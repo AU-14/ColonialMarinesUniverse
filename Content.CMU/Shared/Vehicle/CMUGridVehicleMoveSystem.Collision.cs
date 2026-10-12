@@ -69,7 +69,8 @@ public sealed partial class GridVehicleMoverSystem
         if (hullDamage <= 0f)
             return;
 
-        var ev = new CMUVehicleCrashedEvent(hullDamage, CMUIsFrontalCrash(vehicle, mover, target));
+        var speed = mover.MaxSpeed > 0f ? MathF.Min(1f, MathF.Abs(mover.CurrentSpeed) / mover.MaxSpeed) : 0f;
+        var ev = new CMUVehicleCrashedEvent(hullDamage, CMUIsFrontalCrash(vehicle, mover, target), speed);
         RaiseLocalEvent(vehicle, ref ev);
     }
 

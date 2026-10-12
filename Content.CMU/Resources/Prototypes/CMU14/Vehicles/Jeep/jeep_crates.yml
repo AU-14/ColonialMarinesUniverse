@@ -1,0 +1,248 @@
+# A jeep ships whole in a wooden crate a size up from its own, RMC's dense crate stretched to it:
+# assembled, key in, its one wheel set in the rear hatch. Unlatched by hand, the walls fall flat and the
+# jeep stands there on its brake drums. The crate comes up the ASRS lift, parachutes in from a squad's
+# supply drop pad like any crate, from a dropship's LAG-14 launcher as a launch-bay round at a laser or
+# flare, or onto a CLF jeep drop flare.
+
+- type: entity
+  abstract: true
+  parent: BaseStructureDynamic
+  id: CMUCrateJeepBase
+  name: jeep crate
+  description: A whole jeep in a wooden crate, its wheel set stowed in the rear hatch. Unlatch it by hand on clear ground and the walls fall away.
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/vehicles/jeep/jeep_crate.rsi
+    noRot: true
+    drawdepth: Objects
+    layers:
+    - state: closed
+  - type: Icon
+    sprite: CMU14/Structures/vehicles/jeep/jeep_crate.rsi
+    state: closed
+  - type: Transform
+    noRot: true
+  - type: InteractionOutline
+  # Its parachute is big enough to show above it while it comes down.
+  - type: ParaDroppable
+    parachutePrototype: CMUParachuteJeepCrate
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.03,-1.38,1.03,1.5"
+        density: 500
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: PlaceableSurface
+    isPlaceable: false
+  - type: CanBeSupplyDropped
+  - type: CargoSellBlacklist
+  - type: StaticPrice
+    price: 1500
+
+- type: entity
+  parent: CMUCrateJeepBase
+  id: CMUCrateJeepCargo
+  name: cargo jeep crate
+  components:
+  - type: CMUVehicleCrate
+    vehicle: CMUVehicleJeepCargo
+
+- type: entity
+  parent: CMUCrateJeepBase
+  id: CMUCrateJeepMedical
+  name: medical jeep crate
+  components:
+  - type: CMUVehicleCrate
+    vehicle: CMUVehicleJeepMedical
+
+- type: entity
+  parent: CMUCrateJeepBase
+  id: CMUCrateJeepTransport
+  name: transport jeep crate
+  components:
+  - type: CMUVehicleCrate
+    vehicle: CMUVehicleJeepTransport
+
+- type: entity
+  parent: CMUCrateJeepBase
+  id: CMUCrateJeepGunner
+  name: gun jeep crate
+  components:
+  - type: CMUVehicleCrate
+    vehicle: CMUVehicleJeepGunner
+
+# Colony crates: civilian jeeps in a random showroom paint: apple red, navy blue, electric yellow,
+# orange or gunmetal.
+- type: entity
+  parent: CMUCrateJeepCargo
+  id: CMUCrateJeepCargoColony
+  suffix: Colony
+  components:
+  - type: CMUVehicleCrate
+    vehicle: CMUVehicleJeepCargo
+    paints: [ "#D7262E", "#2E4F8A", "#FFE41A", "#F07A1A", "#6A737B" ]
+
+- type: entity
+  parent: CMUCrateJeepMedical
+  id: CMUCrateJeepMedicalColony
+  suffix: Colony
+  components:
+  - type: CMUVehicleCrate
+    vehicle: CMUVehicleJeepMedical
+    paints: [ "#D7262E", "#2E4F8A", "#FFE41A", "#F07A1A", "#6A737B" ]
+
+# What an opened jeep crate leaves: its floor under the jeep, with the walls lying flat round it once
+# they are down. A crowbar breaks it up into planks; left alone it is cleared away after a while.
+- type: entity
+  id: CMUJeepCrateRemains
+  name: jeep crate walls
+  description: The floor and walls of an opened jeep crate, lying flat. A crowbar breaks them up into planks.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/vehicles/jeep/jeep_crate.rsi
+    noRot: true
+    drawdepth: FloorObjects
+    layers:
+    - state: floor
+      map: [ enum.CMUVehicleCrateVisualLayers.Walls ]
+  - type: Transform
+    noRot: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: CMUVehicleCrateRemains
+  - type: CrateOpenable
+    spawn:
+    - id: RMCPlankWood25
+    sound: /Audio/Effects/wood_destroy2.ogg
+  - type: TimedDespawn
+    lifetime: 300
+
+# The walls of an opened jeep crate falling over the jeep; hidden once they are down, gone with the floor.
+- type: entity
+  id: CMUJeepCrateWalls
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/vehicles/jeep/jeep_crate.rsi
+    noRot: true
+    drawdepth: OverMobs
+    layers:
+    - state: opening
+      map: [ enum.CMUVehicleCrateVisualLayers.Walls ]
+  - type: Transform
+    noRot: true
+  - type: CMUVehicleCrateRemains
+    falling: true
+
+# A jeep crate's parachute: the deployed parachute made bigger and hung higher, drawn over the crate.
+- type: entity
+  parent: RMCParachuteDeployed
+  id: CMUParachuteJeepCrate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Overlays
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/Parachute/parachute_deployed.rsi
+    scale: 1.5, 1.5
+    layers:
+    - state: cables
+      offset: 0.0, 1.6
+    - state: chute_animated
+      offset: 0.0, 2.0
+
+# LAG-14 launch-bay rounds: a jeep crate rigged with a parachute, launched at a laser or flare.
+- type: entity
+  abstract: true
+  parent: RMCDropshipAttachmentBase
+  id: CMUDropshipAttachmentAmmoLaunchableJeepBase
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/densecrate.rsi
+    state: base
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipUtilityPoint
+  - type: PowerLoaderDetachable
+  - type: Appearance
+
+- type: entity
+  parent: CMUDropshipAttachmentAmmoLaunchableJeepBase
+  id: CMUDropshipAttachmentAmmoLaunchableJeepCargo
+  name: air-droppable cargo jeep
+  description: A cargo jeep crate rigged with a parachute. Load it into the LAG-14 Internal Sentry Launcher and launch it at a laser or flare; it lands as a crate to unlatch.
+  components:
+  - type: RMCOrbitalDeployable
+    deployPrototype: CMUCrateJeepCargo
+    dropPod: false
+    useParachute: true
+
+- type: entity
+  parent: CMUDropshipAttachmentAmmoLaunchableJeepBase
+  id: CMUDropshipAttachmentAmmoLaunchableJeepMedical
+  name: air-droppable medical jeep
+  description: A medical jeep crate rigged with a parachute. Load it into the LAG-14 Internal Sentry Launcher and launch it at a laser or flare; it lands as a crate to unlatch.
+  components:
+  - type: RMCOrbitalDeployable
+    deployPrototype: CMUCrateJeepMedical
+    dropPod: false
+    useParachute: true
+
+- type: entity
+  parent: CMUDropshipAttachmentAmmoLaunchableJeepBase
+  id: CMUDropshipAttachmentAmmoLaunchableJeepTransport
+  name: air-droppable transport jeep
+  description: A transport jeep crate rigged with a parachute. Load it into the LAG-14 Internal Sentry Launcher and launch it at a laser or flare; it lands as a crate to unlatch.
+  components:
+  - type: RMCOrbitalDeployable
+    deployPrototype: CMUCrateJeepTransport
+    dropPod: false
+    useParachute: true
+
+- type: entity
+  parent: CMUDropshipAttachmentAmmoLaunchableJeepBase
+  id: CMUDropshipAttachmentAmmoLaunchableJeepGunner
+  name: air-droppable gun jeep
+  description: A gun jeep crate rigged with a parachute. Load it into the LAG-14 Internal Sentry Launcher and launch it at a laser or flare; it lands as a crate to unlatch.
+  components:
+  - type: RMCOrbitalDeployable
+    deployPrototype: CMUCrateJeepGunner
+    dropPod: false
+    useParachute: true
+
+# The CLF's jeep: a signal flare wired to a smuggler's beacon. Lit and left burning on open ground,
+# it brings a gun jeep crate down by parachute onto the spot.
+- type: entity
+  parent: CMFlare
+  id: CMUFlareJeepDropCLF
+  name: jeep drop flare
+  description: A signal flare wired to a smuggler's beacon. Light it and throw it on open ground; a gun jeep in its crate comes down by parachute where it burns.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/cas_flares.rsi
+    layers:
+    - map: [ "enum.ExpendableLightVisualLayers.Base" ]
+      state: flare
+    - map: [ "enum.ExpendableLightVisualLayers.Glow" ]
+      sprite: _RMC14/Objects/Misc/cas_flares.rsi
+      state: flare_flame
+      color: "#FFD27A"
+      visible: false
+    - map: [ "enum.ExpendableLightVisualLayers.Overlay" ]
+      sprite: _RMC14/Objects/Misc/cas_flares.rsi
+      state: overlay
+  - type: Icon
+    sprite: _RMC14/Objects/Misc/cas_flares.rsi
+    state: flare
+  - type: PointLight
+    color: "#FFE2AA"
+  - type: CMUVehicleDropFlare
+    crate: CMUCrateJeepGunner

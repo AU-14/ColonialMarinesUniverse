@@ -10,7 +10,9 @@ using Content.Shared.Vehicle.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Graphics.RSI;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
@@ -23,6 +25,7 @@ namespace Content.Client.CMU14.Vehicle;
 /// </summary>
 public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
 {
+    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private CMUJeepSystem _jeep = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
@@ -366,8 +369,13 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
                 _sprite.LayerSetAnimationTime(ent.AsNullable(), index, blink);
         }
 
-        // The signal states show their lit frame for the first half of each blink.
+        // The signal states show their lit frame for the first half of each blink; the relay ticks as
+        // they go on and off.
         var blinkOn = blink < SignalPeriod / 2;
+        if ((left || right) && blinkOn != visuals.BlinkOn && visuals.SignalSound != null)
+            _audio.PlayEntity(visuals.SignalSound, Filter.Local(), vehicle, false);
+
+        visuals.BlinkOn = blinkOn;
         UpdateGlows(ent.Owner, vehicle, lightsOn, braking, left && blinkOn, right && blinkOn);
     }
 

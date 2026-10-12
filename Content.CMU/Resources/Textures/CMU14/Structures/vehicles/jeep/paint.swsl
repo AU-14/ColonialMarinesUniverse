@@ -1,16 +1,24 @@
-// Repaints a jeep layer in any colour and dirties it. The jeep generator writes its paint pixels with
-// alpha just under 255 (PAINT_ALPHA - 2 * dirt level - mud in jeep_pixel_art.py); everything else is
-// opaque and keeps its own colours. A paint pixel keeps its shading: its brightness relative to the
-// olive the art was drawn in scales the new colour, so the jeep's lips, faces, seams and outlines all
-// carry over. The art's dirt level says how soon the pixel gets dirty: the sills, wheel arches, the
-// panels behind the wheels and the bumpers first, the upper body barely. Dirt spreads from there in
-// soft patches, dark wet mud where it is thickest and lighter dust at its edges. The windshield's glass
-// (alpha 78, streaks 150, less its own dust level) dusts over the same way, a film that clouds it,
-// thickest low on the panes and clear where the wipers sweep. Lit like the sprite. The engine samples
-// textures and takes colour uniforms in linear light, so the colours written here are sRGB, converted.
+// Repaints a jeep layer in any colour and dirties it. The jeep generator writes its paint pixels
+// with alpha just under 255 (PAINT_ALPHA - 16 * zone - 2 * dirt level - mud in jeep_pixel_art.py);
+// everything else is opaque and keeps its own colours. On zoned layers the tub inside and the seats
+// take their own paint; other layers only read the body's band, since their own art uses those
+// alphas. A paint pixel keeps its shading: its brightness relative to the olive the art was drawn
+// in scales the new colour, so the jeep's lips, faces, seams and outlines all carry over. The art's
+// dirt level says how soon the pixel gets dirty: the sills, wheel arches, the panels behind the
+// wheels and the bumpers first, the upper body barely. Dirt spreads from there in soft patches,
+// dark wet mud where it is thickest and lighter dust at its edges. The windshield's glass (alpha
+// 78, streaks 150, less its own dust level) dusts over the same way, a film that clouds it,
+// thickest low on the panes and clear where the wipers sweep. Lit like the sprite. The engine
+// samples textures and takes colour uniforms in linear light, so the colours written here are sRGB,
+// converted.
 
 uniform highp vec4 paint;       // the chosen colour
 uniform highp float painted;    // 1 when the jeep has been resprayed, else it keeps its factory olive
+uniform highp float zoned;      // 1 when the layer's tub inside and seats have their own paint
+uniform highp vec4 interior;    // the tub inside's colour
+uniform highp float paintedInterior;
+uniform highp vec4 seats;       // the seats' colour
+uniform highp float paintedSeats;
 uniform highp vec4 base;        // the olive "top" tone the art was drawn in
 uniform highp vec4 mud;         // the mud splashed on the low bodywork
 uniform highp float dirt;       // 0 clean to 1 as dirty as it gets
@@ -35,8 +43,13 @@ highp vec3 srgb(highp vec3 c) {
 void fragment() {
     highp vec4 texel = zTexture(UV);
     highp float mark = floor(texel.a * 255.0 + 0.5);
-    highp float paintPixel = step(238.5, mark) * step(mark, 254.5);
-    highp float code = (254.0 - mark) * paintPixel;
+    highp float paintPixel = step(mix(238.5, 206.5, zoned), mark) * step(mark, 254.5);
+    highp float zone = floor((254.0 - mark) / 16.0) * paintPixel;
+    highp float inside = step(0.5, zone) * step(zone, 1.5);
+    highp float seat = step(1.5, zone);
+    highp vec4 colour = mix(mix(paint, interior, inside), seats, seat);
+    highp float coloured = mix(mix(painted, paintedInterior, inside), paintedSeats, seat);
+    highp float code = mod(254.0 - mark, 16.0) * paintPixel;
     highp float muddy = mod(code, 2.0) * paintPixel;
     // 0 gets dirty first, 1 last.
     highp float soon = floor(code / 2.0) / 7.0;
@@ -44,12 +57,12 @@ void fragment() {
     highp float shade = zGrayscale(texel.rgb) / max(zGrayscale(base.rgb), 0.001);
     // Any colour goes, black included: a touch of the art's own light and shadow is added on top,
     // so even a black paint keeps its panels' edges.
-    highp vec3 lit = max(paint.rgb * shade + vec3((shade - 1.0) * 0.12), vec3(0.0));
+    highp vec3 lit = max(colour.rgb * shade + vec3((shade - 1.0) * 0.12), vec3(0.0));
     // A pale colour can't brighten past white; its highlights fade towards white instead.
     highp float over = clamp(max(lit.r, max(lit.g, lit.b)) - 1.0, 0.0, 1.0);
     highp vec3 col = mix(min(lit, vec3(1.0)), vec3(1.0), over);
     col = mix(col, mud.rgb, muddy / 3.0);
-    col = mix(texel.rgb, col, paintPixel * painted);
+    col = mix(texel.rgb, col, paintPixel * coloured);
 
     highp float amount = clamp((dirt * 0.95 - soon) / 0.25, 0.0, 1.0) * paintPixel * step(0.001, dirt);
     // The tone drifts over the frame, not the atlas, so a state's frames and its layers share it.

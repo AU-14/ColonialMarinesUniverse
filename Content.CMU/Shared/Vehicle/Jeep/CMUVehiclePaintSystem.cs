@@ -12,13 +12,15 @@ namespace Content.Shared.CMU14.Vehicle.Jeep;
 
 /// <summary>
 /// Respraying a vehicle with a vehicle spray painter: the colour picked in its window becomes the
-/// vehicle's paint, or its wheels' when sprayed on them, after a do-after, for some of its charges.
+/// paint of the part it is used on (the body outside, the tub inside, the seats or the wheels) after a
+/// do-after, for some of its charges.
 /// </summary>
 public sealed class CMUVehiclePaintSystem : EntitySystem
 {
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedChargesSystem _charges = default!;
+    [Dependency] private SharedCMUVehicleCrayonSystem _crayon = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -35,26 +37,65 @@ public sealed class CMUVehiclePaintSystem : EntitySystem
             return;
 
         args.Handled = true;
-        TryRespray(ent.AsNullable(), args.User, args.Used, false);
+        TryRespray(ent.AsNullable(), args.User, args.Used, BodyZone(ent, args.ClickLocation));
     }
 
     /// <summary>
-    /// Starts respraying the vehicle, or only its wheels, in the painter's colour.
+    /// The tub inside where a click on the body lands on it, else the body outside.
     /// </summary>
-    public bool TryRespray(Entity<CMUVehiclePaintComponent?> ent, EntityUid user, EntityUid used, bool wheels)
+    private CMUVehiclePaintZone BodyZone(Entity<CMUVehiclePaintComponent> ent, Robust.Shared.Map.EntityCoordinates click)
+    {
+        if (!TryComp(ent, out CMUVehicleCrayonComponent? crayon) ||
+            !_crayon.TryGetClickedSurface((ent, crayon), click, out _, out var voxel, out _, out _))
+        {
+            return CMUVehiclePaintZone.Body;
+        }
+
+        var min = ent.Comp.InteriorMin;
+        var max = ent.Comp.InteriorMax;
+        return voxel.X >= min.X && voxel.X <= max.X && voxel.Y >= min.Y && voxel.Y <= max.Y && voxel.Z >= min.Z && voxel.Z <= max.Z
+            ? CMUVehiclePaintZone.Interior
+            : CMUVehiclePaintZone.Body;
+    }
+
+    private static int Cost(CMUVehiclePaintComponent paint, CMUVehiclePaintZone zone)
+    {
+        return zone switch
+        {
+            CMUVehiclePaintZone.Interior => paint.InteriorChargeCost,
+            CMUVehiclePaintZone.Seats => paint.SeatChargeCost,
+            CMUVehiclePaintZone.Wheels => paint.WheelChargeCost,
+            _ => paint.ChargeCost,
+        };
+    }
+
+    private static TimeSpan Delay(CMUVehiclePaintComponent paint, CMUVehiclePaintZone zone)
+    {
+        return zone switch
+        {
+            CMUVehiclePaintZone.Interior => paint.InteriorDelay,
+            CMUVehiclePaintZone.Seats => paint.SeatDelay,
+            CMUVehiclePaintZone.Wheels => paint.WheelDelay,
+            _ => paint.Delay,
+        };
+    }
+
+    /// <summary>
+    /// Starts respraying one part of the vehicle in the painter's colour.
+    /// </summary>
+    public bool TryRespray(Entity<CMUVehiclePaintComponent?> ent, EntityUid user, EntityUid used, CMUVehiclePaintZone zone)
     {
         if (!Resolve(ent, ref ent.Comp, false) || !TryComp(used, out CMUVehicleSprayPainterComponent? painter))
             return false;
 
-        if (!_charges.HasCharges(used, wheels ? ent.Comp.WheelChargeCost : ent.Comp.ChargeCost))
+        if (!_charges.HasCharges(used, Cost(ent.Comp, zone)))
         {
             _popup.PopupClient(Loc.GetString("cmu-vehicle-paint-empty"), ent, user);
             return false;
         }
 
         var color = painter.Color.WithAlpha(1f);
-        var delay = wheels ? ent.Comp.WheelDelay : ent.Comp.Delay;
-        var doAfter = new DoAfterArgs(EntityManager, user, delay, new CMUVehiclePaintDoAfterEvent(color, wheels), ent, ent, used)
+        var doAfter = new DoAfterArgs(EntityManager, user, Delay(ent.Comp, zone), new CMUVehiclePaintDoAfterEvent(color, zone), ent, ent, used)
         {
             BreakOnMove = true,
             BreakOnDamage = true,
@@ -76,16 +117,27 @@ public sealed class CMUVehiclePaintSystem : EntitySystem
             return;
 
         args.Handled = true;
-        if (!_charges.TryUseCharges(used, args.Wheels ? ent.Comp.WheelChargeCost : ent.Comp.ChargeCost))
+        if (!_charges.TryUseCharges(used, Cost(ent.Comp, args.Zone)))
         {
             _popup.PopupClient(Loc.GetString("cmu-vehicle-paint-empty"), ent, args.User);
             return;
         }
 
-        if (args.Wheels)
-            ent.Comp.WheelColor = args.Color;
-        else
-            ent.Comp.Color = args.Color;
+        switch (args.Zone)
+        {
+            case CMUVehiclePaintZone.Interior:
+                ent.Comp.InteriorColor = args.Color;
+                break;
+            case CMUVehiclePaintZone.Seats:
+                ent.Comp.SeatColor = args.Color;
+                break;
+            case CMUVehiclePaintZone.Wheels:
+                ent.Comp.WheelColor = args.Color;
+                break;
+            default:
+                ent.Comp.Color = args.Color;
+                break;
+        }
 
         Dirty(ent);
 
@@ -97,8 +149,15 @@ public sealed class CMUVehiclePaintSystem : EntitySystem
             _audio.PlayPredicted(painter.SpraySound, ent, args.User);
         }
 
-        _popup.PopupClient(Loc.GetString(args.Wheels ? "cmu-vehicle-paint-wheels-done" : "cmu-vehicle-paint-done", ("vehicle", ent.Owner)), ent, args.User);
+        var done = args.Zone switch
+        {
+            CMUVehiclePaintZone.Interior => "cmu-vehicle-paint-interior-done",
+            CMUVehiclePaintZone.Seats => "cmu-vehicle-paint-seats-done",
+            CMUVehiclePaintZone.Wheels => "cmu-vehicle-paint-wheels-done",
+            _ => "cmu-vehicle-paint-done",
+        };
+        _popup.PopupClient(Loc.GetString(done, ("vehicle", ent.Owner)), ent, args.User);
         _adminLog.Add(LogType.Action, LogImpact.Low,
-            $"{ToPrettyString(args.User):user} repainted {ToPrettyString(ent):target}{(args.Wheels ? " wheels" : "")} {args.Color.ToHex()}");
+            $"{ToPrettyString(args.User):user} repainted {ToPrettyString(ent):target} {args.Zone} {args.Color.ToHex()}");
     }
 }

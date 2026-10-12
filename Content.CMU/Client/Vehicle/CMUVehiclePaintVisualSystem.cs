@@ -27,11 +27,14 @@ public sealed class CMUVehiclePaintVisualSystem : EntitySystem
 
     private readonly Dictionary<EntityUid, Paint> _paints = new();
 
-    private sealed class Paint(ShaderInstance body, ShaderInstance wheels)
+    private sealed class Paint(ShaderInstance body, ShaderInstance plain, ShaderInstance wheels)
     {
         public readonly ShaderInstance Body = body;
+        public readonly ShaderInstance Plain = plain;
         public readonly ShaderInstance Wheels = wheels;
         public Color? Color;
+        public Color? InteriorColor;
+        public Color? SeatColor;
         public Color? WheelColor;
         public float Dirt = -1f;
     }
@@ -46,6 +49,7 @@ public sealed class CMUVehiclePaintVisualSystem : EntitySystem
         foreach (var (_, paint) in _paints)
         {
             paint.Body.Dispose();
+            paint.Plain.Dispose();
             paint.Wheels.Dispose();
         }
 
@@ -65,16 +69,35 @@ public sealed class CMUVehiclePaintVisualSystem : EntitySystem
             var dirt = CompOrNull<CMUVehicleGrimeComponent>(uid)?.Dirt ?? 0f;
             if (!_paints.TryGetValue(uid, out var entry))
             {
-                entry = new Paint(NewShader(), NewShader());
+                entry = new Paint(NewShader(), NewShader(), NewShader());
+                entry.Body.SetParameter("zoned", 1f);
                 entry.Wheels.SetParameter("painted", 1f);
                 _paints[uid] = entry;
             }
 
             if (entry.Color != paint.Color)
             {
-                entry.Body.SetParameter("paint", paint.Color ?? Base);
-                entry.Body.SetParameter("painted", paint.Color == null ? 0f : 1f);
+                foreach (var shader in new[] { entry.Body, entry.Plain })
+                {
+                    shader.SetParameter("paint", paint.Color ?? Base);
+                    shader.SetParameter("painted", paint.Color == null ? 0f : 1f);
+                }
+
                 entry.Color = paint.Color;
+            }
+
+            if (entry.InteriorColor != paint.InteriorColor)
+            {
+                entry.Body.SetParameter("interior", paint.InteriorColor ?? Base);
+                entry.Body.SetParameter("paintedInterior", paint.InteriorColor == null ? 0f : 1f);
+                entry.InteriorColor = paint.InteriorColor;
+            }
+
+            if (entry.SeatColor != paint.SeatColor)
+            {
+                entry.Body.SetParameter("seats", paint.SeatColor ?? Base);
+                entry.Body.SetParameter("paintedSeats", paint.SeatColor == null ? 0f : 1f);
+                entry.SeatColor = paint.SeatColor;
             }
 
             if (entry.WheelColor != paint.WheelColor)
@@ -86,6 +109,7 @@ public sealed class CMUVehiclePaintVisualSystem : EntitySystem
             if (!MathHelper.CloseTo(entry.Dirt, dirt))
             {
                 entry.Body.SetParameter("dirt", dirt);
+                entry.Plain.SetParameter("dirt", dirt);
                 entry.Wheels.SetParameter("dirt", dirt);
                 entry.Dirt = dirt;
             }
@@ -123,6 +147,7 @@ public sealed class CMUVehiclePaintVisualSystem : EntitySystem
         }
 
         old.Body.Dispose();
+        old.Plain.Dispose();
         old.Wheels.Dispose();
     }
 
@@ -139,11 +164,13 @@ public sealed class CMUVehiclePaintVisualSystem : EntitySystem
     private void SetVehicle(EntityUid uid, SpriteComponent sprite, CMUVehiclePaintComponent paint, Paint shaders, bool on)
     {
         SetLayers((uid, sprite), paint.Layers, shaders.Body, on ? shaders.Body : null);
+        SetLayers((uid, sprite), paint.PlainLayers, shaders.Plain, on ? shaders.Plain : null);
         SetLayers((uid, sprite), paint.WheelLayers, shaders.Wheels, on ? shaders.Wheels : null);
         if (TryComp(uid, out CMUVehicleOverlayComponent? overlay) &&
             TryComp(overlay.Overlay, out SpriteComponent? overlaySprite))
         {
             SetLayers((overlay.Overlay.Value, overlaySprite), paint.OverlayLayers, shaders.Body, on ? shaders.Body : null);
+            SetLayers((overlay.Overlay.Value, overlaySprite), paint.PlainOverlayLayers, shaders.Plain, on ? shaders.Plain : null);
             SetLayers((overlay.Overlay.Value, overlaySprite), paint.WheelOverlayLayers, shaders.Wheels, on ? shaders.Wheels : null);
         }
     }

@@ -62,6 +62,7 @@ it, back at their own depth once clear.
 | `actions.rsi` | hand-drawn `hazards_off` / `hazards_on`; generated `headlights_off` / `_low` / `_high` |
 | `vehicle_spray_painter.rsi` | the vehicle spray painter's `icon` and the white `paint` in its cup, tinted in game with the picked colour |
 | `blood.rsi` | `splat_1`-`5` and `drip_1`-`3`: white blood splashes, tinted in game with the bleeder's blood colour |
+| `jeep_crate.rsi` | the jeep crate, 256 px, four directions: `closed`, `opening`, `floor`, `open` |
 
 All jeep states are 96 px with 4 directions. The paint is bare olive drab: players decorate jeeps
 with crayons. Only the medical jeep is marked, with outlined red crosses on white (`cross_field`).
@@ -70,12 +71,13 @@ with crayons. Only the medical jeep is marked, with outlined red crosses on whit
 
 The jeep is open, so riders are drawn between the vehicle and an overlay entity:
 
-1. Vehicle entity: `jeep_base`, `damaged_frame`, `engine_*`, the hood state, the extinguisher
+1. Vehicle entity: `jeep_base`, `front_dent_*`, `damaged_frame`, `engine_*`, the hood state
+   (`hood_closed_dent1`-`3` while the front is crumpled), the extinguisher
    (under the doors: the passenger's swings open in front of it), the doors and the tailgate, the
    fuel door, the other hardpoints (`BASE_KIT_ORDER`: the tail lights over the spare beside them),
    then `wheels_0` / `wheels_1` (layer `rmc-wheels`).
 2. Crate (when loaded) and riders, far to near. Facing north the crate goes after the riders.
-3. Overlay entity: `jeep_overlay`, `damaged_overlay`, the doors' and tailgate's `*_overlay`
+3. Overlay entity: `jeep_overlay`, `front_dent_overlay_*`, `damaged_overlay`, the doors' and tailgate's `*_overlay`
    states, `hood_closed_overlay`, the hardpoint
    `*_overlay_0` / `_1` states, then the raised hood (`hood_opening` / `hood_open` /
    `hood_closing` `_overlay`) and the fuel door `*_overlay` states, `wheels_overlay_0` / `_1`, then
@@ -83,6 +85,27 @@ The jeep is open, so riders are drawn between the vehicle and an overlay entity:
    hover highlights.
 4. Turret visual: `mgturret_0` / `mgturret_1`, like `humveeturret_0`. Facing north the gunner
    stands between the camera and the gun, so in that direction the turret goes under the riders.
+
+## Front crash damage
+
+Head on crashes crumple the front, shown in three levels (`CMUVehicleFrontDamage`: damage from 8,
+25 and 45 of 60). `crumple()` simulates it as a deformation of the voxels rather than drawn creases:
+
+- The nose is pushed back, most around an impact point a little off the centre line, and the push
+  fades out over a crumple zone behind it (`CRUMPLE_DEPTH`, `CRUMPLE_ZONE`).
+- The squeezed metal in that zone buckles into folds (`CRUMPLE_FOLD`, `CRUMPLE_WAVELENGTH`) that wave
+  across the width; the fender sides bulge out, the bumper bends and sags where it hit, the grille
+  frame buckles less than the sheet around it, and the grille drives the radiator back with it.
+- Every level is the same crumple further along (`CRUMPLE_SCALE`), so what gave at one level gives
+  more at the next, never somewhere new; the bare steel scrapes on the struck edges keep their
+  places and add more.
+- Voxels are carried forward to where the push takes them, so thin panels facing it can't drop out,
+  then gaps stretched sheet leaves are closed by sampling back from the deformed space.
+
+`front_dent_N` / `front_dent_overlay_N` hold only the pixels the crumple changes, over the base and
+the overlay; where the front no longer reaches they are dark, as the shadow in the fold. The shut
+hood crumples with it: `hood_closed_dent1`-`3` (and `_overlay`) replace `hood_closed`. The preview
+`jeep_front_damage.png` shows the cargo jeep at each level.
 
 ## Turret
 
@@ -288,8 +311,16 @@ In `Content.CMU/Resources/Audio/CMU14/Jeep/`, cut from the team's Pixabay record
 - `jeep_engine_sputter`: the engine stalls under the driver (tank dry, engine dead). A driver
   getting out just switches it off.
 - `jeep_hood_open`, `jeep_hood_close` and `jeep_windshield`: with their swings.
+- `jeep_horn`: the driver's horn, a single honk. `jeep_horn_long`: the same horn held down, looped
+  from its steady middle, blaring while a driver knocked out in a crash is slumped on the wheel.
+- `jeep_blinker`: one tick of the turn signal relay, played on each client as the signals blink on
+  and off, quiet and heard only close by.
+- `jeep_headlight_shatter`: a headlight's bulb bursting when wear breaks it, shot or crashed.
+- `jeep_mg_close` and `jeep_mg_far`: one .50 cal round each (a burst's first crack crossfaded into
+  the echo after its last round). The gun plays the close one; listeners 10 to 45 tiles off hear
+  the far one instead, the two overlapping where the close one fades.
 
-The jeep has no RMC running sound; the horn and collision sounds are RMC's.
+The jeep has no RMC running sound; the collision sound is RMC's.
 
 ## Motion
 
@@ -356,26 +387,34 @@ bay with now and then a bang. After six seconds it goes up and leaves a wreck fr
 `jeep_wreck.rsi`, which the fire left under it doesn't burn away. `jeep_engine_fire.gif` shows it.
 Water on it first, from an extinguisher or a splash, puts the fire out and leaves the engine at 1.
 
-## Kit crate
+## Jeep crate
 
-A jeep can come as a kit crate (cargo, medical, transport or gun jeep). Opened, the bare chassis
-takes the crate's place and its contents are laid out on both sides:
-- wheel sets;
-- windshield, hood, two doors, and the tailgate on cargo, medical and gun jeeps;
-- two headlights, two turn signals and two tail lights;
-- the gun mount for the gun jeep;
-- two fuel cans, the shovel, the fire axe, the maintenance jack and the fire extinguisher;
-- a wrench, a screwdriver, the ignition key and the assembly manual.
+A jeep ships whole in a wooden crate a size up from its own, RMC's dense crate stretched to it with
+boards, battens, a shipping label and grime added (`jeep_crates.yml`, cargo, medical, transport or
+gun jeep): assembled, the key in the ignition, its axle bare and its one wheel set stowed in the
+rear hatch (the spare slot). Unlatched by hand (a 3 s do-after, `CMUVehicleCrate*`), the jeep stands
+where the crate was, facing south on its brake drums. The crate leaves its floor under the jeep
+(`CMUJeepCrateRemains`) and its walls fall over the jeep (`CMUJeepCrateWalls`, gone once down),
+after which the floor shows them lying flat round it. A crowbar breaks the floor and walls into 25
+planks; left alone they go after five minutes. Fit the wheel set from the hatch to drive off. While
+a crate comes down by parachute it is drawn over everything, under a parachute made bigger and hung
+higher (`CMUParachuteJeepCrate`).
 
-The chassis has its engine but an empty tank, and no lamps or key. The crate parachutes in like any
-crate from a squad's supply drop pad. As `CMUDropshipAttachmentAmmoLaunchableJeep*`, it is a round
-for a dropship's LAG-14 launcher, dropped by parachute at a laser or flare.
+`jeep_crate.rsi` (256 px, four directions like the jeep, drawn round the jeep's own origin):
+`closed`, `opening` (the lid lifts off, then the walls fall, 8 frames of 0.08 s), `floor` and `open`
+(the floor with the walls flat). `jeep_crate.gif` shows it facing south and east.
 
-The platoons order the kits from the ASRS under Vehicles (`jeep_requisitions.yml`): cargo 12,000,
+The crate parachutes in like any crate from a squad's supply drop pad. As
+`CMUDropshipAttachmentAmmoLaunchableJeep*`, it is a round for a dropship's LAG-14 launcher, dropped by
+parachute at a laser or flare. The CLF buy a `CMUFlareJeepDropCLF` jeep drop flare from their
+requisitions rack for 200 points: lit and left at rest under open sky for two seconds, it brings a gun
+jeep crate down onto the spot (`CMUVehicleDropFlare*`).
+
+The platoons order the crates from the ASRS under Vehicles (`jeep_requisitions.yml`): cargo 12,000,
 medical 15,000, transport 17,500, gun jeep 20,000, against an account that opens a round at 20,000.
-The colony's ASRS console only sells the cargo and medical kits, at the same prices, as
-`CMUCrateJeepKit*Colony`: their chassis comes in one of five showroom paints picked at random
-(apple red, navy blue, electric yellow, orange, gunmetal), from the crate's `paints` list.
+The colony's ASRS console only sells the cargo and medical jeeps, at the same prices, as
+`CMUCrateJeep*Colony`: they come in one of five showroom paints picked at random (apple red, navy
+blue, electric yellow, orange, gunmetal), from the crate's `paints` list.
 
 ## Crayons
 
@@ -417,10 +456,15 @@ Prototypes are in `Content.CMU/Resources/Prototypes/CMU14/Vehicles/Jeep/jeep.yml
 | `Shared/Vehicle/Jeep/CMUVehicleIgnition*` | the ignition key slot: no key, no running |
 | `Shared/Vehicle/Jeep/CMUVehicleFuel*` | fuel use and refuelling from a fuel can at the fuel door; the do-after bar starts at the tank level |
 | `Shared/Vehicle/Jeep/CMUVehicleCargo*` | loading, wrenching down and unloading a crate on the cargo bed, over the tailgate |
-| `Shared/Vehicle/Jeep/CMUVehiclePaint*`, `CMUVehicleSprayPainter*`, `paint.swsl` | the vehicle spray painter (an RGB colour window in hand, 30 charges, 5 a respray and 1 for the wheels, printed at the autolathe) and respraying the jeep with it, or only its wheels and spare when sprayed on the wheels (grey metal rims by default, their own shader instance); the art marks its paint pixels with an alpha just under 255 that also carries their dirt level and the art's mud (`PAINT_ALPHA - 2 * level - mud`, 239 to 254), so the shader is always on |
+| `Shared/Vehicle/Jeep/CMUVehiclePaint*`, `CMUVehicleSprayPainter*`, `paint.swsl` | the vehicle spray painter (an RGB colour window in hand, 30 charges, 5 a respray and 1 for the wheels, printed at the autolathe) and respraying the jeep with it, or one part where it is sprayed: the body outside, the tub inside (by the body voxel under the click), the seats (on a seat) or the wheels and spare (on the wheels; grey metal rims by default, their own shader instance); the art marks its paint pixels with an alpha just under 255 that also carries their zone, dirt level and the art's mud (`PAINT_ALPHA - 16 * zone - 2 * level - mud`, 207 to 254: body 239-254, tub inside 223-238, seats 207-222), so the shader is always on; the engine and windshield only read the body's band (`plainLayers`), since their own art uses the others |
 | `Shared/Vehicle/Jeep/CMUVehicleCrayon*`, `Server/.../CMUVehicleCrayonSystem.cs` | crayon drawings (up to 50) and blood splashes anchored to the body via `crayon_maps/` |
 | `Shared/Vehicle/Jeep/CMUVehicleGrime*`, `Server/.../CMUVehicleGrimeBuildUpSystem.cs` | dirt from driving, blood from wounded riders and anyone run down, cleaning |
-| `Shared/Vehicle/Jeep/CMUVehicleKitCrate*`, `Server/.../CMUVehicleKitCrateSystem.cs`, `jeep_kit.yml` | kit crates opening into a chassis with its parts, launch-bay rounds, the manual |
+| `Shared/Vehicle/Jeep/CMUVehicleCrate*`, `Client/Vehicle/CMUVehicleCrateRemainsVisualSystem.cs`, `jeep_crates.yml` | jeep crates opening into the jeep with their walls falling, launch-bay rounds |
+| `Shared/Vehicle/Jeep/CMUVehicleDropFlareComponent.cs`, `Server/.../CMUVehicleDropFlareSystem.cs` | the CLF's jeep drop flare |
+| `Shared/Vehicle/CMUVehicleFrontDamage*`, `Client/Vehicle/CMUVehicleFrontDamageVisualSystem.cs` | the front crumpled by head on crashes (see Front crash damage) and beaten straight with a welder used on the front, read from the crayon map under the click |
+| `Shared/Vehicle/Jeep/CMUVehicleCrashKnockout*`, `Server/.../CMUVehicleCrashKnockoutSystem.cs` | a hard head on crash (from 70% of top speed) knocks each rider out for 3 to 5 seconds, more surely the faster; the horn blares while the driver is out on the wheel |
+| `Shared/Vehicle/CMUGunDistantSound*`, `Server/Vehicle/CMUGunDistantSoundSystem.cs` | the gun's far shot, played to listeners 10 to 45 tiles away, placed on the map so it reaches them out of view |
+| `Shared/Vehicle/Jeep/CMUVehicleGunOrigin*` | shots from the gun's pivot on the jeep; the muzzle flash on the drawn barrel tip, for the way each client's camera is turned |
 | `Client/Vehicle/CMU*` | overlay frame and lights, part masks and hover outlines, swing animations, damage looks, suspension bob, crate placement, crayon painting, paint, headlight haze |
 
 Clickable parts are child entities whose sprite is the `click_*` mask: the part's own pixels at
@@ -429,7 +473,9 @@ and hover pick the part, and the hover draws the matching `*_outline` state on t
 masks overlap, the part drawn on top in that direction takes the click (its render order follows
 the layer stack); the seats are under every other part.
 
-CMU14-marked edits outside the jeep files: RMC's grid mover ignores entities riding the vehicle,
+CMU14-marked edits outside the jeep files: a spray's pushback never moves a grid that is its map (a
+planet's ground), RMC's turret muzzle flash takes a CMU gun origin's drawn barrel tip, RMC's grid
+mover ignores entities riding the vehicle,
 RMC's weapon seats fall back to the open vehicle a CMU seat belongs to, turrets take an optional
 `cmuMaxYawDegrees` arc, `SharedDoAfterSystem.CMUSetProgress` starts a do-after part-way, and RMC's
 fuel can carries a `CMUJerryCan` tag and a `fuel` solution.
@@ -443,8 +489,11 @@ off by default:
 - `cmu.jeep.dev_kit`: `CMUJeepDevKitSystem` parks the four jeeps on the nearest open ground around
   each player (under open sky where there is room, facing south, three tiles apart), each with its
   key on the ground by the driver's door, with a welder,
-  wrench, screwdriver, crayons, a vehicle spray painter, a fuel can, cupola ammo, a crate and a fuel tank, and moves the
+  wrench, screwdriver, crowbar, crayons, a vehicle spray painter, a fuel can, cupola ammo, a crate and a fuel tank, and moves the
   player next to them. The server log line `Jeep dev kit for ...` gives the entities and where.
+- `cmu.jeep.dev_kit_crates`: instead of parked jeeps, the six jeep crates (the four platoon ones and
+  the two colony ones) come down by parachute six tiles apart, shut until they land; three CLF jeep
+  drop flares join the tools.
 - `cmu.jeep.dev_daylight`: the round starts at midday instead of dawn.
 
 The admin command `jeepkit [username]` parks another set next to a player on any server.

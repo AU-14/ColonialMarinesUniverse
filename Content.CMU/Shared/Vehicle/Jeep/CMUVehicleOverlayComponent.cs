@@ -1,4 +1,5 @@
 using System.Numerics;
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -40,7 +41,15 @@ public sealed partial class CMUVehicleOverlayVisualsComponent : Component
     [DataField]
     public TimeSpan BrakeHold = TimeSpan.FromSeconds(0.3);
 
+    /// <summary>
+    /// The turn signal relay's tick, played each time the signals blink on or off.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier? SignalSound;
+
     public float LastSpeed;
 
     public TimeSpan BrakeUntil;
+
+    public bool BlinkOn;
 }

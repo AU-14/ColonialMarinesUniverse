@@ -9,8 +9,8 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Lathe;
 using Content.Shared.Research.Prototypes;
-using Content.Shared.Storage.EntitySystems;
 using Content.Shared._RMC14.Requisitions.Components;
+using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -18,10 +18,10 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests.CMU14.Vehicle;
 
 /// <summary>
-/// A jeep kit crate opens into its chassis with the parts beside it, the colony's kits come in a
+/// A jeep crate opens into the jeep with its wheel set in the hatch, the colony's crates come in a
 /// showroom paint and only as cargo and medical jeeps, the autolathe prints the vehicle spray painter,
-/// the painter on the wheels repaints only them, and space cleaner takes a jeep's dirt, blood and
-/// crayon off.
+/// the painter on the wheels or a seat repaints only them, and space cleaner takes a jeep's dirt,
+/// blood and crayon off.
 /// </summary>
 [TestFixture]
 public sealed class CMUJeepKitAndGrimeTest : GameTest
@@ -44,61 +44,64 @@ public sealed class CMUJeepKitAndGrimeTest : GameTest
     }
 
     [Test]
-    public async Task KitCrateOpensIntoChassis()
+    public async Task CrateOpensIntoAJeepWithItsWheelsInTheHatch()
     {
         var map = await Floor();
         EntityUid crate = default;
         EntityUid user = default;
         await Server.WaitPost(() =>
         {
-            crate = SEntMan.SpawnEntity("CMUCrateJeepKitCargo", new EntityCoordinates(map.Grid, 0.5f, 0.5f));
+            crate = SEntMan.SpawnEntity("CMUCrateJeepCargo", new EntityCoordinates(map.Grid, 0.5f, 0.5f));
             user = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(map.Grid, 0.5f, 2.5f));
         });
         await RunTicksSync(5);
 
         await Server.WaitPost(() =>
         {
-            Assert.That(SEntMan.EntityExists(crate), Is.True, "Spawning the crate should not unpack it.");
-            SEntMan.System<SharedEntityStorageSystem>().OpenStorage(crate, user);
+            var comp = SEntMan.GetComponent<CMUVehicleCrateComponent>(crate);
+            Assert.That(SEntMan.System<CMUVehicleCrateSystem>().TryStartOpening((crate, comp), user), Is.True);
         });
-        await RunTicksSync(5);
+        await RunSeconds(4f);
 
         await Server.WaitAssertion(() =>
         {
-            Assert.That(SEntMan.Deleted(crate), Is.True, "The crate should give way to the chassis.");
-            var chassis = SEntMan.EntityQuery<CMUJeepComponent>(true).Select(c => c.Owner).ToList();
-            Assert.That(chassis, Has.Count.EqualTo(1));
-            Assert.That(SEntMan.GetComponent<MetaDataComponent>(chassis[0]).EntityPrototype?.ID, Is.EqualTo("CMUVehicleJeepCargoChassis"));
-            var manual = SEntMan.EntityQuery<MetaDataComponent>(true)
-                .Count(m => m.EntityPrototype?.ID == "CMUPaperJeepAssemblyManual");
-            Assert.That(manual, Is.EqualTo(1), "The manual should come out of the crate.");
+            Assert.That(SEntMan.Deleted(crate), Is.True, "The crate should give way to the jeep.");
+            var jeep = SEntMan.EntityQuery<CMUJeepComponent>(true).Select(c => c.Owner).Single();
+            Assert.That(SEntMan.GetComponent<MetaDataComponent>(jeep).EntityPrototype?.ID, Is.EqualTo("CMUVehicleJeepCargo"));
+
+            var containers = SEntMan.System<SharedContainerSystem>();
+            Assert.That(containers.GetContainer(jeep, "wheel-1").ContainedEntities, Is.Empty, "The axle comes bare.");
+            var hatch = containers.GetContainer(jeep, CMUJeepSystem.SpareSlot).ContainedEntities;
+            Assert.That(hatch, Has.Count.EqualTo(1), "The wheel set rides in the rear hatch.");
+            Assert.That(SEntMan.GetComponent<MetaDataComponent>(hatch[0]).EntityPrototype?.ID, Is.EqualTo("CMUJeepWheel"));
+            Assert.That(SEntMan.GetComponent<CMUVehicleIgnitionComponent>(jeep).KeySlot.HasItem, Is.True, "The key comes in.");
+            Assert.That(SEntMan.EntityQuery<CMUVehicleCrateRemainsComponent>(true).Count(), Is.EqualTo(2), "The floor and the falling walls stand where the crate was.");
         });
     }
 
     [Test]
-    public async Task ColonyKitCrateOpensIntoAPaintedChassis()
+    public async Task ColonyCrateOpensIntoAPaintedJeep()
     {
         var map = await Floor();
         EntityUid crate = default;
-        EntityUid user = default;
         List<Color> paints = new();
         await Server.WaitPost(() =>
         {
-            crate = SEntMan.SpawnEntity("CMUCrateJeepKitMedicalColony", new EntityCoordinates(map.Grid, 0.5f, 0.5f));
-            user = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(map.Grid, 0.5f, 2.5f));
-            paints = SEntMan.GetComponent<CMUVehicleKitCrateComponent>(crate).Paints.ToList();
+            crate = SEntMan.SpawnEntity("CMUCrateJeepMedicalColony", new EntityCoordinates(map.Grid, 0.5f, 0.5f));
+            paints = SEntMan.GetComponent<CMUVehicleCrateComponent>(crate).Paints.ToList();
         });
         await RunTicksSync(5);
 
-        await Server.WaitPost(() => SEntMan.System<SharedEntityStorageSystem>().OpenStorage(crate, user));
+        await Server.WaitPost(() =>
+            SEntMan.System<CMUVehicleCrateSystem>().Open((crate, SEntMan.GetComponent<CMUVehicleCrateComponent>(crate))));
         await RunTicksSync(5);
 
         await Server.WaitAssertion(() =>
         {
             Assert.That(paints, Has.Count.EqualTo(5));
-            var chassis = SEntMan.EntityQuery<CMUJeepComponent>(true).Select(c => c.Owner).Single();
-            Assert.That(SEntMan.GetComponent<MetaDataComponent>(chassis).EntityPrototype?.ID, Is.EqualTo("CMUVehicleJeepMedicalChassis"));
-            var color = SEntMan.GetComponent<CMUVehiclePaintComponent>(chassis).Color;
+            var jeep = SEntMan.EntityQuery<CMUJeepComponent>(true).Select(c => c.Owner).Single();
+            Assert.That(SEntMan.GetComponent<MetaDataComponent>(jeep).EntityPrototype?.ID, Is.EqualTo("CMUVehicleJeepMedical"));
+            var color = SEntMan.GetComponent<CMUVehiclePaintComponent>(jeep).Color;
             Assert.That(color, Is.Not.Null);
             Assert.That(paints, Does.Contain(color!.Value));
         });
@@ -115,9 +118,9 @@ public sealed class CMUJeepKitAndGrimeTest : GameTest
             var kits = console!.Categories
                 .SelectMany(category => category.Entries)
                 .Select(entry => entry.Crate.Id)
-                .Where(crate => crate.StartsWith("CMUCrateJeepKit"))
+                .Where(crate => crate.StartsWith("CMUCrateJeep"))
                 .ToList();
-            Assert.That(kits, Is.EquivalentTo(new[] { "CMUCrateJeepKitCargoColony", "CMUCrateJeepKitMedicalColony" }));
+            Assert.That(kits, Is.EquivalentTo(new[] { "CMUCrateJeepCargoColony", "CMUCrateJeepMedicalColony" }));
         });
     }
 
@@ -173,6 +176,45 @@ public sealed class CMUJeepKitAndGrimeTest : GameTest
             Assert.That(paint.WheelColor, Is.EqualTo(red));
             Assert.That(paint.Color, Is.Null, "The body keeps its factory paint.");
             Assert.That(SEntMan.System<SharedChargesSystem>().GetCurrentCharges(painter), Is.EqualTo(29));
+        });
+    }
+
+    [Test]
+    public async Task SprayPainterOnASeatPaintsOnlyTheSeats()
+    {
+        var map = await Floor();
+        var red = Color.FromHex("#D7262E");
+        EntityUid jeep = default;
+        EntityUid user = default;
+        EntityUid painter = default;
+        await Server.WaitPost(() =>
+        {
+            jeep = SEntMan.SpawnEntity("CMUVehicleJeepCargo", new EntityCoordinates(map.Grid, 0.5f, 0.5f));
+            user = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(map.Grid, 1.45f, 0.75f));
+            painter = SEntMan.SpawnEntity("CMUVehicleSprayPainter", new EntityCoordinates(map.Grid, 1.45f, 0.75f));
+        });
+        await RunTicksSync(5);
+
+        await Server.WaitPost(() =>
+        {
+            Assert.That(SEntMan.System<SharedHandsSystem>().TryPickup(user, painter), Is.True);
+            var comp = SEntMan.GetComponent<CMUVehicleSprayPainterComponent>(painter);
+            comp.Color = red;
+            SEntMan.Dirty(painter, comp);
+
+            var seat = SEntMan.EntityQuery<CMUVehiclePartComponent>(true)
+                .First(part => part.Vehicle == jeep && part.Part == "seat_driver").Owner;
+            SEntMan.System<SharedInteractionSystem>()
+                .UserInteraction(user, SEntMan.GetComponent<TransformComponent>(seat).Coordinates, seat);
+        });
+        await RunSeconds(5f);
+
+        await Server.WaitAssertion(() =>
+        {
+            var paint = SEntMan.GetComponent<CMUVehiclePaintComponent>(jeep);
+            Assert.That(paint.SeatColor, Is.EqualTo(red));
+            Assert.That(paint.Color, Is.Null, "The body keeps its factory paint.");
+            Assert.That(paint.InteriorColor, Is.Null, "The tub inside keeps its factory paint.");
         });
     }
 

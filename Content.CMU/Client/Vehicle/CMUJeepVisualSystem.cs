@@ -4,6 +4,7 @@ using Content.Client.CombatMode;
 using Content.Client.Gameplay;
 using Content.Client.Interactable.Components;
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared.CMU14.Vehicle;
 using Content.Shared.CMU14.Vehicle.Jeep;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Hands.EntitySystems;
@@ -26,6 +27,7 @@ public sealed class CMUJeepVisualSystem : EntitySystem
 {
     [Dependency] private CombatModeSystem _combat = default!;
     [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private CMUVehicleFrontDamageSystem _frontDamage = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private IInputManager _input = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
@@ -144,7 +146,7 @@ public sealed class CMUJeepVisualSystem : EntitySystem
 
             var hood = SwingOf(swings, "hood");
             Animate((uid, sprite), overlay, "hood", hood, jeep.HoodOpen, HoodSwing,
-                "hood_open", "hood_closed", "hood_opening", "hood_closing", "hood_raised");
+                "hood_open", ClosedHood(uid), "hood_opening", "hood_closing", "hood_raised");
             var lidRaised = jeep.HoodOpen || hood.Start != null;
             // A wrecked hull shows at a glance: the hood popped ajar, the windshield cracked, the body
             // sagging on its wheels (CMUVehicleOverlayVisualSystem) and the frame damage at its worst.
@@ -487,6 +489,18 @@ public sealed class CMUJeepVisualSystem : EntitySystem
                _itemSlots.TryGetSlot((vehicle, slots), slotId, out var slot) &&
                !slot.HasItem &&
                _itemSlots.CanInsert(vehicle, slot, held, null);
+    }
+
+    /// <summary>
+    /// The shut hood's state: crumpled with the front, for as far as the front is crumpled.
+    /// </summary>
+    private string ClosedHood(EntityUid uid)
+    {
+        return TryComp(uid, out CMUVehicleFrontDamageComponent? front) &&
+               front.ClosedHoodState is { } dented &&
+               _frontDamage.GetLevel((uid, front)) is var level and > 0
+            ? dented + level
+            : "hood_closed";
     }
 
     private void SetVisible(Entity<SpriteComponent> ent, string key, bool visible)

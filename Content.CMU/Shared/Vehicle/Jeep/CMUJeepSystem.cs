@@ -241,8 +241,12 @@ public sealed partial class CMUJeepSystem : EntitySystem
             return;
         }
 
+        var broken = part.MaxIntegrity * part.BrokenFraction;
+        var wasWhole = part.Integrity > broken;
         part.Integrity = MathF.Max(0f, part.Integrity - damage);
         Dirty(slot.Item.Value, part);
+        if (wasWhole && part.Integrity <= broken && _net.IsServer)
+            _audio.PlayPvs(part.BreakSound, vehicle);
     }
 
     /// <summary>
@@ -418,7 +422,11 @@ public sealed partial class CMUJeepSystem : EntitySystem
         switch (ent.Comp.Part)
         {
             case "wheels" when HasComp<CMUVehicleSprayPainterComponent>(used):
-                _paint.TryRespray(vehicle, user, used, true);
+                _paint.TryRespray(vehicle, user, used, CMUVehiclePaintZone.Wheels);
+                args.Handled = true;
+                return;
+            case var seat when seat.StartsWith("seat_") && HasComp<CMUVehicleSprayPainterComponent>(used):
+                _paint.TryRespray(vehicle, user, used, CMUVehiclePaintZone.Seats);
                 args.Handled = true;
                 return;
             case "fuel_door" when _fuel.IsFuelCan(vehicle, used):

@@ -1,4 +1,5 @@
 using Content.Shared.DoAfter;
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
@@ -19,6 +20,12 @@ public sealed partial class CMUJeepPartIntegrityComponent : Component
 
     [DataField]
     public float BrokenFraction = 0.5f;
+
+    /// <summary>
+    /// Played on the vehicle when wear breaks the part: a headlight's bulb shattering.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier? BreakSound;
 }
 
 /// <summary>

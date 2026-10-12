@@ -192,6 +192,7 @@ public sealed partial class SpraySystem : SharedSpraySystem
                     // Push back the grid the player is standing on.
                     var userTransform = Transform(thingGettingPushed);
                     if (userTransform.GridUid == userTransform.ParentUid &&
+                        userTransform.GridUid != userTransform.MapUid && // CMU14: a planet's ground is its map, which never moves
                         TryComp<PhysicsComponent>(userTransform.GridUid.Value, out var gridBody))
                     {
                         // Apply both linear and angular momentum depending on the player position.

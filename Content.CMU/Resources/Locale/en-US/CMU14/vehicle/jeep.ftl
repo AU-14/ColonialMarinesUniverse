@@ -46,6 +46,11 @@ cmu-jeep-engine-fine = The engine doesn't need any work.
 cmu-jeep-part-fine = There's nothing to fix on the {$part}.
 cmu-jeep-wreck-warning = Flames burst from under {THE($vehicle)}'s hood! Get clear before it goes up!
 cmu-jeep-fire-out = The fire under {THE($vehicle)}'s hood dies down with a hiss.
+cmu-vehicle-crash-knocked-out = {CAPITALIZE(THE($rider))} slams forward with the crash and goes limp!
+cmu-vehicle-front-straightened = You beat the last of the dents out of {THE($vehicle)}'s front.
+cmu-vehicle-front-damage-1 = Its bumper is bent in from a crash.
+cmu-vehicle-front-damage-2 = [color=yellow]Its front end is crumpled from a crash.[/color]
+cmu-vehicle-front-damage-3 = [color=red]Its front end is smashed in.[/color]
 cmu-jeep-hull-wrecked = {CAPITALIZE(THE($vehicle))} buckles and sags on its wheels. It won't go any further until the hull is repaired.
 cmu-vehicle-cargo-load-verb = Load crate
 cmu-vehicle-cargo-unload-verb = Unload crate
@@ -60,6 +65,8 @@ cmu-vehicle-crayon-empty = The crayon is used up.
 cmu-vehicle-paint-empty = The spray painter is out of paint.
 cmu-vehicle-paint-done = You respray {THE($vehicle)}.
 cmu-vehicle-paint-wheels-done = You respray the wheels of {THE($vehicle)}.
+cmu-vehicle-paint-interior-done = You respray the inside of {THE($vehicle)}.
+cmu-vehicle-paint-seats-done = You respray the seats of {THE($vehicle)}.
 
 # Moving parts come off screwdriver, wrench, hand, and go back on hand, wrench, screwdriver.
 cmu-jeep-part-unscrewed = You take the screws out of the {$part}. Its bolts still hold it.
@@ -89,29 +96,8 @@ cmu-vehicle-spray-painter-title = Vehicle paint
 cmu-vehicle-spray-painter-hex = Hex
 cmu-vehicle-spray-painter-charges = Paint left: {$current}/{$max} (a respray uses 5, the wheels 1)
 
-# The manual packed in a jeep kit crate.
-cmu-jeep-assembly-manual =
-    {"["}head=2]JEEP FIELD ASSEMBLY[/head]
-    {"["}italic]For the cargo, medical, transport and gun jeeps delivered as kit crates.[/italic]
-
-    The crate holds the chassis, its parts, a wrench, a screwdriver, two fuel cans and the ignition key. Opening it sets the chassis down where the crate stood and lays the parts out on either side. The chassis comes with its engine fitted and an empty tank.
-
-    {"["}bold]1. Wheels.[/bold] Take a wheel set and use it on the chassis. It goes on by hand. The jeep can't move without it.
-
-    {"["}bold]2. Panels.[/bold] The hood, both doors and the windshield (and the tailgate on cargo, medical and gun jeeps) each go on in three steps:
-    - Use the part on the jeep to hang it on its hinges.
-    - Use a wrench on the part to bolt it on.
-    - Use a screwdriver on the part to screw it down.
-    A door takes either side. Taking a panel off is the same in reverse: screwdriver, wrench, then lift it off with an empty hand.
-
-    {"["}bold]3. Lamps.[/bold] Two headlights, two turn signals for the front fenders and two tail lights. Each fits either side: hold it and click where it goes. They come off with a screwdriver.
-
-    {"["}bold]4. Kit.[/bold] Hang the shovel and the fire axe on the driver's door, the maintenance jack on the passenger's door, and strap the fire extinguisher to the cowl ahead of the passenger's door. On the cargo, medical and gun jeeps, hang the spare wheel set and a fuel can on the tailgate while it is up. On the transport they hang on the rear wall.
-
-    {"["}bold]5. Gun jeep only.[/bold] Fit the gun mount on the pedestal behind the seats.
-
-    {"["}bold]6. Fuel.[/bold] Open the fuel door on the right rear quarter and use the second fuel can on it.
-
-    {"["}bold]7. Key.[/bold] Put the key in the ignition. The first key in becomes this jeep's own, and only it fits after that. Without it the engine won't start, and taking it out stops it. At the wheel, your key button pulls it out into your hand.
-
-    {"["}bold]Driving.[/bold] Doors open let the crew in and out at once; over a shut door it takes a moment. The headlight switch cycles low beam, high beam and off. Lower the tailgate to load or unload a crate. On the medical jeep, drag a casualty onto the surgical bed over the lowered tailgate; the medic's seat faces the bed.
+# Jeep crates and the CLF's jeep drop flare.
+cmu-vehicle-crate-landing = It's still settling after the drop.
+cmu-vehicle-crate-unlatching = You start unlatching {THE($crate)}.
+cmu-vehicle-drop-flare-covered = The flare's beacon can't be seen from the sky here.
+cmu-vehicle-drop-flare-called = The flare's beacon chirps: a crate is on its way down.

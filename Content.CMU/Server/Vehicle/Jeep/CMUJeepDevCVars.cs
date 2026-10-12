@@ -10,10 +10,16 @@ namespace Content.Server.CMU14.Vehicle.Jeep;
 public sealed class CMUJeepDevCVars
 {
     /// <summary>
-    /// On a server without a lobby, parks the three jeeps and a test kit on open ground next to each
+    /// On a server without a lobby, parks the four jeeps and a test kit on open ground next to each
     /// player who spawns, once per player per round.
     /// </summary>
     public static readonly CVarDef<bool> DevKit = CVarDef.Create("cmu.jeep.dev_kit", false, CVar.SERVERONLY);
+
+    /// <summary>
+    /// The dev kit drops the jeep crates by parachute, the colony ones too, instead of parking
+    /// assembled jeeps.
+    /// </summary>
+    public static readonly CVarDef<bool> DevKitCrates = CVarDef.Create("cmu.jeep.dev_kit_crates", false, CVar.SERVERONLY);
 
     /// <summary>
     /// Job given to joining players when their station offers it, so a test account spawns as a

@@ -1,0 +1,21 @@
+using Robust.Shared.Audio;
+
+namespace Content.Shared.CMU14.Vehicle;
+
+/// <summary>
+/// A gun heard from afar: each shot also plays <see cref="Sound"/> to everyone between
+/// <see cref="MinRange"/> and <see cref="MaxRange"/> tiles away, full at the near edge and fading out
+/// at the far one. Closer in, only the gun's own shot is heard; the two overlap where its own fades.
+/// </summary>
+[RegisterComponent]
+public sealed partial class CMUGunDistantSoundComponent : Component
+{
+    [DataField(required: true)]
+    public SoundSpecifier Sound = default!;
+
+    [DataField]
+    public float MinRange = 10f;
+
+    [DataField]
+    public float MaxRange = 45f;
+}

@@ -129,6 +129,10 @@
   - type: CMUJeepPartIntegrity
     integrity: 30
     maxIntegrity: 30
+    breakSound:
+      path: /Audio/CMU14/Jeep/jeep_headlight_shatter.wav
+      params:
+        volume: -2
   - type: Tag
     tags:
     - CMUJeepHeadlight
@@ -372,11 +376,17 @@
     availableModes:
     - FullAuto
     soundGunshot:
-      path: /Audio/_RuMC14/Weapons/Guns/Gunshots/gun_UTES-C.ogg
+      path: /Audio/CMU14/Jeep/jeep_mg_close.wav
       params:
-        volume: -1
+        volume: -2
         variation: 0.05
     cameraRecoilScalar: 0
+  - type: CMUGunDistantSound
+    sound:
+      path: /Audio/CMU14/Jeep/jeep_mg_far.wav
+      params:
+        volume: -3
+        variation: 0.05
   - type: GunIFF
     enabled: true
   - type: RMCWeaponAccuracy
@@ -670,8 +680,10 @@
   - type: Reactive
   # A spray painter resprays the body, or the wheels on their own, in its chosen colour; see paint.swsl.
   - type: CMUVehiclePaint
-    layers: [ base, damaged_frame, engine, hood, door_driver, door_passenger, tailgate, fuel_door, headlight_left, headlight_right, turn_signal_left, turn_signal_right, taillight_left, taillight_right, extinguisher, windshield ]
-    overlayLayers: [ body, damaged_frame, door_driver, door_passenger, tailgate, taillight_left, taillight_right, hood, hood_raised, fuel_door, headlight_left, headlight_right, turn_signal_left, turn_signal_right, extinguisher, windshield ]
+    layers: [ base, front_dent, damaged_frame, hood, door_driver, door_passenger, tailgate, fuel_door, headlight_left, headlight_right, turn_signal_left, turn_signal_right, taillight_left, taillight_right, extinguisher ]
+    overlayLayers: [ body, front_dent, damaged_frame, door_driver, door_passenger, tailgate, taillight_left, taillight_right, hood, hood_raised, fuel_door, headlight_left, headlight_right, turn_signal_left, turn_signal_right, extinguisher ]
+    plainLayers: [ engine, windshield ]
+    plainOverlayLayers: [ windshield ]
     wheelLayers: [ rmc-wheels, spare ]
     wheelOverlayLayers: [ wheels, spare ]
   - type: RMCIgnoreGhostInteractionLimits
@@ -708,6 +720,13 @@
     xenoMobCrashImmobileDuration: 8
     xenoMobCrashImmobileMinSpeed: 5
   - type: CMUVehicleCrash
+  - type: CMUVehicleFrontDamage
+    closedHoodState: hood_closed_dent
+  - type: CMUVehicleCrashKnockout
+    hornSound:
+      path: /Audio/CMU14/Jeep/jeep_horn_long.wav
+      params:
+        volume: 2
   - type: VehicleOvercharge
     speedMultiplier: 1.55
     duration: 3
@@ -715,7 +734,7 @@
     overchargeSound: /Audio/_RMC14/Vehicle/overdrive_activate.ogg
   # The engine sounds come from CMUVehicleEngineSound, so there is no running sound here.
   - type: VehicleSound
-    hornSound: /Audio/_RMC14/Vehicle/sound_vehicles_humvee_horn.ogg
+    hornSound: /Audio/CMU14/Jeep/jeep_horn.wav
     hornCooldown: 1
     collisionSound: /Audio/_RMC14/Effects/metal_crash.ogg
     collisionSoundCooldown: 1.5
@@ -783,6 +802,9 @@
     layers:
     - map: [ base ]
       state: jeep_base
+    - map: [ front_dent ]
+      state: front_dent_1
+      visible: false
     - map: [ damaged_frame ]
       state: damaged_frame
       visible: false
@@ -1604,6 +1626,9 @@
     layers:
     - map: [ body ]
       state: jeep_overlay
+    - map: [ front_dent ]
+      state: front_dent_overlay_1
+      visible: false
     - map: [ damaged_frame ]
       state: damaged_overlay
       visible: false
@@ -1704,6 +1729,11 @@
       state: hood_outline
       visible: false
   - type: CMUVehicleOverlayVisuals
+    signalSound:
+      path: /Audio/CMU14/Jeep/jeep_blinker.wav
+      params:
+        volume: -6
+        maxDistance: 4
     directionOffsets:
       South: 0,1
       North: 0,0
@@ -1742,6 +1772,9 @@
     layers:
     - map: [ body ]
       state: jeep_overlay
+    - map: [ front_dent ]
+      state: front_dent_overlay_1
+      visible: false
     - map: [ damaged_frame ]
       state: damaged_overlay
       visible: false
@@ -1838,6 +1871,11 @@
       state: hood_outline
       visible: false
   - type: CMUVehicleOverlayVisuals
+    signalSound:
+      path: /Audio/CMU14/Jeep/jeep_blinker.wav
+      params:
+        volume: -6
+        maxDistance: 4
     directionOffsets:
       South: 0,1
       North: 0,0

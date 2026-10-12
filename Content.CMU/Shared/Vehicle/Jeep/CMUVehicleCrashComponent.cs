@@ -59,7 +59,8 @@ public sealed partial class CMUVehicleCrashComponent : Component
 
 /// <summary>
 /// A vehicle crashed into something and its hull took <see cref="HullDamage"/>. <see cref="Frontal"/>
-/// when it drove forward into something ahead of its front.
+/// when it drove forward into something ahead of its front; <see cref="Speed"/> is how fast it hit,
+/// as a share of its top speed.
 /// </summary>
 [ByRefEvent]
-public readonly record struct CMUVehicleCrashedEvent(float HullDamage, bool Frontal);
+public readonly record struct CMUVehicleCrashedEvent(float HullDamage, bool Frontal, float Speed = 0f);

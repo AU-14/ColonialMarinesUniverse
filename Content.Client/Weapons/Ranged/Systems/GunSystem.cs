@@ -571,6 +571,11 @@ public sealed partial class GunSystem : SharedGunSystem
         var droneFlash = _combatDroneTurret.AttachMuzzleFlash(ent, gunUid, message.Angle);
         if (!droneFlash && _vehicleTurretMuzzleOffset.TryGetGunPose(gunUid, null, out var origin, out var rotation))
         {
+            // CMU14 VehicleGunOrigin Begin: a gun with a CMU origin already gives its drawn barrel tip.
+            if (HasComp<Content.Shared.CMU14.Vehicle.Jeep.CMUVehicleGunOriginComponent>(gunUid))
+                offset = Vector2.Zero;
+            // CMU14 End
+
             var renderedMap = TransformSystem.ToMapCoordinates(origin);
             var effectXform = Transform(ent);
             effectXform.ActivelyLerping = false;

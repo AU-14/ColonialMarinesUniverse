@@ -6,6 +6,7 @@ using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Shared._NC14.DayNightCycle;
 using Content.Shared._RMC14.Areas;
+using Content.Shared._RMC14.SupplyDrop;
 using Content.Shared.CMU14.Vehicle.Jeep;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.CMU14.ZLevels.Core;
@@ -15,6 +16,7 @@ using Content.Shared.Maps;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Physics;
 using Content.Shared.Roles;
+using Robust.Shared.Audio;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
@@ -27,8 +29,8 @@ namespace Content.Server.CMU14.Vehicle.Jeep;
 /// <summary>
 /// Jeep test server helper, off unless the jeep test config turns it on (see <see cref="CMUJeepDevCVars"/>).
 /// On a server without a lobby it gives joining players a job their station offers, so a test account
-/// spawns as a person on any map, then parks the four jeeps and a test kit on the nearest open ground
-/// around each player and brings the player next to them.
+/// spawns as a person on any map, then parks the four jeeps, or drops their crates by parachute,
+/// with a test kit on the nearest open ground around each player and brings the player next to them.
 /// </summary>
 public sealed class CMUJeepDevKitSystem : EntitySystem
 {
@@ -40,6 +42,7 @@ public sealed class CMUJeepDevKitSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private CMUVehicleSeatSystem _seats = default!;
     [Dependency] private StationJobsSystem _stationJobs = default!;
+    [Dependency] private SharedSupplyDropSystem _supplyDrop = default!;
     [Dependency] private GameTicker _ticker = default!;
     [Dependency] private ITileDefinitionManager _tileDefs = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -49,10 +52,20 @@ public sealed class CMUJeepDevKitSystem : EntitySystem
     private static readonly EntProtoId[] Jeeps =
         { "CMUVehicleJeepCargo", "CMUVehicleJeepTransport", "CMUVehicleJeepGunner", "CMUVehicleJeepMedical" };
 
-    // What the jeep's parts take: welding, screwing and anchoring tools, a crayon, refuelling, cupola
-    // ammo. The loose tools share the player's tile; the crate and the fuel tank are hard and need a
-    // tile each.
-    private static readonly EntProtoId[] Tools = { "CMWelder", "CMWrench", "CMScrewdriver", "CrayonBox", "CMUVehicleSprayPainter", "RMCFuelCan", "VehicleAmmoBoxCupola" };
+    private static readonly EntProtoId[] Crates =
+    {
+        "CMUCrateJeepCargo", "CMUCrateJeepTransport", "CMUCrateJeepGunner", "CMUCrateJeepMedical",
+        "CMUCrateJeepCargoColony", "CMUCrateJeepMedicalColony",
+    };
+
+    // What the jeep's parts take: welding, screwing, prying and anchoring tools, a crayon, refuelling,
+    // cupola ammo, and the CLF's jeep drop flares. The loose tools share the player's tile; the crate
+    // and the fuel tank are hard and need a tile each.
+    private static readonly EntProtoId[] Tools =
+    {
+        "CMWelder", "CMWrench", "CMScrewdriver", "CMCrowbar", "CrayonBox", "CMUVehicleSprayPainter", "RMCFuelCan",
+        "VehicleAmmoBoxCupola", "CMUFlareJeepDropCLF", "CMUFlareJeepDropCLF", "CMUFlareJeepDropCLF",
+    };
     private static readonly EntProtoId[] Props = { "RMCCrateGreen", "RMCTankReagentFuel" };
 
     private const CollisionGroup Blockers = CollisionGroup.Impassable | CollisionGroup.MidImpassable |
@@ -60,8 +73,16 @@ public sealed class CMUJeepDevKitSystem : EntitySystem
                                             CollisionGroup.BarricadeImpassable | CollisionGroup.MobLayer |
                                             CollisionGroup.LargeMobLayer | CollisionGroup.MachineLayer;
 
-    // Jeeps park facing south, three columns apart so their side exits stay clear.
+    // Jeeps park facing south, three columns apart so their side exits stay clear; jeep crates land
+    // six apart, room for their walls to fall flat.
     private const int Pitch = 3;
+    private const int CratePitch = 6;
+
+    // A jeep crate's fall: as a supply drop with a shorter wait, shut until a second after it lands.
+    private const float CrateSkyFall = 4f;
+    private const float CrateDropTime = 3f;
+    private static readonly EntProtoId CrateLandingMarker = "RMCEffectAlert";
+    private static readonly SoundSpecifier CrateArrivingSound = new SoundPathSpecifier("/Audio/_RMC14/Machines/Techpod/techpod_drill.ogg");
     private const int SearchRadius = 30;
     // A player further than this from their jeeps is moved next to them.
     private const int GatherDistance = 2;
@@ -137,8 +158,9 @@ public sealed class CMUJeepDevKitSystem : EntitySystem
     }
 
     /// <summary>
-    /// Parks the four jeeps and the test kit on the nearest open ground around a player, under open
-    /// sky where there is room, and moves the player next to them if they ended up further away.
+    /// Parks the four jeeps, or drops the jeep crates, and the test kit on the nearest open ground
+    /// around a player, under open sky where there is room, and moves the player next to them if they
+    /// ended up further away.
     /// </summary>
     public bool TrySpawnKit(EntityUid player, [NotNullWhen(true)] out List<EntityUid>? jeeps, [NotNullWhen(false)] out string? error)
     {
@@ -161,23 +183,32 @@ public sealed class CMUJeepDevKitSystem : EntitySystem
         var grid = new Entity<MapGridComponent>(gridUid, gridComp);
         var origin = _map.TileIndicesFor(gridUid, gridComp, xform.Coordinates);
 
+        var crates = _cfg.GetCVar(CMUJeepDevCVars.DevKitCrates);
+        var pitch = crates ? CratePitch : Pitch;
+        Func<Vector2i, IEnumerable<Vector2i>> footprint = crates ? CrateTiles : JeepTiles;
         var placed = new List<Vector2i>();
+        var spots = new List<string>();
         jeeps = new List<EntityUid>();
-        foreach (var proto in Jeeps)
+        foreach (var proto in crates ? Crates : Jeeps)
         {
-            // Line the jeeps up beside the first one where there is room.
-            Vector2i? beside = placed.Count == 0 ? null : placed[^1] + new Vector2i(Pitch, 0);
-            if (!TryFindTile(grid, placed.Count == 0 ? origin : placed[0], beside, JeepTiles, out var tile))
+            // Line them up beside the first one where there is room.
+            Vector2i? beside = placed.Count == 0 ? null : placed[^1] + new Vector2i(pitch, 0);
+            if (!TryFindTile(grid, placed.Count == 0 ? origin : placed[0], beside, footprint, out var tile))
             {
                 Log.Warning($"No room for {proto} within {SearchRadius} tiles of {ToPrettyString(player)}.");
                 continue;
             }
 
-            Reserve(grid, JeepTiles(tile));
+            Reserve(grid, footprint(tile));
             placed.Add(tile);
-            var jeep = SpawnAttachedTo(proto, _map.GridTileToLocal(gridUid, gridComp, tile));
-            jeeps.Add(jeep);
-            LeaveKitKey(jeep);
+            var coordinates = _map.GridTileToLocal(gridUid, gridComp, tile);
+            var spawned = SpawnAttachedTo(proto, coordinates);
+            jeeps.Add(spawned);
+            spots.Add($"{ToPrettyString(spawned)} at {coordinates.Position}");
+            if (crates)
+                DropCrate(spawned, _transform.ToMapCoordinates(coordinates));
+            else
+                LeaveKitKey(spawned);
         }
 
         if (placed.Count == 0)
@@ -219,10 +250,23 @@ public sealed class CMUJeepDevKitSystem : EntitySystem
         }
 
         Log.Info($"Jeep dev kit for {ToPrettyString(player)} on {ToPrettyString(gridUid)}: " +
-                 string.Join(", ", jeeps.Select(j => $"{ToPrettyString(j)} at {Transform(j).LocalPosition}")) +
-                 $"; player at {stand}.");
+                 string.Join(", ", spots) + $"; player at {stand}.");
         error = null;
         return true;
+    }
+
+    /// <summary>
+    /// A jeep crate comes down by parachute like a supply drop and stays shut until it has landed.
+    /// </summary>
+    private void DropCrate(EntityUid crate, MapCoordinates target)
+    {
+        _supplyDrop.LaunchSupplyDrop(crate,
+            target,
+            CrateSkyFall,
+            CrateDropTime,
+            TimeSpan.FromSeconds(CrateSkyFall + CrateDropTime + 1f),
+            landingEffect: CrateLandingMarker,
+            arrivingSound: CrateArrivingSound);
     }
 
     /// <summary>
@@ -257,6 +301,24 @@ public sealed class CMUJeepDevKitSystem : EntitySystem
         // The transport's rear seats step out at (+/-0.95, 0.75), in the tiles beside the rear.
         yield return tile + new Vector2i(-1, 1);
         yield return tile + new Vector2i(1, 1);
+    }
+
+    /// <summary>
+    /// Tiles a jeep crate needs free: the crate and the jeep's exits. Its walls lie flat over whatever
+    /// is round it.
+    /// </summary>
+    private static IEnumerable<Vector2i> CrateTiles(Vector2i tile)
+    {
+        for (var dx = -1; dx <= 1; dx++)
+        {
+            for (var dy = -1; dy <= 1; dy++)
+            {
+                yield return tile + new Vector2i(dx, dy);
+            }
+        }
+
+        yield return tile + new Vector2i(0, -2);
+        yield return tile + new Vector2i(0, 2);
     }
 
     private static IEnumerable<Vector2i> SingleTile(Vector2i tile)

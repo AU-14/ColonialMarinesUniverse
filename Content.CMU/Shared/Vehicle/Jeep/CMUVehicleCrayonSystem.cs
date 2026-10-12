@@ -7,6 +7,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Robust.Shared.Audio.Systems;
 using System.Numerics;
+using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Utility;
 
@@ -65,13 +66,7 @@ public abstract class SharedCMUVehicleCrayonSystem : EntitySystem
             return;
         }
 
-        // The frame is drawn turned by whatever is left over past its cardinal, which a jeep can rest at.
-        var (position, rotation) = _transform.GetWorldPositionRotation(ent);
-        var direction = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(rotation);
-        var offset = (direction.ToAngle() - rotation).RotateVec(_transform.ToMapCoordinates(args.ClickLocation).Position - position);
-        var x = (int) MathF.Floor(FrameSize / 2f + offset.X * PixelsPerMeter);
-        var y = (int) MathF.Floor(FrameSize / 2f - offset.Y * PixelsPerMeter);
-        if (!TryGetSurface(ent.Comp.Map, direction, x, y, out var voxel, out var front, out _, out var panel) ||
+        if (!TryGetClickedSurface(ent, args.ClickLocation, out var direction, out var voxel, out var front, out var panel) ||
             IsPanelOpen(CompOrNull<CMUJeepComponent>(ent.Owner), panel))
         {
             _popup.PopupEntity(Loc.GetString("cmu-vehicle-crayon-miss"), ent, args.User);
@@ -110,6 +105,20 @@ public abstract class SharedCMUVehicleCrayonSystem : EntitySystem
     {
         _popup.PopupEntity(Loc.GetString("crayon-interact-used-up-text", ("owner", crayon)), user, user);
         QueueDel(crayon);
+    }
+
+    /// <summary>
+    /// The body voxel under a click on the vehicle, read from the frame it is drawn with.
+    /// </summary>
+    public bool TryGetClickedSurface(Entity<CMUVehicleCrayonComponent> ent, EntityCoordinates click, out Direction direction, out Vector3 voxel, out bool front, out CMUCrayonPanel panel)
+    {
+        // The frame is drawn turned by whatever is left over past its cardinal, which a jeep can rest at.
+        var (position, rotation) = _transform.GetWorldPositionRotation(ent);
+        direction = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(rotation);
+        var offset = (direction.ToAngle() - rotation).RotateVec(_transform.ToMapCoordinates(click).Position - position);
+        var x = (int) MathF.Floor(FrameSize / 2f + offset.X * PixelsPerMeter);
+        var y = (int) MathF.Floor(FrameSize / 2f - offset.Y * PixelsPerMeter);
+        return TryGetSurface(ent.Comp.Map, direction, x, y, out voxel, out front, out _, out panel);
     }
 
     /// <summary>
