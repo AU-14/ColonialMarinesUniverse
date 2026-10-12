@@ -216,8 +216,11 @@ public sealed class NubodySpeciesBridgeTest : GameTest
         });
     }
 
+    // dirty: turning pvs on leaves a stale send list behind that the next pvs test on this pair would trip over
+    private static PoolSettings PvsDisconnected => new() { Connected = false, Dirty = true };
+
     [Test]
-    [PairConfig(nameof(PsDisconnected))]
+    [PairConfig(nameof(PvsDisconnected))]
     public async Task ExistingCmuHumanHasVisibleBodyForLateConnectingClient()
     {
         await Server.WaitPost(() => Server.CfgMan.SetCVar(CVars.NetPVS, true));

@@ -82,14 +82,17 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
 
             UnequipAndFling(d.Body, "shoes");
 
+            EnsureComp<CMULegLossDownedComponent>(d.Body);
             _standing.Down(d.Body);
         }
 
         while (_deferredLegRestore.TryDequeue(out var restored))
         {
             // nothing else stands up a mob that was only down for missing legs, and RMC blocks item use
-            // for a downed mob with both legs. not forced, so knockdown/rest/buckle/crit still win
+            // for a downed mob with both legs. not forced, so knockdown/rest/buckle/crit still win.
+            // part-added also fires for every limb at spawn, so only mobs that lost leg support get stood up
             if (Deleted(restored) ||
+                !HasComp<CMULegLossDownedComponent>(restored) ||
                 !_standing.IsDown(restored) ||
                 _container.IsEntityInContainer(restored) || // body bags and cryo own their down state
                 !_legSupport.HasLegsToStand(restored))
@@ -97,6 +100,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
                 continue;
             }
 
+            RemComp<CMULegLossDownedComponent>(restored);
             _standing.Stand(restored);
         }
 
