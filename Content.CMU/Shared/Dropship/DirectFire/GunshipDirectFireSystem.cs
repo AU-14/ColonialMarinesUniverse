@@ -19,6 +19,10 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Random;
 using Content.Shared.Throwing;
+using Content.Shared._RMC14.Weapons.Ranged;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
+using Robust.Shared.Physics.Events;
 
 namespace Content.Shared.CMU14.Dropship.DirectFire;
 
@@ -50,6 +54,8 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         SubscribeLocalEvent<GunshipDirectFireWeaponComponent, GunShotEvent>(OnGunShot);
         SubscribeLocalEvent<GunshipDirectFireWeaponComponent, ShotAttemptedEvent>(OnShotAttempted);
         SubscribeLocalEvent<GunshipDirectFireWeaponComponent, GunRefreshModifiersEvent>(OnRefreshModifiers);
+        SubscribeLocalEvent<MohawkChinGunProjectileComponent, PreventCollideEvent>(OnProjectileCollision);
+        SubscribeLocalEvent<MohawkChinGunProjectileComponent, ProjectileFixedDistanceStopEvent>(OnProjectileStop);
     }
 
     private void OnShotAttempted(Entity<GunshipDirectFireWeaponComponent> ent, ref ShotAttemptedEvent args)
@@ -121,6 +127,13 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         if (chinMount)
         {
             var chin = Comp<MohawkChinGunComponent>(point);
+            if (ammo != null && !_chinGun.IsAmmoUsable(point, ammo))
+            {
+                args.Cancelled = true;
+                args.ResetCooldown = true;
+                args.Message = _chinGun.AmmoRestriction(ammo);
+                return;
+            }
             if (!_chinGun.IsInFlareArea((point.Owner, chin), targetCoordinates))
             {
                 chin.PendingManualShot = null;
@@ -286,6 +299,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
             args.Ammo.Add((projectile, _guns.EnsureShootable(projectile)));
             if (TryComp(point, out MohawkChinGunComponent? chin))
             {
+                EnsureComp<MohawkChinGunProjectileComponent>(projectile);
                 chin.PendingManualShot = null;
                 var iffEvent = new AmmoShotEvent { FiredProjectiles = new List<EntityUid> { projectile } };
                 _iff.GiveAmmoIFF(point.Owner, ref iffEvent, intrinsic: true, enabled: true);
@@ -332,6 +346,23 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
 
     private void OnGunShot(Entity<GunshipDirectFireWeaponComponent> ent, ref GunShotEvent args)
     {
+        if (TryComp(ent, out GunComponent? gun) && gun.ProjectileSpeedModified > 0 &&
+            _containers.TryGetContainingContainer(ent.Owner, out var container) &&
+            HasComp<MohawkChinGunComponent>(container.Owner))
+        {
+            var from = _transform.ToMapCoordinates(args.FromCoordinates);
+            var target = _transform.ToMapCoordinates(args.ToCoordinates);
+            foreach (var (projectile, _) in args.Ammo)
+            {
+                if (projectile is not { } uid)
+                    continue;
+                var stop = EnsureComp<ProjectileFixedDistanceComponent>(uid);
+                stop.TargetCoordinates = target;
+                stop.FlyEndTime = _timing.CurTime +
+                                  TimeSpan.FromSeconds(Vector2.Distance(from.Position, target.Position) / gun.ProjectileSpeedModified);
+                Dirty(uid, stop);
+            }
+        }
         if (!TryResolveMount(ent, out var point, out var grid, out _, out _))
             return;
 
@@ -356,6 +387,18 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
             _physics.SetLinearVelocity(uid, body.LinearVelocity + velocityCorrection, body: body);
         }
 
+    }
+
+    private void OnProjectileCollision(Entity<MohawkChinGunProjectileComponent> ent, ref PreventCollideEvent args)
+    {
+        if (TryComp(args.OtherEntity, out MobStateComponent? mob) && mob.CurrentState == MobState.Dead)
+            args.Cancelled = true;
+    }
+
+    private void OnProjectileStop(Entity<MohawkChinGunProjectileComponent> ent, ref ProjectileFixedDistanceStopEvent args)
+    {
+        if (_net.IsServer)
+            QueueDel(ent);
     }
 
     public bool TryResolveMount(

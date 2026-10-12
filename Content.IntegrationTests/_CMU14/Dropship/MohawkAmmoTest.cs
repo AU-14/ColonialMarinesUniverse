@@ -179,7 +179,9 @@ public sealed class MohawkAmmoTest : GameTest
             Assert.That(containers.GetContainer(point, mount.AmmoContainerSlotId).Contains(crate), Is.True);
             var payload = SEntMan.GetComponent<DropshipAmmoComponent>(crate);
             Assert.That(payload.Weapon.Id, Is.EqualTo("CMUMohawkM90"));
-            Assert.That(payload.Rounds, Is.EqualTo(400));
+            var capacity = payload.GroundOnly ? 1200 : 400;
+            Assert.That(payload.Rounds, Is.EqualTo(capacity));
+            Assert.That(payload.MaxRounds, Is.EqualTo(capacity));
             Assert.That(payload.RoundsPerShot, Is.EqualTo(1));
             Assert.That(payload.DirectFireSpreadDegrees, Is.EqualTo(spread));
             Assert.That(payload.Damage!.GetTotal().Int(), Is.EqualTo(damage));
@@ -194,7 +196,10 @@ public sealed class MohawkAmmoTest : GameTest
                 var attempt = new AttemptShootEvent(weapon, null, map.GridCoords,
                     map.GridCoords.Offset(new Vector2(1.5f, 20)));
                 SEntMan.EventBus.RaiseLocalEvent(weapon, ref attempt);
-                Assert.That(attempt.Cancelled, Is.False);
+                Assert.That(attempt.Cancelled, Is.EqualTo(!payload.GroundOnly),
+                    "Only Squall kinetic ammunition can be fired groundside.");
+                if (!payload.GroundOnly)
+                    continue;
                 var direction = transform.ToMapCoordinates(attempt.ToCoordinates!.Value).Position -
                                 transform.ToMapCoordinates(attempt.FromCoordinates).Position;
                 var degrees = MathF.Abs(MathHelper.RadiansToDegrees(MathF.Atan2(direction.X, direction.Y)));
@@ -202,13 +207,13 @@ public sealed class MohawkAmmoTest : GameTest
                 Assert.That(degrees, Is.LessThanOrEqualTo(spread + 0.001f));
             }
             chin.DefensiveFire = false;
-            if (spread > 0)
+            if (payload.GroundOnly && spread > 0)
                 Assert.That(maximumScatter, Is.GreaterThan(spread * 0.5f),
                     "The ammo must actually scatter firing trajectories, not merely advertise a spread field.");
             var take = new TakeAmmoEvent(1, new(), map.GridCoords, null);
             SEntMan.EventBus.RaiseLocalEvent(weapon, take);
             Assert.That(take.Ammo, Has.Count.EqualTo(1));
-            Assert.That(payload.Rounds, Is.EqualTo(399));
+            Assert.That(payload.Rounds, Is.EqualTo(capacity - 1));
             var projectile = take.Ammo.Single().Entity!.Value;
             Assert.That(SEntMan.GetComponent<MetaDataComponent>(projectile).EntityPrototype!.ID,
                 Is.EqualTo(projectileId));

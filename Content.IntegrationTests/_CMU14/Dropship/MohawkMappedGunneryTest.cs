@@ -49,7 +49,7 @@ public sealed class MohawkMappedGunneryTest : GameTest
             var containers = Server.System<SharedContainerSystem>();
             foreach (var slotId in mount.GetAmmoSlots())
             {
-                var crate = SEntMan.SpawnEntity("CMUMohawkM90Ammo",
+                var crate = SEntMan.SpawnEntity("CMUMohawkM90AmmoKinetic",
                     SEntMan.GetComponent<TransformComponent>(point).Coordinates);
                 Assert.That(containers.Insert(crate, containers.GetContainer(point, slotId)), Is.True);
             }
@@ -92,11 +92,15 @@ public sealed class MohawkMappedGunneryTest : GameTest
             Assert.That(window.FeedModeButton.Visible, Is.True);
             Assert.That(window.FeedOneButton.Visible, Is.True);
             Assert.That(window.FeedTwoButton.Visible, Is.True);
-            Assert.That(window.FeedStatusLabel.Text, Does.Contain("400 rounds"));
-            Assert.That(console.ChinGunFeedOne, Does.Contain("400 rounds"));
-            Assert.That(console.ChinGunFeedTwo, Does.Contain("400 rounds"));
+            Assert.That(window.FeedStatusLabel.Text, Does.Contain("1200 rounds"));
+            Assert.That(console.ChinGunFeedOne, Does.Contain("1200 rounds"));
+            Assert.That(console.ChinGunFeedTwo, Does.Contain("1200 rounds"));
             Assert.That(window.FreeFireButton.Visible, Is.True);
             Assert.That(window.ChinGunHealthLabel.Text, Does.Contain("2000"));
+            Assert.That(window.Panel.HasStyleClass("CrtPanel"), Is.True);
+            Assert.That(window.TrackTargetButton.Text, Is.EqualTo("Mark target"));
+            Assert.That(window.ScreenOne.TopRow.One.StyleBoxOverride, Is.Null,
+                "The screen controls must use digital stylesheet states, not hard-coded legacy green borders.");
             var bui = (DropshipWeaponsBui) CEntMan.GetComponent<UserInterfaceComponent>(CEntMan.GetEntity(consoleNet))
                 .ClientOpenInterfaces[DropshipTerminalWeaponsUi.Key];
             var preview = window.ScreenOne.Viewport.Children.OfType<DropshipTargetingPreview>().Single();

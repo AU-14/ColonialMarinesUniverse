@@ -4,22 +4,15 @@
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:viewport="clr-namespace:Content.Client.Viewport"
     xmlns:firemission="clr-namespace:Content.Client._RMC14.Dropship.Weapon.FireMission">
-    <PanelContainer Margin="10">
-        <PanelContainer.PanelOverride>
-            <graphics:StyleBoxFlat BackgroundColor="#121212" />
-        </PanelContainer.PanelOverride>
+    <PanelContainer Margin="6" StyleClasses="CrtInsetPanel">
         <BoxContainer Orientation="Vertical">
             <controls:DropshipWeaponsButtonRow Name="TopRow" Access="Public"
                                                Orientation="Horizontal" />
             <BoxContainer Orientation="Horizontal">
                 <controls:DropshipWeaponsButtonRow Name="LeftRow" Access="Public"
                                                    Orientation="Vertical" />
-                <PanelContainer SetSize="500 500"
+                <PanelContainer SetSize="500 500" StyleClasses="CrtPanel"
                                 HorizontalExpand="True" VerticalExpand="True">
-                    <PanelContainer.PanelOverride>
-                        <graphics:StyleBoxFlat BackgroundColor="#001908" BorderColor="#00AE3A"
-                                               BorderThickness="2" />
-                    </PanelContainer.PanelOverride>
                     <viewport:ScalingViewport Name="Viewport" Access="Public" Visible="False"
                                               HorizontalExpand="True" VerticalExpand="True" />
                     <firemission:DropshipFireMissionCreateScreen Name="FireMissionCreate" Access="Public" Visible="False"
@@ -30,7 +23,7 @@
                                                                HorizontalExpand="True" VerticalExpand="True" />
                     <Label Name="ScreenLabel" Access="Public"
                            HorizontalExpand="True" VerticalExpand="True"
-                           Align="Center" VAlign="Center" ModulateSelfOverride="#00E94E" />
+                           Align="Center" VAlign="Center" StyleClasses="CrtText" />
                 </PanelContainer>
                 <controls:DropshipWeaponsButtonRow Name="RightRow" Access="Public"
                                                    Orientation="Vertical" />
@@ -41,7 +34,7 @@
                 <Button Name="LaserPatternButton" Access="Public" Visible="False" />
                 <Button Name="AirburstHeightButton" Access="Public" Visible="False" />
             </BoxContainer>
-            <Label Name="PayloadPreviewLabel" Access="Public" ClipText="True"
+            <Label Name="PayloadPreviewLabel" Access="Public" ClipText="True" StyleClasses="CrtDimText"
                    ToolTip="{Loc 'cmu-dropship-preview-help'}" />
         </BoxContainer>
     </PanelContainer>

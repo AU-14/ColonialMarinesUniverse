@@ -42,6 +42,7 @@ public sealed partial class MohawkChinGunComponent : Component
     public TimeSpan FreeFireUntil;
     public TimeSpan FreeFireReadyAt;
     public EntityUid? FreeFireConsole;
+    public EntityUid? AutomaticTarget;
     [DataField, AutoNetworkedField]
     public float MaxHealth = 2000;
     [DataField, AutoNetworkedField]
