@@ -193,6 +193,8 @@
         amount: 25
     - name: Helmet Garb
       entries:
+      - id: CMUHelmetGarbPVS71NightVision
+        amount: 15
       - id: AU14HelmetGarbM10SkrimJungle
         amount: 15
       - id: AU14HelmetGarbM10SkrimDesert
