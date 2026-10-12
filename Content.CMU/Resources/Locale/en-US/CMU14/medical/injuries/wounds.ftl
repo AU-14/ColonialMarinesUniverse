@@ -66,3 +66,5 @@ cmu-robotic-limb-repair-brute-finish-others = { THE($user) } repairs dents in { 
 cmu-robotic-limb-repair-burn-finish-self = You repair scorched wiring in your { $limb } with { THE($tool) }.
 cmu-robotic-limb-repair-burn-finish-user = You repair scorched wiring in { THE($target) }'s { $limb } with { THE($tool) }.
 cmu-robotic-limb-repair-burn-finish-others = { THE($user) } repairs scorched wiring in { THE($target) }'s { $limb } with { THE($tool) }.
+
+cmu-wound-arterial-spray = Blood squirts out of your { $part } in hot spurts!
