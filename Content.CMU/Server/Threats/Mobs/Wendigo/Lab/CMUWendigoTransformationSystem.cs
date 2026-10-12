@@ -1,6 +1,6 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Antag;
-using Content.Server.CMU14.Language;
+using Content.Server._RMC14.Language.Systems;
 using Content.Shared._RMC14.Language;
 using Content.Shared._RMC14.Language.Prototypes;
 using Content.Server.GameTicking;
@@ -62,7 +62,7 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private AntagSelectionSystem _antag = default!;
     [Dependency] private DamageableSystem _damageable = default!;
-    [Dependency] private CMUXenoLanguageSystem _xenoLanguage = default!;
+    [Dependency] private LanguageSystem _language = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedRMCEmoteSystem _emote = default!;
     [Dependency] private GhostRoleSystem _ghostRole = default!;
@@ -465,8 +465,9 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
 
         EnsureComp<CMUWendigoLabMadeComponent>(wendigo);
         // The Wendigo keeps the base human languages (LabMadeLanguages), not just the ones the
-        // subject knew, so it understands what's going on around it; English stays its active one.
-        _xenoLanguage.RefreshEnglish(wendigo);
+        // subject knew, so it understands what's going on around it. The marker is added after spawn,
+        // so the languages are recomputed here; English is the prototype's default.
+        _language.UpdateEntityLanguages(wendigo);
 
         DropEverything(ent);
 
@@ -916,8 +917,8 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
     }
 
     /// <summary>
-    /// Lab-made Wendigos were human: they keep the base human languages. English itself comes from
-    /// <see cref="CMUXenoLanguageSystem"/>, which otherwise strips it from xenos.
+    /// Lab-made Wendigos were human: they keep the base human languages. They are not xenos, so English
+    /// is simply their prototype default.
     /// </summary>
     private void OnLabMadeLanguages(Entity<CMUWendigoLabMadeComponent> ent, ref DetermineEntityLanguagesEvent args)
     {
