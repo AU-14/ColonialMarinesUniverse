@@ -67,10 +67,12 @@
 - type: entity
   parent: CMBloodPack
   id: CMUBloodPlasmaPack
-  name: blood plasma pack
-  description: A pack of blood plasma. It runs in faster than whole blood, works for any blood type, and slows bleeding for a while after it's given.
-  suffix: CMU, Full
+  name: blood plasma pack (AB+)
+  description: A pack of blood plasma. It runs in faster than whole blood and slows bleeding for a while after it's given. Plasma matches the other way round to blood; AB plasma suits anyone, O plasma only O patients.
+  suffix: CMU, Full, AB+
   components:
+  - type: CMUBloodPackType
+    type: ABPositive
   - type: BloodPack
     transferableReagents: [ CMUBloodPlasma ]
   - type: CMUIVFlow
@@ -82,6 +84,69 @@
         reagents:
         - ReagentId: CMUBloodPlasma
           Quantity: 300
+
+- type: entity
+  parent: CMUBloodPlasmaPack
+  id: CMUBloodPlasmaPackABNegative
+  name: blood plasma pack (AB-)
+  suffix: CMU, Full, AB-
+  components:
+  - type: CMUBloodPackType
+    type: ABNegative
+
+- type: entity
+  parent: CMUBloodPlasmaPack
+  id: CMUBloodPlasmaPackAPositive
+  name: blood plasma pack (A+)
+  suffix: CMU, Full, A+
+  components:
+  - type: CMUBloodPackType
+    type: APositive
+
+- type: entity
+  parent: CMUBloodPlasmaPack
+  id: CMUBloodPlasmaPackANegative
+  name: blood plasma pack (A-)
+  suffix: CMU, Full, A-
+  components:
+  - type: CMUBloodPackType
+    type: ANegative
+
+- type: entity
+  parent: CMUBloodPlasmaPack
+  id: CMUBloodPlasmaPackBPositive
+  name: blood plasma pack (B+)
+  suffix: CMU, Full, B+
+  components:
+  - type: CMUBloodPackType
+    type: BPositive
+
+- type: entity
+  parent: CMUBloodPlasmaPack
+  id: CMUBloodPlasmaPackBNegative
+  name: blood plasma pack (B-)
+  suffix: CMU, Full, B-
+  components:
+  - type: CMUBloodPackType
+    type: BNegative
+
+- type: entity
+  parent: CMUBloodPlasmaPack
+  id: CMUBloodPlasmaPackOPositive
+  name: blood plasma pack (O+)
+  suffix: CMU, Full, O+
+  components:
+  - type: CMUBloodPackType
+    type: OPositive
+
+- type: entity
+  parent: CMUBloodPlasmaPack
+  id: CMUBloodPlasmaPackONegative
+  name: blood plasma pack (O-)
+  suffix: CMU, Full, O-
+  components:
+  - type: CMUBloodPackType
+    type: ONegative
 
 - type: entity
   parent: CMBloodPack

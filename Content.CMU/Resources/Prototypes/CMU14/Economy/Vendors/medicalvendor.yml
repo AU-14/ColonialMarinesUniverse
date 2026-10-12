@@ -198,7 +198,21 @@
     - name: Plasma and Saline
       entries:
       - id: CMUBloodPlasmaPack
-        amount: 15
+        amount: 8
+      - id: CMUBloodPlasmaPackABNegative
+        amount: 4
+      - id: CMUBloodPlasmaPackAPositive
+        amount: 3
+      - id: CMUBloodPlasmaPackANegative
+        amount: 3
+      - id: CMUBloodPlasmaPackBPositive
+        amount: 3
+      - id: CMUBloodPlasmaPackBNegative
+        amount: 3
+      - id: CMUBloodPlasmaPackOPositive
+        amount: 3
+      - id: CMUBloodPlasmaPackONegative
+        amount: 3
       - id: CMUSalineBag
         amount: 20
       - id: CMUIVPressureBag

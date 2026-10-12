@@ -26,7 +26,7 @@ using Robust.Shared.Timing;
 namespace Content.Server.CMU14.Medical.Blood;
 
 /// <summary>
-/// CMU blood: blood types and compatibility, squeezing blood packs, IV pressure bags, plasma that slows bleeding and
+/// CMU blood: blood types and compatibility (red cells and plasma follow their real-life rules), squeezing blood packs, IV pressure bags, plasma that slows bleeding and
 /// saline that stands in for blood but poisons the patient when too much of their blood is saline.
 /// </summary>
 public sealed class CMUBloodSystem : EntitySystem
@@ -159,7 +159,7 @@ public sealed class CMUBloodSystem : EntitySystem
     }
 
     /// <summary>
-    /// Turns plasma and saline in a transfusion into blood volume, and destroys blood the recipient can't take.
+    /// Turns plasma and saline in a transfusion into blood volume, and destroys blood or plasma the recipient can't take.
     /// </summary>
     public void ProcessTransfusion(EntityUid pack, EntityUid recipient, BloodstreamComponent bloodstream, Solution transferred)
     {
@@ -169,19 +169,25 @@ public sealed class CMUBloodSystem : EntitySystem
 
         var reference = references[0];
 
-        if (TryComp<CMUBloodPackTypeComponent>(pack, out var label) && (label.Mixed || label.Type is { } donor &&
-                !CMUBloodTypes.CanReceive(GetBloodType(recipient), donor)))
+        // Red cells and plasma each follow their own compatibility rules.
+        if (TryComp<CMUBloodPackTypeComponent>(pack, out var label) && (label.Mixed || label.Type != null))
         {
-            var destroyed = FixedPoint2.Zero;
-            foreach (var reagent in references)
-            {
-                var quantity = transferred.GetTotalPrototypeQuantity(reagent.Id);
-                if (quantity <= FixedPoint2.Zero)
-                    continue;
+            var recipientType = GetBloodType(recipient);
+            var bloodOk = !label.Mixed && label.Type is { } bloodDonor && CMUBloodTypes.CanReceive(recipientType, bloodDonor);
+            var plasmaOk = !label.Mixed && label.Type is { } plasmaDonor &&
+                           CMUBloodTypes.CanReceivePlasma(recipientType, plasmaDonor);
 
-                transferred.RemoveReagent(new ReagentId(reagent.Id, null), quantity, ignoreReagentData: true);
-                destroyed += quantity;
+            var destroyed = FixedPoint2.Zero;
+            if (!bloodOk)
+            {
+                foreach (var reagent in references)
+                {
+                    destroyed += Destroy(transferred, reagent);
+                }
             }
+
+            if (!plasmaOk)
+                destroyed += Destroy(transferred, PlasmaReagent);
 
             if (destroyed > FixedPoint2.Zero)
                 ApplyMismatchReaction(recipient, destroyed);
@@ -205,6 +211,15 @@ public sealed class CMUBloodSystem : EntitySystem
             dilution.Saline += saline;
             Dirty(recipient, dilution);
         }
+    }
+
+    private static FixedPoint2 Destroy(Solution solution, ProtoId<ReagentPrototype> reagent)
+    {
+        var quantity = solution.GetTotalPrototypeQuantity(reagent.Id);
+        if (quantity > FixedPoint2.Zero)
+            solution.RemoveReagent(new ReagentId(reagent.Id, null), quantity, ignoreReagentData: true);
+
+        return quantity;
     }
 
     private static FixedPoint2 ConvertToBlood(Solution solution, ProtoId<ReagentPrototype> from, ProtoId<ReagentPrototype> to)

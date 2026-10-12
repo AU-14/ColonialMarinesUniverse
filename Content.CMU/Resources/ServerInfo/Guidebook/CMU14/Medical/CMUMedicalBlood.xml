@@ -6,9 +6,9 @@
   ## Blood Types
   Everyone has a blood type, picked in character creation. A health analyzer shows the patient's type next to their blood level.
   - Blood packs are labelled with their type. Blood from the WeYu Blood Dispenser comes in every type.
-  - Only give blood the patient can take. [bold]O-[/bold] can go to anyone, and [bold]AB+[/bold] can take any blood.
+  - Only give blood the patient can take, the same as real life. [bold]O-[/bold] blood can go to anyone, and [bold]AB+[/bold] patients can take any blood.
 
-  Who can take what:
+  Who can take which blood:
   - [bold]O-[/bold] patients: O- only.
   - [bold]O+[/bold]: O- and O+.
   - [bold]A-[/bold]: O- and A-.
@@ -18,13 +18,13 @@
   - [bold]AB-[/bold]: O-, A-, B- and AB-.
   - [bold]AB+[/bold]: any type.
 
-  - [color=red]The wrong type is destroyed in the bloodstream[/color]. It restores no blood, and it poisons the patient.
+  - [color=red]The wrong type is destroyed in the bloodstream[/color]. It restores nothing, and it poisons the patient.
   - Drawing blood from someone into an empty pack labels it with their type. Filling one pack from two different types makes it [color=red]mixed[/color], safe for nobody. An emptied pack can be refilled with any type.
 
   ## Giving Blood
   <Box>
     <GuideEntityEmbed Entity="CMBloodPackFull" Caption="Blood pack (O-)"/>
-    <GuideEntityEmbed Entity="CMUBloodPlasmaPack" Caption="Plasma pack"/>
+    <GuideEntityEmbed Entity="CMUBloodPlasmaPack" Caption="Plasma pack (AB+)"/>
     <GuideEntityEmbed Entity="CMUSalineBag" Caption="Saline bag"/>
     <GuideEntityEmbed Entity="CMUIVPressureBag" Caption="Pressure bag"/>
   </Box>
@@ -33,7 +33,12 @@
   - [bold]IV stand[/bold]: hang the pack on a stand and drag the stand onto the patient. Fit a [bold]pressure bag[/bold] by using it on the stand and the drip runs twice as fast. Take it off again with the stand's alt-click option.
 
   ## Plasma
-  - Plasma runs in twice as fast as whole blood and suits every blood type.
+  - Plasma runs in twice as fast as whole blood.
+  - Plasma packs are typed too, but [bold]plasma matches the other way round to blood[/bold], as in real life, and Rh doesn't matter:
+    - [bold]AB[/bold] plasma can go to anyone.
+    - [bold]A[/bold] plasma goes to A and O patients.
+    - [bold]B[/bold] plasma goes to B and O patients.
+    - [bold]O[/bold] plasma only goes to O patients.
   - For a while after it's given, it [bold]slows all bleeding by half[/bold], open wounds and internal bleeding alike. The more plasma, the longer it lasts, up to 5 minutes.
   - It doesn't stop bleeding: treat the wounds as usual.
 

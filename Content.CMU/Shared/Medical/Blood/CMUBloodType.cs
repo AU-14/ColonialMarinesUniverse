@@ -54,6 +54,18 @@ public static class CMUBloodTypes
         return (!donorA || recipientA) && (!donorB || recipientB) && (!donorRh || recipientRh);
     }
 
+    /// <summary>
+    /// Whether someone with <paramref name="recipient"/> blood can take plasma from a <paramref name="donor"/>. Plasma
+    /// carries the donor's antibodies, so it runs the other way to red cells: AB plasma suits anyone and O plasma only
+    /// O. Rh doesn't matter.
+    /// </summary>
+    public static bool CanReceivePlasma(CMUBloodType recipient, CMUBloodType donor)
+    {
+        var (recipientA, recipientB, _) = Antigens(recipient);
+        var (donorA, donorB, _) = Antigens(donor);
+        return (!recipientA || donorA) && (!recipientB || donorB);
+    }
+
     private static (bool A, bool B, bool Rh) Antigens(CMUBloodType type) => type switch
     {
         CMUBloodType.OPositive => (false, false, true),

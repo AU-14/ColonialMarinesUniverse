@@ -28,6 +28,18 @@ public sealed class BloodTypeTest
         Assert.That(CMUBloodTypes.CanReceive(recipient, donor), Is.EqualTo(compatible));
     }
 
+    [TestCase(CMUBloodType.ONegative, CMUBloodType.ABPositive, true)]
+    [TestCase(CMUBloodType.ABPositive, CMUBloodType.ABNegative, true)]
+    [TestCase(CMUBloodType.ABPositive, CMUBloodType.OPositive, false)]
+    [TestCase(CMUBloodType.APositive, CMUBloodType.ANegative, true)]
+    [TestCase(CMUBloodType.APositive, CMUBloodType.OPositive, false)]
+    [TestCase(CMUBloodType.OPositive, CMUBloodType.BNegative, true)]
+    [TestCase(CMUBloodType.BNegative, CMUBloodType.APositive, false)]
+    public void PlasmaRunsTheOtherWayAndIgnoresRh(CMUBloodType recipient, CMUBloodType donor, bool compatible)
+    {
+        Assert.That(CMUBloodTypes.CanReceivePlasma(recipient, donor), Is.EqualTo(compatible));
+    }
+
     [Test]
     public void DefaultsAreNeverONegative()
     {
