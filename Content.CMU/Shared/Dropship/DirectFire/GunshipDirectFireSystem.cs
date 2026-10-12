@@ -18,6 +18,7 @@ using Robust.Shared.Timing;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Random;
+using Content.Shared.Throwing;
 
 namespace Content.Shared.CMU14.Dropship.DirectFire;
 
@@ -39,6 +40,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
     [Dependency] private MohawkChinGunSystem _chinGun = default!;
     [Dependency] private GunIFFSystem _iff = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
 
     public override void Initialize()
     {
@@ -197,7 +199,14 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         message = null;
 
         if (TryComp(point, out MohawkChinGunComponent? chin))
+        {
+            if (!_chinGun.IsGrounded(point))
+            {
+                message = Loc.GetString("cmu-mohawk-gunnery-airborne-flare-only");
+                return false;
+            }
             return _chinGun.CanOperate((point, chin), user, weapon, out message);
+        }
 
         if (!TryComp(user, out RemoteWeaponOperatorComponent? remote) ||
             remote.Platform != grid ||
@@ -245,8 +254,16 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         }
 
         var roundsPerShot = Math.Max(1, ent.Comp.RoundsPerProjectile ?? ammo.RoundsPerShot);
-        for (var i = 0; i < args.Shots; i++)
+        // A chin-gun trajectory is checked for one feed's dispersion and friendly clearance.
+        var shots = HasComp<MohawkChinGunComponent>(point) ? Math.Min(1, args.Shots) : args.Shots;
+        for (var i = 0; i < shots; i++)
         {
+            if (HasComp<MohawkChinGunComponent>(point) &&
+                TryGetFeedAmmo(point, out var feedAmmo))
+            {
+                loadedAmmo = feedAmmo.Owner;
+                ammo = feedAmmo.Comp;
+            }
             if (ammo.Rounds < roundsPerShot)
                 break;
 
@@ -260,26 +277,40 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
                 _iff.GiveAmmoIFF(point.Owner, ref iffEvent, intrinsic: true, enabled: true);
                 if (_net.IsServer)
                 {
-                    var rotation = _transform.GetWorldRotation(grid);
-                    var position = _transform.GetMapCoordinates(point);
-                    var belowMount = new MapCoordinates(position.Position +
-                        rotation.RotateVec(new Vector2(point.Comp.LateralOffset, point.Comp.ForwardOffset)), position.MapId);
-                    var casing = Spawn("CMUMohawkM90Casing", _transform.ToCoordinates(belowMount));
-                    EnsureComp<CMUSpentCasingComponent>(casing).EjectedAt = _timing.CurTime;
+                    EjectCasing(point, grid);
+                    AmmoConsumed(point);
                 }
             }
+            _appearance.SetData(loadedAmmo, DropshipAmmoVisuals.Fill, ammo.Rounds);
+            Dirty(loadedAmmo, ammo);
         }
 
-        _appearance.SetData(loadedAmmo, DropshipAmmoVisuals.Fill, ammo.Rounds);
-        Dirty(loadedAmmo, ammo);
         _powerLoader.SyncAppearance(point.Owner);
     }
 
     private void OnGetAmmoCount(Entity<GunshipDirectFireWeaponComponent> ent, ref GetAmmoCountEvent args)
     {
-        if (!TryResolveMount(ent, out _, out _, out _, out var ammo) || ammo == null)
+        if (!TryResolveMount(ent, out var point, out _, out _, out var ammo))
             return;
 
+        if (HasComp<MohawkChinGunComponent>(point) && TryComp(point, out DropshipWeaponPointComponent? mount))
+        {
+            foreach (var id in mount.GetAmmoSlots())
+            {
+                if (!_containers.TryGetContainer(point, id, out var slot))
+                    continue;
+                foreach (var uid in slot.ContainedEntities)
+                {
+                    if (!TryComp(uid, out DropshipAmmoComponent? feed))
+                        continue;
+                    args.Count += feed.Rounds;
+                    args.Capacity += feed.MaxRounds;
+                }
+            }
+            return;
+        }
+        if (ammo == null)
+            return;
         var roundsPerShot = Math.Max(1, ent.Comp.RoundsPerProjectile ?? ammo.RoundsPerShot);
         args.Count = ammo.Rounds / roundsPerShot;
         args.Capacity = ammo.MaxRounds / roundsPerShot;
@@ -337,15 +368,23 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         point = (weaponContainer.Owner, directPoint);
         grid = mountGrid;
 
+        if (HasComp<MohawkChinGunComponent>(point))
+        {
+            if (TryGetFeedAmmo(point, out var feedAmmo))
+            {
+                ammoUid = feedAmmo.Owner;
+                ammo = feedAmmo.Comp;
+            }
+            return true;
+        }
+
         if (!_containers.TryGetContainer(point.Owner, weaponPoint.AmmoContainerSlotId, out var ammoContainer))
             return true;
 
         foreach (var contained in ammoContainer.ContainedEntities)
         {
             if (!TryComp(contained, out DropshipAmmoComponent? foundAmmo) ||
-                (HasComp<MohawkChinGunComponent>(point)
-                    ? foundAmmo.Weapon.Id != MetaData(weapon.Owner).EntityPrototype?.ID
-                    : MetaData(contained).EntityPrototype?.ID != weapon.Comp.AmmoPrototype.Id))
+                MetaData(contained).EntityPrototype?.ID != weapon.Comp.AmmoPrototype.Id)
             {
                 continue;
             }
@@ -356,5 +395,68 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         }
 
         return true;
+    }
+
+    public bool TryGetFeedAmmo(EntityUid point, out Entity<DropshipAmmoComponent> ammo, int minimumRounds = 1)
+    {
+        ammo = default;
+        if (!TryComp(point, out MohawkChinGunComponent? chin) ||
+            !TryComp(point, out DropshipWeaponPointComponent? mount))
+            return false;
+        Entity<DropshipAmmoComponent>? GetFeed(int feed)
+        {
+            var id = feed == 0 ? mount.AmmoContainerSlotId : mount.SecondAmmoContainerSlotId;
+            if (id == null || !_containers.TryGetContainer(point, id, out var slot))
+                return null;
+            foreach (var uid in slot.ContainedEntities)
+            {
+                if (TryComp(uid, out DropshipAmmoComponent? payload) && payload.Weapon.Id == "CMUMohawkM90")
+                    return (uid, payload);
+            }
+            return null;
+        }
+        var chosen = GetFeed(chin.ActiveFeed);
+        if (chosen == null || chosen.Value.Comp.Rounds < minimumRounds)
+        {
+            var other = GetFeed(1 - chin.ActiveFeed);
+            if (other is { } usable && usable.Comp.Rounds >= minimumRounds)
+            {
+                if (_net.IsServer)
+                {
+                    chin.ActiveFeed = 1 - chin.ActiveFeed;
+                    Dirty(point, chin);
+                }
+                chosen = other;
+            }
+        }
+        if (chosen is not { } selected)
+            return false;
+        ammo = selected;
+        return true;
+    }
+
+    public void AmmoConsumed(EntityUid point)
+    {
+        if (!_net.IsServer || !TryComp(point, out MohawkChinGunComponent? chin))
+            return;
+        if (chin.AlternateFeeds)
+            chin.ActiveFeed = 1 - chin.ActiveFeed;
+        Dirty(point, chin);
+    }
+
+    public void EjectCasing(Entity<GunshipDirectFirePointComponent> point, EntityUid grid)
+    {
+        if (!_net.IsServer)
+            return;
+        var rotation = _transform.GetWorldRotation(grid);
+        var position = _transform.GetMapCoordinates(point);
+        var belowMount = new MapCoordinates(position.Position +
+            rotation.RotateVec(new Vector2(point.Comp.LateralOffset, point.Comp.ForwardOffset)), position.MapId);
+        var casing = Spawn("CMUMohawkM90Casing", _transform.ToCoordinates(belowMount));
+        EnsureComp<CMUSpentCasingComponent>(casing).EjectedAt = _timing.CurTime;
+        _transform.SetLocalRotation(casing, _random.NextAngle());
+        if (!_throwing.TryThrow(casing, _random.NextAngle().RotateVec(Vector2.UnitX * _random.NextFloat(0.5f, 2f)),
+                _random.NextFloat(2f, 5f), recoil: false, playSound: false))
+            Log.Error($"Failed to throw spent M90 casing {ToPrettyString(casing)} from {ToPrettyString(point)}.");
     }
 }

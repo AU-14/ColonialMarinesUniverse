@@ -338,7 +338,10 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         var target = args.Target;
         ContainerSlot container;
 
-        if (CanDetachPopup(ref user, ent, ent.Comp.AmmoContainerSlotId, false, out var ammoSlot) &&
+        var detachableAmmoSlot = ent.Comp.GetAmmoSlots().FirstOrDefault(id =>
+            _container.TryGetContainer(ent, id, out var candidate) && candidate.ContainedEntities.Count > 0);
+        if (detachableAmmoSlot != null &&
+            CanDetachPopup(ref user, ent, detachableAmmoSlot, false, out var ammoSlot) &&
             ammoSlot.ContainedEntity != null)
         {
             container = ammoSlot;
@@ -470,7 +473,9 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         }
         else
         {
-            args.CanUse = CanDetachPopup(ref user, ent, ent.Comp.AmmoContainerSlotId, false, out slot) ||
+            var ammoSlotId = ent.Comp.GetAmmoSlots().FirstOrDefault(id =>
+                _container.TryGetContainer(ent, id, out var candidate) && candidate.Contains(used.Value));
+            args.CanUse = CanDetachPopup(ref user, ent, ammoSlotId ?? ent.Comp.AmmoContainerSlotId, false, out slot) ||
                           CanDetachPopup(ref user, ent, ent.Comp.WeaponContainerSlotId, false, out slot);
         }
 
@@ -776,6 +781,9 @@ public sealed partial class PowerLoaderSystem : EntitySystem
             }
 
             slotId = target.Comp.AmmoContainerSlotId;
+            if (_container.TryGetContainer(target, slotId, out var firstAmmo) &&
+                firstAmmo.ContainedEntities.Count > 0 && target.Comp.SecondAmmoContainerSlotId is { } secondSlot)
+                slotId = secondSlot;
             msg = Loc.GetString("rmc-power-loader-occupied-ammo");
 
             if (!_container.TryGetContainer(target, target.Comp.WeaponContainerSlotId, out var weaponContainer) ||
@@ -1264,14 +1272,16 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         var hasRounds = false;
         var maxRounds = 0;
         var rounds = 0;
-        if (_container.TryGetContainer(point, point.Comp.AmmoContainerSlotId, out var ammoContainer))
+        foreach (var ammoSlotId in point.Comp.GetAmmoSlots())
         {
+            if (!_container.TryGetContainer(point, ammoSlotId, out var ammoContainer))
+                continue;
             foreach (var contained in ammoContainer.ContainedEntities)
             {
                 if (TryComp(contained, out DropshipAmmoComponent? ammo))
                 {
-                    rounds = ammo.Rounds;
-                    maxRounds = ammo.MaxRounds;
+                    rounds += ammo.Rounds;
+                    maxRounds += ammo.MaxRounds;
 
                     // TODO RMC14 partial reloads? or hide it anyways if below the threshold
                     if (ammo.Rounds >= ammo.RoundsPerShot)

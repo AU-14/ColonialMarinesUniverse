@@ -28,6 +28,24 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
     public MohawkTargetPriority ChinGunPriority;
 
     [DataField, AutoNetworkedField]
+    public bool ChinGunAirborne;
+
+    [DataField, AutoNetworkedField]
+    public float ChinGunFlareRadius = 10f;
+
+    [DataField, AutoNetworkedField]
+    public int ChinGunFeed;
+
+    [DataField, AutoNetworkedField]
+    public bool ChinGunAlternateFeeds;
+
+    [DataField, AutoNetworkedField]
+    public string ChinGunFeedOne = "";
+
+    [DataField, AutoNetworkedField]
+    public string ChinGunFeedTwo = "";
+
+    [DataField, AutoNetworkedField]
     public Screen ScreenOne;
 
     [DataField, AutoNetworkedField]

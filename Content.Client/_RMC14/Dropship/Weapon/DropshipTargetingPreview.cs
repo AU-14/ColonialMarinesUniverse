@@ -22,6 +22,7 @@ public sealed class DropshipTargetingPreview : Control
     private readonly IInputManager _input = IoCManager.Resolve<IInputManager>();
     private float _aimElapsed;
     public event Action<MapCoordinates>? CursorAim;
+    public event Action? CursorUnavailable;
 
     public DropshipTargetingPreview(IEntityManager entities, EntityUid console, bool first, DropshipWeaponsScreen screen)
     {
@@ -50,6 +51,8 @@ public sealed class DropshipTargetingPreview : Control
         if (viewport.Visible && local.X >= 0 && local.Y >= 0 &&
             local.X < viewport.PixelWidth && local.Y < viewport.PixelHeight)
             CursorAim?.Invoke(viewport.PixelToMap(cursor));
+        else
+            CursorUnavailable?.Invoke();
     }
 
     protected override void Draw(DrawingHandleScreen handle)
@@ -80,6 +83,23 @@ public sealed class DropshipTargetingPreview : Control
                     handle.DrawLine(from, next, tint);
                 previous = next;
             }
+        }
+
+        if (_first && terminal.ChinGunOperator != null && terminal.ChinGunAirborne)
+        {
+            if (terminal.Target is { } signal && _entities.HasComponent<TransformComponent>(signal))
+            {
+                var anchor = transform.GetMapCoordinates(signal);
+                Ring(anchor.Position, terminal.ChinGunFlareRadius, Color.Cyan);
+                var cursorAim = cursorInView ? viewport.PixelToMap(cursor) : center;
+                Ring(cursorAim.Position, 0.45f,
+                    cursorAim.MapId == anchor.MapId && Vector2.DistanceSquared(cursorAim.Position, anchor.Position) <=
+                    terminal.ChinGunFlareRadius * terminal.ChinGunFlareRadius ? Color.Lime : Color.Red);
+                _screen.PayloadPreviewLabel.Text = Loc.GetString("cmu-mohawk-gunnery-airborne-preview");
+            }
+            else
+                _screen.PayloadPreviewLabel.Text = Loc.GetString("cmu-mohawk-gunnery-airborne-flare-only");
+            return;
         }
 
         if (_first && terminal.ChinGunOperator != null && shipSystem.TryGetGridDropship(_console, out var ship))

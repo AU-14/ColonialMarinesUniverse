@@ -14,6 +14,17 @@ public sealed partial class DropshipWeaponPointComponent : Component
     [DataField, AutoNetworkedField]
     public string AmmoContainerSlotId = "rmc_dropship_weapon_point_ammo_container_slot";
 
+    [DataField, AutoNetworkedField]
+    public string? SecondAmmoContainerSlotId;
+
+    [Access(Other = AccessPermissions.ReadExecute)]
+    public IEnumerable<string> GetAmmoSlots()
+    {
+        yield return AmmoContainerSlotId;
+        if (SecondAmmoContainerSlotId is { } second)
+            yield return second;
+    }
+
     // CMU14: fixed weapons can still have their ammunition serviced.
     [DataField, AutoNetworkedField, Access(Other = AccessPermissions.ReadExecute)]
     public bool FixedWeapon;

@@ -22,6 +22,8 @@ using Content.Shared.Shuttles.Systems;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
+using Content.Shared.Throwing;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -191,11 +193,16 @@ public sealed class MohawkChinGunTest
             var casing = entities.QueryEntities<CMUSpentCasingComponent>().Single();
             Assert.That(transform.GetMapCoordinates(casing).Position, Is.EqualTo(new Vector2(1.5f, 1)));
             Assert.That(transform.GetMapCoordinates(casing).MapId, Is.EqualTo(mapId));
+            Assert.That(entities.HasComponent<ThrownItemComponent>(casing), Is.True);
+            Assert.That(entities.GetComponent<PhysicsComponent>(casing).LinearVelocity.Length(),
+                Is.InRange(2f, 5f), "Casings must be physically thrown, not just placed under the mount.");
             Assert.That(entities.QueryEntities<ProjectileIFFComponent>().Any(projectile => projectile.Comp.Enabled), Is.True,
                 "Fired shells must inherit the turret's smartgun-compatible IFF.");
             Assert.That(entities.System<SharedGunSystem>().AttemptShoot(actor, (weapon, gun),
-                new EntityCoordinates(map, 1.5f, 10)), Is.False, "A second shell must wait for the one-second cooldown.");
-            Assert.That(gun.FireRate, Is.EqualTo(1));
+                new EntityCoordinates(map, 1.5f, 10)), Is.False, "A second shell must wait for the third-second cooldown.");
+            Assert.That(gun.FireRate, Is.EqualTo(3));
+            Assert.That(gun.NextFire - pair.Server.ResolveDependency<Robust.Shared.Timing.IGameTiming>().CurTime,
+                Is.EqualTo(TimeSpan.FromSeconds(1f / 3f)).Within(TimeSpan.FromMilliseconds(1)));
             gun.NextFire = TimeSpan.Zero;
             entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunFireMessage(
                 entities.GetNetCoordinates(new EntityCoordinates(map, 1.5f, 10)))
@@ -270,11 +277,7 @@ public sealed class MohawkChinGunTest
             entities.AddComponent<DropshipTargetComponent>(flare);
             entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunFlareMessage(entities.GetNetEntity(flare))
                 { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
-            Assert.That(consoleState.Target, Is.EqualTo(flare));
-            turret.Update(0);
-            Assert.That(transform.GetMapCoordinates(chin.Eye!.Value).Position, Is.EqualTo(new Vector2(1.5f, 15)));
-            Assert.That(turret.IsInFlareArea((point, chin), new EntityCoordinates(map, 1.5f, 25)), Is.True);
-            Assert.That(turret.IsInFlareArea((point, chin), new EntityCoordinates(map, 1.5f, 25.01f)), Is.False);
+            Assert.That(consoleState.Target, Is.Null, "Groundside gunnery must reject flare targeting.");
             entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunAcquireMessage
                 { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
             Assert.That(chin.TrackedTarget, Is.EqualTo(hostile));

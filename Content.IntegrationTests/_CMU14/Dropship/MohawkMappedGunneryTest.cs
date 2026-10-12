@@ -10,6 +10,8 @@ using Content.Shared.CMU14.Dropship.DirectFire;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.Eye;
 using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared._RMC14.Dropship.AttachmentPoint;
+using Robust.Shared.Containers;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -39,6 +41,14 @@ public sealed class MohawkMappedGunneryTest : GameTest
         await Server.WaitAssertion(() =>
         {
             var point = SEntMan.QueryEntities<MohawkChinGunComponent>().Single();
+            var mount = SEntMan.GetComponent<DropshipWeaponPointComponent>(point);
+            var containers = Server.System<SharedContainerSystem>();
+            foreach (var slotId in mount.GetAmmoSlots())
+            {
+                var crate = SEntMan.SpawnEntity("CMUMohawkM90Ammo",
+                    SEntMan.GetComponent<TransformComponent>(point).Coordinates);
+                Assert.That(containers.Insert(crate, containers.GetContainer(point, slotId)), Is.True);
+            }
             var seat = SEntMan.QueryEntities<MohawkGunnerySeatComponent>().Single();
             var console = SEntMan.QueryEntities<DropshipTerminalWeaponsComponent>()
                 .Single(ent => ent.Comp.Gunnery);
@@ -75,6 +85,32 @@ public sealed class MohawkMappedGunneryTest : GameTest
                 "Authorization must be discoverable but unavailable before a hostile is marked.");
             Assert.That(window.AcquireTargetButton.Visible, Is.True);
             Assert.That(window.PriorityButton.Visible, Is.True);
+            Assert.That(window.FeedModeButton.Visible, Is.True);
+            Assert.That(window.FeedOneButton.Visible, Is.True);
+            Assert.That(window.FeedTwoButton.Visible, Is.True);
+            Assert.That(window.FeedStatusLabel.Text, Does.Contain("400 rounds"));
+            Assert.That(console.ChinGunFeedOne, Does.Contain("400 rounds"));
+            Assert.That(console.ChinGunFeedTwo, Does.Contain("400 rounds"));
+        });
+        await Server.WaitAssertion(() =>
+        {
+            var console = SEntMan.GetEntity(consoleNet);
+            var actor = SEntMan.GetEntity(actorNet);
+            SEntMan.EventBus.RaiseLocalEvent(console, new MohawkChinGunFeedMessage(1)
+                { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
+            Assert.That(SEntMan.QueryEntities<MohawkChinGunComponent>().Single().Comp.ActiveFeed, Is.EqualTo(1));
+            SEntMan.EventBus.RaiseLocalEvent(console, new MohawkChinGunFeedMessage()
+                { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
+        });
+        await Pair.RunUntilSynced();
+        await Client.WaitAssertion(() =>
+        {
+            var console = CEntMan.GetComponent<DropshipTerminalWeaponsComponent>(CEntMan.GetEntity(consoleNet));
+            Assert.That(console.ChinGunAlternateFeeds, Is.True);
+            var window = Client.ResolveDependency<IUserInterfaceManager>().RootControl
+                .GetControlOfType<DropshipWeaponsWindow>(fullTreeSearch: true).Single();
+            Assert.That(window.FeedModeButton.Text, Does.Contain("alternate"));
+            Assert.That(window.FeedTwoButton.Text, Does.Contain("*"));
         });
     }
 }

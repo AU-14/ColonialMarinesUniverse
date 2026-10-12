@@ -27,6 +27,10 @@
                 <Button Name="ClearTrackingButton" Access="Public" Visible="False"
                         Text="{Loc 'cmu-dropship-track-clear'}" />
                 <Button Name="PriorityButton" Access="Public" Visible="False" />
+                <Button Name="FeedModeButton" Access="Public" Visible="False" />
+                <Button Name="FeedOneButton" Access="Public" Visible="False" />
+                <Button Name="FeedTwoButton" Access="Public" Visible="False" />
+                <Label Name="FeedStatusLabel" Access="Public" Visible="False" MaxWidth="225" ClipText="True" />
                 <Button Name="ClearFlareButton" Access="Public" Visible="False"
                         Text="{Loc 'cmu-mohawk-gunnery-clear-flare'}" />
                 <Label Name="TrackingStatusLabel" Access="Public" MaxWidth="225" />

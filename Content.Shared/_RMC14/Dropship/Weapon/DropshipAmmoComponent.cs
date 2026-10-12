@@ -39,6 +39,9 @@ public sealed partial class DropshipAmmoComponent : Component
     public int RoundsPerShot = 40;
 
     [DataField, AutoNetworkedField]
+    public int? RoundsPerSprite;
+
+    [DataField, AutoNetworkedField]
     public int ShotsPerVolley = 1;
 
     /// <summary>Separate impact locations per volley, independent of ammunition consumption.</summary>

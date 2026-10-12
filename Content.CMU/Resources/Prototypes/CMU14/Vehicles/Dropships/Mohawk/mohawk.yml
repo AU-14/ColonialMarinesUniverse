@@ -480,6 +480,7 @@
   - type: DropshipWeaponPoint
     dirOffset: None
     fixedWeapon: true
+    secondAmmoContainerSlotId: cmu_m90_second_ammo
   - type: Sprite
     layers:
     - state: equip_base_front
@@ -491,6 +492,7 @@
     containers:
       rmc_dropship_weapon_point_weapon_container_slot: !type:ContainerSlot
       rmc_dropship_weapon_point_ammo_container_slot: !type:ContainerSlot
+      cmu_m90_second_ammo: !type:ContainerSlot
   - type: ContainerFill
     containers:
       rmc_dropship_weapon_point_weapon_container_slot: [CMUMohawkM90]
@@ -499,7 +501,7 @@
   parent: RMCDropshipAttachmentGau21Cannon
   id: CMUMohawkM90
   name: twin-linked M90 90mm chin guns
-  description: The Midway's twin 90mm turret has a 180-degree forward arc and 30-tile range. Supports four M90 ammunition types. While unmanned and landed, it holds fire except against IFF hostiles within four tiles of the mount.
+  description: The Midway's dual-feed twin 90mm turret fires three shells per second. Supports four M90 ammunition types, selected or alternating feeds, a landed 180-degree forward arc and 30-tile range, and delayed flare-assisted bombardment during CAS flybys. Unmanned landed close defense engages IFF hostiles within four tiles.
   components:
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/midway/misc_96x96.rsi
@@ -509,7 +511,7 @@
     abbreviation: M90
     ammoSpriteThresholds: []
     gunneryOnly: true
-    fireDelay: 1
+    fireDelay: 0.3333333
     fireInTransport: false
     weaponAttachedSprite:
       sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/midway/misc_96x96.rsi
@@ -527,7 +529,7 @@
     roundsPerProjectile: 1
   - type: Gun
     projectileSpeed: 40
-    fireRate: 1
+    fireRate: 3
     minAngle: 0
     maxAngle: 0
     angleIncrease: 0
@@ -545,14 +547,15 @@
   parent: RMCDropshipAttachmentAmmoGAU
   id: CMUMohawkM90Ammo
   name: PGU-420 HEAP 90mm ammunition crate
-  description: Four hundred high-explosive armor-piercing rounds for the Midway's twin M90 guns. Fires individual shells groundside and forty-round bursts during aerial bombardment.
+  description: Four hundred high-explosive armor-piercing rounds for the Midway's dual-feed M90 guns. Fires individual groundside shells or delayed explosive impacts near a signal flare during CAS flybys.
   components:
   - type: RMCGenericExamine
     message: It can penetrate 3 z-levels.
   - type: DropshipAmmo
     rounds: 400
     maxRounds: 400
-    roundsPerShot: 40
+    roundsPerShot: 1
+    roundsPerSprite: 40
     fireMissionDelay: 2
     travelTime: 2
     targetSpread: 1
@@ -607,7 +610,7 @@
   parent: CMUMohawkM90Ammo
   id: CMUMohawkM90AmmoIncendiary
   name: PGU-430 'Ember' 90mm incendiary ammunition crate
-  description: Four hundred incendiary 90mm shells. Direct hits ignite flammable targets; aerial bursts scatter burning impact sites. Reduced penetration compared with HEAP.
+  description: Four hundred incendiary 90mm shells. Direct hits ignite flammable targets; flyby bombardment scatters burning impact sites. Reduced penetration compared with HEAP.
   components:
   - type: RMCGenericExamine
     message: Incendiary rounds cannot penetrate overhead cover.

@@ -14,14 +14,14 @@ cmu-mohawk-gunnery-only = Fire the M90 from the dedicated gunnery console.
 cmu-mohawk-gunnery-seat = You must be buckled into the gunnery seat to fire the M90.
 cmu-mohawk-gunnery-manual = Take turret control
 cmu-mohawk-gunnery-automatic = Release / close defense
-cmu-mohawk-gunnery-control-help = Groundside only. Take control while seated; move the mouse over the left camera to slew, then click to fire one shell. Arrows pan the camera two tiles; the center button recenters. Mark a hostile, then Authorize fire to engage that entity for 30 seconds. Acquire priority target marks the nearest or highest-health visible threat. Select a signal flare from TARGET on the right monitor to work within ten tiles of it. Losing sight pauses authorized fire. Unmanned close defense fires only at hostiles within four tiles. Friendly-fire checks and the one-shell-per-second limit always apply.
-cmu-mohawk-gunnery-ground-only = The chin turret can only be controlled manually while landed.
+cmu-mohawk-gunnery-control-help = Take control while seated and landed or during a CAS flyby. Move the mouse over the left camera to aim; hold left click for continuous fire at three shells per second. Arrows pan; the center button recenters. Mark a hostile, then Authorize fire for thirty seconds. During a flyby, select an active signal flare on the right TARGET monitor: shells produce delayed explosive impacts within ten tiles of it, not travelling projectiles. Flare targeting is unavailable while landed or hovering. Select feed 1/2 or toggle alternating feeds. Unmanned landed close defense engages hostiles within four tiles. Friendly-fire checks still apply.
+cmu-mohawk-gunnery-ground-only = Manual chin-gun control requires landing or an active CAS flyby; it is unavailable during transit, takeoff or tactical hover.
 cmu-mohawk-gunnery-busy = Another operator is controlling the chin turret.
 cmu-mohawk-gunnery-out-of-range = The target is outside the chin turret's range.
 cmu-mohawk-gunnery-out-of-arc = The target is behind the chin turret's forward firing arc.
 cmu-mohawk-gunnery-auth-expired = Fire authorization expired. Confirm the target again to resume.
 cmu-mohawk-gunnery-unsafe-shot = Holding fire: a friendly or an opaque obstruction is in the firing path.
-cmu-mohawk-gunnery-flare-invalid = Select an active signal flare within the turret's forward arc and 30-tile range. Aim within ten tiles of the flare, or clear it to return to unrestricted manual aiming.
+cmu-mohawk-gunnery-flare-invalid = Flare targeting requires an active CAS flyby and a selected active signal flare. Aim within ten tiles of that flare. Clearing the flare disables airborne fire.
 cmu-mohawk-gunnery-mark-help = Press this button, then click a visible hostile in the left camera. Marking never authorizes fire.
 cmu-mohawk-gunnery-mark-pending = Click a hostile in the left camera.
 cmu-mohawk-gunnery-unmarked = No marked target.
@@ -33,7 +33,16 @@ cmu-mohawk-gunnery-priority-distance = Priority: nearest
 cmu-mohawk-gunnery-priority-health = Priority: highest health
 cmu-mohawk-gunnery-clear-flare = Clear flare / recenter
 cmu-mohawk-gunnery-pan-help = Pan two tiles with the arrows. The center button recenters on the flare or chin mount. Panning clears tracking and authorization.
-cmu-mohawk-gunnery-short-help = Mouse: slew | Click: one shell
+cmu-mohawk-gunnery-short-help = Mouse: aim | Hold click: fire
     Mark -> Authorize: tracked fire
     Arrows: pan | Center: recenter
-    Right TARGET: select a flare
+    Flyby TARGET: select a flare
+cmu-mohawk-gunnery-airborne-flare-only = Airborne M90 fire requires an active CAS flyby and a selected signal flare. Landed fire uses physical shells; tactical hover does not support flare fire.
+cmu-mohawk-gunnery-airborne-preview = Flyby fire: ten tiles around the flare | Impact delay: 1-2 seconds | Three shells per second
+cmu-mohawk-gunnery-airburst-blocked = Holding fire: the dispersed impact is outside the flare area, under protected cover, or too close to a friendly.
+cmu-mohawk-gunnery-airburst-cancelled = A delayed M90 impact was cancelled because friendly clearance was lost. The released shell remains consumed.
+cmu-mohawk-gunnery-feed-selected = Feed mode: selected
+cmu-mohawk-gunnery-feed-alternate = Feed mode: alternate each shell
+cmu-mohawk-gunnery-feed-select = Feed {$feed} {$active}
+cmu-mohawk-gunnery-feed-ammo = {$ammo} ({$rounds} rounds)
+cmu-mohawk-gunnery-feed-empty = empty

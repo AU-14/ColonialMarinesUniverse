@@ -31,6 +31,14 @@ public sealed partial class MohawkChinGunComponent : Component
     public Vector2 CameraPan;
     public bool DefensiveFire;
     public TimeSpan NextAimUpdate;
+    [DataField, AutoNetworkedField]
+    public int ActiveFeed;
+    [DataField, AutoNetworkedField]
+    public bool AlternateFeeds;
+    public EntityCoordinates? HeldAim;
+    public TimeSpan HeldFireUntil;
+    public bool AirborneControl;
+    public TimeSpan NextFireWarning;
     [DataField]
     public float SlewDegreesPerSecond = 30f;
     [DataField]
@@ -101,4 +109,18 @@ public sealed class MohawkChinGunAcquireMessage : BoundUserInterfaceMessage;
 public sealed class MohawkChinGunFlareMessage(NetEntity? flare) : BoundUserInterfaceMessage
 {
     public readonly NetEntity? Flare = flare;
+}
+
+[Serializable, NetSerializable]
+public sealed class MohawkChinGunTriggerMessage(bool held, NetCoordinates? coordinates = null) : BoundUserInterfaceMessage
+{
+    public readonly bool Held = held;
+    public readonly NetCoordinates? Coordinates = coordinates;
+}
+
+[Serializable, NetSerializable]
+public sealed class MohawkChinGunFeedMessage(int? feed = null) : BoundUserInterfaceMessage
+{
+    // Null toggles selected/alternating feed mode.
+    public readonly int? Feed = feed;
 }
