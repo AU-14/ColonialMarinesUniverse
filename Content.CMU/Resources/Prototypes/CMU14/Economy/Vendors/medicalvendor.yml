@@ -180,7 +180,7 @@
     - name: Blood Packs
       entries:
       - id: CMBloodPackFull
-        amount: 45
+        amount: 15
       - id: CMUBloodPackFullOPositive
         amount: 10
       - id: CMUBloodPackFullAPositive
@@ -197,10 +197,10 @@
         amount: 10
       - id: CMUSynthBloodPackFull
         amount: 6
-    - name: Plasma and Saline
+    - name: Plasma
       entries:
       - id: CMUBloodPlasmaPack
-        amount: 8
+        amount: 6
       - id: CMUBloodPlasmaPackABNegative
         amount: 4
       - id: CMUBloodPlasmaPackAPositive
@@ -215,8 +215,12 @@
         amount: 3
       - id: CMUBloodPlasmaPackONegative
         amount: 3
+    - name: Saline
+      entries:
       - id: CMUSalineBag
         amount: 20
+    - name: Devices
+      entries:
       - id: CMUIVPressureBag
         amount: 6
       - id: CMUBloodCooler
