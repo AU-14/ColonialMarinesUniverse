@@ -3,6 +3,7 @@ using Content.Server.Radio.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Marines;
+using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CMU14.Dropship;
 using Content.Shared.Mobs;
@@ -22,6 +23,7 @@ public sealed partial class CMUDropshipBeaconRadioSystem : EntitySystem
     [Dependency] private AreaSystem _areas = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private RadioSystem _radio = default!;
+    [Dependency] private SharedRankSystem _rank = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
     private static readonly Dictionary<string, ProtoId<RadioChannelPrototype>> JtacChannels = new()
@@ -69,17 +71,23 @@ public sealed partial class CMUDropshipBeaconRadioSystem : EntitySystem
                 return;
 
             message = Loc.GetString("cmu-dropship-radio-medevac-patient",
-                ("patient", Name(strapped)), ("status", DescribeStatus(strapped)), ("location", location));
+                ("patient", PatientName(strapped)), ("status", DescribeStatus(strapped)), ("location", location));
         }
         else
         {
             message = patient is { } aboard
                 ? Loc.GetString("cmu-dropship-radio-medevac-ready",
-                    ("patient", Name(aboard)), ("status", DescribeStatus(aboard)), ("location", location))
+                    ("patient", PatientName(aboard)), ("status", DescribeStatus(aboard)), ("location", location))
                 : Loc.GetString("cmu-dropship-radio-medevac-empty", ("location", location));
         }
 
         _radio.SendRadioMessage(ev.Stretcher, message, channel, ev.Stretcher);
+    }
+
+    /// <summary>The patient's name with their short rank in front, if they have one.</summary>
+    private string PatientName(EntityUid patient)
+    {
+        return _rank.GetSpeakerRankName(patient) ?? Name(patient);
     }
 
     private string DescribeStatus(EntityUid patient)
