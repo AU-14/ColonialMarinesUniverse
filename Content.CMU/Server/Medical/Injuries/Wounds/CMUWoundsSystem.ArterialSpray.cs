@@ -44,7 +44,7 @@ public sealed partial class CMUWoundsSystem
 
     private bool TrySprayArterialBlood(Entity<BloodstreamComponent> ent, Solution blood)
     {
-        if (!TryGetArterialSource(ent, out var part))
+        if (!TryGetArterialSource(ent, out var part, out var stump))
             return false;
 
         var now = Timing.CurTime;
@@ -82,29 +82,57 @@ public sealed partial class CMUWoundsSystem
         var spillAt = landing is { } land ? _transform.ToCoordinates(land) : Transform(ent).Coordinates;
         _puddle.TrySpillAt(spillAt, blood, out _, sound: false);
 
-        _popup.PopupEntity(Loc.GetString("cmu-wound-arterial-spray", ("part", Name(part))), ent, ent,
-            PopupType.MediumCaution);
+        // A stump has nothing left to name, so say which limb used to be there.
+        var message = stump is { } open
+            ? Loc.GetString("cmu-wound-arterial-spray-stump", ("limb", Loc.GetString("cmu-wound-stump-limb",
+                ("symmetry", open.Symmetry.ToString().ToLowerInvariant()),
+                ("type", open.Type.ToString().ToLowerInvariant()))))
+            : Loc.GetString("cmu-wound-arterial-spray", ("part", Name(part)));
+        _popup.PopupEntity(message, ent, ent, PopupType.MediumCaution);
         return true;
     }
 
-    /// <summary>An unoccluded arterial wound or open stump that would spray blood.</summary>
-    private bool TryGetArterialSource(EntityUid body, out EntityUid part)
+    /// <summary>
+    /// True while the body has an arterial bleed that sprays: an arterial wound or unclamped stump that no tourniquet
+    /// holds shut.
+    /// </summary>
+    public bool IsSprayingArterialBlood(EntityUid body) => TryGetArterialSource(body, out _, out _);
+
+    /// <summary>
+    /// An unoccluded arterial wound or unclamped stump that would spray blood. For a stump, <paramref name="part"/>
+    /// is the part it hangs off and <paramref name="stump"/> says which limb is missing.
+    /// </summary>
+    private bool TryGetArterialSource(EntityUid body, out EntityUid part, out CMUStump? stump)
     {
         foreach (var (candidate, _) in MedicalIndex.GetBodyParts(body))
         {
             if (IsBloodFlowOccluded(candidate))
                 continue;
 
-            if (_stumps.HasUnclampedStump(candidate) ||
-                TryComp<BodyPartWoundComponent>(candidate, out var wounds) &&
+            if (TryComp<CMUOpenStumpComponent>(candidate, out var stumps))
+            {
+                foreach (var open in stumps.Stumps)
+                {
+                    if (open.Clamped)
+                        continue;
+
+                    part = candidate;
+                    stump = open;
+                    return true;
+                }
+            }
+
+            if (TryComp<BodyPartWoundComponent>(candidate, out var wounds) &&
                 wounds.ExternalBleeding == ExternalBleedTier.Arterial)
             {
                 part = candidate;
+                stump = null;
                 return true;
             }
         }
 
         part = default;
+        stump = null;
         return false;
     }
 

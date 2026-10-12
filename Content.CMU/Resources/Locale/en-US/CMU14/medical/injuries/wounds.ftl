@@ -68,3 +68,15 @@ cmu-robotic-limb-repair-burn-finish-user = You repair scorched wiring in { THE($
 cmu-robotic-limb-repair-burn-finish-others = { THE($user) } repairs scorched wiring in { THE($target) }'s { $limb } with { THE($tool) }.
 
 cmu-wound-arterial-spray = Blood squirts out of your { $part } in hot spurts!
+cmu-wound-arterial-spray-stump = Blood squirts out of the stump where your { $limb } used to be!
+cmu-wound-stump-limb = { $symmetry ->
+    [left] left{" "}
+    [right] right{" "}
+   *[other] {""}
+}{ $type ->
+    [arm] arm
+    [hand] hand
+    [leg] leg
+    [foot] foot
+   *[other] limb
+}
