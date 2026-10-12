@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared._RMC14.Xenonids.Devour;
 using Content.Shared.Actions;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
@@ -34,6 +35,7 @@ public sealed partial class CMUClawedSweepSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedColorFlashEffectSystem _colorFlash = default!;
     [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedHitLocationSystem _hitLocation = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedMapSystem _map = default!;
@@ -146,14 +148,29 @@ public sealed partial class CMUClawedSweepSystem : EntitySystem
 
         foreach (var target in hit)
         {
-            var damage = _damageable.TryChangeDamage(
-                target,
-                _xeno.TryApplyXenoSlashDamageMultiplier(target, comp.Damage),
-                origin: uid,
-                tool: uid,
-                impact: DamageImpact.XenoRendingSlash(comp.RendingTier));
+            // Several separate strikes, each resolving its own hit location, so the claws rake several limbs.
+            // The Wendigo's aimed zone is suppressed for the sweep, or every strike would land on that one zone.
+            var anyDamage = false;
+            using (_hitLocation.SuppressBodyZoneTargeting(uid))
+            {
+                for (var strike = 0; strike < Math.Max(1, comp.Strikes); strike++)
+                {
+                    if (TerminatingOrDeleted(target))
+                        break;
 
-            if (damage?.GetTotal() > FixedPoint2.Zero)
+                    var damage = _damageable.TryChangeDamage(
+                        target,
+                        _xeno.TryApplyXenoSlashDamageMultiplier(target, comp.Damage),
+                        origin: uid,
+                        tool: uid,
+                        impact: DamageImpact.XenoRendingSlash(comp.RendingTier));
+
+                    if (damage?.GetTotal() > FixedPoint2.Zero)
+                        anyDamage = true;
+                }
+            }
+
+            if (anyDamage)
             {
                 var filter = Filter.Pvs(target, entityManager: EntityManager).RemoveWhereAttachedEntity(o => o == uid);
                 _colorFlash.RaiseEffect(Color.Red, new List<EntityUid> { target }, filter);

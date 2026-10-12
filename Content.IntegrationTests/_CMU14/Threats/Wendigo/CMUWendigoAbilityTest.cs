@@ -149,7 +149,12 @@ public sealed class CMUWendigoAbilityTest
                 Assert.That(hit, Does.Contain(front));
                 Assert.That(hit, Does.Not.Contain(behind));
                 Assert.That(hit, Does.Not.Contain(ally));
-                Assert.That(damageable.GetTotalDamage(front), Is.GreaterThan(frontBefore), "the human in front took no damage");
+                // Several strikes per target: more than (strikes - 1) strikes' worth must land on an unarmored human.
+                var sweep = entMan.GetComponent<CMUClawedSweepComponent>(wendigo);
+                var perStrike = sweep.Damage.GetTotal();
+                Assert.That(sweep.Strikes, Is.GreaterThan(1), "the sweep must rake several limbs");
+                Assert.That(damageable.GetTotalDamage(front) - frontBefore, Is.GreaterThan(perStrike * (sweep.Strikes - 1)),
+                    "the human in front was not hit by every strike");
                 Assert.That(entMan.HasComponent<KnockedDownComponent>(front), Is.True, "the human in front isn't down");
                 Assert.That(damageable.GetTotalDamage(behind), Is.EqualTo(behindBefore), "the human behind was hit");
                 Assert.That(entMan.HasComponent<KnockedDownComponent>(behind), Is.False);
