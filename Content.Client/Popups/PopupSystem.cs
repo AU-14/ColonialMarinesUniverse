@@ -1,4 +1,7 @@
 using System.Linq;
+using Content.Client.UserInterface.Systems.Chat; // CMU14
+using Content.Shared.CCVar; // CMU14
+using Content.Shared.Chat; // CMU14
 using Content.Shared.Examine;
 using Content.Shared.GameTicking;
 using Content.Shared.Popups;
@@ -12,6 +15,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Replays;
+using Robust.Shared.Utility; // CMU14
 
 namespace Content.Client.Popups;
 
@@ -100,6 +104,11 @@ public sealed partial class PopupSystem : SharedPopupSystem
             return;
         }
 
+        // CMU14: popup chat/screen options
+        CMUEchoPopupToChat(message);
+        if (_configManager.GetCVar(CCVars.HidePopupsOnScreen))
+            return;
+
         var label = new WorldPopupLabel(coordinates)
         {
             Text = message,
@@ -127,6 +136,11 @@ public sealed partial class PopupSystem : SharedPopupSystem
             return;
         }
 
+        // CMU14: popup chat/screen options
+        CMUEchoPopupToChat(message);
+        if (_configManager.GetCVar(CCVars.HidePopupsOnScreen))
+            return;
+
         var label = new CursorPopupLabel(_inputManager.MouseScreenPosition)
         {
             Text = message,
@@ -135,6 +149,19 @@ public sealed partial class PopupSystem : SharedPopupSystem
 
         _aliveCursorLabels.Add(popupData, label);
     }
+
+    // CMU14 start: copy popups into the local chat log when the player opts in.
+    private void CMUEchoPopupToChat(string message)
+    {
+        if (!_configManager.GetCVar(CCVars.PopupsInChat))
+            return;
+
+        var escaped = FormattedMessage.EscapeText(message);
+        _uiManager.GetUIController<ChatUIController>().ProcessChatMessage(
+            new ChatMessage(ChatChannel.Visual, escaped, escaped, NetEntity.Invalid, null),
+            speechBubble: false);
+    }
+    // CMU14 end
 
     #region Abstract Method Implementations
 

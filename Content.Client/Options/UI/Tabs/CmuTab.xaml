@@ -51,6 +51,12 @@
                 <CheckBox Name="ChatCenterInputCheckBox"
                           Text="{Loc 'cmu-ui-options-chat-center-input'}"
                           ToolTip="{Loc 'cmu-ui-options-chat-center-input-tooltip'}" />
+                <CheckBox Name="PopupsInChatCheckBox"
+                          Text="{Loc 'cmu-ui-options-popups-in-chat'}"
+                          ToolTip="{Loc 'cmu-ui-options-popups-in-chat-tooltip'}" />
+                <CheckBox Name="HidePopupsOnScreenCheckBox"
+                          Text="{Loc 'cmu-ui-options-hide-popups-on-screen'}"
+                          ToolTip="{Loc 'cmu-ui-options-hide-popups-on-screen-tooltip'}" />
                 <!-- cmu edit end -->
 
                 <Label Text="{Loc 'cmu-ui-options-accessibility'}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
