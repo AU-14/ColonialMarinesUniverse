@@ -6,6 +6,7 @@ using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Synth;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
@@ -79,7 +80,13 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
         CMUStump? stump = null;
         EntityUid part;
         var alreadyOn = false;
-        if (TryFindAimedStump(args.User, target, out var stumpParent, out var aimedStump))
+        // CMU14: a limb that needs a tourniquet takes priority over where the user is aiming.
+        if (TryFindNeededTourniquetSite(args.User, target, out var neededPart, out var neededStump))
+        {
+            part = neededPart;
+            stump = neededStump;
+        }
+        else if (TryFindAimedStump(args.User, target, out var stumpParent, out var aimedStump))
         {
             part = stumpParent;
             stump = aimedStump;
@@ -87,10 +94,10 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
         }
         else if (!TryFindTourniquetTargetPart(args.User, target, out part, out alreadyOn))
         {
-            if (!Stumps.TryFindUnclampedStump(target, out stumpParent, out var openStump))
+            if (!Stumps.TryFindUnclampedStump(target, out var openParent, out var openStump))
                 return;
 
-            part = stumpParent;
+            part = openParent;
             stump = openStump;
         }
 
@@ -364,12 +371,108 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
                 continue;
             if (HasComp<CMURoboticLimbComponent>(id))
                 continue;
-            if (HasComp<BodyPartWoundComponent>(id) || HasComp<InternalBleedingComponent>(id))
+            if (HasComp<BodyPartWoundComponent>(id)) // CMU14: internal bleeding isn't visible, so it can't pick the limb
             {
                 part = id;
                 alreadyOn = false;
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// CMU14: the limb that needs a tourniquet most: an open stump, then an arterial bleed, then a severe bleed. Only
+    /// visible bleeding counts. Between two of the same kind, the one the user is aiming at wins.
+    /// </summary>
+    private bool TryFindNeededTourniquetSite(EntityUid user, EntityUid patient, out EntityUid part, out CMUStump? stump)
+    {
+        part = default;
+        stump = null;
+
+        (BodyPartType Type, BodyPartSymmetry Symmetry)? aimedAt = null;
+        if (TryComp<BodyZoneTargetingComponent>(user, out var aim) && aim.LastSelectedAt > TimeSpan.Zero)
+            aimedAt = SharedBodyZoneTargetingSystem.ToBodyPart(aim.Selected);
+
+        bool IsAimed(BodyPartType type, BodyPartSymmetry symmetry)
+            => aimedAt is { } aimed && aimed.Type == type && aimed.Symmetry == symmetry;
+
+        var bestScore = -1;
+        foreach (var (id, partComp) in MedicalIndex.GetBodyParts(patient))
+        {
+            if (Wounds.IsBloodFlowOccluded(id))
+                continue;
+
+            if (TryComp<CMUOpenStumpComponent>(id, out var stumps))
+            {
+                foreach (var open in stumps.Stumps)
+                {
+                    if (open.Clamped)
+                        continue;
+
+                    var score = NeedScore(StumpNeed, IsAimed(open.Type, open.Symmetry));
+                    if (score <= bestScore)
+                        continue;
+
+                    bestScore = score;
+                    part = id;
+                    stump = open;
+                }
+            }
+
+            if (!TryComp<BodyPartWoundComponent>(id, out var wounds) ||
+                wounds.ExternalBleeding < ExternalBleedTier.Severe ||
+                !TryGetTourniquetLimb(id, out var limb))
+            {
+                continue;
+            }
+
+            var limbComp = Comp<BodyPartComponent>(limb);
+            var aimedLimb = IsAimed(partComp.PartType, partComp.Symmetry) || IsAimed(limbComp.PartType, limbComp.Symmetry);
+            var need = wounds.ExternalBleeding == ExternalBleedTier.Arterial ? ArterialNeed : SevereNeed;
+            var woundScore = NeedScore(need, aimedLimb);
+            if (woundScore <= bestScore)
+                continue;
+
+            bestScore = woundScore;
+            part = limb;
+            stump = null;
+        }
+
+        return bestScore >= 0;
+    }
+
+    private const int StumpNeed = 3;
+    private const int ArterialNeed = 2;
+    private const int SevereNeed = 1;
+
+    private static int NeedScore(int need, bool aimed)
+        => need * 10 + (aimed ? 1 : 0);
+
+    /// <summary>
+    /// CMU14: the arm or leg a tourniquet goes on to stop bleeding from this part: the part itself, or the limb a
+    /// hand or foot hangs off.
+    /// </summary>
+    private bool TryGetTourniquetLimb(EntityUid part, out EntityUid limb)
+    {
+        limb = default;
+        var current = part;
+        while (TryComp<BodyPartComponent>(current, out var site))
+        {
+            if (IsTourniquetable(site.PartType))
+            {
+                if (HasComp<CMURoboticLimbComponent>(current))
+                    return false;
+
+                limb = current;
+                return true;
+            }
+
+            if (!TryComp<ChildOrganComponent>(current, out var child) || child.Parent is not { } parent)
+                return false;
+
+            current = parent;
         }
 
         return false;
