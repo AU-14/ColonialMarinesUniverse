@@ -19,7 +19,7 @@ public sealed partial class SharedGasMaskSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
 
     /// <summary>How long internals keep out neurotoxin per continuous exposure.</summary>
-    public static readonly TimeSpan InternalsNeurotoxinProtection = TimeSpan.FromSeconds(12);
+    public static readonly TimeSpan InternalsNeurotoxinProtection = TimeSpan.FromSeconds(9);
 
     /// <summary>Time out of the gas after which the next exposure starts the protection timer over.</summary>
     public static readonly TimeSpan NeurotoxinExposureGap = TimeSpan.FromSeconds(1.5);

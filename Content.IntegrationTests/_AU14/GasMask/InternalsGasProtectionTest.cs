@@ -56,7 +56,7 @@ public sealed class InternalsGasProtectionTest
     }
 
     [Test]
-    public async Task InternalsKeepOutNeurotoxinForTwelveSecondsPerExposure()
+    public async Task InternalsKeepOutNeurotoxinForNineSecondsPerExposure()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -76,8 +76,8 @@ public sealed class InternalsGasProtectionTest
             Assert.That(internalsSystem.TryConnectTank((victim, internals), tank), Is.True);
         });
 
-        // Stay in the gas: one exposure a second for 14 seconds.
-        for (var second = 0; second <= 14; second++)
+        // Stay in the gas: one exposure a second for 11 seconds.
+        for (var second = 0; second <= 11; second++)
         {
             await server.WaitPost(() =>
                 blocked.Add(server.EntMan.System<SharedGasMaskSystem>().TryBlockNeurotoxinWithInternals(victim)));
@@ -86,8 +86,8 @@ public sealed class InternalsGasProtectionTest
 
         Assert.Multiple(() =>
         {
-            Assert.That(blocked[11], Is.True, "internals should still hold after 11 seconds of exposure");
-            Assert.That(blocked[13], Is.False, "internals should give out after 12 seconds of exposure");
+            Assert.That(blocked[8], Is.True, "internals should still hold after 8 seconds of exposure");
+            Assert.That(blocked[10], Is.False, "internals should give out after 9 seconds of exposure");
         });
 
         // Step out of the gas, then back in: the timer starts over.
