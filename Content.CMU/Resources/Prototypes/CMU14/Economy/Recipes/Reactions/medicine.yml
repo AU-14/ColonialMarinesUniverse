@@ -1,0 +1,11 @@
+- type: reaction
+  id: CMUTranexamicAcid
+  reactants:
+    CMInaprovaline:
+      amount: 1
+    RMCSulphuricAcid:
+      amount: 1
+    RMCIron:
+      amount: 1
+  products:
+    CMUTranexamicAcid: 3

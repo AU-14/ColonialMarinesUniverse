@@ -10,6 +10,8 @@ cmu-medical-defib-heart-beating              = Heart is already beating.
 
 reagent-name-cmu-hepatocytin                 = Hepatocytin
 reagent-desc-cmu-hepatocytin                 = A regenerative compound for liver tissue repair.
+reagent-name-cmu-tranexamic-acid             = Tranexamic Acid
+reagent-desc-cmu-tranexamic-acid             = A clotting agent that stops bleeding for as long as it stays in the bloodstream. It doesn't close the wounds.
 reagent-name-cmu-pulmovine                   = Pulmovine
 reagent-desc-cmu-pulmovine                   = An aerosolized agent for lung tissue repair.
 reagent-name-cmu-nephronate                  = Nephronate
