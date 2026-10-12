@@ -15,6 +15,9 @@ public sealed partial class IVDripSystem
     private void CMUOnBloodDrawn(EntityUid pack, EntityUid donor)
         => _cmuBlood.OnBloodDrawn(pack, donor);
 
+    private void CMUOnDialysisTick(EntityUid patient)
+        => _cmuBlood.DialyzeSaline(patient);
+
     private void CMUProcessTransfusion(EntityUid pack, EntityUid recipient, BloodstreamComponent bloodstream, Solution transferred)
         => _cmuBlood.ProcessTransfusion(pack, recipient, bloodstream, transferred);
 }

@@ -411,6 +411,24 @@ public sealed class CMUBloodSystem : EntitySystem
 
     #region Saline
 
+    /// <summary>Saline a dialysis machine filters out each pass, replacing it with the patient's own blood.</summary>
+    private static readonly FixedPoint2 SalineDialyzedPerTick = FixedPoint2.New(3);
+
+    public void DialyzeSaline(EntityUid patient)
+    {
+        if (!TryComp<CMUSalineDilutionComponent>(patient, out var dilution))
+            return;
+
+        dilution.Saline = FixedPoint2.Max(FixedPoint2.Zero, dilution.Saline - SalineDialyzedPerTick);
+        if (dilution.Saline <= FixedPoint2.Zero)
+        {
+            RemCompDeferred<CMUSalineDilutionComponent>(patient);
+            return;
+        }
+
+        Dirty(patient, dilution);
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);

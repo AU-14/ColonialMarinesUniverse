@@ -228,6 +228,8 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
             if (TryComp(attachedTo, out BloodstreamComponent? bloodstreamComp))
                 _bloodstream.TryRegulateBloodLevel((attachedTo, bloodstreamComp), dialysisComp.BloodRemovalCost, referenceFactor: 0f);
 
+            CMUOnDialysisTick(attachedTo); // CMU14: dialysis filters saline back out to real blood
+
             _powerCell.TryUseActivatableCharge(dialysisId);
 
             Dirty(dialysisId, dialysisComp);
