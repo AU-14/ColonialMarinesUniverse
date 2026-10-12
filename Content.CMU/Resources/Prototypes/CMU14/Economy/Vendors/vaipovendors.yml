@@ -386,6 +386,8 @@
       entries:
       - id: CMUSynthBloodPackFull
         amount: 2
+      - id: CMUSalineBag
+        amount: 3
       - id: CMUMaskCPR
         amount: 30
       - id: AU14HemostaticGauzePacket
