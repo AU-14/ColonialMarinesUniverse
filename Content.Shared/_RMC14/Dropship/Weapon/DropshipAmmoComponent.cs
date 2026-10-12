@@ -20,6 +20,15 @@ public sealed partial class DropshipAmmoComponent : Component
     [DataField, AutoNetworkedField]
     public int BulletSpread = 3;
 
+    [DataField, AutoNetworkedField]
+    public EntProtoId? DirectFireProjectile;
+
+    [DataField, AutoNetworkedField]
+    public float DirectFireSpreadDegrees;
+
+    [DataField, AutoNetworkedField]
+    public float FriendlyImpactRadius = 2f;
+
     [DataField(required: true), AutoNetworkedField]
     public int Rounds = 400;
 

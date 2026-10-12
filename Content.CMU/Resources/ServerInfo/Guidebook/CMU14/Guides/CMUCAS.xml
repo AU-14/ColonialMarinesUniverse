@@ -225,23 +225,41 @@
 
     ### E. Mohawk Groundside Chin Turret
 
-    The fixed twin 90mm M90 chin gun has a [bold]180-degree forward arc[/bold] and a [bold]30-tile range[/bold]. While landed, it slews toward visible IFF hostiles but [bold]holds fire until commanded[/bold]. It rotates at thirty degrees per second and fires at most [bold]one HEAP shell per second[/bold], only after aligning. Groundside turret operation is disabled during takeoff or hovering; airborne CAS uses the weapon's burst behavior instead.
+    The fixed twin 90mm M90 chin gun has a [bold]180-degree forward arc[/bold] and a [bold]30-tile range measured from the chin mount[/bold]. It rotates at thirty degrees per second and fires at most [bold]one shell per second[/bold], only after aligning. Groundside turret operation is disabled during takeoff or hovering; airborne CAS uses forty-round bursts instead.
+
+    [bold]90mm ammunition and loading[/bold]:
+    All four crates contain [bold]400 rounds[/bold]: 400 individual groundside shells or ten forty-round aerial bursts. Obtain them from the dropship fabricator's [bold]Ammo[/bold] category and use a powerloader to install one crate on the fixed M90 chin mount. Unload the old crate before changing ammunition. These are M90-only crates, not GAU-21 ammunition; the GAU mixed-belt carrier is not compatible. The weapon itself remains permanently mounted.
+    - [bold]PGU-420 HEAP[/bold] (275 fabricator points): precision general-purpose armor piercing; 145 piercing + 20 heat direct damage, 60 armor piercing, and up to three levels of aerial cover penetration. Groundside has no extra shell dispersion. Aerial target/bullet spread is 1/2 tiles.
+    - [bold]PGU-425 'Gale' scatter[/bold] (350 points): wide, low-damage suppression; 50 piercing + 10 heat and 10 armor piercing. Groundside scatter is up to ten degrees either side of the aimed bearing; aerial target/bullet spread is 4/5 tiles. No overhead penetration.
+    - [bold]PGU-430 'Ember' incendiary[/bold] (600 points): 70 piercing + 60 heat and 15 armor piercing. Direct groundside hits ignite susceptible targets with intensity 30 for twenty seconds, subject to fire protection; aerial impacts create burning tiles. Groundside scatter is up to two degrees; aerial target/bullet spread is 2/3 tiles. No overhead penetration.
+    - [bold]PGU-440 'Tempest' devastator[/bold] (2000 points): expensive high-damage saturation; 220 piercing + 80 heat and 40 armor piercing, with a much stronger explosive impact. Groundside scatter is up to twelve degrees; aerial target/bullet spread is 5/6 tiles. Up to one level of aerial cover penetration.
+    All four shells have explosive impacts. High dispersion can miss the intended entity; fire and explosions can still harm nearby troops. Groundside safety checks use the sampled dispersed firing path and reserve extra friendly clearance for Ember and Tempest. IFF is not blanket immunity to blast or fire. Overhead-penetration ratings describe aerial CAS, not groundside shells passing through walls.
 
     [bold]Manual aiming[/bold]:
     1. Buckle into the Mohawk's gunnery seat and open the dedicated gunnery console.
     2. Press [bold]Take turret control[/bold]. This replaces automatic observation with manual aiming; taking control alone does not authorize fire.
-    3. Use the left camera view to aim and click to fire. Combat-mode firing in the main view is also supported. Each fired groundside shell ejects a spent casing beneath the chin mount.
+    3. [bold]Move the mouse inside the left camera[/bold] to slew without firing; [bold]click[/bold] to request one shell. The shell waits for the turret to align. Each fired groundside shell ejects a spent casing beneath the chin mount. Stop / clear tracking also cancels a queued shot.
     4. The overlay shows the forward arc, range, and aim marker. Red indicates an out-of-range/out-of-arc aimpoint or confirmed tracked engagement; green indicates an aimpoint inside the arc and range. It does not guarantee an unobstructed shot.
+    5. Use the [bold]directional arrows[/bold] to pan the chin-gun camera two tiles per press. Pan forward to see targets at the full thirty-tile range, or sideways to inspect the arc. The center button recenters on the mount or selected flare. Camera centers stay inside the turret's arc and range. Panning clears tracking and fire authorization; moving the camera does not extend weapon range.
 
     [bold]Tracking a moving hostile[/bold]:
-    1. While in manual control, press [bold]Mark hostile[/bold], then click a visible hostile in the left camera view.
+    1. While in manual control, press [bold]Mark hostile[/bold], then click a visible hostile in the left camera view. The mark button arms the next click; it does not select a target by itself. Alternatively press [bold]Acquire priority target[/bold] to select a visible hostile automatically.
     2. The camera follows the target and displays its range. Marking alone does [bold]not[/bold] fire.
-    3. Continue firing manually, or press [bold]CONFIRM automatic fire[/bold] to authorize repeated fire at that specific entity for [bold]thirty seconds[/bold].
+    3. Press the center-column [bold]Authorize fire (30 seconds)[/bold] button to authorize repeated fire at that specific entity. The button is always shown during manual control, but is disabled until a valid hostile is marked or while authorization is active. Moving the cursor while tracking does not replace the marked target.
     4. Press [bold]Stop / clear tracking[/bold] to stop tracked engagement and return to manual aiming. Clicking the left camera to fire manually also clears tracking.
 
     Losing sight, range, or the forward firing arc pauses engagement without extending the thirty-second authorization. The camera stops following an invisible target. Reacquiring the same entity before expiry resumes engagement; after expiry, confirm again. Death or becoming IFF-friendly clears the mark. Transparent windows do not prevent acquisition, but opaque walls do. Friendlies in the shell's path or near its intended impact block every shot, including manual shots. Running out of ammunition stops confirmed engagement. Closing the console, leaving the gunnery seat, or leaving the landed state releases manual control and clears authorization.
 
-    [bold]Release control / hold fire[/bold] returns the turret to observation only. Closing the console also returns it to hold-fire; it cannot engage another entity without a new gunner command.
+    [bold]Flare-assisted gunnery[/bold]:
+    1. Take manual control, then open [bold]TARGET[/bold] on the right monitor and select an active signal flare from the designation list. The flare must be on the turret's map, within thirty tiles and in the forward arc. Laser designations and other beacon types are not flare anchors.
+    2. The left camera recenters on the flare. A cyan ring marks a [bold]ten-tile engagement radius[/bold]. Slew and fire with the mouse anywhere inside that ring, but every shot must still satisfy the mount's thirty-tile range, forward arc and safety checks.
+    3. Mark a hostile within the ring, or press [bold]Acquire priority target[/bold], then [bold]Authorize fire[/bold] to track that entity. This never blindly bombards the flare itself or grants blanket authorization for new targets.
+    4. Use [bold]Clear flare / recenter[/bold] to return to the mount camera and remove the ten-tile restriction. Selecting or clearing a flare cancels the previous mark and authorization. An invalid/out-of-range flare cannot enable shots.
+
+    [bold]Automatic observation and close defense[/bold]:
+    Press [bold]Priority: nearest[/bold] to switch to [bold]Priority: highest health[/bold], or press again to return. Highest health means greatest remaining health before death, not damage already taken; distance breaks equal-health ties. This setting controls both unmanned observation and Acquire priority target. Neither observation nor acquisition alone authorizes ordinary fire.
+
+    [bold]Release / close defense[/bold], closing the console, or leaving the seat clears manual authorization. While unmanned and landed, the turret [bold]automatically fires at visible IFF hostiles within four tiles of the chin mount[/bold], without authorization. Close threats take precedence over distant observation targets; the selected priority ranks threats within that radius. This exception never overrides an active manual operator. Slew alignment, one-shell-per-second cooldown, arc, cover and friendly-fire checks still apply.
 
     ### F. Gameplay Troubleshooting
 

@@ -25,6 +25,9 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
     public bool TrackingFireConfirmed;
 
     [DataField, AutoNetworkedField]
+    public MohawkTargetPriority ChinGunPriority;
+
+    [DataField, AutoNetworkedField]
     public Screen ScreenOne;
 
     [DataField, AutoNetworkedField]

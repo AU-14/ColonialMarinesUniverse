@@ -9,6 +9,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
+using Robust.Shared.Timing;
 
 namespace Content.Client._RMC14.Dropship.Weapon;
 
@@ -19,6 +20,8 @@ public sealed class DropshipTargetingPreview : Control
     private readonly bool _first;
     private readonly DropshipWeaponsScreen _screen;
     private readonly IInputManager _input = IoCManager.Resolve<IInputManager>();
+    private float _aimElapsed;
+    public event Action<MapCoordinates>? CursorAim;
 
     public DropshipTargetingPreview(IEntityManager entities, EntityUid console, bool first, DropshipWeaponsScreen screen)
     {
@@ -30,6 +33,23 @@ public sealed class DropshipTargetingPreview : Control
         HorizontalExpand = true;
         VerticalExpand = true;
         RectClipContent = true;
+    }
+
+    protected override void FrameUpdate(FrameEventArgs args)
+    {
+        base.FrameUpdate(args);
+        _aimElapsed += args.DeltaSeconds;
+        if (!_first || _aimElapsed < 0.1f ||
+            !_entities.TryGetComponent(_console, out DropshipTerminalWeaponsComponent? terminal) ||
+            terminal.ChinGunOperator == null || terminal.TrackedTarget != null)
+            return;
+        _aimElapsed = 0;
+        var viewport = _screen.Viewport;
+        var cursor = _input.MouseScreenPosition.Position;
+        var local = cursor - viewport.GlobalPixelPosition;
+        if (viewport.Visible && local.X >= 0 && local.Y >= 0 &&
+            local.X < viewport.PixelWidth && local.Y < viewport.PixelHeight)
+            CursorAim?.Invoke(viewport.PixelToMap(cursor));
     }
 
     protected override void Draw(DrawingHandleScreen handle)
@@ -91,6 +111,14 @@ public sealed class DropshipTargetingPreview : Control
                 var distanceToAim = Vector2.Distance(muzzle, center.Position);
                 var validAim = center.MapId == origin.MapId && distanceToAim <= chin.Range &&
                     Vector2.Dot(rotation.RotateVec(Vector2.UnitY), center.Position - muzzle) >= 0;
+                if (terminal.Target is { } flare && _entities.HasComponent<FlareSignalComponent>(flare))
+                {
+                    var anchor = transform.GetMapCoordinates(flare);
+                    if (anchor.MapId == origin.MapId)
+                        Ring(anchor.Position, chin.FlareRadius, Color.Cyan);
+                    validAim &= _entities.System<MohawkChinGunSystem>().IsInFlareArea(
+                        (point, chin), transform.ToCoordinates(center));
+                }
                 Ring(center.Position, 0.45f, !validAim || terminal.TrackingFireConfirmed ? Color.Red : Color.Lime);
                 if (terminal.TrackedTarget is { } tracked)
                 {

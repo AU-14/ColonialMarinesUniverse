@@ -14,6 +14,8 @@ using Content.Shared.CMU14.Weapons.Ranged;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Damage.Components;
 using Content.Shared.NPC.Components;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
@@ -146,6 +148,25 @@ public sealed class MohawkChinGunTest
                 { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
             Assert.That(chin.Operator, Is.EqualTo(actor));
             Assert.That(entities.GetComponent<RemoteWeaponOperatorComponent>(actor).SelectedWeapon, Is.EqualTo(weapon));
+            entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunAimMessage(
+                entities.GetNetCoordinates(new EntityCoordinates(map, -8.5f, 11)))
+                { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
+            Assert.That(chin.DesiredAimDegrees, Is.EqualTo(45).Within(0.001),
+                "Hovering the camera must request an aim bearing without firing.");
+            Assert.That(payload.Rounds, Is.EqualTo(400));
+            for (var pan = 0; pan < 15; pan++)
+                entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunPanMessage(Direction.North)
+                    { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
+            turret.Update(0);
+            Assert.That(Vector2.Distance(transform.GetMapCoordinates(chin.Eye!.Value).Position, new Vector2(1.5f, 1)),
+                Is.EqualTo(30).Within(0.001), "Camera pan must reach the full thirty-tile range.");
+            entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunPanMessage(Direction.South)
+                { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
+            turret.Update(0);
+            Assert.That(Vector2.Distance(transform.GetMapCoordinates(chin.Eye!.Value).Position, new Vector2(1.5f, 1)),
+                Is.EqualTo(28).Within(0.001), "Panning back from the limit must move immediately without a dead zone.");
+            entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunPanMessage(null)
+                { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
             Assert.That(turret.RequestAim((point, chin), weapon, new EntityCoordinates(map, -8.5f, 11)), Is.False);
             Assert.That(entities.GetComponent<GunshipDirectFirePointComponent>(point).AimOffsetDegrees, Is.Zero,
                 "Requesting a new bearing must not snap the turret.");
@@ -244,12 +265,51 @@ public sealed class MohawkChinGunTest
             entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunClearTrackingMessage
                 { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
             Assert.That(chin.TrackedTarget, Is.Null);
+            var flare = entities.SpawnEntity(null, new EntityCoordinates(map, 1.5f, 15));
+            entities.AddComponent<FlareSignalComponent>(flare);
+            entities.AddComponent<DropshipTargetComponent>(flare);
+            entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunFlareMessage(entities.GetNetEntity(flare))
+                { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
+            Assert.That(consoleState.Target, Is.EqualTo(flare));
+            turret.Update(0);
+            Assert.That(transform.GetMapCoordinates(chin.Eye!.Value).Position, Is.EqualTo(new Vector2(1.5f, 15)));
+            Assert.That(turret.IsInFlareArea((point, chin), new EntityCoordinates(map, 1.5f, 25)), Is.True);
+            Assert.That(turret.IsInFlareArea((point, chin), new EntityCoordinates(map, 1.5f, 25.01f)), Is.False);
+            entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunAcquireMessage
+                { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
+            Assert.That(chin.TrackedTarget, Is.EqualTo(hostile));
+            Assert.That(chin.TrackingFireConfirmed, Is.False);
+            entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunFlareMessage(null)
+                { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
+            Assert.That(chin.TrackedTarget, Is.Null);
+            Assert.That(consoleState.Target, Is.Null);
+
+            var tough = Target("OPFOR", new Vector2(1.5f, 20));
+            entities.AddComponent<DamageableComponent>(hostile);
+            entities.AddComponent<DamageableComponent>(tough);
+            entities.AddComponent<MobThresholdsComponent>(hostile);
+            entities.AddComponent<MobThresholdsComponent>(tough);
+            entities.System<MobThresholdSystem>().SetMobStateThreshold(hostile, 100, MobState.Dead);
+            entities.System<MobThresholdSystem>().SetMobStateThreshold(tough, 300, MobState.Dead);
+            Assert.That(turret.SelectTarget((point, chin)), Is.EqualTo(hostile));
+            entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunPriorityMessage
+                { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
+            Assert.That(turret.SelectTarget((point, chin)), Is.EqualTo(tough));
+            Assert.That(consoleState.ChinGunPriority, Is.EqualTo(MohawkTargetPriority.HighestHealth));
+
+            transform.SetCoordinates(hostile, new EntityCoordinates(map, 1.5f, 5));
+            Scan();
+            Assert.That(payload.Rounds, Is.EqualTo(396), "An active manual gunner must suppress close defense.");
             ui.CloseUi(console, DropshipTerminalWeaponsUi.Key, actor);
             Scan();
             Assert.That(chin.Operator, Is.Null);
             Assert.That(entities.HasComponent<RemoteWeaponOperatorComponent>(actor), Is.False);
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(396), "Closing the console must return to persistent hold-fire.");
+            Assert.That(payload.Rounds, Is.EqualTo(395),
+                "Unmanned close defense must fire at a threat exactly four tiles from the muzzle mount.");
+            transform.SetCoordinates(hostile, new EntityCoordinates(map, 1.5f, 5.01f));
+            Scan();
+            Assert.That(payload.Rounds, Is.EqualTo(395), "Targets outside four tiles require authorization.");
             entities.DeleteEntity(map);
         });
         await pair.CleanReturnAsync();

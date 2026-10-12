@@ -3,11 +3,15 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Sentry;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared.Eye;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Interaction;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -41,6 +45,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private MobThresholdSystem _thresholds = default!;
     private readonly HashSet<Entity<MobStateComponent>> _nearbyMobs = new();
 
     public override void Initialize()
@@ -53,6 +59,11 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                 subs.Event<MohawkChinGunTrackMessage>(OnTrack);
                 subs.Event<MohawkChinGunConfirmTrackingMessage>(OnConfirmTracking);
                 subs.Event<MohawkChinGunClearTrackingMessage>(OnClearTracking);
+                subs.Event<MohawkChinGunAimMessage>(OnAim);
+                subs.Event<MohawkChinGunPanMessage>(OnPan);
+                subs.Event<MohawkChinGunPriorityMessage>(OnPriority);
+                subs.Event<MohawkChinGunAcquireMessage>(OnAcquire);
+                subs.Event<MohawkChinGunFlareMessage>(OnFlare);
             });
         SubscribeLocalEvent<MohawkChinGunComponent, ComponentShutdown>(OnShutdown);
     }
@@ -114,7 +125,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
         }
 
         if (actor == weapon)
-            return false;
+            return _net.IsServer && point.Comp.Operator == null && point.Comp.DefensiveFire;
 
         if (point.Comp.Operator != actor || !IsSeatedOperator(point, actor))
         {
@@ -176,6 +187,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             }
 
             chin.Operator = args.Actor;
+            chin.CameraPan = Vector2.Zero;
             var eye = EnsureComp<EyeComponent>(args.Actor);
             chin.Console = console;
             chin.PreviousEye = eye.Target;
@@ -193,6 +205,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             remote.SelectedWeapon = weapon;
             Dirty(args.Actor, remote);
             console.Comp.ChinGunOperator = args.Actor;
+            console.Comp.ScreenOne.Weapon = GetNetEntity(weapon);
+            console.Comp.ChinGunPriority = chin.TargetPriority;
             console.Comp.ChinGunEye = chin.Eye;
             Dirty(console);
             Dirty(point);
@@ -223,8 +237,19 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
         var coords = _transform.GetMapCoordinates(point);
         var rotation = _transform.GetWorldRotation(Transform(point).GridUid ?? point);
         var mount = Comp<GunshipDirectFirePointComponent>(point);
-        return _transform.ToCoordinates(new MapCoordinates(coords.Position +
-            rotation.RotateVec(new Vector2(mount.LateralOffset, mount.ForwardOffset + 5f)), coords.MapId));
+        var chin = Comp<MohawkChinGunComponent>(point);
+        var muzzle = coords.Position + rotation.RotateVec(new Vector2(mount.LateralOffset, mount.ForwardOffset));
+        var center = muzzle + rotation.RotateVec(Vector2.UnitY * 5f);
+        if (chin.Console is { } console && TryComp(console, out DropshipTerminalWeaponsComponent? terminal) &&
+            terminal.Target is { } flare && IsUsableFlare((point, chin), flare))
+            center = _transform.GetMapCoordinates(flare).Position;
+        var delta = center + chin.CameraPan - muzzle;
+        var forward = rotation.RotateVec(Vector2.UnitY);
+        if (Vector2.Dot(delta, forward) < 0)
+            delta -= forward * Vector2.Dot(delta, forward);
+        if (delta.LengthSquared() > chin.Range * chin.Range)
+            delta = Vector2.Normalize(delta) * chin.Range;
+        return _transform.ToCoordinates(new MapCoordinates(muzzle + delta, coords.MapId));
     }
 
     private void OnShutdown(Entity<MohawkChinGunComponent> point, ref ComponentShutdown args)
@@ -274,6 +299,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
         point.Comp.PreviousEye = null;
         point.Comp.ControlledWeapon = null;
         point.Comp.PreviousPlatform = null;
+        point.Comp.CameraPan = Vector2.Zero;
         Dirty(point);
     }
 
@@ -365,36 +391,24 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                     out _, out var ammo) || ammo == null || ammo.Rounds <= 0)
                 continue;
 
-            var rotation = _transform.GetWorldRotation(grid);
-            var origin = _transform.GetMapCoordinates(uid);
-            var position = origin.Position + rotation.RotateVec(
-                new Vector2(mount.Comp.LateralOffset, mount.Comp.ForwardOffset));
-            EntityUid? nearest = null;
-            var nearestDistance = chin.Range * chin.Range;
-            foreach (var candidate in _targeting.GetNearbyIffHostiles((uid, targeting), chin.Range))
+            var defensive = SelectTarget(point, chin.CloseDefenseRange);
+            var selected = defensive ?? SelectTarget(point);
+            if (selected is { } hostile)
             {
-                if (TryComp(candidate, out MobStateComponent? mob) && mob.CurrentState == MobState.Dead ||
-                    _dropships.TryGetGridDropship(candidate, out var targetShip) &&
-                    _dropships.TryGetGridDropship(uid, out var ship) && targetShip.Owner == ship.Owner)
-                    continue;
-                var target = _transform.GetMapCoordinates(candidate);
-                var delta = target.Position - position;
-                var distance = delta.LengthSquared();
-                if (target.MapId != origin.MapId || distance <= 0.0001f || distance > nearestDistance ||
-                    Vector2.Dot(rotation.RotateVec(Vector2.UnitY), delta) < -0.0001f)
-                    continue;
-                var muzzle = new MapCoordinates(position + Vector2.Normalize(delta) * direct.MuzzleOffset,
-                    origin.MapId);
-                if (!_interaction.InRangeUnobstructed(muzzle, target, chin.Range, CollisionGroup.Opaque,
-                        predicate: blocker => blocker == candidate || blocker == uid || blocker == weapon ||
-                            !TryComp(blocker, out OccluderComponent? occluder) || !occluder.Enabled))
-                    continue;
-                nearest = candidate;
-                nearestDistance = distance;
-            }
-
-            if (nearest is { } hostile)
                 RequestAim(point, weapon, Transform(hostile).Coordinates);
+                if (defensive != null)
+                {
+                    chin.DefensiveFire = true;
+                    try
+                    {
+                        _guns.AttemptShoot(weapon, (weapon, gun), Transform(hostile).Coordinates, hostile);
+                    }
+                    finally
+                    {
+                        chin.DefensiveFire = false;
+                    }
+                }
+            }
             else
                 chin.DesiredAimDegrees = 0f;
         }
@@ -436,7 +450,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
         var hostile = knownHostile;
         if (!knownHostile)
         {
-            foreach (var candidate in _targeting.GetNearbyIffHostiles((point.Owner, targeting), point.Comp.Range))
+            foreach (var candidate in _targeting.GetNearbyIffHostiles((point.Owner, targeting), GetScanRange(point)))
             {
                 if (candidate == target)
                 {
@@ -454,7 +468,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
         var delta = location.Position - position;
         if (location.MapId != origin.MapId || delta.LengthSquared() < 0.0001f ||
             delta.LengthSquared() > point.Comp.Range * point.Comp.Range ||
-            Vector2.Dot(rotation.RotateVec(Vector2.UnitY), delta) < -0.0001f)
+            Vector2.Dot(rotation.RotateVec(Vector2.UnitY), delta) < -0.0001f ||
+            !IsInFlareArea(point, Transform(target).Coordinates))
             return false;
         var muzzle = new MapCoordinates(position + Vector2.Normalize(delta) * direct.MuzzleOffset, origin.MapId);
         return _interaction.InRangeUnobstructed(muzzle, location, point.Comp.Range, CollisionGroup.Opaque,
@@ -489,7 +504,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
         var distance = 1.5f * 1.5f;
         if (TryComp(point, out SentryTargetingComponent? targeting) && EnsureTrackingFaction(point))
         {
-            foreach (var candidate in _targeting.GetNearbyIffHostiles((point.Owner, targeting), point.Comp.Range))
+            foreach (var candidate in _targeting.GetNearbyIffHostiles((point.Owner, targeting),
+                         GetScanRange(point)))
             {
                 var position = _transform.GetMapCoordinates(candidate);
                 var candidateDistance = Vector2.DistanceSquared(position.Position, location.Position);
@@ -528,6 +544,150 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
     {
         if (!_net.IsClient && TryGetControlledPoint(console, args.Actor, out var point))
             SetTracking(point, null);
+    }
+
+    private void OnAim(Entity<DropshipTerminalWeaponsComponent> console, ref MohawkChinGunAimMessage args)
+    {
+        if (_net.IsClient || !TryGetControlledPoint(console, args.Actor, out var point) ||
+            point.Comp.TrackedTarget != null || point.Comp.PendingManualShot != null ||
+            _timing.CurTime < point.Comp.NextAimUpdate)
+            return;
+        point.Comp.NextAimUpdate = _timing.CurTime + TimeSpan.FromMilliseconds(75);
+        var coordinates = GetCoordinates(args.Coordinates);
+        if (coordinates.IsValid(EntityManager) && IsInFlareArea(point, coordinates) &&
+            TryGetWeapon(point, out var weapon))
+            RequestAim(point, weapon, coordinates);
+    }
+
+    private void OnPan(Entity<DropshipTerminalWeaponsComponent> console, ref MohawkChinGunPanMessage args)
+    {
+        if (_net.IsClient || !TryGetControlledPoint(console, args.Actor, out var point))
+            return;
+        if (args.Direction is { } direction && !direction.IsCardinal())
+            return;
+        SetTracking(point, null);
+        var current = _transform.ToMapCoordinates(GetCameraCoordinates(point)).Position;
+        point.Comp.CameraPan = Vector2.Zero;
+        var center = _transform.ToMapCoordinates(GetCameraCoordinates(point)).Position;
+        if (args.Direction is { } pan)
+        {
+            point.Comp.CameraPan = current + pan.ToIntVec() * 2 - center;
+            point.Comp.CameraPan = _transform.ToMapCoordinates(GetCameraCoordinates(point)).Position - center;
+        }
+    }
+
+    private void OnPriority(Entity<DropshipTerminalWeaponsComponent> console, ref MohawkChinGunPriorityMessage args)
+    {
+        if (_net.IsClient || !console.Comp.Gunnery ||
+            !_dropships.TryGetGridDropship(console, out var ship))
+            return;
+        foreach (var uid in ship.Comp.AttachmentPoints)
+        {
+            if (!TryComp(uid, out MohawkChinGunComponent? chin) || !IsSeatedOperator(uid, args.Actor) ||
+                chin.Operator != null && chin.Operator != args.Actor)
+                continue;
+            chin.TargetPriority = chin.TargetPriority == MohawkTargetPriority.Distance
+                ? MohawkTargetPriority.HighestHealth : MohawkTargetPriority.Distance;
+            console.Comp.ChinGunPriority = chin.TargetPriority;
+            Dirty(uid, chin);
+            Dirty(console);
+            return;
+        }
+    }
+
+    private void OnAcquire(Entity<DropshipTerminalWeaponsComponent> console, ref MohawkChinGunAcquireMessage args)
+    {
+        if (_net.IsClient || !TryGetControlledPoint(console, args.Actor, out var point))
+            return;
+        var target = SelectTarget(point);
+        SetTracking(point, target);
+        if (target == null)
+            _popup.PopupEntity(Loc.GetString("cmu-dropship-track-invalid"), console, args.Actor);
+    }
+
+    private void OnFlare(Entity<DropshipTerminalWeaponsComponent> console, ref MohawkChinGunFlareMessage args)
+    {
+        if (_net.IsClient || !TryGetControlledPoint(console, args.Actor, out var point))
+            return;
+        var flare = GetEntity(args.Flare);
+        if (flare != null && !IsUsableFlare(point, flare.Value))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-mohawk-gunnery-flare-invalid"), console, args.Actor);
+            return;
+        }
+        SetTracking(point, null);
+        console.Comp.Target = flare;
+        point.Comp.CameraPan = Vector2.Zero;
+        Dirty(console);
+    }
+
+    public EntityUid? SelectTarget(Entity<MohawkChinGunComponent> point, float? radius = null)
+    {
+        if (!TryComp(point, out SentryTargetingComponent? targeting) || !EnsureTrackingFaction(point) ||
+            !TryComp(point, out GunshipDirectFirePointComponent? mount))
+            return null;
+        var rotation = _transform.GetWorldRotation(Transform(point).GridUid ?? point.Owner);
+        var origin = _transform.GetMapCoordinates(point);
+        var muzzle = origin.Position + rotation.RotateVec(new Vector2(mount.LateralOffset, mount.ForwardOffset));
+        EntityUid? selected = null;
+        var bestDistance = float.PositiveInfinity;
+        var bestHealth = float.NegativeInfinity;
+        foreach (var candidate in _targeting.GetNearbyIffHostiles((point.Owner, targeting), GetScanRange(point)))
+        {
+            if (!CanTrack(point, candidate, true))
+                continue;
+            var distance = Vector2.DistanceSquared(muzzle, _transform.GetMapCoordinates(candidate).Position);
+            if (radius is { } limit && distance > limit * limit)
+                continue;
+            var health = 0f;
+            if (TryComp(candidate, out DamageableComponent? damage) &&
+                _thresholds.TryGetDeadThreshold(candidate, out var maximum))
+                health = MathF.Max(0, (maximum.Value - _damage.GetTotalDamage((candidate, damage))).Float());
+            if (selected != null && (point.Comp.TargetPriority == MohawkTargetPriority.Distance
+                    ? distance >= bestDistance
+                    : health < bestHealth || health == bestHealth && distance >= bestDistance))
+                continue;
+            selected = candidate;
+            bestDistance = distance;
+            bestHealth = health;
+        }
+        return selected;
+    }
+
+    private float GetScanRange(Entity<MohawkChinGunComponent> point)
+    {
+        var mount = Comp<GunshipDirectFirePointComponent>(point);
+        return point.Comp.Range + new Vector2(mount.LateralOffset, mount.ForwardOffset).Length();
+    }
+
+    private bool IsUsableFlare(Entity<MohawkChinGunComponent> point, EntityUid flare)
+    {
+        if (TerminatingOrDeleted(flare) || !HasComp<FlareSignalComponent>(flare) ||
+            !HasComp<DropshipTargetComponent>(flare) || !TryGetWeapon(point, out var weapon) ||
+            !TryComp(weapon, out GunshipDirectFireWeaponComponent? direct) ||
+            !_directFire.TryResolveMount((weapon, direct), out var mount, out var grid, out _, out _))
+            return false;
+        var origin = _transform.GetMapCoordinates(point);
+        var rotation = _transform.GetWorldRotation(grid);
+        var muzzle = origin.Position + rotation.RotateVec(new Vector2(mount.Comp.LateralOffset, mount.Comp.ForwardOffset));
+        var target = _transform.GetMapCoordinates(flare);
+        return target.MapId == origin.MapId &&
+               Vector2.DistanceSquared(muzzle, target.Position) <= point.Comp.Range * point.Comp.Range &&
+               Vector2.Dot(rotation.RotateVec(Vector2.UnitY), target.Position - muzzle) >= 0;
+    }
+
+    public bool IsInFlareArea(Entity<MohawkChinGunComponent> point, EntityCoordinates coordinates)
+    {
+        if (point.Comp.Console is not { } console ||
+            !TryComp(console, out DropshipTerminalWeaponsComponent? terminal) ||
+            terminal.Target is not { } flare || !HasComp<FlareSignalComponent>(flare))
+            return true;
+        if (!IsUsableFlare(point, flare))
+            return false;
+        var target = _transform.ToMapCoordinates(coordinates);
+        var anchor = _transform.GetMapCoordinates(flare);
+        return target.MapId == anchor.MapId &&
+               Vector2.DistanceSquared(target.Position, anchor.Position) <= point.Comp.FlareRadius * point.Comp.FlareRadius;
     }
 
     private bool EnsureTrackingFaction(Entity<MohawkChinGunComponent> point)
@@ -572,8 +732,12 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             return false;
         var line = target.Position - muzzle.Position;
         var lengthSquared = line.LengthSquared();
+        var friendlyRadius = 2f;
+        if (TryComp(weapon, out GunshipDirectFireWeaponComponent? direct) &&
+            _directFire.TryResolveMount((weapon, direct), out _, out _, out _, out var ammo) && ammo != null)
+            friendlyRadius = ammo.FriendlyImpactRadius;
         _nearbyMobs.Clear();
-        _lookup.GetEntitiesInRange(muzzle, point.Comp.Range + 2f, _nearbyMobs);
+        _lookup.GetEntitiesInRange(muzzle, point.Comp.Range + friendlyRadius, _nearbyMobs);
         foreach (var mob in _nearbyMobs)
         {
             if (_targeting.IsValidTarget((point.Owner, targeting), mob.Owner))
@@ -583,7 +747,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                 continue;
             var fraction = lengthSquared > 0 ? Math.Clamp(Vector2.Dot(location.Position - muzzle.Position, line) / lengthSquared, 0, 1) : 0;
             if (Vector2.DistanceSquared(location.Position, muzzle.Position + fraction * line) < 0.75f * 0.75f ||
-                Vector2.DistanceSquared(location.Position, target.Position) < 2f * 2f)
+                Vector2.DistanceSquared(location.Position, target.Position) < friendlyRadius * friendlyRadius)
                 return false;
         }
         return true;

@@ -13,11 +13,27 @@ cmu-mohawk-controls-repaired = The remote connection has been restored.
 cmu-mohawk-gunnery-only = Fire the M90 from the dedicated gunnery console.
 cmu-mohawk-gunnery-seat = You must be buckled into the gunnery seat to fire the M90.
 cmu-mohawk-gunnery-manual = Take turret control
-cmu-mohawk-gunnery-automatic = Release control / hold fire
-cmu-mohawk-gunnery-control-help = Groundside only. The turret holds fire until commanded. Take control while seated, then click the left camera to slew and fire one shell, or use combat mode in the main view. Slewing takes time; the gun fires at most once per second. Mark a visible hostile, then CONFIRM automatic fire to authorize that entity for 30 seconds. Losing sight pauses fire without extending authorization; reacquiring the same entity before expiry resumes fire. Friendlies in the firing path block shots. Closing the console returns to hold-fire.
+cmu-mohawk-gunnery-automatic = Release / close defense
+cmu-mohawk-gunnery-control-help = Groundside only. Take control while seated; move the mouse over the left camera to slew, then click to fire one shell. Arrows pan the camera two tiles; the center button recenters. Mark a hostile, then Authorize fire to engage that entity for 30 seconds. Acquire priority target marks the nearest or highest-health visible threat. Select a signal flare from TARGET on the right monitor to work within ten tiles of it. Losing sight pauses authorized fire. Unmanned close defense fires only at hostiles within four tiles. Friendly-fire checks and the one-shell-per-second limit always apply.
 cmu-mohawk-gunnery-ground-only = The chin turret can only be controlled manually while landed.
 cmu-mohawk-gunnery-busy = Another operator is controlling the chin turret.
 cmu-mohawk-gunnery-out-of-range = The target is outside the chin turret's range.
 cmu-mohawk-gunnery-out-of-arc = The target is behind the chin turret's forward firing arc.
 cmu-mohawk-gunnery-auth-expired = Fire authorization expired. Confirm the target again to resume.
 cmu-mohawk-gunnery-unsafe-shot = Holding fire: a friendly or an opaque obstruction is in the firing path.
+cmu-mohawk-gunnery-flare-invalid = Select an active signal flare within the turret's forward arc and 30-tile range. Aim within ten tiles of the flare, or clear it to return to unrestricted manual aiming.
+cmu-mohawk-gunnery-mark-help = Press this button, then click a visible hostile in the left camera. Marking never authorizes fire.
+cmu-mohawk-gunnery-mark-pending = Click a hostile in the left camera.
+cmu-mohawk-gunnery-unmarked = No marked target.
+cmu-mohawk-gunnery-acquire = Acquire priority target
+cmu-mohawk-gunnery-acquire-help = Mark the nearest or highest-health visible hostile, according to the priority setting. With a flare selected, acquire only within ten tiles of it. Then authorize fire separately.
+cmu-mohawk-gunnery-authorize = Authorize fire (30 seconds)
+cmu-mohawk-gunnery-authorize-help = Mark or acquire a hostile first. Authorizes that entity for thirty seconds, firing only while visible and safe.
+cmu-mohawk-gunnery-priority-distance = Priority: nearest
+cmu-mohawk-gunnery-priority-health = Priority: highest health
+cmu-mohawk-gunnery-clear-flare = Clear flare / recenter
+cmu-mohawk-gunnery-pan-help = Pan two tiles with the arrows. The center button recenters on the flare or chin mount. Panning clears tracking and authorization.
+cmu-mohawk-gunnery-short-help = Mouse: slew | Click: one shell
+    Mark -> Authorize: tracked fire
+    Arrows: pan | Center: recenter
+    Right TARGET: select a flare

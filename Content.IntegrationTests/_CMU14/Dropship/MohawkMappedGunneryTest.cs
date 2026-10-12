@@ -1,4 +1,7 @@
 using Content.IntegrationTests.Fixtures;
+using Content.Client._RMC14.Dropship.Weapon;
+using Content.Client.UserInterface.ControlExtensions;
+using Robust.Client.UserInterface;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Marines.Skills;
@@ -63,6 +66,15 @@ public sealed class MohawkMappedGunneryTest : GameTest
             var console = CEntMan.GetComponent<DropshipTerminalWeaponsComponent>(CEntMan.GetEntity(consoleNet));
             Assert.That(console.ChinGunOperator, Is.EqualTo(CEntMan.GetEntity(actorNet)));
             Assert.That(console.ChinGunEye, Is.Not.Null);
+            var window = Client.ResolveDependency<IUserInterfaceManager>().RootControl
+                .GetControlOfType<DropshipWeaponsWindow>(fullTreeSearch: true).Single();
+            Assert.That(window.ScreenOne.Viewport.MouseFilter, Is.EqualTo(Control.MouseFilterMode.Stop),
+                "The embedded camera must receive clicks instead of silently ignoring target marks.");
+            Assert.That(window.ConfirmTrackingButton.Visible, Is.True);
+            Assert.That(window.ConfirmTrackingButton.Disabled, Is.True,
+                "Authorization must be discoverable but unavailable before a hostile is marked.");
+            Assert.That(window.AcquireTargetButton.Visible, Is.True);
+            Assert.That(window.PriorityButton.Visible, Is.True);
         });
     }
 }

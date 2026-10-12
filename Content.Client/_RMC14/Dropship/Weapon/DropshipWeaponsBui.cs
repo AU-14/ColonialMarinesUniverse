@@ -71,6 +71,12 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 SendMessage(new MohawkChinGunConfirmTrackingMessage(EntMan.GetNetEntity(target)));
         };
         Window.ClearTrackingButton.OnPressed += _ => SendMessage(new MohawkChinGunClearTrackingMessage());
+        Window.TrackTargetButton.OnPressed += _ =>
+            Window.TrackingStatusLabel.Text = Loc.GetString(Window.TrackTargetButton.Pressed
+                ? "cmu-mohawk-gunnery-mark-pending" : "cmu-mohawk-gunnery-unmarked");
+        Window.AcquireTargetButton.OnPressed += _ => SendMessage(new MohawkChinGunAcquireMessage());
+        Window.PriorityButton.OnPressed += _ => SendMessage(new MohawkChinGunPriorityMessage());
+        Window.ClearFlareButton.OnPressed += _ => SendMessage(new MohawkChinGunFlareMessage(null));
         Window.ScreenOne.Viewport.OnKeyBindDown += args =>
         {
             if (args.Function != EngineKeyFunctions.UIClick ||
@@ -98,22 +104,22 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
         Window.OffsetUpButton.Text = "^";
         Window.OffsetUpButton.OnPressed += _ =>
-            SendPredictedMessage(new DropshipTerminalWeaponsAdjustOffsetMsg(Direction.North));
+            PanOrAdjust(Direction.North);
 
         Window.OffsetLeftButton.Text = "<";
         Window.OffsetLeftButton.OnPressed += _ =>
-            SendPredictedMessage(new DropshipTerminalWeaponsAdjustOffsetMsg(Direction.West));
+            PanOrAdjust(Direction.West);
 
         Window.OffsetRightButton.Text = ">";
         Window.OffsetRightButton.OnPressed += _ =>
-            SendPredictedMessage(new DropshipTerminalWeaponsAdjustOffsetMsg(Direction.East));
+            PanOrAdjust(Direction.East);
 
         Window.OffsetDownButton.Text = "v";
         Window.OffsetDownButton.OnPressed += _ =>
-            SendPredictedMessage(new DropshipTerminalWeaponsAdjustOffsetMsg(Direction.South));
+            PanOrAdjust(Direction.South);
 
         Window.ResetOffsetButton.OnPressed += _ =>
-            SendPredictedMessage(new DropshipTerminalWeaponsResetOffsetMsg());
+            PanOrAdjust(null);
 
         foreach (var screen in new[] { Window.ScreenOne, Window.ScreenTwo })
         {
@@ -140,6 +146,17 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         Refresh();
     }
 
+    private void PanOrAdjust(Direction? direction)
+    {
+        if (EntMan.TryGetComponent(Owner, out DropshipTerminalWeaponsComponent? terminal) &&
+            terminal.ChinGunOperator != null)
+            SendMessage(new MohawkChinGunPanMessage(direction));
+        else if (direction is { } pan)
+            SendPredictedMessage(new DropshipTerminalWeaponsAdjustOffsetMsg(pan));
+        else
+            SendPredictedMessage(new DropshipTerminalWeaponsResetOffsetMsg());
+    }
+
     public void Refresh()
     {
         if (Window == null)
@@ -153,14 +170,24 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 : "cmu-mohawk-gunnery-automatic");
             var manual = terminal.ChinGunOperator != null;
             Window.TrackTargetButton.Visible = manual;
-            Window.ConfirmTrackingButton.Visible = manual && terminal.TrackedTarget != null && !terminal.TrackingFireConfirmed;
-            Window.ClearTrackingButton.Visible = manual && terminal.TrackedTarget != null;
+            Window.AcquireTargetButton.Visible = manual;
+            Window.ConfirmTrackingButton.Visible = manual;
+            Window.ConfirmTrackingButton.Disabled = terminal.TrackedTarget == null || terminal.TrackingFireConfirmed;
+            Window.ClearTrackingButton.Visible = manual;
+            Window.PriorityButton.Visible = terminal.Gunnery;
+            Window.PriorityButton.Text = Loc.GetString(terminal.ChinGunPriority == MohawkTargetPriority.Distance
+                ? "cmu-mohawk-gunnery-priority-distance" : "cmu-mohawk-gunnery-priority-health");
+            Window.ClearFlareButton.Visible = manual && terminal.Target != null;
+            Window.ChinGunHelpLabel.Visible = manual;
+            Window.ResetOffsetButton.ToolTip = Loc.GetString(manual
+                ? "cmu-mohawk-gunnery-pan-help" : "rmc-dropship-weapons-offset-calibration-does-not-affect-direct-bombardment");
             if (!manual)
                 Window.TrackTargetButton.Pressed = false;
             Window.TrackingStatusLabel.Text = terminal.TrackedTarget is { } tracked
                 ? Loc.GetString(terminal.TrackingFireConfirmed ? "cmu-dropship-track-firing" : "cmu-dropship-track-ready",
                     ("target", EntMan.GetComponent<MetaDataComponent>(tracked).EntityName))
-                : "";
+                : manual ? Loc.GetString(Window.TrackTargetButton.Pressed
+                    ? "cmu-mohawk-gunnery-mark-pending" : "cmu-mohawk-gunnery-unmarked") : "";
             SetScreen(true, terminal.ScreenOne);
             SetScreen(false, terminal.ScreenTwo);
         }
@@ -249,7 +276,12 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         var screen = first ? Window.ScreenOne : Window.ScreenTwo;
 
         screen.Viewport.RemoveAllChildren();
-        screen.Viewport.AddChild(new DropshipTargetingPreview(EntMan, Owner, first, screen));
+        var preview = new DropshipTargetingPreview(EntMan, Owner, first, screen);
+        preview.CursorAim += coordinates =>
+            SendMessage(new MohawkChinGunAimMessage(EntMan.GetNetCoordinates(
+                EntMan.System<SharedTransformSystem>().ToCoordinates(coordinates))));
+        screen.Viewport.AddChild(preview);
+        screen.Viewport.MouseFilter = MouseFilterMode.Ignore;
         RefreshPayloadSettings(screen, compScreen);
         screen.Viewport.Visible = false;
         screen.FireMissionCreate.Visible = false;
@@ -351,7 +383,8 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         void AddTargets(out DropshipWeaponsButtonData? previous, out DropshipWeaponsButtonData? next)
         {
             AddButtons(
-                id => new DropshipTerminalWeaponsTargetsSelectMsg(id),
+                id => terminal.Gunnery && terminal.ChinGunOperator != null
+                    ? new MohawkChinGunFlareMessage(id) : new DropshipTerminalWeaponsTargetsSelectMsg(id),
                 new DropshipTerminalWeaponsTargetsPreviousMsg(),
                 new DropshipTerminalWeaponsTargetsNextMsg(),
                 screen.RightRow,
@@ -419,6 +452,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             EntMan.TryGetComponent(chinEye, out EyeComponent? turretEye))
         {
             screen.Viewport.Eye = turretEye.Eye;
+            screen.Viewport.MouseFilter = MouseFilterMode.Stop;
             screen.Viewport.Visible = true;
             screen.ScreenLabel.Visible = false;
             screen.TopRow.SetData();

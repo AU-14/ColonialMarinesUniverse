@@ -1,3 +1,4 @@
+using System.Numerics;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 using Robust.Shared.Map;
@@ -21,6 +22,15 @@ public sealed partial class MohawkChinGunComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool TrackingFireConfirmed;
+    [DataField, AutoNetworkedField]
+    public MohawkTargetPriority TargetPriority;
+    [DataField]
+    public float CloseDefenseRange = 4f;
+    [DataField]
+    public float FlareRadius = 10f;
+    public Vector2 CameraPan;
+    public bool DefensiveFire;
+    public TimeSpan NextAimUpdate;
     [DataField]
     public float SlewDegreesPerSecond = 30f;
     [DataField]
@@ -61,3 +71,34 @@ public sealed class MohawkChinGunConfirmTrackingMessage(NetEntity target) : Boun
 
 [Serializable, NetSerializable]
 public sealed class MohawkChinGunClearTrackingMessage : BoundUserInterfaceMessage;
+
+[Serializable, NetSerializable]
+public enum MohawkTargetPriority : byte
+{
+    Distance,
+    HighestHealth,
+}
+
+[Serializable, NetSerializable]
+public sealed class MohawkChinGunAimMessage(NetCoordinates coordinates) : BoundUserInterfaceMessage
+{
+    public readonly NetCoordinates Coordinates = coordinates;
+}
+
+[Serializable, NetSerializable]
+public sealed class MohawkChinGunPanMessage(Direction? direction) : BoundUserInterfaceMessage
+{
+    public readonly Direction? Direction = direction;
+}
+
+[Serializable, NetSerializable]
+public sealed class MohawkChinGunPriorityMessage : BoundUserInterfaceMessage;
+
+[Serializable, NetSerializable]
+public sealed class MohawkChinGunAcquireMessage : BoundUserInterfaceMessage;
+
+[Serializable, NetSerializable]
+public sealed class MohawkChinGunFlareMessage(NetEntity? flare) : BoundUserInterfaceMessage
+{
+    public readonly NetEntity? Flare = flare;
+}

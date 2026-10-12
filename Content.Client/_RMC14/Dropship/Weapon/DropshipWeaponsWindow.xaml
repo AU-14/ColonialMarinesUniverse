@@ -16,12 +16,22 @@
                         Text="{Loc 'cmu-mohawk-gunnery-manual'}"
                         ToolTip="{Loc 'cmu-mohawk-gunnery-control-help'}" />
                 <Button Name="TrackTargetButton" Access="Public" Visible="False"
-                        ToggleMode="True" Text="{Loc 'cmu-dropship-track-mark'}" />
+                        ToggleMode="True" Text="{Loc 'cmu-dropship-track-mark'}"
+                        ToolTip="{Loc 'cmu-mohawk-gunnery-mark-help'}" />
+                <Button Name="AcquireTargetButton" Access="Public" Visible="False"
+                        Text="{Loc 'cmu-mohawk-gunnery-acquire'}"
+                        ToolTip="{Loc 'cmu-mohawk-gunnery-acquire-help'}" />
                 <Button Name="ConfirmTrackingButton" Access="Public" Visible="False"
-                        Text="{Loc 'cmu-dropship-track-confirm'}" />
+                        Text="{Loc 'cmu-mohawk-gunnery-authorize'}"
+                        ToolTip="{Loc 'cmu-mohawk-gunnery-authorize-help'}" />
                 <Button Name="ClearTrackingButton" Access="Public" Visible="False"
                         Text="{Loc 'cmu-dropship-track-clear'}" />
-                <Label Name="TrackingStatusLabel" Access="Public" ClipText="True" MaxWidth="180" />
+                <Button Name="PriorityButton" Access="Public" Visible="False" />
+                <Button Name="ClearFlareButton" Access="Public" Visible="False"
+                        Text="{Loc 'cmu-mohawk-gunnery-clear-flare'}" />
+                <Label Name="TrackingStatusLabel" Access="Public" MaxWidth="225" />
+                <Label Name="ChinGunHelpLabel" Access="Public" Visible="False"
+                       Text="{Loc 'cmu-mohawk-gunnery-short-help'}" />
                 <BoxContainer Orientation="Horizontal">
                     <Control HorizontalExpand="True" />
                     <Button Name="OffsetUpButton" Access="Public" StyleClasses="OpenBoth"
