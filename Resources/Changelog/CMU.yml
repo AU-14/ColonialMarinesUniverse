@@ -12934,5 +12934,148 @@
   id: 790
   time: '2026-10-11T16:24:39.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2096
+- author: rokudara-sen
+  changes:
+  - message: Expedition squads make the same flank and cover calls no matter how long
+      the round has been going
+    type: Fix
+  - message: CI test runners get swap, the 3D tests run in their own shard, and the
+      six-guard expedition test is back in the cmu shard
+    type: Code
+  id: 791
+  time: '2026-10-11T17:07:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2155
+- author: rokudara-sen
+  changes:
+  - message: The queen can decline the hijack and end the round again
+    type: Fix
+  - message: Intel and data scanners no longer ping bodies, barricades, plants and
+      vendors
+    type: Fix
+  - message: MFHS grenades and other chem smoke and foam reactions work again
+    type: Fix
+  - message: LACN breacher breaching shells break walls (2 shots normal, 4 reinforced)
+    type: Fix
+  - message: Platoon jobs like the UPP CO get their faction languages on spawn
+    type: Fix
+  - message: Helmet lights no longer hide NVGs, headphones and other helmet garb
+    type: Fix
+  - message: The Yautja wrist blade action no longer deploys the gauntlet too
+    type: Fix
+  - message: An aheal clears perma, so the next death gets a normal revive window
+    type: Fix
+  - message: Patients who get their brain back wake up instead of staying asleep forever
+    type: Fix
+  - message: The SAS commander can give orders
+    type: Fix
+  - message: WeYu experiment crates have a salvaged hivebreaker WeYu can pick up and
+      use instead of the Yautja one that shocked them
+    type: Fix
+  - message: You can climb ladders while dragging someone
+    type: Fix
+  - message: PM-61 IFAK matches the standard IFAK, UPP ushankas have the armor they
+      describe, old UPP radio packs removed from command vendors
+    type: Fix
+  id: 792
+  time: '2026-10-11T17:07:28.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2152
+- author: flex5hybrid
+  changes:
+  - message: Retain recently visible HUD caches when new entities enter view, reduce
+      xenomorph visual allocations and skip unnecessary footprint grid lookups between
+      steps.
+    type: Code
+  id: 793
+  time: '2026-10-11T19:47:15.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2160
+- author: flex5hybrid
+  changes:
+  - message: Reduced server stalls when large Scavenger squads fight or search for
+      routes.
+    type: Fix
+  - message: Added decision budgets and queue diagnostics for expedition AI.
+    type: Admin
+  id: 794
+  time: '2026-10-11T19:47:39.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2157
+- author: TheHellFireo
+  changes:
+  - message: Expedition AI now commits to escaping threatened smoke without waiting
+      for covering fire.
+    type: Fix
+  - message: Expedition AI can return fire along recently observed incoming-fire bearings
+      through smoke and fire during compatible movement.
+    type: Tweak
+  id: 795
+  time: '2026-10-11T21:51:15.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2162
+- author: PERed5
+  changes:
+  - message: Intel tech tree names, descriptions and announcements now use localization
+      keys.
+    type: Code
+  id: 796
+  time: '2026-10-11T21:51:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2161
+- author: PoltavskaPraca
+  changes:
+  - message: stuff thrown into asrs now despawns, same for the vehicle elevator
+    type: Add
+  - message: pilots now have access to the vehicle vendor
+    type: Add
+  id: 797
+  time: '2026-10-11T21:52:38.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2158
+- author: rokudara-sen
+  changes:
+  - message: Dropship hatches no longer auto-close onto people standing in them
+    type: Fix
+  - message: Landing on a burning LZ no longer leaves fires burning inside the dropship
+    type: Fix
+  - message: The chemical simulator warns when a relate or add will cancel a conflicting
+      property
+    type: Fix
+  - message: Duplicate intel objectives (like two WY laptops) each pay out
+    type: Fix
+  - message: NSG-23 AP and incendiary mags work with their ammo boxes, and the NSG-23
+      has no damage falloff
+    type: Fix
+  - message: K9 dogs can bite weeds and wall weeds, let go of downed targets, ignore
+      dead xenos and no longer read xeno names
+    type: Fix
+  - message: K9 welder repair is no longer an instant full heal, burns need cable
+      coil
+    type: Fix
+  - message: Xenos can build resin on roofs again
+    type: Fix
+  - message: Carrion Mantle no longer burns its cooldown on a miss
+    type: Fix
+  - message: WY hazard transport scientists have medical skill
+    type: Fix
+  - message: Military synths can send announcements from the command tablet
+    type: Fix
+  - message: Patients stand back up after their legs are reattached, and losing your
+      feet puts you down
+    type: Fix
+  - message: You're no longer stuck slow after getting up from a knockdown
+    type: Fix
+  id: 798
+  time: '2026-10-11T21:53:38.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2159
+- author: rokudara-sen
+  changes:
+  - message: Mobs laid down as they spawn no longer stand right back up
+    type: Fix
+  - message: Expedition squads no longer jam up at corners and narrow spots
+    type: Fix
+  - message: Tactical map blips no longer freeze in place on quiet maps
+    type: Fix
+  - message: Parked dropships are no longer pushed around by depressurization
+    type: Fix
+  - message: Restarting the round right after a dropship hijack no longer errors
+    type: Fix
+  id: 799
+  time: '2026-10-12T14:21:06.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2165
 Name: CMU
 Order: -1
