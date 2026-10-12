@@ -1,3 +1,5 @@
+#pragma warning disable RA0002 // the test reads the reference blood volume to drain to an exact level
+
 using Content.IntegrationTests.Fixtures;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
