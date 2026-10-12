@@ -489,6 +489,11 @@ jobs:
               | FullyQualifiedName~CMU14.Evacuation.
               | FullyQualifiedName~CMU14.Weapons.
               | FullyQualifiedName~CMU14.TacticalMap.
+              | FullyQualifiedName~CMU14.Traits.
+              | FullyQualifiedName~CMU14.Trigger.
+              | FullyQualifiedName~CMU14.Minds.
+              | FullyQualifiedName~CMU14.Construction.
+              | FullyQualifiedName~CMU14.Light.
           # CMU14: the 3D tests build fresh client/server pairs and load the 3D libraries, ~10 GB by the
           # end. they were most of cmu_systems' memory, on their own they can't push the others over
           - name: cmu_threed
@@ -505,6 +510,11 @@ jobs:
               & FullyQualifiedName!~CMU14.Evacuation.
               & FullyQualifiedName!~CMU14.Weapons.
               & FullyQualifiedName!~CMU14.TacticalMap.
+              & FullyQualifiedName!~CMU14.Traits.
+              & FullyQualifiedName!~CMU14.Trigger.
+              & FullyQualifiedName!~CMU14.Minds.
+              & FullyQualifiedName!~CMU14.Construction.
+              & FullyQualifiedName!~CMU14.Light.
               & FullyQualifiedName!~CMU14.Medical.
               & FullyQualifiedName!~CMU14.Chemistry.
               & FullyQualifiedName!~CMU14.Dropship.
