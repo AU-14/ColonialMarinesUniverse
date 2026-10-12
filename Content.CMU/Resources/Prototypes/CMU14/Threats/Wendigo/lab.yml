@@ -26,6 +26,53 @@
       - id: CMUSyringeMH32
         amount: 2
 
+# Faxed to the WY Lab when it reaches research clearance 3. Deliberately vague about what each phase is.
+- type: entity
+  parent: CMPaper
+  id: CMUPaperWendigoLabBriefing
+  name: Project MH briefing
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Paper
+    stampState: paper_stamp-centcom
+    stampedBy:
+    - stampedColor: "#7a1f1f"
+      stampedName: Weyland-Yutani Biological Research Division
+    content: >2-
+                [color=#7a1f1f]⬢[/color] [head=2]Weyland-Yutani Biological Research Division[/head] [color=#7a1f1f]⬢[/color]
+      [color=#7a1f1f]▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[/color]
+      [bold]PROJECT MH. CLEARANCE 3. EYES ONLY.[/bold]
+
+      Your laboratory has been cleared to continue Project MH. MH-32 is now available through your ASRS terminal under Research. Stock is limited and slow to restock: do not waste it.
+
+      [head=3]1. Candidate selection[/head]
+      • A living, unaugmented human. Synthetics and non-human candidates do not respond.
+      • The candidate must be starving when the trial begins.
+      • The trial begins when the candidate finishes an entire portion of [bold]raw[/bold] human tissue (carved meat or organs). Partial or cooked portions do not count.
+      • Candidates with a prior appetite for human flesh produce markedly superior results.
+
+      [head=3]2. Materials[/head]
+      • [bold]Raw human tissue.[/bold] Several portions. Carve it fresh.
+      • [bold]Stabilized Mutagen[/bold]: 10u Dylovene, 5u Uranium, 1u Gold, 5u Unstable Mutagen. Yields 15u.
+        Unstable Mutagen: 1u Chlorine, 1u Radium, 1u Phosphorus. Yields 3u.
+      • [bold]MH-32[/bold]: ASRS, Research category.
+      • [bold]MH-33[/bold] (conditioned compound): 15u MH-32, 15u Gold, 10u Platinum, 32u Black Sludge. Yields 15u.
+        Black Sludge: 16u each of Bicaridine, Meralyne, Kelotane and Dermaline. Yields 64u.
+      • Compounds are administered by injection only, in [bold]full 15-unit doses[/bold]. Check your injector setting before every administration.
+
+      [head=3]3. Observations and warnings[/head]
+      • The candidate signals receptivity with a violent seizure. A health analyzer will also report the candidate as [italic]Reactive[/italic]. Treatment given at any other time is wasted.
+      • Receptivity does not last. Candidates left untreated regress, and lost progress must be repeated.
+      • Ordinary food given early in the regimen ends the trial outright.
+      • Partial doses, premature or out-of-sequence treatment, and missed receptive periods destabilise the candidate. So does letting the candidate fall into critical condition.
+      • Destabilisation accumulates and is visible to the naked eye. A badly destabilised candidate will not accept MH-33 conditioning. Past a certain point the candidate's body fails outright.
+      • Death of the candidate at any point terminates the trial.
+      • Restrain the candidate and clear the room before the final administration. Without conditioning, the result is hostile to everyone. Conditioning binds the result only to the researcher who administered it.
+      • The result may be treated with standard medical supplies. It is company property. Do not let it leave the facility.
+
+      [color=#7a1f1f]▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[/color]
+      [italic][color=#8a9baf]Weyland-Yutani Corporation // Building Better Worlds // Destroy after reading.[/color][/italic]
+
 - type: entity
   parent: BaseMindRoleAntag
   id: MindRoleCMUWendigoLab
