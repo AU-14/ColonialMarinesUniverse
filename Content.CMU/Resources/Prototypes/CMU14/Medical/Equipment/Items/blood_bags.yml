@@ -8,7 +8,7 @@
   suffix: CMU, Full, O+
   components:
   - type: CMUBloodPackType
-    type: OPositive
+    bloodType: OPositive
 
 - type: entity
   parent: CMBloodPackFull
@@ -17,7 +17,7 @@
   suffix: CMU, Full, A+
   components:
   - type: CMUBloodPackType
-    type: APositive
+    bloodType: APositive
 
 - type: entity
   parent: CMBloodPackFull
@@ -26,7 +26,7 @@
   suffix: CMU, Full, A-
   components:
   - type: CMUBloodPackType
-    type: ANegative
+    bloodType: ANegative
 
 - type: entity
   parent: CMBloodPackFull
@@ -35,7 +35,7 @@
   suffix: CMU, Full, B+
   components:
   - type: CMUBloodPackType
-    type: BPositive
+    bloodType: BPositive
 
 - type: entity
   parent: CMBloodPackFull
@@ -44,7 +44,7 @@
   suffix: CMU, Full, B-
   components:
   - type: CMUBloodPackType
-    type: BNegative
+    bloodType: BNegative
 
 - type: entity
   parent: CMBloodPackFull
@@ -53,7 +53,7 @@
   suffix: CMU, Full, AB+
   components:
   - type: CMUBloodPackType
-    type: ABPositive
+    bloodType: ABPositive
 
 - type: entity
   parent: CMBloodPackFull
@@ -62,7 +62,7 @@
   suffix: CMU, Full, AB-
   components:
   - type: CMUBloodPackType
-    type: ABNegative
+    bloodType: ABNegative
 
 - type: entity
   parent: CMBloodPack
@@ -72,7 +72,7 @@
   suffix: CMU, Full, AB+
   components:
   - type: CMUBloodPackType
-    type: ABPositive
+    bloodType: ABPositive
   - type: CMUPerishableBlood
   - type: BloodPack
     transferableReagents: [ CMUBloodPlasma ]
@@ -93,7 +93,7 @@
   suffix: CMU, Full, AB-
   components:
   - type: CMUBloodPackType
-    type: ABNegative
+    bloodType: ABNegative
 
 - type: entity
   parent: CMUBloodPlasmaPack
@@ -102,7 +102,7 @@
   suffix: CMU, Full, A+
   components:
   - type: CMUBloodPackType
-    type: APositive
+    bloodType: APositive
 
 - type: entity
   parent: CMUBloodPlasmaPack
@@ -111,7 +111,7 @@
   suffix: CMU, Full, A-
   components:
   - type: CMUBloodPackType
-    type: ANegative
+    bloodType: ANegative
 
 - type: entity
   parent: CMUBloodPlasmaPack
@@ -120,7 +120,7 @@
   suffix: CMU, Full, B+
   components:
   - type: CMUBloodPackType
-    type: BPositive
+    bloodType: BPositive
 
 - type: entity
   parent: CMUBloodPlasmaPack
@@ -129,7 +129,7 @@
   suffix: CMU, Full, B-
   components:
   - type: CMUBloodPackType
-    type: BNegative
+    bloodType: BNegative
 
 - type: entity
   parent: CMUBloodPlasmaPack
@@ -138,7 +138,7 @@
   suffix: CMU, Full, O+
   components:
   - type: CMUBloodPackType
-    type: OPositive
+    bloodType: OPositive
 
 - type: entity
   parent: CMUBloodPlasmaPack
@@ -147,7 +147,7 @@
   suffix: CMU, Full, O-
   components:
   - type: CMUBloodPackType
-    type: ONegative
+    bloodType: ONegative
 
 - type: entity
   parent: CMBloodPack

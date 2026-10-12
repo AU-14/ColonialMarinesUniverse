@@ -8,7 +8,8 @@ namespace Content.Shared.CMU14.Medical.Blood;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CMUBloodTypeComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    // "type" is taken by the component's own YAML key.
+    [DataField("bloodType"), AutoNetworkedField]
     public CMUBloodType Type = CMUBloodType.OPositive;
 }
 
@@ -19,7 +20,8 @@ public sealed partial class CMUBloodTypeComponent : Component
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class CMUBloodPackTypeComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    // "type" is taken by the component's own YAML key.
+    [DataField("bloodType"), AutoNetworkedField]
     public CMUBloodType? Type;
 
     [DataField, AutoNetworkedField]

@@ -8,7 +8,7 @@ namespace Content.Shared.CMU14.Medical.Blood;
 [Access(typeof(CMUIdBloodTypeSystem))]
 public sealed partial class CMUIdBloodTypeComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    [DataField("bloodType"), AutoNetworkedField]
     public CMUBloodType Type;
 }
 
