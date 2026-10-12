@@ -56,6 +56,47 @@ public sealed class InternalsGasProtectionTest
     }
 
     [Test]
+    public async Task InternalsKeepOutNeurotoxinForTwiceTheBestFilter()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var gasMask = entities.System<SharedGasMaskSystem>();
+            var internalsSystem = entities.System<SharedInternalsSystem>();
+
+            var victim = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var mask = entities.SpawnEntity("ClothingMaskBreath", MapCoordinates.Nullspace);
+            var tank = entities.SpawnEntity("OxygenTankFilled", MapCoordinates.Nullspace);
+            var internals = entities.EnsureComponent<InternalsComponent>(victim);
+            internalsSystem.ConnectBreathTool((victim, internals), mask);
+            Assert.That(internalsSystem.TryConnectTank((victim, internals), tank), Is.True);
+
+            // The WY filter, the best against neurotoxin, absorbs 100 / 1.25 = 80 gas damage: eight 10-damage doses.
+            const int doses = 16;
+            for (var i = 0; i < doses; i++)
+            {
+                Assert.That(gasMask.TryAbsorbNeurotoxinWithInternals(victim, 10f), Is.True,
+                    $"internals should still keep out neurotoxin dose {i + 1}");
+            }
+
+            Assert.That(gasMask.IsInternalsBlockingNeurotoxin(victim), Is.False,
+                "internals must stop protecting once twice the best filter's protection is used up");
+            Assert.That(gasMask.TryAbsorbNeurotoxinWithInternals(victim, 10f), Is.False);
+            Assert.That(gasMask.IsBreathingInternals(victim), Is.True,
+                "spent neurotoxin protection must not stop internals keeping out other gases");
+
+            entities.DeleteEntity(victim);
+            entities.DeleteEntity(mask);
+            entities.DeleteEntity(tank);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task AcidGasOnlyBurnsMobsOnInternals()
     {
         await using var pair = await PoolManager.GetServerClient();

@@ -6,6 +6,7 @@ using Content.Shared.Examine;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 using Content.Shared.Containers.ItemSlots;
 using Robust.Shared.Containers;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.GasMask;
 
@@ -15,11 +16,19 @@ public sealed partial class SharedGasMaskSystem : EntitySystem
 
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private SharedInternalsSystem _internals = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
+
+    /// <summary>Internals keep out neurotoxin this many times longer than the best neurotoxin filter.</summary>
+    private const float InternalsNeurotoxinFilterMultiplier = 2f;
+
+    private float? _internalsNeurotoxinBudget;
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<GasMaskFilterComponent, ComponentStartup>(OnComponentInit);
+        SubscribeLocalEvent<PrototypesReloadedEventArgs>(_ => _internalsNeurotoxinBudget = null);
         SubscribeLocalEvent<GasMaskFilterComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<MycotoxinProtectionComponent, ExaminedEvent>(OnMaskExamined);
     }
@@ -44,6 +53,66 @@ public sealed partial class SharedGasMaskSystem : EntitySystem
             return false;
 
         return TryComp<GasTankComponent>(internals.GasTankEntity, out var tank) && tank.Air.TotalMoles > 0;
+    }
+
+    /// <summary>
+    /// True when the entity's internals still keep out neurotoxin: breathing from a tank with air whose
+    /// neurotoxin protection isn't used up.
+    /// </summary>
+    public bool IsInternalsBlockingNeurotoxin(EntityUid uid)
+    {
+        if (!IsBreathingInternals(uid))
+            return false;
+
+        var tank = Comp<InternalsComponent>(uid).GasTankEntity!.Value;
+        return !TryComp<InternalsNeurotoxinComponent>(tank, out var neuro) || neuro.Remaining > _epsilon;
+    }
+
+    /// <summary>
+    /// Wears down the internals' neurotoxin protection like a filter. Returns true if they still kept this dose out.
+    /// </summary>
+    public bool TryAbsorbNeurotoxinWithInternals(EntityUid uid, float damage)
+    {
+        if (!IsInternalsBlockingNeurotoxin(uid))
+            return false;
+
+        var tank = Comp<InternalsComponent>(uid).GasTankEntity!.Value;
+        if (!TryComp<InternalsNeurotoxinComponent>(tank, out var neuro))
+        {
+            neuro = AddComp<InternalsNeurotoxinComponent>(tank);
+            neuro.Remaining = GetInternalsNeurotoxinBudget();
+        }
+
+        neuro.Remaining = Math.Max(0f, neuro.Remaining - damage);
+        Dirty(tank, neuro);
+        return true;
+    }
+
+    /// <summary>
+    /// The neurotoxin a fresh tank keeps out: <see cref="InternalsNeurotoxinFilterMultiplier"/> times what the
+    /// longest-lasting neurotoxin-resistant filter absorbs.
+    /// </summary>
+    private float GetInternalsNeurotoxinBudget()
+    {
+        if (_internalsNeurotoxinBudget is { } cached)
+            return cached;
+
+        var best = 0f;
+        foreach (var proto in _prototypes.EnumeratePrototypes<EntityPrototype>())
+        {
+            if (proto.Abstract ||
+                !proto.TryGetComponent<GasMaskFilterComponent>(out var filter, _compFactory) ||
+                !filter.NeurotoxinResist ||
+                filter.NeurotoxinDamageMultiplier <= 0)
+            {
+                continue;
+            }
+
+            best = Math.Max(best, filter.BaseIntegrity / filter.NeurotoxinDamageMultiplier);
+        }
+
+        _internalsNeurotoxinBudget = best * InternalsNeurotoxinFilterMultiplier;
+        return _internalsNeurotoxinBudget.Value;
     }
 
     public void DamageFilter(EntityUid uid, GasMaskFilterComponent comp, GasMaskFilterDamageComponent dam)
