@@ -82,7 +82,9 @@ public sealed partial class CMUExpeditionAgentSystem
             KnownDangerPassage(uid, agent, start, pocket))
         {
             PauseTravelClock(agent, now);
-            if (_transform.InRange(start, pocket, 0.12f))
+            // a body in a firefight gets shoved and thinks every few ticks, so it rarely sits within
+            // a tenth of the pocket. 0.12 left flankers circling it until their deadline ran out
+            if (_transform.InRange(start, pocket, 0.25f))
             {
                 if (passing.TrafficActiveUntil > now)
                 {
