@@ -14,7 +14,7 @@ namespace Content.Client.CMU14.Visor;
 public sealed class CMUFriendlyGrenadeOverlay : Overlay
 {
     private static readonly Color RingColor = Color.Red.WithAlpha(0.5f);
-    private const float RingRadius = 0.35f;
+    private const float RingRadius = 0.45f;
 
     private readonly IEntityManager _entity;
     private readonly IPlayerManager _player;
