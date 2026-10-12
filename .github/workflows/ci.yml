@@ -379,7 +379,7 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Stacks.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Tools.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Weapons.
-          - name: storage_crafting_misc
+          - name: storage_misc_au14
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.Storage.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Strip.
@@ -387,6 +387,7 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Utility.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Vending.
               | FullyQualifiedName~Content.IntegrationTests.Tests.IconSmoothing.
+              | FullyQualifiedName~Content.IntegrationTests._AU14
           - name: proto_lint_serial
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.Guidebook.
@@ -409,9 +410,6 @@ jobs:
           - name: cmu_medical_anatomy
             filter: >-
               FullyQualifiedName~CMU14.Medical.Anatomy.
-          - name: cmu_medical_treatment
-            filter: >-
-              FullyQualifiedName~CMU14.Medical.Treatment.
           - name: cmu_chemistry
             filter: >-
               FullyQualifiedName~CMU14.Chemistry.
@@ -476,7 +474,6 @@ jobs:
             filter: >-
               FullyQualifiedName~CMU14.Medical.
               & FullyQualifiedName!~CMU14.Medical.Anatomy.
-              & FullyQualifiedName!~CMU14.Medical.Treatment.
           # CMU14: the heaviest areas of the cmu catch-all, about half its time. cmu stays the
           # catch-all so new areas always land somewhere; keep this list and its exclusions in sync
           - name: cmu_systems
@@ -530,8 +527,6 @@ jobs:
               & FullyQualifiedName!~CMU14.Chat.ChatLogLayoutTest.
               & FullyQualifiedName!~CMU14.Lobby.OptionsThemeRegressionTest.
               & FullyQualifiedName!~CMU14.Overwatch.SupportLaunchButtonTest.
-          - name: au14
-            filter: FullyQualifiedName~Content.IntegrationTests._AU14
     steps:
       - uses: actions/checkout@v7
         with:
