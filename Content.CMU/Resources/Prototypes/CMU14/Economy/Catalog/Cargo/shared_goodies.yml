@@ -111,6 +111,8 @@
       #   crate: TritiumCanister
       # - cost: 800
       #   crate: FrezonCanister
+      - cost: 700
+        crate: CMUCratePhoronSheets
       - cost: 600
         crate: AU14CrateBoxFirefighting
       - cost: 1200
@@ -132,8 +134,8 @@
       - cost: 150
         crate: RMCTinyFan
 
-# Plasma and phoron for the colony refinery. Kept off the GOVFOR/OPFOR platoon catalogs: a burning plasma or phoron mix
-# can rupture tanks and canisters into explosions.
+# Plasma and phoron gas for the colony refinery. Kept off the GOVFOR/OPFOR platoon catalogs: a burning plasma or
+# phoron mix can rupture tanks and canisters into explosions. Solid phoron sheets stay in the shared Atmospherics list.
 - type: entity
   abstract: true
   id: CMUASRSRefineryGoodies
@@ -148,5 +150,3 @@
       #   crate: CMUCanisterPhoron
       - cost: 1200
         crate: CMUCrateAtmosPhoronKit
-      - cost: 700
-        crate: CMUCratePhoronSheets
