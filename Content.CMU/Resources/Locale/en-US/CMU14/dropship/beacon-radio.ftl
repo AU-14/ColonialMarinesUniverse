@@ -7,7 +7,7 @@ cmu-dropship-radio-patient-status = { $state ->
    *[other] PRIORITY
 }
 
-cmu-dropship-radio-fulton-deployed = FULTON RECOVERY. Package is {$target}, balloon up at {$location}. Recovery window {$seconds} seconds, then the package drops. Over.
-cmu-dropship-radio-medevac-ready = MEDEVAC REQUEST. Line 1: {$location}. Line 3: one patient, {$status}. Line 5: one litter, {$patient}. Line 7: beacon. Standing by for pickup until the beacon goes dark. Over.
-cmu-dropship-radio-medevac-empty = MEDEVAC BEACON UP. Line 1: {$location}. Line 7: beacon. No patient on the litter, nothing for pickup yet. Out.
-cmu-dropship-radio-medevac-patient = MEDEVAC UPDATE. Line 1: {$location}. Line 3: one patient, {$status}. Line 5: one litter, {$patient}. Ready for pickup. Over.
+cmu-dropship-radio-fulton-deployed = FULTON RECOVERY. Package is {$target}, balloon up at {$location}. Recovery window {$seconds} seconds. Over.
+cmu-dropship-radio-medevac-ready = MEDEVAC REQUEST. {$location}. One patient, {$status}. One litter, {$patient}. Marked by beacon. Standing by for pickup.
+cmu-dropship-radio-medevac-empty = MEDEVAC BEACON UP. {$location}. Marked by beacon. No patient on the litter. Out.
+cmu-dropship-radio-medevac-patient = MEDEVAC UPDATE. {$location}. One patient, {$status}. One litter, {$patient}. Ready for pickup. Over.
