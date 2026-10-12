@@ -79,7 +79,7 @@ public static class CMUBloodTypes
         _ => (true, true, true),
     };
 
-    public static CMUBloodType RandomDefault(Random random) => DefaultTypes[random.Next(DefaultTypes.Length)];
+    public static CMUBloodType RandomDefault(System.Random random) => DefaultTypes[random.Next(DefaultTypes.Length)];
 
     /// <summary>A stable default for a profile saved before blood types existed, so it doesn't change every round.</summary>
     public static CMUBloodType StableDefault(string seed)

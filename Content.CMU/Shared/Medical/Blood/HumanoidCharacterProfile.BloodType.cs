@@ -6,7 +6,7 @@ namespace Content.Shared.Preferences;
 public sealed partial class HumanoidCharacterProfile
 {
     [DataField]
-    public CMUBloodType BloodType { get; private set; } = CMUBloodTypes.RandomDefault(new Random());
+    public CMUBloodType BloodType { get; private set; } = CMUBloodTypes.RandomDefault(new System.Random());
 
     public HumanoidCharacterProfile WithBloodType(CMUBloodType bloodType)
     {

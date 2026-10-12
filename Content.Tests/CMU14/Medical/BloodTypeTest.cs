@@ -43,7 +43,7 @@ public sealed class BloodTypeTest
     [Test]
     public void DefaultsAreNeverONegative()
     {
-        var random = new Random(1);
+        var random = new System.Random(1);
         for (var i = 0; i < 200; i++)
         {
             Assert.That(CMUBloodTypes.RandomDefault(random), Is.Not.EqualTo(CMUBloodType.ONegative));
