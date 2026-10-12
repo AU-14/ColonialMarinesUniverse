@@ -236,19 +236,7 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
     /// </summary>
     public float IntensityToRadius(float totalIntensity, float slope, float maxIntensity)
     {
-        // max radius to avoid being capped by max-intensity
-        var r0 = maxIntensity / slope;
-
-        // volume at r0
-        var v0 = RadiusToIntensity(r0, slope);
-
-        if (totalIntensity <= v0)
-        {
-            // maxIntensity is a non-issue, can use simple inverse formula
-            return MathF.Cbrt(3 * totalIntensity / (slope * MathF.PI));
-        }
-
-        return r0 * (MathF.Sqrt(12 * totalIntensity / v0 - 3) / 6 + 0.5f);
+        return CalculateBlastRadius(totalIntensity, slope, maxIntensity);
     }
 
     /// <inheritdoc />

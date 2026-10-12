@@ -1,15 +1,28 @@
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
+using Content.Shared.CMU14.Dropship.DirectFire;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Dropship.Weapon;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
-[Access(typeof(SharedDropshipWeaponSystem))]
+[Access(typeof(SharedDropshipWeaponSystem), typeof(MohawkChinGunSystem))]
 public sealed partial class DropshipTerminalWeaponsComponent : Component
 {
     [DataField, AutoNetworkedField]
     public bool Gunnery; // CMU14: dedicated chin-gun console
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? ChinGunOperator;
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? ChinGunEye;
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? TrackedTarget;
+
+    [DataField, AutoNetworkedField]
+    public bool TrackingFireConfirmed;
 
     [DataField, AutoNetworkedField]
     public Screen ScreenOne;

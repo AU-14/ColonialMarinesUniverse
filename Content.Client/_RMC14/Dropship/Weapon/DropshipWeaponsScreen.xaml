@@ -37,6 +37,12 @@
             </BoxContainer>
         <controls:DropshipWeaponsButtonRow Name="BottomRow" Access="Public"
                                            Orientation="Horizontal" />
+            <BoxContainer Orientation="Horizontal">
+                <Button Name="LaserPatternButton" Access="Public" Visible="False" />
+                <Button Name="AirburstHeightButton" Access="Public" Visible="False" />
+            </BoxContainer>
+            <Label Name="PayloadPreviewLabel" Access="Public" ClipText="True"
+                   ToolTip="{Loc 'cmu-dropship-preview-help'}" />
         </BoxContainer>
     </PanelContainer>
 </controls:DropshipWeaponsScreen>

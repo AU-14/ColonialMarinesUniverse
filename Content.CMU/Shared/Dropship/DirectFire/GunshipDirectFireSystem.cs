@@ -31,6 +31,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private PowerLoaderSystem _powerLoader = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private MohawkChinGunSystem _chinGun = default!;
 
     public override void Initialize()
     {
@@ -67,23 +68,40 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
 
         var pointPosition = _transform.GetWorldPosition(point.Owner);
         var shipRotation = _transform.GetWorldRotation(grid);
-        var forward = shipRotation.RotateVec(Vector2.UnitY);
-        var mountPosition = pointPosition + forward * point.Comp.ForwardOffset;
-        var aimOrigin = _transform.GetWorldPosition(grid);
+        var chinMount = HasComp<MohawkChinGunComponent>(point);
+        var mountPosition = pointPosition + shipRotation.RotateVec(
+            new Vector2(chinMount ? point.Comp.LateralOffset : 0f, point.Comp.ForwardOffset));
+        var aimOrigin = chinMount ? mountPosition : _transform.GetWorldPosition(grid);
         if (!TryGetClampedAim(
                 shipRotation,
                 aimOrigin,
                 target.Position,
                 ent.Comp.GimbalDegrees,
                 out var direction,
-                out _))
+                out var aimDegrees))
         {
             args.Cancelled = true;
             args.ResetCooldown = true;
             return;
         }
 
-        // Cursor bearing is measured around the dropship center. Measuring it
+        if (chinMount && Vector2.DistanceSquared(mountPosition, target.Position) >
+            MathF.Pow(Comp<MohawkChinGunComponent>(point).Range, 2))
+        {
+            args.Cancelled = true;
+            args.ResetCooldown = true;
+            args.Message = Loc.GetString("cmu-mohawk-gunnery-out-of-range");
+            return;
+        }
+
+        if (chinMount)
+        {
+            point.Comp.AimOffsetDegrees = aimDegrees;
+            _appearance.SetData(point, GunshipDirectFireVisuals.AimOffsetDegrees, point.Comp.AimOffsetDegrees);
+            Dirty(point);
+        }
+
+        // Pilot cursor bearing is measured around the dropship center. Measuring it
         // around the nose-mounted muzzle makes ordinary cursor positions over
         // the ship fall behind the mount, where atan2 jumps between both ends
         // of the gimbal arc. The projectile still starts at the real muzzle.
@@ -132,6 +150,9 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
     {
         message = null;
 
+        if (TryComp(point, out MohawkChinGunComponent? chin))
+            return _chinGun.CanOperate((point, chin), user, weapon, out message);
+
         if (!TryComp(user, out RemoteWeaponOperatorComponent? remote) ||
             remote.Platform != grid ||
             remote.SelectedWeapon != weapon ||
@@ -177,7 +198,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
             return;
         }
 
-        var roundsPerShot = Math.Max(1, ammo.RoundsPerShot);
+        var roundsPerShot = Math.Max(1, ent.Comp.RoundsPerProjectile ?? ammo.RoundsPerShot);
         for (var i = 0; i < args.Shots; i++)
         {
             if (ammo.Rounds < roundsPerShot)
@@ -198,7 +219,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         if (!TryResolveMount(ent, out _, out _, out _, out var ammo) || ammo == null)
             return;
 
-        var roundsPerShot = Math.Max(1, ammo.RoundsPerShot);
+        var roundsPerShot = Math.Max(1, ent.Comp.RoundsPerProjectile ?? ammo.RoundsPerShot);
         args.Count = ammo.Rounds / roundsPerShot;
         args.Capacity = ammo.MaxRounds / roundsPerShot;
     }

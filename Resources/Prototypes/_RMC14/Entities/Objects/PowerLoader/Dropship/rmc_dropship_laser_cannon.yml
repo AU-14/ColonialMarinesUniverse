@@ -119,11 +119,19 @@
   parent: RMCDropshipAttachmentAmmoLaserCannon
   id: RMCDropshipAttachmentAmmoLaserCannonRapid
   name: BTU-18/LW-R 'Rapidfire' Hi-Cap Laser Battery
-  description: A high-capacity laser battery used to power laser beam weapons, overclocked to dump charge rapidly and spread napalm fire over the target. Can be loaded into the LWU-6B Laser Cannon.
+  description: An overclocked laser battery that fires five simultaneous laser pulses, igniting five separate impact areas. Select a wide ring or sweeping line in the weapons console. Both patterns hold enough charge for ten shots. Can be loaded into the LWU-6B Laser Cannon.
   components:
   - type: DropshipAmmo
     ammoType: laser_battery_rapid
-    roundsPerShot: 20
+    ammoSpriteType: laser_battery
+    roundsPerShot: 10
+    shotsPerVolley: 10
+    impactsPerVolley: 5
+    selectableLaserPattern: true
+    targetSpread: 0
+    bulletSpread: 6
+    impactEffects:
+    - CMUDropshipLaserPulse
     fire:
       type: RMCTileFireNapalm
       range: 3

@@ -47,7 +47,18 @@
 # region 40mm BOFORS magazines (20 rounds, 5 shots per trigger pull)
 
 - type: entity
+  abstract: true
   parent: CMUDropshipAmmoHandLoadable
+  id: CMUDropshipAmmoBOFORSMag
+  components:
+  - type: DropshipAmmo
+    soundCockpit: /Audio/_RMC14/Effects/rocketpod_fire.ogg
+    soundGround: null
+    soundImpact: null
+    damage: null
+
+- type: entity
+  parent: CMUDropshipAmmoBOFORSMag
   id: CMUDropshipAmmoBOFORSMagHE
   name: 40mm BOFORS HE magazine
   description: A 20-round magazine of 40mm high-explosive BOFORS shells. Loaded by hand into the L/60 40mm BOFORS Autocannon.
@@ -74,21 +85,10 @@
     zLevelPenetration: 1
     applyEffectsOnPenetrationLevels: false
     weapon: CMUDropshipAttachmentBOFORS
-    damage:
-      types:
-        Blunt: 45
-        Slash: 45
-        Piercing: 45
     explosion:
       total: 120
       slope: 10
       max: 12
-    soundCockpit: /Audio/_RMC14/Dropship/gau_incockpit.ogg
-    soundGround: /Audio/_RMC14/Dropship/gau.ogg
-    soundImpact:
-      path: /Audio/_RMC14/Dropship/gauimpact.ogg
-      params:
-        volume: -6
     impactEffects:
     - RMCEffectExplosionParticle
   - type: DropshipFabricatorPrintable
@@ -96,10 +96,10 @@
     cost: 500
 
 - type: entity
-  parent: CMUDropshipAmmoHandLoadable
+  parent: CMUDropshipAmmoBOFORSMag
   id: CMUDropshipAmmoBOFORSMagAP
   name: 40mm BOFORS AP magazine
-  description: A 20-round magazine of 40mm armor-piercing BOFORS shells. Loaded by hand into the L/60 40mm BOFORS Autocannon.
+  description: A 20-round magazine of 40mm armor-piercing BOFORS shells with explosive fillers. Penetrates cover before detonating a focused blast. Loaded by hand into the L/60 40mm BOFORS Autocannon.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/dropship_ammo.rsi
@@ -123,18 +123,11 @@
     zLevelPenetration: 2
     applyEffectsOnPenetrationLevels: false
     weapon: CMUDropshipAttachmentBOFORS
-    damage:
-      types:
-        Blunt: 40
-        Slash: 40
-        Piercing: 40
     armorPiercing: 60
-    soundCockpit: /Audio/_RMC14/Dropship/gau_incockpit.ogg
-    soundGround: /Audio/_RMC14/Dropship/gau.ogg
-    soundImpact:
-      path: /Audio/_RMC14/Dropship/gauimpact.ogg
-      params:
-        volume: -6
+    explosion:
+      total: 100
+      slope: 12
+      max: 20
     impactEffects:
     - RMCEffectExplosionParticle
   - type: DropshipFabricatorPrintable
@@ -142,10 +135,10 @@
     cost: 550
 
 - type: entity
-  parent: CMUDropshipAmmoHandLoadable
+  parent: CMUDropshipAmmoBOFORSMag
   id: CMUDropshipAmmoBOFORSMagAirburst
   name: 40mm BOFORS Airburst magazine
-  description: A 20-round magazine of 40mm airburst BOFORS shells that shower a wide area with shrapnel. Loaded by hand into the L/60 40mm BOFORS Autocannon.
+  description: A 20-round magazine of 40mm airburst BOFORS shells with low, medium, and high detonation settings. Higher bursts spread the same explosive energy over a wider area at lower intensity. Loaded by hand into the L/60 40mm BOFORS Autocannon.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/dropship_ammo.rsi
@@ -159,6 +152,7 @@
     - CMUBOFORSMagAirburst
   - type: DropshipAmmo
     ammoType: bofors_40mm_ab
+    selectableAirburstHeight: true
     rounds: 20
     maxRounds: 20
     roundsPerShot: 5
@@ -169,21 +163,10 @@
     zLevelPenetration: 1
     applyEffectsOnPenetrationLevels: true
     weapon: CMUDropshipAttachmentBOFORS
-    damage:
-      types:
-        Blunt: 20
-        Slash: 20
-        Piercing: 20
     explosion:
       total: 40
       slope: 8
       max: 5
-    soundCockpit: /Audio/_RMC14/Dropship/gau_incockpit.ogg
-    soundGround: /Audio/_RMC14/Dropship/gau.ogg
-    soundImpact:
-      path: /Audio/_RMC14/Dropship/gauimpact.ogg
-      params:
-        volume: -6
     impactEffects:
     - RMCEffectExplosionParticle
     - RMCSmokeExplosionProofSmall
@@ -192,7 +175,7 @@
     cost: 550
 
 - type: entity
-  parent: CMUDropshipAmmoHandLoadable
+  parent: CMUDropshipAmmoBOFORSMag
   id: CMUDropshipAmmoBOFORSMagHEAT
   name: 40mm BOFORS HEAT magazine
   description: A 20-round magazine of 40mm high-explosive anti-tank BOFORS shells. Loaded by hand into the L/60 40mm BOFORS Autocannon.
@@ -219,22 +202,11 @@
     zLevelPenetration: 3
     applyEffectsOnPenetrationLevels: true
     weapon: CMUDropshipAttachmentBOFORS
-    damage:
-      types:
-        Blunt: 35
-        Slash: 35
-        Piercing: 35
     armorPiercing: 80
     explosion:
       total: 250
       slope: 6
       max: 30
-    soundCockpit: /Audio/_RMC14/Dropship/gau_incockpit.ogg
-    soundGround: /Audio/_RMC14/Dropship/gau.ogg
-    soundImpact:
-      path: /Audio/_RMC14/Dropship/gauimpact.ogg
-      params:
-        volume: -6
     impactEffects:
     - RMCEffectExplosionParticle
   - type: DropshipFabricatorPrintable
@@ -242,7 +214,7 @@
     cost: 600
 
 - type: entity
-  parent: CMUDropshipAmmoHandLoadable
+  parent: CMUDropshipAmmoBOFORSMag
   id: CMUDropshipAmmoBOFORSMagIncendiary
   name: 40mm BOFORS Incendiary magazine
   description: A 20-round magazine of 40mm incendiary BOFORS shells that set the target area alight. Loaded by hand into the L/60 40mm BOFORS Autocannon.
@@ -269,11 +241,6 @@
     zLevelPenetration: 1
     applyEffectsOnPenetrationLevels: false
     weapon: CMUDropshipAttachmentBOFORS
-    damage:
-      types:
-        Blunt: 20
-        Slash: 20
-        Piercing: 20
     explosion:
       total: 30
       slope: 8
@@ -282,12 +249,6 @@
       type: RMCTileFireMiniMike
       range: 1
       cardinalRange: 1
-    soundCockpit: /Audio/_RMC14/Dropship/gau_incockpit.ogg
-    soundGround: /Audio/_RMC14/Dropship/gau.ogg
-    soundImpact:
-      path: /Audio/_RMC14/Dropship/gauimpact.ogg
-      params:
-        volume: -6
     impactEffects:
     - RMCEffectExplosionParticle
   - type: DropshipFabricatorPrintable

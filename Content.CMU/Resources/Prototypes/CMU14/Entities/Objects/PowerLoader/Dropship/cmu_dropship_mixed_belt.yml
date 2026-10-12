@@ -1,0 +1,37 @@
+- type: entity
+  parent: RMCDropshipAttachmentAmmo
+  id: CMUDropshipMixedGauBelt
+  name: GAU-21 mixed ammunition belt carrier
+  description: An empty three-crate GAU belt carrier. Use a powerloader to insert GAU crates in slot order, then mount the carrier on a GAU-21. Each trigger fires a whole burst from the next crate, cycling through the three slots and skipping exhausted crates. Eject crates using the slot verbs to change the sequence.
+  components:
+  - type: Sprite
+    layers:
+    - state: 30mm_crate_10
+  - type: DropshipAmmo
+    ammoType: gau_mixed_belt
+    rounds: 0
+    maxRounds: 1200
+    roundsPerShot: 40
+    weapon: RMCDropshipAttachmentGau21Cannon
+    fireMissionDelay: 1
+  - type: DropshipMixedBelt
+  - type: ItemSlots
+    slots:
+      belt1:
+        name: cmu-dropship-belt-slot-one
+        insertOnInteract: true
+        whitelist:
+          components: [ DropshipAmmo ]
+      belt2:
+        name: cmu-dropship-belt-slot-two
+        insertOnInteract: true
+        whitelist:
+          components: [ DropshipAmmo ]
+      belt3:
+        name: cmu-dropship-belt-slot-three
+        insertOnInteract: true
+        whitelist:
+          components: [ DropshipAmmo ]
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 150

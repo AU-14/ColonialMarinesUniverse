@@ -6,6 +6,7 @@ using Content.Client._RMC14.UserInterface;
 using Content.Client.Eye;
 using Content.Client.UserInterface.ControlExtensions;
 using Content.Shared._RMC14.Areas;
+using Content.Shared.CMU14.Dropship.DirectFire;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.ElectronicSystem;
 using Content.Shared._RMC14.Dropship.Utility.Components;
@@ -16,6 +17,7 @@ using Content.Shared.ParaDrop;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Input;
 using Robust.Shared.Maths;
 using Robust.Shared.Utility;
 using static Content.Shared._RMC14.Dropship.Weapon.DropshipTerminalWeaponsComponent;
@@ -59,6 +61,40 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
     {
         base.Open();
         Window = this.CreatePopOutableWindow<DropshipWeaponsWindow>();
+
+        Window.ChinGunControlButton.OnPressed += _ =>
+            SendMessage(new MohawkChinGunControlMessage());
+        Window.ConfirmTrackingButton.OnPressed += _ =>
+        {
+            if (EntMan.TryGetComponent(Owner, out DropshipTerminalWeaponsComponent? terminal) &&
+                terminal.TrackedTarget is { } target)
+                SendMessage(new MohawkChinGunConfirmTrackingMessage(EntMan.GetNetEntity(target)));
+        };
+        Window.ClearTrackingButton.OnPressed += _ => SendMessage(new MohawkChinGunClearTrackingMessage());
+        Window.ScreenOne.Viewport.OnKeyBindDown += args =>
+        {
+            if (args.Function != EngineKeyFunctions.UIClick ||
+                !EntMan.TryGetComponent(Owner, out DropshipTerminalWeaponsComponent? terminal) ||
+                terminal.ChinGunOperator == null)
+                return;
+
+            var target = Window.ScreenOne.Viewport.PixelToMap(args.PointerLocation.Position);
+            var coordinates = EntMan.System<SharedTransformSystem>().ToCoordinates(target);
+            if (Window.TrackTargetButton.Pressed)
+            {
+                SendMessage(new MohawkChinGunTrackMessage(EntMan.GetNetCoordinates(coordinates)));
+                Window.TrackTargetButton.Pressed = false;
+            }
+            else
+                SendMessage(new MohawkChinGunFireMessage(EntMan.GetNetCoordinates(coordinates)));
+            args.Handle();
+        };
+        foreach (var first in new[] { true, false })
+        {
+            var screen = first ? Window.ScreenOne : Window.ScreenTwo;
+            screen.LaserPatternButton.OnPressed += _ => ChangePayloadSetting(first, true);
+            screen.AirburstHeightButton.OnPressed += _ => ChangePayloadSetting(first, false);
+        }
 
         Window.OffsetUpButton.Text = "^";
         Window.OffsetUpButton.OnPressed += _ =>
@@ -111,6 +147,20 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
         if (EntMan.TryGetComponent(Owner, out DropshipTerminalWeaponsComponent? terminal))
         {
+            Window.ChinGunControlButton.Visible = terminal.Gunnery;
+            Window.ChinGunControlButton.Text = Loc.GetString(terminal.ChinGunOperator == null
+                ? "cmu-mohawk-gunnery-manual"
+                : "cmu-mohawk-gunnery-automatic");
+            var manual = terminal.ChinGunOperator != null;
+            Window.TrackTargetButton.Visible = manual;
+            Window.ConfirmTrackingButton.Visible = manual && terminal.TrackedTarget != null && !terminal.TrackingFireConfirmed;
+            Window.ClearTrackingButton.Visible = manual && terminal.TrackedTarget != null;
+            if (!manual)
+                Window.TrackTargetButton.Pressed = false;
+            Window.TrackingStatusLabel.Text = terminal.TrackedTarget is { } tracked
+                ? Loc.GetString(terminal.TrackingFireConfirmed ? "cmu-dropship-track-firing" : "cmu-dropship-track-ready",
+                    ("target", EntMan.GetComponent<MetaDataComponent>(tracked).EntityName))
+                : "";
             SetScreen(true, terminal.ScreenOne);
             SetScreen(false, terminal.ScreenTwo);
         }
@@ -152,6 +202,42 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         }
     }
 
+    private void ChangePayloadSetting(bool first, bool laser)
+    {
+        if (!EntMan.TryGetComponent(Owner, out DropshipTerminalWeaponsComponent? terminal))
+            return;
+        var selected = first ? terminal.ScreenOne : terminal.ScreenTwo;
+        if (!EntMan.TryGetEntity(selected.Weapon, out var uid) ||
+            !EntMan.TryGetComponent(uid, out DropshipWeaponComponent? weapon))
+            return;
+        var pattern = laser ? (weapon.LaserPattern == DropshipLaserPattern.Ring
+            ? DropshipLaserPattern.Line : DropshipLaserPattern.Ring) : weapon.LaserPattern;
+        var height = laser ? weapon.AirburstHeight
+            : (DropshipAirburstHeight)(((int)weapon.AirburstHeight + 1) % 3);
+        SendMessage(new DropshipWeaponSettingsMessage(first, pattern, height));
+    }
+
+    private void RefreshPayloadSettings(DropshipWeaponsScreen screen, Screen selection)
+    {
+        screen.LaserPatternButton.Visible = false;
+        screen.AirburstHeightButton.Visible = false;
+        screen.PayloadPreviewLabel.Text = "";
+        if (!EntMan.TryGetEntity(selection.Weapon, out var uid) ||
+            !EntMan.TryGetComponent(uid, out DropshipWeaponComponent? weapon) ||
+            !_weaponSystem.TryGetWeaponAmmo(uid.Value, out var ammo))
+            return;
+        screen.LaserPatternButton.Visible = ammo.Comp.SelectableLaserPattern;
+        screen.LaserPatternButton.Text = Loc.GetString(weapon.LaserPattern == DropshipLaserPattern.Ring
+            ? "cmu-dropship-laser-ring" : "cmu-dropship-laser-line");
+        screen.AirburstHeightButton.Visible = ammo.Comp.SelectableAirburstHeight;
+        var height = weapon.AirburstHeight;
+        screen.AirburstHeightButton.Text = Loc.GetString("cmu-dropship-airburst-" + height.ToString().ToLowerInvariant());
+        screen.PayloadPreviewLabel.Text = Loc.GetString("cmu-dropship-payload-preview",
+            ("ammo", EntMan.GetComponent<MetaDataComponent>(ammo).EntityName),
+            ("bursts", _weaponSystem.GetAvailableBursts(ammo)),
+            ("impacts", ammo.Comp.ImpactsPerVolley));
+    }
+
     private void SetScreen(bool first, Screen compScreen)
     {
         if (Window == null ||
@@ -163,6 +249,8 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         var screen = first ? Window.ScreenOne : Window.ScreenTwo;
 
         screen.Viewport.RemoveAllChildren();
+        screen.Viewport.AddChild(new DropshipTargetingPreview(EntMan, Owner, first, screen));
+        RefreshPayloadSettings(screen, compScreen);
         screen.Viewport.Visible = false;
         screen.FireMissionCreate.Visible = false;
         screen.FireMissionView.Visible = false;
@@ -327,6 +415,19 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         var firemission = Button("fire-mission", StrikeFireMission);
         var strikeVector = Button("vector", StrikeVector);
 
+        if (first && terminal.ChinGunOperator != null && terminal.ChinGunEye is { } chinEye &&
+            EntMan.TryGetComponent(chinEye, out EyeComponent? turretEye))
+        {
+            screen.Viewport.Eye = turretEye.Eye;
+            screen.Viewport.Visible = true;
+            screen.ScreenLabel.Visible = false;
+            screen.TopRow.SetData();
+            screen.LeftRow.SetData();
+            screen.RightRow.SetData();
+            screen.BottomRow.SetData();
+            return;
+        }
+
         void SetWeaponPageControls()
         {
             var weapons = TryGetWeapons(first, out _, out _, out _, out _, out _, out _, out _, out _, out _);
@@ -473,11 +574,12 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 {
                     if (_weaponSystem.TryGetWeaponAmmo(selectedWeapon.Value, out var ammo))
                     {
+                        var summary = _weaponSystem.GetLoadedAmmoSummary(ammo);
                         screen.ScreenLabel.Text = Loc.GetString("rmc-dropship-weapons-weapon-selected-ammo",
                             ("weapon", selectedWeapon.Value),
                             ("ammo", ammo),
-                            ("rounds", ammo.Comp.Rounds),
-                            ("maxRounds", ammo.Comp.MaxRounds));
+                            ("rounds", summary.Comp.Rounds),
+                            ("maxRounds", summary.Comp.MaxRounds));
                     }
                     else
                     {
@@ -801,8 +903,9 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
                         if (_weaponSystem.TryGetWeaponAmmo(weaponEntity, out var weaponAmmo))
                         {
-                            info.MaxAmmo = weaponAmmo.Comp.MaxRounds;
-                            info.Ammo = weaponAmmo.Comp.Rounds;
+                            var summary = _weaponSystem.GetLoadedAmmoSummary(weaponAmmo);
+                            info.MaxAmmo = summary.Comp.MaxRounds;
+                            info.Ammo = summary.Comp.Rounds;
                             info.AmmoConsumption = weaponAmmo.Comp.RoundsPerShot * setOffsetCount;
                         }
 
@@ -873,8 +976,9 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
                     if (_weaponSystem.TryGetWeaponAmmo(weaponEntity, out var weaponAmmo))
                     {
-                        weaponInfo.MaxAmmo = weaponAmmo.Comp.MaxRounds;
-                        weaponInfo.Ammo = weaponAmmo.Comp.Rounds;
+                        var summary = _weaponSystem.GetLoadedAmmoSummary(weaponAmmo);
+                        weaponInfo.MaxAmmo = summary.Comp.MaxRounds;
+                        weaponInfo.Ammo = summary.Comp.Rounds;
                         weaponInfo.AmmoConsumption = weaponAmmo.Comp.RoundsPerShot;
 
                         if (weaponAmmo.Comp.FireMissionDelay != null)
@@ -960,6 +1064,15 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             default:
                 screen.BottomRow.SetData(exit);
                 break;
+        }
+
+        if (compScreen.Weapon != null && compScreen.State is Strike or StrikeWeapon or SelectingWeapon &&
+            terminal.Target is { } aim && _weaponSystem.TryGetTargetEye((Owner, terminal), aim, out var eyeUid) &&
+            EntMan.TryGetComponent(eyeUid, out EyeComponent? targetingEye))
+        {
+            screen.Viewport.Eye = targetingEye.Eye;
+            screen.Viewport.Visible = true;
+            screen.ScreenLabel.Visible = false;
         }
 
         RefreshButtons();
