@@ -264,18 +264,11 @@
       entries:
       - id: CMBloodPackFull
         amount: 6
-      - id: CMUSynthBloodPackFull
-        amount: 2
     - name: Miscellaneous
       entries:
       - id: CMBloodPack
         amount: 20
         name: empty blood pack
-      - id: CMUSynthBloodPack
-        amount: 4
-        name: empty synthetic blood pack
-      - id: CMUBloodCooler
-        amount: 4
 
 - type: entity
   parent: AU14VendorBloodField
