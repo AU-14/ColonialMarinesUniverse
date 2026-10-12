@@ -1375,7 +1375,8 @@ public sealed class CameraNetworkSystemTest
     [Test]
     public async Task StandardMonitorMapDoesNotReplicateUnrelatedRemoteEntities()
     {
-        var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        // dirty: toggling pvs leaves a stale send list behind that the next pvs test on this pair would trip over
+        var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
         var server = pair.Server;
         var client = pair.Client;
         var monitor = EntityUid.Invalid;

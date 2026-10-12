@@ -27,11 +27,16 @@ namespace Content.IntegrationTests.CMU14.TacticalMap;
 public sealed partial class CMUReconstructionTest
 {
 #pragma warning disable RA0002 // Build deterministic authorized tactical feeds and hive fixtures.
+    // the engine never clears a session's last pvs send list while pvs is off, so turning it back on in a
+    // fast-recycled pair walks deleted entities and trips a debug assert. dirty makes the next borrower reconnect
+    private static PoolSettings PvsSettings => new() { Connected = true, Dirty = true };
+
     [TestCase(true, false, false)]
     [TestCase(true, true, false)]
     [TestCase(false, false, false)]
     [TestCase(false, true, false)]
     [TestCase(false, true, true)]
+    [PairConfig(nameof(PvsSettings))]
     public async Task QueenWatchesXenoIconsThroughBothMaps(bool classic, bool remoteEye, bool overlappingStructure)
     {
         var session = ServerSession!;
