@@ -93,6 +93,7 @@ public sealed partial class CMUSquadVisorSystem
 
     private void OnWearerPickedUp(Entity<CMUSquadVisorWearerComponent> ent, ref DidEquipHandEvent args)
     {
+        SwitchUpIfSmartgun(ent);
         UpdateHeldGuns(ent);
     }
 

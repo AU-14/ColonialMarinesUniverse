@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Attachable.Systems;
 using Content.Shared._RMC14.Tracker.SquadLeader;
+using Content.Shared._RMC14.Visor;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Actions;
 using Content.Shared.Hands.EntitySystems;
@@ -27,6 +28,7 @@ public sealed partial class CMUSquadVisorSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private CMGunSystem _rmcGun = default!;
     [Dependency] private SquadLeaderTrackerSystem _tracker = default!;
+    [Dependency] private VisorSystem _visor = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
@@ -37,6 +39,7 @@ public sealed partial class CMUSquadVisorSystem : EntitySystem
         SubscribeLocalEvent<CMUSquadVisorActiveComponent, GotUnequippedEvent>(OnUnequipped);
 
         InitializeIFF();
+        InitializeSmartgun();
     }
 
     private void OnActiveStartup(Entity<CMUSquadVisorActiveComponent> helmet, ref ComponentStartup args)

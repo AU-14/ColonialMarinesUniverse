@@ -11,6 +11,12 @@ namespace Content.Shared.CMU14.Visor;
 public sealed partial class CMUSquadVisorActiveComponent : Component;
 
 /// <summary>
+/// A squad optic. It can't be switched down while its wearer holds or wears a smartgun.
+/// </summary>
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CMUSquadOpticComponent : Component;
+
+/// <summary>
 /// On a mob looking through an active squad optic. Shows friendly primed grenades and stops the held gun firing into
 /// friendlies, each of which the wearer can switch off with an action.
 /// </summary>
