@@ -2490,11 +2490,18 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
             // Process updates per-faction using the NextUpdatePerFaction dictionary on the map component.
             var factions = new[] { "MARINES", "XENONIDS", "OPFOR", "GOVFOR", "CLF", "YAUTJA" }; // CMU14
+            var throttled = false; // CMU14: a change inside someone's cooldown still owes them a publish
 
             foreach (var faction in factions)
             {
-                if (!map.NextUpdatePerFaction.TryGetValue(faction, out var next) || time < next)
+                if (!map.NextUpdatePerFaction.TryGetValue(faction, out var next))
                     continue;
+
+                if (time < next) // CMU14
+                {
+                    throttled = true;
+                    continue;
+                }
 
                 // Advance the timer immediately to avoid re-entrancy causing multiple updates this tick.
                 map.NextUpdatePerFaction[faction] = time + _mapUpdateEvery;
@@ -2587,14 +2594,18 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                     continue;
 
                 if (time < consoleComp.NextUpdate)
+                {
+                    throttled = true; // CMU14
                     continue;
+                }
 
                 consoleComp.NextUpdate = time + _mapUpdateEvery;
                 UpdateMapData((consoleId, consoleComp), map);
             }
 
             // We've processed per-faction updates for this map this tick; clear dirty flag.
-            map.MapDirty = false;
+            // CMU14: unless a faction/console was still cooling down, clearing it dropped their update until something else moved (up to the 30s forced refresh)
+            map.MapDirty = throttled;
         }
     }
 
