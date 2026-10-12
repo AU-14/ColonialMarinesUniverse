@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Text.RegularExpressions; // CMU14
 using Content.Server.CMU14.Examine;
 using Content.Server.Chat.Managers;
 using Content.Server.Verbs;
@@ -32,6 +33,17 @@ namespace Content.Server.Examine
             ChatDisplayKind.System,
             accentColor: Color.FromHex("#a0a0a0"),
             backgroundColorOverride: Color.FromHex("#1e1e1e"));
+
+        // CMU14: examine text in chat matches the character breakdown's small gray lines, with a divider between them.
+        private const string ExamineChatDivider = "[color=#5a5a5a][font size=10]--------------------------------[/font][/color]";
+
+        private static readonly Regex ExamineChatBlankLines = new(@"\n\s*\n+", RegexOptions.Compiled);
+
+        private static string StyleExamineChatText(string markup)
+        {
+            var compact = ExamineChatBlankLines.Replace(markup.Trim(), "\n");
+            return $"[color=lightgray][font size=10]{compact}[/font][/color]";
+        }
 
         public override void Initialize()
         {
@@ -101,7 +113,7 @@ namespace Content.Server.Examine
             {
                 var combinedLog = EntityManager.System<ExaminableCharacterSystem>().BuildBreakdown(entity, playerEnt);
                 if (hasText)
-                    combinedLog += $"\n{markup}";
+                    combinedLog += $"\n{ExamineChatDivider}\n{StyleExamineChatText(markup)}";
 
                 _chatManager.ChatMessageToOne(ChatChannel.Emotes, combinedLog, combinedLog, EntityUid.Invalid, false, channel, recordReplay: false, display: ExamineChatDisplay);
                 echoedFullText = hasText;
@@ -109,7 +121,7 @@ namespace Content.Server.Examine
             else if (_netConfigManager.GetClientCVar(channel, CCVars.ExamineFullTextInChat) && hasText)
             {
                 var itemName = FormattedMessage.EscapeText(Identity.Name(entity, EntityManager, playerEnt));
-                var combinedLog = $"[color=gold][bold]{itemName}[/bold][/color]\n{markup}";
+                var combinedLog = $"[color=gold][bold]{itemName}[/bold][/color]\n{StyleExamineChatText(markup)}";
                 _chatManager.ChatMessageToOne(ChatChannel.Emotes, combinedLog, combinedLog, EntityUid.Invalid, false, channel, recordReplay: false, display: ExamineChatDisplay);
                 echoedFullText = true;
             }
