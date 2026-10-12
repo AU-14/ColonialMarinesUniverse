@@ -451,8 +451,16 @@ jobs:
             filter: FullyQualifiedName~CMU14.Yautja.YautjaBowTest.
           - name: cmu_yautja_roles
             filter: FullyQualifiedName~CMU14.Yautja.YautjaPredatorRoleTest.
+          # CMU14: the smoke fixture runs one pair at a time, so it's split by method name instead.
+          # cmu_yautja_smoke is the catch-all, keep these words in sync with its exclusions
+          - name: cmu_yautja_smoke_blooding
+            filter: >-
+              FullyQualifiedName~CMU14.Yautja.YautjaSmokeTest.
+              & (Name~Blooding | Name~Bracer | Name~Huntsmaster)
           - name: cmu_yautja_smoke
-            filter: FullyQualifiedName~CMU14.Yautja.YautjaSmokeTest.
+            filter: >-
+              FullyQualifiedName~CMU14.Yautja.YautjaSmokeTest.
+              & Name!~Blooding & Name!~Bracer & Name!~Huntsmaster
           - name: cmu_diagnostics
             filter: >-
               FullyQualifiedName~CMU14.Diagnostics.
@@ -585,7 +593,7 @@ jobs:
           export DOTNET_GCHeapHardLimitPercent=0x50
           case "$shard" in
             # CMU14: destructive smoke pairs approach the runner's memory limit in parallel.
-            cmu_yautja_smoke) workers=1 ;;
+            cmu_yautja_smoke*) workers=1 ;;
             post_map_init*|cmu|cmu_systems|cmu_spatial|cmu_camera|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
             cmu_lobby_ui) workers=1 ;;
             # CMU14: every 3D case makes its own pair, two at once is the memory peak
