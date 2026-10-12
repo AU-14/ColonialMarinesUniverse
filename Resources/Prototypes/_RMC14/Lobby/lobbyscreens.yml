@@ -1,125 +1,83 @@
 - type: lobbyBackground
   id: Pyro
   background: /Textures/_RMC14/Lobby/PyrotechnicianXeno.png
-  title: cmu-lobby-background-pyro-title # CMU14
-  artist: cmu-lobby-background-pyro-artist # CMU14
 
 - type: lobbyBackground
   id: fob
   background: /Textures/_RMC14/Lobby/from_fobbiton_with_love.png
-  title: cmu-lobby-background-fob-title # CMU14
-  artist: cmu-lobby-background-fob-artist # CMU14
 
 - type: lobbyBackground
   id: shnee
   background: /Textures/_RMC14/Lobby/only_you_shnee.png
-  title: cmu-lobby-background-shnee-title # CMU14
-  artist: cmu-lobby-background-shnee-artist # CMU14
 
 - type: lobbyBackground
   id: sisters
   background: /Textures/_RMC14/Lobby/sisters.png
-  title: cmu-lobby-background-sisters-title # CMU14
-  artist: cmu-lobby-background-sisters-artist # CMU14
 
 - type: lobbyBackground
   id: smartgunoperator
   background: /Textures/_RMC14/Lobby/smart_gun.png
-  title: cmu-lobby-background-smartgunoperator-title # CMU14
-  artist: cmu-lobby-background-smartgunoperator-artist # CMU14
 
 - type: lobbyBackground
   id: MarineMajor
   background: /Textures/_RMC14/Lobby/MarineMajor.png
-  title: cmu-lobby-background-marinemajor-title # CMU14
-  artist: cmu-lobby-background-marinemajor-artist # CMU14
 
 - type: lobbyBackground
   id: Battered
   background: /Textures/_RMC14/Lobby/Battered.png
-  title: cmu-lobby-background-battered-title # CMU14
-  artist: cmu-lobby-background-battered-artist # CMU14
 
 - type: lobbyBackground
   id: FriendlySkies
   background: /Textures/_RMC14/Lobby/Fly_the_Friendly_Skies.png
-  title: cmu-lobby-background-friendlyskies-title # CMU14
-  artist: cmu-lobby-background-friendlyskies-artist # CMU14
 
 - type: lobbyBackground
   id: LoneMedevac
   background: /Textures/_RMC14/Lobby/Lone_Medevac.png
-  title: cmu-lobby-background-lonemedevac-title # CMU14
-  artist: cmu-lobby-background-lonemedevac-artist # CMU14
 
 - type: lobbyBackground
   id: MoveOut
   background: /Textures/_RMC14/Lobby/Move_Out.png
-  title: cmu-lobby-background-moveout-title # CMU14
-  artist: cmu-lobby-background-moveout-artist # CMU14
 
 - type: lobbyBackground
   id: Cornered
   background: /Textures/_RMC14/Lobby/Cornered.png
-  title: cmu-lobby-background-cornered-title # CMU14
-  artist: cmu-lobby-background-cornered-artist # CMU14
 
 - type: lobbyBackground
   id: EyesUp
   background: /Textures/_RMC14/Lobby/Eyes_Up.png
-  title: cmu-lobby-background-eyesup-title # CMU14
-  artist: cmu-lobby-background-eyesup-artist # CMU14
 
 - type: lobbyBackground
   id: FocusFire
   background: /Textures/_RMC14/Lobby/Focus_Fire.png
-  title: cmu-lobby-background-focusfire-title # CMU14
-  artist: cmu-lobby-background-focusfire-artist # CMU14
 
 - type: lobbyBackground
   id: Intelligence
   background: /Textures/_RMC14/Lobby/Intelligence.png
-  title: cmu-lobby-background-intelligence-title # CMU14
-  artist: cmu-lobby-background-intelligence-artist # CMU14
 
 - type: lobbyBackground
   id: LiquorCabinetsLastStand
   background: /Textures/_RMC14/Lobby/LiquorCabinetsLastStand.png
-  title: cmu-lobby-background-liquorcabinetslaststand-title # CMU14
-  artist: cmu-lobby-background-liquorcabinetslaststand-artist # CMU14
 
 - type: lobbyBackground
   id: APushTooFar
   background: /Textures/_RMC14/Lobby/APushTooFar.png
-  title: cmu-lobby-background-apushtoofar-title # CMU14
-  artist: cmu-lobby-background-apushtoofar-artist # CMU14
 
 - type: lobbyBackground
   id: WEYALobby
   background: /Textures/_RMC14/Lobby/WEYALobby.png
-  title: cmu-lobby-background-weyalobby-title # CMU14
-  artist: cmu-lobby-background-weyalobby-artist # CMU14
 
 - type: lobbyBackground
   id: JudgmentDay
   background: /Textures/_RMC14/Lobby/Judgment_Day.png
-  title: cmu-lobby-background-judgmentday-title # CMU14
-  artist: cmu-lobby-background-judgmentday-artist # CMU14
 
 - type: lobbyBackground
   id: runningfromravager
   background: /Textures/_RMC14/Lobby/running_from_ravager.png
-  title: cmu-lobby-background-runningfromravager-title # CMU14
-  artist: cmu-lobby-background-runningfromravager-artist # CMU14
 
 - type: lobbyBackground
   id: goodhits
   background: /Textures/_RMC14/Lobby/good_hits.png
-  title: cmu-lobby-background-goodhits-title # CMU14
-  artist: cmu-lobby-background-goodhits-artist # CMU14
 
 - type: lobbyBackground
   id: HisHighness
   background: /Textures/_RMC14/Lobby/his_highness.png
-  title: cmu-lobby-background-hishighness-title # CMU14
-  artist: cmu-lobby-background-hishighness-artist # CMU14
