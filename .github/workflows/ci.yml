@@ -255,12 +255,16 @@ jobs:
       fail-fast: false
       matrix:
         shard:
-          - name: root_1
-            root_group: 0
-            root_groups: 2
-          - name: root_2
-            root_group: 1
-            root_groups: 2
+          # CMU14: the files directly in Tests/, minus PostMapInitTest which has its own shards
+          - name: root
+          # CMU14: PostMapInitTest loads every map, two thirds of the old root_1. split by method so
+          # neither half is the slowest shard; post_map_init is the catch-all for new methods
+          - name: post_map_init
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.PostMapInitTest.
+              & FullyQualifiedName!~Content.IntegrationTests.Tests.PostMapInitTest.NonGameMapsLoadableTest
+          - name: post_map_init_nongame
+            filter: FullyQualifiedName~Content.IntegrationTests.Tests.PostMapInitTest.NonGameMapsLoadableTest
           # Bulk entity/component sweeps remain in the manual Build & Test Debug workflow.
           - name: admin_access_ui
             filter: >-
@@ -574,7 +578,7 @@ jobs:
           case "$shard" in
             # CMU14: destructive smoke pairs approach the runner's memory limit in parallel.
             cmu_yautja_smoke) workers=1 ;;
-            root_1|cmu|cmu_systems|cmu_spatial|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
+            post_map_init*|cmu|cmu_systems|cmu_spatial|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
             cmu_lobby_ui) workers=1 ;;
             # CMU14: every 3D case makes its own pair, two at once is the memory peak
             cmu_threed) workers=1 ;;
@@ -584,9 +588,7 @@ jobs:
             proto_lint_serial) workers=2 ;;
           esac
 
-          if [[ "$shard" == root_* ]]; then
-            root_group='${{ matrix.shard.root_group }}'
-            root_groups='${{ matrix.shard.root_groups }}'
+          if [[ "$shard" == root ]]; then
             shopt -s nullglob
             files=(Content.IntegrationTests/Tests/*.cs)
             if [ ${#files[@]} -eq 0 ]; then
@@ -594,10 +596,9 @@ jobs:
               exit 1
             fi
             FILTER=""
-            for i in "${!files[@]}"; do
-              f="${files[$i]}"
+            for f in "${files[@]}"; do
               base=$(basename "$f" .cs)
-              if [[ "$base" == "EntityTest" ]] || (( i % root_groups != root_group )); then
+              if [[ "$base" == "EntityTest" || "$base" == "PostMapInitTest" ]]; then
                 continue
               fi
               FILTER="${FILTER:+$FILTER | }FullyQualifiedName~Content.IntegrationTests.Tests.$base."
