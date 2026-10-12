@@ -61,6 +61,8 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     private static readonly ProtoId<NpcFactionPrototype> OpforNpcFaction = new("OPFOR");
 
     [Dependency] private SharedAccessSystem _accessSystem = default!;
+
+    [Dependency] private CMUIdBloodTypeSystem _cmuIdBloodType = default!; // CMU14
     [Dependency] private ActorSystem _actors = default!;
     [Dependency] private IdCardSystem _cardSystem = default!;
     [Dependency] private IConfigurationManager _configurationManager = default!;
@@ -808,6 +810,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             return;
 
         _cardSystem.TryChangeFullName(cardId, characterName, card);
+        _cmuIdBloodType.Stamp(cardId, entity); // CMU14: print the blood type on the ID
 
         // Respect cards with a prototype-defined title (e.g. fixed-role/faction IDs).
         if (card.JobTitle == null)
@@ -855,6 +858,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
         // Set name and (unless fixed by prototype) job title/icon from the selected job.
         _cardSystem.TryChangeFullName(cardId, characterName, card);
+        _cmuIdBloodType.Stamp(cardId, entity); // CMU14: print the blood type on the ID
         if (card.JobTitle == null)
         {
             _cardSystem.TryChangeJobTitle(cardId, titleJobPrototype.LocalizedName, card);

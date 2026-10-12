@@ -19,3 +19,5 @@ cmu-blood-pack-examine-spoiled = [color=#8a6d3b]It's been out of the fridge too 
 cmu-blood-pack-examine-warm = [color=#d9a03f]It's getting warm. Use it or refrigerate it soon.[/color]
 cmu-blood-pack-examine-cold = [color=lightblue]It's being kept cold.[/color]
 cmu-blood-spoiled-reaction = Something in your veins feels badly wrong!
+
+cmu-id-card-examine-blood-type = Blood type: [color=#d10a0a][bold]{ $type }[/bold][/color]
