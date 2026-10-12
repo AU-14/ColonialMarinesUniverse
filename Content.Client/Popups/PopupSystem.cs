@@ -105,7 +105,7 @@ public sealed partial class PopupSystem : SharedPopupSystem
         }
 
         // CMU14: popup chat/screen options
-        CMUEchoPopupToChat(message);
+        CMUEchoPopupToChat(message, type);
         if (_configManager.GetCVar(CCVars.HidePopupsOnScreen))
             return;
 
@@ -137,7 +137,7 @@ public sealed partial class PopupSystem : SharedPopupSystem
         }
 
         // CMU14: popup chat/screen options
-        CMUEchoPopupToChat(message);
+        CMUEchoPopupToChat(message, type);
         if (_configManager.GetCVar(CCVars.HidePopupsOnScreen))
             return;
 
@@ -151,14 +151,16 @@ public sealed partial class PopupSystem : SharedPopupSystem
     }
 
     // CMU14 start: copy popups into the local chat log when the player opts in.
-    private void CMUEchoPopupToChat(string message)
+    private void CMUEchoPopupToChat(string message, PopupType type)
     {
         if (!_configManager.GetCVar(CCVars.PopupsInChat))
             return;
 
+        // Keep the colour the popup is drawn in on screen.
         var escaped = FormattedMessage.EscapeText(message);
+        var wrapped = $"[color={PopupUIController.GetPopupColor(type).ToHex()}]{escaped}[/color]";
         _uiManager.GetUIController<ChatUIController>().ProcessChatMessage(
-            new ChatMessage(ChatChannel.Visual, escaped, escaped, NetEntity.Invalid, null),
+            new ChatMessage(ChatChannel.Visual, escaped, wrapped, NetEntity.Invalid, null),
             speechBubble: false);
     }
     // CMU14 end
