@@ -305,6 +305,8 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
                 if (profile.FlavorText != "" && _configurationManager.GetCVar(CCVars.FlavorText))
                     AddComp<DetailExaminableComponent>(jobEntity).Content = profile.FlavorText;
 
+                ApplyProfileBloodType(jobEntity, profile); // CMU14
+
                 if (_configurationManager.GetCVar(CCVars.CharacterDescription))
                     BakeCharacterDescription(jobEntity, profile);
             }
@@ -360,6 +362,8 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
             if (profile.FlavorText != "" && _configurationManager.GetCVar(CCVars.FlavorText))
                 AddComp<DetailExaminableComponent>(entity.Value).Content = profile.FlavorText;
+
+            ApplyProfileBloodType(entity.Value, profile); // CMU14
 
             if (_configurationManager.GetCVar(CCVars.CharacterDescription))
                 BakeCharacterDescription(entity.Value, profile);
@@ -695,13 +699,16 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     private const string DisabilitiesTraitCategory = "Disabilities";
     private const string DrugAllergyTraitId = "RandomDrugAllergy";
 
-    private void BakeCharacterDescription(EntityUid uid, HumanoidCharacterProfile profile)
+    // CMU14: blood type from the profile, applied whether or not character descriptions are on
+    private void ApplyProfileBloodType(EntityUid uid, HumanoidCharacterProfile profile)
     {
-        // CMU14: blood type from the profile
         var bloodType = EnsureComp<CMUBloodTypeComponent>(uid);
         bloodType.Type = profile.BloodType;
         Dirty(uid, bloodType);
+    }
 
+    private void BakeCharacterDescription(EntityUid uid, HumanoidCharacterProfile profile)
+    {
         var comp = AddComp<CharacterDescriptionComponent>(uid);
         comp.ShortExamine = profile.ShortExamine;
         comp.FullDescription = profile.FullDescription;
