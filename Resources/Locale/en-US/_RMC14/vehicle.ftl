@@ -147,19 +147,20 @@ rmc-hardpoint-removal-prying-tool = Hold a crowbar or maintenance jack to remove
 # CMU14
 cmu-vehicle-supply-unassigned = No platoon assigned to this depot.
 cmu-vehicle-supply-allowance = {$platoon} — Vehicles issued: {$used}/{$limit} (maximum one tank and one VTOL)
-
-rmc-vehicle-lock-frame-destroyed = The vehicle cannot be locked while its frame is destroyed.
-
-rmc-hardpoint-remove-blocked = That hardpoint is fixed in place.
-
-rmc-vehicle-demolition-frame-intact = The vehicle frame is too intact to rig with charges. Destroy it first.
-
-rmc-vehicle-demolition-busy = Someone is already rigging this wreck.
-
-rmc-vehicle-demolition-start = You start rigging the wreck with explosives...
-
-rmc-vehicle-demolition-no-skill = You do not know how to rig demolition charges.
-
-rmc-vehicle-too-small-to-damage = We're too small to do any significant damage to this vehicle!
-
-rmc-vehicle-demolition-armed = The charge is planted and is counting down!
+cmu-vehicle-supply-preview-title = Vehicle Preview
+cmu-vehicle-supply-stored-vehicles = Stored Vehicles
+cmu-vehicle-supply-loadout = Vehicle Loadout
+cmu-vehicle-supply-raise = Raise
+cmu-vehicle-supply-lower = Lower
+cmu-vehicle-supply-active-none = none
+cmu-vehicle-supply-status-busy = busy
+cmu-vehicle-supply-status-idle = idle
+cmu-vehicle-supply-status-line = Lift: { $lift } | Status: { $status } | Active: { $active }
+cmu-vehicle-supply-lift-none = No lift
+cmu-vehicle-supply-lift-lowered = Lowered
+cmu-vehicle-supply-lift-raised = Raised
+cmu-vehicle-supply-lift-lowering = Lowering
+cmu-vehicle-supply-lift-raising = Raising
+cmu-vehicle-supply-lift-preparing = Preparing
+cmu-vehicle-supply-copies-expanded = Copies v
+cmu-vehicle-supply-copies-collapsed = Copies >

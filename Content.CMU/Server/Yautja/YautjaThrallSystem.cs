@@ -720,8 +720,8 @@ public sealed partial class YautjaThrallSystem : EntitySystem
             _hive.SetHive(target, GetOrCreateBadBloodHive());
         }
 
-        SetHivebrokenNpcFaction(target, hivebreaker);
-        SetHivebrokenIffFaction(target, hivebreaker);
+        SetHivebrokenNpcFaction(target, master, hivebreaker);
+        SetHivebrokenIffFaction(target, master, hivebreaker);
         ApplyHivebrokenWeedBehavior(target, hivebreaker);
         ApplyHivebrokenRegen(target);
         ApplyHivebrokenSpeech(target, hivebreaker);
@@ -736,17 +736,22 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         if (hivebreaker.BloodOnConversion)
             GrantAllSkills(target, 4);
 
-        _marks.ForceMark(target, target, YautjaMarkKind.Dishonored, reason: Loc.GetString(HivebreakerDishonoredReason));
-        PopupHivebreakerEnthrallMessages(target);
+        if (hivebreaker.DishonorOnConversion)
+            _marks.ForceMark(target, target, YautjaMarkKind.Dishonored, reason: Loc.GetString(HivebreakerDishonoredReason));
+
+        PopupHivebreakerEnthrallMessages(target, hivebreaker);
 
         if (hivebreaker.HealOnConversion && TryComp(target, out DamageableComponent? damageable))
             _damage.SetAllDamage((target, damageable), 0);
 
-        BroadcastToYautja(
-            Loc.GetString("cmu-yautja-hivebreaker-broadcast",
-                ("hunter", YautjaDisplayName(master)),
-                ("target", target)),
-            master);
+        if (hivebreaker.BroadcastOnConversion)
+        {
+            BroadcastToYautja(
+                Loc.GetString("cmu-yautja-hivebreaker-broadcast",
+                    ("hunter", YautjaDisplayName(master)),
+                    ("target", target)),
+                master);
+        }
 
         _adminLog.Add(LogType.Action, LogImpact.High,
             $"{ToPrettyString(master):hunter} hivebroke xeno {ToPrettyString(target):target} with {ToPrettyString(source):item}");
@@ -1133,17 +1138,41 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         thrall.HivebreakHadHivebrokenName = HasComp<YautjaHivebrokenXenoComponent>(target);
     }
 
-    private void SetHivebrokenNpcFaction(EntityUid target, YautjaHivebreakerComponent hivebreaker)
+    private void SetHivebrokenNpcFaction(EntityUid target, EntityUid master, YautjaHivebreakerComponent hivebreaker)
     {
         var faction = EnsureComp<NpcFactionMemberComponent>(target);
         _faction.ClearFactions((target, faction), false);
-        _faction.AddFaction((target, faction), hivebreaker.ThrallNpcFaction);
+
+        if (hivebreaker.CopyMasterFactions &&
+            TryComp(master, out NpcFactionMemberComponent? masterFaction) &&
+            masterFaction.Factions.Count > 0)
+        {
+            _faction.AddFactions((target, faction), masterFaction.Factions);
+        }
+        else
+        {
+            _faction.AddFaction((target, faction), hivebreaker.ThrallNpcFaction);
+        }
+
         RaiseLocalEvent(new ObjectiveWatchedEntityStartupEvent(target));
     }
 
-    private void SetHivebrokenIffFaction(EntityUid target, YautjaHivebreakerComponent hivebreaker)
+    private void SetHivebrokenIffFaction(EntityUid target, EntityUid master, YautjaHivebreakerComponent hivebreaker)
     {
         _iff.ClearUserFactions(target);
+
+        // the thrall shoots with whoever leashed it, ID card included
+        var masterFactions = new HashSet<EntProtoId<IFFFactionComponent>>();
+        if (hivebreaker.CopyMasterFactions && _iff.TryGetFactions(master, masterFactions))
+        {
+            foreach (var iff in masterFactions)
+            {
+                _iff.AddUserFaction(target, iff);
+            }
+
+            return;
+        }
+
         _iff.AddUserFaction(target, hivebreaker.ThrallIffFaction);
     }
 
@@ -1239,9 +1268,9 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         PopupHivebreakerDethrallMessages(target);
     }
 
-    private void PopupHivebreakerEnthrallMessages(EntityUid target)
+    private void PopupHivebreakerEnthrallMessages(EntityUid target, YautjaHivebreakerComponent hivebreaker)
     {
-        _popup.PopupEntity(Loc.GetString("cmu-yautja-hivebreaker-enthralled-target"), target, target, PopupType.LargeCaution);
+        _popup.PopupEntity(Loc.GetString(hivebreaker.EnthralledPopup), target, target, PopupType.LargeCaution);
         _popup.PopupEntity(Loc.GetString("cmu-yautja-hivebreaker-hivemind-lost"), target, target, PopupType.LargeCaution);
         _popup.PopupEntity(Loc.GetString("cmu-yautja-hivebreaker-evolution-blocked"), target, target, PopupType.MediumCaution);
     }

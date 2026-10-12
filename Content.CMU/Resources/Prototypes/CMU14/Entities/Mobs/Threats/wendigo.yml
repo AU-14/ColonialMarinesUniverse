@@ -177,9 +177,55 @@
   - type: InstantAction
     event: !type:WendigoVoiceActionEvent {}
 
-# Lab-made Wendigo: about 20% less health and damage, and no area screech.
+# Lab-made Wendigo: a body Weyland-Yutani scientists can treat with kits, sutures and medicine.
+# Natural Wendigos stay untreatable; only the lab procedure spawns this and its lesser child.
 - type: entity
   parent: AU14Wendigo
+  id: CMUWendigoLab
+  name: Wendigo
+  description: A tall, pale creature that looks uncannily human. Its back is branded "Weyland-Yutani".
+  components:
+  - type: SolutionManager
+  - type: InjectableSolution
+    solution: bloodstream
+  # Same blood as RMC humans (_RMC14/Entities/Mobs/Species/base.yml).
+  - type: Bloodstream
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 560
+    maxBleedAmount: 50
+    bleedReductionAmount: 0
+    bloodRefreshAmount: 0.15
+    bloodlossDamage:
+      types:
+        Bloodloss: 0.5
+    bloodlossHealDamage:
+      types:
+        Bloodloss: -1
+    damageBleedModifiers: CMBloodlossHuman
+  - type: Woundable
+  - type: InitialBody
+    organs:
+      Head: RMCHeadXeno
+      Heart: CMUOrganWendigoHeart
+    relationships:
+      Head: [ Heart ]
+
+- type: entity
+  parent: RMCOrganXenoHeart
+  id: CMUOrganWendigoHeart
+  name: wendigo heart
+  description: A swollen, too-human heart that still pumps whatever is fed into it.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Metabolizer
+    maxReagents: 2
+    stages: [ Bloodstream ]
+
+# Lab-made Wendigo from a non-cannibal: about 20% less health and damage, and no area screech.
+- type: entity
+  parent: CMUWendigoLab
   id: CMUWendigoLesser
   name: Wendigo
   description: A tall, pale creature that looks uncannily human. Its back is branded "Weyland-Yutani".

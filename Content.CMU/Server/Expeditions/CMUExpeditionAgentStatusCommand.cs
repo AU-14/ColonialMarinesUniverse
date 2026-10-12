@@ -42,6 +42,10 @@ public sealed partial class CMUExpeditionAgentStatusCommand : LocalizedEntityCom
             shell.WriteError(Help);
             return;
         }
+        var system = EntityManager.System<CMUExpeditionAgentSystem>();
+        shell.WriteLine(Loc.GetString("cmu-expedition-ai-status-budget",
+            ("processed", system.ThinksLastUpdate), ("deferred", system.DeferredThinksLastUpdate),
+            ("milliseconds", system.DecisionMilliseconds.ToString("F2"))));
         var query = EntityManager.EntityQueryEnumerator<CMUExpeditionAgentComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var agent, out var transform))
         {

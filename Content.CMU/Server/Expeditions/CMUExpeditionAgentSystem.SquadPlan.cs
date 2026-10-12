@@ -102,9 +102,9 @@ public sealed partial class CMUExpeditionAgentSystem
         var assault = observers.Any(agent => agent.AssaultDestination != null);
         var travelling = observers.Any(agent => agent.OrderedDestination != null || agent.TravelGoal != null);
         var (phase, reason) = melee ? ("anti-rush", "closing-melee-threat") :
+            casualties + low >= Math.Max(2, local.Length / 2) ? ("withdraw", "casualties-or-empty-weapons") :
             contact == null ? assault ? ("assault-advance", "assault-objective") :
                 travelling ? ("travelling", "moving-to-order") : ("holding", "no-contact") :
-            casualties + low >= Math.Max(2, local.Length / 2) ? ("withdraw", "casualties-or-empty-weapons") :
             observers.Any(agent => agent.AntiVehicle && agent.Target is { } target && ArmedVehicle(target)) ? ("anti-armor", "vehicle-contact") :
             assault ? ("assault", "assault-contact") : ("fire-and-move", "engaging-contact");
         // Only a brief grace follows a close rush. Ordinary phases retain their
@@ -145,7 +145,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 candidate.State is not (CMUExpeditionAgentState.Incapacitated or CMUExpeditionAgentState.Disabled or
                     CMUExpeditionAgentState.Reloading or CMUExpeditionAgentState.Healing or CMUExpeditionAgentState.Retreat or
                     CMUExpeditionAgentState.Withdraw or CMUExpeditionAgentState.OutOfAmmo) &&
-                _guns.TryGetGun(member, out var readyGun) && WeaponAmmo(readyGun) > 0 &&
+                AssaultWeaponReady(member) &&
                 (candidate.AssaultBoundDestination != null || now >= candidate.AssaultNextBound))
             .OrderByDescending(member => Comp<CMUExpeditionAgentComponent>(member).AssaultBoundDestination != null)
             .ThenBy(member => Comp<CMUExpeditionAgentComponent>(member).CombatRole is

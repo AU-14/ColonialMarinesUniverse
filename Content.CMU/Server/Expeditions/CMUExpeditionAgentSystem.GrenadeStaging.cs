@@ -76,8 +76,10 @@ public sealed partial class CMUExpeditionAgentSystem
 
         // If no covered HE stance exists, screen the reachable near side of the angle.
         // The cloud may hide the enemy too, so this remains disabled for melee contacts.
-        if (Grenade(uid, true) is { } smoke && CornerSmokePoint(uid, agent, smoke, frozen) is { } screen)
+        if (Grenade(uid, true) is { } smoke && CornerSmokePoint(uid, agent, smoke, frozen) is { } screen &&
+            FindSmokeWithdrawal(uid, agent, screen, frozen, out var withdrawal))
         {
+            agent.SmokeWithdrawalDestination = withdrawal;
             agent.SmokeGrenade = true;
             agent.GrenadeTarget = screen;
             agent.GrenadeDecision = "screen-held-corner";
@@ -179,7 +181,8 @@ public sealed partial class CMUExpeditionAgentSystem
             var point = _transform.ToCoordinates(start.EntityId, origin.Offset(direction * forward + side * sideways));
             var candidateScore = forward - Math.Abs(sideways) * 0.25f;
             if (candidateScore <= score || !GroundSafe(point) || !SafeGrenade(uid, point, smoke) ||
-                SmokeReserved(uid, agent, point))
+                SmokeReserved(uid, agent, point) ||
+                !SmokeScreensApproach(uid, start, agent.CornerDangerPoint ?? contact, point))
                 continue;
             score = candidateScore;
             best = point;

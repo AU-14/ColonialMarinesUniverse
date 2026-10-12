@@ -12815,5 +12815,124 @@
   id: 779
   time: '2026-10-10T14:28:56.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2132
+- author: TheHellFireo
+  changes:
+  - message: Expedition squads use improved close-quarters movement, covering fire,
+      corner tactics and cooperative patrols.
+    type: Tweak
+  - message: Expedition agents handle stored weapons, ammunition, healing, flares
+      and nearby fire more reliably.
+    type: Fix
+  - message: Added live squad aim controls and expanded squad diagnostics.
+    type: Admin
+  id: 780
+  time: '2026-10-10T16:23:53.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2142
+- author: Kadeo64
+  changes:
+  - message: Clearance X can now be unlocked at 40 minutes instead of being unlocked
+      at 1 hour.
+    type: Tweak
+  id: 781
+  time: '2026-10-10T21:13:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2144
+- author: troytroy400
+  changes:
+  - message: Gas Masks resprited, sprites by Nzzy.
+    type: Tweak
+  id: 782
+  time: '2026-10-11T03:13:51.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2143
+- author: ErinBaking
+  changes:
+  - message: New Wendigo Lobby art
+    type: Add
+  - message: Old Wendigo Lobby art
+    type: Remove
+  id: 783
+  time: '2026-10-11T03:15:35.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2146
+- author: rokudara-sen
+  changes:
+  - message: Third-party dropships can launch at round start instead of waiting out
+      the fueling lockout
+    type: Fix
+  - message: Breaking a flower vase no longer throws an error
+    type: Fix
+  - message: Expedition NPCs throw grenades and finish flanks mid-fight, and stop
+      holding exposed angles while shaken
+    type: Fix
+  - message: Expedition NPCs can reach and drag a downed squadmate again
+    type: Fix
+  - message: Lifeboats crash land on small planets instead of falling back to a bad
+      spot
+    type: Fix
+  id: 784
+  time: '2026-10-11T10:10:38.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2150
+- author: TheHellFireo
+  changes:
+  - message: Expedition AllHostile orders target enemies and armed non-friendlies
+      while sparing unarmed neutrals and protecting allies.
+    type: Fix
+  - message: Expedition NPCs reload from uniform webbing and retain danger awareness
+      when approaching casualties.
+    type: Fix
+  - message: Expedition NPCs preserve medical retreats and coordinate cover departures
+      through weapon readiness delays.
+    type: Fix
+  - message: Expedition gunfire observations follow the actual shot destination.
+    type: Fix
+  id: 785
+  time: '2026-10-11T10:21:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2148
+- author: TheHellFireo
+  changes:
+  - message: Expedition squads handle crowded corridors, incoming fire, assault follow-through,
+      reloads, dropped weapons and glass doors more reliably.
+    type: Fix
+  - message: AI scavengers no longer fall asleep from the disconnected-player timer.
+    type: Fix
+  - message: Expedition kits now include HE and smoke throughout all factions and
+      groups, with loaded starting primaries.
+    type: Tweak
+  - message: Expedition AI defaults to 65% aim skill and one tile less sight range,
+      and uses bipods and longer suppressive volleys.
+    type: Tweak
+  id: 786
+  time: '2026-10-11T13:40:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2154
+- author: ArturUr1
+  changes:
+  - message: Localization keys have been added for many things. Simplified translation
+      for forks.
+    type: Code
+  id: 787
+  time: '2026-10-11T14:01:28.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2151
+- author: StiffRobot
+  changes:
+  - message: Added Pilot-Visors to the Aircrew vendors of UPP, Prodigy and WY
+    type: Fix
+  id: 788
+  time: '2026-10-11T14:02:29.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2153
+- author: troytroy400
+  changes:
+  - message: Rail flashlights are now more useful. They have the same stats as armor
+      lights with a larger radius, the downside being the light is directional. Rail
+      lights can also now be used inside helmets, just like in CM13.
+    type: Tweak
+  id: 789
+  time: '2026-10-11T16:10:32.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2156
+- author: P-MCT
+  changes:
+  - message: Apollo has just received a distress call from a backwater flyover colony
+      named Fort McNeil.
+    type: Map
+  id: 790
+  time: '2026-10-11T16:24:39.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2096
 Name: CMU
 Order: -1

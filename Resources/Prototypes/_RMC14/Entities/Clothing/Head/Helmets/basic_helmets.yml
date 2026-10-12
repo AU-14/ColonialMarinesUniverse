@@ -42,6 +42,7 @@
   - type: ContainerContainer
     containers:
       storagebase: !type:Container
+        occludes: false # CMU14: lights stored in a worn helmet shine out of it
         ents: [ ]
   - type: UserInterface
     interfaces:

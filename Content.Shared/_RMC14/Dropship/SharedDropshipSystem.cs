@@ -1174,7 +1174,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
     private bool TryDropshipLaunchPopup(EntityUid computer, EntityUid user, bool predicted)
     {
         var roundDuration = _gameTicker.RoundDuration();
-        if (roundDuration < _dropshipInitialDelay)
+        if (roundDuration < _dropshipInitialDelay && !IsExemptFromInitialDelay(computer)) // CMU14
         {
             var minutesLeft = Math.Max(1, (int)(_dropshipInitialDelay - roundDuration).TotalMinutes);
             var msg = Loc.GetString("rmc-dropship-pre-flight-fueling", ("minutes", minutesLeft));

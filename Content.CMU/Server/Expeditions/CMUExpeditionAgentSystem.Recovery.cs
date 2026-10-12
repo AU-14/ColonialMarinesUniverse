@@ -1,5 +1,7 @@
 using Content.Shared.Hands;
+using Content.Shared.SSDIndicator;
 using Content.Shared.Standing;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.Stunnable;
 using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.Containers;
@@ -16,6 +18,15 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         SubscribeLocalEvent<CMUExpeditionAgentComponent, DidEquipHandEvent>(OnWeaponEquipped);
         SubscribeLocalEvent<CMUExpeditionAgentComponent, DidUnequipHandEvent>(OnWeaponUnequipped);
+        SubscribeLocalEvent<CMUExpeditionAgentComponent, BeforeStatusEffectAddedEvent>(OnBeforeStatusEffectAdded);
+    }
+
+    private void OnBeforeStatusEffectAdded(Entity<CMUExpeditionAgentComponent> ent, ref BeforeStatusEffectAddedEvent args)
+    {
+        // AI bodies intentionally have no player. Only veto the disconnect timer;
+        // anesthesia, forced sleep and other incapacitation retain their native ownership.
+        if (args.Effect == SSDIndicatorSystem.StatusEffectSSDSleeping && !HasComp<ActorComponent>(ent))
+            args.Cancelled = true;
     }
 
     private void OnWeaponEquipped(Entity<CMUExpeditionAgentComponent> ent, ref DidEquipHandEvent args)
@@ -33,7 +44,7 @@ public sealed partial class CMUExpeditionAgentSystem
             return;
         ent.Comp.Rifle = args.Unequipped;
         ent.Comp.NextWeaponRecovery = _timing.CurTime;
-        ent.Comp.NextThink = _timing.CurTime;
+        RequestThink(ent.Comp, _timing.CurTime);
     }
 
     private bool PauseForKnockdown(EntityUid uid, CMUExpeditionAgentComponent agent)
@@ -48,7 +59,7 @@ public sealed partial class CMUExpeditionAgentSystem
             if (agent.State == CMUExpeditionAgentState.Incapacitated)
             {
                 agent.State = CMUExpeditionAgentState.Guard;
-                agent.NextThink = _timing.CurTime;
+                RequestThink(agent, _timing.CurTime);
             }
             return false;
         }
@@ -86,36 +97,29 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.RememberedWeapons.Add(carried);
         agent.RememberedWeapons.RemoveWhere(weapon => !Exists(weapon));
         var armed = SelectHeldRifle(uid, agent);
+        EntityUid? recovery = armed ? null : agent.Rifle;
         // A sidearm must not erase our memory of a primary lost to knockdown or a failed
         // hand operation. Secure nearby owned weapons during a lull, without dropping another.
-        if (armed && agent.Action == null && agent.PendingWeapon == null && agent.Treatment == null &&
-            agent.WorkItem == null && !agent.PreparingWork && agent.FlareItem == null && agent.Target == null &&
-            now - agent.LastHit > TimeSpan.FromSeconds(2) && now >= agent.NextWeaponRecovery)
+        if (armed && LoadoutReadinessSafe(uid, agent, now))
         {
             foreach (var lost in agent.RememberedWeapons)
             {
                 if (_containers.IsEntityOrParentInContainer(lost) || Transform(lost).Anchored ||
-                    !_interaction.InRangeUnobstructed(uid, lost) || !Visible(uid, lost, 2) ||
+                    !Visible(uid, lost, agent.WeaponRecoveryRange) ||
                     TryComp<CMUExpeditionWeaponRoleComponent>(lost, out var role) && role.Rocket && WeaponAmmo(lost) == 0)
                     continue;
-                agent.NextWeaponRecovery = now + TimeSpan.FromSeconds(2);
-                if (_inventory.TryEquip(uid, lost, SuitStorageSlot, silent: true) || StoreSupply(uid, lost))
-                {
-                    agent.WeaponsRecovered++;
-                    agent.WeaponRecoveryDecision = "secured-lost-primary";
-                    agent.NextWeaponChoice = now;
-                }
+                recovery = lost;
                 break;
             }
         }
-        if (armed)
+        if (armed && recovery == null)
         {
             agent.WeaponRecoveryDecision = "armed";
             if (agent.State == CMUExpeditionAgentState.RecoverWeapon)
                 FinishRecovery();
             return false;
         }
-        if (agent.Rifle is not { } rifle || !Exists(rifle) ||
+        if (recovery is not { } rifle || !Exists(rifle) ||
             WeaponAmmo(rifle) == 0 && SpareAmmunition(uid, rifle) == null ||
             !TryComp(rifle, out TransformComponent? weaponTransform) ||
             _containers.IsEntityOrParentInContainer(rifle) || weaponTransform.Anchored ||
@@ -136,10 +140,14 @@ public sealed partial class CMUExpeditionAgentSystem
             if (now < agent.NextWeaponRecovery)
                 return false;
             agent.NextWeaponRecovery = now + TimeSpan.FromSeconds(0.5);
-            if (_hands.TryPickupAnyHand(uid, rifle) && SelectHeldRifle(uid, agent))
+            var pickedUp = armed
+                ? _inventory.TryEquip(uid, rifle, SuitStorageSlot, silent: true) || StoreSupply(uid, rifle)
+                : _hands.TryPickupAnyHand(uid, rifle) && SelectHeldRifle(uid, agent);
+            if (pickedUp)
             {
                 agent.WeaponsRecovered++;
                 agent.WeaponRecoveryDecision = "recovered";
+                agent.NextWeaponChoice = now;
                 FinishRecovery();
             }
             else

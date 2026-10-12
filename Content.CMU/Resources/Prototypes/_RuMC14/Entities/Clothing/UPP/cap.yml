@@ -26,6 +26,12 @@
   - type: ItemCamouflage
     camouflageVariations:
       classic: _RuMC14/Clothing/UPP/cap/ushanka.rsi
+  # desc says it stops small arms and shrapnel, so give it the rmc ushanka armor like the officer one
+  - type: CMArmor
+    melee: 30
+    bullet: 15
+    bio: 15
+    explosionArmor: 10
   - type: CMUItemStain
     wornStates:
       head: booniehat_blood
@@ -46,6 +52,12 @@
   - type: ItemCamouflage
     camouflageVariations:
       classic: _RuMC14/Clothing/UPP/cap/ushanka_com.rsi
+  # desc promises it stops bullets, so it has to actually do it. same numbers as the rmc ushanka
+  - type: CMArmor
+    melee: 30
+    bullet: 15
+    bio: 15
+    explosionArmor: 10
   - type: CMUItemStain
     wornStates:
       head: booniehat_blood

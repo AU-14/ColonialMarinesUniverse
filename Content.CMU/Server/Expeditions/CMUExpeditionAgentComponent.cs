@@ -7,7 +7,7 @@ namespace Content.Server.CMU14.Expeditions;
 [RegisterComponent]
 public sealed partial class CMUExpeditionAgentComponent : Component
 {
-    [DataField] public float DetectionRange = 18;
+    [DataField] public float DetectionRange = 17;
     [DataField] public float FireRange = 12;
     [DataField] public float LeashRange = 28;
     [DataField] public CMUExpeditionDisposition Disposition = CMUExpeditionDisposition.Steady;

@@ -16,10 +16,6 @@
     slots:
     - Mask
     - Suitstorage
-    clothingVisuals:
-      mask:
-      - state: equipped-MASK
-      - state: equipped-MASK-color
   - type: Item
     size: Small
     sprite: CMU14/Clothing/Masks/gasmask.rsi
