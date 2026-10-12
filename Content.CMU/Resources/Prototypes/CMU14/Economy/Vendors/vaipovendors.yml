@@ -517,7 +517,7 @@
     - name: Footwear
       choices: { CMUPlatoonAirCrewFootwear: 1 }
       entries:
-      - id: CMBootsBlack
+      - id: CMBootsBlackFilled
     - name: Gloves
       choices: { CMUPlatoonAirCrewGloves: 1 }
       entries:
@@ -822,7 +822,7 @@
         recommended: true
     - name: Footwear
       entries:
-      - id: AU14SpikeBoots
+      - id: CMUSpikeBootsFilled
         points: 8
         recommended: true
     - name: Utilities

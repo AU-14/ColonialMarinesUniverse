@@ -24,7 +24,7 @@
       entries:
       - id: RMCBootsPMCFilled
         amount: 25
-      - id: RMCBootsCorporate
+      - id: CMUBootsCorporateFilled
         amount: 40
     - name: Gloves
       entries:
@@ -681,7 +681,7 @@
       entries:
       - id: RMCBootsPMCFilled
         amount: 5
-      - id: CMBootsBrown
+      - id: CMBootsBrownFilled
         amount: 5
     - name: Headgear
       entries:
@@ -844,7 +844,7 @@
         recommended: true
     - name: Footwear
       entries:
-      - id: AU14SpikeBoots
+      - id: CMUSpikeBootsFilled
         points: 8
         recommended: true
     - name: Utilities
@@ -1316,7 +1316,7 @@
       entries:
       - id: RMCBootsPMCFilled
         amount: 25
-      - id: RMCBootsCorporate
+      - id: CMUBootsCorporateFilled
         amount: 40
     - name: Mask
       entries:

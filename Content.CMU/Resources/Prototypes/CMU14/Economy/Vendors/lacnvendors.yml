@@ -22,7 +22,7 @@
         amount: 40
     - name: Footwear
       entries:
-      - id: AU14LACNBoots
+      - id: AU14LACNBootsFilled
         amount: 40
     - name: Gloves
       entries:
@@ -505,7 +505,7 @@
     - name: Footwear
       choices: { CMUPlatoonAirCrewFootwear: 1 }
       entries:
-      - id: AU14LACNBoots
+      - id: AU14LACNBootsFilled
     - name: Gloves
       choices: { CMUPlatoonAirCrewGloves: 1 }
       entries:
@@ -703,7 +703,7 @@
         amount: 5
     - name: Footwear
       entries:
-      - id: AU14LACNBoots
+      - id: AU14LACNBootsFilled
         amount: 5
     - name: Headgear
       entries:
@@ -874,7 +874,7 @@
         recommended: true
     - name: Footwear
       entries:
-      - id: AU14SpikeBoots
+      - id: CMUSpikeBootsFilled
         points: 8
         recommended: true
     - name: Utilities
@@ -1068,7 +1068,7 @@
     - name: Footwear
       choices: { AU14FootWear: 1 }
       entries:
-      - id: AU14LACNBoots
+      - id: AU14LACNBootsFilled
     - name: Hat
       choices: { CMHat: 1 }
       entries:
@@ -1386,7 +1386,7 @@
         amount: 40
     - name: Footwear
       entries:
-      - id: AU14LACNBoots
+      - id: AU14LACNBootsFilled
         amount: 40
     - name: Gloves
       entries:
@@ -1421,7 +1421,7 @@
     - name: Footwear
       choices: { CMUPlatoonMedicalClothingFeet: 1 }
       entries:
-      - id: CMULACNBootsWhite
+      - id: CMULACNBootsWhiteFilled
     - name: Labcoats
       choices: { CMUPlatoonMedicalClothingLabcoat: 1 }
       entries:
@@ -1496,8 +1496,8 @@
     - name: Footwear
       choices: { CMULACNReqFootwear: 1 }
       entries:
-      - id: CMULACNBootsWhite
-      - id: AU14LACNBoots
+      - id: CMULACNBootsWhiteFilled
+      - id: AU14LACNBootsFilled
     - name: Gloves
       choices: { CMULACNReqGloves: 1 }
       entries:
