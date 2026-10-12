@@ -419,11 +419,13 @@
     whitelist:
       components:
       - Marine
+      - Synth # CMU14: synth k9s aren't Marine, so they read real xeno names without this
   - type: FixedDescription
     description: rmc-xeno-unknown-description
     whitelist:
       components:
       - Marine
+      - Synth # CMU14: same gap as the name mask above
   - type: EmoteCooldown
   - type: RMCMesonsNonviewable
     xenoVisible: true

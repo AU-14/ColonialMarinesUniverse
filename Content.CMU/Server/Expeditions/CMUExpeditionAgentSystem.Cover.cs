@@ -26,6 +26,23 @@ public sealed partial class CMUExpeditionAgentSystem
     [Dependency] private SharedPhysicsSystem _physics = default!;
     private readonly Dictionary<(EntityUid User, EntityCoordinates Point, float Radius, bool Doors, bool Firing, EntityUid? Vault, bool Vaults), bool> _bodyClearCache = new();
 
+    private readonly record struct BodyQuery(CMUExpeditionAgentSystem System, EntityUid User,
+        bool Doors, bool Firing, EntityUid? Vault, bool AllowVaults);
+
+    private readonly struct BodyObstacleCallback : IFixtureQueryCallback<BodyQuery>
+    {
+        public bool Invoke(ref BodyQuery query, in FixtureProxy fixture)
+        {
+            var system = query.System;
+            // Stop at the first solid obstruction instead of collecting all fixtures.
+            return !fixture.Fixture.Hard || !fixture.Body.CanCollide || fixture.Entity == query.User ||
+                system.HasComp<NpcFactionMemberComponent>(fixture.Entity) || fixture.Entity == query.Vault ||
+                query.Firing && system.LowBulletCover(fixture.Entity) ||
+                query.Doors && (system.CanNavigateDoor(query.User, fixture.Entity) ||
+                    query.AllowVaults && system.CanNavigateVault(query.User, fixture.Entity));
+        }
+    }
+
     private bool BodyFits(EntityUid uid, EntityCoordinates point, float radius = AgentBodyRadius, bool planningDoors = false,
         bool firing = false, EntityUid? vault = null, bool allowVault = true)
     {
@@ -36,18 +53,15 @@ public sealed partial class CMUExpeditionAgentSystem
         var location = _transform.ToMapCoordinates(point);
         // Rays starting inside a wall do not report an entry hit. Test the body footprint instead.
         // Ignore polygon skin so ordinary physics contact does not invalidate a stance beside a wall.
-        var fixtures = new HashSet<FixtureProxy>();
-        _lookup.GetFixturesIntersecting(location.MapId, new PhysShapeCircle(radius),
-            new Robust.Shared.Physics.Transform(location.Position, Angle.Zero), fixtures, new FixtureQueryArgs(new QueryFilter
+        var query = new BodyQuery(this, uid, planningDoors, firing, vault, allowVault);
+        clear = _lookup.ForEachFixtureIntersecting(location.MapId, new PhysShapeCircle(radius),
+            new Robust.Shared.Physics.Transform(location.Position, Angle.Zero), ref query,
+            new BodyObstacleCallback(), new FixtureQueryArgs(new QueryFilter
         {
             LayerBits = 0,
             MaskBits = (long) mask,
             Flags = QueryFlags.Dynamic | QueryFlags.Static,
         }, IgnoreShapeSkin: true));
-        clear = !fixtures.Any(fixture => fixture.Fixture.Hard && fixture.Body.CanCollide &&
-            fixture.Entity != uid && !HasComp<NpcFactionMemberComponent>(fixture.Entity) &&
-            fixture.Entity != vault && !(firing && LowBulletCover(fixture.Entity)) &&
-            !(planningDoors && (CanNavigateDoor(uid, fixture.Entity) || allowVault && CanNavigateVault(uid, fixture.Entity))));
         _bodyClearCache[key] = clear;
         return clear;
     }
@@ -328,15 +342,13 @@ public sealed partial class CMUExpeditionAgentSystem
         var center = (start.Position + end.Position) / 2;
         var bounds = new Box2Rotated(Box2.CenteredAround(center, new Vector2(translation.Length(), radius * 2)),
             translation.ToAngle(), center);
-        var fixtures = new HashSet<FixtureProxy>();
-        _lookup.GetFixturesIntersecting(start.MapId, bounds, fixtures, new FixtureQueryArgs(new QueryFilter
+        var query = new BodyQuery(this, uid, planningDoors, false, vault, allowVault);
+        // Sensors (including RMC water) do not become static route walls.
+        return _lookup.ForEachFixtureIntersecting(start.MapId, bounds, ref query,
+            new BodyObstacleCallback(), new FixtureQueryArgs(new QueryFilter
         {
             MaskBits = (long) NavigationMask(uid, planningDoors),
-            IsIgnored = entity => entity == uid || HasComp<NpcFactionMemberComponent>(entity),
         }, IgnoreShapeSkin: true));
-        // Sensors (including RMC water) do not become static route walls.
-        return !fixtures.Any(fixture => fixture.Fixture.Hard && fixture.Body.CanCollide && fixture.Entity != vault &&
-            !(planningDoors && (CanNavigateDoor(uid, fixture.Entity) || allowVault && CanNavigateVault(uid, fixture.Entity))));
     }
 
 
@@ -416,15 +428,14 @@ public sealed partial class CMUExpeditionAgentSystem
     private bool Reserved(EntityUid uid, EntityCoordinates coordinates)
     {
         var owner = Comp<CMUExpeditionAgentComponent>(uid);
-        var query = EntityQueryEnumerator<CMUExpeditionAgentComponent>();
-        while (query.MoveNext(out var other, out var agent))
+        var map = Transform(uid).MapID;
+        foreach (var (other, agent, transform) in ReservationAgents(uid))
         {
-            if (other == uid || !_mobs.IsAlive(other) || !IsFriendly(uid, other) ||
-                Transform(uid).MapID != Transform(other).MapID)
+            if (agent.Deleted || transform.Deleted || transform.MapID != map || !_mobs.IsAlive(other))
                 continue;
             // Bodies need personal space even across squads. Future-position reservations
             // remain squad-local so unrelated squads cannot reserve each other's whole area.
-            if (_transform.InRange(coordinates, Transform(other).Coordinates, 1.3f))
+            if (_transform.InRange(coordinates, transform.Coordinates, 1.3f) && IsFriendly(uid, other))
                 return true;
             if (owner.Squad != agent.Squad || agent.State is CMUExpeditionAgentState.Disabled or CMUExpeditionAgentState.Incapacitated)
                 continue;
@@ -434,7 +445,11 @@ public sealed partial class CMUExpeditionAgentSystem
                 agent.InvestigationDestination is { } support && _transform.InRange(coordinates, support, 1.5f) ||
                 agent.CoverDestination is { } destination && _transform.InRange(coordinates, destination, 1.5f) ||
                 agent.SpacingDestination is { } escape && _transform.InRange(coordinates, escape, 1.5f))
+            {
+                if (!IsFriendly(uid, other))
+                    continue;
                 return true;
+            }
         }
         return false;
     }

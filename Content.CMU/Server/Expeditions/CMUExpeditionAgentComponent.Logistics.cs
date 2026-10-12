@@ -15,6 +15,7 @@ public sealed partial class CMUExpeditionAgentComponent
     public string SupplyDecision = "stocked";
     public TimeSpan NextEquipmentAction;
     public int BipodsDeployed;
+    public EntityUid? ActiveBipod;
     public EntityUid? AimedWeapon;
     public EntityUid? AimedTarget;
     public TimeSpan AimedStarted;

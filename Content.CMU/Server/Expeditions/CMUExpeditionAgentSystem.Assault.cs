@@ -23,6 +23,7 @@ public sealed partial class CMUExpeditionAgentSystem
     private static void ClearAssaultOrder(CMUExpeditionAgentComponent agent)
     {
         agent.AssaultDestination = null;
+        agent.AssaultObjectiveSecured = false;
         agent.AssaultBoundDestination = null;
         agent.AssaultNextBound = TimeSpan.Zero;
         agent.NextAssaultRoute = TimeSpan.Zero;
@@ -31,9 +32,12 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void CompleteAssaultOrder(CMUExpeditionAgentComponent agent)
     {
-        ClearAssaultOrder(agent);
+        // Arrival establishes the squad's base of fire. Keep the assault assignment
+        // so one ready member can approach fresh contacts while the others cover.
+        agent.AssaultObjectiveSecured = true;
+        agent.AssaultBoundDestination = null;
         agent.OrderedDestination = null;
-        agent.OrderRally = null;
+        agent.OrderRally = agent.AssaultDestination;
         agent.AssaultDecision = "objective-secured";
         Decision(agent, "assault-complete", "objective-secured");
     }
@@ -63,7 +67,7 @@ public sealed partial class CMUExpeditionAgentSystem
             (agent.CoverDestination != interrupted || agent.State != CMUExpeditionAgentState.Reposition))
         {
             agent.AssaultBoundDestination = null;
-            agent.OrderedDestination = objective;
+            agent.OrderedDestination = agent.AssaultObjectiveSecured ? null : objective;
             agent.AssaultNextBound = now + TimeSpan.FromSeconds(1);
         }
         if (agent.SquadPhase is "anti-rush" or "withdraw" or "anti-armor")
@@ -74,7 +78,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 ClearCover(agent);
                 _steering.Unregister(uid);
                 agent.AssaultBoundDestination = null;
-                agent.OrderedDestination = objective;
+                agent.OrderedDestination = agent.AssaultObjectiveSecured ? null : objective;
                 agent.State = CMUExpeditionAgentState.Guard;
             }
             agent.AssaultDecision = "squad-response-priority";
@@ -103,14 +107,14 @@ public sealed partial class CMUExpeditionAgentSystem
             else
                 agent.OrderRoute.Clear();
             agent.AssaultBoundDestination = null;
-            agent.OrderedDestination = objective;
+            agent.OrderedDestination = agent.AssaultObjectiveSecured ? null : objective;
             agent.AssaultNextBound = now + TimeSpan.FromSeconds(0.8);
             agent.State = CMUExpeditionAgentState.Guard;
             agent.AssaultDecision = "covering-next-bound";
         }
         else if (CommittedMovement(agent) || HasCoverCommitment(uid, agent, now))
             return false;
-        if (_transform.InRange(start, objective, 0.5f))
+        if (!agent.AssaultObjectiveSecured && _transform.InRange(start, objective, 0.5f))
         {
             agent.Home = objective;
             agent.OrderRoute.Clear();
@@ -120,7 +124,31 @@ public sealed partial class CMUExpeditionAgentSystem
             return false;
         }
         var contact = agent.Target is { } enemy && CombatTargetAlive(enemy) && Visible(uid, enemy, WeaponFireRange(uid, agent));
-        if (!contact)
+        var approach = objective;
+        if (agent.AssaultObjectiveSecured)
+        {
+            if (agent.LastSeen is not { } seen || now >= agent.ForgetAt || !Exists(seen.EntityId) ||
+                Transform(seen.EntityId).MapID != Transform(uid).MapID ||
+                !_transform.InRange(objective, seen, agent.LeashRange))
+            {
+                agent.AssaultDecision = "objective-secured";
+                return false;
+            }
+            // Use the observed position, never the hidden target's current transform.
+            var offset = _transform.ToCoordinates(start.EntityId, _transform.ToMapCoordinates(seen)).Position - start.Position;
+            var advance = offset.Length() - agent.PreferredFireRange;
+            if (advance <= 0.5f)
+                return SupportAssaultAdvance(uid, agent, damage, now);
+            approach = start.Offset(Vector2.Normalize(offset) * Math.Min(advance, 6));
+        }
+        if (!AssaultWeaponReady(uid))
+        {
+            agent.AssaultDecision = "preparing-ammunition";
+            if (ReloadSafe(uid, agent) && RunPlan(uid, agent, false, damage, false, now))
+                return true;
+            return SupportAssaultAdvance(uid, agent, damage, now);
+        }
+        if (!contact && !agent.AssaultObjectiveSecured)
         {
             // A remembered enemy or an uncertain sound must not replace the ordered goal.
             // Known danger still rejects lethal corners along the ordinary order route.
@@ -136,20 +164,21 @@ public sealed partial class CMUExpeditionAgentSystem
         if (now < agent.AssaultNextBound || agent.Duty != CMUSquadDuty.Advance && HasLocalAssaultPartner(uid, agent))
             return SupportAssaultAdvance(uid, agent, damage, now);
         agent.AssaultNextBound = now + TimeSpan.FromSeconds(0.6);
-        agent.OrderedDestination = objective;
-        agent.Home = start;
+        agent.OrderedDestination = agent.AssaultObjectiveSecured ? null : objective;
+        if (!agent.AssaultObjectiveSecured)
+            agent.Home = start;
         AdvanceRoute(uid, agent.OrderRoute, start);
         if (agent.OrderRoute.Count == 0)
         {
             if (now < agent.NextAssaultRoute)
                 return SupportAssaultAdvance(uid, agent, damage, now);
-            if (!BorrowSquadRoute(uid, agent, objective))
+            if (!BorrowSquadRoute(uid, agent, approach))
             {
                 if (_orderRouteSearched)
                     return SupportAssaultAdvance(uid, agent, damage, now);
                 _orderRouteSearched = true;
                 agent.NextAssaultRoute = now + TimeSpan.FromSeconds(2);
-                if (!BuildTacticalRoute(uid, agent, objective, ordered: true, allowVaults: false))
+                if (!BuildTacticalRoute(uid, agent, approach, ordered: true, allowVaults: false))
                 {
                     agent.AssaultDecision = "objective-route-blocked";
                     return SupportAssaultAdvance(uid, agent, damage, now);

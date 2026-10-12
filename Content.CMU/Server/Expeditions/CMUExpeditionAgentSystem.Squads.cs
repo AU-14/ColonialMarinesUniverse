@@ -89,9 +89,13 @@ public sealed partial class CMUExpeditionAgentSystem
             !TrySquadCoordinates(center, out center) ||
             action == "patrol-add" && agent.PatrolPoints.Count >= 8)
             return false;
-        foreach (var point in NearbySquadPositions(center, 4))
+        // Travel formations can close to body spacing when a narrow objective cannot
+        // fit the preferred firing intervals. Every member still receives a distinct goal.
+        var travelling = action is "assault" or "move";
+        foreach (var (radius, spacing) in travelling ? new[] { (4, 1.5f), (4, 0.9f), (8, 0.9f) } : new[] { (4, 1.5f) })
+        foreach (var point in NearbySquadPositions(center, radius))
         {
-            if (reserved.Any(other => _transform.InRange(other, point, 1.5f)) || !ValidOrderPoint(uid, point))
+            if (reserved.Any(other => _transform.InRange(other, point, spacing)) || !ValidOrderPoint(uid, point))
                 continue;
             if (action == "patrol-add")
                 agent.PatrolPoints.Add(point);
@@ -126,6 +130,15 @@ public sealed partial class CMUExpeditionAgentSystem
             return true;
         if (agent.OrderedDestination is not { } destination)
             return false;
+        // Survival can decline the assault earlier in Think without clearing its
+        // order. The quiet-contact fallback must not restart that same advance.
+        if (agent.AssaultDestination != null &&
+            (agent.LastDamage >= agent.RetreatDamage || agent.RecoveryUntil > now || agent.SquadPhase == "withdraw"))
+        {
+            _steering.Unregister(uid);
+            agent.AssaultDecision = "recovering-before-advance";
+            return true;
+        }
         var start = Transform(uid).Coordinates;
         if (_transform.InRange(start, destination, 0.5f))
         {

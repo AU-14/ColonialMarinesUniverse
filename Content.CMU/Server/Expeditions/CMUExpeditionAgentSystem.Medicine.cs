@@ -111,6 +111,27 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool HasMedicine(EntityUid uid) => PersonalDressing(uid) != null;
 
+    private bool RunRetreat(EntityUid uid, CMUExpeditionAgentComponent agent, TransformComponent transform,
+        bool hasAmmo, float damage, bool hit, TimeSpan now)
+    {
+        if (agent.State is not (CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.OutOfAmmo) &&
+            (!hasAmmo || damage >= agent.RetreatDamage && now >= agent.NextRetreat &&
+                HasMedicine(uid) && ShouldTreat(agent, damage, now)))
+            BeginRetreat(uid, agent, transform, hasAmmo, now);
+
+        if (agent.State is not (CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.OutOfAmmo))
+            return false;
+        if (!hasAmmo && (hit || GrenadeDanger(transform.Coordinates)) && now >= agent.NextRetreat)
+            BeginRetreat(uid, agent, transform, false, now);
+        if (ContinueMove(uid, agent, transform, now) || TryTreat(uid, agent, damage, now))
+            return true;
+        if (!hasAmmo || now < agent.HoldUntil)
+            return true;
+        agent.State = agent.CoverAnchor != null ? CMUExpeditionAgentState.Recover : CMUExpeditionAgentState.Guard;
+        agent.FireAt = now;
+        return false;
+    }
+
     private static bool ShouldTreat(CMUExpeditionAgentComponent agent, float damage, TimeSpan now)
     {
         if (damage < agent.HealDamage || now < agent.NextHeal)
