@@ -22,7 +22,6 @@ public sealed partial class PainShockSystem : SharedPainShockSystem
     private static readonly string[] ModeratePainReflections =
     {
         "cmu-medical-pain-reflection-moderate-1",
-        "cmu-medical-pain-reflection-moderate-2",
         "cmu-medical-pain-reflection-moderate-3",
     };
 

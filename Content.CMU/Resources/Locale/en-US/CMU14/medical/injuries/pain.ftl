@@ -8,19 +8,18 @@ cmu-medical-pain-shock-pulse         = Pain shock overwhelms you!
 
 cmu-medical-pain-reflection-mild-1 = Something aches.
 cmu-medical-pain-reflection-mild-2 = You can still ignore the pain.
-cmu-medical-pain-reflection-mild-3 = Your body keeps reminding you.
+cmu-medical-pain-reflection-mild-3 = Your body aches.
 
 cmu-medical-pain-reflection-moderate-1 = This hurts. You need painkillers.
-cmu-medical-pain-reflection-moderate-2 = Focus. Breathe. It still hurts.
 cmu-medical-pain-reflection-moderate-3 = The pain keeps pulling at your thoughts.
 
-cmu-medical-pain-reflection-severe-1 = Every movement hurts. Stop. No, move.
+cmu-medical-pain-reflection-severe-1 = Every movement hurts.
 cmu-medical-pain-reflection-severe-2 = Painkillers. Need painkillers. Right now.
 cmu-medical-pain-reflection-severe-3 = It is getting hard to think in full thoughts.
 
-cmu-medical-pain-reflection-shock-1 = Too much. Too much. Make it stop.
+cmu-medical-pain-reflection-shock-1 = The pain is too much. Make it stop.
 cmu-medical-pain-reflection-shock-2 = Pain. Help. Now. Now.
-cmu-medical-pain-reflection-shock-3 = Can't think. Can't breathe. Make it stop.
+cmu-medical-pain-reflection-shock-3 = You can't think straight. Make the pain stop.
 
 cmu-medical-pain-relief-1 = The painkiller starts to take the edge off.
 cmu-medical-pain-relief-2 = The pain dulls. You can breathe a little easier.
