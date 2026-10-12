@@ -425,9 +425,17 @@ jobs:
               & FullyQualifiedName!~CMU14.Dropship.MohawkLandingTest.
           - name: cmu_spatial
             filter: >-
-              FullyQualifiedName~CMU14.ZLevels.
+              (FullyQualifiedName~CMU14.ZLevels.
               | FullyQualifiedName~CMU14.Camera.
-              | FullyQualifiedName~Content.IntegrationTests.CMU.
+              | FullyQualifiedName~Content.IntegrationTests.CMU.)
+              & (FullyQualifiedName!~CMU14.Camera.CameraNetworkSystemTest.
+              | (Name!~Rmc & Name!~Static & Name!~Member & Name!~Cmu))
+          # CMU14: half of CameraNetworkSystemTest by method name, it was most of cmu_spatial.
+          # cmu_spatial runs the other half, keep these words in sync with its exclusions
+          - name: cmu_camera
+            filter: >-
+              FullyQualifiedName~CMU14.Camera.CameraNetworkSystemTest.
+              & (Name~Rmc | Name~Static | Name~Member | Name~Cmu)
           # CMU14: keep the largest Yautja fixtures in separate test processes.
           - name: cmu_yautja
             filter: >-
@@ -578,7 +586,7 @@ jobs:
           case "$shard" in
             # CMU14: destructive smoke pairs approach the runner's memory limit in parallel.
             cmu_yautja_smoke) workers=1 ;;
-            post_map_init*|cmu|cmu_systems|cmu_spatial|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
+            post_map_init*|cmu|cmu_systems|cmu_spatial|cmu_camera|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
             cmu_lobby_ui) workers=1 ;;
             # CMU14: every 3D case makes its own pair, two at once is the memory peak
             cmu_threed) workers=1 ;;
