@@ -229,7 +229,11 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         _window.ChemicalsContainer.Visible = anyChemicals;
         _window.ChemicalContentsCard.Visible = anyChemicals || uiState.UnknownChemicals;
 
-        _window.BloodTypeLabel.Text = "Blood:";
+        // cmu edit start: blood type and saline share
+        _window.BloodTypeLabel.Text = uiState.CMUBloodType is { } bloodType
+            ? Loc.GetString("cmu-health-analyzer-blood-type", ("type", bloodType))
+            : "Blood:";
+        // cmu edit end
         var bloodMsg = new FormattedMessage();
         bloodMsg.PushColor(Color.FromHex("#25B732"));
 
@@ -237,6 +241,14 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         var percentageString = MathHelper.CloseTo(percentage, 100) ? "100%" : $"{percentage:F1}%";
         bloodMsg.AddText($"{percentageString}, {uiState.Blood}cl");
         bloodMsg.Pop();
+        // cmu edit start
+        if (uiState.CMUSalinePercent >= 1f)
+        {
+            bloodMsg.PushColor(Color.FromHex(uiState.CMUSalinePercent > 25f ? "#DF8A3E" : "#5B88B0"));
+            bloodMsg.AddText($" ({Loc.GetString("cmu-health-analyzer-saline", ("percent", (int) uiState.CMUSalinePercent))})");
+            bloodMsg.Pop();
+        }
+        // cmu edit end
         _window.BloodAmountLabel.SetMessage(bloodMsg);
 
         // cmu edit start

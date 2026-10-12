@@ -20,6 +20,7 @@ using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CMU14.CharacterDescription;
+using Content.Shared.CMU14.Medical.Blood; // CMU14
 using Content.Shared.Body;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
@@ -694,6 +695,11 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
     private void BakeCharacterDescription(EntityUid uid, HumanoidCharacterProfile profile)
     {
+        // CMU14: blood type from the profile
+        var bloodType = EnsureComp<CMUBloodTypeComponent>(uid);
+        bloodType.Type = profile.BloodType;
+        Dirty(uid, bloodType);
+
         var comp = AddComp<CharacterDescriptionComponent>(uid);
         comp.ShortExamine = profile.ShortExamine;
         comp.FullDescription = profile.FullDescription;

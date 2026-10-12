@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Medical.IV;
+using Content.Shared.CMU14.Medical.Blood; // CMU14
 using Content.Shared.Rounding;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -17,6 +18,14 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
             _overlay.AddOverlay(new IVDripOverlay());
 
         SubscribeNetworkEvent<DialysisDetachedEvent>(OnDialysisDetachedEvent);
+        SubscribeLocalEvent<CMUBloodPackTypeComponent, AfterAutoHandleStateEvent>(OnBloodTypeLabelState); // CMU14
+    }
+
+    // CMU14: redraw the blood type label when it changes
+    private void OnBloodTypeLabelState(Entity<CMUBloodPackTypeComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        if (TryComp(ent, out BloodPackComponent? pack))
+            UpdatePackAppearance((ent.Owner, pack));
     }
 
     private void OnDialysisDetachedEvent(DialysisDetachedEvent ev)
@@ -74,8 +83,25 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
         if (!TryComp(pack, out SpriteComponent? sprite))
             return;
 
-        // TODO RMC14 blood types
-        _spriteSystem.LayerSetVisible((pack.Owner, sprite), BloodPackVisuals.Label, false);
+        // CMU14: label the pack with its blood type ("x" when mixed)
+        string? label = null;
+        if (TryComp(pack, out CMUBloodPackTypeComponent? bloodType))
+        {
+            if (bloodType.Mixed)
+                label = "x";
+            else if (bloodType.Type is { } type)
+                label = CMUBloodTypes.LabelState(type);
+        }
+
+        if (label != null && _spriteSystem.LayerMapTryGet((pack.Owner, sprite), BloodPackVisuals.Label, out var labelLayer, false))
+        {
+            _spriteSystem.LayerSetRsiState((pack.Owner, sprite), labelLayer, label);
+            _spriteSystem.LayerSetVisible((pack.Owner, sprite), labelLayer, true);
+        }
+        else
+        {
+            _spriteSystem.LayerSetVisible((pack.Owner, sprite), BloodPackVisuals.Label, false);
+        }
 
         if (_spriteSystem.LayerMapTryGet((pack.Owner, sprite), BloodPackVisuals.Fill, out var fillLayer, false))
         {

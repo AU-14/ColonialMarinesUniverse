@@ -120,12 +120,17 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
                         packSol,
                         bloodstream,
                         packComponent.TransferableReagents,
-                        ivComp.TransferAmount);
+                        ivComp.TransferAmount * CMUFlowMultiplier(ivId, pack), // CMU14: pressure bags and plasma flow faster
+                        pack,
+                        attachedTo);
             }
             else
             {
                 if (packSol.Volume < packSol.MaxVolume)
+                {
                     TransferReferenceBlood(packSolEnt.Value, streamSolEnt.Value, streamSol, bloodstream, ivComp.TransferAmount);
+                    CMUOnBloodDrawn(pack, attachedTo); // CMU14: label the pack with the donor's blood type
+                }
             }
 
             Dirty(ivId, ivComp);
@@ -165,12 +170,17 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
                         packSol,
                         bloodstream,
                         packComp.TransferableReagents,
-                        packComp.TransferAmount);
+                        packComp.TransferAmount * CMUFlowMultiplier(null, packId), // CMU14: squeezing and plasma flow faster
+                        packId,
+                        attachedTo);
             }
             else
             {
                 if (packSol.Volume < packSol.MaxVolume)
+                {
                     TransferReferenceBlood(packSolEnt.Value, streamSolEnt.Value, streamSol, bloodstream, packComp.TransferAmount);
+                    CMUOnBloodDrawn(packId, attachedTo); // CMU14: label the pack with the donor's blood type
+                }
             }
 
             Dirty(packId, packComp);
@@ -246,7 +256,9 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
         Solution sourceSolution,
         BloodstreamComponent bloodstream,
         string[] transferableReagents,
-        FixedPoint2 amount)
+        FixedPoint2 amount,
+        EntityUid pack, // CMU14
+        EntityUid recipient) // CMU14
     {
         amount = FixedPoint2.Min(amount, destination.Comp.Solution.AvailableVolume);
         if (amount <= FixedPoint2.Zero)
@@ -258,6 +270,14 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
         var transferred = sourceSolution.SplitSolutionWithOnly(amount, transferablePrototypes);
         if (transferred.Volume <= FixedPoint2.Zero)
             return;
+
+        // CMU14: plasma and saline become blood volume, and mismatched blood types are destroyed
+        CMUProcessTransfusion(pack, recipient, bloodstream, transferred);
+        if (transferred.Volume <= FixedPoint2.Zero)
+        {
+            Dirty(source);
+            return;
+        }
 
         // Blood packs do not model compatibility yet. Convert matching donor blood IDs (including DNA data)
         // to the recipient's reference IDs so they restore blood volume instead of metabolizing as foreign blood.

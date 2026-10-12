@@ -179,7 +179,29 @@
       entries:
       - id: CMBloodPackFull
         amount: 45
+      - id: CMUBloodPackFullOPositive
+        amount: 10
+      - id: CMUBloodPackFullAPositive
+        amount: 10
+      - id: CMUBloodPackFullANegative
+        amount: 10
+      - id: CMUBloodPackFullBPositive
+        amount: 10
+      - id: CMUBloodPackFullBNegative
+        amount: 10
+      - id: CMUBloodPackFullABPositive
+        amount: 10
+      - id: CMUBloodPackFullABNegative
+        amount: 10
       - id: CMUSynthBloodPackFull
+        amount: 6
+    - name: Plasma and Saline
+      entries:
+      - id: CMUBloodPlasmaPack
+        amount: 15
+      - id: CMUSalineBag
+        amount: 20
+      - id: CMUIVPressureBag
         amount: 6
     - name: Empty Packs
       entries:

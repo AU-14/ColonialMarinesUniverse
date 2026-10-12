@@ -46,3 +46,6 @@ reagent-name-cmu-meth-base                   = Methamphetamine Freebase
 reagent-desc-cmu-meth-base                   = A volatile freebase compound, one step removed from a stable, injectable drug.
 reagent-name-cmu-methamphetamine             = Methamphetamine
 reagent-desc-cmu-methamphetamine             = A potent synthetic stimulant. Produces a powerful rush of speed and energy, at the cost of your heart and your health.
+
+reagent-name-cmu-blood-plasma = blood plasma
+reagent-desc-cmu-blood-plasma = The liquid part of blood. Given from a plasma pack it restores blood volume quickly for any blood type and slows bleeding for a while.

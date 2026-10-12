@@ -19,6 +19,7 @@ using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.Medical.Blood; // CMU14
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
@@ -266,7 +267,11 @@ namespace Content.Server.Preferences.Managers
                 Enum.TryParse<BuildType>(profile.Build, out var build) ? build : BuildType.Average,
                 profile.HideMetaInformation,
                 YautjaProfileSerializer.DeserializeYautjaProfile(profile.YautjaProfile)
-            ).WithForceOnForcePreferences((ForceOnForceSide) profile.FoFSide, (ForceOnForceFallback) profile.FoFFallback);
+            ).WithForceOnForcePreferences((ForceOnForceSide) profile.FoFSide, (ForceOnForceFallback) profile.FoFFallback)
+             // CMU14: profiles saved before blood types get a stable default until the player picks one
+             .WithBloodType(CMUBloodTypes.TryParse(profile.BloodType, out var bloodType)
+                 ? bloodType
+                 : CMUBloodTypes.StableDefault(profile.CharacterName));
         }
 
         private static HashSet<ProtoId<ThreatPrototype>> ConvertThreatPreferences(string? raw)

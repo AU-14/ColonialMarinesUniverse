@@ -16,3 +16,18 @@
       # The wounds themselves still need treating.
       - !type:Hemostatic
         potency: 1
+
+# CMU14: blood plasma. A plasma pack turns it straight into blood volume and slows bleeding for a while.
+- type: reagent
+  id: CMUBloodPlasma
+  name: reagent-name-cmu-blood-plasma
+  desc: reagent-desc-cmu-blood-plasma
+  group: Medicine
+  flavor: metallic
+  physicalDesc: reagent-physical-desc-viscous
+  color: "#e8c46a"
+  metabolisms:
+    Bloodstream:
+      effects:
+      - !type:ModifyBloodLevel
+        amount: 2

@@ -1,0 +1,45 @@
+<Document>
+  # Blood and Transfusions
+
+  Blood lost to bleeding has to be put back. Stop the bleeding first, then give blood, plasma or saline through a blood pack or an IV stand. See [textlink="Wounds and Bleeding" link="CMUGuideMedicalWounds"].
+
+  ## Blood Types
+  Everyone has a blood type, picked in character creation. A health analyzer shows the patient's type next to their blood level.
+  - Blood packs are labelled with their type. Blood from the WeYu Blood Dispenser comes in every type.
+  - Only give blood the patient can take. [bold]O-[/bold] can go to anyone, and [bold]AB+[/bold] can take any blood.
+
+  Who can take what:
+  - [bold]O-[/bold] patients: O- only.
+  - [bold]O+[/bold]: O- and O+.
+  - [bold]A-[/bold]: O- and A-.
+  - [bold]A+[/bold]: O-, O+, A- and A+.
+  - [bold]B-[/bold]: O- and B-.
+  - [bold]B+[/bold]: O-, O+, B- and B+.
+  - [bold]AB-[/bold]: O-, A-, B- and AB-.
+  - [bold]AB+[/bold]: any type.
+
+  - [color=red]The wrong type is destroyed in the bloodstream[/color]. It restores no blood, and it poisons the patient.
+  - Drawing blood from someone into an empty pack labels it with their type. Filling one pack from two different types makes it [color=red]mixed[/color], safe for nobody. An emptied pack can be refilled with any type.
+
+  ## Giving Blood
+  <Box>
+    <GuideEntityEmbed Entity="CMBloodPackFull" Caption="Blood pack (O-)"/>
+    <GuideEntityEmbed Entity="CMUBloodPlasmaPack" Caption="Plasma pack"/>
+    <GuideEntityEmbed Entity="CMUSalineBag" Caption="Saline bag"/>
+    <GuideEntityEmbed Entity="CMUIVPressureBag" Caption="Pressure bag"/>
+  </Box>
+  - [bold]From your hand[/bold]: use a pack on the patient to hook it up. It stays connected while you hold it.
+  - [bold]Squeeze it[/bold]: use the connected pack in your hand to squeeze it. It runs in three times as fast for a few seconds; keep squeezing to keep it going.
+  - [bold]IV stand[/bold]: hang the pack on a stand and drag the stand onto the patient. Fit a [bold]pressure bag[/bold] by using it on the stand and the drip runs twice as fast. Take it off again with the stand's alt-click option.
+
+  ## Plasma
+  - Plasma runs in twice as fast as whole blood and suits every blood type.
+  - For a while after it's given, it [bold]slows all bleeding by half[/bold], open wounds and internal bleeding alike. The more plasma, the longer it lasts, up to 5 minutes.
+  - It doesn't stop bleeding: treat the wounds as usual.
+
+  ## Saline
+  - Saline fills lost blood volume for any blood type, but it isn't blood.
+  - [color=red]If more than a quarter of a patient's blood is saline, it starts poisoning them[/color], harder the further past that it goes.
+  - The health analyzer shows how much of the blood is saline. It turns orange once it's past the safe share.
+  - The body slowly replaces saline with real blood. Use it to buy time, then follow up with blood.
+</Document>
