@@ -1,4 +1,4 @@
-# Tranexamic acid is made in two steps, like the real thing: aminomethylbenzoic acid, then hydrogen over a platinum catalyst.
+# Tranexamic acid is made in two steps, like the real thing: aminomethylbenzoic acid, then hydrogen.
 - type: reaction
   id: CMUAminomethylbenzoicAcid
   reactants:
@@ -22,8 +22,5 @@
       amount: 2
     CMInaprovaline:
       amount: 1
-    RMCPlatinum:
-      amount: 1
-      catalyst: true
   products:
     CMUTranexamicAcid: 3
