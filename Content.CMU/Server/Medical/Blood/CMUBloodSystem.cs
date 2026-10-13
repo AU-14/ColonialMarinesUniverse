@@ -226,6 +226,32 @@ public sealed class CMUBloodSystem : EntitySystem
     }
 
     /// <summary>
+    /// Whether the pack holds blood or plasma that would hurt the recipient. Such a pack keeps flowing even into a full bloodstream,
+    /// since the bad blood is destroyed instead of adding volume.
+    /// </summary>
+    public bool IsHarmfulTransfusion(EntityUid pack, EntityUid recipient, BloodstreamComponent bloodstream, Solution packSolution)
+    {
+        var references = _bloodstream.GetReferenceReagentPrototypes((recipient, bloodstream));
+        var hasBlood = references.Any(r => packSolution.GetTotalPrototypeQuantity(r.Id) > FixedPoint2.Zero);
+        var hasPlasma = packSolution.GetTotalPrototypeQuantity(PlasmaReagent.Id) > FixedPoint2.Zero;
+        if (!hasBlood && !hasPlasma)
+            return false;
+
+        if (TryComp<CMUPerishableBloodComponent>(pack, out var perishable) && perishable.Spoiled)
+            return true;
+
+        if (!TryComp<CMUBloodPackTypeComponent>(pack, out var label) || label is { Mixed: false, Type: null })
+            return false;
+
+        if (label.Mixed || label.Type is not { } donor)
+            return true;
+
+        var recipientType = GetBloodType(recipient);
+        return hasBlood && !CMUBloodTypes.CanReceive(recipientType, donor) ||
+               hasPlasma && !CMUBloodTypes.CanReceivePlasma(recipientType, donor);
+    }
+
+    /// <summary>
     /// Turns plasma and saline in a transfusion into blood volume, and destroys blood or plasma the recipient can't take.
     /// </summary>
     public void ProcessTransfusion(EntityUid pack, EntityUid recipient, BloodstreamComponent bloodstream, Solution transferred)

@@ -3,6 +3,7 @@ using Content.Shared.CMU14.Medical.Blood; // CMU14
 using Content.Shared.Rounding;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Shared.Utility; // CMU14
 
 namespace Content.Client._RMC14.Medical.IV;
 
@@ -93,14 +94,17 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
                 label = CMUBloodTypes.LabelState(type);
         }
 
-        if (label != null && _spriteSystem.LayerMapTryGet((pack.Owner, sprite), BloodPackVisuals.Label, out var labelLayer, false))
+        // The label goes on its own layer added after every other one so the fill can never draw over it.
+        _spriteSystem.LayerSetVisible((pack.Owner, sprite), BloodPackVisuals.Label, false);
+        if (label != null)
         {
-            _spriteSystem.LayerSetRsiState((pack.Owner, sprite), labelLayer, label);
+            var labelLayer = _spriteSystem.LayerMapReserve((pack.Owner, sprite), CMUBloodPackLabelLayer.Label);
+            _spriteSystem.LayerSetRsi((pack.Owner, sprite), labelLayer, new ResPath("_RMC14/Objects/Medical/blood_pack.rsi"), label);
             _spriteSystem.LayerSetVisible((pack.Owner, sprite), labelLayer, true);
         }
-        else
+        else if (_spriteSystem.LayerMapTryGet((pack.Owner, sprite), CMUBloodPackLabelLayer.Label, out var oldLabel, false))
         {
-            _spriteSystem.LayerSetVisible((pack.Owner, sprite), BloodPackVisuals.Label, false);
+            _spriteSystem.LayerSetVisible((pack.Owner, sprite), oldLabel, false);
         }
 
         if (_spriteSystem.LayerMapTryGet((pack.Owner, sprite), BloodPackVisuals.Fill, out var fillLayer, false))
@@ -155,4 +159,10 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
             _spriteSystem.LayerSetVisible((dialysis.Owner, sprite), filteringLayer, showFiltering);
         }
     }
+}
+
+// CMU14: the blood type label's own sprite layer
+public enum CMUBloodPackLabelLayer : byte
+{
+    Label,
 }

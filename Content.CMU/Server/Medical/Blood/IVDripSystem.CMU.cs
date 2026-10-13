@@ -20,4 +20,7 @@ public sealed partial class IVDripSystem
 
     private void CMUProcessTransfusion(EntityUid pack, EntityUid recipient, BloodstreamComponent bloodstream, Solution transferred)
         => _cmuBlood.ProcessTransfusion(pack, recipient, bloodstream, transferred);
+
+    private bool CMUIsHarmfulTransfusion(EntityUid pack, EntityUid recipient, BloodstreamComponent bloodstream, Solution packSolution)
+        => _cmuBlood.IsHarmfulTransfusion(pack, recipient, bloodstream, packSolution);
 }

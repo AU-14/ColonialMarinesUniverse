@@ -113,7 +113,9 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
 
             if (ivComp.Injecting)
             {
-                if (streamSolEnt.Value.Comp.Solution.Volume < streamSolEnt.Value.Comp.Solution.MaxVolume)
+                // CMU14: incompatible or spoiled blood keeps flowing into a full bloodstream so it still causes a reaction
+                if (streamSolEnt.Value.Comp.Solution.Volume < streamSolEnt.Value.Comp.Solution.MaxVolume ||
+                    CMUIsHarmfulTransfusion(pack, attachedTo, bloodstream, packSol))
                     TransferBloodToRecipient(
                         streamSolEnt.Value,
                         packSolEnt.Value,
@@ -163,7 +165,9 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
 
             if (packComp.Injecting)
             {
-                if (streamSolEnt.Value.Comp.Solution.Volume < streamSolEnt.Value.Comp.Solution.MaxVolume)
+                // CMU14: incompatible or spoiled blood keeps flowing into a full bloodstream so it still causes a reaction
+                if (streamSolEnt.Value.Comp.Solution.Volume < streamSolEnt.Value.Comp.Solution.MaxVolume ||
+                    CMUIsHarmfulTransfusion(packId, attachedTo, bloodstream, packSol))
                     TransferBloodToRecipient(
                         streamSolEnt.Value,
                         packSolEnt.Value,
@@ -262,7 +266,10 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
         EntityUid pack, // CMU14
         EntityUid recipient) // CMU14
     {
-        amount = FixedPoint2.Min(amount, destination.Comp.Solution.AvailableVolume);
+        // CMU14: harmful blood is destroyed rather than added, so it isn't capped by the room left in the bloodstream
+        if (!CMUIsHarmfulTransfusion(pack, recipient, bloodstream, sourceSolution))
+            amount = FixedPoint2.Min(amount, destination.Comp.Solution.AvailableVolume);
+
         if (amount <= FixedPoint2.Zero)
             return;
 
@@ -292,6 +299,11 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
             transferred.RemoveReagent(referenceReagent, quantity, ignoreReagentData: true);
             transferred.AddReagent(referenceReagent, quantity);
         }
+
+        // CMU14: whatever doesn't fit after harmful blood was destroyed goes back into the pack
+        var overflow = transferred.Volume - destination.Comp.Solution.AvailableVolume;
+        if (overflow > FixedPoint2.Zero)
+            _solutionContainer.TryAddSolution(source, transferred.SplitSolution(overflow));
 
         if (!_solutionContainer.TryAddSolution(destination, transferred))
             _solutionContainer.TryAddSolution(source, transferred);
