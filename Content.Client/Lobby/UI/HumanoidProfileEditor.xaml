@@ -127,41 +127,6 @@
                                                    StyleClasses="SpeciesInfoDefault" />
                                     <LineEdit Name="XenoPostfix" HorizontalAlignment="Right" MinWidth="100" />
                                 </BoxContainer>
-                                <!-- cmu edit start -->
-                                <!-- FOB security squad opt-in. Its own card so it reads as a choice with
-                                     consequences rather than another one-line setting. Short lines only:
-                                     this tab scrolls sideways, so long text never wraps. -->
-                                <PanelContainer StyleClasses="CrtInsetPanel" Margin="0 8 0 2">
-                                    <BoxContainer Orientation="Vertical" SeparationOverride="6">
-                                        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
-                                            <Label Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-title'}"
-                                                   StyleClasses="CrtSectionTitle"
-                                                   VerticalAlignment="Center" />
-                                            <PanelContainer StyleClasses="CrtSectionRule"
-                                                            HorizontalExpand="True"
-                                                            VerticalAlignment="Center"
-                                                            MinHeight="1" />
-                                        </BoxContainer>
-                                        <BoxContainer Orientation="Horizontal" SeparationOverride="12">
-                                            <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="2">
-                                                <Label Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-names'}" />
-                                                <Label Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-role'}"
-                                                       StyleClasses="CrtDimText" />
-                                            </BoxContainer>
-                                            <Button Name="FoxtrotSquadOptInButton"
-                                                    ToggleMode="True"
-                                                    StyleClasses="CrtReadyToggle"
-                                                    MinWidth="140"
-                                                    VerticalAlignment="Center"
-                                                    ToolTip="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-tooltip'}" />
-                                        </BoxContainer>
-                                        <BoxContainer Orientation="Vertical" SeparationOverride="1">
-                                            <Label Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-point-roles'}" StyleClasses="CrtDimText" />
-                                            <Label Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-point-full'}" StyleClasses="CrtDimText" />
-                                        </BoxContainer>
-                                    </BoxContainer>
-                                </PanelContainer>
-                                <!-- cmu edit end -->
                                 <cc:HSeparator Color="#16823E" Margin="0 5" />
                                 <!-- Species -->
                                 <!-- cmu edit start -->
@@ -208,6 +173,40 @@
                                     <Control HorizontalExpand="True"/>
                                     <OptionButton Name="SpawnPriorityButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
+                                <!-- cmu edit start -->
+                                <!-- FOB security squad opt-in. Its own card so it reads as a choice with
+                                     consequences rather than another one-line setting. Short lines only:
+                                     this tab scrolls sideways, so long text never wraps. -->
+                                <PanelContainer StyleClasses="CrtInsetPanel" Margin="0 8 0 2">
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                                        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                                            <Label Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-title'}"
+                                                   StyleClasses="CrtSectionTitle"
+                                                   VerticalAlignment="Center" />
+                                            <PanelContainer StyleClasses="CrtSectionRule"
+                                                            HorizontalExpand="True"
+                                                            VerticalAlignment="Center"
+                                                            MinHeight="1" />
+                                        </BoxContainer>
+                                        <BoxContainer Orientation="Horizontal" SeparationOverride="12">
+                                            <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="2">
+                                                <Label Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-role'}"
+                                                       StyleClasses="CrtDimText" />
+                                            </BoxContainer>
+                                            <Button Name="FoxtrotSquadOptInButton"
+                                                    ToggleMode="True"
+                                                    StyleClasses="CrtReadyToggle"
+                                                    MinWidth="140"
+                                                    VerticalAlignment="Center"
+                                                    ToolTip="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-tooltip'}" />
+                                        </BoxContainer>
+                                        <BoxContainer Orientation="Vertical" SeparationOverride="1">
+                                            <Label Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-point-roles'}" StyleClasses="CrtDimText" />
+                                            <Label Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-point-full'}" StyleClasses="CrtDimText" />
+                                        </BoxContainer>
+                                    </BoxContainer>
+                                </PanelContainer>
+                                <!-- cmu edit end -->
                                 <!-- Synthetic -->
                                 <BoxContainer Name="SyntheticContainer" Orientation="Vertical" />
                             </BoxContainer>

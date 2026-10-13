@@ -1,5 +1,4 @@
 cmu-humanoid-profile-editor-foxtrot-squad-title = FOB SECURITY SQUAD
-cmu-humanoid-profile-editor-foxtrot-squad-names = Foxtrot (GOVFOR) / Victor (OPFOR)
 cmu-humanoid-profile-editor-foxtrot-squad-role = Builds and secures the FOB.
 cmu-humanoid-profile-editor-foxtrot-squad-point-roles = - If you join as Comtech, RTO or SL you will be put into Security Squad.
 cmu-humanoid-profile-editor-foxtrot-squad-point-full = - If it's full, you join a regular squad
