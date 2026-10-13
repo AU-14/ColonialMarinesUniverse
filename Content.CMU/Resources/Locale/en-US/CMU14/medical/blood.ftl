@@ -3,7 +3,9 @@ cmu-humanoid-profile-editor-blood-type-tooltip = Your character's blood type. Bl
 
 cmu-blood-pack-examine-type = The label reads [color=#d10a0a][bold]{ $type }[/bold][/color].
 cmu-blood-pack-examine-mixed = The label is crossed out: it holds [color=#d10a0a]mixed blood[/color] that's safe for nobody.
-cmu-blood-pack-squeeze = You squeeze { THE($pack) }, forcing it in faster.
+cmu-blood-pack-squeeze = You squeeze { THE($pack) }.
+cmu-blood-pack-squeeze-start = You start squeezing { THE($pack) } to force it in faster.
+cmu-blood-pack-squeeze-stop = You stop squeezing { THE($pack) }.
 cmu-blood-mismatch-reaction = Your veins burn!
 
 cmu-iv-pressure-bag-fitted = You fit the pressure bag to { THE($iv) }.

@@ -367,15 +367,65 @@ public sealed class CMUBloodSystem : EntitySystem
 
     private void OnPackUseInHand(Entity<BloodPackComponent> ent, ref UseInHandEvent args)
     {
-        if (args.Handled || ent.Comp.AttachedTo == null || !ent.Comp.Injecting)
+        if (args.Handled)
+            return;
+
+        // Pressing it again stops squeezing.
+        if (TryComp<CMUBloodPackSqueezeComponent>(ent, out var existing) && existing.Squeezer != null)
+        {
+            args.Handled = true;
+            StopSqueezing((ent.Owner, existing));
+            return;
+        }
+
+        if (ent.Comp.AttachedTo == null || !ent.Comp.Injecting)
             return;
 
         args.Handled = true;
         var squeeze = EnsureComp<CMUBloodPackSqueezeComponent>(ent);
-        squeeze.Until = _timing.CurTime + squeeze.Duration;
+        squeeze.Squeezer = args.User;
+        squeeze.NextSqueeze = _timing.CurTime;
         Dirty(ent, squeeze);
 
-        _popup.PopupEntity(Loc.GetString("cmu-blood-pack-squeeze", ("pack", ent.Owner)), args.User, args.User);
+        _popup.PopupEntity(Loc.GetString("cmu-blood-pack-squeeze-start", ("pack", ent.Owner)), args.User, args.User);
+    }
+
+    private void StopSqueezing(Entity<CMUBloodPackSqueezeComponent> ent)
+    {
+        if (ent.Comp.Squeezer is not { } user)
+            return;
+
+        ent.Comp.Squeezer = null;
+        Dirty(ent);
+        _popup.PopupEntity(Loc.GetString("cmu-blood-pack-squeeze-stop", ("pack", ent.Owner)), user, user);
+    }
+
+    private void UpdateSqueezing(TimeSpan now)
+    {
+        var query = EntityQueryEnumerator<CMUBloodPackSqueezeComponent, BloodPackComponent>();
+        while (query.MoveNext(out var uid, out var squeeze, out var pack))
+        {
+            if (squeeze.Squeezer is not { } user)
+                continue;
+
+            if (TerminatingOrDeleted(user) ||
+                !_hands.IsHolding(user, uid) ||
+                _mobState.IsIncapacitated(user) ||
+                pack.AttachedTo == null ||
+                !pack.Injecting)
+            {
+                StopSqueezing((uid, squeeze));
+                continue;
+            }
+
+            if (now < squeeze.NextSqueeze)
+                continue;
+
+            squeeze.NextSqueeze = now + squeeze.Interval;
+            squeeze.Until = now + squeeze.Interval + TimeSpan.FromSeconds(1);
+            Dirty(uid, squeeze);
+            _popup.PopupEntity(Loc.GetString("cmu-blood-pack-squeeze", ("pack", uid)), user, user);
+        }
     }
 
     private void OnIVInteractUsing(Entity<IVDripComponent> ent, ref InteractUsingEvent args)
@@ -460,6 +510,7 @@ public sealed class CMUBloodSystem : EntitySystem
         base.Update(frameTime);
 
         var now = _timing.CurTime;
+        UpdateSqueezing(now);
         if (now < _nextSalineTick)
             return;
 

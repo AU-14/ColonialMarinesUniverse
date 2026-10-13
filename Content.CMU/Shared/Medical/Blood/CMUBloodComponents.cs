@@ -36,15 +36,24 @@ public sealed partial class CMUIVFlowComponent : Component
     public float Multiplier = 1f;
 }
 
-/// <summary>A blood pack being squeezed by hand flows faster until <see cref="Until"/>.</summary>
+/// <summary>
+/// A blood pack being squeezed by hand. While <see cref="Squeezer"/> keeps holding it they squeeze it every <see cref="Interval"/>,
+/// and it flows faster until <see cref="Until"/>.
+/// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 public sealed partial class CMUBloodPackSqueezeComponent : Component
 {
+    [DataField, AutoNetworkedField]
+    public EntityUid? Squeezer;
+
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan Until;
 
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    public TimeSpan NextSqueeze;
+
     [DataField]
-    public TimeSpan Duration = TimeSpan.FromSeconds(5);
+    public TimeSpan Interval = TimeSpan.FromSeconds(3);
 
     [DataField]
     public float Multiplier = 3f;
