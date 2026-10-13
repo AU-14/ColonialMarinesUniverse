@@ -4,7 +4,6 @@ using Content.Client.Lobby.UI;
 using Content.Client.Stylesheets;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.Tracker.SquadLeader;
-using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.Mobs;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -21,7 +20,7 @@ public readonly record struct CMURosterEntry(OverwatchMarine Marine, string Disp
 /// <summary>
 /// The overwatch squad roster, grouped the way the squad talks on the radio: squad lead, each
 /// fireteam (with its nickname), the unassigned, then tripod cameras. Each row carries the
-/// marine's callsign, a health bar and bleeding/SSD tags.
+/// marine's callsign, a health bar and an SSD tag.
 /// </summary>
 /// <remarks>
 /// Rows are kept and moved between groups rather than rebuilt, because the console refreshes
@@ -308,7 +307,6 @@ public sealed class CMUOverwatchRoster : BoxContainer
         public readonly Label Role;
         public readonly CMUOverwatchHealthBar Health;
         public readonly Label State;
-        public readonly Label Bleeding;
         public readonly Label Ssd;
         public readonly Label Location;
         public readonly Label Distance;
@@ -329,7 +327,6 @@ public sealed class CMUOverwatchRoster : BoxContainer
             // Not clipped: a clipped label in a box of its own asks for no width at all and vanishes.
             // The status box clips them instead.
             State = new Label { VerticalAlignment = VAlignment.Center };
-            Bleeding = new Label { VerticalAlignment = VAlignment.Center };
             Ssd = new Label { VerticalAlignment = VAlignment.Center, Text = Loc.GetString("rmc-overwatch-console-ssd") };
             Location = Cell(LocationRatio);
             Distance = Cell(DistanceRatio);
@@ -345,7 +342,7 @@ public sealed class CMUOverwatchRoster : BoxContainer
                 MinWidth = MinCellWidth,
                 RectClipContent = true,
                 SeparationOverride = 5,
-                Children = { Health, State, Bleeding, Ssd },
+                Children = { Health, State, Ssd },
             };
 
             // Who and how they are on top; where they are and what to do with them below.
@@ -411,13 +408,16 @@ public sealed class CMUOverwatchRoster : BoxContainer
                 : Loc.GetString("rmc-overwatch-console-hide-marine");
 
             Hide.Visible = !isLeader && !entry.IsTripod;
-            Promote.Visible = !isLeader && !entry.IsTripod;
+            Promote.Visible = !entry.IsTripod;
+            Promote.Disabled = isLeader;
+            Promote.ToolTip = isLeader
+                ? Loc.GetString("cmu-overwatch-roster-already-leader")
+                : Loc.GetString("rmc-overwatch-console-promote-squad-leader");
         }
 
         private void UpdateStatus(CMURosterEntry entry)
         {
             var marine = entry.Marine;
-            Bleeding.Visible = false;
             Ssd.Visible = false;
 
             if (entry.IsTripod)
@@ -439,22 +439,6 @@ public sealed class CMUOverwatchRoster : BoxContainer
                         SetLabel(State, $"{MathF.Round(health * 100):F0}%", CMUOverwatchHealthBar.ColorFor(health));
                     else
                         SetLabel(State, Loc.GetString("rmc-overwatch-console-state-conscious"), CrtTerminalPalette.Accent);
-                    break;
-            }
-
-            switch (marine.Bleeding)
-            {
-                case ExternalBleedTier.Arterial:
-                    SetLabel(Bleeding, Loc.GetString("cmu-overwatch-roster-arterial"), CrtTerminalPalette.Alert);
-                    Bleeding.Visible = true;
-                    break;
-                case ExternalBleedTier.Severe:
-                    SetLabel(Bleeding, Loc.GetString("cmu-overwatch-roster-bleeding-heavy"), CrtTerminalPalette.Alert);
-                    Bleeding.Visible = true;
-                    break;
-                case ExternalBleedTier.Minor or ExternalBleedTier.Moderate:
-                    SetLabel(Bleeding, Loc.GetString("cmu-overwatch-roster-bleeding"), CrtTerminalPalette.Caution);
-                    Bleeding.Visible = true;
                     break;
             }
 

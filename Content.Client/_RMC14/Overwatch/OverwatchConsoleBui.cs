@@ -257,8 +257,10 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                 monitor.OrbitalSaveButton.OnPressed +=
                     _ =>
                     {
-                        var longitude = (int)monitor.Longitude.Value;
-                        var latitude = (int)monitor.Latitude.Value;
+                        // cmu edit start: save the orbital coordinates, not the supply drop's
+                        var longitude = (int)monitor.OrbitalLongitude.Value;
+                        var latitude = (int)monitor.OrbitalLatitude.Value;
+                        // cmu edit end
                         var msg = new OverwatchConsoleOrbitalSaveBuiMsg(longitude, latitude);
                         SendPredictedMessage(msg);
                     };
@@ -912,8 +914,9 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
             }
 
             AddSaving(squad.OrbitalLongitudes, squad.OrbitalLatitudes, squad.OrbitalComments, squad.OrbitalSaves, margin);
+            // cmu edit start: the orbital tab lists and loads its own saved coordinates
             AddSavedLocation(
-                console.SavedLocations,
+                console.OrbitalSavedLocations,
                 margin,
                 squad.OrbitalLongitudes,
                 squad.OrbitalLatitudes,
@@ -921,13 +924,15 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                 squad.OrbitalSaves,
                 location =>
                 {
-                    squad.Longitude.Value = location.Longitude;
-                    squad.Latitude.Value = location.Latitude;
+                    squad.OrbitalLongitude.Value = location.Longitude;
+                    squad.OrbitalLatitude.Value = location.Latitude;
 
                     SendPredictedMessage(new OverwatchConsoleOrbitalLongitudeBuiMsg(location.Longitude));
                     SendPredictedMessage(new OverwatchConsoleOrbitalLatitudeBuiMsg(location.Latitude));
-                }
+                },
+                orbital: true
             );
+            // cmu edit end
 
             squad.HasOrbital = console.HasOrbital;
             squad.NextOrbitalAt = console.NextOrbitalLaunch;
@@ -986,7 +991,10 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
         BoxContainer latitudes,
         BoxContainer comments,
         BoxContainer saves,
-        Action<OverwatchSavedLocation> onSave)
+        // cmu edit start
+        Action<OverwatchSavedLocation> onSave,
+        bool orbital = false)
+        // cmu edit end
     {
         for (var i = 0; i < locations.Length; i++)
         {
@@ -1011,7 +1019,15 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
 
             var comment = new LineEdit { Text = $"{location.Comment}" };
             var index = i;
-            comment.OnTextEntered += args => SaveComment(index, args.Text);
+            // cmu edit start: orbital comments go to the orbital list
+            comment.OnTextEntered += args =>
+            {
+                if (orbital)
+                    SendPredictedMessage(new OverwatchConsoleOrbitalCommentBuiMsg(index, args.Text.Length > 50 ? args.Text[..50] : args.Text));
+                else
+                    SaveComment(index, args.Text);
+            };
+            // cmu edit end
 
             panel = CreatePanel(50);
             panel.AddChild(comment);

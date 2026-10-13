@@ -1,5 +1,4 @@
 using Content.Shared._RMC14.Tracker.SquadLeader;
-using Content.Shared.CMU14.Medical.Diagnostics.Examine;
 using Content.Shared.CMU14.Preferences;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -7,11 +6,10 @@ using Content.Shared.Mobs.Systems;
 
 namespace Content.Shared._RMC14.Overwatch;
 
-// CMU14: callsign, fireteam and casualty details on the overwatch roster.
+// CMU14: callsign, fireteam and health on the overwatch roster.
 public abstract partial class SharedOverwatchConsoleSystem
 {
     [Dependency] private DamageableSystem _cmuDamageable = default!;
-    [Dependency] private CMUMedicalExamineSystem _cmuMedicalExamine = default!;
     [Dependency] private MobThresholdSystem _cmuThresholds = default!;
 
     private OverwatchMarine CMUAddMarineDetails(EntityUid member, OverwatchMarine marine)
@@ -29,8 +27,35 @@ public abstract partial class SharedOverwatchConsoleSystem
             Fireteam = fireteam?.Fireteam,
             FireteamLeader = fireteam?.Leader ?? false,
             Health = CMUGetHealth(member),
-            Bleeding = _cmuMedicalExamine.GetWorstExternalBleeding(member),
         };
+    }
+
+    /// <summary>
+    /// Orbital bombardment keeps its own saved coordinates, separate from the supply drop's.
+    /// </summary>
+    private void CMUOnOrbitalSave(Entity<OverwatchConsoleComponent> ent, ref OverwatchConsoleOrbitalSaveBuiMsg args)
+    {
+        var locations = ent.Comp.OrbitalSavedLocations;
+        if (locations.Length == 0)
+            return;
+
+        if (ent.Comp.LastOrbitalLocation >= locations.Length)
+            ent.Comp.LastOrbitalLocation = 0;
+
+        locations[ent.Comp.LastOrbitalLocation] = new OverwatchSavedLocation(args.Longitude, args.Latitude, string.Empty);
+        ent.Comp.LastOrbitalLocation++;
+        Dirty(ent);
+    }
+
+    private void CMUOnOrbitalComment(Entity<OverwatchConsoleComponent> ent, ref OverwatchConsoleOrbitalCommentBuiMsg args)
+    {
+        var locations = ent.Comp.OrbitalSavedLocations;
+        if (args.Index < 0 || args.Index >= locations.Length || locations[args.Index] is not { } location)
+            return;
+
+        var comment = args.Comment.Length > 50 ? args.Comment[..50] : args.Comment;
+        locations[args.Index] = location with { Comment = comment };
+        Dirty(ent);
     }
 
     /// <summary>

@@ -141,8 +141,10 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
                 subs.Event<OverwatchConsoleOrbitalLongitudeBuiMsg>(OnOverwatchOrbitalCoordinatesBui);
                 subs.Event<OverwatchConsoleOrbitalLatitudeBuiMsg>(OnOverwatchOrbitalCoordinatesBui);
                 subs.Event<OverwatchConsoleOrbitalLaunchBuiMsg>(OnOverwatchOrbitalLaunchBui);
-                // subs.Event<OverwatchConsoleOrbitalSaveBuiMsg>(OnOverwatchOrbitalSaveBui);
-                // subs.Event<OverwatchConsoleOrbitalCommentBuiMsg>(OnOverwatchOrbitalCommentBui);
+                // cmu edit start: orbital saved coordinates (SharedOverwatchConsoleSystem.CMU)
+                subs.Event<OverwatchConsoleOrbitalSaveBuiMsg>(CMUOnOrbitalSave);
+                subs.Event<OverwatchConsoleOrbitalCommentBuiMsg>(CMUOnOrbitalComment);
+                // cmu edit end
                 subs.Event<OverwatchConsoleSendMessageBuiMsg>(OnOverwatchSendMessageBui);
                 subs.Event<OverwatchConsoleSetFireteamNicknameBuiMsg>(OnOverwatchSetFireteamNicknameBui);
                 subs.Event<OverwatchConsoleOpenSquadFireteamsBuiMsg>(OnOverwatchOpenSquadFireteamsBui);
@@ -816,7 +818,10 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
                 continue;
 
             var netUid = GetNetEntity(uid);
-            var squad = new OverwatchSquad(netUid, Name(uid), team.Color, null, team.CanSupplyDrop, team.LeaderIcon, new Dictionary<SquadObjectiveType, string>(team.Objectives));
+            // cmu edit start
+            var squad = new OverwatchSquad(netUid, Name(uid), team.Color, null, team.CanSupplyDrop, team.LeaderIcon, new Dictionary<SquadObjectiveType, string>(team.Objectives),
+                HasComp<Content.Shared.CMU14.Squads.CMUManualLeadershipComponent>(uid));
+            // cmu edit end
             var members = marines.GetOrNew(netUid);
 
             foreach (var member in team.Members)

@@ -4,7 +4,6 @@ using Content.Client.Stylesheets;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.SupplyDrop;
 using Content.Shared.CMU14.Overwatch;
-using Content.Shared.CMU14.Squads;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
@@ -18,10 +17,14 @@ public sealed partial class OverwatchConsoleBui
     private readonly Dictionary<NetEntity, CMUOverwatchRoster> _cmuRosters = new();
     private readonly Dictionary<NetEntity, CMUOverwatchFireteamPanel> _cmuFireteamPanels = new();
 
+    private bool _cmuRestoredView;
+
     private void CMUOnWindowCreated()
     {
         if (Window == null)
             return;
+
+        CMURestoreViewSettings();
 
         // The console stays in the game window; popping it out to its own OS window is not offered.
         CMUHidePopOutButton(Window);
@@ -77,6 +80,9 @@ public sealed partial class OverwatchConsoleBui
             monitor.SearchBar.OnTextChanged += _ => Refresh();
         }
 
+        if (monitor.Longitudes.Parent?.Parent is { } supplySaved)
+            supplySaved.Visible = true;
+
         var fireteams = new CMUOverwatchFireteamPanel();
         fireteams.OnAssign += (id, fireteam) => SendMessage(new CMUOverwatchAssignFireteamBuiMsg(id, fireteam));
         fireteams.OnLead += (id, lead) => SendMessage(new CMUOverwatchFireteamLeaderBuiMsg(id, lead));
@@ -123,8 +129,7 @@ public sealed partial class OverwatchConsoleBui
         state.Fireteams.TryGetValue(squad.Id, out var fireteams);
 
         if (_cmuFireteamPanels.TryGetValue(squad.Id, out var fireteamPanel))
-            fireteamPanel.Update(fireteams,
-                !(EntMan.TryGetEntity(squad.Id, out var squadUid) && EntMan.HasComponent<CMUManualLeadershipComponent>(squadUid)));
+            fireteamPanel.Update(fireteams, !squad.ManualLeadership);
 
         if (!_cmuRosters.TryGetValue(squad.Id, out var roster))
             return;
@@ -138,8 +143,53 @@ public sealed partial class OverwatchConsoleBui
             EntMan.System<CMUOverwatchFeedsSystem>().GetFeedTargets());
     }
 
+    /// <summary>
+    /// Puts the operator's own filter choices back when they reopen a console, since the console
+    /// itself may have been changed by someone else meanwhile.
+    /// </summary>
+    private void CMURestoreViewSettings()
+    {
+        if (!EntMan.TryGetComponent(Owner, out OverwatchConsoleComponent? console))
+            return;
+
+        var saved = EntMan.System<CMUOverwatchViewSettingsSystem>().Settings;
+        if (saved != null)
+        {
+            if (console.ShowDead != saved.Value.ShowDead)
+                SendPredictedMessage(new OverwatchConsoleShowDeadBuiMsg(saved.Value.ShowDead));
+
+            if (console.ShowHidden != saved.Value.ShowHidden)
+                SendPredictedMessage(new OverwatchConsoleShowHiddenBuiMsg(saved.Value.ShowHidden));
+
+            if (console.Location != saved.Value.Location)
+                SendPredictedMessage(new OverwatchConsoleSetLocationBuiMsg(saved.Value.Location));
+        }
+
+        _cmuRestoredView = true;
+    }
+
+    private void CMURememberViewSettings()
+    {
+        if (!_cmuRestoredView || !EntMan.TryGetComponent(Owner, out OverwatchConsoleComponent? console))
+            return;
+
+        var settings = EntMan.System<CMUOverwatchViewSettingsSystem>();
+        var squadInfoHidden = settings.Settings?.SquadInfoHidden ?? false;
+        if (console.Squad is { } active && _squadViews.TryGetValue(active, out var view))
+            squadInfoHidden = view.CMUSquadInfoHidden;
+
+        settings.Settings = new CMUOverwatchViewSettings(console.Location, console.ShowDead, console.ShowHidden, squadInfoHidden);
+
+        foreach (var squadView in _squadViews.Values)
+        {
+            squadView.CMUSetSquadInfoHidden(squadInfoHidden);
+        }
+    }
+
     private void CMUApplyTheme()
     {
+        CMURememberViewSettings();
+
         if (Window != null)
             CMUOverwatchCrt.Apply(Window);
     }

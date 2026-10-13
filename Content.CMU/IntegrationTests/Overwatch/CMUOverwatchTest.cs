@@ -266,4 +266,35 @@ public sealed class CMUOverwatchTest : GameTest
             Assert.That(SEntMan.HasComponent<CMUManualLeadershipComponent>(squad), Is.False);
         });
     }
+    [Test]
+    public async Task SupplyDropAndOrbitalKeepSeparateSavedCoordinates()
+    {
+        var map = await Pair.CreateTestMap();
+
+        await Server.WaitAssertion(() =>
+        {
+            var actor = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var console = SEntMan.SpawnEntity("RMCOverwatchConsoleGovfor", map.GridCoords);
+
+            void Send(BoundUserInterfaceMessage message)
+            {
+                message.Actor = actor;
+                message.UiKey = OverwatchConsoleUI.Key;
+                SEntMan.EventBus.RaiseLocalEvent(console, (object) message);
+            }
+
+            Send(new OverwatchConsoleSupplyDropSaveBuiMsg(10, 20));
+            Send(new OverwatchConsoleOrbitalSaveBuiMsg(300, 400));
+            Send(new OverwatchConsoleOrbitalCommentBuiMsg(0, "Ridge"));
+
+            var overwatch = SComp<OverwatchConsoleComponent>(console);
+            Assert.Multiple(() =>
+            {
+                Assert.That(overwatch.SavedLocations[0], Is.EqualTo(new OverwatchSavedLocation(10, 20, string.Empty)));
+                Assert.That(overwatch.SavedLocations[1], Is.Null, "orbital saves stay out of the supply drop list");
+                Assert.That(overwatch.OrbitalSavedLocations[0], Is.EqualTo(new OverwatchSavedLocation(300, 400, "Ridge")));
+                Assert.That(overwatch.OrbitalSavedLocations[1], Is.Null, "supply drop saves stay out of the orbital list");
+            });
+        });
+    }
 }

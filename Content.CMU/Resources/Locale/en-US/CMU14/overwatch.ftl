@@ -8,14 +8,12 @@ cmu-overwatch-roster-group-cameras = TRIPOD CAMERAS
 cmu-overwatch-roster-ftl = {$name} (FTL)
 cmu-overwatch-roster-no-camera = {$name} (NO CAM)
 cmu-overwatch-roster-crit = UNCONSCIOUS
-cmu-overwatch-roster-bleeding = BLEED
-cmu-overwatch-roster-bleeding-heavy = HVY BLEED
-cmu-overwatch-roster-arterial = ARTERIAL
 cmu-overwatch-roster-feed = CAM
 cmu-overwatch-roster-feed-tooltip = Watch this camera in the feeds window (up to four at once). Press again to close it.
 cmu-overwatch-roster-hide = HIDE
 cmu-overwatch-roster-show = SHOW
 cmu-overwatch-roster-promote = SL
+cmu-overwatch-roster-already-leader = Already the squad leader.
 cmu-overwatch-roster-distance = SL {$distance}m
 cmu-overwatch-roster-distance-none = SL -
 
