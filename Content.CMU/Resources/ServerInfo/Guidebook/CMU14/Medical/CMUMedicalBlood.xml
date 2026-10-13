@@ -31,14 +31,13 @@
 
   ## Giving Blood
   <Box>
-    <GuideEntityEmbed Entity="CMBloodPackFull" Caption="Blood pack (O-)"/>
-    <GuideEntityEmbed Entity="CMUBloodPlasmaPack" Caption="Plasma pack (AB+)"/>
     <GuideEntityEmbed Entity="CMUSalineBag" Caption="Saline bag"/>
+    <GuideEntityEmbed Entity="CMBloodPack" Caption="Blood pack"/>
     <GuideEntityEmbed Entity="CMUIVPressureBag" Caption="Pressure bag"/>
     <GuideEntityEmbed Entity="CMUBloodCooler" Caption="Blood cooler"/>
   </Box>
   - [bold]From your hand[/bold]: use a pack on the patient to hook it up. It stays connected while you hold it.
-  - [bold]Squeeze it[/bold]: use the connected pack in your hand to squeeze it. It runs in three times as fast for a few seconds; keep squeezing to keep it going.
+  - [bold]Squeeze it[/bold]: use the connected pack in your hand ([bold]Z[/bold]) to start squeezing it every few seconds, making it run in three times as fast. Press it again to stop. You also stop if you let go of the pack, it gets disconnected or you're knocked out.
   - [bold]IV stand[/bold]: hang the pack on a stand and drag the stand onto the patient. Fit a [bold]pressure bag[/bold] by using it on the stand and the drip runs twice as fast. Take it off again with the stand's alt-click option.
 
   ## Plasma
