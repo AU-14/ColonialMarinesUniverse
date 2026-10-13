@@ -206,3 +206,5 @@ cmu-guide-entry-lore-ua-doves = The 'Doves'
 cmu-guide-entry-lore-ua-hawks = The 'Hawks'
 cmu-guide-entry-lore-ua-magpies = The 'Magpies'
 cmu-guide-entry-lore-ua-politics = Politics
+cmu-guide-entry-overwatch = Overwatch
+cmu-guide-entry-fob-security = FOB Security Squad

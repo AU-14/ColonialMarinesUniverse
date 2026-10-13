@@ -6,6 +6,8 @@
   text: "/ServerInfo/Guidebook/CMU14/CMUGuidebook.xml"
   children:
   - AU14Comms
+  - CMUGuideOverwatch
+  - CMUGuideFOBSecurity
   - CMUGuideMortar
   - CMUGuideExplosives
   - CMUGuideMedical
@@ -1066,3 +1068,17 @@
   name: cmu-guide-entry-lore-tribals
   priority: 6
   text: "/ServerInfo/Guidebook/CMU14/Lore/Organisms/CMULoreTribals.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideOverwatch
+  name: cmu-guide-entry-overwatch
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUOverwatch.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideFOBSecurity
+  name: cmu-guide-entry-fob-security
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUFOBSecurity.xml"
