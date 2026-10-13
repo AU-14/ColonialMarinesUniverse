@@ -337,8 +337,10 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                     }
                 };
 
-                monitor.FireteamsButton.OnPressed += _ =>
-                    SendPredictedMessage(new OverwatchConsoleOpenSquadFireteamsBuiMsg(squad.Id));
+                // cmu edit start: the Fireteams tab manages fireteams itself (CMUOverwatchFireteamPanel)
+                // monitor.FireteamsButton.OnPressed += _ =>
+                //     SendPredictedMessage(new OverwatchConsoleOpenSquadFireteamsBuiMsg(squad.Id));
+                // cmu edit end
                 monitor.OnStop += () => SendPredictedMessage(new OverwatchConsoleStopOverwatchBuiMsg());
 
                 var canSupplyDrop = EntMan.HasComponent<SupplyDropComputerComponent>(Owner) && squad.CanSupplyDrop;

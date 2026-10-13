@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Tracker.SquadLeader;
 using Content.Shared.CMU14.Medical.Diagnostics.Examine;
+using Content.Shared.CMU14.Preferences;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Systems;
@@ -22,6 +23,8 @@ public abstract partial class SharedOverwatchConsoleSystem
 
         return marine with
         {
+            // Rank (added by the console) and first and last name only; no nickname.
+            Name = CMUCharacterName.StripNickname(marine.Name),
             Callsign = details.Callsign ?? string.Empty,
             Fireteam = fireteam?.Fireteam,
             FireteamLeader = fireteam?.Leader ?? false,

@@ -15,6 +15,7 @@ namespace Content.Client._RMC14.Overwatch;
 public sealed partial class OverwatchConsoleBui
 {
     private readonly Dictionary<NetEntity, CMUOverwatchRoster> _cmuRosters = new();
+    private readonly Dictionary<NetEntity, CMUOverwatchFireteamPanel> _cmuFireteamPanels = new();
 
     private void CMUOnWindowCreated()
     {
@@ -75,6 +76,14 @@ public sealed partial class OverwatchConsoleBui
             monitor.SearchBar.OnTextChanged += _ => Refresh();
         }
 
+        var fireteams = new CMUOverwatchFireteamPanel();
+        fireteams.OnAssign += (id, fireteam) => SendMessage(new CMUOverwatchAssignFireteamBuiMsg(id, fireteam));
+        fireteams.OnLead += (id, lead) => SendMessage(new CMUOverwatchFireteamLeaderBuiMsg(id, lead));
+        fireteams.OnNickname += (index, nickname) =>
+            SendMessage(new OverwatchConsoleSetFireteamNicknameBuiMsg(squad.Id, index, nickname));
+        monitor.FireteamsList.AddChild(fireteams);
+        _cmuFireteamPanels[squad.Id] = fireteams;
+
         if (EntMan.HasComponent<SupplyDropComputerComponent>(Owner) &&
             squad.CanSupplyDrop &&
             monitor.TacticalMapButton.Parent is { } header)
@@ -92,10 +101,13 @@ public sealed partial class OverwatchConsoleBui
         OverwatchConsoleBuiState state,
         OverwatchConsoleComponent console)
     {
+        state.Fireteams.TryGetValue(squad.Id, out var fireteams);
+
+        if (_cmuFireteamPanels.TryGetValue(squad.Id, out var fireteamPanel))
+            fireteamPanel.Update(fireteams);
+
         if (!_cmuRosters.TryGetValue(squad.Id, out var roster))
             return;
-
-        state.Fireteams.TryGetValue(squad.Id, out var fireteams);
         roster.Update(
             entries,
             squad.Leader,

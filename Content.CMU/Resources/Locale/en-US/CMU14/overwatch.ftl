@@ -34,3 +34,17 @@ cmu-overwatch-feeds-rec = REC
 cmu-overwatch-feeds-channel = CH {$channel}
 cmu-overwatch-feeds-speed = SP
 cmu-overwatch-feeds-full = All {$max} camera feeds are in use. Close one first.
+
+# Fireteams tab
+cmu-overwatch-fireteams-help = Move marines between fireteams and choose who leads each one.
+cmu-overwatch-fireteams-squad-leader = SQUAD LEADER: {$name}
+cmu-overwatch-fireteams-no-squad-leader = NO SQUAD LEADER
+cmu-overwatch-fireteams-nickname = Fireteam nickname
+cmu-overwatch-fireteams-set-nickname = SET
+cmu-overwatch-fireteams-empty = No one assigned.
+cmu-overwatch-fireteams-lead = LEAD
+cmu-overwatch-fireteams-lead-tooltip = Make them this fireteam's leader.
+cmu-overwatch-fireteams-lead-off-tooltip = Stand them down as fireteam leader.
+cmu-overwatch-fireteams-move-tooltip = Move to fireteam {$number}.
+cmu-overwatch-fireteams-remove = OUT
+cmu-overwatch-fireteams-remove-tooltip = Take them out of their fireteam.

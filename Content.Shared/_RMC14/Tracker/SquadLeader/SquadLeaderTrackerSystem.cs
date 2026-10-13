@@ -549,6 +549,9 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
         if (!Resolve(squad, ref squad.Comp, false))
             return;
 
+        // cmu edit start: rebuilding the fireteams used to wipe their nicknames
+        var cmuNicknames = CMUSaveFireteamNicknames(squad.Comp.Fireteams);
+        // cmu edit end
         Array.Clear(squad.Comp.Fireteams.Fireteams);
         squad.Comp.Fireteams.Unassigned.Clear();
         if (_squad.TryGetSquadLeader((squad, squad.Comp), out var leader))
@@ -566,6 +569,10 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
         {
             AddFireteamMember(squad.Comp.Fireteams, member);
         }
+
+        // cmu edit start
+        CMURestoreFireteamNicknames(squad.Comp.Fireteams, cmuNicknames);
+        // cmu edit end
     }
 
     private void AddFireteamMember(FireteamData fireteamData, EntityUid member)

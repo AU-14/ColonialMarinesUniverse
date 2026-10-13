@@ -1,6 +1,9 @@
+using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Overwatch;
+using Content.Shared._RMC14.Tracker.SquadLeader;
 using Content.Shared.CMU14.Callsigns;
 using Content.Shared.CMU14.Overwatch;
+using Content.Shared.CMU14.Preferences;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Popups;
 using Robust.Server.GameObjects;
@@ -22,6 +25,7 @@ public sealed class CMUOverwatchSystem : EntitySystem
 
     [Dependency] private SharedOverwatchConsoleSystem _overwatch = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SquadLeaderTrackerSystem _squadLeaderTracker = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private ViewSubscriberSystem _viewSubscriber = default!;
@@ -35,6 +39,9 @@ public sealed class CMUOverwatchSystem : EntitySystem
         SubscribeLocalEvent<OverwatchConsoleComponent, CMUOverwatchFeedToggleBuiMsg>(OnFeedToggle);
         SubscribeLocalEvent<OverwatchConsoleComponent, CMUOverwatchFeedClearBuiMsg>(OnFeedClear);
         SubscribeLocalEvent<CMUOverwatchFeedsComponent, ComponentShutdown>(OnFeedsShutdown);
+
+        SubscribeLocalEvent<OverwatchConsoleComponent, CMUOverwatchAssignFireteamBuiMsg>(OnAssignFireteam);
+        SubscribeLocalEvent<OverwatchConsoleComponent, CMUOverwatchFireteamLeaderBuiMsg>(OnFireteamLeader);
         SubscribeLocalEvent<CMUOverwatchFeedsComponent, PlayerDetachedEvent>(OnFeedsDetached);
     }
 
@@ -81,7 +88,7 @@ public sealed class CMUOverwatchSystem : EntitySystem
         var eye = Spawn(FeedEye, new EntityCoordinates(camera.Owner, default));
         _viewSubscriber.AddViewSubscriber(eye, player.PlayerSession);
 
-        var name = Identity.Name(target.Value, EntityManager);
+        var name = CMUCharacterName.StripNickname(Identity.Name(target.Value, EntityManager));
         feeds.Feeds.Add(new CMUOverwatchFeed(targetNet, GetNetEntity(eye), name));
         Dirty(actor, feeds);
     }
@@ -90,6 +97,45 @@ public sealed class CMUOverwatchSystem : EntitySystem
     {
         if (TryComp(args.Actor, out CMUOverwatchFeedsComponent? feeds))
             RemCompDeferred(args.Actor, feeds);
+    }
+
+    private void OnAssignFireteam(Entity<OverwatchConsoleComponent> ent, ref CMUOverwatchAssignFireteamBuiMsg args)
+    {
+        if (TryGetConsoleSquadMember(ent.Comp, args.Marine, out var marine, out var squad))
+            _squadLeaderTracker.CMUMoveToFireteam(squad, marine, args.Fireteam, args.Actor);
+    }
+
+    private void OnFireteamLeader(Entity<OverwatchConsoleComponent> ent, ref CMUOverwatchFireteamLeaderBuiMsg args)
+    {
+        if (TryGetConsoleSquadMember(ent.Comp, args.Marine, out var marine, out var squad))
+            _squadLeaderTracker.CMUSetFireteamLeadership(squad, marine, args.Lead, args.Actor);
+    }
+
+    /// <summary>
+    /// The marine, if they are in the squad this console is showing and it may manage.
+    /// </summary>
+    private bool TryGetConsoleSquadMember(
+        OverwatchConsoleComponent console,
+        NetEntity marineNet,
+        out EntityUid marine,
+        out Entity<SquadTeamComponent> squad)
+    {
+        marine = default;
+        squad = default;
+        if (!TryGetEntity(marineNet, out var marineUid) ||
+            !TryComp(marineUid, out SquadMemberComponent? member) ||
+            member.Squad is not { } squadUid ||
+            console.Squad != GetNetEntity(squadUid) ||
+            !TryComp(squadUid, out SquadTeamComponent? team) ||
+            !(string.Equals(console.Group, "ADMINISTRATOR", StringComparison.OrdinalIgnoreCase) ||
+              string.Equals(team.Group, console.Group, StringComparison.OrdinalIgnoreCase)))
+        {
+            return false;
+        }
+
+        marine = marineUid.Value;
+        squad = (squadUid, team);
+        return true;
     }
 
     private void OnFeedsShutdown(Entity<CMUOverwatchFeedsComponent> ent, ref ComponentShutdown args)
