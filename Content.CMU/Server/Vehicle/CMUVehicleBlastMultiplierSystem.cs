@@ -9,9 +9,9 @@ using Robust.Shared.Timing;
 namespace Content.Server._RMC14.Vehicle;
 
 /// <summary>
-/// Rockets and IEDs carry an anti-vehicle multiplier, but explosions are credited to whoever fired them,
-/// so the blast half of a rocket hit never saw it. Remember where a multiplied explosive went off and
-/// scale that blast when it reaches a vehicle.
+/// Rockets and IEDs carry an anti-vehicle multiplier, but the blast is credited to the explosive and it's
+/// usually deleted by the time the blast lands, so the blast half of a rocket hit never saw it. Remember
+/// where a multiplied explosive went off and scale that blast when it reaches a vehicle.
 /// </summary>
 public sealed partial class CMUVehicleBlastMultiplierSystem : EntitySystem
 {
@@ -22,7 +22,7 @@ public sealed partial class CMUVehicleBlastMultiplierSystem : EntitySystem
     private static readonly TimeSpan BlastMemory = TimeSpan.FromSeconds(5);
     private const float EpicenterTolerance = 0.5f;
 
-    private readonly List<(MapCoordinates Epicenter, float Multiplier, TimeSpan Expires)> _blasts = new();
+    private readonly List<(EntityUid Source, MapCoordinates Epicenter, float Multiplier, TimeSpan Expires)> _blasts = new();
 
     public override void Initialize()
     {
@@ -37,7 +37,7 @@ public sealed partial class CMUVehicleBlastMultiplierSystem : EntitySystem
             return;
 
         Prune();
-        _blasts.Add((_transform.GetMapCoordinates(ent), ent.Comp.Multiplier, _timing.CurTime + BlastMemory));
+        _blasts.Add((ent, _transform.GetMapCoordinates(ent), ent.Comp.Multiplier, _timing.CurTime + BlastMemory));
     }
 
     private void OnVehicleBlast(Entity<HardpointSlotsComponent> ent, ref ExplosionDamagePreparingEvent args)
@@ -46,6 +46,11 @@ public sealed partial class CMUVehicleBlastMultiplierSystem : EntitySystem
         var multiplier = 1f;
         foreach (var blast in _blasts)
         {
+            // the blast is credited to the explosive, so while it's still around the hardpoint damage
+            // code reads the multiplier off it itself. scaling here too squared it and gutted the vehicle
+            if (HasComp<VehicleDamageMultiplierComponent>(blast.Source))
+                continue;
+
             if (blast.Epicenter.MapId == args.Epicenter.MapId &&
                 (blast.Epicenter.Position - args.Epicenter.Position).LengthSquared() <= EpicenterTolerance * EpicenterTolerance)
             {
