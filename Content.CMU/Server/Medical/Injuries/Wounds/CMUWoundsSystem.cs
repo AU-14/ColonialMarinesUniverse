@@ -45,7 +45,7 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
             ExternalBleedTier.Minor => 0.08f,
             ExternalBleedTier.Moderate => 0.18f,
             ExternalBleedTier.Severe => 0.35f,
-            ExternalBleedTier.Arterial => 0.70f,
+            ExternalBleedTier.Arterial => 0.91f, // 1.3x the old 0.70
             _ => 0f,
         };
 
