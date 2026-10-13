@@ -104,7 +104,7 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
         var query = EntityQueryEnumerator<CMUVehicleCrayonComponent, SpriteComponent>();
         while (query.MoveNext(out var uid, out var crayon, out var sprite))
         {
-            if (crayon.Drawings.Count == 0 && crayon.Blood.Count == 0 && crayon.Dots.Count == 0 && !_paints.ContainsKey(uid))
+            if (crayon.Drawings.Count == 0 && crayon.Blood.Count == 0 && !_paints.ContainsKey(uid))
                 continue;
 
             Entity<SpriteComponent>? overlay = null;
@@ -163,16 +163,10 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
     private void Repaint(CMUVehicleCrayonComponent crayon, Paint paint, CMUVehicleOverlayVisualsComponent? overlayVisuals, CMUJeepComponent? jeep)
     {
         paint.Dispose();
-        if (crayon.Drawings.Count == 0 && crayon.Blood.Count == 0 && crayon.Dots.Count == 0 ||
+        if (crayon.Drawings.Count == 0 && crayon.Blood.Count == 0 ||
             GetImage(_maps, crayon.Map) is not { } map)
         {
             return;
-        }
-
-        var dots = new Dictionary<(Vector3, byte), Color>();
-        foreach (var dot in crayon.Dots)
-        {
-            dots[(dot.Voxel, dot.Face)] = dot.Color;
         }
 
         for (var i = 0; i < MapDirections.Length; i++)
@@ -200,9 +194,8 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
                         continue;
                     }
 
-                    // Crayon goes on over blood, free drawing over the symbols.
-                    if ((DotPixel(dots, voxel, front, direction) ??
-                         PaintPixel(crayon.Drawings, voxel, front, direction, Opacity) ??
+                    // Crayon goes on over blood.
+                    if ((PaintPixel(crayon.Drawings, voxel, front, direction, Opacity) ??
                          PaintPixel(crayon.Blood, voxel, front, direction, BloodOpacity)) is not { } color)
                         continue;
 
@@ -224,17 +217,6 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
             paint.Under[i] = anyUnder ? _clyde.LoadTextureFromImage(under) : null;
             paint.Over[i] = anyOver ? _clyde.LoadTextureFromImage(overImage) : null;
         }
-    }
-
-    private static Rgba32? DotPixel(Dictionary<(Vector3, byte), Color> dots, Vector3 voxel, bool front, Direction direction)
-    {
-        if (dots.Count == 0 ||
-            !dots.TryGetValue((voxel, FaceOf(front, direction)), out var c))
-        {
-            return null;
-        }
-
-        return new Rgba32(c.R, c.G, c.B, c.A * Opacity);
     }
 
     /// <summary>

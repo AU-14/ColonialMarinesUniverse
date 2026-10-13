@@ -492,11 +492,6 @@ Wheels and hardpoints aren't in the map: drawings stay on the bodywork. Use the 
 painted pixels between the vehicle entity and the overlay entity. `crayon()` and `crayon_demo()` in
 the script are the reference; `jeep_crayons.png` shows the result.
 
-A crayon's alt verb switches it between stamping its symbol and drawing freely. Drawing freely,
-pressing on a jeep and dragging traces a line onto the body: the client sends the cursor's path in
-batches and the server lays a dot on each body face under the line, through the same map, from the
-side the jeep is drawn from. Dots (up to 1500) are drawn over the symbols and cleaned off with them;
-every 40 new dots use a charge.
 
 ## In game
 
@@ -514,7 +509,7 @@ Prototypes are in `Content.CMU/Resources/Prototypes/CMU14/Vehicles/Jeep/jeep.yml
 | `Shared/Vehicle/Jeep/CMUVehicleCargo*` | loading, wrenching down and unloading a crate on the cargo bed, over the tailgate |
 | `Shared/Vehicle/Jeep/CMUVehiclePaint*`, `CMUVehicleSprayPainter*`, `paint.swsl` | the vehicle spray painter (an RGB colour window in hand with a rim design tab, 30 charges, 5 a respray, 1 for the wheels and 2 for a rim design, printed at the autolathe) and respraying the jeep with it, or one part where it is sprayed: the body outside, the tub inside (by the body voxel under the click), the seats (on a seat) or the wheels and spare (on the wheels; grey metal rims by default, their own shader instance); the art marks its paint pixels with an alpha just under 255 that also carries their zone, dirt level and the art's mud (`PAINT_ALPHA - 16 * zone - 2 * level - mud`, 207 to 254: body 239-254, tub inside 223-238, seats 207-222), so the shader is always on; the engine and windshield only read the body's band (`plainLayers`), since their own art uses the others |
 | `Shared/Vehicle/Jeep/CMURimDesign*`, `Client/Vehicle/CMUVehicleRimVisualSystem.cs`, `rim.swsl`, `jeep_rims.yml` | rim designs sprayed on the wheels in design mode, in their base, accent, lip and cap colours; painting the wheels after only changes the base, and the factory design takes a design off (see Rim designs) |
-| `Shared/Vehicle/Jeep/CMUVehicleCrayon*`, `Server/.../CMUVehicleCrayonSystem.cs`, `Client/Vehicle/CMUCrayonFreeDrawSystem.cs` | crayon drawings (up to 50), free drawn dots and blood splashes anchored to the body via `crayon_maps/` |
+| `Shared/Vehicle/Jeep/CMUVehicleCrayon*`, `Server/.../CMUVehicleCrayonSystem.cs` | crayon drawings (up to 50) and blood splashes anchored to the body via `crayon_maps/` |
 | `Shared/Vehicle/CMUVehicleTyre*`, `CMUGridVehicleMoveSystem.Tyres.cs` | tyres from the fitted wheel set, and their speed and water drag on the ground under the jeep (see Tyres) |
 | `Shared/Vehicle/Jeep/CMUVehicleCover*` | shut doors and the raised windshield stopping shots at the riders, grit behind a lowered windshield (see Cover) |
 | `Shared/Vehicle/Jeep/CMUVehicleGrime*`, `Server/.../CMUVehicleGrimeBuildUpSystem.cs` | dirt from driving, blood from wounded riders and anyone run down, cleaning |

@@ -1,13 +1,10 @@
 using Content.Shared._RMC14.Vehicle;
-using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Charges.Systems;
 using Content.Shared.Crayon;
 using Content.Shared.Database;
-using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
-using Content.Shared.Verbs;
 using Robust.Shared.Audio.Systems;
 using System.Numerics;
 using Robust.Shared.Map;
@@ -18,10 +15,7 @@ namespace Content.Shared.CMU14.Vehicle.Jeep;
 
 public abstract class SharedCMUVehicleCrayonSystem : EntitySystem
 {
-    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private SharedHandsSystem _hands = default!;
-    [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedChargesSystem _charges = default!;
     [Dependency] private INetManager _net = default!;
@@ -31,12 +25,6 @@ public abstract class SharedCMUVehicleCrayonSystem : EntitySystem
 
     public const int FrameSize = 96;
     public const float PixelsPerMeter = 32f;
-
-    /// <summary>
-    /// The most points a stroke batch may carry, and the longest line between two of them, in pixels.
-    /// </summary>
-    public const int MaxStrokePoints = 64;
-    private const int MaxStrokeStep = 48;
 
     /// <summary>
     /// Camera-facing panel per direction, and the screen's right and down axes in vehicle space for
@@ -57,30 +45,6 @@ public abstract class SharedCMUVehicleCrayonSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<CMUVehicleCrayonComponent, InteractUsingEvent>(OnInteractUsing);
-        SubscribeLocalEvent<CrayonComponent, GetVerbsEvent<AlternativeVerb>>(OnCrayonVerbs);
-        SubscribeNetworkEvent<CMUCrayonStrokeEvent>(OnStroke);
-    }
-
-    private void OnCrayonVerbs(Entity<CrayonComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
-    {
-        if (!args.CanAccess || !args.CanInteract || !_hands.IsHolding(args.User, ent))
-            return;
-
-        var free = HasComp<CMUCrayonFreeDrawComponent>(ent);
-        var user = args.User;
-        args.Verbs.Add(new AlternativeVerb
-        {
-            Text = Loc.GetString(free ? "cmu-vehicle-crayon-mode-symbols" : "cmu-vehicle-crayon-mode-free"),
-            Act = () =>
-            {
-                if (free)
-                    RemComp<CMUCrayonFreeDrawComponent>(ent);
-                else
-                    EnsureComp<CMUCrayonFreeDrawComponent>(ent);
-
-                _popup.PopupClient(Loc.GetString(free ? "cmu-vehicle-crayon-mode-symbols-set" : "cmu-vehicle-crayon-mode-free-set"), user, user);
-            },
-        });
     }
 
     private void OnInteractUsing(Entity<CMUVehicleCrayonComponent> ent, ref InteractUsingEvent args)
@@ -89,8 +53,7 @@ public abstract class SharedCMUVehicleCrayonSystem : EntitySystem
             return;
 
         args.Handled = true;
-        // A free drawing crayon draws by dragging, which the client sends as strokes.
-        if (_net.IsClient || HasComp<CMUCrayonFreeDrawComponent>(args.Used))
+        if (_net.IsClient)
             return;
 
         if (_charges.IsEmpty(args.Used))
@@ -136,176 +99,6 @@ public abstract class SharedCMUVehicleCrayonSystem : EntitySystem
             UseUpCrayon(args.Used, args.User);
         else
             _ui.ServerSendUiMessage(args.Used, CrayonUiKey.Key, new CrayonUsedMessage(crayon.SelectedState));
-    }
-
-    /// <summary>
-    /// Draws a batch of a stroke: lines between its points, traced onto the body under them as the
-    /// vehicle is drawn from where it faces, a charge used up for every so many new dots.
-    /// </summary>
-    private void OnStroke(CMUCrayonStrokeEvent msg, EntitySessionEventArgs args)
-    {
-        if (args.SenderSession.AttachedEntity is not { } user ||
-            !TryGetEntity(msg.Vehicle, out var vehicle) ||
-            !TryComp(vehicle, out CMUVehicleCrayonComponent? comp) ||
-            _hands.GetActiveItem(user) is not { } held ||
-            !TryComp(held, out CrayonComponent? crayon) ||
-            !TryComp(held, out CMUCrayonFreeDrawComponent? free) ||
-            msg.Points.Count == 0 ||
-            msg.Points.Count > MaxStrokePoints ||
-            !_actionBlocker.CanInteract(user, vehicle) ||
-            !_interaction.InRangeUnobstructed(user, vehicle.Value))
-        {
-            return;
-        }
-
-        Draw((vehicle.Value, comp), user, (held, crayon, free), msg.Points, msg.Start);
-    }
-
-    /// <summary>
-    /// Draws a batch of a stroke with a crayon; returns how many dots it added.
-    /// </summary>
-    public int Draw(
-        Entity<CMUVehicleCrayonComponent> vehicle,
-        EntityUid user,
-        Entity<CrayonComponent, CMUCrayonFreeDrawComponent> crayon,
-        IReadOnlyList<Vector2> points,
-        bool start)
-    {
-        var (held, crayonComp, free) = crayon;
-        var comp = vehicle.Comp;
-        if (_charges.IsEmpty(held))
-        {
-            if (crayonComp.DeleteEmpty)
-                UseUpCrayon(held, user);
-            else
-                _popup.PopupEntity(Loc.GetString("cmu-vehicle-crayon-empty"), vehicle, user);
-
-            return 0;
-        }
-
-        var jeep = CompOrNull<CMUJeepComponent>(vehicle);
-        var (position, rotation) = _transform.GetWorldPositionRotation(vehicle);
-        var direction = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(rotation);
-        var turn = direction.ToAngle() - rotation;
-        var index = new Dictionary<(Vector3, byte), int>();
-        for (var i = 0; i < comp.Dots.Count; i++)
-        {
-            index[(comp.Dots[i].Voxel, comp.Dots[i].Face)] = i;
-        }
-
-        var added = new List<CMUCrayonDot>();
-        var drawn = new HashSet<(Vector3, byte)>();
-        var painted = new HashSet<int>();
-        Vector2i? last = null;
-        foreach (var point in points)
-        {
-            var offset = turn.RotateVec(point - position);
-            var pixel = new Vector2i(
-                (int) MathF.Floor(FrameSize / 2f + offset.X * PixelsPerMeter),
-                (int) MathF.Floor(FrameSize / 2f - offset.Y * PixelsPerMeter));
-            var from = last ?? pixel;
-            last = pixel;
-            if ((pixel - from).Length > MaxStrokeStep)
-                continue;
-
-            foreach (var (x, y) in Line(from, pixel))
-            {
-                if (!TryGetSurface(comp.Map, direction, x, y, out var voxel, out var front, out _, out var panel) ||
-                    IsPanelOpen(jeep, comp, panel))
-                {
-                    continue;
-                }
-
-                var dot = new CMUCrayonDot
-                {
-                    Voxel = voxel,
-                    Face = FaceOf(front, direction),
-                    Color = crayonComp.Color,
-                };
-
-                var key = (dot.Voxel, dot.Face);
-                if (!drawn.Add(key))
-                    continue;
-
-                if (index.TryGetValue(key, out var at))
-                {
-                    if (comp.Dots[at].Color == dot.Color)
-                        continue;
-
-                    painted.Add(at);
-                }
-
-                added.Add(dot);
-            }
-        }
-
-        if (added.Count == 0)
-            return 0;
-
-        // Painted over dots are taken out; the new ones go on top.
-        var n = 0;
-        comp.Dots.RemoveAll(_ => painted.Contains(n++));
-        comp.Dots.AddRange(added);
-        if (comp.Dots.Count > comp.MaxDots)
-            comp.Dots.RemoveRange(0, comp.Dots.Count - comp.MaxDots);
-
-        Dirty(vehicle);
-        if (start)
-        {
-            _audio.PlayPvs(crayonComp.UseSound, vehicle);
-            _adminLog.Add(LogType.CrayonDraw, LogImpact.Low,
-                $"{ToPrettyString(user):user} drew freely in {crayonComp.Color:color} on {ToPrettyString(vehicle):entity}");
-        }
-
-        free.Drawn += added.Count;
-        while (free.Drawn >= comp.DotsPerCharge && !_charges.IsEmpty(held))
-        {
-            free.Drawn -= comp.DotsPerCharge;
-            _charges.TryUseCharge(held);
-        }
-
-        if (crayonComp.DeleteEmpty && _charges.IsEmpty(held))
-            UseUpCrayon(held, user);
-
-        return added.Count;
-    }
-
-    /// <summary>
-    /// The pixels of a line, both ends included.
-    /// </summary>
-    private static IEnumerable<(int X, int Y)> Line(Vector2i from, Vector2i to)
-    {
-        int x = from.X, y = from.Y;
-        int dx = Math.Abs(to.X - x), dy = -Math.Abs(to.Y - y);
-        int sx = x < to.X ? 1 : -1, sy = y < to.Y ? 1 : -1;
-        var err = dx + dy;
-        while (true)
-        {
-            yield return (x, y);
-            if (x == to.X && y == to.Y)
-                yield break;
-
-            var e2 = 2 * err;
-            if (e2 >= dy)
-            {
-                err += dy;
-                x += sx;
-            }
-
-            if (e2 <= dx)
-            {
-                err += dx;
-                y += sy;
-            }
-        }
-    }
-
-    /// <summary>
-    /// The face a surface point is on: 0 a top face, else the camera-facing panel of the direction.
-    /// </summary>
-    public static byte FaceOf(bool front, Direction direction)
-    {
-        return front ? (byte) (Array.IndexOf(MapDirections, direction) + 1) : (byte) 0;
     }
 
     private void UseUpCrayon(EntityUid crayon, EntityUid user)

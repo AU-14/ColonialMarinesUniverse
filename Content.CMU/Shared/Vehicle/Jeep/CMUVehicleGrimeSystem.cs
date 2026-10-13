@@ -115,7 +115,7 @@ public sealed class CMUVehicleGrimeSystem : EntitySystem
     {
         return ent.Comp.Dirt > 0f ||
                TryComp(ent, out CMUVehicleCrayonComponent? crayon) &&
-               (crayon.Drawings.Count > 0 || crayon.Blood.Count > 0 || crayon.Dots.Count > 0);
+               (crayon.Drawings.Count > 0 || crayon.Blood.Count > 0);
     }
 
     /// <summary>
@@ -135,13 +135,11 @@ public sealed class CMUVehicleGrimeSystem : EntitySystem
 
         var blood = (int) MathF.Ceiling(crayon.Blood.Count * share);
         var drawings = (int) MathF.Ceiling(crayon.Drawings.Count * share);
-        var dots = (int) MathF.Ceiling(crayon.Dots.Count * share);
-        if (blood + drawings + dots == 0)
+        if (blood + drawings == 0)
             return;
 
         crayon.Blood.RemoveRange(0, blood);
         crayon.Drawings.RemoveRange(0, drawings);
-        crayon.Dots.RemoveRange(0, dots);
         Dirty(ent, crayon);
     }
 

@@ -133,7 +133,3 @@ cmu-vehicle-cover-door = The shot slams into the door beside you!
 cmu-vehicle-cover-windshield = The windshield catches the shot!
 cmu-vehicle-cover-grit = Grit flies up into your eyes!
 
-cmu-vehicle-crayon-mode-free = Draw freely on vehicles
-cmu-vehicle-crayon-mode-symbols = Stamp symbols on vehicles
-cmu-vehicle-crayon-mode-free-set = You'll draw freely on vehicles: hold the click and drag across the body.
-cmu-vehicle-crayon-mode-symbols-set = You'll stamp symbols on vehicles.
