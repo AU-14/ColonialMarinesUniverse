@@ -4,7 +4,7 @@ using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.CMU14.Medical.Blood;
-using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Containers;
 
@@ -30,6 +30,8 @@ public sealed class CMUBloodMismatchTest
             patient = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
             pack = entMan.SpawnEntity("CMUBloodPackFullOPositive", map.GridCoords);
             iv = entMan.SpawnEntity("CMIV", map.GridCoords);
+            Assert.That(entMan.GetComponent<CMUBloodPackTypeComponent>(pack).Type, Is.EqualTo(CMUBloodType.OPositive),
+                "The O+ pack spawned without its blood type.");
 
             var bloodType = entMan.EnsureComponent<CMUBloodTypeComponent>(patient);
             bloodType.Type = CMUBloodType.ANegative;
@@ -54,14 +56,14 @@ public sealed class CMUBloodMismatchTest
         {
             var entMan = server.EntMan;
             var label = entMan.GetComponent<CMUBloodPackTypeComponent>(pack);
-            var damageable = entMan.GetComponent<DamageableComponent>(patient);
+            var damage = entMan.System<DamageableSystem>().GetAllDamage((patient, null));
             var solutions = entMan.System<SharedSolutionContainerSystem>();
             Assert.That(solutions.TryGetSolution(pack, "pack", out _, out var packSolution), Is.True);
 
-            TestContext.Out.WriteLine($"label {label.Type} mixed {label.Mixed}; pack volume {packSolution!.Volume}; damage {string.Join(", ", damageable.Damage.DamageDict.Where(d => d.Value > 0).Select(d => $"{d.Key}={d.Value}"))}");
+            TestContext.Out.WriteLine($"label {label.Type} mixed {label.Mixed}; pack volume {packSolution!.Volume}; damage {string.Join(", ", damage.DamageDict.Where(d => d.Value > 0).Select(d => $"{d.Key}={d.Value}"))}");
 
             Assert.That(packSolution.Volume, Is.LessThan(FixedPoint2.New(300)), "Nothing left the pack.");
-            Assert.That(damageable.Damage.DamageDict.GetValueOrDefault("Poison"), Is.GreaterThan(FixedPoint2.Zero),
+            Assert.That(damage.DamageDict.GetValueOrDefault("Poison"), Is.GreaterThan(FixedPoint2.Zero),
                 "Incompatible blood didn't poison the recipient.");
         });
 

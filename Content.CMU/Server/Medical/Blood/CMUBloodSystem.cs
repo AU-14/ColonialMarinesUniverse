@@ -69,9 +69,7 @@ public sealed class CMUBloodSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<CMUHumanMedicalComponent, MapInitEvent>(OnHumanMapInit);
-        SubscribeLocalEvent<CMUBloodPackTypeComponent, SolutionChangedEvent>(OnTypedPackSolutionChanged);
         SubscribeLocalEvent<CMUBloodPackTypeComponent, ExaminedEvent>(OnTypedPackExamined);
-        SubscribeLocalEvent<CMUPerishableBloodComponent, SolutionChangedEvent>(OnPerishableSolutionChanged);
         SubscribeLocalEvent<CMUPerishableBloodComponent, ExaminedEvent>(OnPerishableExamined);
         SubscribeLocalEvent<BloodPackComponent, UseInHandEvent>(OnPackUseInHand);
 
@@ -100,20 +98,35 @@ public sealed class CMUBloodSystem : EntitySystem
         return comp.Type;
     }
 
-    /// <summary>Drawing blood into a pack labels it with the donor's type, or marks it mixed.</summary>
-    public void OnBloodDrawn(EntityUid pack, EntityUid donor)
+    /// <summary>
+    /// Drawing blood into a pack labels it with the donor's type, or marks it mixed. Drawing into an empty pack starts it
+    /// over: any type, and fresh.
+    /// </summary>
+    public void OnBloodDrawn(EntityUid pack, EntityUid donor, bool wasEmpty)
     {
         if (!HasComp<BloodstreamComponent>(donor))
             return;
 
         var donorType = GetBloodType(donor);
-        EnsureComp<CMUPerishableBloodComponent>(pack);
+        var perishable = EnsureComp<CMUPerishableBloodComponent>(pack);
         var label = EnsureComp<CMUBloodPackTypeComponent>(pack);
-        if (label.Mixed)
-            return;
+        if (wasEmpty)
+        {
+            perishable.Warm = TimeSpan.Zero;
+            perishable.Spoiled = false;
+            Dirty(pack, perishable);
 
-        if (label.Type == null)
             label.Type = donorType;
+            label.Mixed = false;
+        }
+        else if (label.Mixed)
+        {
+            return;
+        }
+        else if (label.Type == null)
+        {
+            label.Type = donorType;
+        }
         else if (label.Type != donorType)
         {
             label.Type = null;
@@ -123,34 +136,12 @@ public sealed class CMUBloodSystem : EntitySystem
         Dirty(pack, label);
     }
 
-    private void OnTypedPackSolutionChanged(Entity<CMUBloodPackTypeComponent> ent, ref SolutionChangedEvent args)
-    {
-        // An emptied pack can be refilled with any type.
-        if (args.Solution.Comp.Solution.Volume > FixedPoint2.Zero || ent.Comp.Type == null && !ent.Comp.Mixed)
-            return;
-
-        ent.Comp.Type = null;
-        ent.Comp.Mixed = false;
-        Dirty(ent);
-    }
-
     private void OnTypedPackExamined(Entity<CMUBloodPackTypeComponent> ent, ref ExaminedEvent args)
     {
         if (ent.Comp.Mixed)
             args.PushMarkup(Loc.GetString("cmu-blood-pack-examine-mixed"));
         else if (ent.Comp.Type is { } type)
             args.PushMarkup(Loc.GetString("cmu-blood-pack-examine-type", ("type", CMUBloodTypes.Name(type))));
-    }
-
-    private void OnPerishableSolutionChanged(Entity<CMUPerishableBloodComponent> ent, ref SolutionChangedEvent args)
-    {
-        // An emptied pack can hold fresh blood again.
-        if (args.Solution.Comp.Solution.Volume > FixedPoint2.Zero || ent.Comp.Warm == TimeSpan.Zero && !ent.Comp.Spoiled)
-            return;
-
-        ent.Comp.Warm = TimeSpan.Zero;
-        ent.Comp.Spoiled = false;
-        Dirty(ent);
     }
 
     private void OnPerishableExamined(Entity<CMUPerishableBloodComponent> ent, ref ExaminedEvent args)

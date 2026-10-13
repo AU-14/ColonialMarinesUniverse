@@ -12,8 +12,8 @@ public sealed partial class IVDripSystem
     private float CMUFlowMultiplier(EntityUid? iv, EntityUid pack)
         => _cmuBlood.GetFlowMultiplier(iv, pack);
 
-    private void CMUOnBloodDrawn(EntityUid pack, EntityUid donor)
-        => _cmuBlood.OnBloodDrawn(pack, donor);
+    private void CMUOnBloodDrawn(EntityUid pack, EntityUid donor, bool wasEmpty)
+        => _cmuBlood.OnBloodDrawn(pack, donor, wasEmpty);
 
     private void CMUOnDialysisTick(EntityUid patient)
         => _cmuBlood.DialyzeSaline(patient);

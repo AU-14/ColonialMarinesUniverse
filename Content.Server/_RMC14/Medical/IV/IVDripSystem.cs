@@ -130,8 +130,9 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
             {
                 if (packSol.Volume < packSol.MaxVolume)
                 {
+                    var cmuWasEmpty = packSol.Volume <= FixedPoint2.Zero; // CMU14
                     TransferReferenceBlood(packSolEnt.Value, streamSolEnt.Value, streamSol, bloodstream, ivComp.TransferAmount);
-                    CMUOnBloodDrawn(pack, attachedTo); // CMU14: label the pack with the donor's blood type
+                    CMUOnBloodDrawn(pack, attachedTo, cmuWasEmpty); // CMU14: label the pack with the donor's blood type
                 }
             }
 
@@ -182,8 +183,9 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
             {
                 if (packSol.Volume < packSol.MaxVolume)
                 {
+                    var cmuWasEmpty = packSol.Volume <= FixedPoint2.Zero; // CMU14
                     TransferReferenceBlood(packSolEnt.Value, streamSolEnt.Value, streamSol, bloodstream, packComp.TransferAmount);
-                    CMUOnBloodDrawn(packId, attachedTo); // CMU14: label the pack with the donor's blood type
+                    CMUOnBloodDrawn(packId, attachedTo, cmuWasEmpty); // CMU14: label the pack with the donor's blood type
                 }
             }
 
