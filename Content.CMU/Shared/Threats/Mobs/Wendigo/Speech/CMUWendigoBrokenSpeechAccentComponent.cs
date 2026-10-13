@@ -6,16 +6,17 @@ namespace Content.Shared.CMU14.Threats.Mobs.Wendigo.Speech;
 /// <summary>
 /// Wendigo speech: words break up like brain damage, drunkenness or radio static.
 /// "They're in the upper window!" may come out as "IIn.. Uuupperrr.. ... Window!".
-/// Each chance is rolled per word; most words survive in some form.
+/// Each chance is rolled per word. About a third of the words are lost (never two in a row), so a full sentence
+/// rarely makes it out intact.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
 [Access(typeof(CMUWendigoBrokenSpeechAccentSystem))]
 public sealed partial class CMUWendigoBrokenSpeechAccentComponent : BaseAccentComponent
 {
-    public const float DefaultDropChance = 0.12f;
-    public const float DefaultStretchChance = 0.35f;
-    public const float DefaultDoubleChance = 0.25f;
-    public const float DefaultTrailChance = 0.3f;
+    public const float DefaultDropChance = 0.35f;
+    public const float DefaultStretchChance = 0.5f;
+    public const float DefaultDoubleChance = 0.35f;
+    public const float DefaultTrailChance = 0.6f;
     public const float DefaultCapitalizeChance = 0.2f;
 
     /// <summary>

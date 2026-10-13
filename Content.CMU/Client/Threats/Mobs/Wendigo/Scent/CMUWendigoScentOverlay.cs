@@ -86,7 +86,7 @@ public sealed partial class CMUWendigoScentOverlay : Overlay
             {
                 foreach (var offset in StrandOffsets)
                 {
-                    handle.DrawLine(from + offset, to + offset, CoreColor.WithAlpha(segmentAlpha * 0.22f));
+                    handle.DrawLine(from + offset, to + offset, CoreColor.WithAlpha(segmentAlpha * 0.65f));
                 }
             }
 
@@ -120,9 +120,9 @@ public sealed partial class CMUWendigoScentOverlay : Overlay
         var pos = center + jitter + sway;
         var size = 0.75f + Noise(seed + 13) * 0.5f;
 
-        handle.DrawCircle(pos, 0.38f * size, HazeColor.WithAlpha(alpha * 0.07f));
-        handle.DrawCircle(pos, 0.24f * size, HazeColor.WithAlpha(alpha * 0.09f));
-        handle.DrawCircle(pos, 0.12f * size, CoreColor.WithAlpha(alpha * 0.12f));
+        handle.DrawCircle(pos, 0.38f * size, HazeColor.WithAlpha(alpha * 0.22f));
+        handle.DrawCircle(pos, 0.24f * size, HazeColor.WithAlpha(alpha * 0.3f));
+        handle.DrawCircle(pos, 0.12f * size, CoreColor.WithAlpha(alpha * 0.45f));
     }
 
     /// <summary>Cheap deterministic hash in [0, 1), so puffs keep their place between frames.</summary>
