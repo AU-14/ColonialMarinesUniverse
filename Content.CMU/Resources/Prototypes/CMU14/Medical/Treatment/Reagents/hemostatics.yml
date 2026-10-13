@@ -31,3 +31,13 @@
       effects:
       - !type:ModifyBloodLevel
         amount: 2
+
+# Precursor for tranexamic acid. Does nothing by itself.
+- type: reagent
+  parent: CMReagent
+  id: CMUAminomethylbenzoicAcid
+  name: reagent-name-cmu-aminomethylbenzoic-acid
+  desc: reagent-desc-cmu-aminomethylbenzoic-acid
+  physicalDesc: reagent-physical-desc-powdery
+  flavor: bitter
+  color: "#e3dccb"
