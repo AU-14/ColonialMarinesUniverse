@@ -35,17 +35,27 @@ public sealed partial class CMUSquadVisorWearerComponent : Component
     [DataField, AutoNetworkedField]
     public bool GrenadeWarningsEnabled = true;
 
+    /// <summary>Whether the optic shows what squadmates' motion trackers pick up.</summary>
+    [DataField, AutoNetworkedField]
+    public bool MotionLinkEnabled = true;
+
     [DataField]
     public EntProtoId IffActionId = "CMUActionSquadVisorIFF";
 
     [DataField]
     public EntProtoId GrenadeActionId = "CMUActionSquadVisorGrenadeWarnings";
 
+    [DataField]
+    public EntProtoId MotionLinkActionId = "CMUActionSquadVisorMotionLink";
+
     [DataField, AutoNetworkedField]
     public EntityUid? IffAction;
 
     [DataField, AutoNetworkedField]
     public EntityUid? GrenadeAction;
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? MotionLinkAction;
 }
 
 /// <summary>
@@ -68,6 +78,8 @@ public sealed partial class CMUSquadVisorIFFGunComponent : Component
 public sealed partial class CMUToggleSquadVisorIFFActionEvent : InstantActionEvent;
 
 public sealed partial class CMUToggleSquadVisorGrenadeWarningsActionEvent : InstantActionEvent;
+
+public sealed partial class CMUToggleSquadVisorMotionLinkActionEvent : InstantActionEvent;
 
 /// <summary>
 /// A grenade with a smart fuse that a squad optic can pick out. Squad optic wearers see a ring around friendly ones

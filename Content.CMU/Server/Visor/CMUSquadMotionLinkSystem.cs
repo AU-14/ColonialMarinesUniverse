@@ -54,8 +54,11 @@ public sealed class CMUSquadMotionLinkSystem : EntitySystem
         }
 
         var wearers = EntityQueryEnumerator<CMUSquadVisorWearerComponent>();
-        while (wearers.MoveNext(out var wearer, out _))
+        while (wearers.MoveNext(out var wearer, out var marker))
         {
+            if (!marker.MotionLinkEnabled)
+                continue;
+
             var link = EnsureComp<CMUSquadMotionLinkComponent>(wearer);
             var latest = TimeSpan.Zero;
             var any = false;

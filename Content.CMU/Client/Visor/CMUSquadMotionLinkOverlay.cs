@@ -44,7 +44,8 @@ public sealed class CMUSquadMotionLinkOverlay : Overlay
     {
         if (_player.LocalEntity is not { } player ||
             !_entity.TryGetComponent(player, out CMUSquadMotionLinkComponent? link) ||
-            !_entity.HasComponent<CMUSquadVisorWearerComponent>(player))
+            !_entity.TryGetComponent(player, out CMUSquadVisorWearerComponent? wearer) ||
+            !wearer.MotionLinkEnabled)
         {
             return;
         }

@@ -37,3 +37,23 @@
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:CMUToggleSquadVisorGrenadeWarningsActionEvent
+
+- type: entity
+  parent: ActionMarineBase
+  id: CMUActionSquadVisorMotionLink
+  name: Toggle Squad Motion Tracker Link
+  description: Toggles your squad optic showing what your squadmates' motion trackers pick up.
+  components:
+  - type: Action
+    checkCanInteract: false
+    itemIconStyle: NoItem
+    backgroundOn:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: template_on_big
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_smart_gun_actions.rsi
+      state: motion_detector
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUToggleSquadVisorMotionLinkActionEvent

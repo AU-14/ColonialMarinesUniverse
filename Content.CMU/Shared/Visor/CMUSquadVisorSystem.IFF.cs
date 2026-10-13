@@ -21,6 +21,7 @@ public sealed partial class CMUSquadVisorSystem
     {
         SubscribeLocalEvent<CMUSquadVisorWearerComponent, CMUToggleSquadVisorIFFActionEvent>(OnToggleIff);
         SubscribeLocalEvent<CMUSquadVisorWearerComponent, CMUToggleSquadVisorGrenadeWarningsActionEvent>(OnToggleGrenadeWarnings);
+        SubscribeLocalEvent<CMUSquadVisorWearerComponent, CMUToggleSquadVisorMotionLinkActionEvent>(OnToggleMotionLink);
         SubscribeLocalEvent<CMUSquadVisorWearerComponent, DidEquipHandEvent>(OnWearerPickedUp);
 
         SubscribeLocalEvent<CMUSquadVisorIFFGunComponent, GotUnequippedHandEvent>(OnGunDropped);
@@ -36,8 +37,10 @@ public sealed partial class CMUSquadVisorSystem
 
         _actions.AddAction(wearer, ref marker.IffAction, marker.IffActionId);
         _actions.AddAction(wearer, ref marker.GrenadeAction, marker.GrenadeActionId);
+        _actions.AddAction(wearer, ref marker.MotionLinkAction, marker.MotionLinkActionId);
         _actions.SetToggled(marker.IffAction, marker.IffEnabled);
         _actions.SetToggled(marker.GrenadeAction, marker.GrenadeWarningsEnabled);
+        _actions.SetToggled(marker.MotionLinkAction, marker.MotionLinkEnabled);
         Dirty(wearer, marker);
     }
 
@@ -46,7 +49,7 @@ public sealed partial class CMUSquadVisorSystem
         if (_net.IsClient)
             return;
 
-        foreach (var action in new[] { marker.IffAction, marker.GrenadeAction })
+        foreach (var action in new[] { marker.IffAction, marker.GrenadeAction, marker.MotionLinkAction })
         {
             if (action is not { } uid)
                 continue;
@@ -57,6 +60,7 @@ public sealed partial class CMUSquadVisorSystem
 
         marker.IffAction = null;
         marker.GrenadeAction = null;
+        marker.MotionLinkAction = null;
     }
 
     private void OnToggleIff(Entity<CMUSquadVisorWearerComponent> ent, ref CMUToggleSquadVisorIFFActionEvent args)
@@ -88,6 +92,22 @@ public sealed partial class CMUSquadVisorSystem
         _popup.PopupClient(Loc.GetString(ent.Comp.GrenadeWarningsEnabled
                 ? "cmu-squad-visor-grenades-on"
                 : "cmu-squad-visor-grenades-off"),
+            ent, ent, PopupType.Small);
+    }
+
+    private void OnToggleMotionLink(Entity<CMUSquadVisorWearerComponent> ent, ref CMUToggleSquadVisorMotionLinkActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        args.Handled = true;
+        ent.Comp.MotionLinkEnabled = !ent.Comp.MotionLinkEnabled;
+        Dirty(ent);
+
+        _actions.SetToggled(ent.Comp.MotionLinkAction, ent.Comp.MotionLinkEnabled);
+        _popup.PopupClient(Loc.GetString(ent.Comp.MotionLinkEnabled
+                ? "cmu-squad-visor-motion-link-on"
+                : "cmu-squad-visor-motion-link-off"),
             ent, ent, PopupType.Small);
     }
 
