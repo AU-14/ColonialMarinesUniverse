@@ -11,6 +11,7 @@ using Content.Shared.CCVar;
 using Content.Shared.CMU14.CharacterDescription;
 using Content.Shared.CMU14.Roles;
 // cmu edit start
+using Content.Client.CMU14.Interface;
 using Content.Shared.CMU14.Squads.Foxtrot;
 // cmu edit end
 using Content.Shared._RMC14.LinkAccount;
@@ -184,8 +185,10 @@ public sealed partial class HumanoidProfileEditor
         FoxtrotSquadOptInButton.OnPressed += args =>
         {
             Profile = Profile?.WithFoxtrotSquadOptIn(args.Button.Pressed);
+            UpdateFoxtrotSquadOptIn();
             SetDirty();
         };
+        UpdateFoxtrotSquadOptIn();
         // cmu edit end
         XenoPrefix.OnTextChanged += args => SetXenoPrefix(args.Text);
         XenoPostfix.OnTextChanged += args => SetXenoPostfix(args.Text);
@@ -360,7 +363,7 @@ public sealed partial class HumanoidProfileEditor
         UpdateNamedItems();
         UpdatePlaytimePerks();
         // cmu edit start
-        FoxtrotSquadOptInButton.Pressed = Profile?.FoxtrotSquadOptIn ?? false;
+        UpdateFoxtrotSquadOptIn();
         // cmu edit end
         UpdateCharacterDescriptionControls();
         UpdateXenoPrefix();
@@ -734,6 +737,21 @@ public sealed partial class HumanoidProfileEditor
         NamedItems.Armor.Text = Profile?.NamedItems.ArmorName ?? string.Empty;
         NamedItems.Sentry.Text = Profile?.NamedItems.SentryName ?? string.Empty;
     }
+
+    // cmu edit start
+    /// <summary>
+    /// The opt-in uses the lobby ready toggle's two looks, so on and off read at a glance.
+    /// </summary>
+    private void UpdateFoxtrotSquadOptIn()
+    {
+        var optedIn = Profile?.FoxtrotSquadOptIn ?? false;
+        CmuReadyToggle.Apply(FoxtrotSquadOptInButton, optedIn);
+        FoxtrotSquadOptInButton.Pressed = optedIn;
+        FoxtrotSquadOptInButton.Text = Loc.GetString(optedIn
+            ? "cmu-humanoid-profile-editor-foxtrot-squad-opted-in"
+            : "cmu-humanoid-profile-editor-foxtrot-squad-opted-out");
+    }
+    // cmu edit end
 
     private void UpdatePlaytimePerks()
     {
