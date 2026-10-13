@@ -1,11 +1,4 @@
 # Overwatch console roster
-cmu-overwatch-roster-col-callsign = CALLSIGN
-cmu-overwatch-roster-col-name = NAME
-cmu-overwatch-roster-col-role = ROLE
-cmu-overwatch-roster-col-status = STATUS
-cmu-overwatch-roster-col-location = LOCATION
-cmu-overwatch-roster-col-distance = SL DIST
-
 cmu-overwatch-roster-group-lead = SQUAD LEAD
 cmu-overwatch-roster-group-fireteam = FIRETEAM {$number}
 cmu-overwatch-roster-group-fireteam-named = FIRETEAM {$number} - {$name}
@@ -23,6 +16,8 @@ cmu-overwatch-roster-feed-tooltip = Watch this camera in the feeds window (up to
 cmu-overwatch-roster-hide = HIDE
 cmu-overwatch-roster-show = SHOW
 cmu-overwatch-roster-promote = SL
+cmu-overwatch-roster-distance = SL {$distance}m
+cmu-overwatch-roster-distance-none = SL -
 
 # Supply drop readiness on the squad dashboard
 cmu-overwatch-supply-label = SUPPLY DROP:
