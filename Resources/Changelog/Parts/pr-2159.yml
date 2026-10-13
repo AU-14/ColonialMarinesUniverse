@@ -1,0 +1,35 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Dropship hatches no longer auto-close onto people standing in them
+  type: Fix
+- message: Landing on a burning LZ no longer leaves fires burning inside the dropship
+  type: Fix
+- message: The chemical simulator warns when a relate or add will cancel a conflicting
+    property
+  type: Fix
+- message: Duplicate intel objectives (like two WY laptops) each pay out
+  type: Fix
+- message: NSG-23 AP and incendiary mags work with their ammo boxes, and the NSG-23
+    has no damage falloff
+  type: Fix
+- message: K9 dogs can bite weeds and wall weeds, let go of downed targets, ignore
+    dead xenos and no longer read xeno names
+  type: Fix
+- message: K9 welder repair is no longer an instant full heal, burns need cable coil
+  type: Fix
+- message: Xenos can build resin on roofs again
+  type: Fix
+- message: Carrion Mantle no longer burns its cooldown on a miss
+  type: Fix
+- message: WY hazard transport scientists have medical skill
+  type: Fix
+- message: Military synths can send announcements from the command tablet
+  type: Fix
+- message: Patients stand back up after their legs are reattached, and losing your
+    feet puts you down
+  type: Fix
+- message: You're no longer stuck slow after getting up from a knockdown
+  type: Fix
+time: '2026-10-11T21:53:38.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2159
