@@ -19,8 +19,8 @@
     <GuideEntityEmbed Entity="CMUAutodocPod" Caption="Autodoc pod"/>
     <GuideEntityEmbed Entity="CMUAutodocConsole" Caption="Autodoc console"/>
   </Box>
-  The autodoc operates by itself, so a surgeon can queue up the work and step away.
-  - Put the patient in the pod, then open the console. Queuing procedures needs [bold]surgery training[/bold] (level 2).
+  The autodoc operates by itself, so anyone can queue up the work and step away. It needs no surgery training.
+  - Put the patient in the pod, then open the console.
   - Pick a body part and the surgeries it needs, and add them to the queue. It can also run [bold]Repair Wounds / Burns[/bold] as an automated cycle.
   - Press [bold]Start[/bold]. The pod works through the queue on its own. It's thorough but slow: each step takes the better part of a minute.
   - [bold]Stop[/bold] pauses it, [bold]Clear[/bold] empties the queue, and [bold]Eject Patient[/bold] takes them out.
