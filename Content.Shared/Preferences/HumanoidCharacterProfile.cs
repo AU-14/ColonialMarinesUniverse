@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.NamedItems;
 using Content.Shared._RMC14.Xenonids.Name;
+using Content.Shared.CMU14.Medical.Blood; // CMU14
 using Content.Shared.CMU14.Allegiance;
 using Content.Shared.CMU14.Origin;
 using Content.Shared.CMU14.Threats;
@@ -500,6 +501,7 @@ namespace Content.Shared.Preferences
             // CMU14: Force on Force roles, hijacking, announcements and identification.
             FoFSide = other.FoFSide;
             FoFFallback = other.FoFFallback;
+            BloodType = other.BloodType; // CMU14
             // cmu edit start
             FoxtrotSquadOptIn = other.FoxtrotSquadOptIn;
             // cmu edit end
@@ -1223,6 +1225,7 @@ namespace Content.Shared.Preferences
             if (PreferenceUnavailable != other.PreferenceUnavailable) return false;
             // CMU14: Force on Force roles, hijacking, announcements and identification.
             if (FoFSide != other.FoFSide || FoFFallback != other.FoFFallback) return false;
+            if (BloodType != other.BloodType) return false; // CMU14
             // cmu edit start
             if (FoxtrotSquadOptIn != other.FoxtrotSquadOptIn) return false;
             // cmu edit end
@@ -1576,6 +1579,7 @@ namespace Content.Shared.Preferences
             // CMU14: Force on Force roles, hijacking, announcements and identification.
             if (!Enum.IsDefined(FoFSide)) FoFSide = ForceOnForceSide.Either;
             if (!Enum.IsDefined(FoFFallback)) FoFFallback = ForceOnForceFallback.StayInLobby;
+            if (!Enum.IsDefined(BloodType)) BloodType = CMUBloodTypes.DefaultTypes[0]; // CMU14
 
             _antagPreferences.Clear();
             _antagPreferences.UnionWith(antags);
@@ -1759,6 +1763,7 @@ namespace Content.Shared.Preferences
             // CMU14: Force on Force roles, hijacking, announcements and identification.
             hashCode.Add(FoFSide);
             hashCode.Add(FoFFallback);
+            hashCode.Add(BloodType); // CMU14
             // cmu edit start
             hashCode.Add(FoxtrotSquadOptIn);
             // cmu edit end

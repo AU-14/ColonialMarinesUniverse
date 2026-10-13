@@ -226,6 +226,7 @@
   - CMUGuideMedicalInfantry
   - CMUGuideMedicalDiagnosis
   - CMUGuideMedicalWounds
+  - CMUGuideMedicalBlood
   - CMUGuideMedicalFieldCare
   - CMUGuideMedicalBones
   - CMUGuideMedicalPain
@@ -256,6 +257,13 @@
   name: cmu-guide-entry-medical-wounds
   priority: 1
   text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalWounds.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalBlood
+  name: cmu-guide-entry-medical-blood
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalBlood.xml"
 
 - type: guideEntry
   parent: RMC

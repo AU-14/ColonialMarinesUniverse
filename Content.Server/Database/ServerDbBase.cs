@@ -423,6 +423,7 @@ namespace Content.Server.Database
             profile.Height = humanoid.Height;
             profile.Weight = humanoid.Weight;
             profile.Build = humanoid.Build.ToString();
+            profile.BloodType = humanoid.BloodType.ToString(); // CMU14
             // cmu edit start
             profile.FoxtrotSquadOptIn = humanoid.FoxtrotSquadOptIn;
             // cmu edit end

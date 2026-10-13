@@ -20,6 +20,7 @@ using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CMU14.CharacterDescription;
+using Content.Shared.CMU14.Medical.Blood; // CMU14
 using Content.Shared.Body;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
@@ -60,6 +61,8 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     private static readonly ProtoId<NpcFactionPrototype> OpforNpcFaction = new("OPFOR");
 
     [Dependency] private SharedAccessSystem _accessSystem = default!;
+
+    [Dependency] private CMUIdBloodTypeSystem _cmuIdBloodType = default!; // CMU14
     [Dependency] private ActorSystem _actors = default!;
     [Dependency] private IdCardSystem _cardSystem = default!;
     [Dependency] private IConfigurationManager _configurationManager = default!;
@@ -312,6 +315,8 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
                 if (profile.FlavorText != "" && _configurationManager.GetCVar(CCVars.FlavorText))
                     AddComp<DetailExaminableComponent>(jobEntity).Content = profile.FlavorText;
 
+                ApplyProfileBloodType(jobEntity, profile); // CMU14
+
                 if (_configurationManager.GetCVar(CCVars.CharacterDescription))
                     BakeCharacterDescription(jobEntity, profile);
             }
@@ -369,6 +374,8 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
             if (profile.FlavorText != "" && _configurationManager.GetCVar(CCVars.FlavorText))
                 AddComp<DetailExaminableComponent>(entity.Value).Content = profile.FlavorText;
+
+            ApplyProfileBloodType(entity.Value, profile); // CMU14
 
             if (_configurationManager.GetCVar(CCVars.CharacterDescription))
                 BakeCharacterDescription(entity.Value, profile);
@@ -718,6 +725,14 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     private const string DisabilitiesTraitCategory = "Disabilities";
     private const string DrugAllergyTraitId = "RandomDrugAllergy";
 
+    // CMU14: blood type from the profile, applied whether or not character descriptions are on
+    private void ApplyProfileBloodType(EntityUid uid, HumanoidCharacterProfile profile)
+    {
+        var bloodType = EnsureComp<CMUBloodTypeComponent>(uid);
+        bloodType.Type = profile.BloodType;
+        Dirty(uid, bloodType);
+    }
+
     private void BakeCharacterDescription(EntityUid uid, HumanoidCharacterProfile profile)
     {
         var comp = AddComp<CharacterDescriptionComponent>(uid);
@@ -828,6 +843,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             return;
 
         _cardSystem.TryChangeFullName(cardId, characterName, card);
+        _cmuIdBloodType.Stamp(cardId, entity); // CMU14: print the blood type on the ID
 
         // Respect cards with a prototype-defined title (e.g. fixed-role/faction IDs).
         if (card.JobTitle == null)
@@ -875,6 +891,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
         // Set name and (unless fixed by prototype) job title/icon from the selected job.
         _cardSystem.TryChangeFullName(cardId, characterName, card);
+        _cmuIdBloodType.Stamp(cardId, entity); // CMU14: print the blood type on the ID
         if (card.JobTitle == null)
         {
             _cardSystem.TryChangeJobTitle(cardId, titleJobPrototype.LocalizedName, card);

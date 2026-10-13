@@ -89,6 +89,11 @@ public sealed partial class ActionContainerSystem : EntitySystem
         DebugTools.AssertOwner(uid, comp);
         comp ??= EnsureComp<ActionsContainerComponent>(uid);
 
+        // CMU14: on the client, applying a mob's state can initialize another component (e.g. sleeping) before the
+        // action container has set up its container. Wait for it rather than crash; the server's state brings the action.
+        if (comp.Container == null)
+            return false;
+
         // Replicated action and container states can arrive separately. Keep server-owned references intact until
         // containment catches up, since the client cannot authoritatively replace them.
         var canSpawnAction = !_netMan.IsClient || IsClientSide(uid);

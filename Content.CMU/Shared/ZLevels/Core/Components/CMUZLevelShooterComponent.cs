@@ -8,4 +8,9 @@ public sealed partial class CMUZLevelShooterComponent : Component
 {
     [DataField, AutoNetworkedField]
     public bool ShootDown;
+
+    // cursor is over the level below through a hole. client syncs it, separate from ShootDown
+    // so it can't clobber the blackfoot door gun's manual mode
+    [DataField, AutoNetworkedField]
+    public bool AimDown;
 }
