@@ -17,6 +17,7 @@ cmu-medical-tourniquet-applied = The tourniquet is applied.
 cmu-medical-tourniquet-applied-stump = The tourniquet is clamped over the stump.
 cmu-medical-tourniquet-removed = The tourniquet is removed.
 cmu-medical-tourniquet-already-on = That limb already has a tourniquet.
+cmu-medical-tourniquet-no-selected-limb = There's no arm or leg to put a tourniquet on where you're aiming.
 cmu-medical-tourniquet-no-target = There is no limb to tourniquet.
 cmu-medical-tourniquet-verb-remove = Remove tourniquet
 cmu-medical-tourniquet-verb-remove-stump = Remove tourniquet from stump

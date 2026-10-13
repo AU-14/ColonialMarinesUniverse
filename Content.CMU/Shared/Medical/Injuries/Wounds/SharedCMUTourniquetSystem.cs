@@ -17,6 +17,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 
@@ -25,6 +26,7 @@ namespace Content.Shared.CMU14.Medical.Injuries.Wounds;
 public abstract partial class SharedCMUTourniquetSystem : EntitySystem
 {
     [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] private INetConfigurationManager _netCfg = default!;
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected INetManager Net = default!;
     [Dependency] protected SharedAudioSystem Audio = default!;
@@ -80,8 +82,18 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
         CMUStump? stump = null;
         EntityUid part;
         var alreadyOn = false;
+        // CMU14: with targeted healing on, the tourniquet only goes on the selected limb, like bandages and kits.
+        if (IsTargetedHealingEnabled(args.User))
+        {
+            if (!TryFindSelectedTourniquetSite(args.User, target, out part, out stump, out alreadyOn))
+            {
+                Popup.PopupClient(Loc.GetString("cmu-medical-tourniquet-no-selected-limb"), target, args.User, PopupType.SmallCaution);
+                args.Handled = true;
+                return;
+            }
+        }
         // CMU14: a limb that needs a tourniquet takes priority over where the user is aiming.
-        if (TryFindNeededTourniquetSite(args.User, target, out var neededPart, out var neededStump))
+        else if (TryFindNeededTourniquetSite(args.User, target, out var neededPart, out var neededStump))
         {
             part = neededPart;
             stump = neededStump;
@@ -377,6 +389,58 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
                 alreadyOn = false;
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    /// <summary>CMU14: whether the user wants treatments kept to the body part they've selected.</summary>
+    private bool IsTargetedHealingEnabled(EntityUid user)
+    {
+        if (Net.IsClient)
+            return Cfg.GetCVar(CMUMedicalCCVars.TargetedHealingEnabled);
+
+        return TryComp<ActorComponent>(user, out var actor) &&
+               _netCfg.GetClientCVar(actor.PlayerSession.Channel, CMUMedicalCCVars.TargetedHealingEnabled);
+    }
+
+    /// <summary>
+    /// CMU14: the tourniquet site on the body part the user has selected: the stump of a missing limb there, or the arm
+    /// or leg the part belongs to.
+    /// </summary>
+    private bool TryFindSelectedTourniquetSite(
+        EntityUid user,
+        EntityUid patient,
+        out EntityUid part,
+        out CMUStump? stump,
+        out bool alreadyOn)
+    {
+        part = default;
+        stump = null;
+        alreadyOn = false;
+        if (!TryComp<BodyZoneTargetingComponent>(user, out var aim))
+            return false;
+
+        var (partType, symmetry) = SharedBodyZoneTargetingSystem.ToBodyPart(aim.Selected);
+        if (Stumps.TryFindStump(patient, partType, symmetry, out var stumpParent, out var selectedStump))
+        {
+            part = stumpParent;
+            stump = selectedStump;
+            alreadyOn = selectedStump.Clamped;
+            return true;
+        }
+
+        foreach (var (id, partComp) in MedicalIndex.GetBodyParts(patient))
+        {
+            if (partComp.PartType != partType || partComp.Symmetry != symmetry)
+                continue;
+
+            if (!TryGetTourniquetLimb(id, out var limb))
+                return false;
+
+            part = limb;
+            alreadyOn = HasComp<CMUTourniquetComponent>(limb);
+            return true;
         }
 
         return false;
