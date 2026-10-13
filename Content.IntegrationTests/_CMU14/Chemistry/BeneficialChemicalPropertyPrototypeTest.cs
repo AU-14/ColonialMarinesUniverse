@@ -99,6 +99,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
         "Antiaddictive",
     ];
 
+    [TestPrototypes]
     private static readonly string ReagentPrototype = $$"""
         - type: reagent
           id: {{TestReagent}}
@@ -191,6 +192,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     [Test]
     public async Task AdminContractRegistersAndMaterializesItsGeneratedChemical()
     {
+        // the generated reagent stays in the proto manager, so this pair can't go back in the pool
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
         await pair.CreateTestMap();
 
@@ -271,8 +273,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     [Test]
     public async Task AllPropertiesDeserializeAndHaveRealGuidebookDescriptions()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
-        await pair.LoadPrototypes([ReagentPrototype]);
+        await using var pair = await PoolManager.GetServerClient();
 
         await pair.Server.WaitAssertion(() =>
         {
@@ -391,6 +392,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     [Test]
     public async Task AdminContractDynamicallyLoadsEveryGeneratedPropertyExactlyOnce()
     {
+        // same as above, the generated reagent outlives the test
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
         await pair.CreateTestMap();
 
@@ -458,8 +460,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     [Test]
     public async Task EveryPropertyExecutesAtNormalOverdoseAndCriticalThresholds()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
-        await pair.LoadPrototypes([ReagentPrototype]);
+        await using var pair = await PoolManager.GetServerClient();
 
         await pair.Server.WaitAssertion(() =>
         {
@@ -500,8 +501,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     [Test]
     public async Task TypedReagentConditionUsesLiveSourceAndCurrentContextReagent()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
-        await pair.LoadPrototypes([ReagentPrototype]);
+        await using var pair = await PoolManager.GetServerClient();
 
         await pair.Server.WaitAssertion(() =>
         {
@@ -572,7 +572,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     [Test]
     public async Task TemporaryPropertiesFallBackToTheStrongestStillActiveSource()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
+        await using var pair = await PoolManager.GetServerClient();
         EntityUid human = default;
 
         await pair.Server.WaitAssertion(() =>
@@ -620,8 +620,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     [Test]
     public async Task ElectrogeneticDefibrillationHealsAndConsumesOneUnit()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
-        await pair.LoadPrototypes([ReagentPrototype]);
+        await using var pair = await PoolManager.GetServerClient();
 
         await pair.Server.WaitAssertion(() =>
         {
@@ -682,8 +681,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     [Test]
     public async Task ChemicalDefibrillatingRevivesARevivableCorpseAndTriggersElectrogenetic()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
-        await pair.LoadPrototypes([ReagentPrototype]);
+        await using var pair = await PoolManager.GetServerClient();
 
         EntityUid human = default;
 
@@ -730,8 +728,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     [Test]
     public async Task SupportingSystemsRespectTargetsThresholdsAndExpiration()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
-        await pair.LoadPrototypes([ReagentPrototype]);
+        await using var pair = await PoolManager.GetServerClient();
         var spawned = new List<EntityUid>();
 
         await pair.Server.WaitAssertion(() =>
