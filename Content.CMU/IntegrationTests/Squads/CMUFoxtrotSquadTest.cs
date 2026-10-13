@@ -25,6 +25,7 @@ public sealed class CMUFoxtrotSquadTest : GameTest
     private static readonly ProtoId<JobPrototype> GovforSquadLeader = "AU14JobGOVFORSquadSergeant";
     private static readonly ProtoId<JobPrototype> GovforRto = "AU14JobGOVFORRadioTrafficOperator";
     private static readonly ProtoId<JobPrototype> GovforRifleman = "AU14JobGOVFORSquadRifleman";
+    private static readonly ProtoId<JobPrototype> GovforAutomaticRifleman = "AU14JobGOVFORSquadAutomaticRifleman";
     private static readonly ProtoId<JobPrototype> OpforCombatTech = "AU14JobOPFORSquadCombatTech";
     private static readonly ProtoId<JobPrototype> OpforSquadLeader = "AU14JobOPFORSquadSergeant";
     private static readonly ProtoId<JobPrototype> OpforRto = "AU14JobOPFORRadioTrafficOperator";
@@ -66,13 +67,13 @@ public sealed class CMUFoxtrotSquadTest : GameTest
 
             Assert.Multiple(() =>
             {
-                Assert.That(govfor[GovforCombatTech], Is.EqualTo(9));
+                Assert.That(govfor[GovforCombatTech], Is.EqualTo(8));
                 Assert.That(govfor[GovforSquadLeader], Is.EqualTo(4));
                 Assert.That(govfor[GovforRto], Is.EqualTo(4));
-                Assert.That(govfor[GovforRifleman], Is.EqualTo(75));
+                Assert.That(govfor[GovforRifleman], Is.EqualTo(76));
                 Assert.That(govfor[OpforCombatTech], Is.EqualTo(6));
 
-                Assert.That(opfor[OpforCombatTech], Is.EqualTo(9));
+                Assert.That(opfor[OpforCombatTech], Is.EqualTo(8));
                 Assert.That(opfor[OpforSquadLeader], Is.EqualTo(4));
                 Assert.That(opfor[OpforRto], Is.EqualTo(0), "a role the side does not have gets no Foxtrot slot");
 
@@ -93,8 +94,8 @@ public sealed class CMUFoxtrotSquadTest : GameTest
             var stationJobs = Server.System<StationJobsSystem>();
             var station = SEntMan.SpawnEntity("CMUFoxtrotSquadTestStation", MapCoordinates.Nullspace);
 
-            // 6 regular combat technician slots plus the 3 Foxtrot ones.
-            Assert.That(stationJobs.TrySetJobSlot(station, GovforCombatTech, 9, createSlot: true), Is.True);
+            // 6 regular combat technician slots plus the 2 Foxtrot ones.
+            Assert.That(stationJobs.TrySetJobSlot(station, GovforCombatTech, 8, createSlot: true), Is.True);
 
             var users = new List<NetUserId>();
             NetUserId NewUser()
@@ -133,16 +134,14 @@ public sealed class CMUFoxtrotSquadTest : GameTest
                 Is.EqualTo(CMUFoxtrotSlot.OnlyFoxtrotLeft),
                 "a player's own slot is not counted against them when they join again");
 
-            Join(NewUser(), true, CMUFoxtrotSlot.Foxtrot, "the last Foxtrot slot goes to an opted-in character");
-
             Assert.Multiple(() =>
             {
                 Assert.That(stationJobs.TryGetJobSlot(station, GovforCombatTech, out var left), Is.True);
                 Assert.That(left, Is.EqualTo(0));
                 Assert.That(foxtrot.Pick(station, GovforCombatTech, NewUser(), true), Is.EqualTo(CMUFoxtrotSlot.Regular),
                     "a full Foxtrot squad sends opted-in characters to the regular squads");
-                Assert.That(foxtrot.Pick(station, GovforRifleman, NewUser(), true), Is.EqualTo(CMUFoxtrotSlot.None),
-                    "riflemen have no Foxtrot slots");
+                Assert.That(foxtrot.Pick(station, GovforAutomaticRifleman, NewUser(), true), Is.EqualTo(CMUFoxtrotSlot.None),
+                    "automatic riflemen have no Foxtrot slots");
             });
 
             // A refunded regular slot opens up for regular joiners again.

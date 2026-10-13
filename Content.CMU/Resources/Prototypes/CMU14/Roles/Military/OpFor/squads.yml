@@ -78,7 +78,8 @@
     slots:
       SquadSergeant: 1
       RadioTrafficOperator: 1
-      SquadCombatTech: 3
+      SquadCombatTech: 2
+      SquadRifleman: 1
     # the squad leader and RTO build like the combat technicians (AU14SkillPresetPlatoonCombatTechnician)
     skillRoles:
     - SquadSergeant
