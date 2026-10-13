@@ -1,0 +1,17 @@
+cmu-crayon-symbol-missing-colors = You need a crayon of every colour in this symbol.
+cmu-crayon-custom-category = Custom symbols
+cmu-crayon-custom-new = New
+cmu-crayon-custom-edit = Edit
+cmu-crayon-custom-delete = Delete
+cmu-crayon-canvas-title = Crayon symbol
+cmu-crayon-canvas-name = Name
+cmu-crayon-canvas-eraser = Eraser
+cmu-crayon-canvas-custom = Custom colour
+cmu-crayon-canvas-fill = Fill
+cmu-crayon-canvas-clear = Clear
+cmu-crayon-canvas-save = Save
+cmu-crayon-canvas-rainbow = rainbow crayon
+cmu-crayon-canvas-needs = Needs: {$crayons}
+cmu-crayon-canvas-error-name = Give the symbol a name.
+cmu-crayon-canvas-error-empty = Draw something first.
+cmu-crayon-canvas-error-colors = Use at most {$max} colours.

@@ -54,6 +54,7 @@ namespace Content.Client.Crayon.UI
         {
             // Clear
             Grids.RemoveAllChildren();
+            CMUAddCustomSymbols(); // CMU14
 
             if (_decals == null || _allDecals == null)
                 return;
@@ -141,6 +142,7 @@ namespace Content.Client.Crayon.UI
                 return;
 
             _selected = obj.Button.Name;
+            _cmuSelected = null; // CMU14
             _autoSelected = null;
             OnSelected?.Invoke(_selected);
             RefreshList();
