@@ -15,6 +15,11 @@
     weapon: RMCDropshipAttachmentGau21Cannon
     fireMissionDelay: 1
   - type: DropshipMixedBelt
+  - type: ContainerContainer
+    containers:
+      belt1: !type:ContainerSlot
+      belt2: !type:ContainerSlot
+      belt3: !type:ContainerSlot
   - type: ItemSlots
     slots:
       belt1:

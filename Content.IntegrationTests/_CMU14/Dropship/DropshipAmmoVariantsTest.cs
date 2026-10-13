@@ -112,7 +112,7 @@ public sealed class DropshipAmmoVariantsTest
                 for (var y = -5; y <= 5; y++)
                     maps.SetTile(map.Grid, new Vector2i(x, y), map.Tile.Tile);
             }
-            victim = entities.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
+            victim = entities.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1.5f, 0.5f)));
         });
         await pair.RunTicksSync(2);
         await pair.Server.WaitAssertion(() =>
@@ -125,7 +125,7 @@ public sealed class DropshipAmmoVariantsTest
             var flight = entities.SpawnEntity(null, MapCoordinates.Nullspace);
             entities.AddComponent(flight, new AmmoInFlightComponent
             {
-                Target = map.GridCoords,
+                Target = map.GridCoords.Offset(new Vector2(0.5f, 0.5f)),
                 MarkerAt = TimeSpan.Zero,
                 MarkerDuration = TimeSpan.Zero,
                 ShotsLeft = 1,

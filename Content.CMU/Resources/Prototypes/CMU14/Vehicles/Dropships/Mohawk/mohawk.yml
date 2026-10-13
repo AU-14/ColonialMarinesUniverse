@@ -477,6 +477,19 @@
   - type: Damageable
   - type: Injurable
     damageContainer: Inorganic
+  - type: Physics
+    bodyType: Kinematic
+  - type: Fixtures
+    fixtures:
+      turret:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+          position: 1.5,1
+        density: 100
+        hard: true
+        layer: [BulletImpassable]
+        mask: [BulletImpassable]
   - type: GenericVisualizer
     visuals:
       enum.MohawkChinGunVisuals.Disabled:
@@ -487,6 +500,8 @@
     lateralOffset: 1.5
     forwardOffset: 1
   - type: SentryTargeting
+  - type: EntityIFF
+  - type: UserIFF
   - type: DropshipWeaponPoint
     dirOffset: None
     fixedWeapon: true
