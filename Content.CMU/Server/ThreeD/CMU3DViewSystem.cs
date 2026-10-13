@@ -34,6 +34,8 @@ public sealed partial class CMU3DViewSystem : EntitySystem
         public readonly Dictionary<EntityUid, EntityUid> Probes = [];
     }
 
+    private const float MaximumPvsScale = 2f;
+
     private readonly Dictionary<ICommonSession, ViewState> _views = [];
     private readonly HashSet<EntityUid> _wanted = [];
 
@@ -92,8 +94,10 @@ public sealed partial class CMU3DViewSystem : EntitySystem
             }
 
             // PVS range is a diameter. Prefetch beyond the rendered bounds to cover normal walking.
-            var scale = 2 * (state.Radius + CMU3DViewRequest.PrefetchMargin) /
-                Math.Max(1, _config.GetCVar(Robust.Shared.CVars.NetMaxUpdateRange));
+            // every z-level gets its own probe, so a max-distance view streamed ~6x the normal area per level
+            // and buried the server and the client in state (bug 895). cap it at twice the normal range
+            var scale = MathF.Min(MaximumPvsScale, 2 * (state.Radius + CMU3DViewRequest.PrefetchMargin) /
+                Math.Max(1, _config.GetCVar(Robust.Shared.CVars.NetMaxUpdateRange)));
             TryComp(actor, out EyeComponent? actorEye);
             foreach (var map in _wanted)
             {

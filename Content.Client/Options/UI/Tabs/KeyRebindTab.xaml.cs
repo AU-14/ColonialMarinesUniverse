@@ -280,9 +280,6 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(CMUKeyFunctions.CMUTargetBodyZoneRightLeg);
             AddButton(CMUKeyFunctions.CMUOpenMedicalCraftingMenu);
 
-            AddHeader("ui-options-header-cmu-zlevels");
-            AddButton(CMUKeyFunctions.CMUToggleShootDownZLevel);
-
             AddHeader("ui-options-header-cmu-gunship");
             AddButton(CMUKeyFunctions.CMUGunshipForward);
             AddButton(CMUKeyFunctions.CMUGunshipBack);

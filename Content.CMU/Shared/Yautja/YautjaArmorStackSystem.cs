@@ -17,26 +17,39 @@ public sealed partial class YautjaArmorStackSystem : EntitySystem
     }
 
     // pred gear ports cmss13's per-limb armor onto every piece and rmc adds them all up. mesh + armor + greaves + mask
-    // came to 95 bio, so fire did nothing. only the best worn piece counts, like it would on a single limb
+    // came to 95 bio, so fire did nothing, and mesh + clan armor came to 85 bullet so rifles mostly did nothing.
+    // only the best worn piece counts, like it would on a single limb
     private void OnGetArmor(Entity<YautjaComponent> ent, ref CMGetArmorEvent args)
     {
-        var sum = 0;
-        var best = 0;
+        int meleeSum = 0, meleeBest = 0;
+        int bulletSum = 0, bulletBest = 0;
+        int bioSum = 0, bioBest = 0;
         var slots = _inventory.GetSlotEnumerator(ent.Owner, args.TargetSlots);
         while (slots.MoveNext(out var slot))
         {
             if (!TryComp(slot.ContainedEntity, out CMArmorComponent? piece) ||
-                piece.Bio <= 0 ||
                 !_armor.AppliesTo(piece, args.TargetPart, args.TargetZone))
             {
                 continue;
             }
 
-            sum += piece.Bio;
-            best = Math.Max(best, piece.Bio);
+            Track(piece.Melee, ref meleeSum, ref meleeBest);
+            Track(piece.Bullet, ref bulletSum, ref bulletBest);
+            Track(piece.Bio, ref bioSum, ref bioBest);
         }
 
-        args.Bio -= sum - best;
+        args.Melee -= meleeSum - meleeBest;
+        args.Bullet -= bulletSum - bulletBest;
+        args.Bio -= bioSum - bioBest;
+    }
+
+    private static void Track(int value, ref int sum, ref int best)
+    {
+        if (value <= 0)
+            return;
+
+        sum += value;
+        best = Math.Max(best, value);
     }
 
     // same story for explosions, except each piece divides the damage, so a full kit compounded to ~25x and shrugged off grenades

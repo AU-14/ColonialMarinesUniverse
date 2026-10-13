@@ -15,9 +15,6 @@
   - type: CMUCombatEarProtection
   - type: TranslatorDevice
     spokenLanguages:
-      - Yautja
-      - Arcturian
-      - TacticalSignLanguage
       - Ukrainian
       - Polish
       - Czech
@@ -55,9 +52,6 @@
       - Slovak
       - Romanian
     understoodLanguages:
-      - Yautja
-      - Arcturian
-      - TacticalSignLanguage
       - Ukrainian
       - Polish
       - Czech

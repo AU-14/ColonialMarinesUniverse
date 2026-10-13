@@ -167,7 +167,6 @@ namespace Content.Client.Input
             human.AddFunction(CMUKeyFunctions.CMUTargetBodyZoneLeftLeg);
             human.AddFunction(CMUKeyFunctions.CMUTargetBodyZoneRightLeg);
             human.AddFunction(CMUKeyFunctions.CMUOpenMedicalCraftingMenu);
-            human.AddFunction(CMUKeyFunctions.CMUToggleShootDownZLevel);
             human.AddFunction(CMUKeyFunctions.CMUGunshipForward);
             human.AddFunction(CMUKeyFunctions.CMUGunshipBack);
             human.AddFunction(CMUKeyFunctions.CMUGunshipLeft);

@@ -147,7 +147,6 @@ public sealed class RulesKeyRebindMergeRegressionTest : GameTest
                     CMUKeyFunctions.CMUTargetBodyZoneLeftLeg,
                     CMUKeyFunctions.CMUTargetBodyZoneRightLeg,
                     CMUKeyFunctions.CMUOpenMedicalCraftingMenu,
-                    CMUKeyFunctions.CMUToggleShootDownZLevel,
                     CMKeyFunctions.CMXenoWideSwing,
                     CMKeyFunctions.RMCXenoRest,
                     CMUKeyFunctions.CMUEmoteSlot1,

@@ -1,0 +1,11 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Expedition AI now commits to escaping threatened smoke without waiting
+    for covering fire.
+  type: Fix
+- message: Expedition AI can return fire along recently observed incoming-fire bearings
+    through smoke and fire during compatible movement.
+  type: Tweak
+time: '2026-10-11T21:51:15.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2162
