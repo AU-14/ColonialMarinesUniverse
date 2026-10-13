@@ -4,6 +4,7 @@ using Content.Client.CMU14.Medical.Presentation.Windows;
 using Content.Client.CMU14.Temperature; // CMU14
 using Content.Client._RMC14.Medical.HUD;
 using Content.Client.Message;
+using Content.Shared.CMU14.Medical.Blood; // CMU14
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Marines.Skills;
@@ -1240,6 +1241,17 @@ public sealed partial class HealthScannerBui : BoundUserInterface
             if (!_skills.HasAllSkills(viewer, BloodPackSkill))
                 bloodpack = $"[color=#858585]{bloodpack}[/color]";
             AddAdviceCandidate(recommendations, 78, bloodpack);
+
+            // CMU14: which blood and plasma the patient can take
+            if (CMUBloodTypes.TryParseName(uiState.CMUBloodType, out var patientType))
+            {
+                var types = Loc.GetString("cmu-health-analyzer-advice-blood-types",
+                    ("blood", CMUBloodTypes.CompatibleBloodNames(patientType)),
+                    ("plasma", CMUBloodTypes.CompatiblePlasmaGroups(patientType)));
+                if (!_skills.HasAllSkills(viewer, BloodPackSkill))
+                    types = $"[color=#858585]{types}[/color]";
+                AddAdviceCandidate(recommendations, 77, types);
+            }
         }
 
         if (uiState.Advice.ShowFood)

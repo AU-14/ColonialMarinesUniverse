@@ -16,6 +16,7 @@ cmu-iv-pressure-bag-examine = A [color=lightblue]pressure bag[/color] is squeezi
 
 cmu-health-analyzer-blood-type = Blood ({ $type }):
 cmu-health-analyzer-saline = { $percent }% saline
+cmu-health-analyzer-advice-blood-types = [color=red][font="Emoji"]🩸[/font][/color] Compatible blood: { $blood }. Compatible plasma: { $plasma }.
 
 cmu-blood-pack-examine-spoiled = [color=#8a6d3b]It's been out of the fridge too long and has gone bad.[/color]
 cmu-blood-pack-examine-warm = [color=#d9a03f]It's getting warm. Use it or refrigerate it soon.[/color]

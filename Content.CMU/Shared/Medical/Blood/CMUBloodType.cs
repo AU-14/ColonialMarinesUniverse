@@ -1,3 +1,4 @@
+using System.Linq;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Medical.Blood;
@@ -78,6 +79,58 @@ public static class CMUBloodTypes
         CMUBloodType.ABNegative => (true, true, false),
         _ => (true, true, true),
     };
+
+    /// <summary>Every blood type, O- first.</summary>
+    public static readonly CMUBloodType[] AllTypes =
+    [
+        CMUBloodType.ONegative,
+        CMUBloodType.OPositive,
+        CMUBloodType.ANegative,
+        CMUBloodType.APositive,
+        CMUBloodType.BNegative,
+        CMUBloodType.BPositive,
+        CMUBloodType.ABNegative,
+        CMUBloodType.ABPositive,
+    ];
+
+    /// <summary>The blood types <paramref name="recipient"/> can take blood from, as "O-, A-".</summary>
+    public static string CompatibleBloodNames(CMUBloodType recipient)
+        => string.Join(", ", AllTypes.Where(donor => CanReceive(recipient, donor)).Select(Name));
+
+    /// <summary>The ABO groups <paramref name="recipient"/> can take plasma from, as "A, AB". Rh doesn't matter for plasma.</summary>
+    public static string CompatiblePlasmaGroups(CMUBloodType recipient)
+    {
+        var groups = new List<string>();
+        foreach (var (group, donor) in new[]
+                 {
+                     ("O", CMUBloodType.OPositive),
+                     ("A", CMUBloodType.APositive),
+                     ("B", CMUBloodType.BPositive),
+                     ("AB", CMUBloodType.ABPositive),
+                 })
+        {
+            if (CanReceivePlasma(recipient, donor))
+                groups.Add(group);
+        }
+
+        return string.Join(", ", groups);
+    }
+
+    /// <summary>Reads back a name from <see cref="Name"/>, like "AB+".</summary>
+    public static bool TryParseName(string? name, out CMUBloodType type)
+    {
+        foreach (var candidate in AllTypes)
+        {
+            if (Name(candidate) != name)
+                continue;
+
+            type = candidate;
+            return true;
+        }
+
+        type = default;
+        return false;
+    }
 
     public static CMUBloodType RandomDefault(System.Random random) => DefaultTypes[random.Next(DefaultTypes.Length)];
 
