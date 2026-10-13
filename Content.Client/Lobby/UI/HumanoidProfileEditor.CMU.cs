@@ -9,6 +9,7 @@ using Content.Client.Message;
 using Content.Client.Stylesheets;
 using Content.Shared.CCVar;
 using Content.Shared.CMU14.CharacterDescription;
+using Content.Shared.CMU14.Medical.Blood; // CMU14
 using Content.Shared.CMU14.Roles;
 using Content.Shared._RMC14.LinkAccount;
 using Content.Shared._RMC14.Marines.Squads;
@@ -233,6 +234,17 @@ public sealed partial class HumanoidProfileEditor
         {
             BuildButton.SelectId(args.Id);
             SetBuild((BuildType)args.Id);
+        };
+
+        // CMU14: blood type
+        foreach (var bloodType in Enum.GetValues<CMUBloodType>())
+            BloodTypeButton.AddItem(CMUBloodTypes.Name(bloodType), (int)bloodType);
+
+        BloodTypeButton.OnItemSelected += args =>
+        {
+            BloodTypeButton.SelectId(args.Id);
+            Profile = Profile?.WithBloodType((CMUBloodType)args.Id);
+            SetDirty();
         };
 
         HideMetaInformationButton.OnToggled += args =>
@@ -737,6 +749,7 @@ public sealed partial class HumanoidProfileEditor
         CriminalRecordEdit.TextRope = new Rope.Leaf(Profile?.CriminalRecord ?? string.Empty);
         GeneralRecordEdit.TextRope = new Rope.Leaf(Profile?.GeneralRecord ?? string.Empty);
         BuildButton.SelectId((int)(Profile?.Build ?? BuildType.Average));
+        BloodTypeButton.SelectId((int)(Profile?.BloodType ?? CMUBloodType.OPositive)); // CMU14
         HideMetaInformationButton.Pressed = Profile?.HideMetaInformation ?? false;
         UpdateHideMetaInformationButtonText();
 

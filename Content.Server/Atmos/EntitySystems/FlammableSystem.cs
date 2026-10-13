@@ -643,6 +643,13 @@ namespace Content.Server.Atmos.EntitySystems
                 if (!flammable.OnFire)
                     continue;
 
+                // CMU14: anything burning on uncovered water is put out without needing to resist.
+                if (CanWaterExtinguish(uid, flammable) && _rmcWater.IsOnWater(uid))
+                {
+                    TryExtinguish((uid, flammable));
+                    continue;
+                }
+
                 if (flammable.FireStacks <= 0)
                 {
                     TryExtinguish((uid, flammable));

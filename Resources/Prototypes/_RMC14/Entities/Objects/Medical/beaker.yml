@@ -62,6 +62,7 @@
   name: beaker
   description: A beaker. Can hold up to 60 units.
   components:
+  - type: CMUSpillWhenStoredOpen # CMU14: spills in storage without a lid
   - type: Sprite
     sprite: _RMC14/Objects/Medical/beaker.rsi
     layers:
@@ -113,6 +114,7 @@
   name: large beaker
   description: A large beaker. Can hold up to 120 units.
   components:
+  - type: CMUSpillWhenStoredOpen # CMU14: spills in storage without a lid
   - type: Sprite
     sprite: _RMC14/Objects/Medical/large_beaker.rsi
     layers:
@@ -159,6 +161,7 @@
   name: high-capacity beaker
   description: A beaker with an enlarged holding capacity, made with blue-tinted plexiglass in order to withstand greater pressure. Can hold up to 300 units.
   components:
+  - type: CMUSpillWhenStoredOpen # CMU14: spills in storage without a lid
   - type: Sprite
     sprite: _RMC14/Objects/Medical/high_capacity_beaker.rsi
     layers:

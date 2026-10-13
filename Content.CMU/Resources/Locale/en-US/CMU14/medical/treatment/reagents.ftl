@@ -10,6 +10,10 @@ cmu-medical-defib-heart-beating              = Heart is already beating.
 
 reagent-name-cmu-hepatocytin                 = Hepatocytin
 reagent-desc-cmu-hepatocytin                 = A regenerative compound for liver tissue repair.
+reagent-name-cmu-tranexamic-acid             = Tranexamic Acid
+reagent-desc-cmu-tranexamic-acid             = A clotting agent that stops bleeding for as long as it stays in the bloodstream. It doesn't close the wounds.
+reagent-name-cmu-aminomethylbenzoic-acid     = Aminomethylbenzoic Acid
+reagent-desc-cmu-aminomethylbenzoic-acid     = A chemical precursor. Mix it with hydrogen and inaprovaline to make tranexamic acid.
 reagent-name-cmu-pulmovine                   = Pulmovine
 reagent-desc-cmu-pulmovine                   = An aerosolized agent for lung tissue repair.
 reagent-name-cmu-nephronate                  = Nephronate
@@ -44,3 +48,6 @@ reagent-name-cmu-meth-base                   = Methamphetamine Freebase
 reagent-desc-cmu-meth-base                   = A volatile freebase compound, one step removed from a stable, injectable drug.
 reagent-name-cmu-methamphetamine             = Methamphetamine
 reagent-desc-cmu-methamphetamine             = A potent synthetic stimulant. Produces a powerful rush of speed and energy, at the cost of your heart and your health.
+
+reagent-name-cmu-blood-plasma = blood plasma
+reagent-desc-cmu-blood-plasma = The liquid part of blood. Given from a plasma pack of a matching type it restores blood volume quickly and slows bleeding for a while.

@@ -23,7 +23,7 @@
         amount: 80
     - name: Footwear
       entries:
-      - id: RMCBootsRoyal
+      - id: RMCBootsRoyalFilled
         amount: 40
     - name: Gloves
       entries:
@@ -455,6 +455,8 @@
       entries:
       - id: CMUSynthBloodPackFull
         amount: 2
+      - id: CMUSalineBag
+        amount: 3
       - id: CMUMaskCPR
         amount: 30
       - id: AU14HemostaticGauzePacket
@@ -583,7 +585,7 @@
     - name: Footwear
       choices: { CMUPlatoonAirCrewFootwear: 1 }
       entries:
-      - id: CMBootsBlack
+      - id: CMBootsBlackFilled
     - name: Gloves
       choices: { CMUPlatoonAirCrewGloves: 1 }
       entries:
@@ -773,7 +775,7 @@
         amount: 4
     - name: Footwear
       entries:
-      - id: RMCBootsRoyal
+      - id: RMCBootsRoyalFilled
         amount: 3
       - id: RMCShoesLaceup
         amount: 2
@@ -957,7 +959,7 @@
         recommended: true
     - name: Footwear
       entries:
-      - id: AU14SpikeBoots
+      - id: CMUSpikeBootsFilled
         points: 8
         recommended: true
     - name: Utilities
@@ -1632,7 +1634,7 @@
         amount: 80
     - name: Footwear
       entries:
-      - id: RMCBootsRoyal
+      - id: RMCBootsRoyalFilled
         amount: 40
     - name: Mask
       entries:

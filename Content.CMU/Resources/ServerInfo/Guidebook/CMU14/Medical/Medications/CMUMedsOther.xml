@@ -6,6 +6,9 @@
   - [bold]Cryoxadone[/bold]: heals brute, burn, toxin, suffocation and genetic damage all at once.
   - [bold]Clonexadone[/bold]: a stronger cryoxadone. Heals brute, burn, toxin and genetic damage faster.
 
+  ## Bleeding
+  - [bold]Tranexamic acid[/bold]: stops surface bleeding and holds internal bleeding back for as long as it's in the patient's blood. It buys time but doesn't close anything, so the wounds still need dressing or surgery once it wears off. Overdose at 20 units causes clotting damage, and a critical overdose at 40 units damages the heart. It takes two steps: mix 2 carbon, 1 nitrogen, 1 oxygen and 1 sulphuric acid to make aminomethylbenzoic acid, then mix 2 of that with 2 hydrogen and 1 inaprovaline.
+
   ## Body Temperature
   - [bold]Leporazine[/bold]: brings body temperature back to normal, treating both hypothermia and heatstroke. It also stops cryogenics working, so don't give it to someone going into a cryo pod. Overdosing causes extreme drowsiness.
 
@@ -14,6 +17,8 @@
   - [bold]Methylphenidate[/bold]: a stimulant that sharpens focus.
   - [bold]Lipozine[/bold]: burns off fat and makes the patient hungry. Mainly used against obesity.
 
+  <GuideReagentEmbed Reagent="CMUTranexamicAcid"/>
+  <GuideReagentEmbed Reagent="CMUAminomethylbenzoicAcid"/>
   <GuideReagentEmbed Reagent="CMCryoxadone"/>
   <GuideReagentEmbed Reagent="CMClonexadone"/>
   <GuideReagentEmbed Reagent="CMLeporazine"/>

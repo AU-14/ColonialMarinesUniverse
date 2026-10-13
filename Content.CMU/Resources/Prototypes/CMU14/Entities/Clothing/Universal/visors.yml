@@ -1,0 +1,34 @@
+# Corpsman optic: the advanced medical optic and the squad optic in one visor.
+- type: entity
+  parent: RMCVisorMedicalAdvanced
+  id: CMUVisorMedicalSquad
+  name: medical squad optic
+  description: An insertable visor HUD for a standard helmet, issued to corpsmen. It combines the advanced medical optic's health readouts with the squad optic's squad display, trackers, grenade warnings and squad motion tracker link.
+  components:
+  - type: ToggleVisor
+    ignoreRedundancy: true
+  - type: CMUSquadOptic
+  - type: ComponentToggler
+    components:
+    # Advanced medical optic
+    - type: ShowHealthBars
+      damageContainers:
+      - Biological
+    - type: HolocardScanner
+    - type: ShowHealthIcons
+      damageContainers:
+      - Biological
+    # Squad optic
+    - type: GrantMarineIcons
+    - type: CMUSquadVisorActive
+
+- type: entity
+  parent: CMUVisorMedicalSquad
+  id: CMUVisorMedicalSquadIntegrated
+  suffix: Integrated
+  components:
+  - type: UnremovableVisor
+  - type: Visor
+    toggledSprite:
+      sprite: _RMC14/Objects/Clothing/Head/Helmets/huds.rsi
+      state: med_sight_left

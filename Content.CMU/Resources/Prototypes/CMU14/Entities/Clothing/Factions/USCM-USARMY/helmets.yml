@@ -8,6 +8,10 @@
     sprite: CMU14/Clothing/DesertHats/m10corpsmanhelmet.rsi
   - type: Clothing
     sprite: CMU14/Clothing/DesertHats/m10corpsmanhelmet.rsi
+  - type: IntegratedVisors
+    startToggled: true
+    visorsToAdd:
+    - CMUVisorMedicalSquadIntegrated
 
 - type: entity
   parent: RMCMarineHelmetBase
@@ -74,6 +78,10 @@
     sprite: CMU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
   - type: Clothing
     sprite: CMU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
+  - type: IntegratedVisors
+    startToggled: true
+    visorsToAdd:
+    - CMUVisorMedicalSquadIntegrated
 
 - type: entity
   parent: RMCMarineHelmetBase
@@ -183,6 +191,10 @@
       Snow: CMU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
       Classic: CMU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
       Urban: CMU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
+  - type: IntegratedVisors
+    startToggled: true
+    visorsToAdd:
+    - CMUVisorMedicalSquadIntegrated
 
 - type: entity
   parent: RMCMarineHelmetBase

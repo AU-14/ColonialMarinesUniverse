@@ -6,6 +6,7 @@
   name: G2 Electroshock grenade
   description: This is a G2 Electroshock Grenade. Produced by Armat Battlefield Systems, it's sometimes referred to as the Sonic Electric Ball Breaker, after a rash of incidents where the intense 1.2 gV sonic payload caused... rupturing. A bounding landmine mode is available for this weapon which activates a small drill to self-bury itself when planted. Simply plant it at your feet and walk away.
   components:
+  - type: CMUSmartGrenade
   - type: Sprite
     sprite: CMU14/Weapons/Throwable/electroshock.rsi
     layers:

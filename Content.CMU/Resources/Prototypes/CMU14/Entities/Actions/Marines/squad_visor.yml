@@ -1,0 +1,59 @@
+- type: entity
+  parent: ActionMarineBase
+  id: CMUActionSquadVisorIFF
+  name: Toggle Optic IFF
+  description: Toggles your squad optic's IFF. While it's on, your gun won't fire with a friendly in the line of fire, but it's a little less accurate and loses damage over range a little faster.
+  components:
+  - type: Action
+    checkCanInteract: false
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/iff_toggle_actions.rsi
+      state: iff_toggle_off
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Actions/iff_toggle_actions.rsi
+      state: iff_toggle_on
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
+  - type: InstantAction
+    event: !type:CMUToggleSquadVisorIFFActionEvent
+
+- type: entity
+  parent: ActionMarineBase
+  id: CMUActionSquadVisorGrenadeWarnings
+  name: Toggle Grenade Warnings
+  description: Toggles your squad optic marking friendly primed smart grenades.
+  components:
+  - type: Action
+    checkCanInteract: false
+    itemIconStyle: NoItem
+    backgroundOn:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: template_on_big
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_smart_gun_actions.rsi
+      state: recoil_compensation
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUToggleSquadVisorGrenadeWarningsActionEvent
+
+- type: entity
+  parent: ActionMarineBase
+  id: CMUActionSquadVisorMotionLink
+  name: Toggle Squad Motion Tracker Link
+  description: Toggles your squad optic showing what your squadmates' motion trackers pick up.
+  components:
+  - type: Action
+    checkCanInteract: false
+    itemIconStyle: NoItem
+    backgroundOn:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: template_on_big
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_smart_gun_actions.rsi
+      state: motion_detector
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUToggleSquadVisorMotionLinkActionEvent

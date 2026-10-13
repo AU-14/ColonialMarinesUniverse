@@ -28,7 +28,8 @@ ghost-target-window-tab-corrupted-hive = Corrupted Hive
 ghost-target-window-tab-opfor = OPFOR
 ghost-target-window-tab-yautja = Yautja
 ghost-target-window-tab-third-party = Third Party
-ghost-target-window-tab-survivors = Survivors
+# CMU14: survivors are shown as civilians.
+ghost-target-window-tab-survivors = Civilians
 ghost-target-window-tab-weya-pmc = WeYu/PMC
 ghost-target-window-tab-clf = CLF
 ghost-target-window-tab-spp = SPP

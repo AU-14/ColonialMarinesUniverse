@@ -162,8 +162,8 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
                     continue;
                 }
 
-                // CMU14: internals keep out neurotoxin gas
-                if (_mask.IsBreathingInternals(marine))
+                // CMU14: internals keep out neurotoxin gas for a while per exposure
+                if (_mask.TryBlockNeurotoxinWithInternals(marine))
                     continue;
 
                 if (TryComp<ContainerManagerComponent>(marine, out var uinv))
