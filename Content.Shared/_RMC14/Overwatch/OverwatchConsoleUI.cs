@@ -203,7 +203,14 @@ public readonly record struct OverwatchMarine(
     string AreaName,
     Vector2? LeaderDistance,
     ProtoId<RankPrototype>? Rank,
-    LocId? RoleOverride
+    // cmu edit start: callsign, fireteam and casualty details (SharedOverwatchConsoleSystem.CMU)
+    LocId? RoleOverride,
+    string Callsign = "",
+    int? Fireteam = null,
+    bool FireteamLeader = false,
+    float? Health = null,
+    Content.Shared.CMU14.Medical.Injuries.Wounds.ExternalBleedTier Bleeding = default
+    // cmu edit end
 );
 
 [Serializable, NetSerializable]

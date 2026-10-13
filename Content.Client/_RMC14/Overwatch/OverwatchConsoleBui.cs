@@ -53,6 +53,9 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
 
         Window = this.CreatePopOutableWindow<OverwatchConsoleWindow>();
         Window.OverwatchHeader.SetMarkupPermissive($"[color=#88C7FA]{Loc.GetString("rmc-overwatch-console-disabled-select-squad")}[/color]");
+        // cmu edit start
+        CMUOnWindowCreated();
+        // cmu edit end
 
         if (State is OverwatchConsoleBuiState s)
             RefreshState(s);
@@ -102,6 +105,9 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
             };
 
             squadButton.OnPressed += _ => SendPredictedMessage(new OverwatchConsoleSelectSquadBuiMsg(squad.Id));
+            // cmu edit start
+            CMUStyleSquadButton(squadButton, squad.Color);
+            // cmu edit end
 
             var panel = CreatePanel();
             panel.AddChild(squadButton);
@@ -350,6 +356,9 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                 }
 
                 _squadViews[squad.Id] = monitor;
+                // cmu edit start
+                CMUSetupSquadView(squad, monitor);
+                // cmu edit end
                 Window.SquadViewContainer.AddChild(monitor);
             }
 
@@ -381,6 +390,9 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                 squadRows.Remove(id);
             }
 
+            // cmu edit start
+            var cmuRoster = new List<Content.Client.CMU14.Overwatch.CMURosterEntry>();
+            // cmu edit end
             foreach (var marine in marines)
             {
                 var roleName = Loc.GetString("rmc-overwatch-console-role-none");
@@ -422,6 +434,9 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                 }
 
                 var name = rankName != null ? $"{rankName} {marine.Name}" : marine.Name;
+                // cmu edit start
+                cmuRoster.Add(new Content.Client.CMU14.Overwatch.CMURosterEntry(marine, name, roleName, tripodIds.Contains(marine.Id)));
+                // cmu edit end
                 if (!squadRows.TryGetValue(marine.Id, out var row))
                 {
                     var watchButton = new Button
@@ -786,6 +801,9 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
 
             monitor.RolesContainer.AddChild(totalPanel);
             monitor.UpdateResults(console.Location, console.ShowDead, console.ShowHidden, marines, console);
+            // cmu edit start
+            CMUUpdateRoster(squad, monitor, cmuRoster, s, console);
+            // cmu edit end
         }
 
         UpdateView();
@@ -912,6 +930,10 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
             squad.HasOrbital = console.HasOrbital;
             squad.NextOrbitalAt = console.NextOrbitalLaunch;
         }
+
+        // cmu edit start
+        CMUApplyTheme();
+        // cmu edit end
     }
 
     private void AddSaving(BoxContainer longitudes, BoxContainer latitudes, BoxContainer comments, BoxContainer saves, Thickness margin)

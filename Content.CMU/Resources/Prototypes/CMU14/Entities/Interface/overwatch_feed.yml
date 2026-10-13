@@ -1,0 +1,11 @@
+# The eye behind one of an overwatch operator's camera feeds; rides on the watched camera.
+- type: entity
+  id: CMUOverwatchFeedEye
+  categories: [ HideSpawnMenu ]
+  name: overwatch camera feed
+  components:
+  - type: Visibility
+    layer: 8 # only the subscribed operator gets it, through their view subscription
+  - type: Eye
+    drawFov: false
+    pvsScale: 0.6 # a feed tile shows far less than the main view

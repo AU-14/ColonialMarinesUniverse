@@ -955,7 +955,8 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
 
                         _inventory.TryGetInventoryEntity<OverwatchCameraComponent>(member, out var camera);
 
-                        EnsureComp<OverwatchDataComponent>(member).Marine = new OverwatchMarine(
+                        // cmu edit start
+                        EnsureComp<OverwatchDataComponent>(member).Marine = CMUAddMarineDetails(member, new OverwatchMarine(
                             netMember,
                             GetNetEntity(camera),
                             name,
@@ -968,7 +969,8 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
                             leaderDistance,
                             rank,
                             roleOverride
-                        );
+                        )); // CMU14
+                        // cmu edit end
                     }
 
                     if (membersQueue.Count == 0)
