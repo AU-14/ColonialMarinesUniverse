@@ -493,6 +493,7 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             shooterComp.ShootDown)
         {
             return -1;
+        }
 
         if (TryComp<CMUZLevelViewerComponent>(shooter, out var viewer) &&
             viewer.LookUp &&
