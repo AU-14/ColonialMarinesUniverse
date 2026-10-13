@@ -14,11 +14,13 @@ public sealed class CMUWallWipeSystem : EntitySystem
 {
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";
     private static readonly TimeSpan WipeDelay = TimeSpan.FromSeconds(6);
+    private const float WipeRange = 1.6f;
 
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private CMUItemStainSystem _stains = default!;
     [Dependency] private TagSystem _tag = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {
@@ -28,7 +30,9 @@ public sealed class CMUWallWipeSystem : EntitySystem
 
     private void OnWallVerbs(Entity<TagComponent> ent, ref GetVerbsEvent<Verb> args)
     {
-        if (!args.CanAccess || !args.CanInteract || !_tag.HasTag(ent.Comp, WallTag) ||
+        // Walls are solid, so check plain distance rather than line of sight to the wall.
+        if (!args.CanInteract || !_tag.HasTag(ent.Comp, WallTag) ||
+            !_transform.InRange(args.User, ent.Owner, WipeRange) ||
             !_stains.HasBloodStainedEquipment(args.User))
         {
             return;
@@ -45,12 +49,12 @@ public sealed class CMUWallWipeSystem : EntitySystem
 
     private void StartWipe(EntityUid user, EntityUid wall)
     {
-        var doAfter = new DoAfterArgs(EntityManager, user, WipeDelay, new CMUWallWipeDoAfterEvent(), wall, wall)
+        // No do-after target: its reach check can fail against a solid wall. Moving away cancels it instead.
+        var doAfter = new DoAfterArgs(EntityManager, user, WipeDelay, new CMUWallWipeDoAfterEvent(), wall)
         {
             BreakOnMove = true,
             BreakOnDamage = true,
             NeedHand = false,
-            DistanceThreshold = 1.5f,
         };
 
         _doAfter.TryStartDoAfter(doAfter);
