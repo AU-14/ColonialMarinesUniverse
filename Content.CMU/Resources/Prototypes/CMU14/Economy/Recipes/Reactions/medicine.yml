@@ -1,0 +1,26 @@
+# Tranexamic acid is made in two steps, like the real thing: aminomethylbenzoic acid, then hydrogen.
+- type: reaction
+  id: CMUAminomethylbenzoicAcid
+  reactants:
+    RMCCarbon:
+      amount: 2
+    RMCNitrogen:
+      amount: 1
+    RMCOxygen:
+      amount: 1
+    RMCSulphuricAcid:
+      amount: 1
+  products:
+    CMUAminomethylbenzoicAcid: 3
+
+- type: reaction
+  id: CMUTranexamicAcid
+  reactants:
+    CMUAminomethylbenzoicAcid:
+      amount: 2
+    RMCHydrogen:
+      amount: 2
+    CMInaprovaline:
+      amount: 1
+  products:
+    CMUTranexamicAcid: 3

@@ -34,6 +34,7 @@
   - type: MarineOrders
   - type: RMCTrackable
   - type: RMCPointing
+  - type: PyroWhitelist
   - type: Language
     spokenLanguages:
     - Polish

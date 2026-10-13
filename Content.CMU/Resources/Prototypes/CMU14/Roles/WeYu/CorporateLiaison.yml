@@ -23,6 +23,8 @@
     - CMUDrugAddict
   roundSide: Civilian
   roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
   roundRole: CivilianCorporateLiaison
   roundComponents:
   - type: Skills

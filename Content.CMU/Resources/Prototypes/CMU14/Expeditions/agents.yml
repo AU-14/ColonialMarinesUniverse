@@ -240,12 +240,16 @@
   parent: CMGrenadeHighExplosive
   id: CMUExpeditionBlastGrenade
   components:
+  - type: CMUSmartGrenade
+    enabled: false
   - type: CMUExpeditionGrenade
 
 - type: entity
   parent: CMGrenadeSmoke
   id: CMUExpeditionSmokeGrenade
   components:
+  - type: CMUSmartGrenade
+    enabled: false
   - type: CMUExpeditionGrenade
     smoke: true
     safeRadius: 1

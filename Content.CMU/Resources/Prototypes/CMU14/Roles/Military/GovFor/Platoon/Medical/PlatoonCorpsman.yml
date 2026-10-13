@@ -133,7 +133,7 @@
     outerClothing: AU14ArmorM3JungleOne
     gloves: CMHandsLatex
     shoes: CMBootsBlack
-    head: AU14JungleM10CorpsmanHelmet
+    head: AU14CamoM10CorpsmanHelmet
     jumpsuit: AU14JungleFatigues
     ears: CMUHeadsetGovforMarineAuxiliary
 
@@ -205,7 +205,7 @@
     outerClothing: AU14ArmorM3JungleOne
     gloves: CMHandsLatex
     shoes: CMBootsBlack
-    head: AU14JungleM10CorpsmanHelmet
+    head: AU14CamoM10CorpsmanHelmet
     jumpsuit: AU14JungleFatigues
     ears: CMUHeadsetOpforMarineAuxiliary
 

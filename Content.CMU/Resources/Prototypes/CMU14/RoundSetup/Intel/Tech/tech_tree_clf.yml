@@ -68,7 +68,7 @@
           repurchasable: false
           events:
           - !type:TechPartySpawnEvent
-            thirdPartyId: CLFCommandoSpawnIntel
+            thirdPartyId: CLFCellCommandosIntel
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon

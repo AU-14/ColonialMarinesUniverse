@@ -59,6 +59,8 @@ public sealed class HealthScannerBuiState(
     public bool HolocardXeno;
     // cmu edit start
     public TimeSpan? CMUTimeUntilUnrevivable;
+    public string? CMUBloodType;
+    public float CMUSalinePercent;
     // cmu edit end
 }
 
