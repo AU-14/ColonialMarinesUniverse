@@ -9,7 +9,7 @@ namespace Content.Shared.CMU14.Crayon;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CMUCrayonSymbolComponent : Component
 {
-    [AutoNetworkedField]
+    [DataField, AutoNetworkedField]
     public CMUCrayonSymbol? Symbol;
 }
 
@@ -19,7 +19,7 @@ public sealed partial class CMUCrayonSymbolComponent : Component
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class CMUCrayonStampComponent : Component
 {
-    [AutoNetworkedField]
+    [DataField, AutoNetworkedField]
     public CMUCrayonSymbol Symbol = new();
 }
 
