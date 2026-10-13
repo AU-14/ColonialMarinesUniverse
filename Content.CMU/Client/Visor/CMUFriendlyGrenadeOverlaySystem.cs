@@ -11,10 +11,12 @@ public sealed partial class CMUFriendlyGrenadeOverlaySystem : EntitySystem
     public override void Initialize()
     {
         _overlay.AddOverlay(new CMUFriendlyGrenadeOverlay(EntityManager, _player));
+        _overlay.AddOverlay(new CMUSquadMotionLinkOverlay());
     }
 
     public override void Shutdown()
     {
         _overlay.RemoveOverlay<CMUFriendlyGrenadeOverlay>();
+        _overlay.RemoveOverlay<CMUSquadMotionLinkOverlay>();
     }
 }

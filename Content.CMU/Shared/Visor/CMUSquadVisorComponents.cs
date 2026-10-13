@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.MotionDetector;
 using Content.Shared.Actions;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -78,4 +79,26 @@ public sealed partial class CMUSmartGrenadeComponent : Component
     /// <summary>False on dumb grenades that inherit from a smart one.</summary>
     [DataField]
     public bool Enabled = true;
+}
+
+/// <summary>
+/// On a squad optic wearer: what the motion trackers of nearby squadmates are picking up, drawn like their own tracker.
+/// </summary>
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+public sealed partial class CMUSquadMotionLinkComponent : Component, IDetectorComponent
+{
+    public override bool SendOnlyToOwner => true;
+
+    [DataField, AutoNetworkedField]
+    public List<Blip> Blips { get; set; } = new();
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan LastScan { get; set; }
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan ScanDuration { get; set; } = TimeSpan.FromSeconds(1);
+
+    /// <summary>How close a squadmate with a motion tracker has to be for the optic to link to it.</summary>
+    [DataField]
+    public float Range = 15f;
 }

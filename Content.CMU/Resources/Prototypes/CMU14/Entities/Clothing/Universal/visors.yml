@@ -3,7 +3,7 @@
   parent: RMCVisorMedicalAdvanced
   id: CMUVisorMedicalSquad
   name: medical squad optic
-  description: An insertable visor HUD for a standard helmet, issued to corpsmen. It combines the advanced medical optic's health readouts with the squad optic's squad display, trackers and grenade warnings.
+  description: An insertable visor HUD for a standard helmet, issued to corpsmen. It combines the advanced medical optic's health readouts with the squad optic's squad display, trackers, grenade warnings and squad motion tracker link.
   components:
   - type: ToggleVisor
     ignoreRedundancy: true
