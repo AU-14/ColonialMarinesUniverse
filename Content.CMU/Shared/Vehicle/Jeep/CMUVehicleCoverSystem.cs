@@ -206,7 +206,7 @@ public sealed class CMUVehicleCoverSystem : EntitySystem
 
                 foreach (var rider in strap.BuckledEntities)
                 {
-                    if (!_random.Prob(cover.GritChance * frameTime) ||
+                    if (!_random.Prob(MathF.Min(1f, cover.GritChance * frameTime)) ||
                         EyesCovered(rider) ||
                         !_status.TryAddStatusEffect<RMCBlindedComponent>(rider, Blinded, cover.GritDuration, false))
                     {
