@@ -66,3 +66,35 @@
     minimapBackground:
      sprite: /Textures/_RMC14/Interface/map_blips.rsi
      state: background_intel
+
+# FOB security squad: opt-in (character menu), with its own slots on top of the regular ones; see CMUFoxtrotSquadSystem.
+- type: entity
+  parent: SquadGovfor
+  id: SquadGovforFoxtrot
+  name: Foxtrot
+  components:
+  - type: CMUFoxtrotSquad
+    slots:
+      SquadSergeant: 1
+      RadioTrafficOperator: 1
+      SquadCombatTech: 3
+    # the squad leader and RTO build like the combat technicians (AU14SkillPresetPlatoonCombatTechnician)
+    skillRoles:
+    - SquadSergeant
+    - RadioTrafficOperator
+    skills:
+      RMCSkillConstruction: 4
+      RMCSkillEngineer: 4
+    extraVendorPoints:
+      SquadCombatTech: 15
+  - type: AU14SquadCallsign
+    word: HALBERD
+  - type: SquadTeam
+    roundStart: true
+    color: "#4B6584"
+    group: GOVFOR
+    radio: radioGovforFoxtrot
+    supplyDropPadSquad: SquadDelta
+    minimapBackground:
+     sprite: /Textures/_RMC14/Interface/map_blips.rsi
+     state: background_foxtrot

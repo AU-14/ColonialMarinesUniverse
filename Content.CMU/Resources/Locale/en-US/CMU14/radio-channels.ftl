@@ -4,6 +4,7 @@ chat-radio-govforalpha = ALFA
 chat-radio-govforbravo =  BRAV
 chat-radio-govforcharlie =  CHAR
 chat-radio-govforintel =  AUXY
+chat-radio-govforfoxtrot = FOXT
 chat-radio-govforjtac = ATC
 chat-radio-govformp = MILP
 
@@ -13,6 +14,7 @@ chat-radio-opforalpha = SIER
 chat-radio-opforbravo =  TANG
 chat-radio-opforcharlie =  UNIF
 chat-radio-opforintel =  INTL
+chat-radio-opforvictor = VICT
 chat-radio-opforjtac = ORBT
 chat-radio-opformp = CSTD
 

@@ -53,6 +53,7 @@
     - radioGovforCharlie
     - radioGovforCommand
     - radioGovforIntel
+    - radioGovforFoxtrot
     - radioGovforJTAC
     - radioGovforMILP
     - radioOpforAlpha
@@ -60,6 +61,7 @@
     - radioOpforCharlie
     - radioOpforCommand
     - radioOpforIntel
+    - radioOpforVictor
     - radioOpforJTAC
     - radioOpforMILP
     - CMUYautja
@@ -87,6 +89,7 @@
     - radioGovforCharlie
     - radioGovforCommand
     - radioGovforIntel
+    - radioGovforFoxtrot
     - radioGovforJTAC
     - radioGovforMILP
 
@@ -104,6 +107,7 @@
     - radioOpforCharlie
     - radioOpforCommand
     - radioOpforIntel
+    - radioOpforVictor
     - radioOpforJTAC
     - radioOpforMILP
 

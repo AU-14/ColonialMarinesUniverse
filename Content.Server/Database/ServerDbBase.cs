@@ -423,6 +423,9 @@ namespace Content.Server.Database
             profile.Height = humanoid.Height;
             profile.Weight = humanoid.Weight;
             profile.Build = humanoid.Build.ToString();
+            // cmu edit start
+            profile.FoxtrotSquadOptIn = humanoid.FoxtrotSquadOptIn;
+            // cmu edit end
             profile.HideMetaInformation = humanoid.HideMetaInformation;
             profile.ThreatPreference = humanoid.ThreatPreferences.Count == 0
                 ? null

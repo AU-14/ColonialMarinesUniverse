@@ -107,6 +107,19 @@
                                     <Control HorizontalExpand="True"/>
                                     <Button Name="PlaytimePerksButton" Pressed="True" ToggleMode="True" Text="{Loc 'humanoid-profile-editor-enable'}" HorizontalAlignment="Right" />
                                 </BoxContainer>
+                                <!-- cmu edit start -->
+                                <!-- Foxtrot squad opt-in -->
+                                <BoxContainer HorizontalExpand="True">
+                                    <Label Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-label'}"
+                                           ToolTip="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-tooltip'}" />
+                                    <Control HorizontalExpand="True"/>
+                                    <Button Name="FoxtrotSquadOptInButton" ToggleMode="True" Text="{Loc 'humanoid-profile-editor-enable'}" HorizontalAlignment="Right" />
+                                </BoxContainer>
+                                <RichTextLabel Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-description'}"
+                                               StyleClasses="CrtDimText"
+                                               HorizontalExpand="True"
+                                               Margin="0 0 0 6" />
+                                <!-- cmu edit end -->
                                 <!-- Xeno Prefix -->
                                 <BoxContainer HorizontalExpand="True">
                                     <Label Text="{Loc 'humanoid-profile-editor-xeno-prefix'}" />

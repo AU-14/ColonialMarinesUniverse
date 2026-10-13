@@ -190,7 +190,17 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
         var ev = new PlayerSpawningEvent(job, profile, station, player);
 
-        RaiseLocalEvent(ev);
+        // cmu edit start: squad assignment needs to know who is spawning
+        _cmuSpawningPlayer = player;
+        try
+        {
+            RaiseLocalEvent(ev);
+        }
+        finally
+        {
+            _cmuSpawningPlayer = null;
+        }
+        // cmu edit end
         DebugTools.Assert(ev.SpawnResult is { Valid: true } or null);
 
         return ev.SpawnResult;
@@ -338,7 +348,9 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             if (originalPrototype != null && TryComp(jobEntity, out MetaDataComponent? metaDataJobEntity))
                 SetPdaAndIdCardData(jobEntity, metaDataJobEntity.EntityName, originalPrototype, station);
 
-            AssignRoundStartSquad(jobEntity, coordinates, job, originalPrototype, jobId, team, profile); // CMU14
+            // cmu edit start
+            AssignRoundStartSquad(jobEntity, coordinates, job, originalPrototype, jobId, team, profile, station); // CMU14
+            // cmu edit end
             return jobEntity;
         }
 
@@ -453,7 +465,9 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         ApplyRegulationAppearance(entity.Value, profile);
         _identity.QueueIdentityUpdate(entity.Value);
 
-        AssignRoundStartSquad(entity.Value, coordinates, job, originalPrototype, jobId, team, profile); // CMU14
+        // cmu edit start
+        AssignRoundStartSquad(entity.Value, coordinates, job, originalPrototype, jobId, team, profile, station); // CMU14
+        // cmu edit end
 
         ApplyTeamFaction(entity.Value, team);
         return entity.Value;
@@ -466,7 +480,10 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         JobPrototype? originalPrototype,
         string? originalJobId,
         string? team,
-        HumanoidCharacterProfile? profile) // CMU14
+        // cmu edit start
+        HumanoidCharacterProfile? profile, // CMU14
+        EntityUid? station) // CMU14
+        // cmu edit end
     {
         if (team == null || !ShouldAssignToSquad(originalPrototype, originalJobId))
             return;
@@ -484,6 +501,11 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
             // Squad preference is no longer offered, so it is ignored here.
             protoId = CMUPickSquad(candidates, job, originalPrototype, originalJobId, isSergeant);
+            // cmu edit end
+
+            // cmu edit start: reserved Foxtrot squad slots
+            if (CMUTryPickFoxtrotSquad(station, originalJobId, profile, out var foxtrotSquad))
+                protoId = foxtrotSquad;
             // cmu edit end
         }
 
@@ -504,6 +526,10 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             var leaderIcon = ensured.Comp.LeaderIcon;
             _squadSystem.PromoteSquadLeader((entity, memberComp), entity, leaderIcon);
         }
+
+        // cmu edit start
+        CMUApplyFoxtrotSquadPerks(entity, ensured, originalPrototype);
+        // cmu edit end
     }
 
     private static string? GetTeamForSide(RoundJobSide side)

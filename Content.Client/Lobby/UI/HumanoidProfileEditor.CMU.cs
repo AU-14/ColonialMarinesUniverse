@@ -10,6 +10,9 @@ using Content.Client.Stylesheets;
 using Content.Shared.CCVar;
 using Content.Shared.CMU14.CharacterDescription;
 using Content.Shared.CMU14.Roles;
+// cmu edit start
+using Content.Shared.CMU14.Squads.Foxtrot;
+// cmu edit end
 using Content.Shared._RMC14.LinkAccount;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.NamedItems;
@@ -155,6 +158,11 @@ public sealed partial class HumanoidProfileEditor
                 || team.Group != "GOVFOR")
                 continue;
 
+            // cmu edit start: Foxtrot is joined through its own opt-in
+            if (squadProto.HasComp<CMUFoxtrotSquadComponent>(_componentFactory))
+                continue;
+            // cmu edit end
+
             SquadPreferenceButton.AddItem(squadProto.Name, i + 1);
         }
 
@@ -172,6 +180,13 @@ public sealed partial class HumanoidProfileEditor
         };
 
         PlaytimePerksButton.OnPressed += args => SetPlaytimePerks(args.Button.Pressed);
+        // cmu edit start
+        FoxtrotSquadOptInButton.OnPressed += args =>
+        {
+            Profile = Profile?.WithFoxtrotSquadOptIn(args.Button.Pressed);
+            SetDirty();
+        };
+        // cmu edit end
         XenoPrefix.OnTextChanged += args => SetXenoPrefix(args.Text);
         XenoPostfix.OnTextChanged += args => SetXenoPostfix(args.Text);
 
@@ -344,6 +359,9 @@ public sealed partial class HumanoidProfileEditor
         UpdateSquadPreferenceControls();
         UpdateNamedItems();
         UpdatePlaytimePerks();
+        // cmu edit start
+        FoxtrotSquadOptInButton.Pressed = Profile?.FoxtrotSquadOptIn ?? false;
+        // cmu edit end
         UpdateCharacterDescriptionControls();
         UpdateXenoPrefix();
         UpdateXenoPostfix();

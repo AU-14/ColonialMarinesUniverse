@@ -55,6 +55,17 @@
   anchorGated: true
 
 - type: radioChannel
+  id: radioGovforFoxtrot
+  name: chat-radio-govforfoxtrot
+  keycode: 'ŝ' # all letters and digits are taken; the squad headset defaults to it
+  frequency: 160.8
+  color: "#4B6584"
+  longRange: true
+  tower: true
+  faction: "govfor"
+  anchorGated: true
+
+- type: radioChannel
   id: radioGovforJTAC
   name: chat-radio-govforjtac
   keycode: "j"
@@ -127,6 +138,17 @@
   keycode: "i"
   frequency: 160.2
   color: "#e4860c"
+  longRange: true
+  tower: true
+  faction: "opfor"
+  anchorGated: true
+
+- type: radioChannel
+  id: radioOpforVictor
+  name: chat-radio-opforvictor
+  keycode: 'ś' # all letters and digits are taken; the squad headset defaults to it
+  frequency: 160.9
+  color: "#7B8B6F"
   longRange: true
   tower: true
   faction: "opfor"

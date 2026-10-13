@@ -671,6 +671,9 @@ namespace Content.Server.Database
         public string Height { get; set; } = string.Empty;
         public int Weight { get; set; } = 160;
         public string Build { get; set; } = string.Empty;
+        // cmu edit start
+        public bool FoxtrotSquadOptIn { get; set; }
+        // cmu edit end
         public bool HideMetaInformation { get; set; }
     }
 

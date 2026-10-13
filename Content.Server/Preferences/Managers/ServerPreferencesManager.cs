@@ -266,7 +266,10 @@ namespace Content.Server.Preferences.Managers
                 Enum.TryParse<BuildType>(profile.Build, out var build) ? build : BuildType.Average,
                 profile.HideMetaInformation,
                 YautjaProfileSerializer.DeserializeYautjaProfile(profile.YautjaProfile)
-            ).WithForceOnForcePreferences((ForceOnForceSide) profile.FoFSide, (ForceOnForceFallback) profile.FoFFallback);
+            // cmu edit start
+            ).WithForceOnForcePreferences((ForceOnForceSide) profile.FoFSide, (ForceOnForceFallback) profile.FoFFallback)
+             .WithFoxtrotSquadOptIn(profile.FoxtrotSquadOptIn);
+             // cmu edit end
         }
 
         private static HashSet<ProtoId<ThreatPrototype>> ConvertThreatPreferences(string? raw)

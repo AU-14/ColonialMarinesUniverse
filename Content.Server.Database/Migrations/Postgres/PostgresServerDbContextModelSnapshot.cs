@@ -1555,6 +1555,12 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("text")
                         .HasColumnName("regulation_hair_name");
 
+                    // cmu edit start
+                    b.Property<bool>("FoxtrotSquadOptIn")
+                        .HasColumnType("boolean")
+                        .HasColumnName("foxtrot_squad_opt_in");
+                    // cmu edit end
+
                     b.Property<string>("Sex")
                         .IsRequired()
                         .HasColumnType("text")

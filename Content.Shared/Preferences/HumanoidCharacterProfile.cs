@@ -500,6 +500,9 @@ namespace Content.Shared.Preferences
             // CMU14: Force on Force roles, hijacking, announcements and identification.
             FoFSide = other.FoFSide;
             FoFFallback = other.FoFFallback;
+            // cmu edit start
+            FoxtrotSquadOptIn = other.FoxtrotSquadOptIn;
+            // cmu edit end
         }
 
         /// <summary>
@@ -1220,6 +1223,9 @@ namespace Content.Shared.Preferences
             if (PreferenceUnavailable != other.PreferenceUnavailable) return false;
             // CMU14: Force on Force roles, hijacking, announcements and identification.
             if (FoFSide != other.FoFSide || FoFFallback != other.FoFFallback) return false;
+            // cmu edit start
+            if (FoxtrotSquadOptIn != other.FoxtrotSquadOptIn) return false;
+            // cmu edit end
             if (SpawnPriority != other.SpawnPriority) return false;
             if (SquadPreference != other.SquadPreference) return false;
             if (!_jobPriorities.SequenceEqual(other._jobPriorities)) return false;
@@ -1753,6 +1759,9 @@ namespace Content.Shared.Preferences
             // CMU14: Force on Force roles, hijacking, announcements and identification.
             hashCode.Add(FoFSide);
             hashCode.Add(FoFFallback);
+            // cmu edit start
+            hashCode.Add(FoxtrotSquadOptIn);
+            // cmu edit end
             hashCode.Add(NamedItems);
             hashCode.Add(PlaytimePerks);
             hashCode.Add(XenoPrefix);
