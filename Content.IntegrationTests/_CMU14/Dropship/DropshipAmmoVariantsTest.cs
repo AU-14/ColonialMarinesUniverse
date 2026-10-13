@@ -112,7 +112,14 @@ public sealed class DropshipAmmoVariantsTest
                 for (var y = -5; y <= 5; y++)
                     maps.SetTile(map.Grid, new Vector2i(x, y), map.Tile.Tile);
             }
-            victim = entities.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1.5f, 0.5f)));
+            victim = entities.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1.01f, 0.5f)));
+            var victimCoordinates = entities.System<SharedTransformSystem>().GetMapCoordinates(victim);
+            var epicenter = entities.System<SharedTransformSystem>()
+                .ToMapCoordinates(map.GridCoords.Offset(new Vector2(0.5f, 0.5f)));
+            Assert.That(victimCoordinates.MapId, Is.EqualTo(epicenter.MapId));
+            Assert.That(maps.CoordinatesToTile(map.Grid, map.Grid.Comp, victimCoordinates), Is.EqualTo(new Vector2i(1, 0)));
+            Assert.That(maps.CoordinatesToTile(map.Grid, map.Grid.Comp, epicenter), Is.EqualTo(new Vector2i(0, 0)));
+            Assert.That(Vector2.Distance(victimCoordinates.Position, epicenter.Position), Is.GreaterThan(0.49f));
         });
         await pair.RunTicksSync(2);
         await pair.Server.WaitAssertion(() =>
