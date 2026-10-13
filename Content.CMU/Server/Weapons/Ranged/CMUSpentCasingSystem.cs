@@ -4,7 +4,6 @@ using Content.Shared.CCVar;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.Physics;
-using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
 
@@ -25,7 +24,7 @@ public sealed partial class CMUSpentCasingSystem : EntitySystem
 
     private static readonly TimeSpan SweepInterval = TimeSpan.FromSeconds(5);
 
-    /// <summary>Delay before the physics strip, so the ejection throw always finishes first.</summary>
+    /// <summary>Delay before disabling physics, so the ejection throw always finishes first.</summary>
     private static readonly TimeSpan StripDelay = TimeSpan.FromSeconds(3);
 
     private TimeSpan _nextSweep;
@@ -55,9 +54,9 @@ public sealed partial class CMUSpentCasingSystem : EntitySystem
                 QueueDel(uid);
             else if (age >= StripDelay && !HasComp<CMUZFallingComponent>(uid))
             {
+                // Clients need fixtures when applying the replicated body-type change.
                 _physics.SetBodyType(uid, BodyType.Static);
                 _physics.SetCanCollide(uid, false);
-                RemComp<FixturesComponent>(uid);
             }
         }
     }
