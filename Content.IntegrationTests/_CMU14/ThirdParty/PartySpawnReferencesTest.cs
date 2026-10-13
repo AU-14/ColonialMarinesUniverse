@@ -2,6 +2,8 @@ using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Intel.Tech;
 using Content.Shared.CMU14.Threats;
+using Content.Shared.Radio;
+using Content.Shared.Radio.Components;
 using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.CMU14.ThirdParty;
@@ -47,6 +49,21 @@ public sealed class PartySpawnReferencesTest : GameTest
                     }
                 }
             }
+        });
+    }
+
+    // BUG-943: the upstream CLF headset only had the colony key, so commandos never heard the cell
+    [Test]
+    public async Task CLFHeadsetCarriesCellNet()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var headset = SEntMan.SpawnEntity("AU14HeadsetCLF", map.GridCoords);
+            var holder = SEntMan.GetComponent<EncryptionKeyHolderComponent>(headset);
+            Assert.That(holder.Channels, Does.Contain(new ProtoId<RadioChannelPrototype>("radioCLF")));
+            Assert.That(holder.Channels, Does.Contain(new ProtoId<RadioChannelPrototype>("Colony")));
+            SEntMan.DeleteEntity(headset);
         });
     }
 }
