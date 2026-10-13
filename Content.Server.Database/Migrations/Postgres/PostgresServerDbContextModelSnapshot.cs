@@ -1398,6 +1398,13 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("text")
                         .HasColumnName("armor_preference");
 
+                    b.Property<string>("BloodType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("")
+                        .HasColumnName("blood_type");
+
                     b.Property<string>("Build")
                         .IsRequired()
                         .ValueGeneratedOnAdd()

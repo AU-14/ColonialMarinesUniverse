@@ -171,7 +171,18 @@ public sealed partial class VisorSystem : EntitySystem
                 RaiseLocalEvent(newContained, ref rev);
 
                 if (rev.Cancelled)
+                {
+                    // CMU14: say why a visor that needs training was skipped, as equipping the helmet does
+                    if (TryComp<VisorComponent>(newContained, out var skillVisor) &&
+                        skillVisor.SkillsRequired != null &&
+                        !_skills.HasSkills(args.Performer, skillVisor.SkillsRequired))
+                    {
+                        _popup.PopupEntity(Loc.GetString("rmc-skills-no-training", ("target", newContained)),
+                            args.Performer, args.Performer, PopupType.SmallCaution);
+                    }
+
                     continue;
+                }
 
                 var ev = new ActivateVisorEvent(ent, args.Performer);
                 RaiseLocalEvent(newContained, ref ev);

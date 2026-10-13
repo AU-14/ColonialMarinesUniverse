@@ -1,5 +1,8 @@
 using Content.Server.Body.Components;
 using Content.Server.Body.Systems;
+using Content.Shared.Atmos;
+using Content.Shared.Atmos.Components;
+using Content.Shared.Body.Components;
 using Content.Shared.CMU14.Atmos;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
@@ -12,11 +15,13 @@ namespace Content.Server.CMU14.Atmos;
 /// Humans don't breathe by default. While one is on a map with <see cref="CMUBreathingRequiredMapComponent"/> (or in
 /// its z-network) this gives them a respirator, so the map's air and their internals matter. Leaving takes it away
 /// again. Only respirators this system added are ever removed.
+/// Anyone breathing through internals connected to an empty tank also gets one, so the empty tank suffocates them.
 /// </summary>
 public sealed partial class CMUMapBreathingSystem : EntitySystem
 {
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private InternalsSystem _internals = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     /// <summary>Entity prototype holding the respirator settings to add.</summary>
@@ -39,7 +44,7 @@ public sealed partial class CMUMapBreathingSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUHumanMedicalComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out _, out var xform))
         {
-            var required = xform.MapUid is { } map && RequiresBreathing(map);
+            var required = xform.MapUid is { } map && RequiresBreathing(map) || IsBreathingFromEmptyTank(uid);
             var granted = HasComp<CMUMapGrantedRespiratorComponent>(uid);
 
             if (required && !granted && !HasComp<RespiratorComponent>(uid))
@@ -56,6 +61,14 @@ public sealed partial class CMUMapBreathingSystem : EntitySystem
                 RemComp<CMUMapGrantedRespiratorComponent>(uid);
             }
         }
+    }
+
+    private bool IsBreathingFromEmptyTank(EntityUid uid)
+    {
+        return TryComp<InternalsComponent>(uid, out var internals)
+               && _internals.AreInternalsWorking(internals)
+               && TryComp<GasTankComponent>(internals.GasTankEntity, out var tank)
+               && tank.Air.TotalMoles <= Atmospherics.GasMinMoles;
     }
 
     private bool RequiresBreathing(EntityUid map)
