@@ -6,6 +6,7 @@
   ## Blood Types
   Everyone has a blood type, picked in character creation. It's printed on their ID card, and a health analyzer shows it next to their blood level.
   - Blood packs are labelled with their type. Blood from the WeYu Blood Dispenser comes in every type.
+  - When a patient is low on blood, the health analyzer's advice lists the blood types and plasma groups they can take.
   - Only give blood the patient can take, the same as real life. [bold]O-[/bold] blood can go to anyone, and [bold]AB+[/bold] patients can take any blood.
 
   Who can take which blood:
@@ -18,11 +19,11 @@
   - [bold]AB-[/bold]: O-, A-, B- and AB-.
   - [bold]AB+[/bold]: any type.
 
-  - [color=red]The wrong type is destroyed in the bloodstream[/color]. It restores nothing, and it poisons the patient.
+  - [color=red]The wrong type is destroyed in the bloodstream[/color]. It restores nothing, and it poisons the patient. It keeps running in even when the patient's blood is full.
   - Drawing blood from someone into an empty pack labels it with their type. Filling one pack from two different types makes it [color=red]mixed[/color], safe for nobody. An emptied pack can be refilled with any type.
 
   ## Keeping Blood Fresh
-  - Blood and plasma [color=red]go bad after 30 minutes out of the fridge[/color]. The time adds up, and putting a pack back in the cold pauses it but doesn't reset it.
+  - Blood [color=red]goes bad after 30 minutes out of the fridge[/color], plasma after [color=red]20 minutes[/color]. The time adds up, and putting a pack back in the cold pauses it but doesn't reset it.
   - A [bold]blood cooler[/bold], a [bold]freezer crate[/bold] or a full-size [bold]IV stand[/bold] keeps packs cold. A pack held in your hand or on a folding IV stand isn't.
   - The blood cooler only holds blood packs and IV bags, and fits in a satchel. Corpsmen get one in their essential kit, and WeYu medical vendors stock them.
   - Examining a pack tells you when it's getting warm, and when it's gone bad.
