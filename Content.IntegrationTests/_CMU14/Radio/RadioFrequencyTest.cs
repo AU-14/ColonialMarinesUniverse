@@ -46,7 +46,9 @@ public sealed class RadioFrequencyTest : GameTest
         ["radioCMB"] = 122_000,
         ["radioCLF"] = 188_600,
         ["radioCLFCommand"] = 188_700,
-        ["radioMobFamily"] = 146_700,
+        // cmu edit start: the mob family channel was removed
+        // ["radioMobFamily"] = 146_700,
+        // cmu edit end
         ["radioAI"] = 767_600,
         ["ColonyHandheld"] = 146_100,
         ["Hivemind"] = 42_600,
@@ -144,7 +146,7 @@ public sealed class RadioFrequencyTest : GameTest
         await Server.WaitAssertion(() =>
         {
             // cmu edit start
-            Assert.That(CustomChannels, Has.Count.EqualTo(59));
+            Assert.That(CustomChannels, Has.Count.EqualTo(58));
             // cmu edit end
 
             foreach (var (id, expectedKilohertz) in CustomChannels)
@@ -161,11 +163,11 @@ public sealed class RadioFrequencyTest : GameTest
             Assert.Multiple(() =>
             {
                 // cmu edit start
-                Assert.That(positive, Has.Length.EqualTo(57));
+                Assert.That(positive, Has.Length.EqualTo(56));
                 // cmu edit end
                 Assert.That(CustomChannels.Values.Count(value => value == 0), Is.EqualTo(2));
                 // cmu edit start
-                Assert.That(positive.Distinct().Count(), Is.EqualTo(57),
+                Assert.That(positive.Distinct().Count(), Is.EqualTo(56),
                 // cmu edit end
                     "Every positive custom carrier must have one unambiguous reverse lookup.");
             });

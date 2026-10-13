@@ -61,7 +61,8 @@
     jumpsuit: CMJumpsuitLiaisonCharcoal
     shoes: RMCShoesLaceup
     id: AU14IDCardMobGoon
-    ears: AU14HeadsetMob
+    ears: AU14HeadsetColonist
+    pocket1: CMUMobilePhone
 
 - type: entity
   id: AU14DrugSmugglerPreset

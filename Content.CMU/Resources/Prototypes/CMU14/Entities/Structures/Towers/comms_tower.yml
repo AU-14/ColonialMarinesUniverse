@@ -47,7 +47,6 @@
     - radioWEYU
     - radioCMB
     - radioCLF
-    - radioMobFamily
     - radioGovforAlpha
     - radioGovforBravo
     - radioGovforCharlie
@@ -145,7 +144,6 @@
     - radioWEYU
     - radioCMB
     - radioCLF
-    - radioMobFamily
 
 # ├──[ MAP SPAWNS ]──────────────────────────────────────────────────┤
 - type: entity

@@ -249,15 +249,6 @@
   anchorGated: true
 
 - type: radioChannel
-  id: radioMobFamily
-  name: chat-radio-mob
-  keycode: 'ŝ' # gave "f" to GOVFOR Foxtrot
-  frequency: 146.7
-  color: "#318779"
-  longRange: true
-  # tower: true
-
-- type: radioChannel
   id: radioAI
   name: chat-radio-ai
   keycode: "$"
