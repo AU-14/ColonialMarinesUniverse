@@ -28,7 +28,7 @@ public sealed partial class TurretFactionSystem : EntitySystem
     private void OnInteractUsing(Entity<SentryTargetingComponent> ent, ref InteractUsingEvent args)
     {
         // SentrySystem handles entities with SentryComponent.
-        if (HasComp<SentryComponent>(ent))
+        if (HasComp<SentryComponent>(ent) || HasComp<Content.Shared.CMU14.Dropship.DirectFire.MohawkChinGunComponent>(ent))
             return;
 
         if (!HasComp<MultitoolComponent>(args.Used))

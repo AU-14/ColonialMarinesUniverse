@@ -23,12 +23,14 @@ public sealed class MohawkGunnerInputSystem : EntitySystem
     [Dependency] private IUserInterfaceManager _ui = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
     private readonly HashSet<BoundKeyFunction> _held = new();
     private TimeSpan _nextInput;
     private Button? _exit;
 
     public override void Initialize()
     {
+        _overlays.AddOverlay(new MohawkGunnerOverlay(EntityManager, _player));
         var binds = CommandBinds.Builder;
         foreach (var key in new[] { EngineKeyFunctions.MoveUp, EngineKeyFunctions.MoveDown,
                      EngineKeyFunctions.MoveLeft, EngineKeyFunctions.MoveRight })
@@ -38,6 +40,7 @@ public sealed class MohawkGunnerInputSystem : EntitySystem
 
     public override void Shutdown()
     {
+        _overlays.RemoveOverlay<MohawkGunnerOverlay>();
         CommandBinds.Unregister<MohawkGunnerInputSystem>();
         _exit?.Dispose();
         base.Shutdown();

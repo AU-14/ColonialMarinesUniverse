@@ -39,10 +39,15 @@ public sealed partial class MohawkChinGunComponent : Component
     public TimeSpan HeldFireUntil;
     public bool AirborneControl;
     public TimeSpan NextFireWarning;
-    public TimeSpan FreeFireUntil;
     public TimeSpan FreeFireReadyAt;
     public EntityUid? FreeFireConsole;
     public EntityUid? AutomaticTarget;
+    [DataField, AutoNetworkedField] public bool Calibrated;
+    [DataField, AutoNetworkedField] public bool IffConfigured;
+    [DataField, AutoNetworkedField] public bool IffEnabled = true;
+    [DataField, AutoNetworkedField] public bool FreeFireEnabled;
+    public EntityUid? ApprovedAutomaticTarget;
+    public EntityUid? AutomaticEye;
     public Vector2 KeyboardPan;
     public TimeSpan KeyboardPanUntil;
     [DataField, AutoNetworkedField]
@@ -67,7 +72,6 @@ public sealed partial class MohawkChinGunComponent : Component
     public bool AddedRemoteOperator;
     public EntityUid? PreviousPlatform;
     public TimeSpan NextScan;
-    public string? AssignedFaction;
 }
 
 [Serializable, NetSerializable]
@@ -78,6 +82,15 @@ public sealed class MohawkChinGunFreeFireMessage : BoundUserInterfaceMessage;
 
 [Serializable, NetSerializable]
 public sealed class MohawkChinGunArMessage : BoundUserInterfaceMessage;
+
+[Serializable, NetSerializable]
+public sealed class MohawkChinGunIffMessage : BoundUserInterfaceMessage;
+
+[Serializable, NetSerializable]
+public sealed class MohawkChinGunApproveAiMessage(NetEntity? target) : BoundUserInterfaceMessage
+{
+    public readonly NetEntity? Target = target;
+}
 
 [Serializable, NetSerializable]
 public sealed class MohawkChinGunInputEvent(NetEntity console, Vector2 movement, NetCoordinates? aim,

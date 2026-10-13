@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Repairable;
+using Content.Shared._RMC14.Sentry;
 using Content.Shared._RMC14.Tools;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Damage;
@@ -34,6 +35,7 @@ public sealed partial class MohawkChinGunSystem
         SubscribeLocalEvent<MohawkChinGunComponent, ExaminedEvent>(OnDamageExamined);
         SubscribeLocalEvent<MohawkChinGunComponent, InteractUsingEvent>(OnRepairInteract);
         SubscribeLocalEvent<MohawkChinGunComponent, MohawkChinGunRepairDoAfterEvent>(OnRepairDoAfter);
+        SubscribeLocalEvent<MohawkChinGunComponent, MohawkChinGunSetupDoAfterEvent>(OnSetupFinished);
     }
 
     private void OnDamageModify(Entity<MohawkChinGunComponent> point, ref DamageModifyEvent args)
@@ -53,8 +55,8 @@ public sealed partial class MohawkChinGunSystem
         if (point.Comp.Operator is { } actor)
             _popup.PopupEntity(Loc.GetString("cmu-mohawk-gunnery-disabled"), point, actor);
         ReleaseControl(point);
-        if (point.Comp.FreeFireUntil != TimeSpan.Zero)
-            EndFreeFire(point);
+        point.Comp.ApprovedAutomaticTarget = null;
+        point.Comp.AutomaticTarget = null;
         point.Comp.DefensiveFire = false;
         _appearance.SetData(point, MohawkChinGunVisuals.Disabled, true);
         Dirty(point);
@@ -72,6 +74,8 @@ public sealed partial class MohawkChinGunSystem
             ("health", (int) Math.Ceiling(remaining)), ("max", (int) point.Comp.MaxHealth)));
         if (point.Comp.Disabled)
             args.PushMarkup(RepairInstruction(point.Comp.RepairStage));
+        else if (!point.Comp.Calibrated || !point.Comp.IffConfigured)
+            args.PushMarkup(Loc.GetString(point.Comp.Calibrated ? "cmu-mohawk-setup-iff" : "cmu-mohawk-setup-screw"));
     }
 
     public static TimeSpan RepairDelay(MohawkChinGunRepairStage stage)
@@ -136,6 +140,31 @@ public sealed partial class MohawkChinGunSystem
 
     private void OnRepairInteract(Entity<MohawkChinGunComponent> point, ref InteractUsingEvent args)
     {
+        if (!point.Comp.Disabled && !args.Handled &&
+            (!point.Comp.Calibrated && _repairTools.HasQuality(args.Used, ScrewingQuality) ||
+             HasComp<MultitoolComponent>(args.Used) &&
+             (!TryComp(point, out DropshipHardpointFaultComponent? fault) || !fault.Faulted)))
+        {
+            args.Handled = true;
+            if (_net.IsClient)
+                return;
+            if (!IsGrounded(point))
+            {
+                _popup.PopupEntity(Loc.GetString("cmu-mohawk-repair-grounded"), point, args.User);
+                return;
+            }
+            if (!point.Comp.Calibrated && HasComp<MultitoolComponent>(args.Used))
+            {
+                _popup.PopupEntity(Loc.GetString("cmu-mohawk-setup-screw"), point, args.User);
+                return;
+            }
+            _repairDoAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, TimeSpan.FromSeconds(3),
+                new MohawkChinGunSetupDoAfterEvent(point.Comp.Calibrated), point, point, args.Used)
+            {
+                NeedHand = true, BreakOnMove = true, BreakOnDamage = true, BlockDuplicate = true,
+            });
+            return;
+        }
         if (args.Handled || !point.Comp.Disabled)
             return;
         args.Handled = true;
@@ -157,6 +186,37 @@ public sealed partial class MohawkChinGunSystem
             if (point.Comp.RepairStage == MohawkChinGunRepairStage.Weld)
                 _weldEffects.SpawnWeldEffect(point, delay);
         }
+    }
+
+    private void OnSetupFinished(Entity<MohawkChinGunComponent> point, ref MohawkChinGunSetupDoAfterEvent args)
+    {
+        if (_net.IsClient || args.Cancelled || args.Handled || args.Used is not { } used ||
+            point.Comp.Disabled || !IsGrounded(point))
+            return;
+        args.Handled = true;
+        if (!args.ConfigureIff && !point.Comp.Calibrated && _repairTools.HasQuality(used, ScrewingQuality))
+        {
+            point.Comp.Calibrated = true;
+            _popup.PopupEntity(Loc.GetString("cmu-mohawk-setup-iff"), point, args.User);
+        }
+        else if (args.ConfigureIff && point.Comp.Calibrated && HasComp<MultitoolComponent>(used))
+        {
+            _targeting.ApplyDeployerFactions(point, args.User);
+            var targeting = Comp<SentryTargetingComponent>(point);
+            point.Comp.IffConfigured = targeting.FriendlyFactions.Count > 0;
+            if (point.Comp.IffConfigured)
+            {
+                var assigned = new SentryFactionAssignedEvent(args.User);
+                RaiseLocalEvent(point.Owner, ref assigned);
+            }
+            point.Comp.AutomaticTarget = null;
+            point.Comp.ApprovedAutomaticTarget = null;
+            if (point.Comp.Operator != null)
+                ReleaseControl(point);
+            _popup.PopupEntity(Loc.GetString(point.Comp.IffConfigured
+                ? "cmu-mohawk-setup-ready" : "cmu-mohawk-setup-no-faction"), point, args.User);
+        }
+        Dirty(point);
     }
 
     private void OnRepairDoAfter(Entity<MohawkChinGunComponent> point, ref MohawkChinGunRepairDoAfterEvent args)
@@ -186,6 +246,7 @@ public sealed partial class MohawkChinGunSystem
             case MohawkChinGunRepairStage.Calibrate:
                 _damage.SetAllDamage(point.Owner, FixedPoint2.Zero);
                 point.Comp.Disabled = false;
+                point.Comp.Calibrated = true;
                 point.Comp.RepairStage = MohawkChinGunRepairStage.Strip;
                 _appearance.SetData(point, MohawkChinGunVisuals.Disabled, false);
                 Dirty(point);
@@ -231,4 +292,12 @@ public sealed partial class MohawkChinGunRepairDoAfterEvent : DoAfterEvent
         Stage = stage;
     }
     public override DoAfterEvent Clone() => new MohawkChinGunRepairDoAfterEvent(Stage);
+}
+
+[Serializable, NetSerializable]
+public sealed partial class MohawkChinGunSetupDoAfterEvent : SimpleDoAfterEvent
+{
+    [DataField] public bool ConfigureIff;
+    public MohawkChinGunSetupDoAfterEvent() { }
+    public MohawkChinGunSetupDoAfterEvent(bool configureIff) => ConfigureIff = configureIff;
 }

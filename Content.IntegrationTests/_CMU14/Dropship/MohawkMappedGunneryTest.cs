@@ -47,6 +47,12 @@ public sealed class MohawkMappedGunneryTest : GameTest
         await Server.WaitAssertion(() =>
         {
             var point = SEntMan.QueryEntities<MohawkChinGunComponent>().Single();
+            point.Comp.Calibrated = true;
+            point.Comp.IffConfigured = true;
+            Server.System<Content.Shared._RMC14.Sentry.SharedSentryTargetingSystem>().SetFriendlyFactions(
+                (point.Owner, SEntMan.GetComponent<Content.Shared._RMC14.Sentry.SentryTargetingComponent>(point)), ["GOVFOR"]);
+            Assert.That(Server.System<SharedDropshipSystem>().TryGetGridDropship(point, out var canonicalShip), Is.True);
+            SEntMan.EnsureComponent<DropshipFireControlBootComponent>(canonicalShip).Complete = true;
             var mount = SEntMan.GetComponent<DropshipWeaponPointComponent>(point);
             var containers = Server.System<SharedContainerSystem>();
             foreach (var slotId in mount.GetAmmoSlots())
@@ -71,6 +77,8 @@ public sealed class MohawkMappedGunneryTest : GameTest
                 UiKey = DropshipTerminalWeaponsUi.Key,
             });
             Assert.That(point.Comp.Operator, Is.EqualTo(actor));
+            Assert.That(SEntMan.GetComponent<EyeComponent>(point.Comp.Eye!.Value).DrawFov, Is.True,
+                "Landed gun cameras use wall occlusion.");
             Assert.That(Server.System<MohawkChinGunSystem>().CanOperate(point, actor,
                 SEntMan.GetComponent<RemoteWeaponOperatorComponent>(actor).SelectedWeapon!.Value, out _), Is.True);
             consoleNet = SEntMan.GetNetEntity(console);
@@ -82,6 +90,8 @@ public sealed class MohawkMappedGunneryTest : GameTest
             var console = CEntMan.GetComponent<DropshipTerminalWeaponsComponent>(CEntMan.GetEntity(consoleNet));
             Assert.That(console.ChinGunOperator, Is.EqualTo(CEntMan.GetEntity(actorNet)));
             Assert.That(console.ChinGunEye, Is.Not.Null);
+            Assert.That(Client.ResolveDependency<Robust.Client.Graphics.IOverlayManager>()
+                .HasOverlay<Content.Client.CMU14.Dropship.DirectFire.MohawkGunnerOverlay>(), Is.True);
             var window = Client.ResolveDependency<IUserInterfaceManager>().RootControl
                 .GetControlOfType<DropshipWeaponsWindow>(fullTreeSearch: true).Single();
             Assert.That(window.ScreenOne.Viewport.MouseFilter, Is.EqualTo(Control.MouseFilterMode.Stop),
@@ -184,6 +194,14 @@ public sealed class MohawkMappedGunneryTest : GameTest
             var window = Client.ResolveDependency<IUserInterfaceManager>().RootControl
                 .GetControlOfType<DropshipWeaponsWindow>(fullTreeSearch: true).Single();
             Assert.That(window.Visible, Is.False, "AR must hide the entire console panel.");
+            var overlay = Client.ResolveDependency<Robust.Client.Graphics.IOverlayManager>()
+                .GetOverlay<Content.Client.CMU14.Dropship.DirectFire.MohawkGunnerOverlay>();
+            var mainViewport = ui.RootControl.GetControlOfType<Content.Client.UserInterface.Controls.MainViewport>(
+                fullTreeSearch: true).Single();
+            Assert.That(overlay.ShouldDrawForViewport(mainViewport.Viewport), Is.True,
+                "The actual game ScalingViewport must draw the AR firing radius.");
+            Assert.That(overlay.ShouldDrawForViewport(window.ScreenOne.Viewport), Is.False,
+                "AR geometry must not leak into embedded targeting monitors.");
             Assert.That(Client.ResolveDependency<Robust.Client.Player.IPlayerManager>().LocalEntity,
                 Is.EqualTo(CEntMan.GetEntity(actorNet)));
             var system = Client.System<Content.Client.CMU14.Dropship.DirectFire.MohawkGunnerInputSystem>();

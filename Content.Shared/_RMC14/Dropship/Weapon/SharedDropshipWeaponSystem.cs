@@ -364,6 +364,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
     private void OnTerminalBUIOpened(Entity<DropshipTerminalWeaponsComponent> ent, ref BoundUIOpenedEvent args)
     {
+        if (Equals(args.UiKey, DropshipTerminalWeaponsUi.Key))
+            EntityManager.System<DropshipFireControlBootSystem>().OnConsoleOpened(ent);
         AddPvs(ent, args.Actor);
     }
 
@@ -1721,6 +1723,16 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         }
     }
 
+    public void SetChinGunCamera(Entity<DropshipTerminalWeaponsComponent> terminal, EntityUid? camera)
+    {
+        if (terminal.Comp.ChinGunEye == camera)
+            return;
+        RemovePvsActors(terminal);
+        terminal.Comp.ChinGunEye = camera;
+        Dirty(terminal);
+        AddPvsActors(terminal);
+    }
+
     private void RemovePvsActors(Entity<DropshipTerminalWeaponsComponent> terminal)
     {
         foreach (var actor in _ui.GetActors(terminal.Owner, DropshipTerminalWeaponsUi.Key))
@@ -2865,7 +2877,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         ammo.Comp.Rounds--;
         _appearance.SetData(ammo, DropshipAmmoVisuals.Fill, ammo.Comp.Rounds);
         Dirty(ammo);
-        _gun.SetNextFire((weapon, gun), now + TimeSpan.FromSeconds(1f / gun.FireRateModified));
+        var interval = TimeSpan.FromSeconds(1f / gun.FireRateModified);
+        var nextShot = gun.NextFire == TimeSpan.Zero || gun.NextFire < now - interval ? now : gun.NextFire;
+        _gun.SetNextFire((weapon, gun), nextShot + interval);
         _audio.PlayPvs(ammo.Comp.SoundCockpit, weapon);
         if (ammo.Comp.EjectCasing)
             _directFire.EjectCasing(mount, grid);
@@ -2887,6 +2901,21 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
     /// <returns>True if the weapon is able to shoot</returns>
     private bool CanFire(EntityUid uid, DropshipWeaponStrikeType strikeType, EntityUid? actor = null, int requiredShots = 1, DropshipWeaponComponent? weapon = null)
     {
+        if (!EntityManager.System<DropshipFireControlBootSystem>().IsWeaponReady(uid))
+        {
+            if (actor is { } user)
+                _popup.PopupEntity(Loc.GetString("cmu-dropship-hardpoint-unready"), uid, user);
+            return false;
+        }
+        if (_container.TryGetContainingContainer(uid, out var weaponContainer) &&
+            TryComp(weaponContainer.Owner, out MohawkChinGunComponent? chin) &&
+            (!chin.Calibrated || !chin.IffConfigured || chin.Disabled))
+        {
+            if (actor is { } user)
+                _popup.PopupEntity(Loc.GetString(chin.Disabled ? "cmu-mohawk-gunnery-disabled" :
+                    !chin.Calibrated ? "cmu-mohawk-setup-screw" : "cmu-mohawk-setup-iff"), uid, user);
+            return false;
+        }
         if (!Resolve(uid, ref weapon, false))
             return false;
 

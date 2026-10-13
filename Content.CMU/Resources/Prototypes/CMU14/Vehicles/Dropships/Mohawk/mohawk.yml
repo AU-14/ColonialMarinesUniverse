@@ -726,7 +726,7 @@
     armorPiercing: 30
     zLevelPenetration: 0
     directFireProjectile: CMUMohawkM90Kinetic
-    directFireRate: 10
+    directFireRate: 15
     groundCompatible: true
     livingTargetsOnly: true
     ejectCasing: false

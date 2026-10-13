@@ -83,6 +83,11 @@ public sealed class MohawkChinGunTest
             var payload = entities.GetComponent<DropshipAmmoComponent>(ammo);
             var turret = entities.System<MohawkChinGunSystem>();
             var chin = entities.GetComponent<MohawkChinGunComponent>(point);
+            chin.Calibrated = true;
+            chin.IffConfigured = true;
+            entities.EnsureComponent<DropshipFireControlBootComponent>(ship).Complete = true;
+            entities.System<SharedSentryTargetingSystem>().SetFriendlyFactions(
+                (point, entities.GetComponent<SentryTargetingComponent>(point)), ["GOVFOR"]);
             var gun = entities.GetComponent<GunComponent>(weapon);
             var transform = entities.System<SharedTransformSystem>();
 
@@ -198,10 +203,10 @@ public sealed class MohawkChinGunTest
             Assert.That(entities.QueryEntities<ProjectileIFFComponent>().Any(projectile => projectile.Comp.Enabled), Is.True,
                 "Fired shells must inherit the turret's smartgun-compatible IFF.");
             Assert.That(entities.System<SharedGunSystem>().AttemptShoot(actor, (weapon, gun),
-                new EntityCoordinates(map, 1.5f, 10)), Is.False, "A second shell must wait for the third-second cooldown.");
+                new EntityCoordinates(map, 1.5f, 10)), Is.False, "A second round must wait for the ammunition cooldown.");
             Assert.That(gun.FireRate, Is.EqualTo(3));
             Assert.That(gun.NextFire - pair.Server.ResolveDependency<Robust.Shared.Timing.IGameTiming>().CurTime,
-                Is.EqualTo(TimeSpan.FromSeconds(0.1f)).Within(TimeSpan.FromMilliseconds(1)));
+                Is.EqualTo(TimeSpan.FromSeconds(1f / 15)).Within(TimeSpan.FromMilliseconds(1)));
             gun.NextFire = TimeSpan.Zero;
             entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunFireMessage(
                 entities.GetNetCoordinates(new EntityCoordinates(map, 1.5f, 10)))
@@ -214,7 +219,7 @@ public sealed class MohawkChinGunTest
                 ToCoordinates = new EntityCoordinates(map, 1.5f, 100),
             };
             entities.EventBus.RaiseLocalEvent(weapon, ref shot);
-            Assert.That(shot.Cancelled, Is.True, "Manual fire must not bypass maximum range.");
+            Assert.That(shot.Cancelled, Is.False, "Ground manual shots outside the acquisition circle travel until collision.");
 
             void Track(EntityUid target)
             {
@@ -309,11 +314,11 @@ public sealed class MohawkChinGunTest
             Assert.That(turret.SelectTarget((point, chin), chin.CloseDefenseRange), Is.EqualTo(hostile),
                 "The exact boundary threat must remain an eligible AI target.");
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(1195),
-                "Unmanned close defense must fire at exactly eight tiles from the chin mount.");
+            Assert.That(payload.Rounds, Is.EqualTo(1196),
+                "Unmanned close defense acquires but waits for gunner approval.");
             transform.SetCoordinates(hostile, new EntityCoordinates(map, 1.5f, 9.01f));
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(1195), "Targets outside eight tiles require authorization.");
+            Assert.That(payload.Rounds, Is.EqualTo(1196), "Targets outside eight tiles require authorization.");
             entities.DeleteEntity(map);
         });
         await pair.CleanReturnAsync();

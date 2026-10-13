@@ -6,7 +6,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._RMC14.Dropship.Weapon;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
-[Access(typeof(SharedDropshipWeaponSystem), typeof(MohawkChinGunSystem))]
+[Access(typeof(SharedDropshipWeaponSystem), typeof(MohawkChinGunSystem), typeof(DropshipFireControlBootSystem))]
 public sealed partial class DropshipTerminalWeaponsComponent : Component
 {
     [DataField, AutoNetworkedField]
@@ -34,9 +34,6 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
     public float ChinGunFlareRadius = 10f;
 
     [DataField, AutoNetworkedField]
-    public int ChinGunFreeFireSeconds;
-
-    [DataField, AutoNetworkedField]
     public int ChinGunFreeFireCooldown;
 
     [DataField, AutoNetworkedField]
@@ -47,6 +44,14 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool ChinGunAr;
+
+    [DataField, AutoNetworkedField] public bool ChinGunIff = true;
+    [DataField, AutoNetworkedField] public bool ChinGunSetupReady;
+    [DataField, AutoNetworkedField] public bool ChinGunAiEnabled;
+    [DataField, AutoNetworkedField] public EntityUid? ChinGunAiTarget;
+    [DataField, AutoNetworkedField] public bool ChinGunAiApproved;
+    [DataField, AutoNetworkedField] public bool FireControlBooting;
+    [DataField, AutoNetworkedField] public string FireControlStatus = "";
 
     [DataField, AutoNetworkedField]
     public int ChinGunFeed;

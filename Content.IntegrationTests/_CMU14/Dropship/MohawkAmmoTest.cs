@@ -106,6 +106,8 @@ public sealed class MohawkAmmoTest : GameTest
             Assert.That(count.Capacity, Is.EqualTo(800));
             Assert.That(Server.System<SharedSentryTargetingSystem>().TryApplyDefaultFaction(point, "GOVFOR"), Is.True);
             var chin = SEntMan.GetComponent<MohawkChinGunComponent>(point);
+            chin.Calibrated = true;
+            chin.IffConfigured = true;
             EntityUid Consume()
             {
                 var take = new TakeAmmoEvent(1, new(), map.GridCoords, null);
@@ -180,6 +182,8 @@ public sealed class MohawkAmmoTest : GameTest
             var payload = SEntMan.GetComponent<DropshipAmmoComponent>(crate);
             Assert.That(payload.Weapon.Id, Is.EqualTo("CMUMohawkM90"));
             var capacity = payload.GroundCompatible ? 1200 : 400;
+            if (payload.GroundCompatible)
+                Assert.That(payload.DirectFireRate, Is.EqualTo(15));
             Assert.That(payload.Rounds, Is.EqualTo(capacity));
             Assert.That(payload.MaxRounds, Is.EqualTo(capacity));
             Assert.That(payload.RoundsPerShot, Is.EqualTo(1));
@@ -188,6 +192,8 @@ public sealed class MohawkAmmoTest : GameTest
             Assert.That(SEntMan.GetComponent<DropshipFabricatorPrintableComponent>(crate).Cost, Is.EqualTo(cost));
             Assert.That(Server.System<SharedSentryTargetingSystem>().TryApplyDefaultFaction(point, "GOVFOR"), Is.True);
             var chin = SEntMan.GetComponent<MohawkChinGunComponent>(point);
+            chin.Calibrated = true;
+            chin.IffConfigured = true;
             var transform = Server.System<SharedTransformSystem>();
             var maximumScatter = 0f;
             chin.DefensiveFire = true;

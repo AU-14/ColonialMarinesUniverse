@@ -85,7 +85,15 @@ public sealed class DropshipTargetingPreview : Control
             }
         }
 
-        if (_first && terminal.ChinGunOperator != null && terminal.ChinGunAirborne)
+        if (_first && terminal.ChinGunAiTarget is { } aiTarget &&
+            _entities.TryGetComponent(aiTarget, out TransformComponent? aiTransform))
+        {
+            var location = transform.GetMapCoordinates(aiTarget, aiTransform);
+            if (location.MapId == center.MapId)
+                Ring(location.Position, 0.65f, terminal.ChinGunAiApproved ? Color.Lime : Color.Yellow);
+        }
+
+        if (_first && terminal.ChinGunEye != null && terminal.ChinGunAirborne)
         {
             if (terminal.Target is { } signal && _entities.HasComponent<TransformComponent>(signal))
             {
@@ -102,7 +110,7 @@ public sealed class DropshipTargetingPreview : Control
             return;
         }
 
-        if (_first && terminal.ChinGunOperator != null && shipSystem.TryGetGridDropship(_console, out var ship))
+        if (_first && terminal.ChinGunEye != null && shipSystem.TryGetGridDropship(_console, out var ship))
         {
             foreach (var point in ship.Comp.AttachmentPoints)
             {

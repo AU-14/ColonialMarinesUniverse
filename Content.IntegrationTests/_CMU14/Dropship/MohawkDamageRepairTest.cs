@@ -26,6 +26,62 @@ public sealed class MohawkDamageRepairTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Dirty = true };
 
+    [Test]
+    public async Task NewGunRequiresCompletedScrewdriverThenFactionProgramming()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            SEntMan.EnsureComponent<DropshipComponent>(map.Grid);
+            var point = SEntMan.SpawnEntity("CMUMohawkM90Point", map.GridCoords);
+            var chin = SEntMan.GetComponent<MohawkChinGunComponent>(point);
+            var slots = SEntMan.GetComponent<DropshipWeaponPointComponent>(point);
+            var weapon = Server.System<SharedContainerSystem>().GetContainer(point, slots.WeaponContainerSlotId).ContainedEntities.Single();
+            chin.DefensiveFire = true;
+            var system = Server.System<MohawkChinGunSystem>();
+            Assert.That(system.CanOperate((point, chin), weapon, weapon, out _), Is.False);
+            var actor = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(0, 0.5f)));
+            var factions = SEntMan.GetComponent<Content.Shared.NPC.Components.NpcFactionMemberComponent>(actor);
+            factions.Factions.Clear();
+            factions.Factions.Add("OPFOR");
+            var hands = Server.System<SharedHandsSystem>();
+            var multitool = SEntMan.SpawnEntity("CMMultitool", map.GridCoords);
+            Assert.That(hands.TryPickupAnyHand(actor, multitool), Is.True);
+            SEntMan.EventBus.RaiseLocalEvent(point, new InteractUsingEvent(actor, multitool, point, map.GridCoords));
+            Assert.That(chin.IffConfigured, Is.False, "Multitool cannot skip calibration.");
+            hands.TryDrop(actor, multitool);
+
+            void Use(EntityUid tool, bool cancel)
+            {
+                Assert.That(hands.TryPickupAnyHand(actor, tool), Is.True);
+                SEntMan.EventBus.RaiseLocalEvent(point, new InteractUsingEvent(actor, tool, point, map.GridCoords));
+                var after = SEntMan.GetComponent<DoAfterComponent>(actor).DoAfters.Values.Single(d => !d.Completed && !d.Cancelled);
+                if (cancel)
+                    Server.System<SharedDoAfterSystem>().Cancel(after);
+                else
+                {
+                    after.StartTime = SGameTiming.CurTime - after.Args.Delay - TimeSpan.FromSeconds(1);
+                    Server.System<SharedDoAfterSystem>().Update(0);
+                    Assert.That(after.Completed, Is.True);
+                }
+                hands.TryDrop(actor, tool);
+            }
+            var screwdriver = SEntMan.SpawnEntity("CMScrewdriver", map.GridCoords);
+            Use(screwdriver, true);
+            Assert.That(chin.Calibrated, Is.False, "Interrupted calibration must not enable the gun.");
+            Use(screwdriver, false);
+            Assert.That(chin.Calibrated, Is.True);
+            Assert.That(system.CanOperate((point, chin), weapon, weapon, out _), Is.False);
+            Use(multitool, true);
+            Assert.That(chin.IffConfigured, Is.False);
+            Use(multitool, false);
+            Assert.That(chin.IffConfigured, Is.True);
+            Assert.That(SEntMan.GetComponent<Content.Shared._RMC14.Sentry.SentryTargetingComponent>(point).FriendlyFactions,
+                Does.Contain("OPFOR"), "Programming takes the operator's faction, not the ship's.");
+            Assert.That(system.CanOperate((point, chin), weapon, weapon, out _), Is.True);
+        });
+    }
+
     [TestCase("BulletRifle10x24mm")]
     [TestCase("BulletRifle10x24mmAP")]
     public async Task RealBulletsCollideWithTheExposedMountAndDisableWithoutDeletingIt(string bulletPrototype)
@@ -84,12 +140,12 @@ public sealed class MohawkDamageRepairTest : GameTest
             var mount = SEntMan.GetComponent<DropshipWeaponPointComponent>(point);
             var weapon = Server.System<SharedContainerSystem>().GetContainer(point, mount.WeaponContainerSlotId).ContainedEntities.Single();
             chin.DefensiveFire = true;
-            chin.FreeFireUntil = SGameTiming.CurTime + TimeSpan.FromSeconds(120);
+            chin.FreeFireEnabled = true;
             damage.TryChangeDamage(point, new DamageSpecifier { DamageDict = new() { ["Piercing"] = 1949 } });
             Assert.That(chin.Disabled, Is.False, "1999 damage leaves exactly one HP.");
             damage.TryChangeDamage(point, new DamageSpecifier { DamageDict = new() { ["Piercing"] = 1 } });
             Assert.That(chin.Disabled, Is.True);
-            Assert.That(chin.FreeFireUntil, Is.EqualTo(TimeSpan.Zero));
+            Assert.That(chin.FreeFireEnabled, Is.True, "Damage pauses AI without disabling its toggle.");
             Assert.That(Server.System<MohawkChinGunSystem>().CanOperate((point, chin), weapon, weapon, out _), Is.False);
             damage.SetAllDamage(point, FixedPoint2.Zero);
             Assert.That(chin.Disabled, Is.True, "Ordinary healing must not bypass the costly staged rebuild.");

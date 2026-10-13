@@ -77,6 +77,16 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             StopManualTrigger();
             SendMessage(new MohawkChinGunFreeFireMessage());
         };
+        Window.IffButton.OnPressed += _ =>
+        {
+            StopManualTrigger();
+            SendMessage(new MohawkChinGunIffMessage());
+        };
+        Window.ApproveAiButton.OnPressed += _ =>
+        {
+            if (EntMan.TryGetComponent(Owner, out DropshipTerminalWeaponsComponent? terminal))
+                SendMessage(new MohawkChinGunApproveAiMessage(EntMan.GetNetEntity(terminal.ChinGunAiTarget)));
+        };
         Window.ConfirmTrackingButton.OnPressed += _ =>
         {
             if (EntMan.TryGetComponent(Owner, out DropshipTerminalWeaponsComponent? terminal) &&
@@ -203,20 +213,35 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         {
             Window.ChinGunControlButton.Visible = terminal.Gunnery;
             Window.FreeFireButton.Visible = terminal.Gunnery;
-            Window.FreeFireButton.Disabled = terminal.ChinGunDisabled || terminal.ChinGunFreeFireCooldown > 0;
-            Window.ChinGunControlButton.Disabled = terminal.ChinGunDisabled;
+            Window.FreeFireButton.Disabled = !terminal.ChinGunAiEnabled &&
+                (terminal.ChinGunDisabled || terminal.ChinGunFreeFireCooldown > 0 ||
+                 !terminal.ChinGunSetupReady || terminal.FireControlBooting);
+            Window.ChinGunControlButton.Disabled = terminal.ChinGunDisabled || !terminal.ChinGunSetupReady || terminal.FireControlBooting;
             Window.ChinGunHealthLabel.Visible = terminal.Gunnery;
+            Window.BootStatusLabel.Text = terminal.FireControlStatus;
+            Window.BootStatusLabel.ToolTip = terminal.FireControlStatus;
+            Window.IffButton.Visible = terminal.Gunnery;
+            Window.IffButton.Disabled = !terminal.ChinGunSetupReady;
+            Window.IffButton.Text = Loc.GetString(terminal.ChinGunIff ? "cmu-mohawk-iff-on" : "cmu-mohawk-iff-off");
+            Window.AiTargetLabel.Visible = terminal.Gunnery;
+            Window.AiTargetLabel.Text = terminal.ChinGunAiTarget is { } aiTarget && EntMan.TryGetComponent(aiTarget, out MetaDataComponent? aiMeta)
+                ? Loc.GetString("cmu-mohawk-ai-lock", ("target", aiMeta.EntityName))
+                : Loc.GetString("cmu-mohawk-ai-none");
+            Window.ApproveAiButton.Visible = terminal.Gunnery;
+            Window.ApproveAiButton.Disabled = terminal.ChinGunOperator != null || terminal.ChinGunAiTarget == null ||
+                !terminal.ChinGunSetupReady || terminal.FireControlBooting || terminal.ChinGunDisabled;
+            Window.ApproveAiButton.Text = Loc.GetString(terminal.ChinGunAiApproved ? "cmu-mohawk-ai-revoke" : "cmu-mohawk-ai-approve");
             Window.ChinGunHealthLabel.Text = terminal.ChinGunDisabled
                 ? Loc.GetString("cmu-mohawk-gunnery-disabled")
                 : Loc.GetString("cmu-mohawk-gunnery-health", ("health", terminal.ChinGunHealth), ("max", 2000));
-            Window.FreeFireButton.Text = terminal.ChinGunFreeFireSeconds > 0
-                ? Loc.GetString("cmu-mohawk-free-fire-active", ("seconds", terminal.ChinGunFreeFireSeconds))
+            Window.FreeFireButton.Text = terminal.ChinGunAiEnabled
+                ? Loc.GetString("cmu-mohawk-free-fire-active")
                 : terminal.ChinGunFreeFireCooldown > 0
                     ? Loc.GetString("cmu-mohawk-free-fire-cooldown", ("seconds", terminal.ChinGunFreeFireCooldown))
                     : Loc.GetString("cmu-mohawk-free-fire-enable");
             Window.ChinGunControlButton.Text = Loc.GetString(terminal.ChinGunOperator == null
                 ? "cmu-mohawk-gunnery-manual"
-                : "cmu-mohawk-gunnery-automatic");
+                : terminal.ChinGunAiEnabled ? "cmu-mohawk-gunnery-resume-ai" : "cmu-mohawk-gunnery-automatic");
             var manual = terminal.ChinGunOperator != null;
             Window.ArButton.Visible = manual;
             Window.Visible = !manual || !terminal.ChinGunAr;
@@ -355,7 +380,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             preview.CursorUnavailable += StopManualTrigger;
             screen.Viewport.AddChild(preview);
         }
-        var turretCamera = first && terminal.ChinGunOperator != null && terminal.ChinGunEye != null;
+        var turretCamera = first && terminal.ChinGunEye != null;
         screen.Viewport.MouseFilter = turretCamera ? MouseFilterMode.Stop : MouseFilterMode.Ignore;
         RefreshPayloadSettings(screen, compScreen);
         if (!turretCamera)
@@ -524,7 +549,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         var firemission = Button("fire-mission", StrikeFireMission);
         var strikeVector = Button("vector", StrikeVector);
 
-        if (first && terminal.ChinGunOperator != null && terminal.ChinGunEye is { } chinEye &&
+        if (first && terminal.ChinGunEye is { } chinEye &&
             EntMan.TryGetComponent(chinEye, out EyeComponent? turretEye))
         {
             screen.Viewport.Eye = turretEye.Eye;

@@ -114,16 +114,6 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
             return;
         }
 
-        if (chinMount && Vector2.DistanceSquared(mountPosition, target.Position) >
-            MathF.Pow(Comp<MohawkChinGunComponent>(point).Range, 2))
-        {
-            Comp<MohawkChinGunComponent>(point).PendingManualShot = null;
-            args.Cancelled = true;
-            args.ResetCooldown = true;
-            args.Message = Loc.GetString("cmu-mohawk-gunnery-out-of-range");
-            return;
-        }
-
         if (chinMount)
         {
             var chin = Comp<MohawkChinGunComponent>(point);
@@ -303,7 +293,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
                 EnsureComp<MohawkChinGunProjectileComponent>(projectile);
                 chin.PendingManualShot = null;
                 var iffEvent = new AmmoShotEvent { FiredProjectiles = new List<EntityUid> { projectile } };
-                _iff.GiveAmmoIFF(point.Owner, ref iffEvent, intrinsic: true, enabled: true);
+                _iff.GiveAmmoIFF(point.Owner, ref iffEvent, intrinsic: true, enabled: chin.IffEnabled);
                 if (_net.IsServer)
                 {
                     if (ammo.EjectCasing)
@@ -350,7 +340,9 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
     {
         if (TryComp(ent, out GunComponent? gun) && gun.ProjectileSpeedModified > 0 &&
             _containers.TryGetContainingContainer(ent.Owner, out var container) &&
-            HasComp<MohawkChinGunComponent>(container.Owner))
+            TryComp(container.Owner, out MohawkChinGunComponent? chin) &&
+            Vector2.DistanceSquared(_transform.ToMapCoordinates(args.ToCoordinates).Position,
+                _transform.ToMapCoordinates(_chinGun.GetMountCoordinates((container.Owner, chin))).Position) <= chin.Range * chin.Range)
         {
             var from = _transform.ToMapCoordinates(args.FromCoordinates);
             var target = _transform.ToMapCoordinates(args.ToCoordinates);
