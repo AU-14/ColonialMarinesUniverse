@@ -73,6 +73,7 @@ public sealed partial class ZBuildableMapComponent : Component
         Metal("RUMCRockWallChrome", 0.05f),
         Metal("RUMCRockWallCobalt", 0.05f),
         Metal("RUMCRockWallTungsten", 0.04f),
+        Metal("RUMCRockWallCokeCoal", 0.10f),
         Metal("RUMCRockWallPlatinum", 0.015f),
         Gem("RUMCRockWallRawDiamond", 0.004f),
         Gem("RUMCRockWallEmerald", 0.005f),
@@ -148,6 +149,7 @@ public sealed partial class ZBuildableMapComponent : Component
             OreVeins = new List<ZLevelOreVein>
             {
                 new ZLevelOreVein { Entity = "RUMCClayWallCoal", ChancePerChunk = 0.3f },
+                new ZLevelOreVein { Entity = "RUMCClayWallCokeCoal", ChancePerChunk = 0.2f },
             },
             CaveDecor = new List<ZLevelCaveDecor>
             {

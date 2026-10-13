@@ -791,3 +791,36 @@
   parent: [ RUMCBaseVeinLaytoite, RUMCBlackRockWall ]
   id: RUMCBlackRockWallLaytoite
   name: black stone wall
+
+# Coking coal: a vein of the coal that gives coke straight from the rock, so that the first coke of the electric stage does not wait for a pyrolysis oven (which needs a circuit, which needs a resistor, which needs coke).
+- type: ore
+  id: RUMCOreCokeCoal
+  oreEntity: RUMCCokeCoal1
+  minOreYield: 1
+  maxOreYield: 3
+
+- type: entity
+  abstract: true
+  id: RUMCBaseVeinCokeCoal
+  suffix: Coking coal
+  description: An ore vein rich with coking coal.
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreCokeCoal
+  - type: Sprite
+    layers:
+    - state: rock_coal
+      sprite: Structures/Walls/stone-ore.rsi
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  parent: [ RUMCBaseVeinCokeCoal, RUMCRockWall ]
+  id: RUMCRockWallCokeCoal
+  name: stone wall
+
+- type: entity
+  parent: [ RUMCBaseVeinCokeCoal, RUMCClayWall ]
+  id: RUMCClayWallCokeCoal
+  name: clay wall
+
