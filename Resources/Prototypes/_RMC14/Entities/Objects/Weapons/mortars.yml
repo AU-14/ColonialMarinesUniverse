@@ -227,7 +227,26 @@
     spawn: RMCTileFire
     range: 2
   - type: CMUSpawnOnExplosiveTrigger
-    spawn: RMCSmokePhosphorus
+    spawn: CMUSmokePhosphorusMortar
+
+# CMU14: the WP mortar shell's phosphorus smoke, which lasts 6 seconds
+- type: entity
+  parent: RMCSmokePhosphorusNoSpread
+  id: CMUSmokePhosphorusMortarNoSpread
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 6
+
+- type: entity
+  parent: CMUSmokePhosphorusMortarNoSpread
+  id: CMUSmokePhosphorusMortar
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EvenSmoke
+    spawn: CMUSmokePhosphorusMortarNoSpread
+    initialSpread: 3
+    range: 3
 
 - type: entity
   parent: RMCMortarShellBase
