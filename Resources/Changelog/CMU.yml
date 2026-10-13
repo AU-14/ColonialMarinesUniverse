@@ -13077,5 +13077,179 @@
   id: 799
   time: '2026-10-12T14:21:06.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2165
+- author: rokudara-sen
+  changes:
+  - message: You now shoot where you look across z-levels. Point at something through
+      a hole and you'll shoot down at it.
+    type: Tweak
+  - message: Removed the shoot down z-level hotkey.
+    type: Remove
+  id: 800
+  time: '2026-10-13T12:29:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2172
+- author: KeiKiyomi
+  changes:
+  - message: Dropship UI now shows how much penetration an ammo has
+    type: Add
+  - message: Changed Dropship UI allowing you to filter by weapon and search specific
+      items
+    type: Tweak
+  - message: Insurgency gets a starting fab count of 7500
+    type: Tweak
+  - message: Distress Signal gets a starting fab count of 18000
+    type: Tweak
+  - message: Force on Force gets a starting fab count of 25000
+    type: Tweak
+  - message: Default fab count raised to 17500 (previously 10000)
+    type: Tweak
+  id: 801
+  time: '2026-10-13T14:37:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2145
+- author: troytroy400
+  changes:
+  - message: M908 white phosphorus mortar shells. They throw up a 6 second cloud of
+      burning phosphorus smoke. Order them in crates of 12 wherever mortar shells
+      are sold.
+    type: Add
+  - message: LACN equipment vendor brought up to parity with the other platoon vendors.
+    type: Add
+  - message: The M82-F flare gun is now a small item.
+    type: Tweak
+  - message: The LACN engineering satchel has a fuel tank and LACN grenade webbing
+      has 8 grenade webbing slots.
+    type: Tweak
+  - message: GOVFOR/OPFOR vendor boots now come stocked with knives.
+    type: Tweak
+  - message: The Auto-Doc does not require medical skill to use anymore.
+    type: Tweak
+  - message: Detailed examine moved into the examine sub-menu and tooltip.
+    type: Tweak
+  - message: Fires on water are put out.
+    type: Add
+  - message: Unconscious players whisper their local speech now.
+    type: Tweak
+  - message: Trackers now work between Z-Levels
+    type: Tweak
+  - message: Breathing from an empty internals tank suffocates you and now you're
+      told if you can't breathe.
+    type: Tweak
+  - message: Internals hold out neurotoxin for 9 seconds per exposure instead of forever.
+    type: Tweak
+  - message: CPR works through masks on patients breathing from internals.
+    type: Tweak
+  - message: The withdrawal console is disabled in Distress Signal.
+    type: Remove
+  - message: Electroshock grenades are stronger against xenos.
+    type: Tweak
+  - message: Eating and drinking take twice as long. Swallowing pills and force-feeding
+      keep their usual time.
+    type: Tweak
+  - message: The ghost warp Survivors tab is now called Civilians.
+    type: Tweak
+  - message: Lobby menu art is now credited to its artists.
+    type: Add
+  - message: Added options to copy popups into chat, to hide popups on screen and
+      to hide the shift-click examine popup to match CM13.
+    type: Add
+  - message: You can wipe blood and acid off your clothes onto a wall with a verb.
+    type: Add
+  - message: Toggling combat mode no longer shows a popup.
+    type: Tweak
+  - message: Humans are knocked out below 40% blood and die below 10%.
+    type: Add
+  - message: Tranexamic acid. It stops surface bleeding and holds internal bleeding
+      back while it's in the blood. Make it from aminomethylbenzoic acid (carbon,
+      nitrogen, oxygen and sulphuric acid), hydrogen and inaprovaline.
+    type: Add
+  - message: Arterial bleeds and open stumps spray blood every 10 seconds.
+    type: Add
+  - message: Arterial bleeding is 30% faster.
+    type: Tweak
+  - message: Tourniquets now go on the limb that needs one the most. Arterially bleeding
+      stumps first, then arterial bleeds, then severe bleeds.
+    type: Tweak
+  - message: The squad optic now gives you the squad leader/fireteam trackers, shows
+      friendly primed smart grenades, and gives your gun IFF at the cost of 6% more
+      spread and more damage falloff. IFF and grenade warnings each have a toggle
+      action.
+    type: Add
+  - message: Squad optics show the motion tracker pings of nearby members of your
+      squad.
+    type: Add
+  - message: Squad optics don't work while you hold or wear a smartgun.
+    type: Tweak
+  - message: Medical squad optic for corpsmen, combining the advanced medical optic
+      with the squad optic. Corpsman helmets come with one, and it replaces the HUD
+      in OPFOR/GOVFOR corpsman vendors. It needs medical training.
+    type: Add
+  - message: The USCM corpsman now gets the camo conforming helmet.
+    type: Tweak
+  - message: Iron pills no longer contain nutriment.
+    type: Tweak
+  - message: Fultons and medevac beacons are called in over JTAC as nine-line style
+      radio calls, in the platoon's primary language.
+    type: Add
+  - message: Set Pose. It's replaced by an in-round editor for your short examine
+      text and full character description.
+    type: Remove
+  - message: Examine shows when someone is leaning on a wall, in pain, struggling
+      to breathe or unconscious.
+    type: Add
+  - message: The drunk examine text now reads "appears disoriented" as the effect
+      is used for more than just being drunk.
+    type: Tweak
+  - message: Pain thoughts are reworded to be more informative.
+    type: Tweak
+  - message: The vanilla prone system (Shift+C) is disabled. CM prone (Shift+R) still
+      works.
+    type: Remove
+  - message: The open storage keybind also opens held, nearby and nested storage.
+    type: Tweak
+  - message: The broadcasting camera fits in suit storage and backpacks.
+    type: Tweak
+  - message: Untie Hair is at the top of the tie hair verbs.
+    type: Tweak
+  - message: Plasma and phoron are off the GOVFOR/OPFOR requisitions. Phoron sheets
+      can still be ordered.
+    type: Remove
+  - message: Blood types. Pick yours in character creation. It's printed on your ID
+      card and shown on the health analyzer.
+    type: Add
+  - message: Compatibility works like real life. The wrong blood type is destroyed
+      in the bloodstream and poisons the patient, even if their blood is already full.
+    type: Add
+  - message: Blood packs come in every type and are labelled. Blood drawn into an
+      empty pack takes the donor's type, and mixing two types marks it mixed.
+    type: Add
+  - message: Blood plasma packs. They run in twice as fast, slow all bleeding by half
+      for a while.
+    type: Add
+  - message: Saline IV bags. They fill blood volume, but poison the patient past a
+      quarter of their blood. Dialysis filters saline out.
+    type: Add
+  - message: Squeeze a connected blood pack with Z to make it run three times as fast,
+      repeating every few seconds until you press Z again.
+    type: Add
+  - message: Added IV pressure bags that fit on an IV stand and make it run twice
+      as fast.
+    type: Add
+  - message: Blood goes bad after 30 minutes out of the fridge, plasma after 20. Full-size
+      IV stands, freezer crates and the new portable blood cooler keep them cold.
+      Corpsmen get a cooler in their essentials, and WeYu medical vendors stock them.
+    type: Add
+  - message: Beakers put into a bag or pouch without their lid spill everything in
+      them.
+    type: Add
+  - message: Guidebook sections for blood and transfusions, the limb printer and portable
+      dialysis, plus updates for all of the above.
+    type: Add
+  - message: Spilling liquids no longer shows text popups.
+    type: Remove
+  - message: GOVFOR/OPFOR vehicle crewmen can use the vehicle supply console and lift
+      again.
+    type: Fix
+  id: 802
+  time: '2026-10-13T15:24:13.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2164
 Name: CMU
 Order: -1
