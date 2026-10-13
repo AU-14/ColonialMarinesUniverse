@@ -4,7 +4,6 @@ using Content.Shared.CMU14.Chemistry;
 using Content.Shared.FixedPoint;
 using Content.Shared.Fluids.Components;
 using Content.Shared.Nutrition.EntitySystems;
-using Content.Shared.Popups;
 using Content.Shared.Storage;
 using Robust.Shared.Containers;
 using Robust.Shared.Timing;
@@ -17,7 +16,6 @@ namespace Content.Server.CMU14.Chemistry.Spill;
 public sealed class CMUSpillWhenStoredOpenSystem : EntitySystem
 {
     [Dependency] private OpenableSystem _openable = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private PuddleSystem _puddle = default!;
     [Dependency] private SharedSolutionContainerSystem _solution = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -47,6 +45,5 @@ public sealed class CMUSpillWhenStoredOpenSystem : EntitySystem
         var spilled = _solution.SplitSolution(solutionEnt.Value, solution.Volume);
         var coordinates = _transform.GetMoverCoordinates(ent);
         _puddle.TrySpillAt(coordinates, spilled, out _);
-        _popup.PopupCoordinates(Loc.GetString("cmu-spill-when-stored-open", ("item", ent.Owner)), coordinates, PopupType.SmallCaution);
     }
 }
