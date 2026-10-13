@@ -257,6 +257,13 @@
                                 <OptionButton Name="BuildButton" HorizontalAlignment="Right" />
                             </BoxContainer>
                             <!-- cmu edit start -->
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'cmu-humanoid-profile-editor-blood-type-label'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-blood-type-tooltip'}" />
+                                <Control HorizontalExpand="True"/>
+                                <OptionButton Name="BloodTypeButton" HorizontalAlignment="Right" />
+                            </BoxContainer>
+                            <!-- cmu edit end -->
+                            <!-- cmu edit start -->
                             <!-- skin tone, hair color and eye color moved to the Appearance tab -->
                             <!-- cmu edit end -->
                             <BoxContainer HorizontalExpand="True">

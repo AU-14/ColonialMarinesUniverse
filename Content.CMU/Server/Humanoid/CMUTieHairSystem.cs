@@ -48,6 +48,8 @@ public sealed partial class CMUTieHairSystem : EntitySystem
             args.Verbs.Add(new Verb
             {
                 Text = Loc.GetString("cmu-tie-hair-back-untie-verb"),
+                Category = TieHairBackCategory,
+                Priority = 1, // top of the list, above the styles
                 Icon = new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/VerbIcons/refresh.svg.192dpi.png")),
                 Act = () => StartUntieHair(uid),
             });
@@ -78,6 +80,8 @@ public sealed partial class CMUTieHairSystem : EntitySystem
             args.Verbs.Add(new Verb
             {
                 Text = Loc.GetString("cmu-tie-hair-back-untie-verb"),
+                Category = TieHairBackCategory,
+                Priority = 1, // top of the list, above the styles
                 Icon = new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/VerbIcons/refresh.svg.192dpi.png")),
                 Act = () => StartUntieHair(uid, CMUHairStyles.SpawnedTiedUntieHairStyle),
             });
