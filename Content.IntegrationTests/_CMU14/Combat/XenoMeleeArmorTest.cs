@@ -67,6 +67,20 @@ public sealed class XenoMeleeArmorTest
             Assert.That(xenoProjectile / raw, Is.EqualTo(1.0).Within(0.02),
                 "A xeno projectile on a xeno is ranged-type and must not get the melee config.");
 
+            // Heals ride the same event, and both Fury (XenoFurySystem) and Soak (XenoSoakSystem) heal with
+            // origin: xeno, tool: xeno. Negative damage must never be scaled.
+            double Heal(EntityUid origin)
+            {
+                var wounded = entMan.SpawnEntity("RMCXenoRavagerHedgehog", MapCoordinates.Nullspace);
+                damageable.TryChangeDamage(wounded, new DamageSpecifier(slash, FixedPoint2.New(200)), out _);
+                damageable.TryChangeDamage(wounded, new DamageSpecifier(slash, FixedPoint2.New(-100)),
+                    out var healed, origin: origin, tool: origin, armorPiercing: 100);
+                return (double) healed.GetTotal().Float();
+            }
+
+            Assert.That(Heal(xeno), Is.EqualTo(Heal(nonXeno)).Within(0.5),
+                "A xeno heal must come back unscaled: Fury and Soak heal with origin: xeno, tool: xeno.");
+
             // Armour handling with the real armour in play.
             var baseline = Hit(100, impact: default);
             var marineBody = Hit(100, origin: nonXeno, tool: nonXeno, impact: DamageImpact.MeleeSlash);

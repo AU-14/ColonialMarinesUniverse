@@ -362,12 +362,13 @@ public sealed partial class CMArmorSystem : EntitySystem
             // xeno deals x1.5 (GLOB.xeno_melee.damage_initial_multiplier): the item attack path, the claw
             // swing and every xeno ability, which all route through apply_armoured_damage(..., ARMOR_MELEE).
             // Xeno projectiles take GLOB.xeno_ranged instead, so a non-Melee impact is only counted when
-            // the attack is a body attack (tool == origin). The flat 20 penetration is the item-attack path
-            // only, and a xeno's own body attack ignores three quarters of the victim's armour
-            // (XVX_ARMOR_EFFECTIVEMULT).
+            // the attack is a body attack (tool == origin) - and only when it deals damage, because
+            // DamageModifyEvent also carries heals and Fury/Soak heal with origin: xeno, tool: xeno. The
+            // flat 20 penetration is the item-attack path only, and a xeno's own body attack ignores three
+            // quarters of the victim's armour (XVX_ARMOR_EFFECTIVEMULT).
             var armorEffectiveness = 1f;
             if (args.Impact.Delivery == DamageImpactDelivery.Melee ||
-                (HasComp<XenoComponent>(args.Origin) && args.Tool == args.Origin))
+                (HasComp<XenoComponent>(args.Origin) && args.Tool == args.Origin && args.Damage.AnyPositive()))
             {
                 args.Damage = args.Damage * 1.5f;
 
