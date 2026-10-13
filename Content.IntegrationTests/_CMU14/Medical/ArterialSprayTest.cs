@@ -47,7 +47,7 @@ public sealed class ArterialSprayTest : GameTest
             var wounds = Server.System<CMUWoundsSystem>();
             var patient = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             var arm = Part(patient, BodyPartType.Arm, BodyPartSymmetry.Left);
-            SEntMan.GetComponent<BodyPartWoundComponent>(arm).ExternalBleeding = ExternalBleedTier.Arterial;
+            SEntMan.EnsureComponent<BodyPartWoundComponent>(arm).ExternalBleeding = ExternalBleedTier.Arterial;
             Assert.That(wounds.IsSprayingArterialBlood(patient), Is.True);
 
             var tourniquet = SEntMan.SpawnEntity("AU14Tourniquet", map.GridCoords);

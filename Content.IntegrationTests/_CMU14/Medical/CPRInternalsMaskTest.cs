@@ -3,6 +3,8 @@ using Content.Shared._RMC14.Medical.CPR;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.Inventory;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Systems;
 using Robust.Shared.GameObjects;
 
 namespace Content.IntegrationTests.CMU14.Medical;
@@ -21,6 +23,9 @@ public sealed class CPRInternalsMaskTest : GameTest
             var mask = SEntMan.SpawnEntity("ClothingMaskBreath", map.GridCoords);
             var tank = SEntMan.SpawnEntity("OxygenTankFilled", map.GridCoords);
             Assert.That(Server.System<InventorySystem>().TryEquip(patient, mask, "mask", silent: true, force: true), Is.True);
+
+            // CPR is only ever allowed on someone who isn't conscious.
+            Server.System<MobStateSystem>().ChangeMobState(patient, MobState.Critical);
 
             bool Blocked()
             {

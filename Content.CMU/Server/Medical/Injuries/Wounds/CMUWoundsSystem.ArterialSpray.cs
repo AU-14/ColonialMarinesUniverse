@@ -25,6 +25,7 @@ public sealed partial class CMUWoundsSystem
     [Dependency] private PuddleSystem _puddle = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
 
     private const float ArterialSprayMinRange = 1.5f;
     private const float ArterialSprayMaxRange = 3f;
@@ -48,13 +49,17 @@ public sealed partial class CMUWoundsSystem
         if (!TryGetArterialSource(ent, out var part, out var stump))
             return false;
 
+        // Nothing to spray onto off a map, e.g. a body in nullspace or a container with no map.
+        var origin = _transform.GetMapCoordinates(ent);
+        if (origin.MapId == MapId.Nullspace || !_mapSystem.MapExists(origin.MapId))
+            return false;
+
         var now = Timing.CurTime;
         if (_nextArterialSpray.TryGetValue(ent, out var next) && now < next)
             return false;
 
         _nextArterialSpray[ent] = now + ArterialSprayInterval;
 
-        var origin = _transform.GetMapCoordinates(ent);
         var direction = _random.NextAngle().ToVec();
         var range = _random.NextFloat(ArterialSprayMinRange, ArterialSprayMaxRange);
         var color = blood.GetColor(Proto);
@@ -80,8 +85,11 @@ public sealed partial class CMUWoundsSystem
                 cleanable: true);
         }
 
-        var spillAt = landing is { } land ? _transform.ToCoordinates(land) : Transform(ent).Coordinates;
-        _puddle.TrySpillAt(spillAt, blood, out _, sound: false);
+        // Where the spray can't pool (open space, no floor), the blood pools at the patient's feet instead.
+        var feet = Transform(ent).Coordinates;
+        var spillAt = landing is { } land ? _transform.ToCoordinates(land) : feet;
+        if (!_puddle.TrySpillAt(spillAt, blood, out _, sound: false) && landing != null)
+            _puddle.TrySpillAt(feet, blood, out _, sound: false);
 
         // A stump has nothing left to name, so say which limb used to be there.
         var message = stump is { } open

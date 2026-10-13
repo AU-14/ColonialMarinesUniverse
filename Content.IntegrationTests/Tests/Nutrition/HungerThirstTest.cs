@@ -125,7 +125,8 @@ public sealed class HungerThirstTest : InteractionTest
         try
         {
             await UseInHand();
-            await RunSeconds(30);
+            // CMU14: sips take longer, so wait as much longer for the drink to empty.
+            await RunSeconds(30f * (float) IngestionSystem.CMUIngestionDelayMultiplier);
 
             Assert.That(solution.Value.Comp.Solution.Volume, Is.EqualTo(FixedPoint2.Zero),
                 "Drinks should continue consuming after the first sip until empty.");
