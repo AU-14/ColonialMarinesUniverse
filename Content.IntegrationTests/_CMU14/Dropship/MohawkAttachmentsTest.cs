@@ -11,6 +11,7 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.PowerLoader.Events;
 using Content.Shared.Buckle;
 using Content.Shared.CCVar;
+using Content.Shared.CMU14.Dropship.DirectFire;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
