@@ -109,11 +109,24 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
         var faults = ship.Comp.AttachmentPoints.Where(point =>
             TryComp(point, out DropshipHardpointFaultComponent? fault) && fault.Faulted)
             .Select(point => Name(point)).ToArray();
-        var status = !boot.Complete
-            ? Loc.GetString(_timing.CurTime < boot.ReadyAt - TimeSpan.FromSeconds(2)
-                ? "cmu-dropship-boot-start" : "cmu-dropship-boot-test")
-            : faults.Length == 0 ? Loc.GetString("cmu-dropship-boot-ready")
+        string status;
+        if (!boot.Complete)
+        {
+            var remaining = (boot.ReadyAt - _timing.CurTime).TotalSeconds;
+            if (remaining > 3.0)
+                status = Loc.GetString("cmu-dropship-boot-stage-1");
+            else if (remaining > 2.0)
+                status = Loc.GetString("cmu-dropship-boot-stage-2");
+            else if (remaining > 1.0)
+                status = Loc.GetString("cmu-dropship-boot-stage-3");
+            else
+                status = Loc.GetString("cmu-dropship-boot-stage-4");
+        }
+        else
+        {
+            status = faults.Length == 0 ? Loc.GetString("cmu-dropship-boot-ready")
                 : Loc.GetString("cmu-dropship-boot-faults", ("parts", string.Join(", ", faults)));
+        }
         var query = EntityQueryEnumerator<DropshipTerminalWeaponsComponent>();
         while (query.MoveNext(out var uid, out var console))
         {
