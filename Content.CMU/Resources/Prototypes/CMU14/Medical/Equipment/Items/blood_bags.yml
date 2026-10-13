@@ -191,7 +191,13 @@
   suffix: Empty
   components:
   - type: Sprite
-    color: "#e8eef5"
+    sprite: CMU14/Objects/Medical/blood_cooler.rsi
+    state: blood_cooler
+    layers:
+    - state: blood_cooler
+      map: ["closeLayer"]
+    - state: blood_cooler-open
+      map: ["openLayer"]
   - type: Item
     size: Normal
   - type: Storage
