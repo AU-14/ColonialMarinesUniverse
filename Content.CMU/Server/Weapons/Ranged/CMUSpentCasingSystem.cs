@@ -3,8 +3,8 @@ using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CCVar;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
+using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
-using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
 
