@@ -4,7 +4,7 @@ using Content.Shared.CMU14.Dropship.Fabricator;
 
 namespace Content.Server.CMU14.Dropship.Fabricator;
 
-public sealed class CMUDropshipFabricatorPointsSystem : EntitySystem
+public sealed partial class CMUDropshipFabricatorPointsSystem : EntitySystem
 {
     [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private GameTicker _gameTicker = default!;
