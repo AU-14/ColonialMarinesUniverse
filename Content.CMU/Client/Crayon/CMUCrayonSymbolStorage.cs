@@ -62,22 +62,25 @@ public sealed class CMUCrayonSymbolStorage
     private static (string, CMUCrayonSymbol)? Parse(string line)
     {
         var parts = line.Split('|');
-        if (parts.Length != 4 || !int.TryParse(parts[1], out var size))
+        if (parts.Length != 4 ||
+            !int.TryParse(parts[1], out var size) ||
+            size is not (CMUCrayonSymbol.Small or CMUCrayonSymbol.Large))
+        {
+            return null;
+        }
+
+        var symbol = new CMUCrayonSymbol { Size = size, Pixels = new byte[size * size] };
+        foreach (var hex in parts[2].Split(','))
+        {
+            if (!Color.TryFromHex(hex, out var color))
+                return null;
+
+            symbol.Palette.Add(color);
+        }
+
+        if (!Convert.TryFromBase64String(parts[3], symbol.Pixels, out var written) || written != symbol.Pixels.Length)
             return null;
 
-        try
-        {
-            var symbol = new CMUCrayonSymbol
-            {
-                Size = size,
-                Palette = parts[2].Split(',').Select(h => Color.FromHex(h)).ToList(),
-                Pixels = Convert.FromBase64String(parts[3]),
-            };
-            return symbol.IsValid() ? (parts[0], symbol) : null;
-        }
-        catch (Exception e) when (e is FormatException or ArgumentException)
-        {
-            return null;
-        }
+        return symbol.IsValid() ? (parts[0], symbol) : null;
     }
 }
