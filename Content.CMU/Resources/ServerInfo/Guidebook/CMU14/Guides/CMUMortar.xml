@@ -38,6 +38,9 @@
   <Box HorizontalAlignment="Left"><GuideEntityEmbed Entity="RMCMortarShellIncendiary"/></Box>
   - [bold]M902 HE-INC[/bold]: a small blast that leaves a wide patch of fire. Good for area denial and cutting off retreats.
 
+  <Box HorizontalAlignment="Left"><GuideEntityEmbed Entity="CMUMortarShellWP"/></Box>
+  - [bold]M908 WP[/bold]: white phosphorus. A light blast that sets the ground around the impact alight and throws up a spreading cloud of burning phosphorus smoke. Use it to screen a move or burn out a position.
+
   <Box HorizontalAlignment="Left"><GuideEntityEmbed Entity="RMCMortarShellFlare"/></Box>
   - [bold]M853 ILLUM-OBS[/bold]: no damage. Drops a flare that lights up the area and a camera you can watch from the mortar's [bold]View[/bold] button for about 3 minutes. Use it to spot targets and walk your shots in.
 

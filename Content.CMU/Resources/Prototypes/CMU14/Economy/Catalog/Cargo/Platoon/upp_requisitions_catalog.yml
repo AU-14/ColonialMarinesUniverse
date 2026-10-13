@@ -169,6 +169,8 @@
         crate: AU14CrateMortarShellHERMC # 12 shells
       - cost: 750
         crate: AU14CrateMortarShellIncendiaryRMC # 12 shells
+      - cost: 750
+        crate: CMUCrateMortarShellWPRMC # CMU14: white phosphorus
       - cost: 800
         crate: AU14CrateMortarShellHEATRMC # 12 shells
       - cost: 950

@@ -65,3 +65,13 @@
       amount: 3
     - id: AU14MortarShellHEATMP
       amount: 3
+
+- type: entity
+  parent: RMCCrateMortarAmmo
+  id: CMUCrateMortarShellWPRMC
+  name: L53A1 light mortar shells crate (x12 WP)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMortarShellWP
+      amount: 12
