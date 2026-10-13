@@ -73,7 +73,7 @@ public sealed partial class CrayonWindow
 
     private void CMUOpenCanvas(string? name)
     {
-        var canvas = new CMUCrayonCanvasWindow();
+        var canvas = new CMUCrayonCanvasWindow(_color);
         if (name != null && _cmuStorage.Symbols.Find(s => s.Name == name) is { Symbol: { } symbol })
             canvas.Load(name, symbol);
 

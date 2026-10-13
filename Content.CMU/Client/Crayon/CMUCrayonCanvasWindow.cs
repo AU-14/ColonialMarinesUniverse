@@ -17,6 +17,7 @@ public sealed class CMUCrayonCanvasWindow : DefaultWindow
 
     private readonly CMUCrayonCanvas _canvas = new();
     private readonly LineEdit _name = new() { HorizontalExpand = true };
+    private readonly Label _brush = new();
     private readonly Label _needs = new();
     private readonly Label _error = new() { FontColorOverride = Color.Red };
     private readonly ColorSelectorSliders _custom = new() { Visible = false };
@@ -24,7 +25,7 @@ public sealed class CMUCrayonCanvasWindow : DefaultWindow
 
     public event Action<string, CMUCrayonSymbol>? OnSaved;
 
-    public CMUCrayonCanvasWindow()
+    public CMUCrayonCanvasWindow(Color brush)
     {
         IoCManager.InjectDependencies(this);
         Title = Loc.GetString("cmu-crayon-canvas-title");
@@ -46,14 +47,14 @@ public sealed class CMUCrayonCanvasWindow : DefaultWindow
         }
 
         var eraser = new Button { Text = Loc.GetString("cmu-crayon-canvas-eraser") };
-        eraser.OnPressed += _ => _canvas.Brush = null;
+        eraser.OnPressed += _ => SetBrush(null);
         var custom = new Button { Text = Loc.GetString("cmu-crayon-canvas-custom") };
         custom.OnPressed += _ =>
         {
             _custom.Visible = !_custom.Visible;
-            _canvas.Brush = _custom.Color;
+            SetBrush(_custom.Color);
         };
-        _custom.OnColorChanged += c => _canvas.Brush = c;
+        _custom.OnColorChanged += c => SetBrush(c);
         palette.AddChild(eraser);
         palette.AddChild(custom);
 
@@ -73,6 +74,7 @@ public sealed class CMUCrayonCanvasWindow : DefaultWindow
             {
                 Row(new Label { Text = Loc.GetString("cmu-crayon-canvas-name") }, _name, small, large),
                 palette,
+                _brush,
                 _custom,
                 _canvas,
                 Row(fill, clear),
@@ -82,6 +84,7 @@ public sealed class CMUCrayonCanvasWindow : DefaultWindow
             },
         });
 
+        SetBrush(brush);
         UpdateNeeds();
     }
 
@@ -96,6 +99,14 @@ public sealed class CMUCrayonCanvasWindow : DefaultWindow
         pressed.Pressed = true;
         other.Pressed = false;
         _canvas.Resize(size);
+    }
+
+    private void SetBrush(Color? color)
+    {
+        _canvas.Brush = color;
+        _brush.Text = Loc.GetString("cmu-crayon-canvas-brush", ("color", color == null
+            ? Loc.GetString("cmu-crayon-canvas-eraser")
+            : _crayons.GetValueOrDefault(color.Value) ?? color.Value.ToHex()));
     }
 
     private void UpdateNeeds()
@@ -123,13 +134,13 @@ public sealed class CMUCrayonCanvasWindow : DefaultWindow
 
     private Button Swatch(Color color, string name)
     {
-        var button = new Button
+        var button = new Button { ToolTip = name };
+        button.AddChild(new PanelContainer
         {
-            ToolTip = name,
-            MinSize = new Vector2(24, 24),
-            StyleBoxOverride = new StyleBoxFlat { BackgroundColor = color },
-        };
-        button.OnPressed += _ => _canvas.Brush = color;
+            MinSize = new Vector2(20, 20),
+            PanelOverride = new StyleBoxFlat { BackgroundColor = color, BorderColor = Color.Black, BorderThickness = new Thickness(1) },
+        });
+        button.OnPressed += _ => SetBrush(color);
         return button;
     }
 

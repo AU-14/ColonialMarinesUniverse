@@ -15,3 +15,4 @@ cmu-crayon-canvas-needs = Needs: {$crayons}
 cmu-crayon-canvas-error-name = Give the symbol a name.
 cmu-crayon-canvas-error-empty = Draw something first.
 cmu-crayon-canvas-error-colors = Use at most {$max} colours.
+cmu-crayon-canvas-brush = Drawing with: {$color}
