@@ -86,6 +86,23 @@ public sealed partial class OverwatchConsoleBui
         monitor.FireteamsList.AddChild(fireteams);
         _cmuFireteamPanels[squad.Id] = fireteams;
 
+        // Upstream's "Fireteams" title bar is set to expand and takes half the tab; the panel has
+        // its own headings, so drop the bar and let the list fill the tab.
+        if (monitor.FireteamsList.Parent is ScrollContainer fireteamScroll)
+        {
+            fireteamScroll.HScrollEnabled = false;
+            fireteamScroll.VerticalExpand = true;
+
+            if (fireteamScroll.Parent is { } fireteamTab)
+            {
+                foreach (var child in fireteamTab.Children)
+                {
+                    if (child != fireteamScroll)
+                        child.Visible = false;
+                }
+            }
+        }
+
         if (EntMan.HasComponent<SupplyDropComputerComponent>(Owner) &&
             squad.CanSupplyDrop &&
             monitor.TacticalMapButton.Parent is { } header)
