@@ -477,21 +477,6 @@
   - type: Damageable
   - type: Injurable
     damageContainer: Inorganic
-  - type: Physics
-    bodyType: Static
-  - type: Fixtures
-    fixtures:
-      turret:
-        shape:
-          !type:PhysShapeCircle
-          radius: 0.45
-          position: 1.5,1
-        density: 100
-        hard: true
-        layer:
-        - BulletImpassable
-        mask:
-        - BulletImpassable
   - type: GenericVisualizer
     visuals:
       enum.MohawkChinGunVisuals.Disabled:

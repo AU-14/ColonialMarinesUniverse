@@ -16,15 +16,9 @@ public sealed class AmmoHolderSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<AmmoHolderComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<AmmoHolderComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<AmmoHolderComponent, EntInsertedIntoContainerMessage>(OnContainerModified);
         SubscribeLocalEvent<AmmoHolderComponent, EntRemovedFromContainerMessage>(OnContainerModified);
-    }
-
-    private void OnInit(EntityUid uid, AmmoHolderComponent component, ComponentInit args)
-    {
-        UpdateAmmoFill(uid);
     }
 
     private void OnMapInit(EntityUid uid, AmmoHolderComponent component, MapInitEvent args)

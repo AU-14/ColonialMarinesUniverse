@@ -279,6 +279,13 @@ public sealed class MohawkAttachmentsTest
                 var gunner = entities.SpawnEntity("CMMobHuman", entities.GetComponent<TransformComponent>(seat).Coordinates);
                 Assert.That(entities.System<SharedBuckleSystem>().TryBuckle(gunner, null, seat, popup: false), Is.True);
                 var terminal = entities.QueryEntities<DropshipTerminalWeaponsComponent>().Single(c => c.Comp.Gunnery);
+                var ui = entities.System<SharedUserInterfaceSystem>();
+                ui.OpenUi(terminal.Owner, DropshipTerminalWeaponsUi.Key, gunner);
+                entities.EventBus.RaiseLocalEvent(terminal.Owner, new MohawkChinGunControlMessage
+                {
+                    Actor = gunner,
+                    UiKey = DropshipTerminalWeaponsUi.Key,
+                });
                 Assert.That(weapons.TryFireWeapon(chinGun, new EntityCoordinates(ground, 25, 25),
                     DropshipWeaponStrikeType.Direct, gunner, terminal), Is.True);
                 Assert.That(entities.GetComponent<DropshipAmmoComponent>(chinAmmo).Rounds, Is.EqualTo(360));
