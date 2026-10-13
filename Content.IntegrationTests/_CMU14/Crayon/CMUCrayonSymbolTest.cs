@@ -8,6 +8,7 @@ using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Crayon;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Input;
 using Robust.Shared.Maths;
 
 namespace Content.IntegrationTests.CMU14.Crayon;
@@ -129,6 +130,23 @@ public sealed class CMUCrayonSymbolTest : InteractionTest
         await RunTicks(2);
 
         await Server.WaitAssertion(() => Assert.That(Stamps(), Is.Empty));
+    }
+
+    [Test]
+    public async Task SelectingFromTheWindowThenClickingWithAnotherItemKeepsPredictionIntact()
+    {
+        var crayon = await PlaceInHands("CrayonWhite");
+        await RunTicks(10);
+        await UseInHand();
+        await RunTicks(10);
+        await SendBui(CrayonUiKey.Key, new CMUCrayonSelectSymbolMessage(Symbol(CMUCrayonSymbol.Small, White)), crayon);
+        await Server.WaitAssertion(() =>
+            Assert.That(SEntMan.GetComponent<CMUCrayonSymbolComponent>(ToServer(crayon)).Symbol, Is.Not.Null));
+
+        await SwapHands();
+        await PlaceInHands("CrayonBox");
+        await PressKey(EngineKeyFunctions.Use, 3, TargetCoords, NetEntity.Invalid);
+        await RunTicks(30);
     }
 
     private static CMUCrayonSymbol Symbol(int size, params Color[] colors)
