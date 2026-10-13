@@ -18,12 +18,18 @@ using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Events;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.CMU14.Chemistry;
+using Content.Shared.CMU14.Chemistry.Effects;
 using Content.Shared.CMU14.Round.Antags.Cannibal;
 using Content.Shared.CMU14.Threats.Mobs.Wendigo.Lab;
 using Content.Shared.Chat.Prototypes;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Diagnostics;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
@@ -45,6 +51,7 @@ using Content.Shared.Popups;
 using Content.Shared.Stunnable;
 using Content.Shared.Tag;
 using Content.Shared.Zombies;
+using Robust.Shared.Configuration;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -61,6 +68,8 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private CMUChemicalMedicalSystem _chemicalMedical = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private LanguageSystem _language = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
@@ -70,6 +79,7 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private MobThresholdSystem _thresholds = default!;
     [Dependency] private PopupSystem _popup = default!;
@@ -141,6 +151,7 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
     public const int MaxInstability = 5;
 
     private const string CollapseDamageType = "Poison";
+    private static readonly ProtoId<DamageTypePrototype> MutagenBrainDamageType = "Cellular";
     private static readonly FixedPoint2 CollapseMargin = 5;
 
     /// <summary>
@@ -352,10 +363,45 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
         {
             SetStage(ent, CMUWendigoSubjectStage.Mutagen, _random.Next(MutagenMin, MutagenMax));
             _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-mutagen"), ent, ent, PopupType.Medium);
+            DamageBrainForMutagen(ent);
             return;
         }
 
         StartMutation(ent, reagent == MH33);
+    }
+
+    /// <summary>
+    /// The Stabilized Mutagen rewires the subject's brain. Damaging the brain organ to the Damaged stage
+    /// (not Failing) lets the CMU brain system apply its own effects: the speech impairment, concussion
+    /// and slower actions. A Damaged brain does not regenerate on its own, so it stays until treated.
+    /// Skipped when the subject has no CMU brain or CMU organ medical is off.
+    /// </summary>
+    private void DamageBrainForMutagen(EntityUid subject)
+    {
+        if (!_cfg.GetCVar(CMUMedicalCCVars.Enabled) || !_cfg.GetCVar(CMUMedicalCCVars.OrganEnabled))
+            return;
+
+        if (!_medicalIndex.TryGetOrgan<CMUBrainComponent>(subject, out var brain)
+            || !TryComp(brain, out OrganHealthComponent? health))
+        {
+            return;
+        }
+
+        // Thresholds are access-restricted; read them into a local before querying.
+        var thresholds = health.StageThresholds;
+        if (!thresholds.TryGetValue(OrganDamageStage.Damaged, out var damaged)
+            || !thresholds.TryGetValue(OrganDamageStage.Failing, out var failing))
+        {
+            return;
+        }
+
+        // Land halfway between the Damaged and Failing floors; an already worse brain is left alone.
+        var target = failing + (damaged - failing) / 2f;
+        var amount = health.Current - target;
+        if (amount <= FixedPoint2.Zero)
+            return;
+
+        _chemicalMedical.DamageOrgan<CMUBrainComponent>(subject, amount, MutagenBrainDamageType, OrganDamageSource.Direct);
     }
 
     private void StartMutation(Entity<CMUWendigoSubjectComponent> ent, bool tamed)

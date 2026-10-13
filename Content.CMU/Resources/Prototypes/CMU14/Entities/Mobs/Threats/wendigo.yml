@@ -51,6 +51,7 @@
     - ActionCMUWendigoClawedSweep
     - ActionApeLimbRip
     - ActionXenoRest
+    - ActionCMUWendigoScent
     tier: 99
     hudOffset: -0.15,0.25
   # CMU14: Wendigo ability set, shared with the lab-made variants.
@@ -58,6 +59,8 @@
   - type: CMUWendigoPunchSwing
   - type: CMUClawedSweep
   - type: CMUWendigoRest
+  - type: CMUWendigoScentTracker
+  - type: CMUWendigoBrokenSpeechAccent # words break up as it speaks
   # CMU14: eats and drinks, heals on human flesh, butchers and rips limbs from bodies like the ape.
   - type: CMUWendigoFleshHeal
   - type: Tool
@@ -569,14 +572,6 @@
     factions:
     - FactionWendigo
   - type: CMUWendigoPack
-  # Riders: up to two, one per shoulder, by the Wendigo's consent (CMUMountSystem).
-  - type: Strap
-    position: Stand
-    size: 200
-    buckleOnInteractHand: false
-    buckleDoafterTime: 0
-  - type: RMCStrapNoDrawDepthChange # riders draw one layer above the Wendigo
-  - type: CMUMount
   # Combat (from CMXenoMelee plus the Wendigo kit).
   - type: CombatMode
     canDisarm: true
@@ -652,6 +647,8 @@
   - type: CMUWendigoPunchSwing
   - type: CMUClawedSweep
   - type: CMUWendigoRest
+  - type: CMUWendigoScentTracker
+  - type: CMUWendigoBrokenSpeechAccent # words break up as it speaks
   # Eats and drinks, heals on human flesh, butchers and rips limbs from bodies like the ape.
   - type: CMUWendigoFleshHeal
   - type: Tool
@@ -675,6 +672,7 @@
     - ActionCMUWendigoClawedSweep
     - ActionApeLimbRip
     - ActionXenoRest
+    - ActionCMUWendigoScent
     - ActionWendigoDoom
 
 - type: entity
@@ -712,6 +710,7 @@
     - ActionCMUWendigoClawedSweep
     - ActionApeLimbRip
     - ActionXenoRest
+    - ActionCMUWendigoScent
 
 # Wendigo pack NPC faction: hostile to everything THREAT is hostile to, xenos included.
 - type: npcFaction

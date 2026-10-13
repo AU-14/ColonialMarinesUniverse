@@ -1,4 +1,3 @@
-using Content.Shared.CMU14.Threats.Mobs.Wendigo.Riding;
 using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.Actions;
@@ -160,12 +159,6 @@ public sealed class CMUWendigoAbilityTest
                 Assert.That(entMan.HasComponent<KnockedDownComponent>(behind), Is.False);
                 Assert.That(damageable.GetTotalDamage(ally), Is.EqualTo(allyBefore), "the allied Wendigo was hit");
             });
-
-            // Riders count as allies for every Wendigo ability; abilities pick targets before melee's own filter.
-            var rider = entMan.SpawnEntity(Human, map.GridCoords.Offset(new Vector2(0, 0.5f)));
-            Assert.That(entMan.System<CMUMountSystem>().TryMount(wendigo, rider, popup: false), Is.True);
-            Assert.That(entMan.System<CMUWendigoAllySystem>().IsWendigoAlly(wendigo, rider), Is.True,
-                "a Wendigo's own rider must be spared by its abilities");
         });
 
         await pair.CleanReturnAsync();

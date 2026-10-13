@@ -100,7 +100,7 @@ public sealed class CMUWendigoLabPrototypeTest : GameTest
         string[] shared =
         [
             "ActionXenoWatch", "ActionXenoPunch", "ActionCMUWendigoPunchSwing", "ActionXenoPounce",
-            "ActionXenoHeadbite", "ActionCMUWendigoClawedSweep", "ActionApeLimbRip", "ActionXenoRest",
+            "ActionXenoHeadbite", "ActionCMUWendigoClawedSweep", "ActionApeLimbRip", "ActionXenoRest", "ActionCMUWendigoScent",
         ];
         foreach (var (proto, screech) in new[] { (lab, true), (lesser, false) })
         {
