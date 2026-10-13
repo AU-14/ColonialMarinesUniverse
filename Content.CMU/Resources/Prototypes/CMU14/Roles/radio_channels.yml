@@ -146,7 +146,7 @@
 - type: radioChannel
   id: radioOpforVictor
   name: chat-radio-opforvictor
-  keycode: 'ś' # all letters and digits are taken; the squad headset defaults to it
+  keycode: "v" # shared with GOVFOR Command; the speaker's own channel is picked (SharedChatSystem.CMURadioKeys)
   frequency: 160.9
   color: "#7B8B6F"
   longRange: true
