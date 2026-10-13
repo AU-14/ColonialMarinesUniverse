@@ -74,6 +74,7 @@
   - type: CMUBloodPackType
     bloodType: ABPositive
   - type: CMUPerishableBlood
+    shelfLife: 1200 # 20 minutes
   - type: BloodPack
     transferableReagents: [ CMUBloodPlasma ]
   - type: CMUIVFlow
