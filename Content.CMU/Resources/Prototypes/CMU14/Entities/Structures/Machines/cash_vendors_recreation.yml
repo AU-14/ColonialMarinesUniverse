@@ -534,6 +534,14 @@
       price: 70
     - id: CMJumpsuitLiaisonCharcoal
       price: 60
+    - id: RMCJumpsuitLiaisonBlackSuitskirt
+      price: 60
+    - id: RMCJumpsuitLiaisonCharcoalSuitskirt
+      price: 60
+    - id: RMCJumpsuitLiaisonFieldSuitskirt
+      price: 60
+    - id: RMCJumpsuitLiaisonSkirt
+      price: 60
     - id: ClothingNeckTieRed
       price: 10
     - id: ClothingNeckTieDet
