@@ -4,19 +4,22 @@ using Content.Shared.CCVar;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Dynamics;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Weapons.Ranged;
 
 /// <summary>
-/// Periodic sweeper for ejected spent casings: strips their physics a few seconds
-/// after landing (they become free-floating decals) and despawns them after
+/// Periodic sweeper for ejected spent casings: disables collision physics a few
+/// seconds after landing (they become free-floating decals) and despawns them after
 /// <see cref="CCVars.SpentCasingDespawnTime"/>. One shared sweep instead of
 /// per-entity timers; contained casings (held, stored) are left alone.
 /// </summary>
 public sealed partial class CMUSpentCasingSystem : EntitySystem
 {
     [Dependency] private  SharedContainerSystem _containers = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
     [Dependency] private  IConfigurationManager _cfg = default!;
     [Dependency] private  IGameTiming _timing = default!;
 
@@ -51,7 +54,11 @@ public sealed partial class CMUSpentCasingSystem : EntitySystem
             if (age >= despawn)
                 QueueDel(uid);
             else if (age >= StripDelay && !HasComp<CMUZFallingComponent>(uid))
-                RemComp<PhysicsComponent>(uid);
+            {
+                _physics.SetBodyType(uid, BodyType.Static);
+                _physics.SetCanCollide(uid, false);
+                RemComp<FixturesComponent>(uid);
+            }
         }
     }
 }
