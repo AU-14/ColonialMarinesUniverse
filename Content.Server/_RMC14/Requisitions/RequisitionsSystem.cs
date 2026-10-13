@@ -774,31 +774,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             if (ProcessElevator((uid, elevator)))
                 updateUI = true;
 
-            if (!_chasmQuery.TryComp(uid, out var chasm))
-                continue;
-
-            if (time < elevator.NextChasmCheck)
-                continue;
-
-            elevator.NextChasmCheck = time + elevator.ChasmCheckEvery;
-
             if (_net.IsClient)
                 continue;
 
-            if (elevator.Mode != Raised && elevator.Mode != Preparing)
-            {
-                _toPit.Clear();
-                _lookup.GetEntitiesInRange(uid.ToCoordinates(), elevator.Radius + 0.25f, _toPit);
-
-                foreach (var toPit in _toPit)
-                {
-                    if (_chasmFallingQuery.HasComp(toPit))
-                        continue;
-
-                    _chasm.StartFalling((uid, chasm), toPit, playEmote: false);
-                    _audio.PlayEntity(chasm.FallingSound, toPit, uid);
-                }
-            }
         }
 
         if (updateUI)

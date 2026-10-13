@@ -65,7 +65,6 @@ public sealed class RequisitionsChasmFallRegressionTest : GameTest
 
                 var elevatorComp = SEntMan.GetComponent<RequisitionsElevatorComponent>(elevator);
                 elevatorComp.Mode = RequisitionsElevatorMode.Lowered;
-                elevatorComp.NextChasmCheck = TimeSpan.Zero;
                 requisitions.Update(0f);
 
                 var falling = SEntMan.GetComponent<ChasmFallingComponent>(tripper);
