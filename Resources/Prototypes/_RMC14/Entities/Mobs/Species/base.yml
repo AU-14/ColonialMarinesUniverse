@@ -407,7 +407,10 @@
   - type: RMCDisarm
   - type: RMCDisarmable
   - type: StunOnExplosionReceived
-  - type: DeafenWhileCrit
+  # cmu edit start
+  # Crit no longer deafens outright; CMUUnconsciousHearingSystem muffles hearing instead.
+  # - type: DeafenWhileCrit
+  # cmu edit end
   - type: CrawlWhileCrit
   - type: RMCStopDropRollVisuals
   - type: XenoToggleChargingDamage
