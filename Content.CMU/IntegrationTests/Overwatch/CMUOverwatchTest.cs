@@ -10,6 +10,7 @@ using Content.Shared._RMC14.Tracker.SquadLeader;
 using Content.Shared.Access.Components;
 using Content.Shared.CMU14.Callsigns;
 using Content.Shared.CMU14.Overwatch;
+using Content.Shared.CMU14.Squads;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Inventory;
@@ -213,6 +214,56 @@ public sealed class CMUOverwatchTest : GameTest
                 Assert.That(Fireteam(alpha), Is.Null, "a marine can be taken out of their fireteam");
                 Assert.That(Fireteam(outsider), Is.Null, "the console only manages the squad it is showing");
             });
+        });
+    }
+    [Test]
+    public async Task AutomaticLeadersCanBeTurnedOffPerSquad()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid console = default, squad = default, other = default, actor = default;
+        var marines = new List<EntityUid>();
+
+        await Server.WaitAssertion(() =>
+        {
+            actor = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            console = SEntMan.SpawnEntity("RMCOverwatchConsoleGovfor", map.GridCoords);
+            squad = SEntMan.SpawnEntity("SquadGovforBravo", MapCoordinates.Nullspace);
+            other = SEntMan.SpawnEntity("SquadGovforCharlie", MapCoordinates.Nullspace);
+            SComp<OverwatchConsoleComponent>(console).Squad = SEntMan.GetNetEntity(squad);
+
+            SEntMan.EventBus.RaiseLocalEvent(console,
+                (object) new CMUOverwatchAutoLeadersBuiMsg(false) { Actor = actor, UiKey = OverwatchConsoleUI.Key });
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(SEntMan.HasComponent<CMUManualLeadershipComponent>(squad), Is.True);
+                Assert.That(SEntMan.HasComponent<CMUManualLeadershipComponent>(other), Is.False,
+                    "only the squad the console is showing changes");
+            });
+
+            for (var i = 0; i < 3; i++)
+            {
+                var marine = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+                SEntMan.System<SquadSystem>().AssignSquad(marine, squad, null);
+                marines.Add(marine);
+            }
+        });
+
+        await Pair.RunTicksSync(5);
+
+        await Server.WaitAssertion(() =>
+        {
+            foreach (var marine in marines)
+            {
+                Assert.That(SEntMan.HasComponent<FireteamMemberComponent>(marine), Is.True,
+                    "marines are still sorted into fireteams");
+                Assert.That(SEntMan.HasComponent<FireteamLeaderComponent>(marine), Is.False,
+                    "nobody is made a fireteam leader automatically");
+            }
+
+            SEntMan.EventBus.RaiseLocalEvent(console,
+                (object) new CMUOverwatchAutoLeadersBuiMsg(true) { Actor = actor, UiKey = OverwatchConsoleUI.Key });
+            Assert.That(SEntMan.HasComponent<CMUManualLeadershipComponent>(squad), Is.False);
         });
     }
 }

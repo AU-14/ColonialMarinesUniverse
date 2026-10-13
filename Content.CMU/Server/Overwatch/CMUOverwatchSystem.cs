@@ -1,7 +1,10 @@
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.Tracker.SquadLeader;
+using Content.Shared.Administration.Logs;
 using Content.Shared.CMU14.Callsigns;
+using Content.Shared.CMU14.Squads;
+using Content.Shared.Database;
 using Content.Shared.CMU14.Overwatch;
 using Content.Shared.CMU14.Preferences;
 using Content.Shared.IdentityManagement;
@@ -24,6 +27,7 @@ public sealed class CMUOverwatchSystem : EntitySystem
     private static readonly TimeSpan CheckEvery = TimeSpan.FromSeconds(0.5);
 
     [Dependency] private SharedOverwatchConsoleSystem _overwatch = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SquadLeaderTrackerSystem _squadLeaderTracker = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -42,6 +46,7 @@ public sealed class CMUOverwatchSystem : EntitySystem
 
         SubscribeLocalEvent<OverwatchConsoleComponent, CMUOverwatchAssignFireteamBuiMsg>(OnAssignFireteam);
         SubscribeLocalEvent<OverwatchConsoleComponent, CMUOverwatchFireteamLeaderBuiMsg>(OnFireteamLeader);
+        SubscribeLocalEvent<OverwatchConsoleComponent, CMUOverwatchAutoLeadersBuiMsg>(OnAutoLeaders);
         SubscribeLocalEvent<CMUOverwatchFeedsComponent, PlayerDetachedEvent>(OnFeedsDetached);
     }
 
@@ -111,6 +116,30 @@ public sealed class CMUOverwatchSystem : EntitySystem
             _squadLeaderTracker.CMUSetFireteamLeadership(squad, marine, args.Lead, args.Actor);
     }
 
+    private void OnAutoLeaders(Entity<OverwatchConsoleComponent> ent, ref CMUOverwatchAutoLeadersBuiMsg args)
+    {
+        if (!TryGetEntity(ent.Comp.Squad, out var squadUid) ||
+            !TryComp(squadUid, out SquadTeamComponent? team) ||
+            !CanManage(ent.Comp, team))
+        {
+            return;
+        }
+
+        if (args.Enabled)
+            RemComp<CMUManualLeadershipComponent>(squadUid.Value);
+        else
+            EnsureComp<CMUManualLeadershipComponent>(squadUid.Value);
+
+        _adminLog.Add(LogType.RMCFireteam,
+            $"{ToPrettyString(args.Actor)} turned automatic leader assignment {(args.Enabled ? "on" : "off")} for {ToPrettyString(squadUid.Value)}");
+    }
+
+    private static bool CanManage(OverwatchConsoleComponent console, SquadTeamComponent team)
+    {
+        return string.Equals(console.Group, "ADMINISTRATOR", StringComparison.OrdinalIgnoreCase) ||
+               string.Equals(team.Group, console.Group, StringComparison.OrdinalIgnoreCase);
+    }
+
     /// <summary>
     /// The marine, if they are in the squad this console is showing and it may manage.
     /// </summary>
@@ -127,8 +156,7 @@ public sealed class CMUOverwatchSystem : EntitySystem
             member.Squad is not { } squadUid ||
             console.Squad != GetNetEntity(squadUid) ||
             !TryComp(squadUid, out SquadTeamComponent? team) ||
-            !(string.Equals(console.Group, "ADMINISTRATOR", StringComparison.OrdinalIgnoreCase) ||
-              string.Equals(team.Group, console.Group, StringComparison.OrdinalIgnoreCase)))
+            !CanManage(console, team))
         {
             return false;
         }

@@ -22,3 +22,13 @@ public sealed class CMUOverwatchFireteamLeaderBuiMsg(NetEntity marine, bool lead
     public readonly NetEntity Marine = marine;
     public readonly bool Lead = lead;
 }
+
+/// <summary>
+/// Turns automatic squad leader and fireteam leader assignment on or off for the squad the console
+/// is showing.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class CMUOverwatchAutoLeadersBuiMsg(bool enabled) : BoundUserInterfaceMessage
+{
+    public readonly bool Enabled = enabled;
+}

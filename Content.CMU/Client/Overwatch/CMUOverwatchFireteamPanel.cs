@@ -27,6 +27,7 @@ public sealed class CMUOverwatchFireteamPanel : BoxContainer
     public event Action<NetEntity, int?>? OnAssign;
     public event Action<NetEntity, bool>? OnLead;
     public event Action<int, string>? OnNickname;
+    public event Action<bool>? OnAutoLeaders;
 
     private string _signature = string.Empty;
 
@@ -43,10 +44,10 @@ public sealed class CMUOverwatchFireteamPanel : BoxContainer
     /// Rebuilds the panel when the fireteams changed. Skipped otherwise, so a click or a nickname
     /// being typed is not lost to the console's twice-a-second refresh.
     /// </summary>
-    public void Update(FireteamData? data)
+    public void Update(FireteamData? data, bool autoLeaders)
     {
         data ??= new FireteamData();
-        var signature = Signature(data);
+        var signature = $"{autoLeaders}|{Signature(data)}";
         if (signature == _signature)
             return;
 
@@ -57,6 +58,33 @@ public sealed class CMUOverwatchFireteamPanel : BoxContainer
         {
             Text = Loc.GetString("cmu-overwatch-fireteams-help"),
             StyleClasses = { StyleNano.StyleClassCrtDimText },
+        });
+
+        var autoButton = new Button
+        {
+            Text = Loc.GetString(autoLeaders ? "cmu-overwatch-fireteams-auto-on" : "cmu-overwatch-fireteams-auto-off"),
+            ToolTip = Loc.GetString("cmu-overwatch-fireteams-auto-tooltip"),
+            MinWidth = 220,
+        };
+        autoButton.OnPressed += _ => OnAutoLeaders?.Invoke(!autoLeaders);
+        CMUOverwatchCrt.SetLit(autoButton, autoLeaders);
+
+        AddChild(new BoxContainer
+        {
+            Orientation = LayoutOrientation.Horizontal,
+            SeparationOverride = 8,
+            Children =
+            {
+                autoButton,
+                new Label
+                {
+                    Text = Loc.GetString(autoLeaders ? "cmu-overwatch-fireteams-auto-on-desc" : "cmu-overwatch-fireteams-auto-off-desc"),
+                    FontColorOverride = CrtTerminalPalette.TextDim,
+                    VerticalAlignment = VAlignment.Center,
+                    HorizontalExpand = true,
+                    ClipText = true,
+                },
+            },
         });
 
         AddChild(new Label

@@ -4,6 +4,7 @@ using Content.Client.Stylesheets;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.SupplyDrop;
 using Content.Shared.CMU14.Overwatch;
+using Content.Shared.CMU14.Squads;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
@@ -79,6 +80,7 @@ public sealed partial class OverwatchConsoleBui
         var fireteams = new CMUOverwatchFireteamPanel();
         fireteams.OnAssign += (id, fireteam) => SendMessage(new CMUOverwatchAssignFireteamBuiMsg(id, fireteam));
         fireteams.OnLead += (id, lead) => SendMessage(new CMUOverwatchFireteamLeaderBuiMsg(id, lead));
+        fireteams.OnAutoLeaders += enabled => SendMessage(new CMUOverwatchAutoLeadersBuiMsg(enabled));
         fireteams.OnNickname += (index, nickname) =>
             SendMessage(new OverwatchConsoleSetFireteamNicknameBuiMsg(squad.Id, index, nickname));
         monitor.FireteamsList.AddChild(fireteams);
@@ -104,7 +106,8 @@ public sealed partial class OverwatchConsoleBui
         state.Fireteams.TryGetValue(squad.Id, out var fireteams);
 
         if (_cmuFireteamPanels.TryGetValue(squad.Id, out var fireteamPanel))
-            fireteamPanel.Update(fireteams);
+            fireteamPanel.Update(fireteams,
+                !(EntMan.TryGetEntity(squad.Id, out var squadUid) && EntMan.HasComponent<CMUManualLeadershipComponent>(squadUid)));
 
         if (!_cmuRosters.TryGetValue(squad.Id, out var roster))
             return;
