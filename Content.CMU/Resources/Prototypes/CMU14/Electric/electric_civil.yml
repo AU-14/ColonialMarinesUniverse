@@ -1,0 +1,289 @@
+# The civil side of the electric age: concrete and the walls built of it, solar panels, and leather. The machines that make them (the concrete mixer,
+# the sewing machine, the tannery) are in electric_machines.yml, their recipes in electric_recipes.yml.
+
+# ---------------------------------------------------------------- concrete
+- type: stack
+  id: RUMCConcreteBlock
+  name: packs of concrete
+  icon: { sprite: CMU14/Objects/Materials/concrete.rsi, state: bag }
+  spawn: RUMCConcreteBlockItem
+  maxCount: 30
+
+- type: stack
+  id: RUMCReinforcedConcrete
+  name: packs of reinforced concrete
+  icon: { sprite: CMU14/Objects/Materials/concrete.rsi, state: bag }
+  spawn: RUMCReinforcedConcreteItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCConcreteBlockItem
+  name: pack of concrete
+  description: A pack of ready concrete. Build a wall of the packs, or of the reinforced ones for a stronger one. Hold it and pick what to build.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/concrete.rsi
+    state: bag
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCConcreteBlock
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCConcrete: 100
+  - type: RMCConstructionItem
+    buildable:
+    - RUMCConcreteWallBuild
+  - type: UserInterface
+    interfaces:
+      enum.RMCConstructionUiKey.Key:
+        type: RMCConstructionBui
+
+- type: entity
+  parent: BaseItem
+  id: RUMCReinforcedConcreteItem
+  name: pack of reinforced concrete
+  description: A pack of concrete cast around steel rods. A wall of these withstands a lot more than a plain concrete one.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/concrete.rsi
+    state: bag
+    color: "#a8b8cc"
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCReinforcedConcrete
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCReinforcedConcrete: 100
+  - type: RMCConstructionItem
+    buildable:
+    - RUMCReinforcedConcreteWallBuild
+  - type: UserInterface
+    interfaces:
+      enum.RMCConstructionUiKey.Key:
+        type: RMCConstructionBui
+
+- type: rmcConstruction
+  id: RUMCConcreteWallBuild
+  name: concrete wall
+  prototype: RUMCConcreteWall
+  noRotate: true
+  doAfterTime: 5
+  materialCost: 4
+  skill: RMCSkillConstruction
+  requiredSkillLevel: 1
+
+- type: rmcConstruction
+  id: RUMCReinforcedConcreteWallBuild
+  name: reinforced concrete wall
+  prototype: RUMCReinforcedConcreteWall
+  noRotate: true
+  doAfterTime: 7
+  materialCost: 4
+  skill: RMCSkillConstruction
+  requiredSkillLevel: 1
+
+# Concrete takes a pickaxe badly and an explosion or a jackhammer well, as stone does, and holds a lot more than the rock of the caves.
+- type: damageModifierSet
+  id: RUMCConcreteWallMod
+  coefficients:
+    Piercing: 0.6
+    Slash: 0.4
+    Blunt: 0.6
+    Structural: 1.5
+
+# The reinforced one does not feel the acid at all.
+- type: damageModifierSet
+  id: RUMCReinforcedConcreteWallMod
+  coefficients:
+    Piercing: 0.4
+    Slash: 0.25
+    Blunt: 0.4
+    Structural: 1.2
+    Caustic: 0
+
+- type: entity
+  abstract: true
+  parent: BaseWall
+  id: RUMCConcreteWallBase
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Transform
+    noRot: true
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Sprite
+    sprite: Structures/Walls/stone.rsi
+    color: "#c4c4bc"
+  - type: Icon
+    sprite: Structures/Walls/stone.rsi
+    state: full
+  - type: IconSmooth
+    key: concrete
+    additionalKeys:
+    - stone
+    - doors
+    base: stone
+
+# The plain wall: the claws of the sharp xenos get through it slowly and the acid eats it slowly.
+- type: entity
+  parent: RUMCConcreteWallBase
+  id: RUMCConcreteWall
+  name: concrete wall
+  description: A wall of cast concrete.
+  components:
+  - type: Damageable
+    damageModifierSet: RUMCConcreteWallMod
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          RUMCConcreteBlockItem:
+            min: 1
+            max: 2
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: ReceiverXenoClaws
+    maxHealth: 400
+    hitsToDestroy: 25
+  - type: Corrodible
+    isCorrodible: true
+    structure: true
+    meltTimeMult: 4
+
+# The reinforced wall is proof against the xenos: their claws, however sharp, do nothing to it, and the acid does not take it.
+- type: entity
+  parent: RUMCConcreteWallBase
+  id: RUMCReinforcedConcreteWall
+  name: reinforced concrete wall
+  description: A wall of concrete cast around steel rods. The claws of the xenos do nothing to it, and the acid does not eat it.
+  components:
+  - type: Damageable
+    damageModifierSet: RUMCReinforcedConcreteWallMod
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 900
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          RUMCReinforcedConcreteItem:
+            min: 1
+            max: 2
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: Sprite
+    color: "#8f9ba6"
+  - type: ReceiverXenoClaws
+    minimumClawStrength: ImpossiblySharp
+  - type: Corrodible
+    isCorrodible: false
+
+# ---------------------------------------------------------------- solar panels
+# A solar panel of the game with a power of its own, carried like a machine and set down where there is sun. It takes the grid like the generators do.
+- type: entity
+  parent: [ SolarPanelBasePhysSprite, StructureHealthMachineWeak ]
+  id: RUMCSolarPanel
+  name: solar panel
+  description: A frame of glass over silicon cells that makes current out of the sun. Face it toward the sun and keep it clear of shade.
+  components:
+  - type: PowerSupplier
+    supplyRampTolerance: 500
+    supplyRampRate: 500
+  - type: SolarPanel
+    maxSupply: 600
+  - type: Damageable
+    damageModifierSet: GlassMod
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+        connection: Both
+  - type: PortableStructure
+
+- type: entity
+  parent: RUMCSolarPanel
+  id: RUMCSolarPanelSilver
+  name: silver solar panel
+  description: A panel of silicon cells with silver contacts and a better glass. It makes twice as much as the plain one.
+  components:
+  - type: SolarPanel
+    maxSupply: 1200
+  - type: Sprite
+    state: solar_panel_plasma
+
+- type: craftRecipe
+  id: RUMCCraftBuildSolarPanel
+  name: au14-craft-recipe-buildsolarpanel
+  output: RUMCSolarPanel
+  time: 20
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCSiliconWafer
+    amount: 8
+  - stack: CMGlass
+    amount: 2
+  - stack: RUMCIronSheet
+    amount: 2
+  - stack: RUMCInsulatedCable
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftBuildSolarPanelSilver
+  name: au14-craft-recipe-buildsolarpanelsilver
+  output: RUMCSolarPanelSilver
+  time: 25
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCSiliconWafer
+    amount: 12
+  - stack: CMGlass
+    amount: 3
+  - stack: RUMCChromedSheet
+    amount: 2
+  - stack: RUMCSilverWire
+    amount: 4
+  - stack: RUMCInsulatedCable
+    amount: 2
+
+# ---------------------------------------------------------------- leather
+- type: stack
+  id: RUMCLeather
+  name: leather
+  icon: { sprite: Objects/Materials/materials.rsi, state: cloth }
+  spawn: RUMCLeatherItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCLeatherItem
+  name: leather
+  description: A piece of tanned leather, soft and strong, ready to be cut into boots and gloves.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/materials.rsi
+    state: cloth
+    color: "#8a5a30"
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCLeather
+    count: 1

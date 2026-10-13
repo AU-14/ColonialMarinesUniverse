@@ -30,6 +30,9 @@ public abstract partial class SharedStackSystem
         var entityUid = PredictedSpawnNextToOrDrop(stackId.Spawn, stackEnt.Owner);
 
         SetCount((entityUid, null), 1);
+
+        var taken = new StackOneTakenEvent(entityUid);
+        RaiseLocalEvent(stackEnt.Owner, ref taken);
         return entityUid;
     }
 
@@ -136,6 +139,12 @@ public abstract partial class SharedStackSystem
 
         // RMC: Stacks covered in acid cannot be merged.
         if (IsAcidicStack(donor.Owner) || IsAcidicStack(recipient.Owner))
+            return false;
+
+        // CMU14: some stacks (handmade cartridges) merge only with the ones that are made the same.
+        var attempt = new StackMergeAttemptEvent(donor.Owner, recipient.Owner);
+        RaiseLocalEvent(recipient.Owner, ref attempt);
+        if (attempt.Cancelled)
             return false;
 
         // The most we can transfer

@@ -1,0 +1,273 @@
+# Zinc and brass. Zinc is a bright grey metal of the stone layer; brass is the alloy of two of copper and two of zinc,
+# cast in a mold from the melt of the crucible, in the colour of the brass machines. Both are painted from the blank ingot.
+
+- type: reagent
+  id: RUMCZincMelt
+  name: reagent-name-au14-zinc-melt
+  group: Elements
+  desc: reagent-desc-au14-zinc-melt
+  physicalDesc: reagent-physical-desc-crystalline
+  flavor: metallic
+  color: "#c9cfd8"
+  boilingPoint: 1180.0
+  meltingPoint: 420.0
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCZincOre
+  name: zinc ore
+  icon: { sprite: CMU14/Objects/Materials/ore.rsi, state: zinc }
+  spawn: RUMCZincOre1
+
+- type: entity
+  parent: OreBase
+  id: RUMCZincOre
+  name: zinc ore
+  description: A chunk of unrefined zinc ore, bright grey.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: RUMCZincOre
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/ore.rsi
+    state: zinc
+  - type: Item
+    sprite: CMU14/Objects/Materials/ore.rsi
+    heldPrefix: zinc
+
+- type: entity
+  parent: RUMCZincOre
+  id: RUMCZincOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: ore
+  id: RUMCOreZinc
+  oreEntity: RUMCZincOre1
+  minOreYield: 1
+  maxOreYield: 3
+
+- type: stack
+  id: RUMCZincPowder
+  name: zinc powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: zinc }
+  spawn: RUMCZincPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCZincPowderItem
+  name: zinc powder
+  description: Finely ground zinc dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: zinc
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCZincPowder
+    count: 1
+  - type: Tag
+    tags:
+    - Metal
+
+- type: stack
+  id: RUMCZincIngot
+  name: zinc ingot
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: zinc }
+  spawn: RUMCZincIngot
+  maxCount: 10
+
+- type: material
+  id: RUMCZinc
+  stackEntity: RUMCZincIngot
+  name: zinc ingot
+  unit: materials-unit-bar
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: zinc }
+  price: 0.0009
+
+- type: entity
+  parent: BaseItem
+  id: RUMCZincIngot
+  name: zinc ingot
+  description: A bright grey ingot of cast zinc, still warm from the mold.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    layers:
+    - state: zinc
+      map: ["base"]
+    - state: zinc_hot
+      map: ["hot"]
+      visible: false
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCZincIngot
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCZinc: 100
+  - type: Forgeable
+    burnDamage:
+      types:
+        Heat: 12
+  - type: AnvilWorkpiece
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ForgeableVisuals.Active:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        hot:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Tag
+    tags:
+    - Metal
+
+- type: stack
+  id: RUMCZincSheet
+  name: zinc sheet
+  icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: zinc }
+  spawn: RUMCZincSheet
+  maxCount: 50
+
+- type: entity
+  parent: SheetMetalBase
+  id: RUMCZincSheet
+  name: zinc sheet
+  description: A sheet of zinc.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    layers:
+    - state: zinc_4
+      map: ["base"]
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    inhandVisuals:
+      left:
+      - state: zinc-inhand-left
+      right:
+      - state: zinc-inhand-right
+  - type: Stack
+    stackType: RUMCZincSheet
+    count: 1
+    baseLayer: base
+    layerStates:
+    - zinc
+    - zinc_2
+    - zinc_3
+    - zinc_4
+  - type: Appearance
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCZinc: 100
+
+- type: stack
+  id: RUMCBrassIngot
+  name: brass ingot
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: brass }
+  spawn: RUMCBrassIngot
+  maxCount: 10
+
+- type: material
+  id: RUMCBrass
+  stackEntity: RUMCBrassIngot
+  name: brass ingot
+  unit: materials-unit-bar
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: brass }
+  price: 0.0012
+
+- type: entity
+  parent: BaseItem
+  id: RUMCBrassIngot
+  name: brass ingot
+  description: A heavy ingot of brass, the alloy of copper and zinc, still warm from the mold.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    layers:
+    - state: brass
+      map: ["base"]
+    - state: brass_hot
+      map: ["hot"]
+      visible: false
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCBrassIngot
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCBrass: 100
+  - type: Forgeable
+    burnDamage:
+      types:
+        Heat: 12
+  - type: AnvilWorkpiece
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ForgeableVisuals.Active:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        hot:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Tag
+    tags:
+    - Metal
+
+- type: stack
+  id: RUMCBrassSheet
+  name: brass sheet
+  icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: brass }
+  spawn: RUMCBrassSheet
+  maxCount: 50
+
+- type: entity
+  parent: SheetMetalBase
+  id: RUMCBrassSheet
+  name: brass sheet
+  description: A sheet of brass.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    layers:
+    - state: brass_4
+      map: ["base"]
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    inhandVisuals:
+      left:
+      - state: brass-inhand-left
+      right:
+      - state: brass-inhand-right
+  - type: Stack
+    stackType: RUMCBrassSheet
+    count: 1
+    baseLayer: base
+    layerStates:
+    - brass
+    - brass_2
+    - brass_3
+    - brass_4
+  - type: Appearance
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCBrass: 100

@@ -1,0 +1,114 @@
+# The cables that go up and down: they join the network of their own voltage to the cables in the same place on the level above and the level below.
+
+- type: entity
+  abstract: true
+  id: RUMCCableShaftBase
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Anchorable
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Fixtures
+  - type: CollideOnAnchor
+  - type: Sprite
+    noRot: true
+    drawdepth: ThickWire
+    sprite: CMU14/Structures/Electric/cable_shaft.rsi
+    scale: 0.49, 0.49
+  - type: CableShaft
+
+- type: entity
+  parent: RUMCCableShaftBase
+  id: RUMCCableShaftHV
+  name: high voltage cable shaft
+  description: A high voltage cable that goes through the floor and gives the power of its network to the high voltage cables in the same place on the level above and the level below.
+  components:
+  - type: Sprite
+    state: shaft
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      shaft:
+        !type:CableNode
+        nodeGroupID: HVPower
+        connection: Both
+
+- type: entity
+  parent: RUMCCableShaftBase
+  id: RUMCCableShaftMV
+  name: medium voltage cable shaft
+  description: A medium voltage cable that goes through the floor and gives the power of its network to the medium voltage cables in the same place on the level above and the level below.
+  components:
+  - type: Sprite
+    state: shaft
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      shaft:
+        !type:CableNode
+        nodeGroupID: MVPower
+        connection: Both
+
+- type: entity
+  parent: RUMCCableShaftBase
+  id: RUMCCableShaftLV
+  name: low voltage cable shaft
+  description: A low voltage cable that goes through the floor and gives the power of its network to the devices in the same place on the level above and the level below.
+  components:
+  - type: Sprite
+    state: shaft
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      shaft:
+        !type:CableNode
+        nodeGroupID: Apc
+        connection: Both
+
+# ---------------------------------------------------------------- crafts
+- type: craftRecipe
+  id: RUMCCraftCableShaftHV
+  name: au14-craft-recipe-cableshafthv
+  output: RUMCCableShaftHV
+  time: 8
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCInsulatedCable
+    amount: 4
+  - stack: RUMCConductorAlloy
+    amount: 1
+  - stack: RUMCIronRing
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftCableShaftMV
+  name: au14-craft-recipe-cableshaftmv
+  output: RUMCCableShaftMV
+  time: 7
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCInsulatedCable
+    amount: 3
+  - stack: RUMCIronRing
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftCableShaftLV
+  name: au14-craft-recipe-cableshaftlv
+  output: RUMCCableShaftLV
+  time: 6
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCInsulatedCable
+    amount: 2
+  - stack: RUMCIronBolt
+    amount: 1

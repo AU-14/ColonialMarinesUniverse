@@ -1,0 +1,13 @@
+au14-window-materials = Materials
+au14-window-attachments = Attachments
+au14-window-output = Output
+au14-window-temperature = Temperature
+au14-window-blueprint = Blueprint
+au14-window-upgrades = Upgrades
+au14-window-steam = Steam
+au14-window-water = Water
+au14-window-slag = Slag
+au14-window-storage = Liquid storage
+au14-window-fuel = Fuel
+au14-window-regulators = Regulators
+au14-grinder-status-no-steam = No steam

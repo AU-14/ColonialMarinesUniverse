@@ -1,0 +1,160 @@
+# The tiles of the ground, taken from the repository of crystall-punk-14: the grass in three kinds, the dirt, the seedbed that a shovel makes of dirt, and the sand.
+
+- type: tile
+  id: RUMCFloorGrass
+  editorHidden: false
+  name: au14-tiles-grass
+  sprite: /Textures/CMU14/Tiles/Grass/grass.png
+  variants: 6
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  edgeSpritePriority: 6
+  edgeSprites:
+    SouthEast: /Textures/CMU14/Tiles/Grass/single_edge_SE.png
+    NorthEast: /Textures/CMU14/Tiles/Grass/single_edge_NE.png
+    NorthWest: /Textures/CMU14/Tiles/Grass/single_edge_NW.png
+    SouthWest: /Textures/CMU14/Tiles/Grass/single_edge_SW.png
+    South: /Textures/CMU14/Tiles/Grass/double_edge_S.png
+    East: /Textures/CMU14/Tiles/Grass/double_edge_E.png
+    North: /Textures/CMU14/Tiles/Grass/double_edge_N.png
+    West: /Textures/CMU14/Tiles/Grass/double_edge_W.png
+  baseTurf: RUMCFloorDirt
+  isSubfloor: false
+  footstepSounds:
+    collection: FootstepGrass
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  id: RUMCFloorGrassLight
+  editorHidden: false
+  name: au14-tiles-grass-light
+  sprite: /Textures/CMU14/Tiles/GrassLight/grass.png
+  variants: 6
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  edgeSpritePriority: 7
+  edgeSprites:
+    SouthEast: /Textures/CMU14/Tiles/GrassLight/single_edge_SE.png
+    NorthEast: /Textures/CMU14/Tiles/GrassLight/single_edge_NE.png
+    NorthWest: /Textures/CMU14/Tiles/GrassLight/single_edge_NW.png
+    SouthWest: /Textures/CMU14/Tiles/GrassLight/single_edge_SW.png
+    South: /Textures/CMU14/Tiles/GrassLight/double_edge_S.png
+    East: /Textures/CMU14/Tiles/GrassLight/double_edge_E.png
+    North: /Textures/CMU14/Tiles/GrassLight/double_edge_N.png
+    West: /Textures/CMU14/Tiles/GrassLight/double_edge_W.png
+  baseTurf: RUMCFloorDirt
+  isSubfloor: false
+  footstepSounds:
+    collection: FootstepGrass
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  id: RUMCFloorGrassTall
+  editorHidden: false
+  name: au14-tiles-grass-tall
+  sprite: /Textures/CMU14/Tiles/GrassTall/grass.png
+  variants: 6
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  edgeSpritePriority: 8
+  edgeSprites:
+    SouthEast: /Textures/CMU14/Tiles/GrassTall/single_edge_SE.png
+    NorthEast: /Textures/CMU14/Tiles/GrassTall/single_edge_NE.png
+    NorthWest: /Textures/CMU14/Tiles/GrassTall/single_edge_NW.png
+    SouthWest: /Textures/CMU14/Tiles/GrassTall/single_edge_SW.png
+    South: /Textures/CMU14/Tiles/GrassTall/double_edge_S.png
+    East: /Textures/CMU14/Tiles/GrassTall/double_edge_E.png
+    North: /Textures/CMU14/Tiles/GrassTall/double_edge_N.png
+    West: /Textures/CMU14/Tiles/GrassTall/double_edge_W.png
+  baseTurf: RUMCFloorDirt
+  isSubfloor: false
+  footstepSounds:
+    collection: FootstepGrass
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  editorHidden: false
+  id: RUMCFloorDirt
+  name: au14-tiles-dirt
+  sprite: /Textures/CMU14/Tiles/Dirt/cavedrought.png
+  variants: 16
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  edgeSpritePriority: 1
+  edgeSprites:
+    SouthEast: /Textures/CMU14/Tiles/Dirt/single_edge_SE.png
+    NorthEast: /Textures/CMU14/Tiles/Dirt/single_edge_NE.png
+    NorthWest: /Textures/CMU14/Tiles/Dirt/single_edge_NW.png
+    SouthWest: /Textures/CMU14/Tiles/Dirt/single_edge_SW.png
+    South: /Textures/CMU14/Tiles/Dirt/double_edge_S.png
+    East: /Textures/CMU14/Tiles/Dirt/double_edge_E.png
+    North: /Textures/CMU14/Tiles/Dirt/double_edge_N.png
+    West: /Textures/CMU14/Tiles/Dirt/double_edge_W.png
+  baseTurf: Plating
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepAsteroid
+  heatCapacity: 10000
+  weather: true
+
+- type: tile
+  editorHidden: false
+  id: RUMCFloorSand
+  name: au14-tiles-sand
+  sprite: /Textures/CMU14/Tiles/Sand/sand.png
+  variants: 5
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  edgeSpritePriority: 5
+  edgeSprites:
+    SouthEast: /Textures/CMU14/Tiles/Sand/single_edge_SE.png
+    NorthEast: /Textures/CMU14/Tiles/Sand/single_edge_NE.png
+    NorthWest: /Textures/CMU14/Tiles/Sand/single_edge_NW.png
+    SouthWest: /Textures/CMU14/Tiles/Sand/single_edge_SW.png
+    South: /Textures/CMU14/Tiles/Sand/double_edge_S.png
+    East: /Textures/CMU14/Tiles/Sand/double_edge_E.png
+    North: /Textures/CMU14/Tiles/Sand/double_edge_N.png
+    West: /Textures/CMU14/Tiles/Sand/double_edge_W.png
+  baseTurf: Plating
+  isSubfloor: true
+  footstepSounds:
+    collection: FootstepSnow #TODO
+  heatCapacity: 10000
+  weather: true

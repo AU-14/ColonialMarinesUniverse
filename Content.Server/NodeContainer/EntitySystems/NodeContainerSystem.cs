@@ -26,6 +26,7 @@ namespace Content.Server.NodeContainer.EntitySystems
             SubscribeLocalEvent<NodeContainerComponent, ComponentStartup>(OnStartupEvent);
             SubscribeLocalEvent<NodeContainerComponent, ComponentShutdown>(OnShutdownEvent);
             SubscribeLocalEvent<NodeContainerComponent, AnchorStateChangedEvent>(OnAnchorStateChanged);
+            SubscribeLocalEvent<NodeContainerComponent, ReAnchorEvent>(OnReAnchor);
             SubscribeLocalEvent<NodeContainerComponent, MoveEvent>(OnMoveEvent);
             SubscribeLocalEvent<NodeContainerComponent, ExaminedEvent>(OnExamine);
         }
@@ -142,6 +143,17 @@ namespace Content.Server.NodeContainer.EntitySystems
             {
                 _nodeGroupSystem.QueueNodeRemove(node);
                 node.Deleting = true;
+
+                if (node.DirectLinks.Count == 0)
+                    continue;
+
+                foreach (var linked in node.DirectLinks)
+                {
+                    linked.DirectLinks.Remove(node);
+                    _nodeGroupSystem.QueueReflood(linked);
+                }
+
+                node.DirectLinks.Clear();
             }
         }
 
@@ -164,17 +176,17 @@ namespace Content.Server.NodeContainer.EntitySystems
             }
         }
 
+        private void OnReAnchor(EntityUid uid, NodeContainerComponent component, ref ReAnchorEvent args)
+        {
+            foreach (var node in component.Nodes.Values)
+            {
+                _nodeGroupSystem.QueueNodeRemove(node);
+                _nodeGroupSystem.QueueReflood(node);
+            }
+        }
+
         private void OnMoveEvent(EntityUid uid, NodeContainerComponent container, ref MoveEvent ev)
         {
-            if (ev.ParentChanged)
-            {
-                foreach (var node in container.Nodes.Values)
-                {
-                    _nodeGroupSystem.QueueNodeRemove(node);
-                    _nodeGroupSystem.QueueReflood(node);
-                }
-            }
-
             if (ev.NewRotation == ev.OldRotation)
             {
                 return;

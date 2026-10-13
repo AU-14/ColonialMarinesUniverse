@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "The crushing attachment of the grinder (Created for Colonial Marines Universe), the brass one repainted",
+  "size": {
+    "x": 32,
+    "y": 23
+  },
+  "states": [
+    {
+      "name": "steel"
+    },
+    {
+      "name": "brass"
+    }
+  ]
+}

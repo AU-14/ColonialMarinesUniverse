@@ -1,0 +1,156 @@
+- type: entity
+  parent: BaseItem
+  id: RUMCAssemblyBlueprint
+  name: assembly blueprint
+  description: Activate it in hand to program which recipe it unlocks, then seat it in an assembly machine's blueprint slot.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/bureaucracy.rsi
+    state: paper
+  - type: Item
+    size: Small
+  - type: AssemblyBlueprint
+  - type: UserInterface
+    interfaces:
+      enum.AssemblyBlueprintUiKey.Key:
+        type: AssemblyBlueprintBoundUserInterface
+  - type: ActivatableUI
+    key: enum.AssemblyBlueprintUiKey.Key
+
+- type: entity
+  parent: BaseItem
+  id: RUMCAssemblySpeedUpgrade
+  name: assembly speed module
+  description: Seated in an assembly machine's upgrade slot, this cuts how long every cycle takes.
+  components:
+  - type: Sprite
+    sprite: Objects/Tools/drill.rsi
+    state: drill_bolt
+    color: "#79E37D"
+  - type: Item
+    size: Small
+  - type: AssemblyUpgrade
+    speedMultiplier: 0.75
+
+- type: entity
+  parent: BaseItem
+  id: RUMCAssemblyEfficiencyUpgrade
+  name: assembly efficiency module
+  description: Seated in an assembly machine's upgrade slot, this cuts how much battery charge every cycle costs.
+  components:
+  - type: Sprite
+    sprite: Objects/Tools/drill.rsi
+    state: drill_screw
+    color: "#79B8E3"
+  - type: Item
+    size: Small
+  - type: AssemblyUpgrade
+    energyMultiplier: 0.75
+
+- type: entity
+  parent: [ BaseMachine, BaseMachineDestructible ]
+  id: RUMCAssemblyMachine
+  name: assembly machine
+  description: A programmable fabricator - seat a programmed blueprint and a charged cell, then feed it exactly what it asks for.
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/assembly_machine.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: ["off"]
+    - state: on
+      map: ["on"]
+      visible: false
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.AssemblyMachineVisuals.Working:
+        off:
+          True: { visible: false }
+          False: { visible: true }
+        on:
+          True: { visible: true }
+          False: { visible: false }
+  - type: PowerCellSlot
+    cellSlotId: cell_slot
+  - type: ItemSlots
+    slots:
+      material1: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      material2: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      material3: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      material4: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      material5: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      material6: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      material7: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      material8: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      material9: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
+      output: { insertOnInteract: false }
+      blueprint:
+        whitelist:
+          components:
+          - AssemblyBlueprint
+        insertOnInteract: false
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        whitelist:
+          components:
+          - PowerCell
+        insertOnInteract: false
+      upgrade1:
+        whitelist:
+          components:
+          - AssemblyUpgrade
+        insertOnInteract: false
+      upgrade2:
+        whitelist:
+          components:
+          - AssemblyUpgrade
+        insertOnInteract: false
+  - type: ContainerContainer
+    containers:
+      material1: !type:ContainerSlot
+      material2: !type:ContainerSlot
+      material3: !type:ContainerSlot
+      material4: !type:ContainerSlot
+      material5: !type:ContainerSlot
+      material6: !type:ContainerSlot
+      material7: !type:ContainerSlot
+      material8: !type:ContainerSlot
+      material9: !type:ContainerSlot
+      output: !type:ContainerSlot
+      blueprint: !type:ContainerSlot
+      cell_slot: !type:ContainerSlot
+      upgrade1: !type:ContainerSlot
+      upgrade2: !type:ContainerSlot
+  - type: AssemblyMachine
+  - type: PortableStructure
+  - type: WindowMachine
+    stackSlots:
+    - material1
+    - material2
+    - material3
+    - material4
+    - material5
+    - material6
+    - material7
+    - material8
+    - material9
+    outputSlots:
+    - output
+  - type: UserInterface
+    interfaces:
+      enum.AssemblyMachineUiKey.Key:
+        type: AssemblyMachineBoundUserInterface
+  - type: ActivatableUI
+    key: enum.AssemblyMachineUiKey.Key
+
+- type: cmuAssemblyRecipe
+  id: RUMCAssemblyRecipeWrench
+  layout:
+    0: { material: CMSteel, amount: 2 }
+    8: { material: CMSteel, amount: 1 }
+  result: Wrench
+  resultAmount: 1
+  assembleTime: 5
+  energyCost: 300

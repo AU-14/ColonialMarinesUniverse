@@ -1,0 +1,812 @@
+# Ingots stack up to ten. Only one of a stack goes into a furnace or on an anvil: the tongs take a single ingot off the pile.
+- type: stack
+  id: RUMCIronIngot
+  name: iron ingot
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: ingot }
+  spawn: RUMCIronIngot
+  maxCount: 10
+
+- type: stack
+  id: RUMCAluminumIngot
+  name: aluminum ingot
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: aluminum }
+  spawn: RUMCAluminumIngot
+  maxCount: 10
+
+- type: stack
+  id: RUMCChromeIngot
+  name: chrome ingot
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: chrome }
+  spawn: RUMCChromeIngot
+  maxCount: 10
+
+- type: stack
+  id: RUMCCobaltIngot
+  name: cobalt ingot
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: cobalt }
+  spawn: RUMCCobaltIngot
+  maxCount: 10
+
+- type: stack
+  id: RUMCCopperIngot
+  name: copper ingot
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: cuprum }
+  spawn: RUMCCopperIngot
+  maxCount: 10
+
+- type: stack
+  id: RUMCGoldIngot
+  name: gold ingot
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: gold }
+  spawn: RUMCGoldIngot
+  maxCount: 10
+
+- type: stack
+  id: RUMCLeadIngot
+  name: lead ingot
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: lead }
+  spawn: RUMCLeadIngot
+  maxCount: 10
+
+- type: stack
+  id: RUMCPlastitanIngot
+  name: plastitan ingot
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: plastitan }
+  spawn: RUMCPlastitanIngot
+  maxCount: 10
+
+- type: stack
+  id: RUMCSilverIngot
+  name: silver ingot
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: silver }
+  spawn: RUMCSilverIngot
+  maxCount: 10
+
+- type: stack
+  id: RUMCTitaniumIngot
+  name: titanium ingot
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: titanium }
+  spawn: RUMCTitaniumIngot
+  maxCount: 10
+
+- type: stack
+  id: RUMCTungstenIngot
+  name: tungsten ingot
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: tungsten }
+  spawn: RUMCTungstenIngot
+  maxCount: 10
+
+- type: stack
+  id: RUMCWeaponSteelIngot
+  name: weapon steel ingot
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: weapon_steel }
+  spawn: RUMCWeaponSteelIngot
+  maxCount: 10
+
+- type: stack
+  id: RUMCPlatinumIngot
+  name: platinum ingot
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: platinum }
+  spawn: RUMCPlatinumIngot
+  maxCount: 10
+
+- type: stack
+  id: RUMCPlasteelIngot
+  name: plasteel ingot
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: plasteel }
+  spawn: RUMCPlasteelIngot
+  maxCount: 10
+
+- type: material
+  id: RUMCIron
+  stackEntity: RUMCIronIngot
+  name: iron ingot
+  unit: materials-unit-bar
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: ingot }
+  price: 0.00133
+
+- type: entity
+  parent: BaseItem
+  id: RUMCIronIngot
+  name: iron ingot
+  description: A rough ingot of cast iron, still warm from the mold.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    layers:
+    - state: ingot
+      map: ["base"]
+    - state: ingot_hot
+      map: ["hot"]
+      visible: false
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCIronIngot
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCIron: 100
+  - type: Forgeable
+    burnDamage:
+      types:
+        Heat: 12
+  - type: AnvilWorkpiece
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ForgeableVisuals.Active:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        hot:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Tag
+    tags:
+    - Metal
+
+- type: material
+  id: RUMCAluminum
+  stackEntity: RUMCAluminumIngot
+  name: aluminum ingot
+  unit: materials-unit-bar
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: aluminum }
+  price: 0.0008
+
+- type: entity
+  parent: BaseItem
+  id: RUMCAluminumIngot
+  name: aluminum ingot
+  description: A light, dull-grey ingot of cast aluminum, still warm from the mold.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    layers:
+    - state: aluminum
+      map: ["base"]
+    - state: aluminum_hot
+      map: ["hot"]
+      visible: false
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCAluminumIngot
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCAluminum: 100
+  - type: Forgeable
+    burnDamage:
+      types:
+        Heat: 12
+  - type: AnvilWorkpiece
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ForgeableVisuals.Active:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        hot:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Tag
+    tags:
+    - Metal
+
+- type: material
+  id: RUMCChrome
+  stackEntity: RUMCChromeIngot
+  name: chromium ingot
+  unit: materials-unit-bar
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: chrome }
+  price: 0.002
+
+- type: entity
+  parent: BaseItem
+  id: RUMCChromeIngot
+  name: chromium ingot
+  description: A hard, mirror-bright ingot of cast chromium, still warm from the mold.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    layers:
+    - state: chrome
+      map: ["base"]
+    - state: chrome_hot
+      map: ["hot"]
+      visible: false
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCChromeIngot
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCChrome: 100
+  - type: Forgeable
+    burnDamage:
+      types:
+        Heat: 12
+  - type: AnvilWorkpiece
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ForgeableVisuals.Active:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        hot:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Tag
+    tags:
+    - Metal
+
+- type: material
+  id: RUMCCobalt
+  stackEntity: RUMCCobaltIngot
+  name: cobalt ingot
+  unit: materials-unit-bar
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: cobalt }
+  price: 0.003
+
+- type: entity
+  parent: BaseItem
+  id: RUMCCobaltIngot
+  name: cobalt ingot
+  description: A dense, faintly blue-grey ingot of cast cobalt, still warm from the mold.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    layers:
+    - state: cobalt
+      map: ["base"]
+    - state: cobalt_hot
+      map: ["hot"]
+      visible: false
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCCobaltIngot
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCCobalt: 100
+  - type: Forgeable
+    burnDamage:
+      types:
+        Heat: 12
+  - type: AnvilWorkpiece
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ForgeableVisuals.Active:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        hot:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Tag
+    tags:
+    - Metal
+
+- type: material
+  id: RUMCCopper
+  stackEntity: RUMCCopperIngot
+  name: copper ingot
+  unit: materials-unit-bar
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: cuprum }
+  price: 0.0015
+
+- type: entity
+  parent: BaseItem
+  id: RUMCCopperIngot
+  name: copper ingot
+  description: A warm, reddish-orange ingot of cast copper, still warm from the mold.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    layers:
+    - state: cuprum
+      map: ["base"]
+    - state: cuprum_hot
+      map: ["hot"]
+      visible: false
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCCopperIngot
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCCopper: 100
+  - type: Forgeable
+    burnDamage:
+      types:
+        Heat: 12
+  - type: AnvilWorkpiece
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ForgeableVisuals.Active:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        hot:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Tag
+    tags:
+    - Metal
+
+- type: material
+  id: RUMCGold
+  stackEntity: RUMCGoldIngot
+  name: gold ingot
+  unit: materials-unit-bar
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: gold }
+  price: 0.006
+
+- type: entity
+  parent: BaseItem
+  id: RUMCGoldIngot
+  name: gold ingot
+  description: A soft, gleaming ingot of cast gold, still warm from the mold.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    layers:
+    - state: gold
+      map: ["base"]
+    - state: gold_hot
+      map: ["hot"]
+      visible: false
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCGoldIngot
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCGold: 100
+  - type: Forgeable
+    burnDamage:
+      types:
+        Heat: 12
+  - type: AnvilWorkpiece
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ForgeableVisuals.Active:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        hot:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Tag
+    tags:
+    - Metal
+
+- type: material
+  id: RUMCLead
+  stackEntity: RUMCLeadIngot
+  name: lead ingot
+  unit: materials-unit-bar
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: lead }
+  price: 0.0009
+
+- type: entity
+  parent: BaseItem
+  id: RUMCLeadIngot
+  name: lead ingot
+  description: A heavy, dull ingot of cast lead, still warm from the mold.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    layers:
+    - state: lead
+      map: ["base"]
+    - state: lead_hot
+      map: ["hot"]
+      visible: false
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCLeadIngot
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCLead: 100
+  - type: Forgeable
+    burnDamage:
+      types:
+        Heat: 12
+  - type: AnvilWorkpiece
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ForgeableVisuals.Active:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        hot:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Tag
+    tags:
+    - Metal
+
+- type: material
+  id: RUMCPlastitan
+  stackEntity: RUMCPlastitanIngot
+  name: plastitan ingot
+  unit: materials-unit-bar
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: plastitan }
+  price: 0.0045
+
+- type: entity
+  parent: BaseItem
+  id: RUMCPlastitanIngot
+  name: plastitan ingot
+  description: A light, faintly bluish ingot of cast plastitan - a titanium-polymer composite prized for armour plating.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    layers:
+    - state: plastitan
+      map: ["base"]
+    - state: plastitan_hot
+      map: ["hot"]
+      visible: false
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCPlastitanIngot
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCPlastitan: 100
+  - type: Forgeable
+    burnDamage:
+      types:
+        Heat: 12
+  - type: AnvilWorkpiece
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ForgeableVisuals.Active:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        hot:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Tag
+    tags:
+    - Metal
+
+- type: material
+  id: RUMCSilver
+  stackEntity: RUMCSilverIngot
+  name: silver ingot
+  unit: materials-unit-bar
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: silver }
+  price: 0.004
+
+- type: entity
+  parent: BaseItem
+  id: RUMCSilverIngot
+  name: silver ingot
+  description: A bright, pale ingot of cast silver, still warm from the mold.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    layers:
+    - state: silver
+      map: ["base"]
+    - state: silver_hot
+      map: ["hot"]
+      visible: false
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCSilverIngot
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCSilver: 100
+  - type: Forgeable
+    burnDamage:
+      types:
+        Heat: 12
+  - type: AnvilWorkpiece
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ForgeableVisuals.Active:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        hot:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Tag
+    tags:
+    - Metal
+
+- type: material
+  id: RUMCTitanium
+  stackEntity: RUMCTitaniumIngot
+  name: titanium ingot
+  unit: materials-unit-bar
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: titanium }
+  price: 0.0035
+
+- type: entity
+  parent: BaseItem
+  id: RUMCTitaniumIngot
+  name: titanium ingot
+  description: A light, faintly violet-grey ingot of cast titanium, still warm from the mold.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    layers:
+    - state: titanium
+      map: ["base"]
+    - state: titanium_hot
+      map: ["hot"]
+      visible: false
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCTitaniumIngot
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCTitanium: 100
+  - type: Forgeable
+    burnDamage:
+      types:
+        Heat: 12
+  - type: AnvilWorkpiece
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ForgeableVisuals.Active:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        hot:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Tag
+    tags:
+    - Metal
+
+- type: material
+  id: RUMCTungsten
+  stackEntity: RUMCTungstenIngot
+  name: tungsten ingot
+  unit: materials-unit-bar
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: tungsten }
+  price: 0.005
+
+- type: entity
+  parent: BaseItem
+  id: RUMCTungstenIngot
+  name: tungsten ingot
+  description: A dense, dark ingot of cast tungsten, still warm from the mold.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    layers:
+    - state: tungsten
+      map: ["base"]
+    - state: tungsten_hot
+      map: ["hot"]
+      visible: false
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCTungstenIngot
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCTungsten: 100
+  - type: Forgeable
+    burnDamage:
+      types:
+        Heat: 12
+  - type: AnvilWorkpiece
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ForgeableVisuals.Active:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        hot:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Tag
+    tags:
+    - Metal
+
+- type: material
+  id: RUMCWeaponSteel
+  stackEntity: RUMCWeaponSteelIngot
+  name: weapon-grade steel ingot
+  unit: materials-unit-bar
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: weapon_steel }
+  price: 0.0025
+
+- type: entity
+  parent: BaseItem
+  id: RUMCWeaponSteelIngot
+  name: weapon-grade steel ingot
+  description: A dense, dark-tempered ingot of cast weapon-grade steel, still warm from the mold.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    layers:
+    - state: weapon_steel
+      map: ["base"]
+    - state: weapon_steel_hot
+      map: ["hot"]
+      visible: false
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCWeaponSteelIngot
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCWeaponSteel: 100
+  - type: Forgeable
+    burnDamage:
+      types:
+        Heat: 12
+  - type: AnvilWorkpiece
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ForgeableVisuals.Active:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        hot:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Tag
+    tags:
+    - Metal
+
+- type: material
+  id: RUMCPlatinum
+  stackEntity: RUMCPlatinumIngot
+  name: platinum ingot
+  unit: materials-unit-bar
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: platinum }
+  price: 0.01
+
+- type: entity
+  parent: BaseItem
+  id: RUMCPlatinumIngot
+  name: platinum ingot
+  description: A heavy, silvery-white ingot of cast platinum, still warm from the mold.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    layers:
+    - state: platinum
+      map: ["base"]
+    - state: platinum_hot
+      map: ["hot"]
+      visible: false
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCPlatinumIngot
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCPlatinum: 100
+  - type: Forgeable
+    burnDamage:
+      types:
+        Heat: 12
+  - type: AnvilWorkpiece
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ForgeableVisuals.Active:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        hot:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Tag
+    tags:
+    - Metal
+
+- type: material
+  id: RUMCPlasteel
+  stackEntity: RUMCPlasteelIngot
+  name: plasteel ingot
+  unit: materials-unit-bar
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: plasteel }
+  price: 0.004
+
+- type: entity
+  parent: BaseItem
+  id: RUMCPlasteelIngot
+  name: plasteel ingot
+  description: A dense, dull grey ingot of cast plasteel - steel hardened with plasma, still warm from the mold.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    layers:
+    - state: plasteel
+      map: ["base"]
+    - state: plasteel_hot
+      map: ["hot"]
+      visible: false
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCPlasteelIngot
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCPlasteel: 100
+  - type: Forgeable
+    burnDamage:
+      types:
+        Heat: 12
+  - type: AnvilWorkpiece
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ForgeableVisuals.Active:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        hot:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Tag
+    tags:
+    - Metal

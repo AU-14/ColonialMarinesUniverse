@@ -1,4 +1,5 @@
 using Content.Shared.Audio;
+using Content.Shared.CMU14.Cables;
 using Content.Shared.Construction.Components;
 using Content.Shared.Explosion;
 using Content.Shared.Eye;
@@ -27,6 +28,7 @@ namespace Content.Shared.SubFloor
         [Dependency] protected SharedPopupSystem _popup = default!;
 
         [Dependency] private EntityQuery<SubFloorHideComponent> _hideQuery = default!;
+        [Dependency] private EntityQuery<CableLayerComponent> _layerQuery = default!;
 
         public override void Initialize()
         {
@@ -42,6 +44,30 @@ namespace Content.Shared.SubFloor
             SubscribeLocalEvent<SubFloorHideComponent, GetExplosionResistanceEvent>(OnGetExplosionResistance);
             SubscribeLocalEvent<SubFloorHideComponent, AnchorAttemptEvent>(OnAnchorAttempt);
             SubscribeLocalEvent<SubFloorHideComponent, UnanchorAttemptEvent>(OnUnanchorAttempt);
+            // CMU14: the client learns which layer a cable lies on only after the entity has started.
+            SubscribeLocalEvent<CableLayerComponent, AfterAutoHandleStateEvent>(OnLayerState);
+        }
+
+        private void OnLayerState(Entity<CableLayerComponent> ent, ref AfterAutoHandleStateEvent args)
+        {
+            RefreshCover(ent.Owner);
+        }
+
+        /// <summary>
+        ///     Works out again whether a floor tile covers this entity, for when something besides the tile changed.
+        /// </summary>
+        public void RefreshCover(EntityUid uid)
+        {
+            UpdateFloorCover(uid);
+        }
+
+        // CMU14: a cable that lies on the top layer is not covered by the tile it lies on.
+        private bool IsCovered(EntityUid uid, EntityUid gridUid, MapGridComponent grid, Vector2i position)
+        {
+            if (_layerQuery.TryComp(uid, out var layer) && !layer.Buried)
+                return false;
+
+            return HasFloorCover(gridUid, grid, position);
         }
 
         private void OnAnchorAttempt(EntityUid uid, SubFloorHideComponent component, AnchorAttemptEvent args)
@@ -50,7 +76,7 @@ namespace Content.Shared.SubFloor
             var xform = Transform(uid);
 
             if (TryComp<MapGridComponent>(xform.GridUid, out var grid)
-                && HasFloorCover(xform.GridUid.Value, grid, Map.TileIndicesFor(xform.GridUid.Value, grid, xform.Coordinates)))
+                && IsCovered(uid, xform.GridUid.Value, grid, Map.TileIndicesFor(xform.GridUid.Value, grid, xform.Coordinates)))
             {
                 _popup.PopupEntity(Loc.GetString("subfloor-anchor-failure", ("entity", uid)), args.User, args.User);
                 args.Cancel();
@@ -146,7 +172,7 @@ namespace Content.Shared.SubFloor
                 return;
 
             if (xform.Anchored && TryComp<MapGridComponent>(xform.GridUid, out var grid))
-                SetUnderCover((uid, component), HasFloorCover(xform.GridUid.Value, grid, Map.TileIndicesFor(xform.GridUid.Value, grid, xform.Coordinates)));
+                SetUnderCover((uid, component), IsCovered(uid, xform.GridUid.Value, grid, Map.TileIndicesFor(xform.GridUid.Value, grid, xform.Coordinates)));
             else
                 SetUnderCover((uid, component), false);
 
@@ -173,12 +199,12 @@ namespace Content.Shared.SubFloor
 
         private void UpdateTile(EntityUid gridUid, MapGridComponent grid, Vector2i position)
         {
-            var covered = HasFloorCover(gridUid, grid, position);
-
             foreach (var uid in Map.GetAnchoredEntities(gridUid, grid, position))
             {
                 if (!_hideQuery.TryComp(uid, out var hideComp))
                     continue;
+
+                var covered = IsCovered(uid, gridUid, grid, position);
 
                 if (hideComp.IsUnderCover == covered)
                     continue;

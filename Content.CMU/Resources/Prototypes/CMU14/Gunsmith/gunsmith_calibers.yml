@@ -1,0 +1,666 @@
+# The cartridges the bench starts a caliber from. A preset carries the numbers of the cartridge, and the tags the cartridges and the magazines of the
+# game have, so that a cartridge or a magazine made for the caliber fits the weapons of the game that take it (and the weapon on the bench gives its
+# caliber). The tags are the ones the weapons of the game ask for. barrelMm is the barrel the damage of a cartridge in a weapon of the game is rated in.
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber46x30
+  name: gunsmith-caliber-46x30
+  boreMm: 4.6
+  caseDiameterMm: 8
+  caseLengthMm: 30
+  seatDepthMm: 8
+  bulletMassG: 2
+  powder: GunsmithPowderSmokeless
+  chargeG: 0.902
+  barrelMm: 200
+  gameDamage: 40
+  gameMaxDamage: 40
+  cartridgeTags:
+  - RMCCartridge46x30mm
+  magazineTags:
+  - RMCMagazineSMGMP27
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber556
+  name: gunsmith-caliber-556
+  boreMm: 5.56
+  caseDiameterMm: 9
+  caseLengthMm: 45
+  seatDepthMm: 12.4
+  bulletMassG: 3.6
+  powder: GunsmithPowderSmokeless
+  chargeG: 1.73
+  barrelMm: 400
+  gameDamage: 40
+  gameMaxDamage: 40
+  cartridgeTags:
+  - CMUCartridgeRifleM16AP
+  - RMCCartridgeRifleM16
+  magazineTags:
+  - CMUMagazineRifleM16AP
+  - CMUMagazineRifleM16APExt
+  - CMUMagazineRifleM16Extended
+  - RMCMagazineRifleM16
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber22
+  name: gunsmith-caliber-22
+  boreMm: 5.6
+  caseDiameterMm: 6.4
+  caseLengthMm: 15
+  seatDepthMm: 6.8
+  bulletMassG: 2.6
+  powder: GunsmithPowderSmokeless
+  chargeG: 0.13
+  barrelMm: 100
+  gameDamage: 20
+  gameMaxDamage: 20
+  cartridgeTags:
+  - CMCartridgePistol22mm
+  magazineTags:
+  - RMCMagazinePistolHoldout
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber545
+  name: gunsmith-caliber-545
+  boreMm: 5.6
+  caseDiameterMm: 10
+  caseLengthMm: 39
+  seatDepthMm: 11
+  bulletMassG: 3.4
+  powder: GunsmithPowderSmokeless
+  chargeG: 1.793
+  barrelMm: 415
+  gameDamage: 55
+  gameMaxDamage: 65
+  cartridgeTags:
+  - RMCCartridgeRifle545x39mm
+  - RMCCartridgeRifle545x39mmAP
+  - RMCCartridgeRifle545x39mmHEAP
+  - RuMCCartridgeRifle545x39mmTracer
+  magazineTags:
+  - RMCMagazineRifleType71
+  - RMCMagazineRifleType71AP
+  - RMCMagazineRifleType71HEAP
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber57x28
+  name: gunsmith-caliber-57x28
+  boreMm: 5.7
+  caseDiameterMm: 7.95
+  caseLengthMm: 28.9
+  seatDepthMm: 8
+  bulletMassG: 2
+  powder: GunsmithPowderSmokeless
+  chargeG: 0.811
+  barrelMm: 260
+  gameDamage: 26
+  gameMaxDamage: 34
+  cartridgeTags:
+  - RMCCartridge57x28mm
+  - RMCCartridge57x28mmFP9000
+  magazineTags:
+  - RMCMagazineSMGFP9000
+  - RMCMagazineSMGPDW90
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber25ACP
+  name: gunsmith-caliber-25acp
+  boreMm: 6.35
+  caseDiameterMm: 7.9
+  caseLengthMm: 16
+  seatDepthMm: 6
+  bulletMassG: 3.2
+  powder: GunsmithPowderSmokeless
+  chargeG: 0.23
+  barrelMm: 55
+  gameDamage: 40
+  gameMaxDamage: 40
+  cartridgeTags:
+  - AU14CartridgeRifleC10A6BR
+  magazineTags:
+  - AU14MagazineRifleC10A6BR
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber65
+  name: gunsmith-caliber-65
+  boreMm: 6.5
+  caseDiameterMm: 12.2
+  caseLengthMm: 55
+  seatDepthMm: 17
+  bulletMassG: 9.1
+  powder: GunsmithPowderSmokeless
+  chargeG: 3.622
+  barrelMm: 600
+  gameDamage: 29
+  gameMaxDamage: 29
+  cartridgeTags:
+  - RMCCartridgeBoltActionRifle
+  magazineTags:
+  - RMCMagazineRifleHunting
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber7x43
+  name: gunsmith-caliber-7x43
+  boreMm: 7
+  caseDiameterMm: 11
+  caseLengthMm: 43
+  seatDepthMm: 14
+  bulletMassG: 9.1
+  powder: GunsmithPowderSmokeless
+  chargeG: 2.168
+  barrelMm: 500
+  gameDamage: 50
+  gameMaxDamage: 70
+  cartridgeTags:
+  - RMCCartridgeRifleL90
+  - RMCCartridgeRifleL90AP
+  - RMCCartridgeRifleL90HEAP
+  - RMCCartridgeRifleL90Incendiary
+  magazineTags:
+  - RMCMagazineRifleL90
+  - RMCMagazineRifleL90AP
+  - RMCMagazineRifleL90Drum
+  - RMCMagazineRifleL90DrumAP
+  - RMCMagazineRifleL90DrumHEAP
+  - RMCMagazineRifleL90DrumIncendiary
+  - RMCMagazineRifleL90HEAP
+  - RMCMagazineRifleL90Incendiary
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber762
+  name: gunsmith-caliber-762
+  boreMm: 7.62
+  caseDiameterMm: 11.3
+  caseLengthMm: 39
+  seatDepthMm: 14.9
+  bulletMassG: 8
+  powder: GunsmithPowderSmokeless
+  chargeG: 1.9
+  barrelMm: 415
+  gameDamage: 55
+  gameMaxDamage: 55
+  cartridgeTags:
+  - AU14CartridgeRifleMAR40AP
+  - RMCCartridgeRifleMAR40
+  magazineTags:
+  - RMCMagazineMar50LMG
+  - RMCMagazineRifleMAR40
+  - RMCMagazineRifleMAR40Ext
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber762x38
+  name: gunsmith-caliber-762x38
+  boreMm: 7.62
+  caseDiameterMm: 8.6
+  caseLengthMm: 38.5
+  seatDepthMm: 12
+  bulletMassG: 6.8
+  powder: GunsmithPowderSmokeless
+  chargeG: 0.723
+  barrelMm: 114
+  gameDamage: 70
+  gameMaxDamage: 70
+  cartridgeTags:
+  - RMCCartridgeRevolverZHNK72
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber308
+  name: gunsmith-caliber-308
+  boreMm: 7.82
+  caseDiameterMm: 11.9
+  caseLengthMm: 51
+  seatDepthMm: 16.7
+  bulletMassG: 9.7
+  powder: GunsmithPowderSmokeless
+  chargeG: 3.21
+  barrelMm: 600
+  gameDamage: 42.5
+  gameMaxDamage: 45
+  cartridgeTags:
+  - RMCCartridgeLMGM60
+  - RMCCartridgeRifleAR10
+  magazineTags:
+  - RMCMagazineLMGM60
+  - RMCMagazineRifleAR10
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber762x25
+  name: gunsmith-caliber-762x25
+  boreMm: 7.85
+  caseDiameterMm: 9.9
+  caseLengthMm: 25
+  seatDepthMm: 9
+  bulletMassG: 5.5
+  powder: GunsmithPowderSmokeless
+  chargeG: 0.821
+  barrelMm: 120
+  gameDamage: 45
+  gameMaxDamage: 55
+  cartridgeTags:
+  - RMCCartridge762x25mm
+  - RMCCartridgePistolT73
+  - RMCCartridgePistolT74Impact
+  magazineTags:
+  - RMCMagazinePistolT73
+  - RMCMagazinePistolT74Impact
+  - RMCMagazineSMGType19
+  - RMCMagazineSMGType19Drum
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber77x56R
+  name: gunsmith-caliber-77x56r
+  boreMm: 7.9
+  caseDiameterMm: 13
+  caseLengthMm: 56.4
+  seatDepthMm: 16
+  bulletMassG: 11.3
+  powder: GunsmithPowderSmokeless
+  chargeG: 4.218
+  barrelMm: 640
+  gameDamage: 40
+  gameMaxDamage: 60
+  cartridgeTags:
+  - RMCCartridgeSniper77x56mmR
+  - RMCCartridgeSniper77x56mmRSH
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber762x54R
+  name: gunsmith-caliber-762x54r
+  boreMm: 7.92
+  caseDiameterMm: 12.4
+  caseLengthMm: 53.7
+  seatDepthMm: 15
+  bulletMassG: 10
+  powder: GunsmithPowderSmokeless
+  chargeG: 3.853
+  barrelMm: 600
+  gameDamage: 40
+  gameMaxDamage: 80
+  cartridgeTags:
+  - RMCCartridgeLMGQYJ72
+  - RMCCartridgeSniperType88
+  - RuMCCartridge762x54R
+  - RuMCCartridge762x54RTracer
+  magazineTags:
+  - RMCMagazineLMGQYJ72
+  - RuMCMagazinePKP_MS
+  - RuMCMagazineTachanka
+  - RuMCMagazineTachankaLarge
+  - RuMCMagazineTachankaLargeTracer
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber888x51
+  name: gunsmith-caliber-888x51
+  boreMm: 8.88
+  caseDiameterMm: 13
+  caseLengthMm: 51
+  seatDepthMm: 15
+  bulletMassG: 11
+  powder: GunsmithPowderSmokeless
+  chargeG: 3.897
+  barrelMm: 500
+  gameDamage: 73
+  gameMaxDamage: 73
+  cartridgeTags:
+  - AU14CartridgeRifleL64A3Squashhead
+  magazineTags:
+  - AU14MagazineSniperL64A3
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber9mm
+  name: gunsmith-caliber-9mm
+  boreMm: 9
+  caseDiameterMm: 9.9
+  caseLengthMm: 19
+  seatDepthMm: 8.4
+  bulletMassG: 8
+  powder: GunsmithPowderSmokeless
+  chargeG: 0.53
+  barrelMm: 115
+  gameDamage: 40
+  gameMaxDamage: 65
+  cartridgeTags:
+  - AU14CartridgeMinigunHAZOPS9mm
+  - CMCartridge9mmSMG
+  - CMCartridgePistol9mm
+  - CMCartridgePistol9mmAP
+  - CMUCartridge9mmSMGHEAP
+  - RMCCartridge9mmSMGMAC15
+  - RMCCartridge9x21mmSMGUZI
+  - RMCCartridgePistol9mmElectrostatic
+  - RMCCartridgePistol9mmHP
+  - RMCCartridgePistol9mmRubber
+  - RMCCartridgePistol9mmSquashHead
+  - RMCCartridgePistolNP92
+  - RMCCartridgeSMG9mmSquashHead
+  magazineTags:
+  - AU14MagazineMinigunHAZOPS
+  - CMMagazinePistolM1984
+  - CMMagazinePistolM77AP
+  - CMMagazinePistolMK80
+  - CMMagazineSMGMP5
+  - CMU14MagazinePistolGlock75
+  - CMU14MagazinePistolGlock77
+  - CMUMagazineSMGMP5HEAP
+  - RMCMagazinePistolB92FS
+  - RMCMagazinePistolD18
+  - RMCMagazinePistolKT42
+  - RMCMagazinePistolL14
+  - RMCMagazinePistolL14AP
+  - RMCMagazinePistolL54
+  - RMCMagazinePistolM1984AP
+  - RMCMagazinePistolM1984Rubber
+  - RMCMagazinePistolM77Rubber
+  - RMCMagazinePistolNP92
+  - RMCMagazinePistolNP92Extended
+  - RMCMagazinePistolPK7
+  - RMCMagazineSMGL7A3SquashHead
+  - RMCMagazineSMGMAC15
+  - RMCMagazineSMGMAC15Ext
+  - RMCMagazineSMGUZI
+  - RMCMagazineSMGUZIExt
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber357
+  name: gunsmith-caliber-357
+  boreMm: 9.07
+  caseDiameterMm: 9.6
+  caseLengthMm: 33
+  seatDepthMm: 10
+  bulletMassG: 10.2
+  powder: GunsmithPowderSmokeless
+  chargeG: 1.292
+  barrelMm: 100
+  gameDamage: 69
+  gameMaxDamage: 86
+  cartridgeTags:
+  - RMCCartridgeRevolver357
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber38
+  name: gunsmith-caliber-38
+  boreMm: 9.07
+  caseDiameterMm: 9.6
+  caseLengthMm: 29
+  seatDepthMm: 10
+  bulletMassG: 10.2
+  powder: GunsmithPowderSmokeless
+  chargeG: 0.676
+  barrelMm: 100
+  gameDamage: 45
+  gameMaxDamage: 45
+  cartridgeTags:
+  - RMCCartridgeRevolver38
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber9x39
+  name: gunsmith-caliber-9x39
+  boreMm: 9.27
+  caseDiameterMm: 11.6
+  caseLengthMm: 39
+  seatDepthMm: 13
+  bulletMassG: 16
+  powder: GunsmithPowderSmokeless
+  chargeG: 1.87
+  barrelMm: 200
+  gameDamage: 65
+  gameMaxDamage: 65
+  cartridgeTags:
+  - RMCCartridgeRevolverRsh9
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber10mm
+  name: gunsmith-caliber-10mm
+  boreMm: 10
+  caseDiameterMm: 11
+  caseLengthMm: 24
+  seatDepthMm: 11.9
+  bulletMassG: 11
+  powder: GunsmithPowderSmokeless
+  chargeG: 0.73
+  barrelMm: 230
+  gameDamage: 34
+  gameMaxDamage: 45
+  cartridgeTags:
+  - CMCartridge10x20mm
+  - CMCartridge10x20mmAP
+  - RMCCartridge10x20mmHEAP
+  - RMCCartridge10x20mmIncendiary
+  - RMCCartridge10x20mmRubber
+  - RMCCartridge10x20mmWP
+  - RMCCartridgeAutoPistol
+  - RMCCartridgeAutoPistolAP
+  - RMCCartridgeType64
+  - RuMCCartridgeSMG10x20AP
+  - RuMCCartridgeSMG10x20Tracer
+  magazineTags:
+  - AU14MagazineSMGL90A2
+  - AU14MagazineSMGL90A2AP
+  - AU14MagazineSMGL90A2HEAP
+  - AU14MagazineSMGL90A2Incendiary
+  - AU14MagazineSMGL90A2extended
+  - CMMagazineSMGM63
+  - CMMagazineSMGM63AP
+  - CMMagazineSMGM63Ext
+  - RMCMagazinePistolM13
+  - RMCMagazinePistolM13AP
+  - RMCMagazinePistolM13Drum
+  - RMCMagazinePistolM13DrumAP
+  - RMCMagazinePistolM13Ext
+  - RMCMagazinePistolM13ExtAP
+  - RMCMagazineSMGM63HEAP
+  - RMCMagazineSMGM63Incendiary
+  - RMCMagazineSMGM63Rubber
+  - RMCMagazineSMGM63WP
+  - RMCMagazineSMGType64
+  - RuMCMagazinePP13M
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber10x28
+  name: gunsmith-caliber-10x28
+  boreMm: 10
+  caseDiameterMm: 13.5
+  caseLengthMm: 28
+  seatDepthMm: 10
+  bulletMassG: 12
+  powder: GunsmithPowderSmokeless
+  chargeG: 1.973
+  barrelMm: 600
+  gameDamage: 70
+  gameMaxDamage: 90
+  cartridgeTags:
+  - CMCartridgeSniper10x28mm
+  - CMUCartridgeSniper10x28mmSH
+  magazineTags:
+  - CMUMagazineSniperL144
+  - CMUMagazineSniperL144SH
+  - RuMcMagazineSniperRifleSVAROG
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber10x30
+  name: gunsmith-caliber-10x30
+  boreMm: 10
+  caseDiameterMm: 14
+  caseLengthMm: 30
+  seatDepthMm: 11
+  bulletMassG: 12
+  powder: GunsmithPowderSmokeless
+  chargeG: 2.33
+  barrelMm: 600
+  gameDamage: 40
+  gameMaxDamage: 40
+  cartridgeTags:
+  - CMUCartridgeGPMGTWE
+  magazineTags:
+  - CMUMagazineGPMGTWE
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber44
+  name: gunsmith-caliber-44
+  boreMm: 10.9
+  caseDiameterMm: 11.6
+  caseLengthMm: 33
+  seatDepthMm: 11
+  bulletMassG: 15.6
+  powder: GunsmithPowderSmokeless
+  chargeG: 1.896
+  barrelMm: 150
+  gameDamage: 72
+  gameMaxDamage: 72
+  cartridgeTags:
+  - RMCCartridgeRevolver44
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber45
+  name: gunsmith-caliber-45
+  boreMm: 11.43
+  caseDiameterMm: 12.1
+  caseLengthMm: 23
+  seatDepthMm: 12.6
+  bulletMassG: 14.9
+  powder: GunsmithPowderSmokeless
+  chargeG: 0.56
+  barrelMm: 130
+  gameDamage: 33
+  gameMaxDamage: 45
+  cartridgeTags:
+  - AU14CartridgePistolM48A5Super
+  - CMCartridgePistolMK45
+  - RMCCartridgePistol45ACP
+  magazineTags:
+  - AU14MagazinePistolM48A4
+  - AU14MagazinePistolM48A5Super
+  - RMCMagazinePistolMK45
+  - RMCMagazinePistolSU6
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber454
+  name: gunsmith-caliber-454
+  boreMm: 11.5
+  caseDiameterMm: 12.3
+  caseLengthMm: 35
+  seatDepthMm: 11
+  bulletMassG: 18
+  powder: GunsmithPowderSmokeless
+  chargeG: 2.425
+  barrelMm: 190
+  gameDamage: 60
+  gameMaxDamage: 100
+  cartridgeTags:
+  - RMCCartridgeRevolverMateba
+  - RMCCartridgeRevolverMatebaHIAP
+  - RMCCartridgeRevolverMatebaHighImpact
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber127x108
+  name: gunsmith-caliber-127x108
+  boreMm: 12.7
+  caseDiameterMm: 18
+  caseLengthMm: 108
+  seatDepthMm: 30
+  bulletMassG: 48
+  powder: GunsmithPowderSmokeless
+  chargeG: 16.186
+  barrelMm: 1000
+  gameDamage: 54
+  gameMaxDamage: 54
+  cartridgeTags:
+  - RuMCCartridgeHMG127x108mm
+  - RuMCCartridgeHMG127x108mmTracer
+  magazineTags:
+  - RuMCMagazineUTES-C
+  - RuMCMagazineUTES-CTracter
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber127x55
+  name: gunsmith-caliber-127x55
+  boreMm: 12.7
+  caseDiameterMm: 17
+  caseLengthMm: 55
+  seatDepthMm: 20
+  bulletMassG: 30
+  powder: GunsmithPowderSmokeless
+  chargeG: 6.478
+  barrelMm: 800
+  gameDamage: 70
+  gameMaxDamage: 75
+  cartridgeTags:
+  - RuMCCartridgeHMG127x55mm
+  - RuMCCartridgeHMG127x55mmAP
+  - RuMCCartridgeHMG127x55mmJHP
+  - RuMCCartridgeHMG127x55mmTracer
+  magazineTags:
+  - RuMCMagazineAH12
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber50AE
+  name: gunsmith-caliber-50ae
+  boreMm: 12.7
+  caseDiameterMm: 15.3
+  caseLengthMm: 32.6
+  seatDepthMm: 10
+  bulletMassG: 21
+  powder: GunsmithPowderSmokeless
+  chargeG: 2.884
+  barrelMm: 200
+  gameDamage: 47.5
+  gameMaxDamage: 50
+  cartridgeTags:
+  - AU14CartridgePistol50JP
+  - RMCCartridgePistolHandcannon
+  - RMCCartridgePistolHandcannonHI
+  - RMCCartridgePistolHandcannonHIAP
+  magazineTags:
+  - AU14MagazinePistolM50
+  - RMCMagazinePistolHandcannon
+  - RMCMagazinePistolHandcannonHI
+  - RMCMagazinePistolHandcannonHIAP
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber12ga
+  name: gunsmith-caliber-12ga
+  boreMm: 18.5
+  caseDiameterMm: 20.2
+  caseLengthMm: 70
+  seatDepthMm: 42
+  bulletMassG: 28
+  powder: GunsmithPowderSmokeless
+  chargeG: 2.523
+  barrelMm: 700
+  shell: true
+  gameDamage: 65
+  gameMaxDamage: 70
+  nominalPellets: 4
+  cartridgeTags:
+  - RMCShellShotgun
+  - RMCShellShotgunBuckshot
+  - RMCShellShotgunSlugs
+  - RMCShellShotgunFlechette
+  - RMCShellShotgunIncendiaryBuckshot
+  - RMCShellShotgunIncendiary
+  - RMCShellShotgunBeanbag
+
+- type: gunsmithCaliber
+  id: GunsmithCaliber10gaHeavy
+  name: gunsmith-caliber-10gaheavy
+  boreMm: 19.7
+  caseDiameterMm: 21.6
+  caseLengthMm: 89
+  seatDepthMm: 53
+  bulletMassG: 56
+  powder: GunsmithPowderSmokeless
+  chargeG: 4.122
+  barrelMm: 750
+  shell: true
+  heavy: true
+  gameDamage: 75
+  gameMaxDamage: 90
+  nominalPellets: 4
+  cartridgeTags:
+  - RMCShellShotgunHeavyBuckshot
+  - RMCShellShotgunHeavySlugs
+  - RMCShellShotgunHeavyFlechette
+  - RMCShellShotgunHeavyBeanbag
+  - RMCShellShotgunIncendiaryHeavyBuckshot
+

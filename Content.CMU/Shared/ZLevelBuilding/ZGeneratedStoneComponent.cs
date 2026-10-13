@@ -27,6 +27,17 @@ public sealed partial class ZGeneratedStoneComponent : Component
     [ViewVariables]
     public EntityUid StoneGrid;
 
+    [ViewVariables]
+    public bool DungeonAttempted;
+
+    /// <summary>Seed of the noise that shapes the caves and pools of this level; chosen when the first chunk is made.</summary>
+    [ViewVariables]
+    public int NoiseSeed;
+
+    /// <summary>Tiles of the natural, noise-made caves. They hold themselves up: they never cave in and a collapse does not spread into them.</summary>
+    [ViewVariables]
+    public readonly HashSet<Vector2i> NaturalCaves = new();
+
     /// <summary>Chunk coordinates (tile-index / chunk size) that have already been generated.</summary>
     [ViewVariables]
     public readonly HashSet<Vector2i> GeneratedChunks = new();

@@ -1,0 +1,584 @@
+- type: Tag
+  id: RUMCCrystal
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCSaltpeterCrystal
+  name: saltpeter crystal
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: saltpeter }
+  spawn: RUMCSaltpeterCrystal
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCCinnabarCrystal
+  name: cinnabar crystal
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: cinnabar }
+  spawn: RUMCCinnabarCrystal
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCAsbestosCrystal
+  name: asbestos crystal
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: asbestos }
+  spawn: RUMCAsbestosCrystal
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCFluoriteCrystal
+  name: fluorite crystal
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: fluorite }
+  spawn: RUMCFluoriteCrystal
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCBerylliumCrystal
+  name: beryllium crystal
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: beryllium }
+  spawn: RUMCBerylliumCrystal
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCColtanCrystal
+  name: coltan crystal
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: coltan }
+  spawn: RUMCColtanCrystal
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCAlexandriteCrystal
+  name: alexandrite crystal
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: alexandrite }
+  spawn: RUMCAlexandriteCrystal
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCRawDiamondCrystal
+  name: rough diamond crystal
+  icon: { sprite: CMU14/Objects/Materials/ore.rsi, state: diamond }
+  spawn: RUMCRawDiamondCrystal
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCEmeraldCrystal
+  name: emerald crystal
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: emerald }
+  spawn: RUMCEmeraldCrystal
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCRubyCrystal
+  name: ruby crystal
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: ruby }
+  spawn: RUMCRubyCrystal
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCPhosphorusCrystal
+  name: phosphorus crystal
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: phosphorus }
+  spawn: RUMCPhosphorusCrystal
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCTrimoridCrystal
+  name: trimorid crystal
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: trimorid }
+  spawn: RUMCTrimoridCrystal
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCLaxaniteCrystal
+  name: laxanite crystal
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: laxanite }
+  spawn: RUMCLaxaniteCrystal
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCLaytoiteCrystal
+  name: laytoite crystal
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: laytoite }
+  spawn: RUMCLaytoiteCrystal
+
+- type: material
+  id: RUMCSaltpeter
+  stackEntity: RUMCSaltpeterCrystal
+  name: saltpeter crystal
+  unit: materials-unit-chunk
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: saltpeter }
+  price: 0.0012
+
+- type: entity
+  parent: BaseItem
+  id: RUMCSaltpeterCrystal
+  name: saltpeter crystal
+  description: A rough, sulphur-yellow cluster of saltpeter still embedded in its matrix.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    state: saltpeter
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCSaltpeterCrystal
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCSaltpeter: 100
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: material
+  id: RUMCCinnabar
+  stackEntity: RUMCCinnabarCrystal
+  name: cinnabar crystal
+  unit: materials-unit-chunk
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: cinnabar }
+  price: 0.0025
+
+- type: entity
+  parent: BaseItem
+  id: RUMCCinnabarCrystal
+  name: cinnabar crystal
+  description: A dark red, faintly toxic-looking cluster of cinnabar still embedded in its matrix.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    state: cinnabar
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCCinnabarCrystal
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCCinnabar: 100
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: material
+  id: RUMCAsbestos
+  stackEntity: RUMCAsbestosCrystal
+  name: asbestos crystal
+  unit: materials-unit-chunk
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: asbestos }
+  price: 0.0006
+
+- type: entity
+  parent: BaseItem
+  id: RUMCAsbestosCrystal
+  name: asbestos crystal
+  description: A dull, dark-grey fibrous cluster of asbestos still embedded in its matrix.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    state: asbestos
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCAsbestosCrystal
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCAsbestos: 100
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: material
+  id: RUMCFluorite
+  stackEntity: RUMCFluoriteCrystal
+  name: fluorite crystal
+  unit: materials-unit-chunk
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: fluorite }
+  price: 0.0018
+
+- type: entity
+  parent: BaseItem
+  id: RUMCFluoriteCrystal
+  name: fluorite crystal
+  description: A dark purple, glassy cluster of fluorite still embedded in its matrix.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    state: fluorite
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCFluoriteCrystal
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCFluorite: 100
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: material
+  id: RUMCBeryllium
+  stackEntity: RUMCBerylliumCrystal
+  name: beryllium crystal
+  unit: materials-unit-chunk
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: beryllium }
+  price: 0.004
+
+- type: entity
+  parent: BaseItem
+  id: RUMCBerylliumCrystal
+  name: beryllium crystal
+  description: A turquoise, hexagonal cluster of beryllium still embedded in its matrix.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    state: beryllium
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCBerylliumCrystal
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCBeryllium: 100
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: material
+  id: RUMCColtan
+  stackEntity: RUMCColtanCrystal
+  name: coltan crystal
+  unit: materials-unit-chunk
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: coltan }
+  price: 0.0035
+
+- type: entity
+  parent: BaseItem
+  id: RUMCColtanCrystal
+  name: coltan crystal
+  description: A dull, brownish-grey cluster of coltan still embedded in its matrix.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    state: coltan
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCColtanCrystal
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCColtan: 100
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: material
+  id: RUMCAlexandrite
+  stackEntity: RUMCAlexandriteCrystal
+  name: alexandrite crystal
+  unit: materials-unit-chunk
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: alexandrite }
+  price: 0.005
+
+- type: entity
+  parent: BaseItem
+  id: RUMCAlexandriteCrystal
+  name: alexandrite crystal
+  description: A delicate, light-pink cluster of alexandrite still embedded in its matrix.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    state: alexandrite
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCAlexandriteCrystal
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCAlexandrite: 100
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: material
+  id: RUMCRawDiamond
+  stackEntity: RUMCRawDiamondCrystal
+  name: rough diamond crystal
+  unit: materials-unit-chunk
+  icon: { sprite: CMU14/Objects/Materials/ore.rsi, state: diamond }
+  price: 0.008
+
+- type: entity
+  parent: BaseItem
+  id: RUMCRawDiamondCrystal
+  name: rough diamond crystal
+  description: A pale, light-blue cluster of uncut diamond still embedded in its matrix.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/ore.rsi
+    state: diamond
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCRawDiamondCrystal
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCRawDiamond: 100
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: material
+  id: RUMCEmerald
+  stackEntity: RUMCEmeraldCrystal
+  name: emerald crystal
+  unit: materials-unit-chunk
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: emerald }
+  price: 0.006
+
+- type: entity
+  parent: BaseItem
+  id: RUMCEmeraldCrystal
+  name: emerald crystal
+  description: A vivid green cluster of emerald still embedded in its matrix.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    state: emerald
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCEmeraldCrystal
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCEmerald: 100
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: material
+  id: RUMCRuby
+  stackEntity: RUMCRubyCrystal
+  name: ruby crystal
+  unit: materials-unit-chunk
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: ruby }
+  price: 0.006
+
+- type: entity
+  parent: BaseItem
+  id: RUMCRubyCrystal
+  name: ruby crystal
+  description: A deep red cluster of ruby still embedded in its matrix.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    state: ruby
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCRubyCrystal
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCRuby: 100
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: material
+  id: RUMCPhosphorus
+  stackEntity: RUMCPhosphorusCrystal
+  name: phosphorus crystal
+  unit: materials-unit-chunk
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: phosphorus }
+  price: 0.002
+
+- type: entity
+  parent: BaseItem
+  id: RUMCPhosphorusCrystal
+  name: phosphorus crystal
+  description: A pale yellow, waxy cluster of phosphorus still embedded in its matrix.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    state: phosphorus
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCPhosphorusCrystal
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCPhosphorus: 100
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: material
+  id: RUMCTrimorid
+  stackEntity: RUMCTrimoridCrystal
+  name: trimorid crystal
+  unit: materials-unit-chunk
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: trimorid }
+  price: 0.0045
+
+- type: entity
+  parent: BaseItem
+  id: RUMCTrimoridCrystal
+  name: trimorid crystal
+  description: A dense, almost-black cluster of trimorid still embedded in its matrix.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    state: trimorid
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCTrimoridCrystal
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCTrimorid: 100
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: material
+  id: RUMCLaxanite
+  stackEntity: RUMCLaxaniteCrystal
+  name: laxanite crystal
+  unit: materials-unit-chunk
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: laxanite }
+  price: 0.0038
+
+- type: entity
+  parent: BaseItem
+  id: RUMCLaxaniteCrystal
+  name: laxanite crystal
+  description: A light orange, waxy cluster of laxanite still embedded in its matrix.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    state: laxanite
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCLaxaniteCrystal
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCLaxanite: 100
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: material
+  id: RUMCLaytoite
+  stackEntity: RUMCLaytoiteCrystal
+  name: laytoite crystal
+  unit: materials-unit-chunk
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: laytoite }
+  price: 0.007
+
+- type: entity
+  parent: BaseItem
+  id: RUMCLaytoiteCrystal
+  name: laytoite crystal
+  description: A light turquoise cluster of laytoite still embedded in its matrix, glowing faintly on its own.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    state: laytoite
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCLaytoiteCrystal
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCLaytoite: 100
+  - type: PointLight
+    radius: 1.2
+    energy: 0.6
+    castShadows: false
+    color: "#8ce6dc"
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+# Quartz: clear white crystals that grind to white powder. Melted in a crucible it is the other source of silicon.
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCQuartzCrystal
+  name: quartz crystal
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: quartz }
+  spawn: RUMCQuartzCrystal
+
+- type: material
+  id: RUMCQuartz
+  stackEntity: RUMCQuartzCrystal
+  name: quartz crystal
+  unit: materials-unit-chunk
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: quartz }
+  price: 0.002
+
+- type: entity
+  parent: BaseItem
+  id: RUMCQuartzCrystal
+  name: quartz crystal
+  description: A clear, milk-white crystal of quartz.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    state: quartz
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCQuartzCrystal
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCQuartz: 100
+  - type: Tag
+    tags:
+    - RUMCCrystal
+
+- type: ore
+  id: RUMCOreQuartz
+  oreEntity: RUMCQuartzCrystal
+  minOreYield: 1
+  maxOreYield: 2

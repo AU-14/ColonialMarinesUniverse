@@ -536,6 +536,7 @@
   - type: StaticPrice
     price: 25
   - type: Shovel
+  - type: PitDiggingTool
 
 - type: entity
   parent: BaseItem

@@ -1,0 +1,11 @@
+# Molten silicon. Sand and quartz melt in a crucible at 1800 degrees into molten silicon, which is cast into glass sheets.
+- type: reagent
+  id: RUMCSiliconMelt
+  name: reagent-name-au14-silicon-melt
+  group: Elements
+  desc: reagent-desc-au14-silicon-melt
+  physicalDesc: reagent-physical-desc-crystalline
+  flavor: metallic
+  color: "#ff9a3c"
+  boilingPoint: 3265.0
+  meltingPoint: 1800.0

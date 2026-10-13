@@ -14,6 +14,16 @@ namespace Content.Server.Power.Nodes
             Entity<MapGridComponent>? grid,
             IEntityManager entMan)
         {
+            // Direct: only the cables run by hand; Both: those and the ones lying under it.
+            if (Connection != NodeConnectorMode.Adjacent)
+            {
+                foreach (var link in DirectLinks)
+                    yield return link;
+
+                if (Connection == NodeConnectorMode.Direct)
+                    yield break;
+            }
+
             if (!xform.Comp.Anchored || grid is not { } gridEnt)
                 yield break;
 

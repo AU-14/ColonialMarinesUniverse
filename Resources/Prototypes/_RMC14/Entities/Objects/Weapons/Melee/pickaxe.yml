@@ -35,4 +35,5 @@
   - type: Tag
     tags:
     - Pickaxe
+  - type: PitDiggingTool
   - type: DeleteOnExplosion

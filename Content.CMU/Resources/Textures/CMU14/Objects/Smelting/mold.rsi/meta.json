@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created for Colonial Marines Universe",
+  "size": {
+    "x": 16,
+    "y": 14
+  },
+  "states": [
+    {
+      "name": "mold"
+    },
+    {
+      "name": "mold_hot"
+    },
+    {
+      "name": "mold_full"
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+- type: entity
+  parent: [ BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCElectricSmelter
+  name: electric smelter
+  description: An automated furnace wired into the grid - load it with raw materials, dial in a temperature, and it alloys them together on its own.
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Smelting/electric_smelter.rsi
+    state: icon
+    noRot: true
+    scale: 0.5,0.5
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.225,-0.225,0.225,0.225"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: ApcPowerReceiver
+    powerLoad: 500
+  - type: PowerState
+    idlePowerDraw: 500
+    workingPowerDraw: 6000
+  - type: ItemSlots
+    slots:
+      material1:
+        whitelist:
+          components:
+          - Stack
+        insertOnInteract: false
+      material2:
+        whitelist:
+          components:
+          - Stack
+        insertOnInteract: false
+      material3:
+        whitelist:
+          components:
+          - Stack
+        insertOnInteract: false
+      material4:
+        whitelist:
+          components:
+          - Stack
+        insertOnInteract: false
+      output:
+        insertOnInteract: false
+  - type: ContainerContainer
+    containers:
+      material1: !type:ContainerSlot
+      material2: !type:ContainerSlot
+      material3: !type:ContainerSlot
+      material4: !type:ContainerSlot
+      output: !type:ContainerSlot
+  - type: ElectricSmelter
+  - type: PortableStructure
+  - type: WindowMachine
+    stackSlots:
+    - material1
+    - material2
+    - material3
+    - material4
+    outputSlots:
+    - output
+    maxTemperature: 5000
+    heatRatePerSecond: 150
+  - type: UserInterface
+    interfaces:
+      enum.ElectricSmelterUiKey.Key:
+        type: ElectricSmelterBoundUserInterface
+  - type: ActivatableUI
+    key: enum.ElectricSmelterUiKey.Key
+  - type: ActivatableUIRequiresPower
+
+- type: cmuAlloyRecipe
+  id: RUMCAlloyRecipeSteel
+  materials:
+    SteelOre: 2
+    Coal: 1
+  minTemperature: 600
+  result: CMSteel
+  resultAmount: 2
+  duration: 8
+
+- type: cmuAlloyRecipe
+  id: RUMCAlloyRecipePlasteel
+  materials:
+    CMSteel: 2
+    PlasmaOre: 1
+  minTemperature: 1200
+  result: CMPlasteel
+  resultAmount: 1
+  duration: 12
+
+- type: cmuAlloyRecipe
+  id: RUMCAlloyRecipeGold
+  materials:
+    GoldOre: 3
+  minTemperature: 300
+  result: Gold
+  resultAmount: 1
+  duration: 6

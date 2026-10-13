@@ -1,0 +1,1059 @@
+# The things of the gunsmith's bench: the bench itself, the kit that unfolds it, the weapons, the magazines and the cartridges it makes.
+# The numbers of a made weapon are not here: the bench works them out of the design and sets them when it builds the thing.
+
+- type: Tag
+  id: RUMCCraftedMagazine
+
+- type: Tag
+  id: RUMCCraftedCartridge
+
+# ---------------------------------------------------------------- the bench
+
+- type: entity
+  parent: BaseItem
+  id: RUMCGunsmithBenchKit
+  name: gunsmith's bench kit
+  suffix: Sapper
+  description: A folded gunsmith's bench. Use it in hand to unfold it where you stand. Only someone trained as a sapper knows how.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/autolathe.rsi
+    state: icon
+    scale: 0.5, 0.5
+    color: "#5a6a4a"
+  - type: Item
+    size: Normal
+  - type: SapperWorkbenchKit
+    workbenchPrototype: RUMCGunsmithBench
+
+- type: entity
+  id: RUMCGunsmithBench
+  name: gunsmith's bench
+  suffix: Sapper
+  description: A bench with a vice, a drill, calipers and a heavy handbook of strength of materials. Feed it ingots, sheets and powder, then design a weapon on paper, and it will only be as good as the sums behind it.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: Structures/Machines/autolathe.rsi
+    snapCardinals: true
+    layers:
+    - state: icon
+    color: "#5a6a4a"
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: InteractionOutline
+  - type: Clickable
+  - type: Anchorable
+  - type: Pullable
+  - type: Appearance
+  - type: GunsmithBench
+  - type: ContainerContainer
+    containers:
+      gunsmith_weapon: !type:ContainerSlot {}
+  - type: ActivatableUI
+    key: enum.GunsmithUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.GunsmithUiKey.Key:
+        type: GunsmithBui
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+# ---------------------------------------------------------------- the cartridge and its bullet
+
+- type: entity
+  parent: RMCBaseBullet
+  id: RUMCCraftedBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 10
+  - type: SolutionContainerManager
+    solutions:
+      ammo:
+        maxVol: 20
+
+- type: entity
+  parent: BaseCartridge
+  id: RUMCCraftedCartridge
+  name: handmade cartridge
+  description: A cartridge made at a gunsmith's bench.
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - RUMCCraftedCartridge
+  - type: CartridgeAmmo
+    proto: RUMCCraftedBullet
+    deleteOnSpawn: false
+  - type: CraftedCartridge
+  - type: Stack
+    stackType: RUMCCraftedStackCartridge
+    count: 1
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Casings/ammo_casing.rsi
+    layers:
+    - state: base
+      map: [ "enum.AmmoVisualLayers.Base" ]
+  - type: Appearance
+  - type: SpentAmmoVisuals
+
+# ---------------------------------------------------------------- the weapons
+
+# What every handmade weapon is, however it is fed.
+- type: entity
+  abstract: true
+  parent: [ BaseItem, CMBaseWeaponGun, RMCBaseAttachableHolder ]
+  id: RUMCCraftedFirearmCommon
+  name: handmade firearm
+  description: A firearm made at a gunsmith's bench.
+  components:
+  - type: CraftedFirearm
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Gunsmith/parts.rsi
+    layers:
+    - state: pistol_rear
+      map: [ "gunsmith_rear" ]
+    - state: carbine_mid
+      map: [ "gunsmith_mid" ]
+    - state: carbine_front
+      map: [ "gunsmith_front" ]
+  - type: Item
+    size: Large
+  - type: Clothing
+    slots:
+    - suitStorage
+    - Back
+  - type: AmmoCounter
+  - type: Wieldable
+  - type: WieldDelay
+    baseDelay: 0.5
+  - type: WieldableSpeedModifiers
+    base: 0.7
+    light: 0.92
+    medium: 0.87
+    heavy: 0.87
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      collection: CMM1984Shoot
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilWielded: 2
+    recoilUnwielded: 5
+    scatterWielded: 8
+    scatterUnwielded: 16
+    baseFireRate: 1.0
+    burstScatterMult: 4
+  - type: Appearance
+  - type: GunPointBlank
+  - type: StaticPrice
+    price: 400
+  # The four sockets for attachments: those of a rifle, unless the weapon looks like a weapon of the game (then they are its own).
+  - type: AttachableHolder
+    randomAttachmentChance: 0
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-stock:
+        whitelist:
+          tags:
+          - RMCAttachmentM16Stock
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentBipod
+          - RMCAttachmentBurstFireAssembly
+          - RMCAttachmentExtinguisher
+          - RMCAttachmentFlamer # TODO RMC14 advanced flamer
+          - RMCAttachmentU1GrenadeLauncher
+          - RMCAttachmentU7UnderbarrelShotgun
+          - RMCAttachmentLaserSight
+          - RMCAttachmentM203GrenadeLauncher
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.81, -0.03
+      rmc-aslot-rail: -0.15, 0.12
+      rmc-aslot-stock: -0.5, 0
+      rmc-aslot-underbarrel: 0.28, -0.33
+
+# Fed from a magazine that is put in.
+- type: entity
+  abstract: true
+  parent: [ RUMCCraftedFirearmCommon, RMCBaseWeaponGunMagazineProvider ]
+  id: RUMCCraftedFirearmBase
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/Weapons/Guns/MagIn/pistol_magin.ogg
+        ejectSound: /Audio/Weapons/Guns/MagOut/pistol_magout.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RUMCCraftedMagazine
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: RMCAmmoEject
+  - type: MagazineAmmoProvider
+    autoEject: false
+
+# Fed from inside, the way a shotgun is: the cartridges are put into it one by one. The inner magazine (BallisticAmmoProvider) is put on at the bench,
+# by the template of the capacity (AU14CraftedFeedInternal*).
+- type: entity
+  abstract: true
+  parent: RUMCCraftedFirearmCommon
+  id: RUMCCraftedFirearmBaseInternal
+  components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+
+# Fed from a cylinder, the way a revolver is (RevolverAmmoProvider, put on at the bench by AU14CraftedFeedRevolver*).
+- type: entity
+  abstract: true
+  parent: RUMCCraftedFirearmCommon
+  id: RUMCCraftedFirearmBaseRevolver
+  components:
+  - type: ContainerContainer
+    containers:
+      revolver-ammo: !type:Container
+
+- type: entity
+  parent: RUMCCraftedFirearmBase
+  id: RUMCCraftedFirearmBolt
+  suffix: bolt-action
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/hunting.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/hunting.rsi
+
+- type: entity
+  parent: RUMCCraftedFirearmBase
+  id: RUMCCraftedFirearmPump
+  suffix: pump-action
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/Shotguns/m42a2.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Shotguns/m42a2.rsi
+
+- type: entity
+  parent: RUMCCraftedFirearmBase
+  id: RUMCCraftedFirearmLever
+  suffix: lever-action
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/l42a.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/l42a.rsi
+
+- type: entity
+  parent: RUMCCraftedFirearmBase
+  id: RUMCCraftedFirearmSemi
+  suffix: semi-automatic
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/m16.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/m16.rsi
+
+- type: entity
+  parent: RUMCCraftedFirearmBase
+  id: RUMCCraftedFirearmBurst
+  suffix: burst-fire
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/ak4047.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/ak4047.rsi
+
+- type: entity
+  parent: RUMCCraftedFirearmBase
+  id: RUMCCraftedFirearmAuto
+  suffix: automatic
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/LMGs/m60.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/LMGs/m60.rsi
+
+# The same mechanisms, fed from a cylinder or from inside.
+
+- type: entity
+  parent: RUMCCraftedFirearmBaseRevolver
+  id: RUMCCraftedFirearmBoltRevolver
+  suffix: bolt-action, revolver
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/hunting.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/hunting.rsi
+
+- type: entity
+  parent: RUMCCraftedFirearmBaseRevolver
+  id: RUMCCraftedFirearmPumpRevolver
+  suffix: pump-action, revolver
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/Shotguns/m42a2.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Shotguns/m42a2.rsi
+
+- type: entity
+  parent: RUMCCraftedFirearmBaseRevolver
+  id: RUMCCraftedFirearmLeverRevolver
+  suffix: lever-action, revolver
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/l42a.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/l42a.rsi
+
+- type: entity
+  parent: RUMCCraftedFirearmBaseRevolver
+  id: RUMCCraftedFirearmSemiRevolver
+  suffix: semi-automatic, revolver
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/m16.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/m16.rsi
+
+- type: entity
+  parent: RUMCCraftedFirearmBaseRevolver
+  id: RUMCCraftedFirearmBurstRevolver
+  suffix: burst-fire, revolver
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/ak4047.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/ak4047.rsi
+
+- type: entity
+  parent: RUMCCraftedFirearmBaseRevolver
+  id: RUMCCraftedFirearmAutoRevolver
+  suffix: automatic, revolver
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/LMGs/m60.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/LMGs/m60.rsi
+
+- type: entity
+  parent: RUMCCraftedFirearmBaseInternal
+  id: RUMCCraftedFirearmBoltInternal
+  suffix: bolt-action, internal
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/hunting.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/hunting.rsi
+
+- type: entity
+  parent: RUMCCraftedFirearmBaseInternal
+  id: RUMCCraftedFirearmPumpInternal
+  suffix: pump-action, internal
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/Shotguns/m42a2.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Shotguns/m42a2.rsi
+
+- type: entity
+  parent: RUMCCraftedFirearmBaseInternal
+  id: RUMCCraftedFirearmLeverInternal
+  suffix: lever-action, internal
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/l42a.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/l42a.rsi
+
+- type: entity
+  parent: RUMCCraftedFirearmBaseInternal
+  id: RUMCCraftedFirearmSemiInternal
+  suffix: semi-automatic, internal
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/m16.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/m16.rsi
+
+- type: entity
+  parent: RUMCCraftedFirearmBaseInternal
+  id: RUMCCraftedFirearmBurstInternal
+  suffix: burst-fire, internal
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/ak4047.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/ak4047.rsi
+
+- type: entity
+  parent: RUMCCraftedFirearmBaseInternal
+  id: RUMCCraftedFirearmAutoInternal
+  suffix: automatic, internal
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/LMGs/m60.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/LMGs/m60.rsi
+
+# ---------------------------------------------------------------- the magazines (one prototype for each capacity the bench can make)
+
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: RUMCCraftedMagazine
+  name: handmade magazine
+  description: A magazine made at a gunsmith's bench.
+  components:
+  - type: Tag
+    tags:
+    - RUMCCraftedMagazine
+  - type: CraftedMagazine
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+  - type: Appearance
+
+- type: entity
+  parent: RUMCCraftedMagazine
+  id: RUMCCraftedMagazine5
+  suffix: 5
+  components:
+  - type: Item
+    size: Small
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - RUMCCraftedCartridge
+    capacity: 5
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Pistol/pistol_mag.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+
+- type: entity
+  parent: RUMCCraftedMagazine
+  id: RUMCCraftedMagazine6
+  suffix: 6
+  components:
+  - type: Item
+    size: Small
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - RUMCCraftedCartridge
+    capacity: 6
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Pistol/pistol_mag.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+
+- type: entity
+  parent: RUMCCraftedMagazine
+  id: RUMCCraftedMagazine8
+  suffix: 8
+  components:
+  - type: Item
+    size: Small
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - RUMCCraftedCartridge
+    capacity: 8
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Pistol/pistol_mag.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+
+- type: entity
+  parent: RUMCCraftedMagazine
+  id: RUMCCraftedMagazine10
+  suffix: 10
+  components:
+  - type: Item
+    size: Small
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - RUMCCraftedCartridge
+    capacity: 10
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Pistol/pistol_mag.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+
+- type: entity
+  parent: RUMCCraftedMagazine
+  id: RUMCCraftedMagazine12
+  suffix: 12
+  components:
+  - type: Item
+    size: Small
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - RUMCCraftedCartridge
+    capacity: 12
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Pistol/pistol_mag.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+
+- type: entity
+  parent: RUMCCraftedMagazine
+  id: RUMCCraftedMagazine15
+  suffix: 15
+  components:
+  - type: Item
+    size: Normal
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - RUMCCraftedCartridge
+    capacity: 15
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Rifle/rifle_mag.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+
+- type: entity
+  parent: RUMCCraftedMagazine
+  id: RUMCCraftedMagazine18
+  suffix: 18
+  components:
+  - type: Item
+    size: Normal
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - RUMCCraftedCartridge
+    capacity: 18
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Rifle/rifle_mag.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+
+- type: entity
+  parent: RUMCCraftedMagazine
+  id: RUMCCraftedMagazine20
+  suffix: 20
+  components:
+  - type: Item
+    size: Normal
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - RUMCCraftedCartridge
+    capacity: 20
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Rifle/rifle_mag.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+
+- type: entity
+  parent: RUMCCraftedMagazine
+  id: RUMCCraftedMagazine25
+  suffix: 25
+  components:
+  - type: Item
+    size: Normal
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - RUMCCraftedCartridge
+    capacity: 25
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Rifle/rifle_mag.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+
+- type: entity
+  parent: RUMCCraftedMagazine
+  id: RUMCCraftedMagazine30
+  suffix: 30
+  components:
+  - type: Item
+    size: Normal
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - RUMCCraftedCartridge
+    capacity: 30
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Rifle/rifle_mag.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+
+- type: entity
+  parent: RUMCCraftedMagazine
+  id: RUMCCraftedMagazine40
+  suffix: 40
+  components:
+  - type: Item
+    size: Large
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - RUMCCraftedCartridge
+    capacity: 40
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Rifle/rifle_mag.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+
+- type: entity
+  parent: RUMCCraftedMagazine
+  id: RUMCCraftedMagazine50
+  suffix: 50
+  components:
+  - type: Item
+    size: Large
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - RUMCCraftedCartridge
+    capacity: 50
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Rifle/rifle_mag.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+
+- type: entity
+  parent: RUMCCraftedMagazine
+  id: RUMCCraftedMagazine60
+  suffix: 60
+  components:
+  - type: Item
+    size: Large
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - RUMCCraftedCartridge
+    capacity: 60
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Rifle/rifle_mag.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+
+- type: entity
+  parent: RUMCCraftedMagazine
+  id: RUMCCraftedMagazine75
+  suffix: 75
+  components:
+  - type: Item
+    size: Large
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - RUMCCraftedCartridge
+    capacity: 75
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Rifle/rifle_mag.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+
+- type: entity
+  parent: RUMCCraftedMagazine
+  id: RUMCCraftedMagazine100
+  suffix: 100
+  components:
+  - type: Item
+    size: Large
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - RUMCCraftedCartridge
+    capacity: 100
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/Rifle/rifle_mag.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+
+# ---------------------------------------------------------------- the feed of a weapon that is not fed from a magazine
+# Only the component of the feed is taken from these, and put on the weapon at the bench: one for each capacity.
+
+- type: entity
+  id: RUMCCraftedFeedInternal2
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BallisticAmmoProvider
+    cycleable: false
+    whitelist:
+      components:
+      - CartridgeAmmo
+    capacity: 2
+    proto: null
+    soundInsert:
+      collection: CMShotgunLoad
+
+- type: entity
+  id: RUMCCraftedFeedRevolver2
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RevolverAmmoProvider
+    whitelist:
+      components:
+      - CartridgeAmmo
+    proto: null
+    capacity: 2
+    chambers: [ null, null ]
+    ammoSlots: [ null, null ]
+
+- type: entity
+  id: RUMCCraftedFeedInternal3
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BallisticAmmoProvider
+    cycleable: false
+    whitelist:
+      components:
+      - CartridgeAmmo
+    capacity: 3
+    proto: null
+    soundInsert:
+      collection: CMShotgunLoad
+
+- type: entity
+  id: RUMCCraftedFeedRevolver3
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RevolverAmmoProvider
+    whitelist:
+      components:
+      - CartridgeAmmo
+    proto: null
+    capacity: 3
+    chambers: [ null, null, null ]
+    ammoSlots: [ null, null, null ]
+
+- type: entity
+  id: RUMCCraftedFeedInternal4
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BallisticAmmoProvider
+    cycleable: false
+    whitelist:
+      components:
+      - CartridgeAmmo
+    capacity: 4
+    proto: null
+    soundInsert:
+      collection: CMShotgunLoad
+
+- type: entity
+  id: RUMCCraftedFeedRevolver4
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RevolverAmmoProvider
+    whitelist:
+      components:
+      - CartridgeAmmo
+    proto: null
+    capacity: 4
+    chambers: [ null, null, null, null ]
+    ammoSlots: [ null, null, null, null ]
+
+- type: entity
+  id: RUMCCraftedFeedInternal5
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BallisticAmmoProvider
+    cycleable: false
+    whitelist:
+      components:
+      - CartridgeAmmo
+    capacity: 5
+    proto: null
+    soundInsert:
+      collection: CMShotgunLoad
+
+- type: entity
+  id: RUMCCraftedFeedRevolver5
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RevolverAmmoProvider
+    whitelist:
+      components:
+      - CartridgeAmmo
+    proto: null
+    capacity: 5
+    chambers: [ null, null, null, null, null ]
+    ammoSlots: [ null, null, null, null, null ]
+
+- type: entity
+  id: RUMCCraftedFeedInternal6
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BallisticAmmoProvider
+    cycleable: false
+    whitelist:
+      components:
+      - CartridgeAmmo
+    capacity: 6
+    proto: null
+    soundInsert:
+      collection: CMShotgunLoad
+
+- type: entity
+  id: RUMCCraftedFeedRevolver6
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RevolverAmmoProvider
+    whitelist:
+      components:
+      - CartridgeAmmo
+    proto: null
+    capacity: 6
+    chambers: [ null, null, null, null, null, null ]
+    ammoSlots: [ null, null, null, null, null, null ]
+
+- type: entity
+  id: RUMCCraftedFeedInternal7
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BallisticAmmoProvider
+    cycleable: false
+    whitelist:
+      components:
+      - CartridgeAmmo
+    capacity: 7
+    proto: null
+    soundInsert:
+      collection: CMShotgunLoad
+
+- type: entity
+  id: RUMCCraftedFeedRevolver7
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RevolverAmmoProvider
+    whitelist:
+      components:
+      - CartridgeAmmo
+    proto: null
+    capacity: 7
+    chambers: [ null, null, null, null, null, null, null ]
+    ammoSlots: [ null, null, null, null, null, null, null ]
+
+- type: entity
+  id: RUMCCraftedFeedInternal8
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BallisticAmmoProvider
+    cycleable: false
+    whitelist:
+      components:
+      - CartridgeAmmo
+    capacity: 8
+    proto: null
+    soundInsert:
+      collection: CMShotgunLoad
+
+- type: entity
+  id: RUMCCraftedFeedRevolver8
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RevolverAmmoProvider
+    whitelist:
+      components:
+      - CartridgeAmmo
+    proto: null
+    capacity: 8
+    chambers: [ null, null, null, null, null, null, null, null ]
+    ammoSlots: [ null, null, null, null, null, null, null, null ]
+
+- type: entity
+  id: RUMCCraftedFeedInternal9
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BallisticAmmoProvider
+    cycleable: false
+    whitelist:
+      components:
+      - CartridgeAmmo
+    capacity: 9
+    proto: null
+    soundInsert:
+      collection: CMShotgunLoad
+
+- type: entity
+  id: RUMCCraftedFeedRevolver9
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RevolverAmmoProvider
+    whitelist:
+      components:
+      - CartridgeAmmo
+    proto: null
+    capacity: 9
+    chambers: [ null, null, null, null, null, null, null, null, null ]
+    ammoSlots: [ null, null, null, null, null, null, null, null, null ]
+
+- type: entity
+  id: RUMCCraftedFeedInternal10
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BallisticAmmoProvider
+    cycleable: false
+    whitelist:
+      components:
+      - CartridgeAmmo
+    capacity: 10
+    proto: null
+    soundInsert:
+      collection: CMShotgunLoad
+
+- type: entity
+  id: RUMCCraftedFeedRevolver10
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RevolverAmmoProvider
+    whitelist:
+      components:
+      - CartridgeAmmo
+    proto: null
+    capacity: 10
+    chambers: [ null, null, null, null, null, null, null, null, null, null ]
+    ammoSlots: [ null, null, null, null, null, null, null, null, null, null ]
+
+- type: entity
+  id: RUMCCraftedFeedInternal11
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BallisticAmmoProvider
+    cycleable: false
+    whitelist:
+      components:
+      - CartridgeAmmo
+    capacity: 11
+    proto: null
+    soundInsert:
+      collection: CMShotgunLoad
+
+- type: entity
+  id: RUMCCraftedFeedRevolver11
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RevolverAmmoProvider
+    whitelist:
+      components:
+      - CartridgeAmmo
+    proto: null
+    capacity: 11
+    chambers: [ null, null, null, null, null, null, null, null, null, null, null ]
+    ammoSlots: [ null, null, null, null, null, null, null, null, null, null, null ]
+
+- type: entity
+  id: RUMCCraftedFeedInternal12
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BallisticAmmoProvider
+    cycleable: false
+    whitelist:
+      components:
+      - CartridgeAmmo
+    capacity: 12
+    proto: null
+    soundInsert:
+      collection: CMShotgunLoad
+
+- type: entity
+  id: RUMCCraftedFeedRevolver12
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RevolverAmmoProvider
+    whitelist:
+      components:
+      - CartridgeAmmo
+    proto: null
+    capacity: 12
+    chambers: [ null, null, null, null, null, null, null, null, null, null, null, null ]
+    ammoSlots: [ null, null, null, null, null, null, null, null, null, null, null, null ]

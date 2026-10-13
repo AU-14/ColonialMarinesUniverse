@@ -1,0 +1,170 @@
+# Two things of the electric age that are not machines with recipes: the hydroponics tray that feeds itself and the welder that runs on a power cell.
+
+# ---------------------------------------------------------------- the automatic hydroponics tray
+# An ordinary hydroponics tray with a tank and a power supply: join a pipe with water and fertilizer to it (or pour them in), and
+# it keeps its water and nutrients above the threshold without anyone watering it. The look is the ordinary tray, tinted blue.
+- type: entity
+  parent: CMHydroponicsTray
+  id: RUMCAutoHydroponicsTray
+  name: automatic hydroponics tray
+  description: A hydroponics tray with a pump and a tank of its own. Give it water and fertilizer, and power, plant a seed once, and it waters and feeds the plant, harvests it when it is ripe and plants the same one again.
+  components:
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      direct:
+        !type:CableDeviceNode
+        nodeGroupID: Apc
+        connection: Direct
+  - type: Sprite
+    color: "#b8d8ff"
+  - type: ApcPowerReceiver
+    powerLoad: 100
+  - type: ExtensionCableReceiver
+  - type: FluidTank
+    capacity: 300
+  - type: FluidFillable
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 8
+  - type: AutoFeedTray
+
+# ---------------------------------------------------------------- the electric welder
+# The welding tool in every way, but the fuel is made of the charge of the power cell in it: no tank to fill, only a cell to charge.
+- type: entity
+  parent: [ SolutionWelder, SolutionSmall, BaseWelder ]
+  id: RUMCElectricWelder
+  name: electric welder
+  description: A welding tool that runs on a power cell instead of fuel. Put a charged cell in it and weld. Mind your eyes.
+  components:
+  - type: Sprite
+    sprite: Objects/Tools/welder.rsi
+    color: "#a8c8ff"
+  - type: ContainerContainer
+    containers:
+      cell_slot: !type:ContainerSlot { }
+  - type: PowerCellSlot
+    cellSlotId: cell_slot
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+  - type: Item
+    inhandVisuals:
+      left: []
+      right: []
+  - type: ElectricWelder
+
+# ---------------------------------------------------------------- crafts
+- type: craftRecipe
+  id: RUMCCraftBuildAutoHydroponicsTray
+  name: au14-craft-recipe-buildautohydroponicstray
+  output: RUMCAutoHydroponicsTray
+  time: 20
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCGalvanizedSheet
+    amount: 4
+  - stack: RUMCPump
+    amount: 1
+  - stack: RUMCBasicCircuit
+    amount: 1
+  - stack: RUMCInsulatedCable
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftBuildElectricWelder
+  name: au14-craft-recipe-buildelectricwelder
+  output: RUMCElectricWelder
+  time: 15
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCChromedSheet
+    amount: 1
+  - stack: RUMCHeatingCoil
+    amount: 1
+  - stack: RUMCConductorAlloy
+    amount: 2
+  - stack: RUMCInsulatedCable
+    amount: 2
+
+# ---------------------------------------------------------------- the charger and the battery buffer
+# The charger is the recharger of the power cells with a better rate, and it needs the power it is given. The look is the ordinary one, tinted.
+- type: entity
+  parent: PowerCellRecharger
+  id: RUMCCharger
+  name: charger
+  description: Charges the power cell set in it much faster than the old recharger, as long as it has power.
+  components:
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      direct:
+        !type:CableDeviceNode
+        nodeGroupID: Apc
+        connection: Direct
+  - type: Sprite
+    color: "#a8c8ff"
+  - type: Charger
+    slotId: charger_slot
+    chargeRate: 400
+  - type: ApcPowerReceiver
+    needsPower: true
+    powerLoad: 1
+
+# The buffer is a small SMES: it takes power in when there is more than is used, and gives it back when there is less. It is joined to
+# the high voltage line as an SMES is, through a cable terminal.
+- type: entity
+  parent: BaseSMES
+  id: RUMCBatteryBuffer
+  name: battery buffer
+  description: A small energy store for the high voltage line. It takes in power when the generators make more than is used and gives it back when they make less. Join it through a cable terminal, as a big SMES is.
+  components:
+  - type: Sprite
+    color: "#a8c8ff"
+  - type: Battery
+    netsync: false
+    startingCharge: 0
+    maxCharge: 1500000
+  - type: PowerNetworkBattery
+    maxSupply: 20000
+    maxChargeRate: 6000
+    supplyRampTolerance: 5000
+    supplyRampRate: 1000
+
+- type: craftRecipe
+  id: RUMCCraftBuildCharger
+  name: au14-craft-recipe-buildcharger
+  output: RUMCCharger
+  time: 15
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCConductorAlloy
+    amount: 2
+  - stack: RUMCBasicCircuit
+    amount: 1
+  - stack: RUMCInsulatedCable
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftBuildBatteryBuffer
+  name: au14-craft-recipe-buildbatterybuffer
+  output: RUMCBatteryBuffer
+  time: 25
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - item: PowerCellMedium
+    amount: 4
+  - stack: RUMCBasicCircuit
+    amount: 2
+  - stack: RUMCInsulatedCable
+    amount: 4

@@ -1,0 +1,58 @@
+# The rake: the only tool that makes the seedbeds. Clicked on the grass, the earth or the sand it makes a seedbed there (an entity with the soil of the botany in it),
+# and clicked on a seedbed it takes it away. A shovel is for the planters.
+- type: entity
+  parent: BaseItem
+  id: RUMCRake
+  name: rake
+  description: "A garden rake. Only with it can seedbeds be made; a click of the rake on a seedbed takes it away."
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Tools/rake.rsi
+    state: rake
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Tools/rake.rsi
+    inhandVisuals:
+      left: []
+      right: []
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 5
+  - type: Flamability
+    chance: 0.5
+    rate: 0.4
+    range: 0.8
+    spread: 0.8
+  - type: Rake
+    delay: 1.5
+    sound:
+      collection: FootstepAsteroid
+
+# The seedbed: the soil of the botany, an entity that the rake makes on the ground (and takes away). Seeds of the game are planted in it, and it is watered.
+- type: entity
+  parent: hydroponicsSoil
+  id: RUMCSeedbed
+  name: seedbed
+  description: "A seedbed turned with a rake. Plant a seed in it and water it. A rake takes it away."
+  components:
+  - type: Seedbed
+  - type: Sprite
+    sprite: CMU14/Flora/seedbed.rsi
+    state: seedbed
+    drawdepth: FloorObjects
+    noRot: true
+
+- type: craftRecipe
+  id: RUMCCraftRake
+  name: au14-craft-recipe-rake
+  output: RUMCRake
+  time: 8
+  tools:
+  - Hammering
+  consumables:
+  - stack: RMCWood
+    amount: 2
+  - stack: RUMCIronRod
+    amount: 2

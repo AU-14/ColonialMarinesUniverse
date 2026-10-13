@@ -1,0 +1,349 @@
+# The shapes the solid-fuel press works with. The empty one is forged; chiselled and hammered it becomes the shape of a sheet.
+- type: entity
+  parent: BaseItem
+  id: RUMCMoldEmpty
+  name: empty mold
+  description: A blank plate of iron, waiting to be cut into a shape. Forged on an anvil, then worked with a chisel and a hammer.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Smelting/shapes.rsi
+    state: blank_shape
+  - type: Item
+    size: Small
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCIron: 100
+
+- type: entity
+  parent: BaseItem
+  id: RUMCMoldSheet
+  name: sheet mold
+  description: A plate with the hollow of a sheet cut into it. Seated in the solid-fuel press with an ingot, it presses the ingot into a sheet.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Smelting/shapes.rsi
+    state: sheet_shape
+  - type: Item
+    size: Small
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCIron: 100
+  - type: PressMold
+    shape: sheet
+
+- type: entity
+  parent: BaseItem
+  id: RUMCMoldIngots
+  name: ingot mold for three
+  description: A plate with the hollows of three ingots cut into it. Seated in the steam smelter with ore for three ingots, it makes three ingots at once.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Smelting/shapes.rsi
+    state: ingots_shape
+  - type: Item
+    size: Small
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCIron: 100
+  - type: PressMold
+    shape: ingots
+
+# What the presses share: the mold, the ingots and the pieces that come out. The one that burns wood adds a fuel slot to it, the
+# one that runs on steam adds a steam pipe; both keep a store of water for the pieces that need liquids.
+- type: entity
+  abstract: true
+  parent: RUMCSteamMachineBase
+  id: RUMCPressBase
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Smelting/fuel_press.rsi
+    state: press
+  - type: SolidFuelPress
+  - type: WindowMachine
+    stackSlots:
+    - input1
+    - input2
+    outputSlots:
+    - output1
+    - output2
+    - output3
+    - output4
+  - type: UserInterface
+    interfaces:
+      enum.SolidFuelPressUiKey.Key:
+        type: AU14SolidFuelPressBoundUserInterface
+  - type: ActivatableUI
+    key: enum.SolidFuelPressUiKey.Key
+
+- type: entity
+  parent: RUMCPressBase
+  id: RUMCSolidFuelPress
+  name: solid-fuel press
+  description: A heavy press that runs on wood instead of the grid. Open it, put planks in for fuel, seat a mold and one or two ingots, and it presses them into a piece.
+  components:
+  - type: ItemSlots
+    slots:
+      mold:
+        whitelist:
+          components:
+          - PressMold
+        insertOnInteract: false
+      input1:
+        whitelist:
+          components:
+          - Stack
+        insertOnInteract: false
+      input2:
+        whitelist:
+          components:
+          - Stack
+        insertOnInteract: false
+      fuel:
+        whitelist:
+          components:
+          - Stack
+        insertOnInteract: false
+      output1: { insertOnInteract: false }
+      output2: { insertOnInteract: false }
+      output3: { insertOnInteract: false }
+      output4: { insertOnInteract: false }
+  - type: ContainerContainer
+    containers:
+      mold: !type:ContainerSlot
+      input1: !type:ContainerSlot
+      input2: !type:ContainerSlot
+      fuel: !type:ContainerSlot
+      output1: !type:ContainerSlot
+      output2: !type:ContainerSlot
+      output3: !type:ContainerSlot
+      output4: !type:ContainerSlot
+  - type: PointLight
+    enabled: false
+    radius: 3
+    energy: 2
+    color: "#FF8C1A"
+  - type: FluidTank
+    capacity: 100
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 8
+      limit: 100
+
+# The press that runs on steam: the same rules, but it works while steam reaches it and has no fuel slot.
+- type: entity
+  parent: RUMCPressBase
+  id: RUMCSteamPress
+  name: steam press
+  description: A heavy brass press driven by steam instead of wood. Join a gas pipe with steam to it, seat a mold and one or two ingots, and it presses them into a piece.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Steam/steam_press.rsi
+    state: press
+  - type: SolidFuelPress
+    steamPerSecond: 0.3
+  - type: NodeContainer
+    nodes:
+      steam:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: Fourway
+  - type: SteamPort
+  - type: ItemSlots
+    slots:
+      mold:
+        whitelist:
+          components:
+          - PressMold
+        insertOnInteract: false
+      input1:
+        whitelist:
+          components:
+          - Stack
+        insertOnInteract: false
+      input2:
+        whitelist:
+          components:
+          - Stack
+        insertOnInteract: false
+      output1: { insertOnInteract: false }
+      output2: { insertOnInteract: false }
+      output3: { insertOnInteract: false }
+      output4: { insertOnInteract: false }
+  - type: ContainerContainer
+    containers:
+      mold: !type:ContainerSlot
+      input1: !type:ContainerSlot
+      input2: !type:ContainerSlot
+      output1: !type:ContainerSlot
+      output2: !type:ContainerSlot
+      output3: !type:ContainerSlot
+      output4: !type:ContainerSlot
+  - type: FluidTank
+    capacity: 100
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 8
+      limit: 100
+
+# An ingot of any of the new metals, pressed in the shape of a sheet, comes out as a sheet of that metal. The press can combine two
+# ingots into one sheet of an alloy if there is a recipe for the pair; for now there is none (the alloys through two ingots are off).
+- type: cmuPressRecipe
+  id: RUMCPressSheetIron
+  shape: sheet
+  inputs:
+    RUMCIronIngot: 1
+  result: RUMCIronSheet
+  resultAmount: 1
+  duration: 6
+
+- type: cmuPressRecipe
+  id: RUMCPressSheetAluminum
+  shape: sheet
+  inputs:
+    RUMCAluminumIngot: 1
+  result: RUMCAluminumSheet
+  resultAmount: 1
+  duration: 6
+
+- type: cmuPressRecipe
+  id: RUMCPressSheetChrome
+  shape: sheet
+  inputs:
+    RUMCChromeIngot: 1
+  result: RUMCChromeSheet
+  resultAmount: 1
+  duration: 6
+
+- type: cmuPressRecipe
+  id: RUMCPressSheetCobalt
+  shape: sheet
+  inputs:
+    RUMCCobaltIngot: 1
+  result: RUMCCobaltSheet
+  resultAmount: 1
+  duration: 6
+
+- type: cmuPressRecipe
+  id: RUMCPressSheetCopper
+  shape: sheet
+  inputs:
+    RUMCCopperIngot: 1
+  result: RUMCCopperSheet
+  resultAmount: 1
+  duration: 6
+
+- type: cmuPressRecipe
+  id: RUMCPressSheetGold
+  shape: sheet
+  inputs:
+    RUMCGoldIngot: 1
+  result: RUMCGoldSheet
+  resultAmount: 1
+  duration: 6
+
+- type: cmuPressRecipe
+  id: RUMCPressSheetLead
+  shape: sheet
+  inputs:
+    RUMCLeadIngot: 1
+  result: RUMCLeadSheet
+  resultAmount: 1
+  duration: 6
+
+- type: cmuPressRecipe
+  id: RUMCPressSheetPlastitan
+  shape: sheet
+  inputs:
+    RUMCPlastitanIngot: 1
+  result: RUMCPlastitanSheet
+  resultAmount: 1
+  duration: 6
+
+- type: cmuPressRecipe
+  id: RUMCPressSheetSilver
+  shape: sheet
+  inputs:
+    RUMCSilverIngot: 1
+  result: RUMCSilverSheet
+  resultAmount: 1
+  duration: 6
+
+- type: cmuPressRecipe
+  id: RUMCPressSheetTitanium
+  shape: sheet
+  inputs:
+    RUMCTitaniumIngot: 1
+  result: RUMCTitaniumSheet
+  resultAmount: 1
+  duration: 6
+
+- type: cmuPressRecipe
+  id: RUMCPressSheetTungsten
+  shape: sheet
+  inputs:
+    RUMCTungstenIngot: 1
+  result: RUMCTungstenSheet
+  resultAmount: 1
+  duration: 6
+
+- type: cmuPressRecipe
+  id: RUMCPressSheetWeaponSteel
+  shape: sheet
+  inputs:
+    RUMCWeaponSteelIngot: 1
+  result: RUMCWeaponSteelSheet
+  resultAmount: 1
+  duration: 6
+
+- type: cmuPressRecipe
+  id: RUMCPressSheetPlatinum
+  shape: sheet
+  inputs:
+    RUMCPlatinumIngot: 1
+  result: RUMCPlatinumSheet
+  resultAmount: 1
+  duration: 6
+
+- type: cmuPressRecipe
+  id: RUMCPressSheetPlasteel
+  shape: sheet
+  inputs:
+    RUMCPlasteelIngot: 1
+  result: RUMCPlasteelSheet
+  resultAmount: 1
+  duration: 6
+
+- type: cmuPressRecipe
+  id: RUMCPressSheetZinc
+  shape: sheet
+  inputs:
+    RUMCZincIngot: 1
+  result: RUMCZincSheet
+  resultAmount: 1
+  duration: 6
+
+- type: cmuPressRecipe
+  id: RUMCPressSheetBrass
+  shape: sheet
+  inputs:
+    RUMCBrassIngot: 1
+  result: RUMCBrassSheet
+  resultAmount: 1
+  duration: 6
+
+# Durathread is pressed of glass and cloth, with no mold at all: leave the mold slot empty.
+- type: cmuPressRecipe
+  id: RUMCPressDurathread
+  inputs:
+    CMGlass: 1
+    Cloth: 1
+  result: Durathread
+  resultAmount: 1
+  duration: 8

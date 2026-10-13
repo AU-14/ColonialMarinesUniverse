@@ -41,6 +41,7 @@
     tags:
     - CableCoil
   - type: RMCCableCoil
+  - type: DirectCableLinker
   # CMU14 start - RMC cable coils are the ghetto surgery cable fallback.
   - type: CMSurgeryTool
   - type: CMHemostat

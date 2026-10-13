@@ -1,0 +1,257 @@
+# Drilling. A deposit of ore lies on the floor of the stone layer or of the dark stone layer, with up to five kinds of ore in it, made
+# when it appears. A drill set on it, with a head in its slot, takes from one to ten pieces of ore a turn and wears the head down.
+
+# The ores a deposit can hold, by weight. Copper, iron and zinc are the most of it in the stone, then the other metals of the stone
+# layer, and gold and titanium rarely. The dark stone is the same, but gold and titanium are thirty percent likelier (1.5 to 1.95),
+# and platinum, found only there, has its weight of 1.0 raised by thirty percent to 1.3.
+- type: cmuOreDepositTable
+  id: RUMCOreTableStone
+  ores:
+    RUMCCopperOre: 30
+    RUMCIronOre: 30
+    RUMCZincOre: 26
+    RUMCAluminumOre: 6
+    RUMCLeadOre: 6
+    RUMCChromeOre: 5
+    RUMCCobaltOre: 5
+    RUMCTungstenOre: 5
+    RUMCSilverOre: 3
+    RUMCGoldOre: 1.5
+    RUMCTitaniumOre: 1.5
+
+- type: cmuOreDepositTable
+  id: RUMCOreTableDarkStone
+  ores:
+    RUMCCopperOre: 30
+    RUMCIronOre: 30
+    RUMCZincOre: 26
+    RUMCAluminumOre: 6
+    RUMCLeadOre: 6
+    RUMCChromeOre: 5
+    RUMCCobaltOre: 5
+    RUMCTungstenOre: 5
+    RUMCSilverOre: 3
+    RUMCGoldOre: 1.95
+    RUMCTitaniumOre: 1.95
+    RUMCPlatinumOre: 1.3
+
+- type: entity
+  abstract: true
+  id: RUMCOreDepositBase
+  name: ore deposit
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    noRot: true
+  - type: OreDeposit
+    table: RUMCOreTableStone
+  - type: Sprite
+    drawdepth: FloorTiles
+    sprite: CMU14/Structures/ore_deposits.rsi
+    layers:
+    - state: stone1
+      map: [ "random_deposit" ]
+  - type: RandomSprite
+    available:
+    - random_deposit:
+        stone1: ""
+        stone2: ""
+        stone3: ""
+        stone4: ""
+        stone5: ""
+        stone6: ""
+        stone7: ""
+        stone8: ""
+        stone9: ""
+        stone10: ""
+
+- type: entity
+  parent: RUMCOreDepositBase
+  id: RUMCOreDepositStone
+  name: stone ore deposit
+  description: A deposit of ore in the stone, up to five kinds in it. Mostly copper, iron and zinc. Set a drill on it.
+
+- type: entity
+  parent: RUMCOreDepositBase
+  id: RUMCOreDepositDarkStone
+  name: dark stone ore deposit
+  description: A deposit of ore in the dark stone, up to five kinds in it. Mostly copper, iron and zinc, and richer in gold, titanium and platinum than the stone. Set a drill on it.
+  components:
+  - type: OreDeposit
+    table: RUMCOreTableDarkStone
+  - type: Sprite
+    layers:
+    - state: dark1
+      map: [ "random_deposit" ]
+  - type: RandomSprite
+    available:
+    - random_deposit:
+        dark1: ""
+        dark2: ""
+        dark3: ""
+        dark4: ""
+        dark5: ""
+        dark6: ""
+        dark7: ""
+        dark8: ""
+        dark9: ""
+        dark10: ""
+
+# The heads of the drill. They are the crushing attachment of the grinder, wearing down with every turn of drilling.
+- type: entity
+  parent: BaseItem
+  id: RUMCSteelDrillHead
+  name: steel drill head
+  description: A drill head of steel. It wears down with every turn of drilling and breaks when it is gone.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Mining/drill_head.rsi
+    state: steel
+  - type: Item
+    size: Small
+  - type: DrillHead
+    maxDurability: 100
+    durability: 100
+
+- type: entity
+  parent: BaseItem
+  id: RUMCBrassDrillHead
+  name: brass drill head
+  description: A drill head of brass. It wears down faster than the steel one and breaks when it is gone.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Mining/drill_head.rsi
+    state: brass
+  - type: Item
+    size: Small
+  - type: DrillHead
+    maxDurability: 60
+    durability: 60
+
+# The drills: a head slot, six slots for what they take, and the rules of the window machines.
+- type: entity
+  abstract: true
+  parent: RUMCSteamMachineBase
+  id: RUMCDrillBase
+  components:
+  - type: OreDrill
+  - type: Appearance
+  - type: WindowMachine
+    outputSlots:
+    - output1
+    - output2
+    - output3
+    - output4
+    - output5
+    - output6
+  - type: ItemSlots
+    slots:
+      head:
+        whitelist:
+          components:
+          - DrillHead
+        insertOnInteract: false
+      output1: { insertOnInteract: false }
+      output2: { insertOnInteract: false }
+      output3: { insertOnInteract: false }
+      output4: { insertOnInteract: false }
+      output5: { insertOnInteract: false }
+      output6: { insertOnInteract: false }
+  - type: ContainerContainer
+    containers:
+      head: !type:ContainerSlot
+      output1: !type:ContainerSlot
+      output2: !type:ContainerSlot
+      output3: !type:ContainerSlot
+      output4: !type:ContainerSlot
+      output5: !type:ContainerSlot
+      output6: !type:ContainerSlot
+  - type: UserInterface
+    interfaces:
+      enum.OreDrillUiKey.Key:
+        type: OreDrillBoundUserInterface
+  - type: ActivatableUI
+    key: enum.OreDrillUiKey.Key
+
+- type: entity
+  parent: [ RUMCDrillBase, BaseMachinePowered ]
+  id: RUMCElectricDrill
+  name: electric drill
+  description: A drilling rig on the grid. Set it on a deposit of ore, put a head in it and it takes ore out of the deposit, up to ten pieces a turn.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Mining/drill_electric.rsi
+    layers:
+    - state: drill-off
+      map: [ "off" ]
+    - state: drill
+      map: [ "on" ]
+      visible: false
+    - state: base
+    - state: drill-on-unlit
+      shader: unshaded
+      map: [ "light" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DrillVisuals.Working:
+        off:
+          True: { visible: false }
+          False: { visible: true }
+        on:
+          True: { visible: true }
+          False: { visible: false }
+        light:
+          True: { visible: true }
+          False: { visible: false }
+  - type: ApcPowerReceiver
+    powerLoad: 500
+  - type: PowerState
+    idlePowerDraw: 500
+    workingPowerDraw: 6000
+
+- type: entity
+  parent: RUMCDrillBase
+  id: RUMCSteamDrill
+  name: steam drill
+  description: A brass drilling rig that runs on steam. Join a gas pipe with steam to it, set it on a deposit of ore, put a head in it and it takes ore out of the deposit, up to ten pieces a turn.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Mining/drill_steam.rsi
+    layers:
+    - state: drill-off
+      map: [ "off" ]
+    - state: drill
+      map: [ "on" ]
+      visible: false
+    - state: base
+    - state: drill-on-unlit
+      shader: unshaded
+      map: [ "light" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DrillVisuals.Working:
+        off:
+          True: { visible: false }
+          False: { visible: true }
+        on:
+          True: { visible: true }
+          False: { visible: false }
+        light:
+          True: { visible: true }
+          False: { visible: false }
+  - type: OreDrill
+    steamPerSecond: 0.3
+  - type: NodeContainer
+    nodes:
+      steam:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: Fourway
+  - type: SteamPort

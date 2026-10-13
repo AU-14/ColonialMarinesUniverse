@@ -1,0 +1,109 @@
+# The holes of the steam stage that nothing could be made of: the anvil and the smith's tools, the mold of sand, the solid-fuel press, the steam
+# grinder and the blade of the grinders. The tools and the anvil are made of the iron sheets the steam press makes (the iron ingot and the steel
+# are forged at the anvil, never put in the menu); the blades are forged at the anvil of an ingot.
+
+- type: craftRecipe
+  id: RUMCCraftIngotMold
+  name: au14-craft-recipe-ingot-mold
+  output: RUMCIngotMold
+  time: 6
+  consumables:
+  - stack: RUMCSand
+    amount: 6
+
+- type: craftRecipe
+  id: RUMCCraftForgeHammer
+  name: au14-craft-recipe-forge-hammer
+  output: RUMCForgeHammer
+  time: 8
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCIronSheet
+    amount: 3
+  - stack: RUMCBranch
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftForgeTongs
+  name: au14-craft-recipe-forge-tongs
+  output: RUMCForgeTongs
+  time: 8
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCIronSheet
+    amount: 2
+  - stack: RUMCBranch
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftForgeChisel
+  name: au14-craft-recipe-forge-chisel
+  output: RUMCForgeChisel
+  time: 6
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCIronSheet
+    amount: 1
+  - stack: RUMCBranch
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftAnvil
+  name: au14-craft-recipe-anvil
+  output: RUMCAnvil
+  time: 20
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCIronSheet
+    amount: 12
+  - stack: RUMCStone
+    amount: 4
+
+- type: craftRecipe
+  id: RUMCCraftSolidFuelPress
+  name: au14-craft-recipe-solid-fuel-press
+  output: RUMCSolidFuelPress
+  time: 20
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 7
+  - stack: RUMCBrassParts
+    amount: 5
+  - stack: RMCWood
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftSteamGrinder
+  name: au14-craft-recipe-steam-grinder
+  output: RUMCSteamGrinder
+  time: 20
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 6
+  - stack: RUMCBrassParts
+    amount: 4
+
+# The crushing attachment is forged of an iron ingot.
+- type: anvilRecipe
+  id: RUMCAnvilShredderBlade
+  name: au14-anvil-recipe-shredder-blade
+  icon:
+    sprite: CMU14/Objects/Materials/forged_parts.rsi
+    state: forged_parts
+  output: RUMCShredderBlade
+  outputCount: 1
+  ingot: RUMCIronIngot
+  steps:
+  - Hammering
+  - Hammering
+  - Hammering
+  - Chiseling
+  - Chiseling

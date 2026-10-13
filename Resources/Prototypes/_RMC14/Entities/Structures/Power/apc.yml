@@ -179,6 +179,13 @@
   - type: Construction
     graph: CMApc
     node: apc
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      input:
+        !type:CableDeviceNode
+        nodeGroupID: Apc
+        connection: Direct
 
 - type: entity
   parent: CMApcBase

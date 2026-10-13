@@ -1,0 +1,698 @@
+# Oil. A deposit of crude oil lies under the stone; a pump set on it with power fills its tank, and a pipe takes the oil to the tower.
+# The tower splits it into naphtha, light fuel, heavy fuel and gas, each through a port of its own; the blender mixes diesel; the cracker makes
+# ethylene; the polymerizer makes plastic pellets; the bender presses them into sheets. The diesel is poured from a canister into the generator.
+# The sprites are the ones the project author gave, shrunk on the screen (scale) to fit the tiles.
+
+# ---------------------------------------------------------------- the deposit
+- type: entity
+  id: RUMCOilDeposit
+  name: oil deposit
+  description: A seep of crude oil under the stone. Set an oil pump on it.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    noRot: true
+  - type: OilDeposit
+  - type: Sprite
+    drawdepth: FloorTiles
+    sprite: CMU14/Structures/oil_deposits.rsi
+    layers:
+    - state: oil1
+      map: [ "random_deposit" ]
+  - type: RandomSprite
+    available:
+    - random_deposit:
+        oil1: ""
+        oil2: ""
+        oil3: ""
+        oil4: ""
+        oil5: ""
+        oil6: ""
+        oil7: ""
+        oil8: ""
+        oil9: ""
+        oil10: ""
+
+# ---------------------------------------------------------------- the pump, the tank, the barrel
+- type: entity
+  parent: [ BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCOilPump
+  name: oil pump
+  description: A pump that goes down into a deposit of crude oil and brings it up into its tank. Set it on a deposit, give it power, and join a pipe to its outlet with a screwdriver.
+  components:
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      direct:
+        !type:CableDeviceNode
+        nodeGroupID: Apc
+        connection: Direct
+  - type: PortableStructure
+  - type: Sprite
+    sprite: CMU14/Production/Oil/pump.rsi
+    noRot: true
+    scale: 0.5,0.5
+    offset: 0,1
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.RecipeMachineVisuals.Working:
+        on:
+          True: { visible: true }
+          False: { visible: false }
+        off:
+          True: { visible: false }
+          False: { visible: true }
+  - type: ApcPowerReceiver
+    powerLoad: 80
+  - type: PowerState
+    idlePowerDraw: 80
+    workingPowerDraw: 1500
+  - type: FluidTank
+    capacity: 1000
+  - type: FluidFillable
+  - type: FluidPorts
+    ports:
+    - id: liquid_out
+      output: true
+      rate: 20
+  - type: UserInterface
+    interfaces:
+      enum.FluidPortsUiKey.Key:
+        type: FluidPortsBoundUserInterface
+  - type: OilPump
+
+- type: entity
+  parent: RUMCSteamMachineBase
+  id: RUMCOilTank
+  name: oil tank
+  description: A big tank for liquids, two tiles wide, made for oil and fuel. Pour a canister into it, draw from it with a container in the hand using the right click, or join pipes to its inlet and outlet with a screwdriver. It takes any liquid.
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Oil/tank_wide.rsi
+    state: off
+    noRot: true
+    offset: 0.5,0
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,1.45,0.45"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: FluidTank
+    capacity: 5000
+  - type: FluidFillable
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 40
+    - id: liquid_out
+      output: true
+      rate: 40
+  - type: UserInterface
+    interfaces:
+      enum.FluidPortsUiKey.Key:
+        type: FluidPortsBoundUserInterface
+
+# The tank that comes full of diesel, and one of oil.
+- type: entity
+  parent: RUMCOilTank
+  id: RUMCOilTankDiesel
+  suffix: Diesel
+  components:
+  - type: FluidTank
+    contents:
+      RUMCDiesel: 5000
+
+- type: entity
+  parent: RUMCOilTank
+  id: RUMCOilTankOil
+  suffix: Oil
+  components:
+  - type: FluidTank
+    contents:
+      RUMCCrudeOil: 5000
+
+- type: entity
+  parent: RUMCSteamMachineBase
+  id: RUMCOilBarrel
+  name: oil barrel
+  description: A barrel of oil or fuel, small enough to roll. Pour into it, draw from it with a container in the hand using the right click, or join pipes with a screwdriver.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: OilBarrel
+    noRot: true
+  - type: FluidTank
+    capacity: 800
+  - type: FluidFillable
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 20
+    - id: liquid_out
+      output: true
+      rate: 20
+  - type: UserInterface
+    interfaces:
+      enum.FluidPortsUiKey.Key:
+        type: FluidPortsBoundUserInterface
+
+# The barrel that comes full of diesel.
+- type: entity
+  parent: RUMCOilBarrel
+  id: RUMCOilBarrelDiesel
+  suffix: Diesel
+  components:
+  - type: FluidTank
+    contents:
+      RUMCDiesel: 800
+
+# ---------------------------------------------------------------- the canister
+- type: entity
+  parent: [ SolutionBeaker, SolutionNormal, BaseItem ]
+  id: RUMCFuelCanister
+  name: fuel canister
+  description: A canister for fuel. Pour it into a generator, or draw it full from a tank with the right click.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/items.rsi
+    state: FuelCanister
+  - type: Item
+    size: Normal
+  - type: RefillableSolution
+    solution: beaker
+  - type: DrainableSolution
+    solution: beaker
+  - type: ExaminableSolution
+    solution: beaker
+    exactVolume: true
+  - type: DrawableSolution
+    solution: beaker
+  - type: InjectableSolution
+    solution: beaker
+  - type: SolutionTransfer
+    canChangeTransferAmount: true
+  - type: SolutionItemStatus
+    solution: beaker
+
+# ---------------------------------------------------------------- the diesel generator
+- type: entity
+  parent: [ BaseGenerator ]
+  id: RUMCDieselGenerator
+  name: diesel generator
+  description: A generator that burns diesel. Pour diesel into it from a canister (or pipe it in), join a high voltage cable, and it makes power for as long as the fuel lasts.
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Oil/generator.rsi
+    noRot: true
+    scale: 0.6,0.6
+    offset: 0,-0.12
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.RecipeMachineVisuals.Working:
+        on:
+          True: { visible: true }
+          False: { visible: false }
+        off:
+          True: { visible: false }
+          False: { visible: true }
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+        connection: Both
+  - type: PortableStructure
+  - type: PowerSupplier
+    enabled: false
+    supplyRate: 5000
+  - type: FluidTank
+    capacity: 300
+  - type: FluidFillable
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      kind: RUMCDiesel
+      rate: 8
+    - id: light_in
+      kind: RUMCLightFuel
+      rate: 8
+  - type: UserInterface
+    interfaces:
+      enum.FluidPortsUiKey.Key:
+        type: FluidPortsBoundUserInterface
+  - type: LiquidFuelGenerator
+    fuels:
+      RUMCDiesel: 0.5
+      RUMCLightFuel: 1.0
+
+# The turbine burns gas: the refinery gas, benzene and naphtha, each at its own pace, the cleaner the slower.
+- type: entity
+  parent: [ BaseGenerator ]
+  id: RUMCGasTurbine
+  name: gas turbine
+  description: A turbine that burns the gas of the refinery, benzene or naphtha. Join the pipes with the fuel to its inlets (or pour it in), join a high voltage cable, and it makes power for as long as the fuel lasts.
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Oil/generator.rsi
+    noRot: true
+    scale: 0.65,0.65
+    offset: 0,-0.09
+    color: "#ffb878"
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.RecipeMachineVisuals.Working:
+        on:
+          True: { visible: true }
+          False: { visible: false }
+        off:
+          True: { visible: false }
+          False: { visible: true }
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+        connection: Both
+  - type: PortableStructure
+  - type: PowerSupplier
+    enabled: false
+    supplyRate: 8000
+  - type: FluidTank
+    capacity: 400
+  - type: FluidFillable
+  - type: FluidPorts
+    ports:
+    - id: gas_in
+      kind: RUMCRefineryGas
+      rate: 10
+    - id: benzene_in
+      kind: Benzene
+      rate: 10
+    - id: naphtha_in
+      kind: RUMCNaphtha
+      rate: 10
+  - type: UserInterface
+    interfaces:
+      enum.FluidPortsUiKey.Key:
+        type: FluidPortsBoundUserInterface
+  - type: LiquidFuelGenerator
+    fuels:
+      RUMCRefineryGas: 1.0
+      RUMCNaphtha: 0.6
+      Benzene: 0.4
+
+# ---------------------------------------------------------------- the installations
+# The tower: oil in; naphtha, light fuel, heavy fuel and gas out, each on its own port.
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCDistillationTower
+  name: distillation tower
+  description: A tower that splits crude oil into naphtha, light fuel, heavy fuel and gas, each coming out of a port of its own. Join the pipe with the oil to the inlet.
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Oil/tower.rsi
+    noRot: true
+    offset: 0,0.47
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 120
+  - type: PowerState
+    idlePowerDraw: 120
+    workingPowerDraw: 2400
+  - type: ActivatableUIRequiresPower
+  - type: FluidTank
+    capacity: 600
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 30
+    - id: crude_in
+      kind: RUMCCrudeOil
+      rate: 30
+    - id: resin_in
+      kind: RUMCResin
+      rate: 12
+    - id: naphtha_out
+      kind: RUMCNaphtha
+      output: true
+      rate: 20
+    - id: light_out
+      kind: RUMCLightFuel
+      output: true
+      rate: 20
+    - id: heavy_out
+      kind: RUMCHeavyFuel
+      output: true
+      rate: 20
+    - id: gas_out
+      kind: RUMCRefineryGas
+      output: true
+      rate: 20
+  - type: RecipeMachine
+    kind: distillation
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCFuelBlender
+  name: fuel blender
+  description: Mixes light and heavy fuel into diesel in the right proportion.
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Oil/blender.rsi
+    noRot: true
+    offset: 0,0.47
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 80
+  - type: PowerState
+    idlePowerDraw: 80
+    workingPowerDraw: 800
+  - type: ActivatableUIRequiresPower
+  - type: FluidTank
+    capacity: 300
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 8
+    - id: liquid_out
+      output: true
+      rate: 8
+    - id: light_in
+      kind: RUMCLightFuel
+      rate: 10
+    - id: heavy_in
+      kind: RUMCHeavyFuel
+      rate: 10
+    - id: naphtha_in
+      kind: RUMCNaphtha
+      rate: 10
+  - type: RecipeMachine
+    kind: blender
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCSteamCracker
+  name: steam cracker
+  description: Breaks naphtha and gas apart with steam into ethylene, the gas that plastic is made of.
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Oil/cracker.rsi
+    noRot: true
+    offset: 0,0.5
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 100
+  - type: PowerState
+    idlePowerDraw: 100
+    workingPowerDraw: 1800
+  - type: ActivatableUIRequiresPower
+  - type: FluidTank
+    capacity: 400
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 8
+    - id: liquid_out
+      output: true
+      rate: 8
+    - id: naphtha_in
+      kind: RUMCNaphtha
+      rate: 10
+    - id: gas_in
+      kind: RUMCRefineryGas
+      rate: 10
+    - id: water_in
+      kind: Water
+      rate: 10
+  - type: RecipeMachine
+    kind: cracker
+
+- type: entity
+  parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
+  id: RUMCPolymerizer
+  name: polymerizer
+  description: Turns ethylene into plastic pellets. The pellets are pressed into sheets in the bending machine.
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Oil/polymerizer.rsi
+    noRot: true
+    offset: 0,0.5
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: ApcPowerReceiver
+    powerLoad: 100
+  - type: PowerState
+    idlePowerDraw: 100
+    workingPowerDraw: 1200
+  - type: ActivatableUIRequiresPower
+  - type: FluidTank
+    capacity: 300
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 8
+    - id: liquid_out
+      output: true
+      rate: 8
+    - id: ethylene_in
+      kind: RUMCEthylene
+      rate: 10
+    - id: water_in
+      kind: Water
+      rate: 10
+  - type: RecipeMachine
+    kind: polymerizer
+
+# ---------------------------------------------------------------- crafts
+- type: craftRecipe
+  id: RUMCCraftBuildOilPump
+  name: au14-craft-recipe-buildoilpump
+  output: RUMCOilPump
+  time: 25
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCMotor
+    amount: 2
+  - stack: RUMCPump
+    amount: 2
+  - stack: RUMCBasicCircuit
+    amount: 1
+  - stack: RUMCInsulatedCable
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftBuildOilTank
+  name: au14-craft-recipe-buildoiltank
+  output: RUMCOilTank
+  time: 20
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCGalvanizedSheet
+    amount: 8
+  - stack: RUMCRubberSheet
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftBuildOilBarrel
+  name: au14-craft-recipe-buildoilbarrel
+  output: RUMCOilBarrel
+  time: 10
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCGalvanizedSheet
+    amount: 4
+  - stack: RUMCRubberSheet
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildFuelCanister
+  name: au14-craft-recipe-buildfuelcanister
+  output: RUMCFuelCanister
+  time: 6
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCGalvanizedSheet
+    amount: 2
+  - stack: RUMCRubberSheet
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildDieselGenerator
+  name: au14-craft-recipe-builddieselgenerator
+  output: RUMCDieselGenerator
+  time: 25
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCMotor
+    amount: 2
+  - stack: RUMCPiston
+    amount: 2
+  - stack: RUMCBasicCircuit
+    amount: 1
+  - stack: RUMCInsulatedCable
+    amount: 4
+  - stack: RUMCGalvanizedSheet
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftBuildDistillationTower
+  name: au14-craft-recipe-builddistillationtower
+  output: RUMCDistillationTower
+  time: 30
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCHeatingCoil
+    amount: 4
+  - stack: RUMCPump
+    amount: 2
+  - stack: RUMCBasicCircuit
+    amount: 2
+  - stack: RUMCInsulatedCable
+    amount: 2
+  - stack: RUMCChromedSheet
+    amount: 4
+
+- type: craftRecipe
+  id: RUMCCraftBuildFuelBlender
+  name: au14-craft-recipe-buildfuelblender
+  output: RUMCFuelBlender
+  time: 20
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCMotor
+    amount: 2
+  - stack: RUMCPump
+    amount: 2
+  - stack: RUMCBasicCircuit
+    amount: 1
+  - stack: RUMCInsulatedCable
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftBuildSteamCracker
+  name: au14-craft-recipe-buildsteamcracker
+  output: RUMCSteamCracker
+  time: 25
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCHeatingCoil
+    amount: 2
+  - stack: RUMCPump
+    amount: 2
+  - stack: RUMCBasicCircuit
+    amount: 2
+  - stack: RUMCInsulatedCable
+    amount: 2
+  - stack: RUMCChromedSheet
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftBuildPolymerizer
+  name: au14-craft-recipe-buildpolymerizer
+  output: RUMCPolymerizer
+  time: 25
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCHeatingCoil
+    amount: 1
+  - stack: RUMCPiston
+    amount: 2
+  - stack: RUMCPump
+    amount: 1
+  - stack: RUMCBasicCircuit
+    amount: 2
+  - stack: RUMCInsulatedCable
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftBuildGasTurbine
+  name: au14-craft-recipe-buildgasturbine
+  output: RUMCGasTurbine
+  time: 25
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCMotor
+    amount: 2
+  - stack: RUMCPump
+    amount: 1
+  - stack: RUMCHeatingCoil
+    amount: 1
+  - stack: RUMCBasicCircuit
+    amount: 1
+  - stack: RUMCInsulatedCable
+    amount: 4
+  - stack: RUMCChromedSheet
+    amount: 2

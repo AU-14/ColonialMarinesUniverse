@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
+using Content.Shared.Procedural;
+using Content.Shared.Whitelist;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.ZLevelBuilding;
 
@@ -46,17 +49,184 @@ public sealed partial class ZBuildableMapComponent : Component
     /// vanilla SS14 asteroid tiles.
     /// </summary>
     [DataField]
-    public List<string> StoneFloorTiles = new() { "CMPlanetMarsCave", "CMPlanetMarsDirt" };
+    public List<string> StoneFloorTiles = new() { "FloorBasalt" };
 
     /// <summary>
     /// Mineable rock entity scattered across generated chunks (drops salvageable materials when mined).
     /// </summary>
     [DataField]
-    public string StoneRockEntity = "mineablesolarisrocksteel";
+    public string StoneRockEntity = "RUMCRockWall";
 
-    /// <summary>Loose rock debris flung outward at the moment a cave-in begins, before the roof buries the cavern.</summary>
+    /// <summary>
+    /// Veins of ore in the plain stone layer (the levels that no depth biome covers): metals in bigger groups,
+    /// crystals in small ones, each in about one chunk in ten to twenty.
+    /// </summary>
     [DataField]
-    public string RockDebris = "AU14RockDebris";
+    public List<ZLevelOreVein> StoneOreVeins = new()
+    {
+        Metal("RUMCRockWallIron", 0.15f),
+        Metal("RUMCRockWallCopper", 0.12f),
+        Metal("RUMCRockWallAluminum", 0.10f),
+        Metal("RUMCRockWallLead", 0.08f),
+        Metal("RUMCRockWallSilver", 0.02f),
+        Metal("RUMCRockWallGold", 0.02f),
+        Metal("RUMCRockWallChrome", 0.05f),
+        Metal("RUMCRockWallCobalt", 0.05f),
+        Metal("RUMCRockWallTungsten", 0.04f),
+        Metal("RUMCRockWallPlatinum", 0.015f),
+        Gem("RUMCRockWallRawDiamond", 0.004f),
+        Gem("RUMCRockWallEmerald", 0.005f),
+        Gem("RUMCRockWallRuby", 0.005f),
+        Gem("RUMCRockWallAlexandrite", 0.004f),
+        Crystal("RUMCRockWallQuartz", 0.05f),
+        Crystal("RUMCRockWallSaltpeter", 0.04f),
+        Crystal("RUMCRockWallCinnabar", 0.03f),
+        Crystal("RUMCRockWallAsbestos", 0.03f),
+        Crystal("RUMCRockWallFluorite", 0.03f),
+        Crystal("RUMCRockWallBeryllium", 0.03f),
+        Crystal("RUMCRockWallColtan", 0.03f),
+        Crystal("RUMCRockWallPhosphorus", 0.03f),
+        Crystal("RUMCRockWallTrimorid", 0.02f),
+        Crystal("RUMCRockWallLaxanite", 0.02f),
+        Crystal("RUMCRockWallLaytoite", 0.02f),
+    };
+
+    /// <summary>Deposits of ore lying under the rock of the plain stone layer, with a small chance in each chunk.</summary>
+    [DataField]
+    public List<ZLevelDeposit> StoneDeposits = new()
+    {
+        new ZLevelDeposit { Entity = "RUMCOreDepositStone", ChancePerChunk = 0.08f },
+        new ZLevelDeposit { Entity = "RUMCOilDeposit", ChancePerChunk = 0.02f },
+    };
+
+    /// <summary>Empty caves in the plain stone layer: where this noise is high, the rock is left out.</summary>
+    [DataField]
+    public ZLevelNoiseFeature? StoneCaves = new() { Frequency = 0.05f, Octaves = 3, Threshold = 0.47f, SeedOffset = 1 };
+
+    /// <summary>Underground pools in the plain stone layer: where this noise is high, there is water in place of rock.</summary>
+    [DataField]
+    public ZLevelNoiseFeature? StoneWater = new() { Frequency = 0.035f, Octaves = 2, Threshold = 0.72f, SeedOffset = 2 };
+
+    /// <summary>What lies about in the caves of the stone layer: rocks, scattered over the floor of the caves.</summary>
+    [DataField]
+    public List<ZLevelCaveDecor> StoneCaveDecor = new()
+    {
+        new ZLevelCaveDecor { Entity = "RMCRock07", Chance = 0.05f },
+        new ZLevelCaveDecor { Entity = "RUMCOilDeposit", Chance = 0.004f },
+    };
+
+    /// <summary>The entity that fills a pool tile.</summary>
+    [DataField]
+    public string WaterEntity = "RUMCCaveWater";
+
+    private static ZLevelOreVein Metal(string wall, float chance)
+        => new() { Entity = wall, ChancePerChunk = chance, MinGroupSize = 4, MaxGroupSize = 8, Radius = 3 };
+
+    // A gem is a single block of rock, not a vein.
+    private static ZLevelOreVein Gem(string wall, float chance)
+        => new() { Entity = wall, ChancePerChunk = chance, MinGroupSize = 1, MaxGroupSize = 1, Radius = 0 };
+
+    private static ZLevelOreVein Crystal(string wall, float chance)
+        => new() { Entity = wall, ChancePerChunk = chance, MinGroupSize = 2, MaxGroupSize = 4, Radius = 2 };
+
+    [DataField]
+    public EntityWhitelist? RequiredDigTool = new() { Tags = new() { "Pickaxe" } };
+
+    [DataField]
+    public List<ZLevelBiomeTier> DepthBiomes = new()
+    {
+        new ZLevelBiomeTier
+        {
+            Name = "Clay Layer",
+            DepthFrom = -1,
+            DepthTo = -2,
+            StoneFloorTiles = new List<string> { "FloorPlanetDirt" },
+            StoneRockEntity = "RUMCClayWall",
+            RequiredDigTool = new EntityWhitelist { Components = new[] { "Shovel", "RMCShovel" } },
+            // From the ground, down into the clay, and through it, a shovel digs; a pickaxe is wanted to break from the clay into the stone.
+            RequiredEntryTool = new EntityWhitelist { Components = new[] { "Shovel", "RMCShovel" } },
+            OreVeins = new List<ZLevelOreVein>
+            {
+                new ZLevelOreVein { Entity = "RUMCClayWallCoal", ChancePerChunk = 0.3f },
+            },
+            CaveDecor = new List<ZLevelCaveDecor>
+            {
+                new ZLevelCaveDecor { Entity = "RUMCOilDeposit", Chance = 0.002f },
+            },
+            // Small empty caves made by noise, a lot rarer and smaller than those of the stone layer.
+            Caves = new ZLevelNoiseFeature { Frequency = 0.08f, Octaves = 3, Threshold = 0.55f, SeedOffset = 1 },
+        },
+
+        // From ten levels down it goes on for ever: dark rock with the precious metals and the titanium, empty
+        // caves, and lakes of lava where the stone layer has pools of water.
+        new ZLevelBiomeTier
+        {
+            Name = "Black Stone Layer",
+            DepthFrom = -10,
+            DepthTo = int.MinValue,
+            StoneFloorTiles = new List<string> { "RUMCFloorBlackBasalt" },
+            StoneRockEntity = "RUMCBlackRockWall",
+            RequiredDigTool = new EntityWhitelist { Tags = new() { "Jackhammer" } },
+            RequiredEntryTool = new EntityWhitelist { Tags = new() { "Jackhammer" } },
+            OreVeins = new List<ZLevelOreVein>
+            {
+                Metal("RUMCBlackRockWallSilver", 0.12f),
+                Metal("RUMCBlackRockWallGold", 0.10f),
+                Metal("RUMCBlackRockWallTitanium", 0.12f),
+                Metal("RUMCBlackRockWallPlatinum", 0.08f),
+                Metal("RUMCBlackRockWallUranium", 0.08f),
+                Metal("RUMCBlackRockWallIron", 0.10f),
+                Metal("RUMCBlackRockWallCopper", 0.08f),
+                Metal("RUMCBlackRockWallAluminum", 0.07f),
+                Metal("RUMCBlackRockWallLead", 0.05f),
+                Metal("RUMCBlackRockWallChrome", 0.04f),
+                Metal("RUMCBlackRockWallCobalt", 0.04f),
+                Metal("RUMCBlackRockWallTungsten", 0.03f),
+                Crystal("RUMCBlackRockWallQuartz", 0.04f),
+                Crystal("RUMCBlackRockWallSaltpeter", 0.03f),
+                Crystal("RUMCBlackRockWallCinnabar", 0.02f),
+                Crystal("RUMCBlackRockWallAsbestos", 0.02f),
+                Crystal("RUMCBlackRockWallFluorite", 0.02f),
+                Crystal("RUMCBlackRockWallBeryllium", 0.02f),
+                Crystal("RUMCBlackRockWallColtan", 0.02f),
+                Crystal("RUMCBlackRockWallPhosphorus", 0.02f),
+                Crystal("RUMCBlackRockWallTrimorid", 0.015f),
+                Crystal("RUMCBlackRockWallLaxanite", 0.015f),
+                Crystal("RUMCBlackRockWallLaytoite", 0.015f),
+                Gem("RUMCBlackRockWallRawDiamond", 0.15f),
+                Gem("RUMCBlackRockWallEmerald", 0.20f),
+                Gem("RUMCBlackRockWallRuby", 0.20f),
+                Gem("RUMCBlackRockWallAlexandrite", 0.15f),
+            },
+            Deposits = new List<ZLevelDeposit>
+            {
+                new ZLevelDeposit { Entity = "RUMCOreDepositDarkStone", ChancePerChunk = 0.08f },
+                new ZLevelDeposit { Entity = "RUMCOilDeposit", ChancePerChunk = 0.03f },
+            },
+            CaveDecor = new List<ZLevelCaveDecor>
+            {
+                new ZLevelCaveDecor { Entity = "RUMCOilDeposit", Chance = 0.006f },
+            },
+            Caves = new ZLevelNoiseFeature { Frequency = 0.05f, Octaves = 3, Threshold = 0.42f, SeedOffset = 1 },
+            Water = new ZLevelNoiseFeature { Frequency = 0.035f, Octaves = 2, Threshold = 0.68f, SeedOffset = 2 },
+            WaterEntity = "RUMCCaveLava",
+        },
+    };
+
+    /// <summary>
+    /// What a cave-in brings down instead of plain debris: the resource of the layer that stood over the tile, by the prototype of the rock (or one of its parents): clay
+    /// where the layer above is clay, black stone where it is black stone. Any other rock gives <see cref="DefaultCollapseResource"/>.
+    /// </summary>
+    [DataField]
+    public Dictionary<string, string> CollapseResources = new()
+    {
+        ["RUMCClayWall"] = "RUMCClayLump",
+        ["RUMCBlackRockWall"] = "RUMCBlackStoneItem",
+    };
+
+    /// <summary>The resource a collapse brings down when the rock over it has none of its own: a fragment of stone.</summary>
+    [DataField]
+    public string DefaultCollapseResource = "RUMCStoneItem";
 
     /// <summary>See-through fog spawned across a cavern while it is caving in (atmosphere; does not block view).</summary>
     [DataField]

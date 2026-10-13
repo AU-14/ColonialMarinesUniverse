@@ -1,0 +1,613 @@
+# Sheets of the new metals: the CMU steel sheet painted in the colour of each metal (Objects/Materials/sheets.rsi).
+# They stack like the steel sheets do, up to fifty of them.
+
+- type: stack
+  id: RUMCIronSheet
+  name: iron sheet
+  icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: iron }
+  spawn: RUMCIronSheet
+  maxCount: 50
+
+- type: entity
+  parent: SheetMetalBase
+  id: RUMCIronSheet
+  name: iron sheet
+  description: A sheet of iron.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    layers:
+    - state: iron_4
+      map: ["base"]
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    inhandVisuals:
+      left:
+      - state: iron-inhand-left
+      right:
+      - state: iron-inhand-right
+  - type: Stack
+    stackType: RUMCIronSheet
+    count: 1
+    baseLayer: base
+    layerStates:
+    - iron
+    - iron_2
+    - iron_3
+    - iron_4
+  - type: Appearance
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCIron: 100
+
+- type: stack
+  id: RUMCAluminumSheet
+  name: aluminum sheet
+  icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: aluminum }
+  spawn: RUMCAluminumSheet
+  maxCount: 50
+
+- type: entity
+  parent: SheetMetalBase
+  id: RUMCAluminumSheet
+  name: aluminum sheet
+  description: A sheet of aluminum.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    layers:
+    - state: aluminum_4
+      map: ["base"]
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    inhandVisuals:
+      left:
+      - state: aluminum-inhand-left
+      right:
+      - state: aluminum-inhand-right
+  - type: Stack
+    stackType: RUMCAluminumSheet
+    count: 1
+    baseLayer: base
+    layerStates:
+    - aluminum
+    - aluminum_2
+    - aluminum_3
+    - aluminum_4
+  - type: Appearance
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCAluminum: 100
+
+- type: stack
+  id: RUMCChromeSheet
+  name: chrome sheet
+  icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: chrome }
+  spawn: RUMCChromeSheet
+  maxCount: 50
+
+- type: entity
+  parent: SheetMetalBase
+  id: RUMCChromeSheet
+  name: chrome sheet
+  description: A sheet of chrome.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    layers:
+    - state: chrome_4
+      map: ["base"]
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    inhandVisuals:
+      left:
+      - state: chrome-inhand-left
+      right:
+      - state: chrome-inhand-right
+  - type: Stack
+    stackType: RUMCChromeSheet
+    count: 1
+    baseLayer: base
+    layerStates:
+    - chrome
+    - chrome_2
+    - chrome_3
+    - chrome_4
+  - type: Appearance
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCChrome: 100
+
+- type: stack
+  id: RUMCCobaltSheet
+  name: cobalt sheet
+  icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: cobalt }
+  spawn: RUMCCobaltSheet
+  maxCount: 50
+
+- type: entity
+  parent: SheetMetalBase
+  id: RUMCCobaltSheet
+  name: cobalt sheet
+  description: A sheet of cobalt.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    layers:
+    - state: cobalt_4
+      map: ["base"]
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    inhandVisuals:
+      left:
+      - state: cobalt-inhand-left
+      right:
+      - state: cobalt-inhand-right
+  - type: Stack
+    stackType: RUMCCobaltSheet
+    count: 1
+    baseLayer: base
+    layerStates:
+    - cobalt
+    - cobalt_2
+    - cobalt_3
+    - cobalt_4
+  - type: Appearance
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCCobalt: 100
+
+- type: stack
+  id: RUMCCopperSheet
+  name: copper sheet
+  icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: copper }
+  spawn: RUMCCopperSheet
+  maxCount: 50
+
+- type: entity
+  parent: SheetMetalBase
+  id: RUMCCopperSheet
+  name: copper sheet
+  description: A sheet of copper.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    layers:
+    - state: copper_4
+      map: ["base"]
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    inhandVisuals:
+      left:
+      - state: copper-inhand-left
+      right:
+      - state: copper-inhand-right
+  - type: Stack
+    stackType: RUMCCopperSheet
+    count: 1
+    baseLayer: base
+    layerStates:
+    - copper
+    - copper_2
+    - copper_3
+    - copper_4
+  - type: Appearance
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCCopper: 100
+
+- type: stack
+  id: RUMCGoldSheet
+  name: gold sheet
+  icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: gold }
+  spawn: RUMCGoldSheet
+  maxCount: 50
+
+- type: entity
+  parent: SheetMetalBase
+  id: RUMCGoldSheet
+  name: gold sheet
+  description: A sheet of gold.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    layers:
+    - state: gold_4
+      map: ["base"]
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    inhandVisuals:
+      left:
+      - state: gold-inhand-left
+      right:
+      - state: gold-inhand-right
+  - type: Stack
+    stackType: RUMCGoldSheet
+    count: 1
+    baseLayer: base
+    layerStates:
+    - gold
+    - gold_2
+    - gold_3
+    - gold_4
+  - type: Appearance
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCGold: 100
+
+- type: stack
+  id: RUMCLeadSheet
+  name: lead sheet
+  icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: lead }
+  spawn: RUMCLeadSheet
+  maxCount: 50
+
+- type: entity
+  parent: SheetMetalBase
+  id: RUMCLeadSheet
+  name: lead sheet
+  description: A sheet of lead.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    layers:
+    - state: lead_4
+      map: ["base"]
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    inhandVisuals:
+      left:
+      - state: lead-inhand-left
+      right:
+      - state: lead-inhand-right
+  - type: Stack
+    stackType: RUMCLeadSheet
+    count: 1
+    baseLayer: base
+    layerStates:
+    - lead
+    - lead_2
+    - lead_3
+    - lead_4
+  - type: Appearance
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCLead: 100
+
+- type: stack
+  id: RUMCSilverSheet
+  name: silver sheet
+  icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: silver }
+  spawn: RUMCSilverSheet
+  maxCount: 50
+
+- type: entity
+  parent: SheetMetalBase
+  id: RUMCSilverSheet
+  name: silver sheet
+  description: A sheet of silver.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    layers:
+    - state: silver_4
+      map: ["base"]
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    inhandVisuals:
+      left:
+      - state: silver-inhand-left
+      right:
+      - state: silver-inhand-right
+  - type: Stack
+    stackType: RUMCSilverSheet
+    count: 1
+    baseLayer: base
+    layerStates:
+    - silver
+    - silver_2
+    - silver_3
+    - silver_4
+  - type: Appearance
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCSilver: 100
+
+- type: stack
+  id: RUMCTitaniumSheet
+  name: titanium sheet
+  icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: titanium }
+  spawn: RUMCTitaniumSheet
+  maxCount: 50
+
+- type: entity
+  parent: SheetMetalBase
+  id: RUMCTitaniumSheet
+  name: titanium sheet
+  description: A sheet of titanium.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    layers:
+    - state: titanium_4
+      map: ["base"]
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    inhandVisuals:
+      left:
+      - state: titanium-inhand-left
+      right:
+      - state: titanium-inhand-right
+  - type: Stack
+    stackType: RUMCTitaniumSheet
+    count: 1
+    baseLayer: base
+    layerStates:
+    - titanium
+    - titanium_2
+    - titanium_3
+    - titanium_4
+  - type: Appearance
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCTitanium: 100
+
+- type: stack
+  id: RUMCTungstenSheet
+  name: tungsten sheet
+  icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: tungsten }
+  spawn: RUMCTungstenSheet
+  maxCount: 50
+
+- type: entity
+  parent: SheetMetalBase
+  id: RUMCTungstenSheet
+  name: tungsten sheet
+  description: A sheet of tungsten.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    layers:
+    - state: tungsten_4
+      map: ["base"]
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    inhandVisuals:
+      left:
+      - state: tungsten-inhand-left
+      right:
+      - state: tungsten-inhand-right
+  - type: Stack
+    stackType: RUMCTungstenSheet
+    count: 1
+    baseLayer: base
+    layerStates:
+    - tungsten
+    - tungsten_2
+    - tungsten_3
+    - tungsten_4
+  - type: Appearance
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCTungsten: 100
+
+- type: stack
+  id: RUMCPlatinumSheet
+  name: platinum sheet
+  icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: platinum }
+  spawn: RUMCPlatinumSheet
+  maxCount: 50
+
+- type: entity
+  parent: SheetMetalBase
+  id: RUMCPlatinumSheet
+  name: platinum sheet
+  description: A sheet of platinum.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    layers:
+    - state: platinum_4
+      map: ["base"]
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    inhandVisuals:
+      left:
+      - state: platinum-inhand-left
+      right:
+      - state: platinum-inhand-right
+  - type: Stack
+    stackType: RUMCPlatinumSheet
+    count: 1
+    baseLayer: base
+    layerStates:
+    - platinum
+    - platinum_2
+    - platinum_3
+    - platinum_4
+  - type: Appearance
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCPlatinum: 100
+
+- type: stack
+  id: RUMCPlastitanSheet
+  name: plastitan sheet
+  icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: plastitan }
+  spawn: RUMCPlastitanSheet
+  maxCount: 50
+
+- type: entity
+  parent: SheetMetalBase
+  id: RUMCPlastitanSheet
+  name: plastitan sheet
+  description: A sheet of plastitan.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    layers:
+    - state: plastitan_4
+      map: ["base"]
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    inhandVisuals:
+      left:
+      - state: plastitan-inhand-left
+      right:
+      - state: plastitan-inhand-right
+  - type: Stack
+    stackType: RUMCPlastitanSheet
+    count: 1
+    baseLayer: base
+    layerStates:
+    - plastitan
+    - plastitan_2
+    - plastitan_3
+    - plastitan_4
+  - type: Appearance
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCPlastitan: 100
+
+- type: stack
+  id: RUMCWeaponSteelSheet
+  name: weapon steel sheet
+  icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: weaponsteel }
+  spawn: RUMCWeaponSteelSheet
+  maxCount: 50
+
+- type: entity
+  parent: SheetMetalBase
+  id: RUMCWeaponSteelSheet
+  name: weapon steel sheet
+  description: A sheet of weapon steel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    layers:
+    - state: weaponsteel_4
+      map: ["base"]
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    inhandVisuals:
+      left:
+      - state: weaponsteel-inhand-left
+      right:
+      - state: weaponsteel-inhand-right
+  - type: Stack
+    stackType: RUMCWeaponSteelSheet
+    count: 1
+    baseLayer: base
+    layerStates:
+    - weaponsteel
+    - weaponsteel_2
+    - weaponsteel_3
+    - weaponsteel_4
+  - type: Appearance
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCWeaponSteel: 100
+
+- type: stack
+  id: RUMCPlasteelSheet
+  name: plasteel sheet
+  icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: plasteel }
+  spawn: RUMCPlasteelSheet
+  maxCount: 50
+
+- type: entity
+  parent: SheetMetalBase
+  id: RUMCPlasteelSheet
+  name: plasteel sheet
+  description: A sheet of plasteel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    layers:
+    - state: plasteel_4
+      map: ["base"]
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    inhandVisuals:
+      left:
+      - state: plasteel-inhand-left
+      right:
+      - state: plasteel-inhand-right
+  - type: Stack
+    stackType: RUMCPlasteelSheet
+    count: 1
+    baseLayer: base
+    layerStates:
+    - plasteel
+    - plasteel_2
+    - plasteel_3
+    - plasteel_4
+  - type: Appearance
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCPlasteel: 100
+
+- type: stack
+  id: RUMCUraniumSheet
+  name: uranium sheet
+  icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: uranium }
+  spawn: RUMCUraniumSheet
+  maxCount: 50
+
+- type: entity
+  parent: SheetMetalBase
+  id: RUMCUraniumSheet
+  name: uranium sheet
+  description: A sheet of uranium.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    layers:
+    - state: uranium_4
+      map: ["base"]
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    inhandVisuals:
+      left:
+      - state: uranium-inhand-left
+      right:
+      - state: uranium-inhand-right
+  - type: Stack
+    stackType: RUMCUraniumSheet
+    count: 1
+    baseLayer: base
+    layerStates:
+    - uranium
+    - uranium_2
+    - uranium_3
+    - uranium_4
+  - type: Appearance

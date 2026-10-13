@@ -1,0 +1,1059 @@
+# The ammunition bench and its kit; the projectiles and the cartridges with the armor penetration of the bullets it makes (the armor penetration
+# of a projectile cannot be set on the fly, so there is a projectile for each step of it).
+
+- type: entity
+  parent: BaseItem
+  id: RUMCAmmoBenchKit
+  name: ammunition bench kit
+  suffix: Sapper
+  description: A folded ammunition bench. Use it in hand to unfold it where you stand. Only someone trained as a sapper knows how.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/autolathe.rsi
+    state: icon
+    scale: 0.5, 0.5
+    color: "#8a5a3a"
+  - type: Item
+    size: Normal
+  - type: SapperWorkbenchKit
+    workbenchPrototype: RUMCAmmoBench
+
+- type: entity
+  id: RUMCAmmoBench
+  name: ammunition bench
+  suffix: Sapper
+  description: A bench with a mold, a press, a scale and a tank. Feed it ingots and powder, and pour the fuel of a flamethrower or any other liquid into the tank, then load cartridges the way you want them.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: Structures/Machines/autolathe.rsi
+    snapCardinals: true
+    layers:
+    - state: icon
+    color: "#8a5a3a"
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: InteractionOutline
+  - type: Clickable
+  - type: Anchorable
+  - type: Pullable
+  - type: Appearance
+  - type: AmmoBench
+  - type: SolutionContainerManager
+    solutions:
+      ammo_tank:
+        maxVol: 500
+  - type: ContainerContainer
+    containers:
+      ammo_item: !type:ContainerSlot {}
+  - type: ActivatableUI
+    key: enum.AmmoBenchUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.AmmoBenchUiKey.Key:
+        type: AmmoBenchBui
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+# ---------------------------------------------------------------- the bullets with the armor penetration, and the cartridges that fire them
+# The armor penetration of a projectile cannot be set on the fly, so there is a projectile for each step of it.
+
+- type: entity
+  parent: RUMCCraftedBullet
+  id: RUMCCraftedBulletAp5
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMArmorPiercing
+    amount: 5
+
+- type: entity
+  parent: RUMCCraftedCartridge
+  id: RUMCCraftedCartridgeAp5
+  categories: [ HideSpawnMenu ]
+  suffix: AP 5
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedBulletAp5
+    deleteOnSpawn: false
+  - type: Stack
+    stackType: RUMCCraftedStackCartridgeAp5
+    count: 1
+
+- type: entity
+  parent: RUMCCraftedBullet
+  id: RUMCCraftedBulletAp10
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMArmorPiercing
+    amount: 10
+
+- type: entity
+  parent: RUMCCraftedCartridge
+  id: RUMCCraftedCartridgeAp10
+  categories: [ HideSpawnMenu ]
+  suffix: AP 10
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedBulletAp10
+    deleteOnSpawn: false
+  - type: Stack
+    stackType: RUMCCraftedStackCartridgeAp10
+    count: 1
+
+- type: entity
+  parent: RUMCCraftedBullet
+  id: RUMCCraftedBulletAp15
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMArmorPiercing
+    amount: 15
+
+- type: entity
+  parent: RUMCCraftedCartridge
+  id: RUMCCraftedCartridgeAp15
+  categories: [ HideSpawnMenu ]
+  suffix: AP 15
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedBulletAp15
+    deleteOnSpawn: false
+  - type: Stack
+    stackType: RUMCCraftedStackCartridgeAp15
+    count: 1
+
+- type: entity
+  parent: RUMCCraftedBullet
+  id: RUMCCraftedBulletAp20
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMArmorPiercing
+    amount: 20
+
+- type: entity
+  parent: RUMCCraftedCartridge
+  id: RUMCCraftedCartridgeAp20
+  categories: [ HideSpawnMenu ]
+  suffix: AP 20
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedBulletAp20
+    deleteOnSpawn: false
+  - type: Stack
+    stackType: RUMCCraftedStackCartridgeAp20
+    count: 1
+
+- type: entity
+  parent: RUMCCraftedBullet
+  id: RUMCCraftedBulletAp25
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMArmorPiercing
+    amount: 25
+
+- type: entity
+  parent: RUMCCraftedCartridge
+  id: RUMCCraftedCartridgeAp25
+  categories: [ HideSpawnMenu ]
+  suffix: AP 25
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedBulletAp25
+    deleteOnSpawn: false
+  - type: Stack
+    stackType: RUMCCraftedStackCartridgeAp25
+    count: 1
+
+- type: entity
+  parent: RUMCCraftedBullet
+  id: RUMCCraftedBulletAp30
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMArmorPiercing
+    amount: 30
+
+- type: entity
+  parent: RUMCCraftedCartridge
+  id: RUMCCraftedCartridgeAp30
+  categories: [ HideSpawnMenu ]
+  suffix: AP 30
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedBulletAp30
+    deleteOnSpawn: false
+  - type: Stack
+    stackType: RUMCCraftedStackCartridgeAp30
+    count: 1
+
+- type: entity
+  parent: RUMCCraftedBullet
+  id: RUMCCraftedBulletAp35
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMArmorPiercing
+    amount: 35
+
+- type: entity
+  parent: RUMCCraftedCartridge
+  id: RUMCCraftedCartridgeAp35
+  categories: [ HideSpawnMenu ]
+  suffix: AP 35
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedBulletAp35
+    deleteOnSpawn: false
+  - type: Stack
+    stackType: RUMCCraftedStackCartridgeAp35
+    count: 1
+
+- type: entity
+  parent: RUMCCraftedBullet
+  id: RUMCCraftedBulletAp40
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMArmorPiercing
+    amount: 40
+
+- type: entity
+  parent: RUMCCraftedCartridge
+  id: RUMCCraftedCartridgeAp40
+  categories: [ HideSpawnMenu ]
+  suffix: AP 40
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedBulletAp40
+    deleteOnSpawn: false
+  - type: Stack
+    stackType: RUMCCraftedStackCartridgeAp40
+    count: 1
+
+- type: entity
+  parent: RUMCCraftedBullet
+  id: RUMCCraftedBulletAp50
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMArmorPiercing
+    amount: 50
+
+- type: entity
+  parent: RUMCCraftedCartridge
+  id: RUMCCraftedCartridgeAp50
+  categories: [ HideSpawnMenu ]
+  suffix: AP 50
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedBulletAp50
+    deleteOnSpawn: false
+  - type: Stack
+    stackType: RUMCCraftedStackCartridgeAp50
+    count: 1
+
+# ---------------------------------------------------------------- shot: the pellets of the shotguns of the game (RMC), as many as the load has
+# Buckshot is the bullet's own kind, not the caliber's: any cartridge can be loaded with it. One pellet is the shotgun bullet of the game, a slug.
+
+# The pellets: the buckshot of the game, with the number of the pellets and how wide they spread.
+
+- type: entity
+  parent: CMPelletShotgunSlug
+  id: RUMCCraftedSlugPellet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      ammo:
+        maxVol: 20
+
+- type: entity
+  parent: RMCPelletHeavyShotgunSlug
+  id: RUMCCraftedHeavySlugPellet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      ammo:
+        maxVol: 20
+
+
+- type: entity
+  parent: CMPelletShotgunBuckshot
+  id: RUMCCraftedPellet4
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileSpread
+    proto: RUMCCraftedPellet4
+    count: 4
+    spread: 15
+
+- type: entity
+  parent: RMCPelletHeavyShotgunBuckshot
+  id: RUMCCraftedHeavyPellet4
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileSpread
+    proto: RUMCCraftedHeavyPellet4
+    count: 4
+    spread: 20
+
+
+- type: entity
+  parent: CMPelletShotgunBuckshot
+  id: RUMCCraftedPellet6
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileSpread
+    proto: RUMCCraftedPellet6
+    count: 6
+    spread: 15
+
+- type: entity
+  parent: RMCPelletHeavyShotgunBuckshot
+  id: RUMCCraftedHeavyPellet6
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileSpread
+    proto: RUMCCraftedHeavyPellet6
+    count: 6
+    spread: 20
+
+
+- type: entity
+  parent: CMPelletShotgunBuckshot
+  id: RUMCCraftedPellet8
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileSpread
+    proto: RUMCCraftedPellet8
+    count: 8
+    spread: 15
+
+- type: entity
+  parent: RMCPelletHeavyShotgunBuckshot
+  id: RUMCCraftedHeavyPellet8
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileSpread
+    proto: RUMCCraftedHeavyPellet8
+    count: 8
+    spread: 20
+
+
+- type: entity
+  parent: CMPelletShotgunBuckshot
+  id: RUMCCraftedPellet9
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileSpread
+    proto: RUMCCraftedPellet9
+    count: 9
+    spread: 15
+
+- type: entity
+  parent: RMCPelletHeavyShotgunBuckshot
+  id: RUMCCraftedHeavyPellet9
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileSpread
+    proto: RUMCCraftedHeavyPellet9
+    count: 9
+    spread: 20
+
+
+- type: entity
+  parent: CMPelletShotgunBuckshot
+  id: RUMCCraftedPellet12
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileSpread
+    proto: RUMCCraftedPellet12
+    count: 12
+    spread: 15
+
+- type: entity
+  parent: RMCPelletHeavyShotgunBuckshot
+  id: RUMCCraftedHeavyPellet12
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileSpread
+    proto: RUMCCraftedHeavyPellet12
+    count: 12
+    spread: 20
+
+
+- type: entity
+  parent: CMPelletShotgunBuckshot
+  id: RUMCCraftedPellet16
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileSpread
+    proto: RUMCCraftedPellet16
+    count: 16
+    spread: 15
+
+- type: entity
+  parent: RMCPelletHeavyShotgunBuckshot
+  id: RUMCCraftedHeavyPellet16
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileSpread
+    proto: RUMCCraftedHeavyPellet16
+    count: 16
+    spread: 20
+
+
+- type: entity
+  parent: CMPelletShotgunBuckshot
+  id: RUMCCraftedPellet20
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileSpread
+    proto: RUMCCraftedPellet20
+    count: 20
+    spread: 15
+
+- type: entity
+  parent: RMCPelletHeavyShotgunBuckshot
+  id: RUMCCraftedHeavyPellet20
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileSpread
+    proto: RUMCCraftedHeavyPellet20
+    count: 20
+    spread: 20
+
+
+# The cartridges of a caliber that is not a shotgun's, loaded with shot.
+
+
+- type: entity
+  parent: RUMCCraftedCartridge
+  id: RUMCCraftedCartridgeP1
+  categories: [ HideSpawnMenu ]
+  suffix: slug
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedSlugPellet
+    deleteOnSpawn: false
+  - type: Stack
+    stackType: RUMCCraftedStackCartridgeP1
+    count: 1
+
+
+- type: entity
+  parent: RUMCCraftedCartridge
+  id: RUMCCraftedCartridgeP4
+  categories: [ HideSpawnMenu ]
+  suffix: 4 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedPellet4
+    deleteOnSpawn: false
+  - type: Stack
+    stackType: RUMCCraftedStackCartridgeP4
+    count: 1
+
+
+- type: entity
+  parent: RUMCCraftedCartridge
+  id: RUMCCraftedCartridgeP6
+  categories: [ HideSpawnMenu ]
+  suffix: 6 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedPellet6
+    deleteOnSpawn: false
+  - type: Stack
+    stackType: RUMCCraftedStackCartridgeP6
+    count: 1
+
+
+- type: entity
+  parent: RUMCCraftedCartridge
+  id: RUMCCraftedCartridgeP8
+  categories: [ HideSpawnMenu ]
+  suffix: 8 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedPellet8
+    deleteOnSpawn: false
+  - type: Stack
+    stackType: RUMCCraftedStackCartridgeP8
+    count: 1
+
+
+- type: entity
+  parent: RUMCCraftedCartridge
+  id: RUMCCraftedCartridgeP9
+  categories: [ HideSpawnMenu ]
+  suffix: 9 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedPellet9
+    deleteOnSpawn: false
+  - type: Stack
+    stackType: RUMCCraftedStackCartridgeP9
+    count: 1
+
+
+- type: entity
+  parent: RUMCCraftedCartridge
+  id: RUMCCraftedCartridgeP12
+  categories: [ HideSpawnMenu ]
+  suffix: 12 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedPellet12
+    deleteOnSpawn: false
+  - type: Stack
+    stackType: RUMCCraftedStackCartridgeP12
+    count: 1
+
+
+- type: entity
+  parent: RUMCCraftedCartridge
+  id: RUMCCraftedCartridgeP16
+  categories: [ HideSpawnMenu ]
+  suffix: 16 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedPellet16
+    deleteOnSpawn: false
+  - type: Stack
+    stackType: RUMCCraftedStackCartridgeP16
+    count: 1
+
+
+- type: entity
+  parent: RUMCCraftedCartridge
+  id: RUMCCraftedCartridgeP20
+  categories: [ HideSpawnMenu ]
+  suffix: 20 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedPellet20
+    deleteOnSpawn: false
+  - type: Stack
+    stackType: RUMCCraftedStackCartridgeP20
+    count: 1
+
+
+# ---------------------------------------------------------------- shotgun shells: the cartridges of the shotgun calibers are shells, like the shells of the game
+
+- type: entity
+  abstract: true
+  parent: BaseCartridge
+  id: RUMCCraftedShellBase
+  name: handmade shotgun shell
+  description: A shotgun shell loaded at the ammunition bench.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Handfuls/shotgun_handfuls.rsi
+    layers:
+    - state: buckshot_shell_1
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - Cartridge
+    - RMCShellShotgun
+    - RUMCCraftedCartridge
+  - type: CartridgeAmmo
+    proto: RUMCCraftedBullet
+    deleteOnSpawn: false
+    soundEject:
+      collection: ShellEject
+    soundInsert:
+      collection: CMShotgunLoad
+  - type: CraftedCartridge
+  - type: Appearance
+
+- type: entity
+  abstract: true
+  parent: RUMCCraftedShellBase
+  id: RUMCCraftedHeavyShellBase
+  name: handmade heavy shotgun shell
+  description: A shell for the heavy shotguns, loaded at the ammunition bench.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Handfuls/shotgun_heavy_handfuls.rsi
+    layers:
+    - state: heavy_buckshot_1
+  - type: Tag
+    tags:
+    - Cartridge
+    - RUMCCraftedCartridge
+
+
+# A slug: the shotgun bullet of the game.
+- type: entity
+  parent: RUMCCraftedShellBase
+  id: RUMCCraftedShell1
+  categories: [ HideSpawnMenu ]
+  suffix: slug
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Handfuls/shotgun_handfuls.rsi
+    layers:
+    - state: slug_shell_1
+  - type: CartridgeAmmo
+    proto: RUMCCraftedSlugPellet
+  - type: Stack
+    stackType: RUMCCraftedStackShell1
+    count: 1
+
+- type: entity
+  parent: RUMCCraftedHeavyShellBase
+  id: RUMCCraftedHeavyShell1
+  categories: [ HideSpawnMenu ]
+  suffix: heavy slug
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Handfuls/shotgun_heavy_handfuls.rsi
+    layers:
+    - state: heavy_slug_1
+  - type: CartridgeAmmo
+    proto: RUMCCraftedHeavySlugPellet
+  - type: Stack
+    stackType: RUMCCraftedStackHeavyShell1
+    count: 1
+
+
+- type: entity
+  parent: RUMCCraftedShellBase
+  id: RUMCCraftedShell4
+  categories: [ HideSpawnMenu ]
+  suffix: 4 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedPellet4
+  - type: Stack
+    stackType: RUMCCraftedStackShell4
+    count: 1
+
+- type: entity
+  parent: RUMCCraftedHeavyShellBase
+  id: RUMCCraftedHeavyShell4
+  categories: [ HideSpawnMenu ]
+  suffix: heavy, 4 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedHeavyPellet4
+  - type: Stack
+    stackType: RUMCCraftedStackHeavyShell4
+    count: 1
+
+
+- type: entity
+  parent: RUMCCraftedShellBase
+  id: RUMCCraftedShell6
+  categories: [ HideSpawnMenu ]
+  suffix: 6 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedPellet6
+  - type: Stack
+    stackType: RUMCCraftedStackShell6
+    count: 1
+
+- type: entity
+  parent: RUMCCraftedHeavyShellBase
+  id: RUMCCraftedHeavyShell6
+  categories: [ HideSpawnMenu ]
+  suffix: heavy, 6 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedHeavyPellet6
+  - type: Stack
+    stackType: RUMCCraftedStackHeavyShell6
+    count: 1
+
+
+- type: entity
+  parent: RUMCCraftedShellBase
+  id: RUMCCraftedShell8
+  categories: [ HideSpawnMenu ]
+  suffix: 8 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedPellet8
+  - type: Stack
+    stackType: RUMCCraftedStackShell8
+    count: 1
+
+- type: entity
+  parent: RUMCCraftedHeavyShellBase
+  id: RUMCCraftedHeavyShell8
+  categories: [ HideSpawnMenu ]
+  suffix: heavy, 8 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedHeavyPellet8
+  - type: Stack
+    stackType: RUMCCraftedStackHeavyShell8
+    count: 1
+
+
+- type: entity
+  parent: RUMCCraftedShellBase
+  id: RUMCCraftedShell9
+  categories: [ HideSpawnMenu ]
+  suffix: 9 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedPellet9
+  - type: Stack
+    stackType: RUMCCraftedStackShell9
+    count: 1
+
+- type: entity
+  parent: RUMCCraftedHeavyShellBase
+  id: RUMCCraftedHeavyShell9
+  categories: [ HideSpawnMenu ]
+  suffix: heavy, 9 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedHeavyPellet9
+  - type: Stack
+    stackType: RUMCCraftedStackHeavyShell9
+    count: 1
+
+
+- type: entity
+  parent: RUMCCraftedShellBase
+  id: RUMCCraftedShell12
+  categories: [ HideSpawnMenu ]
+  suffix: 12 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedPellet12
+  - type: Stack
+    stackType: RUMCCraftedStackShell12
+    count: 1
+
+- type: entity
+  parent: RUMCCraftedHeavyShellBase
+  id: RUMCCraftedHeavyShell12
+  categories: [ HideSpawnMenu ]
+  suffix: heavy, 12 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedHeavyPellet12
+  - type: Stack
+    stackType: RUMCCraftedStackHeavyShell12
+    count: 1
+
+
+- type: entity
+  parent: RUMCCraftedShellBase
+  id: RUMCCraftedShell16
+  categories: [ HideSpawnMenu ]
+  suffix: 16 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedPellet16
+  - type: Stack
+    stackType: RUMCCraftedStackShell16
+    count: 1
+
+- type: entity
+  parent: RUMCCraftedHeavyShellBase
+  id: RUMCCraftedHeavyShell16
+  categories: [ HideSpawnMenu ]
+  suffix: heavy, 16 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedHeavyPellet16
+  - type: Stack
+    stackType: RUMCCraftedStackHeavyShell16
+    count: 1
+
+
+- type: entity
+  parent: RUMCCraftedShellBase
+  id: RUMCCraftedShell20
+  categories: [ HideSpawnMenu ]
+  suffix: 20 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedPellet20
+  - type: Stack
+    stackType: RUMCCraftedStackShell20
+    count: 1
+
+- type: entity
+  parent: RUMCCraftedHeavyShellBase
+  id: RUMCCraftedHeavyShell20
+  categories: [ HideSpawnMenu ]
+  suffix: heavy, 20 pellets
+  components:
+  - type: CartridgeAmmo
+    proto: RUMCCraftedHeavyPellet20
+  - type: Stack
+    stackType: RUMCCraftedStackHeavyShell20
+    count: 1
+
+
+# ---------------------------------------------------------------- the stacks: cartridges made the same lie in one stack (and no others do)
+
+
+- type: stack
+  id: RUMCCraftedStackCartridgeAp5
+  name: handmade cartridge
+  spawn: RUMCCraftedCartridgeAp5
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackCartridgeAp10
+  name: handmade cartridge
+  spawn: RUMCCraftedCartridgeAp10
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackCartridgeAp15
+  name: handmade cartridge
+  spawn: RUMCCraftedCartridgeAp15
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackCartridgeAp20
+  name: handmade cartridge
+  spawn: RUMCCraftedCartridgeAp20
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackCartridgeAp25
+  name: handmade cartridge
+  spawn: RUMCCraftedCartridgeAp25
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackCartridgeAp30
+  name: handmade cartridge
+  spawn: RUMCCraftedCartridgeAp30
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackCartridgeAp35
+  name: handmade cartridge
+  spawn: RUMCCraftedCartridgeAp35
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackCartridgeAp40
+  name: handmade cartridge
+  spawn: RUMCCraftedCartridgeAp40
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackCartridgeAp50
+  name: handmade cartridge
+  spawn: RUMCCraftedCartridgeAp50
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackCartridgeP1
+  name: handmade cartridge
+  spawn: RUMCCraftedCartridgeP1
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackCartridgeP4
+  name: handmade cartridge
+  spawn: RUMCCraftedCartridgeP4
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackCartridgeP6
+  name: handmade cartridge
+  spawn: RUMCCraftedCartridgeP6
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackCartridgeP8
+  name: handmade cartridge
+  spawn: RUMCCraftedCartridgeP8
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackCartridgeP9
+  name: handmade cartridge
+  spawn: RUMCCraftedCartridgeP9
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackCartridgeP12
+  name: handmade cartridge
+  spawn: RUMCCraftedCartridgeP12
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackCartridgeP16
+  name: handmade cartridge
+  spawn: RUMCCraftedCartridgeP16
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackCartridgeP20
+  name: handmade cartridge
+  spawn: RUMCCraftedCartridgeP20
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackShell1
+  name: handmade cartridge
+  spawn: RUMCCraftedShell1
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackHeavyShell1
+  name: handmade cartridge
+  spawn: RUMCCraftedHeavyShell1
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackShell4
+  name: handmade cartridge
+  spawn: RUMCCraftedShell4
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackHeavyShell4
+  name: handmade cartridge
+  spawn: RUMCCraftedHeavyShell4
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackShell6
+  name: handmade cartridge
+  spawn: RUMCCraftedShell6
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackHeavyShell6
+  name: handmade cartridge
+  spawn: RUMCCraftedHeavyShell6
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackShell8
+  name: handmade cartridge
+  spawn: RUMCCraftedShell8
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackHeavyShell8
+  name: handmade cartridge
+  spawn: RUMCCraftedHeavyShell8
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackShell9
+  name: handmade cartridge
+  spawn: RUMCCraftedShell9
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackHeavyShell9
+  name: handmade cartridge
+  spawn: RUMCCraftedHeavyShell9
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackShell12
+  name: handmade cartridge
+  spawn: RUMCCraftedShell12
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackHeavyShell12
+  name: handmade cartridge
+  spawn: RUMCCraftedHeavyShell12
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackShell16
+  name: handmade cartridge
+  spawn: RUMCCraftedShell16
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackHeavyShell16
+  name: handmade cartridge
+  spawn: RUMCCraftedHeavyShell16
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackShell20
+  name: handmade cartridge
+  spawn: RUMCCraftedShell20
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackHeavyShell20
+  name: handmade cartridge
+  spawn: RUMCCraftedHeavyShell20
+  maxCount: 20
+
+
+- type: stack
+  id: RUMCCraftedStackCartridge
+  name: handmade cartridge
+  spawn: RUMCCraftedCartridge
+  maxCount: 20
+

@@ -58,6 +58,7 @@
       output:
         !type:CableDeviceNode
         nodeGroupID: Apc
+        connection: Both
   - type: PowerMonitoringDevice
     group: APC
     sourceNode: input
@@ -180,6 +181,17 @@
   - type: Battery
     maxCharge: 50000
     startingCharge: 50000
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      input:
+        !type:CableDeviceNode
+        nodeGroupID: MVPower
+        connection: Direct
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: Apc
+        connection: Both
 
 - type: entity
   parent: BaseAPC

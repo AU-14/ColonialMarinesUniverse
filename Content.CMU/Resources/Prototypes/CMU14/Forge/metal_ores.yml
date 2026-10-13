@@ -1,0 +1,443 @@
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCIronOre
+  name: iron ore
+  icon: { sprite: CMU14/Objects/Materials/ore.rsi, state: iron }
+  spawn: RUMCIronOre1
+
+- type: entity
+  parent: OreBase
+  id: RUMCIronOre
+  name: iron ore
+  description: A chunk of unrefined iron ore.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: RUMCIronOre
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/ore.rsi
+    state: iron
+  - type: Item
+    sprite: CMU14/Objects/Materials/ore.rsi
+    heldPrefix: iron
+
+- type: entity
+  parent: RUMCIronOre
+  id: RUMCIronOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: ore
+  id: RUMCOreIron
+  oreEntity: RUMCIronOre1
+  minOreYield: 1
+  maxOreYield: 3
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCAluminumOre
+  name: aluminum ore
+  icon: { sprite: CMU14/Objects/Materials/ore.rsi, state: aluminum }
+  spawn: RUMCAluminumOre1
+
+- type: entity
+  parent: OreBase
+  id: RUMCAluminumOre
+  name: aluminum ore
+  description: A chunk of unrefined aluminum ore.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: RUMCAluminumOre
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/ore.rsi
+    state: aluminum
+  - type: Item
+    sprite: CMU14/Objects/Materials/ore.rsi
+    heldPrefix: aluminum
+
+- type: entity
+  parent: RUMCAluminumOre
+  id: RUMCAluminumOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: ore
+  id: RUMCOreAluminum
+  oreEntity: RUMCAluminumOre1
+  minOreYield: 1
+  maxOreYield: 3
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCChromeOre
+  name: chrome ore
+  icon: { sprite: CMU14/Objects/Materials/ore.rsi, state: chrome }
+  spawn: RUMCChromeOre1
+
+- type: entity
+  parent: OreBase
+  id: RUMCChromeOre
+  name: chrome ore
+  description: A chunk of unrefined chrome ore.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: RUMCChromeOre
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/ore.rsi
+    state: chrome
+  - type: Item
+    sprite: CMU14/Objects/Materials/ore.rsi
+    heldPrefix: chrome
+
+- type: entity
+  parent: RUMCChromeOre
+  id: RUMCChromeOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: ore
+  id: RUMCOreChrome
+  oreEntity: RUMCChromeOre1
+  minOreYield: 1
+  maxOreYield: 3
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCCobaltOre
+  name: cobalt ore
+  icon: { sprite: CMU14/Objects/Materials/ore.rsi, state: cobalt }
+  spawn: RUMCCobaltOre1
+
+- type: entity
+  parent: OreBase
+  id: RUMCCobaltOre
+  name: cobalt ore
+  description: A chunk of unrefined cobalt ore.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: RUMCCobaltOre
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/ore.rsi
+    state: cobalt
+  - type: Item
+    sprite: CMU14/Objects/Materials/ore.rsi
+    heldPrefix: cobalt
+
+- type: entity
+  parent: RUMCCobaltOre
+  id: RUMCCobaltOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: ore
+  id: RUMCOreCobalt
+  oreEntity: RUMCCobaltOre1
+  minOreYield: 1
+  maxOreYield: 3
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCCopperOre
+  name: copper ore
+  icon: { sprite: CMU14/Objects/Materials/ore.rsi, state: copper }
+  spawn: RUMCCopperOre1
+
+- type: entity
+  parent: OreBase
+  id: RUMCCopperOre
+  name: copper ore
+  description: A chunk of unrefined copper ore.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: RUMCCopperOre
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/ore.rsi
+    state: copper
+  - type: Item
+    sprite: CMU14/Objects/Materials/ore.rsi
+    heldPrefix: copper
+
+- type: entity
+  parent: RUMCCopperOre
+  id: RUMCCopperOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: ore
+  id: RUMCOreCopper
+  oreEntity: RUMCCopperOre1
+  minOreYield: 1
+  maxOreYield: 3
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCGoldOre
+  name: gold ore
+  icon: { sprite: CMU14/Objects/Materials/ore.rsi, state: gold }
+  spawn: RUMCGoldOre1
+
+- type: entity
+  parent: OreBase
+  id: RUMCGoldOre
+  name: gold ore
+  description: A chunk of unrefined gold ore.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: RUMCGoldOre
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/ore.rsi
+    state: gold
+  - type: Item
+    sprite: CMU14/Objects/Materials/ore.rsi
+    heldPrefix: gold
+
+- type: entity
+  parent: RUMCGoldOre
+  id: RUMCGoldOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: ore
+  id: RUMCOreGold
+  oreEntity: RUMCGoldOre1
+  minOreYield: 1
+  maxOreYield: 3
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCLeadOre
+  name: lead ore
+  icon: { sprite: CMU14/Objects/Materials/ore.rsi, state: lead }
+  spawn: RUMCLeadOre1
+
+- type: entity
+  parent: OreBase
+  id: RUMCLeadOre
+  name: lead ore
+  description: A chunk of unrefined lead ore.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: RUMCLeadOre
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/ore.rsi
+    state: lead
+  - type: Item
+    sprite: CMU14/Objects/Materials/ore.rsi
+    heldPrefix: lead
+
+- type: entity
+  parent: RUMCLeadOre
+  id: RUMCLeadOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: ore
+  id: RUMCOreLead
+  oreEntity: RUMCLeadOre1
+  minOreYield: 1
+  maxOreYield: 3
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCSilverOre
+  name: silver ore
+  icon: { sprite: CMU14/Objects/Materials/ore.rsi, state: silver }
+  spawn: RUMCSilverOre1
+
+- type: entity
+  parent: OreBase
+  id: RUMCSilverOre
+  name: silver ore
+  description: A chunk of unrefined silver ore.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: RUMCSilverOre
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/ore.rsi
+    state: silver
+  - type: Item
+    sprite: CMU14/Objects/Materials/ore.rsi
+    heldPrefix: silver
+
+- type: entity
+  parent: RUMCSilverOre
+  id: RUMCSilverOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: ore
+  id: RUMCOreSilver
+  oreEntity: RUMCSilverOre1
+  minOreYield: 1
+  maxOreYield: 3
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCTitaniumOre
+  name: titanium ore
+  icon: { sprite: CMU14/Objects/Materials/ore.rsi, state: titanium }
+  spawn: RUMCTitaniumOre1
+
+- type: entity
+  parent: OreBase
+  id: RUMCTitaniumOre
+  name: titanium ore
+  description: A chunk of unrefined titanium ore.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: RUMCTitaniumOre
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/ore.rsi
+    state: titanium
+  - type: Item
+    sprite: CMU14/Objects/Materials/ore.rsi
+    heldPrefix: titanium
+
+- type: entity
+  parent: RUMCTitaniumOre
+  id: RUMCTitaniumOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: ore
+  id: RUMCOreTitanium
+  oreEntity: RUMCTitaniumOre1
+  minOreYield: 1
+  maxOreYield: 3
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCTungstenOre
+  name: tungsten ore
+  icon: { sprite: CMU14/Objects/Materials/ore.rsi, state: tungsten }
+  spawn: RUMCTungstenOre1
+
+- type: entity
+  parent: OreBase
+  id: RUMCTungstenOre
+  name: tungsten ore
+  description: A chunk of unrefined tungsten ore.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: RUMCTungstenOre
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/ore.rsi
+    state: tungsten
+  - type: Item
+    sprite: CMU14/Objects/Materials/ore.rsi
+    heldPrefix: tungsten
+
+- type: entity
+  parent: RUMCTungstenOre
+  id: RUMCTungstenOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: ore
+  id: RUMCOreTungsten
+  oreEntity: RUMCTungstenOre1
+  minOreYield: 1
+  maxOreYield: 3
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCPlatinumOre
+  name: platinum ore
+  icon: { sprite: CMU14/Objects/Materials/ore.rsi, state: platinum }
+  spawn: RUMCPlatinumOre1
+
+- type: entity
+  parent: OreBase
+  id: RUMCPlatinumOre
+  name: platinum ore
+  description: A chunk of unrefined platinum ore.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: RUMCPlatinumOre
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/ore.rsi
+    state: platinum
+  - type: Item
+    sprite: CMU14/Objects/Materials/ore.rsi
+    heldPrefix: platinum
+
+- type: entity
+  parent: RUMCPlatinumOre
+  id: RUMCPlatinumOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: ore
+  id: RUMCOrePlatinum
+  oreEntity: RUMCPlatinumOre1
+  minOreYield: 1
+  maxOreYield: 3
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCUraniumOre
+  name: uranium ore
+  icon: { sprite: CMU14/Objects/Materials/ore.rsi, state: uranium }
+  spawn: RUMCUraniumOre1
+
+- type: entity
+  parent: OreBase
+  id: RUMCUraniumOre
+  name: uranium ore
+  description: A chunk of unrefined uranium ore.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: RUMCUraniumOre
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/ore.rsi
+    state: uranium
+  - type: Item
+    sprite: CMU14/Objects/Materials/ore.rsi
+    heldPrefix: uranium
+
+- type: entity
+  parent: RUMCUraniumOre
+  id: RUMCUraniumOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: ore
+  id: RUMCOreUranium
+  oreEntity: RUMCUraniumOre1
+  minOreYield: 1
+  maxOreYield: 3

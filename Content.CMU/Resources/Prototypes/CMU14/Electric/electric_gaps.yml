@@ -1,0 +1,71 @@
+# The machines of the grid that the earlier files had no way to build: the grinder, the drilling rig, the electric smelter and the condenser.
+
+- type: craftRecipe
+  id: RUMCCraftBuildGrinder
+  name: au14-craft-recipe-buildgrinder
+  output: RUMCGrinder
+  time: 20
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCMotor
+    amount: 2
+  - stack: RUMCBasicCircuit
+    amount: 1
+  - stack: RUMCInsulatedCable
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftBuildElectricDrill
+  name: au14-craft-recipe-buildelectricdrill
+  output: RUMCElectricDrill
+  time: 20
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCMotor
+    amount: 2
+  - stack: RUMCPiston
+    amount: 1
+  - stack: RUMCBasicCircuit
+    amount: 1
+  - stack: RUMCInsulatedCable
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftBuildElectricSmelter
+  name: au14-craft-recipe-buildelectricsmelter
+  output: RUMCElectricSmelter
+  time: 20
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCHeatingCoil
+    amount: 4
+  - stack: RUMCBasicCircuit
+    amount: 2
+  - stack: RUMCInsulatedCable
+    amount: 4
+
+- type: craftRecipe
+  id: RUMCCraftBuildCondenser
+  name: au14-craft-recipe-buildcondenser
+  output: RUMCCondenser
+  time: 20
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCPump
+    amount: 2
+  - stack: RUMCBasicCircuit
+    amount: 1
+  - stack: RUMCInsulatedCable
+    amount: 2

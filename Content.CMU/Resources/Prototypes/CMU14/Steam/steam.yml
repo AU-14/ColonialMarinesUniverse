@@ -1,0 +1,459 @@
+# The steam age: liquid pipes, the boiler, the pump, the barrel, the cooling station, the steam generator and the steam smelter.
+# The sprites are placeholders. A liquid pipe is joined to a machine with a screwdriver: first the pipe, then the machine; the same
+# two clicks take them apart again. A pipe clicked after another pipe is joined to it in the same way. Steam is the water vapor
+# gas, in the ordinary gas pipes.
+
+- type: entity
+  abstract: true
+  parent: CMBaseStructure
+  id: RUMCSteamMachineBase
+  components:
+  - type: PortableStructure
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+# Pipes: they carry any liquid, whichever comes into them first, and pass it on to the pipes next to them. They are drawn with an
+# arm on every side where they are joined. A brass pipe and a steel one are the same but for the look. A pipe that goes down also
+# passes the liquid to the pipe in the same place on the level below.
+# Steam is the water vapor gas of the atmosphere and goes through the ordinary gas pipes, joined to the machines that use it.
+
+- type: entity
+  abstract: true
+  id: RUMCFluidPipeBase
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Anchorable
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Fixtures
+  - type: CollideOnAnchor
+  - type: Appearance
+  - type: FluidPipe
+
+- type: entity
+  parent: RUMCFluidPipeBase
+  id: RUMCBrassPipe
+  name: brass pipe
+  description: A length of brass pipe for liquids. It carries any liquid, one at a time, and pipes next to each other pass it along slowly. Join it to a machine with a screwdriver, the pipe first and then the machine.
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: FloorObjects
+    sprite: CMU14/Production/Steam/pipes_brass.rsi
+    layers:
+    - state: c0
+      map: [ "pipe" ]
+
+- type: entity
+  parent: RUMCFluidPipeBase
+  id: RUMCSteelPipe
+  name: steel pipe
+  description: A length of steel pipe for liquids. It carries any liquid, one at a time, and pipes next to each other pass it along slowly. Join it to a machine with a screwdriver, the pipe first and then the machine.
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: FloorObjects
+    sprite: CMU14/Production/Steam/pipes_steel.rsi
+    layers:
+    - state: c0
+      map: [ "pipe" ]
+
+- type: entity
+  parent: RUMCBrassPipe
+  id: RUMCBrassPipeDown
+  name: brass pipe going down
+  description: A brass pipe that goes down through the floor, and the liquid it carries goes to the pipe in the same place on the level below.
+  components:
+  - type: FluidPipe
+    down: true
+
+- type: entity
+  parent: RUMCSteelPipe
+  id: RUMCSteelPipeDown
+  name: steel pipe going down
+  description: A steel pipe that goes down through the floor, and the liquid it carries goes to the pipe in the same place on the level below.
+  components:
+  - type: FluidPipe
+    down: true
+
+# Molten slag, left by the smelter.
+- type: reagent
+  id: RUMCSlag
+  name: reagent-name-au14-slag
+  group: Elements
+  desc: reagent-desc-au14-slag
+  physicalDesc: reagent-physical-desc-viscous
+  flavor: bitter
+  color: "#6b4f3a"
+  boilingPoint: 2000.0
+  meltingPoint: 1000.0
+
+# Slag, once it has set.
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCSlag
+  name: slag
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: black_stone_fragment }
+  spawn: RUMCSlagChunk
+
+- type: entity
+  parent: BaseItem
+  id: RUMCSlagChunk
+  name: slag
+  description: A lump of slag that has set hard.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    state: black_stone_fragment
+    noRot: true
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCSlag
+    count: 1
+
+# Machines
+
+- type: entity
+  parent: RUMCSteamMachineBase
+  id: RUMCBoiler
+  name: boiler
+  description: A boiler. Put coal, coke, planks or branches in its fuel slot and pipe water in, and it turns the water into steam in the gas pipes joined to it.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Steam/boiler.rsi
+    layers:
+    - state: boiler
+      map: [ "cold" ]
+    - state: boiler_on
+      map: [ "hot" ]
+      visible: false
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.BoilerVisuals.Burning:
+        cold:
+          True: { visible: false }
+          False: { visible: true }
+        hot:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Boiler
+    fuels:
+      Coal: 20
+      RUMCCokeCoal: 40
+      RMCWood: 12
+      RUMCBranch: 6
+  - type: WindowMachine
+    stackSlots:
+    - fuel
+  - type: ItemSlots
+    slots:
+      fuel:
+        whitelist:
+          components:
+          - Stack
+        insertOnInteract: false
+  - type: ContainerContainer
+    containers:
+      fuel: !type:ContainerSlot
+  - type: PointLight
+    enabled: false
+    radius: 3
+    energy: 2
+    color: "#FF8C1A"
+  - type: FluidTank
+    capacity: 100
+  - type: FluidPorts
+    ports:
+    - id: water_in
+      kind: Water
+      rate: 10
+      limit: 100
+  - type: NodeContainer
+    nodes:
+      steam:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: Fourway
+  - type: SteamPort
+  - type: UserInterface
+    interfaces:
+      enum.BoilerUiKey.Key:
+        type: BoilerBoundUserInterface
+  - type: ActivatableUI
+    key: enum.BoilerUiKey.Key
+
+- type: entity
+  parent: [ BaseGenerator ]
+  id: RUMCSteamGenerator
+  name: steam generator
+  description: A generator turned by steam. Join a gas pipe with steam to it and a high voltage cable, and it makes power for as long as the steam lasts.
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Steam/steam_generator.rsi
+    state: generator
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+        connection: Both
+      steam:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: Fourway
+  - type: SteamPort
+  - type: PortableStructure
+  - type: PowerSupplier
+    enabled: false
+    supplyRate: 3000
+  - type: SteamGenerator
+
+- type: entity
+  parent: RUMCSteamMachineBase
+  id: RUMCBrassPump
+  name: brass water pump
+  description: A brass pump that draws water up, slowly, and gives it to a pipe.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Steam/pump_brass.rsi
+    state: pump
+  - type: FluidPump
+    waterPerSecond: 2
+  - type: FluidTank
+    capacity: 50
+  - type: FluidPorts
+    ports:
+    - id: water_out
+      kind: Water
+      output: true
+      rate: 2
+
+# The steel pump does twice as much and holds twice as much as the brass one.
+- type: entity
+  parent: RUMCSteamMachineBase
+  id: RUMCSteelPump
+  name: steel water pump
+  description: A steel pump that draws water up twice as fast as the brass one, and holds twice as much, and gives it to a pipe.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Steam/pump_steel.rsi
+    state: pump
+  - type: FluidPump
+    waterPerSecond: 4
+  - type: FluidTank
+    capacity: 100
+  - type: FluidPorts
+    ports:
+    - id: water_out
+      kind: Water
+      output: true
+      rate: 4
+
+- type: entity
+  parent: RUMCSteamMachineBase
+  id: RUMCFluidBarrel
+  name: fluid barrel
+  description: A brass barrel for liquids, big enough for ten thousand litres. Pour a beaker into it, draw from it with a container in the hand using the right click, or join pipes to its inlet and outlet with a screwdriver. It takes any liquid.
+  components:
+  - type: Sprite
+    noRot: true
+    offset: 0,0.25
+    sprite: CMU14/Production/Steam/barrel.rsi
+    state: barrel
+  - type: FluidTank
+    capacity: 10000
+  - type: FluidFillable
+  - type: FluidPorts
+    ports:
+    - id: liquid_in
+      rate: 20
+    - id: liquid_out
+      output: true
+      rate: 20
+  - type: UserInterface
+    interfaces:
+      enum.FluidPortsUiKey.Key:
+        type: FluidPortsBoundUserInterface
+
+# The condenser: a liquid and the liquid that cools it come in, a material goes into its slot, and the liquid sets into pieces.
+- type: entity
+  abstract: true
+  parent: RUMCSteamMachineBase
+  id: RUMCCondenserBase
+  components:
+  - type: Condenser
+  - type: ItemSlots
+    slots:
+      material:
+        whitelist:
+          components:
+          - Stack
+        insertOnInteract: false
+      output:
+        insertOnInteract: false
+  - type: ContainerContainer
+    containers:
+      material: !type:ContainerSlot
+      output: !type:ContainerSlot
+  - type: WindowMachine
+    stackSlots:
+    - material
+    outputSlots:
+    - output
+  - type: FluidTank
+    capacity: 100
+  - type: FluidPorts
+    ports:
+    - id: hot_in
+      limit: 50
+    - id: coolant_in
+      limit: 50
+  - type: UserInterface
+    interfaces:
+      enum.CondenserUiKey.Key:
+        type: CondenserBoundUserInterface
+      enum.FluidPortsUiKey.Key:
+        type: FluidPortsBoundUserInterface
+  - type: ActivatableUI
+    key: enum.CondenserUiKey.Key
+
+- type: entity
+  parent: [ RUMCCondenserBase, BaseMachinePowered ]
+  id: RUMCCondenser
+  name: condenser
+  description: A condenser that runs on the grid. A liquid comes in at one inlet and the liquid that cools it at the other, and with a material in its slot the liquid sets into solid pieces. Slag is cooled with water.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Steam/condenser_steel.rsi
+    state: condenser
+  - type: ApcPowerReceiver
+    powerLoad: 400
+
+# The brass condenser needs neither power nor steam, only a steady supply of the coolant.
+- type: entity
+  parent: RUMCCondenserBase
+  id: RUMCBrassCondenser
+  name: brass condenser
+  description: A brass condenser that needs no power, only a steady supply of the liquid that cools. A liquid comes in at one inlet and the coolant at the other, and with a material in its slot the liquid sets into solid pieces. Slag is cooled with water.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Steam/condenser_brass.rsi
+    state: condenser
+  - type: Condenser
+    needsPower: false
+    steadyCoolant: 15
+
+- type: cmuCondenserRecipe
+  id: RUMCCondenseSlag
+  liquid: RUMCSlag
+  liquidAmount: 10
+  coolant: Water
+  coolantAmount: 5
+  result: RUMCSlag
+  resultAmount: 1
+  duration: 4
+
+- type: entity
+  parent: RUMCSteamMachineBase
+  id: RUMCSteamSmelter
+  name: steam smelter
+  description: A brass smelter driven by steam. It has no thermostat and no recipes of its own, so seat a mold for three ingots and enough ore for them, and it makes three ingots, leaving slag that goes out through a liquid pipe.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Steam/steam_smelter.rsi
+    state: smelter
+  - type: SteamSmelter
+  - type: ItemSlots
+    slots:
+      material1:
+        whitelist:
+          components:
+          - Stack
+        insertOnInteract: false
+      material2:
+        whitelist:
+          components:
+          - Stack
+        insertOnInteract: false
+      material3:
+        whitelist:
+          components:
+          - Stack
+        insertOnInteract: false
+      material4:
+        whitelist:
+          components:
+          - Stack
+        insertOnInteract: false
+      mold:
+        whitelist:
+          components:
+          - PressMold
+        insertOnInteract: false
+      output:
+        insertOnInteract: false
+  - type: ContainerContainer
+    containers:
+      material1: !type:ContainerSlot
+      material2: !type:ContainerSlot
+      material3: !type:ContainerSlot
+      material4: !type:ContainerSlot
+      mold: !type:ContainerSlot
+      output: !type:ContainerSlot
+  - type: WindowMachine
+    stackSlots:
+    - material1
+    - material2
+    - material3
+    - material4
+    outputSlots:
+    - output
+  - type: FluidTank
+    capacity: 200
+  - type: NodeContainer
+    nodes:
+      steam:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: Fourway
+  - type: SteamPort
+  - type: FluidPorts
+    ports:
+    - id: slag_out
+      kind: RUMCSlag
+      output: true
+      rate: 4
+  - type: UserInterface
+    interfaces:
+      enum.SteamSmelterUiKey.Key:
+        type: SteamSmelterBoundUserInterface
+  - type: ActivatableUI
+    key: enum.SteamSmelterUiKey.Key

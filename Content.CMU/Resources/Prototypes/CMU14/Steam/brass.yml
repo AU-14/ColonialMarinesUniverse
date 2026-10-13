@@ -1,0 +1,216 @@
+# Brass for the steam age: the parts that every brass mechanism is built of, and the ordinary gas pipes in brass.
+# The sprites are placeholders: the brass parts are the forged parts in the color of brass, and the brass gas pipes are the ordinary ones, tinted.
+
+# ---------------------------------------------------------------- brass parts
+
+- type: stack
+  id: RUMCBrassParts
+  name: brass parts
+  icon: { sprite: CMU14/Objects/Materials/forged_parts.rsi, state: forged_parts }
+  spawn: RUMCBrassPartsItem
+  maxCount: 5
+
+- type: entity
+  parent: BaseItem
+  id: RUMCBrassPartsItem
+  name: brass parts
+  description: "Small hand-forged brass components: gears, bushings and fittings. Every brass mechanism is built of them."
+  components:
+  - type: Stack
+    stackType: RUMCBrassParts
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/forged_parts.rsi
+    state: forged_parts
+    scale: 0.66,0.66
+    color: "#d4b24a"
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - Metal
+
+# ---------------------------------------------------------------- brass gas pipes
+# The ordinary gas pipes of the atmosphere (steam goes through them), made of brass: the same pipes in every way, in the color of brass.
+
+- type: entity
+  abstract: true
+  parent: GasPipeBase
+  id: RUMCBrassGasPipeBase
+  name: brass gas pipe
+  description: A gas pipe of brass. It holds gas, and steam goes through it as it goes through the steel ones.
+  components:
+  - type: AtmosPipeColor
+    color: "#d4b24a"
+  - type: GuideHelp
+    guides:
+    - Pipes
+    - PipeNetworks
+
+- type: entity
+  parent: RUMCBrassGasPipeBase
+  id: RUMCBrassGasPipeHalf
+  suffix: Half
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: NodeContainer
+    nodes:
+      pipe:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: South
+        volume: 100
+  - type: Sprite
+    layers:
+    - sprite: Structures/Piping/Atmospherics/pipe.rsi
+      state: pipeHalf
+      map: [ "enum.PipeVisualLayers.Pipe" ]
+  - type: AtmosPipeLayers
+    pipeLayer: 0
+  - type: Item
+    size: Small
+    storedSprite:
+      sprite: Structures/Piping/Atmospherics/pipe.rsi
+      state: storageHalf
+
+- type: entity
+  parent: RUMCBrassGasPipeBase
+  id: RUMCBrassGasPipeStraight
+  suffix: Straight
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: NodeContainer
+    nodes:
+      pipe:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: Longitudinal
+  - type: Sprite
+    layers:
+    - sprite: Structures/Piping/Atmospherics/pipe.rsi
+      state: pipeStraight
+      map: [ "enum.PipeVisualLayers.Pipe" ]
+  - type: AtmosPipeLayers
+    pipeLayer: 0
+  - type: Item
+    storedSprite:
+      sprite: Structures/Piping/Atmospherics/pipe.rsi
+      state: storageStraight
+    shape:
+    - 0,0,0,2
+  - type: MeleeWeapon
+    attackRate: 1
+    damage:
+      types:
+        Blunt: 8
+    soundHit:
+      collection: MetalThud
+
+- type: entity
+  parent: RUMCBrassGasPipeBase
+  id: RUMCBrassGasPipeBend
+  suffix: Bend
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: NodeContainer
+    nodes:
+      pipe:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: SWBend
+  - type: Sprite
+    layers:
+    - sprite: Structures/Piping/Atmospherics/pipe.rsi
+      state: pipeBend
+      map: [ "enum.PipeVisualLayers.Pipe" ]
+  - type: AtmosPipeLayers
+    pipeLayer: 0
+  - type: Item
+    shape:
+    - 0,0,1,0
+    - 1,1,1,1
+    heldPrefix: Bend
+    storedSprite:
+      sprite: Structures/Piping/Atmospherics/pipe.rsi
+      state: storageBend
+  - type: MeleeWeapon
+    wideAnimationRotation: 180
+    attackRate: 1
+    damage:
+      types:
+        Blunt: 6
+    soundHit:
+      collection: MetalThud
+
+- type: entity
+  parent: RUMCBrassGasPipeBase
+  id: RUMCBrassGasPipeTJunction
+  suffix: TJunction
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: NodeContainer
+    nodes:
+      pipe:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: TSouth
+  - type: Sprite
+    layers:
+    - sprite: Structures/Piping/Atmospherics/pipe.rsi
+      state: pipeTJunction
+      map: [ "enum.PipeVisualLayers.Pipe" ]
+  - type: AtmosPipeLayers
+    pipeLayer: 0
+  - type: Item
+    heldPrefix: TJunction
+    storedSprite:
+      sprite: Structures/Piping/Atmospherics/pipe.rsi
+      state: storageTJunction
+  - type: MeleeWeapon
+    wideAnimationRotation: 90
+    attackRate: 0.75
+    damage:
+      types:
+        Blunt: 10
+    soundHit:
+      collection: MetalThud
+
+- type: entity
+  parent: RUMCBrassGasPipeBase
+  id: RUMCBrassGasPipeFourway
+  suffix: Fourway
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: Transform
+    noRot: true
+  - type: NodeContainer
+    nodes:
+      pipe:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: Fourway
+  - type: Sprite
+    layers:
+    - sprite: Structures/Piping/Atmospherics/pipe.rsi
+      state: pipeFourway
+      map: [ "enum.PipeVisualLayers.Pipe" ]
+  - type: AtmosPipeLayers
+    pipeLayer: 0
+  - type: Item
+    heldPrefix: Fourway
+    storedSprite:
+      sprite: Structures/Piping/Atmospherics/pipe.rsi
+      state: storageFourway
+  - type: MeleeWeapon
+    wideAnimationRotation: 90
+    attackRate: 0.75
+    damage:
+      types:
+        Blunt: 10
+    soundHit:
+      collection: MetalThud

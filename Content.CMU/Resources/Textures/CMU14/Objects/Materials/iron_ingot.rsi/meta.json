@@ -1,0 +1,164 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created for Colonial Marines Universe",
+  "size": {
+    "x": 32,
+    "y": 23
+  },
+  "states": [
+    {
+      "name": "ingot"
+    },
+    {
+      "name": "ingot_hot"
+    },
+    {
+      "name": "aluminum"
+    },
+    {
+      "name": "aluminum_hot"
+    },
+    {
+      "name": "chrome"
+    },
+    {
+      "name": "chrome_hot"
+    },
+    {
+      "name": "cobalt"
+    },
+    {
+      "name": "cobalt_hot"
+    },
+    {
+      "name": "cuprum"
+    },
+    {
+      "name": "cuprum_hot"
+    },
+    {
+      "name": "gold"
+    },
+    {
+      "name": "gold_hot"
+    },
+    {
+      "name": "lead"
+    },
+    {
+      "name": "lead_hot"
+    },
+    {
+      "name": "plastitan"
+    },
+    {
+      "name": "plastitan_hot"
+    },
+    {
+      "name": "silver"
+    },
+    {
+      "name": "silver_hot"
+    },
+    {
+      "name": "titanium"
+    },
+    {
+      "name": "titanium_hot"
+    },
+    {
+      "name": "tungsten"
+    },
+    {
+      "name": "tungsten_hot"
+    },
+    {
+      "name": "weapon_steel"
+    },
+    {
+      "name": "weapon_steel_hot"
+    },
+    {
+      "name": "saltpeter"
+    },
+    {
+      "name": "cinnabar"
+    },
+    {
+      "name": "asbestos"
+    },
+    {
+      "name": "fluorite"
+    },
+    {
+      "name": "beryllium"
+    },
+    {
+      "name": "coltan"
+    },
+    {
+      "name": "alexandrite"
+    },
+    {
+      "name": "diamond"
+    },
+    {
+      "name": "emerald"
+    },
+    {
+      "name": "ruby"
+    },
+    {
+      "name": "phosphorus"
+    },
+    {
+      "name": "trimorid"
+    },
+    {
+      "name": "laxanite"
+    },
+    {
+      "name": "laytoite"
+    },
+    {
+      "name": "platinum"
+    },
+    {
+      "name": "platinum_hot"
+    },
+    {
+      "name": "plasteel"
+    },
+    {
+      "name": "plasteel_hot"
+    },
+    {
+      "name": "stone_fragment"
+    },
+    {
+      "name": "black_stone_fragment"
+    },
+    {
+      "name": "quartz"
+    },
+    {
+      "name": "silicon"
+    },
+    {
+      "name": "drilling_attachment"
+    },
+    {
+      "name": "zinc"
+    },
+    {
+      "name": "zinc_hot"
+    },
+    {
+      "name": "brass"
+    },
+    {
+      "name": "brass_hot"
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+- type: entity
+  id: RUMCPit
+  name: pit
+  description: A rough hole dug into the ground. You could fall right through it.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/xeno_tunnel.rsi
+    drawdepth: FloorTiles
+    state: hole
+  - type: Pit
+  - type: CMUZLevelFallThrough
+  - type: ZDestroyedOnCollapse
+
+- type: entity
+  parent: BaseItem
+  id: RUMCRopeCoil
+  name: coil of rope
+  description: A sturdy coil of rope, long enough to reach the level below.
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/rope_item.rsi
+    state: rope
+  - type: Item
+    size: Small
+  - type: RopeCoil
+
+- type: entity
+  parent: CMUZLevelRopeThroughDown2
+  id: RUMCPitRopeDown
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/rope_down.rsi
+    drawdepth: WallTops
+    state: rope-down
+  - type: CMUZLevelFallThrough
+  - type: ZDestroyedOnCollapse
+
+- type: entity
+  parent: CMUZLevelRopeThroughUp
+  id: RUMCPitRopeUp
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/rope_up.rsi
+    drawdepth: WallTops
+    state: rope-up
+
+- type: entity
+  parent: CMUZLevelLadderThroughDown3
+  id: RUMCPitLadderDown
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/pit_ladder.rsi
+    drawdepth: WallTops
+    state: ladder
+  - type: CMUZLevelFallThrough
+  - type: ZDestroyedOnCollapse
+
+- type: entity
+  parent: CMUZLevelLadderThroughUp3
+  id: RUMCPitLadderUp
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/pit_ladder.rsi
+    drawdepth: WallTops
+    state: ladder
+
+- type: entity
+  parent: CMUZLevelLadderBase
+  id: RUMCPitHatchDown
+  name: hatch
+  description: A hatch leading down. It's closed.
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/hatch.rsi
+    drawdepth: WallTops
+    layers:
+    - state: closed
+      map: ["base"]
+  - type: Hatch
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.HatchVisuals.Open:
+        base:
+          True: { state: open }
+          False: { state: closed }
+      enum.HatchVisuals.Invisible:
+        base:
+          True: { color: "#00000000" }
+          False: { color: "#FFFFFFFF" }
+
+- type: entity
+  parent: AU14ZStairDown
+  id: RUMCPitStairDown
+  components:
+  - type: ZStair
+    direction: -1
+    partnerProto: AU14ZStairUp

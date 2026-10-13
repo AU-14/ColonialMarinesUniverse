@@ -10,7 +10,6 @@ using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.OnCollide;
 // CMU14: fire growth and synthetic resistance.
 using Content.Shared._RMC14.Synth;
-using Content.Shared._RMC14.Water; // CMU14
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.Atmos;
@@ -76,7 +75,6 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
-    [Dependency] private RMCWaterSystem _rmcWater = default!; // CMU14
 
     private static readonly ProtoId<ReagentPrototype> WaterReagent = "Water";
     private static readonly ProtoId<TagPrototype> StructureTag = "Structure";
@@ -152,13 +150,6 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
 
     private void OnTileFireMapInit(Entity<TileFireComponent> ent, ref MapInitEvent args)
     {
-        // CMU14: flames cannot burn on uncovered water.
-        if (_net.IsServer && _rmcWater.IsOnWater(ent))
-        {
-            QueueDel(ent);
-            return;
-        }
-
         ent.Comp.SpawnedAt = _timing.CurTime;
         // CMU14: fire growth and synthetic resistance.
         if (ent.Comp.GrowthDuration > TimeSpan.Zero && TryComp(ent, out RMCIgniteOnCollideComponent? ignition))
@@ -846,36 +837,11 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
     }
 
     // CMU14: fire growth and synthetic resistance.
-    /// <summary>
-    /// Fire bypasses worn armor, but respects synthetic and Yautja heat resistance unless the fire is
-    /// <paramref name="penetrating"/> (Firepenetrating fuel), in which case every resistance is ignored.
-    /// </summary>
-    public void DamageFromFire(EntityUid target, DamageSpecifier damage, bool interruptsDoAfters = true, EntityUid? origin = null, bool penetrating = false)
+    /// <summary>Fire bypasses worn armor, but respects synthetic and Yautja heat resistance.</summary>
+    public void DamageFromFire(EntityUid target, DamageSpecifier damage, bool interruptsDoAfters = true, EntityUid? origin = null)
     {
-        var ignoreResistances = penetrating || (!HasComp<SynthComponent>(target) && !HasComp<YautjaComponent>(target));
-        _damageable.TryChangeDamage(target, damage, ignoreResistances: ignoreResistances,
+        _damageable.TryChangeDamage(target, damage, ignoreResistances: !HasComp<SynthComponent>(target) && !HasComp<YautjaComponent>(target),
             interruptsDoAfters: interruptsDoAfters, origin: origin);
-    }
-
-    // CMU14 method - Firepenetrating fuel
-    public void SetFirePenetrating(Entity<RMCIgniteOnCollideComponent?> ent, bool penetrating)
-    {
-        if (!Resolve(ent, ref ent.Comp, false))
-            return;
-
-        ent.Comp.FirePenetrating = penetrating;
-        Dirty(ent.Owner, ent.Comp);
-    }
-
-    // CMU14 method - flamer blends scale the tile fire's lifetime
-    /// <summary>Multiplies the remaining lifetime of a tile fire, keeping its spawn time.</summary>
-    public void ScaleTileFireDuration(Entity<TileFireComponent?> fire, float multiplier)
-    {
-        if (multiplier <= 0 || !Resolve(fire, ref fire.Comp, false))
-            return;
-
-        fire.Comp.Duration *= multiplier;
-        Dirty(fire.Owner, fire.Comp);
     }
 
     private void TryIgnite(Entity<RMCIgniteOnCollideComponent> ent, EntityUid other, bool checkIgnited)
@@ -922,7 +888,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
 
         if (!wasOnFire && IsOnFire(flammableEnt) && CanFireBypassImmunity(ent, other))
             // CMU14: fire growth and synthetic resistance.
-            DamageFromFire(other, flammableEnt.Comp.Damage * ent.Comp.Intensity, penetrating: ent.Comp.FirePenetrating);
+            DamageFromFire(other, flammableEnt.Comp.Damage * ent.Comp.Intensity);
     }
 
     private void ApplyTileEffect(Entity<SteppingOnFireComponent> ent, RMCIgniteOnCollideComponent ignite, EntityUid fireEntity)
@@ -943,23 +909,6 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
                 stepping.ArmorMultiplier *= mod.DebuffModifier;
         }
 
-        // CMU14 Begin: fireproof wearers get their fire protection on the per-meter
-        // walking tick too; previously only the standing tick applied it, so every new
-        // fire tile stepped hit at full strength (AU-14 PR #2296).
-        var canIgnite = CanBeIgnited(uid, fireEntity, ignite.Intensity);
-        var fireProtection = 1f;
-        if (!canIgnite)
-        {
-            var ev = new GetFireProtectionEvent();
-            RaiseLocalEvent(uid, ref ev);
-
-            if (_inventoryQuery.TryComp(uid, out var inv))
-                _inventory.RelayEvent((uid, inv), ref ev);
-
-            fireProtection = ev.Multiplier;
-        }
-        // CMU14 End
-
         var coords = _transform.GetMoverCoordinates(uid);
         if (stepping.LastPosition is { } last &&
             last.TryDistance(EntityManager, _transform, coords, out var distance))
@@ -969,8 +918,8 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
             {
                 stepping.Distance = 0;
                 if (CanFireBypassImmunity(fireEntity, uid))
-                    // CMU14: fire growth and synthetic resistance; walking ticks take fire protection.
-                    DamageFromFire(uid, tile * ignite.Intensity * fireProtection, penetrating: ignite.FirePenetrating);
+                    // CMU14: fire growth and synthetic resistance.
+                    DamageFromFire(uid, tile * ignite.Intensity);
             }
         }
 
@@ -978,8 +927,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
             return;
 
         // Check for ignition immunity before igniting
-        // CMU14: read above the walking tick so fire protection can reuse it
-        //var canIgnite = CanBeIgnited(uid, fireEntity, ignite.Intensity);
+        var canIgnite = CanBeIgnited(uid, fireEntity, ignite.Intensity);
 
         if (canIgnite)
         {
@@ -1001,19 +949,16 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         {
             // Damaging entities that are immune to being ignited but NOT immune to the fire's damage
             // Same update rate as FlammableSystem
-            // CMU14: fire protection is read once above the walking tick and reused here
-            //var ev = new GetFireProtectionEvent();
-            //RaiseLocalEvent(uid, ref ev);
+            var ev = new GetFireProtectionEvent();
+            RaiseLocalEvent(uid, ref ev);
 
-            // CMU14
-            //if (_inventoryQuery.TryComp(uid, out var inv))
-            //    _inventory.RelayEvent((uid, inv), ref ev);
+            if (_inventoryQuery.TryComp(uid, out var inv))
+                _inventory.RelayEvent((uid, inv), ref ev);
 
             if (ent.Comp.UpdateAt <= timing)
             {
                 // CMU14: fire growth and synthetic resistance.
-                // CMU14
-                DamageFromFire(uid, ignite.Intensity / 5f * flammable.Damage * fireProtection, interruptsDoAfters: false, penetrating: ignite.FirePenetrating);
+                DamageFromFire(uid, ignite.Intensity / 5f * flammable.Damage * ev.Multiplier, interruptsDoAfters: false);
                 ent.Comp.UpdateAt = timing + ent.Comp.UpdateTime;
             }
         }
@@ -1057,6 +1002,16 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
             _inventory.RelayEvent((target, inv), ref ev);
 
         return ev.Ignite;
+    }
+
+    /// <summary>CMU14: puts on a projectile the fire of the fuel it carries: how hot, how long, and the color of the flame (the gunsmith's bullets with a fuel in them).</summary>
+    public void SetProjectileFire(EntityUid projectile, int intensity, int duration, Color color)
+    {
+        var ignite = EnsureComp<IgniteOnProjectileHitComponent>(projectile);
+        ignite.Intensity = intensity;
+        ignite.Duration = duration;
+        ignite.BurnColor = color;
+        Dirty(projectile, ignite);
     }
 
     public void ChangeBurnColor(EntityUid target, Color color)

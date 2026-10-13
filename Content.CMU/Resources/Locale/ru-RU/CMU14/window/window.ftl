@@ -1,0 +1,13 @@
+au14-window-materials = Материалы
+au14-window-attachments = Насадки
+au14-window-output = Выход
+au14-window-temperature = Температура
+au14-window-blueprint = Чертёж
+au14-window-upgrades = Улучшения
+au14-window-steam = Пар
+au14-window-water = Вода
+au14-window-slag = Шлак
+au14-window-storage = Хранилище жидкостей
+au14-window-fuel = Топливо
+au14-window-regulators = Регуляторы
+au14-grinder-status-no-steam = Нет пара

@@ -1,0 +1,72 @@
+# Coke: the coal of the game, a darker version of it.
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCCokeCoal
+  name: coke
+  icon: { sprite: CMU14/Objects/Materials/coke.rsi, state: coke }
+  spawn: RUMCCokeCoal1
+
+- type: entity
+  parent: Coal
+  id: RUMCCokeCoal
+  name: coke
+  description: Coal baked until little but carbon is left. It burns hotter and cleaner than coal does.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: RUMCCokeCoal
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/coke.rsi
+    state: coke
+  - type: Item
+    sprite: CMU14/Objects/Materials/coke.rsi
+    heldPrefix: coke
+  - type: PhysicalComposition
+    materialComposition: {}
+
+- type: entity
+  parent: RUMCCokeCoal
+  id: RUMCCokeCoal1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+# Resin, drawn out of a tree through a hole made with a knife.
+- type: reagent
+  id: RUMCResin
+  name: reagent-name-au14-resin
+  group: Elements
+  desc: reagent-desc-au14-resin
+  physicalDesc: reagent-physical-desc-viscous
+  flavor: bitter
+  color: "#c98a2b"
+  boilingPoint: 300.0
+  meltingPoint: 20.0
+
+# A branch broken off a tree: firewood.
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCBranch
+  name: branch
+  icon: { sprite: CMU14/Objects/Materials/branch.rsi, state: branch }
+  spawn: RUMCBranch
+
+- type: entity
+  parent: BaseItem
+  id: RUMCBranch
+  name: branch
+  description: A branch broken off a tree. Good firewood.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/branch.rsi
+    state: branch
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCBranch
+    count: 1
+  - type: Tag
+    tags:
+    - RUMCStick

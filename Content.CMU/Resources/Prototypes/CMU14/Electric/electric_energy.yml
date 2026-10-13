@@ -1,0 +1,156 @@
+# The big machines of the grid: the geothermal generator (it stands beside the lava of the black stone layer), the heavy diesel generator and the
+# battery bank. They all give to the high voltage line, like the other generators.
+
+- type: entity
+  parent: [ BaseGenerator ]
+  id: RUMCGeothermalGenerator
+  name: geothermal generator
+  description: A boiler on a plate of heat-resistant alloy that makes power of the heat of the earth. Set it beside the lava of the black stone layer, and every piece of the lake within its reach gives it a share of the power, up to four.
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/geothermal.rsi
+    noRot: true
+    layers:
+    - state: off
+      map: [ "off" ]
+    - state: on
+      map: [ "on" ]
+      visible: false
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.RecipeMachineVisuals.Working:
+        on:
+          True: { visible: true }
+          False: { visible: false }
+        off:
+          True: { visible: false }
+          False: { visible: true }
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+        connection: Both
+  - type: PortableStructure
+  - type: PowerSupplier
+    enabled: false
+    supplyRate: 14000
+  - type: SourceGenerator
+    source: RUMCCaveLava
+    supplyPerSource: 3500
+    maxSources: 4
+
+# The big diesel generator: four times the power of the small one, and it burns only twice as much.
+- type: entity
+  parent: RUMCDieselGenerator
+  id: RUMCDieselGeneratorHeavy
+  name: heavy diesel generator
+  description: A big diesel engine on a frame, with a tank of its own. It gives four times the power of the small generator and burns only twice the fuel. Pour diesel into it from a canister (or pipe it in), join a high voltage cable.
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/dieselheavy.rsi
+    scale: 1,1
+    offset: 0,0.05
+    color: "#ffffff"
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.45,-0.5,1.45,0.3"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: PowerSupplier
+    supplyRate: 20000
+    supplyRampRate: 3000
+    supplyRampTolerance: 3000
+  - type: FluidTank
+    capacity: 800
+  - type: LiquidFuelGenerator
+    fuels:
+      RUMCDiesel: 1.0
+      RUMCLightFuel: 2.0
+
+# The battery bank: a big store for the high voltage line, joined like a small one through a cable terminal.
+- type: entity
+  parent: BaseSMES
+  id: RUMCBatteryBank
+  name: battery bank
+  description: A big store of power for the high voltage line, many times the battery buffer. It takes in what the generators make beyond use and gives it back when they make less. Join it through a cable terminal, as a big SMES is.
+  components:
+  - type: Sprite
+    color: "#ffd890"
+  - type: Battery
+    netsync: false
+    startingCharge: 0
+    maxCharge: 12000000
+  - type: PowerNetworkBattery
+    maxSupply: 60000
+    maxChargeRate: 24000
+    supplyRampTolerance: 15000
+    supplyRampRate: 3000
+
+# ---------------------------------------------------------------- crafts
+- type: craftRecipe
+  id: RUMCCraftBuildGeothermalGenerator
+  name: au14-craft-recipe-buildgeothermalgenerator
+  output: RUMCGeothermalGenerator
+  time: 30
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 2
+  - stack: RUMCPump
+    amount: 2
+  - stack: RUMCHeatingCoil
+    amount: 4
+  - stack: RUMCThermoAlloy
+    amount: 4
+  - stack: RUMCBasicCircuit
+    amount: 2
+  - stack: RUMCInsulatedCable
+    amount: 4
+
+- type: craftRecipe
+  id: RUMCCraftBuildDieselGeneratorHeavy
+  name: au14-craft-recipe-builddieselgeneratorheavy
+  output: RUMCDieselGeneratorHeavy
+  time: 30
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 2
+  - stack: RUMCMotor
+    amount: 4
+  - stack: RUMCPiston
+    amount: 4
+  - stack: RUMCIronGear
+    amount: 4
+  - stack: RUMCBasicCircuit
+    amount: 2
+  - stack: RUMCInsulatedCable
+    amount: 4
+
+- type: craftRecipe
+  id: RUMCCraftBuildBatteryBank
+  name: au14-craft-recipe-buildbatterybank
+  output: RUMCBatteryBank
+  time: 35
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 2
+  - item: RUMCCellLeadAcid
+    amount: 8
+  - stack: RUMCBasicCircuit
+    amount: 3
+  - stack: RUMCInsulatedCable
+    amount: 6

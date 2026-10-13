@@ -40,6 +40,11 @@ namespace Content.Server.Power.EntitySystems
                     continue;
 
                 var otherTransform = Transform(reachable.Owner);
+
+                // A cable joined from another level (a cable shaft) is not drawn as a neighbour of this one.
+                if (otherTransform.GridUid != transform.GridUid)
+                    continue;
+
                 var otherTile = _map.TileIndicesFor((transform.GridUid.Value, grid), otherTransform.Coordinates);
                 var diff = otherTile - tile;
 

@@ -3,21 +3,6 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # Building overhaul (z-level): underground stone + debris.
 
-# Loose rock flung outward when a cave-in starts (before the roof buries the cavern). Salvage flavour.
-# Borrows ONLY the SteelOre1 (iron ore) sprite, tinted darker and scaled down so it reads as a small rock chunk.
-- type: entity
-  parent: BaseItem
-  id: AU14RockDebris
-  name: rock debris
-  suffix: AU14 z-build
-  description: A chunk of rock thrown loose by a cave-in.
-  components:
-  - type: Sprite
-    sprite: Objects/Materials/ore.rsi
-    state: iron
-    color: "#6b6b6b"
-    scale: 0.7, 0.7
-
 # Collapse atmosphere: waterfall-mist fog, but see-through (Occluder off) and non-blocking, auto-despawns.
 - type: entity
   parent: CMUFogWallLamentWaterfallMist

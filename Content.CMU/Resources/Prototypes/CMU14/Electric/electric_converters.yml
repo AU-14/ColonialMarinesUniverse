@@ -1,0 +1,200 @@
+# The transformers: they change the voltage of the grid (the high voltage line to the medium one and back). The chain goes from the generator (high voltage)
+# through the transformer down to the medium voltage line, through the panel or the APC to the low voltage, and to the machines.
+# Every one takes a cable under it or run by hand. A transformer is a casing, a core, the windings and the insulation: so it is made of those.
+
+# ---------------------------------------------------------------- the transformers
+- type: entity
+  abstract: true
+  parent: [ CoreSubstation, BaseMachine, BaseMachineDestructible ]
+  id: RUMCTransformerBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Electric/transformer.rsi
+    state: transformer
+    noRot: true
+  - type: Battery
+    netsync: false
+    maxCharge: 600000
+    startingCharge: 0
+  - type: PowerNetworkBattery
+    maxSupply: 80000
+    maxChargeRate: 40000
+    supplyRampTolerance: 8000
+    supplyRampRate: 4000
+  - type: BatteryInterface
+    minChargeRate: 5000
+    maxChargeRate: 40000
+    minSupply: 5000
+    maxSupply: 80000
+  - type: PortableStructure
+
+# The one that steps the high voltage line down to the medium one, as the substation does, with a battery of its own.
+- type: entity
+  parent: RUMCTransformerBase
+  id: RUMCTransformerDown
+  name: step-down transformer
+  description: Takes the high voltage line and gives the medium voltage one, and after it come the panels and the APCs. Join the high voltage cable to one side and the medium to the other (under it or run by hand).
+  components:
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      input:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+        connection: Both
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: MVPower
+        connection: Both
+  - type: BatteryCharger
+    voltage: High
+  - type: BatteryDischarger
+    voltage: Medium
+
+# And the one that steps the medium line up to the high one, for a generator that makes the medium voltage, or to carry power far along the thin cable.
+- type: entity
+  parent: RUMCTransformerBase
+  id: RUMCTransformerUp
+  name: step-up transformer
+  description: Takes the medium voltage line and gives the high voltage one, to carry the power far, or from a generator of the medium voltage to the grid. Join the medium voltage cable to one side and the high to the other (under it or run by hand).
+  components:
+  - type: Sprite
+    color: "#ffe9a8"
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      input:
+        !type:CableDeviceNode
+        nodeGroupID: MVPower
+        connection: Both
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+        connection: Both
+  - type: BatteryCharger
+    voltage: Medium
+  - type: BatteryDischarger
+    voltage: High
+
+# ---------------------------------------------------------------- crafts
+# The casing of two iron sheets, the core of two magnetic rods, the primary and the secondary winding of copper wire, and cable for the insulation.
+- type: craftRecipe
+  id: RUMCCraftBuildTransformerDown
+  name: au14-craft-recipe-buildtransformerdown
+  output: RUMCTransformerDown
+  time: 25
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCIronSheet
+    amount: 2
+  - stack: RUMCMagneticRod
+    amount: 2
+  - stack: RUMCCopperWire
+    amount: 6
+  - stack: RUMCInsulatedCable
+    amount: 3
+
+# The step-up one winds its high voltage side of the conductor alloy, and its core is heavier.
+- type: craftRecipe
+  id: RUMCCraftBuildTransformerUp
+  name: au14-craft-recipe-buildtransformerup
+  output: RUMCTransformerUp
+  time: 25
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCIronSheet
+    amount: 2
+  - stack: RUMCMagneticRod
+    amount: 3
+  - stack: RUMCCopperWire
+    amount: 4
+  - stack: RUMCConductorAlloy
+    amount: 2
+  - stack: RUMCInsulatedCable
+    amount: 3
+
+# The panel of the grid (the medium voltage line to the low one) has a way to be built too, of the same parts.
+- type: craftRecipe
+  id: RUMCCraftBuildPowerPanel
+  name: au14-craft-recipe-buildpowerpanel
+  output: PowerPanel
+  time: 20
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCIronSheet
+    amount: 1
+  - stack: RUMCInductor
+    amount: 2
+  - stack: RUMCBasicCircuit
+    amount: 1
+  - stack: RUMCInsulatedCable
+    amount: 3
+
+# ---------------------------------------------------------------- the colony APC
+# The APC of the stage: a cabinet with a door of its own. Shut, its screen works and the wiring is out of reach; open, the panel can be unscrewed,
+# the live terminals can shock, and the screen is out of reach.
+- type: entity
+  parent: BaseAPC
+  id: RUMCColonyApc
+  name: colony APC
+  description: A steel power cabinet with a door. Shut, it shows its screen; open, it shows the wiring. Feed it the medium voltage and it gives the low one to a cable run by hand and to every device in its reach.
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/Electric/lkp.rsi
+    offset: 0,0
+    layers:
+    - state: closed
+      map: ["door"]
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+      visible: false
+    - state: display-charging
+      shader: unshaded
+      map: ["enum.ApcVisualLayers.ChargeState"]
+    - state: channel-on
+      shader: unshaded
+      map: ["enum.ApcVisualLayers.Equipment"]
+      visible: false
+  - type: ServiceDoor
+  - type: GenericVisualizer
+    visuals:
+      enum.ServiceDoorVisuals.Open:
+        door:
+          True: { state: open }
+          False: { state: closed }
+  - type: Battery
+    maxCharge: 100000
+    startingCharge: 100000
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      input:
+        !type:CableDeviceNode
+        nodeGroupID: MVPower
+        connection: Both
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: Apc
+        connection: Both
+  - type: ExtensionCableProvider
+    transferRange: 6
+
+- type: craftRecipe
+  id: RUMCCraftBuildColonyApc
+  name: au14-craft-recipe-buildcolonyapc
+  output: RUMCColonyApc
+  time: 20
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCIronSheet
+    amount: 2
+  - stack: RUMCBasicCircuit
+    amount: 1
+  - stack: RUMCCapacitor
+    amount: 2
+  - stack: RUMCInsulatedCable
+    amount: 3

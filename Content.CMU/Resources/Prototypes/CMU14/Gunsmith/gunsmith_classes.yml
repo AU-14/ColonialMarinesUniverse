@@ -1,0 +1,76 @@
+# The classes of weapons. A class says what a weapon of it can be: the bore and the powder of its cartridge (a caliber too big for a pistol is not a pistol's),
+# the length of the barrel, the stock. The looks of the weapons of the game are each of a class, and so is a weapon made of parts, by choice.
+
+- type: gunsmithClass
+  id: GunsmithClassPistol
+  name: gunsmith-class-pistol
+  minBoreMm: 4.5
+  maxBoreMm: 13.0
+  maxChargeG: 3.5
+  maxCaseLengthMm: 40
+  minBarrelMm: 40
+  maxBarrelMm: 260
+  stocks: [ None ]
+
+- type: gunsmithClass
+  id: GunsmithClassSmg
+  name: gunsmith-class-smg
+  minBoreMm: 4.5
+  maxBoreMm: 11.5
+  maxChargeG: 2.0
+  maxCaseLengthMm: 33
+  minBarrelMm: 120
+  maxBarrelMm: 450
+
+- type: gunsmithClass
+  id: GunsmithClassRifle
+  name: gunsmith-class-rifle
+  minBoreMm: 4.5
+  maxBoreMm: 12.0
+  maxChargeG: 5.5
+  maxCaseLengthMm: 70
+  minBarrelMm: 250
+  maxBarrelMm: 900
+
+- type: gunsmithClass
+  id: GunsmithClassLmg
+  name: gunsmith-class-lmg
+  minBoreMm: 5.0
+  maxBoreMm: 12.7
+  maxChargeG: 20
+  maxCaseLengthMm: 110
+  minBarrelMm: 350
+  maxBarrelMm: 800
+  stocks: [ Fixed, Folding ]
+
+- type: gunsmithClass
+  id: GunsmithClassSniper
+  name: gunsmith-class-sniper
+  minBoreMm: 5.0
+  maxBoreMm: 13.0
+  maxChargeG: 12
+  maxCaseLengthMm: 100
+  minBarrelMm: 500
+  maxBarrelMm: 1000
+  stocks: [ Fixed ]
+
+- type: gunsmithClass
+  id: GunsmithClassShotgun
+  name: gunsmith-class-shotgun
+  minBoreMm: 12.0
+  maxBoreMm: 20.0
+  maxChargeG: 6.0
+  maxCaseLengthMm: 100
+  minBarrelMm: 250
+  maxBarrelMm: 900
+
+- type: gunsmithClass
+  id: GunsmithClassHeavy
+  name: gunsmith-class-heavy
+  minBoreMm: 7.0
+  maxBoreMm: 13.0
+  maxChargeG: 20
+  maxCaseLengthMm: 110
+  minBarrelMm: 600
+  maxBarrelMm: 1000
+  stocks: [ Fixed, None ]

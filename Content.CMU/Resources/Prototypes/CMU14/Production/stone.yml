@@ -1,0 +1,187 @@
+# Stone, black stone, their powders and sand, and the walls that drop the stone.
+# A fragment of broken rock. It is made the way the ores are: a stack of small pieces that is carried in one hand
+# and does not slow anyone down. Every wall of rock breaks into three to five of them.
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCStone
+  name: stone fragment
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: stone_fragment }
+  spawn: RUMCStoneItem
+
+- type: stack
+  parent: BaseMediumStack
+  id: RUMCBlackStone
+  name: black stone fragment
+  icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: black_stone_fragment }
+  spawn: RUMCBlackStoneItem
+
+- type: entity
+  parent: BaseItem
+  id: RUMCStoneItem
+  name: stone fragment
+  description: A fragment of broken rock.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    state: stone_fragment
+    noRot: true
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCStone
+    count: 1
+  - type: Tag
+    tags:
+    - Ore
+
+- type: entity
+  parent: BaseItem
+  id: RUMCBlackStoneItem
+  name: black stone fragment
+  description: A fragment of dark, nearly black rock.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/iron_ingot.rsi
+    state: black_stone_fragment
+    noRot: true
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCBlackStone
+    count: 1
+  - type: Tag
+    tags:
+    - Ore
+
+- type: stack
+  id: RUMCStonePowder
+  name: stone powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: stone }
+  spawn: RUMCStonePowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCStonePowderItem
+  name: stone powder
+  description: Finely ground stone dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: stone
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCStonePowder
+    count: 1
+
+- type: stack
+  id: RUMCBlackStonePowder
+  name: black stone powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: black_stone }
+  spawn: RUMCBlackStonePowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCBlackStonePowderItem
+  name: black stone powder
+  description: Finely ground black stone dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: black_stone
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCBlackStonePowder
+    count: 1
+
+- type: stack
+  id: RUMCSand
+  name: sand
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: sand }
+  spawn: RUMCSandItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCSandItem
+  name: sand
+  description: A pile of coarse sand.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: sand
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCSand
+    count: 1
+
+# Stone gives way to a pickaxe even when it is not wielded: piercing and structural damage hurt it more than the metal walls it was copied from.
+- type: damageModifierSet
+  id: RUMCRockWallMod
+  coefficients:
+    Piercing: 2
+    Structural: 3
+    Blunt: 0.5
+    Slash: 0.5
+
+# The plain stone wall of the stone levels: a solid block that breaks into three to five fragments of stone.
+- type: entity
+  parent: mineablesolarisrock
+  id: RUMCRockWall
+  name: stone wall
+  description: A wall of solid rock. Breaking it yields fragments of stone.
+  components:
+  - type: Damageable
+    damageModifierSet: RUMCRockWallMod
+  - type: PreferredTool
+    whitelist:
+      tags:
+      - Pickaxe
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 168
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          RUMCStoneItem:
+            min: 3
+            max: 5
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+
+- type: entity
+  parent: RUMCRockWall
+  id: RUMCBlackRockWall
+  name: black stone wall
+  description: A wall of dark, nearly black rock. Breaking it yields fragments of black stone.
+  components:
+  - type: Damageable
+    damageModifierSet: RUMCBlackRockWallMod
+  - type: PreferredTool
+    whitelist:
+      tags:
+      - Jackhammer
+  - type: Sprite
+    sprite: CMU14/Structures/black_stone.rsi
+  - type: Icon
+    sprite: CMU14/Structures/black_stone.rsi
+    state: full
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 168
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          RUMCBlackStoneItem:
+            min: 3
+            max: 5
+      - !type:DoActsBehavior
+        acts: ["Destruction"]

@@ -17,6 +17,11 @@ public abstract partial class Node
     [DataField("nodeGroupID")]
     public NodeGroupID NodeGroupID { get; private set; } = NodeGroupID.Default;
 
+    [DataField("connection")]
+    public NodeConnectorMode Connection { get; private set; } = NodeConnectorMode.Adjacent;
+
+    public readonly HashSet<Node> DirectLinks = new();
+
     /// <summary>
     ///     The node group this node is a part of.
     /// </summary>

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
+using System.Linq;
 using System.Numerics;
 using Content.Server.Chat.Managers;
 using Content.Server.Shuttles.Systems;
@@ -22,6 +23,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -57,6 +59,8 @@ public sealed partial class ZCaveInSystem : EntitySystem
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private TagSystem _tag = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private ZLandingSystem _landing = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     private static readonly TimeSpan WarningTime = TimeSpan.FromSeconds(8);
 
@@ -118,6 +122,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
             _lastDigger.Clear();
             _loadBearingTerrain.Clear();
             _loadBearingTerrainAt.Clear();
+            _resourceByTile.Clear();
         });
     }
 
@@ -372,7 +377,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
         _chat.SendAdminAlert(Loc.GetString("au-cavein-admin-alert", ("count", region.Count), ("culprit", culprit)));
 
         // Before the roof buries the cavern, fling loose rocks and lay see-through fog for atmosphere.
-        ThrowDebris(grid, region, settings);
+        ThrowDebris(stoneMap, grid, region, settings);
         SpawnFog(grid, region, settings);
 
         foreach (var t in region)
@@ -389,19 +394,56 @@ public sealed partial class ZCaveInSystem : EntitySystem
         BuildCollapseFeedbackDistances(stoneMap.Comp, region);
     }
 
-    /// <summary>Spawns a handful of loose rocks across the doomed cavern and flings them 1-2 tiles in random directions.</summary>
-    private void ThrowDebris(Entity<MapGridComponent> grid, List<Vector2i> region, ZBuildableMapComponent settings)
+    /// <summary>
+    /// Spawns a handful of the resource of the layer across the doomed cavern and flings it 1-2 tiles in random directions: stone where the rock above is stone, clay where the
+    /// layer above is clay, and so on.
+    /// </summary>
+    private void ThrowDebris(Entity<ZGeneratedStoneComponent> stoneMap, Entity<MapGridComponent> grid, List<Vector2i> region, ZBuildableMapComponent settings)
     {
         var count = Math.Min(region.Count, 10);
         for (var i = 0; i < count; i++)
         {
             var tile = region[_random.Next(region.Count)];
             var coords = _map.GridTileToLocal(grid.Owner, grid.Comp, tile);
-            var rock = Spawn(settings.RockDebris, coords);
+            var rock = Spawn(CollapseResourceAt(stoneMap, grid, tile, settings), coords);
 
             var direction = _random.NextAngle().ToVec() * _random.NextFloat(1f, 2f);
             _throwing.TryThrow(rock, direction, baseThrowSpeed: 5f);
         }
+    }
+
+    /// <summary>The resource that comes down at this tile: that of the rock standing over it on the level above, or the stone of the default when nothing stands there.</summary>
+    private EntProtoId CollapseResourceAt(Entity<ZGeneratedStoneComponent> stoneMap, Entity<MapGridComponent> grid, Vector2i tile, ZBuildableMapComponent settings)
+    {
+        if (FindBlockAbove(stoneMap, grid, tile) is { } block && MetaData(block).EntityPrototype is { } proto)
+            return CollapseResourceOf(proto, settings);
+
+        return settings.DefaultCollapseResource;
+    }
+
+    /// <summary>The resource of a rock: its own entry in the settings, or that of the nearest parent that has one, or the default.</summary>
+    private EntProtoId CollapseResourceOf(EntityPrototype proto, ZBuildableMapComponent settings)
+    {
+        var seen = 0;
+        var stack = new Stack<EntityPrototype>();
+        stack.Push(proto);
+        while (stack.Count > 0 && seen++ < 64)
+        {
+            var current = stack.Pop();
+            if (settings.CollapseResources.TryGetValue(current.ID, out var resource))
+                return resource;
+
+            if (current.Parents is not { } parents)
+                continue;
+
+            foreach (var parent in parents)
+            {
+                if (_prototypes.TryIndex<EntityPrototype>(parent, out var parentProto))
+                    stack.Push(parentProto);
+            }
+        }
+
+        return settings.DefaultCollapseResource;
     }
 
     /// <summary>Lays see-through fog over roughly every third cavern tile while it collapses.</summary>
@@ -477,13 +519,67 @@ public sealed partial class ZCaveInSystem : EntitySystem
         // Animated falling-rock effect as the roof comes down on this tile.
         Spawn(settings.CollapseRockProp, coords);
 
-        // Bury the tile in rock (the roof falling in).
-        Spawn(settings.StoneRockEntity, coords);
+        // The block that was over this tile falls in: whatever stands on the level above is what lands here, and if nothing does, nothing does.
+        if (TakeBlockAbove(stoneMap, grid, tile) is { } fallen)
+            Spawn(fallen, coords);
+
         stoneMap.Comp.LastCollapseRegion.Add(tile);
 
         // The ground/default level directly above loses its floor tile in the SAME spot, so the surface caves
         // into the pit exactly where the underground gave way.
         RemoveSurfaceTileAbove(stoneMap, grid, tile);
+    }
+
+    /// <summary>
+    /// Takes the block that stands over this stone tile on the level above (a rock, a wall: whatever holds a roof up) and returns what it is, so that the same
+    /// lands below. The block above is gone; it has fallen. Nothing is taken from a ship, a staircase or a wall of the border of the map, and when
+    /// there is no such block over the tile the result is null.
+    /// </summary>
+    private EntProtoId? TakeBlockAbove(Entity<ZGeneratedStoneComponent> stoneMap, Entity<MapGridComponent> grid, Vector2i tile)
+    {
+        if (FindBlockAbove(stoneMap, grid, tile) is not { } block || MetaData(block).EntityPrototype?.ID is not { } id)
+            return null;
+
+        // The resource of its layer comes down with it, for the surface scatter at the end of the cave-in.
+        if (!_resourceByTile.TryGetValue(stoneMap.Owner, out var byTile))
+            _resourceByTile[stoneMap.Owner] = byTile = new Dictionary<Vector2i, EntProtoId>();
+
+        byTile[tile] = CollapseResourceOf(MetaData(block).EntityPrototype!, GetSettings(stoneMap.Owner));
+
+        Del(block);
+        return id;
+    }
+
+    // Per cave: the resource that came down at each tile, kept until the cave-in is over.
+    private readonly Dictionary<EntityUid, Dictionary<Vector2i, EntProtoId>> _resourceByTile = new();
+
+    /// <summary>The block that stands over this stone tile on the level above (a rock, a wall: whatever holds a roof up), or null when there is none, or it is a ship, a staircase or a wall of the border of the map.</summary>
+    private EntityUid? FindBlockAbove(Entity<ZGeneratedStoneComponent> stoneMap, Entity<MapGridComponent> grid, Vector2i tile)
+    {
+        if (!TryComp<CMUZLevelMapComponent>(stoneMap.Owner, out var zMap) || zMap.MapAbove is not { } aboveMap)
+            return null;
+
+        if (!TryComp<MapComponent>(aboveMap, out var aboveMapComp))
+            return null;
+
+        var worldPos = _transform.ToMapCoordinates(_map.GridTileToLocal(grid.Owner, grid.Comp, tile)).Position;
+        var aboveCoords = new MapCoordinates(worldPos, aboveMapComp.MapId);
+        if (!_map.TryFindGridAt(aboveCoords, out var aboveGridUid, out var aboveGrid) || HasComp<DropshipComponent>(aboveGridUid))
+            return null;
+
+        var aboveTile = _map.TileIndicesFor(aboveGridUid, aboveGrid, aboveCoords);
+        foreach (var anchored in _map.GetAnchoredEntities(aboveGridUid, aboveGrid, aboveTile).ToList())
+        {
+            if (!IsLoadBearing(anchored) || IsIndestructibleWall(anchored) || HasComp<CMUZLevelHighGroundComponent>(anchored))
+                continue;
+
+            if (MetaData(anchored).EntityPrototype is null)
+                continue;
+
+            return anchored;
+        }
+
+        return null;
     }
 
     /// <summary>True if a walk-through staircase (CMUZLevelHighGround) sits on this tile or within <paramref name="range"/> tiles.</summary>
@@ -552,7 +648,13 @@ public sealed partial class ZCaveInSystem : EntitySystem
 
         // Snapshot first: unanchoring mutates the grid's anchored-entity set.
         var anchored = new List<EntityUid>(_map.GetAnchoredEntities(surfaceGridUid, surfaceGrid, surfaceTile));
-        var belowCoords = new MapCoordinates(worldPos, belowMapComp.MapId);
+        // It falls on until there is a solid tile under it, not only to the next level.
+        var landingMap = _landing.FindLandingMap(belowMap, worldPos);
+        var belowCoords = new MapCoordinates(worldPos, TryComp<MapComponent>(landingMap, out var landingComp) ? landingComp.MapId : belowMapComp.MapId);
+        var surfaceMap = Transform(surfaceGridUid).MapUid;
+
+        // Only what would land inside something solid (a rock, a wall, a table) loses its collision; the rest keeps it.
+        var inside = _landing.LandsInsideSolid(landingMap, worldPos);
 
         foreach (var uid in anchored)
         {
@@ -561,6 +663,13 @@ public sealed partial class ZCaveInSystem : EntitySystem
 
             if (IsIndestructibleWall(uid))
                 continue; // never drop map-border walls
+
+            // A pit is part of the ground: when the tile under it collapses it is gone, it does not fall.
+            if (HasComp<ZDestroyedOnCollapseComponent>(uid))
+            {
+                QueueDel(uid);
+                continue;
+            }
 
             if (!TryComp(uid, out TransformComponent? xform))
                 continue;
@@ -573,13 +682,30 @@ public sealed partial class ZCaveInSystem : EntitySystem
                 continue;
             }
 
+            // On one level a thing falls only once.
+            if (!_landing.TryMarkFall(uid, surfaceMap))
+                continue;
+
             RemComp<StructuralSupportComponent>(uid);
             _transform.SetMapCoordinates(uid, belowCoords);
 
-            // Fallen structures are rubble: strip fixture hardness so a wall that lands inside (or later gets
-            // buried under) a cave rock can never sit there grinding contacts forever. That constant jitter was
-            // a physics drain that degraded server TPS (felt as ever-worsening UI lag) as the round ran on.
-            MakeFallenDebrisNonHard(uid);
+            // What lands inside a rock or a wall is rubble: strip fixture hardness so it can never sit there grinding contacts forever (that constant jitter was a physics drain that
+            // degraded server TPS). What lands on open floor keeps its collision.
+            if (inside)
+                MakeFallenDebrisNonHard(uid);
+        }
+
+        // What has fallen before and lies loose here falls again with the floor: as many times as there are floors to give way.
+        var loose = new List<EntityUid>();
+        _landing.GetFallenDebrisOnTile(surfaceGridUid, surfaceGrid, surfaceTile, loose);
+        foreach (var uid in loose)
+        {
+            if (!_landing.TryMarkFall(uid, surfaceMap))
+                continue;
+
+            _transform.SetMapCoordinates(uid, belowCoords);
+            if (inside)
+                MakeFallenDebrisNonHard(uid);
         }
     }
 
@@ -649,7 +775,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
     /// <summary>Turns a structure that has fallen through a collapsed floor into inert rubble: every fixture's
     /// collision layer/mask is zeroed (non-hard alone still raises contact events, so bullets would still "hit"
     /// the fallen wall - with no collision bits projectiles pass straight through and cave rocks never grind
-    /// contacts against it). The networked ZFallenDebris marker makes the client draw it battered.</summary>
+    /// contacts against it). The networked ZFallenDebris marker records that it has fallen (it may fall again, as often as the floor under it gives way).</summary>
     private void MakeFallenDebrisNonHard(EntityUid uid)
     {
         EnsureComp<ZFallenDebrisComponent>(uid);
@@ -893,8 +1019,16 @@ public sealed partial class ZCaveInSystem : EntitySystem
 
             // Scatter some debris on the surface (30% chance per sampled tile).
             if (_random.Prob(0.30f))
-                Spawn(settings.RockDebris, _map.GridTileToLocal(surfaceGridUid, surfaceGridComp, surfaceTile));
+            {
+                var resource = _resourceByTile.TryGetValue(stoneMap.Owner, out var byTile) && byTile.TryGetValue(region[i], out var fell)
+                    ? fell
+                    : new EntProtoId(settings.DefaultCollapseResource);
+                Spawn(resource, _map.GridTileToLocal(surfaceGridUid, surfaceGridComp, surfaceTile));
+            }
         }
+
+        // The resources that came down are told; the cave-in is over.
+        _resourceByTile.Remove(stoneMap.Owner);
 
         // Brief grey vignette blink for players on the surface NEAR the cave-in - not map-wide.
         // Region tiles map 1:1 to surface world positions, so distance is measured against the region's

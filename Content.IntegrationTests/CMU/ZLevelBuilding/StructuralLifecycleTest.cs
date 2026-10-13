@@ -316,6 +316,15 @@ public sealed class StructuralLifecycleTest
         {
             var entities = server.EntMan;
             cave = CreateCave(entities, map.MapUid, map.Grid.Owner, map.Tile.Tile, first, second);
+
+            // What falls into a cave is the block that stood over it: over each of the two the level above has one.
+            var surface = entities.System<SharedMapSystem>();
+            foreach (var spot in new[] { first, second })
+            {
+                surface.SetTile(map.Grid.Owner, map.Grid.Comp, spot, map.Tile.Tile);
+                entities.SpawnEntity("CMUTestCaveWall", surface.GridTileToLocal(map.Grid.Owner, map.Grid.Comp, spot));
+            }
+
             if (changeDuringCollapse)
             {
                 cave.Comp.CollapseQueue.Add(first);
@@ -403,11 +412,12 @@ public sealed class StructuralLifecycleTest
                 Assert.That(entities.HasComponent<ZFallenDebrisComponent>(contents), Is.True);
                 Assert.That(entities.Deleted(marker), Is.True);
             });
+            // It landed on open cave floor, not inside a rock: it keeps its collision (only what lands inside something solid loses it).
             foreach (var fixture in entities.GetComponent<FixturesComponent>(contents).Fixtures.Values)
             {
-                Assert.That(fixture.Hard, Is.False);
-                Assert.That(fixture.CollisionLayer, Is.Zero);
-                Assert.That(fixture.CollisionMask, Is.Zero);
+                Assert.That(fixture.Hard, Is.True);
+                Assert.That(fixture.CollisionLayer, Is.Not.Zero);
+                Assert.That(fixture.CollisionMask, Is.Not.Zero);
             }
             var maps = entities.System<SharedMapSystem>();
             var caveGrid = entities.GetComponent<MapGridComponent>(cave.Comp.StoneGrid);

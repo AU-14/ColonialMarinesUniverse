@@ -78,3 +78,5 @@
   - !type:TileNotBlocked
   # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
   - !type:ZBuildAllowed
+  # Concrete supports hold the ground under and around them: no staircase is dug down there.
+  - !type:NoDigNearby

@@ -1,0 +1,119 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Cut into rear, middle and front parts from the sprites of existing weapons (cmss13 / RMC14 guns, CC-BY-SA-3.0) for the gunsmith's bench.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "hunting_rear"
+    },
+    {
+      "name": "hunting_mid"
+    },
+    {
+      "name": "hunting_front"
+    },
+    {
+      "name": "pump_rear"
+    },
+    {
+      "name": "pump_mid"
+    },
+    {
+      "name": "pump_front"
+    },
+    {
+      "name": "lever_rear"
+    },
+    {
+      "name": "lever_mid"
+    },
+    {
+      "name": "lever_front"
+    },
+    {
+      "name": "carbine_rear"
+    },
+    {
+      "name": "carbine_mid"
+    },
+    {
+      "name": "carbine_front"
+    },
+    {
+      "name": "assault_rear"
+    },
+    {
+      "name": "assault_mid"
+    },
+    {
+      "name": "assault_front"
+    },
+    {
+      "name": "lmg_rear"
+    },
+    {
+      "name": "lmg_mid"
+    },
+    {
+      "name": "lmg_front"
+    },
+    {
+      "name": "pistol_rear"
+    },
+    {
+      "name": "pistol_mid"
+    },
+    {
+      "name": "pistol_front"
+    },
+    {
+      "name": "smg_rear"
+    },
+    {
+      "name": "smg_mid"
+    },
+    {
+      "name": "smg_front"
+    },
+    {
+      "name": "sniper_rear"
+    },
+    {
+      "name": "sniper_mid"
+    },
+    {
+      "name": "sniper_front"
+    },
+    {
+      "name": "mp_rear"
+    },
+    {
+      "name": "mp_mid"
+    },
+    {
+      "name": "mp_front"
+    },
+    {
+      "name": "magnum_rear"
+    },
+    {
+      "name": "magnum_mid"
+    },
+    {
+      "name": "magnum_front"
+    },
+    {
+      "name": "breaker_rear"
+    },
+    {
+      "name": "breaker_mid"
+    },
+    {
+      "name": "breaker_front"
+    }
+  ]
+}

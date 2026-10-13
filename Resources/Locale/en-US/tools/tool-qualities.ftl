@@ -42,3 +42,12 @@ tool-quality-brushing-tool-name = Wire Brush
 
 tool-quality-vehicle-servicing-name = Vehicle Servicing
 tool-quality-vehicle-servicing-tool-name = Maintenance Jack
+
+tool-quality-hammering-name = Hammering
+tool-quality-hammering-tool-name = Hammer
+
+tool-quality-tonging-name = Tonging
+tool-quality-tonging-tool-name = Tongs
+
+tool-quality-chiseling-name = Chiseling
+tool-quality-chiseling-tool-name = Chisel

@@ -1,0 +1,427 @@
+- type: entity
+  parent: BaseItem
+  id: RUMCCrucible
+  name: crucible
+  description: A heavy clay crucible for melting metal. Drop ore or scrap in, set it in a lit fire, and once it's glowing hot pour it out into a mold.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Smelting/crucible.rsi
+    noRot: true
+    layers:
+    - state: crucible
+      map: ["base"]
+    - state: crucible_full
+      map: ["active"]
+      visible: false
+  - type: Item
+    size: Large
+  - type: Forge
+    capacity: 40
+    ingredients:
+    # Only copper and glass (sand) are melted in the crucible; the iron and the quartz are not.
+    - input: RUMCCopperOre
+      reagent: Copper
+      reagentPerUnit: 10
+    - input: RUMCSand
+      reagent: RUMCSiliconMelt
+      reagentPerUnit: 10
+    # Two of copper ore and two of zinc ore together are the melt of one brass ingot.
+    - input: RUMCZincOre
+      reagent: RUMCZincMelt
+      reagentPerUnit: 10
+  - type: Forgeable
+    # The stone smeltery heats to 2000, and the silicon in the crucible melts at 1800.
+    maxTemperature: 2000
+    burnDamage:
+      types:
+        Heat: 15
+  - type: Solution
+    id: melt
+    solution:
+      maxVol: 40
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ForgeableVisuals.Active:
+        active:
+          True: { visible: true }
+          False: { visible: false }
+  - type: EmitSoundOnLand
+    sound:
+      collection: MetalThud
+      params:
+        volume: 2
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: BaseItem
+  id: RUMCIngotMold
+  name: ingot mold
+  description: A simple sand mold. Pour molten copper, zinc or glass from a crucible into it and give it a moment to cool, and it casts a copper ingot, a zinc ingot or a sheet of glass. Copper and zinc melted together, equal parts of each, cast a brass ingot.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Smelting/mold.rsi
+    noRot: true
+    layers:
+    - state: mold
+      map: ["base"]
+    - state: mold_hot
+      map: ["hot"]
+      visible: false
+    - state: mold_full
+      map: ["full"]
+      visible: false
+  - type: Item
+    size: Normal
+  - type: Mold
+    capacity: 60
+    recipes:
+    - ingredients:
+        Copper: 40
+      output: RUMCCopperIngot
+      outputCount: 1
+      coolTime: 6
+      name: copper ingot
+    - ingredients:
+        RUMCSiliconMelt: 40
+      output: CMSheetGlass1
+      outputCount: 1
+      coolTime: 6
+      name: glass sheet
+    - ingredients:
+        RUMCZincMelt: 40
+      output: RUMCZincIngot
+      outputCount: 1
+      coolTime: 6
+      name: zinc ingot
+    - ingredients:
+        Copper: 20
+        RUMCZincMelt: 20
+      output: RUMCBrassIngot
+      outputCount: 1
+      coolTime: 6
+      name: brass ingot
+  - type: Solution
+    id: cast
+    solution:
+      maxVol: 60
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.MoldVisuals.State:
+        base:
+          Empty: { visible: true }
+          Cooling: { visible: false }
+          Ready: { visible: false }
+        hot:
+          Empty: { visible: false }
+          Cooling: { visible: true }
+          Ready: { visible: false }
+        full:
+          Empty: { visible: false }
+          Cooling: { visible: false }
+          Ready: { visible: true }
+  - type: EmitSoundOnLand
+    sound:
+      collection: MetalThud
+      params:
+        volume: 2
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: BaseItem
+  id: RUMCForgeTongs
+  name: forge tongs
+  description: Long-handled iron tongs for handling a red-hot crucible without cooking your hands.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Smelting/tongs.rsi
+    state: tongs
+  - type: Item
+    size: Small
+  - type: ForgeTongs
+  - type: Tool
+    qualities:
+    - Tonging
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: BaseItem
+  id: RUMCForgeHammer
+  name: smithing hammer
+  description: A heavy hammer for working hot metal on an anvil.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Smelting/hammer.rsi
+    state: hammer
+  - type: Item
+    sprite: CMU14/Objects/Smelting/hammer.rsi
+    size: Normal
+  - type: Tool
+    qualities:
+    - Hammering
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 6
+    soundHit:
+      collection: MetalThud
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 100
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: BaseItem
+  id: RUMCForgeChisel
+  name: chisel
+  description: A sharp chisel for detailing worked metal on an anvil.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Smelting/chisel.rsi
+    state: chisel
+  - type: Item
+    sprite: CMU14/Objects/Smelting/chisel.rsi
+    size: Small
+  - type: Tool
+    qualities:
+    - Chiseling
+  - type: MeleeWeapon
+    damage:
+      types:
+        Piercing: 4
+    soundHit:
+      collection: MetalThud
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 50
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 60
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: CMBaseStructure
+  id: RUMCSmeltery
+  name: clay smeltery
+  description: A furnace of baked clay built to take a crucible. Feed it fuel and light it, then work it with forge tongs. It heats up to 1500 degrees.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Smelting/smeltery.rsi
+    state: smeltery
+  - type: Smeltery
+    maxTemperature: 1500
+  - type: PortableStructure
+  - type: Campfire
+    fuel: 5
+  - type: PointLight
+    enabled: false
+    radius: 8
+    energy: 3
+    color: "#FF8C1A"
+  - type: AmbientSound
+    enabled: false
+    volume: -5
+    range: 5
+    sound:
+      path: /Audio/Ambience/Objects/fireplace.ogg
+  - type: Appearance
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: CMBaseStructure
+  id: RUMCStoneSmeltery
+  name: stone smeltery
+  description: A furnace of dressed stone built to take a crucible. Feed it fuel and light it, then work it with forge tongs. It heats up to 2000 degrees.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Smelting/smeltery.rsi
+    state: smeltery_stone
+  - type: Smeltery
+    maxTemperature: 2000
+  - type: PortableStructure
+  - type: Campfire
+    fuel: 5
+  - type: PointLight
+    enabled: false
+    radius: 8
+    energy: 3
+    color: "#FF8C1A"
+  - type: AmbientSound
+    enabled: false
+    volume: -5
+    range: 5
+    sound:
+      path: /Audio/Ambience/Objects/fireplace.ogg
+  - type: Appearance
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: CMBaseStructure
+  id: RUMCAnvil
+  name: anvil
+  description: A solid steel anvil for forging hot metal. Set a heated ingot on it with tongs, then click it to pick what to make.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Smelting/anvil.rsi
+    state: anvil
+  - type: Anvil
+  - type: PortableStructure
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+# The stone tools: rough versions of the forge tongs and the smithing hammer, made of stone fragments. They give out after
+# five uses.
+- type: entity
+  parent: RUMCForgeTongs
+  id: RUMCStoneTongs
+  name: stone tongs
+  description: Tongs of rough stone for handling a hot crucible or ingot. They will not last, and are gone after five uses.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Smelting/stone_tongs.rsi
+    state: tongs
+  - type: BreaksAfterUses
+    usesLeft: 5
+
+- type: entity
+  parent: RUMCForgeHammer
+  id: RUMCStoneHammer
+  name: stone hammer
+  description: A hammer with a head of rough stone, for working hot metal on an anvil. It will not last, and is gone after five uses.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Smelting/stone_hammer.rsi
+    state: hammer
+  - type: Item
+    sprite: CMU14/Objects/Smelting/stone_hammer.rsi
+    size: Normal
+  - type: BreaksAfterUses
+    usesLeft: 5
+
+- type: entity
+  parent: RUMCForgeChisel
+  id: RUMCStoneChisel
+  name: stone chisel
+  description: A chisel of rough stone for detailing worked metal. It will not last, and is gone after five uses.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Smelting/stone_chisel.rsi
+    state: chisel
+  - type: Item
+    sprite: CMU14/Objects/Smelting/stone_chisel.rsi
+    size: Small
+  - type: BreaksAfterUses
+    usesLeft: 5

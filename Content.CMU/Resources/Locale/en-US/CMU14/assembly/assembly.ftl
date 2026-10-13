@@ -1,0 +1,10 @@
+au14-assembly-title = Assembly Machine
+au14-assembly-result-label = Result
+au14-assembly-charge-label = Charge
+au14-assembly-status-assembling = Assembling: { $percent }%
+au14-assembly-status-no-blueprint = No recipe programmed
+au14-assembly-status-ready = Ready
+au14-assembly-examine-progress = Assembling: { $percent }%.
+au14-assembly-examine-no-blueprint = No blueprint seated, or it isn't programmed with a recipe.
+au14-assembly-examine-idle = Idle.
+au14-assembly-blueprint-title = Program Blueprint

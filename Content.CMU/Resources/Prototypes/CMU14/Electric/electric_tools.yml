@@ -1,0 +1,471 @@
+# The tools on a power cell. Each takes a charge from its cell when a job begins; with a flat cell it does nothing. They are built from the parts
+# of the electric stage, with a hammer, and each is the quicker kin of a hand tool. The digging ones (shovel, pickaxe) take three charges for a dig.
+
+- type: entity
+  parent: BaseItem
+  id: RUMCElectricToolBase
+  abstract: true
+  components:
+  - type: ContainerContainer
+    containers:
+      cell_slot: !type:ContainerSlot { }
+  - type: PowerCellSlot
+    cellSlotId: cell_slot
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+  - type: ElectricTool
+
+- type: entity
+  parent: RUMCElectricToolBase
+  id: RUMCElectricScrewdriver
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/Electric/screwdriver.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/Electric/screwdriver.rsi
+    inhandVisuals:
+      left: []
+      right: []
+    size: Normal
+  - type: ElectricTool
+    chargePerUse: 15
+  - type: Tool
+    qualities:
+    - Screwing
+    speedModifier: 2.0
+  - type: MeleeWeapon
+    damage:
+      types:
+        Piercing: 9
+  - type: Tag
+    tags:
+    - Screwdriver
+
+- type: entity
+  parent: RUMCElectricToolBase
+  id: RUMCElectricWrench
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/Electric/wrench.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/Electric/wrench.rsi
+    inhandVisuals:
+      left: []
+      right: []
+    size: Normal
+  - type: ElectricTool
+    chargePerUse: 15
+  - type: Tool
+    qualities:
+    - Anchoring
+    speedModifier: 2.0
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 6.75
+  - type: Tag
+    tags:
+    - Wrench
+
+- type: entity
+  parent: RUMCElectricToolBase
+  id: RUMCElectricWirecutters
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/Electric/wirecutters.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/Electric/wirecutters.rsi
+    inhandVisuals:
+      left: []
+      right: []
+    size: Normal
+  - type: ElectricTool
+    chargePerUse: 15
+  - type: Tool
+    qualities:
+    - Cutting
+    speedModifier: 2.0
+  - type: MeleeWeapon
+    damage:
+      types:
+        Piercing: 3
+  - type: Tag
+    tags:
+    - Wirecutter
+
+- type: entity
+  parent: RUMCElectricToolBase
+  id: RUMCElectricCrowbar
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/Electric/crowbar.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/Electric/crowbar.rsi
+    inhandVisuals:
+      left: []
+      right: []
+    size: Normal
+  - type: ElectricTool
+    chargePerUse: 20
+  - type: Tool
+    qualities:
+    - Prying
+    speedModifier: 2.0
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 12
+  - type: Tag
+    tags:
+    - Crowbar
+
+- type: entity
+  parent: RUMCElectricToolBase
+  id: RUMCElectricHammer
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/Electric/hammer.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/Electric/hammer.rsi
+    inhandVisuals:
+      left: []
+      right: []
+    size: Normal
+  - type: ElectricTool
+    chargePerUse: 20
+  - type: Tool
+    qualities:
+    - Hammering
+    speedModifier: 1.5
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 12
+
+- type: entity
+  parent: RUMCElectricToolBase
+  id: RUMCPowerDrill
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/Electric/drill.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/Electric/drill.rsi
+    inhandVisuals:
+      left: []
+      right: []
+    size: Normal
+  - type: ElectricTool
+    chargePerUse: 25
+  - type: Tool
+    qualities:
+    - Screwing
+    - Anchoring
+    speedModifier: 2.5
+  - type: MeleeWeapon
+    damage:
+      types:
+        Piercing: 9
+  - type: Tag
+    tags:
+    - Screwdriver
+
+- type: entity
+  parent: [ RUMCElectricToolBase, RMCShovel ]
+  id: RUMCElectricShovel
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/Electric/shovel.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/Electric/shovel.rsi
+    inhandVisuals:
+      left: []
+      right: []
+    size: Normal
+  - type: ElectricTool
+    chargePerUse: 25
+  - type: Shovel
+  - type: PitDiggingTool
+    digTimeMultiplier: 0.5
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 21
+
+- type: entity
+  parent: [ RUMCElectricToolBase, RMCPickaxe ]
+  id: RUMCElectricPickaxe
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/Electric/pickaxe.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/Electric/pickaxe.rsi
+    inhandVisuals:
+      left: []
+      right: []
+    size: Large
+  - type: ElectricTool
+    chargePerUse: 30
+  - type: PitDiggingTool
+    digTimeMultiplier: 0.5
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 22.5
+        Blunt: 40.5
+
+- type: entity
+  parent: RUMCElectricToolBase
+  id: RUMCProspector
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/Electric/prospector.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/Electric/prospector.rsi
+    inhandVisuals:
+      left: []
+      right: []
+    size: Normal
+  - type: Prospector
+
+# The jackhammer: the only tool that takes the black stone, and so the only one that breaks through to the lava layer. It hits the rock with
+# structural damage, a blow for a charge of the cell, and digs the pits through the plain stone as a pickaxe does, but much faster.
+- type: Tag
+  id: Jackhammer
+
+- type: damageModifierSet
+  id: RUMCBlackRockWallMod
+  coefficients:
+    Piercing: 0.05
+    Slash: 0.02
+    Blunt: 0.02
+    Structural: 1
+
+- type: entity
+  parent: RUMCElectricToolBase
+  id: RUMCJackhammer
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/Electric/jackhammer.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Tools/Electric/jackhammer.rsi
+    inhandVisuals:
+      left: []
+      right: []
+    size: Large
+  - type: ElectricTool
+    chargePerUse: 30
+    chargePerSwing: 12
+  # It strikes the way the mining drill of the game does: straight along, a thrust, not a swing of a sword. 50 of brute damage a blow.
+  - type: MeleeWeapon
+    attackRate: 2
+    angle: 0
+    wideAnimationRotation: -90
+    damage:
+      types:
+        Structural: 220
+        Piercing: 50
+    soundHit:
+      collection: MetalThud
+  - type: PitDiggingTool
+    digTimeMultiplier: 0.35
+  - type: Tag
+    tags:
+    - Pickaxe
+    - Jackhammer
+
+# ---------------------------------------------------------------- crafts
+- type: craftRecipe
+  id: RUMCCraftBuildElectricScrewdriver
+  name: au14-craft-recipe-buildelectricscrewdriver
+  output: RUMCElectricScrewdriver
+  time: 12
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMotor
+    amount: 1
+  - stack: RUMCIronRod
+    amount: 1
+  - stack: RUMCConductorAlloy
+    amount: 1
+  - stack: RUMCInsulatedCable
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildElectricWrench
+  name: au14-craft-recipe-buildelectricwrench
+  output: RUMCElectricWrench
+  time: 12
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMotor
+    amount: 1
+  - stack: RUMCChromedSheet
+    amount: 1
+  - stack: RUMCIronBolt
+    amount: 2
+  - stack: RUMCInsulatedCable
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildElectricWirecutters
+  name: au14-craft-recipe-buildelectricwirecutters
+  output: RUMCElectricWirecutters
+  time: 12
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMotor
+    amount: 1
+  - stack: RUMCChromedSheet
+    amount: 1
+  - stack: RUMCIronRod
+    amount: 2
+  - stack: RUMCInsulatedCable
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildElectricCrowbar
+  name: au14-craft-recipe-buildelectriccrowbar
+  output: RUMCElectricCrowbar
+  time: 14
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMotor
+    amount: 1
+  - stack: RUMCIronRod
+    amount: 3
+  - stack: RUMCIronGear
+    amount: 1
+  - stack: RUMCInsulatedCable
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildElectricHammer
+  name: au14-craft-recipe-buildelectrichammer
+  output: RUMCElectricHammer
+  time: 14
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCPiston
+    amount: 1
+  - stack: RUMCIronRod
+    amount: 2
+  - stack: RUMCMotor
+    amount: 1
+  - stack: RUMCInsulatedCable
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildPowerDrill
+  name: au14-craft-recipe-buildpowerdrill
+  output: RUMCPowerDrill
+  time: 18
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMotor
+    amount: 2
+  - stack: RUMCChromedSheet
+    amount: 1
+  - stack: RUMCIronGear
+    amount: 1
+  - stack: RUMCBasicCircuit
+    amount: 1
+  - stack: RUMCInsulatedCable
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftBuildElectricShovel
+  name: au14-craft-recipe-buildelectricshovel
+  output: RUMCElectricShovel
+  time: 16
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMotor
+    amount: 1
+  - stack: RUMCChromedSheet
+    amount: 2
+  - stack: RUMCIronRod
+    amount: 2
+  - stack: RUMCIronGear
+    amount: 1
+  - stack: RUMCInsulatedCable
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildElectricPickaxe
+  name: au14-craft-recipe-buildelectricpickaxe
+  output: RUMCElectricPickaxe
+  time: 18
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMotor
+    amount: 1
+  - stack: RUMCPiston
+    amount: 1
+  - stack: RUMCChromedSheet
+    amount: 2
+  - stack: RUMCIronRod
+    amount: 3
+  - stack: RUMCInsulatedCable
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildProspector
+  name: au14-craft-recipe-buildprospector
+  output: RUMCProspector
+  time: 20
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBasicCircuit
+    amount: 2
+  - stack: RUMCLensEmerald
+    amount: 1
+  - stack: RUMCInsulatedCable
+    amount: 2
+  - stack: RUMCChromedSheet
+    amount: 1
+  - stack: RUMCConductorAlloy
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildJackhammer
+  name: au14-craft-recipe-buildjackhammer
+  output: RUMCJackhammer
+  time: 24
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMotor
+    amount: 2
+  - stack: RUMCPiston
+    amount: 2
+  - stack: RUMCChromedSheet
+    amount: 2
+  - stack: RUMCIronRod
+    amount: 3
+  - stack: RUMCIronGear
+    amount: 2
+  - stack: RUMCBasicCircuit
+    amount: 1
+  - stack: RUMCInsulatedCable
+    amount: 2

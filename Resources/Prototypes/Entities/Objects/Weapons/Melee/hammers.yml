@@ -23,6 +23,9 @@
         Structural: 6
   - type: Item
     size: Large
+  - type: Tool
+    qualities:
+    - Hammering
 
 - type: entity
   id: Mjollnir

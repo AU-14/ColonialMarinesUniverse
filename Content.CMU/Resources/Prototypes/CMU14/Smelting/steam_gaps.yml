@@ -1,0 +1,22 @@
+# Lead melts at a low heat and the first solder, the cells and the lead sheets of the electric stage are made of it, so the steam smelter takes it too:
+# without it the only way to a lead ingot was the electric blast furnace, which is built of the things that need lead.
+
+- type: cmuSteamSmeltRecipe
+  id: RUMCSteamSmeltLead
+  shape: ingots
+  inputs:
+    RUMCLeadOre: 12
+  result: RUMCLeadIngot
+  resultAmount: 3
+  duration: 12
+  slag: 15
+
+- type: cmuSteamSmeltRecipe
+  id: RUMCSteamSmeltPowderLead
+  shape: ingots
+  inputs:
+    RUMCLeadPowder: 24
+  result: RUMCLeadIngot
+  resultAmount: 3
+  duration: 12
+  slag: 15

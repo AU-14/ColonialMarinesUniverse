@@ -37,6 +37,9 @@
   components:
   - type: Sprite
     state: capacitor
+  - type: Tag
+    tags:
+    - AU14PartCapacitor
 #  - type: MachinePart
 #    part: Capacitor
 #    rating: 1
@@ -50,6 +53,9 @@
   components:
   - type: Sprite
     state: scan_module
+  - type: Tag
+    tags:
+    - AU14PartScanningModule
   #- type: MachinePart
   #  part: ScanningModule
   #  rating: 1
@@ -63,6 +69,9 @@
   components:
   - type: Sprite
     state: micro_mani
+  - type: Tag
+    tags:
+    - AU14PartManipulator
 #  - type: MachinePart
 #    part: Manipulator
 #    rating: 1
@@ -76,6 +85,9 @@
   components:
   - type: Sprite
     state: micro_laser
+  - type: Tag
+    tags:
+    - AU14PartMicroLaser
   #- type: MachinePart
   #  part: MicroLaser
   #  rating: 1
@@ -89,6 +101,9 @@
   components:
   - type: Sprite
     state: matter_bin
+  - type: Tag
+    tags:
+    - AU14PartMatterBin
 #  - type: MachinePart
 #    part: MatterBin
 #    rating: 1

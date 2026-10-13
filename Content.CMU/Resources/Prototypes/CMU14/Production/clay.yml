@@ -1,0 +1,40 @@
+- type: ore
+  id: RUMCOreClay
+  oreEntity: RUMCClayLump
+  minOreYield: 1
+  maxOreYield: 5
+
+- type: material
+  id: RUMCClay
+  stackEntity: RUMCClayLump
+  name: clay
+  unit: materials-unit-chunk
+  icon: { sprite: CMU14/Objects/Materials/clay.rsi, state: clay }
+  price: 0.0005
+
+- type: stack
+  id: RUMCClay
+  name: clay
+  icon: { sprite: CMU14/Objects/Materials/clay.rsi, state: clay }
+  spawn: RUMCClayLump
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCClayLump
+  name: clay
+  description: A soft, workable lump of clay dug out of the rock.
+  components:
+  - type: Stack
+    stackType: RUMCClay
+    count: 1
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Objects/Materials/clay.rsi
+    state: clay
+  - type: Item
+    size: Tiny
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RUMCClay: 100

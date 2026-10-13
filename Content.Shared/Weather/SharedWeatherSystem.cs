@@ -27,22 +27,26 @@ public abstract partial class SharedWeatherSystem : EntitySystem
     [Dependency] private CMUSharedZLevelsSystem _zLevel = default!;
 
     [Dependency] private EntityQuery<BlockWeatherComponent> _blockQuery = default!;
+    [Dependency] private EntityQuery<Content.Shared.CMU14.ZLevelBuilding.ZGeneratedStoneComponent> _stoneQuery = default!;
     [Dependency] private EntityQuery<WeatherStatusEffectComponent> _weatherQuery = default!;
 
     public static readonly TimeSpan StartupTime = TimeSpan.FromSeconds(15);
     public static readonly TimeSpan ShutdownTime = TimeSpan.FromSeconds(15);
 
-    // CMU14: Renderers can supply a current roof result without repeating per-tile spatial queries.
-    public bool CanWeatherAffect(Entity<MapGridComponent?, RoofComponent?> ent, TileRef tileRef, bool? roofed = null)
+    public bool CanWeatherAffect(Entity<MapGridComponent?, RoofComponent?> ent, TileRef tileRef)
     {
         if (!Resolve(ent, ref ent.Comp1))
             return false;
 
+        // CMU14: The generated stone levels are underground. There is no sky over a mine, so no weather reaches it.
+        if (Transform(ent.Owner).MapUid is { } mapUid && _stoneQuery.HasComp(mapUid))
+            return false;
+
         // RMC14: Area grids use their local weather settings instead of tile weather flags.
         if (TryComp<AreaGridComponent>(ent.Owner, out _))
-            return _rmcWeather.CanWeatherAffectArea(ent.Owner, ent.Comp1, tileRef, ent.Comp2, roofed);
+            return _rmcWeather.CanWeatherAffectArea(ent.Owner, ent.Comp1, tileRef, ent.Comp2);
 
-        if (roofed ?? (Resolve(ent, ref ent.Comp2, false) && _roof.IsRooved((ent, ent.Comp1, ent.Comp2), tileRef.GridIndices)))
+        if (Resolve(ent, ref ent.Comp2, false) && _roof.IsRooved((ent, ent.Comp1, ent.Comp2), tileRef.GridIndices))
             return false;
 
         // CMU14: A tile on the z-level above also blocks weather, including above empty tiles.
