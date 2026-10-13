@@ -1,6 +1,6 @@
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Movement.Pulling.Components;
@@ -59,8 +59,8 @@ public sealed class CMUJeepCargoLoadTest : GameTest
             target = jeep;
             if (clickRearPart)
             {
-                target = SEntMan.GetComponent<CMUJeepComponent>(jeep).PartEntities
-                    .First(part => SEntMan.GetComponent<CMUVehiclePartComponent>(part).Part == CMUJeepSystem.Tailgate);
+                target = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep).PartEntities
+                    .First(part => SEntMan.GetComponent<CMUVehiclePartComponent>(part).Part == CMUOpenVehicleSystem.Tailgate);
             }
 
             SEntMan.System<SharedInteractionSystem>()
@@ -73,8 +73,8 @@ public sealed class CMUJeepCargoLoadTest : GameTest
         {
             Assert.That(SEntMan.GetComponent<CMUVehicleCargoComponent>(jeep).Crate, Is.Null,
                 "A crate should not load over a shut tailgate.");
-            SEntMan.System<CMUJeepSystem>()
-                .SetPanel((jeep, SEntMan.GetComponent<CMUJeepComponent>(jeep)), CMUJeepSystem.Tailgate, true);
+            SEntMan.System<CMUOpenVehicleSystem>()
+                .SetPanel((jeep, SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep)), CMUOpenVehicleSystem.Tailgate, true);
             SEntMan.System<SharedInteractionSystem>()
                 .UserInteraction(user, SEntMan.GetComponent<TransformComponent>(target).Coordinates, target);
         });

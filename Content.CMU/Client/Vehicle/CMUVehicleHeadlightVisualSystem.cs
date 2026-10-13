@@ -1,6 +1,6 @@
 using System.Numerics;
 using Content.Shared._RMC14.Vehicle;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Map.Components;
@@ -21,7 +21,7 @@ public sealed class CMUVehicleHeadlightVisualSystem : EntitySystem
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
-    private static readonly ProtoId<ShaderPrototype> BeamShader = "CMUJeepBeam";
+    private static readonly ProtoId<ShaderPrototype> BeamShader = "CMUVehicleBeam";
 
     private readonly Dictionary<EntityUid, ShaderInstance> _shaders = new();
 
@@ -70,7 +70,7 @@ public sealed class CMUVehicleHeadlightVisualSystem : EntitySystem
             // the beam's own space. The light sits on the lens; the haze's cone starts there.
             var direction = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(
                 _transform.GetWorldRotation(xform) + eyeRotation);
-            var anchors = TryComp(beam.Vehicle, out CMUJeepLampsComponent? lamps) &&
+            var anchors = TryComp(beam.Vehicle, out CMUVehicleLampsComponent? lamps) &&
                           lamps.Lamps.Find(l => l.Id == beam.Lamp) is { BeamAnchors.Count: > 0 } lampData
                 ? lampData.BeamAnchors
                 : beam.Driver ? lights.DriverLampAnchors : lights.PassengerLampAnchors;

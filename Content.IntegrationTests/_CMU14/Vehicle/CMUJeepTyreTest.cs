@@ -1,7 +1,7 @@
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared.CMU14.Vehicle;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Maps;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Containers;
@@ -98,7 +98,7 @@ public sealed class CMUJeepTyreTest : GameTest
         {
             var containers = SEntMan.System<SharedContainerSystem>();
             Assert.That(containers.GetContainer(jeep, "wheel-1").ContainedEntities, Is.Empty, "The axle comes bare.");
-            var hatch = containers.GetContainer(jeep, CMUJeepSystem.SpareSlot).ContainedEntities;
+            var hatch = containers.GetContainer(jeep, CMUOpenVehicleSystem.SpareSlot).ContainedEntities;
             Assert.That(hatch, Has.Count.EqualTo(1));
             Assert.That(SEntMan.GetComponent<MetaDataComponent>(hatch[0]).EntityPrototype?.ID, Is.EqualTo("CMUJeepWheelRoad"));
         });

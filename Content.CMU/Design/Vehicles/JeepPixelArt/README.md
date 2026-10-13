@@ -430,7 +430,7 @@ When the hull gives out the jeep won't run, but doesn't burn: it sags on its shr
 hood popped ajar, the windshield cracked and the frame damage at its worst, until the hull is
 repaired.
 
-When damage destroys the engine, it catches fire (`CMUJeepComponent.Burning`): flames
+When damage destroys the engine, it catches fire (`CMUOpenVehicleComponent.Burning`): flames
 lick out from under the hood and through the grille (`engine_fire`, 8 frames at 0.08 s, over the
 heavy smoke), a flickering orange glow lights it, the fire crackles, and sparks fly from the engine
 bay with now and then a bang. After six seconds it goes up and leaves a wreck from
@@ -500,25 +500,25 @@ Prototypes are in `Content.CMU/Resources/Prototypes/CMU14/Vehicles/Jeep/jeep.yml
 
 | File | Does |
 | --- | --- |
-| `Shared/Vehicle/Jeep/CMUVehicleOverlay*` | spawns the overlay entity drawn over the riders |
-| `Shared/Vehicle/Jeep/CMUVehicleSeat*` | one strap entity per seat (the driver's seat drives), exit points, climbing in and out over shut doors, riders' gun scatter by firearms skill and the vehicle's speed (with no camera kick); seated riders keep their body but lose hard contacts and are held still around each physics step, so bumps don't unbuckle them while fire, smoke, bullets, knockbacks and drags still reach them |
-| `Shared/Vehicle/Jeep/CMUVehicleEngineSound*`, `Server/.../CMUVehicleEngineSoundSystem.cs`, `Client/Vehicle/CMUVehicleEngineLoopSystem.cs` | engine start, rev and stall from the server, running loops faded by speed on each client |
-| `Shared/Vehicle/Jeep/CMUJeep*` | hood, windshield, door, tailgate and fuel door toggles, taking moving parts off and on in steps, clickable parts, item hooks, engine/windshield/lamp wear and repair, each lamp in its own slot (`CMUJeepLamps`), the headlight switch and its beams, jerry can leaks, stray shots passing through, the burning wreck |
-| `Shared/Vehicle/Jeep/CMUVehicleIgnition*` | the ignition key slot: no key, no running |
-| `Shared/Vehicle/Jeep/CMUVehicleFuel*` | fuel use and refuelling from a fuel can at the fuel door; the do-after bar starts at the tank level |
-| `Shared/Vehicle/Jeep/CMUVehicleCargo*` | loading, wrenching down and unloading a crate on the cargo bed, over the tailgate |
-| `Shared/Vehicle/Jeep/CMUVehiclePaint*`, `CMUVehicleSprayPainter*`, `paint.swsl` | the vehicle spray painter (an RGB colour window in hand with a rim design tab, 30 charges, 5 a respray, 1 for the wheels and 2 for a rim design, printed at the autolathe) and respraying the jeep with it, or one part where it is sprayed: the body outside, the tub inside (by the body voxel under the click), the seats (on a seat) or the wheels and spare (on the wheels; grey metal rims by default, their own shader instance); the art marks its paint pixels with an alpha just under 255 that also carries their zone, dirt level and the art's mud (`PAINT_ALPHA - 16 * zone - 2 * level - mud`, 207 to 254: body 239-254, tub inside 223-238, seats 207-222), so the shader is always on; the engine and windshield only read the body's band (`plainLayers`), since their own art uses the others |
-| `Shared/Vehicle/Jeep/CMURimDesign*`, `Client/Vehicle/CMUVehicleRimVisualSystem.cs`, `rim.swsl`, `jeep_rims.yml` | rim designs sprayed on the wheels in design mode, in their base, accent, lip and cap colours; painting the wheels after only changes the base, and the factory design takes a design off (see Rim designs) |
-| `Shared/Vehicle/Jeep/CMUVehicleCrayon*`, `Server/.../CMUVehicleCrayonSystem.cs` | crayon drawings (up to 50) and blood splashes anchored to the body via `crayon_maps/` |
+| `Shared/Vehicle/Open/CMUVehicleOverlay*` | spawns the overlay entity drawn over the riders |
+| `Shared/Vehicle/Open/CMUVehicleSeat*` | one strap entity per seat (the driver's seat drives), exit points, climbing in and out over shut doors, riders' gun scatter by firearms skill and the vehicle's speed (with no camera kick); seated riders keep their body but lose hard contacts and are held still around each physics step, so bumps don't unbuckle them while fire, smoke, bullets, knockbacks and drags still reach them |
+| `Shared/Vehicle/Open/CMUVehicleEngineSound*`, `Server/.../CMUVehicleEngineSoundSystem.cs`, `Client/Vehicle/CMUVehicleEngineLoopSystem.cs` | engine start, rev and stall from the server, running loops faded by speed on each client |
+| `Shared/Vehicle/Open/CMUJeep*` | hood, windshield, door, tailgate and fuel door toggles, taking moving parts off and on in steps, clickable parts, item hooks, engine/windshield/lamp wear and repair, each lamp in its own slot (`CMUVehicleLamps`), the headlight switch and its beams, jerry can leaks, stray shots passing through, the burning wreck |
+| `Shared/Vehicle/Open/CMUVehicleIgnition*` | the ignition key slot: no key, no running |
+| `Shared/Vehicle/Open/CMUVehicleFuel*` | fuel use and refuelling from a fuel can at the fuel door; the do-after bar starts at the tank level |
+| `Shared/Vehicle/Open/CMUVehicleCargo*` | loading, wrenching down and unloading a crate on the cargo bed, over the tailgate |
+| `Shared/Vehicle/Open/CMUVehiclePaint*`, `CMUVehicleSprayPainter*`, `paint.swsl` | the vehicle spray painter (an RGB colour window in hand with a rim design tab, 30 charges, 5 a respray, 1 for the wheels and 2 for a rim design, printed at the autolathe) and respraying the jeep with it, or one part where it is sprayed: the body outside, the tub inside (by the body voxel under the click), the seats (on a seat) or the wheels and spare (on the wheels; grey metal rims by default, their own shader instance); the art marks its paint pixels with an alpha just under 255 that also carries their zone, dirt level and the art's mud (`PAINT_ALPHA - 16 * zone - 2 * level - mud`, 207 to 254: body 239-254, tub inside 223-238, seats 207-222), so the shader is always on; the engine and windshield only read the body's band (`plainLayers`), since their own art uses the others |
+| `Shared/Vehicle/Open/CMURimDesign*`, `Client/Vehicle/CMUVehicleRimVisualSystem.cs`, `rim.swsl`, `jeep_rims.yml` | rim designs sprayed on the wheels in design mode, in their base, accent, lip and cap colours; painting the wheels after only changes the base, and the factory design takes a design off (see Rim designs) |
+| `Shared/Vehicle/Open/CMUVehicleCrayon*`, `Server/.../CMUVehicleCrayonSystem.cs` | crayon drawings (up to 50) and blood splashes anchored to the body via `crayon_maps/` |
 | `Shared/Vehicle/CMUVehicleTyre*`, `CMUGridVehicleMoveSystem.Tyres.cs` | tyres from the fitted wheel set, and their speed and water drag on the ground under the jeep (see Tyres) |
-| `Shared/Vehicle/Jeep/CMUVehicleCover*` | shut doors and the raised windshield stopping shots at the riders, grit behind a lowered windshield (see Cover) |
-| `Shared/Vehicle/Jeep/CMUVehicleGrime*`, `Server/.../CMUVehicleGrimeBuildUpSystem.cs` | dirt from driving, blood from wounded riders and anyone run down, cleaning |
-| `Shared/Vehicle/Jeep/CMUVehicleCrate*`, `Client/Vehicle/CMUVehicleCrateRemainsVisualSystem.cs`, `jeep_crates.yml` | jeep crates opening into the jeep with their walls falling, launch-bay rounds |
-| `Shared/Vehicle/Jeep/CMUVehicleDropFlareComponent.cs`, `Server/.../CMUVehicleDropFlareSystem.cs` | the CLF's jeep drop flare |
+| `Shared/Vehicle/Open/CMUVehicleCover*` | shut doors and the raised windshield stopping shots at the riders, grit behind a lowered windshield (see Cover) |
+| `Shared/Vehicle/Open/CMUVehicleGrime*`, `Server/.../CMUVehicleGrimeBuildUpSystem.cs` | dirt from driving, blood from wounded riders and anyone run down, cleaning |
+| `Shared/Vehicle/Open/CMUVehicleCrate*`, `Client/Vehicle/CMUVehicleCrateRemainsVisualSystem.cs`, `jeep_crates.yml` | jeep crates opening into the jeep with their walls falling, launch-bay rounds |
+| `Shared/Vehicle/Open/CMUVehicleDropFlareComponent.cs`, `Server/.../CMUVehicleDropFlareSystem.cs` | the CLF's jeep drop flare |
 | `Shared/Vehicle/CMUVehicleFrontDamage*`, `Client/Vehicle/CMUVehicleFrontDamageVisualSystem.cs` | the front crumpled by head on crashes (see Front crash damage) and beaten straight with a welder used on the front, read from the crayon map under the click |
-| `Shared/Vehicle/Jeep/CMUVehicleCrashKnockout*`, `Server/.../CMUVehicleCrashKnockoutSystem.cs` | a hard head on crash (from 70% of top speed) blacks every rider out for 2 seconds and knocks each out for 3 to 5, more surely the faster; the horn blares while the driver is out on the wheel |
+| `Shared/Vehicle/Open/CMUVehicleCrashKnockout*`, `Server/.../CMUVehicleCrashKnockoutSystem.cs` | a hard head on crash (from 70% of top speed) blacks every rider out for 2 seconds and knocks each out for 3 to 5, more surely the faster; the horn blares while the driver is out on the wheel |
 | `Shared/Vehicle/CMUGunDistantSound*`, `Server/Vehicle/CMUGunDistantSoundSystem.cs` | the gun's far shot, played to listeners 10 to 45 tiles away, placed on the map so it reaches them out of view |
-| `Shared/Vehicle/Jeep/CMUVehicleGunOrigin*` | shots from the gun's pivot on the jeep; the muzzle flash on the drawn barrel tip, for the way each client's camera is turned |
+| `Shared/Vehicle/Open/CMUVehicleGunOrigin*` | shots from the gun's pivot on the jeep; the muzzle flash on the drawn barrel tip, for the way each client's camera is turned |
 | `Client/Vehicle/CMU*` | overlay frame and lights, part masks and hover outlines, swing animations, damage looks, suspension bob, crate placement, crayon painting, paint, headlight haze |
 
 Clickable parts are child entities whose sprite is the `click_*` mask: the part's own pixels at

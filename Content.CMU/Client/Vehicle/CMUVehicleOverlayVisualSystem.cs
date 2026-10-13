@@ -5,7 +5,7 @@ using Content.Client._RMC14.Sprite;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Mobs.Components;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Vehicle.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -27,7 +27,7 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private IEyeManager _eye = default!;
-    [Dependency] private CMUJeepSystem _jeep = default!;
+    [Dependency] private CMUOpenVehicleSystem _jeep = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedPointLightSystem _lights = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -51,7 +51,7 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
 
     // Client-side glows each overlay's vehicle throws from its tail lights and turn signals. The tail
     // lights glow dim red, brighter braking; a blinking signal amber.
-    private static readonly EntProtoId GlowPrototype = "CMUJeepLampGlow";
+    private static readonly EntProtoId GlowPrototype = "CMUVehicleLampGlow";
     private static readonly Color TailGlow = Color.FromHex("#FF2A1A");
     private static readonly Color SignalGlow = Color.FromHex("#FFA62A");
     private const float TailEnergy = 1f;
@@ -346,7 +346,7 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
 
         // Each lamp's lit layers show while it is fitted and whole.
         var blink = (float) (_timing.CurTime.TotalSeconds % SignalPeriod);
-        var lamps = CompOrNull<CMUJeepLampsComponent>(vehicle)?.Lamps ?? NoLamps;
+        var lamps = CompOrNull<CMUVehicleLampsComponent>(vehicle)?.Lamps ?? NoLamps;
         foreach (var lamp in lamps)
         {
             var works = _jeep.LampWorks(vehicle, lamp.Id);
@@ -373,13 +373,13 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
         UpdateGlows(ent.Owner, vehicle, lamps, lightsOn, braking, left && blinkOn, right && blinkOn);
     }
 
-    private static readonly List<CMUJeepLampData> NoLamps = new();
+    private static readonly List<CMUVehicleLampData> NoLamps = new();
 
     /// <summary>
     /// Lights the ground around the lamps that are lit: a dim red round each working tail light (with
     /// the lights on, brighter while braking), amber round a blinking turn signal, front and rear.
     /// </summary>
-    private void UpdateGlows(EntityUid overlay, EntityUid vehicle, List<CMUJeepLampData> lamps, bool lightsOn, bool braking, bool leftBlink, bool rightBlink)
+    private void UpdateGlows(EntityUid overlay, EntityUid vehicle, List<CMUVehicleLampData> lamps, bool lightsOn, bool braking, bool leftBlink, bool rightBlink)
     {
         if (!_glows.TryGetValue(overlay, out var glows))
             _glows[overlay] = glows = new Dictionary<string, EntityUid>();

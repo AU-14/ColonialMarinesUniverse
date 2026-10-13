@@ -4,7 +4,7 @@ using Content.Shared._RMC14.BlurredVision;
 using Content.Shared.Body.Part;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
@@ -79,7 +79,7 @@ public sealed class CMUJeepCoverTest : GameTest
             // Facing south, the driver's door is on the east side.
             var east = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(map.Grid, 4.5f, 0.75f));
             var west = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(map.Grid, -3.5f, 0.75f));
-            var jeepComp = SEntMan.GetComponent<CMUJeepComponent>(jeep);
+            var jeepComp = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep);
 
             Assert.That(Shoot(driver, east, BodyPartType.Leg), Is.False, "The shut door takes a leg shot from its side.");
             Assert.That(Shoot(driver, east, BodyPartType.Torso), Is.True, "It doesn't reach the chest.");
@@ -99,20 +99,20 @@ public sealed class CMUJeepCoverTest : GameTest
         {
             SEntMan.GetComponent<CMUVehicleCoverComponent>(jeep).WindshieldChance = 1f;
             var windshield = Windshield(jeep);
-            before = SEntMan.GetComponent<CMUJeepPartIntegrityComponent>(windshield).Integrity;
+            before = SEntMan.GetComponent<CMUVehiclePartIntegrityComponent>(windshield).Integrity;
 
             // Facing south, ahead is south.
             var ahead = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(map.Grid, 1f, -4.5f));
             Assert.That(Shoot(driver, ahead, BodyPartType.Head), Is.False, "The windshield catches a head shot from ahead.");
             Assert.That(Shoot(driver, ahead, BodyPartType.Leg), Is.True, "It doesn't reach the legs.");
 
-            SEntMan.GetComponent<CMUJeepComponent>(jeep).WindshieldDown = true;
+            SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep).WindshieldDown = true;
             Assert.That(Shoot(driver, ahead, BodyPartType.Head), Is.True, "Folded down, it stops nothing.");
         });
         await RunTicksSync(2);
 
         await Server.WaitAssertion(() =>
-            Assert.That(SEntMan.GetComponent<CMUJeepPartIntegrityComponent>(Windshield(jeep)).Integrity, Is.LessThan(before),
+            Assert.That(SEntMan.GetComponent<CMUVehiclePartIntegrityComponent>(Windshield(jeep)).Integrity, Is.LessThan(before),
                 "The caught shot wears the glass."));
     }
 
@@ -133,7 +133,7 @@ public sealed class CMUJeepCoverTest : GameTest
             }
 
             SEntMan.GetComponent<CMUVehicleCoverComponent>(jeep).GritChance = 1000f;
-            SEntMan.GetComponent<CMUJeepComponent>(jeep).WindshieldDown = true;
+            SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep).WindshieldDown = true;
             var mover = SEntMan.GetComponent<GridVehicleMoverComponent>(jeep);
             mover.CurrentSpeed = mover.MaxSpeed;
         });

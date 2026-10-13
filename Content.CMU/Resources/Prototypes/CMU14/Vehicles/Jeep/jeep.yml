@@ -32,24 +32,24 @@
   id: CMUJeepTailgate
 
 - type: shader
-  id: CMUJeepRiderClip
+  id: CMUVehicleRiderClip
   kind: source
   path: /Textures/CMU14/Structures/vehicles/jeep/rider_clip.swsl
   params:
     clip_enabled: false
 
 - type: shader
-  id: CMUJeepPaint
+  id: CMUVehiclePaint
   kind: source
   path: /Textures/CMU14/Structures/vehicles/jeep/paint.swsl
 
 - type: shader
-  id: CMUJeepRim
+  id: CMUVehicleRim
   kind: source
   path: /Textures/CMU14/Structures/vehicles/jeep/rim.swsl
 
 - type: shader
-  id: CMUJeepBeam
+  id: CMUVehicleBeam
   kind: source
   path: /Textures/CMU14/Structures/vehicles/jeep/beam.swsl
   params:
@@ -57,7 +57,7 @@
 
 # The headlight beams' cones, drawn by the generator: up in the image is the jeep's front.
 - type: lightMask
-  id: CMUJeepLowBeamMask
+  id: CMUVehicleLowBeamMask
   maskPath: /Textures/CMU14/Structures/vehicles/jeep/light_masks/low_beam.png
   lightCones:
   - direction: 0
@@ -65,7 +65,7 @@
     outerWidth: 110
 
 - type: lightMask
-  id: CMUJeepHighBeamMask
+  id: CMUVehicleHighBeamMask
   maskPath: /Textures/CMU14/Structures/vehicles/jeep/light_masks/high_beam.png
   lightCones:
   - direction: 0
@@ -129,7 +129,7 @@
   components:
   - type: Sprite
     state: windshield
-  - type: CMUJeepPartIntegrity
+  - type: CMUVehiclePartIntegrity
     integrity: 50
     maxIntegrity: 50
   - type: Tag
@@ -146,7 +146,7 @@
     state: headlight
   - type: Item
     size: Small
-  - type: CMUJeepPartIntegrity
+  - type: CMUVehiclePartIntegrity
     integrity: 30
     maxIntegrity: 30
     breakSound:
@@ -167,7 +167,7 @@
     state: turn_signal
   - type: Item
     size: Tiny
-  - type: CMUJeepPartIntegrity
+  - type: CMUVehiclePartIntegrity
     integrity: 15
     maxIntegrity: 15
   - type: Tag
@@ -184,7 +184,7 @@
     state: taillight
   - type: Item
     size: Small
-  - type: CMUJeepPartIntegrity
+  - type: CMUVehiclePartIntegrity
     integrity: 20
     maxIntegrity: 20
   - type: Tag
@@ -275,7 +275,7 @@
 
 - type: entity
   parent: CMUJeepBeamBase
-  id: CMUJeepLowBeam
+  id: CMUVehicleLowBeam
   components:
   - type: Sprite
     layers:
@@ -283,7 +283,7 @@
       state: beam_low
       visible: false
   - type: PointLight
-    lightMask: CMUJeepLowBeamMask
+    lightMask: CMUVehicleLowBeamMask
     radius: 5.5
     energy: 1.8
     softness: 1
@@ -291,7 +291,7 @@
 
 - type: entity
   parent: CMUJeepBeamBase
-  id: CMUJeepHighBeam
+  id: CMUVehicleHighBeam
   components:
   - type: Sprite
     layers:
@@ -299,7 +299,7 @@
       state: beam_high
       visible: false
   - type: PointLight
-    lightMask: CMUJeepHighBeamMask
+    lightMask: CMUVehicleHighBeamMask
     radius: 11
     energy: 2.4
     softness: 1
@@ -437,6 +437,62 @@
   name: jeep
   description: A light, open four-by-four. Fast and nimble, but nothing stands between its crew and the bullets.
   components:
+  - type: CMUVehicleIgnition
+    keySlot:
+      name: cmu-jeep-part-ignition
+      startingItem: CMUJeepKey
+      swap: false
+      insertSound: /Audio/Machines/id_insert.ogg
+      ejectSound: /Audio/Machines/id_swipe.ogg
+      whitelist:
+        tags:
+        - CMUJeepKey
+  - type: CMUVehicleEngineSound
+    startSound:
+      path: /Audio/CMU14/Jeep/jeep_engine_start.wav
+      params:
+        maxDistance: 12
+    idleSound:
+      path: /Audio/CMU14/Jeep/jeep_engine_idle.wav
+      params:
+        volume: -2
+        maxDistance: 10
+    driveSound:
+      path: /Audio/CMU14/Jeep/jeep_engine_drive.wav
+      params:
+        volume: -1
+        maxDistance: 12
+    roughSound:
+      path: /Audio/CMU14/Jeep/jeep_engine_rough.wav
+      params:
+        volume: -2
+        maxDistance: 10
+    roughDriveSound:
+      path: /Audio/CMU14/Jeep/jeep_engine_rough_drive.wav
+      params:
+        volume: -1
+        maxDistance: 12
+    revSound:
+      path: /Audio/CMU14/Jeep/jeep_engine_rev.wav
+      params:
+        maxDistance: 12
+    stallSound:
+      path: /Audio/CMU14/Jeep/jeep_engine_sputter.wav
+      params:
+        maxDistance: 12
+  - type: CMUVehicleCrashKnockout
+    hornSound:
+      path: /Audio/CMU14/Jeep/jeep_horn_long.wav
+      params:
+        volume: 2
+  # The engine sounds come from CMUVehicleEngineSound, so there is no running sound here.
+  - type: VehicleSound
+    hornSound: /Audio/CMU14/Jeep/jeep_horn.wav
+    hornCooldown: 1
+    collisionSound: /Audio/_RMC14/Effects/metal_crash.ogg
+    collisionSoundCooldown: 1.5
+    collisionSoundMinSpeed: 7
+    mobCollisionSound: /Audio/_RMC14/Xeno/alien_claw_block.ogg
   - type: CMUVehicleSeats
     seats:
     - id: driver
@@ -474,7 +530,7 @@
         North: 4
         East: 2
         West: 2
-  - type: CMUJeep
+  - type: CMUOpenVehicle
     parts:
     - id: hood
       name: cmu-jeep-part-hood
@@ -597,7 +653,7 @@
       params:
         volume: -2
   # Each lamp fitted on its own: offsets are where its click mask sits (vehicle space, facing south).
-  - type: CMUJeepLamps
+  - type: CMUVehicleLamps
     lamps:
     - id: headlight_left
       name: cmu-jeep-part-headlight-left
@@ -845,12 +901,12 @@
       jeep-jack: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
-      jeep-headlight-left: !type:ContainerSlot
-      jeep-headlight-right: !type:ContainerSlot
-      jeep-turn-signal-left: !type:ContainerSlot
-      jeep-turn-signal-right: !type:ContainerSlot
-      jeep-taillight-left: !type:ContainerSlot
-      jeep-taillight-right: !type:ContainerSlot
+      vehicle-headlight-left: !type:ContainerSlot
+      vehicle-headlight-right: !type:ContainerSlot
+      vehicle-turn-signal-left: !type:ContainerSlot
+      vehicle-turn-signal-right: !type:ContainerSlot
+      vehicle-taillight-left: !type:ContainerSlot
+      vehicle-taillight-right: !type:ContainerSlot
       jeep-ignition: !type:ContainerSlot
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
@@ -945,7 +1001,7 @@
     - wheel-1
   # Goes up when its engine dies, leaving a wreck. A light vehicle's blast: a frag grenade's
   # core but a shorter reach, about 2.4 tiles, and roughly half the Bison's a tile out where the crew lands.
-  - type: CMUJeepWreck
+  - type: CMUVehicleWreck
 - type: entity
   parent: CMUVehicleJeepBase
   id: CMUVehicleJeepCargo
@@ -980,12 +1036,12 @@
       jeep-jack: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
-      jeep-headlight-left: !type:ContainerSlot
-      jeep-headlight-right: !type:ContainerSlot
-      jeep-turn-signal-left: !type:ContainerSlot
-      jeep-turn-signal-right: !type:ContainerSlot
-      jeep-taillight-left: !type:ContainerSlot
-      jeep-taillight-right: !type:ContainerSlot
+      vehicle-headlight-left: !type:ContainerSlot
+      vehicle-headlight-right: !type:ContainerSlot
+      vehicle-turn-signal-left: !type:ContainerSlot
+      vehicle-turn-signal-right: !type:ContainerSlot
+      vehicle-taillight-left: !type:ContainerSlot
+      vehicle-taillight-right: !type:ContainerSlot
       jeep-ignition: !type:ContainerSlot
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
@@ -1155,7 +1211,7 @@
     prototype: CMUJeepTransportOverlay
   # The rear bench backs onto a fixed wall: no tailgate, so the spare and the jerry can stay put. The
   # list replaces the parent's.
-  - type: CMUJeep
+  - type: CMUOpenVehicle
     parts:
     - id: hood
       name: cmu-jeep-part-hood
@@ -1255,7 +1311,7 @@
       overRiders: [ South, East ]
   - type: CMUVehicleCrayon
     map: /Textures/CMU14/Structures/vehicles/jeep/crayon_maps/jeep_transport.png
-  - type: CMUJeepWreck
+  - type: CMUVehicleWreck
     wreckPrototype: CMUJeepWreckTransport
 
 - type: entity
@@ -1321,7 +1377,7 @@
     prototype: CMUJeepGunnerOverlay
   - type: CMUVehicleCrayon
     map: /Textures/CMU14/Structures/vehicles/jeep/crayon_maps/jeep_gunner.png
-  - type: CMUJeepWreck
+  - type: CMUVehicleWreck
     wreckPrototype: CMUJeepWreckGunner
   # Containers and slots replace the parent's instead of merging, so the base jeep's are repeated here.
   - type: ContainerContainer
@@ -1337,12 +1393,12 @@
       jeep-jack: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
-      jeep-headlight-left: !type:ContainerSlot
-      jeep-headlight-right: !type:ContainerSlot
-      jeep-turn-signal-left: !type:ContainerSlot
-      jeep-turn-signal-right: !type:ContainerSlot
-      jeep-taillight-left: !type:ContainerSlot
-      jeep-taillight-right: !type:ContainerSlot
+      vehicle-headlight-left: !type:ContainerSlot
+      vehicle-headlight-right: !type:ContainerSlot
+      vehicle-turn-signal-left: !type:ContainerSlot
+      vehicle-turn-signal-right: !type:ContainerSlot
+      vehicle-taillight-left: !type:ContainerSlot
+      vehicle-taillight-right: !type:ContainerSlot
       jeep-ignition: !type:ContainerSlot
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
@@ -1524,7 +1580,7 @@
     prototype: CMUJeepMedicalOverlay
   - type: CMUVehicleCrayon
     map: /Textures/CMU14/Structures/vehicles/jeep/crayon_maps/jeep_medical.png
-  - type: CMUJeepWreck
+  - type: CMUVehicleWreck
     wreckPrototype: CMUJeepWreckMedical
   # Containers and slots replace the parent's instead of merging, so the base jeep's are repeated
   # here with the tailgate's.
@@ -1541,12 +1597,12 @@
       jeep-jack: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
-      jeep-headlight-left: !type:ContainerSlot
-      jeep-headlight-right: !type:ContainerSlot
-      jeep-turn-signal-left: !type:ContainerSlot
-      jeep-turn-signal-right: !type:ContainerSlot
-      jeep-taillight-left: !type:ContainerSlot
-      jeep-taillight-right: !type:ContainerSlot
+      vehicle-headlight-left: !type:ContainerSlot
+      vehicle-headlight-right: !type:ContainerSlot
+      vehicle-turn-signal-left: !type:ContainerSlot
+      vehicle-turn-signal-right: !type:ContainerSlot
+      vehicle-taillight-left: !type:ContainerSlot
+      vehicle-taillight-right: !type:ContainerSlot
       jeep-ignition: !type:ContainerSlot
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
@@ -1983,7 +2039,7 @@
 # The dim glow a lit tail light, brake light or turn signal throws on the ground around it. The
 # client spawns one on each lamp and switches, colours and blinks it with the lamp's lit state.
 - type: entity
-  id: CMUJeepLampGlow
+  id: CMUVehicleLampGlow
   categories: [ HideSpawnMenu ]
   name: lamp glow
   components:
@@ -1997,7 +2053,7 @@
 
 # The burning engine's flickering glow, on a jeep's engine bay until it goes up or the fire is put out.
 - type: entity
-  id: CMUJeepFireLight
+  id: CMUVehicleFireLight
   categories: [ HideSpawnMenu ]
   name: engine fire
   components:

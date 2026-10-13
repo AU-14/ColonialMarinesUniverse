@@ -1,4 +1,4 @@
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Vehicle.Components;
 using Robust.Client.Graphics;
 using Robust.Shared.Audio;

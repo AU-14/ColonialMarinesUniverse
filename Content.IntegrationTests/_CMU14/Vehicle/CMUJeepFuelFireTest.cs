@@ -3,7 +3,7 @@ using Content.IntegrationTests.Fixtures;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
@@ -63,7 +63,7 @@ public sealed class CMUJeepFuelFireTest : GameTest
 
     private EntityUid HoldRackCan(EntityUid jeep, EntityUid user)
     {
-        Assert.That(SEntMan.System<ItemSlotsSystem>().TryEject(jeep, CMUJeepSystem.JerryCanSlot, null, out var can), Is.True);
+        Assert.That(SEntMan.System<ItemSlotsSystem>().TryEject(jeep, CMUOpenVehicleSystem.JerryCanSlot, null, out var can), Is.True);
         Assert.That(SEntMan.System<SharedHandsSystem>().TryPickup(user, can!.Value), Is.True);
         return can.Value;
     }
@@ -78,7 +78,7 @@ public sealed class CMUJeepFuelFireTest : GameTest
             Assert.That(spray.GetTotalPrototypeQuantity("Water").Float(), Is.EqualTo(30f));
             Assert.That(spray.AvailableVolume.Float(), Is.Zero);
 
-            var fuel = Contents(Rack(jeep, CMUJeepSystem.JerryCanSlot), "fuel");
+            var fuel = Contents(Rack(jeep, CMUOpenVehicleSystem.JerryCanSlot), "fuel");
             Assert.That(fuel.GetTotalPrototypeQuantity("WeldingFuel").Float(), Is.EqualTo(60f));
             Assert.That(fuel.AvailableVolume.Float(), Is.Zero);
 
@@ -95,9 +95,9 @@ public sealed class CMUJeepFuelFireTest : GameTest
         await Server.WaitPost(() =>
         {
             can = HoldRackCan(jeep, user);
-            door = SEntMan.GetComponent<CMUJeepComponent>(jeep).PartEntities
+            door = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep).PartEntities
                 .First(part => SEntMan.GetComponent<CMUVehiclePartComponent>(part).Part == "fuel_door");
-            var comp = SEntMan.GetComponent<CMUJeepComponent>(jeep);
+            var comp = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep);
             comp.OpenPanels.Add("fuel_door");
             SEntMan.Dirty(jeep, comp);
             Click(user, door);
@@ -109,7 +109,7 @@ public sealed class CMUJeepFuelFireTest : GameTest
             Assert.That(Contents(jeep, "fuel").GetTotalPrototypeQuantity("WeldingFuel").Float(), Is.EqualTo(60f).Within(0.01f));
             Assert.That(Contents(can, "fuel").GetTotalPrototypeQuantity("WeldingFuel").Float(), Is.EqualTo(45f).Within(0.01f));
             Assert.That(SEntMan.System<SharedHandsSystem>().IsHolding(user, can), Is.True, "The can stays in hand.");
-            Assert.That(SEntMan.System<SharedContainerSystem>().TryGetContainer(jeep, CMUJeepSystem.JerryCanSlot, out var rack) &&
+            Assert.That(SEntMan.System<SharedContainerSystem>().TryGetContainer(jeep, CMUOpenVehicleSystem.JerryCanSlot, out var rack) &&
                         rack.ContainedEntities.Count == 0, Is.True, "The rack stays empty.");
         });
     }
@@ -136,7 +136,7 @@ public sealed class CMUJeepFuelFireTest : GameTest
         var (jeep, _) = await SpawnJeep();
         await Server.WaitPost(() =>
         {
-            var comp = SEntMan.GetComponent<CMUJeepComponent>(jeep);
+            var comp = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep);
             comp.EngineIntegrity = 0f;
             SEntMan.Dirty(jeep, comp);
         });
@@ -144,7 +144,7 @@ public sealed class CMUJeepFuelFireTest : GameTest
 
         await Server.WaitPost(() =>
         {
-            Assert.That(SEntMan.GetComponent<CMUJeepComponent>(jeep).Burning, Is.True);
+            Assert.That(SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep).Burning, Is.True);
             var water = new Solution("Water", 2);
             SEntMan.System<ReactiveSystem>().DoEntityReaction(jeep, water, ReactionMethod.Touch);
         });
@@ -153,7 +153,7 @@ public sealed class CMUJeepFuelFireTest : GameTest
         await Server.WaitAssertion(() =>
         {
             Assert.That(SEntMan.Deleted(jeep), Is.False, "Put out in time, the jeep shouldn't blow up.");
-            var comp = SEntMan.GetComponent<CMUJeepComponent>(jeep);
+            var comp = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep);
             Assert.That(comp.Burning, Is.False);
             Assert.That(comp.EngineIntegrity, Is.EqualTo(1f));
         });

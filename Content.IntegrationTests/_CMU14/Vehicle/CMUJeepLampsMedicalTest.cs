@@ -4,7 +4,7 @@ using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -60,7 +60,7 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
 
     private EntityUid Part(EntityUid jeep, string id)
     {
-        return SEntMan.GetComponent<CMUJeepComponent>(jeep).PartEntities
+        return SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep).PartEntities
             .First(part => SEntMan.GetComponent<CMUVehiclePartComponent>(part).Part == id);
     }
 
@@ -102,7 +102,7 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
         // An empty hand leaves a lamp alone; a screwdriver takes it off.
         await Server.WaitPost(() =>
         {
-            lamp = Part(jeep, CMUJeepSystem.DriverHeadlight);
+            lamp = Part(jeep, CMUOpenVehicleSystem.DriverHeadlight);
             Hold(user, null);
             Click(user, lamp);
             Assert.That(SEntMan.System<ItemSlotsSystem>().GetItemOrNull(jeep, slot), Is.Not.Null);
@@ -113,11 +113,11 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
 
         await Server.WaitPost(() =>
         {
-            var jeeps = SEntMan.System<CMUJeepSystem>();
+            var jeeps = SEntMan.System<CMUOpenVehicleSystem>();
             Assert.That(SEntMan.System<ItemSlotsSystem>().GetItemOrNull(jeep, slot), Is.Null,
                 "A screwdriver should take the headlight off.");
-            Assert.That(jeeps.LampWorks(jeep, CMUJeepSystem.DriverHeadlight), Is.False);
-            Assert.That(jeeps.LampWorks(jeep, CMUJeepSystem.PassengerHeadlight), Is.True);
+            Assert.That(jeeps.LampWorks(jeep, CMUOpenVehicleSystem.DriverHeadlight), Is.False);
+            Assert.That(jeeps.LampWorks(jeep, CMUOpenVehicleSystem.PassengerHeadlight), Is.True);
 
             // Only the passenger's beam lights with the driver's headlight gone.
             var lights = SEntMan.GetComponent<CMUVehicleHeadlightsComponent>(jeep);
@@ -169,8 +169,8 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
         var (jeep, user) = await SpawnJeep("CMUVehicleJeepCargo");
         await Server.WaitPost(() =>
         {
-            SEntMan.System<CMUJeepSystem>()
-                .SetPanel((jeep, SEntMan.GetComponent<CMUJeepComponent>(jeep)), CMUJeepSystem.DriverDoor, true);
+            SEntMan.System<CMUOpenVehicleSystem>()
+                .SetPanel((jeep, SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep)), CMUOpenVehicleSystem.DriverDoor, true);
             Hold(user, null);
         });
         await RunTicksSync(5);
@@ -254,8 +254,8 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
             Assert.That(SEntMan.GetComponent<StrapComponent>(bed).Position, Is.EqualTo(StrapPosition.Down));
 
             // Laid on over the lowered tailgate.
-            SEntMan.System<CMUJeepSystem>()
-                .SetPanel((jeep, SEntMan.GetComponent<CMUJeepComponent>(jeep)), CMUJeepSystem.Tailgate, true);
+            SEntMan.System<CMUOpenVehicleSystem>()
+                .SetPanel((jeep, SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep)), CMUOpenVehicleSystem.Tailgate, true);
             // Behind the jeep, on the grid.
             var grid = SEntMan.GetComponent<TransformComponent>(jeep).ParentUid;
             patient = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(grid, 0.5f, 2f));
@@ -309,13 +309,13 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
         {
             Assert.That(SEntMan.Deleted(crate), Is.True);
             Assert.That(SEntMan.GetComponent<MetaDataComponent>(medical).EntityPrototype?.ID, Is.EqualTo("CMUVehicleJeepMedical"));
-            var lamps = SEntMan.GetComponent<CMUJeepLampsComponent>(medical);
+            var lamps = SEntMan.GetComponent<CMUVehicleLampsComponent>(medical);
             Assert.That(lamps.Lamps.All(lamp => lamp.Slot.HasItem), Is.True, "The jeep comes with its lamps on.");
             Assert.That(SEntMan.GetComponent<CMUVehicleIgnitionComponent>(medical).KeySlot.HasItem, Is.True);
             var containers = SEntMan.System<SharedContainerSystem>();
-            Assert.That(containers.GetContainer(medical, CMUJeepSystem.ExtinguisherSlot).ContainedEntities, Has.Count.EqualTo(1));
+            Assert.That(containers.GetContainer(medical, CMUOpenVehicleSystem.ExtinguisherSlot).ContainedEntities, Has.Count.EqualTo(1));
             Assert.That(containers.GetContainer(medical, "wheel-1").ContainedEntities, Is.Empty);
-            Assert.That(containers.GetContainer(medical, CMUJeepSystem.SpareSlot).ContainedEntities, Has.Count.EqualTo(1));
+            Assert.That(containers.GetContainer(medical, CMUOpenVehicleSystem.SpareSlot).ContainedEntities, Has.Count.EqualTo(1));
         });
     }
 
@@ -356,7 +356,7 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
         });
         await RunSeconds(1f);
         await Server.WaitAssertion(() =>
-            Assert.That(SEntMan.GetComponent<CMUJeepComponent>(jeep).Burning, Is.True, "The engine should burn before the blast."));
+            Assert.That(SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep).Burning, Is.True, "The engine should burn before the blast."));
 
         await RunSeconds(7f);
         EntityUid wreck = default;

@@ -2,7 +2,7 @@ using System.Numerics;
 using Content.Client.Graphics;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Buckle.Components;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Jittering;
 using Content.Shared.Rotation;
 using Content.Shared.Vehicle.Components;
@@ -29,8 +29,8 @@ public sealed class CMUVehicleSeatVisualSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
 
     private const float PixelsPerMeter = 32f;
-    private const string ClipId = "cmu-jeep-rider-clip";
-    private static readonly ProtoId<ShaderPrototype> ClipShader = "CMUJeepRiderClip";
+    private const string ClipId = "cmu-open-vehicle-rider-clip";
+    private static readonly ProtoId<ShaderPrototype> ClipShader = "CMUVehicleRiderClip";
 
     private readonly Dictionary<EntityUid, RiderState> _riders = new();
     private readonly HashSet<EntityUid> _seated = new();

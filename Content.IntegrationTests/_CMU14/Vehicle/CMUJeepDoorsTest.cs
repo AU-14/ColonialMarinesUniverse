@@ -1,7 +1,7 @@
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared.Buckle.Components;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
@@ -45,7 +45,7 @@ public sealed class CMUJeepDoorsTest : GameTest
 
     private EntityUid Part(EntityUid jeep, string id)
     {
-        return SEntMan.GetComponent<CMUJeepComponent>(jeep).PartEntities
+        return SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep).PartEntities
             .First(part => SEntMan.GetComponent<CMUVehiclePartComponent>(part).Part == id);
     }
 
@@ -103,8 +103,8 @@ public sealed class CMUJeepDoorsTest : GameTest
         // Out through the opened door: at once.
         await Server.WaitPost(() =>
         {
-            SEntMan.System<CMUJeepSystem>()
-                .SetPanel((jeep, SEntMan.GetComponent<CMUJeepComponent>(jeep)), CMUJeepSystem.DriverDoor, true);
+            SEntMan.System<CMUOpenVehicleSystem>()
+                .SetPanel((jeep, SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep)), CMUOpenVehicleSystem.DriverDoor, true);
         });
         await RunSeconds(1f);
         await Server.WaitPost(() => SEntMan.System<CMUVehicleSeatSystem>().ClickSeat(seat, user));
@@ -124,24 +124,24 @@ public sealed class CMUJeepDoorsTest : GameTest
         // Its jack comes off first.
         await Server.WaitPost(() =>
         {
-            Assert.That(SEntMan.System<ItemSlotsSystem>().TryEject(jeep, CMUJeepSystem.JackSlot, null, out _), Is.True);
-            door = Part(jeep, CMUJeepSystem.PassengerDoor);
+            Assert.That(SEntMan.System<ItemSlotsSystem>().TryEject(jeep, CMUOpenVehicleSystem.JackSlot, null, out _), Is.True);
+            door = Part(jeep, CMUOpenVehicleSystem.PassengerDoor);
             Hold(user, "CMScrewdriver");
             Click(user, door);
         });
         await RunSeconds(3f);
         await Server.WaitPost(() =>
         {
-            var jeepComp = SEntMan.GetComponent<CMUJeepComponent>(jeep);
-            Assert.That(CMUJeepSystem.GetFastening(jeepComp, slot), Is.EqualTo(CMUJeepSystem.Bolted));
+            var jeepComp = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep);
+            Assert.That(CMUOpenVehicleSystem.GetFastening(jeepComp, slot), Is.EqualTo(CMUOpenVehicleSystem.Bolted));
             Hold(user, "CMWrench");
             Click(user, door);
         });
         await RunSeconds(3f);
         await Server.WaitPost(() =>
         {
-            var jeepComp = SEntMan.GetComponent<CMUJeepComponent>(jeep);
-            Assert.That(CMUJeepSystem.GetFastening(jeepComp, slot), Is.EqualTo(CMUJeepSystem.Loose));
+            var jeepComp = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep);
+            Assert.That(CMUOpenVehicleSystem.GetFastening(jeepComp, slot), Is.EqualTo(CMUOpenVehicleSystem.Loose));
             Hold(user, null);
             Click(user, door);
         });
@@ -153,7 +153,7 @@ public sealed class CMUJeepDoorsTest : GameTest
             Assert.That(SEntMan.System<ItemSlotsSystem>().GetItemOrNull(jeep, slot), Is.Null,
                 "An unbolted door should lift off by hand.");
             item = SEntMan.System<SharedHandsSystem>().EnumerateHeld(user).Single();
-            Assert.That(SEntMan.System<CMUJeepSystem>().IsPanelOpen(jeep, CMUJeepSystem.PassengerDoor), Is.True,
+            Assert.That(SEntMan.System<CMUOpenVehicleSystem>().IsPanelOpen(jeep, CMUOpenVehicleSystem.PassengerDoor), Is.True,
                 "With its door off, a seat's opening is open.");
 
             // Hung back on by hand: loose until bolted and screwed down.
@@ -162,9 +162,9 @@ public sealed class CMUJeepDoorsTest : GameTest
         await RunTicksSync(5);
         await Server.WaitPost(() =>
         {
-            var jeepComp = SEntMan.GetComponent<CMUJeepComponent>(jeep);
+            var jeepComp = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep);
             Assert.That(SEntMan.System<ItemSlotsSystem>().GetItemOrNull(jeep, slot), Is.EqualTo(item));
-            Assert.That(CMUJeepSystem.GetFastening(jeepComp, slot), Is.EqualTo(CMUJeepSystem.Loose));
+            Assert.That(CMUOpenVehicleSystem.GetFastening(jeepComp, slot), Is.EqualTo(CMUOpenVehicleSystem.Loose));
             Hold(user, "CMWrench");
             Click(user, door);
         });
@@ -177,8 +177,8 @@ public sealed class CMUJeepDoorsTest : GameTest
         await RunSeconds(3f);
         await Server.WaitAssertion(() =>
         {
-            var jeepComp = SEntMan.GetComponent<CMUJeepComponent>(jeep);
-            Assert.That(CMUJeepSystem.GetFastening(jeepComp, slot), Is.EqualTo(CMUJeepSystem.Fastened));
+            var jeepComp = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep);
+            Assert.That(CMUOpenVehicleSystem.GetFastening(jeepComp, slot), Is.EqualTo(CMUOpenVehicleSystem.Fastened));
         });
     }
 
@@ -193,12 +193,12 @@ public sealed class CMUJeepDoorsTest : GameTest
         {
             var grid = SEntMan.GetComponent<TransformComponent>(jeep).ParentUid;
             SEntMan.System<SharedTransformSystem>().SetCoordinates(user, new EntityCoordinates(grid, -0.45f, 0.75f));
-            var fitted = SEntMan.System<ItemSlotsSystem>().GetItemOrNull(jeep, CMUJeepSystem.JackSlot);
+            var fitted = SEntMan.System<ItemSlotsSystem>().GetItemOrNull(jeep, CMUOpenVehicleSystem.JackSlot);
             Assert.That(fitted, Is.Not.Null);
             Assert.That(SEntMan.GetComponent<MetaDataComponent>(fitted!.Value).EntityPrototype?.ID, Is.EqualTo("AU14MaintenanceJack"));
 
             jack = Part(jeep, "jack");
-            door = Part(jeep, CMUJeepSystem.PassengerDoor);
+            door = Part(jeep, CMUOpenVehicleSystem.PassengerDoor);
             Hold(user, "CMScrewdriver");
             Click(user, door);
         });
@@ -206,8 +206,8 @@ public sealed class CMUJeepDoorsTest : GameTest
 
         await Server.WaitPost(() =>
         {
-            var jeepComp = SEntMan.GetComponent<CMUJeepComponent>(jeep);
-            Assert.That(CMUJeepSystem.GetFastening(jeepComp, "jeep-door-passenger"), Is.EqualTo(CMUJeepSystem.Fastened),
+            var jeepComp = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep);
+            Assert.That(CMUOpenVehicleSystem.GetFastening(jeepComp, "jeep-door-passenger"), Is.EqualTo(CMUOpenVehicleSystem.Fastened),
                 "The door stays on while the jack hangs on it.");
             Hold(user, null);
             Click(user, jack);
@@ -216,14 +216,14 @@ public sealed class CMUJeepDoorsTest : GameTest
 
         await Server.WaitPost(() =>
         {
-            Assert.That(SEntMan.System<ItemSlotsSystem>().GetItemOrNull(jeep, CMUJeepSystem.JackSlot), Is.Null,
+            Assert.That(SEntMan.System<ItemSlotsSystem>().GetItemOrNull(jeep, CMUOpenVehicleSystem.JackSlot), Is.Null,
                 "An empty hand should take the jack off.");
             Click(user, jack);
         });
         await RunTicksSync(5);
 
         await Server.WaitAssertion(() =>
-            Assert.That(SEntMan.System<ItemSlotsSystem>().GetItemOrNull(jeep, CMUJeepSystem.JackSlot), Is.Not.Null,
+            Assert.That(SEntMan.System<ItemSlotsSystem>().GetItemOrNull(jeep, CMUOpenVehicleSystem.JackSlot), Is.Not.Null,
                 "The jack should go back on the door."));
     }
 
@@ -233,7 +233,7 @@ public sealed class CMUJeepDoorsTest : GameTest
         var (jeep, user) = await SpawnJeep("CMUVehicleJeepGunner");
         await Server.WaitAssertion(() =>
         {
-            var jeeps = SEntMan.System<CMUJeepSystem>();
+            var jeeps = SEntMan.System<CMUOpenVehicleSystem>();
             var lights = SEntMan.GetComponent<CMUVehicleHeadlightsComponent>(jeep);
             // A low and a high beam for each headlight.
             Assert.That(lights.Beams, Has.Count.EqualTo(4));

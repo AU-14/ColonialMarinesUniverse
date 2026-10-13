@@ -1,6 +1,6 @@
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Shared.Charges.Systems;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 
 namespace Content.IntegrationTests.CMU14.Vehicle;
 

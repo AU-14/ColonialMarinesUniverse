@@ -1,6 +1,5 @@
-# What every open vehicle shares: driving on the grid, its engine and key, fuel, crashes, damage, the
-# lights switch, z levels and how it goes up when wrecked. A vehicle adds its own parts, lamps, seats,
-# art and slots.
+# What every open vehicle shares: driving on the grid, fuel, crashes, damage, the lights switch, z levels
+# and how it goes up when wrecked. A vehicle adds its own key, sounds, parts, lamps, seats, art and slots.
 - type: entity
   id: CMUOpenVehicleBase
   abstract: true
@@ -11,49 +10,6 @@
     movementKind: Grid
     transferDamage: false
   - type: VehicleOperatorDamage
-  - type: CMUVehicleIgnition
-    keySlot:
-      name: cmu-jeep-part-ignition
-      startingItem: CMUJeepKey
-      swap: false
-      insertSound: /Audio/Machines/id_insert.ogg
-      ejectSound: /Audio/Machines/id_swipe.ogg
-      whitelist:
-        tags:
-        - CMUJeepKey
-  - type: CMUVehicleEngineSound
-    startSound:
-      path: /Audio/CMU14/Jeep/jeep_engine_start.wav
-      params:
-        maxDistance: 12
-    idleSound:
-      path: /Audio/CMU14/Jeep/jeep_engine_idle.wav
-      params:
-        volume: -2
-        maxDistance: 10
-    driveSound:
-      path: /Audio/CMU14/Jeep/jeep_engine_drive.wav
-      params:
-        volume: -1
-        maxDistance: 12
-    roughSound:
-      path: /Audio/CMU14/Jeep/jeep_engine_rough.wav
-      params:
-        volume: -2
-        maxDistance: 10
-    roughDriveSound:
-      path: /Audio/CMU14/Jeep/jeep_engine_rough_drive.wav
-      params:
-        volume: -1
-        maxDistance: 12
-    revSound:
-      path: /Audio/CMU14/Jeep/jeep_engine_rev.wav
-      params:
-        maxDistance: 12
-    stallSound:
-      path: /Audio/CMU14/Jeep/jeep_engine_sputter.wav
-      params:
-        maxDistance: 12
   # The fuel tank, filled through the fuel door.
   - type: CMUVehicleFuel
   - type: Solution
@@ -103,24 +59,11 @@
   - type: CMUVehicleCrash
   - type: CMUVehicleTyres
   - type: CMUVehicleCover
-  - type: CMUVehicleCrashKnockout
-    hornSound:
-      path: /Audio/CMU14/Jeep/jeep_horn_long.wav
-      params:
-        volume: 2
   - type: VehicleOvercharge
     speedMultiplier: 1.55
     duration: 3
     cooldown: 14
     overchargeSound: /Audio/_RMC14/Vehicle/overdrive_activate.ogg
-  # The engine sounds come from CMUVehicleEngineSound, so there is no running sound here.
-  - type: VehicleSound
-    hornSound: /Audio/CMU14/Jeep/jeep_horn.wav
-    hornCooldown: 1
-    collisionSound: /Audio/_RMC14/Effects/metal_crash.ogg
-    collisionSoundCooldown: 1.5
-    collisionSoundMinSpeed: 7
-    mobCollisionSound: /Audio/_RMC14/Xeno/alien_claw_block.ogg
   # The headlight switch. RMC's spotlight flag (F) follows it and lights the tail and marker lamps;
   # the jeep itself has no light of its own, each beam is a child with a cone-shaped one.
   - type: VehicleSpotlight

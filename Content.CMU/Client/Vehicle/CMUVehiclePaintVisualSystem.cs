@@ -1,6 +1,6 @@
 using System.Linq;
 using Content.Shared._RMC14.Vehicle;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Prototypes;
@@ -20,7 +20,7 @@ public sealed class CMUVehiclePaintVisualSystem : EntitySystem
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private VehicleTurretSystem _turret = default!;
 
-    private static readonly ProtoId<ShaderPrototype> PaintShader = "CMUJeepPaint";
+    private static readonly ProtoId<ShaderPrototype> PaintShader = "CMUVehiclePaint";
     // The olive top tone the art was drawn in, and the mud splashed on the low bodywork.
     private static readonly Color Base = new(118, 126, 80);
     private static readonly Color Mud = new(98, 84, 58);

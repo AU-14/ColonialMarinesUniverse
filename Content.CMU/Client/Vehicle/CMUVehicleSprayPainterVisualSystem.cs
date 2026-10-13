@@ -1,4 +1,4 @@
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Robust.Client.GameObjects;
 
 namespace Content.Client.CMU14.Vehicle;

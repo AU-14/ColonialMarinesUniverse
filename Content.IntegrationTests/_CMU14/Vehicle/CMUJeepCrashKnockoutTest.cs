@@ -1,10 +1,10 @@
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
-using Content.Server.CMU14.Vehicle.Jeep;
+using Content.Server.CMU14.Vehicle.Open;
 using Content.Shared._RMC14.Stun;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CMU14.Vehicle;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Robust.Shared.ContentPack;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;

@@ -1,7 +1,7 @@
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared.Charges.Systems;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Robust.Shared.GameObjects;
@@ -73,7 +73,7 @@ public sealed class CMUJeepRimDesignTest : GameTest
     private void Spray(EntityUid user, EntityUid jeep, bool wheels)
     {
         var target = wheels
-            ? SEntMan.GetComponent<CMUJeepComponent>(jeep).PartEntities
+            ? SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep).PartEntities
                 .First(part => SEntMan.GetComponent<CMUVehiclePartComponent>(part).Part == "wheels")
             : jeep;
         SEntMan.System<SharedInteractionSystem>()

@@ -1,6 +1,6 @@
 using Content.Shared.Charges.Components;
 using Content.Shared.Charges.Systems;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 

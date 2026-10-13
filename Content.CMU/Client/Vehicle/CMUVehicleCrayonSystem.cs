@@ -2,7 +2,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Client._RMC14.Vehicle;
 using Content.Shared._RMC14.Vehicle;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Decals;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -120,7 +120,7 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
                 _paints[uid] = paint = new Paint();
 
             // The overlay can arrive after the drawings, and a panel swinging changes what shows.
-            var jeep = CompOrNull<CMUJeepComponent>(uid);
+            var jeep = CompOrNull<CMUOpenVehicleComponent>(uid);
             var openPanels = OpenPanels(jeep, crayon);
             if (paint.Stale ||
                 !ReferenceEquals(paint.Visuals, overlayVisuals) ||
@@ -160,7 +160,7 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
         _sprite.LayerSetRotation(ent.AsNullable(), index, counter);
     }
 
-    private void Repaint(CMUVehicleCrayonComponent crayon, Paint paint, CMUVehicleOverlayVisualsComponent? overlayVisuals, CMUJeepComponent? jeep)
+    private void Repaint(CMUVehicleCrayonComponent crayon, Paint paint, CMUVehicleOverlayVisualsComponent? overlayVisuals, CMUOpenVehicleComponent? jeep)
     {
         paint.Dispose();
         if (crayon.Drawings.Count == 0 && crayon.Blood.Count == 0 ||

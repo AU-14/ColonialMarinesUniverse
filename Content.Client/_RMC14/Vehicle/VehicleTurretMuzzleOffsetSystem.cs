@@ -1,7 +1,7 @@
 using System.Numerics;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Weapons.Ranged;
-using Content.Shared.CMU14.Vehicle.Jeep; // CMU14
+using Content.Shared.CMU14.Vehicle.Open; // CMU14
 using Content.Shared.Weapons.Ranged.Components;
 using Robust.Client.Graphics;
 using Robust.Shared.GameObjects;

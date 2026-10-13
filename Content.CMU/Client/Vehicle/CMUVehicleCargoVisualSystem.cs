@@ -1,7 +1,7 @@
 using System.Numerics;
 using Content.Client._RMC14.Vehicle;
 using Content.Shared._RMC14.Vehicle;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Vehicle.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;

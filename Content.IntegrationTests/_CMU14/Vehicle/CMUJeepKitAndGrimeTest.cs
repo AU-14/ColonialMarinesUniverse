@@ -4,7 +4,7 @@ using Content.IntegrationTests.Fixtures;
 using Content.Shared.Charges.Systems;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Components;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Lathe;
@@ -66,12 +66,12 @@ public sealed class CMUJeepKitAndGrimeTest : GameTest
         await Server.WaitAssertion(() =>
         {
             Assert.That(SEntMan.Deleted(crate), Is.True, "The crate should give way to the jeep.");
-            var jeep = SEntMan.EntityQuery<CMUJeepComponent>(true).Select(c => c.Owner).Single();
+            var jeep = SEntMan.EntityQuery<CMUOpenVehicleComponent>(true).Select(c => c.Owner).Single();
             Assert.That(SEntMan.GetComponent<MetaDataComponent>(jeep).EntityPrototype?.ID, Is.EqualTo("CMUVehicleJeepCargo"));
 
             var containers = SEntMan.System<SharedContainerSystem>();
             Assert.That(containers.GetContainer(jeep, "wheel-1").ContainedEntities, Is.Empty, "The axle comes bare.");
-            var hatch = containers.GetContainer(jeep, CMUJeepSystem.SpareSlot).ContainedEntities;
+            var hatch = containers.GetContainer(jeep, CMUOpenVehicleSystem.SpareSlot).ContainedEntities;
             Assert.That(hatch, Has.Count.EqualTo(1), "The wheel set rides in the rear hatch.");
             Assert.That(SEntMan.GetComponent<MetaDataComponent>(hatch[0]).EntityPrototype?.ID, Is.EqualTo("CMUJeepWheel"));
             Assert.That(SEntMan.GetComponent<CMUVehicleIgnitionComponent>(jeep).KeySlot.HasItem, Is.True, "The key comes in.");
@@ -99,7 +99,7 @@ public sealed class CMUJeepKitAndGrimeTest : GameTest
         await Server.WaitAssertion(() =>
         {
             Assert.That(paints, Has.Count.EqualTo(5));
-            var jeep = SEntMan.EntityQuery<CMUJeepComponent>(true).Select(c => c.Owner).Single();
+            var jeep = SEntMan.EntityQuery<CMUOpenVehicleComponent>(true).Select(c => c.Owner).Single();
             Assert.That(SEntMan.GetComponent<MetaDataComponent>(jeep).EntityPrototype?.ID, Is.EqualTo("CMUVehicleJeepMedical"));
             var color = SEntMan.GetComponent<CMUVehiclePaintComponent>(jeep).Color;
             Assert.That(color, Is.Not.Null);
@@ -163,7 +163,7 @@ public sealed class CMUJeepKitAndGrimeTest : GameTest
             comp.Color = red;
             SEntMan.Dirty(painter, comp);
 
-            var wheels = SEntMan.GetComponent<CMUJeepComponent>(jeep).PartEntities
+            var wheels = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep).PartEntities
                 .First(part => SEntMan.GetComponent<CMUVehiclePartComponent>(part).Part == "wheels");
             SEntMan.System<SharedInteractionSystem>()
                 .UserInteraction(user, SEntMan.GetComponent<TransformComponent>(wheels).Coordinates, wheels);

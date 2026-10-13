@@ -2,7 +2,7 @@ using System.Linq;
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.Fluids.EntitySystems;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Fluids.Components;
 using Content.Shared.Gravity;
@@ -49,7 +49,7 @@ public sealed class CMUJeepExtinguisherTest : GameTest
 
     private EntityUid HoldRackExtinguisher(EntityUid jeep, EntityUid user)
     {
-        Assert.That(SEntMan.System<ItemSlotsSystem>().TryEject(jeep, CMUJeepSystem.ExtinguisherSlot, null, out var extinguisher), Is.True);
+        Assert.That(SEntMan.System<ItemSlotsSystem>().TryEject(jeep, CMUOpenVehicleSystem.ExtinguisherSlot, null, out var extinguisher), Is.True);
         Assert.That(SEntMan.System<SharedHandsSystem>().TryPickup(user, extinguisher!.Value), Is.True);
         Assert.That(SEntMan.System<ItemToggleSystem>().TryActivate(extinguisher.Value, user), Is.True, "The safety should come off.");
         return extinguisher.Value;

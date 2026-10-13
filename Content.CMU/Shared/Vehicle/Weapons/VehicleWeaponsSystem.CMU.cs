@@ -1,4 +1,4 @@
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 
 namespace Content.Shared._RMC14.Vehicle;
 

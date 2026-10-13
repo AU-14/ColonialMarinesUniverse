@@ -1,7 +1,7 @@
 using System.Linq;
 using Content.Client._RMC14.Vehicle;
 using Content.Shared.CMU14.Vehicle;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Prototypes;
@@ -24,7 +24,7 @@ public sealed class CMUVehicleRimVisualSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private SpriteSystem _sprite = default!;
 
-    private static readonly ProtoId<ShaderPrototype> RimShader = "CMUJeepRim";
+    private static readonly ProtoId<ShaderPrototype> RimShader = "CMUVehicleRim";
     private const string MapPrefix = "rims_";
 
     private readonly Dictionary<EntityUid, Rims> _rims = new();
@@ -47,7 +47,7 @@ public sealed class CMUVehicleRimVisualSystem : EntitySystem
     public override void Initialize()
     {
         UpdatesAfter.Add(typeof(VehicleWheelVisualizerSystem));
-        UpdatesAfter.Add(typeof(CMUJeepVisualSystem));
+        UpdatesAfter.Add(typeof(CMUOpenVehicleVisualSystem));
         UpdatesAfter.Add(typeof(CMUVehicleOverlayVisualSystem));
     }
 

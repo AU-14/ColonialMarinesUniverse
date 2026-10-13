@@ -7,7 +7,7 @@ using Content.Server.Station.Systems;
 using Content.Shared._NC14.DayNightCycle;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.SupplyDrop;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;

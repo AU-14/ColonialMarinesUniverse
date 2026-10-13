@@ -30,8 +30,6 @@ cmu-jeep-part-jack = maintenance jack
 cmu-jeep-part-door-driver = driver's door
 cmu-jeep-part-door-passenger = passenger's door
 cmu-jeep-part-tailgate = tailgate
-cmu-jeep-hood-blocked = Raise the windshield first.
-cmu-jeep-windshield-blocked = Close the hood first.
 
 cmu-vehicle-fuel-examine = The fuel gauge reads [color=yellow]{$percent}%[/color].
 cmu-vehicle-fuel-empty = The engine sputters and dies. The tank is empty.
@@ -40,19 +38,12 @@ cmu-vehicle-fuel-full = The tank is full.
 cmu-vehicle-fuel-door-closed = Open the fuel door first.
 
 cmu-jeep-part-engine = engine
-cmu-jeep-engine-dead = The engine coughs and dies. It needs repairs under the hood.
-cmu-jeep-engine-examine = The engine is at {$percent}%.
-cmu-jeep-engine-fine = The engine doesn't need any work.
-cmu-jeep-part-fine = There's nothing to fix on the {$part}.
-cmu-jeep-wreck-warning = Flames burst from under {THE($vehicle)}'s hood! Get clear before it goes up!
-cmu-jeep-fire-out = The fire under {THE($vehicle)}'s hood dies down with a hiss.
 cmu-vehicle-crash-knocked-out = {CAPITALIZE(THE($rider))} slams forward with the crash and goes limp!
 cmu-vehicle-crash-blackout = You slam forward and everything goes black for a moment!
 cmu-vehicle-front-straightened = You beat the last of the dents out of {THE($vehicle)}'s front.
 cmu-vehicle-front-damage-1 = Its bumper is bent in from a crash.
 cmu-vehicle-front-damage-2 = [color=yellow]Its front end is crumpled from a crash.[/color]
 cmu-vehicle-front-damage-3 = [color=red]Its front end is smashed in.[/color]
-cmu-jeep-hull-wrecked = {CAPITALIZE(THE($vehicle))} buckles and sags on its wheels. It won't go any further until the hull is repaired.
 cmu-vehicle-cargo-load-verb = Load crate
 cmu-vehicle-cargo-unload-verb = Unload crate
 cmu-vehicle-cargo-secured = You wrench the crate down.
@@ -73,19 +64,8 @@ cmu-vehicle-paint-design-wheels = A rim design goes on the wheels.
 cmu-vehicle-paint-rims-examine = Its wheels have {$design} rims.
 
 # Moving parts come off screwdriver, wrench, hand, and go back on hand, wrench, screwdriver.
-cmu-jeep-part-unscrewed = You take the screws out of the {$part}. Its bolts still hold it.
-cmu-jeep-part-unbolted = You unbolt the {$part}. It can be lifted off by hand.
-cmu-jeep-part-bolted = You bolt the {$part} on. Screw it down to finish.
-cmu-jeep-part-screwed = You screw the {$part} down.
-cmu-jeep-part-bolt-first = The {$part} is only hung on. Bolt it on with a wrench first.
-cmu-jeep-part-loaded = Take off what hangs on the {$part} first.
-cmu-jeep-kit-blocked = There's nothing to reach it on: the panel it hangs on is down or off.
 cmu-vehicle-cargo-tailgate-closed = Lower the tailgate first.
 
-cmu-jeep-headlights-off = You switch the headlights off.
-cmu-jeep-headlights-low = You switch on the low beams.
-cmu-jeep-headlights-high = You switch on the high beams.
-cmu-jeep-headlights-broken = You flick the switch, but the headlights stay dark.
 
 cmu-vehicle-ignition-examine-key = The key is in the ignition.
 cmu-vehicle-ignition-examine-no-key = There's no key in the ignition.

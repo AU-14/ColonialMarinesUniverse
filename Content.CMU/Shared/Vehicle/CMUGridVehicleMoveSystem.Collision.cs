@@ -1,5 +1,5 @@
 using System;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared._RMC14.Crate;
 using Content.Shared._RMC14.Entrenching;
 using Content.Shared._RMC14.Vehicle;

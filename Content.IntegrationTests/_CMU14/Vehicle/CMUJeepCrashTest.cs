@@ -8,7 +8,7 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
-using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Vehicle;
 using Content.Shared.Vehicle.Components;
 using Content.Shared._RMC14.Vehicle;
@@ -91,7 +91,7 @@ public sealed class CMUJeepCrashTest : GameTest
         var jeep = await SpawnJeep();
         await Server.WaitAssertion(() =>
         {
-            var comp = SEntMan.GetComponent<CMUJeepComponent>(jeep);
+            var comp = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep);
             var before = comp.EngineIntegrity;
             var side = new CMUVehicleCrashedEvent(30f, false);
             SEntMan.EventBus.RaiseLocalEvent(jeep, ref side);
@@ -109,7 +109,7 @@ public sealed class CMUJeepCrashTest : GameTest
         var jeep = await SpawnJeep();
         await Server.WaitAssertion(() =>
         {
-            var comp = SEntMan.GetComponent<CMUJeepComponent>(jeep);
+            var comp = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep);
             var grid = SEntMan.GetComponent<TransformComponent>(jeep).ParentUid;
             // Facing south: the hood is toward -y.
             var ahead = SEntMan.SpawnEntity(null, new EntityCoordinates(grid, 0.5f, -2.5f));
@@ -151,9 +151,9 @@ public sealed class CMUJeepCrashTest : GameTest
 
         await Server.WaitAssertion(() =>
         {
-            Assert.That(SEntMan.System<CMUJeepSystem>().IsHullWrecked(jeep), Is.True);
+            Assert.That(SEntMan.System<CMUOpenVehicleSystem>().IsHullWrecked(jeep), Is.True);
             Assert.That(CanRun(jeep), Is.False, "A wrecked hull should stop the jeep.");
-            Assert.That(SEntMan.GetComponent<CMUJeepComponent>(jeep).Burning, Is.False, "A wrecked hull alone shouldn't set it alight.");
+            Assert.That(SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep).Burning, Is.False, "A wrecked hull alone shouldn't set it alight.");
         });
 
         await RunSeconds(8f);
