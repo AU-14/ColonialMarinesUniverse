@@ -103,8 +103,8 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     private static readonly string ReagentPrototype = $$"""
         - type: reagent
           id: {{TestReagent}}
-          name: all beneficial property test reagent
-          desc: all beneficial property test reagent
+          name: reagent-name-nothing
+          desc: reagent-desc-nothing
           physicalDesc: reagent-physical-desc-translucent
           color: "#ffffff"
           worksOnTheDead: true
@@ -118,8 +118,8 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
 
         - type: reagent
           id: {{DefibrillatingTestReagent}}
-          name: level six defibrillating test reagent
-          desc: level six defibrillating test reagent
+          name: reagent-name-nothing
+          desc: reagent-desc-nothing
           physicalDesc: reagent-physical-desc-translucent
           color: "#ffffff"
           worksOnTheDead: true
