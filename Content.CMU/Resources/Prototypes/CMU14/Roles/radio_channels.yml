@@ -57,7 +57,7 @@
 - type: radioChannel
   id: radioGovforFoxtrot
   name: chat-radio-govforfoxtrot
-  keycode: 'ŝ' # all letters and digits are taken; the squad headset defaults to it
+  keycode: "f"
   frequency: 160.8
   color: "#4B6584"
   longRange: true
@@ -251,7 +251,7 @@
 - type: radioChannel
   id: radioMobFamily
   name: chat-radio-mob
-  keycode: "f"
+  keycode: 'ŝ' # gave "f" to GOVFOR Foxtrot
   frequency: 146.7
   color: "#318779"
   longRange: true
