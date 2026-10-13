@@ -34,6 +34,8 @@ public sealed class MohawkMappedGunneryTest : GameTest
     {
         await Server.WaitAssertion(() =>
         {
+            Server.ResolveDependency<Robust.Shared.Configuration.IConfigurationManager>()
+                .SetCVar(Robust.Shared.CVars.NetTickrate, 30);
             var maps = Server.System<SharedMapSystem>();
             maps.CreateMap(out var mapId);
             Assert.That(Server.System<MapLoaderSystem>().TryLoadGrid(mapId,
@@ -158,6 +160,122 @@ public sealed class MohawkMappedGunneryTest : GameTest
                 .GetControlOfType<DropshipWeaponsWindow>(fullTreeSearch: true).Single();
             Assert.That(window.FeedModeButton.Text, Does.Contain("alternate"));
             Assert.That(window.FeedTwoButton.Text, Does.Contain("*"));
+        });
+        await Server.WaitAssertion(() =>
+        {
+            var point = SEntMan.QueryEntities<MohawkChinGunComponent>().Single();
+            var actor = SEntMan.GetEntity(actorNet);
+            SEntMan.EventBus.RaiseLocalEvent(SEntMan.GetEntity(consoleNet), new MohawkChinGunArMessage
+                { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
+            Assert.That(point.Comp.ArMode, Is.True);
+            Assert.That(Server.System<SharedUserInterfaceSystem>().IsUiOpen(
+                SEntMan.GetEntity(consoleNet), DropshipTerminalWeaponsUi.Key, actor), Is.True,
+                "AR hides rather than closes the authoritative control session.");
+        });
+        await Pair.RunUntilSynced();
+        await Client.WaitAssertion(() =>
+        {
+            var ui = Client.ResolveDependency<IUserInterfaceManager>();
+            if (ui.ActiveScreen is not Content.Client.UserInterface.Screens.DefaultGameScreen)
+            {
+                ui.UnloadScreen();
+                ui.LoadScreen<Content.Client.UserInterface.Screens.DefaultGameScreen>();
+            }
+            var window = Client.ResolveDependency<IUserInterfaceManager>().RootControl
+                .GetControlOfType<DropshipWeaponsWindow>(fullTreeSearch: true).Single();
+            Assert.That(window.Visible, Is.False, "AR must hide the entire console panel.");
+            Assert.That(Client.ResolveDependency<Robust.Client.Player.IPlayerManager>().LocalEntity,
+                Is.EqualTo(CEntMan.GetEntity(actorNet)));
+            var system = Client.System<Content.Client.CMU14.Dropship.DirectFire.MohawkGunnerInputSystem>();
+            system.FrameUpdate(0.1f);
+            var exit = Client.ResolveDependency<IUserInterfaceManager>().RootControl
+                .GetControlOfType<Robust.Client.UserInterface.Controls.Button>(fullTreeSearch: true)
+                .Single(button => button.Text == "Return to gun panel");
+            Assert.That(exit.Visible, Is.True);
+        });
+        var enabledBeforePan = false;
+        await Client.WaitPost(() =>
+        {
+            var input = Client.ResolveDependency<IInputManager>();
+            enabledBeforePan = input.Enabled;
+            input.Enabled = true;
+            Client.ResolveDependency<IUserInterfaceManager>().KeyboardFocused?.ReleaseKeyboardFocus();
+            var timing = Client.ResolveDependency<Robust.Shared.Timing.IGameTiming>();
+            var message = new ClientFullInputCmdMessage(timing.CurTick, timing.TickFraction,
+                input.NetworkBindMap.KeyFunctionID(EngineKeyFunctions.MoveRight)) { State = BoundKeyState.Down };
+            Client.System<Robust.Client.GameObjects.InputSystem>().HandleInputCommand(
+                Client.ResolveDependency<Robust.Client.Player.IPlayerManager>().LocalSession,
+                EngineKeyFunctions.MoveRight, message);
+        });
+        try
+        {
+            await Pair.RunTicksSync(4);
+            await Client.WaitPost(() => Client.System<Content.Client.CMU14.Dropship.DirectFire.MohawkGunnerInputSystem>().FrameUpdate(0.1f));
+            await Pair.RunTicksSync(3);
+            await Server.WaitAssertion(() =>
+            {
+                var point = SEntMan.QueryEntities<MohawkChinGunComponent>().Single();
+                Assert.That(point.Comp.CameraPan.X, Is.GreaterThan(0), "The bound MoveRight input must pan the camera right.");
+                Assert.That(point.Comp.DesiredAimDegrees, Is.LessThan(0), "Keyboard panning must also slew the gun.");
+            });
+        }
+        finally
+        {
+            await Client.WaitPost(() =>
+            {
+                var input = Client.ResolveDependency<IInputManager>();
+                var timing = Client.ResolveDependency<Robust.Shared.Timing.IGameTiming>();
+                var message = new ClientFullInputCmdMessage(timing.CurTick, timing.TickFraction,
+                    input.NetworkBindMap.KeyFunctionID(EngineKeyFunctions.MoveRight)) { State = BoundKeyState.Up };
+                Client.System<Robust.Client.GameObjects.InputSystem>().HandleInputCommand(
+                    Client.ResolveDependency<Robust.Client.Player.IPlayerManager>().LocalSession,
+                    EngineKeyFunctions.MoveRight, message);
+                input.Enabled = enabledBeforePan;
+            });
+        }
+        await Client.WaitPost(() =>
+        {
+            var exit = Client.ResolveDependency<IUserInterfaceManager>().RootControl
+                .GetControlOfType<Robust.Client.UserInterface.Controls.Button>(fullTreeSearch: true)
+                .Single(button => button.Text == "Return to gun panel");
+            var pressed = false;
+            exit.OnPressed += _ => pressed = true;
+            exit.GetType().GetMethod("KeyBindDown", BindingFlags.Instance | BindingFlags.NonPublic)!
+                .Invoke(exit, new object[] { new GUIBoundKeyEventArgs(EngineKeyFunctions.UIClick, BoundKeyState.Down,
+                    default, true, Vector2.Zero, Vector2.Zero) });
+            Assert.That(pressed, Is.True, "The AR return button must emit its actual press event.");
+        });
+        await Pair.RunTicksSync(3);
+        await Pair.RunUntilSynced();
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.QueryEntities<MohawkChinGunComponent>().Single().Comp.ArMode, Is.False,
+                "The networked AR exit must be accepted by the authoritative control session.");
+            Assert.That(SEntMan.GetComponent<DropshipTerminalWeaponsComponent>(SEntMan.GetEntity(consoleNet)).ChinGunAr, Is.False);
+        });
+        await Client.WaitAssertion(() =>
+        {
+            Assert.That(CEntMan.GetComponent<DropshipTerminalWeaponsComponent>(CEntMan.GetEntity(consoleNet)).ChinGunAr,
+                Is.False, "The authoritative AR state must reach the client.");
+            var window = Client.ResolveDependency<IUserInterfaceManager>().RootControl
+                .GetControlOfType<DropshipWeaponsWindow>(fullTreeSearch: true).Single();
+            Assert.That(window.Visible, Is.True);
+        });
+        await Server.WaitAssertion(() =>
+        {
+            var point = SEntMan.QueryEntities<MohawkChinGunComponent>().Single();
+            Assert.That(point.Comp.ArMode, Is.False);
+            Assert.That(point.Comp.Operator, Is.EqualTo(SEntMan.GetEntity(actorNet)),
+                "Returning from AR must preserve turret control.");
+            var previousEye = point.Comp.PreviousEye;
+            Server.System<SharedUserInterfaceSystem>().CloseUi(
+                SEntMan.GetEntity(consoleNet), DropshipTerminalWeaponsUi.Key, SEntMan.GetEntity(actorNet));
+            Server.System<MohawkChinGunSystem>().Update(0);
+            Assert.That(point.Comp.Operator, Is.Null);
+            Assert.That(point.Comp.KeyboardPan, Is.EqualTo(Vector2.Zero));
+            Assert.That(SEntMan.GetComponent<DropshipTerminalWeaponsComponent>(SEntMan.GetEntity(consoleNet)).ChinGunAr, Is.False);
+            Assert.That(SEntMan.GetComponent<EyeComponent>(SEntMan.GetEntity(actorNet)).Target, Is.EqualTo(previousEye),
+                "Closing turret control must restore the gunner's original camera.");
         });
     }
 }

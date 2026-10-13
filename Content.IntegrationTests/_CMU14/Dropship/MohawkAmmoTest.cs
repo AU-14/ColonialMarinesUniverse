@@ -156,9 +156,9 @@ public sealed class MohawkAmmoTest : GameTest
     [TestCase("CMUMohawkM90AmmoScatter", "CMUMohawkM90Scatter", 60, 10, 3000, false)]
     [TestCase("CMUMohawkM90AmmoIncendiary", "CMUMohawkM90Incendiary", 130, 2, 3000, true)]
     [TestCase("CMUMohawkM90AmmoDevastator", "CMUMohawkM90Devastator", 300, 12, 6000, false)]
-    [TestCase("CMUMohawkM90AmmoKinetic", "CMUMohawkM90Kinetic", 82, 0, 750, false)]
+    [TestCase("CMUMohawkM90AmmoKinetic", "CMUMohawkM90Kinetic", 20.5, 0, 750, false)]
     public async Task PowerloaderLoadsVariantAndGunConsumesItsProjectile(
-        string crateId, string projectileId, int damage, int spread, int cost, bool burns)
+        string crateId, string projectileId, double damage, int spread, int cost, bool burns)
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
@@ -179,12 +179,12 @@ public sealed class MohawkAmmoTest : GameTest
             Assert.That(containers.GetContainer(point, mount.AmmoContainerSlotId).Contains(crate), Is.True);
             var payload = SEntMan.GetComponent<DropshipAmmoComponent>(crate);
             Assert.That(payload.Weapon.Id, Is.EqualTo("CMUMohawkM90"));
-            var capacity = payload.GroundOnly ? 1200 : 400;
+            var capacity = payload.GroundCompatible ? 1200 : 400;
             Assert.That(payload.Rounds, Is.EqualTo(capacity));
             Assert.That(payload.MaxRounds, Is.EqualTo(capacity));
             Assert.That(payload.RoundsPerShot, Is.EqualTo(1));
             Assert.That(payload.DirectFireSpreadDegrees, Is.EqualTo(spread));
-            Assert.That(payload.Damage!.GetTotal().Int(), Is.EqualTo(damage));
+            Assert.That(payload.Damage!.GetTotal().Float(), Is.EqualTo(damage));
             Assert.That(SEntMan.GetComponent<DropshipFabricatorPrintableComponent>(crate).Cost, Is.EqualTo(cost));
             Assert.That(Server.System<SharedSentryTargetingSystem>().TryApplyDefaultFaction(point, "GOVFOR"), Is.True);
             var chin = SEntMan.GetComponent<MohawkChinGunComponent>(point);
@@ -196,9 +196,9 @@ public sealed class MohawkAmmoTest : GameTest
                 var attempt = new AttemptShootEvent(weapon, null, map.GridCoords,
                     map.GridCoords.Offset(new Vector2(1.5f, 20)));
                 SEntMan.EventBus.RaiseLocalEvent(weapon, ref attempt);
-                Assert.That(attempt.Cancelled, Is.EqualTo(!payload.GroundOnly),
+                Assert.That(attempt.Cancelled, Is.EqualTo(!payload.GroundCompatible),
                     "Only Squall kinetic ammunition can be fired groundside.");
-                if (!payload.GroundOnly)
+                if (!payload.GroundCompatible)
                     continue;
                 var direction = transform.ToMapCoordinates(attempt.ToCoordinates!.Value).Position -
                                 transform.ToMapCoordinates(attempt.FromCoordinates).Position;
@@ -207,7 +207,7 @@ public sealed class MohawkAmmoTest : GameTest
                 Assert.That(degrees, Is.LessThanOrEqualTo(spread + 0.001f));
             }
             chin.DefensiveFire = false;
-            if (payload.GroundOnly && spread > 0)
+            if (payload.GroundCompatible && spread > 0)
                 Assert.That(maximumScatter, Is.GreaterThan(spread * 0.5f),
                     "The ammo must actually scatter firing trajectories, not merely advertise a spread field.");
             var take = new TakeAmmoEvent(1, new(), map.GridCoords, null);
@@ -217,7 +217,7 @@ public sealed class MohawkAmmoTest : GameTest
             var projectile = take.Ammo.Single().Entity!.Value;
             Assert.That(SEntMan.GetComponent<MetaDataComponent>(projectile).EntityPrototype!.ID,
                 Is.EqualTo(projectileId));
-            Assert.That(SEntMan.GetComponent<ProjectileComponent>(projectile).Damage.GetTotal().Int(),
+            Assert.That(SEntMan.GetComponent<ProjectileComponent>(projectile).Damage.GetTotal().Float(),
                 Is.EqualTo(damage));
             Assert.That(SEntMan.HasComponent<IgniteOnProjectileHitComponent>(projectile), Is.EqualTo(burns));
             Assert.That(SEntMan.GetComponent<ProjectileIFFComponent>(projectile).Enabled, Is.True);
@@ -229,6 +229,24 @@ public sealed class MohawkAmmoTest : GameTest
                 Assert.That(SEntMan.GetComponent<FlammableComponent>(victim).OnFire, Is.True,
                     "An Ember projectile hit must ignite a susceptible mob.");
             }
+
         });
+    }
+
+    [Test]
+    public async Task M90CasingsExpireAfterTenSeconds()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid casing = default;
+        await Server.WaitAssertion(() =>
+        {
+            casing = SEntMan.SpawnEntity("CMUMohawkM90Casing", map.GridCoords);
+            Assert.That(SEntMan.GetComponent<Robust.Shared.Spawners.TimedDespawnComponent>(casing).Lifetime,
+                Is.EqualTo(10));
+        });
+        await Pair.RunSeconds(9);
+        await Server.WaitAssertion(() => Assert.That(SEntMan.Deleted(casing), Is.False));
+        await Pair.RunSeconds(2);
+        await Server.WaitAssertion(() => Assert.That(SEntMan.Deleted(casing), Is.True));
     }
 }

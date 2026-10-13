@@ -67,6 +67,11 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
         Window.ChinGunControlButton.OnPressed += _ =>
             SendMessage(new MohawkChinGunControlMessage());
+        Window.ArButton.OnPressed += _ =>
+        {
+            StopManualTrigger();
+            SendMessage(new MohawkChinGunArMessage());
+        };
         Window.FreeFireButton.OnPressed += _ =>
         {
             StopManualTrigger();
@@ -213,6 +218,8 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 ? "cmu-mohawk-gunnery-manual"
                 : "cmu-mohawk-gunnery-automatic");
             var manual = terminal.ChinGunOperator != null;
+            Window.ArButton.Visible = manual;
+            Window.Visible = !manual || !terminal.ChinGunAr;
             if (!manual)
                 _manualTriggerHeld = false;
             Window.FeedModeButton.Visible = manual;

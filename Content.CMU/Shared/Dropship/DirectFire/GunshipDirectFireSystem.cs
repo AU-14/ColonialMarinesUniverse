@@ -105,7 +105,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
                 shipRotation,
                 aimOrigin,
                 target.Position,
-                ent.Comp.GimbalDegrees,
+                chinMount ? _chinGun.FiringArc((point.Owner, Comp<MohawkChinGunComponent>(point)), ent.Owner, targetCoordinates) : ent.Comp.GimbalDegrees,
                 out var direction,
                 out var aimDegrees))
         {
@@ -142,7 +142,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
                 args.Message = Loc.GetString("cmu-mohawk-gunnery-flare-invalid");
                 return;
             }
-            if (Vector2.Dot(shipRotation.RotateVec(Vector2.UnitY), target.Position - mountPosition) < 0)
+            if (!_chinGun.IsWithinArc((point.Owner, chin), ent.Owner, targetCoordinates))
             {
                 chin.PendingManualShot = null;
                 args.Cancelled = true;
@@ -167,7 +167,8 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         if (chinMount && _net.IsServer && ammo is { DirectFireSpreadDegrees: > 0 })
         {
             var spread = _random.NextFloat(-ammo.DirectFireSpreadDegrees, ammo.DirectFireSpreadDegrees);
-            direction = shipRotation.RotateVec(Angle.FromDegrees(Math.Clamp(aimDegrees + spread, -90, 90))
+            var halfArc = _chinGun.FiringArc((point.Owner, Comp<MohawkChinGunComponent>(point)), ent.Owner, targetCoordinates) / 2;
+            direction = shipRotation.RotateVec(Angle.FromDegrees(Math.Clamp(aimDegrees + spread, -halfArc, halfArc))
                 .RotateVec(Vector2.UnitY));
         }
         var distance = Vector2.Distance(mountPosition, target.Position);
@@ -305,7 +306,8 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
                 _iff.GiveAmmoIFF(point.Owner, ref iffEvent, intrinsic: true, enabled: true);
                 if (_net.IsServer)
                 {
-                    EjectCasing(point, grid);
+                    if (ammo.EjectCasing)
+                        EjectCasing(point, grid);
                     AmmoConsumed(point);
                 }
             }
@@ -460,24 +462,10 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         if (!TryComp(point, out MohawkChinGunComponent? chin) ||
             !TryComp(point, out DropshipWeaponPointComponent? mount))
             return false;
-        Entity<DropshipAmmoComponent>? GetFeed(int feed)
-        {
-            var id = feed == 0 ? mount.AmmoContainerSlotId : mount.SecondAmmoContainerSlotId;
-            if (id == null || !_containers.TryGetContainer(point, id, out var slot))
-                return null;
-            foreach (var uid in slot.ContainedEntities)
-            {
-                if (_containers.TryGetContainingContainer(uid, out var actual) && actual == slot &&
-                    Transform(uid).ParentUid == point &&
-                    TryComp(uid, out DropshipAmmoComponent? payload) && payload.Weapon.Id == "CMUMohawkM90")
-                    return (uid, payload);
-            }
-            return null;
-        }
-        var chosen = GetFeed(chin.ActiveFeed);
+        var chosen = GetFeedAmmo(point, chin.ActiveFeed);
         if (chosen == null || chosen.Value.Comp.Rounds < minimumRounds)
         {
-            var other = GetFeed(1 - chin.ActiveFeed);
+            var other = GetFeedAmmo(point, 1 - chin.ActiveFeed);
             if (other is { } usable && usable.Comp.Rounds >= minimumRounds)
             {
                 if (_net.IsServer)
@@ -492,6 +480,23 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
             return false;
         ammo = selected;
         return true;
+    }
+
+    public Entity<DropshipAmmoComponent>? GetFeedAmmo(EntityUid point, int feed)
+    {
+        if (feed is < 0 or > 1 || !TryComp(point, out DropshipWeaponPointComponent? mount))
+            return null;
+        var id = feed == 0 ? mount.AmmoContainerSlotId : mount.SecondAmmoContainerSlotId;
+        if (id == null || !_containers.TryGetContainer(point, id, out var slot))
+            return null;
+        foreach (var uid in slot.ContainedEntities)
+        {
+            if (_containers.TryGetContainingContainer(uid, out var actual) && actual == slot &&
+                Transform(uid).ParentUid == point &&
+                TryComp(uid, out DropshipAmmoComponent? payload) && payload.Weapon.Id == "CMUMohawkM90")
+                return (uid, payload);
+        }
+        return null;
     }
 
     public void AmmoConsumed(EntityUid point)

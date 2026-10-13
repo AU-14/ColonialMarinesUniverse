@@ -46,6 +46,9 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
     public int ChinGunHealth = 2000;
 
     [DataField, AutoNetworkedField]
+    public bool ChinGunAr;
+
+    [DataField, AutoNetworkedField]
     public int ChinGunFeed;
 
     [DataField, AutoNetworkedField]

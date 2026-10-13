@@ -17,9 +17,9 @@ cmu-mohawk-gunnery-panel-title = GUNNERY CONTROL
 cmu-mohawk-gunnery-mark = Mark target
 cmu-mohawk-gunnery-mark-invalid = No visible valid target near the cursor. Squall requires a living entity; explosive ammunition can mark any entity.
 cmu-mohawk-gunnery-automatic = Release / close defense
-cmu-mohawk-gunnery-control-help = Take control while seated and landed or during a CAS flyby. Groundside requires PGU-410 Squall: 1200 rounds, ten rounds per second, with impacts at your cursor and corpse passthrough. Flybys require explosive ammunition: select an active signal flare on the right TARGET monitor for delayed impacts within ten tiles at three shells per second. Move the mouse over the left camera to aim; hold left click for continuous fire. Arrows pan; the center button recenters. Mark a target, then Authorize fire for thirty seconds. Squall marks living entities; explosive rounds mark any entity. Select a compatible feed with feed 1/2. AI free fire engages hostiles for 120 seconds, retaining its target until critical or invalid, then has a five-minute cooldown. Unmanned landed close defense engages hostiles within four tiles. Friendly-fire checks still apply. At zero integrity the M90 disables and requires a staged engineer rebuild.
+cmu-mohawk-gunnery-control-help = Take control while seated and landed or during a CAS flyby. Groundside requires PGU-410 Squall: 1200 rounds, ten rounds per second, with impacts at your cursor and corpse passthrough. Ground range is twenty tiles within a 225-degree arc. Flybys support Squall and explosive ammunition: select an active signal flare on the right TARGET monitor for delayed impacts within ten tiles. Squall fires ten rounds per second; explosive shells fire three. Move the mouse over the left camera to aim; hold left click for continuous fire. WASD moves the camera and turret; arrows pan and the center button recenters. AR hides the console and uses the main view for mouse aiming and held-click fire; Return to gun panel restores it. Panning clears tracking and authorization. Mark a target, then Authorize fire for thirty seconds. Squall marks living entities; explosive rounds mark any entity. Select a compatible feed with feed 1/2. AI free fire engages hostiles for 120 seconds, retaining its target until critical or invalid, then has a five-minute cooldown. Unmanned landed close defense engages hostiles within eight tiles in any direction. Friendly-fire checks still apply. At zero integrity the M90 disables and requires a staged engineer rebuild.
 cmu-mohawk-gunnery-ground-only = Manual chin-gun control requires landing or an active CAS flyby; it is unavailable during transit, takeoff or tactical hover.
-cmu-mohawk-gunnery-ammo-ground-only = Squall kinetic ammunition is groundside-only. Select an explosive feed for airborne fire.
+cmu-mohawk-gunnery-ammo-ground-only = This ammunition cannot be used during a flyby. Select an airborne-compatible feed.
 cmu-mohawk-gunnery-ammo-air-only = Explosive M90 ammunition is flyby-only. Select PGU-410 Squall for groundside fire.
 cmu-mohawk-gunnery-busy = Another operator is controlling the chin turret.
 cmu-mohawk-gunnery-out-of-range = The target is outside the chin turret's range.
@@ -40,10 +40,10 @@ cmu-mohawk-gunnery-clear-flare = Clear flare / recenter
 cmu-mohawk-gunnery-pan-help = Pan two tiles with the arrows. The center button recenters on the flare or chin mount. Panning clears tracking and authorization.
 cmu-mohawk-gunnery-short-help = Mouse: aim | Hold click: fire
     Mark -> Authorize: tracked fire
-    Arrows: pan | Center: recenter
+    WASD / arrows: pan | AR: main view
     Flyby TARGET: select a flare
 cmu-mohawk-gunnery-airborne-flare-only = Airborne M90 fire requires an active CAS flyby and a selected signal flare. Landed fire uses physical shells; tactical hover does not support flare fire.
-cmu-mohawk-gunnery-airborne-preview = Flyby fire: ten tiles around the flare | Impact delay: 1-2 seconds | Three shells per second
+cmu-mohawk-gunnery-airborne-preview = Flyby fire: ten tiles around the flare | Impact delay: 1-2 seconds | Squall: 10/s; explosive: 3/s
 cmu-mohawk-gunnery-airburst-blocked = Holding fire: the dispersed impact is outside the flare area, under protected cover, or too close to a friendly.
 cmu-mohawk-gunnery-airburst-cancelled = A delayed M90 impact was cancelled because friendly clearance was lost. The released shell remains consumed.
 cmu-mohawk-gunnery-feed-selected = Feed mode: selected
@@ -63,4 +63,7 @@ cmu-mohawk-repair-calibrate = Disabled M90: calibrate and close it with a screwd
 cmu-mohawk-repair-complete = M90 rebuild complete: restored to 2000 HP and ready for operation.
 cmu-mohawk-free-fire-active = Stop AI free fire ({$seconds}s)
 cmu-mohawk-free-fire-cooldown = AI free fire cooldown: {$seconds}s
-cmu-mohawk-free-fire-help = Releases manual control and allows the AI to acquire and fire at IFF hostiles using the selected priority for 120 seconds. Groundside arc, range, slew, cover and friendly checks still apply. During a CAS flyby, first take control and select a signal flare; the AI engages only inside its ten-tile circle. The five-minute cooldown begins when free fire ends. Press again to stop early; taking manual control also ends free fire.
+cmu-mohawk-free-fire-help = Releases manual control and allows the AI to acquire and fire at IFF hostiles using the selected priority for 120 seconds. Groundside arc, range, slew, cover and friendly checks still apply. During a CAS flyby, the AI scans all active signal flares, locks one with a valid hostile, and engages inside its ten-tile circle. It retains its target until critical or invalid. AI chooses compatible loaded ammunition using remaining health, armor, nearby hostiles, cover and friendly clearance; matching boxes alternate, different payloads use the best selected feed. Ordinary unmanned ground defense also chooses its compatible feed automatically. Manual control keeps your feed and flare choices. The five-minute cooldown begins when free fire ends. Press again to stop early; taking manual control also ends free fire.
+cmu-mohawk-gunnery-ar = AR mode
+cmu-mohawk-gunnery-ar-exit = Return to gun panel
+cmu-mohawk-flare-warning = WARNING: M90 gunner locked onto a nearby signal flare. You are inside its ten-tile engagement area. Clear the area!

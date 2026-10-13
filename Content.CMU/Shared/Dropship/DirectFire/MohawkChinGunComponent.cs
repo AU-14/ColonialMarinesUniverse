@@ -9,7 +9,7 @@ namespace Content.Shared.CMU14.Dropship.DirectFire;
 public sealed partial class MohawkChinGunComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public float Range = 30f;
+    public float Range = 20f;
 
     [DataField, AutoNetworkedField]
     public EntityUid? Operator;
@@ -25,7 +25,7 @@ public sealed partial class MohawkChinGunComponent : Component
     [DataField, AutoNetworkedField]
     public MohawkTargetPriority TargetPriority;
     [DataField]
-    public float CloseDefenseRange = 4f;
+    public float CloseDefenseRange = 8f;
     [DataField]
     public float FlareRadius = 10f;
     public Vector2 CameraPan;
@@ -43,6 +43,10 @@ public sealed partial class MohawkChinGunComponent : Component
     public TimeSpan FreeFireReadyAt;
     public EntityUid? FreeFireConsole;
     public EntityUid? AutomaticTarget;
+    public Vector2 KeyboardPan;
+    public TimeSpan KeyboardPanUntil;
+    [DataField, AutoNetworkedField]
+    public bool ArMode;
     [DataField, AutoNetworkedField]
     public float MaxHealth = 2000;
     [DataField, AutoNetworkedField]
@@ -71,6 +75,23 @@ public sealed class MohawkChinGunControlMessage : BoundUserInterfaceMessage;
 
 [Serializable, NetSerializable]
 public sealed class MohawkChinGunFreeFireMessage : BoundUserInterfaceMessage;
+
+[Serializable, NetSerializable]
+public sealed class MohawkChinGunArMessage : BoundUserInterfaceMessage;
+
+[Serializable, NetSerializable]
+public sealed class MohawkChinGunInputEvent(NetEntity console, Vector2 movement, NetCoordinates? aim,
+    bool held, bool toggleAr = false) : EntityEventArgs
+{
+    public readonly NetEntity Console = console;
+    public readonly Vector2 Movement = movement;
+    public readonly NetCoordinates? Aim = aim;
+    public readonly bool Held = held;
+    public readonly bool ToggleAr = toggleAr;
+}
+
+[ByRefEvent]
+public readonly record struct MohawkChinGunFlareLockedEvent(EntityUid Flare, float Radius);
 
 [Serializable, NetSerializable]
 public sealed class MohawkChinGunFireMessage(NetCoordinates coordinates) : BoundUserInterfaceMessage

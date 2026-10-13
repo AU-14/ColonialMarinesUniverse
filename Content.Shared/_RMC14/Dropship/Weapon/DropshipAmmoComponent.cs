@@ -30,7 +30,16 @@ public sealed partial class DropshipAmmoComponent : Component
     public float? DirectFireRate;
 
     [DataField, AutoNetworkedField]
-    public bool GroundOnly;
+    public bool GroundCompatible;
+
+    [DataField, AutoNetworkedField]
+    public bool AirborneCompatible = true;
+
+    [DataField, AutoNetworkedField]
+    public bool LivingTargetsOnly;
+
+    [DataField, AutoNetworkedField]
+    public bool EjectCasing = true;
 
     [DataField, AutoNetworkedField]
     public float FriendlyImpactRadius = 2f;

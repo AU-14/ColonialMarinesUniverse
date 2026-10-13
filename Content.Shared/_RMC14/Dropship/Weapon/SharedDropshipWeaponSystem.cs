@@ -2826,7 +2826,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             gun.NextFire > _timing.CurTime || gun.FireRateModified <= 0 ||
             !TryComp(weapon, out GunshipDirectFireWeaponComponent? direct) ||
             !_directFire.TryResolveMount((weapon, direct), out var mount, out var grid, out _, out _) ||
-            !_directFire.TryGetFeedAmmo(point, out var ammo) || ammo.Comp.Rounds <= 0 || ammo.Comp.GroundOnly)
+            !_directFire.TryGetFeedAmmo(point, out var ammo) || ammo.Comp.Rounds <= 0 ||
+            !_chinGun.IsAmmoUsable(point, ammo.Comp))
             return false;
 
         var landing = coordinates;
@@ -2866,7 +2867,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         Dirty(ammo);
         _gun.SetNextFire((weapon, gun), now + TimeSpan.FromSeconds(1f / gun.FireRateModified));
         _audio.PlayPvs(ammo.Comp.SoundCockpit, weapon);
-        _directFire.EjectCasing(mount, grid);
+        if (ammo.Comp.EjectCasing)
+            _directFire.EjectCasing(mount, grid);
         _directFire.AmmoConsumed(point);
         _powerloader.SyncAppearance(point.Owner);
         _adminLog.Add(LogType.RMCDropshipWeapon,

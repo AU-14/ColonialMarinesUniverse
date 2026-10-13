@@ -550,7 +550,7 @@
   - type: GunshipDirectFireWeapon
     projectile: CMUMohawkM90HEAP
     ammoPrototype: CMUMohawkM90Ammo
-    gimbalDegrees: 180
+    gimbalDegrees: 225
     roundsPerProjectile: 1
   - type: Gun
     projectileSpeed: 40
@@ -715,10 +715,10 @@
   parent: CMUMohawkM90Ammo
   id: CMUMohawkM90AmmoKinetic
   name: PGU-410 'Squall' 90mm rapid-fire kinetic ammunition crate
-  description: Twelve hundred groundside-only budget kinetic rounds for the dual-feed M90. Fires ten rounds per second with GAU-style non-explosive impacts and roughly half HEAP's direct damage. Cannot be fired during flight.
+  description: Twelve hundred budget kinetic rounds for the dual-feed M90. Fires ten rounds per second with GAU-style non-explosive impacts. Supports groundside and flyby fire without ejecting casings.
   components:
   - type: RMCGenericExamine
-    message: Squall kinetic rounds can only be fired groundside and cannot penetrate overhead cover.
+    message: Squall kinetic rounds support groundside and flyby fire but cannot penetrate overhead cover.
   - type: DropshipAmmo
     ammoType: m90_kinetic
     ammoSpriteType: 30mm_crate
@@ -727,14 +727,16 @@
     zLevelPenetration: 0
     directFireProjectile: CMUMohawkM90Kinetic
     directFireRate: 10
-    groundOnly: true
+    groundCompatible: true
+    livingTargetsOnly: true
+    ejectCasing: false
     rounds: 1200
     maxRounds: 1200
     roundsPerSprite: 120
     friendlyImpactRadius: 2
     damage:
       types:
-        Piercing: 82
+        Piercing: 20.5
     explosion: null
     impactEffects:
     - RMCEffectExplosionParticle
@@ -751,7 +753,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 82
+        Piercing: 20.5
   - type: CMArmorPiercing
     amount: 30
   - type: SpawnOnTerminate
@@ -802,6 +804,8 @@
   - type: Item
     size: Normal
   - type: CMUSpentCasing
+  - type: TimedDespawn
+    lifetime: 10
 
 - type: entity
   parent: CMUMohawkM90HEAP

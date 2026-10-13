@@ -42,7 +42,7 @@ public sealed class DropshipTargetingPreview : Control
         _aimElapsed += args.DeltaSeconds;
         if (!_first || _aimElapsed < 0.1f ||
             !_entities.TryGetComponent(_console, out DropshipTerminalWeaponsComponent? terminal) ||
-            terminal.ChinGunOperator == null || terminal.TrackedTarget != null)
+            terminal.ChinGunOperator == null || terminal.TrackedTarget != null || terminal.ChinGunAr)
             return;
         _aimElapsed = 0;
         var viewport = _screen.Viewport;
@@ -114,14 +114,16 @@ public sealed class DropshipTargetingPreview : Control
                     continue;
                 var rotation = transform.GetWorldRotation(ship);
                 var muzzle = origin.Position + rotation.RotateVec(new Vector2(mount.LateralOffset, mount.ForwardOffset));
+                var arc = selectedWeapon is { } arcWeapon && _entities.TryGetComponent(arcWeapon, out GunshipDirectFireWeaponComponent? direct)
+                    ? direct.GimbalDegrees : 225f;
                 Vector2? previous = null;
-                for (var i = 0; i <= 36; i++)
+                for (var i = 0; i <= 45; i++)
                 {
-                    var end = muzzle + (rotation + Angle.FromDegrees(-90 + i * 5)).RotateVec(Vector2.UnitY * chin.Range);
+                    var end = muzzle + (rotation + Angle.FromDegrees(-arc / 2 + i * arc / 45)).RotateVec(Vector2.UnitY * chin.Range);
                     var pixel = Pixel(end);
                     if (previous is { } from)
                         handle.DrawLine(from, pixel, color);
-                    if (i is 0 or 36)
+                    if (i is 0 or 45)
                         handle.DrawLine(Pixel(muzzle), pixel, color);
                     previous = pixel;
                 }
@@ -130,7 +132,8 @@ public sealed class DropshipTargetingPreview : Control
                     : cursorInView ? viewport.PixelToMap(cursor) : center;
                 var distanceToAim = Vector2.Distance(muzzle, center.Position);
                 var validAim = center.MapId == origin.MapId && distanceToAim <= chin.Range &&
-                    Vector2.Dot(rotation.RotateVec(Vector2.UnitY), center.Position - muzzle) >= 0;
+                    Vector2.Dot(rotation.RotateVec(Vector2.UnitY), Vector2.Normalize(center.Position - muzzle)) >=
+                    MathF.Cos(arc * MathF.PI / 360);
                 if (terminal.Target is { } flare && _entities.HasComponent<FlareSignalComponent>(flare))
                 {
                     var anchor = transform.GetMapCoordinates(flare);

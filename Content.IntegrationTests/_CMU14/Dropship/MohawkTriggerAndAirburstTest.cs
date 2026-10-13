@@ -19,6 +19,8 @@ using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
+using Content.Shared.CMU14.Weapons.Ranged;
+using Robust.Shared.Maths;
 
 #pragma warning disable RA0002 // Arrange gun cooldowns, flight state and delayed impacts at system boundaries.
 
@@ -41,7 +43,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
         var gridEnt = new Entity<MapGridComponent>(grid, SEntMan.GetComponent<MapGridComponent>(grid));
         for (var x = -2; x <= 11; x++)
         {
-            for (var y = -2; y <= 20; y++)
+            for (var y = -2; y <= 10; y++)
                 maps.SetTile(gridEnt, new Vector2i(x, y), new Tile(tiles["FloorSteel"].TileId));
         }
         var ship = SEntMan.EnsureComponent<DropshipComponent>(grid);
@@ -116,6 +118,176 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
     }
 
     [Test]
+    public async Task ManualArcIs225DegreesButCloseDefenseCoversRearThreatsWithinEightTiles()
+    {
+        var map = await Pair.CreateTestMap();
+        Mount mount = null!;
+        await Server.WaitAssertion(() =>
+        {
+            mount = Create(map.Grid, false);
+            var system = Server.System<MohawkChinGunSystem>();
+            var origin = new Vector2(1.5f, 1);
+            EntityCoordinates Bearing(float degrees, float distance) =>
+                new(map.MapUid, origin + Angle.FromDegrees(degrees).RotateVec(Vector2.UnitY * distance));
+            foreach (var degrees in new[] { -112.5f, 112.5f })
+            {
+                Assert.That(system.IsWithinArc((mount.Point, mount.Chin), mount.Weapon, Bearing(degrees, 10)), Is.True);
+                Assert.That(system.RequestAim((mount.Point, mount.Chin), mount.Weapon, Bearing(degrees, 10)), Is.False,
+                    "A valid new bearing still waits for slew alignment.");
+                Assert.That(MathF.Abs(mount.Chin.DesiredAimDegrees), Is.EqualTo(112.5f).Within(0.001));
+            }
+            Assert.That(system.IsWithinArc((mount.Point, mount.Chin), mount.Weapon, Bearing(113, 10)), Is.False);
+            Assert.That(system.IsWithinArc((mount.Point, mount.Chin), mount.Weapon, Bearing(180, 7.9f)), Is.False);
+            Assert.That(mount.Chin.Range, Is.EqualTo(20));
+            Send(mount, new MohawkChinGunControlMessage());
+            Assert.That(system.IsWithinArc((mount.Point, mount.Chin), mount.Weapon, Bearing(180, 7.9f)), Is.True);
+            Assert.That(system.IsWithinArc((mount.Point, mount.Chin), mount.Weapon, Bearing(180, 8.1f)), Is.False);
+            var target = SEntMan.SpawnEntity(null, Bearing(180, 7));
+            SEntMan.AddComponent<NpcFactionMemberComponent>(target).Factions.Add("OPFOR");
+            SEntMan.AddComponent<Content.Shared.Mobs.Components.MobStateComponent>(target);
+            Assert.That(system.SelectTarget((mount.Point, mount.Chin), mount.Chin.CloseDefenseRange), Is.EqualTo(target));
+            mount.Chin.NextScan = TimeSpan.Zero;
+            system.Update(0);
+            Assert.That(MathF.Abs(mount.Chin.DesiredAimDegrees), Is.EqualTo(180).Within(0.001));
+            system.Update(6);
+            mount.Chin.NextScan = TimeSpan.Zero;
+            system.Update(0);
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1199), "An aligned rear close threat must trigger self-defense fire.");
+        });
+    }
+
+    [Test]
+    public async Task AutonomousFlybyScansEveryFlareChoosesPayloadAndRetainsTarget()
+    {
+        var shipMap = await Pair.CreateTestMap();
+        var groundMap = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var mount = Create(shipMap.Grid, true, "CMUMohawkM90AmmoKinetic");
+            var point = SEntMan.GetComponent<DropshipWeaponPointComponent>(mount.Point);
+            var heavyCrate = SEntMan.SpawnEntity("CMUMohawkM90AmmoDevastator", shipMap.GridCoords);
+            Assert.That(Server.System<SharedContainerSystem>().Insert(heavyCrate,
+                Server.System<SharedContainerSystem>().GetContainer(mount.Point, point.SecondAmmoContainerSlotId!)), Is.True);
+            var heavy = SEntMan.GetComponent<DropshipAmmoComponent>(heavyCrate);
+            mount.Ammo.BulletSpread = 0;
+            heavy.BulletSpread = 0;
+            var weapons = Server.System<SharedDropshipWeaponSystem>();
+            Server.ResolveDependency<IConfigurationManager>().SetCVar(RMCCVars.RMCDropshipCASDebug, true);
+            EntityUid Flare(Vector2 offset)
+            {
+                var flare = SEntMan.SpawnEntity(null, groundMap.GridCoords.Offset(offset));
+                SEntMan.AddComponent<FlareSignalComponent>(flare);
+                weapons.MakeDropshipTarget(flare, "TEST");
+                return flare;
+            }
+            var quiet = Flare(Vector2.Zero);
+            var active = Flare(new Vector2(40, 0));
+            var far = Flare(new Vector2(80, 0));
+            Send(mount, new MohawkChinGunFlareMessage(SEntMan.GetNetEntity(quiet)));
+            var first = Hostile(groundMap.GridCoords.Offset(new Vector2(40, 1)));
+            Server.System<Content.Shared.Mobs.Systems.MobThresholdSystem>()
+                .SetMobStateThreshold(first, 100, Content.Shared.Mobs.MobState.Dead);
+            Send(mount, new MohawkChinGunFreeFireMessage());
+            void Scan()
+            {
+                mount.Chin.NextScan = TimeSpan.Zero;
+                mount.Gun.NextFire = TimeSpan.Zero;
+                Server.System<MohawkChinGunSystem>().Update(0);
+            }
+            Scan();
+            Assert.That(mount.Terminal.Target, Is.EqualTo(active), "The AI must leave a quiet manually selected flare.");
+            Assert.That(mount.Chin.AutomaticTarget, Is.EqualTo(first));
+            Assert.That(mount.Chin.ActiveFeed, Is.Zero, "A soft isolated target favors rapid kinetic fire.");
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1199));
+            var second = Hostile(groundMap.GridCoords.Offset(new Vector2(40, 2)));
+            var third = Hostile(groundMap.GridCoords.Offset(new Vector2(41, 1)));
+            Scan();
+            Assert.That(mount.Chin.AutomaticTarget, Is.EqualTo(first), "A larger cluster must not cause target thrashing.");
+            Assert.That(mount.Chin.ActiveFeed, Is.EqualTo(1), "Clustered threats favor the loaded area-effect payload.");
+            Assert.That(heavy.Rounds, Is.EqualTo(399));
+            Assert.That(mount.Chin.AlternateFeeds, Is.False, "Different payloads use the selected tactical feed.");
+            var friend = Hostile(groundMap.GridCoords.Offset(new Vector2(40, 5)));
+            var faction = SEntMan.GetComponent<NpcFactionMemberComponent>(friend);
+            faction.Factions.Clear();
+            faction.Factions.Add("GOVFOR");
+            Scan();
+            Assert.That(mount.Chin.ActiveFeed, Is.Zero, "Nearby friendlies rule out the wider explosive payload.");
+            Assert.That(heavy.Rounds, Is.EqualTo(399));
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1198));
+            foreach (var target in new[] { first, second, third })
+                SEntMan.GetComponent<Content.Shared.Mobs.Components.MobStateComponent>(target).CurrentState = Content.Shared.Mobs.MobState.Critical;
+            var next = Hostile(groundMap.GridCoords.Offset(new Vector2(80, 1)));
+            Scan();
+            Assert.That(mount.Terminal.Target, Is.EqualTo(far));
+            Assert.That(mount.Chin.AutomaticTarget, Is.EqualTo(next),
+                "Critical targets release the retained lock and permit acquisition under another flare.");
+            SEntMan.RemoveComponent<FlareSignalComponent>(far);
+            Scan();
+            Assert.That(mount.Chin.AutomaticTarget, Is.Null);
+            Assert.That(mount.Terminal.Target, Is.Null, "An expired flare cannot remain an engagement anchor.");
+            SEntMan.RemoveComponent<FTLComponent>(shipMap.Grid);
+            SEntMan.RemoveComponent<DropshipInFlyByComponent>(shipMap.Grid);
+        });
+    }
+
+    [Test]
+    public async Task FlareLockWarnsNearbyPlayerInChatButNotDistantPlayerOrRepeatedLock()
+    {
+        var map = await Pair.CreateTestMap();
+        Mount mount = null!;
+        EntityUid nearby = default;
+        EntityUid distant = default;
+        await Server.WaitAssertion(() =>
+        {
+            mount = Create(map.Grid, true);
+            var weapons = Server.System<SharedDropshipWeaponSystem>();
+            Server.ResolveDependency<IConfigurationManager>().SetCVar(RMCCVars.RMCDropshipCASDebug, true);
+            EntityUid Flare(float x)
+            {
+                var flare = SEntMan.SpawnEntity(null, map.GridCoords.Offset(new Vector2(x, 2)));
+                SEntMan.AddComponent<FlareSignalComponent>(flare);
+                weapons.MakeDropshipTarget(flare, "TEST");
+                return flare;
+            }
+            nearby = Flare(10);
+            distant = Flare(40);
+        });
+        await Pair.RunUntilSynced();
+        var warnings = new List<Content.Shared.Chat.ChatMessage>();
+        var controller = Client.ResolveDependency<Robust.Client.UserInterface.IUserInterfaceManager>()
+            .GetUIController<Content.Client.UserInterface.Systems.Chat.ChatUIController>();
+        void Capture(Content.Shared.Chat.ChatMessage message)
+        {
+            if (message.Message.Contains("M90 gunner locked"))
+                warnings.Add(message);
+        }
+        await Client.WaitPost(() => controller.MessageAdded += Capture);
+        try
+        {
+            await Server.WaitPost(() => Send(mount, new MohawkChinGunFlareMessage(SEntMan.GetNetEntity(nearby))));
+            await Pair.RunTicksSync(3);
+            await Client.WaitAssertion(() => Assert.That(warnings, Has.Count.EqualTo(1)));
+            await Server.WaitPost(() => Send(mount, new MohawkChinGunFlareMessage(SEntMan.GetNetEntity(distant))));
+            await Pair.RunTicksSync(3);
+            await Client.WaitAssertion(() => Assert.That(warnings, Has.Count.EqualTo(1),
+                "A player outside the engagement radius receives no warning."));
+            await Server.WaitPost(() => Send(mount, new MohawkChinGunFlareMessage(SEntMan.GetNetEntity(nearby))));
+            await Pair.RunTicksSync(3);
+            await Client.WaitAssertion(() => Assert.That(warnings, Has.Count.EqualTo(1),
+                "Repeated locks cannot spam the same flare warning within thirty seconds."));
+        }
+        finally
+        {
+            await Client.WaitPost(() => controller.MessageAdded -= Capture);
+            await Server.WaitPost(() =>
+            {
+                SEntMan.RemoveComponent<FTLComponent>(map.Grid);
+                SEntMan.RemoveComponent<DropshipInFlyByComponent>(map.Grid);
+            });
+        }
+    }
+
+    [Test]
     public async Task GroundShotsStopAtCursorAndPassThroughCorpses()
     {
         var map = await Pair.CreateTestMap();
@@ -160,8 +332,8 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
         {
             var mount = Create(map.Grid, false);
             var turret = Server.System<MohawkChinGunSystem>();
-            var first = Hostile(new EntityCoordinates(map.MapUid, 1.5f, 24));
-            var second = Hostile(new EntityCoordinates(map.MapUid, 1.5f, 25));
+            var first = Hostile(new EntityCoordinates(map.MapUid, 1.5f, 16));
+            var second = Hostile(new EntityCoordinates(map.MapUid, 1.5f, 17));
             var damage = Server.System<Content.Shared.Damage.Systems.DamageableSystem>();
             damage.TryChangeDamage(second, new Content.Shared.Damage.DamageSpecifier { DamageDict = new() { ["Blunt"] = 10 } }, true);
             mount.Chin.TargetPriority = MohawkTargetPriority.HighestHealth;
@@ -188,7 +360,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
         {
             var mount = Create(map.Grid, false);
             var turret = Server.System<MohawkChinGunSystem>();
-            var coordinates = new EntityCoordinates(map.MapUid, 1.5f, 24);
+            var coordinates = new EntityCoordinates(map.MapUid, 1.5f, 16);
             var living = Hostile(coordinates);
             var faction = SEntMan.GetComponent<NpcFactionMemberComponent>(living);
             faction.Factions.Clear();
@@ -277,26 +449,31 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             Assert.That(chinGun.IsInFlareArea((mount.Point, mount.Chin), groundMap.GridCoords), Is.True);
             var rounds = mount.Ammo.Rounds;
             Assert.That(weapons.TryFireChinGunAirburst((mount.Point, mount.Chin), mount.Weapon, mount.Actor,
-                groundMap.GridCoords, mount.Terminal), Is.False, "Squall cannot bypass its restriction through the CAS firing API.");
+                groundMap.GridCoords, mount.Terminal), Is.True, "Squall supports delayed flyby impacts.");
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(rounds - 1));
+            mount.Gun.NextFire = TimeSpan.Zero;
             Trigger(mount, true, groundMap.GridCoords);
             chinGun.Update(0);
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(rounds), "Manual airborne fire must not consume kinetic ammunition.");
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(rounds - 2), "Manual airborne fire consumes kinetic ammunition.");
             Hostile(groundMap.GridCoords.Offset(new Vector2(0, 4)));
             Send(mount, new MohawkChinGunFreeFireMessage());
             mount.Chin.NextScan = TimeSpan.Zero;
             chinGun.Update(0);
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(rounds), "AI free fire must also respect groundside-only ammunition.");
-            Assert.That(SEntMan.QueryEntities<AmmoInFlightComponent>(), Is.Empty);
-            Assert.That(mount.Gun.NextFire, Is.EqualTo(TimeSpan.Zero), "Blocked airborne shots do not incur a firing cooldown.");
+            Assert.That(SEntMan.QueryEntities<AmmoInFlightComponent>().Count(), Is.EqualTo(2));
+            Assert.That(SEntMan.QueryEntities<CMUSpentCasingComponent>(), Is.Empty, "Squall never ejects casings.");
+            Assert.That(mount.Gun.NextFire - SGameTiming.CurTime, Is.EqualTo(TimeSpan.FromSeconds(0.1)).Within(TimeSpan.FromMilliseconds(1)));
+            Send(mount, new MohawkChinGunControlMessage());
             Send(mount, new MohawkChinGunFeedMessage(1));
-            mount.Chin.NextScan = TimeSpan.Zero;
-            chinGun.Update(0);
+            Send(mount, new MohawkChinGunFlareMessage(SEntMan.GetNetEntity(flare)));
+            mount.Gun.NextFire = TimeSpan.Zero;
+            Assert.That(weapons.TryFireChinGunAirburst((mount.Point, mount.Chin), mount.Weapon, mount.Actor,
+                groundMap.GridCoords, mount.Terminal), Is.True);
             Assert.That(SEntMan.GetComponent<DropshipAmmoComponent>(explosive).Rounds, Is.EqualTo(399),
-                "Selecting the explosive feed must still allow airborne AI fire.");
+                "Manual feed choices must remain available during a flyby.");
             Assert.That(mount.Gun.NextFire - SGameTiming.CurTime, Is.EqualTo(TimeSpan.FromSeconds(1f / 3)).Within(TimeSpan.FromMilliseconds(1)));
             Send(mount, new MohawkChinGunFeedMessage(0));
-            Assert.That(mount.Chin.ActiveFeed, Is.EqualTo(1), "Flyby operators cannot switch back to Squall.");
-            Assert.That(SEntMan.QueryEntities<AmmoInFlightComponent>().Single().Comp.Explosion, Is.Not.Null);
+            Assert.That(mount.Chin.ActiveFeed, Is.Zero, "Flyby operators may select Squall.");
+            Assert.That(SEntMan.QueryEntities<AmmoInFlightComponent>().Count(ent => ent.Comp.Explosion != null), Is.EqualTo(1));
             SEntMan.RemoveComponent<FTLComponent>(shipMap.Grid);
             SEntMan.RemoveComponent<DropshipInFlyByComponent>(shipMap.Grid);
         });
@@ -311,7 +488,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
         {
             Server.ResolveDependency<IConfigurationManager>().SetCVar(Robust.Shared.CVars.NetTickrate, 30);
             mount = Create(map.Grid, false);
-            var hostile = SEntMan.SpawnEntity(null, new EntityCoordinates(map.MapUid, 1.5f, 24));
+            var hostile = SEntMan.SpawnEntity(null, new EntityCoordinates(map.MapUid, 1.5f, 16));
             SEntMan.AddComponent<NpcFactionMemberComponent>(hostile).Factions.Add("OPFOR");
             SEntMan.AddComponent<Content.Shared.Mobs.Components.MobStateComponent>(hostile);
             var chin = mount.Chin;
@@ -405,7 +582,8 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             terminal.Target = flare;
             chin.FreeFireReadyAt = SGameTiming.CurTime;
             Send(mount, new MohawkChinGunFreeFireMessage());
-            Assert.That(chin.FreeFireUntil, Is.EqualTo(TimeSpan.Zero), "AI cannot start without valid manual flare selection.");
+            Assert.That(chin.FreeFireUntil, Is.GreaterThan(SGameTiming.CurTime),
+                "AI can scan registered flares without manual flare selection.");
             SEntMan.RemoveComponent<FTLComponent>(shipMap.Grid);
             SEntMan.RemoveComponent<DropshipInFlyByComponent>(shipMap.Grid);
         });

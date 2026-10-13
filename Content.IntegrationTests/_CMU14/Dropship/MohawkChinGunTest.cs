@@ -130,6 +130,9 @@ public sealed class MohawkChinGunTest
 
             var seat = entities.SpawnEntity("CMUMohawkMidwayMidwayGunner9ec7eb79e9", coordinates);
             var actor = entities.SpawnEntity("CMMobHuman", coordinates);
+            var actorFaction = entities.GetComponent<NpcFactionMemberComponent>(actor);
+            actorFaction.Factions.Clear();
+            actorFaction.Factions.Add("GOVFOR");
             entities.EnsureComponent<EyeComponent>(actor);
             entities.System<SkillsSystem>().SetSkill(actor, "RMCSkillPilot", 1);
             Assert.That(entities.System<SharedBuckleSystem>().TryBuckle(actor, null, seat, popup: false), Is.True);
@@ -161,12 +164,12 @@ public sealed class MohawkChinGunTest
                     { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
             turret.Update(0);
             Assert.That(Vector2.Distance(transform.GetMapCoordinates(chin.Eye!.Value).Position, new Vector2(1.5f, 1)),
-                Is.EqualTo(30).Within(0.001), "Camera pan must reach the full thirty-tile range.");
+                Is.EqualTo(20).Within(0.001), "Camera pan must reach the full twenty-tile range.");
             entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunPanMessage(Direction.South)
                 { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
             turret.Update(0);
             Assert.That(Vector2.Distance(transform.GetMapCoordinates(chin.Eye!.Value).Position, new Vector2(1.5f, 1)),
-                Is.EqualTo(28).Within(0.001), "Panning back from the limit must move immediately without a dead zone.");
+                Is.EqualTo(18).Within(0.001), "Panning back from the limit must move immediately without a dead zone.");
             entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunPanMessage(null)
                 { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
             Assert.That(turret.RequestAim((point, chin), weapon, new EntityCoordinates(map, -8.5f, 11)), Is.False);
@@ -190,12 +193,8 @@ public sealed class MohawkChinGunTest
             Assert.That(entities.System<SharedGunSystem>().AttemptShoot(actor, (weapon, gun),
                 new EntityCoordinates(map, 1.5f, 10)), Is.True);
             Assert.That(payload.Rounds, Is.EqualTo(1199), "Mouse-coordinate firing must consume an individual shell.");
-            var casing = entities.QueryEntities<CMUSpentCasingComponent>().Single();
-            Assert.That(transform.GetMapCoordinates(casing).Position, Is.EqualTo(new Vector2(1.5f, 1)));
-            Assert.That(transform.GetMapCoordinates(casing).MapId, Is.EqualTo(mapId));
-            Assert.That(entities.HasComponent<ThrownItemComponent>(casing), Is.True);
-            Assert.That(entities.GetComponent<PhysicsComponent>(casing).LinearVelocity.Length(),
-                Is.InRange(2f, 5f), "Casings must be physically thrown, not just placed under the mount.");
+            Assert.That(entities.QueryEntities<CMUSpentCasingComponent>(), Is.Empty,
+                "Squall must not eject casings.");
             Assert.That(entities.QueryEntities<ProjectileIFFComponent>().Any(projectile => projectile.Comp.Enabled), Is.True,
                 "Fired shells must inherit the turret's smartgun-compatible IFF.");
             Assert.That(entities.System<SharedGunSystem>().AttemptShoot(actor, (weapon, gun),
@@ -300,19 +299,21 @@ public sealed class MohawkChinGunTest
             Assert.That(turret.SelectTarget((point, chin)), Is.EqualTo(tough));
             Assert.That(consoleState.ChinGunPriority, Is.EqualTo(MohawkTargetPriority.HighestHealth));
 
-            transform.SetCoordinates(hostile, new EntityCoordinates(map, 1.5f, 5));
+            transform.SetCoordinates(hostile, new EntityCoordinates(map, 1.5f, 9));
             Scan();
             Assert.That(payload.Rounds, Is.EqualTo(1196), "An active manual gunner must suppress close defense.");
             ui.CloseUi(console, DropshipTerminalWeaponsUi.Key, actor);
             Scan();
             Assert.That(chin.Operator, Is.Null);
             Assert.That(entities.HasComponent<RemoteWeaponOperatorComponent>(actor), Is.False);
+            Assert.That(turret.SelectTarget((point, chin), chin.CloseDefenseRange), Is.EqualTo(hostile),
+                "The exact boundary threat must remain an eligible AI target.");
             Scan();
             Assert.That(payload.Rounds, Is.EqualTo(1195),
-                "Unmanned close defense must fire at a threat exactly four tiles from the muzzle mount.");
-            transform.SetCoordinates(hostile, new EntityCoordinates(map, 1.5f, 5.01f));
+                "Unmanned close defense must fire at exactly eight tiles from the chin mount.");
+            transform.SetCoordinates(hostile, new EntityCoordinates(map, 1.5f, 9.01f));
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(1195), "Targets outside four tiles require authorization.");
+            Assert.That(payload.Rounds, Is.EqualTo(1195), "Targets outside eight tiles require authorization.");
             entities.DeleteEntity(map);
         });
         await pair.CleanReturnAsync();

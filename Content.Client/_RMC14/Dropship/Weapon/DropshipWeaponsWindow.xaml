@@ -19,6 +19,7 @@
                 <Button Name="ChinGunControlButton" Access="Public" Visible="False"
                         Text="{Loc 'cmu-mohawk-gunnery-manual'}"
                         ToolTip="{Loc 'cmu-mohawk-gunnery-control-help'}" />
+                <Button Name="ArButton" Access="Public" Visible="False" Text="{Loc 'cmu-mohawk-gunnery-ar'}" />
                 <Button Name="FreeFireButton" Access="Public" Visible="False"
                         ToolTip="{Loc 'cmu-mohawk-free-fire-help'}" />
                 <Label Name="ChinGunHealthLabel" Access="Public" Visible="False" />
