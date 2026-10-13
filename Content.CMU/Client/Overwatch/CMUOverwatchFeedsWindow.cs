@@ -40,7 +40,7 @@ public sealed class CMUOverwatchFeedsWindow : DefaultWindow
 
         for (var i = 0; i < _tiles.Length; i++)
         {
-            var tile = new Tile();
+            var tile = new Tile(i + 1);
             tile.Close.OnPressed += _ =>
             {
                 if (tile.Target is { } target)
@@ -83,10 +83,12 @@ public sealed class CMUOverwatchFeedsWindow : DefaultWindow
         private readonly Label _name;
         private readonly Label _noSignal;
         private readonly ScalingViewport _viewport;
+        private readonly CMUVhsScreenControl _vhs;
+        private readonly CMUVhsHud _hud;
         private NetEntity? _eyeNet;
         private EntityUid? _eye;
 
-        public Tile()
+        public Tile(int channel)
         {
             IoCManager.InjectDependencies(this);
             _eyeLerping = _entities.System<EyeLerpingSystem>();
@@ -117,8 +119,20 @@ public sealed class CMUOverwatchFeedsWindow : DefaultWindow
                 FontColorOverride = CrtTerminalPalette.TextDim,
             };
 
-            var screen = new Control { HorizontalExpand = true, VerticalExpand = true, MinSize = new Vector2(200, 160) };
+            // The VHS pass sits after the viewport it shades, and the on-screen display above both.
+            _vhs = new CMUVhsScreenControl { Source = _viewport };
+            _hud = new CMUVhsHud(channel);
+
+            var screen = new Control
+            {
+                HorizontalExpand = true,
+                VerticalExpand = true,
+                MinSize = new Vector2(200, 160),
+                RectClipContent = true,
+            };
             screen.AddChild(_viewport);
+            screen.AddChild(_vhs);
+            screen.AddChild(_hud);
             screen.AddChild(_noSignal);
 
             AddChild(new BoxContainer
@@ -176,14 +190,20 @@ public sealed class CMUOverwatchFeedsWindow : DefaultWindow
             if (_eye is { } current && _entities.TryGetComponent(current, out EyeComponent? eyeComp) && eyeComp.Eye != null)
             {
                 _viewport.Eye = eyeComp.Eye;
-                _viewport.Visible = true;
-                _noSignal.Visible = false;
+                SetSignal(true);
             }
             else
             {
-                _viewport.Visible = false;
-                _noSignal.Visible = true;
+                SetSignal(false);
             }
+        }
+
+        private void SetSignal(bool signal)
+        {
+            _viewport.Visible = signal;
+            _vhs.Visible = signal;
+            _hud.Visible = signal;
+            _noSignal.Visible = !signal;
         }
 
         protected override void Dispose(bool disposing)

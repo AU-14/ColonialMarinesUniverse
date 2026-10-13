@@ -16,7 +16,7 @@ public sealed class CMUOverwatchHealthBar : Control
 
     public CMUOverwatchHealthBar()
     {
-        MinSize = new Vector2(64, 10);
+        MinSize = new Vector2(46, 10);
         VerticalAlignment = VAlignment.Center;
     }
 

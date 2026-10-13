@@ -1,7 +1,6 @@
 using System.Linq;
 using Content.Client.CMU14.Interface;
 using Content.Client.Lobby.UI;
-using Content.Client.Message;
 using Content.Client.Stylesheets;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.Tracker.SquadLeader;
@@ -30,15 +29,21 @@ public readonly record struct CMURosterEntry(OverwatchMarine Marine, string Disp
 /// </remarks>
 public sealed class CMUOverwatchRoster : BoxContainer
 {
-    private const float CallsignWidth = 120;
-    private const float NameWidth = 210;
-    private const float RoleWidth = 165;
-    private const float StatusWidth = 240;
-    private const float LocationWidth = 180;
-    private const float DistanceWidth = 70;
-    private const float ButtonWidth = 46;
+    // Columns share the width by these ratios and clip their text, so the roster always fits the
+    // window instead of running off its right edge. Only the action buttons are fixed.
+    private const float CallsignRatio = 1.0f;
+    private const float NameRatio = 1.6f;
+    private const float RoleRatio = 1.3f;
+    private const float StatusRatio = 1.8f;
+    private const float LocationRatio = 1.4f;
+    private const float DistanceRatio = 0.5f;
+    private const float MinCellWidth = 30;
+    private const float ButtonWidth = 42;
+    private const int CellSeparation = 6;
 
-    public event Action<NetEntity>? OnWatch;
+    // Matches the row panels' content padding (CrtInsetPanel) so headers line up with the cells.
+    private static readonly Thickness RowInset = new(9, 0);
+
     public event Action<NetEntity>? OnFeed;
     public event Action<NetEntity, bool>? OnHide;
     public event Action<NetEntity>? OnPromote;
@@ -229,7 +234,6 @@ public sealed class CMUOverwatchRoster : BoxContainer
             return row;
 
         row = new Row(id);
-        row.Name.OnPressed += _ => OnWatch?.Invoke(id);
         row.Feed.OnPressed += _ => OnFeed?.Invoke(id);
         row.Hide.OnPressed += _ => OnHide?.Invoke(id, !row.Hidden);
         row.Promote.OnPressed += _ => OnPromote?.Invoke(id);
@@ -244,28 +248,40 @@ public sealed class CMUOverwatchRoster : BoxContainer
         var header = new BoxContainer
         {
             Orientation = LayoutOrientation.Horizontal,
-            SeparationOverride = 6,
-            Margin = new Thickness(4, 0),
+            SeparationOverride = CellSeparation,
+            Margin = RowInset,
         };
 
-        header.AddChild(HeaderCell("cmu-overwatch-roster-col-callsign", CallsignWidth));
-        header.AddChild(HeaderCell("cmu-overwatch-roster-col-name", NameWidth, expand: true));
-        header.AddChild(HeaderCell("cmu-overwatch-roster-col-role", RoleWidth));
-        header.AddChild(HeaderCell("cmu-overwatch-roster-col-status", StatusWidth));
-        header.AddChild(HeaderCell("cmu-overwatch-roster-col-location", LocationWidth));
-        header.AddChild(HeaderCell("cmu-overwatch-roster-col-distance", DistanceWidth));
-        header.AddChild(new Control { MinWidth = ButtonWidth * 3 + 12 });
+        header.AddChild(HeaderCell("cmu-overwatch-roster-col-callsign", CallsignRatio));
+        header.AddChild(HeaderCell("cmu-overwatch-roster-col-name", NameRatio));
+        header.AddChild(HeaderCell("cmu-overwatch-roster-col-role", RoleRatio));
+        header.AddChild(HeaderCell("cmu-overwatch-roster-col-status", StatusRatio));
+        header.AddChild(HeaderCell("cmu-overwatch-roster-col-location", LocationRatio));
+        header.AddChild(HeaderCell("cmu-overwatch-roster-col-distance", DistanceRatio));
+        header.AddChild(new Control { MinWidth = ButtonWidth * 3 + CellSeparation * 2 });
         return header;
     }
 
-    private static Label HeaderCell(string loc, float width, bool expand = false)
+    private static Label HeaderCell(string loc, float ratio)
+    {
+        var label = Cell(ratio);
+        label.Text = Loc.GetString(loc);
+        label.StyleClasses.Add(StyleNano.StyleClassCrtDimText);
+        return label;
+    }
+
+    /// <summary>
+    /// A column cell: takes its share of the row and clips rather than widening the row.
+    /// </summary>
+    private static Label Cell(float ratio)
     {
         return new Label
         {
-            Text = Loc.GetString(loc),
-            MinWidth = width,
-            HorizontalExpand = expand,
-            StyleClasses = { StyleNano.StyleClassCrtDimText },
+            HorizontalExpand = true,
+            SizeFlagsStretchRatio = ratio,
+            MinWidth = MinCellWidth,
+            ClipText = true,
+            VerticalAlignment = VAlignment.Center,
         };
     }
 
@@ -319,10 +335,12 @@ public sealed class CMUOverwatchRoster : BoxContainer
     private sealed class Row : PanelContainer
     {
         public readonly Label Callsign;
-        public readonly Button Name;
+        public readonly Label Name;
         public readonly Label Role;
         public readonly CMUOverwatchHealthBar Health;
-        public readonly RichTextLabel Status;
+        public readonly Label State;
+        public readonly Label Bleeding;
+        public readonly Label Ssd;
         public readonly Label Location;
         public readonly Label Distance;
         public readonly Button Feed;
@@ -335,13 +353,15 @@ public sealed class CMUOverwatchRoster : BoxContainer
             StyleClasses.Add(StyleNano.StyleClassCrtInsetPanel);
             HorizontalExpand = true;
 
-            Callsign = new Label { MinWidth = CallsignWidth, MaxWidth = CallsignWidth, ClipText = true, VerticalAlignment = VAlignment.Center };
-            Name = new Button { MinWidth = NameWidth, HorizontalExpand = true, ClipText = true };
-            Role = new Label { MinWidth = RoleWidth, MaxWidth = RoleWidth, ClipText = true, VerticalAlignment = VAlignment.Center };
+            Callsign = Cell(CallsignRatio);
+            Name = Cell(NameRatio);
+            Role = Cell(RoleRatio);
             Health = new CMUOverwatchHealthBar();
-            Status = new RichTextLabel { VerticalAlignment = VAlignment.Center };
-            Location = new Label { MinWidth = LocationWidth, MaxWidth = LocationWidth, ClipText = true, VerticalAlignment = VAlignment.Center };
-            Distance = new Label { MinWidth = DistanceWidth, MaxWidth = DistanceWidth, VerticalAlignment = VAlignment.Center };
+            State = new Label { ClipText = true, VerticalAlignment = VAlignment.Center };
+            Bleeding = new Label { ClipText = true, VerticalAlignment = VAlignment.Center };
+            Ssd = new Label { ClipText = true, VerticalAlignment = VAlignment.Center, Text = Loc.GetString("rmc-overwatch-console-ssd") };
+            Location = Cell(LocationRatio);
+            Distance = Cell(DistanceRatio);
             Feed = new Button { MinWidth = ButtonWidth, Text = Loc.GetString("cmu-overwatch-roster-feed"), ToolTip = Loc.GetString("cmu-overwatch-roster-feed-tooltip") };
             Hide = new Button { MinWidth = ButtonWidth };
             Promote = new Button { MinWidth = ButtonWidth, Text = Loc.GetString("cmu-overwatch-roster-promote"), ToolTip = Loc.GetString("rmc-overwatch-console-promote-squad-leader") };
@@ -349,16 +369,18 @@ public sealed class CMUOverwatchRoster : BoxContainer
             var status = new BoxContainer
             {
                 Orientation = LayoutOrientation.Horizontal,
-                MinWidth = StatusWidth,
-                MaxWidth = StatusWidth,
-                SeparationOverride = 6,
-                Children = { Health, Status },
+                HorizontalExpand = true,
+                SizeFlagsStretchRatio = StatusRatio,
+                MinWidth = MinCellWidth,
+                RectClipContent = true,
+                SeparationOverride = 5,
+                Children = { Health, State, Bleeding, Ssd },
             };
 
             AddChild(new BoxContainer
             {
                 Orientation = LayoutOrientation.Horizontal,
-                SeparationOverride = 6,
+                SeparationOverride = CellSeparation,
                 Children = { Callsign, Name, Role, status, Location, Distance, Feed, Hide, Promote },
             });
         }
@@ -376,8 +398,7 @@ public sealed class CMUOverwatchRoster : BoxContainer
                 name = Loc.GetString("cmu-overwatch-roster-ftl", ("name", name));
 
             Name.Text = hasCamera ? name : Loc.GetString("cmu-overwatch-roster-no-camera", ("name", name));
-            Name.Disabled = !hasCamera;
-            Name.ToolTip = hasCamera ? Loc.GetString("cmu-overwatch-roster-watch-tooltip") : null;
+            Name.ToolTip = Name.Text;
 
             Role.Text = entry.RoleName;
             Location.Text = marine.AreaName;
@@ -388,7 +409,7 @@ public sealed class CMUOverwatchRoster : BoxContainer
 
             Health.Visible = !entry.IsTripod;
             Health.SetHealth(marine.Health, marine.State == MobState.Dead);
-            Status.SetMarkupPermissive(StatusMarkup(entry));
+            UpdateStatus(entry);
 
             Feed.Disabled = !hasCamera;
             CMUOverwatchCrt.SetLit(Feed, feedOpen);
@@ -403,45 +424,61 @@ public sealed class CMUOverwatchRoster : BoxContainer
             Promote.Visible = !isLeader && !entry.IsTripod;
         }
 
-        private static string StatusMarkup(CMURosterEntry entry)
+        private void UpdateStatus(CMURosterEntry entry)
         {
             var marine = entry.Marine;
+            Bleeding.Visible = false;
+            Ssd.Visible = false;
+
             if (entry.IsTripod)
-                return Colored(Loc.GetString("rmc-overwatch-tripod-camera-active"), CrtTerminalPalette.Text);
-
-            string state = marine.State switch
             {
-                MobState.Dead => Colored(Loc.GetString("rmc-overwatch-console-state-dead"), CrtTerminalPalette.Alert),
-                MobState.Critical => Colored(Loc.GetString("cmu-overwatch-roster-crit"), CrtTerminalPalette.Caution),
-                _ when marine.Health is { } health => Colored($"{MathF.Round(health * 100):F0}%", CMUOverwatchHealthBar.ColorFor(health)),
-                _ => Colored(Loc.GetString("rmc-overwatch-console-state-conscious"), CrtTerminalPalette.Accent),
-            };
-
-            if (marine.State != MobState.Dead)
-            {
-                state += marine.Bleeding switch
-                {
-                    ExternalBleedTier.Arterial => " " + Colored(Loc.GetString("cmu-overwatch-roster-arterial"), CrtTerminalPalette.Alert),
-                    ExternalBleedTier.Severe => " " + Colored(Loc.GetString("cmu-overwatch-roster-bleeding-heavy"), CrtTerminalPalette.Alert),
-                    ExternalBleedTier.Minor or ExternalBleedTier.Moderate => " " + Colored(Loc.GetString("cmu-overwatch-roster-bleeding"), CrtTerminalPalette.Caution),
-                    _ => string.Empty,
-                };
-
-                if (marine.SSD)
-                    state += " " + Colored(Loc.GetString("rmc-overwatch-console-ssd"), CrtTerminalPalette.TextDim);
+                SetLabel(State, Loc.GetString("rmc-overwatch-tripod-camera-active"), CrtTerminalPalette.Text);
+                return;
             }
 
-            return state;
+            switch (marine.State)
+            {
+                case MobState.Dead:
+                    SetLabel(State, Loc.GetString("rmc-overwatch-console-state-dead"), CrtTerminalPalette.Alert);
+                    return;
+                case MobState.Critical:
+                    SetLabel(State, Loc.GetString("cmu-overwatch-roster-crit"), CrtTerminalPalette.Caution);
+                    break;
+                default:
+                    if (marine.Health is { } health)
+                        SetLabel(State, $"{MathF.Round(health * 100):F0}%", CMUOverwatchHealthBar.ColorFor(health));
+                    else
+                        SetLabel(State, Loc.GetString("rmc-overwatch-console-state-conscious"), CrtTerminalPalette.Accent);
+                    break;
+            }
+
+            switch (marine.Bleeding)
+            {
+                case ExternalBleedTier.Arterial:
+                    SetLabel(Bleeding, Loc.GetString("cmu-overwatch-roster-arterial"), CrtTerminalPalette.Alert);
+                    Bleeding.Visible = true;
+                    break;
+                case ExternalBleedTier.Severe:
+                    SetLabel(Bleeding, Loc.GetString("cmu-overwatch-roster-bleeding-heavy"), CrtTerminalPalette.Alert);
+                    Bleeding.Visible = true;
+                    break;
+                case ExternalBleedTier.Minor or ExternalBleedTier.Moderate:
+                    SetLabel(Bleeding, Loc.GetString("cmu-overwatch-roster-bleeding"), CrtTerminalPalette.Caution);
+                    Bleeding.Visible = true;
+                    break;
+            }
+
+            if (marine.SSD)
+            {
+                Ssd.FontColorOverride = CrtTerminalPalette.TextDim;
+                Ssd.Visible = true;
+            }
         }
 
-        private static string Colored(string text, Robust.Shared.Maths.Color color)
+        private static void SetLabel(Label label, string text, Color color)
         {
-            return $"[color={color.ToHex()}]{FormattedMessageEscape(text)}[/color]";
-        }
-
-        private static string FormattedMessageEscape(string text)
-        {
-            return Robust.Shared.Utility.FormattedMessage.EscapeText(text);
+            label.Text = text;
+            label.FontColorOverride = color;
         }
     }
 }

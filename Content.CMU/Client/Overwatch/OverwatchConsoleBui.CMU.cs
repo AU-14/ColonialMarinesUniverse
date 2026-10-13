@@ -4,6 +4,7 @@ using Content.Client.Stylesheets;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.SupplyDrop;
 using Content.Shared.CMU14.Overwatch;
+using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
 
@@ -17,10 +18,31 @@ public sealed partial class OverwatchConsoleBui
 
     private void CMUOnWindowCreated()
     {
-        if (Window == null || !StyleNano.CrtUiEnabled)
+        if (Window == null)
             return;
 
-        CrtLobbyTheme.ApplyWindow(Window, useCrtTypography: true);
+        // The console stays in the game window; popping it out to its own OS window is not offered.
+        CMUHidePopOutButton(Window);
+
+        if (StyleNano.CrtUiEnabled)
+            CrtLobbyTheme.ApplyWindow(Window, useCrtTypography: true);
+    }
+
+    private static bool CMUHidePopOutButton(Control control)
+    {
+        foreach (var child in control.Children)
+        {
+            if (child is Button { Text: "Pop Out" } button)
+            {
+                button.Visible = false;
+                return true;
+            }
+
+            if (CMUHidePopOutButton(child))
+                return true;
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -44,7 +66,6 @@ public sealed partial class OverwatchConsoleBui
             table.Visible = false;
 
             var roster = new CMUOverwatchRoster();
-            roster.OnWatch += id => SendPredictedMessage(new OverwatchConsoleWatchBuiMsg(id));
             roster.OnFeed += id => SendMessage(new CMUOverwatchFeedToggleBuiMsg(id));
             roster.OnHide += (id, hide) => SendPredictedMessage(new OverwatchConsoleHideBuiMsg(id, hide));
             roster.OnPromote += id => SendPredictedMessage(new OverwatchConsolePromoteLeaderBuiMsg(id, squad.LeaderIcon));

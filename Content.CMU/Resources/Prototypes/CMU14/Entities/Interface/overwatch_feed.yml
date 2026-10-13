@@ -9,3 +9,11 @@
   - type: Eye
     drawFov: false
     pvsScale: 0.6 # a feed tile shows far less than the main view
+
+# VHS playback look for the overwatch camera feeds (CMUVhsScreenControl).
+- type: shader
+  id: CMUOverwatchVhs
+  kind: source
+  path: "/Textures/Shaders/CMU14/overwatch_vhs.swsl"
+  params:
+    aspect: 1.0
