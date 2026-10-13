@@ -75,3 +75,13 @@
     contents:
     - id: CMUMortarShellWP
       amount: 12
+
+- type: entity
+  parent: RMCCrateMortarAmmo
+  id: CMUCrateMortarShellWP
+  name: M402 mortar shells crate (x12 WP)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMortarShellWP
+      amount: 12

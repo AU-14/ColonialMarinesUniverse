@@ -168,7 +168,7 @@
       - cost: 750
         crate: RMCCrateMortarShellIncendiary
       - cost: 750
-        crate: CMUCrateMortarShellWP # CMU14: white phosphorus
+        crate: CMUCrateMortarShellWP
       - cost: 800
         crate: AU14CrateMortarShellHEATMP
       - cost: 950
