@@ -14,3 +14,10 @@
   components:
   - type: LightweightDrunk
     boozeStrengthMultiplier: 0.5
+
+- type: trait
+  id: CMUIronTeeth
+  name: cmu-trait-iron-teeth-name
+  description: cmu-trait-iron-teeth-desc
+  components:
+  - type: CMUIronTeeth

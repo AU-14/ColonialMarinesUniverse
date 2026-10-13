@@ -83,3 +83,27 @@
       cravingMessage: cmu-drugaddict-craving
       shakeMessage: cmu-drugaddict-shake
       satisfiedMessage: cmu-drugaddict-satisfied
+
+- type: trait
+  id: CMUOpiateReceptorDeficiency
+  name: cmu-trait-opiate-receptor-deficiency-name
+  description: cmu-trait-opiate-receptor-deficiency-desc
+  category: Disabilities
+  cost: 1
+  components:
+  - type: CMUOpiateReceptorDeficiency
+
+- type: trait
+  id: CMUBadLeg
+  name: cmu-trait-bad-leg-name
+  description: cmu-trait-bad-leg-desc
+  category: Disabilities
+  cost: 1
+  traitGear: Cane
+  cmuBlockedDepartments:
+  - AU14DepartmentGovernmentForces
+  - AU14DepartmentOpfor
+  - AU14DepartmentColonySecurity
+  - CMUDepartmentProvost
+  components:
+  - type: CMUBadLeg

@@ -143,3 +143,19 @@ trait-cmu-tile-movement-desc = You move from tile to tile instead of walking fre
 cmu-trait-category-drinking = Alcohol Tolerance
 cmu-trait-heavyweight-name = Heavyweight drunk
 cmu-trait-heavyweight-desc = This is someone that can hold their liquor.
+
+cmu-trait-opiate-receptor-deficiency-name = Opiate Receptor Deficiency
+cmu-trait-opiate-receptor-deficiency-desc = Due to overuse of opiates or a genetic fluke, basic painkillers (up to tramadol) work much less well on you.
+
+cmu-trait-bad-leg-name = Bad Leg
+cmu-trait-bad-leg-desc = Your leg suffered an undetermined wound a long time ago that never fully healed. Walking around without a cane will eventually make you fall over in pain, but you start with one. Not available to GOVFOR, OPFOR or law enforcement.
+
+cmu-trait-iron-teeth-name = Iron Teeth
+cmu-trait-iron-teeth-desc = You've got iron teeth, or really good dental insurance. Items in your face slot, such as knives, won't fall out when you go down.
+
+cmu-bad-leg-warning = Your bad leg is starting to ache.
+cmu-bad-leg-warning-severe = Your bad leg is throbbing. It won't hold out much longer without a cane!
+cmu-bad-leg-give-out = Your bad leg gives out and you collapse in pain!
+cmu-bad-leg-give-out-others = {CAPITALIZE(THE($user))} stumbles as their leg gives out.
+
+cmu-mouth-item-falls-out = {CAPITALIZE(THE($item))} falls out of {THE($user)}'s mouth.
