@@ -84,6 +84,11 @@
         Structural: 3
   - type: Damageable
     damageModifierSet: CMUYautja
+  # cmss13 armour deflection zeroes anything below armour*2, and the 0.28 species mod lands first,
+  # so most hits on armoured limbs did nothing. a big mult turns deflection into a sliver off the top
+  - type: RMCArmorModifier
+    meleeArmorModifier: 100
+    rangedArmorModifier: 100
   - type: Injurable
     damageContainer: Biological
     healthBarThreshold: 5
@@ -306,6 +311,11 @@
         Structural: 3
   - type: Damageable
     damageModifierSet: CMUYautja
+  # cmss13 armour deflection zeroes anything below armour*2, and the 0.28 species mod lands first,
+  # so most hits on armoured limbs did nothing. a big mult turns deflection into a sliver off the top
+  - type: RMCArmorModifier
+    meleeArmorModifier: 100
+    rangedArmorModifier: 100
   - type: Injurable
     damageContainer: Biological
     healthBarThreshold: 5

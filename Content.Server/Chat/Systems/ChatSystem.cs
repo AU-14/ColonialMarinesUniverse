@@ -233,12 +233,12 @@ public sealed partial class ChatSystem : SharedChatSystem
             checkRadioPrefix = false;
         }
 
-        // CMU14: crit players whisper instead of speaking. Force-say's one-shot
+        // CMU14: crit, asleep and knocked-out players whisper instead of speaking. Force-say's one-shot
         // allowance still sends the interrupted sentence as speech.
         if (desiredType == InGameICChatType.Speak
             && _critWhisperEnabled
             && !HasComp<AllowNextCritSpeechComponent>(source)
-            && _mobStateSystem.IsCritical(source))
+            && IsUnconsciousForWhisper(source))
         {
             desiredType = InGameICChatType.Whisper;
             checkRadioPrefix = false;

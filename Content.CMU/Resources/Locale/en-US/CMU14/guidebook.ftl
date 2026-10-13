@@ -111,6 +111,7 @@ cmu-guide-entry-medical = Medical
 cmu-guide-entry-medical-infantry = Start Here: Infantry First Aid
 cmu-guide-entry-medical-diagnosis = Diagnosis
 cmu-guide-entry-medical-wounds = Wounds and Bleeding
+cmu-guide-entry-medical-blood = Blood and Transfusions
 cmu-guide-entry-medical-field-care = Field Treatment Mixing
 cmu-guide-entry-medical-bones = Fractures
 cmu-guide-entry-medical-pain = Pain

@@ -183,6 +183,8 @@
         crate: RMCCrateMortarShellHE
       - cost: 750
         crate: RMCCrateMortarShellIncendiary
+      - cost: 750
+        crate: CMUCrateMortarShellWP
       - cost: 800
         crate: AU14CrateMortarShellHEATMP
       - cost: 950

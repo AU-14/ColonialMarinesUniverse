@@ -29,6 +29,7 @@
     - GOVFOR
   - type: Marine
     Faction: govfor
+  - type: Ambassador
 
   name: au14-job-name-civilianambassadorcca
   description: au14-job-description-civilianambassadorcca
@@ -125,6 +126,7 @@
     - GOVFOR
   - type: Marine
     Faction: govfor
+  - type: Ambassador
 
   name: au14-job-name-civilianambassadoricsc
   description: au14-job-description-civilianambassadoricsc
@@ -221,6 +223,7 @@
     - GOVFOR
   - type: Marine
     Faction: govfor
+  - type: Ambassador
 
   name: au14-job-name-civilianambassadortwe
   description: au14-job-description-civilianambassadortwe
@@ -316,6 +319,7 @@
   # - CMUVAI
   - type: Marine
   # Faction: ""
+  - type: Ambassador
 
   name: au14-job-name-civilianambassadorua
   description: au14-job-description-civilianambassadorua
@@ -410,6 +414,7 @@
     - GOVFOR
   - type: Marine
     Faction: govfor
+  - type: Ambassador
 
   name: au14-job-name-civilianambassadorupp
   description: au14-job-description-civilianambassadorupp
