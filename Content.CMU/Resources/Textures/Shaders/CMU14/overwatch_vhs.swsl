@@ -39,26 +39,28 @@ void fragment() {
                        zTexture(clamp(src - vec2(0.002, 0.0), 0.0, 1.0)).rgb) * 0.5;
     rgb = mix(rgb, soft, 0.35);
 
-    // Washed-out, warm tape colour.
+    // Washed-out, warm tape colour, lifted a little so the picture reads as bright playback.
     highp float luma = dot(rgb, vec3(0.299, 0.587, 0.114));
     rgb = mix(vec3(luma), rgb, 0.75);
-    rgb = rgb * vec3(1.05, 1.0, 0.9);
+    rgb = rgb * vec3(1.12, 1.08, 0.98) + 0.03;
 
-    // Scanlines.
+    // Scanlines, kept faint: the static carries the look, not a dark raster.
     highp float scan = 0.5 - 0.5 * cos(FRAGCOORD.y * TAU / 3.0);
-    rgb = rgb * (1.0 - scan * 0.25);
+    rgb = rgb * (1.0 - scan * 0.08);
 
-    // Grain everywhere, and snow inside the tracking band.
+    // Static: fine grain over everything, sparse bright specks, and snow inside the tracking band.
     highp float noise = zRandom(FRAGCOORD.xy * SCREEN_PIXEL_SIZE + vec2(TIME * 13.0, TIME * 7.0)).x;
-    rgb = rgb + (noise - 0.5) * 0.08;
-    rgb = rgb + band * noise * 0.35;
+    highp float speck = step(0.985, zRandom(FRAGCOORD.xy * SCREEN_PIXEL_SIZE + vec2(TIME * 5.0, TIME * 17.0)).y);
+    rgb = rgb + (noise - 0.5) * 0.18;
+    rgb = rgb + speck * 0.35;
+    rgb = rgb + band * noise * 0.45;
 
     // Vignette, in real pixel proportions so a wide tile darkens evenly.
     highp vec2 centred = uv * 2.0 - 1.0;
     highp vec2 asp = vec2(aspect, 1.0);
     highp vec2 inPixels = centred * asp;
     highp float r2 = dot(inPixels, inPixels) / dot(asp, asp);
-    highp float vig = 1.0 - clamp(0.45 * r2 * r2, 0.0, 1.0);
+    highp float vig = 1.0 - clamp(0.25 * r2 * r2, 0.0, 1.0);
 
     COLOR = vec4(clamp(rgb, 0.0, 1.0) * vig, 1.0);
 }
