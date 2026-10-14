@@ -103,10 +103,5 @@
   cmuExcludes:
   - CMUProstheticLeftLeg
   - CMUProstheticRightLeg
-  cmuBlockedDepartments:
-  - AU14DepartmentGovernmentForces
-  - AU14DepartmentOpfor
-  - AU14DepartmentColonySecurity
-  - CMUDepartmentProvost
   components:
   - type: CMUBadLeg

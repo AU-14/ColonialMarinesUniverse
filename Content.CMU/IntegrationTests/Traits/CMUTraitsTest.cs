@@ -1,7 +1,9 @@
+using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared.CMU14.Hearing;
 using Content.Shared.CMU14.Traits.IronTeeth;
 using Content.Shared.Inventory;
+using Content.Shared.Roles;
 using Content.Shared.Traits;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -18,15 +20,18 @@ public sealed class CMUTraitsTest : GameTest
         await Server.WaitAssertion(() =>
         {
             var prototypes = Server.ResolveDependency<IPrototypeManager>();
-            var badLeg = prototypes.Index<TraitPrototype>("CMUBadLeg");
+
+            bool Bars(string job) => prototypes.Index<JobPrototype>(job).Requirements?
+                .OfType<TraitsRequirement>()
+                .Any(requirement => requirement.Inverted && requirement.Traits.Contains("CMUBadLeg")) == true;
 
             Assert.Multiple(() =>
             {
-                Assert.That(badLeg.CMUIsBlockedForJob(prototypes, "AU14JobGOVFORSquadRifleman"), Is.True);
-                Assert.That(badLeg.CMUIsBlockedForJob(prototypes, "AU14JobOPFORSquadRifleman"), Is.True);
-                Assert.That(badLeg.CMUIsBlockedForJob(prototypes, "AU14JobCivilianCMBMarshal"), Is.True);
-                Assert.That(badLeg.CMUIsBlockedForJob(prototypes, "CMUJobINDFORProvostEnforcer"), Is.True);
-                Assert.That(badLeg.CMUIsBlockedForJob(prototypes, "AU14JobCivilianJournalist"), Is.False);
+                Assert.That(Bars("AU14JobGOVFORSquadRifleman"), Is.True);
+                Assert.That(Bars("AU14JobOPFORSquadRifleman"), Is.True);
+                Assert.That(Bars("AU14JobCivilianCMBMarshal"), Is.True);
+                Assert.That(Bars("CMUJobINDFORProvostEnforcer"), Is.True);
+                Assert.That(Bars("AU14JobCivilianJournalist"), Is.False);
             });
         });
     }

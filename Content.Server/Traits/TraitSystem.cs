@@ -43,11 +43,6 @@ public sealed partial class TraitSystem : EntitySystem
                 _whitelistSystem.IsWhitelistPass(traitPrototype.Blacklist, args.Mob))
                 continue;
 
-            // cmu edit start
-            if (traitPrototype.CMUIsBlockedForJob(ProtoMan, args.JobId))
-                continue;
-            // cmu edit end
-
             // Add all components required by the prototype
             if (traitPrototype.Components.Count > 0)
                 EntityManager.AddComponents(args.Mob, traitPrototype.Components, false);
