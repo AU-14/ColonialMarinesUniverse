@@ -8,6 +8,7 @@
   - AU14Comms
   - CMUGuideOverwatch
   - CMUGuideFOBSecurity
+  - CMUGuideSkills
   - CMUGuideMortar
   - CMUGuideExplosives
   - CMUGuideMedical
@@ -1082,3 +1083,10 @@
   name: cmu-guide-entry-fob-security
   priority: 2
   text: "/ServerInfo/Guidebook/CMU14/Guides/CMUFOBSecurity.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideSkills
+  name: cmu-guide-entry-skills
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUSkills.xml"

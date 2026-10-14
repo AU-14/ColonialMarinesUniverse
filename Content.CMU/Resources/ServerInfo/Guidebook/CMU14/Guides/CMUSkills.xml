@@ -1,0 +1,36 @@
+<Document>
+  # Skills
+
+  Every role comes with a set of skills. They decide what you can use well, what you can use at all, and how fast you do things. A higher level is better; a skill you do not have counts as 0.
+
+  ## Checking Your Skills
+  - [bold]Examine yourself[/bold] and click the cap icon to see your skills and their levels.
+  - Your skills come from your role. Some things raise them for the round, like joining the FOB security squad or certain pamphlets.
+
+  ## What Each Skill Covers
+  - [bold]Firearms[/bold]: handling guns. Without it you are less accurate and your shots spread more.
+  - [bold]Specialist Weapons[/bold] and [bold]Smart Gun[/bold]: the specialist kits and the smartgun.
+  - [bold]Melee Weapons[/bold] and [bold]CQC[/bold]: fighting up close, with and without a weapon.
+  - [bold]Endurance[/bold]: how much running and exertion you can take.
+  - [bold]Construction[/bold]: building barricades, walls and other structures. Higher levels unlock sturdier builds.
+  - [bold]Engineer[/bold]: repairs, wiring, power and hacking machines.
+  - [bold]Medical[/bold]: treating the wounded and reading health scanners. At level 1 a scanner shows internal bleeding, fractures and shock risk; at level 3 it shows exact fracture severity.
+  - [bold]Surgery[/bold]: performing operations.
+  - [bold]Research[/bold]: chemistry and research work.
+  - [bold]Leadership[/bold]: command equipment, orders and leading a squad.
+  - [bold]Overwatch[/bold]: using overwatch consoles.
+  - [bold]JTAC[/bold]: calling in fire support and laser designating.
+  - [bold]Intel[/bold]: gathering and using intelligence.
+  - [bold]Police[/bold]: security and military police equipment.
+  - [bold]Pilot[/bold]: flying and arming dropships.
+  - [bold]Navigations[/bold]: ship navigation.
+  - [bold]Vehicles[/bold]: driving and crewing vehicles.
+  - [bold]Power Loader[/bold]: operating the power loader.
+  - [bold]Fireman[/bold]: carrying people over your shoulder.
+  - [bold]Domestics[/bold]: cooking and other everyday tasks.
+  - [bold]Aircrew[/bold]: keeping your feet on a dropship. When a dropship hits turbulence between landing zones, everyone's view shakes and anyone standing and not buckled in can be thrown around or knocked down. Pilots, crew chiefs and other aircrew have this skill and stay standing. Everyone else should buckle in.
+
+  ## Tips
+  - If a tool or weapon does not work for you, or is slow, check whether your role has the skill for it.
+  - Leave jobs that need a high skill to the people trained for them.
+</Document>
