@@ -333,9 +333,15 @@
                             <!-- cmu edit start: text on GOVFOR/OPFOR vendor armor and helmets -->
                             <cc:HSeparator Color="#16823E" Margin="0 5" />
                             <Label Text="{Loc 'cmu-humanoid-profile-editor-armor-flavor-label'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-gear-flavor-tooltip'}" />
-                            <LineEdit Name="ArmorFlavorTextEdit" HorizontalExpand="True" PlaceHolder="{Loc 'cmu-humanoid-profile-editor-gear-flavor-placeholder'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-gear-flavor-tooltip'}" />
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'cmu-humanoid-profile-editor-armor-flavor-prefix'}" Margin="0 0 6 0" FontColorOverride="#A0A0A0" />
+                                <LineEdit Name="ArmorFlavorTextEdit" HorizontalExpand="True" PlaceHolder="{Loc 'cmu-humanoid-profile-editor-gear-flavor-placeholder'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-gear-flavor-tooltip'}" />
+                            </BoxContainer>
                             <Label Text="{Loc 'cmu-humanoid-profile-editor-helmet-flavor-label'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-gear-flavor-tooltip'}" />
-                            <LineEdit Name="HelmetFlavorTextEdit" HorizontalExpand="True" Margin="0 0 0 8" PlaceHolder="{Loc 'cmu-humanoid-profile-editor-gear-flavor-placeholder'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-gear-flavor-tooltip'}" />
+                            <BoxContainer HorizontalExpand="True" Margin="0 0 0 8">
+                                <Label Text="{Loc 'cmu-humanoid-profile-editor-helmet-flavor-prefix'}" Margin="0 0 6 0" FontColorOverride="#A0A0A0" />
+                                <LineEdit Name="HelmetFlavorTextEdit" HorizontalExpand="True" PlaceHolder="{Loc 'cmu-humanoid-profile-editor-gear-flavor-placeholder'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-gear-flavor-tooltip'}" />
+                            </BoxContainer>
                             <!-- cmu edit end -->
                         </BoxContainer>
                     </ScrollContainer>
