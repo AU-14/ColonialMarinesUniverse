@@ -3,7 +3,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: c_boxers
@@ -13,7 +15,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: d_boxers
@@ -23,7 +27,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: j_boxers
@@ -33,7 +39,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: s_boxers
@@ -43,7 +51,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: urban_boxers
@@ -53,7 +63,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: c_lowriders
@@ -63,7 +75,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: d_lowriders
@@ -73,7 +87,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: j_lowriders
@@ -83,7 +99,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: s_lowriders
@@ -93,7 +111,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: urban_lowriders
@@ -103,7 +123,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: c_briefs
@@ -113,7 +135,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: d_briefs
@@ -123,7 +147,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: j_briefs
@@ -133,7 +159,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: s_briefs
@@ -143,7 +171,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: urban_briefs
@@ -153,7 +183,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: c_satin
@@ -163,7 +195,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: d_satin
@@ -173,7 +207,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: j_satin
@@ -183,7 +219,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: s_satin
@@ -193,7 +231,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: urban_satin
@@ -204,7 +244,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: classic_tanga
@@ -214,7 +256,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: desert_tanga
@@ -224,7 +268,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: jungle_tanga
@@ -234,7 +280,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: snow_tanga
@@ -244,7 +292,9 @@
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
-  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit start: humans use the cmss13-pve underwear
+  groupWhitelist: [Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  # cmu edit end
   sprites:
   - sprite: _RMC14/Mobs/Customization/underwear.rsi
     state: urban_tanga

@@ -87,7 +87,8 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
         if (skill >= 1)
             FillFractures(args.Patient, state, exactSeverity: skill >= 3);
         if (skill >= 1)
-            FillInternalBleeds(args.Patient, state, exactLocation: skill >= 3);
+            // The patient already feels which limb is bleeding, so any trained scan points at it too.
+            FillInternalBleeds(args.Patient, state, exactLocation: true);
         FillHeart(args.Patient, state);
         if (skill >= 1)
             FillPainShockRisk(args.Patient, state);

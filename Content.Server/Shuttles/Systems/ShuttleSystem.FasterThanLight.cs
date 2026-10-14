@@ -739,6 +739,11 @@ public sealed partial class ShuttleSystem
         {
             foreach (var child in toKnock)
             {
+                // cmu edit start: aircrew keep their feet through takeoff and landing
+                if (CMUKeepsFooting(child))
+                    continue;
+                // cmu edit end
+
                 _stuns.TryUpdateParalyzeDuration(child, _hyperspaceKnockdownTime);
 
                 // If the guy we knocked down is on a spaced tile, throw them too

@@ -108,6 +108,9 @@ public sealed class HealthScannerAdviceReadout
     public bool ShowBicaridine;
     public bool ShowKelotane;
     public bool ShowDylovene;
+    // cmu edit start
+    public bool CMUShowInternals;
+    // cmu edit end
 }
 
 [Serializable, NetSerializable]

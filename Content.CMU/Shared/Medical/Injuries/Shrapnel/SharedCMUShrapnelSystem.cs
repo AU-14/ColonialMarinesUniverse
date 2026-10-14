@@ -487,7 +487,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
 
         _pain.AddPainPulse(ent.Owner, (FixedPoint2)pulse);
         _pain.OnRecomputeTrigger(ent.Owner);
-        _popup.PopupEntity(Loc.GetString("cmu-medical-shrapnel-movement-pain"), ent.Owner, ent.Owner, PopupType.SmallCaution);
+        // The message is CMUShrapnelMovePainSystem's, once when they set off; one per pulse was spam.
     }
 
     private void OnHumanRemove(Entity<CMUHumanMedicalComponent> ent, ref ComponentRemove args)

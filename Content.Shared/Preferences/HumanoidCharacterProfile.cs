@@ -502,6 +502,12 @@ namespace Content.Shared.Preferences
             FoFSide = other.FoFSide;
             FoFFallback = other.FoFFallback;
             BloodType = other.BloodType; // CMU14
+            // cmu edit start
+            FoxtrotSquadOptIn = other.FoxtrotSquadOptIn;
+            Religion = other.Religion;
+            ArmorFlavorText = other.ArmorFlavorText;
+            HelmetFlavorText = other.HelmetFlavorText;
+            // cmu edit end
         }
 
         /// <summary>
@@ -1160,6 +1166,12 @@ namespace Content.Shared.Preferences
 
             var list = new HashSet<ProtoId<TraitPrototype>>(_traitPreferences) { traitId };
 
+            // cmu edit start: picking a trait drops any trait it cannot be taken with
+            list.RemoveWhere(other => other != traitId &&
+                                      protoManager.TryIndex(other, out var otherTrait) &&
+                                      traitProto.CMUConflictsWith(otherTrait));
+            // cmu edit end
+
             if (traitCategory == null || traitCategory.MaxTraitPoints < 0)
             {
                 return new(this)
@@ -1223,6 +1235,12 @@ namespace Content.Shared.Preferences
             // CMU14: Force on Force roles, hijacking, announcements and identification.
             if (FoFSide != other.FoFSide || FoFFallback != other.FoFFallback) return false;
             if (BloodType != other.BloodType) return false; // CMU14
+            // cmu edit start
+            if (FoxtrotSquadOptIn != other.FoxtrotSquadOptIn) return false;
+            if (Religion != other.Religion) return false;
+            if (ArmorFlavorText != other.ArmorFlavorText) return false;
+            if (HelmetFlavorText != other.HelmetFlavorText) return false;
+            // cmu edit end
             if (SpawnPriority != other.SpawnPriority) return false;
             if (SquadPreference != other.SquadPreference) return false;
             if (!_jobPriorities.SequenceEqual(other._jobPriorities)) return false;
@@ -1574,6 +1592,11 @@ namespace Content.Shared.Preferences
             if (!Enum.IsDefined(FoFSide)) FoFSide = ForceOnForceSide.Either;
             if (!Enum.IsDefined(FoFFallback)) FoFFallback = ForceOnForceFallback.StayInLobby;
             if (!Enum.IsDefined(BloodType)) BloodType = CMUBloodTypes.DefaultTypes[0]; // CMU14
+            // cmu edit start
+            if (!prototypeManager.HasIndex(Religion)) Religion = Content.Shared.CMU14.Religion.CMUReligionPrototype.Atheist;
+            ArmorFlavorText = Content.Shared.CMU14.GearFlavor.CMUGearFlavorText.Clamp(ArmorFlavorText);
+            HelmetFlavorText = Content.Shared.CMU14.GearFlavor.CMUGearFlavorText.Clamp(HelmetFlavorText);
+            // cmu edit end
 
             _antagPreferences.Clear();
             _antagPreferences.UnionWith(antags);
@@ -1683,6 +1706,21 @@ namespace Content.Shared.Preferences
                 if (!protoManager.TryIndex(trait, out var traitProto))
                     continue;
 
+                // cmu edit start: the first of two traits that cannot be taken together wins
+                var conflicts = false;
+                foreach (var kept in result)
+                {
+                    if (protoManager.TryIndex(kept, out var keptProto) && traitProto.CMUConflictsWith(keptProto))
+                    {
+                        conflicts = true;
+                        break;
+                    }
+                }
+
+                if (conflicts)
+                    continue;
+                // cmu edit end
+
                 // Always valid.
                 if (traitProto.Category == null)
                 {
@@ -1758,6 +1796,12 @@ namespace Content.Shared.Preferences
             hashCode.Add(FoFSide);
             hashCode.Add(FoFFallback);
             hashCode.Add(BloodType); // CMU14
+            // cmu edit start
+            hashCode.Add(FoxtrotSquadOptIn);
+            hashCode.Add(Religion);
+            hashCode.Add(ArmorFlavorText);
+            hashCode.Add(HelmetFlavorText);
+            // cmu edit end
             hashCode.Add(NamedItems);
             hashCode.Add(PlaytimePerks);
             hashCode.Add(XenoPrefix);

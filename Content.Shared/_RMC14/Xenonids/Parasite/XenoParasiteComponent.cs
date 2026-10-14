@@ -32,6 +32,20 @@ public sealed partial class XenoParasiteComponent : Component
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan? FallOffAt;
 
+    // cmu edit start: a parasite holds on for two to five minutes; after two, shakes and pats can knock it loose
+    [DataField("cmuMinHugTime")]
+    public TimeSpan CMUMinHugTime = TimeSpan.FromMinutes(2);
+
+    [DataField("cmuMaxHugTime")]
+    public TimeSpan CMUMaxHugTime = TimeSpan.FromMinutes(5);
+
+    [DataField("cmuShakeOffChance")]
+    public float CMUShakeOffChance = 0.25f;
+
+    [DataField("cmuAttachedAt", customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan? CMUAttachedAt;
+    // cmu edit end
+
     [DataField]
     public bool FellOff;
 

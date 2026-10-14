@@ -110,9 +110,7 @@ public sealed partial class AutoHolocardSystem : EntitySystem
 
     private HolocardStatus GetAutomaticStatus(EntityUid body)
     {
-        if (TryComp<VictimInfectedComponent>(body, out var infection) && infection.LifeStage <= ComponentLifeStage.Running)
-            return HolocardStatus.Xeno;
-
+        // A parasite isn't tagged automatically: scanners outside the body scanner can't see one.
         foreach (var (organUid, _) in _medicalIndex.GetOrgans(body))
         {
             if (IsAttachedOrgan(organUid, body) && TryComp<OrganHealthComponent>(organUid, out var organ) &&

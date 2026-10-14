@@ -39,6 +39,7 @@
     - SABRE ACTUAL
     - DAGGER ACTUAL
     - PIKE 6
+    - HALBERD ACTUAL
     - SUNRAY
     - OVERLORD
     - DUSTOFF
@@ -93,6 +94,7 @@
     - radioGovforAlpha
     - radioGovforBravo
     - radioGovforCharlie
+    - radioGovforFoxtrot
   - type: UserInterface
     interfaces:
       enum.ANPRCRadioUI.Key:
@@ -157,6 +159,7 @@
     - radioOpforAlpha
     - radioOpforBravo
     - radioOpforCharlie
+    - radioOpforVictor
 
 - type: entity
   parent: ANPRC117GRadio

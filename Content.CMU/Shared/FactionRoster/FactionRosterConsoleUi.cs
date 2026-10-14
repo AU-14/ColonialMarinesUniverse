@@ -28,6 +28,7 @@ public sealed class FactionRosterEntry
     public string EyeColorName = string.Empty;
     public string? Allegiance;
     public string? Origin;
+    public string? Religion;
 }
 
 [Serializable, NetSerializable]

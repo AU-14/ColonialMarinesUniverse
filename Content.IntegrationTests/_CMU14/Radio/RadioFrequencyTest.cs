@@ -35,6 +35,10 @@ public sealed class RadioFrequencyTest : GameTest
         ["radioOpforIntel"] = 160_200,
         ["radioOpforJTAC"] = 147_400,
         ["radioOpforMILP"] = 147_700,
+        // cmu edit start
+        ["radioGovforFoxtrot"] = 160_800,
+        ["radioOpforVictor"] = 160_900,
+        // cmu edit end
         ["radioProvost"] = 186_300,
         ["Colony"] = 146_900,
         ["colonyAlert"] = 143_100,
@@ -42,7 +46,9 @@ public sealed class RadioFrequencyTest : GameTest
         ["radioCMB"] = 122_000,
         ["radioCLF"] = 188_600,
         ["radioCLFCommand"] = 188_700,
-        ["radioMobFamily"] = 146_700,
+        // cmu edit start: the mob family channel was removed
+        // ["radioMobFamily"] = 146_700,
+        // cmu edit end
         ["radioAI"] = 767_600,
         ["ColonyHandheld"] = 146_100,
         ["Hivemind"] = 42_600,
@@ -139,7 +145,9 @@ public sealed class RadioFrequencyTest : GameTest
     {
         await Server.WaitAssertion(() =>
         {
-            Assert.That(CustomChannels, Has.Count.EqualTo(57));
+            // cmu edit start
+            Assert.That(CustomChannels, Has.Count.EqualTo(58));
+            // cmu edit end
 
             foreach (var (id, expectedKilohertz) in CustomChannels)
             {
@@ -154,9 +162,13 @@ public sealed class RadioFrequencyTest : GameTest
             var positive = CustomChannels.Values.Where(value => value > 0).ToArray();
             Assert.Multiple(() =>
             {
-                Assert.That(positive, Has.Length.EqualTo(55));
+                // cmu edit start
+                Assert.That(positive, Has.Length.EqualTo(56));
+                // cmu edit end
                 Assert.That(CustomChannels.Values.Count(value => value == 0), Is.EqualTo(2));
-                Assert.That(positive.Distinct().Count(), Is.EqualTo(55),
+                // cmu edit start
+                Assert.That(positive.Distinct().Count(), Is.EqualTo(56),
+                // cmu edit end
                     "Every positive custom carrier must have one unambiguous reverse lookup.");
             });
         });

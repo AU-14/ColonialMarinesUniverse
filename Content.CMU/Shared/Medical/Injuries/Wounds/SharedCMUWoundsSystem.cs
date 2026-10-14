@@ -269,7 +269,28 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             return;
         }
 
-        ComputeInternalBleedSource(part, ignoreSplint, out var maxRate, out var source);
+        // One internal bleed per limb: a hand's or foot's sources bleed on its arm or leg.
+        var changedPart = part;
+        part = GetBleedSite(part);
+
+        var maxRate = 0f;
+        var source = string.Empty;
+        foreach (var segment in GetBleedSegments(part))
+        {
+            ComputeInternalBleedSource(segment, ignoreSplint && segment == changedPart, out var segmentRate, out var segmentSource);
+            if (segmentRate > maxRate)
+            {
+                maxRate = segmentRate;
+                source = segmentSource;
+            }
+
+            // A bleed left on a hand or foot from before limbs shared one is folded into the limb's.
+            if (segment != part && HasComp<InternalBleedingComponent>(segment))
+            {
+                RemComp<InternalBleedingComponent>(segment);
+                RaiseInternalBleedingChanged(segment, true);
+            }
+        }
 
         if (maxRate <= 0f)
         {
@@ -369,6 +390,52 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    ///     Where a part's internal bleed is tracked: hands bleed on their arm and feet on their leg,
+    ///     so a limb never carries two separate bleeds.
+    /// </summary>
+    public EntityUid GetBleedSite(EntityUid part)
+    {
+        if (!TryComp<BodyPartComponent>(part, out var partComp) ||
+            partComp.PartType is not (BodyPartType.Hand or BodyPartType.Foot) ||
+            TryGetBodyOwner(part) is not { } body)
+        {
+            return part;
+        }
+
+        var limbType = partComp.PartType == BodyPartType.Hand ? BodyPartType.Arm : BodyPartType.Leg;
+        foreach (var (limb, limbComp) in MedicalIndex.GetBodyParts(body))
+        {
+            if (limbComp.PartType == limbType && limbComp.Symmetry == partComp.Symmetry)
+                return limb;
+        }
+
+        return part;
+    }
+
+    /// <summary>
+    ///     The parts whose bleed sources feed the bleed tracked on <paramref name="site"/>: the site,
+    ///     and for an arm or leg its hand or foot.
+    /// </summary>
+    private IEnumerable<EntityUid> GetBleedSegments(EntityUid site)
+    {
+        yield return site;
+
+        if (!TryComp<BodyPartComponent>(site, out var siteComp) ||
+            siteComp.PartType is not (BodyPartType.Arm or BodyPartType.Leg) ||
+            TryGetBodyOwner(site) is not { } body)
+        {
+            yield break;
+        }
+
+        var extremity = siteComp.PartType == BodyPartType.Arm ? BodyPartType.Hand : BodyPartType.Foot;
+        foreach (var (part, partComp) in MedicalIndex.GetBodyParts(body))
+        {
+            if (partComp.PartType == extremity && partComp.Symmetry == siteComp.Symmetry)
+                yield return part;
+        }
+    }
+
     private static bool IsSuppressedBleedSourceMatch(string suppressed, string current)
     {
         if (suppressed == current)
@@ -399,6 +466,9 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     {
         if (IsSynthOwned(part))
             return;
+
+        // One internal bleed per limb: a hand or foot bleeds on its arm or leg.
+        part = GetBleedSite(part);
 
         RemComp<CMUInternalBleedingSuppressedComponent>(part);
 
