@@ -2,6 +2,7 @@ using Content.Server._RMC14.Dropship;
 using Content.Shared._RMC14.Damage.ObstacleSlamming;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Camera;
 using Content.Shared.CCVar;
@@ -255,9 +256,10 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
         };
     }
 
+    /// <summary>Aircrew, and synthetics, who are never thrown off balance by flight.</summary>
     private bool IsAircrew(EntityUid mob)
     {
-        return _skills.HasSkill(mob, AircrewSkill, 1);
+        return HasComp<SynthComponent>(mob) || _skills.HasSkill(mob, AircrewSkill, 1);
     }
 
     private void Shake(EntityUid ship, bool heavy)
