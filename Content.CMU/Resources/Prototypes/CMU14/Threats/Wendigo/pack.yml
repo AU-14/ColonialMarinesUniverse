@@ -1,4 +1,4 @@
-# Private band for lab-made Wendigos. Granted by CMUWendigoPack and used as their default channel.
+# Private band for Wendigos, natural and lab-made. Granted by CMUWendigoPack and used as their default channel.
 - type: radioChannel
   id: CMUWendigoPack
   name: chat-radio-cmu-wendigo-pack

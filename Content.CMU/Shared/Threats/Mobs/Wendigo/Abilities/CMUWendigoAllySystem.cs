@@ -6,7 +6,7 @@ namespace Content.Shared.CMU14.Threats.Mobs.Wendigo.Abilities;
 
 /// <summary>
 /// Shared ally rule for the Wendigo abilities: pack allies (pack members, a tamed Wendigo and its master)
-/// plus any two Wendigo-tagged mobs, so the natural xeno Wendigo and the lab-made ones spare each other.
+/// plus any two Wendigo-tagged mobs, so natural and lab-made Wendigos spare each other.
 /// </summary>
 public sealed partial class CMUWendigoAllySystem : EntitySystem
 {

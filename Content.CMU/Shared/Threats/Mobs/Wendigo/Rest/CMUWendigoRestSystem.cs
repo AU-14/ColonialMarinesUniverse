@@ -8,9 +8,8 @@ using Robust.Shared.Timing;
 namespace Content.Shared.CMU14.Threats.Mobs.Wendigo.Rest;
 
 /// <summary>
-/// Rest for lab-made Wendigos, which are not xenos: the xeno Rest action only has a handler on XenoComponent.
-/// Natural Wendigos are xenos and keep the stock handler. Resting itself (no movement or attacks, faster regen)
-/// is all driven by XenoRestingComponent, so both behave the same.
+/// Rest for Wendigos, which are not xenos: the xeno Rest action only has a handler on XenoComponent. Resting itself
+/// (no movement or attacks, faster regen) is all driven by XenoRestingComponent, so it behaves like xeno rest.
 /// </summary>
 public sealed partial class CMUWendigoRestSystem : EntitySystem
 {

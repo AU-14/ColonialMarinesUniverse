@@ -5,7 +5,7 @@
   whitelist:
     components:
     - Xeno
-    tags: # CMU14: lab-made Wendigos are not xenos
+    tags: # CMU14: Wendigos are not xenos
     - Wendigo
   blacklist:
     components:
@@ -55,7 +55,7 @@
   whitelist:
     components:
     - Xeno
-    tags: # CMU14: lab-made Wendigos are not xenos
+    tags: # CMU14: Wendigos are not xenos
     - Wendigo
   blacklist:
     components:

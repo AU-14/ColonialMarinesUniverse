@@ -64,7 +64,7 @@ public sealed partial class CMUWendigoPackSystem : EntitySystem
 
     private void OnGetPrefix(Entity<CMUWendigoPackComponent> ent, ref ChatGetPrefixEvent args)
     {
-        // Lab Wendigos are not part of any hive.
+        // Wendigos are not part of any hive.
         if (args.Channel?.ID == SharedChatSystem.HivemindChannel.Id)
             args.Channel = null;
     }

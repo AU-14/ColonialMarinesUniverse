@@ -3,7 +3,7 @@ using Content.Shared.Actions.Components;
 // ReSharper disable once CheckNamespace
 namespace Content.Shared._RMC14.Xenonids.Rest;
 
-// CMU14 class: rest toggle for mobs that use the xeno Rest action without being xenos (lab-made Wendigos).
+// CMU14 class: rest toggle for mobs that use the xeno Rest action without being xenos (Wendigos).
 // XenoRestingComponent is access-restricted to this system, so the toggle lives here and mirrors OnXenoRestAction.
 public sealed partial class XenoRestSystem
 {

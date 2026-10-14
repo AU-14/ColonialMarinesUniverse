@@ -5,7 +5,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared.CMU14.Threats.Mobs.Wendigo.Pack;
 
 /// <summary>
-/// Marks a lab-made Wendigo as a member of the Wendigo pack. Pack members share a private radio
+/// Marks a Wendigo, natural or lab-made, as a member of the Wendigo pack. Pack members share a private radio
 /// channel, never hurt each other, hear when a packmate dies and can watch each other.
 /// </summary>
 [RegisterComponent, NetworkedComponent]

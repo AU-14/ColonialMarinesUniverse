@@ -3,6 +3,10 @@ using Content.IntegrationTests.Fixtures;
 using Content.IntegrationTests.Fixtures.Attributes;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Armor;
+using Content.Shared._RMC14.Fireman;
+using Content.Shared.CMU14.PowerLoader;
+using Content.Shared.CMU14.Pulling;
+using Content.Shared.CMU14.Threats.Mobs.Wendigo.Pack;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.ClawSharpness;
 using Content.Shared.Actions;
@@ -69,13 +73,13 @@ public sealed class CMUWendigoLabPrototypeTest : GameTest
     }
 
     /// <summary>
-    /// Lab-made Wendigos are not xenos: no XenoComponent, actions granted directly. The lesser one keeps less
-    /// health and no screech but full damage, and both carry the ballistic hide, armor piercing, wall-breaking
-    /// claws and their emotes.
+    /// No Wendigo is a xeno: no XenoComponent, actions granted directly. The lesser one keeps less health and no
+    /// screech but full damage. All carry the ballistic hide, armor piercing, wall-breaking claws, the pack, the
+    /// drag, carry and crate utility, and their emotes; the natural one matches the lab one's hide and piercing.
     /// </summary>
     [Test]
     [RunOnSide(Side.Server)]
-    public void LabWendigosAreNotXenosAndCarryTheirKit()
+    public void WendigosAreNotXenosAndCarryTheirKit()
     {
         var full = SProtoMan.Index<Robust.Shared.Prototypes.EntityPrototype>(Full);
         var lab = SProtoMan.Index<Robust.Shared.Prototypes.EntityPrototype>(Lab);
@@ -102,7 +106,7 @@ public sealed class CMUWendigoLabPrototypeTest : GameTest
             "ActionXenoWatch", "ActionXenoPunch", "ActionCMUWendigoPunchSwing", "ActionXenoPounce",
             "ActionXenoHeadbite", "ActionCMUWendigoClawedSweep", "ActionApeLimbRip", "ActionXenoRest", "ActionCMUWendigoScent",
         ];
-        foreach (var (proto, screech) in new[] { (lab, true), (lesser, false) })
+        foreach (var (proto, screech) in new[] { (full, true), (lab, true), (lesser, false) })
         {
             Assert.That(proto.TryComp<XenoComponent>(out _, _compFactory), Is.False, $"{proto.ID} must not be a xeno.");
             Assert.That(proto.TryComp<ActionGrantComponent>(out var grant, _compFactory), proto.ID);
@@ -118,12 +122,39 @@ public sealed class CMUWendigoLabPrototypeTest : GameTest
             Assert.That(proto.TryComp<XenoClawsComponent>(out var claws, _compFactory), proto.ID);
             Assert.That(claws!.ClawType, Is.EqualTo(XenoClawType.VerySharp), $"{proto.ID} must break reinforced walls.");
 
+            foreach (var utility in new[]
+                     {
+                         typeof(CMUWendigoPackComponent), typeof(CMUNoPullSlowdownComponent),
+                         typeof(CanFiremanCarryComponent), typeof(CMULargeObjectGrabberComponent),
+                     })
+            {
+                Assert.That(proto.Components.ContainsKey(_compFactory.GetComponentName(utility)),
+                    $"{proto.ID} must have {utility.Name}.");
+            }
+
             foreach (var emote in new[] { "Growl", "Hiss", "XenoRoar", "XenoHelp", "WendigoBreathing" })
             {
                 Assert.That(PassesWhitelist(proto, SProtoMan.Index<EmotePrototype>(emote).Whitelist),
                     $"{proto.ID} must keep the {emote} emote.");
             }
         }
+    }
+
+    [Test]
+    [RunOnSide(Side.Server)]
+    public void NaturalWendigoHideAndPiercingMatchLab()
+    {
+        var natural = SProtoMan.Index<Robust.Shared.Prototypes.EntityPrototype>(Full);
+        var lab = SProtoMan.Index<Robust.Shared.Prototypes.EntityPrototype>(Lab);
+        Assert.That(natural.TryComp<CMArmorComponent>(out var naturalArmor, _compFactory));
+        Assert.That(lab.TryComp<CMArmorComponent>(out var labArmor, _compFactory));
+        Assert.That(naturalArmor!.Melee, Is.EqualTo(labArmor!.Melee));
+        Assert.That(naturalArmor.Bullet, Is.EqualTo(labArmor.Bullet));
+        Assert.That(naturalArmor.Bio, Is.EqualTo(labArmor.Bio));
+        Assert.That(naturalArmor.ExplosionArmor, Is.EqualTo(labArmor.ExplosionArmor));
+        Assert.That(natural.TryComp<CMArmorPiercingComponent>(out var naturalPiercing, _compFactory));
+        Assert.That(lab.TryComp<CMArmorPiercingComponent>(out var labPiercing, _compFactory));
+        Assert.That(naturalPiercing!.Amount, Is.EqualTo(labPiercing!.Amount));
     }
 
     private bool PassesWhitelist(Robust.Shared.Prototypes.EntityPrototype proto, EntityWhitelist? whitelist)

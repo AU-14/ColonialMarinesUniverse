@@ -1,175 +1,29 @@
+# Natural Wendigo (ColonyFall threat). Not a xeno: built on CMUWendigoBase like the lab-made ones, with the same
+# hide, claws, armor piercing, utility and pack, but no human blood, so it stays untreatable. It cannot speak at all;
+# emotes and voice mimicry still work.
 - type: entity
-  abstract: false
-  parent:
-  - CMXenoDeveloped
-  - CMXenoFlammable
-  - RMCXenoCommendationReceiver
-  - RMCXenoMobCollision
+  parent: CMUWendigoBase
   id: AU14Wendigo
-  name: Wendigo
-  description: A tall, pale creature that looks uncannily human. Its back is branded "Weyland-Yutani".
   components:
   - type: GhostRole
     name: Wendigo
-  - type: Sprite
-    sprite: CMU14/Mobs/MiscMob/wendigo.rsi
-    layers:
-    - map: [ "enum.DamageStateVisualLayers.Base" ]
-      state: alive
-    - map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
-      state: wendigo_glowmask
-      shader: unshaded
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: alive
-        BaseUnshaded: wendigo_glowmask
-      Dead:
-        Base: dead
   - type: Speech
-    speechVerb: AU14WendigoSpeech
-    allowedEmotes: [ "Growl", "Hiss", "XenoRoar", "XenoHelp", "WendigoBreathing" ]
-  - type: MobState
-    allowedStates:
-    - Alive
-    - Dead
-  - type: MobThresholds
-    thresholds:
-      0: Alive
-      1500: Dead
-  - type: Xeno
-    unlockAt: 99999 #never unlock naturally
-    role: CMXenoWendigo
-    emoteSounds: Wendigo
-    actionIds:
+    enabled: false
+  - type: CMUWendigoJob
+  - type: IntelRecoverCorpseObjectiveOnDeath
+    value: 0.2
+  - type: ActionGrant
+    actions:
     - ActionXenoWatch
     - ActionXenoPunch
+    - ActionCMUWendigoPunchSwing
     - ActionXenoPounce
     - ActionXenoHeadbite
-    - ActionWendigoDoom
-    - ActionCMUWendigoPunchSwing
     - ActionCMUWendigoClawedSweep
     - ActionApeLimbRip
     - ActionXenoRest
     - ActionCMUWendigoScent
-    tier: 99
-    hudOffset: -0.15,0.25
-  # CMU14: Wendigo ability set, shared with the lab-made variants.
-  - type: CMUWendigoPounce
-  - type: CMUWendigoPunchSwing
-  - type: CMUClawedSweep
-  - type: CMUWendigoRest
-  - type: CMUWendigoScentTracker
-  - type: CMUWendigoBrokenSpeechAccent # words break up as it speaks
-  # CMU14: eats and drinks, heals on human flesh, butchers and rips limbs from bodies like the ape.
-  - type: CMUWendigoFleshHeal
-  - type: Tool
-    qualities:
-    - Slicing
-    speedModifier: 2
-  - type: ApeLimbRip
-  - type: WhitelistPickup
-    whitelist:
-      components:
-      - XenoFruit
-      - Edible
-  - type: InitialBody
-    organs:
-      Head: RMCHeadXeno
-      Heart: RMCOrganXenoHeart
-      Stomach: CMUOrganWendigoStomach
-    relationships:
-      Head: [ Heart, Stomach ]
-  - type: BurrowedLarvaSpawnBlocked
-  - type: XenoRegen
-    standHealingMultiplier: 0.3
-  - type: XenoHeavy
-  - type: XenoPunch
-    damage:
-      types:
-        Blunt: 30
-  - type: XenoLeap
-    plasmaCost: 0
-    delay: 0
-    moveDelayTime: 1.5
-    knockdownTime: 3
-    knockdownRequiresInvisibility: false
-    unrootOnMelee: true
-    leapSound:
-      collection: WendigoLeap
-  - type: XenoPlasma
-    plasma: 0
-    maxPlasma: 0
-    plasmaRegenOnWeeds: 0
-  - type: CMArmor
-    xenoArmor: 25
-    explosionArmor: 40
-  - type: XenoClaws
-    clawType: Sharp
-  - type: MeleeWeapon
-    damage:
-      types:
-        Blunt: 15
-        Slash: 15
-        Piercing: 15
-  - type: XenoHeadbite
-    damage:
-      types:
-        Blunt: 20
-        Slash: 20
-        Piercing: 20
-    emoteCooldown: 99999
-  - type: WendigoHeadbiteAudio
-    closeSound:
-      collection: WendigoHeadbiteClose
-    globalSound:
-      collection: WendigoHeadbiteGlobal
-    globalCooldown: 60
-  - type: XenoDoom
-    sound:
-      collection: WendigoDoom
-    slowTime: 0
-  - type: MovementSpeedModifier
-    baseWalkSpeed: 6
-    baseSprintSpeed: 7
-  - type: Tackle
-    max: 4
-  - type: SlowOnPull
-    slowdowns:
-    - multiplier: 0.6
-      whitelist:
-        components:
-        - Marine
-    - multiplier: 0.6
-      whitelist:
-        components:
-        - XenoLight
-    - multiplier: 0.4
-      whitelist:
-        components:
-        - XenoHeavy
-  - type: XenoLifesteal
-  - type: TacticalMapIcon
-    icon:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: warrior
-  - type: IntelRecoverCorpseObjectiveOnDeath
-    value: 0.2
-  - type: SoundOnDeath
-    sound:
-      collection: WendigoDeath
-      params:
-        volume: -4
-  - type: RMCSize
-    size: Big
-  - type: WendigoVoice
-  - type: UserInterface
-    interfaces:
-      enum.WendigoVoiceUiKey.Key:
-        type: WendigoVoiceBui
-  - type: Tag
-    tags:
-    - Wendigo
+    - ActionWendigoDoom
 
 - type: entity
   parent: ActionXenoDoom
@@ -185,14 +39,19 @@
   name: chat-speech-verb-name-default
   speechVerbStrings:
   - Growl
+# Job of the natural Wendigo's mind (CMUWendigoJob), so Wendigo playtime is tracked. A hidden threat job, not a xeno
+# one; the IDs keep their old names so playtime already recorded under them carries over.
 - type: job
-  parent: CMJobXenoBase
+  parent: AUThreatJobBase
   id: CMXenoWendigo
   name: Wendigo
+  supervisors: cm-job-supervisors-nobody
+  icon: "AU14JobIconThreatLeader"
+  setPreference: false
+  hidden: true
   playTimeTracker: CMJobXenoWendigo
 - type: playTimeTracker
   id: CMJobXenoWendigo
-  isXeno: true
 
 - type: entity
   id: ActionWendigoVoice
@@ -208,14 +67,13 @@
   - type: InstantAction
     event: !type:WendigoVoiceActionEvent {}
 
-# Lab-made Wendigos. Not xenos: built on their own base with no xeno prototype parents and no XenoComponent, so
-# they have no hive, hivemind, queen, xeno tactical map or xeno faction. The base keeps the xeno body mechanics
-# they still need (movement, fixtures, claws, abilities) copied from _RMC14 base_xeno.yml, minus everything
-# hive- or XenoComponent-bound. Pack chat, allies, death announcements and watch come from CMUWendigoPack.
-# Natural Wendigos (AU14Wendigo) stay xenos and untreatable.
+# Wendigo base, shared by the natural (AU14Wendigo) and the lab-made Wendigos. Not xenos: no xeno prototype parents
+# and no XenoComponent, so they have no hive, hivemind, queen, xeno tactical map or xeno faction. The base keeps the
+# xeno body mechanics they still need (movement, fixtures, claws, abilities) copied from _RMC14 base_xeno.yml, minus
+# everything hive- or XenoComponent-bound. Pack chat, allies, death announcements and watch come from CMUWendigoPack.
 - type: entity
   abstract: true
-  id: CMUWendigoLabBase
+  id: CMUWendigoBase
   save: false
   name: Wendigo
   description: A tall, pale creature that looks uncannily human. Its back is branded "Weyland-Yutani".
@@ -239,6 +97,7 @@
   - type: RMCMedicalExamine
     simple: true
   - type: YautjaTrophySource
+    countsAsXeno: true # Yautja hunt, butcher and trophy every Wendigo like a xeno
   - type: MobState
     allowedStates:
     - Alive
@@ -258,7 +117,7 @@
       - CMActionGhost
       Dead:
       - CMActionGhost
-  # English plus the base human languages come from CMUWendigoTransformationSystem.OnLabMadeLanguages.
+  # English. Lab-made Wendigos also get the base human languages from CMUWendigoTransformationSystem.OnLabMadeLanguages.
   - type: Language
     spokenLanguages:
     - English
@@ -375,32 +234,12 @@
     entities:
     - RMCDecalSpawnerGibsDrone
     - RMCGibEffectXenoSmall
-  # Same blood as RMC humans (_RMC14/Entities/Mobs/Species/base.yml), treatable with kits and sutures.
-  - type: SolutionManager
-  - type: InjectableSolution
-    solution: bloodstream
-  - type: Bloodstream
-    bloodReferenceSolution:
-      reagents:
-      - ReagentId: Blood
-        Quantity: 560
-    maxBleedAmount: 50
-    bleedReductionAmount: 0
-    bloodRefreshAmount: 0.15
-    bloodlossDamage:
-      types:
-        Bloodloss: 0.5
-    bloodlossHealDamage:
-      types:
-        Bloodloss: -1
-    damageBleedModifiers: CMBloodlossHuman
-  - type: Woundable
   - type: Body
     requiredLegs: 0
   - type: InitialBody
     organs:
       Head: RMCHeadXeno
-      Heart: CMUOrganWendigoHeart
+      Heart: RMCOrganXenoHeart
       Stomach: CMUOrganWendigoStomach
     relationships:
       Head: [ Heart, Stomach ]
@@ -656,6 +495,42 @@
     - Slicing
     speedModifier: 2
   - type: ApeLimbRip
+
+# Lab-made Wendigos: the Wendigo base plus human blood and a metabolising heart, so Weyland-Yutani scientists can
+# treat them with kits, sutures and medicine. Natural Wendigos stay untreatable.
+- type: entity
+  abstract: true
+  parent: CMUWendigoBase
+  id: CMUWendigoLabBase
+  save: false
+  components:
+  # Same blood as RMC humans (_RMC14/Entities/Mobs/Species/base.yml), treatable with kits and sutures.
+  - type: SolutionManager
+  - type: InjectableSolution
+    solution: bloodstream
+  - type: Bloodstream
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 560
+    maxBleedAmount: 50
+    bleedReductionAmount: 0
+    bloodRefreshAmount: 0.15
+    bloodlossDamage:
+      types:
+        Bloodloss: 0.5
+    bloodlossHealDamage:
+      types:
+        Bloodloss: -1
+    damageBleedModifiers: CMBloodlossHuman
+  - type: Woundable
+  - type: InitialBody
+    organs:
+      Head: RMCHeadXeno
+      Heart: CMUOrganWendigoHeart
+      Stomach: CMUOrganWendigoStomach
+    relationships:
+      Head: [ Heart, Stomach ]
 
 # Lab-made Wendigo from a cannibal: full strength and the area screech.
 - type: entity

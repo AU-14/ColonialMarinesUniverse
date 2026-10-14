@@ -1,5 +1,5 @@
-# Wendigo ability actions, shared by the natural AU14Wendigo (XenoComponent.actionIds) and the
-# lab-made CMUWendigoLab / CMUWendigoLesser (ActionGrant). Systems: Content.CMU/Shared/Threats/Mobs/Wendigo/Abilities.
+# Wendigo ability actions, granted (ActionGrant) to the natural AU14Wendigo and the
+# lab-made CMUWendigoLab / CMUWendigoLesser. Systems: Content.CMU/Shared/Threats/Mobs/Wendigo/Abilities.
 
 - type: entity
   id: ActionCMUWendigoPunchSwing
