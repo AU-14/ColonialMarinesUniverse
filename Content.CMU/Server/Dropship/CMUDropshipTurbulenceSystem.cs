@@ -1,8 +1,10 @@
 using Content.Server._RMC14.Dropship;
+using Content.Shared._RMC14.Damage.ObstacleSlamming;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Camera;
+using Content.Shared.CCVar;
 using Content.Shared.CMU14.WallLean;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -12,6 +14,7 @@ using Content.Shared.Shuttles.Systems;
 using Content.Shared.Standing;
 using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
+using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -21,10 +24,9 @@ namespace Content.Server.CMU14.Dropship;
 /// <summary>
 ///     A dropship in flight hits turbulence now and then. While it lasts, everyone aboard but the aircrew
 ///     (<see cref="AircrewSkill"/>) has their view rocked, and anyone standing who is not buckled in or
-///     bracing against a wall gets jostled about and sometimes thrown to the floor.
-///     Dropping out of a warship's bay follows the cmss13-devs/cmss13-pve#1294 sound: the clamps let go
-///     three seconds into the airlocked takeoff cue, then a few quiet seconds, then very heavy turbulence.
-///     From the ground, the first bout waits until the takeoff cue's freefall is over.
+///     bracing against a wall gets jostled about and sometimes thrown to the floor, without being hurt by it.
+///     The air is only rough for the first and last half minute of a flight, climbing out and coming in to land.
+///     Dropping out of a warship's bay starts with a lurch, a few quiet seconds, then very heavy turbulence.
 /// </summary>
 public sealed class CMUDropshipTurbulenceSystem : EntitySystem
 {
@@ -32,9 +34,10 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
 
     private static readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(0.1);
 
-    // Timed against the cmss13-pve#1294 takeoff cues.
-    private static readonly TimeSpan DeclampDelay = TimeSpan.FromSeconds(3); // into dropship_flight_airlocked_start.ogg
-    private static readonly TimeSpan GroundFreefall = TimeSpan.FromSeconds(15); // dropship_flight_start.ogg
+    // Rough air only after liftoff and before touchdown.
+    private static readonly TimeSpan RoughAirWindow = TimeSpan.FromSeconds(30);
+    private const float MinFirstBoutDelay = 2f;
+    private const float MaxFirstBoutDelay = 6f;
 
     // Leaving a warship: the lurch, a quiet pause, then the dropship fighting its way into the air.
     private static readonly TimeSpan LaunchPause = TimeSpan.FromSeconds(3);
@@ -70,8 +73,10 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
     private const int LaunchMessages = 4;
 
     [Dependency] private SharedCameraRecoilSystem _cameraRecoil = default!;
+    [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private DropshipSystem _dropship = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private RMCObstacleSlammingSystem _obstacleSlamming = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SkillsSystem _skills = default!;
@@ -95,6 +100,7 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
         public TimeSpan NextPulse;
         public bool Heavy;
         public bool Announced;
+        public bool Landing;
     }
 
     public override void Update(float frameTime)
@@ -108,7 +114,7 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
         _gone.Clear();
         foreach (var ship in _flights.Keys)
         {
-            if (!TryComp(ship, out FTLComponent? ftl) || ftl.State is not (FTLState.Starting or FTLState.Travelling))
+            if (!TryComp(ship, out FTLComponent? ftl) || !Flying(ftl))
                 _gone.Add(ship);
         }
 
@@ -120,7 +126,7 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
         var query = EntityQueryEnumerator<DropshipComponent, FTLComponent>();
         while (query.MoveNext(out var ship, out _, out var ftl))
         {
-            if (ftl.State is not (FTLState.Starting or FTLState.Travelling))
+            if (!Flying(ftl))
                 continue;
 
             if (!_flights.TryGetValue(ship, out var flight))
@@ -133,8 +139,32 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
             }
 
             // Ordinary turbulence only once the dropship has left the pad.
-            if (ftl.State != FTLState.Travelling && now < flight.BoutStarts)
+            if (ftl.State == FTLState.Starting && now < flight.BoutStarts)
                 continue;
+
+            var untilTouchdown = UntilTouchdown(ftl, now);
+            var sinceLiftoff = ftl.State == FTLState.Travelling ? now - ftl.StateTime.Start : TimeSpan.Zero;
+            var roughAir = ftl.State == FTLState.Starting ||
+                           sinceLiftoff <= RoughAirWindow ||
+                           untilTouchdown <= RoughAirWindow;
+
+            // Smooth air in the middle of the flight: a bout still going ends here.
+            if (!roughAir)
+            {
+                if (now < flight.BoutEnds)
+                    flight.BoutEnds = now;
+
+                continue;
+            }
+
+            // Coming in to land, the next bout comes soon rather than after a long calm.
+            if (!flight.Landing && untilTouchdown <= RoughAirWindow)
+            {
+                flight.Landing = true;
+                var soon = now + FirstBoutDelay();
+                if (flight.NextBout > soon)
+                    flight.NextBout = soon;
+            }
 
             if (now >= flight.BoutEnds && now >= flight.NextBout)
             {
@@ -171,17 +201,13 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
     /// </summary>
     private Flight Plan(EntityUid ship, FTLComponent ftl, TimeSpan now)
     {
-        var startup = ftl.State == FTLState.Starting ? ftl.StateTime.Start : now;
+        var liftoff = ftl.State == FTLState.Starting ? ftl.StateTime.End : now;
         var flight = new Flight();
 
         if (ftl.State == FTLState.Starting && _dropship.CMUIsDepartingWarship(ship))
         {
-            // A long countdown keeps the dropship clamped in the bay until just before it leaves.
-            var declamp = startup + DeclampDelay;
-            var leaving = ftl.StateTime.End - (DeclampDelay - TimeSpan.FromSeconds(0.5));
-            if (leaving > declamp)
-                declamp = leaving;
-
+            // The dropship drops out of the bay the moment it leaves.
+            var declamp = liftoff;
             flight.LurchAt = declamp;
             flight.Heavy = true;
             flight.Announced = true; // the lurch is the announcement
@@ -192,7 +218,7 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
             return flight;
         }
 
-        flight.NextBout = startup + GroundFreefall + Calm();
+        flight.NextBout = liftoff + FirstBoutDelay();
         flight.BoutStarts = flight.NextBout;
         flight.BoutEnds = flight.NextBout;
         return flight;
@@ -201,6 +227,30 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
     private TimeSpan Calm()
     {
         return TimeSpan.FromSeconds(_random.NextFloat(MinCalm, MaxCalm));
+    }
+
+    private TimeSpan FirstBoutDelay()
+    {
+        return TimeSpan.FromSeconds(_random.NextFloat(MinFirstBoutDelay, MaxFirstBoutDelay));
+    }
+
+    private static bool Flying(FTLComponent ftl)
+    {
+        return ftl.State is FTLState.Starting or FTLState.Travelling or FTLState.Arriving;
+    }
+
+    /// <summary>
+    ///     How long until the dropship touches down. Travel ends when the final approach starts, which takes the
+    ///     standard shuttle arrival time.
+    /// </summary>
+    private TimeSpan UntilTouchdown(FTLComponent ftl, TimeSpan now)
+    {
+        return ftl.State switch
+        {
+            FTLState.Arriving => ftl.StateTime.End - now,
+            FTLState.Travelling => ftl.StateTime.End - now + TimeSpan.FromSeconds(_config.GetCVar(CCVars.FTLArrivalTime)),
+            _ => TimeSpan.MaxValue,
+        };
     }
 
     private bool IsAircrew(EntityUid mob)
@@ -251,6 +301,9 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
 
     private void Nudge(EntityUid mob, bool heavy)
     {
+        // Being thrown about the cabin doesn't hurt.
+        _obstacleSlamming.MakeImmune(mob);
+
         var direction = _random.NextAngle().ToVec() * (heavy ? HeavyNudgeDistance : NudgeDistance);
         _throwing.TryThrow(mob, direction, NudgeSpeed, animated: false, playSound: false, doSpin: false);
     }
