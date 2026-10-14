@@ -1732,7 +1732,7 @@
       - id: RMCExplosiveBreachingCharge
         points: 5
       - id: RMCPacketGrenadeMetalFoamFilled
-        points: 8
+        points: 5
       - id: RMCRocketM5510Brute
         points: 4
     - name: Utilities
