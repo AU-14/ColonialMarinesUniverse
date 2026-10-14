@@ -50,6 +50,10 @@
       - id: CMJumpsuitLiaison
       - id: CMJumpsuitLiaisonBlazer
       - id: CMJumpsuitLiaisonCharcoal
+      - id: RMCJumpsuitLiaisonBlackSuitskirt
+      - id: RMCJumpsuitLiaisonCharcoalSuitskirt
+      - id: RMCJumpsuitLiaisonFieldSuitskirt
+      - id: RMCJumpsuitLiaisonSkirt
     - name: Ties
       choices: { CMUcivilianclothestie: 1 }
       entries:
