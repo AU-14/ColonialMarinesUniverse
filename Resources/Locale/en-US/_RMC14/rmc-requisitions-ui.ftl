@@ -12,6 +12,7 @@ rmc-requisitions-category-vehicle-ammo = Vehicle Ammo
 rmc-requisitions-category-weapons = Weapons
 rmc-requisitions-category-ammo = Ammo
 rmc-requisitions-category-ammunition = Ammunition
+rmc-requisitions-category-anti-armor = Anti-Armor
 rmc-requisitions-category-specialist-ammo = Specialist Ammo
 rmc-requisitions-category-ap-ammo = AP Ammo
 rmc-requisitions-category-dropship-parts = Dropship Parts

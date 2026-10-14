@@ -1,0 +1,25 @@
+# Shared ASRS anti-armor category. Parent into non-WeYu platoon catalogs only.
+- type: entity
+  abstract: true
+  id: CMUASRSAntiArmor
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Anti-Armor
+      entries:
+      - cost: 4000
+        crate: CMUCrateATGM
+        maxStock: 1
+        startingStock: 1
+        stockReplenishDelay: 1200
+        stockReplenishAmount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: CMUCrateATGM
+  name: ATGM team kit crate (x1)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUATGMCase
+      amount: 1

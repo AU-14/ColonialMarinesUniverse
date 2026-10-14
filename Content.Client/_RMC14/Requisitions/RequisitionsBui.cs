@@ -53,11 +53,12 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
     private const string RecentCategory = "#recent";
 
     // CMU14 Hardcode localization Begin: removing hardcode for easy localization in downstreams
-    private static readonly Dictionary<string, string> CategoryLocKeys = new()
+    internal static readonly Dictionary<string, string> CategoryLocKeys = new()
     {
         ["Air Defense"] = "rmc-requisitions-category-air-defense",
         ["Ammo"] = "rmc-requisitions-category-ammo",
         ["Ammunition"] = "rmc-requisitions-category-ammunition",
+        ["Anti-Armor"] = "rmc-requisitions-category-anti-armor",
         ["AP Ammo"] = "rmc-requisitions-category-ap-ammo",
         ["Atmospherics"] = "rmc-requisitions-category-atmospherics",
         ["Botany"] = "rmc-requisitions-category-botany",
@@ -89,7 +90,9 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
 
     private static string GetLocalizedCategoryName(string category)
     {
-        return Loc.GetString(CategoryLocKeys[category]);
+        // An unmapped category must not throw: an exception here escapes BUI state handling and
+        // forces the client into a full-state refresh loop while the console is open.
+        return CategoryLocKeys.TryGetValue(category, out var key) ? Loc.GetString(key) : category;
     }
     // CMU14 End
 

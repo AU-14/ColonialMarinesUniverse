@@ -489,6 +489,42 @@
       - VehicleSPPAPCAutocannon
       - VehicleSPPAPCHJ35Launcher
       - VehicleSPPAPCFlareLauncher
+    # CMU14: Wolfpack MGS. Entry and option names come from the localized prototype names;
+    # the hardpoint list holds only parts with art in the Wolfpack RSI.
+    - vehicle: CMUVehicleAPCWolfpack
+      group: vehicle-apc
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: CMUVehicleAPCWolfpackAutocannon
+          item: CMUVehicleAPCWolfpackAutocannon
+          slot: primary::turret-cannon
+      - id: secondary
+        name: Secondary
+        options:
+        - id: CMUVehicleAPCWolfpackFrontCannon
+          item: CMUVehicleAPCWolfpackFrontCannon
+          slot: secondary
+      - id: wheels
+        name: Wheels
+        options:
+        - id: RMCAPCWheel
+          item: RMCAPCWheel
+          slot: wheel-1
+      - id: support
+        name: Support
+        options:
+        - id: CMUVehicleAPCWolfpackFlareLauncher
+          item: CMUVehicleAPCWolfpackFlareLauncher
+          slot: support
+      hardpoints:
+      - CMUVehicleAPCWolfpackTurret
+      - CMUVehicleAPCWolfpackAutocannon
+      - CMUVehicleAPCWolfpackFrontCannon
+      - CMUVehicleAPCWolfpackFlareLauncher
+      - RMCAPCWheel
+    # CMU14 End
     - name: M34A2 Longstreet
       vehicle: VehicleTank
       group: vehicle-tank

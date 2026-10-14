@@ -130,6 +130,9 @@
       - id: RMCM2CMount
         amount: 1
         points: 17
+      - id: CMUATGMCase
+        amount: 1
+        points: 35
     - name: Attachments
       entries:
       - id: AU14AttachmentTwoPointSling

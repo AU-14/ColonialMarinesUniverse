@@ -4,6 +4,7 @@
   - CMUFighterGround
   - VehicleTank
   - VehicleAPC
+  - CMUVehicleAPCWolfpack
   - VehicleAPCMed
   - VehicleAPCCommand
   - VehicleAev
@@ -36,6 +37,7 @@
   - CMUFighterGround
   - VehicleTank
   - VehicleAPC
+  - CMUVehicleAPCWolfpack
   - VehicleAPCMed
   - VehicleHumvee
   - VehicleHumveeTransport
@@ -1369,6 +1371,7 @@
   - AU14VehicleCivEMSAmbulance
   - VehicleBlackfootTransport
   - VehicleAPC
+  - CMUVehicleAPCWolfpack
   - VehicleAPCMed
   - VehicleHumvee
   - VehicleHumveeTransport
@@ -1596,6 +1599,7 @@
   - CMUFighterGround
   - VehicleAev
   - VehicleAPC
+  - CMUVehicleAPCWolfpack
   - VehicleAPCMed
   - VehicleHumvee
   - VehicleHumveeMedical
@@ -1915,6 +1919,7 @@
   - CMUFighterGround
   - VehicleTank
   - VehicleAPC
+  - CMUVehicleAPCWolfpack
   - VehicleHumvee
   - VehicleHumveeTransport
   - VehicleHumveeMedical

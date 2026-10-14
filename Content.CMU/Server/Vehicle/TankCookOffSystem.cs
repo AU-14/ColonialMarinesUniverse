@@ -55,9 +55,9 @@ public sealed partial class TankCookOffSystem : EntitySystem
         _pending.Add(ent);
         // The actual projectile is the tool, not its shooter or an unrelated splash explosion.
         if (args.Impact.Delivery == DamageImpactDelivery.Projectile &&
-            args.Tool is { } tool && HasComp<TankCookOffProjectileComponent>(tool) &&
+            args.Tool is { } tool && TryComp(tool, out TankCookOffProjectileComponent? projectile) &&
             ent.Comp.Enabled && !HasComp<ActiveTankCookOffComponent>(ent) &&
-            _random.Prob(Math.Clamp(ent.Comp.CriticalChance, 0, 1)))
+            _random.Prob(Math.Clamp(projectile.CriticalChance ?? ent.Comp.CriticalChance, 0, 1)))
             Start(ent);
     }
 

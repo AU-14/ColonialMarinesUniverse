@@ -678,7 +678,15 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
             || explosion == "RMC"
             || explosion == "RMCMortar"
             || explosion == "RMCOB"
-            || explosion == "RMCOBXenoTunnel";
+            || explosion == "RMCOBXenoTunnel"
+            || explosion == "CMUATGM"
+            // FLOW-09: copies of RMC that only differ against tanks.
+            || explosion == "CMUAntiVehicleHE"
+            || explosion == "CMUHEAP"
+            || explosion == "CMUIED"
+            || explosion == "CMUCASMunition"
+            || explosion == "CMUPlasticExplosive"
+            || explosion == "CMUMortarHEATMP";
     }
 
     private static float MovementFracturePulse(FractureSeverity severity) => severity switch
