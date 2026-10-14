@@ -18,7 +18,7 @@ namespace Content.IntegrationTests._CMU14.Administration;
 
 /// <summary>
 /// In-game admin mode makes the admin inactive, so every admin tool and admin-only check is off, while the AHelp
-/// keeps working for them on the server and on the client. Reloads keep the mode; readmin or the command end it.
+/// keeps working for them on the server and on the client. Reloads keep the mode; readmin, deadmin or the command end it.
 /// </summary>
 [TestFixture]
 public sealed class CMUIngameAdminTest
@@ -54,9 +54,10 @@ public sealed class CMUIngameAdminTest
                 Assert.That(manager.GetAdminData(session, includeDeAdmin: true)!.Flags, Is.EqualTo(fullFlags),
                     "The rank's flags are kept for when the mode ends.");
 
-                // Admin commands are refused; the toggle itself still runs.
+                // Admin commands are refused; the toggle itself and deadmin, the other way out, still run.
                 Assert.That(manager.CanCommand(session, "kick"), Is.False);
-                Assert.That(manager.CanCommand(session, "deadmin"), Is.False);
+                Assert.That(manager.CanCommand(session, "readmin"));
+                Assert.That(manager.CanCommand(session, "deadmin"));
                 Assert.That(manager.CanCommand(session, "ingameadmin"));
 
                 // The AHelp alone is given back.
@@ -73,6 +74,8 @@ public sealed class CMUIngameAdminTest
             {
                 Assert.That(clientAdmin.IsActive(), Is.False);
                 Assert.That(clientAdmin.HasFlag(AdminFlags.Admin), Is.False);
+                Assert.That(clientAdmin.CanCommand("kick"), Is.False);
+                Assert.That(clientAdmin.CanCommand("deadmin"), "The client refuses commands the server did not list.");
                 Assert.That(client.System<CMUIngameAdminClientSystem>().IngameAdmin);
                 Assert.That(client.ResolveDependency<IUserInterfaceManager>().GetUIController<AHelpUIController>().CMUHasAhelp());
                 Assert.That(client.System<ClientAdminSystem>().PlayerList, Is.Not.Empty,
@@ -126,6 +129,32 @@ public sealed class CMUIngameAdminTest
                 Assert.That(manager.CMUIsIngameAdmin(session), Is.False);
                 Assert.That(manager.GetAdminData(session)!.HasFlag(AdminFlags.Admin));
             });
+
+            // Deadmin, typed into the client console, drops straight from the mode to a deadminned player.
+            await server.WaitPost(() => Assert.That(manager.CMUSetIngameAdmin(session, true)));
+            await pair.RunTicksSync(10);
+            await client.WaitPost(() => client.ConsoleHost.ExecuteCommand("deadmin"));
+            await pair.RunTicksSync(10);
+            await server.WaitAssertion(() =>
+            {
+                Assert.That(manager.CMUIsIngameAdmin(session), Is.False);
+                Assert.That(manager.GetAdminData(session), Is.Null);
+                Assert.That(manager.CMUHasAhelp(session), Is.False, "A deadminned admin no longer handles AHelps.");
+                Assert.That(manager.CanCommand(session, "deadmin"), Is.False);
+                Assert.That(manager.GetAdminData(session, includeDeAdmin: true)!.Flags, Is.EqualTo(fullFlags));
+            });
+            await client.WaitAssertion(() =>
+            {
+                Assert.That(client.System<CMUIngameAdminClientSystem>().IngameAdmin, Is.False);
+                Assert.That(clientAdmin.CanCommand("deadmin"), Is.False);
+            });
+
+            // Readmin restores the full admin after that.
+            await server.WaitAssertion(() =>
+            {
+                manager.ReAdmin(session);
+                Assert.That(manager.GetAdminData(session)!.Flags, Is.EqualTo(fullFlags));
+            });
         }
         finally
         {
@@ -134,6 +163,8 @@ public sealed class CMUIngameAdminTest
             {
                 if (manager.CMUIsIngameAdmin(session))
                     manager.CMUSetIngameAdmin(session, false);
+                if (manager.GetAdminData(session) == null && manager.GetAdminData(session, includeDeAdmin: true) != null)
+                    manager.ReAdmin(session);
                 server.System<CMUTicketSystem>().Reset();
             });
             await pair.RunTicksSync(5);

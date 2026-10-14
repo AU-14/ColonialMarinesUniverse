@@ -81,6 +81,11 @@
   - type: MindRole
     exclusiveAntag: false
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-wendigo-lab
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/job_icons.rsi
+      state: threat_member
 
 - type: entity
   parent: BaseMindRoleAntag

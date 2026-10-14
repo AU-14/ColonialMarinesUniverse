@@ -47,6 +47,7 @@ public sealed class CMUAntagSubtypeTest : GameTest
         "MindRoleThreat",
         "MindRoleCultist",
         "MindRoleXenoHackedSynth",
+        "MindRoleCMUWendigoLab",
     };
 
     private static readonly ResPath CMUPrototypeRoot = new("/Prototypes/CMU14");

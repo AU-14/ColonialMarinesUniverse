@@ -3,7 +3,6 @@ using Content.Client.UserInterface.Systems.Bwoink;
 using Content.Shared.Administration;
 using Content.Shared.CMU14.Administration.Tickets;
 using Robust.Client.Player;
-using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Network;
 
 // ReSharper disable once CheckNamespace
@@ -18,8 +17,6 @@ public sealed partial class BwoinkControl
 
     private CMUTicketClientSystem? _cmuTickets;
     private CMUTicketCloseWindow? _cmuCloseWindow;
-    // Built here rather than in BwoinkControl.xaml to keep the upstream layout untouched.
-    private Button? _cmuAcknowledge;
 
     private void CMUInitTickets()
     {
@@ -28,27 +25,11 @@ public sealed partial class BwoinkControl
 
         _cmuTickets.OnTicketsChanged += CMUOnTicketsChanged;
 
-        if (CMUTicketClaim.Parent is { } row)
+        CMUTicketAcknowledge.OnPressed += _ =>
         {
-            _cmuAcknowledge = new Button
-            {
-                Visible = false,
-                Text = Loc.GetString("cmu-ahelp-ticket-acknowledge"),
-                ToolTip = Loc.GetString("cmu-ahelp-ticket-acknowledge-tooltip"),
-                StyleClasses = { "OpenRight" },
-            };
-            var claimPosition = CMUTicketClaim.GetPositionInParent();
-            row.AddChild(_cmuAcknowledge);
-            _cmuAcknowledge.SetPositionInParent(claimPosition);
-            CMUTicketClaim.RemoveStyleClass("OpenRight");
-            CMUTicketClaim.AddStyleClass("OpenBoth");
-
-            _cmuAcknowledge.OnPressed += _ =>
-            {
-                if (_currentPlayer != null)
-                    _cmuTickets?.Acknowledge(_currentPlayer.SessionId);
-            };
-        }
+            if (_currentPlayer != null)
+                _cmuTickets?.Acknowledge(_currentPlayer.SessionId);
+        };
 
         CMUTicketClaim.OnPressed += _ =>
         {
@@ -128,11 +109,7 @@ public sealed partial class BwoinkControl
     {
         // Through the AHelp controller so in-game admins, who are inactive, keep the ticket controls.
         var visible = _cmuTickets != null && _ui.GetUIController<AHelpUIController>().CMUHasAhelp();
-        CMUTicketStatusLabel.Visible = visible;
-        CMUTicketClaim.Visible = visible;
-        CMUTicketClose.Visible = visible;
-        if (_cmuAcknowledge != null)
-            _cmuAcknowledge.Visible = visible;
+        CMUTicketRow.Visible = visible;
         if (!visible)
             return;
 
@@ -140,8 +117,7 @@ public sealed partial class BwoinkControl
         var active = ticket is { Status: not CMUTicketStatus.Closed };
         CMUTicketClaim.Disabled = !active;
         CMUTicketClose.Disabled = !active;
-        if (_cmuAcknowledge != null)
-            _cmuAcknowledge.Disabled = ticket is not { Status: CMUTicketStatus.Open, AcknowledgedBy: null, AnsweredBy: null };
+        CMUTicketAcknowledge.Disabled = ticket is not { Status: CMUTicketStatus.Open, AcknowledgedBy: null, AnsweredBy: null };
 
         var mine = ticket?.ClaimedBy != null && ticket.ClaimedBy == _cmuPlayerManager.LocalUser;
         CMUTicketClaim.Text = Loc.GetString(mine

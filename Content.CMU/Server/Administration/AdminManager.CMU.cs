@@ -16,6 +16,9 @@ public sealed partial class AdminManager
     // Kept by user id so the mode survives a relog or a rank reload until the admin leaves it.
     private readonly HashSet<NetUserId> _cmuIngameAdmins = new();
 
+    // Admin commands an in-game admin can still run. Only ways out of the mode belong here, never a tool.
+    private static readonly string[] CMUIngameAdminCommands = { "deadmin" };
+
     /// <summary>
     /// Raised after a session's admin status was sent to its client, which happens on every change of
     /// in-game admin mode, login, rank reload, deadmin and readmin.
@@ -100,6 +103,36 @@ public sealed partial class AdminManager
     /// Every session that may handle AHelps: active Adminhelp admins and in-game admins.
     /// </summary>
     public IEnumerable<ICommonSession> CMUAhelpAdmins => _admins.Keys.Where(CMUHasAhelp);
+
+    /// <summary>
+    /// Called by <see cref="CanCommand"/>: an in-game admin is inactive, so admin commands are refused except
+    /// <see cref="CMUIngameAdminCommands"/>.
+    /// </summary>
+    private bool CMUIngameAdminCanCommand(ICommonSession session, string cmdName)
+    {
+        return _cmuIngameAdmins.Contains(session.UserId) &&
+               _admins.ContainsKey(session) &&
+               CMUIngameAdminCommands.Contains(cmdName);
+    }
+
+    /// <summary>
+    /// Called by <see cref="UpdateAdminStatus"/> for an admin, so the client offers the same commands
+    /// <see cref="CMUIngameAdminCanCommand"/> allows instead of refusing them itself.
+    /// </summary>
+    private IEnumerable<string> CMUIngameAdminAvailableCommands(ICommonSession session)
+    {
+        return _cmuIngameAdmins.Contains(session.UserId) ? CMUIngameAdminCommands : Array.Empty<string>();
+    }
+
+    /// <summary>
+    /// Called by <see cref="DeAdmin"/> before it checks that the admin is active. An in-game admin is inactive,
+    /// so leave the mode quietly and let the normal deadmin run: it announces, saves and sends the new status.
+    /// </summary>
+    private void CMULeaveIngameAdminForDeAdmin(ICommonSession session, AdminReg reg)
+    {
+        if (_cmuIngameAdmins.Remove(session.UserId))
+            reg.Data.Active = true;
+    }
 
     /// <summary>
     /// Called wherever a session's admin data is (re)loaded, before permission changes are sent, so a rank

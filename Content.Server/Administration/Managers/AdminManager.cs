@@ -81,6 +81,8 @@ namespace Content.Server.Administration.Managers
                 throw new ArgumentException($"Player {session} is not an admin");
             }
 
+            CMULeaveIngameAdminForDeAdmin(session, reg); // CMU14: deadmin also works from in-game admin mode
+
             if (!reg.Data.Active)
             {
                 return;
@@ -336,6 +338,7 @@ namespace Content.Server.Administration.Managers
                 commands.AddRange(_commandPermissions.AdminCommands
                     .Where(p => p.Value.Any(f => adminData.Data.HasFlag(f)))
                     .Select(p => p.Key));
+                commands.AddRange(CMUIngameAdminAvailableCommands(session)); // CMU14: in-game admins keep deadmin
             }
 
             msg.AvailableCommands = commands.ToArray();
@@ -548,6 +551,9 @@ namespace Content.Server.Administration.Managers
                 // Server-console only.
                 return false;
             }
+
+            if (CMUIngameAdminCanCommand(session, cmdName)) // CMU14: in-game admins keep deadmin
+                return true;
 
             var data = GetAdminData(session);
             if (data == null)
