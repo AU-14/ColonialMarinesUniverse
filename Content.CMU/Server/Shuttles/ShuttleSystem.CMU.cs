@@ -2,6 +2,7 @@
 
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared.CMU14.WallLean;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Shuttles.Systems;
@@ -21,10 +22,10 @@ public sealed partial class ShuttleSystem
     }
 
     /// <summary>
-    ///     Aircrew are not knocked down when a shuttle takes off or lands.
+    ///     Aircrew, and anyone bracing against a wall, are not knocked down when a shuttle takes off or lands.
     /// </summary>
     private bool CMUKeepsFooting(EntityUid mob)
     {
-        return _cmuSkills.HasSkill(mob, CMUAircrewSkill, 1);
+        return HasComp<CMUWallLeaningComponent>(mob) || _cmuSkills.HasSkill(mob, CMUAircrewSkill, 1);
     }
 }

@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Camera;
+using Content.Shared.CMU14.WallLean;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
@@ -19,8 +20,8 @@ namespace Content.Server.CMU14.Dropship;
 
 /// <summary>
 ///     A dropship in flight hits turbulence now and then. While it lasts, everyone aboard but the aircrew
-///     (<see cref="AircrewSkill"/>) has their view rocked, and anyone standing who is not buckled in gets
-///     jostled about and sometimes thrown to the floor.
+///     (<see cref="AircrewSkill"/>) has their view rocked, and anyone standing who is not buckled in or
+///     bracing against a wall gets jostled about and sometimes thrown to the floor.
 ///     Dropping out of a warship's bay follows the cmss13-devs/cmss13-pve#1294 sound: the clamps let go
 ///     three seconds into the airlocked takeoff cue, then a few quiet seconds, then very heavy turbulence.
 ///     From the ground, the first bout waits until the takeoff cue's freefall is over.
@@ -229,6 +230,7 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
             if (!_mobState.IsAlive(mob) ||
                 _standing.IsDown(mob) ||
                 TryComp(mob, out BuckleComponent? buckle) && buckle.Buckled ||
+                HasComp<CMUWallLeaningComponent>(mob) ||
                 IsAircrew(mob))
             {
                 continue;
