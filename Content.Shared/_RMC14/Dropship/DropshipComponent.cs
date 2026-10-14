@@ -113,6 +113,11 @@ public sealed partial class DropshipComponent : Component
     [DataField]
     public SoundSpecifier ArrivalSound = new SoundPathSpecifier("/Audio/CMU14/Dropship/dropship_flight_end.ogg");
 
+    /// <summary>Extra landing sound played aboard the dropship on top of <see cref="ArrivalSound"/>.</summary>
+    [DataField]
+    public SoundSpecifier? InteriorArrivalSound = new SoundPathSpecifier("/Audio/_RMC14/Machines/Shuttle/engine_landing.ogg",
+        AudioParams.Default.AddVolume(5f));
+
     // Timed to the takeoff and landing sounds, as cmss13-pve#1294 does.
     /// <summary>Engine warmup before leaving the ground; the dropship lifts off as the takeoff cue does.</summary>
     [DataField]

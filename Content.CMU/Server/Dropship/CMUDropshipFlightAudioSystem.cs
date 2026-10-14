@@ -8,9 +8,10 @@ using Robust.Shared.Timing;
 namespace Content.Server.CMU14.Dropship;
 
 /// <summary>
-///     Plays a dropship's flight loop (cmss13-devs/cmss13-pve#1294) once its takeoff cue has finished, and
-///     stops it when the dropship starts arriving. Each play of the loop starts a second before the last one
-///     ends, so the engine never drops out between them.
+///     Plays a dropship's flight loop (cmss13-devs/cmss13-pve#1294) once its takeoff cue has finished, and keeps
+///     it going until the moment the dropship touches down. Each play of the loop starts a second before the last
+///     one ends, so the engine never drops out between them. The old landing sound plays aboard on top of the new
+///     one through the approach.
 /// </summary>
 public sealed class CMUDropshipFlightAudioSystem : EntitySystem
 {
@@ -28,6 +29,7 @@ public sealed class CMUDropshipFlightAudioSystem : EntitySystem
     private sealed class Flight
     {
         public TimeSpan NextPlay;
+        public bool Arriving;
         public readonly List<EntityUid> Playing = new();
     }
 
@@ -42,7 +44,7 @@ public sealed class CMUDropshipFlightAudioSystem : EntitySystem
         _landed.Clear();
         foreach (var (ship, flight) in _flights)
         {
-            if (TryComp(ship, out FTLComponent? ftl) && ftl.State is FTLState.Starting or FTLState.Travelling)
+            if (TryComp(ship, out FTLComponent? ftl) && ftl.State is FTLState.Starting or FTLState.Travelling or FTLState.Arriving)
                 continue;
 
             foreach (var audio in flight.Playing)
@@ -80,7 +82,17 @@ public sealed class CMUDropshipFlightAudioSystem : EntitySystem
 
             flight.Playing.RemoveAll(audio => !Exists(audio));
 
-            if (ftl.State != FTLState.Travelling || now < flight.NextPlay)
+            if (ftl.State == FTLState.Arriving && !flight.Arriving)
+            {
+                flight.Arriving = true;
+                if (dropship.InteriorArrivalSound is { } landing)
+                {
+                    var landingAudio = _audio.PlayPvs(landing, ship);
+                    _audio.SetGridAudio(landingAudio);
+                }
+            }
+
+            if (ftl.State is not (FTLState.Travelling or FTLState.Arriving) || now < flight.NextPlay)
                 continue;
 
             var resolved = _audio.ResolveSound(loopSound);
