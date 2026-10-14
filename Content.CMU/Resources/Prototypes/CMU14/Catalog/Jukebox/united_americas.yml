@@ -8,7 +8,7 @@
 
 - type: jukebox
   id: CMUJukeboxUnitedAmericasStudentVisas
-  name: Student Visas
+  name: Corb Lund - Student Visas
   path:
     path: /Audio/CMU14/Private/Music/Cassette/UnitedAmericas/student_visas.ogg
 
@@ -62,7 +62,7 @@
 
 - type: jukebox
   id: CMUJukeboxUnitedAmericasAudhumbla
-  name: Audhumbla
+  name: Monolord - Audhumbla
   path:
     path: /Audio/CMU14/Private/Music/Cassette/UnitedAmericas/audhumbla.ogg
 
@@ -74,12 +74,12 @@
 
 - type: jukebox
   id: CMUJukeboxUnitedAmericasOneWayTripToTheSun
-  name: One Way Trip to the Sun
+  name: Ditch - One Way Trip to the Sun
   path:
     path: /Audio/CMU14/Private/Music/Cassette/UnitedAmericas/one_way_trip_to_the_sun.ogg
 
 - type: jukebox
   id: CMUJukeboxUnitedAmericasSpaceSabbath
-  name: Space Sabbath
+  name: Spaceslug - Space Sabbath
   path:
     path: /Audio/CMU14/Private/Music/Cassette/UnitedAmericas/space_sabbath.ogg
