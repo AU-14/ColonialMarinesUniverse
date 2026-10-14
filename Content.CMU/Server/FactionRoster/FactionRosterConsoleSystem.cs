@@ -97,7 +97,7 @@ public sealed partial class FactionRosterConsoleSystem : EntitySystem
                 if (desc.Origin is { } origin && _prototypeManager.TryIndex(origin, out var originProto))
                     entry.Origin = Loc.GetString(originProto.Name);
 
-                if (_prototypeManager.TryIndex(desc.Religion, out var religionProto))
+                if (!desc.HideMetaInformation && _prototypeManager.TryIndex(desc.Religion, out var religionProto))
                     entry.Religion = Loc.GetString(religionProto.Name);
 
                 if (desc.Allegiance is { } allegiance && _prototypeManager.TryIndex(allegiance, out var allegianceProto))

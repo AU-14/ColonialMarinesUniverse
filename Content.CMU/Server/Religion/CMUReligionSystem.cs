@@ -46,6 +46,10 @@ public sealed class CMUReligionSystem : EntitySystem
         if (religion != CMUReligionPrototype.Atheist)
             EnsureComp<CMUReligiousComponent>(args.Mob).Religion = religion;
 
+        // Hide Meta Information keeps it off the records consoles too.
+        if (args.Profile.HideMetaInformation)
+            return;
+
         SetRecordReligion(args.Station, args.Profile.Name, religion);
         if (_universalRecords.GetRecords() is { } universal && universal != args.Station)
             SetRecordReligion(universal, args.Profile.Name, religion);
