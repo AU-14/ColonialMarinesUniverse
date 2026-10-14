@@ -21,7 +21,9 @@ public sealed class CMUTraitsTest : GameTest
         {
             var prototypes = Server.ResolveDependency<IPrototypeManager>();
 
-            bool Bars(string job) => prototypes.Index<JobPrototype>(job).Requirements?
+            var roles = SEntMan.System<SharedRoleSystem>();
+
+            bool Bars(string job) => roles.GetRoleRequirements(prototypes.Index<JobPrototype>(job))?
                 .OfType<TraitsRequirement>()
                 .Any(requirement => requirement.Inverted && requirement.Traits.Contains("CMUBadLeg")) == true;
 
