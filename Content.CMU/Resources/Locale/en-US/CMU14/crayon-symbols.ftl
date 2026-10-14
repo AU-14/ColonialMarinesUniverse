@@ -1,4 +1,4 @@
-cmu-crayon-symbol-missing-colors = You need a crayon of every colour in this symbol.
+cmu-crayon-symbol-missing-colors = You need a crayon of every colour in this symbol, in any tone.
 cmu-crayon-custom-category = Custom symbols
 cmu-crayon-custom-new = New
 cmu-crayon-custom-edit = Edit
@@ -16,3 +16,7 @@ cmu-crayon-canvas-error-name = Give the symbol a name.
 cmu-crayon-canvas-error-empty = Draw something first.
 cmu-crayon-canvas-error-colors = Use at most {$max} colours.
 cmu-crayon-canvas-brush = Drawing with: {$color}
+cmu-crayon-canvas-tone = Tone
+cmu-crayon-canvas-tone-lighter = {$crayon}, {$steps} lighter
+cmu-crayon-canvas-tone-darker = {$crayon}, {$steps} darker
+cmu-crayon-status-custom = custom symbol

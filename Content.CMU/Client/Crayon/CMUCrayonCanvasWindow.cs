@@ -1,39 +1,37 @@
 using System.Linq;
 using System.Numerics;
 using Content.Shared.CMU14.Crayon;
-using Content.Shared.Crayon;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
-using Robust.Shared.Prototypes;
 
 namespace Content.Client.CMU14.Crayon;
 
+/// <summary>
+/// Draws a custom crayon symbol with the default box's crayons, each in its tones from light to dark,
+/// or with any colour for a rainbow crayon.
+/// </summary>
 public sealed class CMUCrayonCanvasWindow : DefaultWindow
 {
-    [Dependency] private IComponentFactory _factory = default!;
-    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IEntityManager _entities = default!;
 
+    private readonly CMUCrayonPaletteSystem _palette;
     private readonly CMUCrayonCanvas _canvas = new();
     private readonly LineEdit _name = new() { HorizontalExpand = true };
+    private readonly BoxContainer _tones = new() { Orientation = BoxContainer.LayoutOrientation.Horizontal, SeparationOverride = 2 };
     private readonly Label _brush = new();
     private readonly Label _needs = new();
     private readonly Label _error = new() { FontColorOverride = Color.Red };
     private readonly ColorSelectorSliders _custom = new() { Visible = false };
-    private readonly Dictionary<Color, string> _crayons = new();
 
     public event Action<string, CMUCrayonSymbol>? OnSaved;
 
     public CMUCrayonCanvasWindow(Color brush)
     {
         IoCManager.InjectDependencies(this);
+        _palette = _entities.System<CMUCrayonPaletteSystem>();
         Title = Loc.GetString("cmu-crayon-canvas-title");
-        foreach (var proto in _prototypes.EnumeratePrototypes<EntityPrototype>())
-        {
-            if (!proto.Abstract && proto.TryGetComponent<CrayonComponent>(out var crayon, _factory) && !crayon.SelectableColor)
-                _crayons.TryAdd(crayon.Color, proto.Name);
-        }
 
         var small = new Button { Text = "32x32", ToggleMode = true, Pressed = true };
         var large = new Button { Text = "64x64", ToggleMode = true };
@@ -41,9 +39,11 @@ public sealed class CMUCrayonCanvasWindow : DefaultWindow
         large.OnPressed += _ => SetSize(CMUCrayonSymbol.Large, large, small);
 
         var palette = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal };
-        foreach (var (color, name) in _crayons)
+        var crayons = _palette.Crayons;
+        for (var i = 0; i < crayons.Count; i++)
         {
-            palette.AddChild(Swatch(color, name));
+            var family = i;
+            palette.AddChild(Swatch(crayons[i].Color, crayons[i].Name, () => PickCrayon(family)));
         }
 
         var eraser = new Button { Text = Loc.GetString("cmu-crayon-canvas-eraser") };
@@ -74,6 +74,7 @@ public sealed class CMUCrayonCanvasWindow : DefaultWindow
             {
                 Row(new Label { Text = Loc.GetString("cmu-crayon-canvas-name") }, _name, small, large),
                 palette,
+                Row(new Label { Text = Loc.GetString("cmu-crayon-canvas-tone") }, _tones),
                 _brush,
                 _custom,
                 _canvas,
@@ -84,7 +85,21 @@ public sealed class CMUCrayonCanvasWindow : DefaultWindow
             },
         });
 
-        SetBrush(brush);
+        // Start with the held crayon: its own colour if it is a box crayon's tone, else the box crayon nearest it.
+        if (_palette.TryGetFamily(brush, out var held, out _))
+        {
+            ShowTones(held);
+            SetBrush(brush);
+        }
+        else if (_palette.NearestFamily(brush) is var nearest and >= 0)
+        {
+            PickCrayon(nearest);
+        }
+        else
+        {
+            SetBrush(brush);
+        }
+
         UpdateNeeds();
     }
 
@@ -101,17 +116,51 @@ public sealed class CMUCrayonCanvasWindow : DefaultWindow
         _canvas.Resize(size);
     }
 
+    private void PickCrayon(int family)
+    {
+        ShowTones(family);
+        SetBrush(_palette.Crayons[family].Color);
+    }
+
+    private void ShowTones(int family)
+    {
+        _tones.RemoveAllChildren();
+        foreach (var (_, color) in CMUCrayonPaletteSystem.Shades(_palette.Crayons[family].Color))
+        {
+            _tones.AddChild(Swatch(color, Describe(color), () => SetBrush(color)));
+        }
+    }
+
     private void SetBrush(Color? color)
     {
         _canvas.Brush = color;
         _brush.Text = Loc.GetString("cmu-crayon-canvas-brush", ("color", color == null
             ? Loc.GetString("cmu-crayon-canvas-eraser")
-            : _crayons.GetValueOrDefault(color.Value) ?? color.Value.ToHex()));
+            : Describe(color.Value)));
+    }
+
+    /// <summary>
+    /// A colour as the crayon and tone that draws it, or its hex for a rainbow crayon's.
+    /// </summary>
+    private string Describe(Color color)
+    {
+        if (!_palette.TryGetFamily(color, out var family, out var tone))
+            return color.ToHex();
+
+        var name = _palette.Crayons[family].Name;
+        return tone switch
+        {
+            > 0 => Loc.GetString("cmu-crayon-canvas-tone-lighter", ("crayon", name), ("steps", tone)),
+            < 0 => Loc.GetString("cmu-crayon-canvas-tone-darker", ("crayon", name), ("steps", -tone)),
+            _ => name,
+        };
     }
 
     private void UpdateNeeds()
     {
-        var names = _canvas.Colors().Select(c => _crayons.GetValueOrDefault(c) ?? Loc.GetString("cmu-crayon-canvas-rainbow"));
+        var names = _canvas.Colors().Select(c => _palette.TryGetFamily(c, out var family, out _)
+            ? _palette.Crayons[family].Name
+            : Loc.GetString("cmu-crayon-canvas-rainbow"));
         _needs.Text = Loc.GetString("cmu-crayon-canvas-needs", ("crayons", string.Join(", ", names.Distinct())));
     }
 
@@ -132,7 +181,7 @@ public sealed class CMUCrayonCanvasWindow : DefaultWindow
         }
     }
 
-    private Button Swatch(Color color, string name)
+    private static Button Swatch(Color color, string name, Action pressed)
     {
         var button = new Button { ToolTip = name };
         button.AddChild(new PanelContainer
@@ -140,7 +189,7 @@ public sealed class CMUCrayonCanvasWindow : DefaultWindow
             MinSize = new Vector2(20, 20),
             PanelOverride = new StyleBoxFlat { BackgroundColor = color, BorderColor = Color.Black, BorderThickness = new Thickness(1) },
         });
-        button.OnPressed += _ => SetBrush(color);
+        button.OnPressed += _ => pressed();
         return button;
     }
 

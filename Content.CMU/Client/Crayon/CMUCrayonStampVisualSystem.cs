@@ -35,6 +35,9 @@ public sealed class CMUCrayonStampVisualSystem : EntitySystem
 
     private void OnShutdown(Entity<CMUCrayonStampComponent> ent, ref ComponentShutdown args)
     {
+        if (!TerminatingOrDeleted(ent) && TryComp(ent, out SpriteComponent? sprite) && sprite.AllLayers.Any())
+            _sprite.LayerSetVisible((ent, sprite), 0, false);
+
         Release(ent);
     }
 

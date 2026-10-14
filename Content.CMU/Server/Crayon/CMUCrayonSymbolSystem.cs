@@ -10,6 +10,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Nutrition.EntitySystems;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Crayon;
@@ -23,7 +24,11 @@ public sealed class CMUCrayonSymbolSystem : EntitySystem
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private CMUCrayonPaletteSystem _palette = default!;
     [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private CMUCrayonStencilSystem _stencil = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private static readonly EntProtoId StampPrototype = "CMUCrayonStamp";
 
@@ -33,37 +38,36 @@ public sealed class CMUCrayonSymbolSystem : EntitySystem
         SubscribeLocalEvent<CMUCrayonSymbolComponent, CrayonSelectMessage>(OnSelectStock);
         SubscribeLocalEvent<CMUCrayonSymbolComponent, AfterInteractEvent>(OnAfterInteract,
             after: [typeof(IngestionSystem)], before: [typeof(CrayonSystem)]);
+        SubscribeLocalEvent<CMUCrayonSymbolComponent, CMUCrayonDrawImageEvent>(OnDrawImage);
     }
 
     private void OnSelectSymbol(Entity<CrayonComponent> ent, ref CMUCrayonSelectSymbolMessage args)
     {
-        TrySelect(ent, args.Actor, args.Symbol);
+        if (args.Symbol is { } symbol)
+            TrySelect(ent, args.Actor, symbol);
     }
 
+    // Every stock pick lands here, from a button, a search or the comma queue moving on.
     private void OnSelectStock(Entity<CMUCrayonSymbolComponent> ent, ref CrayonSelectMessage args)
     {
-        ent.Comp.Symbol = null;
-        Dirty(ent);
+        _stencil.ClearStencil(args.Actor);
     }
 
+    /// <summary>
+    /// Picks a custom symbol in a crayon's window: the user stamps it with every crayon until they pick a stock decal.
+    /// </summary>
     public bool TrySelect(EntityUid crayon, EntityUid user, CMUCrayonSymbol symbol)
     {
-        if (!HasComp<CrayonComponent>(crayon) || !symbol.IsValid())
-            return false;
-
-        var comp = EnsureComp<CMUCrayonSymbolComponent>(crayon);
-        comp.Symbol = symbol;
-        Dirty(crayon, comp);
-        return true;
+        return HasComp<CrayonComponent>(crayon) && _stencil.TrySetStencil(user, symbol);
     }
 
     private void OnAfterInteract(Entity<CMUCrayonSymbolComponent> ent, ref AfterInteractEvent args)
     {
-        if (args.Handled || !args.CanReach || ent.Comp.Symbol is not { } symbol)
+        if (args.Handled || !args.CanReach || !_stencil.TryGetStencil(args.User, out var symbol))
             return;
 
         args.Handled = true;
-        if (!args.ClickLocation.IsValid(EntityManager))
+        if (!TryGetFloor(args.ClickLocation, out var floor))
         {
             _popup.PopupEntity(Loc.GetString("crayon-interact-invalid-location"), ent, args.User);
             return;
@@ -72,7 +76,7 @@ public sealed class CMUCrayonSymbolSystem : EntitySystem
         if (!TrySpend(args.User, ent, symbol))
             return;
 
-        var stamp = Spawn(StampPrototype, args.ClickLocation);
+        var stamp = Spawn(StampPrototype, floor);
         var comp = EnsureComp<CMUCrayonStampComponent>(stamp);
         comp.Symbol = symbol;
         Dirty(stamp, comp);
@@ -85,7 +89,46 @@ public sealed class CMUCrayonSymbolSystem : EntitySystem
     }
 
     /// <summary>
-    /// Spends a charge of a matching crayon for every colour the symbol uses, or nothing if one is missing.
+    /// The click on a grid's floor tile, in that grid's coordinates.
+    /// </summary>
+    private bool TryGetFloor(EntityCoordinates click, out EntityCoordinates floor)
+    {
+        floor = default;
+        if (!click.IsValid(EntityManager))
+            return false;
+
+        var map = _transform.ToMapCoordinates(click);
+        if (!_map.TryFindGridAt(map, out var gridUid, out var grid) ||
+            !_map.TryGetTileRef(gridUid, grid, map.Position, out var tile) ||
+            tile.Tile.IsEmpty)
+        {
+            return false;
+        }
+
+        floor = _transform.ToCoordinates(gridUid, map);
+        return true;
+    }
+
+    // Drawn on something other than the floor, the stencil goes on instead of the decal.
+    private void OnDrawImage(Entity<CMUCrayonSymbolComponent> ent, ref CMUCrayonDrawImageEvent args)
+    {
+        if (args.Cancelled || args.Pixels != null || !_stencil.TryGetStencil(args.User, out var symbol))
+            return;
+
+        if (!TrySpend(args.User, ent, symbol))
+        {
+            args.Cancelled = true;
+            return;
+        }
+
+        args.Size = symbol.Size;
+        args.Pixels = (byte[]) symbol.Pixels.Clone();
+        args.Palette = new List<Color>(symbol.Palette);
+    }
+
+    /// <summary>
+    /// Spends a charge of a matching crayon for every crayon colour the symbol uses, whatever its tones,
+    /// or nothing if one is missing.
     /// </summary>
     public bool TrySpend(EntityUid user, EntityUid held, CMUCrayonSymbol symbol)
     {
@@ -109,8 +152,9 @@ public sealed class CMUCrayonSymbolSystem : EntitySystem
     }
 
     /// <summary>
-    /// A crayon for each colour the symbol uses, once per charge it gives: the held one first, then
-    /// those carried, then those within reach. A crayon of selectable colour gives any.
+    /// A crayon for each box crayon colour the symbol uses in any of its tones, and for each other
+    /// colour, once per charge it gives: the held one first, then those carried, then those within
+    /// reach. A crayon draws as the box crayon nearest its colour; one of selectable colour gives any.
     /// </summary>
     public bool TryGatherCrayons(EntityUid user, EntityUid held, CMUCrayonSymbol symbol, out List<EntityUid> crayons)
     {
@@ -126,9 +170,30 @@ public sealed class CMUCrayonSymbolSystem : EntitySystem
             candidates.Add((uid, crayon));
         }
 
+        var families = new HashSet<int>();
+        var others = new List<Color>();
         foreach (var color in symbol.UsedColors())
         {
-            if (!TryPick(candidates, left, c => !c.SelectableColor && c.Color == color, out var pick) &&
+            if (_palette.TryGetFamily(color, out var family, out _))
+                families.Add(family);
+            else
+                others.Add(color);
+        }
+
+        foreach (var family in families)
+        {
+            if (!TryPick(candidates, left, c => !c.SelectableColor && _palette.NearestFamily(c.Color) == family, out var pick) &&
+                !TryPick(candidates, left, c => c.SelectableColor, out pick))
+            {
+                return false;
+            }
+
+            crayons.Add(pick);
+        }
+
+        foreach (var color in others)
+        {
+            if (!TryPick(candidates, left, c => !c.SelectableColor && CMUCrayonPaletteSystem.Same(c.Color, color), out var pick) &&
                 !TryPick(candidates, left, c => c.SelectableColor, out pick))
             {
                 return false;

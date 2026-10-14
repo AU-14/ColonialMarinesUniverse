@@ -54,7 +54,6 @@ namespace Content.Client.Crayon.UI
         {
             // Clear
             Grids.RemoveAllChildren();
-            CMUAddCustomSymbols(); // CMU14
 
             if (_decals == null || _allDecals == null)
                 return;
@@ -70,8 +69,11 @@ namespace Content.Client.Crayon.UI
             {
                 _selected = first;
                 _autoSelected = _selected;
+                CMUClear(); // CMU14
                 OnSelected?.Invoke(_selected);
             }
+
+            CMUAddCustomSymbols(); // CMU14
 
             foreach (var categoryName in names)
             {
@@ -107,7 +109,7 @@ namespace Content.Client.Crayon.UI
                     };
                     button.OnPressed += ButtonOnPressed;
 
-                    if (_selected == name)
+                    if (_selected == name && _cmuStencil == null) // CMU14: a custom symbol draws instead
                     {
                         var panelContainer = new PanelContainer()
                         {
@@ -142,7 +144,7 @@ namespace Content.Client.Crayon.UI
                 return;
 
             _selected = obj.Button.Name;
-            _cmuSelected = null; // CMU14
+            CMUClear(); // CMU14
             _autoSelected = null;
             OnSelected?.Invoke(_selected);
             RefreshList();
