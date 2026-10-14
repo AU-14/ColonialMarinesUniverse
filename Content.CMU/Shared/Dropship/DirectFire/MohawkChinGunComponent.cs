@@ -75,6 +75,15 @@ public sealed partial class MohawkChinGunComponent : Component
     public bool AddedRemoteOperator;
     public EntityUid? PreviousPlatform;
     public TimeSpan NextScan;
+
+    /// <summary>Barrel heat, 0 to <see cref="MaxHeat"/>. Each shell adds its ammo's <c>directFireHeat</c>.</summary>
+    [DataField, AutoNetworkedField] public float Heat;
+    [DataField] public float MaxHeat = 100f;
+    [DataField] public float CoolPerSecond = 8f;
+
+    /// <summary>Once overheated, the guns stay locked until heat falls to this value.</summary>
+    [DataField] public float OverheatRecoveredAt = 40f;
+    [DataField, AutoNetworkedField] public bool Overheated;
 }
 
 [Serializable, NetSerializable]

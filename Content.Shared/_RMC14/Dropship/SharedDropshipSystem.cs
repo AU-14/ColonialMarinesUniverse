@@ -4,6 +4,7 @@ using System.Numerics; // CMU14
 using Content.Shared.CMU14.Marines; // CMU14
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
+using Content.Shared.CMU14.Dropship.DirectFire; // CMU14
 using Content.Shared.CMU14.Dropship.GunshipControls; // CMU14
 using Content.Shared.CMU14.Xenomorphs.Pathogen;
 using Content.Shared._RMC14.ARES;
@@ -835,6 +836,8 @@ public abstract partial class SharedDropshipSystem : EntitySystem
                 }
             }
         }
+
+        EntityManager.System<DropshipFireControlBootSystem>().AddChecklist(ent, args); // CMU14
     }
 
     private void OnEngineExamined(Entity<DropshipEnginePointComponent> ent, ref ExaminedEvent args)

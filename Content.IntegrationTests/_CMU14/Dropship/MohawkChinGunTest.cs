@@ -314,11 +314,11 @@ public sealed class MohawkChinGunTest
             Assert.That(turret.SelectTarget((point, chin), chin.CloseDefenseRange), Is.EqualTo(hostile),
                 "The exact boundary threat must remain an eligible AI target.");
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(1196),
-                "Unmanned close defense acquires but waits for gunner approval.");
+            Assert.That(payload.Rounds, Is.EqualTo(1195),
+                "Grounded close defense engages without airborne gunner approval.");
             transform.SetCoordinates(hostile, new EntityCoordinates(map, 1.5f, 9.01f));
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(1196), "Targets outside eight tiles require authorization.");
+            Assert.That(payload.Rounds, Is.EqualTo(1195), "Targets outside close-defense range require authorization.");
             entities.DeleteEntity(map);
         });
         await pair.CleanReturnAsync();

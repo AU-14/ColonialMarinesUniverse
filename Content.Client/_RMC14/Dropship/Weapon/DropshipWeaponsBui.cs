@@ -7,6 +7,7 @@ using Content.Client.Eye;
 using Content.Client.UserInterface.ControlExtensions;
 using Content.Shared._RMC14.Areas;
 using Content.Shared.CMU14.Dropship.DirectFire;
+using Content.Shared.CMU14.Dropship.Cas;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.ElectronicSystem;
 using Content.Shared._RMC14.Dropship.Utility.Components;
@@ -205,6 +206,11 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         SendMessage(new MohawkChinGunTriggerMessage(false));
     }
 
+    private static string LocationTag(DropshipWeaponPointLocation location)
+    {
+        return location == DropshipWeaponPointLocation.Internal ? "INT" : ((int) location).ToString();
+    }
+
     public void Refresh()
     {
         if (Window == null)
@@ -251,6 +257,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 : Loc.GetString("cmu-mohawk-ai-none");
             Window.ApproveAiButton.Visible = terminal.Gunnery;
             Window.ApproveAiButton.Disabled = terminal.ChinGunOperator != null || terminal.ChinGunAiTarget == null ||
+                !terminal.ChinGunInFlight ||
                 !terminal.ChinGunSetupReady || terminal.FireControlBooting || terminal.ChinGunDisabled;
             Window.ApproveAiButton.Text = Loc.GetString(terminal.ChinGunAiApproved ? "cmu-mohawk-ai-revoke" : "cmu-mohawk-ai-approve");
             Window.ChinGunHealthLabel.Text = terminal.ChinGunDisabled
@@ -300,6 +307,15 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                     ("target", EntMan.GetComponent<MetaDataComponent>(tracked).EntityName))
                 : manual ? Loc.GetString(Window.TrackTargetButton.Pressed
                     ? "cmu-mohawk-gunnery-mark-pending" : "cmu-mohawk-gunnery-unmarked") : "";
+            Window.HeatLabel.Visible = terminal.Gunnery;
+            Window.HeatBar.Visible = terminal.Gunnery;
+            Window.HeatBar.Value = terminal.ChinGunHeat;
+            Window.HeatLabel.Text = Loc.GetString(terminal.ChinGunOverheated ? "cmu-mohawk-heat-overheated" : "cmu-mohawk-heat",
+                ("heat", terminal.ChinGunHeat));
+            Window.HeatLabel.FontColorOverride = terminal.ChinGunOverheated ? Color.Red
+                : terminal.ChinGunHeat >= 70 ? Color.Orange : null;
+            RefreshCasRequests(terminal);
+            RefreshLoadout(terminal);
             SetScreen(true, terminal.ScreenOne);
             SetScreen(false, terminal.ScreenTwo);
         }
@@ -323,6 +339,135 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 createScreen.RefreshFireMissions(terminal.FireMissions);
             }
         }
+    }
+
+    private void RefreshCasRequests(DropshipTerminalWeaponsComponent terminal)
+    {
+        if (Window == null)
+            return;
+
+        var box = Window.CasRequestsBox;
+        box.RemoveAllChildren();
+        if (terminal.CasRequests.Count == 0)
+        {
+            box.AddChild(new Label { Text = Loc.GetString("cmu-cas-requests-none"), FontColorOverride = Color.Gray });
+            return;
+        }
+
+        foreach (var request in terminal.CasRequests)
+        {
+            var id = request.Id;
+            var card = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, Margin = new Thickness(0, 0, 0, 4) };
+            var text = Loc.GetString("cmu-cas-request-card",
+                ("id", id), ("callsign", request.Callsign),
+                ("status", Loc.GetString($"cmu-cas-status-{request.Status.ToString().ToLowerInvariant()}")),
+                ("target", request.TargetName), ("location", request.Location),
+                ("description", request.TargetDescription), ("friendlies", request.Friendlies),
+                ("munition", CMUCasRequestSystem.MunitionName(request.Munition)),
+                ("danger", request.DangerClose ? Loc.GetString("cmu-cas-request-card-danger") : ""));
+            card.AddChild(new Label
+            {
+                Text = text,
+                MaxWidth = 260,
+                FontColorOverride = request.Status switch
+                {
+                    CMUCasRequestStatus.ClearedHot => Color.Red,
+                    CMUCasRequestStatus.Pending => Color.Yellow,
+                    CMUCasRequestStatus.Denied or CMUCasRequestStatus.Complete => Color.Gray,
+                    _ => request.DangerClose ? Color.Orange : null,
+                },
+            });
+
+            var buttons = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal };
+            void AddAction(string loc, CMUCasRequestStatus status, bool enabled)
+            {
+                var button = new Button { Text = Loc.GetString(loc), Disabled = !enabled, HorizontalExpand = true };
+                button.OnPressed += _ => SendMessage(new CMUCasRequestActionMsg(id, status));
+                buttons.AddChild(button);
+            }
+
+            AddAction("cmu-cas-request-accept", CMUCasRequestStatus.Accepted, request.Status == CMUCasRequestStatus.Pending);
+            AddAction("cmu-cas-request-deny", CMUCasRequestStatus.Denied,
+                request.Status is CMUCasRequestStatus.Pending or CMUCasRequestStatus.Accepted);
+            AddAction("cmu-cas-request-complete", CMUCasRequestStatus.Complete,
+                request.Status is CMUCasRequestStatus.Accepted or CMUCasRequestStatus.ClearedHot);
+            card.AddChild(buttons);
+            box.AddChild(card);
+        }
+    }
+
+    private void RefreshLoadout(DropshipTerminalWeaponsComponent terminal)
+    {
+        if (Window == null)
+            return;
+
+        var loadout = new StringBuilder();
+        var preflight = new StringBuilder();
+        if (terminal.FireControlBooting)
+            preflight.AppendLine(Loc.GetString("cmu-dropship-preflight-booting"));
+
+        if (_system.TryGetGridDropship(Owner, out var dropship))
+        {
+            var boot = EntMan.System<DropshipFireControlBootSystem>();
+            foreach (var point in dropship.Comp.AttachmentPoints)
+            {
+                string? slot = null;
+                if (EntMan.TryGetComponent(point, out DropshipWeaponPointComponent? weaponPoint))
+                    slot = weaponPoint.WeaponContainerSlotId;
+                else if (EntMan.TryGetComponent(point, out DropshipUtilityPointComponent? utilityPoint))
+                    slot = utilityPoint.UtilitySlotId;
+                else
+                    continue;
+
+                EntityUid? mounted = _container.TryGetContainer(point, slot, out var container) &&
+                    container.ContainedEntities.Count > 0 ? container.ContainedEntities[0] : null;
+                var isWeapon = mounted != null && EntMan.TryGetComponent(mounted, out DropshipWeaponComponent? _);
+                if (weaponPoint == null && !isWeapon)
+                    continue;
+
+                var location = mounted is { } m && _weaponSystem.TryGetWeaponLocation(m, out var loc)
+                    ? LocationTag(loc)
+                    : weaponPoint != null ? LocationTag(weaponPoint.Location ?? DropshipWeaponPointLocation.Internal) : "INT";
+
+                if (EntMan.TryGetComponent(point, out DropshipHardpointFaultComponent? fault) && fault.Faulted)
+                {
+                    preflight.AppendLine(Loc.GetString("cmu-dropship-preflight-fault",
+                        ("location", location), ("reason", boot.FaultReason(fault))));
+                }
+
+                if (mounted is not { } weapon || !EntMan.TryGetComponent(weapon, out DropshipWeaponComponent? weaponComp))
+                {
+                    preflight.AppendLine(Loc.GetString("cmu-dropship-preflight-empty", ("location", location)));
+                    continue;
+                }
+
+                string ammoText;
+                if (_weaponSystem.TryGetWeaponAmmo((weapon, weaponComp), out var ammo))
+                {
+                    ammoText = Loc.GetString("cmu-dropship-loadout-ammo",
+                        ("ammo", EntMan.GetComponent<MetaDataComponent>(ammo).EntityName),
+                        ("rounds", ammo.Comp.Rounds), ("max", ammo.Comp.MaxRounds));
+                    if (ammo.Comp.Rounds <= 0)
+                        preflight.AppendLine(Loc.GetString("cmu-dropship-preflight-dry", ("location", location)));
+                }
+                else
+                {
+                    ammoText = Loc.GetString("cmu-dropship-loadout-empty");
+                    preflight.AppendLine(Loc.GetString("cmu-dropship-preflight-dry", ("location", location)));
+                }
+
+                loadout.AppendLine(Loc.GetString("cmu-dropship-loadout-line",
+                    ("location", location), ("weapon", weaponComp.Abbreviation), ("ammo", ammoText)));
+            }
+        }
+
+        Window.LoadoutLabel.Text = loadout.Length == 0
+            ? Loc.GetString("cmu-dropship-loadout-none")
+            : loadout.ToString().TrimEnd();
+        Window.PreflightLabel.Text = preflight.Length == 0
+            ? Loc.GetString("cmu-dropship-preflight-ok")
+            : preflight.ToString().TrimEnd();
+        Window.PreflightLabel.FontColorOverride = preflight.Length == 0 ? Color.LimeGreen : Color.Orange;
     }
 
     private void RefreshButtons()
@@ -1061,7 +1206,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                         var info = new WeaponDisplayInfo
                         {
                             Name = hasLocation
-                                ? $"{weaponComp.Abbreviation} {(int) locationId}"
+                                ? $"{weaponComp.Abbreviation} {LocationTag(locationId)}"
                                 : weaponComp.Abbreviation,
                             Offsets = offsets,
                         };
@@ -1141,7 +1286,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                     var weaponInfo = new WeaponDisplayInfo
                     {
                         Name = hasLocation
-                            ? $"{weaponComp.Abbreviation} {(int) location}"
+                            ? $"{weaponComp.Abbreviation} {LocationTag(location)}"
                             : weaponComp.Abbreviation,
                         Offsets = offsets,
                     };
@@ -1422,7 +1567,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                     var weaponMsg = new DropshipTerminalWeaponsChooseWeaponMsg(first, weaponNetEnt);
                     var weaponData = new DropshipWeaponsButtonData(
                         hasWeaponLocation
-                            ? $"{utilityWeapon.Abbreviation} {(int) weaponLocation}"
+                            ? $"{utilityWeapon.Abbreviation} {LocationTag(weaponLocation)}"
                             : utilityWeapon.Abbreviation,
                         _ => SendPredictedMessage(weaponMsg),
                         weaponNetEnt
@@ -1527,7 +1672,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 var msg = new DropshipTerminalWeaponsChooseWeaponMsg(first, netEnt);
                 var data = new DropshipWeaponsButtonData(
                     hasLocation
-                        ? $"{abbreviation} {(int) location}"
+                        ? $"{abbreviation} {LocationTag(location)}"
                         : abbreviation,
                     _ => SendPredictedMessage(msg),
                     netEnt

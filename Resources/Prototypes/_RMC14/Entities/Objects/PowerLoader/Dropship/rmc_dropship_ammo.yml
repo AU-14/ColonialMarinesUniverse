@@ -422,6 +422,8 @@
       total: 500
       slope: 5.5
       max: 40
+    impactEffects: # CMU14
+    - CMUCasFalloutArmor
   - type: DropshipFabricatorPrintable
     category: Ammo
     cost: 600
@@ -442,6 +444,8 @@
       pullRange: 6
       pullDistance: 2.5
       pullSpeed: 16
+    impactEffects: # CMU14
+    - CMUCasFalloutResin
   - type: DropshipFabricatorPrintable
     category: Ammo
     cost: 600
@@ -464,6 +468,7 @@
       max: 1
     impactEffects:
     - AU14FlareExplosionProofRocket
+    - CMUCasFalloutFlare # CMU14
   - type: DropshipFabricatorPrintable
     category: Ammo
     cost: 500
@@ -487,6 +492,7 @@
       max: 1
     impactEffects:
     - RMCSmokeExplosionProofMiniRocket
+    - CMUCasFalloutObscurant # CMU14
     fire:
       type: RMCTileFireMiniMikePhosphorus
       range: 2
@@ -545,6 +551,7 @@
       max: 1
     impactEffects:
     - AU14WeedKillerExplosionProofRocket
+    - CMUCasFalloutWeedKiller # CMU14
   - type: DropshipFabricatorPrintable
     category: Ammo
     cost: 500

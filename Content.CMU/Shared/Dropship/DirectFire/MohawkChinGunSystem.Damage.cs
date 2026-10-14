@@ -258,6 +258,24 @@ public sealed partial class MohawkChinGunSystem
         Dirty(point);
         _popup.PopupEntity(RepairInstruction(point.Comp.RepairStage), point, args.User);
     }
+
+    /// <summary>Admin restore: full integrity, cool barrels and calibrated. IFF is kept if any factions were ever programmed.</summary>
+    public void AdminRestore(Entity<MohawkChinGunComponent> point)
+    {
+        if (_net.IsClient)
+            return;
+        _damage.SetAllDamage(point.Owner, FixedPoint2.Zero);
+        point.Comp.Disabled = false;
+        point.Comp.Calibrated = true;
+        point.Comp.RepairStage = MohawkChinGunRepairStage.Strip;
+        point.Comp.Heat = 0;
+        point.Comp.Overheated = false;
+        if (TryComp(point, out SentryTargetingComponent? targeting) && targeting.FriendlyFactions.Count > 0)
+            point.Comp.IffConfigured = true;
+        _appearance.SetData(point, MohawkChinGunVisuals.Disabled, false);
+        Dirty(point);
+        SyncFreeFireDisplay(point);
+    }
 }
 
 [RegisterComponent]

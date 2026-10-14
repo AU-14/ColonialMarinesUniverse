@@ -25,6 +25,7 @@
     markerWarning: true
     impactEffects:
     - RMCSmokeExplosionProofSmall
+    - CMUCasFalloutResin
   - type: DropshipFabricatorPrintable
     category: Ammo
     cost: 450
@@ -365,3 +366,81 @@
         startingItem: CMUDropshipAmmoHowitzerAirburst
       shell4:
         startingItem: CMUDropshipAmmoHowitzerAirburst
+
+# CMU14: lasting or bonus effects left behind by special CAS rockets.
+- type: entity
+  id: CMUCasFalloutBase
+  abstract: true
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+
+- type: entity
+  parent: CMUCasFalloutBase
+  id: CMUCasFalloutWeedKiller
+  name: weedkiller residue
+  components:
+  - type: CMUCasFallout
+    fallout: WeedKiller
+    radius: 3
+  - type: TimedDespawn
+    lifetime: 300
+
+- type: entity
+  parent: CMUCasFalloutBase
+  id: CMUCasFalloutObscurant
+  name: smoke screen
+  components:
+  - type: CMUCasFallout
+    fallout: Obscurant
+    radius: 3
+  - type: TimedDespawn
+    lifetime: 20
+
+- type: entity
+  parent: CMUCasFalloutBase
+  id: CMUCasFalloutFlare
+  name: rocket flare
+  components:
+  - type: CMUCasFallout
+    fallout: Flare
+    radius: 0
+    abbreviation: RKT
+  - type: PointLight
+    enabled: true
+    radius: 6
+    energy: 2
+    color: "#ff8a5c"
+  - type: TimedDespawn
+    lifetime: 60
+
+- type: entity
+  parent: CMUCasFalloutBase
+  id: CMUCasFalloutResin
+  name: overpressure
+  components:
+  - type: CMUCasFallout
+    fallout: Resin
+    radius: 2
+    damage:
+      types:
+        Structural: 450
+  - type: TimedDespawn
+    lifetime: 1
+
+- type: entity
+  parent: CMUCasFalloutBase
+  id: CMUCasFalloutArmor
+  name: shaped charge jet
+  components:
+  - type: CMUCasFallout
+    fallout: Armor
+    radius: 1.5
+    vehicleDamage: 60
+    heavyArmor: 30
+    damage:
+      types:
+        Piercing: 40
+  - type: TimedDespawn
+    lifetime: 1

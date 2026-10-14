@@ -120,8 +120,9 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
 
     public bool IsAirborne(EntityUid point)
     {
+        // Flybys and plain transit flight both count; only a tactical hover is excluded.
         return _dropships.TryGetGridDropship(point, out var ship) && !ship.Comp.Crashed &&
-               HasComp<DropshipInFlyByComponent>(ship) && !HasComp<DropshipTacticalHoverComponent>(ship) &&
+               !HasComp<DropshipTacticalHoverComponent>(ship) &&
                TryComp(ship, out FTLComponent? ftl) &&
                ftl.State is FTLState.Travelling or FTLState.Arriving;
     }
@@ -154,6 +155,11 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
         if (!IsGrounded(point) && !IsAirborne(point))
         {
             message = Loc.GetString("cmu-mohawk-gunnery-ground-only");
+            return false;
+        }
+        if (point.Comp.Overheated)
+        {
+            message = Loc.GetString("cmu-mohawk-overheated");
             return false;
         }
 
@@ -463,6 +469,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
         while (query.MoveNext(out var uid, out var chin, out var targeting))
         {
             var point = new Entity<MohawkChinGunComponent>(uid, chin);
+            CoolBarrels(point, frameTime);
             SyncFreeFireDisplay(point);
             if (chin.Disabled)
                 continue;
@@ -583,7 +590,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             {
                 if (IsGrounded(uid))
                     RequestAim(point, weapon, Transform(hostile).Coordinates);
-                if (selected != null && chin.ApprovedAutomaticTarget == selected)
+                // Grounded close defense engages on its own; airborne AI picks still need the gunner's approval.
+                if (selected != null && (IsGrounded(uid) || chin.ApprovedAutomaticTarget == selected))
                 {
                     chin.DefensiveFire = true;
                     try
@@ -798,7 +806,10 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                 terminal.ChinGunAiEnabled == point.Comp.FreeFireEnabled &&
                 terminal.ChinGunAiTarget == point.Comp.AutomaticTarget &&
                 terminal.ChinGunAiApproved == (point.Comp.ApprovedAutomaticTarget != null) &&
-                terminal.ChinGunVision == point.Comp.VisionMode)
+                terminal.ChinGunVision == point.Comp.VisionMode &&
+                terminal.ChinGunInFlight == IsAirborne(point) &&
+                terminal.ChinGunHeat == (int) point.Comp.Heat &&
+                terminal.ChinGunOverheated == point.Comp.Overheated)
                 continue;
             terminal.ChinGunFreeFireCooldown = cooldown;
             terminal.ChinGunDisabled = point.Comp.Disabled;
@@ -809,8 +820,49 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             terminal.ChinGunAiTarget = point.Comp.AutomaticTarget;
             terminal.ChinGunAiApproved = point.Comp.ApprovedAutomaticTarget != null;
             terminal.ChinGunVision = point.Comp.VisionMode;
+            terminal.ChinGunInFlight = IsAirborne(point);
+            terminal.ChinGunHeat = (int) point.Comp.Heat;
+            terminal.ChinGunOverheated = point.Comp.Overheated;
             Dirty(uid, terminal);
         }
+    }
+
+    /// <summary>Adds one shell's heat. Crossing the limit locks the guns until they cool.</summary>
+    public void AddHeat(Entity<MohawkChinGunComponent> point, float heat)
+    {
+        if (_net.IsClient || heat <= 0)
+            return;
+        point.Comp.Heat = Math.Min(point.Comp.MaxHeat, point.Comp.Heat + heat);
+        if (!point.Comp.Overheated && point.Comp.Heat >= point.Comp.MaxHeat)
+        {
+            point.Comp.Overheated = true;
+            point.Comp.PendingManualShot = null;
+            point.Comp.HeldAim = null;
+            point.Comp.HeldFireUntil = TimeSpan.Zero;
+            var message = Loc.GetString("cmu-mohawk-overheated");
+            _popup.PopupEntity(message, point, PopupType.MediumCaution);
+            if (point.Comp.Operator is { } gunner)
+                _popup.PopupEntity(message, gunner, gunner, PopupType.MediumCaution);
+            _adminLog.Add(LogType.RMCDropshipWeapon, $"M90 chin gun {ToPrettyString(point)} overheated.");
+        }
+        Dirty(point);
+    }
+
+    private void CoolBarrels(Entity<MohawkChinGunComponent> point, float frameTime)
+    {
+        if (point.Comp.Heat <= 0)
+            return;
+        var previous = (int) point.Comp.Heat;
+        point.Comp.Heat = Math.Max(0, point.Comp.Heat - point.Comp.CoolPerSecond * frameTime);
+        var recovered = point.Comp.Overheated && point.Comp.Heat <= point.Comp.OverheatRecoveredAt;
+        if (recovered)
+        {
+            point.Comp.Overheated = false;
+            if (point.Comp.Operator is { } gunner)
+                _popup.PopupEntity(Loc.GetString("cmu-mohawk-overheat-cleared"), gunner, gunner);
+        }
+        if (recovered || previous != (int) point.Comp.Heat)
+            Dirty(point);
     }
 
     private bool TryGetControlledPoint(Entity<DropshipTerminalWeaponsComponent> console, EntityUid actor,
@@ -838,6 +890,10 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             !TryComp(weapon, out GunshipDirectFireWeaponComponent? direct) ||
             !_directFire.TryResolveMount((weapon, direct), out var mount, out var grid, out _, out _))
             return false;
+        // Rocket smoke hides targets from the Normal and Night optics; thermal sees through it.
+        if (point.Comp.VisionMode != MohawkChinGunVisionMode.Thermal &&
+            EntityManager.System<Content.Shared.CMU14.Dropship.Cas.CMUCasFalloutSystem>().IsObscured(_transform.GetMapCoordinates(target)))
+            return false;
         if (IsAirborne(point))
             return IsInFlareArea(point, Transform(target).Coordinates) &&
                    _weapons.CanChinGunImpactAt(Transform(target).Coordinates,
@@ -853,6 +909,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             !IsInFlareArea(point, Transform(target).Coordinates))
             return false;
         var muzzle = new MapCoordinates(position + Vector2.Normalize(delta) * direct.MuzzleOffset, origin.MapId);
+        if (point.Comp.VisionMode == MohawkChinGunVisionMode.Thermal)
+            return true;
         return _interaction.InRangeUnobstructed(muzzle, location, point.Comp.Range, CollisionGroup.Opaque,
             predicate: blocker => blocker == target || blocker == point.Owner || blocker == weapon ||
                 !TryComp(blocker, out OccluderComponent? occluder) || !occluder.Enabled);
@@ -1622,7 +1680,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
     {
         var freeTravel = point.Comp.Operator != null && IsGrounded(point) &&
             Vector2.DistanceSquared(_transform.ToMapCoordinates(GetMountCoordinates(point)).Position,
-                target.Position) > point.Comp.Range * point.Comp.Range;
+                target.Position) > point.Comp.Range * point.Comp.Range ||
+            point.Comp.VisionMode == MohawkChinGunVisionMode.Thermal;
         if (!EnsureTrackingFaction(point) || !TryComp(point, out SentryTargetingComponent? targeting) ||
             !freeTravel && !_interaction.InRangeUnobstructed(muzzle, target, MathF.Max(point.Comp.Range, Vector2.Distance(muzzle.Position, target.Position)), CollisionGroup.Opaque,
                 predicate: blocker => blocker == point.Owner || blocker == weapon || HasComp<MobStateComponent>(blocker) ||

@@ -23,6 +23,9 @@
                 <Button Name="FreeFireButton" Access="Public" Visible="False"
                         ToolTip="{Loc 'cmu-mohawk-free-fire-help'}" />
                 <Label Name="ChinGunHealthLabel" Access="Public" Visible="False" />
+                <Label Name="HeatLabel" Access="Public" Visible="False" MaxWidth="260" ClipText="True" />
+                <ProgressBar Name="HeatBar" Access="Public" Visible="False" MinValue="0" MaxValue="100"
+                             MinHeight="8" HorizontalExpand="True" />
                 <Label Name="BootStatusLabel" Access="Public" MaxWidth="260" ClipText="True" />
                 <Button Name="IffButton" Access="Public" Visible="False" />
                 <Button Name="VisionButton" Access="Public" Visible="False"
@@ -74,6 +77,25 @@
                 <PanelContainer Margin="0 10 0 0" MouseFilter="Pass" StyleClasses="CrtQuietPanel"
                                 ToolTip="{Loc 'rmc-dropship-weapons-offset-calibration-does-not-affect-direct-bombardment'}">
                     <Label Align="Center" Text="{Loc 'rmc-dropship-weapons-offset-calibration'}" />
+                </PanelContainer>
+                <PanelContainer Margin="0 10 0 0" StyleClasses="CrtQuietPanel">
+                    <BoxContainer Orientation="Vertical" Margin="4">
+                        <Label Text="{Loc 'cmu-cas-requests-title'}" />
+                        <BoxContainer Name="CasRequestsBox" Access="Public" Orientation="Vertical"
+                                      SeparationOverride="4" />
+                    </BoxContainer>
+                </PanelContainer>
+                <PanelContainer Margin="0 10 0 0" StyleClasses="CrtQuietPanel">
+                    <BoxContainer Orientation="Vertical" Margin="4">
+                        <Label Text="{Loc 'cmu-dropship-loadout-title'}" />
+                        <Label Name="LoadoutLabel" Access="Public" MaxWidth="260" />
+                    </BoxContainer>
+                </PanelContainer>
+                <PanelContainer Margin="0 10 0 0" StyleClasses="CrtQuietPanel">
+                    <BoxContainer Orientation="Vertical" Margin="4">
+                        <Label Text="{Loc 'cmu-dropship-preflight-title'}" />
+                        <Label Name="PreflightLabel" Access="Public" MaxWidth="260" />
+                    </BoxContainer>
                 </PanelContainer>
                </BoxContainer>
               </ScrollContainer>

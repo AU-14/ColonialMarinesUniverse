@@ -298,7 +298,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
                 {
                     if (ammo.EjectCasing)
                         EjectCasing(point, grid);
-                    AmmoConsumed(point);
+                    AmmoConsumed(point, ammo.DirectFireHeat);
                 }
             }
             _appearance.SetData(loadedAmmo, DropshipAmmoVisuals.Fill, ammo.Rounds);
@@ -491,13 +491,14 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         return null;
     }
 
-    public void AmmoConsumed(EntityUid point)
+    public void AmmoConsumed(EntityUid point, float heat = 0)
     {
         if (!_net.IsServer)
             return;
         EntityManager.System<DropshipFireControlBootSystem>().RegisterUse(point);
         if (!TryComp(point, out MohawkChinGunComponent? chin))
             return;
+        _chinGun.AddHeat((point, chin), heat);
         if (chin.AlternateFeeds)
             chin.ActiveFeed = 1 - chin.ActiveFeed;
         Dirty(point, chin);

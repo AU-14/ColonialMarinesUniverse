@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using Content.Shared.CMU14.Dropship.AttachmentPoint;
 using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
 using Content.Shared.CMU14.Dropship.DirectFire;
+using Content.Shared.CMU14.Dropship.Cas;
 using Content.Shared.Buckle.Components; // CMU14
 using Content.Shared.CMU14.ZLevels.Ordnance;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
@@ -230,6 +231,12 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         {
             RaiseLocalEvent(attachmentPoint, ev);
         }
+    }
+
+    // CMU14: lets accepted CAS requests slew the console onto the RTO's mark.
+    public void SetTerminalTarget(Entity<DropshipTerminalWeaponsComponent> terminal, EntityUid? target)
+    {
+        SetTarget(terminal, target);
     }
 
     // CMU14: mirrors the pilot's CAS flare and the gunner's chin gun flare onto every weapons console of the ship.
@@ -605,6 +612,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         foreach (var buckled in args.Buckled)
         {
             _popup.PopupEntity(Loc.GetString("rmc-power-loader-transfer-ammo", ("rounds", roundsToFill), ("ammo", args.Target)), args.Target, buckled);
+            _adminLog.Add(LogType.RMCDropshipWeapon,
+                $"{ToPrettyString(buckled)} transferred {roundsToFill} rounds from {ToPrettyString(ent)} into {ToPrettyString(args.Target)}"); // CMU14
         }
     }
 
@@ -1556,7 +1565,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return false;
         }
 
-        if (!TryComp(weaponEntity, out DropshipWeaponComponent? weaponComp))
+        if (!TryComp(weaponEntity, out DropshipWeaponComponent? weaponComp) ||
+            weaponComp.GunneryOnly || weaponComp.DirectFireOnly) // CMU14
             return false;
 
         if (!TryGetWeaponAmmo((weaponEntity, weaponComp), out var ammo))
@@ -1588,6 +1598,27 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
     protected virtual void RefreshWeaponsUI(Entity<DropshipTerminalWeaponsComponent> terminal)
     {
+    }
+
+    /// <summary>CMU14: admin tool. Fills every ammunition crate loaded on an attachment point.</summary>
+    public int AdminRefillAmmo(EntityUid point)
+    {
+        var filled = 0;
+        foreach (var container in _container.GetAllContainers(point))
+        {
+            foreach (var contained in container.ContainedEntities)
+            {
+                if (!TryComp(contained, out DropshipAmmoComponent? ammo) || ammo.Rounds >= ammo.MaxRounds)
+                    continue;
+                ammo.Rounds = ammo.MaxRounds;
+                _appearance.SetData(contained, DropshipAmmoVisuals.Fill, ammo.Rounds);
+                Dirty(contained, ammo);
+                RefreshMixedBeltSummary(contained);
+                filled++;
+            }
+        }
+
+        return filled;
     }
 
     public bool TryGetWeaponAmmo(Entity<DropshipWeaponComponent?> weapon, out Entity<DropshipAmmoComponent> ammo)
@@ -2643,7 +2674,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             location = point.Location;
         // AU-14: weapons mounted on crew compartment points can have a location too.
         else if (TryComp(container.Owner, out DropshipUtilityPointComponent? utilityPoint))
-            location = utilityPoint.Location;
+            location = utilityPoint.Location ?? DropshipWeaponPointLocation.Internal; // CMU14: internal weapons join fire missions
 
         if (location is not { } loc)
             return false;
@@ -2750,6 +2781,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         activeFireMission.WatchingTerminal = watchingTerminal;
         activeFireMission.FireMissionData = missionData;
         Dirty(dropship, activeFireMission);
+        _adminLog.Add(LogType.RMCDropshipWeapon,
+            $"{ToPrettyString(user)} started fire mission {missionData.Name} from {ToPrettyString(dropship)} at {targetCoordinates} heading {strikeVector}"); // CMU14
 
         var msg = Loc.GetString("rmc-dropship-firemission-started");
         _popup.PopupCursor(msg, user, PopupType.SmallCaution);
@@ -2839,6 +2872,12 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return false;
         }
 
+        // CMU14: direct strikes near friendlies need a second press to confirm.
+        if (strikeType == DropshipWeaponStrikeType.Direct && actor is { } shooter && terminalComp != null &&
+            !EntityManager.System<CMUCasRequestSystem>().CheckDangerClose((terminalComp.Owner, terminalComp),
+                targetCoordinates, shooter, weapon))
+            return false;
+
         FireWeapon(weapon, targetCoordinates, strikeType,dropship, actor, terminalComp, weaponComp);
         return true;
     }
@@ -2905,7 +2944,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         _audio.PlayPvs(ammo.Comp.SoundCockpit, weapon);
         if (ammo.Comp.EjectCasing)
             _directFire.EjectCasing(mount, grid);
-        _directFire.AmmoConsumed(point);
+        _directFire.AmmoConsumed(point, ammo.Comp.DirectFireHeat);
         _powerloader.SyncAppearance(point.Owner);
         _adminLog.Add(LogType.RMCDropshipWeapon,
             $"{ToPrettyString(actor)} fired one M90 shell from {ToPrettyString(ammo)} near flare {ToPrettyString(terminal.Target)}.");
@@ -3070,6 +3109,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         Dirty(ammo);
         _directFire.AmmoConsumed(Transform(weapon).ParentUid);
         AdvanceMixedBelt(ammo);
+        if (strikeType != DropshipWeaponStrikeType.FireMission) // CMU14: no stoppages mid fire mission
+            EntityManager.System<DropshipFireControlBootSystem>().TryJam(Transform(weapon).ParentUid, actor);
 
         _audio.PlayPvs(ev.SoundCockpit, weapon);
         weaponComp.NextFireAt = time + weaponComp.FireDelay;
@@ -3122,8 +3163,13 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         if (!Resolve(weapon, ref weaponComp, false))
             return;
 
+        // CMU14: fire missions and scripted strikes are logged too.
         if (terminalComp == null)
+        {
+            _adminLog.Add(LogType.RMCDropshipWeapon,
+                $"{ToPrettyString(dropship)} fired {ToPrettyString(weapon)} at {targetCoords} during a {strikeType} strike");
             return;
+        }
 
         _adminLog.Add(LogType.RMCDropshipWeapon,
             $"{ToPrettyString(actor)} fired {ToPrettyString(weapon)} at {ToPrettyString(terminalComp.Target)}");

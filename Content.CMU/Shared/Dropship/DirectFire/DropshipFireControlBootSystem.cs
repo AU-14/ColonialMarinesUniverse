@@ -43,10 +43,10 @@ public sealed partial class DropshipHardpointFaultComponent : Component
     [DataField, AutoNetworkedField] public string? Reason;
 
     /// <summary>Firing engagements since the hardpoint was last serviced.</summary>
-    [DataField] public int Uses;
+    [DataField, AutoNetworkedField] public int Uses;
 
     /// <summary>Landing reboots survived since the hardpoint was last serviced.</summary>
-    [DataField] public int Landings;
+    [DataField, AutoNetworkedField] public int Landings;
 
     [DataField] public TimeSpan LastUse;
 
@@ -73,6 +73,15 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private IGameTiming _timing = default!;
 
+    public static readonly string[] JamReasons =
+    [
+        "cmu-dropship-fault-reason-jam-feed",
+        "cmu-dropship-fault-reason-jam-double",
+        "cmu-dropship-fault-reason-jam-gremlin",
+    ];
+
+    private static readonly SoundSpecifier JamSound = new SoundPathSpecifier("/Audio/Items/bottle_clunk.ogg");
+
     public static readonly string[] FaultReasons =
     [
         "cmu-dropship-fault-reason-gyro",
@@ -88,6 +97,7 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
         SubscribeLocalEvent<DropshipHardpointFaultComponent, InteractUsingEvent>(OnReset);
         SubscribeLocalEvent<DropshipHardpointFaultComponent, DropshipHardpointResetDoAfterEvent>(OnResetFinished);
         SubscribeLocalEvent<DropshipHardpointFaultComponent, ExaminedEvent>(OnExamine);
+        SubscribeLocalEvent<DropshipUtilityPointComponent, ExaminedEvent>((uid, _, args) => AddChecklist(uid, args));
     }
 
     public void OnConsoleOpened(Entity<DropshipTerminalWeaponsComponent> console)
@@ -141,8 +151,149 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
         var fault = EnsureComp<DropshipHardpointFaultComponent>(point);
         var now = _timing.CurTime;
         if (fault.LastUse == TimeSpan.Zero || now - fault.LastUse >= fault.UseWindow)
+        {
             fault.Uses++;
+            Dirty(point, fault);
+        }
         fault.LastUse = now;
+    }
+
+    /// <summary>
+    /// Rolls a stoppage after a CAS weapon fires. Worn hardpoints jam more often; the crew clears it with a multitool.
+    /// </summary>
+    public bool TryJam(EntityUid point, EntityUid? actor = null)
+    {
+        if (_net.IsClient || TerminatingOrDeleted(point) ||
+            !HasComp<DropshipWeaponPointComponent>(point) && !HasComp<DropshipUtilityPointComponent>(point))
+            return false;
+        var fault = EnsureComp<DropshipHardpointFaultComponent>(point);
+        if (fault.Faulted || !_random.Prob(GetJamChance(fault)))
+            return false;
+        fault.Faulted = true;
+        fault.Reason = _random.Pick(JamReasons);
+        Dirty(point, fault);
+        _audio.PlayPvs(JamSound, point);
+        if (actor is { } user)
+            _popup.PopupEntity(Loc.GetString("cmu-dropship-weapon-jammed", ("reason", FaultReason(fault))), user, user,
+                PopupType.MediumCaution);
+        _adminLog.Add(LogType.RMCDropshipWeapon,
+            $"Hardpoint {ToPrettyString(point)} jammed after firing ({Loc.GetString(fault.Reason)}).");
+        if (_dropships.TryGetGridDropship(point, out var ship) &&
+            TryComp(ship, out DropshipFireControlBootComponent? boot))
+            Sync(ship, boot);
+        return true;
+    }
+
+    public float GetJamChance(DropshipHardpointFaultComponent fault)
+    {
+        var chance = _config.GetCVar(CCVars.DropshipJamChance) *
+                     (1f + _config.GetCVar(CCVars.DropshipFaultUseMultiplier) * fault.Uses);
+        return Math.Clamp(chance, 0f, Math.Clamp(_config.GetCVar(CCVars.DropshipFaultMaxChance), 0f, 1f));
+    }
+
+    /// <summary>Clears a hardpoint fault without the multitool procedure (admin tools).</summary>
+    public void ClearFault(EntityUid point, bool resetWear = true)
+    {
+        if (!TryComp(point, out DropshipHardpointFaultComponent? fault))
+            return;
+        fault.Faulted = false;
+        fault.Reason = null;
+        if (resetWear)
+        {
+            fault.Uses = 0;
+            fault.Landings = 0;
+        }
+        Dirty(point, fault);
+        SyncShipOf(point);
+    }
+
+    public void ForceFault(EntityUid point, string? reason = null)
+    {
+        var fault = EnsureComp<DropshipHardpointFaultComponent>(point);
+        fault.Faulted = true;
+        fault.Reason = reason ?? _random.Pick(FaultReasons);
+        Dirty(point, fault);
+        SyncShipOf(point);
+    }
+
+    /// <summary>Finishes any running boot instantly (admin tools).</summary>
+    public void SkipBoot(EntityUid ship)
+    {
+        if (!TryComp(ship, out DropshipComponent? dropship))
+            return;
+        var boot = EnsureComp<DropshipFireControlBootComponent>(ship);
+        boot.Complete = true;
+        boot.LandingReboot = false;
+        boot.CrashLanding = false;
+        boot.ReadyAt = _timing.CurTime;
+        Dirty(ship, boot);
+        Sync((ship, dropship), boot);
+    }
+
+    /// <summary>Immediately rolls a post-landing reboot, as if the dropship had just touched down.</summary>
+    public void ForceLandingReboot(EntityUid ship, bool crashed)
+    {
+        if (!TryComp(ship, out DropshipComponent? dropship))
+            return;
+        var boot = EnsureComp<DropshipFireControlBootComponent>(ship);
+        boot.Complete = false;
+        boot.LandingReboot = true;
+        boot.CrashLanding = crashed;
+        FinishBoot((ship, dropship), boot);
+        Sync((ship, dropship), boot);
+    }
+
+    private void SyncShipOf(EntityUid point)
+    {
+        if (_dropships.TryGetGridDropship(point, out var ship) &&
+            TryComp(ship, out DropshipFireControlBootComponent? boot))
+            Sync(ship, boot);
+    }
+
+    /// <summary>
+    /// Ground crew preflight lines for an attachment point: what is mounted, what is loaded, and its maintenance state.
+    /// </summary>
+    public void AddChecklist(EntityUid point, ExaminedEvent args)
+    {
+        if (!args.IsInDetailsRange)
+            return;
+        string? slot = TryComp(point, out DropshipWeaponPointComponent? weaponPoint)
+            ? weaponPoint.WeaponContainerSlotId
+            : TryComp(point, out DropshipUtilityPointComponent? utilityPoint) ? utilityPoint.UtilitySlotId : null;
+        if (slot == null)
+            return;
+        EntityUid? weapon = null;
+        if (_containers.TryGetContainer(point, slot, out var container))
+            weapon = container.ContainedEntities.FirstOrDefault(contained => HasComp<DropshipWeaponComponent>(contained));
+        if (weapon == null || weapon == EntityUid.Invalid)
+            return;
+
+        using (args.PushGroup(nameof(DropshipFireControlBootSystem)))
+        {
+            args.PushMarkup(Loc.GetString("cmu-dropship-checklist-header"));
+            args.PushMarkup(Line(true, Loc.GetString("cmu-dropship-checklist-mounted", ("weapon", Name(weapon.Value)))));
+            var hasAmmo = EntityManager.System<SharedDropshipWeaponSystem>().TryGetWeaponAmmo(weapon.Value, out var ammo);
+            args.PushMarkup(Line(hasAmmo && ammo.Comp.Rounds > 0, hasAmmo
+                ? Loc.GetString("cmu-dropship-checklist-ammo", ("ammo", Name(ammo)), ("rounds", ammo.Comp.Rounds),
+                    ("max", ammo.Comp.MaxRounds))
+                : Loc.GetString("cmu-dropship-checklist-no-ammo")));
+            TryComp(point, out DropshipHardpointFaultComponent? fault);
+            args.PushMarkup(Line(fault is not { Faulted: true }, fault is { Faulted: true }
+                ? Loc.GetString("cmu-dropship-checklist-faulted", ("reason", FaultReason(fault)))
+                : Loc.GetString("cmu-dropship-checklist-serviceable")));
+            if (fault != null && CanRepair(_skills, args.Examiner))
+            {
+                args.PushMarkup(Loc.GetString("cmu-dropship-checklist-wear", ("uses", fault.Uses),
+                    ("landings", fault.Landings),
+                    ("landing", (int) MathF.Round(GetLandingFaultChance(fault, false) * 100)),
+                    ("jam", MathF.Round(GetJamChance(fault) * 100, 1))));
+            }
+        }
+
+        string Line(bool ok, string text)
+        {
+            return Loc.GetString(ok ? "cmu-dropship-checklist-ok" : "cmu-dropship-checklist-bad", ("text", text));
+        }
     }
 
     public float GetLandingFaultChance(DropshipHardpointFaultComponent fault, bool crashed)
@@ -203,6 +354,7 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
             if (boot.LandingReboot)
             {
                 fault.Landings++;
+                Dirty(point, fault);
                 chance = GetLandingFaultChance(fault, boot.CrashLanding);
             }
             else
@@ -235,7 +387,7 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
         }
     }
 
-    private string FaultReason(DropshipHardpointFaultComponent fault)
+    public string FaultReason(DropshipHardpointFaultComponent fault)
     {
         return Loc.GetString(fault.Reason ?? "cmu-dropship-fault-reason-unknown");
     }

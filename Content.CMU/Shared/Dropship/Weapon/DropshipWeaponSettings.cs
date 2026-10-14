@@ -59,6 +59,8 @@ public abstract partial class SharedDropshipWeaponSystem
         if (ammo.Comp.SelectableAirburstHeight)
             component.AirburstHeight = args.Height;
         Dirty(weapon, component);
+        _adminLog.Add(Content.Shared.Database.LogType.RMCDropshipWeapon,
+            $"{ToPrettyString(args.Actor)} set {ToPrettyString(weapon)} to laser pattern {component.LaserPattern}, airburst {component.AirburstHeight}");
         RefreshWeaponsUI(terminal);
     }
 

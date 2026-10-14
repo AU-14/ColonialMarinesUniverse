@@ -1,12 +1,14 @@
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared.CMU14.Dropship.DirectFire;
+using Content.Shared.CMU14.Dropship.Cas;
 using Robust.Shared.GameStates;
+using Robust.Shared.Map;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Dropship.Weapon;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
-[Access(typeof(SharedDropshipWeaponSystem), typeof(MohawkChinGunSystem), typeof(DropshipFireControlBootSystem))]
+[Access(typeof(SharedDropshipWeaponSystem), typeof(MohawkChinGunSystem), typeof(DropshipFireControlBootSystem), typeof(CMUCasRequestSystem))]
 public sealed partial class DropshipTerminalWeaponsComponent : Component
 {
     [DataField, AutoNetworkedField]
@@ -53,6 +55,18 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
     [DataField, AutoNetworkedField] public bool FireControlBooting;
     [DataField, AutoNetworkedField] public string FireControlStatus = "";
     [DataField, AutoNetworkedField] public MohawkChinGunVisionMode ChinGunVision;
+
+    /// <summary>The ship is in flight, so AI-selected chin gun targets need gunner approval.</summary>
+    [DataField, AutoNetworkedField] public bool ChinGunInFlight;
+    [DataField, AutoNetworkedField] public int ChinGunHeat;
+    [DataField, AutoNetworkedField] public bool ChinGunOverheated;
+
+    /// <summary>9-line CAS requests from this console's faction RTOs.</summary>
+    [DataField, AutoNetworkedField] public List<CMUCasRequest> CasRequests = new();
+
+    /// <summary>Danger-close strike awaiting a repeat fire command to confirm. Server only.</summary>
+    public EntityCoordinates? DangerCloseTarget;
+    public TimeSpan DangerCloseExpires;
 
     /// <summary>Flare the gunner has locked with the chin gun, shared with every console on the ship.</summary>
     [DataField, AutoNetworkedField] public EntityUid? GunnerFlare;
@@ -154,6 +168,7 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
         { DropshipWeaponPointLocation.PortWing, new List<int?> { -6, -5, -4, -3, -2, -1, 0, null } },
         { DropshipWeaponPointLocation.StarboardFore, new List<int?> { null, 0, 1, 2, 3, 4, 5, 6 } },
         { DropshipWeaponPointLocation.StarboardWing, new List<int?> { null, 0, 1, 2, 3, 4, 5, 6 } },
+        { DropshipWeaponPointLocation.Internal, new List<int?> { -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, null } },
     };
 
     /// <summary>

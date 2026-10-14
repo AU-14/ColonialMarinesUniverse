@@ -32,6 +32,10 @@ public sealed partial class DropshipAmmoComponent : Component
     [DataField, AutoNetworkedField]
     public bool GroundCompatible;
 
+    /// <summary>Heat added to an M90 mount per shell fired from this crate.</summary>
+    [DataField, AutoNetworkedField]
+    public float DirectFireHeat;
+
     [DataField, AutoNetworkedField]
     public bool AirborneCompatible = true;
 

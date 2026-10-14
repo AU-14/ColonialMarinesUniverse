@@ -588,7 +588,7 @@
   parent: RMCDropshipAttachmentAmmoGAU
   id: CMUMohawkM90Ammo
   name: PGU-420 HEAP 90mm ammunition crate
-  description: Four hundred high-explosive armor-piercing rounds for the Midway's dual-feed M90 guns. Fires delayed explosive impacts near a signal flare during CAS flybys only.
+  description: Four hundred high-explosive armor-piercing rounds for the Midway's dual-feed M90 guns. Fires as a landed turret or as delayed explosive impacts near a signal flare in flight. HEAP heats the barrels quickly; sustained fire overheats the guns.
   components:
   - type: RMCGenericExamine
     message: It can penetrate 3 z-levels.
@@ -614,6 +614,8 @@
       max: 10
     weapon: CMUMohawkM90
     directFireProjectile: CMUMohawkM90HEAP
+    groundCompatible: true
+    directFireHeat: 8
   - type: DropshipFabricatorPrintable
     category: Ammo
     cost: 3000
@@ -628,6 +630,7 @@
     message: Scatter rounds cannot penetrate overhead cover.
   - type: DropshipAmmo
     ammoType: m90_scatter
+    groundCompatible: false
     ammoSpriteType: 30mm_crate
     targetSpread: 4
     bulletSpread: 5
@@ -657,6 +660,7 @@
     message: Incendiary rounds cannot penetrate overhead cover.
   - type: DropshipAmmo
     ammoType: m90_incendiary
+    groundCompatible: false
     ammoSpriteType: 30mm_crate
     targetSpread: 2
     bulletSpread: 3
@@ -691,6 +695,7 @@
     message: It can penetrate 1 z-level.
   - type: DropshipAmmo
     ammoType: m90_devastator
+    groundCompatible: false
     ammoSpriteType: 30mm_crate_hv
     targetSpread: 5
     bulletSpread: 6
@@ -728,6 +733,7 @@
     directFireProjectile: CMUMohawkM90Kinetic
     directFireRate: 15
     groundCompatible: true
+    directFireHeat: 0.6
     livingTargetsOnly: true
     ejectCasing: false
     rounds: 1200
