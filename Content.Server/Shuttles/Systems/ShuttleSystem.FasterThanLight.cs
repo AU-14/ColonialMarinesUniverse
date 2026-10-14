@@ -395,7 +395,12 @@ public sealed partial class ShuttleSystem
         if (TryComp<DropshipComponent>(uid, out var dropship))
         {
             startupSound = dropship.StartupSound ?? startupSound;
-            component.TravelSound = dropship.TravelSound ?? component.TravelSound;
+            // cmu edit start: dropships drop out of a warship's bay with their own cue, and play their own flight loop
+            if (dropship.AirlockedStartupSound != null && _dropship.CMUIsDepartingWarship(uid))
+                startupSound = dropship.AirlockedStartupSound;
+
+            component.TravelSound = dropship.TravelSound;
+            // cmu edit end
         }
 
         // CMU14: faction gameplay fixes.

@@ -90,16 +90,29 @@ public sealed partial class DropshipComponent : Component
     [DataField]
     public EntityUid? LaunchAlarmEntity;
 
+    // cmu edit start: cmss13-devs/cmss13-pve#1294 dropship flight sounds
     /// <summary>Optional takeoff cue; null preserves the standard shuttle startup sound.</summary>
     [DataField]
-    public SoundSpecifier? StartupSound;
+    public SoundSpecifier? StartupSound = new SoundPathSpecifier("/Audio/CMU14/Dropship/dropship_flight_start.ogg");
 
-    /// <summary>Optional flight ambience; null preserves the standard FTL travel sound.</summary>
+    /// <summary>Takeoff cue when the dropship leaves a warship's bay; null uses <see cref="StartupSound"/>.</summary>
+    [DataField]
+    public SoundSpecifier? AirlockedStartupSound = new SoundPathSpecifier("/Audio/CMU14/Dropship/dropship_flight_airlocked_start.ogg");
+
+    /// <summary>
+    /// Flight ambience played on the dropship at the start of travel; null plays none. The CMU dropship flight
+    /// audio system starts <see cref="FlightLoopSound"/> once the takeoff cue has finished instead.
+    /// </summary>
     [DataField]
     public SoundSpecifier? TravelSound;
 
+    /// <summary>Looping engine sound while the dropship is in flight, after the takeoff cue.</summary>
     [DataField]
-    public SoundSpecifier ArrivalSound = new SoundPathSpecifier("/Audio/_RMC14/Machines/Shuttle/engine_landing.ogg");
+    public SoundSpecifier? FlightLoopSound = new SoundPathSpecifier("/Audio/CMU14/Dropship/dropship_flight_recurr.ogg");
+
+    [DataField]
+    public SoundSpecifier ArrivalSound = new SoundPathSpecifier("/Audio/CMU14/Dropship/dropship_flight_end.ogg");
+    // cmu edit end
 
     [DataField]
     public SoundSpecifier? LaunchAlarmSound = new SoundPathSpecifier("/Audio/_RMC14/Machines/Shuttle/dropship_launch_alarm.ogg")
