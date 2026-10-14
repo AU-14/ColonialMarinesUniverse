@@ -49,15 +49,16 @@ public sealed class CMUMotionSickSystem : EntitySystem
             }
 
             sick.LastInMotion = now;
+            sick.Riding += sick.CheckInterval;
 
-            if (_random.Prob(sick.PukeChance))
+            if (sick.Riding >= sick.PukeInterval)
             {
-                _vomit.Vomit(uid);
-                sick.Pukes++;
-                Dizzy(uid, sick);
+                sick.Riding -= sick.PukeInterval;
+                if (_random.Prob(sick.PukeChance))
+                    Puke(uid, sick);
+                else
+                    Dizzy(uid, sick);
 
-                var worse = Loc.GetString($"cmu-motion-sick-worse-{_random.Next(1, WorseMessages + 1)}");
-                _popup.PopupEntity(worse, uid, uid, PopupType.MediumCaution);
                 continue;
             }
 
@@ -69,6 +70,16 @@ public sealed class CMUMotionSickSystem : EntitySystem
                 _popup.PopupEntity(queasy, uid, uid, PopupType.SmallCaution);
             }
         }
+    }
+
+    private void Puke(EntityUid uid, CMUMotionSickComponent sick)
+    {
+        _vomit.Vomit(uid);
+        sick.Pukes++;
+        Dizzy(uid, sick);
+
+        var worse = Loc.GetString($"cmu-motion-sick-worse-{_random.Next(1, WorseMessages + 1)}");
+        _popup.PopupEntity(worse, uid, uid, PopupType.MediumCaution);
     }
 
     private void Dizzy(EntityUid uid, CMUMotionSickComponent sick)

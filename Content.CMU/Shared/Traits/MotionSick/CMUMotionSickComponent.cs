@@ -24,9 +24,12 @@ public sealed partial class CMUMotionSickComponent : Component
     [DataField]
     public TimeSpan MaxDizziness = TimeSpan.FromSeconds(20);
 
-    /// <summary>Chance per check to puke.</summary>
+    /// <summary>Chance to puke for every <see cref="PukeInterval"/> spent in motion.</summary>
     [DataField]
-    public float PukeChance = 0.015f;
+    public float PukeChance = 0.05f;
+
+    [DataField]
+    public TimeSpan PukeInterval = TimeSpan.FromMinutes(2);
 
     /// <summary>Chance per check of a queasy message.</summary>
     [DataField]
@@ -39,4 +42,7 @@ public sealed partial class CMUMotionSickComponent : Component
     public TimeSpan NextCheck;
     public TimeSpan LastInMotion;
     public int Pukes;
+
+    /// <summary>Time in motion since the last puke roll.</summary>
+    public TimeSpan Riding;
 }
