@@ -1,0 +1,161 @@
+# cmss13-devs/cmss13-pve#1309 undershirts; fixed colours, not camo conforming
+
+- type: marking
+  id: CMUUndershirtOlive
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_undershirt.rsi
+    state: undershirt_uscm_short
+
+- type: marking
+  id: CMUUndershirtOliveSleeveless
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_undershirt.rsi
+    state: undershirt_uscm
+
+- type: marking
+  id: CMUUndershirtBlack
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_undershirt.rsi
+    state: undershirt_black_short
+
+- type: marking
+  id: CMUUndershirtBlackSleeveless
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_undershirt.rsi
+    state: undershirt_black
+
+- type: marking
+  id: CMUUndershirtWhite
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_undershirt.rsi
+    state: undershirt_short
+
+- type: marking
+  id: CMUUndershirtWhiteSleeveless
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_undershirt.rsi
+    state: undershirt
+
+- type: marking
+  id: CMUUndershirtGrey
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_undershirt.rsi
+    state: undershirt_grey_short
+
+- type: marking
+  id: CMUUndershirtGreySleeveless
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_undershirt.rsi
+    state: undershirt_grey
+
+- type: marking
+  id: CMUUndershirtRed
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_undershirt.rsi
+    state: undershirt_uscm_red
+
+- type: marking
+  id: CMUUndershirtYellow
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_undershirt.rsi
+    state: undershirt_uscm_yellow
+
+- type: marking
+  id: CMUUndershirtBlue
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_undershirt.rsi
+    state: undershirt_uscm_blue
+
+- type: marking
+  id: CMUBraWhite
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_undershirt.rsi
+    state: bra_white
+
+- type: marking
+  id: CMUBraBlack
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_undershirt.rsi
+    state: bra_black
+
+- type: marking
+  id: CMUSportsBraOlive
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_undershirt.rsi
+    state: sports_uscm
+
+- type: marking
+  id: CMUSportsBraWhite
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_undershirt.rsi
+    state: sports_white
+
+- type: marking
+  id: CMUSportsBraBlack
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_undershirt.rsi
+    state: sports_black

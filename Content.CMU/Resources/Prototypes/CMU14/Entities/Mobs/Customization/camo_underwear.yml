@@ -1,0 +1,154 @@
+# Underwear that follows the map's camouflage. The editor shows the jungle version; on spawn it is
+# swapped for the standalone marking listed for the map's camo (CMUCamoMarkingSystem).
+
+- type: marking
+  id: CMUUnderwearBoxersCamo
+  bodyPart: UndergarmentBottom
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: _RMC14/Mobs/Customization/underwear.rsi
+    state: j_boxers
+
+- type: cmuCamoMarking
+  id: CMUUnderwearBoxersCamo
+  variants:
+    Classic: RMCUnderwearBoxers
+    Desert: RMCUnderwearBoxersBlue
+    Jungle: RMCUnderwearBoxersJungle
+    Snow: RMCUnderwearBoxersSnow
+    Urban: RMCUnderwearBoxersUrban
+
+- type: marking
+  id: CMUUnderwearLowridersCamo
+  bodyPart: UndergarmentBottom
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: _RMC14/Mobs/Customization/underwear.rsi
+    state: j_lowriders
+
+- type: cmuCamoMarking
+  id: CMUUnderwearLowridersCamo
+  variants:
+    Classic: RMCUnderwearLowriders
+    Desert: RMCUnderwearLowridersDesert
+    Jungle: RMCUnderwearLowridersJungle
+    Snow: RMCUnderwearLowridersSnow
+    Urban: RMCUnderwearLowridersUrban
+
+- type: marking
+  id: CMUUnderwearBriefsCamo
+  bodyPart: UndergarmentBottom
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: _RMC14/Mobs/Customization/underwear.rsi
+    state: j_briefs
+
+- type: cmuCamoMarking
+  id: CMUUnderwearBriefsCamo
+  variants:
+    Classic: RMCUnderwearBriefs
+    Desert: RMCUnderwearBriefsDesert
+    Jungle: RMCUnderwearBriefsJungle
+    Snow: RMCUnderwearBriefsSnow
+    Urban: RMCUnderwearBriefsUrban
+
+- type: marking
+  id: CMUUnderwearSatinCamo
+  bodyPart: UndergarmentBottom
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: _RMC14/Mobs/Customization/underwear.rsi
+    state: j_satin
+
+- type: cmuCamoMarking
+  id: CMUUnderwearSatinCamo
+  variants:
+    Classic: RMCUnderwearSatin
+    Desert: RMCUnderwearSatinDesert
+    Jungle: RMCUnderwearSatinJungle
+    Snow: RMCUnderwearSatinSnow
+    Urban: RMCUnderwearSatinUrban
+
+- type: marking
+  id: CMUUnderwearTangaCamo
+  bodyPart: UndergarmentBottom
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: _RMC14/Mobs/Customization/underwear.rsi
+    state: jungle_tanga
+
+- type: cmuCamoMarking
+  id: CMUUnderwearTangaCamo
+  variants:
+    Classic: RMCUnderwearTanga
+    Desert: RMCUnderwearTangaDesert
+    Jungle: RMCUnderwearTangaJungle
+    Snow: RMCUnderwearTangaSnow
+    Urban: RMCUnderwearTangaUrban
+
+- type: marking
+  id: CMUUndershirtClassicCamo
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: _RMC14/Mobs/Customization/undershirt.rsi
+    state: j_classic
+
+- type: cmuCamoMarking
+  id: CMUUndershirtClassicCamo
+  variants:
+    Classic: RMCUndershirtClassic
+    Desert: RMCUndershirtClassicDesert
+    Jungle: RMCUndershirtClassicJungle
+    Snow: RMCUndershirtClassicSnow
+    Urban: RMCUndershirtClassicUrban
+
+- type: marking
+  id: CMUUndershirtSportsCamo
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: _RMC14/Mobs/Customization/undershirt.rsi
+    state: j_sports
+
+- type: cmuCamoMarking
+  id: CMUUndershirtSportsCamo
+  variants:
+    Classic: RMCUndershirtSports
+    Desert: RMCUndershirtSportsDesert
+    Jungle: RMCUndershirtSportsJungle
+    Snow: RMCUndershirtSportsSnow
+    Urban: RMCUndershirtSportsUrban
+
+- type: marking
+  id: CMUUndershirtStraplessCamo
+  bodyPart: UndergarmentTop
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: _RMC14/Mobs/Customization/undershirt.rsi
+    state: j_strapless
+
+- type: cmuCamoMarking
+  id: CMUUndershirtStraplessCamo
+  variants:
+    Classic: RMCUndershirtStrapless
+    Desert: RMCUndershirtStraplessDesert
+    Jungle: RMCUndershirtStraplessJungle
+    Snow: RMCUndershirtStraplessSnow
+    Urban: RMCUndershirtStraplesUrban

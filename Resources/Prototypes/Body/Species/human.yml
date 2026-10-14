@@ -9,12 +9,16 @@
       limit: 1
       required: true
       default: [ RMCUndershirtStandard ]
-      nudityDefault: [ UndergarmentTopTanktop ]
+      # cmu edit start
+      nudityDefault: [ RMCUndershirtStandard ]
+      # cmu edit end
     enum.HumanoidVisualLayers.UndergarmentBottom:
       limit: 1
       required: true
       default: [ RMCUnderwearBoxersBlue ]
-      nudityDefault: [ UndergarmentBottomBoxers ]
+      # cmu edit start
+      nudityDefault: [ RMCUnderwearBoxersBlue ]
+      # cmu edit end
     enum.HumanoidVisualLayers.Hair:
       limit: 1
       required: false

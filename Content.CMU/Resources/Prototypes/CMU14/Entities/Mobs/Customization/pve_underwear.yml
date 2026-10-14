@@ -1,0 +1,111 @@
+# cmss13-devs/cmss13-pve#1309 underwear; fixed colours, not camo conforming
+
+- type: marking
+  id: CMUUnderwearBoxersWhite
+  bodyPart: UndergarmentBottom
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_underwear.rsi
+    state: white_boxers
+
+- type: marking
+  id: CMUUnderwearBoxersBlack
+  bodyPart: UndergarmentBottom
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_underwear.rsi
+    state: black_boxers
+
+- type: marking
+  id: CMUUnderwearBoxersBlue
+  bodyPart: UndergarmentBottom
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_underwear.rsi
+    state: blue_boxers
+
+- type: marking
+  id: CMUUnderwearBoxersPink
+  bodyPart: UndergarmentBottom
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_underwear.rsi
+    state: pink_boxers
+
+- type: marking
+  id: CMUUnderwearBoxersGrey
+  bodyPart: UndergarmentBottom
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_underwear.rsi
+    state: grey_boxers
+
+- type: marking
+  id: CMUUnderwearBoxersOlive
+  bodyPart: UndergarmentBottom
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_underwear.rsi
+    state: marine_boxers
+
+- type: marking
+  id: CMUUnderwearBriefsWhite
+  bodyPart: UndergarmentBottom
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_underwear.rsi
+    state: white_briefs
+
+- type: marking
+  id: CMUUnderwearBriefsBlack
+  bodyPart: UndergarmentBottom
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_underwear.rsi
+    state: black_briefs
+
+- type: marking
+  id: CMUUnderwearPantiesWhite
+  bodyPart: UndergarmentBottom
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_underwear.rsi
+    state: white_satin
+
+- type: marking
+  id: CMUUnderwearPantiesBlack
+  bodyPart: UndergarmentBottom
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_underwear.rsi
+    state: black_satin
+
+- type: marking
+  id: CMUUnderwearPantiesGrey
+  bodyPart: UndergarmentBottom
+  forcedColoring: true
+  RMCFollowSkinColor: false
+  groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/pve_underwear.rsi
+    state: grey_satin
