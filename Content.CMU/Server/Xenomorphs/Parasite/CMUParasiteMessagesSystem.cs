@@ -1,4 +1,6 @@
+using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.Parasite;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -7,7 +9,7 @@ namespace Content.Server.CMU14.Xenomorphs.Parasite;
 
 /// <summary>
 ///     What a host feels while a parasite is on their face: as it latches on, now and then while it holds on, and
-///     when it lets go.
+///     when it lets go. The host stays knocked out for as long as it holds on.
 /// </summary>
 public sealed class CMUParasiteMessagesSystem : EntitySystem
 {
@@ -20,8 +22,13 @@ public sealed class CMUParasiteMessagesSystem : EntitySystem
 
     private static readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(1);
 
+    /// <summary>Topped up every update, so the host wakes shortly after the parasite lets go.</summary>
+    private static readonly TimeSpan KnockOutTime = TimeSpan.FromSeconds(3);
+
+    [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private RMCSizeStunSystem _sizeStun = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     private readonly Dictionary<EntityUid, Hug> _hugs = new();
@@ -70,6 +77,9 @@ public sealed class CMUParasiteMessagesSystem : EntitySystem
                 _over.Add(victim);
                 continue;
             }
+
+            if (!_mobState.IsDead(victim))
+                _sizeStun.TryKnockOut(victim, KnockOutTime);
 
             if (now < hug.NextMessage)
                 continue;
