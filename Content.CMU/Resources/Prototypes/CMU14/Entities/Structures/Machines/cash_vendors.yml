@@ -409,29 +409,62 @@
     - id: RMCPouchCassette
       name: Cassette Pouch
       price: 10
-    - id: RMCCassetteTapeWigWoo1
-      name: Cassette (Wig Woo)
+    - id: AU14CassetteTapeUnitedAmericasVol1
+      name: Cassette (United Americas Vol. 1)
       price: 5
-    - id: RMCCassetteTapeMendax
-      name: Cassette (Mendax)
+    - id: AU14CassetteTapeUnitedAmericasVol2
+      name: Cassette (United Americas Vol. 2)
       price: 5
-    - id: RMCCassetteTapeNighty
-      name: Cassette (Nighty)
+    - id: AU14CassetteTapeRisingSun
+      name: Cassette (Rising Sun)
       price: 5
-    - id: RMCCassetteTapeGoodShowOldChap
-      name: Cassette (Good Show Old Chap)
+    - id: AU14CassetteTapeBlueStripe
+      name: Cassette (Blue Stripe)
       price: 5
-    - id: RMCCassetteTapeRedQwesta
-      name: Cassette (Red Qwesta)
+    - id: AU14CassetteTapeNeon
+      name: Cassette (Neon)
       price: 5
-    - id: RMCCassetteTapeBolgarich
-      name: Cassette (Bolgarich)
+    - id: AU14CassetteTapePurple
+      name: Cassette (Purple)
       price: 5
-    - id: RMCCassetteTapeQwertyquerty
-      name: Cassette (Qwertyquerty)
+    - id: AU14CassetteTapePartyApproved
+      name: Cassette (UPP)
       price: 5
-    - id: RMCCassetteTapePigeonBeans
-      name: Cassette (Pigeon Beans)
+    - id: AU14CassetteTapeTan
+      name: Cassette (Tan)
+      price: 5
+    - id: AU14CassetteTapeTWE
+      name: Cassette (TWE)
+      price: 5
+    - id: AU14CassetteTapeWY
+      name: Cassette (Weyland-Yutani)
+      price: 5
+    - id: AU14CassetteTapeGreen
+      name: Cassette (Green)
+      price: 5
+    - id: AU14CassetteTapePink
+      name: Cassette (Pink Striped)
+      price: 5
+    - id: AU14CassetteTapeRainbow
+      name: Cassette (Rainbow)
+      price: 5
+    - id: AU14CassetteTapeRedStripe
+      name: Cassette (Red Stripe)
+      price: 5
+    - id: AU14CassetteTapeRedBlack
+      name: Cassette (Red Black)
+      price: 5
+    - id: AU14CassetteTapeOcean
+      name: Cassette (Ocean)
+      price: 5
+    - id: AU14CassetteTapeWhite
+      name: Cassette (White)
+      price: 5
+    - id: AU14CassetteTapeRedDirt
+      name: Cassette (Red Dirt)
+      price: 5
+    - id: AU14CassetteTapeCLF
+      name: Cassette (CLF)
       price: 5
     - id: RMCCassetteTapeCustom
       name: Cassette (Blank)
@@ -448,12 +481,6 @@
     - id: CMPen
       name: Pen
       price: 1
-    - id: AU14CassetteTapeUnitedAmericasVol1
-      name: Cassette (United Americas Vol. 1)
-      price: 5
-    - id: AU14CassetteTapeUnitedAmericasVol2
-      name: Cassette (United Americas Vol. 2)
-      price: 5
     - id: RMCMagazineBootsN160
       name: Boots! Magazine (Issue 160)
       price: 4
