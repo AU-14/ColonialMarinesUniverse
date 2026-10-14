@@ -293,7 +293,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
                 EnsureComp<MohawkChinGunProjectileComponent>(projectile);
                 chin.PendingManualShot = null;
                 var iffEvent = new AmmoShotEvent { FiredProjectiles = new List<EntityUid> { projectile } };
-                _iff.GiveAmmoIFF(point.Owner, ref iffEvent, intrinsic: true, enabled: chin.IffEnabled);
+                _iff.GiveAmmoIFF(point.Owner, ref iffEvent, intrinsic: true, enabled: MohawkChinGunSystem.IsIffActive(chin));
                 if (_net.IsServer)
                 {
                     if (ammo.EjectCasing)
@@ -457,15 +457,18 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         var chosen = GetFeedAmmo(point, chin.ActiveFeed);
         if (chosen == null || chosen.Value.Comp.Rounds < minimumRounds)
         {
-            var other = GetFeedAmmo(point, 1 - chin.ActiveFeed);
-            if (other is { } usable && usable.Comp.Rounds >= minimumRounds)
+            for (var step = 1; step < FeedCount; step++)
             {
+                var feed = (chin.ActiveFeed + step) % FeedCount;
+                if (GetFeedAmmo(point, feed) is not { } usable || usable.Comp.Rounds < minimumRounds)
+                    continue;
                 if (_net.IsServer)
                 {
-                    chin.ActiveFeed = 1 - chin.ActiveFeed;
+                    chin.ActiveFeed = feed;
                     Dirty(point, chin);
                 }
-                chosen = other;
+                chosen = usable;
+                break;
             }
         }
         if (chosen is not { } selected)
@@ -476,9 +479,9 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
 
     public Entity<DropshipAmmoComponent>? GetFeedAmmo(EntityUid point, int feed)
     {
-        if (feed is < 0 or > 1 || !TryComp(point, out DropshipWeaponPointComponent? mount))
+        if (feed is < 0 or >= FeedCount || !TryComp(point, out DropshipWeaponPointComponent? mount))
             return null;
-        var id = feed == 0 ? mount.AmmoContainerSlotId : mount.SecondAmmoContainerSlotId;
+        var id = mount.GetFeedSlot(feed);
         if (id == null || !_containers.TryGetContainer(point, id, out var slot))
             return null;
         foreach (var uid in slot.ContainedEntities)
@@ -495,13 +498,32 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
     {
         if (!_net.IsServer)
             return;
-        EntityManager.System<DropshipFireControlBootSystem>().RegisterUse(point);
+        var boot = EntityManager.System<DropshipFireControlBootSystem>();
+        var engagement = boot.RegisterUse(point);
         if (!TryComp(point, out MohawkChinGunComponent? chin))
             return;
+        // The M90 bursts many shells per engagement, so it rolls one stoppage per engagement instead of per shell.
+        if (engagement)
+            boot.TryJam(point, chin.Operator);
         _chinGun.AddHeat((point, chin), heat);
         if (chin.AlternateFeeds)
-            chin.ActiveFeed = 1 - chin.ActiveFeed;
+            chin.ActiveFeed = NextAlternateFeed(point, chin.ActiveFeed);
         Dirty(point, chin);
+    }
+
+    public const int FeedCount = 3;
+
+    /// <summary>The next loaded feed usable in the current flight state, for alternating fire.</summary>
+    public int NextAlternateFeed(EntityUid point, int current)
+    {
+        for (var step = 1; step < FeedCount; step++)
+        {
+            var feed = (current + step) % FeedCount;
+            if (GetFeedAmmo(point, feed) is { } ammo && ammo.Comp.Rounds > 0 &&
+                _chinGun.IsAmmoUsable(point, ammo.Comp))
+                return feed;
+        }
+        return current;
     }
 
     public void EjectCasing(Entity<GunshipDirectFirePointComponent> point, EntityUid grid)

@@ -257,4 +257,113 @@ public sealed class CMUCasSupportTest
         });
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task UplinkRadioMarksDesignationsAndAutoCarryOut()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var entities = pair.Server.EntMan;
+        var id = 0;
+        EntityUid grid = default;
+        await pair.Server.WaitAssertion(() =>
+        {
+            var maps = entities.System<SharedMapSystem>();
+            maps.CreateMap(out var mapId);
+            var gridEnt = maps.CreateGridEntity(mapId);
+            grid = gridEnt.Owner;
+            var tiles = pair.Server.ResolveDependency<ITileDefinitionManager>();
+            for (var x = -2; x <= 60; x++)
+                maps.SetTile(gridEnt, new Vector2i(x, 0), new Tile(tiles["FloorSteel"].TileId));
+            EntityCoordinates At(float x) => new(grid, new Vector2(x + 0.5f, 0.5f));
+            EntityUid Mob(float x, string faction)
+            {
+                var mob = entities.SpawnEntity("CMMobHuman", At(x));
+                entities.EnsureComponent<MarineComponent>(mob).Faction = faction;
+                return mob;
+            }
+
+            var requests = entities.System<CMUCasRequestSystem>();
+            var weapons = entities.System<SharedDropshipWeaponSystem>();
+            var rto = Mob(0, "GOVFOR");
+            Mob(1, "GOVFOR");
+            var hostile = Mob(30, "OPFOR");
+            Mob(55, "OPFOR");
+
+            Assert.That(requests.TryCreateRadioMarkRequest(rto, CMUCasMunition.Gau, CMUCasEffect.Incendiary, "  bunker  ", out id),
+                Is.True, "The uplink calls CAS onto the nearest hostile without a flare.");
+            Assert.That(requests.TryGetRequest(id, out var request), Is.True);
+            Assert.That(request.RadioMark, Is.True);
+            Assert.That(request.Munition, Is.EqualTo(CMUCasMunition.Gau));
+            Assert.That(request.Effect, Is.EqualTo(CMUCasEffect.Incendiary));
+            Assert.That(request.Remarks, Is.EqualTo("bunker"));
+            Assert.That(entities.TryGetEntity(request.Target, out var radioMark), Is.True);
+            var xforms = entities.System<SharedTransformSystem>();
+            Assert.That((xforms.GetMapCoordinates(radioMark!.Value).Position -
+                         xforms.GetMapCoordinates(hostile).Position).Length(), Is.LessThan(0.5f),
+                "The radio mark drops on the nearest hostile, not the friendly or the out-of-range one.");
+            Assert.That(entities.HasComponent<DropshipTargetComponent>(radioMark.Value), Is.True);
+
+            var farMark = entities.SpawnEntity(null, At(55));
+            weapons.MakeDropshipTarget(farMark, "FAR", "GOVFOR");
+            Assert.That(requests.TryCreateRequest(rto, farMark, CMUCasMunition.Any, out _), Is.False,
+                "Marks beyond 45 tiles are out of call range.");
+            var nearMark = entities.SpawnEntity(null, At(40));
+            weapons.MakeDropshipTarget(nearMark, "NER", "GOVFOR");
+            Assert.That(requests.IsRtoDesignated(nearMark), Is.False);
+            var lase = entities.SpawnEntity(null, At(41));
+            entities.EnsureComponent<CMUCasRtoDesignationComponent>(lase);
+            Assert.That(requests.IsRtoDesignated(nearMark), Is.True, "An RTO lase within two tiles designates the strike.");
+            Assert.That(requests.IsRtoDesignated(At(10)), Is.False);
+            Assert.That(requests.TryCreateRequest(rto, nearMark, CMUCasMunition.Bofors, out var lasedId), Is.True,
+                "Marks within 45 tiles can be called.");
+            requests.TryGetRequest(lasedId, out var lased);
+            Assert.That(lased.Designated, Is.True);
+
+            bool Match(CMUCasMunition munition, string abbreviation) =>
+                CMUCasRequestSystem.Matches(munition, new DropshipWeaponComponent { Abbreviation = abbreviation });
+            Assert.That(Match(CMUCasMunition.Gau, "GAU"), Is.True);
+            Assert.That(Match(CMUCasMunition.Gau, "ATC"), Is.False);
+            Assert.That(Match(CMUCasMunition.Bofors, "ATC"), Is.True);
+            Assert.That(Match(CMUCasMunition.Howitzer, "HWR"), Is.True);
+            Assert.That(Match(CMUCasMunition.Missiles, "MSL"), Is.True);
+            Assert.That(Match(CMUCasMunition.Missiles, "RKT"), Is.False);
+            Assert.That(Match(CMUCasMunition.Guns, "HWR"), Is.True);
+            Assert.That(Match(CMUCasMunition.ChinGun, "M90"), Is.True);
+            Assert.That(Match(CMUCasMunition.Any, "FLR"), Is.False, "Flare launchers never carry out a strike.");
+
+            var console = entities.SpawnEntity("CMUMohawkMidwayGunneryea0f8d621b", At(-2));
+            var pilot = Mob(-2, "GOVFOR");
+            entities.EventBus.RaiseLocalEvent(console, new CMUCasRequestActionMsg(id, CMUCasRequestStatus.Accepted)
+                { Actor = pilot, UiKey = DropshipTerminalWeaponsUi.Key });
+            requests.TryGetRequest(id, out request);
+            Assert.That(request.Status, Is.EqualTo(CMUCasRequestStatus.Accepted));
+            Assert.That(request.CarryMode, Is.EqualTo(CMUCasCarryMode.Undecided));
+            Assert.That(request.CarryCountdown, Is.EqualTo(12));
+
+            Assert.That(requests.SetCarryMode(lasedId, CMUCasCarryMode.Manual), Is.False,
+                "Pending requests have no carry-out decision.");
+        });
+
+        await pair.RunSeconds(6);
+        await pair.Server.WaitAssertion(() =>
+        {
+            var requests = entities.System<CMUCasRequestSystem>();
+            requests.TryGetRequest(id, out var request);
+            Assert.That(request.CarryMode, Is.EqualTo(CMUCasCarryMode.Undecided));
+            Assert.That(request.CarryCountdown, Is.InRange(5, 7));
+        });
+
+        await pair.RunSeconds(7);
+        await pair.Server.WaitAssertion(() =>
+        {
+            var requests = entities.System<CMUCasRequestSystem>();
+            requests.TryGetRequest(id, out var request);
+            Assert.That(request.CarryMode, Is.EqualTo(CMUCasCarryMode.Auto),
+                "Without a pilot decision the mission defaults to automatic carry-out after 12 seconds.");
+            Assert.That(requests.SetCarryMode(id, CMUCasCarryMode.Manual), Is.True);
+            requests.TryGetRequest(id, out request);
+            Assert.That(request.CarryMode, Is.EqualTo(CMUCasCarryMode.Manual));
+        });
+        await pair.CleanReturnAsync();
+    }
 }

@@ -866,6 +866,80 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
     }
 
     [Test]
+    public async Task GroundsideFreeFireForcesIffUntilSelfDefenseOrOverwhelmed()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var mount = Create(map.Grid, false);
+            var chin = mount.Chin;
+            var turret = Server.System<MohawkChinGunSystem>();
+            void Evaluate()
+            {
+                chin.NextIffEvaluation = TimeSpan.Zero;
+                turret.Update(0);
+            }
+            EntityUid Spawn(float y)
+            {
+                var hostile = SEntMan.SpawnEntity(null, new EntityCoordinates(map.MapUid, 1.5f, y));
+                SEntMan.AddComponent<NpcFactionMemberComponent>(hostile).Factions.Add("OPFOR");
+                SEntMan.AddComponent<Content.Shared.Mobs.Components.MobStateComponent>(hostile);
+                return hostile;
+            }
+
+            Send(mount, new MohawkChinGunIffMessage());
+            Assert.That(chin.IffEnabled, Is.False);
+            Evaluate();
+            Assert.That(chin.IffOverride, Is.EqualTo(MohawkIffOverride.None), "Manual control never forces IFF.");
+
+            Send(mount, new MohawkChinGunFreeFireMessage());
+            Assert.That(chin.FreeFireEnabled, Is.True);
+            Evaluate();
+            Assert.That(chin.IffOverride, Is.EqualTo(MohawkIffOverride.Forced));
+            Assert.That(MohawkChinGunSystem.IsIffActive(chin), Is.True,
+                "Groundside AI free fire holds IFF on even with the gunner's toggle off.");
+            Assert.That(mount.Terminal.ChinGunIffOverride, Is.EqualTo(MohawkIffOverride.Forced));
+
+            Spawn(16);
+            Evaluate();
+            Assert.That(chin.IffOverride, Is.EqualTo(MohawkIffOverride.Forced), "A single distant hostile keeps the lock.");
+
+            var close = Spawn(4);
+            Evaluate();
+            Assert.That(chin.IffOverride, Is.EqualTo(MohawkIffOverride.SelfDefense));
+            Assert.That(MohawkChinGunSystem.IsIffActive(chin), Is.False, "Self defense returns IFF to the gunner's toggle.");
+
+            SEntMan.DeleteEntity(close);
+            Spawn(14);
+            Spawn(15);
+            Spawn(17);
+            Evaluate();
+            Assert.That(chin.IffOverride, Is.EqualTo(MohawkIffOverride.Overwhelmed));
+        });
+    }
+
+    [Test]
+    public async Task LowAmmoWarnsOnceBelowAQuarterCrate()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var mount = Create(map.Grid, false);
+            var turret = Server.System<MohawkChinGunSystem>();
+            turret.Update(0);
+            Assert.That(mount.Terminal.ChinGunLowAmmo, Is.Empty);
+            mount.Ammo.Rounds = mount.Ammo.MaxRounds / 4 - 1;
+            turret.Update(0);
+            Assert.That(mount.Terminal.ChinGunLowAmmo, Does.Contain("F1"));
+            Assert.That(mount.Chin.LowAmmoWarned, Does.Contain(mount.Crate), "Each crate warns the gunner once.");
+            mount.Ammo.Rounds = mount.Ammo.MaxRounds;
+            turret.Update(0);
+            Assert.That(mount.Terminal.ChinGunLowAmmo, Is.Empty);
+            Assert.That(mount.Chin.LowAmmoWarned, Is.Empty, "Refilled crates re-arm the warning.");
+        });
+    }
+
+    [Test]
     public async Task ApprovedAiSquallFiringIsNotThrottledByAcquisitionCadence()
     {
         var map = await Pair.CreateTestMap();

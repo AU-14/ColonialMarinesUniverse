@@ -48,6 +48,7 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
     public bool ChinGunAr;
 
     [DataField, AutoNetworkedField] public bool ChinGunIff = true;
+    [DataField, AutoNetworkedField] public MohawkIffOverride ChinGunIffOverride;
     [DataField, AutoNetworkedField] public bool ChinGunSetupReady;
     [DataField, AutoNetworkedField] public bool ChinGunAiEnabled;
     [DataField, AutoNetworkedField] public EntityUid? ChinGunAiTarget;
@@ -85,6 +86,13 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
 
     [DataField, AutoNetworkedField]
     public string ChinGunFeedTwo = "";
+
+    [DataField, AutoNetworkedField]
+    public string ChinGunFeedThree = "";
+
+    /// <summary>Feeds under a quarter of a full crate, shown as a warning to the gunner.</summary>
+    [DataField, AutoNetworkedField]
+    public string ChinGunLowAmmo = "";
 
     [DataField, AutoNetworkedField]
     public Screen ScreenOne;

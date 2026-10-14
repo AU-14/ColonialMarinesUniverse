@@ -105,6 +105,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         Window.FeedModeButton.OnPressed += _ => SendMessage(new MohawkChinGunFeedMessage());
         Window.FeedOneButton.OnPressed += _ => SendMessage(new MohawkChinGunFeedMessage(0));
         Window.FeedTwoButton.OnPressed += _ => SendMessage(new MohawkChinGunFeedMessage(1));
+        Window.FeedThreeButton.OnPressed += _ => SendMessage(new MohawkChinGunFeedMessage(2));
         Window.ScreenOne.Viewport.OnKeyBindUp += args =>
         {
             if (args.Function == EngineKeyFunctions.UIClick)
@@ -244,7 +245,18 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             Window.BootStatusLabel.ToolTip = terminal.FireControlStatus;
             Window.IffButton.Visible = terminal.Gunnery;
             Window.IffButton.Disabled = !terminal.ChinGunSetupReady;
-            Window.IffButton.Text = Loc.GetString(terminal.ChinGunIff ? "cmu-mohawk-iff-on" : "cmu-mohawk-iff-off");
+            Window.IffButton.Text = terminal.ChinGunIffOverride switch
+            {
+                MohawkIffOverride.Forced => Loc.GetString("cmu-mohawk-iff-locked"),
+                MohawkIffOverride.SelfDefense => Loc.GetString("cmu-mohawk-iff-self-defense",
+                    ("state", Loc.GetString(terminal.ChinGunIff ? "cmu-mohawk-iff-on" : "cmu-mohawk-iff-off"))),
+                MohawkIffOverride.Overwhelmed => Loc.GetString("cmu-mohawk-iff-overwhelmed",
+                    ("state", Loc.GetString(terminal.ChinGunIff ? "cmu-mohawk-iff-on" : "cmu-mohawk-iff-off"))),
+                _ => Loc.GetString(terminal.ChinGunIff ? "cmu-mohawk-iff-on" : "cmu-mohawk-iff-off"),
+            };
+            Window.LowAmmoLabel.Visible = terminal.Gunnery && terminal.ChinGunLowAmmo.Length > 0;
+            Window.LowAmmoLabel.Text = Loc.GetString("cmu-mohawk-low-ammo-label", ("feeds", terminal.ChinGunLowAmmo));
+            Window.LowAmmoLabel.ToolTip = Window.LowAmmoLabel.Text;
             Window.VisionButton.Visible = terminal.Gunnery;
             Window.VisionButton.Disabled = !terminal.ChinGunSetupReady;
             Window.VisionButton.Text = Loc.GetString(MohawkChinGunSystem.VisionLoc(terminal.ChinGunVision));
@@ -279,6 +291,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             Window.FeedModeButton.Visible = manual;
             Window.FeedOneButton.Visible = manual;
             Window.FeedTwoButton.Visible = manual;
+            Window.FeedThreeButton.Visible = manual;
             Window.FeedStatusLabel.Visible = manual;
             Window.FeedModeButton.Text = Loc.GetString(terminal.ChinGunAlternateFeeds
                 ? "cmu-mohawk-gunnery-feed-alternate" : "cmu-mohawk-gunnery-feed-selected");
@@ -286,7 +299,10 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 ("feed", 1), ("active", terminal.ChinGunFeed == 0 ? "*" : ""));
             Window.FeedTwoButton.Text = Loc.GetString("cmu-mohawk-gunnery-feed-select",
                 ("feed", 2), ("active", terminal.ChinGunFeed == 1 ? "*" : ""));
-            Window.FeedStatusLabel.Text = $"1: {terminal.ChinGunFeedOne}\n2: {terminal.ChinGunFeedTwo}";
+            Window.FeedThreeButton.Text = Loc.GetString("cmu-mohawk-gunnery-feed-select",
+                ("feed", 3), ("active", terminal.ChinGunFeed == 2 ? "*" : ""));
+            Window.FeedStatusLabel.Text =
+                $"1: {terminal.ChinGunFeedOne}\n2: {terminal.ChinGunFeedTwo}\n3: {terminal.ChinGunFeedThree}";
             Window.FeedStatusLabel.ToolTip = Window.FeedStatusLabel.Text;
             Window.TrackTargetButton.Visible = manual;
             Window.AcquireTargetButton.Visible = manual;
@@ -365,6 +381,20 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 ("description", request.TargetDescription), ("friendlies", request.Friendlies),
                 ("munition", CMUCasRequestSystem.MunitionName(request.Munition)),
                 ("danger", request.DangerClose ? Loc.GetString("cmu-cas-request-card-danger") : ""));
+            var details = new List<string>();
+            if (request.Effect != CMUCasEffect.Any)
+                details.Add(Loc.GetString("cmu-cas-request-card-effect", ("effect", CMUCasRequestSystem.EffectName(request.Effect))));
+            if (request.RadioMark)
+                details.Add(Loc.GetString("cmu-cas-request-card-radio-mark"));
+            if (request.Designated)
+                details.Add(Loc.GetString("cmu-cas-request-card-laser"));
+            if (request.Remarks.Length > 0)
+                details.Add(Loc.GetString("cmu-cas-request-card-remarks", ("remarks", request.Remarks)));
+            if (request.Status is CMUCasRequestStatus.Accepted or CMUCasRequestStatus.ClearedHot)
+                details.Add(Loc.GetString($"cmu-cas-carry-{request.CarryMode.ToString().ToLowerInvariant()}",
+                    ("seconds", request.CarryCountdown), ("volleys", request.CarryVolleys)));
+            if (details.Count > 0)
+                text += "\n" + string.Join("\n", details);
             card.AddChild(new Label
             {
                 Text = text,
@@ -378,12 +408,43 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 },
             });
 
-            var buttons = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal };
+            // Stacked, full-width buttons: the console column is too narrow for three labels side by side.
+            var buttons = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, HorizontalExpand = true };
             void AddAction(string loc, CMUCasRequestStatus status, bool enabled)
             {
-                var button = new Button { Text = Loc.GetString(loc), Disabled = !enabled, HorizontalExpand = true };
+                var button = new Button
+                {
+                    Text = Loc.GetString(loc),
+                    Disabled = !enabled,
+                    HorizontalExpand = true,
+                    ClipText = true,
+                    MaxWidth = 260,
+                };
                 button.OnPressed += _ => SendMessage(new CMUCasRequestActionMsg(id, status));
                 buttons.AddChild(button);
+            }
+
+            if (request.Status is CMUCasRequestStatus.Accepted or CMUCasRequestStatus.ClearedHot)
+            {
+                var carry = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, HorizontalExpand = true };
+                void AddCarry(string loc, CMUCasCarryMode mode)
+                {
+                    var button = new Button
+                    {
+                        Text = Loc.GetString(loc),
+                        ToggleMode = true,
+                        Pressed = request.CarryMode == mode,
+                        HorizontalExpand = true,
+                        ClipText = true,
+                        StyleClasses = { mode == CMUCasCarryMode.Auto ? "OpenRight" : "OpenLeft" },
+                    };
+                    button.OnPressed += _ => SendMessage(new CMUCasCarryModeMsg(id, mode));
+                    carry.AddChild(button);
+                }
+
+                AddCarry("cmu-cas-carry-auto-button", CMUCasCarryMode.Auto);
+                AddCarry("cmu-cas-carry-manual-button", CMUCasCarryMode.Manual);
+                buttons.AddChild(carry);
             }
 
             AddAction("cmu-cas-request-accept", CMUCasRequestStatus.Accepted, request.Status == CMUCasRequestStatus.Pending);

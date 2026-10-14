@@ -143,19 +143,22 @@ public sealed partial class DropshipFireControlBootSystem : EntitySystem
     /// Records firing on a hardpoint. Continuous fire within <see cref="DropshipHardpointFaultComponent.UseWindow"/>
     /// counts as a single engagement.
     /// </summary>
-    public void RegisterUse(EntityUid point)
+    /// <returns>True when this use started a new engagement.</returns>
+    public bool RegisterUse(EntityUid point)
     {
         if (_net.IsClient || TerminatingOrDeleted(point) ||
             !HasComp<DropshipWeaponPointComponent>(point) && !HasComp<DropshipUtilityPointComponent>(point))
-            return;
+            return false;
         var fault = EnsureComp<DropshipHardpointFaultComponent>(point);
         var now = _timing.CurTime;
-        if (fault.LastUse == TimeSpan.Zero || now - fault.LastUse >= fault.UseWindow)
+        var engagement = fault.LastUse == TimeSpan.Zero || now - fault.LastUse >= fault.UseWindow;
+        if (engagement)
         {
             fault.Uses++;
             Dirty(point, fault);
         }
         fault.LastUse = now;
+        return engagement;
     }
 
     /// <summary>

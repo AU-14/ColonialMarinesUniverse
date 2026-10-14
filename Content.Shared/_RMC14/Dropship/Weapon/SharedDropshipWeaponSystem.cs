@@ -7,6 +7,7 @@ using Content.Shared.CMU14.Dropship.DirectFire;
 using Content.Shared.CMU14.Dropship.Cas;
 using Content.Shared.Buckle.Components; // CMU14
 using Content.Shared.CMU14.ZLevels.Ordnance;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Atmos;
@@ -117,6 +118,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+    private TimeSpan _nextElevatedEyeUpdate; // CMU14
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private TagSystem _tagSystem = default!;
@@ -365,9 +367,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         var targetsQuery = EntityQueryEnumerator<DropshipTargetComponent>();
 
         // Determine console faction (if any)
-        string? consoleFaction = null;
-        if (TryComp(ent.Owner, out WhitelistedShuttleComponent? whitelist))
-            consoleFaction = string.IsNullOrWhiteSpace(whitelist.Faction) ? null : whitelist.Faction;
+        var consoleFaction = GetConsoleFaction(ent.Owner);
 
         while (targetsQuery.MoveNext(out var uid, out var target))
         {
@@ -378,10 +378,6 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             {
                 continue;
             }
-
-            // If target has a creatorFaction but the console has no faction, do not show it
-            if (!string.IsNullOrEmpty(creatorFaction) && string.IsNullOrEmpty(consoleFaction))
-                continue;
 
             targets.Add(new TargetEnt(GetNetEntity(uid), target.Abbreviation));
         }
@@ -413,9 +409,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         while (terminals.MoveNext(out var uid, out var terminal))
         {
             // Per-terminal faction check
-            string? consoleFaction = null;
-            if (TryComp(uid, out WhitelistedShuttleComponent? whitelist))
-                consoleFaction = string.IsNullOrWhiteSpace(whitelist.Faction) ? null : whitelist.Faction;
+            var consoleFaction = GetConsoleFaction(uid);
 
             var targets = terminal.Targets;
             if (HasComp<MedevacStretcherComponent>(ent))
@@ -426,9 +420,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             var creatorFaction = string.IsNullOrWhiteSpace(ent.Comp.CreatorFaction) ? null : ent.Comp.CreatorFaction;
 
             // If the target is faction-bound, only add it to consoles of that faction
-            if (!string.IsNullOrEmpty(creatorFaction) &&
-                (string.IsNullOrEmpty(consoleFaction) ||
-                 !creatorFaction.Equals(consoleFaction, StringComparison.OrdinalIgnoreCase)))
+            if (!string.IsNullOrEmpty(creatorFaction) && !string.IsNullOrEmpty(consoleFaction) &&
+                !creatorFaction.Equals(consoleFaction, StringComparison.OrdinalIgnoreCase))
             {
                 continue;
             }
@@ -1749,6 +1742,19 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         return abbreviation;
     }
 
+    // CMU14: weapons consoles without their own faction (Mohawk gunnery, generic weapons controls)
+    // inherit the faction of the dropship they are installed on.
+    public string? GetConsoleFaction(EntityUid console)
+    {
+        if (TryComp(console, out WhitelistedShuttleComponent? whitelist) &&
+            !string.IsNullOrWhiteSpace(whitelist.Faction))
+        {
+            return whitelist.Faction;
+        }
+
+        return _dropship.TryGetGridFaction(console, out var faction) ? faction : null;
+    }
+
     public string? GetUserFaction(EntityUid user)
     {
         if (TryComp(user, out MarineComponent? marine) &&
@@ -1862,6 +1868,12 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
     public override void Update(float frameTime)
     {
         var time = _timing.CurTime;
+        if (_net.IsServer && time >= _nextElevatedEyeUpdate)
+        {
+            _nextElevatedEyeUpdate = time + TimeSpan.FromSeconds(0.5);
+            UpdateElevatedTargetEyes();
+        }
+
         var activeFlares = EntityQueryEnumerator<ActiveFlareSignalComponent, TransformComponent>();
         while (activeFlares.MoveNext(out var uid, out var active, out var xform))
         {
@@ -2517,9 +2529,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return null;
 
         // Faction gating: if terminal has a WhitelistedShuttleComponent Faction and target has CreatorFaction set and they differ, don't create the eye
-        string? consoleFaction = null;
-        if (TryComp(terminal.Owner, out WhitelistedShuttleComponent? whitelist))
-            consoleFaction = string.IsNullOrWhiteSpace(whitelist.Faction) ? null : whitelist.Faction;
+        var consoleFaction = GetConsoleFaction(terminal.Owner);
 
         string? creatorFaction = string.IsNullOrWhiteSpace(target.Comp.CreatorFaction) ? null : target.Comp.CreatorFaction;
 
@@ -2534,7 +2544,10 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             if (_net.IsClient)
                 return null;
 
-            eye = Spawn(null, target.Owner.ToCoordinates());
+            // CMU14: flares under roofs or on lower decks are viewed from the topmost z-level above them.
+            eye = TryGetTopZLevelCoordinates(target.Owner, out var top)
+                ? Spawn(null, top)
+                : Spawn(null, target.Owner.ToCoordinates());
             target.Comp.Eyes[terminal] = eye;
             Dirty(target);
 
@@ -2547,6 +2560,38 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         }
 
         return eye;
+    }
+
+    // CMU14
+    /// <summary>The target's world position projected onto the highest z-level map of its network.</summary>
+    public bool TryGetTopZLevelCoordinates(EntityUid target, out MapCoordinates coordinates)
+    {
+        coordinates = default;
+        if (Transform(target).MapUid is not { } map ||
+            !TryComp(map, out CMUZLevelMapComponent? zMap))
+            return false;
+
+        var above = _zLevels.GetAllMapsAbove((map, zMap));
+        return above.Count > 0 &&
+               _zLevels.TryGetMapCoordinates(above[^1], _transform.GetWorldPosition(target), out coordinates);
+    }
+
+    // CMU14: keeps elevated target eyes over targets that drift, such as carried laser marks.
+    private void UpdateElevatedTargetEyes()
+    {
+        var eyes = EntityQueryEnumerator<DropshipTargetEyeComponent, TransformComponent>();
+        while (eyes.MoveNext(out var uid, out var eye, out var xform))
+        {
+            if (eye.Target is not { } target || target == uid || xform.ParentUid == target ||
+                TerminatingOrDeleted(target) || !TryGetTopZLevelCoordinates(target, out var top))
+                continue;
+
+            var current = _transform.GetMapCoordinates(uid, xform);
+            if (current.MapId == top.MapId && (current.Position - top.Position).LengthSquared() < 0.25f)
+                continue;
+
+            _transform.SetMapCoordinates((uid, xform), top);
+        }
     }
 
     public bool TryGetTargetEye(
@@ -3102,6 +3147,13 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             ammo.Comp.SoundEveryShots
         );
         RaiseLocalEvent(dropship, ref ev);
+
+        // CMU14: an RTO's laser designation tightens the strike pattern.
+        if (EntityManager.System<CMUCasRequestSystem>().IsRtoDesignated(targetCoordinates, terminalComp?.Target))
+        {
+            ev.Spread *= CMUCasRequestSystem.DesignationSpreadMultiplier;
+            ev.BulletSpread = (int) MathF.Round(ev.BulletSpread * CMUCasRequestSystem.DesignationSpreadMultiplier);
+        }
 
         ammo.Comp.Rounds -= ammo.Comp.RoundsPerShot;
         _appearance.SetData(ammo, DropshipAmmoVisuals.Fill, ammo.Comp.Rounds);

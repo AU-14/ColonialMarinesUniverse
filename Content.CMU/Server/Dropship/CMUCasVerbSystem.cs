@@ -30,7 +30,7 @@ public sealed class CMUCasVerbSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedDropshipWeaponSystem _weapons = default!;
 
-    public const float MarkSearchRange = 12f;
+    public const float MarkSearchRange = CMUCasRequestSystem.CallRange;
 
     private static readonly VerbCategory CasCategory = new("cmu-cas-verb-category", null);
     private static readonly VerbCategory AdminCategory = new("cmu-cas-admin-verb-category", null);

@@ -14,6 +14,9 @@ public sealed partial class DropshipWeaponSystem : SharedDropshipWeaponSystem
         base.AddPvs(terminal, actor);
         if (terminal.Comp.ChinGunEye is { } gunEye && Resolve(actor, ref actor.Comp, false))
             _viewSubscriber.AddViewSubscriber(gunEye, actor.Comp.PlayerSession);
+        if (terminal.Comp.CameraTarget is { } camera && Resolve(actor, ref actor.Comp, false) &&
+            TryGetTargetEye(terminal, camera, out var cameraEye) && cameraEye != camera)
+            _viewSubscriber.AddViewSubscriber(cameraEye, actor.Comp.PlayerSession);
 
         if (terminal.Comp.Target is not { } target)
             return;
@@ -22,9 +25,7 @@ public sealed partial class DropshipWeaponSystem : SharedDropshipWeaponSystem
             return;
 
         // Faction gating: if both console and target creator have faction and they differ, skip adding the view subscriber
-        string? consoleFaction = null;
-        if (TryComp(terminal.Owner, out WhitelistedShuttleComponent? whitelist))
-            consoleFaction = string.IsNullOrWhiteSpace(whitelist.Faction) ? null : whitelist.Faction;
+        var consoleFaction = GetConsoleFaction(terminal.Owner);
 
         string? creatorFaction = null;
         if (TryComp(target, out DropshipTargetComponent? targetComp))
@@ -37,6 +38,9 @@ public sealed partial class DropshipWeaponSystem : SharedDropshipWeaponSystem
         }
 
         _viewSubscriber.AddViewSubscriber(target, actor.Comp.PlayerSession);
+        // CMU14: elevated eyes sit on another z-level map, outside the target's PVS range.
+        if (TryGetTargetEye(terminal, target, out var eye) && eye != target)
+            _viewSubscriber.AddViewSubscriber(eye, actor.Comp.PlayerSession);
     }
 
     protected override void RemovePvs(Entity<DropshipTerminalWeaponsComponent> terminal, Entity<ActorComponent?> actor)
@@ -44,6 +48,9 @@ public sealed partial class DropshipWeaponSystem : SharedDropshipWeaponSystem
         base.RemovePvs(terminal, actor);
         if (terminal.Comp.ChinGunEye is { } gunEye && Resolve(actor, ref actor.Comp, false))
             _viewSubscriber.RemoveViewSubscriber(gunEye, actor.Comp.PlayerSession);
+        if (terminal.Comp.CameraTarget is { } camera && Resolve(actor, ref actor.Comp, false) &&
+            TryGetTargetEye(terminal, camera, out var cameraEye) && cameraEye != camera)
+            _viewSubscriber.RemoveViewSubscriber(cameraEye, actor.Comp.PlayerSession);
 
         if (terminal.Comp.Target is not { } target)
             return;
@@ -53,6 +60,8 @@ public sealed partial class DropshipWeaponSystem : SharedDropshipWeaponSystem
 
         // Faction may have changed since subscribing. Cleanup must still release the old view.
         _viewSubscriber.RemoveViewSubscriber(target, actor.Comp.PlayerSession);
+        if (TryGetTargetEye(terminal, target, out var eye) && eye != target)
+            _viewSubscriber.RemoveViewSubscriber(eye, actor.Comp.PlayerSession);
     }
 
 }

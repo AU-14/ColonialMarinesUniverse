@@ -506,6 +506,9 @@
     dirOffset: None
     fixedWeapon: true
     secondAmmoContainerSlotId: cmu_m90_second_ammo
+    thirdAmmoContainerSlotId: cmu_m90_squall_ammo
+    thirdAmmoTypes:
+    - m90_kinetic
   - type: Sprite
     layers:
     - state: equip_base_front
@@ -518,6 +521,7 @@
       rmc_dropship_weapon_point_weapon_container_slot: !type:ContainerSlot
       rmc_dropship_weapon_point_ammo_container_slot: !type:ContainerSlot
       cmu_m90_second_ammo: !type:ContainerSlot
+      cmu_m90_squall_ammo: !type:ContainerSlot
   - type: ContainerFill
     containers:
       rmc_dropship_weapon_point_weapon_container_slot: [CMUMohawkM90]
@@ -742,7 +746,7 @@
     friendlyImpactRadius: 2
     damage:
       types:
-        Piercing: 41
+        Piercing: 20
     explosion: null
     impactEffects:
     - RMCEffectExplosionParticle
@@ -759,7 +763,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 41
+        Piercing: 20
   - type: CMArmorPiercing
     amount: 30
   - type: SpawnOnTerminate

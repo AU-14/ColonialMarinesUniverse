@@ -5,14 +5,14 @@
     Title="{Loc 'rmc-dropship-weapons-title'}"
     MinSize="1420 700">
     <PanelContainer Name="Panel" Access="Public" StyleClasses="CrtPanel" Margin="4">
-      <BoxContainer Orientation="Vertical">
+      <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
         <PanelContainer StyleClasses="CrtHeaderPanel" Margin="0 0 0 6">
             <Label StyleClasses="CrtHeading" Text="{Loc 'rmc-dropship-weapons-title'}" Margin="8 4" />
         </PanelContainer>
-        <BoxContainer Orientation="Horizontal">
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
             <controls:DropshipWeaponsScreen Name="ScreenOne" Access="Public"
                                             HorizontalExpand="True" VerticalExpand="True" />
-            <PanelContainer StyleClasses="CrtInsetPanel" Margin="0 6" MinWidth="260" MaxWidth="280">
+            <PanelContainer StyleClasses="CrtInsetPanel" Margin="0 6" MinWidth="260" MaxWidth="280" VerticalExpand="True">
               <ScrollContainer HScrollEnabled="False" VerticalExpand="True">
                <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="4">
                 <Label StyleClasses="CrtHeading" Text="{Loc 'cmu-mohawk-gunnery-panel-title'}" />
@@ -26,6 +26,8 @@
                 <Label Name="HeatLabel" Access="Public" Visible="False" MaxWidth="260" ClipText="True" />
                 <ProgressBar Name="HeatBar" Access="Public" Visible="False" MinValue="0" MaxValue="100"
                              MinHeight="8" HorizontalExpand="True" />
+                <Label Name="LowAmmoLabel" Access="Public" Visible="False" MaxWidth="260" ClipText="True"
+                       FontColorOverride="#FF8C00" />
                 <Label Name="BootStatusLabel" Access="Public" MaxWidth="260" ClipText="True" />
                 <Button Name="IffButton" Access="Public" Visible="False" />
                 <Button Name="VisionButton" Access="Public" Visible="False"
@@ -48,6 +50,8 @@
                 <Button Name="FeedModeButton" Access="Public" Visible="False" />
                 <Button Name="FeedOneButton" Access="Public" Visible="False" />
                 <Button Name="FeedTwoButton" Access="Public" Visible="False" />
+                <Button Name="FeedThreeButton" Access="Public" Visible="False"
+                        ToolTip="{Loc 'cmu-mohawk-gunnery-feed-three-help'}" />
                 <Label Name="FeedStatusLabel" Access="Public" Visible="False" MaxWidth="260" ClipText="True" />
                 <Button Name="ClearFlareButton" Access="Public" Visible="False"
                         Text="{Loc 'cmu-mohawk-gunnery-clear-flare'}" />

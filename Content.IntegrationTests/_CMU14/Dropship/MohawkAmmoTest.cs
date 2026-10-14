@@ -23,6 +23,7 @@ using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Containers;
 using Robust.Shared.Timing;
+using Robust.Shared.Prototypes;
 using System.Reflection;
 using Content.Server.Explosion.EntitySystems;
 using Content.Shared.Explosion.Components;
@@ -118,6 +119,9 @@ public sealed class MohawkAmmoTest : GameTest
                 return take.Ammo.Single().Entity!.Value;
             }
             string Prototype(EntityUid entity) => SEntMan.GetComponent<MetaDataComponent>(entity).EntityPrototype!.ID;
+            // Ember is airborne-only and alternation skips feeds the gun cannot fire, so alternate in flight.
+            SEntMan.EnsureComponent<Content.Shared.Shuttles.Components.FTLComponent>(map.Grid).State =
+                Content.Shared.Shuttles.Systems.FTLState.Travelling;
             chin.AlternateFeeds = true;
             Assert.That(Prototype(Consume()), Is.EqualTo("CMUMohawkM90HEAP"));
             Assert.That(chin.ActiveFeed, Is.EqualTo(1));
@@ -156,11 +160,58 @@ public sealed class MohawkAmmoTest : GameTest
         });
     }
 
+    [Test]
+    public async Task ThirdFeedIsReservedForSquall()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            SEntMan.EnsureComponent<DropshipComponent>(map.Grid).AttachmentPoints.Clear();
+            var point = SEntMan.SpawnEntity("CMUMohawkM90Point", map.GridCoords);
+            var mount = SEntMan.GetComponent<DropshipWeaponPointComponent>(point);
+            var containers = Server.System<SharedContainerSystem>();
+            var first = containers.GetContainer(point, mount.AmmoContainerSlotId);
+            var second = containers.GetContainer(point, mount.SecondAmmoContainerSlotId!);
+            var third = containers.GetContainer(point, mount.ThirdAmmoContainerSlotId!);
+            var loader = SEntMan.SpawnEntity("RMCMechPowerLoader", map.GridCoords);
+            EntityUid Load(string prototype)
+            {
+                var crate = SEntMan.SpawnEntity(prototype, map.GridCoords);
+                SEntMan.GetComponent<PowerLoaderAttachableComponent>(crate).AttachDelay = TimeSpan.Zero;
+                SEntMan.EventBus.RaiseLocalEvent(crate, new BeforeRangedInteractEvent(loader, crate, point, map.GridCoords, true));
+                return crate;
+            }
+
+            var squall = Load("CMUMohawkM90AmmoKinetic");
+            Assert.That(third.Contains(squall), Is.True, "Squall fills its dedicated feed first.");
+            var heap = Load("CMUMohawkM90Ammo");
+            var ember = Load("CMUMohawkM90AmmoIncendiary");
+            Assert.That(first.Contains(heap), Is.True);
+            Assert.That(second.Contains(ember), Is.True);
+            var gale = Load("CMUMohawkM90AmmoScatter");
+            Assert.That(third.Contains(gale), Is.False, "Only Squall may use the third feed.");
+            Assert.That(first.Contains(gale) || second.Contains(gale), Is.False);
+            Assert.That(mount.ThirdSlotAccepts(SEntMan.GetComponent<DropshipAmmoComponent>(squall).AmmoType), Is.True);
+            Assert.That(mount.ThirdSlotAccepts(SEntMan.GetComponent<DropshipAmmoComponent>(heap).AmmoType), Is.False);
+        });
+    }
+
+    [Test]
+    public async Task SquallDealsTwentyDamagePerRound()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var proto = Server.ProtoMan.Index<EntityPrototype>("CMUMohawkM90Kinetic");
+            Assert.That(proto.TryGetComponent(out ProjectileComponent? projectile, Server.ResolveDependency<IComponentFactory>()), Is.True);
+            Assert.That(projectile!.Damage.GetTotal().Float(), Is.EqualTo(20f).Within(0.01f));
+        });
+    }
+
     [TestCase("CMUMohawkM90Ammo", "CMUMohawkM90HEAP", 165, 0, 3000, false)]
     [TestCase("CMUMohawkM90AmmoScatter", "CMUMohawkM90Scatter", 60, 10, 3000, false)]
     [TestCase("CMUMohawkM90AmmoIncendiary", "CMUMohawkM90Incendiary", 130, 2, 3000, true)]
     [TestCase("CMUMohawkM90AmmoDevastator", "CMUMohawkM90Devastator", 300, 12, 6000, false)]
-    [TestCase("CMUMohawkM90AmmoKinetic", "CMUMohawkM90Kinetic", 41, 0, 750, false)]
+    [TestCase("CMUMohawkM90AmmoKinetic", "CMUMohawkM90Kinetic", 20, 0, 750, false)]
     public async Task PowerloaderLoadsVariantAndGunConsumesItsProjectile(
         string crateId, string projectileId, double damage, int spread, int cost, bool burns)
     {

@@ -4,14 +4,14 @@
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:viewport="clr-namespace:Content.Client.Viewport"
     xmlns:firemission="clr-namespace:Content.Client._RMC14.Dropship.Weapon.FireMission">
-    <PanelContainer Margin="6" StyleClasses="CrtInsetPanel">
-        <BoxContainer Orientation="Vertical">
+    <PanelContainer Margin="6" StyleClasses="CrtInsetPanel" HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
             <controls:DropshipWeaponsButtonRow Name="TopRow" Access="Public"
                                                Orientation="Horizontal" />
-            <BoxContainer Orientation="Horizontal">
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
                 <controls:DropshipWeaponsButtonRow Name="LeftRow" Access="Public"
                                                    Orientation="Vertical" />
-                <PanelContainer SetSize="500 500" StyleClasses="CrtPanel"
+                <PanelContainer MinSize="500 500" StyleClasses="CrtPanel"
                                 HorizontalExpand="True" VerticalExpand="True">
                     <viewport:ScalingViewport Name="Viewport" Access="Public" Visible="False"
                                               HorizontalExpand="True" VerticalExpand="True" />

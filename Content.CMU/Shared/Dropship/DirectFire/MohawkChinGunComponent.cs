@@ -84,6 +84,32 @@ public sealed partial class MohawkChinGunComponent : Component
     /// <summary>Once overheated, the guns stay locked until heat falls to this value.</summary>
     [DataField] public float OverheatRecoveredAt = 40f;
     [DataField, AutoNetworkedField] public bool Overheated;
+
+    /// <summary>Groundside AI free-fire IFF state. <see cref="MohawkIffOverride.Forced"/> keeps IFF on regardless of the toggle.</summary>
+    [DataField, AutoNetworkedField] public MohawkIffOverride IffOverride;
+
+    /// <summary>Live hostiles in range at which groundside AI free fire considers itself overwhelmed and drops its IFF lock.</summary>
+    [DataField] public int OverwhelmedThreshold = 4;
+    public TimeSpan NextIffEvaluation;
+
+    /// <summary>Share of a full crate below which a feed warns the gunner.</summary>
+    [DataField] public float LowAmmoFraction = 0.25f;
+    [DataField] public Robust.Shared.Audio.SoundSpecifier LowAmmoSound =
+        new Robust.Shared.Audio.SoundPathSpecifier("/Audio/Machines/warning_buzzer.ogg");
+    public readonly HashSet<EntityUid> LowAmmoWarned = new();
+}
+
+[Serializable, NetSerializable]
+public enum MohawkIffOverride : byte
+{
+    /// <summary>The gunner's IFF toggle applies.</summary>
+    None,
+    /// <summary>Groundside AI free fire holds IFF on.</summary>
+    Forced,
+    /// <summary>Hostiles inside close-defense range; the gunner's toggle applies.</summary>
+    SelfDefense,
+    /// <summary>Too many hostiles in range; the gunner's toggle applies.</summary>
+    Overwhelmed,
 }
 
 [Serializable, NetSerializable]

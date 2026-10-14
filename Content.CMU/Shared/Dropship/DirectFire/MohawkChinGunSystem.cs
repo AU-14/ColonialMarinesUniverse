@@ -54,6 +54,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private MobThresholdSystem _thresholds = default!;
     [Dependency] private SharedDropshipWeaponSystem _weapons = default!;
+    [Dependency] private Robust.Shared.Audio.Systems.SharedAudioSystem _audio = default!;
     private readonly HashSet<Entity<MobStateComponent>> _nearbyMobs = new();
 
     public override void Initialize()
@@ -470,6 +471,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
         {
             var point = new Entity<MohawkChinGunComponent>(uid, chin);
             CoolBarrels(point, frameTime);
+            UpdateForcedIff(point, IsFreeFireActive(chin) && !chin.Disabled);
             SyncFreeFireDisplay(point);
             if (chin.Disabled)
                 continue;
@@ -616,6 +618,59 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
     public bool IsFreeFireActive(MohawkChinGunComponent chin)
     {
         return chin.FreeFireEnabled;
+    }
+
+    /// <summary>Whether friendly protection applies: the gunner's toggle, or the AI free-fire IFF lock.</summary>
+    public static bool IsIffActive(MohawkChinGunComponent chin)
+    {
+        return chin.IffEnabled || chin.IffOverride == MohawkIffOverride.Forced;
+    }
+
+    /// <summary>
+    /// Groundside AI free fire keeps IFF on, unless hostiles are inside close-defense range (self defense) or
+    /// the gun is overwhelmed by <see cref="MohawkChinGunComponent.OverwhelmedThreshold"/> live hostiles in range.
+    /// </summary>
+    private void UpdateForcedIff(Entity<MohawkChinGunComponent> point, bool freeFire)
+    {
+        var state = MohawkIffOverride.None;
+        if (freeFire && point.Comp.Operator == null && IsGrounded(point) && point.Comp.IffConfigured)
+        {
+            if (_timing.CurTime < point.Comp.NextIffEvaluation)
+                return;
+            point.Comp.NextIffEvaluation = _timing.CurTime + TimeSpan.FromMilliseconds(250);
+            state = MohawkIffOverride.Forced;
+            if (TryComp(point, out SentryTargetingComponent? targeting))
+            {
+                var origin = _transform.ToMapCoordinates(GetMountCoordinates(point));
+                _nearbyMobs.Clear();
+                _lookup.GetEntitiesInRange(origin, GetScanRange(point), _nearbyMobs);
+                var hostiles = 0;
+                var close = false;
+                foreach (var mob in _nearbyMobs)
+                {
+                    if (mob.Comp.CurrentState != MobState.Alive ||
+                        !_targeting.IsValidTarget((point.Owner, targeting), mob.Owner))
+                        continue;
+                    hostiles++;
+                    if (DistanceFromMount(point, mob.Owner) <= point.Comp.CloseDefenseRange * point.Comp.CloseDefenseRange)
+                        close = true;
+                }
+                if (hostiles >= point.Comp.OverwhelmedThreshold)
+                    state = MohawkIffOverride.Overwhelmed;
+                else if (close)
+                    state = MohawkIffOverride.SelfDefense;
+            }
+        }
+        if (point.Comp.IffOverride == state)
+            return;
+        var previous = point.Comp.IffOverride;
+        point.Comp.IffOverride = state;
+        Dirty(point);
+        SyncFreeFireDisplay(point);
+        if (state is MohawkIffOverride.SelfDefense or MohawkIffOverride.Overwhelmed &&
+            previous == MohawkIffOverride.Forced)
+            _adminLog.Add(LogType.RMCDropshipWeapon,
+                $"M90 chin gun {ToPrettyString(point)} released its AI IFF lock ({state}); gunner IFF toggle is {(point.Comp.IffEnabled ? "on" : "off")}.");
     }
 
     public bool IsAmmoUsable(EntityUid point, DropshipAmmoComponent ammo)
@@ -802,6 +857,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                 terminal.ChinGunFreeFireCooldown == cooldown &&
                 terminal.ChinGunDisabled == point.Comp.Disabled && terminal.ChinGunHealth == health &&
                 terminal.ChinGunIff == point.Comp.IffEnabled &&
+                terminal.ChinGunIffOverride == point.Comp.IffOverride &&
                 terminal.ChinGunSetupReady == (point.Comp.Calibrated && point.Comp.IffConfigured) &&
                 terminal.ChinGunAiEnabled == point.Comp.FreeFireEnabled &&
                 terminal.ChinGunAiTarget == point.Comp.AutomaticTarget &&
@@ -815,6 +871,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             terminal.ChinGunDisabled = point.Comp.Disabled;
             terminal.ChinGunHealth = health;
             terminal.ChinGunIff = point.Comp.IffEnabled;
+            terminal.ChinGunIffOverride = point.Comp.IffOverride;
             terminal.ChinGunSetupReady = point.Comp.Calibrated && point.Comp.IffConfigured;
             terminal.ChinGunAiEnabled = point.Comp.FreeFireEnabled;
             terminal.ChinGunAiTarget = point.Comp.AutomaticTarget;
@@ -1074,6 +1131,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             return;
         }
         point.Comp.IffEnabled = !point.Comp.IffEnabled;
+        if (!point.Comp.IffEnabled && point.Comp.IffOverride == MohawkIffOverride.Forced)
+            _popup.PopupEntity(Loc.GetString("cmu-mohawk-iff-forced"), console, args.Actor, PopupType.MediumCaution);
         point.Comp.ApprovedAutomaticTarget = null;
         point.Comp.AutomaticTarget = null;
         point.Comp.NextScan = TimeSpan.Zero;
@@ -1334,7 +1393,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                             _targeting.IsValidTarget((point.Owner, targeting), mob.Owner))
                             hostiles++;
             }
-            for (var feed = 0; feed < 2; feed++)
+            for (var feed = 0; feed < GunshipDirectFireSystem.FeedCount; feed++)
             {
                 if (_directFire.GetFeedAmmo(point, feed) is not { } ammo || ammo.Comp.Rounds <= 0 ||
                     !IsAmmoUsable(point, ammo.Comp))
@@ -1366,10 +1425,20 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             }
             if (selectedAmmo is not { } selected)
                 return false;
-            var other = _directFire.GetFeedAmmo(point, 1 - chosen);
-            alternate = other is { } second && second.Comp.Rounds > 0 &&
-                        IsAmmoUsable(point, second.Comp) &&
-                        second.Comp.DirectFireProjectile == selected.Comp.DirectFireProjectile;
+            var sharedShell = false;
+            for (var feed = 0; feed < GunshipDirectFireSystem.FeedCount; feed++)
+            {
+                if (feed == chosen || _directFire.GetFeedAmmo(point, feed) is not { } other ||
+                    other.Comp.Rounds <= 0 || !IsAmmoUsable(point, other.Comp))
+                    continue;
+                if (other.Comp.DirectFireProjectile != selected.Comp.DirectFireProjectile)
+                {
+                    sharedShell = false;
+                    break;
+                }
+                sharedShell = true;
+            }
+            alternate = sharedShell;
             return true;
         }
 
@@ -1550,7 +1619,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                 continue;
             if (args.Feed is { } feed)
             {
-                if (feed is < 0 or > 1)
+                if (feed is < 0 or >= GunshipDirectFireSystem.FeedCount)
                     return;
                 var previous = chin.ActiveFeed;
                 chin.ActiveFeed = feed;
@@ -1591,14 +1660,52 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
         }
         var one = Describe(mount.AmmoContainerSlotId);
         var two = Describe(mount.SecondAmmoContainerSlotId);
+        var three = Describe(mount.ThirdAmmoContainerSlotId);
+        var lowAmmo = UpdateLowAmmo(point, console);
         if (terminal.ChinGunFeed == point.Comp.ActiveFeed && terminal.ChinGunAlternateFeeds == point.Comp.AlternateFeeds &&
-            terminal.ChinGunFeedOne == one && terminal.ChinGunFeedTwo == two)
+            terminal.ChinGunFeedOne == one && terminal.ChinGunFeedTwo == two && terminal.ChinGunFeedThree == three &&
+            terminal.ChinGunLowAmmo == lowAmmo)
             return;
         terminal.ChinGunFeed = point.Comp.ActiveFeed;
         terminal.ChinGunAlternateFeeds = point.Comp.AlternateFeeds;
         terminal.ChinGunFeedOne = one;
         terminal.ChinGunFeedTwo = two;
+        terminal.ChinGunFeedThree = three;
+        terminal.ChinGunLowAmmo = lowAmmo;
         Dirty(console, terminal);
+    }
+
+    /// <summary>
+    /// Feeds under <see cref="MohawkChinGunComponent.LowAmmoFraction"/> of a full crate. Each crate crossing the line
+    /// warns the gunner once.
+    /// </summary>
+    private string UpdateLowAmmo(Entity<MohawkChinGunComponent> point, EntityUid console)
+    {
+        var low = new List<string>();
+        var crates = new HashSet<EntityUid>();
+        for (var feed = 0; feed < GunshipDirectFireSystem.FeedCount; feed++)
+        {
+            if (_directFire.GetFeedAmmo(point, feed) is not { } ammo)
+                continue;
+            if (ammo.Comp.MaxRounds <= 0 || ammo.Comp.Rounds >= ammo.Comp.MaxRounds * point.Comp.LowAmmoFraction)
+                continue;
+            crates.Add(ammo.Owner);
+            var percent = (int) MathF.Floor(100f * ammo.Comp.Rounds / ammo.Comp.MaxRounds);
+            low.Add(Loc.GetString("cmu-mohawk-low-ammo-feed", ("feed", feed + 1), ("percent", percent)));
+            if (!point.Comp.LowAmmoWarned.Add(ammo.Owner))
+                continue;
+            var message = Loc.GetString("cmu-mohawk-low-ammo-warning", ("feed", feed + 1),
+                ("rounds", ammo.Comp.Rounds), ("max", ammo.Comp.MaxRounds));
+            foreach (var actor in _ui.GetActors(console, DropshipTerminalWeaponsUi.Key))
+                _popup.PopupEntity(message, console, actor, PopupType.MediumCaution);
+            if (point.Comp.Operator is { } gunner && !_ui.IsUiOpen(console, DropshipTerminalWeaponsUi.Key, gunner))
+                _popup.PopupEntity(message, gunner, gunner, PopupType.MediumCaution);
+            _audio.PlayPvs(point.Comp.LowAmmoSound, console);
+            _adminLog.Add(LogType.RMCDropshipWeapon,
+                $"M90 chin gun {ToPrettyString(point)} feed {feed + 1} fell below {point.Comp.LowAmmoFraction:P0} ammunition.");
+        }
+        point.Comp.LowAmmoWarned.RemoveWhere(crate => !crates.Contains(crate));
+        return low.Count == 0 ? string.Empty : string.Join(" ", low);
     }
 
     public bool IsSafeAirburst(EntityUid point, MapCoordinates target, float radius)
@@ -1606,7 +1713,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
         if (!TryComp(point, out MohawkChinGunComponent? chin) || !EnsureTrackingFaction((point, chin)) ||
             !TryComp(point, out SentryTargetingComponent? targeting))
             return false;
-        if (!chin.IffEnabled)
+        if (!IsIffActive(chin))
             return true;
         _nearbyMobs.Clear();
         _lookup.GetEntitiesInRange(target, radius, _nearbyMobs);
@@ -1687,7 +1794,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                 predicate: blocker => blocker == point.Owner || blocker == weapon || HasComp<MobStateComponent>(blocker) ||
                     !TryComp(blocker, out OccluderComponent? occluder) || !occluder.Enabled))
             return false;
-        if (!point.Comp.IffEnabled)
+        if (!IsIffActive(point.Comp))
             return true;
         var line = target.Position - muzzle.Position;
         var lengthSquared = line.LengthSquared();

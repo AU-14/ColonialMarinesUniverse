@@ -297,6 +297,9 @@ public sealed partial class RangefinderSystem : EntitySystem
 
         _dropshipWeapon.MakeDropshipTarget(targetEnt, abbreviation, creatorFaction);
         _metaData.SetEntityName(targetEnt, name);
+        // CMU14: a lase from an RTO tightens CAS strikes on the spot.
+        if (HasComp<Content.Shared.CMU14.Radio.WearingANPRCComponent>(user))
+            EnsureComp<Content.Shared.CMU14.Dropship.Cas.CMUCasRtoDesignationComponent>(targetEnt);
     }
 
     private void OnRangefinderExamined(Entity<RangefinderComponent> rangefinder, ref ExaminedEvent args)
