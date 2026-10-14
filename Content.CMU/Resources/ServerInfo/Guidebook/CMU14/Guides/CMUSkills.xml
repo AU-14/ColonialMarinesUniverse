@@ -1,36 +1,50 @@
 <Document>
   # Skills
 
-  Every role comes with a set of skills. They decide what you can use well, what you can use at all, and how fast you do things. A higher level is better; a skill you do not have counts as 0.
+  Every role comes with a set of skills. They decide what you can use at all, how well you use it and how fast you work. Each skill has levels: 0 means untrained, and higher is better. A skill you do not have counts as 0.
 
   ## Checking Your Skills
-  - [bold]Examine yourself[/bold] and click the cap icon to see your skills and their levels.
-  - Your skills come from your role. Some things raise them for the round, like joining the FOB security squad or certain pamphlets.
+  - [bold]Examine yourself[/bold] and click the cap icon to see your skills and their levels. You can check other people's the same way.
+  - Your skills come from your role, and sometimes your faction. A few things raise them for the round, such as joining the FOB security squad or reading certain pamphlets.
+  - Many timed actions (building, repairing, treating, carrying and so on) get faster at higher levels, and some equipment refuses to work below a certain level.
 
-  ## What Each Skill Covers
-  - [bold]Firearms[/bold]: handling guns. Without it you are less accurate and your shots spread more.
-  - [bold]Specialist Weapons[/bold] and [bold]Smart Gun[/bold]: the specialist kits and the smartgun.
-  - [bold]Melee Weapons[/bold] and [bold]CQC[/bold]: fighting up close, with and without a weapon.
-  - [bold]Endurance[/bold]: how much running and exertion you can take.
-  - [bold]Construction[/bold]: building barricades, walls and other structures. Higher levels unlock sturdier builds.
-  - [bold]Engineer[/bold]: repairs, wiring, power and hacking machines.
-  - [bold]Medical[/bold]: treating the wounded and reading health scanners. At level 1 a scanner shows internal bleeding, fractures and shock risk; at level 3 it shows exact fracture severity.
-  - [bold]Surgery[/bold]: performing operations.
-  - [bold]Research[/bold]: chemistry and research work.
-  - [bold]Leadership[/bold]: command equipment, orders and leading a squad.
-  - [bold]Overwatch[/bold]: using overwatch consoles.
-  - [bold]JTAC[/bold]: calling in fire support and laser designating.
-  - [bold]Intel[/bold]: gathering and using intelligence.
-  - [bold]Police[/bold]: security and military police equipment.
-  - [bold]Pilot[/bold]: flying and arming dropships.
-  - [bold]Navigations[/bold]: ship navigation.
-  - [bold]Vehicles[/bold]: driving and crewing vehicles.
-  - [bold]Power Loader[/bold]: operating the power loader.
-  - [bold]Fireman[/bold]: carrying people over your shoulder.
-  - [bold]Domestics[/bold]: cooking and other everyday tasks.
-  - [bold]Aircrew[/bold]: keeping your feet on a dropship. When a dropship hits turbulence between landing zones, everyone's view shakes and anyone standing and not buckled in can be thrown around or knocked down. Pilots, crew chiefs and other aircrew have this skill and stay standing. Everyone else should buckle in.
+  ## Combat
+  - [bold]Firearms[/bold] (levels 0-4): handling guns. Untrained shooters are less accurate and spread their shots more. Most soldiers have 1, sergeants and officers 2, and synthetics up to 2.
+  - [bold]Smart Gun[/bold] (0-1): using the smartgun. Automatic riflemen have it.
+  - [bold]Specialist Weapons[/bold] (0-2): the specialist kits. Weapons specialists have it.
+  - [bold]Melee Weapons[/bold] (0-3): swinging blades and blunt weapons well.
+  - [bold]CQC[/bold] (0-5): fighting up close, disarming and grappling. Most roles have 1, officers 2, military police 3, advisors 4 and synthetics 5.
+  - [bold]Endurance[/bold] (0-5): stamina for running and exertion. Riflemen have 1, automatic riflemen 2, sergeants and command 3, advisors 4.
+
+  ## Engineering
+  - [bold]Construction[/bold] (0-5): building barricades, walls and fortifications. Higher levels build sturdier things and build faster. Riflemen have 1, RTOs and sergeants 2, command 3, and combat techs, engineering and logistics officers 4. The FOB security squad's SL, RTO and corpsman get 3.
+  - [bold]Engineer[/bold] (0-4): repairs, wiring, power and hacking. Riflemen have 1, sergeants and the crew chief 3, and combat techs, auxiliary techs and engineering officers 4.
+  - [bold]Power Loader[/bold] (0-3): driving the power loader to move heavy cargo and dropship ordnance. Combat techs and aircrew have 2, logistics officers 3.
+  - [bold]Vehicles[/bold] (0-3): driving and crewing vehicles. Most roles have 1, aircrew 2, vehicle crewmen 3.
+  - [bold]Domestics[/bold] (0-3): cooking and other day-to-day tasks.
+
+  ## Medical
+  - [bold]Medical[/bold] (0-5): treating the wounded and reading health scanners. At 1 a scanner shows internal bleeding, fractures and shock risk; at 3 it shows how bad each fracture is. Corpsmen have 2, nurses 3, doctors and advisors 4, and the medical officer 5.
+  - [bold]Surgery[/bold] (0-4): performing operations. Corpsmen have 1, nurses 2, doctors and the medical officer 4.
+  - [bold]Research[/bold] (0-3): chemistry and research work.
+
+  ## Command and Support
+  - [bold]Leadership[/bold] (0-4): command equipment, orders and leading a squad. RTOs have 1, sergeants 2, senior sergeants and most officers 3, the platoon commander and adjutant 4.
+  - [bold]Overwatch[/bold] (0-3): using overwatch consoles. Officers and aircrew have 1, intelligence officers 2.
+  - [bold]JTAC[/bold] (0-4): calling in fire support, laser designating and directing mortars. Riflemen have 1, combat techs 2, sergeants 3, RTOs, senior sergeants and command 4.
+  - [bold]Intel[/bold] (0-5): finding and using intelligence. Officers have 2, the adjutant 3, the intelligence officer 5.
+  - [bold]Police[/bold] (0-4): security equipment and arrests. Military police have 2, the military police officer 4.
+  - [bold]Fireman[/bold] (0-5): carrying people over your shoulder quickly. Most soldiers have 2, corpsmen and military police 3, synthetics 5.
+
+  ## Flight
+  - [bold]Pilot[/bold] (0-3): flying and arming dropships and fighters. Officers have 1, dropship pilots and crew chiefs 2.
+  - [bold]Navigations[/bold] (0-2): ship navigation consoles.
+  - [bold]Aircrew[/bold] (0-1): keeping your feet on a dropship. Dropship pilots, crew chiefs, and gunship and fighter crews have it.
+    - Between landing zones a dropship hits turbulence every so often. Everyone's view shakes, and anyone standing and not buckled in can be thrown around or knocked down.
+    - Dropping out of a warship's bay is worse: a few seconds of freefall, then heavy turbulence.
+    - Aircrew stay standing through all of it. Everyone else should buckle in before takeoff.
 
   ## Tips
-  - If a tool or weapon does not work for you, or is slow, check whether your role has the skill for it.
-  - Leave jobs that need a high skill to the people trained for them.
+  - If a tool or weapon does not work for you, or is very slow, check whether your role has the skill for it.
+  - Leave jobs that need a high skill to the people trained for them, and ask for help when you need it.
 </Document>
