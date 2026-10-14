@@ -203,7 +203,7 @@
     state: telnyashka_red
 
 - type: marking
-  id: CMUUndershirtArmy
+  id: CMUUndershirtTan
   bodyPart: UndergarmentTop
   forcedColoring: true
   RMCFollowSkinColor: false
@@ -213,7 +213,7 @@
     state: undershirt_army_short
 
 - type: marking
-  id: CMUUndershirtArmySleeveless
+  id: CMUUndershirtTanSleeveless
   bodyPart: UndergarmentTop
   forcedColoring: true
   RMCFollowSkinColor: false
@@ -233,7 +233,7 @@
     state: undershirt_black_long
 
 - type: marking
-  id: CMUSportsBraArmy
+  id: CMUSportsBraTan
   bodyPart: UndergarmentTop
   forcedColoring: true
   RMCFollowSkinColor: false

@@ -111,7 +111,7 @@
     state: grey_satin
 
 - type: marking
-  id: CMUUnderwearBoxersUPP
+  id: CMUUnderwearBoxersDarkGreen
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false
@@ -121,7 +121,7 @@
     state: upp_boxers
 
 - type: marking
-  id: CMUUnderwearBoxersArmy
+  id: CMUUnderwearBoxersBrown
   bodyPart: UndergarmentBottom
   forcedColoring: true
   RMCFollowSkinColor: false

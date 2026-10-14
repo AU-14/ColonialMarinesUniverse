@@ -79,32 +79,32 @@ marking-CMUSportsBraWhite-sports_white = White Sports Bra
 marking-CMUSportsBraBlack = Black Sports Bra
 marking-CMUSportsBraBlack-sports_black = Black Sports Bra
 
-marking-CMUUnderwearBoxersUPP = UPP Boxers
-marking-CMUUnderwearBoxersUPP-upp_boxers = UPP Boxers
+marking-CMUUnderwearBoxersDarkGreen = Dark Green Boxers
+marking-CMUUnderwearBoxersDarkGreen-upp_boxers = Dark Green Boxers
 
-marking-CMUUnderwearBoxersArmy = US Army Boxers
-marking-CMUUnderwearBoxersArmy-army_boxers = US Army Boxers
+marking-CMUUnderwearBoxersBrown = Brown Boxers
+marking-CMUUnderwearBoxersBrown-army_boxers = Brown Boxers
 
-marking-CMUUndershirtTelnyashkaBlue = Naval Infantry Telnyashka
-marking-CMUUndershirtTelnyashkaBlue-telnyashka_blue = Naval Infantry Telnyashka
+marking-CMUUndershirtTelnyashkaBlue = Blue Telnyashka
+marking-CMUUndershirtTelnyashkaBlue-telnyashka_blue = Blue Telnyashka
 
-marking-CMUUndershirtTelnyashkaGreen = Territorial Guard Telnyashka
-marking-CMUUndershirtTelnyashkaGreen-telnyashka_green = Territorial Guard Telnyashka
+marking-CMUUndershirtTelnyashkaGreen = Green Telnyashka
+marking-CMUUndershirtTelnyashkaGreen-telnyashka_green = Green Telnyashka
 
-marking-CMUUndershirtTelnyashkaRed = Interior Forces Telnyashka
-marking-CMUUndershirtTelnyashkaRed-telnyashka_red = Interior Forces Telnyashka
+marking-CMUUndershirtTelnyashkaRed = Red Telnyashka
+marking-CMUUndershirtTelnyashkaRed-telnyashka_red = Red Telnyashka
 
-marking-CMUUndershirtArmy = US Army Undershirt
-marking-CMUUndershirtArmy-undershirt_army_short = US Army Undershirt
+marking-CMUUndershirtTan = Tan Undershirt
+marking-CMUUndershirtTan-undershirt_army_short = Tan Undershirt
 
-marking-CMUUndershirtArmySleeveless = US Army Undershirt (Sleeveless)
-marking-CMUUndershirtArmySleeveless-undershirt_army = US Army Undershirt (Sleeveless)
+marking-CMUUndershirtTanSleeveless = Tan Undershirt (Sleeveless)
+marking-CMUUndershirtTanSleeveless-undershirt_army = Tan Undershirt (Sleeveless)
 
 marking-CMUUndershirtBlackLong = Black Undershirt (Long Sleeve)
 marking-CMUUndershirtBlackLong-undershirt_black_long = Black Undershirt (Long Sleeve)
 
-marking-CMUSportsBraArmy = US Army Sports Bra
-marking-CMUSportsBraArmy-sports_army = US Army Sports Bra
+marking-CMUSportsBraTan = Tan Sports Bra
+marking-CMUSportsBraTan-sports_army = Tan Sports Bra
 
 marking-CMUUndershirtNone = None
 marking-CMUUndershirtNone-none = None
