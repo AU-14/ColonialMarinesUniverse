@@ -365,7 +365,7 @@
       - CanBeSupplyDropped
   - type: NewPlayerLabel
   - type: MarineMapTracked
-  - type: RMCSetPose
+# - type: RMCSetPose # CMU14: replaced by the in-round Edit Description verb
   - type: Evasion
   - type: CanBeFirePatted
   - type: FirePatter

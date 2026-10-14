@@ -28,7 +28,7 @@
     key: enum.VehicleSupplyUIKey.Key
   - type: ActivatableUIRequiresAccess
   - type: AccessReader
-    access: [ [ "RMCAccessVehicleCrew", "CMAccessPilot" ] ]
+    access: [ [ "RMCAccessVehicleCrew" ], [ "CMAccessPilot" ] ] # CMU14: vehicle crew or pilots, not both
   - type: UserInterface
     interfaces:
       enum.VehicleSupplyUIKey.Key:

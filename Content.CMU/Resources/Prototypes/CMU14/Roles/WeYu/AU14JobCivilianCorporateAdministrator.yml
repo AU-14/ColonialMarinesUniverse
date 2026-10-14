@@ -3,6 +3,8 @@
   id: AU14JobCivilianCorporateAdministrator
   roundSide: Civilian
   roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
   roundRole: CivilianCorporateAdministrator
   roundComponents:
   - type: Skills

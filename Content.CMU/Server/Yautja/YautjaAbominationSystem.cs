@@ -134,24 +134,9 @@ public sealed partial class YautjaAbominationSystem : EntitySystem
             args.Damage *= abomination.YautjaDamageMultiplier;
         }
 
-        // CMSS13 applies xeno melee after the hunter's species modifier. In the
-        // CMU armor model ordinary claw damage otherwise rounds to zero against
-        // clan armor, so give only xeno melee the equivalent penetration.
-        if (args.Origin is { } xeno &&
-            HasComp<XenoComponent>(xeno) &&
-            args.Tool is { } tool &&
-            HasComp<MeleeWeaponComponent>(tool))
-        {
-            // Clan armour is 35-40 melee armour, and the armour curve still
-            // rounds low residual damage down to zero. Xeno melee is the
-            // CMSS13 exception: claws cut through the clan armour instead of
-            // producing the metal/no-damage impact sound.
-            args.ArmorPiercing += 100;
-        }
-
         // rmc fire ignores resistances for everyone except preds and synths, so preds keep their 0.65 heat.
         // that also ran fire ticks through stacked bio armor, which flattens ~2 damage ticks to nothing.
-        // cmss13 never armored fire, so pierce it like the claws above
+        // cmss13 never armored fire, so pierce it
         if (args.Origin == ent.Owner && IsOnlyBurn(args.Damage))
             args.ArmorPiercing += 100;
     }

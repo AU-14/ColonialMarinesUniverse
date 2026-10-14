@@ -423,6 +423,7 @@ namespace Content.Server.Database
             profile.Height = humanoid.Height;
             profile.Weight = humanoid.Weight;
             profile.Build = humanoid.Build.ToString();
+            profile.BloodType = humanoid.BloodType.ToString(); // CMU14
             profile.HideMetaInformation = humanoid.HideMetaInformation;
             profile.ThreatPreference = humanoid.ThreatPreferences.Count == 0
                 ? null

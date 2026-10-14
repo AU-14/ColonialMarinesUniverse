@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Content.Shared.CMU14.Medical.Blood;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
@@ -13,7 +14,9 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Scanner;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Synth;
+using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
+using Content.Shared.Body.Systems;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
@@ -33,6 +36,7 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
     [Dependency] private SharedCMUOpenStumpSystem _stumps = default!;
     [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> MedicalSkill = "RMCSkillMedical";
 
@@ -88,6 +92,21 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
         if (skill >= 1)
             FillPainShockRisk(args.Patient, state);
         FillRiderReading(args.Patient, state);
+        FillBlood(args.Patient, state);
+    }
+
+    private void FillBlood(EntityUid patient, HealthScannerBuiState state)
+    {
+        if (TryComp<CMUBloodTypeComponent>(patient, out var bloodType))
+            state.CMUBloodType = CMUBloodTypes.Name(bloodType.Type);
+
+        if (TryComp<CMUSalineDilutionComponent>(patient, out var saline) &&
+            TryComp<BloodstreamComponent>(patient, out var bloodstream))
+        {
+            var reference = _bloodstream.GetReferenceVolume((patient, bloodstream));
+            if (reference > FixedPoint2.Zero)
+                state.CMUSalinePercent = saline.Saline.Float() / reference.Float() * 100f;
+        }
     }
 
     private void FillRiderReading(EntityUid patient, HealthScannerBuiState state)

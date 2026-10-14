@@ -6,7 +6,8 @@ namespace Content.Client.CMU14.ThreeD;
 public sealed class CMU3DViewSettings
 {
     public const float DefaultFov = 75;
-    public const float DefaultDistance = 24;
+    // the 2D view shows ~8 tiles; 24 drew the whole map and made the server stream ~6x the PVS area per z-level
+    public const float DefaultDistance = 12;
     public const int DefaultPixelBudget = 1920 * 1080;
     public static readonly CVarDef<bool> Enabled = CVarDef.Create("cmu.3d.enabled", false, CVar.CLIENTONLY);
     public static readonly CVarDef<float> Fov = CVarDef.Create("cmu.3d.fov", DefaultFov, CVar.CLIENTONLY | CVar.ARCHIVE);

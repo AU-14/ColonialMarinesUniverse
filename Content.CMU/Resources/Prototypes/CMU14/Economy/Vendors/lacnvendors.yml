@@ -22,7 +22,7 @@
         amount: 40
     - name: Footwear
       entries:
-      - id: AU14LACNBoots
+      - id: AU14LACNBootsFilled
         amount: 40
     - name: Gloves
       entries:
@@ -191,98 +191,10 @@
     - name: Food
       entries:
       - id: CMUMRELACN
-        amount: 30
-      - id: CMUBoxMRELACN
-        amount: 5
-    - name: Tools
-      entries:
-      - id: RMCM5Bayonet
-        amount: 30
-      - id: CMM11Knife
-        amount: 15
-      - id: CMEntrenchingTool
-        amount: 15
-      - id: AU14ToolShovel
-        amount: 10
-      - id: CMScrewdriver
-        amount: 5
-      - id: CMWirecutter
-        amount: 5
-      - id: CMCrowbar
-        amount: 5
-      - id: CMWrench
-        amount: 5
-      - id: CMMultitool
-        amount: 5
-      - id: CMWelder
-        amount: 5
-    - name: Engineering Supplies
-      entries:
-      - id: CMSheetMetal50
-        amount: 2
-      - id: BarbedWire15
-        amount: 4
-      - id: RMCCableCoil
-        amount: 15
-    - name: Flare and light
-      entries:
-      - id: RMCFlashlight # Combat Flashlight
-        amount: 15
-#      #- id: RMCBoxFlashlights
-#      #  amount: 1
-      - id: RMCBoxPackFlare
-        amount: 5
-      - id: CMPackFlare
-        amount: 5
-      - id: RMCPackFlareCAS
-        amount: 2
-    - name: Gas Mask
-      entries:
-      - id: CMUMaskGasLACN
-        amount: 40
-      - id: CMUMaskGasLACNHooded
-        amount: 20
-      - id: CMUMaskPrescriptionGasLACN
-        amount: 10
-      - id: CMUMaskPrescriptionGasLACNHooded
-        amount: 5
-      - id: CMUGasMaskFilter
-        amount: 80
-      - id: AU14PouchGasMaskBag
-        amount: 20
-      - id: CMUFieldOxygenTankFilled
-        amount: 40
-    - name: Hearing Protection
-      entries:
-      - id: CMUHeadElectronicHearingProtection
+        recommended: true
         amount: 60
-    - name: Miscellaneous
-      entries:
-      #- id: CMMap
-      #  amount: 5
-      #- id: CMSparePDTLBattleBuddyKit
-      #  amount: 3
-      - id: RMCEngineerKit
-        amount: 1
-      - id: CMFireExtinguisher
-        amount: 2
-      - id: CMFireExtinguisherPortable
-        amount: 5
-      - id: CMRollerBedSpawnFolded
-        amount: 1
-      - id: RMCScabbardMacheteFilled
-        name: machete scabbard (Full)
-        amount: 5
-      - id: RMCBinoculars
-        amount: 2
-      - id: CMFoldingBarricadesMB6x3
-        amount: 2
-      - id: CMSandbagEmpty25
-        amount: 2
-      - id: RMCPowerCellHigh
-        amount: 5
-      - id: RMCZipties
-        amount: 30
+      - id: CMUBoxMRELACN
+        amount: 10
     - name: Medical Supplies
       entries:
       - id: AU14PouchIFAKFill
@@ -295,18 +207,129 @@
         amount: 40
       - id: AU14Tourniquet
         amount: 40
+      - id: CMUSplintItem
+        amount: 40
       - id: CMOintment10
         amount: 40
       - id: CMPacketPillsTricordrazine
-        amount: 12
+        amount: 40
       - id: AU14NaloxoneAutoInjector
-        amount: 2
+        amount: 9
       - id: AU14PacketPillsTramadol
         amount: 40
       - id: AU14FirstAidAutoInjectorNoSkill
         amount: 20
-      - id: CMUSplintItem
+    - name: Tools
+      entries:
+      - id: CMEntrenchingTool
+        recommended: true
+        amount: 30
+      - id: AU14ToolShovel
+        amount: 10
+      - id: RMCM5Bayonet
+        recommended: true
+        amount: 30
+      - id: CMM11Knife
+        amount: 15
+      - id: RMCScabbardMacheteFilled
+        name: machete scabbard (Full)
+        amount: 6
+      - id: RMCHelmetGarbGunOil
+        amount: 30
+      - id: CMFireExtinguisher
+        amount: 10
+      - id: CMFireExtinguisherPortable
+        amount: 5
+      - id: RMCLightReplacer
+        amount: 10
+      - id: CMScrewdriver
+        amount: 10
+      - id: CMWirecutter
+        amount: 10
+      - id: CMCrowbar
+        amount: 10
+      - id: CMWrench
+        amount: 10
+      - id: CMMultitool
+        amount: 10
+      - id: CMWelderSmall
+        amount: 10
+      - id: CMWelder
+        amount: 4
+      - id: RMCWelderPVE
+        amount: 1
+    - name: Engineering Supplies
+      entries:
+      - id: CMSandbagEmpty50
+        recommended: true
+        amount: 2
+      - id: BarbedWire15
+        amount: 4
+      - id: CMSheetMetal50
+        amount: 2
+      - id: CMSheetPlasteel50
+        amount: 1
+      - id: RMCBoxMagazinePowerCellsHighFilled
+        amount: 2
+      - id: RMCEngineerKit
+        amount: 1
+      - id: RMCPowerCellHigh
+        amount: 2
+      - id: RMCCableCoil
+        amount: 15
+    - name: Flares and lights
+      entries:
+      - id: RMCBoxFlashlights
+        amount: 4
+      - id: RMCFlashlight
+        amount: 20
+      - id: RMCWeaponPistolM82F
+        amount: 4
+      - id: RMCBoxPackFlare
+        amount: 5
+      - id: CMPackFlare
+        amount: 12
+      - id: RMCPackFlareCAS
+        amount: 8
+    - name: Gas Mask
+      entries:
+      - id: CMUMaskGasLACN
         amount: 40
+      - id: CMUMaskGasLACNHooded
+        amount: 40
+      - id: CMUMaskPrescriptionGasLACN
+        amount: 10
+      - id: CMUMaskPrescriptionGasLACNHooded
+        amount: 10
+      - id: CMUGasMaskFilter
+        amount: 80
+      - id: AU14PouchGasMaskBag
+        amount: 20
+      - id: CMUFieldOxygenTankFilled
+        amount: 40
+    - name: Hearing Protection
+      entries:
+      - id: CMUHeadElectronicHearingProtection
+        amount: 60
+    - name: Optics
+      entries:
+      - id: RMCLaserDesignatorPVE
+        amount: 2
+      - id: RMCBinocularsPVE
+        amount: 5
+    - name: Miscellaneous
+      entries:
+      - id: RMCZipties
+        recommended: true
+        amount: 60
+      - id: RMCPVECaseMotionDetector
+        amount: 1
+      - id: CMRollerBedSpawnFolded
+        amount: 8
+      - id: CMFoldingBarricadesMB6x3
+        amount: 2
+      - id: BedrollFolded
+        amount: 20
 
 - type: entity
   parent: ColMarTechBase
@@ -355,6 +378,8 @@
       entries:
       - id: CMUSynthBloodPackFull
         amount: 2
+      - id: CMUSalineBag
+        amount: 3
       - id: CMUMaskCPR
         amount: 30
       - id: AU14HemostaticGauzePacket
@@ -482,7 +507,7 @@
     - name: Footwear
       choices: { CMUPlatoonAirCrewFootwear: 1 }
       entries:
-      - id: AU14LACNBoots
+      - id: AU14LACNBootsFilled
     - name: Gloves
       choices: { CMUPlatoonAirCrewGloves: 1 }
       entries:
@@ -680,7 +705,7 @@
         amount: 5
     - name: Footwear
       entries:
-      - id: AU14LACNBoots
+      - id: AU14LACNBootsFilled
         amount: 5
     - name: Headgear
       entries:
@@ -851,7 +876,7 @@
         recommended: true
     - name: Footwear
       entries:
-      - id: AU14SpikeBoots
+      - id: CMUSpikeBootsFilled
         points: 8
         recommended: true
     - name: Utilities
@@ -1045,7 +1070,7 @@
     - name: Footwear
       choices: { AU14FootWear: 1 }
       entries:
-      - id: AU14LACNBoots
+      - id: AU14LACNBootsFilled
     - name: Hat
       choices: { CMHat: 1 }
       entries:
@@ -1365,7 +1390,7 @@
         amount: 40
     - name: Footwear
       entries:
-      - id: AU14LACNBoots
+      - id: AU14LACNBootsFilled
         amount: 40
     - name: Gloves
       entries:
@@ -1400,7 +1425,7 @@
     - name: Footwear
       choices: { CMUPlatoonMedicalClothingFeet: 1 }
       entries:
-      - id: CMULACNBootsWhite
+      - id: CMULACNBootsWhiteFilled
     - name: Labcoats
       choices: { CMUPlatoonMedicalClothingLabcoat: 1 }
       entries:
@@ -1475,8 +1500,8 @@
     - name: Footwear
       choices: { CMULACNReqFootwear: 1 }
       entries:
-      - id: CMULACNBootsWhite
-      - id: AU14LACNBoots
+      - id: CMULACNBootsWhiteFilled
+      - id: AU14LACNBootsFilled
     - name: Gloves
       choices: { CMULACNReqGloves: 1 }
       entries:
