@@ -505,6 +505,8 @@ namespace Content.Shared.Preferences
             // cmu edit start
             FoxtrotSquadOptIn = other.FoxtrotSquadOptIn;
             Religion = other.Religion;
+            ArmorFlavorText = other.ArmorFlavorText;
+            HelmetFlavorText = other.HelmetFlavorText;
             // cmu edit end
         }
 
@@ -1236,6 +1238,8 @@ namespace Content.Shared.Preferences
             // cmu edit start
             if (FoxtrotSquadOptIn != other.FoxtrotSquadOptIn) return false;
             if (Religion != other.Religion) return false;
+            if (ArmorFlavorText != other.ArmorFlavorText) return false;
+            if (HelmetFlavorText != other.HelmetFlavorText) return false;
             // cmu edit end
             if (SpawnPriority != other.SpawnPriority) return false;
             if (SquadPreference != other.SquadPreference) return false;
@@ -1590,6 +1594,8 @@ namespace Content.Shared.Preferences
             if (!Enum.IsDefined(BloodType)) BloodType = CMUBloodTypes.DefaultTypes[0]; // CMU14
             // cmu edit start
             if (!prototypeManager.HasIndex(Religion)) Religion = Content.Shared.CMU14.Religion.CMUReligionPrototype.Atheist;
+            ArmorFlavorText = Content.Shared.CMU14.GearFlavor.CMUGearFlavorText.Clamp(ArmorFlavorText);
+            HelmetFlavorText = Content.Shared.CMU14.GearFlavor.CMUGearFlavorText.Clamp(HelmetFlavorText);
             // cmu edit end
 
             _antagPreferences.Clear();
@@ -1793,6 +1799,8 @@ namespace Content.Shared.Preferences
             // cmu edit start
             hashCode.Add(FoxtrotSquadOptIn);
             hashCode.Add(Religion);
+            hashCode.Add(ArmorFlavorText);
+            hashCode.Add(HelmetFlavorText);
             // cmu edit end
             hashCode.Add(NamedItems);
             hashCode.Add(PlaytimePerks);

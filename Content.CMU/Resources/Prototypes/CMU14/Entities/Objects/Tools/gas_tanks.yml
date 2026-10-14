@@ -25,7 +25,7 @@
 - type: entity
   parent: RMCGasTankOxygen
   id: CMUFieldGasTankOxygen
-  name: SCBA
+  name: SCBA tank
   description: A self-contained breathing apparatus. A large oxygen tank worn on the back, built for long work in smoke and hostile atmospheres. It can hold 7 L of gas.
   components:
   - type: Sprite

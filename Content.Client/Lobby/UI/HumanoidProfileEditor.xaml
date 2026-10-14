@@ -330,6 +330,13 @@
                             <!-- cmu edit end -->
                             <Label Text="{Loc 'humanoid-profile-editor-general-record-label'}" ToolTip="{Loc 'humanoid-profile-editor-general-record-tooltip'}" />
                             <TextEdit Name="GeneralRecordEdit" MinSize="220 70" Margin="0 0 0 8" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-general-record-tooltip'}" />
+                            <!-- cmu edit start: text on GOVFOR/OPFOR vendor armor and helmets -->
+                            <cc:HSeparator Color="#16823E" Margin="0 5" />
+                            <Label Text="{Loc 'cmu-humanoid-profile-editor-armor-flavor-label'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-gear-flavor-tooltip'}" />
+                            <LineEdit Name="ArmorFlavorTextEdit" HorizontalExpand="True" PlaceHolder="{Loc 'cmu-humanoid-profile-editor-gear-flavor-placeholder'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-gear-flavor-tooltip'}" />
+                            <Label Text="{Loc 'cmu-humanoid-profile-editor-helmet-flavor-label'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-gear-flavor-tooltip'}" />
+                            <LineEdit Name="HelmetFlavorTextEdit" HorizontalExpand="True" Margin="0 0 0 8" PlaceHolder="{Loc 'cmu-humanoid-profile-editor-gear-flavor-placeholder'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-gear-flavor-tooltip'}" />
+                            <!-- cmu edit end -->
                         </BoxContainer>
                     </ScrollContainer>
                 </BoxContainer>

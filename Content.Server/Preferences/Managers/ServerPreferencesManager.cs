@@ -277,7 +277,9 @@ namespace Content.Server.Preferences.Managers
              // Profiles saved before religions are atheist; EnsureValid catches removed religions.
              .WithReligion(string.IsNullOrEmpty(profile.Religion)
                  ? Content.Shared.CMU14.Religion.CMUReligionPrototype.Atheist
-                 : profile.Religion);
+                 : profile.Religion)
+             .WithArmorFlavorText(profile.ArmorFlavorText)
+             .WithHelmetFlavorText(profile.HelmetFlavorText);
              // cmu edit end
         }
 

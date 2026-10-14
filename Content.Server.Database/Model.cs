@@ -143,6 +143,14 @@ namespace Content.Server.Database
             modelBuilder.Entity<Profile>()
                 .Property(p => p.Religion)
                 .HasDefaultValue(string.Empty);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.ArmorFlavorText)
+                .HasDefaultValue(string.Empty);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.HelmetFlavorText)
+                .HasDefaultValue(string.Empty);
             // cmu edit end
 
             modelBuilder.Entity<Profile>()
@@ -686,6 +694,8 @@ namespace Content.Server.Database
         // cmu edit start
         public bool FoxtrotSquadOptIn { get; set; }
         public string Religion { get; set; } = string.Empty;
+        public string ArmorFlavorText { get; set; } = string.Empty;
+        public string HelmetFlavorText { get; set; } = string.Empty;
         // cmu edit end
         public bool HideMetaInformation { get; set; }
     }

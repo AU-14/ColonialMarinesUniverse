@@ -1502,6 +1502,20 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasDefaultValue("")
                         .HasColumnName("religion");
+
+                    b.Property<string>("ArmorFlavorText")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("")
+                        .HasColumnName("armor_flavor_text");
+
+                    b.Property<string>("HelmetFlavorText")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("")
+                        .HasColumnName("helmet_flavor_text");
                     // cmu edit end
 
                     b.Property<string>("Sex")

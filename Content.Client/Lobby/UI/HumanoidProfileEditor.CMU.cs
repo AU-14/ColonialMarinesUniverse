@@ -137,6 +137,7 @@ public sealed partial class HumanoidProfileEditor
 
         // cmu edit start
         InitializeReligion();
+        InitializeGearFlavor();
         // cmu edit end
 
         InitializeCharacterDescription();
@@ -376,6 +377,7 @@ public sealed partial class HumanoidProfileEditor
         UpdateOriginControls();
         // cmu edit start
         UpdateReligionControls();
+        UpdateGearFlavorControls();
         // cmu edit end
         UpdateArmorPreferenceControls();
         UpdateSquadPreferenceControls();
