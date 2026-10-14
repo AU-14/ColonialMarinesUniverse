@@ -3,18 +3,19 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
 using Robust.Server.Audio;
-using Robust.Shared.Audio;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Dropship;
 
 /// <summary>
 ///     Plays a dropship's flight loop (cmss13-devs/cmss13-pve#1294) once its takeoff cue has finished, and
-///     stops it when the dropship starts arriving, so the two engine sounds never play over each other.
+///     stops it when the dropship starts arriving. Each play of the loop starts a second before the last one
+///     ends, so the engine never drops out between them.
 /// </summary>
 public sealed class CMUDropshipFlightAudioSystem : EntitySystem
 {
-    private static readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(0.25);
+    private static readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(0.1);
+    private static readonly TimeSpan LoopOverlap = TimeSpan.FromSeconds(1);
 
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private DropshipSystem _dropship = default!;
@@ -26,8 +27,8 @@ public sealed class CMUDropshipFlightAudioSystem : EntitySystem
 
     private sealed class Flight
     {
-        public TimeSpan LoopAt;
-        public EntityUid? Loop;
+        public TimeSpan NextPlay;
+        public readonly List<EntityUid> Playing = new();
     }
 
     public override void Update(float frameTime)
@@ -44,7 +45,11 @@ public sealed class CMUDropshipFlightAudioSystem : EntitySystem
             if (TryComp(ship, out FTLComponent? ftl) && ftl.State is FTLState.Starting or FTLState.Travelling)
                 continue;
 
-            _audio.Stop(flight.Loop);
+            foreach (var audio in flight.Playing)
+            {
+                _audio.Stop(audio);
+            }
+
             _landed.Add(ship);
         }
 
@@ -68,17 +73,24 @@ public sealed class CMUDropshipFlightAudioSystem : EntitySystem
                 var cue = _dropship.CMUIsDepartingWarship(ship) && dropship.AirlockedStartupSound != null
                     ? dropship.AirlockedStartupSound
                     : dropship.StartupSound;
-                var length = cue == null ? TimeSpan.Zero : _audio.GetAudioLength(_audio.ResolveSound(cue));
-                _flights[ship] = new Flight { LoopAt = now + length };
+                var cueLength = cue == null ? TimeSpan.Zero : _audio.GetAudioLength(_audio.ResolveSound(cue));
+                _flights[ship] = new Flight { NextPlay = now + cueLength - LoopOverlap };
                 continue;
             }
 
-            if (flight.Loop != null || ftl.State != FTLState.Travelling || now < flight.LoopAt)
+            flight.Playing.RemoveAll(audio => !Exists(audio));
+
+            if (ftl.State != FTLState.Travelling || now < flight.NextPlay)
                 continue;
 
-            var audio = _audio.PlayPvs(loopSound, ship, loopSound.Params.WithLoop(true));
-            _audio.SetGridAudio(audio);
-            flight.Loop = audio?.Entity;
+            var resolved = _audio.ResolveSound(loopSound);
+            var length = _audio.GetAudioLength(resolved);
+            var played = _audio.PlayPvs(resolved, ship, loopSound.Params);
+            _audio.SetGridAudio(played);
+            if (played != null)
+                flight.Playing.Add(played.Value.Entity);
+
+            flight.NextPlay = now + length - LoopOverlap;
         }
     }
 }
