@@ -76,3 +76,10 @@ cmu-ui-options-hide-examine-tooltip-tooltip = Examining no longer opens a popup.
 
 cmu-ui-options-hide-cassette-music-notes = Hide music notes over cassette listeners
 cmu-ui-options-hide-cassette-music-notes-tooltip = Stops drawing the floating music notes over people who are listening to a cassette player.
+
+cmu-ui-options-interface = Interface
+cmu-ui-options-gameplay = Gameplay
+cmu-ui-options-popups-examine = Popups and examine
+cmu-ui-options-screen-shake = Screen shake
+cmu-ui-options-sound = Sound
+cmu-ui-options-visuals = Visuals
