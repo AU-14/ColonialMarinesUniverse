@@ -6,10 +6,13 @@
   components:
   - type: CMUBurnPanic
   - type: CMUCombatHearing
-  # cmss13 bodies are the same for both sexes (cmss13-devs/cmss13#6073) and its uniforms have no
-  # female versions, so clothing is not pinched in at the waist for female characters.
   - type: Inventory
-    femaleDisplacements: { }
+    femaleDisplacements:
+      jumpsuit:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Human/displacement.rsi
+            state: jumpsuit-female
   - type: InitialBody
     organs:
       Torso: CMUPartHumanTorso
