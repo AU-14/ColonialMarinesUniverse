@@ -99,7 +99,7 @@
   description: cmu-trait-bad-leg-desc
   category: Disabilities
   cost: 1
-  traitGear: Cane
+  traitGear: RMCHollowCane
   cmuBlockedDepartments:
   - AU14DepartmentGovernmentForces
   - AU14DepartmentOpfor
