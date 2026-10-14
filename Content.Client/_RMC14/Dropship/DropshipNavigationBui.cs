@@ -1,4 +1,5 @@
 using Content.Client.Message;
+using Content.Shared.CMU14.Dropship; // cmu edit
 using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared.Doors.Components;
@@ -103,6 +104,10 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
         };
 
         _window.LockdownButton.Button.OnPressed += _ => SendPredictedMessage(new DropshipLockdownMsg(DoorLocation.None));
+        // cmu edit start
+        _window.CMULockDoorsOpenButton.Visible = _entities.HasComponent<CMUDropshipDoorsLockOpenComponent>(Owner);
+        _window.CMULockDoorsOpenButton.Button.OnPressed += _ => SendPredictedMessage(new CMUDropshipLockDoorsOpenMsg());
+        // cmu edit end
         _window.LockdownButtonAft.Button.OnPressed += _ => SendPredictedMessage(new DropshipLockdownMsg(DoorLocation.Aft));
         _window.LockdownButtonPort.Button.OnPressed += _ => SendPredictedMessage(new DropshipLockdownMsg(DoorLocation.Port));
         _window.LockdownButtonStarboard.Button.OnPressed += _ => SendPredictedMessage(new DropshipLockdownMsg(DoorLocation.Starboard));
