@@ -82,6 +82,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             StopManualTrigger();
             SendMessage(new MohawkChinGunIffMessage());
         };
+        Window.VisionButton.OnPressed += _ => SendMessage(new MohawkChinGunVisionMessage());
         Window.ApproveAiButton.OnPressed += _ =>
         {
             if (EntMan.TryGetComponent(Owner, out DropshipTerminalWeaponsComponent? terminal))
@@ -209,6 +210,21 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         if (Window == null)
             return;
 
+        string FlareName(DropshipTerminalWeaponsComponent terminal, EntityUid? flare)
+        {
+            if (flare is not { } uid)
+                return Loc.GetString("cmu-dropship-shared-flare-none");
+            var net = EntMan.GetNetEntity(uid);
+            foreach (var target in terminal.Targets)
+            {
+                if (target.Id == net)
+                    return target.Name;
+            }
+            return EntMan.TryGetComponent(uid, out MetaDataComponent? meta)
+                ? meta.EntityName
+                : Loc.GetString("cmu-dropship-shared-flare-none");
+        }
+
         if (EntMan.TryGetComponent(Owner, out DropshipTerminalWeaponsComponent? terminal))
         {
             Window.ChinGunControlButton.Visible = terminal.Gunnery;
@@ -223,6 +239,12 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             Window.IffButton.Visible = terminal.Gunnery;
             Window.IffButton.Disabled = !terminal.ChinGunSetupReady;
             Window.IffButton.Text = Loc.GetString(terminal.ChinGunIff ? "cmu-mohawk-iff-on" : "cmu-mohawk-iff-off");
+            Window.VisionButton.Visible = terminal.Gunnery;
+            Window.VisionButton.Disabled = !terminal.ChinGunSetupReady;
+            Window.VisionButton.Text = Loc.GetString(MohawkChinGunSystem.VisionLoc(terminal.ChinGunVision));
+            Window.SharedFlareLabel.Text = Loc.GetString("cmu-dropship-shared-flares",
+                ("pilot", FlareName(terminal, terminal.PilotFlare)), ("gunner", FlareName(terminal, terminal.GunnerFlare)));
+            Window.SharedFlareLabel.ToolTip = Window.SharedFlareLabel.Text;
             Window.AiTargetLabel.Visible = terminal.Gunnery;
             Window.AiTargetLabel.Text = terminal.ChinGunAiTarget is { } aiTarget && EntMan.TryGetComponent(aiTarget, out MetaDataComponent? aiMeta)
                 ? Loc.GetString("cmu-mohawk-ai-lock", ("target", aiMeta.EntityName))
@@ -464,7 +486,15 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                     return null;
 
                 var msg = selectMsg(target.Id);
-                return new DropshipWeaponsButtonData(target.Name, _ => SendPredictedMessage(msg));
+                var name = target.Name;
+                if (ReferenceEquals(targets, terminal.Targets) && EntMan.GetEntity(target.Id) is { Valid: true } flare)
+                {
+                    if (flare == terminal.PilotFlare)
+                        name += " " + Loc.GetString("cmu-dropship-flare-marker-pilot");
+                    if (flare == terminal.GunnerFlare)
+                        name += " " + Loc.GetString("cmu-dropship-flare-marker-gunner");
+                }
+                return new DropshipWeaponsButtonData(name, _ => SendPredictedMessage(msg));
             }
 
             if (firstTarget > 0)
@@ -553,6 +583,12 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             EntMan.TryGetComponent(chinEye, out EyeComponent? turretEye))
         {
             screen.Viewport.Eye = turretEye.Eye;
+            screen.Viewport.ModulateSelfOverride = terminal.ChinGunVision switch
+            {
+                MohawkChinGunVisionMode.Night => Color.FromHex("#7CFF8C"),
+                MohawkChinGunVisionMode.Thermal => Color.FromHex("#FFB070"),
+                _ => null,
+            };
             screen.Viewport.MouseFilter = MouseFilterMode.Stop;
             screen.Viewport.Visible = true;
             screen.ScreenLabel.Visible = false;
@@ -562,6 +598,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             screen.BottomRow.SetData();
             return;
         }
+        screen.Viewport.ModulateSelfOverride = null;
 
         void SetWeaponPageControls()
         {

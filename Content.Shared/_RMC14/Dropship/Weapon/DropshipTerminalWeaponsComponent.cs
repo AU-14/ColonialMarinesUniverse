@@ -52,6 +52,13 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
     [DataField, AutoNetworkedField] public bool ChinGunAiApproved;
     [DataField, AutoNetworkedField] public bool FireControlBooting;
     [DataField, AutoNetworkedField] public string FireControlStatus = "";
+    [DataField, AutoNetworkedField] public MohawkChinGunVisionMode ChinGunVision;
+
+    /// <summary>Flare the gunner has locked with the chin gun, shared with every console on the ship.</summary>
+    [DataField, AutoNetworkedField] public EntityUid? GunnerFlare;
+
+    /// <summary>Flare the pilot has selected for CAS, shared with every console on the ship.</summary>
+    [DataField, AutoNetworkedField] public EntityUid? PilotFlare;
 
     [DataField, AutoNetworkedField]
     public int ChinGunFeed;

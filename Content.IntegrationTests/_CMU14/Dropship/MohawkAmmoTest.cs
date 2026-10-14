@@ -158,7 +158,7 @@ public sealed class MohawkAmmoTest : GameTest
     [TestCase("CMUMohawkM90AmmoScatter", "CMUMohawkM90Scatter", 60, 10, 3000, false)]
     [TestCase("CMUMohawkM90AmmoIncendiary", "CMUMohawkM90Incendiary", 130, 2, 3000, true)]
     [TestCase("CMUMohawkM90AmmoDevastator", "CMUMohawkM90Devastator", 300, 12, 6000, false)]
-    [TestCase("CMUMohawkM90AmmoKinetic", "CMUMohawkM90Kinetic", 20.5, 0, 750, false)]
+    [TestCase("CMUMohawkM90AmmoKinetic", "CMUMohawkM90Kinetic", 41, 0, 750, false)]
     public async Task PowerloaderLoadsVariantAndGunConsumesItsProjectile(
         string crateId, string projectileId, double damage, int spread, int cost, bool burns)
     {

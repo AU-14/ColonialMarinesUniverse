@@ -182,7 +182,7 @@ public sealed class MohawkChinGunTest
                 "Requesting a new bearing must not snap the turret.");
             turret.Update(0.5f);
             Assert.That(entities.GetComponent<GunshipDirectFirePointComponent>(point).AimOffsetDegrees,
-                Is.EqualTo(15).Within(0.001), "A half-second update must slew fifteen degrees.");
+                Is.EqualTo(30).Within(0.001), "A half-second update must slew thirty degrees.");
             chin.DesiredAimDegrees = 0;
             turret.Update(0.5f);
             Scan();

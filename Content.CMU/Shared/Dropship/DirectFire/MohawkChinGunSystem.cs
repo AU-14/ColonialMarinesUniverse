@@ -27,12 +27,15 @@ using Robust.Shared.Network;
 using Robust.Shared.Timing;
 using Robust.Shared.Player;
 using Content.Shared._RMC14.Armor;
+using Content.Shared.Administration.Logs;
+using Content.Shared.Database;
 using Content.Shared.Inventory;
 
 namespace Content.Shared.CMU14.Dropship.DirectFire;
 
 public sealed partial class MohawkChinGunSystem : EntitySystem
 {
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private GunshipDirectFireSystem _directFire = default!;
@@ -74,6 +77,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                 subs.Event<MohawkChinGunArMessage>(OnAr);
                 subs.Event<MohawkChinGunIffMessage>(OnIff);
                 subs.Event<MohawkChinGunApproveAiMessage>(OnApproveAi);
+                subs.Event<MohawkChinGunVisionMessage>(OnVision);
             });
         SubscribeLocalEvent<MohawkChinGunComponent, ComponentShutdown>(OnShutdown);
         InitializeDamage();
@@ -240,12 +244,13 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             chin.Console = console;
             chin.PreviousEye = eye.Target;
             chin.PreviousDrawFov = eye.DrawFov;
+            chin.PreviousDrawLight = eye.DrawLight;
             chin.ControlledWeapon = weapon;
             chin.Eye = Spawn(null, GetCameraCoordinates(uid));
             EnsureComp<EyeComponent>(chin.Eye.Value);
-            _eyes.SetDrawFov(chin.Eye.Value, !chin.AirborneControl);
+            ApplyVision(point, chin.Eye.Value, chin.AirborneControl);
             _eyes.SetTarget(args.Actor, chin.Eye, eye);
-            _eyes.SetDrawFov(args.Actor, !chin.AirborneControl, eye);
+            ApplyVision(point, args.Actor, chin.AirborneControl, eye);
             chin.AddedRemoteOperator = !HasComp<RemoteWeaponOperatorComponent>(args.Actor);
             var remote = EnsureComp<RemoteWeaponOperatorComponent>(args.Actor);
             chin.PreviousPlatform = remote.Platform;
@@ -258,6 +263,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             _weapons.SetChinGunCamera(console, chin.Eye);
             Dirty(console);
             Dirty(point);
+            _adminLog.Add(LogType.RMCDropshipWeapon,
+                $"{ToPrettyString(args.Actor)} took manual control of M90 chin gun {ToPrettyString(uid)} ({(chin.AirborneControl ? "airborne" : "grounded")}).");
             return;
         }
 
@@ -300,7 +307,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             delta = direction * delta.Length();
         if (delta.LengthSquared() > chin.Range * chin.Range)
             delta = Vector2.Normalize(delta) * chin.Range;
-        if (!IsAirborne(point) && !CameraLineClear(point, muzzle, muzzle + delta, coords.MapId))
+        if (!IsAirborne(point) && chin.VisionMode != MohawkChinGunVisionMode.Thermal &&
+            !CameraLineClear(point, muzzle, muzzle + delta, coords.MapId))
         {
             var low = 0f;
             var high = 1f;
@@ -371,6 +379,14 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                 continue;
             if (terminal.ChinGunEye == removed)
                 _weapons.SetChinGunCamera((uid, terminal), null);
+            if (terminal.GunnerFlare == removed || terminal.PilotFlare == removed)
+            {
+                if (terminal.GunnerFlare == removed)
+                    terminal.GunnerFlare = null;
+                if (terminal.PilotFlare == removed)
+                    terminal.PilotFlare = null;
+                Dirty(uid, terminal);
+            }
             if (terminal.ChinGunAiTarget != removed)
                 continue;
             terminal.ChinGunAiTarget = null;
@@ -382,6 +398,9 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
     private void ReleaseControl(Entity<MohawkChinGunComponent> point)
     {
         SetTracking(point, null);
+        if (point.Comp.Operator is { } released)
+            _adminLog.Add(LogType.RMCDropshipWeapon,
+                $"{ToPrettyString(released)} released manual control of M90 chin gun {ToPrettyString(point)}.");
         if (point.Comp.Operator is { } actor && !TerminatingOrDeleted(actor))
         {
             if (TryComp(actor, out RemoteWeaponOperatorComponent? remote) &&
@@ -401,6 +420,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                 _eyes.SetTarget(actor, point.Comp.PreviousEye is { } previous && !TerminatingOrDeleted(previous)
                     ? previous : null, eye);
                 _eyes.SetDrawFov(actor, point.Comp.PreviousDrawFov, eye);
+                _eyes.SetDrawLight((actor, eye), point.Comp.PreviousDrawLight);
             }
         }
 
@@ -413,6 +433,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             terminal.ChinGunAr = false;
             terminal.Target = null;
             Dirty(console, terminal);
+            _weapons.ShareFlare(console, null, true);
         }
 
         if (point.Comp.Eye is { } camera)
@@ -719,6 +740,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             ReleaseControl(point);
             chin.AutomaticTarget = null;
             console.Comp.Target = IsAirborne(uid) ? flare : null;
+            _weapons.ShareFlare(console, console.Comp.Target, true);
             chin.FreeFireConsole = console;
             chin.FreeFireEnabled = true;
             chin.ApprovedAutomaticTarget = null;
@@ -726,6 +748,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             Dirty(point);
             Dirty(console);
             SyncFreeFireDisplay(point);
+            _adminLog.Add(LogType.RMCDropshipWeapon,
+                $"{ToPrettyString(args.Actor)} enabled AI free fire on M90 chin gun {ToPrettyString(uid)}.");
             return;
         }
     }
@@ -740,13 +764,17 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             TryComp(console, out DropshipTerminalWeaponsComponent? terminal))
         {
             if (point.Comp.Operator == null)
+            {
                 terminal.Target = null;
+                _weapons.ShareFlare(console, null, true);
+            }
             terminal.ChinGunAiTarget = null;
             terminal.ChinGunAiApproved = false;
             Dirty(console, terminal);
         }
         point.Comp.FreeFireConsole = null;
         Dirty(point);
+        _adminLog.Add(LogType.RMCDropshipWeapon, $"AI free fire on M90 chin gun {ToPrettyString(point)} was disabled.");
     }
 
     private void SyncFreeFireDisplay(Entity<MohawkChinGunComponent> point)
@@ -769,7 +797,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                 terminal.ChinGunSetupReady == (point.Comp.Calibrated && point.Comp.IffConfigured) &&
                 terminal.ChinGunAiEnabled == point.Comp.FreeFireEnabled &&
                 terminal.ChinGunAiTarget == point.Comp.AutomaticTarget &&
-                terminal.ChinGunAiApproved == (point.Comp.ApprovedAutomaticTarget != null))
+                terminal.ChinGunAiApproved == (point.Comp.ApprovedAutomaticTarget != null) &&
+                terminal.ChinGunVision == point.Comp.VisionMode)
                 continue;
             terminal.ChinGunFreeFireCooldown = cooldown;
             terminal.ChinGunDisabled = point.Comp.Disabled;
@@ -779,6 +808,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             terminal.ChinGunAiEnabled = point.Comp.FreeFireEnabled;
             terminal.ChinGunAiTarget = point.Comp.AutomaticTarget;
             terminal.ChinGunAiApproved = point.Comp.ApprovedAutomaticTarget != null;
+            terminal.ChinGunVision = point.Comp.VisionMode;
             Dirty(uid, terminal);
         }
     }
@@ -994,6 +1024,59 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
         SyncFreeFireDisplay(point);
         _popup.PopupEntity(Loc.GetString(point.Comp.IffEnabled ? "cmu-mohawk-iff-on" : "cmu-mohawk-iff-off"),
             console, args.Actor);
+        _adminLog.Add(LogType.RMCDropshipWeapon,
+            $"{ToPrettyString(args.Actor)} {(point.Comp.IffEnabled ? "enabled" : "disabled")} IFF protection on M90 chin gun {ToPrettyString(point)}.");
+    }
+
+    private void OnVision(Entity<DropshipTerminalWeaponsComponent> console, ref MohawkChinGunVisionMessage args)
+    {
+        if (_net.IsClient)
+            return;
+        if (!TryGetSeatedPoint(console, args.Actor, out var point))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-mohawk-gunnery-seat"), console, args.Actor);
+            return;
+        }
+        point.Comp.VisionMode = point.Comp.VisionMode switch
+        {
+            MohawkChinGunVisionMode.Normal => MohawkChinGunVisionMode.Night,
+            MohawkChinGunVisionMode.Night => MohawkChinGunVisionMode.Thermal,
+            _ => MohawkChinGunVisionMode.Normal,
+        };
+        Dirty(point);
+        if (point.Comp.Eye is { } eye && !TerminatingOrDeleted(eye))
+            ApplyVision(point, eye, point.Comp.AirborneControl);
+        if (point.Comp.Operator is { } actor && TryComp(actor, out EyeComponent? actorEye) &&
+            actorEye.Target == point.Comp.Eye)
+            ApplyVision(point, actor, point.Comp.AirborneControl, actorEye);
+        if (point.Comp.AutomaticEye is { } automatic && !TerminatingOrDeleted(automatic))
+            ApplyVision(point, automatic, IsAirborne(point));
+        SyncFreeFireDisplay(point);
+        _popup.PopupEntity(Loc.GetString(VisionLoc(point.Comp.VisionMode)), console, args.Actor);
+        _adminLog.Add(LogType.RMCDropshipWeapon,
+            $"{ToPrettyString(args.Actor)} switched M90 chin gun {ToPrettyString(point)} optics to {point.Comp.VisionMode}.");
+    }
+
+    public static string VisionLoc(MohawkChinGunVisionMode mode)
+    {
+        return mode switch
+        {
+            MohawkChinGunVisionMode.Night => "cmu-mohawk-vision-night",
+            MohawkChinGunVisionMode.Thermal => "cmu-mohawk-vision-thermal",
+            _ => "cmu-mohawk-vision-normal",
+        };
+    }
+
+    /// <summary>
+    /// Night optics render fullbright; thermal is fullbright and ignores walls for viewing even groundside.
+    /// Shots are still blocked by walls.
+    /// </summary>
+    private void ApplyVision(Entity<MohawkChinGunComponent> point, EntityUid eye, bool airborne, EyeComponent? comp = null)
+    {
+        if (!Resolve(eye, ref comp, false))
+            return;
+        _eyes.SetDrawFov(eye, !airborne && point.Comp.VisionMode != MohawkChinGunVisionMode.Thermal, comp);
+        _eyes.SetDrawLight((eye, comp), point.Comp.VisionMode == MohawkChinGunVisionMode.Normal);
     }
 
     private void OnApproveAi(Entity<DropshipTerminalWeaponsComponent> console, ref MohawkChinGunApproveAiMessage args)
@@ -1015,6 +1098,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
         point.Comp.ApprovedAutomaticTarget = point.Comp.ApprovedAutomaticTarget == target ? null : target;
         Dirty(point);
         SyncAutomaticCamera(point, target);
+        _adminLog.Add(LogType.RMCDropshipWeapon,
+            $"{ToPrettyString(args.Actor)} {(point.Comp.ApprovedAutomaticTarget != null ? "approved" : "revoked")} M90 AI engagement of {ToPrettyString(target)}.");
     }
 
     private void SyncAutomaticCamera(Entity<MohawkChinGunComponent> point, EntityUid? target)
@@ -1027,7 +1112,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             EnsureComp<EyeComponent>(camera);
             point.Comp.AutomaticEye = camera;
         }
-        _eyes.SetDrawFov(camera, !IsAirborne(point));
+        _eyes.SetDrawFov(camera, !IsAirborne(point) && point.Comp.VisionMode != MohawkChinGunVisionMode.Thermal);
+        _eyes.SetDrawLight(camera, point.Comp.VisionMode == MohawkChinGunVisionMode.Normal);
         _transform.SetCoordinates(camera, target is { } tracked && CanTrack(point, tracked)
             ? Transform(tracked).Coordinates : GetCameraCoordinates(point));
         var consoles = EntityQueryEnumerator<DropshipTerminalWeaponsComponent>();
@@ -1131,6 +1217,9 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             return;
         console.Comp.Target = flare;
         Dirty(console);
+        _weapons.ShareFlare(console, flare, true);
+        _adminLog.Add(LogType.RMCDropshipWeapon,
+            $"{ToPrettyString(point.Comp.Operator)} {(flare == null ? "cleared the M90 flare lock" : $"locked M90 chin gun onto flare {ToPrettyString(flare)}")} from {ToPrettyString(console)}.");
         if (flare is { } selected)
         {
             var warning = new MohawkChinGunFlareLockedEvent(selected, point.Comp.FlareRadius);

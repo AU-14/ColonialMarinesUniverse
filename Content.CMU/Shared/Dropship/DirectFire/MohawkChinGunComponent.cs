@@ -68,6 +68,9 @@ public sealed partial class MohawkChinGunComponent : Component
     public EntityUid? Eye;
     public EntityUid? PreviousEye;
     public bool PreviousDrawFov;
+    public bool PreviousDrawLight = true;
+    [DataField, AutoNetworkedField]
+    public MohawkChinGunVisionMode VisionMode;
     public EntityUid? ControlledWeapon;
     public bool AddedRemoteOperator;
     public EntityUid? PreviousPlatform;
@@ -85,6 +88,19 @@ public sealed class MohawkChinGunArMessage : BoundUserInterfaceMessage;
 
 [Serializable, NetSerializable]
 public sealed class MohawkChinGunIffMessage : BoundUserInterfaceMessage;
+
+[Serializable, NetSerializable]
+public sealed class MohawkChinGunVisionMessage : BoundUserInterfaceMessage;
+
+[Serializable, NetSerializable]
+public enum MohawkChinGunVisionMode : byte
+{
+    Normal,
+    Night,
+
+    /// <summary>Night vision that also ignores walls, even while grounded.</summary>
+    Thermal,
+}
 
 [Serializable, NetSerializable]
 public sealed class MohawkChinGunApproveAiMessage(NetEntity? target) : BoundUserInterfaceMessage

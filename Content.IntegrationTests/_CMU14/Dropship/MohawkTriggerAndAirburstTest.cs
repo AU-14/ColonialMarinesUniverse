@@ -146,8 +146,10 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             var boot = SEntMan.GetComponent<DropshipFireControlBootComponent>(map.Grid);
             boot.Complete = false;
             boot.ReadyAt = TimeSpan.Zero;
-            Assert.That(boot.FaultChance, Is.EqualTo(0.1f), "Each installed weapon has a ten-percent fault chance.");
-            boot.FaultChance = 1;
+            var config = Server.ResolveDependency<IConfigurationManager>();
+            Assert.That(config.GetCVar(Content.Shared.CCVar.CCVars.DropshipBootFaultChance), Is.EqualTo(0.1f),
+                "Each installed weapon has a ten-percent fault chance by default.");
+            config.SetCVar(Content.Shared.CCVar.CCVars.DropshipBootFaultChance, 1f);
             ui.OpenUi(mount.Console, DropshipTerminalWeaponsUi.Key, mount.Actor);
             Assert.That(boot.ReadyAt, Is.GreaterThan(SGameTiming.CurTime));
             mount.Chin.DefensiveFire = true;
@@ -159,6 +161,9 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             Assert.That(boot.Complete, Is.True);
             var fault = SEntMan.GetComponent<DropshipHardpointFaultComponent>(mount.Point);
             Assert.That(fault.Faulted, Is.True);
+            Assert.That(fault.Reason, Is.AnyOf(DropshipFireControlBootSystem.FaultReasons.Cast<object>().ToArray()),
+                "Boot faults record a readable reason.");
+            Assert.That(mount.Terminal.FireControlStatus, Does.Contain(Loc.GetString(fault.Reason!)));
             Assert.That(SEntMan.GetComponent<DropshipHardpointFaultComponent>(internalPoint).Faulted, Is.True,
                 "Internal utility-mounted weapons participate in the same boot test.");
             Server.ResolveDependency<IConfigurationManager>().SetCVar(RMCCVars.RMCDropshipCASDebug, true);
@@ -172,6 +177,12 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             var tool = SEntMan.SpawnEntity("CMMultitool", map.GridCoords);
             var hands = Server.System<Content.Shared.Hands.EntitySystems.SharedHandsSystem>();
             Assert.That(hands.TryPickupAnyHand(technician, tool), Is.True);
+            SEntMan.EventBus.RaiseLocalEvent(mount.Point, new Content.Shared.Interaction.InteractUsingEvent(
+                technician, tool, mount.Point, map.GridCoords));
+            Assert.That(SEntMan.TryGetComponent(technician, out Content.Shared.DoAfter.DoAfterComponent? unskilled) &&
+                        unskilled.DoAfters.Values.Any(d => !d.Completed && !d.Cancelled), Is.False,
+                "Untrained users cannot start a fault reset.");
+            Server.System<SkillsSystem>().SetSkill(technician, "RMCSkillEngineer", 1);
             void Reset(bool cancel)
             {
                 SEntMan.EventBus.RaiseLocalEvent(mount.Point, new Content.Shared.Interaction.InteractUsingEvent(
@@ -190,11 +201,13 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             Assert.That(fault.Faulted, Is.True);
             Reset(false);
             Assert.That(fault.Faulted, Is.False);
+            Assert.That(fault.Reason, Is.Null);
             Assert.That(system.CanOperate((mount.Point, mount.Chin), mount.Weapon, mount.Weapon, out _), Is.True);
             ui.CloseUi(mount.Console, DropshipTerminalWeaponsUi.Key, mount.Actor);
             ui.OpenUi(mount.Console, DropshipTerminalWeaponsUi.Key, mount.Actor);
             Server.System<DropshipFireControlBootSystem>().Update(0);
             Assert.That(fault.Faulted, Is.False, "Opening again must not reroll even with 100% configured faults.");
+            config.SetCVar(Content.Shared.CCVar.CCVars.DropshipBootFaultChance, 0.1f);
             mount.Chin.DefensiveFire = false;
         });
     }
@@ -212,7 +225,8 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             var boot = SEntMan.GetComponent<DropshipFireControlBootComponent>(map.Grid);
             boot.Complete = false;
             boot.ReadyAt = TimeSpan.Zero;
-            boot.FaultChance = 0;
+            var config = Server.ResolveDependency<IConfigurationManager>();
+            config.SetCVar(Content.Shared.CCVar.CCVars.DropshipBootFaultChance, 0f);
             ui.OpenUi(mount.Console, DropshipTerminalWeaponsUi.Key, mount.Actor);
             Assert.That(mount.Terminal.FireControlBooting, Is.True);
             boot.ReadyAt = SGameTiming.CurTime - TimeSpan.FromSeconds(1);
@@ -221,11 +235,115 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             Assert.That(boot.Complete, Is.True);
             Assert.That(mount.Terminal.FireControlBooting, Is.False);
             Assert.That(SEntMan.GetComponent<DropshipHardpointFaultComponent>(mount.Point).Faulted, Is.False);
-            boot.FaultChance = 1;
+            config.SetCVar(Content.Shared.CCVar.CCVars.DropshipBootFaultChance, 1f);
             ui.CloseUi(mount.Console, DropshipTerminalWeaponsUi.Key, mount.Actor);
             ui.OpenUi(mount.Console, DropshipTerminalWeaponsUi.Key, mount.Actor);
             system.Update(0);
             Assert.That(SEntMan.GetComponent<DropshipHardpointFaultComponent>(mount.Point).Faulted, Is.False);
+            config.SetCVar(Content.Shared.CCVar.CCVars.DropshipBootFaultChance, 0.1f);
+        });
+    }
+
+    [Test]
+    public async Task LandingRebootRollsEscalatingWearFaults()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var mount = Create(map.Grid, false);
+            var config = Server.ResolveDependency<IConfigurationManager>();
+            var system = Server.System<DropshipFireControlBootSystem>();
+            var boot = SEntMan.EnsureComponent<DropshipFireControlBootComponent>(map.Grid);
+            boot.Complete = true;
+            var fault = SEntMan.EnsureComponent<DropshipHardpointFaultComponent>(mount.Point);
+
+            system.RegisterUse(mount.Point);
+            system.RegisterUse(mount.Point);
+            Assert.That(fault.Uses, Is.EqualTo(1), "Continuous fire counts as one engagement.");
+            fault.LastUse -= fault.UseWindow;
+            system.RegisterUse(mount.Point);
+            Assert.That(fault.Uses, Is.EqualTo(2));
+
+            fault.Landings = 3;
+            var normal = system.GetLandingFaultChance(fault, false);
+            Assert.That(normal, Is.EqualTo((0.02f + 0.01f * 2) * 1.1f).Within(0.0001f),
+                "Landing chance grows per landing and is multiplied by hardpoint use.");
+            Assert.That(system.GetLandingFaultChance(fault, true), Is.EqualTo(normal * 3).Within(0.0001f),
+                "Crash landings triple the chance.");
+            fault.Landings = 500;
+            Assert.That(system.GetLandingFaultChance(fault, true), Is.EqualTo(0.75f).Within(0.0001f));
+            fault.Landings = 0;
+
+            config.SetCVar(Content.Shared.CCVar.CCVars.DropshipLandingFaultChance, 1f);
+            system.OnLanded(map.Grid, false);
+            Assert.That(boot.Complete, Is.False);
+            Assert.That(boot.LandingReboot, Is.True);
+            Assert.That(mount.Terminal.FireControlStatus, Does.Contain("POST-LANDING"));
+            Assert.That(Server.System<MohawkChinGunSystem>().CanOperate((mount.Point, mount.Chin), mount.Weapon,
+                mount.Weapon, out _), Is.False, "Weapons are offline while the post-landing diagnostic runs.");
+            boot.ReadyAt = SGameTiming.CurTime - TimeSpan.FromSeconds(1);
+            system.Update(0);
+            Assert.That(boot.Complete, Is.True);
+            Assert.That(boot.LandingReboot, Is.False);
+            Assert.That(fault.Landings, Is.EqualTo(1));
+            Assert.That(fault.Faulted, Is.True);
+            Assert.That(fault.Reason, Is.Not.Null);
+            config.SetCVar(Content.Shared.CCVar.CCVars.DropshipLandingFaultChance, 0.02f);
+
+            config.SetCVar(Content.Shared.CCVar.CCVars.DropshipLandingReboot, false);
+            system.OnLanded(map.Grid, true);
+            Assert.That(boot.Complete, Is.True, "The landing reboot can be disabled by CVar.");
+            config.SetCVar(Content.Shared.CCVar.CCVars.DropshipLandingReboot, true);
+        });
+    }
+
+    [Test]
+    public async Task VisionModesCycleAndUpdateCameraEye()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var mount = Create(map.Grid, false);
+            var eye = SEntMan.GetComponent<EyeComponent>(mount.Chin.Eye!.Value);
+            Assert.That(mount.Chin.VisionMode, Is.EqualTo(MohawkChinGunVisionMode.Normal));
+            Assert.That(eye.DrawLight, Is.True);
+            Send(mount, new MohawkChinGunVisionMessage());
+            Assert.That(mount.Chin.VisionMode, Is.EqualTo(MohawkChinGunVisionMode.Night));
+            Assert.That(mount.Terminal.ChinGunVision, Is.EqualTo(MohawkChinGunVisionMode.Night));
+            Assert.That(eye.DrawLight, Is.False, "Night optics render fullbright.");
+            Assert.That(eye.DrawFov, Is.True, "Night optics still respect walls groundside.");
+            Send(mount, new MohawkChinGunVisionMessage());
+            Assert.That(mount.Chin.VisionMode, Is.EqualTo(MohawkChinGunVisionMode.Thermal));
+            Assert.That(eye.DrawFov, Is.False, "Thermal sees through walls even groundside.");
+            Send(mount, new MohawkChinGunVisionMessage());
+            Assert.That(mount.Chin.VisionMode, Is.EqualTo(MohawkChinGunVisionMode.Normal));
+            Assert.That(eye.DrawLight, Is.True);
+            Assert.That(eye.DrawFov, Is.True);
+        });
+    }
+
+    [Test]
+    public async Task PilotAndGunnerFlaresAreSharedAcrossShipConsoles()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var mount = Create(map.Grid, false);
+            var other = SEntMan.SpawnEntity(null, new EntityCoordinates(map.Grid, 2, 0));
+            var otherTerminal = SEntMan.AddComponent<DropshipTerminalWeaponsComponent>(other);
+            var pilotFlare = SEntMan.SpawnEntity(null, new EntityCoordinates(map.MapUid, 4, 4));
+            var gunnerFlare = SEntMan.SpawnEntity(null, new EntityCoordinates(map.MapUid, 6, 6));
+            var weapons = Server.System<SharedDropshipWeaponSystem>();
+            weapons.ShareFlare(other, pilotFlare, false);
+            weapons.ShareFlare(mount.Console, gunnerFlare, true);
+            Assert.That(mount.Terminal.PilotFlare, Is.EqualTo(pilotFlare));
+            Assert.That(otherTerminal.GunnerFlare, Is.EqualTo(gunnerFlare));
+            Assert.That(otherTerminal.PilotFlare, Is.EqualTo(pilotFlare));
+            weapons.ShareFlare(mount.Console, null, true);
+            Assert.That(otherTerminal.GunnerFlare, Is.Null);
+            SEntMan.DeleteEntity(pilotFlare);
+            Assert.That(mount.Terminal.PilotFlare, Is.Null, "Deleted flares leave the shared list immediately.");
+            Assert.That(otherTerminal.PilotFlare, Is.Null);
         });
     }
 

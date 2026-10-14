@@ -25,6 +25,9 @@
                 <Label Name="ChinGunHealthLabel" Access="Public" Visible="False" />
                 <Label Name="BootStatusLabel" Access="Public" MaxWidth="260" ClipText="True" />
                 <Button Name="IffButton" Access="Public" Visible="False" />
+                <Button Name="VisionButton" Access="Public" Visible="False"
+                        ToolTip="{Loc 'cmu-mohawk-vision-help'}" />
+                <Label Name="SharedFlareLabel" Access="Public" MaxWidth="260" ClipText="True" />
                 <Label Name="AiTargetLabel" Access="Public" Visible="False" MaxWidth="260" ClipText="True" />
                 <Button Name="ApproveAiButton" Access="Public" Visible="False" />
                 <Button Name="TrackTargetButton" Access="Public" Visible="False"

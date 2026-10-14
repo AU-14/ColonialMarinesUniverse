@@ -493,7 +493,10 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
 
     public void AmmoConsumed(EntityUid point)
     {
-        if (!_net.IsServer || !TryComp(point, out MohawkChinGunComponent? chin))
+        if (!_net.IsServer)
+            return;
+        EntityManager.System<DropshipFireControlBootSystem>().RegisterUse(point);
+        if (!TryComp(point, out MohawkChinGunComponent? chin))
             return;
         if (chin.AlternateFeeds)
             chin.ActiveFeed = 1 - chin.ActiveFeed;

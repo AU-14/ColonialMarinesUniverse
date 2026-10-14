@@ -223,11 +223,33 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
         dropshipWeaponsTerminal.Comp.Target = newTarget;
         Dirty(dropshipWeaponsTerminal);
+        ShareFlare(dropshipWeaponsTerminal, newTarget, false); // CMU14
 
         var ev = new DropshipTargetChangedEvent(GetNetEntity(newTarget));
         foreach (var attachmentPoint in dropship.Comp.AttachmentPoints)
         {
             RaiseLocalEvent(attachmentPoint, ev);
+        }
+    }
+
+    // CMU14: mirrors the pilot's CAS flare and the gunner's chin gun flare onto every weapons console of the ship.
+    public void ShareFlare(EntityUid console, EntityUid? flare, bool gunner)
+    {
+        if (!_dropship.TryGetGridDropship(console, out var dropship))
+            return;
+
+        var query = EntityQueryEnumerator<DropshipTerminalWeaponsComponent>();
+        while (query.MoveNext(out var uid, out var terminal))
+        {
+            if (!_dropship.TryGetGridDropship(uid, out var other) || other.Owner != dropship.Owner)
+                continue;
+            if (gunner ? terminal.GunnerFlare == flare : terminal.PilotFlare == flare)
+                continue;
+            if (gunner)
+                terminal.GunnerFlare = flare;
+            else
+                terminal.PilotFlare = flare;
+            Dirty(uid, terminal);
         }
     }
 
