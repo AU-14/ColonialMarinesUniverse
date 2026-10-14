@@ -140,7 +140,7 @@ public sealed class HolocardSourceOwnershipTest
     }
 
     [Test]
-    public async Task RealInfectionAndPublicChemicalCureReleaseOnlyTheAutomaticXenoSource()
+    public async Task InfectionNeverTagsTheCardAutomatically()
     {
         await using var pair = await PoolManager.GetServerClient();
         var map = await pair.CreateTestMap();
@@ -162,7 +162,8 @@ public sealed class HolocardSourceOwnershipTest
         {
             var entities = pair.Server.EntMan;
             Assert.That(entities.HasComponent<VictimInfectedComponent>(patient), Is.True);
-            AssertCard(entities, patient, HolocardStatus.Xeno, HolocardStatus.Emergency, HolocardStatus.Xeno);
+            // Only the body scanner sees a parasite, so the card isn't tagged Xeno for it.
+            AssertCard(entities, patient, HolocardStatus.Emergency, HolocardStatus.Emergency, HolocardStatus.None);
             Assert.That(entities.System<SharedXenoParasiteSystem>().TryChemicallyExpelInfection(patient), Is.True);
         });
         await pair.RunTicksSync(2);
