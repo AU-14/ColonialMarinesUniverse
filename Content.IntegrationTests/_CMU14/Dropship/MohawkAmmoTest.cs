@@ -231,11 +231,14 @@ public sealed class MohawkAmmoTest : GameTest
             var interact = new BeforeRangedInteractEvent(loader, crate, point, map.GridCoords, true);
             SEntMan.EventBus.RaiseLocalEvent(crate, interact);
             Assert.That(interact.Handled, Is.True);
-            Assert.That(containers.GetContainer(point, mount.AmmoContainerSlotId).Contains(crate), Is.True);
+            var squall = crateId == "CMUMohawkM90AmmoKinetic";
+            var feedSlot = squall ? mount.ThirdAmmoContainerSlotId! : mount.AmmoContainerSlotId;
+            Assert.That(containers.GetContainer(point, feedSlot).Contains(crate), Is.True,
+                "Squall fills its reserved third feed first; every other crate fills the primary feed.");
             var payload = SEntMan.GetComponent<DropshipAmmoComponent>(crate);
             Assert.That(payload.Weapon.Id, Is.EqualTo("CMUMohawkM90"));
-            var capacity = payload.GroundCompatible ? 1200 : 400;
-            if (payload.GroundCompatible)
+            var capacity = squall ? 1200 : 400;
+            if (squall)
                 Assert.That(payload.DirectFireRate, Is.EqualTo(15));
             Assert.That(payload.Rounds, Is.EqualTo(capacity));
             Assert.That(payload.MaxRounds, Is.EqualTo(capacity));
@@ -256,7 +259,7 @@ public sealed class MohawkAmmoTest : GameTest
                     map.GridCoords.Offset(new Vector2(1.5f, 20)));
                 SEntMan.EventBus.RaiseLocalEvent(weapon, ref attempt);
                 Assert.That(attempt.Cancelled, Is.EqualTo(!payload.GroundCompatible),
-                    "Only Squall kinetic ammunition can be fired groundside.");
+                    "Only Squall and HEAP ammunition can be fired groundside.");
                 if (!payload.GroundCompatible)
                     continue;
                 var direction = transform.ToMapCoordinates(attempt.ToCoordinates!.Value).Position -

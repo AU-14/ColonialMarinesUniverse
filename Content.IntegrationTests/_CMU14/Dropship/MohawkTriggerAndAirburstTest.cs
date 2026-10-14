@@ -750,11 +750,11 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             Server.ResolveDependency<IConfigurationManager>().SetCVar(Robust.Shared.CVars.NetTickrate, 30);
             mount = Create(shipMap.Grid, false, "CMUMohawkM90AmmoKinetic");
             var point = SEntMan.GetComponent<DropshipWeaponPointComponent>(mount.Point);
-            explosive = SEntMan.SpawnEntity("CMUMohawkM90Ammo", shipMap.GridCoords);
+            explosive = SEntMan.SpawnEntity("CMUMohawkM90AmmoScatter", shipMap.GridCoords);
             var containers = Server.System<SharedContainerSystem>();
             Assert.That(containers.Insert(explosive, containers.GetContainer(mount.Point, point.SecondAmmoContainerSlotId!)), Is.True);
             Send(mount, new MohawkChinGunFeedMessage(1));
-            Assert.That(mount.Chin.ActiveFeed, Is.Zero, "Groundside operators cannot select explosive ammunition.");
+            Assert.That(mount.Chin.ActiveFeed, Is.Zero, "Groundside operators cannot select airborne-only ammunition.");
             mount.Chin.ActiveFeed = 1;
             Trigger(mount, true, shipMap.GridCoords.Offset(new Vector2(1.5f, 15)));
             Server.System<MohawkChinGunSystem>().Update(0);
@@ -841,14 +841,9 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
         await Pair.RunSeconds(2);
         await Server.WaitAssertion(() =>
         {
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1200), "Scanning waits for individual approval.");
             var chin = mount.Chin;
             Assert.That(chin.AutomaticTarget, Is.Not.Null);
-            Send(mount, new MohawkChinGunApproveAiMessage(SEntMan.GetNetEntity(chin.AutomaticTarget!.Value)));
-            chin.NextScan = TimeSpan.Zero;
-            mount.Gun.NextFire = TimeSpan.Zero;
-            Server.System<MohawkChinGunSystem>().Update(0);
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1199));
+            Assert.That(mount.Ammo.Rounds, Is.LessThan(1200), "Groundside free fire engages without per-target approval.");
             Send(mount, new MohawkChinGunFreeFireMessage());
             Assert.That(chin.FreeFireEnabled, Is.False);
             Assert.That((chin.FreeFireReadyAt - SGameTiming.CurTime).TotalSeconds, Is.EqualTo(300).Within(0.001));
@@ -954,12 +949,9 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             SEntMan.AddComponent<NpcFactionMemberComponent>(target).Factions.Add("OPFOR");
             SEntMan.AddComponent<Content.Shared.Mobs.Components.MobStateComponent>(target);
             Send(mount, new MohawkChinGunFreeFireMessage());
-            Server.System<MohawkChinGunSystem>().Update(0);
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1200));
-            Send(mount, new MohawkChinGunApproveAiMessage(SEntMan.GetNetEntity(target)));
             mount.Gun.NextFire = TimeSpan.Zero;
             Server.System<MohawkChinGunSystem>().Update(0);
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1199));
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1199), "Groundside AI engages without per-target approval.");
             started = SGameTiming.CurTime;
             startingRounds = mount.Ammo.Rounds;
         });
@@ -1211,7 +1203,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             Assert.That(mount.Terminal.Target, Is.Null);
             var ftl = SEntMan.EnsureComponent<FTLComponent>(mount.Ship);
             ftl.State = FTLState.Travelling;
-            Assert.That(turret.IsAirborne(mount.Point), Is.False, "Ordinary transit is not a CAS flyby.");
+            Assert.That(turret.IsAirborne(mount.Point), Is.True, "Transit flight permits full 90mm usage.");
             SEntMan.AddComponent<DropshipInFlyByComponent>(mount.Ship);
             SEntMan.AddComponent<DropshipTacticalHoverComponent>(mount.Ship);
             Assert.That(turret.IsAirborne(mount.Point), Is.False, "Tactical hover must never allow flare fire.");
