@@ -196,8 +196,8 @@
           max: 213
         damage:
           types:
-            Asphyxiation: -0.25
-            Bloodloss: -0.25
+            Asphyxiation: -6
+            Bloodloss: -6
 
 - type: reagent
   id: Doxarubixadone
@@ -218,9 +218,9 @@
             max: 213
           damage:
             types:
-              Cellular: -0.25
+              Cellular: -6
         - !type:CMUCryogenicOrganRepair
-          amountPerUnit: 0.25
+          amountPerUnit: 12
           conditions:
           - !type:TemperatureCondition
             max: 213
@@ -1352,12 +1352,12 @@
           max: 213
         damage:
           types:
-            Blunt: -0.25
-            Piercing: -0.25
-            Slash: -0.25
+            Blunt: -6
+            Piercing: -6
+            Slash: -6
       - !type:CMUCryogenicWoundRepair
         type: Brute
-        amountPerUnit: 0.25
+        amountPerUnit: 12
         conditions:
         - !type:TemperatureCondition
           max: 213
@@ -1381,8 +1381,8 @@
           max: 213
         damage:
           types:
-            Poison: -0.25
-            Radiation: -0.25
+            Poison: -6
+            Radiation: -6
 
 - type: reagent
   id: Necrosol
@@ -1449,13 +1449,12 @@
           max: 213
         damage:
           types:
-            Cold: -0.25
-            Heat: -0.25
-            Shock: -0.25
-            Caustic: -0.25
+            Cold: -6
+            Heat: -6
+            Shock: -6
       - !type:CMUCryogenicWoundRepair
         type: Burn
-        amountPerUnit: 0.25
+        amountPerUnit: 12
         conditions:
         - !type:TemperatureCondition
           max: 213

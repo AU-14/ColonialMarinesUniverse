@@ -4,11 +4,11 @@
   ## Cryogenics
   Place a beaker in a powered cryo pod and put the patient inside. Supply cold gas from a freezer. The medicines below work on living and dead patients once the body reaches the required temperature, except Opporozidone, which treats dead patients only. See [textlink="Medical Machines" link="CMUGuideMedicalMachines"].
   The seven new medicines consume 0.5 units per second at normal metabolism. Damage recovery occurs each second while the medicine is present.
-  - [bold]Cryoxadone[/bold]: heals 0.25 asphyxiation and 0.25 blood loss per second at 213 K or colder.
-  - [bold]Aloxadone[/bold]: heals 0.25 each of heat, shock, cold and caustic damage per second. It also gradually closes burn wounds, including severe burns, at 213 K or colder.
-  - [bold]Traumoxadone[/bold]: heals 0.25 each of blunt, piercing and slash damage per second. It also gradually closes brute wounds, including gaping cuts, at 213 K or colder.
-  - [bold]Urishoxadone[/bold]: heals 0.25 poison and 0.25 radiation damage per second at 213 K or colder.
-  - [bold]Doxarubixadone[/bold]: heals 0.25 cellular damage per second and gradually repairs every attached organ at 213 K or colder.
+  - [bold]Cryoxadone[/bold]: heals 6 asphyxiation and 6 blood loss per second at 213 K or colder.
+  - [bold]Aloxadone[/bold]: heals 6 each of heat, shock, cold and caustic damage per second. It also closes each burn wound by 6 per second, including severe burns, at 213 K or colder.
+  - [bold]Traumoxadone[/bold]: heals 6 each of blunt, piercing and slash damage per second. It also closes each brute wound by 6 per second, including gaping cuts, at 213 K or colder.
+  - [bold]Urishoxadone[/bold]: heals 6 poison and 6 radiation damage per second at 213 K or colder.
+  - [bold]Doxarubixadone[/bold]: heals 6 cellular damage per second and restores 6 health per second to each attached organ at 213 K or colder.
   - [bold]Necrosol[/bold]: regenerates one missing native limb per 5 units, gradually mends every fractured bone, and regenerates 1% of normal blood volume per second at 213 K or colder. It does not heal general damage.
   - [bold]Opporozidone[/bold]: reverses 5 seconds of rot per second and extends an active revival deadline by 5 seconds per unit in dead patients at 150 K or colder. Rot describes corpse decay; the separate revival deadline determines when the body becomes permanently unrevivable. It cannot reverse permanent death or an expired revival deadline.
   - [bold]Marine Cryoxadone and Clonexadone[/bold]: older Marine cryogenic medicines. They use their own formulations and work below 170 K.

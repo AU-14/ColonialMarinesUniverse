@@ -29,7 +29,7 @@ public sealed partial class CMUCryogenicWoundRepair : EntityEffectBase<CMUCryoge
     public WoundType Type = WoundType.Brute;
 
     [DataField]
-    public FixedPoint2 AmountPerUnit = 0.25;
+    public FixedPoint2 AmountPerUnit = 12;
 
     public override string? EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
         => Loc.GetString(Type == WoundType.Burn
@@ -43,7 +43,7 @@ public sealed partial class CMUCryogenicWoundRepair : EntityEffectBase<CMUCryoge
 public sealed partial class CMUCryogenicOrganRepair : EntityEffectBase<CMUCryogenicOrganRepair>
 {
     [DataField]
-    public FixedPoint2 AmountPerUnit = 0.25;
+    public FixedPoint2 AmountPerUnit = 12;
 
     public override string? EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
         => Loc.GetString("cmu-medical-cryo-organs-guidebook", ("amount", AmountPerUnit));
