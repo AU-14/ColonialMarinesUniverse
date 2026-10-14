@@ -418,6 +418,7 @@
       - id: RMCFireAxe
       - id: CMFireExtinguisher
       - id: CMFireExtinguisherPortable
+      - id: CMUFieldGasTankOxygenFilled
       - id: RMCRadioHandheldColonyOff
 
 - type: entity
