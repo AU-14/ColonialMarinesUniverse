@@ -139,12 +139,8 @@
                                                    ToolTip="{Loc 'humanoid-profile-editor-guidebook-button-tooltip'}"/>
                                     <OptionButton Name="SpeciesButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
-                                <!-- Sex -->
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-sex-label'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <OptionButton Name="SexButton" HorizontalAlignment="Right" />
-                                </BoxContainer>
+                                <!-- cmu edit start: sex moved to the Character Records tab -->
+                                <!-- cmu edit end -->
                                 <!-- Voice -->
                                 <!-- cmu edit start -->
                                 <BoxContainer HorizontalExpand="True" Visible="False">
@@ -153,12 +149,8 @@
                                     <Control HorizontalExpand="True" />
                                     <OptionButton Name="VoiceButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
-                                <!-- Pronouns -->
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-pronouns-label'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <OptionButton Name="PronounsButton" HorizontalAlignment="Right" />
-                                </BoxContainer>
+                                <!-- cmu edit start: pronouns moved to the Character Records tab -->
+                                <!-- cmu edit end -->
                                 <!-- Show clothing -->
                                 <BoxContainer HorizontalExpand="True">
                                     <Label Text="{Loc 'humanoid-profile-editor-clothing'}" />
@@ -278,6 +270,18 @@
                                 <Label Text="{Loc 'cmu-humanoid-profile-editor-religion-label'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-religion-tooltip'}" />
                                 <Control HorizontalExpand="True"/>
                                 <OptionButton Name="ReligionButton" HorizontalAlignment="Right" />
+                            </BoxContainer>
+                            <!-- cmu edit end -->
+                            <!-- cmu edit start: sex and pronouns, moved from the main tab -->
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-sex-label'}" />
+                                <Control HorizontalExpand="True"/>
+                                <OptionButton Name="SexButton" HorizontalAlignment="Right" />
+                            </BoxContainer>
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-pronouns-label'}" />
+                                <Control HorizontalExpand="True"/>
+                                <OptionButton Name="PronounsButton" HorizontalAlignment="Right" />
                             </BoxContainer>
                             <!-- cmu edit end -->
                             <BoxContainer HorizontalExpand="True">
