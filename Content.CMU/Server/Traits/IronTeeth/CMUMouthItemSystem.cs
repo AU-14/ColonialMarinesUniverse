@@ -1,8 +1,10 @@
+using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Clothing.Components;
 using Content.Shared.CMU14.Hearing;
 using Content.Shared.CMU14.Traits.IronTeeth;
 using Content.Shared.IdentityManagement;
+using Content.Shared.Interaction.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Popups;
 
@@ -10,7 +12,8 @@ namespace Content.Server.CMU14.Traits.IronTeeth;
 
 /// <summary>
 ///     Something held in the teeth (a knife, a cigarette) falls out when its holder goes unconscious
-///     or into crit, unless they have <see cref="CMUIronTeethComponent"/>. Real masks stay on.
+///     or into crit, unless they have <see cref="CMUIronTeethComponent"/>. Real masks stay on, and so does anything
+///     latched on that can't be taken off, like a facehugger.
 /// </summary>
 public sealed class CMUMouthItemSystem : EntitySystem
 {
@@ -31,7 +34,9 @@ public sealed class CMUMouthItemSystem : EntitySystem
 
         if (!_inventory.TryGetSlotEntity(ent, MouthSlot, out var item) ||
             HasComp<MaskComponent>(item) ||
-            HasComp<BreathToolComponent>(item))
+            HasComp<BreathToolComponent>(item) ||
+            HasComp<XenoParasiteComponent>(item) ||
+            HasComp<UnremoveableComponent>(item))
         {
             return;
         }

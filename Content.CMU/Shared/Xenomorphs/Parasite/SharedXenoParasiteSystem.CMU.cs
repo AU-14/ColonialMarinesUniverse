@@ -38,17 +38,26 @@ public abstract partial class SharedXenoParasiteSystem
     /// </summary>
     private void CMUOnInfectableInteractHand(Entity<InfectableComponent> ent, ref InteractHandEvent args)
     {
-        if (args.Handled || args.User == args.Target || !_net.IsServer || !ent.Comp.BeingInfected)
+        if (args.Handled || args.User == args.Target || !ent.Comp.BeingInfected)
             return;
 
         if (!_inventory.TryGetSlotEntity(ent, "mask", out var mask) ||
             !TryComp(mask, out XenoParasiteComponent? parasite) ||
             parasite.InfectedVictim != ent.Owner ||
-            parasite.FellOff ||
-            parasite.CMUAttachedAt is not { } attachedAt)
+            parasite.FellOff)
         {
             return;
         }
+
+        // The client doesn't know how long the parasite has held on, so it leaves the shake to the server.
+        if (!_net.IsServer)
+        {
+            args.Handled = true;
+            return;
+        }
+
+        if (parasite.CMUAttachedAt is not { } attachedAt)
+            return;
 
         var now = _timing.CurTime;
         if (now < attachedAt + parasite.CMUMinHugTime)
