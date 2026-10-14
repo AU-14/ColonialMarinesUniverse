@@ -36,6 +36,12 @@
             <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="5">
                 <RichTextLabel Name="DoorHeader" Access="Public" />
                 <Control HorizontalExpand="True" />
+                <!-- cmu edit start -->
+                <controls:DropshipButton Name="CMULockDoorsOpenButton" Access="Public"
+                                         Margin="1" BackgroundColor="#004E25"
+                                         BorderColor="#02E74E" BorderThickness="1"
+                                         Text="Lock All Doors Open" Visible="False" />
+                <!-- cmu edit end -->
                 <controls:DropshipButton Name="LockdownButton" Access="Public"
                                          Margin="1" BackgroundColor="#004E25"
                                          BorderColor="#02E74E" BorderThickness="1"

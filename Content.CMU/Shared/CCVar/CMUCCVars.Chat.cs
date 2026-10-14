@@ -48,7 +48,7 @@ public sealed partial class CCVars
     /// Copy every on-screen popup into the chat log.
     /// </summary>
     public static readonly CVarDef<bool> PopupsInChat =
-        CVarDef.Create("cmu.popups_in_chat", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+        CVarDef.Create("cmu.popups_in_chat", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
     /// Don't draw popups on screen. With <see cref="PopupsInChat"/> on, popups only show up in chat.

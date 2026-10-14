@@ -10,6 +10,7 @@
   # Retained as a marker for gunship-console crash effects. Interaction and UI
   # behavior come entirely from CMComputerDropshipNavigation.
   - type: GunshipControls
+  - type: CMUDropshipDoorsLockOpen
   - type: DropshipNavigationComputer
     canTacticalLand: true
     tacticalLandFootprintOverride: 9, 15

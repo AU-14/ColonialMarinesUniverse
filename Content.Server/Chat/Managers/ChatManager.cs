@@ -12,6 +12,9 @@ using Content.Server.Administration.Managers;
 using Content.Server.Administration.Systems;
 using Content.Server.Discord.DiscordLink;
 using Content.Server.Ghost;
+// cmu edit start
+using Content.Server.CMU14.Hearing;
+// cmu edit end
 using Content.Server.Players.RateLimiting;
 using Content.Server.Preferences.Managers;
 using Content.Shared._RMC14.CCVar;
@@ -437,6 +440,11 @@ internal sealed partial class ChatManager : IChatManager
         ChatDisplayMetadata? display = null)
     // RMC14
     {
+        // cmu edit start
+        if (!_entityManager.System<CMUUnconsciousHearingSystem>().FilterForListener(channel, source, client, ref message, ref wrappedMessage))
+            return;
+        // cmu edit end
+
         var user = author == null ? null : EnsurePlayer(author);
         var netSource = _entityManager.GetNetEntity(source);
         user?.AddEntity(netSource);

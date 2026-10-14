@@ -91,6 +91,9 @@
   # cmu edit start: detonate on impact when fired from a launcher (cmss13-pve#517)
   - type: TriggerOnFixedDistanceStop
   # cmu edit end
+  # cmu edit start: the mob it hits from a launcher isn't stunned
+  - type: CMULauncherImpactNoStun
+  # cmu edit end
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40hedp.rsi
   - type: ExplodeOnTrigger
