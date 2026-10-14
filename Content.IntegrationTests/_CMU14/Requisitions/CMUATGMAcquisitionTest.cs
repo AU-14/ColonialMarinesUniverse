@@ -29,9 +29,6 @@ public sealed class CMUATGMAcquisitionTest
     private static readonly ProtoId<CMURequisitionsRoundStartFreeCratePrototype> GovforFreeCrates =
         "CMURequisitionsRoundStartFreeCrateGovfor";
 
-    private static readonly ProtoId<CMURequisitionsRoundStartFreeCratePrototype> GovforAtgmFreeCrates =
-        "CMURequisitionsRoundStartFreeCrateGovforAtgm";
-
     private static readonly ProtoId<CMURequisitionsRoundStartFreeCratePrototype> OpforFreeCrates =
         "CMURequisitionsRoundStartFreeCrateOpfor";
 
@@ -59,8 +56,8 @@ public sealed class CMUATGMAcquisitionTest
         "AU14CorporateASRSConsole",
     ];
 
-    // The one free kit per GOVFOR side comes from the round-start ASRS crate, so the requisitions vendors must
-    // not hand out a second one.
+    // GOVFOR's free kit comes only from the round-start ASRS crate (Distress Signal and Force on Force), so the
+    // requisitions vendors must not hand out a second one. In Insurgency GOVFOR buys it from the ASRS.
     private static readonly EntProtoId[] RequisitionVendorsWithoutFreeKit =
     [
         "AU14USCMRequisitionVendor",
@@ -229,7 +226,7 @@ public sealed class CMUATGMAcquisitionTest
     }
 
     [Test]
-    public async Task GovforRoundStartFreeCratesIncludeAtgmKit()
+    public async Task GovforRoundStartFreeCratesIncludeAtgmKitOnlyInDistressAndForceOnForce()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -238,19 +235,23 @@ public sealed class CMUATGMAcquisitionTest
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var govfor = prototypes.Index(GovforFreeCrates);
-            var govforAtgm = prototypes.Index(GovforAtgmFreeCrates);
 
             Assert.Multiple(() =>
             {
-                // FLOW-12 (c): one free kit for every GOVFOR side, in every mode the mortar kit is given plus
-                // Insurgency (its requisitions vendor no longer hands one out), without moving the mortar.
-                Assert.That(govforAtgm.Faction, Is.EqualTo("govfor"));
-                Assert.That(govforAtgm.Crates, Does.Contain(AtgmCrate));
-                foreach (var mode in govfor.Gamemodes)
-                    Assert.That(govforAtgm.Gamemodes, Does.Contain(mode), $"GOVFOR free kit missing in {mode}");
-                Assert.That(govforAtgm.Gamemodes, Does.Contain("Insurgency"));
+                // FLOW-13: GOVFOR's one free kit ships with the mortar, in Distress Signal and Force on Force only.
+                Assert.That(govfor.Faction, Is.EqualTo("govfor"));
                 Assert.That(govfor.Crates, Does.Contain(MortarKitCrate));
-                Assert.That(govfor.Crates, Does.Not.Contain(AtgmCrate), "Only one free kit per GOVFOR side.");
+                Assert.That(govfor.Crates.Count(c => c == AtgmCrate), Is.EqualTo(1));
+                Assert.That(govfor.Gamemodes, Is.EquivalentTo(new[] { "DistressSignal", "ForceOnForce" }));
+
+                // No other GOVFOR entry may add a second kit, and none ships it in Insurgency.
+                var govforKits = prototypes.EnumeratePrototypes<CMURequisitionsRoundStartFreeCratePrototype>()
+                    .Where(b => string.Equals(b.Faction, "govfor", StringComparison.OrdinalIgnoreCase) && b.Crates.Contains(AtgmCrate))
+                    .ToList();
+                Assert.That(govforKits.Select(b => b.ID), Is.EquivalentTo(new[] { GovforFreeCrates.Id }),
+                    "Only one free FOGO-ATGM kit per GOVFOR side.");
+                Assert.That(govforKits.SelectMany(b => b.Gamemodes), Does.Not.Contain("Insurgency").IgnoreCase,
+                    "The free FOGO-ATGM kit must not ship in Insurgency.");
 
                 // Force-on-Force OPFOR gets one free kit too.
                 var opfor = prototypes.Index(OpforFreeCrates);
