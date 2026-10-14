@@ -77,6 +77,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         ["Medical"] = "rmc-requisitions-category-medical",
         ["Mortar"] = "rmc-requisitions-category-mortar",
         ["Pouches"] = "rmc-requisitions-category-pouches",
+        ["Refinery"] = "rmc-requisitions-category-refinery",
         ["Research"] = "rmc-requisitions-category-research",
         ["Specialist Ammo"] = "rmc-requisitions-category-specialist-ammo",
         ["Supplies"] = "rmc-requisitions-category-supplies",

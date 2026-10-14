@@ -30,8 +30,11 @@
   - type: VehicleWheelSlots
     slots:
     - wheel-1
+  # The overlay turret clears the hull's primary layer on spawn; declare it so the prototype matches (as VehicleSPPAPC).
   - type: VehicleHardpointVisuals
-    layers: []
+    layers:
+    - state: ""
+      layer: primary
   - type: PointLight
     radius: 7
     energy: 3

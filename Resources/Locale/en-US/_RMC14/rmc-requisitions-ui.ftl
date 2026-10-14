@@ -20,6 +20,7 @@ rmc-requisitions-category-dropship-munitions = Dropship Munitions
 rmc-requisitions-category-furniture = Furniture
 rmc-requisitions-category-machines-and-vendors = Machines and Vendors (Wrench Required)
 rmc-requisitions-category-research = Research
+rmc-requisitions-category-refinery = Refinery
 rmc-requisitions-category-botany = Botany
 rmc-requisitions-category-atmospherics = Atmospherics
 rmc-requisitions-category-food = Food

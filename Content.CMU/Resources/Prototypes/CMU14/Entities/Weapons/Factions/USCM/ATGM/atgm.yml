@@ -86,6 +86,11 @@
   name: A.T.G.M. launcher
   description: The launch tube and guidance unit of an A.T.G.M. It ain't much use without a tripod.
   components:
+  # The ballistic ammo provider creates this container on spawn; declare it so the prototype matches.
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
   - type: Item
     size: Huge
   - type: Clothing
