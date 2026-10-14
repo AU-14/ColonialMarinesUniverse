@@ -17,6 +17,22 @@
       entries:
       - id: RMCCassettePlayer
         amount: 50
+      # cmu edit start: coloured cassette players
+      - id: AU14CassettePlayerBlue
+        amount: 10
+      - id: AU14CassettePlayerGreen
+        amount: 10
+      - id: AU14CassettePlayerPink
+        amount: 10
+      - id: AU14CassettePlayerOrange
+        amount: 10
+      - id: AU14CassettePlayerRainbow
+        amount: 10
+      - id: AU14CassettePlayerGray
+        amount: 10
+      - id: AU14CassettePlayerNeon
+        amount: 10
+      # cmu edit end
       - id: RMCPouchCassette
         amount: 10
       - id: AU14CassetteTapeUnitedAmericasVol1

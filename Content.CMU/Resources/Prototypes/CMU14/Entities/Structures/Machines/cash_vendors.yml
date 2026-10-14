@@ -406,6 +406,27 @@
     - id: RMCCassettePlayer
       name: Cassette Player
       price: 25
+    - id: AU14CassettePlayerBlue
+      name: Cassette Player (Blue)
+      price: 25
+    - id: AU14CassettePlayerGreen
+      name: Cassette Player (Green)
+      price: 25
+    - id: AU14CassettePlayerPink
+      name: Cassette Player (Pink)
+      price: 25
+    - id: AU14CassettePlayerOrange
+      name: Cassette Player (Orange)
+      price: 25
+    - id: AU14CassettePlayerRainbow
+      name: Cassette Player (Rainbow)
+      price: 25
+    - id: AU14CassettePlayerGray
+      name: Cassette Player (Gray)
+      price: 25
+    - id: AU14CassettePlayerNeon
+      name: Cassette Player (Neon)
+      price: 25
     - id: RMCPouchCassette
       name: Cassette Pouch
       price: 10
