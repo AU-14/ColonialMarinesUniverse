@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Vents;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.DoAfter;
@@ -14,7 +15,8 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.CMU14.Dropship;
 
 /// <summary>
-///     A landing gear hatch a xeno can climb up into while the dropship is on the ground. They come out of one of
+///     A landing gear hatch a xeno small enough to crawl through vents can climb up into while the dropship is on
+///     the ground. They come out of one of
 ///     the dropship's walkway panels (<see cref="CMUXenoGearHatchExitComponent"/>), which are on the deck above.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
@@ -63,6 +65,7 @@ public sealed class CMUXenoGearHatchSystem : EntitySystem
     private void OnXenoInRangeOverride(Entity<XenoComponent> ent, ref InRangeOverrideEvent args)
     {
         if (args.Handled ||
+            !CanClimb(args.User) ||
             !HasComp<CMUXenoGearHatchComponent>(args.Target) && !HasComp<MohawkLandingGearComponent>(args.Target))
         {
             return;
@@ -74,7 +77,7 @@ public sealed class CMUXenoGearHatchSystem : EntitySystem
 
     private void OnHatchInteractHand(Entity<CMUXenoGearHatchComponent> ent, ref InteractHandEvent args)
     {
-        if (args.Handled || !HasComp<XenoComponent>(args.User))
+        if (args.Handled || !CanClimb(args.User))
             return;
 
         args.Handled = true;
@@ -83,7 +86,7 @@ public sealed class CMUXenoGearHatchSystem : EntitySystem
 
     private void OnGearInteractHand(Entity<MohawkLandingGearComponent> ent, ref InteractHandEvent args)
     {
-        if (args.Handled || !HasComp<XenoComponent>(args.User) || GearHatch(ent) is not { } hatch)
+        if (args.Handled || !CanClimb(args.User) || GearHatch(ent) is not { } hatch)
             return;
 
         args.Handled = true;
@@ -136,6 +139,12 @@ public sealed class CMUXenoGearHatchSystem : EntitySystem
                     ("xeno", Identity.Entity(args.User, EntityManager)), ("panel", exit)),
                 exit, PopupType.LargeCaution);
         }
+    }
+
+    /// <summary>Only xenos that can crawl through vents fit up the landing gear.</summary>
+    private bool CanClimb(EntityUid user)
+    {
+        return HasComp<XenoComponent>(user) && HasComp<VentCrawlerComponent>(user);
     }
 
     private bool Within(EntityUid user, EntityUid target, float range)
