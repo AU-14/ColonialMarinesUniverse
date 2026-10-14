@@ -76,6 +76,11 @@
                 <CheckBox Name="ExplosionScreenShakeIgnoreFarCheckBox" Text="{Loc 'ui-options-explosion-screen-shake-ignore-far'}" />
                 <CheckBox Name="FirearmScreenShakeEnabledCheckBox" Text="{Loc 'ui-options-firearm-screen-shake-enabled'}" />
                 <CheckBox Name="MuteScriptedSoundsCheckBox" Text="{Loc 'ui-options-mute-scripted-sounds'}" />
+                <!-- cmu edit start -->
+                <CheckBox Name="HideCassetteMusicNotesCheckBox"
+                          Text="{Loc 'cmu-ui-options-hide-cassette-music-notes'}"
+                          ToolTip="{Loc 'cmu-ui-options-hide-cassette-music-notes-tooltip'}" />
+                <!-- cmu edit end -->
                 <CheckBox Name="AutoIngestCheckBox"
                           Text="{Loc 'cmu-ui-options-auto-ingest'}"
                           ToolTip="{Loc 'cmu-ui-options-auto-ingest-tooltip'}" />

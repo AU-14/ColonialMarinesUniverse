@@ -63,6 +63,9 @@ public sealed partial class CmuTab : Control
         Control.AddOptionCheckBox(CCVars.ExplosionScreenShakeIgnoreFar, ExplosionScreenShakeIgnoreFarCheckBox);
         Control.AddOptionCheckBox(CCVars.FirearmScreenShakeEnabled, FirearmScreenShakeEnabledCheckBox);
         Control.AddOptionCheckBox(CCVars.MuteScriptedSounds, MuteScriptedSoundsCheckBox);
+        // cmu edit start
+        Control.AddOptionCheckBox(CCVars.CMUHideCassetteMusicNotes, HideCassetteMusicNotesCheckBox);
+        // cmu edit end
         Control.AddOptionCheckBox(CMUMedicalCCVars.TargetedHealingEnabled, TargetedHealingCheckBox);
         Control.AddOptionCheckBox(CMUMedicalCCVars.AutoReapplyKitsEnabled, AutoReapplyKitsCheckBox);
         Control.AddOptionCheckBox(CMUMedicalCCVars.UiLessSurgeryEnabled, UiLessSurgeryCheckBox);

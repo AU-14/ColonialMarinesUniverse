@@ -73,3 +73,6 @@ cmu-ui-options-hide-round-end-username = Hide my username on the round-end scree
 cmu-ui-options-hide-round-end-username-tooltip = Other players see your character at round end, but not the account that played them.
 cmu-ui-options-hide-examine-tooltip = Hide the shift-click examine popup
 cmu-ui-options-hide-examine-tooltip-tooltip = Examining no longer opens a popup. Turn on "Echo everything you examine to chat" too to read examines in chat instead.
+
+cmu-ui-options-hide-cassette-music-notes = Hide music notes over cassette listeners
+cmu-ui-options-hide-cassette-music-notes-tooltip = Stops drawing the floating music notes over people who are listening to a cassette player.
