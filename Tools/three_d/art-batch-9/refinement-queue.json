@@ -1,0 +1,98 @@
+{
+  "scope": "Specific open art findings, separate from draft coverage and format checks.",
+  "findings": [
+    {
+      "id": "riot-helmet-crown",
+      "model": "CMU3DRiotHelmetCloud",
+      "status": "standalone-refinement-complete-canonical-binding-blocked",
+      "finding": "Joined crown patches still leave scalloped contours instead of a smooth rounded helmet crown.",
+      "requirements": [
+        "Preserve inspected source front silhouette and brow colors",
+        "Preserve a real open underside",
+        "Stay within the existing primitive and 128-part contract",
+        "Do not change runtime code or mark fidelity approved"
+      ],
+      "evidence": "CMU3DRiotHelmetCloud-source-and-orbit.png",
+      "candidateReviewPending": false,
+      "candidateStatus": "True arbitrary-mesh thin-shell .blend and GLB completed; canonical primitive model remains unchanged",
+      "limitation": "Current fixed-primitive cmu3DModel schema/exporter does not consume arbitrary vertex/index mesh data or import an external GLB into the native scene. Smooth open shell requires a separately authorized integration design.",
+      "study": "../unbound-blender-studies/riot-helmet-thin-shell/SOURCE_AND_LIMITS.md",
+      "checks": "Fresh GLB import, manifold component boundaries, consistent winding, finite coordinates, clear entry prism, 625 cavity rays and sampled thickness; no native, worn, map or fidelity approval.",
+      "resolutionVariants": [
+        {
+          "triangles": 44724,
+          "role": "high-resolution study"
+        },
+        {
+          "triangles": 4716,
+          "role": "game-oriented lower-poly study",
+          "reductionPercent": 89.45532599946337,
+          "silhouetteBoundaryDeviationMaxPx": 1,
+          "reviewViewportSizes": [
+            128,
+            256,
+            512
+          ],
+          "nativeProductionAcceptance": false
+        }
+      ],
+      "lowPolyStudy": "../unbound-blender-studies/riot-helmet-thin-shell/low-poly/SOURCE_AND_LIMITS.md"
+    },
+    {
+      "id": "redux-minus2-console-divider",
+      "models": [
+        "CMU3DAutodocConsoleCloudNorth",
+        "CMU3DHospitalPrivacyScreen"
+      ],
+      "savedEntities": [
+        741,
+        2386
+      ],
+      "status": "open",
+      "finding": "Nine convex-part intersections at original saved pivots.",
+      "evidence": "../review/medical-map-fit/convex-contact-refinement.json",
+      "correctionConstraint": "No source-backed axis, width or pivot change found. Do not silently move saved entities or distort the source silhouette."
+    },
+    {
+      "id": "redux-minus2-scanner-divider",
+      "models": [
+        "CMU3DBodyScannerPodCloudSouth",
+        "CMU3DHospitalPrivacyScreen"
+      ],
+      "savedEntities": [
+        746,
+        2387
+      ],
+      "status": "open",
+      "finding": "Thirty-four aligned-box part intersections at original saved pivots.",
+      "evidence": "../review/medical-map-fit/convex-contact-refinement.json",
+      "correctionConstraint": "A source-width-preserving folded-divider study did not clear the contact. Unjustified large offsets remain unapplied."
+    },
+    {
+      "id": "bobda-hidden-labels",
+      "models": [
+        "CMU3DBobdaBlueCloud",
+        "CMU3DBobdaCherryCloud",
+        "CMU3DBobdaClassicCloud"
+      ],
+      "status": "unreviewed-inference",
+      "finding": "Source supplies front label pixels only. Plain backs remain inferred; do not invent a full label wrap without supporting reference.",
+      "evidence": "../cloud-containers/containers-source-and-orbit.png"
+    },
+    {
+      "id": "loose-headwear-crown-seams",
+      "family": "garrison_headwear_extra_cloud.yml",
+      "status": "open",
+      "finding": "Fedora brim continuity was refined, but headwear crowns retain explicit planar facets/roof seams, and party-hat stripe bands are approximate. These are not fidelity-approved smooth cloth shells.",
+      "constraint": "Preserve actual underside/head openings within supported primitive/128-part contract; do not silently fill the cavity or assert worn-state coverage.",
+      "evidence": "headwear-extra/CMU3DAU14CivFedoraTanWorldCloud-comparison.png"
+    }
+  ],
+  "sharedUnresolvedChecks": [
+    "Full saved-map fitting beyond the bounded Redux -2 study",
+    "Native admission, picking and frame budget",
+    "Live gameplay and layered state selection",
+    "Khronos glTF Validator run",
+    "Explicit source-fidelity approval"
+  ]
+}

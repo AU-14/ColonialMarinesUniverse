@@ -66,7 +66,7 @@ public sealed class SprayThrowingMergeRegressionTest : GameTest
                 Assert.That(cancelledProbe.Attempts, Is.EqualTo(1));
                 Assert.That(cancelledSpray.Solution.Comp.Solution.Volume, Is.EqualTo(FixedPoint2.New(10)),
                     "SprayAttempt cancellation must preserve the source solution.");
-                Assert.That(entities.EntityQuery<VaporComponent>(), Is.Empty,
+                Assert.That(entities.QueryEntities<VaporComponent>(), Is.Empty,
                     "SprayAttempt cancellation must happen before vapor spawning.");
             });
 
@@ -153,7 +153,7 @@ public sealed class SprayThrowingMergeRegressionTest : GameTest
 
     private EntityUid SingleVaporExcept()
     {
-        var vapors = Server.EntMan.EntityQuery<VaporComponent>().Select(v => v.Owner).ToArray();
+        var vapors = Server.EntMan.QueryEntities<VaporComponent>().Select(v => v.Owner).ToArray();
         Assert.That(vapors, Has.Length.EqualTo(1));
         return vapors[0];
     }

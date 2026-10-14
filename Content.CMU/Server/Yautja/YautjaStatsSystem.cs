@@ -8,12 +8,14 @@ using Content.Shared._RMC14.IdentityManagement;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Pulling;
+using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Stamina;
 using Content.Shared._RMC14.StatusEffect;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Vendors;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Actions.Events;
 using Content.Shared.Body;
@@ -43,8 +45,8 @@ namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaStatsSystem : EntitySystem
 {
-    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private NpcFactionSystem _faction = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
     [Dependency] private HumanoidProfileSystem _humanoidProfile = default!;
     [Dependency] private GunIFFSystem _iff = default!;
@@ -90,6 +92,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         SubscribeLocalEvent<YautjaComponent, IdentityChangedEvent>(OnIdentityChanged);
         SubscribeLocalEvent<YautjaComponent, RandomHumanoidSpawnedEvent>(OnRandomHumanoidSpawned);
         SubscribeLocalEvent<YautjaComponent, RMCStatusEffectTimeEvent>(OnStatusEffectTime);
+
         SubscribeLocalEvent<YautjaComponent, KnockDownAttemptEvent>(OnKnockDownAttempt);
         SubscribeLocalEvent<YautjaComponent, DisarmAttemptEvent>(OnDisarmAttempt);
         SubscribeLocalEvent<YautjaComponent, DisarmedEvent>(OnDisarmed, before: [typeof(HandsSystem)]);
@@ -103,6 +106,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         if (IsRegularYautja(ent) && args.Key == UnconsciousStatus)
             args.Duration = TimeSpan.Zero;
     }
+
 
     private void OnKnockDownAttempt(Entity<YautjaComponent> ent, ref KnockDownAttemptEvent args)
     {
@@ -208,8 +212,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
             Dirty(ent, resilience);
         }
 
-        var damageable = EnsureComp<DamageableComponent>(ent);
-        _damageable.SetDamageModifierSetId((ent.Owner, damageable), ent.Comp.DamageModifierSet?.Id);
+        // Yautja damage modifier is in DamageableComponent.DamageModifierSetId.
 
         var melee = EnsureComp<MeleeWeaponComponent>(ent);
         melee.AttackRate = ent.Comp.UnarmedAttackRate;

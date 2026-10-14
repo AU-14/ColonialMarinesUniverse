@@ -580,8 +580,8 @@ public sealed class YautjaPostVendorHookTest
         var factory = IoCManager.Resolve<IComponentFactory>();
         var expected = prototypes.Index<EntityPrototype>(visualPrototype);
 
-        Assert.That(expected.TryGetComponent<ItemComponent>(out var expectedItem, factory), Is.True, $"{visualPrototype} has item visuals");
-        Assert.That(expected.TryGetComponent<ClothingComponent>(out var expectedClothing, factory), Is.True, $"{visualPrototype} has clothing visuals");
+        Assert.That(expected.TryComp<ItemComponent>(out var expectedItem, factory), Is.True, $"{visualPrototype} has item visuals");
+        Assert.That(expected.TryComp<ClothingComponent>(out var expectedClothing, factory), Is.True, $"{visualPrototype} has clothing visuals");
 
         var actualItem = entMan.GetComponent<ItemComponent>(item.Value);
         var actualClothing = entMan.GetComponent<ClothingComponent>(item.Value);

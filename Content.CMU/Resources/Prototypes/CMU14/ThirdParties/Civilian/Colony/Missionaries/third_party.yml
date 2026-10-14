@@ -1,4 +1,4 @@
-# Using reallife Mormon Missionaries as the Base but kept purposefully ambigous 
+# Using reallife Mormon Missionaries as the Base but kept purposefully ambigous
 # To avoid people not knowing anything about mormon or even christian religion doing slop RP
 
 - type: partySpawn
@@ -17,11 +17,9 @@
   weight: 20
   minplayers: 20
   maxplayers: 69
-  GhostsNeeded: 2
   roundstart: false
-  whitelistedgamemodes:
-    - insurgency
-    - colonyfall
+  ghostsNeeded: 2
+  ghostsCallable: true
 
 - type: partySpawn
   id: MissionariesPartySpawnMid
@@ -39,8 +37,6 @@
   weight: 20
   minplayers: 70
   maxplayers: 150
-  GhostsNeeded: 4
   roundstart: false
-  whitelistedgamemodes:
-    - insurgency
-    - colonyfall
+  ghostsNeeded: 4
+  ghostsCallable: true

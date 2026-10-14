@@ -13,9 +13,9 @@
   lorePrimer: AU14PrimerThreatApe
   roundstartspawns: apePartycf
   thirdpartyinterval: 9100
-  whitelistedgamemodes:
+  whitelistedGamemodes:
   - ColonyFall
-  blacklistedgamemodes:
+  blacklistedGamemodes:
   - DistressSignal
   winconditions:
   - KillAllColonistRule
@@ -46,9 +46,9 @@
 #   voteCooldownGroup: Ape
 #   lorePrimer: AU14PrimerThreatApe
 #   roundstartspawns: apeParty
-#   whitelistedgamemodes:
+#   whitelistedGamemodes:
 #   - DistressSignal
-#   blacklistedgamemodes:
+#   blacklistedGamemodes:
 #   - ColonyFall
 #   jobScaling: DefaultDistressScale
 #   winconditions:

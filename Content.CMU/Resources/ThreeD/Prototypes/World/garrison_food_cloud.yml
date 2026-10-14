@@ -1,0 +1,3669 @@
+# Source-grounded physical food drafts; see SOURCES_FOOD_CLOUD.md.
+- type: cmu3DModel
+  id: CMU3DFoodBowlBigCloud
+  label: Large empty ceramic bowl
+  status: draft
+  sourcePrototypes:
+  - FoodBowlBig
+  description: Source bowl state reconstructed as a closed floor, flared solid wall segments and a rolled open rim. Empty
+    default only; live reagent fills, tint, spills and broken-bowl replacement remain unsupported. Circular plan, depth
+    and hidden underside are inferred.
+  placement: surface
+  referencePrototype: FoodBowlBig
+  referenceRsi: /Textures/Objects/Consumable/Food/bowl.rsi
+  referenceState: bowl
+  sourceDirections: 1
+  parts:
+  - label: ceramic foot ring solid base
+    min: -0.185000, -0.185000, 0.000000
+    max: 0.185000, 0.185000, 0.028000
+    color: '#9E907E'
+    shape: CylinderZ
+  - label: closed ceramic basin floor
+    min: -0.226000, -0.226000, 0.018000
+    max: 0.226000, 0.226000, 0.072000
+    color: '#CDC1B1'
+    shape: CylinderZ
+  - label: flared hollow ceramic wall 01
+    min: 0.185412, -0.0973298, 0.105
+    max: 0.376588, 0.0973298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 0.0
+  - label: flared hollow ceramic wall 02
+    min: 0.1477651, 0.0431702, 0.105
+    max: 0.3389411, 0.2378298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 30.0
+  - label: flared hollow ceramic wall 03
+    min: 0.044912, 0.1460233, 0.105
+    max: 0.236088, 0.340683, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 60.0
+  - label: flared hollow ceramic wall 04
+    min: -0.095588, 0.1836702, 0.105
+    max: 0.095588, 0.3783298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 90.0
+  - label: flared hollow ceramic wall 05
+    min: -0.236088, 0.1460233, 0.105
+    max: -0.044912, 0.340683, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 120.0
+  - label: flared hollow ceramic wall 06
+    min: -0.3389411, 0.0431702, 0.105
+    max: -0.1477651, 0.2378298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 150.0
+  - label: flared hollow ceramic wall 07
+    min: -0.376588, -0.0973298, 0.105
+    max: -0.185412, 0.0973298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 180.0
+  - label: flared hollow ceramic wall 08
+    min: -0.3389411, -0.2378298, 0.105
+    max: -0.1477651, -0.0431702, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 210.0
+  - label: flared hollow ceramic wall 09
+    min: -0.236088, -0.340683, 0.105
+    max: -0.044912, -0.1460233, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 240.0
+  - label: flared hollow ceramic wall 10
+    min: -0.095588, -0.3783298, 0.105
+    max: 0.095588, -0.1836702, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 270.0
+  - label: flared hollow ceramic wall 11
+    min: 0.044912, -0.340683, 0.105
+    max: 0.236088, -0.1460233, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 300.0
+  - label: flared hollow ceramic wall 12
+    min: 0.1477651, -0.2378298, 0.105
+    max: 0.3389411, -0.0431702, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 330.0
+  - label: rolled ceramic rim 01
+    min: 0.334, -0.0985694, 0.166
+    max: 0.366, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 0.0
+  - label: rolled ceramic rim 02
+    min: 0.2871089, 0.0764306, 0.166
+    max: 0.3191089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 30.0
+  - label: rolled ceramic rim 03
+    min: 0.159, 0.2045395, 0.166
+    max: 0.191, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 60.0
+  - label: rolled ceramic rim 04
+    min: -0.016, 0.2514306, 0.166
+    max: 0.016, 0.4485694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 90.0
+  - label: rolled ceramic rim 05
+    min: -0.191, 0.2045395, 0.166
+    max: -0.159, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 120.0
+  - label: rolled ceramic rim 06
+    min: -0.3191089, 0.0764306, 0.166
+    max: -0.2871089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 150.0
+  - label: rolled ceramic rim 07
+    min: -0.366, -0.0985694, 0.166
+    max: -0.334, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 180.0
+  - label: rolled ceramic rim 08
+    min: -0.3191089, -0.2735694, 0.166
+    max: -0.2871089, -0.0764306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 210.0
+  - label: rolled ceramic rim 09
+    min: -0.191, -0.4016783, 0.166
+    max: -0.159, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 240.0
+  - label: rolled ceramic rim 10
+    min: -0.016, -0.4485694, 0.166
+    max: 0.016, -0.2514306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 270.0
+  - label: rolled ceramic rim 11
+    min: 0.159, -0.4016783, 0.166
+    max: 0.191, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 300.0
+  - label: rolled ceramic rim 12
+    min: 0.2871089, -0.2735694, 0.166
+    max: 0.3191089, -0.0764306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 330.0
+- type: cmu3DModel
+  id: CMU3DFoodRiceEggCloud
+  referenceRsi: /Textures/CMU14/ThreeD/EquipmentReferences.rsi
+  referenceState: CMU3DFoodRiceEggCloud
+  label: Egg-fried rice bowl
+  status: draft
+  sourcePrototypes:
+  - FoodRiceEgg
+  description: Original bowl + rice-egg source layers, reconstructed with a hollow ceramic vessel, raised rice grains,
+    carrot and green vegetable pieces and fried egg. One inspected static pose; consumption, spills and carried art are
+    not represented.
+  placement: surface
+  referencePrototype: FoodRiceEgg
+  sourceDirections: 1
+  parts:
+  - label: ceramic foot ring solid base
+    min: -0.185000, -0.185000, 0.000000
+    max: 0.185000, 0.185000, 0.028000
+    color: '#9E907E'
+    shape: CylinderZ
+  - label: closed ceramic basin floor
+    min: -0.226000, -0.226000, 0.018000
+    max: 0.226000, 0.226000, 0.072000
+    color: '#CDC1B1'
+    shape: CylinderZ
+  - label: flared hollow ceramic wall 01
+    min: 0.185412, -0.0973298, 0.105
+    max: 0.376588, 0.0973298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 0.0
+  - label: flared hollow ceramic wall 02
+    min: 0.1477651, 0.0431702, 0.105
+    max: 0.3389411, 0.2378298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 30.0
+  - label: flared hollow ceramic wall 03
+    min: 0.044912, 0.1460233, 0.105
+    max: 0.236088, 0.340683, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 60.0
+  - label: flared hollow ceramic wall 04
+    min: -0.095588, 0.1836702, 0.105
+    max: 0.095588, 0.3783298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 90.0
+  - label: flared hollow ceramic wall 05
+    min: -0.236088, 0.1460233, 0.105
+    max: -0.044912, 0.340683, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 120.0
+  - label: flared hollow ceramic wall 06
+    min: -0.3389411, 0.0431702, 0.105
+    max: -0.1477651, 0.2378298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 150.0
+  - label: flared hollow ceramic wall 07
+    min: -0.376588, -0.0973298, 0.105
+    max: -0.185412, 0.0973298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 180.0
+  - label: flared hollow ceramic wall 08
+    min: -0.3389411, -0.2378298, 0.105
+    max: -0.1477651, -0.0431702, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 210.0
+  - label: flared hollow ceramic wall 09
+    min: -0.236088, -0.340683, 0.105
+    max: -0.044912, -0.1460233, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 240.0
+  - label: flared hollow ceramic wall 10
+    min: -0.095588, -0.3783298, 0.105
+    max: 0.095588, -0.1836702, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 270.0
+  - label: flared hollow ceramic wall 11
+    min: 0.044912, -0.340683, 0.105
+    max: 0.236088, -0.1460233, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 300.0
+  - label: flared hollow ceramic wall 12
+    min: 0.1477651, -0.2378298, 0.105
+    max: 0.3389411, -0.0431702, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 330.0
+  - label: rolled ceramic rim 01
+    min: 0.334, -0.0985694, 0.166
+    max: 0.366, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 0.0
+  - label: rolled ceramic rim 02
+    min: 0.2871089, 0.0764306, 0.166
+    max: 0.3191089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 30.0
+  - label: rolled ceramic rim 03
+    min: 0.159, 0.2045395, 0.166
+    max: 0.191, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 60.0
+  - label: rolled ceramic rim 04
+    min: -0.016, 0.2514306, 0.166
+    max: 0.016, 0.4485694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 90.0
+  - label: rolled ceramic rim 05
+    min: -0.191, 0.2045395, 0.166
+    max: -0.159, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 120.0
+  - label: rolled ceramic rim 06
+    min: -0.3191089, 0.0764306, 0.166
+    max: -0.2871089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 150.0
+  - label: rolled ceramic rim 07
+    min: -0.366, -0.0985694, 0.166
+    max: -0.334, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 180.0
+  - label: rolled ceramic rim 08
+    min: -0.3191089, -0.2735694, 0.166
+    max: -0.2871089, -0.0764306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 210.0
+  - label: rolled ceramic rim 09
+    min: -0.191, -0.4016783, 0.166
+    max: -0.159, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 240.0
+  - label: rolled ceramic rim 10
+    min: -0.016, -0.4485694, 0.166
+    max: 0.016, -0.2514306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 270.0
+  - label: rolled ceramic rim 11
+    min: 0.159, -0.4016783, 0.166
+    max: 0.191, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 300.0
+  - label: rolled ceramic rim 12
+    min: 0.2871089, -0.2735694, 0.166
+    max: 0.3191089, -0.0764306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 330.0
+  - label: fried rice mound
+    min: -0.301000, -0.284000, 0.125000
+    max: 0.301000, 0.284000, 0.243000
+    color: '#F1EEE7'
+    shape: Ellipsoid
+  - label: individual rice grain 01
+    min: -0.002385, -0.014000, 0.241707
+    max: 0.060615, 0.014000, 0.263707
+    color: '#FFFFFF'
+    shape: Ellipsoid
+  - label: individual rice grain 02
+    min: -0.068684, 0.020064, 0.241116
+    max: -0.005684, 0.048064, 0.263116
+    color: '#EAE5DD'
+    shape: Ellipsoid
+    yaw: 137.50775
+  - label: individual rice grain 03
+    min: -0.025808, -0.078854, 0.240520
+    max: 0.037192, -0.050854, 0.262520
+    color: '#F2E1BA'
+    shape: Ellipsoid
+    yaw: -84.9845
+  - label: individual rice grain 04
+    min: 0.015368, 0.047132, 0.239916
+    max: 0.078368, 0.075132, 0.261916
+    color: '#FFFFFF'
+    shape: Ellipsoid
+    yaw: 52.52325
+  - label: individual rice grain 05
+    min: -0.117509, -0.029214, 0.239307
+    max: -0.054509, -0.001214, 0.261307
+    color: '#EAE5DD'
+    shape: Ellipsoid
+    yaw: -169.969
+  - label: individual rice grain 06
+    min: 0.049976, -0.065828, 0.238690
+    max: 0.112976, -0.037828, 0.260690
+    color: '#F2E1BA'
+    shape: Ellipsoid
+    yaw: -32.46125
+  - label: individual rice grain 07
+    min: -0.058752, 0.087376, 0.238067
+    max: 0.004248, 0.115376, 0.260067
+    color: '#FFFFFF'
+    shape: Ellipsoid
+    yaw: 105.04651
+  - label: individual rice grain 08
+    min: -0.083473, -0.114070, 0.237436
+    max: -0.020473, -0.086070, 0.259436
+    color: '#EAE5DD'
+    shape: Ellipsoid
+    yaw: -117.44574
+  - label: individual rice grain 09
+    min: 0.081260, 0.027179, 0.236798
+    max: 0.144260, 0.055179, 0.258798
+    color: '#F2E1BA'
+    shape: Ellipsoid
+    yaw: 20.06201
+  - label: individual rice grain 10
+    min: -0.148807, 0.034423, 0.236151
+    max: -0.085807, 0.062423, 0.258151
+    color: '#FFFFFF'
+    shape: Ellipsoid
+    yaw: 157.56976
+  - label: individual rice grain 11
+    min: 0.025050, -0.134844, 0.235497
+    max: 0.088050, -0.106844, 0.257497
+    color: '#EAE5DD'
+    shape: Ellipsoid
+    yaw: -64.92249
+  - label: individual rice grain 12
+    min: 0.010289, 0.119230, 0.234834
+    max: 0.073289, 0.147230, 0.256834
+    color: '#F2E1BA'
+    shape: Ellipsoid
+    yaw: 72.58526
+  - label: individual rice grain 13
+    min: -0.157453, -0.086992, 0.234163
+    max: -0.094453, -0.058992, 0.256163
+    color: '#FFFFFF'
+    shape: Ellipsoid
+    yaw: -149.90699
+  - label: individual rice grain 14
+    min: 0.116256, -0.046484, 0.233482
+    max: 0.179256, -0.018484, 0.255482
+    color: '#EAE5DD'
+    shape: Ellipsoid
+    yaw: -12.39924
+  - label: individual rice grain 15
+    min: -0.121673, 0.114263, 0.232792
+    max: -0.058673, 0.142263, 0.254792
+    color: '#F2E1BA'
+    shape: Ellipsoid
+    yaw: 125.10851
+  - label: individual rice grain 16
+    min: -0.052333, -0.174760, 0.232092
+    max: 0.010667, -0.146760, 0.254092
+    color: '#FFFFFF'
+    shape: Ellipsoid
+    yaw: -97.38374
+  - label: individual rice grain 17
+    min: 0.096390, 0.093785, 0.231382
+    max: 0.159390, 0.121785, 0.253382
+    color: '#EAE5DD'
+    shape: Ellipsoid
+    yaw: 40.12401
+  - label: individual rice grain 18
+    min: -0.203599, -0.006883, 0.230661
+    max: -0.140599, 0.021117, 0.252661
+    color: '#F2E1BA'
+    shape: Ellipsoid
+    yaw: 177.63177
+  - label: individual rice grain 19
+    min: 0.094032, -0.138922, 0.229929
+    max: 0.157032, -0.110922, 0.251929
+    color: '#FFFFFF'
+    shape: Ellipsoid
+    yaw: -44.86048
+  - label: individual rice grain 20
+    min: -0.039898, 0.167628, 0.229184
+    max: 0.023102, 0.195628, 0.251184
+    color: '#EAE5DD'
+    shape: Ellipsoid
+    yaw: 92.64727
+  - label: individual rice grain 21
+    min: -0.150945, -0.157134, 0.228428
+    max: -0.087945, -0.129134, 0.250428
+    color: '#F2E1BA'
+    shape: Ellipsoid
+    yaw: -129.84498
+  - label: individual rice grain 22
+    min: 0.157714, 0.011458, 0.227658
+    max: 0.220714, 0.039458, 0.249658
+    color: '#FFFFFF'
+    shape: Ellipsoid
+    yaw: 7.66277
+  - label: individual rice grain 23
+    min: -0.191820, 0.097548, 0.226874
+    max: -0.128820, 0.125548, 0.248874
+    color: '#EAE5DD'
+    shape: Ellipsoid
+    yaw: 145.17052
+  - label: individual rice grain 24
+    min: 0.012308, -0.208735, 0.226076
+    max: 0.075308, -0.180735, 0.248076
+    color: '#F2E1BA'
+    shape: Ellipsoid
+    yaw: -77.32173
+  - label: individual rice grain 25
+    min: 0.069828, 0.162829, 0.225262
+    max: 0.132828, 0.190829, 0.247262
+    color: '#FFFFFF'
+    shape: Ellipsoid
+    yaw: 60.18602
+  - label: individual rice grain 26
+    min: -0.229586, -0.077194, 0.224432
+    max: -0.166586, -0.049194, 0.246432
+    color: '#EAE5DD'
+    shape: Ellipsoid
+    yaw: -162.30623
+  - label: individual rice grain 27
+    min: 0.160914, -0.102902, 0.223584
+    max: 0.223914, -0.074902, 0.245584
+    color: '#F2E1BA'
+    shape: Ellipsoid
+    yaw: -24.79848
+  - label: individual rice grain 28
+    min: -0.114858, 0.185182, 0.222718
+    max: -0.051858, 0.213182, 0.244718
+    color: '#FFFFFF'
+    shape: Ellipsoid
+    yaw: 112.70927
+  - label: individual rice grain 29
+    min: -0.105897, -0.220839, 0.221833
+    max: -0.042897, -0.192839, 0.243833
+    color: '#EAE5DD'
+    shape: Ellipsoid
+    yaw: -109.78298
+  - label: individual rice grain 30
+    min: 0.166460, 0.090041, 0.220925
+    max: 0.229460, 0.118041, 0.242925
+    color: '#F2E1BA'
+    shape: Ellipsoid
+    yaw: 27.72478
+  - label: individual rice grain 31
+    min: -0.251383, 0.043962, 0.219995
+    max: -0.188383, 0.071962, 0.241995
+    color: '#FFFFFF'
+    shape: Ellipsoid
+    yaw: 165.23253
+  - label: individual rice grain 32
+    min: 0.093482, -0.208379, 0.219041
+    max: 0.156482, -0.180379, 0.241041
+    color: '#EAE5DD'
+    shape: Ellipsoid
+    yaw: -57.25972
+  - label: individual rice grain 33
+    min: 0.008260, 0.217340, 0.218059
+    max: 0.071260, 0.245340, 0.240059
+    color: '#F2E1BA'
+    shape: Ellipsoid
+    yaw: 80.24803
+  - label: individual rice grain 34
+    min: -0.219919, -0.159920, 0.217049
+    max: -0.156919, -0.131920, 0.239049
+    color: '#FFFFFF'
+    shape: Ellipsoid
+    yaw: -142.24422
+  - label: individual rice grain 35
+    min: 0.209520, -0.033970, 0.216007
+    max: 0.272520, -0.005970, 0.238007
+    color: '#EAE5DD'
+    shape: Ellipsoid
+    yaw: -4.73647
+  - label: individual rice grain 36
+    min: -0.198094, 0.166087, 0.214929
+    max: -0.135094, 0.194087, 0.236929
+    color: '#F2E1BA'
+    shape: Ellipsoid
+    yaw: 132.77128
+  - label: individual rice grain 37
+    min: -0.030289, -0.262754, 0.213813
+    max: 0.032711, -0.234754, 0.235813
+    color: '#FFFFFF'
+    shape: Ellipsoid
+    yaw: -89.72097
+  - label: individual rice grain 38
+    min: 0.137912, 0.172749, 0.212653
+    max: 0.200912, 0.200749, 0.234653
+    color: '#EAE5DD'
+    shape: Ellipsoid
+    yaw: 47.78678
+  - label: individual rice grain 39
+    min: -0.285892, -0.037575, 0.211444
+    max: -0.222892, -0.009575, 0.233444
+    color: '#F2E1BA'
+    shape: Ellipsoid
+    yaw: -174.70547
+  - label: individual rice grain 40
+    min: 0.174631, -0.170449, 0.210179
+    max: 0.237631, -0.142449, 0.232179
+    color: '#FFFFFF'
+    shape: Ellipsoid
+    yaw: -37.19772
+  - label: individual rice grain 41
+    min: -0.078397, 0.243803, 0.208850
+    max: -0.015397, 0.271803, 0.230850
+    color: '#EAE5DD'
+    shape: Ellipsoid
+    yaw: 100.31004
+  - label: individual rice grain 42
+    min: -0.172775, -0.238496, 0.207446
+    max: -0.109775, -0.210496, 0.229446
+    color: '#F2E1BA'
+    shape: Ellipsoid
+    yaw: -122.18221
+  - label: individual rice grain 43
+    min: 0.227380, 0.056946, 0.205952
+    max: 0.290380, 0.084946, 0.227952
+    color: '#FFFFFF'
+    shape: Ellipsoid
+    yaw: 15.32554
+  - label: carrot dice 01
+    min: 0.019517, -0.019000, 0.251366
+    max: 0.064517, 0.019000, 0.286366
+    color: '#FF9138'
+  - label: green vegetable morsel 02
+    min: -0.074163, 0.031659, 0.250099
+    max: -0.033163, 0.066659, 0.283099
+    color: '#17B200'
+    shape: Ellipsoid
+  - label: green vegetable morsel 03
+    min: -0.012286, -0.111093, 0.247832
+    max: 0.028714, -0.076093, 0.280832
+    color: '#009900'
+    shape: Ellipsoid
+  - label: carrot dice 04
+    min: 0.045138, 0.069222, 0.244565
+    max: 0.090138, 0.107222, 0.279565
+    color: '#FF9138'
+    yaw: 63
+  - label: green vegetable morsel 05
+    min: -0.144625, -0.039456, 0.243298
+    max: -0.103625, -0.004456, 0.276298
+    color: '#009900'
+    shape: Ellipsoid
+  - label: green vegetable morsel 06
+    min: 0.097082, -0.092296, 0.241031
+    max: 0.138082, -0.057296, 0.274031
+    color: '#17B200'
+    shape: Ellipsoid
+  - label: carrot dice 07
+    min: -0.061829, 0.127301, 0.237763
+    max: -0.016829, 0.165301, 0.272763
+    color: '#FF9138'
+    yaw: 126
+  - label: green vegetable morsel 08
+    min: -0.095504, -0.161916, 0.236496
+    max: -0.054504, -0.126916, 0.269496
+    color: '#17B200'
+    shape: Ellipsoid
+  - label: green vegetable morsel 09
+    min: 0.142229, 0.041928, 0.234229
+    max: 0.183229, 0.076928, 0.267229
+    color: '#009900'
+    shape: Ellipsoid
+  - label: carrot dice 10
+    min: -0.191792, 0.050882, 0.230962
+    max: -0.146792, 0.088882, 0.265962
+    color: '#FF9138'
+    yaw: -171
+  - label: green vegetable morsel 11
+    min: 0.061110, -0.191896, 0.229695
+    max: 0.102110, -0.156896, 0.262695
+    color: '#009900'
+    shape: Ellipsoid
+  - label: green vegetable morsel 12
+    min: 0.039808, 0.174771, 0.227428
+    max: 0.080808, 0.209771, 0.260428
+    color: '#17B200'
+    shape: Ellipsoid
+  - label: carrot dice 13
+    min: -0.204269, -0.124338, 0.224161
+    max: -0.159269, -0.086338, 0.259161
+    color: '#FF9138'
+    yaw: -108
+  - label: green vegetable morsel 14
+    min: 0.192735, -0.064380, 0.222893
+    max: 0.233735, -0.029380, 0.255893
+    color: '#17B200'
+    shape: Ellipsoid
+  - label: green vegetable morsel 15
+    min: -0.150634, 0.167603, 0.220626
+    max: -0.109634, 0.202603, 0.253626
+    color: '#009900'
+    shape: Ellipsoid
+  - label: carrot dice 16
+    min: -0.052565, -0.251002, 0.217359
+    max: -0.007565, -0.213002, 0.252359
+    color: '#FF9138'
+    yaw: -45
+  - label: green vegetable morsel 17
+    min: 0.164064, 0.138050, 0.216092
+    max: 0.205064, 0.173050, 0.249092
+    color: '#009900'
+    shape: Ellipsoid
+  - label: fried egg white
+    min: -0.045000, -0.147500, 0.254000
+    max: 0.125000, -0.012500, 0.280000
+    color: '#FFFFFF'
+    shape: Ellipsoid
+  - label: fried egg golden yolk
+    min: 0.023000, -0.115500, 0.270000
+    max: 0.093000, -0.050500, 0.298000
+    color: '#F4BF2F'
+    shape: Ellipsoid
+- type: cmu3DModel
+  id: CMU3DFoodRicePuddingCloud
+  referenceRsi: /Textures/CMU14/ThreeD/EquipmentReferences.rsi
+  referenceState: CMU3DFoodRicePuddingCloud
+  label: Rice pudding bowl
+  status: draft
+  sourcePrototypes:
+  - FoodRicePudding
+  description: Original bowl + rice-pudding composition with a rounded pale-gold mound and separate rice-grain relief.
+    Ceramic shell is physically hollow beneath filling; unseen depth and mound profile remain inferred.
+  placement: surface
+  referencePrototype: FoodRicePudding
+  sourceDirections: 1
+  parts:
+  - label: ceramic foot ring solid base
+    min: -0.185000, -0.185000, 0.000000
+    max: 0.185000, 0.185000, 0.028000
+    color: '#9E907E'
+    shape: CylinderZ
+  - label: closed ceramic basin floor
+    min: -0.226000, -0.226000, 0.018000
+    max: 0.226000, 0.226000, 0.072000
+    color: '#CDC1B1'
+    shape: CylinderZ
+  - label: flared hollow ceramic wall 01
+    min: 0.185412, -0.0973298, 0.105
+    max: 0.376588, 0.0973298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 0.0
+  - label: flared hollow ceramic wall 02
+    min: 0.1477651, 0.0431702, 0.105
+    max: 0.3389411, 0.2378298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 30.0
+  - label: flared hollow ceramic wall 03
+    min: 0.044912, 0.1460233, 0.105
+    max: 0.236088, 0.340683, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 60.0
+  - label: flared hollow ceramic wall 04
+    min: -0.095588, 0.1836702, 0.105
+    max: 0.095588, 0.3783298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 90.0
+  - label: flared hollow ceramic wall 05
+    min: -0.236088, 0.1460233, 0.105
+    max: -0.044912, 0.340683, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 120.0
+  - label: flared hollow ceramic wall 06
+    min: -0.3389411, 0.0431702, 0.105
+    max: -0.1477651, 0.2378298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 150.0
+  - label: flared hollow ceramic wall 07
+    min: -0.376588, -0.0973298, 0.105
+    max: -0.185412, 0.0973298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 180.0
+  - label: flared hollow ceramic wall 08
+    min: -0.3389411, -0.2378298, 0.105
+    max: -0.1477651, -0.0431702, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 210.0
+  - label: flared hollow ceramic wall 09
+    min: -0.236088, -0.340683, 0.105
+    max: -0.044912, -0.1460233, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 240.0
+  - label: flared hollow ceramic wall 10
+    min: -0.095588, -0.3783298, 0.105
+    max: 0.095588, -0.1836702, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 270.0
+  - label: flared hollow ceramic wall 11
+    min: 0.044912, -0.340683, 0.105
+    max: 0.236088, -0.1460233, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 300.0
+  - label: flared hollow ceramic wall 12
+    min: 0.1477651, -0.2378298, 0.105
+    max: 0.3389411, -0.0431702, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 330.0
+  - label: rolled ceramic rim 01
+    min: 0.334, -0.0985694, 0.166
+    max: 0.366, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 0.0
+  - label: rolled ceramic rim 02
+    min: 0.2871089, 0.0764306, 0.166
+    max: 0.3191089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 30.0
+  - label: rolled ceramic rim 03
+    min: 0.159, 0.2045395, 0.166
+    max: 0.191, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 60.0
+  - label: rolled ceramic rim 04
+    min: -0.016, 0.2514306, 0.166
+    max: 0.016, 0.4485694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 90.0
+  - label: rolled ceramic rim 05
+    min: -0.191, 0.2045395, 0.166
+    max: -0.159, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 120.0
+  - label: rolled ceramic rim 06
+    min: -0.3191089, 0.0764306, 0.166
+    max: -0.2871089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 150.0
+  - label: rolled ceramic rim 07
+    min: -0.366, -0.0985694, 0.166
+    max: -0.334, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 180.0
+  - label: rolled ceramic rim 08
+    min: -0.3191089, -0.2735694, 0.166
+    max: -0.2871089, -0.0764306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 210.0
+  - label: rolled ceramic rim 09
+    min: -0.191, -0.4016783, 0.166
+    max: -0.159, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 240.0
+  - label: rolled ceramic rim 10
+    min: -0.016, -0.4485694, 0.166
+    max: 0.016, -0.2514306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 270.0
+  - label: rolled ceramic rim 11
+    min: 0.159, -0.4016783, 0.166
+    max: 0.191, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 300.0
+  - label: rolled ceramic rim 12
+    min: 0.2871089, -0.2735694, 0.166
+    max: 0.3191089, -0.0764306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 330.0
+  - label: rounded rice pudding mound
+    min: -0.298000, -0.281500, 0.071000
+    max: 0.298000, 0.281500, 0.323000
+    color: '#F8E0AF'
+    shape: Ellipsoid
+  - label: pudding rice texture 01
+    min: 0.016882, -0.013000, 0.310531
+    max: 0.056882, 0.013000, 0.333531
+    color: '#F7D795'
+    shape: Ellipsoid
+  - label: pudding rice texture 02
+    min: -0.067104, 0.030151, 0.308408
+    max: -0.027104, 0.056151, 0.331408
+    color: '#F5D083'
+    shape: Ellipsoid
+    yaw: 137.50775
+  - label: pudding rice texture 03
+    min: -0.012790, -0.095155, 0.305976
+    max: 0.027210, -0.069155, 0.328976
+    color: '#FFE8BB'
+    shape: Ellipsoid
+    yaw: -84.9845
+  - label: pudding rice texture 04
+    min: 0.039372, 0.064440, 0.304009
+    max: 0.079372, 0.090440, 0.327009
+    color: '#F7D795'
+    shape: Ellipsoid
+    yaw: 52.52325
+  - label: pudding rice texture 05
+    min: -0.128955, -0.032272, 0.302459
+    max: -0.088955, -0.006272, 0.325459
+    color: '#F5D083'
+    shape: Ellipsoid
+    yaw: -169.969
+  - label: pudding rice texture 06
+    min: 0.083211, -0.078655, 0.299990
+    max: 0.123211, -0.052655, 0.322990
+    color: '#FFE8BB'
+    shape: Ellipsoid
+    yaw: -32.46125
+  - label: pudding rice texture 07
+    min: -0.054522, 0.115421, 0.296670
+    max: -0.014522, 0.141421, 0.319670
+    color: '#F7D795'
+    shape: Ellipsoid
+    yaw: 105.04651
+  - label: pudding rice texture 08
+    min: -0.085838, -0.139766, 0.294503
+    max: -0.045838, -0.113766, 0.317503
+    color: '#F5D083'
+    shape: Ellipsoid
+    yaw: -117.44574
+  - label: pudding rice texture 09
+    min: 0.122841, 0.039165, 0.293589
+    max: 0.162841, 0.065165, 0.316589
+    color: '#FFE8BB'
+    shape: Ellipsoid
+    yaw: 20.06201
+  - label: pudding rice texture 10
+    min: -0.168602, 0.048341, 0.291209
+    max: -0.128602, 0.074341, 0.314209
+    color: '#F7D795'
+    shape: Ellipsoid
+    yaw: 157.56976
+  - label: pudding rice texture 11
+    min: 0.051636, -0.166083, 0.286809
+    max: 0.091636, -0.140083, 0.309809
+    color: '#F5D083'
+    shape: Ellipsoid
+    yaw: -64.92249
+  - label: pudding rice texture 12
+    min: 0.032938, 0.155773, 0.283827
+    max: 0.072938, 0.181773, 0.306827
+    color: '#FFE8BB'
+    shape: Ellipsoid
+    yaw: 72.58526
+  - label: pudding rice texture 13
+    min: -0.179554, -0.105464, 0.283540
+    max: -0.139554, -0.079464, 0.306540
+    color: '#F7D795'
+    shape: Ellipsoid
+    yaw: -149.90699
+  - label: pudding rice texture 14
+    min: 0.167175, -0.054150, 0.281799
+    max: 0.207175, -0.028150, 0.304799
+    color: '#F5D083'
+    shape: Ellipsoid
+    yaw: -12.39924
+  - label: pudding rice texture 15
+    min: -0.134229, 0.149481, 0.276352
+    max: -0.094229, 0.175481, 0.299352
+    color: '#FFE8BB'
+    shape: Ellipsoid
+    yaw: 125.10851
+  - label: pudding rice texture 16
+    min: -0.046390, -0.216648, 0.271770
+    max: -0.006390, -0.190648, 0.294770
+    color: '#F7D795'
+    shape: Ellipsoid
+    yaw: -97.38374
+  - label: pudding rice texture 17
+    min: 0.142008, 0.123539, 0.271806
+    max: 0.182008, 0.149539, 0.294806
+    color: '#F5D083'
+    shape: Ellipsoid
+    yaw: 40.12401
+  - label: pudding rice texture 18
+    min: -0.238011, -0.003984, 0.271306
+    max: -0.198011, 0.022016, 0.294306
+    color: '#FFE8BB'
+    shape: Ellipsoid
+    yaw: 177.63177
+  - label: pudding rice texture 19
+    min: 0.139022, -0.171249, 0.265111
+    max: 0.179022, -0.145249, 0.288111
+    color: '#F7D795'
+    shape: Ellipsoid
+    yaw: -44.86048
+  - label: pudding rice texture 20
+    min: -0.030638, 0.217083, 0.257955
+    max: 0.009362, 0.243083, 0.280955
+    color: '#F5D083'
+    shape: Ellipsoid
+    yaw: 92.64727
+  - label: pudding rice texture 21
+    min: -0.171311, -0.194319, 0.257584
+    max: -0.131311, -0.168319, 0.280584
+    color: '#FFE8BB'
+    shape: Ellipsoid
+    yaw: -129.84498
+  - label: pudding rice texture 22
+    min: 0.219692, 0.019249, 0.258961
+    max: 0.259692, 0.045249, 0.281961
+    color: '#F7D795'
+    shape: Ellipsoid
+    yaw: 7.66277
+  - label: pudding rice texture 23
+    min: -0.223090, 0.128306, 0.252596
+    max: -0.183090, 0.154306, 0.275596
+    color: '#F5D083'
+    shape: Ellipsoid
+    yaw: 145.17052
+  - label: pudding rice texture 24
+    min: 0.035495, -0.259686, 0.241478
+    max: 0.075495, -0.233686, 0.264478
+    color: '#FFE8BB'
+    shape: Ellipsoid
+    yaw: -77.32173
+  - label: pudding rice texture 25
+    min: 0.108361, 0.211003, 0.239142
+    max: 0.148361, 0.237003, 0.262142
+    color: '#F7D795'
+    shape: Ellipsoid
+    yaw: 60.18602
+  - label: pudding rice texture 26
+    min: -0.270931, -0.093052, 0.243252
+    max: -0.230931, -0.067052, 0.266252
+    color: '#F5D083'
+    shape: Ellipsoid
+    yaw: -162.30623
+  - label: pudding rice texture 27
+    min: 0.223746, -0.125619, 0.237592
+    max: 0.263746, -0.099619, 0.260592
+    color: '#FFE8BB'
+    shape: Ellipsoid
+    yaw: -24.79848
+  - label: pudding rice texture 28
+    min: -0.125596, 0.239320, 0.219077
+    max: -0.085596, 0.265320, 0.242077
+    color: '#F7D795'
+    shape: Ellipsoid
+    yaw: 112.70927
+- type: cmu3DModel
+  id: CMU3DFoodSaladKimchiCloud
+  referenceRsi: /Textures/CMU14/ThreeD/EquipmentReferences.rsi
+  referenceState: CMU3DFoodSaladKimchiCloud
+  label: Kimchi bowl
+  status: draft
+  sourcePrototypes:
+  - FoodSaladKimchi
+  description: Source bowl + kimchi layers interpreted as ceramic shell and separate folded cabbage leaves with reddish-orange
+    stems. No whole-image cutout, no assumed alternate recipes or eating states.
+  placement: surface
+  referencePrototype: FoodSaladKimchi
+  sourceDirections: 1
+  parts:
+  - label: ceramic foot ring solid base
+    min: -0.185000, -0.185000, 0.000000
+    max: 0.185000, 0.185000, 0.028000
+    color: '#9E907E'
+    shape: CylinderZ
+  - label: closed ceramic basin floor
+    min: -0.226000, -0.226000, 0.018000
+    max: 0.226000, 0.226000, 0.072000
+    color: '#CDC1B1'
+    shape: CylinderZ
+  - label: flared hollow ceramic wall 01
+    min: 0.185412, -0.0973298, 0.105
+    max: 0.376588, 0.0973298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 0.0
+  - label: flared hollow ceramic wall 02
+    min: 0.1477651, 0.0431702, 0.105
+    max: 0.3389411, 0.2378298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 30.0
+  - label: flared hollow ceramic wall 03
+    min: 0.044912, 0.1460233, 0.105
+    max: 0.236088, 0.340683, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 60.0
+  - label: flared hollow ceramic wall 04
+    min: -0.095588, 0.1836702, 0.105
+    max: 0.095588, 0.3783298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 90.0
+  - label: flared hollow ceramic wall 05
+    min: -0.236088, 0.1460233, 0.105
+    max: -0.044912, 0.340683, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 120.0
+  - label: flared hollow ceramic wall 06
+    min: -0.3389411, 0.0431702, 0.105
+    max: -0.1477651, 0.2378298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 150.0
+  - label: flared hollow ceramic wall 07
+    min: -0.376588, -0.0973298, 0.105
+    max: -0.185412, 0.0973298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 180.0
+  - label: flared hollow ceramic wall 08
+    min: -0.3389411, -0.2378298, 0.105
+    max: -0.1477651, -0.0431702, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 210.0
+  - label: flared hollow ceramic wall 09
+    min: -0.236088, -0.340683, 0.105
+    max: -0.044912, -0.1460233, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 240.0
+  - label: flared hollow ceramic wall 10
+    min: -0.095588, -0.3783298, 0.105
+    max: 0.095588, -0.1836702, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 270.0
+  - label: flared hollow ceramic wall 11
+    min: 0.044912, -0.340683, 0.105
+    max: 0.236088, -0.1460233, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 300.0
+  - label: flared hollow ceramic wall 12
+    min: 0.1477651, -0.2378298, 0.105
+    max: 0.3389411, -0.0431702, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 330.0
+  - label: rolled ceramic rim 01
+    min: 0.334, -0.0985694, 0.166
+    max: 0.366, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 0.0
+  - label: rolled ceramic rim 02
+    min: 0.2871089, 0.0764306, 0.166
+    max: 0.3191089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 30.0
+  - label: rolled ceramic rim 03
+    min: 0.159, 0.2045395, 0.166
+    max: 0.191, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 60.0
+  - label: rolled ceramic rim 04
+    min: -0.016, 0.2514306, 0.166
+    max: 0.016, 0.4485694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 90.0
+  - label: rolled ceramic rim 05
+    min: -0.191, 0.2045395, 0.166
+    max: -0.159, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 120.0
+  - label: rolled ceramic rim 06
+    min: -0.3191089, 0.0764306, 0.166
+    max: -0.2871089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 150.0
+  - label: rolled ceramic rim 07
+    min: -0.366, -0.0985694, 0.166
+    max: -0.334, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 180.0
+  - label: rolled ceramic rim 08
+    min: -0.3191089, -0.2735694, 0.166
+    max: -0.2871089, -0.0764306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 210.0
+  - label: rolled ceramic rim 09
+    min: -0.191, -0.4016783, 0.166
+    max: -0.159, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 240.0
+  - label: rolled ceramic rim 10
+    min: -0.016, -0.4485694, 0.166
+    max: 0.016, -0.2514306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 270.0
+  - label: rolled ceramic rim 11
+    min: 0.159, -0.4016783, 0.166
+    max: 0.191, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 300.0
+  - label: rolled ceramic rim 12
+    min: 0.2871089, -0.2735694, 0.166
+    max: 0.3191089, -0.0764306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 330.0
+  - label: kimchi bed
+    min: -0.295000, -0.275000, 0.149000
+    max: 0.295000, 0.275000, 0.197000
+    color: '#AF4C27'
+    shape: Ellipsoid
+  - label: folded cabbage leaf 01
+    min: -0.018665, -0.032500, 0.223033
+    max: 0.093335, 0.032500, 0.258033
+    color: '#C26643'
+    shape: WedgeYReverse
+    pitch: -30
+  - label: folded cabbage leaf 02
+    min: -0.103683, 0.011182, 0.217567
+    max: 0.008317, 0.076182, 0.252567
+    color: '#E57D21'
+    shape: WedgeY
+    yaw: 137.50775
+    pitch: -15
+  - label: cabbage stem rib 02
+    min: -0.085183, 0.036682, 0.245067
+    max: -0.026183, 0.050682, 0.261067
+    color: '#D99564'
+    shape: Ellipsoid
+    yaw: 137.50775
+    pitch: 7
+  - label: folded cabbage leaf 03
+    min: -0.048701, -0.115664, 0.213803
+    max: 0.063299, -0.050664, 0.248803
+    color: '#B7390A'
+    shape: WedgeYReverse
+    yaw: -84.9845
+  - label: folded cabbage leaf 04
+    min: 0.004101, 0.045892, 0.210744
+    max: 0.116101, 0.110892, 0.245744
+    color: '#AF4C27'
+    shape: WedgeY
+    yaw: 52.52325
+    pitch: 15
+  - label: folded cabbage leaf 05
+    min: -0.166294, -0.052009, 0.208099
+    max: -0.054294, 0.012991, 0.243099
+    color: '#C9592F'
+    shape: WedgeYReverse
+    yaw: -169.969
+    pitch: 30
+  - label: folded cabbage leaf 06
+    min: 0.048480, -0.098962, 0.205735
+    max: 0.160480, -0.033962, 0.240735
+    color: '#C26643'
+    shape: WedgeY
+    yaw: -32.46125
+    pitch: -30
+  - label: folded cabbage leaf 07
+    min: -0.090946, 0.097499, 0.203577
+    max: 0.021054, 0.162499, 0.238577
+    color: '#E57D21'
+    shape: WedgeYReverse
+    yaw: 105.04651
+    pitch: -15
+  - label: cabbage stem rib 07
+    min: -0.072446, 0.122999, 0.231077
+    max: -0.013446, 0.136999, 0.247077
+    color: '#D99564'
+    shape: Ellipsoid
+    yaw: 105.04651
+    pitch: 7
+  - label: folded cabbage leaf 08
+    min: -0.122647, -0.160824, 0.201580
+    max: -0.010647, -0.095824, 0.236580
+    color: '#B7390A'
+    shape: WedgeY
+    yaw: -117.44574
+  - label: folded cabbage leaf 09
+    min: 0.088597, 0.020306, 0.199713
+    max: 0.200597, 0.085306, 0.234713
+    color: '#AF4C27'
+    shape: WedgeYReverse
+    yaw: 20.06201
+    pitch: 15
+  - label: folded cabbage leaf 10
+    min: -0.206428, 0.029595, 0.197952
+    max: -0.094428, 0.094595, 0.232952
+    color: '#C9592F'
+    shape: WedgeY
+    yaw: 157.56976
+    pitch: 30
+  - label: folded cabbage leaf 11
+    min: 0.016516, -0.187464, 0.196282
+    max: 0.128516, -0.122464, 0.231282
+    color: '#C26643'
+    shape: WedgeYReverse
+    yaw: -64.92249
+    pitch: -30
+  - label: folded cabbage leaf 12
+    min: -0.002412, 0.138346, 0.194689
+    max: 0.109588, 0.203346, 0.229689
+    color: '#E57D21'
+    shape: WedgeY
+    yaw: 72.58526
+    pitch: -15
+  - label: cabbage stem rib 12
+    min: 0.016088, 0.163846, 0.222189
+    max: 0.075088, 0.177846, 0.238189
+    color: '#D99564'
+    shape: Ellipsoid
+    yaw: 72.58526
+    pitch: 7
+  - label: folded cabbage leaf 13
+    min: -0.217515, -0.126100, 0.193165
+    max: -0.105515, -0.061100, 0.228165
+    color: '#B7390A'
+    shape: WedgeYReverse
+    yaw: -149.90699
+  - label: folded cabbage leaf 14
+    min: 0.133475, -0.074156, 0.191700
+    max: 0.245475, -0.009156, 0.226700
+    color: '#AF4C27'
+    shape: WedgeY
+    yaw: -12.39924
+    pitch: 15
+  - label: folded cabbage leaf 15
+    min: -0.171633, 0.131977, 0.190289
+    max: -0.059633, 0.196977, 0.225289
+    color: '#C9592F'
+    shape: WedgeYReverse
+    yaw: 125.10851
+    pitch: 30
+  - label: folded cabbage leaf 16
+    min: -0.082715, -0.238650, 0.188925
+    max: 0.029285, -0.173650, 0.223925
+    color: '#C26643'
+    shape: WedgeY
+    yaw: -97.38374
+    pitch: -30
+  - label: folded cabbage leaf 17
+    min: 0.107998, 0.105717, 0.187605
+    max: 0.219998, 0.170717, 0.222605
+    color: '#E57D21'
+    shape: WedgeYReverse
+    yaw: 40.12401
+    pitch: -15
+  - label: cabbage stem rib 17
+    min: 0.126498, 0.131217, 0.215105
+    max: 0.185498, 0.145217, 0.231105
+    color: '#D99564'
+    shape: Ellipsoid
+    yaw: 40.12401
+    pitch: 7
+  - label: folded cabbage leaf 18
+    min: -0.276690, -0.023373, 0.186324
+    max: -0.164690, 0.041627, 0.221324
+    color: '#B7390A'
+    shape: WedgeY
+    yaw: 177.63177
+  - label: folded cabbage leaf 19
+    min: 0.104975, -0.192693, 0.185080
+    max: 0.216975, -0.127693, 0.220080
+    color: '#AF4C27'
+    shape: WedgeYReverse
+    yaw: -44.86048
+    pitch: 15
+  - label: folded cabbage leaf 20
+    min: -0.066769, 0.200410, 0.183868
+    max: 0.045231, 0.265410, 0.218868
+    color: '#C9592F'
+    shape: WedgeY
+    yaw: 92.64727
+    pitch: 30
+  - label: folded cabbage leaf 21
+    min: -0.209170, -0.216047, 0.182688
+    max: -0.097170, -0.151047, 0.217688
+    color: '#C26643'
+    shape: WedgeYReverse
+    yaw: -129.84498
+    pitch: -30
+  - label: folded cabbage leaf 22
+    min: 0.186637, 0.000145, 0.181535
+    max: 0.298637, 0.065145, 0.216535
+    color: '#E57D21'
+    shape: WedgeY
+    yaw: 7.66277
+    pitch: -15
+  - label: cabbage stem rib 22
+    min: 0.205137, 0.025645, 0.209035
+    max: 0.264137, 0.039645, 0.225035
+    color: '#D99564'
+    shape: Ellipsoid
+    yaw: 7.66277
+    pitch: 7
+  - label: folded cabbage leaf 23
+    min: -0.261585, 0.110542, 0.180410
+    max: -0.149585, 0.175542, 0.215410
+    color: '#B7390A'
+    shape: WedgeYReverse
+    yaw: 145.17052
+  - label: folded cabbage leaf 24
+    min: 0.000177, -0.282217, 0.179309
+    max: 0.112177, -0.217217, 0.214309
+    color: '#AF4C27'
+    shape: WedgeY
+    yaw: -77.32173
+    pitch: 15
+  - label: folded cabbage leaf 25
+    min: 0.073938, 0.194256, 0.178231
+    max: 0.185938, 0.259256, 0.213231
+    color: '#C9592F'
+    shape: WedgeYReverse
+    yaw: 60.18602
+    pitch: 30
+- type: cmu3DModel
+  id: CMU3DFoodSoupBisqueCloud
+  referenceRsi: /Textures/CMU14/ThreeD/EquipmentReferences.rsi
+  referenceState: CMU3DFoodSoupBisqueCloud
+  label: Bisque bowl
+  status: draft
+  sourcePrototypes:
+  - FoodSoupBisque
+  description: Source bowl + bisque layers reconstructed as a ceramic shell, liquid surface and orange/gold ingredient
+    pieces. Ingredient depth is inferred; dynamic liquid level, tint, pouring and spills are not implemented.
+  placement: surface
+  referencePrototype: FoodSoupBisque
+  sourceDirections: 1
+  parts:
+  - label: ceramic foot ring solid base
+    min: -0.185000, -0.185000, 0.000000
+    max: 0.185000, 0.185000, 0.028000
+    color: '#9E907E'
+    shape: CylinderZ
+  - label: closed ceramic basin floor
+    min: -0.226000, -0.226000, 0.018000
+    max: 0.226000, 0.226000, 0.072000
+    color: '#CDC1B1'
+    shape: CylinderZ
+  - label: flared hollow ceramic wall 01
+    min: 0.185412, -0.0973298, 0.105
+    max: 0.376588, 0.0973298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 0.0
+  - label: flared hollow ceramic wall 02
+    min: 0.1477651, 0.0431702, 0.105
+    max: 0.3389411, 0.2378298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 30.0
+  - label: flared hollow ceramic wall 03
+    min: 0.044912, 0.1460233, 0.105
+    max: 0.236088, 0.340683, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 60.0
+  - label: flared hollow ceramic wall 04
+    min: -0.095588, 0.1836702, 0.105
+    max: 0.095588, 0.3783298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 90.0
+  - label: flared hollow ceramic wall 05
+    min: -0.236088, 0.1460233, 0.105
+    max: -0.044912, 0.340683, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 120.0
+  - label: flared hollow ceramic wall 06
+    min: -0.3389411, 0.0431702, 0.105
+    max: -0.1477651, 0.2378298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 150.0
+  - label: flared hollow ceramic wall 07
+    min: -0.376588, -0.0973298, 0.105
+    max: -0.185412, 0.0973298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 180.0
+  - label: flared hollow ceramic wall 08
+    min: -0.3389411, -0.2378298, 0.105
+    max: -0.1477651, -0.0431702, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 210.0
+  - label: flared hollow ceramic wall 09
+    min: -0.236088, -0.340683, 0.105
+    max: -0.044912, -0.1460233, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 240.0
+  - label: flared hollow ceramic wall 10
+    min: -0.095588, -0.3783298, 0.105
+    max: 0.095588, -0.1836702, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 270.0
+  - label: flared hollow ceramic wall 11
+    min: 0.044912, -0.340683, 0.105
+    max: 0.236088, -0.1460233, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 300.0
+  - label: flared hollow ceramic wall 12
+    min: 0.1477651, -0.2378298, 0.105
+    max: 0.3389411, -0.0431702, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 330.0
+  - label: rolled ceramic rim 01
+    min: 0.334, -0.0985694, 0.166
+    max: 0.366, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 0.0
+  - label: rolled ceramic rim 02
+    min: 0.2871089, 0.0764306, 0.166
+    max: 0.3191089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 30.0
+  - label: rolled ceramic rim 03
+    min: 0.159, 0.2045395, 0.166
+    max: 0.191, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 60.0
+  - label: rolled ceramic rim 04
+    min: -0.016, 0.2514306, 0.166
+    max: 0.016, 0.4485694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 90.0
+  - label: rolled ceramic rim 05
+    min: -0.191, 0.2045395, 0.166
+    max: -0.159, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 120.0
+  - label: rolled ceramic rim 06
+    min: -0.3191089, 0.0764306, 0.166
+    max: -0.2871089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 150.0
+  - label: rolled ceramic rim 07
+    min: -0.366, -0.0985694, 0.166
+    max: -0.334, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 180.0
+  - label: rolled ceramic rim 08
+    min: -0.3191089, -0.2735694, 0.166
+    max: -0.2871089, -0.0764306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 210.0
+  - label: rolled ceramic rim 09
+    min: -0.191, -0.4016783, 0.166
+    max: -0.159, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 240.0
+  - label: rolled ceramic rim 10
+    min: -0.016, -0.4485694, 0.166
+    max: 0.016, -0.2514306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 270.0
+  - label: rolled ceramic rim 11
+    min: 0.159, -0.4016783, 0.166
+    max: 0.191, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 300.0
+  - label: rolled ceramic rim 12
+    min: 0.2871089, -0.2735694, 0.166
+    max: 0.3191089, -0.0764306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 330.0
+  - label: bisque liquid surface
+    min: -0.318000, -0.318000, 0.148500
+    max: 0.318000, 0.318000, 0.173500
+    color: '#B74720'
+    shape: CylinderZ
+  - label: bisque vegetable and seafood piece 01
+    min: 0.019508, -0.019000, 0.172000
+    max: 0.060508, 0.019000, 0.194000
+    color: '#C8682F'
+    shape: Ellipsoid
+  - label: bisque vegetable and seafood piece 02
+    min: -0.077597, 0.027809, 0.172000
+    max: -0.024597, 0.065809, 0.194000
+    color: '#C88614'
+    shape: Ellipsoid
+    yaw: 137.50775
+  - label: bisque vegetable and seafood piece 03
+    min: -0.024679, -0.108119, 0.172000
+    max: 0.040321, -0.070119, 0.194000
+    color: '#B7600E'
+    shape: Ellipsoid
+    yaw: -84.9845
+  - label: bisque vegetable and seafood piece 04
+    min: 0.043905, 0.065004, 0.172000
+    max: 0.084905, 0.103004, 0.194000
+    color: '#B74720'
+    shape: Ellipsoid
+    yaw: 52.52325
+  - label: bisque vegetable and seafood piece 05
+    min: -0.144690, -0.039906, 0.172000
+    max: -0.091690, -0.001906, 0.194000
+    color: '#658032'
+    shape: Ellipsoid
+    yaw: -169.969
+  - label: bisque vegetable and seafood piece 06
+    min: 0.079460, -0.090220, 0.172000
+    max: 0.144460, -0.052220, 0.194000
+    color: '#C8682F'
+    shape: Ellipsoid
+    yaw: -32.46125
+  - label: bisque vegetable and seafood piece 07
+    min: -0.057948, 0.120306, 0.172000
+    max: -0.016948, 0.158306, 0.194000
+    color: '#C88614'
+    shape: Ellipsoid
+    yaw: 105.04651
+  - label: bisque vegetable and seafood piece 08
+    min: -0.097919, -0.156511, 0.172000
+    max: -0.044919, -0.118511, 0.194000
+    color: '#B7600E'
+    shape: Ellipsoid
+    yaw: -117.44574
+  - label: bisque vegetable and seafood piece 09
+    min: 0.122449, 0.037587, 0.172000
+    max: 0.187449, 0.075587, 0.194000
+    color: '#B74720'
+    shape: Ellipsoid
+    yaw: 20.06201
+  - label: bisque vegetable and seafood piece 10
+    min: -0.181699, 0.047541, 0.172000
+    max: -0.140699, 0.085541, 0.194000
+    color: '#658032'
+    shape: Ellipsoid
+    yaw: 157.56976
+  - label: bisque vegetable and seafood piece 11
+    min: 0.051208, -0.185059, 0.172000
+    max: 0.104208, -0.147059, 0.194000
+    color: '#C8682F'
+    shape: Ellipsoid
+    yaw: -64.92249
+  - label: bisque vegetable and seafood piece 12
+    min: 0.024925, 0.164078, 0.172000
+    max: 0.089925, 0.202078, 0.194000
+    color: '#C88614'
+    shape: Ellipsoid
+    yaw: 72.58526
+  - label: bisque vegetable and seafood piece 13
+    min: -0.193579, -0.119302, 0.172000
+    max: -0.152579, -0.081302, 0.194000
+    color: '#B7600E'
+    shape: Ellipsoid
+    yaw: -149.90699
+  - label: bisque vegetable and seafood piece 14
+    min: 0.176540, -0.063638, 0.172000
+    max: 0.229540, -0.025638, 0.194000
+    color: '#B74720'
+    shape: Ellipsoid
+    yaw: -12.39924
+  - label: bisque vegetable and seafood piece 15
+    min: -0.156412, 0.157253, 0.172000
+    max: -0.091412, 0.195253, 0.194000
+    color: '#658032'
+    shape: Ellipsoid
+    yaw: 125.10851
+  - label: bisque vegetable and seafood piece 16
+    min: -0.049127, -0.239910, 0.172000
+    max: -0.008127, -0.201910, 0.194000
+    color: '#C8682F'
+    shape: Ellipsoid
+    yaw: -97.38374
+  - label: bisque vegetable and seafood piece 17
+    min: 0.149240, 0.129113, 0.172000
+    max: 0.202240, 0.167113, 0.194000
+    color: '#C88614'
+    shape: Ellipsoid
+    yaw: 40.12401
+  - label: bisque vegetable and seafood piece 18
+    min: -0.268990, -0.009219, 0.172000
+    max: -0.203990, 0.028781, 0.194000
+    color: '#B7600E'
+    shape: Ellipsoid
+    yaw: 177.63177
+  - label: bisque vegetable and seafood piece 19
+    min: 0.152001, -0.190663, 0.172000
+    max: 0.193001, -0.152663, 0.194000
+    color: '#B74720'
+    shape: Ellipsoid
+    yaw: -44.86048
+  - label: bisque vegetable and seafood piece 20
+    min: -0.038040, 0.230585, 0.172000
+    max: 0.014960, 0.268585, 0.194000
+    color: '#658032'
+    shape: Ellipsoid
+    yaw: 92.64727
+  - label: bisque vegetable and seafood piece 21
+    min: -0.196637, -0.215689, 0.172000
+    max: -0.131637, -0.177689, 0.194000
+    color: '#C8682F'
+    shape: Ellipsoid
+    yaw: -129.84498
+  - label: bisque vegetable and seafood piece 22
+    min: 0.239509, 0.015983, 0.172000
+    max: 0.280509, 0.053983, 0.194000
+    color: '#C88614'
+    shape: Ellipsoid
+    yaw: 7.66277
+  - label: bisque vegetable and seafood piece 23
+    min: -0.246805, 0.134284, 0.172000
+    max: -0.193805, 0.172284, 0.194000
+    color: '#B7600E'
+    shape: Ellipsoid
+    yaw: 145.17052
+  - label: bisque vegetable and seafood piece 24
+    min: 0.027699, -0.286596, 0.172000
+    max: 0.092699, -0.248596, 0.194000
+    color: '#B74720'
+    shape: Ellipsoid
+    yaw: -77.32173
+  - label: bisque vegetable and seafood piece 25
+    min: 0.118741, 0.223991, 0.172000
+    max: 0.159741, 0.261991, 0.194000
+    color: '#658032'
+    shape: Ellipsoid
+    yaw: 60.18602
+  - label: bisque vegetable and seafood piece 26
+    min: -0.298701, -0.105838, 0.172000
+    max: -0.245701, -0.067838, 0.194000
+    color: '#C8682F'
+    shape: Ellipsoid
+    yaw: -162.30623
+  - label: bisque vegetable and seafood piece 27
+    min: 0.231907, -0.141165, 0.172000
+    max: 0.296907, -0.103165, 0.194000
+    color: '#C88614'
+    shape: Ellipsoid
+    yaw: -24.79848
+- type: cmu3DModel
+  id: CMU3DFoodSoupChiliHotCloud
+  referenceRsi: /Textures/CMU14/ThreeD/EquipmentReferences.rsi
+  referenceState: CMU3DFoodSoupChiliHotCloud
+  label: Hot chili bowl
+  status: draft
+  sourcePrototypes:
+  - FoodSoupChiliHot
+  description: Original bowl + chili-hot layers with a red stew surface, morsels and raised curved pepper over the right
+    rim. Pepper shape, backside and liquid depth are inferred; no heat animation or spill/consumption state is claimed.
+  placement: surface
+  referencePrototype: FoodSoupChiliHot
+  sourceDirections: 1
+  parts:
+  - label: ceramic foot ring solid base
+    min: -0.185000, -0.185000, 0.000000
+    max: 0.185000, 0.185000, 0.028000
+    color: '#9E907E'
+    shape: CylinderZ
+  - label: closed ceramic basin floor
+    min: -0.226000, -0.226000, 0.018000
+    max: 0.226000, 0.226000, 0.072000
+    color: '#CDC1B1'
+    shape: CylinderZ
+  - label: flared hollow ceramic wall 01
+    min: 0.185412, -0.0973298, 0.105
+    max: 0.376588, 0.0973298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 0.0
+  - label: flared hollow ceramic wall 02
+    min: 0.1477651, 0.0431702, 0.105
+    max: 0.3389411, 0.2378298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 30.0
+  - label: flared hollow ceramic wall 03
+    min: 0.044912, 0.1460233, 0.105
+    max: 0.236088, 0.340683, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 60.0
+  - label: flared hollow ceramic wall 04
+    min: -0.095588, 0.1836702, 0.105
+    max: 0.095588, 0.3783298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 90.0
+  - label: flared hollow ceramic wall 05
+    min: -0.236088, 0.1460233, 0.105
+    max: -0.044912, 0.340683, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 120.0
+  - label: flared hollow ceramic wall 06
+    min: -0.3389411, 0.0431702, 0.105
+    max: -0.1477651, 0.2378298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 150.0
+  - label: flared hollow ceramic wall 07
+    min: -0.376588, -0.0973298, 0.105
+    max: -0.185412, 0.0973298, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 180.0
+  - label: flared hollow ceramic wall 08
+    min: -0.3389411, -0.2378298, 0.105
+    max: -0.1477651, -0.0431702, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 210.0
+  - label: flared hollow ceramic wall 09
+    min: -0.236088, -0.340683, 0.105
+    max: -0.044912, -0.1460233, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 240.0
+  - label: flared hollow ceramic wall 10
+    min: -0.095588, -0.3783298, 0.105
+    max: 0.095588, -0.1836702, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 270.0
+  - label: flared hollow ceramic wall 11
+    min: 0.044912, -0.340683, 0.105
+    max: 0.236088, -0.1460233, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 300.0
+  - label: flared hollow ceramic wall 12
+    min: 0.1477651, -0.2378298, 0.105
+    max: 0.3389411, -0.0431702, 0.133
+    color: '#BFAE99'
+    pitch: 42.03177
+    yaw: 330.0
+  - label: rolled ceramic rim 01
+    min: 0.334, -0.0985694, 0.166
+    max: 0.366, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 0.0
+  - label: rolled ceramic rim 02
+    min: 0.2871089, 0.0764306, 0.166
+    max: 0.3191089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 30.0
+  - label: rolled ceramic rim 03
+    min: 0.159, 0.2045395, 0.166
+    max: 0.191, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 60.0
+  - label: rolled ceramic rim 04
+    min: -0.016, 0.2514306, 0.166
+    max: 0.016, 0.4485694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 90.0
+  - label: rolled ceramic rim 05
+    min: -0.191, 0.2045395, 0.166
+    max: -0.159, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 120.0
+  - label: rolled ceramic rim 06
+    min: -0.3191089, 0.0764306, 0.166
+    max: -0.2871089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 150.0
+  - label: rolled ceramic rim 07
+    min: -0.366, -0.0985694, 0.166
+    max: -0.334, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 180.0
+  - label: rolled ceramic rim 08
+    min: -0.3191089, -0.2735694, 0.166
+    max: -0.2871089, -0.0764306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 210.0
+  - label: rolled ceramic rim 09
+    min: -0.191, -0.4016783, 0.166
+    max: -0.159, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 240.0
+  - label: rolled ceramic rim 10
+    min: -0.016, -0.4485694, 0.166
+    max: 0.016, -0.2514306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 270.0
+  - label: rolled ceramic rim 11
+    min: 0.159, -0.4016783, 0.166
+    max: 0.191, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 300.0
+  - label: rolled ceramic rim 12
+    min: 0.2871089, -0.2735694, 0.166
+    max: 0.3191089, -0.0764306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 330.0
+  - label: hot chili liquid surface
+    min: -0.314000, -0.314000, 0.151000
+    max: 0.314000, 0.314000, 0.177000
+    color: '#B80000'
+    shape: CylinderZ
+  - label: chili bean and tomato piece 01
+    min: 0.016770, -0.016500, 0.170500
+    max: 0.063770, 0.016500, 0.191500
+    color: '#E00000'
+    shape: Ellipsoid
+  - label: chili bean and tomato piece 02
+    min: -0.074931, 0.030615, 0.170500
+    max: -0.027931, 0.063615, 0.191500
+    color: '#E23D12'
+    shape: Ellipsoid
+    yaw: 137.50775
+  - label: chili bean and tomato piece 03
+    min: -0.015628, -0.106202, 0.170500
+    max: 0.031372, -0.073202, 0.191500
+    color: '#C5320C'
+    shape: Ellipsoid
+    yaw: -84.9845
+  - label: chili bean and tomato piece 04
+    min: 0.041326, 0.068054, 0.170500
+    max: 0.088326, 0.101054, 0.191500
+    color: '#FF5B2C'
+    shape: Ellipsoid
+    yaw: 52.52325
+  - label: chili bean and tomato piece 05
+    min: -0.142464, -0.037543, 0.170500
+    max: -0.095464, -0.004543, 0.191500
+    color: '#E00000'
+    shape: Ellipsoid
+    yaw: -169.969
+  - label: chili bean and tomato piece 06
+    min: 0.089193, -0.088186, 0.170500
+    max: 0.136193, -0.055186, 0.191500
+    color: '#E23D12'
+    shape: Ellipsoid
+    yaw: -32.46125
+  - label: chili bean and tomato piece 07
+    min: -0.061193, 0.123718, 0.170500
+    max: -0.014193, 0.156718, 0.191500
+    color: '#C5320C'
+    shape: Ellipsoid
+    yaw: 105.04651
+  - label: chili bean and tomato piece 08
+    min: -0.095386, -0.154911, 0.170500
+    max: -0.048386, -0.121911, 0.191500
+    color: '#FF5B2C'
+    shape: Ellipsoid
+    yaw: -117.44574
+  - label: chili bean and tomato piece 09
+    min: 0.132463, 0.040457, 0.170500
+    max: 0.179463, 0.073457, 0.191500
+    color: '#E00000'
+    shape: Ellipsoid
+    yaw: 20.06201
+  - label: chili bean and tomato piece 10
+    min: -0.185754, 0.050476, 0.170500
+    max: -0.138754, 0.083476, 0.191500
+    color: '#E23D12'
+    shape: Ellipsoid
+    yaw: 157.56976
+  - label: chili bean and tomato piece 11
+    min: 0.054717, -0.183645, 0.170500
+    max: 0.101717, -0.150645, 0.191500
+    color: '#C5320C'
+    shape: Ellipsoid
+    yaw: -64.92249
+  - label: chili bean and tomato piece 12
+    min: 0.034301, 0.167777, 0.170500
+    max: 0.081301, 0.200777, 0.191500
+    color: '#FF5B2C'
+    shape: Ellipsoid
+    yaw: 72.58526
+  - label: chili bean and tomato piece 13
+    min: -0.197711, -0.117458, 0.170500
+    max: -0.150711, -0.084458, 0.191500
+    color: '#E00000'
+    shape: Ellipsoid
+    yaw: -149.90699
+  - label: chili bean and tomato piece 14
+    min: 0.180869, -0.061431, 0.170500
+    max: 0.227869, -0.028431, 0.191500
+    color: '#E23D12'
+    shape: Ellipsoid
+    yaw: -12.39924
+  - label: chili bean and tomato piece 15
+    min: -0.148223, 0.160907, 0.170500
+    max: -0.101223, 0.193907, 0.191500
+    color: '#C5320C'
+    shape: Ellipsoid
+    yaw: 125.10851
+  - label: chili bean and tomato piece 16
+    min: -0.052315, -0.238856, 0.170500
+    max: -0.005315, -0.205856, 0.191500
+    color: '#FF5B2C'
+    shape: Ellipsoid
+    yaw: -97.38374
+  - label: chili bean and tomato piece 17
+    min: 0.153390, 0.132582, 0.170500
+    max: 0.200390, 0.165582, 0.191500
+    color: '#E00000'
+    shape: Ellipsoid
+    yaw: 40.12401
+  - label: chili bean and tomato piece 18
+    min: -0.261538, -0.006655, 0.170500
+    max: -0.214538, 0.026345, 0.191500
+    color: '#E23D12'
+    shape: Ellipsoid
+    yaw: 177.63177
+  - label: chili bean and tomato piece 19
+    min: 0.150130, -0.189286, 0.170500
+    max: 0.197130, -0.156286, 0.191500
+    color: '#C5320C'
+    shape: Ellipsoid
+    yaw: -44.86048
+  - label: chili bean and tomato piece 20
+    min: -0.035115, 0.234719, 0.170500
+    max: 0.011885, 0.267719, 0.191500
+    color: '#FF5B2C'
+    shape: Ellipsoid
+    yaw: 92.64727
+  - label: chili bean and tomato piece 21
+    min: -0.188711, -0.214476, 0.170500
+    max: -0.141711, -0.181476, 0.191500
+    color: '#E00000'
+    shape: Ellipsoid
+    yaw: -129.84498
+  - label: chili bean and tomato piece 22
+    min: 0.238211, 0.018712, 0.170500
+    max: 0.285211, 0.051712, 0.191500
+    color: '#E23D12'
+    shape: Ellipsoid
+    yaw: 7.66277
+  - label: chili bean and tomato piece 23
+    min: -0.245246, 0.137787, 0.170500
+    max: -0.198246, 0.170787, 0.191500
+    color: '#C5320C'
+    shape: Ellipsoid
+    yaw: 145.17052
+  - label: chili bean and tomato piece 24
+    min: 0.037093, -0.285847, 0.170500
+    max: 0.084093, -0.252847, 0.191500
+    color: '#FF5B2C'
+    shape: Ellipsoid
+    yaw: -77.32173
+  - label: curved red chili pepper 1
+    min: 0.179379, -0.010500, 0.159000
+    max: 0.270621, 0.049500, 0.219000
+    color: '#E00000'
+    shape: CylinderX
+    yaw: 5.71059
+    pitch: 7.55739
+  - label: continuous pepper bend 1
+    min: 0.240500, -0.005500, 0.165500
+    max: 0.299500, 0.053500, 0.224500
+    color: '#E00000'
+    shape: Ellipsoid
+  - label: curved red chili pepper 2
+    min: 0.266081, 0.008500, 0.184500
+    max: 0.352919, 0.059500, 0.235500
+    color: '#D10000'
+    shape: CylinderX
+    yaw: 14.20677
+    pitch: 20.21032
+  - label: continuous pepper bend 2
+    min: 0.324000, 0.019000, 0.200000
+    max: 0.374000, 0.069000, 0.250000
+    color: '#D10000'
+    shape: Ellipsoid
+  - label: curved red chili pepper 3
+    min: 0.336202, 0.036500, 0.226500
+    max: 0.402798, 0.078500, 0.268500
+    color: '#C00000'
+    shape: CylinderX
+    yaw: 33.36637
+    pitch: 42.50996
+  - label: continuous pepper bend 3
+    min: 0.369500, 0.050500, 0.249500
+    max: 0.410500, 0.091500, 0.290500
+    color: '#C00000'
+    shape: Ellipsoid
+  - label: curved red chili pepper 4
+    min: 0.371390, 0.062500, 0.280500
+    max: 0.432610, 0.095500, 0.313500
+    color: '#E00000'
+    shape: CylinderX
+    yaw: 33.69007
+    pitch: 61.89084
+  - label: continuous pepper bend 4
+    min: 0.398000, 0.071000, 0.308000
+    max: 0.430000, 0.103000, 0.340000
+    color: '#E00000'
+    shape: Ellipsoid
+  - label: curved red chili pepper 5
+    min: 0.390885, 0.076500, 0.330000
+    max: 0.428115, 0.100500, 0.354000
+    color: '#B80000'
+    shape: CylinderX
+    yaw: 161.56505
+    pitch: 75.23687
+- type: cmu3DModel
+  id: CMU3DFoodPlateCloud
+  label: Round ceramic dinner plate
+  status: draft
+  sourcePrototypes:
+  - FoodPlate
+  description: Source plate reconstructed with a recessed center, rising ceramic dish lip and foot. Plan diameter follows
+    the 28-pixel source width; thickness and underside are inferred. Broken and carried states are not covered.
+  placement: surface
+  referencePrototype: FoodPlate
+  referenceRsi: /Textures/Objects/Consumable/Food/plates.rsi
+  referenceState: plate
+  sourceDirections: 1
+  parts:
+  - label: plate foot
+    min: -0.290000, -0.290000, 0.000000
+    max: 0.290000, 0.290000, 0.018000
+    color: '#C2C2C2'
+    shape: CylinderZ
+  - label: plate center dish
+    min: -0.352000, -0.352000, 0.012000
+    max: 0.352000, 0.352000, 0.034000
+    color: '#D0D0D0'
+    shape: CylinderZ
+  - label: shallow sloping dish rim 01
+    min: 0.327836, -0.1150043, 0.0345
+    max: 0.427164, 0.1150043, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 0.0
+  - label: shallow sloping dish rim 02
+    min: 0.2772606, 0.0737457, 0.0345
+    max: 0.3765886, 0.3037543, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 30.0
+  - label: shallow sloping dish rim 03
+    min: 0.139086, 0.2119203, 0.0345
+    max: 0.238414, 0.4419289, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 60.0
+  - label: shallow sloping dish rim 04
+    min: -0.049664, 0.2624957, 0.0345
+    max: 0.049664, 0.4925043, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 90.0
+  - label: shallow sloping dish rim 05
+    min: -0.238414, 0.2119203, 0.0345
+    max: -0.139086, 0.4419289, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 120.0
+  - label: shallow sloping dish rim 06
+    min: -0.3765886, 0.0737457, 0.0345
+    max: -0.2772606, 0.3037543, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 150.0
+  - label: shallow sloping dish rim 07
+    min: -0.427164, -0.1150043, 0.0345
+    max: -0.327836, 0.1150043, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 180.0
+  - label: shallow sloping dish rim 08
+    min: -0.3765886, -0.3037543, 0.0345
+    max: -0.2772606, -0.0737457, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 210.0
+  - label: shallow sloping dish rim 09
+    min: -0.238414, -0.4419289, 0.0345
+    max: -0.139086, -0.2119203, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 240.0
+  - label: shallow sloping dish rim 10
+    min: -0.049664, -0.4925043, 0.0345
+    max: 0.049664, -0.2624957, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 270.0
+  - label: shallow sloping dish rim 11
+    min: 0.139086, -0.4419289, 0.0345
+    max: 0.238414, -0.2119203, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 300.0
+  - label: shallow sloping dish rim 12
+    min: 0.2772606, -0.3037543, 0.0345
+    max: 0.3765886, -0.0737457, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 330.0
+  - label: plate rolled edge 01
+    min: 0.415500, -0.056500, 0.046500
+    max: 0.436500, 0.056500, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+  - label: plate rolled edge 02
+    min: 0.400984, 0.053757, 0.046500
+    max: 0.421984, 0.166757, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: 15
+  - label: plate rolled edge 03
+    min: 0.358427, 0.156500, 0.046500
+    max: 0.379427, 0.269500, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: 30
+  - label: plate rolled edge 04
+    min: 0.290727, 0.244727, 0.046500
+    max: 0.311727, 0.357727, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: 45
+  - label: plate rolled edge 05
+    min: 0.202500, 0.312427, 0.046500
+    max: 0.223500, 0.425427, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: 60
+  - label: plate rolled edge 06
+    min: 0.099757, 0.354984, 0.046500
+    max: 0.120757, 0.467984, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: 75
+  - label: plate rolled edge 07
+    min: -0.010500, 0.369500, 0.046500
+    max: 0.010500, 0.482500, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: 90
+  - label: plate rolled edge 08
+    min: -0.120757, 0.354984, 0.046500
+    max: -0.099757, 0.467984, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: 105
+  - label: plate rolled edge 09
+    min: -0.223500, 0.312427, 0.046500
+    max: -0.202500, 0.425427, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: 120
+  - label: plate rolled edge 10
+    min: -0.311727, 0.244727, 0.046500
+    max: -0.290727, 0.357727, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: 135
+  - label: plate rolled edge 11
+    min: -0.379427, 0.156500, 0.046500
+    max: -0.358427, 0.269500, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: 150
+  - label: plate rolled edge 12
+    min: -0.421984, 0.053757, 0.046500
+    max: -0.400984, 0.166757, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: 165
+  - label: plate rolled edge 13
+    min: -0.436500, -0.056500, 0.046500
+    max: -0.415500, 0.056500, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: -180
+  - label: plate rolled edge 14
+    min: -0.421984, -0.166757, 0.046500
+    max: -0.400984, -0.053757, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: -165
+  - label: plate rolled edge 15
+    min: -0.379427, -0.269500, 0.046500
+    max: -0.358427, -0.156500, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: -150
+  - label: plate rolled edge 16
+    min: -0.311727, -0.357727, 0.046500
+    max: -0.290727, -0.244727, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: -135
+  - label: plate rolled edge 17
+    min: -0.223500, -0.425427, 0.046500
+    max: -0.202500, -0.312427, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: -120
+  - label: plate rolled edge 18
+    min: -0.120757, -0.467984, 0.046500
+    max: -0.099757, -0.354984, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: -105
+  - label: plate rolled edge 19
+    min: -0.010500, -0.482500, 0.046500
+    max: 0.010500, -0.369500, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: -90
+  - label: plate rolled edge 20
+    min: 0.099757, -0.467984, 0.046500
+    max: 0.120757, -0.354984, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: -75
+  - label: plate rolled edge 21
+    min: 0.202500, -0.425427, 0.046500
+    max: 0.223500, -0.312427, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: -60
+  - label: plate rolled edge 22
+    min: 0.290727, -0.357727, 0.046500
+    max: 0.311727, -0.244727, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: -45
+  - label: plate rolled edge 23
+    min: 0.358427, -0.269500, 0.046500
+    max: 0.379427, -0.156500, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: -30
+  - label: plate rolled edge 24
+    min: 0.400984, -0.166757, 0.046500
+    max: 0.421984, -0.053757, 0.067500
+    color: '#EFEFEF'
+    shape: CylinderY
+    yaw: -15
+- type: cmu3DModel
+  id: CMU3DFoodBurgerBigCloud
+  label: Big bite stacked burger
+  status: draft
+  sourcePrototypes:
+  - FoodBurgerBig
+  description: Source bigbite sprite reconstructed as three solid patties with separate cheese slices, lettuce, lower
+    bun and domed upper bun. Original golden/brown/green palette and unusually tall stack retained. Depth and hidden
+    ingredients are inferred; eating/carried states remain outside this draft.
+  placement: surface
+  referencePrototype: FoodBurgerBig
+  referenceRsi: /Textures/Objects/Consumable/Food/burger.rsi
+  referenceState: bigbite
+  sourceDirections: 1
+  parts:
+  - label: bottom baked bun
+    min: -0.245000, -0.235000, 0.001500
+    max: 0.245000, 0.235000, 0.106500
+    color: '#8C4C2A'
+    shape: Ellipsoid
+  - label: bottom bun crumb
+    min: -0.240000, -0.230000, 0.046500
+    max: 0.240000, 0.230000, 0.111500
+    color: '#D9822B'
+    shape: Ellipsoid
+  - label: lettuce ruffle 01
+    min: 0.153000, -0.036500, 0.083500
+    max: 0.255000, 0.036500, 0.110500
+    color: '#64B542'
+    shape: SlantedXReverse
+    pitch: -9
+  - label: lettuce ruffle 02
+    min: 0.114039, 0.078706, 0.083500
+    max: 0.216039, 0.151706, 0.110500
+    color: '#88D066'
+    shape: SlantedX
+    yaw: 36
+  - label: lettuce ruffle 03
+    min: 0.012039, 0.149907, 0.083500
+    max: 0.114039, 0.222907, 0.110500
+    color: '#39952D'
+    shape: SlantedXReverse
+    yaw: 72
+    pitch: 9
+  - label: lettuce ruffle 04
+    min: -0.114039, 0.149907, 0.083500
+    max: -0.012039, 0.222907, 0.110500
+    color: '#64B542'
+    shape: SlantedX
+    yaw: 108
+    pitch: -9
+  - label: lettuce ruffle 05
+    min: -0.216039, 0.078706, 0.083500
+    max: -0.114039, 0.151706, 0.110500
+    color: '#88D066'
+    shape: SlantedXReverse
+    yaw: 144
+  - label: lettuce ruffle 06
+    min: -0.255000, -0.036500, 0.083500
+    max: -0.153000, 0.036500, 0.110500
+    color: '#39952D'
+    shape: SlantedX
+    yaw: -180
+    pitch: 9
+  - label: lettuce ruffle 07
+    min: -0.216039, -0.151706, 0.083500
+    max: -0.114039, -0.078706, 0.110500
+    color: '#64B542'
+    shape: SlantedXReverse
+    yaw: -144
+    pitch: -9
+  - label: lettuce ruffle 08
+    min: -0.114039, -0.222907, 0.083500
+    max: -0.012039, -0.149907, 0.110500
+    color: '#88D066'
+    shape: SlantedX
+    yaw: -108
+  - label: lettuce ruffle 09
+    min: 0.012039, -0.222907, 0.083500
+    max: 0.114039, -0.149907, 0.110500
+    color: '#39952D'
+    shape: SlantedXReverse
+    yaw: -72
+    pitch: 9
+  - label: lettuce ruffle 10
+    min: 0.114039, -0.151706, 0.083500
+    max: 0.216039, -0.078706, 0.110500
+    color: '#64B542'
+    shape: SlantedX
+    yaw: -36
+    pitch: -9
+  - label: grilled beef patty 1
+    min: -0.250000, -0.240000, 0.103500
+    max: 0.250000, 0.240000, 0.174500
+    color: '#663931'
+    shape: CylinderZ
+  - label: patty edge 1-1
+    min: 0.189000, -0.023500, 0.112500
+    max: 0.255000, 0.023500, 0.165500
+    color: '#52251D'
+    shape: Ellipsoid
+  - label: patty edge 1-2
+    min: 0.035602, 0.175271, 0.112500
+    max: 0.101602, 0.222271, 0.165500
+    color: '#844C30'
+    shape: Ellipsoid
+    yaw: 72
+  - label: patty edge 1-3
+    min: -0.212602, 0.099347, 0.112500
+    max: -0.146602, 0.146347, 0.165500
+    color: '#52251D'
+    shape: Ellipsoid
+    yaw: 144
+  - label: patty edge 1-4
+    min: -0.212602, -0.146347, 0.112500
+    max: -0.146602, -0.099347, 0.165500
+    color: '#844C30'
+    shape: Ellipsoid
+    yaw: -144
+  - label: patty edge 1-5
+    min: 0.035602, -0.222271, 0.112500
+    max: 0.101602, -0.175271, 0.165500
+    color: '#52251D'
+    shape: Ellipsoid
+    yaw: -72
+  - label: cheese slice 1
+    min: -0.175000, -0.175000, 0.172000
+    max: 0.175000, 0.175000, 0.188000
+    color: '#F6C736'
+    yaw: 10
+  - label: cheese drape 1
+    min: 0.026000, -0.238500, 0.146500
+    max: 0.122000, -0.193500, 0.175500
+    color: '#E4AE1C'
+    shape: WedgeY
+  - label: grilled beef patty 2
+    min: -0.250000, -0.240000, 0.197500
+    max: 0.250000, 0.240000, 0.268500
+    color: '#663931'
+    shape: CylinderZ
+  - label: patty edge 2-1
+    min: 0.171476, 0.057888, 0.206500
+    max: 0.237476, 0.104888, 0.259500
+    color: '#52251D'
+    shape: Ellipsoid
+  - label: patty edge 2-2
+    min: -0.052033, 0.184730, 0.206500
+    max: 0.013967, 0.231730, 0.259500
+    color: '#844C30'
+    shape: Ellipsoid
+    yaw: 72
+  - label: patty edge 2-3
+    min: -0.249239, 0.023805, 0.206500
+    max: -0.183239, 0.070805, 0.259500
+    color: '#52251D'
+    shape: Ellipsoid
+    yaw: 144
+  - label: patty edge 2-4
+    min: -0.147610, -0.202494, 0.206500
+    max: -0.081610, -0.155494, 0.259500
+    color: '#844C30'
+    shape: Ellipsoid
+    yaw: -144
+  - label: patty edge 2-5
+    min: 0.112406, -0.181430, 0.206500
+    max: 0.178406, -0.134430, 0.259500
+    color: '#52251D'
+    shape: Ellipsoid
+    yaw: -72
+  - label: cheese slice 2
+    min: -0.175000, -0.175000, 0.266000
+    max: 0.175000, 0.175000, 0.282000
+    color: '#F6C736'
+    yaw: 41
+  - label: cheese drape 2
+    min: 0.026000, -0.238500, 0.240500
+    max: 0.122000, -0.193500, 0.269500
+    color: '#E4AE1C'
+    shape: WedgeY
+  - label: grilled beef patty 3
+    min: -0.250000, -0.240000, 0.289500
+    max: 0.250000, 0.240000, 0.360500
+    color: '#663931'
+    shape: CylinderZ
+  - label: patty edge 3-1
+    min: 0.121669, 0.126427, 0.298500
+    max: 0.187669, 0.173427, 0.351500
+    color: '#52251D'
+    shape: Ellipsoid
+  - label: patty edge 3-2
+    min: -0.136663, 0.161315, 0.298500
+    max: -0.070663, 0.208315, 0.351500
+    color: '#844C30'
+    shape: Ellipsoid
+    yaw: 72
+  - label: patty edge 3-3
+    min: -0.251736, -0.059205, 0.298500
+    max: -0.185736, -0.012205, 0.351500
+    color: '#52251D'
+    shape: Ellipsoid
+    yaw: 144
+  - label: patty edge 3-4
+    min: -0.064523, -0.230382, 0.298500
+    max: 0.001477, -0.183382, 0.351500
+    color: '#844C30'
+    shape: Ellipsoid
+    yaw: -144
+  - label: patty edge 3-5
+    min: 0.166254, -0.115655, 0.298500
+    max: 0.232254, -0.068655, 0.351500
+    color: '#52251D'
+    shape: Ellipsoid
+    yaw: -72
+  - label: cheese slice 3
+    min: -0.175000, -0.175000, 0.358000
+    max: 0.175000, 0.175000, 0.374000
+    color: '#F6C736'
+    yaw: 72
+  - label: cheese drape 3
+    min: 0.026000, -0.238500, 0.332500
+    max: 0.122000, -0.193500, 0.361500
+    color: '#E4AE1C'
+    shape: WedgeY
+  - label: top bun toasted edge
+    min: -0.253000, -0.244000, 0.364500
+    max: 0.253000, 0.244000, 0.465500
+    color: '#9C592D'
+    shape: Ellipsoid
+  - label: top rounded golden bun
+    min: -0.236000, -0.227000, 0.365000
+    max: 0.236000, 0.227000, 0.527000
+    color: '#D9822B'
+    shape: Ellipsoid
+  - label: bun baked highlight 01
+    min: 0.018926, -0.013000, 0.523556
+    max: 0.052926, 0.013000, 0.532556
+    color: '#F2A349'
+    shape: Ellipsoid
+  - label: bun baked highlight 02
+    min: -0.062883, 0.029033, 0.521526
+    max: -0.028883, 0.055033, 0.530526
+    color: '#FBC469'
+    shape: Ellipsoid
+    yaw: 137.50775
+  - label: bun baked highlight 03
+    min: -0.009977, -0.093025, 0.519261
+    max: 0.024023, -0.067025, 0.528261
+    color: '#FAD481'
+    shape: Ellipsoid
+    yaw: -84.9845
+  - label: bun baked highlight 04
+    min: 0.040833, 0.062432, 0.517273
+    max: 0.074833, 0.088432, 0.526273
+    color: '#F2A349'
+    shape: Ellipsoid
+    yaw: 52.52325
+  - label: bun baked highlight 05
+    min: -0.123130, -0.031773, 0.515537
+    max: -0.089130, -0.005773, 0.524537
+    color: '#FBC469'
+    shape: Ellipsoid
+    yaw: -169.969
+  - label: bun baked highlight 06
+    min: 0.083536, -0.076953, 0.513139
+    max: 0.117536, -0.050953, 0.522139
+    color: '#FAD481'
+    shape: Ellipsoid
+    yaw: -32.46125
+  - label: bun baked highlight 07
+    min: -0.050627, 0.112092, 0.510099
+    max: -0.016627, 0.138092, 0.519099
+    color: '#F2A349'
+    shape: Ellipsoid
+    yaw: 105.04651
+  - label: bun baked highlight 08
+    min: -0.081131, -0.136480, 0.507805
+    max: -0.047131, -0.110480, 0.516805
+    color: '#FBC469'
+    shape: Ellipsoid
+    yaw: -117.44574
+  - label: bun baked highlight 09
+    min: 0.122138, 0.037813, 0.506363
+    max: 0.156138, 0.063813, 0.515363
+    color: '#FAD481'
+    shape: Ellipsoid
+    yaw: 20.06201
+  - label: bun baked highlight 10
+    min: -0.161750, 0.046751, 0.503818
+    max: -0.127750, 0.072751, 0.512818
+    color: '#F2A349'
+    shape: Ellipsoid
+    yaw: 157.56976
+  - label: bun baked highlight 11
+    min: 0.052779, -0.162114, 0.499681
+    max: 0.086779, -0.136114, 0.508681
+    color: '#FBC469'
+    shape: Ellipsoid
+    yaw: -64.92249
+  - label: bun baked highlight 12
+    min: 0.034565, 0.151397, 0.496477
+    max: 0.068565, 0.177397, 0.505477
+    color: '#FAD481'
+    shape: Ellipsoid
+    yaw: 72.58526
+- type: cmu3DModel
+  id: CMU3DFoodBurgerCheeseCloud
+  label: Cheeseburger
+  status: draft
+  sourcePrototypes:
+  - FoodBurgerCheese
+  description: Source cheese state with independent lower bun, lettuce ruffles, grilled patty, draped cheese and rounded
+    golden top. Bun highlights follow source colors; unseen construction and exact ingredient stack remain draft.
+  placement: surface
+  referencePrototype: FoodBurgerCheese
+  referenceRsi: /Textures/Objects/Consumable/Food/burger.rsi
+  referenceState: cheese
+  sourceDirections: 1
+  parts:
+  - label: bottom baked bun
+    min: -0.245000, -0.235000, 0.001500
+    max: 0.245000, 0.235000, 0.106500
+    color: '#8C4C2A'
+    shape: Ellipsoid
+  - label: bottom bun crumb
+    min: -0.240000, -0.230000, 0.046500
+    max: 0.240000, 0.230000, 0.111500
+    color: '#D9822B'
+    shape: Ellipsoid
+  - label: lettuce ruffle 01
+    min: 0.153000, -0.036500, 0.083500
+    max: 0.255000, 0.036500, 0.110500
+    color: '#64B542'
+    shape: SlantedXReverse
+    pitch: -9
+  - label: lettuce ruffle 02
+    min: 0.114039, 0.078706, 0.083500
+    max: 0.216039, 0.151706, 0.110500
+    color: '#88D066'
+    shape: SlantedX
+    yaw: 36
+  - label: lettuce ruffle 03
+    min: 0.012039, 0.149907, 0.083500
+    max: 0.114039, 0.222907, 0.110500
+    color: '#39952D'
+    shape: SlantedXReverse
+    yaw: 72
+    pitch: 9
+  - label: lettuce ruffle 04
+    min: -0.114039, 0.149907, 0.083500
+    max: -0.012039, 0.222907, 0.110500
+    color: '#64B542'
+    shape: SlantedX
+    yaw: 108
+    pitch: -9
+  - label: lettuce ruffle 05
+    min: -0.216039, 0.078706, 0.083500
+    max: -0.114039, 0.151706, 0.110500
+    color: '#88D066'
+    shape: SlantedXReverse
+    yaw: 144
+  - label: lettuce ruffle 06
+    min: -0.255000, -0.036500, 0.083500
+    max: -0.153000, 0.036500, 0.110500
+    color: '#39952D'
+    shape: SlantedX
+    yaw: -180
+    pitch: 9
+  - label: lettuce ruffle 07
+    min: -0.216039, -0.151706, 0.083500
+    max: -0.114039, -0.078706, 0.110500
+    color: '#64B542'
+    shape: SlantedXReverse
+    yaw: -144
+    pitch: -9
+  - label: lettuce ruffle 08
+    min: -0.114039, -0.222907, 0.083500
+    max: -0.012039, -0.149907, 0.110500
+    color: '#88D066'
+    shape: SlantedX
+    yaw: -108
+  - label: lettuce ruffle 09
+    min: 0.012039, -0.222907, 0.083500
+    max: 0.114039, -0.149907, 0.110500
+    color: '#39952D'
+    shape: SlantedXReverse
+    yaw: -72
+    pitch: 9
+  - label: lettuce ruffle 10
+    min: 0.114039, -0.151706, 0.083500
+    max: 0.216039, -0.078706, 0.110500
+    color: '#64B542'
+    shape: SlantedX
+    yaw: -36
+    pitch: -9
+  - label: grilled beef patty 1
+    min: -0.250000, -0.240000, 0.109500
+    max: 0.250000, 0.240000, 0.180500
+    color: '#663931'
+    shape: CylinderZ
+  - label: patty edge 1-1
+    min: 0.189000, -0.023500, 0.118500
+    max: 0.255000, 0.023500, 0.171500
+    color: '#52251D'
+    shape: Ellipsoid
+  - label: patty edge 1-2
+    min: 0.035602, 0.175271, 0.118500
+    max: 0.101602, 0.222271, 0.171500
+    color: '#844C30'
+    shape: Ellipsoid
+    yaw: 72
+  - label: patty edge 1-3
+    min: -0.212602, 0.099347, 0.118500
+    max: -0.146602, 0.146347, 0.171500
+    color: '#52251D'
+    shape: Ellipsoid
+    yaw: 144
+  - label: patty edge 1-4
+    min: -0.212602, -0.146347, 0.118500
+    max: -0.146602, -0.099347, 0.171500
+    color: '#844C30'
+    shape: Ellipsoid
+    yaw: -144
+  - label: patty edge 1-5
+    min: 0.035602, -0.222271, 0.118500
+    max: 0.101602, -0.175271, 0.171500
+    color: '#52251D'
+    shape: Ellipsoid
+    yaw: -72
+  - label: cheese slice 1
+    min: -0.175000, -0.175000, 0.178000
+    max: 0.175000, 0.175000, 0.194000
+    color: '#F6C736'
+    yaw: 10
+  - label: cheese drape 1
+    min: 0.026000, -0.238500, 0.152500
+    max: 0.122000, -0.193500, 0.181500
+    color: '#E4AE1C'
+    shape: WedgeY
+  - label: top bun toasted edge
+    min: -0.253000, -0.244000, 0.184500
+    max: 0.253000, 0.244000, 0.285500
+    color: '#9C592D'
+    shape: Ellipsoid
+  - label: top rounded golden bun
+    min: -0.236000, -0.227000, 0.185000
+    max: 0.236000, 0.227000, 0.347000
+    color: '#D9822B'
+    shape: Ellipsoid
+  - label: bun baked highlight 01
+    min: 0.018926, -0.013000, 0.343556
+    max: 0.052926, 0.013000, 0.352556
+    color: '#F2A349'
+    shape: Ellipsoid
+  - label: bun baked highlight 02
+    min: -0.062883, 0.029033, 0.341526
+    max: -0.028883, 0.055033, 0.350526
+    color: '#FBC469'
+    shape: Ellipsoid
+    yaw: 137.50775
+  - label: bun baked highlight 03
+    min: -0.009977, -0.093025, 0.339261
+    max: 0.024023, -0.067025, 0.348261
+    color: '#FAD481'
+    shape: Ellipsoid
+    yaw: -84.9845
+  - label: bun baked highlight 04
+    min: 0.040833, 0.062432, 0.337273
+    max: 0.074833, 0.088432, 0.346273
+    color: '#F2A349'
+    shape: Ellipsoid
+    yaw: 52.52325
+  - label: bun baked highlight 05
+    min: -0.123130, -0.031773, 0.335537
+    max: -0.089130, -0.005773, 0.344537
+    color: '#FBC469'
+    shape: Ellipsoid
+    yaw: -169.969
+  - label: bun baked highlight 06
+    min: 0.083536, -0.076953, 0.333139
+    max: 0.117536, -0.050953, 0.342139
+    color: '#FAD481'
+    shape: Ellipsoid
+    yaw: -32.46125
+  - label: bun baked highlight 07
+    min: -0.050627, 0.112092, 0.330099
+    max: -0.016627, 0.138092, 0.339099
+    color: '#F2A349'
+    shape: Ellipsoid
+    yaw: 105.04651
+  - label: bun baked highlight 08
+    min: -0.081131, -0.136480, 0.327805
+    max: -0.047131, -0.110480, 0.336805
+    color: '#FBC469'
+    shape: Ellipsoid
+    yaw: -117.44574
+  - label: bun baked highlight 09
+    min: 0.122138, 0.037813, 0.326363
+    max: 0.156138, 0.063813, 0.335363
+    color: '#FAD481'
+    shape: Ellipsoid
+    yaw: 20.06201
+  - label: bun baked highlight 10
+    min: -0.161750, 0.046751, 0.323818
+    max: -0.127750, 0.072751, 0.332818
+    color: '#F2A349'
+    shape: Ellipsoid
+    yaw: 157.56976
+  - label: bun baked highlight 11
+    min: 0.052779, -0.162114, 0.319681
+    max: 0.086779, -0.136114, 0.328681
+    color: '#FBC469'
+    shape: Ellipsoid
+    yaw: -64.92249
+  - label: bun baked highlight 12
+    min: 0.034565, 0.151397, 0.316477
+    max: 0.068565, 0.177397, 0.325477
+    color: '#FAD481'
+    shape: Ellipsoid
+    yaw: 72.58526
+- type: cmu3DModel
+  id: CMU3DFoodDoughPieCloud
+  label: Rolled pie dough
+  status: draft
+  sourcePrototypes:
+  - FoodDoughPie
+  description: Source dough-pie state reconstructed as a soft round rolled dough disc with irregular thickness and lightly
+    mottled top. This is raw flattened pastry, not a pie, plate or raised crust. Depth and underside are inferred.
+  placement: surface
+  referencePrototype: FoodDoughPie
+  referenceRsi: /Textures/Objects/Consumable/Food/ingredients.rsi
+  referenceState: dough-pie
+  sourceDirections: 1
+  parts:
+  - label: soft rolled pie dough lower edge
+    min: -0.367500, -0.327000, 0.000000
+    max: 0.367500, 0.327000, 0.044000
+    color: '#E1B994'
+    shape: Ellipsoid
+  - label: pale rolled dough top
+    min: -0.356500, -0.314000, 0.018500
+    max: 0.356500, 0.314000, 0.051500
+    color: '#E7CAB0'
+    shape: Ellipsoid
+  - label: irregular soft dough edge 1
+    min: 0.277395, 0.064201, 0.015000
+    max: 0.347395, 0.107201, 0.041000
+    color: '#E5C6AA'
+    shape: Ellipsoid
+    yaw: 107.18873
+  - label: irregular soft dough edge 2
+    min: -0.011869, 0.267774, 0.015000
+    max: 0.058131, 0.310774, 0.041000
+    color: '#E5C6AA'
+    shape: Ellipsoid
+    yaw: 175.94367
+  - label: irregular soft dough edge 3
+    min: -0.276128, 0.174384, 0.015000
+    max: -0.206128, 0.217384, 0.041000
+    color: '#E5C6AA'
+    shape: Ellipsoid
+    yaw: -132.49013
+  - label: irregular soft dough edge 4
+    min: -0.272380, -0.220952, 0.015000
+    max: -0.202380, -0.177952, 0.041000
+    color: '#E5C6AA'
+    shape: Ellipsoid
+    yaw: -46.54646
+  - label: irregular soft dough edge 5
+    min: 0.146280, -0.262858, 0.015000
+    max: 0.216280, -0.219858, 0.041000
+    color: '#E5C6AA'
+    shape: Ellipsoid
+    yaw: 33.66763
+- type: cmu3DModel
+  id: CMU3DReagentContainerFlourCloud
+  label: Flour paper sack
+  status: draft
+  sourcePrototypes:
+  - ReagentContainerFlour
+  description: Original closed and open source states reconstructed as a rounded paper sack with gussets, folds, a real
+    open neck and source-pixel label/weave patches. The existing single-layer spriteStates contract is used; runtime
+    interaction and actual fill depletion remain unverified. Backside, paper thickness and dry contents are inferred.
+  placement: surface
+  referencePrototype: ReagentContainerFlour
+  referenceRsi: /Textures/Objects/Consumable/Food/ingredients.rsi
+  referenceState: flour-big
+  sourceDirections: 1
+  parts:
+  - label: folded paper sack flat sole
+    min: -0.200000, -0.120000, 0.000000
+    max: 0.200000, 0.120000, 0.052000
+    color: '#574C1B'
+    shape: Ellipsoid
+  - label: rounded full paper sack belly
+    min: -0.231500, -0.139500, 0.013500
+    max: 0.207500, 0.139500, 0.318500
+    color: '#EFE4B0'
+    shape: Ellipsoid
+  - label: flat front paper panel
+    min: -0.186500, -0.139500, 0.069500
+    max: 0.162500, -0.104500, 0.274500
+    color: '#EFE4B0'
+  - label: back paper panel
+    min: -0.186000, 0.099500, 0.069000
+    max: 0.162000, 0.134500, 0.275000
+    color: '#DDC659'
+  - label: left folded paper gusset
+    min: -0.218500, -0.123500, 0.045000
+    max: -0.163500, 0.115500, 0.321000
+    color: '#DDC659'
+    shape: Ellipsoid
+  - label: right folded paper gusset
+    min: 0.147000, -0.117000, 0.041000
+    max: 0.201000, 0.113000, 0.251000
+    color: '#DDC659'
+    shape: Ellipsoid
+  - label: rear folded seam
+    min: -0.013500, 0.135500, 0.090500
+    max: 0.013500, 0.144500, 0.299500
+    color: '#82732C'
+  - label: bottom stitched fold
+    min: -0.176000, -0.143500, 0.045000
+    max: 0.176000, -0.128500, 0.067000
+    color: '#82732C'
+  - label: original colored label
+    min: -0.084500, -0.147000, 0.171500
+    max: 0.134500, -0.143000, 0.296500
+    color: '#FFFFFF'
+    surface: CMU3DFoodCloudFlourLabel
+    surfaceAxis: XZ
+  - label: original lower paper weave
+    min: -0.132500, -0.145000, 0.072500
+    max: 0.148500, -0.141000, 0.139500
+    color: '#FFFFFF'
+    surface: CMU3DFoodCloudFlourWeave
+    surfaceAxis: XZ
+  - label: left front paper crease
+    min: -0.273296, -0.126000, 0.195000
+    max: -0.049704, -0.112000, 0.209000
+    color: '#EBD56F'
+    shape: Ellipsoid
+    yaw: 55.71312
+    pitch: 83.16052
+  - label: right front paper crease
+    min: 0.050445, -0.124000, 0.196500
+    max: 0.260555, -0.109000, 0.211500
+    color: '#82732C'
+    shape: Ellipsoid
+    yaw: 135.0
+    pitch: 81.87416
+  - label: full sack shoulders
+    min: -0.190000, -0.088000, 0.235500
+    max: 0.126000, 0.120000, 0.398500
+    color: '#EFE4B0'
+    shape: Ellipsoid
+  - label: fold-over paper lip
+    min: -0.150500, -0.104500, 0.378500
+    max: 0.198500, -0.015500, 0.423500
+    color: '#DDC659'
+    shape: Ellipsoid
+  - label: shadow below rolled closure
+    min: -0.103000, -0.092500, 0.360000
+    max: 0.199000, -0.049500, 0.374000
+    color: '#574C1B'
+  - label: folded top back ridge
+    min: -0.163000, 0.025000, 0.392500
+    max: 0.117000, 0.053000, 0.419500
+    color: '#82732C'
+  - label: left closure fold
+    min: -0.157000, -0.103500, 0.332500
+    max: -0.117000, 0.069500, 0.417500
+    color: '#EBD56F'
+    shape: Ellipsoid
+  - label: crimp crease 1
+    min: -0.102000, -0.100000, 0.386500
+    max: -0.088000, -0.068000, 0.421500
+    color: '#EBD56F'
+    shape: Ellipsoid
+    yaw: -8
+  - label: crimp crease 2
+    min: -0.043000, -0.100000, 0.386500
+    max: -0.029000, -0.068000, 0.421500
+    color: '#EFE4B0'
+    shape: Ellipsoid
+    yaw: -4
+  - label: crimp crease 3
+    min: 0.020000, -0.100000, 0.386500
+    max: 0.034000, -0.068000, 0.421500
+    color: '#EBD56F'
+    shape: Ellipsoid
+  - label: crimp crease 4
+    min: 0.076000, -0.100000, 0.386500
+    max: 0.090000, -0.068000, 0.421500
+    color: '#EFE4B0'
+    shape: Ellipsoid
+    yaw: 4
+  - label: crimp crease 5
+    min: 0.130000, -0.100000, 0.386500
+    max: 0.144000, -0.068000, 0.421500
+    color: '#EBD56F'
+    shape: Ellipsoid
+    yaw: 8
+  spriteStates:
+    flour-big:
+      frames:
+      - parts:
+        - label: folded paper sack flat sole
+          min: -0.200000, -0.120000, 0.000000
+          max: 0.200000, 0.120000, 0.052000
+          color: '#574C1B'
+          shape: Ellipsoid
+        - label: rounded full paper sack belly
+          min: -0.231500, -0.139500, 0.013500
+          max: 0.207500, 0.139500, 0.318500
+          color: '#EFE4B0'
+          shape: Ellipsoid
+        - label: flat front paper panel
+          min: -0.186500, -0.139500, 0.069500
+          max: 0.162500, -0.104500, 0.274500
+          color: '#EFE4B0'
+        - label: back paper panel
+          min: -0.186000, 0.099500, 0.069000
+          max: 0.162000, 0.134500, 0.275000
+          color: '#DDC659'
+        - label: left folded paper gusset
+          min: -0.218500, -0.123500, 0.045000
+          max: -0.163500, 0.115500, 0.321000
+          color: '#DDC659'
+          shape: Ellipsoid
+        - label: right folded paper gusset
+          min: 0.147000, -0.117000, 0.041000
+          max: 0.201000, 0.113000, 0.251000
+          color: '#DDC659'
+          shape: Ellipsoid
+        - label: rear folded seam
+          min: -0.013500, 0.135500, 0.090500
+          max: 0.013500, 0.144500, 0.299500
+          color: '#82732C'
+        - label: bottom stitched fold
+          min: -0.176000, -0.143500, 0.045000
+          max: 0.176000, -0.128500, 0.067000
+          color: '#82732C'
+        - label: original colored label
+          min: -0.084500, -0.147000, 0.171500
+          max: 0.134500, -0.143000, 0.296500
+          color: '#FFFFFF'
+          surface: CMU3DFoodCloudFlourLabel
+          surfaceAxis: XZ
+        - label: original lower paper weave
+          min: -0.132500, -0.145000, 0.072500
+          max: 0.148500, -0.141000, 0.139500
+          color: '#FFFFFF'
+          surface: CMU3DFoodCloudFlourWeave
+          surfaceAxis: XZ
+        - label: left front paper crease
+          min: -0.273296, -0.126000, 0.195000
+          max: -0.049704, -0.112000, 0.209000
+          color: '#EBD56F'
+          shape: Ellipsoid
+          yaw: 55.71312
+          pitch: 83.16052
+        - label: right front paper crease
+          min: 0.050445, -0.124000, 0.196500
+          max: 0.260555, -0.109000, 0.211500
+          color: '#82732C'
+          shape: Ellipsoid
+          yaw: 135.0
+          pitch: 81.87416
+        - label: full sack shoulders
+          min: -0.190000, -0.088000, 0.235500
+          max: 0.126000, 0.120000, 0.398500
+          color: '#EFE4B0'
+          shape: Ellipsoid
+        - label: fold-over paper lip
+          min: -0.150500, -0.104500, 0.378500
+          max: 0.198500, -0.015500, 0.423500
+          color: '#DDC659'
+          shape: Ellipsoid
+        - label: shadow below rolled closure
+          min: -0.103000, -0.092500, 0.360000
+          max: 0.199000, -0.049500, 0.374000
+          color: '#574C1B'
+        - label: folded top back ridge
+          min: -0.163000, 0.025000, 0.392500
+          max: 0.117000, 0.053000, 0.419500
+          color: '#82732C'
+        - label: left closure fold
+          min: -0.157000, -0.103500, 0.332500
+          max: -0.117000, 0.069500, 0.417500
+          color: '#EBD56F'
+          shape: Ellipsoid
+        - label: crimp crease 1
+          min: -0.102000, -0.100000, 0.386500
+          max: -0.088000, -0.068000, 0.421500
+          color: '#EBD56F'
+          shape: Ellipsoid
+          yaw: -8
+        - label: crimp crease 2
+          min: -0.043000, -0.100000, 0.386500
+          max: -0.029000, -0.068000, 0.421500
+          color: '#EFE4B0'
+          shape: Ellipsoid
+          yaw: -4
+        - label: crimp crease 3
+          min: 0.020000, -0.100000, 0.386500
+          max: 0.034000, -0.068000, 0.421500
+          color: '#EBD56F'
+          shape: Ellipsoid
+        - label: crimp crease 4
+          min: 0.076000, -0.100000, 0.386500
+          max: 0.090000, -0.068000, 0.421500
+          color: '#EFE4B0'
+          shape: Ellipsoid
+          yaw: 4
+        - label: crimp crease 5
+          min: 0.130000, -0.100000, 0.386500
+          max: 0.144000, -0.068000, 0.421500
+          color: '#EBD56F'
+          shape: Ellipsoid
+          yaw: 8
+      delays:
+      - 1
+    flour-big_open:
+      frames:
+      - parts:
+        - label: folded paper sack flat sole
+          min: -0.200000, -0.120000, 0.000000
+          max: 0.200000, 0.120000, 0.052000
+          color: '#574C1B'
+          shape: Ellipsoid
+        - label: rounded full paper sack belly
+          min: -0.231500, -0.139500, 0.013500
+          max: 0.207500, 0.139500, 0.318500
+          color: '#EFE4B0'
+          shape: Ellipsoid
+        - label: flat front paper panel
+          min: -0.186500, -0.139500, 0.069500
+          max: 0.162500, -0.104500, 0.274500
+          color: '#EFE4B0'
+        - label: back paper panel
+          min: -0.186000, 0.099500, 0.069000
+          max: 0.162000, 0.134500, 0.275000
+          color: '#DDC659'
+        - label: left folded paper gusset
+          min: -0.218500, -0.123500, 0.045000
+          max: -0.163500, 0.115500, 0.321000
+          color: '#DDC659'
+          shape: Ellipsoid
+        - label: right folded paper gusset
+          min: 0.147000, -0.117000, 0.041000
+          max: 0.201000, 0.113000, 0.251000
+          color: '#DDC659'
+          shape: Ellipsoid
+        - label: rear folded seam
+          min: -0.013500, 0.135500, 0.090500
+          max: 0.013500, 0.144500, 0.299500
+          color: '#82732C'
+        - label: bottom stitched fold
+          min: -0.176000, -0.143500, 0.045000
+          max: 0.176000, -0.128500, 0.067000
+          color: '#82732C'
+        - label: original colored label
+          min: -0.084500, -0.147000, 0.171500
+          max: 0.134500, -0.143000, 0.296500
+          color: '#FFFFFF'
+          surface: CMU3DFoodCloudFlourLabel
+          surfaceAxis: XZ
+        - label: original lower paper weave
+          min: -0.132500, -0.145000, 0.072500
+          max: 0.148500, -0.141000, 0.139500
+          color: '#FFFFFF'
+          surface: CMU3DFoodCloudFlourWeave
+          surfaceAxis: XZ
+        - label: left front paper crease
+          min: -0.273296, -0.126000, 0.195000
+          max: -0.049704, -0.112000, 0.209000
+          color: '#EBD56F'
+          shape: Ellipsoid
+          yaw: 55.71312
+          pitch: 83.16052
+        - label: right front paper crease
+          min: 0.050445, -0.124000, 0.196500
+          max: 0.260555, -0.109000, 0.211500
+          color: '#82732C'
+          shape: Ellipsoid
+          yaw: 135.0
+          pitch: 81.87416
+        - label: opened tall back paper neck
+          min: -0.149500, 0.060000, 0.285500
+          max: 0.083500, 0.074000, 0.466500
+          color: '#EFE4B0'
+        - label: opened folded left paper neck
+          min: -0.149000, -0.053500, 0.266500
+          max: -0.129000, 0.073500, 0.431500
+          color: '#DDC659'
+        - label: opened folded right paper neck
+          min: 0.086500, -0.047500, 0.272000
+          max: 0.105500, 0.071500, 0.446000
+          color: '#EBD56F'
+        - label: opened short front paper neck
+          min: -0.154500, -0.070000, 0.277500
+          max: 0.092500, -0.058000, 0.376500
+          color: '#EFE4B0'
+        - label: visible dry ingredient surface
+          min: -0.142500, -0.055000, 0.306000
+          max: 0.080500, 0.055000, 0.318000
+          color: '#EFE4B0'
+          shape: Ellipsoid
+        - label: irregular open paper rim 1
+          min: -0.155500, 0.052500, 0.429500
+          max: -0.104500, 0.067500, 0.460500
+          color: '#DDC659'
+          yaw: -14
+        - label: irregular open paper rim 2
+          min: -0.112500, 0.052500, 0.456500
+          max: -0.061500, 0.067500, 0.487500
+          color: '#EBD56F'
+          yaw: -7
+        - label: irregular open paper rim 3
+          min: -0.052500, 0.052500, 0.438500
+          max: -0.001500, 0.067500, 0.469500
+          color: '#EFE4B0'
+        - label: irregular open paper rim 4
+          min: 0.008500, 0.052500, 0.447500
+          max: 0.059500, 0.067500, 0.478500
+          color: '#DDC659'
+          yaw: 7
+        - label: irregular open paper rim 5
+          min: 0.061500, 0.052500, 0.433500
+          max: 0.112500, 0.067500, 0.464500
+          color: '#EBD56F'
+          yaw: 14
+        - label: open front diagonal crumple
+          min: -0.123288, -0.078500, 0.360000
+          max: 0.065288, -0.063500, 0.375000
+          color: '#EBD56F'
+          shape: Ellipsoid
+          yaw: 1.88819
+          pitch: 15.06068
+      delays:
+      - 1
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+- type: cmu3DModel
+  id: CMU3DReagentContainerSugarCloud
+  label: Sugar paper sack
+  status: draft
+  sourcePrototypes:
+  - ReagentContainerSugar
+  description: Original closed and open source states reconstructed as a rounded paper sack with gussets, folds, a real
+    open neck and source-pixel label/weave patches. The existing single-layer spriteStates contract is used; runtime
+    interaction and actual fill depletion remain unverified. Backside, paper thickness and dry contents are inferred.
+  placement: surface
+  referencePrototype: ReagentContainerSugar
+  referenceRsi: /Textures/Objects/Consumable/Food/ingredients.rsi
+  referenceState: sugar-big
+  sourceDirections: 1
+  parts:
+  - label: folded paper sack flat sole
+    min: -0.200000, -0.120000, 0.000000
+    max: 0.200000, 0.120000, 0.052000
+    color: '#575757'
+    shape: Ellipsoid
+  - label: rounded full paper sack belly
+    min: -0.231500, -0.139500, 0.013500
+    max: 0.207500, 0.139500, 0.318500
+    color: '#FFFFFF'
+    shape: Ellipsoid
+  - label: flat front paper panel
+    min: -0.186500, -0.139500, 0.069500
+    max: 0.162500, -0.104500, 0.274500
+    color: '#FFFFFF'
+  - label: back paper panel
+    min: -0.186000, 0.099500, 0.069000
+    max: 0.162000, 0.134500, 0.275000
+    color: '#C8C8C8'
+  - label: left folded paper gusset
+    min: -0.218500, -0.123500, 0.045000
+    max: -0.163500, 0.115500, 0.321000
+    color: '#C8C8C8'
+    shape: Ellipsoid
+  - label: right folded paper gusset
+    min: 0.147000, -0.117000, 0.041000
+    max: 0.201000, 0.113000, 0.251000
+    color: '#C8C8C8'
+    shape: Ellipsoid
+  - label: rear folded seam
+    min: -0.013500, 0.135500, 0.090500
+    max: 0.013500, 0.144500, 0.299500
+    color: '#888888'
+  - label: bottom stitched fold
+    min: -0.176000, -0.143500, 0.045000
+    max: 0.176000, -0.128500, 0.067000
+    color: '#888888'
+  - label: original colored label
+    min: -0.084500, -0.147000, 0.171500
+    max: 0.134500, -0.143000, 0.296500
+    color: '#FFFFFF'
+    surface: CMU3DFoodCloudSugarLabel
+    surfaceAxis: XZ
+  - label: original lower paper weave
+    min: -0.132500, -0.145000, 0.072500
+    max: 0.148500, -0.141000, 0.139500
+    color: '#FFFFFF'
+    surface: CMU3DFoodCloudSugarWeave
+    surfaceAxis: XZ
+  - label: left front paper crease
+    min: -0.273296, -0.126000, 0.195000
+    max: -0.049704, -0.112000, 0.209000
+    color: '#D6D6D6'
+    shape: Ellipsoid
+    yaw: 55.71312
+    pitch: 83.16052
+  - label: right front paper crease
+    min: 0.050445, -0.124000, 0.196500
+    max: 0.260555, -0.109000, 0.211500
+    color: '#888888'
+    shape: Ellipsoid
+    yaw: 135.0
+    pitch: 81.87416
+  - label: full sack shoulders
+    min: -0.190000, -0.088000, 0.235500
+    max: 0.126000, 0.120000, 0.398500
+    color: '#FFFFFF'
+    shape: Ellipsoid
+  - label: fold-over paper lip
+    min: -0.150500, -0.104500, 0.378500
+    max: 0.198500, -0.015500, 0.423500
+    color: '#C8C8C8'
+    shape: Ellipsoid
+  - label: shadow below rolled closure
+    min: -0.103000, -0.092500, 0.360000
+    max: 0.199000, -0.049500, 0.374000
+    color: '#575757'
+  - label: folded top back ridge
+    min: -0.163000, 0.025000, 0.392500
+    max: 0.117000, 0.053000, 0.419500
+    color: '#888888'
+  - label: left closure fold
+    min: -0.157000, -0.103500, 0.332500
+    max: -0.117000, 0.069500, 0.417500
+    color: '#D6D6D6'
+    shape: Ellipsoid
+  - label: crimp crease 1
+    min: -0.102000, -0.100000, 0.386500
+    max: -0.088000, -0.068000, 0.421500
+    color: '#D6D6D6'
+    shape: Ellipsoid
+    yaw: -8
+  - label: crimp crease 2
+    min: -0.043000, -0.100000, 0.386500
+    max: -0.029000, -0.068000, 0.421500
+    color: '#FFFFFF'
+    shape: Ellipsoid
+    yaw: -4
+  - label: crimp crease 3
+    min: 0.020000, -0.100000, 0.386500
+    max: 0.034000, -0.068000, 0.421500
+    color: '#D6D6D6'
+    shape: Ellipsoid
+  - label: crimp crease 4
+    min: 0.076000, -0.100000, 0.386500
+    max: 0.090000, -0.068000, 0.421500
+    color: '#FFFFFF'
+    shape: Ellipsoid
+    yaw: 4
+  - label: crimp crease 5
+    min: 0.130000, -0.100000, 0.386500
+    max: 0.144000, -0.068000, 0.421500
+    color: '#D6D6D6'
+    shape: Ellipsoid
+    yaw: 8
+  spriteStates:
+    sugar-big:
+      frames:
+      - parts:
+        - label: folded paper sack flat sole
+          min: -0.200000, -0.120000, 0.000000
+          max: 0.200000, 0.120000, 0.052000
+          color: '#575757'
+          shape: Ellipsoid
+        - label: rounded full paper sack belly
+          min: -0.231500, -0.139500, 0.013500
+          max: 0.207500, 0.139500, 0.318500
+          color: '#FFFFFF'
+          shape: Ellipsoid
+        - label: flat front paper panel
+          min: -0.186500, -0.139500, 0.069500
+          max: 0.162500, -0.104500, 0.274500
+          color: '#FFFFFF'
+        - label: back paper panel
+          min: -0.186000, 0.099500, 0.069000
+          max: 0.162000, 0.134500, 0.275000
+          color: '#C8C8C8'
+        - label: left folded paper gusset
+          min: -0.218500, -0.123500, 0.045000
+          max: -0.163500, 0.115500, 0.321000
+          color: '#C8C8C8'
+          shape: Ellipsoid
+        - label: right folded paper gusset
+          min: 0.147000, -0.117000, 0.041000
+          max: 0.201000, 0.113000, 0.251000
+          color: '#C8C8C8'
+          shape: Ellipsoid
+        - label: rear folded seam
+          min: -0.013500, 0.135500, 0.090500
+          max: 0.013500, 0.144500, 0.299500
+          color: '#888888'
+        - label: bottom stitched fold
+          min: -0.176000, -0.143500, 0.045000
+          max: 0.176000, -0.128500, 0.067000
+          color: '#888888'
+        - label: original colored label
+          min: -0.084500, -0.147000, 0.171500
+          max: 0.134500, -0.143000, 0.296500
+          color: '#FFFFFF'
+          surface: CMU3DFoodCloudSugarLabel
+          surfaceAxis: XZ
+        - label: original lower paper weave
+          min: -0.132500, -0.145000, 0.072500
+          max: 0.148500, -0.141000, 0.139500
+          color: '#FFFFFF'
+          surface: CMU3DFoodCloudSugarWeave
+          surfaceAxis: XZ
+        - label: left front paper crease
+          min: -0.273296, -0.126000, 0.195000
+          max: -0.049704, -0.112000, 0.209000
+          color: '#D6D6D6'
+          shape: Ellipsoid
+          yaw: 55.71312
+          pitch: 83.16052
+        - label: right front paper crease
+          min: 0.050445, -0.124000, 0.196500
+          max: 0.260555, -0.109000, 0.211500
+          color: '#888888'
+          shape: Ellipsoid
+          yaw: 135.0
+          pitch: 81.87416
+        - label: full sack shoulders
+          min: -0.190000, -0.088000, 0.235500
+          max: 0.126000, 0.120000, 0.398500
+          color: '#FFFFFF'
+          shape: Ellipsoid
+        - label: fold-over paper lip
+          min: -0.150500, -0.104500, 0.378500
+          max: 0.198500, -0.015500, 0.423500
+          color: '#C8C8C8'
+          shape: Ellipsoid
+        - label: shadow below rolled closure
+          min: -0.103000, -0.092500, 0.360000
+          max: 0.199000, -0.049500, 0.374000
+          color: '#575757'
+        - label: folded top back ridge
+          min: -0.163000, 0.025000, 0.392500
+          max: 0.117000, 0.053000, 0.419500
+          color: '#888888'
+        - label: left closure fold
+          min: -0.157000, -0.103500, 0.332500
+          max: -0.117000, 0.069500, 0.417500
+          color: '#D6D6D6'
+          shape: Ellipsoid
+        - label: crimp crease 1
+          min: -0.102000, -0.100000, 0.386500
+          max: -0.088000, -0.068000, 0.421500
+          color: '#D6D6D6'
+          shape: Ellipsoid
+          yaw: -8
+        - label: crimp crease 2
+          min: -0.043000, -0.100000, 0.386500
+          max: -0.029000, -0.068000, 0.421500
+          color: '#FFFFFF'
+          shape: Ellipsoid
+          yaw: -4
+        - label: crimp crease 3
+          min: 0.020000, -0.100000, 0.386500
+          max: 0.034000, -0.068000, 0.421500
+          color: '#D6D6D6'
+          shape: Ellipsoid
+        - label: crimp crease 4
+          min: 0.076000, -0.100000, 0.386500
+          max: 0.090000, -0.068000, 0.421500
+          color: '#FFFFFF'
+          shape: Ellipsoid
+          yaw: 4
+        - label: crimp crease 5
+          min: 0.130000, -0.100000, 0.386500
+          max: 0.144000, -0.068000, 0.421500
+          color: '#D6D6D6'
+          shape: Ellipsoid
+          yaw: 8
+      delays:
+      - 1
+    sugar-big_open:
+      frames:
+      - parts:
+        - label: folded paper sack flat sole
+          min: -0.200000, -0.120000, 0.000000
+          max: 0.200000, 0.120000, 0.052000
+          color: '#575757'
+          shape: Ellipsoid
+        - label: rounded full paper sack belly
+          min: -0.231500, -0.139500, 0.013500
+          max: 0.207500, 0.139500, 0.318500
+          color: '#FFFFFF'
+          shape: Ellipsoid
+        - label: flat front paper panel
+          min: -0.186500, -0.139500, 0.069500
+          max: 0.162500, -0.104500, 0.274500
+          color: '#FFFFFF'
+        - label: back paper panel
+          min: -0.186000, 0.099500, 0.069000
+          max: 0.162000, 0.134500, 0.275000
+          color: '#C8C8C8'
+        - label: left folded paper gusset
+          min: -0.218500, -0.123500, 0.045000
+          max: -0.163500, 0.115500, 0.321000
+          color: '#C8C8C8'
+          shape: Ellipsoid
+        - label: right folded paper gusset
+          min: 0.147000, -0.117000, 0.041000
+          max: 0.201000, 0.113000, 0.251000
+          color: '#C8C8C8'
+          shape: Ellipsoid
+        - label: rear folded seam
+          min: -0.013500, 0.135500, 0.090500
+          max: 0.013500, 0.144500, 0.299500
+          color: '#888888'
+        - label: bottom stitched fold
+          min: -0.176000, -0.143500, 0.045000
+          max: 0.176000, -0.128500, 0.067000
+          color: '#888888'
+        - label: original colored label
+          min: -0.084500, -0.147000, 0.171500
+          max: 0.134500, -0.143000, 0.296500
+          color: '#FFFFFF'
+          surface: CMU3DFoodCloudSugarLabel
+          surfaceAxis: XZ
+        - label: original lower paper weave
+          min: -0.132500, -0.145000, 0.072500
+          max: 0.148500, -0.141000, 0.139500
+          color: '#FFFFFF'
+          surface: CMU3DFoodCloudSugarWeave
+          surfaceAxis: XZ
+        - label: left front paper crease
+          min: -0.273296, -0.126000, 0.195000
+          max: -0.049704, -0.112000, 0.209000
+          color: '#D6D6D6'
+          shape: Ellipsoid
+          yaw: 55.71312
+          pitch: 83.16052
+        - label: right front paper crease
+          min: 0.050445, -0.124000, 0.196500
+          max: 0.260555, -0.109000, 0.211500
+          color: '#888888'
+          shape: Ellipsoid
+          yaw: 135.0
+          pitch: 81.87416
+        - label: opened tall back paper neck
+          min: -0.149500, 0.060000, 0.285500
+          max: 0.083500, 0.074000, 0.466500
+          color: '#FFFFFF'
+        - label: opened folded left paper neck
+          min: -0.149000, -0.053500, 0.266500
+          max: -0.129000, 0.073500, 0.431500
+          color: '#C8C8C8'
+        - label: opened folded right paper neck
+          min: 0.086500, -0.047500, 0.272000
+          max: 0.105500, 0.071500, 0.446000
+          color: '#D6D6D6'
+        - label: opened short front paper neck
+          min: -0.154500, -0.070000, 0.277500
+          max: 0.092500, -0.058000, 0.376500
+          color: '#FFFFFF'
+        - label: visible dry ingredient surface
+          min: -0.142500, -0.055000, 0.306000
+          max: 0.080500, 0.055000, 0.318000
+          color: '#FFFFFF'
+          shape: Ellipsoid
+        - label: irregular open paper rim 1
+          min: -0.155500, 0.052500, 0.429500
+          max: -0.104500, 0.067500, 0.460500
+          color: '#C8C8C8'
+          yaw: -14
+        - label: irregular open paper rim 2
+          min: -0.112500, 0.052500, 0.456500
+          max: -0.061500, 0.067500, 0.487500
+          color: '#D6D6D6'
+          yaw: -7
+        - label: irregular open paper rim 3
+          min: -0.052500, 0.052500, 0.438500
+          max: -0.001500, 0.067500, 0.469500
+          color: '#FFFFFF'
+        - label: irregular open paper rim 4
+          min: 0.008500, 0.052500, 0.447500
+          max: 0.059500, 0.067500, 0.478500
+          color: '#C8C8C8'
+          yaw: 7
+        - label: irregular open paper rim 5
+          min: 0.061500, 0.052500, 0.433500
+          max: 0.112500, 0.067500, 0.464500
+          color: '#D6D6D6'
+          yaw: 14
+        - label: open front diagonal crumple
+          min: -0.123288, -0.078500, 0.360000
+          max: 0.065288, -0.063500, 0.375000
+          color: '#D6D6D6'
+          shape: Ellipsoid
+          yaw: 1.88819
+          pitch: 15.06068
+      delays:
+      - 1
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true

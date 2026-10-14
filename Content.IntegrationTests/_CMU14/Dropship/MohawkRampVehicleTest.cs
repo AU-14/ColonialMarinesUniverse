@@ -4,6 +4,9 @@ using Content.Server.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Vehicles;
+using Content.Shared.Movement.Components;
+using Content.Shared.Movement.Systems;
+using Content.Shared.Vehicle;
 using Content.Shared.Vehicle.Components;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.GameObjects;
@@ -17,6 +20,96 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 [TestFixture]
 public sealed class MohawkRampVehicleTest
 {
+    [TestCase(null)]
+    [TestCase(0f)]
+    [TestCase(1f)]
+    public async Task MidwayTankCanDriveAfterLowering(float? blockerOffset)
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        EntityUid ship = default;
+        EntityUid tank = default;
+        EntityUid driver = default;
+        EntityUid? blocker = null;
+        EntityUid ground = default;
+        Vector2 landed = default;
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var maps = entities.System<SharedMapSystem>();
+            maps.CreateMap(out var mapId);
+            Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
+                new ResPath("/Maps/CMU14/ShuttlesDropships/Mohawk/midway.yml"), out var loaded), Is.True);
+            ship = loaded!.Value.Owner;
+            var lower = entities.GetComponent<MultiDeckDropshipComponent>(ship).Decks[-1];
+            ground = entities.GetComponent<TransformComponent>(lower).MapUid!.Value;
+            var landingGrid = new Entity<MapGridComponent>(ground, entities.EnsureComponent<MapGridComponent>(ground));
+            var floor = maps.GetAllTiles(lower, entities.GetComponent<MapGridComponent>(lower)).First().Tile;
+            for (var x = -20; x <= 20; x++)
+            for (var y = -20; y <= 20; y++)
+                maps.SetTile(landingGrid, new Vector2i(x, y), floor);
+            // The hull can arrive embedded in an obstacle under its center or rear.
+            // Driving away must work from rest, without requiring a shove first.
+            if (blockerOffset is { } offset)
+                blocker = entities.SpawnEntity("CMWallMetal", new EntityCoordinates(landingGrid, 0.5f, -7.5f + offset));
+            tank = entities.SpawnEntity("VehicleTank", new EntityCoordinates(ship, 0.5f, -3.5f));
+            driver = entities.SpawnEntity("CMMobHuman", new EntityCoordinates(ground, 15, 15));
+            Assert.That(entities.System<Content.Shared.Vehicle.Systems.VehicleSystem>().TrySetOperator(
+                (tank, entities.GetComponent<VehicleComponent>(tank)), driver), Is.True);
+            Assert.That(entities.System<MohawkSystem>().SetRampDeployed(ship, true), Is.True);
+        });
+        await pair.RunSeconds(6);
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            Assert.That(entities.GetComponent<TransformComponent>(tank).MapUid, Is.EqualTo(ground));
+            landed = entities.System<SharedTransformSystem>().GetWorldPosition(tank);
+            if (blocker is { } obstacle)
+            {
+                var lookup = entities.System<EntityLookupSystem>();
+                Assert.That(lookup.GetWorldAABB(tank).Intersects(lookup.GetWorldAABB(obstacle)), Is.True,
+                    "The obstacle must still overlap the unloaded hull when driving begins.");
+            }
+            var canRun = new VehicleCanRunEvent((tank, entities.GetComponent<VehicleComponent>(tank)));
+            entities.EventBus.RaiseLocalEvent(tank, ref canRun);
+            Assert.That(canRun.CanRun, Is.True, "Lowering must leave the tank operational.");
+        });
+        if (blockerOffset > 0)
+        {
+            await pair.Server.WaitAssertion(() =>
+            {
+#pragma warning disable RA0002 // Exercise reverse input into the existing rear overlap.
+                pair.Server.EntMan.EnsureComponent<InputMoverComponent>(driver).HeldMoveButtons = MoveButtons.Down;
+#pragma warning restore RA0002
+            });
+            await pair.RunSeconds(0.25f);
+            await pair.Server.WaitAssertion(() => Assert.That(
+                pair.Server.EntMan.System<SharedTransformSystem>().GetWorldPosition(tank).Y,
+                Is.EqualTo(landed.Y).Within(0.001f), "Recovery must not allow driving farther into the wall."));
+        }
+        await pair.Server.WaitAssertion(() =>
+        {
+#pragma warning disable RA0002 // Supply held driving input without a connected player.
+            pair.Server.EntMan.EnsureComponent<InputMoverComponent>(driver).HeldMoveButtons = MoveButtons.Up;
+#pragma warning restore RA0002
+        });
+        await pair.RunSeconds(2);
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var position = entities.System<SharedTransformSystem>().GetWorldPosition(tank);
+            var xform = entities.GetComponent<TransformComponent>(tank);
+            var mover = entities.GetComponent<GridVehicleMoverComponent>(tank);
+            Assert.That(position.Y, Is.LessThan(landed.Y - 1),
+                $"Tank must drive away: {landed} -> {position}; parent={xform.ParentUid}, grid={xform.GridUid}, synced={mover.SyncedGrid}, speed={mover.CurrentSpeed}");
+            entities.DeleteEntity(driver);
+            entities.DeleteEntity(tank);
+            if (blocker is { } obstacle)
+                entities.DeleteEntity(obstacle);
+            entities.DeleteEntity(ship);
+        });
+        await pair.CleanReturnAsync();
+    }
+
     [TestCase("omaha", "VehicleAPC")]
     [TestCase("midway", "VehicleAPC")]
     [TestCase("omaha", "VehicleBlackfoot")]

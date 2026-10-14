@@ -34,13 +34,13 @@ public sealed partial class XenoTailFountainSystem : EntitySystem
 
         if (xeno.Owner == args.Target)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-tail-fountain-fail-self"), xeno, xeno, PopupType.Small);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-tail-fountain-fail-self"), xeno, xeno, PopupType.Small);
             return;
         }
 
         if (!HasComp<MobStateComponent>(args.Target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-tail-fountain-fail"), xeno, xeno, PopupType.Small);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-tail-fountain-fail"), xeno, xeno, PopupType.Small);
             return;
         }
 
@@ -48,7 +48,7 @@ public sealed partial class XenoTailFountainSystem : EntitySystem
 
         _flame.Extinguish(args.Target);
         _audio.PlayPredicted(xeno.Comp.ExtinguishSound, args.Target, xeno);
-        _popup.PopupPredicted(Loc.GetString("rmc-xeno-tail-fountain-self", ("target", args.Target)),
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-tail-fountain-self", ("target", args.Target)),
             Loc.GetString("rmc-xeno-tail-fountain-others", ("user", xeno), ("target", args.Target)), xeno, xeno, PopupType.SmallCaution);
 
         if (_net.IsServer)

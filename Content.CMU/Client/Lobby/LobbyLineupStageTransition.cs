@@ -8,9 +8,10 @@ using Robust.Shared.Log;
 namespace Content.Client.CMU14.Lobby;
 
 /// <summary>A temporary screen-sized layer borrowing the cards' preview entities during arrival/departure.</summary>
-public sealed class LobbyLineupStageTransition : Control
+public sealed partial class LobbyLineupStageTransition : Control
 {
     [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private ILogManager _logs = default!;
     private readonly List<(LobbyLineupCard Card, TransitionSpriteView View)> _actors = new();
     private readonly bool _leaving;
     private readonly bool _reducedMotion;
@@ -137,14 +138,14 @@ public sealed class LobbyLineupStageTransition : Control
             // SpriteView does not own/delete the entity; the card remains its only owner.
             view.SetEntity((EntityUid?) null);
         }
-        Logger.DebugS("lobby_party", $"{(_leaving ? "Departure" : "Arrival")}: {_actors.Count} previews, " +
+        _logs.GetSawmill("lobby_party").Debug($"{(_leaving ? "Departure" : "Arrival")}: {_actors.Count} previews, " +
             $"{drawn} rendered, {moved} moved while rendered, {_elapsed:F2}s elapsed, reducedMotion={_reducedMotion}.");
         _actors.Clear();
         Visible = false;
         UserInterfaceManager.DeferAction(() =>
         {
             Orphan();
-            Dispose();
+            CMUControlLifetime.Release(this);
         });
     }
 

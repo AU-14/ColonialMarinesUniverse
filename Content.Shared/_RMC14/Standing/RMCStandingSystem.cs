@@ -4,6 +4,7 @@ using Content.Shared.ActionBlocker;
 using Content.Shared.Body;
 using Content.Shared.Body.Components;
 using Content.Shared.Buckle.Components;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts; // CMU14: foot-aware leg check
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory.Events;
@@ -29,6 +30,7 @@ public sealed partial class RMCStandingSystem : EntitySystem
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private CMULegSupportSystem _cmuLegSupport = default!; // CMU14: foot-aware leg check
 
     public override void Initialize()
     {
@@ -67,7 +69,7 @@ public sealed partial class RMCStandingSystem : EntitySystem
                             SetRest((ent, rest), false);
 
                             if (_standing.IsDown(ent))
-                                _popup.PopupClient(Loc.GetString("rmc-standing-stand-when-able"), ent, ent, PopupType.Medium);
+                                _popup.PopupEntity(Loc.GetString("rmc-standing-stand-when-able"), ent, ent, PopupType.Medium);
                         }
                         else
                         {
@@ -75,7 +77,7 @@ public sealed partial class RMCStandingSystem : EntitySystem
                                 return;
 
                             if (_standing.IsDown(ent))
-                                _popup.PopupClient(Loc.GetString("rmc-standing-keep-lying"), ent, ent, PopupType.Medium);
+                                _popup.PopupEntity(Loc.GetString("rmc-standing-keep-lying"), ent, ent, PopupType.Medium);
 
                             if (_standing.Down(ent, downedBy: ent))
                             {
@@ -173,7 +175,7 @@ public sealed partial class RMCStandingSystem : EntitySystem
     private bool HasMissingLeg(EntityUid uid)
     {
         return TryComp<BodyComponent>(uid, out var body) &&
-               body.LegEntities.Count < 2;
+               !_cmuLegSupport.HasLegsToStand((uid, body)); // CMU14: a missing foot keeps you down like a missing leg, so it gets the same exemption
     }
 
     private void OnEnterDown(Entity<DownOnEnterComponent> mob, ref EntInsertedIntoContainerMessage args)

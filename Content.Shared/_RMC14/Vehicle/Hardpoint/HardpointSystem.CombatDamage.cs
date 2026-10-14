@@ -25,6 +25,7 @@ public sealed partial class HardpointSystem
         if (totalDamage <= 0f)
             return;
 
+        TryDestroyVehicleFrame(ent.Owner, totalDamage);
         TryTriggerBlackfootFuelLeak(ent.Owner, totalDamage);
 
         if (!TryComp(ent.Owner, out ItemSlotsComponent? itemSlots))

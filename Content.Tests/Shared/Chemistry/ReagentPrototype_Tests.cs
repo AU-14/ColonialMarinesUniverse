@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using Content.Shared.Chemistry.Reagent;
 using NUnit.Framework;
 using Robust.Shared.IoC;
@@ -28,7 +28,7 @@ namespace Content.Tests.Shared.Chemistry
                 var serializationManager = IoCManager.Resolve<ISerializationManager>();
                 serializationManager.Initialize();
 
-                var newReagent = serializationManager.Read<ReagentPrototype>(new MappingDataNode(proto));
+                var newReagent = serializationManager.Read<ReagentPrototype>(new MappingDataNode(proto), notNullableOverride: true);
 
                 Assert.That(defType, Is.EqualTo("reagent"));
                 Assert.That(newReagent.ID, Is.EqualTo("H2"));

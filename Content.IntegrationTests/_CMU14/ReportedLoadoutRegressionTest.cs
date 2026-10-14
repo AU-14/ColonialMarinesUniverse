@@ -15,6 +15,8 @@ namespace Content.IntegrationTests._CMU14;
 [TestFixture]
 public sealed class ReportedLoadoutRegressionTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<LoadoutPrototype> HazardVestAU14Prototype = "HazardVestAU14";
+
     [TestCase("AU14JobCivilianHeadOfEngineering", "EngiJacketAU14", "HazardVestAU14", "outerClothing", "RMCHazardVest")]
     [TestCase("AU14JobColonyWorkingJoe", "EyewearRMC", "AviatorsRMC", "eyes", "RMCGlassesAviators")]
     public async Task CharacterPreviewShowsSelectedEquipment(string jobId, string group, string selection, string slot, string expected)
@@ -106,7 +108,7 @@ public sealed class ReportedLoadoutRegressionTest
             var wearer = entities.SpawnEntity("CMMobHuman", map.GridCoords);
             var uniform = entities.SpawnEntity("CMJumpsuitColonist", map.GridCoords);
             Assert.That(inventory.TryEquip(wearer, uniform, "jumpsuit", silent: true, force: true), Is.True);
-            var vest = prototypes.Index<LoadoutPrototype>("HazardVestAU14");
+            var vest = prototypes.Index<LoadoutPrototype>(HazardVestAU14Prototype);
             spawning.EquipStartingGear(wearer, vest);
             Assert.That(inventory.TryGetSlotEntity(wearer, "jumpsuit", out var equippedUniform), Is.True);
             Assert.That(equippedUniform, Is.EqualTo(uniform));

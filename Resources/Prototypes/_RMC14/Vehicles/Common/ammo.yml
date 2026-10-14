@@ -420,6 +420,7 @@
   id: VehicleProjectileRocket84mmAntiArmor
   categories: [ HideSpawnMenu ]
   components:
+  - type: TankCookOffProjectile # CMU14: vehicle TOW hits can ignite tank ammunition.
   - type: Projectile
     impactEffect: BulletImpactEffect
     damage:

@@ -545,6 +545,17 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
         _damageable.TryChangeDamage(target, damageBase, ignoreResistances);
     }
 
+    // CMU14 method
+    private static DamageSpecifier WithoutInhaledDamage(DamageSpecifier damage)
+    {
+        if (!damage.DamageDict.ContainsKey(LethalDamageType))
+            return damage;
+
+        var filtered = new DamageSpecifier(damage);
+        filtered.DamageDict.Remove(LethalDamageType);
+        return filtered;
+    }
+
     public virtual bool TryGetDestroyedAt(EntityUid destructible, [NotNullWhen(true)] out FixedPoint2? destroyed)
     {
         // TODO RMC14
@@ -734,6 +745,14 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
 
                 userDamage.NextDamageAt = time + userDamage.DamageEvery;
 
+                // CMU14: internals keep out the same gases a filter does, but only hold neurotoxin out for a while per exposure.
+                var internalsSealed = _mask.IsBreathingInternals(user);
+                if (internalsSealed && TryComp<GasMaskFilterDamageComponent>(contact, out var internalsDamage) && internalsDamage.Neurotoxin)
+                    internalsSealed = _mask.TryBlockNeurotoxinWithInternals(user);
+
+                if (internalsSealed && HasComp<GasMaskFilterDamageComponent>(contact))
+                    continue;
+
                 //this is horrible
                 if (TryComp<ContainerManagerComponent>(user, out var uinv))
                 {
@@ -803,20 +822,26 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
                     continue;
                 }
 
+                // CMU14 Begin: internals keep smoke out of the lungs, so only the burn on the skin gets through
+                var sealedLungs = HasComp<EvenSmokeComponent>(contact) && internalsSealed;
+
                 if (damage.Damage != null)
-                    DoDamage((contact, damage), user, damage.Damage);
+                    DoDamage((contact, damage), user, sealedLungs ? WithoutInhaledDamage(damage.Damage) : damage.Damage);
 
                 if (damage.ArmorPiercingDamage != null)
-                    DoDamage((contact, damage), user, damage.ArmorPiercingDamage, true, acidic: damage.Acidic);
+                    DoDamage((contact, damage), user, sealedLungs ? WithoutInhaledDamage(damage.ArmorPiercingDamage) : damage.ArmorPiercingDamage, true, acidic: damage.Acidic);
 
-                if (damage.Emotes is { Count: > 0 } emotes)
+                if (!sealedLungs && damage.Emotes is { Count: > 0 } emotes)
                 {
                     var emote = _random.Pick(emotes);
                     DoEmote(user, emote);
                 }
 
-                if (damage.Popup is { } popup && _random.Prob(0.5f))
+                if (sealedLungs && _random.Prob(0.5f))
+                    _popup.PopupEntity(Loc.GetString("cmu-smoke-internals-acid-burns"), user, user, PopupType.SmallCaution);
+                else if (!sealedLungs && damage.Popup is { } popup && _random.Prob(0.5f))
                     _popup.PopupEntity(popup, user, user, PopupType.SmallCaution);
+                // CMU14 End
 
                 _audio.PlayPvs(damage.Sound, user);
 

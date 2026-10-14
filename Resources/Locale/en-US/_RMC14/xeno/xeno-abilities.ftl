@@ -65,8 +65,11 @@ cm-xeno-evolution-failed-cannot-support = The Hive cannot support this caste yet
 cm-xeno-evolution-failed-hive-full = The hive cannot support another Tier {$tier}, wait for either more aliens to be born or someone to die.
 rmc-xeno-evolution-devolve-title = De-Evolve To
 rmc-xeno-evolution-devolve = You devolve to {$xeno}!
-rmc-xeno-evolution-cant-evolve-damaged = We must be at full health to evolve.
-rmc-xeno-evolution-cant-strain-damaged = We must be at full health to take a strain.
+# CMU14: evolution health requirement reduced from full health to half health.
+# rmc-xeno-evolution-cant-evolve-damaged = We must be at full health to evolve.
+# rmc-xeno-evolution-cant-strain-damaged = We must be at full health to take a strain.
+rmc-xeno-evolution-cant-evolve-damaged = We must have at least 50% health to evolve.
+rmc-xeno-evolution-cant-strain-damaged = We must have at least 50% health to take a strain.
 rmc-xeno-evolution-cant-devolve-damaged = We are too weak to deevolve, we must regain our health first.
 rmc-xeno-evolution-cant-evolve-recent-queen-death-minutes = We must wait about {$minutes} minutes and {$seconds} seconds for the hive to recover from the previous Queen's death.
 rmc-xeno-evolution-cant-evolve-recent-queen-death-seconds = We must wait about {$seconds} seconds for the hive to recover from the previous Queen's death.
@@ -102,6 +105,7 @@ cm-xeno-fortify-cant-headbutt = We can't headbutt while fortifying!
 cm-xeno-fortify-cant-rest = We can't rest while fortifying!
 cm-xeno-fortify-cant-tail-sweep = We can't tail sweep while fortifying!
 cm-xeno-fortify-cant-toggle-crest = We can't lower our crest while fortifying!
+cm-xeno-fortify-cant-vehicle = The vehicle blocks us from foritifying
 
 # Headbutt
 rmc-xeno-headbutt-too-far = We can't headbutt from this distance with our crest lowered!

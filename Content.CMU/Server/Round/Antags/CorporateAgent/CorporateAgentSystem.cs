@@ -12,8 +12,8 @@ namespace Content.Server.CMU14.Round.Antags.CorporateAgent;
 
 public sealed partial class CorporateAgentSystem : EntitySystem
 {
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly WantedSystem _wanted = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private WantedSystem _wanted = default!;
 
     private EntityQuery<FetchItemComponent> _fetchQuery = default!;
 
@@ -76,7 +76,7 @@ public sealed partial class CorporateAgentSystem : EntitySystem
     private int CountFetchItems(EntityUid holder)
     {
         var count = 0;
-        var enumerator = EntityManager.AllEntityQueryEnumerator<FetchItemComponent>();
+        var enumerator = AllEntityQuery<FetchItemComponent>();
         while (enumerator.MoveNext(out var item, out _))
         {
             if (IsHeldBy(item, holder))
@@ -88,7 +88,7 @@ public sealed partial class CorporateAgentSystem : EntitySystem
     private bool IsHeldBy(EntityUid item, EntityUid holder)
     {
         var current = item;
-        while (EntityManager.TryGetComponent(current, out TransformComponent? xform))
+        while (TryComp(current, out TransformComponent? xform))
         {
             if (xform.ParentUid == holder)
                 return true;

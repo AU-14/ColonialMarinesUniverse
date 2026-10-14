@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.CMU14.Threats.Mobs.Biomorph;
+using Content.Shared.CMU14.Threats.Mobs.Wendigo.Lab;
 using Content.Shared.CMU14.Threats.Mobs.ZombieSummoner;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
 using Content.Shared.GameTicking;
@@ -81,7 +82,8 @@ internal sealed class ThreatRuleHelper : EntitySystem
         if (HasComp<XenoComponent>(uid) || HasComp<YautjaComponent>(uid)
             || HasComp<ApeComponent>(uid) || HasComp<TribalComponent>(uid)
             || HasComp<BiomorphComponent>(uid) || HasComp<BiomorphMimicComponent>(uid)
-            || HasComp<ZombieSummonerComponent>(uid) || HasComp<ZombieSummonerMinionComponent>(uid))
+            || HasComp<ZombieSummonerComponent>(uid) || HasComp<ZombieSummonerMinionComponent>(uid)
+            || HasComp<CMUWendigoLabMadeComponent>(uid))
             return true;
 
         if (HasComp<SynthComponent>(uid))

@@ -911,13 +911,13 @@ entities:
   - uid: 8
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
+      rot: 0 rad
       pos: 1.5,7.5
       parent: 2
   - uid: 129
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
+      rot: 0 rad
       pos: -0.5,7.5
       parent: 2
 - proto: dropshipweaponsvmarker
@@ -925,7 +925,7 @@ entities:
   - uid: 130
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
+      rot: 0 rad
       pos: 0.5,7.5
       parent: 2
 - proto: RMCEngineAttachmentPoint

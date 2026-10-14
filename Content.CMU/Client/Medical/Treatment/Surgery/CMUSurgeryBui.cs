@@ -115,7 +115,7 @@ public sealed partial class CMUSurgeryBui : BoundUserInterface
             _window.InProgressPanel.Visible = false;
             _window.HintPanel.Visible = true;
             _window.InProgressActionRailPanel.Visible = false;
-            _window.InProgressChoiceContainer.DisposeAllChildren();
+            _window.InProgressChoiceContainer.ReleaseChildren();
             return;
         }
 
@@ -189,7 +189,7 @@ public sealed partial class CMUSurgeryBui : BoundUserInterface
         if (_window is null)
             return;
 
-        _window.InProgressChoiceContainer.DisposeAllChildren();
+        _window.InProgressChoiceContainer.ReleaseChildren();
         if (inFlight is null || !TryGetInFlightPart(state, inFlight, out var part))
         {
             _window.InProgressActionRailPanel.Visible = true;
@@ -393,8 +393,8 @@ public sealed partial class CMUSurgeryBui : BoundUserInterface
 
         EnsureSelectedPart(state);
 
-        _window.PartListContainer.DisposeAllChildren();
-        _window.ProcedureListContainer.DisposeAllChildren();
+        _window.PartListContainer.ReleaseChildren();
+        _window.ProcedureListContainer.ReleaseChildren();
 
         if (state.Parts.Count == 0)
         {

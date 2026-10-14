@@ -179,7 +179,7 @@ public sealed partial class XenoShardSystem : EntitySystem
         // Show CM13-style messages
         var selfMsg = Loc.GetString("rmc-spike-shield-self");
         var othersMsg = Loc.GetString("rmc-spike-shield-others", ("user", ent));
-        _popup.PopupPredicted(selfMsg, othersMsg, ent, ent);
+        _popup.PopupEntity(selfMsg, othersMsg, ent, ent);
         _aura.GiveAura(ent, Color.Blue, ent.Comp.ShieldDuration, 2);
 
         args.Handled = true;

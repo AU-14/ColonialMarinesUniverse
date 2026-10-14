@@ -23,6 +23,8 @@
 - type: accessGroup
   id: aulegacygroupcommand # bandaid for officers (legacy AA)
   tags:
+  - RMCAccessCommand
+  - RMCAccessSeniorCommand
   - CMAccessGovforCommand
   - CMAccessBrig
   - CMAccessArmory

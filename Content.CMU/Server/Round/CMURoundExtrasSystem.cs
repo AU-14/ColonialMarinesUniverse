@@ -24,7 +24,7 @@ namespace Content.Server.CMU14.Round;
 ///     announcements, and the ARES greeting/planet announcements. Stays off while the classic rule is
 ///     active so none of it happens twice.
 /// </summary>
-public sealed class CMURoundExtrasSystem : EntitySystem
+public sealed partial class CMURoundExtrasSystem : EntitySystem
 {
     [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private SharedContainerSystem _container = default!;

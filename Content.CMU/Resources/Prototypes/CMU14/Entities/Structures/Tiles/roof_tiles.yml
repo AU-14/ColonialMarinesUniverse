@@ -158,6 +158,18 @@
   mass: 200
   weather: true
   indestructible: false
+  breakIgnoresVacuum: true
+  allowCharges: true
+  collapseWhenUnsupported: true
+  destroyDrops:
+  - id: CMSheetMetal1
+    amount: 1
+    maxAmount: 3
+    prob: 0.75
+  - id: CMRodMetal1
+    amount: 1
+    maxAmount: 3
+    prob: 0.5
   canDig: false
 
 - type: tile
@@ -303,3 +315,57 @@
   id: CMURoofOuterHull31Destroyable
   name: tiles-cmu-legacy-multiz-destroyable-roof-31
   sprite: /Textures/CMU14/Tiles/Roofs/outerhull_dir_31.png
+
+- type: tile
+  parent: CMURoofOuterHullDestroyable
+  id: CMURoofDestroyable
+  name: tiles-cmu-multiz-destroyable-roof
+  sprite: /Textures/_RMC14/Tiles/almayer/outerhull.png
+
+- type: tile
+  parent: CMURoofOuterHullDestroyable
+  id: CMURoofSouthDestroyable
+  name: tiles-cmu-multiz-destroyable-roof-south
+  sprite: /Textures/_RMC14/Tiles/almayer/outerhull_dir_0.png
+
+- type: tile
+  parent: CMURoofOuterHullDestroyable
+  id: CMURoofNorthDestroyable
+  name: tiles-cmu-multiz-destroyable-roof-north
+  sprite: /Textures/_RMC14/Tiles/almayer/outerhull_dir_1.png
+
+- type: tile
+  parent: CMURoofOuterHullDestroyable
+  id: CMURoofEastDestroyable
+  name: tiles-cmu-multiz-destroyable-roof-east
+  sprite: /Textures/_RMC14/Tiles/almayer/outerhull_dir_2.png
+
+- type: tile
+  parent: CMURoofOuterHullDestroyable
+  id: CMURoofWestDestroyable
+  name: tiles-cmu-multiz-destroyable-roof-west
+  sprite: /Textures/_RMC14/Tiles/almayer/outerhull_dir_3.png
+
+- type: tile
+  parent: CMURoofOuterHullDestroyable
+  id: CMURoofSouthEastDestroyable
+  name: tiles-cmu-multiz-destroyable-roof-southeast
+  sprite: /Textures/_RMC14/Tiles/almayer/outerhull_dir_4.png
+
+- type: tile
+  parent: CMURoofOuterHullDestroyable
+  id: CMURoofSouthWestDestroyable
+  name: tiles-cmu-multiz-destroyable-roof-southwest
+  sprite: /Textures/_RMC14/Tiles/almayer/outerhull_dir_5.png
+
+- type: tile
+  parent: CMURoofOuterHullDestroyable
+  id: CMURoofNorthEastDestroyable
+  name: tiles-cmu-multiz-destroyable-roof-northeast
+  sprite: /Textures/_RMC14/Tiles/almayer/outerhull_dir_6.png
+
+- type: tile
+  parent: CMURoofOuterHullDestroyable
+  id: CMURoofNorthWestDestroyable
+  name: tiles-cmu-multiz-destroyable-roof-northwest
+  sprite: /Textures/_RMC14/Tiles/almayer/outerhull_dir_7.png

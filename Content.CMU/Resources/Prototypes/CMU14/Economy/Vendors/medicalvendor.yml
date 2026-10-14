@@ -145,6 +145,8 @@
         amount: 4
       - id: CMUMedicalOxygenTankFilled
         amount: 6
+      - id: CMUBloodCooler
+        amount: 4
      # FixOVien
 
 - type: entity
@@ -178,12 +180,59 @@
     - name: Blood Packs
       entries:
       - id: CMBloodPackFull
-        amount: 45
+        amount: 15
+      - id: CMUBloodPackFullOPositive
+        amount: 10
+      - id: CMUBloodPackFullAPositive
+        amount: 10
+      - id: CMUBloodPackFullANegative
+        amount: 10
+      - id: CMUBloodPackFullBPositive
+        amount: 10
+      - id: CMUBloodPackFullBNegative
+        amount: 10
+      - id: CMUBloodPackFullABPositive
+        amount: 10
+      - id: CMUBloodPackFullABNegative
+        amount: 10
+      - id: CMUSynthBloodPackFull
+        amount: 6
+    - name: Plasma
+      entries:
+      - id: CMUBloodPlasmaPack
+        amount: 6
+      - id: CMUBloodPlasmaPackABNegative
+        amount: 4
+      - id: CMUBloodPlasmaPackAPositive
+        amount: 3
+      - id: CMUBloodPlasmaPackANegative
+        amount: 3
+      - id: CMUBloodPlasmaPackBPositive
+        amount: 3
+      - id: CMUBloodPlasmaPackBNegative
+        amount: 3
+      - id: CMUBloodPlasmaPackOPositive
+        amount: 3
+      - id: CMUBloodPlasmaPackONegative
+        amount: 3
+    - name: Saline
+      entries:
+      - id: CMUSalineBag
+        amount: 20
+    - name: Devices
+      entries:
+      - id: CMUIVPressureBag
+        amount: 6
+      - id: CMUBloodCooler
+        amount: 4
     - name: Empty Packs
       entries:
       - id: CMBloodPack
         amount: 65
         name: empty blood pack
+      - id: CMUSynthBloodPack
+        amount: 10
+        name: empty synthetic blood pack
 
 - type: entity
   parent: ColMarTechBaseAnchorable
@@ -286,6 +335,8 @@
         amount: 3
       - id: AU14CMDefibrillator
         amount: 1
+      - id: CMUBloodCooler
+        amount: 4
     - name: Field Supplies
       entries:
       - id: CMFireExtinguisherPortable

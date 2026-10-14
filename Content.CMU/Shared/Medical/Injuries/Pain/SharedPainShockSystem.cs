@@ -581,7 +581,7 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         var oldTier = pain.Tier;
         var oldRawTier = pain.RawTier;
         var rawTier = PainTierThresholds.Get(oldRawTier, pain.Pain, _painTierHysteresis, _painShockThreshold);
-        var newTier = ApplySuppressionToTier(body, rawTier);
+        var newTier = ClampToFeltRange(pain, ApplySuppressionToTier(body, rawTier));
 
         pain.RawTier = rawTier;
         pain.Tier = newTier;
@@ -673,7 +673,15 @@ public abstract partial class SharedPainShockSystem : EntitySystem
             return PainTier.None;
 
         var rawTier = GetRawTier(pain);
-        return ApplySuppressionToTier(body, rawTier);
+        return ClampToFeltRange(pain, ApplySuppressionToTier(body, rawTier));
+    }
+
+    private static PainTier ClampToFeltRange(PainShockComponent pain, PainTier tier)
+    {
+        if (tier < pain.MinimumFeltTier)
+            return PainTier.None;
+
+        return tier > pain.MaximumFeltTier ? pain.MaximumFeltTier : tier;
     }
 
     public bool IsPainRiskSuppressed(EntityUid body, PainShockComponent pain)

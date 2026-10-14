@@ -23,6 +23,15 @@
       - RMCShellShotgunBeanbag
       - RMCShellShotgunBreaching
     capacity: 8
+  # breaching pellets are 55 blunt, walls flat-reduce blunt by 10, so 4 x 45 x 15 = 2700 a shot.
+  # metal wall dies at 3125 (2 shots), reinforced at 9500 (4 shots). buckshot etc stay normal
+  - type: CMUAmmoProjectileComponents
+    projectiles:
+    - RMCPelletShotgunBreaching
+    components:
+    - type: DamageMultipliers
+      multipliers:
+        Turf: 15
   - type: AttachableHolder
     slots:
       rmc-aslot-barrel:

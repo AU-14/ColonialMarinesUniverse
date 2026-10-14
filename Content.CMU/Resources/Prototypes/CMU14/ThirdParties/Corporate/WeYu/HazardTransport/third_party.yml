@@ -13,7 +13,7 @@
   id: WYHT
   announceAsSurvivors: true
   partyspawn: WYHTSpawn
-  whitelistedgamemodes:
+  whitelistedGamemodes:
     - insurgency
     - colonyfall
     - forceonforce
@@ -22,5 +22,5 @@
   weight: 20
   # minplayers: 30
   maxplayers: 400
-  GhostsNeeded: 5
+  ghostsNeeded: 5
   roundstart: false

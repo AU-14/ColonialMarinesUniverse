@@ -18,7 +18,7 @@
   announceAsSurvivors: true
   displayName: US Army Infantry (Full Squad)
   partyspawn: USArmySpawn
-  blacklistedgamemodes:
+  blacklistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
@@ -26,7 +26,7 @@
   weight: 100
   minplayers: 100
   maxplayers: 400
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
 
 - type: partySpawn
@@ -45,7 +45,7 @@
   announceAsSurvivors: true
   displayName: US Army Infantry (Small Team)
   partyspawn: USArmySpawnAlt
-  blacklistedgamemodes:
+  blacklistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
@@ -53,7 +53,7 @@
   weight: 100
   minplayers: 25
   maxplayers: 50
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
 
 - type: partySpawn
@@ -74,7 +74,7 @@
   announceAsSurvivors: true
   displayName: US Army Infantry (Medium Team)
   partyspawn: USArmySpawnAlt2
-  blacklistedgamemodes:
+  blacklistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
@@ -82,5 +82,5 @@
   weight: 100
   minplayers: 51
   maxplayers: 99
-  GhostsNeeded: 5
+  ghostsNeeded: 5
   roundstart: true

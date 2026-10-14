@@ -39,6 +39,7 @@ public sealed class HealthScannerBuiState(
     public CMUPainShockRisk? CMUPainShockRisk;
     public bool CMUPainShockSuppressed;
     public string? CMURiderReading;
+    public string? CMUWendigoReading; // CMU14: lab Wendigo procedure progress
     public bool CMUExternalBleeding;
     // cmu edit start
     public ExternalBleedTier CMUExternalBleedTier;
@@ -58,6 +59,8 @@ public sealed class HealthScannerBuiState(
     public bool HolocardXeno;
     // cmu edit start
     public TimeSpan? CMUTimeUntilUnrevivable;
+    public string? CMUBloodType;
+    public float CMUSalinePercent;
     // cmu edit end
 }
 

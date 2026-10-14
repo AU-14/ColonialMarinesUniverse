@@ -5,11 +5,11 @@ using Robust.Shared.Map.Components;
 
 namespace Content.Server.CMU14.Atmos;
 
-public sealed class CMUWideAirtightSystem : EntitySystem
+public sealed partial class CMUWideAirtightSystem : EntitySystem
 {
-    [Dependency] private readonly AirtightSystem _airtight = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private AirtightSystem _airtight = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private readonly List<EntityUid> _tileEnts = new();
 

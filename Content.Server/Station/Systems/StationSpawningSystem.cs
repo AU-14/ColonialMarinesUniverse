@@ -20,6 +20,7 @@ using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CMU14.CharacterDescription;
+using Content.Shared.CMU14.Medical.Blood; // CMU14
 using Content.Shared.Body;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
@@ -60,6 +61,8 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     private static readonly ProtoId<NpcFactionPrototype> OpforNpcFaction = new("OPFOR");
 
     [Dependency] private SharedAccessSystem _accessSystem = default!;
+
+    [Dependency] private CMUIdBloodTypeSystem _cmuIdBloodType = default!; // CMU14
     [Dependency] private ActorSystem _actors = default!;
     [Dependency] private IdCardSystem _cardSystem = default!;
     [Dependency] private IConfigurationManager _configurationManager = default!;
@@ -87,23 +90,27 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     // Round-robin rotation indices for squads per side
     private readonly string[] _govforSquads = { "SquadGovfor", "SquadGovforBravo", "SquadGovforCharlie" };
     private readonly string[] _opforSquads = { "SquadOpfor", "SquadOpforBravo", "SquadOpforCharlie" };
-    private int _govforNextSquadIndex;
-    private int _opforNextSquadIndex;
+    // cmu edit start: replaced by CMUPickSquad
+    // private int _govforNextSquadIndex;
+    // private int _opforNextSquadIndex;
+    // cmu edit end
     private static readonly ProtoId<NpcFactionPrototype> YautjaBadBloodFaction = "CMUYautjaBadBlood";
 
     private static readonly HashSet<string> NoSquadRoundRoles = new(StringComparer.OrdinalIgnoreCase)
     {
-        "Advisor",
-        "DropshipCrewChief",
-        "DropshipPilot",
-        "MilitaryDoctor",
-        "MilitaryPolice",
-        "PlatoonCommander",
-        "ExecutiveOfficer",
-        "CMO",
-        "ChiefMP",
-        "LogisticsOfficer",
-        "EngineeringOfficer",
+        // cmu edit start: moved to AuxiliarySquadRoundRoles
+        // "Advisor",
+        // "DropshipCrewChief",
+        // "DropshipPilot",
+        // "MilitaryDoctor",
+        // "MilitaryPolice",
+        // "PlatoonCommander",
+        // "ExecutiveOfficer",
+        // "CMO",
+        // "ChiefMP",
+        // "LogisticsOfficer",
+        // "EngineeringOfficer",
+        // cmu edit end
         "AdjutantDress",
         "BrigadierGeneral",
         "VipEscort"
@@ -121,23 +128,45 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         "Nurse",
         "WorkingJoe",
         "VehicleCommander",
-        "VehicleCrewman"
+        "VehicleCrewman",
+        // cmu edit start: staff officers, aircrew, medical and police join the auxiliary squad
+        "Advisor",
+        "DropshipCrewChief",
+        "DropshipPilot",
+        "MilitaryDoctor",
+        "MilitaryPolice",
+        "CMO",
+        "ChiefMP",
+        "LogisticsOfficer",
+        "EngineeringOfficer",
+        "PlatoonCommander",
+        "ExecutiveOfficer",
+        // cmu edit end
     };
 
     // Legacy fallback for jobs that have not been migrated to roundRole yet.
     private static readonly HashSet<string> NoSquadJobIdFragments = new(StringComparer.OrdinalIgnoreCase)
     {
-        "dcc",
-        "pilot",
-        "platco",
-        "policeman",
-        "militarydoctor"
+        // cmu edit start: moved to AuxiliarySquadJobIdFragments
+        // "dcc",
+        // "pilot",
+        // "platco",
+        // "policeman",
+        // "militarydoctor"
+        // cmu edit end
     };
 
     private static readonly HashSet<string> AuxiliarySquadJobIdFragments = new(StringComparer.OrdinalIgnoreCase)
     {
         "synth",
-        "platop"
+        "platop",
+        // cmu edit start
+        "dcc",
+        "pilot",
+        "policeman",
+        "militarydoctor",
+        "platco",
+        // cmu edit end
     };
 
     /// <summary>
@@ -276,6 +305,8 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
                 if (profile.FlavorText != "" && _configurationManager.GetCVar(CCVars.FlavorText))
                     AddComp<DetailExaminableComponent>(jobEntity).Content = profile.FlavorText;
 
+                ApplyProfileBloodType(jobEntity, profile); // CMU14
+
                 if (_configurationManager.GetCVar(CCVars.CharacterDescription))
                     BakeCharacterDescription(jobEntity, profile);
             }
@@ -331,6 +362,8 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
             if (profile.FlavorText != "" && _configurationManager.GetCVar(CCVars.FlavorText))
                 AddComp<DetailExaminableComponent>(entity.Value).Content = profile.FlavorText;
+
+            ApplyProfileBloodType(entity.Value, profile); // CMU14
 
             if (_configurationManager.GetCVar(CCVars.CharacterDescription))
                 BakeCharacterDescription(entity.Value, profile);
@@ -452,145 +485,13 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             protoId = team == "govfor" ? "SquadGovforIntel" : "SquadOpforIntel";
         else
         {
+            // cmu edit start: one squad leader per squad, special roles spread evenly, riflemen fill the smallest squad
             var candidates = team == "govfor" ? _govforSquads : _opforSquads;
-
-            // New: prioritize distributing Sergeants, Automatic Riflemen, and Radio Telephone Operators
             var isSergeant = IsSquadLeaderRole(originalPrototype, originalJobId);
-            var isAutomaticRifleman = IsRoundRole(originalPrototype, "SquadAutomaticRifleman") ||
-                                      originalJobId?.Contains("automaticrifleman", StringComparison.OrdinalIgnoreCase) == true ||
-                                      originalJobId?.Contains("autora", StringComparison.OrdinalIgnoreCase) == true ||
-                                      originalJobId?.Contains("auto", StringComparison.OrdinalIgnoreCase) == true ||
-                                      originalJobId?.Contains("afn", StringComparison.OrdinalIgnoreCase) == true ||
-                                      originalJobId?.EndsWith("squadautomaticrifleman", StringComparison.OrdinalIgnoreCase) == true;
-            var isRadioTelephone = IsRoundRole(originalPrototype, "RadioTelephoneOperator") ||
-                                   originalJobId?.Contains("radiotelephoneoperator", StringComparison.OrdinalIgnoreCase) == true ||
-                                   originalJobId?.Contains("radio", StringComparison.OrdinalIgnoreCase) == true ||
-                                   originalJobId?.Contains("rto", StringComparison.OrdinalIgnoreCase) == true ||
-                                   originalJobId?.EndsWith("radiotelephoneoperator", StringComparison.OrdinalIgnoreCase) == true;
 
-            // CMU14: Player preference wins over distribution when the squad belongs to this side.
-            // Sergeants still skip a preferred squad that already has a leader so the sitting leader is not demoted.
-            // The menu only offers GovFor squads; force-balanced OpFor players get the mirrored squad by slot.
-            var preferred = profile?.SquadPreference?.Id;
-            if (team == "opfor" && preferred != null)
-            {
-                var mirror = Array.IndexOf(_govforSquads, preferred);
-                if (mirror >= 0)
-                    preferred = _opforSquads[mirror];
-            }
-
-            if (preferred != null // CMU14
-                && Array.IndexOf(candidates, preferred) != -1
-                && (!isSergeant
-                || !_squadSystem.TryEnsureSquad(preferred, out var preferredSquad)
-                || !_squadSystem.TryGetSquadLeader(preferredSquad, out _)))
-                protoId = preferred;
-
-            // CMU14: Sergeants: try to place into a squad without a leader where possible
-            else if (isSergeant)
-            {
-                string? chosen = null;
-                foreach (var candidate in candidates)
-                {
-                    if (_squadSystem.TryEnsureSquad(candidate, out var squad) &&
-                        !_squadSystem.TryGetSquadLeader(squad, out _))
-                    {
-                        chosen = candidate;
-                        break;
-                    }
-                }
-
-                if (chosen != null)
-                {
-                    protoId = chosen;
-                }
-                else
-                {
-                    // All squads already have leaders, fall back to round-robin.
-                    if (team == "govfor")
-                    {
-                        protoId = candidates[_govforNextSquadIndex % candidates.Length];
-                        _govforNextSquadIndex = (_govforNextSquadIndex + 1) % candidates.Length;
-                    }
-                    else
-                    {
-                        protoId = candidates[_opforNextSquadIndex % candidates.Length];
-                        _opforNextSquadIndex = (_opforNextSquadIndex + 1) % candidates.Length;
-                    }
-                }
-            }
-            // Automatic riflemen and radio telephone operators: try to evenly distribute so each squad gets one of each
-            else if (isAutomaticRifleman || isRadioTelephone)
-            {
-                string? chosen = null;
-                // Prefer squads that exist and don't yet have this role
-                foreach (var candidate in candidates)
-                {
-                    if (_squadSystem.TryEnsureSquad(candidate, out var squad))
-                    {
-                        // If job is available as a ProtoId, check the role count in the squad.
-                        if (job != null)
-                        {
-                            squad.Comp.Roles.TryGetValue(job.Value, out var existingCount);
-                            if (existingCount == 0)
-                            {
-                                chosen = candidate;
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            // If we don't have a proto id for the job for whatever reason,
-                            // prefer squads that exist but currently have fewer members (heuristic)
-                            if (_squadSystem.GetSquadMembersAlive(squad) == 0)
-                            {
-                                chosen = candidate;
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // Squad doesn't exist yet, so it definitely has none of the role
-                        chosen = candidate;
-                        break;
-                    }
-                }
-
-                if (chosen != null)
-                {
-                    protoId = chosen;
-                }
-                else
-                {
-                    // Fallback to round-robin distribution when every squad already has the role
-                    if (team == "govfor")
-                    {
-                        protoId = candidates[_govforNextSquadIndex % candidates.Length];
-                        _govforNextSquadIndex = (_govforNextSquadIndex + 1) % candidates.Length;
-                    }
-                    else
-                    {
-                        protoId = candidates[_opforNextSquadIndex % candidates.Length];
-                        _opforNextSquadIndex = (_opforNextSquadIndex + 1) % candidates.Length;
-                    }
-                }
-            }
-            else
-            {
-                // Default distribution (round-robin)
-                // Sergeants already handled above; everyone else falls through here.
-                if (team == "govfor")
-                {
-                    protoId = candidates[_govforNextSquadIndex % candidates.Length];
-                    _govforNextSquadIndex = (_govforNextSquadIndex + 1) % candidates.Length;
-                }
-                else
-                {
-                    protoId = candidates[_opforNextSquadIndex % candidates.Length];
-                    _opforNextSquadIndex = (_opforNextSquadIndex + 1) % candidates.Length;
-                }
-            }
+            // Squad preference is no longer offered, so it is ignored here.
+            protoId = CMUPickSquad(candidates, job, originalPrototype, originalJobId, isSergeant);
+            // cmu edit end
         }
 
         if (!_squadSystem.TryEnsureSquad(protoId, out Entity<SquadTeamComponent> ensured))
@@ -798,6 +699,14 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     private const string DisabilitiesTraitCategory = "Disabilities";
     private const string DrugAllergyTraitId = "RandomDrugAllergy";
 
+    // CMU14: blood type from the profile, applied whether or not character descriptions are on
+    private void ApplyProfileBloodType(EntityUid uid, HumanoidCharacterProfile profile)
+    {
+        var bloodType = EnsureComp<CMUBloodTypeComponent>(uid);
+        bloodType.Type = profile.BloodType;
+        Dirty(uid, bloodType);
+    }
+
     private void BakeCharacterDescription(EntityUid uid, HumanoidCharacterProfile profile)
     {
         var comp = AddComp<CharacterDescriptionComponent>(uid);
@@ -908,6 +817,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             return;
 
         _cardSystem.TryChangeFullName(cardId, characterName, card);
+        _cmuIdBloodType.Stamp(cardId, entity); // CMU14: print the blood type on the ID
 
         // Respect cards with a prototype-defined title (e.g. fixed-role/faction IDs).
         if (card.JobTitle == null)
@@ -955,6 +865,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
         // Set name and (unless fixed by prototype) job title/icon from the selected job.
         _cardSystem.TryChangeFullName(cardId, characterName, card);
+        _cmuIdBloodType.Stamp(cardId, entity); // CMU14: print the blood type on the ID
         if (card.JobTitle == null)
         {
             _cardSystem.TryChangeJobTitle(cardId, titleJobPrototype.LocalizedName, card);

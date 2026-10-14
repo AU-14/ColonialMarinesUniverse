@@ -5,6 +5,7 @@ using Content.Server.Chat.Systems;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs.Events;
 using Content.Shared._RMC14.Chemistry.Reagent;
+using Content.Shared._RMC14.Medical.Asphyxiation;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Body.Systems;
 using Content.Shared.Alert;
@@ -16,6 +17,7 @@ using Content.Shared.Chat;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.EntityConditions;
@@ -49,6 +51,7 @@ public sealed partial class RespiratorSystem : EntitySystem
     [Dependency] private SharedEntityConditionsSystem _entityConditions = default!;
 
     private static readonly ProtoId<MetabolismStagePrototype> RespirationStage = new("Respiration");
+    private static readonly ProtoId<DamageTypePrototype> AsphyxiationType = "Asphyxiation"; // CMU14
 
     public override void Initialize()
     {
@@ -115,7 +118,8 @@ public sealed partial class RespiratorSystem : EntitySystem
 
             if (respirator.Saturation < respirator.SuffocationThreshold)
             {
-                if (_gameTiming.CurTime >= respirator.LastGaspEmoteTime + respirator.GaspEmoteCooldown)
+                if (_gameTiming.CurTime >= respirator.LastGaspEmoteTime + respirator.GaspEmoteCooldown &&
+                    ShouldGasp((uid, respirator))) // CMU14
                 {
                     respirator.LastGaspEmoteTime = _gameTiming.CurTime;
                     _chat.TryEmoteWithChat(uid,
@@ -413,6 +417,20 @@ public sealed partial class RespiratorSystem : EntitySystem
         {
             Handled = true
         };
+    }
+
+    // CMU14 method
+    /// <summary>
+    ///     Short breaths alone do not make a mob gasp until it has taken real oxygen damage.
+    ///     Mobs with <see cref="GaspOnAsphyxiationComponent"/> already gasp from that damage, so they are left to it.
+    /// </summary>
+    private bool ShouldGasp(Entity<RespiratorComponent> ent)
+    {
+        if (HasComp<GaspOnAsphyxiationComponent>(ent))
+            return false;
+
+        return _damageableSys.GetAllDamage(ent.Owner).DamageDict.TryGetValue(AsphyxiationType, out var asphyxiation) &&
+               asphyxiation >= ent.Comp.GaspDamageThreshold;
     }
 }
 

@@ -12,6 +12,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared.Traits.Assorted;
 using Robust.Shared.Network;
+using Robust.Shared.Physics.Components; // CMU14
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Random;
 using ApeComponent = Content.Shared.CMU14.Threats.Mobs.Ape.ApeComponent;
@@ -111,10 +112,15 @@ public sealed partial class RMCGibSystem : EntitySystem
             // Drop the item next to the target
             _transform.DropNextTo(item, (target, targetTransform));
 
+            // CMU14: dropping virtual hand items queues their deletion; they have no physics to scatter.
+            if (TerminatingOrDeleted(item) || EntityManager.IsQueuedForDeletion(item) ||
+                !TryComp(item, out PhysicsComponent? body))
+                continue;
+
             // Apply random launch impulse to scatter the item
             var scatterAngle = _random.NextAngle();
             var scatterVector = scatterAngle.ToVec() * (impulse + _random.NextFloat(impulseVariance));
-            _physics.ApplyLinearImpulse(item, scatterVector);
+            _physics.ApplyLinearImpulse(item, scatterVector, body: body); // CMU14: reuse the validated body.
 
             // Give the item a random rotation for visual effect
             _transform.SetWorldRotation(item, _random.NextAngle());

@@ -1,5 +1,6 @@
 ﻿using Content.Server.Fluids.EntitySystems;
 using Content.Server.Spreader;
+using Content.Shared.Chemistry.Components; // CMU14: reaction fallback below
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.EntityEffects;
 using Content.Shared.EntityEffects.Effects.Solution;
@@ -27,14 +28,22 @@ public sealed partial class AreaReactionEntityEffectsSystem : EntityEffectSystem
     // TODO: A sane way to make Smoke without a solution.
     protected override void Effect(Entity<TransformComponent> entity, ref EntityEffectEvent<AreaReactionEffect> args)
     {
-        if (args.ReagentContext is not { Source: { } source } context)
+        // CMU14: reactions never pass a reagent context, so fall back to the reacting solution itself.
+        // without this every smoke/foam reaction (mfhs, weedkiller, chem smoke) silently did nothing
+        var source = args.ReagentContext?.Source;
+        if (source == null && TryComp<SolutionComponent>(entity, out var reacting))
+            source = reacting.Solution;
+
+        if (source == null)
             return;
+
+        var quantity = args.ReagentContext is { } context ? context.Quantity.Quantity.Float() : args.Scale; // CMU14: reaction scale = units reacted
 
         var xform = entity.Comp;
         var mapCoords = _xform.GetMapCoordinates(entity);
         var spreadAmount = (int) Math.Max(
             0,
-            Math.Ceiling(context.Quantity.Quantity.Float() / args.Effect.OverflowThreshold));
+            Math.Ceiling(quantity / args.Effect.OverflowThreshold));
         var effect = args.Effect;
 
         if (!_map.TryFindGridAt(mapCoords, out var gridUid, out var grid) ||

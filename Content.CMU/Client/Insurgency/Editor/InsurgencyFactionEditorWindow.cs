@@ -366,7 +366,7 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
     // GOVFOR "factions" are Platoons (USMC, TWE RMC, UPP, and so on). A faction author picks which
     // of these platoons their cell opposes; the round's selected GOVFOR platoon drives the match.
     private List<(string Id, string Display)> PlatoonOptions() => _prototype.EnumeratePrototypes<PlatoonPrototype>()
-        .Select(p => (p.ID, string.IsNullOrWhiteSpace(p.Name) ? p.ID : $"{p.Name}  [{p.ID}]"))
+        .Select(p => (p.ID, string.IsNullOrWhiteSpace(p.Name) ? p.ID : $"{Loc.GetString(p.Name)}  [{p.ID}]"))
         .OrderBy(x => x.Item2, StringComparer.InvariantCultureIgnoreCase)
         .ToList();
 

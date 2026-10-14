@@ -273,6 +273,10 @@ public sealed partial class CMArmorSystem : EntitySystem
 
     private void OnArmorCanPerformStep(Entity<CMHardArmorComponent> ent, ref InventoryRelayedEvent<CMSurgeryCanPerformStepEvent> args)
     {
+        // CMU14: yautja medicomp steps are surface-depth self-surgery
+        if (args.Args.IgnoreArmor)
+            return;
+
         if (args.Args.Invalid == StepInvalidReason.None)
             args.Args.Invalid = StepInvalidReason.Armor;
     }

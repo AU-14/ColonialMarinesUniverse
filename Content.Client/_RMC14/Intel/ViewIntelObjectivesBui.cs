@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Intel;
+using Content.Shared._RMC14.Intel;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -49,7 +49,7 @@ public sealed class ViewIntelObjectivesBui(EntityUid owner, Enum uiKey) : BoundU
             _window.ColonyPowerLabel.Text = string.Join("\n", comp.TeamTrees.Select(kvp => kvp.Key.ToUpperInvariant() + ": " + (kvp.Value.ColonyPower ? Loc.GetString("rmc-ui-intel-colony-status-online") : Loc.GetString("rmc-ui-intel-colony-status-offline"))).ToArray());
 
             // Clues: create tabs for each team and category
-            _window.CluesContainer.DisposeAllChildren();
+            _window.CluesContainer.ReleaseChildren();
             foreach (var (team, teamTree) in comp.TeamTrees)
             {
                 foreach (var (category, clues) in teamTree.Clues)
@@ -97,7 +97,7 @@ public sealed class ViewIntelObjectivesBui(EntityUid owner, Enum uiKey) : BoundU
         _window.ColonyCommunicationsLabel.Text = Loc.GetString("rmc-ui-intel-colony-status", ("online", tree.ColonyCommunications));
         _window.ColonyPowerLabel.Text = Loc.GetString("rmc-ui-intel-colony-status", ("online", tree.ColonyPower));
 
-        _window.CluesContainer.DisposeAllChildren();
+        _window.CluesContainer.ReleaseChildren();
         foreach (var (category, clues) in comp.Tree.Clues)
         {
             var scroll = new ScrollContainer

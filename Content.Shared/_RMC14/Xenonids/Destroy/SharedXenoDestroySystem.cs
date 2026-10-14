@@ -109,13 +109,13 @@ public abstract partial class SharedXenoDestroySystem : EntitySystem
 
         if (!_interaction.InRangeUnobstructed(xeno, target, xeno.Comp.Range) || _rmcMap.IsTileBlocked(target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-destroy-cant-reach"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-destroy-cant-reach"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
-        if (!_area.TryGetArea(target, out var area, out var _) || area.Value.Comp.NoTunnel)
+        if (!_area.TryGetArea(target, out var area, out var _) || !_area.CanDestroyLeapInto(area.Value)) // CMU14
         {
-            _popup.PopupClient(Loc.GetString("rmc-destroy-cant-area"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-destroy-cant-area"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
@@ -145,7 +145,7 @@ public abstract partial class SharedXenoDestroySystem : EntitySystem
 
         if (!_interaction.InRangeUnobstructed(xeno, coords, xeno.Comp.Range) || _rmcMap.IsTileBlocked(coords))
         {
-            _popup.PopupClient(Loc.GetString("rmc-destroy-cant-reach"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-destroy-cant-reach"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 

@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Client.CMU14.UserInterface.Options;
 using Content.Client.Stylesheets;
 using Content.Shared.CMU14.Input;
+using Content.Shared.CMU14.Inventory;
 using Content.Shared._RMC14.Input;
 using Content.Shared.CCVar;
 using Content.Shared.Chat.Prototypes;
@@ -262,6 +263,8 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(CMKeyFunctions.CMHolsterSecondary);
             AddButton(CMKeyFunctions.CMHolsterTertiary);
             AddButton(CMKeyFunctions.CMHolsterQuaternary);
+            AddButton(CMUKeyFunctions.CMUOpenWornStorage); // CMU14
+            AddToggleCvarCheckBox("ui-options-cmu-click-opens-worn-storage", CMUInventoryCVars.ClickOpensWornStorage); // CMU14
             AddButton(CMKeyFunctions.RMCPickUpDroppedItems);
             AddButton(CMKeyFunctions.RMCInteractWithOtherHand);
             AddButton(CMKeyFunctions.RMCRest);
@@ -276,9 +279,6 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(CMUKeyFunctions.CMUTargetBodyZoneLeftLeg);
             AddButton(CMUKeyFunctions.CMUTargetBodyZoneRightLeg);
             AddButton(CMUKeyFunctions.CMUOpenMedicalCraftingMenu);
-
-            AddHeader("ui-options-header-cmu-zlevels");
-            AddButton(CMUKeyFunctions.CMUToggleShootDownZLevel);
 
             AddHeader("ui-options-header-cmu-gunship");
             AddButton(CMUKeyFunctions.CMUGunshipForward);
@@ -374,13 +374,14 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.Walk);
             AddCheckBox("ui-options-hotkey-toggle-walk", _cfg.GetCVar(CCVars.ToggleWalk), HandleToggleWalk);
             InitToggleWalk();
-            AddButton(ContentKeyFunctions.ToggleKnockdown);
+            // AddButton(ContentKeyFunctions.ToggleKnockdown); // CMU14: vanilla prone removed
 
             AddHeader("ui-options-header-camera");
             AddButton(EngineKeyFunctions.CameraRotateLeft);
             AddButton(EngineKeyFunctions.CameraRotateRight);
             AddButton(EngineKeyFunctions.CameraReset);
             AddButton(ContentKeyFunctions.RotateCameraWithMouse);
+            AddButton(CMUKeyFunctions.CMUToggleFirstPersonMouse); // CMU14
             AddButton(ContentKeyFunctions.ZoomIn);
             AddButton(ContentKeyFunctions.ZoomOut);
             AddButton(ContentKeyFunctions.ResetZoom);

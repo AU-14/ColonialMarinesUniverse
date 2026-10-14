@@ -18,6 +18,9 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Content.Shared._RMC14.Tackle;
+using Content.Shared._RMC14.K9.Components; // CMU14: k9s bite weeds
+using Content.Shared._RMC14.Xenonids.Construction.Nest; // CMU14: k9s bite wall weeds
+using Content.Shared._RMC14.Xenonids.Weeds; // CMU14: k9s bite weeds
 
 namespace Content.Shared._RMC14.Weapons.Melee;
 
@@ -148,6 +151,10 @@ public abstract partial class SharedRMCMeleeWeaponSystem : EntitySystem
     private void OnImmuneToUnarmedGettingAttacked(Entity<ImmuneToUnarmedComponent> ent, ref GettingAttackedAttemptEvent args)
     {
         if (!ent.Comp.ApplyToXenos && _xenoQuery.HasComp(args.Attacker))
+            return;
+
+        // CMU14: a k9's bite is its only weapon, it has to tear weeds and wall weeds to free nested people
+        if (HasComp<K9DogComponent>(args.Attacker) && (HasComp<XenoWeedsComponent>(ent) || HasComp<XenoNestSurfaceComponent>(ent)))
             return;
 
         if (args.Attacker == args.Weapon)

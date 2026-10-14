@@ -160,11 +160,11 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         var decidedRounds = dashboard.Modes.Sum(mode => mode.DecidedTotal);
         _summary.Text = $"{totalRounds} tracked endings, {decidedRounds} decided wins";
 
-        _modes.DisposeAllChildren();
+        _modes.ReleaseChildren();
         foreach (var mode in dashboard.Modes)
             _modes.AddChild(MakeModePanel(mode));
 
-        _recent.DisposeAllChildren();
+        _recent.ReleaseChildren();
         if (dashboard.RecentRounds.Count == 0)
         {
             _recent.AddChild(MakeEmptyPanel("No tracked rounds yet."));
@@ -281,10 +281,10 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
             "decided endings",
             StreakColor(mode.LongestStreak)));
         grid.AddChild(MakeMetric(
-            "Avg Duration",
+            "Average Duration",
             FormatDurationOrNone(mode.Durations.AverageSeconds),
-            $"{mode.SideA} {FormatDurationOrNone(mode.Durations.SideAAverageSeconds)} / " +
-            $"{mode.SideB} {FormatDurationOrNone(mode.Durations.SideBAverageSeconds)}",
+            $"{SideMinutes(mode.SideA, mode.Durations.SideAAverageSeconds)} / " +
+            $"{SideMinutes(mode.SideB, mode.Durations.SideBAverageSeconds)}",
             Border));
 
         return grid;
@@ -581,8 +581,8 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         foreach (var threat in mode.Threats)
         {
             var decided = threat.SideAWins + threat.SideBWins;
-            var text = $"{mode.SideA} {FormatRate(threat.SideAWins, decided)} ({threat.SideAWins}) / " +
-                       $"{mode.SideB} {FormatRate(threat.SideBWins, decided)} ({threat.SideBWins})";
+            var text = $"{SideWins(mode.SideA, threat.SideAWins, decided)} / " +
+                       $"{SideWins(mode.SideB, threat.SideBWins, decided)}";
             if (threat.Draws > 0)
                 text += $" / draws {threat.Draws}";
             if (threat.Unknown > 0)
@@ -608,8 +608,8 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         foreach (var planet in mode.Planets)
         {
             var decided = planet.SideAWins + planet.SideBWins;
-            var text = $"{mode.SideA} {FormatRate(planet.SideAWins, decided)} ({planet.SideAWins}) / " +
-                       $"{mode.SideB} {FormatRate(planet.SideBWins, decided)} ({planet.SideBWins}) / " +
+            var text = $"{SideWins(mode.SideA, planet.SideAWins, decided)} / " +
+                       $"{SideWins(mode.SideB, planet.SideBWins, decided)} / " +
                        $"avg {FormatDurationOrNone(planet.AverageDurationSeconds)}";
             if (planet.Draws > 0)
                 text += $" / draws {planet.Draws}";
@@ -636,8 +636,8 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         foreach (var matchup in mode.PlatoonMatchups)
         {
             var decided = matchup.SideAWins + matchup.SideBWins;
-            var text = $"{mode.SideA} {FormatRate(matchup.SideAWins, decided)} ({matchup.SideAWins}) / " +
-                       $"{mode.SideB} {FormatRate(matchup.SideBWins, decided)} ({matchup.SideBWins})";
+            var text = $"{SideWins(mode.SideA, matchup.SideAWins, decided)} / " +
+                       $"{SideWins(mode.SideB, matchup.SideBWins, decided)}";
             if (matchup.Draws > 0)
                 text += $" / draws {matchup.Draws}";
             if (matchup.Unknown > 0)
@@ -667,8 +667,8 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         foreach (var band in mode.PlayerCountBands)
         {
             var decided = band.SideAWins + band.SideBWins;
-            var text = $"{mode.SideA} {FormatRate(band.SideAWins, decided)} ({band.SideAWins}) / " +
-                       $"{mode.SideB} {FormatRate(band.SideBWins, decided)} ({band.SideBWins})";
+            var text = $"{SideWins(mode.SideA, band.SideAWins, decided)} / " +
+                       $"{SideWins(mode.SideB, band.SideBWins, decided)}";
             if (band.Draws > 0)
                 text += $" / draws {band.Draws}";
             if (band.Unknown > 0)
@@ -822,9 +822,31 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
     private static string FormatRate(int wins, int decided)
     {
         return decided <= 0
-            ? "0.0%"
-            : $"{wins * 100f / decided:0.0}%";
+            ? "0%"
+            : $"{wins * 100f / decided:0}%";
     }
+
+    private static string SideShorthand(string side)
+    {
+        return side.Trim().ToLowerInvariant() switch
+        {
+            "xeno" or "threat" => "X",
+            "govfor" => "G",
+            "opfor" => "O",
+            "indfor" => "I",
+            "colonist" or "colonists" => "C",
+            "clf" => "CLF",
+            var other => other,
+        };
+    }
+
+    private static string SideWins(string side, int wins, int decided)
+        => $"{SideShorthand(side)}-{wins} ({FormatRate(wins, decided)})";
+
+    private static string SideMinutes(string side, int seconds)
+        => seconds <= 0
+            ? "No data"
+            : $"{SideShorthand(side)}-{seconds / 60f:0}min";
 
     private static string FormatRecentForm(CMURoundModeStatistics mode)
     {

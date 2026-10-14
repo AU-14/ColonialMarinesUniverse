@@ -78,7 +78,9 @@ public sealed class BloodstreamPrototypeMigrationTest : GameTest
             Assert.Multiple(() =>
             {
                 Assert.That(SEntMan.HasComponent<SolutionManagerComponent>(target), Is.True);
+#pragma warning disable CS0612 // CMU14: Regression coverage intentionally inspects the legacy solution schema.
                 Assert.That(SEntMan.HasComponent<SolutionContainerManagerComponent>(target), Is.False);
+#pragma warning restore CS0612
                 Assert.That(SComp<InjectableSolutionComponent>(target).Solution,
                     Is.EqualTo(BloodstreamComponent.DefaultBloodSolutionName));
             });

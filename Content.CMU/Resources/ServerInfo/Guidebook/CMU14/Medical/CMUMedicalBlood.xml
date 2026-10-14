@@ -1,0 +1,59 @@
+<Document>
+  # Blood and Transfusions
+
+  Blood lost to bleeding has to be put back. Stop the bleeding first, then give blood, plasma or saline through a blood pack or an IV stand. See [textlink="Wounds and Bleeding" link="CMUGuideMedicalWounds"].
+
+  ## Blood Types
+  Everyone has a blood type, picked in character creation. It's printed on their ID card, and a health analyzer shows it next to their blood level.
+  - Blood packs are labelled with their type. Blood from the WeYu Blood Dispenser comes in every type.
+  - When a patient is low on blood, the health analyzer's advice lists the blood types and plasma groups they can take.
+  - Only give blood the patient can take, the same as real life. [bold]O-[/bold] blood can go to anyone, and [bold]AB+[/bold] patients can take any blood.
+
+  Who can take which blood:
+  - [bold]O-[/bold] patients: O- only.
+  - [bold]O+[/bold]: O- and O+.
+  - [bold]A-[/bold]: O- and A-.
+  - [bold]A+[/bold]: O-, O+, A- and A+.
+  - [bold]B-[/bold]: O- and B-.
+  - [bold]B+[/bold]: O-, O+, B- and B+.
+  - [bold]AB-[/bold]: O-, A-, B- and AB-.
+  - [bold]AB+[/bold]: any type.
+
+  - [color=red]The wrong type is destroyed in the bloodstream[/color]. It restores nothing, and it poisons the patient. It keeps running in even when the patient's blood is full.
+  - Drawing blood from someone into an empty pack labels it with their type. Filling one pack from two different types makes it [color=red]mixed[/color], safe for nobody. An emptied pack can be refilled with any type.
+
+  ## Keeping Blood Fresh
+  - Blood [color=red]goes bad after 30 minutes out of the fridge[/color], plasma after [color=red]20 minutes[/color]. The time adds up, and putting a pack back in the cold pauses it but doesn't reset it.
+  - A [bold]blood cooler[/bold], a [bold]freezer crate[/bold] or a full-size [bold]IV stand[/bold] keeps packs cold. A pack held in your hand or on a folding IV stand isn't.
+  - The blood cooler only holds blood packs and IV bags, and fits in a satchel. Corpsmen get one in their essential kit, and WeYu medical vendors stock them.
+  - Examining a pack tells you when it's getting warm, and when it's gone bad.
+  - [color=red]Spoiled blood and plasma[/color] do no good and poison the patient. Saline doesn't spoil.
+  - An empty pack can be refilled with fresh blood.
+
+  ## Giving Blood
+  <Box>
+    <GuideEntityEmbed Entity="CMUSalineBag" Caption="Saline bag"/>
+    <GuideEntityEmbed Entity="CMBloodPack" Caption="Blood pack"/>
+    <GuideEntityEmbed Entity="CMUIVPressureBag" Caption="Pressure bag"/>
+    <GuideEntityEmbed Entity="CMUBloodCooler" Caption="Blood cooler"/>
+  </Box>
+  - [bold]From your hand[/bold]: use a pack on the patient to hook it up. It stays connected while you hold it.
+  - [bold]Squeeze it[/bold]: use the connected pack in your hand ([bold]Z[/bold]) to start squeezing it every few seconds, making it run in three times as fast. Press it again to stop. You also stop if you let go of the pack, it gets disconnected or you're knocked out.
+  - [bold]IV stand[/bold]: hang the pack on a stand and drag the stand onto the patient. Fit a [bold]pressure bag[/bold] by using it on the stand and the drip runs twice as fast. Take it off again with the stand's alt-click option.
+
+  ## Plasma
+  - Plasma runs in twice as fast as whole blood.
+  - Plasma packs are typed too, but [bold]plasma matches the other way round to blood[/bold], as in real life, and Rh doesn't matter:
+    - [bold]AB[/bold] plasma can go to anyone.
+    - [bold]A[/bold] plasma goes to A and O patients.
+    - [bold]B[/bold] plasma goes to B and O patients.
+    - [bold]O[/bold] plasma only goes to O patients.
+  - For a while after it's given, it [bold]slows all bleeding by half[/bold], open wounds and internal bleeding alike. The more plasma, the longer it lasts, up to 5 minutes.
+  - It doesn't stop bleeding: treat the wounds as usual.
+
+  ## Saline
+  - Saline fills lost blood volume for any blood type, but it isn't blood.
+  - [color=red]If more than a quarter of a patient's blood is saline, it starts poisoning them[/color], harder the further past that it goes.
+  - The health analyzer shows how much of the blood is saline. It turns orange once it's past the safe share.
+  - The body slowly replaces saline with real blood. A [bold]portable dialysis machine[/bold] filters it out five times faster; see [textlink="Medical Machines" link="CMUGuideMedicalMachines"]. Use saline to buy time, then follow up with blood.
+</Document>

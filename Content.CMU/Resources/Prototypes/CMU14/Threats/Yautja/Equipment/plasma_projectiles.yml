@@ -19,6 +19,46 @@
     energy: 2.2
 
 - type: entity
+  parent: MuzzleFlashEffect
+  id: CMUYautjaPlasmaPistolMuzzleFlash
+  categories: [HideSpawnMenu]
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    offset: 0.25, 0
+    scale: 1.1, 1.1
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: CMU14/Yautja/plasma_projectiles.rsi
+      state: muzzle_energy
+  - type: PointLight
+    enabled: true
+    color: "#4fdcff"
+    radius: 2.5
+    energy: 1.8
+
+- type: entity
+  parent: MuzzleFlashEffect
+  id: CMUYautjaPlasmaRifleMuzzleFlash
+  categories: [HideSpawnMenu]
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    offset: 0.3, 0
+    scale: 1.75, 1.75
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: CMU14/Yautja/plasma_projectiles.rsi
+      state: muzzle_flash_blue
+  - type: PointLight
+    enabled: true
+    color: "#55c7ff"
+    radius: 4.25
+    energy: 2.9
+
+- type: entity
   id: CMUYautjaPlasmaImpactEffect
   categories: [HideSpawnMenu]
   components:
@@ -191,6 +231,12 @@
   name: plasma pistol bolt
   categories: [HideSpawnMenu]
   components:
+  - type: Sprite
+    layers:
+    - state: pulse1
+      shader: unshaded
+  - type: Ammo
+    muzzleFlash: CMUYautjaPlasmaPistolMuzzleFlash
   - type: Projectile
     impactEffect: CMUYautjaPlasmaImpactEffect
     damage:
@@ -205,6 +251,12 @@
   name: plasma rifle bolt
   categories: [HideSpawnMenu]
   components:
+  - type: Sprite
+    layers:
+    - state: plasma
+      shader: unshaded
+  - type: Ammo
+    muzzleFlash: CMUYautjaPlasmaRifleMuzzleFlash
   - type: Projectile
     impactEffect: CMUYautjaPlasmaHeavyImpactEffect
     damage:

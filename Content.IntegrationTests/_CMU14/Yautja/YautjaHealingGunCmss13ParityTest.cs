@@ -13,6 +13,8 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaHealingGunCmss13ParityTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<DamageTypePrototype> BluntPrototype = "Blunt";
+
     [Test]
     public async Task HealingGunDoesNotDirectlyHealOutsideMedicompSurgery()
     {
@@ -29,7 +31,7 @@ public sealed class YautjaHealingGunCmss13ParityTest
 
             try
             {
-                damageable.TryChangeDamage(user, new DamageSpecifier(prototypes.Index<DamageTypePrototype>("Blunt"), 30));
+                damageable.TryChangeDamage(user, new DamageSpecifier(prototypes.Index<DamageTypePrototype>(BluntPrototype), 30));
                 var beforeHeal = entMan.System<DamageableSystem>().GetAllDamage(user).GetTotal();
 
                 var firstUse = new UseInHandEvent(user);

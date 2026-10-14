@@ -261,6 +261,7 @@ public sealed class FighterEffectsControl : Control
         _particles.Mote(origin, new Vector2(14, 23) * scale, Flame.WithAlpha(.35f + .1f * MathF.Sin(time * 18)));
     }
 
+    [Obsolete("Retained for CMUControlLifetime.Release cleanup.")]
     protected override void Dispose(bool disposing)
     {
         if (disposing) _particles.Dispose();

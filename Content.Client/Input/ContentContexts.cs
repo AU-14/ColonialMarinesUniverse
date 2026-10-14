@@ -37,6 +37,7 @@ namespace Content.Client.Input
             common.AddFunction(ContentKeyFunctions.SaveItemLocation);
             common.AddFunction(ContentKeyFunctions.Point);
             common.AddFunction(ContentKeyFunctions.RotateCameraWithMouse);
+            common.AddFunction(CMUKeyFunctions.CMUToggleFirstPersonMouse); // CMU14
             common.AddFunction(ContentKeyFunctions.ZoomOut);
             common.AddFunction(ContentKeyFunctions.ZoomIn);
             common.AddFunction(ContentKeyFunctions.ResetZoom);
@@ -57,7 +58,7 @@ namespace Content.Client.Input
             human.AddFunction(EngineKeyFunctions.MoveLeft);
             human.AddFunction(EngineKeyFunctions.MoveRight);
             human.AddFunction(EngineKeyFunctions.Walk);
-            human.AddFunction(ContentKeyFunctions.ToggleKnockdown);
+            // human.AddFunction(ContentKeyFunctions.ToggleKnockdown); // CMU14: vanilla prone removed
             human.AddFunction(ContentKeyFunctions.SwapHands);
             human.AddFunction(ContentKeyFunctions.SwapHandsReverse);
             human.AddFunction(ContentKeyFunctions.Drop);
@@ -156,6 +157,7 @@ namespace Content.Client.Input
             human.AddFunction(CMKeyFunctions.RMCPickUpDroppedItems);
             human.AddFunction(CMKeyFunctions.RMCInteractWithOtherHand);
             human.AddFunction(CMKeyFunctions.RMCRest);
+            human.AddFunction(CMUKeyFunctions.CMUOpenWornStorage); // CMU14
             human.AddFunction(CMUKeyFunctions.CMUCycleBodyZoneTarget);
             human.AddFunction(CMUKeyFunctions.CMUCycleBodyZoneTargetReverse);
             human.AddFunction(CMUKeyFunctions.CMUTargetBodyZoneHead);
@@ -165,7 +167,6 @@ namespace Content.Client.Input
             human.AddFunction(CMUKeyFunctions.CMUTargetBodyZoneLeftLeg);
             human.AddFunction(CMUKeyFunctions.CMUTargetBodyZoneRightLeg);
             human.AddFunction(CMUKeyFunctions.CMUOpenMedicalCraftingMenu);
-            human.AddFunction(CMUKeyFunctions.CMUToggleShootDownZLevel);
             human.AddFunction(CMUKeyFunctions.CMUGunshipForward);
             human.AddFunction(CMUKeyFunctions.CMUGunshipBack);
             human.AddFunction(CMUKeyFunctions.CMUGunshipLeft);

@@ -649,7 +649,7 @@ public sealed partial class CMUVisceralPressureProbeSystem : EntitySystem
         if (ent.Comp.QueueOnPermission is { } queued)
         {
             ent.Comp.QueueOnPermission = null;
-            EntityManager.QueueDeleteEntity(queued);
+            QueueDel(queued);
             ent.Comp.Queued = true;
             return;
         }

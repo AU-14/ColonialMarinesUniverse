@@ -41,7 +41,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.CargoVehicle;
 
-public sealed class CMUCargoVehicleSystem : EntitySystem
+public sealed partial class CMUCargoVehicleSystem : EntitySystem
 {
     private const string ReturnActionId = "CMUActionCargoVehicleReturn";
     private const string SelfDestructActionId = "CMUActionCargoVehicleSelfDestruct";

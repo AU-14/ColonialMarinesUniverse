@@ -12,15 +12,15 @@ using Robust.Shared.Map.Components;
 
 namespace Content.Server.CMU14.Atmos;
 
-public sealed class CMUExhaustVentSystem : EntitySystem
+public sealed partial class CMUExhaustVentSystem : EntitySystem
 {
     private const string ScrewingQuality = "Screwing";
 
-    [Dependency] private readonly NodeContainerSystem _nodeContainer = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedToolSystem _tool = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly CMUOutdoorAtmosphereSystem _outdoor = default!;
+    [Dependency] private NodeContainerSystem _nodeContainer = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private CMUOutdoorAtmosphereSystem _outdoor = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery = default!;
 
@@ -70,7 +70,7 @@ public sealed class CMUExhaustVentSystem : EntitySystem
         ent.Comp.IsOpen = !ent.Comp.IsOpen;
 
         var state = Loc.GetString(ent.Comp.IsOpen ? "cmu-exhaust-vent-open" : "cmu-exhaust-vent-closed");
-        _popup.PopupClient(Loc.GetString("cmu-exhaust-vent-toggle-state", ("state", state)), ent, args.User);
+        _popup.PopupEntity(Loc.GetString("cmu-exhaust-vent-toggle-state", ("state", state)), ent, args.User);
     }
 
     private void OnExamined(Entity<CMUExhaustVentComponent> ent, ref ExaminedEvent args)

@@ -10,6 +10,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Map.Events;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Timing; // CMU14: per decal delta tick stamps
 
 namespace Content.Server.Decals;
 
@@ -17,6 +18,7 @@ public sealed partial class DecalSystem : SharedDecalSystem
 {
     [Dependency] private IAdminManager _adminManager = default!;
     [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private IGameTiming _gameTiming = default!; // CMU14: per decal delta tick stamps
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private TurfSystem _turf = default!;
@@ -31,12 +33,16 @@ public sealed partial class DecalSystem : SharedDecalSystem
         base.Initialize();
 
         SubscribeLocalEvent<TileChangedEvent>(OnTileChanged);
+#pragma warning disable CS0618 // CMU14: Read legacy grid decals when migrating saved maps and replay state.
         SubscribeLocalEvent<DecalGridComponent, ComponentStartup>(OnLegacyDecalGridStartup);
+#pragma warning restore CS0618
         SubscribeLocalEvent<BeforeSerializationEvent>(OnBeforeSerialization);
         SubscribeLocalEvent<PostGridSplitEvent>(OnGridSplit);
     }
 
+#pragma warning disable CS0618 // CMU14: Read legacy grid decals when migrating saved maps and replay state.
     private void OnLegacyDecalGridStartup(EntityUid uid, DecalGridComponent component, ComponentStartup args)
+#pragma warning restore CS0618
     {
         MigrateLegacyDecalGrid(uid, component);
         RemComp(uid, component);
@@ -55,7 +61,9 @@ public sealed partial class DecalSystem : SharedDecalSystem
 
         foreach (var uid in ev.Entities)
         {
+#pragma warning disable CS0618 // CMU14: Read legacy grid decals when migrating saved maps and replay state.
             if (!TryComp<DecalGridComponent>(uid, out var component))
+#pragma warning restore CS0618
                 continue;
 
             MigrateLegacyDecalGrid(uid, component);
@@ -72,7 +80,9 @@ public sealed partial class DecalSystem : SharedDecalSystem
         }
     }
 
+#pragma warning disable CS0618 // CMU14: Read legacy grid decals when migrating saved maps and replay state.
     private void MigrateLegacyDecalGrid(EntityUid uid, DecalGridComponent component)
+#pragma warning restore CS0618
     {
         // Old maps store grid-wide decal chunks; convert them into chunk entities and remove the legacy component.
         foreach (var chunk in component.ChunkCollection.ChunkCollection.Values)
@@ -254,6 +264,9 @@ public sealed partial class DecalSystem : SharedDecalSystem
         }
 
         FreeDecalId(decals, decalId);
+        // CMU14: delta bookkeeping, a later id reuse clears the removal again
+        decals.RemovedTicks[decalId] = _gameTiming.CurTick;
+        decals.ModifiedTicks.Remove(decalId);
         DirtyChunk((chunkEnt.Value.Owner, chunkEnt.Value.Comp, decals));
         return true;
     }
@@ -278,6 +291,8 @@ public sealed partial class DecalSystem : SharedDecalSystem
             return false;
 
         chunk.Comp2.Decals[decalId.Id] = modifyDecal(chunk.Comp2.Decals[decalId.Id]);
+        // CMU14: delta bookkeeping
+        chunk.Comp2.ModifiedTicks[decalId.Id] = _gameTiming.CurTick;
         DirtyChunk(chunk);
         return true;
     }
@@ -317,6 +332,10 @@ public sealed partial class DecalSystem : SharedDecalSystem
             chunk.Comp2.MaxDecalId = Math.Max(chunk.Comp2.MaxDecalId, id);
             chunk.Comp2.FreeDecalIds.Remove(id);
         }
+
+        // CMU14: delta bookkeeping, a reused id supersedes its earlier removal
+        chunk.Comp2.ModifiedTicks[id] = _gameTiming.CurTick;
+        chunk.Comp2.RemovedTicks.Remove(id);
 
         DirtyChunk(chunk);
     }
@@ -435,7 +454,8 @@ public sealed partial class DecalSystem : SharedDecalSystem
             return;
         }
 
-        DirtyField(chunk.Owner, chunk.Comp2, nameof(DecalChunkComponent.Decals));
+        // DirtyField(chunk.Owner, chunk.Comp2, nameof(DecalChunkComponent.Decals)); // CMU14: delta states are manual, dirtying the dictionary field would be a no op
+        Dirty(chunk.Owner, chunk.Comp2);
     }
 
     /// <summary>

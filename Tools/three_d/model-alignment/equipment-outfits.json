@@ -1,0 +1,132 @@
+[
+  {
+    "startingGear": "CMUGearColonyChaplain",
+    "modeledEquipment": [
+      {
+        "slot": "eyes",
+        "item": "RMCGogglesKutjevo",
+        "model": "CMU3DWornRMCGogglesKutjevoEyes"
+      },
+      {
+        "slot": "mask",
+        "item": "RMCMaskKutjevoRespirator",
+        "model": "CMU3DWornRMCMaskKutjevoRespiratorMask"
+      },
+      {
+        "slot": "back",
+        "item": "CMSatchelFillSurvivorPriest",
+        "model": "CMU3DWornCMSatchelBack"
+      },
+      {
+        "slot": "shoes",
+        "item": "RMCShoesJackboots",
+        "model": "CMU3DWornRMCBootsPMCShoes"
+      },
+      {
+        "slot": "gloves",
+        "item": "RMCHandsBlack",
+        "model": "CMU3DWornAU14PVEHandsInsulatedBlackMarineGloves"
+      },
+      {
+        "slot": "jumpsuit",
+        "item": "RMCJumpsuitKutjevoJumper",
+        "model": "CMU3DWornRMCJumpsuitKutjevoJumperJumpsuit"
+      },
+      {
+        "slot": "outerClothing",
+        "item": "RMCClothingHolidayRobes",
+        "model": "CMU3DWornRMCClothingHolidayRobesOuterClothing"
+      }
+    ]
+  },
+  {
+    "startingGear": "AU14GearPARTYPartyEngineer",
+    "modeledEquipment": [
+      {
+        "slot": "outerClothing",
+        "item": "AU14ArmorProdigyXAS23",
+        "model": "CMU3DWornAU14ArmorProdigyXAS23OuterClothing"
+      },
+      {
+        "slot": "jumpsuit",
+        "item": "AU14ProdigyFatiguesRU",
+        "model": "CMU3DWornAU14ProdigyFatiguesRUJumpsuit"
+      },
+      {
+        "slot": "shoes",
+        "item": "RMCBootsSPPBlackFilled",
+        "model": "CMU3DWornCMBootsBlackShoes"
+      },
+      {
+        "slot": "mask",
+        "item": "RMCMaskCoifPMC",
+        "model": "CMU3DWornCMMaskCoifMask"
+      },
+      {
+        "slot": "eyes",
+        "item": "AU14ProdigyWeldingGoggles",
+        "model": "CMU3DWornAU14ProdigyWeldingGogglesEyes"
+      },
+      {
+        "slot": "head",
+        "item": "AU14ProdigyBallisticHelmetPART",
+        "model": "CMU3DWornAU14ProdigyBallisticHelmetPARTHead"
+      },
+      {
+        "slot": "gloves",
+        "item": "AU14HandsProdigyRU",
+        "model": "CMU3DWornAU14HandsProdigyRUGloves"
+      },
+      {
+        "slot": "belt",
+        "item": "AU14BeltUtilityCombatProdigyRUFilled",
+        "model": "CMU3DWornAU14BeltUtilityCombatProdigyRUFilledBelt"
+      },
+      {
+        "slot": "back",
+        "item": "RMCSatchelWelderRU",
+        "model": "CMU3DWornRMCSatchelWelderRUBack"
+      }
+    ]
+  },
+  {
+    "startingGear": "AU14GearRMCRRTSmartgunner",
+    "modeledEquipment": [
+      {
+        "slot": "outerClothing",
+        "item": "AU14ArmorSmartGunDesertCombatHarnessRMC",
+        "model": "CMU3DWornAU14ArmorSmartGunDesertCombatHarnessRMCOuterClothing"
+      },
+      {
+        "slot": "jumpsuit",
+        "item": "AU14FatiguesBlackRMC",
+        "model": "CMU3DWornAU14FatiguesBlackRMCJumpsuit"
+      },
+      {
+        "slot": "shoes",
+        "item": "RMCBootsRoyalFilled",
+        "model": "CMU3DWornRMCBootsRoyalFilledShoes"
+      },
+      {
+        "slot": "mask",
+        "item": "RMCMaskScarfTan",
+        "model": "CMU3DWornRMCMaskScarfTanMask"
+      },
+      {
+        "slot": "head",
+        "item": "AU14HeadHelmetRMCHeavy",
+        "model": "CMU3DWornAU14HeadHelmetRMCHeavyHead"
+      },
+      {
+        "slot": "gloves",
+        "item": "AU14HandsRMC",
+        "model": "CMU3DWornAU14HandsRMCGloves"
+      },
+      {
+        "slot": "belt",
+        "item": "RMCBeltSmartGunOperatorPistolFilledL165A1",
+        "model": "CMU3DWornAU14BeltSmartGunOperatorPistolForeconFilledBelt"
+      }
+    ]
+  }
+]

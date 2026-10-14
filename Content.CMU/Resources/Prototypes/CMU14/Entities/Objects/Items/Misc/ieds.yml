@@ -52,6 +52,9 @@
   - type: DeviceLinkSink
     ports:
     - Timer
+  # built to cripple light vehicles, credit the blast against hulls like a rocket
+  - type: VehicleDamageMultiplier
+    multiplier: 12
   - type: Explosive
     explosionType: RMC
     totalIntensity: 1400
@@ -97,6 +100,9 @@
   - type: DeviceLinkSink
     ports:
     - Timer
+  # built to cripple light vehicles, credit the blast against hulls like a rocket
+  - type: VehicleDamageMultiplier
+    multiplier: 12
   - type: Explosive
     explosionType: RMC
     totalIntensity: 1800

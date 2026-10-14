@@ -140,11 +140,7 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto))
             return;
 
-        if (!_thirdParty.SpawnThirdParty(partyProto, spawnProto, false))
-        {
-            _popup.PopupEntity(Loc.GetString("colony-economy-support-dispatch-failed"), uid, msg.Actor);
-            return;
-        }
+        _thirdParty.SpawnThirdParty(partyProto, spawnProto, false);
 
         // Deduct from ALL corporate consoles (they share one budget)
         var q = EntityQueryEnumerator<CorporateConsoleComponent>();

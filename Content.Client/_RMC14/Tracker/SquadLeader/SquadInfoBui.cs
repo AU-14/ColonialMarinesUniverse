@@ -77,7 +77,7 @@ public sealed partial class SquadInfoBui : BoundUserInterface
         }
 
         // Display objectives
-        _window.ObjectivesContainer.DisposeAllChildren();
+        _window.ObjectivesContainer.ReleaseChildren();
         foreach (SquadObjectiveType objectiveType in Enum.GetValues<SquadObjectiveType>())
         {
             var objectiveText = objectives.GetValueOrDefault(objectiveType, string.Empty);
@@ -101,7 +101,7 @@ public sealed partial class SquadInfoBui : BoundUserInterface
             _window.ObjectivesContainer.AddChild(objectiveLabel);
         }
 
-        _window.FireteamsContainer.DisposeAllChildren();
+        _window.FireteamsContainer.ReleaseChildren();
         for (var i = 0; i < tracker.Fireteams.Fireteams.Length; i++)
         {
             var fireteam = tracker.Fireteams.Fireteams[i];

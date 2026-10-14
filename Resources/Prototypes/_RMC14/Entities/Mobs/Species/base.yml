@@ -308,8 +308,9 @@
       275: Dead
   - type: MobStateActions
     actions:
-      Critical:
-      - CMActionGhost
+      # cmu edit start: no ghost button while in crit
+      Critical: []
+      # cmu edit end
       Dead:
       - CMActionGhost
   - type: Destructible
@@ -364,7 +365,7 @@
       - CanBeSupplyDropped
   - type: NewPlayerLabel
   - type: MarineMapTracked
-  - type: RMCSetPose
+# - type: RMCSetPose # CMU14: replaced by the in-round Edit Description verb
   - type: Evasion
   - type: CanBeFirePatted
   - type: FirePatter

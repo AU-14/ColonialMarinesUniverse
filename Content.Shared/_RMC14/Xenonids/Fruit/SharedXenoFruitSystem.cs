@@ -171,7 +171,7 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
             _actions.SetIcon(action.AsNullable(), new SpriteSpecifier.Rsi(new ResPath("_RMC14/Structures/Xenos/xeno_fruit.rsi"), GetFruitSprite(fruit)));
         }
 
-        _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-choose", ("fruit", args.Choice)), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-choose", ("fruit", args.Choice)), xeno, xeno);
     }
 
     #endregion
@@ -364,7 +364,7 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
 
         // Target has fruit, resin hole, egg, xeno construct or other obstruction on it
         var tile = _mapSystem.CoordinatesToTile(gridId, grid, target);
-        var anchored = _mapSystem.GetAnchoredEntitiesEnumerator(gridId, grid, tile);
+        var anchored = _mapSystem.GetAnchoredEntities(gridId, grid, tile);
         while (anchored.MoveNext(out var uid))
         {
             // Target on another fruit
@@ -410,7 +410,7 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
         // Check for selected fruit
         if (xeno.Comp.FruitChoice is not { })
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-plant-failed-select"), xeno.Owner, xeno.Owner, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-plant-failed-select"), xeno.Owner, xeno.Owner, PopupType.SmallCaution);
             return;
         }
 
@@ -422,7 +422,7 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
         // Check if target location valid
         if (!CanPlantOnTilePopup(xeno, coordinates, args.CheckWeeds, out var popup))
         {
-            _popup.PopupClient(popup, coordinates, xeno.Owner, PopupType.SmallCaution);
+            _popup.PopupCoordinates(popup, coordinates, xeno.Owner, PopupType.SmallCaution);
             return;
         }
 
@@ -493,7 +493,7 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
         var popupSelf = fruitOverflow ? Loc.GetString("rmc-xeno-fruit-plant-limit-exceeded")
             : Loc.GetString("rmc-xeno-fruit-plant-success-self");
         var popupOthers = Loc.GetString("rmc-xeno-fruit-plant-success-others", ("xeno", xeno));
-        _popup.PopupPredicted(popupSelf, popupOthers, xeno.Owner, xeno.Owner);
+        _popup.PopupEntity(popupSelf, popupOthers, xeno.Owner, xeno.Owner);
 
         UpdateFruitCount(xeno);
     }
@@ -522,7 +522,7 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
 
         if (!HasComp<MarineComponent>(user) && !_hive.FromSameHive(fruit.Owner, user))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-wrong-hive"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-wrong-hive"), user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -531,7 +531,7 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
             !HasComp<XenoFruitPlanterComponent>(user) &&
             fruit.Comp.State == XenoFruitState.Growing)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-pick-failed-not-mature", ("fruit", fruit)), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-pick-failed-not-mature", ("fruit", fruit)), user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -550,17 +550,17 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
         if (!_doAfter.TryStartDoAfter(doAfter))
         {
             if (HasComp<XenoComponent>(user))
-                _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-harvest-failed-xeno"), user, user, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-harvest-failed-xeno"), user, user, PopupType.SmallCaution);
             else
-                _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-harvest-failed-marine"), user, user, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-harvest-failed-marine"), user, user, PopupType.SmallCaution);
 
             return false;
         }
 
         if (HasComp<XenoComponent>(user))
-            _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-harvest-start-xeno", ("fruit", fruit)), user, user);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-harvest-start-xeno", ("fruit", fruit)), user, user);
         else
-            _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-harvest-start-marine", ("fruit", fruit)), user, user);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-harvest-start-marine", ("fruit", fruit)), user, user);
 
         return true;
     }
@@ -580,9 +580,9 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
         if (fruit.Comp.State == XenoFruitState.Growing)
         {
             if (HasComp<XenoComponent>(args.User))
-                _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-harvest-failed-not-mature-xeno", ("fruit", fruit)), args.User, args.User, PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-harvest-failed-not-mature-xeno", ("fruit", fruit)), args.User, args.User, PopupType.MediumCaution);
             else
-                _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-harvest-failed-not-mature-marine", ("fruit", fruit)), args.User, args.User, PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-harvest-failed-not-mature-marine", ("fruit", fruit)), args.User, args.User, PopupType.MediumCaution);
 
             if (_net.IsClient)
                 return;
@@ -594,9 +594,9 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
         }
 
         if (HasComp<XenoComponent>(args.User))
-            _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-harvest-success-xeno", ("fruit", fruit)), args.User, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-harvest-success-xeno", ("fruit", fruit)), args.User, args.User);
         else
-            _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-harvest-success-marine", ("fruit", fruit)), args.User, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-harvest-success-marine", ("fruit", fruit)), args.User, args.User);
 
         var xform = Transform(fruit);
         _transform.Unanchor(fruit, xform);
@@ -622,20 +622,20 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
         // Check if fruit is ripe
         if (fruit.Comp.State == XenoFruitState.Growing)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-pick-failed-not-mature", ("fruit", fruit)), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-pick-failed-not-mature", ("fruit", fruit)), user, user, PopupType.SmallCaution);
             return false;
         }
 
         if (!_hive.FromSameHive(fruit.Owner, user))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-wrong-hive"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-wrong-hive"), user, user, PopupType.SmallCaution);
             return false;
         }
 
         // Check if user is already under the effects of consumed fruit
         if (HasComp<XenoFruitSpeedComponent>(fruit) && HasComp<XenoFruitEffectSpeedComponent>(user))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-effect-already", ("fruit", fruit)), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-effect-already", ("fruit", fruit)), user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -645,7 +645,7 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
 
         if (!fruit.Comp.CanConsumeAtFull && _damageable.GetTotalDamage((user, damage)) == 0)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-pick-failed-health-full"), user, user);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-pick-failed-health-full"), user, user);
             return false;
         }
 
@@ -662,13 +662,13 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
 
         if (!_doAfter.TryStartDoAfter(doAfter))
         {
-            _popup.PopupPredicted(popupSelf, popupOthers, user, user);
+            _popup.PopupEntity(popupSelf, popupOthers, user, user);
             return false;
         }
 
         popupSelf = Loc.GetString("rmc-xeno-fruit-eat-start-self", ("fruit", fruit));
         popupOthers = Loc.GetString("rmc-xeno-fruit-eat-start-others", ("fruit", fruit), ("xeno", user));
-        _popup.PopupPredicted(popupSelf, popupOthers, user, user);
+        _popup.PopupEntity(popupSelf, popupOthers, user, user);
         return true;
     }
 
@@ -681,33 +681,33 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
         // Can't feed non-xenos
         if (!HasComp<XenoComponent>(target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-feed-refuse", ("target",target), ("fruit", fruit)), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-feed-refuse", ("target",target), ("fruit", fruit)), user, user, PopupType.SmallCaution);
             return false;
         }
 
         // Check if target is alive
         if (_mobState.IsDead(target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-feed-dead", ("target", target), ("fruit", fruit)), user, user);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-feed-dead", ("target", target), ("fruit", fruit)), user, user);
             return false;
         }
 
         // TODO: check for hive
         if(!_hive.FromSameHive(fruit.Owner, user))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-wrong-hive"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-wrong-hive"), user, user, PopupType.SmallCaution);
             return false;
         }
         else if (!_hive.FromSameHive(user, target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-feed-wrong-hive", ("target", target)), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-feed-wrong-hive", ("target", target)), user, user, PopupType.SmallCaution);
             return false;
         }
 
         // Check if xeno is already under the effects of a fruit
         if (HasComp<XenoFruitSpeedComponent>(fruit) && HasComp<XenoFruitEffectSpeedComponent>(target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-effect-already-feed", ("xeno", target), ("fruit", fruit)), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-effect-already-feed", ("xeno", target), ("fruit", fruit)), user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -717,7 +717,7 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
 
         if (!fruit.Comp.CanConsumeAtFull && _damageable.GetTotalDamage((target, damage)) == 0)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-pick-failed-health-full-target"), user, user);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-pick-failed-health-full-target"), user, user);
             return false;
         }
 
@@ -739,16 +739,16 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
 
         if (!_doAfter.TryStartDoAfter(doAfter))
         {
-            _popup.PopupClient(popupTarget, target, target, PopupType.MediumCaution);
-            _popup.PopupPredicted(popupSelf, popupOthers, user, user);
+            _popup.PopupEntity(popupTarget, target, target, PopupType.MediumCaution);
+            _popup.PopupEntity(popupSelf, popupOthers, user, user);
             return false;
         }
 
         popupSelf = Loc.GetString("rmc-xeno-fruit-feed-start-self", ("target", target), ("fruit", fruit));
         popupTarget = Loc.GetString("rmc-xeno-fruit-feed-start-target", ("user", user), ("fruit", fruit));
         popupOthers = Loc.GetString("rmc-xeno-fruit-feed-start-others", ("user", user), ("target", target), ("fruit", fruit));
-        _popup.PopupClient(popupTarget, target, target, PopupType.MediumCaution);
-        _popup.PopupPredicted(popupSelf, popupOthers, user, user);
+        _popup.PopupEntity(popupTarget, target, target, PopupType.MediumCaution);
+        _popup.PopupEntity(popupSelf, popupOthers, user, user);
         return true;
     }
 
@@ -769,7 +769,7 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
         if (TerminatingOrDeleted(fruit) || EntityManager.IsQueuedForDeletion(fruit) || fruit.Comp.State == XenoFruitState.Eaten)
         {
             if (user == target)
-                _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-pick-failed-no-longer", ("fruit", fruit)), user, user, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-pick-failed-no-longer", ("fruit", fruit)), user, user, PopupType.SmallCaution);
 
             return;
         }
@@ -791,7 +791,7 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
         ApplyFruitEffects(fruit, target);
 
         // Send pop-up to target describing effect
-        _popup.PopupClient(Loc.GetString(fruit.Comp.Popup), target, target, PopupType.Medium);
+        _popup.PopupEntity(Loc.GetString(fruit.Comp.Popup), target, target, PopupType.Medium);
 
         // If neither the user nor the target were the planter, inform the planter as well
         if (args.User != fruit.Comp.Planter && args.Target != fruit.Comp.Planter)
@@ -893,7 +893,7 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
 
     private void OnXenoFruitEffectSpeedShutdown(Entity<XenoFruitEffectSpeedComponent> xeno, ref ComponentShutdown ev)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-effect-end"), xeno.Owner, xeno.Owner, PopupType.MediumCaution);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-effect-end"), xeno.Owner, xeno.Owner, PopupType.MediumCaution);
         _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
     }
 
@@ -994,7 +994,7 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
 
     private void OnXenoFruitEffectHasteShutdown(Entity<XenoFruitEffectHasteComponent> xeno, ref ComponentShutdown ev)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-effect-end"), xeno.Owner, xeno.Owner, PopupType.MediumCaution);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-fruit-effect-end"), xeno.Owner, xeno.Owner, PopupType.MediumCaution);
 
         // Reset cooldowns and usedelays to default
         RefreshUseDelays(xeno.Owner, 0);

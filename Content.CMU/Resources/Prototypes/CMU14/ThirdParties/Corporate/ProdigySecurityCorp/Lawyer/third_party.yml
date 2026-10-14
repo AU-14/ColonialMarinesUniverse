@@ -11,7 +11,7 @@
   id: ProdigyLawyer
   announceAsSurvivors: true
   partyspawn: ProdigyLawyerSpawn
-  whitelistedgamemodes:
+  whitelistedGamemodes:
     - insurgency
     - colonyfall
     - forceonforce
@@ -20,5 +20,5 @@
   weight: 20
   minplayers: 30
   maxplayers: 400
-  GhostsNeeded: 2
+  ghostsNeeded: 2
   roundstart: false

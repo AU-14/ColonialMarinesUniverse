@@ -2,7 +2,7 @@
   abstract: true
   parent: RuMCIRPComponentBase
   id: RuMCIRPDesertComponentBase
-  description: Упаковочка для сладкого.
+  description: A little pouch for something sweet.
   components:
   - type: Sprite
     state: pack_desert

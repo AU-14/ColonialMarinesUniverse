@@ -1,0 +1,89 @@
+# intermediates for the synth blood chain, see Reactions/synthetic.yml
+# none of these do anything useful in a person, they're feedstock
+
+- type: reagent
+  parent: CMReagent
+  id: CMUSiliconeOil
+  name: reagent-name-silicone-oil
+  desc: reagent-desc-silicone-oil
+  physicalDesc: reagent-physical-desc-oily
+  flavor: bitter
+  color: "#D8DCE0"
+  flags: Scannable
+  class: Common
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.5
+      effects:
+        - !type:Toxic
+          potency: 0.5
+
+- type: reagent
+  parent: CMReagent
+  id: CMUGlycol
+  name: reagent-name-glycol
+  desc: reagent-desc-glycol
+  physicalDesc: reagent-physical-desc-syrupy
+  flavor: sweet
+  color: "#B8E0C8"
+  flags: Scannable
+  class: Common
+  overdose: 15
+  criticalOverdose: 30
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.5
+      effects:
+        - !type:Toxic
+          potency: 1
+
+- type: reagent
+  parent: CMReagent
+  id: CMUSyntheticLatex
+  name: reagent-name-synthetic-latex
+  desc: reagent-desc-synthetic-latex
+  physicalDesc: reagent-physical-desc-milky
+  flavor: plastic
+  color: "#F4F0E6"
+  flags: Scannable
+  class: Common
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.5
+      effects:
+        - !type:Toxic
+          potency: 0.5
+
+- type: reagent
+  parent: CMReagent
+  id: CMUSurfactant
+  name: reagent-name-surfactant
+  desc: reagent-desc-surfactant
+  physicalDesc: reagent-physical-desc-bubbling
+  flavor: bitter
+  color: "#E0E8F0"
+  flags: Scannable
+  class: Common
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.5
+      effects:
+        - !type:Toxic
+          potency: 1
+
+- type: reagent
+  parent: CMReagent
+  id: CMUCorrosionInhibitor
+  name: reagent-name-corrosion-inhibitor
+  desc: reagent-desc-corrosion-inhibitor
+  physicalDesc: reagent-physical-desc-crystalline
+  flavor: metallic
+  color: "#C8D0B0"
+  flags: Scannable
+  class: Common
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.5
+      effects:
+        - !type:Toxic
+          potency: 1
