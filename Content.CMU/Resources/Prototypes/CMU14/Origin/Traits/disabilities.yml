@@ -105,3 +105,12 @@
   - CMUProstheticRightLeg
   components:
   - type: CMUBadLeg
+
+- type: trait
+  id: CMUMotionSick
+  name: cmu-trait-motion-sick-name
+  description: cmu-trait-motion-sick-desc
+  category: Disabilities
+  cost: 1
+  components:
+  - type: CMUMotionSick

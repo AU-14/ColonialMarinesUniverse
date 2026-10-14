@@ -113,6 +113,7 @@
     - CMUAlcoholic
     - CMUDrugAddict
     - CMUBadLeg
+    - CMUMotionSick
   ranks:
     RMCRankCivilian: []
   chevrons:

@@ -160,3 +160,17 @@ cmu-bad-leg-give-out = Your bad leg gives out and you collapse in pain!
 cmu-bad-leg-give-out-others = {CAPITALIZE(THE($user))} stumbles as their leg gives out.
 
 cmu-mouth-item-falls-out = {CAPITALIZE(THE($item))} falls out of {THE($user)}'s mouth.
+
+cmu-trait-motion-sick-name = Motion Sick
+cmu-trait-motion-sick-desc = Riding in a flying dropship, or inside or on top of a moving vehicle, leaves you dizzy and queasy, and now and then you'll lose your lunch. Puking only makes it worse. Not available to flight crew, vehicle crewmen or vehicle commanders.
+
+cmu-motion-sick-queasy-1 = Your stomach turns over with the motion.
+cmu-motion-sick-queasy-2 = You swallow hard as your guts lurch.
+cmu-motion-sick-queasy-3 = The rocking makes your head swim.
+cmu-motion-sick-queasy-4 = A cold sweat breaks out on your forehead.
+cmu-motion-sick-queasy-5 = You fix your eyes on one spot, but the world keeps swaying.
+cmu-motion-sick-queasy-6 = Your mouth fills with spit and you feel awful.
+cmu-motion-sick-worse-1 = You can't hold it in any longer!
+cmu-motion-sick-worse-2 = Your stomach gives up on you!
+cmu-motion-sick-worse-3 = That's it, you're going to be sick!
+cmu-motion-sick-worse-4 = Your lunch comes back up, and your head spins worse than before.
