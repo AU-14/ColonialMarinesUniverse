@@ -177,7 +177,7 @@ public sealed partial class XenoLeapSystem : EntitySystem
 
         if (args.Cancelled)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-leap-cancelled"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-leap-cancelled"), xeno, xeno);
             return;
         }
 
@@ -219,7 +219,7 @@ public sealed partial class XenoLeapSystem : EntitySystem
                 AttemptBlockLeap(result.HitEntity, protection.StunDuration, protection.BlockSound, xeno, _transform.GetMoverCoordinates(xeno), protection.FullProtection))
                 return;
 
-            _popup.PopupClient(Loc.GetString("cmu-xeno-dash-blocked"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cmu-xeno-dash-blocked"), xeno, xeno);
             return;
         }
 
@@ -489,7 +489,7 @@ public sealed partial class XenoLeapSystem : EntitySystem
 
         var selfMessage = Loc.GetString("rmc-obstacle-slam-self", ("object", Identity.Name(blocker, EntityManager, leaper)));
 
-        _popup.PopupClient(selfMessage, leaper, leaper, PopupType.MediumCaution);
+        _popup.PopupEntity(selfMessage, leaper, leaper, PopupType.MediumCaution);
 
         var others = Filter.PvsExcept(leaper).Recipients;
         foreach (var other in others)

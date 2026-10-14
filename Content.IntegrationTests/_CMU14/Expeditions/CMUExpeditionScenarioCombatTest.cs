@@ -18,7 +18,15 @@ namespace Content.IntegrationTests._CMU14.Expeditions;
 [TestFixture, NonParallelizable]
 public sealed class CMUExpeditionScenarioCombatTest : GameTest
 {
-    public override PoolSettings PoolSettings => new() { Dirty = true, Connected = true };
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.NPC.Prototypes.NpcFactionPrototype> GOVFORPrototype = "GOVFOR";
+
+    // fixed seed, these assert emergent fights and a fresh seed per pair made a different one miss each run
+    public override PoolSettings PoolSettings => new() { Dirty = true, Connected = true, ServerSeed = 1414 };
+
+    // learned tactics carry over between rounds on a recycled server, start every case from the baseline
+    [SetUp]
+    public async Task ResetExpeditionLearning() =>
+        await Server.WaitPost(() => Server.System<CMUExpeditionAgentSystem>().ResetLearnedExperience());
 
     [TestCase("Trees", "CMUExpeditionWoodland", CMUExpeditionLandform.RiverValley)]
     [TestCase("MULE", "CMUExpeditionMountain", CMUExpeditionLandform.Highlands)]
@@ -50,7 +58,7 @@ public sealed class CMUExpeditionScenarioCombatTest : GameTest
             guard = SEntMan.SpawnEntity("CMUExpeditionScavenger", from);
             player = SEntMan.SpawnEntity("CMMobHuman", to);
             SEntMan.AddComponent<GodmodeComponent>(player);
-            Server.System<NpcFactionSystem>().AddFaction(player, "GOVFOR");
+            Server.System<NpcFactionSystem>().AddFaction(player, GOVFORPrototype);
             Server.PlayerMan.SetAttachedEntity(ServerSession, player);
             Assert.That(Server.System<GunSystem>().TryGetGun(guard, out var gun), Is.True);
             rifle = gun.Owner;

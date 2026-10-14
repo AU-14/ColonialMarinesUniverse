@@ -47,7 +47,11 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
     }
 
     private void OnBuildScanner(Entity<HealthScannerComponent> ent, ref HealthScannerBuildStateEvent args)
-        => HandleBuildState(ref args);
+    {
+        var reading = new CMUHealthScannerReadingEvent(args.State, args.Examiner);
+        RaiseLocalEvent(args.Patient, ref reading);
+        HandleBuildState(ref args);
+    }
 
     private void OnBuildPatient(Entity<CMUHumanMedicalComponent> ent, ref HealthScannerBuildStateEvent args)
         => HandleBuildState(ref args);

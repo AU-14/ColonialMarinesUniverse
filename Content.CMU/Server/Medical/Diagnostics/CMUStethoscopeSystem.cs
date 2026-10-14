@@ -127,8 +127,8 @@ public sealed partial class CMUStethoscopeSystem : EntitySystem
         }
 
         if (!TryComp<BodyComponent>(args.Patient, out var body) ||
-            !TryComp<TransformComponent>(args.Patient, out var patientTransform) ||
-            !TryComp<TransformComponent>(args.User, out var medicTransform) ||
+            !TryComp(args.Patient, out TransformComponent? patientTransform) ||
+            !TryComp(args.User, out TransformComponent? medicTransform) ||
             !TryComp<SkillsComponent>(args.User, out var skills) ||
             !TryComp<DoAfterComponent>(args.User, out var doAfterComponent) ||
             _skills.GetSkill((args.User, skills), MedicalSkill) < 1)

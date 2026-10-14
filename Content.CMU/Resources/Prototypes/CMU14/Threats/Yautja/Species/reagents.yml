@@ -75,6 +75,7 @@
         potency: 6
       - !type:Bonemending
         potency: 6
+        requiresSet: false
       - !type:Aiding
         potency: 1
       - !type:Antihallucinogenic
@@ -117,6 +118,7 @@
         potency: 6
       - !type:Bonemending
         potency: 6
+        requiresSet: false
       - !type:Aiding
         potency: 1
       - !type:Antihallucinogenic

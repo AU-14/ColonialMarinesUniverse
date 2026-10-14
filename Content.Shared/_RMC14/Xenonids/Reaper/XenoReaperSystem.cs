@@ -258,6 +258,10 @@ public sealed partial class XenoReaperSystem : EntitySystem
         if (args.Target != xeno.Owner && !_hive.FromSameHive(xeno.Owner, args.Target))
             return;
 
+        // CMU14: weeds and resin are same-hive too, so a click that slips off a moving xeno used to mantle the floor and eat the cooldown
+        if (!HasComp<XenoComponent>(args.Target) || _mobState.IsDead(args.Target))
+            return;
+
         if (!HasFleshResinPopup(xeno, xeno.Comp.CarrionMantleCost) || !_rmcActions.TryUseAction(args))
             return;
 
@@ -278,7 +282,7 @@ public sealed partial class XenoReaperSystem : EntitySystem
             visualState: xeno.Comp.CarrionMantleShieldVisualState);
         _movementSpeed.RefreshMovementSpeedModifiers(args.Target);
         _armor.UpdateArmorValue((args.Target, null));
-        _popup.PopupClient(Loc.GetString("cm-xeno-reaper-carrion-mantle"), args.Target, xeno);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-reaper-carrion-mantle"), args.Target, xeno);
     }
 
     private void OnCarrionMantleGetArmor(Entity<XenoCarrionMantleComponent> ent, ref CMGetArmorEvent args)
@@ -369,7 +373,7 @@ public sealed partial class XenoReaperSystem : EntitySystem
             !_unrevivable.IsUnrevivable(target))
         {
             if (popup)
-                _popup.PopupClient(Loc.GetString("cm-xeno-reaper-harvest-permadead-marine"), xeno, xeno);
+                _popup.PopupEntity(Loc.GetString("cm-xeno-reaper-harvest-permadead-marine"), xeno, xeno);
 
             return false;
         }
@@ -377,7 +381,7 @@ public sealed partial class XenoReaperSystem : EntitySystem
         if (HasComp<XenoFleshHarvestedComponent>(target))
         {
             if (popup)
-                _popup.PopupClient(Loc.GetString("cm-xeno-reaper-harvest-spent"), xeno, xeno);
+                _popup.PopupEntity(Loc.GetString("cm-xeno-reaper-harvest-spent"), xeno, xeno);
 
             return false;
         }
@@ -674,7 +678,7 @@ public sealed partial class XenoReaperSystem : EntitySystem
         if (reaper.Comp.FleshResin >= amount)
             return true;
 
-        _popup.PopupClient(Loc.GetString("cm-xeno-reaper-not-enough-flesh"), reaper, reaper);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-reaper-not-enough-flesh"), reaper, reaper);
         return false;
     }
 

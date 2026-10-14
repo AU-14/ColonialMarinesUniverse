@@ -102,7 +102,7 @@ public sealed class CMUPlaytimeLeaderboardWindow : DefaultWindow
             ("roles", roleCount),
             ("players", leaderboard.Players));
 
-        _sections.DisposeAllChildren();
+        _sections.ReleaseChildren();
         AddSection(
             Loc.GetString("cmu-playtime-leaderboard-xeno-header"),
             Loc.GetString("cmu-playtime-leaderboard-xeno-champions"),

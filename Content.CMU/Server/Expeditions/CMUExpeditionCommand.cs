@@ -21,6 +21,43 @@ public sealed partial class CMUExpeditionCommand : LocalizedEntityCommands
     public override string Description => Loc.GetString("cmd-cmu-expedition-desc");
     public override string Help => Loc.GetString("cmd-cmu-expedition-help");
 
+    public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
+    {
+        if (args.Length == 0)
+            return CompletionResult.Empty;
+        if (args.Length == 1)
+            return CompletionResult.FromOptions(new[] { "scenarios", "scenario", "generate", "status", "open", "briefing", "time" });
+        if (args.Length == 2)
+        {
+            return args[0] switch
+            {
+                "scenario" => CompletionResult.FromHintOptions(_prototypes.EnumeratePrototypes<CMUExpeditionScenarioPrototype>()
+                    .OrderBy(proto => proto.ID).Select(proto => new CompletionOption(proto.ID, Loc.GetString(proto.Name))),
+                    Loc.GetString("cmu-expedition-hint-scenario")),
+                "generate" => CompletionResult.FromOptions(Enum.GetNames<CMUExpeditionBiome>()),
+                "status" or "open" or "briefing" or "time" => CMUExpeditionCommandCompletion.Maps(EntityManager, shell, expeditionsOnly: true),
+                _ => CompletionResult.Empty,
+            };
+        }
+        if (args.Length == 3 && args[0] is "scenario" or "generate")
+            return CompletionResult.FromHint(Loc.GetString("cmu-expedition-hint-seed"));
+        if (args[0] == "generate")
+            return args.Length switch
+            {
+                4 => CompletionResult.FromOptions(Enum.GetNames<CMUExpeditionLandform>()),
+                5 => CompletionResult.FromOptions(Enum.GetNames<CMUExpeditionStory>()),
+                _ => CompletionResult.Empty,
+            };
+        if (args[0] == "time")
+            return args.Length switch
+            {
+                3 => CompletionResult.FromOptions(new[] { "hour" }),
+                4 => CompletionResult.FromHintOptions(new[] { "0", "6", "12", "18" }, Loc.GetString("cmu-expedition-hint-hour")),
+                _ => CompletionResult.Empty,
+            };
+        return CompletionResult.Empty;
+    }
+
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (args.Length == 4 && args[0] == "time" && int.TryParse(args[1], out var timeMap) &&

@@ -60,6 +60,7 @@ public sealed class CMU3DSolutionGlassAppearanceTest
     private static CMU3DModelPart Part(string label) => new() {Label=label,Min=Vector3.Zero,Max=new Vector3(.1f)};
     private static CMU3DSolutionLayerGeometry Geometry(string role,string rsi,string state,string label) =>
         new() {Role=role,Rsi=rsi,State=state,Parts=[Part(label)]};
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     private static CMU3DModelPrototype Model() => new()
     {
         ReferenceRsi=Clear,ReferenceState="icon",SourceDirections=1,UseEntityRotation=true,Placement="surface",

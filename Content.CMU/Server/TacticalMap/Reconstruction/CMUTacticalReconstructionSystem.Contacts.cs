@@ -58,7 +58,7 @@ public sealed partial class CMUTacticalReconstructionSystem
                 if (!seen.Add(id)) continue;
                 // an intel blip (DF ping, jammer fix) has no entity behind its key; it sits on the grid
                 // it was placed on. without this every intel blip silently vanished from the view
-                var mapUid = TryComp<TransformComponent>(target, out var transform)
+                var mapUid = TryComp(target, out TransformComponent? transform)
                     ? transform.MapUid
                     : _tacticalMaps.TryGetIntelBlipGrid(id, out var intelGrid) && TryComp(intelGrid, out TransformComponent? gridTransform)
                         ? gridTransform.MapUid

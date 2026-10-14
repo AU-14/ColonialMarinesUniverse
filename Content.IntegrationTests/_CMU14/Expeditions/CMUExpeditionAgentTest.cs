@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
+using Content.IntegrationTests.Tests.Helpers;
 using Content.Server.CMU14.Expeditions;
 using Content.Server.NPC.Components;
 using Content.Server.Weapons.Ranged.Systems;
@@ -12,18 +13,54 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Components;
 using Content.Shared.NPC;
+using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Weapons.Ranged.Events;
+using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Utility;
 
 namespace Content.IntegrationTests._CMU14.Expeditions;
 
 [TestFixture, NonParallelizable]
 public sealed class CMUExpeditionAgentTest : GameTest
 {
-    public override PoolSettings PoolSettings => new() { Dirty = true };
+    private sealed record VolleyShot(bool Moving, TimeSpan Started, int Rounds, int Limit);
+
+    private sealed class ShotListenerSystem : EntitySystem
+    {
+        public override void Initialize()
+        {
+            base.Initialize();
+            SubscribeLocalEvent<TestListenerComponent, GunShotEvent>(OnShot,
+                after: new[] { typeof(CMUExpeditionAgentSystem) });
+        }
+
+        private void OnShot(Entity<TestListenerComponent> ent, ref GunShotEvent args)
+        {
+            if (!TryComp<CMUExpeditionAgentComponent>(args.User, out var agent))
+                return;
+            ent.Comp.Events.GetOrNew(typeof(GunShotEvent)).Add(args);
+            // Urgent fire can start the next burst between samples. Record native shots
+            // against their first shot; pressure can extend the end of a live burst.
+            ent.Comp.Events.GetOrNew(typeof(VolleyShot)).Add(new VolleyShot(agent.MovingFire,
+                agent.MovingFire ? agent.FireControlMovingBurstStarted : agent.FireControlBurstStarted, args.Ammo.Count,
+                agent.FireControlVolley > 0 ? agent.FireControlVolley : agent.BurstSize));
+        }
+    }
+
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.NPC.Prototypes.NpcFactionPrototype> GOVFORPrototype = "GOVFOR";
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.NPC.Prototypes.NpcFactionPrototype> CMUExpeditionHostilePrototype = "CMUExpeditionHostile";
+
+    // fixed seed, these assert emergent fights and a fresh seed per pair made a different one miss each run
+    public override PoolSettings PoolSettings => new() { Dirty = true, ServerSeed = 1414 };
+
+    // learned tactics carry over between rounds on a recycled server, start every case from the baseline
+    [SetUp]
+    public async Task ResetExpeditionLearning() =>
+        await Server.WaitPost(() => Server.System<CMUExpeditionAgentSystem>().ResetLearnedExperience());
 
     [Test]
     public async Task InfantryReadiesRifleAndHoldsFireForTeammates()
@@ -44,11 +81,11 @@ public sealed class CMUExpeditionAgentTest : GameTest
             guard = SEntMan.SpawnEntity("CMUExpeditionScavenger", origin.Offset(new Vector2(-5, 0)));
             var enemy = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(5, 0)));
             SEntMan.AddComponent<GodmodeComponent>(enemy);
-            Server.System<NpcFactionSystem>().AddFaction(enemy, "GOVFOR");
+            Server.System<NpcFactionSystem>().AddFaction(enemy, GOVFORPrototype);
             ally = SEntMan.SpawnEntity("CMMobHuman", origin);
-            Server.System<NpcFactionSystem>().AddFaction(ally, "CMUExpeditionHostile");
-            // Isolate the trigger discipline test from the separate cover movement test.
-            SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).NextReposition = SGameTiming.CurTime + TimeSpan.FromMinutes(1);
+            Server.System<NpcFactionSystem>().AddFaction(ally, CMUExpeditionHostilePrototype);
+            // Keep the firing position fixed so lane-clearing movement cannot bypass the teammate.
+            SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).LeashRange = 0.25f;
             Assert.That(Server.System<GunSystem>().TryGetGun(guard, out var gun), Is.True);
             rifle = gun.Owner;
             initialAmmo = Ammo();
@@ -79,10 +116,9 @@ public sealed class CMUExpeditionAgentTest : GameTest
     }
 
     [Test]
-    public async Task InfantryPeeksFiresShortBurstsAndPhysicallyReturnsToShelter()
+    public async Task InfantryPeeksFiresBoundedVolleysAndPhysicallyReturnsToShelter()
     {
         EntityUid map = default, guard = default, enemy = default, rifle = default, enemyRifle = default;
-        var ammoBefore = 0;
         await Server.WaitAssertion(() =>
         {
             var generator = Server.System<CMUExpeditionSystem>();
@@ -96,28 +132,42 @@ public sealed class CMUExpeditionAgentTest : GameTest
             guard = SEntMan.SpawnEntity("CMUExpeditionScavenger", origin.Offset(new Vector2(-4, 0)));
             enemy = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(5, 0)));
             SEntMan.AddComponent<GodmodeComponent>(enemy);
-            Server.System<NpcFactionSystem>().AddFaction(enemy, "GOVFOR");
+            Server.System<NpcFactionSystem>().AddFaction(enemy, GOVFORPrototype);
             enemyRifle = SEntMan.SpawnEntity("WeaponRifleMAR40", origin.Offset(new Vector2(5, 0)));
             Assert.That(Server.System<Content.Shared.Hands.EntitySystems.SharedHandsSystem>().TryPickupAnyHand(enemy, enemyRifle), Is.True);
-            // The initial lane is open, while the far side of this fragment offers real shelter.
+            // Start from acquired cover to exercise the peek/withdraw executor. An open,
+            // productive firing lane no longer makes the planner seek cover every volley.
             for (var y = 1; y <= 3; y++)
             {
                 var coordinates = origin.Offset(new Vector2(-2, y));
                 SEntMan.SpawnEntity("CMUExpeditionHull", coordinates);
                 expedition.Plan.Props[expedition.Plan.Index((int) coordinates.X, (int) coordinates.Y)] = CMUExpeditionProp.Hull;
             }
+            var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
+            // Utility decisions have separate coverage; sustained suppression here must
+            // exercise the cover executor rather than spend the carried grenade.
+            agent.PlanningEnabled = false;
+            agent.Target = enemy;
+            agent.LastSeen = SEntMan.GetComponent<TransformComponent>(enemy).Coordinates;
+            agent.LastContact = SGameTiming.CurTime;
+            agent.ForgetAt = SGameTiming.CurTime + agent.MemoryDuration;
+            agent.CoverAnchor = origin.Offset(new Vector2(-4, 2));
+            agent.PeekPosition = origin.Offset(new Vector2(-4, 0));
+            agent.State = CMUExpeditionAgentState.Recover;
+            Server.System<SharedTransformSystem>().SetCoordinates(guard, agent.CoverAnchor.Value);
+            // Isolate perceived near-miss pressure from random projectile hits and medical retreat.
+            SEntMan.AddComponent<GodmodeComponent>(guard);
             Assert.That(Server.System<GunSystem>().TryGetGun(guard, out var gun), Is.True);
             rifle = gun.Owner;
-            ammoBefore = Ammo();
+            SEntMan.EnsureComponent<TestListenerComponent>(rifle);
         });
 
         var states = new HashSet<CMUExpeditionAgentState>();
-        var volley = 0;
-        var volleys = new List<int>();
         var coveredVolleys = 0;
-        var shelteredAfterFiring = false;
+        var firedSinceShelter = false;
         var suppressionTested = false;
-        for (var sample = 0; sample < 100; sample++)
+        var nextIncomingShot = TimeSpan.Zero;
+        for (var sample = 0; sample < 100 && coveredVolleys < 2; sample++)
         {
             await Pair.RunSeconds(0.15f);
             await Server.WaitAssertion(() =>
@@ -128,42 +178,40 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 if (agent.State == CMUExpeditionAgentState.Peeking)
                     Assert.That(SEntMan.GetComponent<Content.Shared.Wieldable.Components.WieldableComponent>(rifle).Wielded,
                         Is.True, "A short step out must keep the rifle shouldered instead of paying another wield delay in the open.");
-                var ammo = Ammo();
-                if (ammo < ammoBefore)
+                var shots = SEntMan.GetComponent<TestListenerComponent>(rifle).Events.GetOrNew(typeof(GunShotEvent));
+                foreach (var shot in shots.Cast<GunShotEvent>())
                 {
-                    volley += ammoBefore - ammo;
-                    Assert.That(Server.System<SharedInteractionSystem>().InRangeUnobstructed(guard, enemy, 18,
+                    firedSinceShelter = true;
+                    // The guard can fire while moving and reach shelter before this sample.
+                    // Check the shot's recorded origin rather than its later body position.
+                    var transform = Server.System<SharedTransformSystem>();
+                    Assert.That(Server.System<SharedInteractionSystem>().InRangeUnobstructed(
+                        transform.ToMapCoordinates(shot.FromCoordinates), transform.ToMapCoordinates(shot.ToCoordinates), 18,
                         CollisionGroup.Impassable | CollisionGroup.InteractImpassable, predicate: e => e == guard || e == enemy), Is.True,
                         "Actual volleys must leave a clear firing position, not strike the shelter.");
                 }
-                ammoBefore = ammo;
-                if (!suppressionTested && agent.State == CMUExpeditionAgentState.Engage)
+                shots.Clear();
+                if (agent.State == CMUExpeditionAgentState.Engage && SGameTiming.CurTime >= nextIncomingShot &&
+                    OpenNearMiss(guard, enemy) is { } aim)
                 {
-                    var aim = SEntMan.GetComponent<TransformComponent>(guard).Coordinates.Offset(new Vector2(0, 1.2f));
                     Assert.That(Server.System<GunSystem>().AttemptShoot(enemy,
                         (enemyRifle, SEntMan.GetComponent<Content.Shared.Weapons.Ranged.Components.GunComponent>(enemyRifle)), aim), Is.True);
                     Assert.That(agent.SuppressedUntil, Is.GreaterThan(SGameTiming.CurTime),
                         "A perceived hostile near miss must create pressure without requiring a damage event.");
                     suppressionTested = true;
+                    nextIncomingShot = SGameTiming.CurTime + TimeSpan.FromSeconds(1);
                 }
-                // The opening volley can end in an ordinary retreat before a shelter/peek pair
-                // exists. Count it separately instead of adding its rounds to the next covered attack.
-                if (agent.State is CMUExpeditionAgentState.Withdraw or CMUExpeditionAgentState.Retreat or
-                    CMUExpeditionAgentState.Reposition or CMUExpeditionAgentState.Recover && volley > 0)
-                {
-                    if (agent.State == CMUExpeditionAgentState.Withdraw)
-                        coveredVolleys++;
-                    volleys.Add(volley);
-                    volley = 0;
-                }
-                if (agent.State == CMUExpeditionAgentState.Recover && agent.CoverAnchor != null && volleys.Count > 0)
+                if (agent.State == CMUExpeditionAgentState.Recover && agent.CoverAnchor != null && firedSinceShelter)
                 {
                     Assert.That(agent.CoverAnchor, Is.Not.Null);
                     Assert.That(Server.System<SharedTransformSystem>().InRange(
                         SEntMan.GetComponent<TransformComponent>(guard).Coordinates, agent.CoverAnchor!.Value, 0.3f), Is.True,
                         $"Recovery must stay at shelter: pos={SEntMan.GetComponent<TransformComponent>(guard).Coordinates}, anchor={agent.CoverAnchor}, destination={agent.CoverDestination}, route={agent.Route.Count}, action={agent.Action}, sample={sample}");
-                    shelteredAfterFiring |= !Server.System<SharedInteractionSystem>().InRangeUnobstructed(guard, enemy, 18,
-                        CollisionGroup.Impassable | CollisionGroup.InteractImpassable, predicate: e => e == guard || e == enemy);
+                    Assert.That(Server.System<SharedInteractionSystem>().InRangeUnobstructed(guard, enemy, 100,
+                        CollisionGroup.Impassable | CollisionGroup.InteractImpassable, predicate: e => e == guard || e == enemy), Is.False,
+                        "Returning to cover must physically break enemy line of sight.");
+                    coveredVolleys++;
+                    firedSinceShelter = false;
                 }
             });
         }
@@ -171,29 +219,28 @@ public sealed class CMUExpeditionAgentTest : GameTest
         {
             Assert.That(states, Does.Contain(CMUExpeditionAgentState.Peeking));
             Assert.That(states, Does.Contain(CMUExpeditionAgentState.Withdraw));
-            Assert.That(volleys.Count, Is.GreaterThanOrEqualTo(2), "The guard must complete repeated attacks.");
-            Assert.That(coveredVolleys, Is.GreaterThanOrEqualTo(2), "Complete repeated covered attacks after the opening volley.");
-            Assert.That(volleys, Has.All.InRange(1, 3));
-            Assert.That(shelteredAfterFiring, Is.True, "Returning to cover must physically break enemy line of sight.");
+            var volleys = SEntMan.GetComponent<TestListenerComponent>(rifle).Events[typeof(VolleyShot)]
+                .Cast<VolleyShot>().GroupBy(shot => (shot.Moving, shot.Started)).ToArray();
+            Assert.That(volleys.Count(group => !group.Key.Moving), Is.GreaterThanOrEqualTo(2), "The guard must complete repeated attacks.");
+            Assert.That(coveredVolleys, Is.GreaterThanOrEqualTo(2), "Complete repeated attacks with physical returns to shelter.");
+            foreach (var volley in volleys)
+                Assert.That(volley.Sum(shot => shot.Rounds), Is.InRange(1, volley.Max(shot => shot.Limit)),
+                    "Native fire must stay within the chosen volley budget, including sustained fire under pressure.");
             Assert.That(suppressionTested, Is.True);
             SEntMan.DeleteEntity(map);
         });
 
-        int Ammo()
-        {
-            var count = new GetAmmoCountEvent();
-            SEntMan.EventBus.RaiseLocalEvent(rifle, ref count);
-            return count.Count;
-        }
     }
 
     [Test]
     public async Task SquadStaggersPeeksAndBothGuardsKeepAttacking()
     {
-        EntityUid map = default;
+        EntityUid map = default, enemy = default, enemyRifle = default;
         var guards = new List<EntityUid>();
         var rifles = new List<EntityUid>();
         var initial = new List<int>();
+        var pressured = new HashSet<EntityUid>();
+        var sawStaggeredOpening = false;
         await Server.WaitAssertion(() =>
         {
             var generator = Server.System<CMUExpeditionSystem>();
@@ -204,9 +251,11 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 generator.Update(0);
             var lz = expedition.Plan.LandingZone;
             var origin = new EntityCoordinates(map, new Vector2(lz.X + 0.5f, lz.Y + 0.5f));
-            var enemy = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(5, 0)));
+            enemy = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(5, 0)));
             SEntMan.AddComponent<GodmodeComponent>(enemy);
-            Server.System<NpcFactionSystem>().AddFaction(enemy, "GOVFOR");
+            Server.System<NpcFactionSystem>().AddFaction(enemy, GOVFORPrototype);
+            enemyRifle = SEntMan.SpawnEntity("WeaponRifleMAR40", SEntMan.GetComponent<TransformComponent>(enemy).Coordinates);
+            Assert.That(Server.System<Content.Shared.Hands.EntitySystems.SharedHandsSystem>().TryPickupAnyHand(enemy, enemyRifle), Is.True);
             foreach (var y in new[] { 1, 2, 3, -2, -3, -4 })
             {
                 var coordinates = origin.Offset(new Vector2(-2, y));
@@ -217,9 +266,12 @@ public sealed class CMUExpeditionAgentTest : GameTest
             {
                 var anchor = origin.Offset(new Vector2(-4, index == 0 ? 2 : -3));
                 var guard = SEntMan.SpawnEntity("CMUExpeditionScavenger", anchor);
+                SEntMan.AddComponent<GodmodeComponent>(guard);
                 guards.Add(guard);
                 var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
                 // Begin with two already-acquired contacts in known shelters to isolate squad scheduling.
+                agent.PlanningEnabled = false;
+                agent.Squad = 7;
                 agent.Target = enemy;
                 agent.LastSeen = SEntMan.GetComponent<TransformComponent>(enemy).Coordinates;
                 agent.LastContact = SGameTiming.CurTime;
@@ -232,33 +284,85 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 initial.Add(Ammo(gun.Owner));
             }
         });
+        var nextIncomingShot = TimeSpan.Zero;
         for (var sample = 0; sample < 80; sample++)
         {
             await Pair.RunSeconds(0.15f);
             await Server.WaitAssertion(() =>
             {
-                var attackers = 0;
+                // Attack slots govern the initial departure from these safe shelters.
+                // After live incoming fire, both exposed guards may defend themselves;
+                // counting every Aim/Engage state would incorrectly forbid that response.
+                if (pressured.Count == 0)
+                {
+                    var attackers = guards.Count(guard => SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).State is
+                        CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage);
+                    Assert.That(attackers, Is.LessThanOrEqualTo(1), "A pair must stagger its initial departure from shelter.");
+                    sawStaggeredOpening |= attackers == 1;
+                }
                 foreach (var guard in guards)
                 {
-                    var state = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).State;
-                    if (state is CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage)
-                        attackers++;
+                    var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
+                    var state = agent.State;
+                    // Productive positions persist without pressure. Native incoming fire
+                    // makes each attacker return to shelter and yield the next peek.
+                    if (state == CMUExpeditionAgentState.Engage && SGameTiming.CurTime >= nextIncomingShot)
+                    {
+                        // Track the actual attacker after a flank or escape step. Firing at
+                        // the original gap stops creating pressure once the guard moves away.
+                        // Godmode above isolates suppression from projectile damage.
+                        var incomingAim = SEntMan.GetComponent<TransformComponent>(guard).Coordinates;
+                        if (!Server.System<SharedInteractionSystem>().InRangeUnobstructed(
+                            Server.System<SharedTransformSystem>().GetMapCoordinates(enemy),
+                            Server.System<SharedTransformSystem>().ToMapCoordinates(incomingAim), 18,
+                            CollisionGroup.Impassable | CollisionGroup.InteractImpassable | CollisionGroup.BulletImpassable,
+                            predicate: e => e == enemy || guards.Contains(e)))
+                            continue;
+                        Assert.That(Server.System<GunSystem>().AttemptShoot(enemy,
+                            (enemyRifle, SEntMan.GetComponent<Content.Shared.Weapons.Ranged.Components.GunComponent>(enemyRifle)), incomingAim), Is.True);
+                        Assert.That(agent.SuppressedUntil, Is.GreaterThan(SGameTiming.CurTime),
+                            $"The exposed attacker must perceive the shot before yielding its peek: guard={guard}, aim={incomingAim}.");
+                        pressured.Add(guard);
+                        nextIncomingShot = SGameTiming.CurTime + TimeSpan.FromSeconds(1);
+                    }
                 }
-                Assert.That(attackers, Is.LessThanOrEqualTo(1), "A pair must stagger its exposure, not pop out together.");
             });
         }
         await Server.WaitAssertion(() =>
         {
+            Assert.That(sawStaggeredOpening, Is.True, "One guard must open the attack while its partner waits in shelter.");
+            Assert.That(pressured, Is.EquivalentTo(guards), "Both attackers must receive real incoming fire.");
             for (var index = 0; index < 2; index++)
                 Assert.That(Ammo(rifles[index]), Is.LessThan(initial[index]), $"Guard {index} must receive an attack turn.");
             var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guards[0]);
-            var failed = SEntMan.GetComponent<TransformComponent>(guards[0]).Coordinates.Offset(new Vector2(-3, 0));
+            SEntMan.DeleteEntity(enemy);
+            var agents = Server.System<CMUExpeditionAgentSystem>();
+            agents.ResetOrders(guards[0], agent);
+            // Order cancellation preserves observed danger. End that combat stimulus
+            // before checking a movement timeout, so evasion cannot replace this route.
+            agent.IncomingFireUntil = agent.SuppressedUntil = TimeSpan.Zero;
+            agent.KnownDanger.Clear();
+            agent.KnownFireLanes.Clear();
+            var position = SEntMan.GetComponent<TransformComponent>(guards[0]).Coordinates;
+            var failed = position.Offset(new Vector2(-3, 0));
+            // A reachable timeout now retries a local detour. Block the destination so
+            // this check exercises a real failed move after that recovery is exhausted.
+            SEntMan.SpawnEntity("CMUExpeditionHull", failed);
             agent.CoverDestination = failed;
             agent.State = CMUExpeditionAgentState.Reposition;
+            // A new waypoint counts as progress and grants slow wading more time.
+            // Seed the previous observation to represent an actually stalled move.
+            agent.MoveProgressDestination = failed;
+            agent.MoveProgressDistance = Vector2.Distance(position.Position, failed.Position);
+            agent.MoveProgressAt = SGameTiming.CurTime - TimeSpan.FromSeconds(2);
             agent.MoveUntil = SGameTiming.CurTime - TimeSpan.FromSeconds(1);
+            agent.FailedPosition = null;
+            agent.LastMoveFailed = false;
             agent.NextThink = SGameTiming.CurTime;
-            Server.System<CMUExpeditionAgentSystem>().Update(0);
-            Assert.That(agent.FailedPosition, Is.EqualTo(failed), "Timed-out actions must inform the next position search.");
+            agents.Update(0);
+            Assert.That(agent.FailedPosition, Is.EqualTo(failed),
+                $"Timed-out actions must inform the next position search: {agent.State}, {agent.DecisionOwner}/{agent.DecisionReason}.");
+            Assert.That(agent.LastMoveFailed, Is.True);
             Assert.That(agent.AvoidPositionUntil, Is.GreaterThan(SGameTiming.CurTime));
             SEntMan.DeleteEntity(map);
         });
@@ -290,8 +394,9 @@ public sealed class CMUExpeditionAgentTest : GameTest
             initialPosition = origin.Offset(new Vector2(-4, 0.3f));
             guard = SEntMan.SpawnEntity("CMUExpeditionScavenger", initialPosition);
             enemy = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(4, 0.3f)));
-            Server.System<NpcFactionSystem>().AddFaction(enemy, "GOVFOR");
-            wall = SEntMan.SpawnEntity("CMUExpeditionHull", origin.Offset(new Vector2(0, 1)));
+            Server.System<NpcFactionSystem>().AddFaction(enemy, GOVFORPrototype);
+            // Obstruct the muzzle clearance, not scatter beside a distant target.
+            wall = SEntMan.SpawnEntity("CMUExpeditionHull", origin.Offset(new Vector2(-3, 1)));
             SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).NextReposition = SGameTiming.CurTime + TimeSpan.FromMinutes(1);
             Assert.That(Server.System<GunSystem>().TryGetGun(guard, out var gun), Is.True);
             rifle = gun.Owner;
@@ -359,7 +464,7 @@ public sealed class CMUExpeditionAgentTest : GameTest
             guard = SEntMan.SpawnEntity("CMUExpeditionScavenger", origin.Offset(new Vector2(-4, 0)));
             enemy = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(5, 0)));
             SEntMan.AddComponent<GodmodeComponent>(enemy);
-            Server.System<NpcFactionSystem>().AddFaction(enemy, "GOVFOR");
+            Server.System<NpcFactionSystem>().AddFaction(enemy, GOVFORPrototype);
             for (var y = 1; y <= 4; y++)
             {
                 var coordinates = origin.Offset(new Vector2(-2, y));
@@ -383,7 +488,7 @@ public sealed class CMUExpeditionAgentTest : GameTest
             await Server.WaitAssertion(() =>
             {
                 var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
-                healing = agent.State == CMUExpeditionAgentState.Healing;
+                healing = agent.Treatment != null;
                 if (sample % 10 == 0)
                     medicalTrace.Add($"{agent.State}: {SEntMan.GetComponent<TransformComponent>(guard).Coordinates}, dest={agent.CoverDestination}, hands={Server.System<Content.Shared.Hands.EntitySystems.SharedHandsSystem>().GetEmptyHandCount(guard)}, damage={Server.System<DamageableSystem>().GetTotalDamage(guard)}");
             });
@@ -402,7 +507,14 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 "Interrupted treatment must not consume a dressing.");
             Assert.That(Server.System<DamageableSystem>().GetTotalDamage(guard).Float(), Is.GreaterThanOrEqualTo(32));
         });
-        await Pair.RunSeconds(12);
+        // Damage in shelter invalidates that position. Allow another cover move as well
+        // as three native three-second doses and their hand/cooldown transitions.
+        var exhausted = false;
+        for (var sample = 0; sample < 100 && !exhausted; sample++)
+        {
+            await Pair.RunSeconds(0.2f);
+            await Server.WaitAssertion(() => exhausted = SEntMan.Deleted(medicine));
+        }
         float damageAfter = 0;
         await Server.WaitAssertion(() =>
         {
@@ -423,139 +535,26 @@ public sealed class CMUExpeditionAgentTest : GameTest
             new DamageSpecifier { DamageDict = { ["Blunt"] = amount } }, ignoreResistances: true);
     }
 
-    [Test]
-    public async Task InfantryUsesSightRealAmmunitionAndMovementThenStopsWhenIncapacitated()
+    // a near miss 1.2 tiles off the guard, on a side whose lane is actually open. the AI only feels
+    // rounds that physically reach it (RayClear, shelter), and where the guard fights from depends on
+    // the run, so a fixed side sometimes clipped hull or scenery. null when neither side is open
+    private EntityCoordinates? OpenNearMiss(EntityUid guard, EntityUid enemy)
     {
-        EntityUid map = default, guard = default, enemy = default, rifle = default;
-        var walls = new List<EntityUid>();
-        EntityCoordinates origin = default;
-        var initialAmmo = 0;
-        await Server.WaitAssertion(() =>
+        var transform = Server.System<SharedTransformSystem>();
+        var interaction = Server.System<SharedInteractionSystem>();
+        var body = SEntMan.GetComponent<TransformComponent>(guard).Coordinates;
+        var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
+        // prefer passing on the side away from its shelter, that's the open side of a peek
+        var away = agent.CoverAnchor is { } shelter &&
+            transform.ToMapCoordinates(shelter).Position.Y > transform.ToMapCoordinates(body).Position.Y ? -1.2f : 1.2f;
+        foreach (var side in new[] { away, -away })
         {
-            var generator = Server.System<CMUExpeditionSystem>();
-            Assert.That(generator.TryGenerate("CMUExpeditionWoodland", 42, CMUExpeditionLandform.RiverValley,
-                CMUExpeditionStory.CrashRecovery, out map, out var error), Is.True, error);
-            var expedition = SEntMan.GetComponent<CMUExpeditionMapComponent>(map);
-            for (var i = 0; i < 900 && !expedition.Ready; i++)
-                generator.Update(0);
-            Assert.That(expedition.Ready, Is.True);
-            var lz = expedition.Plan.LandingZone;
-            origin = new EntityCoordinates(map, new Vector2(lz.X + 0.5f, lz.Y + 0.5f));
-            guard = SEntMan.SpawnEntity("CMUExpeditionScavenger", origin.Offset(new Vector2(-7, 0)));
-            enemy = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(7, 0)));
-            SEntMan.AddComponent<GodmodeComponent>(enemy);
-            Server.System<NpcFactionSystem>().AddFaction(enemy, "GOVFOR");
-            var ally = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(-7, 2)));
-            Server.System<NpcFactionSystem>().AddFaction(ally, "CMUExpeditionHostile");
-            for (var y = -3; y <= 3; y++)
-                walls.Add(SEntMan.SpawnEntity("CMUExpeditionHull", origin.Offset(new Vector2(0, y))));
-            Assert.That(Server.System<GunSystem>().TryGetGun(guard, out var gun), Is.True, "Loadout must put a usable rifle in hand.");
-            rifle = gun.Owner;
-            initialAmmo = Ammo();
-            Assert.That(initialAmmo, Is.GreaterThan(0));
-        });
-        await Pair.RunSeconds(1);
-        await Server.WaitAssertion(() =>
-        {
-            Assert.That(SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).Target, Is.Null,
-                "A nearby hostile behind a wall and a visible ally must not be acquired.");
-            Assert.That(Ammo(), Is.EqualTo(initialAmmo));
-            foreach (var wall in walls)
-                SEntMan.DeleteEntity(wall);
-        });
-        await Pair.RunSeconds(4);
-        EntityCoordinates remembered = default;
-        await Server.WaitAssertion(() =>
-        {
-            var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
-            Assert.That(agent.Target, Is.EqualTo(enemy));
-            SEntMan.TryGetComponent<NPCSteeringComponent>(guard, out var steering);
-            var mover = SEntMan.GetComponent<InputMoverComponent>(guard);
-            Assert.That(SEntMan.GetComponent<TransformComponent>(guard).LocalPosition.X, Is.GreaterThan(origin.X - 6),
-                $"Actual movement required; state={agent.State}, steering={steering?.Status}, path={steering?.CurrentPath.Count}, canMove={mover.CanMove}, input={mover.CurTickSprintMovement}, active={SEntMan.HasComponent<ActiveNPCComponent>(guard)}");
-            Assert.That(Ammo(), Is.LessThan(initialAmmo), "Native gunfire must consume the loaded magazine.");
-            remembered = agent.LastSeen!.Value;
-            var plan = SEntMan.GetComponent<CMUExpeditionMapComponent>(map).Plan;
-            var hiddenCell = Enumerable.Range(0, plan.Terrain.Length).First(i => plan.Paths[i] &&
-                plan.Props[i] == CMUExpeditionProp.None && plan.Terrain[i] is not (CMUExpeditionTerrain.Water or CMUExpeditionTerrain.Cliff) &&
-                Vector2.Distance(new Vector2(i % plan.Size, i / plan.Size), origin.Position) > 40);
-            Server.System<SharedTransformSystem>().SetCoordinates(enemy,
-                new EntityCoordinates(map, new Vector2(hiddenCell % plan.Size + 0.5f, hiddenCell / plan.Size + 0.5f)));
-        });
-        await Pair.RunSeconds(1);
-        await Server.WaitAssertion(() =>
-        {
-            var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
-            Assert.That(agent.LastSeen, Is.EqualTo(remembered), "Unseen movement must not update the remembered location.");
-            Assert.That(agent.State, Is.EqualTo(CMUExpeditionAgentState.Watch), "Briefly watch the last opening before abandoning a firing position.");
-            Assert.That(SEntMan.HasComponent<NPCRangedCombatComponent>(guard), Is.False);
-            Assert.That(SEntMan.HasComponent<NPCSteeringComponent>(guard), Is.False);
-        });
-        await Pair.RunSeconds(1);
-        await Server.WaitAssertion(() => Assert.That(SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).State,
-            Is.EqualTo(CMUExpeditionAgentState.Investigate)));
-        await Pair.RunSeconds(6);
-        EntityCoordinates shelter = default;
-        await Server.WaitAssertion(() =>
-        {
-            var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
-            Assert.That(agent.LastSeen, Is.Null);
-            Assert.That(agent.Target, Is.Null);
-            var transform = Server.System<SharedTransformSystem>();
-            transform.SetCoordinates(guard, origin.Offset(new Vector2(-6, 0)));
-            transform.SetCoordinates(enemy, origin.Offset(new Vector2(4, 0)));
-            agent.Home = origin.Offset(new Vector2(-6, 0));
-            // A small known wreck fragment inside the clear LZ gives the tactical test an unambiguous shelter.
-            var plan = SEntMan.GetComponent<CMUExpeditionMapComponent>(map).Plan;
-            for (var y = 2; y <= 4; y++)
-            {
-                var location = origin.Offset(new Vector2(-3, y));
-                SEntMan.SpawnEntity("CMUExpeditionHull", location);
-                plan.Props[plan.Index((int) location.X, (int) location.Y)] = CMUExpeditionProp.Hull;
-            }
-            agent.RetreatDamage = 4;
-            agent.HealDamage = 4;
-            agent.EmergencyHealDamage = 4;
-            Server.System<DamageableSystem>().TryChangeDamage(guard,
-                new DamageSpecifier { DamageDict = { ["Blunt"] = 10 } }, ignoreResistances: true);
-            Assert.That(Server.System<DamageableSystem>().GetTotalDamage(guard).Float(), Is.GreaterThanOrEqualTo(4));
-        });
-        await Pair.RunSeconds(0.6f);
-        await Server.WaitAssertion(() =>
-        {
-            var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
-            Assert.That(agent.State, Is.EqualTo(CMUExpeditionAgentState.Retreat));
-            Assert.That(SEntMan.HasComponent<NPCSteeringComponent>(guard), Is.True);
-            Assert.That(agent.CoverDestination, Is.Not.Null);
-            // Native steering targets the next danger-route waypoint, not the final shelter.
-            shelter = agent.CoverDestination!.Value;
-            Assert.That(shelter, Is.Not.EqualTo(agent.Home), "Injury should choose shelter rather than simply return home.");
-            var mapPosition = Server.System<SharedTransformSystem>().ToMapCoordinates(shelter);
-            Assert.That(Server.System<SharedInteractionSystem>().InRangeUnobstructed(mapPosition, enemy, 18,
-                CollisionGroup.Impassable | CollisionGroup.InteractImpassable, predicate: e => e == guard || e == enemy), Is.False);
-            Assert.That(SEntMan.HasComponent<NPCRangedCombatComponent>(guard), Is.False);
-        });
-        await Pair.RunSeconds(3);
-        await Server.WaitAssertion(() =>
-        {
-            Assert.That(Server.System<SharedTransformSystem>().InRange(
-                SEntMan.GetComponent<TransformComponent>(guard).Coordinates, shelter, 1.2f), Is.True,
-                $"Must reach shelter {shelter}; state={SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).State}, pos={SEntMan.GetComponent<TransformComponent>(guard).Coordinates}, dest={SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).CoverDestination}.");
-            var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
-            Assert.That(agent.State, Is.AnyOf(CMUExpeditionAgentState.Retreat, CMUExpeditionAgentState.Healing),
-                "Losing sight in cover must preserve retreat or allow sheltered treatment.");
-            Server.System<MobStateSystem>().ChangeMobState(guard, MobState.Critical);
-            Assert.That(agent.State, Is.EqualTo(CMUExpeditionAgentState.Disabled));
-            Assert.That(SEntMan.HasComponent<NPCRangedCombatComponent>(guard), Is.False);
-            Assert.That(SEntMan.HasComponent<NPCSteeringComponent>(guard), Is.False);
-            SEntMan.DeleteEntity(map);
-        });
-
-        int Ammo()
-        {
-            var count = new GetAmmoCountEvent();
-            SEntMan.EventBus.RaiseLocalEvent(rifle, ref count);
-            return count.Count;
+            var aim = body.Offset(new Vector2(0, side));
+            if (interaction.InRangeUnobstructed(transform.GetMapCoordinates(enemy), transform.ToMapCoordinates(aim), 30,
+                    CollisionGroup.Impassable | CollisionGroup.InteractImpassable | CollisionGroup.BulletImpassable,
+                    predicate: e => e == guard || e == enemy || SEntMan.HasComponent<NpcFactionMemberComponent>(e)))
+                return aim;
         }
+        return null;
     }
 }

@@ -107,7 +107,7 @@ public sealed partial class CMU3DLiveSceneSystem
         _previousViewport = null;
         _firstPersonView.ReleaseResources();
         _firstPersonView.Orphan();
-        _firstPersonView.Dispose();
+        _firstPersonView.Release();
         _firstPersonView = null;
         UpdateSubscription(0);
         if (_firstPersonHost != null)

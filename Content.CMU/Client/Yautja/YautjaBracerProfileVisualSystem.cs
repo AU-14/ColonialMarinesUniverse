@@ -8,7 +8,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.CMU14.Yautja;
 
-public sealed class YautjaBracerProfileVisualSystem : EntitySystem
+public sealed partial class YautjaBracerProfileVisualSystem : EntitySystem
 {
     [Dependency] private ClothingSystem _clothing = default!;
     [Dependency] private SharedItemSystem _items = default!;

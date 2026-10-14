@@ -876,7 +876,7 @@ public sealed partial class HumanoidProfileEditor
 
     public void RefreshSynthetic()
     {
-        SyntheticContainer.DisposeAllChildren();
+        SyntheticContainer.ReleaseChildren();
         var selector = new RequirementsSelector { Margin = new Thickness(3f, 3f, 3f, 0f) };
         selector.Setup(
             [("humanoid-profile-editor-synthetic-yes-button", 0),
@@ -943,8 +943,8 @@ public sealed partial class HumanoidProfileEditor
 
     public void RefreshThreatPreferences()
     {
-        ColonyThreatPreferenceList.DisposeAllChildren();
-        DistressThreatPreferenceList.DisposeAllChildren();
+        ColonyThreatPreferenceList.ReleaseChildren();
+        DistressThreatPreferenceList.ReleaseChildren();
         _threatPreferenceButtons.Clear();
         PopulateThreatPreferenceList(ColonyThreatPreferenceList, GamemodeColonyFall);
         PopulateThreatPreferenceList(DistressThreatPreferenceList, GamemodeDistressSignal);

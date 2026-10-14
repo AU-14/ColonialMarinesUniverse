@@ -48,7 +48,7 @@
 
   The AN/PRC control panel can be used by:
 
-  - [bold]GOVFOR and OPFOR[/bold] - Commander, Adjutant, staff officers, engineering officers, intelligence officers, synthetics, Squad Leaders, Fireteam Leaders, and Radio Traffic Operators
+  - [bold]GOVFOR and OPFOR[/bold] - Commanding Officer, Adjutant, staff officers, engineering officers, intelligence officers, synthetics, Squad Leaders, Fireteam Leaders, and Radio Traffic Operators
   - [bold]CLF[/bold] - Cell Leader and Radio Operator
   - anyone who has read a [bold]field radio operator's pamphlet[/bold]
 
@@ -510,7 +510,7 @@
       <Box Margin="4">[bold]RECRYPTO[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Invalidates all older faction fill cards. Requires Commander, Adjutant, or Advisor authority.</Box>
+      <Box Margin="4">Invalidates all older faction fill cards. Requires Commanding Officer, Adjutant, or Advisor authority.</Box>
     </ColorBox>
 
     <ColorBox>

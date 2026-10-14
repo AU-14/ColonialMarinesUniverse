@@ -8,6 +8,8 @@ namespace Content.IntegrationTests.CMU14.Intel;
 [TestFixture]
 public sealed class IntelConsoleClaimPrototypeTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUComputerIntelCLFClaimablePrototype = "CMUComputerIntelCLFClaimable";
+
     [Test]
     public async Task ClfBaseIntelConsoleIsClaimableByGovfor()
     {
@@ -18,7 +20,7 @@ public sealed class IntelConsoleClaimPrototypeTest
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var factory = server.ResolveDependency<IComponentFactory>();
-            var prototype = prototypes.Index<EntityPrototype>("CMUComputerIntelCLFClaimable");
+            var prototype = prototypes.Index<EntityPrototype>(CMUComputerIntelCLFClaimablePrototype);
 
             Assert.Multiple(() =>
             {

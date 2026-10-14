@@ -14,6 +14,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Mobs;
+using Content.Shared.Mobs.Systems; // CMU14
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Events;
@@ -49,6 +50,7 @@ public sealed partial class K9System : EntitySystem
     [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private MobStateSystem _mobState = default!; // CMU14: grab release + senses skip the dead
 
     public override void Initialize()
     {
@@ -218,18 +220,26 @@ public sealed partial class K9System : EntitySystem
         if (HasComp<XenoComponent>(target))
         {
             args.Handled = true;
-            _popup.PopupClient(Loc.GetString("rmc-k9-arm-grab-xeno"), ent.Owner, ent.Owner);
+            _popup.PopupEntity(Loc.GetString("rmc-k9-arm-grab-xeno"), ent.Owner, ent.Owner);
             return;
         }
 
-        if (!TryComp<TransformComponent>(target, out var targetXform) ||
-            !TryComp<TransformComponent>(ent, out var dogXform))
+        if (!TryComp(target, out TransformComponent? targetXform) ||
+            !TryComp(ent, out TransformComponent? dogXform))
             return;
 
         if (targetXform.MapID != dogXform.MapID ||
             Vector2.Distance(_transform.GetWorldPosition(targetXform), _transform.GetWorldPosition(dogXform)) > 2.5f)
         {
-            _popup.PopupClient(Loc.GetString("rmc-k9-arm-grab-out-of-range"), ent.Owner, ent.Owner);
+            _popup.PopupEntity(Loc.GetString("rmc-k9-arm-grab-out-of-range"), ent.Owner, ent.Owner);
+            return;
+        }
+
+        // CMU14: a downed body can't struggle free, so latching onto one just pins the dog to it
+        if (_mobState.IsIncapacitated(target) && !(TryComp<K9GrabbedComponent>(target, out var downGrab) && downGrab.Dog == ent.Owner))
+        {
+            args.Handled = true;
+            _popup.PopupEntity(Loc.GetString("rmc-k9-arm-grab-target-down"), ent.Owner, ent.Owner);
             return;
         }
 
@@ -322,6 +332,13 @@ public sealed partial class K9System : EntitySystem
 
     private void OnGrabbedAttemptStopPulling(Entity<K9GrabbedComponent> ent, ref AttemptStopPullingEvent args)
     {
+        // CMU14: the dog dropping the pull is it letting go, flag it so the re-pull below doesn't bite straight back on
+        if (args.User != null && args.User == ent.Comp.Dog)
+        {
+            ent.Comp.DogLetGo = true;
+            return;
+        }
+
         // Prevent breaking pull while grabbed unless explicitly released or dog drops it
         if (args.User == ent.Owner || args.User == null)
         {
@@ -331,8 +348,18 @@ public sealed partial class K9System : EntitySystem
 
     private void OnGrabbedPullStopped(Entity<K9GrabbedComponent> ent, ref PullStoppedMessage args)
     {
+        if (!_net.IsServer)
+            return;
+
+        // CMU14: a dog that let go, or a victim who's down, ends the grip for good
+        if (ent.Comp.DogLetGo || _mobState.IsIncapacitated(ent.Owner))
+        {
+            ReleaseGrab(ent.Owner, ent.Comp);
+            return;
+        }
+
         // If the pull was somehow interrupted (e.g. distance or mechanics) and target is still grabbed, re-pull
-        if (_net.IsServer && Exists(ent.Comp.Dog) && !ent.Comp.Escaping)
+        if (Exists(ent.Comp.Dog) && !ent.Comp.Escaping)
         {
             _pulling.TryStartPull(ent.Comp.Dog, ent.Owner);
         }
@@ -601,6 +628,21 @@ public sealed partial class K9System : EntitySystem
 
     private void OnMobStateChanged(MobStateChangedEvent args)
     {
+        // CMU14: nobody stays latched once either side goes down; crit victims can't struggle free
+        // and a crit dog's pull-stop gets vetoed by the grab, so it'd hang on forever
+        if (_net.IsServer && args.NewMobState is MobState.Critical or MobState.Dead)
+        {
+            if (TryComp<K9GrabbedComponent>(args.Target, out var victimGrab))
+                ReleaseGrab(args.Target, victimGrab);
+
+            if (TryComp<K9DogComponent>(args.Target, out var dogComp) &&
+                dogComp.GrabbedTarget is { } held &&
+                TryComp<K9GrabbedComponent>(held, out var heldGrab))
+            {
+                ReleaseGrab(held, heldGrab);
+            }
+        }
+
         if (args.NewMobState != MobState.Critical)
             return;
 
@@ -872,6 +914,10 @@ public sealed partial class K9System : EntitySystem
             var xenoQuery = EntityQueryEnumerator<XenoComponent, TransformComponent>();
             while (xenoQuery.MoveNext(out var xenoUid, out _, out var xenoXform))
             {
+                // CMU14: corpses aren't a threat to growl at
+                if (_mobState.IsDead(xenoUid))
+                    continue;
+
                 var xenoPos = _transform.GetMapCoordinates(xenoXform);
                 if (xenoPos.MapId != dogPos.MapId)
                     continue;

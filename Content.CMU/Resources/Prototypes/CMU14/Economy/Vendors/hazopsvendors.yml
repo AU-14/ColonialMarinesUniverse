@@ -390,6 +390,12 @@
       - id: RMCPackFlareCAS
     - name: Spare Equipment
       entries:
+      - id: ANPRC117GRadioIssued
+        amount: 2
+      - id: ANPRCFillCardIssued
+        amount: 3
+      - id: ANPRCMastAntenna
+        amount: 1
       - id: AU14HAZOPShecuBeret
         amount: 3
       - id: RMCExplosiveBreachingCharge
@@ -774,7 +780,9 @@
         amount: 2
     - name: Protective Equipment
       entries:
-      - id: CMMaskGas
+      - id: CMUMaskGas
+        amount: 30
+      - id: CMUMaskGasBlack
         amount: 30
       - id: CMUGasMaskFilter
         amount: 30
@@ -798,6 +806,8 @@
         amount: 8
       - id: AU14HescoKit
         amount: 30
+      - id: AU14ConcreteBag
+        amount: 15
       - id: RMCSheetPlastic
         amount: 4
       - id: RMCSheetAluminum

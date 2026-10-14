@@ -91,7 +91,7 @@ public sealed partial class CMUReconstructionCacheSystem
         _preloadRequest = 0;
         // Unattached controls do not receive ExitedTree, so release their GPU ownership explicitly.
         _preloadView?.TakeRenderData().Dispose();
-        _preloadView?.Dispose();
+        _preloadView?.Release();
         _preloadView = null;
     }
 }

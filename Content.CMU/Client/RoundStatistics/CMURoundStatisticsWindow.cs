@@ -160,11 +160,11 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         var decidedRounds = dashboard.Modes.Sum(mode => mode.DecidedTotal);
         _summary.Text = $"{totalRounds} tracked endings, {decidedRounds} decided wins";
 
-        _modes.DisposeAllChildren();
+        _modes.ReleaseChildren();
         foreach (var mode in dashboard.Modes)
             _modes.AddChild(MakeModePanel(mode));
 
-        _recent.DisposeAllChildren();
+        _recent.ReleaseChildren();
         if (dashboard.RecentRounds.Count == 0)
         {
             _recent.AddChild(MakeEmptyPanel("No tracked rounds yet."));

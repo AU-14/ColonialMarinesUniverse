@@ -92,6 +92,7 @@ public sealed class CMU3DReagentTankAppearanceTest
         Assert.That(key, Is.Empty);
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [TestCase("CMCatwalk")]
     [TestCase("CMCatwalkPrison")]
     [TestCase("RMCCatwalkHybrisaElevator")]
@@ -115,6 +116,7 @@ public sealed class CMU3DReagentTankAppearanceTest
         .Select((state, i) => new CMU3DButtonLayer("/Textures/" + CMU3DReagentTankAppearance.Rsi, state, 0,
             i != 2, Color.White, true)).ToArray();
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     private static CMU3DModelPrototype Model() => new()
     {
         ReferenceRsi = CMU3DReagentTankAppearance.Rsi, ReferenceState = "tank_normal", SourceDirections = 1,

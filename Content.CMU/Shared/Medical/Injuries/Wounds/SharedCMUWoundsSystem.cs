@@ -1163,7 +1163,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     // pause state. Explicit treatment remains available while physiology is frozen.
     private bool IsWoundPhysiologySuspended(EntityUid body)
         => HasComp<CMInStasisComponent>(body) ||
-           TryComp<MetaDataComponent>(body, out var metadata) && metadata.EntityPaused;
+           TryComp(body, out MetaDataComponent? metadata) && metadata.EntityPaused;
 
     private bool IsCurrentWoundOwner(EntityUid body, EntityUid partUid, BodyPartComponent part,
         BodyPartWoundComponent wounds)

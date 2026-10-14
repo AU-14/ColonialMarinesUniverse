@@ -66,7 +66,7 @@ public sealed partial class XenoWordQueenSystem : EntitySystem
 
         if (_hive.GetHive(queen.Owner) is not {} hive)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-words-of-the-queen-nobody-hear-you"), queen, queen, PopupType.LargeCaution);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-words-of-the-queen-nobody-hear-you"), queen, queen, PopupType.LargeCaution);
             return;
         }
 

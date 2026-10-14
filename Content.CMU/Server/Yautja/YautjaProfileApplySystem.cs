@@ -293,13 +293,13 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
     private void CopyProfileVisuals(EntityUid uid, EntityPrototype visualPrototype)
     {
         if (TryComp(uid, out ItemComponent? item) &&
-            visualPrototype.TryGetComponent(out ItemComponent? visualItem, EntityManager.ComponentFactory))
+            visualPrototype.TryComp(out ItemComponent? visualItem, EntityManager.ComponentFactory))
         {
             _items.CopyVisuals(uid, visualItem, item);
         }
 
         if (TryComp(uid, out ClothingComponent? clothing) &&
-            visualPrototype.TryGetComponent(out ClothingComponent? visualClothing, EntityManager.ComponentFactory))
+            visualPrototype.TryComp(out ClothingComponent? visualClothing, EntityManager.ComponentFactory))
         {
             _clothing.CopyVisuals(uid, visualClothing, clothing);
         }

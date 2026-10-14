@@ -90,3 +90,40 @@
     bullet: 15
     bio: 15
     explosionArmor: 10
+
+# Civilian versions of the desert/jungle patrol hats, for the civilian clothing wardrobes.
+- type: entity
+  parent: AU14DesertBoonieHat
+  id: CMUCivBoonieHatTan
+  name: tan boonie hat
+  description: A wide-brimmed boonie hat that keeps the sun off your face on long days outdoors.
+
+- type: entity
+  parent: AU14JungleBoonieHat
+  id: CMUCivBoonieHatGreen
+  name: green boonie hat
+  description: A wide-brimmed boonie hat that keeps the sun off your face on long days outdoors.
+
+- type: entity
+  parent: AU14DesertPatrolCap
+  id: CMUCivWorkCapTan
+  name: tan work cap
+  description: A plain cotton work cap.
+
+- type: entity
+  parent: AU14JunglePatrolCap
+  id: CMUCivWorkCapGreen
+  name: green work cap
+  description: A plain cotton work cap.
+
+- type: entity
+  parent: AU14DesertFlapCap
+  id: CMUCivSunCapTan
+  name: tan sun cap
+  description: A cotton work cap with a cloth flap to keep the sun off your neck.
+
+- type: entity
+  parent: AU14JungleFlapCap
+  id: CMUCivSunCapGreen
+  name: green sun cap
+  description: A cotton work cap with a cloth flap to keep the sun off your neck.

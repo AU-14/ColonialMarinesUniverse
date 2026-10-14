@@ -21,6 +21,8 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaScalpTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaScalpPrototype = "CMUYautjaScalp";
+
     [Test]
     public async Task ScalpPrototypeMatchesCmss13StaticFacts()
     {
@@ -70,9 +72,9 @@ public sealed class YautjaScalpTest
         {
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.ResolveDependency<IComponentFactory>();
-            var prototype = prototypes.Index<EntityPrototype>("CMUYautjaScalp");
+            var prototype = prototypes.Index<EntityPrototype>(CMUYautjaScalpPrototype);
 
-            Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True);
+            Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True);
             Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/CMU14/Yautja/yautja_items.rsi")));
             Assert.That(sprite.AllLayers.Select(layer => layer.RsiState.Name),
                 Is.EqualTo(new[] { "scalp_1", "scalp_1_blood" }),

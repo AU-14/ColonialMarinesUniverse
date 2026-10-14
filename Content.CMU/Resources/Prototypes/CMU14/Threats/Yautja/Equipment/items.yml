@@ -528,6 +528,39 @@
     worn: false
   - type: StaticPrice
     price: 200
+
+# lab copy for the WeYu experiment crates, no pred-tech zap and anyone can work it
+- type: entity
+  parent: BaseItem
+  id: CMUWeYuHivebreaker
+  name: salvaged hivebreaker
+  description: A recovered Yautja hivebreaker, its alien interlocks cut out and rewired by Weyland-Yutani. Breaks a serpent's link to the Hivemind and binds it to whoever holds the device.
+  suffix: WeYu
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/yautja_items.rsi
+    state: emitter-xeno
+  - type: Item
+    size: Tiny
+    sprite: CMU14/Yautja/yautja_items.rsi
+  - type: YautjaHivebreaker
+    requireCritical: true
+    requireBadBloodUser: false
+    dishonorOnConversion: false
+    broadcastOnConversion: false
+    copyMasterFactions: true
+    bloodOnConversion: false
+    authorizeTechOnConversion: false
+    enthralledPopup: cmu-weyu-hivebreaker-enthralled-target
+    consentMessage: cmu-weyu-hivebreaker-consent-message
+  - type: Corrodible
+    isCorrodible: false
+  - type: ExplosionResistance
+    damageCoefficient: 0
+    worn: false
+  - type: StaticPrice
+    price: 200
+
 - type: radioChannel
   id: CMUYautjaStranded
   name: chat-radio-cmu-yautja-stranded

@@ -14,7 +14,7 @@ using Robust.Shared.Network;
 
 namespace Content.Server.CMU14.Yautja;
 
-public sealed class YautjaClanInfoEui : BaseEui
+public sealed partial class YautjaClanInfoEui : BaseEui
 {
     [Dependency] private YautjaClanManager _clanManager = default!;
     [Dependency] private YautjaRankManager _rankManager = default!;

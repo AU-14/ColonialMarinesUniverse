@@ -200,7 +200,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         if (!Resolve(ent, ref ent.Comp, false))
             return false;
 
-        if (ent.Comp.SpawnedLarva is { } larva && EntityManager.EntityExists(larva))
+        if (ent.Comp.SpawnedLarva is { } larva && Exists(larva))
             QueueDel(larva);
 
         RemCompDeferred<VictimInfectedComponent>(ent);
@@ -322,7 +322,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             !HasComp<InfectOnPullAttemptImmuneComponent>(args.PullerUid) &&
             !HasComp<SynthComponent>(args.PullerUid))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-parasite-nonplayer-pull", ("parasite", ent)), ent, args.PullerUid, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-parasite-nonplayer-pull", ("parasite", ent)), ent, args.PullerUid, PopupType.SmallCaution);
             args.Cancelled = true;
         }
     }
@@ -331,7 +331,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
     {
         if (HasComp<OnFireComponent>(args.User))
         {
-            _popup.PopupClient("Touching the parasite while you're on fire would burn it!", ent, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity("Touching the parasite while you're on fire would burn it!", ent, args.User, PopupType.MediumCaution);
             args.Cancel();
             return;
         }
@@ -374,7 +374,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             // Unable to leap while underneath an airlock
             if (HasComp<DoorComponent>(contact) && !HasComp<ResinDoorComponent>(contact))
             {
-                _popup.PopupClient(Loc.GetString("cm-xeno-leap-blocked"), Transform(ent).Coordinates, ent);
+                _popup.PopupCoordinates(Loc.GetString("cm-xeno-leap-blocked"), Transform(ent).Coordinates, ent);
                 args.Cancelled = true;
                 return;
             }
@@ -631,7 +631,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         if (!IsInfectable(parasite, victim))
         {
             if (popup)
-                _popup.PopupClient(Loc.GetString("rmc-xeno-failed-cant-infect", ("target", victim)), victim, user, PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-failed-cant-infect", ("target", victim)), victim, user, PopupType.MediumCaution);
 
             return false;
         }
@@ -643,7 +643,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             && !_standing.IsDown(victim, standing))
         {
             if (popup)
-                _popup.PopupClient(Loc.GetString("rmc-xeno-failed-cant-reach", ("target", victim)), victim, user, PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-failed-cant-reach", ("target", victim)), victim, user, PopupType.MediumCaution);
 
             return false;
         }
@@ -651,7 +651,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         if (_mobState.IsDead(victim))
         {
             if (popup)
-                _popup.PopupClient(Loc.GetString("rmc-xeno-failed-target-dead"), victim, user, PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-failed-target-dead"), victim, user, PopupType.MediumCaution);
 
             return false;
         }
@@ -659,7 +659,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         if (_mobState.IsDead(parasite))
         {
             if (popup)
-                _popup.PopupClient(Loc.GetString("rmc-xeno-failed-parasite-dead"), victim, user, PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-failed-parasite-dead"), victim, user, PopupType.MediumCaution);
 
             return false;
         }
@@ -1061,7 +1061,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
                 : "rmc-xeno-infection-burst-now-xeno";
 
             var messageLarva = Loc.GetString(burstLocId, ("victim", Identity.Entity(victim, EntityManager)));
-            _popup.PopupClient(messageLarva, spawnedLarva, spawnedLarva, PopupType.MediumCaution);
+            _popup.PopupEntity(messageLarva, spawnedLarva, spawnedLarva, PopupType.MediumCaution);
         }
         else
         {

@@ -76,7 +76,6 @@ public sealed partial class NicotineAddictionSystem : EntitySystem
                 continue;
 
             comp.NextCheck = time + comp.TimeBetweenChecks;
-            Dirty(uid, comp);
 
             var elapsed = time - comp.LastSmoked;
             var craving = elapsed >= comp.CravingThreshold;

@@ -101,6 +101,7 @@ public sealed class CMU3DLightAppearanceTest
         }
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     private static CMU3DModelPrototype Model(string prefix = "bulb", string rsi = Rsi)
     {
         var model = new CMU3DModelPrototype { ReferenceRsi = rsi, SourceDirections = 4, WallMounted = true };

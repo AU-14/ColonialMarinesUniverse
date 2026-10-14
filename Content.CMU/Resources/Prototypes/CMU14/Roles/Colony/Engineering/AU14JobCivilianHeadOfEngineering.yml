@@ -32,7 +32,7 @@
     time: 43200 # 12 hours
   - !type:DepartmentTimeRequirement
     department: AU14DepartmentEngineering
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   - !type:AgeRequirement
     requiredAge: 25
   - !type:TraitsRequirement

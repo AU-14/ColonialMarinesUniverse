@@ -7,11 +7,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Atmos;
 
-public sealed class CMUBurnPanicSystem : EntitySystem
+public sealed partial class CMUBurnPanicSystem : EntitySystem
 {
-    [Dependency] private readonly SharedRMCEmoteSystem _emote = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedRMCEmoteSystem _emote = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private static readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(0.25);
 

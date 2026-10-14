@@ -1,3 +1,5 @@
+using Content.Shared.Clothing;
+using Content.Server.CMU14.Round;
 using System.Collections.Generic;
 using System.Linq;
 using Content.Shared._RMC14.Rules;
@@ -17,7 +19,7 @@ namespace Content.Server._RMC14.Rules
     /// </summary>
     public sealed partial class ColonyJobOverrideSystem : EntitySystem
     {
-        [Dependency] private RMCPlanetSystem _planetSystem = default!;
+        [Dependency] private AuRoundSystem _round = default!; // CMU14
         [Dependency] private GameTicker _gameTicker = default!;
 
         public override void Initialize()
@@ -34,13 +36,9 @@ namespace Content.Server._RMC14.Rules
             if (ev.Profiles is not Dictionary<NetUserId, HumanoidCharacterProfile> profiles)
                 return;
 
-            // Read the planet prototype data directly. Prefer any planet in rotation.
-            var all = _planetSystem.GetAllPlanetsInRotation();
-            if (all.Count == 0)
-                return;
-
-            var planetComp = all[0].Comp;
-            if (planetComp.ColonyJobOverrides == null)
+            // CMU14: only the selected planet determines which law-enforcement roles exist.
+            var planetComp = _round.ActivePlanet ?? _round.GetSelectedPlanet();
+            if (planetComp?.ColonyJobOverrides == null)
                 return;
 
             var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
@@ -61,10 +59,16 @@ namespace Content.Server._RMC14.Rules
                     var existing = profile.GetJobPriorityForGamemode(presetId, overridenJob);
                     var overridenPriority = (JobPriority)Math.Max((int)existing, (int)priority);
 
-                    // Replace the profile with a copy that has updated priorities.
-                    profiles[user] = profile
+                    // CMU14: the generic job's saved accessories must follow the assigned role.
+                    var assignedProfile = profile
                         .WithGamemodeJobPriority(presetId, overridenJob, overridenPriority)
                         .WithGamemodeJobPriority(presetId, overrideJob, JobPriority.Never);
+                    if (priority >= existing &&
+                        profile.Loadouts.TryGetValue(LoadoutSystem.GetJobPrototype(overrideJob), out var loadout))
+                    {
+                        assignedProfile = assignedProfile.WithLoadout(LoadoutSystem.GetJobPrototype(overridenJob), loadout);
+                    }
+                    profiles[user] = assignedProfile;
                 }
             }
         }

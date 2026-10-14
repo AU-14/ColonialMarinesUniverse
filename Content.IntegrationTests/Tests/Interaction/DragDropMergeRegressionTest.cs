@@ -17,6 +17,8 @@ namespace Content.IntegrationTests.Tests.Interaction;
 [TestOf(typeof(DragDropSystem))]
 public sealed class DragDropMergeRegressionTest : InteractionTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<ShaderPrototype> SelectionOutlinePrototype = "SelectionOutline";
+
     protected override string PlayerPrototype => "DragDropMergeCultistPlayer";
 
     [TestPrototypes]
@@ -106,7 +108,7 @@ public sealed class DragDropMergeRegressionTest : InteractionTest
         await Client.WaitAssertion(() =>
         {
             var sprites = CEntMan.System<SpriteSystem>();
-            var unrelated = Client.ProtoMan.Index<ShaderPrototype>("SelectionOutline").InstanceUnique();
+            var unrelated = Client.ProtoMan.Index<ShaderPrototype>(SelectionOutlinePrototype).InstanceUnique();
             var drag = GetPrivate<ShaderInstance>(CDragDropSys, "_dropTargetInRangeShader");
             var highlighted = GetPrivate<HashSet<SpriteComponent>>(CDragDropSys, "_highlightedSprites");
             var next = GetPrivate<HashSet<SpriteComponent>>(CDragDropSys, "_nextHighlightedSprites");

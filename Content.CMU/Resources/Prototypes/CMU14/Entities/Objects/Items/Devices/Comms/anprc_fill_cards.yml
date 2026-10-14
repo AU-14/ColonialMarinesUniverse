@@ -47,3 +47,19 @@
   - type: ANPRCFillCard
     faction: clf
     designation: KY-38
+
+# vendor and requisitions stock. keys itself to the side of the ship it turns up on, or of
+# the first marine to pick it up (ANPRCSideKeyingSystem)
+- type: entity
+  parent: ANPRCFillCard
+  id: ANPRCFillCardIssued
+  name: COMSEC fill card (unkeyed)
+  suffix: Issue, keys to side
+  description: >-
+    A cryptographic fill card fresh from the signal section, waiting to be
+    loaded with whichever side's key its holder answers to.
+  components:
+  - type: ANPRCSideKeyed
+    variants:
+      govfor: ANPRCFillCardGOVFOR
+      opfor: ANPRCFillCardOPFOR

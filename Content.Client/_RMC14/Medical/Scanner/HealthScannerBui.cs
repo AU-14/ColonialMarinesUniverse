@@ -196,7 +196,7 @@ public sealed partial class HealthScannerBui : BoundUserInterface
                 panel.BackgroundColor = Color.Transparent;
         }
 
-        _window.ChemicalsContainer.DisposeAllChildren();
+        _window.ChemicalsContainer.ReleaseChildren();
 
         var anyChemicals = false;
         foreach (var reagent in uiState.KnownChemicals)
@@ -267,7 +267,7 @@ public sealed partial class HealthScannerBui : BoundUserInterface
 
         _window.BodyTemperatureLabel.SetMessage(temperatureMsg);
 
-        _window.AdviceContainer.DisposeAllChildren();
+        _window.AdviceContainer.ReleaseChildren();
         //Medication Advice
         if (!isPermaDead)
         {
@@ -294,6 +294,11 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         _window.CMURiderBanner.Visible = uiState.CMURiderReading is not null;
         if (uiState.CMURiderReading is { } riderReading)
             _window.CMURiderLabel.Text = riderReading;
+
+        // CMU14: lab Wendigo procedure progress
+        _window.CMUWendigoBanner.Visible = uiState.CMUWendigoReading is not null;
+        if (uiState.CMUWendigoReading is { } wendigoReading)
+            _window.CMUWendigoLabel.Text = wendigoReading;
 
         if (!_window.IsOpen)
         {
@@ -403,8 +408,8 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         }
 
         section.Visible = true;
-        _window.CMUBodyChartContainer.DisposeAllChildren();
-        _window.CMUOrgansContainer.DisposeAllChildren();
+        _window.CMUBodyChartContainer.ReleaseChildren();
+        _window.CMUOrgansContainer.ReleaseChildren();
 
         BuildBodyChart(uiState);
         BuildOrgans(uiState);

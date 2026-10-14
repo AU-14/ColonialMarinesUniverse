@@ -40,7 +40,7 @@ public sealed class MohawkEquipmentTest
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
                 new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
-            foreach (var xform in entities.EntityQuery<TransformComponent>().Where(t => t.ParentUid == ship))
+            foreach (var xform in entities.QueryEntities<TransformComponent>().Where(t => t.Comp.ParentUid == ship))
             {
                 var meta = entities.GetComponent<MetaDataComponent>(xform.Owner);
                 Assert.That(meta.EntityName, Is.Not.AnyOf("Omaha", "Midway", "Mohawk hull", "Platform"));
@@ -51,13 +51,13 @@ public sealed class MohawkEquipmentTest
                 if (parent is not ("CMUMohawkCamera" or "CMUMohawkIntercom" or "CMUMohawkMedicalCabinet"
                     or "CMUMohawkLight" or "CMUMohawkBlueLight"))
                     continue;
-                Assert.That(xform.Anchored, Is.True, $"{meta.EntityName} must stay attached to the cabin.");
-                fixtures.Add(entities.GetNetEntity(xform.Owner), (xform.LocalPosition, xform.LocalRotation, parent));
+                Assert.That(xform.Comp.Anchored, Is.True, $"{meta.EntityName} must stay attached to the cabin.");
+                fixtures.Add(entities.GetNetEntity(xform.Owner), (xform.Comp.LocalPosition, xform.Comp.LocalRotation, parent));
             }
             Assert.That(table, Is.Not.EqualTo(default(EntityUid)));
             Assert.That(fixtures, Has.Count.EqualTo(variant.StartsWith("omaha") ? 23 : 18));
 
-            var mounts = entities.EntityQuery<DropshipUtilityPointComponent>()
+            var mounts = entities.QueryEntities<DropshipUtilityPointComponent>()
                 .Where(p => entities.GetComponent<TransformComponent>(p.Owner).ParentUid == ship &&
                             entities.GetComponent<MetaDataComponent>(p.Owner).EntityPrototype?.ID.StartsWith("CMUMohawkInternal") == true)
                 .ToArray();
@@ -80,7 +80,7 @@ public sealed class MohawkEquipmentTest
                 var slot = new GetAttachmentSlotEvent(entities.GetNetEntity(loader), entities.GetNetEntity(medevac));
                 entities.EventBus.RaiseLocalEvent(mount.Owner, slot);
                 Assert.That(slot.CanUse, Is.True, "The internal mount must accept a real medevac module.");
-                Assert.That(slot.SlotId, Is.EqualTo(mount.UtilitySlotId));
+                Assert.That(slot.SlotId, Is.EqualTo(mount.Comp.UtilitySlotId));
                 entities.DeleteEntity(loader);
                 entities.DeleteEntity(medevac);
             }
@@ -96,13 +96,13 @@ public sealed class MohawkEquipmentTest
             {
                 var entities = pair.Server.EntMan;
                 var transform = entities.System<SharedTransformSystem>();
-                foreach (var receiver in entities.EntityQuery<ApcPowerReceiverComponent>()
+                foreach (var receiver in entities.QueryEntities<ApcPowerReceiverComponent>()
                              .Where(r => entities.GetComponent<TransformComponent>(r.Owner).GridUid == ship))
                     Assert.That(entities.System<PowerReceiverSystem>().IsPowered(receiver.Owner), Is.True,
                         $"{entities.GetComponent<MetaDataComponent>(receiver.Owner).EntityName} needs onboard power.");
-                foreach (var intercom in entities.EntityQuery<IntercomComponent>())
+                foreach (var intercom in entities.QueryEntities<IntercomComponent>())
                 {
-                    Assert.That(intercom.CurrentChannel?.ToString(), Is.EqualTo("MarineCommon"));
+                    Assert.That(intercom.Comp.CurrentChannel?.ToString(), Is.EqualTo("MarineCommon"));
                     Assert.That(entities.GetComponent<RadioSpeakerComponent>(intercom.Owner).Enabled, Is.True);
                 }
                 var tablePosition = entities.GetComponent<TransformComponent>(table).LocalPosition;

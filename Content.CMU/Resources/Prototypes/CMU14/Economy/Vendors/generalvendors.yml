@@ -403,7 +403,9 @@
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
       - id: CMBeltMedicBag
+        recommended: true
       - id: AU14BeltMedicBagBlack
+      - id: CMBeltMedical
     - name: Medical Webbing
       choices: { CMUPlatoonSurgicalWebbing: 1 }
       entries:

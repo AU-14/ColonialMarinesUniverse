@@ -21,6 +21,8 @@ namespace Content.IntegrationTests.CMU14.Light;
 [TestOf(typeof(ExpendableLightSystem))]
 public sealed class ExpendableLightReplicationTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Tag.TagPrototype> TrashPrototype = "Trash";
+
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
     [TestPrototypes]
@@ -268,7 +270,7 @@ public sealed class ExpendableLightReplicationTest : GameTest
         Assert.That(flare.Comp.Activated, Is.False);
         Assert.That(SEntMan.GetComponent<IgnitionSourceComponent>(flare.Owner).Ignited, Is.False);
         Assert.That(SEntMan.GetComponent<ItemComponent>(flare.Owner).HeldPrefix, Is.EqualTo("unlit"));
-        Assert.That(Server.System<TagSystem>().HasTag(flare.Owner, "Trash"), Is.True);
+        Assert.That(Server.System<TagSystem>().HasTag(flare.Owner, TrashPrototype), Is.True);
         Assert.That(SEntMan.GetComponent<PhysicsComponent>(flare.Owner).BodyType, Is.EqualTo(BodyType.Dynamic));
     }
 

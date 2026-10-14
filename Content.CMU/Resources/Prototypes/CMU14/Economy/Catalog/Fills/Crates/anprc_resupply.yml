@@ -1,3 +1,29 @@
+# what every platoon catalog sells: platoons fly either side off the same catalog, so the
+# contents key themselves to whoever unpacks them (ANPRCSideKeyingSystem)
+- type: entity
+  parent: RMCCrateBase
+  id: ANPRCFillCardResupplyCrate
+  name: COMSEC fill card resupply crate
+  components:
+  - type: StorageFill
+    contents:
+    - id: ANPRCFillCardIssued
+      amount: 3
+
+- type: entity
+  parent: RMCCrateBase
+  id: ANPRCRadioResupplyCrate
+  name: AN/PRC-117G resupply crate
+  components:
+  - type: StorageFill
+    contents:
+    - id: ANPRC117GRadioIssued
+      amount: 1
+    - id: ANPRCMastAntenna
+      amount: 1
+    - id: RMCPowerCellHigh
+      amount: 2
+
 - type: entity
   parent: RMCCrateBase
   id: ANPRCFillCardResupplyCrateGOVFOR

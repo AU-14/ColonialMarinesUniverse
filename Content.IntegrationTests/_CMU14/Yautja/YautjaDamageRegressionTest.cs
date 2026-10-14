@@ -12,6 +12,8 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaDamageRegressionTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<DamageGroupPrototype> BrutePrototype = "Brute";
+
     private const string ArmoredHunter = "CMUTestYautjaMeleeArmoredHunter";
 
     [TestPrototypes]
@@ -44,7 +46,7 @@ public sealed class YautjaDamageRegressionTest
                 var before = entMan.System<DamageableSystem>().GetAllDamage(hunter).GetTotal();
                 var delta = damageable.TryChangeDamage(
                     hunter,
-                    new DamageSpecifier(prototypes.Index<DamageGroupPrototype>("Brute"), 45),
+                    new DamageSpecifier(prototypes.Index<DamageGroupPrototype>(BrutePrototype), 45),
                     origin: ravager,
                     tool: ravager);
 

@@ -15,7 +15,10 @@ namespace Content.IntegrationTests.CMU14.Threats;
 [TestFixture]
 public sealed class ThreatHijackVictoryTest
 {
-    [Test, Timeout(180000)]
+    private static readonly Robust.Shared.Prototypes.EntProtoId KillAllXenoRulePrototype = "KillAllXenoRule";
+    private static readonly Robust.Shared.Prototypes.EntProtoId HiveCollapseRulePrototype = "HiveCollapseRule";
+
+    [Test, CancelAfter(180000)]
     public async Task WreckCannotEndRoundWithSevenSurvivorsAndAReplacementQueen()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { DummyTicker = false, Dirty = true });
@@ -40,8 +43,8 @@ public sealed class ThreatHijackVictoryTest
                 survivors.Add(drone);
             }
 
-            Assert.That(ticker.StartGameRule("KillAllXenoRule"), Is.True);
-            var collapse = ticker.AddGameRule("HiveCollapseRule");
+            Assert.That(ticker.StartGameRule(KillAllXenoRulePrototype), Is.True);
+            var collapse = ticker.AddGameRule(HiveCollapseRulePrototype);
             entities.GetComponent<HiveCollapseRuleComponent>(collapse).HiveCollapseDuration = TimeSpan.FromSeconds(1);
             Assert.That(ticker.StartGameRule(collapse), Is.True);
             mobs.ChangeMobState(oldQueen, MobState.Dead);

@@ -347,7 +347,7 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         {
             var entity = SpawnAtPosition(entityPrototype, spawnPosition);
             spawnedEnts.Add(entity);
-            _stack.SetCount(entity, count);
+            _stack.SetCount((entity, null), count);
         }
 
         return spawnedEnts;
@@ -443,7 +443,7 @@ public sealed partial class RMCConstructionSystem : EntitySystem
 
         if (!CanBuildAt(ent.Owner.ToCoordinates(), Name(ent), out var popup, true))
         {
-            _popup.PopupClient(popup, ent, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(popup, ent, args.User, PopupType.SmallCaution);
             args.Cancel();
         }
     }

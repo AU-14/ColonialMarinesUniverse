@@ -13,7 +13,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Telephone;
 
-public sealed class CMUMobilePhoneSystem : EntitySystem
+public sealed partial class CMUMobilePhoneSystem : EntitySystem
 {
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private SharedPopupSystem _popup = default!;

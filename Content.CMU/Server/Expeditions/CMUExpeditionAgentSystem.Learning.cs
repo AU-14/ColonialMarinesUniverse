@@ -63,23 +63,39 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void LoadExperience(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
-        if (agent.LearningLoaded)
+        if (agent.LearningLoaded && _timing.CurTime < agent.NextExperienceRefresh)
             return;
         agent.LearningLoaded = true;
-        if (ExperienceKey(uid, agent) is { } key && _experience.TryGetValue(key, out var value))
-        {
-            agent.LearnedFlankCost = value.FlankCost;
-            agent.LearnedDangerCost = value.DangerCost;
-        }
+        agent.NextExperienceRefresh = _timing.CurTime + TimeSpan.FromSeconds(5);
+        agent.ExperienceGroup = ExperienceKey(uid, agent);
+        // Use current-round outcomes for live adaptation, without changing weapon skill
+        // or inventing tactics. Peers refresh lazily; the observing agent updates at once.
+        _roundExperience.TryGetValue(agent.ExperienceGroup, out var value);
+        ApplyExperience(agent, value);
+    }
+
+    private static void ApplyExperience(CMUExpeditionAgentComponent agent, CMUTacticalExperience? value)
+    {
+        agent.LearnedFlankCost = value?.FlankCost ?? 1;
+        agent.LearnedDangerCost = value?.DangerCost ?? 1;
+        agent.ExperienceSamples = value?.Samples ?? 0;
     }
 
     private void RecordTactic(EntityUid uid, CMUExpeditionAgentComponent agent, bool success, bool flank = true)
     {
+        // Several damage/think events can belong to one exposed peek. Count the
+        // attempt once so sustained fire cannot flood the shared learning average.
+        if (!flank && agent.PeekOutcomeRecorded)
+            return;
+        if (!flank)
+            agent.PeekOutcomeRecorded = true;
         if (ExperienceKey(uid, agent) is not { } key)
             return;
         if (!_roundExperience.TryGetValue(key, out var value))
             _roundExperience[key] = value = new CMUTacticalExperience();
         value.Observe(flank, success);
+        agent.ExperienceGroup = key;
+        ApplyExperience(agent, value);
         _experienceChanged = true;
     }
 
@@ -106,6 +122,19 @@ public sealed partial class CMUExpeditionAgentSystem
         CopyExperienceForRound();
         _grenadeHazards.Clear();
         _reports.Clear();
+        // keyed by squad root, and ids get reused after the round flush, so a stale plan could latch onto a new squad
+        _squadPlans.Clear();
+        // the plan cadence too, carried over it shifted when the new round's squads got their first roles
+        _nextSquadPlan = TimeSpan.Zero;
+    }
+
+    // back to baseline tactics. learning normally carries between rounds (and to disk), and tests
+    // recycle servers, so without this every case inherited whatever the last ones taught the agents
+    public void ResetLearnedExperience()
+    {
+        _experience.Clear();
+        _roundExperience.Clear();
+        _experienceChanged = false;
     }
 
     public override void Shutdown()

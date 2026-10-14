@@ -53,7 +53,7 @@ public sealed partial class XenoInsightSystem : EntitySystem
         if (xeno.Comp.Emote is { } emote)
             _emote.TryEmoteWithChat(xeno.Owner, emote, false, null, false, true);
 
-        _popup.PopupClient(Loc.GetString("rmc-xeno-insight-empower"), xeno, xeno, PopupType.Medium);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-insight-empower"), xeno, xeno, PopupType.Medium);
     }
 }
 

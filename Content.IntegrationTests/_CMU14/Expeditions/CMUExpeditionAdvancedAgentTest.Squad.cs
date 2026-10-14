@@ -2,6 +2,8 @@ using System.Numerics;
 using Content.Server.CMU14.Expeditions;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared.CMU14.Expeditions;
+using Content.Shared.Damage.Components;
+using Content.Shared.Hands.EntitySystems;
 using Robust.Shared.GameObjects;
 
 namespace Content.IntegrationTests._CMU14.Expeditions;
@@ -14,7 +16,7 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
     {
         EntityUid map = default;
         var guards = new List<EntityUid>();
-        var rifles = new List<EntityUid>();
+        var weapons = new List<EntityUid[]>();
         var priorAmmo = new int[6];
         var shots = new int[6];
         var acquired = new bool[6];
@@ -22,21 +24,35 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
         var searches = new List<double>();
         var routes = new List<double>();
         var sawFlank = false;
+        var wasFlanking = new bool[6];
+        var flankTransitions = new Queue<string>();
         await Server.WaitAssertion(() =>
         {
-            var arena = Arena("CMUExpeditionScavengerAggressive");
+            // Every squad needs a usable opening lane. The cover wall used by the
+            // retreat fixtures would hide the upper squad's shooters behind it.
+            var arena = Arena("CMUExpeditionScavengerAggressive", withCover: false);
             map = arena.Map;
+            // An unarmed human is a melee threat: nearby squads correctly enter anti-rush
+            // instead of assigning an advance. This fixture exercises a firefight.
+            var enemyRifle = SEntMan.SpawnEntity("WeaponRifleMAR40", SEntMan.GetComponent<TransformComponent>(arena.Enemy).Coordinates);
+            Assert.That(Server.System<SharedHandsSystem>().TryPickupAnyHand(arena.Enemy, enemyRifle), Is.True);
             guards.Add(arena.Guard);
             var origin = SEntMan.GetComponent<TransformComponent>(arena.Guard).Coordinates;
-            var offsets = new[] { new Vector2(-2, -5), new Vector2(-2, -3), new Vector2(-2, -1), new Vector2(-2, 2), new Vector2(-2, 5) };
+            // Keep the first covering shooter above the lead guard's downward flank,
+            // so the mover does not cross and block that shooter's reserved firing lane.
+            var offsets = new[] { new Vector2(-2, 5), new Vector2(-2, 3), new Vector2(-2, 1), new Vector2(-2, -2), new Vector2(-2, -5) };
             for (var i = 0; i < offsets.Length; i++)
                 guards.Add(SEntMan.SpawnEntity(i % 2 == 0 ? "CMUExpeditionScavengerCautious" : "CMUExpeditionScavengerAggressive", origin.Offset(offsets[i])));
             for (var i = 0; i < guards.Count; i++)
             {
+                // Stray friendly rounds must not turn this coordination scenario into
+                // an injury/medical interruption test. Native lane checks still apply.
+                SEntMan.EnsureComponent<GodmodeComponent>(guards[i]);
                 SEntMan.GetComponent<CMUExpeditionAgentComponent>(guards[i]).Squad = twoSquads && i >= 3 ? 2 : 1;
                 Assert.That(Server.System<GunSystem>().TryGetGun(guards[i], out var gun), Is.True);
-                rifles.Add(gun.Owner);
-                priorAmmo[i] = Ammo(gun.Owner);
+                weapons.Add(Stored(guards[i]).Where(SEntMan.HasComponent<Content.Shared.Weapons.Ranged.Components.GunComponent>)
+                    .Append(gun.Owner).ToArray());
+                priorAmmo[i] = weapons[i].Sum(Ammo);
             }
         });
         for (var sample = 0; sample < 120; sample++)
@@ -49,9 +65,20 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
                 {
                     var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guards[i]);
                     acquired[i] |= agent.Target != null;
-                    var ammo = Ammo(rifles[i]);
+                    var ammo = weapons[i].Sum(Ammo);
                     shots[i] += Math.Max(0, priorAmmo[i] - ammo);
                     priorAmmo[i] = ammo;
+                    var flanking = agent.Action == CMUTacticalAction.Flank;
+                    if (flanking != wasFlanking[i])
+                    {
+                        flankTransitions.Enqueue($"{SGameTiming.CurTime.TotalSeconds:F2}: guard {i}, flank={flanking}, " +
+                            $"position={SEntMan.GetComponent<TransformComponent>(guards[i]).Coordinates}, destination={agent.ActiveMoveDestination}, " +
+                            $"covering={agent.CoveringShooter}, completed={agent.Flanks}, failedMove={agent.LastMoveFailed}, " +
+                            $"decision={agent.DecisionOwner}/{agent.DecisionReason}");
+                        while (flankTransitions.Count > 12)
+                            flankTransitions.Dequeue();
+                        wasFlanking[i] = flanking;
+                    }
                     if (agent.Action == CMUTacticalAction.Flank)
                     {
                         sawFlank = true;
@@ -82,7 +109,9 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
             Assert.That(shots, Has.All.GreaterThan(0), $"Every guard must contribute, including both squads: {string.Join(';', details)}");
             Assert.That(searches.Count, Is.GreaterThanOrEqualTo(6));
             Assert.That(sawFlank, Is.True, $"At least one covered flank should be attempted in a mixed six-person squad: {string.Join(';', details)}");
-            Assert.That(guards.Sum(g => SEntMan.GetComponent<CMUExpeditionAgentComponent>(g).Flanks), Is.GreaterThan(0), "A coordinated flank must physically complete, not just receive a role label.");
+            Assert.That(guards.Sum(g => SEntMan.GetComponent<CMUExpeditionAgentComponent>(g).Flanks), Is.GreaterThan(0),
+                $"A coordinated flank must physically complete, not just receive a role label: {string.Join(';', details)}\n" +
+                string.Join(Environment.NewLine, flankTransitions));
             SEntMan.DeleteEntity(map);
         });
     }

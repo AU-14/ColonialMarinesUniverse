@@ -1035,204 +1035,268 @@
   referenceState: handcuff
   sourceDirections: 1
   parts:
-  - label: open steel cuff ring
-    min: -0.15700, -0.09600, 0.01784
-    max: -0.12100, -0.06000, 0.04016
+  - label: cuff 1 joined steel arc 1
+    min: -0.1718954, -0.0695, 0.01784
+    max: -0.1168226, -0.0335, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: 101.432504
+  - label: cuff 1 rounded joint 1
+    min: -0.157, -0.096, 0.01784
+    max: -0.121, -0.06, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.15798, -0.07942, 0.01784
-    max: -0.12198, -0.04342, 0.04016
+  - label: cuff 1 joined steel arc 2
+    min: -0.1891632, -0.0236007, 0.01784
+    max: -0.1395548, 0.0123993, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: 127.042475
+  - label: cuff 1 rounded joint 2
+    min: -0.167718, -0.043, 0.01784
+    max: -0.131718, -0.007, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.16092, -0.06324, 0.01784
-    max: -0.12492, -0.02724, 0.04016
+  - label: cuff 1 joined steel arc 3
+    min: -0.2207231, 0.0028993, 0.01784
+    max: -0.1772769, 0.0388993, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: 160.453475
+  - label: cuff 1 rounded joint 3
+    min: -0.197, -0.0042013, 0.01784
+    max: -0.161, 0.0317987, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.16572, -0.04788, 0.01784
-    max: -0.12972, -0.01188, 0.04016
+  - label: cuff 1 joined steel arc 4
+    min: -0.2607231, 0.0028993, 0.01784
+    max: -0.2172769, 0.0388993, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: -160.453475
+  - label: cuff 1 rounded joint 4
+    min: -0.237, 0.01, 0.01784
+    max: -0.201, 0.046, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.17228, -0.03369, 0.01784
-    max: -0.13628, 0.00231, 0.04016
+  - label: cuff 1 joined steel arc 5
+    min: -0.2984452, -0.0236007, 0.01784
+    max: -0.2488368, 0.0123993, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: -127.042475
+  - label: cuff 1 rounded joint 5
+    min: -0.277, -0.0042013, 0.01784
+    max: -0.241, 0.0317987, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.18043, -0.02105, 0.01784
-    max: -0.14443, 0.01495, 0.04016
+  - label: cuff 1 joined steel arc 6
+    min: -0.3211774, -0.0695, 0.01784
+    max: -0.2661046, -0.0335, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: -101.432504
+  - label: cuff 1 rounded joint 6
+    min: -0.306282, -0.043, 0.01784
+    max: -0.270282, -0.007, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.18998, -0.01024, 0.01784
-    max: -0.15398, 0.02576, 0.04016
+  - label: cuff 1 joined steel arc 7
+    min: -0.3211774, -0.1225, 0.01784
+    max: -0.2661046, -0.0865, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: -78.567496
+  - label: cuff 1 rounded joint 7
+    min: -0.317, -0.096, 0.01784
+    max: -0.281, -0.06, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.20068, -0.00155, 0.01784
-    max: -0.16468, 0.03445, 0.04016
+  - label: cuff 1 joined steel arc 8
+    min: -0.2984452, -0.1683993, 0.01784
+    max: -0.2488368, -0.1323993, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: -52.957525
+  - label: cuff 1 rounded joint 8
+    min: -0.306282, -0.149, 0.01784
+    max: -0.270282, -0.113, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.21228, 0.00481, 0.01784
-    max: -0.17628, 0.04081, 0.04016
+  - label: cuff 1 joined steel arc 9
+    min: -0.2607231, -0.1948993, 0.01784
+    max: -0.2172769, -0.1588993, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: -19.546525
+  - label: cuff 1 rounded joint 9
+    min: -0.277, -0.1877987, 0.01784
+    max: -0.241, -0.1517987, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.22449, 0.00869, 0.01784
-    max: -0.18849, 0.04469, 0.04016
+  - label: cuff 1 joined steel arc 10
+    min: -0.2207231, -0.1948993, 0.01784
+    max: -0.1772769, -0.1588993, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: 19.546525
+  - label: cuff 1 rounded joint 10
+    min: -0.237, -0.202, 0.01784
+    max: -0.201, -0.166, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.23700, 0.01000, 0.01784
-    max: -0.20100, 0.04600, 0.04016
+  - label: cuff 1 joined steel arc 11
+    min: -0.1891632, -0.1683993, 0.01784
+    max: -0.1395548, -0.1323993, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: 52.957525
+  - label: cuff 1 rounded joint 11
+    min: -0.197, -0.1877987, 0.01784
+    max: -0.161, -0.1517987, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.24951, 0.00869, 0.01784
-    max: -0.21351, 0.04469, 0.04016
+  - label: cuff 1 joined steel arc 12
+    min: -0.1718954, -0.1225, 0.01784
+    max: -0.1168226, -0.0865, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: 78.567496
+  - label: cuff 1 rounded joint 12
+    min: -0.167718, -0.149, 0.01784
+    max: -0.131718, -0.113, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.26172, 0.00481, 0.01784
-    max: -0.22572, 0.04081, 0.04016
+  - label: cuff 2 joined steel arc 1
+    min: 0.269407, -0.01225, 0.01784
+    max: 0.3153391, 0.02375, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: 104.50494
+  - label: cuff 2 rounded joint 1
+    min: 0.28, -0.034, 0.01784
+    max: 0.316, 0.002, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.27332, -0.00155, 0.01784
-    max: -0.23732, 0.03445, 0.04016
+  - label: cuff 2 joined steel arc 2
+    min: 0.2487406, 0.0254221, 0.01784
+    max: 0.2940055, 0.0614221, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: 133.994914
+  - label: cuff 2 rounded joint 2
+    min: 0.2687461, 0.0095, 0.01784
+    max: 0.3047461, 0.0455, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.28402, -0.01024, 0.01784
-    max: -0.24802, 0.02576, 0.04016
+  - label: cuff 2 joined steel arc 3
+    min: 0.2127063, 0.0471721, 0.01784
+    max: 0.2572937, 0.0831721, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: 164.489665
+  - label: cuff 2 rounded joint 3
+    min: 0.238, 0.0413442, 0.01784
+    max: 0.274, 0.0773442, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.29357, -0.02105, 0.01784
-    max: -0.25757, 0.01495, 0.04016
+  - label: cuff 2 joined steel arc 4
+    min: 0.1707063, 0.0471721, 0.01784
+    max: 0.2152937, 0.0831721, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: -164.489665
+  - label: cuff 2 rounded joint 4
+    min: 0.196, 0.053, 0.01784
+    max: 0.232, 0.089, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.30172, -0.03369, 0.01784
-    max: -0.26572, 0.00231, 0.04016
+  - label: cuff 2 joined steel arc 5
+    min: 0.1339945, 0.0254221, 0.01784
+    max: 0.1792594, 0.0614221, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: -133.994914
+  - label: cuff 2 rounded joint 5
+    min: 0.154, 0.0413442, 0.01784
+    max: 0.19, 0.0773442, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.30828, -0.04788, 0.01784
-    max: -0.27228, -0.01188, 0.04016
+  - label: cuff 2 joined steel arc 6
+    min: 0.1126609, -0.01225, 0.01784
+    max: 0.158593, 0.02375, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: -104.50494
+  - label: cuff 2 rounded joint 6
+    min: 0.1232539, 0.0095, 0.01784
+    max: 0.1592539, 0.0455, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.31308, -0.06324, 0.01784
-    max: -0.27708, -0.02724, 0.04016
+  - label: cuff 2 joined steel arc 7
+    min: 0.1126609, -0.05575, 0.01784
+    max: 0.158593, -0.01975, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: -75.49506
+  - label: cuff 2 rounded joint 7
+    min: 0.112, -0.034, 0.01784
+    max: 0.148, 0.002, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.31602, -0.07942, 0.01784
-    max: -0.28002, -0.04342, 0.04016
+  - label: cuff 2 joined steel arc 8
+    min: 0.1339945, -0.0934221, 0.01784
+    max: 0.1792594, -0.0574221, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: -46.005086
+  - label: cuff 2 rounded joint 8
+    min: 0.1232539, -0.0775, 0.01784
+    max: 0.1592539, -0.0415, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.31700, -0.09600, 0.01784
-    max: -0.28100, -0.06000, 0.04016
+  - label: cuff 2 joined steel arc 9
+    min: 0.1707063, -0.1151721, 0.01784
+    max: 0.2152937, -0.0791721, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: -15.510335
+  - label: cuff 2 rounded joint 9
+    min: 0.154, -0.1093442, 0.01784
+    max: 0.19, -0.0733442, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.31602, -0.11258, 0.01784
-    max: -0.28002, -0.07658, 0.04016
+  - label: cuff 2 joined steel arc 10
+    min: 0.2127063, -0.1151721, 0.01784
+    max: 0.2572937, -0.0791721, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: 15.510335
+  - label: cuff 2 rounded joint 10
+    min: 0.196, -0.121, 0.01784
+    max: 0.232, -0.085, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.31308, -0.12876, 0.01784
-    max: -0.27708, -0.09276, 0.04016
+  - label: cuff 2 joined steel arc 11
+    min: 0.2487406, -0.0934221, 0.01784
+    max: 0.2940055, -0.0574221, 0.04016
+    color: '#9B9990'
+    shape: CylinderX
+    yaw: 46.005086
+  - label: cuff 2 rounded joint 11
+    min: 0.238, -0.1093442, 0.01784
+    max: 0.274, -0.0733442, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.30828, -0.14412, 0.01784
-    max: -0.27228, -0.10812, 0.04016
+  - label: cuff 2 joined steel arc 12
+    min: 0.269407, -0.05575, 0.01784
+    max: 0.3153391, -0.01975, 0.04016
     color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.30172, -0.15831, 0.01784
-    max: -0.26572, -0.12231, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.29357, -0.17095, 0.01784
-    max: -0.25757, -0.13495, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.28402, -0.18176, 0.01784
-    max: -0.24802, -0.14576, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.27332, -0.19045, 0.01784
-    max: -0.23732, -0.15445, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.26172, -0.19681, 0.01784
-    max: -0.22572, -0.16081, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.24951, -0.20069, 0.01784
-    max: -0.21351, -0.16469, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.23700, -0.20200, 0.01784
-    max: -0.20100, -0.16600, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.22449, -0.20069, 0.01784
-    max: -0.18849, -0.16469, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.21228, -0.19681, 0.01784
-    max: -0.17628, -0.16081, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.20068, -0.19045, 0.01784
-    max: -0.16468, -0.15445, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.18998, -0.18176, 0.01784
-    max: -0.15398, -0.14576, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.18043, -0.17095, 0.01784
-    max: -0.14443, -0.13495, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.17228, -0.15831, 0.01784
-    max: -0.13628, -0.12231, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.16572, -0.14412, 0.01784
-    max: -0.12972, -0.10812, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.16092, -0.12876, 0.01784
-    max: -0.12492, -0.09276, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: -0.15798, -0.11258, 0.01784
-    max: -0.12198, -0.07658, 0.04016
+    shape: CylinderX
+    yaw: 75.49506
+  - label: cuff 2 rounded joint 12
+    min: 0.2687461, -0.0775, 0.01784
+    max: 0.3047461, -0.0415, 0.04016
     color: '#9B9990'
     shape: Ellipsoid
   - label: cuff lock body
@@ -1247,206 +1311,6 @@
     min: -0.26100, 0.02400, 0.05900
     max: -0.23800, 0.03700, 0.06600
     color: '#AA1717'
-  - label: open steel cuff ring
-    min: 0.28000, -0.03400, 0.01784
-    max: 0.31600, 0.00200, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.27897, -0.02039, 0.01784
-    max: 0.31497, 0.01561, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.27589, -0.00712, 0.01784
-    max: 0.31189, 0.02888, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.27084, 0.00550, 0.01784
-    max: 0.30684, 0.04150, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.26396, 0.01714, 0.01784
-    max: 0.29996, 0.05314, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.25540, 0.02752, 0.01784
-    max: 0.29140, 0.06352, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.24537, 0.03638, 0.01784
-    max: 0.28137, 0.07238, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.23414, 0.04352, 0.01784
-    max: 0.27014, 0.07952, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.22196, 0.04874, 0.01784
-    max: 0.25796, 0.08474, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.20914, 0.05193, 0.01784
-    max: 0.24514, 0.08793, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.19600, 0.05300, 0.01784
-    max: 0.23200, 0.08900, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.18286, 0.05193, 0.01784
-    max: 0.21886, 0.08793, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.17004, 0.04874, 0.01784
-    max: 0.20604, 0.08474, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.15786, 0.04352, 0.01784
-    max: 0.19386, 0.07952, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.14663, 0.03638, 0.01784
-    max: 0.18263, 0.07238, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.13660, 0.02752, 0.01784
-    max: 0.17260, 0.06352, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.12804, 0.01714, 0.01784
-    max: 0.16404, 0.05314, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.12116, 0.00550, 0.01784
-    max: 0.15716, 0.04150, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.11611, -0.00712, 0.01784
-    max: 0.15211, 0.02888, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.11303, -0.02039, 0.01784
-    max: 0.14903, 0.01561, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.11200, -0.03400, 0.01784
-    max: 0.14800, 0.00200, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.11303, -0.04761, 0.01784
-    max: 0.14903, -0.01161, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.11611, -0.06088, 0.01784
-    max: 0.15211, -0.02488, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.12116, -0.07350, 0.01784
-    max: 0.15716, -0.03750, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.12804, -0.08514, 0.01784
-    max: 0.16404, -0.04914, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.13660, -0.09552, 0.01784
-    max: 0.17260, -0.05952, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.14663, -0.10438, 0.01784
-    max: 0.18263, -0.06838, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.15786, -0.11152, 0.01784
-    max: 0.19386, -0.07552, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.17004, -0.11674, 0.01784
-    max: 0.20604, -0.08074, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.18286, -0.11993, 0.01784
-    max: 0.21886, -0.08393, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.19600, -0.12100, 0.01784
-    max: 0.23200, -0.08500, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.20914, -0.11993, 0.01784
-    max: 0.24514, -0.08393, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.22196, -0.11674, 0.01784
-    max: 0.25796, -0.08074, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.23414, -0.11152, 0.01784
-    max: 0.27014, -0.07552, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.24537, -0.10438, 0.01784
-    max: 0.28137, -0.06838, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.25540, -0.09552, 0.01784
-    max: 0.29140, -0.05952, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.26396, -0.08514, 0.01784
-    max: 0.29996, -0.04914, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.27084, -0.07350, 0.01784
-    max: 0.30684, -0.03750, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.27589, -0.06088, 0.01784
-    max: 0.31189, -0.02488, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
-  - label: open steel cuff ring
-    min: 0.27897, -0.04761, 0.01784
-    max: 0.31497, -0.01161, 0.04016
-    color: '#9B9990'
-    shape: Ellipsoid
   - label: cuff lock body
     min: 0.15900, 0.05100, 0.02100
     max: 0.26900, 0.09500, 0.05900
@@ -2808,8 +2672,8 @@
     color: '#32B65A'
     shape: Ellipsoid
   - label: carrot leafy stem
-    min: 0.16616, 0.16072, 0.04730
-    max: 0.20124, 0.19068, 0.06130
+    min: 0.16616, 0.1593, 0.0473
+    max: 0.20124, 0.19068, 0.0613
     color: '#209A45'
   - label: carrot leafy stem
     min: 0.19356, 0.18412, 0.05190
@@ -2862,10 +2726,6 @@
     max: 0.30994, 0.28351, 0.09257
     color: '#32B65A'
     shape: Ellipsoid
-  - label: carrot leafy stem
-    min: 0.16616, 0.15930, 0.04730
-    max: 0.20124, 0.17330, 0.06130
-    color: '#209A45'
   - label: carrot leafy stem
     min: 0.19356, 0.16390, 0.05190
     max: 0.22864, 0.17790, 0.06590

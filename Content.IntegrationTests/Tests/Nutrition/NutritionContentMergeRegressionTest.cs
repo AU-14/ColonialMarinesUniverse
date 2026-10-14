@@ -13,6 +13,15 @@ namespace Content.IntegrationTests.Tests.Nutrition;
 [TestFixture]
 public sealed class NutritionContentMergeRegressionTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMPillPrototype = "CMPill";
+    private static readonly Robust.Shared.Prototypes.ProtoId<EdiblePrototype> PillPrototype = "Pill";
+    private static readonly Robust.Shared.Prototypes.EntProtoId FoodBurgerMcribPrototype = "FoodBurgerMcrib";
+    private static readonly Robust.Shared.Prototypes.EntProtoId FoodBakedCannoliPrototype = "FoodBakedCannoli";
+    private static readonly Robust.Shared.Prototypes.ProtoId<FoodRecipePrototype> RecipeCannoliPrototype = "RecipeCannoli";
+    private static readonly Robust.Shared.Prototypes.ProtoId<FoodRecipePrototype> RecipeCornedBeefPrototype = "RecipeCornedBeef";
+    private static readonly Robust.Shared.Prototypes.ProtoId<FoodRecipePrototype> RecipePretzelPrototype = "RecipePretzel";
+    private static readonly Robust.Shared.Prototypes.ProtoId<FoodRecipePrototype> RecipeMoproachPrototype = "RecipeMoproach";
+
     private static readonly string[] MigratedEdibles =
     {
         "RMCJumpsuitDispatcherUniform",
@@ -192,7 +201,7 @@ public sealed class NutritionContentMergeRegressionTest
                 Assert.That(prototype.TryComp<EdibleComponent>(out _, factory), Is.True, id);
             }
 
-            var pill = prototypes.Index<EntityPrototype>("CMPill");
+            var pill = prototypes.Index<EntityPrototype>(CMPillPrototype);
             Assert.That(pill.TryComp<EdibleComponent>(out var edible, factory), Is.True);
             Assert.Multiple(() =>
             {
@@ -204,7 +213,7 @@ public sealed class NutritionContentMergeRegressionTest
                     "CMPill must use the Pill edible prototype so its historic audio parameters are retained.");
             });
 
-            var pillStyle = prototypes.Index<EdiblePrototype>("Pill");
+            var pillStyle = prototypes.Index<EdiblePrototype>(PillPrototype);
             Assert.That(pillStyle.Message.Id, Is.EqualTo("edible-swallow"));
             Assert.That(pillStyle.UseSound, Is.TypeOf<SoundPathSpecifier>());
             var pillSound = (SoundPathSpecifier) pillStyle.UseSound;
@@ -227,11 +236,11 @@ public sealed class NutritionContentMergeRegressionTest
                 Assert.That(cottonEdible!.RequiresSpecialDigestion, Is.False, id);
             }
 
-            var mcrib = prototypes.Index<EntityPrototype>("FoodBurgerMcrib");
+            var mcrib = prototypes.Index<EntityPrototype>(FoodBurgerMcribPrototype);
             Assert.That(mcrib.TryComp<EdibleComponent>(out var mcribEdible, factory), Is.True);
             Assert.That(mcribEdible!.Trash.Select(id => id.Id), Is.EqualTo(new[] { "FoodKebabSkewer" }));
 
-            var cannoli = prototypes.Index<EntityPrototype>("FoodBakedCannoli");
+            var cannoli = prototypes.Index<EntityPrototype>(FoodBakedCannoliPrototype);
             Assert.That(cannoli.TryComp<FlavorProfileComponent>(out var flavor, factory), Is.True);
             Assert.That(flavor!.Flavors.Select(id => id.Id), Is.EquivalentTo(new[] { "crunchy", "creamy" }));
         });
@@ -266,13 +275,13 @@ public sealed class NutritionContentMergeRegressionTest
                 new Dictionary<string, FixedPoint2> { ["Rice"] = 10, ["Milk"] = 30, ["Egg"] = 6, ["RMCSugar"] = 5 });
             AssertRecipe(prototypes, "RecipeColdChili", new Dictionary<string, FixedPoint2> { ["RMCNitrogen"] = 5 });
 
-            Assert.That(prototypes.Index<FoodRecipePrototype>("RecipeCannoli").Result.Id,
+            Assert.That(prototypes.Index<FoodRecipePrototype>(RecipeCannoliPrototype).Result.Id,
                 Is.EqualTo("FoodBakedCannoli"));
-            Assert.That(prototypes.Index<FoodRecipePrototype>("RecipeCornedBeef").Result.Id,
+            Assert.That(prototypes.Index<FoodRecipePrototype>(RecipeCornedBeefPrototype).Result.Id,
                 Is.EqualTo("FoodMealCornedbeef"));
-            Assert.That(prototypes.Index<FoodRecipePrototype>("RecipePretzel").Result.Id,
+            Assert.That(prototypes.Index<FoodRecipePrototype>(RecipePretzelPrototype).Result.Id,
                 Is.EqualTo("FoodBakedPretzel"));
-            Assert.That(prototypes.Index<FoodRecipePrototype>("RecipeMoproach").Result.Id,
+            Assert.That(prototypes.Index<FoodRecipePrototype>(RecipeMoproachPrototype).Result.Id,
                 Is.EqualTo("MobMoproach"));
         });
 

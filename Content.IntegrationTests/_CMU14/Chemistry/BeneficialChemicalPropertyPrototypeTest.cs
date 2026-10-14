@@ -60,6 +60,10 @@ namespace Content.IntegrationTests.CMU14.Chemistry;
 [TestFixture]
 public sealed class BeneficialChemicalPropertyPrototypeTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<ReagentPrototype> NutrimentPrototype = "Nutriment";
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Chemistry.Reagent.ReagentPrototype> WaterPrototype = "Water";
+    private static readonly Robust.Shared.Prototypes.ProtoId<RandomPlantMutationListPrototype> RandomPlantMutationsPrototype = "RandomPlantMutations";
+
     private const string TestReagent = "CMUTestAllBeneficialChemicalProperties";
     private const string DefibrillatingTestReagent = "CMUTestLevelSixDefibrillating";
     private const string InorganicTarget = "CMUTestRepairingInorganicTarget";
@@ -374,7 +378,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
                     }
                 }
 
-                var nutriment = prototypes.Index<ReagentPrototype>("Nutriment");
+                var nutriment = prototypes.Index<ReagentPrototype>(NutrimentPrototype);
                 Assert.That(nutriment.Metabolisms!.Metabolisms.Keys.Select(stage => stage.Id),
                     Does.Contain("Metabolites"),
                     "Base Nutriment's intentional Metabolites-stage effects were moved to Digestion.");
@@ -533,7 +537,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
                 var sufficient = new Solution(TestReagent, 2);
                 var excessive = new Solution(TestReagent, 4);
                 var explicitSource = new Solution(TestReagent, 1);
-                explicitSource.AddReagent("Water", 2);
+                explicitSource.AddReagent(WaterPrototype, 2);
 
                 Assert.Multiple(() =>
                 {
@@ -1093,7 +1097,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
         EntityUid plant,
         string mutationName)
     {
-        var prototype = prototypes.Index<RandomPlantMutationListPrototype>("RandomPlantMutations");
+        var prototype = prototypes.Index<RandomPlantMutationListPrototype>(RandomPlantMutationsPrototype);
         var mutation = prototype.Mutations.Single(candidate => candidate.Name == mutationName);
         var ev = new BeforeRandomPlantMutationEvent(plant, mutation);
         entities.EventBus.RaiseLocalEvent(plant, ref ev);

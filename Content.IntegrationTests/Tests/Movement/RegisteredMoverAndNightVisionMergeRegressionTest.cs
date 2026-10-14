@@ -18,6 +18,8 @@ namespace Content.IntegrationTests.Tests.Movement;
 [TestFixture]
 public sealed class RegisteredMoverAndNightVisionMergeRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId MobObserverPrototype = "MobObserver";
+
     [TestPrototypes]
     private const string Prototypes = @"
 - type: entity
@@ -100,8 +102,8 @@ public sealed class RegisteredMoverAndNightVisionMergeRegressionTest : GameTest
                 var prototype = prototypes.Index<EntityPrototype>(id);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(prototype.TryGetComponent<LightingNightVisionComponent>(out _, factory), Is.True, id.Id);
-                    Assert.That(prototype.TryGetComponent<RMCNightVisionComponent>(out _, factory), Is.False, id.Id);
+                    Assert.That(prototype.TryComp<LightingNightVisionComponent>(out _, factory), Is.True, id.Id);
+                    Assert.That(prototype.TryComp<RMCNightVisionComponent>(out _, factory), Is.False, id.Id);
                 });
             }
 
@@ -110,8 +112,8 @@ public sealed class RegisteredMoverAndNightVisionMergeRegressionTest : GameTest
                 var prototype = prototypes.Index<EntityPrototype>(id);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(prototype.TryGetComponent<RMCNightVisionComponent>(out _, factory), Is.True, id.Id);
-                    Assert.That(prototype.TryGetComponent<LightingNightVisionComponent>(out _, factory), Is.False, id.Id);
+                    Assert.That(prototype.TryComp<RMCNightVisionComponent>(out _, factory), Is.True, id.Id);
+                    Assert.That(prototype.TryComp<LightingNightVisionComponent>(out _, factory), Is.False, id.Id);
                 });
             }
 
@@ -120,14 +122,14 @@ public sealed class RegisteredMoverAndNightVisionMergeRegressionTest : GameTest
                 var prototype = prototypes.Index<EntityPrototype>(id);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(prototype.TryGetComponent<RMCActiveInputMoverComponent>(out _, factory), Is.True, id.Id);
-                    Assert.That(prototype.TryGetComponent<TransientActiveInputMoverComponent>(out _, factory), Is.False, id.Id);
+                    Assert.That(prototype.TryComp<RMCActiveInputMoverComponent>(out _, factory), Is.True, id.Id);
+                    Assert.That(prototype.TryComp<TransientActiveInputMoverComponent>(out _, factory), Is.False, id.Id);
                 });
             }
 
-            var observer = prototypes.Index<EntityPrototype>("MobObserver");
-            Assert.That(observer.TryGetComponent<LightingNightVisionComponent>(out var observerNightVision, factory), Is.True);
-            Assert.That(observer.TryGetComponent<ServerPointLightComponent>(out var observerLight, factory), Is.True);
+            var observer = prototypes.Index<EntityPrototype>(MobObserverPrototype);
+            Assert.That(observer.TryComp<LightingNightVisionComponent>(out var observerNightVision, factory), Is.True);
+            Assert.That(observer.TryComp<ServerPointLightComponent>(out var observerLight, factory), Is.True);
             Assert.Multiple(() =>
             {
                 Assert.That(observerNightVision!.Enabled, Is.False);

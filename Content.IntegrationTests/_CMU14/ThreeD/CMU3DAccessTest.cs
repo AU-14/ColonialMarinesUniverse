@@ -19,6 +19,8 @@ namespace Content.IntegrationTests.CMU14.ThreeD;
 [TestOf(typeof(CMU3DLiveSceneSystem))]
 public sealed class CMU3DAccessTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<GameMapPrototype> StableGarrisonReduxPrototype = "StableGarrisonRedux";
+
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
     [Test]
@@ -67,7 +69,7 @@ public sealed class CMU3DAccessTest : GameTest
             await Server.WaitPost(() =>
             {
                 // Apply the same registry that the Redux map loader applies to every floor.
-                var components = SProtoMan.Index<GameMapPrototype>("StableGarrisonRedux").ZLevelsComponentOverrides;
+                var components = SProtoMan.Index<GameMapPrototype>(StableGarrisonReduxPrototype).ZLevelsComponentOverrides;
                 SEntMan.AddComponents(root, components);
                 SEntMan.AddComponents(upper, components);
             });

@@ -3,7 +3,7 @@
   name: trait-cmu-prosthetic-left-arm-name
   description: trait-cmu-prosthetic-left-arm-desc
   category: Disabilities
-  cost: 1
+  cost: 2
   components:
   - type: CMUProstheticLeftArm
 
@@ -12,7 +12,7 @@
   name: trait-cmu-prosthetic-right-arm-name
   description: trait-cmu-prosthetic-right-arm-desc
   category: Disabilities
-  cost: 1
+  cost: 2
   components:
   - type: CMUProstheticRightArm
 
@@ -21,7 +21,7 @@
   name: trait-cmu-prosthetic-left-leg-name
   description: trait-cmu-prosthetic-left-leg-desc
   category: Disabilities
-  cost: 1
+  cost: 2
   components:
   - type: CMUProstheticLeftLeg
 
@@ -30,7 +30,7 @@
   name: trait-cmu-prosthetic-right-leg-name
   description: trait-cmu-prosthetic-right-leg-desc
   category: Disabilities
-  cost: 1
+  cost: 2
   components:
   - type: CMUProstheticRightLeg
 
