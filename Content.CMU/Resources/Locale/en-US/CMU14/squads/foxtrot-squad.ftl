@@ -1,10 +1,10 @@
 cmu-humanoid-profile-editor-foxtrot-squad-title = FOB SECURITY SQUAD
 cmu-humanoid-profile-editor-foxtrot-squad-role = Builds and secures the FOB.
-cmu-humanoid-profile-editor-foxtrot-squad-point-roles = - If you join as Comtech, RTO, SL or Rifleman you will be put into Security Squad.
+cmu-humanoid-profile-editor-foxtrot-squad-point-roles = - If you join as Comtech, RTO, SL or Corpsman you will be put into Security Squad.
 cmu-humanoid-profile-editor-foxtrot-squad-point-full = - If it's full, you join a regular squad
 cmu-humanoid-profile-editor-foxtrot-squad-opted-in = OPTED IN
 cmu-humanoid-profile-editor-foxtrot-squad-opted-out = OPT IN
-cmu-humanoid-profile-editor-foxtrot-squad-tooltip = Applies when you join GOVFOR or OPFOR as a Squad Leader, Radio Traffic Operator, Combat Technician or Rifleman.
+cmu-humanoid-profile-editor-foxtrot-squad-tooltip = Applies when you join GOVFOR or OPFOR as a Squad Leader, Radio Traffic Operator, Combat Technician or Corpsman.
 
 cmu-foxtrot-squad-confirm-title = Reserved for {$squad}
 cmu-foxtrot-squad-confirm-prompt = The only {$job} slot left is reserved for {$squad}, the security squad that builds and secures the FOB.

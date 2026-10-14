@@ -79,15 +79,15 @@
       SquadSergeant: 1
       RadioTrafficOperator: 1
       SquadCombatTech: 2
-      SquadRifleman: 1
-    # the squad leader, RTO and rifleman build like the combat technicians (AU14SkillPresetPlatoonCombatTechnician)
+      PlatoonCorpsman: 1
+    # the squad leader, RTO and corpsman can help build the FOB; the combat technicians keep their own skills
     skillRoles:
     - SquadSergeant
     - RadioTrafficOperator
-    - SquadRifleman
+    - PlatoonCorpsman
     skills:
-      RMCSkillConstruction: 4
-      RMCSkillEngineer: 4
+      RMCSkillConstruction: 3
+      RMCSkillEngineer: 3
     extraVendorPoints:
       SquadCombatTech: 15
   - type: AU14SquadCallsign

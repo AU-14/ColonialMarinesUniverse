@@ -25,6 +25,7 @@ public sealed class CMUFoxtrotSquadTest : GameTest
     private static readonly ProtoId<JobPrototype> GovforSquadLeader = "AU14JobGOVFORSquadSergeant";
     private static readonly ProtoId<JobPrototype> GovforRto = "AU14JobGOVFORRadioTrafficOperator";
     private static readonly ProtoId<JobPrototype> GovforRifleman = "AU14JobGOVFORSquadRifleman";
+    private static readonly ProtoId<JobPrototype> GovforCorpsman = "AU14JobGOVFORPlatoonCorpsman";
     private static readonly ProtoId<JobPrototype> GovforAutomaticRifleman = "AU14JobGOVFORSquadAutomaticRifleman";
     private static readonly ProtoId<JobPrototype> OpforCombatTech = "AU14JobOPFORSquadCombatTech";
     private static readonly ProtoId<JobPrototype> OpforSquadLeader = "AU14JobOPFORSquadSergeant";
@@ -52,6 +53,7 @@ public sealed class CMUFoxtrotSquadTest : GameTest
                 [GovforSquadLeader] = 3,
                 [GovforRto] = 3,
                 [GovforRifleman] = 75,
+                [GovforCorpsman] = 6,
                 // the other side's jobs are left alone
                 [OpforCombatTech] = 6,
             };
@@ -70,7 +72,8 @@ public sealed class CMUFoxtrotSquadTest : GameTest
                 Assert.That(govfor[GovforCombatTech], Is.EqualTo(8));
                 Assert.That(govfor[GovforSquadLeader], Is.EqualTo(4));
                 Assert.That(govfor[GovforRto], Is.EqualTo(4));
-                Assert.That(govfor[GovforRifleman], Is.EqualTo(76));
+                Assert.That(govfor[GovforRifleman], Is.EqualTo(75), "riflemen have no Foxtrot slot");
+                Assert.That(govfor[GovforCorpsman], Is.EqualTo(7));
                 Assert.That(govfor[OpforCombatTech], Is.EqualTo(6));
 
                 Assert.That(opfor[OpforCombatTech], Is.EqualTo(8));
@@ -170,13 +173,19 @@ public sealed class CMUFoxtrotSquadTest : GameTest
             SEntMan.EnsureComponent<CMVendorUserComponent>(tech).Points = 50;
             foxtrot.ApplyPerks(tech, squad, SProtoMan.Index(GovforCombatTech));
 
+            var corpsman = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            foxtrot.ApplyPerks(corpsman, squad, SProtoMan.Index(GovforCorpsman));
+
             var rifleman = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             foxtrot.ApplyPerks(rifleman, squad, SProtoMan.Index(GovforRifleman));
 
             Assert.Multiple(() =>
             {
-                Assert.That(skills.GetSkill(rto, "RMCSkillConstruction"), Is.EqualTo(4));
-                Assert.That(skills.GetSkill(rto, "RMCSkillEngineer"), Is.EqualTo(4));
+                Assert.That(skills.GetSkill(rto, "RMCSkillConstruction"), Is.EqualTo(3));
+                Assert.That(skills.GetSkill(rto, "RMCSkillEngineer"), Is.EqualTo(3));
+                Assert.That(skills.GetSkill(corpsman, "RMCSkillConstruction"), Is.EqualTo(3));
+                Assert.That(skills.GetSkill(corpsman, "RMCSkillEngineer"), Is.EqualTo(3));
+                Assert.That(skills.GetSkill(tech, "RMCSkillConstruction"), Is.EqualTo(0), "combat technicians keep their own skills");
                 Assert.That(SEntMan.GetComponent<CMVendorUserComponent>(tech).Points, Is.EqualTo(65));
                 Assert.That(skills.GetSkill(rifleman, "RMCSkillConstruction"), Is.EqualTo(0));
             });
