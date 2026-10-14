@@ -122,9 +122,9 @@ public sealed partial class DropshipComponent : Component
     [DataField]
     public float AirlockedStartupTime = 3f;
 
-    /// <summary>How long the final approach takes; the landing sound plays across it.</summary>
+    /// <summary>How long the final approach takes; null uses the standard shuttle arrival time.</summary>
     [DataField]
-    public float ArrivalTime = 15f;
+    public float? ArrivalTime;
     // cmu edit end
 
     [DataField]

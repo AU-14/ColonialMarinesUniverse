@@ -746,7 +746,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                 }
 
                 // cmu edit start: the dropship's own approach time
-                hyperspaceTime += dropship.ArrivalTime;
+                hyperspaceTime += dropship.ArrivalTime ?? _config.GetCVar(CCVars.FTLArrivalTime);
                 // cmu edit end
             }
         }
