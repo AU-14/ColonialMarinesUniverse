@@ -108,3 +108,15 @@ marking-CMUSportsBraTan-sports_army = Tan Sports Bra
 
 marking-CMUUndershirtNone = None
 marking-CMUUndershirtNone-none = None
+
+marking-CMUUndershirtBlackLogo = Black Undershirt (Logo)
+marking-CMUUndershirtBlackLogo-undershirt_black_short_wy = Black Undershirt (Logo)
+
+marking-CMUUndershirtGreyLogo = Grey Undershirt (Logo)
+marking-CMUUndershirtGreyLogo-undershirt_grey_wy = Grey Undershirt (Logo)
+
+marking-CMUUndershirtOrange = Orange Undershirt
+marking-CMUUndershirtOrange-undershirt_orange = Orange Undershirt
+
+marking-CMUUndershirtPurple = Purple Undershirt
+marking-CMUUndershirtPurple-undershirt_purple = Purple Undershirt

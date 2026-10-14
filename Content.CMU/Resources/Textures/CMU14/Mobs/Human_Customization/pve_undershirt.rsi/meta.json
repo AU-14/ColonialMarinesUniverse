@@ -102,6 +102,22 @@
     {
       "name": "sports_black",
       "directions": 4
+    },
+    {
+      "name": "undershirt_black_short_wy",
+      "directions": 4
+    },
+    {
+      "name": "undershirt_grey_wy",
+      "directions": 4
+    },
+    {
+      "name": "undershirt_orange",
+      "directions": 4
+    },
+    {
+      "name": "undershirt_purple",
+      "directions": 4
     }
   ]
 }
