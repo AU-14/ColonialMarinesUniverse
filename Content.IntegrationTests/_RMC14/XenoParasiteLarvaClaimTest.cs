@@ -120,6 +120,11 @@ public sealed class XenoParasiteLarvaClaimTest
             var parasiteComp = entMan.GetComponent<XenoParasiteComponent>(parasite);
             fallOffDelay = parasiteComp.FallOffDelay; // CMU14
             Assert.That(parasiteSystem.Infect((parasite, parasiteComp), victim, force: true), Is.True);
+            // cmu edit start: a real parasite holds on for minutes now; this test keeps its fall-off delay
+#pragma warning disable RA0002
+            parasiteComp.FallOffAt = server.ResolveDependency<IGameTiming>().CurTime + fallOffDelay;
+#pragma warning restore RA0002
+            // cmu edit end
         });
 
         await pair.RunTicksSync(5);
