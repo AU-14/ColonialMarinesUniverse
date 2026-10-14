@@ -247,6 +247,9 @@
 - type: marking
   id: RMCUndershirtNone
   bodyPart: UndergarmentTop
+  # cmu edit start: female characters have to wear something up top
+  sexRestriction: Male
+  # cmu edit end
   forcedColoring: true
   RMCFollowSkinColor: false
   groupWhitelist: [Human, Felinid, Arachnid, Reptilian, Diona, Moth, Slime, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
