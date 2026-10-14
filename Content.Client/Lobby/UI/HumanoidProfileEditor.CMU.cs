@@ -791,9 +791,7 @@ public sealed partial class HumanoidProfileEditor
         MedicalRecordEdit.TextRope = new Rope.Leaf(Profile?.MedicalRecord ?? string.Empty);
         CriminalRecordEdit.TextRope = new Rope.Leaf(Profile?.CriminalRecord ?? string.Empty);
         GeneralRecordEdit.TextRope = new Rope.Leaf(Profile?.GeneralRecord ?? string.Empty);
-        // cmu edit start
-        BuildButton.SelectId((int)(Profile?.Build ?? BuildType.AverageLean));
-        // cmu edit end
+        BuildButton.SelectId((int)(Profile?.Build ?? BuildType.Average));
         BloodTypeButton.SelectId((int)(Profile?.BloodType ?? CMUBloodType.OPositive)); // CMU14
         HideMetaInformationButton.Pressed = Profile?.HideMetaInformation ?? false;
         UpdateHideMetaInformationButtonText();

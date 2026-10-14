@@ -34,15 +34,14 @@ detailed-examine-general-record-tooltip = The character's general record.
 medical-record-disability-line = Has { $trait }.
 medical-record-allergy-line = Allergic to { $reagent }.
 
-build-type-thinnomuscle = Thin, no muscles
-build-type-thinlean = Thin, lean
-build-type-thinripped = Thin, ripped
-build-type-averagenomuscle = Average, no muscles
-build-type-averagelean = Average, lean
-build-type-averageripped = Average, ripped
-build-type-largenomuscle = Large, no muscles
-build-type-largelean = Large, lean
-build-type-largeripped = Large, ripped
+build-type-thin = Thin
+build-type-lean = Lean
+build-type-average = Average
+build-type-athletic = Athletic
+build-type-muscular = Muscular
+build-type-broad = Broad
+build-type-stocky = Stocky
+build-type-heavyset = Heavyset
 
 faction-roster-console-window-title = Personnel Roster
 faction-roster-console-refresh-button = Refresh

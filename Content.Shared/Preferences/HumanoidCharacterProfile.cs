@@ -268,9 +268,7 @@ namespace Content.Shared.Preferences
         public int Weight { get; private set; } = 160;
 
         [DataField]
-        // cmu edit start
-        public BuildType Build { get; private set; } = BuildType.AverageLean;
-        // cmu edit end
+        public BuildType Build { get; private set; } = BuildType.Average;
 
         [DataField]
         public bool HideMetaInformation { get; private set; } = false;
@@ -312,9 +310,7 @@ namespace Content.Shared.Preferences
             string generalRecord = "",
             string height = "",
             int weight = 160,
-            // cmu edit start
-            BuildType build = BuildType.AverageLean,
-            // cmu edit end
+            BuildType build = BuildType.Average,
             bool hideMetaInformation = false,
             YautjaCharacterProfile? yautjaProfile = null)
         {
@@ -1439,9 +1435,18 @@ namespace Content.Shared.Preferences
             var height = HeightRegex.IsMatch(Height) ? Height : string.Empty;
             var weight = Math.Clamp(Weight, MinWeight, MaxWeight);
 
-            // cmu edit start
-            var build = Enum.IsDefined(Build) ? Build : BuildType.AverageLean;
-            // cmu edit end
+            var build = Build switch
+            {
+                BuildType.Thin => BuildType.Thin,
+                BuildType.Lean => BuildType.Lean,
+                BuildType.Average => BuildType.Average,
+                BuildType.Athletic => BuildType.Athletic,
+                BuildType.Muscular => BuildType.Muscular,
+                BuildType.Broad => BuildType.Broad,
+                BuildType.Stocky => BuildType.Stocky,
+                BuildType.Heavyset => BuildType.Heavyset,
+                _ => BuildType.Average // Invalid enum values.
+            };
 
             var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, Sex);
 

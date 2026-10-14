@@ -144,9 +144,7 @@ public abstract partial class SharedVisualBodySystem
         RaiseLocalEvent(ent, ref markingsEvt);
     }
 
-    // cmu edit start
-    private void ApplyAppearanceTo(Entity<VisualBodyComponent?> ent, HumanoidCharacterAppearance appearance, Sex sex, BuildType build = BuildType.AverageLean)
-    // cmu edit end
+    private void ApplyAppearanceTo(Entity<VisualBodyComponent?> ent, HumanoidCharacterAppearance appearance, Sex sex)
     {
         if (!Resolve(ent, ref ent.Comp))
             return;
@@ -157,9 +155,6 @@ public abstract partial class SharedVisualBodySystem
             Sex = sex,
             SkinColor = appearance.SkinColor,
             EyeColor = appearance.EyeColor,
-            // cmu edit start
-            Build = build,
-            // cmu edit end
         });
 
         var markingsEvt = new ApplyOrganMarkingsEvent(appearance.Markings);
@@ -175,9 +170,7 @@ public abstract partial class SharedVisualBodySystem
     [PublicAPI]
     public void ApplyProfileTo(Entity<VisualBodyComponent?> ent, HumanoidCharacterProfile profile)
     {
-        // cmu edit start
-        ApplyAppearanceTo(ent, profile.Appearance, profile.Sex, profile.Build);
-        // cmu edit end
+        ApplyAppearanceTo(ent, profile.Appearance, profile.Sex);
     }
 
     /// <summary>

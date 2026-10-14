@@ -311,9 +311,6 @@
   - SquadArmbandRMC
   - PatchPeaceRMC
   - PDTLKitRMC
-  # cmu edit start
-  - DogtagsAccessoryCMU
-  # cmu edit end
 
 # Accessories
 - type: loadoutGroup

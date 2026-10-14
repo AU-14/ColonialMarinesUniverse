@@ -32,15 +32,6 @@ public sealed partial class VisualOrganComponent : Component
     [DataField]
     public Dictionary<Sex, string>? SexStateOverrides;
 
-    // cmu edit start
-    /// <summary>
-    /// When applying a profile, if the build is present in this dictionary, overrides the state of the sprite data.
-    /// Applied after <see cref="SexStateOverrides"/>. Used for the human body shapes.
-    /// </summary>
-    [DataField]
-    public Dictionary<Content.Shared.Preferences.BuildType, string>? BuildStateOverrides;
-    // cmu edit end
-
     /// <summary>
     /// The current profile data of this organ, used for alternate sprite selection and colouration.
     /// </summary>
@@ -77,12 +68,4 @@ public partial record struct OrganProfileData
     /// </summary>
     [DataField]
     public Color SkinColor = Color.White;
-
-    // cmu edit start
-    /// <summary>
-    /// The body shape of this organ
-    /// </summary>
-    [DataField]
-    public Content.Shared.Preferences.BuildType Build = Content.Shared.Preferences.BuildType.AverageLean;
-    // cmu edit end
 }

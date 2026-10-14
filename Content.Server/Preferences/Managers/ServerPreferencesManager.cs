@@ -264,9 +264,7 @@ namespace Content.Server.Preferences.Managers
                 profile.GeneralRecord,
                 profile.Height,
                 profile.Weight,
-                // cmu edit start
-                Content.Shared.CMU14.Preferences.CMUBuildTypes.Parse(profile.Build),
-                // cmu edit end
+                Enum.TryParse<BuildType>(profile.Build, out var build) ? build : BuildType.Average,
                 profile.HideMetaInformation,
                 YautjaProfileSerializer.DeserializeYautjaProfile(profile.YautjaProfile)
             ).WithForceOnForcePreferences((ForceOnForceSide) profile.FoFSide, (ForceOnForceFallback) profile.FoFFallback)

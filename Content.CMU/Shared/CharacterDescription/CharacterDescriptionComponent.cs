@@ -38,7 +38,7 @@ public sealed partial class CharacterDescriptionComponent : Component
     public int Weight = 160;
 
     [DataField, AutoNetworkedField]
-    public BuildType Build = BuildType.AverageLean;
+    public BuildType Build = BuildType.Average;
 
     [DataField, AutoNetworkedField]
     public int Age = 18;

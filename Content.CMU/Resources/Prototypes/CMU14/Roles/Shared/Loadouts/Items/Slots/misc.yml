@@ -117,9 +117,3 @@
   storage:
     back:
     - RMCMedEMTArmband
-
-- type: loadout
-  id: DogtagsAccessoryCMU
-  storage:
-    back:
-    - CMUAccessoryDogtags

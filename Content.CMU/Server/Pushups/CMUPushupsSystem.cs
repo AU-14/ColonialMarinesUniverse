@@ -40,7 +40,7 @@ public sealed partial class CMUPushupsSystem : EntitySystem
 
     private const string FallbackHeight = "5'9";
     private const int FallbackWeight = 160;
-    private const BuildType FallbackBuild = BuildType.AverageLean;
+    private const BuildType FallbackBuild = BuildType.Average;
     private const int FallbackAge = 25;
 
     public override void Initialize()
@@ -239,15 +239,14 @@ public sealed partial class CMUPushupsSystem : EntitySystem
 
         float limit = build switch
         {
-            BuildType.ThinNoMuscle => situps ? 22 : 14,
-            BuildType.ThinLean => situps ? 34 : 24,
-            BuildType.ThinRipped => situps ? 46 : 38,
-            BuildType.AverageNoMuscle => situps ? 22 : 16,
-            BuildType.AverageLean => situps ? 26 : 20,
-            BuildType.AverageRipped => situps ? 40 : 45,
-            BuildType.LargeNoMuscle => situps ? 12 : 10,
-            BuildType.LargeLean => 26,
-            BuildType.LargeRipped => situps ? 30 : 32,
+            BuildType.Thin => situps ? 22 : 14,
+            BuildType.Lean => situps ? 34 : 24,
+            BuildType.Average => situps ? 26 : 20,
+            BuildType.Athletic => situps ? 46 : 38,
+            BuildType.Muscular => situps ? 40 : 45,
+            BuildType.Broad => situps ? 30 : 32,
+            BuildType.Stocky => 26,
+            BuildType.Heavyset => situps ? 12 : 10,
             _ => situps ? 26 : 20,
         };
 
