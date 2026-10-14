@@ -15,10 +15,11 @@ namespace Content.Shared.CMU14.Vehicle.Open;
 public sealed partial class CMUVehicleWreckComponent : Component
 {
     /// <summary>
-    /// The engine fire between the engine giving out and the blast: time enough to bail out.
+    /// The engine fire between the engine giving out and the blast: time enough to bail out, or to get
+    /// the extinguisher off its rack and put it out.
     /// </summary>
     [DataField]
-    public TimeSpan Delay = TimeSpan.FromSeconds(6);
+    public TimeSpan Delay = TimeSpan.FromSeconds(20);
 
     /// <summary>
     /// The fire's crackle, looped on the jeep until it goes up or the fire is put out.

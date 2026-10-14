@@ -362,7 +362,7 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
         await Server.WaitAssertion(() =>
             Assert.That(SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep).Burning, Is.True, "The engine should burn before the blast."));
 
-        await RunSeconds(7f);
+        await RunSeconds((float) SEntMan.GetComponent<CMUVehicleWreckComponent>(jeep).Delay.TotalSeconds + 2f);
         EntityUid wreck = default;
         await Server.WaitAssertion(() =>
         {

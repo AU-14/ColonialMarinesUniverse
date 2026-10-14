@@ -18,3 +18,6 @@ cmu-open-vehicle-headlights-off = You switch the headlights off.
 cmu-open-vehicle-headlights-low = You switch on the low beams.
 cmu-open-vehicle-headlights-high = You switch on the high beams.
 cmu-open-vehicle-headlights-broken = You flick the switch, but the headlights stay dark.
+cmu-vehicle-seat-guns-sidearms = You can only fire a sidearm while you drive.
+cmu-vehicle-seat-guns-none = Your hands are on the mounted gun.
+cmu-vehicle-seat-wield-driver = You can't take your hand off the steering wheel.

@@ -34,6 +34,7 @@ public sealed class CMUVehicleSeatSystem : EntitySystem
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private CMUVehicleSeatGunsSystem _seatGuns = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private VehicleSystem _vehicles = default!;
 
@@ -215,6 +216,7 @@ public sealed class CMUVehicleSeatSystem : EntitySystem
             var comp = EnsureComp<CMUVehicleSeatComponent>(seat);
             comp.Vehicle = ent;
             comp.Driver = data.Driver;
+            comp.Guns = data.Guns ?? (data.Driver ? CMUVehicleSeatGuns.Sidearms : CMUVehicleSeatGuns.Any);
             comp.Door = data.Door;
             comp.DoorSide = data.DoorSide;
             comp.Windshield = data.Windshield;
@@ -333,6 +335,8 @@ public sealed class CMUVehicleSeatSystem : EntitySystem
             {
                 MarkGun(held, rider.ExtraSpread);
             }
+
+            _seatGuns.LetGoOfWielded(args.Buckle.Owner);
         }
 
         if (_net.IsClient ||

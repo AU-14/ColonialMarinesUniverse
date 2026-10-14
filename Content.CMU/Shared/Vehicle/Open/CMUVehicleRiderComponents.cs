@@ -20,6 +20,12 @@ public sealed partial class CMUVehicleRiderComponent : Component
     /// </summary>
     [ViewVariables]
     public int SpeedStep;
+
+    /// <summary>
+    /// When a gun this rider can't fire from their seat may say so again.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan NextGunPopup;
 }
 
 /// <summary>

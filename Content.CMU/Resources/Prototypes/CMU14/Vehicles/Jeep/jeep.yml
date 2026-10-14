@@ -1373,6 +1373,8 @@
     - id: gunner
       name: cmu-vehicle-seat-gunner
       prototype: CMUVehicleSeatGunner
+      # Hands on the mounted gun.
+      guns: None
       offset: 0,0.75
       exit: 0,1.55
       door: tailgate

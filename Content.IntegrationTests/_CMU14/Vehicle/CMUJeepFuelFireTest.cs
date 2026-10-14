@@ -148,7 +148,7 @@ public sealed class CMUJeepFuelFireTest : GameTest
             var water = new Solution("Water", 2);
             SEntMan.System<ReactiveSystem>().DoEntityReaction(jeep, water, ReactionMethod.Touch);
         });
-        await RunSeconds(8f);
+        await RunSeconds((float) SEntMan.GetComponent<CMUVehicleWreckComponent>(jeep).Delay.TotalSeconds + 2f);
 
         await Server.WaitAssertion(() =>
         {

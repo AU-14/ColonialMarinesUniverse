@@ -156,7 +156,7 @@ public sealed class CMUJeepCrashTest : GameTest
             Assert.That(SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep).Burning, Is.False, "A wrecked hull alone shouldn't set it alight.");
         });
 
-        await RunSeconds(8f);
+        await RunSeconds((float) SEntMan.GetComponent<CMUVehicleWreckComponent>(jeep).Delay.TotalSeconds + 2f);
         await Server.WaitAssertion(() =>
             Assert.That(SEntMan.Deleted(jeep), Is.False, "A wrecked hull alone shouldn't blow the jeep up."));
     }

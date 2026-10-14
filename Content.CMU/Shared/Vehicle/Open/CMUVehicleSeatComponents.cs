@@ -84,6 +84,12 @@ public sealed partial class CMUVehicleSeatData
     public bool Driver;
 
     /// <summary>
+    /// The hand guns a rider here can fire: by default only sidearms for the driver, any for the rest.
+    /// </summary>
+    [DataField]
+    public CMUVehicleSeatGuns? Guns;
+
+    /// <summary>
     /// The hinged panel (a door, the tailgate) riders climb through to reach this seat, if any.
     /// </summary>
     [DataField]
@@ -157,6 +163,9 @@ public sealed partial class CMUVehicleSeatComponent : Component
     public bool Driver;
 
     [DataField, AutoNetworkedField]
+    public CMUVehicleSeatGuns Guns;
+
+    [DataField, AutoNetworkedField]
     public Vector2 Exit;
 
     [DataField, AutoNetworkedField]
@@ -185,6 +194,14 @@ public sealed partial class CMUVehicleSeatComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool AutoSeat = true;
+}
+
+[Serializable, NetSerializable]
+public enum CMUVehicleSeatGuns : byte
+{
+    Any,
+    Sidearms,
+    None,
 }
 
 [Serializable, NetSerializable]
