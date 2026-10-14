@@ -18,6 +18,6 @@ emplacement-mount-RuMCMachineGunUTES-C-name = UTES-C heavy machine gun
 emplacement-mount-RuMCMachineGunUTES-C-description = The disassembled UTES-C HMG, with its telescopic tripods folded up and unable to fire.
 emplacement-mount-RuMCMachineGunUTES-C-description-mounted = A deployable UPP 12.7x108mm heavy machine gun on its tripod. Slow to set up and murder on the back, but once it's down it puts out a wall of heavy rounds.
 
-emplacement-mount-CMUATGMLauncher-name = A.T.G.M. launcher
-emplacement-mount-CMUATGMLauncher-description = The disassembled A.T.G.M. launcher, with its tripod folded up and unable to fire.
+emplacement-mount-CMUATGMLauncher-name = MGM-120B FOGO-ATGM
+emplacement-mount-CMUATGMLauncher-description = Forward Observer Guided Operation Antitank Guided Missile. Built by the ISCS and distributed amongst the sector to fight against the growing number of long range vehicle heavy insurgencies. This Wire Guided ATGM has served as a staple for the local Neroid military forces ever since.
 emplacement-mount-CMUATGMLauncher-description-mounted = A deployed wire-guided anti-tank missile launcher. The gunner fires it; a second crewman with the linked finder steers the missile onto the target. Slow to set up, slower to reload, and it hits like a freight train.

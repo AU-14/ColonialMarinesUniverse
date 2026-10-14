@@ -1,4 +1,4 @@
-# A.T.G.M. - two-man, wire-guided anti-tank missile emplacement.
+# FOGO-ATGM - two-man, wire-guided anti-tank missile emplacement.
 # The gunner straps into the deployed tripod and fires; a second crewman holding the linked
 # finder lases a target for the missile to home on and bends its path with their cursor
 # (see Content.CMU/*/Weapons/ATGM).
@@ -6,15 +6,15 @@
 - type: entity
   parent: RMCSkillBase
   id: CMUSkillATGM
-  name: A.T.G.M. Crew
+  name: FOGO-ATGM Crew
   categories: [ HideSpawnMenu ]
 
 # Folded tripod item; deploys like the M2C/Mk86.
 - type: entity
   parent: [RMCBaseWeaponMount, BaseItem]
   id: CMUATGMMount
-  name: A.T.G.M. launcher
-  description: The disassembled A.T.G.M. launcher, with its tripod folded up and unable to fire.
+  name: MGM-120B FOGO-ATGM
+  description: Forward Observer Guided Operation Antitank Guided Missile. Built by the ISCS and distributed amongst the sector to fight against the growing number of long range vehicle heavy insurgencies. This Wire Guided ATGM has served as a staple for the local Neroid military forces ever since.
   components:
   - type: Item
     size: Huge
@@ -83,8 +83,8 @@
   parent: [ CMBaseWeaponGun, BaseItem ]
   id: CMUATGMLauncher
   categories: [ HideSpawnMenu ]
-  name: A.T.G.M. launcher
-  description: The launch tube and guidance unit of an A.T.G.M. It ain't much use without a tripod.
+  name: MGM-120B FOGO-ATGM launcher
+  description: The launch tube and guidance unit of a FOGO-ATGM. It ain't much use without a tripod.
   components:
   # The ballistic ammo provider creates this container on spawn; declare it so the prototype matches.
   - type: ContainerContainer
@@ -164,7 +164,7 @@
 - type: entity
   parent: BaseItem
   id: CMUATGMMissile
-  name: A.T.G.M. missile
+  name: FOGO-ATGM missile
   description: A sealed launch tube holding a wire-guided anti-tank missile. Its tandem warhead punches through armor, brings down walls and throws fragments across a wide area. Don't stand near the target.
   components:
   - type: Tag
@@ -187,7 +187,7 @@
 # usually drops a surviving T3 to crit, breaches walls at the impact and fragments out to about 5.5 tiles.
 - type: entity
   id: CMUProjectileATGM
-  name: A.T.G.M. missile
+  name: FOGO-ATGM missile
   categories: [ HideSpawnMenu ]
   description: Uh oh.
   components:
@@ -267,8 +267,8 @@
 - type: entity
   parent: RMCBinoculars
   id: CMUATGMFinder
-  name: A.T.G.M. finder
-  description: Ruggedized binoculars wired to an A.T.G.M. launcher. Link it to a deployed launcher, click a target to lase it so the missile homes on it, and use the crosshair to steer the missile around cover.
+  name: FOGO-ATGM finder
+  description: Ruggedized binoculars wired to a FOGO-ATGM launcher. Link it to a deployed launcher, click a target to lase it so the missile homes on it, and use the crosshair to steer the missile around cover.
   suffix: ATGM
   components:
   - type: Item
@@ -295,8 +295,8 @@
 - type: entity
   parent: CMBackpack
   id: CMUATGMMissileBag
-  name: A.T.G.M. missile bag
-  description: A padded backpack frame that carries A.T.G.M. missile tubes.
+  name: FOGO-ATGM missile bag
+  description: A padded backpack frame that carries FOGO-ATGM missile tubes.
   components:
   - type: Sprite
     sprite: CMU14/Weapons/Guns/USCM/ATGM/atgm_bag.rsi
@@ -306,10 +306,11 @@
   - type: CMStorageVisualizer
     storageClosed: null
     storageOpen: null
+  # FixedItemSizeStorage gives every missile a 2x2 slot: 14x2 holds seven, the resupply load (FLOW-12).
   - type: Storage
     maxItemSize: Large
     grid:
-    - 0,0,7,1
+    - 0,0,13,1
     whitelist:
       tags:
       - CMUATGMMissile
@@ -320,11 +321,23 @@
     - Backpack
     - CMUATGMMissileBag
 
+# ASRS missile resupply: the bag delivered full (CMUCrateATGMMissiles).
+- type: entity
+  parent: CMUATGMMissileBag
+  id: CMUATGMMissileBagFilled
+  suffix: Filled
+  description: A padded backpack frame that carries FOGO-ATGM missile tubes. This one comes loaded with seven missiles.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUATGMMissile
+      amount: 7
+
 - type: entity
   parent: RMCCaseBase
   id: CMUATGMCase
-  name: A.T.G.M. kit
-  description: A hardened case holding a complete A.T.G.M. team kit - the launcher, its finder, a missile bag, three missiles and two crew pamphlets.
+  name: MGM-120B FOGO-ATGM kit
+  description: Forward Observer Guided Operation Antitank Guided Missile. Built by the ISCS and distributed amongst the sector to fight against the growing number of long range vehicle heavy insurgencies. This Wire Guided ATGM has served as a staple for the local Neroid military forces ever since. This hardened case holds a complete team kit - the launcher, its finder, a missile bag, three missiles and two crew pamphlets.
   components:
   - type: Sprite
     sprite: CMU14/Weapons/Guns/USCM/ATGM/atgm_case.rsi

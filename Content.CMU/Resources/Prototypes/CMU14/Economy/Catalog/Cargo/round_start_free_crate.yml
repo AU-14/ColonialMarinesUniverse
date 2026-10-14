@@ -9,6 +9,18 @@
   - RMCCrateMortarKit
   - CMUCrateCargoCarrier
 
+# Every GOVFOR side gets one FOGO-ATGM kit, including Insurgency, where its requisitions vendor no longer
+# hands one out. Kept apart from the mortar entry so the mortar's game modes are unchanged.
+- type: cmuRequisitionsRoundStartFreeCrate
+  id: CMURequisitionsRoundStartFreeCrateGovforAtgm
+  faction: govfor
+  gamemodes:
+  - ForceOnForce
+  - DistressSignal
+  - Insurgency
+  crates:
+  - CMUCrateATGM
+
 - type: cmuRequisitionsRoundStartFreeCrate
   id: CMURequisitionsRoundStartFreeCrateOpfor
   faction: opfor
@@ -18,3 +30,4 @@
   - AU14CrateFOBTentCrate
   - AU14CrateMortarKitRMC
   - CMUCrateCargoCarrier
+  - CMUCrateATGM # Force-on-Force OPFOR starts with one FOGO-ATGM kit too, keeping the sides even.

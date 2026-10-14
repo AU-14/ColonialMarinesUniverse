@@ -1,6 +1,8 @@
 using System.Linq;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared._RMC14.Vendors;
+using Content.Shared.CMU14.Requisitions;
+using Content.Shared.Storage;
 using Content.Shared.Storage.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
@@ -13,12 +15,28 @@ public sealed class CMUATGMAcquisitionTest
     private const string AntiArmorCategory = "Anti-Armor";
     private const int AtgmCrateCost = 4000;
     private const int AtgmClfPoints = 35;
+    private const int MissileCrateCost = 3500;
+    private const int MissileClfPoints = 15;
+    private const int MissilesPerBag = 7;
 
     private static readonly EntProtoId AtgmCase = "CMUATGMCase";
     private static readonly EntProtoId AtgmCrate = "CMUCrateATGM";
+    private static readonly EntProtoId AtgmMissile = "CMUATGMMissile";
+    private static readonly EntProtoId MissileBagFilled = "CMUATGMMissileBagFilled";
+    private static readonly EntProtoId MissileCrate = "CMUCrateATGMMissiles";
     private static readonly EntProtoId ClfVendor = "AU14CLFObjectiveWeaponsVendor";
+    private static readonly EntProtoId MortarKitCrate = "RMCCrateMortarKit";
+    private static readonly ProtoId<CMURequisitionsRoundStartFreeCratePrototype> GovforFreeCrates =
+        "CMURequisitionsRoundStartFreeCrateGovfor";
+
+    private static readonly ProtoId<CMURequisitionsRoundStartFreeCratePrototype> GovforAtgmFreeCrates =
+        "CMURequisitionsRoundStartFreeCrateGovforAtgm";
+
+    private static readonly ProtoId<CMURequisitionsRoundStartFreeCratePrototype> OpforFreeCrates =
+        "CMURequisitionsRoundStartFreeCrateOpfor";
 
     // BEAR inherits UPPCargoCatalog, so it receives the ATGM through UPP.
+    // FLOW-12 (e): WeYu PMC is fully included, so WYPMCCargoCatalog moved here from the excluded list.
     private static readonly EntProtoId[] CatalogsWithAtgm =
     [
         "USCMCargoCatalog",
@@ -30,29 +48,28 @@ public sealed class CMUATGMAcquisitionTest
         "LACNCargoCatalog",
         "HAZOPSCargoCatalog",
         "CMBCIUCargoCatalog",
+        "WYPMCCargoCatalog",
     ];
 
+    // The colony ASRS and the WeYu corporate (science/facility) ASRS stay excluded.
     private static readonly EntProtoId[] CatalogsWithoutAtgm =
     [
-        "WYPMCCargoCatalog",
         "CMASRSConsole",
         "CMASRSConsoleColony",
         "AU14CorporateASRSConsole",
     ];
 
-    private static readonly EntProtoId[] VendorsWithAtgm =
+    // The one free kit per GOVFOR side comes from the round-start ASRS crate, so the requisitions vendors must
+    // not hand out a second one.
+    private static readonly EntProtoId[] RequisitionVendorsWithoutFreeKit =
     [
         "AU14USCMRequisitionVendor",
         "AU14LACNRequisitionVendor",
-    ];
-
-    private static readonly EntProtoId[] VendorsWithoutAtgm =
-    [
         "AU14WYPMCRequisitionVendor",
     ];
 
     [Test]
-    public async Task AtgmCrateIsSoldByNonWeYuPlatoonCatalogsOnly()
+    public async Task AtgmCratesAreSoldByPlatoonCatalogsOnly()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -79,13 +96,18 @@ public sealed class CMUATGMAcquisitionTest
 
                     Assert.That(entry.Cost, Is.EqualTo(AtgmCrateCost), $"{catalogId} {AtgmCrate} cost");
                     Assert.That(entry.MaxStock, Is.EqualTo(1), $"{catalogId} {AtgmCrate} maxStock");
+
+                    var missiles = category.Entries.FirstOrDefault(e => e.Crate == MissileCrate);
+                    Assert.That(missiles, Is.Not.Null, $"{catalogId} {AntiArmorCategory} does not sell {MissileCrate}");
+                    Assert.That(missiles?.Cost, Is.EqualTo(MissileCrateCost), $"{catalogId} {MissileCrate} cost");
                 }
 
                 foreach (var catalogId in CatalogsWithoutAtgm)
                 {
                     var req = GetRequisitions(prototypes, factory, catalogId);
-                    var sold = req.Categories.SelectMany(c => c.Entries).Any(e => e.Crate == AtgmCrate);
-                    Assert.That(sold, Is.False, $"{catalogId} must not sell {AtgmCrate}");
+                    var sold = req.Categories.SelectMany(c => c.Entries)
+                        .Any(e => e.Crate == AtgmCrate || e.Crate == MissileCrate);
+                    Assert.That(sold, Is.False, $"{catalogId} must not sell {AtgmCrate} or {MissileCrate}");
                 }
             });
         });
@@ -94,7 +116,7 @@ public sealed class CMUATGMAcquisitionTest
     }
 
     [Test]
-    public async Task AtgmCaseIsInFreeAndClfVendors()
+    public async Task AtgmKitIsNotFreeFromRequisitionVendorsButSoldToClf()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -106,19 +128,11 @@ public sealed class CMUATGMAcquisitionTest
 
             Assert.Multiple(() =>
             {
-                foreach (var vendorId in VendorsWithAtgm)
+                foreach (var vendorId in RequisitionVendorsWithoutFreeKit)
                 {
                     var vendor = GetVendor(prototypes, factory, vendorId);
-                    var entry = vendor.Sections.SelectMany(s => s.Entries).FirstOrDefault(e => e.Id == AtgmCase);
-                    Assert.That(entry, Is.Not.Null, $"{vendorId} does not vend {AtgmCase}");
-                    Assert.That(entry?.Amount, Is.EqualTo(1), $"{vendorId} {AtgmCase} amount");
-                }
-
-                foreach (var vendorId in VendorsWithoutAtgm)
-                {
-                    var vendor = GetVendor(prototypes, factory, vendorId);
-                    var sold = vendor.Sections.SelectMany(s => s.Entries).Any(e => e.Id == AtgmCase);
-                    Assert.That(sold, Is.False, $"{vendorId} must not vend {AtgmCase}");
+                    Assert.That(vendor.Sections.SelectMany(s => s.Entries).Any(e => e.Id == AtgmCase), Is.False,
+                        $"{vendorId} must not give a free {AtgmCase}; the round-start ASRS crate already does");
                 }
 
                 var clf = GetVendor(prototypes, factory, ClfVendor);
@@ -126,6 +140,11 @@ public sealed class CMUATGMAcquisitionTest
                 Assert.That(clfEntry, Is.Not.Null, $"{ClfVendor} does not vend {AtgmCase}");
                 Assert.That(clfEntry?.Amount, Is.EqualTo(1), $"{ClfVendor} {AtgmCase} amount");
                 Assert.That(clfEntry?.Points, Is.EqualTo(AtgmClfPoints), $"{ClfVendor} {AtgmCase} points");
+
+                var clfMissile = clf.Sections.SelectMany(s => s.Entries).FirstOrDefault(e => e.Id == AtgmMissile);
+                Assert.That(clfMissile, Is.Not.Null, $"{ClfVendor} does not vend {AtgmMissile}");
+                Assert.That(clfMissile?.Points, Is.EqualTo(MissileClfPoints), $"{ClfVendor} {AtgmMissile} points");
+                Assert.That(clfMissile?.Amount, Is.GreaterThan(0), $"{ClfVendor} {AtgmMissile} amount");
             });
         });
 
@@ -153,6 +172,99 @@ public sealed class CMUATGMAcquisitionTest
             var entries = storage!.Contents.Where(e => e.PrototypeId == AtgmCase).ToList();
             Assert.That(entries, Has.Count.EqualTo(1), $"{AtgmCrate} should contain one {AtgmCase} entry");
             Assert.That(entries.Sum(e => e.Amount), Is.EqualTo(1), $"{AtgmCrate} {AtgmCase} amount");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task MissileCrateHoldsOneFilledBag()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var factory = server.EntMan.ComponentFactory;
+
+            Assert.That(prototypes.TryIndex<EntityPrototype>(MissileCrate, out var crate), Is.True,
+                $"{MissileCrate} prototype does not exist");
+            Assert.That(crate!.TryComp<StorageFillComponent>(out var storage, factory), Is.True,
+                $"{MissileCrate} has no StorageFill component");
+
+            // The itemized ASRS view reads the crate's own fill, so it lists one filled bag.
+            var entries = storage!.Contents;
+            Assert.That(entries, Has.Count.EqualTo(1), $"{MissileCrate} should have a single fill entry");
+            Assert.That(entries[0].PrototypeId, Is.EqualTo((EntProtoId?) MissileBagFilled), $"{MissileCrate} fill");
+            Assert.That(entries[0].Amount, Is.EqualTo(1), $"{MissileCrate} {MissileBagFilled} amount");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task FilledMissileBagSpawnsWithSevenMissiles()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var bag = entMan.SpawnEntity(MissileBagFilled, map.GridCoords);
+            var storage = entMan.GetComponent<StorageComponent>(bag);
+            var contents = storage.Container.ContainedEntities
+                .Select(e => entMan.GetComponent<MetaDataComponent>(e).EntityPrototype?.ID)
+                .ToList();
+
+            Assert.That(contents, Has.Count.EqualTo(MissilesPerBag), $"{MissileBagFilled} contents");
+            Assert.That(contents, Is.All.EqualTo(AtgmMissile.Id), $"{MissileBagFilled} holds only missiles");
+
+            entMan.DeleteEntity(bag);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task GovforRoundStartFreeCratesIncludeAtgmKit()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var govfor = prototypes.Index(GovforFreeCrates);
+            var govforAtgm = prototypes.Index(GovforAtgmFreeCrates);
+
+            Assert.Multiple(() =>
+            {
+                // FLOW-12 (c): one free kit for every GOVFOR side, in every mode the mortar kit is given plus
+                // Insurgency (its requisitions vendor no longer hands one out), without moving the mortar.
+                Assert.That(govforAtgm.Faction, Is.EqualTo("govfor"));
+                Assert.That(govforAtgm.Crates, Does.Contain(AtgmCrate));
+                foreach (var mode in govfor.Gamemodes)
+                    Assert.That(govforAtgm.Gamemodes, Does.Contain(mode), $"GOVFOR free kit missing in {mode}");
+                Assert.That(govforAtgm.Gamemodes, Does.Contain("Insurgency"));
+                Assert.That(govfor.Crates, Does.Contain(MortarKitCrate));
+                Assert.That(govfor.Crates, Does.Not.Contain(AtgmCrate), "Only one free kit per GOVFOR side.");
+
+                // Force-on-Force OPFOR gets one free kit too.
+                var opfor = prototypes.Index(OpforFreeCrates);
+                Assert.That(opfor.Faction, Is.EqualTo("opfor"));
+                Assert.That(opfor.Gamemodes, Does.Contain("ForceOnForce"));
+                Assert.That(opfor.Crates.Count(c => c == AtgmCrate), Is.EqualTo(1));
+
+                // The colony and corporate elevators never receive it.
+                foreach (var bonus in prototypes.EnumeratePrototypes<CMURequisitionsRoundStartFreeCratePrototype>())
+                {
+                    if (bonus.Faction is "colony" or "corporate")
+                        Assert.That(bonus.Crates, Does.Not.Contain(AtgmCrate), $"{bonus.ID} must not give {AtgmCrate}");
+                }
+            });
         });
 
         await pair.CleanReturnAsync();

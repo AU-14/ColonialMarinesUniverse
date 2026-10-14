@@ -1574,8 +1574,6 @@
         amount: 5
       - id: RMCML66DCase
         amount: 1
-      - id: CMUATGMCase
-        amount: 1
       - id: RMCGunCasePistolSmart
         amount: 3
     - name: primary ammunition

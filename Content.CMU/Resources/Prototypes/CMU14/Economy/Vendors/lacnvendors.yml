@@ -1145,8 +1145,6 @@
         amount: 5
       - id: CMUFighterManpad
         amount: 1
-      - id: CMUATGMCase
-        amount: 1
     - name: primary ammunition
       entries:
       - id: AU14WeaponRifleKramerMagazineStandard

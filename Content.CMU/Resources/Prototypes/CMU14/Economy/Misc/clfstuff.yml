@@ -133,6 +133,9 @@
       - id: CMUATGMCase
         amount: 1
         points: 35
+      - id: CMUATGMMissile
+        amount: 6
+        points: 15
     - name: Attachments
       entries:
       - id: AU14AttachmentTwoPointSling

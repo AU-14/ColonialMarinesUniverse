@@ -10,12 +10,12 @@
     addComps:
     - type: ANPRCRadioUser
 
-# grants A.T.G.M. crew training; ships two per kit so both crew can read one after another pamphlet
+# grants FOGO-ATGM crew training; ships two per kit so both crew can read one after another pamphlet
 - type: entity
   parent: CMPamphlet
   id: CMUPamphletATGM
-  name: A.T.G.M. crew instructional pamphlet
-  description: A pamphlet used to quickly impart vital knowledge. This one covers assembling, loading, spotting for and firing the wire-guided A.T.G.M. system.
+  name: FOGO-ATGM crew instructional pamphlet
+  description: A pamphlet used to quickly impart vital knowledge. This one covers assembling, loading, spotting for and firing the wire-guided FOGO-ATGM system.
   components:
   - type: Sprite
     state: pamphlet_loader
