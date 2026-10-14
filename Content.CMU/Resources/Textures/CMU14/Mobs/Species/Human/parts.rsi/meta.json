@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/884ab172389b6fc54ef063f5fbea5e8b0a0a2235/icons/mob/humans/species/r_human.dmi (cmss13-devs/cmss13#6073, extra pale skin), groin merged into the torso",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "full"
+    },
+    {
+      "name": "head_f",
+      "directions": 4
+    },
+    {
+      "name": "head_m",
+      "directions": 4
+    },
+    {
+      "name": "l_arm",
+      "directions": 4
+    },
+    {
+      "name": "l_foot",
+      "directions": 4
+    },
+    {
+      "name": "l_hand",
+      "directions": 4
+    },
+    {
+      "name": "l_leg",
+      "directions": 4
+    },
+    {
+      "name": "r_arm",
+      "directions": 4
+    },
+    {
+      "name": "r_foot",
+      "directions": 4
+    },
+    {
+      "name": "r_hand",
+      "directions": 4
+    },
+    {
+      "name": "r_leg",
+      "directions": 4
+    },
+    {
+      "name": "torso_avg_buff",
+      "directions": 4
+    },
+    {
+      "name": "torso_avg_lean",
+      "directions": 4
+    },
+    {
+      "name": "torso_avg_twig",
+      "directions": 4
+    },
+    {
+      "name": "torso_f",
+      "directions": 4
+    },
+    {
+      "name": "torso_lrg_buff",
+      "directions": 4
+    },
+    {
+      "name": "torso_lrg_lean",
+      "directions": 4
+    },
+    {
+      "name": "torso_lrg_twig",
+      "directions": 4
+    },
+    {
+      "name": "torso_m",
+      "directions": 4
+    },
+    {
+      "name": "torso_sml_buff",
+      "directions": 4
+    },
+    {
+      "name": "torso_sml_lean",
+      "directions": 4
+    },
+    {
+      "name": "torso_sml_twig",
+      "directions": 4
+    }
+  ]
+}

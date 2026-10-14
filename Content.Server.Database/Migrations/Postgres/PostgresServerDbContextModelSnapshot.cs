@@ -1566,6 +1566,13 @@ namespace Content.Server.Database.Migrations.Postgres
                     b.Property<bool>("FoxtrotSquadOptIn")
                         .HasColumnType("boolean")
                         .HasColumnName("foxtrot_squad_opt_in");
+
+                    b.Property<string>("Religion")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("")
+                        .HasColumnName("religion");
                     // cmu edit end
 
                     b.Property<string>("Sex")

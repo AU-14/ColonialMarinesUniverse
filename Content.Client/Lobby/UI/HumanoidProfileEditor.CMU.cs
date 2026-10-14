@@ -135,6 +135,10 @@ public sealed partial class HumanoidProfileEditor
             SetOrigin(args.Id == 0 ? null : _origins[args.Id - 1].ID);
         };
 
+        // cmu edit start
+        InitializeReligion();
+        // cmu edit end
+
         InitializeCharacterDescription();
         InitializeRegulationAppearance();
 
@@ -370,6 +374,9 @@ public sealed partial class HumanoidProfileEditor
         UpdateRegulationHairPickers();
         UpdateAllegianceControls();
         UpdateOriginControls();
+        // cmu edit start
+        UpdateReligionControls();
+        // cmu edit end
         UpdateArmorPreferenceControls();
         UpdateSquadPreferenceControls();
         UpdateNamedItems();
@@ -784,7 +791,9 @@ public sealed partial class HumanoidProfileEditor
         MedicalRecordEdit.TextRope = new Rope.Leaf(Profile?.MedicalRecord ?? string.Empty);
         CriminalRecordEdit.TextRope = new Rope.Leaf(Profile?.CriminalRecord ?? string.Empty);
         GeneralRecordEdit.TextRope = new Rope.Leaf(Profile?.GeneralRecord ?? string.Empty);
-        BuildButton.SelectId((int)(Profile?.Build ?? BuildType.Average));
+        // cmu edit start
+        BuildButton.SelectId((int)(Profile?.Build ?? BuildType.AverageLean));
+        // cmu edit end
         BloodTypeButton.SelectId((int)(Profile?.BloodType ?? CMUBloodType.OPositive)); // CMU14
         HideMetaInformationButton.Pressed = Profile?.HideMetaInformation ?? false;
         UpdateHideMetaInformationButtonText();

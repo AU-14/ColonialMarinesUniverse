@@ -1,5 +1,6 @@
 using Content.Shared.CMU14.Allegiance;
 using Content.Shared.CMU14.Origin;
+using Content.Shared.CMU14.Religion;
 using Content.Shared.Preferences;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -37,7 +38,7 @@ public sealed partial class CharacterDescriptionComponent : Component
     public int Weight = 160;
 
     [DataField, AutoNetworkedField]
-    public BuildType Build = BuildType.Average;
+    public BuildType Build = BuildType.AverageLean;
 
     [DataField, AutoNetworkedField]
     public int Age = 18;
@@ -47,6 +48,9 @@ public sealed partial class CharacterDescriptionComponent : Component
 
     [DataField, AutoNetworkedField]
     public ProtoId<OriginPrototype>? Origin;
+
+    [DataField, AutoNetworkedField]
+    public ProtoId<CMUReligionPrototype> Religion = CMUReligionPrototype.Atheist;
 
     [DataField, AutoNetworkedField]
     public bool HideMetaInformation;

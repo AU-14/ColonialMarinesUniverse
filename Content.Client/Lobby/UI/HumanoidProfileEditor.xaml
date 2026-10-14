@@ -273,6 +273,13 @@
                                 <Control HorizontalExpand="True"/>
                                 <OptionButton Name="OriginButton" HorizontalAlignment="Right" />
                             </BoxContainer>
+                            <!-- cmu edit start -->
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'cmu-humanoid-profile-editor-religion-label'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-religion-tooltip'}" />
+                                <Control HorizontalExpand="True"/>
+                                <OptionButton Name="ReligionButton" HorizontalAlignment="Right" />
+                            </BoxContainer>
+                            <!-- cmu edit end -->
                             <BoxContainer HorizontalExpand="True">
                                 <Label Text="{Loc 'humanoid-profile-editor-height-label'}" ToolTip="{Loc 'humanoid-profile-editor-height-tooltip'}" />
                                 <Control HorizontalExpand="True"/>

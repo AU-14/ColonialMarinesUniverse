@@ -264,7 +264,9 @@ namespace Content.Server.Preferences.Managers
                 profile.GeneralRecord,
                 profile.Height,
                 profile.Weight,
-                Enum.TryParse<BuildType>(profile.Build, out var build) ? build : BuildType.Average,
+                // cmu edit start
+                Content.Shared.CMU14.Preferences.CMUBuildTypes.Parse(profile.Build),
+                // cmu edit end
                 profile.HideMetaInformation,
                 YautjaProfileSerializer.DeserializeYautjaProfile(profile.YautjaProfile)
             ).WithForceOnForcePreferences((ForceOnForceSide) profile.FoFSide, (ForceOnForceFallback) profile.FoFFallback)
@@ -273,7 +275,11 @@ namespace Content.Server.Preferences.Managers
                  ? bloodType
              // cmu edit start
                  : CMUBloodTypes.StableDefault(profile.CharacterName))
-             .WithFoxtrotSquadOptIn(profile.FoxtrotSquadOptIn);
+             .WithFoxtrotSquadOptIn(profile.FoxtrotSquadOptIn)
+             // Profiles saved before religions are atheist; EnsureValid catches removed religions.
+             .WithReligion(string.IsNullOrEmpty(profile.Religion)
+                 ? Content.Shared.CMU14.Religion.CMUReligionPrototype.Atheist
+                 : profile.Religion);
              // cmu edit end
         }
 

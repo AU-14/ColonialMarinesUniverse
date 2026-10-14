@@ -268,7 +268,9 @@ namespace Content.Shared.Preferences
         public int Weight { get; private set; } = 160;
 
         [DataField]
-        public BuildType Build { get; private set; } = BuildType.Average;
+        // cmu edit start
+        public BuildType Build { get; private set; } = BuildType.AverageLean;
+        // cmu edit end
 
         [DataField]
         public bool HideMetaInformation { get; private set; } = false;
@@ -310,7 +312,9 @@ namespace Content.Shared.Preferences
             string generalRecord = "",
             string height = "",
             int weight = 160,
-            BuildType build = BuildType.Average,
+            // cmu edit start
+            BuildType build = BuildType.AverageLean,
+            // cmu edit end
             bool hideMetaInformation = false,
             YautjaCharacterProfile? yautjaProfile = null)
         {
@@ -504,6 +508,7 @@ namespace Content.Shared.Preferences
             BloodType = other.BloodType; // CMU14
             // cmu edit start
             FoxtrotSquadOptIn = other.FoxtrotSquadOptIn;
+            Religion = other.Religion;
             // cmu edit end
         }
 
@@ -1228,6 +1233,7 @@ namespace Content.Shared.Preferences
             if (BloodType != other.BloodType) return false; // CMU14
             // cmu edit start
             if (FoxtrotSquadOptIn != other.FoxtrotSquadOptIn) return false;
+            if (Religion != other.Religion) return false;
             // cmu edit end
             if (SpawnPriority != other.SpawnPriority) return false;
             if (SquadPreference != other.SquadPreference) return false;
@@ -1433,18 +1439,9 @@ namespace Content.Shared.Preferences
             var height = HeightRegex.IsMatch(Height) ? Height : string.Empty;
             var weight = Math.Clamp(Weight, MinWeight, MaxWeight);
 
-            var build = Build switch
-            {
-                BuildType.Thin => BuildType.Thin,
-                BuildType.Lean => BuildType.Lean,
-                BuildType.Average => BuildType.Average,
-                BuildType.Athletic => BuildType.Athletic,
-                BuildType.Muscular => BuildType.Muscular,
-                BuildType.Broad => BuildType.Broad,
-                BuildType.Stocky => BuildType.Stocky,
-                BuildType.Heavyset => BuildType.Heavyset,
-                _ => BuildType.Average // Invalid enum values.
-            };
+            // cmu edit start
+            var build = Enum.IsDefined(Build) ? Build : BuildType.AverageLean;
+            // cmu edit end
 
             var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, Sex);
 
@@ -1580,6 +1577,9 @@ namespace Content.Shared.Preferences
             if (!Enum.IsDefined(FoFSide)) FoFSide = ForceOnForceSide.Either;
             if (!Enum.IsDefined(FoFFallback)) FoFFallback = ForceOnForceFallback.StayInLobby;
             if (!Enum.IsDefined(BloodType)) BloodType = CMUBloodTypes.DefaultTypes[0]; // CMU14
+            // cmu edit start
+            if (!prototypeManager.HasIndex(Religion)) Religion = Content.Shared.CMU14.Religion.CMUReligionPrototype.Atheist;
+            // cmu edit end
 
             _antagPreferences.Clear();
             _antagPreferences.UnionWith(antags);
@@ -1766,6 +1766,7 @@ namespace Content.Shared.Preferences
             hashCode.Add(BloodType); // CMU14
             // cmu edit start
             hashCode.Add(FoxtrotSquadOptIn);
+            hashCode.Add(Religion);
             // cmu edit end
             hashCode.Add(NamedItems);
             hashCode.Add(PlaytimePerks);

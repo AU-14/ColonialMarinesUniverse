@@ -747,6 +747,9 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         comp.Age = profile.Age;
         comp.Allegiance = profile.Allegiance;
         comp.Origin = profile.Origin;
+        // cmu edit start
+        comp.Religion = profile.Religion;
+        // cmu edit end
         comp.HideMetaInformation = profile.HideMetaInformation;
 
         foreach (var traitId in profile.TraitPreferences)

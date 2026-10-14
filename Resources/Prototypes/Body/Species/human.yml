@@ -146,11 +146,13 @@
   id: OrganHumanExternal
   abstract: true
   components:
+  # cmu edit start: the cmss13-devs/cmss13#6073 bodies
   - type: Sprite
-    sprite: Mobs/Species/Human/parts.rsi
+    sprite: CMU14/Mobs/Species/Human/parts.rsi
   - type: VisualOrgan
     data:
-      sprite: Mobs/Species/Human/parts.rsi
+      sprite: CMU14/Mobs/Species/Human/parts.rsi
+  # cmu edit end
   - type: VisualOrganMarkings
     markingData:
       group: Human
@@ -158,6 +160,20 @@
 - type: entity
   parent: [ OrganBaseTorsoSexed, OrganBaseTorso, OrganHumanExternal ]
   id: OrganHumanTorso
+  # cmu edit start
+  components:
+  - type: VisualOrgan
+    buildStateOverrides:
+      ThinNoMuscle: torso_sml_twig
+      ThinLean: torso_sml_lean
+      ThinRipped: torso_sml_buff
+      AverageNoMuscle: torso_avg_twig
+      AverageLean: torso_avg_lean
+      AverageRipped: torso_avg_buff
+      LargeNoMuscle: torso_lrg_twig
+      LargeLean: torso_lrg_lean
+      LargeRipped: torso_lrg_buff
+  # cmu edit end
 
 - type: entity
   parent: [ OrganBaseHeadSexed, OrganBaseHead, OrganHumanExternal ]

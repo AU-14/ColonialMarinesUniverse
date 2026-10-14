@@ -299,3 +299,19 @@
     playerSprite:
       sprite: CMU14/Objects/Clothing/TWE/sas_patch.rsi
       state: patch
+# cmss13-devs/cmss13#6073
+- type: entity
+  parent: RMCBaseUniformAccessory
+  id: CMUAccessoryDogtags
+  name: attachable dogtags
+  description: A robust pair of dogtags to be worn around the neck. After budget cuts, lost tags and more than one marine swallowing theirs, they now clip onto the uniform or armor instead.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Clothing/Accessory/dogtags.rsi
+    state: icon
+  - type: UniformAccessory
+    category: Medal
+    limit: 2
+    playerSprite:
+      sprite: CMU14/Objects/Clothing/Accessory/dogtags.rsi
+      state: equipped

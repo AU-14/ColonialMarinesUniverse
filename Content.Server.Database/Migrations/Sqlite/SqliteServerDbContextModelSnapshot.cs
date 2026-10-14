@@ -1495,6 +1495,13 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Property<bool>("FoxtrotSquadOptIn")
                         .HasColumnType("INTEGER")
                         .HasColumnName("foxtrot_squad_opt_in");
+
+                    b.Property<string>("Religion")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("")
+                        .HasColumnName("religion");
                     // cmu edit end
 
                     b.Property<string>("Sex")

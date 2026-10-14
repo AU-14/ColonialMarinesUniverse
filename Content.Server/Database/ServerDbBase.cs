@@ -426,6 +426,7 @@ namespace Content.Server.Database
             profile.BloodType = humanoid.BloodType.ToString(); // CMU14
             // cmu edit start
             profile.FoxtrotSquadOptIn = humanoid.FoxtrotSquadOptIn;
+            profile.Religion = humanoid.Religion.Id;
             // cmu edit end
             profile.HideMetaInformation = humanoid.HideMetaInformation;
             profile.ThreatPreference = humanoid.ThreatPreferences.Count == 0

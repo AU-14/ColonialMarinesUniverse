@@ -33,6 +33,7 @@ public sealed partial class FactionRosterEntryWindow : DefaultWindow
         CharacterDescriptionRowBuilder.AddRow(ContentContainer, Loc.GetString("detailed-examine-eye-color"), entry.EyeColorName, Loc.GetString("detailed-examine-eye-color-tooltip"));
         CharacterDescriptionRowBuilder.AddRow(ContentContainer, Loc.GetString("detailed-examine-allegiance"), entry.Allegiance, Loc.GetString("detailed-examine-allegiance-tooltip"));
         CharacterDescriptionRowBuilder.AddRow(ContentContainer, Loc.GetString("detailed-examine-origin"), entry.Origin, Loc.GetString("detailed-examine-origin-tooltip"));
+        CharacterDescriptionRowBuilder.AddRow(ContentContainer, Loc.GetString("detailed-examine-religion"), entry.Religion, Loc.GetString("detailed-examine-religion-tooltip"));
 
         CharacterDescriptionRowBuilder.AddSeparator(ContentContainer);
 

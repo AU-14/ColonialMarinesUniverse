@@ -135,6 +135,14 @@ public abstract partial class SharedVisualBodySystem : EntitySystem
             ent.Comp.Data.State = state;
             SetOrganAppearance(ent, ent.Comp.Data, ent.Comp.Displacement);
         }
+
+        // cmu edit start
+        if (ent.Comp.BuildStateOverrides is { } buildOverrides && buildOverrides.TryGetValue(data.Build, out var buildState))
+        {
+            ent.Comp.Data.State = buildState;
+            SetOrganAppearance(ent, ent.Comp.Data, ent.Comp.Displacement);
+        }
+        // cmu edit end
     }
 
     private void OnMarkingsOrganApplyMarkings(Entity<VisualOrganMarkingsComponent> ent, ref BodyRelayedEvent<ApplyOrganMarkingsEvent> args)
