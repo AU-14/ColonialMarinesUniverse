@@ -6,6 +6,7 @@ using Content.Shared.Examine;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 using Content.Shared.Containers.ItemSlots;
 using Robust.Shared.Containers;
+using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.GasMask;
 
@@ -15,6 +16,13 @@ public sealed partial class SharedGasMaskSystem : EntitySystem
 
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private SharedInternalsSystem _internals = default!;
+    [Dependency] private IGameTiming _timing = default!;
+
+    /// <summary>How long internals keep out neurotoxin per continuous exposure.</summary>
+    public static readonly TimeSpan InternalsNeurotoxinProtection = TimeSpan.FromSeconds(9);
+
+    /// <summary>Time out of the gas after which the next exposure starts the protection timer over.</summary>
+    public static readonly TimeSpan NeurotoxinExposureGap = TimeSpan.FromSeconds(1.5);
 
     public override void Initialize()
     {
@@ -44,6 +52,31 @@ public sealed partial class SharedGasMaskSystem : EntitySystem
             return false;
 
         return TryComp<GasTankComponent>(internals.GasTankEntity, out var tank) && tank.Air.TotalMoles > 0;
+    }
+
+    /// <summary>
+    /// Records that neurotoxin reached the entity and returns true if their internals still keep it out.
+    /// Internals hold for <see cref="InternalsNeurotoxinProtection"/> of continuous exposure; stepping out of the gas
+    /// for longer than <see cref="NeurotoxinExposureGap"/> starts a fresh exposure.
+    /// </summary>
+    public bool TryBlockNeurotoxinWithInternals(EntityUid uid)
+    {
+        if (!IsBreathingInternals(uid))
+            return false;
+
+        var now = _timing.CurTime;
+        if (!TryComp<InternalsNeurotoxinComponent>(uid, out var exposure))
+        {
+            exposure = AddComp<InternalsNeurotoxinComponent>(uid);
+            exposure.ExposureStart = now;
+        }
+        else if (now - exposure.LastExposure > NeurotoxinExposureGap)
+        {
+            exposure.ExposureStart = now;
+        }
+
+        exposure.LastExposure = now;
+        return now - exposure.ExposureStart < InternalsNeurotoxinProtection;
     }
 
     public void DamageFilter(EntityUid uid, GasMaskFilterComponent comp, GasMaskFilterDamageComponent dam)

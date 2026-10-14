@@ -35,3 +35,14 @@
     - Colony
     - radioCLF
     defaultChannel: radioCLF
+
+# the upstream CLF headset only inherits the colony key, so off-map cells never heard radioCLF
+- type: entity
+  parent: RMCHeadsetDistressCLF
+  id: AU14HeadsetCLF
+  suffix: CLF, Colony
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyCLF

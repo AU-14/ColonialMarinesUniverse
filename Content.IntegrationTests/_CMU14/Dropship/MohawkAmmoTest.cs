@@ -19,8 +19,10 @@ using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Throwing;
 using Content.Shared._RMC14.PowerLoader.Events;
 using Content.Shared.DoAfter;
+using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Containers;
+using Robust.Shared.Timing;
 using System.Reflection;
 using Content.Server.Explosion.EntitySystems;
 using Content.Shared.Explosion.Components;
@@ -237,6 +239,44 @@ public sealed class MohawkAmmoTest : GameTest
             }
 
         });
+    }
+
+    [Test]
+    public async Task SettledM90CasingRetainsFixturesOnBothServerAndClient()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true, Connected = true });
+        var map = await pair.CreateTestMap();
+        NetEntity casingNet = default;
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var casing = entities.SpawnEntity("CMUMohawkM90Casing", map.GridCoords);
+            entities.GetComponent<CMUSpentCasingComponent>(casing).EjectedAt =
+                pair.Server.ResolveDependency<IGameTiming>().CurTime;
+            casingNet = entities.GetNetEntity(casing);
+        });
+        await pair.RunSeconds(6);
+        await pair.RunUntilSynced();
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var casing = entities.GetEntity(casingNet);
+            Assert.That(entities.HasComponent<FixturesComponent>(casing), Is.True);
+            var physics = entities.GetComponent<PhysicsComponent>(casing);
+            Assert.That(physics.BodyType, Is.EqualTo(BodyType.Static));
+            Assert.That(physics.CanCollide, Is.False);
+            Assert.That(physics.LinearVelocity, Is.EqualTo(Vector2.Zero));
+        });
+        await pair.Client.WaitAssertion(() =>
+        {
+            var entities = pair.Client.EntMan;
+            var casing = entities.GetEntity(casingNet);
+            Assert.That(entities.HasComponent<FixturesComponent>(casing), Is.True);
+            var physics = entities.GetComponent<PhysicsComponent>(casing);
+            Assert.That(physics.BodyType, Is.EqualTo(BodyType.Static));
+            Assert.That(physics.CanCollide, Is.False);
+        });
+        await pair.CleanReturnAsync();
     }
 
     [Test]

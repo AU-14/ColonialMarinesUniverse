@@ -59,7 +59,7 @@ public sealed partial class MohawkChinGunComponent : Component
     [DataField, AutoNetworkedField]
     public MohawkChinGunRepairStage RepairStage;
     [DataField]
-    public float SlewDegreesPerSecond = 60f;
+    public float SlewDegreesPerSecond = 30f;
     [DataField]
     public TimeSpan AuthorizationDuration = TimeSpan.FromSeconds(30);
     public TimeSpan AuthorizedUntil;

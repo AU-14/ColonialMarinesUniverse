@@ -296,6 +296,11 @@
     maxRounds: 3
     roundsPerShot: 1
     weapon: CMUDropshipAttachmentBOFORS
+  - type: ContainerContainer
+    containers:
+      mag1: !type:ContainerSlot
+      mag2: !type:ContainerSlot
+      mag3: !type:ContainerSlot
   - type: AmmoHolder
   - type: DropshipFabricatorPrintable
     category: Ammo
@@ -700,6 +705,12 @@
     roundsPerShot: 1
     weapon: CMUDropshipAttachmentHowitzer
   - type: AmmoHolder
+  - type: ContainerContainer
+    containers:
+      shell1: !type:ContainerSlot
+      shell2: !type:ContainerSlot
+      shell3: !type:ContainerSlot
+      shell4: !type:ContainerSlot
   - type: ItemSlots
     slots:
       shell1:

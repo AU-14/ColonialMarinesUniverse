@@ -41,6 +41,7 @@
   id: CrateFreezer
   name: freezer
   components:
+  - type: CMUBloodRefrigerator # CMU14: keeps blood and plasma fresh
   - type: Icon
     sprite: Structures/Storage/Crates/freezer.rsi
   - type: Sprite

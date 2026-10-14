@@ -23,11 +23,11 @@
         amount: 120
     - name: Footwear
       entries:
-      - id: CMBootsBlack
+      - id: CMBootsBlackFilled
         amount: 40
-      - id: CMBootsBrown
+      - id: CMBootsBrownFilled
         amount: 40
-      - id: AU14BootsJungle
+      - id: AU14BootsJungleFilled
         amount: 25
     - name: Gloves
       entries:
@@ -262,7 +262,7 @@
         name: first-aid pouch (pills)
     - name: Medical Headgear
       entries:
-      - id: AU14DesertM10CorpsmanHelmet
+      - id: AU14CamoM10CorpsmanHelmet
         amount: 9
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
@@ -274,6 +274,8 @@
       entries:
       - id: CMUSynthBloodPackFull
         amount: 2
+      - id: CMUSalineBag
+        amount: 3
       - id: CMUMaskCPR
         amount: 30
       - id: AU14HemostaticGauzePacket
@@ -402,7 +404,7 @@
     - name: Footwear
       choices: { CMUPlatoonAirCrewFootwear: 1 }
       entries:
-      - id: CMBootsBlack
+      - id: CMBootsBlackFilled
     - name: Gloves
       choices: { CMUPlatoonAirCrewGloves: 1 }
       entries:
@@ -601,11 +603,11 @@
         amount: 10
     - name: Footwear
       entries:
-      - id: CMBootsBlack
+      - id: CMBootsBlackFilled
         amount: 5
-      - id: CMBootsBrown
+      - id: CMBootsBrownFilled
         amount: 5
-      - id: AU14BootsJungle
+      - id: AU14BootsJungleFilled
         amount: 5
     - name: Headgear
       entries:
@@ -762,7 +764,7 @@
         recommended: true
     - name: Footwear
       entries:
-      - id: AU14SpikeBoots
+      - id: CMUSpikeBootsFilled
         points: 8
         recommended: true
     - name: Utilities
@@ -1436,8 +1438,9 @@
     state: firstaid
   - type: CMVendorBundle
     bundle:
-    - RMCVisorMedicalAdvanced
+    - CMUVisorMedicalSquad
     - RMCGlassesMedicalHUDGlasses
+    - CMUBloodCooler
     - AU14CMDefibrillator
     - CMHealthAnalyzer
     - RMCFlashlightPen
@@ -1482,8 +1485,8 @@
     - name: Footwear
       choices: { AU14FootWear: 1 }
       entries:
-      - id: CMBootsBlack
-      - id: CMBootsBrown
+      - id: CMBootsBlackFilled
+      - id: CMBootsBrownFilled
     - name: Hat
       choices: { CMHat: 2 }
       entries:
@@ -1891,11 +1894,11 @@
         amount: 120
     - name: Footwear
       entries:
-      - id: CMBootsBlack
+      - id: CMBootsBlackFilled
         amount: 40
-      - id: CMBootsBrown
+      - id: CMBootsBrownFilled
         amount: 40
-      - id: AU14BootsJungle
+      - id: AU14BootsJungleFilled
         amount: 25
     - name: Mask
       entries:

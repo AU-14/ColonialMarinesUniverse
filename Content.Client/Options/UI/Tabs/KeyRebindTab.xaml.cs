@@ -280,9 +280,6 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(CMUKeyFunctions.CMUTargetBodyZoneRightLeg);
             AddButton(CMUKeyFunctions.CMUOpenMedicalCraftingMenu);
 
-            AddHeader("ui-options-header-cmu-zlevels");
-            AddButton(CMUKeyFunctions.CMUToggleShootDownZLevel);
-
             AddHeader("ui-options-header-cmu-gunship");
             AddButton(CMUKeyFunctions.CMUGunshipForward);
             AddButton(CMUKeyFunctions.CMUGunshipBack);
@@ -377,7 +374,7 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.Walk);
             AddCheckBox("ui-options-hotkey-toggle-walk", _cfg.GetCVar(CCVars.ToggleWalk), HandleToggleWalk);
             InitToggleWalk();
-            AddButton(ContentKeyFunctions.ToggleKnockdown);
+            // AddButton(ContentKeyFunctions.ToggleKnockdown); // CMU14: vanilla prone removed
 
             AddHeader("ui-options-header-camera");
             AddButton(EngineKeyFunctions.CameraRotateLeft);

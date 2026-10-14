@@ -114,6 +114,9 @@ public abstract partial class CMUSharedZLevelsSystem
             return 1;
         }
 
+        if (shooter is { AimDown: true })
+            return -1;
+
         return 0;
     }
 

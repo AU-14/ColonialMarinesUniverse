@@ -20,7 +20,7 @@
         amount: 40
     - name: Footwear
       entries:
-      - id: CMBootsBlack
+      - id: CMBootsBlackFilled
         amount: 40
       - id: AU14BootsCBRNHAZOPS
         amount: 25
@@ -360,11 +360,11 @@
         amount: 2
     - name: Footwear
       entries:
-      - id: CMBootsBlack
+      - id: CMBootsBlackFilled
         amount: 2
-      - id: CMBootsBrown
+      - id: CMBootsBrownFilled
         amount: 2
-      - id: AU14BootsJungle
+      - id: AU14BootsJungleFilled
         amount: 2
     - name: Headgear
       entries:
@@ -485,7 +485,7 @@
         recommended: true
     - name: Footwear
       entries:
-      - id: AU14SpikeBoots
+      - id: CMUSpikeBootsFilled
         points: 8
         recommended: true
     - name: Utilities
@@ -582,7 +582,7 @@
         amount: 20
     - name: special issue equipment
       entries:
-      - id: AU14SpikeBoots
+      - id: CMUSpikeBootsFilled
         amount: 3
       - id: RMCWeaponRifleM54CFilled
         amount: 10
@@ -863,7 +863,7 @@
         amount: 40
     - name: Footwear
       entries:
-      - id: CMBootsBlack
+      - id: CMBootsBlackFilled
         amount: 40
     - name: Mask
       entries:
