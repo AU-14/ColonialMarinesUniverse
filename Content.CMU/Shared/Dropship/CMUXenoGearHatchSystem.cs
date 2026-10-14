@@ -93,10 +93,7 @@ public sealed class CMUXenoGearHatchSystem : EntitySystem
     private void TryClimb(Entity<CMUXenoGearHatchComponent> hatch, EntityUid xeno)
     {
         if (InFlight(hatch))
-        {
-            _popup.PopupClient(Loc.GetString("cmu-xeno-gear-hatch-in-flight"), hatch, xeno);
             return;
-        }
 
         if (PickExit(hatch) is not { } exit)
         {
