@@ -79,10 +79,11 @@
       RadioTrafficOperator: 1
       SquadCombatTech: 2
       SquadRifleman: 1
-    # the squad leader and RTO build like the combat technicians (AU14SkillPresetPlatoonCombatTechnician)
+    # the squad leader, RTO and rifleman build like the combat technicians (AU14SkillPresetPlatoonCombatTechnician)
     skillRoles:
     - SquadSergeant
     - RadioTrafficOperator
+    - SquadRifleman
     skills:
       RMCSkillConstruction: 4
       RMCSkillEngineer: 4
