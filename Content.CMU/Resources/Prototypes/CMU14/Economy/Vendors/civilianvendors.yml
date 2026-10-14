@@ -423,7 +423,7 @@
       - id: CMFireExtinguisher
       - id: CMFireExtinguisherPortable
       - id: CMUFieldGasTankOxygenFilled
-      - id: CMUMaskGasBlack
+      - id: CMUMaskSCBA
       - id: RMCRadioHandheldColonyOff
 
 - type: entity
