@@ -38,7 +38,6 @@
       - id: AU14CivilianTurnoutGear
       - id: CMUFieldGasTankOxygenFilled
       - id: CMUMaskSCBA
-      - id: RMCHardhatRed
       - id: CMFireExtinguisher
       - id: CMFireExtinguisherPortable
       - id: CMPackFlare
