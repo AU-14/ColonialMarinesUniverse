@@ -502,7 +502,9 @@ public sealed partial class ShuttleSystem
         // Reset rotation so they always face the same direction.
         _transform.SetLocalRotation(entity, Angle.Zero, xform);
         _index += width + Buffer;
-        comp.StateTime = StartEndTime.FromCurTime(_gameTiming, comp.TravelTime - DefaultArrivalTime);
+        // cmu edit start
+        comp.StateTime = StartEndTime.FromCurTime(_gameTiming, comp.TravelTime - CMUArrivalTime(uid));
+        // cmu edit end
 
         Enable(uid, component: body);
         _physics.SetLinearVelocity(uid, new Vector2(0f, FTLMapComponent.TravelSpeed), body: body);
@@ -528,7 +530,9 @@ public sealed partial class ShuttleSystem
     {
         var shuttle = entity.Comp2;
         var comp = entity.Comp1;
-        comp.StateTime = StartEndTime.FromCurTime(_gameTiming, DefaultArrivalTime);
+        // cmu edit start
+        comp.StateTime = StartEndTime.FromCurTime(_gameTiming, CMUArrivalTime(entity.Owner));
+        // cmu edit end
         comp.State = FTLState.Arriving;
 
         if (entity.Comp1.VisualizerProto != null)

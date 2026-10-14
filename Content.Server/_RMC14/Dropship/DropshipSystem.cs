@@ -745,7 +745,9 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                     }
                 }
 
-                hyperspaceTime += _config.GetCVar(CCVars.FTLArrivalTime);
+                // cmu edit start: the dropship's own approach time
+                hyperspaceTime += dropship.ArrivalTime;
+                // cmu edit end
             }
         }
 
@@ -765,6 +767,9 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         }
 
         RemComp<Content.Server.CMU14.ForceOnForce.ForceOnForceLaunchComponent>(dropshipId.Value);
+        // cmu edit start: warm up for as long as the takeoff sound before leaving
+        startupTime ??= CMUIsDepartingWarship(dropshipId.Value) ? dropship.AirlockedStartupTime : dropship.StartupTime;
+        // cmu edit end
         var coordinated = TryGetForceOnForceLaunchWindow(computer, destination, hijack,
             out var opposingFaction, out var departureAt, out var newLaunchWindow);
         if (coordinated)

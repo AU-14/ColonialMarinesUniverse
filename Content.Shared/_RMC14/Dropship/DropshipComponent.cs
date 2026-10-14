@@ -112,6 +112,19 @@ public sealed partial class DropshipComponent : Component
 
     [DataField]
     public SoundSpecifier ArrivalSound = new SoundPathSpecifier("/Audio/CMU14/Dropship/dropship_flight_end.ogg");
+
+    // Timed to the takeoff and landing sounds, as cmss13-pve#1294 does.
+    /// <summary>Engine warmup before leaving the ground; the dropship lifts off as the takeoff cue does.</summary>
+    [DataField]
+    public float StartupTime = 15f;
+
+    /// <summary>Warmup when dropping out of a warship's bay: the clamps let go three seconds into the cue.</summary>
+    [DataField]
+    public float AirlockedStartupTime = 3f;
+
+    /// <summary>How long the final approach takes; the landing sound plays across it.</summary>
+    [DataField]
+    public float ArrivalTime = 15f;
     // cmu edit end
 
     [DataField]
