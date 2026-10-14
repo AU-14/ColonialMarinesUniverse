@@ -1,20 +1,4 @@
-# CMU versions of the upstream cryogenic medicine recipes. The standard
-# reactions remain available when a station-style chemical dispenser is used.
-
-- type: reaction
-  id: CMUSalicylicAcid
-  minTemp: 373.15
-  reactants:
-    RMCSodium:
-      amount: 1
-    CMUPhenol:
-      amount: 1
-    RMCCarbon:
-      amount: 1
-    RMCOxygen:
-      amount: 1
-  products:
-    SalicylicAcid: 4
+# CMU versions of the cryogenic medicine recipes using available ingredients.
 
 - type: reaction
   id: CMUCryoxadone
@@ -46,7 +30,7 @@
   reactants:
     Cryoxadone:
       amount: 1
-    SalicylicAcid:
+    CMUPhenol:
       amount: 1
     RMCLipozine:
       amount: 1

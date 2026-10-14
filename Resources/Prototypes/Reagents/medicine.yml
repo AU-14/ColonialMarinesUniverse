@@ -188,7 +188,7 @@
   - !type:PlantCryoxadone {}
   metabolisms:
     Bloodstream:
-      metabolismRate: 1
+      metabolismRate: 0.5
       effects:
       - !type:HealthChange
         conditions:
@@ -196,8 +196,8 @@
           max: 213
         damage:
           types:
-            Asphyxiation: -10
-            Bloodloss: -10
+            Asphyxiation: -0.25
+            Bloodloss: -0.25
 
 - type: reagent
   id: Doxarubixadone
@@ -210,7 +210,7 @@
   worksOnTheDead: true
   metabolisms:
     Bloodstream:
-      metabolismRate: 1
+      metabolismRate: 0.5
       effects:
         - !type:HealthChange
           conditions:
@@ -218,7 +218,12 @@
             max: 213
           damage:
             types:
-              Cellular: -10
+              Cellular: -0.25
+        - !type:CMUCryogenicOrganRepair
+          amountPerUnit: 0.25
+          conditions:
+          - !type:TemperatureCondition
+            max: 213
 
 - type: reagent
   id: Dermaline
@@ -1310,10 +1315,10 @@
   worksOnTheDead: true
   metabolisms:
     Bloodstream:
-      metabolismRate: 1
+      metabolismRate: 0.5
       effects:
         - !type:ReduceRotting
-          seconds: 40
+          seconds: 5
           conditions:
           #Patient must be dead and in a cryo tube (or something cold)
           - !type:TemperatureCondition
@@ -1321,7 +1326,7 @@
           - !type:MobStateCondition
             mobstate: Dead
         - !type:CMUReverseRevivalTimer
-          secondsPerUnit: 20
+          secondsPerUnit: 5
           conditions:
           - !type:TemperatureCondition
             max: 150.0
@@ -1339,7 +1344,7 @@
   worksOnTheDead: true
   metabolisms:
     Bloodstream:
-      metabolismRate: 1
+      metabolismRate: 0.5
       effects:
       - !type:HealthChange
         conditions:
@@ -1347,9 +1352,15 @@
           max: 213
         damage:
           types:
-            Blunt: -10
-            Piercing: -10
-            Slash: -10
+            Blunt: -0.25
+            Piercing: -0.25
+            Slash: -0.25
+      - !type:CMUCryogenicWoundRepair
+        type: Brute
+        amountPerUnit: 0.25
+        conditions:
+        - !type:TemperatureCondition
+          max: 213
 
 - type: reagent
   id: Urishoxadone
@@ -1362,7 +1373,7 @@
   worksOnTheDead: true
   metabolisms:
     Bloodstream:
-      metabolismRate: 1
+      metabolismRate: 0.5
       effects:
       - !type:HealthChange
         conditions:
@@ -1370,8 +1381,8 @@
           max: 213
         damage:
           types:
-            Poison: -10
-            Radiation: -10
+            Poison: -0.25
+            Radiation: -0.25
 
 - type: reagent
   id: Necrosol
@@ -1384,9 +1395,15 @@
   worksOnTheDead: true
   metabolisms:
     Bloodstream:
-      metabolismRate: 1
+      metabolismRate: 0.5
       effects:
       - !type:CMURegenerateLimb
+        conditions:
+        - !type:TemperatureCondition
+          max: 213
+      - !type:CMUCryogenicBoneAndBloodRepair
+        boneIntegrityPerUnit: 0.25
+        bloodPercentPerSecond: 1
         conditions:
         - !type:TemperatureCondition
           max: 213
@@ -1424,7 +1441,7 @@
   worksOnTheDead: true
   metabolisms:
     Bloodstream:
-      metabolismRate: 1
+      metabolismRate: 0.5
       effects:
       - !type:HealthChange
         conditions:
@@ -1432,10 +1449,16 @@
           max: 213
         damage:
           types:
-            Cold: -10
-            Heat: -10
-            Shock: -10
-            Caustic: -10
+            Cold: -0.25
+            Heat: -0.25
+            Shock: -0.25
+            Caustic: -0.25
+      - !type:CMUCryogenicWoundRepair
+        type: Burn
+        amountPerUnit: 0.25
+        conditions:
+        - !type:TemperatureCondition
+          max: 213
 
 - type: reagent
   id : Mannitol # currently this is just a way to create psicodine
@@ -1457,15 +1480,6 @@
         visualType: Medium
         messages: [ "mannitol-effect-enlightened" ]
         probability: 0.2
-
-- type: reagent
-  id: SalicylicAcid
-  name: reagent-name-salicylic-acid
-  group: Medicine
-  desc: reagent-desc-salicylic-acid
-  physicalDesc: reagent-physical-desc-opaque
-  flavor: medicine
-  color: "#d8d1c6"
 
 - type: reagent
   id: Psicodine

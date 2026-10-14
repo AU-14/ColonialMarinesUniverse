@@ -23,10 +23,10 @@ public sealed class OpporozidoneRevivalTimerTest : GameTest
 {
     private static readonly ProtoId<ReagentPrototype> ReagentId = "Opporozidone";
 
-    [TestCase(1f, 20f)]
-    [TestCase(0.25f, 5f)]
-    [TestCase(2.5f, 50f)]
-    public async Task ReversesTwentySecondsPerActualUnit(float dose, float seconds)
+    [TestCase(1f, 5f)]
+    [TestCase(0.25f, 1.25f)]
+    [TestCase(2.5f, 12.5f)]
+    public async Task ExtendsActiveDeadlineForActualDose(float dose, float seconds)
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
@@ -105,7 +105,7 @@ public sealed class OpporozidoneRevivalTimerTest : GameTest
 
             Assert.That(ApplyDose(target, 1f), Is.EqualTo(works));
             Assert.That(revivable.UnrevivableAt,
-                Is.EqualTo(deadline + (works ? TimeSpan.FromSeconds(20) : TimeSpan.Zero)));
+                Is.EqualTo(deadline + (works ? TimeSpan.FromSeconds(5) : TimeSpan.Zero)));
         });
     }
 

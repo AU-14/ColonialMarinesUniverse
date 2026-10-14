@@ -76,35 +76,6 @@
   products:
     Doxarubixadone: 2
 
-# Frontier's Traumoxadone requires Salicylic Acid. CMU also provides a reaction
-# using RMC dispenser reagents.
-- type: reaction
-  id: SalicylicAcid
-  minTemp: 373.15
-  reactants:
-    Sodium:
-      amount: 1
-    CMUPhenol:
-      amount: 1
-    Carbon:
-      amount: 1
-    Oxygen:
-      amount: 1
-  products:
-    SalicylicAcid: 4
-
-- type: reaction
-  id: Traumoxadone
-  reactants:
-    Cryoxadone:
-      amount: 1
-    SalicylicAcid:
-      amount: 1
-    Lipozine:
-      amount: 1
-  products:
-    Traumoxadone: 2
-
 - type: reaction
   id: Urishoxadone
   reactants:
