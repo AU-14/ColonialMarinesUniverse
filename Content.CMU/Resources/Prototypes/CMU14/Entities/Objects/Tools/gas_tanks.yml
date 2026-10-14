@@ -30,7 +30,9 @@
   components:
   - type: Sprite
     sprite: CMU14/Items/scba_tank.rsi
+  # Too bulky for satchels and other storage: it goes on the back or in suit storage.
   - type: Item
+    size: Ginormous
     sprite: CMU14/Items/scba_tank.rsi
   - type: Clothing
     sprite: CMU14/Items/scba_tank.rsi
