@@ -7,7 +7,7 @@ namespace Content.Shared.CMU14.GearFlavor;
 /// <summary>
 ///     Flavor text written on a character's armor or helmet, with the cmss13-devs/cmss13#9966 inserts:
 ///     %name% (the name others see, so hidden by a helmet), %bloodtype% (e.g. "O+") and %rank%
-///     (e.g. "Capt ", with a trailing space when there is one).
+///     (the full rank, e.g. "Lieutenant").
 /// </summary>
 public static class CMUGearFlavorText
 {
@@ -37,8 +37,8 @@ public static class CMUGearFlavorText
 
         if (text.Contains("%rank%"))
         {
-            var rank = entities.System<SharedRankSystem>().GetRankString(wearer, isShort: true);
-            text = text.Replace("%rank%", string.IsNullOrEmpty(rank) ? string.Empty : rank + " ");
+            var rank = entities.System<SharedRankSystem>().GetRankString(wearer);
+            text = text.Replace("%rank%", rank ?? string.Empty);
         }
 
         return text;

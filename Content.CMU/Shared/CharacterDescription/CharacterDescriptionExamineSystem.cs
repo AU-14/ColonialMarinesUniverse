@@ -1,5 +1,6 @@
 using Content.Shared.CMU14.GearFlavor;
 using Content.Shared.Examine;
+using Content.Shared.IdentityManagement;
 using Content.Shared.Inventory;
 using Robust.Shared.Utility;
 
@@ -43,7 +44,8 @@ public sealed class CharacterDescriptionExamineSystem : EntitySystem
             }
 
             var text = FormattedMessage.EscapeText(CMUGearFlavorText.Fill(EntityManager, ent, args.Examiner, flavor.Text));
-            args.PushMarkup($"[color={GearFlavorColor}]{Loc.GetString(line, ("text", text))}[/color]");
+            var wearer = Identity.Entity(ent, EntityManager, args.Examiner);
+            args.PushMarkup($"[color={GearFlavorColor}]{Loc.GetString(line, ("user", wearer), ("text", text))}[/color]");
         }
     }
 }
