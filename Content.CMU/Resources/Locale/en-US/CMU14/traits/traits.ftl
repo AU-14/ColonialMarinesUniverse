@@ -137,8 +137,9 @@ trait-cmu-prosthetic-left-leg-desc = Your left leg has been replaced with a robo
 trait-cmu-prosthetic-right-leg-name = Right leg prosthesis
 trait-cmu-prosthetic-right-leg-desc = Your right leg has been replaced with a robotic prosthesis.
 
-trait-cmu-tile-movement-name = Tile Movement
-trait-cmu-tile-movement-desc = You move from tile to tile instead of walking freely, just like the forebears who came before you.
+cmu-ui-options-movement = Movement
+cmu-ui-options-tile-movement = Tile movement
+cmu-ui-options-tile-movement-tooltip = Move from tile to tile instead of walking freely, just like the forebears who came before you.
 
 cmu-trait-category-drinking = Alcohol Tolerance
 cmu-trait-heavyweight-name = Heavyweight drunk

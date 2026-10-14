@@ -32,6 +32,9 @@ public sealed partial class CmuTab : Control
         Control.AddOptionCheckBox(CCVars.ChatEnableRunechatBubbles, RunechatSpeechBubblesCheckBox);
         Control.AddOptionPercentSlider(CCVars.ChatRunechatBubbleScale, RunechatSpeechBubbleScaleSlider, 0.5f, 2f);
         Control.AddOptionCheckBox(CCVars.CMUVoteUiLarge, VoteUiLargeCheckBox);
+        // cmu edit start
+        Control.AddOptionCheckBox(CCVars.CMUTileMovementPreferred, TileMovementCheckBox);
+        // cmu edit end
         // cmu edit start: hide username on the round-end screen
         Control.AddOptionCheckBox(Content.Shared.CMU14.CCVar.AU14CCVars.HideRoundEndUsername, HideRoundEndUsernameCheckBox);
         // cmu edit end

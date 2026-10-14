@@ -1,11 +1,4 @@
 - type: trait
-  id: CMUTileMovement
-  name: trait-cmu-tile-movement-name
-  description: trait-cmu-tile-movement-desc
-  components:
-  - type: CMUTileMovement
-
-- type: trait
   id: CMUHeavyweightDrunk
   name: cmu-trait-heavyweight-name
   description: cmu-trait-heavyweight-desc
