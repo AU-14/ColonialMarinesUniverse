@@ -36,8 +36,8 @@
   - type: StorageFill
     contents:
       - id: AU14CivilianTurnoutGear
-      - id: RMCGasTankOxygenFilled
-      - id: RMCHardhatRed
+      - id: CMUFieldGasTankOxygenFilled
+      - id: CMUMaskSCBA
       - id: CMFireExtinguisher
       - id: CMFireExtinguisherPortable
       - id: CMPackFlare

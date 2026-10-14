@@ -89,6 +89,14 @@
   components:
   - type: Sprite
     state: cassette_rising_sun
+  - type: CassetteTape
+    songs:
+    - /Audio/CMU14/Private/Music/Cassette/RisingSun/CityIsDeath.ogg
+    - /Audio/CMU14/Private/Music/Cassette/RisingSun/Cult.ogg
+    - /Audio/CMU14/Private/Music/Cassette/RisingSun/Cosmonauts.ogg
+    - /Audio/CMU14/Private/Music/Cassette/RisingSun/FoundMe.ogg
+    - /Audio/CMU14/Private/Music/Cassette/RisingSun/MyType.ogg
+    - /Audio/CMU14/Private/Music/Cassette/RisingSun/Help.ogg
 
 - type: entity
 # abstract: true
@@ -98,6 +106,14 @@
   components:
   - type: Sprite
     state: cassette_orange_blue
+  - type: CassetteTape
+    songs:
+    - /Audio/CMU14/Private/Music/Cassette/BlueStripe/Beastie.ogg
+    - /Audio/CMU14/Private/Music/Cassette/BlueStripe/Tricky.ogg
+    - /Audio/CMU14/Private/Music/Cassette/BlueStripe/Message.ogg
+    - /Audio/CMU14/Private/Music/Cassette/BlueStripe/NoJoke.ogg
+    - /Audio/CMU14/Private/Music/Cassette/BlueStripe/Bells.ogg
+    - /Audio/CMU14/Private/Music/Cassette/BlueStripe/Jump.ogg
 
 - type: entity
 # abstract: true
@@ -107,6 +123,13 @@
   components:
   - type: Sprite
     state: cassette_aesthetic
+  - type: CassetteTape
+    songs:
+    - /Audio/CMU14/Private/Music/Cassette/Neon/After.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Neon/Cop.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Neon/Human.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Neon/Running.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Neon/Shame.ogg
 
 - type: entity
 # abstract: true
@@ -116,6 +139,14 @@
   components:
   - type: Sprite
     state: cassette_purple
+  - type: CassetteTape
+    songs:
+    - /Audio/CMU14/Private/Music/Cassette/Galaxy/Southern.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Galaxy/Closer.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Galaxy/Drive.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Galaxy/Get.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Galaxy/Love.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Galaxy/Sky.ogg
 
 - type: entity
 # abstract: true
@@ -126,6 +157,13 @@
   components:
   - type: Sprite
     state: cassette_camo
+  - type: CassetteTape
+    songs:
+    - /Audio/CMU14/Private/Music/Cassette/PartyApproved/Lady.ogg
+    - /Audio/CMU14/Private/Music/Cassette/PartyApproved/Afghan.ogg
+    - /Audio/CMU14/Private/Music/Cassette/PartyApproved/Aporah.ogg
+    - /Audio/CMU14/Private/Music/Cassette/PartyApproved/Caravan.ogg
+    - /Audio/CMU14/Private/Music/Cassette/PartyApproved/Dushman.ogg
 
 - type: entity
 # abstract: true
@@ -136,6 +174,15 @@
   components:
   - type: Sprite
     state: cassette_tan
+  - type: CassetteTape
+    songs:
+    - /Audio/CMU14/Private/Music/Cassette/Tan/TeenageDirtbag.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Tan/Southtown.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Tan/Serenity.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Tan/WishYouWereHere.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Tan/PrayerToGod.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Tan/ItsBeenAwhile.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Tan/FarFromAnyRoad.ogg
 
 - type: entity
 # abstract: true
@@ -146,6 +193,15 @@
   components:
   - type: Sprite
     state: cassette_dam
+  - type: CassetteTape
+    songs:
+    - /Audio/CMU14/Private/Music/Cassette/TWE/london.ogg
+    - /Audio/CMU14/Private/Music/Cassette/TWE/Tactics.ogg
+    - /Audio/CMU14/Private/Music/Cassette/TWE/Falklands.ogg
+    - /Audio/CMU14/Private/Music/Cassette/TWE/Passenger.ogg
+    - /Audio/CMU14/Private/Music/Cassette/TWE/Malice.ogg
+    - /Audio/CMU14/Private/Music/Cassette/TWE/Rakuen.ogg
+    - /Audio/CMU14/Private/Music/Cassette/TWE/Killer.ogg
 
 - type: entity
 # abstract: true
@@ -155,6 +211,13 @@
   components:
   - type: Sprite
     state: cassette_weya
+  - type: CassetteTape
+    songs:
+    - /Audio/CMU14/Private/Music/Cassette/WY/everything.ogg
+    - /Audio/CMU14/Private/Music/Cassette/WY/YMCA.ogg
+    - /Audio/CMU14/Private/Music/Cassette/WY/silence.ogg
+    - /Audio/CMU14/Private/Music/Cassette/WY/sultan.ogg
+    - /Audio/CMU14/Private/Music/Cassette/WY/exit.ogg
 
 - type: entity
 # abstract: true
@@ -164,6 +227,14 @@
   components:
   - type: Sprite
     state: cassette_green
+  - type: CassetteTape
+    songs:
+    - /Audio/CMU14/Private/Music/Cassette/Green/paranoid.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Green/tide.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Green/world.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Green/worth.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Green/confusion.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Green/free.ogg
 
 - type: entity
 # abstract: true
@@ -173,6 +244,14 @@
   components:
   - type: Sprite
     state: cassette_pink_stripe
+  - type: CassetteTape
+    songs:
+    - /Audio/CMU14/Private/Music/Cassette/Pink/come.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Pink/countdown.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Pink/forget.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Pink/pressure.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Pink/zone.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Pink/beat.ogg
 
 - type: entity
 # abstract: true
@@ -182,6 +261,14 @@
   components:
   - type: Sprite
     state: cassette_rainbow
+  - type: CassetteTape
+    songs:
+    - /Audio/CMU14/Private/Music/Cassette/Rainbow/rio.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Rainbow/love.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Rainbow/me.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Rainbow/record.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Rainbow/dream.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Rainbow/safety.ogg
 
 - type: entity
 # abstract: true
@@ -191,6 +278,14 @@
   components:
   - type: Sprite
     state: cassette_red_stripe
+  - type: CassetteTape
+    songs:
+    - /Audio/CMU14/Private/Music/Cassette/RedStripe/thing.ogg
+    - /Audio/CMU14/Private/Music/Cassette/RedStripe/sugar.ogg
+    - /Audio/CMU14/Private/Music/Cassette/RedStripe/pie.ogg
+    - /Audio/CMU14/Private/Music/Cassette/RedStripe/heart.ogg
+    - /Audio/CMU14/Private/Music/Cassette/RedStripe/dirty.ogg
+    - /Audio/CMU14/Private/Music/Cassette/RedStripe/deadly.ogg
 
 - type: entity
 # abstract: true
@@ -200,6 +295,15 @@
   components:
   - type: Sprite
     state: cassette_red_black
+  - type: CassetteTape
+    songs:
+    - /Audio/CMU14/Private/Music/Cassette/RedBlack/trooper.ogg
+    - /Audio/CMU14/Private/Music/Cassette/RedBlack/heavy.ogg
+    - /Audio/CMU14/Private/Music/Cassette/RedBlack/hills.ogg
+    - /Audio/CMU14/Private/Music/Cassette/RedBlack/panama.ogg
+    - /Audio/CMU14/Private/Music/Cassette/RedBlack/reach.ogg
+    - /Audio/CMU14/Private/Music/Cassette/RedBlack/rock.ogg
+    - /Audio/CMU14/Private/Music/Cassette/RedBlack/round.ogg
 
 - type: entity
 # abstract: true
@@ -209,6 +313,16 @@
   components:
   - type: Sprite
     state: cassette_ocean
+  - type: CassetteTape
+    songs:
+    - /Audio/CMU14/Private/Music/Cassette/Ocean/around.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Ocean/bird.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Ocean/city.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Ocean/koko.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Ocean/moto.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Ocean/nice.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Ocean/surf.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Ocean/wipe.ogg
 
 - type: entity
 # abstract: true
@@ -218,6 +332,15 @@
   components:
   - type: Sprite
     state: cassette_regulation
+  - type: CassetteTape
+    songs:
+    - /Audio/CMU14/Private/Music/Cassette/White/forever.ogg
+    - /Audio/CMU14/Private/Music/Cassette/White/ring.ogg
+    - /Audio/CMU14/Private/Music/Cassette/White/spanish.ogg
+    - /Audio/CMU14/Private/Music/Cassette/White/loving.ogg
+    - /Audio/CMU14/Private/Music/Cassette/White/morning.ogg
+    - /Audio/CMU14/Private/Music/Cassette/White/cry.ogg
+    - /Audio/CMU14/Private/Music/Cassette/White/cats.ogg
 
 - type: entity
 # abstract: true
@@ -227,6 +350,14 @@
   components:
   - type: Sprite
     state: cassette_solaris
+  - type: CassetteTape
+    songs:
+    - /Audio/CMU14/Private/Music/Cassette/Flaming/cheat.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Flaming/dirt.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Flaming/horse.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Flaming/sun.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Flaming/you.ogg
+    - /Audio/CMU14/Private/Music/Cassette/Flaming/broken.ogg
 
 - type: entity
 # abstract: true
@@ -236,3 +367,11 @@
   components:
   - type: Sprite
     state: cassette_worstmap
+  - type: CassetteTape
+    songs:
+    - /Audio/CMU14/Private/Music/Cassette/CLF/tons.ogg
+    - /Audio/CMU14/Private/Music/Cassette/CLF/tans.ogg
+    - /Audio/CMU14/Private/Music/Cassette/CLF/prison.ogg
+    - /Audio/CMU14/Private/Music/Cassette/CLF/hard.ogg
+    - /Audio/CMU14/Private/Music/Cassette/CLF/copper.ogg
+    - /Audio/CMU14/Private/Music/Cassette/CLF/blues.ogg

@@ -104,6 +104,16 @@
                                        StyleClasses="CrtDimText" />
                                 <Label Name="PersonDna" StyleClasses="CrtText" />
                             </BoxContainer>
+                            <!-- cmu edit start -->
+                            <BoxContainer Orientation="Horizontal">
+                                <Label Text="{Loc 'cmu-general-station-record-religion'}"
+                                       StyleClasses="CrtDimText" />
+                                <Label Text=":"
+                                       Margin="0 0 6 0"
+                                       StyleClasses="CrtDimText" />
+                                <Label Name="PersonReligion" StyleClasses="CrtText" />
+                            </BoxContainer>
+                            <!-- cmu edit end -->
                             <PanelContainer StyleClasses="LowDivider"
                                             Margin="0 4" />
                             <BoxContainer Orientation="Horizontal">

@@ -1,0 +1,8 @@
+- type: entity
+  parent: BaseFlatpack
+  id: CMUChemistryHotplateFlatpack
+  name: chemistry hotplate flatpack
+  description: Deploys a hotplate for heating beakers to make temperature-sensitive medicines.
+  components:
+  - type: Flatpack
+    entity: ChemistryHotplate

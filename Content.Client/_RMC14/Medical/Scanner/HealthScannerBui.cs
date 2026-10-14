@@ -1275,6 +1275,10 @@ public sealed partial class HealthScannerBui : BoundUserInterface
 
         //TODO RMC14 Clone damage advice
 
+        // cmu edit start
+        CMUMedicalAdvice(uiState, recommendations);
+        // cmu edit end
+
         recommendations.Sort((a, b) =>
         {
             var priority = b.Priority.CompareTo(a.Priority);

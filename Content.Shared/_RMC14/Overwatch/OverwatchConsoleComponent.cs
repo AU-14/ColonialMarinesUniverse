@@ -32,6 +32,14 @@ public sealed partial class OverwatchConsoleComponent : Component
     [DataField, AutoNetworkedField]
     public int LastLocation;
 
+    // cmu edit start: orbital bombardment keeps its own saved coordinates (SharedOverwatchConsoleSystem.CMU)
+    [DataField, AutoNetworkedField]
+    public OverwatchSavedLocation?[] OrbitalSavedLocations = new OverwatchSavedLocation?[3];
+
+    [DataField, AutoNetworkedField]
+    public int LastOrbitalLocation;
+    // cmu edit end
+
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan LastMessage;
 

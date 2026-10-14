@@ -2,6 +2,12 @@ cmu-medical-heal-organ-guidebook            = Heals { $amount } HP per cycle on 
 cmu-medical-pain-suppression-guidebook       = Suppresses { $percent }% of pain accumulation, masks { $tiers } pain tier(s), and adds { $decay } pain/sec decay for { $seconds } seconds per unit. Effect weakens by { $decrease } per max-pain fraction; non-additive profiles keep the strongest active profile.
 cmu-medical-bone-regen-boost-guidebook       = Multiplies bone healing rate by { $multiplier } while active.
 cmu-medical-restart-heart-guidebook          = { $chance }% chance per cycle to restart a stopped heart (only on hearts that are not yet at the Dead stage).
+cmu-medical-regenerate-limb-guidebook        = Regenerates one missing native limb per 5 units metabolized at 213K or colder.
+cmu-medical-reverse-revival-timer-guidebook   = Reverses { $seconds } seconds of an active revival countdown per unit metabolized. Cannot reverse permanent death or an expired countdown.
+cmu-medical-cryo-bone-blood-guidebook         = Gradually mends all fractures by { $bone } bone integrity per unit and restores { $blood }% blood per second during metabolism.
+cmu-medical-cryo-burn-wounds-guidebook        = Gradually closes burn wounds by { $amount } wound damage per unit, including severe burns.
+cmu-medical-cryo-brute-wounds-guidebook       = Gradually closes brute wounds by { $amount } wound damage per unit, including gaping cuts.
+cmu-medical-cryo-organs-guidebook             = Gradually restores { $amount } health per unit to every attached organ.
 
 cmu-medical-defib-no-heart                   = No heart detected in patient.
 cmu-medical-defib-heart-destroyed            = Heart is destroyed; cannot revive.
