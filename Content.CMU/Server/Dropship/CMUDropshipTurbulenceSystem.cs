@@ -25,7 +25,8 @@ namespace Content.Server.CMU14.Dropship;
 ///     A dropship in flight hits turbulence now and then. While it lasts, everyone aboard but the aircrew
 ///     (<see cref="AircrewSkill"/>) has their view rocked, and anyone standing who is not buckled in or
 ///     bracing against a wall gets jostled about and sometimes thrown to the floor, without being hurt by it.
-///     The air is only rough for the first and last half minute of a flight, climbing out and coming in to land.
+///     On a flyby the air is only rough for its first and last half minute, climbing out and coming back down;
+///     any other flight can hit turbulence the whole way.
 ///     Dropping out of a warship's bay starts with a lurch, a few quiet seconds, then very heavy turbulence.
 /// </summary>
 public sealed class CMUDropshipTurbulenceSystem : EntitySystem
@@ -34,7 +35,7 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
 
     private static readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(0.1);
 
-    // Rough air only after liftoff and before touchdown.
+    // On a flyby, rough air only after liftoff and before touchdown.
     private static readonly TimeSpan RoughAirWindow = TimeSpan.FromSeconds(30);
     private const float MinFirstBoutDelay = 2f;
     private const float MaxFirstBoutDelay = 6f;
@@ -144,11 +145,12 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
 
             var untilTouchdown = UntilTouchdown(ftl, now);
             var sinceLiftoff = ftl.State == FTLState.Travelling ? now - ftl.StateTime.Start : TimeSpan.Zero;
-            var roughAir = ftl.State == FTLState.Starting ||
+            var roughAir = !HasComp<DropshipInFlyByComponent>(ship) ||
+                           ftl.State == FTLState.Starting ||
                            sinceLiftoff <= RoughAirWindow ||
                            untilTouchdown <= RoughAirWindow;
 
-            // Smooth air in the middle of the flight: a bout still going ends here.
+            // Smooth air in the middle of a flyby: a bout still going ends here.
             if (!roughAir)
             {
                 if (now < flight.BoutEnds)
