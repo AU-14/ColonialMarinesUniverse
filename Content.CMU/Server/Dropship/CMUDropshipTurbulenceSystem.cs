@@ -41,6 +41,9 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
     private const float NudgeDistance = 0.6f;
     private const float NudgeSpeed = 2f;
 
+    private const int StartMessages = 8;
+    private const int KnockdownMessages = 5;
+
     [Dependency] private RMCCameraShakeSystem _cameraShake = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -125,10 +128,12 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
 
     private void Announce(EntityUid ship)
     {
+        // Everyone aboard feels the same jolt, so they all get the same line.
+        var message = Loc.GetString($"cmu-dropship-turbulence-start-{_random.Next(1, StartMessages + 1)}");
         GetPassengers(ship);
         foreach (var mob in _aboard)
         {
-            _popup.PopupEntity(Loc.GetString("cmu-dropship-turbulence-start"), mob, mob, PopupType.MediumCaution);
+            _popup.PopupEntity(message, mob, mob, PopupType.LargeCaution);
         }
     }
 
@@ -150,7 +155,7 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
             if (_random.Prob(KnockdownChance))
             {
                 _stun.TryKnockdown(mob, KnockdownTime, refresh: true);
-                _popup.PopupEntity(Loc.GetString("cmu-dropship-turbulence-knocked-down"), mob, mob, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString($"cmu-dropship-turbulence-knocked-down-{_random.Next(1, KnockdownMessages + 1)}"), mob, mob, PopupType.MediumCaution);
                 Nudge(mob);
             }
             else if (_random.Prob(NudgeChance))
