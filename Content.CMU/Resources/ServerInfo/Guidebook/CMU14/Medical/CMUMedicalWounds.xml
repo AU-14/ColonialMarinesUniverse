@@ -55,8 +55,13 @@
   - Eschar has to be cut away with the [bold]Debride Eschar[/bold] surgery. This is a single step using a burn kit or ointment, and can be done on your own arms and legs.
 
   ## Shrapnel
-  - Explosions and some rounds leave fragments embedded in a body part. They hurt whenever you move.
-  - Remove them with a scalpel or knife: right-click the patient and choose [bold]Remove shrapnel[/bold].
+  - Explosions and some rounds leave fragments embedded in a body part. The patient feels them dig in when they start moving, and walking on them causes pain and a little piercing damage.
+  - The health analyzer shows how many fragments are in each body part.
+  - Remove them with a [bold]scalpel[/bold] or any [bold]knife[/bold], including a marine's combat knife or bayonet: hold the tool, right-click the patient and choose [bold]Remove shrapnel[/bold]. Aim at a body part first to work on that one.
+  - On yourself, aim at the body part and use the tool in your hand.
+  - A scalpel pulls 3 fragments in just over a second and barely hurts. A knife pulls 2 in a bit over two seconds and hurts more. Both do a little damage, and taking damage interrupts the work.
+  - Keep going until you're told no shrapnel is left.
+  - Research chemicals with the [bold]Fluxing[/bold] property dissolve shrapnel over time, but an overdose weakens and breaks bones.
 
   ## Synthetics
   Synthetics don't bleed or bandage. Repair brute damage with a welder and burns with cable coils. For the full process, including the maintenance station and rebooting with a reset key, see [textlink="Repairing Synthetics" link="CMUGuideEngSynths"].

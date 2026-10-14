@@ -130,11 +130,10 @@
     children:
     - id: ClothingOuterSuitFire
     - id: ClothingHeadHelmetFire
-    - id: ClothingMaskGas
-    - !type:GroupSelector
-      children:
-      - id: EmergencyOxygenTankFilled
-      - id: OxygenTankFilled
+    # cmu edit start
+    - id: CMUMaskSCBA
+    - id: CMUFieldGasTankOxygenFilled
+    # cmu edit end
     - id: CrowbarRed
     - !type:GroupSelector
       children:
