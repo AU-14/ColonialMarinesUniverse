@@ -90,47 +90,16 @@ public sealed partial class DropshipComponent : Component
     [DataField]
     public EntityUid? LaunchAlarmEntity;
 
-    // cmu edit start: cmss13-devs/cmss13-pve#1294 dropship flight sounds
     /// <summary>Optional takeoff cue; null preserves the standard shuttle startup sound.</summary>
     [DataField]
-    public SoundSpecifier? StartupSound = new SoundPathSpecifier("/Audio/CMU14/Dropship/dropship_flight_start.ogg");
+    public SoundSpecifier? StartupSound;
 
-    /// <summary>Takeoff cue when the dropship leaves a warship's bay; null uses <see cref="StartupSound"/>.</summary>
-    [DataField]
-    public SoundSpecifier? AirlockedStartupSound = new SoundPathSpecifier("/Audio/CMU14/Dropship/dropship_flight_airlocked_start.ogg");
-
-    /// <summary>
-    /// Flight ambience played on the dropship at the start of travel; null plays none. The CMU dropship flight
-    /// audio system starts <see cref="FlightLoopSound"/> once the takeoff cue has finished instead.
-    /// </summary>
+    /// <summary>Optional flight ambience; null preserves the standard FTL travel sound.</summary>
     [DataField]
     public SoundSpecifier? TravelSound;
 
-    /// <summary>Looping engine sound while the dropship is in flight, after the takeoff cue.</summary>
     [DataField]
-    public SoundSpecifier? FlightLoopSound = new SoundPathSpecifier("/Audio/CMU14/Dropship/dropship_flight_recurr.ogg");
-
-    [DataField]
-    public SoundSpecifier ArrivalSound = new SoundPathSpecifier("/Audio/CMU14/Dropship/dropship_flight_end.ogg");
-
-    /// <summary>Extra landing sound played aboard the dropship on top of <see cref="ArrivalSound"/>.</summary>
-    [DataField]
-    public SoundSpecifier? InteriorArrivalSound = new SoundPathSpecifier("/Audio/_RMC14/Machines/Shuttle/engine_landing.ogg",
-        AudioParams.Default.AddVolume(5f));
-
-    // Timed to the takeoff and landing sounds, as cmss13-pve#1294 does.
-    /// <summary>Engine warmup before leaving the ground; the dropship lifts off as the takeoff cue does.</summary>
-    [DataField]
-    public float StartupTime = 15f;
-
-    /// <summary>Warmup when dropping out of a warship's bay: the clamps let go three seconds into the cue.</summary>
-    [DataField]
-    public float AirlockedStartupTime = 3f;
-
-    /// <summary>How long the final approach takes; null uses the standard shuttle arrival time.</summary>
-    [DataField]
-    public float? ArrivalTime;
-    // cmu edit end
+    public SoundSpecifier ArrivalSound = new SoundPathSpecifier("/Audio/_RMC14/Machines/Shuttle/engine_landing.ogg");
 
     [DataField]
     public SoundSpecifier? LaunchAlarmSound = new SoundPathSpecifier("/Audio/_RMC14/Machines/Shuttle/dropship_launch_alarm.ogg")

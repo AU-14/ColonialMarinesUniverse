@@ -395,12 +395,7 @@ public sealed partial class ShuttleSystem
         if (TryComp<DropshipComponent>(uid, out var dropship))
         {
             startupSound = dropship.StartupSound ?? startupSound;
-            // cmu edit start: dropships drop out of a warship's bay with their own cue, and play their own flight loop
-            if (dropship.AirlockedStartupSound != null && _dropship.CMUIsDepartingWarship(uid))
-                startupSound = dropship.AirlockedStartupSound;
-
-            component.TravelSound = dropship.TravelSound;
-            // cmu edit end
+            component.TravelSound = dropship.TravelSound ?? component.TravelSound;
         }
 
         // CMU14: faction gameplay fixes.
@@ -502,9 +497,7 @@ public sealed partial class ShuttleSystem
         // Reset rotation so they always face the same direction.
         _transform.SetLocalRotation(entity, Angle.Zero, xform);
         _index += width + Buffer;
-        // cmu edit start
-        comp.StateTime = StartEndTime.FromCurTime(_gameTiming, comp.TravelTime - CMUArrivalTime(uid));
-        // cmu edit end
+        comp.StateTime = StartEndTime.FromCurTime(_gameTiming, comp.TravelTime - DefaultArrivalTime);
 
         Enable(uid, component: body);
         _physics.SetLinearVelocity(uid, new Vector2(0f, FTLMapComponent.TravelSpeed), body: body);
@@ -530,9 +523,7 @@ public sealed partial class ShuttleSystem
     {
         var shuttle = entity.Comp2;
         var comp = entity.Comp1;
-        // cmu edit start
-        comp.StateTime = StartEndTime.FromCurTime(_gameTiming, CMUArrivalTime(entity.Owner));
-        // cmu edit end
+        comp.StateTime = StartEndTime.FromCurTime(_gameTiming, DefaultArrivalTime);
         comp.State = FTLState.Arriving;
 
         if (entity.Comp1.VisualizerProto != null)

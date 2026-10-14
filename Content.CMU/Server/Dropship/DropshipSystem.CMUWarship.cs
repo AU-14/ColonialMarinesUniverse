@@ -2,7 +2,7 @@
 
 namespace Content.Server._RMC14.Dropship;
 
-// CMU14: which takeoff cue a dropship plays.
+// CMU14: whether a dropship is leaving a warship, for turbulence.
 public sealed partial class DropshipSystem
 {
     /// <summary>
