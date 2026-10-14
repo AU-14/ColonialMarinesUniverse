@@ -23,7 +23,7 @@ namespace Content.Server.CMU14.Dropship;
 ///     (<see cref="AircrewSkill"/>) has their view rocked, and anyone standing who is not buckled in or
 ///     bracing against a wall gets jostled about and sometimes thrown to the floor.
 ///     Dropping out of a warship's bay follows the cmss13-devs/cmss13-pve#1294 sound: the clamps let go
-///     three seconds into the airlocked takeoff cue, then a few quiet seconds, then very heavy turbulence.
+///     four seconds into the airlocked takeoff cue, then a few quiet seconds, then very heavy turbulence.
 ///     From the ground, the first bout waits until the takeoff cue's freefall is over.
 /// </summary>
 public sealed class CMUDropshipTurbulenceSystem : EntitySystem
@@ -33,7 +33,7 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
     private static readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(0.1);
 
     // Timed against the cmss13-pve#1294 takeoff cues.
-    private static readonly TimeSpan DeclampDelay = TimeSpan.FromSeconds(3); // into dropship_flight_airlocked_start.ogg
+    private static readonly TimeSpan DeclampDelay = TimeSpan.FromSeconds(4); // into dropship_flight_airlocked_start.ogg
     private static readonly TimeSpan GroundFreefall = TimeSpan.FromSeconds(15); // dropship_flight_start.ogg
 
     // Leaving a warship: the lurch, a quiet pause, then the dropship fighting its way into the air.

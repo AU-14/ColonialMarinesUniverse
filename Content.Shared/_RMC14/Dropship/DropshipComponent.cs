@@ -123,13 +123,16 @@ public sealed partial class DropshipComponent : Component
     [DataField]
     public float StartupTime = 15f;
 
-    /// <summary>Warmup when dropping out of a warship's bay: the clamps let go three seconds into the cue.</summary>
+    /// <summary>Warmup when dropping out of a warship's bay: the clamps let go four seconds into the cue.</summary>
     [DataField]
-    public float AirlockedStartupTime = 3f;
+    public float AirlockedStartupTime = 4f;
 
-    /// <summary>How long the final approach takes; null uses the standard shuttle arrival time.</summary>
+    /// <summary>
+    ///     How long the final approach takes; null uses the standard shuttle arrival time. The approach starts
+    ///     with dropship_flight_end.ogg (27.5 seconds) and the dropship touches down with nine seconds of it left.
+    /// </summary>
     [DataField]
-    public float? ArrivalTime;
+    public float? ArrivalTime = 18.5f;
     // cmu edit end
 
     [DataField]

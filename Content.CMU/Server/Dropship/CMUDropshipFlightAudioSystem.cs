@@ -9,7 +9,8 @@ namespace Content.Server.CMU14.Dropship;
 
 /// <summary>
 ///     Plays a dropship's flight loop (cmss13-devs/cmss13-pve#1294) once its takeoff cue has finished, and keeps
-///     it going until the moment the dropship touches down. Each play of the loop starts a second before the last
+///     it going until the moment the dropship touches down. Out of a warship's bay, the ground takeoff cue plays
+///     straight after the airlocked one, and the loop follows that. Each play of the loop starts a second before the last
 ///     one ends, so the engine never drops out between them. The old landing sound plays aboard on top of the new
 ///     one through the approach.
 /// </summary>
@@ -29,6 +30,7 @@ public sealed class CMUDropshipFlightAudioSystem : EntitySystem
     private sealed class Flight
     {
         public TimeSpan NextPlay;
+        public TimeSpan? TakeoffAt;
         public bool Arriving;
         public readonly List<EntityUid> Playing = new();
     }
@@ -71,16 +73,36 @@ public sealed class CMUDropshipFlightAudioSystem : EntitySystem
                 if (ftl.State != FTLState.Starting)
                     continue;
 
-                // The loop waits for whichever takeoff cue is playing to end.
-                var cue = _dropship.CMUIsDepartingWarship(ship) && dropship.AirlockedStartupSound != null
-                    ? dropship.AirlockedStartupSound
-                    : dropship.StartupSound;
-                var cueLength = cue == null ? TimeSpan.Zero : _audio.GetAudioLength(_audio.ResolveSound(cue));
-                _flights[ship] = new Flight { NextPlay = now + cueLength - LoopOverlap };
+                // The loop waits for the takeoff cue to end. Out of a warship's bay, the ground takeoff cue
+                // plays right after the airlocked one.
+                var takeoffLength = dropship.StartupSound == null
+                    ? TimeSpan.Zero
+                    : _audio.GetAudioLength(_audio.ResolveSound(dropship.StartupSound));
+                var newFlight = new Flight { NextPlay = now + takeoffLength - LoopOverlap };
+                if (_dropship.CMUIsDepartingWarship(ship) && dropship.AirlockedStartupSound is { } airlocked)
+                {
+                    var airlockedLength = _audio.GetAudioLength(_audio.ResolveSound(airlocked));
+                    newFlight.TakeoffAt = now + airlockedLength;
+                    newFlight.NextPlay += airlockedLength;
+                }
+
+                _flights[ship] = newFlight;
                 continue;
             }
 
             flight.Playing.RemoveAll(audio => !Exists(audio));
+
+            if (flight.TakeoffAt is { } takeoffAt && now >= takeoffAt)
+            {
+                flight.TakeoffAt = null;
+                if (dropship.StartupSound is { } takeoff)
+                {
+                    var takeoffAudio = _audio.PlayPvs(takeoff, ship);
+                    _audio.SetGridAudio(takeoffAudio);
+                    if (takeoffAudio != null)
+                        flight.Playing.Add(takeoffAudio.Value.Entity);
+                }
+            }
 
             if (ftl.State == FTLState.Arriving && !flight.Arriving)
             {
