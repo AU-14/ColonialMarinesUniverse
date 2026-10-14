@@ -78,3 +78,33 @@ marking-CMUSportsBraWhite-sports_white = White Sports Bra
 
 marking-CMUSportsBraBlack = Black Sports Bra
 marking-CMUSportsBraBlack-sports_black = Black Sports Bra
+
+marking-CMUUnderwearBoxersUPP = UPP Boxers
+marking-CMUUnderwearBoxersUPP-upp_boxers = UPP Boxers
+
+marking-CMUUnderwearBoxersArmy = US Army Boxers
+marking-CMUUnderwearBoxersArmy-army_boxers = US Army Boxers
+
+marking-CMUUndershirtTelnyashkaBlue = Naval Infantry Telnyashka
+marking-CMUUndershirtTelnyashkaBlue-telnyashka_blue = Naval Infantry Telnyashka
+
+marking-CMUUndershirtTelnyashkaGreen = Territorial Guard Telnyashka
+marking-CMUUndershirtTelnyashkaGreen-telnyashka_green = Territorial Guard Telnyashka
+
+marking-CMUUndershirtTelnyashkaRed = Interior Forces Telnyashka
+marking-CMUUndershirtTelnyashkaRed-telnyashka_red = Interior Forces Telnyashka
+
+marking-CMUUndershirtArmy = US Army Undershirt
+marking-CMUUndershirtArmy-undershirt_army_short = US Army Undershirt
+
+marking-CMUUndershirtArmySleeveless = US Army Undershirt (Sleeveless)
+marking-CMUUndershirtArmySleeveless-undershirt_army = US Army Undershirt (Sleeveless)
+
+marking-CMUUndershirtBlackLong = Black Undershirt (Long Sleeve)
+marking-CMUUndershirtBlackLong-undershirt_black_long = Black Undershirt (Long Sleeve)
+
+marking-CMUSportsBraArmy = US Army Sports Bra
+marking-CMUSportsBraArmy-sports_army = US Army Sports Bra
+
+marking-CMUUndershirtNone = None
+marking-CMUUndershirtNone-none = None

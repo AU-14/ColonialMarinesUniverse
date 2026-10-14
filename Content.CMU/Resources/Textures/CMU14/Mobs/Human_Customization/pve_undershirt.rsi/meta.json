@@ -76,6 +76,10 @@
       "directions": 4
     },
     {
+      "name": "none",
+      "directions": 4
+    },
+    {
       "name": "bra_white",
       "directions": 4
     },
