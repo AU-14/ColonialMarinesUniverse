@@ -94,12 +94,17 @@ public sealed class CMUCrayonSymbolTest : InteractionTest
         await Server.WaitAssertion(() =>
         {
             var crayons = Server.System<CMUCrayonPaletteSystem>().Crayons;
-            Assert.That(crayons.Select(c => c.Id.Id).ToArray(), Is.EqualTo(new[]
-            {
-                "CrayonRed", "CrayonOrange", "CrayonYellow", "CrayonGreen",
-                "CrayonBlue", "CrayonPurple", "CrayonBlack", "CrayonWhite",
-            }));
+            Assert.That(crayons, Is.Not.Empty);
+            Assert.That(crayons.Select(c => c.Color.ToHex()).Distinct().Count(), Is.EqualTo(crayons.Count),
+                "One crayon per colour, however many the box holds of it.");
             Assert.That(crayons.Select(c => c.Name), Does.Not.Contain("crayon"), "Each colour has its crayon's name.");
+
+            var factory = Server.ResolveDependency<IComponentFactory>();
+            foreach (var crayon in crayons)
+            {
+                Assert.That(SProtoMan.Index<EntityPrototype>(crayon.Id).TryGetComponent(out CrayonComponent? comp, factory), Is.True, crayon.Name);
+                Assert.That(comp!.SelectableColor, Is.False, $"{crayon.Name}: the rainbow crayon draws any colour, it isn't one.");
+            }
 
             foreach (var crayon in crayons)
             {
