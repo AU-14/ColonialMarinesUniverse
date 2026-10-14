@@ -134,6 +134,9 @@
   - type: GunToggleableAutoFire
   - type: ToggleableMotionDetector
   - type: IFFToggle
+  # cmu edit start: more damage and less falloff with IFF off
+  - type: CMUIFFOffBonus
+  # cmu edit end
   - type: MotionDetector
     handToggleable: false
     deactivateOnDrop: false
