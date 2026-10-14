@@ -243,6 +243,9 @@ public sealed class CMUVehicleSeatSystem : EntitySystem
         if (_net.IsClient)
             return;
 
+        // A grid or map being deleted takes the riders down with it, as the cargo system does the crate.
+        var xform = Transform(ent);
+        var parentGone = TerminatingOrDeleted(xform.MapUid) || xform.GridUid is { } grid && TerminatingOrDeleted(grid);
         foreach (var seat in ent.Comp.SeatEntities)
         {
             if (!TryComp(seat, out StrapComponent? strap))
@@ -251,7 +254,8 @@ public sealed class CMUVehicleSeatSystem : EntitySystem
             foreach (var rider in strap.BuckledEntities.ToArray())
             {
                 _buckle.TryUnbuckle(rider, null, popup: false);
-                _transform.AttachToGridOrMap(rider);
+                if (!parentGone)
+                    _transform.AttachToGridOrMap(rider);
             }
         }
     }

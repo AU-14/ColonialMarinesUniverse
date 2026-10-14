@@ -9,9 +9,9 @@ namespace Content.Shared.CMU14.Vehicle.Open;
 /// <summary>
 /// A vehicle a spray painter can repaint in any colour. The art marks its paint pixels; clients run
 /// them through the paint shader on the listed layers, which keeps their shading. Null is the
-/// factory colour. The body outside, the tub inside, the seats and the wheels each take their own
-/// paint, sprayed where the painter is used on them. The wheels can also take a rim design, drawn
-/// over their rims in its colours, the wheels' paint as its base.
+/// factory colour. The body outside, the tub inside and the seats each take their own paint, sprayed
+/// where the painter is used on them. The fitted wheels take theirs, and a rim design, on the wheel
+/// set itself (<see cref="CMUVehicleWheelPaintComponent"/>), so it goes wherever the set goes.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CMUVehiclePaintComponent : Component
@@ -25,20 +25,11 @@ public sealed partial class CMUVehiclePaintComponent : Component
     [DataField, AutoNetworkedField]
     public Color? SeatColor;
 
-    [DataField, AutoNetworkedField]
-    public Color WheelColor = Robust.Shared.Maths.Color.FromHex("#C8CDD2");
-
     /// <summary>
-    /// The rim design on the wheels, or null for the plain rims they came with.
+    /// The item slot of the road wheels a painter used on the wheels sprays.
     /// </summary>
-    [DataField, AutoNetworkedField]
-    public ProtoId<CMURimDesignPrototype>? RimDesign;
-
-    /// <summary>
-    /// The rim design's accent, lip and cap colours.
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public List<Color> RimColors = new();
+    [DataField]
+    public string WheelSlot = "wheel-1";
 
     [DataField]
     public TimeSpan Delay = TimeSpan.FromSeconds(10);
@@ -104,13 +95,13 @@ public sealed partial class CMUVehiclePaintComponent : Component
     public List<string> PlainOverlayLayers = new();
 
     /// <summary>
-    /// Layer keys painted in the wheel colour.
+    /// Layer keys painted in a wheel set's colour, with the item slot of the set each one draws.
     /// </summary>
     [DataField]
-    public List<string> WheelLayers = new();
+    public Dictionary<string, string> WheelLayers = new();
 
     [DataField]
-    public List<string> WheelOverlayLayers = new();
+    public Dictionary<string, string> WheelOverlayLayers = new();
 
     /// <summary>
     /// Rim design layers on the vehicle's sprite and on its overlay's, each drawn over the layer it

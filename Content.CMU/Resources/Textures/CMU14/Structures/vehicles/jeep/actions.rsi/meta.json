@@ -27,6 +27,12 @@
         },
         {
             "name": "signals_auto_on"
+        },
+        {
+            "name": "engine_off"
+        },
+        {
+            "name": "engine_on"
         }
     ]
 }

@@ -8,12 +8,14 @@ using Robust.Shared.Timing;
 namespace Content.Server.CMU14.Vehicle.Open;
 
 /// <summary>
-/// Runs an open vehicle's engine from its driver, fuel, engine and speed: plays the start, rev and
-/// stall, and tells clients when to play the running loops. See <see cref="CMUVehicleEngineSoundComponent"/>.
+/// Runs an open vehicle's engine from its switch, key, fuel, engine and speed: plays the start, rev,
+/// stall and switching off, and tells clients when to play the running loops. A new driver at the
+/// wheel switches it on; it runs on without one. See <see cref="CMUVehicleEngineSoundComponent"/>.
 /// </summary>
 public sealed class CMUVehicleEngineSoundSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private CMUVehicleEngineSwitchSystem _engine = default!;
     [Dependency] private CMUVehicleFuelSystem _fuel = default!;
     [Dependency] private IGameTiming _timing = default!;
 
@@ -23,11 +25,22 @@ public sealed class CMUVehicleEngineSoundSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUVehicleEngineSoundComponent, VehicleComponent, GridVehicleMoverComponent>();
         while (query.MoveNext(out var uid, out var engine, out var vehicle, out var mover))
         {
-            var canRun = vehicle.Operator != null && CanRun((uid, vehicle));
+            if (vehicle.Operator != engine.Driver)
+            {
+                engine.Driver = vehicle.Operator;
+                if (vehicle.Operator != null)
+                    _engine.SetSwitched((uid, engine), true);
+            }
+
+            var canRun = engine.Switched && CanRun((uid, vehicle));
             if (!engine.On)
             {
+                // Switched on without a key, fuel or a working engine, it doesn't catch.
                 if (!canRun)
+                {
+                    _engine.SetSwitched((uid, engine), false);
                     continue;
+                }
 
                 engine.On = true;
                 engine.IdleAt = now + engine.IdleDelay;
@@ -38,15 +51,14 @@ public sealed class CMUVehicleEngineSoundSystem : EntitySystem
 
             if (!canRun)
             {
-                // A driver getting out, or anything else that stops the drive, switches it off; a dry
-                // tank or a dead engine under the driver stalls it.
+                // Switched off or the key pulled, it winds down; a dry tank or a dead engine stalls it.
+                var switchedOff = !engine.Switched;
                 engine.On = false;
                 engine.IdleAt = null;
                 engine.StartStream = _audio.Stop(engine.StartStream);
                 SetRunning((uid, engine), false, engine.Rough);
-                if (vehicle.Operator != null && IsStalled(uid))
-                    _audio.PlayPvs(engine.StallSound, uid);
-
+                _engine.SetSwitched((uid, engine), false);
+                _audio.PlayPvs(!switchedOff && IsStalled(uid) ? engine.StallSound : engine.OffSound, uid);
                 continue;
             }
 

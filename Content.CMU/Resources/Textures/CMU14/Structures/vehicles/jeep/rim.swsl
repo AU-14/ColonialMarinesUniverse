@@ -1,29 +1,150 @@
 // Draws a rim design over a vehicle's rims. The layer's texture is a rim map (rims_<state> in the
 // vehicle's RSI, written by jeep_pixel_art.py beside each intact wheel and spare state): where a rim
 // shows, red and green give the pixel's place on the rim's face and blue the wheel frame. The design
-// comes as a small texture of its colours, one 11 by 11 rim for each of the four frames side by side,
-// baked by the client (CMUVehicleRimVisualSystem) from the design and the colours sprayed on. Lit like
-// the sprite, and dirtied with the wheels. The engine samples textures in linear light; the map's
-// values are spaced far enough apart (RIM_STEP) to read back the same once turned back to sRGB.
+// is worked out here from its numbers, the same way CMURimDesigns does for the painter's previews, so
+// nothing but plain values is passed in. Lit like the sprite, and dirtied with the wheels. The engine
+// samples textures and passes colours in linear light; the map's values are spaced far enough apart
+// (RIM_STEP) to read back the same once turned back to sRGB, and the colours are shaded in sRGB.
 
-uniform sampler2D design;
-uniform highp float dirt;   // 0 clean to 1 as dirty as it gets
+uniform highp float pattern;    // CMURimPattern: 0 dish, 1 spokes, 2 holes, 3 slots, 4 mesh, 5 disc
+uniform highp float count;
+uniform highp float width;
+uniform highp float twist;
+uniform highp float holeRadius;
+uniform highp float holeSize;
+uniform highp float cap;
+uniform highp float lip;
+uniform highp float nuts;
+uniform highp float nutRadius;
+uniform highp float lipBolts;
+uniform highp vec3 regions;     // 1 where the design colours its accent, lip and cap
+uniform highp vec4 baseColor;
+uniform highp vec4 accentColor;
+uniform highp vec4 lipColor;
+uniform highp vec4 capColor;
+uniform highp float dirt;       // 0 clean to 1 as dirty as it gets
+
+const highp float TAU = 6.28318530718;
+const highp float FRAMES = 4.0;
+const highp float EDGE = 5.6;
+
+// Regions: 0 base, 1 accent, 2 lip, 3 cap. Tones: 0 plain, 1 shadow, 2 highlight, 3 hole.
 
 highp float level(highp float channel, highp float first, highp float step) {
     return floor((channel * 255.0 - first) / step + 0.5);
 }
 
+// Rounds halves to even, as C#'s MathF.Round does.
+highp float roundHalfEven(highp float x) {
+    highp float r = floor(x + 0.5);
+    if (abs(fract(x) - 0.5) < 0.0001 && mod(r, 2.0) > 0.5)
+        r -= 1.0;
+    return r;
+}
+
+highp vec2 part(highp float region, highp float tone) {
+    highp float has = region == 1.0 ? regions.x : region == 2.0 ? regions.y : region == 3.0 ? regions.z : 1.0;
+    if (has > 0.5)
+        return vec2(region, tone);
+    if (region == 2.0)
+        return vec2(0.0, 1.0);
+    if (region == 3.0)
+        return vec2(0.0, tone == 1.0 ? 1.0 : 2.0);
+    return vec2(0.0, tone);
+}
+
+highp float centred(highp float angle, highp float slice) {
+    highp float s = angle / slice - floor(angle / slice);
+    return min(s, 1.0 - s);
+}
+
+bool onRing(highp float u, highp float v, highp float n, highp float radius, highp float turn) {
+    for (int i = 0; i < 32; i++) {
+        if (float(i) >= n)
+            break;
+        highp float a = float(i) * TAU / n - turn;
+        if (u == roundHalfEven(radius * cos(a)) && v == roundHalfEven(radius * sin(a)))
+            return true;
+    }
+    return false;
+}
+
+highp vec2 sampleRim(highp float u, highp float v, highp float frame) {
+    highp float n = max(1.0, count);
+    highp float dist = sqrt(u * u + v * v);
+    // A feature at angle a shows where angle + turn is a: the pattern turns the tyre's way.
+    highp float turn = frame * TAU / (FRAMES * n);
+
+    if (dist > lip) {
+        if (lipBolts > 0.0 && onRing(u, v, lipBolts, lip + 0.4, turn))
+            return part(3.0, 2.0);
+        return part(2.0, dist > EDGE - 0.3 ? 1.0 : 0.0);
+    }
+
+    if (dist < cap)
+        return part(3.0, dist < 0.5 ? 2.0 : 0.0);
+
+    if (nuts > 0.0 && onRing(u, v, nuts, nutRadius, turn))
+        return part(3.0, 1.0);
+
+    highp float angle = atan(v, u) + turn;
+    highp float slice = TAU / n;
+    highp float across = clamp((dist - cap) / max(0.1, lip - cap), 0.0, 1.0);
+    if (pattern == 1.0)
+        return centred(angle + twist * slice * across, slice) < width / 2.0 ? part(1.0, 0.0) : vec2(0.0, 3.0);
+
+    if (pattern == 4.0) {
+        highp float t = twist * slice * across;
+        bool spoke = centred(angle + t, slice) < width / 2.0 || centred(angle - t + slice / 2.0, slice) < width / 2.0;
+        return spoke ? part(1.0, 0.0) : vec2(0.0, 3.0);
+    }
+
+    if (pattern == 2.0) {
+        for (int i = 0; i < 32; i++) {
+            if (float(i) >= n)
+                break;
+            highp float a = float(i) * slice - turn;
+            highp vec2 hole = holeRadius * vec2(cos(a), sin(a));
+            if (distance(vec2(u, v), hole) < holeSize)
+                return vec2(0.0, 3.0);
+        }
+        return vec2(0.0, 0.0);
+    }
+
+    if (pattern == 3.0)
+        return abs(dist - holeRadius) < holeSize && centred(angle + slice / 2.0, slice) < width / 2.0 ? vec2(0.0, 3.0) : vec2(0.0, 0.0);
+
+    if (pattern == 5.0)
+        return part(1.0, dist > lip - 0.8 ? 1.0 : 0.0);
+
+    return vec2(0.0, 0.0);
+}
+
+highp vec3 shade(highp vec2 rt) {
+    highp vec4 linear = rt.x == 1.0 ? accentColor : rt.x == 2.0 ? lipColor : rt.x == 3.0 ? capColor : baseColor;
+    highp vec3 colour = zToSrgb(linear).rgb;
+    if (rt.y == 1.0)
+        return colour * 0.62;
+    if (rt.y == 2.0)
+        return mix(colour, vec3(1.0), 0.35);
+    // An open gap shows the dark drum behind, with a little of the rim's colour.
+    if (rt.y == 3.0)
+        return vec3(0.07) + colour * 0.1;
+    return colour;
+}
+
 void fragment() {
     highp vec4 map = zTexture(UV);
     highp vec3 raw = zToSrgb(map).rgb;
-    highp float u = level(raw.r, 4.0, 24.0);
-    highp float v = level(raw.g, 4.0, 24.0);
+    highp float u = level(raw.r, 4.0, 24.0) - 5.0;
+    highp float v = level(raw.g, 4.0, 24.0) - 5.0;
     highp float frame = level(raw.b, 16.0, 64.0);
-    highp vec2 cell = vec2(frame * 11.0 + u + 0.5, 10.0 - v + 0.5) / vec2(44.0, 11.0);
-    highp vec4 colour = zTextureSpec(design, cell);
+    highp vec3 colour = zFromSrgb(vec4(shade(sampleRim(u, v, frame)), 1.0)).rgb;
 
     // Wheels are the first thing on a vehicle to get dirty.
     highp float amount = clamp((dirt * 0.95 - 0.1) / 0.25, 0.0, 1.0) * 0.55;
     highp vec3 grime = zFromSrgb(vec4(0.33, 0.27, 0.19, 1.0)).rgb;
-    COLOR = vec4(mix(colour.rgb, grime, amount), colour.a * map.a);
+    // The map's corners lie past the rim's edge; the tyre's own art shows there.
+    highp float onRim = sqrt(u * u + v * v) <= EDGE ? 1.0 : 0.0;
+    COLOR = vec4(mix(colour, grime, amount), map.a * onRim);
 }

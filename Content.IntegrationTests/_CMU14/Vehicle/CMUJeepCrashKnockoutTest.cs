@@ -115,12 +115,16 @@ public sealed class CMUJeepCrashKnockoutTest : GameTest
             knockout.MinChance = 0f;
             Crash(jeep, true, 0.7f);
             Assert.That(SEntMan.HasComponent<RMCUnconsciousComponent>(driver), Is.True, "A hard crash blacks the driver out.");
+            Assert.That(SEntMan.HasComponent<CMUBlackoutComponent>(driver), Is.True, "Their view goes dark.");
             Assert.That(knockout.Horn, Is.Null, "A blackout doesn't hold the horn down.");
         });
 
         await RunSeconds(3f);
         await Server.WaitAssertion(() =>
-            Assert.That(SEntMan.HasComponent<RMCUnconsciousComponent>(driver), Is.False, "Only for a moment."));
+        {
+            Assert.That(SEntMan.HasComponent<RMCUnconsciousComponent>(driver), Is.False, "Only for a moment.");
+            Assert.That(SEntMan.HasComponent<CMUBlackoutComponent>(driver), Is.False, "And they can see again.");
+        });
     }
 
     [Test]

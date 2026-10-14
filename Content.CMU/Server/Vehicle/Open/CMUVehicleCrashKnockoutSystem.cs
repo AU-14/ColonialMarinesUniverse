@@ -11,7 +11,8 @@ namespace Content.Server.CMU14.Vehicle.Open;
 
 /// <summary>
 /// Blacks the riders of a vehicle out on a hard head on crash and knocks some out for longer, each by
-/// their own roll, and blares the horn while its driver is out on the wheel.
+/// their own roll, their view going dark while they are out, and blares the horn while its driver is
+/// out on the wheel.
 /// </summary>
 public sealed class CMUVehicleCrashKnockoutSystem : EntitySystem
 {
@@ -46,10 +47,11 @@ public sealed class CMUVehicleCrashKnockoutSystem : EntitySystem
 
     private void OnCrashed(Entity<CMUVehicleCrashKnockoutComponent> ent, ref CMUVehicleCrashedEvent args)
     {
-        var chance = Chance(ent.Comp, args.Frontal, args.Speed);
-        if (chance <= 0f || !TryComp(ent, out CMUVehicleSeatsComponent? seats))
+        // Even with no chance of staying out, a hard enough crash blacks everyone out for a moment.
+        if (!args.Frontal || args.Speed < ent.Comp.MinSpeed || !TryComp(ent, out CMUVehicleSeatsComponent? seats))
             return;
 
+        var chance = Chance(ent.Comp, args.Frontal, args.Speed);
         foreach (var seat in seats.SeatEntities)
         {
             if (!TryComp(seat, out StrapComponent? strap) || strap.BuckledEntities.Count == 0)
@@ -68,6 +70,8 @@ public sealed class CMUVehicleCrashKnockoutSystem : EntitySystem
                 if (!_sizeStun.TryKnockOut(rider, duration, false))
                     continue;
 
+                Blackout(rider, duration);
+
                 if (!knockedOut)
                 {
                     _popup.PopupEntity(Loc.GetString("cmu-vehicle-crash-blackout"), rider, rider, PopupType.MediumCaution);
@@ -79,6 +83,14 @@ public sealed class CMUVehicleCrashKnockoutSystem : EntitySystem
                     BlareHorn(ent, rider, duration);
             }
         }
+    }
+
+    private void Blackout(EntityUid rider, TimeSpan duration)
+    {
+        var blackout = EnsureComp<CMUBlackoutComponent>(rider);
+        blackout.Start = _timing.CurTime;
+        blackout.End = _timing.CurTime + duration;
+        Dirty(rider, blackout);
     }
 
     private void BlareHorn(Entity<CMUVehicleCrashKnockoutComponent> ent, EntityUid driver, TimeSpan duration)
@@ -99,6 +111,13 @@ public sealed class CMUVehicleCrashKnockoutSystem : EntitySystem
     public override void Update(float frameTime)
     {
         var now = _timing.CurTime;
+        var blackouts = EntityQueryEnumerator<CMUBlackoutComponent>();
+        while (blackouts.MoveNext(out var uid, out var blackout))
+        {
+            if (now >= blackout.End)
+                RemCompDeferred<CMUBlackoutComponent>(uid);
+        }
+
         var query = EntityQueryEnumerator<CMUVehicleCrashKnockoutComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {

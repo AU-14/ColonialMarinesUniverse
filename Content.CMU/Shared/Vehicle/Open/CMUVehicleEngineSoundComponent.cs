@@ -4,10 +4,11 @@ using Robust.Shared.GameStates;
 namespace Content.Shared.CMU14.Vehicle.Open;
 
 /// <summary>
-/// An open vehicle's engine: it starts when someone takes the wheel and can drive, revs as it
-/// pulls away, runs rough while the engine is badly damaged, and sputters out when the tank runs
-/// dry or the engine dies under the driver. While it runs, each client plays an idle loop and a
-/// sped-up driving loop around it and fades between them with the vehicle's speed.
+/// An open vehicle's engine and its switch: it starts when someone takes the wheel or the driver
+/// switches it on, keeps running when the driver gets out, and stops when the driver switches it off
+/// or pulls the key. It revs as it pulls away, runs rough while the engine is badly damaged, and
+/// sputters out when the tank runs dry or the engine dies. While it runs, each client plays an idle
+/// loop and a sped up driving loop around it and fades between them with the vehicle's speed.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CMUVehicleEngineSoundComponent : Component
@@ -37,6 +38,12 @@ public sealed partial class CMUVehicleEngineSoundComponent : Component
     public SoundSpecifier? StallSound;
 
     /// <summary>
+    /// The engine switched off, by the driver or by pulling the key.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier? OffSound;
+
+    /// <summary>
     /// From the start sound to the loops, which take over while the start fades out.
     /// </summary>
     [DataField]
@@ -62,6 +69,18 @@ public sealed partial class CMUVehicleEngineSoundComponent : Component
 
     [ViewVariables]
     public bool On;
+
+    /// <summary>
+    /// The engine switch. Off, the vehicle won't drive.
+    /// </summary>
+    [ViewVariables, AutoNetworkedField]
+    public bool Switched;
+
+    /// <summary>
+    /// The driver last seen at the wheel; a new one switches the engine on.
+    /// </summary>
+    [ViewVariables]
+    public EntityUid? Driver;
 
     public TimeSpan? IdleAt;
 

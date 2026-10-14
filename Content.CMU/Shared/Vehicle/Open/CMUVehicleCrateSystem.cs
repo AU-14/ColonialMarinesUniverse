@@ -76,7 +76,8 @@ public sealed class CMUVehicleCrateSystem : EntitySystem
             return;
 
         args.Handled = true;
-        if (_net.IsClient)
+        // Two players finishing in the same tick: the first one opened it.
+        if (_net.IsClient || TerminatingOrDeleted(ent) || EntityManager.IsQueuedForDeletion(ent))
             return;
 
         Open(ent);

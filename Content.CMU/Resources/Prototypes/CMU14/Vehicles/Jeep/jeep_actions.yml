@@ -74,6 +74,27 @@
       state: key
       map: ["enum.ActionVisuals.Icon"]
 
+- type: entity
+  id: CMUActionJeepEngine
+  parent: BaseAction
+  name: Engine
+  description: Switch the engine on or off. It keeps running when you get out until you switch it off.
+  components:
+  - type: InstantAction
+    event: !type:CMUVehicleEngineActionEvent
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Structures/vehicles/jeep/actions.rsi
+      state: engine_off
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: CMU14/Structures/vehicles/jeep/actions.rsi
+      state: engine_on
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
+
 # One switch for the headlights: off, low beam, high beam, off. The icon shows where it is; there
 # is no toggled icon layer, which would hide it.
 - type: entity

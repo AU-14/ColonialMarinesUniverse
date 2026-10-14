@@ -96,7 +96,7 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
     public async Task LampComesOffWithAScrewdriverAndItsBeamGoesDark()
     {
         var (jeep, user) = await SpawnJeep("CMUVehicleJeepCargo");
-        const string slot = "jeep-headlight-left";
+        const string slot = "vehicle-headlight-left";
         EntityUid lamp = default;
 
         // An empty hand leaves a lamp alone; a screwdriver takes it off.
@@ -153,6 +153,10 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
             var slots = SEntMan.System<ItemSlotsSystem>();
             var ignition = SEntMan.GetComponent<CMUVehicleIgnitionComponent>(jeep);
             Assert.That(ignition.KeySlot.HasItem, Is.True, "A jeep comes with its key in.");
+            Assert.That(CanRun(jeep), Is.False, "Not until its engine is switched on.");
+
+            var engine = SEntMan.GetComponent<CMUVehicleEngineSoundComponent>(jeep);
+            SEntMan.System<CMUVehicleEngineSwitchSystem>().SetSwitched((jeep, engine), true);
             Assert.That(CanRun(jeep), Is.True);
 
             Assert.That(slots.TryEject(jeep, ignition.KeySlot, null, out var key), Is.True);

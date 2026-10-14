@@ -145,6 +145,8 @@
     falling: true
 
 # A jeep crate's parachute: the deployed parachute made bigger and hung higher, drawn over the crate.
+# Its layer offsets are scaled with it: the cables end on the crate's top, the canopy over them as on
+# the deployed parachute.
 - type: entity
   parent: RMCParachuteDeployed
   id: CMUParachuteJeepCrate
@@ -157,9 +159,9 @@
     scale: 1.5, 1.5
     layers:
     - state: cables
-      offset: 0.0, 1.6
+      offset: 0.0, 1.5
     - state: chute_animated
-      offset: 0.0, 2.0
+      offset: 0.0, 2.1
 
 # LAG-14 launch-bay rounds: a jeep crate rigged with a parachute, launched at a laser or flare.
 - type: entity

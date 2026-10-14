@@ -284,7 +284,15 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
         }
 
         var state = wheels.State.Name?.Replace("wheels_", "wheels_overlay_");
-        if (state != null && _sprite.LayerGetRsiState(ent.AsNullable(), index) != state)
+        if (state == null ||
+            ent.Comp[index] is not SpriteComponent.Layer { ActualRsi: { } rsi } ||
+            !rsi.TryGetState(state, out _))
+        {
+            _sprite.LayerSetVisible(ent.AsNullable(), index, false);
+            return;
+        }
+
+        if (_sprite.LayerGetRsiState(ent.AsNullable(), index) != state)
             _sprite.LayerSetRsiState(ent.AsNullable(), index, state);
 
         _sprite.LayerSetVisible(ent.AsNullable(), index, wheels.Visible);

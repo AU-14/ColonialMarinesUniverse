@@ -467,6 +467,14 @@ public sealed class CMUOpenVehicleVisualSystem : EntitySystem
         if (!_sprite.LayerMapTryGet(ent.AsNullable(), key, out var index, false))
             return;
 
+        // A part drawn without an open look keeps its shut one; one missing the state altogether stays as it is.
+        if (ent.Comp[index] is SpriteComponent.Layer { ActualRsi: { } rsi } && !rsi.TryGetState(state, out _))
+        {
+            state = state.Replace("_open", string.Empty);
+            if (!rsi.TryGetState(state, out _))
+                return;
+        }
+
         if (_sprite.LayerGetRsiState(ent.AsNullable(), index) != state)
             _sprite.LayerSetRsiState(ent.AsNullable(), index, state);
 

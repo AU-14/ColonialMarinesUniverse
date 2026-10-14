@@ -95,8 +95,19 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
 
     private void OnShutdown(Entity<CMUVehicleCrayonComponent> ent, ref ComponentShutdown args)
     {
-        if (_paints.Remove(ent, out var paint))
-            paint.Dispose();
+        if (!_paints.Remove(ent, out var paint))
+            return;
+
+        if (!TerminatingOrDeleted(ent))
+        {
+            if (TryComp(ent, out SpriteComponent? sprite))
+                ShowLayer((ent, sprite), "fuel_door", null, Angle.Zero);
+
+            if (TryComp(ent, out CMUVehicleOverlayComponent? over) && TryComp(over.Overlay, out SpriteComponent? overSprite))
+                ShowLayer((over.Overlay.Value, overSprite), "hood", null, Angle.Zero);
+        }
+
+        paint.Dispose();
     }
 
     public override void FrameUpdate(float frameTime)
@@ -227,7 +238,18 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
         for (var i = drawings.Count - 1; i >= 0; i--)
         {
             var drawing = drawings[i];
-            if (DecalPixel(drawing, voxel, front, direction) is not { } uv || GetDecal(drawing.Decal) is not { } decal)
+            if (DecalPixel(drawing, voxel, front, direction) is not { } uv)
+                continue;
+
+            if (drawing.Pixels != null)
+            {
+                if (ImagePixel(drawing, uv) is not { } own)
+                    continue;
+
+                return new Rgba32(own.R, own.G, own.B, own.A * opacity);
+            }
+
+            if (GetDecal(drawing.Decal) is not { } decal)
                 continue;
 
             var texel = Pixel(decal, Math.Min(uv.X, decal.Width - 1), Math.Min(uv.Y, decal.Height - 1));
@@ -243,6 +265,16 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
         }
 
         return null;
+    }
+
+    private static Color? ImagePixel(CMUCrayonDrawing drawing, Vector2i uv)
+    {
+        var index = uv.Y * drawing.Size + uv.X;
+        if (drawing.Pixels is not { } pixels || drawing.Palette is not { } palette || index >= pixels.Length)
+            return null;
+
+        var pixel = pixels[index];
+        return pixel == 0 || pixel > palette.Count ? null : palette[pixel - 1];
     }
 
     private Image<Rgba32>? GetDecal(string id)

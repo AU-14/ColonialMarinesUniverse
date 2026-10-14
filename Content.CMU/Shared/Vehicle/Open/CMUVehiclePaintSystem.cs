@@ -1,5 +1,7 @@
+using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Charges.Systems;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
@@ -16,7 +18,8 @@ namespace Content.Shared.CMU14.Vehicle.Open;
 /// Respraying a vehicle with a vehicle spray painter: the colour picked in its window becomes the
 /// paint of the part it is used on (the body outside, the tub inside, the seats or the wheels) after a
 /// do-after, for some of its charges. Switched to its rim designs, the painter sprays the design picked
-/// on the wheels, its base colour as their paint; the plain factory design takes a design off.
+/// on the wheels, its base colour as their paint; the plain factory design takes a design off. The
+/// wheels' paint and design go on the fitted road wheel set, never the spare.
 /// </summary>
 public sealed class CMUVehiclePaintSystem : EntitySystem
 {
@@ -25,6 +28,7 @@ public sealed class CMUVehiclePaintSystem : EntitySystem
     [Dependency] private SharedChargesSystem _charges = default!;
     [Dependency] private SharedCMUVehicleCrayonSystem _crayon = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -34,12 +38,37 @@ public sealed class CMUVehiclePaintSystem : EntitySystem
         SubscribeLocalEvent<CMUVehiclePaintComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<CMUVehiclePaintComponent, CMUVehiclePaintDoAfterEvent>(OnPaint);
         SubscribeLocalEvent<CMUVehiclePaintComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<CMUVehicleWheelPaintComponent, ExaminedEvent>(OnWheelsExamined);
     }
 
     private void OnExamined(Entity<CMUVehiclePaintComponent> ent, ref ExaminedEvent args)
     {
-        if (ent.Comp.RimDesign is { } id && _prototypes.TryIndex(id, out var design))
-            args.PushMarkup(Loc.GetString("cmu-vehicle-paint-rims-examine", ("design", Loc.GetString(design.Name))));
+        if (TryGetWheelPaint(ent, ent.Comp.WheelSlot, out var wheels) && RimName(wheels.Value.Comp) is { } name)
+            args.PushMarkup(Loc.GetString("cmu-vehicle-paint-rims-examine", ("design", name)));
+    }
+
+    private void OnWheelsExamined(Entity<CMUVehicleWheelPaintComponent> ent, ref ExaminedEvent args)
+    {
+        if (RimName(ent.Comp) is { } name)
+            args.PushMarkup(Loc.GetString("cmu-vehicle-wheel-rims-examine", ("design", name)));
+    }
+
+    private string? RimName(CMUVehicleWheelPaintComponent wheels)
+    {
+        return wheels.RimDesign is { } id && _prototypes.TryIndex(id, out var design) ? Loc.GetString(design.Name) : null;
+    }
+
+    /// <summary>
+    /// The paint of the wheel set fitted in one of a vehicle's slots.
+    /// </summary>
+    public bool TryGetWheelPaint(EntityUid vehicle, string slot, [NotNullWhen(true)] out Entity<CMUVehicleWheelPaintComponent>? wheels)
+    {
+        wheels = null;
+        if (_itemSlots.GetItemOrNull(vehicle, slot) is not { } item || !TryComp(item, out CMUVehicleWheelPaintComponent? paint))
+            return false;
+
+        wheels = (item, paint);
+        return true;
     }
 
     private void OnInteractUsing(Entity<CMUVehiclePaintComponent> ent, ref InteractUsingEvent args)
@@ -108,6 +137,12 @@ public sealed class CMUVehiclePaintSystem : EntitySystem
             return false;
         }
 
+        if (zone == CMUVehiclePaintZone.Wheels && _itemSlots.GetItemOrNull(ent.Owner, ent.Comp.WheelSlot) == null)
+        {
+            _popup.PopupClient(Loc.GetString("cmu-vehicle-paint-no-wheels", ("vehicle", ent.Owner)), ent, user);
+            return false;
+        }
+
         if (!_charges.HasCharges(used, Cost(ent.Comp, zone, design)))
         {
             _popup.PopupClient(Loc.GetString("cmu-vehicle-paint-empty"), ent, user);
@@ -156,6 +191,10 @@ public sealed class CMUVehiclePaintSystem : EntitySystem
             return;
         }
 
+        EntityUid? wheelSet = null;
+        if (args.Zone == CMUVehiclePaintZone.Wheels && (wheelSet = _itemSlots.GetItemOrNull(ent.Owner, ent.Comp.WheelSlot)) == null)
+            return;
+
         if (!_charges.TryUseCharges(used, Cost(ent.Comp, args.Zone, design != null)))
         {
             _popup.PopupClient(Loc.GetString("cmu-vehicle-paint-empty"), ent, args.User);
@@ -165,10 +204,14 @@ public sealed class CMUVehiclePaintSystem : EntitySystem
         switch (args.Zone)
         {
             case CMUVehiclePaintZone.Wheels when design != null:
-                ent.Comp.WheelColor = args.Colors[0];
-                ent.Comp.RimDesign = design.Factory ? null : design.ID;
-                ent.Comp.RimColors = design.Factory ? new List<Color>() : args.Colors.GetRange(1, 3);
+            {
+                var wheels = EnsureComp<CMUVehicleWheelPaintComponent>(wheelSet!.Value);
+                wheels.Color = args.Colors[0];
+                wheels.RimDesign = design.Factory ? null : design.ID;
+                wheels.RimColors = design.Factory ? new List<Color>() : args.Colors.GetRange(1, 3);
+                Dirty(wheelSet.Value, wheels);
                 break;
+            }
             case CMUVehiclePaintZone.Interior:
                 ent.Comp.InteriorColor = args.Color;
                 break;
@@ -176,8 +219,12 @@ public sealed class CMUVehiclePaintSystem : EntitySystem
                 ent.Comp.SeatColor = args.Color;
                 break;
             case CMUVehiclePaintZone.Wheels:
-                ent.Comp.WheelColor = args.Color;
+            {
+                var wheels = EnsureComp<CMUVehicleWheelPaintComponent>(wheelSet!.Value);
+                wheels.Color = args.Color;
+                Dirty(wheelSet.Value, wheels);
                 break;
+            }
             default:
                 ent.Comp.Color = args.Color;
                 break;

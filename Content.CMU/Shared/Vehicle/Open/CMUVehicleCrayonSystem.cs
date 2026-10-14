@@ -1,6 +1,8 @@
+using System.Linq;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Charges.Systems;
+using Content.Shared.CMU14.Crayon;
 using Content.Shared.Crayon;
 using Content.Shared.Database;
 using Content.Shared.Interaction;
@@ -73,6 +75,12 @@ public abstract class SharedCMUVehicleCrayonSystem : EntitySystem
             return;
         }
 
+        // Custom symbols, where the crayon has them, draw instead of the decal and pay for themselves.
+        var image = new CMUCrayonDrawImageEvent(args.User);
+        RaiseLocalEvent(args.Used, ref image);
+        if (image.Cancelled)
+            return;
+
         var axes = Axes[direction];
         var drawing = new CMUCrayonDrawing
         {
@@ -84,13 +92,32 @@ public abstract class SharedCMUVehicleCrayonSystem : EntitySystem
             Down = front ? FaceDown : axes.TopDown,
         };
 
+        var custom = image.Pixels is { } pixels && image.Palette != null && image.Size > 0 && pixels.Length == image.Size * image.Size;
+        if (custom)
+        {
+            drawing.Decal = string.Empty;
+            drawing.Size = image.Size;
+            drawing.Pixels = image.Pixels;
+            drawing.Palette = image.Palette;
+        }
+
         ent.Comp.Drawings.Add(drawing);
         if (ent.Comp.Drawings.Count > ent.Comp.MaxDrawings)
             ent.Comp.Drawings.RemoveAt(0);
 
+        if (custom && ent.Comp.Drawings.Count(d => d.Pixels != null) > ent.Comp.MaxImages)
+            ent.Comp.Drawings.RemoveAt(ent.Comp.Drawings.FindIndex(d => d.Pixels != null));
+
         Dirty(ent);
-        _charges.TryUseCharge(args.Used);
         _audio.PlayPvs(crayon.UseSound, ent);
+        if (custom)
+        {
+            _adminLog.Add(LogType.CrayonDraw, LogImpact.Low,
+                $"{ToPrettyString(args.User):user} drew a custom symbol on {ToPrettyString(ent):entity}");
+            return;
+        }
+
+        _charges.TryUseCharge(args.Used);
         _adminLog.Add(LogType.CrayonDraw, LogImpact.Low,
             $"{ToPrettyString(args.User):user} drew a {crayon.Color:color} {crayon.SelectedState} on {ToPrettyString(ent):entity}");
 
@@ -192,8 +219,9 @@ public abstract class SharedCMUVehicleCrayonSystem : EntitySystem
         if (MathF.Abs(depth) > 2)
             return null;
 
-        var u = 16 + (int) MathF.Round(Vector3.Dot(d, drawing.Right));
-        var w = 16 + (int) MathF.Round(Vector3.Dot(d, drawing.Down));
-        return u is >= 0 and < 32 && w is >= 0 and < 32 ? new Vector2i(u, w) : null;
+        var size = drawing.Size;
+        var u = size / 2 + (int) MathF.Round(Vector3.Dot(d, drawing.Right));
+        var w = size / 2 + (int) MathF.Round(Vector3.Dot(d, drawing.Down));
+        return u >= 0 && u < size && w >= 0 && w < size ? new Vector2i(u, w) : null;
     }
 }

@@ -183,6 +183,7 @@ public sealed class CMUVehicleGrimeSystem : EntitySystem
         if (crayon.Blood.Count > crayon.MaxBlood)
             crayon.Blood.RemoveAt(0);
 
-        Dirty(vehicle, crayon);
+        // Only the blood: the drawings can carry whole images.
+        DirtyField(vehicle, crayon, nameof(CMUVehicleCrayonComponent.Blood));
     }
 }

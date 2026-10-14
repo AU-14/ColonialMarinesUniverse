@@ -104,6 +104,8 @@
   - type: VehicleWheelItem
   - type: CMUVehicleTyre
     tyre: OffRoad
+  # Its paint and rim design, which go wherever the set goes.
+  - type: CMUVehicleWheelPaint
   - type: Tag
     tags:
     - CMUJeepWheel
@@ -480,6 +482,10 @@
       path: /Audio/CMU14/Jeep/jeep_engine_sputter.wav
       params:
         maxDistance: 12
+    offSound:
+      path: /Audio/CMU14/Jeep/jeep_engine_off.wav
+      params:
+        maxDistance: 12
   - type: CMUVehicleCrashKnockout
     hornSound:
       path: /Audio/CMU14/Jeep/jeep_horn_long.wav
@@ -769,15 +775,20 @@
       west: -1.34,-0.81,1.25,0.78
   - type: CMUVehicleCrayon
     map: /Textures/CMU14/Structures/vehicles/jeep/crayon_maps/jeep.png
-  # A spray painter resprays the body, or the wheels on their own, in its chosen colour; see paint.swsl.
-  # Switched to its rim designs it sprays one on the wheels, drawn over the rims; see rim.swsl.
+  # A spray painter resprays the body, or the fitted wheel set on its own, in its chosen colour; see
+  # paint.swsl. Switched to its rim designs it sprays one on the wheel set, drawn over the rims; see
+  # rim.swsl. The spare keeps its own paint and rims.
   - type: CMUVehiclePaint
     layers: [ base, front_dent, damaged_frame, hood, door_driver, door_passenger, tailgate, fuel_door, headlight_left, headlight_right, turn_signal_left, turn_signal_right, taillight_left, taillight_right, extinguisher ]
     overlayLayers: [ body, front_dent, damaged_frame, door_driver, door_passenger, tailgate, taillight_left, taillight_right, hood, hood_raised, fuel_door, headlight_left, headlight_right, turn_signal_left, turn_signal_right, extinguisher ]
     plainLayers: [ engine, windshield ]
     plainOverlayLayers: [ windshield ]
-    wheelLayers: [ rmc-wheels, spare ]
-    wheelOverlayLayers: [ wheels, spare ]
+    wheelLayers:
+      rmc-wheels: wheel-1
+      spare: jeep-spare
+    wheelOverlayLayers:
+      wheels: wheel-1
+      spare: jeep-spare
     rimLayers:
       rims: rmc-wheels
       spare_rims: spare

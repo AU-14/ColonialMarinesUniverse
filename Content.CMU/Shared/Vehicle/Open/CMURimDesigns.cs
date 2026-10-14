@@ -4,8 +4,8 @@ namespace Content.Shared.CMU14.Vehicle.Open;
 /// How a rim design looks, pixel by pixel. A rim is 11 pixels across, centred on its hub pixel: u
 /// runs across it and v up it, from -5 to 5. Its four frames turn it a quarter of one repeat of its
 /// pattern each, the way the wheels' frames turn the tyre, so a moving wheel's loop is seamless. The
-/// client bakes a vehicle's design into a small texture of colours from this for its shader, and the
-/// painter draws its previews from it.
+/// painter draws its previews from this; the rim shader (rim.swsl) works the same out on the GPU, so
+/// the two must change together.
 /// </summary>
 public static class CMURimDesigns
 {

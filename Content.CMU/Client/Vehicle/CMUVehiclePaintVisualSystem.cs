@@ -9,13 +9,14 @@ namespace Content.Client.CMU14.Vehicle;
 
 /// <summary>
 /// Shows a vehicle's paint and dirt: the paint shader on its painted layers, its overlay's and its
-/// mounted turret's, with the vehicle's colour and dirt, and a second one on its wheels with their own
-/// colour. Only the art's paint pixels change colour or get dirty. The shader stays on even while the
+/// mounted turret's, with the vehicle's colour and dirt, and one more on each wheel set (the road
+/// wheels, the spare) with that set's own colour. Only the art's paint pixels change colour or get dirty. The shader stays on even while the
 /// vehicle is clean in its factory paint, since it is what draws those pixels opaque: their alpha
 /// carries how soon they get dirty.
 /// </summary>
 public sealed class CMUVehiclePaintVisualSystem : EntitySystem
 {
+    [Dependency] private CMUVehiclePaintSystem _paint = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private VehicleTurretSystem _turret = default!;
@@ -24,19 +25,31 @@ public sealed class CMUVehiclePaintVisualSystem : EntitySystem
     // The olive top tone the art was drawn in, and the mud splashed on the low bodywork.
     private static readonly Color Base = new(118, 126, 80);
     private static readonly Color Mud = new(98, 84, 58);
+    private static readonly Color FactoryWheels = new CMUVehicleWheelPaintComponent().Color;
 
     private readonly Dictionary<EntityUid, Paint> _paints = new();
 
-    private sealed class Paint(ShaderInstance body, ShaderInstance plain, ShaderInstance wheels)
+    private sealed class Paint(ShaderInstance body, ShaderInstance plain)
     {
         public readonly ShaderInstance Body = body;
         public readonly ShaderInstance Plain = plain;
-        public readonly ShaderInstance Wheels = wheels;
+
+        // By the item slot of the wheel set they draw.
+        public readonly Dictionary<string, (ShaderInstance Shader, Color Color)> Wheels = new();
         public Color? Color;
         public Color? InteriorColor;
         public Color? SeatColor;
-        public Color? WheelColor;
         public float Dirt = -1f;
+
+        public void Dispose()
+        {
+            Body.Dispose();
+            Plain.Dispose();
+            foreach (var (shader, _) in Wheels.Values)
+            {
+                shader.Dispose();
+            }
+        }
     }
 
     public override void Initialize()
@@ -48,9 +61,7 @@ public sealed class CMUVehiclePaintVisualSystem : EntitySystem
     {
         foreach (var (_, paint) in _paints)
         {
-            paint.Body.Dispose();
-            paint.Plain.Dispose();
-            paint.Wheels.Dispose();
+            paint.Dispose();
         }
 
         _paints.Clear();
@@ -69,9 +80,8 @@ public sealed class CMUVehiclePaintVisualSystem : EntitySystem
             var dirt = CompOrNull<CMUVehicleGrimeComponent>(uid)?.Dirt ?? 0f;
             if (!_paints.TryGetValue(uid, out var entry))
             {
-                entry = new Paint(NewShader(), NewShader(), NewShader());
+                entry = new Paint(NewShader(), NewShader());
                 entry.Body.SetParameter("zoned", 1f);
-                entry.Wheels.SetParameter("painted", 1f);
                 _paints[uid] = entry;
             }
 
@@ -100,19 +110,20 @@ public sealed class CMUVehiclePaintVisualSystem : EntitySystem
                 entry.SeatColor = paint.SeatColor;
             }
 
-            if (entry.WheelColor != paint.WheelColor)
-            {
-                entry.Wheels.SetParameter("paint", paint.WheelColor);
-                entry.WheelColor = paint.WheelColor;
-            }
-
             if (!MathHelper.CloseTo(entry.Dirt, dirt))
             {
                 entry.Body.SetParameter("dirt", dirt);
                 entry.Plain.SetParameter("dirt", dirt);
-                entry.Wheels.SetParameter("dirt", dirt);
+                foreach (var (shader, _) in entry.Wheels.Values)
+                {
+                    shader.SetParameter("dirt", dirt);
+                }
+
                 entry.Dirt = dirt;
             }
+
+            UpdateWheels(uid, paint.WheelLayers, entry, dirt);
+            UpdateWheels(uid, paint.WheelOverlayLayers, entry, dirt);
 
             SetVehicle(uid, sprite, paint, entry, true);
         }
@@ -146,9 +157,33 @@ public sealed class CMUVehiclePaintVisualSystem : EntitySystem
             SetLayer((uid, turretSprite), 0, old.Body, null);
         }
 
-        old.Body.Dispose();
-        old.Plain.Dispose();
-        old.Wheels.Dispose();
+        old.Dispose();
+    }
+
+    /// <summary>
+    /// Gives each wheel set the layers draw its own shader, in the set's colour.
+    /// </summary>
+    private void UpdateWheels(EntityUid uid, Dictionary<string, string> layers, Paint entry, float dirt)
+    {
+        foreach (var slot in layers.Values)
+        {
+            var color = _paint.TryGetWheelPaint(uid, slot, out var wheels) ? wheels.Value.Comp.Color : FactoryWheels;
+            if (!entry.Wheels.TryGetValue(slot, out var current))
+            {
+                var shader = NewShader();
+                shader.SetParameter("painted", 1f);
+                shader.SetParameter("dirt", dirt);
+                shader.SetParameter("paint", color);
+                entry.Wheels[slot] = (shader, color);
+                continue;
+            }
+
+            if (current.Color == color)
+                continue;
+
+            current.Shader.SetParameter("paint", color);
+            entry.Wheels[slot] = (current.Shader, color);
+        }
     }
 
     /// <summary>
@@ -175,13 +210,22 @@ public sealed class CMUVehiclePaintVisualSystem : EntitySystem
     {
         SetLayers((uid, sprite), paint.Layers, shaders.Body, on ? shaders.Body : null);
         SetLayers((uid, sprite), paint.PlainLayers, shaders.Plain, on ? shaders.Plain : null);
-        SetLayers((uid, sprite), paint.WheelLayers, shaders.Wheels, on ? shaders.Wheels : null);
+        SetWheelLayers((uid, sprite), paint.WheelLayers, shaders, on);
         if (TryComp(uid, out CMUVehicleOverlayComponent? overlay) &&
             TryComp(overlay.Overlay, out SpriteComponent? overlaySprite))
         {
             SetLayers((overlay.Overlay.Value, overlaySprite), paint.OverlayLayers, shaders.Body, on ? shaders.Body : null);
             SetLayers((overlay.Overlay.Value, overlaySprite), paint.PlainOverlayLayers, shaders.Plain, on ? shaders.Plain : null);
-            SetLayers((overlay.Overlay.Value, overlaySprite), paint.WheelOverlayLayers, shaders.Wheels, on ? shaders.Wheels : null);
+            SetWheelLayers((overlay.Overlay.Value, overlaySprite), paint.WheelOverlayLayers, shaders, on);
+        }
+    }
+
+    private void SetWheelLayers(Entity<SpriteComponent> ent, Dictionary<string, string> layers, Paint shaders, bool on)
+    {
+        foreach (var (key, slot) in layers)
+        {
+            if (shaders.Wheels.TryGetValue(slot, out var wheels) && _sprite.LayerMapTryGet(ent.AsNullable(), key, out var index, false))
+                SetLayer(ent, index, wheels.Shader, on ? wheels.Shader : null);
         }
     }
 

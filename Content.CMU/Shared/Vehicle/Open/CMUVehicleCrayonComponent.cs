@@ -9,7 +9,7 @@ namespace Content.Shared.CMU14.Vehicle.Open;
 /// Crayon drawings stored on a vehicle's body: each is anchored to a point on a panel, so it stays on
 /// the same spot as the vehicle turns and only shows where that panel faces the camera.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true, fieldDeltas: true)]
 public sealed partial class CMUVehicleCrayonComponent : Component
 {
     /// <summary>
@@ -27,6 +27,12 @@ public sealed partial class CMUVehicleCrayonComponent : Component
 
     [DataField]
     public int MaxDrawings = 50;
+
+    /// <summary>
+    /// Custom images kept among the drawings, the oldest going first: each is sent whole with them.
+    /// </summary>
+    [DataField]
+    public int MaxImages = 8;
 
     [DataField, AutoNetworkedField]
     public List<CMUCrayonDrawing> Drawings = new();
@@ -49,6 +55,21 @@ public sealed partial class CMUCrayonDrawing
 
     [DataField]
     public Color Color = Color.White;
+
+    /// <summary>
+    /// Width of the decal or image in voxels, centred on the anchor.
+    /// </summary>
+    [DataField]
+    public int Size = 32;
+
+    /// <summary>
+    /// A custom image drawn instead of the decal: a square of palette indices, 0 empty.
+    /// </summary>
+    [DataField]
+    public byte[]? Pixels;
+
+    [DataField]
+    public List<Color>? Palette;
 
     /// <summary>
     /// Anchor voxel (forward, right, up) in vehicle space.

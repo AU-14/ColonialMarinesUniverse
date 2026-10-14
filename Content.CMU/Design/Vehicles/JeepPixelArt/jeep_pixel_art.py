@@ -3426,9 +3426,44 @@ def signals_icon(on):
     return out
 
 
+def engine_icon(on):
+    """Engine switch icons, drawn like the hazard ones: a power symbol, green and glowing when the
+    engine is switched on, dark when off."""
+    fill = (110, 214, 104) if on else (96, 96, 88)
+    shape = set()
+    for y in range(32):
+        for x in range(32):
+            dx, dy = x + 0.5 - 16, y + 0.5 - 17
+            d = math.hypot(dx, dy)
+            gap = dy < 0 and abs(dx) < 4.5
+            if 7.5 <= d <= 10.5 and not gap:
+                shape.add((x, y))
+            if abs(dx) <= 1.5 and 3 <= y <= 16:
+                shape.add((x, y))
+    dark = (40, 40, 40, 255)
+    out = Image.new("RGBA", (32, 32), (0, 0, 0, 0))
+    o = out.load()
+    for (x, y) in shape:
+        for dx in (-1, 0, 1):
+            for dy in (-1, 0, 1):
+                p = (x + dx, y + dy)
+                if p not in shape and 0 <= p[0] < 32 and 0 <= p[1] < 32:
+                    o[p] = dark
+    if on:
+        for (x, y) in list(shape):
+            for dx in (-2, -1, 0, 1, 2):
+                for dy in (-2, -1, 0, 1, 2):
+                    p = (x + dx, y + dy)
+                    if 0 <= p[0] < 32 and 0 <= p[1] < 32 and o[p][3] == 0 and p not in shape:
+                        o[p] = fill + (70,)
+    for (x, y) in shape:
+        o[(x, y)] = fill + (255,)
+    return out
+
+
 def write_beams():
-    """jeep_beams.rsi (the haze sprites), light_masks/*_beam.png and the headlight switch and turn
-    signal icons."""
+    """jeep_beams.rsi (the haze sprites), light_masks/*_beam.png and the headlight switch, turn
+    signal and engine switch icons."""
     path = os.path.join(RSI_DIR, "jeep_beams.rsi")
     fresh_dir(path)
     size = BEAM_TILES * 32
@@ -3445,13 +3480,15 @@ def write_beams():
     path = os.path.join(RSI_DIR, "actions.rsi")
     meta_path = os.path.join(path, "meta.json")
     meta = json.load(open(meta_path))
-    names = [f"headlights_{mode}" for mode in ("off", "low", "high")] + ["signals_auto_off", "signals_auto_on"]
+    names = ([f"headlights_{mode}" for mode in ("off", "low", "high")] + ["signals_auto_off", "signals_auto_on"]
+             + ["engine_off", "engine_on"])
     meta["states"] = [st for st in meta["states"] if st["name"] not in names] + [{"name": n} for n in names]
     meta["copyright"] = "Made for CMU (jeep hazard lights, headlight switch and turn signal actions)"
     for mode in ("off", "low", "high"):
         action_icon(mode).save(os.path.join(path, f"headlights_{mode}.png"))
     for on in (False, True):
         signals_icon(on).save(os.path.join(path, f"signals_auto_{'on' if on else 'off'}.png"))
+        engine_icon(on).save(os.path.join(path, f"engine_{'on' if on else 'off'}.png"))
     with open(meta_path, "w", newline="\n") as fh:
         json.dump(meta, fh, indent=4)
         fh.write("\n")

@@ -155,8 +155,8 @@ public sealed class CMUJeepKitAndGrimeTest : GameTest
 
         await Server.WaitPost(() =>
         {
-            var paint = SEntMan.GetComponent<CMUVehiclePaintComponent>(jeep);
-            Assert.That(paint.WheelColor, Is.EqualTo(Color.FromHex("#C8CDD2")), "Wheels come in grey metal.");
+            Assert.That(SEntMan.System<CMUVehiclePaintSystem>().TryGetWheelPaint(jeep, "wheel-1", out var fitted), Is.True);
+            Assert.That(fitted!.Value.Comp.Color, Is.EqualTo(Color.FromHex("#C8CDD2")), "Wheels come in grey metal.");
 
             Assert.That(SEntMan.System<SharedHandsSystem>().TryPickup(user, painter), Is.True);
             var comp = SEntMan.GetComponent<CMUVehicleSprayPainterComponent>(painter);
@@ -173,7 +173,10 @@ public sealed class CMUJeepKitAndGrimeTest : GameTest
         await Server.WaitAssertion(() =>
         {
             var paint = SEntMan.GetComponent<CMUVehiclePaintComponent>(jeep);
-            Assert.That(paint.WheelColor, Is.EqualTo(red));
+            Assert.That(SEntMan.System<CMUVehiclePaintSystem>().TryGetWheelPaint(jeep, "wheel-1", out var fitted), Is.True);
+            Assert.That(fitted!.Value.Comp.Color, Is.EqualTo(red));
+            Assert.That(SEntMan.System<CMUVehiclePaintSystem>().TryGetWheelPaint(jeep, "jeep-spare", out var spare), Is.True);
+            Assert.That(spare!.Value.Comp.Color, Is.EqualTo(Color.FromHex("#C8CDD2")), "The spare keeps its own paint.");
             Assert.That(paint.Color, Is.Null, "The body keeps its factory paint.");
             Assert.That(SEntMan.System<SharedChargesSystem>().GetCurrentCharges(painter), Is.EqualTo(29));
         });

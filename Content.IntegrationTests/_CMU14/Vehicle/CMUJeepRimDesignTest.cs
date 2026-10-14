@@ -4,6 +4,7 @@ using Content.Shared.Charges.Systems;
 using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
+using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -12,8 +13,9 @@ namespace Content.IntegrationTests.CMU14.Vehicle;
 
 /// <summary>
 /// Every rim design loops seamlessly as the wheels turn. Switched to its rim designs, the vehicle
-/// spray painter sprays the design picked on a jeep's wheels in its colours, and won't on the body;
-/// painting the wheels afterwards only changes the design's base; the factory design takes it off.
+/// spray painter sprays the design picked on a jeep's fitted wheel set in its colours, never the spare,
+/// and won't on the body; painting the wheels afterwards only changes the design's base; the factory
+/// design takes it off. The design stays on the wheel set, so it goes on with it to another jeep.
 /// </summary>
 [TestFixture]
 public sealed class CMUJeepRimDesignTest : GameTest
@@ -70,6 +72,12 @@ public sealed class CMUJeepRimDesignTest : GameTest
         SEntMan.Dirty(painter, comp);
     }
 
+    private CMUVehicleWheelPaintComponent Wheels(EntityUid jeep, string slot = "wheel-1")
+    {
+        Assert.That(SEntMan.System<CMUVehiclePaintSystem>().TryGetWheelPaint(jeep, slot, out var wheels), Is.True);
+        return wheels!.Value.Comp;
+    }
+
     private void Spray(EntityUid user, EntityUid jeep, bool wheels)
     {
         var target = wheels
@@ -120,11 +128,14 @@ public sealed class CMUJeepRimDesignTest : GameTest
 
         await Server.WaitAssertion(() =>
         {
-            var paint = SEntMan.GetComponent<CMUVehiclePaintComponent>(jeep);
-            Assert.That(paint.RimDesign?.Id, Is.EqualTo("CMURimMesh"));
-            Assert.That(paint.WheelColor, Is.EqualTo(Red), "The design's base is the wheels' paint.");
-            Assert.That(paint.RimColors, Is.EqualTo(new List<Color> { Gold, Black, White }));
-            Assert.That(paint.Color, Is.Null, "The body keeps its factory paint.");
+            var wheels = Wheels(jeep);
+            Assert.That(wheels.RimDesign?.Id, Is.EqualTo("CMURimMesh"));
+            Assert.That(wheels.Color, Is.EqualTo(Red), "The design's base is the wheels' paint.");
+            Assert.That(wheels.RimColors, Is.EqualTo(new List<Color> { Gold, Black, White }));
+            var spare = Wheels(jeep, "jeep-spare");
+            Assert.That(spare.RimDesign, Is.Null, "The spare keeps its own rims.");
+            Assert.That(spare.Color, Is.EqualTo(Color.FromHex("#C8CDD2")));
+            Assert.That(SEntMan.GetComponent<CMUVehiclePaintComponent>(jeep).Color, Is.Null, "The body keeps its factory paint.");
             Assert.That(SEntMan.System<SharedChargesSystem>().GetCurrentCharges(painter), Is.EqualTo(28));
         });
     }
@@ -148,10 +159,10 @@ public sealed class CMUJeepRimDesignTest : GameTest
 
         await Server.WaitAssertion(() =>
         {
-            var paint = SEntMan.GetComponent<CMUVehiclePaintComponent>(jeep);
-            Assert.That(paint.WheelColor, Is.EqualTo(Blue));
-            Assert.That(paint.RimDesign?.Id, Is.EqualTo("CMURimTurbine"));
-            Assert.That(paint.RimColors, Is.EqualTo(new List<Color> { Gold, Black, White }));
+            var wheels = Wheels(jeep);
+            Assert.That(wheels.Color, Is.EqualTo(Blue));
+            Assert.That(wheels.RimDesign?.Id, Is.EqualTo("CMURimTurbine"));
+            Assert.That(wheels.RimColors, Is.EqualTo(new List<Color> { Gold, Black, White }));
         });
     }
 
@@ -168,9 +179,8 @@ public sealed class CMUJeepRimDesignTest : GameTest
 
         await Server.WaitAssertion(() =>
         {
-            var paint = SEntMan.GetComponent<CMUVehiclePaintComponent>(jeep);
-            Assert.That(paint.Color, Is.Null);
-            Assert.That(paint.RimDesign, Is.Null);
+            Assert.That(SEntMan.GetComponent<CMUVehiclePaintComponent>(jeep).Color, Is.Null);
+            Assert.That(Wheels(jeep).RimDesign, Is.Null);
             Assert.That(SEntMan.System<SharedChargesSystem>().GetCurrentCharges(painter), Is.EqualTo(30));
         });
     }
@@ -194,10 +204,40 @@ public sealed class CMUJeepRimDesignTest : GameTest
 
         await Server.WaitAssertion(() =>
         {
-            var paint = SEntMan.GetComponent<CMUVehiclePaintComponent>(jeep);
-            Assert.That(paint.RimDesign, Is.Null);
-            Assert.That(paint.RimColors, Is.Empty);
-            Assert.That(paint.WheelColor, Is.EqualTo(White));
+            var wheels = Wheels(jeep);
+            Assert.That(wheels.RimDesign, Is.Null);
+            Assert.That(wheels.RimColors, Is.Empty);
+            Assert.That(wheels.Color, Is.EqualTo(White));
+        });
+    }
+
+    [Test]
+    public async Task TheDesignGoesWithTheWheelSet()
+    {
+        var (jeep, user, painter) = await Setup();
+        EntityUid other = default;
+        await Server.WaitPost(() =>
+        {
+            SetPainter(painter, CMUVehicleSprayPainterMode.Design, "CMURimRally", [Red, Gold, Black, White]);
+            Spray(user, jeep, true);
+            var grid = SEntMan.GetComponent<TransformComponent>(jeep).ParentUid;
+            other = SEntMan.SpawnEntity("CMUVehicleJeepCargo", new EntityCoordinates(grid, -3.5f, 0.5f));
+        });
+        await RunSeconds(7f);
+
+        await Server.WaitAssertion(() =>
+        {
+            var containers = SEntMan.System<SharedContainerSystem>();
+            var from = containers.GetContainer(jeep, "wheel-1");
+            var to = containers.GetContainer(other, "wheel-1");
+            var set = from.ContainedEntities.Single();
+            SEntMan.DeleteEntity(to.ContainedEntities.Single());
+            Assert.That(containers.Remove(set, from), Is.True);
+            Assert.That(containers.Insert(set, to), Is.True);
+
+            var wheels = Wheels(other);
+            Assert.That(wheels.RimDesign?.Id, Is.EqualTo("CMURimRally"), "The rims stay on the wheel set.");
+            Assert.That(wheels.Color, Is.EqualTo(Red));
         });
     }
 }

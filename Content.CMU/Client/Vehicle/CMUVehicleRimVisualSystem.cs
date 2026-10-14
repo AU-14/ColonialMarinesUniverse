@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Numerics;
 using Content.Client._RMC14.Vehicle;
 using Content.Shared.CMU14.Vehicle;
 using Content.Shared.CMU14.Vehicle.Open;
@@ -12,36 +13,31 @@ using Color = Robust.Shared.Maths.Color;
 namespace Content.Client.CMU14.Vehicle;
 
 /// <summary>
-/// Draws a vehicle's rim design. Each rim layer follows the wheel or spare layer it sits over: the
-/// rim map beside that layer's state (rims_&lt;state&gt;, or the off-road state's for road tyres), on
-/// the same frame, offset and tint, shown while the layer shows and has a map, which only intact
-/// wheels do. The rim shader reads the map and
-/// paints the design, baked here into a small texture of its colours whenever it or they change.
+/// Draws the rim designs of a vehicle's wheel sets. Each rim layer follows the wheel or spare layer it
+/// sits over: the rim map beside that layer's state (rims_&lt;state&gt;, or the off-road state's for
+/// road tyres), on the same frame, offset and tint, shown while the layer shows and has a map, which
+/// only intact wheels do. Each rim layer has its own shader, set to the design of the wheel set in
+/// that layer's slot and its colours; the shader works the design out from those numbers, so no
+/// texture is handed to it.
 /// </summary>
 public sealed class CMUVehicleRimVisualSystem : EntitySystem
 {
-    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private CMUVehiclePaintSystem _paint = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private SpriteSystem _sprite = default!;
 
     private static readonly ProtoId<ShaderPrototype> RimShader = "CMUVehicleRim";
     private const string MapPrefix = "rims_";
 
-    private readonly Dictionary<EntityUid, Rims> _rims = new();
+    private readonly Dictionary<(EntityUid Vehicle, EntityUid Sprite, string Layer), Rims> _rims = new();
+    private readonly List<(EntityUid Vehicle, EntityUid Sprite, string Layer)> _stale = new();
 
-    private sealed class Rims(ShaderInstance shader) : IDisposable
+    private sealed class Rims(ShaderInstance shader)
     {
         public readonly ShaderInstance Shader = shader;
-        public OwnedTexture? Texture;
-        public string? Design;
+        public CMURimDesignPrototype? Design;
         public readonly List<Color> Colors = new();
         public float Dirt = -1f;
-
-        public void Dispose()
-        {
-            Shader.Dispose();
-            Texture?.Dispose();
-        }
     }
 
     public override void Initialize()
@@ -55,7 +51,7 @@ public sealed class CMUVehicleRimVisualSystem : EntitySystem
     {
         foreach (var rims in _rims.Values)
         {
-            rims.Dispose();
+            rims.Shader.Dispose();
         }
 
         _rims.Clear();
@@ -63,15 +59,26 @@ public sealed class CMUVehicleRimVisualSystem : EntitySystem
 
     public override void FrameUpdate(float frameTime)
     {
-        // The paint visuals already take the paint's shutdown; a vehicle gone or without a design
-        // frees its shader and texture here.
-        foreach (var (uid, stale) in _rims)
+        // A vehicle gone or no longer painted frees its shaders here.
+        _stale.Clear();
+        foreach (var key in _rims.Keys)
         {
-            if (TryComp(uid, out CMUVehiclePaintComponent? kept) && kept.RimDesign != null)
-                continue;
+            if (!HasComp<CMUVehiclePaintComponent>(key.Vehicle) || TerminatingOrDeleted(key.Sprite))
+                _stale.Add(key);
+        }
 
-            stale.Dispose();
-            _rims.Remove(uid);
+        foreach (var key in _stale)
+        {
+            if (!TerminatingOrDeleted(key.Sprite) &&
+                TryComp(key.Sprite, out SpriteComponent? stale) &&
+                _sprite.LayerMapTryGet((key.Sprite, stale), key.Layer, out var layer, false))
+            {
+                stale.LayerSetShader(layer, (ShaderInstance?) null);
+                _sprite.LayerSetVisible((key.Sprite, stale), layer, false);
+            }
+
+            _rims[key].Shader.Dispose();
+            _rims.Remove(key);
         }
 
         var query = EntityQueryEnumerator<CMUVehiclePaintComponent, SpriteComponent>();
@@ -80,51 +87,14 @@ public sealed class CMUVehicleRimVisualSystem : EntitySystem
             if (paint.RimLayers.Count == 0 && paint.RimOverlayLayers.Count == 0)
                 continue;
 
-            CMURimDesignPrototype? design = null;
-            if (paint.RimDesign is { } id)
-                _prototypes.TryIndex(id, out design);
-
-            var rims = design == null ? null : Update(uid, paint, design);
-            Mirror((uid, sprite), paint.RimLayers, rims);
+            var dirt = CompOrNull<CMUVehicleGrimeComponent>(uid)?.Dirt ?? 0f;
+            Mirror(uid, (uid, sprite), paint.RimLayers, paint.WheelLayers, dirt);
             if (TryComp(uid, out CMUVehicleOverlayComponent? overlay) &&
                 TryComp(overlay.Overlay, out SpriteComponent? overlaySprite))
             {
-                Mirror((overlay.Overlay.Value, overlaySprite), paint.RimOverlayLayers, rims);
+                Mirror(uid, (overlay.Overlay.Value, overlaySprite), paint.RimOverlayLayers, paint.WheelOverlayLayers, dirt);
             }
         }
-    }
-
-    /// <summary>
-    /// The vehicle's rim shader, its design texture baked again if the design or its colours changed.
-    /// </summary>
-    private Rims Update(EntityUid uid, CMUVehiclePaintComponent paint, CMURimDesignPrototype design)
-    {
-        if (!_rims.TryGetValue(uid, out var rims))
-        {
-            rims = new Rims(_prototypes.Index(RimShader).InstanceUnique());
-            _rims[uid] = rims;
-        }
-
-        var colors = Colors(paint, design);
-        if (rims.Design != design.ID || !rims.Colors.SequenceEqual(colors))
-        {
-            using var image = DesignImage(design, colors);
-            rims.Texture?.Dispose();
-            rims.Texture = _clyde.LoadTextureFromImage(image, $"rims-{uid}");
-            rims.Shader.SetParameter("design", rims.Texture);
-            rims.Design = design.ID;
-            rims.Colors.Clear();
-            rims.Colors.AddRange(colors);
-        }
-
-        var dirt = CompOrNull<CMUVehicleGrimeComponent>(uid)?.Dirt ?? 0f;
-        if (!MathHelper.CloseTo(rims.Dirt, dirt))
-        {
-            rims.Shader.SetParameter("dirt", dirt);
-            rims.Dirt = dirt;
-        }
-
-        return rims;
     }
 
     /// <summary>
@@ -149,14 +119,29 @@ public sealed class CMUVehicleRimVisualSystem : EntitySystem
         return null;
     }
 
-    private void Mirror(Entity<SpriteComponent> ent, Dictionary<string, string> layers, Rims? rims)
+    private void Mirror(
+        EntityUid vehicle,
+        Entity<SpriteComponent> ent,
+        Dictionary<string, string> layers,
+        Dictionary<string, string> wheelLayers,
+        float dirt)
     {
         foreach (var (key, sourceKey) in layers)
         {
             if (!_sprite.LayerMapTryGet(ent.AsNullable(), key, out var index, false))
                 continue;
 
-            if (rims == null ||
+            CMURimDesignPrototype? design = null;
+            Entity<CMUVehicleWheelPaintComponent>? wheels = null;
+            if (wheelLayers.TryGetValue(sourceKey, out var slot) &&
+                _paint.TryGetWheelPaint(vehicle, slot, out wheels) &&
+                wheels.Value.Comp.RimDesign is { } id)
+            {
+                _prototypes.TryIndex(id, out design);
+            }
+
+            if (design == null ||
+                wheels == null ||
                 !_sprite.LayerMapTryGet(ent.AsNullable(), sourceKey, out var sourceIndex, false) ||
                 ent.Comp[sourceIndex] is not SpriteComponent.Layer source ||
                 source.State.Name is not { } sourceState ||
@@ -167,6 +152,7 @@ public sealed class CMUVehicleRimVisualSystem : EntitySystem
                 continue;
             }
 
+            var rims = Update((vehicle, ent.Owner, key), design, Colors(wheels.Value.Comp, design), dirt);
             if (_sprite.LayerGetRsiState(ent.AsNullable(), index) != state)
                 _sprite.LayerSetRsiState(ent.AsNullable(), index, state);
 
@@ -181,44 +167,72 @@ public sealed class CMUVehicleRimVisualSystem : EntitySystem
     }
 
     /// <summary>
-    /// A vehicle's design colours: the wheels' paint as the base, then the accent, lip and cap.
+    /// A rim layer's shader, set to the design and colours it should draw.
     /// </summary>
-    public static List<Color> Colors(CMUVehiclePaintComponent paint, CMURimDesignPrototype design)
+    private Rims Update(
+        (EntityUid Vehicle, EntityUid Sprite, string Layer) key,
+        CMURimDesignPrototype design,
+        List<Color> colors,
+        float dirt)
     {
-        var colors = new List<Color> { paint.WheelColor };
-        if (paint.RimColors.Count == 3)
-            colors.AddRange(paint.RimColors);
+        if (!_rims.TryGetValue(key, out var rims))
+        {
+            rims = new Rims(_prototypes.Index(RimShader).InstanceUnique());
+            _rims[key] = rims;
+        }
+
+        var shader = rims.Shader;
+        if (rims.Design != design)
+        {
+            shader.SetParameter("pattern", (float) design.Pattern);
+            shader.SetParameter("count", (float) design.Count);
+            shader.SetParameter("width", design.Width);
+            shader.SetParameter("twist", design.Twist);
+            shader.SetParameter("holeRadius", design.HoleRadius);
+            shader.SetParameter("holeSize", design.HoleSize);
+            shader.SetParameter("cap", design.Cap);
+            shader.SetParameter("lip", design.Lip);
+            shader.SetParameter("nuts", (float) design.Nuts);
+            shader.SetParameter("nutRadius", design.NutRadius);
+            shader.SetParameter("lipBolts", (float) design.LipBolts);
+            shader.SetParameter("regions", new Vector3(
+                design.Regions.Contains(CMURimRegion.Accent) ? 1f : 0f,
+                design.Regions.Contains(CMURimRegion.Lip) ? 1f : 0f,
+                design.Regions.Contains(CMURimRegion.Cap) ? 1f : 0f));
+            rims.Design = design;
+        }
+
+        if (!rims.Colors.SequenceEqual(colors))
+        {
+            shader.SetParameter("baseColor", colors[0]);
+            shader.SetParameter("accentColor", colors[1]);
+            shader.SetParameter("lipColor", colors[2]);
+            shader.SetParameter("capColor", colors[3]);
+            rims.Colors.Clear();
+            rims.Colors.AddRange(colors);
+        }
+
+        if (!MathHelper.CloseTo(rims.Dirt, dirt))
+        {
+            shader.SetParameter("dirt", dirt);
+            rims.Dirt = dirt;
+        }
+
+        return rims;
+    }
+
+    /// <summary>
+    /// A wheel set's design colours: its paint as the base, then the accent, lip and cap.
+    /// </summary>
+    public static List<Color> Colors(CMUVehicleWheelPaintComponent wheels, CMURimDesignPrototype design)
+    {
+        var colors = new List<Color> { wheels.Color };
+        if (wheels.RimColors.Count == 3)
+            colors.AddRange(wheels.RimColors);
         else
             colors.AddRange(new[] { design.Accent, design.LipColor, design.CapColor });
 
         return colors;
-    }
-
-    /// <summary>
-    /// A design's colours for the rim shader: one rim per frame, side by side, v up.
-    /// </summary>
-    public static Image<Rgba32> DesignImage(CMURimDesignPrototype design, IReadOnlyList<Color> colors)
-    {
-        var size = CMURimDesigns.Size;
-        var radius = CMURimDesigns.Radius;
-        var image = new Image<Rgba32>(size * CMURimDesigns.Frames, size);
-        for (var frame = 0; frame < CMURimDesigns.Frames; frame++)
-        {
-            for (var u = -radius; u <= radius; u++)
-            {
-                for (var v = -radius; v <= radius; v++)
-                {
-                    if (!CMURimDesigns.OnRim(u, v))
-                        continue;
-
-                    var (region, tone) = CMURimDesigns.Sample(design, u, v, frame);
-                    var color = CMURimDesigns.Shade(region, tone, colors[0], colors[1], colors[2], colors[3]);
-                    image[frame * size + u + radius, radius - v] = new Rgba32(color.R, color.G, color.B, 1f);
-                }
-            }
-        }
-
-        return image;
     }
 
     /// <summary>

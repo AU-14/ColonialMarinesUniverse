@@ -42,7 +42,11 @@ public sealed class CMUVehicleSprayPainterSystem : EntitySystem
 
     private void OnDesign(Entity<CMUVehicleSprayPainterComponent> ent, ref CMUVehicleSprayPainterDesignMessage args)
     {
-        if (!_prototypes.HasIndex(args.Design) || args.Colors.Count != DesignColorCount)
+        // Sent by a client, either can arrive missing.
+        if (args.Colors == null ||
+            string.IsNullOrEmpty(args.Design.Id) ||
+            !_prototypes.HasIndex(args.Design) ||
+            args.Colors.Count != DesignColorCount)
             return;
 
         ent.Comp.Design = args.Design;

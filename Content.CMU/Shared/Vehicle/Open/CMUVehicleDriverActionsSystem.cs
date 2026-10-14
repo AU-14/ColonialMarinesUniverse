@@ -12,13 +12,14 @@ namespace Content.Shared.CMU14.Vehicle.Open;
 
 /// <summary>
 /// Gives an open vehicle's driver buttons for the hazard lights, the automatic turn signals, the horn,
-/// the headlight switch and taking the key out of the ignition while they drive.
+/// the headlight switch, the engine switch and taking the key out of the ignition while they drive.
 /// The horn is the vehicle's own <see cref="VehicleSoundComponent.HornSound"/>, with its cooldown.
 /// </summary>
 public sealed class CMUVehicleDriverActionsSystem : EntitySystem
 {
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private CMUVehicleEngineSwitchSystem _engine = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private CMUOpenVehicleSystem _jeep = default!;
     [Dependency] private INetManager _net = default!;
@@ -34,6 +35,8 @@ public sealed class CMUVehicleDriverActionsSystem : EntitySystem
         SubscribeLocalEvent<VehicleOperatorComponent, CMUVehicleHeadlightsActionEvent>(OnHeadlights);
         SubscribeLocalEvent<VehicleOperatorComponent, CMUVehicleAutoSignalsActionEvent>(OnAutoSignals);
         SubscribeLocalEvent<VehicleOperatorComponent, CMUVehicleEjectKeyActionEvent>(OnEjectKey);
+        SubscribeLocalEvent<VehicleOperatorComponent, CMUVehicleEngineActionEvent>(OnEngine);
+        SubscribeLocalEvent<CMUVehicleDriverActionsComponent, CMUVehicleEngineSwitchedEvent>(OnEngineSwitched);
     }
 
     private void OnOperatorSet(Entity<CMUVehicleSeatsComponent> ent, ref VehicleOperatorSetEvent args)
@@ -59,6 +62,12 @@ public sealed class CMUVehicleDriverActionsSystem : EntitySystem
 
         if (HasComp<CMUVehicleIgnitionComponent>(ent))
             _actions.AddAction(driver, ref actions.EjectKeyActionEntity, actions.EjectKeyAction);
+
+        if (TryComp(ent, out CMUVehicleEngineSoundComponent? engine))
+        {
+            _actions.AddAction(driver, ref actions.EngineActionEntity, actions.EngineAction);
+            _actions.SetToggled(actions.EngineActionEntity, engine.Switched);
+        }
     }
 
     private void OnShutdown(Entity<CMUVehicleDriverActionsComponent> ent, ref ComponentShutdown args)
@@ -77,16 +86,19 @@ public sealed class CMUVehicleDriverActionsSystem : EntitySystem
         _actions.RemoveAction(actions.HeadlightsActionEntity);
         _actions.RemoveAction(actions.AutoSignalsActionEntity);
         _actions.RemoveAction(actions.EjectKeyActionEntity);
+        _actions.RemoveAction(actions.EngineActionEntity);
         QueueDel(actions.HazardsActionEntity);
         QueueDel(actions.HornActionEntity);
         QueueDel(actions.HeadlightsActionEntity);
         QueueDel(actions.AutoSignalsActionEntity);
         QueueDel(actions.EjectKeyActionEntity);
+        QueueDel(actions.EngineActionEntity);
         actions.HazardsActionEntity = null;
         actions.HornActionEntity = null;
         actions.HeadlightsActionEntity = null;
         actions.AutoSignalsActionEntity = null;
         actions.EjectKeyActionEntity = null;
+        actions.EngineActionEntity = null;
     }
 
     private void OnHazards(Entity<VehicleOperatorComponent> ent, ref CMUVehicleHazardsActionEvent args)
@@ -162,6 +174,24 @@ public sealed class CMUVehicleDriverActionsSystem : EntitySystem
         }
 
         _itemSlots.TryEjectToHands(vehicle, ignition.KeySlot, args.Performer, true);
+    }
+
+    private void OnEngine(Entity<VehicleOperatorComponent> ent, ref CMUVehicleEngineActionEvent args)
+    {
+        if (args.Handled ||
+            !TryGetDriven(ent, args.Performer, out var vehicle, out _) ||
+            !TryComp(vehicle, out CMUVehicleEngineSoundComponent? engine))
+        {
+            return;
+        }
+
+        args.Handled = true;
+        _engine.SetSwitched((vehicle, engine), !engine.Switched);
+    }
+
+    private void OnEngineSwitched(Entity<CMUVehicleDriverActionsComponent> ent, ref CMUVehicleEngineSwitchedEvent args)
+    {
+        _actions.SetToggled(ent.Comp.EngineActionEntity, args.Switched);
     }
 
     private bool TryGetDriven(

@@ -64,6 +64,8 @@ public sealed class CMUJeepCoverTest : GameTest
     /// </summary>
     private bool Shoot(EntityUid driver, EntityUid shooter, BodyPartType part)
     {
+        // A shooter who aims rolls for the part and can miss it; one who doesn't hits it.
+        SEntMan.RemoveComponent<BodyZoneTargetingComponent>(shooter);
         SEntMan.System<SharedHitLocationSystem>().SetForcedHit(driver, part);
         var piercing = Server.ResolveDependency<IPrototypeManager>().Index<DamageTypePrototype>("Piercing");
         return SEntMan.System<DamageableSystem>().TryChangeDamage(driver, new DamageSpecifier(piercing, 10),

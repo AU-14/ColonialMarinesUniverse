@@ -28,6 +28,9 @@ public sealed partial class CMUVehicleDriverActionsComponent : Component
     public EntProtoId EjectKeyAction = "CMUActionJeepEjectKey";
 
     [DataField]
+    public EntProtoId EngineAction = "CMUActionJeepEngine";
+
+    [DataField]
     public EntityUid? HazardsActionEntity;
 
     [DataField]
@@ -41,6 +44,9 @@ public sealed partial class CMUVehicleDriverActionsComponent : Component
 
     [DataField]
     public EntityUid? EjectKeyActionEntity;
+
+    [DataField]
+    public EntityUid? EngineActionEntity;
 
     /// <summary>
     /// Both turn signals blink together while this is on.
@@ -62,3 +68,5 @@ public sealed partial class CMUVehicleHornActionEvent : InstantActionEvent;
 public sealed partial class CMUVehicleAutoSignalsActionEvent : InstantActionEvent;
 
 public sealed partial class CMUVehicleEjectKeyActionEvent : InstantActionEvent;
+
+public sealed partial class CMUVehicleEngineActionEvent : InstantActionEvent;

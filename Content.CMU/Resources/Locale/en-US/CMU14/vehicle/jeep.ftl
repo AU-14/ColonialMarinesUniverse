@@ -62,6 +62,8 @@ cmu-vehicle-paint-seats-done = You respray the seats of {THE($vehicle)}.
 cmu-vehicle-paint-design-done = You spray {$design} rims on the wheels of {THE($vehicle)}.
 cmu-vehicle-paint-design-wheels = A rim design goes on the wheels.
 cmu-vehicle-paint-rims-examine = Its wheels have {$design} rims.
+cmu-vehicle-wheel-rims-examine = They have {$design} rims.
+cmu-vehicle-paint-no-wheels = {CAPITALIZE(THE($vehicle))} has no wheels on to paint.
 
 # Moving parts come off screwdriver, wrench, hand, and go back on hand, wrench, screwdriver.
 cmu-vehicle-cargo-tailgate-closed = Lower the tailgate first.
