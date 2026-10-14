@@ -46,6 +46,7 @@
     RMC:
     - type: Skills
       skills:
+        CMUSkillAircrew: 1
         RMCSkillFirearms: 2
         RMCSkillFireman: 1
         RMCSkillIntel: 1
@@ -60,6 +61,7 @@
     UPP:
     - type: Skills
       skills:
+        CMUSkillAircrew: 1
         RMCSkillFirearms: 2
         RMCSkillFireman: 1
         RMCSkillIntel: 1
@@ -76,6 +78,7 @@
     WYPMC:
     - type: Skills
       skills:
+        CMUSkillAircrew: 1
         RMCSkillFirearms: 2
         RMCSkillFireman: 1
         RMCSkillIntel: 1
