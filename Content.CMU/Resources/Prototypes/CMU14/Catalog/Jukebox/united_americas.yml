@@ -1,0 +1,85 @@
+# The songs from the United Americas cassettes (Cassettes/unitedamericas.yml).
+
+- type: jukebox
+  id: CMUJukeboxUnitedAmericasHotelCalifornia
+  name: Eagles - Hotel California
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/UnitedAmericas/hotel_california.ogg
+
+- type: jukebox
+  id: CMUJukeboxUnitedAmericasStudentVisas
+  name: Student Visas
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/UnitedAmericas/student_visas.ogg
+
+- type: jukebox
+  id: CMUJukeboxUnitedAmericasRunThroughTheJungle
+  name: Creedence Clearwater Revival - Run Through the Jungle
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/UnitedAmericas/run_through_the_jungle.ogg
+
+- type: jukebox
+  id: CMUJukeboxUnitedAmericasOne
+  name: Metallica - One
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/UnitedAmericas/one.ogg
+
+- type: jukebox
+  id: CMUJukeboxUnitedAmericasKillingInTheName
+  name: Rage Against the Machine - Killing in the Name
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/UnitedAmericas/killing_in_the_name.ogg
+
+- type: jukebox
+  id: CMUJukeboxUnitedAmericasAllAlongTheWatchtower
+  name: Jimi Hendrix - All Along the Watchtower
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/UnitedAmericas/all_along_the_watchtower.ogg
+
+- type: jukebox
+  id: CMUJukeboxUnitedAmericasHouseOfTheRisingSun
+  name: The Animals - The House of the Rising Sun
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/UnitedAmericas/house_of_the_rising_sun.ogg
+
+- type: jukebox
+  id: CMUJukeboxUnitedAmericasEnterSandman
+  name: Metallica - Enter Sandman
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/UnitedAmericas/enter_sandman.ogg
+
+- type: jukebox
+  id: CMUJukeboxUnitedAmericasRosemary
+  name: Deftones - Rosemary
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/UnitedAmericas/rosemary.ogg
+
+- type: jukebox
+  id: CMUJukeboxUnitedAmericasRisk
+  name: Deftones - Risk
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/UnitedAmericas/risk.ogg
+
+- type: jukebox
+  id: CMUJukeboxUnitedAmericasAudhumbla
+  name: Audhumbla
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/UnitedAmericas/audhumbla.ogg
+
+- type: jukebox
+  id: CMUJukeboxUnitedAmericasEmpressRising
+  name: Monolord - Empress Rising
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/UnitedAmericas/empress_rising.ogg
+
+- type: jukebox
+  id: CMUJukeboxUnitedAmericasOneWayTripToTheSun
+  name: One Way Trip to the Sun
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/UnitedAmericas/one_way_trip_to_the_sun.ogg
+
+- type: jukebox
+  id: CMUJukeboxUnitedAmericasSpaceSabbath
+  name: Space Sabbath
+  path:
+    path: /Audio/CMU14/Private/Music/Cassette/UnitedAmericas/space_sabbath.ogg
