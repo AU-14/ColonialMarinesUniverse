@@ -42,7 +42,7 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
     private const float NudgeDistance = 0.6f;
     private const float NudgeSpeed = 2f;
 
-    private const int StartMessages = 8;
+    private const int StartMessages = 7;
     private const int KnockdownMessages = 5;
     private const int LaunchMessages = 4;
 

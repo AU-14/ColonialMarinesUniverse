@@ -5,7 +5,6 @@ cmu-dropship-turbulence-start-4 = Crosswinds hammer the dropship, rattling every
 cmu-dropship-turbulence-start-5 = Warning lights flicker as the dropship bucks through a storm front!
 cmu-dropship-turbulence-start-6 = Atmospheric shear tears at the airframe and the dropship lurches hard to one side!
 cmu-dropship-turbulence-start-7 = The dropship pitches and rolls, loose gear clattering across the deck!
-cmu-dropship-turbulence-start-8 = Something hits the hull with a hollow bang, and the dropship starts shaking violently!
 
 cmu-dropship-turbulence-knocked-down-1 = The deck heaves and throws you off your feet!
 cmu-dropship-turbulence-knocked-down-2 = You lose your footing and slam into the deck!
