@@ -11,7 +11,7 @@ namespace Content.Shared.CMU14.GearFlavor;
 /// </summary>
 public static class CMUGearFlavorText
 {
-    public const int MaxLength = 80;
+    public const int MaxLength = 100;
 
     public static string Clamp(string? text)
     {
