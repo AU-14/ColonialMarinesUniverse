@@ -38,6 +38,10 @@ public sealed class XenoParasiteLarvaClaimTest
       components:
       - type: XenoParasite
         fallOffDelay: 0
+        # cmu edit start
+        cmuMinHugTime: 0
+        cmuMaxHugTime: 0
+        # cmu edit end
 
     - type: entity
       parent: RMCXenoParasiteWatcher
@@ -45,6 +49,10 @@ public sealed class XenoParasiteLarvaClaimTest
       components:
       - type: XenoParasite
         fallOffDelay: 0
+        # cmu edit start
+        cmuMinHugTime: 0
+        cmuMaxHugTime: 0
+        # cmu edit end
 
     - type: entity
       parent: CMMobHuman

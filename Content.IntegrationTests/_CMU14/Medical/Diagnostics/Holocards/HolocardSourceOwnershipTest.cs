@@ -42,6 +42,10 @@ public sealed class HolocardSourceOwnershipTest
           components:
           - type: XenoParasite
             fallOffDelay: 0
+            # cmu edit start
+            cmuMinHugTime: 0
+            cmuMaxHugTime: 0
+            # cmu edit end
         """;
 
     [TestCase(false)]
@@ -140,7 +144,9 @@ public sealed class HolocardSourceOwnershipTest
     }
 
     [Test]
+    // cmu edit start
     public async Task InfectionNeverTagsTheCardAutomatically()
+    // cmu edit end
     {
         await using var pair = await PoolManager.GetServerClient();
         var map = await pair.CreateTestMap();
@@ -162,8 +168,9 @@ public sealed class HolocardSourceOwnershipTest
         {
             var entities = pair.Server.EntMan;
             Assert.That(entities.HasComponent<VictimInfectedComponent>(patient), Is.True);
-            // Only the body scanner sees a parasite, so the card isn't tagged Xeno for it.
+            // cmu edit start: only the body scanner sees a parasite, so the card isn't tagged Xeno for it
             AssertCard(entities, patient, HolocardStatus.Emergency, HolocardStatus.Emergency, HolocardStatus.None);
+            // cmu edit end
             Assert.That(entities.System<SharedXenoParasiteSystem>().TryChemicallyExpelInfection(patient), Is.True);
         });
         await pair.RunTicksSync(2);
