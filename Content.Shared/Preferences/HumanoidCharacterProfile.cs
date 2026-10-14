@@ -1164,6 +1164,12 @@ namespace Content.Shared.Preferences
 
             var list = new HashSet<ProtoId<TraitPrototype>>(_traitPreferences) { traitId };
 
+            // cmu edit start: picking a trait drops any trait it cannot be taken with
+            list.RemoveWhere(other => other != traitId &&
+                                      protoManager.TryIndex(other, out var otherTrait) &&
+                                      traitProto.CMUConflictsWith(otherTrait));
+            // cmu edit end
+
             if (traitCategory == null || traitCategory.MaxTraitPoints < 0)
             {
                 return new(this)
@@ -1693,6 +1699,21 @@ namespace Content.Shared.Preferences
             {
                 if (!protoManager.TryIndex(trait, out var traitProto))
                     continue;
+
+                // cmu edit start: the first of two traits that cannot be taken together wins
+                var conflicts = false;
+                foreach (var kept in result)
+                {
+                    if (protoManager.TryIndex(kept, out var keptProto) && traitProto.CMUConflictsWith(keptProto))
+                    {
+                        conflicts = true;
+                        break;
+                    }
+                }
+
+                if (conflicts)
+                    continue;
+                // cmu edit end
 
                 // Always valid.
                 if (traitProto.Category == null)

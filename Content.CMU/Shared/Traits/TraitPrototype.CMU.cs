@@ -14,6 +14,20 @@ public sealed partial class TraitPrototype
     public List<ProtoId<DepartmentPrototype>> CMUBlockedDepartments { get; private set; } = new();
 
     /// <summary>
+    ///     Traits that cannot be taken together with this one. Only needs listing on one side.
+    /// </summary>
+    [DataField("cmuExcludes")]
+    public List<ProtoId<TraitPrototype>> CMUExcludes { get; private set; } = new();
+
+    /// <summary>
+    ///     Whether this trait and <paramref name="other"/> rule each other out, from either side's list.
+    /// </summary>
+    public bool CMUConflictsWith(TraitPrototype other)
+    {
+        return CMUExcludes.Contains(other.ID) || other.CMUExcludes.Contains(ID);
+    }
+
+    /// <summary>
     ///     Whether this trait is kept off the given job by <see cref="CMUBlockedDepartments"/>.
     /// </summary>
     public bool CMUIsBlockedForJob(IPrototypeManager prototypes, ProtoId<JobPrototype> job)

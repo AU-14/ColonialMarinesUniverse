@@ -149,7 +149,7 @@ cmu-trait-opiate-receptor-deficiency-name = Opiate Receptor Deficiency
 cmu-trait-opiate-receptor-deficiency-desc = Due to overuse of opiates or a genetic fluke, basic painkillers (up to tramadol) work much less well on you.
 
 cmu-trait-bad-leg-name = Bad Leg
-cmu-trait-bad-leg-desc = Your leg suffered an undetermined wound a long time ago that never fully healed. Walking around without a cane will eventually make you fall over in pain, but you start with one. Not available to GOVFOR, OPFOR or law enforcement.
+cmu-trait-bad-leg-desc = Your leg suffered an undetermined wound a long time ago that never fully healed. Walking around without a cane will eventually make you fall over in pain, but you start with one. Not available to GOVFOR, OPFOR or law enforcement, and can't be taken with a prosthetic leg.
 
 cmu-trait-iron-teeth-name = Iron Teeth
 cmu-trait-iron-teeth-desc = You've got iron teeth, or really good dental insurance. Items in your face slot, such as knives, won't fall out when you go down.
