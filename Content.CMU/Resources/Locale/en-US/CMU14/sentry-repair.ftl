@@ -31,3 +31,8 @@ cmu-sentry-repair-done-screw = {CAPITALIZE(THE($sentry))}'s panels are secure.
 cmu-sentry-repair-done-tune = {CAPITALIZE(THE($sentry))}'s targeting beeps back to life.
 cmu-sentry-repair-finished = You seal {THE($sentry)}'s casing. It's working again.
 cmu-sentry-repair-finished-others = { $user } finishes repairing {THE($sentry)}.
+
+# RMC sentry lines that had no text
+rmc-sentry-disassembled-with-wrench = It can be disassembled with a [color=cyan]wrench[/color].
+rmc-sentry-faction-set-with-multitool = Use a [color=cyan]multitool[/color] on it to set it to your IFF.
+rmc-sentry-no-faction-set = {CAPITALIZE(THE($sentry))} has no IFF set. Use a multitool on it first.
