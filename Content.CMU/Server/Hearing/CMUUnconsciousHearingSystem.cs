@@ -1,5 +1,6 @@
 using System.Text;
 using Content.Shared._RMC14.Deafness;
+using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Chat;
 using Content.Shared.CMU14.Hearing;
 using Content.Shared.Mobs.Systems;
@@ -79,6 +80,10 @@ public sealed class CMUUnconsciousHearingSystem : EntitySystem
     public bool IsUnconscious(EntityUid uid)
     {
         if (_mobState.IsCritical(uid))
+            return true;
+
+        // A parasite over the face hears the same as being out cold.
+        if (TryComp(uid, out InfectableComponent? infectable) && infectable.BeingInfected)
             return true;
 
         if (_status.HasStatusEffect(uid, LegacyUnconsciousKey))
