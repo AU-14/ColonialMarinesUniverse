@@ -20,6 +20,7 @@ namespace Content.Server.CMU14.Dropship;
 ///     A dropship flying between landing zones hits turbulence now and then. While it lasts, everyone
 ///     aboard has their screen shaken, and anyone standing who is not buckled in gets jostled about and
 ///     sometimes thrown to the floor. Aircrew (<see cref="AircrewSkill"/>) keep their feet.
+///     Dropping out of a warship's bay starts with a lurch, a few seconds of quiet, then very heavy turbulence.
 /// </summary>
 public sealed class CMUDropshipTurbulenceSystem : EntitySystem
 {
@@ -43,6 +44,15 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
 
     private const int StartMessages = 8;
     private const int KnockdownMessages = 5;
+    private const int LaunchMessages = 4;
+
+    // Leaving a warship's bay: the drop, a pause, then the dropship fighting its way into the air.
+    private static readonly TimeSpan LaunchPause = TimeSpan.FromSeconds(3);
+    private static readonly TimeSpan LaunchBout = TimeSpan.FromSeconds(6);
+    private static readonly TimeSpan HeavyPulseInterval = TimeSpan.FromSeconds(0.5);
+    private const float HeavyKnockdownChance = 0.6f;
+    private static readonly TimeSpan HeavyKnockdownTime = TimeSpan.FromSeconds(2.5);
+    private const float HeavyNudgeDistance = 1.2f;
 
     [Dependency] private RMCCameraShakeSystem _cameraShake = default!;
     [Dependency] private MobStateSystem _mobState = default!;
@@ -64,6 +74,33 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
         public TimeSpan NextBout;
         public TimeSpan BoutEnds;
         public TimeSpan NextPulse;
+        public bool Heavy;
+    }
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<DropshipLaunchedFromWarshipEvent>(OnLaunchedFromWarship);
+    }
+
+    private void OnLaunchedFromWarship(ref DropshipLaunchedFromWarshipEvent args)
+    {
+        var ship = args.Dropship.Owner;
+        var now = _timing.CurTime;
+        var start = now + LaunchPause;
+        _ships[ship] = new Turbulence
+        {
+            BoutEnds = start + LaunchBout,
+            NextBout = start + LaunchBout + Calm(),
+            NextPulse = start,
+            Heavy = true,
+        };
+
+        var message = Loc.GetString($"cmu-dropship-launch-drop-{_random.Next(1, LaunchMessages + 1)}");
+        GetPassengers(ship);
+        foreach (var mob in _aboard)
+        {
+            _popup.PopupEntity(message, mob, mob, PopupType.LargeCaution);
+        }
     }
 
     public override void Update(float frameTime)
@@ -101,6 +138,7 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
 
             if (now >= turbulence.BoutEnds && now >= turbulence.NextBout)
             {
+                turbulence.Heavy = false;
                 var duration = TimeSpan.FromSeconds(_random.NextFloat(MinDuration, MaxDuration));
                 turbulence.BoutEnds = now + duration;
                 turbulence.NextBout = turbulence.BoutEnds + Calm();
@@ -110,8 +148,8 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
 
             if (now < turbulence.BoutEnds && now >= turbulence.NextPulse)
             {
-                turbulence.NextPulse = now + PulseInterval;
-                Pulse(ship);
+                turbulence.NextPulse = now + (turbulence.Heavy ? HeavyPulseInterval : PulseInterval);
+                Pulse(ship, turbulence.Heavy);
             }
         }
     }
@@ -137,12 +175,15 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
         }
     }
 
-    private void Pulse(EntityUid ship)
+    private void Pulse(EntityUid ship, bool heavy)
     {
         GetPassengers(ship);
         foreach (var mob in _aboard)
         {
-            _cameraShake.ShakeCamera(mob, 3, _random.Next(1, 3));
+            if (heavy)
+                _cameraShake.ShakeCamera(mob, 5, _random.Next(3, 5), TimeSpan.FromSeconds(0.08));
+            else
+                _cameraShake.ShakeCamera(mob, 3, _random.Next(1, 3));
 
             if (!_mobState.IsAlive(mob) ||
                 _standing.IsDown(mob) ||
@@ -152,22 +193,22 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
                 continue;
             }
 
-            if (_random.Prob(KnockdownChance))
+            if (_random.Prob(heavy ? HeavyKnockdownChance : KnockdownChance))
             {
-                _stun.TryKnockdown(mob, KnockdownTime, refresh: true);
+                _stun.TryKnockdown(mob, heavy ? HeavyKnockdownTime : KnockdownTime, refresh: true);
                 _popup.PopupEntity(Loc.GetString($"cmu-dropship-turbulence-knocked-down-{_random.Next(1, KnockdownMessages + 1)}"), mob, mob, PopupType.MediumCaution);
-                Nudge(mob);
+                Nudge(mob, heavy);
             }
-            else if (_random.Prob(NudgeChance))
+            else if (heavy || _random.Prob(NudgeChance))
             {
-                Nudge(mob);
+                Nudge(mob, heavy);
             }
         }
     }
 
-    private void Nudge(EntityUid mob)
+    private void Nudge(EntityUid mob, bool heavy)
     {
-        var direction = _random.NextAngle().ToVec() * NudgeDistance;
+        var direction = _random.NextAngle().ToVec() * (heavy ? HeavyNudgeDistance : NudgeDistance);
         _throwing.TryThrow(mob, direction, NudgeSpeed, animated: false, playSound: false, doSpin: false);
     }
 

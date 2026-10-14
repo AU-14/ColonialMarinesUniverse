@@ -12,3 +12,8 @@ cmu-dropship-turbulence-knocked-down-2 = You lose your footing and slam into the
 cmu-dropship-turbulence-knocked-down-3 = The dropship lurches and you go sprawling!
 cmu-dropship-turbulence-knocked-down-4 = You grab for a handhold and miss, hitting the floor hard!
 cmu-dropship-turbulence-knocked-down-5 = A sudden drop pitches you onto the deck!
+
+cmu-dropship-launch-drop-1 = Your stomach lurches as the dropship freefalls out of the ship's bay!
+cmu-dropship-launch-drop-2 = The docking clamps release with a bang and the dropship drops like a stone out of the bay!
+cmu-dropship-launch-drop-3 = The bay doors yawn open and the dropship falls away into the dark, your stomach left somewhere behind you!
+cmu-dropship-launch-drop-4 = Weightlessness grabs you as the dropship plummets clear of the ship!
