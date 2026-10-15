@@ -116,7 +116,7 @@
   # Full IED-grade blast: identical numbers to the AU14IED item (plus its shrapnel burst), so the
   # buried version hits exactly as hard as the handheld one.
   - type: Explosive
-    explosionType: RMC
+    explosionType: CMUIED # FLOW-09: own tank blast multiplier; otherwise RMC.
     totalIntensity: 1400
     intensitySlope: 1.5
     maxIntensity: 80
