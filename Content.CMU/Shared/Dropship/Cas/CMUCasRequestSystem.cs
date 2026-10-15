@@ -13,6 +13,8 @@ using Content.Shared.CMU14.Radio;
 using Content.Shared.CMU14.Round;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
+using Content.Shared.Interaction;
+using Content.Shared.Physics;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
@@ -38,6 +40,7 @@ public sealed class CMUCasRequestSystem : EntitySystem
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private SharedDropshipSystem _dropships = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private RMCPlanetSystem _planet = default!;
@@ -50,7 +53,8 @@ public sealed class CMUCasRequestSystem : EntitySystem
     public const float TargetScanRange = 4f;
     public const int MaxOpenRequests = 6;
     /// <summary>How far from the RTO a mark, or the hostile for a radio mark, can be.</summary>
-    public const float CallRange = 45f;
+    public const float CallRange = 30f;
+    public const float MaintainRange = 45f;
     /// <summary>Marks within this distance of an RTO's laser designation count as designated.</summary>
     public const float DesignationRange = 2f;
     /// <summary>Strike spread multiplier on RTO-designated targets: 25% tighter.</summary>
@@ -144,6 +148,11 @@ public sealed class CMUCasRequestSystem : EntitySystem
                 PopupType.SmallCaution);
             return false;
         }
+        if (!CanCallTarget(rto, target))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-cas-request-no-los"), rto, rto, PopupType.SmallCaution);
+            return false;
+        }
 
         var netTarget = GetNetEntity(target);
         if (_requests.Any(entry => entry.Request.Target == netTarget && entry.ClosedAt == null))
@@ -196,6 +205,14 @@ public sealed class CMUCasRequestSystem : EntitySystem
     }
 
     public const int MaxRemarksLength = 120;
+
+    public bool CanCallTarget(EntityUid rto, EntityUid target)
+    {
+        return _interaction.InRangeUnobstructed(_transform.GetMapCoordinates(rto),
+            _transform.GetMapCoordinates(target), CallRange, CollisionGroup.Opaque,
+            predicate: blocker => blocker == rto || blocker == target ||
+                !TryComp(blocker, out OccluderComponent? occluder) || !occluder.Enabled);
+    }
 
     /// <summary>
     /// Calls CAS without a flare: the uplink drops a radio mark on the nearest hostile within <see cref="CallRange"/>.
@@ -252,7 +269,7 @@ public sealed class CMUCasRequestSystem : EntitySystem
             if (mob.Owner == rto || mob.Comp.CurrentState != MobState.Alive || IsFriendly(faction, mob))
                 continue;
             var distance = (_transform.GetMapCoordinates(mob).Position - origin.Position).LengthSquared();
-            if (distance >= bestDistance)
+            if (distance >= bestDistance || !CanCallTarget(rto, mob))
                 continue;
             bestDistance = distance;
             best = mob;
@@ -266,6 +283,8 @@ public sealed class CMUCasRequestSystem : EntitySystem
     {
         if (_net.IsClient || FindEntry(id) is not { } entry || entry.Rto != rto ||
             entry.Request.Status != CMUCasRequestStatus.Accepted)
+            return false;
+        if (!CheckMaintainedRange(entry))
             return false;
         SetStatus(entry, CMUCasRequestStatus.ClearedHot, entry.Request.Aircraft);
         Radio(rto, entry.Faction, Loc.GetString("cmu-cas-radio-cleared",
@@ -387,6 +406,8 @@ public sealed class CMUCasRequestSystem : EntitySystem
         var changed = false;
         foreach (var entry in _requests.ToList())
         {
+            if (entry.ClosedAt != null || !CheckMaintainedRange(entry))
+                continue;
             if (entry.ClosedAt == null && entry.HadHostiles &&
                 TryGetEntity(entry.Request.Target, out var mark) && !TerminatingOrDeleted(mark))
             {
@@ -518,6 +539,23 @@ public sealed class CMUCasRequestSystem : EntitySystem
             $"CAS request {entry.Request.Id} cancelled: {entry.Request.StatusDetail}.");
     }
 
+    private bool CheckMaintainedRange(Entry entry)
+    {
+        if (TerminatingOrDeleted(entry.Rto) ||
+            !TryGetEntity(entry.Request.Target, out var target) || TerminatingOrDeleted(target))
+        {
+            Cancel(entry, "cmu-cas-cancel-rto-range");
+            return false;
+        }
+        var origin = _transform.GetMapCoordinates(entry.Rto);
+        var mark = _transform.GetMapCoordinates(target.Value);
+        if (origin.MapId == mark.MapId &&
+            (origin.Position - mark.Position).LengthSquared() <= MaintainRange * MaintainRange)
+            return true;
+        Cancel(entry, "cmu-cas-cancel-rto-range");
+        return false;
+    }
+
     private bool HasHostiles(string faction, MapCoordinates coordinates)
     {
         _mobs.Clear();
@@ -532,13 +570,17 @@ public sealed class CMUCasRequestSystem : EntitySystem
         var impact = _transform.ToMapCoordinates(coordinates);
         foreach (var entry in _requests)
         {
-            if (entry.ClosedAt != null || entry.Request.Status == CMUCasRequestStatus.ClearedHot ||
+            if (entry.ClosedAt != null ||
                 !FactionMatches(faction, entry.Faction) ||
                 !TryGetEntity(entry.Request.Target, out var mark) || TerminatingOrDeleted(mark))
                 continue;
             var anchor = _transform.GetMapCoordinates(mark.Value);
             if (mark != selectedTarget && (anchor.MapId != impact.MapId ||
                 (anchor.Position - impact.Position).LengthSquared() > RequestCoverRange * RequestCoverRange))
+                continue;
+            if (!CheckMaintainedRange(entry))
+                return false;
+            if (entry.Request.Status == CMUCasRequestStatus.ClearedHot)
                 continue;
             if (actor is { } user)
                 _popup.PopupEntity(Loc.GetString("cmu-cas-clearance-required"), console, user, PopupType.MediumCaution);
@@ -670,6 +712,8 @@ public sealed class CMUCasRequestSystem : EntitySystem
         {
             if (!string.IsNullOrEmpty(mark.Comp.CreatorFaction) &&
                 !string.Equals(mark.Comp.CreatorFaction, faction, StringComparison.OrdinalIgnoreCase))
+                continue;
+            if (!CanCallTarget(rto, mark))
                 continue;
             marks.Add(DescribeCallTarget(faction, origin, mark, GetNetEntity(mark),
                 mark.Comp.Abbreviation ?? Name(mark), IsRtoDesignated(mark)));

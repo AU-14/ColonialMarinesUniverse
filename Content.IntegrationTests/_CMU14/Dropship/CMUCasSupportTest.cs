@@ -306,16 +306,16 @@ public sealed class CMUCasSupportTest
             var farMark = entities.SpawnEntity(null, At(55));
             weapons.MakeDropshipTarget(farMark, "FAR", "GOVFOR");
             Assert.That(requests.TryCreateRequest(rto, farMark, CMUCasMunition.Any, out _), Is.False,
-                "Marks beyond 45 tiles are out of call range.");
-            var nearMark = entities.SpawnEntity(null, At(40));
+                "Marks beyond 30 tiles are out of call range.");
+            var nearMark = entities.SpawnEntity(null, At(25));
             weapons.MakeDropshipTarget(nearMark, "NER", "GOVFOR");
             Assert.That(requests.IsRtoDesignated(nearMark), Is.False);
-            var lase = entities.SpawnEntity(null, At(41));
+            var lase = entities.SpawnEntity(null, At(26));
             entities.EnsureComponent<CMUCasRtoDesignationComponent>(lase);
             Assert.That(requests.IsRtoDesignated(nearMark), Is.True, "An RTO lase within two tiles designates the strike.");
             Assert.That(requests.IsRtoDesignated(At(10)), Is.False);
             Assert.That(requests.TryCreateRequest(rto, nearMark, CMUCasMunition.Bofors, out var lasedId), Is.True,
-                "Marks within 45 tiles can be called.");
+                "Visible marks within 30 tiles can be called.");
             requests.TryGetRequest(lasedId, out var lased);
             Assert.That(lased.Designated, Is.True);
 

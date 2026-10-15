@@ -38,6 +38,125 @@ public sealed class CasCorrectionsTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Dirty = true };
 
+    [TestCase(30f, true)]
+    [TestCase(30.01f, false)]
+    [TestCase(45f, false)]
+    public async Task RtoCallsRequireThirtyTileRange(float distance, bool allowed)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var rto = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(rto).Faction = "GOVFOR";
+            var mark = SEntMan.SpawnEntity(null, map.GridCoords.Offset(new Vector2(distance, 0)));
+            Server.System<SharedDropshipWeaponSystem>().MakeDropshipTarget(mark, "RANGE", "GOVFOR");
+            Assert.That(Server.System<CMUCasRequestSystem>().TryCreateRequest(rto, mark, CMUCasMunition.Any, out _),
+                Is.EqualTo(allowed));
+        });
+    }
+
+    [TestCase("CMWallMetal", false)]
+    [TestCase("CMWindowReinforcedAlmayer", true)]
+    public async Task RtoCallsRespectWallsButSeeThroughWindows(string obstacle, bool allowed)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            for (var x = 0; x <= 10; x++)
+                maps.SetTile(map.Grid, new Vector2i(x, 0), map.Tile.Tile);
+            var rto = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(rto).Faction = "GOVFOR";
+            SEntMan.SpawnEntity(obstacle, map.GridCoords.Offset(new Vector2(5, 0)));
+            var mark = SEntMan.SpawnEntity(null, map.GridCoords.Offset(new Vector2(10, 0)));
+            Server.System<SharedDropshipWeaponSystem>().MakeDropshipTarget(mark, "LOS", "GOVFOR");
+            var requests = Server.System<CMUCasRequestSystem>();
+            Assert.That(requests.CanCallTarget(rto, mark), Is.EqualTo(allowed));
+            Assert.That(requests.TryCreateRequest(rto, mark, CMUCasMunition.Any, out _), Is.EqualTo(allowed));
+        });
+    }
+
+    [Test]
+    public async Task RadioCallsSkipHiddenAndOutOfRangeHostiles()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            for (var x = 0; x <= 40; x++)
+                for (var y = 0; y <= 20; y++)
+                    maps.SetTile(map.Grid, new Vector2i(x, y), map.Tile.Tile);
+            EntityUid Mob(Vector2 offset, string faction)
+            {
+                var mob = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(offset));
+                SEntMan.EnsureComponent<MarineComponent>(mob).Faction = faction;
+                return mob;
+            }
+            var rto = Mob(Vector2.Zero, "GOVFOR");
+            Mob(new Vector2(10, 0), "OPFOR");
+            Mob(new Vector2(31, 0), "OPFOR");
+            SEntMan.SpawnEntity("CMWallMetal", map.GridCoords.Offset(new Vector2(5, 0)));
+            var requests = Server.System<CMUCasRequestSystem>();
+            Assert.That(requests.TryCreateRadioMarkRequest(rto, CMUCasMunition.Any, CMUCasEffect.Any, "", out _),
+                Is.False, "A nearby hidden hostile must not bypass the LOS check.");
+            var visible = Mob(new Vector2(0, 15), "OPFOR");
+            Assert.That(requests.TryCreateRadioMarkRequest(rto, CMUCasMunition.Any, CMUCasEffect.Any, "", out var id),
+                Is.True);
+            Assert.That(requests.TryGetRequest(id, out var request), Is.True);
+            var xforms = Server.System<SharedTransformSystem>();
+            Assert.That(xforms.GetMapCoordinates(SEntMan.GetEntity(request.Target)),
+                Is.EqualTo(xforms.GetMapCoordinates(visible)));
+        });
+    }
+
+    [TestCase(CMUCasRequestStatus.Pending)]
+    [TestCase(CMUCasRequestStatus.Accepted)]
+    [TestCase(CMUCasRequestStatus.ClearedHot)]
+    public async Task RtoMayLoseSightButMustStayWithinFortyFiveTiles(CMUCasRequestStatus status)
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid rto = default;
+        var id = 0;
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            for (var x = -25; x <= 20; x++)
+                maps.SetTile(map.Grid, new Vector2i(x, 0), map.Tile.Tile);
+            rto = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(rto).Faction = "GOVFOR";
+            var mark = SEntMan.SpawnEntity(null, map.GridCoords.Offset(new Vector2(20, 0)));
+            Server.System<SharedDropshipWeaponSystem>().MakeDropshipTarget(mark, "HOLD", "GOVFOR");
+            var requests = Server.System<CMUCasRequestSystem>();
+            Assert.That(requests.TryCreateRequest(rto, mark, CMUCasMunition.Any, out id), Is.True);
+            if (status != CMUCasRequestStatus.Pending)
+            {
+                var console = SEntMan.SpawnEntity("CMUMohawkMidwayGunneryea0f8d621b", map.GridCoords);
+                SEntMan.EventBus.RaiseLocalEvent(console, new CMUCasRequestActionMsg(id, CMUCasRequestStatus.Accepted)
+                { Actor = rto, UiKey = DropshipTerminalWeaponsUi.Key });
+                Assert.That(requests.SetCarryMode(id, CMUCasCarryMode.Manual), Is.True);
+                if (status == CMUCasRequestStatus.ClearedHot)
+                    Assert.That(requests.TryClearHot(rto, id), Is.True);
+            }
+            SEntMan.SpawnEntity("CMWallMetal", map.GridCoords.Offset(new Vector2(10, 0)));
+            Server.System<SharedTransformSystem>().SetCoordinates(rto, map.GridCoords.Offset(new Vector2(-25, 0)));
+        });
+        await Pair.RunSeconds(0.5f);
+        await Server.WaitAssertion(() =>
+        {
+            var requests = Server.System<CMUCasRequestSystem>();
+            Assert.That(requests.TryGetRequest(id, out var request), Is.True);
+            Assert.That(request.Status, Is.EqualTo(status), "Exactly 45 tiles is valid, even after losing sight.");
+            Server.System<SharedTransformSystem>().SetCoordinates(rto, map.GridCoords.Offset(new Vector2(-25.01f, 0)));
+        });
+        await Pair.RunSeconds(0.5f);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(Server.System<CMUCasRequestSystem>().TryGetRequest(id, out var request), Is.True);
+            Assert.That(request.Status, Is.EqualTo(CMUCasRequestStatus.Denied));
+            Assert.That(request.StatusDetail, Does.Contain("45-tile"));
+        });
+    }
+
     [Test]
     public async Task FlareCameraUsesHighestSolidDeckAndReturnsToTargetBelowSpace()
     {

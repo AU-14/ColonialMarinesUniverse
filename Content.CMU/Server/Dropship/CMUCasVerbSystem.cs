@@ -129,7 +129,7 @@ public sealed class CMUCasVerbSystem : EntitySystem
                 !string.Equals(mark.Comp.CreatorFaction, faction, StringComparison.OrdinalIgnoreCase))
                 continue;
             var distance = (_transform.GetMapCoordinates(mark).Position - origin.Position).LengthSquared();
-            if (distance >= bestDistance)
+            if (distance >= bestDistance || !_requests.CanCallTarget(user, mark))
                 continue;
             bestDistance = distance;
             best = mark;
