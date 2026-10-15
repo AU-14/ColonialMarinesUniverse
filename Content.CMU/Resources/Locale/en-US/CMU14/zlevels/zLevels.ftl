@@ -5,8 +5,12 @@ cmu-zlevel-look-up-nested = You cannot look up while nested.
 cmu-zlevel-look-up-enabled = You look up.
 cmu-zlevel-look-up-disabled = You stop looking up.
 
+cmu-zlevel-shoot-down-enabled = You prepare to fire down a Z-level.
+cmu-zlevel-shoot-down-disabled = You stop aiming down a Z-level.
 cmu-zlevel-shoot-down-disabled-unwield = You stop aiming down as you unwield your weapon.
 cmu-zlevel-shoot-up-disabled-unwield = You stop aiming up as you unwield your weapon.
+cmu-zlevel-shoot-down-no-gun = You need a gun in hand to aim down a Z-level.
+cmu-zlevel-shoot-down-requires-wield = You need to wield your gun before aiming down a Z-level.
 cmu-zlevel-shoot-down-no-level = There is no Z-level below to shoot into.
 cmu-zlevel-shoot-up-no-level = There is no Z-level above to shoot into.
 cmu-zlevel-shoot-down-blocked-floor = There is no opening nearby to shoot down through.

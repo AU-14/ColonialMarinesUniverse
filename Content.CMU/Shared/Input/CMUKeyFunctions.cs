@@ -16,6 +16,7 @@ public sealed class CMUKeyFunctions
     public static readonly BoundKeyFunction CMUTargetBodyZoneRightLeg = "CMUTargetBodyZoneRightLeg";
     public static readonly BoundKeyFunction CMUInspectInjuries = "CMUInspectInjuries";
     public static readonly BoundKeyFunction CMUOpenMedicalCraftingMenu = "CMUOpenMedicalCraftingMenu";
+    public static readonly BoundKeyFunction CMUToggleShootDownZLevel = "CMUToggleShootDownZLevel";
     public static readonly BoundKeyFunction CMUOpenWornStorage = "CMUOpenWornStorage";
 
     public static readonly BoundKeyFunction CMUGunshipForward = "CMUGunshipForward";
