@@ -4,8 +4,8 @@ meta:
   engineVersion: 290.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/15/2026 01:24:56
-  entityCount: 29350
+  time: 10/15/2026 05:32:54
+  entityCount: 29351
 maps:
 - 1
 grids:
@@ -57148,7 +57148,7 @@ entities:
         DoorStatus: True
     - type: Door
       state: Opening
-      secondsUntilStateChange: -68077.57
+      secondsUntilStateChange: -68152.766
   - uid: 133
     components:
     - type: MetaData
@@ -57644,7 +57644,7 @@ entities:
         DoorStatus: True
     - type: Door
       state: Opening
-      secondsUntilStateChange: -70157
+      secondsUntilStateChange: -70232.195
   - uid: 200
     components:
     - type: Transform
@@ -57656,7 +57656,7 @@ entities:
         DoorStatus: True
     - type: Door
       state: Opening
-      secondsUntilStateChange: -70158.03
+      secondsUntilStateChange: -70233.23
   - uid: 201
     components:
     - type: Transform
@@ -57689,7 +57689,7 @@ entities:
       pos: 127.5,-79.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -72600.67
+      secondsUntilStateChange: -72675.87
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -57761,7 +57761,7 @@ entities:
       pos: 77.5,-75.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69162.03
+      secondsUntilStateChange: -69237.23
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -57782,7 +57782,7 @@ entities:
       pos: 80.5,-75.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69161.734
+      secondsUntilStateChange: -69236.93
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -57887,7 +57887,7 @@ entities:
       pos: 63.5,-64.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69457.7
+      secondsUntilStateChange: -69532.9
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -58284,7 +58284,7 @@ entities:
       pos: 68.5,-33.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -70640.164
+      secondsUntilStateChange: -70715.36
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -63557,7 +63557,7 @@ entities:
       lastOpeningAt: 865.2991347
     - type: Door
       state: Opening
-      secondsUntilStateChange: -70690.266
+      secondsUntilStateChange: -70765.46
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -63572,7 +63572,7 @@ entities:
       lastOpeningAt: 865.2991347
     - type: Door
       state: Opening
-      secondsUntilStateChange: -70690.266
+      secondsUntilStateChange: -70765.46
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64105,7 +64105,7 @@ entities:
       lastOpeningAt: 2393.0309403
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69162.53
+      secondsUntilStateChange: -69237.73
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64121,7 +64121,7 @@ entities:
       lastOpeningAt: 2393.0309403
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69162.53
+      secondsUntilStateChange: -69237.73
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64137,7 +64137,7 @@ entities:
       lastOpeningAt: 2078.4979215
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69477.07
+      secondsUntilStateChange: -69552.266
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64153,7 +64153,7 @@ entities:
       lastOpeningAt: 2078.4979215
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69477.07
+      secondsUntilStateChange: -69552.266
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -74307,6 +74307,13 @@ entities:
       parent: 1
       rot: 1.5707963267948966 rad
       pos: 64.91357,-56.558292
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 24260
+    components:
+    - type: Transform
+      parent: 1
+      pos: 88.5,-73.5
 - proto: CMVendorBooze
   entities:
   - uid: 2981
