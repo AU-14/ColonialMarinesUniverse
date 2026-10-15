@@ -52,8 +52,9 @@
   id: CMUYautjaGroundRelayDestination
   name: Yautja ground relay destination
   description: Invisible destination marker for Yautja relay beacons on a ground map.
-  categories: [ HideSpawnMenu ]
   components:
+  - type: Sprite
+    state: green
   - type: YautjaRelayDestination
     kind: Ground
 
