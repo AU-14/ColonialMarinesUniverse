@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13-pve (cmss13-devs/cmss13-pve#781) at https://github.com/The32bitguy/cmss13-pve-32bit/blob/88aaf103972f5fa67af1ac7f0973f396b6ca9707/icons/obj/items/weapons/guns/attachments/stock.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "stock"
+    },
+    {
+      "name": "stock-on"
+    },
+    {
+      "name": "stock_a"
+    },
+    {
+      "name": "stock_a-on"
+    }
+  ]
+}

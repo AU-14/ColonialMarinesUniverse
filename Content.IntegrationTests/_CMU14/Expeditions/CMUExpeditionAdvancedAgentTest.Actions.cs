@@ -113,6 +113,8 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
     {
         EntityUid map = default, guard = default, enemy = default, second = default, grenade = default, ally = default;
         EntityCoordinates contact = default;
+        // the kit carries more than one now, so follow all of them and check exactly one gets thrown
+        var carried = new List<EntityUid>();
         await Server.WaitAssertion(() =>
         {
             (map, guard, enemy) = Arena("CMUExpeditionScavenger");
@@ -120,7 +122,8 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
             second = SEntMan.SpawnEntity("CMMobHuman", contact.Offset(new Vector2(0, -1)));
             SEntMan.AddComponent<GodmodeComponent>(second);
             Server.System<NpcFactionSystem>().AddFaction(second, GOVFORPrototype);
-            grenade = Stored(guard).Single(item => SEntMan.TryGetComponent<CMUExpeditionGrenadeComponent>(item, out var kind) && !kind.Smoke);
+            carried.AddRange(Stored(guard).Where(item => SEntMan.TryGetComponent<CMUExpeditionGrenadeComponent>(item, out var kind) && !kind.Smoke));
+            Assert.That(carried, Is.Not.Empty, "The scavenger kit needs a blast grenade for this test.");
         });
         await WaitForUtility(guard, CMUTacticalAction.ThrowGrenade);
         await Server.WaitAssertion(() =>
@@ -132,7 +135,7 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
         await Pair.RunSeconds(1);
         await Server.WaitAssertion(() =>
         {
-            Assert.That(SEntMan.HasComponent<ActiveTimerTriggerComponent>(grenade), Is.False, "A buddy entering the blast area during preparation cancels the throw before priming.");
+            Assert.That(carried.Where(SEntMan.HasComponent<ActiveTimerTriggerComponent>), Is.Empty, "A buddy entering the blast area during preparation cancels the throw before priming.");
             Assert.That(SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).GrenadesThrown, Is.Zero);
             SEntMan.DeleteEntity(ally);
             SEntMan.DeleteEntity(enemy);
@@ -164,9 +167,13 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
         {
             var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
             Assert.That(thrown, Is.True, $"state={agent.State}, goal={agent.Goal}, action={agent.Action}, failures={agent.FailedPlans}, threats={agent.VisibleThreats.Count}, held={agent.ActionItem}, pos={SEntMan.GetComponent<TransformComponent>(guard).Coordinates}");
-            Assert.That(SEntMan.HasComponent<ActiveTimerTriggerComponent>(grenade), Is.True);
+            var primed = carried.Where(SEntMan.HasComponent<ActiveTimerTriggerComponent>).ToList();
+            Assert.That(primed, Has.Count.EqualTo(1), "One throw primes exactly one of the carried grenades.");
+            grenade = primed[0];
             Assert.That(SEntMan.HasComponent<ThrownItemComponent>(grenade), Is.True, "Use native throwing physics, not a spawned explosion at the target.");
-            Assert.That(Stored(guard), Does.Not.Contain(grenade));
+            var stored = Stored(guard);
+            Assert.That(stored, Does.Not.Contain(grenade));
+            Assert.That(carried.Count(stored.Contains), Is.EqualTo(carried.Count - 1), "The rest of the grenades stay in the kit.");
         });
         await Pair.RunSeconds(0.5f);
         await Server.WaitAssertion(() =>

@@ -1,8 +1,10 @@
 using Content.Client.Gameplay;
+using Content.Client.CMU14.Inventory; // CMU14
 using Content.Client.Hands.Systems;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Hands.Controls;
 using Content.Client.UserInterface.Systems.Hotbar.Widgets;
+using Content.Shared.CMU14.Input; // CMU14
 using Content.Shared.Hands.Components;
 using Content.Shared.Input;
 using Content.Shared.Inventory.VirtualItem;
@@ -113,6 +115,14 @@ public sealed partial class HandsUIController : UIController, IOnStateEntered<Ga
         else if (args.Function == ContentKeyFunctions.Point)
         {
             CMUHoldUpItem(hand.SlotName);
+            args.Handle();
+        }
+        // cmu edit end
+        // cmu edit start: the open storage keybind also opens storage held in hand
+        else if (args.Function == CMUKeyFunctions.CMUOpenWornStorage &&
+                 _handsSystem.GetHeldItem(hands.Value.AsNullable(), hand.SlotName) is { } held &&
+                 EntityManager.System<CMUOpenStorageKeySystem>().TryOpenStorage(held))
+        {
             args.Handle();
         }
         // cmu edit end

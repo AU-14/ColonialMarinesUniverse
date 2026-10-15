@@ -10,6 +10,8 @@ using Content.Shared.CMU14.util;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Roles;
 using Content.Server.CMU14.Ops.ForceOnForce;
+using Content.Server.CMU14.Squads.Foxtrot;
+using Content.Shared.CMU14.Round.Roles;
 using Robust.Server.Player;
 using Robust.Shared.Prototypes;
 using JetBrains.Annotations;
@@ -26,6 +28,7 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
     [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private CMUFoxtrotSquadSystem _foxtrotSquad = default!;
 
     protected override void Started(EntityUid uid, AddJobsRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
@@ -200,6 +203,20 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
             }
         }
         // --- END: Job Scaling Logic ---
+
+        // The Foxtrot squad's slots sit on top of the regular, scaled slots.
+        if (component.Jobs != null && !string.IsNullOrEmpty(component.ShipFaction))
+        {
+            var side = component.ShipFaction.ToLowerInvariant() switch
+            {
+                "govfor" => RoundJobSide.Govfor,
+                "opfor" => RoundJobSide.Opfor,
+                _ => RoundJobSide.None,
+            };
+
+            if (side != RoundJobSide.None)
+                _foxtrotSquad.AddReservedSlots(component.Jobs, side);
+        }
 
         // If there are no jobs to add, return early
         if (component.Jobs == null || component.Jobs.Count == 0)

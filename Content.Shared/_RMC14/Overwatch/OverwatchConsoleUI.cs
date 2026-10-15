@@ -188,7 +188,9 @@ public sealed class OverwatchConsoleClearSquadObjectiveBuiMsg(SquadObjectiveType
 }
 
 [Serializable, NetSerializable]
-public record struct OverwatchSquad(NetEntity Id, string Name, Color Color, NetEntity? Leader, bool CanSupplyDrop, SpriteSpecifier.Rsi LeaderIcon, Dictionary<SquadObjectiveType, string> Objectives);
+// cmu edit start: ManualLeadership (CMUManualLeadershipComponent) for the fireteams tab
+public record struct OverwatchSquad(NetEntity Id, string Name, Color Color, NetEntity? Leader, bool CanSupplyDrop, SpriteSpecifier.Rsi LeaderIcon, Dictionary<SquadObjectiveType, string> Objectives, bool ManualLeadership = false);
+// cmu edit end
 
 [Serializable, NetSerializable]
 public readonly record struct OverwatchMarine(
@@ -203,7 +205,13 @@ public readonly record struct OverwatchMarine(
     string AreaName,
     Vector2? LeaderDistance,
     ProtoId<RankPrototype>? Rank,
-    LocId? RoleOverride
+    // cmu edit start: callsign, fireteam and health (SharedOverwatchConsoleSystem.CMU)
+    LocId? RoleOverride,
+    string Callsign = "",
+    int? Fireteam = null,
+    bool FireteamLeader = false,
+    float? Health = null
+    // cmu edit end
 );
 
 [Serializable, NetSerializable]

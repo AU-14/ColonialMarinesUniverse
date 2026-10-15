@@ -43,4 +43,22 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<bool> ChatCenterInput =
         CVarDef.Create("cmu.chat_center_input", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Copy every on-screen popup into the chat log.
+    /// </summary>
+    public static readonly CVarDef<bool> PopupsInChat =
+        CVarDef.Create("cmu.popups_in_chat", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Don't draw popups on screen. With <see cref="PopupsInChat"/> on, popups only show up in chat.
+    /// </summary>
+    public static readonly CVarDef<bool> HidePopupsOnScreen =
+        CVarDef.Create("cmu.hide_popups_on_screen", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Don't open the examine popup when examining. Pair with <see cref="ExamineFullTextInChat"/> to read examines in chat.
+    /// </summary>
+    public static readonly CVarDef<bool> HideExamineTooltip =
+        CVarDef.Create("cmu.hide_examine_tooltip", false, CVar.CLIENTONLY | CVar.ARCHIVE);
 }

@@ -20,6 +20,7 @@ using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CMU14.CharacterDescription;
+using Content.Shared.CMU14.Medical.Blood; // CMU14
 using Content.Shared.Body;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
@@ -60,6 +61,8 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     private static readonly ProtoId<NpcFactionPrototype> OpforNpcFaction = new("OPFOR");
 
     [Dependency] private SharedAccessSystem _accessSystem = default!;
+
+    [Dependency] private CMUIdBloodTypeSystem _cmuIdBloodType = default!; // CMU14
     [Dependency] private ActorSystem _actors = default!;
     [Dependency] private IdCardSystem _cardSystem = default!;
     [Dependency] private IConfigurationManager _configurationManager = default!;
@@ -190,7 +193,17 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
         var ev = new PlayerSpawningEvent(job, profile, station, player);
 
-        RaiseLocalEvent(ev);
+        // cmu edit start: squad assignment needs to know who is spawning
+        _cmuSpawningPlayer = player;
+        try
+        {
+            RaiseLocalEvent(ev);
+        }
+        finally
+        {
+            _cmuSpawningPlayer = null;
+        }
+        // cmu edit end
         DebugTools.Assert(ev.SpawnResult is { Valid: true } or null);
 
         return ev.SpawnResult;
@@ -302,6 +315,8 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
                 if (profile.FlavorText != "" && _configurationManager.GetCVar(CCVars.FlavorText))
                     AddComp<DetailExaminableComponent>(jobEntity).Content = profile.FlavorText;
 
+                ApplyProfileBloodType(jobEntity, profile); // CMU14
+
                 if (_configurationManager.GetCVar(CCVars.CharacterDescription))
                     BakeCharacterDescription(jobEntity, profile);
             }
@@ -338,7 +353,9 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             if (originalPrototype != null && TryComp(jobEntity, out MetaDataComponent? metaDataJobEntity))
                 SetPdaAndIdCardData(jobEntity, metaDataJobEntity.EntityName, originalPrototype, station);
 
-            AssignRoundStartSquad(jobEntity, coordinates, job, originalPrototype, jobId, team, profile); // CMU14
+            // cmu edit start
+            AssignRoundStartSquad(jobEntity, coordinates, job, originalPrototype, jobId, team, profile, station); // CMU14
+            // cmu edit end
             return jobEntity;
         }
 
@@ -357,6 +374,8 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
             if (profile.FlavorText != "" && _configurationManager.GetCVar(CCVars.FlavorText))
                 AddComp<DetailExaminableComponent>(entity.Value).Content = profile.FlavorText;
+
+            ApplyProfileBloodType(entity.Value, profile); // CMU14
 
             if (_configurationManager.GetCVar(CCVars.CharacterDescription))
                 BakeCharacterDescription(entity.Value, profile);
@@ -453,7 +472,9 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         ApplyRegulationAppearance(entity.Value, profile);
         _identity.QueueIdentityUpdate(entity.Value);
 
-        AssignRoundStartSquad(entity.Value, coordinates, job, originalPrototype, jobId, team, profile); // CMU14
+        // cmu edit start
+        AssignRoundStartSquad(entity.Value, coordinates, job, originalPrototype, jobId, team, profile, station); // CMU14
+        // cmu edit end
 
         ApplyTeamFaction(entity.Value, team);
         return entity.Value;
@@ -466,7 +487,10 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         JobPrototype? originalPrototype,
         string? originalJobId,
         string? team,
-        HumanoidCharacterProfile? profile) // CMU14
+        // cmu edit start
+        HumanoidCharacterProfile? profile, // CMU14
+        EntityUid? station) // CMU14
+        // cmu edit end
     {
         if (team == null || !ShouldAssignToSquad(originalPrototype, originalJobId))
             return;
@@ -484,6 +508,11 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
             // Squad preference is no longer offered, so it is ignored here.
             protoId = CMUPickSquad(candidates, job, originalPrototype, originalJobId, isSergeant);
+            // cmu edit end
+
+            // cmu edit start: reserved Foxtrot squad slots
+            if (CMUTryPickFoxtrotSquad(station, originalJobId, profile, out var foxtrotSquad))
+                protoId = foxtrotSquad;
             // cmu edit end
         }
 
@@ -504,6 +533,10 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             var leaderIcon = ensured.Comp.LeaderIcon;
             _squadSystem.PromoteSquadLeader((entity, memberComp), entity, leaderIcon);
         }
+
+        // cmu edit start
+        CMUApplyFoxtrotSquadPerks(entity, ensured, originalPrototype);
+        // cmu edit end
     }
 
     private static string? GetTeamForSide(RoundJobSide side)
@@ -692,6 +725,14 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     private const string DisabilitiesTraitCategory = "Disabilities";
     private const string DrugAllergyTraitId = "RandomDrugAllergy";
 
+    // CMU14: blood type from the profile, applied whether or not character descriptions are on
+    private void ApplyProfileBloodType(EntityUid uid, HumanoidCharacterProfile profile)
+    {
+        var bloodType = EnsureComp<CMUBloodTypeComponent>(uid);
+        bloodType.Type = profile.BloodType;
+        Dirty(uid, bloodType);
+    }
+
     private void BakeCharacterDescription(EntityUid uid, HumanoidCharacterProfile profile)
     {
         var comp = AddComp<CharacterDescriptionComponent>(uid);
@@ -706,6 +747,9 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         comp.Age = profile.Age;
         comp.Allegiance = profile.Allegiance;
         comp.Origin = profile.Origin;
+        // cmu edit start
+        comp.Religion = profile.Religion;
+        // cmu edit end
         comp.HideMetaInformation = profile.HideMetaInformation;
 
         foreach (var traitId in profile.TraitPreferences)
@@ -802,6 +846,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             return;
 
         _cardSystem.TryChangeFullName(cardId, characterName, card);
+        _cmuIdBloodType.Stamp(cardId, entity); // CMU14: print the blood type on the ID
 
         // Respect cards with a prototype-defined title (e.g. fixed-role/faction IDs).
         if (card.JobTitle == null)
@@ -849,6 +894,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
         // Set name and (unless fixed by prototype) job title/icon from the selected job.
         _cardSystem.TryChangeFullName(cardId, characterName, card);
+        _cmuIdBloodType.Stamp(cardId, entity); // CMU14: print the blood type on the ID
         if (card.JobTitle == null)
         {
             _cardSystem.TryChangeJobTitle(cardId, titleJobPrototype.LocalizedName, card);

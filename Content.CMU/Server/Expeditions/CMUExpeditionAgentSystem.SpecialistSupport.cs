@@ -12,19 +12,19 @@ public sealed partial class CMUExpeditionAgentSystem
         foreach (var member in plan.Members)
         {
             var buddy = Comp<CMUExpeditionAgentComponent>(member);
-            if (member == uid || buddy.GrenadeReservationUntil <= now || buddy.GrenadeTarget is not { } landing)
+            if (member == uid || buddy.SmokeGrenade || buddy.GrenadeReservationUntil <= now || buddy.GrenadeTarget is not { } landing)
                 continue;
             var next = agent.CoverDestination ?? agent.SpacingDestination ?? agent.ContactDestination;
             if (next == null && agent.OrderRoute.TryPeek(out var waypoint))
                 next = waypoint;
             if (next is not { } destination || Transform(destination.EntityId).MapID != Transform(landing.EntityId).MapID ||
                 SegmentDistance(_transform.ToMapCoordinates(landing).Position, _transform.GetWorldPosition(uid),
-                    _transform.ToMapCoordinates(destination).Position) > (buddy.SmokeGrenade ? 3 : 6))
+                    _transform.ToMapCoordinates(destination).Position) > 6)
                 continue;
             // Keep firing from the current safe stance while the thrower completes the action.
             _steering.Unregister(uid);
             agent.MoveProgressAt = now;
-            Decision(agent, "waiting-for-ordnance", buddy.SmokeGrenade ? "do-not-enter-screen" : "reserved-blast-area");
+            Decision(agent, "waiting-for-ordnance", "reserved-blast-area");
             return true;
         }
         return false;

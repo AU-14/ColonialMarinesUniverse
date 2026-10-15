@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Rules;
+using Content.Shared.CMU14.Dropship; // CMU14
 using Content.Shared.Atmos.Rotting;
 using Content.Shared.Coordinates;
 using Content.Shared.DoAfter;
@@ -116,6 +117,13 @@ public sealed partial class RMCFultonSystem : EntitySystem
 
         if (TryComp(target, out RMCCanBeFultonedComponent? canBeFultoned))
             _audio.PlayPredicted(canBeFultoned.FultonSound, active.ReturnTo, args.User);
+
+        // CMU14: call the fulton in over the faction's JTAC radio.
+        if (_net.IsServer && args.User is { } fultonUser)
+        {
+            var deployed = new CMUFultonDeployedEvent(fultonUser, target, active.ReturnTo, ent.Comp.ReturnDelay);
+            RaiseLocalEvent(ref deployed);
+        }
 
         var name = Name(target);
         _dropshipWeapon.MakeTarget(target, name, false);

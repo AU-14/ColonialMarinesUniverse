@@ -1494,7 +1494,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
     private bool TileSolidAndNotBlocked(EntityCoordinates target)
     {
         return _turf.GetTileRef(target) is { } tile &&
-               !_turf.IsSpace(tile) &&
+               !IsSpaceForConstruction(tile) && // CMU14: multi-z roofs are isSpace but still floor
                _turf.GetContentTileDefinition(tile).Sturdy &&
                !_turf.IsTileBlocked(tile.GridUid, tile.GridIndices, Impassable,
                    ignore: uid => IsClearableOnTile(uid, tile)) && // CMU14

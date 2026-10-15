@@ -46,7 +46,7 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             if (uid == args.User || HasComp<ActorComponent>(uid) || !_mobs.IsAlive(uid) || transform.MapID != origin.MapId ||
                 now < agent.NextFlashObservation || !_transform.InRange(transform.Coordinates, args.FromCoordinates, agent.DetectionRange) ||
-                !SightLine(uid, args.FromCoordinates, agent.DetectionRange) || !ExpeditionHostiles(uid, agent).Contains(args.User))
+                !NearbyExpeditionHostile(uid, agent, args.User) || !SightLine(uid, args.FromCoordinates, agent.DetectionRange))
                 continue;
             // Freeze the observed flash in map coordinates. Neither a radio report nor a
             // remembered entity reference may supply live position/velocity after this event.
@@ -55,7 +55,7 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.FlashShooter = args.User;
             agent.FlashUntil = now + agent.FlashMemory;
             agent.NextFlashObservation = now + TimeSpan.FromSeconds(0.4);
-            agent.NextThink = now;
+            RequestThink(agent, now);
             if (agent.Target is { } target && Visible(uid, target, agent.DetectionRange))
                 continue;
             agent.LastSeen = agent.FlashPosition;

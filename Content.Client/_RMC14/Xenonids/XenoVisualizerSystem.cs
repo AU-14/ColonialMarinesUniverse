@@ -224,7 +224,7 @@ public sealed partial class XenoVisualizerSystem : VisualizerSystem<XenoComponen
             return;
         }
 
-        var bloodyState = chosenState + "_bloody";
+        var bloodyState = GetBloodyState(chosenState); // CMU14: reuse fixed RSI IDs instead of allocating every visual update.
         var bloodyRsi = sprite[bloodyLayer].ActualRsi ?? rsi;
 
         if (bloodyRsi.TryGetState(bloodyState, out _))
@@ -236,6 +236,24 @@ public sealed partial class XenoVisualizerSystem : VisualizerSystem<XenoComponen
         {
             SpriteSystem.LayerSetVisible((uid, sprite), bloodyLayer, false);
         }
+    }
+
+    // CMU14 method: all current visual choices are fixed IDs; retain concatenation for future/custom states.
+    internal static string GetBloodyState(string state)
+    {
+        return state switch
+        {
+            "alive" => "alive_bloody",
+            "running" => "running_bloody",
+            "crit" => "crit_bloody",
+            "dead" => "dead_bloody",
+            "sleeping" => "sleeping_bloody",
+            "thrown" => "thrown_bloody",
+            "fortify" => "fortify_bloody",
+            "crest" => "crest_bloody",
+            "burrowed" => "burrowed_bloody",
+            _ => state + "_bloody",
+        };
     }
 
     private bool IsThrown(Entity<XenoLeapingComponent?, ThrownItemComponent?, ActiveXenoToggleChargingComponent?> xeno)

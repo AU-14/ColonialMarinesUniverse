@@ -4,6 +4,7 @@ using Content.Client.CMU14.Medical.Presentation.Windows;
 using Content.Client.CMU14.Temperature; // CMU14
 using Content.Client._RMC14.Medical.HUD;
 using Content.Client.Message;
+using Content.Shared.CMU14.Medical.Blood; // CMU14
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Marines.Skills;
@@ -229,7 +230,11 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         _window.ChemicalsContainer.Visible = anyChemicals;
         _window.ChemicalContentsCard.Visible = anyChemicals || uiState.UnknownChemicals;
 
-        _window.BloodTypeLabel.Text = "Blood:";
+        // cmu edit start: blood type and saline share
+        _window.BloodTypeLabel.Text = uiState.CMUBloodType is { } bloodType
+            ? Loc.GetString("cmu-health-analyzer-blood-type", ("type", bloodType))
+            : "Blood:";
+        // cmu edit end
         var bloodMsg = new FormattedMessage();
         bloodMsg.PushColor(Color.FromHex("#25B732"));
 
@@ -237,6 +242,14 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         var percentageString = MathHelper.CloseTo(percentage, 100) ? "100%" : $"{percentage:F1}%";
         bloodMsg.AddText($"{percentageString}, {uiState.Blood}cl");
         bloodMsg.Pop();
+        // cmu edit start
+        if (uiState.CMUSalinePercent >= 1f)
+        {
+            bloodMsg.PushColor(Color.FromHex(uiState.CMUSalinePercent > 25f ? "#DF8A3E" : "#5B88B0"));
+            bloodMsg.AddText($" ({Loc.GetString("cmu-health-analyzer-saline", ("percent", (int) uiState.CMUSalinePercent))})");
+            bloodMsg.Pop();
+        }
+        // cmu edit end
         _window.BloodAmountLabel.SetMessage(bloodMsg);
 
         // cmu edit start
@@ -294,6 +307,11 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         _window.CMURiderBanner.Visible = uiState.CMURiderReading is not null;
         if (uiState.CMURiderReading is { } riderReading)
             _window.CMURiderLabel.Text = riderReading;
+
+        // CMU14: lab Wendigo procedure progress
+        _window.CMUWendigoBanner.Visible = uiState.CMUWendigoReading is not null;
+        if (uiState.CMUWendigoReading is { } wendigoReading)
+            _window.CMUWendigoLabel.Text = wendigoReading;
 
         if (!_window.IsOpen)
         {
@@ -1223,6 +1241,17 @@ public sealed partial class HealthScannerBui : BoundUserInterface
             if (!_skills.HasAllSkills(viewer, BloodPackSkill))
                 bloodpack = $"[color=#858585]{bloodpack}[/color]";
             AddAdviceCandidate(recommendations, 78, bloodpack);
+
+            // CMU14: which blood and plasma the patient can take
+            if (CMUBloodTypes.TryParseName(uiState.CMUBloodType, out var patientType))
+            {
+                var types = Loc.GetString("cmu-health-analyzer-advice-blood-types",
+                    ("blood", CMUBloodTypes.CompatibleBloodNames(patientType)),
+                    ("plasma", CMUBloodTypes.CompatiblePlasmaGroups(patientType)));
+                if (!_skills.HasAllSkills(viewer, BloodPackSkill))
+                    types = $"[color=#858585]{types}[/color]";
+                AddAdviceCandidate(recommendations, 77, types);
+            }
         }
 
         if (uiState.Advice.ShowFood)
@@ -1245,6 +1274,10 @@ public sealed partial class HealthScannerBui : BoundUserInterface
             AddAdviceCandidate(recommendations, 60, Loc.GetString("rmc-health-analyzer-advice-dylovene"));
 
         //TODO RMC14 Clone damage advice
+
+        // cmu edit start
+        CMUMedicalAdvice(uiState, recommendations);
+        // cmu edit end
 
         recommendations.Sort((a, b) =>
         {

@@ -161,7 +161,7 @@
     sprite: _RMC14/Objects/Weapons/mortar.rsi
     state: mortar_ammo_heat
   - type: Explosive
-    explosionType: RMCMortar
+    explosionType: CMUMortarHEATMP # CMU14: FLOW-09 was RMCMortar; identical but for its tank blast multiplier.
     maxIntensity: 300
     intensitySlope: 35
     totalIntensity: 1000

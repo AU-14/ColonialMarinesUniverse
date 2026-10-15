@@ -109,5 +109,10 @@ public sealed partial class IFFToggleSystem : EntitySystem
         }
 
         Dirty(ent);
+
+        // cmu edit start
+        var toggled = new Content.Shared.CMU14.Weapons.Ranged.CMUGunIFFToggledEvent(ent.Comp.Enabled);
+        RaiseLocalEvent(ent, ref toggled);
+        // cmu edit end
     }
 }

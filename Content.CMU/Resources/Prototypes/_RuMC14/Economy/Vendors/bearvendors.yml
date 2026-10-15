@@ -729,10 +729,6 @@
         amount: 15
       - id: CMHeadCapSPPUshankaCivilian
         amount: 2
-    - name: au14-vendor-section-backpack
-      entries:
-      - id: RMCBackpackRTOSPP
-        amount: 5
     - name: au14-vendor-section-pouches
       entries:
       - id: AU14PouchCommandFill

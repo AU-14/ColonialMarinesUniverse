@@ -745,8 +745,12 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
 
                 userDamage.NextDamageAt = time + userDamage.DamageEvery;
 
-                // CMU14: internals keep out the same gases a filter does
-                if (HasComp<GasMaskFilterDamageComponent>(contact) && _mask.IsBreathingInternals(user))
+                // CMU14: internals keep out the same gases a filter does, but only hold neurotoxin out for a while per exposure.
+                var internalsSealed = _mask.IsBreathingInternals(user);
+                if (internalsSealed && TryComp<GasMaskFilterDamageComponent>(contact, out var internalsDamage) && internalsDamage.Neurotoxin)
+                    internalsSealed = _mask.TryBlockNeurotoxinWithInternals(user);
+
+                if (internalsSealed && HasComp<GasMaskFilterDamageComponent>(contact))
                     continue;
 
                 //this is horrible
@@ -819,7 +823,7 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
                 }
 
                 // CMU14 Begin: internals keep smoke out of the lungs, so only the burn on the skin gets through
-                var sealedLungs = HasComp<EvenSmokeComponent>(contact) && _mask.IsBreathingInternals(user);
+                var sealedLungs = HasComp<EvenSmokeComponent>(contact) && internalsSealed;
 
                 if (damage.Damage != null)
                     DoDamage((contact, damage), user, sealedLungs ? WithoutInhaledDamage(damage.Damage) : damage.Damage);

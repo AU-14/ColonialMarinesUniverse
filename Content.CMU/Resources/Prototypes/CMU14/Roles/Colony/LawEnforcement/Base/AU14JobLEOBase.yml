@@ -18,6 +18,7 @@
     - NoEnglish
     - CMUAlcoholic
     - CMUDrugAddict
+    - CMUBadLeg
 
 - type: playTimeTracker
   id: AU14JobCivilianCMBDeputy
