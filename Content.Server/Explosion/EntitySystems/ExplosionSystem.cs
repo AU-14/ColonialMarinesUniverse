@@ -307,11 +307,14 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
         if (addLog) // dont log if already created a separate, more detailed, log.
             _adminLogger.Add(LogType.Explosion, LogImpact.High, $"Explosion ({typeId}) spawned at {epicenter:coordinates} with intensity {totalIntensity} slope {slope}");
 
+        var nonGibbing = HasComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(cause) ||
+                        EntityManager.System<Content.Shared.Gibbing.GibbingSystem>().GibbingSuppressed;
         // try to combine explosions on the same tile if they are the same type
         foreach (var queued in _queuedExplosions)
         {
             // ignore different types or those on different maps
-            if (queued.Proto.ID != type.ID || queued.Epicenter.MapId != epicenter.MapId)
+            if (queued.Proto.ID != type.ID || queued.Epicenter.MapId != epicenter.MapId ||
+                queued.NonGibbing != nonGibbing)
                 continue;
 
             var dst2 = queued.Proto.MaxCombineDistance * queued.Proto.MaxCombineDistance;
@@ -333,7 +336,8 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             TileBreakScale = tileBreakScale,
             MaxTileBreak = maxTileBreak,
             CanCreateVacuum = canCreateVacuum,
-            Cause = cause
+            Cause = cause,
+            NonGibbing = nonGibbing,
         };
         _explosionQueue.Enqueue(boom);
         _queuedExplosions.Add(boom);
@@ -425,6 +429,7 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             EntityManager,
             visualEnt,
             queued.Cause,
+            queued.NonGibbing,
             _map,
             _damageableSystem,
             _tileHistoryQuery);

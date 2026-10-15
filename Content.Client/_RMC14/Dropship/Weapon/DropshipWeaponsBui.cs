@@ -285,7 +285,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 : terminal.ChinGunAiEnabled ? "cmu-mohawk-gunnery-resume-ai" : "cmu-mohawk-gunnery-automatic");
             var manual = terminal.ChinGunOperator != null;
             Window.ArButton.Visible = manual;
-            Window.Visible = !manual || !terminal.ChinGunAr;
+            Window.SetConsoleVisible(!manual || !terminal.ChinGunAr);
             if (!manual)
                 _manualTriggerHeld = false;
             Window.FeedModeButton.Visible = manual;
@@ -325,11 +325,12 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                     ? "cmu-mohawk-gunnery-mark-pending" : "cmu-mohawk-gunnery-unmarked") : "";
             Window.HeatLabel.Visible = terminal.Gunnery;
             Window.HeatBar.Visible = terminal.Gunnery;
+            Window.HeatBar.MaxValue = terminal.ChinGunMaxHeat;
             Window.HeatBar.Value = terminal.ChinGunHeat;
             Window.HeatLabel.Text = Loc.GetString(terminal.ChinGunOverheated ? "cmu-mohawk-heat-overheated" : "cmu-mohawk-heat",
-                ("heat", terminal.ChinGunHeat));
+                ("heat", terminal.ChinGunHeat), ("max", terminal.ChinGunMaxHeat));
             Window.HeatLabel.FontColorOverride = terminal.ChinGunOverheated ? Color.Red
-                : terminal.ChinGunHeat >= 70 ? Color.Orange : null;
+                : terminal.ChinGunHeat >= terminal.ChinGunMaxHeat * 0.7f ? Color.Orange : null;
             RefreshCasRequests(terminal);
             RefreshLoadout(terminal);
             SetScreen(true, terminal.ScreenOne);
@@ -382,6 +383,8 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 ("munition", CMUCasRequestSystem.MunitionName(request.Munition)),
                 ("danger", request.DangerClose ? Loc.GetString("cmu-cas-request-card-danger") : ""));
             var details = new List<string>();
+            if (request.StatusDetail.Length > 0)
+                details.Add(request.StatusDetail);
             if (request.Effect != CMUCasEffect.Any)
                 details.Add(Loc.GetString("cmu-cas-request-card-effect", ("effect", CMUCasRequestSystem.EffectName(request.Effect))));
             if (request.RadioMark)
@@ -398,7 +401,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             card.AddChild(new Label
             {
                 Text = text,
-                MaxWidth = 260,
+                MaxWidth = 520,
                 FontColorOverride = request.Status switch
                 {
                     CMUCasRequestStatus.ClearedHot => Color.Red,
@@ -1783,6 +1786,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
     {
         if (disposing)
         {
+            Window?.DisposeAuxiliaryWindows();
             _embeddedTacMapWrapperScreen1?.Orphan();
             _embeddedTacMapWrapperScreen1 = null;
 

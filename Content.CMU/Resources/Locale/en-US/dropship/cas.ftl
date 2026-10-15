@@ -157,8 +157,13 @@ cmu-dropship-preflight-ok = ALL SYSTEMS NOMINAL
 
 ## M90 heat
 
-cmu-mohawk-heat = BARREL HEAT: {$heat}%
-cmu-mohawk-heat-overheated = BARREL HEAT: {$heat}% - OVERHEATED
+cmu-mohawk-heat = BARREL HEAT: {$heat}/{$max}
+cmu-mohawk-heat-overheated = BARREL HEAT: {$heat}/{$max} - OVERHEATED
+cmu-cas-clearance-required = RTO clearance required. Wait for CLEARED HOT before firing this mission.
+cmu-cas-cancel-target-lost = No hostiles remain at the called-out position.
+cmu-cas-cancel-no-weapon = The requested weapon is not available for automatic carry-out.
+cmu-cas-cancel-unable = The requested weapon could not fire. Reissue the request after checking the loadout and flight mode.
+cmu-cas-radio-cancelled = CAS request #{$id} cancelled: {$reason}
 cmu-mohawk-overheated = M90 OVERHEATED: barrels locked until they cool.
 cmu-mohawk-overheat-cleared = M90 barrels cooled. Fire control restored.
 
@@ -176,4 +181,3 @@ cmu-cas-admin-clear-all = Clear every fault and restore M90
 
 ## Rocket fallout
 cmu-cas-fallout-designator-obscured = Smoke scatters the laser. The target can't be designated through it.
-

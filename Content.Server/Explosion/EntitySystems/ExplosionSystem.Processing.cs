@@ -832,6 +832,7 @@ sealed class Explosion
     public readonly EntityUid VisualEnt;
 
     public readonly EntityUid? Cause;
+    public readonly bool NonGibbing;
 
     /// <summary>
     ///     Initialize a new instance for processing
@@ -850,12 +851,14 @@ sealed class Explosion
         IEntityManager entMan,
         EntityUid visualEnt,
         EntityUid? cause,
+        bool nonGibbing,
         SharedMapSystem mapSystem,
         DamageableSystem damageable,
         EntityQuery<TileHistoryComponent> historyQuery)
     {
         VisualEnt = visualEnt;
         Cause = cause;
+        NonGibbing = nonGibbing;
         _system = system;
         _mapSystem = mapSystem;
         ExplosionType = explosionType;
@@ -985,6 +988,7 @@ sealed class Explosion
     /// </summary>
     public int Process(int processingTarget)
     {
+        using var gibbingScope = _entMan.System<Content.Shared.Gibbing.GibbingSystem>().PreventGibbing(NonGibbing);
         // In case the explosion terminated early last tick due to exceeding the allocated processing time, use this
         // time to update the tiles.
         SetTiles();
@@ -1096,6 +1100,7 @@ sealed class Explosion
 /// </summary>
 public sealed partial class QueuedExplosion(ExplosionPrototype proto)
 {
+    public bool NonGibbing;
     public MapCoordinates Epicenter;
     public ExplosionPrototype Proto = proto;
     public float TotalIntensity, Slope, MaxTileIntensity, TileBreakScale;

@@ -49,6 +49,8 @@
     standardNets:
     - label: CMD
       channel: radioGovforCommand
+    - label: ATC
+      channel: radioGovforJTAC
   - type: ANPRCCryptoSlot
   - type: PowerCellSlot
     cellSlotId: cell_slot
@@ -156,6 +158,8 @@
     standardNets:
     - label: CMD
       channel: radioOpforCommand
+    - label: ORBT
+      channel: radioOpforJTAC
   - type: RTORelay
     bridgedChannels:
     - radioOpforAlpha

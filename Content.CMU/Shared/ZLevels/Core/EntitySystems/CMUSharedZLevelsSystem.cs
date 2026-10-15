@@ -207,10 +207,10 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
         return true;
     }
 
-    private bool HasSolidProjectionTile(EntityUid mapUid, Vector2 worldPosition)
+    public bool HasSolidProjectionTile(EntityUid mapUid, Vector2 worldPosition)
     {
-        if (!TryComp(mapUid, out MapGridComponent? grid) ||
-            !_map.TryGetTileRef(mapUid, grid, worldPosition, out var tileRef))
+        if (!TryResolveMovementGrid(mapUid, worldPosition, out var gridUid, out var grid) ||
+            !_map.TryGetTileRef(gridUid, grid, worldPosition, out var tileRef))
         {
             return false;
         }

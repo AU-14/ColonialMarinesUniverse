@@ -147,8 +147,8 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             boot.Complete = false;
             boot.ReadyAt = TimeSpan.Zero;
             var config = Server.ResolveDependency<IConfigurationManager>();
-            Assert.That(config.GetCVar(Content.Shared.CCVar.CCVars.DropshipBootFaultChance), Is.EqualTo(0.1f),
-                "Each installed weapon has a ten-percent fault chance by default.");
+            Assert.That(config.GetCVar(Content.Shared.CCVar.CCVars.DropshipBootFaultChance), Is.EqualTo(0.02f),
+                "Each installed weapon has a two-percent fault chance by default.");
             config.SetCVar(Content.Shared.CCVar.CCVars.DropshipBootFaultChance, 1f);
             ui.OpenUi(mount.Console, DropshipTerminalWeaponsUi.Key, mount.Actor);
             Assert.That(boot.ReadyAt, Is.GreaterThan(SGameTiming.CurTime));
@@ -207,7 +207,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             ui.OpenUi(mount.Console, DropshipTerminalWeaponsUi.Key, mount.Actor);
             Server.System<DropshipFireControlBootSystem>().Update(0);
             Assert.That(fault.Faulted, Is.False, "Opening again must not reroll even with 100% configured faults.");
-            config.SetCVar(Content.Shared.CCVar.CCVars.DropshipBootFaultChance, 0.1f);
+            config.SetCVar(Content.Shared.CCVar.CCVars.DropshipBootFaultChance, 0.02f);
             mount.Chin.DefensiveFire = false;
         });
     }
@@ -240,7 +240,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             ui.OpenUi(mount.Console, DropshipTerminalWeaponsUi.Key, mount.Actor);
             system.Update(0);
             Assert.That(SEntMan.GetComponent<DropshipHardpointFaultComponent>(mount.Point).Faulted, Is.False);
-            config.SetCVar(Content.Shared.CCVar.CCVars.DropshipBootFaultChance, 0.1f);
+            config.SetCVar(Content.Shared.CCVar.CCVars.DropshipBootFaultChance, 0.02f);
         });
     }
 
@@ -266,7 +266,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
 
             fault.Landings = 3;
             var normal = system.GetLandingFaultChance(fault, false);
-            Assert.That(normal, Is.EqualTo((0.02f + 0.01f * 2) * 1.1f).Within(0.0001f),
+            Assert.That(normal, Is.EqualTo((0.005f + 0.002f * 2) * 1.02f).Within(0.0001f),
                 "Landing chance grows per landing and is multiplied by hardpoint use.");
             Assert.That(system.GetLandingFaultChance(fault, true), Is.EqualTo(normal * 3).Within(0.0001f),
                 "Crash landings triple the chance.");
@@ -275,6 +275,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             fault.Landings = 0;
 
             config.SetCVar(Content.Shared.CCVar.CCVars.DropshipLandingFaultChance, 1f);
+            config.SetCVar(Content.Shared.CCVar.CCVars.DropshipFaultMaxChance, 1f);
             system.OnLanded(map.Grid, false);
             Assert.That(boot.Complete, Is.False);
             Assert.That(boot.LandingReboot, Is.True);
@@ -288,7 +289,8 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             Assert.That(fault.Landings, Is.EqualTo(1));
             Assert.That(fault.Faulted, Is.True);
             Assert.That(fault.Reason, Is.Not.Null);
-            config.SetCVar(Content.Shared.CCVar.CCVars.DropshipLandingFaultChance, 0.02f);
+            config.SetCVar(Content.Shared.CCVar.CCVars.DropshipLandingFaultChance, 0.005f);
+            config.SetCVar(Content.Shared.CCVar.CCVars.DropshipFaultMaxChance, 0.75f);
 
             config.SetCVar(Content.Shared.CCVar.CCVars.DropshipLandingReboot, false);
             system.OnLanded(map.Grid, true);

@@ -117,6 +117,16 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         if (chinMount)
         {
             var chin = Comp<MohawkChinGunComponent>(point);
+            if ((chin.Console ?? chin.FreeFireConsole) is { } console &&
+                !EntityManager.System<Content.Shared.CMU14.Dropship.Cas.CMUCasRequestSystem>()
+                    .CheckClearance(console, targetCoordinates))
+            {
+                chin.PendingManualShot = null;
+                args.Cancelled = true;
+                args.ResetCooldown = true;
+                args.Message = Loc.GetString("cmu-cas-clearance-required");
+                return;
+            }
             if (ammo != null && !_chinGun.IsAmmoUsable(point, ammo))
             {
                 args.Cancelled = true;
@@ -287,6 +297,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
 
             ammo.Rounds -= roundsPerShot;
             var projectile = Spawn(ammo.DirectFireProjectile ?? ent.Comp.Projectile, args.Coordinates);
+            EnsureComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(projectile);
             args.Ammo.Add((projectile, _guns.EnsureShootable(projectile)));
             if (TryComp(point, out MohawkChinGunComponent? chin))
             {

@@ -60,6 +60,7 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
     /// <summary>The ship is in flight, so AI-selected chin gun targets need gunner approval.</summary>
     [DataField, AutoNetworkedField] public bool ChinGunInFlight;
     [DataField, AutoNetworkedField] public int ChinGunHeat;
+    [DataField, AutoNetworkedField] public int ChinGunMaxHeat = 100;
     [DataField, AutoNetworkedField] public bool ChinGunOverheated;
 
     /// <summary>9-line CAS requests from this console's faction RTOs.</summary>

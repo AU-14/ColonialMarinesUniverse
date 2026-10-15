@@ -55,7 +55,7 @@ public abstract partial class SharedDropshipWeaponSystem
 
         args.Handled = true;
         if (crate.Comp.Weapon.Id != GauWeapon || HasComp<DropshipMixedBeltComponent>(crate) ||
-            crate.Comp.Rounds < crate.Comp.RoundsPerShot)
+            crate.Comp.Rounds <= 0)
         {
             foreach (var actor in args.Buckled)
                 _popup.PopupEntity(Loc.GetString("cmu-dropship-belt-wrong-ammo"), args.Target, actor, PopupType.SmallCaution);
@@ -99,7 +99,7 @@ public abstract partial class SharedDropshipWeaponSystem
             foreach (var crate in slot.ContainedEntities)
             {
                 if (!TryComp(crate, out DropshipAmmoComponent? payload) ||
-                    payload.Rounds < payload.RoundsPerShot || payload.Weapon.Id != GauWeapon)
+                    payload.Rounds <= 0 || payload.Weapon.Id != GauWeapon)
                     continue;
                 ammo = (crate, payload);
                 return true;
@@ -159,10 +159,10 @@ public abstract partial class SharedDropshipWeaponSystem
             foreach (var crate in slot.ContainedEntities)
             {
                 if (TryComp(crate, out DropshipAmmoComponent? payload))
-                    count += payload.Rounds / Math.Max(1, payload.RoundsPerShot);
+                    count += payload.Rounds;
             }
         }
-        return count;
+        return count / Math.Max(1, ammo.Comp.RoundsPerShot);
     }
 
     public Entity<DropshipAmmoComponent> GetLoadedAmmoSummary(Entity<DropshipAmmoComponent> ammo)

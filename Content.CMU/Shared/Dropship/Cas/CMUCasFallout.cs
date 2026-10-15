@@ -76,6 +76,7 @@ public sealed class CMUCasFalloutSystem : EntitySystem
 
     private void OnMapInit(Entity<CMUCasFalloutComponent> ent, ref MapInitEvent args)
     {
+        EnsureComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(ent);
         if (_net.IsClient)
             return;
 

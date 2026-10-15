@@ -7,12 +7,16 @@
     <PanelContainer Name="Panel" Access="Public" StyleClasses="CrtPanel" Margin="4">
       <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
         <PanelContainer StyleClasses="CrtHeaderPanel" Margin="0 0 0 6">
-            <Label StyleClasses="CrtHeading" Text="{Loc 'rmc-dropship-weapons-title'}" Margin="8 4" />
+            <BoxContainer Orientation="Horizontal">
+                <Label StyleClasses="CrtHeading" Text="{Loc 'rmc-dropship-weapons-title'}" Margin="8 4" HorizontalExpand="True" />
+                <Button Name="TurretPanelButton" Access="Public" Text="{Loc 'cmu-mohawk-gunnery-panel-title'}" />
+                <Button Name="RtoPanelButton" Access="Public" Text="{Loc 'cmu-cas-requests-title'}" />
+            </BoxContainer>
         </PanelContainer>
         <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
             <controls:DropshipWeaponsScreen Name="ScreenOne" Access="Public"
                                             HorizontalExpand="True" VerticalExpand="True" />
-            <PanelContainer StyleClasses="CrtInsetPanel" Margin="0 6" MinWidth="260" MaxWidth="280" VerticalExpand="True">
+            <PanelContainer Name="TurretPanel" Access="Public" StyleClasses="CrtInsetPanel" Margin="0 6" MinWidth="260" VerticalExpand="True">
               <ScrollContainer HScrollEnabled="False" VerticalExpand="True">
                <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="4">
                 <Label StyleClasses="CrtHeading" Text="{Loc 'cmu-mohawk-gunnery-panel-title'}" />
@@ -82,7 +86,7 @@
                                 ToolTip="{Loc 'rmc-dropship-weapons-offset-calibration-does-not-affect-direct-bombardment'}">
                     <Label Align="Center" Text="{Loc 'rmc-dropship-weapons-offset-calibration'}" />
                 </PanelContainer>
-                <PanelContainer Margin="0 10 0 0" StyleClasses="CrtQuietPanel">
+                <PanelContainer Name="RtoPanel" Access="Public" Margin="0 10 0 0" StyleClasses="CrtQuietPanel">
                     <BoxContainer Orientation="Vertical" Margin="4">
                         <Label Text="{Loc 'cmu-cas-requests-title'}" />
                         <BoxContainer Name="CasRequestsBox" Access="Public" Orientation="Vertical"

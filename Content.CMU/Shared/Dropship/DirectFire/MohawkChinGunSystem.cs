@@ -865,6 +865,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                 terminal.ChinGunVision == point.Comp.VisionMode &&
                 terminal.ChinGunInFlight == IsAirborne(point) &&
                 terminal.ChinGunHeat == (int) point.Comp.Heat &&
+                terminal.ChinGunMaxHeat == (int) GetMaxHeat(point) &&
                 terminal.ChinGunOverheated == point.Comp.Overheated)
                 continue;
             terminal.ChinGunFreeFireCooldown = cooldown;
@@ -879,18 +880,25 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             terminal.ChinGunVision = point.Comp.VisionMode;
             terminal.ChinGunInFlight = IsAirborne(point);
             terminal.ChinGunHeat = (int) point.Comp.Heat;
+            terminal.ChinGunMaxHeat = (int) GetMaxHeat(point);
             terminal.ChinGunOverheated = point.Comp.Overheated;
             Dirty(uid, terminal);
         }
     }
 
+    public float GetMaxHeat(Entity<MohawkChinGunComponent> point)
+    {
+        return point.Comp.MaxHeat * (IsAirborne(point) ? 2 : 1);
+    }
+
     /// <summary>Adds one shell's heat. Crossing the limit locks the guns until they cool.</summary>
     public void AddHeat(Entity<MohawkChinGunComponent> point, float heat)
     {
-        if (_net.IsClient || heat <= 0)
+        if (_net.IsClient || heat < 0)
             return;
-        point.Comp.Heat = Math.Min(point.Comp.MaxHeat, point.Comp.Heat + heat);
-        if (!point.Comp.Overheated && point.Comp.Heat >= point.Comp.MaxHeat)
+        var maxHeat = GetMaxHeat(point);
+        point.Comp.Heat = Math.Min(maxHeat, point.Comp.Heat + heat);
+        if (!point.Comp.Overheated && point.Comp.Heat >= maxHeat)
         {
             point.Comp.Overheated = true;
             point.Comp.PendingManualShot = null;
@@ -909,6 +917,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
     {
         if (point.Comp.Heat <= 0)
             return;
+        if (!point.Comp.Overheated && point.Comp.Heat >= GetMaxHeat(point))
+            AddHeat(point, 0);
         var previous = (int) point.Comp.Heat;
         point.Comp.Heat = Math.Max(0, point.Comp.Heat - point.Comp.CoolPerSecond * frameTime);
         var recovered = point.Comp.Overheated && point.Comp.Heat <= point.Comp.OverheatRecoveredAt;

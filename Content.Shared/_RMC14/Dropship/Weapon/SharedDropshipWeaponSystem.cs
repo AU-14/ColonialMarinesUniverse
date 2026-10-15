@@ -1919,6 +1919,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             if (_net.IsClient)
                 continue;
 
+            EnsureComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(uid);
+            using var gibbingScope = EntityManager.System<Content.Shared.Gibbing.GibbingSystem>().BeginDamage(uid);
             if (!flight.Target.IsValid(EntityManager)) // CMU14: the target grid can be deleted before the marker spawns
             {
                 QueueDel(uid);
@@ -2040,6 +2042,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
                                 damageable,
                                 flight.Damage,
                                 damageable: damageable,
+                                origin: uid,
+                                impact: Content.Shared.Damage.DamageImpact.Projectile,
                                 armorPiercing: flight.ArmorPiercing
                             );
                         }
@@ -2053,6 +2057,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
                     if (flight.Fire != null)
                     {
                         var chain = _onCollide.SpawnChain();
+                        EnsureComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(chain);
+                        EnsureComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(chain);
                         if (flight.Fire.Total is { } total)
                         {
                             var tiles = new List<Vector2i>();
@@ -2157,6 +2163,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
                                     if (flight.Fire != null)
                                     {
                                         var chain = _onCollide.SpawnChain();
+                                        EnsureComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(chain);
                                         var coords = new EntityCoordinates(targetMapUid.Value.Owner, worldPos);
 
                                         if (flight.Fire.Total is { } total)
@@ -2563,7 +2570,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
     }
 
     // CMU14
-    /// <summary>The target's world position projected onto the highest z-level map of its network.</summary>
+    /// <summary>The highest solid deck over the target, falling back to its own map rather than empty space.</summary>
     public bool TryGetTopZLevelCoordinates(EntityUid target, out MapCoordinates coordinates)
     {
         coordinates = default;
@@ -2571,9 +2578,16 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             !TryComp(map, out CMUZLevelMapComponent? zMap))
             return false;
 
+        var position = _transform.GetWorldPosition(target);
         var above = _zLevels.GetAllMapsAbove((map, zMap));
-        return above.Count > 0 &&
-               _zLevels.TryGetMapCoordinates(above[^1], _transform.GetWorldPosition(target), out coordinates);
+        for (var i = above.Count - 1; i >= 0; i--)
+        {
+            if (_zLevels.HasSolidProjectionTile(above[i], position) &&
+                _zLevels.TryGetMapCoordinates(above[i], position, out coordinates))
+                return true;
+        }
+        coordinates = _transform.GetMapCoordinates(target);
+        return true;
     }
 
     // CMU14: keeps elevated target eyes over targets that drift, such as carried laser marks.
@@ -2582,7 +2596,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         var eyes = EntityQueryEnumerator<DropshipTargetEyeComponent, TransformComponent>();
         while (eyes.MoveNext(out var uid, out var eye, out var xform))
         {
-            if (eye.Target is not { } target || target == uid || xform.ParentUid == target ||
+            if (eye.Target is not { } target || target == uid ||
                 TerminatingOrDeleted(target) || !TryGetTopZLevelCoordinates(target, out var top))
                 continue;
 
@@ -2775,6 +2789,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
     /// <returns>True if a fire mission was successfully started</returns>
     public bool TryStartFireMission(Entity<DropshipComponent> dropship, EntityUid target, Direction strikeVector, int maxSteps, Vector2 offset, EntityUid user, FireMissionData missionData, EntityUid? watchingTerminal = null)
     {
+        if (!EntityManager.System<CMUCasRequestSystem>().CheckClearance(watchingTerminal ?? dropship.Owner,
+            Transform(target).Coordinates, user, target))
+            return false;
         if (HasComp<ActiveFireMissionComponent>(dropship))
         {
             var cooldownMsg = Loc.GetString("rmc-dropship-firemission-cooldown");
@@ -2883,6 +2900,10 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         if (!Resolve(weapon, ref weaponComp, false))
             return false;
 
+        if (!EntityManager.System<CMUCasRequestSystem>().CheckClearance(terminalComp?.Owner ?? dropship.Owner,
+            targetCoordinates, actor, terminalComp?.Target))
+            return false;
+
         if (weaponComp.GunneryOnly && _container.TryGetContainingContainer((weapon, null), out var mounted) &&
             TryComp(mounted.Owner, out MohawkChinGunComponent? chin))
             return strikeType == DropshipWeaponStrikeType.Direct && actor is { } gunnerActor &&
@@ -2946,6 +2967,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             !_directFire.TryResolveMount((weapon, direct), out var mount, out var grid, out _, out _) ||
             !_directFire.TryGetFeedAmmo(point, out var ammo) || ammo.Comp.Rounds <= 0 ||
             !_chinGun.IsAmmoUsable(point, ammo.Comp))
+            return false;
+        if (!EntityManager.System<CMUCasRequestSystem>().CheckClearance(terminal.Owner, coordinates,
+                actor == weapon ? null : actor, terminal.Target))
             return false;
 
         var landing = coordinates;
@@ -3053,9 +3077,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         if (_fireMission.HasActiveFireMission(dropship) && strikeType != DropshipWeaponStrikeType.FireMission)
                 return false;
 
-        if (!CasDebug &&
-            !weapon.FireInTransport &&
-            !HasComp<DropshipInFlyByComponent>(dropship))
+        if (!CanFireInFlightMode(dropship, weapon))
         {
             // TODO RMC14 fire mission only weapons
             return false;
@@ -3101,6 +3123,14 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         return true;
     }
 
+    public bool CanFireInFlightMode(EntityUid ship, DropshipWeaponComponent weapon)
+    {
+        return CasDebug ||
+               TryComp(ship, out FTLComponent? ftl) &&
+               ftl.State is FTLState.Travelling or FTLState.Arriving &&
+               (weapon.FireInTransport || HasComp<DropshipInFlyByComponent>(ship));
+    }
+
     public static Vector2 GetVolleyImpactOffset(int index, int count, float radius, Angle rotation)
     {
         if (count <= 0 || index < 0 || index >= count || radius < 0)
@@ -3112,10 +3142,24 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
     private void FireWeapon(EntityUid weapon, EntityCoordinates targetCoordinates, DropshipWeaponStrikeType strikeType, EntityUid dropship,  EntityUid? actor = null, DropshipTerminalWeaponsComponent? terminalComp = null, DropshipWeaponComponent? weaponComp = null)
     {
-        if (!Resolve(weapon, ref weaponComp, false))
-            return;
-
         if (!TryGetWeaponAmmo(weapon, out var ammo))
+            return;
+        var mixed = _container.TryGetContainingContainer((ammo.Owner, null), out var container) &&
+                    HasComp<DropshipMixedBeltComponent>(container.Owner);
+        var rounds = mixed ? ammo.Comp.RoundsPerShot : 1;
+        for (var shot = 0; shot < rounds; shot++)
+        {
+            if (!TryGetWeaponAmmo(weapon, out var next))
+                break;
+            FirePayload(weapon, targetCoordinates, strikeType, dropship, next, mixed, shot, actor, terminalComp, weaponComp);
+        }
+    }
+
+    private void FirePayload(EntityUid weapon, EntityCoordinates targetCoordinates, DropshipWeaponStrikeType strikeType,
+        EntityUid dropship, Entity<DropshipAmmoComponent> ammo, bool mixed, int shot,
+        EntityUid? actor, DropshipTerminalWeaponsComponent? terminalComp, DropshipWeaponComponent? weaponComp)
+    {
+        if (!Resolve(weapon, ref weaponComp, false))
             return;
 
         var time = _timing.CurTime;
@@ -3129,8 +3173,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             targetSpread,
             ammo.Comp.BulletSpread,
             travelTime,
-            ammo.Comp.RoundsPerShot,
-            ammo.Comp.ShotsPerVolley,
+            mixed ? 1 : ammo.Comp.RoundsPerShot,
+            mixed ? 1 : ammo.Comp.ShotsPerVolley,
             ammo.Comp.Damage,
             ammo.Comp.ArmorPiercing,
             soundTravelTime,
@@ -3155,16 +3199,18 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             ev.BulletSpread = (int) MathF.Round(ev.BulletSpread * CMUCasRequestSystem.DesignationSpreadMultiplier);
         }
 
-        ammo.Comp.Rounds -= ammo.Comp.RoundsPerShot;
+        ammo.Comp.Rounds -= mixed ? 1 : ammo.Comp.RoundsPerShot;
         _appearance.SetData(ammo, DropshipAmmoVisuals.Fill, ammo.Comp.Rounds);
         _powerloader.SyncAppearance(Transform(weapon).ParentUid);
         Dirty(ammo);
-        _directFire.AmmoConsumed(Transform(weapon).ParentUid);
+        if (shot == 0)
+            _directFire.AmmoConsumed(Transform(weapon).ParentUid);
         AdvanceMixedBelt(ammo);
-        if (strikeType != DropshipWeaponStrikeType.FireMission) // CMU14: no stoppages mid fire mission
+        if (shot == 0 && strikeType != DropshipWeaponStrikeType.FireMission) // CMU14: no stoppages mid fire mission
             EntityManager.System<DropshipFireControlBootSystem>().TryJam(Transform(weapon).ParentUid, actor);
 
-        _audio.PlayPvs(ev.SoundCockpit, weapon);
+        if (shot == 0)
+            _audio.PlayPvs(ev.SoundCockpit, weapon);
         weaponComp.NextFireAt = time + weaponComp.FireDelay;
         Dirty(weapon, weaponComp);
 
@@ -3181,6 +3227,12 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         {
             Target = targetCoords,
             MarkerAt = time + ev.TravelTime,
+            NextShot = mixed
+                ? time + ev.TravelTime + markerDuration + TimeSpan.FromSeconds(shot * 0.1)
+                : TimeSpan.Zero,
+            SpawnedMarker = shot > 0,
+            WarnedMarker = shot > 0,
+            WarnedSound = shot > 0,
             ShotsLeft = ev.RoundsPerShot,
             ShotsPerVolley = ev.ShotsPerVolley,
             ImpactsPerVolley = ammo.Comp.ImpactsPerVolley,
@@ -3192,8 +3244,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             BulletSpread = ev.BulletSpread,
             SoundTravelTime = ev.SoundTravelTime,
             SoundMarker = ev.SoundMarker,
-            SoundGround = ev.SoundGround,
-            SoundImpact = ev.SoundImpact,
+            SoundGround = shot == 0 ? ev.SoundGround : null,
+            SoundImpact = !mixed || (shot + 1) % Math.Max(1, ev.SoundEveryShots) == 0 ? ev.SoundImpact : null,
             SoundWarning = ev.SoundWarning,
             MarkerWarning = ev.MarkerWarning,
             WarningMarkerAt = time + markerDuration,
@@ -3216,6 +3268,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return;
 
         // CMU14: fire missions and scripted strikes are logged too.
+        if (shot > 0)
+            return;
         if (terminalComp == null)
         {
             _adminLog.Add(LogType.RMCDropshipWeapon,

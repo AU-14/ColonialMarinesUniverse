@@ -3,7 +3,7 @@ cmu-dropship-belt-slot = Slot {$slot}: {$ammo}
 cmu-dropship-belt-slot-one = Belt slot 1
 cmu-dropship-belt-slot-two = Belt slot 2
 cmu-dropship-belt-slot-three = Belt slot 3
-cmu-dropship-belt-wrong-ammo = Insert a GAU crate containing at least one full burst. Belt carriers cannot be combined or refilled directly.
+cmu-dropship-belt-wrong-ammo = Insert a GAU crate containing ammunition. Belt carriers cannot be combined or refilled directly.
 cmu-dropship-belt-full = All three belt slots are occupied.
 cmu-dropship-belt-loaded = GAU crate added to the belt sequence.
 cmu-dropship-laser-ring = Laser: wide ring
@@ -25,5 +25,5 @@ cmu-dropship-aim-invalid = Outside forward firing arc or range
 cmu-dropship-track-lost = Target lock lost. Tracking and automatic fire stopped.
 cmu-dropship-track-invalid = No visible IFF-hostile target in range and inside the forward firing arc.
 cmu-dropship-payload-preview = Bursts left: {$bursts} | Impacts per volley: {$impacts}
-    Next burst: {$ammo}
+    Next round: {$ammo}
 cmu-dropship-preview-help = Yellow: estimated payload footprint. Orange: dispersion envelope. Cover and blast resistance affect actual damage. Laser patterns follow the dropship's orientation.

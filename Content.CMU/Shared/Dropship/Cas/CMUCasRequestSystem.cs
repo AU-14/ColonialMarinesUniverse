@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
+using Content.Shared._RMC14.Dropship.Utility.Components;
 using Content.Shared.Actions;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CMU14.Radio;
@@ -81,6 +82,9 @@ public sealed class CMUCasRequestSystem : EntitySystem
         public EntityUid? Console;
         public TimeSpan CarryDeadline;
         public TimeSpan? LastVolley;
+        public TimeSpan? AutoStarted;
+        public bool HadHostiles;
+        public TimeSpan? TargetEmptySince;
         public readonly Dictionary<EntityUid, int> Volleys = new();
     }
 
@@ -169,7 +173,11 @@ public sealed class CMUCasRequestSystem : EntitySystem
             RadioMark = radioMark,
             Designated = IsRtoDesignated(target),
         };
-        _requests.Add(new Entry { Request = request, Faction = faction, Rto = rto, Created = _timing.CurTime });
+        _requests.Add(new Entry
+        {
+            Request = request, Faction = faction, Rto = rto, Created = _timing.CurTime,
+            HadHostiles = HasHostiles(faction, coordinates),
+        });
 
         var danger = request.DangerClose ? Loc.GetString("cmu-cas-radio-danger-close") : string.Empty;
         Radio(rto, faction, Loc.GetString("cmu-cas-radio-request",
@@ -361,6 +369,7 @@ public sealed class CMUCasRequestSystem : EntitySystem
     private void SetCarryMode(Entry entry, CMUCasCarryMode mode, EntityUid? actor)
     {
         entry.Request = entry.Request with { CarryMode = mode, CarryCountdown = 0 };
+        entry.AutoStarted = null;
         var aircraft = entry.Request.Aircraft ?? string.Empty;
         Radio(entry.Console ?? entry.Rto, entry.Faction, Loc.GetString(mode == CMUCasCarryMode.Auto
                 ? "cmu-cas-radio-carry-auto" : "cmu-cas-radio-carry-manual",
@@ -378,6 +387,19 @@ public sealed class CMUCasRequestSystem : EntitySystem
         var changed = false;
         foreach (var entry in _requests.ToList())
         {
+            if (entry.ClosedAt == null && entry.HadHostiles &&
+                TryGetEntity(entry.Request.Target, out var mark) && !TerminatingOrDeleted(mark))
+            {
+                if (HasHostiles(entry.Faction, _transform.GetMapCoordinates(mark.Value)))
+                    entry.TargetEmptySince = null;
+                else if (entry.TargetEmptySince is not { } empty)
+                    entry.TargetEmptySince = now;
+                else if (now - empty >= TimeSpan.FromSeconds(5))
+                {
+                    Cancel(entry, "cmu-cas-cancel-target-lost");
+                    continue;
+                }
+            }
             if (entry.Request.Status is not (CMUCasRequestStatus.Accepted or CMUCasRequestStatus.ClearedHot))
                 continue;
             switch (entry.Request.CarryMode)
@@ -408,8 +430,7 @@ public sealed class CMUCasRequestSystem : EntitySystem
     /// <summary>Fires the ship's matching onboard ordnance at the request mark until each weapon has flown its volleys.</summary>
     private bool RunAutoCarry(Entry entry, TimeSpan now)
     {
-        // Danger close still needs the ground commander's clearance before the computer drops anything.
-        if (entry.Request.DangerClose && entry.Request.Status != CMUCasRequestStatus.ClearedHot)
+        if (entry.Request.Status != CMUCasRequestStatus.ClearedHot)
             return false;
         if (entry.Console is not { } console || TerminatingOrDeleted(console) ||
             !TryComp(console, out DropshipTerminalWeaponsComponent? terminal) ||
@@ -418,6 +439,19 @@ public sealed class CMUCasRequestSystem : EntitySystem
             return false;
 
         var weapons = GetAutoWeapons(ship, entry.Request.Munition);
+        if (weapons.Count == 0)
+        {
+            Cancel(entry, "cmu-cas-cancel-no-weapon");
+            return false;
+        }
+        if (!weapons.Any(weapon => _weapons.CanFireInFlightMode(ship, weapon.Comp)))
+        {
+            entry.AutoStarted = null;
+            if (entry.LastVolley != null)
+                entry.LastVolley = now;
+            return false;
+        }
+        entry.AutoStarted ??= now;
         var coordinates = Transform(target.Value).Coordinates;
         var fired = false;
         foreach (var (weapon, comp) in weapons)
@@ -443,6 +477,11 @@ public sealed class CMUCasRequestSystem : EntitySystem
             Complete(entry, console, entry.Request.Aircraft ?? Name(ship));
             return false;
         }
+        if (!fired && entry.LastVolley == null && now - entry.AutoStarted.Value > AutoIdleTimeout)
+        {
+            Cancel(entry, "cmu-cas-cancel-unable");
+            return false;
+        }
 
         return fired;
     }
@@ -454,8 +493,10 @@ public sealed class CMUCasRequestSystem : EntitySystem
             return all;
         foreach (var point in dropship.AttachmentPoints)
         {
-            if (!TryComp(point, out DropshipWeaponPointComponent? weaponPoint) ||
-                !_containers.TryGetContainer(point, weaponPoint.WeaponContainerSlotId, out var container))
+            var slot = TryComp(point, out DropshipWeaponPointComponent? weaponPoint)
+                ? weaponPoint.WeaponContainerSlotId
+                : TryComp(point, out DropshipUtilityPointComponent? utilityPoint) ? utilityPoint.UtilitySlotId : null;
+            if (slot == null || !_containers.TryGetContainer(point, slot, out var container))
                 continue;
             foreach (var contained in container.ContainedEntities)
             {
@@ -464,9 +505,46 @@ public sealed class CMUCasRequestSystem : EntitySystem
             }
         }
 
-        var matching = all.Where(weapon => Matches(munition, weapon.Comp)).ToList();
-        // Nothing fitting the call on board: the aircrew uses whatever ordnance they carry.
-        return matching.Count > 0 ? matching : all.Where(weapon => Matches(CMUCasMunition.Any, weapon.Comp)).ToList();
+        return all.Where(weapon => Matches(munition, weapon.Comp)).ToList();
+    }
+
+    private void Cancel(Entry entry, string reason)
+    {
+        entry.Request = entry.Request with { StatusDetail = Loc.GetString(reason) };
+        SetStatus(entry, CMUCasRequestStatus.Denied, entry.Request.Aircraft);
+        Radio(entry.Console ?? entry.Rto, entry.Faction, Loc.GetString("cmu-cas-radio-cancelled",
+            ("id", entry.Request.Id), ("reason", entry.Request.StatusDetail)));
+        _adminLog.Add(LogType.RMCDropshipWeapon,
+            $"CAS request {entry.Request.Id} cancelled: {entry.Request.StatusDetail}.");
+    }
+
+    private bool HasHostiles(string faction, MapCoordinates coordinates)
+    {
+        _mobs.Clear();
+        _lookup.GetEntitiesInRange(coordinates, TargetScanRange, _mobs);
+        return _mobs.Any(mob => mob.Comp.CurrentState == MobState.Alive && !IsFriendly(faction, mob));
+    }
+
+    public bool CheckClearance(EntityUid console, EntityCoordinates coordinates, EntityUid? actor = null,
+        EntityUid? selectedTarget = null)
+    {
+        var faction = ConsoleFaction(console);
+        var impact = _transform.ToMapCoordinates(coordinates);
+        foreach (var entry in _requests)
+        {
+            if (entry.ClosedAt != null || entry.Request.Status == CMUCasRequestStatus.ClearedHot ||
+                !FactionMatches(faction, entry.Faction) ||
+                !TryGetEntity(entry.Request.Target, out var mark) || TerminatingOrDeleted(mark))
+                continue;
+            var anchor = _transform.GetMapCoordinates(mark.Value);
+            if (mark != selectedTarget && (anchor.MapId != impact.MapId ||
+                (anchor.Position - impact.Position).LengthSquared() > RequestCoverRange * RequestCoverRange))
+                continue;
+            if (actor is { } user)
+                _popup.PopupEntity(Loc.GetString("cmu-cas-clearance-required"), console, user, PopupType.MediumCaution);
+            return false;
+        }
+        return true;
     }
 
     public static bool Matches(CMUCasMunition munition, DropshipWeaponComponent weapon)
@@ -661,7 +739,7 @@ public sealed class CMUCasRequestSystem : EntitySystem
     {
         foreach (var entry in _requests)
         {
-            if (entry.Request.Status is not (CMUCasRequestStatus.Accepted or CMUCasRequestStatus.ClearedHot) ||
+            if (entry.Request.Status != CMUCasRequestStatus.ClearedHot ||
                 !FactionMatches(faction, entry.Faction) ||
                 !TryGetEntity(entry.Request.Target, out var target) || TerminatingOrDeleted(target))
                 continue;

@@ -18,6 +18,31 @@ public sealed partial class GibbingSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
 
     private static readonly SoundSpecifier? GibSound = new SoundCollectionSpecifier("gib", AudioParams.Default.WithVariation(0.025f));
+    private int _suppressedDamageDepth;
+
+    public bool GibbingSuppressed => _suppressedDamageDepth > 0;
+
+    public DamageScope BeginDamage(EntityUid? origin, EntityUid? tool = null)
+    {
+        return PreventGibbing(HasComp<NonGibbingDamageComponent>(origin) || HasComp<NonGibbingDamageComponent>(tool));
+    }
+
+    public DamageScope PreventGibbing(bool prevent)
+    {
+        if (!prevent)
+            return new DamageScope(null);
+        _suppressedDamageDepth++;
+        return new DamageScope(this);
+    }
+
+    public readonly struct DamageScope(GibbingSystem? system) : IDisposable
+    {
+        public void Dispose()
+        {
+            if (system != null)
+                system._suppressedDamageDepth--;
+        }
+    }
 
     /// <summary>
     /// Attempts to gib an entity.
@@ -37,6 +62,9 @@ public sealed partial class GibbingSystem : EntitySystem
         // BodySystem handles prediction rather poorly and causes client-sided bugs when we gib on the client
         // This guard can be removed once it is gone and replaced by a prediction-safe system.
         if (!_net.IsServer)
+            return new();
+
+        if (GibbingSuppressed && HasComp<Content.Shared.Body.BodyComponent>(ent))
             return new();
 
         if (!_destructible.DestroyEntity(ent))

@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
+using Content.Shared.Gibbing;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Popups;
@@ -15,6 +16,7 @@ using Content.Shared.Whitelist;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Projectiles;
@@ -269,7 +271,15 @@ public sealed partial class RMCProjectileSystem : EntitySystem
             }
         }
 
-        var spawn = SpawnAtPosition(ent.Comp.Spawn, coordinates);
+        ComponentRegistry? overrides = null;
+        if (HasComp<NonGibbingDamageComponent>(ent))
+        {
+            overrides = new ComponentRegistry
+            {
+                ["NonGibbingDamage"] = new EntityPrototype.ComponentRegistryEntry(new NonGibbingDamageComponent()),
+            };
+        }
+        var spawn = SpawnAtPosition(ent.Comp.Spawn, coordinates, overrides);
         _hive.SetSameHive(ent.Owner, spawn);
 
         if (ent.Comp.Popup is { } popup)

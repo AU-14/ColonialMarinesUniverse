@@ -79,6 +79,11 @@ public sealed class DropshipWeaponFeaturesTest
                     var bui = ui.ClientOpenInterfaces.Values.OfType<DropshipWeaponsBui>().Single();
                     var window = (DropshipWeaponsWindow)typeof(DropshipWeaponsBui)
                         .GetProperty("Window", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)!.GetValue(bui)!;
+                    Assert.That(window.ScreenOne.Parent, Is.SameAs(window.ScreenTwo.Parent));
+                    Assert.That(window.ScreenOne.Parent!.Children.Count(), Is.EqualTo(2),
+                        "Only the two camera screens remain in the main monitor row.");
+                    Assert.That(window.TurretPanel.Parent, Is.Not.SameAs(window.ScreenOne.Parent));
+                    Assert.That(window.RtoPanel.Parent, Is.Not.SameAs(window.TurretPanel.Parent));
                     Assert.That(window.ScreenOne.LaserPatternButton.Visible, Is.True);
                     Assert.That(window.ScreenOne.LaserPatternButton.Text, Is.EqualTo(patternLabel));
                     Assert.That(window.ScreenOne.AirburstHeightButton.Visible, Is.False);
@@ -255,7 +260,7 @@ public sealed class DropshipWeaponFeaturesTest
     }
 
     [Test]
-    public async Task MixedBeltCyclesWholePayloadsAndSkipsSpentCrates()
+    public async Task MixedBeltAlternatesEveryRoundAndUsesPartialCrates()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         await pair.Server.WaitAssertion(() =>
@@ -291,21 +296,36 @@ public sealed class DropshipWeaponFeaturesTest
                 Assert.That(next.Owner, Is.EqualTo(crates[shot]));
                 Assert.That(system.GetAvailableBursts(next), Is.EqualTo(30 - shot));
                 Assert.That(system.TryFireWeapon(weapon, new EntityCoordinates(map, 20, 20), DropshipWeaponStrikeType.Direct), Is.True);
-                Assert.That(next.Comp.Rounds, Is.EqualTo(360));
+                Assert.That(next.Comp.Rounds, Is.EqualTo(400 - 13 * (shot + 1) - 1));
+                if (shot == 0)
+                {
+                    var sequence = entities.QueryEntities<AmmoInFlightComponent>().OrderBy(f => f.Owner.Id).ToArray();
+                    Assert.That(sequence, Has.Length.EqualTo(40));
+                    Assert.That(sequence.All(f => f.Comp.ShotsLeft == 1), Is.True);
+                    for (var round = 0; round < sequence.Length; round++)
+                    {
+                        Assert.That(sequence[round].Comp.Explosion != null, Is.EqualTo(round % 3 == 0));
+                        Assert.That(sequence[round].Comp.ArmorPiercing == 80, Is.EqualTo(round % 3 == 1));
+                        Assert.That(sequence[round].Comp.Fire != null, Is.EqualTo(round % 3 == 2));
+                    }
+                }
             }
             var flights = entities.QueryEntities<AmmoInFlightComponent>().ToArray();
-            Assert.That(flights, Has.Length.EqualTo(3));
-            Assert.That(flights.Count(f => f.Comp.Explosion != null), Is.EqualTo(1));
-            Assert.That(flights.Count(f => f.Comp.ArmorPiercing == 80), Is.EqualTo(1));
-            Assert.That(flights.Count(f => f.Comp.Fire != null), Is.EqualTo(1));
+            Assert.That(flights, Has.Length.EqualTo(120));
+            Assert.That(flights.Count(f => f.Comp.Explosion != null), Is.EqualTo(40));
+            Assert.That(flights.Count(f => f.Comp.ArmorPiercing == 80), Is.EqualTo(40));
+            Assert.That(flights.Count(f => f.Comp.Fire != null), Is.EqualTo(40));
             Assert.That(entities.GetComponent<DropshipAmmoComponent>(belt).Rounds, Is.EqualTo(1080));
             Assert.That(system.GetWeaponRounds(weapon), Is.EqualTo(1080));
             entities.GetComponent<DropshipAmmoComponent>(crates[0]).Rounds = 20;
             Assert.That(system.TryGetWeaponAmmo(weapon, out var available), Is.True);
-            Assert.That(available.Owner, Is.EqualTo(crates[1]), "A partial crate must not blend with the next payload.");
+            Assert.That(available.Owner, Is.EqualTo(crates[0]), "Partial crates participate round-by-round.");
             Assert.That(system.TryFireWeapon(weapon, new EntityCoordinates(map, 20, 20), DropshipWeaponStrikeType.FireMission), Is.True);
-            Assert.That(entities.GetComponent<DropshipAmmoComponent>(crates[1]).Rounds, Is.EqualTo(320));
-            Assert.That(entities.GetComponent<DropshipAmmoComponent>(crates[0]).Rounds, Is.EqualTo(20));
+            Assert.That(entities.GetComponent<DropshipAmmoComponent>(crates[1]).Rounds, Is.EqualTo(347));
+            Assert.That(entities.GetComponent<DropshipAmmoComponent>(crates[0]).Rounds, Is.EqualTo(6));
+            entities.GetComponent<DropshipAmmoComponent>(crates[1]).Rounds = 0;
+            Assert.That(system.TryGetWeaponAmmo(weapon, out available), Is.True);
+            Assert.That(available.Owner, Is.EqualTo(crates[2]), "Empty crates are skipped.");
             var incorrect = entities.SpawnEntity("RMCDropshipAttachmentAmmoLaserCannon", coords);
             Assert.That(containers.Remove(crates[0], containers.GetContainer(belt, "belt1")), Is.True);
             Assert.That(containers.Insert(incorrect, containers.GetContainer(belt, "belt1")), Is.False);

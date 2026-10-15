@@ -76,6 +76,7 @@ public partial record struct CMUCasRequest(
     /// <summary>Seconds left before an undecided accepted request switches to automatic carry-out.</summary>
     public int CarryCountdown { get; init; }
     public int CarryVolleys { get; init; }
+    public string StatusDetail { get; init; } = string.Empty;
 }
 
 [Serializable, NetSerializable]
