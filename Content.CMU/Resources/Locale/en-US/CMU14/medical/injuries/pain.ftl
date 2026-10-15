@@ -31,4 +31,3 @@ cmu-medical-shrapnel-extract-finish = Removed { $count } embedded fragment{ $cou
     [one] {""}
    *[other] s
 }.
-cmu-medical-shrapnel-movement-pain = Embedded shrapnel shifts painfully.

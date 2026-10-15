@@ -7,6 +7,9 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+// cmu edit start
+using Content.Client.CMU14.Hearing;
+// cmu edit end
 using Content.Client.Light.EntitySystems;
 using Content.Shared._Mono.CCVar;
 using Content.Shared.Light.Components;
@@ -39,6 +42,10 @@ public sealed partial class AreaEchoSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transformSystem = default!;
     [Dependency] private AudioEffectSystem _audioEffectSystem = default!;
     [Dependency] private RoofSystem _roofSystem = default!;
+    // cmu edit start
+    [Dependency] private CMUUnconsciousHearingSystem _unconsciousHearing = default!;
+    private bool _wasUnconscious;
+    // cmu edit end
 
     /// <summary>
     ///     The directions that are raycasted to determine size for echo.
@@ -94,6 +101,22 @@ public sealed partial class AreaEchoSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
+        // cmu edit start
+        // The unconscious echo owns every sound while it lasts; recalculate as soon as it ends.
+        if (_unconsciousHearing.Active)
+        {
+            _wasUnconscious = true;
+            return;
+        }
+
+        if (_wasUnconscious)
+        {
+            _wasUnconscious = false;
+            _nextExistingUpdate = TimeSpan.Zero;
+        }
+        // cmu edit end
+
         if (!_echoEnabled ||
             _gameTiming.CurTime < _nextExistingUpdate)
             return;
@@ -440,6 +463,11 @@ public sealed partial class AreaEchoSystem : EntitySystem
 
     private void ProcessAudioEntity(Entity<AudioComponent> entity, TransformComponent transformComponent, float minimumMagnitude, float maximumMagnitude)
     {
+        // cmu edit start
+        if (_unconsciousHearing.Active)
+            return;
+        // cmu edit end
+
         TryProcessAreaSpaceMagnitude((entity, transformComponent), maximumMagnitude, out var echoMagnitude);
 
         if (echoMagnitude > minimumMagnitude)

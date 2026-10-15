@@ -267,12 +267,14 @@ public sealed class HiddenAppearanceTest : InteractionTest
             var group = CProtoMan.Index<MarkingsGroupPrototype>(HumanPrototype);
             Assert.Multiple(() =>
             {
+                // cmu edit start: humans default to the CMU olive undershirt and boxers
                 Assert.That(
                     group.Limits[HumanoidVisualLayers.UndergarmentTop].NudityDefault.Select(id => id.Id),
-                    Is.EqualTo(new[] { "UndergarmentTopTanktop" }));
+                    Is.EqualTo(new[] { "CMUUndershirtOlive" }));
                 Assert.That(
                     group.Limits[HumanoidVisualLayers.UndergarmentBottom].NudityDefault.Select(id => id.Id),
-                    Is.EqualTo(new[] { "UndergarmentBottomBoxers" }));
+                    Is.EqualTo(new[] { "CMUUnderwearBoxersOlive" }));
+                // cmu edit end
             });
         });
 

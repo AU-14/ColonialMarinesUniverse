@@ -271,7 +271,16 @@ namespace Content.Server.Preferences.Managers
              // CMU14: profiles saved before blood types get a stable default until the player picks one
              .WithBloodType(CMUBloodTypes.TryParse(profile.BloodType, out var bloodType)
                  ? bloodType
-                 : CMUBloodTypes.StableDefault(profile.CharacterName));
+             // cmu edit start
+                 : CMUBloodTypes.StableDefault(profile.CharacterName))
+             .WithFoxtrotSquadOptIn(profile.FoxtrotSquadOptIn)
+             // Profiles saved before religions are atheist; EnsureValid catches removed religions.
+             .WithReligion(string.IsNullOrEmpty(profile.Religion)
+                 ? Content.Shared.CMU14.Religion.CMUReligionPrototype.Atheist
+                 : profile.Religion)
+             .WithArmorFlavorText(profile.ArmorFlavorText)
+             .WithHelmetFlavorText(profile.HelmetFlavorText);
+             // cmu edit end
         }
 
         private static HashSet<ProtoId<ThreatPrototype>> ConvertThreatPreferences(string? raw)

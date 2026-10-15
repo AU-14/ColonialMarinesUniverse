@@ -1,7 +1,7 @@
 - type: entity
   abstract: false
   id: ProdigyCargoCatalog
-  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies, CMUASRSManpad ]
+  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies, CMUASRSManpad, CMUASRSAntiArmor ]
   components:
   - type: RequisitionsComputer
     categories:

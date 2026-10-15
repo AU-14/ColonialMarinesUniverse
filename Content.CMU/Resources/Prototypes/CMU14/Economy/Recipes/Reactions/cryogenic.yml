@@ -1,0 +1,87 @@
+# CMU versions of the cryogenic medicine recipes using available ingredients.
+
+- type: reaction
+  id: CMUCryoxadone
+  reactants:
+    CMDexalin:
+      amount: 1
+    Water:
+      amount: 1
+    RMCOxygen:
+      amount: 1
+  products:
+    Cryoxadone: 3
+
+- type: reaction
+  id: CMUAloxadone
+  impact: Medium
+  reactants:
+    Cryoxadone:
+      amount: 2
+    Aloe:
+      amount: 1
+    CMLeporazine:
+      amount: 2
+  products:
+    Aloxadone: 4
+
+- type: reaction
+  id: CMUTraumoxadone
+  reactants:
+    Cryoxadone:
+      amount: 1
+    CMUPhenol:
+      amount: 1
+    RMCLipozine:
+      amount: 1
+  products:
+    Traumoxadone: 2
+
+- type: reaction
+  id: CMUUrishoxadone
+  reactants:
+    Cryoxadone:
+      amount: 3
+    CMUUrishiol:
+      amount: 5
+    CMArithrazine:
+      amount: 2
+  products:
+    Urishoxadone: 5
+
+- type: reaction
+  id: CMUDoxarubixadone
+  reactants:
+    Cryoxadone:
+      amount: 1
+    CMUUnstableMutagen:
+      amount: 1
+  products:
+    Doxarubixadone: 2
+
+- type: reaction
+  id: CMUNecrosol
+  impact: Medium
+  minTemp: 370
+  reactants:
+    CMUCardiocaine:
+      amount: 3
+    RMCMindbreakerToxin:
+      amount: 1
+    Cryoxadone:
+      amount: 2
+  products:
+    Necrosol: 2
+
+- type: reaction
+  id: CMUOpporozidone
+  minTemp: 400
+  reactants:
+    RMCMindbreakerToxin:
+      amount: 1
+    RMCPhoron:
+      amount: 1
+    Doxarubixadone:
+      amount: 1
+  products:
+    Opporozidone: 3

@@ -47,12 +47,12 @@
     - radioWEYU
     - radioCMB
     - radioCLF
-    - radioMobFamily
     - radioGovforAlpha
     - radioGovforBravo
     - radioGovforCharlie
     - radioGovforCommand
     - radioGovforIntel
+    - radioGovforFoxtrot
     - radioGovforJTAC
     - radioGovforMILP
     - radioOpforAlpha
@@ -60,6 +60,7 @@
     - radioOpforCharlie
     - radioOpforCommand
     - radioOpforIntel
+    - radioOpforVictor
     - radioOpforJTAC
     - radioOpforMILP
     - CMUYautja
@@ -87,6 +88,7 @@
     - radioGovforCharlie
     - radioGovforCommand
     - radioGovforIntel
+    - radioGovforFoxtrot
     - radioGovforJTAC
     - radioGovforMILP
 
@@ -104,6 +106,7 @@
     - radioOpforCharlie
     - radioOpforCommand
     - radioOpforIntel
+    - radioOpforVictor
     - radioOpforJTAC
     - radioOpforMILP
 
@@ -141,7 +144,6 @@
     - radioWEYU
     - radioCMB
     - radioCLF
-    - radioMobFamily
 
 # ├──[ MAP SPAWNS ]──────────────────────────────────────────────────┤
 - type: entity

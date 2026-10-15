@@ -179,6 +179,7 @@
     travelTime: 3
     zLevelPenetration: 1
     explosion:
+      type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
       total: 3000
       slope: 5.5
       max: 55
@@ -192,6 +193,7 @@
     travelTime: 2
     zLevelPenetration: 1
     explosion:
+      type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
       total: 905
       slope: 15
       max: 45
@@ -205,6 +207,7 @@
     travelTime: 6
     zLevelPenetration: 1
     explosion:
+      type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
       total: 1780
       slope: 7.2
       max: 50
@@ -222,6 +225,7 @@
     travelTime: 5
     zLevelPenetration: 1
     explosion:
+      type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
       total: 1850
       slope: 3.2
       max: 32
@@ -255,6 +259,7 @@
     travelTime: 6
     zLevelPenetration: 1
     explosion:
+      type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
       total: 2000
       slope: 5.5
       max: 40
@@ -288,6 +293,7 @@
   components:
   - type: DropshipAmmo
     explosion:
+      type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
       total: 850
       slope: 8
       max: 40
@@ -314,6 +320,7 @@
     travelTime: 12
     zLevelPenetration: 4
     explosion:
+      type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
       total: 18000
       slope: 5.5
       max: 150000
@@ -335,6 +342,7 @@
     travelTime: 12
     zLevelPenetration: 4
     explosion:
+      type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
       total: 13000
       slope: 4
       max: 120000
@@ -355,6 +363,7 @@
     travelTime: 3
     zLevelPenetration: 1
     explosion:
+      type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
       total: 3000
       slope: 5.5
       max: 55
@@ -372,6 +381,7 @@
     travelTime: 3
     zLevelPenetration: 1
     explosion:
+      type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
       total: 3000
       slope: 5.5
       max: 55
@@ -389,6 +399,7 @@
     bulletSpread: 17
     zLevelPenetration: 1
     explosion:
+      type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
       total: 110
       slope: 4
       max: 8
@@ -431,6 +442,7 @@
     bulletSpread: 5
     zLevelPenetration: 1
     explosion:
+      type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
       total: 100
       slope: 12
       max: 11

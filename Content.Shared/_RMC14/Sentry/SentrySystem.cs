@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared._RMC14.Interaction;
+using Content.Shared.CMU14.Sentry; // cmu edit
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.NPC;
@@ -163,6 +164,14 @@ public sealed partial class SentrySystem : EntitySystem
         {
             case SentryMode.Off:
             {
+                // cmu edit start: a broken sentry won't power up until it's repaired
+                if (HasComp<CMUSentryBrokenComponent>(sentry))
+                {
+                    _popup.PopupEntity(Loc.GetString("cmu-sentry-broken-cant-turn-on", ("sentry", sentry)), sentry, user, PopupType.SmallCaution);
+                    return;
+                }
+                // cmu edit end
+
                 if (!TryComp<SentryTargetingComponent>(sentry, out var targeting) || targeting.FriendlyFactions.Count == 0)
                 {
                     var noFactionMsg = Loc.GetString("rmc-sentry-no-faction-set", ("sentry", sentry));
@@ -205,6 +214,11 @@ public sealed partial class SentrySystem : EntitySystem
 
     private void OnSentryInteractUsing(Entity<SentryComponent> sentry, ref InteractUsingEvent args)
     {
+        // cmu edit start: leave tools another system already used alone, like a broken sentry's repair
+        if (args.Handled)
+            return;
+        // cmu edit end
+
         if (sentry.Comp.IsLocked)
             return;
 
@@ -624,6 +638,11 @@ public sealed partial class SentrySystem : EntitySystem
     {
         if (sentry.Comp.Mode == mode)
             return false;
+
+        // cmu edit start: a broken sentry won't power up until it's repaired
+        if (mode == SentryMode.On && HasComp<CMUSentryBrokenComponent>(sentry))
+            return false;
+        // cmu edit end
 
         sentry.Comp.Mode = mode;
         UpdateState(sentry);

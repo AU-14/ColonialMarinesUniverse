@@ -360,7 +360,9 @@ public sealed partial class HealthScannerSystem : EntitySystem
         }
 
         state.VictimBurst = HasComp<VictimBurstComponent>(target);
-        state.VictimInfected = HasComp<VictimInfectedComponent>(target);
+        // cmu edit start: a handheld analyzer can't see a parasite; the body scanner can
+        state.VictimInfected = false;
+        // cmu edit end
         state.HolocardXeno = TryComp<HolocardStateComponent>(target, out var holocard) &&
             holocard.HolocardStatus == HolocardStatus.Xeno;
         state.PermaDead = _mob.IsDead(target) &&

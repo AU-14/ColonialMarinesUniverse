@@ -13251,5 +13251,208 @@
   id: 802
   time: '2026-10-13T15:24:13.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2164
+- author: Mary-Marilyn
+  changes:
+  - message: Added skirts to the civilian clothing shops, wardrobes, and civilian
+      and WY loadouts
+    type: Add
+  id: 803
+  time: '2026-10-14T01:31:03.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2175
+- author: KeiKiyomi
+  changes:
+  - message: Added Working Elevators that can also be built in round
+    type: Add
+  - message: Elevators have a max weight limit of 250 (INCLUDING ITEMS IN BAG)
+    type: Tweak
+  - message: Elevators have 2 types, railed and enclosed
+    type: Tweak
+  - message: Elevators can be disabled/enabled. (engineering 3 required by default)
+    type: Tweak
+  - message: Elevator call buttons work per floor (duh)
+    type: Tweak
+  - message: Elevators that attempt to be used while overloaded breakdown and fall
+      back to elevator disable skill check
+    type: Tweak
+  - message: Xenos / vehicles / weapons count as 1 weight
+    type: Tweak
+  id: 804
+  time: '2026-10-14T02:44:38.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2113
+- author: Vencallium
+  changes:
+  - message: Added cryopod medicines for gradual damage, wound, fracture, organ, and
+      limb treatment, with recipes and prefilled large beakers.
+    type: Add
+  - message: Opporozidone preserves an active revival deadline but cannot reverse
+      permanent death.
+    type: Tweak
+  - message: Cryopods use CMU glass and RMC cable for construction.
+    type: Tweak
+  - message: Added cryogenic medicine, recipe, and precursor instructions to the medical
+      guidebook.
+    type: Add
+  id: 805
+  time: '2026-10-14T08:38:51.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2170
+- author: Mary-Marilyn
+  changes:
+  - message: Added skirt loadout options for orbital lawyer, arbiter, manager, Head
+      of Service, Laselle Liaison, and CCA, ICSC, TWE, UPP and UA ambassadors
+    type: Add
+  id: 806
+  time: '2026-10-14T15:47:53.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2178
+- author: troytroy400
+  changes:
+  - message: 'FOB security squads: Foxtrot (GOVFOR) and Victor (OPFOR). Opt in from
+      the character menu, they have their own SL, RTO, 2 Combat Tech and Corpsman
+      slots on top of the regular ones, their own radio channel (f / v) and callsigns.'
+    type: Add
+  - message: The security squad's SL, RTO and Corpsman get construction and engineering
+      3, their Combat Techs get extra vendor points.
+    type: Add
+  - message: Removed the mob family radio channel. Mob roles now spawn with a mobile
+      phone.
+    type: Remove
+  - message: Overwatch overhaul. CRT look, roster grouped by fireteam with callsigns
+      and health, supply drop readiness, up to four camera feeds with a VHS effect,
+      and a fireteam tab to move members, set leads and turn automatic leaders off
+      per squad.
+    type: Add
+  - message: Overwatch shows names without nicknames, greys out the SL button for
+      the current leader, remembers hide/show filters and saves supply and orbital
+      coordinates separately.
+    type: Tweak
+  - message: A limb can now only ever have one internal bleed at a time and scanners
+      show it on the limb that is bleeding.
+    type: Fix
+  - message: Internal bleeding gives a stabbing pain message every so often and shrapnel
+      tells you when it digs in as you start moving.
+    type: Add
+  - message: Being unconscious no longer makes you fully deaf, you catch a few words
+      from people within 4 tiles and all sound is quiet and heavily echoed.
+    type: Add
+  - message: New traits ported from CM13. Opiate Receptor Deficiency, Bad Leg and
+      Iron Teeth.
+    type: Add
+  - message: New Motion Sick trait. Riding in a flying dropship, or inside/on top
+      of a moving vehicle, makes you dizzy and queasy, with a small chance to puke.
+    type: Add
+  - message: Items held in your teeth now fall out when you go unconscious or into
+      crit.
+    type: Add
+  - message: Tile movement is now a personal setting in the CMU options tab instead
+      of a trait, meaning it can be toggled on/off for yourself mid-round.
+    type: Tweak
+  - message: Pick a religion in your character records. It shows on records and examine
+      (hidden with Hide Meta Information) and anyone but an atheist can pray to god
+      (the admins).
+    type: Add
+  - message: GOVFOR/OPFOR characters can write up to 100 characters of flavor text
+      for their vendor armor and helmet. It shows on examine as "On his armor..."
+      and supports %name%, %rank% and %bloodtype%.
+    type: Add
+  - message: Character sex and pronouns moved to the Character Records tab.
+    type: Tweak
+  - message: Underwear replacements for the aging old sprites taken from CM13 PvE,
+      including telnyashkas, bras, sports bras, many shirt variants, military style
+      variants and WY undershirts. Female characters can no-longer go top less.
+    type: Add
+  - message: Right-click your clothing to hide or show its chevron.
+    type: Add
+  - message: Pan fed submachinegun, with normal, AP and hollowpoint pan magazines
+      and a folding stock.
+    type: Add
+  - message: Dropships can now hit turbulence in flight. On a flyby, only for its
+      first and last 30 seconds. Everyone but aircrew has their view shaken, and anyone
+      standing and not buckled in can be thrown around or knocked down, without being
+      hurt. Dropping out of a warship's bay starts with a freefall lurch followed
+      by heavy turbulence. New Aircrew skill for pilots, crew chiefs, synths and other
+      aircrew. They stay on their feet through turbulence, takeoff and landing. Lean
+      on a wall to brace yourself against turbulence, takeoff and landing. You can
+      now keep leaning while the dropship flies.
+    type: Add
+  - message: Every platoon except HAZOPS (since they have the osprey) now flies the
+      Midway and the lexington.
+    type: Tweak
+  - message: Lexington controls now have a Lock All Doors Open button that opens every
+      door and bolts it open.
+    type: Add
+  - message: Xenos that can crawl through vents can now climb up the Mohawk's landing
+      gear while it's on the ground and burst out of a walkway panel on the deck above.
+      Anyone nearby hears rustling in the panel before they come out.
+    type: Add
+  - message: The smartgun does 5% more damage and loses less damage over range with
+      its IFF turned off.
+    type: Tweak
+  - message: Sentries break down instead of being destroyed. A wrecked sentry turns
+      black, shuts off and loses a quarter of its ammo, but can still be packed up.
+      Repair it while deployed with wirecutters, a welder, 10 cable coil, a screwdriver,
+      an access tuner and a welder again.
+    type: Add
+  - message: Combat technician racks sell M20 claymores (5 points) and incendiary
+      claymores (6 points).
+    type: Add
+  - message: The MFHS grenade packet now costs combat technicians 5 points.
+    type: Tweak
+  - message: M40 HEDP and HEFA grenades fired from a launcher no longer stun the person
+      they hit.
+    type: Tweak
+  - message: Electroshock grenades can be fired from underbarrel grenade launchers
+      like the M41's.
+    type: Tweak
+  - message: The health scanner gives more relevant advice.
+    type: Add
+  - message: Facehugger infections only show up on the body scanner, as a parasite
+      in the chest. The handheld analyzer can't see them and infected patients are
+      no longer tagged on the triage HUD automatically.
+    type: Tweak
+  - message: Facehuggers hold on for 2 to 5 minutes and keep their host knocked out
+      and breathing the whole time. Nobody can pull one off for the first 2 minutes,
+      after that each shake or pat has a chance to knock it loose.
+    type: Tweak
+  - message: A hugged host sees a heavily dimmed, vignetted screen, hears like they're
+      unconscious and gets context messages when it latches on, while it holds on
+      and when it falls off.
+    type: Add
+  - message: Infection symptoms don't start until 30 seconds before the burst.
+    type: Tweak
+  - message: 'SCBA tank: a large oxygen tank that goes on your back. It''s in the
+      ERO vendor and in fire closets.'
+    type: Add
+  - message: SCBA mask, made to hook up to the SCBA tank. It replaces the gas mask
+      in the ERO vendor and in fire closets.
+    type: Add
+  - message: Turning off internals now makes a sound.
+    type: Add
+  - message: Readded the old AU-14 cassette tapes (17 cassettes w/ 105 tracks) and
+      the Rec-Vend stocks them.
+    type: Add
+  - message: The jukebox plays every cassette song.
+    type: Add
+  - message: Jukebox music fades out over its 10 tile range instead of cutting off.
+    type: Tweak
+  - message: Reenabled CM13 music note sprites when using a cassette player. There
+      is now a setting to hide the music notes over people listening to a cassette.
+    type: Add
+  - message: Popups are copied into chat by default as information is important.
+    type: Tweak
+  - message: Colony prisoners spawn with an ID card that has no access.
+    type: Tweak
+  - message: Random crates no longer contain smoke grenades or marine uniforms.
+    type: Tweak
+  - message: Sentry examine and IFF messages that showed raw locale keys now have
+      text.
+    type: Fix
+  - message: Guidebook pages for Overwatch, the FOB security squad and skills, and
+      shrapnel removal added to the medical guides.
+    type: Add
+  - message: Reordered the CMU settings list/headers to make more sense and be easier
+      to navigate.
+    type: Fix
+  id: 807
+  time: '2026-10-14T21:34:35.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2177
 Name: CMU
 Order: -1

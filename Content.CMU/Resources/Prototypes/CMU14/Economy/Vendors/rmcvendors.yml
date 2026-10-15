@@ -1302,6 +1302,10 @@
         points: 4
     - name: Explosives
       entries:
+      - id: RMCExplosiveClaymoreMine
+        points: 5
+      - id: AU14ExplosiveClaymoreMineIncendiary
+        points: 6
       - id: RMCExplosivePlastic
         points: 4
       - id: AU14Bangalore
@@ -1310,7 +1314,7 @@
       - id: RMCExplosiveBreachingCharge
         points: 5
       - id: RMCPacketGrenadeMetalFoamFilled
-        points: 8
+        points: 5
       - id: RMCRocketM5510Brute
         points: 4
     - name: Utilities
