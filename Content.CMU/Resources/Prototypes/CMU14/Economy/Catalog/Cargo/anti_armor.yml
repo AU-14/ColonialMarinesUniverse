@@ -1,0 +1,44 @@
+# Shared ASRS anti-armor category. Parent into every platoon catalog (WeYu PMC included); never into the
+# colony or corporate ASRS consoles.
+- type: entity
+  abstract: true
+  id: CMUASRSAntiArmor
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Anti-Armor
+      entries:
+      - cost: 4000
+        crate: CMUCrateATGM
+        maxStock: 1
+        startingStock: 1
+        stockReplenishDelay: 1200
+        stockReplenishAmount: 1
+      # Missile resupply: one bag of seven. Two on the shelf and a 15-minute restock, so a team can reload a
+      # couple of times without the missiles outpacing the 4000 kit that fires them.
+      - cost: 3500
+        crate: CMUCrateATGMMissiles
+        maxStock: 2
+        startingStock: 2
+        stockReplenishDelay: 900
+        stockReplenishAmount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: CMUCrateATGM
+  name: FOGO-ATGM team kit crate (x1)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUATGMCase
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: CMUCrateATGMMissiles
+  name: FOGO-ATGM missile resupply crate (7 missiles)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUATGMMissileBagFilled
+      amount: 1

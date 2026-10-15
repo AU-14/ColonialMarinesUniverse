@@ -79,8 +79,13 @@ public sealed partial class CMUAutoSquadLeaderSystem : EntitySystem
         while (squads.MoveNext(out var uid, out var squad))
         {
             // Auxiliary squads never get an automatic squad leader (and have no fireteams).
-            if (!Groups.Contains(squad.Group) || HasComp<CMUAuxiliarySquadComponent>(uid))
+            // Auxiliary squads never get an automatic leader, nor do squads overwatch set to manual.
+            if (!Groups.Contains(squad.Group) ||
+                HasComp<CMUAuxiliarySquadComponent>(uid) ||
+                HasComp<CMUManualLeadershipComponent>(uid))
+            {
                 continue;
+            }
 
             CheckSquadLeader((uid, squad), time);
             CheckFireteamLeaders((uid, squad), time);
@@ -103,7 +108,8 @@ public sealed partial class CMUAutoSquadLeaderSystem : EntitySystem
     {
         foreach (var (squadUid, replacement) in _replacedSquadLeaders)
         {
-            if (!TryGetOriginalInSquad(squadUid, replacement.Original, out var squad, out var member))
+            if (!TryGetOriginalInSquad(squadUid, replacement.Original, out var squad, out var member) ||
+                HasComp<CMUManualLeadershipComponent>(squadUid))
             {
                 _replacedSquadLeaders.Remove(squadUid);
                 continue;

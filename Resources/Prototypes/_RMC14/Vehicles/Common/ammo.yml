@@ -421,6 +421,8 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: TankCookOffProjectile # CMU14: vehicle TOW hits can ignite tank ammunition.
+    criticalChance: 0.15 # CMU14: FLOW-09
+    hullFraction: 0.35 # CMU14: FLOW-09
   - type: Projectile
     impactEffect: BulletImpactEffect
     damage:

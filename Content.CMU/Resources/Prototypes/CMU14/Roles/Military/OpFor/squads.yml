@@ -66,3 +66,38 @@
     minimapBackground:
      sprite: /Textures/_RMC14/Interface/map_blips.rsi
      state: background_intel
+
+# FOB security squad: opt-in (character menu, shared with GOVFOR's Foxtrot) with its own slots on top of the regular ones;
+# see CMUFoxtrotSquadSystem.
+- type: entity
+  parent: SquadOpfor
+  id: SquadOpforVictor
+  name: Victor
+  components:
+  - type: CMUFoxtrotSquad
+    slots:
+      SquadSergeant: 1
+      RadioTrafficOperator: 1
+      SquadCombatTech: 2
+      PlatoonCorpsman: 1
+    # the squad leader, RTO and corpsman can help build the FOB; the combat technicians keep their own skills
+    skillRoles:
+    - SquadSergeant
+    - RadioTrafficOperator
+    - PlatoonCorpsman
+    skills:
+      RMCSkillConstruction: 3
+      RMCSkillEngineer: 3
+    extraVendorPoints:
+      SquadCombatTech: 15
+  - type: AU14SquadCallsign
+    word: SLATE
+  - type: SquadTeam
+    roundStart: true
+    color: "#7B8B6F"
+    group: OPFOR
+    radio: radioOpforVictor
+    supplyDropPadSquad: SquadDelta
+    minimapBackground:
+     sprite: /Textures/_RMC14/Interface/map_blips.rsi
+     state: background_echo

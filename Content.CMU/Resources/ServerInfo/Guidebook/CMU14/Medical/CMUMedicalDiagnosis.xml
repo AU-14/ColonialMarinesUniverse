@@ -15,6 +15,7 @@
   ## The Health Analyzer
   Use it on a patient to open a full scan.
   - [bold]Top bar[/bold]: overall health, pulse, blood level, temperature and shock risk, with a status of stable, serious, critical or deceased.
+  - [bold]Blood[/bold]: the patient's blood type, and how much of their blood is [bold]saline[/bold] if they've had a saline drip. See [textlink="Blood and Transfusions" link="CMUGuideMedicalBlood"].
   - [bold]Body[/bold]: each body part's health, with its wounds, bleeding, embedded shrapnel, eschar, splints, casts and tourniquets.
   - [bold]Bleeding[/bold]: with basic medical training, the scan shows how bad each bleed is (minor, moderate, severe or [color=red]arterial[/color]), on the blood readout and on each bleeding body part. A missing limb's row shows whether its stump is bleeding arterially or has a tourniquet on it.
   - [bold]Fractures and internal bleeding[/bold]: need basic medical training. With more training it tells you the exact fracture severity and where the bleeding is.
@@ -48,7 +49,7 @@
   - See [textlink="Suffocation Medications" link="CMUGuideMedsSuffocation"].
 
   [bold]Genetic[/bold]: cellular damage. Rare, and only a few things cause it.
-  - Only a few treatments touch it, such as [bold]cryoxadone[/bold] in a cryo pod. See [textlink="Other Medications" link="CMUGuideMedsOther"].
+  - Only a few treatments touch it, such as [bold]doxarubixadone[/bold] in a cryo pod. See [textlink="Other Medications" link="CMUGuideMedsOther"].
 
   [bold]Tricordrazine[/bold] heals a little of brute, burn, toxin and suffocation all at once, and is a good general-purpose drug when you're not sure what you're dealing with. For every medicine, see [textlink="Medications" link="CMUGuideMedications"].
 

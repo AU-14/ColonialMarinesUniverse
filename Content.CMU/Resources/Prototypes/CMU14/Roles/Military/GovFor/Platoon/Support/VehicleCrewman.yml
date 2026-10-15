@@ -48,6 +48,8 @@
     - Asthmatic
     - CMUAlcoholic
     - CMUDrugAddict
+    - CMUBadLeg
+    - CMUMotionSick
   ranks:
     RMCRankCivilian: []
   chevrons:

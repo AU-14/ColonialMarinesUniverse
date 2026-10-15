@@ -12,6 +12,8 @@
   id: AU14JobWYGuard
   roundSide: Civilian
   roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
   roundRole: WYGuard
   roundComponents:
   - type: Skills

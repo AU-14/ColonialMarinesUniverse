@@ -1013,13 +1013,14 @@ public sealed class YautjaYoungbloodTest
     [Test]
     public async Task MaskVisorAndZoomActionsPlaySourceSoundsLikeCmss13()
     {
-        await using var pair = await PoolManager.GetServerClient();
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
         var server = pair.Server;
         var map = await pair.CreateTestMap();
 
         EntityUid wearer = default;
         EntityUid bracer = default;
         EntityUid mask = default;
+        EntityUid? previousAttached = null;
 
         try
         {
@@ -1033,6 +1034,11 @@ public sealed class YautjaYoungbloodTest
                 bracer = entMan.SpawnEntity("CMUYautjaBracer", map.GridCoords);
                 mask = entMan.SpawnEntity("CMUYautjaMask", map.GridCoords);
                 entMan.EnsureComponent<YautjaComponent>(wearer);
+
+                // the zoom whirr only plays for the wearer's own session, so the wearer needs one
+                var session = server.PlayerMan.Sessions.Single();
+                previousAttached = session.AttachedEntity;
+                server.PlayerMan.SetAttachedEntity(session, wearer);
 
                 Assert.That(inventory.TryEquip(wearer, bracer, "gloves", silent: true, force: true), Is.True);
                 Assert.That(inventory.TryEquip(wearer, mask, "mask", silent: true, force: true), Is.True);
@@ -1060,6 +1066,8 @@ public sealed class YautjaYoungbloodTest
             await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
+                server.PlayerMan.SetAttachedEntity(server.PlayerMan.Sessions.Single(), previousAttached);
+
                 foreach (var uid in new[] { wearer, bracer, mask })
                 {
                     if (uid != default && !entMan.Deleted(uid))

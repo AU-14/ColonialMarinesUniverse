@@ -187,6 +187,12 @@ public sealed partial class CMU3DLiveSceneSystem
     public bool ToggleMouseCapture()
     {
         if (_firstPersonView == null) return false;
+        // the intro window blocks capture while it's open, so the hotkey looked dead until it was clicked away
+        if (_captureControls is { IsOpen: true })
+        {
+            CloseCaptureControls();
+            return RequestMouseCapture(true);
+        }
         return RequestMouseCapture(!_firstPersonView.MouseCaptured && !_captureRequested);
     }
 

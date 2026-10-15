@@ -20,7 +20,7 @@
         amount: 40
     - name: Footwear
       entries:
-      - id: CMBootsBlack
+      - id: CMBootsBlackFilled
         amount: 40
       - id: AU14BootsCBRNHAZOPS
         amount: 25
@@ -193,6 +193,8 @@
         amount: 25
     - name: Helmet Garb
       entries:
+      - id: CMUHelmetGarbPVS71NightVision
+        amount: 15
       - id: AU14HelmetGarbM10SkrimJungle
         amount: 15
       - id: AU14HelmetGarbM10SkrimDesert
@@ -360,11 +362,11 @@
         amount: 2
     - name: Footwear
       entries:
-      - id: CMBootsBlack
+      - id: CMBootsBlackFilled
         amount: 2
-      - id: CMBootsBrown
+      - id: CMBootsBrownFilled
         amount: 2
-      - id: AU14BootsJungle
+      - id: AU14BootsJungleFilled
         amount: 2
     - name: Headgear
       entries:
@@ -485,7 +487,7 @@
         recommended: true
     - name: Footwear
       entries:
-      - id: AU14SpikeBoots
+      - id: CMUSpikeBootsFilled
         points: 8
         recommended: true
     - name: Utilities
@@ -582,7 +584,7 @@
         amount: 20
     - name: special issue equipment
       entries:
-      - id: AU14SpikeBoots
+      - id: CMUSpikeBootsFilled
         amount: 3
       - id: RMCWeaponRifleM54CFilled
         amount: 10
@@ -778,16 +780,12 @@
         amount: 2
       - id: CMUDeployableZLevelLadder
         amount: 2
-    - name: Protective Equipment
+    - name: Oxygen and Gas Mask Filters
       entries:
-      - id: CMUMaskGas
-        amount: 30
-      - id: CMUMaskGasBlack
-        amount: 30
-      - id: CMUGasMaskFilter
-        amount: 30
-      - id: CMUFieldGasTankOxygenFilled
+      - id: CMUFieldOxygenTankHAZOPS
         amount: 15
+      - id: CMUGasMaskFilterHAZOPS
+        amount: 30
     - name: Radio Equipment
       entries:
       - id: ANPRC117GRadio
@@ -863,7 +861,7 @@
         amount: 40
     - name: Footwear
       entries:
-      - id: CMBootsBlack
+      - id: CMBootsBlackFilled
         amount: 40
     - name: Mask
       entries:

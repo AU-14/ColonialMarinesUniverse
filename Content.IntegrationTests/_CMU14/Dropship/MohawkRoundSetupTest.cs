@@ -43,7 +43,9 @@ public sealed class MohawkRoundSetupTest
             opforfighters: 0
         """;
 
-    [TestCase("USCM", "govfor", "/Maps/CMU14/Shuttles/alamo.yml")]
+    // cmu edit start: USCM flies the Midway and the dynamic gunship
+    [TestCase("USCM", "govfor", "/Maps/_RMC14/Shuttles/dynamic_gunship.yml")]
+    // cmu edit end
     [TestCase("HAZOPS", "opfor", "/Maps/CMU14/Shuttles/osprey.yml")]
     public async Task MidwayReplacesGunshipAndDeploysAllDecksToBush(string platoonId, string faction, string transport)
     {

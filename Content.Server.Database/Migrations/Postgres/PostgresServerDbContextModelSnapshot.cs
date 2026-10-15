@@ -1398,6 +1398,13 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("text")
                         .HasColumnName("armor_preference");
 
+                    b.Property<string>("BloodType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("")
+                        .HasColumnName("blood_type");
+
                     b.Property<string>("Build")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -1554,6 +1561,33 @@ namespace Content.Server.Database.Migrations.Postgres
                     b.Property<string>("RegulationHairName")
                         .HasColumnType("text")
                         .HasColumnName("regulation_hair_name");
+
+                    // cmu edit start
+                    b.Property<bool>("FoxtrotSquadOptIn")
+                        .HasColumnType("boolean")
+                        .HasColumnName("foxtrot_squad_opt_in");
+
+                    b.Property<string>("Religion")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("")
+                        .HasColumnName("religion");
+
+                    b.Property<string>("ArmorFlavorText")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("")
+                        .HasColumnName("armor_flavor_text");
+
+                    b.Property<string>("HelmetFlavorText")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("")
+                        .HasColumnName("helmet_flavor_text");
+                    // cmu edit end
 
                     b.Property<string>("Sex")
                         .IsRequired()

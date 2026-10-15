@@ -700,7 +700,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
         if (applyEffects)
         {
-            var selfDamageScale = smashable?.SelfDamageMultiplier ?? 1f;
+            var selfDamageScale = CMUSmashSelfDamageScale(other, smashable); // CMU14
             // Apply this before spending momentum; otherwise a successful smash
             // can lower CurrentSpeed below WallSmashMinSpeed and skip self-damage.
             ApplyHeavySmashSelfDamage(vehicle, mover, other, selfDamageScale);

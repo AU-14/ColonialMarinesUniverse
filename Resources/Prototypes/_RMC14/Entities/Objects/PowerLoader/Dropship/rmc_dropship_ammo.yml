@@ -172,6 +172,7 @@
     applyEffectsOnPenetrationLevels: true
     #cmu end
     explosion:
+      type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
       total: 3000
       slope: 5.5
       max: 55
@@ -200,6 +201,7 @@
     applyEffectsOnPenetrationLevels: true
     #cmu end
     explosion:
+      type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
       total: 905
       slope: 15
       max: 45
@@ -229,6 +231,7 @@
     #cmu end
     fireMissionDelay: null
     explosion:
+      type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
       total: 1780
       slope: 7.2
       max: 50
@@ -261,6 +264,7 @@
     applyEffectsOnPenetrationLevels: true
     #cmu end
     explosion:
+      type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
       total: 1850
       slope: 3.2
       max: 32
@@ -324,6 +328,7 @@
     applyEffectsOnPenetrationLevels: true
     #cmu end
     explosion:
+      type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
       total: 2000
       slope: 5.5
       max: 40
@@ -374,6 +379,7 @@
   - type: DropshipAmmo
     ammoType: minirocket
     explosion:
+      type: CMUCASMunition # CMU14: FLOW-09 was the RMC default; identical but for its tank blast multiplier.
       total: 850
       slope: 8
       max: 40

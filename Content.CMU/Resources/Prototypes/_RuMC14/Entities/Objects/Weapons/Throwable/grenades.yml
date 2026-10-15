@@ -6,6 +6,8 @@
   name: RG35F grenade
   description: The RG35F hand grenade is filled with Termobaric.
   components:
+  - type: CMUSmartGrenade
+    enabled: false
   - type: Sprite
     sprite: _RuMC14/Objects/Weapons/Grenades/RG35F.rsi
   - type: TriggerOnUse
