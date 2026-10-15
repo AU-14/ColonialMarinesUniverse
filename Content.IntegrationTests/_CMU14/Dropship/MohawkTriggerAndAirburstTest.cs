@@ -572,8 +572,9 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
         });
     }
 
-    [Test]
-    public async Task FlareLockWarnsNearbyPlayerInChatButNotDistantPlayerOrRepeatedLock()
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task FlareLockWarnsNearbyPlayerInChatButNotDistantPlayerOrRepeatedLock(bool popupsInChat)
     {
         var map = await Pair.CreateTestMap();
         Mount mount = null!;
@@ -598,12 +599,19 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
         var warnings = new List<Content.Shared.Chat.ChatMessage>();
         var controller = Client.ResolveDependency<Robust.Client.UserInterface.IUserInterfaceManager>()
             .GetUIController<Content.Client.UserInterface.Systems.Chat.ChatUIController>();
+        var config = Client.ResolveDependency<IConfigurationManager>();
+        var previousPopupsInChat = config.GetCVar(Content.Shared.CCVar.CCVars.PopupsInChat);
         void Capture(Content.Shared.Chat.ChatMessage message)
         {
-            if (message.Message.Contains("M90 gunner locked"))
+            if (message.Channel == Content.Shared.Chat.ChatChannel.Server &&
+                message.Message.Contains("M90 gunner locked"))
                 warnings.Add(message);
         }
-        await Client.WaitPost(() => controller.MessageAdded += Capture);
+        await Client.WaitPost(() =>
+        {
+            config.SetCVar(Content.Shared.CCVar.CCVars.PopupsInChat, popupsInChat);
+            controller.MessageAdded += Capture;
+        });
         try
         {
             await Server.WaitPost(() => Send(mount, new MohawkChinGunFlareMessage(SEntMan.GetNetEntity(nearby))));
@@ -620,7 +628,11 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
         }
         finally
         {
-            await Client.WaitPost(() => controller.MessageAdded -= Capture);
+            await Client.WaitPost(() =>
+            {
+                controller.MessageAdded -= Capture;
+                config.SetCVar(Content.Shared.CCVar.CCVars.PopupsInChat, previousPopupsInChat);
+            });
             await Server.WaitPost(() =>
             {
                 SEntMan.RemoveComponent<FTLComponent>(map.Grid);
