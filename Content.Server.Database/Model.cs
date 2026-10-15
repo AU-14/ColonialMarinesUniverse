@@ -151,6 +151,14 @@ namespace Content.Server.Database
             modelBuilder.Entity<Profile>()
                 .Property(p => p.HelmetFlavorText)
                 .HasDefaultValue(string.Empty);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.SyntheticGeneration)
+                .HasDefaultValue(1);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.SyntheticModelSuffix)
+                .HasDefaultValue(string.Empty);
             // cmu edit end
 
             modelBuilder.Entity<Profile>()
@@ -696,6 +704,8 @@ namespace Content.Server.Database
         public string Religion { get; set; } = string.Empty;
         public string ArmorFlavorText { get; set; } = string.Empty;
         public string HelmetFlavorText { get; set; } = string.Empty;
+        public int SyntheticGeneration { get; set; } = 1;
+        public string SyntheticModelSuffix { get; set; } = string.Empty;
         // cmu edit end
         public bool HideMetaInformation { get; set; }
     }

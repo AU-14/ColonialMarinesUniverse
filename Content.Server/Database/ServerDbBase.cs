@@ -429,6 +429,8 @@ namespace Content.Server.Database
             profile.Religion = humanoid.Religion.Id;
             profile.ArmorFlavorText = humanoid.ArmorFlavorText;
             profile.HelmetFlavorText = humanoid.HelmetFlavorText;
+            profile.SyntheticGeneration = humanoid.SyntheticGeneration;
+            profile.SyntheticModelSuffix = humanoid.SyntheticModelSuffix;
             // cmu edit end
             profile.HideMetaInformation = humanoid.HideMetaInformation;
             profile.ThreatPreference = humanoid.ThreatPreferences.Count == 0

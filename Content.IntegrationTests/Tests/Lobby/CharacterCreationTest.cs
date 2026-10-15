@@ -35,7 +35,9 @@ public sealed class CharacterCreationTest : GameTest
         HumanoidCharacterProfile profile = null;
         await client.WaitPost(() =>
         {
-            profile = HumanoidCharacterProfile.Random();
+            profile = HumanoidCharacterProfile.Random()
+                .WithSyntheticGeneration(4)
+                .WithSyntheticModelSuffix("Model-X");
             clientPrefManager.CreateCharacter(profile);
         });
         await pair.RunTicksSync(5);
@@ -92,6 +94,8 @@ public sealed class CharacterCreationTest : GameTest
             Assert.That(a.PreferenceUnavailable, Is.EqualTo(b.PreferenceUnavailable));
             Assert.That(a.SpawnPriority, Is.EqualTo(b.SpawnPriority));
             Assert.That(a.FlavorText, Is.EqualTo(b.FlavorText));
+            Assert.That(a.SyntheticGeneration, Is.EqualTo(b.SyntheticGeneration));
+            Assert.That(a.SyntheticModelSuffix, Is.EqualTo(b.SyntheticModelSuffix));
             Assert.That(a.JobPriorities, Is.EquivalentTo(b.JobPriorities));
             Assert.That(a.AntagPreferences, Is.EquivalentTo(b.AntagPreferences));
             Assert.That(a.TraitPreferences, Is.EquivalentTo(b.TraitPreferences));
