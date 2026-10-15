@@ -1,0 +1,20 @@
+using Content.Shared.Actions;
+using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
+
+namespace Content.Shared.CMU14.Xenomorphs.Swarm;
+
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CMUQueenSwarmComponent : Component
+{
+    [DataField] public EntProtoId SummonAction = "CMUActionSummonSwarm";
+    [DataField] public EntProtoId GuardAction = "CMUActionGuardSwarm";
+    [DataField] public EntProtoId FollowAction = "CMUActionFollowSwarm";
+}
+
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CMUSwarmLesserComponent : Component;
+
+public sealed partial class CMUSummonSwarmActionEvent : InstantActionEvent;
+public sealed partial class CMUGuardSwarmActionEvent : WorldTargetActionEvent;
+public sealed partial class CMUFollowSwarmActionEvent : EntityTargetActionEvent;

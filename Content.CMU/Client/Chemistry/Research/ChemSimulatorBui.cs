@@ -1,271 +1,255 @@
+using Content.Client._RMC14.UserInterface;
+using Content.Shared._RMC14.Chemistry.Reagent;
+using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared.CMU14.Chemistry.Reagents;
 using Content.Shared.CMU14.Chemistry.Research;
-using Content.Shared.CMU14.Chemistry.Reagent;
 using JetBrains.Annotations;
-using Robust.Client.Player;
+using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using static Content.Client.CMU14.Chemistry.Research.ChemSimulatorWindow;
 
 namespace Content.Client.CMU14.Chemistry.Research;
 
 [UsedImplicitly]
 public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
-    [Dependency] private IPrototypeManager _protoman = default!;
-    [Dependency] private SharedReagentGeneratorSystem _gen = default!;
-
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private ChemSimulatorWindow? _window;
-    
 
     protected override void Open()
     {
         base.Open();
         _window = this.CreateWindow<ChemSimulatorWindow>();
-        ButtonGroup _mode = new ButtonGroup(true);
-        _window.Add.Group = _mode;
-        _window.Relate.Group = _mode;
-        _window.Amplify.Group = _mode;
-        _window.Suppress.Group = _mode;
 
-        _window.Finalize.OnPressed += _ => SendPredictedMessage(new ChemSimulatorFinalizeBuiMsg());
-        _window.Simulate.OnPressed += _ => SendPredictedMessage(new ChemSimulatorAttemptSimulateBuiMsg());
-        _window.Override.OnPressed += _ => SendPredictedMessage(new ChemSimulatorToggleOverrideBuiMsg());
-        _window.EjectReference.OnPressed += _ =>
-        SendPredictedMessage(new ChemSimulatorEjectBuiMsg(true, EntMan.GetNetEntity(PlayerManager.LocalEntity)));
-        _window.EjectTarget.OnPressed += _ =>
-        SendPredictedMessage(new ChemSimulatorEjectBuiMsg(false, EntMan.GetNetEntity(PlayerManager.LocalEntity)));
-        _window.Amplify.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickModeBuiMsg(ChemSimulatorMode.Amplify));
-        _window.Suppress.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickModeBuiMsg(ChemSimulatorMode.Suppress));
-        _window.Relate.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickModeBuiMsg(ChemSimulatorMode.Relate));
-        _window.Add.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickModeBuiMsg(ChemSimulatorMode.Add));
+        _window.AmplifyButton.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickModeBuiMsg(ChemSimulatorMode.Amplify));
+        _window.SuppressButton.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickModeBuiMsg(ChemSimulatorMode.Suppress));
+        _window.RelateButton.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickModeBuiMsg(ChemSimulatorMode.Relate));
+        _window.AddButton.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickModeBuiMsg(ChemSimulatorMode.Add));
+
+        _window.EjectTargetButton.OnPressed += _ =>
+            SendPredictedMessage(new ChemSimulatorEjectBuiMsg(false, EntMan.GetNetEntity(PlayerManager.LocalEntity)));
+        _window.EjectReferenceButton.OnPressed += _ =>
+            SendPredictedMessage(new ChemSimulatorEjectBuiMsg(true, EntMan.GetNetEntity(PlayerManager.LocalEntity)));
+        _window.SimulateButton.OnPressed += _ => SendPredictedMessage(new ChemSimulatorAttemptSimulateBuiMsg());
+        _window.OverrideButton.OnPressed += _ => SendPredictedMessage(new ChemSimulatorToggleOverrideBuiMsg());
+        _window.FinalizeButton.OnPressed += _ => SendPredictedMessage(new ChemSimulatorFinalizeBuiMsg());
 
         if (State is ChemSimulatorBuiState s)
-        {
             RefreshState(s);
-        }
     }
+
     protected override void UpdateState(BoundUserInterfaceState state)
     {
         base.UpdateState(state);
         if (state is ChemSimulatorBuiState s)
             RefreshState(s);
     }
+
     private void RefreshState(ChemSimulatorBuiState state)
     {
-        if (_window is null || !EntMan.TryGetComponent<ChemSimulatorComponent>(Owner, out _))
+        if (_window is not { IsOpen: true })
             return;
 
-        bool CanEjectTarget = ((state.Target is not null ? true : false) && state.Stage == ChemSimulatorStage.Off);
-        bool CanEjectRef = ((state.Reference is not null ? true : false) && state.Stage == ChemSimulatorStage.Off);
-        bool LockControl = state.Stage != ChemSimulatorStage.Off;
-        bool isPicking = state.Stage == ChemSimulatorStage.Final;
-        bool canSimulate = (state.Ready && state.Stage == ChemSimulatorStage.Off);
-
-        _window.Status.Text = state.StatusBar;
-        _window.CreditsBar.Value = state.Credits;
-        _window.Credits.Text = Loc.GetString("research-sim-ui-credits", ("NUM", state.Credits));
-        var props = _protoman.GetInstances<ReagentPropertyPrototype>();
-        _window.Simulate.Disabled = !canSimulate;
-        var recigroup = new ButtonGroup();
-        _window.Finalize.Disabled = true;
-        _window.PickRecipeContainer.RemoveAllChildren();
-        if (state.Stage == ChemSimulatorStage.Final)
+        _window.CreditsLabel.Text = Loc.GetString("research-sim-ui-credits", ("NUM", state.Credits));
+        _window.CreditsBar.Value = Math.Clamp(state.Credits, 0, 100);
+        _window.CreditsBar.ForegroundStyleBoxOverride = new StyleBoxFlat
         {
-            _window.Controls.Visible = false;
-            _window.ControlsFinalize.Visible = true;
-            foreach (var recipick in state.RecipeOptions)
-            {
-                var recibutton = new Button();
-                recibutton.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickRecipeChemBuiMsg(recipick.Item1));
-                recibutton.Text = recipick.Item1;
-                recibutton.StyleClasses.Add("ButtonSquare");
-                recibutton.Group = recigroup;
-                if (state.RecipePicked is not null && state.RecipePicked == recipick.Item1)
-                    recibutton.Disabled = true; //can't do Pressed because then that mucks with the group
-                _window.PickRecipeContainer.AddChild(recibutton);
-            }
-            if (state.RecipePicked is not null)
-                _window.Finalize.Disabled = false;
+            BackgroundColor = state.Credits >= 60 ? CreditsGood : state.Credits >= 15 ? CreditsAverage : CreditsBad,
+        };
+
+        var locked = state.Stage != ChemSimulatorStage.Off;
+        _window.SimulateButton.Disabled = locked || !state.Ready;
+
+        _window.AmplifyButton.Disabled = locked;
+        _window.SuppressButton.Disabled = locked;
+        _window.RelateButton.Disabled = locked;
+        _window.AddButton.Disabled = locked;
+
+        _window.OverrideButton.Disabled = locked;
+        _window.OverrideButton.Pressed = state.Override;
+        Colored(_window.OverrideButton, state.Override ? OverrideActiveColor : ActionColor);
+
+        var targetItem = GetSlotItem("target");
+        var referenceItem = GetSlotItem("reference");
+
+        _window.EjectTargetButton.Disabled = targetItem == null || locked;
+        _window.EjectReferenceButton.Disabled = referenceItem == null || locked;
+
+        SetModeButton(_window.AmplifyButton, state.Mode == ChemSimulatorMode.Amplify);
+        SetModeButton(_window.SuppressButton, state.Mode == ChemSimulatorMode.Suppress);
+        SetModeButton(_window.RelateButton, state.Mode == ChemSimulatorMode.Relate);
+        SetModeButton(_window.AddButton, state.Mode == ChemSimulatorMode.Add);
+
+        _window.TargetIcon.SetEntity(targetItem);
+        _window.ReferenceIcon.SetEntity(referenceItem);
+
+        var noData = Loc.GetString("research-sim-ui-no-data");
+        Row(_window.TargetStatusPanel, _window.TargetNameLabel, state.Target?.Name ?? noData,
+            targetItem != null ? GreenColor : RedColor);
+        Row(_window.ReferenceStatusPanel, _window.ReferenceNameLabel, state.Reference?.Name ?? noData,
+            referenceItem != null ? GreenColor : RedColor);
+
+        var costProperty = state.Mode == ChemSimulatorMode.Add ? state.ReferenceProp : state.TargetProp;
+        int? cost = costProperty != null && state.Costs.TryGetValue(costProperty, out var propertyCost)
+            ? propertyCost
+            : state.Cost;
+        _window.CostLabel.Text = cost is { } c
+            ? Loc.GetString("research-sim-ui-cost", ("NUM", c))
+            : Loc.GetString("research-sim-ui-cost-null");
+        _window.OverdoseLabel.Text = state.Overdose is { } od
+            ? Loc.GetString("research-sim-ui-overdose", ("NUM", od))
+            : Loc.GetString("research-sim-ui-no-overdose");
+
+        var statusText = string.IsNullOrEmpty(state.StatusBar)
+            ? Loc.GetString("research-sim-ui-status-not-ready")
+            : state.StatusBar;
+        var statusColor = state.Stage switch
+        {
+            ChemSimulatorStage.Final => GreenColor,
+            ChemSimulatorStage.Failure => RedColor,
+            > ChemSimulatorStage.Final => OrangeColor,
+            _ => state.Ready ? TanColor : RedColor,
+        };
+        Row(_window.StatusPanel, _window.StatusLabel, statusText, statusColor);
+
+        var showReference = state.Mode is ChemSimulatorMode.Relate or ChemSimulatorMode.Add;
+
+        _window.TargetPropertiesPanel.Visible = state.Target != null && state.Costs.Count > 0;
+        _window.ReferenceHeader.Visible = showReference;
+        _window.ReferenceStatusPanel.Visible = showReference;
+        _window.ReferencePropertiesPanel.Visible = state.Reference != null && showReference;
+
+        PopulateProperties(_window.TargetPropertiesBox, state, state.Target, state.TargetProp, state.ReferenceProp,
+            state.Mode != ChemSimulatorMode.Add, "research-sim-ui-selected-ref-conflict", id =>
+                SendPredictedMessage(new ChemSimulatorPickTargetPropertyBuiMsg(id)));
+
+        if (showReference)
+        {
+            PopulateProperties(_window.ReferencePropertiesBox, state, state.Reference, state.ReferenceProp, state.TargetProp,
+                true, "research-sim-ui-selected-targ-conflict", id =>
+                    SendPredictedMessage(new ChemSimulatorPickReferencePropertyBuiMsg(id)));
         }
-        
-        _window.Override.Pressed = state.Override;
-        
-        _window.NoDat.Visible = true;
-        _window.ModeChange.Visible = false;
-        _window.ModeRelateAdd.Visible = false;
-        _window.TargetPropertyContainer.RemoveAllChildren();
-        _window.ReferencePropertyContainer.RemoveAllChildren();
-        _window.EjectTarget.Disabled = true;
-        
-        _window.EjectReference.Disabled = true;
-        
-        _window.TargPickBox.Visible = false;
-        _window.RefPickBox.Visible = false;
 
-        
+        var picking = state.Stage == ChemSimulatorStage.Final;
+        _window.RecipePickerHeader.Visible = picking;
+        _window.RecipePickerPanel.Visible = picking;
+        PopulateRecipeCandidates(picking ? state.RecipeOptions : [], state.RecipePicked);
 
-        _window.Amplify.Disabled = LockControl;
-        _window.Suppress.Disabled = LockControl;
-        _window.Relate.Disabled = LockControl;
-        _window.Add.Disabled = LockControl;
+        _window.FinalizeButton.Disabled = !picking || state.RecipePicked is null;
+    }
 
-        _window.Override.Disabled = LockControl;
+    private EntityUid? GetSlotItem(string slotId)
+    {
+        if (!EntMan.System<SharedContainerSystem>().TryGetContainer(Owner, slotId, out var container))
+            return null;
 
-        _window.TargPickBox.Visible = false;
-        _window.RefPickBox.Visible = false;
-        _window.Overdose.Text = (state.Overdose is not null) ?
-            Loc.GetString("research-sim-ui-overdose", ("NUM", state.Overdose.Value)) : Loc.GetString("research-sim-ui-no-overdose");
-        _window.SimCost.Text = (state.Cost is not null) ?
-            Loc.GetString("research-sim-ui-sim-cost", ("NUM", state.Cost.Value)) : Loc.GetString("research-sim-ui-cost-null");
-        _window.TargetName.Text = (state.TargetProp is not null) ?
-            Loc.GetString("research-sim-ui-target-name", ("NAME", state.TargetProp)) : Loc.GetString("research-sim-ui-no-targ-chem");
-        _window.ReferenceName.Text = (state.ReferenceProp is not null) ?
-            Loc.GetString("research-sim-ui-ref-name", ("NAME", state.ReferenceProp)) : Loc.GetString("research-sim-ui-no-ref-chem");
-        
+        return container.ContainedEntities.Count > 0 ? container.ContainedEntities[0] : null;
+    }
 
-        switch (state.Mode)
+    private void PopulateProperties(
+        BoxContainer box,
+        ChemSimulatorBuiState state,
+        GeneratedReagentData? data,
+        string? selectedId,
+        string? opposingSelectedId,
+        bool selectable,
+        string conflictTooltip,
+        Action<string> onSelect)
+    {
+        if (data is not { } reagent)
         {
-            case ChemSimulatorMode.Amplify:
-                _window.Amplify.Pressed = true;
-                break;
-            case ChemSimulatorMode.Suppress:
-                _window.Suppress.Pressed = true;
-                break;
-            case ChemSimulatorMode.Relate:
-                _window.Relate.Pressed = true;
-                break;
-            case ChemSimulatorMode.Add:
-                _window.Add.Pressed = true;
-                break;
-            default:
-                break;
+            box.RemoveAllChildren();
+            return;
         }
-        var targetgroup = new ButtonGroup();
-        var referencegroup = new ButtonGroup();
-        _window.EjectTarget.Disabled = !CanEjectTarget | LockControl;
-        _window.EjectReference.Disabled = !CanEjectRef | LockControl;
-        if (state.Target is not null && state.Costs.Count > 0)
+
+        var locked = state.Stage != ChemSimulatorStage.Off;
+        var conflicts = EntMan.System<SharedReagentGeneratorSystem>().UnfoldedConflicts;
+
+        var index = 0;
+        foreach (var (propertyId, level) in reagent.Effects)
         {
-            foreach (var kvp in state.Target.Value.Effects)
+            var name = propertyId;
+            var description = string.Empty;
+            var categoryColor = Color.White;
+            if (_prototype.TryIndex<ReagentPropertyPrototype>(propertyId, out var proto))
             {
-                var propdat = props[kvp.Key];
-                var propbutton = new Button();
-                propbutton.Access = AccessLevel.Public;
-                //propbutton.Name = "TargProps." + propdat.ID;
-                if (state.Mode != ChemSimulatorMode.Add)
+                name = proto.LocalizedName;
+                description = proto.LocalizedDescription;
+                categoryColor = proto.Hint switch
                 {
-                    propbutton.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickTargetPropertyBuiMsg(kvp.Key));
-                    propbutton.Group = targetgroup;
-                }
-                propbutton.StyleClasses.Add("ButtonSquare");
-                propbutton.Text = propdat.Code + " " + kvp.Value.ToString();
-                bool isLocked = false;
-                //this fucking sucks
-                if (state.ReferenceProp is not null)
-                {
-                    foreach (var list in _gen.UnfoldedConflicts)
-                    {
-                        if ((list[0] == state.ReferenceProp && list[1] == kvp.Key) |
-                            (list[0] == kvp.Key && list[1] == state.ReferenceProp))
-                        {
-                            propbutton.ToolTip = Loc.GetString("research-sim-ui-selected-ref-conflict");
-                            isLocked = true;
-                            break;
-                        }
-                    }
-                }
-                propbutton.Disabled = LockControl || (!state.Override ? isLocked : false);
-                if (state.TargetProp is not null && state.TargetProp == kvp.Key)
-                    propbutton.Pressed = true;
-                _window.TargetPropertyContainer.AddChild(propbutton);
+                    ReagentPropertyHintEnum.Positive => PropertyPositiveColor,
+                    ReagentPropertyHintEnum.Negative => PropertyNegativeColor,
+                    _ => Color.White,
+                };
             }
+
+            if (state.Costs.TryGetValue(propertyId, out var price))
+            {
+                var priceText = Loc.GetString("research-sim-ui-price", ("COST", price));
+                description = description.Length > 0 ? description + "\n" + priceText : priceText;
+            }
+
+            var conflicting = opposingSelectedId != null && conflicts.Exists(pair =>
+                pair[0] == opposingSelectedId && pair[1] == propertyId ||
+                pair[0] == propertyId && pair[1] == opposingSelectedId);
+
+            SelectButton button;
+            if (index < box.ChildCount && box.GetChild(index) is SelectButton existing)
+            {
+                button = existing;
+            }
+            else
+            {
+                button = new SelectButton { HorizontalExpand = true, MinHeight = 28, ClipText = true };
+                box.AddChild(button);
+            }
+
+            button.Id = propertyId;
+            button.OnSelect = selectable ? onSelect : null;
+            button.Text = Loc.GetString("research-sim-ui-property", ("NAME", name), ("LEVEL", level));
+            button.Pressed = propertyId == selectedId;
+            button.Disabled = selectable && conflicting && !state.Override;
+            button.ToolTip = conflicting && !state.Override ? Loc.GetString(conflictTooltip) : description;
+            button.MouseFilter = selectable && !locked ? Control.MouseFilterMode.Stop : Control.MouseFilterMode.Ignore;
+            SetRowButton(button, categoryColor);
+
+            index++;
         }
-        if (state.Reference is not null)
+
+        box.RemoveChildrenAfter(index);
+    }
+
+    private void PopulateRecipeCandidates(List<(string, int, bool, bool)> candidates, string? picked)
+    {
+        var box = _window!.RecipeCandidatesBox;
+
+        for (var i = 0; i < candidates.Count; i++)
         {
-            foreach (var kvp in state.Reference.Value.Effects)
+            var id = candidates[i].Item1;
+            var name = EntMan.System<RMCReagentSystem>().TryIndex(id, out var reagent) ? reagent.LocalizedName : id;
+
+            SelectButton button;
+            if (i < box.ChildCount && box.GetChild(i) is SelectButton existing)
             {
-                var propdat = props[kvp.Key];
-                var propbutton = new Button();
-                propbutton.Access = AccessLevel.Public;
-                //propbutton.Name = "RefProps." + propdat.ID;
-                propbutton.OnPressed += _ => SendPredictedMessage(new ChemSimulatorPickReferencePropertyBuiMsg(kvp.Key));
-                propbutton.StyleClasses.Add("ButtonSquare");
-                propbutton.Text = propdat.Code + " " + kvp.Value.ToString();
-                var isLocked = false;
-                if (state.TargetProp is not null)
-                {
-                    foreach (var list in _gen.UnfoldedConflicts)
-                    {
-                        if ((list[0] == state.TargetProp && list[1] == kvp.Key) |
-                            (list[0] == kvp.Key && list[1] == state.TargetProp))
-                        {
-                            propbutton.ToolTip = Loc.GetString("research-sim-ui-selected-targ-conflict");
-                            isLocked = true;
-                            break;
-                        }
-                    }
-                }
-                propbutton.Disabled = LockControl || (!state.Override ? isLocked : false);
-                propbutton.Group = referencegroup;
-                if (state.ReferenceProp is not null && state.ReferenceProp == kvp.Key)
-                    propbutton.Pressed = true;
-                _window.ReferencePropertyContainer.AddChild(propbutton);
+                button = existing;
             }
+            else
+            {
+                button = new SelectButton { HorizontalExpand = true, MinHeight = 32, ClipText = true };
+                box.AddChild(button);
+            }
+
+            button.Id = id;
+            button.OnSelect = pick => SendPredictedMessage(new ChemSimulatorPickRecipeChemBuiMsg(pick));
+            button.Text = name;
+            button.Pressed = picked == id;
+            SetRowButton(button, Color.White);
         }
-        if (state.Mode == ChemSimulatorMode.Amplify || state.Mode == ChemSimulatorMode.Suppress)
-        {
-            if (state.Target is not null && state.Costs.Count > 0)
-            {
-                _window.NoDat.Visible = false;
-                _window.ModeChange.Visible = true;
-                _window.TargetPropertyContainer.Orphan();
-                _window.ModeChangeTargDatCon.AddChild(_window.TargetPropertyContainer);
-                _window.TargetPropertyContainer.SetPositionLast();
-            }
-            if (state.TargetProp is not null)
-            {
-                _window.TargPickBox.Visible = true;
-                _window.PropPickName.Text = props[state.TargetProp].LocalizedName;
-                _window.PropPickDesc.Text = props[state.TargetProp].LocalizedDescription;
-                _window.SimPrice.Text = Loc.GetString("research-sim-ui-price", ("COST", state.Costs[state.TargetProp]));
-            }
-        }
-        else
-        {
-            if (state.Target is not null && state.Reference is not null && state.Costs.Count > 0)
-            {
-                _window.NoDat.Visible = false;
-                _window.ModeRelateAdd.Visible = true;
-                _window.TargetPropertyContainer.Orphan();
-                _window.ModeRelateAddTargDatCon.AddChild(_window.TargetPropertyContainer);
-                _window.TargetPropertyContainer.SetPositionLast();
-                if (state.Mode == ChemSimulatorMode.Add)
-                {
-                    if (state.ReferenceProp is not null)
-                    {
-                        _window.RefPickBox.Visible = true;
-                        _window.RAPropPickName.Text = props[state.ReferenceProp].LocalizedName;
-                        _window.RAPropPickDesc.Text = props[state.ReferenceProp].LocalizedDescription;
-                        _window.RASimPrice.Text = Loc.GetString("research-sim-ui-price", ("COST", state.Costs[state.ReferenceProp]));
-                    }
-                }
-                else
-                {
-                    if (state.TargetProp is not null)
-                    {
-                        _window.RefPickBox.Visible = true;
-                        _window.RAPropPickName.Text = props[state.TargetProp].LocalizedName;
-                        _window.RAPropPickDesc.Text = props[state.TargetProp].LocalizedDescription;
-                        _window.RASimPrice.Text = Loc.GetString("research-sim-ui-price", ("COST", state.Costs[state.TargetProp]));
-                    }
-                }
-            }
-            
-        }
+
+        box.RemoveChildrenAfter(candidates.Count);
     }
 }
