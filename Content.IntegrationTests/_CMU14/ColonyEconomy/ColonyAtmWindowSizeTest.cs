@@ -13,7 +13,8 @@ namespace Content.IntegrationTests.CMU14.ColonyEconomy;
 ///     Opens the ATM window on a range of screen resolutions and UI scales and checks that
 ///     it always fits, keeps the art's aspect ratio, and leaves the whole keypad reachable.
 /// </summary>
-[TestFixture]
+// the dragged size lives in a static, so one test forgetting it mid-drag broke another one running beside it
+[TestFixture, NonParallelizable]
 public sealed class ColonyAtmWindowSizeTest
 {
     // The window shows the art's fascia, 203 x 181 art pixels, under a nav bar of fixed height.

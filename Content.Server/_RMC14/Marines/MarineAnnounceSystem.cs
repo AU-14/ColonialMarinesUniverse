@@ -133,6 +133,9 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
             var targetFaction = ResolveAnnouncementFaction(faction);
             filter = Filter.Empty().AddWhereAttachedEntity(e =>
             {
+                if (IsCMUAnnouncementExcluded(e)) // CMU14
+                    return false;
+
                 if (TryComp<MarineComponent>(e, out var marine))
                     return IsMarineAnnouncementRecipient(marine.Faction, targetFaction);
 
@@ -253,6 +256,9 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
         var targetFaction = ResolveAnnouncementFaction(faction);
         return Filter.Empty().AddWhereAttachedEntity(e =>
         {
+            if (IsCMUAnnouncementExcluded(e)) // CMU14
+                return false;
+
             if (TryComp<MarineComponent>(e, out var marine))
                 return IsMarineAnnouncementRecipient(marine.Faction, targetFaction);
 

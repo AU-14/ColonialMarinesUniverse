@@ -365,7 +365,7 @@
       - CanBeSupplyDropped
   - type: NewPlayerLabel
   - type: MarineMapTracked
-  - type: RMCSetPose
+# - type: RMCSetPose # CMU14: replaced by the in-round Edit Description verb
   - type: Evasion
   - type: CanBeFirePatted
   - type: FirePatter
@@ -407,7 +407,10 @@
   - type: RMCDisarm
   - type: RMCDisarmable
   - type: StunOnExplosionReceived
-  - type: DeafenWhileCrit
+  # cmu edit start
+  # Crit no longer deafens outright; CMUUnconsciousHearingSystem muffles hearing instead.
+  # - type: DeafenWhileCrit
+  # cmu edit end
   - type: CrawlWhileCrit
   - type: RMCStopDropRollVisuals
   - type: XenoToggleChargingDamage

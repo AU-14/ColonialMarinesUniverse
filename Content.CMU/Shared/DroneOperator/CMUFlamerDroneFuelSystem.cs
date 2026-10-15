@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Water;
 using Content.Shared.Examine;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Movement.Events;
@@ -10,6 +11,10 @@ namespace Content.Shared.CMU14.DroneOperator;
 public sealed partial class CMUFlamerDroneFuelSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private RMCWaterSystem _water = default!;
+
+    // deeper than wading water, the nozzle is under the surface
+    private const float SubmergedDepth = 8;
 
     public override void Initialize()
     {
@@ -31,6 +36,15 @@ public sealed partial class CMUFlamerDroneFuelSystem : EntitySystem
             args.Cancelled = true;
             args.ResetCooldown = true;
             args.Message = Loc.GetString(ent.Comp.Ruined ? "cmu-flamer-fuel-ruined" : "cmu-flamer-fuel-lockout");
+            return;
+        }
+
+        if (_water.TryGetWaterSurface(ent, out _, out var depth, out var covered) &&
+            !covered && depth > SubmergedDepth && _water.CanSubmerge(ent))
+        {
+            args.Cancelled = true;
+            args.ResetCooldown = true;
+            args.Message = Loc.GetString("cmu-flamer-fuel-submerged");
         }
     }
 

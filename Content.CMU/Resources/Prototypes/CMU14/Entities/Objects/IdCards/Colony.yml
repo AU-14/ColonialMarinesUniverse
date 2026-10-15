@@ -420,6 +420,15 @@
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
+  id: AU14IDCardColonyPrisoner
+  name: prisoner ID card
+  description: A prison-issued identification badge. It opens nothing.
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianPrisoner
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardFoodServiceWorker
   name: food service worker ID card
   components:

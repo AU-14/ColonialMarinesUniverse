@@ -3,6 +3,7 @@ using Content.Client.CMU14.UserInterface.Options;
 using Content.Client.Stylesheets;
 using Content.Shared.CMU14.Input;
 using Content.Shared.CMU14.Inventory;
+using Content.Shared.CMU14.ZLevels; // CMU14
 using Content.Shared._RMC14.Input;
 using Content.Shared.CCVar;
 using Content.Shared.Chat.Prototypes;
@@ -281,6 +282,7 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(CMUKeyFunctions.CMUOpenMedicalCraftingMenu);
 
             AddHeader("ui-options-header-cmu-zlevels");
+            AddToggleCvarCheckBox("ui-options-cmu-zlevels-look-aim", CMUZLevelsCVars.LookAim); // CMU14
             AddButton(CMUKeyFunctions.CMUToggleShootDownZLevel);
 
             AddHeader("ui-options-header-cmu-gunship");
@@ -377,7 +379,7 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.Walk);
             AddCheckBox("ui-options-hotkey-toggle-walk", _cfg.GetCVar(CCVars.ToggleWalk), HandleToggleWalk);
             InitToggleWalk();
-            AddButton(ContentKeyFunctions.ToggleKnockdown);
+            // AddButton(ContentKeyFunctions.ToggleKnockdown); // CMU14: vanilla prone removed
 
             AddHeader("ui-options-header-camera");
             AddButton(EngineKeyFunctions.CameraRotateLeft);

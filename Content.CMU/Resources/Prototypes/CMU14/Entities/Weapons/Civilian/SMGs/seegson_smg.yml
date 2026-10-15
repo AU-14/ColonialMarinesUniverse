@@ -1,0 +1,280 @@
+# Seegson pan-fed submachinegun, from cmss13-devs/cmss13-pve#781.
+
+- type: soundCollection
+  id: CMUSeegsonSMGShoot
+  files:
+  - /Audio/CMU14/Weapons/Guns/Gunshots/sieg_smg_1.ogg
+  - /Audio/CMU14/Weapons/Guns/Gunshots/sieg_smg_2.ogg
+  - /Audio/CMU14/Weapons/Guns/Gunshots/sieg_smg_3.ogg
+  - /Audio/CMU14/Weapons/Guns/Gunshots/sieg_smg_4.ogg
+
+- type: entity
+  parent: CMBaseWeaponSMG
+  id: CMUWeaponSMGSeegson
+  name: pan fed submachinegun
+  description: A pan fed submachinegun with a folding wire stock. Chambered in 9x19mm.
+  suffix: Filled
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Guns/SMGs/seegson.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: ItemMapper
+    containerWhitelist:
+    - gun_magazine
+    mapLayers:
+      mag-0:
+        whitelist:
+          tags:
+          - CMUMagazineSMGSeegson
+  - type: Clothing
+    sprite: CMU14/Objects/Weapons/Guns/SMGs/seegson.rsi
+  - type: Gun
+    shotsPerBurst: 3
+    soundGunshot:
+      collection: CMUSeegsonSMGShoot
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    recoilWielded: 0
+    recoilUnwielded: 1
+    scatterWielded: 4
+    scatterUnwielded: 8
+    baseFireRate: 6.667
+    burstScatterMult: 3
+    modifiers:
+      Burst:
+        fireDelay: 0.0999
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
+      FullAuto:
+        maxScatterModifier: 3
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 4
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 0.65
+    accuracyMultiplierUnwielded: 0.75
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineSMGSeegson
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMUMagazineSMGSeegson
+  - type: AttachableHolder
+    randomAttachmentChance: 0.38
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentSuppressor
+          - RMCAttachmentRecoilCompensator
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentBarrelCharger
+          - RMCM5Bayonet
+        random:
+        - RMCAttachmentRecoilCompensator
+        - RMCAttachmentExtendedBarrel
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentMagneticHarness
+      rmc-aslot-stock:
+        startingAttachable: CMUAttachmentSeegsonStock
+        whitelist:
+          tags:
+          - CMUAttachmentSeegsonStock
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentLaserSight
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentBurstFireAssembly
+          - RMCAttachmentU7UnderbarrelShotgun
+          - RMCAttachmentBipod
+        random:
+        - RMCAttachmentFlashlightGrip
+        - RMCAttachmentAngledGrip
+        - RMCAttachmentVerticalGrip
+        - RMCAttachmentGyroscopicStabilizer
+        - RMCAttachmentBurstFireAssembly
+        - RMCAttachmentBipod
+  # Converted from the cmss13 attachable_offset list.
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.78125, -0.09375
+      rmc-aslot-rail: 0.3125, 0.03125
+      rmc-aslot-underbarrel: 0.28125, -0.28125
+      rmc-aslot-stock: -0.28125, -0.15625
+
+- type: entity
+  parent: CMUWeaponSMGSeegson
+  id: CMUWeaponSMGSeegsonAP
+  suffix: Filled, AP
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineSMGSeegsonAP
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMUMagazineSMGSeegson
+
+# Pan magazines. Only tagged for this gun, so they do not fit magazine webbing.
+- type: entity
+  parent: CMMagazineRifleBase
+  id: CMUMagazineSMGSeegson
+  name: pan magazine (9mm)
+  description: A 9mm submachinegun pan magazine. The shape prevents it from fitting into magazine webbings.
+  components:
+  - type: Tag
+    tags:
+    - CMUMagazineSMGSeegson
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgePistol9mm
+    proto: CMCartridgePistol9mm
+    capacity: 86
+  - type: Item
+    size: Normal
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Guns/Ammunition/seegson_pan.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsPistol9MM
+
+- type: entity
+  parent: CMUMagazineSMGSeegson
+  id: CMUMagazineSMGSeegsonAP
+  name: pan AP magazine (9mm)
+  description: A 9mm armor-piercing submachinegun pan magazine. The shape prevents it from fitting into magazine webbings.
+  components:
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMCartridgePistol9mmAP
+    proto: CMCartridgePistolM77AP
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Guns/Ammunition/seegson_pan.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsPistol9MMAP
+
+- type: entity
+  parent: CMUMagazineSMGSeegson
+  id: CMUMagazineSMGSeegsonHP
+  name: pan hollowpoint magazine (9mm)
+  description: A 9mm hollowpoint submachinegun pan magazine. The shape prevents it from fitting into magazine webbings.
+  components:
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RMCCartridgePistol9mmHP
+    proto: RMCCartridgePistol9mmHP
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Guns/Ammunition/seegson_pan.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#BA5D00"
+
+# Folding wire stock
+- type: entity
+  parent: RMCStockAttachmentCollapsibleBase
+  id: CMUAttachmentSeegsonStock
+  name: pan submachinegun folding stock
+  description: The stock, when extended, reduces recoil and improves accuracy, but at a reduction to handling and agility. This stock can collapse in, removing all positive and negative effects.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Guns/Attachments/seegson_stock.rsi
+    state: stock
+  - type: Tag
+    tags:
+    - RMCAttachmentStock
+    - CMUAttachmentSeegsonStock
+  - type: AttachableToggleable
+    icon:
+      sprite: CMU14/Objects/Weapons/Guns/Attachments/seegson_stock.rsi
+      state: stock
+    iconActive:
+      sprite: CMU14/Objects/Weapons/Guns/Attachments/seegson_stock.rsi
+      state: stock-on
+    actionName: Toggle Pan Submachinegun Folding Stock
+  - type: AttachableSizeMods
+    modifiers:
+    - conditions:
+        activeOnly: true
+      size: 1
+  - type: AttachableSpeedMods
+    modifiers:
+    - conditions:
+        wieldedOnly: true
+        activeOnly: true
+      walk: -0.024
+      sprint: -0.043
+  - type: AttachableWieldDelayMods
+    modifiers:
+    - conditions:
+        activeOnly: true
+      delay: 0.2
+  - type: AttachableWeaponRangedMods
+    modifiers:
+    - conditions:
+        wieldedOnly: true
+        activeOnly: true
+      accuracyAddMult: 0.15
+      recoilFlat: -2
+      scatterFlat: -6
+    - conditions:
+        unwieldedOnly: true
+        activeOnly: true
+      accuracyAddMult: -0.15
+      recoilFlat: 2
+      scatterFlat: 2
+
+- type: Tag
+  id: CMUMagazineSMGSeegson
+
+- type: Tag
+  id: CMUAttachmentSeegsonStock
