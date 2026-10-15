@@ -2,14 +2,14 @@
   parent: RMCDropshipAttachmentWeapon
   id: RMCDropshipAttachmentLaserCannon
   name: LWU-6B Laser Cannon
-  description: State of the art technology recently acquired by the UNMC, it fires a battery-fed pulsed laser beam at near lightspeed setting on fire everything it touches. Moving this will require some sort of lifter. Accepts the BTU-17/LW Hi-Cap Laser Batteries.
+  description: State of the art technology recently acquired, it fires a battery-fed pulsed laser beam at near lightspeed setting on fire everything it touches. Moving this will require some sort of lifter. Accepts the BTU-17/LW Hi-Cap Laser Batteries.
   components:
   - type: Sprite
     layers:
     - state: laser_beam
       offset: 0.5, 0.5
   - type: DropshipFabricatorPrintable
-    cost: 500
+    cost: 400
   - type: DropshipWeapon
     abbreviation: LZR
     fireDelay: 5
@@ -31,7 +31,7 @@
   parent: RMCDropshipAttachmentAmmo
   id: RMCDropshipAttachmentAmmoLaserCannon
   name: BTU-17/LW Hi-Cap Laser Battery
-  description: A high-capacity laser battery used to power laser beam weapons.  Can be loaded into the LWU-6B Laser Cannon.
+  description: A high-capacity standard laser battery used to power laser beam weapons.  Can be loaded into the LWU-6B Laser Cannon.
   components:
   - type: Sprite
     layers:
@@ -62,7 +62,7 @@
     deleteOnEmpty: true
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 500
+    cost: 475
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoLaserCannon
@@ -75,11 +75,11 @@
     roundsPerShot: 5
     fire:
       type: RMCTileFireGreen
-      range: 6
-      total: 32
+      range: 8
+      total: 48
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 600
+    cost: 500
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoLaserCannon
@@ -96,7 +96,7 @@
       total: 16
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 600
+    cost: 1100
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoLaserCannon
@@ -113,7 +113,7 @@
       total: 8
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 700
+    cost: 3500
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoLaserCannon
@@ -138,4 +138,4 @@
       total: 16
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 600
+    cost: 950
