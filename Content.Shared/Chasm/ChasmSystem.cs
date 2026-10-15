@@ -119,7 +119,7 @@ public sealed partial class ChasmSystem : EntitySystem
         // feels horrible to do it like this, i'd much rather somehow disable the chasm component altogether via another custom component
         // instead of modifying the behaviour of chasm in any way since it's used not only in the lifts
         // idk how to do it tho
-        if(TryComp<VehicleSupplyLiftComponent>(entity.Owner, out var lift) && lift.Mode is VehicleSupplyLiftMode.Raised or VehicleSupplyLiftMode.Preparing)
+        if(TryComp<VehicleSupplyLiftComponent>(entity.Owner, out var lift) && (lift.Mode == VehicleSupplyLiftMode.Raised || (lift.Mode == VehicleSupplyLiftMode.Preparing && lift.NextMode == VehicleSupplyLiftMode.Lowering)))
             return;
 
         // Check the white-/blacklists and inform on rejection.
