@@ -18,10 +18,10 @@
     layers:
     - state: bomb_clamp_unloaded
   - type: DropshipFabricatorPrintable
-    cost: 650
+    cost: 450
   - type: DropshipWeapon
     abbreviation: BMB
-    fireDelay: 10
+    fireDelay: 0.5
     utilityAmmoAttachedSprite:
       sprite: _RMC14/Objects/dropship_utility_attachments.rsi
       state: bomb_clamp_interior_loaded
@@ -71,7 +71,7 @@
     maxRounds: 1
     roundsPerShot: 1
     travelTime: 12
-    zLevelPenetration: 2
+    zLevelPenetration: 4
     applyEffectsOnPenetrationLevels: true
     weapon: CMUDropshipAttachmentJDAMBombClamp
     explosion:
@@ -82,7 +82,7 @@
     - AU14EffectExplosionParticleJDAM
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 7500
+    cost: 5500
 
 - type: entity
   parent: CMUDropshipAmmoJDAMBase
@@ -105,7 +105,7 @@
     maxRounds: 1
     roundsPerShot: 1
     travelTime: 11
-    zLevelPenetration: 2
+    zLevelPenetration: 4
     applyEffectsOnPenetrationLevels: true
     weapon: CMUDropshipAttachmentJDAMBombClamp
     explosion:
@@ -121,7 +121,7 @@
     - AU14SmokeExplosionProofJDAM
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 8000
+    cost: 6500
 
 - type: entity
   parent: CMUDropshipAmmoJDAMBase
@@ -144,7 +144,7 @@
     maxRounds: 1
     roundsPerShot: 1
     travelTime: 12
-    zLevelPenetration: 3
+    zLevelPenetration: 5
     applyEffectsOnPenetrationLevels: true
     targetLowestZLevel: true  # Targets lowest z-level with tiles
     weapon: CMUDropshipAttachmentJDAMBombClamp
@@ -176,9 +176,9 @@
     tags:
     - CMUJDAMBomb
   - type: DropshipAmmo
-    rounds: 12
-    maxRounds: 12
-    roundsPerShot: 12
+    rounds: 36
+    maxRounds: 36
+    roundsPerShot: 36
     bulletSpread: 17
     travelTime: 10
     zLevelPenetration: 2
@@ -232,6 +232,6 @@
     - AU14SmokeExplosionProofJDAM
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 8000
+    cost: 7500
 
 # endregion
