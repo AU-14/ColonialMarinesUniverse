@@ -361,8 +361,8 @@
     maxRounds: 6
     roundsPerShot: 1
     bulletSpread: 0
-    travelTime: 8
-    fireMissionDelay: 2
+    travelTime: 5
+    fireMissionDelay: 1.25
     #cmu start
     zLevelPenetration: 1
     applyEffectsOnPenetrationLevels: true
@@ -410,7 +410,7 @@
       cardinalRange: 2
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 700
+    cost: 650
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocketMiniMike
@@ -422,8 +422,13 @@
     layers:
     - state: minirocket_heat_6
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  #cmu start
+  - type: RMCGenericExamine
+    message: It can penetrate 1 z-level.
+  #cmu end
   - type: DropshipAmmo
     ammoType: minirocket_heat
+    zLevelPenetration: 2
     explosion:
       total: 500
       slope: 5.5
@@ -448,13 +453,13 @@
     ammoType: minirocket_blu
     implosion:
       pullRange: 6
-      pullDistance: 2.5
+      pullDistance: 8.5
       pullSpeed: 16
     impactEffects: # CMU14
     - CMUCasFalloutResin
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 600
+    cost: 500
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocketMiniMike
@@ -477,7 +482,7 @@
     - CMUCasFalloutFlare # CMU14
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 500
+    cost: 250
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocketMiniMike
@@ -505,7 +510,7 @@
       cardinalRange: 2
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 500
+    cost: 600
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocketMiniMike
@@ -536,7 +541,7 @@
       cardinalRange: 2
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 800
+    cost: 750
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocketMiniMike
@@ -550,7 +555,7 @@
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
   - type: DropshipAmmo
     ammoType: minirocket_wk
-    travelTime: 4
+    travelTime: 1.5
     explosion:
       total: 1
       slope: 1
@@ -560,7 +565,7 @@
     - CMUCasFalloutWeedKiller # CMU14
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 500
+    cost: 225
 
 - type: entity
   parent: RMCDropshipAttachmentBase
