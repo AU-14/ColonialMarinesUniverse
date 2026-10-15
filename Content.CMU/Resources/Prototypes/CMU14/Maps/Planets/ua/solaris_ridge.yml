@@ -45,7 +45,7 @@
   planetText: "Date 2181 - Solaris Ridge also known as Big Red is a human settlement and former terraforming project. While originally an independent operation on the planet LV-1413, after funds dried up and the terraforming lichen failed to take, colonization rights were quietly sold to the W-Y Corporation. Solaris Ridge houses a meager 120 colonists and is considered a dead end for most enterprising off-worlders. It operates under the W-Y brand as a biological storage facility and virology research lab. All of its colonists are presently employed by the Company, willingly or not."
 
 - type: gameMap
-  id: solarisridge
+  id: SolarisRidge
   mapName: LV-1413 Solaris Ridge
   allegiance: WeylandYutani
   mapPath: /Maps/CMU14/SolarisRidgeMultiZ/SolarisRidgeMultiZ0.yml
