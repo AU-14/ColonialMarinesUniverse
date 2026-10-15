@@ -8,6 +8,8 @@ using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
 using Content.Shared.Storage.EntitySystems;
+using Content.Shared.Tools.Systems;
+using Content.Shared.Weapons.Melee;
 using Content.Shared.Verbs;
 using Robust.Shared.Prototypes;
 
@@ -18,6 +20,7 @@ public sealed partial class ANPRCRadioSystem
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedStackSystem _stack = default!;
+    [Dependency] private SharedToolSystem _tools = default!;
 
     private static readonly ProtoId<StackPrototype> RepairCable = "RMCCable";
     public const int RepairCableCount = 5;
@@ -48,7 +51,8 @@ public sealed partial class ANPRCRadioSystem
 
     private void AddRipVerb(Entity<ANPRCRadioComponent> pack, ref GetVerbsEvent<Verb> args)
     {
-        if (!args.CanAccess || !args.CanInteract || pack.Comp.WiresRipped || !HasComp<XenoComponent>(args.User))
+        var tool = _hands.GetActiveItem(args.User);
+        if (!args.CanAccess || !args.CanInteract || pack.Comp.WiresRipped || !CanRipWires(args.User, tool))
             return;
 
         var user = args.User;
@@ -58,12 +62,12 @@ public sealed partial class ANPRCRadioSystem
             Text = Loc.GetString("cmu-radio-rip-wires"),
             Act = () =>
             {
-                if (pack.Comp.WiresRipped || !HasComp<XenoComponent>(user) ||
+                if (pack.Comp.WiresRipped || !CanRipWires(user, tool) ||
                     !_interaction.InRangeUnobstructed(user, target) || !IsRipTarget(pack, target))
                     return;
 
                 _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, RipWiresDelay,
-                    new CMURadioRipWiresDoAfterEvent(), pack, target)
+                    new CMURadioRipWiresDoAfterEvent(), pack, target, tool)
                 {
                     BreakOnMove = true,
                     BreakOnDamage = true,
@@ -81,7 +85,7 @@ public sealed partial class ANPRCRadioSystem
 
     private void OnRipWiresComplete(Entity<ANPRCRadioComponent> ent, ref CMURadioRipWiresDoAfterEvent args)
     {
-        if (args.Cancelled || args.Handled || ent.Comp.WiresRipped || !HasComp<XenoComponent>(args.User) ||
+        if (args.Cancelled || args.Handled || ent.Comp.WiresRipped || !CanRipWires(args.User, args.Used) ||
             args.Target is not { } target || !IsRipTarget(ent, target) ||
             !_interaction.InRangeUnobstructed(args.User, target))
             return;
@@ -102,6 +106,15 @@ public sealed partial class ANPRCRadioSystem
             EndCall(ent, args.User, "cmu-radio-wires-ripped");
         UpdateBuiState(ent);
         _popup.PopupEntity(Loc.GetString("cmu-radio-wires-ripped"), target, PopupType.MediumCaution);
+    }
+
+    private bool CanRipWires(EntityUid user, EntityUid? tool)
+    {
+        if (HasComp<XenoComponent>(user))
+            return true;
+        return tool is { } sharp && _hands.GetActiveItem(user) == sharp &&
+            (_tools.HasQuality(sharp, "Slicing") || _tools.HasQuality(sharp, "Cutting") ||
+                TryComp(sharp, out MeleeWeaponComponent? melee) && melee.Damage.DamageDict.GetValueOrDefault("Slash") > 0);
     }
 
     private void OnRepairPack(Entity<ANPRCRadioComponent> ent, ref InteractUsingEvent args)

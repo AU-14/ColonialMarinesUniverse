@@ -315,6 +315,9 @@ public sealed partial class RangefinderSystem : EntitySystem
 
             if (comp.CanDesignate)
             {
+                // CMU14: designator programming is independent of its mode.
+                args.PushText(Loc.GetString("cmu-guidance-code-examine",
+                    ("code", EntityManager.System<Content.Shared.CMU14.Guidance.CMUGuidanceSystem>().GetCode(rangefinder))));
                 switch (comp.Mode)
                 {
                     case RangefinderMode.Rangefinder:

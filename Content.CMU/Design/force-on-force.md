@@ -23,11 +23,28 @@ including diagonally. The server adds up to 12 tiles of random radial deviation
 to the requested position; the resulting mark stays fixed when the RTO moves.
 Existing acknowledgement and cleared-hot requirements still apply.
 
-Xenos can right-click an RTO radio pack or its wearer to **Rip out radio wires**.
-This takes seven seconds and is interrupted by movement or damage. The broken
+Xenos, or players holding a sharp tool such as a knife, can right-click an RTO
+radio pack or its wearer to **Rip out radio wires**.
+This takes seven seconds and is interrupted by movement, damage, or changing
+hands/dropping the required tool. The broken
 pack cannot operate its radio, relay, phone or CAS uplink. An RTO or someone with
 Engineer skill 1 can use five cable on the pack (or its wearer) to repair it,
 then power it back on.
+
+Laser designators default to **1111-1**. Right-click a designator to open
+**Guidance programming** and set its code (four digits, a dash, one digit).
+The dropship weapons console and fighter cockpit have a guidance button.
+Each aircraft shares one receiver code across its weapons; mismatched laser
+spots cannot be detected, selected, tracked, or used for release.
+The fighter's onboard designators can be programmed separately from its receiver.
+
+Loaded guided missiles and JDAMs can select laser or GPS guidance independently.
+For GPS, select the ground map and enter the raw X/Y shown by a handheld GPS,
+then program the round. GPS release requires no flare or laser lock and ignores
+the console's selected mark and manual offsets, while retaining normal flight,
+range, protected-area, clearance, and danger-close checks.
+The GPS-only **PGU-44/G 105mm HE shell** costs **1400** (twice standard HE)
+and has the same explosive payload, with zero target spread.
 
 Dropship part fabricators share a budget within their carrier's faction, including linked decks. GOVFOR and OPFOR have separate accounts for purchases, refunds, passive income and faction tech rewards.
 

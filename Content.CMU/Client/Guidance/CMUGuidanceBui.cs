@@ -1,0 +1,96 @@
+using System.Linq;
+using Content.Shared.CMU14.Guidance;
+using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controls;
+using Robust.Client.UserInterface.CustomControls;
+
+namespace Content.Client.CMU14.Guidance;
+
+public sealed class CMUGuidanceBui(EntityUid owner, Enum key) : BoundUserInterface(owner, key)
+{
+    private DefaultWindow? _window;
+    private BoxContainer _body = default!;
+
+    protected override void Open()
+    {
+        base.Open();
+        _window = this.CreateWindow<DefaultWindow>();
+        _window.Title = Loc.GetString("cmu-guidance-title");
+        _window.MinWidth = 500;
+        _body = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical };
+        var scroll = new ScrollContainer { HScrollEnabled = false, MaxHeight = 600 };
+        scroll.AddChild(_body);
+        _window.Contents.AddChild(scroll);
+    }
+
+    protected override void UpdateState(BoundUserInterfaceState state)
+    {
+        if (_window == null || state is not CMUGuidanceState settings)
+            return;
+        _body.RemoveAllChildren();
+        if (settings.ReceiverCode is { } receiver)
+            AddCode("cmu-guidance-receiver-code", receiver, false);
+        if (settings.DesignatorCode is { } designator)
+            AddCode("cmu-guidance-designator-code", designator, true);
+        if (settings.Ammo.Count > 0)
+        {
+            var help = new RichTextLabel { MaxWidth = 500 };
+            help.SetMessage(Loc.GetString("cmu-guidance-gps-help"));
+            _body.AddChild(help);
+        }
+        foreach (var ammo in settings.Ammo)
+        {
+            _body.AddChild(new Label { Text = ammo.Name, Margin = new Thickness(0, 8, 0, 0) });
+            var mode = new OptionButton();
+            mode.AddItem(Loc.GetString("cmu-guidance-laser"), (int) CMUGuidanceMode.Laser);
+            mode.AddItem(Loc.GetString("cmu-guidance-gps"), (int) CMUGuidanceMode.Gps);
+            mode.SetItemDisabled(0, ammo.GpsOnly);
+            mode.SelectId((int) ammo.Mode);
+            mode.OnItemSelected += args => mode.SelectId(args.Id);
+            _body.AddChild(mode);
+            var maps = new OptionButton { HorizontalExpand = true };
+            foreach (var map in settings.Maps)
+                maps.AddItem(map.Name);
+            var selectedMap = settings.Maps.FindIndex(map => map.Id == ammo.Map);
+            if (settings.Maps.Count > 0)
+                maps.Select(selectedMap >= 0 ? selectedMap : 0);
+            maps.OnItemSelected += args => maps.SelectId(args.Id);
+            _body.AddChild(maps);
+            var x = Coordinate(ammo.X);
+            var y = Coordinate(ammo.Y);
+            var row = new BoxContainer();
+            row.AddChild(new Label { Text = "X " });
+            row.AddChild(x);
+            row.AddChild(new Label { Text = " Y " });
+            row.AddChild(y);
+            var apply = new Button { Text = Loc.GetString("cmu-guidance-program") };
+            apply.OnPressed += _ =>
+            {
+                var map = settings.Maps.ElementAtOrDefault(maps.SelectedId)?.Id;
+                SendMessage(new CMUProgramGpsMessage(ammo.Id, (CMUGuidanceMode) mode.SelectedId, map, x.Value, y.Value));
+            };
+            row.AddChild(apply);
+            _body.AddChild(row);
+        }
+    }
+
+    private static SpinBox Coordinate(int value)
+    {
+        var spin = new SpinBox { HorizontalExpand = true, IsValid = input => input is >= -1000000 and <= 1000000 };
+        spin.OverrideValue(value);
+        spin.InitDefaultButtons();
+        return spin;
+    }
+
+    private void AddCode(string label, string code, bool designator)
+    {
+        var row = new BoxContainer();
+        row.AddChild(new Label { Text = Loc.GetString(label), MinWidth = 190 });
+        var edit = new LineEdit { Text = code, HorizontalExpand = true };
+        row.AddChild(edit);
+        var apply = new Button { Text = Loc.GetString("cmu-guidance-program") };
+        apply.OnPressed += _ => SendMessage(new CMUSetLaserCodeMessage(edit.Text, designator));
+        row.AddChild(apply);
+        _body.AddChild(row);
+    }
+}

@@ -7,6 +7,7 @@ using Content.Shared.CMU14.Dropship.Cas;
 using Content.Shared.CMU14.Radio;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.Components;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Stacks;
 using Content.Shared.Verbs;
@@ -119,6 +120,67 @@ public sealed class CMURtoRadioTest : GameTest
             Assert.That(radio.WiresRipped, Is.EqualTo(!interrupt));
             Assert.That(radio.Enabled, Is.EqualTo(interrupt));
             Assert.That(SEntMan.HasComponent<ANPRCRelayAnchorComponent>(pack), Is.False);
+        });
+    }
+
+    [TestCase("RMCM5Bayonet", false, false)]
+    [TestCase("RMCM5Bayonet", true, false)]
+    [TestCase("RMCKitchenKnife", false, false)]
+    [TestCase("RMCM5Bayonet", false, true)]
+    public async Task HumansNeedHeldSharpToolToRipWires(string prototype, bool targetWearer, bool drop)
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid user = default;
+        EntityUid tool = default;
+        EntityUid pack = default;
+        await Server.WaitAssertion(() =>
+        {
+            user = SEntMan.SpawnEntity("MobHuman", map.GridCoords);
+            pack = SEntMan.SpawnEntity("ANPRC117GRadio", map.GridCoords);
+            tool = SEntMan.SpawnEntity(prototype, map.GridCoords);
+            Assert.That(Server.System<SharedHandsSystem>().TryPickupAnyHand(user, tool), Is.True);
+            var target = pack;
+            if (targetWearer)
+            {
+                target = SEntMan.SpawnEntity(null, map.GridCoords);
+                SEntMan.AddComponent<WearingANPRCComponent>(target).Radio = pack;
+            }
+            var verbs = new GetVerbsEvent<Verb>(user, target, tool,
+                SEntMan.GetComponent<HandsComponent>(user), true, true, true, new());
+            SEntMan.EventBus.RaiseLocalEvent(target, verbs);
+            verbs.Verbs.Single(verb => verb.Text == "Rip out radio wires").Act!();
+        });
+        await Pair.RunSeconds(6);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.GetComponent<ANPRCRadioComponent>(pack).WiresRipped, Is.False);
+            if (drop)
+                Assert.That(Server.System<SharedHandsSystem>().TryDrop(user, tool), Is.True);
+        });
+        await Pair.RunSeconds(1.5f);
+        await Server.WaitAssertion(() =>
+            Assert.That(SEntMan.GetComponent<ANPRCRadioComponent>(pack).WiresRipped, Is.EqualTo(!drop)));
+    }
+
+    [TestCase(null)]
+    [TestCase("RMCCableCoil30")]
+    public async Task HumansWithoutSharpToolHaveNoSabotageVerb(string? prototype)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var user = SEntMan.SpawnEntity("MobHuman", map.GridCoords);
+            var pack = SEntMan.SpawnEntity("ANPRC117GRadio", map.GridCoords);
+            EntityUid? tool = null;
+            if (prototype != null)
+            {
+                tool = SEntMan.SpawnEntity(prototype, map.GridCoords);
+                Assert.That(Server.System<SharedHandsSystem>().TryPickupAnyHand(user, tool.Value), Is.True);
+            }
+            var verbs = new GetVerbsEvent<Verb>(user, pack, tool,
+                SEntMan.GetComponent<HandsComponent>(user), true, true, true, new());
+            SEntMan.EventBus.RaiseLocalEvent(pack, verbs);
+            Assert.That(verbs.Verbs.Any(verb => verb.Text == "Rip out radio wires"), Is.False);
         });
     }
 
