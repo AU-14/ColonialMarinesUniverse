@@ -18,7 +18,7 @@ public sealed partial class CMUCasUplinkComponent : Component
     [DataField, AutoNetworkedField]
     public EntityUid? Action;
 
-    /// <summary>Spawned on the nearest hostile when the RTO calls CAS without a flare.</summary>
+    /// <summary>Spawned for nearest-hostile and own-position calls without a flare.</summary>
     [DataField]
     public EntProtoId RadioMark = "CMUCasRadioMark";
 }

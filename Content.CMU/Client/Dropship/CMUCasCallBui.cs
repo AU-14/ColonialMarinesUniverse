@@ -7,7 +7,7 @@ using Robust.Client.UserInterface.CustomControls;
 
 namespace Content.Client.CMU14.Dropship;
 
-/// <summary>The RTO's CAS uplink: pick a mark (or the nearest hostile), preview the 9-line and send it.</summary>
+/// <summary>The RTO's CAS uplink: call a mark, nearest hostile or offset position, then transmit the 9-line.</summary>
 public sealed class CMUCasCallBui : BoundUserInterface
 {
     private static readonly Color Amber = Color.FromHex("#FFB000");
@@ -22,11 +22,14 @@ public sealed class CMUCasCallBui : BoundUserInterface
     private OptionButton _effect = default!;
     private LineEdit _remarks = default!;
     private Button _send = default!;
+    private SpinBox _offsetX = default!;
+    private SpinBox _offsetY = default!;
 
     private CMUCasCallBuiState? _state;
-    // Null target = nearest hostile without a flare. _selected false = nothing picked.
+    // Null target = own position or nearest hostile. _selected false = nothing picked.
     private NetEntity? _target;
     private bool _selected;
+    private bool _ownPosition;
 
     public CMUCasCallBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
@@ -58,6 +61,11 @@ public sealed class CMUCasCallBui : BoundUserInterface
         _preview = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, HorizontalExpand = true };
         right.AddChild(_preview);
 
+        _offsetX = CreateOffset();
+        _offsetY = CreateOffset();
+        right.AddChild(Row("cmu-cas-call-offset-x", _offsetX));
+        right.AddChild(Row("cmu-cas-call-offset-y", _offsetY));
+
         _munition = new OptionButton { HorizontalExpand = true };
         foreach (var munition in Enum.GetValues<CMUCasMunition>())
             _munition.AddItem(CMUCasRequestSystem.MunitionName(munition), (int) munition);
@@ -84,7 +92,7 @@ public sealed class CMUCasCallBui : BoundUserInterface
             if (!_selected)
                 return;
             SendMessage(new CMUCasCallSendMsg(_target, (CMUCasMunition) _munition.SelectedId,
-                (CMUCasEffect) _effect.SelectedId, _remarks.Text));
+                (CMUCasEffect) _effect.SelectedId, _remarks.Text, _ownPosition, _offsetX.Value, _offsetY.Value));
             _remarks.Text = string.Empty;
         };
         right.AddChild(_send);
@@ -108,6 +116,19 @@ public sealed class CMUCasCallBui : BoundUserInterface
         return row;
     }
 
+    private static SpinBox CreateOffset()
+    {
+        var offset = new SpinBox
+        {
+            HorizontalExpand = true,
+            IsValid = value => value >= -CMUCasRequestSystem.PositionOffsetLimit &&
+                value <= CMUCasRequestSystem.PositionOffsetLimit,
+        };
+        offset.OverrideValue(0);
+        offset.InitDefaultButtons();
+        return offset;
+    }
+
     protected override void UpdateState(BoundUserInterfaceState state)
     {
         if (_window == null || state is not CMUCasCallBuiState call)
@@ -116,8 +137,8 @@ public sealed class CMUCasCallBui : BoundUserInterface
         _header.Text = Loc.GetString("cmu-cas-call-header", ("callsign", call.Callsign), ("range", call.Range));
 
         // Drop a selection whose mark burned out.
-        if (_selected && _target is { } picked && call.Marks.All(mark => mark.Target != picked) ||
-            _selected && _target == null && call.NearestHostile == null)
+        if (!_ownPosition && (_selected && _target is { } picked && call.Marks.All(mark => mark.Target != picked) ||
+            _selected && _target == null && call.NearestHostile == null))
             _selected = false;
 
         RebuildTargets();
@@ -130,6 +151,7 @@ public sealed class CMUCasCallBui : BoundUserInterface
         if (_state is not { } state)
             return;
         _targets.RemoveAllChildren();
+        AddTarget(state.OwnPosition, null, Loc.GetString("cmu-cas-call-own-position"), ownPosition: true);
         AddTarget(state.NearestHostile, null, Loc.GetString("cmu-cas-call-no-flare"));
         foreach (var mark in state.Marks)
             AddTarget(mark, mark.Target, mark.Name);
@@ -137,7 +159,7 @@ public sealed class CMUCasCallBui : BoundUserInterface
             _targets.AddChild(new Label { Text = Loc.GetString("cmu-cas-call-no-marks"), FontColorOverride = Dim });
     }
 
-    private void AddTarget(CMUCasCallTarget? target, NetEntity? net, string name)
+    private void AddTarget(CMUCasCallTarget? target, NetEntity? net, string name, bool ownPosition = false)
     {
         var text = target == null
             ? Loc.GetString("cmu-cas-call-target-none", ("name", name))
@@ -151,7 +173,7 @@ public sealed class CMUCasCallBui : BoundUserInterface
             ClipText = true,
             HorizontalExpand = true,
             Disabled = target == null,
-            Pressed = _selected && _target == net,
+            Pressed = _selected && _target == net && _ownPosition == ownPosition,
         };
         if (target?.DangerClose == true)
             button.ModulateSelfOverride = Color.FromHex("#FFC8A0");
@@ -159,6 +181,7 @@ public sealed class CMUCasCallBui : BoundUserInterface
         {
             _selected = true;
             _target = net;
+            _ownPosition = ownPosition;
             RebuildTargets();
             RebuildPreview();
         };
@@ -169,8 +192,12 @@ public sealed class CMUCasCallBui : BoundUserInterface
     {
         _preview.RemoveAllChildren();
         var target = !_selected || _state == null ? null
+            : _ownPosition ? _state.OwnPosition
             : _target == null ? _state.NearestHostile
             : _state.Marks.FirstOrDefault(mark => mark.Target == _target);
+        _offsetX.LineEditDisabled = _offsetY.LineEditDisabled = !_ownPosition;
+        _offsetX.SetButtonDisabled(!_ownPosition);
+        _offsetY.SetButtonDisabled(!_ownPosition);
         _send.Disabled = target == null;
         if (target == null)
         {
@@ -197,6 +224,9 @@ public sealed class CMUCasCallBui : BoundUserInterface
         Line("cmu-cas-call-line-description", target.Description);
         Line("cmu-cas-call-line-friendlies", target.Friendlies);
         Line("cmu-cas-call-line-distance", target.Distance.ToString());
+        if (_ownPosition)
+            Line("cmu-cas-call-line-danger", Loc.GetString("cmu-cas-call-position-deviation",
+                ("deviation", CMUCasRequestSystem.PositionDeviation)), Color.OrangeRed);
         if (target.DangerClose)
             Line("cmu-cas-call-line-danger", Loc.GetString("cmu-cas-request-card-danger"), Color.OrangeRed);
         if (target.Designated)

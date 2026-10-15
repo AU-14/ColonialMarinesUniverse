@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Numerics;
 using Robust.Shared.Prototypes;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dropship;
@@ -23,6 +24,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.Dropship.Cas;
@@ -43,6 +45,7 @@ public sealed class CMUCasRequestSystem : EntitySystem
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RMCPlanetSystem _planet = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -55,6 +58,8 @@ public sealed class CMUCasRequestSystem : EntitySystem
     /// <summary>How far from the RTO a mark, or the hostile for a radio mark, can be.</summary>
     public const float CallRange = 30f;
     public const float MaintainRange = 45f;
+    public const int PositionOffsetLimit = 15;
+    public const float PositionDeviation = 12f;
     /// <summary>Marks within this distance of an RTO's laser designation count as designated.</summary>
     public const float DesignationRange = 2f;
     /// <summary>Strike spread multiplier on RTO-designated targets: 25% tighter.</summary>
@@ -131,8 +136,14 @@ public sealed class CMUCasRequestSystem : EntitySystem
     public bool TryCreateRequest(EntityUid rto, EntityUid target, CMUCasMunition munition, out int id,
         CMUCasEffect effect = CMUCasEffect.Any, string remarks = "", bool radioMark = false)
     {
+        return TryCreateRequestCore(rto, target, munition, out id, effect, remarks, radioMark);
+    }
+
+    private bool TryCreateRequestCore(EntityUid rto, EntityUid target, CMUCasMunition munition, out int id,
+        CMUCasEffect effect, string remarks, bool radioMark, bool ownPosition = false)
+    {
         id = 0;
-        if (_net.IsClient || !TryComp(target, out DropshipTargetComponent? mark) ||
+        if (_net.IsClient || !CheckRadioWires(rto) || !TryComp(target, out DropshipTargetComponent? mark) ||
             _weapons.GetUserFaction(rto) is not { } faction)
             return false;
         if (!string.IsNullOrEmpty(mark.CreatorFaction) &&
@@ -141,14 +152,15 @@ public sealed class CMUCasRequestSystem : EntitySystem
 
         var coordinates = _transform.GetMapCoordinates(target);
         var origin = _transform.GetMapCoordinates(rto);
+        var range = ownPosition ? MathF.Sqrt(2) * PositionOffsetLimit + PositionDeviation : CallRange;
         if (origin.MapId != coordinates.MapId ||
-            (origin.Position - coordinates.Position).LengthSquared() > CallRange * CallRange)
+            (origin.Position - coordinates.Position).LengthSquared() > range * range)
         {
             _popup.PopupEntity(Loc.GetString("cmu-cas-request-out-of-range", ("range", (int) CallRange)), rto, rto,
                 PopupType.SmallCaution);
             return false;
         }
-        if (!CanCallTarget(rto, target))
+        if (!ownPosition && !CanCallTarget(rto, target))
         {
             _popup.PopupEntity(Loc.GetString("cmu-cas-request-no-los"), rto, rto, PopupType.SmallCaution);
             return false;
@@ -206,6 +218,33 @@ public sealed class CMUCasRequestSystem : EntitySystem
 
     public const int MaxRemarksLength = 120;
 
+    /// <summary>Calls a fixed position relative to the RTO, with server-side radio ranging error and no LOS requirement.</summary>
+    public bool TryCreatePositionRequest(EntityUid rto, int offsetX, int offsetY, CMUCasMunition munition,
+        CMUCasEffect effect, string remarks, out int id, EntProtoId? markPrototype = null)
+    {
+        id = 0;
+        if (_net.IsClient || !CanUseUplink(rto) || _weapons.GetUserFaction(rto) is not { } faction)
+            return false;
+        if (offsetX < -PositionOffsetLimit || offsetX > PositionOffsetLimit ||
+            offsetY < -PositionOffsetLimit || offsetY > PositionOffsetLimit)
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-cas-position-invalid", ("limit", PositionOffsetLimit)), rto, rto,
+                PopupType.SmallCaution);
+            return false;
+        }
+
+        var origin = _transform.GetMapCoordinates(rto);
+        var position = origin.Position + new Vector2(offsetX, offsetY) + _random.NextVector2(PositionDeviation);
+        var mark = Spawn(markPrototype ?? "CMUCasRadioMark", new MapCoordinates(position, origin.MapId));
+        var abbreviation = _weapons.GetUserAbbreviation(rto, _weapons.ComputeNextId());
+        _weapons.MakeDropshipTarget(mark, abbreviation, faction);
+        _metaData.SetEntityName(mark, Loc.GetString("cmu-cas-position-mark-name", ("id", abbreviation)));
+        if (TryCreateRequestCore(rto, mark, munition, out id, effect, remarks, true, ownPosition: true))
+            return true;
+        QueueDel(mark);
+        return false;
+    }
+
     public bool CanCallTarget(EntityUid rto, EntityUid target)
     {
         return _interaction.InRangeUnobstructed(_transform.GetMapCoordinates(rto),
@@ -221,7 +260,7 @@ public sealed class CMUCasRequestSystem : EntitySystem
         out int id, EntProtoId? markPrototype = null)
     {
         id = 0;
-        if (_net.IsClient || _weapons.GetUserFaction(rto) is not { } faction)
+        if (_net.IsClient || !CheckRadioWires(rto) || _weapons.GetUserFaction(rto) is not { } faction)
             return false;
         if (FindNearestHostile(rto, faction) is not { } hostile)
         {
@@ -281,7 +320,7 @@ public sealed class CMUCasRequestSystem : EntitySystem
     /// <summary>The RTO's clearance for an accepted request.</summary>
     public bool TryClearHot(EntityUid rto, int id)
     {
-        if (_net.IsClient || FindEntry(id) is not { } entry || entry.Rto != rto ||
+        if (_net.IsClient || !CheckRadioWires(rto) || FindEntry(id) is not { } entry || entry.Rto != rto ||
             entry.Request.Status != CMUCasRequestStatus.Accepted)
             return false;
         if (!CheckMaintainedRange(entry))
@@ -296,7 +335,7 @@ public sealed class CMUCasRequestSystem : EntitySystem
 
     public bool TryAbort(EntityUid rto, int id)
     {
-        if (_net.IsClient || FindEntry(id) is not { } entry || entry.Rto != rto || entry.ClosedAt != null)
+        if (_net.IsClient || !CheckRadioWires(rto) || FindEntry(id) is not { } entry || entry.Rto != rto || entry.ClosedAt != null)
             return false;
         SetStatus(entry, CMUCasRequestStatus.Denied, entry.Request.Aircraft);
         Radio(rto, entry.Faction, Loc.GetString("cmu-cas-radio-abort",
@@ -635,19 +674,35 @@ public sealed class CMUCasRequestSystem : EntitySystem
 
     private bool CanUseUplink(EntityUid actor)
     {
-        return HasComp<WearingANPRCComponent>(actor);
+        return HasComp<WearingANPRCComponent>(actor) && CheckRadioWires(actor);
+    }
+
+    private bool CheckRadioWires(EntityUid actor)
+    {
+        if (!TryComp(actor, out WearingANPRCComponent? wearing) ||
+            !TryComp(wearing.Radio, out ANPRCRadioComponent? radio) || !radio.WiresRipped)
+            return true;
+        if (!_net.IsClient)
+            _popup.PopupEntity(Loc.GetString("cmu-radio-wires-ripped"), actor, actor, PopupType.SmallCaution);
+        return false;
     }
 
     private void OnUplinkSend(Entity<CMUCasUplinkComponent> ent, ref CMUCasCallSendMsg args)
     {
-        if (_net.IsClient || !CanUseUplink(args.Actor))
+        if (_net.IsClient || !CanUseUplink(args.Actor) ||
+            !TryComp(args.Actor, out WearingANPRCComponent? wearing) || wearing.Radio != ent.Owner)
             return;
         var rto = args.Actor;
         var munition = Enum.IsDefined(args.Munition) ? args.Munition : CMUCasMunition.Any;
         var effect = Enum.IsDefined(args.Effect) ? args.Effect : CMUCasEffect.Any;
         var sent = false;
         var id = 0;
-        if (args.Target is { } netTarget)
+        if (args.OwnPosition)
+        {
+            sent = TryCreatePositionRequest(rto, args.OffsetX, args.OffsetY, munition, effect, args.Remarks,
+                out id, ent.Comp.RadioMark);
+        }
+        else if (args.Target is { } netTarget)
         {
             if (TryGetEntity(netTarget, out var target) && HasComp<DropshipTargetComponent>(target))
                 sent = TryCreateRequest(rto, target.Value, munition, out id, effect, args.Remarks);
@@ -724,7 +779,9 @@ public sealed class CMUCasRequestSystem : EntitySystem
             nearest = DescribeCallTarget(faction, origin, hostile, null, Loc.GetString("cmu-cas-call-nearest-hostile"), false);
 
         var requests = _requests.Where(entry => entry.Rto == rto).Select(entry => entry.Request).ToList();
-        return new CMUCasCallBuiState(Name(rto), marks, nearest, requests, (int) CallRange);
+        var ownPosition = DescribeCallTarget(faction, origin, rto, null,
+            Loc.GetString("cmu-cas-call-own-position"), false);
+        return new CMUCasCallBuiState(Name(rto), marks, nearest, requests, (int) CallRange, ownPosition);
     }
 
     private CMUCasCallTarget DescribeCallTarget(string faction, MapCoordinates origin, EntityUid target,

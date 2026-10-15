@@ -68,7 +68,7 @@ public partial record struct CMUCasRequest(
 {
     public CMUCasEffect Effect { get; init; }
     public string Remarks { get; init; } = string.Empty;
-    /// <summary>The RTO had no flare out; the uplink dropped a mark on the nearest hostile.</summary>
+    /// <summary>The uplink created a radio mark instead of using a flare or laser.</summary>
     public bool RadioMark { get; init; }
     /// <summary>The target is under an RTO's laser designation.</summary>
     public bool Designated { get; init; }
@@ -117,7 +117,8 @@ public sealed class CMUCasCallBuiState(
     List<CMUCasCallTarget> marks,
     CMUCasCallTarget? nearestHostile,
     List<CMUCasRequest> requests,
-    int range) : BoundUserInterfaceState
+    int range,
+    CMUCasCallTarget ownPosition) : BoundUserInterfaceState
 {
     public readonly string Callsign = callsign;
     public readonly List<CMUCasCallTarget> Marks = marks;
@@ -125,17 +126,22 @@ public sealed class CMUCasCallBuiState(
     public readonly CMUCasCallTarget? NearestHostile = nearestHostile;
     public readonly List<CMUCasRequest> Requests = requests;
     public readonly int Range = range;
+    public readonly CMUCasCallTarget OwnPosition = ownPosition;
 }
 
-/// <summary>Sends a request. A null target drops a radio mark on the nearest hostile.</summary>
+/// <summary>Sends a request. Own-position calls use offsets; otherwise a null target selects the nearest hostile.</summary>
 [Serializable, NetSerializable]
-public sealed class CMUCasCallSendMsg(NetEntity? target, CMUCasMunition munition, CMUCasEffect effect, string remarks)
+public sealed class CMUCasCallSendMsg(NetEntity? target, CMUCasMunition munition, CMUCasEffect effect, string remarks,
+    bool ownPosition = false, int offsetX = 0, int offsetY = 0)
     : BoundUserInterfaceMessage
 {
     public readonly NetEntity? Target = target;
     public readonly CMUCasMunition Munition = munition;
     public readonly CMUCasEffect Effect = effect;
     public readonly string Remarks = remarks;
+    public readonly bool OwnPosition = ownPosition;
+    public readonly int OffsetX = offsetX;
+    public readonly int OffsetY = offsetY;
 }
 
 [Serializable, NetSerializable]
