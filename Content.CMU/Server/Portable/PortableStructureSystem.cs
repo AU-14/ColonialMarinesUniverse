@@ -214,16 +214,24 @@ public sealed class PortableStructureSystem : SharedPortableStructureSystem
 
         foreach (var anchored in _map.GetAnchoredEntities(gridUid, grid, tile))
         {
-            if (anchored != ent.Owner)
+            if (anchored != ent.Owner && !IsStoodOn(ent, anchored))
                 return false;
         }
 
         // Anything a person cannot walk through, except the structure itself, is in the way.
-        if (_turf.IsTileBlocked(gridUid, tile, CollisionGroup.MobMask, grid, ignore: other => other == ent.Owner))
+        if (_turf.IsTileBlocked(gridUid, tile, CollisionGroup.MobMask, grid, ignore: other => other == ent.Owner || IsStoodOn(ent, other)))
             return false;
 
         coordinates = _map.GridTileToLocal(gridUid, grid, tile);
         return true;
+    }
+
+    // The thing is what the structure is made to stand on (the water under a pump, the deposit under a drill), so it does not count as being in the way.
+    private bool IsStoodOn(Entity<PortableStructureComponent> ent, EntityUid other)
+    {
+        var stood = new PortablePlaceableOverEvent(other);
+        RaiseLocalEvent(ent, ref stood);
+        return stood.Allowed;
     }
 
     // Takes off what was added to make it carryable and gives it back its body.

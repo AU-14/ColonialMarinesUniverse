@@ -5,6 +5,7 @@ using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.CMU14.Electric;
 using Content.Shared.CMU14.Fluids;
+using Content.Shared.CMU14.Portable;
 using Content.Shared.Examine;
 using Content.Shared.Power.EntitySystems;
 using Robust.Shared.Random;
@@ -30,6 +31,7 @@ public sealed class OilSystem : EntitySystem
         SubscribeLocalEvent<OilDepositComponent, MapInitEvent>(OnDepositInit);
         SubscribeLocalEvent<OilDepositComponent, ExaminedEvent>(OnDepositExamined);
         SubscribeLocalEvent<OilPumpComponent, ExaminedEvent>(OnPumpExamined);
+        SubscribeLocalEvent<OilPumpComponent, PortablePlaceableOverEvent>(OnPumpPlaceableOver);
         SubscribeLocalEvent<LiquidFuelGeneratorComponent, ExaminedEvent>(OnGeneratorExamined);
     }
 
@@ -119,6 +121,13 @@ public sealed class OilSystem : EntitySystem
         }
 
         return null;
+    }
+
+    // The oil pump is made to stand on a deposit of oil, so the deposit on the tile is not in its way.
+    private void OnPumpPlaceableOver(Entity<OilPumpComponent> pump, ref PortablePlaceableOverEvent args)
+    {
+        if (HasComp<OilDepositComponent>(args.Other))
+            args.Allowed = true;
     }
 
     private void OnDepositExamined(Entity<OilDepositComponent> deposit, ref ExaminedEvent args)

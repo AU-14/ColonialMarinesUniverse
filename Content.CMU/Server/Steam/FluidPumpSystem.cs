@@ -2,6 +2,7 @@
 // Copyright (c) 2026 wray-git
 using Content.Server.CMU14.Fluids;
 using Content.Shared.CMU14.Fluids;
+using Content.Shared.CMU14.Portable;
 using Content.Shared.CMU14.Steam;
 using Content.Shared.Examine;
 using Robust.Shared.Prototypes;
@@ -32,6 +33,7 @@ public sealed class FluidPumpSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<FluidPumpComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<FluidPumpComponent, PortablePlaceableOverEvent>(OnPlaceableOver);
     }
 
     public override void Update(float frameTime)
@@ -85,6 +87,13 @@ public sealed class FluidPumpSystem : EntitySystem
 
         _isWater[proto.ID] = water;
         return water;
+    }
+
+    // The pump is made to stand on water, so the water on the tile is not in its way.
+    private void OnPlaceableOver(Entity<FluidPumpComponent> pump, ref PortablePlaceableOverEvent args)
+    {
+        if (MetaData(args.Other).EntityPrototype is { } proto && IsWater(proto))
+            args.Allowed = true;
     }
 
     private void OnExamined(Entity<FluidPumpComponent> pump, ref ExaminedEvent args)

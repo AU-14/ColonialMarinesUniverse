@@ -39,3 +39,8 @@ public sealed class PortablePickUpAttemptEvent(EntityUid user) : CancellableEnti
 {
     public readonly EntityUid User = user;
 }
+
+// Raised on a structure that is being put down, once for each anchored thing already on the tile. A structure that is made to stand on something (a pump on
+// water, a drill on a deposit) says so by setting Allowed: that thing is then not in the way.
+[ByRefEvent]
+public record struct PortablePlaceableOverEvent(EntityUid Other, bool Allowed = false);

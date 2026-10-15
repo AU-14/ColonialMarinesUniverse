@@ -4,6 +4,7 @@ using System.Linq;
 using Content.Server.CMU14.Fluids;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.CMU14.Mining;
+using Content.Shared.CMU14.Portable;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Examine;
 using Content.Shared.Popups;
@@ -43,6 +44,7 @@ public sealed class OreDrillSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<OreDrillComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<OreDrillComponent, PortablePlaceableOverEvent>(OnPlaceableOver);
         SubscribeLocalEvent<DrillHeadComponent, ExaminedEvent>(OnHeadExamined);
     }
 
@@ -55,6 +57,13 @@ public sealed class OreDrillSystem : EntitySystem
         {
             UpdateDrill((uid, comp), frameTime);
         }
+    }
+
+    // The drill is made to stand on a deposit, so the deposit on the tile is not in its way.
+    private void OnPlaceableOver(Entity<OreDrillComponent> drill, ref PortablePlaceableOverEvent args)
+    {
+        if (HasComp<OreDepositComponent>(args.Other))
+            args.Allowed = true;
     }
 
     private void UpdateDrill(Entity<OreDrillComponent> drill, float frameTime)
