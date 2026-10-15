@@ -25,6 +25,7 @@
         type: CrayonBoundUserInterface
   - type: Crayon
     selectedState: like
+  - type: CMUCrayonSymbol # CMU14: stamps the user's custom symbol while they have one picked.
   - type: LimitedCharges
     maxCharges: 25
   - type: StaticPrice
