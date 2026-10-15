@@ -162,7 +162,7 @@ so an empty slot still reads.
 
 | Slot | States | Holds |
 | --- | --- | --- |
-| wheels | `wheels_0` intact (animated while moving), `wheels_1` destroyed; hidden when removed (brake drums show); `road_wheels_0` on road tyres | jeep wheel, jeep road wheel |
+| wheels | `wheels_0` intact (animated while moving), `wheels_1` destroyed; hidden when removed (the arches stay empty); `road_wheels_0` on road tyres | jeep wheel, jeep road wheel |
 | windshield | `windshield_up_*`, `windshield_down_*`; the damaged glass has bullet holes | jeep windshield |
 | turret (gunner) | `mgturret_0` / `_1` | heavy machine gun |
 | spare | `spare_*`, `road_spare_*` for road tyres; drawn as its tread face from the side; removed leaves the carrier. On the cargo and gun jeeps it hangs on the tailgate and folds under it | the same wheel-set item the wheel slot takes, so it replaces destroyed wheels |
@@ -443,7 +443,7 @@ A jeep ships whole in a wooden crate a size up from its own, RMC's dense crate s
 boards, battens, a shipping label and grime added (`jeep_crates.yml`, cargo, medical, transport or
 gun jeep): assembled, the key in the ignition, its axle bare and its one wheel set stowed in the
 rear hatch (the spare slot). Unlatched by hand (a 3 s do-after, `CMUVehicleCrate*`), the jeep stands
-where the crate was, facing south on its brake drums. The crate leaves its floor under the jeep
+where the crate was, facing south without its wheels. The crate leaves its floor under the jeep
 (`CMUJeepCrateRemains`) and its walls fall over the jeep (`CMUJeepCrateWalls`, gone once down),
 after which the floor shows them lying flat round it. A crowbar breaks the floor and walls into 25
 planks; left alone they go after five minutes. Fit the wheel set from the hatch to drive off. While

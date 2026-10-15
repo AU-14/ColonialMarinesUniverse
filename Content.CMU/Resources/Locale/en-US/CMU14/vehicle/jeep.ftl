@@ -115,3 +115,4 @@ cmu-vehicle-cover-door = The shot slams into the door beside you!
 cmu-vehicle-cover-windshield = The windshield catches the shot!
 cmu-vehicle-cover-grit = Grit flies up into your eyes!
 
+cmu-requisitions-category-vehicles = Vehicles

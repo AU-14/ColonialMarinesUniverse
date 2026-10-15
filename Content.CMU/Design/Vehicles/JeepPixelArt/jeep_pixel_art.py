@@ -7,7 +7,7 @@ and south-facing faces show. The depth and height scales are per view (DEPTH_SCA
 into layers. Riders sit between the vehicle entity and an overlay entity:
 
   vehicle entity (under riders)
-    jeep_base                    body; brake drums show when the wheels are taken off
+    jeep_base                    body; the arches are left empty when the wheels are taken off
     damaged_frame                frame damage
     wheels_0 / wheels_1          intact (animated while moving) / destroyed, like the humvee
     road_wheels_0, road_spare_*  the intact wheels and spare on road tyres
@@ -615,18 +615,11 @@ def build(variant, view=None):
     """The body without wheels or hardpoints, as drawn for a view (seat backs differ per view)."""
     m = Model()
 
-    # Frame rails, cross members and the brake drums left when the wheels come off.
+    # Frame rails, cross members and the axles; with the wheels off the arches are left empty.
     m.mirror_box(-29, 30, 8, 10, 2, 5, "frame", "chassis")
     m.box(28, 30, -9, 8, 2, 5, "frame", "chassis_front")
     m.box(-30, -29, -12, 11, 3, 5, "frame", "chassis")
     for fc in (FRONT_AXLE, REAR_AXLE):
-        for a in range(-4, 5):
-            for b in range(-4, 5):
-                d = math.hypot(a, b)
-                if d <= 3.8:
-                    mat = "hub" if d < 1.2 else "frame"
-                    m.mirror_box(fc + a, fc + a, 11, 12, WHEEL_Z + b, WHEEL_Z + b, mat, "chassis")
-        m.mirror_box(fc - 1, fc + 1, 9, 10, WHEEL_Z - 1, WHEEL_Z + 1, "frame", "chassis")
         m.box(fc - 1, fc + 1, -17, 16, WHEEL_Z - 1, WHEEL_Z, "frame", "chassis")
     # Steering tie rod ahead of the front axle; both show through the gaps beside the grille.
     m.box(FRONT_AXLE + 5, FRONT_AXLE + 5, -17, 16, WHEEL_Z - 2, WHEEL_Z - 2, "steel", "chassis")
@@ -647,9 +640,13 @@ def build(variant, view=None):
     m.box(-30, -30, -19, 18, 6, RIM, "od", "rear_wall")
     m.box(-29, -29, -18, 17, 8, RIM, "od_in", "rear_wall")
     m.remove(lambda f, r, z: (f, r) in ((-30, 19), (-30, -20)) and z >= RIM - 1)
-    # The rear arch is cut from the outer skin only, so the inner skin hides the tyre from the tub.
+    # The rear arch is cut from the outer skin only, so the inner skin hides the tyre from the tub. It
+    # hugs the tyre: a gap round it would show the inner skin, drawn under the riders and the bed's cargo.
     arch = lambda f, z: math.hypot(f + 0.5 - (REAR_AXLE + 0.5), z + 0.5 - (WHEEL_Z + 0.5))
-    m.remove(lambda f, r, z: r in (19, -20) and arch(f, z) < WHEEL_R + 0.6)
+    m.remove(lambda f, r, z: r in (19, -20) and arch(f, z) < WHEEL_R)
+    # Seen through the arch beside the tyre, the inner skin is the well's wall: body, so it takes the
+    # body's paint. The wheel housing hides it from the tub up to the housing's top.
+    m.paint(lambda f, r, z: r in (18, -19) and arch(f, z) < WHEEL_R + 1 and z <= 12, "od")
     m.paint(lambda f, r, z: r in (19, -20) and z == RIM - 2 and f <= 5 and arch(f, z) >= WHEEL_R + 1.6, "od_seam")
     # Door openings through both skins; the doors are their own layers.
     dr = DOOR
