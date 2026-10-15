@@ -22,15 +22,33 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
 
     [Dependency] private EntityQuery<HandsComponent> _handsQuery = default!;
 
-    private DoAfter[] _doAfters = Array.Empty<DoAfter>();
+    private readonly Stack<List<DoAfter>> _doAfterBuffers = new();
+    private readonly HashSet<DoAfterComponent> _updatingComponents = new();
+    private bool _updatingDoAfters;
     private readonly List<(EntityUid Uid, ActiveDoAfterComponent Active, DoAfterComponent Component)> _activeDoAfters = new();
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
-        var time = GameTiming.CurTime;
+        // A callback can re-enter Update. The outer snapshot already covers this tick.
+        if (_updatingDoAfters)
+            return;
 
+        _updatingDoAfters = true;
+        try
+        {
+            UpdateAllDoAfters(GameTiming.CurTime);
+        }
+        finally
+        {
+            _activeDoAfters.Clear();
+            _updatingDoAfters = false;
+        }
+    }
+
+    private void UpdateAllDoAfters(TimeSpan time)
+    {
         // Callbacks can start do-afters on other entities, invalidating the live query.
         _activeDoAfters.Clear();
         var enumerator = EntityQueryEnumerator<ActiveDoAfterComponent, DoAfterComponent>();
@@ -93,7 +111,6 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
             }
 
         }
-        _activeDoAfters.Clear();
     }
 
     protected void Update(
@@ -102,17 +119,34 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
         DoAfterComponent comp,
         TimeSpan time)
     {
-        var dirty = false;
+        if (!_updatingComponents.Add(comp))
+            return;
 
-        var values = comp.DoAfters.Values;
-        var count = values.Count;
-        if (_doAfters.Length < count)
-            _doAfters = new DoAfter[count];
-
-        values.CopyTo(_doAfters, 0);
-        for (var i = 0; i < count; i++)
+        var doAfters = _doAfterBuffers.TryPop(out var buffer) ? buffer : new List<DoAfter>();
+        try
         {
-            var doAfter = _doAfters[i];
+            doAfters.AddRange(comp.DoAfters.Values);
+            UpdateSnapshot(uid, active, comp, time, doAfters);
+        }
+        finally
+        {
+            // DoAfterArgs can retain callback closures and entities long after completion.
+            doAfters.Clear();
+            _doAfterBuffers.Push(doAfters);
+            _updatingComponents.Remove(comp);
+        }
+    }
+
+    private void UpdateSnapshot(
+        EntityUid uid,
+        ActiveDoAfterComponent active,
+        DoAfterComponent comp,
+        TimeSpan time,
+        List<DoAfter> doAfters)
+    {
+        var dirty = false;
+        foreach (var doAfter in doAfters)
+        {
             if (doAfter.CancelledTime != null)
             {
                 if (time - doAfter.CancelledTime.Value > ExcessTime)

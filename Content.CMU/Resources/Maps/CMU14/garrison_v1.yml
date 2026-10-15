@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 06/07/2026 01:48:23
-  entityCount: 49398
+  entityCount: 49363
 maps:
 - 1
 grids:
@@ -79471,19 +79471,19 @@ entities:
           cost: 4000
           name: null
         - entities: []
-          crate: RMCCrateGrenadesHighExplosiveBox
+          crate: CMUCrateGrenadeBoxHEDP
           cost: 10000
           name: null
         - entities: []
-          crate: RMCCrateGrenadesBoxHEFA
+          crate: CMUCrateGrenadeBoxHEFA
           cost: 10000
           name: null
         - entities: []
-          crate: RMCCrateGrenadesAirburstFragBox
+          crate: CMUCrateGrenadeBoxAGMF
           cost: 10000
           name: null
         - entities: []
-          crate: RMCCrateBoxAGMI
+          crate: CMUCrateGrenadeBoxAGMI
           cost: 10000
           name: null
         - entities: []
@@ -79936,19 +79936,19 @@ entities:
           cost: 4000
           name: null
         - entities: []
-          crate: RMCCrateGrenadesHighExplosiveBox
+          crate: CMUCrateGrenadeBoxHEDP
           cost: 10000
           name: null
         - entities: []
-          crate: RMCCrateGrenadesBoxHEFA
+          crate: CMUCrateGrenadeBoxHEFA
           cost: 10000
           name: null
         - entities: []
-          crate: RMCCrateGrenadesAirburstFragBox
+          crate: CMUCrateGrenadeBoxAGMF
           cost: 10000
           name: null
         - entities: []
-          crate: RMCCrateBoxAGMI
+          crate: CMUCrateGrenadeBoxAGMI
           cost: 10000
           name: null
         - entities: []
@@ -115945,73 +115945,6 @@ entities:
     components:
     - type: Transform
       pos: 153.5,-150.5
-      parent: 1
-- proto: fetchreturngovfor
-  entities:
-  - uid: 7468
-    components:
-    - type: Transform
-      pos: 64.5,-0.5
-      parent: 1
-  - uid: 7469
-    components:
-    - type: Transform
-      pos: 64.5,-1.5
-      parent: 1
-  - uid: 7470
-    components:
-    - type: Transform
-      pos: 64.5,-2.5
-      parent: 1
-  - uid: 7471
-    components:
-    - type: Transform
-      pos: 64.5,-3.5
-      parent: 1
-  - uid: 7472
-    components:
-    - type: Transform
-      pos: 65.5,-2.5
-      parent: 1
-  - uid: 7473
-    components:
-    - type: Transform
-      pos: 65.5,-1.5
-      parent: 1
-  - uid: 7474
-    components:
-    - type: Transform
-      pos: 65.5,-3.5
-      parent: 1
-  - uid: 7475
-    components:
-    - type: Transform
-      pos: 66.5,-1.5
-      parent: 1
-  - uid: 7476
-    components:
-    - type: Transform
-      pos: 66.5,-2.5
-      parent: 1
-  - uid: 7477
-    components:
-    - type: Transform
-      pos: 66.5,-3.5
-      parent: 1
-  - uid: 7478
-    components:
-    - type: Transform
-      pos: 67.5,-1.5
-      parent: 1
-  - uid: 7479
-    components:
-    - type: Transform
-      pos: 67.5,-2.5
-      parent: 1
-  - uid: 7480
-    components:
-    - type: Transform
-      pos: 67.5,-3.5
       parent: 1
 - proto: fetchwylaptopobjective
   entities:
@@ -338260,7 +338193,7 @@ entities:
     - type: Transform
       pos: -2.5716593,0.4712336
       parent: 1
-- proto: RMCWeaponLauncherM81
+- proto: CMUWeaponLauncherM81
   entities:
   - uid: 11961
     components:
@@ -343001,4 +342934,17 @@ entities:
     - type: Transform
       pos: 236.5,-54.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 49405
+    components:
+    - type: MetaData
+      name: Stable Garrison ground relay
+    - type: Transform
+      pos: 25.5,-57.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: stable-garrison.ground.relay
+      displayName: Stable Garrison Ground Relay
 ...

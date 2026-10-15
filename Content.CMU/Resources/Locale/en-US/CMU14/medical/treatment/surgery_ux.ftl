@@ -81,6 +81,7 @@ cmu-medical-surgery-category-reattach = Reattach Limb
 cmu-medical-surgery-category-parasite = Parasite Removal
 cmu-medical-surgery-category-close_up = Close Up
 cmu-medical-surgery-category-general = Other
+cmu-medical-surgery-category-yautja_medicomp = Yautja Medicomp
 
 # ---- Examine surface (CMUSurgeryStateExamineSystem) ------------------
 
@@ -164,6 +165,9 @@ cmu-medical-surgery-tool-category-scalpel_or_burn_kit = Scalpel or burn kit
 cmu-medical-surgery-tool-category-severed_limb = Matching Limb
 cmu-medical-surgery-tool-category-blowtorch = Lit Welder
 cmu-medical-surgery-tool-category-cable_coil = Cable Coil
+cmu-medical-surgery-tool-category-yautja_medicomp_stabilizer = Stabilizer Gel
+cmu-medical-surgery-tool-category-yautja_medicomp_healing_gun = Healing Gun
+cmu-medical-surgery-tool-category-yautja_medicomp_clamp = Wound Clamp
 
 # ---- Per-step labels -------------------------------------------------
 
@@ -203,6 +207,36 @@ cmu-medical-surgery-step-suture-heart-label = Suture Heart
 cmu-medical-surgery-step-suture-stomach-label = Suture Stomach
 cmu-medical-surgery-step-amputate-limb-label = Amputate Limb
 cmu-medical-surgery-step-reattach-limb-label = Reattach Severed Limb
+cmu-medical-surgery-step-trim-necrotic-stump-label = Trim Necrotic Stump
+cmu-medical-surgery-step-prep-reattach-socket-label = Prep Reattachment Socket
+cmu-medical-surgery-step-debride-eschar-label = Debride Eschar
+
+# ---- Surgery names ---------------------------------------------------
+
+cmu-medical-surgery-name-set-fracture = Set Fracture
+cmu-medical-surgery-name-stop-internal-bleeding = Stop Internal Bleeding
+cmu-medical-surgery-name-remove-liver = Remove Liver
+cmu-medical-surgery-name-remove-lungs = Remove Lungs
+cmu-medical-surgery-name-remove-kidneys = Remove Kidneys
+cmu-medical-surgery-name-remove-heart = Remove Heart
+cmu-medical-surgery-name-remove-stomach = Remove Stomach
+cmu-medical-surgery-name-replace-liver = Replace Liver
+cmu-medical-surgery-name-replace-lungs = Replace Lungs
+cmu-medical-surgery-name-replace-kidneys = Replace Kidneys
+cmu-medical-surgery-name-transplant-heart = Transplant Heart
+cmu-medical-surgery-name-replace-stomach = Replace Stomach
+cmu-medical-surgery-name-suture-liver = Suture Liver
+cmu-medical-surgery-name-suture-lungs = Suture Lungs
+cmu-medical-surgery-name-suture-kidneys = Suture Kidneys
+cmu-medical-surgery-name-suture-heart = Suture Heart
+cmu-medical-surgery-name-suture-stomach = Suture Stomach
+cmu-medical-surgery-name-repair-brain = Repair Brain
+cmu-medical-surgery-name-repair-eyes = Repair Eyes
+cmu-medical-surgery-name-repair-ears = Repair Ears
+cmu-medical-surgery-name-remove-limb = Remove Limb
+cmu-medical-surgery-name-reattach-limb = Reattach Limb
+cmu-medical-surgery-name-remove-larva = Remove Larva
+cmu-medical-surgery-name-debride-eschar = Debride Eschar
 
 # ---- Autodoc ---------------------------------------------------------
 
@@ -220,6 +254,12 @@ cmu-autodoc-start-button = Start
 cmu-autodoc-stop-button = Stop
 cmu-autodoc-clear-button = Clear
 cmu-autodoc-eject-button = Eject Patient
+cmu-autodoc-dialysis-start = Start Dialysis
+cmu-autodoc-dialysis-stop = Stop Dialysis
+cmu-autodoc-chemicals-heading = Sleeper Chemicals
+cmu-autodoc-no-chemicals = No configured chemicals.
+cmu-autodoc-dose-small = 5u
+cmu-autodoc-dose-large = 10u
 cmu-autodoc-remove-button = Remove
 cmu-autodoc-queue-button = Queue
 cmu-autodoc-queue-heading = Queue
@@ -229,7 +269,7 @@ cmu-autodoc-queue-empty = No queued procedures.
 cmu-autodoc-queue-summary = { $count } queued procedure(s)
 cmu-autodoc-available-procedures = { $count } available procedure(s)
 cmu-autodoc-part-procedures = { $count } procedure(s)
-cmu-autodoc-surgery2-required = Surgery 2 training is required to queue autodoc steps.
+cmu-autodoc-no-patient-to-queue = Put a patient in the linked autodoc pod to queue steps.
 cmu-autodoc-no-surgeries = No surgeries available here.
 cmu-autodoc-queue-row = #{ $index } { $surgery } on { $part } - { $step }
 cmu-autodoc-surgery-row = { $surgery } - { $step }
@@ -343,12 +383,14 @@ cmu-body-scanner-title-damage = Damage
 cmu-body-scanner-title-blood = Blood
 cmu-body-scanner-title-heart = Heart
 cmu-body-scanner-title-flesh-infection = Infection
+cmu-body-scanner-title-parasite = Parasite
 cmu-body-scanner-title-no-data = Diagnostics
 cmu-body-scanner-title-missing-organ = Missing { $organ }
 cmu-body-scanner-detail-damage = total { $total } (brute { $brute }, burn { $burn })
 cmu-body-scanner-detail-blood = { $blood } / { $max }
 cmu-body-scanner-detail-heart-stopped = no activity detected
 cmu-body-scanner-detail-flesh-infection-systemic = systemic
+cmu-body-scanner-detail-parasite = embryo in the chest cavity, stage { $stage } of { $final }
 cmu-body-scanner-detail-heart-active = { $bpm } bpm
 cmu-body-scanner-detail-no-data = No diagnostic data available.
 cmu-body-scanner-detail-organ = { $stage } ({ $current } / { $max })

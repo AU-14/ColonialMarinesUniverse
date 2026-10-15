@@ -32,10 +32,16 @@ public sealed partial class DropshipDestinationComponent : Component
 
 
     [DataField("destinationtype")]
-    public  DestinationType Destinationtype = DestinationType.Dropship;
+    public DestinationType Destinationtype = DestinationType.Dropship;
 
     [DataField("Home")]
     public bool Home = false;
+
+    /// <summary>
+    ///     Offset from this destination marker to the dropship grid origin on landing.
+    /// </summary>
+    [DataField("landingOffset")]
+    public Vector2 LandingOffset;
 
     // CMU14: Large multi-deck hulls can need a different center on the same pad.
     // This is expressed in the destination grid's coordinates; ordinary ships

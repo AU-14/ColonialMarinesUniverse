@@ -24,12 +24,12 @@ public enum ObjectiveTypeDisplay
 [Serializable, NetSerializable]
 public sealed class ObjectivesConsoleBoundUserInterfaceState(
     List<ObjectiveEntry> objectives,
-    int currentWinPoints,
+    float currentWinPoints,
     int requiredWinPoints)
     : BoundUserInterfaceState
 {
     public List<ObjectiveEntry> Objectives { get; } = objectives;
-    public int CurrentWinPoints { get; } = currentWinPoints;
+    public float CurrentWinPoints { get; } = currentWinPoints;
     public int RequiredWinPoints { get; } = requiredWinPoints;
 }
 
@@ -70,14 +70,14 @@ public sealed class ObjectiveIntelBoundUserInterfaceMessage(
     string defaultTitle,
     List<ObjectiveIntelTierEntry> tiers,
     int unlockedTier,
-    int factionPoints)
+    float factionPoints)
     : BoundUserInterfaceMessage
 {
     public string ObjectiveId { get; } = objectiveId;
     public string ObjectiveDefaultTitle { get; } = defaultTitle;
     public List<ObjectiveIntelTierEntry> Tiers { get; } = tiers;
     public int UnlockedTier { get; } = unlockedTier;
-    public int FactionPoints { get; } = factionPoints;
+    public float FactionPoints { get; } = factionPoints;
 }
 
 [Serializable, NetSerializable]
@@ -90,7 +90,7 @@ public sealed class ObjectiveEntry(
     bool repeating = false,
     int? repeatsCompleted = null,
     int? maxRepeatable = null,
-    int points = 0)
+    float points = 0)
 {
     public string Id { get; } = id;
     public string Description { get; } = description;
@@ -100,5 +100,5 @@ public sealed class ObjectiveEntry(
     public bool Repeating { get; } = repeating;
     public int? RepeatsCompleted { get; } = repeatsCompleted;
     public int? MaxRepeatable { get; } = maxRepeatable;
-    public int Points { get; } = points;
+    public float Points { get; } = points;
 }

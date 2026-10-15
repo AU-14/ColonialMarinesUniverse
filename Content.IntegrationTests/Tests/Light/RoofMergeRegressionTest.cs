@@ -32,13 +32,11 @@ public sealed class RoofMergeRegressionTest : GameTest
     weatherEnabled: false
 """;
 
+    // CMU14 method: GameTest owns the pair and returns it once during teardown.
     [Test]
     public async Task ExplicitAndEntityRoofsTakePriorityOverAreaFallback()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            Connected = true,
-        });
+        var pair = Pair;
         var server = pair.Server;
         var client = pair.Client;
         var map = await pair.CreateTestMap();
@@ -142,8 +140,6 @@ public sealed class RoofMergeRegressionTest : GameTest
             Assert.That(IsRoofBitSet(roof, indices), Is.False,
                 "Clearing a roof bit must dirty and replicate the changed bitmask.");
         });
-
-        await pair.CleanReturnAsync();
     }
 
     private static bool IsRoofBitSet(RoofComponent roof, Vector2i indices)

@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "'hubaruba' from Discord",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "stock_Light"
+    },
+    {
+      "name": "stock_Light-on"
+    },
+    {
+      "name": "stock_Medium"
+    },
+    {
+      "name": "stock_Medium-on"
+    },
+    {
+      "name": "stock_Mini"
+    },
+    {
+      "name": "stock_Mini-on"
+    }
+  ]
+}

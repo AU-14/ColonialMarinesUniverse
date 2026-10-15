@@ -16,7 +16,9 @@
     sprintModifier: .75
   - type: Clothing
     sprite: CMU14/Clothing/HAZOPS/poweredwarfightingarmor.rsi
-    equipSound:
+  # Only the wearer hears it power up.
+  - type: CMUSelfEquipSound
+    sound:
       path: /Audio/CMU14/Armor/pwa_equip.ogg
 
 - type: entity

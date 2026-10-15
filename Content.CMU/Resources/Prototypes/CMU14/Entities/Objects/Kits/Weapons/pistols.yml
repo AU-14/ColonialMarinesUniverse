@@ -40,6 +40,26 @@
 
 - type: entity
   parent: RMCGunCaseBase
+  id: CMUGunCasePistolTPR9Civilian
+  name: TPR9 civilian handgun case
+  description: A case containing a TPR9 civilian handgun and six M4A3 magazines for it.
+  components:
+    - type: Storage
+      maxItemSize: Huge
+      grid:
+      - 0,0,15,1
+      whitelist:
+       tags:
+       - AU14WeaponPistolTPR23B
+       - CMMagazinePistolM1984
+    - type: StorageFill
+      contents:
+      - id: CMUWeaponPistolTPR9Civilian
+      - id: CMMagazinePistolM1984
+        amount: 6
+
+- type: entity
+  parent: RMCGunCaseBase
   id: AU14GunCasePistolL45
   name: L54 service pistol case
   description:

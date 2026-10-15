@@ -1,4 +1,5 @@
 using Content.Server.Administration.Logs;
+using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Power.Components;
@@ -37,6 +38,7 @@ public sealed partial class RadioSystem : SharedRadioSystem
     [Dependency] private INetManager _netMan = default!;
     [Dependency] private IReplayRecordingManager _replay = default!;
     [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private IAdminManager _admin = default!; // CMU14
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ChatSystem _chat = default!;
@@ -191,7 +193,17 @@ public sealed partial class RadioSystem : SharedRadioSystem
             ("name", name),
             ("message", content));
 
-        var sendAttemptEv = new RadioSendAttemptEvent(channel, radioSource);
+        var sendAttemptChat = new ChatMessage(
+            ChatChannel.Radio,
+            message,
+            wrappedMessage,
+            GetNetEntity(messageSource),
+            _chatManager.EnsurePlayer(CompOrNull<ActorComponent>(messageSource)?.PlayerSession.UserId)?.Key,
+            languageIcon: languageIcon,
+            repeatCheckSender: !HasComp<ChatRepeatIgnoreSenderComponent>(radioSource),
+            display: CreateRadioDisplay(channel, name, verb));
+        var sendAttemptChatMsg = new MsgChatMessage { Message = sendAttemptChat };
+        var sendAttemptEv = new RadioSendAttemptEvent(channel, radioSource, messageSource, message, sendAttemptChatMsg);
         RaiseLocalEvent(ref sendAttemptEv);
         RaiseLocalEvent(radioSource, ref sendAttemptEv);
         var canSend = !sendAttemptEv.Cancelled;
@@ -234,9 +246,20 @@ public sealed partial class RadioSystem : SharedRadioSystem
 
             var listenerEntity = ResolveRadioListener(receiver);
 
-            if (listenerEntity.HasValue &&
-                listenerEntity.Value != messageSource &&
-                !_language.CanUnderstand(listenerEntity.Value, currentLanguage))
+            // CMU14: clan members and admin ghosts understand the language, so they only
+            // enter the block below to resolve the Yautja's true name
+            var unmaskName =
+                HasComp<YautjaComponent>(messageSource)
+                && listenerEntity is { } maskListener
+                && (HasComp<YautjaComponent>(maskListener)
+                    || (TryComp<GhostComponent>(maskListener, out var listenerGhost)
+                        && listenerGhost.CanGhostInteract
+                        && _admin.IsAdmin(maskListener)));
+
+            if (listenerEntity.HasValue
+                && ((listenerEntity.Value != messageSource
+                  && !_language.CanUnderstand(listenerEntity.Value, currentLanguage))
+                    || unmaskName)) // CMU14
             {
                 actualName = _chat.GetSpeakerNameForListener(messageSource, listenerEntity, name);
                 actualMessage = _language.ObfuscateMessageForListener(listenerEntity.Value, message, currentLanguage, messageSource);

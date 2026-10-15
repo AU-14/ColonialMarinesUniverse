@@ -31,8 +31,10 @@ public sealed partial class CriminalRecordsHackerSystem : SharedCriminalRecordsH
         if (args.Cancelled || args.Handled || args.Target == null)
             return;
 
-        if (_station.GetOwningStation(ent) is not {} station)
+        // cmu edit start
+        if (EntityManager.System<Content.Shared.CMU14.CriminalRecords.CMUUniversalRecordsSystem>().GetRecords() is not {} station)
             return;
+        // cmu edit end
 
         var reasons = ProtoMan.Index(ent.Comp.Reasons);
         foreach (var (key, record) in _records.GetRecordsOfType<CriminalRecord>(station))

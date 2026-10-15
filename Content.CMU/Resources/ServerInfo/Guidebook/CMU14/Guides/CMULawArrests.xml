@@ -1,0 +1,37 @@
+<Document>
+  # Arrests and Holding
+
+  <Box>
+    <GuideEntityEmbed Entity="RMCHandcuffs" Caption="Handcuffs"/>
+    <GuideEntityEmbed Entity="RMCZipties" Caption="Zip ties"/>
+    <GuideEntityEmbed Entity="CMStunbaton" Caption="Stun baton"/>
+  </Box>
+
+  ## Making an Arrest
+  1. [bold]Tell the suspect the charge[/bold] and order them to comply.
+
+  2. [bold]Use non-lethal force[/bold] if they resist: your taser, stun baton or flash. Lethal force is only allowed against an immediate lethal threat to officers, civilians or critical colony systems.
+
+  3. [bold]Restrain them[/bold]: click them with handcuffs or zip ties. It takes a moment, so they need to hold still.
+
+  4. [bold]Search them[/bold] and take anything dangerous.
+
+  5. [bold]Take them to holding[/bold], set their record to [bold]Detained[/bold], and process the charges promptly.
+
+  ## Holding
+  - Nobody may be held for more than [bold]25 minutes[/bold] unless they've been placed under permanent confinement.
+  - Sentences are listed in the [textlink="criminal code" link="AU14CCLawCriminalCode"]. Resisting arrest and similar add-on charges are served on top of the base sentence.
+  - Give inmates a prison jumpsuit from the vendor.
+  - When they're released, set their record to [bold]Discharged[/bold] or [bold]Paroled[/bold].
+
+  ## Citations
+  For minor crimes you can issue a [bold]civil citation[/bold] instead of an arrest: a warning, fine, restitution, temporary confiscation, access or license suspension, community service, or a short spell in holding. If the offender refuses the citation, they serve the holding sentence instead. Citations can't be used for major or capital crimes.
+
+  ## Dropped Charges
+  Except for capital crimes, neglect of duty and crimes causing major bodily harm, the victim can drop the charges and ask you to release the suspect. If you continue anyway, you can hold them for up to 10 minutes while asking Law Enforcement Command for approval. If Command doesn't answer in time or says no, release them.
+
+  ## Other Detainments
+  - [bold]Civilian detainment[/bold]: a civilian may detain someone only if they witness a major or capital crime and law enforcement isn't available. They must hand the suspect over as soon as they can.
+  - [bold]Field detainment[/bold]: during emergencies or off-colony operations, authorized personnel may detain people who endanger the group, interfere with evacuation, break quarantine, sabotage equipment or interfere with emergency operations.
+  - [bold]Military custody[/bold]: the military is asked to hand civilian suspects over to the Marshal's Office, though they may keep ongoing threats such as terrorists and saboteurs.
+</Document>

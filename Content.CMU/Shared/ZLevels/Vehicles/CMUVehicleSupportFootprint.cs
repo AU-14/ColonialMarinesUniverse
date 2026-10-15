@@ -43,17 +43,28 @@ public static class CMUVehicleSupportFootprint
         bottom += inset;
         top -= inset;
 
-        var xSamples = new List<float>();
-        var ySamples = new List<float>();
-        AddAxisSamples(left, right, spacing, xSamples);
-        AddAxisSamples(bottom, top, spacing, ySamples);
-
-        foreach (var x in xSamples)
+        var xIntervals = AxisIntervals(left, right, spacing);
+        var yIntervals = AxisIntervals(bottom, top, spacing);
+        // A regular grid has no duplicate points when both axes are sufficiently separated.
+        // Check the actual rounded coordinates, since tiny bounds or large offsets can collapse
+        // samples. Those cases keep the original distance-based duplicate filtering.
+        var distinct = AxisSamplesAreDistinct(left, right, xIntervals) &&
+                       AxisSamplesAreDistinct(bottom, top, yIntervals);
+        for (var xIndex = 0; ; xIndex++)
         {
-            foreach (var y in ySamples)
+            var x = AxisSample(left, right, xIntervals, xIndex);
+            for (var yIndex = 0; ; yIndex++)
             {
-                AddSample(samples, new Vector2(x, y));
+                var sample = new Vector2(x, AxisSample(bottom, top, yIntervals, yIndex));
+                if (distinct)
+                    samples.Add(sample);
+                else
+                    AddSample(samples, sample);
+                if (yIndex == yIntervals)
+                    break;
             }
+            if (xIndex == xIntervals)
+                break;
         }
     }
 
@@ -176,22 +187,32 @@ public static class CMUVehicleSupportFootprint
         return !first;
     }
 
-    private static void AddAxisSamples(float min, float max, float spacing, List<float> samples)
+    private static int AxisIntervals(float min, float max, float spacing)
     {
-        samples.Add(min);
-
         var length = max - min;
-        if (length <= DuplicateTolerance)
-            return;
+        return length <= DuplicateTolerance ? 0 : Math.Max(1, (int) MathF.Ceiling(length / spacing));
+    }
 
-        var intervals = Math.Max(1, (int) MathF.Ceiling(length / spacing));
+    private static float AxisSample(float min, float max, int intervals, int index)
+    {
+        if (index == 0)
+            return min;
+        return index == intervals ? max : MathHelper.Lerp(min, max, index / (float) intervals);
+    }
+
+    private static bool AxisSamplesAreDistinct(float min, float max, int intervals)
+    {
+        if (!float.IsFinite(min) || !float.IsFinite(max))
+            return false;
+        var previous = min;
         for (var i = 1; i < intervals; i++)
         {
-            var t = i / (float) intervals;
-            samples.Add(MathHelper.Lerp(min, max, t));
+            var current = AxisSample(min, max, intervals, i);
+            if (!(current - previous > DuplicateTolerance))
+                return false;
+            previous = current;
         }
-
-        samples.Add(max);
+        return intervals == 0 || max - previous > DuplicateTolerance;
     }
 
     private static void AddSample(List<Vector2> samples, Vector2 sample)

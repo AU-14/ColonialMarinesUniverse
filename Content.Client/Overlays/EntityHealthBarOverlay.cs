@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.CMU14.Overlays; // CMU14: retain recently visible HUD entries across cache overflow.
 using Content.Client.StatusIcon;
 using Content.Client.UserInterface.Systems;
 using Content.Shared._RMC14.CrashLand;
@@ -8,6 +9,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Overlays;
 using Content.Shared.ParaDrop;
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
@@ -40,8 +42,9 @@ public sealed class EntityHealthBarOverlay : Overlay
 
     private readonly EntityQuery<CrashLandingComponent> _crashLandingQuery;
     private readonly EntityQuery<ParaDroppingComponent> _paraDroppingQuery;
+    private readonly EntityQuery<HideHealthBarComponent> _hideHealthBarQuery;
     private readonly HashSet<Entity<MobThresholdsComponent>> _healthCandidates = new();
-    private readonly Dictionary<EntityUid, CachedHealthProgress> _progressCache = new();
+    private readonly CMUOverlayCache<EntityUid, CachedHealthProgress> _progressCache = new(MaxCachedHealthEntities); // CMU14: bounded per-entry eviction.
 
     private static readonly TimeSpan HealthProgressCacheLifetime = TimeSpan.FromSeconds(0.25);
     private const int MaxCachedHealthEntities = 512;
@@ -65,6 +68,7 @@ public sealed class EntityHealthBarOverlay : Overlay
         _crashLandingQuery = _entManager.GetEntityQuery<CrashLandingComponent>();
         _paraDroppingQuery = _entManager.GetEntityQuery<ParaDroppingComponent>();
         _damageable = _entManager.System<DamageableSystem>();
+        _hideHealthBarQuery = _entManager.GetEntityQuery<HideHealthBarComponent>();
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -95,6 +99,9 @@ public sealed class EntityHealthBarOverlay : Overlay
         {
             var uid = candidate.Owner;
             var mobThresholdsComponent = candidate.Comp;
+            if (_hideHealthBarQuery.HasComp(uid))
+                continue;
+
             if (!mobQuery.TryGetComponent(uid, out var mobStateComponent) ||
                 !damageQuery.TryGetComponent(uid, out var damageableComponent) ||
                 !injurableQuery.TryGetComponent(uid, out var injurableComponent) ||
@@ -198,11 +205,9 @@ public sealed class EntityHealthBarOverlay : Overlay
 
         if (cached is null)
         {
-            if (_progressCache.Count >= MaxCachedHealthEntities)
-                _progressCache.Clear();
-
+            // CMU14: evict one entity, keeping the remaining crowd's progress snapshots.
             cached = new CachedHealthProgress();
-            _progressCache[uid] = cached;
+            _progressCache.Set(uid, cached);
         }
 
         cached.Expires = now + HealthProgressCacheLifetime;

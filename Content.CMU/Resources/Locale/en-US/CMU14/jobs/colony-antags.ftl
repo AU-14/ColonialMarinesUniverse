@@ -5,7 +5,7 @@ cmu-admin-verb-make-antag = Make {$antag}
 
 cmu-antag-arsonist-name = Arsonist
 cmu-antag-arsonist-objective = Watch it all burn.
-cmu-antag-arsonist-greeting = The colony took everything from you. Now you will take everything from the colony. You have a flamethrower and a grudge. Light it up, but don't get caught with the torch.
+cmu-antag-arsonist-greeting = The colony took everything from you. Now, you’ll take everything from them. Scavenge what you can, improvise more incendiary weapons, and reduce everything they built to ash. When the flames spread, they’ll finally understand what it feels like to lose everything.
 
 reagent-name-cmu-phoron-fuel = Phoron Fuel Mix
 reagent-desc-cmu-phoron-fuel = A stabilized phoron slurry for incinerator units. Burns long, spreads on its own, and shrugs off extinguishers.
@@ -147,8 +147,8 @@ cmu-summary-detail-none = Their work stays in the shadows.
 cmu-summary-detail-saboteur = They destroyed {$count} pieces of colony infrastructure.
 cmu-summary-detail-strike = Their petition gathered {$count}/{$goal} signatures.
 cmu-summary-detail-vigilante = {$count} mob members were on their list.
-cmu-summary-entry = {$name} ({$user}) was the {$role}. {$detail}
-cmu-summary-header = Colony Underworld:
+cmu-summary-entry = {"["}bold]{$name}[/bold] ([italic]{$user}[/italic]) was the [color=#d1b85d][bold]{$role}[/bold][/color]. {$detail}
+cmu-summary-header = {"["}bold][color=#d1b85d]Colony Underworld:[/color][/bold]
 cmu-summary-petition = A strike petition gathered {$count}/{$goal} signatures.
 cmu-vigilante-empty = The mob has no presence in this colony. Keep your eyes open; scum always crawls out eventually.
 cmu-vigilante-list = The mob's members in this colony:

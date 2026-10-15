@@ -9,7 +9,6 @@ public sealed partial class FetchObjectiveComponent : Robust.Shared.GameObjects.
     [DataField] public int SpawnCount = 1;
     [DataField] public int FetchCount = 1;
     [DataField] public string? SpawnOther;
-    [DataField] public string? CustomReturnPointId;
     [DataField] public bool RespawnOnRepeat;
     [DataField] public bool Catalog = true;
 

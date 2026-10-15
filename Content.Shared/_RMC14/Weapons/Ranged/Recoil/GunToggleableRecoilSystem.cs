@@ -80,6 +80,6 @@ public sealed partial class GunToggleableRecoilSystem : EntitySystem
         var popup = ent.Comp.Active
             ? Loc.GetString("rmc-toggleable-recoil-compensation-on", ("gun", ent.Owner))
             : Loc.GetString("rmc-toggleable-recoil-compensation-off", ("gun", ent.Owner));
-        _popup.PopupClient(popup, user.Value, user.Value, PopupType.Large);
+        _popup.PopupEntity(popup, user.Value, user.Value, PopupType.Large);
     }
 }

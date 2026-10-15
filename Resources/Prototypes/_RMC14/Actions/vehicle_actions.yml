@@ -58,3 +58,17 @@
     temporary: false
     raiseOnUser: true
     itemIconStyle: BigItem
+- type: entity
+  id: ActionVehicleMaintenance
+  parent: BaseAction
+  name: Toggle maintenance mode
+  description: Shut down the engine and lock the weapons to open maintenance panels, or close the panels to return to combat. Open panels leave the tank vulnerable.
+  components:
+  - type: Action
+    itemIconStyle: BigItem
+    raiseOnUser: true
+  - type: InstantAction
+    event: !type:VehicleMaintenanceActionEvent
+  - type: Sprite
+    sprite: Objects/Tools/wrench.rsi
+    state: icon

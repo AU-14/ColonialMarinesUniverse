@@ -15,6 +15,14 @@
   weather: true
   indestructible: false
   canDig: false
+  breakIgnoresVacuum: true
+  allowCharges: true
+  collapseWhenUnsupported: true
+  destroyDrops:
+  - id: CMRodMetal1
+    amount: 1
+    maxAmount: 3
+    prob: 0.8
 
 - type: tile
   parent: AU14LatticeTile
@@ -27,18 +35,37 @@
   id: AU14LatticeTile3
   name: tiles-cmu-legacy-multiz-destroyable-grate-2
   sprite: /Textures/CMU14/Tiles/multizgrates/solidgrate2.png
+  destroyDrops:
+  - id: CMShardGlass
+    amount: 1
+    maxAmount: 3
+    prob: 0.8
 
 - type: tile
   parent: AU14LatticeTile
   id: AU14LatticeTile4
   name: tiles-cmu-legacy-multiz-destroyable-grate-3
   sprite: /Textures/CMU14/Tiles/multizgrates/solidgrate3.png
+  destroyDrops:
+  - id: CMShardGlass
+    amount: 1
+    maxAmount: 3
+    prob: 0.8
+  - id: CMRodMetal1
+    amount: 1
+    maxAmount: 3
+    prob: 0.8
 
 - type: tile
   parent: AU14LatticeTile
   id: AU14LatticeTile5
   name: tiles-cmu-legacy-multiz-destroyable-grate-4
   sprite: /Textures/CMU14/Tiles/multizgrates/solidgrate4.png
+  destroyDrops:
+  - id: CMShardGlass
+    amount: 1
+    maxAmount: 3
+    prob: 0.8
 
 - type: tile
   parent: AU14LatticeTile
@@ -153,3 +180,19 @@
   id: AU14LatticeTileHalf4Indestructible
   name: tiles-cmu-legacy-multiz-destroyable-half-grate-4
   sprite: /Textures/CMU14/Tiles/multizgrates/zhalfgrate4.png
+
+# Invisible anchor a C4 or breaching charge is planted on when placed on a destroyable tile.
+- type: entity
+  id: CMUTileChargeAnchor
+  name: planted charge
+  categories: [ HideSpawnMenu ]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: RMCWallExplosionDeletable
+  - type: CMUTileChargeAnchor

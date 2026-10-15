@@ -1,0 +1,43 @@
+DONOR CAPE ASSET LICENSE
+
+Copyright (c) 2026 flex5hybrid/RussianCM. All rights reserved.
+
+1. Scope
+
+This license applies only to the donor cape assets in this directory, including
+the PNG files, RSI metadata, and any copies, adaptations, or derived versions
+of those assets.
+
+2. Limited permission
+
+Permission is granted to use and display these assets as part of the
+flex5hybrid/RussianCM project and its official builds. This permission does not
+transfer ownership and does not grant a general license to the assets.
+
+3. Restrictions
+
+Without prior written permission from flex5hybrid/RussianCM, you may not:
+
+- copy, publish, republish, re-upload, or otherwise redistribute these assets;
+- include these assets in another project, fork, package, mod, or service;
+- sell, rent, sublicense, license, or otherwise make these assets available to
+  another person or organization; or
+- use these assets, separately or as part of another product or service, for
+  monetization or any other commercial purpose.
+
+4. Relationship to the repository license
+
+The GNU Affero General Public License version 3 applies to the project code as
+specified by the repository's top-level license files. It does not grant
+permission to use these donor cape assets outside the terms of this license.
+
+5. Permission requests
+
+Requests for an exception must be made to and approved in writing by
+flex5hybrid/RussianCM before the relevant use or distribution takes place.
+
+6. Disclaimer
+
+The assets are provided without warranties of any kind. To the maximum extent
+permitted by applicable law, flex5hybrid/RussianCM is not liable for any claim,
+damages, or other liability arising from their use.

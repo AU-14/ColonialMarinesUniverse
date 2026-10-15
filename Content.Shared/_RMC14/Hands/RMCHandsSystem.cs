@@ -121,7 +121,7 @@ public abstract partial class RMCHandsSystem : EntitySystem
                     _ => string.Empty,
                 };
 
-                _popup.PopupClient(Loc.GetString(popup, ("storage", ent.Owner)), user, user, PopupType.Medium);
+                _popup.PopupEntity(Loc.GetString(popup, ("storage", ent.Owner)), user, user, PopupType.Medium);
             },
         };
 
@@ -255,7 +255,7 @@ public abstract partial class RMCHandsSystem : EntitySystem
 
         if (!_rmcStorage.CanEject(item, user, out var popup))
         {
-            _popup.PopupClient(popup, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(popup, user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -285,7 +285,7 @@ public abstract partial class RMCHandsSystem : EntitySystem
                 if (eject.EjectWhenEmpty)
                     return false;
 
-                _popup.PopupClient(Loc.GetString("rmc-storage-nothing-left", ("storage", item)), user, user);
+                _popup.PopupEntity(Loc.GetString("rmc-storage-nothing-left", ("storage", item)), user, user);
                 return true;
             }
             case RMCStorageEjectState.First:
@@ -299,7 +299,7 @@ public abstract partial class RMCHandsSystem : EntitySystem
                 if (eject.EjectWhenEmpty)
                     return false;
 
-                _popup.PopupClient(Loc.GetString("rmc-storage-nothing-left", ("storage", item)), user, user);
+                _popup.PopupEntity(Loc.GetString("rmc-storage-nothing-left", ("storage", item)), user, user);
                 return true;
             }
         }

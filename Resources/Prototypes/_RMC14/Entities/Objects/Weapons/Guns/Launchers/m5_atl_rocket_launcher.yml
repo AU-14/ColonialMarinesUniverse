@@ -250,7 +250,7 @@
     fixtureID: projectile # no parent entity from BaseBulletTrigger because it has Clickable
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: RMC
+    explosionType: CMUAntiVehicleHE # CMU14: FLOW-09 was RMC; identical but for its tank blast multiplier.
     maxIntensity: 30
     intensitySlope: 10
     totalIntensity: 290
@@ -323,7 +323,7 @@
     fixtureID: projectile # no parent entity from BaseBulletTrigger because it has Clickable
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: RMC
+    explosionType: CMUAntiVehicleHE # CMU14: FLOW-09 was RMC; identical but for its tank blast multiplier.
     maxIntensity: 30
     intensitySlope: 10
     totalIntensity: 290
@@ -371,7 +371,7 @@
   description: A squat missile canister for the EMBLR surface-to-air weapons system. Unlike it's USCM counterpart, the Goose carries a small but powerful warhead. This one has 'Armor-Piercing' written on the side.
   components:
   - type: CartridgeAmmo
-    proto: RMCProjectileRocket84mmAntiArmor
+    proto: CMUProjectileRocket70mmAntiArmor # CMU14: FLOW-09 was RMCProjectileRocket84mmAntiArmor.
     deleteOnSpawn: false
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Explosives/emblr.rsi
@@ -386,9 +386,12 @@
 - type: entity
   id: CMUProjectileRocket70mmAntiArmor
   name: 70mm anti-armor rocket
-  parent: CMUProjectileRocket70mm
+  parent: CMUProjectileRocket70mmHE # CMU14: FLOW-09 was CMUProjectileRocket70mm, which has no impact trigger.
   categories: [ HideSpawnMenu ]
   components:
+  - type: TankCookOffProjectile # CMU14
+    criticalChance: 0.15 # CMU14: FLOW-09
+    hullFraction: 0.3 # CMU14: FLOW-09
   - type: Projectile
     impactEffect: BulletImpactEffect
     damage:
@@ -430,6 +433,9 @@
   parent: RMCProjectileRocket84mm
   categories: [ HideSpawnMenu ]
   components:
+  - type: TankCookOffProjectile # CMU14
+    criticalChance: 0.15 # CMU14: FLOW-09
+    hullFraction: 0.35 # CMU14: FLOW-09
   - type: Projectile
     impactEffect: BulletImpactEffect
     damage:

@@ -1,3 +1,4 @@
+using Content.Shared.Damage.Events;
 #pragma warning disable RA0002 // Fixtures configure service deadlines/rates; assertions inspect owner state after public interactions.
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Administration.Systems;
@@ -648,7 +649,7 @@ public sealed partial class CMUVisceralPressureProbeSystem : EntitySystem
         if (ent.Comp.QueueOnPermission is { } queued)
         {
             ent.Comp.QueueOnPermission = null;
-            EntityManager.QueueDeleteEntity(queued);
+            QueueDel(queued);
             ent.Comp.Queued = true;
             return;
         }

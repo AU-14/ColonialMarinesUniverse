@@ -18,6 +18,7 @@ using Content.Shared.Players.RateLimiting;
 using Content.Shared.Roles;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
+using Robust.Shared.Enums;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -116,6 +117,9 @@ public sealed partial class MentorManager : IPostInjectInit
 
     private void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs args)
     {
+        if (args.NewStatus != SessionStatus.Disconnected)
+            return;
+
         var user = args.Session;
         _typingUpdateTimestamps.Remove(user.UserId);
 
@@ -129,7 +133,7 @@ public sealed partial class MentorManager : IPostInjectInit
         }
 
         if (!_mentorClaims.TryGetValue(user.UserId, out var destinations)) return;
-        foreach (var destination in destinations)
+        foreach (var destination in destinations.ToArray())
         {
             Unclaim(user.Channel, destination, true);
         }
@@ -241,6 +245,9 @@ public sealed partial class MentorManager : IPostInjectInit
 
         foreach (var mentor in _activeMentors)
         {
+            if (!mentor.Channel.IsConnected)
+                continue;
+
             try
             {
                 _net.ServerSendMessage(claim, mentor.Channel);
@@ -351,6 +358,9 @@ public sealed partial class MentorManager : IPostInjectInit
 
         foreach (var mentor in _activeMentors)
         {
+            if (!mentor.Channel.IsConnected)
+                continue;
+
             try
             {
                 _net.ServerSendMessage(msg, mentor.Channel);
@@ -365,6 +375,9 @@ public sealed partial class MentorManager : IPostInjectInit
 
     private void SendMentorStatus(ICommonSession player)
     {
+        if (!player.Channel.IsConnected)
+            return;
+
         var isMentor = _activeMentors.Contains(player);
         var canReMentor = _mentors.TryGetValue(player.UserId, out var mentor) && mentor;
         var msg = new MentorStatusMsg()
@@ -398,7 +411,8 @@ public sealed partial class MentorManager : IPostInjectInit
             if (author != null && active.UserId == author.UserId)
                 isMentor = true;
 
-            recipients.Add(active.Channel);
+            if (active.Channel.IsConnected)
+                recipients.Add(active.Channel);
         }
 
         var isAdmin = author != null && _admin.IsAdmin(author);
@@ -450,7 +464,7 @@ public sealed partial class MentorManager : IPostInjectInit
 
         foreach (var admin in GetActiveMentors())
         {
-            if (admin.UserId == author.UserId)
+            if (admin.UserId == author.UserId || !admin.Channel.IsConnected)
                 continue;
 
             _net.ServerSendMessage(update, admin.Channel);
@@ -492,7 +506,7 @@ public sealed partial class MentorManager : IPostInjectInit
         SendMentorStatus(session);
 
         if (!_mentorClaims.TryGetValue(user.UserId, out var claims)) return;
-        foreach (var claim in claims)
+        foreach (var claim in claims.ToArray())
         {
             Unclaim(user, claim, true);
         }

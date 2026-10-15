@@ -32,7 +32,7 @@
   - type: Marine
     Faction: govfor
 
-  name: IPIE Lawyer
+  name: au14-job-name-ipie-lawyer
   description: au14-ipie-lawyer-description
   playTimeTracker: AU14JobIPIELawyer
   ranks:

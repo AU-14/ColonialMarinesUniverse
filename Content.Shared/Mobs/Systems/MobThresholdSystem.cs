@@ -10,6 +10,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Events;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing; // CMU14
 
 namespace Content.Shared.Mobs.Systems;
 
@@ -18,6 +19,7 @@ public sealed partial class MobThresholdSystem : EntitySystem
     [Dependency] private MobStateSystem _mobStateSystem = default!;
     [Dependency] private AlertsSystem _alerts = default!;
     [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private IGameTiming _timing = default!; // CMU14
 
     private readonly HashSet<EntityUid> _damageThresholdUpdates = new();
 
@@ -41,7 +43,7 @@ public sealed partial class MobThresholdSystem : EntitySystem
 
     private void OnGetState(EntityUid uid, MobThresholdsComponent component, ref ComponentGetState args)
     {
-        var thresholds = new Dictionary<FixedPoint2, MobState>();
+        var thresholds = new Dictionary<FixedPoint2, MobState>(component.Thresholds.Count);
         foreach (var (key, value) in component.Thresholds)
         {
             thresholds.Add(key, value);
@@ -352,6 +354,11 @@ public sealed partial class MobThresholdSystem : EntitySystem
     private void CheckThresholds(EntityUid target, MobStateComponent mobStateComponent,
         MobThresholdsComponent thresholdsComponent, DamageableComponent damageableComponent, EntityUid? origin = null)
     {
+        // CMU14: state-application callbacks can see revived mob state with the corpse's old damage.
+        // Both mob states are replicated; recalculating here can latch the client back into death.
+        if (_timing.ApplyingState)
+            return;
+
         foreach (var (threshold, mobState) in thresholdsComponent.Thresholds.Reverse())
         {
             if (_damageable.GetTotalDamage((target, damageableComponent)) < threshold)

@@ -1,0 +1,151 @@
+- type: job
+  parent: AU14JobLEOBase
+  id: RuMCMigrant
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: RuMCMigrant
+  roundComponents:
+  - type: EquipEntityPreset
+    preset: RuMCGearMigrant
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliancolonist
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+  - type: Language
+    spokenLanguages:
+    - Polish
+    - Czech
+    - Slovak
+    - Ukrainian
+    - Romanian
+    - Hungarian
+    - Lithuanian
+    - Indonesian
+    understoodLanguages:
+    - Polish
+    - Czech
+    - Slovak
+    - Ukrainian
+    - Romanian
+    - Hungarian
+    - Lithuanian
+    - Indonesian
+    currentLanguage: Ukrainian
+    defaultLanguage: Ukrainian
+
+  name: New Colonist
+  description: Wether by choice, necessity or force you have arrived in orbit of this colony to establish your new life on the frontier. Time to get to work.
+  setPreference: true
+  playTimeTracker: RuMCJobMigrant
+  ranks:
+    RMCRankCivilian: []
+  spawnMenuRoleName: Colonist (3rd party)
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: RuMCJobMigrant
+  name: New Colonist (civilian)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: New Colonist (civilian)
+    description: Wether by choice, necessity or force you have arrived in orbit of this colony to establish your new life on the frontier. Time to get to work.
+    reregister: false
+    job: RuMCMigrant
+    raffle:
+      settings: short
+    rules: You do not know what is going on in the colony.
+
+- type: entity
+  id: RuMCGearMigrant
+  name: returning colonist preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomGearOther:
+    -
+      - [ CMJumpsuitColonist ]
+      - [ RMCJumpsuitCivilian ]
+      - [ CMJumpsuitTShirtWhite ]
+      - [ CMJumpsuitTShirtGray ]
+      - [ RMCJumpsuitLiaisonExpensiveSuitBrownJacket ]
+      - [ RMCJumpsuitLiaisonGreenWorkwearBrownWebbing ]
+      - [ RMCJumpsuitLiaisonDisco ]
+      - [ RMCJumpsuitNormCivilianYellow ]
+      - [ RMCJumpsuitCivilianGreen ]
+      - [ RMCJumpsuitCivilianEngineerWorker ]
+      - [ RMCJumpsuitSteward ]
+      - [ RMCJumpsuitPizza ]
+      - [ RMCJumpsuitCorrespondentOrange ]
+      - [ RMCJumpsuitCorrespondentRed ]
+      - [ RMCJumpsuitCorrespondent ]
+      - [ RMCJumpsuitCorrespondentBlack ]
+      - [ RMCJumpsuitCivilianFrontier ]
+      - [ RMCJumpsuitLaborersOveralls ]
+      - [ RMCJumpsuitNormCivilianBrown ]
+      - [ RMCJumpsuitBlackPantsUniform ]
+      - [ RMCJumpsuitKutjevoDrysuit ]
+      - [ RMCJumpsuitLiaisonGreyWorkwear ]
+      - [ RMCJumpsuitDispatcherUniform ]
+      - [ RMCJumpsuitSPPCiv5 ]
+      - [ CMJumpsuitFishingColonist ]
+    -
+      - [ RMCShoesBlack ]
+      - [ RMCBootsVanBandolier ]
+      - [ RMCShoesBrown ]
+      - [ RMCPlatformHybrisaThree ]
+      - [ RMCShoesYellow ]
+      - [ RMCShoesWeYaStompers ]
+      - [ RMCShoesSandals ]
+      - [ RMCShoesFancyLeather ]
+      - [ RMCShoesSnow ]
+      - [ RMCShoesRed ]
+    -
+      - [ AU14SlingSatchelBlue, RMCMatchboxFull, RMCCigarettePackLuckySloths ]
+      - [ AU14SlingSatchelBlack, RMCCigarettePackWeYaGold, RMCLighter]
+      - [ CMSatchel, RMCCigarCase, RMCZippo]
+    -
+      #- [ RMCSpaceCash1000 ]
+      - [ RMCSpaceCash200 ]
+      - [ RMCSpaceCash200 ]
+      - [ RMCSpaceCash100 ]
+      - [ RMCSpaceCash100 ]
+      - [ RMCSpaceCash100 ]
+      - [ RMCSpaceCash100 ]
+      - [ RMCSpaceCash50 ]
+      - [ RMCSpaceCash50 ]
+      - [ RMCSpaceCash50 ]
+      - [ RMCSpaceCash50 ]
+      - [ RMCSpaceCash20 ]
+      - [ RMCSpaceCash20 ]
+      - [ RMCSpaceCash20 ]
+      - [ RMCSpaceCash10 ]
+      - [ RMCSpaceCash1 ]
+    -
+      - [ CMMRE ]
+      - [ RMCMRESPP ]
+
+
+- type: playTimeTracker
+  id: RuMCJobMigrant
+  isHumanoid: true

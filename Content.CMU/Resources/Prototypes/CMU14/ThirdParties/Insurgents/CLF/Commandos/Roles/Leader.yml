@@ -63,7 +63,7 @@
   equipment:
     head: CMU14CLFCommandoHelmet
     mask: RMCCombatUtilityKnifeA
-    ears: RMCHeadsetDistressCLF
+    ears: AU14HeadsetCLF
     jumpsuit: CMU14FatiguesCLFCommandoLeader
     outerClothing: CMU14CLFCommandoArmor
     gloves: CMHandsInsulated

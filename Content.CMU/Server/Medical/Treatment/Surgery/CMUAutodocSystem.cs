@@ -7,9 +7,14 @@ using Content.Shared.Destructible;
 using Content.Shared.CMU14.Medical.Treatment.Surgery;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Damage;
-using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Body;
+using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Medical.Wounds;
+using Content.Shared.Body.Components;
+using Content.Shared.Body.Systems;
 using Content.Shared.Body.Part;
+using Content.Shared.Chemistry.Components;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -18,6 +23,7 @@ using Content.Shared.DragDrop;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
 using Content.Shared.Movement.Events;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Verbs;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
@@ -33,6 +39,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private CMUSurgerySystem _cmuSurgery = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private CMUSurgeryDispatchSystem _dispatch = default!;
     [Dependency] private CMUSurgeryFlowSystem _flow = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
@@ -42,13 +49,14 @@ public sealed partial class CMUAutodocSystem : EntitySystem
     [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
     [Dependency] private CMUSurgeryRulebookSystem _rulebook = default!;
     [Dependency] private CMUMedicalSchedulerSystem _scheduler = default!;
-    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private RMCReagentSystem _reagents = default!;
+    [Dependency] private SharedRMCBloodstreamSystem _rmcBloodstream = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private SharedCMUWoundsSystem _wounds = default!;
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
 
-    private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
     private const string AutodocLimbRegenerationId = "CMUAutodocRegenerateLimb";
     private const string AutodocLimbRegenerationCategory = "limb_regeneration";
     private const string AutodocWoundRepairId = "CMUAutodocRepairWounds";
@@ -89,6 +97,8 @@ public sealed partial class CMUAutodocSystem : EntitySystem
             subs.Event<CMUAutodocStartMessage>(OnStart);
             subs.Event<CMUAutodocStopMessage>(OnStop);
             subs.Event<CMUAutodocEjectPatientMessage>(OnEjectPatient);
+            subs.Event<CMUAutodocInjectChemicalMessage>(OnInjectChemical);
+            subs.Event<CMUAutodocToggleDialysisMessage>(OnToggleDialysis);
         });
 
         SubscribeLocalEvent<CMUAutodocPodComponent, ComponentInit>(OnPodInit);
@@ -107,6 +117,8 @@ public sealed partial class CMUAutodocSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
+        ProcessDialysis(frameTime);
 
         _uiAccumulator += frameTime;
         if (_uiAccumulator < 1f)
@@ -329,6 +341,70 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         // A delayed or concurrent command never targets the replacement occupant or row.
         RefreshUi(console.Owner, console.Comp, actor);
         return false;
+    }
+
+    private void OnInjectChemical(Entity<CMUAutodocConsoleComponent> ent, ref CMUAutodocInjectChemicalMessage msg)
+    {
+        if (msg.Amount <= FixedPoint2.Zero
+            || !TryValidateCommand(ent, msg.Actor, msg.Context, out _, out var podComp, out var patient))
+        {
+            return;
+        }
+
+        var reagentId = new ProtoId<ReagentPrototype>(msg.ReagentId);
+        var available = podComp.AvailableChemicals.Contains(reagentId);
+        var emergency = podComp.EmergencyChemicals.Contains(reagentId);
+        if ((!available && !emergency) || _mobState.IsCritical(patient) && !emergency)
+            return;
+
+        if (msg.Amount != podComp.ChemicalDose && msg.Amount != podComp.LargeChemicalDose)
+            return;
+
+        if (!_rmcBloodstream.TryGetChemicalSolution(patient, out _, out var chemicals)
+            || chemicals is null
+            || chemicals.Volume + msg.Amount > podComp.MaxChemicalVolume)
+        {
+            return;
+        }
+
+        var solution = new Solution();
+        solution.AddReagent(reagentId, msg.Amount);
+        if (!_bloodstream.TryAddToBloodstream((patient, null), solution))
+            return;
+
+        podComp.StateRevision++;
+        RefreshUi(ent.Owner, ent.Comp);
+    }
+
+    private void OnToggleDialysis(Entity<CMUAutodocConsoleComponent> ent, ref CMUAutodocToggleDialysisMessage msg)
+    {
+        if (!TryValidateCommand(ent, msg.Actor, msg.Context, out _, out var podComp, out _))
+        {
+            return;
+        }
+
+        podComp.Filtering = !podComp.Filtering;
+        podComp.StateRevision++;
+        RefreshUi(ent.Owner, ent.Comp);
+    }
+
+    private void ProcessDialysis(float frameTime)
+    {
+        var amount = FixedPoint2.New(MathF.Max(0f, frameTime));
+        var query = EntityQueryEnumerator<CMUAutodocPodComponent>();
+        while (query.MoveNext(out var pod, out var podComp))
+        {
+            if (!podComp.Filtering)
+                continue;
+
+            if (!TryGetPatient(pod, out var patient))
+            {
+                podComp.Filtering = false;
+                continue;
+            }
+
+            _bloodstream.FlushChemicals((patient, null), podComp.DialysisRatePerSecond * amount);
+        }
     }
 
     private void ProcessPod(EntityUid pod, CMUAutodocPodComponent comp)
@@ -556,9 +632,10 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         }
     }
 
+    // CMU14: anyone can run the autodoc, no surgery training needed.
     private bool CanControl(EntityUid user)
     {
-        return user.IsValid() && !TerminatingOrDeleted(user) && _skills.HasSkill(user, SurgerySkill, 2);
+        return user.IsValid() && !TerminatingOrDeleted(user);
     }
 
     private List<CMUSurgeryPartEntry> BuildAutodocPartEntries(EntityUid patient, EntityUid viewer)
@@ -801,13 +878,55 @@ public sealed partial class CMUAutodocSystem : EntitySystem
             podLinked ? podComp.CurrentStep : null,
             podLinked && podComp.NextStepAt > TimeSpan.Zero ? podComp.NextStepAt : null,
             parts,
-            podLinked ? BuildQueueEntries(podComp) : [])
+            podLinked ? BuildQueueEntries(podComp) : [],
+            podLinked && hasPatient ? BuildChemicalEntries(podComp, patient) : [],
+            podLinked && podComp.Filtering)
         {
             CommandContext = hasPatient
                 ? new CMUAutodocCommandContext(GetNetEntity(pod), GetNetEntity(patient),
                     podComp.OccupantGeneration, podComp.StateRevision)
                 : null,
         };
+    }
+
+    private List<CMUAutodocChemicalEntry> BuildChemicalEntries(CMUAutodocPodComponent pod, EntityUid patient)
+    {
+        var emergency = _mobState.IsCritical(patient);
+        var currentVolume = FixedPoint2.Zero;
+        var current = new Dictionary<ProtoId<ReagentPrototype>, FixedPoint2>();
+        if (_rmcBloodstream.TryGetChemicalSolution(patient, out _, out var solution) && solution is not null)
+        {
+            currentVolume = solution.Volume;
+            foreach (var (reagent, quantity) in solution.Contents)
+                current[reagent.Prototype] = quantity;
+        }
+
+        var ids = new List<ProtoId<ReagentPrototype>>(pod.AvailableChemicals);
+        foreach (var id in pod.EmergencyChemicals)
+        {
+            if (!ids.Contains(id))
+                ids.Add(id);
+        }
+
+        var entries = new List<CMUAutodocChemicalEntry>(ids.Count);
+        foreach (var id in ids)
+        {
+            if (!_reagents.TryIndex(id, out var reagent))
+                continue;
+
+            var emergencyOnly = pod.EmergencyChemicals.Contains(id) && !pod.AvailableChemicals.Contains(id);
+            var canInject = currentVolume + pod.ChemicalDose <= pod.MaxChemicalVolume
+                && (!emergency || pod.EmergencyChemicals.Contains(id));
+            current.TryGetValue(id, out var amount);
+            entries.Add(new CMUAutodocChemicalEntry(
+                id,
+                reagent.LocalizedName,
+                amount,
+                canInject,
+                emergencyOnly));
+        }
+
+        return entries;
     }
 
     private List<CMUAutodocQueueEntry> BuildQueueEntries(CMUAutodocPodComponent pod)
@@ -975,6 +1094,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         if (!_patientBay.TryEjectPatient(pod, comp.BodyContainer, patient))
             return null;
 
+        comp.Filtering = false;
         return patient;
     }
 

@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Vehicle;
 using System.Linq;
 using Content.Shared._RMC14.Examine;
 using Content.Shared._RMC14.Overwatch;
@@ -88,7 +89,16 @@ namespace Content.Shared.Examine
             if (MobStateSystem.IsIncapacitated(examiner))
                 return false;
 
-            if (!InRangeUnOccluded(examiner, entity, ExamineDetailsRange))
+            // RMC
+            var detailsOrigin = examiner;
+            if (TryComp<VehicleWatchingComponent>(examiner, out var detailsWatcher) &&
+                detailsWatcher.Watching is { } detailsWatched &&
+                Comp<TransformComponent>(examiner).MapID != Transform(entity).MapID)
+            {
+                detailsOrigin = detailsWatched;
+            }
+
+            if (!InRangeUnOccluded(detailsOrigin, entity, ExamineDetailsRange))
                 return false;
 
             // Is the target hidden in a opaque locker or something? Currently this check allows players to examine
@@ -156,7 +166,8 @@ namespace Content.Shared.Examine
 
             if (Comp<TransformComponent>(examiner).MapID != target.MapId)
             {
-                if (!HasComp<OverwatchWatchingComponent>(examiner) && !HasComp<XenoWatchingComponent>(examiner))
+                if (!HasComp<OverwatchWatchingComponent>(examiner) && !HasComp<XenoWatchingComponent>(examiner) &&
+                    !HasComp<VehicleWatchingComponent>(examiner))
                     return false;
             }
 
@@ -187,6 +198,14 @@ namespace Content.Shared.Examine
                         predicate: predicate);
                 }
 
+                // CMU14: use the active vehicle camera without granting the hull's unrestricted vision range.
+                if (TryComp<VehicleWatchingComponent>(examiner, out var vehicleWatcher) &&
+                    vehicleWatcher.Watching is { } watchedVehicle &&
+                    !TerminatingOrDeleted(watchedVehicle) && Transform(examiner).MapID != target.MapId)
+                {
+                    return InRangeUnOccluded(watchedVehicle, examined.Value, GetExaminerRange(examiner), predicate);
+                }
+
                 return InRangeUnOccluded(
                     examiner,
                     examined.Value,
@@ -195,6 +214,18 @@ namespace Content.Shared.Examine
             }
             else
             {
+                // RMC
+                if (Comp<TransformComponent>(examiner).MapID != target.MapId &&
+                    TryComp<VehicleWatchingComponent>(examiner, out var vehicleWatcher) &&
+                    vehicleWatcher.Watching is { } vehicleWatched)
+                {
+                    return InRangeUnOccluded(
+                        vehicleWatched,
+                        target,
+                        GetExaminerRange(examiner),
+                        predicate: predicate);
+                }
+
                 return InRangeUnOccluded(
                     examiner,
                     target,
@@ -470,6 +501,7 @@ namespace Content.Shared.Examine
         public EntityUid Examined { get; }
 
         private bool _hasDescription;
+        private bool _descriptionReplaced;
 
         private ExamineMessagePart? _currentGroupPart;
 
@@ -487,10 +519,33 @@ namespace Content.Shared.Examine
         }
 
         /// <summary>
+        /// Removes the prototype description when a specialized examine handler provides the complete text.
+        /// </summary>
+        public void SuppressDescription()
+        {
+            Message.Clear();
+            Parts.Clear();
+            _hasDescription = false;
+            _descriptionReplaced = true;
+        }
+
+        /// <summary>
+        /// Replaces the complete examine result with plain text supplied by a specialized handler.
+        /// </summary>
+        public void ReplaceDescription(string text)
+        {
+            SuppressDescription();
+            Message.AddText(text);
+        }
+
+        /// <summary>
         ///     Returns <see cref="Message"/> with all <see cref="Parts"/> appended according to their priority.
         /// </summary>
         public FormattedMessage GetTotalMessage()
         {
+            if (_descriptionReplaced)
+                return new FormattedMessage(Message);
+
             int Comparison(ExamineMessagePart a, ExamineMessagePart b)
             {
                 // Try sort by priority, then group, then by string contents

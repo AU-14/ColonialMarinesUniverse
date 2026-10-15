@@ -1,0 +1,19 @@
+- type: trackerMode
+  id: BEARCommandingOfficer
+  job: RuMCUPPBEARCommander
+  alert: SquadTrackerCommandingOfficer
+
+- type: trackerMode
+  id: BEARGROZACommandingOfficer
+  job: RuMCUPPBEARCommanderGROZA
+  alert: SquadTrackerCommandingOfficer
+
+- type: trackerMode
+  id: BEARSKALACommandingOfficer
+  job: RuMCUPPBEARCommanderSKALA
+  alert: SquadTrackerCommandingOfficer
+
+- type: trackerMode
+  id: LiquidatorCommandingOfficer
+  job: RuMCUPPLiquidatorComander
+  alert: SquadTrackerCommandingOfficer

@@ -6,7 +6,7 @@ namespace Content.Shared.CMU14.Radio;
 public sealed partial class ANPRCAntennaComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public string Label = "WHIP";
+    public LocId Label = "anprc-antenna-whip";
 
     [DataField, AutoNetworkedField]
     public float FullRange = 30f;

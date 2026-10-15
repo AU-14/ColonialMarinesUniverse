@@ -9,8 +9,8 @@
       options:
 # ├──[ Tier 0 ]──────────────────────────────────────────────────────┤
       -
-        - name: Unlock Tier 1
-          description: Transitions the tree to another tier.
+        - name: cmu-tech-tier-one
+          description: cmu-tech-tier-unlock-desc
           cost: 0
           events:
           - !type:TechUnlockTierEvent
@@ -20,8 +20,8 @@
             state: upgrade
 # ├──[ Tier 1: Early resupply & budget ]─────────────────────────────┤
       -
-        - name: Requisition Budget Increase
-          description: Distributes resources to requisitions for spending.
+        - name: cmu-tech-govfor-req-budget
+          description: cmu-tech-govfor-req-budget-desc
           cost: 12
           increase: 3
           repurchasable: true
@@ -29,78 +29,76 @@
           - !type:TechRequisitionsBudgetEvent
             amount: 5000
           - !type:TechAnnounceEvent
-            author: SPECIAL ASSETS AUTHORIZED
-            message: Additional supply budget has been authorised for this operation.
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-req-budget-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: budget_req
-        - name: CMB Investigation Party
-          description: Summon a CMB investigation party to the area.
+        - name: cmu-tech-govfor-cmb-investigation
+          description: cmu-tech-govfor-cmb-investigation-desc
           cost: 10
           events:
           - !type:TechPartySpawnEvent
             thirdPartyId: CMBInvestigationPartyAlt
           - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: A CMB investigation party has been dispatched to investigate intel leads.
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-cmb-investigation-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
-        - name: Unlock Tier 2
-          description: Transitions the tree to another tier.
+        - name: cmu-tech-govfor-k9-team
+          description: cmu-tech-govfor-k9-team-desc
+          cost: 6
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: AU14IntelThirdPartyK9
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-k9-team-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: medic_qol
+        - name: cmu-tech-govfor-icrc-relief
+          description: cmu-tech-govfor-icrc-relief-desc
+          cost: 15
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: ICRCReliefParty
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-icrc-relief-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: cmu-tech-tier-two
+          description: cmu-tech-tier-unlock-desc
           cost: 3
           events:
           - !type:TechUnlockTierEvent
             tier: 2
           - !type:TechAnnounceEvent
-            author: GOVFOR HIGH COMMAND
-            message: "NOTICE: Effective immediately, readiness posture is LEVEL 2. Escalation authorisation has been approved. Section Two assets are cleared for deployment at commanding officer's discretion.
-
-              By order of GovFor High Command."
+            author: cmu-tech-author-govfor-high-command
+            message: cmu-tech-govfor-tier-two-announce
             sound: /Audio/_RMC14/AI/commandreport.ogg
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: upgrade
 # ├──[ Tier 2: Support & specialists ]───────────────────────────────┤
       -
-        - name: CMB Parolee Transport
-          description: Summon a CMB transport shuttle to take captured combatants off-world. Pairs with arrest objectives.
+        - name: cmu-tech-govfor-cmb-parolee
+          description: cmu-tech-govfor-cmb-parolee-desc
           cost: 8
           events:
           - !type:TechPartySpawnEvent
             thirdPartyId: CMBParoleeTransport
           - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: A CMB parolee transport has been dispatched to process detainees.
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-cmb-parolee-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
-        - name: ICRC Relief Party
-          description: Summon a Red Cross relief party. Neutral medics for everyone.
-          cost: 15
-          events:
-          - !type:TechPartySpawnEvent
-            thirdPartyId: ICRCReliefParty
-          - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: An ICRC relief party has been dispatched to provide humanitarian aid.
-          icon:
-            sprite: _RMC14/Interface/tech_tree.rsi
-            state: beacon
-        - name: S&R K9 Team
-          description: Summon a search-and-rescue handler and their canine companion.
-          cost: 15
-          events:
-          - !type:TechPartySpawnEvent
-            thirdPartyId: AU14IntelThirdPartyK9
-          - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: A search-and-rescue K9 team has been dispatched to aid with the operation.
-          icon:
-            sprite: _RMC14/Interface/tech_tree.rsi
-            state: medic_qol
-        - name: Dropship Fabricator Budget
-          description: Distributes resources to the dropship part fabricator.
+        - name: cmu-tech-govfor-dropship-budget
+          description: cmu-tech-govfor-dropship-budget-desc
           cost: 12
           increase: 2
           repurchasable: true
@@ -108,115 +106,111 @@
           - !type:TechDropshipBudgetEvent
             amount: 2000
           - !type:TechAnnounceEvent
-            author: SPECIAL ASSETS AUTHORIZED
-            message: Additional dropship part fabricator points have been authorised for this operation.
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-dropship-budget-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: budget_ds
-        - name: LACN Sniper Team
-          description: Summon a LACN marksman team to provide overwatch.
+        - name: cmu-tech-govfor-lacn-sniper
+          description: cmu-tech-govfor-lacn-sniper-desc
           cost: 20
           events:
           - !type:TechPartySpawnEvent
             thirdPartyId: LACNSniperteamIntel
           - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: A LACN sniper team has been dispatched to provide overwatch.
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-lacn-sniper-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
-        - name: Unlock Tier 3
-          description: Transitions the tree to another tier.
+        - name: cmu-tech-tier-three
+          description: cmu-tech-tier-unlock-desc
           cost: 5
           events:
           - !type:TechUnlockTierEvent
             tier: 3
           - !type:TechAnnounceEvent
-            author: GOVFOR HIGH COMMAND
-            message: "GENERAL ORDER: Effective immediately, readiness posture is LEVEL 3. Theatre command has assessed hostile activity as a direct threat to the operational area. Additional forces have been committed. All units are to maintain discipline and hold assigned positions.
-
-              By order of Theatre Command."
+            author: cmu-tech-author-govfor-high-command
+            message: cmu-tech-govfor-tier-three-announce
             sound: /Audio/_RMC14/AI/commandreport.ogg
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: upgrade
 # ├──[ Tier 3: Force multipliers ]───────────────────────────────────┤
       -
-        - name: US Army Infantry Squad
-          description: Summon a US Army infantry squad to reinforce the operation.
+        - name: cmu-tech-govfor-us-army-infantry
+          description: cmu-tech-govfor-us-army-infantry-desc
           cost: 25
           events:
           - !type:TechPartySpawnEvent
             thirdPartyId: CMUUSArmyReinforcements
           - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: A US Army infantry squad has been dispatched to aid with the operation.
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-us-army-infantry-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: marine
-        - name: FORECON Kill Team
-          description: Summon a FORECON kill team for direct action.
+        - name: cmu-tech-govfor-forecon
+          description: cmu-tech-govfor-forecon-desc
           cost: 30
           events:
           - !type:TechPartySpawnEvent
             thirdPartyId: FORECONKillTeam
           - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: A FORECON kill team has been dispatched to eliminate high-value targets.
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-forecon-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: weapon
-        - name: Unlock Tier 4
-          description: Transitions the tree to another tier.
+        - name: cmu-tech-tier-four
+          description: cmu-tech-tier-unlock-desc
           cost: 5
           events:
           - !type:TechUnlockTierEvent
             tier: 4
           - !type:TechAnnounceEvent
-            author: GOVFOR HIGH COMMAND
-            message: "PRIORITY NOTICE: READINESS POSTURE LEVEL 4. Theatre command has declared a critical situation in the operational area. All remaining assets are released. Weapons free. Evacuation may be authorised at the commanding officer's discretion.
-
-              By order of Theatre Command. God speed."
+            author: cmu-tech-author-govfor-high-command
+            message: cmu-tech-govfor-tier-four-announce
             sound: /Audio/_RMC14/AI/commandreport.ogg
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: upgrade
 # ├──[ Tier 4: Capstones ]───────────────────────────────────────────┤
       -
-        - name: Prodigy Armed Repair Team Sierra
-          description: Summon a PART Sierra Squad to the area.
+        - name: cmu-tech-govfor-prodigy-part
+          description: cmu-tech-govfor-prodigy-part-desc
           cost: 45
           events:
           - !type:TechPartySpawnEvent
             thirdPartyId: ProdigyPARTSParty
           - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: A Prodigy Armed Repair Team has been dispatched to aid with the operation.
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-prodigy-part-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
-        - name: US Army 32nd ArmDiv
-          description: Summon a squad from US Army 32nd Armored Division.
+        - name: cmu-tech-govfor-us-army-armored
+          description: cmu-tech-govfor-us-army-armored-desc
           cost: 55
           events:
           - !type:TechPartySpawnEvent
             thirdPartyId: USArmyArmored
           - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: A US Army 32nd Armored Division squad has been dispatched to aid with the operation.
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-govfor-us-army-armored-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
-        - name: AEG-538-KRA "KRAKEN"
-          description: AEGIS experimental phoron warhead, delivered to Requisitions via ASRS. Only purchasable 116 minutes into the operation.
+        - name: cmu-tech-govfor-kraken
+          description: cmu-tech-govfor-kraken-desc
           cost: 30
           timeLock: 115m
           events:
           - !type:TechLogisticsDeliveryEvent
             object: CMUOrbitalCannonWarheadAegis
           - !type:TechAnnounceEvent
-            author: AEGIS R&D DIVISION
-            message: AEG-538-KRA has been authorised for deployment and will be delivered to the Requisitions Department, via ASRS. Handle with extreme care.
+            author: cmu-tech-author-aegis-rnd
+            message: cmu-tech-govfor-kraken-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: nuke

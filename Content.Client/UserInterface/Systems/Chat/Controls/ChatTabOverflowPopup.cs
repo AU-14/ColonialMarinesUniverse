@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Content.Client._CMU14.Interface;
+using Content.Client.CMU14.Interface;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Chat;
 using Robust.Client.Graphics;

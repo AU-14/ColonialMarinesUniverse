@@ -89,7 +89,10 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
                 continue;
 
             if (!InRange(ivId, attachedTo, ivComp.Range))
+            {
                 DetachIV((ivId, ivComp), null, true, false);
+                continue;
+            }
 
             if (time < ivComp.TransferAt)
                 continue;
@@ -110,19 +113,27 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
 
             if (ivComp.Injecting)
             {
-                if (streamSolEnt.Value.Comp.Solution.Volume < streamSolEnt.Value.Comp.Solution.MaxVolume)
+                // CMU14: incompatible or spoiled blood keeps flowing into a full bloodstream so it still causes a reaction
+                if (streamSolEnt.Value.Comp.Solution.Volume < streamSolEnt.Value.Comp.Solution.MaxVolume ||
+                    CMUIsHarmfulTransfusion(pack, attachedTo, bloodstream, packSol))
                     TransferBloodToRecipient(
                         streamSolEnt.Value,
                         packSolEnt.Value,
                         packSol,
                         bloodstream,
                         packComponent.TransferableReagents,
-                        ivComp.TransferAmount);
+                        ivComp.TransferAmount * CMUFlowMultiplier(ivId, pack), // CMU14: pressure bags and plasma flow faster
+                        pack,
+                        attachedTo);
             }
             else
             {
                 if (packSol.Volume < packSol.MaxVolume)
+                {
+                    var cmuWasEmpty = packSol.Volume <= FixedPoint2.Zero; // CMU14
                     TransferReferenceBlood(packSolEnt.Value, streamSolEnt.Value, streamSol, bloodstream, ivComp.TransferAmount);
+                    CMUOnBloodDrawn(pack, attachedTo, cmuWasEmpty); // CMU14: label the pack with the donor's blood type
+                }
             }
 
             Dirty(ivId, ivComp);
@@ -137,7 +148,10 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
                 continue;
 
             if (!InRange(packId, attachedTo, packComp.Range))
+            {
                 DetachPack((packId, packComp), null, true, false);
+                continue;
+            }
 
             if (time < packComp.TransferAt)
                 continue;
@@ -152,19 +166,27 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
 
             if (packComp.Injecting)
             {
-                if (streamSolEnt.Value.Comp.Solution.Volume < streamSolEnt.Value.Comp.Solution.MaxVolume)
+                // CMU14: incompatible or spoiled blood keeps flowing into a full bloodstream so it still causes a reaction
+                if (streamSolEnt.Value.Comp.Solution.Volume < streamSolEnt.Value.Comp.Solution.MaxVolume ||
+                    CMUIsHarmfulTransfusion(packId, attachedTo, bloodstream, packSol))
                     TransferBloodToRecipient(
                         streamSolEnt.Value,
                         packSolEnt.Value,
                         packSol,
                         bloodstream,
                         packComp.TransferableReagents,
-                        packComp.TransferAmount);
+                        packComp.TransferAmount * CMUFlowMultiplier(null, packId), // CMU14: squeezing and plasma flow faster
+                        packId,
+                        attachedTo);
             }
             else
             {
                 if (packSol.Volume < packSol.MaxVolume)
+                {
+                    var cmuWasEmpty = packSol.Volume <= FixedPoint2.Zero; // CMU14
                     TransferReferenceBlood(packSolEnt.Value, streamSolEnt.Value, streamSol, bloodstream, packComp.TransferAmount);
+                    CMUOnBloodDrawn(packId, attachedTo, cmuWasEmpty); // CMU14: label the pack with the donor's blood type
+                }
             }
 
             Dirty(packId, packComp);
@@ -178,7 +200,10 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
                 continue;
 
             if (!InRange(dialysisId, attachedTo, dialysisComp.Range))
+            {
                 DetachDialysis((dialysisId, dialysisComp), null, true, false);
+                continue;
+            }
 
             if (time < dialysisComp.TransferAt)
                 continue;
@@ -209,6 +234,8 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
             if (TryComp(attachedTo, out BloodstreamComponent? bloodstreamComp))
                 _bloodstream.TryRegulateBloodLevel((attachedTo, bloodstreamComp), dialysisComp.BloodRemovalCost, referenceFactor: 0f);
 
+            CMUOnDialysisTick(attachedTo); // CMU14: dialysis filters saline back out to real blood
+
             _powerCell.TryUseActivatableCharge(dialysisId);
 
             Dirty(dialysisId, dialysisComp);
@@ -237,9 +264,14 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
         Solution sourceSolution,
         BloodstreamComponent bloodstream,
         string[] transferableReagents,
-        FixedPoint2 amount)
+        FixedPoint2 amount,
+        EntityUid pack, // CMU14
+        EntityUid recipient) // CMU14
     {
-        amount = FixedPoint2.Min(amount, destination.Comp.Solution.AvailableVolume);
+        // CMU14: harmful blood is destroyed rather than added, so it isn't capped by the room left in the bloodstream
+        if (!CMUIsHarmfulTransfusion(pack, recipient, bloodstream, sourceSolution))
+            amount = FixedPoint2.Min(amount, destination.Comp.Solution.AvailableVolume);
+
         if (amount <= FixedPoint2.Zero)
             return;
 
@@ -249,6 +281,14 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
         var transferred = sourceSolution.SplitSolutionWithOnly(amount, transferablePrototypes);
         if (transferred.Volume <= FixedPoint2.Zero)
             return;
+
+        // CMU14: plasma and saline become blood volume, and mismatched blood types are destroyed
+        CMUProcessTransfusion(pack, recipient, bloodstream, transferred);
+        if (transferred.Volume <= FixedPoint2.Zero)
+        {
+            Dirty(source);
+            return;
+        }
 
         // Blood packs do not model compatibility yet. Convert matching donor blood IDs (including DNA data)
         // to the recipient's reference IDs so they restore blood volume instead of metabolizing as foreign blood.
@@ -261,6 +301,11 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
             transferred.RemoveReagent(referenceReagent, quantity, ignoreReagentData: true);
             transferred.AddReagent(referenceReagent, quantity);
         }
+
+        // CMU14: whatever doesn't fit after harmful blood was destroyed goes back into the pack
+        var overflow = transferred.Volume - destination.Comp.Solution.AvailableVolume;
+        if (overflow > FixedPoint2.Zero)
+            _solutionContainer.TryAddSolution(source, transferred.SplitSolution(overflow));
 
         if (!_solutionContainer.TryAddSolution(destination, transferred))
             _solutionContainer.TryAddSolution(source, transferred);

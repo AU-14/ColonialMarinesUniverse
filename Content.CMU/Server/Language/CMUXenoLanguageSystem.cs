@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server._RMC14.Language.Systems;
+using Content.Shared.CMU14.Threats.Mobs.Wendigo.Lab;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Language;
 using Content.Shared._RMC14.Language.Components;
@@ -94,7 +95,8 @@ public sealed partial class CMUXenoLanguageSystem : EntitySystem
     private bool ShouldUseEnglish(EntityUid uid)
     {
         return IsHivebrokenXeno(uid) ||
-               _hive.GetHive(uid) is { Comp.Corrupted: true };
+               _hive.GetHive(uid) is { Comp.Corrupted: true } ||
+               HasComp<CMUWendigoLabMadeComponent>(uid); // Lab Wendigos keep their human speech.
     }
 
     private bool IsHivebrokenXeno(EntityUid uid)

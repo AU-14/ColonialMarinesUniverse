@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "license": "CC-BY-SA-4.0",
+  "copyright": "Composed from unchanged source layers; original creators and per-image licenses are recorded in Content.CMU/Resources/Models/CMU14/Garrison/SOURCES_EQUIPMENT_REFERENCES.json.",
+  "states": [
+    {
+      "name": "CMU3DAU14TentBigFoldedSurgicalWorldCloud"
+    },
+    {
+      "name": "CMU3DCMBootsBlackFilledWorldCloud"
+    },
+    {
+      "name": "CMU3DCMBootsBrownFilledWorldCloud"
+    },
+    {
+      "name": "CMU3DRMCBootsVanBandolierWorldCloud"
+    },
+    {
+      "name": "CMU3DStandingASRSTerminal"
+    },
+    {
+      "name": "CMU3DCombatBootsCloud"
+    },
+    {
+      "name": "CMU3DBlackShoesCloud"
+    },
+    {
+      "name": "CMU3DFieldCMEntrenchingToolCloud"
+    },
+    {
+      "name": "CMU3DFoodRiceEggCloud"
+    },
+    {
+      "name": "CMU3DFoodRicePuddingCloud"
+    },
+    {
+      "name": "CMU3DFoodSaladKimchiCloud"
+    },
+    {
+      "name": "CMU3DFoodSoupBisqueCloud"
+    },
+    {
+      "name": "CMU3DFoodSoupChiliHotCloud"
+    },
+    {
+      "name": "CMU3DVehicleSupplyConsoleCloud"
+    },
+    {
+      "name": "CMU3DSensorComputer"
+    },
+    {
+      "name": "CMU3DBookHowToCookForFortySpacemanPrintedSmallCloud"
+    },
+    {
+      "name": "CMU3DFullBloodPack"
+    },
+    {
+      "name": "CMU3DIVStand"
+    },
+    {
+      "name": "CMU3DMappingComputer"
+    },
+    {
+      "name": "CMU3DMPSComputer"
+    },
+    {
+      "name": "CMU3DSensorComputerWide"
+    },
+    {
+      "name": "CMU3DVendorWYGuardCloud"
+    },
+    {
+      "name": "CMU3DVendorBoozeCloud"
+    },
+    {
+      "name": "CMU3DVendorCassettesCloud"
+    }
+  ]
+}

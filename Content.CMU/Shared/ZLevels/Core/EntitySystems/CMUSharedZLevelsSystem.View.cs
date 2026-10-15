@@ -70,13 +70,13 @@ public abstract partial class CMUSharedZLevelsSystem
             ent.Comp.FaintUp = false;
             DirtyField(ent, ent.Comp, nameof(CMUZLevelViewerComponent.LookUp));
             DirtyField(ent, ent.Comp, nameof(CMUZLevelViewerComponent.FaintUp));
-            _popup.PopupClient(Loc.GetString("cmu-zlevel-look-up-disabled"), ent, ent, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-zlevel-look-up-disabled"), ent, ent, PopupType.SmallCaution);
             return;
         }
 
         if (HasComp<XenoNestedComponent>(ent))
         {
-            _popup.PopupClient(Loc.GetString("cmu-zlevel-look-up-nested"), ent, ent, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-zlevel-look-up-nested"), ent, ent, PopupType.SmallCaution);
             return;
         }
 
@@ -86,14 +86,14 @@ public abstract partial class CMUSharedZLevelsSystem
             // and simply draws nothing while one is overhead, so the mode can stay latched while moving.
             ent.Comp.FaintUp = true;
             DirtyField(ent, ent.Comp, nameof(CMUZLevelViewerComponent.FaintUp));
-            _popup.PopupClient(Loc.GetString("cmu-zlevel-faint-up-enabled"), ent, ent, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-zlevel-faint-up-enabled"), ent, ent, PopupType.SmallCaution);
             return;
         }
 
         // Faint -> full look up (original gates apply; on failure we stay in faint mode).
         if (HasOpaqueAbove(ent))
         {
-            _popup.PopupClient(Loc.GetString("cmu-zlevel-look-up-fail"), ent, ent, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-zlevel-look-up-fail"), ent, ent, PopupType.SmallCaution);
             return;
         }
 
@@ -103,7 +103,7 @@ public abstract partial class CMUSharedZLevelsSystem
         var ev = new CMUZLevelLookUpEnabledEvent();
         RaiseLocalEvent(ent, ev);
 
-        _popup.PopupClient(Loc.GetString("cmu-zlevel-look-up-enabled"), ent, ent, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("cmu-zlevel-look-up-enabled"), ent, ent, PopupType.SmallCaution);
     }
 
     public bool TryDisableLookUp(EntityUid uid)
@@ -253,6 +253,9 @@ public abstract partial class CMUSharedZLevelsSystem
         if (offset == 0)
             return false;
 
+        if (TryFindSourceZStairOpening(sourceMap, offset, from, to, out opening))
+            return true;
+
         var openingMap = offset < 0 ? sourceMap : targetMap;
         var openingGrid = openingMap;
         _movementDeckCandidates.Clear();
@@ -304,7 +307,8 @@ public abstract partial class CMUSharedZLevelsSystem
         {
             var openingCenter = _transform.ToMapCoordinates(_map.ToCenterCoordinates(openingGrid, tile, grid)).Position;
             if (_map.TryFindGridAt(openingMap, openingCenter, out var surface, out var surfaceGrid) &&
-                !CMUZLevelOpeningCache.IsOpeningTile(surface, surfaceGrid, openingCenter, _map, TilDefMan))
+                !CMUZLevelOpeningCache.IsOpeningTile(surface, surfaceGrid, openingCenter, _map, TilDefMan) &&
+                !TryFindZStairOpening(openingMap, sourceMap, openingGrid, grid, tile, offset, out openingCenter))
             {
                 return false;
             }
@@ -430,6 +434,99 @@ public abstract partial class CMUSharedZLevelsSystem
                 tMaxY += tDeltaY;
             }
         }
+    }
+
+    private bool TryFindSourceZStairOpening(
+        EntityUid sourceMap,
+        int offset,
+        Vector2 from,
+        Vector2 to,
+        out Vector2 opening)
+    {
+        opening = default;
+
+        var delta = to - from;
+        var lengthSquared = delta.LengthSquared();
+        if (lengthSquared <= 0.001f)
+            return false;
+
+        var query = EntityQueryEnumerator<CMUZLevelStairsComponent, TransformComponent>();
+        while (query.MoveNext(out var stairUid, out var stairs, out var xform))
+        {
+            if (xform.MapUid != sourceMap ||
+                stairs.Offset != offset)
+            {
+                continue;
+            }
+
+            var requiredDelta = RequiredZStairDelta(stairs);
+            var candidate = _transform.GetWorldPosition(stairUid) + new Vector2(requiredDelta.X, requiredDelta.Y);
+            var progress = Vector2.Dot(candidate - from, delta) / lengthSquared;
+            if (progress is < 0f or > 1f)
+                continue;
+
+            var closest = from + delta * progress;
+            if (Vector2.DistanceSquared(candidate, closest) > 0.25f)
+                continue;
+
+            opening = candidate;
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool TryFindZStairOpening(
+        EntityUid openingMap,
+        EntityUid sourceMap,
+        EntityUid openingGridUid,
+        MapGridComponent grid,
+        Vector2i tile,
+        int offset,
+        out Vector2 openingCenter)
+    {
+        openingCenter = default;
+
+        var query = EntityQueryEnumerator<CMUZLevelStairsComponent, TransformComponent>();
+        while (query.MoveNext(out var stairUid, out var stairs, out var xform))
+        {
+            var onOpeningMap = xform.MapUid == openingMap;
+            var onSourceMap = xform.MapUid == sourceMap;
+            if (!onOpeningMap && !onSourceMap)
+                continue;
+
+            var stairTile = _map.WorldToTile(openingGridUid, grid, _transform.GetWorldPosition(stairUid));
+            if (onOpeningMap && stairs.Offset == -offset && stairTile == tile ||
+                onSourceMap && stairs.Offset == offset && stairTile + RequiredZStairDelta(stairs) == tile)
+            {
+                openingCenter = _transform.ToMapCoordinates(_map.ToCenterCoordinates(openingGridUid, tile, grid)).Position;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static Vector2i RequiredZStairDelta(CMUZLevelStairsComponent stairs)
+    {
+        var delta = DirectionDelta(stairs.Direction);
+        return stairs.Offset >= 0 ? delta : -delta;
+    }
+
+    private static Vector2i DirectionDelta(Direction direction)
+    {
+        return direction switch
+        {
+            Direction.North => new Vector2i(0, 1),
+            Direction.South => new Vector2i(0, -1),
+            Direction.East => new Vector2i(1, 0),
+            Direction.West => new Vector2i(-1, 0),
+            Direction.NorthEast => new Vector2i(1, 1),
+            Direction.NorthWest => new Vector2i(-1, 1),
+            Direction.SouthEast => new Vector2i(1, -1),
+            Direction.SouthWest => new Vector2i(-1, -1),
+            _ => Vector2i.Zero,
+        };
     }
 
     /// <summary>

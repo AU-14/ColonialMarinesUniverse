@@ -432,7 +432,7 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
         if (ent.Comp.Broken)
         {
             var msg = Loc.GetString("emplacement-mount-deploy-broken", ("mount", ent));
-            _popup.PopupClient(msg, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -441,14 +441,14 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
         if (_rmcMap.IsTileBlocked(coordinates, CollisionGroup.MidImpassable))
         {
             var msg = Loc.GetString("rmc-sentry-need-open-area", ("sentry", ent));
-            _popup.PopupClient(msg, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
             return false;
         }
 
         if (_rmcMap.HasAnchoredEntityEnumerator<WeaponMountComponent>(coordinates))
         {
             var msg = Loc.GetString("rmc-sentry-need-open-area", ("sentry", ent));
-            _popup.PopupClient(msg, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -677,7 +677,7 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
             }
         }
 
-        if (checking.HasComponent<BarricadeComponent>())
+        if (checking.HasComp<BarricadeComponent>(_componentFactory))
         {
             foreach (var mount in mounts)
             {
@@ -905,7 +905,7 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
         _damage.TryChangeDamage(ent, args.Args.Damage);
         if (ent.Comp.MountedEntity != null)
         {
-            _popup.PopupClient(Loc.GetString("emplacement-mounted-weapon-overheated",
+            _popup.PopupEntity(Loc.GetString("emplacement-mounted-weapon-overheated",
                     ("weapon", ent.Comp.MountedEntity.Value)),
                 ent,
                 ent.Comp.User,
@@ -984,7 +984,7 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
 
         if (popup)
         {
-            _popup.PopupClient(Loc.GetString("emplacement-mount-need-hands-free"),
+            _popup.PopupEntity(Loc.GetString("emplacement-mount-need-hands-free"),
                 mount,
                 user,
                 PopupType.MediumCaution);

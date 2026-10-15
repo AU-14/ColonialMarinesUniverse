@@ -710,3 +710,14 @@
     - id: RMCSpeedLoaderMateba
       amount: 6
     - id: RMCWeaponRevolverMatebaSpecialNoStun
+
+- type: entity
+  parent: RMCBeltHolsterRevolver
+  id: CMUBeltHolsterRevolverM2019Fill
+  suffix: Filled, M2019
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSpeedLoader357
+      amount: 6
+    - id: AU14WeaponRevolverM2019

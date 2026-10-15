@@ -2,26 +2,99 @@
   parent: RMCWeaponRifleXM40
   id: CMUWeaponRifleXM40Raider
   name: XM40 assault rifle
-  suffix: CMU
-  description: An experimental pre-M41A pattern rifle that never saw wide adoption. This one fell off a marine logistics convoy and into free company hands. Integrated suppressor, burst-fire, accepts M41A MK2 and proprietary magazines.
+  suffix: CMU, Raider
+  description: The leader's old service rifle, carried out the door the day they deserted. The proprietary HEAP stock ran out years ago; it is fed standard M41A MK2 magazines now, and the finish is worn down to bare metal.
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMMagazineRifleM54C
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazineRifleM54C
+          - CMMagazineRifleM54CAP
+          - CMMagazineRifleM54CExt
+          - RMCMagazineRifleXM40AP
+          - RMCMagazineRifleXM40HEAP
 
 - type: entity
-  parent: RMCJumpsuitMarsocWebbingBuckshot
-  id: CMUJumpsuitRaiderWebbingBuckshot
+  parent: RMCJumpsuitMarsoc
+  id: CMUJumpsuitRaider
   name: raider fatigues
   suffix: CMU
-  description: Black combat fatigues, stripped of insignia and restitched for a raiding outfit. The buckshot webbing comes pre-loaded.
+  description: Black special-operations fatigues, insignia cut away and the holes patched with whatever was to hand. They have been through more than one owner.
 
 - type: entity
-  parent: RMCArmorMARSOCXM40
-  id: CMUArmorRaiderXM40
+  parent: RMCArmorMARSOC
+  id: CMUArmorRaider
   name: raider plate carrier
   suffix: CMU
-  description: A heavily customized suit of M3 pattern armor, repainted and re-stitched until nothing points back at its original owners. Comes stuffed with looted HEAP magazines.
+  description: What is left of a suit of marine raider armour. The ceramic inserts were sold off long ago and replaced with scrap plating, so it now stops less than an off-the-rack M3.
+  components:
+  - type: CMArmor
+    melee: 15
+    bullet: 15
+    bio: 10
+    explosionArmor: 15
+
+- type: entity
+  parent: RMCArmorHelmetMARSOC
+  id: CMUArmorHelmetRaider
+  name: raider helmet
+  suffix: CMU
+  description: A scuffed SOF operator helmet with the optics pulled and pawned. The shell is cracked along one side and held together with tape.
+  components:
+  - type: CMArmor
+    melee: 15
+    bullet: 15
+    bio: 10
 
 - type: entity
   parent: RMCSatchelMARSOC
   id: CMUSatchelRaider
   name: raider combat pack
   suffix: CMU
-  description: A streamlined combat pack of military make, looted honest and paid for in blood. It has outlived at least three previous owners.
+  description: A streamlined military combat pack with the unit patches burned off. Kept empty on the way in; it leaves full.
+
+# ├──[ POUCHES ]─────────────────────────────────────────────────────┤
+- type: entity
+  parent: RMCPouchTools
+  id: CMUPouchToolsRaiderFill
+  suffix: CMU, Raider, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMCrowbar
+    - id: CMScrewdriver
+    - id: CMWirecutter
+    - id: CMMultitool
+
+# ├──[ COMMS ]───────────────────────────────────────────────────────┤
+- type: entity
+  parent: AU14EncryptionKey
+  id: CMUEncryptionKeyRaiders
+  name: raider encryption key
+  suffix: CMU
+  description: A hand-flashed encryption key cut to a private pirate net. The colony band is left open so the crew can listen in on their marks.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioRaiders
+    - Colony
+    defaultChannel: radioRaiders
+
+- type: entity
+  parent: CMHeadset
+  id: CMUHeadsetRaider
+  name: raider headset
+  suffix: CMU
+  description: A battered headset scavenged from a dead operator, rewired for a free company's private net.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMUEncryptionKeyRaiders

@@ -369,7 +369,10 @@
         ents: []
         showEnts: False
         occludes: True
+  # cmu edit start
   - type: CriminalRecordsConsole
+    securityChannel: radioCMB
+  # cmu edit end
   - type: UserInterface
     interfaces:
       enum.CriminalRecordsConsoleKey.Key:

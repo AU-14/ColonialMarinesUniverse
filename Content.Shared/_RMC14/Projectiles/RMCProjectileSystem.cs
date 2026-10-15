@@ -172,7 +172,10 @@ public sealed partial class RMCProjectileSystem : EntitySystem
 
         var accuracy = projectile.Comp.Accuracy;
         var targetCoords = _transform.GetMoverCoordinates(args.OtherEntity);
-        var distance = (targetCoords.Position - projectile.Comp.ShotFrom.Value.Position).Length();
+        // CMU14: shot origins and targets may belong to different grids on the same map.
+        // var distance = (targetCoords.Position - projectile.Comp.ShotFrom.Value.Position).Length();
+        if (!targetCoords.TryDistance(EntityManager, _transform, projectile.Comp.ShotFrom.Value, out var distance))
+            return;
 
         foreach (var threshold in projectile.Comp.Thresholds)
         {

@@ -55,7 +55,9 @@
   children:
   - RMCSurvivor
   - RMCMedical
-  - AU14MedicalV2
+  # cmu edit start: Medical V2 is replaced by the CMU Medical guide
+  # - AU14MedicalV2
+  # cmu edit end
   - RMCRequisitions
   - RMCIntel
   - RMCGuideRoleMilitaryPolice
@@ -83,12 +85,14 @@
   name: "Medical"
   text: "/ServerInfo/Guidebook/_RMC14/Guides/RMCMedical.xml"
 
-- type: guideEntry
-  parent: RMC
-  id: AU14MedicalV2
-  priority: 2
-  name: "Medical V2"
-  text: "/ServerInfo/Guidebook/_RMC14/Guides/AU14MedicalV2.xml"
+# cmu edit start: Medical V2 is replaced by the CMU Medical guide
+# - type: guideEntry
+#   parent: RMC
+#   id: AU14MedicalV2
+#   priority: 2
+#   name: "Medical V2"
+#   text: "/ServerInfo/Guidebook/_RMC14/Guides/AU14MedicalV2.xml"
+# cmu edit end
 
 - type: guideEntry
   parent: RMC

@@ -425,12 +425,14 @@
     - sprite: _RMC14/Mobs/Customization/human_hair.rsi
       state: hair_scully
 
-- type: marking
-  id: RMCHumanHairNitori
-  bodyPart: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_nitori
+# cmu edit start
+# - type: marking
+#   id: RMCHumanHairNitori
+#   bodyPart: Hair
+#   sprites:
+#     - sprite: _RMC14/Mobs/Customization/human_hair.rsi
+#       state: hair_nitori
+# cmu edit end
 
 - type: marking
   id: RMCHumanHairFlatTopFade

@@ -1,0 +1,16 @@
+<Document>
+  # Xenomorph Cultists
+
+  Not everyone who meets the [textlink="Xenomorphs" link="CMUGuideLoreAliens"] runs from them. Some come to worship them.
+
+  The [bold]Xenomorph cultists[/bold] are colonists who have turned to the Hive, seeing the creatures as something holy, a light to cleanse their rotten colony. They serve its will, help it grow, and bring it the hosts it needs.
+
+  ## The Cult
+  - Cultists hide among ordinary colonists, organized into small, secretive cells. To outsiders they look like anyone else, until they don their robes.
+  - They work alongside the Hive rather than against it, nursing its eggs, guarding its nests and dragging the living back to be used as hosts.
+  - Some carry tools no colonist should have, such as hacked equipment covered in occult symbols and stolen synthetic reset keys that have been illegally modified.
+
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearCultist" Caption="Cultist"/>
+  </Box>
+</Document>

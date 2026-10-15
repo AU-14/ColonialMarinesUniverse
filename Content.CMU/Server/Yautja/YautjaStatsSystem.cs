@@ -8,10 +8,14 @@ using Content.Shared._RMC14.IdentityManagement;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Pulling;
+using Content.Shared._RMC14.Damage;
+using Content.Shared._RMC14.Stamina;
 using Content.Shared._RMC14.StatusEffect;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
+using Content.Shared._RMC14.Vendors;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Actions.Events;
 using Content.Shared.Body;
@@ -41,11 +45,12 @@ namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaStatsSystem : EntitySystem
 {
-    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private NpcFactionSystem _faction = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
     [Dependency] private HumanoidProfileSystem _humanoidProfile = default!;
     [Dependency] private GunIFFSystem _iff = default!;
+    [Dependency] private YautjaAbilitySystem _abilities = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
     [Dependency] private NamingSystem _naming = default!;
@@ -54,6 +59,8 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private TagSystem _tags = default!;
     [Dependency] private YautjaHonorboundAbilitiesSystem _honorboundAbilities = default!;
+    [Dependency] private SharedCMAutomatedVendorSystem _vendors = default!;
+    [Dependency] private YautjaVoiceSystem _voice = default!;
     [Dependency] private SharedEyeSystem _eye = default!;
 
     private const string YautjaSpecies = "Yautja";
@@ -61,17 +68,31 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     private static readonly ProtoId<TagPrototype> StunImmuneTag = "StunImmune";
     private static readonly ProtoId<TagPrototype> SlowImmuneTag = "SlowImmune";
     private static readonly ProtoId<StatusEffectPrototype> UnconsciousStatus = "Unconscious";
+    private const int Cmss13TotalBuyPoints = 50;
     private static readonly Color DreadlocksColor = Color.FromHex("#1a1512");
+    private static readonly Dictionary<string, int> Cmss13YautjaBuyCategoryUses = new()
+    {
+        ["CMUYautjaEssentials"] = 0,
+        ["CMUYautjaArmor"] = 0,
+        ["CMUYautjaPrimary"] = 0,
+        ["CMUYautjaBracer"] = 0,
+        ["CMUYautjaRanged"] = 0,
+        ["CMUYautjaSupport"] = 0,
+        ["CMUYautjaAccessory"] = 0,
+    };
+
     private readonly HashSet<EntityUid> _pendingSkinRandomization = new();
 
     public override void Initialize()
     {
         SubscribeLocalEvent<YautjaComponent, ComponentInit>(OnYautjaInit);
         SubscribeLocalEvent<YautjaComponent, ComponentStartup>(OnYautjaStartup);
+        SubscribeLocalEvent<YautjaComponent, ComponentShutdown>(OnYautjaShutdown);
         SubscribeLocalEvent<YautjaComponent, MapInitEvent>(OnYautjaMapInit);
         SubscribeLocalEvent<YautjaComponent, IdentityChangedEvent>(OnIdentityChanged);
         SubscribeLocalEvent<YautjaComponent, RandomHumanoidSpawnedEvent>(OnRandomHumanoidSpawned);
         SubscribeLocalEvent<YautjaComponent, RMCStatusEffectTimeEvent>(OnStatusEffectTime);
+
         SubscribeLocalEvent<YautjaComponent, KnockDownAttemptEvent>(OnKnockDownAttempt);
         SubscribeLocalEvent<YautjaComponent, DisarmAttemptEvent>(OnDisarmAttempt);
         SubscribeLocalEvent<YautjaComponent, DisarmedEvent>(OnDisarmed, before: [typeof(HandsSystem)]);
@@ -85,6 +106,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         if (IsRegularYautja(ent) && args.Key == UnconsciousStatus)
             args.Duration = TimeSpan.Zero;
     }
+
 
     private void OnKnockDownAttempt(Entity<YautjaComponent> ent, ref KnockDownAttemptEvent args)
     {
@@ -110,6 +132,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     private void OnYautjaInit(Entity<YautjaComponent> ent, ref ComponentInit args)
     {
         ApplyIntrinsicStats(ent);
+        InitializeVendorPoints(ent);
     }
 
     private void OnYautjaStartup(Entity<YautjaComponent> ent, ref ComponentStartup args)
@@ -117,6 +140,14 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         ApplyIntrinsicStats(ent);
         ent.Comp.SkinColorRandomized = false;
         _pendingSkinRandomization.Add(ent);
+        _abilities.GrantActions(ent);
+        _voice.GrantAudioPanelAction(ent);
+    }
+
+    private void OnYautjaShutdown(Entity<YautjaComponent> ent, ref ComponentShutdown args)
+    {
+        _abilities.RemoveActions(ent);
+        _voice.RemoveAudioPanelAction(ent);
     }
 
     private void OnYautjaMapInit(Entity<YautjaComponent> ent, ref MapInitEvent args)
@@ -151,7 +182,8 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         EnsureComp<ParalyzeOnPullAttemptImmuneComponent>(ent);
         EnsureComp<InfectOnPullAttemptImmuneComponent>(ent);
         EnsureComp<YautjaTrophyRecordComponent>(ent);
-        RemComp<StatusIconComponent>(ent);
+        RemComp<StaminaComponent>(ent.Owner);
+        RemComp<RMCStaminaComponent>(ent.Owner);
 
         if (ent.Comp.StunResistance > 0f)
             _rmcStatusEffects.GiveStunResistance(ent, ent.Comp.StunResistance);
@@ -180,8 +212,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
             Dirty(ent, resilience);
         }
 
-        var damageable = EnsureComp<DamageableComponent>(ent);
-        _damageable.SetDamageModifierSetId((ent.Owner, damageable), ent.Comp.DamageModifierSet?.Id);
+        // Yautja damage modifier is in DamageableComponent.DamageModifierSetId.
 
         var melee = EnsureComp<MeleeWeaponComponent>(ent);
         melee.AttackRate = ent.Comp.UnarmedAttackRate;
@@ -214,6 +245,14 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         SetFixedUnknownIdentity(ent);
         SetUnknownIdentity(ent);
         SetUnknownVoice(ent);
+    }
+
+    private void InitializeVendorPoints(Entity<YautjaComponent> ent)
+    {
+        var vendorUser = EnsureComp<CMVendorUserComponent>(ent);
+        _vendors.SetPoints((ent.Owner, vendorUser), Cmss13TotalBuyPoints);
+        _vendors.InitializeChoices((ent.Owner, vendorUser), Cmss13YautjaBuyCategoryUses);
+        _vendors.SetChoiceWhitelist((ent.Owner, vendorUser), new HashSet<string>(Cmss13YautjaBuyCategoryUses.Keys));
     }
 
     public override void Update(float frameTime)
@@ -259,6 +298,9 @@ public sealed partial class YautjaStatsSystem : EntitySystem
 
     private void NormalizeAppearance(Entity<YautjaComponent> ent)
     {
+        if (HasComp<YautjaAppliedProfileComponent>(ent))
+            return;
+
         if (!_humanoidAppearance.TryGetMarkings(
                 ent,
                 HumanoidVisualLayers.Hair,
@@ -298,7 +340,9 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         if (ent.Comp.SkillLevel <= 0)
             return;
 
-        TryComp(ent, out SkillsComponent? skills);
+        if (TryComp(ent, out SkillsComponent? skills) && skills.Preset != null)
+            return;
+
         var toGrant = new Dictionary<EntProtoId<SkillDefinitionComponent>, int>();
         foreach (var skill in _skills.Skills)
         {

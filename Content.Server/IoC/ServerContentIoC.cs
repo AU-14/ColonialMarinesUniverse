@@ -1,5 +1,6 @@
 using Content.Server.CMU14.Administration.Console;
 using Content.Server.CMU14.Diagnostics.Performance;
+using Content.Server.CMU14.Yautja;
 using Content.Server._RMC14.Actions;
 using Content.Server._RMC14.Admin;
 using Content.Server._RMC14.Commendations;
@@ -49,6 +50,8 @@ internal static class ServerContentIoC
     public static void Register(IDependencyCollection deps)
     {
         SharedContentIoC.Register(deps);
+        deps.Register<YautjaClanManager>();
+        deps.Register<YautjaRankManager>();
         deps.Register<IChatManager, ChatManager>();
         deps.Register<ISharedChatManager, ChatManager>();
         deps.Register<IChatSanitizationManager, ChatSanitizationManager>();

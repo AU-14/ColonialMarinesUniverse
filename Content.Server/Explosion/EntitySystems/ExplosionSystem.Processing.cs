@@ -1,3 +1,4 @@
+using Microsoft.Extensions.ObjectPool;
 using System.Numerics;
 using Content.Server.Atmos.EntitySystems;
 using Content.Shared._RMC14.Explosion;
@@ -27,6 +28,9 @@ namespace Content.Server.Explosion.EntitySystems;
 
 public sealed partial class ExplosionSystem
 {
+    private readonly ObjectPool<List<(EntityUid, TransformComponent)>> _tileEntitySnapshots =
+        new DefaultObjectPool<List<(EntityUid, TransformComponent)>>(new DefaultPooledObjectPolicy<List<(EntityUid, TransformComponent)>>());
+
     /// <summary>
     ///     Used to limit explosion processing time. See <see cref="MaxProcessingTime"/>.
     /// </summary>
@@ -55,6 +59,67 @@ public sealed partial class ExplosionSystem
     ///     The explosion currently being processed.
     /// </summary>
     private Explosion? _activeExplosion;
+    private QueuedExplosion? _preparingExplosion;
+    private bool _preparationInvalidated;
+    private ExplosionPreparation? _preparation;
+    private IEnumerator<bool>? _preparationSteps;
+
+    private void CancelPreparation()
+    {
+        _preparationSteps?.Dispose();
+        _preparationSteps = null;
+        _preparation = null;
+        _preparingExplosion = null;
+        _preparationInvalidated = false;
+    }
+
+    private bool AdvancePreparation()
+    {
+        if (_preparationInvalidated && _preparingExplosion is { } restart)
+        {
+            _preparationSteps?.Dispose();
+            _preparation = new ExplosionPreparation();
+            _preparationSteps = PrepareExplosionTiles(restart.Epicenter, restart.Proto.ID,
+                restart.TotalIntensity, restart.Slope, restart.MaxTileIntensity, _preparation).GetEnumerator();
+            _preparationInvalidated = false;
+        }
+        if (_preparingExplosion == null)
+        {
+            if (!_explosionQueue.TryDequeue(out _preparingExplosion)) return true;
+            _queuedExplosions.Remove(_preparingExplosion);
+            var queued = _preparingExplosion;
+            if (!_map.MapExists(queued.Epicenter.MapId))
+            {
+                CancelPreparation();
+                return true;
+            }
+            _preparation = new ExplosionPreparation();
+            _preparationSteps = PrepareExplosionTiles(queued.Epicenter, queued.Proto.ID,
+                queued.TotalIntensity, queued.Slope, queued.MaxTileIntensity, _preparation).GetEnumerator();
+        }
+
+        try
+        {
+            for (var steps = 0; steps < 4096; steps++)
+            {
+                if (steps > 0 && Stopwatch.Elapsed.TotalMilliseconds >= MaxProcessingTime) return false;
+                if (_preparationSteps!.MoveNext()) continue;
+                var queued = _preparingExplosion;
+                var result = _preparation!.Result;
+                CancelPreparation();
+                _activeExplosion = SpawnExplosion(queued, result);
+                return true;
+            }
+            return false;
+        }
+        catch
+        {
+            CancelPreparation();
+            _nodeGroupSystem.PauseUpdating = false;
+            _pathfindingSystem.PauseUpdating = false;
+            throw;
+        }
+    }
 
     /// <summary>
     /// This list is used when raising <see cref="BeforeExplodeEvent"/> to avoid allocating a new list per event.
@@ -70,6 +135,15 @@ public sealed partial class ExplosionSystem
 
     private void OnMapRemoved(MapRemovedEvent ev)
     {
+        if (_preparingExplosion?.Epicenter.MapId == ev.MapId)
+        {
+            CancelPreparation();
+            if (_activeExplosion == null)
+            {
+                _nodeGroupSystem.PauseUpdating = false;
+                _pathfindingSystem.PauseUpdating = false;
+            }
+        }
         // If a map was deleted, check the explosion currently being processed belongs to that map.
         if (_activeExplosion?.Epicenter.MapId != ev.MapId)
             return;
@@ -85,12 +159,11 @@ public sealed partial class ExplosionSystem
     /// </summary>
     public override void Update(float frameTime)
     {
-        if (_activeExplosion == null && _explosionQueue.Count == 0)
+        if (_activeExplosion == null && _preparingExplosion == null && _explosionQueue.Count == 0)
             // nothing to do
             return;
 
         Stopwatch.Restart();
-        var x = Stopwatch.Elapsed.TotalMilliseconds;
 
         var tilesRemaining = TilesPerTick;
         while (tilesRemaining > 0 && MaxProcessingTime > Stopwatch.Elapsed.TotalMilliseconds)
@@ -98,16 +171,8 @@ public sealed partial class ExplosionSystem
             // if there is no active explosion, get a new one to process
             if (_activeExplosion == null)
             {
-                // EXPLOSION TODO allow explosion spawning to be interrupted by time limit. In the meantime, ensure that
-                // there is at-least 1ms of time left before creating a new explosion
-                if (MathF.Max(MaxProcessingTime - 1, 0.1f) < Stopwatch.Elapsed.TotalMilliseconds)
-                    break;
-
-                if (!_explosionQueue.TryDequeue(out var queued))
-                    break;
-
-                _queuedExplosions.Remove(queued);
-                _activeExplosion = SpawnExplosion(queued);
+                if (!AdvancePreparation()) break;
+                if (_activeExplosion == null && _explosionQueue.Count == 0) break;
 
                 // explosion spawning can be null if something somewhere went wrong. (e.g., negative explosion
                 // intensity).
@@ -169,7 +234,7 @@ public sealed partial class ExplosionSystem
             return;
         }
 
-        if (_explosionQueue.Count > 0)
+        if (_preparingExplosion != null || _explosionQueue.Count > 0)
             return;
 
         //wakey wakey
@@ -228,69 +293,77 @@ public sealed partial class ExplosionSystem
 
         // get the entities on a tile. Note that we cannot process them directly, or we get
         // enumerator-changed-while-enumerating errors.
-        List<(EntityUid, TransformComponent)> list = new();
-        var state = (list, processed, EntityManager.TransformQuery);
-
-        // get entities:
-        lookup.DynamicTree.QueryAabb(ref state, GridQueryCallback, gridBox, true);
-        lookup.StaticTree.QueryAabb(ref state, GridQueryCallback, gridBox, true);
-        lookup.SundriesTree.QueryAabb(ref state, GridQueryCallback, gridBox, true);
-        lookup.StaticSundriesTree.QueryAabb(ref state, GridQueryCallback, gridBox, true);
-
-        // process those entities
-        foreach (var (uid, xform) in list)
+        var list = _tileEntitySnapshots.Get();
+        try
         {
-            ProcessEntity(uid, epicenter, damage, throwForce, id, xform, fireStacks, cause);
-        }
+            var state = (list, processed, EntityManager.TransformQuery);
 
-        // heat the atmosphere
-        if (temperature != null)
-        {
-            _atmosphere.HotspotExpose(grid.Owner, tile, temperature.Value, currentIntensity, cause, true);
-        }
+            // get entities:
+            lookup.DynamicTree.QueryAabb(ref state, GridQueryCallback, gridBox, true);
+            lookup.StaticTree.QueryAabb(ref state, GridQueryCallback, gridBox, true);
+            lookup.SundriesTree.QueryAabb(ref state, GridQueryCallback, gridBox, true);
+            lookup.StaticSundriesTree.QueryAabb(ref state, GridQueryCallback, gridBox, true);
 
-        // We process anchored entities after the AABB lookup for performance reasons.
-        // The AABB lookup cannot performantly check if each anchored entity is on this tile without a bunch of wasted CPU time
-        // To get around this, we just skip them during the first loop.
-        // This prevents us from hitting walls with a greater intensity than intended.
-        // Walls and reinforced walls will break into girders. These girders will also be considered turf-blocking for
-        // the purposes of destroying floors. Again, ideally the process of damaging an entity should somehow return
-        // information about the entities that were spawned as a result, but without that information we just have to
-        var tileBlocked = false;
-        foreach (var entity in _anchored)
-        {
-            processed.Add(entity);
-            ProcessEntity(entity, epicenter, damage, throwForce, id, null, fireStacks, cause);
-            tileBlocked |= IsBlockingTurf(entity);
-        }
-        _anchored.Clear();
+            // process those entities
+            foreach (var (uid, xform) in list)
+            {
+                ProcessEntity(uid, epicenter, damage, throwForce, id, xform, fireStacks, cause);
+            }
 
-        if (!tileBlocked)
-            Spawn(ShockwaveSmoke, new EntityCoordinates(grid.Owner, tile));
+            // heat the atmosphere
+            if (temperature != null)
+            {
+                _atmosphere.HotspotExpose(grid.Owner, tile, temperature.Value, currentIntensity, cause, true);
+            }
 
-        // Next, we get the intersecting entities AGAIN, but purely for throwing. This way, glass shards spawned from
-        // windows will be flung outwards, and not stay where they spawned. This is however somewhat unnecessary, and a
-        // prime candidate for computational cost-cutting. Alternatively, it would be nice if there was just some sort
-        // of spawned-on-destruction event that could be used to automatically assemble a list of new entities that need
-        // to be thrown.
-        //
-        // All things considered, until entity spawning & destruction is sped up, this isn't all that time consuming.
-        // And throwing is disabled for nukes anyways.
-        if (throwForce <= 0)
+            // We process anchored entities after the AABB lookup for performance reasons.
+            // The AABB lookup cannot performantly check if each anchored entity is on this tile without a bunch of wasted CPU time
+            // To get around this, we just skip them during the first loop.
+            // This prevents us from hitting walls with a greater intensity than intended.
+            // Walls and reinforced walls will break into girders. These girders will also be considered turf-blocking for
+            // the purposes of destroying floors. Again, ideally the process of damaging an entity should somehow return
+            // information about the entities that were spawned as a result, but without that information we just have to
+            var tileBlocked = false;
+            foreach (var entity in _anchored)
+            {
+                processed.Add(entity);
+                ProcessEntity(entity, epicenter, damage, throwForce, id, null, fireStacks, cause);
+                tileBlocked |= IsBlockingTurf(entity);
+            }
+            _anchored.Clear();
+
+            if (!tileBlocked)
+                Spawn(ShockwaveSmoke, new EntityCoordinates(grid.Owner, tile));
+
+            // Next, we get the intersecting entities AGAIN, but purely for throwing. This way, glass shards spawned from
+            // windows will be flung outwards, and not stay where they spawned. This is however somewhat unnecessary, and a
+            // prime candidate for computational cost-cutting. Alternatively, it would be nice if there was just some sort
+            // of spawned-on-destruction event that could be used to automatically assemble a list of new entities that need
+            // to be thrown.
+            //
+            // All things considered, until entity spawning & destruction is sped up, this isn't all that time consuming.
+            // And throwing is disabled for nukes anyways.
+            if (throwForce <= 0)
+                return !tileBlocked;
+
+            list.Clear();
+            lookup.DynamicTree.QueryAabb(ref state, GridQueryCallback, gridBox, true);
+            lookup.SundriesTree.QueryAabb(ref state, GridQueryCallback, gridBox, true);
+
+            foreach (var (uid, xform) in list)
+            {
+                // Here we only throw, no dealing damage. Containers n such might drop their entities after being destroyed, but
+                // they should handle their own damage pass-through, with their own damage reduction calculation.
+                ProcessEntity(uid, epicenter, null, throwForce, id, xform, null, cause);
+            }
+
             return !tileBlocked;
-
-        list.Clear();
-        lookup.DynamicTree.QueryAabb(ref state, GridQueryCallback, gridBox, true);
-        lookup.SundriesTree.QueryAabb(ref state, GridQueryCallback, gridBox, true);
-
-        foreach (var (uid, xform) in list)
-        {
-            // Here we only throw, no dealing damage. Containers n such might drop their entities after being destroyed, but
-            // they should handle their own damage pass-through, with their own damage reduction calculation.
-            ProcessEntity(uid, epicenter, null, throwForce, id, xform, null, cause);
         }
-
-        return !tileBlocked;
+        finally
+        {
+            list.Clear();
+            _tileEntitySnapshots.Return(list);
+        }
     }
 
     private static bool GridQueryCallback(
@@ -328,33 +401,41 @@ public sealed partial class ExplosionSystem
     {
         var gridBox = Box2.FromDimensions(tile * DefaultTileSize, new Vector2(DefaultTileSize, DefaultTileSize));
         var worldBox = spaceMatrix.TransformBox(gridBox);
-        var list = new List<(EntityUid, TransformComponent)>();
-        var state = (list, processed, invSpaceMatrix, lookup.Owner, EntityManager.TransformQuery, gridBox, _transformSystem);
-
-        // get entities:
-        lookup.Comp.DynamicTree.QueryAabb(ref state, SpaceQueryCallback, worldBox, true);
-        lookup.Comp.StaticTree.QueryAabb(ref state, SpaceQueryCallback, worldBox, true);
-        lookup.Comp.SundriesTree.QueryAabb(ref state, SpaceQueryCallback, worldBox, true);
-        lookup.Comp.StaticSundriesTree.QueryAabb(ref state, SpaceQueryCallback, worldBox, true);
-
-        foreach (var (uid, xform) in state.Item1)
+        var list = _tileEntitySnapshots.Get();
+        try
         {
-            processed.Add(uid);
-            ProcessEntity(uid, epicenter, damage, throwForce, id, xform, fireStacks, cause);
+            var state = (list, processed, invSpaceMatrix, lookup.Owner, EntityManager.TransformQuery, gridBox, _transformSystem);
+
+            // get entities:
+            lookup.Comp.DynamicTree.QueryAabb(ref state, SpaceQueryCallback, worldBox, true);
+            lookup.Comp.StaticTree.QueryAabb(ref state, SpaceQueryCallback, worldBox, true);
+            lookup.Comp.SundriesTree.QueryAabb(ref state, SpaceQueryCallback, worldBox, true);
+            lookup.Comp.StaticSundriesTree.QueryAabb(ref state, SpaceQueryCallback, worldBox, true);
+
+            foreach (var (uid, xform) in state.Item1)
+            {
+                processed.Add(uid);
+                ProcessEntity(uid, epicenter, damage, throwForce, id, xform, fireStacks, cause);
+            }
+
+            if (throwForce <= 0)
+                return;
+
+            // Also, throw any entities that were spawned as shrapnel. Compared to entity spawning & destruction, this extra
+            // lookup is relatively minor computational cost, and throwing is disabled for nukes anyways.
+            list.Clear();
+            lookup.Comp.DynamicTree.QueryAabb(ref state, SpaceQueryCallback, worldBox, true);
+            lookup.Comp.SundriesTree.QueryAabb(ref state, SpaceQueryCallback, worldBox, true);
+
+            foreach (var (uid, xform) in list)
+            {
+                ProcessEntity(uid, epicenter, null, throwForce, id, xform, fireStacks, cause);
+            }
         }
-
-        if (throwForce <= 0)
-            return;
-
-        // Also, throw any entities that were spawned as shrapnel. Compared to entity spawning & destruction, this extra
-        // lookup is relatively minor computational cost, and throwing is disabled for nukes anyways.
-        list.Clear();
-        lookup.Comp.DynamicTree.QueryAabb(ref state, SpaceQueryCallback, worldBox, true);
-        lookup.Comp.SundriesTree.QueryAabb(ref state, SpaceQueryCallback, worldBox, true);
-
-        foreach (var (uid, xform) in list)
+        finally
         {
-            ProcessEntity(uid, epicenter, null, throwForce, id, xform, fireStacks, cause);
+            list.Clear();
+            _tileEntitySnapshots.Return(list);
         }
     }
 
@@ -511,6 +592,7 @@ public sealed partial class ExplosionSystem
             || EntityManager.IsQueuedForDeletion(uid)
             || HasComp<VehicleComponent>(uid)
             || HasComp<GridVehicleMoverComponent>(uid)
+            || CMUIsExplosionImmovable(uid) // CMU14
             || !_physicsQuery.TryGetComponent(uid, out var physics)
             || physics.BodyType != BodyType.Dynamic)
             return;
@@ -543,6 +625,11 @@ public sealed partial class ExplosionSystem
         if (_tileDefinitionManager[tileRef.Tile.TypeId] is not ContentTileDefinition tileDef || tileDef.Indestructible)
             return;
 
+        // cmu edit start: tiles marked breakIgnoresVacuum (multi-Z grates) break even when vacuums are disabled
+        if (tileDef.BreakIgnoresVacuum)
+            canCreateVacuum = true;
+        else
+        // cmu edit end
         if (!CanCreateVacuum)
             canCreateVacuum = false;
         else if (tileDef.MapAtmosphere)
@@ -572,6 +659,9 @@ public sealed partial class ExplosionSystem
         if (tileDef.TileId == tileRef.Tile.TypeId)
             return;
 
+        // cmu edit start: roll the destroyed tile's drops in its place
+        CMUSpawnTileDestroyDrops(tileRef);
+        // cmu edit end
         damagedTiles.Add((tileRef.GridIndices, new Tile(tileDef.TileId)));
     }
 

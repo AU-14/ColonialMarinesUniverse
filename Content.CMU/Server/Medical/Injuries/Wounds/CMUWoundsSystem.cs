@@ -1,3 +1,4 @@
+using Content.Server.CMU14.Medical.Blood;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._RMC14.Damage;
@@ -17,6 +18,7 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
 {
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
     [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private CMUBloodSystem _blood = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
@@ -32,7 +34,8 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
         if (amount <= 0f)
             return;
 
-        DrainBlood(body, amount);
+        // A recent plasma transfusion slows bleeding.
+        DrainBlood(body, amount * _blood.GetBleedMultiplier(body));
     }
 
     protected override void ApplyExternalBleed(EntityUid body, EntityUid part, ExternalBleedTier tier, float tickSeconds)
@@ -42,7 +45,7 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
             ExternalBleedTier.Minor => 0.08f,
             ExternalBleedTier.Moderate => 0.18f,
             ExternalBleedTier.Severe => 0.35f,
-            ExternalBleedTier.Arterial => 0.70f,
+            ExternalBleedTier.Arterial => 0.91f, // 1.3x the old 0.70
             _ => 0f,
         };
 
@@ -50,7 +53,7 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
             return;
 
         if (TryComp<BloodstreamComponent>(body, out var bloodstream))
-            _bloodstream.TryBleedOut((body, bloodstream), FixedPoint2.New(rate * tickSeconds));
+            _bloodstream.TryBleedOut((body, bloodstream), FixedPoint2.New(rate * tickSeconds * _blood.GetBleedMultiplier(body)), cmuWoundBleed: true);
     }
 
     private void DrainBlood(EntityUid body, float amount)

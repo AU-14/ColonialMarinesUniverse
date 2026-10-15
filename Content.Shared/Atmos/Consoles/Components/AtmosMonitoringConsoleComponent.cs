@@ -46,11 +46,11 @@ public sealed partial class AtmosMonitoringConsoleComponent : Component
     public Color NavMapWallColor;
 
     /// <summary>
-    /// The next time this component is dirtied, it will force the full state
-    /// to be sent to the client, instead of just the delta state
+    /// Recipients acknowledging a tick at or before this reset require a full state.
+    /// State generation must not consume a flag shared by multiple recipients.
     /// </summary>
     [ViewVariables]
-    public bool ForceFullUpdate = false;
+    public GameTick ForceFullUpdateTick;
 }
 
 [Serializable, NetSerializable]

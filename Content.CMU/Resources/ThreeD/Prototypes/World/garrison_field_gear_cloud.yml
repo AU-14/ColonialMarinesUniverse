@@ -1,0 +1,3268 @@
+- type: cmu3DModel
+  id: CMU3DFieldAU14TeleBatonCloud
+  label: 'Telescopic baton: compact default and extended static pose'
+  status: draft
+  sourcePrototypes:
+  - AU14TeleBaton
+  referencePrototype: AU14TeleBaton
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Melee/telebaton.rsi
+  referenceState: telebaton_off
+  sourceDirections: 1
+  placement: surface
+  description: Inherited ItemToggle defaults inactive. GenericVisualizer selects the
+    existing single world layer telebaton_off/on; both static source states are authored
+    without a transition clip. Ground-world exterior art only. Physical depth, reverse
+    surfaces and material finish are inferred. No held, firing, reload, rigging, arming
+    or use effects; no native/map/live/fidelity approval.
+  parts:
+  - label: compact grip body span 1
+    min: -0.36803, -0.245313, 0.017063
+    max: -0.13822, -0.173438, 0.088938
+    color: '#26231C'
+    yaw: 45.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: open retention loop span 1
+    min: -0.396025, -0.23625, 0.034375
+    max: -0.316475, -0.195, 0.075625
+    color: '#292929'
+    yaw: 135.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: open retention loop span 2
+    min: -0.410561, -0.147188, 0.034375
+    max: -0.242564, -0.105938, 0.075625
+    color: '#292929'
+    yaw: 46.507435758774946
+    pitch: 0.0
+    shape: CylinderX
+  - label: open retention loop span 3
+    min: -0.282341, -0.119063, 0.034375
+    max: -0.189534, -0.077813, 0.075625
+    color: '#292929'
+    yaw: -44.99999999999997
+    pitch: 0.0
+    shape: CylinderX
+  - label: open retention loop rounded join 1
+    min: -0.405, -0.208125, 0.034375
+    max: -0.36375, -0.166875, 0.075625
+    color: '#292929'
+    shape: Ellipsoid
+  - label: open retention loop rounded join 2
+    min: -0.289375, -0.08625, 0.034375
+    max: -0.248125, -0.045, 0.075625
+    color: '#292929'
+    shape: Ellipsoid
+  - label: grip wrap 1
+    min: -0.364396, -0.2875, 0.079313
+    max: -0.298104, -0.275, 0.088688
+    color: '#484848'
+    yaw: -45.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip wrap 2
+    min: -0.337208, -0.260312, 0.079313
+    max: -0.270917, -0.247812, 0.088688
+    color: '#484848'
+    yaw: -45.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip wrap 3
+    min: -0.310021, -0.233125, 0.079313
+    max: -0.243729, -0.220625, 0.088688
+    color: '#484848'
+    yaw: -45.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip wrap 4
+    min: -0.282833, -0.205938, 0.079313
+    max: -0.216542, -0.193438, 0.088688
+    color: '#484848'
+    yaw: -45.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip wrap 5
+    min: -0.255646, -0.17875, 0.079313
+    max: -0.189354, -0.16625, 0.088688
+    color: '#484848'
+    yaw: -45.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: collar
+    min: -0.203135, -0.162344, 0.016438
+    max: -0.139053, -0.089219, 0.089562
+    color: '#17150F'
+    yaw: 45.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: metal end
+    min: -0.164894, -0.105625, 0.033
+    max: -0.102293, -0.065625, 0.073
+    color: '#7C7C7C'
+    yaw: 47.63011266335761
+    pitch: 0.0
+    shape: CylinderX
+  spriteStates:
+    telebaton_off:
+      frames:
+      - parts:
+        - label: compact grip body span 1
+          min: -0.36803, -0.245313, 0.017063
+          max: -0.13822, -0.173438, 0.088938
+          color: '#26231C'
+          yaw: 45.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: open retention loop span 1
+          min: -0.396025, -0.23625, 0.034375
+          max: -0.316475, -0.195, 0.075625
+          color: '#292929'
+          yaw: 135.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: open retention loop span 2
+          min: -0.410561, -0.147188, 0.034375
+          max: -0.242564, -0.105938, 0.075625
+          color: '#292929'
+          yaw: 46.507435758774946
+          pitch: 0.0
+          shape: CylinderX
+        - label: open retention loop span 3
+          min: -0.282341, -0.119063, 0.034375
+          max: -0.189534, -0.077813, 0.075625
+          color: '#292929'
+          yaw: -44.99999999999997
+          pitch: 0.0
+          shape: CylinderX
+        - label: open retention loop rounded join 1
+          min: -0.405, -0.208125, 0.034375
+          max: -0.36375, -0.166875, 0.075625
+          color: '#292929'
+          shape: Ellipsoid
+        - label: open retention loop rounded join 2
+          min: -0.289375, -0.08625, 0.034375
+          max: -0.248125, -0.045, 0.075625
+          color: '#292929'
+          shape: Ellipsoid
+        - label: grip wrap 1
+          min: -0.364396, -0.2875, 0.079313
+          max: -0.298104, -0.275, 0.088688
+          color: '#484848'
+          yaw: -45.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: grip wrap 2
+          min: -0.337208, -0.260312, 0.079313
+          max: -0.270917, -0.247812, 0.088688
+          color: '#484848'
+          yaw: -45.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: grip wrap 3
+          min: -0.310021, -0.233125, 0.079313
+          max: -0.243729, -0.220625, 0.088688
+          color: '#484848'
+          yaw: -45.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: grip wrap 4
+          min: -0.282833, -0.205938, 0.079313
+          max: -0.216542, -0.193438, 0.088688
+          color: '#484848'
+          yaw: -45.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: grip wrap 5
+          min: -0.255646, -0.17875, 0.079313
+          max: -0.189354, -0.16625, 0.088688
+          color: '#484848'
+          yaw: -45.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: collar
+          min: -0.203135, -0.162344, 0.016438
+          max: -0.139053, -0.089219, 0.089562
+          color: '#17150F'
+          yaw: 45.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: metal end
+          min: -0.164894, -0.105625, 0.033
+          max: -0.102293, -0.065625, 0.073
+          color: '#7C7C7C'
+          yaw: 47.63011266335761
+          pitch: 0.0
+          shape: CylinderX
+      delays:
+      - 1
+    telebaton_on:
+      frames:
+      - parts:
+        - label: compact grip body span 1
+          min: -0.36803, -0.245313, 0.017063
+          max: -0.13822, -0.173438, 0.088938
+          color: '#26231C'
+          yaw: 45.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: open retention loop span 1
+          min: -0.396025, -0.23625, 0.034375
+          max: -0.316475, -0.195, 0.075625
+          color: '#292929'
+          yaw: 135.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: open retention loop span 2
+          min: -0.410561, -0.147188, 0.034375
+          max: -0.242564, -0.105938, 0.075625
+          color: '#292929'
+          yaw: 46.507435758774946
+          pitch: 0.0
+          shape: CylinderX
+        - label: open retention loop span 3
+          min: -0.282341, -0.119063, 0.034375
+          max: -0.189534, -0.077813, 0.075625
+          color: '#292929'
+          yaw: -44.99999999999997
+          pitch: 0.0
+          shape: CylinderX
+        - label: open retention loop rounded join 1
+          min: -0.405, -0.208125, 0.034375
+          max: -0.36375, -0.166875, 0.075625
+          color: '#292929'
+          shape: Ellipsoid
+        - label: open retention loop rounded join 2
+          min: -0.289375, -0.08625, 0.034375
+          max: -0.248125, -0.045, 0.075625
+          color: '#292929'
+          shape: Ellipsoid
+        - label: grip wrap 1
+          min: -0.364396, -0.2875, 0.079313
+          max: -0.298104, -0.275, 0.088688
+          color: '#484848'
+          yaw: -45.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: grip wrap 2
+          min: -0.337208, -0.260312, 0.079313
+          max: -0.270917, -0.247812, 0.088688
+          color: '#484848'
+          yaw: -45.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: grip wrap 3
+          min: -0.310021, -0.233125, 0.079313
+          max: -0.243729, -0.220625, 0.088688
+          color: '#484848'
+          yaw: -45.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: grip wrap 4
+          min: -0.282833, -0.205938, 0.079313
+          max: -0.216542, -0.193438, 0.088688
+          color: '#484848'
+          yaw: -45.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: grip wrap 5
+          min: -0.255646, -0.17875, 0.079313
+          max: -0.189354, -0.16625, 0.088688
+          color: '#484848'
+          yaw: -45.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: collar
+          min: -0.203135, -0.162344, 0.016438
+          max: -0.139053, -0.089219, 0.089562
+          color: '#17150F'
+          yaw: 45.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: metal end
+          min: -0.164894, -0.105625, 0.033
+          max: -0.102293, -0.065625, 0.073
+          color: '#7C7C7C'
+          yaw: 47.63011266335761
+          pitch: 0.0
+          shape: CylinderX
+        - label: extended outer tube
+          min: -0.199188, 0.002813, 0.037062
+          max: 0.136688, 0.034688, 0.068937
+          color: '#7C7C7C'
+          yaw: 44.99999999999999
+          pitch: 0.0
+          shape: CylinderX
+        - label: extended inner tube
+          min: 0.029048, 0.224062, 0.041125
+          max: 0.342827, 0.247812, 0.064875
+          color: '#B8B8B8'
+          yaw: 44.99999999999999
+          pitch: 0.0
+          shape: CylinderX
+        - label: shaft reflected line
+          min: -0.210108, 0.131406, 0.067875
+          max: 0.371045, 0.138906, 0.074125
+          color: '#B8B8B8'
+          yaw: 45.00000000000001
+          pitch: 0.0
+          shape: CylinderX
+      delays:
+      - 1
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+- type: cmu3DModel
+  id: CMU3DFieldCMM11KnifeCloud
+  label: 'M11 knife: olive grip, broad blade and pommel loop'
+  status: draft
+  sourcePrototypes:
+  - CMM11Knife
+  referencePrototype: CMM11Knife
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Melee/m11_knife.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Static loose-world icon; distinct olive stacked grip and warm silver
+    blade follow the source diagonal. Grip loop aperture is geometry. Ground-world
+    exterior art only. Physical depth, reverse surfaces and material finish are inferred.
+    No held, firing, reload, rigging, arming or use effects; no native/map/live/fidelity
+    approval.
+  parts:
+  - label: olive stacked grip
+    min: -0.302623, -0.2225, 0.0035
+    max: -0.01144, -0.1275, 0.0985
+    color: '#444131'
+    yaw: 48.6983843716019
+    pitch: 0.0
+    shape: CylinderX
+  - label: dark grip spine
+    min: -0.316631, -0.201719, 0.039
+    max: -0.028681, -0.171719, 0.069
+    color: '#211B19'
+    yaw: 48.96031183045838
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip groove 1
+    min: -0.284269, -0.279063, 0.08825
+    max: -0.209794, -0.269063, 0.09575
+    color: '#6C6447'
+    yaw: -44.1499766189089
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip groove 2
+    min: -0.254581, -0.247188, 0.08825
+    max: -0.180106, -0.237188, 0.09575
+    color: '#6C6447'
+    yaw: -44.14997661890894
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip groove 3
+    min: -0.224894, -0.215313, 0.08825
+    max: -0.150419, -0.205313, 0.09575
+    color: '#6C6447'
+    yaw: -44.14997661890894
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip groove 4
+    min: -0.195206, -0.183438, 0.08825
+    max: -0.120731, -0.173438, 0.09575
+    color: '#6C6447'
+    yaw: -44.14997661890894
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip groove 5
+    min: -0.165519, -0.151562, 0.08825
+    max: -0.091044, -0.141562, 0.09575
+    color: '#6C6447'
+    yaw: -44.14997661890894
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip groove 6
+    min: -0.135831, -0.119688, 0.08825
+    max: -0.061356, -0.109688, 0.09575
+    color: '#6C6447'
+    yaw: -44.14997661890894
+    pitch: 0.0
+    shape: CylinderX
+  - label: steel blade core
+    min: -0.114257, 0.022969, 0.02925
+    max: 0.265819, 0.119219, 0.05675
+    color: '#D5CCC3'
+    yaw: 44.666888756078635
+    pitch: 0.0
+  - label: tapered rounded blade nose
+    min: 0.158858, 0.151562, 0.0305
+    max: 0.23958, 0.232812, 0.0555
+    color: '#D5CCC3'
+    yaw: 47.353296866108316
+    pitch: 0.0
+    shape: Ellipsoid
+  - label: continuous sharpened edge
+    min: -0.079212, 0.044531, 0.053875
+    max: 0.304212, 0.069531, 0.060125
+    color: '#FFFFFF'
+    yaw: 44.17446952955791
+    pitch: 0.0
+    shape: CylinderX
+  - label: blade spine highlight
+    min: -0.123197, 0.100312, 0.051875
+    max: 0.232572, 0.115312, 0.058125
+    color: '#6C6447'
+    yaw: 44.644130169378116
+    pitch: 0.0
+    shape: CylinderX
+  - label: pommel exposed loop arc 1
+    min: -0.307733, -0.368594, 0.041188
+    max: -0.295198, -0.352969, 0.056813
+    color: '#6C6447'
+    yaw: -103.52104258694246
+    pitch: 0.0
+    shape: CylinderX
+  - label: pommel exposed loop arc 2
+    min: -0.312928, -0.379148, 0.041188
+    max: -0.30094, -0.363523, 0.056813
+    color: '#6C6447'
+    yaw: -131.90594194108277
+    pitch: 0.0
+    shape: CylinderX
+  - label: pommel exposed loop arc 3
+    min: -0.322114, -0.385242, 0.041188
+    max: -0.310699, -0.369617, 0.056813
+    color: '#6C6447'
+    yaw: -163.37585021130013
+    pitch: 0.0
+    shape: CylinderX
+  - label: pommel exposed loop arc 4
+    min: -0.333051, -0.385242, 0.041188
+    max: -0.321636, -0.369617, 0.056813
+    color: '#6C6447'
+    yaw: 163.3758502113
+    pitch: 0.0
+    shape: CylinderX
+  - label: pommel exposed loop arc 5
+    min: -0.34281, -0.379148, 0.041188
+    max: -0.330822, -0.363523, 0.056813
+    color: '#6C6447'
+    yaw: 131.90594194108314
+    pitch: 0.0
+    shape: CylinderX
+  - label: pommel exposed loop arc 6
+    min: -0.348552, -0.368594, 0.041188
+    max: -0.336017, -0.352969, 0.056813
+    color: '#6C6447'
+    yaw: 103.52104258694222
+    pitch: 0.0
+    shape: CylinderX
+  - label: pommel exposed loop arc 7
+    min: -0.348552, -0.356406, 0.041188
+    max: -0.336017, -0.340781, 0.056813
+    color: '#6C6447'
+    yaw: 76.4789574130578
+    pitch: 0.0
+    shape: CylinderX
+  - label: pommel exposed loop arc 8
+    min: -0.34281, -0.345852, 0.041188
+    max: -0.330822, -0.330227, 0.056813
+    color: '#6C6447'
+    yaw: 48.09405805891705
+    pitch: 0.0
+    shape: CylinderX
+  - label: pommel exposed loop arc 9
+    min: -0.333051, -0.339758, 0.041188
+    max: -0.321636, -0.324133, 0.056813
+    color: '#6C6447'
+    yaw: 16.624149788699945
+    pitch: 0.0
+    shape: CylinderX
+  - label: pommel exposed loop arc 10
+    min: -0.322114, -0.339758, 0.041188
+    max: -0.310699, -0.324133, 0.056813
+    color: '#6C6447'
+    yaw: -16.624149788699867
+    pitch: 0.0
+    shape: CylinderX
+  - label: pommel exposed loop arc 11
+    min: -0.312928, -0.345852, 0.041188
+    max: -0.30094, -0.330227, 0.056813
+    color: '#6C6447'
+    yaw: -48.09405805891724
+    pitch: 0.0
+    shape: CylinderX
+  - label: pommel exposed loop arc 12
+    min: -0.307733, -0.356406, 0.041188
+    max: -0.295198, -0.340781, 0.056813
+    color: '#6C6447'
+    yaw: -76.47895741305754
+    pitch: 0.0
+    shape: CylinderX
+  - label: loop attachment
+    min: -0.318895, -0.320625, 0.03775
+    max: -0.251417, -0.298125, 0.06025
+    color: '#444131'
+    yaw: 47.8155566842112
+    pitch: 0.0
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DFieldKukriKnifeCloud
+  label: 'Kukri: recurved silver blade and olive handle'
+  status: draft
+  sourcePrototypes:
+  - KukriKnife
+  referencePrototype: KukriKnife
+  referenceRsi: /Textures/Objects/Weapons/Melee/kukri_knife.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Source-specific broad recurved silhouette, separate edge and backbone,
+    short green grip. Hidden section thickness is inferred. Ground-world exterior
+    art only. Physical depth, reverse surfaces and material finish are inferred. No
+    held, firing, reload, rigging, arming or use effects; no native/map/live/fidelity
+    approval.
+  parts:
+  - label: olive kukri handle
+    min: -0.310749, -0.187031, 0.010312
+    max: -0.145501, -0.117656, 0.079687
+    color: '#6E6E38'
+    yaw: 49.98633377123547
+    pitch: 0.0
+    shape: CylinderX
+  - label: dark pommel
+    min: -0.297584, -0.2475, 0.006875
+    max: -0.255541, -0.17125, 0.083125
+    color: '#3A3A3A'
+    yaw: 48.01278750418333
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle ferrule band 0
+    min: -0.258377, -0.21625, 0.072938
+    max: -0.22756, -0.205625, 0.081062
+    color: '#818155'
+    yaw: -30.465544919459887
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle ferrule band 1
+    min: -0.238065, -0.189687, 0.072938
+    max: -0.207248, -0.179062, 0.081062
+    color: '#818155'
+    yaw: -30.465544919459838
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle ferrule band 2
+    min: -0.217752, -0.163125, 0.072938
+    max: -0.186935, -0.1525, 0.081062
+    color: '#818155'
+    yaw: -30.465544919459838
+    pitch: 0.0
+    shape: CylinderX
+  - label: recurved broad blade spine span 1
+    min: -0.215683, -0.08375, 0.02375
+    max: -0.046817, 0.015, 0.05625
+    color: '#746F6F'
+    yaw: 51.009005957494516
+    pitch: 0.0
+    shape: CylinderX
+  - label: recurved broad blade spine span 2
+    min: -0.090865, 0.025625, 0.02375
+    max: 0.072115, 0.124375, 0.05625
+    color: '#746F6F'
+    yaw: 32.471192290848506
+    pitch: 0.0
+    shape: CylinderX
+  - label: recurved broad blade spine span 3
+    min: 0.05925, 0.064688, 0.02375
+    max: 0.2345, 0.163438, 0.05625
+    color: '#746F6F'
+    yaw: -3.0664855011259
+    pitch: 0.0
+    shape: CylinderX
+  - label: recurved broad blade spine span 4
+    min: 0.234375, 0.06, 0.02375
+    max: 0.34375, 0.15875, 0.05625
+    color: '#746F6F'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: recurved broad blade spine rounded join 1
+    min: -0.1275, -0.018125, 0.02375
+    max: -0.02875, 0.080625, 0.05625
+    color: '#746F6F'
+    shape: Ellipsoid
+  - label: recurved broad blade spine rounded join 2
+    min: 0.01, 0.069375, 0.02375
+    max: 0.10875, 0.168125, 0.05625
+    color: '#746F6F'
+    shape: Ellipsoid
+  - label: recurved broad blade spine rounded join 3
+    min: 0.185, 0.06, 0.02375
+    max: 0.28375, 0.15875, 0.05625
+    color: '#746F6F'
+    shape: Ellipsoid
+  - label: bright curved cutting edge span 1
+    min: -0.164631, -0.053281, 0.050313
+    max: -0.004119, -0.029531, 0.059687
+    color: '#DCDCDC'
+    yaw: 48.5517333548204
+    pitch: 0.0
+    shape: CylinderX
+  - label: bright curved cutting edge span 2
+    min: -0.033224, 0.023281, 0.050313
+    max: 0.105099, 0.047031, 0.059687
+    color: '#DCDCDC'
+    yaw: 13.722297133133553
+    pitch: 0.0
+    shape: CylinderX
+  - label: bright curved cutting edge span 3
+    min: 0.103057, 0.042813, 0.050313
+    max: 0.246943, 0.066562, 0.059687
+    color: '#DCDCDC'
+    yaw: 2.4895529219991483
+    pitch: 0.0
+    shape: CylinderX
+  - label: bright curved cutting edge span 4
+    min: 0.243475, 0.064688, 0.050313
+    max: 0.350275, 0.088438, 0.059687
+    color: '#DCDCDC'
+    yaw: 20.556045219583467
+    pitch: 0.0
+    shape: CylinderX
+  - label: bright curved cutting edge rounded join 1
+    min: -0.043125, 0.006875, 0.050313
+    max: -0.019375, 0.030625, 0.059687
+    color: '#DCDCDC'
+    shape: Ellipsoid
+  - label: bright curved cutting edge rounded join 2
+    min: 0.09125, 0.039687, 0.050313
+    max: 0.115, 0.063438, 0.059687
+    color: '#DCDCDC'
+    shape: Ellipsoid
+  - label: bright curved cutting edge rounded join 3
+    min: 0.235, 0.045937, 0.050313
+    max: 0.25875, 0.069688, 0.059687
+    color: '#DCDCDC'
+    shape: Ellipsoid
+  - label: dark blade back span 1
+    min: -0.217536, -0.000625, 0.043313
+    max: -0.041839, 0.025625, 0.052687
+    color: '#525252'
+    yaw: 51.49934627965457
+    pitch: 0.0
+    shape: CylinderX
+  - label: dark blade back span 2
+    min: -0.085169, 0.105625, 0.043313
+    max: 0.063294, 0.131875, 0.052687
+    color: '#525252'
+    yaw: 30.343248884239582
+    pitch: 0.0
+    shape: CylinderX
+  - label: dark blade back span 3
+    min: 0.053122, 0.142344, 0.043313
+    max: 0.253128, 0.168594, 0.052687
+    color: '#525252'
+    yaw: -0.44761417086055927
+    pitch: 0.0
+    shape: CylinderX
+  - label: dark blade back span 4
+    min: 0.25173, 0.130625, 0.043313
+    max: 0.338895, 0.156875, 0.052687
+    color: '#525252'
+    yaw: -14.534455080540113
+    pitch: 0.0
+    shape: CylinderX
+  - label: dark blade back rounded join 1
+    min: -0.088125, 0.068125, 0.043313
+    max: -0.061875, 0.094375, 0.052687
+    color: '#525252'
+    shape: Ellipsoid
+  - label: dark blade back rounded join 2
+    min: 0.04, 0.143125, 0.043313
+    max: 0.06625, 0.169375, 0.052687
+    color: '#525252'
+    shape: Ellipsoid
+  - label: dark blade back rounded join 3
+    min: 0.24, 0.141562, 0.043313
+    max: 0.26625, 0.167812, 0.052687
+    color: '#525252'
+    shape: Ellipsoid
+- type: cmu3DModel
+  id: CMU3DFieldRMCCeremonialSwordCloud
+  label: 'Ceremonial saber: swept blade and open gold guard'
+  status: draft
+  sourcePrototypes:
+  - RMCCeremonialSword
+  referencePrototype: RMCCeremonialSword
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Melee/co_sabre.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Source blue grip, continuous curved silver blade and gold swept knuckle
+    bow. The guard opening is not filled by backing geometry. Ground-world exterior
+    art only. Physical depth, reverse surfaces and material finish are inferred. No
+    held, firing, reload, rigging, arming or use effects; no native/map/live/fidelity
+    approval.
+  parts:
+  - label: blue sword grip
+    min: -0.325154, -0.353906, 0.017313
+    max: -0.131096, -0.294531, 0.076687
+    color: '#354D63'
+    yaw: 49.899092453787766
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip diagonal binding 0
+    min: -0.284375, -0.394375, 0.073875
+    max: -0.253125, -0.386875, 0.080125
+    color: '#3B6185'
+    yaw: -36.86989764584407
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip diagonal binding 1
+    min: -0.259375, -0.366875, 0.073875
+    max: -0.228125, -0.359375, 0.080125
+    color: '#3B6185'
+    yaw: -36.86989764584413
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip diagonal binding 2
+    min: -0.234375, -0.339375, 0.073875
+    max: -0.203125, -0.331875, 0.080125
+    color: '#3B6185'
+    yaw: -36.86989764584407
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip diagonal binding 3
+    min: -0.209375, -0.311875, 0.073875
+    max: -0.178125, -0.304375, 0.080125
+    color: '#3B6185'
+    yaw: -36.86989764584413
+    pitch: 0.0
+    shape: CylinderX
+  - label: gold open knuckle bow span 1
+    min: -0.375619, -0.414062, 0.029688
+    max: -0.311881, -0.373437, 0.070312
+    color: '#A5943D'
+    yaw: 168.6900675259797
+    pitch: 0.0
+    shape: CylinderX
+  - label: gold open knuckle bow span 2
+    min: -0.396038, -0.434375, 0.029688
+    max: -0.341462, -0.39375, 0.070312
+    color: '#A5943D'
+    yaw: -76.75948008481281
+    pitch: 0.0
+    shape: CylinderX
+  - label: gold open knuckle bow span 3
+    min: -0.362889, -0.467188, 0.029688
+    max: -0.262111, -0.426563, 0.070312
+    color: '#A5943D'
+    yaw: -7.125016348901774
+    pitch: 0.0
+    shape: CylinderX
+  - label: gold open knuckle bow span 4
+    min: -0.270333, -0.44375, 0.029688
+    max: -0.14998, -0.403125, 0.070312
+    color: '#A5943D'
+    yaw: 29.560354464680717
+    pitch: 0.0
+    shape: CylinderX
+  - label: gold open knuckle bow span 5
+    min: -0.166229, -0.392188, 0.029688
+    max: -0.100958, -0.351562, 0.070312
+    color: '#A5943D'
+    yaw: 42.08916217383228
+    pitch: 0.0
+    shape: CylinderX
+  - label: gold open knuckle bow span 6
+    min: -0.151195, -0.334375, 0.029688
+    max: -0.078493, -0.29375, 0.070312
+    color: '#A5943D'
+    yaw: 98.65254179111471
+    pitch: 0.0
+    shape: CylinderX
+  - label: gold open knuckle bow span 7
+    min: -0.185413, -0.26875, 0.029688
+    max: -0.106774, -0.228125, 0.070312
+    color: '#A5943D'
+    yaw: 130.97173633351488
+    pitch: 0.0
+    shape: CylinderX
+  - label: gold open knuckle bow rounded join 1
+    min: -0.395313, -0.407812, 0.029688
+    max: -0.354687, -0.367188, 0.070312
+    color: '#A5943D'
+    shape: Ellipsoid
+  - label: gold open knuckle bow rounded join 2
+    min: -0.382812, -0.460938, 0.029688
+    max: -0.342187, -0.420313, 0.070312
+    color: '#A5943D'
+    shape: Ellipsoid
+  - label: gold open knuckle bow rounded join 3
+    min: -0.282813, -0.473437, 0.029688
+    max: -0.242188, -0.432813, 0.070312
+    color: '#A5943D'
+    shape: Ellipsoid
+  - label: gold open knuckle bow rounded join 4
+    min: -0.178125, -0.414062, 0.029688
+    max: -0.1375, -0.373438, 0.070312
+    color: '#A5943D'
+    shape: Ellipsoid
+  - label: gold open knuckle bow rounded join 5
+    min: -0.129688, -0.370312, 0.029688
+    max: -0.089062, -0.329688, 0.070312
+    color: '#A5943D'
+    shape: Ellipsoid
+  - label: gold open knuckle bow rounded join 6
+    min: -0.140625, -0.298437, 0.029688
+    max: -0.1, -0.257812, 0.070312
+    color: '#A5943D'
+    shape: Ellipsoid
+  - label: upturned gold quillon span 1
+    min: -0.249632, -0.245312, 0.035125
+    max: -0.150368, -0.201562, 0.078875
+    color: '#CEBB58'
+    yaw: 151.82140989004085
+    pitch: 0.0
+    shape: CylinderX
+  - label: upturned gold quillon span 2
+    min: -0.30638, -0.19375, 0.035125
+    max: -0.23112, -0.15, 0.078875
+    color: '#CEBB58'
+    yaw: 131.63353933657024
+    pitch: 0.0
+    shape: CylinderX
+  - label: upturned gold quillon span 3
+    min: -0.346251, -0.117188, 0.035125
+    max: -0.249061, -0.073438, 0.078875
+    color: '#CEBB58'
+    yaw: 94.61064931866062
+    pitch: 0.0
+    shape: CylinderX
+  - label: upturned gold quillon rounded join 1
+    min: -0.265625, -0.221875, 0.035125
+    max: -0.221875, -0.178125, 0.078875
+    color: '#CEBB58'
+    shape: Ellipsoid
+  - label: upturned gold quillon rounded join 2
+    min: -0.315625, -0.165625, 0.035125
+    max: -0.271875, -0.121875, 0.078875
+    color: '#CEBB58'
+    shape: Ellipsoid
+  - label: curved saber blade span 1
+    min: -0.208888, -0.154688, 0.028125
+    max: 0.046388, -0.104688, 0.051875
+    color: '#7E7E7E'
+    yaw: 50.463842813236646
+    pitch: 0.0
+    shape: CylinderX
+  - label: curved saber blade span 2
+    min: -0.04391, 0.0375, 0.028125
+    max: 0.20016, 0.0875, 0.051875
+    color: '#7E7E7E'
+    yaw: 50.19442890773481
+    pitch: 0.0
+    shape: CylinderX
+  - label: curved saber blade span 3
+    min: 0.134482, 0.185938, 0.028125
+    max: 0.293643, 0.235937, 0.051875
+    color: '#7E7E7E'
+    yaw: 43.40885972880542
+    pitch: 0.0
+    shape: CylinderX
+  - label: curved saber blade span 4
+    min: 0.238458, 0.291406, 0.028125
+    max: 0.349042, 0.341406, 0.051875
+    color: '#7E7E7E'
+    yaw: 66.69510946079686
+    pitch: 0.0
+    shape: CylinderX
+  - label: curved saber blade span 5
+    min: 0.267873, 0.392969, 0.028125
+    max: 0.369627, 0.442969, 0.051875
+    color: '#7E7E7E'
+    yaw: 86.47854662307778
+    pitch: 0.0
+    shape: CylinderX
+  - label: curved saber blade rounded join 1
+    min: -0.025, -0.05625, 0.028125
+    max: 0.025, -0.00625, 0.051875
+    color: '#7E7E7E'
+    shape: Ellipsoid
+  - label: curved saber blade rounded join 2
+    min: 0.13125, 0.13125, 0.028125
+    max: 0.18125, 0.18125, 0.051875
+    color: '#7E7E7E'
+    shape: Ellipsoid
+  - label: curved saber blade rounded join 3
+    min: 0.246875, 0.240625, 0.028125
+    max: 0.296875, 0.290625, 0.051875
+    color: '#7E7E7E'
+    shape: Ellipsoid
+  - label: curved saber blade rounded join 4
+    min: 0.290625, 0.342187, 0.028125
+    max: 0.340625, 0.392188, 0.051875
+    color: '#7E7E7E'
+    shape: Ellipsoid
+  - label: saber bright long edge span 1
+    min: -0.163963, -0.121563, 0.05025
+    max: 0.057713, -0.106563, 0.05775
+    color: '#BBBBBB'
+    yaw: 49.57392125990087
+    pitch: 0.0
+    shape: CylinderX
+  - label: saber bright long edge span 2
+    min: -0.02401, 0.055781, 0.05025
+    max: 0.220885, 0.070781, 0.05775
+    color: '#BBBBBB'
+    yaw: 49.39870535499554
+    pitch: 0.0
+    shape: CylinderX
+  - label: saber bright long edge span 3
+    min: 0.156569, 0.203437, 0.05025
+    max: 0.316868, 0.218438, 0.05775
+    color: '#BBBBBB'
+    yaw: 43.025065989118026
+    pitch: 0.0
+    shape: CylinderX
+  - label: saber bright long edge span 4
+    min: 0.259721, 0.312812, 0.05025
+    max: 0.379342, 0.327813, 0.05775
+    color: '#BBBBBB'
+    yaw: 66.11350007836525
+    pitch: 0.0
+    shape: CylinderX
+  - label: saber bright long edge span 5
+    min: 0.296875, 0.414375, 0.05025
+    max: 0.390625, 0.429375, 0.05775
+    color: '#BBBBBB'
+    yaw: 90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: saber bright long edge rounded join 1
+    min: 0.01125, -0.037187, 0.05025
+    max: 0.02625, -0.022188, 0.05775
+    color: '#BBBBBB'
+    shape: Ellipsoid
+  - label: saber bright long edge rounded join 2
+    min: 0.170625, 0.14875, 0.05025
+    max: 0.185625, 0.16375, 0.05775
+    color: '#BBBBBB'
+    shape: Ellipsoid
+  - label: saber bright long edge rounded join 3
+    min: 0.287813, 0.258125, 0.05025
+    max: 0.302812, 0.273125, 0.05775
+    color: '#BBBBBB'
+    shape: Ellipsoid
+  - label: saber bright long edge rounded join 4
+    min: 0.33625, 0.3675, 0.05025
+    max: 0.35125, 0.3825, 0.05775
+    color: '#BBBBBB'
+    shape: Ellipsoid
+  - label: saber dark spine span 1
+    min: -0.197046, -0.121875, 0.042875
+    max: 0.031421, -0.103125, 0.049125
+    color: '#636363'
+    yaw: 49.993743985823386
+    pitch: 0.0
+    shape: CylinderX
+  - label: saber dark spine span 2
+    min: -0.053853, 0.059375, 0.042875
+    max: 0.188228, 0.078125, 0.049125
+    color: '#636363'
+    yaw: 50.76263288659844
+    pitch: 0.0
+    shape: CylinderX
+  - label: saber dark spine span 3
+    min: 0.121757, 0.209375, 0.042875
+    max: 0.287618, 0.228125, 0.049125
+    color: '#636363'
+    yaw: 42.709389957361495
+    pitch: 0.0
+    shape: CylinderX
+  - label: saber dark spine span 4
+    min: 0.233413, 0.314063, 0.042875
+    max: 0.338462, 0.332813, 0.049125
+    color: '#636363'
+    yaw: 67.24902365721236
+    pitch: 0.0
+    shape: CylinderX
+  - label: saber dark spine rounded join 1
+    min: -0.01875, -0.034375, 0.042875
+    max: 0.0, -0.015625, 0.049125
+    color: '#636363'
+    shape: Ellipsoid
+  - label: saber dark spine rounded join 2
+    min: 0.134375, 0.153125, 0.042875
+    max: 0.153125, 0.171875, 0.049125
+    color: '#636363'
+    shape: Ellipsoid
+  - label: saber dark spine rounded join 3
+    min: 0.25625, 0.265625, 0.042875
+    max: 0.275, 0.284375, 0.049125
+    color: '#636363'
+    shape: Ellipsoid
+- type: cmu3DModel
+  id: CMU3DFieldRMCCombatUtilityKnifeBCloud
+  label: 'Utility knife B: hooked blade, gold guard and brown grip'
+  status: draft
+  sourcePrototypes:
+  - RMCCombatUtilityKnifeB
+  referencePrototype: RMCCombatUtilityKnifeB
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Melee/combat_utility_b.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Actual B variant has a clipped/hooked silver tip and gold curved guard.
+    Its blade and grip proportions are distinct from M11 and M5. Ground-world exterior
+    art only. Physical depth, reverse surfaces and material finish are inferred. No
+    held, firing, reload, rigging, arming or use effects; no native/map/live/fidelity
+    approval.
+  parts:
+  - label: bent brown grip span 1
+    min: -0.342727, -0.337187, 0.018625
+    max: -0.269773, -0.278438, 0.077375
+    color: '#5E4327'
+    yaw: 80.13419305691562
+    pitch: 0.0
+    shape: CylinderX
+  - label: bent brown grip span 2
+    min: -0.329263, -0.234062, 0.018625
+    max: -0.145737, -0.175312, 0.077375
+    color: '#5E4327'
+    yaw: 47.07003065304111
+    pitch: 0.0
+    shape: CylinderX
+  - label: bent brown grip rounded join 1
+    min: -0.329375, -0.30125, 0.018625
+    max: -0.270625, -0.2425, 0.077375
+    color: '#5E4327'
+    shape: Ellipsoid
+  - label: handle ridge 0
+    min: -0.286399, -0.279688, 0.07425
+    max: -0.254226, -0.270313, 0.08175
+    color: '#BAAA4E'
+    yaw: -29.05460409907714
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle ridge 1
+    min: -0.259837, -0.250937, 0.07425
+    max: -0.227663, -0.241562, 0.08175
+    color: '#BAAA4E'
+    yaw: -29.05460409907714
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle ridge 2
+    min: -0.233274, -0.222188, 0.07425
+    max: -0.201101, -0.212813, 0.08175
+    color: '#BAAA4E'
+    yaw: -29.05460409907714
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle ridge 3
+    min: -0.206712, -0.193437, 0.07425
+    max: -0.174538, -0.184062, 0.08175
+    color: '#BAAA4E'
+    yaw: -29.05460409907714
+    pitch: 0.0
+    shape: CylinderX
+  - label: gold curved crossguard span 1
+    min: -0.21696, -0.163594, 0.0315
+    max: -0.112728, -0.128594, 0.0665
+    color: '#BAAA4E'
+    yaw: -23.875280853927535
+    pitch: 0.0
+    shape: CylinderX
+  - label: gold curved crossguard span 2
+    min: -0.128283, -0.2175, 0.0315
+    max: -0.020154, -0.1825, 0.0665
+    color: '#BAAA4E'
+    yaw: -37.36666941276867
+    pitch: 0.0
+    shape: CylinderX
+  - label: gold curved crossguard rounded join 1
+    min: -0.134688, -0.184688, 0.0315
+    max: -0.099687, -0.149688, 0.0665
+    color: '#BAAA4E'
+    shape: Ellipsoid
+  - label: gold upper hook span 1
+    min: -0.257508, -0.136875, 0.036563
+    max: -0.145617, -0.11, 0.063438
+    color: '#D6C45A'
+    yaw: 144.0902769208223
+    pitch: 0.0
+    shape: CylinderX
+  - label: gold upper hook span 2
+    min: -0.298202, -0.080625, 0.036563
+    max: -0.236173, -0.05375, 0.063438
+    color: '#D6C45A'
+    yaw: 130.9143832200251
+    pitch: 0.0
+    shape: CylinderX
+  - label: gold upper hook rounded join 1
+    min: -0.260313, -0.104062, 0.036563
+    max: -0.233438, -0.077187, 0.063438
+    color: '#D6C45A'
+    shape: Ellipsoid
+  - label: broad utility blade
+    min: -0.169911, -0.042188, 0.024
+    max: 0.304286, 0.039062, 0.054
+    color: '#C4BEBE'
+    yaw: 49.27584111262894
+    pitch: 0.0
+  - label: raised clip-point spine span 1
+    min: -0.11461, 0.0175, 0.040188
+    max: 0.211485, 0.045, 0.055813
+    color: '#736D6D'
+    yaw: 50.05382605006437
+    pitch: 0.0
+    shape: CylinderX
+  - label: raised clip-point spine span 2
+    min: 0.135338, 0.183125, 0.040188
+    max: 0.245912, 0.210625, 0.055813
+    color: '#736D6D'
+    yaw: 47.290610042638505
+    pitch: 0.0
+    shape: CylinderX
+  - label: raised clip-point spine span 3
+    min: 0.171875, 0.26125, 0.040188
+    max: 0.253125, 0.28875, 0.055813
+    color: '#736D6D'
+    yaw: 112.61986494804043
+    pitch: 0.0
+    shape: CylinderX
+  - label: raised clip-point spine rounded join 1
+    min: 0.139375, 0.1425, 0.040188
+    max: 0.166875, 0.17, 0.055813
+    color: '#736D6D'
+    shape: Ellipsoid
+  - label: raised clip-point spine rounded join 2
+    min: 0.214375, 0.22375, 0.040188
+    max: 0.241875, 0.25125, 0.055813
+    color: '#736D6D'
+    shape: Ellipsoid
+  - label: broad hooked blade tip
+    min: 0.21875, 0.1375, 0.023
+    max: 0.29375, 0.264062, 0.054
+    color: '#E0DADA'
+    shape: Ellipsoid
+  - label: utility blade polished edge
+    min: -0.082097, 0.010156, 0.053875
+    max: 0.325847, 0.032031, 0.060125
+    color: '#FFF7F7'
+    yaw: 47.017715992487226
+    pitch: 0.0
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DFieldRMCM5BayonetCloud
+  label: 'M5 bayonet: banded grip, crossguard and narrow blade'
+  status: draft
+  sourcePrototypes:
+  - RMCM5Bayonet
+  referencePrototype: RMCM5Bayonet
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Melee/m5_bayonet.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Source-striped grip and narrow straight blade with a small clipped
+    point. Attachment/held pose is not claimed. Ground-world exterior art only. Physical
+    depth, reverse surfaces and material finish are inferred. No held, firing, reload,
+    rigging, arming or use effects; no native/map/live/fidelity approval.
+  parts:
+  - label: bayonet dark grip
+    min: -0.385053, -0.230312, 0.006312
+    max: -0.024322, -0.150938, 0.085687
+    color: '#5D5353'
+    yaw: 48.16036162604567
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip silver stripe 0
+    min: -0.328171, -0.314062, 0.081875
+    max: -0.274954, -0.301563, 0.088125
+    color: '#8B8379'
+    yaw: -40.236358309273754
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip silver stripe 1
+    min: -0.300671, -0.283125, 0.081875
+    max: -0.247454, -0.270625, 0.088125
+    color: '#8B8379'
+    yaw: -40.23635830927379
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip silver stripe 2
+    min: -0.273171, -0.252187, 0.081875
+    max: -0.219954, -0.239687, 0.088125
+    color: '#8B8379'
+    yaw: -40.23635830927379
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip silver stripe 3
+    min: -0.245671, -0.22125, 0.081875
+    max: -0.192454, -0.20875, 0.088125
+    color: '#8B8379'
+    yaw: -40.236358309273754
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip silver stripe 4
+    min: -0.218171, -0.190312, 0.081875
+    max: -0.164954, -0.177812, 0.088125
+    color: '#8B8379'
+    yaw: -40.23635830927379
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip silver stripe 5
+    min: -0.190671, -0.159375, 0.081875
+    max: -0.137454, -0.146875, 0.088125
+    color: '#8B8379'
+    yaw: -40.23635830927379
+    pitch: 0.0
+    shape: CylinderX
+  - label: grip silver stripe 6
+    min: -0.163171, -0.128438, 0.081875
+    max: -0.109954, -0.115937, 0.088125
+    color: '#8B8379'
+    yaw: -40.23635830927385
+    pitch: 0.0
+    shape: CylinderX
+  - label: bayonet guard
+    min: -0.195055, -0.075938, 0.035
+    max: 0.032555, -0.045938, 0.065
+    color: '#211B19'
+    yaw: -44.44374777291933
+    pitch: 0.0
+    shape: CylinderX
+  - label: bayonet blade face
+    min: -0.144244, 0.045625, 0.02625
+    max: 0.291119, 0.123125, 0.05375
+    color: '#B3A99C'
+    yaw: 45.87245712290204
+    pitch: 0.0
+  - label: slender blade tip
+    min: 0.178708, 0.22625, 0.0275
+    max: 0.261917, 0.27375, 0.0525
+    color: '#D5CCC3'
+    yaw: 55.71312302279103
+    pitch: 0.0
+    shape: Ellipsoid
+  - label: bayonet edge
+    min: -0.120002, 0.079687, 0.051875
+    max: 0.320002, 0.098437, 0.058125
+    color: '#FFFFFF'
+    yaw: 47.014598787870575
+    pitch: 0.0
+    shape: CylinderX
+  - label: bayonet long groove
+    min: -0.098007, 0.091563, 0.052375
+    max: 0.213632, 0.108438, 0.058625
+    color: '#655F57'
+    yaw: 46.21887523513129
+    pitch: 0.0
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DFieldCMEntrenchingToolCloud
+  referenceRsi: /Textures/CMU14/ThreeD/EquipmentReferences.rsi
+  referenceState: CMU3DFieldCMEntrenchingToolCloud
+  label: 'Entrenching tool: folded nested blade and green grip'
+  status: draft
+  sourcePrototypes:
+  - CMEntrenchingTool
+  referencePrototype: CMEntrenchingTool
+  sourceDirections: 1
+  placement: surface
+  description: Default inactive ItemToggle selects only etool_c in EntrenchingToolVisualsSystem.
+    A nested compact spade supports the raised handle; the source center is opaque,
+    not a through-hole. Unfolded and dirt layers are unsupported because this is a
+    multi-layer owner, not Foldable. Ground-world exterior art only. Physical depth,
+    reverse surfaces and material finish are inferred. No held, firing, reload, rigging,
+    arming or use effects; no native/map/live/fidelity approval.
+  parts:
+  - label: folded compact blade backing
+    min: -0.178125, -0.070312, 0.015
+    max: 0.115625, 0.184375, 0.052
+    color: '#323232'
+  - label: folded blade lower curved pan
+    min: -0.15625, -0.15625, 0.013
+    max: 0.09375, 0.03125, 0.055
+    color: '#303A3F'
+    shape: Ellipsoid
+  - label: folded blade toe
+    min: -0.075, -0.16875, 0.018
+    max: 0.0125, -0.115625, 0.056
+    color: '#999999'
+    shape: Ellipsoid
+  - label: green D frame span 1
+    min: -0.182135, 0.000625, 0.050313
+    max: -0.035052, 0.04, 0.089688
+    color: '#455454'
+    yaw: -86.95522155580602
+    pitch: 0.0
+    shape: CylinderX
+  - label: green D frame span 2
+    min: -0.116905, -0.098594, 0.050313
+    max: -0.050283, -0.059219, 0.089688
+    color: '#455454'
+    yaw: -50.71059313749969
+    pitch: 0.0
+    shape: CylinderX
+  - label: green D frame span 3
+    min: -0.0625, -0.124375, 0.050313
+    max: 0.009375, -0.085, 0.089688
+    color: '#455454'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: green D frame span 4
+    min: -0.004423, -0.098594, 0.050313
+    max: 0.057548, -0.059219, 0.089688
+    color: '#455454'
+    yaw: 56.3099324740203
+    pitch: 0.0
+    shape: CylinderX
+  - label: green D frame span 5
+    min: -0.02819, 0.002188, 0.050313
+    max: 0.12194, 0.041563, 0.089688
+    color: '#455454'
+    yaw: 87.61405596961116
+    pitch: 0.0
+    shape: CylinderX
+  - label: green D frame rounded join 1
+    min: -0.124375, -0.072812, 0.050313
+    max: -0.085, -0.033438, 0.089688
+    color: '#455454'
+    shape: Ellipsoid
+  - label: green D frame rounded join 2
+    min: -0.082188, -0.124375, 0.050313
+    max: -0.042812, -0.085, 0.089688
+    color: '#455454'
+    shape: Ellipsoid
+  - label: green D frame rounded join 3
+    min: -0.010313, -0.124375, 0.050313
+    max: 0.029062, -0.085, 0.089688
+    color: '#455454'
+    shape: Ellipsoid
+  - label: green D frame rounded join 4
+    min: 0.024062, -0.072812, 0.050313
+    max: 0.063437, -0.033438, 0.089688
+    color: '#455454'
+    shape: Ellipsoid
+  - label: D handle crossbar
+    min: -0.140625, 0.104375, 0.050375
+    max: 0.078125, 0.145625, 0.091625
+    color: '#7E928D'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: folded central shaft
+    min: -0.142187, 0.047188, 0.080125
+    max: 0.073437, 0.080938, 0.113875
+    color: '#62746F'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper hinge plate
+    min: -0.059375, 0.16, 0.095562
+    max: 0.0, 0.186875, 0.122438
+    color: '#91A7A0'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: frame rivet 12.5
+    min: -0.119375, 0.0675, 0.087
+    max: -0.099375, 0.0875, 0.108
+    color: '#ABABAB'
+    shape: CylinderZ
+  - label: frame rivet 17.25
+    min: 0.029062, 0.0675, 0.087
+    max: 0.049063, 0.0875, 0.108
+    color: '#ABABAB'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DFieldHydroponicsToolScytheCloud
+  label: 'Garden scythe: green curved shaft, yellow loop and swept blade'
+  status: draft
+  sourcePrototypes:
+  - HydroponicsToolScythe
+  referencePrototype: HydroponicsToolScythe
+  referenceRsi: /Textures/Objects/Tools/Hydroponics/scythe.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Source yellow open lower hand loop and short green side grip, separate
+    long shaft and silver curved blade. Cutting/held motion unsupported. Ground-world
+    exterior art only. Physical depth, reverse surfaces and material finish are inferred.
+    No held, firing, reload, rigging, arming or use effects; no native/map/live/fidelity
+    approval.
+  parts:
+  - label: bent green scythe shaft span 1
+    min: -0.371419, -0.194687, 0.028313
+    max: -0.200456, -0.155312, 0.067687
+    color: '#283D27'
+    yaw: 71.89623696549339
+    pitch: 0.0
+    shape: CylinderX
+  - label: bent green scythe shaft span 2
+    min: -0.305002, -0.022812, 0.028313
+    max: -0.079373, 0.016563, 0.067687
+    color: '#283D27'
+    yaw: 53.44752724790847
+    pitch: 0.0
+    shape: CylinderX
+  - label: bent green scythe shaft span 3
+    min: -0.165596, 0.16, 0.028313
+    max: 0.084346, 0.199375, 0.067687
+    color: '#283D27'
+    yaw: 47.53355888839457
+    pitch: 0.0
+    shape: CylinderX
+  - label: bent green scythe shaft span 4
+    min: 0.042976, 0.26, 0.028313
+    max: 0.122649, 0.299375, 0.067687
+    color: '#283D27'
+    yaw: 11.309932474020213
+    pitch: 0.0
+    shape: CylinderX
+  - label: bent green scythe shaft rounded join 1
+    min: -0.279062, -0.113437, 0.028313
+    max: -0.239687, -0.074063, 0.067687
+    color: '#283D27'
+    shape: Ellipsoid
+  - label: bent green scythe shaft rounded join 2
+    min: -0.144688, 0.067812, 0.028313
+    max: -0.105312, 0.107188, 0.067687
+    color: '#283D27'
+    shape: Ellipsoid
+  - label: bent green scythe shaft rounded join 3
+    min: 0.024062, 0.252188, 0.028313
+    max: 0.063437, 0.291563, 0.067687
+    color: '#283D27'
+    shape: Ellipsoid
+  - label: yellow lower handle outer span 1
+    min: -0.433751, -0.215312, 0.032
+    max: -0.258437, -0.175313, 0.072
+    color: '#EA962A'
+    yaw: -126.66563548264217
+    pitch: 0.0
+    shape: CylinderX
+  - label: yellow lower handle outer span 2
+    min: -0.408568, -0.310625, 0.032
+    max: -0.336744, -0.270625, 0.072
+    color: '#EA962A'
+    yaw: -44.11859600341788
+    pitch: 0.0
+    shape: CylinderX
+  - label: yellow lower handle outer span 3
+    min: -0.346992, -0.333281, 0.032
+    max: -0.299883, -0.293281, 0.072
+    color: '#EA962A'
+    yaw: 5.710593137499724
+    pitch: 0.0
+    shape: CylinderX
+  - label: yellow lower handle outer span 4
+    min: -0.389896, -0.237969, 0.032
+    max: -0.203854, -0.197969, 0.072
+    color: '#EA962A'
+    yaw: 88.07481629167685
+    pitch: 0.0
+    shape: CylinderX
+  - label: yellow lower handle outer rounded join 1
+    min: -0.418438, -0.285625, 0.032
+    max: -0.378437, -0.245625, 0.072
+    color: '#EA962A'
+    shape: Ellipsoid
+  - label: yellow lower handle outer rounded join 2
+    min: -0.366875, -0.335625, 0.032
+    max: -0.326875, -0.295625, 0.072
+    color: '#EA962A'
+    shape: Ellipsoid
+  - label: yellow lower handle outer rounded join 3
+    min: -0.32, -0.330937, 0.032
+    max: -0.28, -0.290937, 0.072
+    color: '#EA962A'
+    shape: Ellipsoid
+  - label: yellow handle bright ridge
+    min: -0.400972, -0.231094, 0.07125
+    max: -0.324028, -0.217344, 0.07875
+    color: '#E9B665'
+    yaw: -119.1676133795778
+    pitch: 0.0
+    shape: CylinderX
+  - label: short green side grip
+    min: -0.288819, -0.033125, 0.0325
+    max: -0.198681, 0.001875, 0.0675
+    color: '#243723'
+    yaw: 146.3099324740202
+    pitch: 0.0
+    shape: CylinderX
+  - label: swept scythe blade back span 1
+    min: 0.123797, 0.247813, 0.035375
+    max: 0.198078, 0.302187, 0.056625
+    color: '#858583'
+    yaw: -14.620873988631644
+    pitch: 0.0
+    shape: CylinderX
+  - label: swept scythe blade back span 2
+    min: 0.188615, 0.210312, 0.035375
+    max: 0.292635, 0.264687, 0.056625
+    color: '#858583'
+    yaw: -32.7352262721076
+    pitch: 0.0
+    shape: CylinderX
+  - label: swept scythe blade back span 3
+    min: 0.265297, 0.138437, 0.035375
+    max: 0.384703, 0.192812, 0.056625
+    color: '#858583'
+    yaw: -47.12109639666147
+    pitch: 0.0
+    shape: CylinderX
+  - label: swept scythe blade back span 4
+    min: 0.325082, 0.038438, 0.035375
+    max: 0.443668, 0.092813, 0.056625
+    color: '#858583'
+    yaw: -71.565051177078
+    pitch: 0.0
+    shape: CylinderX
+  - label: swept scythe blade back rounded join 1
+    min: 0.169687, 0.238438, 0.035375
+    max: 0.224063, 0.292813, 0.056625
+    color: '#858583'
+    shape: Ellipsoid
+  - label: swept scythe blade back rounded join 2
+    min: 0.257188, 0.182188, 0.035375
+    max: 0.311563, 0.236562, 0.056625
+    color: '#858583'
+    shape: Ellipsoid
+  - label: swept scythe blade back rounded join 3
+    min: 0.338437, 0.094688, 0.035375
+    max: 0.392813, 0.149062, 0.056625
+    color: '#858583'
+    shape: Ellipsoid
+  - label: bright continuous curved edge span 1
+    min: 0.127016, 0.234375, 0.054938
+    max: 0.207359, 0.259375, 0.063062
+    color: '#C4C2C2'
+    yaw: -13.495733280795806
+    pitch: 0.0
+    shape: CylinderX
+  - label: bright continuous curved edge span 2
+    min: 0.19734, 0.197656, 0.054938
+    max: 0.29016, 0.222656, 0.063062
+    color: '#C4C2C2'
+    yaw: -36.098283967108024
+    pitch: 0.0
+    shape: CylinderX
+  - label: bright continuous curved edge span 3
+    min: 0.261863, 0.130469, 0.054938
+    max: 0.363137, 0.155469, 0.063062
+    color: '#C4C2C2'
+    yaw: -51.892423122485134
+    pitch: 0.0
+    shape: CylinderX
+  - label: bright continuous curved edge span 4
+    min: 0.309834, 0.034375, 0.054938
+    max: 0.437041, 0.059375, 0.063062
+    color: '#C4C2C2'
+    yaw: -62.17590361574677
+    pitch: 0.0
+    shape: CylinderX
+  - label: bright continuous curved edge rounded join 1
+    min: 0.19375, 0.225, 0.054938
+    max: 0.21875, 0.25, 0.063062
+    color: '#C4C2C2'
+    shape: Ellipsoid
+  - label: bright continuous curved edge rounded join 2
+    min: 0.26875, 0.170312, 0.054938
+    max: 0.29375, 0.195312, 0.063062
+    color: '#C4C2C2'
+    shape: Ellipsoid
+  - label: bright continuous curved edge rounded join 3
+    min: 0.33125, 0.090625, 0.054938
+    max: 0.35625, 0.115625, 0.063062
+    color: '#C4C2C2'
+    shape: Ellipsoid
+  - label: dull blade spine span 1
+    min: 0.128156, 0.283437, 0.039375
+    max: 0.207782, 0.307188, 0.050625
+    color: '#4A4E4A'
+    yaw: -15.945395900922861
+    pitch: 0.0
+    shape: CylinderX
+  - label: dull blade spine span 2
+    min: 0.198982, 0.244375, 0.039375
+    max: 0.315081, 0.268125, 0.050625
+    color: '#4A4E4A'
+    yaw: -28.979707697928767
+    pitch: 0.0
+    shape: CylinderX
+  - label: dull blade spine span 3
+    min: 0.283118, 0.167813, 0.039375
+    max: 0.40282, 0.191562, 0.050625
+    color: '#4A4E4A'
+    yaw: -54.02761295071511
+    pitch: 0.0
+    shape: CylinderX
+  - label: dull blade spine rounded join 1
+    min: 0.194375, 0.2725, 0.039375
+    max: 0.218125, 0.29625, 0.050625
+    color: '#4A4E4A'
+    shape: Ellipsoid
+  - label: dull blade spine rounded join 2
+    min: 0.295938, 0.21625, 0.039375
+    max: 0.319688, 0.24, 0.050625
+    color: '#4A4E4A'
+    shape: Ellipsoid
+- type: cmu3DModel
+  id: CMU3DFieldRMCBaseballBatCloud
+  label: 'Wooden baseball bat: tapered barrel and wrapped handle'
+  status: draft
+  sourcePrototypes:
+  - RMCBaseballBat
+  referencePrototype: RMCBaseballBat
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Melee/baseball_bat.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Distinct warm wood source palette. Continuous rounded barrel widens
+    from narrow brown handle with a separate knob. Swing/held effects unsupported.
+    Ground-world exterior art only. Physical depth, reverse surfaces and material
+    finish are inferred. No held, firing, reload, rigging, arming or use effects;
+    no native/map/live/fidelity approval.
+  parts:
+  - label: slim handle
+    min: -0.318373, -0.285625, 0.032
+    max: -0.059752, -0.245625, 0.072
+    color: '#6D5833'
+    yaw: 46.46880071438582
+    pitch: 0.0
+    shape: CylinderX
+  - label: rounded handle knob
+    min: -0.299575, -0.394375, 0.018562
+    max: -0.2598, -0.3275, 0.085437
+    color: '#4B2E1E'
+    yaw: 44.99999999999994
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower tapered bat body
+    min: -0.165506, -0.1375, 0.0265
+    max: 0.079568, -0.0625, 0.1015
+    color: '#A26848'
+    yaw: 49.913798762374746
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper widening bat barrel
+    min: -0.063426, 0.043125, 0.014
+    max: 0.369676, 0.163125, 0.134
+    color: '#A26848'
+    yaw: 45.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: rounded barrel end
+    min: 0.262836, 0.175938, 0.009313
+    max: 0.349664, 0.305312, 0.138687
+    color: '#A26848'
+    yaw: 30.25643716352929
+    pitch: 0.0
+    shape: Ellipsoid
+  - label: long curved highlight
+    min: -0.179782, 0.018281, 0.122875
+    max: 0.396969, 0.042656, 0.129125
+    color: '#A27C59'
+    yaw: 45.43903952568167
+    pitch: 0.0
+    shape: CylinderX
+  - label: dark lower barrel shade
+    min: -0.192821, 0.04125, 0.115875
+    max: 0.347508, 0.05875, 0.122125
+    color: '#4B2E1E'
+    yaw: 45.82012896636183
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle wrap 0
+    min: -0.249146, -0.32125, 0.0695
+    max: -0.207104, -0.313125, 0.0745
+    color: '#A27C59'
+    yaw: -41.98721249581673
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle wrap 1
+    min: -0.218521, -0.287188, 0.0695
+    max: -0.176479, -0.279062, 0.0745
+    color: '#A27C59'
+    yaw: -41.98721249581673
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle wrap 2
+    min: -0.187896, -0.253125, 0.0695
+    max: -0.145854, -0.245, 0.0745
+    color: '#A27C59'
+    yaw: -41.98721249581673
+    pitch: 0.0
+    shape: CylinderX
+  - label: wood grain line 0
+    min: -0.039277, 0.097187, 0.124875
+    max: 0.314277, 0.102812, 0.131125
+    color: '#4B2E1E'
+    yaw: 45.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: wood grain line 1
+    min: -0.020527, 0.084687, 0.124875
+    max: 0.333027, 0.090312, 0.131125
+    color: '#4B2E1E'
+    yaw: 44.99999999999999
+    pitch: 0.0
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DFieldRMCBaseballBatMetalCloud
+  label: 'Metal baseball bat: tapered barrel and wrapped handle'
+  status: draft
+  sourcePrototypes:
+  - RMCBaseballBatMetal
+  referencePrototype: RMCBaseballBatMetal
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Melee/metal_bat.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Distinct silver metal source palette. Continuous rounded barrel widens
+    from narrow brown handle with a separate knob. Swing/held effects unsupported.
+    Ground-world exterior art only. Physical depth, reverse surfaces and material
+    finish are inferred. No held, firing, reload, rigging, arming or use effects;
+    no native/map/live/fidelity approval.
+  parts:
+  - label: slim handle
+    min: -0.318373, -0.285625, 0.032
+    max: -0.059752, -0.245625, 0.072
+    color: '#885436'
+    yaw: 46.46880071438582
+    pitch: 0.0
+    shape: CylinderX
+  - label: rounded handle knob
+    min: -0.299575, -0.394375, 0.018562
+    max: -0.2598, -0.3275, 0.085437
+    color: '#4B2E1E'
+    yaw: 44.99999999999994
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower tapered bat body
+    min: -0.165506, -0.1375, 0.0265
+    max: 0.079568, -0.0625, 0.1015
+    color: '#868686'
+    yaw: 49.913798762374746
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper widening bat barrel
+    min: -0.063426, 0.043125, 0.014
+    max: 0.369676, 0.163125, 0.134
+    color: '#868686'
+    yaw: 45.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: rounded barrel end
+    min: 0.262836, 0.175938, 0.009313
+    max: 0.349664, 0.305312, 0.138687
+    color: '#868686'
+    yaw: 30.25643716352929
+    pitch: 0.0
+    shape: Ellipsoid
+  - label: long curved highlight
+    min: -0.179782, 0.018281, 0.122875
+    max: 0.396969, 0.042656, 0.129125
+    color: '#BFBFBF'
+    yaw: 45.43903952568167
+    pitch: 0.0
+    shape: CylinderX
+  - label: dark lower barrel shade
+    min: -0.192821, 0.04125, 0.115875
+    max: 0.347508, 0.05875, 0.122125
+    color: '#5C5C5C'
+    yaw: 45.82012896636183
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle wrap 0
+    min: -0.249146, -0.32125, 0.0695
+    max: -0.207104, -0.313125, 0.0745
+    color: '#A27C59'
+    yaw: -41.98721249581673
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle wrap 1
+    min: -0.218521, -0.287188, 0.0695
+    max: -0.176479, -0.279062, 0.0745
+    color: '#A27C59'
+    yaw: -41.98721249581673
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle wrap 2
+    min: -0.187896, -0.253125, 0.0695
+    max: -0.145854, -0.245, 0.0745
+    color: '#A27C59'
+    yaw: -41.98721249581673
+    pitch: 0.0
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DFieldRMCIceAxeRedCloud
+  label: 'Red ice axe: curved red shaft and silver pick head'
+  status: draft
+  sourcePrototypes:
+  - RMCIceAxeRed
+  referencePrototype: RMCIceAxeRed
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Melee/ice_axe.rsi
+  referenceState: icon_red
+  sourceDirections: 1
+  placement: surface
+  description: Specific red world variant. Source curved handle, pale midshaft collar,
+    separate small end spike and arched metal head remain distinct. Ground-world exterior
+    art only. Physical depth, reverse surfaces and material finish are inferred. No
+    held, firing, reload, rigging, arming or use effects; no native/map/live/fidelity
+    approval.
+  parts:
+  - label: red curved axe shaft span 1
+    min: -0.369021, -0.197813, 0.029187
+    max: -0.224729, -0.152187, 0.074813
+    color: '#743C3C'
+    yaw: 72.34987578006991
+    pitch: 0.0
+    shape: CylinderX
+  - label: red curved axe shaft span 2
+    min: -0.310048, -0.061875, 0.029187
+    max: -0.146202, -0.01625, 0.074813
+    color: '#743C3C'
+    yaw: 55.09750438407528
+    pitch: 0.0
+    shape: CylinderX
+  - label: red curved axe shaft span 3
+    min: -0.211539, 0.0725, 0.029187
+    max: -0.032211, 0.118125, 0.074813
+    color: '#743C3C'
+    yaw: 48.532294583890874
+    pitch: 0.0
+    shape: CylinderX
+  - label: red curved axe shaft span 4
+    min: -0.07029, 0.167812, 0.029187
+    max: 0.03904, 0.213438, 0.074813
+    color: '#743C3C'
+    yaw: 30.96375653207353
+    pitch: 0.0
+    shape: CylinderX
+  - label: red curved axe shaft rounded join 1
+    min: -0.297812, -0.129062, 0.029187
+    max: -0.252188, -0.083437, 0.074813
+    color: '#743C3C'
+    shape: Ellipsoid
+  - label: red curved axe shaft rounded join 2
+    min: -0.204063, 0.005312, 0.029187
+    max: -0.158438, 0.050938, 0.074813
+    color: '#743C3C'
+    shape: Ellipsoid
+  - label: red curved axe shaft rounded join 3
+    min: -0.085313, 0.139687, 0.029187
+    max: -0.039687, 0.185312, 0.074813
+    color: '#743C3C'
+    shape: Ellipsoid
+  - label: bright red shaft ridge span 1
+    min: -0.298789, -0.020937, 0.073938
+    max: -0.138711, -0.007187, 0.082062
+    color: '#B34444'
+    yaw: 51.34019174590991
+    pitch: 0.0
+    shape: CylinderX
+  - label: bright red shaft ridge span 2
+    min: -0.197296, 0.106406, 0.073938
+    max: -0.021454, 0.120156, 0.082062
+    color: '#B34444'
+    yaw: 47.52082790771016
+    pitch: 0.0
+    shape: CylinderX
+  - label: bright red shaft ridge span 3
+    min: -0.055423, 0.193125, 0.073938
+    max: 0.038236, 0.206875, 0.082062
+    color: '#B34444'
+    yaw: 27.84757825978817
+    pitch: 0.0
+    shape: CylinderX
+  - label: bright red shaft ridge rounded join 1
+    min: -0.175625, 0.041563, 0.073938
+    max: -0.161875, 0.055313, 0.082062
+    color: '#B34444'
+    shape: Ellipsoid
+  - label: bright red shaft ridge rounded join 2
+    min: -0.056875, 0.17125, 0.073938
+    max: -0.043125, 0.185, 0.082062
+    color: '#B34444'
+    shape: Ellipsoid
+  - label: lower silver spike
+    min: -0.352614, -0.258437, 0.038437
+    max: -0.295824, -0.235313, 0.061563
+    color: '#C2C2C2'
+    yaw: -97.90716270295844
+    pitch: 0.0
+    shape: CylinderX
+  - label: steel grip collar
+    min: -0.276892, -0.116563, 0.027062
+    max: -0.224671, -0.064688, 0.078937
+    color: '#C2C2C2'
+    yaw: 51.072456407207696
+    pitch: 0.0
+    shape: CylinderX
+  - label: axe curved head span 1
+    min: -0.05595, 0.239063, 0.037
+    max: 0.057512, 0.279688, 0.057
+    color: '#706F6F'
+    yaw: -22.680559607024925
+    pitch: 0.0
+    shape: CylinderX
+  - label: axe curved head span 2
+    min: 0.038868, 0.179687, 0.037
+    max: 0.151757, 0.220312, 0.057
+    color: '#706F6F'
+    yaw: -41.633539336570216
+    pitch: 0.0
+    shape: CylinderX
+  - label: axe curved head span 3
+    min: 0.109973, 0.089063, 0.037
+    max: 0.240027, 0.129688, 0.057
+    color: '#706F6F'
+    yaw: -54.78240703180725
+    pitch: 0.0
+    shape: CylinderX
+  - label: axe curved head rounded join 1
+    min: 0.032813, 0.217187, 0.037
+    max: 0.073437, 0.257812, 0.057
+    color: '#706F6F'
+    shape: Ellipsoid
+  - label: axe curved head rounded join 2
+    min: 0.117188, 0.142187, 0.037
+    max: 0.157812, 0.182812, 0.057
+    color: '#706F6F'
+    shape: Ellipsoid
+  - label: axe bright edge span 1
+    min: 0.076563, 0.17125, 0.054938
+    max: 0.167187, 0.19125, 0.063062
+    color: '#DCDCDC'
+    yaw: -43.60281897270365
+    pitch: 0.0
+    shape: CylinderX
+  - label: axe bright edge span 2
+    min: 0.124684, 0.086875, 0.054938
+    max: 0.248753, 0.106875, 0.063062
+    color: '#DCDCDC'
+    yaw: -58.91249467652001
+    pitch: 0.0
+    shape: CylinderX
+  - label: axe bright edge rounded join 1
+    min: 0.144687, 0.14, 0.054938
+    max: 0.164687, 0.16, 0.063062
+    color: '#DCDCDC'
+    shape: Ellipsoid
+  - label: axe rear pick
+    min: -0.097193, 0.275938, 0.040813
+    max: -0.027807, 0.302187, 0.055188
+    color: '#C2C2C2'
+    yaw: 144.1623470457217
+    pitch: 0.0
+    shape: CylinderX
+  - label: head red collar
+    min: -0.012537, 0.187812, 0.022625
+    max: 0.053162, 0.246563, 0.081375
+    color: '#B34444'
+    yaw: 25.346175941946676
+    pitch: 0.0
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DFieldRMCSynthBreachingHammerCloud
+  label: 'Synthetic breaching hammer: wide head and orange grip'
+  status: draft
+  sourcePrototypes:
+  - RMCSynthBreachingHammer
+  referencePrototype: RMCSynthBreachingHammer
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Melee/breaching.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Long dark shaft, bright orange upper wrap and wide gray head trace
+    the actual source. This is a static prop, without impact mechanics. Ground-world
+    exterior art only. Physical depth, reverse surfaces and material finish are inferred.
+    No held, firing, reload, rigging, arming or use effects; no native/map/live/fidelity
+    approval.
+  parts:
+  - label: long charcoal hammer shaft
+    min: -0.524587, -0.115781, 0.0275
+    max: 0.277712, -0.060781, 0.0825
+    color: '#584F4F'
+    yaw: 48.23672759819502
+    pitch: 0.0
+    shape: CylinderX
+  - label: shaft upper ridge
+    min: -0.488086, -0.126719, 0.079875
+    max: 0.188086, -0.112344, 0.086125
+    color: '#726868'
+    yaw: 48.278499451378345
+    pitch: 0.0
+    shape: CylinderX
+  - label: orange grip wrap
+    min: -0.129775, -0.007812, 0.020937
+    max: 0.1204, 0.070312, 0.099062
+    color: '#CA4A1D'
+    yaw: 48.544766455594875
+    pitch: 0.0
+    shape: CylinderX
+  - label: orange grip raised band 0
+    min: -0.110838, -0.052656, 0.098875
+    max: -0.044475, -0.043281, 0.105125
+    color: '#E0683E'
+    yaw: -42.328135406727405
+    pitch: 0.0
+    shape: CylinderX
+  - label: orange grip raised band 1
+    min: -0.082088, -0.020156, 0.098875
+    max: -0.015725, -0.010781, 0.105125
+    color: '#E0683E'
+    yaw: -42.328135406727434
+    pitch: 0.0
+    shape: CylinderX
+  - label: orange grip raised band 2
+    min: -0.053338, 0.012344, 0.098875
+    max: 0.013025, 0.021719, 0.105125
+    color: '#E0683E'
+    yaw: -42.32813540672737
+    pitch: 0.0
+    shape: CylinderX
+  - label: orange grip raised band 3
+    min: -0.024588, 0.044844, 0.098875
+    max: 0.041775, 0.054219, 0.105125
+    color: '#E0683E'
+    yaw: -42.328135406727405
+    pitch: 0.0
+    shape: CylinderX
+  - label: orange grip raised band 4
+    min: 0.004162, 0.077344, 0.098875
+    max: 0.070525, 0.086719, 0.105125
+    color: '#E0683E'
+    yaw: -42.328135406727434
+    pitch: 0.0
+    shape: CylinderX
+  - label: broad solid hammer head
+    min: -0.042542, 0.145313, 0.01075
+    max: 0.398792, 0.276562, 0.12325
+    color: '#726868'
+    yaw: -40.117240436166945
+    pitch: 0.0
+  - label: left hammer face
+    min: -0.02645, 0.287656, 0.010125
+    max: 0.054575, 0.420156, 0.123875
+    color: '#726868'
+    yaw: -39.52263127117113
+    pitch: 0.0
+  - label: right hammer face
+    min: 0.311943, 0.009531, 0.010125
+    max: 0.366182, 0.142031, 0.123875
+    color: '#726868'
+    yaw: -41.496468355215534
+    pitch: 0.0
+  - label: hammer head forged band 0
+    min: 0.002406, 0.299375, 0.117875
+    max: 0.128844, 0.313125, 0.124125
+    color: '#544949'
+    yaw: 50.01311375503579
+    pitch: 0.0
+    shape: CylinderX
+  - label: hammer head forged band 1
+    min: 0.078969, 0.235313, 0.117875
+    max: 0.205406, 0.249062, 0.124125
+    color: '#544949'
+    yaw: 50.01311375503581
+    pitch: 0.0
+    shape: CylinderX
+  - label: hammer head forged band 2
+    min: 0.155531, 0.17125, 0.117875
+    max: 0.281969, 0.185, 0.124125
+    color: '#544949'
+    yaw: 50.01311375503581
+    pitch: 0.0
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DFieldRMCMagazinePistolB92FSCloud
+  label: 'B92FS magazine: ribbed black shell and loaded gold lip'
+  status: draft
+  sourcePrototypes:
+  - RMCMagazinePistolB92FS
+  referencePrototype: RMCMagazinePistolB92FS
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Ammunition/Magazines/b92fs.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: Resolved default base + mag-1 composition from 2-step MagazineVisuals.
+    The visible gold top and shell are exterior art. Empty/count/reload states use
+    multiple source layers and remain unsupported. Ground-world exterior art only.
+    Physical depth, reverse surfaces and material finish are inferred. No held, firing,
+    reload, rigging, arming or use effects; no native/map/live/fidelity approval.
+  parts:
+  - label: dark offset magazine shell
+    min: -0.121756, -0.158594, 0.027
+    max: 0.118631, -0.089844, 0.067
+    color: '#343537'
+    yaw: 62.935288994058304
+    pitch: 0.0
+  - label: shell upper shoulder
+    min: 0.030999, -0.044062, 0.026375
+    max: 0.079938, 0.028437, 0.067625
+    color: '#444749'
+    yaw: 73.3007557660064
+    pitch: 0.0
+  - label: flared lower shoe
+    min: -0.077015, -0.267031, 0.021875
+    max: -0.010485, -0.231406, 0.068125
+    color: '#444749'
+    yaw: -9.462322208025563
+    pitch: 0.0
+  - label: stamped horizontal rib 0
+    min: -0.071877, -0.222812, 0.065938
+    max: -0.021873, -0.211562, 0.074063
+    color: '#5F6368'
+    yaw: -18.20848447058083
+    pitch: 0.0
+    shape: CylinderX
+  - label: stamped horizontal rib 1
+    min: -0.054377, -0.185625, 0.065938
+    max: -0.004373, -0.174375, 0.074063
+    color: '#5F6368'
+    yaw: -18.20848447058083
+    pitch: 0.0
+    shape: CylinderX
+  - label: stamped horizontal rib 2
+    min: -0.036877, -0.148438, 0.065938
+    max: 0.013127, -0.137188, 0.074063
+    color: '#5F6368'
+    yaw: -18.208484470580814
+    pitch: 0.0
+    shape: CylinderX
+  - label: stamped horizontal rib 3
+    min: -0.019377, -0.11125, 0.065938
+    max: 0.030627, -0.1, 0.074063
+    color: '#5F6368'
+    yaw: -18.208484470580814
+    pitch: 0.0
+    shape: CylinderX
+  - label: stamped horizontal rib 4
+    min: -0.001877, -0.074062, 0.065938
+    max: 0.048127, -0.062812, 0.074063
+    color: '#5F6368'
+    yaw: -18.208484470580814
+    pitch: 0.0
+    shape: CylinderX
+  - label: visible gold top round
+    min: 0.048438, 0.006875, 0.039062
+    max: 0.0875, 0.03375, 0.060938
+    color: '#9C6C19'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DFieldRMCMagazinePistolPK7Cloud
+  label: 'PK7 magazine: silver shell and orange bands'
+  status: draft
+  sourcePrototypes:
+  - RMCMagazinePistolPK7
+  referencePrototype: RMCMagazinePistolPK7
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Ammunition/Magazines/pk7.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: 'Default base + mag-1 + ammo_band; the band retains the source #DF963F
+    tint. Only loaded world exterior is authored. Empty/count variations and reloading
+    unsupported. Ground-world exterior art only. Physical depth, reverse surfaces
+    and material finish are inferred. No held, firing, reload, rigging, arming or
+    use effects; no native/map/live/fidelity approval.'
+  parts:
+  - label: silver slanted magazine shell
+    min: -0.125483, -0.080313, 0.028938
+    max: 0.142671, 0.039687, 0.087063
+    color: '#A3A0A0'
+    yaw: 67.02059655601568
+    pitch: 0.0
+  - label: angled lower shoe
+    min: -0.10176, -0.182187, 0.026688
+    max: 0.009573, -0.133437, 0.087313
+    color: '#C0C0C0'
+    yaw: -4.830419958289951
+    pitch: 0.0
+  - label: silver upper neck
+    min: 0.017462, 0.052031, 0.028
+    max: 0.095038, 0.155781, 0.088
+    color: '#919191'
+    yaw: 80.72739822279974
+    pitch: 0.0
+  - label: left long bright rim
+    min: -0.164697, -0.023438, 0.087875
+    max: 0.105322, -0.007812, 0.094125
+    color: '#CECECE'
+    yaw: 66.10483858492964
+    pitch: 0.0
+    shape: CylinderX
+  - label: center shell stamped line
+    min: -0.070673, -0.046875, 0.086875
+    max: 0.119111, -0.034375, 0.093125
+    color: '#919191'
+    yaw: 67.23499089248853
+    pitch: 0.0
+    shape: CylinderX
+  - label: orange electrostatic identity band 13.0
+    min: 0.0, 0.084062, 0.08725
+    max: 0.101562, 0.103438, 0.09475
+    color: '#B47932'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: orange electrostatic identity band 14.8
+    min: 0.0, 0.027812, 0.08725
+    max: 0.101562, 0.047187, 0.09475
+    color: '#B47932'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: blue top indication
+    min: 0.096875, 0.125, 0.062
+    max: 0.120313, 0.15625, 0.092
+    color: '#31319B'
+- type: cmu3DModel
+  id: CMU3DFieldRMCMagazineLMGM60Cloud
+  label: 'M60 ammunition box: ribbed brown case and visible loaded belt'
+  status: draft
+  sourcePrototypes:
+  - RMCMagazineLMGM60
+  referencePrototype: RMCMagazineLMGM60
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m60.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: Default base + mag-1 for inherited 2-step MagazineVisuals, full provider.
+    Source belt remains exterior capsule detail. Empty/count/feeding/reload behavior
+    and internal contents are not represented. Ground-world exterior art only. Physical
+    depth, reverse surfaces and material finish are inferred. No held, firing, reload,
+    rigging, arming or use effects; no native/map/live/fidelity approval.
+  parts:
+  - label: M60 brown box main shell
+    min: -0.1875, -0.29375, 0.014
+    max: 0.178125, 0.01875, 0.144
+    color: '#4D3F29'
+  - label: front recessed center panel
+    min: -0.146875, -0.2625, 0.141
+    max: 0.1375, -0.021875, 0.157
+    color: '#4D3F29'
+  - label: embossed front flute 18.05
+    min: -0.11875, -0.085313, 0.154
+    max: 0.103125, -0.064063, 0.171
+    color: '#6A593C'
+  - label: embossed front flute 20.1
+    min: -0.11875, -0.149375, 0.154
+    max: 0.103125, -0.128125, 0.171
+    color: '#6A593C'
+  - label: embossed front flute 22.1
+    min: -0.11875, -0.211875, 0.154
+    max: 0.103125, -0.190625, 0.171
+    color: '#6A593C'
+  - label: left top collar rail
+    min: -0.182812, -0.00625, 0.05
+    max: -0.123437, 0.14375, 0.16
+    color: '#6A593C'
+  - label: right top collar rail
+    min: 0.107812, -0.00625, 0.05
+    max: 0.175, 0.14375, 0.16
+    color: '#6A593C'
+  - label: rear upper collar
+    min: -0.1375, 0.128125, 0.052
+    max: 0.13125, 0.175, 0.16
+    color: '#6A593C'
+  - label: front upper collar
+    min: -0.14375, -0.007812, 0.115
+    max: 0.125, 0.053125, 0.177
+    color: '#AE7C27'
+  - label: deep unfilled top recess
+    min: -0.123437, 0.05, 0.028
+    max: 0.107812, 0.13125, 0.051
+    color: '#352A19'
+  - label: visible belt capsule 1
+    min: -0.030892, 0.168125, 0.09575
+    max: 0.037142, 0.200625, 0.12825
+    color: '#AE7C27'
+    yaw: -66.73229518994307
+    pitch: 0.0
+    shape: CylinderX
+  - label: belt capsule warm glint 1
+    min: -0.024711, 0.173281, 0.1245
+    max: 0.025336, 0.181406, 0.1295
+    color: '#AE7C27'
+    yaw: -64.87504218471818
+    pitch: 0.0
+    shape: CylinderX
+  - label: visible belt capsule 2
+    min: 0.028483, 0.193125, 0.09575
+    max: 0.096517, 0.225625, 0.12825
+    color: '#AE7C27'
+    yaw: -66.73229518994307
+    pitch: 0.0
+    shape: CylinderX
+  - label: belt capsule warm glint 2
+    min: 0.034664, 0.198281, 0.1245
+    max: 0.084711, 0.206406, 0.1295
+    color: '#AE7C27'
+    yaw: -64.87504218471818
+    pitch: 0.0
+    shape: CylinderX
+  - label: visible belt capsule 3
+    min: 0.089421, 0.182188, 0.09575
+    max: 0.157454, 0.214687, 0.12825
+    color: '#AE7C27'
+    yaw: -66.73229518994307
+    pitch: 0.0
+    shape: CylinderX
+  - label: belt capsule warm glint 3
+    min: 0.095601, 0.187344, 0.1245
+    max: 0.145649, 0.195469, 0.1295
+    color: '#AE7C27'
+    yaw: -64.87504218471818
+    pitch: 0.0
+    shape: CylinderX
+  - label: visible belt capsule 4
+    min: 0.147233, 0.155625, 0.09575
+    max: 0.215267, 0.188125, 0.12825
+    color: '#AE7C27'
+    yaw: -66.73229518994307
+    pitch: 0.0
+    shape: CylinderX
+  - label: belt capsule warm glint 4
+    min: 0.153414, 0.160781, 0.1245
+    max: 0.203461, 0.168906, 0.1295
+    color: '#AE7C27'
+    yaw: -64.87504218471818
+    pitch: 0.0
+    shape: CylinderX
+  - label: visible belt capsule 5
+    min: 0.187858, 0.105625, 0.09575
+    max: 0.255892, 0.138125, 0.12825
+    color: '#AE7C27'
+    yaw: -66.73229518994307
+    pitch: 0.0
+    shape: CylinderX
+  - label: belt capsule warm glint 5
+    min: 0.194039, 0.110781, 0.1245
+    max: 0.244086, 0.118906, 0.1295
+    color: '#AE7C27'
+    yaw: -64.87504218471818
+    pitch: 0.0
+    shape: CylinderX
+  - label: visible belt capsule 6
+    min: 0.211296, 0.0525, 0.09575
+    max: 0.279329, 0.085, 0.12825
+    color: '#AE7C27'
+    yaw: -66.73229518994307
+    pitch: 0.0
+    shape: CylinderX
+  - label: belt capsule warm glint 6
+    min: 0.217476, 0.057656, 0.1245
+    max: 0.267524, 0.065781, 0.1295
+    color: '#AE7C27'
+    yaw: -64.87504218471818
+    pitch: 0.0
+    shape: CylinderX
+  - label: visible belt capsule 7
+    min: 0.212858, -0.006875, 0.09575
+    max: 0.280892, 0.025625, 0.12825
+    color: '#AE7C27'
+    yaw: -66.73229518994307
+    pitch: 0.0
+    shape: CylinderX
+  - label: belt capsule warm glint 7
+    min: 0.219039, -0.001719, 0.1245
+    max: 0.269086, 0.006406, 0.1295
+    color: '#AE7C27'
+    yaw: -64.87504218471818
+    pitch: 0.0
+    shape: CylinderX
+  - label: visible belt capsule 8
+    min: 0.212858, -0.069375, 0.09575
+    max: 0.280892, -0.036875, 0.12825
+    color: '#AE7C27'
+    yaw: -66.73229518994307
+    pitch: 0.0
+    shape: CylinderX
+  - label: belt capsule warm glint 8
+    min: 0.219039, -0.064219, 0.1245
+    max: 0.269086, -0.056094, 0.1295
+    color: '#AE7C27'
+    yaw: -64.87504218471818
+    pitch: 0.0
+    shape: CylinderX
+  - label: visible belt capsule 9
+    min: 0.212858, -0.135, 0.09575
+    max: 0.280892, -0.1025, 0.12825
+    color: '#AE7C27'
+    yaw: -66.73229518994307
+    pitch: 0.0
+    shape: CylinderX
+  - label: belt capsule warm glint 9
+    min: 0.219039, -0.129844, 0.1245
+    max: 0.269086, -0.121719, 0.1295
+    color: '#AE7C27'
+    yaw: -64.87504218471818
+    pitch: 0.0
+    shape: CylinderX
+  - label: connected exterior belt edge span 1
+    min: -0.007948, 0.185312, 0.087
+    max: 0.064198, 0.205313, 0.107
+    color: '#6D4C09'
+    yaw: 17.650124219930113
+    pitch: 0.0
+    shape: CylinderX
+  - label: connected exterior belt edge span 2
+    min: 0.062257, 0.192344, 0.087
+    max: 0.125243, 0.212344, 0.107
+    color: '#6D4C09'
+    yaw: -7.125016348901798
+    pitch: 0.0
+    shape: CylinderX
+  - label: connected exterior belt edge span 3
+    min: 0.122022, 0.175156, 0.087
+    max: 0.184228, 0.195156, 0.107
+    color: '#6D4C09'
+    yaw: -25.277722235552936
+    pitch: 0.0
+    shape: CylinderX
+  - label: connected exterior belt edge span 4
+    min: 0.170419, 0.136875, 0.087
+    max: 0.238956, 0.156875, 0.107
+    color: '#6D4C09'
+    yaw: -46.84761026599459
+    pitch: 0.0
+    shape: CylinderX
+  - label: connected exterior belt edge span 5
+    min: 0.180474, 0.055625, 0.087
+    max: 0.294526, 0.075625, 0.107
+    color: '#6D4C09'
+    yaw: -80.53767779197442
+    pitch: 0.0
+    shape: CylinderX
+  - label: connected exterior belt edge span 6
+    min: 0.179687, -0.067812, 0.087
+    max: 0.314062, -0.047812, 0.107
+    color: '#6D4C09'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: connected exterior belt edge rounded join 1
+    min: 0.0525, 0.19625, 0.087
+    max: 0.0725, 0.21625, 0.107
+    color: '#6D4C09'
+    shape: Ellipsoid
+  - label: connected exterior belt edge rounded join 2
+    min: 0.115, 0.188437, 0.087
+    max: 0.135, 0.208437, 0.107
+    color: '#6D4C09'
+    shape: Ellipsoid
+  - label: connected exterior belt edge rounded join 3
+    min: 0.17125, 0.161875, 0.087
+    max: 0.19125, 0.181875, 0.107
+    color: '#6D4C09'
+    shape: Ellipsoid
+  - label: connected exterior belt edge rounded join 4
+    min: 0.218125, 0.111875, 0.087
+    max: 0.238125, 0.131875, 0.107
+    color: '#6D4C09'
+    shape: Ellipsoid
+  - label: connected exterior belt edge rounded join 5
+    min: 0.236875, -0.000625, 0.087
+    max: 0.256875, 0.019375, 0.107
+    color: '#6D4C09'
+    shape: Ellipsoid
+- type: cmu3DModel
+  id: CMU3DFieldMagazineFoamBoxCloud
+  label: 'Foam dart box: green case with full yellow count strip'
+  status: draft
+  sourcePrototypes:
+  - MagazineFoamBox
+  referencePrototype: MagazineFoamBox
+  referenceRsi: /Textures/Objects/Weapons/Guns/Ammunition/Magazine/LightRifle/light_rifle_box.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: Full provider and 8-step MagazineVisuals resolve base + mag-7, correcting
+    the initial YAML mag-1 placeholder. Narrow original count strip is a detail crop
+    on a modeled green case. Partial/empty count and reload states unsupported. Ground-world
+    exterior art only. Physical depth, reverse surfaces and material finish are inferred.
+    No held, firing, reload, rigging, arming or use effects; no native/map/live/fidelity
+    approval.
+  parts:
+  - label: green foam box casing
+    min: -0.1875, -0.26875, 0.013
+    max: 0.15625, 0.221875, 0.139
+    color: '#4C6A3B'
+  - label: raised left case ridge
+    min: -0.176563, -0.24375, 0.135
+    max: -0.125, 0.203125, 0.169
+    color: '#7B956D'
+  - label: raised top case ridge
+    min: -0.146875, 0.165625, 0.135
+    max: 0.13125, 0.2125, 0.169
+    color: '#7B956D'
+  - label: right folded case side
+    min: 0.121875, -0.253125, 0.018
+    max: 0.1625, 0.1875, 0.17
+    color: '#38492E'
+  - label: bottom case shoe
+    min: -0.146875, -0.28125, 0.015
+    max: 0.13125, -0.234375, 0.14
+    color: '#38492E'
+  - label: display strip recessed bed
+    min: -0.090625, -0.275, 0.137
+    max: 0.03125, 0.15, 0.15
+    color: '#2B3D27'
+  - label: original full-count strip
+    min: -0.0625, -0.25, 0.151
+    max: 0.03125, 0.125, 0.154
+    color: '#FFFFFF'
+    surface: CMU3DFieldGearCloudFoamFullCountStrip
+    surfaceAxis: XY
+  - label: left strip rim
+    min: -0.092187, -0.275, 0.149
+    max: -0.0625, 0.14375, 0.163
+    color: '#688359'
+- type: cmu3DModel
+  id: CMU3DFieldRMCSpeedLoader357Cloud
+  label: '357 speedloader: circular carrier and loaded source row'
+  status: draft
+  sourcePrototypes:
+  - RMCSpeedLoader357
+  referencePrototype: RMCSpeedLoader357
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Ammunition/SpeedLoaders/spearhead.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: Source base + base-5 is the full 6-step visual. Five front-visible
+    capsule forms reproduce the projected art; no unseen internal or rear mechanical
+    arrangement is invented. Count/empty/reload states remain unsupported. Ground-world
+    exterior art only. Physical depth, reverse surfaces and material finish are inferred.
+    No held, firing, reload, rigging, arming or use effects; no native/map/live/fidelity
+    approval.
+  parts:
+  - label: round dark speedloader carrier
+    min: -0.1875, -0.121875, 0.014
+    max: 0.184375, 0.078125, 0.143
+    color: '#3F3F3F'
+    shape: CylinderY
+  - label: carrier upper rolled rim
+    min: -0.184375, 0.045312, 0.048
+    max: 0.18125, 0.073437, 0.156
+    color: '#2C2521'
+    shape: CylinderY
+  - label: carrier lower rounded edge
+    min: -0.170312, -0.13125, 0.036
+    max: 0.170312, -0.0875, 0.132
+    color: '#2C2521'
+    shape: CylinderY
+  - label: exposed pale loaded capsule 1
+    min: -0.14375, 0.04375, 0.053
+    max: -0.103125, 0.159375, 0.13
+    color: '#CFC2B4'
+    shape: CylinderY
+  - label: violet capsule top 1
+    min: -0.146875, 0.14375, 0.053
+    max: -0.1, 0.204688, 0.13
+    color: '#958099'
+    shape: Ellipsoid
+  - label: carrier vertical rib 1
+    min: -0.189219, -0.045469, 0.119827
+    max: -0.065781, -0.027969, 0.126077
+    color: '#606060'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: exposed pale loaded capsule 2
+    min: -0.078125, 0.04375, 0.053
+    max: -0.0375, 0.159375, 0.13
+    color: '#CFC2B4'
+    shape: CylinderY
+  - label: violet capsule top 2
+    min: -0.08125, 0.14375, 0.053
+    max: -0.034375, 0.204688, 0.13
+    color: '#958099'
+    shape: Ellipsoid
+  - label: carrier vertical rib 2
+    min: -0.123594, -0.045469, 0.133388
+    max: -0.000156, -0.027969, 0.139638
+    color: '#606060'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: exposed pale loaded capsule 3
+    min: -0.0125, 0.04375, 0.053
+    max: 0.028125, 0.159375, 0.13
+    color: '#CFC2B4'
+    shape: CylinderY
+  - label: violet capsule top 3
+    min: -0.015625, 0.14375, 0.053
+    max: 0.03125, 0.204688, 0.13
+    color: '#958099'
+    shape: Ellipsoid
+  - label: carrier vertical rib 3
+    min: -0.057969, -0.045469, 0.136849
+    max: 0.065469, -0.027969, 0.143099
+    color: '#606060'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: exposed pale loaded capsule 4
+    min: 0.053125, 0.04375, 0.053
+    max: 0.09375, 0.159375, 0.13
+    color: '#CFC2B4'
+    shape: CylinderY
+  - label: violet capsule top 4
+    min: 0.05, 0.14375, 0.053
+    max: 0.096875, 0.204688, 0.13
+    color: '#958099'
+    shape: Ellipsoid
+  - label: carrier vertical rib 4
+    min: 0.007656, -0.045469, 0.131996
+    max: 0.131094, -0.027969, 0.138246
+    color: '#606060'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: exposed pale loaded capsule 5
+    min: 0.11875, 0.04375, 0.053
+    max: 0.159375, 0.159375, 0.13
+    color: '#CFC2B4'
+    shape: CylinderY
+  - label: violet capsule top 5
+    min: 0.115625, 0.14375, 0.053
+    max: 0.1625, 0.204688, 0.13
+    color: '#958099'
+    shape: Ellipsoid
+  - label: carrier vertical rib 5
+    min: 0.073281, -0.045469, 0.116148
+    max: 0.196719, -0.027969, 0.122398
+    color: '#606060'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower release knob
+    min: -0.05, -0.209375, 0.035
+    max: 0.075, -0.109375, 0.11
+    color: '#342B25'
+    shape: CylinderY
+  - label: knob highlight
+    min: -0.023438, -0.16875, 0.105
+    max: 0.039062, -0.125, 0.135
+    color: '#717171'
+    shape: Ellipsoid
+- type: cmu3DModel
+  id: CMU3DFieldCMGrenadeHighExplosiveCloud
+  label: 'HEDP red-cap grenade: source cylindrical exterior'
+  status: draft
+  sourcePrototypes:
+  - CMGrenadeHighExplosive
+  referencePrototype: CMGrenadeHighExplosive
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Grenades/m40hedp.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Inherited GrenadeBase has one visible TriggerVisualLayers.Base icon.
+    Default unarmed source is a plain slim cylinder with red cap. No pin, pull ring
+    or lever is present in this art. Timer/armed/detonation effects unsupported. Ground-world
+    exterior art only. Physical depth, reverse surfaces and material finish are inferred.
+    No held, firing, reload, rigging, arming or use effects; no native/map/live/fidelity
+    approval.
+  parts:
+  - label: dark cylindrical body
+    min: -0.0875, -0.207812, 0.008
+    max: 0.023438, 0.1125, 0.105
+    color: '#323335'
+    shape: CylinderY
+  - label: silver long body inset
+    min: -0.0625, -0.18125, 0.101
+    max: -0.021875, 0.084375, 0.114
+    color: '#D0D0D0'
+  - label: dark lower collar
+    min: -0.089062, -0.15625, 0.01
+    max: 0.026563, -0.13125, 0.11
+    color: '#0C0C0C'
+    shape: CylinderY
+  - label: rounded colored cap
+    min: -0.090625, 0.090625, 0.009
+    max: 0.025, 0.173438, 0.111
+    color: '#C24444'
+    shape: CylinderY
+  - label: cap upper light
+    min: -0.06875, 0.11875, 0.106
+    max: -0.028125, 0.15, 0.12
+    color: '#F67979'
+- type: cmu3DModel
+  id: CMU3DFieldRMCGrenadeTrainingCloud
+  label: 'Training white-cap grenade: source cylindrical exterior'
+  status: draft
+  sourcePrototypes:
+  - RMCGrenadeTraining
+  referencePrototype: RMCGrenadeTraining
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Grenades/m07training.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Inherited GrenadeBase has one visible TriggerVisualLayers.Base icon.
+    Default unarmed source is a plain slim cylinder with white cap. No pin, pull ring
+    or lever is present in this art. Timer/armed/detonation effects unsupported. Ground-world
+    exterior art only. Physical depth, reverse surfaces and material finish are inferred.
+    No held, firing, reload, rigging, arming or use effects; no native/map/live/fidelity
+    approval.
+  parts:
+  - label: dark cylindrical body
+    min: -0.0875, -0.207812, 0.008
+    max: 0.023438, 0.1125, 0.105
+    color: '#323335'
+    shape: CylinderY
+  - label: silver long body inset
+    min: -0.0625, -0.18125, 0.101
+    max: -0.021875, 0.084375, 0.114
+    color: '#C0C0C0'
+  - label: dark lower collar
+    min: -0.089062, -0.15625, 0.01
+    max: 0.026563, -0.13125, 0.11
+    color: '#0C0C0C'
+    shape: CylinderY
+  - label: rounded colored cap
+    min: -0.090625, 0.090625, 0.009
+    max: 0.025, 0.173438, 0.111
+    color: '#D9D9D9'
+    shape: CylinderY
+  - label: cap upper light
+    min: -0.06875, 0.11875, 0.106
+    max: -0.028125, 0.15, 0.12
+    color: '#FFFFFF'
+- type: cmu3DModel
+  id: CMU3DFieldRMCMortarShellHECloud
+  label: 'HE mortar prop: red capsule, band and separate tail fins'
+  status: draft
+  sourcePrototypes:
+  - RMCMortarShellHE
+  referencePrototype: RMCMortarShellHE
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/mortar.rsi
+  referenceState: mortar_ammo_he
+  sourceDirections: 1
+  placement: surface
+  description: Red exterior capsule and separate source-visible gray tail/fin volumes.
+    Only the loose-world visual is authored; no functional internals, dimensions or
+    firing behavior. Ground-world exterior art only. Physical depth, reverse surfaces
+    and material finish are inferred. No held, firing, reload, rigging, arming or
+    use effects; no native/map/live/fidelity approval.
+  parts:
+  - label: red capsule body
+    min: -0.084375, 0.076562, 0.025
+    max: 0.1125, 0.34375, 0.187
+    color: '#A02A2A'
+    shape: CylinderY
+  - label: rounded red nose
+    min: -0.073437, 0.242188, 0.032
+    max: 0.103125, 0.384375, 0.18
+    color: '#BE4444'
+    shape: Ellipsoid
+  - label: upper nose small red tip
+    min: -0.03125, 0.3375, 0.07
+    max: 0.05, 0.403125, 0.146
+    color: '#A02A2A'
+    shape: Ellipsoid
+  - label: red body lower shoulder
+    min: -0.073437, 0.0375, 0.035
+    max: 0.104688, 0.14375, 0.175
+    color: '#A02A2A'
+    shape: Ellipsoid
+  - label: source silver body band
+    min: -0.073437, 0.120937, 0.04
+    max: 0.098437, 0.148438, 0.177
+    color: '#99A3A8'
+    shape: CylinderY
+  - label: slim gray tail stem
+    min: -0.028125, -0.21875, 0.06
+    max: 0.059375, 0.059375, 0.13
+    color: '#99A3A8'
+    shape: CylinderY
+  - label: tail lower tapered cap
+    min: -0.01875, -0.29375, 0.062
+    max: 0.05, -0.184375, 0.125
+    color: '#5E666A'
+    shape: Ellipsoid
+  - label: left tail fin
+    min: -0.0875, -0.221875, 0.082
+    max: -0.015625, -0.140625, 0.103
+    color: '#3D4144'
+  - label: right tail fin
+    min: 0.046875, -0.221875, 0.082
+    max: 0.115625, -0.140625, 0.103
+    color: '#3D4144'
+  - label: upper tail raised fin
+    min: -0.007812, -0.275, 0.098
+    max: 0.039062, -0.09375, 0.181
+    color: '#5E666A'
+  - label: lower tail fin
+    min: -0.007812, -0.275, 0.014
+    max: 0.039062, -0.09375, 0.073
+    color: '#3D4144'
+  - label: tail silver collar
+    min: -0.048438, -0.1375, 0.049
+    max: 0.079688, -0.090625, 0.14
+    color: '#99A3A8'
+    shape: CylinderY
+  - label: nose bright reflected streak
+    min: -0.098605, 0.267188, 0.164875
+    max: 0.03298, 0.289062, 0.171125
+    color: '#BE4444'
+    yaw: -94.08561677997486
+    pitch: 0.0
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DFieldRMCAttachmentBipodCloud
+  label: 'Folded bipod attachment: paired legs with through-open center'
+  status: draft
+  sourcePrototypes:
+  - RMCAttachmentBipod
+  referencePrototype: RMCAttachmentBipod
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Attachments/under.rsi
+  referenceState: bipod
+  sourceDirections: 1
+  placement: surface
+  description: Source folded U form with two distinct legs, dark feet and a clear
+    central aperture. Deployed/installed/held forms remain unsupported; no mechanics
+    are modeled. Ground-world exterior art only. Physical depth, reverse surfaces
+    and material finish are inferred. No held, firing, reload, rigging, arming or
+    use effects; no native/map/live/fidelity approval.
+  parts:
+  - label: top folded hinge bridge
+    min: -0.0625, 0.101875, 0.026625
+    max: 0.071875, 0.160625, 0.085375
+    color: '#484848'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: left folded leg span 1
+    min: -0.158305, 0.01, 0.033188
+    max: 0.020805, 0.055625, 0.078813
+    color: '#484848'
+    yaw: -96.00900595749452
+    pitch: 0.0
+    shape: CylinderX
+  - label: left folded leg span 2
+    min: -0.141632, -0.1275, 0.033188
+    max: -0.041181, -0.081875, 0.078813
+    color: '#484848'
+    yaw: -105.33328479305356
+    pitch: 0.0
+    shape: CylinderX
+  - label: left folded leg rounded join 1
+    min: -0.100938, -0.079063, 0.033188
+    max: -0.055312, -0.033438, 0.078813
+    color: '#484848'
+    shape: Ellipsoid
+  - label: right folded leg span 1
+    min: -0.01768, 0.01, 0.033188
+    max: 0.16143, 0.055625, 0.078813
+    color: '#5B5B5B'
+    yaw: -83.99099404250548
+    pitch: 0.0
+    shape: CylinderX
+  - label: right folded leg span 2
+    min: 0.045433, -0.1275, 0.033188
+    max: 0.146755, -0.081875, 0.078813
+    color: '#5B5B5B'
+    yaw: -72.96223220437436
+    pitch: 0.0
+    shape: CylinderX
+  - label: right folded leg rounded join 1
+    min: 0.058438, -0.079063, 0.033188
+    max: 0.104063, -0.033438, 0.078813
+    color: '#5B5B5B'
+    shape: Ellipsoid
+  - label: left pale leg reflection
+    min: -0.161203, -0.017187, 0.07275
+    max: -0.013797, -0.004687, 0.08525
+    color: '#909090'
+    yaw: -94.86451443776053
+    pitch: 0.0
+    shape: CylinderX
+  - label: right pale leg reflection
+    min: 0.017765, -0.017187, 0.07275
+    max: 0.165047, -0.004687, 0.08525
+    color: '#909090'
+    yaw: -85.74115387782963
+    pitch: 0.0
+    shape: CylinderX
+  - label: left foot shoe
+    min: -0.140625, -0.201562, 0.014
+    max: -0.0625, -0.125, 0.093
+    color: '#343434'
+  - label: right foot shoe
+    min: 0.071875, -0.201562, 0.014
+    max: 0.146875, -0.125, 0.093
+    color: '#343434'
+  - label: hinge rivet 14.0
+    min: -0.07375, 0.124375, 0.08
+    max: -0.05125, 0.146875, 0.099
+    color: '#6A6A6A'
+    shape: CylinderZ
+  - label: hinge rivet 18.15
+    min: 0.055937, 0.124375, 0.08
+    max: 0.078437, 0.146875, 0.099
+    color: '#6A6A6A'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DFieldRMCAttachmentM63StockCloud
+  label: 'M63 stock attachment: solid stepped shell and raised ribs'
+  status: draft
+  sourcePrototypes:
+  - RMCAttachmentM63Stock
+  referencePrototype: RMCAttachmentM63Stock
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Attachments/stock.rsi
+  referenceState: smgstock
+  sourceDirections: 1
+  placement: surface
+  description: Source alpha confirms a fully filled ribbed body, rather than a skeletal
+    opening. Stepped exterior follows the sloped source underside. Installed/retracted
+    or attachment transforms remain unsupported. Ground-world exterior art only. Physical
+    depth, reverse surfaces and material finish are inferred. No held, firing, reload,
+    rigging, arming or use effects; no native/map/live/fidelity approval.
+  parts:
+  - label: deep butt end
+    min: -0.23125, -0.165625, 0.015
+    max: -0.15, 0.06875, 0.157
+    color: '#2D2D34'
+  - label: central stepped stock shell
+    min: -0.178125, -0.153125, 0.025
+    max: 0.0125, 0.079688, 0.151
+    color: '#2D2D34'
+  - label: upper forward stock shell
+    min: -0.01875, -0.1, 0.04
+    max: 0.132812, 0.075, 0.139
+    color: '#3A3F42'
+  - label: forward narrow stock neck
+    min: 0.1, -0.05625, 0.053
+    max: 0.23125, 0.028125, 0.129
+    color: '#4F4F4F'
+  - label: lower swept stock shoulder
+    min: -0.178125, -0.190625, 0.028
+    max: -0.034375, -0.1125, 0.144
+    color: '#2D2D34'
+    shape: Ellipsoid
+  - label: source vertical stock rib 1
+    min: -0.153125, -0.15625, 0.145
+    max: -0.134375, 0.054688, 0.171
+    color: '#5C576B'
+  - label: source vertical stock rib 2
+    min: -0.09375, -0.15625, 0.145
+    max: -0.075, 0.054688, 0.171
+    color: '#5C576B'
+  - label: source vertical stock rib 3
+    min: -0.03125, -0.10625, 0.129
+    max: -0.0125, 0.054688, 0.155
+    color: '#5C576B'
+  - label: source vertical stock rib 4
+    min: 0.03125, -0.076562, 0.129
+    max: 0.05, 0.054688, 0.155
+    color: '#5C576B'
+  - label: source vertical stock rib 5
+    min: 0.09375, -0.076562, 0.129
+    max: 0.1125, 0.054688, 0.155
+    color: '#5C576B'
+  - label: butt pad pale edge
+    min: -0.2125, -0.14375, 0.151
+    max: -0.195312, 0.059375, 0.166
+    color: '#746F81'
+  - label: forward metal end
+    min: 0.198438, -0.034375, 0.07
+    max: 0.240625, 0.003125, 0.137
+    color: '#746F81'
+- type: cmu3DModel
+  id: CMU3DFieldRMCAttachmentB8SmartScopeCloud
+  label: 'B8 smart scope: detached optic, red bracket and recessed lens'
+  status: draft
+  sourcePrototypes:
+  - RMCAttachmentB8SmartScope
+  referencePrototype: RMCAttachmentB8SmartScope
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Attachments/rail.rsi
+  referenceState: iffbarrel
+  sourceDirections: 1
+  placement: surface
+  description: Source charcoal optical body, red identification bracket and separate
+    lens rim. Hollow rim stops at recessed colored glass; inferred optical depth remains
+    purely visual. Installed aiming/activation/held states unsupported. Ground-world
+    exterior art only. Physical depth, reverse surfaces and material finish are inferred.
+    No held, firing, reload, rigging, arming or use effects; no native/map/live/fidelity
+    approval.
+  parts:
+  - label: main charcoal scope body
+    min: 0.021875, 0.036875, 0.037
+    max: 0.234375, 0.169375, 0.137
+    color: '#363636'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower sensor housing
+    min: -0.075, -0.0625, 0.018
+    max: 0.196875, 0.090625, 0.112
+    color: '#292929'
+    shape: Ellipsoid
+  - label: left short ocular neck
+    min: -0.303125, 0.035, 0.04425
+    max: -0.121875, 0.10875, 0.10175
+    color: '#292929'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: ocular-to-housing bridge
+    min: -0.162968, 0.035, 0.0455
+    max: 0.025468, 0.1275, 0.1105
+    color: '#363636'
+    yaw: 5.7105931374996395
+    pitch: 0.0
+    shape: CylinderX
+  - label: front open optical rim arc 1
+    min: 0.246513, 0.151645, 0.085447
+    max: 0.265987, 0.173645, 0.107447
+    color: '#5C5C5C'
+    yaw: -90.0
+    pitch: 76.00313270347824
+    shape: CylinderX
+  - label: front open optical rim arc 2
+    min: 0.245804, 0.142584, 0.102904
+    max: 0.266696, 0.164584, 0.124904
+    color: '#5C5C5C'
+    yaw: -90.0
+    pitch: 50.05928910522946
+    shape: CylinderX
+  - label: front open optical rim arc 3
+    min: 0.244876, 0.12584, 0.116265
+    max: 0.267624, 0.14784, 0.138265
+    color: '#5C5C5C'
+    yaw: -90.0
+    pitch: 28.06622909167867
+    shape: CylinderX
+  - label: front open optical rim arc 4
+    min: 0.244263, 0.103964, 0.123496
+    max: 0.268237, 0.125964, 0.145496
+    color: '#5C5C5C'
+    yaw: -90.0
+    pitch: 9.019204620523919
+    shape: CylinderX
+  - label: front open optical rim arc 5
+    min: 0.244263, 0.080286, 0.123496
+    max: 0.268237, 0.102286, 0.145496
+    color: '#5C5C5C'
+    yaw: -90.0
+    pitch: -9.019204620523919
+    shape: CylinderX
+  - label: front open optical rim arc 6
+    min: 0.244876, 0.05841, 0.116265
+    max: 0.267624, 0.08041, 0.138265
+    color: '#5C5C5C'
+    yaw: -90.0
+    pitch: -28.066229091678686
+    shape: CylinderX
+  - label: front open optical rim arc 7
+    min: 0.245804, 0.041666, 0.102904
+    max: 0.266696, 0.063666, 0.124904
+    color: '#5C5C5C'
+    yaw: -90.0
+    pitch: -50.05928910522942
+    shape: CylinderX
+  - label: front open optical rim arc 8
+    min: 0.246513, 0.032605, 0.085447
+    max: 0.265987, 0.054605, 0.107447
+    color: '#5C5C5C'
+    yaw: -90.0
+    pitch: -76.0031327034783
+    shape: CylinderX
+  - label: front open optical rim arc 9
+    min: 0.246513, 0.032605, 0.066553
+    max: 0.265987, 0.054605, 0.088553
+    color: '#5C5C5C'
+    yaw: 90.0
+    pitch: -76.00313270347831
+    shape: CylinderX
+  - label: front open optical rim arc 10
+    min: 0.245804, 0.041666, 0.049096
+    max: 0.266696, 0.063666, 0.071096
+    color: '#5C5C5C'
+    yaw: 90.0
+    pitch: -50.05928910522944
+    shape: CylinderX
+  - label: front open optical rim arc 11
+    min: 0.244876, 0.05841, 0.035735
+    max: 0.267624, 0.08041, 0.057735
+    color: '#5C5C5C'
+    yaw: 90.0
+    pitch: -28.066229091678643
+    shape: CylinderX
+  - label: front open optical rim arc 12
+    min: 0.244263, 0.080286, 0.028504
+    max: 0.268237, 0.102286, 0.050504
+    color: '#5C5C5C'
+    yaw: 90.0
+    pitch: -9.019204620523979
+    shape: CylinderX
+  - label: front open optical rim arc 13
+    min: 0.244263, 0.103964, 0.028504
+    max: 0.268237, 0.125964, 0.050504
+    color: '#5C5C5C'
+    yaw: 90.0
+    pitch: 9.019204620523952
+    shape: CylinderX
+  - label: front open optical rim arc 14
+    min: 0.244876, 0.12584, 0.035735
+    max: 0.267624, 0.14784, 0.057735
+    color: '#5C5C5C'
+    yaw: 90.0
+    pitch: 28.066229091678657
+    shape: CylinderX
+  - label: front open optical rim arc 15
+    min: 0.245804, 0.142584, 0.049096
+    max: 0.266696, 0.164584, 0.071096
+    color: '#5C5C5C'
+    yaw: 90.0
+    pitch: 50.05928910522938
+    shape: CylinderX
+  - label: front open optical rim arc 16
+    min: 0.246513, 0.151645, 0.066553
+    max: 0.265987, 0.173645, 0.088553
+    color: '#5C5C5C'
+    yaw: 90.0
+    pitch: 76.00313270347824
+    shape: CylinderX
+  - label: hollow optical neck wall 1
+    min: 0.22625, 0.149875, 0.075
+    max: 0.25825, 0.173875, 0.099
+    color: '#484848'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: hollow optical neck wall 2
+    min: 0.22625, 0.145403, 0.092938
+    max: 0.25825, 0.169403, 0.116938
+    color: '#484848'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: hollow optical neck wall 3
+    min: 0.22625, 0.132668, 0.108146
+    max: 0.25825, 0.156668, 0.132146
+    color: '#484848'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: hollow optical neck wall 4
+    min: 0.22625, 0.113608, 0.118307
+    max: 0.25825, 0.137608, 0.142307
+    color: '#484848'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: hollow optical neck wall 5
+    min: 0.22625, 0.091125, 0.121875
+    max: 0.25825, 0.115125, 0.145875
+    color: '#484848'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: hollow optical neck wall 6
+    min: 0.22625, 0.068642, 0.118307
+    max: 0.25825, 0.092642, 0.142307
+    color: '#484848'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: hollow optical neck wall 7
+    min: 0.22625, 0.049582, 0.108146
+    max: 0.25825, 0.073582, 0.132146
+    color: '#484848'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: hollow optical neck wall 8
+    min: 0.22625, 0.036847, 0.092938
+    max: 0.25825, 0.060847, 0.116938
+    color: '#484848'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: hollow optical neck wall 9
+    min: 0.22625, 0.032375, 0.075
+    max: 0.25825, 0.056375, 0.099
+    color: '#484848'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: hollow optical neck wall 10
+    min: 0.22625, 0.036847, 0.057062
+    max: 0.25825, 0.060847, 0.081062
+    color: '#484848'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: hollow optical neck wall 11
+    min: 0.22625, 0.049582, 0.041854
+    max: 0.25825, 0.073582, 0.065854
+    color: '#484848'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: hollow optical neck wall 12
+    min: 0.22625, 0.068642, 0.031693
+    max: 0.25825, 0.092642, 0.055693
+    color: '#484848'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: hollow optical neck wall 13
+    min: 0.22625, 0.091125, 0.028125
+    max: 0.25825, 0.115125, 0.052125
+    color: '#484848'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: hollow optical neck wall 14
+    min: 0.22625, 0.113608, 0.031693
+    max: 0.25825, 0.137608, 0.055693
+    color: '#484848'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: hollow optical neck wall 15
+    min: 0.22625, 0.132668, 0.041854
+    max: 0.25825, 0.156668, 0.065854
+    color: '#484848'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: hollow optical neck wall 16
+    min: 0.22625, 0.145403, 0.057062
+    max: 0.25825, 0.169403, 0.081062
+    color: '#484848'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: recessed red lens
+    min: 0.24125, 0.050625, 0.047
+    max: 0.24625, 0.155625, 0.127
+    color: '#D34F4F'
+    shape: CylinderX
+  - label: left red thin indicator
+    min: -0.3375, 0.05625, 0.097
+    max: -0.2125, 0.082813, 0.114
+    color: '#6C2121'
+  - label: red vertical bracket
+    min: -0.1375, -0.1125, 0.019
+    max: -0.084375, 0.05625, 0.111
+    color: '#961C1C'
+  - label: bracket gray foot
+    min: -0.134375, -0.140625, 0.018
+    max: -0.08125, -0.103125, 0.078
+    color: '#7C7C7C'
+  - label: upper source gray highlight
+    min: 0.101562, 0.135937, 0.128
+    max: 0.20625, 0.1625, 0.146
+    color: '#5B5E5E'
+  - label: original red bracket detail
+    min: -0.15625, -0.03125, 0.109
+    max: -0.09375, 0.0625, 0.115
+    color: '#FFFFFF'
+    surface: CMU3DFieldGearCloudScopeRedBracketDetail
+    surfaceAxis: XY

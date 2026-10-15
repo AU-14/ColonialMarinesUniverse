@@ -1,6 +1,28 @@
 # ---- Bone setting ---------------------------------------------------
 
 - type: cmuSurgeryStepMetadata
+  id: CMUSurgeryStepMetaMcompWounds
+  surgery: CMUSurgeryMcompWounds
+  displayName: Tend wounds
+  validParts: [Head, Torso, Arm, Hand, Leg, Foot]
+  allowSelfSurgery: true
+  selfSurgeryValidParts: [Head, Torso, Arm, Hand, Leg, Foot]
+  allowStanding: true
+  requiresYautjaTech: true
+  minSkill: 1
+  category: yautja_medicomp
+  steps:
+  - stepId: CMUSurgeryStepMcompStabilizeWounds
+    label: Stabilize wounds
+    toolCategory: yautja_medicomp_stabilizer
+  - stepId: CMUSurgeryStepMcompTendWounds
+    label: Tend wounds
+    toolCategory: yautja_medicomp_healing_gun
+  - stepId: CMUSurgeryStepMcompClampWound
+    label: Clamp wounds
+    toolCategory: yautja_medicomp_clamp
+
+- type: cmuSurgeryStepMetadata
   id: CMUSurgeryStepMetaSetSimpleFracture
   surgery: CMUSurgerySetSimpleFracture
   displayName: Set Fracture
@@ -262,3 +284,19 @@
   - stepId: CMUSurgeryStepDebrideEschar
     label: Debride Eschar
     toolCategory: scalpel_or_burn_kit
+
+# ---- Stump closure -------------------------------------------------
+
+- type: cmuSurgeryStepMetadata
+  id: CMUSurgeryStepMetaCloseStump
+  surgery: CMUSurgeryCloseStump
+  displayName: Close Stump
+  validParts: [Torso, Arm, Leg]
+  category: stump
+  steps:
+  - stepId: CMUSurgeryStepClampStumpArtery
+    label: Clamp Stump Artery
+    toolCategory: hemostat
+  - stepId: CMUSurgeryStepCauterizeStump
+    label: Cauterize Stump
+    toolCategory: cautery

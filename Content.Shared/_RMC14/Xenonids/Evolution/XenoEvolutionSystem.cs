@@ -62,6 +62,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private SharedMindSystem _mind = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MobThresholdSystem _mobThresholds = default!; // CMU14: caste-relative evolution health.
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
@@ -192,7 +193,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
 
         var time = _timing.CurTime;
         if (_prototypes.TryIndex(args.Choice, out var choice) &&
-            choice.HasComponent<XenoEvolutionGranterComponent>(_compFactory) &&
+            choice.HasComp<XenoEvolutionGranterComponent>(_compFactory) &&
             _xenoHive.GetHive(xeno.Owner) is { } hive &&
             hive.Comp.LastQueenDeath is { } lastQueenDeath &&
             time < lastQueenDeath + hive.Comp.NewQueenCooldown)
@@ -218,7 +219,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         };
 
         if (xeno.Comp.EvolutionDelay > TimeSpan.Zero)
-            _popup.PopupClient(Loc.GetString("cm-xeno-evolution-start"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-evolution-start"), xeno, xeno);
 
         if (_doAfter.TryStartDoAfter(doAfter))
         {
@@ -317,7 +318,9 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
             args.Handled ||
             args.Cancelled ||
             !_mind.TryGetMind(xeno, out _, out _) ||
-            !CanEvolvePopup(xeno, args.Choice))
+            // CMU14: !CanEvolvePopup(xeno, args.Choice))
+            !CanEvolvePopup(xeno, args.Choice) ||
+            !DamagedCheckPopup(xeno, false))
         {
             return;
         }
@@ -375,13 +378,13 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         var castes = new List<(EntProtoId Id, int Tier)>();
         foreach (var prototype in _prototypes.EnumeratePrototypes<EntityPrototype>())
         {
-            if (!prototype.TryGetComponent(out XenoEvolutionComponent? evolution, _compFactory))
+            if (!prototype.TryComp(out XenoEvolutionComponent? evolution, _compFactory))
                 continue;
 
             foreach (var id in evolution.EvolvesTo)
             {
                 if (_prototypes.TryIndex(id, out var caste) &&
-                    caste.TryGetComponent(out XenoComponent? xeno, _compFactory))
+                    caste.TryComp(out XenoComponent? xeno, _compFactory))
                 {
                     castes.Add((id, xeno.Tier));
                 }
@@ -495,12 +498,21 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
 
     private bool DamagedCheckPopup(EntityUid xeno, bool predicted = true, bool doPopup = true)
     {
-        if (!TryComp(xeno, out DamageableComponent? damageable) ||
-            _damageable.GetTotalDamage((xeno, damageable)) <= 1)
+        // CMU14: use the same health maximum as the xeno HUD (critical threshold, then death).
+        // if (!TryComp(xeno, out DamageableComponent? damageable) ||
+        //     _damageable.GetTotalDamage((xeno, damageable)) <= 1)
+        if (!TryComp(xeno, out DamageableComponent? damageable))
             return true;
 
+        var maxDamage = _mobThresholds.TryGetIncapThreshold(xeno, out var maxHealth)
+            ? maxHealth.Value / 2
+            : (FixedPoint2) 1;
+        if (_damageable.GetTotalDamage((xeno, damageable)) <= maxDamage)
+            return true;
+        // CMU14 End
+
         if (predicted)
-            _popup.PopupClient(Loc.GetString("rmc-xeno-evolution-cant-evolve-damaged"), xeno, xeno, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-evolution-cant-evolve-damaged"), xeno, xeno, PopupType.MediumCaution);
         else
             _popup.PopupEntity(Loc.GetString("rmc-xeno-evolution-cant-evolve-damaged"), xeno, xeno, PopupType.MediumCaution);
 
@@ -558,7 +570,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         if (!ContainedCheckPopup(xeno, doPopup))
             return false;
 
-        if (prototype.HasComponent<XenoEvolutionGranterComponent>(_compFactory) && HiveHasLivingQueen(xeno.Owner))
+        if (prototype.HasComp<XenoEvolutionGranterComponent>(_compFactory) && HiveHasLivingQueen(xeno.Owner))
         {
             if (doPopup)
                 _popup.PopupEntity(Loc.GetString("rmc-xeno-evolution-failed-queen-exists"), xeno, xeno, PopupType.MediumCaution);
@@ -1003,6 +1015,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         }
 
         FixedPoint2? evoOverride = null;
+        var overrideIgnoresGranter = false; // CMU14
         var overrides = EntityQueryEnumerator<EvolutionOverrideComponent>();
         while (overrides.MoveNext(out var comp))
         {
@@ -1010,6 +1023,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
             // Overrides can overlap (for example a hive boon and the hijack surge).
             // Entity iteration order must not let the weaker effect mask the stronger one.
             evoOverride = evoOverride is { } previous ? FixedPoint2.Max(previous, comp.Amount) : comp.Amount;
+            overrideIgnoresGranter |= comp.IgnoreGranter; // CMU14
         }
 
         var evolution = EntityQueryEnumerator<XenoEvolutionComponent>();
@@ -1054,7 +1068,9 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
                 if (needsOvipositor && HasEvolutionIgnoreGranter(uid))
                     hasGranter = true;
 
-                if (needsOvipositor && comp.RequiresGranter && !hasGranter)
+                // CMU14: the timed hijack surge also grants evolution without an ovipositor.
+                // if (needsOvipositor && comp.RequiresGranter && !hasGranter)
+                if (needsOvipositor && comp.RequiresGranter && !hasGranter && !overrideIgnoresGranter)
                     continue;
 
                 SetPoints((uid, comp), comp.Points + gain);

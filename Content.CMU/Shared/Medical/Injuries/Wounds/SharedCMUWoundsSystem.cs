@@ -1,4 +1,5 @@
 using System;
+using Content.Shared.Timing;
 using System.Collections.Generic;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
@@ -84,6 +85,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
     private float _woundScanAccumulator;
     private bool _processingWoundHealing;
+    private bool _updatingWoundSchedules;
     private readonly List<(EntityUid PartUid, BodyPartWoundComponent Wounds, BodyPartComponent Part, EntityUid Body)>
         _woundHealingCandidates = new();
 
@@ -97,6 +99,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         base.Initialize();
         if (!Net.IsClient)
         {
+            InitializeWoundScheduling();
             // after: ordering so we read updated bone integrity / fracture
             // severity / organ stage from the same hit.
             SubscribeLocalEvent<BodyPartComponent, BodyPartDamagedEvent>(
@@ -266,7 +269,28 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             return;
         }
 
-        ComputeInternalBleedSource(part, ignoreSplint, out var maxRate, out var source);
+        // One internal bleed per limb: a hand's or foot's sources bleed on its arm or leg.
+        var changedPart = part;
+        part = GetBleedSite(part);
+
+        var maxRate = 0f;
+        var source = string.Empty;
+        foreach (var segment in GetBleedSegments(part))
+        {
+            ComputeInternalBleedSource(segment, ignoreSplint && segment == changedPart, out var segmentRate, out var segmentSource);
+            if (segmentRate > maxRate)
+            {
+                maxRate = segmentRate;
+                source = segmentSource;
+            }
+
+            // A bleed left on a hand or foot from before limbs shared one is folded into the limb's.
+            if (segment != part && HasComp<InternalBleedingComponent>(segment))
+            {
+                RemComp<InternalBleedingComponent>(segment);
+                RaiseInternalBleedingChanged(segment, true);
+            }
+        }
 
         if (maxRate <= 0f)
         {
@@ -366,6 +390,52 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    ///     Where a part's internal bleed is tracked: hands bleed on their arm and feet on their leg,
+    ///     so a limb never carries two separate bleeds.
+    /// </summary>
+    public EntityUid GetBleedSite(EntityUid part)
+    {
+        if (!TryComp<BodyPartComponent>(part, out var partComp) ||
+            partComp.PartType is not (BodyPartType.Hand or BodyPartType.Foot) ||
+            TryGetBodyOwner(part) is not { } body)
+        {
+            return part;
+        }
+
+        var limbType = partComp.PartType == BodyPartType.Hand ? BodyPartType.Arm : BodyPartType.Leg;
+        foreach (var (limb, limbComp) in MedicalIndex.GetBodyParts(body))
+        {
+            if (limbComp.PartType == limbType && limbComp.Symmetry == partComp.Symmetry)
+                return limb;
+        }
+
+        return part;
+    }
+
+    /// <summary>
+    ///     The parts whose bleed sources feed the bleed tracked on <paramref name="site"/>: the site,
+    ///     and for an arm or leg its hand or foot.
+    /// </summary>
+    private IEnumerable<EntityUid> GetBleedSegments(EntityUid site)
+    {
+        yield return site;
+
+        if (!TryComp<BodyPartComponent>(site, out var siteComp) ||
+            siteComp.PartType is not (BodyPartType.Arm or BodyPartType.Leg) ||
+            TryGetBodyOwner(site) is not { } body)
+        {
+            yield break;
+        }
+
+        var extremity = siteComp.PartType == BodyPartType.Arm ? BodyPartType.Hand : BodyPartType.Foot;
+        foreach (var (part, partComp) in MedicalIndex.GetBodyParts(body))
+        {
+            if (partComp.PartType == extremity && partComp.Symmetry == siteComp.Symmetry)
+                yield return part;
+        }
+    }
+
     private static bool IsSuppressedBleedSourceMatch(string suppressed, string current)
     {
         if (suppressed == current)
@@ -396,6 +466,9 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     {
         if (IsSynthOwned(part))
             return;
+
+        // One internal bleed per limb: a hand or foot bleeds on its arm or leg.
+        part = GetBleedSite(part);
 
         RemComp<CMUInternalBleedingSuppressedComponent>(part);
 
@@ -924,7 +997,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
     protected void UpdateServer(float frameTime)
     {
-        if (!IsEnabled())
+        if (_updatingWoundSchedules || !IsEnabled())
             return;
 
         _woundScanAccumulator += frameTime;
@@ -933,16 +1006,34 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         _woundScanAccumulator = 0f;
 
         var now = Timing.CurTime;
-        TickExternalBleed(now);
-        TickWoundHealing(now);
-        TickInternalBleed(now);
+        _updatingWoundSchedules = true;
+        try
+        {
+            TickExternalBleed(now);
+            TickWoundHealing(now);
+            TickInternalBleed(now);
+        }
+        finally
+        {
+            foreach (var wounds in _dueExternalBleeds)
+                if (wounds.ScheduleChanged != null && !MetaData(wounds.ScheduledOwner).EntityPaused) ScheduleWounds(wounds);
+            foreach (var bleeding in _dueInternalBleeds)
+                if (bleeding.ScheduleChanged != null && !MetaData(bleeding.ScheduledOwner).EntityPaused) ScheduleInternalBleed(bleeding);
+            _dueExternalBleeds.Clear();
+            _dueInternalBleeds.Clear();
+            _updatingWoundSchedules = false;
+        }
     }
 
     private void TickExternalBleed(TimeSpan now)
     {
-        var query = EntityQueryEnumerator<BodyPartWoundComponent, BodyPartComponent>();
-        while (query.MoveNext(out var partUid, out var wounds, out _))
+        _dueExternalBleeds.Clear();
+        while (_externalBleedDeadlines.TryTakeDue(now, out var due)) _dueExternalBleeds.Add(due);
+        foreach (var wounds in _dueExternalBleeds)
         {
+            var partUid = wounds.ScheduledOwner;
+            if (wounds.ScheduleChanged == null || TerminatingOrDeleted(partUid) ||
+                MetaData(partUid).EntityPaused || !HasComp<BodyPartComponent>(partUid)) continue;
             if (wounds.ExternalBleeding == ExternalBleedTier.None)
                 continue;
 
@@ -958,7 +1049,9 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             if (bodyOwner is null || IsWoundPhysiologySuspended(bodyOwner.Value))
                 continue;
 
-            if (TryComp<MobStateComponent>(bodyOwner, out var mob) && mob.CurrentState == MobState.Dead)
+            // Arterial bleeding keeps draining a corpse; lesser bleeds stop at death.
+            if (wounds.ExternalBleeding != ExternalBleedTier.Arterial &&
+                TryComp<MobStateComponent>(bodyOwner, out var mob) && mob.CurrentState == MobState.Dead)
                 continue;
 
             ApplyExternalBleed(bodyOwner.Value, partUid, wounds.ExternalBleeding, 1f);
@@ -974,11 +1067,14 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         {
             // Damage callbacks can create a replacement wound component and invalidate
             // the engine query. Collect due owners before publishing any healing.
-            var query = EntityQueryEnumerator<BodyPartWoundComponent, BodyPartComponent>();
-            while (query.MoveNext(out var uid, out var wounds, out var part))
+            while (_woundHealDeadlines.TryTakeDue(now, out var wounds))
             {
-                if (wounds.NextHealTick <= now && part.Body is { } body)
+                var uid = wounds.ScheduledOwner;
+                if (wounds.ScheduleChanged != null && !TerminatingOrDeleted(uid) &&
+                    !MetaData(uid).EntityPaused && TryComp(uid, out BodyPartComponent? part) && part.Body is { } body)
                     _woundHealingCandidates.Add((uid, wounds, part, body));
+                else if (wounds.ScheduleChanged != null && !TerminatingOrDeleted(uid) && !MetaData(uid).EntityPaused)
+                    _orphanWoundOwners.Add(wounds);
             }
             foreach (var (partUid, wounds, part, body) in _woundHealingCandidates)
                 HealWoundsOnPart(body, partUid, part, wounds, now);
@@ -987,6 +1083,11 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         {
             // Retain capacity, but no tissue references, between scans. A nested
             // update cannot consume the same work or overwrite this snapshot.
+            foreach (var (_, wounds, _, _) in _woundHealingCandidates)
+                if (wounds.ScheduleChanged != null) ScheduleWounds(wounds);
+            foreach (var wounds in _orphanWoundOwners)
+                if (wounds.ScheduleChanged != null) ScheduleWounds(wounds);
+            _orphanWoundOwners.Clear();
             _woundHealingCandidates.Clear();
             _processingWoundHealing = false;
         }
@@ -1080,9 +1181,12 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     private void TickInternalBleed(TimeSpan now)
     {
         var tickSeconds = _internalBleedTickSeconds;
-        var query = EntityQueryEnumerator<InternalBleedingComponent>();
-        while (query.MoveNext(out var partUid, out var ib))
+        _dueInternalBleeds.Clear();
+        while (_internalBleedDeadlines.TryTakeDue(now, out var due)) _dueInternalBleeds.Add(due);
+        foreach (var ib in _dueInternalBleeds)
         {
+            var partUid = ib.ScheduledOwner;
+            if (ib.ScheduleChanged == null || TerminatingOrDeleted(partUid) || MetaData(partUid).EntityPaused) continue;
             if (ib.NextBleedTick > now)
                 continue;
             ib.NextBleedTick = now + TimeSpan.FromSeconds(tickSeconds);
@@ -1129,7 +1233,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     // pause state. Explicit treatment remains available while physiology is frozen.
     private bool IsWoundPhysiologySuspended(EntityUid body)
         => HasComp<CMInStasisComponent>(body) ||
-           TryComp<MetaDataComponent>(body, out var metadata) && metadata.EntityPaused;
+           TryComp(body, out MetaDataComponent? metadata) && metadata.EntityPaused;
 
     private bool IsCurrentWoundOwner(EntityUid body, EntityUid partUid, BodyPartComponent part,
         BodyPartWoundComponent wounds)

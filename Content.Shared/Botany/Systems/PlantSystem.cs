@@ -23,20 +23,25 @@ public sealed partial class PlantSystem : EntitySystem
 
     private readonly List<Entity<PlantHolderComponent>> _holdersToUpdate = [];
 
+    // CMU14 method: publish growth scheduling only when due, and require live plant data.
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
         _holdersToUpdate.Clear();
-        var query = EntityQueryEnumerator<PlantHolderComponent>();
-        while (query.MoveNext(out var uid, out var plantHolder))
+        var query = EntityQueryEnumerator<PlantHolderComponent, PlantComponent>();
+        while (query.MoveNext(out var uid, out var plantHolder, out _))
         {
-            if (plantHolder.NextUpdate > _gameTiming.CurTime)
+            if (plantHolder.Dead || plantHolder.NextUpdate > _gameTiming.CurTime)
                 continue;
 
-            plantHolder.NextUpdate = _gameTiming.CurTime;
+            var nextCycle = plantHolder.LastCycle + plantHolder.CycleDelay;
+            plantHolder.NextUpdate = nextCycle > _gameTiming.CurTime
+                ? nextCycle
+                : _gameTiming.CurTime + plantHolder.CycleDelay;
             DirtyField(uid, plantHolder, nameof(plantHolder.NextUpdate));
-            _holdersToUpdate.Add((uid, plantHolder));
+            if (nextCycle <= _gameTiming.CurTime)
+                _holdersToUpdate.Add((uid, plantHolder));
         }
 
         foreach (var ent in _holdersToUpdate)
@@ -118,6 +123,11 @@ public sealed partial class PlantSystem : EntitySystem
     {
         if (!Resolve(ent.Owner, ref ent.Comp, false))
             return;
+
+        // CMU14 Begin: a leftover holder is not a plant, including after component removal.
+        if (!HasComp<PlantComponent>(ent))
+            return;
+        // CMU14 End
 
         var curTime = _gameTiming.CurTime;
 

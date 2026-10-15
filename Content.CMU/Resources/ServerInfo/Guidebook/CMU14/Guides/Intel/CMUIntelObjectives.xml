@@ -1,0 +1,23 @@
+<Document>
+  # Objectives and Intel
+
+  Every round, your faction has objectives to complete. Completing them earns points, points buy you upgrades, and enough of them unlocks your faction's final objective. Intel gathered from the colony adds to what you can spend.
+
+  <Box>
+    <GuideEntityEmbed Entity="ComputerObjectivesGovfor" Caption="Objectives console"/>
+    <GuideEntityEmbed Entity="RMCTechTreeConsoleGovfor" Caption="Tech tree console"/>
+    <GuideEntityEmbed Entity="AU14AnalyzerMachine" Caption="Analyzer Machine"/>
+  </Box>
+
+  ## Your Faction's Machines
+  - [bold]Objectives console[/bold]: lists your current objectives, their progress, and what each is worth. It also shows your objective points and how many you need to reach the final objective.
+  - [bold]Tech tree console[/bold]: spend points on upgrades and support for your faction.
+  - [bold]Analyzer Machine[/bold]: where you hand in intel and objective items.
+
+  ## In This Guide
+  - [textlink="Objectives" link="CMUGuideObjectives"]: the kinds of objective and how to complete each.
+
+  - [textlink="Points" link="CMUGuideObjectivePoints"]: objective points, intel points, and what you can spend them on.
+
+  - [textlink="Intel" link="CMUGuideIntel"]: finding intel around the colony and turning it into points.
+</Document>

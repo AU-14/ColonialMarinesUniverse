@@ -52,9 +52,9 @@ public sealed partial class UserDbDataManager : IPostInjectInit
 
     public void ClientDisconnected(ICommonSession session)
     {
-        _users.Remove(session.UserId, out var data);
-        if (data == null)
-            throw new InvalidOperationException("Did not have cached data in ClientDisconnect!");
+        // Connections can close before user loading starts, or after it was already cleaned up.
+        if (!_users.Remove(session.UserId, out var data))
+            return;
 
         data.Cancel.Cancel();
         data.Cancel.Dispose();

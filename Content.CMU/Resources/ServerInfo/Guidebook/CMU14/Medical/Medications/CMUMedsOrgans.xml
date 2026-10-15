@@ -1,0 +1,25 @@
+<Document>
+  # Organ and Bone Medications
+
+  These repair specific organs, or help bones heal. They work on organs that are damaged or failing; a dead organ needs replacing surgically. See [textlink="Organs" link="CMUGuideMedicalOrgans"].
+
+  - [bold]Cardiocaine[/bold]: repairs the heart, and can sometimes restart a heart that has stopped.
+  - [bold]Pulmovine[/bold]: repairs the lungs.
+  - [bold]Hepatocytin[/bold]: repairs the liver.
+  - [bold]Nephronate[/bold]: repairs the kidneys.
+  - [bold]Alkysine[/bold]: repairs the brain.
+  - [bold]Imidazoline[/bold]: repairs the eyes.
+  - [bold]OsteoCalc[/bold]: helps broken bones mend and speeds up bone healing. It doesn't replace setting a fracture. See [textlink="Fractures" link="CMUGuideMedicalBones"].
+  - [bold]Epinephrine[/bold]: a heart and muscle stimulant, useful for restarting the heart. It also stops allergic reactions and dulls pain. Overdose at 10.5 units, which stresses the heart.
+
+  Most organ medicines overdose at 25 units.
+
+  <GuideReagentEmbed Reagent="CMUCardiocaine"/>
+  <GuideReagentEmbed Reagent="CMUPulmovine"/>
+  <GuideReagentEmbed Reagent="CMUHepatocytin"/>
+  <GuideReagentEmbed Reagent="CMUNephronate"/>
+  <GuideReagentEmbed Reagent="CMUAlkysine"/>
+  <GuideReagentEmbed Reagent="CMImidazoline"/>
+  <GuideReagentEmbed Reagent="CMUOsteoCalc"/>
+  <GuideReagentEmbed Reagent="CMEpinephrine"/>
+</Document>

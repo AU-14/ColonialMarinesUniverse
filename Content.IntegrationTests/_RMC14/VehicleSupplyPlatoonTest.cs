@@ -25,19 +25,23 @@ namespace Content.IntegrationTests._RMC14;
 [TestFixture]
 public sealed class VehicleSupplyPlatoonTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<PlatoonPrototype> CMBCIUPrototype = "CMBCIU";
+    private static readonly Robust.Shared.Prototypes.ProtoId<PlatoonPrototype> UPPPrototype = "UPP";
+
     private VehicleSupplySystem Supply => Server.System<VehicleSupplySystem>();
 
     private readonly record struct Depot(Entity<VehicleSupplyConsoleComponent> Console, Entity<VehicleSupplyLiftComponent> Lift);
 
+    // CMU14 method: reject foreign chassis while allowing each platoon's current catalog.
     [TestCase("USCM", "VehicleTank", "VehicleSPPTank", true, true)]
     [TestCase("LACN", "VehicleAPC", "VehicleAPCCommand", true, true)]
     [TestCase("UPP", "VehicleSPPTank", "VehicleTank", false, false)]
     [TestCase("WEYU", "VehicleTankPMC", "VehicleTank", true, true)]
-    [TestCase("CMBCIU", "AU14VehicleCivHSVan", "VehicleHumvee", false, true)]
-    [TestCase("HAZOPS", "VehicleAev", "VehicleTank", false, true)]
+    [TestCase("CMBCIU", "AU14VehicleCivHSVan", "VehicleSPPTank", true, true)]
+    [TestCase("HAZOPS", "VehicleAev", "VehicleSPPTank", false, true)]
     [TestCase("ProdigySF", "AU14VehicleCivTruck", "VehicleAPC", false, false)]
-    [TestCase("VAIPO", "VehicleAPC", "VehicleTank", true, true)]
-    [TestCase("RMC", "VehicleTankTWE", "VehicleHumvee", false, false)]
+    [TestCase("VAIPO", "VehicleAPC", "VehicleSPPTank", true, true)]
+    [TestCase("RMC", "VehicleTankTWE", "VehicleSPPTank", false, false)]
     public async Task PlatoonCatalogRestrictsChassisVtolAndParts(string platoon, string allowed, string excluded, bool armed, bool transport)
     {
         var map = await Pair.CreateTestMap();
@@ -263,7 +267,7 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             Configure(map.GridCoords);
             Assert.That(State(depot).Available.Select(entry => entry.Id), Does.Contain("VehicleTank"));
             Queue(depot, "VehicleTank");
-            Server.System<PlatoonSpawnRuleSystem>().SelectedGovforPlatoon = SProtoMan.Index<PlatoonPrototype>("CMBCIU");
+            Server.System<PlatoonSpawnRuleSystem>().SelectedGovforPlatoon = SProtoMan.Index<PlatoonPrototype>(CMBCIUPrototype);
             Complete(depot);
             Assert.That(depot.Lift.Comp.ActiveVehicle, Is.Null);
             Assert.That(State(depot).IssuedVehicles, Is.Empty);
@@ -300,7 +304,7 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
         SEntMan.EnsureComponent<ShipFactionComponent>(coordinates.EntityId).Faction = "govfor";
         var platoons = Server.System<PlatoonSpawnRuleSystem>();
         platoons.SelectedGovforPlatoon = SProtoMan.Index<PlatoonPrototype>(platoon);
-        platoons.SelectedOpforPlatoon = SProtoMan.Index<PlatoonPrototype>("UPP");
+        platoons.SelectedOpforPlatoon = SProtoMan.Index<PlatoonPrototype>(UPPPrototype);
     }
 
     private Depot CreateDepot(EntityCoordinates coordinates, string? side = "govfor")

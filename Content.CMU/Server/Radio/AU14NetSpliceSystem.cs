@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.Construction;
 using Content.Shared.CMU14.Radio;
 using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared.Administration.Logs;
@@ -61,6 +62,7 @@ public sealed partial class AU14NetSpliceSystem : EntitySystem
         SubscribeLocalEvent<AU14NetSpliceTargetComponent, AU14NetSpliceOpenDoAfterEvent>(OnJunctionOpened);
         SubscribeLocalEvent<AU14NetSpliceTargetComponent, ExaminedEvent>(OnTargetExamined);
         SubscribeLocalEvent<AU14NetSplicedComponent, EntityTerminatingEvent>(OnTargetTerminating);
+        SubscribeLocalEvent<AU14NetSplicedComponent, ConstructionChangeEntityEvent>(OnTargetEntityChanged);
 
         SubscribeLocalEvent<AU14NetSpliceTapComponent, GetVerbsEvent<AlternativeVerb>>(OnTapVerbs);
         SubscribeLocalEvent<AU14NetSpliceTapComponent, AU14NetSpliceRemoveDoAfterEvent>(OnTapRemoved);
@@ -530,6 +532,29 @@ public sealed partial class AU14NetSpliceSystem : EntitySystem
     {
         if (!TerminatingOrDeleted(ent.Comp.Tap))
             QueueDel(ent.Comp.Tap);
+    }
+
+    // opening a field mast's feed swaps the mast for its open-feed stage, and the splice does not come
+    // across. the tap falls off the junction and its keying module drops at the foot of the mast, so
+    // whoever opened it gets the same reward as pulling the tap by hand
+    private void OnTargetEntityChanged(EntityUid uid, AU14NetSplicedComponent comp, ConstructionChangeEntityEvent args)
+    {
+        var tap = comp.Tap;
+
+        if (args.Old != uid || args.New == uid || !tap.IsValid() || TerminatingOrDeleted(tap))
+            return;
+
+        var coordinates = Transform(uid).Coordinates;
+
+        if (TryComp(tap, out AU14NetSpliceTapComponent? tapComp) && tapComp.SalvagedCrypto is { } crypto)
+            Spawn(crypto, coordinates);
+
+        _popup.PopupCoordinates(Loc.GetString("au14-splice-feed-opened"), coordinates, PopupType.Medium);
+
+        _adminLog.Add(LogType.Action, LogImpact.High,
+            $"The net splice tap on {ToPrettyString(uid)} fell off when its feed was opened.");
+
+        QueueDel(tap);
     }
 
     // ----- examine ------------------------------------------------------------------------------------

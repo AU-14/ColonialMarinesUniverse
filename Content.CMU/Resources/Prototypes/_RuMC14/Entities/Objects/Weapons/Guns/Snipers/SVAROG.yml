@@ -1,0 +1,169 @@
+- type: entity
+  parent: RMCBaseWeaponSniperRifle
+  id: RuMcSniperRifleSVAROG
+  name: "'SVAROG' sniper rifle"
+  description: The SWAROG sniper rifle. This model is renowned for its suitability for medium‑range shooting, where it has no equal. It is used by SKALA specialists.
+  components:
+  - type: Item
+    size: Huge
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Snipers/SVAROG/inhands.rsi
+    layers:
+    - state: base
+      sprite: _RuMC14/Objects/Weapons/Guns/Snipers/SVAROG/icon.rsi
+    - state: bolt-open
+      sprite: _RuMC14/Objects/Weapons/Guns/Snipers/SVAROG/icon.rsi
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      sprite: _RuMC14/Objects/Weapons/Guns/Snipers/SVAROG/icon.rsi
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _RuMC14/Objects/Weapons/Guns/Snipers/SVAROG/inhands.rsi
+  - type: Tag
+    tags:
+    - RuMcSniperRifleSVAROG
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 12
+  - type: Gun
+    shotsPerBurst: 1
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_sniper.ogg
+  - type: RMCSelectiveFire
+    recoilWielded: 1
+    scatterWielded: 0
+    baseFireRate: 0.667
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 3
+  - type: WieldDelay
+    baseDelay: 1.2
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: RuMcMagazineSniperRifleSVAROG
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mar40_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mar40_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RuMcMagazineSniperRifleSVAROG
+  - type: GunRequiresWield
+  - type: Corrodible
+    isCorrodible: false
+  - type: GunIFF
+    enabled: false # true
+  - type: RMCNameItemOnVend
+    item: PrimaryGun
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-rail:
+        locked: true
+        startingAttachable: RuMCSVAROGIntegratedScope
+        whitelist:
+          tags:
+          - RuMCSVAROGIntegratedScope
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentBipod
+        whitelist:
+          tags:
+          - RMCAttachmentBipod
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentLaserSight
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-underbarrel: 0.21875, -0.2431415
+  - type: RMCGunChamber
+    enabled: false
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
+
+- type: entity
+  parent: CMMagazineSniperM96S
+  id: RuMcMagazineSniperRifleSVAROG
+  name: SVAROG magazine (10x28mm)
+  description: magazine for the SVAROG sniper rifle (10x28mm)
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineSniper
+    - RuMcMagazineSniperRifleSVAROG
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgeSniper10x28mm
+    proto: CMCartridgeSniper10x28mm
+    capacity: 15
+  - type: Item
+    size: Normal
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Snipers/SVAROG/mag.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
+    zeroOnlyOnEmpty: true
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+  - type: Appearance
+  - type: Clothing
+    slots:
+    - suitStorage
+
+- type: entity
+  parent: RuMcMagazineSniperRifleSVAROG
+  id: RuMcMagazineSniperRifleSVAROGIncendiary
+  name: SVAROG incendiary magazine (10x28mm)
+  description: incendiary magazine for the SVAROG sniper rifle (10x28mm)
+  components:
+  - type: BallisticAmmoProvider
+    proto: CMCartridgeSniper10x28mmIncendiary
+    capacity: 15
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Snipers/SVAROG/mag.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#9C2219"
+
+- type: entity
+  parent: RuMcMagazineSniperRifleSVAROG
+  id: RuMcMagazineSniperRifleSVAROGFlak
+  name: SVAROG flak magazine (10x28mm)
+  description: flak magazine for the SVAROG sniper rifle (10x28mm)
+  components:
+  - type: BallisticAmmoProvider
+    proto: CMCartridgeSniper10x28mmFlak
+    capacity: 15
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Snipers/SVAROG/mag.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#7866FF"
+
+- type: Tag
+  id: RuMcSniperRifleSVAROG
+
+- type: Tag
+  id: RuMcMagazineSniperRifleSVAROG

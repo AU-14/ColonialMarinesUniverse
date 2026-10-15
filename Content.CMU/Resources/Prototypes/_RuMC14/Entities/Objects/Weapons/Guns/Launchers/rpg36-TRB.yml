@@ -1,0 +1,151 @@
+- type: entity
+  parent: RMCBaseWeaponLauncher
+  id: RuMCWeaponLauncherDisposableTermobaric
+  name: RPG-36-T
+  description: "The RPG-36-T is a shot with no second chance. The tube, the charge, and the primer are three elements that come together only to fly apart. Disposability is not a flaw, but a philosophy: it is designed for a single strike, but that strike is enough."
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpg36.rsi
+    layers:
+      - state: icon
+        map: ["enum.GunVisualLayers.Base"]
+  - type: Clothing
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpg36.rsi
+  - type: Item
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpg36.rsi
+  - type: BallisticAmmoProvider
+    proto: RuMCRocketRPG36_Termobaric
+    cycleable: false
+    whitelist:
+      tags: []
+  - type: RMCFoldableGun
+    foldDelay: 2.05
+    foldText: rmc-gun-foldable-launcher-fold-self
+    foldTextOthers: rmc-gun-foldable-launcher-fold-others
+    finishText: rmc-gun-foldable-launcher-fold-finish-self
+    finishTextOthers: rmc-gun-foldable-launcher-fold-finish-others
+    toggleFoldSound:
+      path: /Audio/_RMC14/Weapons/Handling/component_pickup.ogg
+      params:
+        variation: 0.2
+    foldedEntity: RuMCWeaponLauncherDisposableTermobaricFolded
+
+- type: entity
+  parent: [BaseItem, RMCBaseMeleeWeapon]
+  id: RuMCWeaponLauncherDisposableTermobaricFolded
+  name: RPG-36-T
+  description: "The RPG-36 is a shot with no second chance. The tube, the charge, and the primer are three elements that come together only to fly apart. Disposability is not a flaw, but a philosophy: it is designed for a single strike, but that strike is enough."
+  suffix: Folded
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpg36.rsi
+    state: icon-folded
+  - type: Clothing
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpg36.rsi
+    equippedPrefix: folded
+    quickEquip: false
+    slots:
+    - suitStorage
+  - type: Item
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpg36.rsi
+    heldPrefix: folded
+    size: Normal
+  - type: RMCFoldableGun
+    foldDelay: 4
+    foldText: rmc-gun-foldable-launcher-unfold-self
+    foldTextOthers: rmc-gun-foldable-launcher-unfold-others
+    finishText: rmc-gun-foldable-launcher-unfold-finish-self
+    finishTextOthers: rmc-gun-foldable-launcher-unfold-finish-others
+    toggleFoldSound:
+      path: /Audio/_RMC14/Weapons/Handling/component_pickup.ogg
+      params:
+        variation: 0.2
+    foldedEntity: RuMCWeaponLauncherDisposableTermobaric
+    examineText: rmc-gun-foldable-launcher-examine-unfold
+    onActivate: true
+  - type: EmitSoundOnPickup
+    sound:
+      collection: RMCEquipGun
+      params:
+        volume: -6
+  - type: EmitSoundOnDrop
+    sound:
+      collection: RMCRustleGun
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
+    sound:
+      collection: RMCRustleGun
+      params:
+        volume: -4
+  - type: MeleeWeapon
+    attackRate: 1
+    damage:
+      types:
+        Blunt: 5
+    soundHit:
+      collection: GenericHit
+
+- type: entity
+  parent: BaseItem
+  id: RuMCRocketRPG36_Termobaric
+  name: RPG36 Termobaric rocket
+  description: Rocket for the UPP assault units.
+  suffix: NO SPAWN
+  components:
+  - type: Tag
+    tags:
+    - RMCProjectileRocketHJRA12
+  - type: CartridgeAmmo
+    proto: RuMCProjectileRocketRPG36_Termobaric
+    deleteOnSpawn: true #Да, иначе никак
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/RPG32/rpg_rocket.rsi
+    layers:
+    - state: rpg_Phosphorus
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: Item
+    size: Normal
+  - type: Appearance
+  - type: SpentAmmoVisuals
+    state: rpg_Phosphorus
+    suffix: false
+  - type: IgnorePredictionHide
+  - type: RMCLoreExaminable
+    content: rmc-lore-examinable-hjra-12-extreme-intensity-incendiary-rocket
+
+- type: entity
+  categories: [ HideSpawnMenu ]
+  parent: RMCProjectileRocket84mm
+  id: RuMCProjectileRocketRPG36_Termobaric
+  name: RPG36 Termobaric rocket
+  description: Rocket for the UPP assault units.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/RPG32/rpg_rocket.rsi
+    layers:
+    - state: rpg_Phosphorus
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: TriggerOnCollide
+    fixtureID: projectile
+  - type: Projectile
+    deleteOnCollide: false
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Heat: 50
+    maxFixedRange: 7
+  - type: Explosive
+    maxIntensity: 10
+    intensitySlope: 20
+    totalIntensity: 5
+    canCreateVacuum: false
+  - type: DeleteOnTrigger
+  - type: CMExplosionEffect
+  - type: RMCScorchEffect
+  - type: SpawnOnTerminate
+    spawn: RuMCSmokeTermobaricMini
+    spawnOffset: -0.5
+  - type: RMCAreaDamage
+    damageArea: 3.5
+    falloffDistance: 3.5

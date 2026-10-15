@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.DoAfter;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
@@ -21,6 +22,7 @@ public sealed partial class SapperComponent : Component
 ///     long hack; when it lands, the ATM spits out an equal share of the colony budget in cash - the
 ///     budget divided by however many un-hacked ATMs are left on the map, so ten ATMs pay ten equal
 ///     slices - and the ATM is left temporarily malfunctioning (see <see cref="SapperAtmHackedComponent"/>).
+///     The rig also dumps the ATM's cached card logins (account numbers and PINs), readable in hand.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
 public sealed partial class SapperAtmHackingComponent : Component
@@ -50,6 +52,17 @@ public sealed partial class SapperAtmHackingComponent : Component
     /// <summary>What the payout is dispensed as.</summary>
     [DataField]
     public string CashPrototype = "RMCSpaceCash";
+
+    /// <summary>
+    ///     Longest message the sapper may leave on a siphoned ATM's screen (untrusted client text,
+    ///     clamped server-side).
+    /// </summary>
+    [DataField]
+    public int MaxAtmMessageLength = 64;
+
+    /// <summary>Card logins leaked from every ATM this rig has hacked. Server-only.</summary>
+    [ViewVariables]
+    public List<SkimmedAccount> CapturedAccounts = new();
 }
 
 /// <summary>
@@ -81,6 +94,13 @@ public sealed partial class SapperAtmHackedComponent : Component
 
     [ViewVariables]
     public TimeSpan NextSpark;
+
+    /// <summary>
+    ///     A line the sapper left on the out-of-order screen, there until the machine repairs itself.
+    ///     Null for none.
+    /// </summary>
+    [ViewVariables]
+    public string? Message;
 }
 
 /// <summary>

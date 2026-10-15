@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Configuration;
+using Robust.Shared.Configuration;
 
 namespace Content.Shared.CCVar;
 
@@ -62,7 +62,8 @@ public sealed partial class CCVars
     /// <remarks>
     ///     This time limiting is not perfectly implemented. Firstly, a significant chunk of processing time happens
     ///     due to queued entity deletions, which happen outside of the system update code. Secondly, explosion
-    ///     spawning cannot currently be interrupted & resumed, and may lead to exceeding this time limit.
+    ///     preparation is cooperatively sliced, but individual snapshots, lookups, callbacks and visual spawning
+    ///     remain atomic and may exceed this time limit.
     /// </remarks>
     public static readonly CVarDef<float> ExplosionMaxProcessingTime =
         CVarDef.Create("explosion.max_tick_time", 7f, CVar.SERVERONLY);

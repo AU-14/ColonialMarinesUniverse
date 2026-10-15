@@ -9,21 +9,21 @@ public abstract partial class SharedSentryLaptopSystem
     {
         // PVS builds states in parallel. Filter copies rather than repairing gameplay collections here.
         // Several deleted dictionary keys would otherwise all become NetEntity.Invalid and collide.
-        var sentries = new HashSet<NetEntity>();
+        var sentries = new HashSet<NetEntity>(ent.Comp.LinkedSentries.Count);
         foreach (var sentry in ent.Comp.LinkedSentries)
         {
             if (TryGetNetEntity(sentry, out var net) && net != NetEntity.Invalid)
                 sentries.Add(net.Value);
         }
 
-        var names = new Dictionary<NetEntity, string>();
+        var names = new Dictionary<NetEntity, string>(ent.Comp.SentryCustomNames.Count);
         foreach (var (sentry, name) in ent.Comp.SentryCustomNames)
         {
             if (TryGetNetEntity(sentry, out var net) && net != NetEntity.Invalid)
                 names.Add(net.Value, name);
         }
 
-        var watchers = new List<NetEntity>();
+        var watchers = new List<NetEntity>(ent.Comp.Watchers.Count);
         foreach (var watcher in ent.Comp.Watchers)
         {
             if (TryGetNetEntity(watcher, out var net) && net != NetEntity.Invalid)
@@ -66,9 +66,9 @@ public sealed class SentryLaptopComponentState : ComponentState
     public bool IsOpen { get; init; }
     public bool IsPowered { get; init; }
     public float Range { get; init; }
-    public HashSet<NetEntity> LinkedSentries { get; init; } = new();
+    public required HashSet<NetEntity> LinkedSentries { get; init; }
     public int MaxLinkedSentries { get; init; }
-    public Dictionary<NetEntity, string> SentryCustomNames { get; init; } = new();
-    public List<NetEntity> Watchers { get; init; } = new();
+    public required Dictionary<NetEntity, string> SentryCustomNames { get; init; }
+    public required List<NetEntity> Watchers { get; init; }
     public NetEntity? CurrentCamera { get; init; }
 }

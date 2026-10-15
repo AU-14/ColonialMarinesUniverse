@@ -7,6 +7,13 @@
   setPreference: false
   hidden: true
   roundForce: PROVOST
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - CMUAlcoholic
+    - CMUDrugAddict
+    - CMUBadLeg
   roundSide: Indfor
   roundProfiles:
   - AU14RoundJobProfileThirdParty

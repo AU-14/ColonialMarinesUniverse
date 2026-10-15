@@ -1,1 +1,1 @@
-﻿cmu-damageevasion-energy = We feel our body surge with energy!
+cmu-damageevasion-energy = We feel our body surge with energy!

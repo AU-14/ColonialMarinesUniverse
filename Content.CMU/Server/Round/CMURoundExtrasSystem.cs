@@ -8,10 +8,12 @@ using Content.Server.GameTicking.Events;
 using Content.Server.Maps;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.WeedKiller;
+using Content.Shared._RMC14.Xenonids.Egg;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Maps;
 using Robust.Shared.Audio;
+using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Round;
@@ -22,9 +24,10 @@ namespace Content.Server.CMU14.Round;
 ///     announcements, and the ARES greeting/planet announcements. Stays off while the classic rule is
 ///     active so none of it happens twice.
 /// </summary>
-public sealed class CMURoundExtrasSystem : EntitySystem
+public sealed partial class CMURoundExtrasSystem : EntitySystem
 {
     [Dependency] private AuRoundSystem _auRound = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private CMDistressSignalRuleSystem _distressSignal = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private MapInsertSystem _mapInsert = default!;
@@ -91,7 +94,14 @@ public sealed class CMURoundExtrasSystem : EntitySystem
 
         var structures = EntityQueryEnumerator<DeletedByWeedKillerComponent>();
         while (structures.MoveNext(out var uid, out _))
+        {
+            // Stored experiment eggs are cargo, not mapped hive structures.
+            if (TryComp<XenoEggComponent>(uid, out var egg) && egg.State == XenoEggState.Item &&
+                _container.IsEntityInContainer(uid))
+                continue;
+
             QueueDel(uid);
+        }
     }
 
     public override void Update(float frameTime)

@@ -9,6 +9,16 @@ namespace Content.Shared.Chat;
 
 public abstract partial class SharedChatSystem
 {
+    // CMU14: one override lookup; an override cannot recurse into itself.
+    private EmotePrototype GetEmoteOverride(EntityUid source, EmotePrototype emote)
+    {
+        return TryComp<SpeechComponent>(source, out var speech) &&
+               speech.EmoteOverrides.TryGetValue(emote.ID, out var id) &&
+               ProtoMan.TryIndex<EmotePrototype>(id, out var replacement)
+            ? replacement
+            : emote;
+    }
+
     private FrozenDictionary<string, EmotePrototype> _wordEmoteDict = FrozenDictionary<string, EmotePrototype>.Empty;
 
     private void CacheEmotes()
@@ -88,6 +98,9 @@ public abstract partial class SharedChatSystem
         bool forceEmote = false
     )
     {
+        // CMU14: species-specific emotes use the shared chat entry points.
+        emote = GetEmoteOverride(source, emote);
+
         if (!forceEmote && !AllowedToUseEmote(source, emote))
             return false;
 
@@ -132,6 +145,8 @@ public abstract partial class SharedChatSystem
     /// <returns>True if an emote was performed. False if the emote is unavailable, cancelled, etc.</returns>
     public bool TryEmoteWithoutChat(EntityUid uid, EmotePrototype proto, bool ignoreActionBlocker = false)
     {
+        proto = GetEmoteOverride(uid, proto);
+
         if (!_actionBlocker.CanEmote(uid) && !ignoreActionBlocker)
             return false;
 
@@ -190,6 +205,8 @@ public abstract partial class SharedChatSystem
         var actionTrimmedLower = TrimPunctuation(textInput.ToLower());
         if (!_wordEmoteDict.TryGetValue(actionTrimmedLower, out var emote))
             return true;
+
+        emote = GetEmoteOverride(source, emote);
 
         if (!AllowedToUseEmote(source, emote))
             return true;

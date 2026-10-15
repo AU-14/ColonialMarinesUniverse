@@ -131,6 +131,10 @@ public sealed partial class PullController : VirtualController
         if (HasComp<BeingFiremanCarriedComponent>(pulled))
             return false;
 
+        // Input can arrive after a ladder, medevac, or shuttle has moved the player to another map.
+        if (_transformSystem.GetMapId(coords) != Transform(player).MapID)
+            return false;
+
         pullerComp.NextThrow = _timing.CurTime + pullerComp.ThrowCooldown;
 
         // Cap the distance
@@ -290,9 +294,10 @@ public sealed partial class PullController : VirtualController
 
             var impulseModifierLerp = Math.Min(1.0f, Math.Max(0.0f, (physics.Mass - AccelModifierLowMass) / (AccelModifierHighMass - AccelModifierLowMass)));
             var impulseModifier = MathHelper.Lerp(AccelModifierLow, AccelModifierHigh, impulseModifierLerp);
-            var multiplier = diffLength < 1 ? impulseModifier * diffLength : impulseModifier;
             // Note the implication that the real rules of physics don't apply to pulling control.
-            var accel = diff.Normalized() * multiplier;
+            // Near the destination this is already proportional to distance. Avoid normalizing
+            // zero while the body still has velocity and needs the damping below.
+            var accel = diff * (impulseModifier / MathF.Max(1f, diffLength));
             // Now for the part where velocity gets shutdown...
             if (diffLength < SettleShutdownDistance && physics.LinearVelocity.Length() >= SettleMinimumShutdownVelocity)
             {

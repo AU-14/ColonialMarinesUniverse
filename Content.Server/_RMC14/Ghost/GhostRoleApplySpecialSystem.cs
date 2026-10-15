@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Roles;
 using Content.Shared.Access.Components;
+using Content.Shared.Access.Systems;
 using Content.Shared.Clothing;
 using Content.Shared.Inventory;
 using Robust.Shared.Prototypes;
@@ -22,6 +23,7 @@ public sealed partial class GhostRoleApplySpecialSystem : EntitySystem
     [Dependency] private RankSystem _rank = default!;
     [Dependency] private MarineSystem _marine = default!;
     [Dependency] private RoundJobProfileSystem _roundJobProfiles = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
 
     public override void Initialize()
     {
@@ -51,7 +53,7 @@ public sealed partial class GhostRoleApplySpecialSystem : EntitySystem
                 if (TryComp<IdCardComponent>(item, out var card))
                 {
                     card.FullName = metaData.EntityName;
-                    card.OriginalOwner = ent.Owner;
+                    _idCard.TryChangeOriginalOwner(item, ent.Owner, card);
                     _meta.SetEntityName(item, $"{metaData.EntityName} ({job.LocalizedName})");
                 }
             }

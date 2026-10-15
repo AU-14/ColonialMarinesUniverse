@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.Server.Access.Systems;
+using Content.Server.CMU14.Diagnostics.Performance;
 using Content.Server.CMU14.Round;
 using Content.Server.CMU14.Threats;
 using Content.Server.CMU14.VendorMarker;
@@ -43,6 +44,7 @@ namespace Content.Server.CMU14.Ops.ThirdParty;
 public sealed partial class ThirdPartySystem : EntitySystem
 {
     [Dependency] private ForceInterestSystem _forceInterest = default!;
+    [Dependency] private ICMUServerPerformanceDiagnostics _performance = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IEntityManager _entityManager = default!;
@@ -193,12 +195,11 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
     public float GetSignalIntervalMultiplier() => _signalIntervalMultiplier;
 
-    public bool SpawnThirdParty(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
+    // Queues the party for interest collection; spawn happens later on its own timer, so
+    // there is no meaningful failure at this point and nothing is returned
+    public void SpawnThirdParty(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs = null, bool? overrideDropship = null)
-    {
-        QueueThirdParty(party, spawnProto, roundStart, overrideDropship, true, assignedJobs);
-        return true;
-    }
+        => QueueThirdParty(party, spawnProto, roundStart, overrideDropship, true, assignedJobs);
 
     private uint QueueThirdParty(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
         bool? overrideDropship, bool ready,
@@ -218,6 +219,16 @@ public sealed partial class ThirdPartySystem : EntitySystem
     }
 
     private bool SpawnThirdPartyNow(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
+        Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs, bool? overrideDropship)
+    {
+        var spawned = SpawnThirdPartyNowInner(party, spawnProto, roundStart, assignedJobs, overrideDropship);
+        if (spawned)
+            _auRoundSystem.MarkThirdPartySpawned(party);
+
+        return spawned;
+    }
+
+    private bool SpawnThirdPartyNowInner(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs, bool? overrideDropship)
     {
         const float SpawnTogetherRadius = 8f;
@@ -1008,6 +1019,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
         EntityCoordinates coords = _entityManager.GetComponent<TransformComponent>(marker).Coordinates;
         try
         {
+            using var cost = _performance.MeasureOperation("third-party-body-spawn", protoId);
             EntityUid ent = _entityManager.SpawnEntity(protoId, coords);
 
             // If parachute mode, hand off to the shared paradrop system so the entity falls from the sky.

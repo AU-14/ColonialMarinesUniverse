@@ -45,6 +45,9 @@
     - NoEnglish
     - SlowRunner
     - Anemic
+    - CMUAlcoholic
+    - CMUDrugAddict
+    - CMUBadLeg
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -77,7 +80,7 @@
     shoes: CMBootsBlackFilled
     head: RMCHardhatOrange
     jumpsuit: CMJumpsuitMaintTech
-    ears: AU14HeadsetGovforMarine
+    ears: CMUHeadsetGovforMarineAuxiliary
 
 - type: startingGear
   id: AU14GearGOVFOREngineeringTechDummy
@@ -86,7 +89,7 @@
     shoes: CMBootsBlackFilled
     head: RMCHardhatOrange
     jumpsuit: CMJumpsuitMaintTech
-    ears: AU14HeadsetGovforMarine
+    ears: CMUHeadsetGovforMarineAuxiliary
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -142,7 +145,7 @@
     shoes: CMBootsBlackFilled
     head: RMCHardhatOrange
     jumpsuit: CMJumpsuitMaintTech
-    ears: AU14HeadsetOpforMarine
+    ears: CMUHeadsetOpforMarineAuxiliary
 
 - type: startingGear
   id: AU14GearOPFOREngineeringTechDummy
@@ -151,7 +154,7 @@
     shoes: CMBootsBlackFilled
     head: RMCHardhatOrange
     jumpsuit: CMJumpsuitMaintTech
-    ears: AU14HeadsetOpforMarine
+    ears: CMUHeadsetOpforMarineAuxiliary
 
 - type: entity
   parent: CMSpawnPointJobBase

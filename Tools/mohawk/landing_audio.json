@@ -4,29 +4,19 @@
   "sample_rate": 48000,
   "channels": 1,
   "peak_dbfs_before_encoding": -6,
-  "crossfade_seconds": 0.25,
-  "touchdown_starts_at_seconds": 1.9020208333333333,
+  "fade_in_seconds": 0.01,
+  "fade_out_seconds": 0.05,
   "sources": [
     {
-      "title": "super specific landing",
-      "author": "Vospi",
+      "title": "spaceship takeoff.wav", "preview_label": "Extended spaceship lift-off",
+      "author": "pointparkcinema",
       "license": "CC0-1.0",
-      "page": "https://freesound.org/people/Vospi/sounds/439546/",
-      "download": "https://cdn.freesound.org/previews/439/439546_91362-hq.mp3",
-      "start_seconds": 6,
-      "end_seconds": 8.152020833333333,
-      "sha256": "c3fd3d565ecf39c1e07ca6db224b5d2ff823a60a1341d7071865c0a15baf7754"
-    },
-    {
-      "title": "Creaky Thunderous SciFi SpaceShip Landing",
-      "author": "Kalpesh Ajugia (kalsstockmedia)",
-      "license": "Pixabay Content License",
-      "license_url": "https://pixabay.com/service/terms/",
-      "page": "https://pixabay.com/sound-effects/film-special-effects-creaky-thunderous-scifi-spaceship-landing-341621/",
-      "download": "https://cdn.pixabay.com/audio/2025/05/14/audio_84689d3af2.mp3",
-      "start_seconds": 0,
-      "end_seconds": 8.097979166666667,
-      "sha256": "53ccdb18ed83187a57afed28ad36b9f9510a3a6ec823a3d17043b564ca259afd"
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "page": "https://freesound.org/people/pointparkcinema/sounds/407253/",
+      "download": "https://cdn.freesound.org/previews/407/407253_7237186-hq.mp3",
+      "start_seconds": 15,
+      "end_seconds": 25,
+      "sha256": "0a0e48b018fccd24a1728d179bea0d0d8fed49b117f47ab9c9bd3bd6f08f668b"
     }
   ]
 }

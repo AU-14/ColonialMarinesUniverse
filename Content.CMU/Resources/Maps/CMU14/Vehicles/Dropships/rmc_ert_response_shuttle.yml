@@ -74,6 +74,27 @@ entities:
     - type: GridAtmosphere
       version: 2
       data:
+        uniqueMixes:
+        - temperature: 293.15
+          volume: 2500
+          moles:
+            Oxygen: 21.824879
+            Nitrogen: 82.10312
+        tiles:
+          0,0:
+            0: 32631
+          0,-1:
+            0: 32627
+          -1,0:
+            0: 52940
+          0,1:
+            0: 1
+          0,-2:
+            0: 13088
+          -1,-2:
+            0: 34944
+          -1,-1:
+            0: 52936
         chunkSize: 4
     - type: GasTileOverlay
     - type: RadiationGridResistance

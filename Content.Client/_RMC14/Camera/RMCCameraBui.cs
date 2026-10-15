@@ -149,6 +149,9 @@ public sealed class RMCCameraBui : RMCPopOutBui<RMCCameraWindow>
         if (computer.Title is { } title)
             Window.Title = Loc.GetString(title);
 
+        if (Window.Viewport.ViewportSize != computer.ViewportSize)
+            Window.Viewport.ViewportSize = computer.ViewportSize;
+
         var currentNetCamera = _directory.ActiveCamera;
         Window.DisconnectButton.Disabled = currentNetCamera == null;
         for (var i = 0; i < _directory.Cameras.Count; i++)

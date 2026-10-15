@@ -15,6 +15,9 @@
   - type: MarineMapTracked
   - type: XenoMapTracked
   - type: TacticalMapTracked
+  - type: TacticalMapAlwaysVisible
+    visibleToXenos: true
+    visibleAsXenoStructure: true
   - type: ActiveTacticalMapTracked
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
@@ -40,15 +43,16 @@
     state: On
     channels:
     - Colony
+    - ColonyMedical
     - radioWEYU
     - radioCMB
     - radioCLF
-    - radioMobFamily
     - radioGovforAlpha
     - radioGovforBravo
     - radioGovforCharlie
     - radioGovforCommand
     - radioGovforIntel
+    - radioGovforFoxtrot
     - radioGovforJTAC
     - radioGovforMILP
     - radioOpforAlpha
@@ -56,6 +60,7 @@
     - radioOpforCharlie
     - radioOpforCommand
     - radioOpforIntel
+    - radioOpforVictor
     - radioOpforJTAC
     - radioOpforMILP
     - CMUYautja
@@ -83,6 +88,7 @@
     - radioGovforCharlie
     - radioGovforCommand
     - radioGovforIntel
+    - radioGovforFoxtrot
     - radioGovforJTAC
     - radioGovforMILP
 
@@ -100,6 +106,7 @@
     - radioOpforCharlie
     - radioOpforCommand
     - radioOpforIntel
+    - radioOpforVictor
     - radioOpforJTAC
     - radioOpforMILP
 
@@ -133,10 +140,10 @@
     state: Off
     channels:
     - Colony
+    - ColonyMedical
     - radioWEYU
     - radioCMB
     - radioCLF
-    - radioMobFamily
 
 # ├──[ MAP SPAWNS ]──────────────────────────────────────────────────┤
 - type: entity

@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared.CMU14.Blackfoot;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Vehicles;
@@ -49,7 +50,15 @@ public sealed partial class MohawkSystem
                 LookupFlags.Dynamic | LookupFlags.Static);
             foreach (var vehicle in candidates)
             {
-                if (!HasComp<CMUVehicleZTraversalComponent>(vehicle))
+                // The Blackfoot has its own flight controller instead of ordinary
+                // vehicle Z traversal, but its grounded hull still rides the lift.
+                if (TryComp<BlackfootFlightComponent>(vehicle, out var flight))
+                {
+                    if (flight.State is not (BlackfootFlightState.Stowed or BlackfootFlightState.Grounded or
+                        BlackfootFlightState.Idling or BlackfootFlightState.Crashed))
+                        continue;
+                }
+                else if (!HasComp<CMUVehicleZTraversalComponent>(vehicle))
                     continue;
 
                 var local = Vector2.Transform(_transform.GetWorldPosition(vehicle), inverse);

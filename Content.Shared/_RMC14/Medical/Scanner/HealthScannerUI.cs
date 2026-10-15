@@ -39,7 +39,12 @@ public sealed class HealthScannerBuiState(
     public CMUPainShockRisk? CMUPainShockRisk;
     public bool CMUPainShockSuppressed;
     public string? CMURiderReading;
+    public string? CMUWendigoReading; // CMU14: lab Wendigo procedure progress
     public bool CMUExternalBleeding;
+    // cmu edit start
+    public ExternalBleedTier CMUExternalBleedTier;
+    public List<CMUStumpReadout>? CMUStumps;
+    // cmu edit end
     public bool CMUSyntheticPhysiology;
     public HealthScannerDamageReadout Damage = new();
     public HealthScannerAdviceReadout Advice = new();
@@ -52,6 +57,11 @@ public sealed class HealthScannerBuiState(
     public bool VictimBurst;
     public bool VictimInfected;
     public bool HolocardXeno;
+    // cmu edit start
+    public TimeSpan? CMUTimeUntilUnrevivable;
+    public string? CMUBloodType;
+    public float CMUSalinePercent;
+    // cmu edit end
 }
 
 /// <summary>A diagnostic projection never exposes reagent-instance metadata or unknown prototypes.</summary>
@@ -98,6 +108,9 @@ public sealed class HealthScannerAdviceReadout
     public bool ShowBicaridine;
     public bool ShowKelotane;
     public bool ShowDylovene;
+    // cmu edit start
+    public bool CMUShowInternals;
+    // cmu edit end
 }
 
 [Serializable, NetSerializable]
@@ -114,7 +127,18 @@ public readonly record struct CMUBodyPartReadout(
     bool Eschar,
     bool Splinted,
     bool Cast,
-    bool Tourniquet);
+    bool Tourniquet,
+    // cmu edit start
+    ExternalBleedTier ExternalBleeding = ExternalBleedTier.None);
+    // cmu edit end
+
+// cmu edit start
+[Serializable, NetSerializable]
+public readonly record struct CMUStumpReadout(
+    BodyPartType Type,
+    BodyPartSymmetry Symmetry,
+    bool Clamped);
+// cmu edit end
 
 [Serializable, NetSerializable]
 public readonly record struct CMUOrganReadout(

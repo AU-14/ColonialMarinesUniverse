@@ -12,7 +12,7 @@ namespace Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 ///     <see cref="Content.Shared.Damage.DamageableComponent"/>. The mob-state machine still
 ///     reads entity-level damage; this is a side ledger only.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true), AutoGenerateComponentPause]
 [Access(typeof(SharedBodyPartHealthSystem))]
 public sealed partial class BodyPartHealthComponent : Component
 {

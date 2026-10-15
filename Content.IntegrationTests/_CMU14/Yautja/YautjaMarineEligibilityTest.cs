@@ -17,12 +17,12 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaMarineEligibilityTest
 {
-    [TestCase("CMUMobYautja")]
-    [TestCase("CMUMobYautjaBadBloodGrunt")]
-    [TestCase("CMUMobYautjaBadBloodLeader")]
-    [TestCase("CMUYautjaHunter")]
-    [TestCase("CMMobHuman")]
-    public async Task YautjaAreHostileToHumanSentriesAndCannotReceiveMedals(string prototype)
+    [TestCase("CMUMobYautja", "CMUYautja")]
+    [TestCase("CMUMobYautjaBadBloodGrunt", "CMUYautjaBadBlood")]
+    [TestCase("CMUMobYautjaBadBloodLeader", "CMUYautjaBadBlood")]
+    [TestCase("CMUYautjaHunter", "CMUYautja")]
+    [TestCase("CMMobHuman", "CMUYautja")]
+    public async Task YautjaAreHostileToHumanSentriesAndCannotReceiveMedals(string prototype, string expectedFaction)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
         var server = pair.Server;
@@ -67,7 +67,7 @@ public sealed class YautjaMarineEligibilityTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(entities.GetComponent<NpcFactionMemberComponent>(hunter).Factions.Select(faction => faction.Id),
-                        Is.EquivalentTo(new[] { "CMUYautja" }));
+                        Is.EquivalentTo(new[] { expectedFaction }));
                     Assert.That(iff.IsInFaction(hunter, "FactionYautja"), Is.True);
                     Assert.That(targetingSystem.IsValidTarget((sentry, targeting), hunter), Is.True);
                     Assert.That(targetingSystem.GetNearbyIffHostiles((sentry, targeting), 7).ToArray(),

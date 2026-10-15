@@ -5,12 +5,8 @@ cmu-zlevel-look-up-nested = You cannot look up while nested.
 cmu-zlevel-look-up-enabled = You look up.
 cmu-zlevel-look-up-disabled = You stop looking up.
 
-cmu-zlevel-shoot-down-enabled = You prepare to fire down a Z-level.
-cmu-zlevel-shoot-down-disabled = You stop aiming down a Z-level.
 cmu-zlevel-shoot-down-disabled-unwield = You stop aiming down as you unwield your weapon.
 cmu-zlevel-shoot-up-disabled-unwield = You stop aiming up as you unwield your weapon.
-cmu-zlevel-shoot-down-no-gun = You need a gun in hand to aim down a Z-level.
-cmu-zlevel-shoot-down-requires-wield = You need to wield your gun before aiming down a Z-level.
 cmu-zlevel-shoot-down-no-level = There is no Z-level below to shoot into.
 cmu-zlevel-shoot-up-no-level = There is no Z-level above to shoot into.
 cmu-zlevel-shoot-down-blocked-floor = There is no opening nearby to shoot down through.
@@ -38,3 +34,9 @@ cmu-zlevel-ladder-retract-no-hand = You need an empty hand to retract the ladder
 cmu-zlevel-ladder-retract-finish = You retract the ladder.
 # AU14 (building overhaul): stage 1 of the look-up cycle (faint upper ghost).
 cmu-zlevel-faint-up-enabled = You glance upward, faintly making out the level above.
+cmu-zlevel-ladder-throw-start-self = You get ready to toss {THE($item)} {$direction} the ladder.
+cmu-zlevel-ladder-throw-start-others = {$user} gets ready to toss {THE($item)} {$direction} the ladder.
+cmu-zlevel-ladder-throw-finish-self = You toss {THE($item)} {$direction} the ladder.
+cmu-zlevel-ladder-throw-finish-others = {$user} tosses {THE($item)} {$direction} the ladder.
+cmu-zlevel-ladder-throw-up = up
+cmu-zlevel-ladder-throw-down = down

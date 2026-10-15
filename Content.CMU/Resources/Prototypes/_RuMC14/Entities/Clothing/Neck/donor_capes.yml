@@ -1,0 +1,143 @@
+- type: entity
+  parent: ClothingNeckBase
+  id: RMCDonorCapeItem01
+  name: rmc-donor-cape-01-name
+  description: rmc-donor-cape-01-description
+  components:
+  - type: Sprite
+    sprite: _RuMC14/DonorCapes/cape01.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: RMCDonorCapeItem02
+  name: rmc-donor-cape-02-name
+  description: rmc-donor-cape-02-description
+  components:
+  - type: Sprite
+    sprite: _RuMC14/DonorCapes/cape02.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: RMCDonorCapeItem03
+  name: rmc-donor-cape-03-name
+  description: rmc-donor-cape-03-description
+  components:
+  - type: Sprite
+    sprite: _RuMC14/DonorCapes/cape03.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: RMCDonorCapeItem04
+  name: rmc-donor-cape-04-name
+  description: rmc-donor-cape-04-description
+  components:
+  - type: Sprite
+    sprite: _RuMC14/DonorCapes/cape04.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: RMCDonorCapeItem05
+  name: rmc-donor-cape-05-name
+  description: rmc-donor-cape-05-description
+  components:
+  - type: Sprite
+    sprite: _RuMC14/DonorCapes/cape05.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: RMCDonorCapeItem06
+  name: rmc-donor-cape-06-name
+  description: rmc-donor-cape-06-description
+  components:
+  - type: Sprite
+    sprite: _RuMC14/DonorCapes/cape06.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: RMCDonorCapeItem07
+  name: rmc-donor-cape-07-name
+  description: rmc-donor-cape-07-description
+  components:
+  - type: Sprite
+    sprite: _RuMC14/DonorCapes/cape07.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: RMCDonorCapeItem08
+  name: rmc-donor-cape-08-name
+  description: rmc-donor-cape-08-description
+  components:
+  - type: Sprite
+    sprite: _RuMC14/DonorCapes/cape08.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: RMCDonorCapeItem09
+  name: rmc-donor-cape-09-name
+  description: rmc-donor-cape-09-description
+  components:
+  - type: Sprite
+    sprite: _RuMC14/DonorCapes/cape09.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: RMCDonorCapeItem10
+  name: rmc-donor-cape-10-name
+  description: rmc-donor-cape-10-description
+  components:
+  - type: Sprite
+    sprite: _RuMC14/DonorCapes/cape10.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: RMCDonorCapeItem11
+  name: rmc-donor-cape-11-name
+  description: rmc-donor-cape-11-description
+  components:
+  - type: Sprite
+    sprite: _RuMC14/DonorCapes/cape11.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: RMCDonorCapeItem12
+  name: rmc-donor-cape-12-name
+  description: rmc-donor-cape-12-description
+  components:
+  - type: Sprite
+    sprite: _RuMC14/DonorCapes/cape12.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: RMCDonorCapeItem13
+  name: rmc-donor-cape-13-name
+  description: rmc-donor-cape-13-description
+  components:
+  - type: Sprite
+    sprite: _RuMC14/DonorCapes/cape13.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: RMCDonorCapeItem14
+  name: rmc-donor-cape-14-name
+  description: rmc-donor-cape-14-description
+  components:
+  - type: Sprite
+    sprite: _RuMC14/DonorCapes/cape14.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: RMCDonorCapeItem15
+  name: rmc-donor-cape-15-name
+  description: rmc-donor-cape-15-description
+  components:
+  - type: Sprite
+    sprite: _RuMC14/DonorCapes/cape15.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: RMCDonorCapeItem16
+  name: rmc-donor-cape-16-name
+  description: rmc-donor-cape-16-description
+  components:
+  - type: Sprite
+    sprite: _RuMC14/DonorCapes/cape16.rsi

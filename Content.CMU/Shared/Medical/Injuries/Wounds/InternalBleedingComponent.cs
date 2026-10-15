@@ -12,6 +12,8 @@ namespace Content.Shared.CMU14.Medical.Injuries.Wounds;
 [Access(typeof(SharedCMUWoundsSystem))]
 public sealed partial class InternalBleedingComponent : Component
 {
+    internal Action<InternalBleedingComponent>? ScheduleChanged;
+    internal EntityUid ScheduledOwner;
     [DataField, AutoNetworkedField]
     public float BloodlossPerSecond = 0.5f;
 
@@ -23,7 +25,17 @@ public sealed partial class InternalBleedingComponent : Component
     public string Source = "unknown";
 
     [DataField, AutoPausedField]
-    public TimeSpan NextBleedTick;
+    public TimeSpan NextBleedTick
+    {
+        get => _nextBleedTick;
+        set
+        {
+            _nextBleedTick = value;
+            ScheduleChanged?.Invoke(this);
+        }
+    }
+
+    private TimeSpan _nextBleedTick;
 }
 
 [ByRefEvent]

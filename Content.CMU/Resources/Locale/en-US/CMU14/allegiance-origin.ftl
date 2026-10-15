@@ -10,8 +10,6 @@ allegiance-is-name = Independent
 allegiance-is-description = Independent Core System Colonies.
 allegiance-clf-name = Colonial Liberation Front
 allegiance-clf-description = Colonial Liberation Front. A colonist militia fighting for independence from corporate and governmental control.
-allegiance-laselle-name = Laselle Bionational
-allegiance-laselle-description = Laselle Bionational. A powerful biotech corporation with its own colonial interests.
 allegiance-wy-name = Weyland-Yutani
 allegiance-wy-description = Weyland-Yutani Corporation. "Building Better Worlds." The dominant megacorporation in human space.
 allegiance-twe-name = Three World Empire
@@ -36,6 +34,8 @@ origin-ua-brazil-name = UA - Brazil
 origin-ua-brazil-description = Born in Brazil, part of the United Americas.
 origin-ua-argentina-name = UA - Argentina
 origin-ua-argentina-description = Born in Argentina, part of the United Americas.
+origin-ua-artificial-womb-name = UA - Artificial Womb
+origin-ua-artificial-womb-description = You were grown in an artificial womb for military service. As an A.W. Soldier, you must have a weapon produced pre-2010 or the name of the weapon's creator as your last name. A.W. last names must not include numbers or symbols and must be a single word.
 
 # Origins - Three World Empire
 origin-twe-japan-name = TWE - Japan

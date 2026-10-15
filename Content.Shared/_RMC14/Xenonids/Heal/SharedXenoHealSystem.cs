@@ -103,7 +103,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
             return;
 
         var msg = "We channel our plasma to heal our sisters' wounds around this area.";
-        _popup.PopupClient(msg, args.Target, ent, PopupType.Large);
+        _popup.PopupCoordinates(msg, args.Target, ent, PopupType.Large);
 
         foreach (var xeno in _xenos)
         {
@@ -197,7 +197,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
 
         if (failureMessageId != null)
         {
-            _popup.PopupClient(Loc.GetString(failureMessageId, ("target_xeno", target)), ent);
+            _popup.PopupSelf(Loc.GetString(failureMessageId, ("target_xeno", target)), ent);
             return;
         }
 
@@ -235,7 +235,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
         if (TryComp<DamageableComponent>(ent, out var damage))
             _damageable.AddDamage(ent.Owner, damage, damageTakenSpecifier);
 
-        _popup.PopupClient(Loc.GetString("rmc-xeno-apply-salve-self", ("target_xeno", target)), ent, PopupType.Medium);
+        _popup.PopupSelf(Loc.GetString("rmc-xeno-apply-salve-self", ("target_xeno", target)), ent, PopupType.Medium);
 
         args.Handled = true;
 
@@ -259,14 +259,14 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
 
         _audio.PlayPredicted(args.HealSound, target.ToCoordinates(), ent);
 
-        _popup.PopupClient(Loc.GetString("rmc-xeno-apply-salve-target", ("healer_xeno", ent)), target, PopupType.SmallCaution);
+        _popup.PopupSelf(Loc.GetString("rmc-xeno-apply-salve-target", ("healer_xeno", ent)), target, PopupType.SmallCaution);
 
         if (!healedHealerOrSmallXeno && TryComp(ent, out XenoEnergyComponent? xenoEnergyComp) && !_xenoEnergy.HasEnergy((ent, xenoEnergyComp), xenoEnergyComp.Max))
         {
             _xenoEnergy.AddEnergy((ent, xenoEnergyComp), (int)damageTaken, false);
             if (_xenoEnergy.HasEnergy((ent, xenoEnergyComp), xenoEnergyComp.Max))
             {
-                _popup.PopupClient(Loc.GetString("rmc-xeno-sacrifice-heal-will-respawn"), ent, PopupType.Large);
+                _popup.PopupSelf(Loc.GetString("rmc-xeno-sacrifice-heal-will-respawn"), ent, PopupType.Large);
             }
         }
         Dirty(target, heal);
@@ -305,7 +305,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
 
         if (failureMessageId != null)
         {
-            _popup.PopupClient(Loc.GetString(failureMessageId, ("target_xeno", target)), ent);
+            _popup.PopupSelf(Loc.GetString(failureMessageId, ("target_xeno", target)), ent);
             return;
         }
 
@@ -346,7 +346,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
 
         SacrificialHealShout(ent);
         _xenoAnnounce.AnnounceSameHive(ent.Owner, Loc.GetString("rmc-xeno-sacrifice-heal-target-announcement", ("healer_xeno", ent), ("target_xeno", target)), popup:PopupType.Large);
-        _popup.PopupPredicted(Loc.GetString("rmc-xeno-sacrifice-heal-target-enviorment", ("healer_xeno", ent), ("target_xeno", target)), target, ent, PopupType.Medium);
+        _popup.PopupBroadcast(Loc.GetString("rmc-xeno-sacrifice-heal-target-enviorment", ("healer_xeno", ent), ("target_xeno", target)), target, ent, PopupType.Medium);
 
         // Heal from crit
         var targetTotalDamage = _damageable.GetTotalDamage((target, targetDamageComp));

@@ -40,7 +40,7 @@
 
   name: au14-job-name-clfsurgeon
   description: au14-job-description-clfsurgeon
-  setPreference: true
+  setPreference: false
   ignoreAllegiance: true
   playTimeTracker: AU14JobCLFSurgeon
   requirements:

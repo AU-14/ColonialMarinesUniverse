@@ -1,11 +1,11 @@
 <Document>
   # Comms Quick Reference
 
-  A compact reference for radio controls, ranges, and status effects.
+  A compact reference for radio controls, ranges, settings, and common effects.
 
-  For detailed instructions, see [textlink="AN/PRC-117G Radio" link="AU14CommsANPRC"] and [textlink="Field Headsets" link="AU14CommsHeadsets"].
+  For full instructions, see [textlink="AN/PRC-117G Radio" link="AU14CommsANPRC"] and [textlink="Field Headsets" link="AU14CommsHeadsets"].
 
-  ## Chat Prefixes
+  ## Chat prefixes
 
   <Table Columns="2" MinForcedColumnWidth="120">
     <ColorBox Color="#263238">
@@ -23,159 +23,165 @@
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">[color=#a4885c]:v[/color], [color=#a4885c]:a[/color], and others</Box>
+      <Box Margin="4">[color=#a4885c]:v[/color], [color=#a4885c]:a[/color], etc.</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Transmit on another keyed headset net. Examine the headset to view its available prefixes.</Box>
+      <Box Margin="4">Transmit on another net installed in the headset. Examine it for available prefixes.</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">[color=#a4885c]:r[/color]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Transmit through the active AN/PRC slot or handset.</Box>
+      <Box Margin="4">Transmit through the AN/PRC memory marked ON AIR.</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">[color=#a4885c]:x[/color]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Transmit on a headset's tuned direct frequency.</Box>
+      <Box Margin="4">Transmit on the headset's tuned direct frequency.</Box>
     </ColorBox>
   </Table>
 
-  The AN/PRC panel can be operated by:
+  ## AN/PRC operator training
 
-  - [bold]GOVFOR and OPFOR[/bold] - Commander, Adjutant, staff officers, engineering officers, intelligence officers, synthetics, squad leaders, Fireteam Leaders, and Radio Traffic Operators.
-  - [bold]CLF[/bold] - Cell Leader and Radio Operator.
-  - Anyone who has read a [bold]field radio operator's pamphlet[/bold].
+  The AN/PRC control panel can be used by:
 
-  The handset can be used by anyone within range, trained or not.
+  - [bold]GOVFOR and OPFOR[/bold] - Commanding Officer, Adjutant, staff officers, engineering officers, intelligence officers, synthetics, Squad Leaders, Fireteam Leaders, and Radio Traffic Operators
+  - [bold]CLF[/bold] - Cell Leader and Radio Operator
+  - anyone who has read a [bold]field radio operator's pamphlet[/bold]
 
-  ## Signal Range
+  The handset can be used without radio-operator training.
 
-  The following AN/PRC ranges assume [bold]TX MED[/bold] and a whip antenna.
+  ## Signal range
+
+  Unless stated otherwise, AN/PRC values assume [bold]MED output[/bold] and a [bold]WHIP antenna[/bold].
 
   <Table Columns="3" MinForcedColumnWidth="90">
     <ColorBox Color="#263238">
       <Box Margin="4">[bold]System[/bold]</Box>
     </ColorBox>
     <ColorBox Color="#263238">
-      <Box Margin="4">[bold]Clear range[/bold]</Box>
+      <Box Margin="4">[bold]Clear[/bold]</Box>
     </ColorBox>
     <ColorBox Color="#263238">
-      <Box Margin="4">[bold]Degraded or lost[/bold]</Box>
+      <Box Margin="4">[bold]Degraded / lost[/bold]</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">Named net through AN/PRC</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">0-30 tiles from the radio.</Box>
+      <Box Margin="4">0-30 tiles</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Degraded to 45 tiles. No signal beyond 45.</Box>
+      <Box Margin="4">Degraded to 45; lost beyond 45.</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">Direct frequency</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">0-30 tiles from the transmitter.</Box>
+      <Box Margin="4">0-30 tiles</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Degraded to 50 tiles. No signal beyond 50.</Box>
+      <Box Margin="4">Degraded to 50; lost beyond 50.</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">AN/PRC frequency bridge</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Both users within 50 tiles of the radio.</Box>
+      <Box Margin="4">Both users within 50 tiles</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Fails when either user is outside bridge range.</Box>
-    </ColorBox>
-
-    <ColorBox>
-      <Box Margin="4">Command-post antenna mast</Box>
-    </ColorBox>
-    <ColorBox>
-      <Box Margin="4">0-75 tiles.</Box>
-    </ColorBox>
-    <ColorBox>
-      <Box Margin="4">Degraded to 100 tiles. No signal beyond 100.</Box>
+      <Box Margin="4">Fails when either user leaves bridge range.</Box>
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">CLF relay set (staked down)</Box>
+      <Box Margin="4">Command-post mast</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">0-35 tiles.</Box>
+      <Box Margin="4">0-75 tiles</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Degraded to 50 tiles. No signal beyond 50.</Box>
+      <Box Margin="4">Degraded to 100; lost beyond 100.</Box>
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">CLF base station (staked down)</Box>
+      <Box Margin="4">CLF relay set</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">0-55 tiles.</Box>
+      <Box Margin="4">0-35 tiles</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Degraded to 80 tiles. No signal beyond 80.</Box>
+      <Box Margin="4">Degraded to 50; lost beyond 50.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">CLF base station</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">0-55 tiles</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Degraded to 80; lost beyond 80.</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">Shipboard communications array</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Covers the connected ship while powered.</Box>
+      <Box Margin="4">Entire connected ship</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Provides no coverage when destroyed or unpowered.</Box>
+      <Box Margin="4">No coverage while destroyed or unpowered.</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">CLF feeder tap</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Whatever the tapped mast or array covers.</Box>
+      <Box Margin="4">Same as host mast or array</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Adds the CLF nets without removing any. The host keeps working normally for its owners.</Box>
+      <Box Margin="4">Adds CLF nets without changing existing coverage.</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">Handset cord</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">About two and a half tiles from the radio.</Box>
+      <Box Margin="4">About 2.5 tiles</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Disconnects when the user moves out of range.</Box>
+      <Box Margin="4">Disconnects beyond range.</Box>
     </ColorBox>
   </Table>
 
-  Transmit power and antenna type modify AN/PRC relay range.
+  AN/PRC relay range is modified by antenna and output power.
 
-  Faction nets, including squad, command, intelligence, JTAC, and MP, require coverage from at least one of the following:
+  ### Combat-net relays
 
-  - A powered AN/PRC worn by a trained operator.
-  - A deployed retransmission station.
-  - A command-post antenna mast.
-  - A powered communications array.
-  - A vehicle radio set aboard a dropship or vehicle (covers little more than the hull).
-  - A field antenna mast, raised from ten metal sheets by engineering-trained personnel.
-  - A CLF clandestine base station or relay set, staked down (CLF nets only).
-  - Any mast or array carrying a CLF feeder tap (CLF nets only, until the tap is removed).
+  Combat nets require relay coverage from at least one compatible source:
 
-  Colony and civilian channels are not relay-gated and keep stock behavior.
+  - powered AN/PRC worn by a trained operator
+  - deployed retransmission station
+  - command-post antenna mast
+  - powered communications array
+  - vehicle radio
+  - powered field antenna mast keyed to your faction
+  - CLF clandestine base station or relay set
+  - mast or array carrying a CLF feeder tap
 
-  ## Net Splicing
+  Colony and civilian channels are not relay-gated.
 
-  A CLF Radio Operator with a net splice kit can tap a mast or array and add the cell nets to it. The host is not disabled and keeps serving its owners. Probe the band to find each hidden trunk carrier, then lock it. Probes are shared across the whole job. Running out of probes, or filling the detection meter, fails the job and faults the junction.
+  ## Net splicing
+
+  A CLF Radio Operator can use a [bold]net splice kit[/bold] to add CLF nets to compatible communications infrastructure.
+
+  Splicing does not remove or interfere with the host's existing nets.
 
   <Table Columns="4" MinForcedColumnWidth="80">
     <ColorBox Color="#263238">
@@ -231,9 +237,18 @@
     </ColorBox>
   </Table>
 
-  Signal reads zero more than 30 positions from a carrier. A lock takes within 4. Each probe adds 1.5% detection. A missed lock adds 30% and costs 2 probes. The mast sparks throughout, and holds a fault for 90 seconds after a failure, during which it cannot be spliced again.
+  ### Splice rules
 
-  Anyone can pull a tap off in eight seconds, and recovers a CLF fill card for doing it.
+  - PROBE reads zero when the nearest carrier is more than 30 positions away
+  - LOCK succeeds within 4 positions of a carrier
+  - each probe adds 1.5% detection
+  - a failed lock adds 30% detection and consumes 2 probes
+  - using all probes or filling the detection meter fails the attempt
+  - a failed junction remains faulted for 90 seconds
+  - junctions spark while being worked and while faulted
+  - an installed tap can be removed in eight seconds
+  - removing a tap returns a CLF fill card
+  - opening a spliced field mast's feed knocks the tap off and drops its CLF fill card
 
   ## Antennas
 
@@ -242,7 +257,7 @@
       <Box Margin="4">[bold]Antenna[/bold]</Box>
     </ColorBox>
     <ColorBox Color="#263238">
-      <Box Margin="4">[bold]Operation[/bold]</Box>
+      <Box Margin="4">[bold]Use[/bold]</Box>
     </ColorBox>
     <ColorBox Color="#263238">
       <Box Margin="4">[bold]Range[/bold]</Box>
@@ -252,34 +267,34 @@
       <Box Margin="4">[bold]WHIP[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Mobile or stationary.</Box>
+      <Box Margin="4">Mobile or stationary</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Standard range.</Box>
+      <Box Margin="4">Standard range</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">[bold]MAST[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Best while stationary.</Box>
+      <Box Margin="4">Best while stationary</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Approximately double range while stationary and half standard range while moving.</Box>
+      <Box Margin="4">About double while stationary; half standard while moving</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">[bold]WIRE[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Improvised, fitted to the CLF relay set only.</Box>
+      <Box Margin="4">CLF relay set</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">35 tiles clear and 50 degraded while stationary, half standard range while moving.</Box>
+      <Box Margin="4">35 clear / 50 degraded while stationary; half standard while moving</Box>
     </ColorBox>
   </Table>
 
-  ## Operating Modes
+  ## Operating modes
 
   <Table Columns="4" MinForcedColumnWidth="80">
     <ColorBox Color="#263238">
@@ -299,58 +314,60 @@
       <Box Margin="4">[bold]FH[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Frequency-hopping traffic.</Box>
+      <Box Margin="4">Frequency hopping</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Reduces jamming by one tier and permits transmission inside jammer fields.</Box>
+      <Box Margin="4">Reduces jamming by one tier.</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Uses 1.5× battery and creates a small direction-finding signature.</Box>
+      <Box Margin="4">1.5x battery use and a small DF signature.</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">[bold]SC[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Normal secured traffic.</Box>
+      <Box Margin="4">Single-channel secured traffic</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Uses 0.75× battery and creates no direction-finding signature while secured.</Box>
+      <Box Margin="4">0.75x battery use and no DF signature while secured.</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Provides no jamming resistance.</Box>
+      <Box Margin="4">No jamming resistance.</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">[bold]CT[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Cipher traffic between AN/PRC radios.</Box>
+      <Box Margin="4">Cipher traffic between AN/PRCs</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Hidden from receivers without matching fill and creates no direction-finding signature.</Box>
+      <Box Margin="4">Hidden without the matching fill; no DF signature.</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Requires fill-loaded AN/PRCs and provides no jamming resistance.</Box>
+      <Box Margin="4">Requires fill-loaded AN/PRCs and has no jamming resistance.</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">[bold]PT[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Plain-text broadcast.</Box>
+      <Box Margin="4">Plain-text traffic</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Uses 0.5× battery.</Box>
+      <Box Margin="4">0.5x battery use.</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Readable by any compatible receiver, increases jamming by one tier, and creates the largest direction-finding risk.</Box>
+      <Box Margin="4">Unencrypted, increases jamming by one tier, and produces the largest DF signature.</Box>
     </ColorBox>
   </Table>
 
-  Matching COMSEC fill secures FH, SC, and CT traffic. PT traffic is always sent in the clear.
+  A matching COMSEC fill secures FH, SC, and CT traffic.
 
-  ## Transmit Power
+  PT is always transmitted in the clear.
+
+  ## Output power
 
   <Table Columns="4" MinForcedColumnWidth="70">
     <ColorBox Color="#263238">
@@ -360,7 +377,7 @@
       <Box Margin="4">[bold]Range[/bold]</Box>
     </ColorBox>
     <ColorBox Color="#263238">
-      <Box Margin="4">[bold]Battery use[/bold]</Box>
+      <Box Margin="4">[bold]Battery[/bold]</Box>
     </ColorBox>
     <ColorBox Color="#263238">
       <Box Margin="4">[bold]DF signature[/bold]</Box>
@@ -370,48 +387,45 @@
       <Box Margin="4">[bold]LO[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">0.6×</Box>
+      <Box Margin="4">0.6x</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">0.5×</Box>
+      <Box Margin="4">0.5x</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">0.5×</Box>
+      <Box Margin="4">0.5x</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">[bold]MED[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">1×</Box>
+      <Box Margin="4">1x</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">1×</Box>
+      <Box Margin="4">1x</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">1×</Box>
+      <Box Margin="4">1x</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">[bold]HI[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">1.5×</Box>
+      <Box Margin="4">1.5x</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">2×</Box>
+      <Box Margin="4">2x</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">2×</Box>
+      <Box Margin="4">2x</Box>
     </ColorBox>
   </Table>
 
   ## Squelch
 
-  Signal quality falls off smoothly with distance from the nearest relay:
-  clear close in, light hiss over the outer band, broken fragments at the
-  fringe. Squelch decides how much of that damaged traffic you hear - it
-  never repairs a transmission, it only mutes it.
+  Squelch filters degraded and noisy traffic. It does not improve signal quality.
 
   <Table Columns="2" MinForcedColumnWidth="100">
     <ColorBox Color="#263238">
@@ -446,21 +460,22 @@
       <Box Margin="4">[bold]3[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Default. Suppresses light jammer degradation and broken fringe-range traffic.</Box>
+      <Box Margin="4">Default. Suppresses light jamming and heavily degraded fringe traffic.</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">[bold]4[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Maximum filtering. Even lightly hissy long-range traffic is suppressed.</Box>
+      <Box Margin="4">Maximum filtering. Can suppress lightly degraded long-range traffic.</Box>
     </ColorBox>
   </Table>
 
-  Lower SQL settings allow more degraded traffic to be heard. Raising squelch
-  buys quiet at the price of missing weak distant stations entirely.
+  Lower squelch allows more degraded traffic through.
 
-  ## COMSEC Controls
+  Higher squelch produces a quieter receiver but can hide weak stations.
+
+  ## COMSEC
 
   <Table Columns="2" MinForcedColumnWidth="110">
     <ColorBox Color="#263238">
@@ -474,59 +489,61 @@
       <Box Margin="4">Insert fill card</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Secures compatible faction traffic in FH, SC, and CT modes.</Box>
+      <Box Margin="4">Secures compatible faction traffic in FH, SC, and CT.</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">[bold]ZEROIZE[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Ejects the loaded card without damaging it.</Box>
+      <Box Margin="4">Ejects the loaded fill card.</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">[bold]DESTROY[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Permanently removes the loaded card.</Box>
+      <Box Margin="4">Destroys the loaded fill card.</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">[bold]RECRYPTO[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Makes all older cards from that faction stale, including captured cards. Command authority only: Commander, Adjutant, Advisor.</Box>
+      <Box Margin="4">Invalidates all older faction fill cards. Requires Commanding Officer, Adjutant, or Advisor authority.</Box>
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">Captured current card</Box>
+      <Box Margin="4">Captured current fill</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Allows compatible secured traffic from that faction to be decoded until recrypto.</Box>
+      <Box Margin="4">Allows compatible secured traffic from that faction to be decoded until they recrypto.</Box>
     </ColorBox>
   </Table>
 
-  Replacement fill cards are obtained through the normal supply system.
+  Replacement fill cards are available through supply.
 
-  ## Direction Finding
+  ## Direction finding
 
-  The following traffic creates a direction-finding signature, from highest to lowest risk:
+  Direction-finding signatures, from highest to lowest risk:
 
-  - PT traffic.
-  - Faction-net traffic sent without matching fill.
-  - Secured FH traffic.
+  - PT traffic
+  - faction-net traffic without a matching fill
+  - secured FH traffic
 
-  Secured SC and CT traffic do not create a direction-finding signature.
+  Secured SC and CT traffic produce no DF signature.
 
-  Repeated signature-producing transmissions from the same location increase the chance of detection. Direction-finding risk decreases after approximately one minute without another qualifying transmission.
+  Repeated detectable transmissions from the same location increase detection chance.
 
-  [bold]RADIO CHECK[/bold] reports which stations receive the active net clearly or with degradation.
+  DF risk begins decreasing after roughly one minute without another qualifying transmission.
 
-  When used inside a jammer field, it also reports a bearing to the strongest jammer.
+  [bold]RADIO CHECK[/bold] reports which stations receive the current net and whether reception is clear or degraded.
 
-  ## SEARCH
+  Inside a jammer field, RADIO CHECK also provides a bearing toward the strongest jammer.
 
-  [bold]START SEARCH[/bold] walks the band hunting for other factions' frequencies.
+  ## Search receiver
+
+  [bold]START SEARCH[/bold] sweeps for other factions' radio traffic.
 
   While searching:
 
@@ -542,50 +559,272 @@
       <Box Margin="4">Loaded nets</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">All dropped. You hear nothing.</Box>
+      <Box Margin="4">Disconnected while searching.</Box>
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">Transmit</Box>
+      <Box Margin="4">Transmission</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Inhibited.</Box>
-    </ColorBox>
-
-    <ColorBox>
-      <Box Margin="4">Full band pass</Box>
-    </ColorBox>
-    <ColorBox>
-      <Box Margin="4">Approximately 80 seconds.</Box>
+      <Box Margin="4">Disabled.</Box>
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">Catches a frequency if</Box>
+      <Box Margin="4">Full-band sweep</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">It carried traffic within the last 20 seconds, within 60 tiles, on the same level.</Box>
-    </ColorBox>
-
-    <ColorBox>
-      <Box Margin="4">Catches to resolve</Box>
-    </ColorBox>
-    <ColorBox>
-      <Box Margin="4">4.</Box>
+      <Box Margin="4">About 20 seconds.</Box>
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">Partial contact decay</Box>
+      <Box Margin="4">Detection window</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Full decay in roughly 50 seconds without another catch.</Box>
+      <Box Margin="4">Signal transmitted within 20 seconds, on the same level, and within 120 tiles at MED, 72 at LO, or 180 at HI.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Resolution</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Around 3 lines at one transmission per minute; busy nets can resolve in about 1 minute.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Partial-contact decay</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Begins after 2 minutes without traffic.</Box>
     </ColorBox>
   </Table>
 
-  Contacts below half confidence are hidden, above it show an approximate frequency, and at full confidence resolve to an exact frequency and net name.
+  Contacts reveal additional frequency digits as more transmissions are detected.
 
-  ## Net Log
+  Once a net is resolved:
 
-  Stores the last [bold]50[/bold] entries. Other factions' traffic is flagged [bold]INTERCEPT[/bold].
+  <Table Columns="2" MinForcedColumnWidth="110">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Result[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Effect[/bold]</Box>
+    </ColorBox>
 
-  [bold]PRINT LOG[/bold] and [bold]PRINT INTERCEPTS[/bold] transcribe it to paper.
+    <ColorBox>
+      <Box Margin="4">Bearing</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Compass bearing and distance rounded to 10 tiles, at most once every 10 seconds per net. Secured SC and CT do not provide bearings.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Tactical map</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Marks the transmitter for 8 seconds for your faction.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Key trial</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">One per encrypted line, up to 12 stored. Enemy keys contain 6 unique symbols from A-H.</Box>
+    </ColorBox>
+  </Table>
+
+  A broken key allows that radio to read the faction's encrypted traffic until they perform a recrypto.
+
+  ## Net log
+
+  The AN/PRC stores the last [bold]50[/bold] radio entries.
+
+  Enemy traffic is marked [bold]INTERCEPT[/bold].
+
+  - [bold]PRINT LOG[/bold] - print all stored traffic
+  - [bold]PRINT INTERCEPTS[/bold] - print only intercepted traffic
+
+  ## Battery
+
+  Values below assume a [bold]high-capacity 10000 cell[/bold].
+
+  <Table Columns="2" MinForcedColumnWidth="110">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Activity[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Power cost[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Idle, worn or staked</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">2 per second</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Idle with POWER SAVE</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">1.2 per second</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Idle with EMCON</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">0.5 per second</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Relaying</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">+1 per second; x0.5 on LO, x2 on HI</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Band search</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">+3 per second</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Transmission, phone sentence, or retransmission</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">18 x waveform x power; x0.7 with BURST</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Over-the-air key push</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">100</Box>
+    </ColorBox>
+  </Table>
+
+  Approximate endurance:
+
+  - about 80 minutes while idle
+  - about 55 minutes while relaying
+  - about 40-45 minutes under normal radio-operator use
+
+  [bold]ENDURANCE[/bold] on the expert faceplate shows the estimated remaining runtime for the current configuration.
+
+  ## Faceplate techniques
+
+  <Table Columns="3" MinForcedColumnWidth="90">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Technique[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Location[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Effect[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">BURST TX</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">OPT</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">30% lower transmission cost and half DF chance.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">POWER SAVE</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">OPT</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">40% lower idle draw. Disables SCAN and PRIORITY WATCH.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">PRIORITY WATCH</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">OPT</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Monitor another memory while continuing to use the ON AIR memory.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">EMCON</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">OPT</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">No transmissions, relay, or phone traffic. No DF signature. 75% lower idle draw.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Retrans bridge</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">OPT > STAKED SET</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Retransmits traffic between two memories on a staked radio.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Peak antenna</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">OPT > STAKED SET</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Remain still for 15 seconds to gain 25% relay range until packed up.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">SEND KEY OTA</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">SEC</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Send the current key to reachable radios with superseded fills. 30-second cooldown.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Dwell</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">SRCH</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Hold on a partial contact. Each new transmission counts twice toward resolution.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Jammer fix</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">SRCH</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Two bearings taken at least 12 tiles apart mark the jammer for two minutes.</Box>
+    </ColorBox>
+  </Table>
+
+  ## AUTO configuration
+
+  The guided panel normally uses [bold]AUTO[/bold]:
+
+  - FH waveform
+  - MED output
+  - squelch 3
+  - wearer's callsign
+
+  [bold]RETURN TO AUTO[/bold] on the SETTINGS tab restores these settings and clears manual faceplate configuration changes.
 </Document>

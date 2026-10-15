@@ -1,11 +1,12 @@
 using Content.Shared._RMC14.Armor.ThermalCloak;
 using Content.Shared._RMC14.Atmos;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Projectile;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit;
-using Content.Shared.CMU14.Yautja;
+
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Systems;
@@ -37,6 +38,8 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
     private EntityQuery<DamageOnCollideComponent> _damageOnCollideQuery;
 
     private readonly List<Entity<DamageOnCollideComponent>> _damageOnCollide = new();
+    private readonly Dictionary<EntityUid, HashSet<CollideChainComponent>> _chainsByTarget = new();
+    public long ChainCleanupVisits { get; private set; }
 
     public override void Initialize()
     {
@@ -46,17 +49,68 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
         SubscribeLocalEvent<DamageOnCollideComponent, StartCollideEvent>(OnStartCollide);
         SubscribeLocalEvent<DamageOnCollideComponent, EndCollideEvent>(OnEndCollide);
         SubscribeLocalEvent<EntityTerminatingEvent>(OnEntityTerminating);
+        SubscribeLocalEvent<CollideChainComponent, ComponentStartup>(OnChainStartup);
+        SubscribeLocalEvent<CollideChainComponent, ComponentShutdown>(OnChainShutdown);
+        SubscribeLocalEvent<CollideChainComponent, AfterAutoHandleStateEvent>(OnChainHandleState);
+    }
+
+    private void OnChainStartup(Entity<CollideChainComponent> ent, ref ComponentStartup args)
+    {
+        ent.Comp.IndexedOwner = ent.Owner;
+        ent.Comp.HitsReplaced = ReindexChain;
+        ReindexChain(ent.Comp);
+    }
+
+    private void OnChainHandleState(Entity<CollideChainComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        // Generated entity-set replication updates the collection in place.
+        // Before startup, OnChainStartup will index the populated set.
+        if (ent.Comp.HitsReplaced != null)
+            ReindexChain(ent.Comp);
+    }
+
+    private void OnChainShutdown(Entity<CollideChainComponent> ent, ref ComponentShutdown args)
+    {
+        ent.Comp.HitsReplaced = null;
+        UnindexChain(ent.Comp);
+    }
+
+    private void UnindexChain(CollideChainComponent chain)
+    {
+        foreach (var target in chain.IndexedHits)
+        {
+            if (!_chainsByTarget.TryGetValue(target, out var owners)) continue;
+            owners.Remove(chain);
+            if (owners.Count == 0) _chainsByTarget.Remove(target);
+        }
+        chain.IndexedHits.Clear();
+    }
+
+    private void TrackChainHit(CollideChainComponent chain, EntityUid target)
+    {
+        if (!chain.IndexedHits.Add(target)) return;
+        if (!_chainsByTarget.TryGetValue(target, out var owners))
+            _chainsByTarget[target] = owners = new();
+        owners.Add(chain);
+    }
+
+    private void ReindexChain(CollideChainComponent chain)
+    {
+        UnindexChain(chain);
+        // Covers deserialization, authoritative state replacement and admin replacement.
+        foreach (var target in chain.Hit) TrackChainHit(chain, target);
     }
 
     private void OnEntityTerminating(ref EntityTerminatingEvent args)
     {
         var terminating = args.Entity.Owner;
-
-        var chains = EntityQueryEnumerator<CollideChainComponent>();
-        while (chains.MoveNext(out var chainUid, out var chain))
+        if (!_chainsByTarget.Remove(terminating, out var owners)) return;
+        foreach (var chain in owners)
         {
-            if (chain.Hit.Remove(terminating))
-                Dirty(chainUid, chain);
+            ChainCleanupVisits++;
+            chain.IndexedHits.Remove(terminating);
+            if (!chain.Deleted && chain.Hit.Remove(terminating))
+                Dirty(chain.IndexedOwner, chain);
         }
     }
 
@@ -112,7 +166,9 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
             var damage = ent.Comp.Damage;
             if (ent.Comp.Acidic)
                 damage = _xeno.TryApplyXenoAcidDamageMultiplier(other, damage);
-            _damageable.TryChangeDamage(other, damage, ent.Comp.IgnoreResistances, armorPiercing: ent.Comp.ArmorPenetration);
+            var ignoreResistances = ent.Comp.IgnoreResistances
+                && !(ent.Comp.Fire && HasComp<YautjaComponent>(other));
+            _damageable.TryChangeDamage(other, damage, ignoreResistances, armorPiercing: ent.Comp.ArmorPenetration);
             DoEmote(ent, other);
             didEmote = true;
         }
@@ -121,7 +177,9 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
             var damage = ent.Comp.ChainDamage;
             if (ent.Comp.Acidic)
                 damage = _xeno.TryApplyXenoAcidDamageMultiplier(other, damage);
-            _damageable.TryChangeDamage(other, damage, ent.Comp.IgnoreResistances);
+            var ignoreResistances = ent.Comp.IgnoreResistances
+                && !(ent.Comp.Fire && HasComp<YautjaComponent>(other));
+            _damageable.TryChangeDamage(other, damage, ignoreResistances);
         }
 
         // CMU14: the damage above can delete the target outright, and everything after
@@ -164,6 +222,7 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
 
         if (chain.Comp.Hit.Add(add))
         {
+            TrackChainHit(chain.Comp, add);
             Dirty(chain);
             return true;
         }
@@ -237,4 +296,9 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
         if (comp.Chain is { } chain && TerminatingOrDeleted(chain))
             comp.Chain = null;
     }
+    public DamageSpecifier GetCollideDamage(Entity<DamageOnCollideComponent> ent)
+    {
+        return ent.Comp.Damage;
+    }
+
 }

@@ -1,0 +1,15 @@
+# CMB/CIU M81 that takes standard 30mm grenades as well as riot rounds.
+- type: entity
+  parent: RMCWeaponLauncherM81
+  id: CMUWeaponLauncherM81
+  name: M81 Riot grenade launcher
+  description: The M81 riot grenade launcher is a single-shot, shoulder-fired, break-action grenade launcher designed for police use. Built for less-lethal munitions, but it will fire any standard 30mm grenade just as well.
+  components:
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RMCGrenadeRiot
+      - LauncherCompatibleGrenade
+    capacity: 1
+    soundInsert:
+      path: /Audio/_RMC14/Weapons/Guns/Reload/m79_reload.ogg

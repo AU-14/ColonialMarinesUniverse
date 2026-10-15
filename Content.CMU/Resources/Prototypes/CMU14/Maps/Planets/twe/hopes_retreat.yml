@@ -6,7 +6,7 @@
     votename: "Hope's Retreat"
     mapId: hopesretreat
     lorePrimer: CMUPrimerHopesRetreat
-    allegiance: TWE
+    allegiance: IndependentSystems
     camouflage: Desert
     announcement: "The Octanis Research Complex and attached colony of Hope's Retreat on charted exoplanet JE-1758 have gone silent, investigate the cause of this communications blackout."
     platoonsGovfor:
@@ -41,6 +41,9 @@
     - RMCRRT
     - UPPGROM
     - UPPGROMAlt
+    - CHTORM_PMC_BEAR
+    - GROZA_PMC_BEAR
+    - SKALA_PMC_BEAR
     - cultistThirdParty
     - CMBInvestigationParty
     - CMBInvestigationPartyAlt

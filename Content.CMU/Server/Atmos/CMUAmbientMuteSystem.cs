@@ -5,13 +5,13 @@ using Content.Shared.Tools.Systems;
 
 namespace Content.Server.CMU14.Atmos;
 
-public sealed class CMUAmbientMuteSystem : EntitySystem
+public sealed partial class CMUAmbientMuteSystem : EntitySystem
 {
     private const string ScrewingQuality = "Screwing";
 
-    [Dependency] private readonly SharedAmbientSoundSystem _ambient = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedToolSystem _tool = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambient = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
 
     public override void Initialize()
     {
@@ -37,7 +37,7 @@ public sealed class CMUAmbientMuteSystem : EntitySystem
             ent.Comp.Enabled = ambient.Enabled;
 
             RemComp<AmbientSoundComponent>(ent);
-            _popup.PopupClient(Loc.GetString("cmu-ambient-mute-muted"), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("cmu-ambient-mute-muted"), ent, args.User);
         }
         else if (ent.Comp.Sound is { } sound)
         {
@@ -46,7 +46,7 @@ public sealed class CMUAmbientMuteSystem : EntitySystem
             _ambient.SetVolume(ent, ent.Comp.Volume, restored);
             _ambient.SetRange(ent, ent.Comp.Range, restored);
             _ambient.SetAmbience(ent, ent.Comp.Enabled, restored);
-            _popup.PopupClient(Loc.GetString("cmu-ambient-mute-unmuted"), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("cmu-ambient-mute-unmuted"), ent, args.User);
         }
     }
 }

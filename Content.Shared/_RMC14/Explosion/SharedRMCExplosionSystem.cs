@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Deafness;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Stun;
+using Content.Shared.CMU14.Weapons.Grenades; // cmu edit
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.Body.Systems;
 using Content.Shared.Coordinates;
@@ -99,6 +100,18 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
         args.DamageCoefficient *= resistance;
     }
 
+    // cmu edit start
+    public void ApplyExplosionStunOnly(
+        Entity<StunOnExplosionReceivedComponent> ent,
+        ProtoId<ExplosionPrototype> explosion,
+        MapCoordinates epicenter,
+        Content.Shared.Damage.DamageSpecifier wouldBeDamage)
+    {
+        var ev = new ExplosionReceivedEvent(explosion, epicenter, wouldBeDamage);
+        OnStunOnExplosionReceivedBeforeExplode(ent, ref ev);
+    }
+    // cmu edit end
+
     public void ChangeExplosionStunResistance(EntityUid ent, StunOnExplosionReceivedComponent? comp, bool isStunnable)
     {
         if (!Resolve(ent, ref comp, false))
@@ -109,6 +122,15 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
 
     private void OnStunOnExplosionReceivedBeforeExplode(Entity<StunOnExplosionReceivedComponent> ent, ref ExplosionReceivedEvent args)
     {
+        // cmu edit start: the mob a launched impact grenade struck isn't stunned by its blast
+        if (TryComp(ent, out CMUExplosionStunExemptComponent? exempt) &&
+            exempt.Epicenter.MapId == args.Epicenter.MapId &&
+            (exempt.Epicenter.Position - args.Epicenter.Position).Length() <= CMUExplosionStunExemptComponent.Range)
+        {
+            return;
+        }
+        // cmu edit end
+
         var damage = args.Damage.GetTotal();
         var factor = Math.Round(damage.Double() * 0.05) / 2;
         factor = Math.Min(20, factor);

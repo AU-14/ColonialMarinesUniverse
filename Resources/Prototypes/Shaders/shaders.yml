@@ -13,6 +13,8 @@
   id: GradientCircleMask
   kind: source
   path: "/Textures/Shaders/gradient_circle_mask.swsl"
+  params:
+    viewportSize: 0,0 # CMU14: defaults belong here; uniform initializers are invalid on GLES.
 
 - type: shader
   id: WorldGradientCircle

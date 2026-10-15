@@ -73,6 +73,11 @@ public sealed partial class WeedKillerSystem : EntitySystem
 
     public void CreateWeedKiller(EntityUid dropship, EntityCoordinates coordinates)
     {
+        var attempt = new WeedKillerDeployAttemptEvent();
+        RaiseLocalEvent(ref attempt);
+        if (attempt.Cancelled)
+            return;
+
         var id = Spawn();
         var comp = EnsureComp<WeedKillerComponent>(id);
         comp.DeployAt = _timing.CurTime + _dropshipDelay;
@@ -215,4 +220,11 @@ public sealed partial class WeedKillerSystem : EntitySystem
             }
         }
     }
+}
+
+/// <summary>Allows round rules to suppress the landing-zone weedkiller canister deployment.</summary>
+[ByRefEvent]
+public record struct WeedKillerDeployAttemptEvent
+{
+    public bool Cancelled;
 }

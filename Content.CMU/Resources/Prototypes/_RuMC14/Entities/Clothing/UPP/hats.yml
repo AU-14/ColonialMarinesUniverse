@@ -1,0 +1,35 @@
+- type: entity
+  parent: CMHeadCap
+  id: RuMCHeadBeretVDV
+  name: blue VDV beret
+  description: The beret, created for the Airborne Forces, has become a symbol of strength and willpower.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/beret/blueBeret.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/UPP/beret/blueBeret.rsi
+  - type: Appearance
+
+- type: entity
+  parent: CMHeadCap
+  id: RuMCHeadBeretMarien
+  name: black Marien beret
+  description: The beret, created for the Marine, has become a symbol of unbending character and endurance.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/beret/blackBeret.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/UPP/beret/blackBeret.rsi
+  - type: Appearance
+
+- type: entity
+  parent: CMHeadCap
+  id: RuMCHeadBeretSSO
+  name: red SSO beret
+  description: Special forces take it. If you see it, it means the situation has reached its peak.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/beret/redBeret.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/UPP/beret/redBeret.rsi
+  - type: Appearance

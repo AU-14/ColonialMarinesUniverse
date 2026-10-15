@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 07/26/2026 17:51:19
-  entityCount: 24711
+  entityCount: 24716
 maps:
 - 1
 grids:
@@ -78563,7 +78563,7 @@ entities:
           startingStock: -1
           maxStock: 0
           entities: []
-          crate: RMCCrateGrenadesHighExplosiveBox
+          crate: CMUCrateGrenadeBoxHEDP
           cost: 10000
           name: null
         - stockReplenishAmount: 1
@@ -78571,7 +78571,7 @@ entities:
           startingStock: -1
           maxStock: 0
           entities: []
-          crate: RMCCrateGrenadesBoxHEFA
+          crate: CMUCrateGrenadeBoxHEFA
           cost: 10000
           name: null
         - stockReplenishAmount: 1
@@ -78579,7 +78579,7 @@ entities:
           startingStock: -1
           maxStock: 0
           entities: []
-          crate: RMCCrateGrenadesAirburstFragBox
+          crate: CMUCrateGrenadeBoxAGMF
           cost: 10000
           name: null
         - stockReplenishAmount: 1
@@ -78587,7 +78587,7 @@ entities:
           startingStock: -1
           maxStock: 0
           entities: []
-          crate: RMCCrateBoxAGMI
+          crate: CMUCrateGrenadeBoxAGMI
           cost: 10000
           name: null
         - stockReplenishAmount: 1
@@ -79401,7 +79401,7 @@ entities:
           startingStock: -1
           maxStock: 0
           entities: []
-          crate: RMCCrateGrenadesHighExplosiveBox
+          crate: CMUCrateGrenadeBoxHEDP
           cost: 10000
           name: null
         - stockReplenishAmount: 1
@@ -79409,7 +79409,7 @@ entities:
           startingStock: -1
           maxStock: 0
           entities: []
-          crate: RMCCrateGrenadesBoxHEFA
+          crate: CMUCrateGrenadeBoxHEFA
           cost: 10000
           name: null
         - stockReplenishAmount: 1
@@ -79417,7 +79417,7 @@ entities:
           startingStock: -1
           maxStock: 0
           entities: []
-          crate: RMCCrateGrenadesAirburstFragBox
+          crate: CMUCrateGrenadeBoxAGMF
           cost: 10000
           name: null
         - stockReplenishAmount: 1
@@ -79425,7 +79425,7 @@ entities:
           startingStock: -1
           maxStock: 0
           entities: []
-          crate: RMCCrateBoxAGMI
+          crate: CMUCrateGrenadeBoxAGMI
           cost: 10000
           name: null
         - stockReplenishAmount: 1
@@ -213486,4 +213486,17 @@ entities:
     - type: Transform
       pos: -148.5,-50.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 1000000005
+    components:
+    - type: MetaData
+      name: Hybrisa Metropolitan ground relay
+    - type: Transform
+      pos: -204.5,-37.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: hybrisa-metropolitan.ground.relay
+      displayName: Hybrisa Metropolitan Ground Relay
 ...

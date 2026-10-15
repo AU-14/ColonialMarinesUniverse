@@ -163,8 +163,10 @@ public sealed partial class CriminalRecordsSystem : SharedCriminalRecordsSystem
 
     private void UpdateReaderUi(Entity<WantedListCartridgeComponent> ent, EntityUid loaderUid)
     {
-        if (_station.GetOwningStation(ent) is not { } station)
+        // cmu edit start
+        if (EntityManager.System<Content.Shared.CMU14.CriminalRecords.CMUUniversalRecordsSystem>().GetRecords() is not { } station)
             return;
+        // cmu edit end
 
         var records = _records.GetRecordsOfType<CriminalRecord>(station)
             .Where(cr => cr.Item2.Status is not SecurityStatus.None || cr.Item2.History.Count > 0)

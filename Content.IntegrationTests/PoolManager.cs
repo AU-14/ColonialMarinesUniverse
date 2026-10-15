@@ -86,48 +86,15 @@ public static partial class PoolManager
         PoolSettings? settings = null,
         ITestContextLike? testContext = null)
     {
-        return await Instance.GetPair(settings, testContext);
+        var pair = await Instance.GetPair(settings, testContext);
+        pair.MarkBorrowed(); // CMU14: so a stale double dispose from the last borrower can't kill this test's pair
+        return pair;
     }
 
     /// <summary>
     /// Creates a standalone server for tests that do not need a client or pooled state.
     /// </summary>
     public static async Task<(RobustIntegrationTest.ServerIntegrationInstance, PoolTestLogHandler)> GenerateServer(
-        PoolSettings settings,
-        TextWriter testOut)
-    {
-        const int maxAttempts = 3;
-        for (var attempt = 1; ; attempt++)
-        {
-            try
-            {
-                return await GenerateServerOnce(settings, testOut);
-            }
-            catch (Exception e) when (attempt < maxAttempts && IsPrototypeVariantFreezeFailure(e))
-            {
-                // RT v290 registers variant collections from parallel YAML loaders into one dictionary.
-                // Retry only this startup race, before any test assertions or gameplay have run.
-                await testOut.WriteLineAsync(
-                    $"Prototype variant startup failed ({attempt}/{maxAttempts}); retrying with a fresh server.\n{e}");
-            }
-        }
-    }
-
-    private static bool IsPrototypeVariantFreezeFailure(Exception exception)
-    {
-        if (exception is AggregateException aggregate)
-        {
-            return aggregate.InnerExceptions.Count > 0 &&
-                   aggregate.InnerExceptions.All(IsPrototypeVariantFreezeFailure);
-        }
-
-        return exception is ArgumentNullException { ParamName: "key" } &&
-               exception.StackTrace?.Contains(
-                   "Robust.Shared.Prototypes.PrototypeManager.KindData.Freeze()",
-                   StringComparison.Ordinal) == true;
-    }
-
-    private static async Task<(RobustIntegrationTest.ServerIntegrationInstance, PoolTestLogHandler)> GenerateServerOnce(
         PoolSettings settings,
         TextWriter testOut)
     {
@@ -162,20 +129,16 @@ public static partial class PoolManager
             systems.LoadExtraSystemType<TestDestructibleListenerSystem>();
         };
 
-        var server = new RobustIntegrationTest.ServerIntegrationInstance(options);
-        try
-        {
-            await server.WaitIdleAsync();
-            server.Resolve<ILogManager>().GetSawmill("loc").Level = LogLevel.Error;
-            server.CfgMan.OnValueChanged(RTCVars.FailureLogLevel, value => logHandler.FailureLevel = value, true);
-            return (server, logHandler);
-        }
-        catch
-        {
-            // The caller cannot dispose a server that failed before it was returned.
-            server.Dispose();
-            throw;
-        }
+        var server = await PrototypeStartup.Start(
+            () => new RobustIntegrationTest.ServerIntegrationInstance(options),
+            async instance =>
+            {
+                await instance.WaitIdleAsync();
+                instance.Resolve<ILogManager>().GetSawmill("loc").Level = LogLevel.Error;
+                instance.CfgMan.OnValueChanged(RTCVars.FailureLogLevel, value => logHandler.FailureLevel = value, true);
+            },
+            testOut);
+        return (server, logHandler);
     }
 
     public static void Startup(params Assembly[] extra)

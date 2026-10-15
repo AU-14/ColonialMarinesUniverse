@@ -1,3 +1,4 @@
+using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared.CMU14.Round.Objectives.Components;
@@ -16,7 +17,7 @@ public sealed partial class CMUObjectiveMasterComponent : Robust.Shared.GameObje
         [DataField] public int MaxMajorObjectives = 5;
         [DataField] public int? MinMajorObjectives;
 
-        public int CurrentWinPoints;
+        public FixedPoint2 CurrentWinPoints;
     }
 
     [DataField(required: true)]

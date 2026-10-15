@@ -42,6 +42,10 @@ public sealed partial class CMUZLevelsCVars : CVars
     public static readonly CVarDef<float> ProbeUpdateHz =
         CVarDef.Create("cmu.zlevels.probe_update_hz", 4.0f, CVar.REPLICATED | CVar.SERVER);
 
+    /// <summary>Wall-time budget for queued viewer visibility discovery; existing eyes still move every tick.</summary>
+    public static readonly CVarDef<float> ProbeBudgetMs =
+        CVarDef.Create("cmu.zlevels.probe_budget_ms", 2f, CVar.SERVER);
+
     public static readonly CVarDef<int> MaxViewProbesPerPlayer =
         CVarDef.Create("cmu.zlevels.max_view_probes_per_player", 5, CVar.REPLICATED | CVar.SERVER);
 

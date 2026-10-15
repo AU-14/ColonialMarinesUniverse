@@ -110,7 +110,8 @@ internal static class CMUPerformanceProfilerReader
         ProfManager profiler,
         IReadOnlySet<string> entitySystemNames,
         int frameLimit,
-        int eventLimit)
+        int eventLimit,
+        long sinceIndexOffset = 0)
     {
         if (!profiler.IsEnabled)
             return new([], [], [], 0, false, new("disabled", 0, 0, 0, 0, 0, 0));
@@ -120,6 +121,7 @@ internal static class CMUPerformanceProfilerReader
         int eventsToRead = Math.Clamp(eventLimit, 128, 100000);
         long validLogStart = buffer.LogWriteOffset - buffer.LogBuffer.LongLength;
         long validIndexStart = Math.Max(0, buffer.IndexWriteOffset - buffer.IndexBuffer.LongLength);
+        validIndexStart = Math.Clamp(sinceIndexOffset, validIndexStart, buffer.IndexWriteOffset);
         var candidates = new List<CMUPerformanceProfileCandidate>((int) Math.Min(int.MaxValue,
             buffer.IndexWriteOffset - validIndexStart));
         int indexed = 0;
@@ -167,14 +169,14 @@ internal static class CMUPerformanceProfilerReader
 
         var indices = selectedOffsets.ToList();
         var frames = new List<CMUPerformanceProfileFrame>(indices.Count);
-        var samples = new Dictionary<string, SampleAccumulator>(StringComparer.Ordinal);
+        var samples = new Dictionary<(string Kind, string Name), SampleAccumulator>();
         var frameSamples = new List<CMUPerformanceFrameSamples>(indices.Count);
         var counters = new Dictionary<string, CounterAccumulator>(StringComparer.Ordinal);
         int eventsRead = 0;
 
         foreach (long offset in indices)
         {
-            var localSamples = new Dictionary<string, SampleAccumulator>(StringComparer.Ordinal);
+            var localSamples = new Dictionary<(string Kind, string Name), SampleAccumulator>();
             ref ProfIndex index = ref buffer.Index(offset);
             TimeAndAllocSample frameTiming = GetFrameTiming(buffer, index);
             long start = Math.Max(index.StartPos, validLogStart);
@@ -247,9 +249,15 @@ internal static class CMUPerformanceProfilerReader
         int framesToRead = Math.Clamp(frameLimit, 1, 128);
         int eventsToRead = Math.Clamp(eventLimit, 128, 100000);
         int rankedCount = Math.Max(1, framesToRead / 3);
-        var prioritized = new List<CMUPerformanceProfileCandidate>(framesToRead);
+        var prioritized = new List<CMUPerformanceProfileCandidate>(candidates.Count);
         var selected = new HashSet<long>();
 
+        // Preserve the current incident before adding historical extremes. A large old frame must
+        // not repeatedly consume the event budget while newer input or simulation stalls go unseen.
+        AddCandidates(candidates.OrderByDescending(candidate => candidate.Offset).Take(1));
+        AddCandidates(candidates
+            .Where(candidate => candidate.TickCount > 0)
+            .OrderByDescending(candidate => candidate.Offset).Take(1));
         AddCandidates(candidates.OrderByDescending(candidate => candidate.TimeSeconds).Take(rankedCount));
         AddCandidates(candidates.OrderByDescending(candidate => candidate.AllocatedBytes).Take(rankedCount));
         AddCandidates(candidates
@@ -262,6 +270,8 @@ internal static class CMUPerformanceProfilerReader
         var offsets = new List<long>(prioritized.Count);
         foreach (CMUPerformanceProfileCandidate candidate in prioritized)
         {
+            if (offsets.Count >= framesToRead)
+                break;
             if (offsets.Count > 0 && expectedEvents + candidate.EventCount > eventsToRead)
             {
                 truncated = true;
@@ -270,6 +280,12 @@ internal static class CMUPerformanceProfilerReader
 
             offsets.Add(candidate.Offset);
             expectedEvents += candidate.EventCount;
+            // Capture reads the retained tail when even the newest frame exceeds the budget.
+            if (expectedEvents > eventsToRead)
+            {
+                truncated = true;
+                break;
+            }
         }
 
         offsets.Sort();
@@ -279,8 +295,6 @@ internal static class CMUPerformanceProfilerReader
         {
             foreach (CMUPerformanceProfileCandidate candidate in source)
             {
-                if (prioritized.Count >= framesToRead)
-                    return;
                 if (selected.Add(candidate.Offset))
                     prioritized.Add(candidate);
             }
@@ -290,7 +304,7 @@ internal static class CMUPerformanceProfilerReader
     private static void AddValue(
         ProfManager profiler,
         IReadOnlySet<string> entitySystemNames,
-        Dictionary<string, SampleAccumulator> samples,
+        Dictionary<(string Kind, string Name), SampleAccumulator> samples,
         Dictionary<string, CounterAccumulator> counters,
         ProfLogValue log)
     {
@@ -315,7 +329,7 @@ internal static class CMUPerformanceProfilerReader
     private static void AddSample(
         ProfManager profiler,
         IReadOnlySet<string> entitySystemNames,
-        Dictionary<string, SampleAccumulator> samples,
+        Dictionary<(string Kind, string Name), SampleAccumulator> samples,
         string kind,
         int stringId,
         ProfValue value)
@@ -332,12 +346,12 @@ internal static class CMUPerformanceProfilerReader
 
     private static void AddSample(
         IReadOnlySet<string> entitySystemNames,
-        Dictionary<string, SampleAccumulator> samples,
+        Dictionary<(string Kind, string Name), SampleAccumulator> samples,
         string kind,
         string name,
         TimeAndAllocSample value)
     {
-        string key = $"{kind}:{name}";
+        var key = (kind, name);
         if (!samples.TryGetValue(key, out SampleAccumulator? sample))
         {
             sample = new(kind, name, kind == "sample" && entitySystemNames.Contains(name));

@@ -388,17 +388,30 @@ public sealed partial class RequisitionsSystem
             if (!runtime.SourcesByItem.TryGetValue(item.Prototype, out var sourceKeys))
                 continue;
 
-            var sources = sourceKeys.Select(key => runtime.Sources[key]).ToList();
-            if (sources.Any(source => source.Unlimited))
-                continue;
+            var unlimited = false;
+            long current = 0;
+            long max = 0;
+            int? seconds = null;
+            foreach (var key in sourceKeys)
+            {
+                var source = runtime.Sources[key];
+                if (source.Unlimited)
+                {
+                    unlimited = true;
+                    break;
+                }
 
-            var current = sources.Sum(source => source.Current[item.Prototype]);
-            var max = sources.Sum(source => source.Maximum[item.Prototype]);
-            var seconds = sources.Where(source => !source.IsFull)
-                .Select(source => SecondsUntilReplenish(source, time))
-                .DefaultIfEmpty(0)
-                .Min();
-            result.Add(new RequisitionsItemStockInfo(item.Prototype, current, max, seconds));
+                current += source.Current[item.Prototype];
+                max += source.Maximum[item.Prototype];
+                if (!source.IsFull)
+                {
+                    var next = SecondsUntilReplenish(source, time);
+                    seconds = seconds is { } previous ? Math.Min(previous, next) : next;
+                }
+            }
+
+            if (!unlimited)
+                result.Add(new RequisitionsItemStockInfo(item.Prototype, checked((int) current), checked((int) max), seconds ?? 0));
         }
 
         return result;

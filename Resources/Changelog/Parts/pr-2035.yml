@@ -1,0 +1,28 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Fixed dropship movement, vehicle ramp pickup, faction navigation access,
+    and initial gunship deployment.
+  type: Fix
+- message: Added coordinated three-minute FoF dropship departures and opposing launch
+    warnings.
+  type: Add
+- message: Disabled weedkiller canisters in FoF and enabled unfamiliar-uniform markers
+    by default.
+  type: Tweak
+- message: Added tank maintenance mode with engine and weapon locks during repairs.
+  type: Add
+- message: Increased explosion limb severance and corrected structural-heavy blast
+    damage against humans.
+  type: Tweak
+- message: Fixed burst-fire hyperburst, drone IFF, and static gauss turret bullet
+    collisions.
+  type: Fix
+- message: Restored injury overlays, animal night-vision visibility, specialist vending,
+    and colony police scanners.
+  type: Fix
+- message: Fixed reported content exceptions, spawn/loadout problems, and missing
+    authored shuttle atmosphere.
+  type: Fix
+time: '2026-09-27T01:45:30.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2035

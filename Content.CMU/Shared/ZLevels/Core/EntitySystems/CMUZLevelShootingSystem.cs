@@ -1,5 +1,4 @@
 using System.Numerics;
-using Content.Shared.CMU14.Input;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Popups;
@@ -7,9 +6,9 @@ using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Wieldable;
 using Content.Shared.Wieldable.Components;
-using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.ZLevels.Core.EntitySystems;
@@ -32,22 +31,20 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
         SubscribeLocalEvent<GunComponent, ItemUnwieldedEvent>(OnGunUnwielded);
         SubscribeLocalEvent<CMUZLevelViewerComponent, CMUZLevelLookUpEnabledEvent>(OnLookUpEnabled);
-
-        CommandBinds.Builder
-            .Bind(CMUKeyFunctions.CMUToggleShootDownZLevel,
-                InputCmdHandler.FromDelegate(session =>
-                    {
-                        if (session?.AttachedEntity is { } user)
-                            ToggleShootDown(user);
-                    },
-                    handle: false))
-            .Register<CMUZLevelShootingSystem>();
+        SubscribeLocalEvent<CMUZLevelViewerComponent, CMUZLevelAdjustShotEvent>(OnAdjustShot);
+        SubscribeLocalEvent<CMUZLevelShooterComponent, CMUZLevelAdjustShotEvent>(OnAdjustShot);
+        SubscribeAllEvent<CMUZLevelSetAimDownEvent>(OnSetAimDown);
     }
 
-    public override void Shutdown()
+    private void OnSetAimDown(CMUZLevelSetAimDownEvent ev, EntitySessionEventArgs args)
     {
-        base.Shutdown();
-        CommandBinds.Unregister<CMUZLevelShootingSystem>();
+        if (_timing.ApplyingState ||
+            args.SenderSession.AttachedEntity is not { } user)
+        {
+            return;
+        }
+
+        SetAimDown(user, ev.AimDown);
     }
 
     private void OnLookUpEnabled(Entity<CMUZLevelViewerComponent> ent, ref CMUZLevelLookUpEnabledEvent args)
@@ -65,39 +62,26 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
     }
 
-    private void ToggleShootDown(EntityUid user)
+    private void OnAdjustShot<T>(Entity<T> ent, ref CMUZLevelAdjustShotEvent args)
+        where T : IComponent
     {
-        if (!CanAimAcrossZWithoutGun(user) &&
-            !TryGetReadyGun(user, "cmu-zlevel-shoot-down-no-gun", "cmu-zlevel-shoot-down-requires-wield"))
+        if (args.Handled)
+            return;
+
+        args.Handled = true;
+        if (!TryAdjustShotCoordinates(
+                args.User,
+                args.FromCoordinates,
+                args.ToCoordinates,
+                out var adjustedFrom,
+                out var adjustedTo))
         {
+            args.Cancel();
             return;
         }
 
-        var shootDown = !IsShootDownEnabled(user);
-        SetShootDown(user, shootDown);
-
-        var message = shootDown
-            ? "cmu-zlevel-shoot-down-enabled"
-            : "cmu-zlevel-shoot-down-disabled";
-
-        PopupSelf(user, message);
-    }
-
-    private bool TryGetReadyGun(EntityUid user, string noGunMessage, string requiresWieldMessage)
-    {
-        if (!TryGetGun(user, out var gunUid))
-        {
-            PopupSelf(user, noGunMessage);
-            return false;
-        }
-
-        if (!IsReadyGun(gunUid))
-        {
-            PopupSelf(user, requiresWieldMessage);
-            return false;
-        }
-
-        return true;
+        args.FromCoordinates = adjustedFrom;
+        args.ToCoordinates = adjustedTo;
     }
 
     private bool HasReadyGun(EntityUid user)
@@ -164,6 +148,34 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
         if (enabled)
             _zLevels.TryDisableLookUp(user);
+    }
+
+    public bool IsAimingDown(EntityUid user)
+    {
+        return TryComp<CMUZLevelShooterComponent>(user, out var shooter) && shooter.AimDown;
+    }
+
+    public void SetAimDown(EntityUid user, bool enabled)
+    {
+        if (!TryComp<CMUZLevelShooterComponent>(user, out var shooter))
+        {
+            if (!enabled)
+                return;
+
+            shooter = EnsureComp<CMUZLevelShooterComponent>(user);
+        }
+
+        if (shooter.AimDown == enabled)
+            return;
+
+        shooter.AimDown = enabled;
+        DirtyField(user, shooter, nameof(CMUZLevelShooterComponent.AimDown));
+    }
+
+    // the client needs the same answer the server will get, wield check included
+    public int GetShotOffset(EntityUid shooter)
+    {
+        return GetRequestedShotOffset(shooter, requireReadyGunForLookUp: true);
     }
 
     public bool TryAdjustShotCoordinates(
@@ -420,10 +432,10 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         out Vector2 projectileFrom,
         out Vector2 projectileTo)
     {
-        projectileFrom = NudgeOpeningTowardSource(opening, from);
-        var direction = to - from;
+        projectileFrom = opening;
+        var direction = to - opening;
         if (direction.LengthSquared() <= 0.001f)
-            direction = clampedTo - projectileFrom;
+            direction = clampedTo - opening;
 
         if (direction.LengthSquared() <= 0.001f)
         {
@@ -431,7 +443,7 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             return;
         }
 
-        var distance = Math.Max(1f, Vector2.Distance(projectileFrom, clampedTo));
+        var distance = Math.Max(1f, direction.Length());
         projectileTo = projectileFrom + Vector2.Normalize(direction) * distance;
     }
 
@@ -462,16 +474,14 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
     private void PopupSelf(EntityUid user, string message)
     {
-        _popup.PopupClient(Loc.GetString(message), user, user, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString(message), user, user, PopupType.SmallCaution);
     }
 
     private int GetRequestedShotOffset(EntityUid shooter, bool requireReadyGunForLookUp = false)
     {
-        if (TryComp<CMUZLevelShooterComponent>(shooter, out var shooterComp) &&
-            shooterComp.ShootDown)
-        {
+        TryComp<CMUZLevelShooterComponent>(shooter, out var shooterComp);
+        if (shooterComp is { ShootDown: true })
             return -1;
-        }
 
         if (TryComp<CMUZLevelViewerComponent>(shooter, out var viewer) &&
             viewer.LookUp &&
@@ -480,6 +490,30 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             return 1;
         }
 
+        if (shooterComp is { AimDown: true } &&
+            (!requireReadyGunForLookUp || HasReadyGun(shooter) || CanAimAcrossZWithoutGun(shooter)))
+        {
+            return -1;
+        }
+
         return 0;
     }
+}
+
+[Serializable, NetSerializable]
+public sealed class CMUZLevelSetAimDownEvent(bool aimDown) : EntityEventArgs
+{
+    public readonly bool AimDown = aimDown;
+}
+
+[ByRefEvent]
+public sealed class CMUZLevelAdjustShotEvent(
+    EntityUid user,
+    EntityCoordinates fromCoordinates,
+    EntityCoordinates toCoordinates) : CancellableEntityEventArgs
+{
+    public EntityUid User = user;
+    public EntityCoordinates FromCoordinates = fromCoordinates;
+    public EntityCoordinates ToCoordinates = toCoordinates;
+    public bool Handled;
 }

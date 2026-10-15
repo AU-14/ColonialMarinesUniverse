@@ -14,6 +14,7 @@ using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Standing;
 using Content.Shared.Throwing;
+using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Random;
 
@@ -31,6 +32,9 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private BodyPartSeveranceSystem _severance = default!;
+    [Dependency] private SharedCMUOpenStumpSystem _stumps = default!;
+    [Dependency] private CMULegSupportSystem _legSupport = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
 
     /// <summary>
     ///     Bodies queued for next-tick glove-drop / shoe-drop / force-down.
@@ -40,6 +44,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
     private readonly Queue<DeferredHandSever> _deferredHandSever = new();
     private readonly Queue<DeferredLegSever> _deferredLegSever = new();
     private readonly Queue<EntityUid> _deferredHeadSever = new();
+    private readonly Queue<EntityUid> _deferredLegRestore = new();
 
     private readonly record struct DeferredHandSever(EntityUid Body, string HandId);
     private readonly record struct DeferredLegSever(EntityUid Body);
@@ -72,12 +77,31 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
             if (Deleted(d.Body))
                 continue;
 
-            if (TryComp<BodyComponent>(d.Body, out var body) && body.LegEntities.Count >= 2)
+            if (_legSupport.HasLegsToStand(d.Body))
                 continue;
 
             UnequipAndFling(d.Body, "shoes");
 
+            EnsureComp<CMULegLossDownedComponent>(d.Body);
             _standing.Down(d.Body);
+        }
+
+        while (_deferredLegRestore.TryDequeue(out var restored))
+        {
+            // nothing else stands up a mob that was only down for missing legs, and RMC blocks item use
+            // for a downed mob with both legs. not forced, so knockdown/rest/buckle/crit still win.
+            // part-added also fires for every limb at spawn, so only mobs that lost leg support get stood up
+            if (Deleted(restored) ||
+                !HasComp<CMULegLossDownedComponent>(restored) ||
+                !_standing.IsDown(restored) ||
+                _container.IsEntityInContainer(restored) || // body bags and cryo own their down state
+                !_legSupport.HasLegsToStand(restored))
+            {
+                continue;
+            }
+
+            RemComp<CMULegLossDownedComponent>(restored);
+            _standing.Stand(restored);
         }
 
         while (_deferredHeadSever.TryDequeue(out var body))
@@ -129,7 +153,11 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
         if (partType == BodyPartType.Leg)
             _deferredLegSever.Enqueue(new DeferredLegSever(ent.Owner));
         else if (partType == BodyPartType.Foot)
+        {
             UnequipAndFling(ent.Owner, "shoes");
+            // losing a foot puts you on the floor same as losing the leg
+            _deferredLegSever.Enqueue(new DeferredLegSever(ent.Owner));
+        }
 
         if (partType == BodyPartType.Head)
             _deferredHeadSever.Enqueue(ent.Owner);
@@ -140,6 +168,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
         var partType = args.Part.Comp.PartType;
         var symmetry = args.Part.Comp.Symmetry;
         _severance.ClearMissingPartStatus(ent.Owner, partType, symmetry);
+        _stumps.CloseStump(ent.Owner, partType, symmetry);
 
         if (CMUMedicalVisualLayers.ForBodyPart(partType, symmetry) is { } layer &&
             HasComp<HideableHumanoidLayersComponent>(ent.Owner))
@@ -147,6 +176,10 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
             _hideableLayers.SetPermanentLayerOcclusion(ent.Owner, layer, hidden: false);
             _appearance.SetData(ent.Owner, layer, false);
         }
+
+        // deferred: this fires before SharedBodySystem counts the leg back in
+        if (partType is BodyPartType.Leg or BodyPartType.Foot)
+            _deferredLegRestore.Enqueue(ent.Owner);
     }
 
     private void OnStandAttempt(Entity<CMUHumanMedicalComponent> ent, ref StandAttemptEvent args)
@@ -155,7 +188,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
             return;
         if (!TryComp<BodyComponent>(ent.Owner, out var body))
             return;
-        if (body.LegEntities.Count < 2)
+        if (!_legSupport.HasLegsToStand((ent.Owner, body)))
             args.Cancel();
     }
 

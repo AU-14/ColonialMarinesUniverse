@@ -15,6 +15,7 @@
   - type: NameIdentifier
     group: GenericNumber
   - type: ShortExamine
+  - type: RMCNightVisionVisible
   - type: NpcFactionMember
     factions:
     - SimpleNeutral

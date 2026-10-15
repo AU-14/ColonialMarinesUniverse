@@ -1,5 +1,8 @@
 using System.Numerics;
 using Content.Client.Stylesheets;
+// cmu edit start
+using Content.Client.CMU14.Chat;
+// cmu edit end
 using Content.Shared.Chat;
 using Content.Shared.Input;
 using Robust.Client.UserInterface.Controls;
@@ -16,6 +19,11 @@ public class ChatInputBox : PanelContainer
     public readonly ChannelSelectorButton ChannelSelector;
     public readonly HistoryLineEdit Input;
     public readonly ChannelFilterButton FilterButton;
+    // cmu edit start
+    public readonly LineEdit SearchInput;
+    public readonly ChatSearchButton SearchButton;
+    private readonly BoxContainer _rows;
+    // cmu edit end
     protected readonly BoxContainer Container;
     protected ChatChannel ActiveChannel { get; private set; } = ChatChannel.Local;
 
@@ -29,7 +37,17 @@ public class ChatInputBox : PanelContainer
             SeparationOverride = StyleNano.CrtUiEnabled ? 12 : 2,
             Margin = new Thickness(0)
         };
-        AddChild(Container);
+        // cmu edit start
+        // The search bar sits on its own line above the input row.
+        _rows = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            HorizontalExpand = true,
+        };
+        AddChild(_rows);
+        _rows.AddChild(Container);
+        // AddChild(Container);
+        // cmu edit end
 
         ChannelSelector = new ChannelSelectorButton
         {
@@ -53,6 +71,24 @@ public class ChatInputBox : PanelContainer
             StyleClasses = { StyleClassChatLineEdit }
         };
         Container.AddChild(Input);
+        // cmu edit start
+        SearchInput = new LineEdit
+        {
+            Name = "SearchInput",
+            PlaceHolder = Loc.GetString("cmu-chat-search-placeholder"),
+            HorizontalExpand = true,
+            Visible = false,
+            StyleClasses = { StyleClassChatLineEdit }
+        };
+        _rows.AddChild(SearchInput);
+        SearchInput.SetPositionInParent(0);
+        SearchButton = new ChatSearchButton
+        {
+            Name = "SearchButton",
+            MinSize = new Vector2(28, 26)
+        };
+        Container.AddChild(SearchButton);
+        // cmu edit end
         FilterButton = new ChannelFilterButton
         {
             Name = "FilterButton",
@@ -72,6 +108,9 @@ public class ChatInputBox : PanelContainer
         ChannelSelector.MinWidth = legacy ? 75 : (StyleNano.CrtUiEnabled ? 0 : 74);
         ChannelSelector.MinHeight = legacy || StyleNano.CrtUiEnabled ? 0 : 26;
         FilterButton.MinSize = legacy ? Vector2.Zero : new Vector2(28, 26);
+        // cmu edit start
+        SearchButton.MinSize = legacy ? Vector2.Zero : new Vector2(28, 26);
+        // cmu edit end
         FilterButton.SetLegacyMode(legacy);
     }
 

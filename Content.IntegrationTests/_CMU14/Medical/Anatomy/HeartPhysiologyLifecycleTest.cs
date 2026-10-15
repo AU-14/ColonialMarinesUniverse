@@ -1,3 +1,4 @@
+using Content.Shared.Damage.Events;
 #pragma warning disable RA0002 // Fixtures configure service deadlines; assertions inspect committed physiology.
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Administration.Systems;
@@ -19,6 +20,7 @@ using Robust.Shared.Timing;
 namespace Content.IntegrationTests.CMU14.Medical.Anatomy;
 
 [TestFixture]
+[Parallelizable(ParallelScope.All)]
 public sealed class HeartPhysiologyLifecycleTest
 {
     [Test]

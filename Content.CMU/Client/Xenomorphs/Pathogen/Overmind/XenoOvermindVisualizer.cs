@@ -28,44 +28,44 @@ public sealed class CMUXenoOvermindVisualizerSystem : VisualizerSystem<CMUXenoOv
             return;
 
         // Reset everything to a known baseline first
-        args.Sprite.LayerSetVisible(LayerBase, true);
-        args.Sprite.LayerSetVisible(LayerTransition, false);
-        args.Sprite.LayerSetVisible(LayerEyeGlow, false);
-        args.Sprite.LayerSetVisible(LayerStrengthen, false);
+        SpriteSystem.LayerSetVisible((uid, args.Sprite), LayerBase, true);
+        SpriteSystem.LayerSetVisible((uid, args.Sprite), LayerTransition, false);
+        SpriteSystem.LayerSetVisible((uid, args.Sprite), LayerEyeGlow, false);
+        SpriteSystem.LayerSetVisible((uid, args.Sprite), LayerStrengthen, false);
 
         switch (state)
         {
             case OvermindVisualState.Incorporeal:
-                args.Sprite.LayerSetState(LayerBase, "overmind_eye");
+                SpriteSystem.LayerSetRsiState((uid, args.Sprite), LayerBase, "overmind_eye");
                 break;
 
             case OvermindVisualState.Appearing:
-                args.Sprite.LayerSetVisible(LayerBase, false); // hidden until transform completes
-                args.Sprite.LayerSetVisible(LayerTransition, true);
-                args.Sprite.LayerSetState(LayerTransition, "overmind_appear");
+                SpriteSystem.LayerSetVisible((uid, args.Sprite), LayerBase, false); // hidden until transform completes
+                SpriteSystem.LayerSetVisible((uid, args.Sprite), LayerTransition, true);
+                SpriteSystem.LayerSetRsiState((uid, args.Sprite), LayerTransition, "overmind_appear");
                 break;
 
             case OvermindVisualState.Disappearing:
-                args.Sprite.LayerSetVisible(LayerBase, false);
-                args.Sprite.LayerSetVisible(LayerTransition, true);
-                args.Sprite.LayerSetState(LayerTransition, "overmind_disappear");
+                SpriteSystem.LayerSetVisible((uid, args.Sprite), LayerBase, false);
+                SpriteSystem.LayerSetVisible((uid, args.Sprite), LayerTransition, true);
+                SpriteSystem.LayerSetRsiState((uid, args.Sprite), LayerTransition, "overmind_disappear");
                 break;
 
             case OvermindVisualState.Manifested:
-                args.Sprite.LayerSetState(LayerBase, "overmind_manifested");
+                SpriteSystem.LayerSetRsiState((uid, args.Sprite), LayerBase, "overmind_manifested");
                 break;
 
             case OvermindVisualState.ManifestedStrengthened:
-                args.Sprite.LayerSetState(LayerBase, "overmind_manifested");
-                args.Sprite.LayerSetVisible(LayerStrengthen, true);
-                args.Sprite.LayerSetState(LayerStrengthen, "overmind_manifested");
-                args.Sprite.LayerSetColor(LayerStrengthen, Color.FromHex("#ffcc44aa"));
+                SpriteSystem.LayerSetRsiState((uid, args.Sprite), LayerBase, "overmind_manifested");
+                SpriteSystem.LayerSetVisible((uid, args.Sprite), LayerStrengthen, true);
+                SpriteSystem.LayerSetRsiState((uid, args.Sprite), LayerStrengthen, "overmind_manifested");
+                SpriteSystem.LayerSetColor((uid, args.Sprite), LayerStrengthen, Color.FromHex("#ffcc44aa"));
                 break;
 
             case OvermindVisualState.Dying:
-                args.Sprite.LayerSetVisible(LayerBase, false);
-                args.Sprite.LayerSetVisible(LayerTransition, true);
-                args.Sprite.LayerSetState(LayerTransition, "overmind_disappear");
+                SpriteSystem.LayerSetVisible((uid, args.Sprite), LayerBase, false);
+                SpriteSystem.LayerSetVisible((uid, args.Sprite), LayerTransition, true);
+                SpriteSystem.LayerSetRsiState((uid, args.Sprite), LayerTransition, "overmind_disappear");
                 break;
         }
     }

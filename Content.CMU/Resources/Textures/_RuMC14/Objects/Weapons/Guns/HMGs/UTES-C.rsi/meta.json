@@ -1,0 +1,48 @@
+{
+  "version": 2,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "'hubaruba' from Discord",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "utes-c_overheat",
+      "directions": 4
+    },
+    {
+      "name": "utes-c",
+      "directions": 4
+    },
+    {
+      "name": "utes-c_magazine",
+      "directions": 4
+    },
+    {
+      "name": "mag-0"
+    },
+    {
+      "name": "utes-c_gun_mount"
+    },
+    {
+      "name": "utes-c_gun_mount_broken"
+    },
+    {
+      "name": "inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "equipped-SUITSTORAGE",
+      "directions": 4
+    },
+    {
+      "name": "equipped-BACKPACK",
+      "directions": 4
+    }
+  ]
+}

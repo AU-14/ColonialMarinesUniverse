@@ -13,11 +13,11 @@ using System.Linq;
 
 namespace Content.Server.Camera;
 
-public sealed class CameraNetworkSystem : EntitySystem
+public sealed partial class CameraNetworkSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private readonly Dictionary<EntityUid, HashSet<EntityUid>> _members = [];
     private readonly Dictionary<EntityUid, HashSet<EntityUid>> _receivers = [];

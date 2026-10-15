@@ -1,0 +1,42 @@
+- type: entity
+  parent: RMCBarrelAttachmentBase
+  id: RuMCAttachmentSuppressorVAL
+  name: VAL integrated suppressor
+  description: Cor... I don't think you can put that one back on.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Attachments/Barrel/rumc_VAL_barrel.rsi
+    state: suppressor_VAL
+  - type: Tag
+    tags:
+    - RMCAttachmentBarrel
+    - RuMCAttachmentSuppressorVAL
+  - type: AttachableVisuals
+  - type: AttachableSilencer
+    sound:
+      collection: RMCSilencedShootAlt
+      params:
+        maxDistance: 6
+
+- type: entity
+  parent: RMCAttachmentExtendedBarrel
+  id: RuMCAttachmentSuppressorAH12
+  name: AH12 integrated suppressor
+  description: Cor... I don't think you can put that one back on.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Attachments/Barrel/rumc_AH_barrel.rsi
+    state: suppressor_AH
+  - type: Tag
+    tags:
+    - RMCAttachmentBarrel
+    - RuMCAttachmentSuppressorAH
+  - type: AttachableSizeMods # RuMC edit
+    modifiers:
+    - size: 0
+
+- type: Tag
+  id: RuMCAttachmentSuppressorAH
+
+- type: Tag
+  id: RuMCAttachmentSuppressorVAL

@@ -400,7 +400,7 @@ public sealed partial class FighterCockpitControl : LayoutContainer
         foreach (var id in _targets.Keys.Where(id => weapons.Targets.All(target => target.Id != id)).ToArray())
         {
             _targets[id].Orphan();
-            _targets[id].Dispose();
+            _targets[id].Release();
             _targets.Remove(id);
         }
         foreach (var target in weapons.Targets)

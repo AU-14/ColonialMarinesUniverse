@@ -110,6 +110,8 @@ public sealed partial class RMCSelectiveFireSystem : EntitySystem
         var ev = new GunGetFireRateEvent(gunComponent.SelectedMode == SelectiveFire.Burst ? gun.Comp.BaseFireRate * gun.Comp.BurstFireRateMultiplier : gun.Comp.BaseFireRate);
         RaiseLocalEvent(gun, ref ev);
         gunComponent.FireRate = ev.FireRate;
+        if (gunComponent.SelectedMode == SelectiveFire.Burst)
+            gunComponent.BurstFireRate = ev.FireRate;
 
         if (ContainsMods(gun, gunComponent.SelectedMode))
         {

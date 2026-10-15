@@ -16,6 +16,12 @@ public sealed partial class KillObjectiveComponent : Robust.Shared.GameObjects.C
     [DataField] public bool RespawnOnRepeat;
     [DataField] public bool CountArrest = true;
 
+    /// <summary>
+    /// Only count deaths caused by the credited faction. Deaths with no killer (bleeding out, evolving,
+    /// being deleted or replaced by another entity) never count.
+    /// </summary>
+    [DataField] public bool RequireFactionKill;
+
     public bool HasSpawned;
     public Dictionary<string, int> AmountKilledPerFaction = new();
 }

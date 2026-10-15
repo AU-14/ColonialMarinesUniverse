@@ -1,0 +1,44 @@
+author: troytroy400
+category: CMU
+changes:
+- message: The character editor now has separate First name, Last name and Nickname
+    fields.
+  type: Add
+- message: New United Americas Artificial Womb Soldier origin, which adds A.W. after
+    your first name.
+  type: Add
+- message: 'New human chat speech sounds pulled from CM13 PR #13157, with separate
+    male and female voices and different sounds for questions and exclamations.'
+  type: Add
+- message: New CMU chat option to turn off speech sounds for yourself in settings.
+  type: Add
+- message: You can now jump on a live grenade by lying on it (shift + r). You absorb
+    the whole blast and shrapnel, taking the full grenade's damage to each limb (to
+    simulate the close range explosion), losing at minimum two limbs and with a 10%
+    chance of losing your head (being instantly killed). Everyone else nearby will
+    still be knocked down by the blast but take no damage, meaning you can medal of
+    honor this shit.
+  type: Add
+- message: If a grenade detonates in your hand it will now blow that hand off.
+  type: Add
+- message: Ghosts have a new "Ghost Color" button in the ghost bar that allows them
+    to change the color of their ghost.
+  type: Add
+- message: Synthetic characters now use a single name only.
+  type: Tweak
+- message: The Traits and Markings tabs in the character editor now come right after
+    Regulation Appearance.
+  type: Tweak
+- message: Divider lines in the character editor now follow your CRT UI colour.
+  type: Tweak
+- message: The Boo/Scare ghost action is now off by default.
+  type: Tweak
+- message: The roleplay name rules have been updated for the new name fields and the
+    Artificial Womb origin.
+  type: Tweak
+- message: The roleplay rules now refer to Biomorphs instead of Abominations.
+  type: Tweak
+- message: Laselle Bionational has been removed from the allegiance list.
+  type: Remove
+time: '2026-09-28T02:53:44.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2042

@@ -23,6 +23,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: AU14CallsignRole
     suffix: "6"
     commandElement: true
@@ -80,6 +81,10 @@
     - SlowRunner
     - Anemic
     - Asthmatic
+    - CMUAlcoholic
+    - CMUDrugAddict
+    - CMUBadLeg
+    - CMUMotionSick
   ranks:
     RMCRankCivilian: []
   chevrons:

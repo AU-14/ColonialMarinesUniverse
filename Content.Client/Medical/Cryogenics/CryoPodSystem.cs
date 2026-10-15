@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Content.Shared.Medical.Cryogenics;
 using Robust.Client.GameObjects;
 
@@ -53,13 +53,13 @@ public sealed partial class CryoPodSystem : SharedCryoPodSystem
 
         if (isOpen)
         {
-            _sprite.LayerSetRsiState((uid, args.Sprite), CryoPodVisualLayers.Base, "pod-open");
+            _sprite.LayerSetRsiState((uid, args.Sprite), CryoPodVisualLayers.Base, component.OpenState);
             _sprite.LayerSetVisible((uid, args.Sprite), CryoPodVisualLayers.Cover, false);
         }
         else
         {
-            _sprite.LayerSetRsiState((uid, args.Sprite), CryoPodVisualLayers.Base, isOn ? "pod-on" : "pod-off");
-            _sprite.LayerSetRsiState((uid, args.Sprite), CryoPodVisualLayers.Cover, isOn ? "cover-on" : "cover-off");
+            _sprite.LayerSetRsiState((uid, args.Sprite), CryoPodVisualLayers.Base, isOn ? component.OnState : component.OffState);
+            _sprite.LayerSetRsiState((uid, args.Sprite), CryoPodVisualLayers.Cover, isOn ? component.CoverOnState : component.CoverOffState);
             _sprite.LayerSetVisible((uid, args.Sprite), CryoPodVisualLayers.Cover, true);
         }
     }

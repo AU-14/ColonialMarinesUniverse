@@ -38,8 +38,26 @@ public sealed partial class ExplosionSystem
         float slope,
         float maxIntensity)
     {
+        var preparation = new ExplosionPreparation();
+        foreach (var _ in PrepareExplosionTiles(epicenter, typeID, totalIntensity, slope, maxIntensity, preparation)) { }
+        return preparation.Result;
+    }
+
+    private sealed class ExplosionPreparation
+    {
+        public Dictionary<EntityUid, ExplosionGridSnapshot>? Geometry;
+        public (int, List<float>, ExplosionSpaceTileFlood?, Dictionary<EntityUid, ExplosionGridTileFlood>, Matrix3x2)? Result;
+    }
+
+    private IEnumerable<bool> PrepareExplosionTiles(
+        MapCoordinates epicenter,
+        string typeID,
+        float totalIntensity,
+        float slope,
+        float maxIntensity, ExplosionPreparation preparation)
+    {
         if (totalIntensity <= 0 || slope <= 0)
-            return null;
+            yield break;
 
         var typeIndex = _explosionTypes[typeID];
 
@@ -70,6 +88,10 @@ public sealed partial class ExplosionSystem
         }
 
         // Main data for the exploding tiles in space and on various grids
+        if (epicentreGrid is { } origin && !localGrids.Contains(origin)) localGrids.Add(origin);
+        if (referenceGrid is { } referenceUid && !localGrids.Contains(referenceUid)) localGrids.Add(referenceUid);
+        var geometry = CaptureExplosionGeometry(localGrids);
+        preparation.Geometry = geometry;
         Dictionary<EntityUid, ExplosionGridTileFlood> gridData = new();
         ExplosionSpaceTileFlood? spaceData = null;
 
@@ -90,8 +112,9 @@ public sealed partial class ExplosionSystem
         var spaceAngle = Angle.Zero;
         if (referenceGrid != null)
         {
-            var xform = Transform(referenceGrid.Value);
-            (_, spaceAngle, spaceMatrix) = _transformSystem.GetWorldPositionRotationMatrix(xform);
+            var referenceGeometry = geometry[referenceGrid.Value];
+            spaceAngle = referenceGeometry.Angle;
+            spaceMatrix = referenceGeometry.Matrix;
         }
 
         // is the explosion starting on a grid?
@@ -100,35 +123,39 @@ public sealed partial class ExplosionSystem
             // set up the initial `gridData` instance
             encounteredGrids.Add(epicentreGrid.Value);
 
-            var airtightMap = CompOrNull<ExplosionAirtightGridComponent>(epicentreGrid)?.Tiles ?? new();
-
             var initialGridData = new ExplosionGridTileFlood(
-                (epicentreGrid.Value, Comp<MapGridComponent>(epicentreGrid.Value)),
-                airtightMap,
+                geometry[epicentreGrid.Value],
                 maxIntensity,
                 stepSize,
                 typeIndex,
-                _gridEdges[epicentreGrid.Value],
                 referenceGrid,
                 spaceMatrix,
-                spaceAngle,
-                this);
+                spaceAngle);
 
             gridData[epicentreGrid.Value] = initialGridData;
 
+            if (totalIntensity >= stepSize)
+                foreach (var step in initialGridData.PrepareSpaceTiles()) yield return step;
             initialGridData.InitTile(initialTile);
         }
         else
         {
             // set up the space explosion data
-            spaceData = new ExplosionSpaceTileFlood(this, epicenter, referenceGrid, localGrids, maxDistance);
+            spaceData = new ExplosionSpaceTileFlood();
+            // A one-tile blast never crosses a grid edge. Preserve the reference-grid
+            // coordinate scale without building the surrounding grid blocker map.
+            if (referenceGrid is { } reference) spaceData.TileSize = geometry[reference].TileSize;
+            if (totalIntensity >= stepSize)
+                foreach (var step in spaceData.Prepare(this, epicenter, referenceGrid, geometry, maxDistance)) yield return step;
             spaceData.InitTile(initialTile);
         }
 
         // Is this even a multi-tile explosion?
         if (totalIntensity < stepSize)
-            // Bit anticlimactic. All that set up for nothing....
-            return (1, new List<float> { totalIntensity }, spaceData, gridData, spaceMatrix);
+        {
+            preparation.Result = (1, new List<float> { totalIntensity }, spaceData, gridData, spaceMatrix);
+            yield break;
+        }
 
         // These variables keep track of the total intensity we have distributed
         List<int> tilesInIteration = new() { 1 };
@@ -147,6 +174,7 @@ public sealed partial class ExplosionSystem
         // Main flood-fill / neighbor-finding loop
         while (remainingIntensity > 0 && iteration <= MaxIterations && totalTiles < MaxArea)
         {
+            yield return true;
             previousIntensity = remainingIntensity;
 
             // First, we increase the intensity of the tiles that were already discovered in previous iterations.
@@ -186,38 +214,43 @@ public sealed partial class ExplosionSystem
 
             foreach (var grid in encounteredGrids)
             {
+                if (TerminatingOrDeleted(grid) || !geometry.TryGetValue(grid, out var gridGeometry)) continue;
                 // is this a new grid, for which we must create a new explosion data set
                 if (!gridData.TryGetValue(grid, out var data))
                 {
-                    var airtightMap = CompOrNull<ExplosionAirtightGridComponent>(grid)?.Tiles ?? new();
-
                     data = new ExplosionGridTileFlood(
-                        (grid, Comp<MapGridComponent>(grid)),
-                        airtightMap,
+                        gridGeometry,
                         maxIntensity,
                         stepSize,
                         typeIndex,
-                        _gridEdges[grid],
                         referenceGrid,
                         spaceMatrix,
-                        spaceAngle,
-                        this);
+                        spaceAngle);
 
+                    foreach (var step in data.PrepareSpaceTiles()) yield return step;
                     gridData[grid] = data;
                 }
 
                 // get the new neighbours, and populate gridToSpaceTiles in the process.
-                newTileCount += data.AddNewTiles(iteration, previousGridJump?.GetValueOrDefault(grid));
+                foreach (var step in data.PrepareNewTiles(iteration, previousGridJump?.GetValueOrDefault(grid)))
+                    yield return step;
+                newTileCount += data.NewTileCount;
                 spaceJump.UnionWith(data.SpaceJump);
             }
 
             // if space-data is null, but some grid-based explosion reached space, we need to initialize it.
             if (spaceData == null && previousSpaceJump.Count != 0)
-                spaceData = new ExplosionSpaceTileFlood(this, epicenter, referenceGrid, localGrids, maxDistance);
+            {
+                spaceData = new ExplosionSpaceTileFlood();
+                foreach (var step in spaceData.Prepare(this, epicenter, referenceGrid, geometry, maxDistance)) yield return step;
+            }
 
             // If the explosion has reached space, do that neighbors finding step as well.
             if (spaceData != null)
-                newTileCount += spaceData.AddNewTiles(iteration, previousSpaceJump);
+            {
+                foreach (var step in spaceData.PrepareNewTiles(iteration, previousSpaceJump)) yield return step;
+                newTileCount += spaceData.NewTileCount;
+            }
 
             // Does adding these tiles bring us above the total target intensity?
             tilesInIteration.Add(newTileCount);
@@ -243,13 +276,15 @@ public sealed partial class ExplosionSystem
         }
 
         // Neighbor finding is done. Perform final clean up and return.
+        foreach (var uid in gridData.Keys.ToArray())
+            if (TerminatingOrDeleted(uid)) gridData.Remove(uid);
         foreach (var grid in gridData.Values)
         {
             grid.CleanUp();
         }
         spaceData?.CleanUp();
 
-        return (totalTiles, iterationIntensity, spaceData, gridData, spaceMatrix);
+        preparation.Result = (totalTiles, iterationIntensity, spaceData, gridData, spaceMatrix);
     }
 
     /// <summary>

@@ -405,7 +405,7 @@ namespace Content.Server.Atmos.EntitySystems
                 var chunksInRange = ChunkingSys.GetChunksForSession(playerSession, ChunkSize, ChunkIndexPool, ChunkViewerPool);
                 var previouslySent = LastSentChunks[playerSession];
 
-                var ev = new GasOverlayUpdateEvent();
+                GasOverlayUpdateEvent? ev = null;
 
                 foreach (var (netGrid, oldIndices) in previouslySent)
                 {
@@ -416,7 +416,7 @@ namespace Content.Server.Atmos.EntitySystems
 
                         // If grid was deleted then don't worry about sending it to the client.
                         if (!EntManager.TryGetEntity(netGrid, out var gridId) || GridQuery.HasComp(gridId.Value))
-                            ev.RemovedChunks[netGrid] = oldIndices;
+                            (ev ??= new()).RemovedChunks[netGrid] = oldIndices;
                         else
                         {
                             oldIndices.Clear();
@@ -437,17 +437,20 @@ namespace Content.Server.Atmos.EntitySystems
                     if (old.Count == 0)
                         ChunkIndexPool.Return(old);
                     else
-                        ev.RemovedChunks.Add(netGrid, old);
+                        (ev ??= new()).RemovedChunks.Add(netGrid, old);
                 }
 
                 foreach (var (netGrid, gridChunks) in chunksInRange)
                 {
                     // Not all grids have atmospheres.
                     if (!EntManager.TryGetEntity(netGrid, out var grid) || !EntManager.TryGetComponent(grid, out GasTileOverlayComponent? overlay))
+                    {
+                        gridChunks.Clear();
+                        ChunkIndexPool.Return(gridChunks);
                         continue;
+                    }
 
-                    List<GasOverlayChunk> dataToSend = new();
-                    ev.UpdatedChunks[netGrid] = dataToSend;
+                    List<GasOverlayChunk>? dataToSend = null;
 
                     previouslySent.TryGetValue(netGrid, out var previousChunks);
 
@@ -459,14 +462,17 @@ namespace Content.Server.Atmos.EntitySystems
                         // If the chunk was updated since we last sent it, send it again
                         if (value.LastUpdate > LastSessionUpdate)
                         {
-                            dataToSend.Add(value);
+                            (dataToSend ??= new()).Add(value);
                             continue;
                         }
 
                         // Always send it if we didn't previously send it
                         if (previousChunks == null || !previousChunks.Contains(gIndex))
-                            dataToSend.Add(value);
+                            (dataToSend ??= new()).Add(value);
                     }
+
+                    if (dataToSend != null)
+                        (ev ??= new()).UpdatedChunks[netGrid] = dataToSend;
 
                     previouslySent[netGrid] = gridChunks;
                     if (previousChunks != null)
@@ -476,7 +482,11 @@ namespace Content.Server.Atmos.EntitySystems
                     }
                 }
 
-                if (ev.UpdatedChunks.Count != 0 || ev.RemovedChunks.Count != 0)
+                // Keep the grid sets transferred to previouslySent; only return the temporary dictionary.
+                chunksInRange.Clear();
+                ChunkViewerPool.Return(chunksInRange);
+
+                if (ev != null)
                     System.RaiseNetworkEvent(ev, playerSession.Channel);
             }
         }

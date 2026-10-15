@@ -44,6 +44,7 @@ public sealed partial class VehicleViewToggleSystem : EntitySystem
         }
 
         UpdateActionState(toggle);
+        UpdateWatching(user, toggle);
         Dirty(user, toggle);
     }
 
@@ -63,6 +64,7 @@ public sealed partial class VehicleViewToggleSystem : EntitySystem
 
             EnsureSingleToggleAction(user, toggle);
             UpdateActionState(toggle);
+            UpdateWatching(user, toggle);
             Dirty(user, toggle);
             return;
         }
@@ -76,6 +78,7 @@ public sealed partial class VehicleViewToggleSystem : EntitySystem
         toggle.InsideTarget = null;
         toggle.IsOutside = false;
 
+        RemCompDeferred<VehicleWatchingComponent>(user);
         RemComp<VehicleViewToggleComponent>(user);
     }
 
@@ -120,6 +123,7 @@ public sealed partial class VehicleViewToggleSystem : EntitySystem
 
         EnsureSingleToggleAction(ent.Owner, ent.Comp);
         UpdateActionState(ent.Comp);
+        UpdateWatching(ent.Owner, ent.Comp);
         Dirty(ent.Owner, ent.Comp);
         RaiseLocalEvent(ent.Owner, new VehicleViewToggledEvent(ent.Comp.IsOutside));
     }
@@ -157,6 +161,7 @@ public sealed partial class VehicleViewToggleSystem : EntitySystem
 
         EnsureSingleToggleAction(user, toggle);
         UpdateActionState(toggle);
+        UpdateWatching(user, toggle);
         Dirty(user, toggle);
         RaiseLocalEvent(user, new VehicleViewToggledEvent(true));
         return true;
@@ -178,6 +183,7 @@ public sealed partial class VehicleViewToggleSystem : EntitySystem
                 _eye.SetTarget(user, newOutsideTarget, eye);
 
             UpdateActionState(toggle);
+            UpdateWatching(user, toggle);
             Dirty(user, toggle);
         }
     }
@@ -321,5 +327,12 @@ public sealed partial class VehicleViewToggleSystem : EntitySystem
 
         if (Exists(action))
             QueueDel(action);
+    }
+    // CMU14: keep examine authorization aligned with the view toggle, including drivers.
+    private void UpdateWatching(EntityUid user, VehicleViewToggleComponent toggle)
+    {
+        var watching = EnsureComp<VehicleWatchingComponent>(user);
+        watching.Watching = toggle.IsOutside ? toggle.OutsideTarget : null;
+        Dirty(user, watching);
     }
 }

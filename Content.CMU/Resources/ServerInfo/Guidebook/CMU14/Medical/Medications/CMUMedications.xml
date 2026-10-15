@@ -1,0 +1,24 @@
+<Document>
+  # Medications
+
+  Medicines are sorted here by what they treat. Work out what kind of damage the patient has first (see [textlink="Diagnosis" link="CMUGuideMedicalDiagnosis"]), then reach for the right drug.
+
+  - [textlink="Brute Medications" link="CMUGuideMedsBrute"]: cuts, bruises, stab and gunshot damage.
+
+  - [textlink="Burn Medications" link="CMUGuideMedsBurn"]: fire, shock, cold and acid damage.
+
+  - [textlink="Toxin Medications" link="CMUGuideMedsToxin"]: poison, radiation and overdoses.
+
+  - [textlink="Suffocation Medications" link="CMUGuideMedsSuffocation"]: not breathing, damaged lungs and blood loss.
+
+  - [textlink="Painkillers" link="CMUGuideMedsPain"]: pain relief, sedation, and reversing an overdose.
+
+  - [textlink="Organ and Bone Medications" link="CMUGuideMedsOrgans"]: repairing organs, restarting the heart, and mending bones.
+
+  - [textlink="Other Medications" link="CMUGuideMedsOther"]: cryogenics, body temperature and everything else.
+
+  ## General Rules
+  - Every medicine has an [bold]overdose[/bold] amount. Go over it and the drug starts hurting the patient instead. Each medicine's card shows its overdose.
+  - Some patients are [bold]allergic[/bold] to certain drugs. Watch for a reaction after giving something new.
+  - [bold]Tricordrazine[/bold] heals a little brute, burn, toxin and suffocation at once. When you're not sure what you're dealing with, it's a safe first choice.
+</Document>

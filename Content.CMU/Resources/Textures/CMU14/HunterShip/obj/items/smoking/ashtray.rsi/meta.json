@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/smoking/ashtray.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "ashtray_small_bl"
+    },
+    {
+      "name": "ashtray_small_bl_half"
+    },
+    {
+      "name": "ashtray_small_bl_full"
+    },
+    {
+      "name": "ashtray_big_bl"
+    },
+    {
+      "name": "ashtray_bigger_bl"
+    },
+    {
+      "name": "ashtray_jumbo_bl"
+    },
+    {
+      "name": "ashtray_bl"
+    },
+    {
+      "name": "ashtray_half_bl"
+    },
+    {
+      "name": "ashtray_full_bl"
+    },
+    {
+      "name": "ashtray_br"
+    },
+    {
+      "name": "ashtray_half_br"
+    },
+    {
+      "name": "ashtray_full_br"
+    },
+    {
+      "name": "ashtray_bork_bl"
+    },
+    {
+      "name": "ashtray_bork_br"
+    },
+    {
+      "name": "ashtray_gl"
+    },
+    {
+      "name": "ashtray_half_gl"
+    },
+    {
+      "name": "ashtray_full_gl"
+    },
+    {
+      "name": "ashtray_bork_gl"
+    }
+  ]
+}

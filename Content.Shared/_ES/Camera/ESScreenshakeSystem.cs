@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Numerics;
 using Content.Shared.Camera;
 using Robust.Shared.Noise;
@@ -12,11 +11,14 @@ public sealed partial class ESScreenshakeSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
 
+    private Predicate<ESScreenshakeCommand> _expiredCommand = default!;
+
     #region Internal
 
     public override void Initialize()
     {
         base.Initialize();
+        _expiredCommand = command => _timing.CurTime >= command.CalculatedEnd;
 
         SubscribeLocalEvent<ESScreenshakeComponent, ESGetEyeRotationEvent>(OnGetEyeRotation);
         SubscribeLocalEvent<ESScreenshakeComponent, GetEyeOffsetEvent>(OnGetEyeOffset);
@@ -37,13 +39,8 @@ public sealed partial class ESScreenshakeSystem : EntitySystem
                 continue;
             }
 
-            foreach (var command in shake.Commands.ToList())
-            {
-                if (_timing.CurTime < command.CalculatedEnd)
-                    continue;
-                shake.Commands.Remove(command);
+            if (shake.Commands.RemoveWhere(_expiredCommand) > 0)
                 Dirty(ent, shake);
-            }
         }
     }
 

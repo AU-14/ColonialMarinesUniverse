@@ -9,7 +9,6 @@ colony-economy-no-trade-pacts = Trade Pacts: None
 colony-economy-overview = -- Colony Economy Overview --
 colony-economy-third-party-support = -- Third Party Support --
 colony-economy-open-third-party-menu = Open Third Party Menu
-colony-economy-support-dispatch-failed = Unable to dispatch support at this time.
 colony-economy-unknown-faction = Unknown Faction
 colony-economy-apply = Apply
 
@@ -62,9 +61,49 @@ cash-vendor-return-change = Return Change
 cash-vendor-department-budget = Dept Budget:
 cash-vendor-department-budget-value = ${ $amount } ({ $department })
 cash-vendor-search-placeholder = Search...
-cash-vendor-footer-hint = Insert cash, then select item.
+cash-vendor-footer-hint = Insert cash or carry your ID, then select item.
 cash-vendor-prices-include-tax = Prices incl. tax
+cash-vendor-id-account = ID Account:
+cash-vendor-insufficient-cash = Not enough cash, and no ID card to charge the rest to.
+cash-vendor-insufficient-funds = Insufficient funds on your ID card.
+cash-vendor-card-locked = Your ID card is locked.
+cash-vendor-card-charged = ${ $amount } charged to your ID card.
 cash-vendor-sales-tax = Sales Tax: { $percent }%
 cash-vendor-no-sales-tax = No sales tax
 cash-vendor-buy = Buy
 cash-vendor-no-items = No items available.
+
+# Colony ATM card reader
+cmu-atm-card-slot-occupied = There's already a card in the ATM.
+cmu-atm-no-card = You have no ID card to put in.
+cmu-atm-take-card-verb = Take card
+cmu-atm-take-cash-verb = Take cash
+cmu-atm-take-card-start = You start pulling the card out of the ATM...
+cmu-atm-take-card-start-others = {CAPITALIZE(THE($user))} starts pulling a card out of the ATM!
+
+# Colony ATM power-on self test, shown on the terminal as it boots
+cmu-atm-boot-title = W-Y COLONY FINANCIAL SYSTEMS
+cmu-atm-boot-bios = BIOS 2.7 (C) 2179 W-Y CORP.
+cmu-atm-boot-memory = MEMORY 640K
+cmu-atm-boot-keypad = KEYPAD
+cmu-atm-boot-reader = CARD READER
+cmu-atm-boot-dispenser = CASH DISPENSER
+cmu-atm-boot-uplink = UN TREASURY UPLINK
+cmu-atm-boot-ok = OK
+cmu-atm-boot-loading = LOADING TERMINAL...
+
+# Colony ATM knocked out by a sapper's siphon rig: a console gone wrong behind a plain notice.
+# The second line gives way to whatever message the sapper left.
+cmu-atm-out-of-order = OUT OF ORDER
+cmu-atm-out-of-order-sorry = PLEASE USE ANOTHER MACHINE
+
+# Colony ATM screen hints; the keys are labelled OK and X
+cmu-atm-hint-confirm = OK = confirm   X = back
+cmu-atm-hint-continue = OK to continue.
+
+# Colony ATM nav bar
+cmu-atm-nav-title = Colony ATM
+cmu-atm-nav-pin = Your card #{ $account } - PIN { $pin }
+cmu-atm-nav-no-card = You have no card of your own
+cmu-atm-nav-pin-unknown = Reading your card...
+cmu-atm-nav-pop-out = Pop Out

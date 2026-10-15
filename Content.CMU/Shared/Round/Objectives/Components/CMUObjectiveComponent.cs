@@ -74,6 +74,12 @@ public sealed partial class CMUObjectiveComponent : Robust.Shared.GameObjects.Co
     [DataField]
     public int CustomPoints { get; private set; }
 
+    /// <summary>
+    /// Points per completion when that's not a whole number (e.g. 0.3). Overrides <see cref="CustomPoints"/>.
+    /// </summary>
+    [DataField]
+    public float FractionalPoints { get; private set; }
+
     [DataField]
     public List<string> TechUnlocks { get; private set; } = new();
 

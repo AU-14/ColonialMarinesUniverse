@@ -1,4 +1,4 @@
-﻿using Content.Shared.Chemistry.Reagent;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Whitelist;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -23,6 +23,9 @@ public sealed partial class RMCFlamerTankComponent : Component
 
     [DataField, AutoNetworkedField]
     public int MaxRange = 5;
+
+    [DataField, AutoNetworkedField]
+    public bool IgnoreReagentRange;
 
     [DataField, AutoNetworkedField]
     public string ExamineIcon = "/Textures/_RMC14/Structures/Storage/reagent_tank.rsi/weldtank.png";

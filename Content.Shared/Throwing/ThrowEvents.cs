@@ -22,4 +22,8 @@ public readonly record struct ThrowHitByEvent(EntityUid Thrown, EntityUid Target
 /// Raised directed on the thrown entity that hits another.
 /// </summary>
 [ByRefEvent]
-public readonly record struct ThrowDoHitEvent(EntityUid Thrown, EntityUid Target, ThrownItemComponent Component);
+public record struct ThrowDoHitEvent(EntityUid Thrown, EntityUid Target, ThrownItemComponent Component)
+{
+    // CMU14: a custom thrown weapon may handle its impact before generic damage and stamina.
+    public bool Handled;
+}

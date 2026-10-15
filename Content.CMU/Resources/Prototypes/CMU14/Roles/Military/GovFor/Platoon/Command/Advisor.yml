@@ -25,6 +25,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: AU14CallsignRole
     suffix: OPS
     commandElement: true
@@ -59,6 +60,9 @@
     - NoEnglish
     - SlowRunner
     - Anemic
+    - CMUAlcoholic
+    - CMUDrugAddict
+    - CMUBadLeg
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -119,7 +123,7 @@
   roundSide: Opfor
   roundForce: OPFOR
   icon: "AU14JobIconOPFORAdvisor"
-  spawnMenuRoleName: Platoon Advisor (OPFOR)
+  spawnMenuRoleName: Advisor (OPFOR)
   startingGear: AU14GearOPFORadvisor
   dummyStartingGear: AU14GearOPFORadvisorDummy
   supervisors: au14-job-supervisors-opfor
@@ -219,7 +223,7 @@
   parent: AU14JobadvisorBase
   id: AU14JobGOVFORadvisorRMC
   roundForce: RMC
-  spawnMenuRoleName: Platoon Advisor (TWE RMC)
+  spawnMenuRoleName: Advisor (TWE RMC)
   ranks:
     RMC_WarrantOfficer1:
     - !type:RoleTimeRequirement
@@ -231,7 +235,7 @@
   parent: AU14JobadvisorBase
   id: AU14JobGOVFORadvisorUPP
   roundForce: UPP
-  spawnMenuRoleName: Platoon Advisor (UPP)
+  spawnMenuRoleName: Advisor (UPP)
   ranks:
     UPP_SeniorCommissar:
     - !type:RoleTimeRequirement

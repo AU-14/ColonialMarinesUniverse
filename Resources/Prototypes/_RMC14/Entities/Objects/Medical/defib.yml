@@ -122,6 +122,53 @@
     size: Small
   - type: PowerCellDraw
     useCharge: 350
+  # cmu edit start: AEDs analyze, talk the user through the shock and pick their own energy
+  - type: CMUDefibCharge
+    fixed: true
+  - type: CMUDefibVoice
+    automated: true
+    shockAdvisedSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/AED/shockadvised.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+    noShockAdvisedSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/AED/noshockadvised.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+    standClearSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/AED/standclear_pushtoshock.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+    standClearBeforeShock: 2.6
+  - type: GuideHelp
+    guides:
+    - CMUGuideDefibrillators
+    - MedicalDoctor
+  - type: Defibrillator
+    chargeSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/AED/charging.ogg
+      params:
+        volume: -10
+        maxDistance: 6
+    zapSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/AED/shock.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+    successSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/AED/ifnopulsepushanalyze.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+    readySound:
+      path: /Audio/CMU14/Medical/MedicalDevices/AED/heartrate_AEDBeepLoopable.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+  # cmu edit end
 
 - type: entity
   id: CMUDefibrillatorCompactSynth

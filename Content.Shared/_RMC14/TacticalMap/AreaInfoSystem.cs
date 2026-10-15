@@ -10,7 +10,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Profiling;
 using Robust.Shared.Timing;
-using System.Linq;
+using Content.Shared.Timing;
 
 namespace Content.Shared._RMC14.TacticalMap;
 
@@ -28,6 +28,7 @@ public sealed partial class AreaInfoSystem : EntitySystem
     [Dependency] private ProfManager _prof = default!;
 
     private readonly Queue<Entity<AreaInfoComponent>> _marineAlertCopyQueue = new();
+    private readonly DeadlineQueue<Entity<AreaInfoComponent>> _refreshDeadlines = new();
 
     private TimeSpan _maxProcessTime;
 
@@ -36,7 +37,11 @@ public sealed partial class AreaInfoSystem : EntitySystem
         SubscribeLocalEvent<GrantAreaInfoComponent, GotEquippedEvent>(OnGotEquipped);
         SubscribeLocalEvent<GrantAreaInfoComponent, GotUnequippedEvent>(OnGotUnequipped);
         SubscribeLocalEvent<AreaInfoComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<AreaInfoComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<AreaInfoComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<AreaInfoComponent, ComponentRemove>(OnRemove);
+        SubscribeLocalEvent<AreaInfoComponent, EntityPausedEvent>(OnPaused);
+        SubscribeLocalEvent<AreaInfoComponent, EntityUnpausedEvent>(OnUnpaused);
         SubscribeLocalEvent<AreaInfoComponent, MoveEvent>(OnMoveEvent);
 
         Subs.CVar(_config, RMCCVars.RMCMaxTacmapAlertProcessTimeMilliseconds, v => _maxProcessTime = TimeSpan.FromMilliseconds(v), true);
@@ -67,6 +72,48 @@ public sealed partial class AreaInfoSystem : EntitySystem
     {
         UpdateAreaInfoAlert(ent, false);
     }
+
+    private void OnStartup(Entity<AreaInfoComponent> ent, ref ComponentStartup args)
+    {
+        ScheduleRefresh(ent);
+    }
+
+    private void OnShutdown(Entity<AreaInfoComponent> ent, ref ComponentShutdown args)
+    {
+        _refreshDeadlines.Remove(ent);
+    }
+
+    private void OnPaused(Entity<AreaInfoComponent> ent, ref EntityPausedEvent args)
+    {
+        _refreshDeadlines.Remove(ent);
+    }
+
+    private void OnUnpaused(Entity<AreaInfoComponent> ent, ref EntityUnpausedEvent args)
+    {
+        // This deadline was not pause-offset by the old polling loop. Overdue alerts
+        // remain eligible immediately on unpause, without scheduling paused entities.
+        ScheduleRefresh(ent);
+    }
+
+    /// <summary>
+    /// Changes the next periodic refresh without scanning all area-info components.
+    /// Like the original deadline field, this does not cancel a refresh already queued.
+    /// </summary>
+    public void SetNextUpdateTime(Entity<AreaInfoComponent> ent, TimeSpan deadline)
+    {
+        if (_net.IsClient || ent.Comp.Deleted)
+            return;
+
+        ent.Comp.NextUpdateTime = deadline;
+        ScheduleRefresh(ent);
+    }
+
+    private void ScheduleRefresh(Entity<AreaInfoComponent> ent)
+    {
+        if (_net.IsServer && !ent.Comp.Deleted && !Paused(ent))
+            _refreshDeadlines.Schedule(ent, ent.Comp.NextUpdateTime);
+    }
+
     private void OnRemove(Entity<AreaInfoComponent> ent, ref ComponentRemove args)
     {
         _alerts.ClearAlert((ent.Owner, null), ent.Comp.Alert);
@@ -105,12 +152,16 @@ public sealed partial class AreaInfoSystem : EntitySystem
         if (GetAreaInfo(ent, checkMove) is not { areaName: var areaName, ceilingLevel: var ceilingLevel, restrictions: var restrictions })
             return;
 
+        var presentation = (areaName, ceilingLevel, restrictions);
+        if (ent.Comp.LastPresentation != presentation || ent.Comp.LastMessage == null)
+        {
+            ent.Comp.LastPresentation = presentation;
+            ent.Comp.LastMessage = Loc.GetString("rmc-area-info",
+                ("area", areaName), ("ceilingLevel", ceilingLevel), ("restrictions", restrictions));
+        }
+
         _alerts.ShowAlert((ent.Owner, null), ent.Comp.Alert,
-            severity: ceilingLevel,
-            dynamicMessage: Loc.GetString("rmc-area-info",
-                ("area", areaName),
-                ("ceilingLevel", ceilingLevel),
-                ("restrictions", restrictions)));
+            severity: ceilingLevel, dynamicMessage: ent.Comp.LastMessage);
     }
 
     private (string areaName, short ceilingLevel, string restrictions)? GetAreaInfo(Entity<AreaInfoComponent> ent, bool checkMove)
@@ -124,10 +175,6 @@ public sealed partial class AreaInfoSystem : EntitySystem
 
     private (string areaName, short ceilingLevel, string restrictions)? GetAreaInfoCore(Entity<AreaInfoComponent> ent, bool checkMove)
     {
-        var coordinates = ent.Owner.ToCoordinates();
-        if (!_area.TryGetArea(coordinates, out var area, out var areaProto))
-            return (Loc.GetString("rmc-tacmap-alert-no-area"), 0, string.Empty);
-
         var time = _timing.CurTime;
         if (checkMove)
         {
@@ -136,6 +183,10 @@ public sealed partial class AreaInfoSystem : EntitySystem
 
             ent.Comp.LastMoveUpdate = time;
         }
+
+        var coordinates = ent.Owner.ToCoordinates();
+        if (!_area.TryGetArea(coordinates, out var area, out var areaProto))
+            return (Loc.GetString("rmc-tacmap-alert-no-area"), 0, string.Empty);
 
         short ceilingLevel = 0;
         short severityToUse = 0;
@@ -149,9 +200,14 @@ public sealed partial class AreaInfoSystem : EntitySystem
             CMUTopDownOrdnanceKind.Mortar,
             out var mortarFire);
 
-        // Check for hive core protection first (blocks everything including OB, has range ~11.85)
-        bool hasHiveCoreProtection = IsProtectedByRoofing(coordinates, r => !r.Comp.CanOrbitalBombard && r.Comp.Range > 10);        // Check for pylon protection (blocks CAS/Mortar but allows OB, has range ~8.46)
-        bool hasPylonProtection = IsProtectedByRoofing(coordinates, r => r.Comp.CanOrbitalBombard && !r.Comp.CanCAS && r.Comp.Range < 10);
+        var (hasHiveCoreProtection, hasPylonProtection) = GetRoofingProtection(coordinates);
+        var canCAS = _area.CanCAS(coordinates);
+        var canSupplyDrop = _area.CanSupplyDrop(mapCoordinates);
+        var canMortarPlacement = _area.CanMortarPlacement(coordinates);
+        var canLase = _area.CanLase(coordinates);
+        // CMU14: display the same roof permissions checked when these actions are used.
+        var canMedevac = _area.CanMedevac(coordinates);
+        var canParadrop = _area.CanParadrop(coordinates);
 
         // Determine ceiling level based on effective protection (including roofing entities)
         // Note: severityToUse is offset by +1 because roofnull is at index 0 (for "no area" case)
@@ -160,17 +216,19 @@ public sealed partial class AreaInfoSystem : EntitySystem
             ceilingLevel = 4;
             severityToUse = hasHiveCoreProtection ? (short)7 : (short)5;
         }
-        else if (!_area.CanCAS(coordinates))
+        else if (!canCAS)
         {
             ceilingLevel = 3;
             severityToUse = hasPylonProtection ? (short)6 : (short)4;
         }
-        else if (!_area.CanSupplyDrop(mapCoordinates) || !canMortarFire)
+        else if (!canSupplyDrop || !canMortarFire)
         {
             ceilingLevel = 2;
             severityToUse = (short)3;
         }
-        else if (!_area.CanMortarPlacement(coordinates) || !_area.CanLase(coordinates) || !_area.CanMedevac(coordinates) || !_area.CanParadrop(coordinates))
+        // CMU14: reuse the effective permission checks above.
+        // else if (!canMortarPlacement || !canLase || !_area.CanMedevac(coordinates) || !_area.CanParadrop(coordinates))
+        else if (!canMortarPlacement || !canLase || !canMedevac || !canParadrop)
         {
             ceilingLevel = 1;
             severityToUse = (short)2;
@@ -181,6 +239,17 @@ public sealed partial class AreaInfoSystem : EntitySystem
             severityToUse = (short)1;
         }
 
+        // Read permissions every time, but only rebuild text when its inputs change.
+        var restrictionState = new AreaInfoRestrictionState(
+            ceilingLevel, hasHiveCoreProtection, hasPylonProtection,
+            canOrbitalBombard, orbitalBombardment is { Redirected: true }, canCAS, canSupplyDrop,
+            canMortarFire, mortarFire is { Redirected: true }, canMortarPlacement, canLase,
+            // CMU14: area.Value.Comp.Medevac, area.Value.Comp.Paradropping, area.Value.Comp.NoTunnel,
+            canMedevac, canParadrop, area.Value.Comp.NoTunnel,
+            area.Value.Comp.Unweedable, area.Value.Comp.ResinAllowed);
+        if (ent.Comp.LastRestrictionState == restrictionState && ent.Comp.LastRestrictionText is { } cachedRestrictions)
+            return (areaProto.Name, severityToUse, cachedRestrictions);
+
         // Build the restrictions string with clean formatting
         var allowedActions = new List<string>();
         var restrictedActions = new List<string>();
@@ -190,12 +259,12 @@ public sealed partial class AreaInfoSystem : EntitySystem
         else
             restrictedActions.Add("Orbital Strike");
 
-        if (_area.CanCAS(coordinates))
+        if (canCAS)
             allowedActions.Add("Close Air Support");
         else
             restrictedActions.Add("Close Air Support");
 
-        if (_area.CanSupplyDrop(mapCoordinates))
+        if (canSupplyDrop)
             allowedActions.Add("Supply Drops");
         else
             restrictedActions.Add("Supply Drops");
@@ -205,22 +274,24 @@ public sealed partial class AreaInfoSystem : EntitySystem
         else
             restrictedActions.Add("Mortar Fire");
 
-        if (_area.CanMortarPlacement(coordinates))
+        if (canMortarPlacement)
             allowedActions.Add("Mortar Placement");
         else
             restrictedActions.Add("Mortar Placement");
 
-        if (_area.CanLase(coordinates))
+        if (canLase)
             allowedActions.Add("Laser Designation");
         else
             restrictedActions.Add("Laser Designation");
 
-        if (area.Value.Comp.Medevac)
+        // CMU14: if (area.Value.Comp.Medevac)
+        if (canMedevac)
             allowedActions.Add("Casualty Evacuation");
         else
             restrictedActions.Add("Casualty Evacuation");
 
-        if (area.Value.Comp.Paradropping)
+        // CMU14: if (area.Value.Comp.Paradropping)
+        if (canParadrop)
             allowedActions.Add("Paradropping");
         else
             restrictedActions.Add("Paradropping");
@@ -253,6 +324,8 @@ public sealed partial class AreaInfoSystem : EntitySystem
             restrictionsStr += "\n• " + string.Join("\n• ", restrictedActions);
         }
 
+        ent.Comp.LastRestrictionState = restrictionState;
+        ent.Comp.LastRestrictionText = restrictionsStr;
         return (areaProto.Name, severityToUse, restrictionsStr);
     }
 
@@ -263,42 +336,25 @@ public sealed partial class AreaInfoSystem : EntitySystem
             : label;
     }
 
-    private bool IsProtectedByRoofing(EntityCoordinates coordinates, Predicate<Entity<RoofingEntityComponent>> predicate)
+    private (bool HiveCore, bool Pylon) GetRoofingProtection(EntityCoordinates coordinates)
     {
-        if (_prof.IsEnabled)
-        {
-            using var profile = _prof.Group("AreaInfoSystem.IsProtectedByRoofing");
-            return IsProtectedByRoofingCore(coordinates, predicate);
-        }
-
-        return IsProtectedByRoofingCore(coordinates, predicate);
-    }
-
-    private bool IsProtectedByRoofingCore(EntityCoordinates coordinates, Predicate<Entity<RoofingEntityComponent>> predicate)
-    {
+        var hiveCore = false;
+        var pylon = false;
         var scanned = 0;
         var matched = 0;
         var roofs = EntityQueryEnumerator<RoofingEntityComponent>();
         while (roofs.MoveNext(out var uid, out var roof))
         {
             scanned++;
-
-            if (!predicate((uid, roof)))
-                continue;
-
+            var isCore = !hiveCore && !roof.CanOrbitalBombard && roof.Range > 10;
+            var isPylon = !pylon && roof.CanOrbitalBombard && !roof.CanCAS && roof.Range < 10;
+            if (!isCore && !isPylon) continue;
             matched++;
-
-            if (coordinates.TryDistance(_entityManager, uid.ToCoordinates(), out var distance) &&
-                distance <= roof.Range)
-            {
-                if (_prof.IsEnabled)
-                {
-                    _prof.WriteValue("AreaInfoSystem Roofing Entities Scanned", scanned);
-                    _prof.WriteValue("AreaInfoSystem Roofing Predicate Matches", matched);
-                }
-
-                return true;
-            }
+            if (!coordinates.TryDistance(_entityManager, uid.ToCoordinates(), out var distance) || !(distance <= roof.Range))
+                continue;
+            hiveCore |= isCore;
+            pylon |= isPylon;
+            if (hiveCore && pylon) break;
         }
 
         if (_prof.IsEnabled)
@@ -306,8 +362,7 @@ public sealed partial class AreaInfoSystem : EntitySystem
             _prof.WriteValue("AreaInfoSystem Roofing Entities Scanned", scanned);
             _prof.WriteValue("AreaInfoSystem Roofing Predicate Matches", matched);
         }
-
-        return false;
+        return (hiveCore, pylon);
     }
 
     public override void Update(float frameTime)
@@ -318,25 +373,40 @@ public sealed partial class AreaInfoSystem : EntitySystem
         var time = _timing.CurTime;
         if (_marineAlertCopyQueue.Count > 0)
         {
-            while (_marineAlertCopyQueue.TryDequeue(out var ent))
+            var budget = new TimeSliceBudget(_maxProcessTime, 128);
+            while (_marineAlertCopyQueue.Count > 0)
             {
-                if (_timing.CurTime >= time + _maxProcessTime)
+                if (!budget.TryConsume())
                     return;
 
-                if (TerminatingOrDeleted(ent))
+                var ent = _marineAlertCopyQueue.Dequeue();
+                if (TerminatingOrDeleted(ent) || ent.Comp.Deleted)
                     continue;
 
                 UpdateAreaInfoAlert(ent, false);
             }
         }
 
-        var tacMapQuery = EntityQueryEnumerator<AreaInfoComponent>();
-        while (tacMapQuery.MoveNext(out var uid, out var alert))
+        // Discover the entire due wave before rescheduling. Zero/negative intervals
+        // must not repeatedly enqueue the same component during this update.
+        while (_refreshDeadlines.TryTakeDue(time, out var ent))
         {
-            if (time < alert.NextUpdateTime)
+            if (ent.Comp.Deleted || TerminatingOrDeleted(ent) || Paused(ent))
                 continue;
-            _marineAlertCopyQueue.Enqueue((uid, alert));
-            alert.NextUpdateTime = time + alert.UpdateInterval;
+
+            _marineAlertCopyQueue.Enqueue(ent);
         }
+
+        // The preceding wave is empty here. Preserve the existing next-tick refresh
+        // and deadline-at-enqueue behavior, including when a wave spans many ticks.
+        foreach (var ent in _marineAlertCopyQueue)
+            SetNextUpdateTime(ent, time + ent.Comp.UpdateInterval);
+    }
+
+    public override void Shutdown()
+    {
+        _refreshDeadlines.Clear();
+        _marineAlertCopyQueue.Clear();
+        base.Shutdown();
     }
 }

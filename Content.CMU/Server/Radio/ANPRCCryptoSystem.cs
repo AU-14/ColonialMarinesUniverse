@@ -18,6 +18,7 @@ public sealed partial class ANPRCCryptoSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
 
     private readonly Dictionary<string, int> _generation = new();
 
@@ -35,11 +36,14 @@ public sealed partial class ANPRCCryptoSystem : EntitySystem
             subs.Event<ANPRCCryptoDestroyMsg>(OnDestroy);
             subs.Event<ANPRCCryptoRecryptoMsg>(OnRecrypto);
         });
+
+        InitializeAnalysis();
     }
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _generation.Clear();
+        _keys.Clear();
     }
 
     private void OnFillCardMapInit(Entity<ANPRCFillCardComponent> ent, ref MapInitEvent args)
@@ -268,6 +272,46 @@ public sealed partial class ANPRCCryptoSystem : EntitySystem
             return false;
 
         return fill.Generation == GetGeneration(fill.Faction);
+    }
+
+    /// <summary>
+    ///     Brings a superseded fill card in this set up to its faction's current key, as an over-the-air
+    ///     rekey from another set does. Whoever holds the set gets the key - a captured set with the card
+    ///     still in it included, which is why a set is zeroized before it is abandoned.
+    /// </summary>
+    public bool TryRekeyOverAir(EntityUid anprc)
+    {
+        if (!TryGetFillCard(anprc, out var fill, out var cardUid) || string.IsNullOrEmpty(fill.Faction))
+            return false;
+
+        var current = GetGeneration(fill.Faction);
+
+        if (fill.Generation == current)
+            return false;
+
+        fill.Generation = current;
+        Dirty(cardUid, fill);
+        RaiseLocalEvent(anprc, new ANPRCCryptoChangedEvent());
+
+        return true;
+    }
+
+    /// <summary>
+    ///     Keys an unkeyed card to a side at that side's current generation, as a fresh issue from
+    ///     the signal section would be, and tells the set it sits in.
+    /// </summary>
+    public void KeyFillCard(Entity<ANPRCFillCardComponent> card, string faction, string designation)
+    {
+        card.Comp.Faction = faction;
+        card.Comp.Designation = designation;
+        card.Comp.Generation = GetGeneration(faction);
+        Dirty(card);
+
+        if (_container.TryGetContainingContainer(card.Owner, out var container) &&
+            container.ID == FillSlotId)
+        {
+            RaiseLocalEvent(container.Owner, new ANPRCCryptoChangedEvent());
+        }
     }
 
     public string GetFillFaction(EntityUid anprc)

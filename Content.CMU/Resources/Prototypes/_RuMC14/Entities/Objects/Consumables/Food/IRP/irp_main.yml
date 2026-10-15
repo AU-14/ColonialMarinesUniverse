@@ -1,0 +1,490 @@
+- type: entity
+  abstract: true
+  parent: FoodTinBase
+  id: RuMCFoodTinIRP
+  name: tushonka
+  description: Ordinary stewed meat, the most loved and widespread canned food among soldiers and civilians alike.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/Tin/2condensed_milk.rsi
+  - type: Openable
+    openableByHand: false
+  - type: FlavorProfile
+    flavors:
+    - nutty
+    - bread
+    - rice
+    - bacon
+    - vegetables
+    - meaty
+    - tomato
+    - cheesy
+    - chocolate
+    - sweet
+    - creamy
+    - garlic
+    - fishy
+    - egg
+    - bitter
+    - chicken
+    - potatoes
+    - salty
+    - fruity
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 30
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+      - ReagentId: Protein
+        Quantity: 10
+  - type: Edible
+    transferAmount: 10
+    trash:
+    - RuMCFoodTinIRPTrash
+
+
+- type: entity
+  abstract: true
+  parent: FoodTinBaseTrash
+  id: RuMCFoodTinIRPTrash
+  name: empty
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/Tin/2condensed_milk.rsi
+
+# *-------------------------------------------------------------------------------
+
+- type: entity
+  parent: FoodTinBase
+  id: RuMCFoodTinIRPMeat
+  name: canned meat (Regular)
+  description: Standard-issue canned meat. Dense, heavy, and vaguely grey. A staple of field rations for over a century.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/Tin/stewed_meat.rsi
+  - type: Openable
+    openableByHand: false
+  - type: FlavorProfile
+    flavors:
+    - salty
+    - meaty
+  - type: Solution
+    id: food
+    solution:
+        maxVol: 30
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 15
+        - ReagentId: Protein
+          Quantity: 10
+  - type: Edible
+    transferAmount: 10
+    trash:
+    - RuMCFoodTinIRPTrashMeat
+
+- type: entity
+  parent: FoodTinBaseTrash
+  id: RuMCFoodTinIRPTrashMeat
+  name: empty canned meat (Regular)
+  description: An empty tin can. Not much use now.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/Tin/stewed_meat.rsi
+
+
+
+- type: entity
+  parent: FoodTinBase
+  id: RuMCFoodTinIRPMeat2
+  name: canned meat (Premium)
+  description: Improved canned meat. Slightly more edible than the standard version, but still best consumed under the cover of darkness.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/Tin/2stewed_meat.rsi
+  - type: Openable
+    openableByHand: false
+  - type: FlavorProfile
+    flavors:
+    - bacon
+    - meaty
+    - salty
+  - type: Solution
+    id: food
+    solution:
+        maxVol: 30
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 15
+        - ReagentId: Protein
+          Quantity: 10
+  - type: Edible
+    transferAmount: 10
+    trash:
+    - RuMCFoodTinIRPTrashMeat2
+
+- type: entity
+  parent: FoodTinBaseTrash
+  id: RuMCFoodTinIRPTrashMeat2
+  name: empty canned meat
+  description: An empty tin can. Not much use now.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/Tin/2stewed_meat.rsi
+
+
+
+- type: entity
+  parent: FoodTinBase
+  id: RuMCFoodTinIRPPorridge
+  name: porridge ration (a)
+  description: Standard-issue grain porridge. Edible when hot, tolerable when cold. An ancient staple of field nutrition.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/Tin/porridge.rsi
+  - type: Openable
+    openableByHand: false
+  - type: FlavorProfile
+    flavors:
+    - rice
+    - bacon
+    - vegetables
+    - salty
+  - type: Solution
+    id: food
+    solution:
+        maxVol: 30
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 20
+        - ReagentId: Protein
+          Quantity: 25
+  - type: Edible
+    transferAmount: 10
+    trash:
+    - RuMCFoodTinIRPTrashPorridge
+
+- type: entity
+  parent: FoodTinBaseTrash
+  id: RuMCFoodTinIRPTrashPorridge
+  name: empty porridge ration (a)
+  description: An empty tin can. Not much use now.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/Tin/porridge.rsi
+
+
+
+- type: entity
+  parent: FoodTinBase
+  id: RuMCFoodTinIRPPorridge2
+  name: porridge ration (b)
+  description: Grain porridge with minor added ingredients. Made for the soldier who needs more than just hot water to survive.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/Tin/2porridge.rsi
+  - type: Openable
+    openableByHand: false
+  - type: FlavorProfile
+    flavors:
+    - rice
+    - bacon
+    - vegetables
+    - salty
+  - type: Solution
+    id: food
+    solution:
+        maxVol: 30
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 15
+        - ReagentId: Protein
+          Quantity: 10
+  - type: Edible
+    transferAmount: 10
+    trash:
+    - RuMCFoodTinIRPTrashPorridge2
+
+- type: entity
+  parent: FoodTinBaseTrash
+  id: RuMCFoodTinIRPTrashPorridge2
+  name: empty porridge ration (b)
+  description: An empty tin can. Not much use now.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/Tin/2porridge.rsi
+
+
+
+- type: entity
+  parent: FoodTinBase
+  id: RuMCFoodTinIRPPorridge3
+  name: porridge ration (c)
+  description: Improved field porridge. Slightly more texture, slightly less taste. But who cares when you're under fire?
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/Tin/3porridge.rsi
+  - type: Openable
+    openableByHand: false
+  - type: FlavorProfile
+    flavors:
+    - rice
+    - bacon
+    - vegetables
+    - salty
+  - type: Solution
+    id: food
+    solution:
+        maxVol: 30
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 15
+        - ReagentId: Protein
+          Quantity: 10
+  - type: Edible
+    transferAmount: 10
+    trash:
+    - RuMCFoodTinIRPTrashPorridge3
+
+- type: entity
+  parent: FoodTinBaseTrash
+  id: RuMCFoodTinIRPTrashPorridge3
+  name: empty porridge ration (c)
+  description: An empty tin can. Not much use now.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/Tin/3porridge.rsi
+
+
+
+- type: entity
+  parent: FoodTinBase
+  id: RuMCFoodTinIRPMilk
+  name: condensed milk
+  description: Sweetened condensed milk in a heavy tin. Thick, sticky, and almost too sweet. A luxury in the field.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/Tin/condensed_milk.rsi
+  - type: Openable
+    openableByHand: false
+  - type: FlavorProfile
+    flavors:
+    - sweet
+    - creamy
+  - type: Solution
+    id: food
+    solution:
+        maxVol: 30
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 15
+        - ReagentId: Protein
+          Quantity: 10
+  - type: Edible
+    transferAmount: 10
+    trash:
+    - RuMCFoodTinIRPTrashMilk
+
+- type: entity
+  parent: FoodTinBaseTrash
+  id: RuMCFoodTinIRPTrashMilk
+  name: empty condensed milk
+  description: An empty tin can. Not much use now.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/Tin/condensed_milk.rsi
+
+
+
+- type: entity
+  parent: FoodTinBase
+  id: RuMCFoodTinIRPMilk2
+  name: condensed milk
+  description: Cooked condensed milk. Darker, thicker, and richer. Some say it's better than the white version. Most just eat it because it's food.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/Tin/2condensed_milk.rsi
+  - type: Openable
+    openableByHand: false
+  - type: FlavorProfile
+    flavors:
+    - sweet
+    - creamy
+  - type: Solution
+    id: food
+    solution:
+        maxVol: 30
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 15
+        - ReagentId: Protein
+          Quantity: 10
+  - type: Edible
+    transferAmount: 10
+    trash:
+    - RuMCFoodTinIRPTrashMilk2
+
+- type: entity
+  parent: FoodTinBaseTrash
+  id: RuMCFoodTinIRPTrashMilk2
+  name: empty condensed milk
+  description: An empty tin can. Not much use now.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/Tin/2condensed_milk.rsi
+
+#light Tin
+
+- type: entity
+  parent: FoodTinBase
+  id: RuMCFoodLightTinIRPStew
+  name: canned stew (meat)
+  description: A standard-issue tin of canned meat stew. Dense, salty, and filling. A staple of field rations.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/lightTin/stew.rsi
+  - type: Openable
+    openableByHand: true
+  - type: FlavorProfile
+    flavors:
+    - salty
+    - vegetables
+    - meaty
+  - type: Solution
+    id: food
+    solution:
+        maxVol: 30
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 10
+        - ReagentId: Protein
+          Quantity: 10
+  - type: Edible
+    transferAmount: 10
+    trash:
+    - RuMCFoodLightTinIRPTrashStew
+
+- type: entity
+  parent: FoodTinBaseTrash
+  id: RuMCFoodLightTinIRPTrashStew
+  name: empty tin
+  description: An empty tin can. Not much use now.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/lightTin/stew.rsi
+
+- type: entity
+  parent: FoodTinBase
+  id: RuMCFoodLightTinIRPStew2
+  name: canned stew (vegetable)
+  description: A tin of hearty vegetable stew with a touch of salt. Lighter than the meat version, but still enough to keep you going.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/lightTin/2stew.rsi
+  - type: Openable
+    openableByHand: true
+  - type: FlavorProfile
+    flavors:
+    - salty
+    - vegetables
+  - type: Solution
+    id: food
+    solution:
+        maxVol: 30
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 15
+        - ReagentId: Protein
+          Quantity: 5
+  - type: Edible
+    transferAmount: 10
+    trash:
+    - RuMCFoodLightTinIRPTrashStew2
+
+- type: entity
+  parent: FoodTinBaseTrash
+  id: RuMCFoodLightTinIRPTrashStew2
+  name: empty tin
+  description: An empty tin can. Not much use now.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/lightTin/2stew.rsi
+
+- type: entity
+  parent: FoodTinBase
+  id: RuMCFoodLightTinIRPBuckwheat
+  name: canned buckwheat (bacon)
+  description: A tin of buckwheat porridge with bacon bits. A field classic for those who need real energy.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/lightTin/buckwheat.rsi
+  - type: Openable
+    openableByHand: true
+  - type: FlavorProfile
+    flavors:
+    - salty
+    - rice
+    - vegetables
+    - bacon
+  - type: Solution
+    id: food
+    solution:
+        maxVol: 30
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 10
+        - ReagentId: Protein
+          Quantity: 10
+  - type: Edible
+    transferAmount: 10
+    trash:
+    - RuMCFoodLightTinIRPTrashBuckwheat
+
+- type: entity
+  parent: FoodTinBaseTrash
+  id: RuMCFoodLightTinIRPTrashBuckwheat
+  name: empty tin
+  description: An empty tin can. Not much use now.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/lightTin/buckwheat.rsi
+
+- type: entity
+  parent: FoodTinBase
+  id: RuMCFoodLightTinIRPRise
+  name: canned rice (fish)
+  description: A tin of rice with salted fish. A little fishy, a little salty, but it gets the job done.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/lightTin/rise.rsi
+  - type: Openable
+    openableByHand: true
+  - type: FlavorProfile
+    flavors:
+    - salty
+    - rice
+    - vegetables
+    - fishy
+  - type: Solution
+    id: food
+    solution:
+        maxVol: 30
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 10
+        - ReagentId: Protein
+          Quantity: 10
+  - type: Edible
+    transferAmount: 10
+    trash:
+    - RuMCFoodLightTinIRPTrashRise
+
+- type: entity
+  parent: FoodTinBaseTrash
+  id: RuMCFoodLightTinIRPTrashRise
+  name: empty tin
+  description: An empty tin can. Not much use now.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/lightTin/rise.rsi

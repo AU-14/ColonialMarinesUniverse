@@ -54,7 +54,7 @@ public sealed partial class RMCIdLockableStorageSystem : EntitySystem
             // The first valid swipe binds the storage to the printed name on that ID.
             if (!TryGetOwnerName(idCard, out var ownerName))
             {
-                _popup.PopupPredicted(Loc.GetString("rmc-id-lockable-storage-id-invalid"), ent.Owner, args.User, PopupType.SmallCaution);
+                _popup.PopupBroadcast(Loc.GetString("rmc-id-lockable-storage-id-invalid"), ent.Owner, args.User, PopupType.SmallCaution);
                 return;
             }
 
@@ -63,7 +63,7 @@ public sealed partial class RMCIdLockableStorageSystem : EntitySystem
             Dirty(ent);
             UpdateAppearance(ent);
             CloseStorageUi(ent);
-            _popup.PopupPredicted(Loc.GetString("rmc-id-lockable-storage-lock", ("storage", ent)), ent.Owner, args.User, PopupType.Small);
+            _popup.PopupBroadcast(Loc.GetString("rmc-id-lockable-storage-lock", ("storage", ent)), ent.Owner, args.User, PopupType.Small);
             return;
         }
 
@@ -73,11 +73,11 @@ public sealed partial class RMCIdLockableStorageSystem : EntitySystem
             ent.Comp.Locked = false;
             Dirty(ent);
             UpdateAppearance(ent);
-            _popup.PopupPredicted(Loc.GetString("rmc-id-lockable-storage-unlock", ("storage", ent)), ent.Owner, args.User, PopupType.Small);
+            _popup.PopupBroadcast(Loc.GetString("rmc-id-lockable-storage-unlock", ("storage", ent)), ent.Owner, args.User, PopupType.Small);
             return;
         }
 
-        _popup.PopupPredicted(Loc.GetString("rmc-id-lockable-storage-access-denied"), ent.Owner, args.User, PopupType.SmallCaution);
+        _popup.PopupBroadcast(Loc.GetString("rmc-id-lockable-storage-access-denied"), ent.Owner, args.User, PopupType.SmallCaution);
     }
 
     private void OnStorageInteractAttempt(Entity<RMCIdLockableStorageComponent> ent, ref StorageInteractAttemptEvent args)
@@ -88,7 +88,7 @@ public sealed partial class RMCIdLockableStorageSystem : EntitySystem
 
         args.Cancelled = true;
 
-        _popup.PopupPredicted(
+        _popup.PopupBroadcast(
             Loc.GetString("rmc-id-lockable-storage-open-denied",
                 ("storage", ent),
                 ("owner", ent.Comp.OwnerName ?? Loc.GetString("rmc-id-lockable-storage-owner-unknown"))),
@@ -103,7 +103,7 @@ public sealed partial class RMCIdLockableStorageSystem : EntitySystem
             return;
 
         args.Handled = true;
-        _popup.PopupClient(
+        _popup.PopupEntity(
             Loc.GetString("rmc-id-lockable-storage-open-denied",
                 ("storage", ent),
                 ("owner", ent.Comp.OwnerName ?? Loc.GetString("rmc-id-lockable-storage-owner-unknown"))),

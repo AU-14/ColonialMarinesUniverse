@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 09/22/2026 09:27:06
-  entityCount: 28514
+  entityCount: 28515
 maps:
 - 1
 grids:
@@ -88839,14 +88839,15 @@ entities:
         14,13: 17906312118425092096
         14,14: 17361641481273145592
         15,13: 18446462598732840960
+    - type: CMUBreathingRequiredMap
     - type: MapAtmosphere
       space: False
       mixture:
         temperature: 293.15
         volume: 2500
         moles:
-          Oxygen: 21.8124
-          Nitrogen: 81.1594
+          Oxygen: 1.0297
+          Nitrogen: 101.9421
         immutable: True
     - type: ChunkContainer
       chunkEntities:
@@ -249507,4 +249508,17 @@ entities:
     - type: Transform
       parent: 1
       pos: 100.5,200.5
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 56423
+    components:
+    - type: MetaData
+      name: Bosenmori Basho ground relay
+    - type: Transform
+      pos: 161.5,195.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: bosenmori_basho.ground.relay
+      displayName: Bosenmori Basho Ground Relay
 ...

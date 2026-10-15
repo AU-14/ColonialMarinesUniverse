@@ -1,0 +1,56 @@
+- type: entity
+  id: RuMCBEARPresetSKALA
+  name: PMC BEAR (SKALA) preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomGearOther:
+    -
+      - [ RuMCBEARCapBrown, RMCBootsSPPBlack, AU14PVEHandsFingerlessBlackGloves ]
+      - [ RuMCBEARCapBrown, RMCBootsSPPBlack, AU14PVEHandsFingerlessBrownGloves ]
+      - [ RuMCBEARCapBlack, RMCBootsSPP, AU14PVEHandsInsulatedBlackMarine ]
+      - [ RuMCBEARCapBlack, RMCBootsSPP, CMHandsBrown ]
+      - [ RuMCBEARBoonieBrown, RMCBootsSPPBlack, AU14PVEHandsFingerlessBlackGloves ]
+      - [ RuMCBEARBoonieBrown, RMCBootsSPPBlack, AU14PVEHandsFingerlessBrownGloves ]
+      - [ RuMCBEARBoonieBlack, RMCBootsSPP, AU14PVEHandsInsulatedBlackMarine ]
+      - [ RuMCBEARBoonieBlack, RMCBootsSPP, CMHandsBrown ]
+      - [ RuMCInfantryHelmetBEARFull, RMCBootsSPPBlack, AU14PVEHandsFingerlessBlackGloves ]
+      - [ RuMCBEARInfantryHelmet, RMCBootsSPPBlack, AU14PVEHandsFingerlessBrownGloves ]
+      - [ RuMCInfantryHelmetBEARFull, RMCBootsSPP, AU14PVEHandsInsulatedBlackMarine ]
+      - [ RuMCBEARInfantryHelmet, RMCBootsSPP, CMHandsBrown ]
+      - [ RuMCInfantryHelmetBEARFull, RMCBootsSPPBlack, AU14PVEHandsFingerlessBlackGloves ]
+      - [ RuMCBEARInfantryHelmet, RMCBootsSPPBlack, AU14PVEHandsFingerlessBrownGloves ]
+      - [ RuMCInfantryHelmetBEARFull, RMCBootsSPP, AU14PVEHandsInsulatedBlackMarine ]
+      - [ RuMCBEARInfantryHelmet, RMCBootsSPP, CMHandsBrown ]
+    randomWeapon:
+    - [ RuMcSniperRifleSVAROG, RuMCUniformBlackBEARFull, RuMCUPPNavalInfantryBeltPistolFull, RuMCPouchMagazineSVAROGBEARFull, ]
+    - [ RuMcSniperRifleSVAROG, RuMCUniformGrayBEARFull, RuMCUPPNavalInfantryBeltPistolFull, RuMCPouchMagazineSVAROGBEARFull, ]
+    - [ RuMcSniperRifleSVAROG, RuMCUniformBEARFull, RuMCUPPNavalInfantryBeltPistolFull, RuMCPouchMagazineSVAROGBEARFull, ]
+    tryEquipRandomWeapon: true
+
+- type: entity
+  parent: RuMCUPPNavalInfantryBeltPistol
+  id: RuMCUPPNavalInfantryBeltPistolFull
+  suffix: RuMC, FULL, BEAR
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponPistolNP92Empty
+    - id: RMCMagazinePistolNP92
+    - id: RMCMagazinePistolNP92
+    - id: RMCMagazinePistolNP92
+    - id: RMCMagazinePistolNP92
+    - id: RMCMagazinePistolNP92
+    - id: RMCMagazinePistolNP92
+
+- type: entity
+  parent: RuMCUPPPouchMagazineLarge
+  id: RuMCPouchMagazineSVAROGBEARFull
+  suffix: RuMC, FULL, BEAR
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMcMagazineSniperRifleSVAROG
+      amount: 3
+    - id: RuMcMagazineSniperRifleSVAROGFlak
+      amount: 1

@@ -107,7 +107,7 @@ public sealed class CMUStorageTests : GameTest
     }
 
     [Test]
-    public async Task MedicalPouchMatchesInfantryIfakStorageSpace()
+    public async Task MedicalPouchAndInfantryIfakKeepTheirStorageCapacities()
     {
         var server = Pair.Server;
 
@@ -121,7 +121,12 @@ public sealed class CMUStorageTests : GameTest
             Assert.That(ifak!.TryComp<StorageComponent>(out var ifakStorage, factory), Is.True);
             Assert.That(medical!.TryComp<StorageComponent>(out var medicalStorage, factory), Is.True);
 
-            Assert.That(medicalStorage!.Grid.GetArea(), Is.EqualTo(ifakStorage!.Grid.GetArea()));
+            Assert.Multiple(() =>
+            {
+                Assert.That(medicalStorage!.Grid.GetArea(), Is.EqualTo(28));
+                Assert.That(ifakStorage!.Grid.GetArea(), Is.EqualTo(32),
+                    "The infantry IFAK includes an additional slot for its CPR mask.");
+            });
         });
     }
 }

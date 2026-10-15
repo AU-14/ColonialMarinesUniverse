@@ -75,6 +75,37 @@ public sealed class FighterGroundTest : GameTest
         if (!SEntMan.Deleted(_officer)) SEntMan.DeleteEntity(_officer);
     }
 
+    [Test]
+    public async Task DeletedCrewCamerasAreClearedBeforeReplicationAndRecreatedForTheSeatedOperator()
+    {
+        await CreateWorld();
+        await Server.WaitAssertion(() =>
+        {
+            var seat = SEntMan.GetComponent<FighterSeatComponent>(_aircraft.Comp.FrontSeat!.Value);
+            var other = SEntMan.GetComponent<FighterSeatComponent>(_aircraft.Comp.RearSeat!.Value);
+            var otherCamera = other.Camera;
+            var camera = seat.Camera!.Value;
+            var exterior = seat.ExteriorCamera!.Value;
+            SEntMan.DeleteEntity(camera);
+            SEntMan.DeleteEntity(exterior);
+            Assert.Multiple(() =>
+            {
+                Assert.That(seat.Camera, Is.Null);
+                Assert.That(seat.ExteriorCamera, Is.Null);
+                Assert.That(other.Camera, Is.EqualTo(otherCamera), "The other operator owns independent cameras.");
+            });
+            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, seat, null, GameTick.Zero));
+            System.Update(0);
+            Assert.That(SEntMan.EntityExists(seat.Camera), Is.True);
+            Assert.That(SEntMan.EntityExists(seat.ExteriorCamera), Is.True);
+            Assert.That(seat.Camera, Is.Not.EqualTo(camera));
+            Assert.That(seat.ExteriorCamera, Is.Not.EqualTo(exterior));
+            Assert.That(seat.Occupant, Is.EqualTo(_pilot));
+            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, seat, null, GameTick.Zero));
+            CleanWorld();
+        });
+    }
+
     [TestCase(MobState.Critical)]
     [TestCase(MobState.Dead)]
     public async Task IncapacitatedPilotCannotTakeOffOrControlCountermeasures(MobState state)

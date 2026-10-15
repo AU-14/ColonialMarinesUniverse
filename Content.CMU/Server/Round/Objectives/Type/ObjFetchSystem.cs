@@ -1,11 +1,17 @@
+using Content.Shared._RMC14.Intel.Detector;
 using Content.Shared.CMU14.Round.Objectives.Components;
 using Content.Shared.CMU14.Round.Objectives.Type;
-using Content.Shared.DragDrop;
-using Content.Shared.Interaction.Events;
-using Content.Shared.Movement.Pulling.Events;
 using Robust.Shared.Map;
 
 namespace Content.Server.CMU14.Round.Objectives.Type;
+
+public enum FetchAnalyzeResult : byte
+{
+    NotObjective,
+    WrongFaction,
+    AlreadyFetched,
+    Fetched,
+}
 
 public sealed partial class ObjFetchSystem : ObjectiveSystem
 {
@@ -19,11 +25,13 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
         SubscribeLocalEvent<FetchObjectiveComponent, ObjectiveActivatedEvent>(OnActivated);
         SubscribeLocalEvent<FetchObjectiveComponent, ObjectiveResetEvent>(OnReset);
         SubscribeLocalEvent<ObjectiveWatchedEntityStartupEvent>(OnEntityMetaStartup);
-        SubscribeLocalEvent<FetchItemComponent, DroppedEvent>(OnDropped);
-        SubscribeLocalEvent<FetchItemComponent, PullStoppedMessage>(OnUndragged);
-        SubscribeLocalEvent<FetchReturnPointComponent, DragDropTargetEvent>(OnReturnPointDragDrop);
         SubscribeLocalEvent<FetchItemComponent, EntityTerminatingEvent>(OnFetchItemDestroyed);
+        SubscribeLocalEvent<FetchItemComponent, ComponentStartup>(OnFetchItemStartup);
     }
+
+    /// <summary>Objective items show up on intel detectors, the same as RMC intel.</summary>
+    private void OnFetchItemStartup(EntityUid uid, FetchItemComponent comp, ref ComponentStartup args)
+        => EnsureComp<IntelDetectorTrackedComponent>(uid);
 
     private void OnActivated(EntityUid uid, FetchObjectiveComponent fetchComp, ref ObjectiveActivatedEvent args)
     {
@@ -243,9 +251,11 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
             if (!TryComp(objUid, out CMUObjectiveComponent? auComp) || !auComp.Active)
                 continue;
 
-            if (TryComp(objUid, out FetchObjectiveComponent? fetchComp)
-                    && !string.IsNullOrEmpty(fetchComp.TargetPrototype)
-                    && !string.Equals(fetchComp.TargetPrototype, proto, StringComparison.OrdinalIgnoreCase))
+            // the interest list is shared with kill/arrest/destroy/interact objectives and wildcard ones match
+            // every entity, so only claim for a fetch objective that wants this exact proto. otherwise bodies,
+            // cades and vendors become fetch items and ping on intel detectors
+            if (!TryComp(objUid, out FetchObjectiveComponent? fetchComp)
+                    || !string.Equals(fetchComp.TargetPrototype, proto, StringComparison.OrdinalIgnoreCase))
                 continue;
 
             if (HasComp<FetchItemComponent>(uid))
@@ -259,112 +269,143 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
             ObjCtrl.LateSpawnFetchObjectiveForItem(uid, objectiveProto);
     }
 
-    private void OnDropped(EntityUid uid, FetchItemComponent item, ref DroppedEvent _) => TryCompleteFetch(uid, item);
-    private void OnUndragged(EntityUid uid, FetchItemComponent item, ref PullStoppedMessage _) => TryCompleteFetch(uid, item);
-
-    private void OnReturnPointDragDrop(EntityUid uid, FetchReturnPointComponent comp, ref DragDropTargetEvent args)
+    /// <summary>
+    /// Hands an objective item in at an Analyzer Machine. Credits the Analyzer's faction, or the objective's own
+    /// faction for an Analyzer with none set.
+    /// </summary>
+    public FetchAnalyzeResult TryFetchAtAnalyzer(EntityUid analyzerUid, EntityUid itemUid)
     {
-        if (TryComp(args.Dragged, out FetchItemComponent? item))
-            TryCompleteFetch(args.Dragged, item);
+        var proto = MetaData(itemUid).EntityPrototype?.ID;
+        if (string.IsNullOrEmpty(proto))
+            return FetchAnalyzeResult.NotObjective;
+
+        if (TryComp(itemUid, out FetchItemComponent? existing) && existing.Fetched)
+            return FetchAnalyzeResult.AlreadyFetched;
+
+        var analyzerFaction = TryComp(analyzerUid, out FetchAnalyzerComponent? a) ? a.Faction.ToLowerInvariant() : string.Empty;
+        if (!TryPickFetchObjective(proto, existing, analyzerFaction, out var objUid, out var creditFaction, out var wrongFaction))
+            return wrongFaction ? FetchAnalyzeResult.WrongFaction : FetchAnalyzeResult.NotObjective;
+
+        CreditFetch(itemUid, objUid, creditFaction);
+        return FetchAnalyzeResult.Fetched;
     }
 
-    private void TryCompleteFetch(EntityUid itemUid, FetchItemComponent item)
-    {
-        if (item.Fetched
-                || !TryComp(item.ObjectiveUid, out FetchObjectiveComponent? fetchComp)
-                || !TryComp(item.ObjectiveUid, out CMUObjectiveComponent? auComp))
-            return;
-
-        var xform = Transform(itemUid);
-        var coords = xform.Coordinates;
-        var gridId = _xformSys.GetGrid(coords);
-        var pos = _xformSys.GetWorldPosition(xform);
-
-        FetchReturnPointComponent? matched = null;
-        foreach (var ent in _lookup.GetEntitiesInRange(coords, 10f))
-        {
-            if (!TryComp(ent, out FetchReturnPointComponent? rp))
-                continue;
-
-            var rpXform = Transform(ent);
-            if (_xformSys.GetGrid(rpXform.Coordinates) != gridId)
-                continue;
-
-            var rpPos = _xformSys.GetWorldPosition(rpXform);
-            if ((int)pos.X != (int)rpPos.X || (int)pos.Y != (int)rpPos.Y)
-                continue;
-
-            var returnId = fetchComp.CustomReturnPointId;
-            if (!string.IsNullOrEmpty(returnId))
-            {
-                if (rp.FetchId == returnId || (string.IsNullOrEmpty(rp.FetchId) && rp.Generic))
-                { matched = rp; break; }
-            }
-            else if (rp.Generic)
-            { matched = rp; break; }
-        }
-
-        if (matched is not { } rpComp || string.IsNullOrEmpty(rpComp.ReturnPointFaction))
-            return;
-
-        var faction = rpComp.ReturnPointFaction.ToLowerInvariant();
-        if (!auComp.FactionNeutral && faction != auComp.Faction.ToLowerInvariant())
-            return;
-
-        fetchComp.AmountFetchedPerFaction.TryAdd(faction, 0);
-        fetchComp.AmountFetchedPerFaction[faction]++;
-        item.Fetched = true;
-
-        if (ShouldCompleteForFaction(auComp, faction, fetchComp.AmountFetchedPerFaction[faction], fetchComp.FetchCount))
-        {
-            ObjInt.UnregisterInterest(item.ObjectiveUid);
-            ObjCtrl.CompleteObjectiveForFaction(item.ObjectiveUid, auComp, faction, sawmill: _logs);
-        }
-    }
-
-    public int ScanForFetchItems(EntityUid analyzerUid)
+    public int ScanForFetchItems(EntityUid analyzerUid, List<EntityUid>? fetched = null)
     {
         if (!TryComp(analyzerUid, out TransformComponent? analyzerXform))
             return 0;
 
         var analyzerFaction = TryComp(analyzerUid, out FetchAnalyzerComponent? a) ? a.Faction.ToLowerInvariant() : string.Empty;
-        int totalFetched = 0;
+        var totalFetched = 0;
+
+        // item-first so each item goes to its own objective. the old objective-first loop let whichever
+        // objective came first eat every matching item in range, so two "fetch the WY laptop" objectives
+        // only ever paid out once
+        foreach (var ent in _lookup.GetEntitiesInRange(analyzerXform.Coordinates, 5f))
+        {
+            if (ent == analyzerUid || HasComp<FetchObjectiveComponent>(ent))
+                continue;
+
+            var proto = MetaData(ent).EntityPrototype?.ID;
+            if (string.IsNullOrEmpty(proto))
+                continue;
+
+            TryComp(ent, out FetchItemComponent? existing);
+            if (existing is { Fetched: true })
+                continue;
+
+            if (!TryPickFetchObjective(proto, existing, analyzerFaction, out var objUid, out var creditFaction, out _))
+                continue;
+
+            CreditFetch(ent, objUid, creditFaction);
+            totalFetched++;
+            fetched?.Add(ent);
+        }
+
+        return totalFetched;
+    }
+
+    // picks which active objective an item counts for. a claimed item only counts for its owner, an unclaimed
+    // one goes to an objective that still needs it before falling back to one that's already done
+    private bool TryPickFetchObjective(
+        string proto,
+        FetchItemComponent? existing,
+        string analyzerFaction,
+        out EntityUid objective,
+        out string creditFaction,
+        out bool wrongFaction)
+    {
+        objective = default;
+        creditFaction = string.Empty;
+        wrongFaction = false;
+
+        // an owner that's gone shouldn't strand the item
+        var owner = existing != null && existing.ObjectiveUid.IsValid() && HasComp<FetchObjectiveComponent>(existing.ObjectiveUid)
+            ? existing.ObjectiveUid
+            : EntityUid.Invalid;
+
+        EntityUid fallback = default;
+        var fallbackFaction = string.Empty;
 
         var query = EntityQueryEnumerator<FetchObjectiveComponent, CMUObjectiveComponent>();
         while (query.MoveNext(out var objUid, out var fetchComp, out var auComp))
         {
-            if (!auComp.Active || string.IsNullOrEmpty(fetchComp.TargetPrototype))
+            if (!auComp.Active || !string.Equals(fetchComp.TargetPrototype, proto, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            if (owner.IsValid() && owner != objUid)
                 continue;
 
             if (!string.IsNullOrEmpty(analyzerFaction) && !auComp.FactionNeutral && auComp.Faction.ToLowerInvariant() != analyzerFaction)
-                continue;
-
-            var creditFaction = string.IsNullOrEmpty(analyzerFaction) ? auComp.Faction.ToLowerInvariant() : analyzerFaction;
-            if (string.IsNullOrEmpty(creditFaction))
-                continue;
-
-            foreach (var ent in _lookup.GetEntitiesInRange(analyzerXform.Coordinates, 5f))
             {
-                if (ent == analyzerUid || ent == objUid) continue;
-                if (!TryComp(ent, out MetaDataComponent? meta) || meta.EntityPrototype?.ID != fetchComp.TargetPrototype) continue;
-
-                var item = EnsureComp<FetchItemComponent>(ent);
-                if (item.Fetched) continue;
-
-                item.ObjectiveUid = objUid;
-                fetchComp.AmountFetchedPerFaction.TryAdd(creditFaction, 0);
-                fetchComp.AmountFetchedPerFaction[creditFaction]++;
-                item.Fetched = true;
-                totalFetched++;
+                wrongFaction = true;
+                continue;
             }
 
-            if (ShouldCompleteForFaction(auComp, creditFaction, fetchComp.AmountFetchedPerFaction.GetValueOrDefault(creditFaction), fetchComp.FetchCount))
+            var credit = string.IsNullOrEmpty(analyzerFaction) ? auComp.Faction.ToLowerInvariant() : analyzerFaction;
+            if (string.IsNullOrEmpty(credit))
+                continue;
+
+            var stillNeeded = !auComp.StatusesPerFaction.ContainsValue(CMUObjectiveComponent.ObjectiveStatus.Completed)
+                && fetchComp.AmountFetchedPerFaction.GetValueOrDefault(credit) < fetchComp.FetchCount;
+            if (stillNeeded)
             {
-                ObjInt.UnregisterInterest(objUid);
-                ObjCtrl.CompleteObjectiveForFaction(objUid, auComp, creditFaction, sawmill: _logs);
+                objective = objUid;
+                creditFaction = credit;
+                return true;
+            }
+
+            if (!fallback.IsValid())
+            {
+                fallback = objUid;
+                fallbackFaction = credit;
             }
         }
-        return totalFetched;
+
+        if (!fallback.IsValid())
+            return false;
+
+        objective = fallback;
+        creditFaction = fallbackFaction;
+        return true;
+    }
+
+    private void CreditFetch(EntityUid itemUid, EntityUid objUid, string creditFaction)
+    {
+        var fetchComp = Comp<FetchObjectiveComponent>(objUid);
+        var auComp = Comp<CMUObjectiveComponent>(objUid);
+
+        var item = EnsureComp<FetchItemComponent>(itemUid);
+        item.ObjectiveUid = objUid;
+        item.Fetched = true;
+        fetchComp.AmountFetchedPerFaction.TryAdd(creditFaction, 0);
+        fetchComp.AmountFetchedPerFaction[creditFaction]++;
+
+        if (ShouldCompleteForFaction(auComp, creditFaction, fetchComp.AmountFetchedPerFaction[creditFaction], fetchComp.FetchCount))
+        {
+            ObjInt.UnregisterInterest(objUid);
+            ObjCtrl.CompleteObjectiveForFaction(objUid, auComp, creditFaction, sawmill: _logs);
+        }
     }
 
     private void OnFetchItemDestroyed(EntityUid uid, FetchItemComponent comp, ref EntityTerminatingEvent args)

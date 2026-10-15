@@ -41,6 +41,8 @@
   id: AU14GearCivilianJournalist
   equipment:
     outerClothing: AU14CivilianJacketTanPufferVest
+  inhand:
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

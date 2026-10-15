@@ -26,4 +26,16 @@ public sealed class DropshipImpactEffectRotationTest
 
         Assert.That(rotation, Is.EqualTo(Angle.FromDegrees(45)));
     }
+
+    [TestCase(1, 3, true)]
+    [TestCase(0, 3, false)]
+    [TestCase(3, 4, true)]
+    [TestCase(2, 4, false)]
+    [TestCase(1, 2, true)]
+    public void CeilingLevelPenetrationChecksUseCorrectThresholds(int zLevelPenetration, short ceilingLevel, bool expected)
+    {
+        Assert.That(
+            SharedDropshipWeaponSystem.CanHitCeilingLevel(zLevelPenetration, ceilingLevel),
+            Is.EqualTo(expected));
+    }
 }

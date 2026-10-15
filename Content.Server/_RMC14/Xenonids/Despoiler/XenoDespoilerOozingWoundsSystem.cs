@@ -75,6 +75,7 @@ public sealed partial class XenoDespoilerOozingWoundsSystem : EntitySystem
         var now = _timing.CurTime;
 
         var pending = EnsureComp<XenoDespoilerOozingWoundsPendingComponent>(uid);
+        var hitTargets = new HashSet<EntityUid>(); // CMU14: delayed rings share one hit budget per victim.
 
         for (var dx = -radius; dx <= radius; dx++)
         {
@@ -99,6 +100,7 @@ public sealed partial class XenoDespoilerOozingWoundsSystem : EntitySystem
 
                 pending.Pending.Add(new XenoDespoilerOozingWoundsPendingTile
                 {
+                    HitTargets = hitTargets, // CMU14
                     SpawnAt = now + spawnDelay,
                     Tile = tile,
                     SprayProto = sprayProto,
@@ -137,6 +139,7 @@ public sealed partial class XenoDespoilerOozingWoundsSystem : EntitySystem
                 if (_sprayQuery.TryComp(spray, out var sprayComp))
                 {
                     sprayComp.Caster = caster;
+                    sprayComp.HitTargets = entry.HitTargets; // CMU14
                     Dirty(spray, sprayComp);
                 }
 

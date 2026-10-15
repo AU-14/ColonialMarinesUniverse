@@ -1,6 +1,6 @@
 <Control xmlns="https://spacestation14.io"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         xmlns:ui="clr-namespace:Content.Client._CMU14.Interface"
+         xmlns:ui="clr-namespace:Content.Client.CMU14.Interface"
          MinWidth="620" MaxWidth="1280" RectClipContent="True">
     <PanelContainer Name="VotePanel" StyleClasses="CrtPanel" />
 

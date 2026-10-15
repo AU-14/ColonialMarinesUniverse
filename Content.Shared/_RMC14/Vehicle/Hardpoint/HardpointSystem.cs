@@ -89,7 +89,9 @@ public sealed partial class HardpointSystem : EntitySystem
         SubscribeLocalEvent<HardpointIntegrityComponent, ExaminedEvent>(OnHardpointExamined);
         SubscribeLocalEvent<HardpointIntegrityComponent, GetVerbsEvent<ExamineVerb>>(OnDamageExamineVerb);
         SubscribeLocalEvent<HardpointIntegrityComponent, HardpointRepairDoAfterEvent>(OnHardpointRepairDoAfter);
+        SubscribeLocalEvent<HardpointIntegrityComponent, DoAfterAttemptEvent<HardpointRepairDoAfterEvent>>(OnIntegrityRepairAttempt);
         SubscribeLocalEvent<VehicleHardpointFailureComponent, VehicleHardpointFailureRepairDoAfterEvent>(OnFailureRepairDoAfter);
+        SubscribeLocalEvent<VehicleHardpointFailureComponent, DoAfterAttemptEvent<VehicleHardpointFailureRepairDoAfterEvent>>(OnFailureRepairAttempt);
     }
 
     private void OnSlotsInit(Entity<HardpointSlotsComponent> ent, ref ComponentInit args)
@@ -528,6 +530,9 @@ public sealed partial class HardpointSystem : EntitySystem
             return false;
         }
 
+        // CMU14: capture the frame's own capacity before mounted parts replace it.
+        EnsureNativeMaxIntegrity(frameIntegrity);
+
         var totalIntegrity = 0f;
         var totalMaxIntegrity = 0f;
         var visited = new HashSet<EntityUid>();
@@ -554,7 +559,7 @@ public sealed partial class HardpointSystem : EntitySystem
             if (frameIntegrity.NativeMaxIntegrity <= 0f)
                 return false;
 
-            totalMaxIntegrity = frameIntegrity.NativeMaxIntegrity;
+            totalMaxIntegrity = frameIntegrity.NativeMaxIntegrity - frameIntegrity.RepairWear;
             totalIntegrity = Math.Clamp(frameIntegrity.Integrity, 0f, totalMaxIntegrity);
         }
         // CMU14 Frame End
@@ -562,7 +567,8 @@ public sealed partial class HardpointSystem : EntitySystem
         var previous = frameIntegrity.Integrity;
         var previousMax = frameIntegrity.MaxIntegrity;
         frameIntegrity.MaxIntegrity = totalMaxIntegrity;
-        frameIntegrity.Integrity = Math.Clamp(totalIntegrity, 0f, totalMaxIntegrity);
+        // CMU14: fitting or refreshing hardpoints cannot restore a permanently wrecked hull.
+        frameIntegrity.Integrity = IsDestroyedBeyondRepair(vehicle) ? 0 : Math.Clamp(totalIntegrity, 0f, totalMaxIntegrity);
 
         if (Math.Abs(previous - frameIntegrity.Integrity) < 0.01f &&
             Math.Abs(previousMax - frameIntegrity.MaxIntegrity) < 0.01f)
@@ -588,7 +594,8 @@ public sealed partial class HardpointSystem : EntitySystem
         if (!TryComp(vehicle, out HardpointIntegrityComponent? frame) || frame.MaxIntegrity <= 0f)
             return;
 
-        if (!TryRollFailure(vehicle, frame, amount))
+        // CMU14: if (!TryRollFailure(vehicle, frame, amount))
+        if (!TryRollFailure(vehicle, (vehicle, frame), amount))
             return;
 
         var candidates = new List<VehicleHardpointFailure>
@@ -621,7 +628,8 @@ public sealed partial class HardpointSystem : EntitySystem
             return;
         }
 
-        if (!TryRollFailure(vehicle, frame, amount))
+        // CMU14: if (!TryRollFailure(vehicle, frame, amount))
+        if (!TryRollFailure(vehicle, (vehicle, frame), amount))
             return;
 
         AddHardpointFailure(vehicle, vehicle, VehicleHardpointFailure.FuelLeak, failures);
@@ -634,7 +642,11 @@ public sealed partial class HardpointSystem : EntitySystem
         HardpointIntegrityComponent integrity)
     {
         var candidates = GetFailureCandidates(vehicle, hardpoint);
-        if (candidates.Count == 0 || !TryRollFailure(vehicle, integrity, amount))
+        // CMU14: exhausted fault choices must not consume another module's roll interval.
+        if (TryComp(hardpoint, out VehicleHardpointFailureComponent? failures))
+            candidates.RemoveAll(failures.ActiveFailures.Contains);
+        // if (candidates.Count == 0 || !TryRollFailure(vehicle, integrity, amount))
+        if (candidates.Count == 0 || !TryRollFailure(vehicle, (hardpoint, integrity), amount))
             return;
 
         TryAddRandomFailure(vehicle, hardpoint, candidates);
@@ -643,6 +655,9 @@ public sealed partial class HardpointSystem : EntitySystem
     private List<VehicleHardpointFailure> GetFailureCandidates(EntityUid vehicle, EntityUid hardpoint)
     {
         var candidates = new List<VehicleHardpointFailure>();
+
+        if (IsFaultImmuneHardpoint(hardpoint)) // CMU14: passive snowplows cannot develop mechanical faults.
+            return candidates;
 
         if (hardpoint == vehicle)
         {
@@ -733,6 +748,9 @@ public sealed partial class HardpointSystem : EntitySystem
         VehicleHardpointFailure failure,
         VehicleHardpointFailureComponent? failures = null)
     {
+        if (IsFaultImmuneHardpoint(hardpoint)) // CMU14: cover every fault source, not just random rolls.
+            return false;
+
         failures ??= EnsureComp<VehicleHardpointFailureComponent>(hardpoint);
 
         if (failures.ActiveFailures.Contains(failure))
@@ -1322,6 +1340,13 @@ public sealed partial class HardpointSystem : EntitySystem
 
     private void OnVehicleCanRun(Entity<HardpointSlotsComponent> ent, ref VehicleCanRunEvent args)
     {
+        // CMU14: a permanently wrecked vehicle cannot run.
+        if (IsDestroyedBeyondRepair(ent.Owner))
+        {
+            args.CanRun = false;
+            return;
+        }
+
         if (!args.CanRun || HasAllRequired(ent.Owner, ent.Comp))
             return;
 
@@ -1490,9 +1515,16 @@ public sealed partial class HardpointSystem : EntitySystem
         return scaled;
     }
 
+    // CMU14 method: persist the unworn baseline only when gameplay first needs it.
+    // ComponentInit also runs in the map editor, where untouched prototypes must stay unchanged.
+    private static void EnsureNativeMaxIntegrity(HardpointIntegrityComponent integrity)
+    {
+        if (integrity.NativeMaxIntegrity <= 0f)
+            integrity.NativeMaxIntegrity = integrity.MaxIntegrity + integrity.RepairWear;
+    }
+
     private void OnHardpointIntegrityInit(Entity<HardpointIntegrityComponent> ent, ref ComponentInit args)
     {
-        ent.Comp.NativeMaxIntegrity = ent.Comp.MaxIntegrity; // CMU14: cache configured max before derived refreshes replace it
         if (ent.Comp.Integrity <= 0f)
             ent.Comp.Integrity = ent.Comp.MaxIntegrity;
 
@@ -1535,6 +1567,7 @@ public sealed partial class HardpointSystem : EntitySystem
         return true;
     }
 
+    // CMU14 method: damage descriptions retain the unworn loadout's maximum.
     private bool TryGetVehicleEffectiveIntegrity(
         EntityUid vehicle,
         HardpointIntegrityComponent frame,
@@ -1544,7 +1577,13 @@ public sealed partial class HardpointSystem : EntitySystem
         out float max)
     {
         current = frame.Integrity;
-        max = frame.MaxIntegrity;
+        max = GetFactoryMaxIntegrity(vehicle, frame);
+        // CMU14: surviving parts do not count as a repairable hull.
+        if (IsDestroyedBeyondRepair(vehicle))
+        {
+            current = 0;
+            return true;
+        }
         var maxTopLevelCurrent = 0f;
         var maxTopLevelMax = 0f;
         var intactTopLevelHardpoints = 0;
@@ -1567,7 +1606,7 @@ public sealed partial class HardpointSystem : EntitySystem
                 maxTopLevelCurrent = MathF.Max(maxTopLevelCurrent, integrity.Integrity);
             }
 
-            maxTopLevelMax = MathF.Max(maxTopLevelMax, integrity.MaxIntegrity);
+            maxTopLevelMax = MathF.Max(maxTopLevelMax, GetFactoryMaxIntegrity(integrity));
         }
 
         if (maxTopLevelMax <= 0f)
@@ -1575,7 +1614,7 @@ public sealed partial class HardpointSystem : EntitySystem
 
         var hullFraction = intactTopLevelHardpoints > 0 ? slots.FrameDamageFractionWhileIntact : 1f;
         current = GetVehicleEffectiveIntegrity(frame.Integrity, maxTopLevelCurrent, hullFraction);
-        max = GetVehicleEffectiveIntegrity(frame.MaxIntegrity, maxTopLevelMax, slots.FrameDamageFractionWhileIntact);
+        max = GetVehicleEffectiveIntegrity(max, maxTopLevelMax, slots.FrameDamageFractionWhileIntact);
         return true;
     }
 
@@ -1724,6 +1763,14 @@ public sealed partial class HardpointSystem : EntitySystem
             if (step.RequiresWelder && !HasComp<BlowtorchComponent>(args.Used))
                 continue;
 
+            // CMU14: irreversible ammunition destruction.
+            if (!CanRepairCookOff(ent.Owner, args.User)
+                || !CanRepairInMaintenance(ent.Owner, args.User))
+            {
+                args.Handled = true;
+                return true;
+            }
+
             if (step.RequiresWelder &&
                 !_repairable.UseFuel(args.Used, args.User, GetFuelCostForSeconds(step.Time, ent.Comp.FuelPerSecond), true))
             {
@@ -1742,6 +1789,7 @@ public sealed partial class HardpointSystem : EntitySystem
                 GetRepairInteractionTarget(ent.Owner),
                 args.Used)
             {
+                AttemptFrequency = AttemptFrequency.EveryTick,
                 BreakOnMove = true,
                 BreakOnDamage = true,
                 NeedHand = true,
@@ -1800,7 +1848,14 @@ public sealed partial class HardpointSystem : EntitySystem
         if (args.Cancelled || args.Handled)
             return;
 
+        // CMU14: recheck repairs that started before ignition, before consuming fuel.
+        if (!CanRepairCookOff(ent.Owner, args.User))
+            return;
+
         args.Handled = true;
+
+        if (!CanRepairInMaintenance(ent.Owner, args.User))
+            return;
 
         var used = args.Used;
         var stepIndex = GetFailureRepairProgress(ent.Comp, args.Failure);
@@ -1837,7 +1892,7 @@ public sealed partial class HardpointSystem : EntitySystem
 
             if (TryGetFailureRepairStep(args.Failure, nextStep, out var next))
             {
-                _popup.PopupClient(
+                _popup.PopupEntity(
                     $"{GetFailureName(args.Failure)} repair step complete. Next: {GetFailureRepairToolName(next)}.",
                     ent.Owner,
                     args.User);
@@ -1849,7 +1904,7 @@ public sealed partial class HardpointSystem : EntitySystem
         if (!RemoveHardpointFailure(vehicle, ent.Owner, args.Failure, ent.Comp))
             return;
 
-        _popup.PopupClient($"{GetFailureName(args.Failure)} repaired.", ent.Owner, args.User);
+        _popup.PopupEntity($"{GetFailureName(args.Failure)} repaired.", ent.Owner, args.User);
     }
 
     // CMU14 method: vehicle damage and usability.
@@ -1970,19 +2025,27 @@ public sealed partial class HardpointSystem : EntitySystem
         if (!usedWelder && !usedWrench)
             return false;
 
+        // CMU14: irreversible ammunition destruction.
+        if (!CanRepairCookOff(ent.Owner, args.User)
+            || !CanRepairInMaintenance(ent.Owner, args.User))
+        {
+            args.Handled = true;
+            return true;
+        }
+
         if (isFrame)
             RefreshVehicleFrameIntegrityFromHardpoints(ent.Owner);
 
         if (ent.Comp.Integrity >= ent.Comp.MaxIntegrity)
         {
-            _popup.PopupClient(Loc.GetString("rmc-hardpoint-intact"), ent.Owner, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-hardpoint-intact"), ent.Owner, args.User, PopupType.SmallCaution);
             args.Handled = true;
             return true;
         }
 
         if (isFrame && HasDamagedMountedHardpoints(ent.Owner))
         {
-            _popup.PopupClient("Repair the vehicle's hardpoints to restore hull integrity.", ent.Owner, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity("Repair the vehicle's hardpoints to restore hull integrity.", ent.Owner, args.User, PopupType.SmallCaution);
             args.Handled = true;
             return true;
         }
@@ -1997,14 +2060,14 @@ public sealed partial class HardpointSystem : EntitySystem
 
         if (usedWelder && isFrame && ent.Comp.Integrity >= weldCap - ent.Comp.FrameRepairEpsilon)
         {
-            _popup.PopupClient("Finish tightening the frame with a wrench.", ent.Owner, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity("Finish tightening the frame with a wrench.", ent.Owner, args.User, PopupType.SmallCaution);
             args.Handled = true;
             return true;
         }
 
         if (usedWrench && ent.Comp.Integrity < weldCap - ent.Comp.FrameRepairEpsilon)
         {
-            _popup.PopupClient("Weld the frame before tightening it.", ent.Owner, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity("Weld the frame before tightening it.", ent.Owner, args.User, PopupType.SmallCaution);
             args.Handled = true;
             return true;
         }
@@ -2027,8 +2090,11 @@ public sealed partial class HardpointSystem : EntitySystem
 
         ent.Comp.Repairing = true;
 
-        var doAfter = new DoAfterArgs(EntityManager, args.User, repairTime, new HardpointRepairDoAfterEvent(), ent.Owner, GetRepairInteractionTarget(ent.Owner), used)
+        var doAfter = new DoAfterArgs(EntityManager, args.User, repairTime,
+            new HardpointRepairDoAfterEvent { RepairAmount = repairAmount }, ent.Owner,
+            GetRepairInteractionTarget(ent.Owner), used)
         {
+            AttemptFrequency = AttemptFrequency.EveryTick,
             BreakOnMove = true,
             BreakOnDamage = true,
             NeedHand = true,
@@ -2055,7 +2121,14 @@ public sealed partial class HardpointSystem : EntitySystem
         if (args.Cancelled || args.Handled)
             return;
 
+        // CMU14: recheck repairs that started before ignition, before consuming fuel.
+        if (!CanRepairCookOff(ent.Owner, args.User))
+            return;
+
         args.Handled = true;
+
+        if (!CanRepairInMaintenance(ent.Owner, args.User))
+            return;
 
         var used = args.Used;
         var isFrame = IsVehicleFrame(ent.Owner);
@@ -2065,23 +2138,32 @@ public sealed partial class HardpointSystem : EntitySystem
         if (!usedWelder && !usedWrench)
             return;
 
+        // Damage taken during this cycle cannot turn a short finishing weld into a full repair chunk.
+        var repairAmount = MathF.Min(args.RepairAmount,
+            GetRepairAmountForCurrentStep(ent.Owner, ent.Comp, usedWelder, usedWrench, isFrame));
+        if (repairAmount <= 0f)
+            return;
+
         if (usedWelder)
         {
             var fuelCost = GetFuelCostForChunk(
                 ent.Owner,
                 ent.Comp,
-                GetRepairAmountForCurrentStep(ent.Owner, ent.Comp, usedWelder, usedWrench, isFrame),
+                repairAmount,
                 isFrame);
 
             if (used == null || !_repairable.UseFuel(used.Value, args.User, fuelCost))
                 return;
         }
 
-        var repairAmount = GetRepairAmountForCurrentStep(ent.Owner, ent.Comp, usedWelder, usedWrench, isFrame);
-        if (repairAmount <= 0f)
-            return;
-
+        EnsureNativeMaxIntegrity(ent.Comp); // CMU14: retain the original repair floor across successive repairs.
         var previousIntegrity = ent.Comp.Integrity;
+        var capacityFloor = MathF.Max(previousIntegrity,
+            ent.Comp.NativeMaxIntegrity * Math.Clamp(ent.Comp.MinimumRepairCapacityFraction, 0f, 1f));
+        var wear = MathF.Min(MathF.Max(0f, ent.Comp.MaxIntegrity - capacityFloor),
+            repairAmount * Math.Clamp(ent.Comp.RepairWearFraction, 0f, 1f));
+        ent.Comp.RepairWear += wear;
+        ent.Comp.MaxIntegrity -= wear;
         ent.Comp.Integrity = MathF.Min(ent.Comp.MaxIntegrity, ent.Comp.Integrity + repairAmount);
 
         Dirty(ent.Owner, ent.Comp);
@@ -2102,7 +2184,7 @@ public sealed partial class HardpointSystem : EntitySystem
         if (ent.Comp.RepairSound != null)
             _audio.PlayPredicted(ent.Comp.RepairSound, ent.Owner, args.User);
 
-        _popup.PopupClient(Loc.GetString("rmc-hardpoint-repaired"), ent.Owner, args.User);
+        _popup.PopupEntity(Loc.GetString("rmc-hardpoint-repaired"), ent.Owner, args.User);
 
         var vehicle = _topology.TryGetVehicle(ent.Owner, out var containingVehicle)
             ? containingVehicle
@@ -2131,7 +2213,36 @@ public sealed partial class HardpointSystem : EntitySystem
         RaiseHardpointSlotsChanged(vehicle);
 
         if (ShouldRepeatRepair(ent.Owner, ent.Comp, usedWelder, usedWrench, isFrame))
+        {
+            args.RepairAmount = GetRepairAmountForCurrentStep(ent.Owner, ent.Comp, usedWelder, usedWrench, isFrame);
+            args.Args.Delay = TimeSpan.FromSeconds(GetRepairTimeForCurrentStep(ent.Owner, args.User, ent.Comp, args.RepairAmount, isFrame));
+            ent.Comp.Repairing = true;
             args.Repeat = true;
+        }
+    }
+
+    private void OnIntegrityRepairAttempt(Entity<HardpointIntegrityComponent> ent, ref DoAfterAttemptEvent<HardpointRepairDoAfterEvent> args)
+    {
+        if (!CanRepairInMaintenance(ent, args.Event.User, popup: false))
+            args.Cancel();
+    }
+
+    private void OnFailureRepairAttempt(Entity<VehicleHardpointFailureComponent> ent, ref DoAfterAttemptEvent<VehicleHardpointFailureRepairDoAfterEvent> args)
+    {
+        if (!CanRepairInMaintenance(ent, args.Event.User, popup: false))
+            args.Cancel();
+    }
+
+    private bool CanRepairInMaintenance(EntityUid target, EntityUid user, bool popup = true)
+    {
+        var vehicle = _topology.TryGetVehicle(target, out var owner) ? owner : target;
+        if (!TryComp<VehicleMaintenanceComponent>(vehicle, out var maintenance) ||
+            maintenance.Mode == VehicleMaintenanceMode.Maintenance)
+            return true;
+
+        if (popup)
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-maintenance-repair-required"), vehicle, user);
+        return false;
     }
 
     private float GetRepairAmountForCurrentStep(
@@ -2322,7 +2433,9 @@ public sealed partial class HardpointSystem : EntitySystem
         if (TryComp(uid, out HardpointIntegrityComponent? frame))
         {
             frameIntegrity = frame.Integrity;
-            frameMaxIntegrity = frame.MaxIntegrity;
+            // CMU14: show factory capacity instead of a shrinking repair ceiling.
+            // frameMaxIntegrity = frame.MaxIntegrity;
+            frameMaxIntegrity = GetFactoryMaxIntegrity(uid, frame);
             hasFrameIntegrity = true;
         }
 
@@ -2346,7 +2459,8 @@ public sealed partial class HardpointSystem : EntitySystem
                 if (TryComp(item, out HardpointIntegrityComponent? hardpointIntegrity))
                 {
                     integrity = hardpointIntegrity.Integrity;
-                    maxIntegrity = hardpointIntegrity.MaxIntegrity;
+                    // CMU14: maxIntegrity = hardpointIntegrity.MaxIntegrity;
+                    maxIntegrity = GetFactoryMaxIntegrity(hardpointIntegrity);
                     hasIntegrity = true;
                 }
             }
@@ -2426,7 +2540,8 @@ public sealed partial class HardpointSystem : EntitySystem
                 if (TryComp(installedItem, out HardpointIntegrityComponent? hardpointIntegrity))
                 {
                     integrity = hardpointIntegrity.Integrity;
-                    maxIntegrity = hardpointIntegrity.MaxIntegrity;
+                    // CMU14: maxIntegrity = hardpointIntegrity.MaxIntegrity;
+                    maxIntegrity = GetFactoryMaxIntegrity(hardpointIntegrity);
                     hasIntegrity = true;
                 }
             }
@@ -2509,6 +2624,10 @@ public sealed partial class HardpointSystem : EntitySystem
     // Used to Rejuv (Content.Server/Blackfoot/VehicleRejuvenateSystem)
     public void ResetAllHardpointsToFullHealth(EntityUid vehicle)
     {
+        // CMU14: resets don't bring a wreck back either
+        if (IsWrecked(vehicle))
+            return;
+
         if (!TryComp<HardpointSlotsComponent>(vehicle, out var hardpoints)
                 || !TryComp<ItemSlotsComponent>(vehicle, out var itemSlots))
             return;

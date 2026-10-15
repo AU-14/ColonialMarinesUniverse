@@ -85,14 +85,12 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
             if (targetCon.Count == 0 && reportComp.Data is not null)
             {
                 _con.Insert(args.Used, targetCon);
-                ent.Comp.Ready = CheckReady(ent);
             }
             else if ((ent.Comp.Mode == ChemSimulatorMode.Relate || ent.Comp.Mode == ChemSimulatorMode.Add) &&
                 referenceCon.Count == 0 && reportComp.Data is not null)
             {
                 ent.Comp.TargetProperty = null;
                 _con.Insert(args.Used, referenceCon);
-                ent.Comp.Ready = CheckReady(ent);
             }
             else
             {
@@ -110,6 +108,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
             return;
         }
         UpdatePropertyCosts(ent);
+        ent.Comp.Ready = CheckReady(ent);
         ent.Comp.InsertTimeRemaining = ent.Comp.InsertTime;
         if (_net.IsClient)
             return;
@@ -344,7 +343,10 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
         }
         if (ent.Comp.Stage == ChemSimulatorStage.Off)
         {
-            ent.Comp.StatusBar = Loc.GetString("research-sim-status-ready");
+            // warn before they pay, a conflicting insert silently eats properties otherwise
+            ent.Comp.StatusBar = TryGetConflictWarning(ent, out var conflictWarning)
+                ? conflictWarning
+                : Loc.GetString("research-sim-status-ready");
         }
         Dirty(ent);
         return true;

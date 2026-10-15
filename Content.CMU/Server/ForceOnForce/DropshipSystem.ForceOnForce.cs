@@ -1,4 +1,5 @@
 using Content.Server.GameTicking;
+using Content.Server.CMU14.ForceOnForce;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines;
 using Content.Shared.Mobs;
@@ -7,11 +8,65 @@ using Content.Shared.CMU14;
 using Content.Shared.CMU14.ForceOnForce;
 using Content.Shared.CMU14.Round;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Rules;
+using Content.Shared._RMC14.WeedKiller;
+using Content.Shared.Shuttles.Components;
+using Content.Shared.Shuttles.Systems;
 
 namespace Content.Server._RMC14.Dropship;
 
 public sealed partial class DropshipSystem
 {
+    private static readonly TimeSpan ForceOnForceLaunchDelay = TimeSpan.FromMinutes(3);
+
+    private bool TryGetForceOnForceLaunchWindow(EntityUid computer, EntityUid destination, bool hijack,
+        out string enemy, out TimeSpan departure, out bool newWindow)
+    {
+        enemy = string.Empty;
+        departure = default;
+        newWindow = true;
+        if (hijack || _gameTicker.CurrentPreset?.ID.Equals("ForceOnForce", StringComparison.OrdinalIgnoreCase) != true ||
+            !TryComp<WhitelistedShuttleComponent>(computer, out var whitelist) ||
+            ForceOnForceSystem.Opponent(whitelist.Faction) is not { } opponent ||
+            !TryComp<DropshipDestinationComponent>(destination, out _) ||
+            (!HasComp<RMCPlanetComponent>(Transform(destination).MapUid) &&
+             !HasComp<RMCPlanetComponent>(Transform(destination).GridUid)))
+            return false;
+
+        enemy = opponent;
+        departure = _timing.CurTime + ForceOnForceLaunchDelay;
+        var pending = EntityQueryEnumerator<ForceOnForceLaunchComponent, FTLComponent>();
+        while (pending.MoveNext(out var uid, out _, out var flight))
+        {
+            if (TerminatingOrDeleted(uid) || flight.State != FTLState.Starting || flight.StateTime.End <= _timing.CurTime)
+                continue;
+            if (flight.StateTime.End < departure)
+                departure = flight.StateTime.End;
+            newWindow = false;
+        }
+        return true;
+    }
+
+    private void FinishForceOnForceLaunchWindow(EntityUid dropship, TimeSpan departure, string enemy, bool newWindow)
+    {
+        if (!TryComp<FTLComponent>(dropship, out var flight) || flight.State != FTLState.Starting)
+            return;
+
+        EnsureComp<ForceOnForceLaunchComponent>(dropship);
+        // Preserve the exact shared deadline; float startup seconds can round to different ticks.
+        flight.StateTime.End = departure;
+        Dirty(dropship, flight);
+        RefreshUI();
+        if (newWindow)
+            _marineAnnounce.AnnounceARES(dropship, Loc.GetString("cmu-fof-launch-preparing"), faction: enemy);
+    }
+
+    private void OnForceOnForceWeedKillerAttempt(ref WeedKillerDeployAttemptEvent args)
+    {
+        if (_gameTicker.CurrentPreset?.ID.Equals("ForceOnForce", StringComparison.OrdinalIgnoreCase) == true)
+            args.Cancelled = true;
+    }
+
     private void AnnounceForceOnForceBoarders(Entity<DropshipComponent> dropship)
     {
         if (EntityManager.System<GameTicker>().CurrentPreset?.ID.Equals("ForceOnForce", StringComparison.OrdinalIgnoreCase) != true ||

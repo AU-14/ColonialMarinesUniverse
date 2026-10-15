@@ -6,9 +6,13 @@
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Smartpacks/V42/smartpack_black.rsi
   - type: Storage
-    maxItemSize: Large
+    maxItemSize: Normal
     grid:
     - 0,0,15,1
+  - type: IgnoreContentsSize
+    items:
+      components:
+      - RMCStructuralBreacher
   - type: StorageFill
     contents:
     - id: RMCSynthBreachingHammer

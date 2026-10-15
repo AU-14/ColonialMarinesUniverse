@@ -1,7 +1,9 @@
 using Content.IntegrationTests.Fixtures;
 using Content.Shared.DoAfter;
 using Content.Shared.Storage.EntitySystems;
+using Content.Shared.Storage.Components;
 using Content.Shared.Item;
+using Content.Shared.SmartFridge;
 using Robust.Shared.Containers;
 
 namespace Content.IntegrationTests.CMU14.Storage;
@@ -9,8 +11,126 @@ namespace Content.IntegrationTests.CMU14.Storage;
 [TestFixture]
 public sealed class StoragePlacementAllocationTest : GameTest
 {
+    [Test]
+    public async Task DumpingToFilteredTargetCompactsTheItemsItRejects()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var host = SEntMan.SpawnEntity("CMUStoragePlacementPerfHost", map.GridCoords);
+            SEntMan.AddComponent<DumpableComponent>(host);
+            var user = SEntMan.SpawnEntity("MobHuman", map.GridCoords);
+            var target = SEntMan.SpawnEntity("CMUStoragePlacementFilteredTarget", map.GridCoords);
+            var fridge = SEntMan.GetComponent<SmartFridgeComponent>(target);
+            var containers = Server.System<SharedContainerSystem>();
+            var destination = containers.EnsureContainer<Container>(target, fridge.Container);
+            var storage = SEntMan.GetComponent<StorageComponent>(host);
+            var items = new List<EntityUid>();
+            for (var i = 0; i < 4; i++)
+            {
+                var item = SEntMan.SpawnEntity("CMUStoragePlacementPerfItem", map.GridCoords);
+                if (i % 2 == 0) SEntMan.AddComponent<DumpableComponent>(item);
+                items.Add(item);
+                Assert.That(containers.Insert(item, storage.Container), Is.True);
+            }
+
+            var args = new DoAfterArgs(SEntMan, user, TimeSpan.Zero, new DumpableDoAfterEvent(), host, target: target);
+            Assert.That(Server.System<SharedDoAfterSystem>().TryStartDoAfter(args), Is.True);
+            Assert.That(destination.ContainedEntities, Is.EquivalentTo(new[] { items[0], items[2] }));
+            Assert.That(storage.Container.ContainedEntities, Is.EquivalentTo(new[] { items[1], items[3] }));
+            Assert.That(storage.StoredItems[items[1]].Position, Is.EqualTo(new Vector2i(0, 0)));
+            Assert.That(storage.StoredItems[items[3]].Position, Is.EqualTo(new Vector2i(1, 0)));
+            Assert.That(containers.Insert(items[0], storage.Container), Is.True, "Compaction must release the old occupied cells.");
+            SEntMan.DeleteEntity(target);
+            SEntMan.DeleteEntity(host);
+            SEntMan.DeleteEntity(user);
+        });
+    }
+
+    [Test]
+    public async Task DestroyingFilledStorageDoesNotRepackDoomedContents()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var host = SEntMan.SpawnEntity("CMUStoragePlacementPerfHost", map.GridCoords);
+            var storage = SEntMan.GetComponent<StorageComponent>(host);
+            var containers = Server.System<SharedContainerSystem>();
+            var items = new List<EntityUid>();
+            for (var i = 0; i < 64; i++)
+            {
+                var item = SEntMan.SpawnEntity("CMUStoragePlacementPerfItem", map.GridCoords);
+                items.Add(item);
+                Assert.That(containers.Insert(item, storage.Container), Is.True);
+            }
+
+            var before = GC.GetAllocatedBytesForCurrentThread();
+            SEntMan.DeleteEntity(host);
+            var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+            TestContext.Out.WriteLine($"64-item storage deletion allocatedBytes={allocated}");
+            Assert.That(items.All(SEntMan.Deleted), Is.True);
+            Assert.That(allocated, Is.LessThan(4 * 1024 * 1024),
+                "Deleting a bag must not compact contents that are also being deleted.");
+        });
+    }
+
+    [Test]
+    public async Task DumpingFullStorageDoesNotRepackEveryRemainingItemAfterEachRemoval()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var host = SEntMan.SpawnEntity("CMUStoragePlacementPerfHost", map.GridCoords);
+            SEntMan.AddComponent<DumpableComponent>(host);
+            var user = SEntMan.SpawnEntity("MobHuman", map.GridCoords);
+            var target = SEntMan.SpawnEntity(null, map.GridCoords);
+            var storage = SEntMan.GetComponent<StorageComponent>(host);
+            var containers = Server.System<SharedContainerSystem>();
+            var doAfters = Server.System<SharedDoAfterSystem>();
+            var items = new List<EntityUid>();
+            try
+            {
+                for (var i = 0; i < 64; i++)
+                {
+                    var item = SEntMan.SpawnEntity("CMUStoragePlacementPerfItem", map.GridCoords);
+                    items.Add(item);
+                    Assert.That(containers.Insert(item, storage.Container), Is.True);
+                }
+
+                var args = new DoAfterArgs(SEntMan, user, TimeSpan.Zero, new DumpableDoAfterEvent(), host, target: target);
+                var before = GC.GetAllocatedBytesForCurrentThread();
+                var started = doAfters.TryStartDoAfter(args);
+                var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+                TestContext.Progress.WriteLine($"64-item dump allocatedBytes={allocated}");
+                Assert.That(started, Is.True);
+                Assert.That(storage.Container.ContainedEntities, Is.Empty);
+                Assert.That(storage.StoredItems, Is.Empty);
+                Assert.That(items.All(item => !containers.IsEntityInContainer(item)), Is.True);
+                Assert.That(allocated, Is.LessThan(4 * 1024 * 1024),
+                    "A batch dump must not repeatedly rebuild the storage placement of its remaining contents.");
+                foreach (var item in items)
+                    Assert.That(containers.Insert(item, storage.Container), Is.True, "Dumping must release occupied cells.");
+            }
+            finally
+            {
+                foreach (var item in items) SEntMan.DeleteEntity(item);
+                SEntMan.DeleteEntity(host);
+                SEntMan.DeleteEntity(user);
+                SEntMan.DeleteEntity(target);
+            }
+        });
+    }
+
     [TestPrototypes]
     private const string Prototypes = """
+        - type: entity
+          id: CMUStoragePlacementFilteredTarget
+          components:
+          - type: SmartFridge
+            whitelist:
+              components:
+              - Dumpable
+
         - type: entity
           id: CMUStoragePlacementPerfHost
           components:

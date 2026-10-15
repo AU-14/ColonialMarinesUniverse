@@ -14,6 +14,7 @@ public abstract partial class SharedBatterySystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private EntityQuery<MetaDataComponent> _updateMetadataQuery = default!;
 
     public override void Initialize()
     {
@@ -131,11 +132,12 @@ public abstract partial class SharedBatterySystem : EntitySystem
         // Raise events when the battery is full or empty so that other systems can react and visuals can get updated.
         // This is not doing that many calculations, it only has to get the current charge and only raises events if something did change.
         // If this turns out to be too expensive and shows up on grafana consider updating it less often.
-        var batteryQuery = EntityQueryEnumerator<BatteryComponent>();
+        var batteryQuery = AllEntityQuery<BatteryComponent>();
         while (batteryQuery.MoveNext(out var uid, out var battery))
         {
-            if (battery.ChargeRate == 0f)
-                continue; // No need to check if it's constant.
+            if (battery.ChargeRate == 0f ||
+                !_updateMetadataQuery.TryComp(uid, out var metadata) || metadata.EntityPaused)
+                continue; // Constant batteries do not need a pause lookup or a charge calculation.
 
             UpdateState((uid, battery));
         }

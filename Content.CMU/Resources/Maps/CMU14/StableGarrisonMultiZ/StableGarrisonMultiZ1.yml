@@ -567,6 +567,8 @@ entities:
         colorHex: '#02020B'
       - time: 1
         colorHex: '#000000'
+    - type: CMU3DElevation
+      profile: CMU3DStableGarrisonRedux1
     - type: MapGrid
       chunks:
         0,0:
@@ -617421,7 +617423,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 100.5,-140.5
-- proto: RMCWeaponLauncherM81
+- proto: CMUWeaponLauncherM81
   entities:
   - uid: 57315
     components:

@@ -3,6 +3,7 @@ cmu-fof-respawn-side-locked = You can only respawn on your original side for the
 cmu-fof-locked-side-full = Your original side currently has more players. Wait for the teams to balance before respawning.
 cmu-fof-respawn-wait = You can respawn in {$seconds} seconds. The wait is five minutes from death.
 cmu-fof-dropship-wrong-faction = This dropship is not cleared to land at the other faction's destination.
+cmu-dropship-navigation-access-denied = You are not authorized to use this dropship's navigation controls.
 cmu-fof-hijack-no-destination = No assault vectors are available on the enemy ship.
 cmu-dropship-hijack-initiate = Initiate hijack
 cmu-dropship-hijack-random-header = A valid destination will be selected automatically when you initiate the hijack.
@@ -40,3 +41,7 @@ cmu-fof-hijack-join-expiry = This offer expires when the dropship lands.
 cmu-fof-hijack-join = Join — teleport me
 cmu-fof-hijack-stay = Stay here
 cmu-fof-hijack-join-unavailable = Transport is no longer available. You have stayed where you are.
+cmu-fof-launch-preparing = An enemy dropship is preparing to launch to a landing zone. ETA: 3 minutes. Request your launch within this window to depart at the same time.
+
+# Admin Command Tablet
+cmu-admin-tablet-faction-switch = Switch to {$faction}

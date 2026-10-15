@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
 using Content.Shared.CMU14.Medical.Core;
@@ -113,6 +114,13 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
 
     public bool AddShrapnel(EntityUid part, int fragments, float severity)
     {
+        if (TryComp<BodyPartComponent>(part, out var bodyPart) &&
+            bodyPart.Body is { } body &&
+            HasComp<YautjaComponent>(body))
+        {
+            return false;
+        }
+
         if (fragments <= 0 || severity <= 0f)
             return false;
 
@@ -396,7 +404,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
             return;
         if (!TryFindExtractionPart(target, out var part, user, selectedPart))
         {
-            _popup.PopupPredicted(Loc.GetString("cmu-medical-shrapnel-none"), target, user);
+            _popup.PopupBroadcast(Loc.GetString("cmu-medical-shrapnel-none"), target, user);
             return;
         }
 
@@ -412,7 +420,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
         };
 
         if (_doAfter.TryStartDoAfter(doAfter))
-            _popup.PopupPredicted(Loc.GetString("cmu-medical-shrapnel-extract-start"), target, user);
+            _popup.PopupBroadcast(Loc.GetString("cmu-medical-shrapnel-extract-start"), target, user);
     }
 
     private void OnExtractorDoAfter(Entity<CMUShrapnelExtractorComponent> ent, ref CMUShrapnelExtractDoAfterEvent args)
@@ -432,7 +440,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
 
         if (TryExtractShrapnel(target, ent, out var removed, args.User, preferred))
         {
-            _popup.PopupPredicted(
+            _popup.PopupBroadcast(
                 Loc.GetString("cmu-medical-shrapnel-extract-finish", ("count", removed)),
                 target,
                 args.User);
@@ -479,7 +487,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
 
         _pain.AddPainPulse(ent.Owner, (FixedPoint2)pulse);
         _pain.OnRecomputeTrigger(ent.Owner);
-        _popup.PopupEntity(Loc.GetString("cmu-medical-shrapnel-movement-pain"), ent.Owner, ent.Owner, PopupType.SmallCaution);
+        // The message is CMUShrapnelMovePainSystem's, once when they set off; one per pulse was spam.
     }
 
     private void OnHumanRemove(Entity<CMUHumanMedicalComponent> ent, ref ComponentRemove args)
@@ -670,7 +678,15 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
             || explosion == "RMC"
             || explosion == "RMCMortar"
             || explosion == "RMCOB"
-            || explosion == "RMCOBXenoTunnel";
+            || explosion == "RMCOBXenoTunnel"
+            || explosion == "CMUATGM"
+            // FLOW-09: copies of RMC that only differ against tanks.
+            || explosion == "CMUAntiVehicleHE"
+            || explosion == "CMUHEAP"
+            || explosion == "CMUIED"
+            || explosion == "CMUCASMunition"
+            || explosion == "CMUPlasticExplosive"
+            || explosion == "CMUMortarHEATMP";
     }
 
     private static float MovementFracturePulse(FractureSeverity severity) => severity switch

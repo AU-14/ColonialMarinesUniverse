@@ -126,6 +126,10 @@ namespace Content.Client.Gameplay
 
         public EntityUid? GetClickedEntity(MapCoordinates coordinates, IEye? eye)
         {
+            // CMU14: preserve the entity selected by the visible 3D ray, including wall occlusion.
+            if (_entityManager.System<CMU14.ThreeD.Scene.CMU3DLiveSceneSystem>().TryFirstPersonAim(out var aim, out var target)
+                && aim == coordinates)
+                return target;
             if (eye == null)
                 return null;
 
@@ -146,6 +150,10 @@ namespace Content.Client.Gameplay
 
         public IEnumerable<EntityUid> GetClickableEntities(MapCoordinates coordinates, IEye? eye, bool excludeFaded = true, bool ignoreInteractionTransparency = false)
         {
+            // CMU14: use the same source entity as first-person rendering and aiming.
+            if (_entityManager.System<CMU14.ThreeD.Scene.CMU3DLiveSceneSystem>().TryFirstPersonAim(out var aim, out var target)
+                && aim == coordinates)
+                return target is { } entity ? new[] { entity } : Array.Empty<EntityUid>();
             /*
              * TODO:
              * 1. Stuff like MeleeWeaponSystem need an easy way to hook into viewport specific entities / entities under mouse
@@ -240,7 +248,12 @@ namespace Content.Client.Gameplay
                 }
                 else
                 {
-                    if (vp is ScalingViewport svp)
+                    // CMU14: resolve perspective input through the visible scene.
+                    if (vp is CMU14.ThreeD.Scene.CMU3DSceneControl scene && scene.FirstPerson)
+                    {
+                        scene.Aim(kArgs.PointerLocation.Position, out entityToClick);
+                    }
+                    else if (vp is ScalingViewport svp)
                     {
                         entityToClick = GetClickedEntity(mousePosWorld, svp.Eye);
                     }

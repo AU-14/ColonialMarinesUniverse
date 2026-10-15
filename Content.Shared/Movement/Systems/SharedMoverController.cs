@@ -243,6 +243,20 @@ public abstract partial class SharedMoverController : VirtualController
         {
             if (!weightless)
             {
+                // CMU14: a pounce/throw owns the velocity while airborne. Discard the old
+                // walking slide so landing cannot resume a destination behind the mover.
+                // EndSlide also zeros velocity, which would cancel the pounce itself.
+                if (TileMovementQuery.TryComp(uid, out var airborneTileMovement))
+                {
+                    airborneTileMovement.SlideActive = false;
+                    airborneTileMovement.FailureSlideActive = false;
+                    airborneTileMovement.WasWeightlessLastTick = false;
+                    airborneTileMovement.MovementKeyInitialDownTime = null;
+                    airborneTileMovement.CurrentSlideMoveButtons = MoveButtons.None;
+                    airborneTileMovement.LastTickLocalCoordinates = null;
+                    Dirty(uid, airborneTileMovement);
+                }
+
                 UsedMobMovement[uid] = false;
                 return;
             }
@@ -327,15 +341,24 @@ public abstract partial class SharedMoverController : VirtualController
         }
         else
         {
-            var virtualGroundEvent = new IsVirtualGroundForMovementEvent();
-            RaiseLocalEvent(uid, ref virtualGroundEvent);
-
             // Should we ignore the friction of the tile we're standing on?
             if (MapGridQuery.TryComp(xform.GridUid, out var gridComp)
                 && _mapSystem.TryGetTileRef(xform.GridUid.Value, gridComp, xform.Coordinates, out var tile)
-                && physicsComponent.BodyStatus == BodyStatus.OnGround
-                && !(tile.Tile.IsEmpty && virtualGroundEvent.Grounded))
-                tileDef = (ContentTileDefinition)_tileDefinitionManager[tile.Tile.TypeId];
+                && physicsComponent.BodyStatus == BodyStatus.OnGround)
+            {
+                // CMU: virtual support only changes friction on empty tiles. Ordinary floors do not
+                // need the potentially expensive Z-level support search.
+                var virtualGround = false;
+                if (tile.Tile.IsEmpty)
+                {
+                    var virtualGroundEvent = new IsVirtualGroundForMovementEvent();
+                    RaiseLocalEvent(uid, ref virtualGroundEvent);
+                    virtualGround = virtualGroundEvent.Grounded;
+                }
+
+                if (!virtualGround)
+                    tileDef = (ContentTileDefinition)_tileDefinitionManager[tile.Tile.TypeId];
+            }
 
             var walkSpeed = moveSpeedComponent?.CurrentWalkSpeed ?? MovementSpeedModifierComponent.DefaultBaseWalkSpeed;
             var sprintSpeed = moveSpeedComponent?.CurrentSprintSpeed ?? MovementSpeedModifierComponent.DefaultBaseSprintSpeed;

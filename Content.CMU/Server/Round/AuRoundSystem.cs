@@ -153,6 +153,13 @@ namespace Content.Server.CMU14.Round
         private List<ThirdPartyPrototype> _selectedThirdParties => _state.SelectedThirdParties;
         public IReadOnlyList<ThirdPartyPrototype> SelectedThirdParties => _state.SelectedThirdParties;
 
+        private HashSet<ThirdPartyPrototype> _spawnedThirdParties => _state.SpawnedThirdParties;
+        public IReadOnlySet<ThirdPartyPrototype> SpawnedThirdParties => _spawnedThirdParties;
+
+        /// <summary>Records a deployed party so no selection path re-picks it this round; the ghost menu and admin tools deploy outside this schedule.</summary>
+        internal void MarkThirdPartySpawned(ThirdPartyPrototype party)
+            => _spawnedThirdParties.Add(party);
+
         public override void Initialize()
         {
 
@@ -239,6 +246,7 @@ namespace Content.Server.CMU14.Round
             _state.SelectedThreat = null;
             _state.ResetDistressSignalThirdPartyLock();
             _selectedThirdParties.Clear();
+            _spawnedThirdParties.Clear();
             var sequenceId = _voteSequenceId;
             var presetVote = StartPresetVote(sequenceId, presetId =>
             {
@@ -574,10 +582,11 @@ namespace Content.Server.CMU14.Round
             return true;
         }
 
-        private ThirdPartyPrototype? PickWeightedThirdParty(IReadOnlyList<ThirdPartyPrototype> candidates)
+        internal ThirdPartyPrototype? PickWeightedThirdParty(IReadOnlyList<ThirdPartyPrototype> candidates)
         {
+            var pool = candidates.Where(party => !_spawnedThirdParties.Contains(party)).ToList();
             var totalWeight = 0;
-            foreach (var candidate in candidates)
+            foreach (var candidate in pool)
             {
                 totalWeight += Math.Max(1, candidate.weight);
             }
@@ -586,14 +595,14 @@ namespace Content.Server.CMU14.Round
                 return null;
 
             var roll = _random.Next(totalWeight);
-            foreach (var candidate in candidates)
+            foreach (var candidate in pool)
             {
                 roll -= Math.Max(1, candidate.weight);
                 if (roll < 0)
                     return candidate;
             }
 
-            return candidates[candidates.Count - 1];
+            return pool[pool.Count - 1];
         }
 
         public void PreselectThirdPartiesForSelectedThreat()
@@ -935,12 +944,12 @@ namespace Content.Server.CMU14.Round
                 foreach (var platoonId in govforPlatoons)
                 {
                     var platoon = _prototypeManager.Index<PlatoonPrototype>(platoonId);
-                    optionsplatoons.Add((platoon.Name, platoon));
+                    optionsplatoons.Add((Loc.GetString(platoon.Name), platoon));
                 }
 
                 var voteopt = new VoteOptions
                 {
-                    Title = "Govfor Vote",
+                    Title = Loc.GetString("au14-vote-title-govfor"),
                     Options = optionsplatoons,
                     Duration = duration
                 };
@@ -960,7 +969,7 @@ namespace Content.Server.CMU14.Round
                     {
                         args.ResolveWinner(winnerId);
                         platoonSpawnRuleSystem.SelectedGovforPlatoon = winnerId;
-                        AnnounceVoteResult(args, Loc.GetString("au14-vote-name-govfor"), winnerId.Name);
+                        AnnounceVoteResult(args, Loc.GetString("au14-vote-name-govfor"), Loc.GetString(winnerId.Name));
                         _gameTicker.UpdateInfoText();
 
                         // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
@@ -980,7 +989,7 @@ namespace Content.Server.CMU14.Round
                                         return;
 
                                     StartShipVote(winnerId.PossibleShips,
-                                        "Govfor Ship Vote",
+                                        Loc.GetString("au14-vote-title-govfor-ship"),
                                         Loc.GetString("au14-vote-name-govfor-ship"),
                                         SetGovforShip);
                                 });
@@ -995,12 +1004,12 @@ namespace Content.Server.CMU14.Round
                 foreach (var platoonId in opforPlatoons)
                 {
                     var platoon = _prototypeManager.Index<PlatoonPrototype>(platoonId);
-                    optionsplatoons.Add((platoon.Name, platoon));
+                    optionsplatoons.Add((Loc.GetString(platoon.Name), platoon));
                 }
 
                 var voteopt = new VoteOptions
                 {
-                    Title = "Opfor Vote",
+                    Title = Loc.GetString("au14-vote-title-opfor"),
                     Options = optionsplatoons,
                     Duration = duration
                 };
@@ -1020,7 +1029,7 @@ namespace Content.Server.CMU14.Round
                     {
                         args.ResolveWinner(winnerId);
                         platoonSpawnRuleSystem.SelectedOpforPlatoon = winnerId;
-                        AnnounceVoteResult(args, Loc.GetString("au14-vote-name-opfor"), winnerId.Name);
+                        AnnounceVoteResult(args, Loc.GetString("au14-vote-name-opfor"), Loc.GetString(winnerId.Name));
                         _gameTicker.UpdateInfoText();
 
                         // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
@@ -1040,7 +1049,7 @@ namespace Content.Server.CMU14.Round
                                         return;
 
                                     StartShipVote(winnerId.PossibleShips,
-                                        "Opfor Ship Vote",
+                                        Loc.GetString("au14-vote-title-opfor-ship"),
                                         Loc.GetString("au14-vote-name-opfor-ship"),
                                         SetOpforShip);
                                 });

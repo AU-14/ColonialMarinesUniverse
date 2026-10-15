@@ -372,7 +372,7 @@ public abstract class CMUMedicalMachineUiTestBase : InteractionTest
                     "Part " + i, id, "Procedure " + i, "wound", 0, "Repair", 15 + i + sequence % 2, (ulong) i + 1));
             }
             return new CMUAutodocBuiState(pod, patient, "Patient", true, authorized, true,
-                "Running", "Repair", now + TimeSpan.FromSeconds(30 - sequence % 10), parts, queue)
+                "Running", "Repair", now + TimeSpan.FromSeconds(30 - sequence % 10), parts, queue, [], false)
             { CommandContext = new CMUAutodocCommandContext(pod, patient, 1, (ulong) sequence + 1) };
         }
 

@@ -1,0 +1,101 @@
+# Department windoors in plain glass, blue and reinforced (secure) variants.
+
+# CMB, Colony
+- type: entity
+  parent: CMWindoor
+  id: CMUWindoorCMB
+  suffix: CMB, Colony, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyBrig"], ["AU14AccessColonyMarshall"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCWindoorSoro
+  id: CMUWindoorCMBBlue
+  suffix: CMB, Colony, Blue, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyBrig"], ["AU14AccessColonyMarshall"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMWindoorSecure
+  id: CMUWindoorSecureCMB
+  suffix: CMB, Colony, Reinforced, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyBrig"], ["AU14AccessColonyMarshall"], ["CMAccessColonyCommand"]]
+
+# Medical, Colony
+- type: entity
+  parent: CMWindoor
+  id: CMUWindoorMedicalColony
+  suffix: Medical, Colony, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCWindoorSoro
+  id: CMUWindoorMedicalColonyBlue
+  suffix: Medical, Colony, Blue, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMWindoorSecure
+  id: CMUWindoorSecureMedicalColony
+  suffix: Medical, Colony, Reinforced, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+# Engineering, Logistics, Colony
+- type: entity
+  parent: CMWindoor
+  id: CMUWindoorEngineeringColony
+  suffix: Engineering, Logistics, Colony, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyEngineering"], ["CMAccessColonyLogistics"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCWindoorSoro
+  id: CMUWindoorEngineeringColonyBlue
+  suffix: Engineering, Logistics, Colony, Blue, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyEngineering"], ["CMAccessColonyLogistics"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMWindoorSecure
+  id: CMUWindoorSecureEngineeringColony
+  suffix: Engineering, Logistics, Colony, Reinforced, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyEngineering"], ["CMAccessColonyLogistics"], ["CMAccessColonyCommand"]]
+
+# Govfor
+- type: entity
+  parent: CMWindoor
+  id: CMUWindoorGovfor
+  suffix: Govfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovfor"]]
+
+- type: entity
+  parent: RMCWindoorSoro
+  id: CMUWindoorGovforBlue
+  suffix: Govfor, Blue, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovfor"]]
+
+- type: entity
+  parent: CMWindoorSecure
+  id: CMUWindoorSecureGovfor
+  suffix: Govfor, Reinforced, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovfor"]]

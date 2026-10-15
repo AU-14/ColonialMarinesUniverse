@@ -4,6 +4,7 @@ using Content.IntegrationTests.Fixtures;
 using Content.Server.Database;
 using Content.Server.Preferences.Managers;
 using Content.Shared.Body;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
@@ -162,6 +163,36 @@ namespace Content.IntegrationTests.Tests.Preferences
                     Assert.That(saved.CharacterName, Is.EqualTo(original.Name));
                 });
             }
+        }
+
+        [Test]
+        public async Task YautjaOrganAppearanceSurvivesDatabaseRoundTrip()
+        {
+            var db = GetDb(Pair.Server);
+            var user = NewUserId();
+            var yautja = YautjaCharacterProfile.Default
+                .WithName("Database Hunter")
+                .WithSkinColor(YautjaSkinColor.Gray)
+                .WithDreadColor(YautjaDreadColor.Brown)
+                .WithQuillStyle(YautjaQuillStyle.LongCurved)
+                .WithEyeColor(YautjaEyeColor.Jade);
+            await db.InitPrefsAsync(user, CharlieCharlieson().WithYautjaProfile(yautja));
+            var saved = await db.GetPlayerPreferencesAsync(user);
+            await Pair.Server.WaitAssertion(() =>
+            {
+                var preferences = (ServerPreferencesManager) Pair.Server.ResolveDependency<IServerPreferencesManager>();
+                var restored = preferences.ConvertPreferences(saved!).Characters[0].YautjaProfile;
+                Assert.Multiple(() =>
+                {
+                    Assert.That(restored.Name, Is.EqualTo(yautja.Name));
+                    Assert.That(restored.SkinColor, Is.EqualTo(YautjaSkinColor.Gray));
+                    Assert.That(restored.DreadColor, Is.EqualTo(YautjaDreadColor.Brown));
+                    Assert.That(restored.QuillStyle, Is.EqualTo(YautjaQuillStyle.LongCurved));
+                    Assert.That(restored.Appearance.EyeColor, Is.EqualTo(yautja.Appearance.EyeColor));
+                    Assert.That(YautjaCharacterProfile.GetQuillColor(restored.Appearance),
+                        Is.EqualTo(yautja.DreadColorValue));
+                });
+            });
         }
 
         [Test]

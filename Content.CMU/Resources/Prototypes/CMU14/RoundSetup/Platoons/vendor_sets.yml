@@ -74,6 +74,25 @@
     EngiEquipment: AU14EngineeringStaffVendor
 
 - type: platoonVendorSet
+  id: BEAR
+  parent: AU14BasePlatoonVendorSet
+  vendors:
+    Rifleman: RuMCBEARequipmentvendor
+    Clothing: RuMCBEARclothingapparelvendor
+    ShipsideUniform: RuMCBEARShipsideUniformVendor
+    Weapons: RuMCBEARWeaponsVendor
+    SWeapons: RuMCBEARSpecialWeaponsVendor
+    Corpsman: RuMCBEARMedicalVendor
+    Arifleman: RuMCBEARgunnerequipment
+    Dcc: RuMCBEARaircrewvendor
+    OperationsOfficer: RuMCBEARcommandvendor
+    SectionSergeant: RuMCBEARSectionLeaderVendor
+    SquadSergeant: AU14UPPSquadLeaderVendor
+    Pilot: RuMCBEARAirCrewWeaponsVendor
+    MilitaryPolice: RuMCBEARMilitaryPolicemanVendor
+    ReqVend: RuMCBEARRequisitionVendor
+
+- type: platoonVendorSet
   id: WYPMC
   parent: AU14BasePlatoonVendorSet
   vendors:

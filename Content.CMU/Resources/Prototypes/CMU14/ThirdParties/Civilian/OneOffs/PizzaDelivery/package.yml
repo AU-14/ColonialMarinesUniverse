@@ -67,8 +67,9 @@
   weight: 2
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 2
   roundstart: false
+  ghostsNeeded: 2
+  ghostsCallable: true
 
 - type: startingGear
   id: AU14GearPizzaDeliveryBoy

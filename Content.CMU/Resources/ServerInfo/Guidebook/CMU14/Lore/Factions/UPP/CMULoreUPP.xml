@@ -1,0 +1,30 @@
+<Document>
+  # Union of Progressive Peoples
+
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/UPPHeader.png" MaxHeight="128"/>
+
+  The [bold]Union of Progressive Peoples[/bold] (UPP) is a socialist superpower formed in 2108 by Russia, China, Germany and Spain, later joined by Vietnam and other Asian and Eastern European nations, to stand against the [textlink="Three World Empire" link="CMUGuideLoreTWE"] and the [textlink="United Americas" link="CMUGuideLoreUA"]. It is the only great power free of corporate influence, and scorns its rivals as "corporatists".
+
+  ## The Union
+  - Ruled from Earth by a President, with a Premier leading the state council. Its frontier is run by a Governor-General backed by a naval task force, and each colony has its own mayor.
+  - The UPP fields the largest army on the frontier, but its territory is poor in resources. Colonies ration food, and its naturally habitable worlds are badly overcrowded.
+  - Lagging behind in the space and arms race, it reverse-engineers much of its technology from Weyland-Yutani and other corporations.
+  - The UPP is secretive and fiercely territorial, and outsiders know little of how it works.
+
+  ## Relations
+  - [textlink="United Americas" link="CMUGuideLoreUA"]: a cold war ever since [bold]Operation Canton[/bold], which the UPP sees as a UA attempt to seize its territory. In the early 2180s, overcrowding has pushed the UPP deeper into the frontier, and standoffs with the Colonial Marines are growing common.
+  - [textlink="Three World Empire" link="CMUGuideLoreTWE"]: a tense cold war over the Outer Rim. Some TWE colonies have defected to the UPP.
+  - [textlink="Weyland-Yutani" link="CMUGuideLoreWY"]: everything the UPP despises.
+
+  ## Forces
+  <Box>
+    <CMUGuideOutfitEmbed Gear="CMUGearUPPLineRifleman" Caption="UPPNI"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearUPPTerritorialDefenseRifleman" Caption="TG"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearCivilianPaPOfficer" Caption="PaP"/>
+  </Box>
+  - [bold]Space Operating Forces[/bold]: the UPP's elite special forces commandos.
+  - [textlink="Naval Infantry" link="CMUGuideLoreOrgUPPNI"]: UPP shocktroops equivalent to the US Colonial Marines.
+  - [bold]Territorial Guard[/bold] (TG): each UPP colony has a complement of UPP Territorial Guard personnel, usually composed of poorly trained part-time 'weekend' soldiers drawn from the colony’s workforce.
+  - [bold]People's Armed Police[/bold] (PaP): internal security and police on UPP colonies.
+  - [bold]Ministry of Space Security[/bold]: the UPP's intelligence agency and secret police, with spies on UPP and UA worlds alike and inside the great corporations.
+</Document>

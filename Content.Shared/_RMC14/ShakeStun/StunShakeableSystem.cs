@@ -76,7 +76,7 @@ public sealed partial class StunShakeableSystem : EntitySystem
         //They fall back down instantly in stam crit
         if (TryComp<RMCStaminaComponent>(ent, out var stamina) && stamina.Level >= 4)
         {
-            _popup.PopupClient(Loc.GetString("rmc-shake-awake-stamina", ("target", target)), target, user);
+            _popup.PopupEntity(Loc.GetString("rmc-shake-awake-stamina", ("target", target)), target, user);
             return;
         }
 
@@ -88,7 +88,7 @@ public sealed partial class StunShakeableSystem : EntitySystem
         RemCompDeferred<TackledRecentlyByComponent>(target);
 
         var userPopup = Loc.GetString("rmc-shake-awake-user", ("target", target));
-        _popup.PopupClient(userPopup, target, user);
+        _popup.PopupEntity(userPopup, target, user);
 
         var targetPopup = Loc.GetString("rmc-shake-awake-target", ("user", user));
         _popup.PopupEntity(targetPopup, target, target);

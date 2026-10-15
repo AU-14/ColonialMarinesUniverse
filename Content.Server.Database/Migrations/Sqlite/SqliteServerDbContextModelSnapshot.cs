@@ -1251,6 +1251,14 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("user_id");
 
+                    b.Property<int?>("YautjaRank")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("yautja_rank");
+
+                    b.Property<int>("YautjaWhitelistFlags")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("yautja_whitelist_flags");
+
                     b.HasKey("Id")
                         .HasName("PK_player");
 
@@ -1318,6 +1326,13 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasColumnName("armor_preference");
+
+                    b.Property<string>("BloodType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("")
+                        .HasColumnName("blood_type");
 
                     b.Property<string>("Build")
                         .IsRequired()
@@ -1476,6 +1491,33 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("regulation_hair_name");
 
+                    // cmu edit start
+                    b.Property<bool>("FoxtrotSquadOptIn")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("foxtrot_squad_opt_in");
+
+                    b.Property<string>("Religion")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("")
+                        .HasColumnName("religion");
+
+                    b.Property<string>("ArmorFlavorText")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("")
+                        .HasColumnName("armor_flavor_text");
+
+                    b.Property<string>("HelmetFlavorText")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("")
+                        .HasColumnName("helmet_flavor_text");
+                    // cmu edit end
+
                     b.Property<string>("Sex")
                         .IsRequired()
                         .HasColumnType("TEXT")
@@ -1536,6 +1578,10 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Property<string>("Voice")
                         .HasColumnType("TEXT")
                         .HasColumnName("voice");
+
+                    b.Property<string>("YautjaProfile")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("yautja_profile");
 
                     b.HasKey("Id")
                         .HasName("PK_profile");
@@ -2300,6 +2346,85 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasName("PK_whitelist");
 
                     b.ToTable("whitelist", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.YautjaClan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("yautja_clan_id");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("active");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("color");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("description");
+
+                    b.Property<int>("Honor")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("honor");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("PK_yautja_clan");
+
+                    b.ToTable("yautja_clan", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.YautjaClanMember", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("yautja_clan_member_id");
+
+                    b.Property<int?>("ClanId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("clan_id");
+
+                    b.Property<int>("Honor")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("honor");
+
+                    b.Property<bool>("IsLegacy")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("is_legacy");
+
+                    b.Property<int>("Permissions")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("permissions");
+
+                    b.Property<Guid>("PlayerUserId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("player_user_id");
+
+                    b.Property<int>("Rank")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("rank");
+
+                    b.HasKey("Id")
+                        .HasName("PK_yautja_clan_member");
+
+                    b.HasIndex("ClanId")
+                        .HasDatabaseName("IX_yautja_clan_member_clan_id");
+
+                    b.HasIndex("PlayerUserId")
+                        .IsUnique();
+
+                    b.ToTable("yautja_clan_member", (string)null);
                 });
 
             modelBuilder.Entity("PlayerRound", b =>
@@ -3240,6 +3365,27 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Navigation("Ban");
                 });
 
+            modelBuilder.Entity("Content.Server.Database.YautjaClanMember", b =>
+                {
+                    b.HasOne("Content.Server.Database.YautjaClan", "Clan")
+                        .WithMany("Members")
+                        .HasForeignKey("ClanId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("FK_yautja_clan_member_yautja_clan_clan_id");
+
+                    b.HasOne("Content.Server.Database.Player", "Player")
+                        .WithOne("YautjaClanMembership")
+                        .HasForeignKey("Content.Server.Database.YautjaClanMember", "PlayerUserId")
+                        .HasPrincipalKey("Content.Server.Database.Player", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_yautja_clan_member_player_player_user_id");
+
+                    b.Navigation("Clan");
+
+                    b.Navigation("Player");
+                });
+
             modelBuilder.Entity("PlayerRound", b =>
                 {
                     b.HasOne("Content.Server.Database.Player", null)
@@ -3368,6 +3514,8 @@ namespace Content.Server.Database.Migrations.Sqlite
 
                     b.Navigation("Stats")
                         .IsRequired();
+
+                    b.Navigation("YautjaClanMembership");
                 });
 
             modelBuilder.Entity("Content.Server.Database.Preference", b =>
@@ -3436,6 +3584,10 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Navigation("ConnectionLogs");
 
                     b.Navigation("Rounds");
+                });
+            modelBuilder.Entity("Content.Server.Database.YautjaClan", b =>
+                {
+                    b.Navigation("Members");
                 });
 #pragma warning restore 612, 618
         }

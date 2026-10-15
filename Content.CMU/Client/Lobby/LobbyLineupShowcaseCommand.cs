@@ -60,7 +60,7 @@ public sealed partial class LobbyLineupShowcaseCommand : LocalizedCommands
         }
 
         _window?.Close();
-        _window?.Dispose();
+        _window?.Release();
         _window = null;
         _states.OnStateChanged -= OnStateChanged;
         var lobby = (_states.CurrentState as LobbyState)?.Lobby;

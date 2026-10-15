@@ -492,7 +492,7 @@ public sealed partial class SapperWorkbenchSystem : EntitySystem
                 {
                     // Stacks shrink precisely; only what the recipe needs is taken.
                     var take = Math.Min(stack.Count, need);
-                    _stacks.SetCount(uid, stack.Count - take, stack);
+                    _stacks.SetCount((uid, stack), stack.Count - take);
                     need -= take;
                 }
                 else

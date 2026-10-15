@@ -1,0 +1,67 @@
+- type: entity
+  parent: RMCKitBase
+  id: CMUKitWeaponHG3712LEO
+  name: HG 37-12 pump shotgun case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: RMCWeaponShotgunHG3712
+        amount: 1
+      - id: CMShellShotgunBuckshot
+        amount: 3
+      - id: CMShellShotgunSlugs
+        amount: 1
+
+- type: entity
+  parent: RMCKitBase
+  id: CMUKitWeaponKramerEnforcerLEO
+  name: Kramer enforcer rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: CMUWeaponRifleKramerEnforcerNoScope
+        amount: 1
+      - id: AU14WeaponRifleKramerMagazineStandard
+        amount: 3
+
+- type: entity
+  parent: RMCKitBase
+  id: CMUKitWeaponMP5LEO
+  name: MP5 submachine gun case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: WeaponSMGMP5
+        amount: 1
+      - id: CMMagazineSMGMP5
+        amount: 3

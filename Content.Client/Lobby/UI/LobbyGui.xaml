@@ -1,4 +1,4 @@
-﻿<lobbyUi:LobbyGui
+<lobbyUi:LobbyGui
     xmlns="https://spacestation14.io"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
@@ -9,7 +9,7 @@
     xmlns:lineup="clr-namespace:Content.Client.CMU14.Lobby"
     xmlns:info="clr-namespace:Content.Client.Info"
     xmlns:widgets="clr-namespace:Content.Client.UserInterface.Systems.Chat.Widgets"
-    xmlns:cmu="clr-namespace:Content.Client._CMU14.Interface">
+    xmlns:cmu="clr-namespace:Content.Client.CMU14.Interface">
     <!-- Background -->
     <TextureRect Access="Public" VerticalExpand="True" HorizontalExpand="True" Name="Background"
                  Stretch="KeepAspectCovered" />

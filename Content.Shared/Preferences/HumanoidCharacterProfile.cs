@@ -4,9 +4,11 @@ using System.Text.RegularExpressions;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.NamedItems;
 using Content.Shared._RMC14.Xenonids.Name;
+using Content.Shared.CMU14.Medical.Blood; // CMU14
 using Content.Shared.CMU14.Allegiance;
 using Content.Shared.CMU14.Origin;
 using Content.Shared.CMU14.Threats;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
 using Content.Shared.Chat.Prototypes;
@@ -232,6 +234,8 @@ namespace Content.Shared.Preferences
         [DataField]
         public ProtoId<PlatoonPrototype>? Platoon { get; private set; } = null;
 
+        [DataField]
+        public YautjaCharacterProfile YautjaProfile { get; private set; } = YautjaCharacterProfile.Default;
         /// <summary>
         /// Whether this character is a synthetic. Requires the synthetic job whitelist to
         /// set to true; if true, the character will only be resolved into synthetic jobs.
@@ -307,7 +311,8 @@ namespace Content.Shared.Preferences
             string height = "",
             int weight = 160,
             BuildType build = BuildType.Average,
-            bool hideMetaInformation = false)
+            bool hideMetaInformation = false,
+            YautjaCharacterProfile? yautjaProfile = null)
         {
             Name = name;
             FlavorText = flavortext;
@@ -338,6 +343,7 @@ namespace Content.Shared.Preferences
             _gamemodeJobPriorities = NormalizeGamemodeJobPriorities(gamemodeJobPriorities);
             _gamemodeAntagPreferences = NormalizeGamemodeSetPreferences(gamemodeAntagPreferences);
             _gamemodeThreatPreferences = NormalizeGamemodeSetPreferences(gamemodeThreatPreferences);
+            YautjaProfile = yautjaProfile?.Clone() ?? YautjaCharacterProfile.Default;
             ShortExamine = shortExamine;
             FullDescription = fullDescription;
             MedicalRecord = medicalRecord;
@@ -489,11 +495,19 @@ namespace Content.Shared.Preferences
                 other.Height,
                 other.Weight,
                 other.Build,
-                other.HideMetaInformation)
+                other.HideMetaInformation,
+                other.YautjaProfile)
         {
             // CMU14: Force on Force roles, hijacking, announcements and identification.
             FoFSide = other.FoFSide;
             FoFFallback = other.FoFFallback;
+            BloodType = other.BloodType; // CMU14
+            // cmu edit start
+            FoxtrotSquadOptIn = other.FoxtrotSquadOptIn;
+            Religion = other.Religion;
+            ArmorFlavorText = other.ArmorFlavorText;
+            HelmetFlavorText = other.HelmetFlavorText;
+            // cmu edit end
         }
 
         /// <summary>
@@ -835,6 +849,11 @@ namespace Content.Shared.Preferences
             };
         }
 
+        public HumanoidCharacterProfile WithYautjaProfile(YautjaCharacterProfile profile)
+        {
+            return new(this) { YautjaProfile = profile.Clone() };
+        }
+
         public HumanoidCharacterProfile WithSynthetic(bool synthetic)
         {
             return new(this)
@@ -1147,6 +1166,12 @@ namespace Content.Shared.Preferences
 
             var list = new HashSet<ProtoId<TraitPrototype>>(_traitPreferences) { traitId };
 
+            // cmu edit start: picking a trait drops any trait it cannot be taken with
+            list.RemoveWhere(other => other != traitId &&
+                                      protoManager.TryIndex(other, out var otherTrait) &&
+                                      traitProto.CMUConflictsWith(otherTrait));
+            // cmu edit end
+
             if (traitCategory == null || traitCategory.MaxTraitPoints < 0)
             {
                 return new(this)
@@ -1209,6 +1234,13 @@ namespace Content.Shared.Preferences
             if (PreferenceUnavailable != other.PreferenceUnavailable) return false;
             // CMU14: Force on Force roles, hijacking, announcements and identification.
             if (FoFSide != other.FoFSide || FoFFallback != other.FoFFallback) return false;
+            if (BloodType != other.BloodType) return false; // CMU14
+            // cmu edit start
+            if (FoxtrotSquadOptIn != other.FoxtrotSquadOptIn) return false;
+            if (Religion != other.Religion) return false;
+            if (ArmorFlavorText != other.ArmorFlavorText) return false;
+            if (HelmetFlavorText != other.HelmetFlavorText) return false;
+            // cmu edit end
             if (SpawnPriority != other.SpawnPriority) return false;
             if (SquadPreference != other.SquadPreference) return false;
             if (!_jobPriorities.SequenceEqual(other._jobPriorities)) return false;
@@ -1226,6 +1258,28 @@ namespace Content.Shared.Preferences
             if (Allegiance != other.Allegiance) return false;
             if (Origin != other.Origin) return false;
             if (Platoon != other.Platoon) return false;
+            if (!YautjaProfile.Appearance.Equals(other.YautjaProfile.Appearance) ||
+                YautjaProfile.Name != other.YautjaProfile.Name ||
+                YautjaProfile.Age != other.YautjaProfile.Age ||
+                YautjaProfile.Sex != other.YautjaProfile.Sex ||
+                YautjaProfile.Gender != other.YautjaProfile.Gender ||
+                YautjaProfile.ArmorPrototype != other.YautjaProfile.ArmorPrototype ||
+                YautjaProfile.MaskPrototype != other.YautjaProfile.MaskPrototype ||
+                YautjaProfile.MaskAccessoryPrototype != other.YautjaProfile.MaskAccessoryPrototype ||
+                YautjaProfile.GreavesPrototype != other.YautjaProfile.GreavesPrototype ||
+                YautjaProfile.BracerPrototype != other.YautjaProfile.BracerPrototype ||
+                YautjaProfile.CasterPrototype != other.YautjaProfile.CasterPrototype ||
+                YautjaProfile.ClanRank != other.YautjaProfile.ClanRank ||
+                YautjaProfile.OwnerRank != other.YautjaProfile.OwnerRank ||
+                YautjaProfile.Status != other.YautjaProfile.Status ||
+                YautjaProfile.CapePrototype != other.YautjaProfile.CapePrototype ||
+                YautjaProfile.CapeColor != other.YautjaProfile.CapeColor ||
+                YautjaProfile.TranslatorType != other.YautjaProfile.TranslatorType ||
+                YautjaProfile.InvisibilitySound != other.YautjaProfile.InvisibilitySound ||
+                YautjaProfile.Legacy != other.YautjaProfile.Legacy ||
+                YautjaProfile.Unique != other.YautjaProfile.Unique ||
+                YautjaProfile.FlavorText != other.YautjaProfile.FlavorText)
+                return false;
             if (Synthetic != other.Synthetic) return false;
             if (ShortExamine != other.ShortExamine) return false;
             if (FullDescription != other.FullDescription) return false;
@@ -1357,6 +1411,12 @@ namespace Content.Shared.Preferences
             {
                 name = GetName(Species, gender);
             }
+
+            // cmu edit start
+            name = Content.Shared.CMU14.Preferences.CMUCharacterName.Normalize(name,
+                Origin == Content.Shared.CMU14.Preferences.CMUCharacterName.ArtificialWombOrigin,
+                Synthetic);
+            // cmu edit end
 
             string flavortext;
             var maxFlavorTextLength = configManager.GetCVar(CCVars.MaxFlavorTextLength);
@@ -1531,6 +1591,12 @@ namespace Content.Shared.Preferences
             // CMU14: Force on Force roles, hijacking, announcements and identification.
             if (!Enum.IsDefined(FoFSide)) FoFSide = ForceOnForceSide.Either;
             if (!Enum.IsDefined(FoFFallback)) FoFFallback = ForceOnForceFallback.StayInLobby;
+            if (!Enum.IsDefined(BloodType)) BloodType = CMUBloodTypes.DefaultTypes[0]; // CMU14
+            // cmu edit start
+            if (!prototypeManager.HasIndex(Religion)) Religion = Content.Shared.CMU14.Religion.CMUReligionPrototype.Atheist;
+            ArmorFlavorText = Content.Shared.CMU14.GearFlavor.CMUGearFlavorText.Clamp(ArmorFlavorText);
+            HelmetFlavorText = Content.Shared.CMU14.GearFlavor.CMUGearFlavorText.Clamp(HelmetFlavorText);
+            // cmu edit end
 
             _antagPreferences.Clear();
             _antagPreferences.UnionWith(antags);
@@ -1640,6 +1706,21 @@ namespace Content.Shared.Preferences
                 if (!protoManager.TryIndex(trait, out var traitProto))
                     continue;
 
+                // cmu edit start: the first of two traits that cannot be taken together wins
+                var conflicts = false;
+                foreach (var kept in result)
+                {
+                    if (protoManager.TryIndex(kept, out var keptProto) && traitProto.CMUConflictsWith(keptProto))
+                    {
+                        conflicts = true;
+                        break;
+                    }
+                }
+
+                if (conflicts)
+                    continue;
+                // cmu edit end
+
                 // Always valid.
                 if (traitProto.Category == null)
                 {
@@ -1714,6 +1795,13 @@ namespace Content.Shared.Preferences
             // CMU14: Force on Force roles, hijacking, announcements and identification.
             hashCode.Add(FoFSide);
             hashCode.Add(FoFFallback);
+            hashCode.Add(BloodType); // CMU14
+            // cmu edit start
+            hashCode.Add(FoxtrotSquadOptIn);
+            hashCode.Add(Religion);
+            hashCode.Add(ArmorFlavorText);
+            hashCode.Add(HelmetFlavorText);
+            // cmu edit end
             hashCode.Add(NamedItems);
             hashCode.Add(PlaytimePerks);
             hashCode.Add(XenoPrefix);

@@ -13,9 +13,9 @@ public sealed partial class VigilanteSystem : EntitySystem
 {
     private static readonly HashSet<string> MobJobs = new() { "AU14JobMobBoss", "AU14JobMobGoon" };
 
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly SharedJobSystem _jobs = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private SharedJobSystem _jobs = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -27,7 +27,7 @@ public sealed partial class VigilanteSystem : EntitySystem
 
     public override void Update(float frameTime)
     {
-        var enumerator = EntityManager.AllEntityQueryEnumerator<VigilanteComponent>();
+        var enumerator = AllEntityQuery<VigilanteComponent>();
         while (enumerator.MoveNext(out var uid, out var comp))
         {
             if (comp.Faxed || _timing.CurTime < comp.NextFax)
@@ -41,7 +41,7 @@ public sealed partial class VigilanteSystem : EntitySystem
     private string BuildTargetList(VigilanteComponent comp)
     {
         var names = new List<string>();
-        var minds = EntityManager.AllEntityQueryEnumerator<MindComponent>();
+        var minds = AllEntityQuery<MindComponent>();
         while (minds.MoveNext(out var mindId, out var mind))
         {
             if (mind.CurrentEntity == null

@@ -16,8 +16,15 @@
   - !type:DepartmentTimeRequirement
     department: AU14DepartmentCorporate
     time: 18000 # 5 hours
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - CMUAlcoholic
+    - CMUDrugAddict
   roundSide: Civilian
   roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
   roundRole: CivilianCorporateLiaison
   roundComponents:
   - type: Skills
@@ -94,6 +101,7 @@
     pocket1: AU14StampLiaison
   inhand:
   - RMCPortableVendorCorporate
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

@@ -22,8 +22,11 @@ public abstract partial class SharedCriminalRecordsConsoleSystem : EntitySystem
         var name = Identity.Name(uid, EntityManager);
         var xform = Transform(uid);
 
-        // TODO use the entity's station? Not the station of the map that it happens to currently be on?
-        var station = _station.GetStationInMap(xform.MapID);
+        // cmu edit start
+        var station = EntityManager.System<Content.Shared.CMU14.CriminalRecords.CMUUniversalRecordsSystem>().GetRecords();
+        if (station == null)
+            return;
+        // cmu edit end
 
         if (station != null && _records.GetRecordByName(station.Value, name) is { } id)
         {

@@ -17,10 +17,10 @@ namespace Content.Server.CMU14.Round.Antags.BountyHunter;
 /// </summary>
 public sealed partial class BountyHunterSystem : EntitySystem
 {
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly StationRecordsSystem _stationRecords = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private Content.Shared.CMU14.CriminalRecords.CMUUniversalRecordsSystem _universalRecords = default!;
+    [Dependency] private StationRecordsSystem _stationRecords = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -32,7 +32,7 @@ public sealed partial class BountyHunterSystem : EntitySystem
 
     public override void Update(float frameTime)
     {
-        var enumerator = EntityManager.AllEntityQueryEnumerator<BountyHunterComponent>();
+        var enumerator = AllEntityQuery<BountyHunterComponent>();
         while (enumerator.MoveNext(out var uid, out var comp))
         {
             if (comp.Faxed || _timing.CurTime < comp.NextFax)
@@ -46,7 +46,7 @@ public sealed partial class BountyHunterSystem : EntitySystem
     private string BuildTargetList(EntityUid hunter, BountyHunterComponent comp)
     {
         var lines = new List<string>();
-        var station = _station.GetOwningStation(hunter);
+        var station = _universalRecords.GetRecords();
         if (station != null)
         {
             foreach (var (key, record) in _stationRecords.GetRecordsOfType<CriminalRecord>(station.Value))

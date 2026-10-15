@@ -23,6 +23,7 @@ public abstract class ExplosionTileFlood
     // The new tile lists added each iteration. I **could** just pass these along to every function, but IMO it is more
     // readable if they are just private variables.
     protected List<Vector2i> NewTiles = default!;
+    public int NewTileCount => NewTiles.Count + NewBlockedTiles.Count;
     protected List<Vector2i> NewBlockedTiles = default!;
     protected HashSet<Vector2i> NewFreedTiles = default!;
 
@@ -41,11 +42,12 @@ public abstract class ExplosionTileFlood
 
     protected abstract AtmosDirection GetUnblockedDirectionOrAll(Vector2i tile);
 
-    protected void AddNewDiagonalTiles(int iteration, IEnumerable<Vector2i> tiles, bool ignoreLocalBlocker = false)
+    protected IEnumerable<bool> AddNewDiagonalTiles(int iteration, IEnumerable<Vector2i> tiles, bool ignoreLocalBlocker = false)
     {
         AtmosDirection entryDirection = AtmosDirection.Invalid;
         foreach (var tile in tiles)
         {
+            yield return true;
             var freeDirections = ignoreLocalBlocker ? AtmosDirection.All : GetUnblockedDirectionOrAll(tile);
 
             // Get the free directions of the directly adjacent tiles

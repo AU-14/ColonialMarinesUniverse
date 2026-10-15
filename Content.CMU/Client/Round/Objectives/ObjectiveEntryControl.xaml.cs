@@ -101,7 +101,7 @@ public sealed partial class ObjectiveEntryControl : Control
             AppendDetail($"Times completed: {repeatsOnly}");
         }
         if (obj.Points > 0)
-            AppendDetail($"Worth {obj.Points} points");
+            AppendDetail($"Worth {obj.Points:0.##} points");
 
         DetailsLabel.Text = details.ToString();
 

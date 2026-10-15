@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/hunter/thrall_gear.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "ARMOR"
+    },
+    {
+      "name": "thrallarmor_bone"
+    },
+    {
+      "name": "thrallarmor_gold"
+    },
+    {
+      "name": "thrallarmor_silver"
+    },
+    {
+      "name": "thrallarmor_ebony"
+    },
+    {
+      "name": "thrallarmor_crimson"
+    },
+    {
+      "name": "SHOES"
+    },
+    {
+      "name": "thrallgreaves_bone"
+    },
+    {
+      "name": "thrallgreaves_gold"
+    },
+    {
+      "name": "thrallgreaves_silver"
+    },
+    {
+      "name": "thrallgreaves_ebony"
+    },
+    {
+      "name": "thrallgreaves_crimson"
+    },
+    {
+      "name": "MASK"
+    },
+    {
+      "name": "thrallmask_bone"
+    },
+    {
+      "name": "thrallmask_gold"
+    },
+    {
+      "name": "thrallmask_silver"
+    },
+    {
+      "name": "thrallmask_ebony"
+    },
+    {
+      "name": "thrallmask_crimson"
+    },
+    {
+      "name": "EQUIPMENT"
+    },
+    {
+      "name": "thrall_teleporter",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "UNSORTED"
+    }
+  ]
+}

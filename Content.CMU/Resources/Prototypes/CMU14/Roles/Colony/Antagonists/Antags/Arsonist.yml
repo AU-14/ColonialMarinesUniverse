@@ -54,6 +54,5 @@
 
 - type: startingGear
   id: CMUGearArsonist
-  equipment:
-    suitstorage: CMUWeaponArsonistFlamer
-    pocket2: CMUTankFlamerPhoron
+  inhand:
+  - RMCLighter

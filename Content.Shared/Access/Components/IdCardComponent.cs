@@ -77,4 +77,32 @@ public sealed partial class IdCardComponent : Component
     [DataField, AutoNetworkedField]
     public int AccountBalance;
     //AU14
+
+    // CMU14 ATM PIN Begin: per-card bank credentials. Server-only (neither networked nor
+    // serialized) so clients never receive another card's PIN and copied cards never share one.
+    /// <summary>
+    ///     5-digit bank account number (10000-99999), unique per card. Assigned when the card is created.
+    /// </summary>
+    [ViewVariables]
+    public int AccountNumber;
+
+    /// <summary>
+    ///     4-digit ATM PIN (1000-9999), unique per card. Assigned when the card is created.
+    /// </summary>
+    [ViewVariables]
+    public int AtmPin;
+
+    /// <summary>
+    ///     How many consecutive failed PIN attempts have been made.
+    /// </summary>
+    [ViewVariables]
+    public int PinAttempts;
+
+    /// <summary>
+    ///     Game-time timestamp after which the PIN lockout expires.
+    ///     Null means the card is not locked.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan? PinLockedUntil;
+    // CMU14 End
 }

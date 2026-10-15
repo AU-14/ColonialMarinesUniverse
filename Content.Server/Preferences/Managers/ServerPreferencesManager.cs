@@ -11,12 +11,15 @@ using Content.Shared.CMU14.Allegiance;
 using Content.Shared.CMU14.Origin;
 using Content.Shared.CMU14.util;
 using Content.Shared.Body;
+using Content.Server.CMU14.Yautja;
 using Content.Shared.CCVar;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
+using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.Medical.Blood; // CMU14
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
@@ -51,6 +54,7 @@ namespace Content.Server.Preferences.Managers
         [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private MarkingManager _marking = default!;
         [Dependency] private ISerializationManager _serialization = default!;
+        [Dependency] private YautjaRankManager _yautjaRankManager = default!;
 
         // Cache player prefs on the server so we don't need as much async hell related to them.
         private readonly Dictionary<NetUserId, PlayerPrefData> _cachedPlayerPrefs =
@@ -261,9 +265,22 @@ namespace Content.Server.Preferences.Managers
                 profile.Height,
                 profile.Weight,
                 Enum.TryParse<BuildType>(profile.Build, out var build) ? build : BuildType.Average,
-                profile.HideMetaInformation
-            // CMU14: Force on Force roles, hijacking, announcements and identification.
-            ).WithForceOnForcePreferences((ForceOnForceSide) profile.FoFSide, (ForceOnForceFallback) profile.FoFFallback);
+                profile.HideMetaInformation,
+                YautjaProfileSerializer.DeserializeYautjaProfile(profile.YautjaProfile)
+            ).WithForceOnForcePreferences((ForceOnForceSide) profile.FoFSide, (ForceOnForceFallback) profile.FoFFallback)
+             // CMU14: profiles saved before blood types get a stable default until the player picks one
+             .WithBloodType(CMUBloodTypes.TryParse(profile.BloodType, out var bloodType)
+                 ? bloodType
+             // cmu edit start
+                 : CMUBloodTypes.StableDefault(profile.CharacterName))
+             .WithFoxtrotSquadOptIn(profile.FoxtrotSquadOptIn)
+             // Profiles saved before religions are atheist; EnsureValid catches removed religions.
+             .WithReligion(string.IsNullOrEmpty(profile.Religion)
+                 ? Content.Shared.CMU14.Religion.CMUReligionPrototype.Atheist
+                 : profile.Religion)
+             .WithArmorFlavorText(profile.ArmorFlavorText)
+             .WithHelmetFlavorText(profile.HelmetFlavorText);
+             // cmu edit end
         }
 
         private static HashSet<ProtoId<ThreatPrototype>> ConvertThreatPreferences(string? raw)
@@ -501,6 +518,7 @@ namespace Content.Server.Preferences.Managers
             var session = _playerManager.GetSessionById(userId);
 
             profile.EnsureValid(session, _dependencies);
+            profile = SanitizeYautjaProfile(userId, profile);
 
             var profiles = new Dictionary<int, HumanoidCharacterProfile>(curPrefs.Characters)
             {
@@ -674,6 +692,7 @@ namespace Content.Server.Preferences.Managers
             {
                 MaxCharacterSlots = MaxCharacterSlots
             };
+            msg.YautjaCapabilities = _yautjaRankManager.ResolveProfileCapabilitiesCached(session.UserId);
             _netManager.ServerSendMessage(msg, session.Channel);
         }
 
@@ -761,8 +780,29 @@ namespace Content.Server.Preferences.Managers
 
             return new PlayerPreferences(prefs.Characters.Select(p =>
             {
-                return new KeyValuePair<int, HumanoidCharacterProfile>(p.Key, p.Value.Validated(session, collection));
+                var profile = p.Value.Validated(session, collection);
+                return new KeyValuePair<int, HumanoidCharacterProfile>(p.Key, SanitizeYautjaProfile(session.UserId, profile));
             }), prefs.SelectedCharacterIndex, prefs.AdminOOCColor, prefs.ConstructionFavorites);
+        }
+
+        private HumanoidCharacterProfile SanitizeYautjaProfile(NetUserId userId, HumanoidCharacterProfile profile)
+        {
+            var humanoid = profile;
+
+            var yautja = humanoid.YautjaProfile;
+            if (yautja.ClanRank == null &&
+                yautja.OwnerRank == YautjaBracerOwnerRank.Unblooded &&
+                yautja.Status == YautjaProfileStatus.Normal &&
+                yautja.Legacy == YautjaLegacySet.None &&
+                yautja.Unique == YautjaUniqueSet.None &&
+                yautja.CapeStyle == YautjaCapeStyle.Full &&
+                yautja.BracerMaterial == YautjaBracerMaterial.Ebony)
+            {
+                return profile;
+            }
+
+            var capabilities = _yautjaRankManager.ResolveProfileCapabilitiesCached(userId);
+            return humanoid.WithYautjaProfile(yautja.SanitizeForCapabilities(capabilities));
         }
 
         public IEnumerable<KeyValuePair<NetUserId, HumanoidCharacterProfile>> GetSelectedProfilesForPlayers(

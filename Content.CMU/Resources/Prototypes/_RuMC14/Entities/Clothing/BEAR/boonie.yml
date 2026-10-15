@@ -1,0 +1,39 @@
+- type: entity
+  parent: RMCHeadCapFlippable
+  id: RuMCBEARBoonieBlack
+  name: panama BEAR
+  description: Lightweight tactical panama hat for reconnaissance and covert operations. Has a built-in microphone and speaker for communication.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/BEAR/hats/boonie_black.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/BEAR/hats/boonie_black.rsi
+  - type: Foldable
+    unfoldVerbText: fold-strap-verb
+    foldVerbText: fold-unstrap-verb
+  - type: ItemCamouflage
+    camouflageVariations:
+      classic: _RuMC14/Clothing/BEAR/hats/boonie_black.rsi
+  - type: CMUItemStain
+    wornStates:
+      head: booniehat_blood
+
+- type: entity
+  parent: RMCHeadCapFlippable
+  id: RuMCBEARBoonieBrown
+  name: panama BEAR
+  description: Lightweight tactical panama hat for reconnaissance and covert operations. Has a built-in microphone and speaker for communication.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/BEAR/hats/boonie_brown.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/BEAR/hats/boonie_brown.rsi
+  - type: Foldable
+    unfoldVerbText: fold-strap-verb
+    foldVerbText: fold-unstrap-verb
+  - type: ItemCamouflage
+    camouflageVariations:
+      classic: _RuMC14/Clothing/BEAR/hats/boonie_brown.rsi
+  - type: CMUItemStain
+    wornStates:
+      head: booniehat_blood

@@ -283,6 +283,8 @@
         points: 6
       - id: CMBloodPackFull
         points: 5
+      - id: CMUSynthBloodPackFull # CMU14
+        points: 5
       - id: CMPortableSurgicalBed
         points: 10
       - id: CMPillCanisterBicaridine
@@ -422,6 +424,7 @@
   - type: CMVendorBundle
     bundle:
     - CMHeadsetMedical
+    - CMPamphletK9Handler
 
 - type: entity
   parent: CMVendorBundleRiflemanApparel
@@ -432,3 +435,4 @@
   - type: CMVendorBundle
     bundle:
     - CMHeadsetMPO
+    - CMPamphletK9Handler

@@ -610,7 +610,7 @@ public abstract partial class SharedCMInventorySystem : EntitySystem
             }
         }
 
-        _popup.PopupClient(Loc.GetString("cm-inventory-unable-equip"), user, user, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("cm-inventory-unable-equip"), user, user, PopupType.SmallCaution);
         return false;
     }
 
@@ -767,7 +767,7 @@ public abstract partial class SharedCMInventorySystem : EntitySystem
                 _timing.CurTime < holster.LastEjectAt + cooldown)
             {
                 stop = true;
-                _popup.PopupPredicted(holster.CooldownPopup, user, user, PopupType.SmallCaution);
+                _popup.PopupBroadcast(holster.CooldownPopup, user, user, PopupType.SmallCaution);
                 return false;
             }
 

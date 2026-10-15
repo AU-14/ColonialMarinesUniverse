@@ -1,12 +1,14 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Shared.Actions;
 using Content.Shared.Blocking.Components;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Damage;
 using Content.Shared.Examine;
 using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IdentityManagement;
+using Content.Shared.Item;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Item.ItemToggle.Components;
@@ -32,6 +34,7 @@ public sealed partial class BlockingSystem : EntitySystem
     [Dependency] private ItemToggleSystem _toggle = default!;
     [Dependency] private SharedActionsSystem _actionsSystem = default!;
     [Dependency] private SharedHandsSystem _handsSystem = default!;
+    [Dependency] private SharedItemSystem _itemSystem = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedPopupSystem _popupSystem = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
@@ -216,6 +219,7 @@ public sealed partial class BlockingSystem : EntitySystem
 
         entity.Comp.IsRaised = true;
         DirtyField(entity, entity.Comp, nameof(BlockingComponent.IsRaised));
+        SetYautjaShieldHeldPrefix(entity.Owner, readied: true);
 
         return true;
     }
@@ -266,6 +270,7 @@ public sealed partial class BlockingSystem : EntitySystem
         }
 
         entity.Comp.IsRaised = false;
+        SetYautjaShieldHeldPrefix(entity.Owner, readied: false);
         DirtyField(entity, entity.Comp, nameof(BlockingComponent.IsRaised));
         return true;
     }
@@ -284,6 +289,17 @@ public sealed partial class BlockingSystem : EntitySystem
             return false;
 
         return true;
+    }
+
+    private void SetYautjaShieldHeldPrefix(EntityUid item, bool readied)
+    {
+        if (!TryComp(item, out YautjaShieldHeldPrefixComponent? shield) ||
+            !TryComp(item, out ItemComponent? heldItem))
+        {
+            return;
+        }
+
+        _itemSystem.SetHeldPrefix(item, readied ? shield.Readied : shield.Lowered, component: heldItem);
     }
 
     /// <summary>

@@ -97,7 +97,10 @@ public abstract partial class SharedDisposalUnitSystem
             DoContactInteraction = true
         };
 
-        if (!GetContainedEntities(ent).Contains(args.User))
+        if (ent.Comp.Container == null)
+            return;
+
+        if (!ent.Comp.Container.Contains(args.User))
         {
             if (!_container.CanInsert(args.User, ent.Comp.Container))
                 return;

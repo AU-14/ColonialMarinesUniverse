@@ -77,6 +77,11 @@
       whenToBeginScaling: 50
       benchmark: 2
       maximum: 5 # capped ~140 slots
+    AU14JobGOVFOROfficerIntel:
+      scale: 0.04
+      whenToBeginScaling: 36
+      benchmark: 1
+      maximum: 4
 
 - type: jobScale
   id: DefaultInsurgencyScale

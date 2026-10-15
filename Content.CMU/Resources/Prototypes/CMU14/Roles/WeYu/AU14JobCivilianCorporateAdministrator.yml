@@ -3,6 +3,8 @@
   id: AU14JobCivilianCorporateAdministrator
   roundSide: Civilian
   roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
   roundRole: CivilianCorporateAdministrator
   roundComponents:
   - type: Skills
@@ -60,6 +62,7 @@
     outerClothing: RMCJacketCorporateBlue
   inhand:
   - RMCRadioHandheldColonyOff
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

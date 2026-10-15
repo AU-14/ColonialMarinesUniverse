@@ -1,0 +1,191 @@
+// Original CMU tank cook-off density renderer. CC0-1.0.
+// The preview extracts the kernel verbatim; do not maintain a separate browser approximation.
+light_mode unshaded;
+
+// KERNEL BEGIN
+highp float obHash(highp vec3 p) {
+    p = fract(p * 0.1031);
+    p += dot(p, p.yzx + 33.33);
+    return fract((p.x + p.y) * p.z);
+}
+highp float obNoise(highp vec3 p) {
+    highp vec3 i = floor(p);
+    highp vec3 f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(mix(obHash(i), obHash(i + vec3(1,0,0)), f.x),
+                   mix(obHash(i + vec3(0,1,0)), obHash(i + vec3(1,1,0)), f.x), f.y),
+               mix(mix(obHash(i + vec3(0,0,1)), obHash(i + vec3(1,0,1)), f.x),
+                   mix(obHash(i + vec3(0,1,1)), obHash(i + vec3(1,1,1)), f.x), f.y), f.z);
+}
+highp float obFbm(highp vec3 p) {
+    return obNoise(p) * 0.57 + obNoise(p * 2.07 + 13.7) * 0.29 + obNoise(p * 4.13 - 8.1) * 0.14;
+}
+highp vec3 obHeat(highp float heat) {
+    highp vec3 low = vec3(0.75, 0.035, 0.003);
+    highp vec3 middle = vec3(1.5, 0.34, 0.018);
+    highp vec3 high = vec3(1.9, 1.5, 0.73);
+    return mix(mix(low, middle, smoothstep(0.0, 0.55, heat)), high, smoothstep(0.5, 1.0, heat));
+}
+highp vec4 obVolume(highp vec2 uv, highp float phase, highp float seed, highp float material) {
+    highp vec2 screen = uv * 2.0 - 1.0;
+    // Orthographic ray through a tilted 3D volume. Z is height, Y is ground depth.
+    highp float age = phase * 8.0;
+    highp float rise = 1.0 - exp(-age * 0.48);
+    highp float expansion = 1.0 - exp(-age * 5.5);
+    highp float variant = mod(seed, 3.0);
+    highp vec3 radiance = vec3(0.0);
+    highp float transmission = 1.0;
+    for (int i = 0; i < 28; i++) {
+        highp float depth = -1.25 + (float(i) + 0.5) * 0.0892857;
+        highp vec3 p = vec3(screen.x * 1.2, depth, screen.y * 1.5 + 1.16 - depth * 0.32);
+        if (p.z < 0.0 || p.z > 2.65) continue;
+        // Stable silhouette variants: spreading, upright, and a sheared/split crown.
+        if (variant > 1.5) p.x -= p.z * 0.21 * sin(seed * 1.37);
+        // A rolling toroidal flow transports fine structure around the cap, not just straight upward.
+        highp float radial = length(p.xy);
+        highp vec3 flow = p * vec3(5.9, 5.9, 5.4) + vec3(seed, seed * 0.37, -age * 1.8);
+        flow.xy += p.xy * sin(p.z * 3.8 - age * 2.3) * 0.75;
+        flow.z += sin(radial * 5.0 - age * 1.7) * 0.5;
+        highp float shape;
+        {
+            // A constricted hatch throat splits into unequal turbulent lobes above the roof.
+            highp float height = 0.35 + (1.0 - exp(-age * 3.5)) * 1.3;
+            highp float split = max(0.0, p.z - 0.45) * (0.16 + variant * 0.045);
+            highp float fork = abs(p.x + sin(seed) * p.z * 0.075) - split;
+            highp float throat = 1.0 - length(vec3(p.xy / 0.19, (p.z - 0.32) / 0.5));
+            highp float lobes = 1.0 - length(vec3(fork / (0.16 + rise * 0.13), p.y / (0.25 + rise * 0.18), (p.z - height * 0.62) / max(0.08, height * 0.65)));
+            shape = max(throat, lobes);
+            highp float rupture = 1.0 - length(vec3(p.xy / max(0.06, expansion * 0.7), (p.z - 0.55) / 0.62));
+            shape = mix(max(shape, rupture), shape, smoothstep(0.55, 1.7, age));
+        }
+        if (material < 0.5) {
+            highp float curl = sin(p.z * 4.5 - age * 1.7 + seed) * p.z * 0.09;
+            shape = 1.0 - length(vec3((p.x - curl) / (0.12 + p.z * 0.3), p.y / (0.15 + p.z * 0.28), (p.z - 1.1) / 1.3));
+        }
+        if (material > 1.5) {
+            highp float bend = sin(p.z * 4.0 - age * 5.0 + seed) * p.z * 0.075;
+            shape = 1.0 - length(vec3((p.x - bend) / max(0.07, 0.5 - p.z * 0.2), p.y * 3.8, (p.z - 0.6) / 1.0));
+        }
+        // Outside the largest possible noise displacement, the field is exactly empty.
+        // Skip expensive octaves here without dropping any impact or visible density.
+        if (shape < -0.92) continue;
+        highp float turbulence = obFbm(flow);
+        highp float detail = obNoise(flow * 3.5 + 21.0);
+        highp float density = smoothstep(0.015, 0.32, shape + (turbulence - 0.5) * 1.65 + (detail - 0.5) * 0.18);
+        density *= smoothstep(0.0, 0.09, p.z) * (1.0 - smoothstep(2.35, 2.65, p.z));
+        if (density < 0.008) continue;
+        highp float heat = clamp(1.17 - age * 0.39 - p.z * 0.16 - radial * 0.3 + (turbulence - 0.5) * 2.0 + (detail - 0.5) * 0.3, 0.0, 1.0);
+        heat = clamp(heat + 0.32 - p.z * 0.14, 0.0, 1.0);
+        if (material < 0.5) heat = 0.0;
+        if (material > 1.5) heat = clamp(1.05 - p.z * 0.62 + turbulence * 0.25, 0.0, 1.0);
+        // Self-shadowed soot with residual internal incandescence; front layers absorb rear light.
+        highp float light = clamp(0.48 - depth * 0.35 + p.z * 0.15 + (detail - 0.5) * 0.45 - density * 0.28, 0.08, 0.85);
+        highp vec3 soot = mix(vec3(0.025, 0.028, 0.032), vec3(0.29, 0.285, 0.28), light);
+        highp float burning = smoothstep(0.14, 0.78, heat);
+        highp vec3 emission = mix(soot, obHeat(heat), burning);
+        highp float opacity = 1.0 - exp(-density);
+        radiance += transmission * opacity * emission;
+        transmission *= 1.0 - opacity;
+        if (transmission < 0.025) break;
+    }
+    highp float alpha = 1.0 - transmission;
+    return vec4(radiance / max(alpha, 0.001), alpha);
+}
+highp vec4 obWreckFire(highp vec2 uv, highp float phase, highp float seed) {
+    highp float time = phase * 4096.0;
+    highp vec3 radiance = vec3(0.0);
+    highp float transmission = 1.0;
+    // A single connected field: ragged fuel bed, two unequal vents, and cooling billows above them.
+    for (int i = 0; i < 32; i++) {
+        highp float depth = -1.4 + (float(i) + 0.5) * 0.0875;
+        highp vec3 p = vec3((uv.x - 0.5) * 5.6, depth, uv.y * 7.2 - depth * 0.32);
+        if (p.z < 0.0 || p.z > 6.9) continue;
+        highp float surge = 0.16 * sin(time * 1.7 + seed) + 0.13 * sin(time * 2.83 + seed * 0.31);
+        highp float bend = p.z * (0.09 + 0.055 * sin(time * 0.73 + seed))
+            + sin(p.z * 3.5 - time * 3.4 + seed) * p.z * 0.08;
+        highp vec3 flow = p * vec3(4.4, 4.8, 4.5) + vec3(seed, seed * 0.43, -time * 4.2);
+        flow.x += sin(p.z * 3.2 - time * 2.7) * 0.6;
+        highp float noise = obFbm(flow);
+        highp float detail = obNoise(flow * 2.8 - time * 0.6);
+        highp float throat = 1.0 - length(vec3((p.x - bend + 0.22) / max(0.16, 0.75 - p.z * 0.13),
+            p.y / 0.58, (p.z - 1.18 - surge) / (1.45 + surge)));
+        highp float side = 1.0 - length(vec3((p.x - bend - 0.65) / 0.38,
+            (p.y + 0.15) / 0.38, (p.z - 0.65 + surge) / (0.8 - surge * 0.5)));
+        highp float bed = 1.0 - length(vec3(p.x / 1.04, p.y / 0.7, (p.z - 0.24) / 0.28));
+        highp float fireShape = max(bed, max(throat, side));
+        highp float fire = smoothstep(0.03, 0.4, fireShape + (noise - 0.5) * 1.45 + (detail - 0.5) * 0.22);
+
+        highp float curl = p.z * 0.13 + sin(p.z * 2.6 - time * 0.9 + seed) * p.z * 0.055;
+        highp float smokeShape = 1.0 - length(vec3((p.x - curl) / (0.35 + p.z * 0.21),
+            p.y / (0.35 + p.z * 0.18), (p.z - 3.35) / 2.9));
+        highp float smokeNoise = obFbm(p * 2.8 + vec3(seed + 7.0, seed * 0.5, -time * 1.4));
+        highp float smoke = smoothstep(0.06, 0.55, smokeShape + (smokeNoise - 0.5) * 1.6)
+            * smoothstep(1.3, 2.7, p.z) * (1.0 - smoothstep(4.7, 6.8, p.z)) * 0.48;
+        highp float fade = smoothstep(0.02, 0.22, p.z);
+        fire *= fade;
+        highp float density = fire * 0.72 + smoke;
+        if (density < 0.005) continue;
+
+        // Orange fuel fire with small hot pockets; the whole root is never a white strip.
+        highp float heat = clamp(0.61 - p.z * 0.14 + (noise - 0.5) * 0.85 + (detail - 0.5) * 0.35, 0.0, 1.0);
+        highp float light = clamp(0.43 - depth * 0.25 + (smokeNoise - 0.5) * 0.5, 0.08, 0.78);
+        highp vec3 soot = mix(vec3(0.024, 0.026, 0.028), vec3(0.21, 0.205, 0.20), light);
+        highp vec3 flame = obHeat(heat);
+        highp float lit = fire * smoothstep(0.15, 0.56, heat) / max(0.001, fire + smoke * 1.8);
+        highp vec3 emission = mix(soot, flame, lit);
+        highp float opacity = 1.0 - exp(-density * 0.65);
+        radiance += transmission * opacity * emission;
+        transmission *= 1.0 - opacity;
+        if (transmission < 0.025) break;
+    }
+    highp float alpha = 1.0 - transmission;
+    return vec4(radiance / max(alpha, 0.001), alpha);
+}
+highp vec4 obRender(highp vec2 uv, highp vec2 data) {
+    highp float code = floor(data.y);
+    highp float material = mod(code, 16.0);
+    highp float seed = fract(data.y) * 1024.0;
+    highp float phase = data.x;
+    highp vec2 p = uv * 2.0 - 1.0;
+    if (material > 11.5) return obWreckFire(uv, phase, seed);
+    if (material < 2.5) return obVolume(uv, phase, seed, material);
+    if (material < 3.5) {
+        highp float n = obFbm(vec3(p * 7.0, seed));
+        highp float a = (1.0 - smoothstep(0.35, 0.95, length(p) + n * 0.22)) * 0.5;
+        return vec4(vec3(0.023, 0.019, 0.018), a);
+    }
+    if (material < 5.5) {
+        highp float angle = atan(p.y, p.x);
+        highp float boundary = 0.7 + sin(angle * 5.0 + seed) * 0.1 + cos(angle * 3.0 - seed) * 0.07;
+        highp float shape = length(p * vec2(1.0, 1.12)) - boundary;
+        highp float a = 1.0 - smoothstep(-0.035, 0.035, shape);
+        highp float facet = floor((angle + 3.14159) * 1.27) / 8.0;
+        highp vec3 metal = mix(vec3(0.09, 0.085, 0.07), vec3(0.38, 0.34, 0.28), facet);
+        metal += obHeat(0.1) * exp(-abs(shape) * 35.0) * exp(-phase * 7.0) * 0.22;
+        return vec4(material < 4.5 ? obHeat(0.7) : metal, a);
+    }
+    if (material > 8.5 && material < 9.5) {
+        highp float n = obFbm(vec3(p * vec2(3.2, 4.0), seed + phase * 1.4));
+        highp float shape = 1.0 - length(p * vec2(1.0, 1.15)) + (n - 0.5) * 1.1;
+        highp float alpha = smoothstep(0.02, 0.52, shape) * (0.48 + n * 0.35);
+        highp float light = clamp(0.55 + p.y * 0.3 + (n - 0.5) * 0.55, 0.0, 1.0);
+        return vec4(mix(vec3(0.18, 0.15, 0.12), vec3(0.5, 0.45, 0.36), light), alpha);
+    }
+    if (material > 10.5) {
+        // Brief, irregular hatch flash. No expanding ring or lingering screen wash.
+        highp float n = obNoise(vec3(p * 5.0, seed));
+        highp float core = exp(-dot(p, p) * 16.0);
+        highp float flare = exp(-dot(p * vec2(0.8, 1.8), p * vec2(0.8, 1.8)) * 4.0);
+        highp float alpha = (core + flare * 0.45 * n) * pow(1.0 - phase, 2.0);
+        return vec4(mix(obHeat(0.5), vec3(2.0, 1.85, 1.3), core), min(0.95, alpha));
+    }
+    // Ballistic wake: a tapered filament, with a white tip and fading hot tail.
+    highp float width = 0.06 + uv.y * 0.27;
+    highp float a = exp(-p.x * p.x / (width * width)) * smoothstep(0.0, 0.2, uv.y) * (1.0 - smoothstep(0.88, 1.0, uv.y));
+    return vec4(obHeat(uv.y * (1.0 - phase * 0.5)), a);
+}
+// KERNEL END
+void fragment() {
+    // COLOR is the output; Clyde applies particle opacity through MODULATE afterward.
+    COLOR = obRender(UV, UV2);
+}

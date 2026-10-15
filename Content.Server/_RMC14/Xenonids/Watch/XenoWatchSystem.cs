@@ -41,6 +41,7 @@ public sealed partial class XenoWatchSystem : SharedXenoWatchSystem
 
         SubscribeLocalEvent<XenoWatchingComponent, ComponentRemove>(OnWatchingRemove);
         SubscribeLocalEvent<XenoWatchingComponent, EntityTerminatingEvent>(OnWatchingRemove);
+        SubscribeLocalEvent<XenoWatchingComponent, PlayerDetachedEvent>(OnWatcherDetached);
 
         SubscribeLocalEvent<ExpandICChatRecipientsEvent>(OnExpandRecipients);
     }
@@ -58,7 +59,12 @@ public sealed partial class XenoWatchSystem : SharedXenoWatchSystem
 
     private void OnWatchingRemove<T>(Entity<XenoWatchingComponent> ent, ref T args)
     {
-        RemoveWatcher(ent);
+        RemoveWatcher(ent.Owner, watching: ent.Comp);
+    }
+
+    private void OnWatcherDetached(Entity<XenoWatchingComponent> ent, ref PlayerDetachedEvent args)
+    {
+        Unwatch(ent.Owner, args.Player);
     }
 
     private void OnExpandRecipients(ExpandICChatRecipientsEvent ev)
@@ -176,7 +182,7 @@ public sealed partial class XenoWatchSystem : SharedXenoWatchSystem
         _eye.SetTarget(watcher, toWatch, watcher);
         _viewSubscriber.AddViewSubscriber(toWatch, watcher.Comp2.PlayerSession);
 
-        RemoveWatcher(watcher);
+        RemoveWatcher(watcher, toWatch.Owner);
         EnsureComp<XenoWatchingComponent>(watcher).Watching = toWatch;
         EnsureComp<XenoWatchedComponent>(toWatch).Watching.Add(watcher);
 
@@ -199,10 +205,19 @@ public sealed partial class XenoWatchSystem : SharedXenoWatchSystem
         RemoveWatcher(watcher);
     }
 
-    private void RemoveWatcher(EntityUid toRemove)
+    private void RemoveWatcher(EntityUid toRemove, EntityUid? keepView = null, XenoWatchingComponent? watching = null)
     {
-        if (!TryComp(toRemove, out XenoWatchingComponent? watching))
+        // ComponentRemove runs after the component is marked deleted; retain the event's instance.
+        if (watching == null && !TryComp(toRemove, out watching))
             return;
+
+        if (watching.Watching is { } oldView && oldView != keepView &&
+            TryComp<ActorComponent>(toRemove, out var actor))
+            _viewSubscriber.RemoveViewSubscriber(oldView, actor.PlayerSession);
+
+        if (watching.Watching != keepView && TryComp<EyeComponent>(toRemove, out var eye) &&
+            eye.Target == watching.Watching && !TerminatingOrDeleted(toRemove))
+            _eye.SetTarget(toRemove, null, eye);
 
         if (TryComp(watching.Watching, out XenoWatchedComponent? watched))
         {

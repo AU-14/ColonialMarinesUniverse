@@ -14,12 +14,13 @@ rmc-vehicle-ride-climb-down-others = {$user} climbs down from {$vehicle}.
 rmc-hardpoint-remove-verb = Remove {$slot}
 rmc-hardpoint-repaired = Hardpoint repaired.
 rmc-hardpoint-intact = Hardpoint is already intact.
-rmc-hardpoint-integrity-examine = Integrity: [color={$color}]{$current}/{$max} ({$percent}%)[/color]
+# CMU14: factory-scaled health and readable fault descriptions.
+rmc-hardpoint-integrity-examine = [bold]Integrity:[/bold] [color={$color}]{$current}/{$max} ({$percent}%)[/color]
 rmc-vehicle-damage-examine-verb = Vehicle damage
 rmc-vehicle-damage-examine-description = Inspect condition and active faults.
-rmc-vehicle-damage-examine-no-faults = No active faults.
-rmc-vehicle-damage-examine-faults = [bold]Active faults[/bold]
-rmc-vehicle-damage-examine-fault = {$fault}: {$effect}
+rmc-vehicle-damage-examine-no-faults = [color=green]No active faults.[/color]
+rmc-vehicle-damage-examine-faults = [bold][color=orange]Active faults[/color][/bold]
+rmc-vehicle-damage-examine-fault = • [bold][color=orange]{$fault}[/color][/bold]: [color=lightgray]{$effect}[/color]
 rmc-hardpoint-armor-modifiers-examine = Damage modifiers: acid {$acid}, slash {$slash}, bullet {$bullet}, explosive {$explosive}, blunt {$blunt}
 rmc-hardpoint-condition-pristine = It is in pristine condition.
 rmc-hardpoint-condition-good = It is in good condition.
@@ -32,6 +33,7 @@ rmc-hardpoint-ui-integrity = {$current}/{$max} ({$percent}%)
 rmc-hardpoint-ui-no-integrity = No integrity data
 rmc-hardpoint-ui-remove = Remove
 rmc-hardpoint-ui-removing = Removing...
+rmc-hardpoint-disintegrates = {CAPITALIZE(THE($item))} disintegrates into a useless pile of scrap under the damage it suffered.
 rmc-vehicle-ammo-loader-no-vehicle = The loader isn't connected to a vehicle.
 rmc-vehicle-ammo-loader-no-hardpoint = No compatible hardpoint is installed.
 rmc-vehicle-ammo-loader-wrong-ammo = That ammo doesn't fit this loader.
@@ -145,3 +147,21 @@ rmc-hardpoint-removal-prying-tool = Hold a crowbar or maintenance jack to remove
 # CMU14
 cmu-vehicle-supply-unassigned = No platoon assigned to this depot.
 cmu-vehicle-supply-allowance = {$platoon} — Vehicles issued: {$used}/{$limit} (maximum one tank and one VTOL)
+cmu-vehicle-supply-no-refund = NOTICE: Vehicle issue is final. Command will not replace or credit back any hull drawn from this depot - returned or lost, it stays on the platoon's books for the rest of the operation.
+cmu-vehicle-supply-preview-title = Vehicle Preview
+cmu-vehicle-supply-stored-vehicles = Stored Vehicles
+cmu-vehicle-supply-loadout = Vehicle Loadout
+cmu-vehicle-supply-raise = Raise
+cmu-vehicle-supply-lower = Lower
+cmu-vehicle-supply-active-none = none
+cmu-vehicle-supply-status-busy = busy
+cmu-vehicle-supply-status-idle = idle
+cmu-vehicle-supply-status-line = Lift: { $lift } | Status: { $status } | Active: { $active }
+cmu-vehicle-supply-lift-none = No lift
+cmu-vehicle-supply-lift-lowered = Lowered
+cmu-vehicle-supply-lift-raised = Raised
+cmu-vehicle-supply-lift-lowering = Lowering
+cmu-vehicle-supply-lift-raising = Raising
+cmu-vehicle-supply-lift-preparing = Preparing
+cmu-vehicle-supply-copies-expanded = Copies v
+cmu-vehicle-supply-copies-collapsed = Copies >

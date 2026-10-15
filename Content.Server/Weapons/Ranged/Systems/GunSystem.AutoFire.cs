@@ -32,10 +32,10 @@ public sealed partial class GunSystem
             else if (gun.BurstActivated)
             {
                 var parent = TransformSystem.GetParentUid(uid);
-                if (HasComp<DamageableComponent>(parent))
-                    AttemptShoot(parent, (uid, gun), gun.ShootCoordinates ?? new EntityCoordinates(uid, gun.DefaultDirection));
-                else
-                    AttemptShoot((uid, gun));
+                gun.ShootCoordinates ??= new EntityCoordinates(uid, gun.DefaultDirection);
+                // Continue this press without rearming the trigger after every bullet.
+                // The resetting overload would turn held burst fire into full auto.
+                AttemptShoot(HasComp<DamageableComponent>(parent) ? parent : uid, (uid, gun));
             }
         }
     }

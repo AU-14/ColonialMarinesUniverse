@@ -1,4 +1,4 @@
-﻿using Content.Shared.DisplacementMap;
+using Content.Shared.DisplacementMap;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -24,7 +24,9 @@ public sealed partial class InventoryComponent : Component
     public ProtoId<InventoryTemplatePrototype> TemplateIdVV
     {
         get => TemplateId;
+#pragma warning disable CS0618 // CMU14: The legacy VV member editor invokes setters without supplying an entity UID.
         set => IoCManager.Resolve<IEntityManager>().System<InventorySystem>().SetTemplateId((Owner, this), value);
+#pragma warning restore CS0618
     }
 
     [DataField, AutoNetworkedField]

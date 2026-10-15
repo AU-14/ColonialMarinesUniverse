@@ -1,4 +1,6 @@
-﻿- type: entity
+﻿#RuMC modified
+
+- type: entity
   parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
   name: AK-4047 assault rifle
   id: RMCWeaponRifleAK4047
@@ -9,8 +11,24 @@
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
-    - state: mag-0
-      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: ItemMapper
+    mapLayers:
+      mag-0:
+        whitelist:
+          tags:
+          - RMCMagazineRifleAK4047
+          - RMCMagazineRifleAK4047AP
+          - RMCMagazineRifleAK4047Incendiary
+          - RMCMagazineRifleAK4047HEAP
+      mag-1:
+        whitelist:
+          tags:
+          - RuMCMagazineRifleAK4047bakelite
+          - RuMCMagazineRifleAK4047APbakelite
+      mag-2:
+        whitelist:
+          tags:
+          - RuMCMagazineRifleAK4047buben
   - type: Clothing
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/ak4047.rsi
   - type: ContainerContainer
@@ -52,6 +70,9 @@
           - RMCMagazineRifleAK4047AP
           - RMCMagazineRifleAK4047Incendiary
           - RMCMagazineRifleAK4047HEAP
+          - RuMCMagazineRifleAK4047bakelite
+          - RuMCMagazineRifleAK4047APbakelite
+          - RuMCMagazineRifleAK4047buben
   - type: GunDamageModifier
     multiplier: 1.1
   - type: AttachableHolder
@@ -196,7 +217,7 @@
     - state: mag-1
       map: ["enum.GunVisualLayers.Mag"]
     - state: ammo_band
-      color: "#1F951F"
+      color: "#212121"
   - type: RefillableByBulletBox
     bulletType: RMCBoxBulletsRifleAP
 

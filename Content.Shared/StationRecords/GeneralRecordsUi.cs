@@ -13,7 +13,8 @@ public enum GeneralStationRecordConsoleKey : byte
 /// Used by any kind of records console including general and criminal.
 /// </summary>
 [Serializable, NetSerializable]
-[Obsolete("Make your station records UI properly predicted")]
+// CMU14: Criminal-record consoles retain server-authoritative record selection.
+// [Obsolete("Make your station records UI properly predicted")]
 public sealed class SelectStationRecord : BoundUserInterfaceMessage
 {
     public readonly uint? SelectedKey;

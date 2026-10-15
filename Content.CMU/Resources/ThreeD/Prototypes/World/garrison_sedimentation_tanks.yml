@@ -1,0 +1,813 @@
+# Source-guided sedimentation assemblies; dimensions above the footprint remain inferred.
+- type: cmu3DModel
+  id: CMU3DFiltrationSedimentation
+  label: Three-vessel sedimentation filter
+  status: draft
+  sourcePrototypes:
+  - RMCFiltrationSedimentation
+  referencePrototype: RMCFiltrationSedimentation
+  referenceRsi: _RMC14/Structures/Filtration/96x96.rsi
+  referenceState: sedimentation
+  sourceDirections: 1
+  useEntityRotation: true
+  description: Source-palette blue pressure vessels, mint feed and collection pipes, pale framed brown filter bed,
+    blue transfer elbow and exposed right-hand motor/control skid. Three narrow rear vessels and wide front filter
+    bed with a right service cabinet. Static source sprite; original collider footprint preserved. Height, rear
+    elevations and pipe depths inferred; draft needs in-map fidelity review. Source pixels CC-BY-SA-3.0; see 96x96.rsi/meta.json
+    and SOURCES_FILTRATION.md.
+  parts:
+  - label: vessel 1 pedestal foot ring
+    min: -1.374000, 0.566000, 0.000000
+    max: -0.786000, 1.154000, 0.320000
+    color: '#1C2F57'
+    shape: CylinderZ
+  - label: vessel 1 blue barrel
+    min: -1.430000, 0.510000, 0.290000
+    max: -0.730000, 1.210000, 1.790000
+    color: '#2A4783'
+    shape: CylinderZ
+  - label: vessel 1 domed shoulder
+    min: -1.430000, 0.510000, 1.620000
+    max: -0.730000, 1.210000, 1.990000
+    color: '#4E75C7'
+    shape: Ellipsoid
+  - label: vessel 1 top inspection lid
+    min: -1.304000, 0.636000, 1.935000
+    max: -0.856000, 1.084000, 2.005000
+    color: '#7593D3'
+    shape: CylinderZ
+  - label: vessel 1 front left stiffener
+    min: -1.318000, 0.576500, 0.390000
+    max: -1.283000, 0.583500, 1.690000
+    color: '#4E75C7'
+  - label: vessel 1 outlet tube
+    min: -1.135000, 0.340000, 0.895000
+    max: -1.025000, 0.510000, 1.005000
+    color: '#94C5A6'
+    shape: CylinderY
+  - label: vessel 1 outlet tube
+    min: -1.135000, 0.285000, 0.580000
+    max: -1.025000, 0.395000, 0.950000
+    color: '#94C5A6'
+    shape: CylinderZ
+  - label: vessel 1 outlet tube
+    min: -1.080000, 0.285000, 0.525000
+    max: -0.930000, 0.395000, 0.635000
+    color: '#94C5A6'
+    shape: CylinderX
+  - label: vessel 1 outlet elbow
+    min: -1.135000, 0.285000, 0.895000
+    max: -1.025000, 0.395000, 1.005000
+    color: '#94C5A6'
+    shape: Ellipsoid
+  - label: vessel 1 outlet elbow
+    min: -1.135000, 0.285000, 0.525000
+    max: -1.025000, 0.395000, 0.635000
+    color: '#94C5A6'
+    shape: Ellipsoid
+  - label: vessel 1 upper feed tube
+    min: -1.112000, 0.828000, 2.005000
+    max: -1.048000, 0.892000, 2.090000
+    color: '#94C5A6'
+    shape: CylinderZ
+  - label: vessel 1 upper feed tube
+    min: -1.112000, 0.450000, 2.058000
+    max: -1.048000, 0.860000, 2.122000
+    color: '#94C5A6'
+    shape: CylinderY
+  - label: vessel 1 upper feed elbow
+    min: -1.112000, 0.828000, 2.058000
+    max: -1.048000, 0.892000, 2.122000
+    color: '#94C5A6'
+    shape: Ellipsoid
+  - label: vessel 2 pedestal foot ring
+    min: -0.584000, 0.566000, 0.000000
+    max: 0.004000, 1.154000, 0.320000
+    color: '#1C2F57'
+    shape: CylinderZ
+  - label: vessel 2 blue barrel
+    min: -0.640000, 0.510000, 0.290000
+    max: 0.060000, 1.210000, 1.790000
+    color: '#2A4783'
+    shape: CylinderZ
+  - label: vessel 2 domed shoulder
+    min: -0.640000, 0.510000, 1.620000
+    max: 0.060000, 1.210000, 1.990000
+    color: '#4E75C7'
+    shape: Ellipsoid
+  - label: vessel 2 top inspection lid
+    min: -0.514000, 0.636000, 1.935000
+    max: -0.066000, 1.084000, 2.005000
+    color: '#7593D3'
+    shape: CylinderZ
+  - label: vessel 2 front left stiffener
+    min: -0.528000, 0.576500, 0.390000
+    max: -0.493000, 0.583500, 1.690000
+    color: '#4E75C7'
+  - label: vessel 2 outlet tube
+    min: -0.345000, 0.340000, 0.895000
+    max: -0.235000, 0.510000, 1.005000
+    color: '#94C5A6'
+    shape: CylinderY
+  - label: vessel 2 outlet tube
+    min: -0.345000, 0.285000, 0.580000
+    max: -0.235000, 0.395000, 0.950000
+    color: '#94C5A6'
+    shape: CylinderZ
+  - label: vessel 2 outlet tube
+    min: -0.290000, 0.285000, 0.525000
+    max: -0.140000, 0.395000, 0.635000
+    color: '#94C5A6'
+    shape: CylinderX
+  - label: vessel 2 outlet elbow
+    min: -0.345000, 0.285000, 0.895000
+    max: -0.235000, 0.395000, 1.005000
+    color: '#94C5A6'
+    shape: Ellipsoid
+  - label: vessel 2 outlet elbow
+    min: -0.345000, 0.285000, 0.525000
+    max: -0.235000, 0.395000, 0.635000
+    color: '#94C5A6'
+    shape: Ellipsoid
+  - label: vessel 2 upper feed tube
+    min: -0.322000, 0.828000, 2.005000
+    max: -0.258000, 0.892000, 2.090000
+    color: '#94C5A6'
+    shape: CylinderZ
+  - label: vessel 2 upper feed tube
+    min: -0.322000, 0.450000, 2.058000
+    max: -0.258000, 0.860000, 2.122000
+    color: '#94C5A6'
+    shape: CylinderY
+  - label: vessel 2 upper feed elbow
+    min: -0.322000, 0.828000, 2.058000
+    max: -0.258000, 0.892000, 2.122000
+    color: '#94C5A6'
+    shape: Ellipsoid
+  - label: vessel 3 pedestal foot ring
+    min: 0.206000, 0.566000, 0.000000
+    max: 0.794000, 1.154000, 0.320000
+    color: '#1C2F57'
+    shape: CylinderZ
+  - label: vessel 3 blue barrel
+    min: 0.150000, 0.510000, 0.290000
+    max: 0.850000, 1.210000, 1.790000
+    color: '#2A4783'
+    shape: CylinderZ
+  - label: vessel 3 domed shoulder
+    min: 0.150000, 0.510000, 1.620000
+    max: 0.850000, 1.210000, 1.990000
+    color: '#4E75C7'
+    shape: Ellipsoid
+  - label: vessel 3 top inspection lid
+    min: 0.276000, 0.636000, 1.935000
+    max: 0.724000, 1.084000, 2.005000
+    color: '#7593D3'
+    shape: CylinderZ
+  - label: vessel 3 front left stiffener
+    min: 0.262000, 0.576500, 0.390000
+    max: 0.297000, 0.583500, 1.690000
+    color: '#4E75C7'
+  - label: vessel 3 outlet tube
+    min: 0.445000, 0.340000, 0.895000
+    max: 0.555000, 0.510000, 1.005000
+    color: '#94C5A6'
+    shape: CylinderY
+  - label: vessel 3 outlet tube
+    min: 0.445000, 0.285000, 0.580000
+    max: 0.555000, 0.395000, 0.950000
+    color: '#94C5A6'
+    shape: CylinderZ
+  - label: vessel 3 outlet tube
+    min: 0.500000, 0.285000, 0.525000
+    max: 0.650000, 0.395000, 0.635000
+    color: '#94C5A6'
+    shape: CylinderX
+  - label: vessel 3 outlet elbow
+    min: 0.445000, 0.285000, 0.895000
+    max: 0.555000, 0.395000, 1.005000
+    color: '#94C5A6'
+    shape: Ellipsoid
+  - label: vessel 3 outlet elbow
+    min: 0.445000, 0.285000, 0.525000
+    max: 0.555000, 0.395000, 0.635000
+    color: '#94C5A6'
+    shape: Ellipsoid
+  - label: vessel 3 upper feed tube
+    min: 0.468000, 0.828000, 2.005000
+    max: 0.532000, 0.892000, 2.090000
+    color: '#94C5A6'
+    shape: CylinderZ
+  - label: vessel 3 upper feed tube
+    min: 0.468000, 0.450000, 2.058000
+    max: 0.532000, 0.860000, 2.122000
+    color: '#94C5A6'
+    shape: CylinderY
+  - label: vessel 3 upper feed elbow
+    min: 0.468000, 0.828000, 2.058000
+    max: 0.532000, 0.892000, 2.122000
+    color: '#94C5A6'
+    shape: Ellipsoid
+  - label: shared upper mint header tube
+    min: -1.080000, 0.418000, 2.058000
+    max: 0.810000, 0.482000, 2.122000
+    color: '#94C5A6'
+    shape: CylinderX
+  - label: shared upper mint header tube
+    min: 0.778000, 0.418000, 0.580000
+    max: 0.842000, 0.482000, 2.090000
+    color: '#94C5A6'
+    shape: CylinderZ
+  - label: shared upper mint header elbow
+    min: 0.778000, 0.418000, 2.058000
+    max: 0.842000, 0.482000, 2.122000
+    color: '#94C5A6'
+    shape: Ellipsoid
+  - label: lower mint collection header tube
+    min: -0.930000, 0.293000, 0.533000
+    max: 0.810000, 0.387000, 0.627000
+    color: '#94C5A6'
+    shape: CylinderX
+  - label: lower mint collection header tube
+    min: 0.763000, 0.340000, 0.533000
+    max: 0.857000, 0.480000, 0.627000
+    color: '#94C5A6'
+    shape: CylinderY
+  - label: lower mint collection header elbow
+    min: 0.763000, 0.293000, 0.533000
+    max: 0.857000, 0.387000, 0.627000
+    color: '#94C5A6'
+    shape: Ellipsoid
+  - label: wide front filter bed lower foundation
+    min: -1.340000, -1.375000, 0.000000
+    max: 0.840000, -0.540000, 0.130000
+    color: '#89938C'
+  - label: wide front filter bed dark filter well
+    min: -1.270000, -1.305000, 0.160000
+    max: 0.770000, -0.610000, 0.650000
+    color: '#1A120C'
+  - label: wide front filter bed front observation strip
+    min: -1.260000, -1.380000, 0.200000
+    max: 0.760000, -1.345000, 0.384000
+    color: '#457CB8'
+  - label: wide front filter bed front sill
+    min: -1.340000, -1.375000, 0.130000
+    max: 0.840000, -1.290000, 0.230000
+    color: '#646D66'
+  - label: wide front filter bed front upper beam
+    min: -1.340000, -1.375000, 0.660000
+    max: 0.840000, -1.290000, 0.800000
+    color: '#89938C'
+  - label: wide front filter bed rear rim
+    min: -1.340000, -0.620000, 0.670000
+    max: 0.840000, -0.540000, 0.800000
+    color: '#89938C'
+  - label: wide front filter bed left rim
+    min: -1.340000, -1.375000, 0.130000
+    max: -1.260000, -0.540000, 0.800000
+    color: '#646D66'
+  - label: wide front filter bed right rim
+    min: 0.760000, -1.375000, 0.130000
+    max: 0.840000, -0.540000, 0.800000
+    color: '#646D66'
+  - label: wide front filter bed brown filter bar
+    min: -1.108429, -1.310000, 0.570000
+    max: -1.054429, -0.605000, 0.710000
+    color: '#5B4839'
+  - label: wide front filter bed brown filter bar
+    min: -0.831286, -1.310000, 0.570000
+    max: -0.777286, -0.605000, 0.710000
+    color: '#5B4839'
+  - label: wide front filter bed brown filter bar
+    min: -0.554143, -1.310000, 0.570000
+    max: -0.500143, -0.605000, 0.710000
+    color: '#5B4839'
+  - label: wide front filter bed brown filter bar
+    min: -0.277000, -1.310000, 0.570000
+    max: -0.223000, -0.605000, 0.710000
+    color: '#5B4839'
+  - label: wide front filter bed brown filter bar
+    min: 0.000143, -1.310000, 0.570000
+    max: 0.054143, -0.605000, 0.710000
+    color: '#5B4839'
+  - label: wide front filter bed brown filter bar
+    min: 0.277286, -1.310000, 0.570000
+    max: 0.331286, -0.605000, 0.710000
+    color: '#5B4839'
+  - label: wide front filter bed brown filter bar
+    min: 0.554429, -1.310000, 0.570000
+    max: 0.608429, -0.605000, 0.710000
+    color: '#5B4839'
+  - label: wide front filter bed dark blue transfer tube
+    min: -1.004600, -1.480000, 0.160000
+    max: -0.834600, -1.310000, 0.890000
+    color: '#28496D'
+    shape: CylinderZ
+  - label: wide front filter bed dark blue transfer tube
+    min: -0.919600, -1.480000, 0.805000
+    max: -0.539600, -1.310000, 0.975000
+    color: '#28496D'
+    shape: CylinderX
+  - label: wide front filter bed dark blue transfer tube
+    min: -0.624600, -1.480000, 0.680000
+    max: -0.454600, -1.310000, 0.890000
+    color: '#28496D'
+    shape: CylinderZ
+  - label: wide front filter bed dark blue transfer elbow
+    min: -1.004600, -1.480000, 0.805000
+    max: -0.834600, -1.310000, 0.975000
+    color: '#28496D'
+    shape: Ellipsoid
+  - label: wide front filter bed dark blue transfer elbow
+    min: -0.624600, -1.480000, 0.805000
+    max: -0.454600, -1.310000, 0.975000
+    color: '#28496D'
+    shape: Ellipsoid
+  - label: pump rack bottom
+    min: 0.790000, -0.150000, 0.110000
+    max: 1.400000, 0.440000, 0.190000
+    color: '#0B1221'
+  - label: pump rack left upright
+    min: 0.790000, -0.150000, 0.110000
+    max: 0.845000, 0.440000, 0.950000
+    color: '#0B1221'
+  - label: pump rack right upright
+    min: 1.345000, -0.150000, 0.110000
+    max: 1.400000, 0.440000, 0.950000
+    color: '#0B1221'
+  - label: pump rack motor shelf
+    min: 0.790000, -0.150000, 0.400000
+    max: 1.400000, 0.440000, 0.460000
+    color: '#383D39'
+  - label: blue controller housing
+    min: 0.790000, -0.150000, 0.830000
+    max: 1.400000, 0.440000, 1.070000
+    color: '#1C2F57'
+  - label: blue controller front
+    min: 0.825000, -0.157000, 0.890000
+    max: 1.365000, -0.133000, 1.035000
+    color: '#4E75C7'
+  - label: controller status strip
+    min: 0.845000, -0.161000, 0.935000
+    max: 1.240000, -0.157000, 0.962000
+    color: '#646D66'
+  - label: controller red pilot
+    min: 0.825000, -0.162000, 1.035000
+    max: 0.875000, -0.132000, 1.085000
+    color: '#8C2629'
+  - label: controller pale end switch
+    min: 1.325000, -0.163000, 0.910000
+    max: 1.365000, -0.157000, 0.980000
+    color: '#BAB7B8'
+  - label: silver horizontal pump motor
+    min: 0.850000, 0.035000, 0.490000
+    max: 1.310000, 0.255000, 0.720000
+    color: '#989898'
+    shape: CylinderX
+  - label: dark motor winding band
+    min: 0.875000, 0.027000, 0.483000
+    max: 0.940000, 0.263000, 0.727000
+    color: '#493C3B'
+    shape: CylinderX
+  - label: dark motor winding band
+    min: 1.220000, 0.027000, 0.483000
+    max: 1.285000, 0.263000, 0.727000
+    color: '#493C3B'
+    shape: CylinderX
+  - label: small red pressure bottle
+    min: 0.000000, -0.020000, 0.160000
+    max: 0.200000, 0.180000, 0.650000
+    color: '#8C2629'
+    shape: CylinderZ
+  - label: pressure bottle dark shoulder
+    min: 0.000000, -0.020000, 0.580000
+    max: 0.200000, 0.180000, 0.720000
+    color: '#3E1613'
+    shape: Ellipsoid
+  - label: pressure bottle valve
+    min: 0.065000, 0.045000, 0.700000
+    max: 0.135000, 0.115000, 0.820000
+    color: '#636B64'
+  - label: ochre separator bottle
+    min: -0.800000, 0.200000, 0.170000
+    max: -0.650000, 0.350000, 1.040000
+    color: '#2B2823'
+    shape: CylinderZ
+  - label: ochre separator brass collar
+    min: -0.800000, 0.200000, 0.980000
+    max: -0.650000, 0.350000, 1.040000
+    color: '#966A31'
+    shape: CylinderZ
+  - label: brown front service cabinet
+    min: 0.890000, -1.375000, 0.130000
+    max: 1.470000, -0.540000, 0.840000
+    color: '#42352B'
+  - label: service cabinet recessed door
+    min: 0.960000, -1.381000, 0.260000
+    max: 1.400000, -1.375000, 0.760000
+    color: '#5B4839'
+  - label: service cabinet pale latch
+    min: 1.160000, -1.389000, 0.420000
+    max: 1.220000, -1.381000, 0.450000
+    color: '#BAB7B8'
+  - label: rust drain descending into bed tube
+    min: 0.359000, 0.009000, 0.870000
+    max: 0.441000, 0.091000, 1.130000
+    color: '#733817'
+    shape: CylinderZ
+  - label: rust drain descending into bed tube
+    min: 0.400000, 0.009000, 0.829000
+    max: 0.580000, 0.091000, 0.911000
+    color: '#733817'
+    shape: CylinderX
+  - label: rust drain descending into bed tube
+    min: 0.539000, -0.730000, 0.829000
+    max: 0.621000, 0.050000, 0.911000
+    color: '#733817'
+    shape: CylinderY
+  - label: rust drain descending into bed tube
+    min: 0.539000, -0.771000, 0.490000
+    max: 0.621000, -0.689000, 0.870000
+    color: '#733817'
+    shape: CylinderZ
+  - label: rust drain descending into bed elbow
+    min: 0.359000, 0.009000, 0.829000
+    max: 0.441000, 0.091000, 0.911000
+    color: '#733817'
+    shape: Ellipsoid
+  - label: rust drain descending into bed elbow
+    min: 0.539000, 0.009000, 0.829000
+    max: 0.621000, 0.091000, 0.911000
+    color: '#733817'
+    shape: Ellipsoid
+  - label: rust drain descending into bed elbow
+    min: 0.539000, -0.771000, 0.829000
+    max: 0.621000, -0.689000, 0.911000
+    color: '#733817'
+    shape: Ellipsoid
+  - label: rear red supply riser tube
+    min: -1.435000, 1.245000, 0.050000
+    max: -1.365000, 1.315000, 1.300000
+    color: '#25070D'
+    shape: CylinderZ
+  - label: rear red supply riser tube
+    min: -1.400000, 1.245000, 1.265000
+    max: -1.130000, 1.315000, 1.335000
+    color: '#25070D'
+    shape: CylinderX
+  - label: rear red supply riser elbow
+    min: -1.435000, 1.245000, 1.265000
+    max: -1.365000, 1.315000, 1.335000
+    color: '#25070D'
+    shape: Ellipsoid
+  - label: front green service header tube
+    min: -1.132000, -0.402000, 0.150000
+    max: -1.068000, -0.338000, 0.470000
+    color: '#7CA36F'
+    shape: CylinderZ
+  - label: front green service header tube
+    min: -1.100000, -0.402000, 0.438000
+    max: 0.900000, -0.338000, 0.502000
+    color: '#7CA36F'
+    shape: CylinderX
+  - label: front green service header elbow
+    min: -1.132000, -0.402000, 0.438000
+    max: -1.068000, -0.338000, 0.502000
+    color: '#7CA36F'
+    shape: Ellipsoid
+  - label: small grey controller on lower header
+    min: -0.170000, -0.413000, 0.390000
+    max: 0.100000, -0.365000, 0.530000
+    color: '#89938C'
+- type: cmu3DModel
+  id: CMU3DFiltrationSedimentationAlt
+  label: Single-vessel sedimentation filter
+  status: draft
+  sourcePrototypes:
+  - RMCFiltrationSedimentationAlt
+  referencePrototype: RMCFiltrationSedimentationAlt
+  referenceRsi: _RMC14/Structures/Filtration/96x96.rsi
+  referenceState: sedimentation_A_1
+  sourceDirections: 1
+  useEntityRotation: true
+  description: Source-palette blue pressure vessels, mint feed and collection pipes, pale framed brown filter bed,
+    blue transfer elbow and exposed right-hand motor/control skid. One wide left vessel and small rear-right filter
+    bed, south-shifted footprint. Static source sprite; original collider footprint preserved. Height, rear elevations
+    and pipe depths inferred; draft needs in-map fidelity review. Source pixels CC-BY-SA-3.0; see 96x96.rsi/meta.json
+    and SOURCES_FILTRATION.md.
+  parts:
+  - label: large single vessel pedestal foot ring
+    min: -1.236800, -1.056800, 0.000000
+    max: 0.056800, 0.236800, 0.320000
+    color: '#1C2F57'
+    shape: CylinderZ
+  - label: large single vessel blue barrel
+    min: -1.360000, -1.180000, 0.290000
+    max: 0.180000, 0.360000, 1.880000
+    color: '#2A4783'
+    shape: CylinderZ
+  - label: large single vessel domed shoulder
+    min: -1.360000, -1.180000, 1.710000
+    max: 0.180000, 0.360000, 2.080000
+    color: '#4E75C7'
+    shape: Ellipsoid
+  - label: large single vessel top inspection lid
+    min: -1.082800, -0.902800, 2.025000
+    max: -0.097200, 0.082800, 2.095000
+    color: '#7593D3'
+    shape: CylinderZ
+  - label: large single vessel front left stiffener
+    min: -1.113600, -1.033700, 0.390000
+    max: -1.036600, -1.018300, 1.780000
+    color: '#4E75C7'
+  - label: small rear right filter bed lower foundation
+    min: 0.230000, -0.080000, 0.000000
+    max: 1.470000, 0.470000, 0.130000
+    color: '#89938C'
+  - label: small rear right filter bed dark filter well
+    min: 0.300000, -0.010000, 0.160000
+    max: 1.400000, 0.400000, 0.790000
+    color: '#1A120C'
+  - label: small rear right filter bed front observation strip
+    min: 0.310000, -0.085000, 0.200000
+    max: 1.390000, -0.050000, 0.451200
+    color: '#457CB8'
+  - label: small rear right filter bed front sill
+    min: 0.230000, -0.080000, 0.130000
+    max: 1.470000, 0.005000, 0.230000
+    color: '#646D66'
+  - label: small rear right filter bed front upper beam
+    min: 0.230000, -0.080000, 0.800000
+    max: 1.470000, 0.005000, 0.940000
+    color: '#89938C'
+  - label: small rear right filter bed rear rim
+    min: 0.230000, 0.390000, 0.810000
+    max: 1.470000, 0.470000, 0.940000
+    color: '#89938C'
+  - label: small rear right filter bed left rim
+    min: 0.230000, -0.080000, 0.130000
+    max: 0.310000, 0.470000, 0.940000
+    color: '#646D66'
+  - label: small rear right filter bed right rim
+    min: 1.390000, -0.080000, 0.130000
+    max: 1.470000, 0.470000, 0.940000
+    color: '#646D66'
+  - label: small rear right filter bed brown filter bar
+    min: 0.423000, -0.015000, 0.710000
+    max: 0.477000, 0.405000, 0.850000
+    color: '#5B4839'
+  - label: small rear right filter bed brown filter bar
+    min: 0.623000, -0.015000, 0.710000
+    max: 0.677000, 0.405000, 0.850000
+    color: '#5B4839'
+  - label: small rear right filter bed brown filter bar
+    min: 0.823000, -0.015000, 0.710000
+    max: 0.877000, 0.405000, 0.850000
+    color: '#5B4839'
+  - label: small rear right filter bed brown filter bar
+    min: 1.023000, -0.015000, 0.710000
+    max: 1.077000, 0.405000, 0.850000
+    color: '#5B4839'
+  - label: small rear right filter bed brown filter bar
+    min: 1.223000, -0.015000, 0.710000
+    max: 1.277000, 0.405000, 0.850000
+    color: '#5B4839'
+  - label: small rear right filter bed dark blue transfer tube
+    min: 0.319000, -0.168200, 0.160000
+    max: 0.455400, -0.031800, 1.030000
+    color: '#28496D'
+    shape: CylinderZ
+  - label: small rear right filter bed dark blue transfer tube
+    min: 0.387200, -0.168200, 0.961800
+    max: 0.767200, -0.031800, 1.098200
+    color: '#28496D'
+    shape: CylinderX
+  - label: small rear right filter bed dark blue transfer tube
+    min: 0.699000, -0.168200, 0.820000
+    max: 0.835400, -0.031800, 1.030000
+    color: '#28496D'
+    shape: CylinderZ
+  - label: small rear right filter bed dark blue transfer elbow
+    min: 0.319000, -0.168200, 0.961800
+    max: 0.455400, -0.031800, 1.098200
+    color: '#28496D'
+    shape: Ellipsoid
+  - label: small rear right filter bed dark blue transfer elbow
+    min: 0.699000, -0.168200, 0.961800
+    max: 0.835400, -0.031800, 1.098200
+    color: '#28496D'
+    shape: Ellipsoid
+  - label: pump rack bottom
+    min: 0.570000, -1.340000, 0.110000
+    max: 1.430000, -0.700000, 0.190000
+    color: '#0B1221'
+  - label: pump rack left upright
+    min: 0.570000, -1.340000, 0.110000
+    max: 0.625000, -0.700000, 0.950000
+    color: '#0B1221'
+  - label: pump rack right upright
+    min: 1.375000, -1.340000, 0.110000
+    max: 1.430000, -0.700000, 0.950000
+    color: '#0B1221'
+  - label: pump rack motor shelf
+    min: 0.570000, -1.340000, 0.400000
+    max: 1.430000, -0.700000, 0.460000
+    color: '#383D39'
+  - label: blue controller housing
+    min: 0.570000, -1.340000, 0.830000
+    max: 1.430000, -0.700000, 1.070000
+    color: '#1C2F57'
+  - label: blue controller front
+    min: 0.605000, -1.347000, 0.890000
+    max: 1.395000, -1.323000, 1.035000
+    color: '#4E75C7'
+  - label: controller status strip
+    min: 0.625000, -1.351000, 0.935000
+    max: 1.270000, -1.347000, 0.962000
+    color: '#48C9EC'
+  - label: controller red pilot
+    min: 0.605000, -1.352000, 1.035000
+    max: 0.655000, -1.322000, 1.085000
+    color: '#8C2629'
+  - label: controller pale end switch
+    min: 1.355000, -1.353000, 0.910000
+    max: 1.395000, -1.347000, 0.980000
+    color: '#BAB7B8'
+  - label: silver horizontal pump motor
+    min: 0.630000, -1.130000, 0.490000
+    max: 1.340000, -0.910000, 0.720000
+    color: '#989898'
+    shape: CylinderX
+  - label: dark motor winding band
+    min: 0.655000, -1.138000, 0.483000
+    max: 0.720000, -0.902000, 0.727000
+    color: '#493C3B'
+    shape: CylinderX
+  - label: dark motor winding band
+    min: 1.250000, -1.138000, 0.483000
+    max: 1.315000, -0.902000, 0.727000
+    color: '#493C3B'
+    shape: CylinderX
+  - label: small red pressure bottle
+    min: 0.090000, -0.830000, 0.160000
+    max: 0.290000, -0.630000, 0.650000
+    color: '#8C2629'
+    shape: CylinderZ
+  - label: pressure bottle dark shoulder
+    min: 0.090000, -0.830000, 0.580000
+    max: 0.290000, -0.630000, 0.720000
+    color: '#3E1613'
+    shape: Ellipsoid
+  - label: pressure bottle valve
+    min: 0.155000, -0.765000, 0.700000
+    max: 0.225000, -0.695000, 0.820000
+    color: '#636B64'
+  - label: large vessel mint outlet tube
+    min: -0.720000, -1.220000, 1.170000
+    max: -0.600000, -1.080000, 1.290000
+    color: '#94C5A6'
+    shape: CylinderY
+  - label: large vessel mint outlet tube
+    min: -0.720000, -1.280000, 0.790000
+    max: -0.600000, -1.160000, 1.230000
+    color: '#94C5A6'
+    shape: CylinderZ
+  - label: large vessel mint outlet tube
+    min: -0.660000, -1.280000, 0.730000
+    max: -0.130000, -1.160000, 0.850000
+    color: '#94C5A6'
+    shape: CylinderX
+  - label: large vessel mint outlet tube
+    min: -0.190000, -1.280000, 0.390000
+    max: -0.070000, -1.160000, 0.790000
+    color: '#94C5A6'
+    shape: CylinderZ
+  - label: large vessel mint outlet elbow
+    min: -0.720000, -1.280000, 1.170000
+    max: -0.600000, -1.160000, 1.290000
+    color: '#94C5A6'
+    shape: Ellipsoid
+  - label: large vessel mint outlet elbow
+    min: -0.720000, -1.280000, 0.730000
+    max: -0.600000, -1.160000, 0.850000
+    color: '#94C5A6'
+    shape: Ellipsoid
+  - label: large vessel mint outlet elbow
+    min: -0.190000, -1.280000, 0.730000
+    max: -0.070000, -1.160000, 0.850000
+    color: '#94C5A6'
+    shape: Ellipsoid
+  - label: large vessel top return tube
+    min: -0.590000, -0.443000, 2.067000
+    max: 0.220000, -0.377000, 2.133000
+    color: '#94C5A6'
+    shape: CylinderX
+  - label: large vessel top return tube
+    min: 0.187000, -0.443000, 0.530000
+    max: 0.253000, -0.377000, 2.100000
+    color: '#94C5A6'
+    shape: CylinderZ
+  - label: large vessel top return tube
+    min: 0.220000, -0.443000, 0.497000
+    max: 0.440000, -0.377000, 0.563000
+    color: '#94C5A6'
+    shape: CylinderX
+  - label: large vessel top return tube
+    min: 0.407000, -1.220000, 0.497000
+    max: 0.473000, -0.410000, 0.563000
+    color: '#94C5A6'
+    shape: CylinderY
+  - label: large vessel top return elbow
+    min: 0.187000, -0.443000, 2.067000
+    max: 0.253000, -0.377000, 2.133000
+    color: '#94C5A6'
+    shape: Ellipsoid
+  - label: large vessel top return elbow
+    min: 0.187000, -0.443000, 0.497000
+    max: 0.253000, -0.377000, 0.563000
+    color: '#94C5A6'
+    shape: Ellipsoid
+  - label: large vessel top return elbow
+    min: 0.407000, -0.443000, 0.497000
+    max: 0.473000, -0.377000, 0.563000
+    color: '#94C5A6'
+    shape: Ellipsoid
+  - label: green base manifold tube
+    min: -1.287000, -1.367000, 0.140000
+    max: -1.213000, -1.293000, 0.380000
+    color: '#7CA36F'
+    shape: CylinderZ
+  - label: green base manifold tube
+    min: -1.250000, -1.367000, 0.343000
+    max: 0.490000, -1.293000, 0.417000
+    color: '#7CA36F'
+    shape: CylinderX
+  - label: green base manifold tube
+    min: 0.453000, -1.367000, 0.380000
+    max: 0.527000, -1.293000, 0.920000
+    color: '#7CA36F'
+    shape: CylinderZ
+  - label: green base manifold elbow
+    min: -1.287000, -1.367000, 0.343000
+    max: -1.213000, -1.293000, 0.417000
+    color: '#7CA36F'
+    shape: Ellipsoid
+  - label: green base manifold elbow
+    min: 0.453000, -1.367000, 0.343000
+    max: 0.527000, -1.293000, 0.417000
+    color: '#7CA36F'
+    shape: Ellipsoid
+  - label: rear red supply riser tube
+    min: -1.429000, -0.289000, 0.050000
+    max: -1.351000, -0.211000, 1.250000
+    color: '#25070D'
+    shape: CylinderZ
+  - label: rear red supply riser tube
+    min: -1.390000, -0.289000, 1.211000
+    max: -1.160000, -0.211000, 1.289000
+    color: '#25070D'
+    shape: CylinderX
+  - label: rear red supply riser elbow
+    min: -1.429000, -0.289000, 1.211000
+    max: -1.351000, -0.211000, 1.289000
+    color: '#25070D'
+    shape: Ellipsoid
+  - label: rust drain by pressure bottle tube
+    min: 0.366000, -0.564000, 0.200000
+    max: 0.434000, -0.496000, 1.010000
+    color: '#733817'
+    shape: CylinderZ
+  - label: rust drain by pressure bottle tube
+    min: 0.260000, -0.564000, 0.166000
+    max: 0.400000, -0.496000, 0.234000
+    color: '#733817'
+    shape: CylinderX
+  - label: rust drain by pressure bottle elbow
+    min: 0.366000, -0.564000, 0.166000
+    max: 0.434000, -0.496000, 0.234000
+    color: '#733817'
+    shape: Ellipsoid
+  - label: manifold blue clamp
+    min: -0.985000, -1.390000, 0.340000
+    max: -0.915000, -1.280000, 0.420000
+    color: '#4E75C7'
+  - label: manifold blue clamp
+    min: -0.445000, -1.390000, 0.340000
+    max: -0.375000, -1.280000, 0.420000
+    color: '#4E75C7'
+  - label: manifold blue clamp
+    min: 0.195000, -1.390000, 0.340000
+    max: 0.265000, -1.280000, 0.420000
+    color: '#4E75C7'
+  - label: small grey controller on lower header
+    min: -0.170000, -1.386000, 0.160000
+    max: 0.100000, -1.340000, 0.300000
+    color: '#89938C'
+  - label: header controller twin display left
+    min: -0.140000, -1.392000, 0.210000
+    max: -0.090000, -1.386000, 0.270000
+    color: '#C0C0C0'
+  - label: header controller twin display right
+    min: -0.055000, -1.392000, 0.210000
+    max: -0.005000, -1.386000, 0.270000
+    color: '#C0C0C0'

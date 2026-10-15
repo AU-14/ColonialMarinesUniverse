@@ -47,6 +47,8 @@ namespace Content.Server.Database
         public DbSet<AdminWatchlist> AdminWatchlists { get; set; } = null!;
         public DbSet<AdminMessage> AdminMessages { get; set; } = null!;
         public DbSet<RoleWhitelist> RoleWhitelists { get; set; } = null!;
+        public DbSet<YautjaClan> YautjaClans { get; set; } = null!;
+        public DbSet<YautjaClanMember> YautjaClanMembers { get; set; } = null!;
         public DbSet<BanTemplate> BanTemplate { get; set; } = null!;
         public DbSet<IPIntelCache> IPIntelCache { get; set; } = null!;
         public DbSet<CustomVoteLog> CustomVoteLog { get; set; } = null!;
@@ -131,6 +133,25 @@ namespace Content.Server.Database
             modelBuilder.Entity<Profile>()
                 .Property(p => p.Build)
                 .HasDefaultValue(string.Empty);
+
+            // CMU14
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.BloodType)
+                .HasDefaultValue(string.Empty);
+
+            // cmu edit start
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.Religion)
+                .HasDefaultValue(string.Empty);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.ArmorFlavorText)
+                .HasDefaultValue(string.Empty);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.HelmetFlavorText)
+                .HasDefaultValue(string.Empty);
+            // cmu edit end
 
             modelBuilder.Entity<Profile>()
                 .Property(p => p.HideMetaInformation)
@@ -403,6 +424,23 @@ namespace Content.Server.Database
                 .HasPrincipalKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<YautjaClanMember>()
+                .HasIndex(member => member.PlayerUserId)
+                .IsUnique();
+
+            modelBuilder.Entity<YautjaClanMember>()
+                .HasOne(member => member.Player)
+                .WithOne(player => player.YautjaClanMembership)
+                .HasForeignKey<YautjaClanMember>(member => member.PlayerUserId)
+                .HasPrincipalKey<Player>(player => player.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<YautjaClanMember>()
+                .HasOne(member => member.Clan)
+                .WithMany(clan => clan.Members)
+                .HasForeignKey(member => member.ClanId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             // Changes for modern HWID integration
             modelBuilder.Entity<Player>()
                 .OwnsOne(p => p.LastSeenHWId)
@@ -643,6 +681,7 @@ namespace Content.Server.Database
         public int FoFFallback { get; set; }
         public string? GamemodeAntagPreferences { get; set; }
         public string? GamemodeThreatPreferences { get; set; }
+        [Column("yautja_profile")] public string? YautjaProfile { get; set; }
         public string ShortExamine { get; set; } = string.Empty;
         public string FullDescription { get; set; } = string.Empty;
         public string MedicalRecord { get; set; } = string.Empty;
@@ -651,6 +690,13 @@ namespace Content.Server.Database
         public string Height { get; set; } = string.Empty;
         public int Weight { get; set; } = 160;
         public string Build { get; set; } = string.Empty;
+        public string BloodType { get; set; } = string.Empty; // CMU14
+        // cmu edit start
+        public bool FoxtrotSquadOptIn { get; set; }
+        public string Religion { get; set; } = string.Empty;
+        public string ArmorFlavorText { get; set; } = string.Empty;
+        public string HelmetFlavorText { get; set; } = string.Empty;
+        // cmu edit end
         public bool HideMetaInformation { get; set; }
     }
 
@@ -799,6 +845,11 @@ namespace Content.Server.Database
         public DateTime LastSeenTime { get; set; }
         public IPAddress LastSeenAddress { get; set; } = null!;
         public TypedHwid? LastSeenHWId { get; set; }
+
+        // CMU14: nullable keeps existing players on the Blooded compatibility default.
+        public int? YautjaRank { get; set; }
+        public int YautjaWhitelistFlags { get; set; }
+        public YautjaClanMember? YautjaClanMembership { get; set; }
 
         // Data that changes with each round
         public List<Round> Rounds { get; set; } = null!;

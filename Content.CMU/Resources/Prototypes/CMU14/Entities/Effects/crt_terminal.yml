@@ -1,7 +1,7 @@
 - type: shader
   id: CMUCrtTerminal
   kind: source
-  path: "/Textures/Shaders/_CMU14/crt_terminal.swsl"
+  path: "/Textures/Shaders/CMU14/crt_terminal.swsl"
   params:
     pitch: 3.0
     intensity: 1.0

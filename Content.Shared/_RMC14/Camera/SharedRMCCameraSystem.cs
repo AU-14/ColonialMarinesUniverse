@@ -2,6 +2,9 @@ using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared.GameTicking;
 using Content.Shared.SurveillanceCamera;
+using Content.Shared.NameModifier.EntitySystems;
+using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Camera;
@@ -11,6 +14,7 @@ public abstract partial class SharedRMCCameraSystem : EntitySystem
 {
     [Dependency] private AreaSystem _area = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private NameModifierSystem _nameModifier = default!;
 
     private readonly Dictionary<string, int> _cameraNames = new();
 
@@ -319,4 +323,5 @@ public abstract partial class SharedRMCCameraSystem : EntitySystem
     {
         return camera.NameOverride ?? Name(uid);
     }
+
 }

@@ -39,6 +39,7 @@
     mobCrashImmobileMinSpeed: 5.5
     xenoMobCrashImmobileDuration: 8
     xenoMobCrashImmobileMinSpeed: 5.5
+    weedsSpeedFactor: 0.2
   - type: VehicleOvercharge
     speedMultiplier: 1.35
     duration: 2.5
@@ -48,6 +49,7 @@
       params:
         volume: -2
   - type: VehicleSound
+    crashSound: /Audio/_RMC14/Effects/metal_crash.ogg
     runningSound:
       path: /Audio/_RMC14/Vehicle/box_van_driving.ogg
       params:
@@ -77,7 +79,7 @@
       world:
         shape:
           !type:PhysShapeAabb
-          bounds: -0.425,-1.2,0.425,1.2
+          bounds: -0.6,-1.2,0.6,1.5
         density: 1000
         mask:
         - Impassable
@@ -89,7 +91,7 @@
       mob:
         shape:
           !type:PhysShapeAabb
-          bounds: -0.425,-1.2,0.425,1.2
+          bounds: -0.6,-1.2,0.6,1.5
         density: 1000
         mask:
         - MidImpassable
@@ -131,7 +133,7 @@
     autoRot: true
     offset: "0,0.9"
   - type: Corrodible
-    isCorrodible: false
+    isCorrodible: true
   - type: DoAfter
   - type: UserInterface
     interfaces:
@@ -186,6 +188,11 @@
       radius: 0.75
       interiorCoords: 0.25,-1
 
+  - type: VehicleSqueezeUnder
+  - type: VehicleXenoSize
+    minimumSize: Xeno
+  - type: VehicleDemolition
+
 - type: entity
   parent: VehicleVanBase
   id: VehicleVan
@@ -213,22 +220,7 @@
   - type: VehicleSound
     collisionSoundCooldown: 1.5
   - type: VehicleEnter
-    interiorPath: /Maps/_RMC14/Vehicles/van_interior.yml #TODO ACTUAL CLF INTERIOR
-    enterDoAfter: 1.0
-    exitDoAfter: 1.0
     maxPassengers: 10
-    maxXenos: 2
-    entryPoints:
-    - offset: 1,-1
-      radius: 0.6
-      interiorCoords: 3.25,0
-    - offset: -1,-1
-      radius: 0.6
-      interiorCoords: 3.25,-1
-    - offset: 0,2
-      radius: 0.75
-      interiorCoords: 0.25,-1
-
 - type: entity
   id: VehicleBoxVanBase
   abstract: true
@@ -241,6 +233,7 @@
   - type: VehicleOperatorDamage
   - type: Clickable
   - type: GridVehicleMover
+    weedsSpeedFactor: 0.2
     maxSpeed: 8
     acceleration: 5
     deceleration: 12
@@ -274,6 +267,7 @@
       params:
         volume: -3
   - type: VehicleSound
+    crashSound: /Audio/_RMC14/Effects/metal_crash.ogg
     runningSound:
       path: /Audio/_RMC14/Vehicle/box_van_driving.ogg
       params:
@@ -358,7 +352,7 @@
     autoRot: true
     offset: "0,0.9"
   - type: Corrodible
-    isCorrodible: false
+    isCorrodible: true
   - type: DoAfter
   - type: UserInterface
     interfaces:
@@ -412,6 +406,10 @@
     - offset: 0,2
       radius: 0.75
       interiorCoords: -1.74,1.22
+  - type: VehicleSqueezeUnder
+  - type: VehicleXenoSize
+    minimumSize: Xeno
+  - type: VehicleDemolition
 
 - type: entity
   parent: VehicleBoxVanBase
@@ -680,40 +678,3 @@
       slotType: Wheel
       compatibilityId: SPPVan
       insertDelay: 1.5
-
-- type: entity
-  parent: VehicleBoxVanBase
-  id: VehicleCMBPoliceVan
-  name: CMB paddywagon
-  description: A van used by the Colonial Marshal Bureau to transport both prisoners and officers alike.
-  components:
-  - type: PointLight
-    radius: 6
-  - type: Sprite
-    sprite: CMU14/Structures/vehicles/marshalpaddywagon.rsi
-    offset: "0,0.5"
-    layers:
-    - map: [ base ]
-      state: van_base
-    - map: [ damaged_frame ]
-      state: damaged_frame
-      visible: false
-    - map: [ rmc-wheels ]
-      state: wheels_1
-  - type: VehicleEnter
-    # interiorPath: /Maps/Vehicles/Interiors/paddywagon.yml
-    interiorPath: /Maps/_RMC14/Vehicles/box_van_interior.yml # TODO: fix the broken interior PR-895
-    enterDoAfter: 1.0
-    exitDoAfter: 1.0
-    maxPassengers: 8
-    maxXenos: 2
-    entryPoints:
-    - offset: 1,-0.25
-      radius: 0.6
-      interiorCoords: -0.42,1.6
-    - offset: -1,-0.25
-      radius: 0.6
-      interiorCoords: -0.53,0.84
-    - offset: 0,2
-      radius: 0.75
-      interiorCoords: -1.74,1.22

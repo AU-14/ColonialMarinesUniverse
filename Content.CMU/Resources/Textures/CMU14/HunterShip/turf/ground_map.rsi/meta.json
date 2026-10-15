@@ -1,0 +1,588 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/turf/ground_map.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "grass1"
+    },
+    {
+      "name": "grass1_scorched1"
+    },
+    {
+      "name": "grass1_scorched2"
+    },
+    {
+      "name": "grass1_scorched3"
+    },
+    {
+      "name": "grass2"
+    },
+    {
+      "name": "grass2_scorched1"
+    },
+    {
+      "name": "grass2_scorched2"
+    },
+    {
+      "name": "grass2_scorched3"
+    },
+    {
+      "name": "grass3"
+    },
+    {
+      "name": "grass4"
+    },
+    {
+      "name": "stump1"
+    },
+    {
+      "name": "stump2"
+    },
+    {
+      "name": "plant1"
+    },
+    {
+      "name": "plant2"
+    },
+    {
+      "name": "plant3"
+    },
+    {
+      "name": "plant4"
+    },
+    {
+      "name": "plant5"
+    },
+    {
+      "name": "plant6"
+    },
+    {
+      "name": "plant7"
+    },
+    {
+      "name": "dirt"
+    },
+    {
+      "name": "grassdirt2_edge",
+      "directions": 4
+    },
+    {
+      "name": "grassdirt2_corner",
+      "directions": 4
+    },
+    {
+      "name": "grassdirt2_corner2",
+      "directions": 4
+    },
+    {
+      "name": "sand"
+    },
+    {
+      "name": "desert"
+    },
+    {
+      "name": "desert_dug"
+    },
+    {
+      "name": "desert0"
+    },
+    {
+      "name": "desert1"
+    },
+    {
+      "name": "desert5"
+    },
+    {
+      "name": "desert6"
+    },
+    {
+      "name": "desert7"
+    },
+    {
+      "name": "dgrass0"
+    },
+    {
+      "name": "dgrass1"
+    },
+    {
+      "name": "dgrass2"
+    },
+    {
+      "name": "dgrass3"
+    },
+    {
+      "name": "dgrass4"
+    },
+    {
+      "name": "fullgrass0"
+    },
+    {
+      "name": "fullgrass1"
+    },
+    {
+      "name": "fullgrass2"
+    },
+    {
+      "name": "fullgrass3"
+    },
+    {
+      "name": "fullgrass4"
+    },
+    {
+      "name": "seadeep",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
+    },
+    {
+      "name": "seashallow",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
+    },
+    {
+      "name": "beach",
+      "directions": 8,
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
+    },
+    {
+      "name": "beachcorner",
+      "directions": 4,
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
+    },
+    {
+      "name": "jungletree",
+      "directions": 8
+    },
+    {
+      "name": "grassdirt_edge",
+      "directions": 4
+    },
+    {
+      "name": "grassdirt_edge_scorched1",
+      "directions": 4
+    },
+    {
+      "name": "grassdirt_edge_scorched2",
+      "directions": 4
+    },
+    {
+      "name": "grassdirt_edge_scorched3",
+      "directions": 4
+    },
+    {
+      "name": "grassdirt_corner2",
+      "directions": 4
+    },
+    {
+      "name": "grassdirt_corner2_scorched1",
+      "directions": 4
+    },
+    {
+      "name": "grassdirt_corner2_scorched2",
+      "directions": 4
+    },
+    {
+      "name": "grassdirt_corner2_scorched3",
+      "directions": 4
+    },
+    {
+      "name": "grassdirt_corner",
+      "directions": 4
+    },
+    {
+      "name": "grassdirt_corner_scorched1",
+      "directions": 4
+    },
+    {
+      "name": "grassdirt_corner_scorched2",
+      "directions": 4
+    },
+    {
+      "name": "grassdirt_corner_scorched3",
+      "directions": 4
+    },
+    {
+      "name": "grassdirt_single"
+    },
+    {
+      "name": "grassdirt_single_scorched1"
+    },
+    {
+      "name": "grassdirt_single_scorched2"
+    },
+    {
+      "name": "grassdirt_single_scorched3"
+    },
+    {
+      "name": "desert2"
+    },
+    {
+      "name": "desert3"
+    },
+    {
+      "name": "riverwater"
+    },
+    {
+      "name": "beachcorner2",
+      "directions": 4,
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
+    },
+    {
+      "name": "water",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
+    },
+    {
+      "name": "geo_off"
+    },
+    {
+      "name": "geo_working",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
+    },
+    {
+      "name": "geo_broken"
+    },
+    {
+      "name": "geo_broken2"
+    },
+    {
+      "name": "geo_broken3"
+    },
+    {
+      "name": "planttop1"
+    },
+    {
+      "name": "plantbot1"
+    },
+    {
+      "name": "alienplant1",
+      "delays": [
+        [
+          0.5,
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "grassvar1"
+    },
+    {
+      "name": "cart_wreck"
+    },
+    {
+      "name": "grassbeach",
+      "directions": 4
+    },
+    {
+      "name": "grassbeach_scorched1",
+      "directions": 4
+    },
+    {
+      "name": "grassbeach_scorched2",
+      "directions": 4
+    },
+    {
+      "name": "grassbeach_scorched3",
+      "directions": 4
+    },
+    {
+      "name": "gbcorner",
+      "directions": 4
+    },
+    {
+      "name": "gbcorner_scorched1",
+      "directions": 4
+    },
+    {
+      "name": "gbcorner_scorched2",
+      "directions": 4
+    },
+    {
+      "name": "gbcorner_scorched3",
+      "directions": 4
+    },
+    {
+      "name": "treewall1"
+    },
+    {
+      "name": "tw1"
+    },
+    {
+      "name": "tw2"
+    },
+    {
+      "name": "tw3"
+    },
+    {
+      "name": "tw4"
+    },
+    {
+      "name": "jw1"
+    },
+    {
+      "name": "jw2"
+    },
+    {
+      "name": "jw3"
+    },
+    {
+      "name": "jw4"
+    },
+    {
+      "name": "turbine_1"
+    },
+    {
+      "name": "turbine_2"
+    },
+    {
+      "name": "turbine_3"
+    },
+    {
+      "name": "turbine_4"
+    },
+    {
+      "name": "tubine_5",
+      "delays": [
+        [
+          0.6,
+          0.6,
+          0.6
+        ]
+      ]
+    },
+    {
+      "name": "turbine_6"
+    },
+    {
+      "name": "turbine_0",
+      "delays": [
+        [
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "wall1"
+    },
+    {
+      "name": "wall2"
+    },
+    {
+      "name": "wall3"
+    },
+    {
+      "name": "grass1_mask1",
+      "directions": 4
+    },
+    {
+      "name": "grass1_mask2",
+      "directions": 4
+    },
+    {
+      "name": "grass1_mask3",
+      "directions": 4
+    },
+    {
+      "name": "grass2_mask1",
+      "directions": 4
+    },
+    {
+      "name": "grass2_mask2",
+      "directions": 4
+    },
+    {
+      "name": "grass2_mask3",
+      "directions": 4
+    }
+  ]
+}

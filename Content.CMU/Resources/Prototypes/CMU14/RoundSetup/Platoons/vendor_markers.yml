@@ -245,6 +245,55 @@
 
 - type: entity
   parent: VmarkerShip
+  id: CMUVMarkerShipResearchTerminal
+  name: Ship research terminal marker
+  components:
+  - type: VendorMarker
+    class: ResearchTerminal
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: research
+
+- type: entity
+  parent: VmarkerShip
+  id: CMUVMarkerShipHospitalEmergencyComputer
+  name: Ship hospital emergency computer marker
+  components:
+  - type: VendorMarker
+    class: HospitalEmergencyComputer
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal
+
+- type: entity
+  parent: CMUVMarkerShipHospitalEmergencyComputer
+  id: CMUVMarkerGovforHospitalEmergencyComputer
+  name: GOVFOR hospital emergency computer marker
+  components:
+  - type: VendorMarker
+    ship: false
+    govfor: true
+
+- type: entity
+  parent: CMUVMarkerShipHospitalEmergencyComputer
+  id: CMUVMarkerOpforHospitalEmergencyComputer
+  name: OPFOR hospital emergency computer marker
+  components:
+  - type: VendorMarker
+    ship: false
+    opfor: true
+
+- type: entity
+  parent: CMUVMarkerShipHospitalEmergencyComputer
+  id: CMUVMarkerColonyHospitalEmergencyComputer
+  name: Colony hospital emergency computer marker
+  components:
+  - type: VendorMarker
+    ship: false
+    colony: true
+
+- type: entity
+  parent: VmarkerShip
   id: VMarkerShipReqEquipment
   name: Ship requisitions equipment marker
   components:

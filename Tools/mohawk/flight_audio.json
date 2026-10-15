@@ -2,7 +2,7 @@
   "sample_rate": 48000,
   "channels": 1,
   "peak_dbfs_before_encoding": -6,
-  "takeoff_duration_seconds": 6.360645833333334,
+  "takeoff_duration_seconds": 15.836020833333333,
   "takeoff_edge_fades_seconds": 0.01,
   "flight_duration_seconds": 30,
   "plasma_source_range_seconds": [
@@ -13,13 +13,13 @@
   "reactor_rms_relative_to_plasma_db": -12,
   "sources": [
     {
-      "title": "Spaceship Whoosh 2",
-      "author": "steshystesh",
-      "license": "CC-BY-4.0",
-      "license_url": "https://creativecommons.org/licenses/by/4.0/",
-      "page": "https://freesound.org/people/steshystesh/sounds/336741/",
-      "download": "https://cdn.freesound.org/previews/336/336741_3034244-hq.mp3",
-      "sha256": "12a0534aa481b7ed940e59cb84d2dfa3454687b8054750b00ca61a0bfa24d624"
+      "title": "Alien ship takeoff",
+      "author": "xilith.com",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "page": "https://freesound.org/people/xilith.com/sounds/498344/",
+      "download": "https://cdn.freesound.org/previews/498/498344_10814569-hq.mp3",
+      "sha256": "00fb98f20c96ec82119fcbfdffac9e386f9bc81a95844123aa3c80453b74b753"
     },
     {
       "title": "plasma engine fx",

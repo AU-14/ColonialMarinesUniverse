@@ -42,6 +42,32 @@ public sealed partial class ForensicScannerComponent : Component
     [DataField, AutoNetworkedField]
     public string LastScannedName = string.Empty;
 
+    // cmu edit start
+    /// <summary>
+    /// Rough time since death of the last scanned body, empty if it wasn't a corpse.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public string CMUTimeSinceDeath = string.Empty;
+
+    /// <summary>
+    /// Names on the criminal records whose fingerprints or DNA match the last scan.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public List<string> CMURecordMatches = [];
+
+    /// <summary>
+    /// Likely cause of death of the last scanned body, empty if it wasn't a corpse.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public string CMUCauseOfDeath = string.Empty;
+
+    /// <summary>
+    /// Wounds, fractures and missing limbs on the last scanned person, by body part.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public List<Content.Shared.CMU14.Forensics.CMUForensicInjury> CMUInjuries = [];
+    // cmu edit end
+
     /// <summary>
     /// When will the scanner be ready to print again?
     /// </summary>

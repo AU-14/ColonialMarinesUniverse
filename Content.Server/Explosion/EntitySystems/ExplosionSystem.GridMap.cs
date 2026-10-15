@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Numerics;
 using Content.Shared.Atmos;
 using Content.Shared.Explosion.Components;
@@ -15,7 +16,7 @@ public sealed partial class ExplosionSystem
     /// <summary>
     ///     Set of tiles of each grid that are directly adjacent to space, along with the directions that face space.
     /// </summary>
-    private Dictionary<EntityUid, Dictionary<Vector2i, NeighborFlag>> _gridEdges = new();
+    private Dictionary<EntityUid, ExplosionTileMap<NeighborFlag>> _gridEdges = new();
 
     /// <summary>
     ///     On grid startup, prepare a map of grid edges.
@@ -24,7 +25,7 @@ public sealed partial class ExplosionSystem
     {
         var grid = Comp<MapGridComponent>(ev.EntityUid);
 
-        Dictionary<Vector2i, NeighborFlag> edges = new();
+        ExplosionTileMap<NeighborFlag> edges = new();
         _gridEdges[ev.EntityUid] = edges;
 
         foreach (var tileRef in _map.GetAllTiles(ev.EntityUid, grid))
@@ -36,14 +37,18 @@ public sealed partial class ExplosionSystem
 
     private void OnGridRemoved(GridRemovalEvent ev)
     {
+        // A removed participating grid requires a new geometry snapshot. Unrelated grid
+        // churn must not continually restart a blast. Ordinary geometry edits are isolated by snapshots.
+        if (_preparation?.Geometry?.ContainsKey(ev.EntityUid) == true) _preparationInvalidated = true;
         OnAirtightGridRemoved(ev.EntityUid);
         _gridEdges.Remove(ev.EntityUid);
 
         // this should be a small enough set that iterating all of them is fine
         var query = EntityQueryEnumerator<ExplosionVisualsComponent>();
-        while (query.MoveNext(out var visuals))
+        while (query.MoveNext(out var uid, out var visuals))
         {
-            visuals.Tiles.Remove(ev.EntityUid);
+            if (visuals.Tiles.Remove(ev.EntityUid))
+                PublishVisualState((uid, visuals));
         }
     }
 
@@ -57,7 +62,27 @@ public sealed partial class ExplosionSystem
         List<EntityUid> localGrids,
         float maxDistance)
     {
-        Dictionary<Vector2i, BlockedSpaceTile> transformedEdges = new();
+        var preparation = new GridEdgePreparation();
+        var geometry = CaptureExplosionGeometry(referenceGrid is { } reference
+            ? localGrids.Append(reference)
+            : localGrids);
+        foreach (var _ in PrepareGridEdges(epicentre, referenceGrid, geometry, maxDistance, preparation)) { }
+        return (preparation.Edges, preparation.TileSize);
+    }
+
+    public sealed class GridEdgePreparation
+    {
+        public Dictionary<Vector2i, BlockedSpaceTile> Edges = new();
+        public ushort TileSize = DefaultTileSize;
+    }
+
+    public IEnumerable<bool> PrepareGridEdges(
+        MapCoordinates epicentre,
+        EntityUid? referenceGrid,
+        IReadOnlyDictionary<EntityUid, ExplosionGridSnapshot> geometry,
+        float maxDistance, GridEdgePreparation preparation)
+    {
+        var transformedEdges = preparation.Edges;
 
         var targetMatrix = Matrix3x2.Identity;
         Angle targetAngle = new();
@@ -67,32 +92,31 @@ public sealed partial class ExplosionSystem
         // if the explosion is centered on some grid (and not just space), get the transforms.
         if (referenceGrid != null)
         {
-            var targetGrid = Comp<MapGridComponent>(referenceGrid.Value);
-            var xform = Transform(referenceGrid.Value);
-            (_, targetAngle, targetMatrix) = _transformSystem.GetWorldPositionRotationInvMatrix(xform);
+            var targetGrid = geometry[referenceGrid.Value];
+            targetAngle = targetGrid.Angle;
+            targetMatrix = targetGrid.Inverse;
             tileSize = targetGrid.TileSize;
         }
 
+        var transformedTiles = new Vector2i[4];
         var offsetMatrix = Matrix3x2.Identity;
         offsetMatrix.M31 = tileSize / 2f;
         offsetMatrix.M32 = tileSize / 2f;
+
+        preparation.TileSize = tileSize;
 
         // Here we can end up with a triple nested for loop:
         // foreach other grid
         //   foreach edge tile in that grid
         //     foreach tile in our grid that touches that tile (vast majority of the time: 1 tile, but could be up to 4)
 
-        foreach (var gridToTransform in localGrids)
+        foreach (var (gridToTransform, grid) in geometry)
         {
             // we treat the target grid separately
             if (gridToTransform == referenceGrid)
                 continue;
 
-            if (!_gridEdges.TryGetValue(gridToTransform, out var edges))
-                continue;
-
-            if (!TryComp(gridToTransform, out MapGridComponent? grid))
-                continue;
+            var edges = grid.Edges;
 
             if (grid.TileSize != tileSize)
             {
@@ -100,8 +124,9 @@ public sealed partial class ExplosionSystem
                 continue;
             }
 
-            var xform = Transform(gridToTransform);
-            var  (_, gridWorldRotation, gridWorldMatrix, invGridWorldMatrid) = _transformSystem.GetWorldPositionRotationMatrixWithInv(xform);
+            var gridWorldRotation = grid.Angle;
+            var gridWorldMatrix = grid.Matrix;
+            var invGridWorldMatrid = grid.Inverse;
 
             var localEpicentre = (Vector2i) Vector2.Transform(epicentre.Position, invGridWorldMatrid);
             var matrix = offsetMatrix * gridWorldMatrix * targetMatrix;
@@ -111,6 +136,7 @@ public sealed partial class ExplosionSystem
 
             foreach (var (tile, dir) in edges)
             {
+                yield return true;
                 // if a tile is further than max distance from the epicentre, we just ignore it.
                 var delta = tile - localEpicentre;
                 if (delta.X * delta.X + delta.Y * delta.Y > maxDistanceSq) // no Vector2.Length???
@@ -136,16 +162,18 @@ public sealed partial class ExplosionSystem
                 // shitty approximation to doing a proper check to get all space-tiles that intersect this grid tile.
                 // Not perfect, but works well enough.
 
-                HashSet<Vector2i> transformedTiles = new()
-                {
-                    new((int) MathF.Floor(center.X + x), (int) MathF.Floor(center.Y + x)),  // center of tile, offset by (0.25, 0.25) in tile coordinates
-                    new((int) MathF.Floor(center.X - y), (int) MathF.Floor(center.Y - y)),  // center offset by (-0.25, 0.25)
-                    new((int) MathF.Floor(center.X - x), (int) MathF.Floor(center.Y + y)),  // offset by (-0.25, -0.25)
-                    new((int) MathF.Floor(center.X + y), (int) MathF.Floor(center.Y - x)),  // offset by (0.25, -0.25)
-                };
+                transformedTiles[0] = new((int) MathF.Floor(center.X + x), (int) MathF.Floor(center.Y + x));
+                transformedTiles[1] = new((int) MathF.Floor(center.X - y), (int) MathF.Floor(center.Y - y));
+                transformedTiles[2] = new((int) MathF.Floor(center.X - x), (int) MathF.Floor(center.Y + y));
+                transformedTiles[3] = new((int) MathF.Floor(center.X + y), (int) MathF.Floor(center.Y - x));
 
-                foreach (var newIndices in transformedTiles)
+                for (var sample = 0; sample < transformedTiles.Length; sample++)
                 {
+                    var newIndices = transformedTiles[sample];
+                    var duplicate = false;
+                    for (var previous = 0; previous < sample; previous++)
+                        if (transformedTiles[previous] == newIndices) { duplicate = true; break; }
+                    if (duplicate) continue;
                     if (!transformedEdges.TryGetValue(newIndices, out var data))
                     {
                         data = new();
@@ -157,14 +185,15 @@ public sealed partial class ExplosionSystem
         }
 
         if (referenceGrid == null)
-            return (transformedEdges, tileSize);
+            yield break;
 
         // finally, we also include the blocking tiles from the reference grid.
 
-        if (_gridEdges.TryGetValue(referenceGrid.Value, out var localEdges))
+        if (geometry.TryGetValue(referenceGrid.Value, out var referenceGeometry))
         {
-            foreach (var (tile, dir) in localEdges)
+            foreach (var (tile, dir) in referenceGeometry.Edges)
             {
+                yield return true;
                 // grids cannot overlap, so tile should never be an existing entry.
                 // if this ever changes, this needs to do a try-get.
                 var data = new BlockedSpaceTile();
@@ -179,7 +208,7 @@ public sealed partial class ExplosionSystem
             }
         }
 
-        return (transformedEdges, tileSize);
+        yield break;
     }
 
     /// <summary>
@@ -191,8 +220,14 @@ public sealed partial class ExplosionSystem
     /// </remarks>
     public void GetUnblockedDirections(Dictionary<Vector2i, BlockedSpaceTile> transformedEdges, float tileSize)
     {
+        foreach (var _ in PrepareUnblockedDirections(transformedEdges, tileSize)) { }
+    }
+
+    public IEnumerable<bool> PrepareUnblockedDirections(Dictionary<Vector2i, BlockedSpaceTile> transformedEdges, float tileSize)
+    {
         foreach (var (tile, data) in transformedEdges)
         {
+            yield return true;
             if (data.UnblockedDirections == AtmosDirection.Invalid)
                 continue; // already all blocked.
 

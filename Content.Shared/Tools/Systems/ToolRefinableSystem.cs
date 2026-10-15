@@ -76,8 +76,10 @@ public sealed partial class ToolRefinableSystem : EntitySystem
 
     private void OnAttemptButcherRefine(Entity<ButcherableComponent> ent, ref AttemptToolRefineEvent args)
     {
-        // Surgery tools must retain their surgery interaction on surgery targets.
-        if (HasComp<CMSurgeryToolComponent>(args.Using) && HasComp<CMSurgeryTargetComponent>(ent))
+        // CMU14: the explicit butchering verb permits cannibals to carve with their starting knife.
+        var cannibalCarving = HasComp<CannibalComponent>(args.User) &&
+            _utensilQuery.TryComp(args.Using, out var utensil) && (utensil.Types & UtensilType.Knife) != 0;
+        if (HasComp<CMSurgeryToolComponent>(args.Using) && HasComp<CMSurgeryTargetComponent>(ent) && !cannibalCarving)
         {
             args.IsCancelled = true;
             return;
@@ -102,6 +104,10 @@ public sealed partial class ToolRefinableSystem : EntitySystem
     /// <summary> Normal interactions. </summary>
     private void OnInteractUsing(Entity<ToolRefinableComponent> ent, ref InteractUsingEvent args)
     {
+        // CMU14: butchering is an explicit right-click verb, never an ordinary tool click.
+        if (HasComp<ButcherableComponent>(ent))
+            return;
+
         if (args.Handled || !_toolSystem.HasQuality(args.Used, ent.Comp.QualityNeeded))
             return;
 

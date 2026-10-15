@@ -10,6 +10,7 @@
     - radioOpforCharlie
     - radioOpforCommand
     - radioOpforIntel
+    - radioOpforVictor
     - radioOpforJTAC
     - radioOpforMILP
 
@@ -27,7 +28,7 @@
 - type: entity
   parent: AU14IDCardOPFOR
   id: AU14IDCardOPFORPlatCo
-  name: plt. commander ID card
+  name: commanding officer ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORPlatCo

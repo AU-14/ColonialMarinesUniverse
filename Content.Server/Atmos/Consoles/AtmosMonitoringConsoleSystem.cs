@@ -71,7 +71,7 @@ public sealed partial class AtmosMonitoringConsoleSystem : SharedAtmosMonitoring
 
     private void OnConsoleParentChanged(EntityUid uid, AtmosMonitoringConsoleComponent component, EntParentChangedMessage args)
     {
-        component.ForceFullUpdate = true;
+        component.ForceFullUpdateTick = _gameTiming.CurTick;
         InitializeAtmosMonitoringConsole(uid, component);
     }
 
@@ -484,7 +484,17 @@ public sealed partial class AtmosMonitoringConsoleSystem : SharedAtmosMonitoring
         var xform = Transform(uid);
 
         if (xform.GridUid == null)
+        {
+            if (component.AtmosPipeChunks.Count == 0 && component.AtmosDevices.Count == 0)
+                return;
+
+            // The old chunk dictionary belongs to its grid and may be shared with other consoles.
+            component.AtmosPipeChunks = new();
+            component.AtmosDevices = new();
+            component.ForceFullUpdateTick = _gameTiming.CurTick;
+            Dirty(uid, component);
             return;
+        }
 
         var grid = xform.GridUid.Value;
 

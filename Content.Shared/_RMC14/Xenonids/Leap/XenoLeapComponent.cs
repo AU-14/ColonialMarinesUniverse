@@ -44,6 +44,9 @@ public sealed partial class XenoLeapComponent : Component
     public bool DestroyObjects;
 
     [DataField, AutoNetworkedField]
+    public bool CanBeShieldBlocked = true;
+
+    [DataField, AutoNetworkedField]
     public DamageSpecifier Damage = new();
 
     [DataField, AutoNetworkedField]

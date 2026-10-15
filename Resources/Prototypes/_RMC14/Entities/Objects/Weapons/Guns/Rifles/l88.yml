@@ -2,7 +2,9 @@
   parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
   id: RMCWeaponRifleL88A1
   name: L88A1 bullpup rifle
-  description: The L88A1 is the standard-issue rifle of the RCM's Paramarine regiments, the first iteration in a series of innovative rifle designs offering a lightweight, accurate, and reliable option for the armed forces of the TSE.
+  # cmu edit start
+  description: The L88A1 is the standard-issue rifle of the TWE regiments, the first iteration in a series of innovative rifle designs offering a lightweight, accurate, and reliable option for the armed forces.
+  # cmu edit end
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/l88.rsi

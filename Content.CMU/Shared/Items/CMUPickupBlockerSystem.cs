@@ -22,6 +22,6 @@ public sealed partial class CMUPickupBlockerSystem : EntitySystem
         args.Cancel();
 
         if (args.ShowPopup)
-            _popup.PopupClient(Loc.GetString(ent.Comp.BlockedPopup, ("item", args.Item)), ent, ent, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString(ent.Comp.BlockedPopup, ("item", args.Item)), ent, ent, PopupType.SmallCaution);
     }
 }

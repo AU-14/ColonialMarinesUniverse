@@ -5,6 +5,7 @@ using Content.Client.Viewport;
 using Content.Shared.CMU14.ZLevels;
 using Robust.Client.GameObjects;
 using Robust.Shared;
+using Robust.Shared.Profiling;
 
 namespace Content.Client.CMU14.Diagnostics.Performance;
 
@@ -13,6 +14,7 @@ public sealed partial class CMUClientPerformanceSystem
     private const int TopRows = 30;
     private const int MaxInventoryEntities = 50000;
     private const int MaxInventoryComponents = 300000;
+    private const double PeriodicInventoryBudgetMs = 5;
     private Dictionary<string, int>? _inventoryBaseline;
 
     private static void AppendProfile(StringBuilder text, CMUClientProfileReader reader, long wallFrame)
@@ -92,17 +94,30 @@ public sealed partial class CMUClientPerformanceSystem
         text.AppendLine($"projected-ms: total={F(p.TotalMs)} opening={F(p.CurrentOpeningMs)} sourceQuery={F(p.SourceQueryMs)} candidate={F(p.CandidateMs)}");
     }
 
-    private void AppendInventory(StringBuilder text)
+    private void AppendInventory(StringBuilder text, bool budgeted = false)
     {
+        var timer = ProfSampler.StartNew();
+        AppendAudioInventory(text);
+
         var counts = new Dictionary<string, int>(StringComparer.Ordinal);
         var entities = 0;
         var components = 0;
         var truncated = false;
+        var timeLimited = false;
         var sprites = 0;
         var visibleSprites = 0;
         var lights = 0;
         foreach (var uid in EntityManager.GetEntities())
         {
+            // A periodic census must not freeze the client being measured. Manual, initial
+            // and final inventories retain the larger count-based limits for investigation.
+            if (budgeted && (entities & 127) == 0 && timer.Elapsed.TotalMilliseconds >= PeriodicInventoryBudgetMs)
+            {
+                truncated = true;
+                timeLimited = true;
+                break;
+            }
+
             if (entities >= MaxInventoryEntities || components >= MaxInventoryComponents)
             {
                 truncated = true;
@@ -134,7 +149,7 @@ public sealed partial class CMUClientPerformanceSystem
                 Increment(counts, component.GetType().Name);
             }
         }
-        text.AppendLine($"inventory: entities={entities} components={components} truncated={truncated} sprites={sprites} visibleNonContainerSprites={visibleSprites} lightComponents={lights}; loaded client entities, not on-screen counts. Deltas compare consecutive complete inventories.");
+        text.AppendLine($"inventory: entities={entities} components={components} truncated={truncated} timeLimited={timeLimited} sprites={sprites} visibleNonContainerSprites={visibleSprites} lightComponents={lights}; loaded client entities, not on-screen counts. Deltas compare consecutive complete inventories.");
         foreach (var category in new[] { "prototype/", "map/", "components" })
         {
             bool Matches(string key) => category == "components" ? !key.Contains('/') : key.StartsWith(category, StringComparison.Ordinal);

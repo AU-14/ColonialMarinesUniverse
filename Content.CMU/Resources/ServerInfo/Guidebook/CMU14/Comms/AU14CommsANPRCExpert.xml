@@ -1,0 +1,699 @@
+<Document>
+  # Expert faceplate
+
+  Press [bold]VIEW[/bold] at the top of the radio panel until it reads [bold]117G PANEL[/bold].
+
+  The expert faceplate controls the same radio as the [textlink="guided panel" link="AU14CommsANPRCGuided"], but exposes settings and functions that the guided interface normally leaves on AUTO.
+
+  Most functions are controlled through the display, keypad, soft keys, and function switch.
+
+  ## Working the display
+
+  Each screen contains a list of settings, actions, and information.
+
+  Move the cursor to a usable line, then activate it.
+
+  <Table Columns="2" MinForcedColumnWidth="90">
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Control[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Function[/bold]</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">[bold]+ PRE / - PRE[/bold]</Box></ColorBox>
+    <ColorBox><Box Margin="4">Move the cursor up or down.</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">[bold]ENT[/bold]</Box></ColorBox>
+    <ColorBox><Box Margin="4">Use the selected setting, action, or page.</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">[bold]CLR[/bold]</Box></ColorBox>
+    <ColorBox><Box Margin="4">Return to the previous screen. While typing, delete one character.</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">[bold]+ PG / - PG[/bold]</Box></ColorBox>
+    <ColorBox><Box Margin="4">Move between main pages.</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">Soft keys</Box></ColorBox>
+    <ColorBox><Box Margin="4">Open PGM, SEC, SRCH, LOG, OPT, or the ? key card.</Box></ColorBox>
+  </Table>
+
+  Bright lines can be selected.
+
+  Dim lines provide information and are skipped by the cursor.
+
+  A lit setting is currently enabled.
+
+  ### Confirming destructive actions
+
+  Some actions require confirmation, including:
+
+  - ZEROIZE
+  - DESTROY
+  - RECRYPTO
+  - SEND KEY OTA
+
+  Press [bold]ENT[/bold] once to arm the action, then press it again to confirm.
+
+  Armed actions cancel automatically after a short delay.
+
+  ## Keypad
+
+  When the radio is not accepting text or numbers, the number keys act as shortcuts.
+
+  <Table Columns="2" MinForcedColumnWidth="90">
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Key[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Function[/bold]</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">1 CALL</Box></ColorBox>
+    <ColorBox><Box Margin="4">Send a radio check on the working net.</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">2 LT</Box></ColorBox>
+    <ColorBox><Box Margin="4">Cycle the display backlight.</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">3 MODE</Box></ColorBox>
+    <ColorBox><Box Margin="4">Cycle the waveform.</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">4 SQL</Box></ColorBox>
+    <ColorBox><Box Margin="4">Cycle squelch.</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">5 ZERO</Box></ColorBox>
+    <ColorBox><Box Margin="4">Open SEC with ZEROIZE armed.</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">6 PWR</Box></ColorBox>
+    <ColorBox><Box Margin="4">Switch the radio on or off.</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">7</Box></ColorBox>
+    <ColorBox><Box Margin="4">Open OPT.</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">8</Box></ColorBox>
+    <ColorBox><Box Margin="4">Open PGM.</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">9</Box></ColorBox>
+    <ColorBox><Box Margin="4">Open SEC.</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">0</Box></ColorBox>
+    <ColorBox><Box Margin="4">Open LOG.</Box></ColorBox>
+  </Table>
+
+  ### Entering values
+
+  Some settings require direct input, including:
+
+  - frequencies
+  - memory labels
+  - station callsigns
+  - trial keys
+
+  While entering a value:
+
+  - [bold]ENT[/bold] confirms the input
+  - [bold]CLR[/bold] deletes the previous character
+  - pressing [bold]CLR[/bold] on an empty field cancels the input
+
+  [bold]Frequencies[/bold] use the [bold]___.___[/bold] format.
+
+  Enter the megahertz digits first. Untouched digits are treated as zero. At least three digits must be entered.
+
+  [bold]Text[/bold] uses the letters assigned to each number key like a telephone keypad.
+
+  Press a key repeatedly to cycle through its letters.
+
+  [bold]0[/bold] enters a space, then a dash.
+
+  ## Function switch
+
+  The rotary switch controls the radio's basic operating state.
+
+  - [bold]OFF[/bold] - switches the radio off
+  - [bold]CT[/bold] - switches the radio on securely; selecting CT again cycles FH, SC, and CT
+  - [bold]PT[/bold] - switches to unencrypted plain-text transmission
+  - [bold]LD[/bold] - opens the fill page
+  - [bold]Z[/bold] - arms ZEROIZE
+
+  [bold]LD[/bold] and [bold]Z[/bold] are sprung positions and return to the previous switch position after use.
+
+  They do not change the active waveform.
+
+  ## Display readout
+
+  The top of the display remains visible across all faceplate pages.
+
+  It shows:
+
+  - [bold]RX / TX[/bold] - whether the radio is receiving or transmitting
+  - [bold]SEC / UNSEC / CLEAR[/bold] - current encryption state
+  - [bold]SIG[/bold] - working-net link quality
+  - [bold]--DIR--[/bold] - shown instead of SIG when using a direct frequency
+  - [bold]BAT[/bold] - remaining battery in four bars
+  - current memory
+  - frequency
+  - net name
+  - operating band
+  - waveform
+  - squelch
+  - output power
+  - active feature flags
+  - [bold]STN[/bold] - transmitting callsign
+  - [bold]BIT[/bold] - self-test status
+
+  Active feature flags can include:
+
+  - MON
+  - SCAN
+  - BURST
+  - PS
+  - PRI
+  - EMCON
+  - RXMT
+
+  [bold]BIT[/bold] normally shows [bold]PASS[/bold].
+
+  If the radio cannot operate normally, it displays the first detected problem, such as:
+
+  - NO CELL
+  - OFF
+  - STOWED
+  - SRCH
+  - NO NET
+
+  ## PGM - net memory
+
+  PGM manages the radio's memories.
+
+  [bold]LOAD STD NETS[/bold] loads missing standard nets without replacing manually configured memories.
+
+  Each memory appears as a separate line.
+
+  A [bold]*[/bold] marks the current working memory.
+
+  Select a memory and press [bold]ENT[/bold] to open its options.
+
+  Available actions include:
+
+  - [bold]WORK THIS NET[/bold] - make the memory the working net
+  - [bold]TUNE TO A NET[/bold] - select a known friendly net or resolved intercepted net
+  - [bold]KEY A FREQUENCY[/bold] - enter a frequency manually
+  - [bold]EMPTY THE MEMORY[/bold] - remove the memory's current contents
+  - [bold]DELETE THE MEMORY[/bold] - remove the memory slot
+  - [bold]RENAME[/bold] - change the memory label
+
+  [bold]ADD NET[/bold] creates another memory and prompts for a label.
+
+  ### Direct frequencies
+
+  If a manually entered frequency matches a known net, that net is loaded normally.
+
+  Otherwise, it becomes a [bold]direct frequency[/bold].
+
+  Direct frequencies are:
+
+  - unrelayed
+  - unencrypted
+  - usable only by radios or tuned headsets on the same frequency
+
+  Valid direct frequencies must fall within:
+
+  - 1.000-2.999 MHz military band
+  - 30.000+ MHz colony softwave band
+
+  ## SEC - COMSEC
+
+  SEC manages encryption and fill cards.
+
+  It displays:
+
+  - [bold]SWITCH[/bold] - current function-switch position
+  - [bold]FILL[/bold] - installed fill card
+  - [bold]ISSUED TO[/bold] - faction associated with the fill
+  - [bold]TRAFFIC[/bold] - whether transmissions are currently encrypted
+
+  Available actions include:
+
+  - [bold]ZEROIZE[/bold] - eject the fill card
+  - [bold]DESTROY[/bold] - destroy the installed fill card
+  - [bold]RECRYPTO[/bold] - replace your faction's current encryption key
+  - [bold]SEND KEY OTA[/bold] - distribute the current key over the air
+
+  [bold]RECRYPTO[/bold] requires command authority.
+
+  ZEROIZE, DESTROY, RECRYPTO, and SEND KEY OTA require confirmation.
+
+  ## SRCH - search receiver
+
+  The search receiver scans for hostile radio traffic.
+
+  [bold]START SEARCH[/bold] begins sweeping the band.
+
+  While searching, the radio:
+
+  - leaves all loaded nets
+  - cannot transmit
+  - consumes additional power
+
+  The SRCH page includes:
+
+  - [bold]HEAD[/bold] - current search frequency
+  - [bold]CONTACTS[/bold] - detected signals
+  - [bold]KEY ANALYSIS[/bold] - cryptographic analysis for factions with fixed nets
+  - [bold]JAMMER DF[/bold] - jammer direction-finding tools
+
+  ### Resolving contacts
+
+  Contacts become more precise as the radio observes additional transmissions.
+
+  A signal may appear as:
+
+  [bold]2XX.XXX[/bold]
+
+  then:
+
+  [bold]25X.XXX[/bold]
+
+  then:
+
+  [bold]259.XXX[/bold]
+
+  before resolving to its exact frequency and net.
+
+  Each new transmission contributes once toward identifying the contact.
+
+  A net transmitting approximately once per minute requires around three transmissions to resolve.
+
+  A busy net transmitting less than 20 seconds apart can resolve in roughly one minute.
+
+  Partial contacts retain their progress while transmissions continue.
+
+  Progress begins to decay after approximately two minutes without traffic.
+
+  ### Search range
+
+  At MED output, transmitters can be detected within approximately 120 tiles.
+
+  HI increases this range by approximately 50%.
+
+  LO reduces the range to approximately 70 tiles.
+
+  Once a net is resolved, detectable transmissions on it can provide:
+
+  - a bearing toward the transmitter
+  - approximate distance
+  - a temporary tactical-map marker
+  - one trial toward key analysis
+
+  Secured SC and CT transmissions do not provide bearings.
+
+  Select a [bold]resolved[/bold] contact and press ENT to tune it into the working memory.
+
+  Select a [bold]partial[/bold] contact and press ENT to begin [bold]Dwell[/bold].
+
+  ## LOG
+
+  LOG displays recorded radio traffic.
+
+  [bold]NET FILTER[/bold] cycles between nets represented in the log.
+
+  [bold]INTERCEPTS ONLY[/bold] hides friendly traffic.
+
+  Available print functions are:
+
+  - [bold]PRINT LOG[/bold] - prints all recorded traffic
+  - [bold]PRINT INTERCEPTS[/bold] - prints only intercepted traffic
+
+  Each traffic entry shows:
+
+  - time
+  - sender
+  - net
+  - message
+
+  ## OPT - configuration
+
+  OPT contains the radio's operating settings.
+
+  Press [bold]ENT[/bold] on most lines to cycle through available values.
+
+  ### MODE
+
+  [bold]MODE[/bold] selects:
+
+  - FREQ HOP
+  - SINGLE CH
+  - CIPHER
+  - PLAIN
+
+  See [textlink="the AN/PRC-117G" link="AU14CommsANPRC"] for waveform details.
+
+  ### MONITOR and SCAN
+
+  [bold]MONITOR[/bold] and [bold]SCAN[/bold] provide the same functions available through the guided interface.
+
+  ### SQUELCH
+
+  [bold]SQUELCH[/bold] ranges from 0 to 4.
+
+  Higher values suppress more static and degraded traffic.
+
+  Setting 4 can also suppress weak relay traffic.
+
+  The standard setting is 3.
+
+  ### OUTPUT
+
+  [bold]OUTPUT[/bold] selects LO, MED, or HI power.
+
+  <Table Columns="4" MinForcedColumnWidth="75">
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Power[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Relay range[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Battery use[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]DF chance[/bold]</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">LO</Box></ColorBox>
+    <ColorBox><Box Margin="4">60%</Box></ColorBox>
+    <ColorBox><Box Margin="4">Half</Box></ColorBox>
+    <ColorBox><Box Margin="4">Half</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">MED</Box></ColorBox>
+    <ColorBox><Box Margin="4">100%</Box></ColorBox>
+    <ColorBox><Box Margin="4">Standard</Box></ColorBox>
+    <ColorBox><Box Margin="4">Standard</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">HI</Box></ColorBox>
+    <ColorBox><Box Margin="4">150%</Box></ColorBox>
+    <ColorBox><Box Margin="4">Double</Box></ColorBox>
+    <ColorBox><Box Margin="4">Double</Box></ColorBox>
+  </Table>
+
+  ### BACKLIGHT
+
+  [bold]BACKLIGHT[/bold] cycles between:
+
+  - night
+  - day
+  - off
+
+  ### TECHNIQUES
+
+  [bold]TECHNIQUES[/bold] opens advanced operator functions:
+
+  - BURST TX
+  - POWER SAVE
+  - PRIORITY WATCH
+  - EMCON
+  - STAKED SET
+
+  These functions are explained below.
+
+  ### STATION
+
+  [bold]STATION[/bold] controls the identity used by the radio and provides several utility functions.
+
+  - [bold]CALLSIGN[/bold] - assign a fixed station callsign of up to 16 characters
+  - [bold]CLEAR OVERRIDE[/bold] - return to the current wearer's callsign
+  - [bold]ROSTER[/bold] - select a standard station name
+  - [bold]NET DIRECTORY[/bold] - open the communications directory
+  - [bold]PHONE[/bold] - open the field telephone
+  - [bold]RADIO CHECK[/bold] - transmit a radio check
+
+  Fixed callsigns are useful for command posts and staked radios.
+
+  ### SET STATUS
+
+  [bold]SET STATUS[/bold] displays:
+
+  - whether the radio is worn or staked
+  - installed antenna
+  - relayed nets
+  - relay coverage
+  - whether audio is using the headset or handset
+
+  ### LINK
+
+  [bold]LINK[/bold] provides detailed connection information.
+
+  - [bold]QUALITY[/bold] - link quality percentage
+  - [bold]VIA[/bold] - relay carrying the signal, including bearing and distance
+  - [bold]DRAW[/bold] - current battery drain per second
+  - [bold]ENDURANCE[/bold] - estimated remaining operating time
+
+  ## Advanced operator functions
+
+  These functions are not required for normal radio operation.
+
+  They modify range, battery use, emissions, or radio behavior for specific situations.
+
+  ### Burst transmission
+
+  [bold]OPT > TECHNIQUES > BURST TX[/bold]
+
+  Burst transmission compresses each message before sending it.
+
+  While enabled:
+
+  - transmission battery cost is reduced by 30%
+  - direction-finding chance is reduced by 50%
+  - message contents are unchanged
+
+  Burst can be combined with other radio settings.
+
+  ### Power save
+
+  [bold]OPT > TECHNIQUES > POWER SAVE[/bold]
+
+  Power save allows the receiver to sleep between messages.
+
+  Idle battery consumption is reduced by 40%.
+
+  While active:
+
+  - SCAN is disabled
+  - PRIORITY WATCH is disabled
+
+  Enabling SCAN or PRIORITY WATCH disables power save.
+
+  ### Priority watch
+
+  [bold]OPT > TECHNIQUES > PRIORITY WATCH[/bold]
+
+  Priority watch monitors one additional loaded memory while keeping the current working memory unchanged.
+
+  Incoming traffic from the watched memory can be heard, but transmissions continue through the ON AIR memory.
+
+  Unlike SCAN, priority watch does not automatically change the working memory.
+
+  ### EMCON
+
+  [bold]OPT > TECHNIQUES > EMCON[/bold]
+
+  EMCON places the radio into a receive-only emissions-control state.
+
+  While active, the radio performs no:
+
+  - transmissions
+  - relay traffic
+  - telephone traffic
+
+  Because the radio does not transmit, it produces no direction-finding signature.
+
+  The radio continues to:
+
+  - receive traffic on its working net
+  - record received traffic
+
+  Idle battery draw is reduced to one quarter of normal.
+
+  [bold]An AN/PRC in EMCON provides no relay coverage.[/bold]
+
+  Headsets relying on that radio for relay access will lose their combat nets.
+
+  ### Retransmission bridge
+
+  [bold]OPT > TECHNIQUES > STAKED SET[/bold]
+
+  This function is available while the radio is staked down.
+
+  Select:
+
+  - [bold]SIDE A[/bold]
+  - [bold]SIDE B[/bold]
+
+  Each side must contain a named net loaded into one of the radio's memories.
+
+  Select [bold]BRIDGE[/bold] to connect them.
+
+  Traffic received on either net is retransmitted onto the other.
+
+  Retransmitted messages preserve the original speaker and are marked [bold][RXMT][/bold].
+
+  For example:
+
+  [bold][RXMT] SABRE 1-1: contact north[/bold]
+
+  Retransmissions:
+
+  - consume battery
+  - can produce a direction-finding signature
+  - cannot be retransmitted again
+
+  This prevents bridged radios from creating retransmission loops.
+
+  Packing up the radio immediately ends the bridge.
+
+  ### Peak the antenna
+
+  [bold]OPT > TECHNIQUES > STAKED SET > PEAK THE ANTENNA[/bold]
+
+  Peaking the antenna takes approximately 15 seconds.
+
+  The radio must remain stationary while the antenna is tuned.
+
+  Once complete, relay range increases by 25%.
+
+  The bonus remains until the radio is packed up.
+
+  ### Over-the-air rekey
+
+  [bold]SEC > SEND KEY OTA[/bold]
+
+  After a recrypto, radios containing old fill cards have an outdated key.
+
+  An operator with the current key can distribute it over the air.
+
+  The display shows how many outdated friendly radios are currently reachable.
+
+  Press [bold]ENT[/bold] once to arm the transmission, then again to send it.
+
+  The new key reaches friendly radios that are:
+
+  - switched on
+  - worn or staked
+  - within approximately 45 tiles
+
+  Radios can also receive the key at greater distances if both sets are connected through the faction's command-net relay network.
+
+  Sending a key:
+
+  - consumes a large amount of battery
+  - can produce a direction-finding signature
+  - has a 30-second cooldown
+
+  [bold]Captured radios containing one of your faction's fill cards are still treated as friendly sets.[/bold]
+
+  If one is reachable, it also receives the new key.
+
+  Invalidate compromised keys before distributing a replacement whenever possible.
+
+  ### Dwell
+
+  Dwell operates while the search receiver is active.
+
+  On the [bold]SRCH[/bold] page, select a partial contact and press [bold]ENT[/bold].
+
+  The search head stops sweeping and remains on that contact.
+
+  While dwelling:
+
+  - each new transmission counts twice toward resolving the contact
+  - all other frequencies are ignored
+
+  Select [bold]RELEASE THE HEAD[/bold] to resume normal searching.
+
+  The search automatically resumes when the contact fully resolves.
+
+  ### Key analysis
+
+  Key analysis can recover the encryption key of a resolved hostile faction net.
+
+  Enemy keys contain six different symbols from [bold]A[/bold] through [bold]H[/bold].
+
+  Each encrypted transmission received from a resolved enemy net provides one [bold]trial[/bold].
+
+  A radio can store up to 12 trials.
+
+  To test a key:
+
+  - open [bold]SRCH > KEY ANALYSIS[/bold]
+  - select the enemy faction
+  - select [bold]TEST A TRIAL KEY[/bold]
+  - enter six letters
+
+  Letters use the keypad's text-entry system.
+
+  After testing, the radio reports how many symbols are in the correct position.
+
+  For example:
+
+  [bold]2/6[/bold]
+
+  The radio does not identify which symbols are correct.
+
+  Trial results remain available and can be compared when testing later combinations.
+
+  At [bold]6/6[/bold], the key is broken.
+
+  That radio can then read the faction's encrypted traffic:
+
+  - live
+  - in its radio log
+
+  A broken key does [bold]not[/bold]:
+
+  - allow transmission on enemy nets
+  - transfer to another radio
+
+  A recrypto removes:
+
+  - the broken key
+  - stored trials
+  - previous trial results
+
+  Key-analysis progress belongs to the radio itself and remains with the set if it is captured.
+
+  Key analysis requires a trained operator.
+
+  ### Jammer direction finding
+
+  The search receiver can locate an active jammer.
+
+  While affected by a jammer, open:
+
+  [bold]SRCH > JAMMER DF[/bold]
+
+  To establish a fix:
+
+  - select [bold]TAKE A BEARING[/bold]
+  - move at least 12 tiles
+  - check [bold]BASELINE[/bold] to confirm sufficient movement
+  - select [bold]TAKE SECOND BEARING[/bold]
+
+  The radio compares both bearings and places the estimated jammer position on your faction's tactical map.
+
+  The marker remains for approximately two minutes.
+
+  The radio also reports the jammer's distance.
+
+  The first bearing expires after three minutes.
+
+  ## Returning to automatic settings
+
+  Settings changed from the faceplate remain active when returning to the guided interface.
+
+  The guided panel displays any manually changed settings.
+
+  Select [bold]RETURN TO AUTO[/bold] to restore the guided panel's normal configuration.
+
+  This resets manually configured operating settings back to their automatic values.
+
+  ## Practice drill
+
+  The following drill demonstrates the main faceplate controls on a powered, worn radio with no nets loaded.
+
+  - Press [bold]8[/bold] to open PGM.
+  - Select [bold]LOAD STD NETS[/bold] and press ENT.
+  - Press [bold]7[/bold] to open OPT.
+  - Set [bold]OUTPUT[/bold] to LO.
+  - Enable [bold]BURST TX[/bold].
+  - Enable [bold]PRIORITY WATCH[/bold] and select the command memory.
+  - Press [bold]1[/bold] to send a radio check.
+  - Open [bold]LINK[/bold] and check the current relay and estimated endurance.
+  - Return to the guided interface.
+  - Open SETTINGS and confirm that the manual settings are shown.
+  - Press [bold]RETURN TO AUTO[/bold].
+
+  The [bold]?[/bold] soft key opens the faceplate key card at any time.
+</Document>

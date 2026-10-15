@@ -89,8 +89,10 @@ namespace Content.Client.Eye.Blinding
 
         internal static bool ShouldDrawForViewportEye(Robust.Shared.Graphics.IEye? viewportEye, Robust.Shared.Graphics.IEye playerEye)
         {
+            // cmu edit start
             return ReferenceEquals(viewportEye, playerEye) ||
-                   viewportEye is ScalingViewport.ZEye { Depth: 0, BlurCurrentLevel: true };
+                   viewportEye is ScalingViewport.ZEye { Depth: 0 };
+            // cmu edit end
         }
 
         protected override void Draw(in OverlayDrawArgs args)

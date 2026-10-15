@@ -35,6 +35,13 @@ available. A fully hung/disconnected client cannot send reports; this does not c
 stacks or prove rendering succeeded. Preserve the affected client's `client.stdout.log` as well.
 `clientAvgFps=-1` means frame-timing samples are unavailable; application-progress evidence is still retained.
 
+`applicableStates` counts states the client can advance through; a growing `bufferedStates` with zero
+applicable states is evidence of a missing state dependency. `clientEntities` and `clientCachedServerEntities`
+report the current local entity count and the engine's retained server-state entity count without scanning
+entities or retaining references. These counts can help correlate camera travel with retention, but are
+not client RAM measurements. Server `processRssBytes`, `managedBytes` and `memorySampleAgeSeconds` are
+included alongside sync details to separate server memory pressure from client symptoms.
+
 Use `perfIncidentId`, `lastStallTick`, `lastStallMs`, `lastStallAgeSeconds`, `serverTps`, `serverTpsValid` and
 `perfSampleAgeSeconds` to correlate client symptoms with server stalls. Performance `detail-begin` records
 with `source=client-sync` carry the corresponding `syncIncidentId`.

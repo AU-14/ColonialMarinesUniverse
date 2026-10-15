@@ -5,6 +5,7 @@ cmu-mohawk-camera-omaha = Omaha cameras
 cmu-mohawk-camera-midway = Midway cameras
 cmu-mohawk-flight-interlock = The flight interlock prevents deploying the ramp or ladder.
 cmu-mohawk-landing-obstructed = The landing site does not have clearance for all three decks.
+cmu-mohawk-controls-no-access = Access denied. Only pilots, engineers, and command can operate the ramp and ladder.
 cmu-mohawk-controls-broken = The remote connection is damaged. Repair it with a multitool.
 cmu-mohawk-controls-unskilled = You need engineering or piloting training to repair these controls.
 cmu-mohawk-controls-sabotaged = The controls spark as the hatch is forced open!

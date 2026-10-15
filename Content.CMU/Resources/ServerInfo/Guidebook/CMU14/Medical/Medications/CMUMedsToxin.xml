@@ -1,0 +1,16 @@
+<Document>
+  # Toxin Medications
+
+  Toxin damage is poison and radiation: toxic chemicals, overdoses, failing organs and radiation exposure. The liver and kidneys filter toxins and get damaged by them, so check them on badly poisoned patients (see [textlink="Organs" link="CMUGuideMedicalOrgans"]).
+
+  - [bold]Dylovene[/bold]: the standard toxin medicine. It also clears hallucinations and chemical irritation. Overdose at 30 units.
+  - [bold]Arithrazine[/bold]: a weaker, stabilized dylovene with harmful side effects. Its advantage is that it won't react with other chemicals to make toxins. Overdose at 15 units.
+  - [bold]Naloxone[/bold]: instantly clears toxin damage and flushes painkillers out of the body. Mainly for overdoses. It makes the patient vomit. See [textlink="Painkillers" link="CMUGuideMedsPain"].
+  - [bold]Russian Red[/bold]: an emergency radiation treatment. It's harsh, with side effects like eye damage and unconsciousness, so save it for serious radiation cases. Overdose at 15 units.
+  - [bold]Tricordrazine[/bold]: heals a little of everything, toxin included.
+
+  <GuideReagentEmbed Reagent="CMDylovene"/>
+  <GuideReagentEmbed Reagent="CMArithrazine"/>
+  <GuideReagentEmbed Reagent="AU14Naloxone"/>
+  <GuideReagentEmbed Reagent="RMCRussianRed"/>
+</Document>

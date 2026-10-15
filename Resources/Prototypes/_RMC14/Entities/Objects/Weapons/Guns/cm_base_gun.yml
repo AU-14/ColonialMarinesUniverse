@@ -44,7 +44,7 @@
   - type: Gun
     meleeCooldownOnShoot: false
     resetOnHandSelected: false
-    burstCooldown: 0
+    burstCooldown: 0.25
   - type: RMCWeaponAccuracy
   - type: GunSkilledAccuracy
   - type: Appearance
