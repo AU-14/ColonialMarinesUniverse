@@ -109,28 +109,28 @@ public sealed class MohawkChinGunTest
             var blocker = Target("GOVFOR", new Vector2(1.5f, 5));
             var hostile = Target("OPFOR", new Vector2(1.5f, -10));
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(1200), "Friendly targets and rear targets must not consume ammo.");
+            Assert.That(payload.Rounds, Is.EqualTo(2400), "Friendly targets and rear targets must not consume ammo.");
             transform.SetCoordinates(hostile, new EntityCoordinates(map, 1.5f, 10));
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(1200), "Acquiring a hostile must not authorize fire.");
+            Assert.That(payload.Rounds, Is.EqualTo(2400), "Acquiring a hostile must not authorize fire.");
             entities.System<SharedSentryTargetingSystem>().SetFriendlyFactions(
                 (point, entities.GetComponent<SentryTargetingComponent>(point)), ["GOVFOR", "OPFOR"]);
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(1200), "Alliance-friendly IFF must be respected.");
+            Assert.That(payload.Rounds, Is.EqualTo(2400), "Alliance-friendly IFF must be respected.");
             entities.System<SharedSentryTargetingSystem>().SetFriendlyFactions(
                 (point, entities.GetComponent<SentryTargetingComponent>(point)), ["GOVFOR"]);
             entities.GetComponent<MobStateComponent>(hostile).CurrentState = MobState.Dead;
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(1200), "Dead targets must not be engaged.");
+            Assert.That(payload.Rounds, Is.EqualTo(2400), "Dead targets must not be engaged.");
             entities.GetComponent<MobStateComponent>(hostile).CurrentState = MobState.Alive;
             var ftl = entities.AddComponent<FTLComponent>(ship);
             ftl.State = FTLState.Starting;
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(1200), "Takeoff must disable automatic ground fire.");
+            Assert.That(payload.Rounds, Is.EqualTo(2400), "Takeoff must disable automatic ground fire.");
             ftl.State = FTLState.Available;
             entities.AddComponent<DropshipTacticalHoverComponent>(ship);
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(1200), "Hovering must not enable the landed turret.");
+            Assert.That(payload.Rounds, Is.EqualTo(2400), "Hovering must not enable the landed turret.");
             entities.RemoveComponent<DropshipTacticalHoverComponent>(ship);
 
             var seat = entities.SpawnEntity("CMUMohawkMidwayMidwayGunner9ec7eb79e9", coordinates);
@@ -163,7 +163,7 @@ public sealed class MohawkChinGunTest
                 { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
             Assert.That(chin.DesiredAimDegrees, Is.EqualTo(45).Within(0.001),
                 "Hovering the camera must request an aim bearing without firing.");
-            Assert.That(payload.Rounds, Is.EqualTo(1200));
+            Assert.That(payload.Rounds, Is.EqualTo(2400));
             for (var pan = 0; pan < 15; pan++)
                 entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunPanMessage(Direction.North)
                     { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
@@ -186,18 +186,18 @@ public sealed class MohawkChinGunTest
             chin.DesiredAimDegrees = 0;
             turret.Update(0.5f);
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(1200), "Taking control must not authorize fire.");
+            Assert.That(payload.Rounds, Is.EqualTo(2400), "Taking control must not authorize fire.");
             gun.NextFire = TimeSpan.Zero;
             entities.AddComponent<CMUZLevelShooterComponent>(actor).ShootDown = true;
             Assert.That(entities.System<SharedGunSystem>().AttemptShoot(actor, (weapon, gun),
                 new EntityCoordinates(map, 1.5f, 10)), Is.False);
-            Assert.That(payload.Rounds, Is.EqualTo(1200), "A friendly in the path must block manual fire.");
+            Assert.That(payload.Rounds, Is.EqualTo(2400), "A friendly in the path must block manual fire.");
             Assert.That(entities.QueryEntities<CMUSpentCasingComponent>(), Is.Empty,
                 "Blocked shots must not eject casings.");
             transform.SetCoordinates(blocker, new EntityCoordinates(map, 15, 5));
             Assert.That(entities.System<SharedGunSystem>().AttemptShoot(actor, (weapon, gun),
                 new EntityCoordinates(map, 1.5f, 10)), Is.True);
-            Assert.That(payload.Rounds, Is.EqualTo(1199), "Mouse-coordinate firing must consume an individual shell.");
+            Assert.That(payload.Rounds, Is.EqualTo(2399), "Mouse-coordinate firing must consume an individual shell.");
             Assert.That(entities.QueryEntities<CMUSpentCasingComponent>(), Is.Empty,
                 "Squall must not eject casings.");
             Assert.That(entities.QueryEntities<ProjectileIFFComponent>().Any(projectile => projectile.Comp.Enabled), Is.True,
@@ -211,7 +211,7 @@ public sealed class MohawkChinGunTest
             entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunFireMessage(
                 entities.GetNetCoordinates(new EntityCoordinates(map, 1.5f, 10)))
                 { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
-            Assert.That(payload.Rounds, Is.EqualTo(1198), "The console camera must support mouse-coordinate firing.");
+            Assert.That(payload.Rounds, Is.EqualTo(2398), "The console camera must support mouse-coordinate firing.");
 
             var shot = new AttemptShootEvent
             {
@@ -238,7 +238,7 @@ public sealed class MohawkChinGunTest
                 "Transparent windows must not prevent target acquisition.");
             entities.DeleteEntity(window);
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(1198), "A target mark must not authorize fire.");
+            Assert.That(payload.Rounds, Is.EqualTo(2398), "A target mark must not authorize fire.");
             var consoleState = entities.GetComponent<DropshipTerminalWeaponsComponent>(console);
             Assert.That(consoleState.TrackedTarget, Is.EqualTo(hostile));
             var trackedEye = transform.GetMapCoordinates(chin.Eye!.Value);
@@ -253,25 +253,25 @@ public sealed class MohawkChinGunTest
             Assert.That(chin.AuthorizedUntil - pair.Server.ResolveDependency<Robust.Shared.Timing.IGameTiming>().CurTime,
                 Is.EqualTo(TimeSpan.FromSeconds(30)));
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(1197), "Final confirmation enables tracked automatic fire.");
+            Assert.That(payload.Rounds, Is.EqualTo(2397), "Final confirmation enables tracked automatic fire.");
             var wall = entities.SpawnEntity("CMWallMetal", new EntityCoordinates(ship, 1.5f, 6));
             Assert.That(turret.CanTrack((point, chin), hostile), Is.False, "Opaque cover must prevent acquisition.");
             Scan();
             Assert.That(chin.TrackingFireConfirmed, Is.True, "Occlusion must preserve unexpired authorization.");
-            Assert.That(payload.Rounds, Is.EqualTo(1197), "Occlusion must pause fire.");
+            Assert.That(payload.Rounds, Is.EqualTo(2397), "Occlusion must pause fire.");
             entities.DeleteEntity(wall);
             transform.SetCoordinates(hostile, new EntityCoordinates(map, 1.5f, -10));
             Scan();
             Assert.That(chin.TrackedTarget, Is.EqualTo(hostile), "Losing sight or the firing arc must preserve the marked entity.");
             Assert.That(consoleState.TrackingFireConfirmed, Is.True);
-            Assert.That(payload.Rounds, Is.EqualTo(1197));
+            Assert.That(payload.Rounds, Is.EqualTo(2397));
             transform.SetCoordinates(hostile, new EntityCoordinates(map, 1.5f, 10));
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(1196), "Reacquiring the authorized entity must resume fire.");
+            Assert.That(payload.Rounds, Is.EqualTo(2396), "Reacquiring the authorized entity must resume fire.");
             chin.AuthorizedUntil = TimeSpan.Zero;
             Scan();
             Assert.That(chin.TrackingFireConfirmed, Is.False);
-            Assert.That(payload.Rounds, Is.EqualTo(1196), "Expired authorization must not fire.");
+            Assert.That(payload.Rounds, Is.EqualTo(2396), "Expired authorization must not fire.");
             Track(hostile);
             entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunClearTrackingMessage
                 { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
@@ -306,7 +306,7 @@ public sealed class MohawkChinGunTest
 
             transform.SetCoordinates(hostile, new EntityCoordinates(map, 1.5f, 9));
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(1196), "An active manual gunner must suppress close defense.");
+            Assert.That(payload.Rounds, Is.EqualTo(2396), "An active manual gunner must suppress close defense.");
             ui.CloseUi(console, DropshipTerminalWeaponsUi.Key, actor);
             Scan();
             Assert.That(chin.Operator, Is.Null);
@@ -314,11 +314,11 @@ public sealed class MohawkChinGunTest
             Assert.That(turret.SelectTarget((point, chin), chin.CloseDefenseRange), Is.EqualTo(hostile),
                 "The exact boundary threat must remain an eligible AI target.");
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(1195),
+            Assert.That(payload.Rounds, Is.EqualTo(2395),
                 "Grounded close defense engages without airborne gunner approval.");
             transform.SetCoordinates(hostile, new EntityCoordinates(map, 1.5f, 9.01f));
             Scan();
-            Assert.That(payload.Rounds, Is.EqualTo(1195), "Targets outside close-defense range require authorization.");
+            Assert.That(payload.Rounds, Is.EqualTo(2395), "Targets outside close-defense range require authorization.");
             entities.DeleteEntity(map);
         });
         await pair.CleanReturnAsync();

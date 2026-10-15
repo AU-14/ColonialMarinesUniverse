@@ -104,9 +104,9 @@ public sealed class MohawkMappedGunneryTest : GameTest
             Assert.That(window.FeedModeButton.Visible, Is.True);
             Assert.That(window.FeedOneButton.Visible, Is.True);
             Assert.That(window.FeedTwoButton.Visible, Is.True);
-            Assert.That(window.FeedStatusLabel.Text, Does.Contain("1200 rounds"));
-            Assert.That(console.ChinGunFeedOne, Does.Contain("1200 rounds"));
-            Assert.That(console.ChinGunFeedTwo, Does.Contain("1200 rounds"));
+            Assert.That(window.FeedStatusLabel.Text, Does.Contain("2400 rounds"));
+            Assert.That(console.ChinGunFeedOne, Does.Contain("2400 rounds"));
+            Assert.That(console.ChinGunFeedTwo, Does.Contain("2400 rounds"));
             Assert.That(window.FreeFireButton.Visible, Is.True);
             Assert.That(window.ChinGunHealthLabel.Text, Does.Contain("2000"));
             Assert.That(window.Panel.HasStyleClass("CrtPanel"), Is.True);

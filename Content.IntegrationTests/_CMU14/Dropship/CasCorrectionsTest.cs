@@ -255,6 +255,7 @@ public sealed class CasCorrectionsTest : GameTest
                 Assert.That(containers.Insert(weapon, containers.EnsureContainer<ContainerSlot>(point, weaponSlot)), Is.True);
                 var crate = SEntMan.SpawnEntity("CMUMohawkM90AmmoKinetic", map.GridCoords);
                 var ammo = SEntMan.GetComponent<DropshipAmmoComponent>(crate);
+                ammo.Rounds = 1200;
                 ammo.RoundsPerShot = 1;
                 Assert.That(containers.Insert(crate, containers.EnsureContainer<ContainerSlot>(point, ammoSlot)), Is.True);
                 return weapon;

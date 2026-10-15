@@ -167,7 +167,7 @@ public sealed class MohawkDamageRepairTest : GameTest
             damage.TryChangeDamage(point, new DamageSpecifier { DamageDict = new() { ["Piercing"] = 2000 } });
             Assert.That(chin.Disabled, Is.True);
             var parts = SEntMan.SpawnEntity("CMUMohawkM90RepairParts", map.GridCoords);
-            Assert.That(SEntMan.GetComponent<DropshipFabricatorPrintableComponent>(parts).Cost, Is.EqualTo(1500));
+            Assert.That(SEntMan.GetComponent<DropshipFabricatorPrintableComponent>(parts).Cost, Is.EqualTo(1150));
             Assert.That(SEntMan.GetComponent<DropshipFabricatorPrintableComponent>(parts).Category,
                 Is.EqualTo(DropshipFabricatorPrintableComponent.CategoryType.Equipment));
             Assert.That(Server.System<DropshipFabricatorSystem>().Printables.Any(p => p.Id == "CMUMohawkM90RepairParts"), Is.True);

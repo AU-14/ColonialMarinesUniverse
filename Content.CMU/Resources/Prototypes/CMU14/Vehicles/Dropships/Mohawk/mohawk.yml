@@ -728,7 +728,7 @@
   parent: CMUMohawkM90Ammo
   id: CMUMohawkM90AmmoKinetic
   name: PGU-410 'Squall' 90mm rapid-fire kinetic ammunition crate
-  description: Twelve hundred budget kinetic rounds for the dual-feed M90. Fires ten rounds per second with GAU-style non-explosive impacts. Supports groundside and flyby fire without ejecting casings.
+  description: Twenty-four hundred budget kinetic rounds for the three-feed M90. Fires fifteen rounds per second with GAU-style non-explosive impacts. Supports groundside, transit, and flyby fire without ejecting casings.
   components:
   - type: RMCGenericExamine
     message: Squall kinetic rounds support groundside and flyby fire but cannot penetrate overhead cover.

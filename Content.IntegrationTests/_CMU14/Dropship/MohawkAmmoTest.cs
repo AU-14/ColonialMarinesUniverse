@@ -207,13 +207,13 @@ public sealed class MohawkAmmoTest : GameTest
         });
     }
 
-    [TestCase("CMUMohawkM90Ammo", "CMUMohawkM90HEAP", 165, 0, 3000, false)]
-    [TestCase("CMUMohawkM90AmmoScatter", "CMUMohawkM90Scatter", 60, 10, 3000, false)]
-    [TestCase("CMUMohawkM90AmmoIncendiary", "CMUMohawkM90Incendiary", 130, 2, 3000, true)]
-    [TestCase("CMUMohawkM90AmmoDevastator", "CMUMohawkM90Devastator", 300, 12, 6000, false)]
-    [TestCase("CMUMohawkM90AmmoKinetic", "CMUMohawkM90Kinetic", 20, 0, 750, false)]
+    [TestCase("CMUMohawkM90Ammo", "CMUMohawkM90HEAP", 165, 165, 0, 975, false)]
+    [TestCase("CMUMohawkM90AmmoScatter", "CMUMohawkM90Scatter", 60, 60, 10, 1500, false)]
+    [TestCase("CMUMohawkM90AmmoIncendiary", "CMUMohawkM90Incendiary", 130, 130, 2, 1250, true)]
+    [TestCase("CMUMohawkM90AmmoDevastator", "CMUMohawkM90Devastator", 300, 300, 12, 3500, false)]
+    [TestCase("CMUMohawkM90AmmoKinetic", "CMUMohawkM90Kinetic", 25, 20, 0, 750, false)]
     public async Task PowerloaderLoadsVariantAndGunConsumesItsProjectile(
-        string crateId, string projectileId, double damage, int spread, int cost, bool burns)
+        string crateId, string projectileId, double impactDamage, double projectileDamage, int spread, int cost, bool burns)
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
@@ -237,14 +237,14 @@ public sealed class MohawkAmmoTest : GameTest
                 "Squall fills its reserved third feed first; every other crate fills the primary feed.");
             var payload = SEntMan.GetComponent<DropshipAmmoComponent>(crate);
             Assert.That(payload.Weapon.Id, Is.EqualTo("CMUMohawkM90"));
-            var capacity = squall ? 1200 : 400;
+            var capacity = squall ? 2400 : 400;
             if (squall)
                 Assert.That(payload.DirectFireRate, Is.EqualTo(15));
             Assert.That(payload.Rounds, Is.EqualTo(capacity));
             Assert.That(payload.MaxRounds, Is.EqualTo(capacity));
             Assert.That(payload.RoundsPerShot, Is.EqualTo(1));
             Assert.That(payload.DirectFireSpreadDegrees, Is.EqualTo(spread));
-            Assert.That(payload.Damage!.GetTotal().Float(), Is.EqualTo(damage));
+            Assert.That(payload.Damage!.GetTotal().Float(), Is.EqualTo(impactDamage));
             Assert.That(SEntMan.GetComponent<DropshipFabricatorPrintableComponent>(crate).Cost, Is.EqualTo(cost));
             Assert.That(Server.System<SharedSentryTargetingSystem>().TryApplyDefaultFaction(point, "GOVFOR"), Is.True);
             var chin = SEntMan.GetComponent<MohawkChinGunComponent>(point);
@@ -280,7 +280,7 @@ public sealed class MohawkAmmoTest : GameTest
             Assert.That(SEntMan.GetComponent<MetaDataComponent>(projectile).EntityPrototype!.ID,
                 Is.EqualTo(projectileId));
             Assert.That(SEntMan.GetComponent<ProjectileComponent>(projectile).Damage.GetTotal().Float(),
-                Is.EqualTo(damage));
+                Is.EqualTo(projectileDamage));
             Assert.That(SEntMan.HasComponent<IgniteOnProjectileHitComponent>(projectile), Is.EqualTo(burns));
             Assert.That(SEntMan.GetComponent<ProjectileIFFComponent>(projectile).Enabled, Is.True);
             if (burns)

@@ -155,7 +155,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             mount.Chin.DefensiveFire = true;
             var system = Server.System<MohawkChinGunSystem>();
             Assert.That(system.CanOperate((mount.Point, mount.Chin), mount.Weapon, mount.Weapon, out _), Is.False);
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1200));
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(2400));
             boot.ReadyAt = SGameTiming.CurTime - TimeSpan.FromSeconds(1);
             Server.System<DropshipFireControlBootSystem>().Update(0);
             Assert.That(boot.Complete, Is.True);
@@ -406,7 +406,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             mount.Gun.NextFire = TimeSpan.Zero;
             Trigger(mount, true, far);
             system.Update(0);
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1199), "Manual fire outside acquisition range still fires.");
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(2399), "Manual fire outside acquisition range still fires.");
             projectile = SEntMan.QueryEntities<ProjectileComponent>().Single().Owner;
             Assert.That(SEntMan.HasComponent<Content.Shared._RMC14.Weapons.Ranged.ProjectileFixedDistanceComponent>(projectile), Is.False);
             Assert.That(SEntMan.GetComponent<Content.Shared._RMC14.Weapons.Ranged.IFF.ProjectileIFFComponent>(projectile).Enabled, Is.False);
@@ -486,12 +486,12 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             mount.Chin.NextScan = TimeSpan.Zero;
             system.Update(0);
             Assert.That(MathF.Abs(mount.Chin.DesiredAimDegrees), Is.EqualTo(180).Within(0.001));
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1200), "Close defense waits for individual approval.");
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(2400), "Close defense waits for individual approval.");
             Send(mount, new MohawkChinGunApproveAiMessage(SEntMan.GetNetEntity(target)));
             system.Update(6);
             mount.Chin.NextScan = TimeSpan.Zero;
             system.Update(0);
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1199), "An approved aligned rear close threat permits defense fire.");
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(2399), "An approved aligned rear close threat permits defense fire.");
         });
     }
 
@@ -537,10 +537,10 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             Assert.That(mount.Terminal.Target, Is.EqualTo(active), "The AI must leave a quiet manually selected flare.");
             Assert.That(mount.Chin.AutomaticTarget, Is.EqualTo(first));
             Assert.That(mount.Chin.ActiveFeed, Is.Zero, "A soft isolated target favors rapid kinetic fire.");
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1200), "Scanning selects a feed but never authorizes fire.");
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(2400), "Scanning selects a feed but never authorizes fire.");
             Send(mount, new MohawkChinGunApproveAiMessage(SEntMan.GetNetEntity(first)));
             Scan();
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1199));
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(2399));
             var second = Hostile(groundMap.GridCoords.Offset(new Vector2(40, 2)));
             var third = Hostile(groundMap.GridCoords.Offset(new Vector2(41, 1)));
             Scan();
@@ -555,7 +555,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             Scan();
             Assert.That(mount.Chin.ActiveFeed, Is.Zero, "Nearby friendlies rule out the wider explosive payload.");
             Assert.That(heavy.Rounds, Is.EqualTo(399));
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1198));
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(2398));
             foreach (var target in new[] { first, second, third })
                 SEntMan.GetComponent<Content.Shared.Mobs.Components.MobStateComponent>(target).CurrentState = Content.Shared.Mobs.MobState.Critical;
             var next = Hostile(groundMap.GridCoords.Offset(new Vector2(80, 1)));
@@ -724,7 +724,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             mount.Gun.NextFire = TimeSpan.Zero;
             Send(mount, new MohawkChinGunConfirmTrackingMessage(SEntMan.GetNetEntity(living)));
             turret.Update(0);
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1200), "A friendly mark must not bypass firing safety.");
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(2400), "A friendly mark must not bypass firing safety.");
             SEntMan.GetComponent<Content.Shared.Mobs.Components.MobStateComponent>(living).CurrentState = Content.Shared.Mobs.MobState.Dead;
             Send(mount, new MohawkChinGunTrackMessage(SEntMan.GetNetCoordinates(coordinates)));
             Assert.That(mount.Chin.TrackedTarget, Is.Null, "Squall cannot mark corpses.");
@@ -777,8 +777,8 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             mount.Chin.ActiveFeed = 0;
             Trigger(mount, true, shipMap.GridCoords.Offset(new Vector2(1.5f, 15)));
             Server.System<MohawkChinGunSystem>().Update(0);
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1199));
-            Assert.That(mount.Ammo.MaxRounds, Is.EqualTo(1200));
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(2399));
+            Assert.That(mount.Ammo.MaxRounds, Is.EqualTo(2400));
             Assert.That(mount.Gun.NextFire - SGameTiming.CurTime, Is.EqualTo(TimeSpan.FromSeconds(1f / 15)).Within(TimeSpan.FromMilliseconds(1)));
         });
         await Server.WaitAssertion(() =>
@@ -857,7 +857,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
         {
             var chin = mount.Chin;
             Assert.That(chin.AutomaticTarget, Is.Not.Null);
-            Assert.That(mount.Ammo.Rounds, Is.LessThan(1200), "Groundside free fire engages without per-target approval.");
+            Assert.That(mount.Ammo.Rounds, Is.LessThan(2400), "Groundside free fire engages without per-target approval.");
             Send(mount, new MohawkChinGunFreeFireMessage());
             Assert.That(chin.FreeFireEnabled, Is.False);
             Assert.That((chin.FreeFireReadyAt - SGameTiming.CurTime).TotalSeconds, Is.EqualTo(300).Within(0.001));
@@ -965,7 +965,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             Send(mount, new MohawkChinGunFreeFireMessage());
             mount.Gun.NextFire = TimeSpan.Zero;
             Server.System<MohawkChinGunSystem>().Update(0);
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1199), "Groundside AI engages without per-target approval.");
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(2399), "Groundside AI engages without per-target approval.");
             started = SGameTiming.CurTime;
             startingRounds = mount.Ammo.Rounds;
         });
@@ -1063,7 +1063,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             mount = Create(map.Grid, false);
             Trigger(mount, true, target);
             Server.System<MohawkChinGunSystem>().Update(0);
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(1199));
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(2399));
             started = SGameTiming.CurTime;
         });
         await Pair.RunSeconds(0.2f);
@@ -1075,7 +1075,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             Assert.That(mount.Chin.Operator, Is.EqualTo(mount.Actor));
             Assert.That(mount.Chin.HeldAim, Is.Not.Null);
             Assert.That(mount.Chin.HeldFireUntil, Is.GreaterThan(SGameTiming.CurTime));
-            Assert.That(mount.Ammo.Rounds, Is.LessThan(1198), "Holding and renewing should fire repeatedly at fifteen rounds per second.");
+            Assert.That(mount.Ammo.Rounds, Is.LessThan(2398), "Holding and renewing should fire repeatedly at fifteen rounds per second.");
             stoppedRounds = mount.Ammo.Rounds;
             Trigger(mount, false);
         });
