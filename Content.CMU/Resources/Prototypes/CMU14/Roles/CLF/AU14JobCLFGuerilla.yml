@@ -81,6 +81,7 @@
   id: JobAU14JobCLFGuerilla
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - CivFootwearAU14
   - CivHatsAU14

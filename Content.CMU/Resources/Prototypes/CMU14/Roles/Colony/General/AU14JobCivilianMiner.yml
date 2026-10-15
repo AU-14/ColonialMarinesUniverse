@@ -63,6 +63,7 @@
   id: JobAU14JobCivilianMiner
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - MinerSatchelAU14
   - PaperworkRMC
   - RecreationalRMC

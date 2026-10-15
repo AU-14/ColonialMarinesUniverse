@@ -121,6 +121,7 @@
   id: JobAU14JobCivilianCorporateLiaison
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - PaperworkRMC
   - WYCLJumpsuitAU14

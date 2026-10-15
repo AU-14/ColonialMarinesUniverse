@@ -1622,6 +1622,7 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("boolean")
                         .HasColumnName("synthetic");
 
+                    // CMU14 synthetic profile fields
                     b.Property<int>("SyntheticGeneration")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")

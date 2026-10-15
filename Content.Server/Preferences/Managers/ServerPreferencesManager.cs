@@ -280,8 +280,8 @@ namespace Content.Server.Preferences.Managers
                  : profile.Religion)
              .WithArmorFlavorText(profile.ArmorFlavorText)
              .WithHelmetFlavorText(profile.HelmetFlavorText)
-             .WithSyntheticGeneration(profile.SyntheticGeneration)
-             .WithSyntheticModelSuffix(profile.SyntheticModelSuffix);
+             .WithSyntheticGeneration(profile.SyntheticGeneration) // CMU14
+             .WithSyntheticModelSuffix(profile.SyntheticModelSuffix); // CMU14
              // cmu edit end
         }
 

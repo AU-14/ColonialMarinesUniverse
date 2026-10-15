@@ -94,6 +94,7 @@
   id: JobAU14JobCLFSapper
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - CivFootwearAU14
   - CivJumpsuitAU14

@@ -1551,6 +1551,7 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("INTEGER")
                         .HasColumnName("synthetic");
 
+                    // CMU14 synthetic profile fields
                     b.Property<int>("SyntheticGeneration")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")

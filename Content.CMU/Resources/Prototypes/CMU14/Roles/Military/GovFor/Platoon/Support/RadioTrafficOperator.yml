@@ -106,6 +106,7 @@
   id: JobAU14JobGOVFORRadioTrafficOperator
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - EyewearRMCPVE
   - MasksRMCPVE
   - HeadwearRMCPVE

@@ -12,6 +12,7 @@ namespace Content.Server.Database.Migrations.Sqlite
 {
     [DbContext(typeof(SqliteServerDbContext))]
     [Migration("20261015192541_ProfileSyntheticGeneration")]
+    // CMU14: migration metadata for synthetic profile fields.
     partial class ProfileSyntheticGeneration
     {
         /// <inheritdoc />

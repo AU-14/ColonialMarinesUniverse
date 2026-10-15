@@ -77,4 +77,5 @@
   id: JobCMUJobAegisObserver
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - AegisStampGroupCMU

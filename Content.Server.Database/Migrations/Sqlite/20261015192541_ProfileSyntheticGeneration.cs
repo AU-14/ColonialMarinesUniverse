@@ -4,6 +4,7 @@
 
 namespace Content.Server.Database.Migrations.Sqlite
 {
+    // CMU14: add synthetic generation and model suffix to saved profiles.
     /// <inheritdoc />
     public partial class ProfileSyntheticGeneration : Migration
     {

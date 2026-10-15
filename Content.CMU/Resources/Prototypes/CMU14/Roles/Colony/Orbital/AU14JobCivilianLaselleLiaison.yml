@@ -96,6 +96,7 @@
   id: JobAU14JobCivilianLaselleLiaison
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - CMUCorporateSkirts
   - PaperworkRMC

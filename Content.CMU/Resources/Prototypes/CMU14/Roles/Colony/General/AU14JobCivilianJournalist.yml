@@ -62,6 +62,7 @@
   id: JobAU14JobCivilianJournalist
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - JournalistSpecializationAU14
   - CivSatchelAU14
   - CivFootwearAU14

@@ -17,6 +17,7 @@ namespace Content.Server.Database.Migrations.Postgres
 {
     [DbContext(typeof(PostgresServerDbContext))]
     [Migration("20261015192558_ProfileSyntheticGeneration")]
+    // CMU14: migration metadata for synthetic profile fields.
     partial class ProfileSyntheticGeneration
     {
         /// <inheritdoc />

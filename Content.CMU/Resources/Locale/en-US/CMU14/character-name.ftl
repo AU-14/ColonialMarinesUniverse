@@ -8,5 +8,4 @@ cmu-profile-editor-synthetic-generation-label = Generation:
 cmu-profile-editor-synthetic-generation-1 = Gen 1
 cmu-profile-editor-synthetic-generation-2 = Gen 2
 cmu-profile-editor-synthetic-generation-3 = Gen 3
-cmu-profile-editor-synthetic-generation-4 = Gen 4
 cmu-profile-editor-synthetic-model-suffix-label = Model/designation suffix:

@@ -1,5 +1,5 @@
 using System.Linq;
-using System.Numerics;
+using System.Numerics; // CMU14
 using Content.Client._RMC14.NamedItems;
 // cmu edit start
 using Content.Client.Administration.UI.CustomControls;
@@ -962,6 +962,7 @@ public sealed partial class HumanoidProfileEditor
             selector.UnlockRequirements();
         }
 
+        // CMU14 Synthetic Character Preferences Begin
         var generationRow = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Horizontal,
@@ -1034,6 +1035,7 @@ public sealed partial class HumanoidProfileEditor
         SyntheticContainer.AddChild(selector);
         SyntheticContainer.AddChild(generationRow);
         SyntheticContainer.AddChild(modelSuffixRow);
+        // CMU14 End
     }
 
     public void RefreshAllegiances()
