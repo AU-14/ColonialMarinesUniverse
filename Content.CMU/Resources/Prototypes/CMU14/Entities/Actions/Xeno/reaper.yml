@@ -1,0 +1,21 @@
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionReaperRevive
+  name: Reanimate Xeno
+  description: Spend 500 flesh to revive a hive sister who has been dead for no more than three minutes. Channel for two minutes. Flesh and the ten-minute cooldown are consumed when charging begins, even if interrupted.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 600
+  - type: Sprite
+    layers:
+    - sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: reaper_carrion_mantle
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 1.5
+  - type: EntityTargetAction
+    event: !type:Content.Shared.CMU14.Xenomorphs.Reaper.CMUReaperReviveActionEvent
+  - type: ActionBlockIfResting
+  - type: ActionInRangeUnobstructed
+    range: 1.5

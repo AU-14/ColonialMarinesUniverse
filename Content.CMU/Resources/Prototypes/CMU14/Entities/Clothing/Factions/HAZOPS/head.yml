@@ -23,9 +23,16 @@
 - type: entity
   parent: RMCHelmetGarbToggleableBase
   id: CMUHelmetGarbPVS71NightVision
-  name: old PVS-71 night vision goggles
-  description: HAZOPS-issue night vision goggles designed to interface with the Powered Warfighting Armor to provide a suite of visual capabilites. Unfortunatly, it seems unable to connect to the armor and is completely nonfunctional. Still makes you look cool.
+  name: PVS-71 night vision goggles
+  description: HAZOPS-issue night vision goggles that clip into a helmet. Pull them down to see in the dark.
   components:
+  - type: CMUHelmetGarbNightVision
+  - type: NightVisionItem
+    actionId: null
+    toggleable: false
+    enableOnEquip: false
+    slotFlags: HEAD
+    green: true
   - type: Sprite
     sprite: CMU14/Clothing/HAZOPS/pvs7.rsi
     state: icon

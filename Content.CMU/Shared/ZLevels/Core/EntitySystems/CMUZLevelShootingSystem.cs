@@ -9,6 +9,7 @@ using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Wieldable;
 using Content.Shared.Wieldable.Components;
+using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Serialization;
@@ -37,6 +38,23 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         SubscribeLocalEvent<CMUZLevelViewerComponent, CMUZLevelAdjustShotEvent>(OnAdjustShot);
         SubscribeLocalEvent<CMUZLevelShooterComponent, CMUZLevelAdjustShotEvent>(OnAdjustShot);
         SubscribeAllEvent<CMUZLevelSetAimDownEvent>(OnSetAimDown);
+
+        // the old manual toggle, for people who turned off shoot where you look
+        CommandBinds.Builder
+            .Bind(CMUKeyFunctions.CMUToggleShootDownZLevel,
+                InputCmdHandler.FromDelegate(session =>
+                    {
+                        if (session?.AttachedEntity is { } user)
+                            ToggleShootDown(user);
+                    },
+                    handle: false))
+            .Register<CMUZLevelShootingSystem>();
+    }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+        CommandBinds.Unregister<CMUZLevelShootingSystem>();
     }
 
     private void OnSetAimDown(CMUZLevelSetAimDownEvent ev, EntitySessionEventArgs args)
@@ -85,6 +103,41 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
         args.FromCoordinates = adjustedFrom;
         args.ToCoordinates = adjustedTo;
+    }
+
+    private void ToggleShootDown(EntityUid user)
+    {
+        if (!CanAimAcrossZWithoutGun(user) &&
+            !TryGetReadyGun(user, "cmu-zlevel-shoot-down-no-gun", "cmu-zlevel-shoot-down-requires-wield"))
+        {
+            return;
+        }
+
+        var shootDown = !IsShootDownEnabled(user);
+        SetShootDown(user, shootDown);
+
+        var message = shootDown
+            ? "cmu-zlevel-shoot-down-enabled"
+            : "cmu-zlevel-shoot-down-disabled";
+
+        PopupSelf(user, message);
+    }
+
+    private bool TryGetReadyGun(EntityUid user, string noGunMessage, string requiresWieldMessage)
+    {
+        if (!TryGetGun(user, out var gunUid))
+        {
+            PopupSelf(user, noGunMessage);
+            return false;
+        }
+
+        if (!IsReadyGun(gunUid))
+        {
+            PopupSelf(user, requiresWieldMessage);
+            return false;
+        }
+
+        return true;
     }
 
     private bool HasReadyGun(EntityUid user)

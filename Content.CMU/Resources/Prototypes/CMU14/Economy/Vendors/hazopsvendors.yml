@@ -193,8 +193,6 @@
         amount: 25
     - name: Helmet Garb
       entries:
-      - id: CMUHelmetGarbPVS71NightVision
-        amount: 15
       - id: AU14HelmetGarbM10SkrimJungle
         amount: 15
       - id: AU14HelmetGarbM10SkrimDesert
@@ -238,12 +236,18 @@
     - name: Essential Equipment
       takeAll: CMUAREssentialEquipment
       entries:
-      - id: AU14SmartGunMinigunHAZOPS
       - id: AU14HAZOPSBatteryMinigunGAU19Backpack
       - id: RMCScabbardMacheteSGFilled
+    - name: Firearm System
+      choices: { CMUPlatoonMG: 1 }
+      entries:
+      - id: AU14SmartGunMinigunHAZOPS
+      - id: CMUWeaponRifleM250
     - name: Munitions
       entries:
       - id: AU14MagazineMinigunHAZOPS
+        amount: 8
+      - id: CMUMagazineRifleM250
         amount: 8
 
 - type: entity
@@ -275,11 +279,11 @@
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
       entries:
-      - id: AU14KitWeaponM4A3
+      - id: CMUKitWeaponMarkIV
       - id: AU14GunCasePistolM50HAZOPS
     - name: Handgun Ammunition
       entries:
-      - id: CMMagazinePistolM1984
+      - id: CMUMagazinePistolMarkIV
         amount: 60
       - id: AU14MagazinePistolM50
         amount: 60
@@ -478,6 +482,7 @@
       takeAll: CMStandard
       entries:
       - id: RMCVendorBundleCrewLeader
+      - id: CMUHelmetGarbPVS71NightVision
     - name: Backpack
       choices: { CMBackpack: 1 }
       entries:
@@ -580,7 +585,7 @@
         amount: 20
     - name: standard issue secondaries
       entries:
-      - id: CMWeaponPistolM1984Empty
+      - id: CMUWeaponPistolMarkIVEmpty
         amount: 20
     - name: special issue equipment
       entries:
@@ -604,6 +609,8 @@
       entries:
       - id: AU14MagazineXMP5A6
         amount: 200
+      - id: CMUMagazineRifleM250
+        amount: 30
       - id: AU14MagazineRifleXM20A2
         amount: 100
       - id: CMMagazineRifleM54C
@@ -630,8 +637,10 @@
         amount: 25
     - name: secondary ammunition
       entries:
-      - id: CMMagazinePistolM1984
+      - id: CMUMagazinePistolMarkIV
         amount: 200
+      - id: CMMagazinePistolM1984
+        amount: 100
       - id: RMCMagazinePistolM1984AP
         amount: 15
       - id: RMCMagazinePistolM1984HP

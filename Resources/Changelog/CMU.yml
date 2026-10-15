@@ -13454,5 +13454,67 @@
   id: 807
   time: '2026-10-14T21:34:35.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2177
+- author: johnnny34y
+  changes:
+  - message: New sprites for a portion of HAZOPS' gear, along with new cosmetic PVS-71
+      night vision goggles and HAZOPS oxygen tank with 10 L of air.
+    type: Add
+  id: 808
+  time: '2026-10-15T01:30:46.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2169
+- author: troytroy400
+  changes:
+  - message: HAZOPS M250 squad support weapon.
+    type: Add
+  - message: HAZOPS Mark IV service pistol, the new standard HAZOPS sidearm
+    type: Add
+  - message: The HAZOPS PVS-71 night vision goggles now work, clip them into your
+      helmet and pull them down to see in the dark. HAZOPS squad leaders and shotgunner
+      specialists get them.
+    type: Add
+  - message: The HAZOPS powered warfighting armor's power-up sound only plays for
+      the wearer.
+    type: Fix
+  id: 809
+  time: '2026-10-15T02:35:13.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2180
+- author: rokudara-sen
+  changes:
+  - message: Thrown items and grenades no longer drop down the first hole they pass
+      over while your cursor is over the level below. They land where you threw them,
+      and fall if that spot is open.
+    type: Fix
+  - message: Shooting across a wide drop no longer sends every shot into the pit.
+      Empty floor below only pulls your shot down within 4 tiles of you, further than
+      that you have to point at someone down there.
+    type: Fix
+  - message: Aiming at someone on the level below now locks onto anyone within a tile
+      of your cursor, so moving targets are easier to hit.
+    type: Tweak
+  - message: Once you're aiming down at range, slipping off the target keeps you aiming
+      down for half a second, and for as long as you hold the trigger, so bursts don't
+      flip between levels.
+    type: Tweak
+  - message: Added a "Shoot where you look across Z-levels" option under Controls
+      -> CMU Z-Levels. Turn it off to bring back the old Ctrl+Shift+Space shoot down
+      toggle.
+    type: Add
+  id: 810
+  time: '2026-10-15T08:07:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2182
+- author: Ignies
+  changes:
+  - message: 'Added custom crayon symbols: draw your own in the crayon window and
+      stamp them with any crayon.'
+    type: Add
+  - message: Added lighter and darker tones of every box crayon for gradients in custom
+      symbols.
+    type: Add
+  - message: Added CMUCrayonDrawImageEvent so other systems can draw a player's custom
+      symbol on their surfaces.
+    type: Code
+  id: 811
+  time: '2026-10-15T13:10:06.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2179
 Name: CMU
 Order: -1

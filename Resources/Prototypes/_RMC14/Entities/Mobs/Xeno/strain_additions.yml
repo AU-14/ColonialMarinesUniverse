@@ -191,6 +191,7 @@
     - ActionXenoPlantWeeds
     - ActionXenoChooseStructure
     - ActionXenoSecreteStructure
+    - CMUActionReaperRevive # CMU14
     - ActionXenoFleshHarvest
     - ActionXenoFleshBloom
     - ActionXenoCarrionMantle
@@ -249,6 +250,8 @@
     - HiveClusterXenoConstructionNode
     - HiveRecoveryNodeXenoConstructionNode
     - HivePlasmaTreeXenoConstructionNode
+  - type: CMUReaperRevival # CMU14
   - type: XenoReaper
+    fleshBloomPrototype: CMUFleshBloom # CMU14: muted vascular residue
   - type: RMCActionOrder
     id: CMXenoReaper
