@@ -224,3 +224,30 @@
       - id: RMCCLFArmband
         amount: 1
         prob: 0.02
+
+- type: entity
+  parent: RuMCSniperRifleSVAROGCase
+  id: CMUSVAROGCaseUPPSpec
+  name: SVAROG Sniper Rifle Case
+  description: A gun case containing the SVAROG sniper rifle and other equipment.
+  suffix: UPP
+  components:
+  - type: Storage
+    maxItemSize: Colossal
+  - type: StorageFill
+    contents:
+    - id: AU14ArmorGhillie
+      amount: 2
+    - id: AU14HelmetGhillie
+      amount: 2
+    - id: CMBackpackSniper
+    - id: AU14KitSpotter
+    - id: RMCVisorNightVision
+    - id: RMCScoutShoes
+    - id: RuMcMagazineSniperRifleSVAROGIncendiary
+      amount: 4
+    - id: RuMcMagazineSniperRifleSVAROG
+      amount: 7
+    - id: RuMcMagazineSniperRifleSVAROGFlak
+      amount: 4
+    - id: RuMcSniperRifleSVAROG

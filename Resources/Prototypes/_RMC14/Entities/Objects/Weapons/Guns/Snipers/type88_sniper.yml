@@ -22,10 +22,10 @@
   - type: Tag
     tags:
     - RMCType88SniperRifle
-  - type: GunUserWhitelist # CMU14
-    whitelist:
-      components:
-      - SniperWhitelist
+#  - type: GunUserWhitelist # CMU14
+#    whitelist:
+#      components:
+#      - SniperWhitelist
   - type: MeleeWeapon
     damage:
       types:

@@ -4,6 +4,8 @@
   id: RMCWeaponSMGType64
   description: The standard submachinegun of the UPP, sporting an unusual 64 round helical magazine, it has a high fire-rate, but is unusually accurate. This one is bulky and unergonomic, denoting it as civilian use or as an export model.
   components:
+  - type: GunDamageModifier #CMU14
+    multiplier: 1.15 #CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/SMGs/type64.rsi
     layers:
