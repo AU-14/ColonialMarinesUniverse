@@ -4,8 +4,8 @@ meta:
   engineVersion: 290.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/15/2026 06:18:03
-  entityCount: 29357
+  time: 10/15/2026 06:41:46
+  entityCount: 29359
 maps:
 - 1
 grids:
@@ -57148,7 +57148,7 @@ entities:
         DoorStatus: True
     - type: Door
       state: Opening
-      secondsUntilStateChange: -68371.82
+      secondsUntilStateChange: -68570.766
   - uid: 133
     components:
     - type: MetaData
@@ -57644,7 +57644,7 @@ entities:
         DoorStatus: True
     - type: Door
       state: Opening
-      secondsUntilStateChange: -70451.25
+      secondsUntilStateChange: -70650.195
   - uid: 200
     components:
     - type: Transform
@@ -57656,7 +57656,7 @@ entities:
         DoorStatus: True
     - type: Door
       state: Opening
-      secondsUntilStateChange: -70452.28
+      secondsUntilStateChange: -70651.23
   - uid: 201
     components:
     - type: Transform
@@ -57689,7 +57689,7 @@ entities:
       pos: 127.5,-79.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -72894.92
+      secondsUntilStateChange: -73093.87
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -57761,7 +57761,7 @@ entities:
       pos: 77.5,-75.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69456.28
+      secondsUntilStateChange: -69655.23
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -57782,7 +57782,7 @@ entities:
       pos: 80.5,-75.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69455.984
+      secondsUntilStateChange: -69654.93
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -57887,7 +57887,7 @@ entities:
       pos: 63.5,-64.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69751.95
+      secondsUntilStateChange: -69950.9
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -58284,7 +58284,7 @@ entities:
       pos: 68.5,-33.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -70934.414
+      secondsUntilStateChange: -71133.36
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -63557,7 +63557,7 @@ entities:
       lastOpeningAt: 865.2991347
     - type: Door
       state: Opening
-      secondsUntilStateChange: -70984.516
+      secondsUntilStateChange: -71183.46
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -63572,7 +63572,7 @@ entities:
       lastOpeningAt: 865.2991347
     - type: Door
       state: Opening
-      secondsUntilStateChange: -70984.516
+      secondsUntilStateChange: -71183.46
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64105,7 +64105,7 @@ entities:
       lastOpeningAt: 2393.0309403
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69456.78
+      secondsUntilStateChange: -69655.73
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64121,7 +64121,7 @@ entities:
       lastOpeningAt: 2393.0309403
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69456.78
+      secondsUntilStateChange: -69655.73
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64137,7 +64137,7 @@ entities:
       lastOpeningAt: 2078.4979215
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69771.32
+      secondsUntilStateChange: -69970.266
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64153,7 +64153,7 @@ entities:
       lastOpeningAt: 2078.4979215
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69771.32
+      secondsUntilStateChange: -69970.266
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64388,6 +64388,18 @@ entities:
     components:
     - type: MetaData
       name: 'LZ2: Engineering Landing Zone'
+    - type: Transform
+      parent: 1
+      pos: 32.5,-119.5
+- proto: CMDropshipDestinationThirdPartyWhitelist
+  entities:
+  - uid: 24267
+    components:
+    - type: Transform
+      parent: 1
+      pos: 43.5,-45.5
+  - uid: 24268
+    components:
     - type: Transform
       parent: 1
       pos: 32.5,-119.5
