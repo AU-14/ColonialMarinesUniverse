@@ -74191,11 +74191,19 @@ entities:
   entities:
   - uid: 24260
     components:
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: cmu.solaris-ridge.ground.south
+      displayName: Solaris Ridge South Ground Relay
     - type: Transform
       parent: 1
       pos: 89.5,-74.5
   - uid: 24266
     components:
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: cmu.solaris-ridge.ground.north
+      displayName: Solaris Ridge North Ground Relay
     - type: Transform
       parent: 1
       pos: 81.5,-51.5
