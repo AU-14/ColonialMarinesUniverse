@@ -211,6 +211,8 @@
       - RMCCircuitboard
       - RMCSynthResetKey
       - MaintenanceJack
+      - RUMCHandSaw
+      - RUMCHammer
       components:
       - Welder
       - PowerCell
@@ -323,6 +325,8 @@
       - RMCNailgunCompact
       - RMCNailgunTactical
       - RMCSynthResetKey
+      - RUMCHandSaw
+      - RUMCHammer
       #      - # TODO analyzer
       components:
       - Welder

@@ -10,6 +10,9 @@
     state: icon
   - type: Item
     size: Normal
+  - type: Tag
+    tags:
+    - RUMCHammer
   - type: Tool
     qualities:
     - Hammering
@@ -25,6 +28,9 @@
   - type: Damageable
   - type: Injurable
     damageContainer: Inorganic
+
+- type: Tag
+  id: RUMCHammer
 
 - type: craftRecipe
   id: RUMCCraftHammer

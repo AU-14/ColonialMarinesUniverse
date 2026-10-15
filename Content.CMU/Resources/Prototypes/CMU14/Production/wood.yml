@@ -120,6 +120,9 @@
     inhandVisuals:
       left: []
       right: []
+  - type: Tag
+    tags:
+    - RUMCHandSaw
   - type: Tool
     qualities:
     - Sawing
@@ -132,6 +135,9 @@
         Slash: 6
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
+
+- type: Tag
+  id: RUMCHandSaw
 
 # The crate of saws that the colony cargo sells.
 - type: entity

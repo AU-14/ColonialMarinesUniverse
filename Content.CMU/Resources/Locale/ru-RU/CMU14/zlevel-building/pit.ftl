@@ -30,3 +30,6 @@ au14-pit-tool-too-shallow = Вы уже на поверхности, копат�
 au14-pit-tool-nothing-above = Сверху нечего копать.
 au14-pit-tool-tile-blocked = Здесь нельзя копать.
 au14-pit-tool-in-vehicle = Внутри машины копать нельзя.
+au14-pit-tool-wall-below = Внизу стена, которую нельзя пробить: яму здесь вниз не выкопать.
+au14-pit-tool-wall-above = Наверху стена, которую нельзя пробить: яму здесь вверх не выкопать.
+au14-pit-tool-needs-jackhammer = В эту породу можно пробиться вниз только отбойным буром.

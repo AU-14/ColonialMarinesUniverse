@@ -1022,7 +1022,7 @@
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
   id: RUMCConcreteMixer
   name: concrete mixer
-  description: "Mixes stone dust and sand with water into packs of concrete, and casts reinforced ones around metal rods. Build walls of the packs."
+  description: "Mixes stone dust and sand with water into bags of concrete, and casts reinforced ones around metal rods. Build walls of the bags."
   components:
   - type: Sprite
     sprite: CMU14/Production/Electric/concrete.rsi

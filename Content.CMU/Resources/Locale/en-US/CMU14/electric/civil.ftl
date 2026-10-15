@@ -1,7 +1,5 @@
-ent-RUMCConcreteBlockItem = pack of concrete
-    .desc = A pack of ready concrete. Build a wall of the packs, or of the reinforced ones for a stronger one. Hold it and pick what to build.
-ent-RUMCReinforcedConcreteItem = pack of reinforced concrete
-    .desc = A pack of concrete cast around steel rods. A wall of these withstands a lot more than a plain concrete one.
+ent-AU14ReinforcedConcreteBag = reinforced concrete bag
+    .desc = A heavy bag of concrete mix with steel rods in it. A wall of these withstands a lot more than a plain concrete one. Hold it and pick what to build.
 ent-RUMCConcreteWall = concrete wall
     .desc = A wall of cast concrete.
 ent-RUMCReinforcedConcreteWall = reinforced concrete wall

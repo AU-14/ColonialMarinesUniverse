@@ -2525,7 +2525,7 @@
     RUMCStonePowder: 3
     RUMCSand: 3
   outputs:
-    RUMCConcreteBlock: 4
+    AU14ConcreteBag: 4
   fluidInputs:
     Water: 20
   duration: 8
@@ -2534,10 +2534,10 @@
   id: RUMCMRConcreteReinforcedConcrete
   machine: concrete
   inputs:
-    RUMCConcreteBlock: 4
+    AU14ConcreteBag: 4
     CMRodMetal: 2
   outputs:
-    RUMCReinforcedConcrete: 4
+    AU14ReinforcedConcreteBag: 4
   fluidInputs:
     Water: 10
   duration: 10

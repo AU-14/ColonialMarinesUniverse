@@ -2,20 +2,20 @@
 # do (a vertical StructuralSupport), but it also holds its level: while it stands, nothing is dug down from the level above onto it or around it (NoDigBelow), as far as
 # its radius says, from the level above into its level. The reinforced one holds farther and is proof against the claws and the acid of the xenos.
 
-# What the packs of concrete are in the eyes of the construction: the materials of its steps.
+# What the concrete bags are in the eyes of the construction: the materials of its steps.
 - type: material
   id: RUMCConcrete
-  stackEntity: RUMCConcreteBlockItem
+  stackEntity: AU14ConcreteBag
   name: materials-au14-concrete
-  icon: { sprite: CMU14/Objects/Materials/concrete.rsi, state: bag }
+  icon: { sprite: CMU14/Items/cement.rsi, state: cementbag1 }
   color: "#c4c4bc"
   price: 0.002
 
 - type: material
   id: RUMCReinforcedConcrete
-  stackEntity: RUMCReinforcedConcreteItem
+  stackEntity: AU14ReinforcedConcreteBag
   name: materials-au14-reinforced-concrete
-  icon: { sprite: CMU14/Objects/Materials/concrete.rsi, state: bag }
+  icon: { sprite: CMU14/Items/reinforced_cement.rsi, state: cementbag1 }
   color: "#a8b8cc"
   price: 0.004
 
@@ -68,7 +68,7 @@
       behaviors:
       - !type:SpawnEntitiesBehavior
         spawn:
-          RUMCConcreteBlockItem:
+          AU14ConcreteBag:
             min: 1
             max: 3
       - !type:DoActsBehavior
@@ -94,7 +94,7 @@
       behaviors:
       - !type:SpawnEntitiesBehavior
         spawn:
-          RUMCReinforcedConcreteItem:
+          AU14ReinforcedConcreteBag:
             min: 1
             max: 3
       - !type:DoActsBehavior
@@ -136,7 +136,7 @@
       behaviors:
       - !type:SpawnEntitiesBehavior
         spawn:
-          RUMCConcreteBlockItem:
+          AU14ConcreteBag:
             min: 1
             max: 2
       - !type:DoActsBehavior
@@ -153,7 +153,7 @@
       completed:
       - !type:SnapToGrid
       steps:
-      - material: RUMCConcreteBlock
+      - material: AU14ConcreteBag
         amount: 6
         doAfter: 6
   - node: beam
@@ -186,7 +186,7 @@
       completed:
       - !type:SnapToGrid
       steps:
-      - material: RUMCReinforcedConcrete
+      - material: AU14ReinforcedConcreteBag
         amount: 6
         doAfter: 8
   - node: beam
@@ -219,7 +219,7 @@
       completed:
       - !type:SnapToGrid
       steps:
-      - material: RUMCConcreteBlock
+      - material: AU14ConcreteBag
         amount: 3
         doAfter: 4
   - node: slab

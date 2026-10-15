@@ -2,60 +2,36 @@
 # the sewing machine, the tannery) are in electric_machines.yml, their recipes in electric_recipes.yml.
 
 # ---------------------------------------------------------------- concrete
+# The plain concrete is the concrete bag of the game (AU14ConcreteBag, in concrete_bag.yml); the reinforced one is the same bag, darker.
 - type: stack
-  id: RUMCConcreteBlock
-  name: packs of concrete
-  icon: { sprite: CMU14/Objects/Materials/concrete.rsi, state: bag }
-  spawn: RUMCConcreteBlockItem
-  maxCount: 30
-
-- type: stack
-  id: RUMCReinforcedConcrete
-  name: packs of reinforced concrete
-  icon: { sprite: CMU14/Objects/Materials/concrete.rsi, state: bag }
-  spawn: RUMCReinforcedConcreteItem
-  maxCount: 30
+  id: AU14ReinforcedConcreteBag
+  name: reinforced concrete bags
+  icon: { sprite: CMU14/Items/reinforced_cement.rsi, state: cementbag1 }
+  spawn: AU14ReinforcedConcreteBag
+  maxCount: 10
 
 - type: entity
   parent: BaseItem
-  id: RUMCConcreteBlockItem
-  name: pack of concrete
-  description: A pack of ready concrete. Build a wall of the packs, or of the reinforced ones for a stronger one. Hold it and pick what to build.
+  id: AU14ReinforcedConcreteBag
+  name: reinforced concrete bag
+  description: A heavy bag of concrete mix with steel rods in it. A wall of these withstands a lot more than a plain concrete one. Hold it and pick what to build.
   components:
   - type: Sprite
-    sprite: CMU14/Objects/Materials/concrete.rsi
-    state: bag
+    sprite: CMU14/Items/reinforced_cement.rsi
+    layers:
+    - state: cementbag1
+      map: [ "base" ]
+  - type: RandomSprite
+    available:
+    - base:
+        cementbag1: ""
+        cementbag2: ""
+        cementbag3: ""
+        cementbag4: ""
   - type: Item
-    size: Small
+    size: Large
   - type: Stack
-    stackType: RUMCConcreteBlock
-    count: 1
-  - type: Material
-  - type: PhysicalComposition
-    materialComposition:
-      RUMCConcrete: 100
-  - type: RMCConstructionItem
-    buildable:
-    - RUMCConcreteWallBuild
-  - type: UserInterface
-    interfaces:
-      enum.RMCConstructionUiKey.Key:
-        type: RMCConstructionBui
-
-- type: entity
-  parent: BaseItem
-  id: RUMCReinforcedConcreteItem
-  name: pack of reinforced concrete
-  description: A pack of concrete cast around steel rods. A wall of these withstands a lot more than a plain concrete one.
-  components:
-  - type: Sprite
-    sprite: CMU14/Objects/Materials/concrete.rsi
-    state: bag
-    color: "#a8b8cc"
-  - type: Item
-    size: Small
-  - type: Stack
-    stackType: RUMCReinforcedConcrete
+    stackType: AU14ReinforcedConcreteBag
     count: 1
   - type: Material
   - type: PhysicalComposition
@@ -121,18 +97,18 @@
     noRot: true
   - type: Injurable
     damageContainer: StructuralInorganic
+  # The look of the concrete wall of the base game (WallConcrete): the same sprite, and it joins the walls the same way.
   - type: Sprite
-    sprite: Structures/Walls/stone.rsi
-    color: "#c4c4bc"
+    sprite: Structures/Walls/concrete.rsi
   - type: Icon
-    sprite: Structures/Walls/stone.rsi
+    sprite: Structures/Walls/concrete.rsi
     state: full
   - type: IconSmooth
-    key: concrete
+    key: walls
     additionalKeys:
     - stone
     - doors
-    base: stone
+    base: concrete
 
 # The plain wall: the claws of the sharp xenos get through it slowly and the acid eats it slowly.
 - type: entity
@@ -151,7 +127,7 @@
       behaviors:
       - !type:SpawnEntitiesBehavior
         spawn:
-          RUMCConcreteBlockItem:
+          AU14ConcreteBag:
             min: 1
             max: 2
       - !type:DoActsBehavior
@@ -181,13 +157,16 @@
       behaviors:
       - !type:SpawnEntitiesBehavior
         spawn:
-          RUMCReinforcedConcreteItem:
+          AU14ReinforcedConcreteBag:
             min: 1
             max: 2
       - !type:DoActsBehavior
         acts: ["Destruction"]
+  # The same concrete sprite, darker: a copy of it in a darkened rsi, so the icon of the construction is dark too.
   - type: Sprite
-    color: "#8f9ba6"
+    sprite: CMU14/Structures/reinforced_concrete_wall.rsi
+  - type: Icon
+    sprite: CMU14/Structures/reinforced_concrete_wall.rsi
   - type: ReceiverXenoClaws
     minimumClawStrength: ImpossiblySharp
   - type: Corrodible

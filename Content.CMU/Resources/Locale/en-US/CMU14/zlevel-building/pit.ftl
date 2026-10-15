@@ -30,3 +30,6 @@ au14-pit-tool-too-shallow = You're already at the surface, there's nowhere up to
 au14-pit-tool-nothing-above = There's nothing above to dig into.
 au14-pit-tool-tile-blocked = You can't dig here.
 au14-pit-tool-in-vehicle = You can't dig inside a vehicle.
+au14-pit-tool-wall-below = There is a wall under there that cannot be dug through: a pit cannot be dug down here.
+au14-pit-tool-wall-above = There is a wall over there that cannot be dug through: a pit cannot be dug up here.
+au14-pit-tool-needs-jackhammer = Only a jackhammer can drill down into that rock.
