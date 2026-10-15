@@ -163,14 +163,37 @@ public sealed partial class ChatSystem
     }
 
     // CMU14 method: MobState cancels CanSpeak for crit, which would also kill whispering.
+    // CMU14 start - crit, asleep and knocked-out mobs whisper instead of speaking.
+    private static readonly EntProtoId KnockoutMute = "StatusEffectRMCUnconsciousMuted";
+
+    private bool IsUnconsciousForWhisper(EntityUid source) =>
+        !_mobStateSystem.IsDead(source)
+        && (_mobStateSystem.IsCritical(source)
+            || HasComp<SleepingComponent>(source)
+            || HasComp<RMCUnconsciousComponent>(source));
+
     private bool CanWhisperInCrit(EntityUid source) =>
         _critWhisperEnabled
-        && _mobStateSystem.IsCritical(source)
+        && IsUnconsciousForWhisper(source)
         && TryComp<SpeechComponent>(source, out var speech) && speech.Enabled
-        && !HasComp<SleepingComponent>(source)
-        && !HasComp<RMCUnconsciousComponent>(source)
-        && !_newStatus.HasEffectComp<MutedStatusEffectComponent>(source)
+        && !HasMuteOtherThanKnockout(source)
         && (!TryComp<AdminFrozenComponent>(source, out var frozen) || !frozen.Muted);
+
+    // Knockouts mute normal speech; any other mute still blocks whispering.
+    private bool HasMuteOtherThanKnockout(EntityUid source)
+    {
+        if (!_newStatus.TryEffectsWithComp<MutedStatusEffectComponent>(source, out var mutes))
+            return false;
+
+        foreach (var mute in mutes)
+        {
+            if (MetaData(mute).EntityPrototype?.ID != KnockoutMute.Id)
+                return true;
+        }
+
+        return false;
+    }
+    // CMU14 end
 
     private void SendEntityWhisperWithLanguage(
         EntityUid source,

@@ -43,6 +43,7 @@
     - NoEnglish
     - CMUAlcoholic
     - CMUDrugAddict
+    - CMUBadLeg
   playTimeTracker: AU14JobCivilianPaPOfficer
   ranks:
     RMCRankCivilian: []

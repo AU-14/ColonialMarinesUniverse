@@ -1,0 +1,111 @@
+# M577A3E2 "Wolfpack" MGS: an M577 APC chassis carrying a rotating autocannon turret.
+# Hardpoint art is resolved by state name on this vehicle's own RSI, so every slot that
+# renders on the hull carries the CMUWolfpack compatibility id; only items with art in
+# apc_wolfpack.rsi fit. The wheel slot keeps the stock APC wheel, which has no hull state.
+- type: entity
+  parent: VehicleAPCBase
+  id: CMUVehicleAPCWolfpack
+  components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  # The overlay turret clears the hull's primary layer on spawn; declare it so the prototype matches (as VehicleSPPAPC).
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: primary
+  - type: PointLight
+    radius: 7
+    energy: 3
+  - type: Sprite
+    sprite: CMU14/Structures/vehicles/apc_wolfpack.rsi
+    layers:
+    - map: [ base ]
+      state: apc_base_wolfpack
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+    - map: [ primary ]
+      state: PRIMARY
+      visible: false
+    - map: [ secondary ]
+      state: SECONDARY
+      visible: false
+    - map: [ support ]
+      state: SUPPORT
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_1
+  # Prototype inheritance replaces the whole slots mapping, which drops the base APC port guns:
+  # the MGS has no side M56 mounts. The shared interior's port gun stations report the gun missing.
+  - type: ItemSlots
+    slots:
+      primary:
+        startingItem: CMUVehicleAPCWolfpackTurret
+        insertOnInteract: false
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      wheel-1:
+        startingItem: RMCAPCWheel
+        insertOnInteract: false
+        disableEject: true
+        whitelist:
+          components:
+          - VehicleWheelItem
+  - type: HardpointSlots
+    vehicleFamily: APC
+    slots:
+    - id: primary
+      hardpointType: Turret
+      slotType: Turret
+      compatibilityId: CMUWolfpack
+      visualLayer: primary
+      insertDelay: 2.5
+      required: false
+    - id: secondary
+      hardpointType: Cannon
+      slotType: Cannon
+      compatibilityId: CMUWolfpack
+      visualLayer: secondary
+      insertDelay: 2.5
+      required: false
+    - id: support
+      hardpointType: SupportAttachment
+      slotType: SupportAttachment
+      compatibilityId: CMUWolfpack
+      visualLayer: support
+      insertDelay: 2.0
+      required: false
+    - id: wheel-1
+      hardpointType: Wheel
+      slotType: Wheel
+      insertDelay: 1.5
+  - type: MarineMapTracked
+  - type: TacticalMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips_large.rsi
+      state: apc

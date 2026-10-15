@@ -264,6 +264,10 @@ public sealed partial class OverwatchSquadView : Control
                 FireteamsButton.ModulateSelfOverride = Color.FromHex("#404040");
                 break;
         }
+
+        // cmu edit start
+        CMUOnTabShown();
+        // cmu edit end
     }
 
     public void ApplySquadInfoVisibilityState()
