@@ -3,6 +3,9 @@
 using System.Linq;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
+using Content.Shared._RMC14.Power;
+using Content.Shared.Power.Components;
+using Content.Shared.Power.EntitySystems;
 using Content.Shared.NodeContainer;
 using Content.Shared.NodeContainer.NodeGroups;
 using Robust.Shared.Timing;
@@ -15,6 +18,7 @@ public sealed class DirectPowerSystem : EntitySystem
 {
     [Dependency] private readonly ExtensionCableSystem _extension = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedPowerReceiverSystem _powerReceiver = default!;
 
     // The receivers that were given their provider by a cable: they are looked after, so that a provider that came and went does not strand them.
     private readonly HashSet<EntityUid> _direct = new();
@@ -101,6 +105,7 @@ public sealed class DirectPowerSystem : EntitySystem
 
             if (provider is { } source)
             {
+                TakeOutOfAreaPower(uid);
                 _extension.ConnectDirect((uid, receiver), source);
                 _direct.Add(uid);
             }
@@ -109,5 +114,20 @@ public sealed class DirectPowerSystem : EntitySystem
                 _extension.DisconnectDirect((uid, receiver));
             }
         }
+    }
+
+    // On a map of area power every machine is taken into the area of the map, and its power is told by the APC of that area, not by the one its cable runs to.
+    // A machine that has a cable of its own to an APC is on that APC's net like the wired ones of the grid maps, so the area lets it go and the net tells its power.
+    private void TakeOutOfAreaPower(EntityUid uid)
+    {
+        if (!TryComp<RMCPowerReceiverComponent>(uid, out var area) || !HasComp<ApcPowerReceiverComponent>(uid))
+            return;
+
+        var load = TryComp<PowerStateComponent>(uid, out var state)
+            ? state.IsWorking ? state.WorkingPowerDraw : state.IdlePowerDraw
+            : area.ActiveLoad;
+
+        RemComp<RMCPowerReceiverComponent>(uid);
+        _powerReceiver.SetLoad((uid, null), load);
     }
 }
