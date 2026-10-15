@@ -886,7 +886,7 @@
   parent: CMTricordrazineAutoInjector
   id: AU14FirstAidAutoInjectorNoSkill
   name: first-aid autoinjector
-  description: An autoinjector loaded with a dose of tricordrazine and a small ammount of dexalin for wounded soldiers to treat themselves with.
+  description: An autoinjector loaded with a dose of tricordrazine and small amounts of paracetamol and dexalin for wounded soldiers to treat themselves with.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Medical/auto_injectors.rsi
@@ -895,15 +895,19 @@
       map: ["enum.SolutionContainerLayers.Fill"]
   - type: MedicallyUnskilledDoAfter
     min: 0
+  - type: Hypospray # inject the whole mixed dose at once
+    transferAmount: 27
   - type: SolutionContainerManager
     solutions:
       pen:
-        maxVol: 20
+        maxVol: 27
         reagents:
         - ReagentId: CMTricordrazine
           Quantity: 15
+        - ReagentId: CMUParacetamol
+          Quantity: 6
         - ReagentId: CMDexalin
-          Quantity: 5
+          Quantity: 6
   - type: SolutionContainerVisuals
     maxFillLevels: 1
     emptySpriteName: tricord0
@@ -912,7 +916,8 @@
   - type: CMRefillableSolution
     reagents:
       CMTricordrazine: 15
-      CMDexalin: 5
+      CMUParacetamol: 6
+      CMDexalin: 6
   - type: IconLabel
     labelTextLocId: rmc-first-aid-container-label-text
 
@@ -1233,8 +1238,8 @@
 - type: entity
   parent: CMBaseHealingItem
   id: AU14Tourniquet
-  name: CAT tourniquet
-  description: A single use tourniquet designed for self-application under fire. The CAT uses a high-tension Velcro strap and windlass rod to cut off arterial bleeding on limbs. Effective, painful and not exactly gentle. Overuse can lead to nerve damage or amputation. Still, better maimed than dead.
+  name: tourniquet
+  description: A combat application tourniquet designed for self-application under fire. It uses a high-tension Velcro strap and windlass rod to cut off arterial bleeding on limbs. Effective, painful and not exactly gentle. Overuse can lead to nerve damage or amputation. Still, better maimed than dead. Meant to be used once, but it can be reused in a pinch.
   components:
   - type: Tag
     tags:

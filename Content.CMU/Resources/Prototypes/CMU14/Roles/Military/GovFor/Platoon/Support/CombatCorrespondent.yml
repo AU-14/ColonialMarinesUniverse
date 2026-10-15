@@ -55,6 +55,7 @@
     - Asthmatic
     - CMUAlcoholic
     - CMUDrugAddict
+    - CMUBadLeg
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -82,7 +83,7 @@
   id: AU14GearGOVFORCombatCorrespondent
   equipment:
     id: AU14IDCardGOVFORCombatCorrespondent
-    ears: AU14HeadsetGovforMarine
+    ears: AU14HeadsetGovforCommand
     pocket2: RMCCorrespondentMicrophone
 
 - type: startingGear
@@ -92,7 +93,7 @@
     shoes: AU14BootsJungle
     head: AU14JunglePatrolCap
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetGovforMarine
+    ears: AU14HeadsetGovforCommand
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -157,7 +158,7 @@
   id: AU14GearOPFORCombatCorrespondent
   equipment:
     id: AU14IDCardOPFORCombatCorrespondent
-    ears: AU14HeadsetOpforMarine
+    ears: AU14HeadsetOpforCommand
     pocket2: RMCCorrespondentMicrophone
 
 - type: startingGear
@@ -167,7 +168,7 @@
     shoes: AU14BootsJungle
     head: AU14JunglePatrolCap
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetOpforMarine
+    ears: AU14HeadsetOpforCommand
 
 - type: entity
   parent: CMSpawnPointJobBase

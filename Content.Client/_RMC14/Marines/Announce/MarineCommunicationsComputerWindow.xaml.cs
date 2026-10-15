@@ -44,8 +44,9 @@ public sealed partial class MarineCommunicationsComputerWindow : FancyWindow
             comms.Faction != _lastFaction)
         {
             _lastFaction = comms.Faction;
+            var currentFaction = comms.Faction?.ToUpperInvariant() ?? "NONE";
             var target = comms.Faction == "opfor" ? Loc.GetString("cmu-fof-side-govfor") : Loc.GetString("cmu-fof-side-opfor");
-            TabletFactionButton.Text = Loc.GetString("cmu-admin-tablet-faction-switch", ("faction", target));
+            TabletFactionButton.Text = Loc.GetString("cmu-admin-tablet-faction-switch", ("current", currentFaction), ("faction", target));
         }
     }
 }

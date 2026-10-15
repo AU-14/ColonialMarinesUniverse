@@ -11,7 +11,7 @@ namespace Content.Server.CMU14.Roles;
 /// Blocks late joins into roles whose physical standards the selected character doesn't meet.
 /// Round start and the lobby check the same standards; see <see cref="CMUMilitaryHeightRequirement"/>.
 /// </summary>
-public sealed class CMUMilitaryStandardsSystem : EntitySystem
+public sealed partial class CMUMilitaryStandardsSystem : EntitySystem
 {
     [Dependency] private IServerPreferencesManager _prefs = default!;
     [Dependency] private IPrototypeManager _proto = default!;

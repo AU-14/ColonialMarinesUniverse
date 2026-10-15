@@ -13,7 +13,7 @@ namespace Content.Server.CMU14.GameTicking;
 /// The choice is a client CVar, so it's cached while they're connected; that way it still applies
 /// if they disconnect before the round ends.
 /// </summary>
-public sealed class CMURoundEndAnonymitySystem : EntitySystem
+public sealed partial class CMURoundEndAnonymitySystem : EntitySystem
 {
     [Dependency] private INetConfigurationManager _netConfig = default!;
     [Dependency] private IPlayerManager _player = default!;

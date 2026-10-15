@@ -54,11 +54,11 @@ public sealed partial class ResinWhispererSystem : EntitySystem
 
                 if (doorComp.State == DoorState.Opening)
                 {
-                    _popup.PopupClient(Loc.GetString("rmc-xeno-construction-remote-open-door"), user, user);
+                    _popup.PopupEntity(Loc.GetString("rmc-xeno-construction-remote-open-door"), user, user);
                 }
                 if (doorComp.State == DoorState.Closing)
                 {
-                    _popup.PopupClient(Loc.GetString("rmc-xeno-construction-remote-close-door"), user, user);
+                    _popup.PopupEntity(Loc.GetString("rmc-xeno-construction-remote-close-door"), user, user);
                 }
             },
             Priority = 100,
@@ -73,7 +73,7 @@ public sealed partial class ResinWhispererSystem : EntitySystem
         if (!_weeds.IsOnFriendlyWeeds(user.Owner))
         {
             if (doPopup)
-                _popup.PopupClient(Loc.GetString("rmc-xeno-construction-remote-failed-need-on-weeds"), user, user);
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-construction-remote-failed-need-on-weeds"), user, user);
 
             return false;
         }
@@ -107,13 +107,13 @@ public sealed partial class ResinWhispererSystem : EntitySystem
 
         if (!TileIsVisible(ent, args.TargetCoordinates))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-construction-remote-failed-need-line-of-sight"), ent, ent);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-construction-remote-failed-need-line-of-sight"), ent, ent);
             return;
         }
 
         if (!_weeds.IsOnFriendlyWeeds(ent.Owner))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-construction-remote-failed-need-on-weeds"), ent, ent);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-construction-remote-failed-need-on-weeds"), ent, ent);
             return;
         }
 

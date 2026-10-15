@@ -2,6 +2,7 @@
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Pulling;
+using Content.Shared.Bed.Sleep; // CMU14
 using Content.Shared.Mobs;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Pulling.Events;
@@ -36,6 +37,7 @@ public sealed partial class XenoChargerMovementSystem : EntitySystem
         SubscribeNetworkEvent<XenoCursorSteeringMessage>(OnCursorSteeringMessage);
         SubscribeLocalEvent<XenoChargerStateComponent, MoveInputEvent>(OnMoveInput);
         SubscribeLocalEvent<XenoChargerStateComponent, MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<XenoChargerStateComponent, SleepStateChangedEvent>(OnSleepStateChanged); // CMU14
         SubscribeLocalEvent<XenoChargerStateComponent, StartPullAttemptEvent>(OnStartPullAttempt);
         SubscribeLocalEvent<XenoChargerStateComponent, PullAttemptEvent>(OnPullAttempt);
 
@@ -249,6 +251,15 @@ public sealed partial class XenoChargerMovementSystem : EntitySystem
     private void OnMobStateChanged(Entity<XenoChargerStateComponent> ent, ref MobStateChangedEvent args)
     {
         if (_net.IsClient || args.NewMobState == MobState.Alive)
+            return;
+
+        ResetToIdle(ent.Owner);
+    }
+
+    // CMU14: sleeping does not change MobState, but must stop charge movement and collision damage.
+    private void OnSleepStateChanged(Entity<XenoChargerStateComponent> ent, ref SleepStateChangedEvent args)
+    {
+        if (_net.IsClient || !args.FellAsleep)
             return;
 
         ResetToIdle(ent.Owner);

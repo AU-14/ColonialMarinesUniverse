@@ -75,7 +75,7 @@ public sealed partial class CMUXenoZJumpSystem : EntitySystem
 
         if (args.Cancelled)
         {
-            _popup.PopupClient(Loc.GetString(xeno.Comp.CancelledPopup), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString(xeno.Comp.CancelledPopup), xeno, xeno);
             return;
         }
 
@@ -87,7 +87,7 @@ public sealed partial class CMUXenoZJumpSystem : EntitySystem
     {
         if (!TryComp(xeno, out CMUZPhysicsComponent? zPhysics))
         {
-            _popup.PopupClient(Loc.GetString(xeno.Comp.NoZPhysicsPopup), xeno, xeno, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString(xeno.Comp.NoZPhysicsPopup), xeno, xeno, PopupType.MediumCaution);
             return false;
         }
 
@@ -132,7 +132,7 @@ public sealed partial class CMUXenoZJumpSystem : EntitySystem
     {
         if (!TryComp<CMUZPhysicsComponent>(xeno, out _))
         {
-            _popup.PopupClient(Loc.GetString(component.NoZPhysicsPopup), xeno, xeno, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString(component.NoZPhysicsPopup), xeno, xeno, PopupType.MediumCaution);
             return false;
         }
 
@@ -151,7 +151,7 @@ public sealed partial class CMUXenoZJumpSystem : EntitySystem
         bool canUseZJumpMap = CMUXenoZJumpSystem.CanUseZJumpMap(hasZMap, hasMapAbove);
         if (!canUseZJumpMap || !CMUXenoZJumpSystem.CanStartZJumpTakeoff(canUseZJumpMap, _zLevels.HasTileAbove(xeno)))
         {
-            _popup.PopupClient(Loc.GetString(component.NoZPhysicsPopup), xeno, xeno, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString(component.NoZPhysicsPopup), xeno, xeno, PopupType.MediumCaution);
             return false;
         }
 

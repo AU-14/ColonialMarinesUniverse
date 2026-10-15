@@ -99,6 +99,8 @@
   name: CLF Objectives Console
   description: Used to check progress on CLF objectives
   components:
+  # dynamic so the cell can drag it, same IED fling problem as the tech tree console
+  - type: CMUExplosionImmovable
   - type: Transform
     anchored: false
   - type: Physics

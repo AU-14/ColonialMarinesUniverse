@@ -23,7 +23,7 @@ public sealed class EntityCoordinatesConverter : AdminLogConverter<EntityCoordin
         WriteEntityInfo(writer, value.EntityId, entities, "parent");
         writer.WriteNumber("x", value.X);
         writer.WriteNumber("y", value.Y);
-        var mapUid = value.GetMapUid(entities);
+        var mapUid = entities.System<SharedTransformSystem>().GetMap(value);
         if (mapUid.HasValue)
         {
             WriteEntityInfo(writer, mapUid.Value, entities, "map");

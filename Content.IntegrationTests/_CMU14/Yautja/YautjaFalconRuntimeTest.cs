@@ -83,7 +83,7 @@ public sealed class YautjaFalconRuntimeTest
             var surfaceDepths = surfaceIds.Select(id =>
             {
                 var surface = prototypes.Index<EntityPrototype>(id);
-                Assert.That(surface.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, id);
+                Assert.That(surface.TryComp<SpriteComponent>(out var sprite, factory), Is.True, id);
                 return sprite!.DrawDepth;
             }).ToArray();
 
@@ -94,7 +94,7 @@ public sealed class YautjaFalconRuntimeTest
                      })
             {
                 var drone = prototypes.Index<EntityPrototype>(prototype);
-                Assert.That(drone.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, prototype);
+                Assert.That(drone.TryComp<SpriteComponent>(out var sprite, factory), Is.True, prototype);
                 Assert.Multiple(() =>
                 {
                     Assert.That(sprite!.DrawDepth, Is.EqualTo((int) DrawDepth.OverMobs), prototype);
@@ -878,7 +878,7 @@ public sealed class YautjaFalconRuntimeTest
             var factory = client.ResolveDependency<IComponentFactory>();
             var deployed = prototypes.Index<EntityPrototype>(DeployedFalconPrototypeId);
 
-            Assert.That(deployed.TryGetComponent<FixturesComponent>(out var fixtures, factory), Is.True);
+            Assert.That(deployed.TryComp<FixturesComponent>(out var fixtures, factory), Is.True);
             Assert.That(fixtures!.Fixtures.Values.All(fixture => fixture.Hard), Is.True,
                 "The deployed Falcon fixture must resolve collisions instead of passing through walls.");
             Assert.That(fixtures.Fixtures.Values.All(fixture =>

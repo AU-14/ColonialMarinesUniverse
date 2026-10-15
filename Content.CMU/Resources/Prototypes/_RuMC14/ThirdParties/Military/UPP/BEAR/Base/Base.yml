@@ -67,6 +67,28 @@
     - "#7A5E42"
     allowedEyeColorsHex: [ "#000000" ]
     beardChance: 0.1
+    allowedBeardStyles:
+    - HumanFacialHairSmallstache
+    - HumanFacialHairChinlessbeard
+    - HumanFacialHairCroppedfullbeard
+    - HumanFacialHair5oclockmoustache
+    - HumanFacialHairFiveoclock
+    - HumanFacialHairJensen
+    - HumanFacialHair7oclockmoustache
+    - HumanFacialHair7oclock
+    - HumanFacialHair3oclock
+    - HumanFacialHairSelleck
+    - HumanFacialHairSideburn
+    - HumanFacialHairElvis
+    - HumanFacialHairMutton
+    - HumanFacialHairMoustache
+    - HumanFacialHairPencilstache
+    - HumanFacialHairWalrus
+    - HumanFacialHairFumanchu
+    - HumanFacialHairHogan
+    - HumanFacialHairVandyke
+    - RMCHumanFacialHairSoulfulSelleck
+    - HumanFacialHairGt
 
 # Equipment
 

@@ -53,4 +53,18 @@ public sealed partial class AU14CCVars : CVars
     /// </summary>
     public static readonly CVarDef<bool> HideRoundEndUsername =
         CVarDef.Create("cmu.hide_round_end_username", false, CVar.ARCHIVE | CVar.REPLICATED | CVar.CLIENT);
+
+    // Hours in a role needed for each playtime medal on non-xeno jobs. Platinum is the highest medal.
+    // Xeno rank icons in the playtime stats window keep using the rmc.playtime_*_medal_time_hours cvars.
+    public static readonly CVarDef<int> PlaytimeMedalBronzeHours =
+        CVarDef.Create("cmu.playtime_medal_bronze_hours", 8, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> PlaytimeMedalSilverHours =
+        CVarDef.Create("cmu.playtime_medal_silver_hours", 20, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> PlaytimeMedalGoldHours =
+        CVarDef.Create("cmu.playtime_medal_gold_hours", 30, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> PlaytimeMedalPlatinumHours =
+        CVarDef.Create("cmu.playtime_medal_platinum_hours", 40, CVar.REPLICATED | CVar.SERVER);
 }

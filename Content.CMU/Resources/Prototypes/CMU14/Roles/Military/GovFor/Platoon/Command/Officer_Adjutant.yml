@@ -65,8 +65,6 @@
     # - type: JobPrefix
     #   prefix: au14-job-prefix-govforadjutantCMBCIU
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 86400 # 24 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
     time: 36000 # 10 hours
@@ -89,6 +87,7 @@
     - Asthmatic
     - CMUAlcoholic
     - CMUDrugAddict
+    - CMUBadLeg
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -222,8 +221,6 @@
   id: AU14JobGOVFORAdjutantUPP
   roundForce: UPP
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 86400 # 24 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
     time: 36000 # 10 hours
@@ -248,8 +245,6 @@
   id: AU14JobGOVFORAdjutantWYPMC
   roundForce: WYPMC
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 86400 # 24 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
     time: 36000 # 10 hours

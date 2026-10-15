@@ -79,7 +79,7 @@ public sealed partial class RMCStethoscopeSystem : EntitySystem
         if (fromVerb)
             _examine.SendExamineTooltip(user, patient, result, getVerbs: false, centerAtCursor: false);
         else
-            _popup.PopupClient(result.ToString(), patient, user);
+            _popup.PopupEntity(result.ToString(), patient, user);
     }
 
     public bool CanExamine(EntityUid user, EntityUid patient, Entity<RMCStethoscopeComponent> tool, bool fromVerb)

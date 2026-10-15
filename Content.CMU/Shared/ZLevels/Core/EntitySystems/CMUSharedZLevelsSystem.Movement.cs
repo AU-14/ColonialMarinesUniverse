@@ -860,7 +860,7 @@ public abstract partial class CMUSharedZLevelsSystem
         }
 
         var worldPosI = _map.WorldToTile(gridUid, mapGrid, _transform.GetWorldPosition(uid));
-        var queryHigh = _map.GetAnchoredEntitiesEnumerator(gridUid, mapGrid, worldPosI);
+        var queryHigh = _map.GetAnchoredEntities(gridUid, mapGrid, worldPosI);
         while (queryHigh.MoveNext(out var anchoredUid))
         {
             if (_highgroundQuery.HasComp(anchoredUid))
@@ -1190,7 +1190,7 @@ public abstract partial class CMUSharedZLevelsSystem
 
     private bool HasWallAt(EntityUid gridUid, MapGridComponent grid, Vector2i tile)
     {
-        var anchoredEntities = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+        var anchoredEntities = _map.GetAnchoredEntities(gridUid, grid, tile);
         while (anchoredEntities.MoveNext(out var anchored))
         {
             if (HasComp<ZLevelWallSupportComponent>(anchored))
@@ -1272,7 +1272,7 @@ public abstract partial class CMUSharedZLevelsSystem
                     _profileZHighGroundTiles++;
 
                 var isCurrentTile = x == 0 && y == 0;
-                var anchoredEntities = _map.GetAnchoredEntitiesEnumerator(checkingGridUid, checkingGrid, tile);
+                var anchoredEntities = _map.GetAnchoredEntities(checkingGridUid, checkingGrid, tile);
                 while (anchoredEntities.MoveNext(out var anchoredUid))
                 {
                     var uid = anchoredUid.Value;
@@ -1469,7 +1469,7 @@ public abstract partial class CMUSharedZLevelsSystem
                 if (!CanReachHighGroundSupport(sampleLocal))
                     continue;
 
-                var anchoredEntities = _map.GetAnchoredEntitiesEnumerator(checkingMap.Owner, checkingGrid, tile);
+                var anchoredEntities = _map.GetAnchoredEntities(checkingMap.Owner, checkingGrid, tile);
                 while (anchoredEntities.MoveNext(out var anchoredUid))
                 {
                     var uid = anchoredUid.Value;

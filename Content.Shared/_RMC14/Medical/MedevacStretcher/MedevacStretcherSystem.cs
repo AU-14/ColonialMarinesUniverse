@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Buckle.Components;
+using Content.Shared.CMU14.Dropship; // CMU14
 using Content.Shared.Coordinates;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Examine;
@@ -110,7 +111,7 @@ public sealed partial class MedevacStretcherSystem : EntitySystem
         if (args.IsFolded)
             DeactivateBeacon(ent.Owner);
         else
-            ActivateBeacon(ent.Owner, null);
+            ActivateBeacon(ent.Owner, args.User); // CMU14: credit whoever unfolded it
     }
 
     private void PrepareMedevac(Entity<MedevacStretcherComponent> ent, ref PrepareMedevacEvent args)
@@ -156,6 +157,13 @@ public sealed partial class MedevacStretcherSystem : EntitySystem
         dropshipTarget.Abbreviation = GetName(ent.Owner);
         Dirty(ent, dropshipTarget);
         _dropshipWeapon.TargetUpdated((ent, dropshipTarget));
+
+        // CMU14: tell JTAC a patient is ready for pickup on an active beacon.
+        if (_net.IsServer && args is StrappedEvent)
+        {
+            var strapped = new CMUMedevacBeaconEvent(ent, null, true);
+            RaiseLocalEvent(ref strapped);
+        }
     }
 
     private void ToggleBeacon(EntityUid stretcher, EntityUid user)
@@ -173,11 +181,13 @@ public sealed partial class MedevacStretcherSystem : EntitySystem
 
         var stretcherCoords = stretcher.ToCoordinates();
         var snappedCoords = stretcher.ToCoordinates().SnapToGrid(EntityManager);
-        if (!_dropshipWeapon.CasDebug &&
-            (!_areas.TryGetArea(snappedCoords, out var stretcherArea, out _) ||
-            !stretcherArea.Value.Comp.Medevac))
+        // CMU14: use effective roof permissions, including hive protection.
+        // if (!_dropshipWeapon.CasDebug &&
+        //     (!_areas.TryGetArea(snappedCoords, out var stretcherArea, out _) ||
+        //     !stretcherArea.Value.Comp.Medevac))
+        if (!_dropshipWeapon.CasDebug && !_areas.CanMedevac(snappedCoords))
         {
-            _popup.PopupClient(Loc.GetString("rmc-medevac-area-not-cas"), stretcherCoords, user);
+            _popup.PopupCoordinates(Loc.GetString("rmc-medevac-area-not-cas"), stretcherCoords, user);
             return;
         }
 
@@ -188,7 +198,14 @@ public sealed partial class MedevacStretcherSystem : EntitySystem
         _dropshipWeapon.MakeTarget(stretcher, name, false);
 
         _appearance.SetData(stretcher, MedevacStretcherVisuals.BeaconState, BeaconVisuals.On);
-        _popup.PopupClient(Loc.GetString("rmc-medevac-activate-beacon"), stretcherCoords, user);
+        _popup.PopupCoordinates(Loc.GetString("rmc-medevac-activate-beacon"), stretcherCoords, user);
+
+        // CMU14: call the beacon in over the faction's JTAC radio.
+        if (_net.IsServer)
+        {
+            var activated = new CMUMedevacBeaconEvent(stretcher, user, false);
+            RaiseLocalEvent(ref activated);
+        }
     }
 
     private void DeactivateBeacon(EntityUid stretcher)

@@ -115,6 +115,82 @@ public sealed class YautjaHivebreakerThrallRuntimeTest
         await pair.CleanReturnAsync();
     }
 
+    // round 2662: the WeYu crates stocked the pred hivebreaker, which zapped every WeYu hand that grabbed it
+    [Test]
+    public async Task WeYuHivebreakerWorksForAPlainHumanAndLeashesTheXenoToThem()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid researcher = default;
+        EntityUid hivebreaker = default;
+        EntityUid xeno = default;
+        EntityUid? previousAttached = null;
+
+        try
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                var hands = entMan.System<SharedHandsSystem>();
+                var mobState = entMan.System<MobStateSystem>();
+                var transform = entMan.System<SharedTransformSystem>();
+                var thralls = entMan.System<YautjaThrallSystem>();
+                var session = server.PlayerMan.Sessions.Single();
+                previousAttached = session.AttachedEntity;
+
+                researcher = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+                var researcherFaction = entMan.EnsureComponent<NpcFactionMemberComponent>(researcher);
+                researcherFaction.Factions.Clear();
+                researcherFaction.Factions.Add("AUWeYu");
+
+                hivebreaker = entMan.SpawnEntity("CMUWeYuHivebreaker", map.GridCoords);
+                Assert.That(entMan.HasComponent<YautjaTechItemComponent>(hivebreaker), Is.False,
+                    "the WeYu copy must not carry the pred-tech pickup zap");
+                Assert.That(hands.TryPickupAnyHand(researcher, hivebreaker), Is.True,
+                    "a plain WeYu human has to be able to pick it up");
+
+                xeno = SpawnCriticalXeno(entMan, mobState, "CMXenoRunner", map.GridCoords.Offset(new Vector2(2, 0)));
+                server.PlayerMan.SetAttachedEntity(session, xeno);
+                MoveNextTo(entMan, transform, researcher, xeno);
+                Assert.That(StartHivebreaker(entMan, researcher, hivebreaker, xeno), Is.True,
+                    "a non-Yautja, non-bad-blood human can start the enthrall with the WeYu copy");
+
+                Assert.That(thralls.HivebreakXeno(
+                    researcher,
+                    xeno,
+                    hivebreaker,
+                    entMan.GetComponent<YautjaHivebreakerComponent>(hivebreaker)), Is.True);
+
+                var thrall = entMan.GetComponent<YautjaThrallComponent>(xeno);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(thrall.Master, Is.EqualTo(researcher));
+                    Assert.That(thrall.Blooded, Is.False);
+                    Assert.That(thrall.TechAuthorized, Is.False);
+                    Assert.That(entMan.GetComponent<NpcFactionMemberComponent>(xeno).Factions,
+                        Is.EquivalentTo(new[] { new ProtoId<Content.Shared.NPC.Prototypes.NpcFactionPrototype>("AUWeYu") }),
+                        "the thrall sides with whoever leashed it, not the Yautja");
+                    Assert.That(entMan.HasComponent<YautjaTechAuthorizedComponent>(xeno), Is.False);
+                    Assert.That(entMan.System<YautjaMarkSystem>().TryGetMarkOwner(xeno, YautjaMarkKind.Dishonored, out _), Is.False,
+                        "no Yautja dishonour mark for a WeYu thrall");
+                });
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                var session = server.PlayerMan.Sessions.Single();
+                server.PlayerMan.SetAttachedEntity(session, previousAttached);
+                DeleteAll(server.EntMan, researcher, hivebreaker, xeno);
+            });
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task DirectHivebreakXenoRefusesHellhoundLikeCmss13HandleEnthrallOverride()
     {

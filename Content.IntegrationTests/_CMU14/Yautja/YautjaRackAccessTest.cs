@@ -80,7 +80,7 @@ public sealed class YautjaRackAccessTest
             {
                 var entityPrototype = client.ResolveDependency<IPrototypeManager>().Index<EntityPrototype>(prototype);
                 var factory = client.EntMan.ComponentFactory;
-                Assert.That(entityPrototype.TryGetComponent<RemoveComponentsComponent>(out var remove, factory), Is.True,
+                Assert.That(entityPrototype.TryComp<RemoveComponentsComponent>(out var remove, factory), Is.True,
                     prototype);
                 Assert.That(remove!.Components.Any(component =>
                         component.Key.Contains("ActivatableUIRequiresAccess", StringComparison.Ordinal)), Is.True,

@@ -34,7 +34,7 @@
     turnDelay: 1
     turnInPlace: true
     turnInPlaceMaxSpeed: 0.5
-    pushCooldown: 2
+    pushCooldown: 1
     canPushVehicles: true
     blockingMobBypassNudgeLimit: 2
     xenoBlockMinimumSize: Immobile
@@ -46,6 +46,7 @@
     wallSmashSlowdownMultiplier: 0.2
     wallSmashSlowdownDuration: 1.5
     speedAtZeroIntegrity: 0.7
+    weightClass: Medium
   - type: VehicleRideSurface
     bounds:
     - -1.3,-1.9,1.3,1.9
@@ -61,6 +62,7 @@
         volume: -5
         pitch: 0.6
   - type: VehicleSound
+    crashSound: /Audio/_RMC14/Effects/metal_crash.ogg
     runningSound:
       path: /Audio/_RMC14/Vehicle/tank_engine_loop.wav
       params:
@@ -154,7 +156,7 @@
     autoRot: true
     offset: "0,0.9"
   - type: Corrodible
-    isCorrodible: false
+    isCorrodible: true
   - type: DoAfter
   - type: UserInterface
     interfaces:
@@ -240,11 +242,15 @@
     - offset: 0,2
       radius: 1
       interiorCoords: 0.5,-1
+  - type: VehicleXenoSize
+    minimumSize: Xeno
+  - type: VehicleDemolition
 
 - type: entity
   parent: VehicleTankBase
   id: VehicleTank
   components:
+  - type: CMUTankBlastProfile # CMU14: FLOW-09 per-explosion tank blast damage.
   - type: HardpointState
   - type: ContainerContainer
     containers:
@@ -298,6 +304,7 @@
   name: M34A2 Longstreet 'Yutani'
   description: A light tank used by the Yutani Corporation for security and military operations, often seen in colonial sectors where Yutani has a presence.
   components:
+  - type: CMUTankBlastProfile # CMU14: FLOW-09 per-explosion tank blast damage.
   - type: TankCookOff # CMU14
     turretSprite:
       sprite: _RMC14/Structures/Vehicles/wytank.rsi
@@ -527,6 +534,7 @@
   name: Cheetah 2A Light Tank
   description: A light-weight tank made for all ground forces of the UPP.
   components:
+  - type: CMUTankBlastProfile # CMU14: FLOW-09 per-explosion tank blast damage.
   - type: TankCookOff # CMU14
     turretSprite:
       sprite: _RMC14/Structures/Vehicles/spptank.rsi
@@ -726,6 +734,7 @@
   name: FV150 Hobelar LCT
   description: The FV150 ‘Hobelar’ Light Cavalry Tank is a 6m long, 6m wide, 8m tall support vehicle for the RMC. Originally procured for the Special Air Service operations as an Airborne tank, this model has been made into a support vehicle for the Royal Marines thanks to a change of symbol and technological design. Entrance at the back.
   components:
+  - type: CMUTankBlastProfile # CMU14: FLOW-09 per-explosion tank blast damage.
   - type: TankCookOff # CMU14
     turretSprite:
       sprite: CMU14/Structures/vehicles/fv150/exterior.rsi

@@ -19,6 +19,8 @@ namespace Content.IntegrationTests.Tests.Mobs;
 [TestOf(typeof(MobThresholdSystem))]
 public sealed class MobThresholdMergeRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<DamageTypePrototype> BluntPrototype = "Blunt";
+
     [Test]
     public async Task XenoHealthUsesIncapMaximumAndCriticalGraceAlertState()
     {
@@ -215,7 +217,7 @@ public sealed class MobThresholdMergeRegressionTest : GameTest
 
     private DamageSpecifier Damage(float amount)
     {
-        var type = Server.ProtoMan.Index<DamageTypePrototype>("Blunt");
+        var type = Server.ProtoMan.Index<DamageTypePrototype>(BluntPrototype);
         return new DamageSpecifier(type, FixedPoint2.New(amount));
     }
 }

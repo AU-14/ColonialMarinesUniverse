@@ -5,8 +5,9 @@ cmu-force-interest-join = Show interest
 cmu-force-interest-withdraw = Withdraw interest
 cmu-force-interest-help = Once enough eligible players show interest and the force is due, its roles become available here. Claim a role within 240 seconds; unclaimed roles despawn. You can withdraw interest at any time before deployment.
 cmu-ghost-call-button = Amplify the Distress Signal
-cmu-ghost-call-status-available = Enough of the round's players are dead. You may call in a small group of random arrivals.
-cmu-ghost-call-status-time = Amplification unlocks in {$minutes} minute(s).
+cmu-ghost-call-status-available = Enough of the round's players are dead.
+  You may call in a small group of random arrivals.
+cmu-ghost-call-status-time = Signal Amplification unlocks in {$minutes} minute(s).
 cmu-ghost-call-status-dead = {$dead} dead of {$required} needed relative to the living.
 cmu-ghost-call-pending = A random arrival is already on the way
 cmu-ghost-call-deny-pending = {$party} was already called in and has not arrived yet. Another call becomes possible once it deploys.

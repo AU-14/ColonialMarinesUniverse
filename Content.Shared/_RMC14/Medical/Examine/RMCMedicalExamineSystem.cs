@@ -3,6 +3,7 @@ using Content.Shared.CMU14.Medical.Diagnostics.Examine;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Stun;
+using Content.Shared.Bed.Sleep; // CMU14
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
 using Content.Shared.Examine;
@@ -63,7 +64,8 @@ public sealed partial class RMCMedicalExamineSystem : EntitySystem
 
         if (_mobState.IsDead(ent))
             stateText = _unrevivable.IsUnrevivable(ent) ? ent.Comp.UnrevivableText : ent.Comp.DeadText;
-        else if (_mobState.IsCritical(ent) || _sizeStun.IsKnockedOut(ent))
+        else if (_mobState.IsCritical(ent) || _sizeStun.IsKnockedOut(ent) ||
+                 HasComp<SleepingComponent>(ent) || HasComp<RMCUnconsciousComponent>(ent)) // CMU14: asleep or knocked out
             stateText = ent.Comp.CritText;
 
         if (stateText != null)

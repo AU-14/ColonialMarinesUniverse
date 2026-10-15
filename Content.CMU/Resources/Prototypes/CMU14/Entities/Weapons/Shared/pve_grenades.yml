@@ -37,7 +37,7 @@
   - type: TriggerOnFixedDistanceStop
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: RMC
+    explosionType: CMUHEAP # FLOW-09: own tank blast multiplier; otherwise RMC.
     maxIntensity: 30
     intensitySlope: 14
     totalIntensity: 220

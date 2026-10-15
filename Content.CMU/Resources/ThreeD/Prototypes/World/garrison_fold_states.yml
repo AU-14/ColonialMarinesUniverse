@@ -1,0 +1,707 @@
+# Explicit opposite poses. Source attribution and assumptions: SOURCES_FOLD_STATES.md.
+- type: cmu3DModel
+  id: CMU3DRollerBedUnfolded
+  label: Unfolded compact roller bed
+  sourcePrototypes: []
+  referencePrototype: CMRollerBedSpawnFolded
+  status: draft
+  description: 'Unoccupied unfolded roller_down pose: three red padded sections, low gray carriage and separate
+    casters. Reciprocal pose of the compact folded kit. Unseen geometry and height inferred; buckled roller_up and
+    animation remain unfinished. See SOURCES_FOLD_STATES.md.'
+  referenceRsi: _RMC14/Structures/Furniture/rollerbeds.rsi
+  referenceState: roller_down
+  sourceDirections: 1
+  folded: false
+  alternateFoldModel: CMU3DCMRollerBedSpawnFolded
+  parts:
+  - label: caster wheel
+    min: -0.43800, -0.24400, 0.00900
+    max: -0.36200, -0.20600, 0.08500
+    color: '#1E202A'
+    shape: CylinderY
+  - label: gray caster fork
+    min: -0.42600, -0.25700, 0.04500
+    max: -0.37400, -0.19300, 0.13200
+    color: '#8C8C8C'
+  - label: frame upright
+    min: -0.42100, -0.24700, 0.10000
+    max: -0.37900, -0.20300, 0.18300
+    color: '#676767'
+  - label: caster wheel
+    min: -0.43800, 0.20600, 0.00900
+    max: -0.36200, 0.24400, 0.08500
+    color: '#1E202A'
+    shape: CylinderY
+  - label: gray caster fork
+    min: -0.42600, 0.19300, 0.04500
+    max: -0.37400, 0.25700, 0.13200
+    color: '#8C8C8C'
+  - label: frame upright
+    min: -0.42100, 0.20300, 0.10000
+    max: -0.37900, 0.24700, 0.18300
+    color: '#676767'
+  - label: caster wheel
+    min: 0.36200, -0.24400, 0.00900
+    max: 0.43800, -0.20600, 0.08500
+    color: '#1E202A'
+    shape: CylinderY
+  - label: gray caster fork
+    min: 0.37400, -0.25700, 0.04500
+    max: 0.42600, -0.19300, 0.13200
+    color: '#8C8C8C'
+  - label: frame upright
+    min: 0.37900, -0.24700, 0.10000
+    max: 0.42100, -0.20300, 0.18300
+    color: '#676767'
+  - label: caster wheel
+    min: 0.36200, 0.20600, 0.00900
+    max: 0.43800, 0.24400, 0.08500
+    color: '#1E202A'
+    shape: CylinderY
+  - label: gray caster fork
+    min: 0.37400, 0.19300, 0.04500
+    max: 0.42600, 0.25700, 0.13200
+    color: '#8C8C8C'
+  - label: frame upright
+    min: 0.37900, 0.20300, 0.10000
+    max: 0.42100, 0.24700, 0.18300
+    color: '#676767'
+  - label: low rigid deck
+    min: -0.48500, -0.28000, 0.14400
+    max: 0.48500, 0.28000, 0.18800
+    color: '#282A33'
+  - label: nested carriage
+    min: -0.42000, -0.23000, 0.09000
+    max: 0.42000, 0.23000, 0.12400
+    color: '#4D4D4D'
+  - label: deck side rail
+    min: -0.46500, -0.28600, 0.17000
+    max: 0.46500, -0.25400, 0.20500
+    color: '#565656'
+  - label: deck side rail
+    min: -0.46500, 0.25400, 0.17000
+    max: 0.46500, 0.28600, 0.20500
+    color: '#565656'
+  - label: dark red padded base
+    min: -0.47500, -0.26600, 0.18900
+    max: 0.47500, 0.26600, 0.23100
+    color: '#6D4041'
+  - label: red upholstered segment
+    min: -0.45000, -0.24400, 0.22100
+    max: -0.17000, 0.24400, 0.27700
+    color: '#845958'
+  - label: padded edge
+    min: -0.45000, -0.26200, 0.22100
+    max: -0.17000, -0.23000, 0.26700
+    color: '#946968'
+    shape: CylinderX
+  - label: red upholstered segment
+    min: -0.13200, -0.24400, 0.22100
+    max: 0.13200, 0.24400, 0.27700
+    color: '#845958'
+  - label: padded edge
+    min: -0.13200, -0.26200, 0.22100
+    max: 0.13200, -0.23000, 0.26700
+    color: '#946968'
+    shape: CylinderX
+  - label: red upholstered segment
+    min: 0.17000, -0.24400, 0.22100
+    max: 0.45000, 0.24400, 0.27700
+    color: '#845958'
+  - label: padded edge
+    min: 0.17000, -0.26200, 0.22100
+    max: 0.45000, -0.23000, 0.26700
+    color: '#946968'
+    shape: CylinderX
+  - label: front dark cushion band
+    min: -0.47100, -0.26900, 0.20400
+    max: 0.47100, -0.26100, 0.23300
+    color: '#643132'
+  - label: end frame cap
+    min: -0.48400, -0.26900, 0.18500
+    max: -0.45200, 0.26900, 0.28200
+    color: '#4D4D4D'
+  - label: end frame cap
+    min: 0.45200, -0.26900, 0.18500
+    max: 0.48400, 0.26900, 0.28200
+    color: '#4D4D4D'
+  - label: recessed cushion face
+    min: -0.42600, -0.22000, 0.27700
+    max: -0.19400, 0.22000, 0.27800
+    color: '#764C4B'
+  - label: recessed cushion face
+    min: -0.10800, -0.22000, 0.27700
+    max: 0.10800, 0.22000, 0.27800
+    color: '#764C4B'
+  - label: recessed cushion face
+    min: 0.19400, -0.22000, 0.27700
+    max: 0.42600, 0.22000, 0.27800
+    color: '#764C4B'
+  - label: caster hub rim
+    min: -0.42700, -0.26300, 0.02000
+    max: -0.37300, -0.25700, 0.07400
+    color: '#B5B5B5'
+    shape: CylinderY
+  - label: dark caster axle
+    min: -0.41100, -0.26400, 0.03600
+    max: -0.38900, -0.26300, 0.05800
+    color: '#484A50'
+    shape: CylinderY
+  - label: caster hub rim
+    min: -0.42700, 0.18700, 0.02000
+    max: -0.37300, 0.19300, 0.07400
+    color: '#B5B5B5'
+    shape: CylinderY
+  - label: dark caster axle
+    min: -0.41100, 0.18600, 0.03600
+    max: -0.38900, 0.18700, 0.05800
+    color: '#484A50'
+    shape: CylinderY
+  - label: caster hub rim
+    min: 0.37300, -0.26300, 0.02000
+    max: 0.42700, -0.25700, 0.07400
+    color: '#B5B5B5'
+    shape: CylinderY
+  - label: dark caster axle
+    min: 0.38900, -0.26400, 0.03600
+    max: 0.41100, -0.26300, 0.05800
+    color: '#484A50'
+    shape: CylinderY
+  - label: caster hub rim
+    min: 0.37300, 0.18700, 0.02000
+    max: 0.42700, 0.19300, 0.07400
+    color: '#B5B5B5'
+    shape: CylinderY
+  - label: dark caster axle
+    min: 0.38900, 0.18600, 0.03600
+    max: 0.41100, 0.18700, 0.05800
+    color: '#484A50'
+    shape: CylinderY
+- type: cmu3DModel
+  id: CMU3DHospitalRollerBedFolded
+  label: Plain hospital trolley - folded
+  sourcePrototypes: []
+  status: draft
+  description: Folded surgical trolley kit. Source surgical_folded has the same silhouette as folded, with beige/cream
+    retaining cloth. Initial hospital variants share this folded artwork; separate reciprocal links preserve the
+    correct unfolded variant. Hidden construction and animation remain inferred. See SOURCES_FOLD_STATES.md.
+  referenceRsi: _RMC14/Structures/Furniture/rollerbeds.rsi
+  referenceState: surgical_folded
+  sourceDirections: 1
+  placement: surface
+  folded: true
+  alternateFoldModel: CMU3DHospitalRollerBed
+  parts:
+  - label: nested gray cushion
+    min: -0.24200, -0.08400, 0.05700
+    max: 0.24800, 0.07900, 0.44900
+    color: '#888888'
+  - label: folded cushion rear
+    min: -0.22800, 0.07900, 0.06900
+    max: 0.23200, 0.10200, 0.43500
+    color: '#707070'
+  - label: lower frame rail
+    min: -0.27200, -0.11700, 0.02600
+    max: 0.27200, 0.11700, 0.06400
+    color: '#555555'
+  - label: upper frame rail
+    min: -0.27200, -0.10500, 0.44500
+    max: 0.27200, 0.10800, 0.47100
+    color: '#555555'
+  - label: folded side tube
+    min: -0.27500, -0.10800, 0.03800
+    max: -0.24300, 0.11000, 0.45800
+    color: '#555555'
+  - label: front tube highlight
+    min: -0.26600, -0.11400, 0.06100
+    max: -0.25200, -0.10800, 0.44300
+    color: '#AAAAAA'
+  - label: folded side tube
+    min: 0.24300, -0.10800, 0.03800
+    max: 0.27500, 0.11000, 0.45800
+    color: '#555555'
+  - label: front tube highlight
+    min: 0.25200, -0.11400, 0.06100
+    max: 0.26600, -0.10800, 0.44300
+    color: '#AAAAAA'
+  - label: front lower edge highlight
+    min: -0.25200, -0.12300, 0.06400
+    max: 0.25200, -0.11300, 0.08300
+    color: '#AAAAAA'
+  - label: beige retaining strap
+    min: -0.28200, -0.13000, 0.11200
+    max: 0.27900, -0.10900, 0.18400
+    color: '#C6BEAF'
+  - label: strap upper fold
+    min: -0.28200, -0.13500, 0.17100
+    max: 0.27900, -0.13000, 0.19100
+    color: '#918368'
+  - label: strap dark crease
+    min: -0.28200, -0.13400, 0.14300
+    max: 0.27900, -0.13000, 0.15900
+    color: '#413B2F'
+  - label: strap wrap around edge
+    min: -0.28100, -0.12100, 0.11400
+    max: -0.26300, 0.11800, 0.18100
+    color: '#635A47'
+  - label: strap wrap around edge
+    min: 0.26200, -0.12100, 0.11400
+    max: 0.28000, 0.11800, 0.18100
+    color: '#635A47'
+  - label: rear strap
+    min: -0.27100, 0.11200, 0.11400
+    max: 0.27000, 0.12300, 0.18100
+    color: '#C6BEAF'
+  - label: nested handle upright
+    min: 0.13500, -0.09900, 0.27800
+    max: 0.15500, -0.07200, 0.33400
+    color: '#777777'
+  - label: nested handle upright
+    min: 0.19500, -0.09900, 0.27800
+    max: 0.21500, -0.07200, 0.33400
+    color: '#777777'
+  - label: nested handle bridge
+    min: 0.13400, -0.10300, 0.32500
+    max: 0.21600, -0.06900, 0.34400
+    color: '#AAAAAA'
+  - label: nested handle upright
+    min: 0.13500, -0.09900, 0.46200
+    max: 0.15500, -0.07200, 0.51800
+    color: '#777777'
+  - label: nested handle upright
+    min: 0.19500, -0.09900, 0.46200
+    max: 0.21500, -0.07200, 0.51800
+    color: '#777777'
+  - label: nested handle bridge
+    min: 0.13400, -0.10300, 0.50900
+    max: 0.21600, -0.06900, 0.52800
+    color: '#AAAAAA'
+  - label: rear nested upright
+    min: -0.22600, 0.09500, 0.03700
+    max: -0.19800, 0.13100, 0.40800
+    color: '#454754'
+  - label: rear nested upright
+    min: 0.20200, 0.09500, 0.03700
+    max: 0.23000, 0.13100, 0.40800
+    color: '#454754'
+  - label: rear folded cross rail
+    min: -0.21400, 0.10800, 0.39400
+    max: 0.21900, 0.13200, 0.42600
+    color: '#676977'
+  - label: left nested bracket
+    min: -0.29900, -0.08600, 0.07700
+    max: -0.27600, 0.09200, 0.41600
+    color: '#434552'
+  - label: rubber folded foot
+    min: -0.25100, -0.09200, 0.00800
+    max: -0.19300, 0.09200, 0.02700
+    color: '#343641'
+  - label: rubber folded foot
+    min: 0.17100, -0.09200, 0.00800
+    max: 0.22900, 0.09200, 0.02700
+    color: '#343641'
+  - label: pale cloth corner
+    min: -0.24500, -0.13600, 0.17100
+    max: -0.21900, -0.13500, 0.19100
+    color: '#E3DFD8'
+  - label: pale cloth corner
+    min: 0.21900, -0.13600, 0.17100
+    max: 0.24500, -0.13500, 0.19100
+    color: '#E3DFD8'
+  referencePrototype: RMCRollerBedHospital
+- type: cmu3DModel
+  id: CMU3DRMCRollerBedHospitalBloodFolded
+  label: Blood-stained hospital trolley - folded
+  sourcePrototypes: []
+  status: draft
+  description: Folded surgical trolley kit. Source surgical_folded has the same silhouette as folded, with beige/cream
+    retaining cloth. Initial hospital variants share this folded artwork; separate reciprocal links preserve the
+    correct unfolded variant. Hidden construction and animation remain inferred. See SOURCES_FOLD_STATES.md.
+  referenceRsi: _RMC14/Structures/Furniture/rollerbeds.rsi
+  referenceState: surgical_folded
+  sourceDirections: 1
+  placement: surface
+  folded: true
+  alternateFoldModel: CMU3DRMCRollerBedHospitalBlood
+  parts:
+  - label: nested gray cushion
+    min: -0.24200, -0.08400, 0.05700
+    max: 0.24800, 0.07900, 0.44900
+    color: '#888888'
+  - label: folded cushion rear
+    min: -0.22800, 0.07900, 0.06900
+    max: 0.23200, 0.10200, 0.43500
+    color: '#707070'
+  - label: lower frame rail
+    min: -0.27200, -0.11700, 0.02600
+    max: 0.27200, 0.11700, 0.06400
+    color: '#555555'
+  - label: upper frame rail
+    min: -0.27200, -0.10500, 0.44500
+    max: 0.27200, 0.10800, 0.47100
+    color: '#555555'
+  - label: folded side tube
+    min: -0.27500, -0.10800, 0.03800
+    max: -0.24300, 0.11000, 0.45800
+    color: '#555555'
+  - label: front tube highlight
+    min: -0.26600, -0.11400, 0.06100
+    max: -0.25200, -0.10800, 0.44300
+    color: '#AAAAAA'
+  - label: folded side tube
+    min: 0.24300, -0.10800, 0.03800
+    max: 0.27500, 0.11000, 0.45800
+    color: '#555555'
+  - label: front tube highlight
+    min: 0.25200, -0.11400, 0.06100
+    max: 0.26600, -0.10800, 0.44300
+    color: '#AAAAAA'
+  - label: front lower edge highlight
+    min: -0.25200, -0.12300, 0.06400
+    max: 0.25200, -0.11300, 0.08300
+    color: '#AAAAAA'
+  - label: beige retaining strap
+    min: -0.28200, -0.13000, 0.11200
+    max: 0.27900, -0.10900, 0.18400
+    color: '#C6BEAF'
+  - label: strap upper fold
+    min: -0.28200, -0.13500, 0.17100
+    max: 0.27900, -0.13000, 0.19100
+    color: '#918368'
+  - label: strap dark crease
+    min: -0.28200, -0.13400, 0.14300
+    max: 0.27900, -0.13000, 0.15900
+    color: '#413B2F'
+  - label: strap wrap around edge
+    min: -0.28100, -0.12100, 0.11400
+    max: -0.26300, 0.11800, 0.18100
+    color: '#635A47'
+  - label: strap wrap around edge
+    min: 0.26200, -0.12100, 0.11400
+    max: 0.28000, 0.11800, 0.18100
+    color: '#635A47'
+  - label: rear strap
+    min: -0.27100, 0.11200, 0.11400
+    max: 0.27000, 0.12300, 0.18100
+    color: '#C6BEAF'
+  - label: nested handle upright
+    min: 0.13500, -0.09900, 0.27800
+    max: 0.15500, -0.07200, 0.33400
+    color: '#777777'
+  - label: nested handle upright
+    min: 0.19500, -0.09900, 0.27800
+    max: 0.21500, -0.07200, 0.33400
+    color: '#777777'
+  - label: nested handle bridge
+    min: 0.13400, -0.10300, 0.32500
+    max: 0.21600, -0.06900, 0.34400
+    color: '#AAAAAA'
+  - label: nested handle upright
+    min: 0.13500, -0.09900, 0.46200
+    max: 0.15500, -0.07200, 0.51800
+    color: '#777777'
+  - label: nested handle upright
+    min: 0.19500, -0.09900, 0.46200
+    max: 0.21500, -0.07200, 0.51800
+    color: '#777777'
+  - label: nested handle bridge
+    min: 0.13400, -0.10300, 0.50900
+    max: 0.21600, -0.06900, 0.52800
+    color: '#AAAAAA'
+  - label: rear nested upright
+    min: -0.22600, 0.09500, 0.03700
+    max: -0.19800, 0.13100, 0.40800
+    color: '#454754'
+  - label: rear nested upright
+    min: 0.20200, 0.09500, 0.03700
+    max: 0.23000, 0.13100, 0.40800
+    color: '#454754'
+  - label: rear folded cross rail
+    min: -0.21400, 0.10800, 0.39400
+    max: 0.21900, 0.13200, 0.42600
+    color: '#676977'
+  - label: left nested bracket
+    min: -0.29900, -0.08600, 0.07700
+    max: -0.27600, 0.09200, 0.41600
+    color: '#434552'
+  - label: rubber folded foot
+    min: -0.25100, -0.09200, 0.00800
+    max: -0.19300, 0.09200, 0.02700
+    color: '#343641'
+  - label: rubber folded foot
+    min: 0.17100, -0.09200, 0.00800
+    max: 0.22900, 0.09200, 0.02700
+    color: '#343641'
+  - label: pale cloth corner
+    min: -0.24500, -0.13600, 0.17100
+    max: -0.21900, -0.13500, 0.19100
+    color: '#E3DFD8'
+  - label: pale cloth corner
+    min: 0.21900, -0.13600, 0.17100
+    max: 0.24500, -0.13500, 0.19100
+    color: '#E3DFD8'
+  referencePrototype: RMCRollerBedHospitalBlood
+- type: cmu3DModel
+  id: CMU3DRMCRollerBedHospitalSheetFolded
+  label: Green-sheet hospital trolley - folded
+  sourcePrototypes: []
+  status: draft
+  description: Folded surgical trolley kit. Source surgical_folded has the same silhouette as folded, with beige/cream
+    retaining cloth. Initial hospital variants share this folded artwork; separate reciprocal links preserve the
+    correct unfolded variant. Hidden construction and animation remain inferred. See SOURCES_FOLD_STATES.md.
+  referenceRsi: _RMC14/Structures/Furniture/rollerbeds.rsi
+  referenceState: surgical_folded
+  sourceDirections: 1
+  placement: surface
+  folded: true
+  alternateFoldModel: CMU3DRMCRollerBedHospitalSheet
+  parts:
+  - label: nested gray cushion
+    min: -0.24200, -0.08400, 0.05700
+    max: 0.24800, 0.07900, 0.44900
+    color: '#888888'
+  - label: folded cushion rear
+    min: -0.22800, 0.07900, 0.06900
+    max: 0.23200, 0.10200, 0.43500
+    color: '#707070'
+  - label: lower frame rail
+    min: -0.27200, -0.11700, 0.02600
+    max: 0.27200, 0.11700, 0.06400
+    color: '#555555'
+  - label: upper frame rail
+    min: -0.27200, -0.10500, 0.44500
+    max: 0.27200, 0.10800, 0.47100
+    color: '#555555'
+  - label: folded side tube
+    min: -0.27500, -0.10800, 0.03800
+    max: -0.24300, 0.11000, 0.45800
+    color: '#555555'
+  - label: front tube highlight
+    min: -0.26600, -0.11400, 0.06100
+    max: -0.25200, -0.10800, 0.44300
+    color: '#AAAAAA'
+  - label: folded side tube
+    min: 0.24300, -0.10800, 0.03800
+    max: 0.27500, 0.11000, 0.45800
+    color: '#555555'
+  - label: front tube highlight
+    min: 0.25200, -0.11400, 0.06100
+    max: 0.26600, -0.10800, 0.44300
+    color: '#AAAAAA'
+  - label: front lower edge highlight
+    min: -0.25200, -0.12300, 0.06400
+    max: 0.25200, -0.11300, 0.08300
+    color: '#AAAAAA'
+  - label: beige retaining strap
+    min: -0.28200, -0.13000, 0.11200
+    max: 0.27900, -0.10900, 0.18400
+    color: '#C6BEAF'
+  - label: strap upper fold
+    min: -0.28200, -0.13500, 0.17100
+    max: 0.27900, -0.13000, 0.19100
+    color: '#918368'
+  - label: strap dark crease
+    min: -0.28200, -0.13400, 0.14300
+    max: 0.27900, -0.13000, 0.15900
+    color: '#413B2F'
+  - label: strap wrap around edge
+    min: -0.28100, -0.12100, 0.11400
+    max: -0.26300, 0.11800, 0.18100
+    color: '#635A47'
+  - label: strap wrap around edge
+    min: 0.26200, -0.12100, 0.11400
+    max: 0.28000, 0.11800, 0.18100
+    color: '#635A47'
+  - label: rear strap
+    min: -0.27100, 0.11200, 0.11400
+    max: 0.27000, 0.12300, 0.18100
+    color: '#C6BEAF'
+  - label: nested handle upright
+    min: 0.13500, -0.09900, 0.27800
+    max: 0.15500, -0.07200, 0.33400
+    color: '#777777'
+  - label: nested handle upright
+    min: 0.19500, -0.09900, 0.27800
+    max: 0.21500, -0.07200, 0.33400
+    color: '#777777'
+  - label: nested handle bridge
+    min: 0.13400, -0.10300, 0.32500
+    max: 0.21600, -0.06900, 0.34400
+    color: '#AAAAAA'
+  - label: nested handle upright
+    min: 0.13500, -0.09900, 0.46200
+    max: 0.15500, -0.07200, 0.51800
+    color: '#777777'
+  - label: nested handle upright
+    min: 0.19500, -0.09900, 0.46200
+    max: 0.21500, -0.07200, 0.51800
+    color: '#777777'
+  - label: nested handle bridge
+    min: 0.13400, -0.10300, 0.50900
+    max: 0.21600, -0.06900, 0.52800
+    color: '#AAAAAA'
+  - label: rear nested upright
+    min: -0.22600, 0.09500, 0.03700
+    max: -0.19800, 0.13100, 0.40800
+    color: '#454754'
+  - label: rear nested upright
+    min: 0.20200, 0.09500, 0.03700
+    max: 0.23000, 0.13100, 0.40800
+    color: '#454754'
+  - label: rear folded cross rail
+    min: -0.21400, 0.10800, 0.39400
+    max: 0.21900, 0.13200, 0.42600
+    color: '#676977'
+  - label: left nested bracket
+    min: -0.29900, -0.08600, 0.07700
+    max: -0.27600, 0.09200, 0.41600
+    color: '#434552'
+  - label: rubber folded foot
+    min: -0.25100, -0.09200, 0.00800
+    max: -0.19300, 0.09200, 0.02700
+    color: '#343641'
+  - label: rubber folded foot
+    min: 0.17100, -0.09200, 0.00800
+    max: 0.22900, 0.09200, 0.02700
+    color: '#343641'
+  - label: pale cloth corner
+    min: -0.24500, -0.13600, 0.17100
+    max: -0.21900, -0.13500, 0.19100
+    color: '#E3DFD8'
+  - label: pale cloth corner
+    min: 0.21900, -0.13600, 0.17100
+    max: 0.24500, -0.13500, 0.19100
+    color: '#E3DFD8'
+  referencePrototype: RMCRollerBedHospitalSheet
+- type: cmu3DModel
+  id: CMU3DRMCRollerBedHospitalSheet2Folded
+  label: Medical-cross hospital trolley - folded
+  sourcePrototypes: []
+  status: draft
+  description: Folded surgical trolley kit. Source surgical_folded has the same silhouette as folded, with beige/cream
+    retaining cloth. Initial hospital variants share this folded artwork; separate reciprocal links preserve the
+    correct unfolded variant. Hidden construction and animation remain inferred. See SOURCES_FOLD_STATES.md.
+  referenceRsi: _RMC14/Structures/Furniture/rollerbeds.rsi
+  referenceState: surgical_folded
+  sourceDirections: 1
+  placement: surface
+  folded: true
+  alternateFoldModel: CMU3DRMCRollerBedHospitalSheet2
+  parts:
+  - label: nested gray cushion
+    min: -0.24200, -0.08400, 0.05700
+    max: 0.24800, 0.07900, 0.44900
+    color: '#888888'
+  - label: folded cushion rear
+    min: -0.22800, 0.07900, 0.06900
+    max: 0.23200, 0.10200, 0.43500
+    color: '#707070'
+  - label: lower frame rail
+    min: -0.27200, -0.11700, 0.02600
+    max: 0.27200, 0.11700, 0.06400
+    color: '#555555'
+  - label: upper frame rail
+    min: -0.27200, -0.10500, 0.44500
+    max: 0.27200, 0.10800, 0.47100
+    color: '#555555'
+  - label: folded side tube
+    min: -0.27500, -0.10800, 0.03800
+    max: -0.24300, 0.11000, 0.45800
+    color: '#555555'
+  - label: front tube highlight
+    min: -0.26600, -0.11400, 0.06100
+    max: -0.25200, -0.10800, 0.44300
+    color: '#AAAAAA'
+  - label: folded side tube
+    min: 0.24300, -0.10800, 0.03800
+    max: 0.27500, 0.11000, 0.45800
+    color: '#555555'
+  - label: front tube highlight
+    min: 0.25200, -0.11400, 0.06100
+    max: 0.26600, -0.10800, 0.44300
+    color: '#AAAAAA'
+  - label: front lower edge highlight
+    min: -0.25200, -0.12300, 0.06400
+    max: 0.25200, -0.11300, 0.08300
+    color: '#AAAAAA'
+  - label: beige retaining strap
+    min: -0.28200, -0.13000, 0.11200
+    max: 0.27900, -0.10900, 0.18400
+    color: '#C6BEAF'
+  - label: strap upper fold
+    min: -0.28200, -0.13500, 0.17100
+    max: 0.27900, -0.13000, 0.19100
+    color: '#918368'
+  - label: strap dark crease
+    min: -0.28200, -0.13400, 0.14300
+    max: 0.27900, -0.13000, 0.15900
+    color: '#413B2F'
+  - label: strap wrap around edge
+    min: -0.28100, -0.12100, 0.11400
+    max: -0.26300, 0.11800, 0.18100
+    color: '#635A47'
+  - label: strap wrap around edge
+    min: 0.26200, -0.12100, 0.11400
+    max: 0.28000, 0.11800, 0.18100
+    color: '#635A47'
+  - label: rear strap
+    min: -0.27100, 0.11200, 0.11400
+    max: 0.27000, 0.12300, 0.18100
+    color: '#C6BEAF'
+  - label: nested handle upright
+    min: 0.13500, -0.09900, 0.27800
+    max: 0.15500, -0.07200, 0.33400
+    color: '#777777'
+  - label: nested handle upright
+    min: 0.19500, -0.09900, 0.27800
+    max: 0.21500, -0.07200, 0.33400
+    color: '#777777'
+  - label: nested handle bridge
+    min: 0.13400, -0.10300, 0.32500
+    max: 0.21600, -0.06900, 0.34400
+    color: '#AAAAAA'
+  - label: nested handle upright
+    min: 0.13500, -0.09900, 0.46200
+    max: 0.15500, -0.07200, 0.51800
+    color: '#777777'
+  - label: nested handle upright
+    min: 0.19500, -0.09900, 0.46200
+    max: 0.21500, -0.07200, 0.51800
+    color: '#777777'
+  - label: nested handle bridge
+    min: 0.13400, -0.10300, 0.50900
+    max: 0.21600, -0.06900, 0.52800
+    color: '#AAAAAA'
+  - label: rear nested upright
+    min: -0.22600, 0.09500, 0.03700
+    max: -0.19800, 0.13100, 0.40800
+    color: '#454754'
+  - label: rear nested upright
+    min: 0.20200, 0.09500, 0.03700
+    max: 0.23000, 0.13100, 0.40800
+    color: '#454754'
+  - label: rear folded cross rail
+    min: -0.21400, 0.10800, 0.39400
+    max: 0.21900, 0.13200, 0.42600
+    color: '#676977'
+  - label: left nested bracket
+    min: -0.29900, -0.08600, 0.07700
+    max: -0.27600, 0.09200, 0.41600
+    color: '#434552'
+  - label: rubber folded foot
+    min: -0.25100, -0.09200, 0.00800
+    max: -0.19300, 0.09200, 0.02700
+    color: '#343641'
+  - label: rubber folded foot
+    min: 0.17100, -0.09200, 0.00800
+    max: 0.22900, 0.09200, 0.02700
+    color: '#343641'
+  - label: pale cloth corner
+    min: -0.24500, -0.13600, 0.17100
+    max: -0.21900, -0.13500, 0.19100
+    color: '#E3DFD8'
+  - label: pale cloth corner
+    min: 0.21900, -0.13600, 0.17100
+    max: 0.24500, -0.13500, 0.19100
+    color: '#E3DFD8'
+  referencePrototype: RMCRollerBedHospitalSheet2

@@ -35,7 +35,7 @@ namespace Content.Server.CMU14.ColonyEconomy;
 // 500-cr canister). A catalog canister holding a valuable gas must cost more than
 // valuable-rate x fresh moles: at 0.4 a tritium canister resells for ~1108, so the
 // commented-out 800-cr TritiumCanister entry would print if re-enabled.
-public sealed class GasCanisterPricingSystem : EntitySystem
+public sealed partial class GasCanisterPricingSystem : EntitySystem
 {
     private const float ResaleMargin = 0.5f;
 
@@ -55,8 +55,8 @@ public sealed class GasCanisterPricingSystem : EntitySystem
         [Gas.Frezon] = 0.1f,
     };
 
-    [Dependency] private readonly IComponentFactory _factory = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private IComponentFactory _factory = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     public override void Initialize()
     {

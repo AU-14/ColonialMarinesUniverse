@@ -53,6 +53,9 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
 
         Window = this.CreatePopOutableWindow<OverwatchConsoleWindow>();
         Window.OverwatchHeader.SetMarkupPermissive($"[color=#88C7FA]{Loc.GetString("rmc-overwatch-console-disabled-select-squad")}[/color]");
+        // cmu edit start
+        CMUOnWindowCreated();
+        // cmu edit end
 
         if (State is OverwatchConsoleBuiState s)
             RefreshState(s);
@@ -102,6 +105,9 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
             };
 
             squadButton.OnPressed += _ => SendPredictedMessage(new OverwatchConsoleSelectSquadBuiMsg(squad.Id));
+            // cmu edit start
+            CMUStyleSquadButton(squadButton, squad.Color);
+            // cmu edit end
 
             var panel = CreatePanel();
             panel.AddChild(squadButton);
@@ -170,7 +176,7 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
 
             if (_squadViews.TryGetValue(squad.Id, out var monitor))
             {
-                monitor.RolesContainer.DisposeAllChildren();
+                monitor.RolesContainer.ReleaseChildren();
             }
             else
             {
@@ -251,8 +257,10 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                 monitor.OrbitalSaveButton.OnPressed +=
                     _ =>
                     {
-                        var longitude = (int)monitor.Longitude.Value;
-                        var latitude = (int)monitor.Latitude.Value;
+                        // cmu edit start: save the orbital coordinates, not the supply drop's
+                        var longitude = (int)monitor.OrbitalLongitude.Value;
+                        var latitude = (int)monitor.OrbitalLatitude.Value;
+                        // cmu edit end
                         var msg = new OverwatchConsoleOrbitalSaveBuiMsg(longitude, latitude);
                         SendPredictedMessage(msg);
                     };
@@ -331,8 +339,10 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                     }
                 };
 
-                monitor.FireteamsButton.OnPressed += _ =>
-                    SendPredictedMessage(new OverwatchConsoleOpenSquadFireteamsBuiMsg(squad.Id));
+                // cmu edit start: the Fireteams tab manages fireteams itself (CMUOverwatchFireteamPanel)
+                // monitor.FireteamsButton.OnPressed += _ =>
+                //     SendPredictedMessage(new OverwatchConsoleOpenSquadFireteamsBuiMsg(squad.Id));
+                // cmu edit end
                 monitor.OnStop += () => SendPredictedMessage(new OverwatchConsoleStopOverwatchBuiMsg());
 
                 var canSupplyDrop = EntMan.HasComponent<SupplyDropComputerComponent>(Owner) && squad.CanSupplyDrop;
@@ -350,6 +360,9 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                 }
 
                 _squadViews[squad.Id] = monitor;
+                // cmu edit start
+                CMUSetupSquadView(squad, monitor);
+                // cmu edit end
                 Window.SquadViewContainer.AddChild(monitor);
             }
 
@@ -381,6 +394,9 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                 squadRows.Remove(id);
             }
 
+            // cmu edit start
+            var cmuRoster = new List<Content.Client.CMU14.Overwatch.CMURosterEntry>();
+            // cmu edit end
             foreach (var marine in marines)
             {
                 var roleName = Loc.GetString("rmc-overwatch-console-role-none");
@@ -422,6 +438,9 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                 }
 
                 var name = rankName != null ? $"{rankName} {marine.Name}" : marine.Name;
+                // cmu edit start
+                cmuRoster.Add(new Content.Client.CMU14.Overwatch.CMURosterEntry(marine, name, roleName, tripodIds.Contains(marine.Id)));
+                // cmu edit end
                 if (!squadRows.TryGetValue(marine.Id, out var row))
                 {
                     var watchButton = new Button
@@ -786,6 +805,9 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
 
             monitor.RolesContainer.AddChild(totalPanel);
             monitor.UpdateResults(console.Location, console.ShowDead, console.ShowHidden, marines, console);
+            // cmu edit start
+            CMUUpdateRoster(squad, monitor, cmuRoster, s, console);
+            // cmu edit end
         }
 
         UpdateView();
@@ -892,8 +914,9 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
             }
 
             AddSaving(squad.OrbitalLongitudes, squad.OrbitalLatitudes, squad.OrbitalComments, squad.OrbitalSaves, margin);
+            // cmu edit start: the orbital tab lists and loads its own saved coordinates
             AddSavedLocation(
-                console.SavedLocations,
+                console.OrbitalSavedLocations,
                 margin,
                 squad.OrbitalLongitudes,
                 squad.OrbitalLatitudes,
@@ -901,22 +924,28 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                 squad.OrbitalSaves,
                 location =>
                 {
-                    squad.Longitude.Value = location.Longitude;
-                    squad.Latitude.Value = location.Latitude;
+                    squad.OrbitalLongitude.Value = location.Longitude;
+                    squad.OrbitalLatitude.Value = location.Latitude;
 
                     SendPredictedMessage(new OverwatchConsoleOrbitalLongitudeBuiMsg(location.Longitude));
                     SendPredictedMessage(new OverwatchConsoleOrbitalLatitudeBuiMsg(location.Latitude));
-                }
+                },
+                orbital: true
             );
+            // cmu edit end
 
             squad.HasOrbital = console.HasOrbital;
             squad.NextOrbitalAt = console.NextOrbitalLaunch;
         }
+
+        // cmu edit start
+        CMUApplyTheme();
+        // cmu edit end
     }
 
     private void AddSaving(BoxContainer longitudes, BoxContainer latitudes, BoxContainer comments, BoxContainer saves, Thickness margin)
     {
-        longitudes.DisposeAllChildren();
+        longitudes.ReleaseChildren();
 
         var panel = CreatePanel(50);
         panel.AddChild(new Label
@@ -926,7 +955,7 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
         });
         longitudes.AddChild(panel);
 
-        latitudes.DisposeAllChildren();
+        latitudes.ReleaseChildren();
         panel = CreatePanel(50);
         panel.AddChild(new Label
         {
@@ -935,7 +964,7 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
         });
         latitudes.AddChild(panel);
 
-        comments.DisposeAllChildren();
+        comments.ReleaseChildren();
         panel = CreatePanel(50);
         panel.AddChild(new Label
         {
@@ -944,7 +973,7 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
         });
         comments.AddChild(panel);
 
-        saves.DisposeAllChildren();
+        saves.ReleaseChildren();
         panel = CreatePanel(50);
         panel.AddChild(new Label
         {
@@ -962,7 +991,10 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
         BoxContainer latitudes,
         BoxContainer comments,
         BoxContainer saves,
-        Action<OverwatchSavedLocation> onSave)
+        // cmu edit start
+        Action<OverwatchSavedLocation> onSave,
+        bool orbital = false)
+        // cmu edit end
     {
         for (var i = 0; i < locations.Length; i++)
         {
@@ -987,7 +1019,15 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
 
             var comment = new LineEdit { Text = $"{location.Comment}" };
             var index = i;
-            comment.OnTextEntered += args => SaveComment(index, args.Text);
+            // cmu edit start: orbital comments go to the orbital list
+            comment.OnTextEntered += args =>
+            {
+                if (orbital)
+                    SendPredictedMessage(new OverwatchConsoleOrbitalCommentBuiMsg(index, args.Text.Length > 50 ? args.Text[..50] : args.Text));
+                else
+                    SaveComment(index, args.Text);
+            };
+            // cmu edit end
 
             panel = CreatePanel(50);
             panel.AddChild(comment);

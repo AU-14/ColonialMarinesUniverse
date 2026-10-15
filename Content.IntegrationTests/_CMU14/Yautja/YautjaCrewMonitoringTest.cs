@@ -43,7 +43,7 @@ public sealed class YautjaCrewMonitoringTest
             foreach (var id in ids)
             {
                 var prototype = prototypes.Index<EntityPrototype>(id);
-                Assert.That(prototype.TryGetComponent<YautjaCrewMonitoringConsoleComponent>(out _, factory), Is.True, id);
+                Assert.That(prototype.TryComp<YautjaCrewMonitoringConsoleComponent>(out _, factory), Is.True, id);
                 if (id != "CMUYautjaHunterShuttleHealthMonitor")
                 {
                     var parents = prototypes.EnumerateAllParents<EntityPrototype>(id).Select(parent => parent.id);

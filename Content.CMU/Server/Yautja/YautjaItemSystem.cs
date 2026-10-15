@@ -501,7 +501,7 @@ public sealed partial class YautjaItemSystem : EntitySystem
 
     private bool CanHivebreak(YautjaHivebreakerComponent hivebreaker, EntityUid user, EntityUid target, bool popup, bool requireCritical)
     {
-        if (!CanUseHivebreaker(user))
+        if (!CanUseHivebreaker(hivebreaker, user))
         {
             if (popup)
                 _popup.PopupEntity(Loc.GetString("cmu-yautja-hivebreaker-denied"), user, user, PopupType.SmallCaution);
@@ -575,8 +575,11 @@ public sealed partial class YautjaItemSystem : EntitySystem
                _hive.HasFaction(hive, BadBloodYautjaFaction);
     }
 
-    private bool CanUseHivebreaker(EntityUid user)
+    private bool CanUseHivebreaker(YautjaHivebreakerComponent hivebreaker, EntityUid user)
     {
+        if (!hivebreaker.RequireBadBloodUser)
+            return true;
+
         if (!HasComp<YautjaTechAuthorizedComponent>(user) && !HasComp<YautjaComponent>(user))
             return false;
 

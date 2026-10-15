@@ -30,12 +30,17 @@ public abstract partial class SatiationSystem : EntitySystem
     /// <inheritdoc/>
     public override void Update(float frameTime)
     {
+        var now = _timing.CurTime; // CMU14: deadlines are stable throughout this update.
         var query = EntityQueryEnumerator<SatiationComponent>();
         while (query.MoveNext(out var uid, out var component))
         {
             var entity = new Entity<SatiationComponent>(uid, component);
             foreach (var satiation in component.Satiations.Values)
             {
+                // CMU14: skip prototype lookup until either deadline is due; null means no deadline.
+                if (!(now >= satiation.NextAlertUpdateTime || now >= satiation.NextChangeRateModUpdateTime))
+                    continue;
+
                 if (!ProtoMan.Resolve(satiation.Prototype, out var proto))
                     continue;
 

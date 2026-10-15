@@ -52,8 +52,11 @@
   - type: DeviceLinkSink
     ports:
     - Timer
+  # built to cripple light vehicles, credit the blast against hulls like a rocket
+  - type: VehicleDamageMultiplier
+    multiplier: 12
   - type: Explosive
-    explosionType: RMC
+    explosionType: CMUIED # FLOW-09: own tank blast multiplier; otherwise RMC.
     totalIntensity: 1400
     intensitySlope: 1.5
     maxIntensity: 80
@@ -97,8 +100,11 @@
   - type: DeviceLinkSink
     ports:
     - Timer
+  # built to cripple light vehicles, credit the blast against hulls like a rocket
+  - type: VehicleDamageMultiplier
+    multiplier: 12
   - type: Explosive
-    explosionType: RMC
+    explosionType: CMUIED # FLOW-09: own tank blast multiplier; otherwise RMC.
     totalIntensity: 1800
     intensitySlope: 1.5
     maxIntensity: 100
@@ -150,7 +156,7 @@
     ports:
     - Timer
   - type: Explosive
-    explosionType: RMC
+    explosionType: CMUIED # FLOW-09: own tank blast multiplier; otherwise RMC.
     totalIntensity: 1500
     intensitySlope: 10
     maxIntensity: 100

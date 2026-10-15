@@ -501,13 +501,13 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         {
             if (target.Comp.ReagentWhitelist is { } whitelist && !whitelist.Contains(content.Reagent.Prototype))
             {
-                _popup.PopupClient(Loc.GetString("rmc-flamer-tank-not-whitelisted", ("tank", target)), source, user);
+                _popup.PopupEntity(Loc.GetString("rmc-flamer-tank-not-whitelisted", ("tank", target)), source, user);
                 return;
             }
             if (_reagent.TryIndex(content.Reagent.Prototype, out var reagent) &&
                 (reagent.Intensity <= 0 || reagent.Duration <= 0 || reagent.Radius <= 0))
             {
-                _popup.PopupClient(Loc.GetString("rmc-flamer-tank-not-potent-enough"), source, user);
+                _popup.PopupEntity(Loc.GetString("rmc-flamer-tank-not-potent-enough"), source, user);
                 return;
             }
         }
@@ -522,7 +522,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         );
 
         if (transfer > FixedPoint2.Zero)
-            _popup.PopupClient(Loc.GetString("rmc-flamer-refill", ("refilled", target)), source, user);
+            _popup.PopupEntity(Loc.GetString("rmc-flamer-refill", ("refilled", target)), source, user);
     }
 
     private void RefillTank(Entity<RMCFlamerTankComponent> tank, ref BeforeRangedInteractEvent args)
@@ -586,7 +586,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
             _action.SetIcon(action, new SpriteSpecifier.Rsi(ent.Comp.NumberingResource, n.ToString()));
         }
 
-        _popup.PopupClient(Loc.GetString("rmc-broiler-switch-tank", ("n", n)), ent, args.Performer);
+        _popup.PopupEntity(Loc.GetString("rmc-broiler-switch-tank", ("n", n)), ent, args.Performer);
     }
 
     public void OnBroilerUniqueAction(Entity<RMCCanUseBroilerComponent> ent, ref UniqueActionEvent args)

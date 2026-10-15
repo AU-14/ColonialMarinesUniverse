@@ -1,0 +1,1638 @@
+- type: cmu3DModel
+  id: CMU3DCartridge9mmCloud
+  label: 9 mm loose cartridge and spent casing
+  status: draft
+  sourcePrototypes:
+  - CMCartridgePistol9mm
+  referencePrototype: CMCartridgePistol9mm
+  referenceRsi: /Textures/Objects/Weapons/Guns/Ammunition/Casings/ammo_casing.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: Source-sized loose cartridge with cylindrical brass case, rim and rounded
+    copper cap. One visible source layer; source-owned base and base-spent are explicit
+    static states. The unused tip resource is not a layer in this prototype. Thickness,
+    underside and placement are draft visual inferences. No firing, function or live-state
+    validation.
+  parts:
+  - label: rounded brass case
+    min: -0.125, -0.03125, 0
+    max: 0.03125, 0.03125, 0.0625
+    color: '#B68F0E'
+    shape: CylinderX
+  - label: case rim
+    min: -0.125, -0.0325, 0
+    max: -0.113125, 0.0325, 0.064
+    color: '#A5820D'
+    shape: CylinderX
+  - label: brass upper glint
+    min: -0.110938, -0.001563, 0.058
+    max: 0.021875, 0.020313, 0.066
+    color: '#D7DF60'
+    shape: CylinderX
+  - label: copper forward rounded cap
+    min: 0.017188, -0.03, 0.001
+    max: 0.09375, 0.03, 0.061
+    color: '#9F601F'
+    shape: Ellipsoid
+  - label: copper neck
+    min: 0.021875, -0.02875, 0.002
+    max: 0.05, 0.02875, 0.06
+    color: '#81481D'
+    shape: CylinderX
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    base:
+      frames:
+      - parts:
+        - label: rounded brass case
+          min: -0.125, -0.03125, 0
+          max: 0.03125, 0.03125, 0.0625
+          color: '#B68F0E'
+          shape: CylinderX
+        - label: case rim
+          min: -0.125, -0.0325, 0
+          max: -0.113125, 0.0325, 0.064
+          color: '#A5820D'
+          shape: CylinderX
+        - label: brass upper glint
+          min: -0.110938, -0.001563, 0.058
+          max: 0.021875, 0.020313, 0.066
+          color: '#D7DF60'
+          shape: CylinderX
+        - label: copper forward rounded cap
+          min: 0.017188, -0.03, 0.001
+          max: 0.09375, 0.03, 0.061
+          color: '#9F601F'
+          shape: Ellipsoid
+        - label: copper neck
+          min: 0.021875, -0.02875, 0.002
+          max: 0.05, 0.02875, 0.06
+          color: '#81481D'
+          shape: CylinderX
+      delays:
+      - 1
+    base-spent:
+      frames:
+      - parts:
+        - label: rounded brass case
+          min: -0.0625, -0.03125, 0
+          max: 0.0625, 0.03125, 0.0625
+          color: '#B68F0E'
+          shape: CylinderX
+        - label: case rim
+          min: -0.0625, -0.0325, 0
+          max: -0.050625, 0.0325, 0.064
+          color: '#A5820D'
+          shape: CylinderX
+        - label: brass upper glint
+          min: -0.048438, -0.001563, 0.058
+          max: 0.053125, 0.020313, 0.066
+          color: '#D7DF60'
+          shape: CylinderX
+        - label: dark open spent mouth
+          min: 0.058125, -0.023438, 0.009
+          max: 0.062813, 0.023438, 0.054
+          color: '#81501B'
+          shape: CylinderX
+        - label: spent mouth upper rolled edge
+          min: 0.05375, -0.03, 0.012
+          max: 0.0625, 0.03, 0.059
+          color: '#C6CC59'
+          shape: CylinderX
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DMp5MagazineCloud
+  label: MP5 curved magazine / loaded static study
+  status: draft
+  sourcePrototypes:
+  - CMMagazineSMGMP5
+  referencePrototype: CMMagazineSMGMP5
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Ammunition/Magazines/mp5.rsi
+  referenceState: mag-1
+  sourceDirections: 1
+  placement: surface
+  description: Static source-layer composition only. Separate solid shell, source-shaped
+    shoulder, lips, baseplate and stamped ribs. Original base + mag-1 art is composed
+    for the loaded reference. MagazineVisuals owns two source layers; no single-layer
+    spriteStates adapter or live loaded/empty switch is claimed. Carried and worn
+    states, contents, source-state triggers, depth and map fit remain unverified.
+  parts:
+  - label: curved shell segment 1
+    min: -0.140796, 0.020312, 0.011
+    max: -0.012329, 0.139062, 0.083
+    color: '#1F2527'
+    yaw: -85.815084
+  - label: rounded outer seam 1
+    min: -0.092359, 0.070312, 0.026
+    max: 0.036109, 0.089062, 0.079
+    color: '#535F68'
+    shape: CylinderX
+    yaw: -85.815084
+  - label: inner folded seam 1
+    min: -0.187671, 0.072969, 0.012
+    max: -0.059204, 0.086406, 0.061
+    color: '#101417'
+    shape: CylinderX
+    yaw: -85.815084
+  - label: stamped central trough 1
+    min: -0.13769, 0.067969, 0.083
+    max: -0.021685, 0.085156, 0.088
+    color: '#323B3E'
+    yaw: -85.364537
+  - label: curved shell segment 2
+    min: -0.109399, -0.092188, 0.011
+    max: -0.009351, 0.026562, 0.083
+    color: '#1F2527'
+    yaw: -75.529706
+  - label: rounded outer seam 2
+    min: -0.060962, -0.042188, 0.026
+    max: 0.039087, -0.023438, 0.079
+    color: '#535F68'
+    shape: CylinderX
+    yaw: -75.529706
+  - label: inner folded seam 2
+    min: -0.156274, -0.039531, 0.012
+    max: -0.056226, -0.026094, 0.061
+    color: '#101417'
+    shape: CylinderX
+    yaw: -75.529706
+  - label: stamped central trough 2
+    min: -0.1065, -0.044531, 0.083
+    max: -0.0185, -0.027344, 0.088
+    color: '#323B3E'
+    yaw: -73.495639
+  - label: curved shell segment 3
+    min: -0.06921, -0.178125, 0.011
+    max: 0.016085, -0.059375, 0.083
+    color: '#1F2527'
+    yaw: -61.557071
+  - label: rounded outer seam 3
+    min: -0.020773, -0.128125, 0.026
+    max: 0.064523, -0.109375, 0.079
+    color: '#535F68'
+    shape: CylinderX
+    yaw: -61.557071
+  - label: inner folded seam 3
+    min: -0.116085, -0.125469, 0.012
+    max: -0.03079, -0.112031, 0.061
+    color: '#101417'
+    shape: CylinderX
+    yaw: -61.557071
+  - label: stamped central trough 3
+    min: -0.066959, -0.130469, 0.083
+    max: 0.007584, -0.113281, 0.088
+    color: '#323B3E'
+    yaw: -56.976132
+  - label: curved shell segment 4
+    min: -0.023755, -0.25, 0.011
+    max: 0.061255, -0.13125, 0.083
+    color: '#1F2527'
+    yaw: -53.972627
+  - label: rounded outer seam 4
+    min: 0.024683, -0.2, 0.026
+    max: 0.109692, -0.18125, 0.079
+    color: '#535F68'
+    shape: CylinderX
+    yaw: -53.972627
+  - label: inner folded seam 4
+    min: -0.07063, -0.197344, 0.012
+    max: 0.01438, -0.183906, 0.061
+    color: '#101417'
+    shape: CylinderX
+    yaw: -53.972627
+  - label: stamped central trough 4
+    min: -0.022005, -0.202344, 0.083
+    max: 0.053255, -0.185156, 0.088
+    color: '#323B3E'
+    yaw: -48.366461
+  - label: curved shell junction 1
+    min: -0.129688, -0.03125, 0.012
+    max: -0.014063, 0.0625, 0.082
+    color: '#1F2527'
+    shape: Ellipsoid
+  - label: curved shell junction 2
+    min: -0.104687, -0.128125, 0.012
+    max: 0.010938, -0.034375, 0.082
+    color: '#1F2527'
+    shape: Ellipsoid
+  - label: curved shell junction 3
+    min: -0.064062, -0.203125, 0.012
+    max: 0.051563, -0.109375, 0.082
+    color: '#1F2527'
+    shape: Ellipsoid
+  - label: raised feed collar
+    min: -0.125, 0.117188, 0.016
+    max: -0.009375, 0.18125, 0.094
+    color: '#1F2527'
+  - label: feed opening shadow
+    min: -0.11875, 0.134375, 0.082
+    max: -0.025, 0.165625, 0.087
+    color: '#101417'
+  - label: left rolled feed lip
+    min: -0.133463, 0.15125, 0.074
+    max: -0.091537, 0.164375, 0.106
+    color: '#535F68'
+    shape: CylinderX
+    yaw: 26.565051
+  - label: right rolled feed lip
+    min: -0.0875, 0.123125, 0.074
+    max: -0.020313, 0.13625, 0.106
+    color: '#717E87'
+    shape: CylinderX
+    yaw: 0.0
+  - label: reinforced angled baseplate
+    min: 0.005306, -0.259375, 0
+    max: 0.099381, -0.221875, 0.104
+    color: '#101417'
+    yaw: -11.496563
+  - label: baseplate upper seam
+    min: 0.003805, -0.236719, 0.103
+    max: 0.088382, -0.227344, 0.108
+    color: '#323B3E'
+    yaw: -11.725112
+  - label: source visible brass accent
+    min: -0.0625, 0.15625, 0.088
+    max: 0.0, 0.1875, 0.112
+    color: '#C18723'
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DMp5MagazineCloudEmptyStudy
+  label: MP5 curved magazine / empty static study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMMagazineSMGMP5
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Ammunition/Magazines/mp5.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: Static source-layer composition only. Separate solid shell, source-shaped
+    shoulder, lips, baseplate and stamped ribs. Original base art is the empty study.
+    No exact prototype mappings are added for this alternate. MagazineVisuals owns
+    two source layers; no single-layer spriteStates adapter or live loaded/empty switch
+    is claimed. Carried and worn states, contents, source-state triggers, depth and
+    map fit remain unverified.
+  parts:
+  - label: curved shell segment 1
+    min: -0.140796, 0.020312, 0.011
+    max: -0.012329, 0.139062, 0.083
+    color: '#1F2527'
+    yaw: -85.815084
+  - label: rounded outer seam 1
+    min: -0.092359, 0.070312, 0.026
+    max: 0.036109, 0.089062, 0.079
+    color: '#535F68'
+    shape: CylinderX
+    yaw: -85.815084
+  - label: inner folded seam 1
+    min: -0.187671, 0.072969, 0.012
+    max: -0.059204, 0.086406, 0.061
+    color: '#101417'
+    shape: CylinderX
+    yaw: -85.815084
+  - label: stamped central trough 1
+    min: -0.13769, 0.067969, 0.083
+    max: -0.021685, 0.085156, 0.088
+    color: '#323B3E'
+    yaw: -85.364537
+  - label: curved shell segment 2
+    min: -0.109399, -0.092188, 0.011
+    max: -0.009351, 0.026562, 0.083
+    color: '#1F2527'
+    yaw: -75.529706
+  - label: rounded outer seam 2
+    min: -0.060962, -0.042188, 0.026
+    max: 0.039087, -0.023438, 0.079
+    color: '#535F68'
+    shape: CylinderX
+    yaw: -75.529706
+  - label: inner folded seam 2
+    min: -0.156274, -0.039531, 0.012
+    max: -0.056226, -0.026094, 0.061
+    color: '#101417'
+    shape: CylinderX
+    yaw: -75.529706
+  - label: stamped central trough 2
+    min: -0.1065, -0.044531, 0.083
+    max: -0.0185, -0.027344, 0.088
+    color: '#323B3E'
+    yaw: -73.495639
+  - label: curved shell segment 3
+    min: -0.06921, -0.178125, 0.011
+    max: 0.016085, -0.059375, 0.083
+    color: '#1F2527'
+    yaw: -61.557071
+  - label: rounded outer seam 3
+    min: -0.020773, -0.128125, 0.026
+    max: 0.064523, -0.109375, 0.079
+    color: '#535F68'
+    shape: CylinderX
+    yaw: -61.557071
+  - label: inner folded seam 3
+    min: -0.116085, -0.125469, 0.012
+    max: -0.03079, -0.112031, 0.061
+    color: '#101417'
+    shape: CylinderX
+    yaw: -61.557071
+  - label: stamped central trough 3
+    min: -0.066959, -0.130469, 0.083
+    max: 0.007584, -0.113281, 0.088
+    color: '#323B3E'
+    yaw: -56.976132
+  - label: curved shell segment 4
+    min: -0.023755, -0.25, 0.011
+    max: 0.061255, -0.13125, 0.083
+    color: '#1F2527'
+    yaw: -53.972627
+  - label: rounded outer seam 4
+    min: 0.024683, -0.2, 0.026
+    max: 0.109692, -0.18125, 0.079
+    color: '#535F68'
+    shape: CylinderX
+    yaw: -53.972627
+  - label: inner folded seam 4
+    min: -0.07063, -0.197344, 0.012
+    max: 0.01438, -0.183906, 0.061
+    color: '#101417'
+    shape: CylinderX
+    yaw: -53.972627
+  - label: stamped central trough 4
+    min: -0.022005, -0.202344, 0.083
+    max: 0.053255, -0.185156, 0.088
+    color: '#323B3E'
+    yaw: -48.366461
+  - label: curved shell junction 1
+    min: -0.129688, -0.03125, 0.012
+    max: -0.014063, 0.0625, 0.082
+    color: '#1F2527'
+    shape: Ellipsoid
+  - label: curved shell junction 2
+    min: -0.104687, -0.128125, 0.012
+    max: 0.010938, -0.034375, 0.082
+    color: '#1F2527'
+    shape: Ellipsoid
+  - label: curved shell junction 3
+    min: -0.064062, -0.203125, 0.012
+    max: 0.051563, -0.109375, 0.082
+    color: '#1F2527'
+    shape: Ellipsoid
+  - label: raised feed collar
+    min: -0.125, 0.117188, 0.016
+    max: -0.009375, 0.18125, 0.094
+    color: '#1F2527'
+  - label: feed opening shadow
+    min: -0.11875, 0.134375, 0.082
+    max: -0.025, 0.165625, 0.087
+    color: '#101417'
+  - label: left rolled feed lip
+    min: -0.133463, 0.15125, 0.074
+    max: -0.091537, 0.164375, 0.106
+    color: '#535F68'
+    shape: CylinderX
+    yaw: 26.565051
+  - label: right rolled feed lip
+    min: -0.0875, 0.123125, 0.074
+    max: -0.020313, 0.13625, 0.106
+    color: '#717E87'
+    shape: CylinderX
+    yaw: 0.0
+  - label: reinforced angled baseplate
+    min: 0.005306, -0.259375, 0
+    max: 0.099381, -0.221875, 0.104
+    color: '#101417'
+    yaw: -11.496563
+  - label: baseplate upper seam
+    min: 0.003805, -0.236719, 0.103
+    max: 0.088382, -0.227344, 0.108
+    color: '#323B3E'
+    yaw: -11.725112
+- type: cmu3DModel
+  id: CMU3DHuntingMagazineCloud
+  label: Hunting rifle short magazine / loaded static study
+  status: draft
+  sourcePrototypes:
+  - RMCMagazineRifleHunting
+  referencePrototype: RMCMagazineRifleHunting
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Ammunition/Magazines/hunting.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: Static source-layer composition only. Separate solid shell, source-shaped
+    shoulder, lips, baseplate and stamped ribs. Original base + mag-1 art is composed
+    for the loaded reference. MagazineVisuals owns two source layers; no single-layer
+    spriteStates adapter or live loaded/empty switch is claimed. Carried and worn
+    states, contents, source-state triggers, depth and map fit remain unverified.
+  parts:
+  - label: stepped rear shoulder
+    min: -0.21875, 0.028125, 0.012
+    max: -0.03125, 0.125, 0.094
+    color: '#171A1D'
+  - label: short upper shell
+    min: -0.21875, -0.053125, 0.009
+    max: 0.1875, 0.046875, 0.097
+    color: '#333538'
+  - label: tapered lower shell
+    min: -0.203125, -0.1375, 0.003
+    max: 0.171875, -0.03125, 0.084
+    color: '#202123'
+    shape: Ellipsoid
+  - label: lower flat center
+    min: -0.15625, -0.134375, 0.003
+    max: 0.140625, -0.03125, 0.081
+    color: '#202123'
+  - label: upper feed rail
+    min: -0.20625, 0.039844, 0.08
+    max: 0.170312, 0.057031, 0.111
+    color: '#0E0E10'
+    yaw: 0.0
+  - label: lower baseplate
+    min: -0.178125, -0.141406, 0
+    max: 0.153125, -0.117969, 0.097
+    color: '#0E0E10'
+    yaw: 0.0
+  - label: broad stamped horizontal flute 1
+    min: -0.165625, -0.004688, 0.096
+    max: 0.14375, 0.020313, 0.106
+    color: '#42474A'
+    yaw: 0.0
+  - label: flute upper reflection 1
+    min: -0.1375, 0.010781, 0.106
+    max: 0.109375, 0.020469, 0.111
+    color: '#5C626A'
+    yaw: 0.0
+  - label: broad stamped horizontal flute 2
+    min: -0.165625, -0.0625, 0.096
+    max: 0.14375, -0.0375, 0.106
+    color: '#42474A'
+    yaw: 0.0
+  - label: flute upper reflection 2
+    min: -0.1375, -0.047031, 0.106
+    max: 0.109375, -0.037344, 0.111
+    color: '#5C626A'
+    yaw: 0.0
+  - label: left turned seam
+    min: -0.307813, -0.020313, 0.062
+    max: -0.107812, -0.004688, 0.105
+    color: '#333538'
+    yaw: -90.0
+  - label: bottom indexing lug
+    min: -0.125, -0.135938, 0.069
+    max: -0.059375, -0.078125, 0.11
+    color: '#333538'
+  - label: feed opening recess
+    min: -0.03125, 0.048438, 0.075
+    max: 0.15625, 0.070312, 0.079
+    color: '#0E0E10'
+  - label: visible brass source stripe
+    min: -0.03125, 0.0625, 0.09
+    max: 0.15625, 0.09375, 0.12
+    color: '#8C5A00'
+    shape: CylinderX
+  - label: brass stripe highlight
+    min: 0.03125, 0.06875, 0.11
+    max: 0.09375, 0.09375, 0.123
+    color: '#B57300'
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DHuntingMagazineCloudEmptyStudy
+  label: Hunting rifle short magazine / empty static study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCMagazineRifleHunting
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Ammunition/Magazines/hunting.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: Static source-layer composition only. Separate solid shell, source-shaped
+    shoulder, lips, baseplate and stamped ribs. Original base art is the empty study.
+    No exact prototype mappings are added for this alternate. MagazineVisuals owns
+    two source layers; no single-layer spriteStates adapter or live loaded/empty switch
+    is claimed. Carried and worn states, contents, source-state triggers, depth and
+    map fit remain unverified.
+  parts:
+  - label: stepped rear shoulder
+    min: -0.21875, 0.028125, 0.012
+    max: -0.03125, 0.125, 0.094
+    color: '#171A1D'
+  - label: short upper shell
+    min: -0.21875, -0.053125, 0.009
+    max: 0.1875, 0.046875, 0.097
+    color: '#333538'
+  - label: tapered lower shell
+    min: -0.203125, -0.1375, 0.003
+    max: 0.171875, -0.03125, 0.084
+    color: '#202123'
+    shape: Ellipsoid
+  - label: lower flat center
+    min: -0.15625, -0.134375, 0.003
+    max: 0.140625, -0.03125, 0.081
+    color: '#202123'
+  - label: upper feed rail
+    min: -0.20625, 0.039844, 0.08
+    max: 0.170312, 0.057031, 0.111
+    color: '#0E0E10'
+    yaw: 0.0
+  - label: lower baseplate
+    min: -0.178125, -0.141406, 0
+    max: 0.153125, -0.117969, 0.097
+    color: '#0E0E10'
+    yaw: 0.0
+  - label: broad stamped horizontal flute 1
+    min: -0.165625, -0.004688, 0.096
+    max: 0.14375, 0.020313, 0.106
+    color: '#42474A'
+    yaw: 0.0
+  - label: flute upper reflection 1
+    min: -0.1375, 0.010781, 0.106
+    max: 0.109375, 0.020469, 0.111
+    color: '#5C626A'
+    yaw: 0.0
+  - label: broad stamped horizontal flute 2
+    min: -0.165625, -0.0625, 0.096
+    max: 0.14375, -0.0375, 0.106
+    color: '#42474A'
+    yaw: 0.0
+  - label: flute upper reflection 2
+    min: -0.1375, -0.047031, 0.106
+    max: 0.109375, -0.037344, 0.111
+    color: '#5C626A'
+    yaw: 0.0
+  - label: left turned seam
+    min: -0.307813, -0.020313, 0.062
+    max: -0.107812, -0.004688, 0.105
+    color: '#333538'
+    yaw: -90.0
+  - label: bottom indexing lug
+    min: -0.125, -0.135938, 0.069
+    max: -0.059375, -0.078125, 0.11
+    color: '#333538'
+  - label: feed opening recess
+    min: -0.03125, 0.048438, 0.075
+    max: 0.15625, 0.070312, 0.079
+    color: '#0E0E10'
+- type: cmu3DModel
+  id: CMU3DABR40MagazineCloud
+  label: ABR-40 short magazine / loaded static study
+  status: draft
+  sourcePrototypes:
+  - RMCMagazineRifleABR40
+  referencePrototype: RMCMagazineRifleABR40
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Ammunition/Magazines/abr40.rsi
+  referenceState: mag-1
+  sourceDirections: 1
+  placement: surface
+  description: Static source-layer composition only. Separate solid shell, source-shaped
+    shoulder, lips, baseplate and stamped ribs. Original base + mag-1 art is composed
+    for the loaded reference. MagazineVisuals owns two source layers; no single-layer
+    spriteStates adapter or live loaded/empty switch is claimed. Carried and worn
+    states, contents, source-state triggers, depth and map fit remain unverified.
+  parts:
+  - label: short broad shell
+    min: -0.125, -0.075, 0.008
+    max: 0.1875, 0.125, 0.089
+    color: '#212223'
+  - label: raised asymmetric rear neck
+    min: -0.10625, 0.090625, 0.018
+    max: 0.0, 0.1875, 0.092
+    color: '#181A1C'
+  - label: rounded bottom shoulder
+    min: -0.09375, -0.09375, 0.002
+    max: 0.175, -0.03125, 0.085
+    color: '#0F0F10'
+    shape: Ellipsoid
+  - label: lower offset heel
+    min: -0.0625, -0.125, 0.005
+    max: 0.03125, -0.046875, 0.071
+    color: '#212223'
+  - label: heel cap
+    min: -0.0625, -0.125, 0
+    max: 0.00625, -0.098437, 0.088
+    color: '#0F0F10'
+  - label: upper rolled lip
+    min: -0.1, 0.100312, 0.07
+    max: 0.16875, 0.118438, 0.102
+    color: '#0F0F10'
+    yaw: 0.0
+  - label: raised horizontal shell rib
+    min: -0.0875, 0.043438, 0.089
+    max: 0.15, 0.069063, 0.103
+    color: '#444749'
+    yaw: 0.0
+  - label: rib upper highlight
+    min: -0.059375, 0.06, 0.103
+    max: 0.125, 0.07, 0.107
+    color: '#5F6368'
+    yaw: 0.0
+  - label: short lower pressed flute 1
+    min: -0.075136, -0.030313, 0.088
+    max: -0.002989, -0.010313, 0.103
+    color: '#343537'
+    yaw: -107.650124
+  - label: short lower pressed flute 2
+    min: -0.006386, -0.030313, 0.088
+    max: 0.065761, -0.010313, 0.103
+    color: '#343537'
+    yaw: -107.650124
+  - label: short lower pressed flute 3
+    min: 0.065489, -0.030313, 0.088
+    max: 0.137636, -0.010313, 0.103
+    color: '#343537'
+    yaw: -107.650124
+  - label: left folded edge
+    min: -0.204687, 0.032812, 0.04
+    max: -0.010937, 0.048437, 0.106
+    color: '#343537'
+    yaw: -90.0
+  - label: feed recess
+    min: 0.0, 0.121875, 0.08
+    max: 0.134375, 0.134375, 0.084
+    color: '#0F0F10'
+  - label: brass source stripe
+    min: 0.0, 0.125, 0.089
+    max: 0.125, 0.15625, 0.115
+    color: '#9C6C19'
+    shape: CylinderX
+  - label: stripe dark end
+    min: 0.0, 0.125, 0.09
+    max: 0.0375, 0.15625, 0.116
+    color: '#855807'
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DABR40MagazineCloudEmptyStudy
+  label: ABR-40 short magazine / empty static study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCMagazineRifleABR40
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Ammunition/Magazines/abr40.rsi
+  referenceState: base
+  sourceDirections: 1
+  placement: surface
+  description: Static source-layer composition only. Separate solid shell, source-shaped
+    shoulder, lips, baseplate and stamped ribs. Original base art is the empty study.
+    No exact prototype mappings are added for this alternate. MagazineVisuals owns
+    two source layers; no single-layer spriteStates adapter or live loaded/empty switch
+    is claimed. Carried and worn states, contents, source-state triggers, depth and
+    map fit remain unverified.
+  parts:
+  - label: short broad shell
+    min: -0.125, -0.075, 0.008
+    max: 0.1875, 0.125, 0.089
+    color: '#212223'
+  - label: raised asymmetric rear neck
+    min: -0.10625, 0.090625, 0.018
+    max: 0.0, 0.1875, 0.092
+    color: '#181A1C'
+  - label: rounded bottom shoulder
+    min: -0.09375, -0.09375, 0.002
+    max: 0.175, -0.03125, 0.085
+    color: '#0F0F10'
+    shape: Ellipsoid
+  - label: lower offset heel
+    min: -0.0625, -0.125, 0.005
+    max: 0.03125, -0.046875, 0.071
+    color: '#212223'
+  - label: heel cap
+    min: -0.0625, -0.125, 0
+    max: 0.00625, -0.098437, 0.088
+    color: '#0F0F10'
+  - label: upper rolled lip
+    min: -0.1, 0.100312, 0.07
+    max: 0.16875, 0.118438, 0.102
+    color: '#0F0F10'
+    yaw: 0.0
+  - label: raised horizontal shell rib
+    min: -0.0875, 0.043438, 0.089
+    max: 0.15, 0.069063, 0.103
+    color: '#444749'
+    yaw: 0.0
+  - label: rib upper highlight
+    min: -0.059375, 0.06, 0.103
+    max: 0.125, 0.07, 0.107
+    color: '#5F6368'
+    yaw: 0.0
+  - label: short lower pressed flute 1
+    min: -0.075136, -0.030313, 0.088
+    max: -0.002989, -0.010313, 0.103
+    color: '#343537'
+    yaw: -107.650124
+  - label: short lower pressed flute 2
+    min: -0.006386, -0.030313, 0.088
+    max: 0.065761, -0.010313, 0.103
+    color: '#343537'
+    yaw: -107.650124
+  - label: short lower pressed flute 3
+    min: 0.065489, -0.030313, 0.088
+    max: 0.137636, -0.010313, 0.103
+    color: '#343537'
+    yaw: -107.650124
+  - label: left folded edge
+    min: -0.204687, 0.032812, 0.04
+    max: -0.010937, 0.048437, 0.106
+    color: '#343537'
+    yaw: -90.0
+  - label: feed recess
+    min: 0.0, 0.121875, 0.08
+    max: 0.134375, 0.134375, 0.084
+    color: '#0F0F10'
+- type: cmu3DModel
+  id: CMU3DTearGasPacketCloud
+  label: M19-NL tear-gas packet / closed static study
+  status: draft
+  sourcePrototypes:
+  - AU14PacketGrenadeTearGasFilled
+  referencePrototype: AU14PacketGrenadeTearGasFilled
+  referenceRsi: /Textures/_RMC14/Objects/Storage/packets.rsi
+  referenceState: teargas_packet
+  sourceDirections: 1
+  placement: surface
+  description: Separate cardboard bottom, four walls, folded edges, paired closure
+    flaps and top lip. Original tiny label crops are unresampled. CMStorageVisualizer
+    owns closed/open/empty source layers; this static study does not claim a live
+    adapter, container contents or interaction. No whole-icon slab. Depth, hidden
+    construction, map fit and native appearance remain draft.
+  parts:
+  - label: carton bottom
+    min: -0.25, -0.145, 0
+    max: 0.25, 0.145, 0.027
+    color: '#161616'
+  - label: front cardboard wall
+    min: -0.25, -0.145, 0.021
+    max: 0.25, -0.123, 0.22
+    color: '#272727'
+  - label: back cardboard wall
+    min: -0.25, 0.123, 0.021
+    max: 0.25, 0.145, 0.22
+    color: '#272727'
+  - label: left folded cardboard wall
+    min: -0.25, -0.123, 0.022
+    max: -0.228, 0.123, 0.219
+    color: '#212121'
+  - label: left vertical fold edge
+    min: -0.25, -0.151, 0.023
+    max: -0.225, -0.143, 0.216
+    color: '#383839'
+  - label: right folded cardboard wall
+    min: 0.228, -0.123, 0.022
+    max: 0.25, 0.123, 0.219
+    color: '#212121'
+  - label: right vertical fold edge
+    min: 0.228, -0.151, 0.023
+    max: 0.253, -0.143, 0.216
+    color: '#383839'
+  - label: front bottom rolled seam
+    min: -0.25, -0.15, 0.006
+    max: 0.25, -0.14, 0.03
+    color: '#0C0D0E'
+  - label: left top closure flap
+    min: -0.249, -0.142, 0.219
+    max: -0.003, 0.142, 0.232
+    color: '#383839'
+  - label: right top closure flap
+    min: 0.003, -0.142, 0.219
+    max: 0.249, 0.142, 0.232
+    color: '#414142'
+  - label: closure tuck seam
+    min: -0.003, -0.142, 0.219
+    max: 0.003, 0.142, 0.228
+    color: '#212121'
+  - label: front lid folded lip
+    min: -0.244, -0.15, 0.204
+    max: 0.244, -0.137, 0.229
+    color: '#313030'
+  - label: rear lid folded lip
+    min: -0.243, 0.135, 0.204
+    max: 0.243, 0.151, 0.229
+    color: '#313030'
+  - label: exact original pale lid symbol
+    min: -0.095, -0.045, 0.233
+    max: 0.06125, 0.04875, 0.235
+    color: '#FFFFFF'
+    surface: CMU3DAmmoCloudTearGasLidIdentity
+    surfaceAxis: XY
+  - label: original red blue and pale front legend
+    min: -0.095, -0.151, 0.046
+    max: 0.06125, -0.149, 0.13975
+    color: '#FFFFFF'
+    surface: CMU3DAmmoCloudTearGasClosedFrontLegend
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DTearGasPacketCloudOpenStudy
+  label: M19-NL tear-gas packet / open-empty static study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: AU14PacketGrenadeTearGasFilled
+  referenceRsi: /Textures/_RMC14/Objects/Storage/packets.rsi
+  referenceState: teargas_packet_e
+  sourceDirections: 1
+  placement: surface
+  description: Separate cardboard bottom, four walls, folded edges, empty interior
+    and released tuck flaps. Original tiny label crops are unresampled. CMStorageVisualizer
+    owns closed/open/empty source layers; this static study does not claim a live
+    adapter, container contents or interaction. No whole-icon slab. Depth, hidden
+    construction, map fit and native appearance remain draft.
+  parts:
+  - label: carton bottom
+    min: -0.25, -0.145, 0
+    max: 0.25, 0.145, 0.027
+    color: '#161616'
+  - label: front cardboard wall
+    min: -0.25, -0.145, 0.021
+    max: 0.25, -0.123, 0.22
+    color: '#272727'
+  - label: back cardboard wall
+    min: -0.25, 0.123, 0.021
+    max: 0.25, 0.145, 0.22
+    color: '#272727'
+  - label: left folded cardboard wall
+    min: -0.25, -0.123, 0.022
+    max: -0.228, 0.123, 0.219
+    color: '#212121'
+  - label: left vertical fold edge
+    min: -0.25, -0.151, 0.023
+    max: -0.225, -0.143, 0.216
+    color: '#383839'
+  - label: right folded cardboard wall
+    min: 0.228, -0.123, 0.022
+    max: 0.25, 0.123, 0.219
+    color: '#212121'
+  - label: right vertical fold edge
+    min: 0.228, -0.151, 0.023
+    max: 0.253, -0.143, 0.216
+    color: '#383839'
+  - label: front bottom rolled seam
+    min: -0.25, -0.15, 0.006
+    max: 0.25, -0.14, 0.03
+    color: '#0C0D0E'
+  - label: visible empty carton lining
+    min: -0.227, -0.121, 0.027
+    max: 0.227, 0.121, 0.032
+    color: '#0C0D0E'
+  - label: left opened folded flap
+    min: -0.327, -0.125, 0.03
+    max: -0.23, 0.135, 0.046
+    color: '#212121'
+    pitch: -14
+  - label: front opened tuck flap
+    min: -0.258, -0.207, 0.015
+    max: 0.193, -0.14, 0.029
+    color: '#0C0D0E'
+  - label: rear opened upper rim
+    min: -0.246, 0.123, 0.212
+    max: 0.245, 0.153, 0.229
+    color: '#383839'
+  - label: left upper rim
+    min: -0.252, -0.125, 0.212
+    max: -0.221, 0.126, 0.229
+    color: '#383839'
+  - label: right upper rim
+    min: 0.22, -0.125, 0.212
+    max: 0.251, 0.126, 0.229
+    color: '#383839'
+  - label: original red blue and pale front legend
+    min: -0.095, -0.151, 0.046
+    max: 0.06125, -0.149, 0.13975
+    color: '#FFFFFF'
+    surface: CMU3DAmmoCloudTearGasEmptyFrontLegend
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DAirburstPacketCloud
+  label: M74 AGM-PDC airburst packet / closed static study
+  status: draft
+  sourcePrototypes:
+  - AU14PacketGrenadeTearGasFilledAirburst
+  referencePrototype: AU14PacketGrenadeTearGasFilledAirburst
+  referenceRsi: /Textures/_RMC14/Objects/Storage/packets.rsi
+  referenceState: teargas_airburst_packet
+  sourceDirections: 1
+  placement: surface
+  description: Separate cardboard bottom, four walls, folded edges, paired closure
+    flaps and top lip. Original tiny label crops are unresampled. CMStorageVisualizer
+    owns closed/open/empty source layers; this static study does not claim a live
+    adapter, container contents or interaction. No whole-icon slab. Depth, hidden
+    construction, map fit and native appearance remain draft.
+  parts:
+  - label: carton bottom
+    min: -0.25, -0.145, 0
+    max: 0.25, 0.145, 0.027
+    color: '#161616'
+  - label: front cardboard wall
+    min: -0.25, -0.145, 0.021
+    max: 0.25, -0.123, 0.22
+    color: '#272727'
+  - label: back cardboard wall
+    min: -0.25, 0.123, 0.021
+    max: 0.25, 0.145, 0.22
+    color: '#272727'
+  - label: left folded cardboard wall
+    min: -0.25, -0.123, 0.022
+    max: -0.228, 0.123, 0.219
+    color: '#212121'
+  - label: left vertical fold edge
+    min: -0.25, -0.151, 0.023
+    max: -0.225, -0.143, 0.216
+    color: '#383839'
+  - label: right folded cardboard wall
+    min: 0.228, -0.123, 0.022
+    max: 0.25, 0.123, 0.219
+    color: '#212121'
+  - label: right vertical fold edge
+    min: 0.228, -0.151, 0.023
+    max: 0.253, -0.143, 0.216
+    color: '#383839'
+  - label: front bottom rolled seam
+    min: -0.25, -0.15, 0.006
+    max: 0.25, -0.14, 0.03
+    color: '#0C0D0E'
+  - label: left top closure flap
+    min: -0.249, -0.142, 0.219
+    max: -0.003, 0.142, 0.232
+    color: '#383839'
+  - label: right top closure flap
+    min: 0.003, -0.142, 0.219
+    max: 0.249, 0.142, 0.232
+    color: '#414142'
+  - label: closure tuck seam
+    min: -0.003, -0.142, 0.219
+    max: 0.003, 0.142, 0.228
+    color: '#212121'
+  - label: front lid folded lip
+    min: -0.244, -0.15, 0.204
+    max: 0.244, -0.137, 0.229
+    color: '#313030'
+  - label: rear lid folded lip
+    min: -0.243, 0.135, 0.204
+    max: 0.243, 0.151, 0.229
+    color: '#313030'
+  - label: exact original pale lid symbol
+    min: -0.095, -0.045, 0.233
+    max: 0.06125, 0.04875, 0.235
+    color: '#FFFFFF'
+    surface: CMU3DAmmoCloudAirburstLidIdentity
+    surfaceAxis: XY
+  - label: original red blue and pale front legend
+    min: -0.095, -0.151, 0.046
+    max: 0.06125, -0.149, 0.13975
+    color: '#FFFFFF'
+    surface: CMU3DAmmoCloudAirburstClosedFrontLegend
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DAirburstPacketCloudOpenStudy
+  label: M74 AGM-PDC airburst packet / open-empty static study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: AU14PacketGrenadeTearGasFilledAirburst
+  referenceRsi: /Textures/_RMC14/Objects/Storage/packets.rsi
+  referenceState: teargas_airburst_packet_e
+  sourceDirections: 1
+  placement: surface
+  description: Separate cardboard bottom, four walls, folded edges, empty interior
+    and released tuck flaps. Original tiny label crops are unresampled. CMStorageVisualizer
+    owns closed/open/empty source layers; this static study does not claim a live
+    adapter, container contents or interaction. No whole-icon slab. Depth, hidden
+    construction, map fit and native appearance remain draft.
+  parts:
+  - label: carton bottom
+    min: -0.25, -0.145, 0
+    max: 0.25, 0.145, 0.027
+    color: '#161616'
+  - label: front cardboard wall
+    min: -0.25, -0.145, 0.021
+    max: 0.25, -0.123, 0.22
+    color: '#272727'
+  - label: back cardboard wall
+    min: -0.25, 0.123, 0.021
+    max: 0.25, 0.145, 0.22
+    color: '#272727'
+  - label: left folded cardboard wall
+    min: -0.25, -0.123, 0.022
+    max: -0.228, 0.123, 0.219
+    color: '#212121'
+  - label: left vertical fold edge
+    min: -0.25, -0.151, 0.023
+    max: -0.225, -0.143, 0.216
+    color: '#383839'
+  - label: right folded cardboard wall
+    min: 0.228, -0.123, 0.022
+    max: 0.25, 0.123, 0.219
+    color: '#212121'
+  - label: right vertical fold edge
+    min: 0.228, -0.151, 0.023
+    max: 0.253, -0.143, 0.216
+    color: '#383839'
+  - label: front bottom rolled seam
+    min: -0.25, -0.15, 0.006
+    max: 0.25, -0.14, 0.03
+    color: '#0C0D0E'
+  - label: visible empty carton lining
+    min: -0.227, -0.121, 0.027
+    max: 0.227, 0.121, 0.032
+    color: '#0C0D0E'
+  - label: left opened folded flap
+    min: -0.327, -0.125, 0.03
+    max: -0.23, 0.135, 0.046
+    color: '#212121'
+    pitch: -14
+  - label: front opened tuck flap
+    min: -0.258, -0.207, 0.015
+    max: 0.193, -0.14, 0.029
+    color: '#0C0D0E'
+  - label: rear opened upper rim
+    min: -0.246, 0.123, 0.212
+    max: 0.245, 0.153, 0.229
+    color: '#383839'
+  - label: left upper rim
+    min: -0.252, -0.125, 0.212
+    max: -0.221, 0.126, 0.229
+    color: '#383839'
+  - label: right upper rim
+    min: 0.22, -0.125, 0.212
+    max: 0.251, 0.126, 0.229
+    color: '#383839'
+  - label: original red blue and pale front legend
+    min: -0.095, -0.151, 0.046
+    max: 0.06125, -0.149, 0.13975
+    color: '#FFFFFF'
+    surface: CMU3DAmmoCloudAirburstEmptyFrontLegend
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DLargeMagazinePouchCloud
+  label: Four-pocket large magazine pouch / closed static study
+  status: draft
+  sourcePrototypes:
+  - AU14PouchMagazineLargeFilledM16
+  - RMCPouchMagazineLargeMP5
+  referencePrototype: AU14PouchMagazineLargeFilledM16
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Pouches/large_ammo_mag.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Shared identical large_ammo_mag world artwork for the exact M16-filled
+    and MP5-filled source IDs. Four separate soft compartments, compressed folds,
+    seam bindings, closure caps and inferred rear attachment loops. The composed closed
+    overlay covers all four upper pockets. CMStorageVisualizer owns multiple layers;
+    no single-layer adapter, contents geometry, inventory count or worn state is asserted.
+    Rear construction, cloth deformation, depth, map fit and native interaction remain
+    draft.
+  parts:
+  - label: continuous rear woven backing
+    min: -0.375, 0.069, 0.021
+    max: 0.40625, 0.088, 0.371
+    color: '#402C26'
+  - label: pocket 1 soft curved body
+    min: -0.359375, -0.081, 0.008
+    max: -0.203125, 0.081, 0.307
+    color: '#7D4C40'
+    shape: Ellipsoid
+  - label: pocket 1 broad soft front
+    min: -0.343375, -0.087, 0.061
+    max: -0.219125, -0.048, 0.289
+    color: '#7D4C40'
+    shape: Ellipsoid
+  - label: pocket 1 left seam
+    min: -0.363375, -0.032, 0.032
+    max: -0.351375, 0.027, 0.35
+    color: '#4E3028'
+    shape: CylinderZ
+  - label: pocket 1 right seam
+    min: -0.211125, -0.036, 0.032
+    max: -0.199125, 0.027, 0.35
+    color: '#402C26'
+    shape: CylinderZ
+  - label: pocket 1 bottom sewn binding
+    min: -0.349375, -0.042, 0.009
+    max: -0.213125, 0.038, 0.04
+    color: '#694037'
+    shape: CylinderX
+  - label: pocket 1 lower compressed fabric fold
+    min: -0.348375, -0.088, 0.078
+    max: -0.218125, -0.064, 0.106
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 1 lower fold lit ridge
+    min: -0.341375, -0.092, 0.102
+    max: -0.225125, -0.071, 0.118
+    color: '#A86C55'
+    shape: CylinderX
+  - label: pocket 1 rear attachment strip
+    min: -0.309375, 0.089, 0.069
+    max: -0.260375, 0.103, 0.315
+    color: '#694037'
+  - label: pocket 1 rear loop upper fold
+    min: -0.311375, 0.082, 0.299
+    max: -0.258375, 0.12, 0.326
+    color: '#7D4C40'
+    shape: CylinderX
+  - label: pocket 1 rear loop lower fold
+    min: -0.311375, 0.082, 0.06
+    max: -0.258375, 0.12, 0.087
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 1 rounded closure crown
+    min: -0.365375, -0.065, 0.279
+    max: -0.197125, 0.074, 0.4
+    color: '#A86C55'
+    shape: CylinderX
+  - label: pocket 1 drooping flap face
+    min: -0.357375, -0.087, 0.25
+    max: -0.205125, -0.058, 0.345
+    color: '#694037'
+    shape: WedgeYReverse
+  - label: pocket 1 flap edge
+    min: -0.354375, -0.091, 0.256
+    max: -0.208125, -0.07, 0.279
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 1 flap highlight
+    min: -0.347375, -0.069, 0.346
+    max: -0.224125, -0.046, 0.379
+    color: '#A86C55'
+  - label: pocket 2 soft curved body
+    min: -0.171875, -0.081, 0.008
+    max: -0.015625, 0.081, 0.307
+    color: '#7D4C40'
+    shape: Ellipsoid
+  - label: pocket 2 broad soft front
+    min: -0.155875, -0.087, 0.061
+    max: -0.031625, -0.048, 0.289
+    color: '#7D4C40'
+    shape: Ellipsoid
+  - label: pocket 2 left seam
+    min: -0.175875, -0.032, 0.032
+    max: -0.163875, 0.027, 0.35
+    color: '#4E3028'
+    shape: CylinderZ
+  - label: pocket 2 right seam
+    min: -0.023625, -0.036, 0.032
+    max: -0.011625, 0.027, 0.35
+    color: '#402C26'
+    shape: CylinderZ
+  - label: pocket 2 bottom sewn binding
+    min: -0.161875, -0.042, 0.009
+    max: -0.025625, 0.038, 0.04
+    color: '#694037'
+    shape: CylinderX
+  - label: pocket 2 lower compressed fabric fold
+    min: -0.160875, -0.088, 0.078
+    max: -0.030625, -0.064, 0.106
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 2 lower fold lit ridge
+    min: -0.153875, -0.092, 0.102
+    max: -0.037625, -0.071, 0.118
+    color: '#A86C55'
+    shape: CylinderX
+  - label: pocket 2 rear attachment strip
+    min: -0.121875, 0.089, 0.069
+    max: -0.072875, 0.103, 0.315
+    color: '#694037'
+  - label: pocket 2 rear loop upper fold
+    min: -0.123875, 0.082, 0.299
+    max: -0.070875, 0.12, 0.326
+    color: '#7D4C40'
+    shape: CylinderX
+  - label: pocket 2 rear loop lower fold
+    min: -0.123875, 0.082, 0.06
+    max: -0.070875, 0.12, 0.087
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 2 rounded closure crown
+    min: -0.177875, -0.065, 0.279
+    max: -0.009625, 0.074, 0.4
+    color: '#A86C55'
+    shape: CylinderX
+  - label: pocket 2 drooping flap face
+    min: -0.169875, -0.087, 0.25
+    max: -0.017625, -0.058, 0.345
+    color: '#694037'
+    shape: WedgeYReverse
+  - label: pocket 2 flap edge
+    min: -0.166875, -0.091, 0.256
+    max: -0.020625, -0.07, 0.279
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 2 flap highlight
+    min: -0.159875, -0.069, 0.346
+    max: -0.036625, -0.046, 0.379
+    color: '#A86C55'
+  - label: pocket 3 soft curved body
+    min: 0.015625, -0.081, 0.008
+    max: 0.171875, 0.081, 0.307
+    color: '#7D4C40'
+    shape: Ellipsoid
+  - label: pocket 3 broad soft front
+    min: 0.031625, -0.087, 0.061
+    max: 0.155875, -0.048, 0.289
+    color: '#7D4C40'
+    shape: Ellipsoid
+  - label: pocket 3 left seam
+    min: 0.011625, -0.032, 0.032
+    max: 0.023625, 0.027, 0.35
+    color: '#4E3028'
+    shape: CylinderZ
+  - label: pocket 3 right seam
+    min: 0.163875, -0.036, 0.032
+    max: 0.175875, 0.027, 0.35
+    color: '#402C26'
+    shape: CylinderZ
+  - label: pocket 3 bottom sewn binding
+    min: 0.025625, -0.042, 0.009
+    max: 0.161875, 0.038, 0.04
+    color: '#694037'
+    shape: CylinderX
+  - label: pocket 3 lower compressed fabric fold
+    min: 0.026625, -0.088, 0.078
+    max: 0.156875, -0.064, 0.106
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 3 lower fold lit ridge
+    min: 0.033625, -0.092, 0.102
+    max: 0.149875, -0.071, 0.118
+    color: '#A86C55'
+    shape: CylinderX
+  - label: pocket 3 rear attachment strip
+    min: 0.065625, 0.089, 0.069
+    max: 0.114625, 0.103, 0.315
+    color: '#694037'
+  - label: pocket 3 rear loop upper fold
+    min: 0.063625, 0.082, 0.299
+    max: 0.116625, 0.12, 0.326
+    color: '#7D4C40'
+    shape: CylinderX
+  - label: pocket 3 rear loop lower fold
+    min: 0.063625, 0.082, 0.06
+    max: 0.116625, 0.12, 0.087
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 3 rounded closure crown
+    min: 0.009625, -0.065, 0.279
+    max: 0.177875, 0.074, 0.4
+    color: '#A86C55'
+    shape: CylinderX
+  - label: pocket 3 drooping flap face
+    min: 0.017625, -0.087, 0.25
+    max: 0.169875, -0.058, 0.345
+    color: '#694037'
+    shape: WedgeYReverse
+  - label: pocket 3 flap edge
+    min: 0.020625, -0.091, 0.256
+    max: 0.166875, -0.07, 0.279
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 3 flap highlight
+    min: 0.027625, -0.069, 0.346
+    max: 0.150875, -0.046, 0.379
+    color: '#A86C55'
+  - label: pocket 4 soft curved body
+    min: 0.203125, -0.081, 0.008
+    max: 0.359375, 0.081, 0.307
+    color: '#7D4C40'
+    shape: Ellipsoid
+  - label: pocket 4 broad soft front
+    min: 0.219125, -0.087, 0.061
+    max: 0.343375, -0.048, 0.289
+    color: '#7D4C40'
+    shape: Ellipsoid
+  - label: pocket 4 left seam
+    min: 0.199125, -0.032, 0.032
+    max: 0.211125, 0.027, 0.35
+    color: '#4E3028'
+    shape: CylinderZ
+  - label: pocket 4 right seam
+    min: 0.351375, -0.036, 0.032
+    max: 0.363375, 0.027, 0.35
+    color: '#402C26'
+    shape: CylinderZ
+  - label: pocket 4 bottom sewn binding
+    min: 0.213125, -0.042, 0.009
+    max: 0.349375, 0.038, 0.04
+    color: '#694037'
+    shape: CylinderX
+  - label: pocket 4 lower compressed fabric fold
+    min: 0.214125, -0.088, 0.078
+    max: 0.344375, -0.064, 0.106
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 4 lower fold lit ridge
+    min: 0.221125, -0.092, 0.102
+    max: 0.337375, -0.071, 0.118
+    color: '#A86C55'
+    shape: CylinderX
+  - label: pocket 4 rear attachment strip
+    min: 0.253125, 0.089, 0.069
+    max: 0.302125, 0.103, 0.315
+    color: '#694037'
+  - label: pocket 4 rear loop upper fold
+    min: 0.251125, 0.082, 0.299
+    max: 0.304125, 0.12, 0.326
+    color: '#7D4C40'
+    shape: CylinderX
+  - label: pocket 4 rear loop lower fold
+    min: 0.251125, 0.082, 0.06
+    max: 0.304125, 0.12, 0.087
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 4 rounded closure crown
+    min: 0.197125, -0.065, 0.279
+    max: 0.365375, 0.074, 0.4
+    color: '#A86C55'
+    shape: CylinderX
+  - label: pocket 4 drooping flap face
+    min: 0.205125, -0.087, 0.25
+    max: 0.357375, -0.058, 0.345
+    color: '#694037'
+    shape: WedgeYReverse
+  - label: pocket 4 flap edge
+    min: 0.208125, -0.091, 0.256
+    max: 0.354375, -0.07, 0.279
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 4 flap highlight
+    min: 0.215125, -0.069, 0.346
+    max: 0.338375, -0.046, 0.379
+    color: '#A86C55'
+- type: cmu3DModel
+  id: CMU3DLargeMagazinePouchCloudOpenStudy
+  label: Four-pocket large magazine pouch / open static study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: AU14PouchMagazineLargeFilledM16
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Pouches/large_ammo_mag.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Shared identical large_ammo_mag world artwork for the exact M16-filled
+    and MP5-filled source IDs. Four separate soft compartments, compressed folds,
+    seam bindings, closure caps and inferred rear attachment loops. The exact open
+    overlay contains only the two right-hand closure caps; the left pair expose dark
+    mouths. CMStorageVisualizer owns multiple layers; no single-layer adapter, contents
+    geometry, inventory count or worn state is asserted. Rear construction, cloth
+    deformation, depth, map fit and native interaction remain draft.
+  parts:
+  - label: continuous rear woven backing
+    min: -0.375, 0.069, 0.021
+    max: 0.40625, 0.088, 0.371
+    color: '#402C26'
+  - label: pocket 1 soft curved body
+    min: -0.359375, -0.081, 0.008
+    max: -0.203125, 0.081, 0.307
+    color: '#7D4C40'
+    shape: Ellipsoid
+  - label: pocket 1 broad soft front
+    min: -0.343375, -0.087, 0.061
+    max: -0.219125, -0.048, 0.289
+    color: '#7D4C40'
+    shape: Ellipsoid
+  - label: pocket 1 left seam
+    min: -0.363375, -0.032, 0.032
+    max: -0.351375, 0.027, 0.35
+    color: '#4E3028'
+    shape: CylinderZ
+  - label: pocket 1 right seam
+    min: -0.211125, -0.036, 0.032
+    max: -0.199125, 0.027, 0.35
+    color: '#402C26'
+    shape: CylinderZ
+  - label: pocket 1 bottom sewn binding
+    min: -0.349375, -0.042, 0.009
+    max: -0.213125, 0.038, 0.04
+    color: '#694037'
+    shape: CylinderX
+  - label: pocket 1 lower compressed fabric fold
+    min: -0.348375, -0.088, 0.078
+    max: -0.218125, -0.064, 0.106
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 1 lower fold lit ridge
+    min: -0.341375, -0.092, 0.102
+    max: -0.225125, -0.071, 0.118
+    color: '#A86C55'
+    shape: CylinderX
+  - label: pocket 1 rear attachment strip
+    min: -0.309375, 0.089, 0.069
+    max: -0.260375, 0.103, 0.315
+    color: '#694037'
+  - label: pocket 1 rear loop upper fold
+    min: -0.311375, 0.082, 0.299
+    max: -0.258375, 0.12, 0.326
+    color: '#7D4C40'
+    shape: CylinderX
+  - label: pocket 1 rear loop lower fold
+    min: -0.311375, 0.082, 0.06
+    max: -0.258375, 0.12, 0.087
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 1 open mouth shadow
+    min: -0.345375, -0.038, 0.315
+    max: -0.217125, 0.054, 0.324
+    color: '#202020'
+  - label: pocket 1 open mouth front lip
+    min: -0.355375, -0.06, 0.31
+    max: -0.207125, -0.026, 0.343
+    color: '#694037'
+    shape: CylinderX
+  - label: pocket 1 open rear cloth lip
+    min: -0.355375, 0.044, 0.31
+    max: -0.207125, 0.074, 0.343
+    color: '#7D4C40'
+    shape: CylinderX
+  - label: pocket 2 soft curved body
+    min: -0.171875, -0.081, 0.008
+    max: -0.015625, 0.081, 0.307
+    color: '#7D4C40'
+    shape: Ellipsoid
+  - label: pocket 2 broad soft front
+    min: -0.155875, -0.087, 0.061
+    max: -0.031625, -0.048, 0.289
+    color: '#7D4C40'
+    shape: Ellipsoid
+  - label: pocket 2 left seam
+    min: -0.175875, -0.032, 0.032
+    max: -0.163875, 0.027, 0.35
+    color: '#4E3028'
+    shape: CylinderZ
+  - label: pocket 2 right seam
+    min: -0.023625, -0.036, 0.032
+    max: -0.011625, 0.027, 0.35
+    color: '#402C26'
+    shape: CylinderZ
+  - label: pocket 2 bottom sewn binding
+    min: -0.161875, -0.042, 0.009
+    max: -0.025625, 0.038, 0.04
+    color: '#694037'
+    shape: CylinderX
+  - label: pocket 2 lower compressed fabric fold
+    min: -0.160875, -0.088, 0.078
+    max: -0.030625, -0.064, 0.106
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 2 lower fold lit ridge
+    min: -0.153875, -0.092, 0.102
+    max: -0.037625, -0.071, 0.118
+    color: '#A86C55'
+    shape: CylinderX
+  - label: pocket 2 rear attachment strip
+    min: -0.121875, 0.089, 0.069
+    max: -0.072875, 0.103, 0.315
+    color: '#694037'
+  - label: pocket 2 rear loop upper fold
+    min: -0.123875, 0.082, 0.299
+    max: -0.070875, 0.12, 0.326
+    color: '#7D4C40'
+    shape: CylinderX
+  - label: pocket 2 rear loop lower fold
+    min: -0.123875, 0.082, 0.06
+    max: -0.070875, 0.12, 0.087
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 2 open mouth shadow
+    min: -0.157875, -0.038, 0.315
+    max: -0.029625, 0.054, 0.324
+    color: '#202020'
+  - label: pocket 2 open mouth front lip
+    min: -0.167875, -0.06, 0.31
+    max: -0.019625, -0.026, 0.343
+    color: '#694037'
+    shape: CylinderX
+  - label: pocket 2 open rear cloth lip
+    min: -0.167875, 0.044, 0.31
+    max: -0.019625, 0.074, 0.343
+    color: '#7D4C40'
+    shape: CylinderX
+  - label: pocket 3 soft curved body
+    min: 0.015625, -0.081, 0.008
+    max: 0.171875, 0.081, 0.307
+    color: '#7D4C40'
+    shape: Ellipsoid
+  - label: pocket 3 broad soft front
+    min: 0.031625, -0.087, 0.061
+    max: 0.155875, -0.048, 0.289
+    color: '#7D4C40'
+    shape: Ellipsoid
+  - label: pocket 3 left seam
+    min: 0.011625, -0.032, 0.032
+    max: 0.023625, 0.027, 0.35
+    color: '#4E3028'
+    shape: CylinderZ
+  - label: pocket 3 right seam
+    min: 0.163875, -0.036, 0.032
+    max: 0.175875, 0.027, 0.35
+    color: '#402C26'
+    shape: CylinderZ
+  - label: pocket 3 bottom sewn binding
+    min: 0.025625, -0.042, 0.009
+    max: 0.161875, 0.038, 0.04
+    color: '#694037'
+    shape: CylinderX
+  - label: pocket 3 lower compressed fabric fold
+    min: 0.026625, -0.088, 0.078
+    max: 0.156875, -0.064, 0.106
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 3 lower fold lit ridge
+    min: 0.033625, -0.092, 0.102
+    max: 0.149875, -0.071, 0.118
+    color: '#A86C55'
+    shape: CylinderX
+  - label: pocket 3 rear attachment strip
+    min: 0.065625, 0.089, 0.069
+    max: 0.114625, 0.103, 0.315
+    color: '#694037'
+  - label: pocket 3 rear loop upper fold
+    min: 0.063625, 0.082, 0.299
+    max: 0.116625, 0.12, 0.326
+    color: '#7D4C40'
+    shape: CylinderX
+  - label: pocket 3 rear loop lower fold
+    min: 0.063625, 0.082, 0.06
+    max: 0.116625, 0.12, 0.087
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 3 rounded closure crown
+    min: 0.009625, -0.065, 0.279
+    max: 0.177875, 0.074, 0.4
+    color: '#A86C55'
+    shape: CylinderX
+  - label: pocket 3 drooping flap face
+    min: 0.017625, -0.087, 0.25
+    max: 0.169875, -0.058, 0.345
+    color: '#694037'
+    shape: WedgeYReverse
+  - label: pocket 3 flap edge
+    min: 0.020625, -0.091, 0.256
+    max: 0.166875, -0.07, 0.279
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 3 flap highlight
+    min: 0.027625, -0.069, 0.346
+    max: 0.150875, -0.046, 0.379
+    color: '#A86C55'
+  - label: pocket 4 soft curved body
+    min: 0.203125, -0.081, 0.008
+    max: 0.359375, 0.081, 0.307
+    color: '#7D4C40'
+    shape: Ellipsoid
+  - label: pocket 4 broad soft front
+    min: 0.219125, -0.087, 0.061
+    max: 0.343375, -0.048, 0.289
+    color: '#7D4C40'
+    shape: Ellipsoid
+  - label: pocket 4 left seam
+    min: 0.199125, -0.032, 0.032
+    max: 0.211125, 0.027, 0.35
+    color: '#4E3028'
+    shape: CylinderZ
+  - label: pocket 4 right seam
+    min: 0.351375, -0.036, 0.032
+    max: 0.363375, 0.027, 0.35
+    color: '#402C26'
+    shape: CylinderZ
+  - label: pocket 4 bottom sewn binding
+    min: 0.213125, -0.042, 0.009
+    max: 0.349375, 0.038, 0.04
+    color: '#694037'
+    shape: CylinderX
+  - label: pocket 4 lower compressed fabric fold
+    min: 0.214125, -0.088, 0.078
+    max: 0.344375, -0.064, 0.106
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 4 lower fold lit ridge
+    min: 0.221125, -0.092, 0.102
+    max: 0.337375, -0.071, 0.118
+    color: '#A86C55'
+    shape: CylinderX
+  - label: pocket 4 rear attachment strip
+    min: 0.253125, 0.089, 0.069
+    max: 0.302125, 0.103, 0.315
+    color: '#694037'
+  - label: pocket 4 rear loop upper fold
+    min: 0.251125, 0.082, 0.299
+    max: 0.304125, 0.12, 0.326
+    color: '#7D4C40'
+    shape: CylinderX
+  - label: pocket 4 rear loop lower fold
+    min: 0.251125, 0.082, 0.06
+    max: 0.304125, 0.12, 0.087
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 4 rounded closure crown
+    min: 0.197125, -0.065, 0.279
+    max: 0.365375, 0.074, 0.4
+    color: '#A86C55'
+    shape: CylinderX
+  - label: pocket 4 drooping flap face
+    min: 0.205125, -0.087, 0.25
+    max: 0.357375, -0.058, 0.345
+    color: '#694037'
+    shape: WedgeYReverse
+  - label: pocket 4 flap edge
+    min: 0.208125, -0.091, 0.256
+    max: 0.354375, -0.07, 0.279
+    color: '#4E3028'
+    shape: CylinderX
+  - label: pocket 4 flap highlight
+    min: 0.215125, -0.069, 0.346
+    max: 0.338375, -0.046, 0.379
+    color: '#A86C55'

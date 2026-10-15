@@ -1,4 +1,7 @@
 using System;
+using Content.Shared._RMC14.Crate;
+using Content.Shared._RMC14.Entrenching;
+using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Damage;
 using Content.Shared.Vehicle.Components;
 using Robust.Shared.GameObjects;
@@ -7,6 +10,15 @@ namespace Content.Shared.Vehicle;
 
 public sealed partial class GridVehicleMoverSystem
 {
+    // crates and cades are what armour is supposed to roll over, flattening one shouldn't chip the hull
+    private float CMUSmashSelfDamageScale(EntityUid target, VehicleSmashableComponent? smashable)
+    {
+        if (HasComp<BarricadeComponent>(target) || HasComp<CrateOpenableComponent>(target))
+            return 0f;
+
+        return smashable?.SelfDamageMultiplier ?? 1f;
+    }
+
     private void CMUApplyVehicleCollision(
         EntityUid vehicle,
         GridVehicleMoverComponent mover,

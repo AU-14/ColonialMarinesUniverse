@@ -762,15 +762,17 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
             return;
         }
 
-        TryToggleBracerAttachments(bracer, user);
+        // the wrist blade button only touches wrist blades, a gauntlet on the other wrist has its own button
+        TryToggleBracerAttachments(bracer, user, YautjaGearKind.WristBlades);
     }
 
-    public bool TryToggleBracerAttachments(Entity<YautjaGearContainerComponent> bracer, EntityUid user)
+    // onlyKind null = every installed attachment (cmss13 deploy_bracer_attachments, the random-function roll)
+    public bool TryToggleBracerAttachments(Entity<YautjaGearContainerComponent> bracer, EntityUid user, YautjaGearKind? onlyKind = null)
     {
-        if (AnyInstalledGearDeployed(bracer.Comp))
+        if (AnyInstalledGearDeployed(bracer.Comp, onlyKind))
         {
-            RetractDeployedInstalledAttachments(bracer, user);
-            _actions.SetToggled(bracer.Comp.ToggleWristBladesAction, AnyInstalledGearDeployed(bracer.Comp));
+            RetractDeployedInstalledAttachments(bracer, user, onlyKind);
+            _actions.SetToggled(bracer.Comp.ToggleWristBladesAction, AnyInstalledGearDeployed(bracer.Comp, onlyKind));
             return true;
         }
 
@@ -784,7 +786,8 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         foreach (var gear in EnumerateInstalledBracerAttachmentsBySourceSlot(bracer.Comp))
         {
             if (TerminatingOrDeleted(gear) ||
-                !TryComp(gear, out YautjaStoredGearComponent? stored))
+                !TryComp(gear, out YautjaStoredGearComponent? stored) ||
+                onlyKind != null && stored.Kind != onlyKind)
             {
                 continue;
             }
@@ -796,7 +799,7 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         if (!deployed)
             _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-attachments-none"), user, user, PopupType.SmallCaution);
 
-        _actions.SetToggled(bracer.Comp.ToggleWristBladesAction, AnyInstalledGearDeployed(bracer.Comp));
+        _actions.SetToggled(bracer.Comp.ToggleWristBladesAction, AnyInstalledGearDeployed(bracer.Comp, onlyKind));
         return true;
     }
 
@@ -1050,12 +1053,16 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         }
     }
 
-    private bool AnyInstalledGearDeployed(YautjaGearContainerComponent bracer)
+    private bool AnyInstalledGearDeployed(YautjaGearContainerComponent bracer, YautjaGearKind? onlyKind = null)
     {
         foreach (var gear in bracer.InstalledGear)
         {
-            if (TryComp(gear, out YautjaStoredGearComponent? stored) && stored.Deployed)
+            if (TryComp(gear, out YautjaStoredGearComponent? stored) &&
+                stored.Deployed &&
+                (onlyKind == null || stored.Kind == onlyKind))
+            {
                 return true;
+            }
         }
 
         return false;
@@ -1082,7 +1089,7 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         }
     }
 
-    private void RetractDeployedInstalledAttachments(Entity<YautjaGearContainerComponent> bracer, EntityUid user)
+    private void RetractDeployedInstalledAttachments(Entity<YautjaGearContainerComponent> bracer, EntityUid user, YautjaGearKind? onlyKind = null)
     {
         var installed = new EntityUid[bracer.Comp.InstalledGear.Count];
         bracer.Comp.InstalledGear.CopyTo(installed);
@@ -1091,7 +1098,8 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         {
             if (TerminatingOrDeleted(gear) ||
                 !TryComp(gear, out YautjaStoredGearComponent? stored) ||
-                !stored.Deployed)
+                !stored.Deployed ||
+                onlyKind != null && stored.Kind != onlyKind)
             {
                 continue;
             }

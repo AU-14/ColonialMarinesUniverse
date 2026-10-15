@@ -10,6 +10,8 @@ namespace Content.IntegrationTests.Tests.Stacks;
 [TestOf(typeof(StackPrototype))]
 public sealed class StackPrototypeTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<StackPrototype> CMUYautjaStabilizerGelPrototype = "CMUYautjaStabilizerGel";
+
     private const string BaseStack = "StackPrototypeInheritanceBase";
     private const string ChildStack = "StackPrototypeInheritanceChild";
     private const string SpawnPrototype = "StackPrototypeInheritanceSpawn";
@@ -40,7 +42,7 @@ public sealed class StackPrototypeTest : GameTest
                 Assert.That(stack!.StackTypeId, Is.EqualTo(new ProtoId<StackPrototype>(ChildStack)));
             });
 
-            var forkPrototype = SProtoMan.Index<StackPrototype>("CMUYautjaStabilizerGel");
+            var forkPrototype = SProtoMan.Index<StackPrototype>(CMUYautjaStabilizerGelPrototype);
             Assert.Multiple(() =>
             {
                 Assert.That(forkPrototype.Name, Is.EqualTo("stabilizer gel"));

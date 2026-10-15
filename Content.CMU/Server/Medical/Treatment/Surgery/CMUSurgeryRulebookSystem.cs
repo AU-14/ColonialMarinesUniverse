@@ -576,7 +576,7 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
         EntityUid surgeon)
     {
         var patientIsSynth = HasComp<SynthComponent>(patient);
-        var surgeryIsSynth = surgery.Prototype.HasComponent<RMCSynthSurgeryComponent>();
+        var surgeryIsSynth = surgery.Prototype.HasComp<RMCSynthSurgeryComponent>(Factory);
 
         if (patientIsSynth != surgeryIsSynth)
             return false;

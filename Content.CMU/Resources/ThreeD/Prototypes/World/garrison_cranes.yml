@@ -1,0 +1,1803 @@
+# Crane and mining-van drafts. See SOURCES_CRANES.md.
+- type: cmu3DModel
+  id: CMU3DAU14PropVehicleCrane
+  label: Crane
+  sourcePrototypes:
+  - AU14PropVehicleCrane
+  referenceRsi: CMU14/Structures/vehicles/boxvvanwhite.rsi
+  referenceState: crane
+  sourceDirections: 4
+  sourceCardinalFacings:
+  - 0
+  - 2
+  - 2
+  - 0
+  yawOffset: 0
+  groundOffset: 0.5, 0
+  status: draft
+  description: Tracked crane with separate crawler rollers, open grated cargo deck, offset cab, hydraulic cylinder
+    and stowed telescoping boom. Source aliases preserve S/W and N/E physical arrangements. Hidden faces and dimensions
+    are inferred. Static initial-state draft; see SOURCES_CRANES.md.
+  parts:
+  - label: central chassis
+    min: -0.89000, -0.30000, 0.19000
+    max: 0.89000, 0.30000, 0.36000
+    color: '#242E2D'
+  - label: lower track run -1
+    min: -0.92000, -0.48800, 0.01300
+    max: 0.92000, -0.32200, 0.05500
+    color: '#1A2022'
+  - label: upper track run -1
+    min: -0.92000, -0.48800, 0.31300
+    max: 0.92000, -0.32200, 0.35500
+    color: '#1A2022'
+  - label: track roller -1 0
+    min: -0.92600, -0.48500, 0.02800
+    max: -0.61400, -0.32500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub -1 0
+    min: -0.83600, -0.49600, 0.11800
+    max: -0.70400, -0.48600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller -1 1
+    min: -0.61600, -0.48500, 0.02800
+    max: -0.30400, -0.32500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub -1 1
+    min: -0.52600, -0.49600, 0.11800
+    max: -0.39400, -0.48600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller -1 2
+    min: -0.30600, -0.48500, 0.02800
+    max: 0.00600, -0.32500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub -1 2
+    min: -0.21600, -0.49600, 0.11800
+    max: -0.08400, -0.48600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller -1 3
+    min: 0.00400, -0.48500, 0.02800
+    max: 0.31600, -0.32500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub -1 3
+    min: 0.09400, -0.49600, 0.11800
+    max: 0.22600, -0.48600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller -1 4
+    min: 0.31400, -0.48500, 0.02800
+    max: 0.62600, -0.32500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub -1 4
+    min: 0.40400, -0.49600, 0.11800
+    max: 0.53600, -0.48600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller -1 5
+    min: 0.62400, -0.48500, 0.02800
+    max: 0.93600, -0.32500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub -1 5
+    min: 0.71400, -0.49600, 0.11800
+    max: 0.84600, -0.48600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: ground tread -1 0
+    min: -0.90000, -0.49700, 0.00900
+    max: -0.85500, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 1
+    min: -0.72600, -0.49700, 0.00900
+    max: -0.68100, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 2
+    min: -0.55200, -0.49700, 0.00900
+    max: -0.50700, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 3
+    min: -0.37800, -0.49700, 0.00900
+    max: -0.33300, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 4
+    min: -0.20400, -0.49700, 0.00900
+    max: -0.15900, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 5
+    min: -0.03000, -0.49700, 0.00900
+    max: 0.01500, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 6
+    min: 0.14400, -0.49700, 0.00900
+    max: 0.18900, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 7
+    min: 0.31800, -0.49700, 0.00900
+    max: 0.36300, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 8
+    min: 0.49200, -0.49700, 0.00900
+    max: 0.53700, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 9
+    min: 0.66600, -0.49700, 0.00900
+    max: 0.71100, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 10
+    min: 0.84000, -0.49700, 0.00900
+    max: 0.88500, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: lower track run 1
+    min: -0.92000, 0.32200, 0.01300
+    max: 0.92000, 0.48800, 0.05500
+    color: '#1A2022'
+  - label: upper track run 1
+    min: -0.92000, 0.32200, 0.31300
+    max: 0.92000, 0.48800, 0.35500
+    color: '#1A2022'
+  - label: track roller 1 0
+    min: -0.92600, 0.32500, 0.02800
+    max: -0.61400, 0.48500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub 1 0
+    min: -0.83600, 0.48600, 0.11800
+    max: -0.70400, 0.49600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller 1 1
+    min: -0.61600, 0.32500, 0.02800
+    max: -0.30400, 0.48500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub 1 1
+    min: -0.52600, 0.48600, 0.11800
+    max: -0.39400, 0.49600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller 1 2
+    min: -0.30600, 0.32500, 0.02800
+    max: 0.00600, 0.48500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub 1 2
+    min: -0.21600, 0.48600, 0.11800
+    max: -0.08400, 0.49600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller 1 3
+    min: 0.00400, 0.32500, 0.02800
+    max: 0.31600, 0.48500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub 1 3
+    min: 0.09400, 0.48600, 0.11800
+    max: 0.22600, 0.49600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller 1 4
+    min: 0.31400, 0.32500, 0.02800
+    max: 0.62600, 0.48500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub 1 4
+    min: 0.40400, 0.48600, 0.11800
+    max: 0.53600, 0.49600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller 1 5
+    min: 0.62400, 0.32500, 0.02800
+    max: 0.93600, 0.48500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub 1 5
+    min: 0.71400, 0.48600, 0.11800
+    max: 0.84600, 0.49600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: ground tread 1 0
+    min: -0.90000, 0.31300, 0.00900
+    max: -0.85500, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 1
+    min: -0.72600, 0.31300, 0.00900
+    max: -0.68100, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 2
+    min: -0.55200, 0.31300, 0.00900
+    max: -0.50700, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 3
+    min: -0.37800, 0.31300, 0.00900
+    max: -0.33300, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 4
+    min: -0.20400, 0.31300, 0.00900
+    max: -0.15900, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 5
+    min: -0.03000, 0.31300, 0.00900
+    max: 0.01500, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 6
+    min: 0.14400, 0.31300, 0.00900
+    max: 0.18900, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 7
+    min: 0.31800, 0.31300, 0.00900
+    max: 0.36300, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 8
+    min: 0.49200, 0.31300, 0.00900
+    max: 0.53700, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 9
+    min: 0.66600, 0.31300, 0.00900
+    max: 0.71100, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 10
+    min: 0.84000, 0.31300, 0.00900
+    max: 0.88500, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: deck front edge
+    min: -0.97400, -0.49300, 0.35900
+    max: 0.97400, -0.42200, 0.51800
+    color: '#575E5D'
+  - label: deck back edge
+    min: -0.97400, 0.41400, 0.36000
+    max: 0.97400, 0.47900, 0.53700
+    color: '#575E5D'
+  - label: deck cross support
+    min: -0.97400, -0.42400, 0.35800
+    max: -0.92000, 0.42000, 0.51500
+    color: '#575E5D'
+  - label: deck cross support
+    min: -0.13100, -0.42400, 0.35800
+    max: -0.07700, 0.42000, 0.51500
+    color: '#575E5D'
+  - label: deck cross support
+    min: 0.92000, -0.42400, 0.35800
+    max: 0.97400, 0.42000, 0.51500
+    color: '#575E5D'
+  - label: grated deck longitudinal bar 0
+    min: -0.92400, -0.41700, 0.50500
+    max: -0.89500, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 1
+    min: -0.84500, -0.41700, 0.50500
+    max: -0.81600, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 2
+    min: -0.76600, -0.41700, 0.50500
+    max: -0.73700, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 3
+    min: -0.68700, -0.41700, 0.50500
+    max: -0.65800, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 4
+    min: -0.60800, -0.41700, 0.50500
+    max: -0.57900, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 5
+    min: -0.52900, -0.41700, 0.50500
+    max: -0.50000, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 6
+    min: -0.45000, -0.41700, 0.50500
+    max: -0.42100, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 7
+    min: -0.37100, -0.41700, 0.50500
+    max: -0.34200, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 8
+    min: -0.29200, -0.41700, 0.50500
+    max: -0.26300, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 9
+    min: -0.21300, -0.41700, 0.50500
+    max: -0.18400, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck transverse bar 0
+    min: -0.93000, -0.41400, 0.50600
+    max: -0.17400, -0.38700, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 1
+    min: -0.93000, -0.31700, 0.50600
+    max: -0.17400, -0.29000, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 2
+    min: -0.93000, -0.22000, 0.50600
+    max: -0.17400, -0.19300, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 3
+    min: -0.93000, -0.12300, 0.50600
+    max: -0.17400, -0.09600, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 4
+    min: -0.93000, -0.02600, 0.50600
+    max: -0.17400, 0.00100, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 5
+    min: -0.93000, 0.07100, 0.50600
+    max: -0.17400, 0.09800, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 6
+    min: -0.93000, 0.16800, 0.50600
+    max: -0.17400, 0.19500, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 7
+    min: -0.93000, 0.26500, 0.50600
+    max: -0.17400, 0.29200, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 8
+    min: -0.93000, 0.36200, 0.50600
+    max: -0.17400, 0.38900, 0.53400
+    color: '#43515D'
+  - label: cab floor
+    min: -0.05700, -0.41400, 0.51500
+    max: 0.69000, 0.31300, 0.55600
+    color: '#575E5D'
+  - label: cab rear bulkhead
+    min: -0.05700, 0.27600, 0.55400
+    max: 0.69000, 0.31500, 1.12500
+    color: '#575E5D'
+  - label: cab side lower
+    min: -0.05700, -0.41400, 0.55500
+    max: -0.02400, 0.28000, 0.80400
+    color: '#575E5D'
+  - label: cab side glass
+    min: -0.05700, -0.36000, 0.80400
+    max: -0.02400, 0.23400, 1.06300
+    color: '#172222'
+  - label: cab side lower
+    min: 0.65700, -0.41400, 0.55500
+    max: 0.69000, 0.28000, 0.80400
+    color: '#575E5D'
+  - label: cab side glass
+    min: 0.65700, -0.36000, 0.80400
+    max: 0.69000, 0.23400, 1.06300
+    color: '#172222'
+  - label: cab roof
+    min: -0.08300, -0.44600, 1.07300
+    max: 0.71200, 0.34200, 1.14500
+    color: '#575E5D'
+  - label: original cab roof vent
+    min: -0.03700, -0.39600, 1.14600
+    max: 0.67000, 0.29600, 1.15200
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtCabRoof
+    surfaceAxis: XY
+  - label: original cab doors and black glazing
+    min: -0.05000, -0.42000, 0.56200
+    max: 0.69100, -0.41400, 1.07200
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtCabFront
+    surfaceAxis: XZ
+  - label: cab front mullion
+    min: -0.05300, -0.42700, 0.55700
+    max: -0.02600, -0.41500, 1.07800
+    color: '#575E5D'
+  - label: cab front mullion
+    min: 0.30200, -0.42700, 0.55700
+    max: 0.32900, -0.41500, 1.07800
+    color: '#575E5D'
+  - label: cab front mullion
+    min: 0.66000, -0.42700, 0.55700
+    max: 0.68700, -0.41500, 1.07800
+    color: '#575E5D'
+  - label: cab rear glass
+    min: 0.08000, 0.31600, 0.82900
+    max: 0.55400, 0.32200, 1.06600
+    color: '#172222'
+  - label: original chassis compartments
+    min: -0.94100, -0.49900, 0.37300
+    max: -0.12500, -0.49300, 0.64200
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtLowerCompartments
+    surfaceAxis: XZ
+  - label: access ladder rung 0
+    min: 0.26000, -0.59100, 0.17500
+    max: 0.58000, -0.56300, 0.21000
+    color: '#4C5653'
+  - label: access ladder rung 1
+    min: 0.26000, -0.59100, 0.29100
+    max: 0.58000, -0.56300, 0.32600
+    color: '#4C5653'
+  - label: access ladder rung 2
+    min: 0.26000, -0.59100, 0.40500
+    max: 0.58000, -0.56300, 0.44000
+    color: '#4C5653'
+  - label: access ladder stile
+    min: 0.26000, -0.59000, 0.17500
+    max: 0.29000, -0.55600, 0.55800
+    color: '#29332F'
+  - label: access ladder stile
+    min: 0.55000, -0.59000, 0.17500
+    max: 0.58000, -0.55600, 0.55800
+    color: '#29332F'
+  - label: ladder red stripe
+    min: 0.28000, -0.59400, 0.18100
+    max: 0.55000, -0.59000, 0.20700
+    color: '#742A2A'
+  - label: side hydraulic cylinder
+    min: 0.77900, -0.38200, 0.60000
+    max: 0.88500, -0.26200, 1.06500
+    color: '#778481'
+    shape: CylinderZ
+  - label: hydraulic red collar
+    min: 0.77600, -0.38500, 0.92900
+    max: 0.88800, -0.25900, 0.97400
+    color: '#842A2A'
+    shape: CylinderZ
+  - label: boom turntable
+    min: 0.27000, 0.15100, 0.53600
+    max: 0.72000, 0.48700, 0.67200
+    color: '#35423E'
+    shape: CylinderZ
+  - label: boom support mast
+    min: 0.40500, 0.21600, 0.63000
+    max: 0.58500, 0.38100, 1.32100
+    color: '#575E5D'
+  - label: boom outer section
+    min: 0.25500, 0.14200, 1.25900
+    max: 0.94100, 0.42300, 1.57300
+    color: '#575E5D'
+  - label: boom telescopic inner
+    min: -0.82600, 0.17600, 1.33600
+    max: 0.28100, 0.38500, 1.55100
+    color: '#575E5D'
+  - label: boom end housing
+    min: -0.81700, 0.14200, 1.26600
+    max: -0.44000, 0.42400, 1.58500
+    color: '#575E5D'
+  - label: original boom forward markings
+    min: -0.81700, 0.13600, 1.26600
+    max: 0.88200, 0.14200, 1.58500
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtBoom
+    surfaceAxis: XZ
+  - label: original boom rear markings
+    min: -0.81700, 0.42400, 1.26600
+    max: 0.88200, 0.43000, 1.58500
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtBoom
+    surfaceAxis: XZ
+    surfaceFlipU: true
+  - label: boom retaining band
+    min: 0.12400, 0.12400, 1.25800
+    max: 0.15200, 0.44200, 1.58500
+    color: '#635D5A'
+  - label: boom retaining band
+    min: 0.18500, 0.12400, 1.25800
+    max: 0.21300, 0.44200, 1.58500
+    color: '#635D5A'
+  - label: boom retaining band
+    min: 0.24600, 0.12400, 1.25800
+    max: 0.27400, 0.44200, 1.58500
+    color: '#635D5A'
+  - label: visible boom hydraulic ram
+    min: -0.69800, 0.18000, 1.19300
+    max: 0.53800, 0.25000, 1.24600
+    color: '#242C2B'
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DRMCPropVehicleCargoCraneAltHitboxWest
+  label: CargoCraneAltHitboxWest
+  sourcePrototypes:
+  - RMCPropVehicleCargoCraneAltHitboxWest
+  referenceRsi: _RMC14/Structures/Vehicles/vehicles2.rsi
+  referenceState: crane
+  sourceDirections: 4
+  sourceCardinalFacings:
+  - 0
+  - 2
+  - 2
+  - 0
+  yawOffset: 0
+  groundOffset: 0, 0
+  status: draft
+  description: Tracked crane with separate crawler rollers, open grated cargo deck, offset cab, hydraulic cylinder
+    and stowed telescoping boom. Source aliases preserve S/W and N/E physical arrangements. Hidden faces and dimensions
+    are inferred. Static initial-state draft; see SOURCES_CRANES.md.
+  parts:
+  - label: central chassis
+    min: -0.89000, -0.30000, 0.19000
+    max: 0.89000, 0.30000, 0.36000
+    color: '#242E2D'
+  - label: lower track run -1
+    min: -0.92000, -0.48800, 0.01300
+    max: 0.92000, -0.32200, 0.05500
+    color: '#1A2022'
+  - label: upper track run -1
+    min: -0.92000, -0.48800, 0.31300
+    max: 0.92000, -0.32200, 0.35500
+    color: '#1A2022'
+  - label: track roller -1 0
+    min: -0.92600, -0.48500, 0.02800
+    max: -0.61400, -0.32500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub -1 0
+    min: -0.83600, -0.49600, 0.11800
+    max: -0.70400, -0.48600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller -1 1
+    min: -0.61600, -0.48500, 0.02800
+    max: -0.30400, -0.32500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub -1 1
+    min: -0.52600, -0.49600, 0.11800
+    max: -0.39400, -0.48600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller -1 2
+    min: -0.30600, -0.48500, 0.02800
+    max: 0.00600, -0.32500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub -1 2
+    min: -0.21600, -0.49600, 0.11800
+    max: -0.08400, -0.48600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller -1 3
+    min: 0.00400, -0.48500, 0.02800
+    max: 0.31600, -0.32500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub -1 3
+    min: 0.09400, -0.49600, 0.11800
+    max: 0.22600, -0.48600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller -1 4
+    min: 0.31400, -0.48500, 0.02800
+    max: 0.62600, -0.32500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub -1 4
+    min: 0.40400, -0.49600, 0.11800
+    max: 0.53600, -0.48600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller -1 5
+    min: 0.62400, -0.48500, 0.02800
+    max: 0.93600, -0.32500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub -1 5
+    min: 0.71400, -0.49600, 0.11800
+    max: 0.84600, -0.48600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: ground tread -1 0
+    min: -0.90000, -0.49700, 0.00900
+    max: -0.85500, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 1
+    min: -0.72600, -0.49700, 0.00900
+    max: -0.68100, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 2
+    min: -0.55200, -0.49700, 0.00900
+    max: -0.50700, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 3
+    min: -0.37800, -0.49700, 0.00900
+    max: -0.33300, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 4
+    min: -0.20400, -0.49700, 0.00900
+    max: -0.15900, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 5
+    min: -0.03000, -0.49700, 0.00900
+    max: 0.01500, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 6
+    min: 0.14400, -0.49700, 0.00900
+    max: 0.18900, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 7
+    min: 0.31800, -0.49700, 0.00900
+    max: 0.36300, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 8
+    min: 0.49200, -0.49700, 0.00900
+    max: 0.53700, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 9
+    min: 0.66600, -0.49700, 0.00900
+    max: 0.71100, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 10
+    min: 0.84000, -0.49700, 0.00900
+    max: 0.88500, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: lower track run 1
+    min: -0.92000, 0.32200, 0.01300
+    max: 0.92000, 0.48800, 0.05500
+    color: '#1A2022'
+  - label: upper track run 1
+    min: -0.92000, 0.32200, 0.31300
+    max: 0.92000, 0.48800, 0.35500
+    color: '#1A2022'
+  - label: track roller 1 0
+    min: -0.92600, 0.32500, 0.02800
+    max: -0.61400, 0.48500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub 1 0
+    min: -0.83600, 0.48600, 0.11800
+    max: -0.70400, 0.49600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller 1 1
+    min: -0.61600, 0.32500, 0.02800
+    max: -0.30400, 0.48500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub 1 1
+    min: -0.52600, 0.48600, 0.11800
+    max: -0.39400, 0.49600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller 1 2
+    min: -0.30600, 0.32500, 0.02800
+    max: 0.00600, 0.48500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub 1 2
+    min: -0.21600, 0.48600, 0.11800
+    max: -0.08400, 0.49600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller 1 3
+    min: 0.00400, 0.32500, 0.02800
+    max: 0.31600, 0.48500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub 1 3
+    min: 0.09400, 0.48600, 0.11800
+    max: 0.22600, 0.49600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller 1 4
+    min: 0.31400, 0.32500, 0.02800
+    max: 0.62600, 0.48500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub 1 4
+    min: 0.40400, 0.48600, 0.11800
+    max: 0.53600, 0.49600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller 1 5
+    min: 0.62400, 0.32500, 0.02800
+    max: 0.93600, 0.48500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub 1 5
+    min: 0.71400, 0.48600, 0.11800
+    max: 0.84600, 0.49600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: ground tread 1 0
+    min: -0.90000, 0.31300, 0.00900
+    max: -0.85500, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 1
+    min: -0.72600, 0.31300, 0.00900
+    max: -0.68100, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 2
+    min: -0.55200, 0.31300, 0.00900
+    max: -0.50700, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 3
+    min: -0.37800, 0.31300, 0.00900
+    max: -0.33300, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 4
+    min: -0.20400, 0.31300, 0.00900
+    max: -0.15900, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 5
+    min: -0.03000, 0.31300, 0.00900
+    max: 0.01500, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 6
+    min: 0.14400, 0.31300, 0.00900
+    max: 0.18900, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 7
+    min: 0.31800, 0.31300, 0.00900
+    max: 0.36300, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 8
+    min: 0.49200, 0.31300, 0.00900
+    max: 0.53700, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 9
+    min: 0.66600, 0.31300, 0.00900
+    max: 0.71100, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 10
+    min: 0.84000, 0.31300, 0.00900
+    max: 0.88500, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: deck front edge
+    min: -0.97400, -0.49300, 0.35900
+    max: 0.97400, -0.42200, 0.51800
+    color: '#575E5D'
+  - label: deck back edge
+    min: -0.97400, 0.41400, 0.36000
+    max: 0.97400, 0.47900, 0.53700
+    color: '#575E5D'
+  - label: deck cross support
+    min: -0.97400, -0.42400, 0.35800
+    max: -0.92000, 0.42000, 0.51500
+    color: '#575E5D'
+  - label: deck cross support
+    min: -0.13100, -0.42400, 0.35800
+    max: -0.07700, 0.42000, 0.51500
+    color: '#575E5D'
+  - label: deck cross support
+    min: 0.92000, -0.42400, 0.35800
+    max: 0.97400, 0.42000, 0.51500
+    color: '#575E5D'
+  - label: grated deck longitudinal bar 0
+    min: -0.92400, -0.41700, 0.50500
+    max: -0.89500, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 1
+    min: -0.84500, -0.41700, 0.50500
+    max: -0.81600, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 2
+    min: -0.76600, -0.41700, 0.50500
+    max: -0.73700, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 3
+    min: -0.68700, -0.41700, 0.50500
+    max: -0.65800, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 4
+    min: -0.60800, -0.41700, 0.50500
+    max: -0.57900, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 5
+    min: -0.52900, -0.41700, 0.50500
+    max: -0.50000, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 6
+    min: -0.45000, -0.41700, 0.50500
+    max: -0.42100, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 7
+    min: -0.37100, -0.41700, 0.50500
+    max: -0.34200, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 8
+    min: -0.29200, -0.41700, 0.50500
+    max: -0.26300, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 9
+    min: -0.21300, -0.41700, 0.50500
+    max: -0.18400, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck transverse bar 0
+    min: -0.93000, -0.41400, 0.50600
+    max: -0.17400, -0.38700, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 1
+    min: -0.93000, -0.31700, 0.50600
+    max: -0.17400, -0.29000, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 2
+    min: -0.93000, -0.22000, 0.50600
+    max: -0.17400, -0.19300, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 3
+    min: -0.93000, -0.12300, 0.50600
+    max: -0.17400, -0.09600, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 4
+    min: -0.93000, -0.02600, 0.50600
+    max: -0.17400, 0.00100, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 5
+    min: -0.93000, 0.07100, 0.50600
+    max: -0.17400, 0.09800, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 6
+    min: -0.93000, 0.16800, 0.50600
+    max: -0.17400, 0.19500, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 7
+    min: -0.93000, 0.26500, 0.50600
+    max: -0.17400, 0.29200, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 8
+    min: -0.93000, 0.36200, 0.50600
+    max: -0.17400, 0.38900, 0.53400
+    color: '#43515D'
+  - label: cab floor
+    min: -0.05700, -0.41400, 0.51500
+    max: 0.69000, 0.31300, 0.55600
+    color: '#575E5D'
+  - label: cab rear bulkhead
+    min: -0.05700, 0.27600, 0.55400
+    max: 0.69000, 0.31500, 1.12500
+    color: '#575E5D'
+  - label: cab side lower
+    min: -0.05700, -0.41400, 0.55500
+    max: -0.02400, 0.28000, 0.80400
+    color: '#575E5D'
+  - label: cab side glass
+    min: -0.05700, -0.36000, 0.80400
+    max: -0.02400, 0.23400, 1.06300
+    color: '#172222'
+  - label: cab side lower
+    min: 0.65700, -0.41400, 0.55500
+    max: 0.69000, 0.28000, 0.80400
+    color: '#575E5D'
+  - label: cab side glass
+    min: 0.65700, -0.36000, 0.80400
+    max: 0.69000, 0.23400, 1.06300
+    color: '#172222'
+  - label: cab roof
+    min: -0.08300, -0.44600, 1.07300
+    max: 0.71200, 0.34200, 1.14500
+    color: '#575E5D'
+  - label: original cab roof vent
+    min: -0.03700, -0.39600, 1.14600
+    max: 0.67000, 0.29600, 1.15200
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtCabRoof
+    surfaceAxis: XY
+  - label: original cab doors and black glazing
+    min: -0.05000, -0.42000, 0.56200
+    max: 0.69100, -0.41400, 1.07200
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtCabFront
+    surfaceAxis: XZ
+  - label: cab front mullion
+    min: -0.05300, -0.42700, 0.55700
+    max: -0.02600, -0.41500, 1.07800
+    color: '#575E5D'
+  - label: cab front mullion
+    min: 0.30200, -0.42700, 0.55700
+    max: 0.32900, -0.41500, 1.07800
+    color: '#575E5D'
+  - label: cab front mullion
+    min: 0.66000, -0.42700, 0.55700
+    max: 0.68700, -0.41500, 1.07800
+    color: '#575E5D'
+  - label: cab rear glass
+    min: 0.08000, 0.31600, 0.82900
+    max: 0.55400, 0.32200, 1.06600
+    color: '#172222'
+  - label: original chassis compartments
+    min: -0.94100, -0.49900, 0.37300
+    max: -0.12500, -0.49300, 0.64200
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtLowerCompartments
+    surfaceAxis: XZ
+  - label: access ladder rung 0
+    min: 0.26000, -0.59100, 0.17500
+    max: 0.58000, -0.56300, 0.21000
+    color: '#4C5653'
+  - label: access ladder rung 1
+    min: 0.26000, -0.59100, 0.29100
+    max: 0.58000, -0.56300, 0.32600
+    color: '#4C5653'
+  - label: access ladder rung 2
+    min: 0.26000, -0.59100, 0.40500
+    max: 0.58000, -0.56300, 0.44000
+    color: '#4C5653'
+  - label: access ladder stile
+    min: 0.26000, -0.59000, 0.17500
+    max: 0.29000, -0.55600, 0.55800
+    color: '#29332F'
+  - label: access ladder stile
+    min: 0.55000, -0.59000, 0.17500
+    max: 0.58000, -0.55600, 0.55800
+    color: '#29332F'
+  - label: ladder red stripe
+    min: 0.28000, -0.59400, 0.18100
+    max: 0.55000, -0.59000, 0.20700
+    color: '#742A2A'
+  - label: side hydraulic cylinder
+    min: 0.77900, -0.38200, 0.60000
+    max: 0.88500, -0.26200, 1.06500
+    color: '#778481'
+    shape: CylinderZ
+  - label: hydraulic red collar
+    min: 0.77600, -0.38500, 0.92900
+    max: 0.88800, -0.25900, 0.97400
+    color: '#842A2A'
+    shape: CylinderZ
+  - label: boom turntable
+    min: 0.27000, 0.15100, 0.53600
+    max: 0.72000, 0.48700, 0.67200
+    color: '#35423E'
+    shape: CylinderZ
+  - label: boom support mast
+    min: 0.40500, 0.21600, 0.63000
+    max: 0.58500, 0.38100, 1.32100
+    color: '#575E5D'
+  - label: boom outer section
+    min: 0.25500, 0.14200, 1.25900
+    max: 0.94100, 0.42300, 1.57300
+    color: '#575E5D'
+  - label: boom telescopic inner
+    min: -0.82600, 0.17600, 1.33600
+    max: 0.28100, 0.38500, 1.55100
+    color: '#575E5D'
+  - label: boom end housing
+    min: -0.81700, 0.14200, 1.26600
+    max: -0.44000, 0.42400, 1.58500
+    color: '#575E5D'
+  - label: original boom forward markings
+    min: -0.81700, 0.13600, 1.26600
+    max: 0.88200, 0.14200, 1.58500
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtBoom
+    surfaceAxis: XZ
+  - label: original boom rear markings
+    min: -0.81700, 0.42400, 1.26600
+    max: 0.88200, 0.43000, 1.58500
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtBoom
+    surfaceAxis: XZ
+    surfaceFlipU: true
+  - label: boom retaining band
+    min: 0.12400, 0.12400, 1.25800
+    max: 0.15200, 0.44200, 1.58500
+    color: '#635D5A'
+  - label: boom retaining band
+    min: 0.18500, 0.12400, 1.25800
+    max: 0.21300, 0.44200, 1.58500
+    color: '#635D5A'
+  - label: boom retaining band
+    min: 0.24600, 0.12400, 1.25800
+    max: 0.27400, 0.44200, 1.58500
+    color: '#635D5A'
+  - label: visible boom hydraulic ram
+    min: -0.69800, 0.18000, 1.19300
+    max: 0.53800, 0.25000, 1.24600
+    color: '#242C2B'
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DRMCPropVehicleCargoCraneCargo
+  label: CargoCraneCargo
+  sourcePrototypes:
+  - RMCPropVehicleCargoCraneCargo
+  referenceRsi: _RMC14/Structures/Vehicles/vehicles2.rsi
+  referenceState: crane_cargo
+  sourceDirections: 4
+  sourceCardinalFacings:
+  - 0
+  - 2
+  - 2
+  - 0
+  yawOffset: 0
+  groundOffset: 0, 0
+  status: draft
+  description: Tracked crane with separate crawler rollers, open grated cargo deck, offset cab, hydraulic cylinder
+    and stowed telescoping boom. Two separate original cargo crates. Source aliases preserve S/W and N/E physical
+    arrangements. Hidden faces and dimensions are inferred. Static initial-state draft; see SOURCES_CRANES.md.
+  parts:
+  - label: central chassis
+    min: -0.89000, -0.30000, 0.19000
+    max: 0.89000, 0.30000, 0.36000
+    color: '#242E2D'
+  - label: lower track run -1
+    min: -0.92000, -0.48800, 0.01300
+    max: 0.92000, -0.32200, 0.05500
+    color: '#1A2022'
+  - label: upper track run -1
+    min: -0.92000, -0.48800, 0.31300
+    max: 0.92000, -0.32200, 0.35500
+    color: '#1A2022'
+  - label: track roller -1 0
+    min: -0.92600, -0.48500, 0.02800
+    max: -0.61400, -0.32500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub -1 0
+    min: -0.83600, -0.49600, 0.11800
+    max: -0.70400, -0.48600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller -1 1
+    min: -0.61600, -0.48500, 0.02800
+    max: -0.30400, -0.32500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub -1 1
+    min: -0.52600, -0.49600, 0.11800
+    max: -0.39400, -0.48600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller -1 2
+    min: -0.30600, -0.48500, 0.02800
+    max: 0.00600, -0.32500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub -1 2
+    min: -0.21600, -0.49600, 0.11800
+    max: -0.08400, -0.48600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller -1 3
+    min: 0.00400, -0.48500, 0.02800
+    max: 0.31600, -0.32500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub -1 3
+    min: 0.09400, -0.49600, 0.11800
+    max: 0.22600, -0.48600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller -1 4
+    min: 0.31400, -0.48500, 0.02800
+    max: 0.62600, -0.32500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub -1 4
+    min: 0.40400, -0.49600, 0.11800
+    max: 0.53600, -0.48600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller -1 5
+    min: 0.62400, -0.48500, 0.02800
+    max: 0.93600, -0.32500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub -1 5
+    min: 0.71400, -0.49600, 0.11800
+    max: 0.84600, -0.48600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: ground tread -1 0
+    min: -0.90000, -0.49700, 0.00900
+    max: -0.85500, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 1
+    min: -0.72600, -0.49700, 0.00900
+    max: -0.68100, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 2
+    min: -0.55200, -0.49700, 0.00900
+    max: -0.50700, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 3
+    min: -0.37800, -0.49700, 0.00900
+    max: -0.33300, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 4
+    min: -0.20400, -0.49700, 0.00900
+    max: -0.15900, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 5
+    min: -0.03000, -0.49700, 0.00900
+    max: 0.01500, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 6
+    min: 0.14400, -0.49700, 0.00900
+    max: 0.18900, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 7
+    min: 0.31800, -0.49700, 0.00900
+    max: 0.36300, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 8
+    min: 0.49200, -0.49700, 0.00900
+    max: 0.53700, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 9
+    min: 0.66600, -0.49700, 0.00900
+    max: 0.71100, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: ground tread -1 10
+    min: 0.84000, -0.49700, 0.00900
+    max: 0.88500, -0.31300, 0.06800
+    color: '#303E3A'
+  - label: lower track run 1
+    min: -0.92000, 0.32200, 0.01300
+    max: 0.92000, 0.48800, 0.05500
+    color: '#1A2022'
+  - label: upper track run 1
+    min: -0.92000, 0.32200, 0.31300
+    max: 0.92000, 0.48800, 0.35500
+    color: '#1A2022'
+  - label: track roller 1 0
+    min: -0.92600, 0.32500, 0.02800
+    max: -0.61400, 0.48500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub 1 0
+    min: -0.83600, 0.48600, 0.11800
+    max: -0.70400, 0.49600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller 1 1
+    min: -0.61600, 0.32500, 0.02800
+    max: -0.30400, 0.48500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub 1 1
+    min: -0.52600, 0.48600, 0.11800
+    max: -0.39400, 0.49600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller 1 2
+    min: -0.30600, 0.32500, 0.02800
+    max: 0.00600, 0.48500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub 1 2
+    min: -0.21600, 0.48600, 0.11800
+    max: -0.08400, 0.49600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller 1 3
+    min: 0.00400, 0.32500, 0.02800
+    max: 0.31600, 0.48500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub 1 3
+    min: 0.09400, 0.48600, 0.11800
+    max: 0.22600, 0.49600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller 1 4
+    min: 0.31400, 0.32500, 0.02800
+    max: 0.62600, 0.48500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub 1 4
+    min: 0.40400, 0.48600, 0.11800
+    max: 0.53600, 0.49600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: track roller 1 5
+    min: 0.62400, 0.32500, 0.02800
+    max: 0.93600, 0.48500, 0.34000
+    color: '#25312F'
+    shape: CylinderY
+  - label: roller hub 1 5
+    min: 0.71400, 0.48600, 0.11800
+    max: 0.84600, 0.49600, 0.25000
+    color: '#53615E'
+    shape: CylinderY
+  - label: ground tread 1 0
+    min: -0.90000, 0.31300, 0.00900
+    max: -0.85500, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 1
+    min: -0.72600, 0.31300, 0.00900
+    max: -0.68100, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 2
+    min: -0.55200, 0.31300, 0.00900
+    max: -0.50700, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 3
+    min: -0.37800, 0.31300, 0.00900
+    max: -0.33300, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 4
+    min: -0.20400, 0.31300, 0.00900
+    max: -0.15900, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 5
+    min: -0.03000, 0.31300, 0.00900
+    max: 0.01500, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 6
+    min: 0.14400, 0.31300, 0.00900
+    max: 0.18900, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 7
+    min: 0.31800, 0.31300, 0.00900
+    max: 0.36300, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 8
+    min: 0.49200, 0.31300, 0.00900
+    max: 0.53700, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 9
+    min: 0.66600, 0.31300, 0.00900
+    max: 0.71100, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: ground tread 1 10
+    min: 0.84000, 0.31300, 0.00900
+    max: 0.88500, 0.49700, 0.06800
+    color: '#303E3A'
+  - label: deck front edge
+    min: -0.97400, -0.49300, 0.35900
+    max: 0.97400, -0.42200, 0.51800
+    color: '#575E5D'
+  - label: deck back edge
+    min: -0.97400, 0.41400, 0.36000
+    max: 0.97400, 0.47900, 0.53700
+    color: '#575E5D'
+  - label: deck cross support
+    min: -0.97400, -0.42400, 0.35800
+    max: -0.92000, 0.42000, 0.51500
+    color: '#575E5D'
+  - label: deck cross support
+    min: -0.13100, -0.42400, 0.35800
+    max: -0.07700, 0.42000, 0.51500
+    color: '#575E5D'
+  - label: deck cross support
+    min: 0.92000, -0.42400, 0.35800
+    max: 0.97400, 0.42000, 0.51500
+    color: '#575E5D'
+  - label: grated deck longitudinal bar 0
+    min: -0.92400, -0.41700, 0.50500
+    max: -0.89500, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 1
+    min: -0.84500, -0.41700, 0.50500
+    max: -0.81600, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 2
+    min: -0.76600, -0.41700, 0.50500
+    max: -0.73700, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 3
+    min: -0.68700, -0.41700, 0.50500
+    max: -0.65800, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 4
+    min: -0.60800, -0.41700, 0.50500
+    max: -0.57900, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 5
+    min: -0.52900, -0.41700, 0.50500
+    max: -0.50000, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 6
+    min: -0.45000, -0.41700, 0.50500
+    max: -0.42100, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 7
+    min: -0.37100, -0.41700, 0.50500
+    max: -0.34200, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 8
+    min: -0.29200, -0.41700, 0.50500
+    max: -0.26300, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck longitudinal bar 9
+    min: -0.21300, -0.41700, 0.50500
+    max: -0.18400, 0.40900, 0.53200
+    color: '#5C6970'
+  - label: grated deck transverse bar 0
+    min: -0.93000, -0.41400, 0.50600
+    max: -0.17400, -0.38700, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 1
+    min: -0.93000, -0.31700, 0.50600
+    max: -0.17400, -0.29000, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 2
+    min: -0.93000, -0.22000, 0.50600
+    max: -0.17400, -0.19300, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 3
+    min: -0.93000, -0.12300, 0.50600
+    max: -0.17400, -0.09600, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 4
+    min: -0.93000, -0.02600, 0.50600
+    max: -0.17400, 0.00100, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 5
+    min: -0.93000, 0.07100, 0.50600
+    max: -0.17400, 0.09800, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 6
+    min: -0.93000, 0.16800, 0.50600
+    max: -0.17400, 0.19500, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 7
+    min: -0.93000, 0.26500, 0.50600
+    max: -0.17400, 0.29200, 0.53400
+    color: '#43515D'
+  - label: grated deck transverse bar 8
+    min: -0.93000, 0.36200, 0.50600
+    max: -0.17400, 0.38900, 0.53400
+    color: '#43515D'
+  - label: cab floor
+    min: -0.05700, -0.41400, 0.51500
+    max: 0.69000, 0.31300, 0.55600
+    color: '#575E5D'
+  - label: cab rear bulkhead
+    min: -0.05700, 0.27600, 0.55400
+    max: 0.69000, 0.31500, 1.12500
+    color: '#575E5D'
+  - label: cab side lower
+    min: -0.05700, -0.41400, 0.55500
+    max: -0.02400, 0.28000, 0.80400
+    color: '#575E5D'
+  - label: cab side glass
+    min: -0.05700, -0.36000, 0.80400
+    max: -0.02400, 0.23400, 1.06300
+    color: '#172222'
+  - label: cab side lower
+    min: 0.65700, -0.41400, 0.55500
+    max: 0.69000, 0.28000, 0.80400
+    color: '#575E5D'
+  - label: cab side glass
+    min: 0.65700, -0.36000, 0.80400
+    max: 0.69000, 0.23400, 1.06300
+    color: '#172222'
+  - label: cab roof
+    min: -0.08300, -0.44600, 1.07300
+    max: 0.71200, 0.34200, 1.14500
+    color: '#575E5D'
+  - label: original cab roof vent
+    min: -0.03700, -0.39600, 1.14600
+    max: 0.67000, 0.29600, 1.15200
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtCabRoof
+    surfaceAxis: XY
+  - label: original cab doors and black glazing
+    min: -0.05000, -0.42000, 0.56200
+    max: 0.69100, -0.41400, 1.07200
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtCabFront
+    surfaceAxis: XZ
+  - label: cab front mullion
+    min: -0.05300, -0.42700, 0.55700
+    max: -0.02600, -0.41500, 1.07800
+    color: '#575E5D'
+  - label: cab front mullion
+    min: 0.30200, -0.42700, 0.55700
+    max: 0.32900, -0.41500, 1.07800
+    color: '#575E5D'
+  - label: cab front mullion
+    min: 0.66000, -0.42700, 0.55700
+    max: 0.68700, -0.41500, 1.07800
+    color: '#575E5D'
+  - label: cab rear glass
+    min: 0.08000, 0.31600, 0.82900
+    max: 0.55400, 0.32200, 1.06600
+    color: '#172222'
+  - label: original chassis compartments
+    min: -0.94100, -0.49900, 0.37300
+    max: -0.12500, -0.49300, 0.64200
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtLowerCompartments
+    surfaceAxis: XZ
+  - label: access ladder rung 0
+    min: 0.26000, -0.59100, 0.17500
+    max: 0.58000, -0.56300, 0.21000
+    color: '#4C5653'
+  - label: access ladder rung 1
+    min: 0.26000, -0.59100, 0.29100
+    max: 0.58000, -0.56300, 0.32600
+    color: '#4C5653'
+  - label: access ladder rung 2
+    min: 0.26000, -0.59100, 0.40500
+    max: 0.58000, -0.56300, 0.44000
+    color: '#4C5653'
+  - label: access ladder stile
+    min: 0.26000, -0.59000, 0.17500
+    max: 0.29000, -0.55600, 0.55800
+    color: '#29332F'
+  - label: access ladder stile
+    min: 0.55000, -0.59000, 0.17500
+    max: 0.58000, -0.55600, 0.55800
+    color: '#29332F'
+  - label: ladder red stripe
+    min: 0.28000, -0.59400, 0.18100
+    max: 0.55000, -0.59000, 0.20700
+    color: '#742A2A'
+  - label: side hydraulic cylinder
+    min: 0.77900, -0.38200, 0.60000
+    max: 0.88500, -0.26200, 1.06500
+    color: '#778481'
+    shape: CylinderZ
+  - label: hydraulic red collar
+    min: 0.77600, -0.38500, 0.92900
+    max: 0.88800, -0.25900, 0.97400
+    color: '#842A2A'
+    shape: CylinderZ
+  - label: boom turntable
+    min: 0.27000, 0.15100, 0.53600
+    max: 0.72000, 0.48700, 0.67200
+    color: '#35423E'
+    shape: CylinderZ
+  - label: boom support mast
+    min: 0.40500, 0.21600, 0.63000
+    max: 0.58500, 0.38100, 1.32100
+    color: '#575E5D'
+  - label: boom outer section
+    min: 0.25500, 0.14200, 1.25900
+    max: 0.94100, 0.42300, 1.57300
+    color: '#575E5D'
+  - label: boom telescopic inner
+    min: -0.82600, 0.17600, 1.33600
+    max: 0.28100, 0.38500, 1.55100
+    color: '#575E5D'
+  - label: boom end housing
+    min: -0.81700, 0.14200, 1.26600
+    max: -0.44000, 0.42400, 1.58500
+    color: '#575E5D'
+  - label: original boom forward markings
+    min: -0.81700, 0.13600, 1.26600
+    max: 0.88200, 0.14200, 1.58500
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtBoom
+    surfaceAxis: XZ
+  - label: original boom rear markings
+    min: -0.81700, 0.42400, 1.26600
+    max: 0.88200, 0.43000, 1.58500
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtBoom
+    surfaceAxis: XZ
+    surfaceFlipU: true
+  - label: boom retaining band
+    min: 0.12400, 0.12400, 1.25800
+    max: 0.15200, 0.44200, 1.58500
+    color: '#635D5A'
+  - label: boom retaining band
+    min: 0.18500, 0.12400, 1.25800
+    max: 0.21300, 0.44200, 1.58500
+    color: '#635D5A'
+  - label: boom retaining band
+    min: 0.24600, 0.12400, 1.25800
+    max: 0.27400, 0.44200, 1.58500
+    color: '#635D5A'
+  - label: visible boom hydraulic ram
+    min: -0.69800, 0.18000, 1.19300
+    max: 0.53800, 0.25000, 1.24600
+    color: '#242C2B'
+    shape: CylinderX
+  - label: cargo crate 0
+    min: -0.91700, 0.03200, 0.53500
+    max: -0.60400, 0.38000, 0.94300
+    color: '#6D421C'
+  - label: original cargo face 0
+    min: -0.91700, 0.02600, 0.54100
+    max: -0.60400, 0.03200, 0.94300
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtCargo0
+    surfaceAxis: XZ
+  - label: crate retaining batten 0
+    min: -0.89700, 0.02200, 0.53900
+    max: -0.87400, 0.38500, 0.95000
+    color: '#906539'
+  - label: crate retaining batten 0
+    min: -0.64700, 0.02200, 0.53900
+    max: -0.62400, 0.38500, 0.95000
+    color: '#906539'
+  - label: cargo crate 1
+    min: -0.57000, -0.38200, 0.53500
+    max: -0.21100, -0.04200, 0.83400
+    color: '#6D421C'
+  - label: original cargo face 1
+    min: -0.57000, -0.38800, 0.54100
+    max: -0.21100, -0.38200, 0.83400
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtCargo1
+    surfaceAxis: XZ
+  - label: crate retaining batten 1
+    min: -0.55000, -0.39200, 0.53900
+    max: -0.52700, -0.03700, 0.84100
+    color: '#906539'
+  - label: crate retaining batten 1
+    min: -0.25400, -0.39200, 0.53900
+    max: -0.23100, -0.03700, 0.84100
+    color: '#906539'
+- type: cmu3DModel
+  id: CMU3DAU14PropVehicleKellandMiningVan
+  label: KellandMiningVan
+  sourcePrototypes:
+  - AU14PropVehicleKellandMiningVan
+  referenceRsi: CMU14/Structures/vehicles/boxvvanwhite.rsi
+  referenceState: box_van_kellandmining_damage_3
+  sourceDirections: 4
+  sourceCardinalFacings:
+  - 0
+  - 2
+  - 2
+  - 0
+  yawOffset: -90
+  groundOffset: 0.5, 0
+  status: draft
+  description: Kelland mining box van using the saved North damage_3 frame, original red branding, cab door and
+    roof panels, four separate tires and actual wheel openings. No invented wreck holes. Source aliases preserve
+    S/W and N/E physical arrangements. Hidden faces and dimensions are inferred. Static initial-state draft; see
+    SOURCES_CRANES.md.
+  parts:
+  - label: central chassis
+    min: -0.31500, -0.93750, 0.16000
+    max: 0.31500, 0.90625, 0.29000
+    color: '#302B20'
+  - label: cargo floor
+    min: -0.36500, -0.37500, 0.29200
+    max: 0.36500, 0.87500, 0.34500
+    color: '#4D3619'
+  - label: axle 0
+    min: -0.41600, -0.58750, 0.18000
+    max: 0.41600, -0.53750, 0.23100
+    color: '#313130'
+    shape: CylinderX
+  - label: tire 0 -1
+    min: -0.42800, -0.75050, 0.01200
+    max: -0.35800, -0.37450, 0.38800
+    color: '#111112'
+    shape: CylinderX
+  - label: recessed rim 0 -1
+    min: -0.43800, -0.67250, 0.09000
+    max: -0.42900, -0.45250, 0.31000
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 0 -1
+    min: -0.44500, -0.61250, 0.15000
+    max: -0.43900, -0.51250, 0.25000
+    color: '#59616F'
+    shape: CylinderX
+  - label: tire 0 1
+    min: 0.35800, -0.75050, 0.01200
+    max: 0.42800, -0.37450, 0.38800
+    color: '#111112'
+    shape: CylinderX
+  - label: recessed rim 0 1
+    min: 0.42900, -0.67250, 0.09000
+    max: 0.43800, -0.45250, 0.31000
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 0 1
+    min: 0.43900, -0.61250, 0.15000
+    max: 0.44500, -0.51250, 0.25000
+    color: '#59616F'
+    shape: CylinderX
+  - label: axle 1
+    min: -0.41600, 0.50625, 0.18000
+    max: 0.41600, 0.55625, 0.23100
+    color: '#313130'
+    shape: CylinderX
+  - label: tire 1 -1
+    min: -0.42800, 0.34325, 0.01200
+    max: -0.35800, 0.71925, 0.38800
+    color: '#111112'
+    shape: CylinderX
+  - label: recessed rim 1 -1
+    min: -0.43800, 0.42125, 0.09000
+    max: -0.42900, 0.64125, 0.31000
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 1 -1
+    min: -0.44500, 0.48125, 0.15000
+    max: -0.43900, 0.58125, 0.25000
+    color: '#59616F'
+    shape: CylinderX
+  - label: tire 1 1
+    min: 0.35800, 0.34325, 0.01200
+    max: 0.42800, 0.71925, 0.38800
+    color: '#111112'
+    shape: CylinderX
+  - label: recessed rim 1 1
+    min: 0.42900, 0.42125, 0.09000
+    max: 0.43800, 0.64125, 0.31000
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 1 1
+    min: 0.43900, 0.48125, 0.15000
+    max: 0.44500, 0.58125, 0.25000
+    color: '#59616F'
+    shape: CylinderX
+  - label: front cab lower
+    min: -0.39900, -0.93750, 0.41500
+    max: 0.39900, -0.68750, 0.70100
+    color: '#76551C'
+  - label: sloping windshield frame
+    min: -0.39900, -0.93750, 0.68000
+    max: 0.39900, -0.65625, 1.17700
+    color: '#644414'
+    shape: WedgeY
+  - label: sloping windshield
+    min: -0.36000, -0.93750, 0.72400
+    max: 0.36000, -0.66250, 1.15100
+    color: '#364141'
+    shape: WedgeY
+  - label: long roof shell
+    min: -0.39900, -0.68750, 1.16400
+    max: 0.39900, 0.84375, 1.21800
+    color: '#76551C'
+  - label: original roof panel
+    min: -0.36800, -0.65625, 1.21900
+    max: 0.36800, 0.78125, 1.22500
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtMiningRoof
+    surfaceAxis: XY
+  - label: rear body closure
+    min: -0.39900, 0.87500, 0.38500
+    max: 0.39900, 0.93750, 1.16500
+    color: '#76551C'
+  - label: wheel opening skirt -1 0
+    min: -0.39900, -0.93750, 0.25000
+    max: -0.36600, -0.76562, 0.43000
+    color: '#76551C'
+  - label: wheel opening skirt -1 1
+    min: -0.39900, -0.34375, 0.25000
+    max: -0.36600, 0.32812, 0.43000
+    color: '#76551C'
+  - label: wheel opening skirt -1 2
+    min: -0.39900, 0.73438, 0.25000
+    max: -0.36600, 0.93750, 0.43000
+    color: '#76551C'
+  - label: upper wheel rail -1
+    min: -0.39900, -0.93750, 0.42700
+    max: -0.36600, 0.93750, 0.47100
+    color: '#644414'
+  - label: cargo side shell -1
+    min: -0.39900, -0.37500, 0.47000
+    max: -0.36600, 0.90625, 1.16600
+    color: '#76551C'
+  - label: original damaged mining logo panel -1
+    min: -0.40600, -0.37500, 0.48200
+    max: -0.40000, 0.90625, 1.13900
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtMiningCargoSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door shell -1
+    min: -0.39900, -0.78125, 0.43900
+    max: -0.36600, -0.37500, 1.16600
+    color: '#76551C'
+  - label: original cab door -1
+    min: -0.40600, -0.78125, 0.44700
+    max: -0.40000, -0.37500, 1.14100
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtMiningDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab rear pillar -1
+    min: -0.39900, -0.39062, 0.43400
+    max: -0.36600, -0.36875, 1.18200
+    color: '#644414'
+  - label: sill vent housing -1
+    min: -0.39900, -0.28125, 0.25200
+    max: -0.36600, 0.28125, 0.43100
+    color: '#76551C'
+  - label: original sill vent -1
+    min: -0.40600, -0.21875, 0.26600
+    max: -0.40000, 0.18750, 0.41400
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtMiningSillVent
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: access step -1
+    min: -0.44500, -0.28125, 0.22300
+    max: -0.38000, 0.28125, 0.25000
+    color: '#57554B'
+  - label: wheel opening skirt 1 0
+    min: 0.36600, -0.93750, 0.25000
+    max: 0.39900, -0.76562, 0.43000
+    color: '#76551C'
+  - label: wheel opening skirt 1 1
+    min: 0.36600, -0.34375, 0.25000
+    max: 0.39900, 0.32812, 0.43000
+    color: '#76551C'
+  - label: wheel opening skirt 1 2
+    min: 0.36600, 0.73438, 0.25000
+    max: 0.39900, 0.93750, 0.43000
+    color: '#76551C'
+  - label: upper wheel rail 1
+    min: 0.36600, -0.93750, 0.42700
+    max: 0.39900, 0.93750, 0.47100
+    color: '#644414'
+  - label: cargo side shell 1
+    min: 0.36600, -0.37500, 0.47000
+    max: 0.39900, 0.90625, 1.16600
+    color: '#76551C'
+  - label: original damaged mining logo panel 1
+    min: 0.40000, -0.37500, 0.48200
+    max: 0.40600, 0.90625, 1.13900
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtMiningCargoSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door shell 1
+    min: 0.36600, -0.78125, 0.43900
+    max: 0.39900, -0.37500, 1.16600
+    color: '#76551C'
+  - label: original cab door 1
+    min: 0.40000, -0.78125, 0.44700
+    max: 0.40600, -0.37500, 1.14100
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtMiningDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab rear pillar 1
+    min: 0.36600, -0.39062, 0.43400
+    max: 0.39900, -0.36875, 1.18200
+    color: '#644414'
+  - label: sill vent housing 1
+    min: 0.36600, -0.28125, 0.25200
+    max: 0.39900, 0.28125, 0.43100
+    color: '#76551C'
+  - label: original sill vent 1
+    min: 0.40000, -0.21875, 0.26600
+    max: 0.40600, 0.18750, 0.41400
+    color: '#FFFFFF'
+    surface: CMU3DCraneArtMiningSillVent
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: access step 1
+    min: 0.38000, -0.28125, 0.22300
+    max: 0.44500, 0.28125, 0.25000
+    color: '#57554B'
+  - label: front bumper
+    min: -0.42000, -1.00000, 0.26000
+    max: 0.42000, -0.95312, 0.47000
+    color: '#535553'
+  - label: rear bumper
+    min: -0.41500, 0.90625, 0.25400
+    max: 0.41500, 0.96875, 0.34100
+    color: '#453C29'
+  - label: front grille
+    min: -0.24200, -0.94375, 0.48700
+    max: 0.24200, -0.93750, 0.60800
+    color: '#332B1F'
+  - label: front lamp
+    min: -0.35200, -0.94688, 0.62500
+    max: -0.23200, -0.93750, 0.69000
+    color: '#AAA89A'
+  - label: front lamp
+    min: 0.23200, -0.94688, 0.62500
+    max: 0.35200, -0.93750, 0.69000
+    color: '#AAA89A'
+  - label: rear red lamp
+    min: -0.35600, 0.94150, 0.41500
+    max: -0.30500, 0.94950, 0.50700
+    color: '#641F21'
+  - label: rear red lamp
+    min: 0.30500, 0.94150, 0.41500
+    max: 0.35600, 0.94950, 0.50700
+    color: '#641F21'
+  - label: rear split cargo door
+    min: -0.37300, 0.94050, 0.38500
+    max: -0.01200, 0.95150, 1.14100
+    color: '#76551C'
+  - label: rear red company stripe
+    min: -0.37300, 0.95250, 0.59200
+    max: -0.01200, 0.95850, 0.66700
+    color: '#872B0A'
+  - label: rear handle
+    min: -0.07700, 0.95950, 0.70000
+    max: -0.05300, 0.97550, 0.78600
+    color: '#998B6C'
+  - label: rear split cargo door
+    min: 0.01200, 0.94050, 0.38500
+    max: 0.37300, 0.95150, 1.14100
+    color: '#76551C'
+  - label: rear red company stripe
+    min: 0.01200, 0.95250, 0.59200
+    max: 0.37300, 0.95850, 0.66700
+    color: '#872B0A'
+  - label: rear handle
+    min: 0.05300, 0.95950, 0.70000
+    max: 0.07700, 0.97550, 0.78600
+    color: '#998B6C'

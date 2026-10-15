@@ -451,7 +451,7 @@ public abstract partial class SharedBoneSystem : EntitySystem
         return true;
     }
 
-    public int ChemicallyMendFractures(EntityUid body, FixedPoint2 amount)
+    public int ChemicallyMendFractures(EntityUid body, FixedPoint2 amount, bool requireSet = true)
     {
         if (amount <= FixedPoint2.Zero)
             return 0;
@@ -462,7 +462,7 @@ public abstract partial class SharedBoneSystem : EntitySystem
             if (!TryComp<BoneComponent>(part, out var bone) ||
                 !TryComp<FractureComponent>(part, out var fracture) ||
                 fracture.Severity is FractureSeverity.None or FractureSeverity.Shattered ||
-                !HasComp<CMUSplintedComponent>(part) && !HasComp<CMUCastComponent>(part))
+                requireSet && !HasComp<CMUSplintedComponent>(part) && !HasComp<CMUCastComponent>(part))
             {
                 continue;
             }
@@ -475,6 +475,30 @@ public abstract partial class SharedBoneSystem : EntitySystem
         }
 
         return treated;
+    }
+
+    /// <summary>
+    /// Cryogenic repair restores structural integrity on every fractured native bone,
+    /// including compound and shattered fractures that ordinary chemicals cannot mend.
+    /// </summary>
+    public void CryogenicallyMendFractures(EntityUid body, FixedPoint2 amount)
+    {
+        if (amount <= FixedPoint2.Zero)
+            return;
+
+        foreach (var (part, _) in _medicalIndex.GetBodyParts(body))
+        {
+            if (!TryComp<BoneComponent>(part, out var bone) ||
+                !TryComp<FractureComponent>(part, out var fracture) ||
+                fracture.Severity == FractureSeverity.None ||
+                HasComp<CMURoboticLimbComponent>(part))
+                continue;
+
+            RestoreIntegrity((part, bone), bone.Integrity + amount);
+            var healedSeverity = SeverityFromIntegrity(bone);
+            if (healedSeverity < fracture.Severity)
+                Fracture.SetSeverity((part, fracture), healedSeverity, forceUpgrade: false);
+        }
     }
 
     public bool ApplyChemicalMalunion(EntityUid body)

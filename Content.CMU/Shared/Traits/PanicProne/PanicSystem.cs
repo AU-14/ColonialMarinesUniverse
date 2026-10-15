@@ -62,26 +62,28 @@ public abstract partial class PanicSystem : EntitySystem
         if (args.NewMobState != MobState.Dead)
             return;
 
+        // A death can have hundreds of observers with the same trait radius. Keep the spatial
+        // results local to this event so nested deaths cannot overwrite another death's lookup.
+        Dictionary<float, HashSet<EntityUid>>? nearbyByRadius = null;
         var query = EntityQueryEnumerator<PanicComponent>();
         while (query.MoveNext(out var uid, out var panic))
         {
             if (uid == args.Target)
                 continue;
 
-            if (!IsNearbyAndVisible(uid, args.Target, panic.NearbyDeathRadius))
+            nearbyByRadius ??= new Dictionary<float, HashSet<EntityUid>>();
+            if (!nearbyByRadius.TryGetValue(panic.NearbyDeathRadius, out var nearby))
+            {
+                nearby = _lookup.GetEntitiesInRange(args.Target, panic.NearbyDeathRadius, LookupFlags.Dynamic);
+                nearbyByRadius.Add(panic.NearbyDeathRadius, nearby);
+            }
+
+            if (!nearby.Contains(uid) ||
+                !_interaction.InRangeUnobstructed(args.Target, uid, panic.NearbyDeathRadius))
                 continue;
 
             AddPanic((uid, panic), panic.NearbyDeathGain);
         }
-    }
-
-    private bool IsNearbyAndVisible(EntityUid observer, EntityUid dead, float radius)
-    {
-        var nearby = _lookup.GetEntitiesInRange(dead, radius, LookupFlags.Dynamic);
-        if (!nearby.Contains(observer))
-            return false;
-
-        return _interaction.InRangeUnobstructed(dead, observer, radius);
     }
 
     public void AddPanic(Entity<PanicComponent?> ent, double amount)

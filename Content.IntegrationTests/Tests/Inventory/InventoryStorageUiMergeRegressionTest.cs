@@ -1,3 +1,4 @@
+using Content.Client.CMU14.UserInterface;
 #pragma warning disable RA0002 // Integration regression intentionally inspects restricted component state.
 
 using System.Numerics;
@@ -249,12 +250,12 @@ public sealed class InventoryStorageUiMergeRegressionTest : GameTest
                     Assert.That(container.TryGetButton("second", out _), Is.False);
                 });
 
-                adoptedParent.Dispose();
-                container.Dispose();
-                button.Dispose();
-                blank.Dispose();
-                duplicate.Dispose();
-                second.Dispose();
+                adoptedParent.Release();
+                container.Release();
+                button.Release();
+                blank.Release();
+                duplicate.Release();
+                second.Release();
             });
         }
         finally
@@ -310,7 +311,7 @@ public sealed class InventoryStorageUiMergeRegressionTest : GameTest
                 Assert.That(hover.Color, Is.EqualTo(new Color(255, 0, 0, 127)),
                     "an unskilled local user must see the RMC storage preview as rejected");
                 button.ClearHover();
-                button.Dispose();
+                button.Release();
             });
 
             await Server.WaitAssertion(() =>
@@ -340,7 +341,7 @@ public sealed class InventoryStorageUiMergeRegressionTest : GameTest
                 Assert.That(hover.Color, Is.EqualTo(new Color(0, 255, 0, 127)),
                     "the same generic fit must become green only after the user-aware RMC gate passes");
                 button.ClearHover();
-                button.Dispose();
+                button.Release();
             });
         }
         finally

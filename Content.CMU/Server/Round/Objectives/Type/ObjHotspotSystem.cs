@@ -12,9 +12,9 @@ namespace Content.Server.CMU14.Round.Objectives.Type;
 
 public sealed partial class ObjHotspotSystem : ObjectiveSystem
 {
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedTacticalMapSystem _tacMap = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedTacticalMapSystem _tacMap = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {

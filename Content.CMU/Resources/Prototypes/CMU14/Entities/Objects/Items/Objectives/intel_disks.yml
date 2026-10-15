@@ -18,9 +18,14 @@
   - type: Tag
     tags:
     - RMCDataDisk
+    # lets the medical belts carry the disk without admitting legacy RMC disks
+    - CMUIntelDisk
   - type: CMUIntelDataDisk
     value: 1
   - type: UserInterface
     interfaces:
       enum.CMUIntelDecryptUiKey.Key:
         type: CMUIntelDecryptBui
+
+- type: Tag
+  id: CMUIntelDisk

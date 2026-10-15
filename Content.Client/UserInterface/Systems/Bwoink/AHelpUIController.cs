@@ -1,3 +1,4 @@
+using Robust.Shared.Audio;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
@@ -145,7 +146,7 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         if (message.PlaySound && localPlayer.UserId != message.TrueSender)
         {
             if (_aHelpSound != null && (_bwoinkSoundEnabled || !_adminManager.IsActive()))
-                _audio.PlayGlobal(_aHelpSound, Filter.Local(), false);
+                _audio.PlayGlobal(new ResolvedPathSpecifier(_aHelpSound), Filter.Local(), false);
             _clyde.RequestWindowAttention();
         }
 
@@ -228,7 +229,7 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         }
 
         helper.Control.Orphan();
-        helper.Window.Dispose();
+        helper.Window.Release();
         helper.Window = null;
         helper.EverOpened = false;
 
@@ -437,7 +438,7 @@ public sealed partial class AdminAHelpUIHandler : IAHelpUIHandler
                 {
                     panel.Orphan();
                 }
-                Control?.Dispose();
+                Control?.Release();
             }
             // window wont be closed here so we will invoke ourselves
             OnClose?.Invoke();

@@ -16,6 +16,7 @@
     supplyDrop: false
     weatherEnabled: false
     noTunnel: true
+  - type: CMUDestroyLeapAllowed
 
 - type: entity
   parent: AU14AreaUSSGeorgeBush

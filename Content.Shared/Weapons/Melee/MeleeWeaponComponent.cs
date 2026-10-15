@@ -20,10 +20,6 @@ public sealed partial class MeleeWeaponComponent : Component
     [DataField]
     public bool WidePrimary;
 
-   //CMU, if false weapon cant wide swing
-    [DataField]
-    public bool WideAttackAllowed = true;
-
     // TODO: This is becoming bloated as shit.
     // This should just be its own component for alt attacks.
     /// <summary>

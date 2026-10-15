@@ -13,11 +13,11 @@ namespace Content.Client.CMU14.Ops.Sfx;
 
 public sealed partial class ScriptedSoundSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IClientGameStateManager _gameStates = default!;
-    [Dependency] private readonly IPlayerManager _plyMan = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IClientGameStateManager _gameStates = default!;
+    [Dependency] private IPlayerManager _plyMan = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private bool _muted;
     private bool _resyncPending;
@@ -92,7 +92,7 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
         var played = ev.Global
             ? _audio.PlayGlobal(ev.Sound, Filter.Local(), false, ev.Params)
             : ev.AnchorCoords is { } coords
-                ? _audio.PlayPvs(ev.Sound, EntityManager.GetCoordinates(coords), ev.Params)
+                ? _audio.PlayPvs(ev.Sound, GetCoordinates(coords), ev.Params)
                 : null;
 
         if (played is not { } stream)

@@ -47,7 +47,7 @@
   - type: StorageFill
     contents:
     - id: AU14HemostaticGauzePacket
-    - id: AU14HemostaticGauzePacket
+    - id: CMOintment10
     - id: AU14Tourniquet
     - id: CMPacketPillsTricordrazine
     - id: AU14PacketPillsTramadol

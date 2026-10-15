@@ -467,7 +467,8 @@
   id: ActionXenoVomitBile
   parent: ActionXenoBase
   name: Vomit Bile (40)
-  description: Extinguishes a nearby hivemate or sprays volatile bile over enemies in the three tiles in front of you.
+  # CMU14: Extinguishes a nearby hivemate or sprays volatile bile over enemies in the three tiles in front of you.
+  description: Extinguishes a hivemate or sprays volatile bile at an enemy and across three rows in front of you. Ignites enemies while you are burning.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -478,7 +479,8 @@
       state: xeno_spit
       map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
-    range: 1.8
+    # range: 1.8 # CMU14
+    range: 5.4 # CMU14: triple bile targeting range.
     checkCanAccess: false
   - type: EntityTargetAction
     targetCheckCanInteract: false

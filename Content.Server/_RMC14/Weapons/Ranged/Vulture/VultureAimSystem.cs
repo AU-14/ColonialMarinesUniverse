@@ -117,7 +117,7 @@ public sealed partial class VultureAimSystem : SharedVultureAimSystem
 
             if (!HasDeployedBipod(rifle))
             {
-                _popup.PopupClient(
+                _popup.PopupEntity(
                     Loc.GetString("rmc-vulture-bipod-required", ("gun", rifle.Owner)),
                     ev.User,
                     ev.User,

@@ -20,7 +20,8 @@ public sealed partial class StepTriggerSystem : EntitySystem
     public override void Initialize()
     {
         UpdatesOutsidePrediction = true;
-        SubscribeLocalEvent<StepTriggerComponent, AfterAutoHandleStateEvent>(TriggerHandleState);
+        // CMU14: explicit state handling refreshes activation after restoring the contact sets.
+        // SubscribeLocalEvent<StepTriggerComponent, AfterAutoHandleStateEvent>(TriggerHandleState);
 
         SubscribeLocalEvent<StepTriggerComponent, StartCollideEvent>(OnStartCollide);
         SubscribeLocalEvent<StepTriggerComponent, EndCollideEvent>(OnEndCollide);
@@ -190,7 +191,7 @@ public sealed partial class StepTriggerSystem : EntitySystem
         }
     }
 
-    private void TriggerHandleState(EntityUid uid, StepTriggerComponent component, ref AfterAutoHandleStateEvent args)
+    private void RefreshActiveTrigger(EntityUid uid, StepTriggerComponent component) // CMU14
     {
         if (component.Colliding.Count > 0)
         {

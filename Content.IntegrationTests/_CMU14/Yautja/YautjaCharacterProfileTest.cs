@@ -31,6 +31,9 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaCharacterProfileTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaMaskAccessory02BronzePrototype = "CMUYautjaMaskAccessory02Bronze";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaMaskOrnamentPrototype = "CMUYautjaMaskOrnament";
+
     [Test]
     public void YautjaProfileCopiesWithoutChangingNormalSpecies()
     {
@@ -266,7 +269,7 @@ public sealed class YautjaCharacterProfileTest
                     YautjaTestAppearance.Apply(entMan, dummy, profile);
 
                     var sprite = entMan.GetComponent<SpriteComponent>(dummy);
-                    Assert.That(sprite.LayerMapTryGet(HumanoidVisualLayers.Chest, out var chestLayer), Is.True);
+                    Assert.That(entMan.System<SpriteSystem>().LayerMapTryGet((dummy, sprite), HumanoidVisualLayers.Chest, out var chestLayer, logMissing: false), Is.True);
                     var chest = (SpriteComponent.Layer) sprite[chestLayer];
                     Assert.That(chest.ShaderPrototype?.Id, Is.EqualTo("Greyscale"),
                         $"{skinColor} must neutralize the warm source texture instead of inheriting its yellow cast.");
@@ -348,9 +351,9 @@ public sealed class YautjaCharacterProfileTest
             var cache = client.ResolveDependency<IResourceCache>();
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.EntMan.ComponentFactory;
-            var accessory = prototypes.Index<EntityPrototype>("CMUYautjaMaskAccessory02Bronze");
+            var accessory = prototypes.Index<EntityPrototype>(CMUYautjaMaskAccessory02BronzePrototype);
 
-            Assert.That(accessory.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True);
+            Assert.That(accessory.TryComp<SpriteComponent>(out var sprite, factory), Is.True);
             var state = sprite!.AllLayers.First().RsiState.Name;
             var rsiPath = new ResPath("/Textures/CMU14/Yautja/mask_accessories_onmob.rsi");
 
@@ -386,7 +389,7 @@ public sealed class YautjaCharacterProfileTest
             Assert.That(onMobResource!.RSI.Size, Is.EqualTo(new Vector2i(32, 64)),
                 "CMSS13 mask accessories use a separate on-mob accessory DMI for WEAR_FACE overlays.");
 
-            var basePrototype = prototypes.Index<EntityPrototype>("CMUYautjaMaskOrnament");
+            var basePrototype = prototypes.Index<EntityPrototype>(CMUYautjaMaskOrnamentPrototype);
             Assert.Multiple(() =>
             {
                 Assert.That(basePrototype.Name, Is.EqualTo("Mask Ornament"));
@@ -401,7 +404,7 @@ public sealed class YautjaCharacterProfileTest
                 {
                     Assert.That(prototype.Name, Is.EqualTo("Mask Ornament"), row.Id);
                     Assert.That(prototype.Description, Is.EqualTo("An ornate addition to your mask."), row.Id);
-                    Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
+                    Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
                     Assert.That(sprite!.BaseRSI?.Path,
                         Is.EqualTo(new ResPath("/Textures/CMU14/Yautja/mask_accessories.rsi")),
                         $"{row.Id} maps CMSS13 icons/obj/items/hunter/pred_mask_accessories.dmi.");
@@ -472,11 +475,11 @@ public sealed class YautjaCharacterProfileTest
                         $"{row.Id} inherits the CMSS13 source item name from /obj/item/clothing/mask/gas/yautja/hunter; post_vendor_spawn_hook only changes icon_state.");
                     Assert.That(prototype.Description, Is.EqualTo(row.Description),
                         $"{row.Id} inherits the CMSS13 source description from /obj/item/clothing/mask/gas/yautja/hunter; post_vendor_spawn_hook only changes icon_state.");
-                    Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
+                    Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
                     Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(rsiPath),
                         $"{row.Id} maps CMSS13 pred_mask.dmi icon_state {row.State}.");
                     Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo("icon"), row.Id);
-                    Assert.That(prototype.TryGetComponent<ClothingComponent>(out var clothing, factory), Is.True, row.Id);
+                    Assert.That(prototype.TryComp<ClothingComponent>(out var clothing, factory), Is.True, row.Id);
                     Assert.That(clothing!.RsiPath, Is.EqualTo($"CMU14/Yautja/masks/{row.State}.rsi"),
                         $"{row.Id} maps CMSS13 item_state_slots WEAR_FACE {row.State}.");
                     Assert.That(cache.TryGetResource<RSIResource>(rsiPath, out var resource), Is.True,
@@ -537,10 +540,10 @@ public sealed class YautjaCharacterProfileTest
                 {
                     Assert.That(prototype.Name, Is.EqualTo(row.Name), row.Id);
                     Assert.That(prototype.Description, Is.EqualTo(row.Description), row.Id);
-                    Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
+                    Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
                     Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(rsiPath), row.Id);
                     Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo("icon"), row.Id);
-                    Assert.That(prototype.TryGetComponent<ClothingComponent>(out var clothing, factory), Is.True, row.Id);
+                    Assert.That(prototype.TryComp<ClothingComponent>(out var clothing, factory), Is.True, row.Id);
                     Assert.That(clothing!.RsiPath, Is.EqualTo($"CMU14/Yautja/masks/{row.Rsi}.rsi"), row.Id);
                     Assert.That(cache.TryGetResource<RSIResource>(rsiPath, out var resource), Is.True, row.Id);
                     Assert.That(resource!.RSI.Size, Is.EqualTo(row.RsiSize), row.Id);

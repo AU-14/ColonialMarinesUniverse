@@ -134,6 +134,25 @@ namespace Content.Server.Database
                 .Property(p => p.Build)
                 .HasDefaultValue(string.Empty);
 
+            // CMU14
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.BloodType)
+                .HasDefaultValue(string.Empty);
+
+            // cmu edit start
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.Religion)
+                .HasDefaultValue(string.Empty);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.ArmorFlavorText)
+                .HasDefaultValue(string.Empty);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.HelmetFlavorText)
+                .HasDefaultValue(string.Empty);
+            // cmu edit end
+
             modelBuilder.Entity<Profile>()
                 .Property(p => p.HideMetaInformation)
                 .HasDefaultValue(false);
@@ -671,6 +690,13 @@ namespace Content.Server.Database
         public string Height { get; set; } = string.Empty;
         public int Weight { get; set; } = 160;
         public string Build { get; set; } = string.Empty;
+        public string BloodType { get; set; } = string.Empty; // CMU14
+        // cmu edit start
+        public bool FoxtrotSquadOptIn { get; set; }
+        public string Religion { get; set; } = string.Empty;
+        public string ArmorFlavorText { get; set; } = string.Empty;
+        public string HelmetFlavorText { get; set; } = string.Empty;
+        // cmu edit end
         public bool HideMetaInformation { get; set; }
     }
 

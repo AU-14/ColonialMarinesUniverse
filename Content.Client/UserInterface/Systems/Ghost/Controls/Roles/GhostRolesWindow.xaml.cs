@@ -93,24 +93,32 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
 
             if (call.Pending)
             {
+                GhostCallButton.Visible = true;
                 GhostCallButton.Text = Loc.GetString("cmu-ghost-call-pending");
                 GhostCallButton.Disabled = true;
                 GhostCallStatus.Text = string.Empty;
             }
             else if (call.Available)
             {
+                GhostCallButton.Visible = true;
                 GhostCallButton.Text = Loc.GetString("cmu-ghost-call-button");
                 GhostCallButton.Disabled = false;
                 GhostCallStatus.Text = Loc.GetString("cmu-ghost-call-status-available");
             }
+            else if (call.MinutesLeft > 0)
+            {
+                GhostCallButton.Visible = false;
+                GhostCallStatus.Text = Loc.GetString("cmu-ghost-call-status-time", ("minutes", call.MinutesLeft));
+            }
             else
             {
+                GhostCallButton.Visible = true;
                 GhostCallButton.Text = Loc.GetString("cmu-ghost-call-button");
                 GhostCallButton.Disabled = true;
-                GhostCallStatus.Text = call.MinutesLeft > 0
-                    ? Loc.GetString("cmu-ghost-call-status-time", ("minutes", call.MinutesLeft))
-                    : Loc.GetString("cmu-ghost-call-status-dead",
-                        ("dead", call.Dead), ("required", call.RequiredDead));
+                GhostCallStatus.Text = call.Dead < call.RequiredDead
+                    ? Loc.GetString("cmu-ghost-call-status-dead",
+                        ("dead", call.Dead), ("required", call.RequiredDead))
+                    : Loc.GetString("cmu-ghost-call-deny-none");
             }
         }
 

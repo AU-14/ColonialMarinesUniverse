@@ -105,6 +105,9 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
         // TODO using targeted actions while combat mode is enabled should NOT trigger attacks.
 
         var mousePos = _eyeManager.PixelToMap(_inputManager.MouseScreenPosition);
+        // CMU14: captured first-person attacks use the center aiming ray.
+        if (EntityManager.System<CMU14.ThreeD.Scene.CMU3DLiveSceneSystem>().TryFirstPersonAim(out var aim, out _))
+            mousePos = aim;
 
         if (mousePos.MapId == MapId.Nullspace)
         {
@@ -208,10 +211,6 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
     /// </summary>
     public void ClientHeavyAttack(EntityUid user, EntityCoordinates coordinates, EntityUid meleeUid, MeleeWeaponComponent component)
     {
-        //CMU no wide swing
-        if (!component.WideAttackAllowed)
-            return;
-
         // Only run on first prediction to avoid the potential raycast entities changing.
         if (!TryComp(user, out TransformComponent? userXform) ||
             !Timing.IsFirstTimePredicted)

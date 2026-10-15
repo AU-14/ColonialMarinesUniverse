@@ -1,0 +1,15 @@
+author: maertayn
+category: CMU
+changes:
+- message: Ghost callable minor third party
+  type: Add
+- message: Per warship alert levels, some light fixtures emit light
+  type: Add
+- message: Crit whispering works and auto-punctuate is on by default again
+  type: Fix
+- message: Decal chunk fix was reverted by rebase, performance should be better
+  type: Fix
+- message: Hazardous weather effects
+  type: Add
+time: '2026-10-08T06:30:13.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2101

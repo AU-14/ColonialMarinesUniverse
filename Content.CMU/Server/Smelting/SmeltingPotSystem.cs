@@ -36,18 +36,18 @@ namespace Content.Server.CMU14.Smelting;
 /// </summary>
 public sealed partial class SmeltingPotSystem : EntitySystem
 {
-    [Dependency] private  IGameTiming _timing = default!;
-    [Dependency] private  IPrototypeManager _prototype = default!;
-    [Dependency] private  SharedStackSystem _stack = default!;
-    [Dependency] private  SharedPopupSystem _popup = default!;
-    [Dependency] private  SharedAudioSystem _audio = default!;
-    [Dependency] private  SharedHandsSystem _hands = default!;
-    [Dependency] private  SharedTransformSystem _transform = default!;
-    [Dependency] private  SharedAppearanceSystem _appearance = default!;
-    [Dependency] private  EntityLookupSystem _lookup = default!;
-    [Dependency] private  DamageableSystem _damageable = default!;
-    [Dependency] private  ThrowingSystem _throwing = default!;
-    [Dependency] private  SharedRMCEmoteSystem _emote = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SharedStackSystem _stack = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private SharedRMCEmoteSystem _emote = default!;
 
     /// <summary>Played once when a batch finishes.</summary>
     private static readonly SoundSpecifier BatchDoneSound = new SoundPathSpecifier("/Audio/Effects/sizzle.ogg");
@@ -249,7 +249,7 @@ public sealed partial class SmeltingPotSystem : EntitySystem
 
             var ent = Spawn(spawnProto, coords);
             if (TryComp<StackComponent>(ent, out var stack))
-                _stack.SetCount(ent, chunk, stack);
+                _stack.SetCount((ent, stack), chunk);
 
             // Put the first stack straight into the collector's hands; the rest land at the pot's feet.
             if (first && user != null)

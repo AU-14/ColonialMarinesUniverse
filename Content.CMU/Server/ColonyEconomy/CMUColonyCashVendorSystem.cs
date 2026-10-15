@@ -1,4 +1,7 @@
 using Content.Server.GameTicking;
+using Content.Shared.CMU14;
+using Content.Shared.CMU14.Dropship.MultiDeck;
+using Content.Shared.CMU14.Marines;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Vendors;
 using Content.Shared.CMU14.ZLevels.Core.Components;
@@ -9,11 +12,11 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.CMU14.ColonyEconomy;
 
 /// <summary>
-/// Colonists pay for their food, drinks, smokes and entertainment. At round start this swaps the free
-/// food, drink, cigarette, recreation and clothing vendors on the planet for cash-operated CMU versions.
-/// Ships keep the free ones, since marines don't carry cash.
+/// Food, drinks, smokes and entertainment cost money. At round start this swaps the free food, drink,
+/// cigarette, recreation and clothing vendors on the planet and on the GOVFOR/OPFOR ships for
+/// cash-operated CMU versions.
 /// </summary>
-public sealed class CMUColonyCashVendorSystem : EntitySystem
+public sealed partial class CMUColonyCashVendorSystem : EntitySystem
 {
     [Dependency] private SharedTransformSystem _transform = default!;
 
@@ -46,6 +49,7 @@ public sealed class CMUColonyCashVendorSystem : EntitySystem
     };
 
     private readonly List<(EntityUid Uid, EntProtoId Replacement)> _toReplace = new();
+    private readonly HashSet<EntityUid> _shipMaps = new();
 
     public override void Initialize()
     {
@@ -60,6 +64,7 @@ public sealed class CMUColonyCashVendorSystem : EntitySystem
             return;
 
         _toReplace.Clear();
+        CollectShipMaps();
         Collect(EntityQueryEnumerator<VendingMachineComponent>());
         Collect(EntityQueryEnumerator<CMAutomatedVendorComponent>());
 
@@ -69,9 +74,32 @@ public sealed class CMUColonyCashVendorSystem : EntitySystem
         }
 
         if (_toReplace.Count > 0)
-            Log.Info($"Replaced {_toReplace.Count} free vendors on the planet with cash vendors.");
+            Log.Info($"Replaced {_toReplace.Count} free vendors on the planet and ships with cash vendors.");
 
         _toReplace.Clear();
+        _shipMaps.Clear();
+    }
+
+    /// <summary>
+    /// Maps holding a GOVFOR/OPFOR ship grid, or marked as a warship. Multi-deck dropships also carry a
+    /// ship faction but are dropships, so they are left alone.
+    /// </summary>
+    private void CollectShipMaps()
+    {
+        _shipMaps.Clear();
+
+        var ships = EntityQueryEnumerator<ShipFactionComponent, TransformComponent>();
+        while (ships.MoveNext(out var uid, out _, out var xform))
+        {
+            if (!HasComp<MultiDeckDropshipComponent>(uid) && xform.MapUid is { } map)
+                _shipMaps.Add(map);
+        }
+
+        var warships = EntityQueryEnumerator<WarshipComponent, TransformComponent>();
+        while (warships.MoveNext(out var uid, out _, out var xform))
+        {
+            _shipMaps.Add(xform.MapUid ?? uid);
+        }
     }
 
     private void Collect<T>(EntityQueryEnumerator<T> query) where T : IComponent
@@ -80,7 +108,7 @@ public sealed class CMUColonyCashVendorSystem : EntitySystem
         {
             if (MetaData(uid).EntityPrototype?.ID is not { } id ||
                 !Replacements.TryGetValue(id, out var replacement) ||
-                !IsOnPlanet(uid))
+                !IsOnPlanetOrShip(uid))
             {
                 continue;
             }
@@ -89,27 +117,32 @@ public sealed class CMUColonyCashVendorSystem : EntitySystem
         }
     }
 
-    private bool IsOnPlanet(EntityUid uid)
+    private bool IsOnPlanetOrShip(EntityUid uid)
     {
         if (Transform(uid).MapUid is not { } map)
             return false;
 
-        if (HasComp<RMCPlanetComponent>(map))
+        if (IsPlanetOrShipMap(map))
             return true;
 
-        // Only the planet's main level is marked, so check the rest of its Z-levels.
+        // Only the main level is marked, so check the rest of its Z-levels.
         if (!TryComp(map, out CMUZLevelMapComponent? level))
             return false;
 
-        return IsLevelOnPlanet(level, true) || IsLevelOnPlanet(level, false);
+        return IsLevelOnPlanetOrShip(level, true) || IsLevelOnPlanetOrShip(level, false);
     }
 
-    private bool IsLevelOnPlanet(CMUZLevelMapComponent level, bool up)
+    private bool IsPlanetOrShipMap(EntityUid map)
+    {
+        return HasComp<RMCPlanetComponent>(map) || _shipMaps.Contains(map);
+    }
+
+    private bool IsLevelOnPlanetOrShip(CMUZLevelMapComponent level, bool up)
     {
         var next = up ? level.MapAbove : level.MapBelow;
         while (next is { } map)
         {
-            if (HasComp<RMCPlanetComponent>(map))
+            if (IsPlanetOrShipMap(map))
                 return true;
 
             if (!TryComp(map, out CMUZLevelMapComponent? nextLevel))

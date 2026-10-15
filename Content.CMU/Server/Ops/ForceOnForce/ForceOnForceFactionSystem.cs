@@ -24,21 +24,21 @@ namespace Content.Server.CMU14.Ops.ForceOnForce;
 /// on the leading side respawn straight back into it, which defeated the gap balancer.
 /// Round-start dealing lives in StationJobsSystem.AssignJobs.
 /// </summary>
-public sealed class ForceOnForceFactionSystem : EntitySystem
+public sealed partial class ForceOnForceFactionSystem : EntitySystem
 {
     private const double ConfirmValiditySeconds = 60;
     private static readonly ProtoId<JobPrototype> GovforRifleman = "AU14JobGOVFORSquadRifleman";
     private static readonly ProtoId<JobPrototype> OpforRifleman = "AU14JobOPFORSquadRifleman";
 
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly StationJobsSystem _stationJobs = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IServerNetManager _netManager = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private StationSystem _station = default!;
+    [Dependency] private StationJobsSystem _stationJobs = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IServerNetManager _netManager = default!;
 
     private readonly Dictionary<NetUserId, string> _factions = new();
     private readonly Dictionary<NetUserId, PendingBalanceJoin> _pendingJoins = new();

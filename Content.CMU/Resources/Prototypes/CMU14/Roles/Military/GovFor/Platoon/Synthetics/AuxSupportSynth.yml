@@ -106,8 +106,6 @@
         RMCSkillNavigations: 1
 
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -122,6 +120,7 @@
     - SlowRunner
     - Anemic
     - CMUProstheticRightLeg
+    - CMUBadLeg
   ranks:
     RMCRankSyntheticColonist: []
   chevrons:
@@ -243,8 +242,6 @@
   name: au14-job-name-govforauxsupportsynthRMC
   spawnMenuRoleName: Support Synth (TWE RMC)
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 7200 # 2 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -252,6 +249,7 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUBadLeg
   ranks:
     RMC_WarrantOfficer1:
     - !type:RoleTimeRequirement
@@ -275,8 +273,6 @@
   roundForce: UPP
   spawnMenuRoleName: Support Synth (UPP)
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 7200 # 2 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -284,6 +280,7 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUBadLeg
   ranks:
     UPP_SeniorWarrantOfficer:
     - !type:RoleTimeRequirement

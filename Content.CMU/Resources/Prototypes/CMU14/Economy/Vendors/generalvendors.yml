@@ -99,6 +99,14 @@
         amount: 30
       - id: CMJumpsuitLiaisonCharcoal
         amount: 30
+      - id: RMCJumpsuitLiaisonBlackSuitskirt
+        amount: 30
+      - id: RMCJumpsuitLiaisonCharcoalSuitskirt
+        amount: 30
+      - id: RMCJumpsuitLiaisonFieldSuitskirt
+        amount: 30
+      - id: RMCJumpsuitLiaisonSkirt
+        amount: 30
     - name: Miscellaneous Clothes
       entries:
       - id: RMCJumpsuitDutchBandolier
@@ -403,7 +411,9 @@
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
       - id: CMBeltMedicBag
+        recommended: true
       - id: AU14BeltMedicBagBlack
+      - id: CMBeltMedical
     - name: Medical Webbing
       choices: { CMUPlatoonSurgicalWebbing: 1 }
       entries:
@@ -417,6 +427,10 @@
       choices: { CMUPlatoonMedicalMasks: 1 }
       entries:
       - id: CMMaskSterile
+    - name: Synthetic Supplies
+      entries:
+      - id: CMUSynthBloodPackFull
+        amount: 2
 
 - type: entity
   parent: CMVendorBundleRiflemanApparel

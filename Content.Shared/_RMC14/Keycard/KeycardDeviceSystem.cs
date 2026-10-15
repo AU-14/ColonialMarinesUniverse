@@ -38,7 +38,7 @@ public sealed partial class KeycardDeviceSystem : EntitySystem
     {
         if (!_accessReader.IsAllowed(args.User, ent))
         {
-            _popup.PopupClient(Loc.GetString("rmc-access-denied"), ent, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-access-denied"), ent, args.User, PopupType.SmallCaution);
             return;
         }
 
@@ -89,7 +89,7 @@ public sealed partial class KeycardDeviceSystem : EntitySystem
             var access = _accessReader.FindAccessTags(args.Used);
             if (!_accessReader.AreAccessTagsAllowed(access, accessReader))
             {
-                _popup.PopupClient(Loc.GetString("rmc-access-denied"), ent, args.User, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-access-denied"), ent, args.User, PopupType.SmallCaution);
                 return;
             }
         }
@@ -100,7 +100,7 @@ public sealed partial class KeycardDeviceSystem : EntitySystem
         if (ent.Comp.LastStep is { } lastStep && lastStep + ent.Comp.Cooldown > time)
         {
             var remaining = lastStep + ent.Comp.Cooldown - time;
-            _popup.PopupClient(Loc.GetString("rmc-keycard-device-cooldown",
+            _popup.PopupEntity(Loc.GetString("rmc-keycard-device-cooldown",
                 ("seconds", (int) remaining.TotalSeconds)), ent, args.User, PopupType.SmallCaution);
             return;
         }
@@ -130,7 +130,7 @@ public sealed partial class KeycardDeviceSystem : EntitySystem
         if (target == current)
         {
             var name = Loc.GetString($"rmc-alert-{current.ToString().ToLowerInvariant()}");
-            _popup.PopupClient(Loc.GetString("rmc-keycard-device-already", ("level", name)),
+            _popup.PopupEntity(Loc.GetString("rmc-keycard-device-already", ("level", name)),
                 ent, args.User, PopupType.SmallCaution);
             return;
         }

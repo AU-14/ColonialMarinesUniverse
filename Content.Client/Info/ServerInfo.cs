@@ -159,7 +159,7 @@ namespace Content.Client.Info
         /// </summary>
         public void SetInfoBlob(string markup)
         {
-            _extraLines.DisposeAllChildren();
+            _extraLines.ReleaseChildren();
 
             var first = true;
             foreach (var line in markup.Split('\n'))
@@ -195,7 +195,7 @@ namespace Content.Client.Info
         /// </summary>
         public void SetRoundInfo(IReadOnlyList<LobbyRoundInfoField> fields)
         {
-            _roundInfoGrid.DisposeAllChildren();
+            _roundInfoGrid.ReleaseChildren();
 
             // The lead pair, and the trailing player count, are both positional - see
             // GameTicker.GetRoundInfoFields, which owns the order. Planet and gamemode lead; the
