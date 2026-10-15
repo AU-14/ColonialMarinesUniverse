@@ -362,7 +362,7 @@
     roundsPerShot: 1
     bulletSpread: 0
     travelTime: 5
-    fireMissionDelay: 1.25
+    fireMissionDelay: 1
     #cmu start
     zLevelPenetration: 1
     applyEffectsOnPenetrationLevels: true
