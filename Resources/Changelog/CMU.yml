@@ -13454,5 +13454,29 @@
   id: 807
   time: '2026-10-14T21:34:35.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2177
+- author: johnnny34y
+  changes:
+  - message: New sprites for a portion of HAZOPS' gear, along with new cosmetic PVS-71
+      night vision goggles and HAZOPS oxygen tank with 10 L of air.
+    type: Add
+  id: 808
+  time: '2026-10-15T01:30:46.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2169
+- author: troytroy400
+  changes:
+  - message: HAZOPS M250 squad support weapon.
+    type: Add
+  - message: HAZOPS Mark IV service pistol, the new standard HAZOPS sidearm
+    type: Add
+  - message: The HAZOPS PVS-71 night vision goggles now work, clip them into your
+      helmet and pull them down to see in the dark. HAZOPS squad leaders and shotgunner
+      specialists get them.
+    type: Add
+  - message: The HAZOPS powered warfighting armor's power-up sound only plays for
+      the wearer.
+    type: Fix
+  id: 809
+  time: '2026-10-15T02:35:13.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2180
 Name: CMU
 Order: -1
