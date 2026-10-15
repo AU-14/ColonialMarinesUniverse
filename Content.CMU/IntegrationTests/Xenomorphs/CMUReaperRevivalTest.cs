@@ -24,7 +24,7 @@ public sealed class CMUReaperRevivalTest : GameTest
     private EntityUid _hive;
     private EntityUid? _originalAttached;
 
-    private async Task Prepare(float duration)
+    private async Task Prepare(float duration, string corpsePrototype = "CMXenoDrone")
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
@@ -32,7 +32,7 @@ public sealed class CMUReaperRevivalTest : GameTest
             _originalAttached = ServerSession!.AttachedEntity;
             _hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
             _caster = SEntMan.SpawnEntity("CMXenoReaper", map.GridCoords);
-            _corpse = SEntMan.SpawnEntity("CMXenoDrone", map.GridCoords.Offset(new Vector2(1, 0)));
+            _corpse = SEntMan.SpawnEntity(corpsePrototype, map.GridCoords.Offset(new Vector2(1, 0)));
             // These scenarios need intact bodies; target deletion exercises the destroyed-corpse path.
             SEntMan.RemoveComponent<RMCGibOnDeathComponent>(_corpse);
             SEntMan.RemoveComponent<RMCGibOnDeathComponent>(_caster);
@@ -148,6 +148,49 @@ public sealed class CMUReaperRevivalTest : GameTest
             if (reason != "target-deleted")
                 Assert.That(Server.System<MobStateSystem>().IsDead(_corpse), Is.True, "a cancelled timer must never complete later");
             Assert.That(SEntMan.EntityExists(effect), Is.False, "interrupted effects must be cleaned up");
+        });
+    }
+
+    [Test]
+    [TestCase("none")]
+    [TestCase("before")]
+    [TestCase("during")]
+    public async Task QueenRevivalCannotCreateASecondLivingQueen(string replacementTiming)
+    {
+        await Prepare(2, "CMXenoQueen");
+        EntityUid? replacement = null;
+        await Server.WaitAssertion(() =>
+        {
+            void SpawnReplacement()
+            {
+                replacement = SEntMan.SpawnEntity("CMXenoQueen",
+                    SEntMan.GetComponent<TransformComponent>(_caster).Coordinates.Offset(new Vector2(3, 0)));
+                Server.System<SharedXenoHiveSystem>().SetHive(replacement.Value, _hive);
+            }
+
+            if (replacementTiming == "before")
+                SpawnReplacement();
+
+            Assert.That(Cast(_caster).Handled, Is.EqualTo(replacementTiming != "before"));
+            if (replacementTiming == "before")
+            {
+                var action = Server.System<SharedRMCActionsSystem>().GetActionsWithEvent<CMUReaperReviveActionEvent>(_caster).Single();
+                Assert.That(action.Comp.Cooldown, Is.Null);
+                Assert.That(SEntMan.GetComponent<XenoReaperComponent>(_caster).FleshResin, Is.EqualTo(600));
+            }
+
+            if (replacementTiming == "during")
+                SpawnReplacement();
+        });
+        await Pair.RunTicksSync(90);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(Server.System<MobStateSystem>().IsAlive(_corpse), Is.EqualTo(replacementTiming == "none"));
+            Assert.That(SEntMan.GetComponent<HiveComponent>(_hive).CurrentQueen,
+                Is.EqualTo(replacement ?? _corpse));
+            Assert.That(SEntMan.HasComponent<CMUReaperRevivingComponent>(_corpse), Is.False);
+            if (replacementTiming == "during")
+                Assert.That(SEntMan.GetComponent<XenoReaperComponent>(_caster).FleshResin, Is.EqualTo(100));
         });
     }
 

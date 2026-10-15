@@ -56,6 +56,13 @@ public sealed class CMUReaperRitualOverlay(IEntityManager entities, IGameTiming 
     {
         var grow = CMUReaperVascularDrawing.Smooth((progress - 0.04f) / 0.7f);
         var beat = MathF.Pow(MathF.Max(0, MathF.Sin(clock * (0.7f + progress))), 8);
+        var pulseAlpha = CMUReaperVascularDrawing.Smooth(clock / 4) * alpha;
+        // Layered translucent discs give the heartbeat a soft edge without hiding the corpse.
+        for (var layer = 10; layer > 0; layer--)
+        {
+            handle.DrawCircle(Vector2.Zero, (0.65f + beat * 0.35f) * layer / 10,
+                Pale.WithAlpha(pulseAlpha * (0.004f + beat * 0.022f)));
+        }
         for (var i = 0; i < 13; i++)
         {
             var angle = i * 2.399f;
@@ -74,8 +81,8 @@ public sealed class CMUReaperRitualOverlay(IEntityManager entities, IGameTiming 
                     Pale.WithAlpha(alpha * 0.35f));
             }
             var flow = 1 - (clock * 0.16f + i * 0.17f) % 1;
-            handle.DrawCircle(CMUReaperVascularDrawing.Bezier(start, b, c, end, flow),
-                0.025f + beat * 0.015f, Pale.WithAlpha(alpha * grow * 0.6f));
+            DrawPulseParticle(handle, CMUReaperVascularDrawing.Bezier(start, b, c, end, flow),
+                0.045f + beat * 0.025f, alpha * grow * (0.6f + beat * 0.3f));
         }
 
         // Fine oblique sutures leave the real corpse sprite visible beneath the binding.
@@ -90,12 +97,20 @@ public sealed class CMUReaperRitualOverlay(IEntityManager entities, IGameTiming 
 
         for (var i = 0; i < 25; i++)
         {
-            var u = (clock * 0.06f + i * 0.173f) % 1;
-            var angle = i * 2.399f;
-            var radius = (0.5f + u * 1.35f) * grow;
+            var u = (clock * 0.18f + i * 0.173f) % 1;
+            var angle = i * 2.399f + u * 0.45f;
+            var radius = 0.35f + (1 - u) * 1.45f;
             var pos = new Vector2(MathF.Cos(angle) * radius, MathF.Sin(angle) * radius * 0.58f + u * 0.3f);
-            handle.DrawCircle(pos, 0.015f, Pale.WithAlpha(MathF.Sin(u * MathF.PI) * grow * alpha * 0.45f));
+            DrawPulseParticle(handle, pos, 0.04f + beat * 0.02f,
+                MathF.Sin(u * MathF.PI) * pulseAlpha * (0.65f + beat * 0.25f));
         }
+    }
+
+    private static void DrawPulseParticle(DrawingHandleWorld handle, Vector2 position, float radius, float alpha)
+    {
+        handle.DrawCircle(position, radius * 2.8f, Pale.WithAlpha(alpha * 0.12f));
+        handle.DrawCircle(position, radius * 1.6f, Pale.WithAlpha(alpha * 0.25f));
+        handle.DrawCircle(position, radius, Pale.WithAlpha(alpha));
     }
 
     private void DrawHarvest(DrawingHandleWorld handle, Vector2 origin, float progress, float clock,
@@ -115,7 +130,7 @@ public sealed class CMUReaperRitualOverlay(IEntityManager entities, IGameTiming 
             var flow = (clock * 0.65f + i * 0.163f + release) % 1;
             var pos = CMUReaperVascularDrawing.Bezier(Vector2.Zero, new Vector2(0, 0.3f),
                 origin + new Vector2(0.2f, 0), origin, flow);
-            handle.DrawCircle(pos, 0.035f, Pale.WithAlpha(alpha * 0.7f));
+            DrawPulseParticle(handle, pos, 0.045f, alpha * 0.8f);
         }
     }
 }
