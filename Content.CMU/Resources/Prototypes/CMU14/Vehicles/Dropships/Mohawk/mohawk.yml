@@ -586,7 +586,7 @@
   - type: MohawkChinGunRepairParts
   - type: DropshipFabricatorPrintable
     category: Equipment
-    cost: 1500
+    cost: 1150
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoGAU
@@ -595,7 +595,7 @@
   description: Four hundred high-explosive armor-piercing rounds for the Midway's dual-feed M90 guns. Fires as a landed turret or as delayed explosive impacts near a signal flare in flight. HEAP heats the barrels quickly; sustained fire overheats the guns.
   components:
   - type: RMCGenericExamine
-    message: It can penetrate 3 z-levels.
+    message: It can penetrate 2 z-levels.
   - type: DropshipAmmo
     rounds: 400
     maxRounds: 400
@@ -606,7 +606,7 @@
     targetSpread: 1
     bulletSpread: 2
     armorPiercing: 60
-    zLevelPenetration: 3
+    zLevelPenetration: 2
     applyEffectsOnPenetrationLevels: true
     damage:
       types:
@@ -622,7 +622,7 @@
     directFireHeat: 8
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 3000
+    cost: 975
 
 - type: entity
   parent: CMUMohawkM90Ammo
@@ -631,7 +631,7 @@
   description: Four hundred low-yield 90mm shells. Wide dispersion provides suppressive coverage at the cost of direct damage and armor penetration.
   components:
   - type: RMCGenericExamine
-    message: Scatter rounds cannot penetrate overhead cover.
+    message: Scatter rounds penetrate 1 z-level of cover
   - type: DropshipAmmo
     ammoType: m90_scatter
     groundCompatible: false
@@ -639,7 +639,7 @@
     targetSpread: 4
     bulletSpread: 5
     armorPiercing: 10
-    zLevelPenetration: 0
+    zLevelPenetration: 1
     directFireProjectile: CMUMohawkM90Scatter
     directFireSpreadDegrees: 10
     damage:
@@ -652,7 +652,7 @@
       max: 4
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 3000
+    cost: 1500
 
 - type: entity
   parent: CMUMohawkM90Ammo
@@ -661,7 +661,7 @@
   description: Four hundred incendiary 90mm shells. Direct hits ignite flammable targets; flyby bombardment scatters burning impact sites. Reduced penetration compared with HEAP.
   components:
   - type: RMCGenericExamine
-    message: Incendiary rounds cannot penetrate overhead cover.
+    message: Incendiary rounds penetrate 1 z-level of cover.
   - type: DropshipAmmo
     ammoType: m90_incendiary
     groundCompatible: false
@@ -669,7 +669,7 @@
     targetSpread: 2
     bulletSpread: 3
     armorPiercing: 15
-    zLevelPenetration: 0
+    zLevelPenetration: 1
     directFireProjectile: CMUMohawkM90Incendiary
     directFireSpreadDegrees: 2
     friendlyImpactRadius: 3
@@ -687,7 +687,7 @@
       cardinalRange: 0
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 3000
+    cost: 1250
 
 - type: entity
   parent: CMUMohawkM90Ammo
@@ -696,7 +696,7 @@
   description: Four hundred premium high-yield 90mm shells. Wide dispersion and heavy explosive damage saturate exposed targets. Extremely expensive and unsuitable near friendly troops.
   components:
   - type: RMCGenericExamine
-    message: It can penetrate 1 z-level.
+    message: It can penetrate 3 z-levels.
   - type: DropshipAmmo
     ammoType: m90_devastator
     groundCompatible: false
@@ -704,7 +704,7 @@
     targetSpread: 5
     bulletSpread: 6
     armorPiercing: 40
-    zLevelPenetration: 1
+    zLevelPenetration: 3
     directFireProjectile: CMUMohawkM90Devastator
     directFireSpreadDegrees: 12
     friendlyImpactRadius: 6
@@ -716,9 +716,13 @@
       total: 100
       slope: 3
       max: 12
+    fire:
+      type: RMCTileFireMiniMike
+      range: 1
+      cardinalRange: 1
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 6000
+    cost: 3500
 
 - type: entity
   parent: CMUMohawkM90Ammo
@@ -740,13 +744,14 @@
     directFireHeat: 0.6
     livingTargetsOnly: true
     ejectCasing: false
-    rounds: 1200
-    maxRounds: 1200
-    roundsPerSprite: 120
+    rounds: 2400
+    maxRounds: 2400
+    roundsPerSprite: 240
     friendlyImpactRadius: 2
     damage:
       types:
         Piercing: 20
+        Heat: 5
     explosion: null
     impactEffects:
     - RMCEffectExplosionParticle
