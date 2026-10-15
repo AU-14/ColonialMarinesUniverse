@@ -109,6 +109,7 @@
     applyEffectsOnPenetrationLevels: true
     weapon: RMCDropshipAttachmentGuidedMissileLauncher
     explosion:
+      type: CMUCASMunition # FLOW-09: own tank blast multiplier; otherwise RMC.
       total: 10000
       slope: 4.5
       max: 100000000
@@ -137,6 +138,7 @@
     applyEffectsOnPenetrationLevels: true
     weapon: RMCDropshipAttachmentGuidedMissileLauncher
     explosion:
+      type: CMUCASMunition # FLOW-09: own tank blast multiplier; otherwise RMC.
       total: 10000
       slope: 4.5
       max: 100000000
@@ -172,6 +174,7 @@
     zLevelPenetration: 1
     applyEffectsOnPenetrationLevels: true
     explosion:
+      type: CMUCASMunition # FLOW-09: own tank blast multiplier; otherwise RMC.
       total: 110
       slope: 4
       max: 8
@@ -203,6 +206,7 @@
     zLevelPenetration: 1
     applyEffectsOnPenetrationLevels: true
     explosion:
+      type: CMUCASMunition # FLOW-09: own tank blast multiplier; otherwise RMC.
       total: 3000
       slope: 5.5
       max: 55
@@ -231,6 +235,7 @@
     zLevelPenetration: 1
     applyEffectsOnPenetrationLevels: true
     explosion:
+      type: CMUCASMunition # FLOW-09: own tank blast multiplier; otherwise RMC.
       total: 190
       slope: 11
       max: 78
@@ -262,6 +267,7 @@
     zLevelPenetration: 1
     applyEffectsOnPenetrationLevels: true
     explosion:
+      type: CMUCASMunition # FLOW-09: own tank blast multiplier; otherwise RMC.
       total: 100
       slope: 12
       max: 11
@@ -312,6 +318,7 @@
     bulletSpread: 30
     travelTime: 3
     explosion:
+      type: CMUCASMunition # FLOW-09: own tank blast multiplier; otherwise RMC.
       total: 3000
       slope: 5.5
       max: 55

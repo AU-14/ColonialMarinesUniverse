@@ -424,6 +424,12 @@ namespace Content.Server.Database
             profile.Weight = humanoid.Weight;
             profile.Build = humanoid.Build.ToString();
             profile.BloodType = humanoid.BloodType.ToString(); // CMU14
+            // cmu edit start
+            profile.FoxtrotSquadOptIn = humanoid.FoxtrotSquadOptIn;
+            profile.Religion = humanoid.Religion.Id;
+            profile.ArmorFlavorText = humanoid.ArmorFlavorText;
+            profile.HelmetFlavorText = humanoid.HelmetFlavorText;
+            // cmu edit end
             profile.HideMetaInformation = humanoid.HideMetaInformation;
             profile.ThreatPreference = humanoid.ThreatPreferences.Count == 0
                 ? null

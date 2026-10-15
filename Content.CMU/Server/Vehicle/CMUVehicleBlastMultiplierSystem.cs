@@ -43,6 +43,12 @@ public sealed partial class CMUVehicleBlastMultiplierSystem : EntitySystem
     private void OnVehicleBlast(Entity<HardpointSlotsComponent> ent, ref ExplosionDamagePreparingEvent args)
     {
         Prune();
+
+        // Tanks with a blast profile already scale every blast by explosion type and deliberately ignore the
+        // source's multiplier; carrying it in here as well would stack the two and pin tank blasts to the cap.
+        if (HasComp<CMUTankBlastProfileComponent>(ent))
+            return;
+
         var multiplier = 1f;
         foreach (var blast in _blasts)
         {

@@ -37,6 +37,8 @@
     - Grenade
     - HandGrenade
     - LauncherCompatibleGrenade
+    # Underbarrel launchers like the M41's only take M40-pattern grenades.
+    - RMCGrenadeM40
 
 # A grenade that is already counting down, popped out of the ground by a triggered mine.
 - type: entity

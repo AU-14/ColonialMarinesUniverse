@@ -193,6 +193,8 @@
         amount: 25
     - name: Helmet Garb
       entries:
+      - id: CMUHelmetGarbPVS71NightVision
+        amount: 15
       - id: AU14HelmetGarbM10SkrimJungle
         amount: 15
       - id: AU14HelmetGarbM10SkrimDesert
@@ -778,16 +780,12 @@
         amount: 2
       - id: CMUDeployableZLevelLadder
         amount: 2
-    - name: Protective Equipment
+    - name: Oxygen and Gas Mask Filters
       entries:
-      - id: CMUMaskGas
-        amount: 30
-      - id: CMUMaskGasBlack
-        amount: 30
-      - id: CMUGasMaskFilter
-        amount: 30
-      - id: CMUFieldGasTankOxygenFilled
+      - id: CMUFieldOxygenTankHAZOPS
         amount: 15
+      - id: CMUGasMaskFilterHAZOPS
+        amount: 30
     - name: Radio Equipment
       entries:
       - id: ANPRC117GRadio

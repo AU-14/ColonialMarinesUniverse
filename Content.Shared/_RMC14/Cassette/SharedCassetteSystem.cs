@@ -321,7 +321,10 @@ public abstract partial class SharedCassetteSystem : EntitySystem
             State = ent.Comp.WornSprite.RsiState,
         }));
 
-        if (ent.Comp.State == AudioState.Playing)
+        // cmu edit start: viewers can turn the music notes off
+        if (ent.Comp.State == AudioState.Playing &&
+            !_netConfig.GetCVar(Content.Shared.CCVar.CCVars.CMUHideCassetteMusicNotes))
+        // cmu edit end
         {
             args.Layers.Add(("cassette_music", new PrototypeLayerData
             {
