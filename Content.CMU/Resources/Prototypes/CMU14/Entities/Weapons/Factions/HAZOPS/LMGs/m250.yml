@@ -1,0 +1,92 @@
+# The M250 squad support weapon: the M41AE2 heavy pulse rifle under HAZOPS colours, with the same stats and bipod.
+# It has its own stock in the sprite, so no stock attachment, and no camouflage variants.
+- type: entity
+  parent: RMCWeaponRifleM54CE2
+  id: CMUWeaponRifleM250
+  name: M250 squad support weapon
+  description: A squad support weapon issued to HAZOPS automatic riflemen, built to lay down sustained suppressing fire from a mounted position. While unstable and less accurate, it can be lugged and shot with two hands.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/HAZOPS/M250SSW.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/HAZOPS/M250SSW.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Weapons/Guns/HAZOPS/M250SSW.rsi
+      Desert: CMU14/Weapons/Guns/HAZOPS/M250SSW.rsi
+      Snow: CMU14/Weapons/Guns/HAZOPS/M250SSW.rsi
+      Classic: CMU14/Weapons/Guns/HAZOPS/M250SSW.rsi
+      Urban: CMU14/Weapons/Guns/HAZOPS/M250SSW.rsi
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineRifleM250
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/hpr_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/hpr_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazineRifleM54CE2
+          - CMMagazineRifleM54CMK1
+          - CMMagazineRifleM54CMK1AP
+          - RMCMagazineRifleM54CMK1Incendiary
+          - RMCMagazineRifleM54CMK1HEAP
+          - RMCMagazineRifleM54CMK1WP
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentRecoilCompensator
+          - RMCAttachmentSuppressor
+          - RMCAttachmentExtendedCompensator
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentBipod
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentBipod
+          - RMCAttachmentBurstFireAssembly
+          - RMCAttachmentExtinguisher
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentVerticalGrip
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.75, 0.03
+      rmc-aslot-rail: -0.07, 0.18
+      rmc-aslot-underbarrel: 0.37, -0.3125
+
+# Same 300 rounds of 10x24mm as the M41AE2's magazine, and fits either gun.
+- type: entity
+  parent: CMMagazineRifleM54CE2
+  id: CMUMagazineRifleM250
+  name: "M250 magazine (10x24mm)"
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/Ammo/Magazines/m250mag.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Weapons/Guns/Ammo/Magazines/m250mag.rsi
+      Desert: CMU14/Weapons/Guns/Ammo/Magazines/m250mag.rsi
+      Snow: CMU14/Weapons/Guns/Ammo/Magazines/m250mag.rsi
+      Classic: CMU14/Weapons/Guns/Ammo/Magazines/m250mag.rsi
+      Urban: CMU14/Weapons/Guns/Ammo/Magazines/m250mag.rsi
