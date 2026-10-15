@@ -4,8 +4,8 @@ meta:
   engineVersion: 290.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/15/2026 05:32:54
-  entityCount: 29351
+  time: 10/15/2026 06:18:03
+  entityCount: 29357
 maps:
 - 1
 grids:
@@ -57148,7 +57148,7 @@ entities:
         DoorStatus: True
     - type: Door
       state: Opening
-      secondsUntilStateChange: -68152.766
+      secondsUntilStateChange: -68371.82
   - uid: 133
     components:
     - type: MetaData
@@ -57644,7 +57644,7 @@ entities:
         DoorStatus: True
     - type: Door
       state: Opening
-      secondsUntilStateChange: -70232.195
+      secondsUntilStateChange: -70451.25
   - uid: 200
     components:
     - type: Transform
@@ -57656,7 +57656,7 @@ entities:
         DoorStatus: True
     - type: Door
       state: Opening
-      secondsUntilStateChange: -70233.23
+      secondsUntilStateChange: -70452.28
   - uid: 201
     components:
     - type: Transform
@@ -57689,7 +57689,7 @@ entities:
       pos: 127.5,-79.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -72675.87
+      secondsUntilStateChange: -72894.92
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -57761,7 +57761,7 @@ entities:
       pos: 77.5,-75.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69237.23
+      secondsUntilStateChange: -69456.28
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -57782,7 +57782,7 @@ entities:
       pos: 80.5,-75.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69236.93
+      secondsUntilStateChange: -69455.984
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -57887,7 +57887,7 @@ entities:
       pos: 63.5,-64.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69532.9
+      secondsUntilStateChange: -69751.95
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -58284,7 +58284,7 @@ entities:
       pos: 68.5,-33.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -70715.36
+      secondsUntilStateChange: -70934.414
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -63557,7 +63557,7 @@ entities:
       lastOpeningAt: 865.2991347
     - type: Door
       state: Opening
-      secondsUntilStateChange: -70765.46
+      secondsUntilStateChange: -70984.516
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -63572,7 +63572,7 @@ entities:
       lastOpeningAt: 865.2991347
     - type: Door
       state: Opening
-      secondsUntilStateChange: -70765.46
+      secondsUntilStateChange: -70984.516
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64105,7 +64105,7 @@ entities:
       lastOpeningAt: 2393.0309403
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69237.73
+      secondsUntilStateChange: -69456.78
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64121,7 +64121,7 @@ entities:
       lastOpeningAt: 2393.0309403
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69237.73
+      secondsUntilStateChange: -69456.78
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64137,7 +64137,7 @@ entities:
       lastOpeningAt: 2078.4979215
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69552.266
+      secondsUntilStateChange: -69771.32
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64153,7 +64153,7 @@ entities:
       lastOpeningAt: 2078.4979215
     - type: Door
       state: Opening
-      secondsUntilStateChange: -69552.266
+      secondsUntilStateChange: -69771.32
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -74314,6 +74314,11 @@ entities:
     - type: Transform
       parent: 1
       pos: 88.5,-73.5
+  - uid: 24266
+    components:
+    - type: Transform
+      parent: 1
+      pos: 81.5,-51.5
 - proto: CMVendorBooze
   entities:
   - uid: 2981
@@ -211289,6 +211294,33 @@ entities:
       parent: 1
       rot: 3.141592653589793 rad
       pos: 63.5,-58.5
+- proto: threatleaderspawnmarker
+  entities:
+  - uid: 24261
+    components:
+    - type: Transform
+      parent: 1
+      pos: 15.5,-200.5
+  - uid: 24262
+    components:
+    - type: Transform
+      parent: 1
+      pos: 95.5,-180.5
+  - uid: 24263
+    components:
+    - type: Transform
+      parent: 1
+      pos: 200.5,-185.5
+  - uid: 24264
+    components:
+    - type: Transform
+      parent: 1
+      pos: 186.5,-56.5
+  - uid: 24265
+    components:
+    - type: Transform
+      parent: 1
+      pos: 156.5,-36.5
 - proto: ToyFigurineClown
   entities:
   - uid: 29351
