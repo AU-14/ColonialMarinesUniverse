@@ -222,7 +222,7 @@ public sealed class SteamSmelterSystem : EntitySystem
                 Duration = recipe.Duration,
                 Result = recipe.Result,
                 ResultAmount = recipe.ResultAmount,
-                Slag = recipe.Slag,
+                Slag = smelter.Comp.ProducesSlag ? recipe.Slag : 0f,
             };
             job.Consumed.AddRange(use);
             return job;

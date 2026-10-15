@@ -92,12 +92,12 @@ public sealed partial class ZBuildableMapComponent : Component
         Crystal("RUMCRockWallLaytoite", 0.02f),
     };
 
-    /// <summary>Deposits of ore lying under the rock of the plain stone layer, with a small chance in each chunk.</summary>
+    /// <summary>Deposits of ore and of oil lying on the floor of the caves of the plain stone layer (only where there is a cave), each with its chance in a chunk.</summary>
     [DataField]
     public List<ZLevelDeposit> StoneDeposits = new()
     {
-        new ZLevelDeposit { Entity = "RUMCOreDepositStone", ChancePerChunk = 0.08f },
-        new ZLevelDeposit { Entity = "RUMCOilDeposit", ChancePerChunk = 0.02f },
+        new ZLevelDeposit { Entity = "RUMCOreDepositStone", ChancePerChunk = 0.35f },
+        new ZLevelDeposit { Entity = "RUMCOilDeposit", ChancePerChunk = 0.12f },
     };
 
     /// <summary>Empty caves in the plain stone layer: where this noise is high, the rock is left out.</summary>
@@ -113,7 +113,7 @@ public sealed partial class ZBuildableMapComponent : Component
     public List<ZLevelCaveDecor> StoneCaveDecor = new()
     {
         new ZLevelCaveDecor { Entity = "RMCRock07", Chance = 0.05f },
-        new ZLevelCaveDecor { Entity = "RUMCOilDeposit", Chance = 0.004f },
+        new ZLevelCaveDecor { Entity = "RUMCOilDeposit", Chance = 0.02f },
     };
 
     /// <summary>The entity that fills a pool tile.</summary>
@@ -153,7 +153,7 @@ public sealed partial class ZBuildableMapComponent : Component
             },
             CaveDecor = new List<ZLevelCaveDecor>
             {
-                new ZLevelCaveDecor { Entity = "RUMCOilDeposit", Chance = 0.002f },
+                new ZLevelCaveDecor { Entity = "RUMCOilDeposit", Chance = 0.01f },
             },
             // Small empty caves made by noise, a lot rarer and smaller than those of the stone layer.
             Caves = new ZLevelNoiseFeature { Frequency = 0.08f, Octaves = 3, Threshold = 0.55f, SeedOffset = 1 },
@@ -202,12 +202,12 @@ public sealed partial class ZBuildableMapComponent : Component
             },
             Deposits = new List<ZLevelDeposit>
             {
-                new ZLevelDeposit { Entity = "RUMCOreDepositDarkStone", ChancePerChunk = 0.08f },
-                new ZLevelDeposit { Entity = "RUMCOilDeposit", ChancePerChunk = 0.03f },
+                new ZLevelDeposit { Entity = "RUMCOreDepositDarkStone", ChancePerChunk = 0.35f },
+                new ZLevelDeposit { Entity = "RUMCOilDeposit", ChancePerChunk = 0.15f },
             },
             CaveDecor = new List<ZLevelCaveDecor>
             {
-                new ZLevelCaveDecor { Entity = "RUMCOilDeposit", Chance = 0.006f },
+                new ZLevelCaveDecor { Entity = "RUMCOilDeposit", Chance = 0.03f },
             },
             Caves = new ZLevelNoiseFeature { Frequency = 0.05f, Octaves = 3, Threshold = 0.42f, SeedOffset = 1 },
             Water = new ZLevelNoiseFeature { Frequency = 0.035f, Octaves = 2, Threshold = 0.68f, SeedOffset = 2 },

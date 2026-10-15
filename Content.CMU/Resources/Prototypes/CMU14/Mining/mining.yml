@@ -18,6 +18,23 @@
     RUMCSilverOre: 3
     RUMCGoldOre: 1.5
     RUMCTitaniumOre: 1.5
+    # The rest of what lies in the stone layer: the coke, the crystals, and the gems, which are the rarest of them.
+    RUMCCokeCoal: 8
+    RUMCQuartzCrystal: 4
+    RUMCSaltpeterCrystal: 3
+    RUMCCinnabarCrystal: 2
+    RUMCAsbestosCrystal: 2
+    RUMCFluoriteCrystal: 2
+    RUMCPhosphorusCrystal: 2
+    RUMCBerylliumCrystal: 1.5
+    RUMCColtanCrystal: 1.5
+    RUMCTrimoridCrystal: 1
+    RUMCLaxaniteCrystal: 1
+    RUMCLaytoiteCrystal: 1
+    RUMCRawDiamondCrystal: 0.4
+    RUMCEmeraldCrystal: 0.4
+    RUMCRubyCrystal: 0.4
+    RUMCAlexandriteCrystal: 0.4
 
 - type: cmuOreDepositTable
   id: RUMCOreTableDarkStone
@@ -33,6 +50,23 @@
     RUMCSilverOre: 3
     RUMCGoldOre: 1.95
     RUMCTitaniumOre: 1.95
+    # The rest of what lies in the stone layer: the coke, the crystals, and the gems, which are the rarest of them.
+    RUMCCokeCoal: 8
+    RUMCQuartzCrystal: 4
+    RUMCSaltpeterCrystal: 3
+    RUMCCinnabarCrystal: 2
+    RUMCAsbestosCrystal: 2
+    RUMCFluoriteCrystal: 2
+    RUMCPhosphorusCrystal: 2
+    RUMCBerylliumCrystal: 1.5
+    RUMCColtanCrystal: 1.5
+    RUMCTrimoridCrystal: 1
+    RUMCLaxaniteCrystal: 1
+    RUMCLaytoiteCrystal: 1
+    RUMCRawDiamondCrystal: 0.4
+    RUMCEmeraldCrystal: 0.4
+    RUMCRubyCrystal: 0.4
+    RUMCAlexandriteCrystal: 0.4
     RUMCPlatinumOre: 1.3
 
 - type: entity

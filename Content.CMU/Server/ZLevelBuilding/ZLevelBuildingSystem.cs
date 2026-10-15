@@ -5,7 +5,9 @@ using Content.Shared.Damage.Components;
 using System.Numerics;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.Procedural;
+using Content.Shared._RMC14.Entrenching;
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared.Burial.Components;
 using Content.Shared.CMU14.ZLevelBuilding;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Damage;
@@ -54,6 +56,8 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private TagSystem _tag = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private ZBorderSyncSystem _borderSync = default!;
     [Dependency] private DungeonSystem _dungeon = default!;
     [Dependency] private IPrototypeManager _protoMan = default!;
@@ -492,37 +496,42 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         }
 
         SpawnOreVeins(below.Comp.StoneGrid, grid, GetEffectiveOreVeins(settings, mapUid), origin, size, rockEntity);
-        SpawnDeposits(below.Comp.StoneGrid, grid, tier != null ? tier.Deposits : settings.StoneDeposits, origin, size, rockEntity);
+        SpawnDeposits(below.Comp.StoneGrid, grid, below.Comp.NaturalCaves, tier != null ? tier.Deposits : settings.StoneDeposits, origin, size);
     }
 
-    // Lays deposits of ore on the floor of a fresh chunk, each with its small chance, on a tile where the rock stands: the
-    // deposit lies under it, and is found when the rock is mined out.
-    private void SpawnDeposits(EntityUid gridUid, MapGridComponent grid, List<ZLevelDeposit> deposits, Vector2i origin, int size, string rockEntity)
+    // Lays deposits (the ore, and the oil) on the floor of the caves of a fresh chunk, each with its chance for the chunk, on a cave tile where nothing lies
+    // yet: they lie in the open, where the cave is, and are found without breaking the rock. A chunk that has no cave has none of them.
+    private void SpawnDeposits(EntityUid gridUid, MapGridComponent grid, HashSet<Vector2i> caves, List<ZLevelDeposit> deposits, Vector2i origin, int size)
     {
+        if (deposits.Count == 0)
+            return;
+
+        var free = new List<Vector2i>();
+        for (var x = 0; x < size; x++)
+        {
+            for (var y = 0; y < size; y++)
+            {
+                var tile = origin + new Vector2i(x, y);
+                if (caves.Contains(tile) && !TileHasAnchored(gridUid, grid, tile) &&
+                    _lookup.GetLocalEntitiesIntersecting(gridUid, tile, gridComp: grid).Count == 0)
+                {
+                    free.Add(tile);
+                }
+            }
+        }
+
         foreach (var deposit in deposits)
         {
+            if (free.Count == 0)
+                return;
+
             if (!_random.Prob(deposit.ChancePerChunk))
                 continue;
 
-            for (var attempt = 0; attempt < 8; attempt++)
-            {
-                var tile = origin + new Vector2i(_random.Next(size), _random.Next(size));
-                var rockStands = false;
-                foreach (var anchored in _map.GetAnchoredEntities(gridUid, grid, tile))
-                {
-                    if (MetaData(anchored).EntityPrototype?.ID == rockEntity)
-                    {
-                        rockStands = true;
-                        break;
-                    }
-                }
-
-                if (!rockStands)
-                    continue;
-
-                Spawn(deposit.Entity, _map.GridTileToLocal(gridUid, grid, tile));
-                break;
-            }
+            var index = _random.Next(free.Count);
+            var chosen = free[index];
+            free.RemoveAt(index);
+            Spawn(deposit.Entity, _map.GridTileToLocal(gridUid, grid, chosen));
         }
     }
 
@@ -1016,6 +1025,23 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
     {
         var tier = GetBiomeTier(settings, GetDepth(levelMapUid));
         return !string.IsNullOrEmpty(tier?.StoneRockEntity) ? tier.StoneRockEntity : settings.StoneRockEntity;
+    }
+
+    /// <summary>
+    /// Whether the tool may dig a pit at the level: it is the tool the level asks for (<see cref="GetEffectiveDigTool"/>), and below the clay it is
+    /// not a shovel. A shovel can carry the Pickaxe tag (the shovel of the game does, so that it breaks rock walls), and that must not let it dig into
+    /// the stone and on in it: the ground and the clay are for the shovel, the stone is for the pickaxe and the black stone for the jackhammer.
+    /// </summary>
+    public bool CanDigWith(EntityUid levelMapUid, EntityUid tool)
+    {
+        var need = GetEffectiveDigTool(levelMapUid);
+        if (_whitelist.IsWhitelistFail(need, tool))
+            return false;
+
+        if (!HasComp<ShovelComponent>(tool) && !HasComp<RMCShovelComponent>(tool))
+            return true;
+
+        return need?.Components is { } components && (components.Contains("Shovel") || components.Contains("RMCShovel"));
     }
 
     public EntityWhitelist? GetEffectiveDigTool(EntityUid levelMapUid)

@@ -44,3 +44,4 @@ au14-craft-recipe-steam-generator = Паровой генератор
 au14-craft-recipe-steam-smelter = Паровая плавильня
 au14-craft-recipe-steam-press = Паровой пресс
 au14-craft-recipe-steam-drill = Паровой бур
+au14-craft-recipe-rope = Бухта верёвки

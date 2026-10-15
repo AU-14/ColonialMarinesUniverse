@@ -440,3 +440,13 @@
     amount: 1
   - stack: RUMCIronRing
     amount: 2
+
+# Rope, twisted out of plant fiber cut from the bushes: the coil that is let down a pit.
+- type: craftRecipe
+  id: RUMCCraftRope
+  name: au14-craft-recipe-rope
+  output: RUMCRopeCoil
+  time: 8
+  consumables:
+  - stack: RUMCPlantFiber
+    amount: 6

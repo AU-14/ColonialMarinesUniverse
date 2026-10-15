@@ -498,9 +498,12 @@ public sealed class PitDiggingToolSystem : EntitySystem
             return false;
         }
 
-        // The rock of the maps asks for the jackhammer whatever the depth would ask for.
-        var digTool = toolOverride ?? _building.GetEffectiveDigTool(mapUid);
-        if (!_whitelist.IsWhitelistFail(digTool, tool.Owner))
+        // The rock of the maps asks for the jackhammer whatever the depth would ask for; anywhere else the depth says what is asked for (and a shovel
+        // does not dig into the stone, see CanDigWith).
+        var allowed = toolOverride != null
+            ? !_whitelist.IsWhitelistFail(toolOverride, tool.Owner)
+            : _building.CanDigWith(mapUid, tool.Owner);
+        if (allowed)
             return true;
 
         _popup.PopupEntity(Loc.GetString(toolOverride != null ? "au14-pit-tool-needs-jackhammer" : "au14-pit-tool-wrong-tool"), tool, user, PopupType.SmallCaution);

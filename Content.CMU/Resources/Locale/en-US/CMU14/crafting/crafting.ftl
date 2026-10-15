@@ -44,3 +44,4 @@ au14-craft-recipe-steam-generator = Steam generator
 au14-craft-recipe-steam-smelter = Steam smelter
 au14-craft-recipe-steam-press = Steam press
 au14-craft-recipe-steam-drill = Steam drill
+au14-craft-recipe-rope = Coil of rope

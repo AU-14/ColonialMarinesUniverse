@@ -165,8 +165,7 @@ public sealed class PitSystem : SharedPitSystem
                 return false;
             }
 
-            var digTool = _building.GetEffectiveDigTool(mapUid);
-            if (_whitelist.IsWhitelistFail(digTool, heldTool))
+            if (!_building.CanDigWith(mapUid, heldTool))
             {
                 if (popupFail)
                     FailDigTool(pit, user);

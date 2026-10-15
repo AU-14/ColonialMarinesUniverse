@@ -12,6 +12,9 @@
     - id: CMWirecutter
     - id: RMCCableCoil30
     - id: CMMultitool
+    - id: RUMCHandSaw
+    - id: RUMCHammer
+    - id: AU14ToolShovel
 
 - type: entity
   parent: CMBeltUtilityCombat

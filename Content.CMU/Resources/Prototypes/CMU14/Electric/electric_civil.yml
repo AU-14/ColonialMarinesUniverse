@@ -65,6 +65,77 @@
   skill: RMCSkillConstruction
   requiredSkillLevel: 1
 
+# The same two walls, from the construction menu (the main list): four bags of the same kind, as when the bags are held and the wall is picked.
+- type: constructionGraph
+  id: RUMCConcreteWallGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: wall
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: AU14ConcreteBag
+        amount: 4
+        doAfter: 5
+  - node: wall
+    entity: RUMCConcreteWall
+
+- type: constructionGraph
+  id: RUMCReinforcedConcreteWallGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: wall
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: AU14ReinforcedConcreteBag
+        amount: 4
+        doAfter: 7
+  - node: wall
+    entity: RUMCReinforcedConcreteWall
+
+- type: construction
+  id: RUMCConcreteWallRecipe
+  name: concrete wall
+  description: A wall of cast concrete, built of four concrete bags.
+  graph: RUMCConcreteWallGraph
+  startNode: start
+  targetNode: wall
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+  - !type:AU14MinimumSkill
+    skill: RMCSkillConstruction
+    level: 1
+
+- type: construction
+  id: RUMCReinforcedConcreteWallRecipe
+  name: reinforced concrete wall
+  description: A wall of concrete cast around steel rods, built of four reinforced concrete bags. The claws of the xenos do nothing to it, and the acid does not eat it.
+  graph: RUMCReinforcedConcreteWallGraph
+  startNode: start
+  targetNode: wall
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+  - !type:AU14MinimumSkill
+    skill: RMCSkillConstruction
+    level: 1
+
 # Concrete takes a pickaxe badly and an explosion or a jackhammer well, as stone does, and holds a lot more than the rock of the caves.
 - type: damageModifierSet
   id: RUMCConcreteWallMod

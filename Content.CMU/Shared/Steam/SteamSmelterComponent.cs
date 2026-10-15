@@ -24,6 +24,10 @@ public sealed partial class SteamSmelterComponent : Component
     [DataField]
     public float SlagLimit = 45f;
 
+    // Whether an operation leaves slag at all. The industrial smelter does not: it melts the ore clean, and has no slag to let out.
+    [DataField]
+    public bool ProducesSlag = true;
+
     // The steam regulator sets how fast it works (and how much steam it uses), the slag regulator how fast the slag is let out.
     [DataField, AutoNetworkedField]
     public float SteamRegulator = 1f;

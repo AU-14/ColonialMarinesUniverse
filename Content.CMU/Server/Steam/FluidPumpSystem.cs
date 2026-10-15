@@ -17,8 +17,9 @@ public sealed class FluidPumpSystem : EntitySystem
     [Dependency] private readonly FluidSystem _fluids = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
 
-    // The water of the floor, and everything that is made of it.
-    private static readonly EntProtoId WaterEntity = "FloorWaterEntity";
+    // The water of the floor, and everything that is made of it: the water of the base game and of the caves (FloorWaterEntity), and the water
+    // of the RMC maps and of the planets made from it (CMFloorShallowWaterEntity, the deep water and the rivers come from it).
+    private static readonly EntProtoId[] WaterEntities = { "FloorWaterEntity", "CMFloorShallowWaterEntity" };
 
     // How often a pump looks again at what it stands on.
     private const float CheckInterval = 1f;
@@ -75,7 +76,7 @@ public sealed class FluidPumpSystem : EntitySystem
         var water = false;
         foreach (var parent in _proto.EnumerateParents<EntityPrototype>(proto.ID, includeSelf: true))
         {
-            if (parent.ID == WaterEntity)
+            if (Array.IndexOf(WaterEntities, (EntProtoId) parent.ID) >= 0)
             {
                 water = true;
                 break;

@@ -1,0 +1,103 @@
+# The start of the industry: the machines of the steam age made in steel and gray, and the crate they come in. The machines are the
+# ordinary ones with a gray look, and each does a little more than the brass one (the generator twice the power, the smelter leaves no slag).
+# The crate is sealed: it is opened with a crowbar, and everything in it comes out next to where it stood.
+
+# The steel boiler: the boiler, gray.
+- type: entity
+  parent: RUMCBoiler
+  id: RUMCSteelBoiler
+  name: steel boiler
+  description: A boiler of steel. Put coal, coke, planks or branches in its fuel slot and pipe water in, and it turns the water into steam in the gas pipes joined to it.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Industrial/boiler_steel.rsi
+    layers:
+    - state: boiler
+      map: [ "cold" ]
+    - state: boiler_on
+      map: [ "hot" ]
+      visible: false
+
+# The industrial steam generator: gives twice the power of the brass one, from the same steam.
+- type: entity
+  parent: RUMCSteamGenerator
+  id: RUMCIndustrialSteamGenerator
+  name: industrial steam generator
+  description: A gray generator turned by steam, built for the industry, it makes twice the power of the ordinary steam generator from the same steam. Join a gas pipe with steam to it and a high voltage cable.
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Industrial/steam_generator_industrial.rsi
+    state: generator
+  - type: PowerSupplier
+    supplyRate: 6000
+
+# The industrial steam drill: the steam drill, gray.
+- type: entity
+  parent: RUMCSteamDrill
+  id: RUMCIndustrialSteamDrill
+  name: industrial steam drill
+  description: A gray drilling rig that runs on steam. Join a gas pipe with steam to it, set it on a deposit of ore, put a head in it and it takes ore out of the deposit.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Industrial/drill_steam_industrial.rsi
+    layers:
+    - state: drill-off
+      map: [ "off" ]
+    - state: drill
+      map: [ "on" ]
+      visible: false
+    - state: base
+    - state: drill-on-unlit
+      shader: unshaded
+      map: [ "light" ]
+      visible: false
+
+# The industrial steam press: the steam press, gray.
+- type: entity
+  parent: RUMCSteamPress
+  id: RUMCIndustrialSteamPress
+  name: industrial steam press
+  description: A heavy gray press driven by steam. Join a gas pipe with steam to it, seat a mold and one or two ingots, and it presses them.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Industrial/steam_press_industrial.rsi
+    state: press
+
+# The industrial steam smelter: the steam smelter, gray, and it melts the ore clean: no slag.
+- type: entity
+  parent: RUMCSteamSmelter
+  id: RUMCIndustrialSteamSmelter
+  name: industrial steam smelter
+  description: A gray smelter driven by steam. It has no thermostat and no recipes of its own, so seat a mold for three ingots and enough ore for them, and it makes three ingots. It leaves no slag.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Industrial/steam_smelter_industrial.rsi
+    state: smelter
+  - type: SteamSmelter
+    producesSlag: false
+
+# The crate of the start of the industry. It is sealed and opens with a crowbar.
+- type: entity
+  parent: RMCSecureCaseStrapped
+  id: RUMCCrateIndustryStart
+  name: industry start crate
+  description: A sealed crate with what is needed to begin the industry, a steel pump and pipes, a steel boiler, an industrial steam generator, drill and press and smelter, drill heads and two molds. Open it with a crowbar.
+  components:
+  - type: CrateOpenable
+    spawn:
+    - id: RUMCSteelPump
+    - id: RUMCSteelPipe
+      amount: 3
+    - id: RUMCSteelBoiler
+    - id: RUMCIndustrialSteamGenerator
+    - id: RUMCIndustrialSteamDrill
+    - id: RUMCSteelDrillHead
+      amount: 10
+    - id: RUMCIndustrialSteamPress
+    - id: RUMCMoldIngots
+    - id: RUMCMoldSheet
+    - id: RUMCIndustrialSteamSmelter
