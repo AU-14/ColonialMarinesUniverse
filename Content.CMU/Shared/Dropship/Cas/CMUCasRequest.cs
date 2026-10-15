@@ -145,6 +145,9 @@ public sealed class CMUCasCallSendMsg(NetEntity? target, CMUCasMunition munition
 }
 
 [Serializable, NetSerializable]
+public sealed class CMUCasRelayPositionMsg : BoundUserInterfaceMessage;
+
+[Serializable, NetSerializable]
 public sealed class CMUCasCallClearHotMsg(int id) : BoundUserInterfaceMessage
 {
     public readonly int Id = id;

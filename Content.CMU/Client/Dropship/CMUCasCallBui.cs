@@ -46,6 +46,10 @@ public sealed class CMUCasCallBui : BoundUserInterface
         var root = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, HorizontalExpand = true, VerticalExpand = true };
         _header = new Label { FontColorOverride = Amber };
         root.AddChild(_header);
+        var relayPosition = new Button { Text = Loc.GetString("cmu-cas-relay-position"),
+            ToolTip = Loc.GetString("cmu-cas-relay-position-help") };
+        relayPosition.OnPressed += _ => SendMessage(new CMUCasRelayPositionMsg());
+        root.AddChild(relayPosition);
 
         var columns = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, HorizontalExpand = true, VerticalExpand = true };
         var left = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, MinWidth = 260, VerticalExpand = true };

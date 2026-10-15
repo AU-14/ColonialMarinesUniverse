@@ -3,12 +3,15 @@ using System.Numerics;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Dropship.Weapon;
+using Content.Shared._RMC14.Rules;
 using Content.Shared.CMU14.Dropship.Cas;
 using Content.Shared.CMU14.Radio;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
+using Content.Shared.Radio;
 using Content.Shared.Stacks;
 using Content.Shared.Verbs;
 using Robust.Shared.GameObjects;
@@ -19,6 +22,68 @@ namespace Content.IntegrationTests.CMU14.Radio;
 public sealed class CMURtoRadioTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = false };
+
+    [TestCase("govfor", "radioGovforJTAC")]
+    [TestCase("opfor", "radioOpforJTAC")]
+    public async Task PositionRelayBroadcastsExactGpsWithoutCreatingCasRequest(string faction, string channel)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            SEntMan.EnsureComponent<RMCPlanetComponent>(map.Grid).Offset = new Vector2i(500, 500);
+            var rto = SEntMan.SpawnEntity("MobHuman", map.GridCoords.Offset(new Vector2(-12.75f, 15.75f)));
+            var pack = SEntMan.SpawnEntity("ANPRC117GRadio", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(rto).Faction = faction;
+            SEntMan.AddComponent<WearingANPRCComponent>(rto).Radio = pack;
+            _ = Server.System<PositionRadioProbeSystem>();
+            var probe = SEntMan.AddComponent<PositionRadioProbeComponent>(rto);
+            var transform = Server.System<SharedTransformSystem>();
+            var marks = SEntMan.QueryEntities<DropshipTargetComponent>().Count();
+            void Relay()
+            {
+                var position = transform.GetMapCoordinates(rto).Position;
+                SEntMan.EventBus.RaiseLocalEvent(pack, new CMUCasRelayPositionMsg()
+                    { Actor = rto, UiKey = CMUCasCallUi.Key });
+                Assert.That(probe.Channels.Last(), Is.EqualTo(channel));
+                Assert.That(probe.Messages.Last(), Does.Contain($"GPS X {(int) position.X}, Y {(int) position.Y},"));
+            }
+            Relay();
+            transform.SetCoordinates(rto, map.GridCoords.Offset(new Vector2(4.8f, -7.9f)));
+            Relay();
+            Assert.That(probe.Messages.Count, Is.EqualTo(2));
+            Assert.That(Server.System<CMUCasRequestSystem>().GetRequests(faction), Is.Empty);
+            Assert.That(SEntMan.QueryEntities<DropshipTargetComponent>().Count(), Is.EqualTo(marks));
+        });
+    }
+
+    [TestCase("broken")]
+    [TestCase("off")]
+    [TestCase("not-worn")]
+    [TestCase("wrong-pack")]
+    [TestCase("no-faction")]
+    public async Task PositionRelayRequiresWorkingWornPackAndJtacFaction(string failure)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var rto = SEntMan.SpawnEntity("MobHuman", map.GridCoords);
+            var pack = SEntMan.SpawnEntity("ANPRC117GRadio", map.GridCoords);
+            if (failure != "no-faction")
+                SEntMan.EnsureComponent<MarineComponent>(rto).Faction = "govfor";
+            if (failure != "not-worn")
+                SEntMan.AddComponent<WearingANPRCComponent>(rto).Radio = failure == "wrong-pack"
+                    ? SEntMan.SpawnEntity("ANPRC117GRadio", map.GridCoords) : pack;
+            var radio = SEntMan.GetComponent<ANPRCRadioComponent>(pack);
+            radio.WiresRipped = failure == "broken";
+            radio.Enabled = failure != "off";
+            _ = Server.System<PositionRadioProbeSystem>();
+            var probe = SEntMan.AddComponent<PositionRadioProbeComponent>(rto);
+            SEntMan.EventBus.RaiseLocalEvent(pack, new CMUCasRelayPositionMsg()
+                { Actor = rto, UiKey = CMUCasCallUi.Key });
+            Assert.That(probe.Messages, Is.Empty);
+            Assert.That(Server.System<CMUCasRequestSystem>().GetRequests("govfor"), Is.Empty);
+        });
+    }
 
     [TestCase(0, 0)]
     [TestCase(15, 0)]
@@ -57,6 +122,7 @@ public sealed class CMURtoRadioTest : GameTest
                 Assert.That(request.Status, Is.EqualTo(CMUCasRequestStatus.Pending));
                 Assert.That(requests.TryAbort(rto, id), Is.True);
             }
+
             Assert.That(positions.Count, Is.GreaterThan(1), "position calls must actually deviate");
         });
     }
@@ -236,5 +302,24 @@ public sealed class CMURtoRadioTest : GameTest
             Assert.That(Server.System<CMUCasRequestSystem>().TryCreateRadioMarkRequest(user, CMUCasMunition.Any,
                 CMUCasEffect.Any, "", out _), Is.False);
         });
+    }
+}
+
+[RegisterComponent]
+public sealed partial class PositionRadioProbeComponent : Component
+{
+    public readonly List<string> Messages = new();
+    public readonly List<string> Channels = new();
+}
+
+public sealed class PositionRadioProbeSystem : EntitySystem
+{
+    public override void Initialize() =>
+        SubscribeLocalEvent<PositionRadioProbeComponent, RadioSendAttemptEvent>(OnTransmission);
+
+    private static void OnTransmission(Entity<PositionRadioProbeComponent> ent, ref RadioSendAttemptEvent args)
+    {
+        ent.Comp.Messages.Add(args.Message);
+        ent.Comp.Channels.Add(args.Channel.ID);
     }
 }

@@ -108,6 +108,7 @@ public sealed class CMUCasRequestSystem : EntitySystem
         {
             subs.Event<BoundUIOpenedEvent>(OnUplinkOpened);
             subs.Event<CMUCasCallSendMsg>(OnUplinkSend);
+            subs.Event<CMUCasRelayPositionMsg>(OnRelayPosition);
             subs.Event<CMUCasCallClearHotMsg>(OnUplinkClearHot);
             subs.Event<CMUCasCallAbortMsg>(OnUplinkAbort);
         });
@@ -715,6 +716,44 @@ public sealed class CMUCasRequestSystem : EntitySystem
         if (sent)
             _popup.PopupEntity(Loc.GetString("cmu-cas-request-sent", ("id", id)), rto, rto);
         RefreshUplink(ent);
+    }
+
+    private void OnRelayPosition(Entity<CMUCasUplinkComponent> ent, ref CMUCasRelayPositionMsg args)
+    {
+        if (_net.IsClient)
+            return;
+        var actor = args.Actor;
+        if (!TryComp(actor, out WearingANPRCComponent? wearing) || wearing.Radio != ent.Owner ||
+            !TryComp(ent, out ANPRCRadioComponent? radio))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-cas-request-not-rto"), actor, actor, PopupType.SmallCaution);
+            return;
+        }
+        if (!CheckRadioWires(actor))
+            return;
+        if (!radio.Enabled)
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-cas-position-radio-off"), actor, actor, PopupType.SmallCaution);
+            return;
+        }
+        var faction = _weapons.GetUserFaction(actor);
+        if (faction == null || !(faction.Equals("govfor", StringComparison.OrdinalIgnoreCase) ||
+            faction.Equals("opfor", StringComparison.OrdinalIgnoreCase)))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-cas-uplink-no-faction"), actor, actor, PopupType.SmallCaution);
+            return;
+        }
+        var coordinates = _transform.GetMapCoordinates(actor);
+        if (coordinates.MapId == MapId.Nullspace)
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-cas-position-unavailable"), actor, actor, PopupType.SmallCaution);
+            return;
+        }
+        var area = _areas.TryGetArea(coordinates, out _, out var areaProto)
+            ? areaProto.Name : Loc.GetString("cmu-dropship-radio-unknown-area");
+        Radio(actor, faction, Loc.GetString("cmu-cas-radio-position",
+            ("callsign", Name(actor)), ("area", area),
+            ("x", (int) coordinates.Position.X), ("y", (int) coordinates.Position.Y)));
     }
 
     private void OnUplinkClearHot(Entity<CMUCasUplinkComponent> ent, ref CMUCasCallClearHotMsg args)
