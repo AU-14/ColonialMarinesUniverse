@@ -17,7 +17,7 @@ using Robust.Shared.Timing;
 namespace Content.Client.CMU14.ZLevels.Core;
 
 // shoot where you look. figures out which level the cursor is actually showing and keeps
-// the aim-down flag synced, so there's no hotkey for firing down a hole anymore
+// the aim-down flag synced. turning cmu.zlevels.look_aim off hands it back to the hotkey
 public sealed partial class CMUZLevelAimSystem : EntitySystem
 {
     // past this, empty floor through a gap doesn't pull the shot down. you have to be pointing
@@ -50,7 +50,9 @@ public sealed partial class CMUZLevelAimSystem : EntitySystem
             return;
         }
 
-        var aimDown = _input.MouseScreenPosition.IsValid &&
+        // the hotkey has its own flag, this one is only the cursor's opinion
+        var aimDown = !_shooting.IsShootDownEnabled(user) &&
+            _input.MouseScreenPosition.IsValid &&
             ResolveAim(user, _eye.PixelToMap(_input.MouseScreenPosition), out _) < 0;
 
         if (aimDown != _shooting.IsAimingDown(user))
@@ -69,7 +71,7 @@ public sealed partial class CMUZLevelAimSystem : EntitySystem
         return false;
     }
 
-    // 1 looking up, -1 through a hole with nothing on our level drawn over it, else 0
+    // 1 looking up, -1 hotkey on or through a hole with nothing on our level drawn over it, else 0
     private int ResolveAim(EntityUid user, MapCoordinates cursor, out MapCoordinates aim)
     {
         aim = cursor;
@@ -84,11 +86,16 @@ public sealed partial class CMUZLevelAimSystem : EntitySystem
             return 0;
         }
 
+        // hotkey already said down, just line the aim up with what's drawn there
+        if (_shooting.IsShootDownEnabled(user))
+            return TryAimAtLevel(user, map, -1, cursor, out aim, out _) ? -1 : 0;
+
         // looking up draws the level above over everything, same as the old look-up shots
         if (TryComp<CMUZLevelViewerComponent>(user, out var viewer) && viewer.LookUp)
             return TryAimAtLevel(user, map, 1, cursor, out aim, out _) ? 1 : 0;
 
-        if (_config.GetCVar(CMUZLevelsCVars.MaxRenderDepth) <= 0 ||
+        if (!_config.GetCVar(CMUZLevelsCVars.LookAim) ||
+            _config.GetCVar(CMUZLevelsCVars.MaxRenderDepth) <= 0 ||
             !_zLevels.IsZShotPathOpen(map, cursor.Position, cursor.Position) ||
             GetShootableUnderCursor(user, cursor) != null ||
             !TryAimAtLevel(user, map, -1, cursor, out aim, out var snapped))
