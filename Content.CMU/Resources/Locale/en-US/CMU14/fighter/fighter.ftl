@@ -188,6 +188,7 @@ cmu-fighter-officer-route-hint = Select a flare on the map to view it.
     Air cover · assign defended sectors
 cmu-fighter-board-blocked = Both seats are occupied, or the aircraft is not safely grounded.
 cmu-fighter-takeoff-blocked = Takeoff needs a clear footprint and open sky. Move away from people, obstacles, roofs and the moving lift.
+cmu-fighter-landing-diverted = The recovery site is still blocked. Diverting to the nearest clear spot.
 cmu-fighter-air-countdown = Impact in { $seconds }s
 cmu-fighter-flares = DEPLOY FLARES
 cmu-fighter-flares-used = FLARES DEPLOYED
