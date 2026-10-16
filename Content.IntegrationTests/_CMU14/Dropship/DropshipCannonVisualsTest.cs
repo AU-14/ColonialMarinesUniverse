@@ -219,7 +219,7 @@ public sealed class DropshipCannonVisualsTest : GameTest
         {
             map = SEntMan.System<SharedMapSystem>().CreateMap();
             coordinates = new EntityCoordinates(map, Vector2.Zero);
-            user = SEntMan.SpawnEntity("CMMobHuman", coordinates);
+            user = SEntMan.SpawnEntity("CMMobHuman", coordinates.Offset(new Vector2(1, 0)));
             point = SEntMan.SpawnEntity(pointPrototype, coordinates);
             var weapon = SEntMan.SpawnEntity("CMUDropshipAttachmentBOFORS", coordinates);
             var containers = SEntMan.System<SharedContainerSystem>();
