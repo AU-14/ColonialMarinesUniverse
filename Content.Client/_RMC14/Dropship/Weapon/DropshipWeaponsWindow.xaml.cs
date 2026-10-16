@@ -12,7 +12,6 @@ public sealed partial class DropshipWeaponsWindow : RMCPopOutWindow
 {
     protected override Control Control => Panel;
     private readonly DefaultWindow _turretWindow;
-    private readonly DefaultWindow _rtoWindow;
 
     public DropshipWeaponsWindow()
     {
@@ -25,28 +24,16 @@ public sealed partial class DropshipWeaponsWindow : RMCPopOutWindow
         };
         TurretPanel.Orphan();
         _turretWindow.Contents.AddChild(TurretPanel);
-        _rtoWindow = new DefaultWindow
-        {
-            Title = Loc.GetString("cmu-cas-requests-title"),
-            MinSize = new System.Numerics.Vector2(440, 500),
-        };
-        RtoPanel.Orphan();
-        var requests = new Robust.Client.UserInterface.Controls.ScrollContainer { HScrollEnabled = false };
-        requests.AddChild(RtoPanel);
-        _rtoWindow.Contents.AddChild(requests);
         TurretPanelButton.OnPressed += _ => _turretWindow.OpenCentered();
-        RtoPanelButton.OnPressed += _ => _rtoWindow.OpenCentered();
         OnClose += () =>
         {
             _turretWindow.Close();
-            _rtoWindow.Close();
         };
     }
 
     public void DisposeAuxiliaryWindows()
     {
         _turretWindow.Dispose();
-        _rtoWindow.Dispose();
     }
 
     public void SetConsoleVisible(bool visible)
@@ -55,6 +42,5 @@ public sealed partial class DropshipWeaponsWindow : RMCPopOutWindow
         if (visible)
             return;
         _turretWindow.Close();
-        _rtoWindow.Close();
     }
 }

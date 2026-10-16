@@ -17,20 +17,6 @@ The roll maximizes balanced assignments, then prefers higher role priorities and
 
 ## Dropships
 
-RTO CAS uplinks can call **OWN POSITION** without a visible hostile or a flare.
-The operator may offset the call by up to 15 tiles east/west and north/south,
-including diagonally. The server adds up to 12 tiles of random radial deviation
-to the requested position; the resulting mark stays fixed when the RTO moves.
-Existing acknowledgement and cleared-hot requirements still apply.
-
-Xenos, or players holding a sharp tool such as a knife, can right-click an RTO
-radio pack or its wearer to **Rip out radio wires**.
-This takes seven seconds and is interrupted by movement, damage, or changing
-hands/dropping the required tool. The broken
-pack cannot operate its radio, relay, phone or CAS uplink. An RTO or someone with
-Engineer skill 1 can use five cable on the pack (or its wearer) to repair it,
-then power it back on.
-
 Dropship part fabricators share a budget within their carrier's faction, including linked decks. GOVFOR and OPFOR have separate accounts for purchases, refunds, passive income and faction tech rewards.
 
 In FoF, squad leaders, acting squad leaders, officers and command personnel can hack an opposing dropship's navigation console. The hack takes 60 seconds and breaks on movement, damage or resting. Existing launch and hijack timing limits apply. Authorization is tied to the user and console and expires after one minute.

@@ -42,9 +42,6 @@ public sealed partial class ANPRCRadioSystem
 
     private void OnQuickSetup(Entity<ANPRCRadioComponent> ent, ref ANPRCQuickSetupMsg args)
     {
-        if (!CheckWires(ent, args.Actor))
-            return;
-
         var radio = ent.Comp;
 
         if (!radio.Enabled)

@@ -164,7 +164,6 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
 
         InitializePhone();
         InitializeExpert();
-        InitializeDamage();
     }
 
     private void OnRadioReceive(Entity<ANPRCRadioComponent> ent, ref RadioReceiveEvent args)
@@ -325,7 +324,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
 
         if (TryComp(ent.Owner, out RTORelayComponent? relay))
         {
-            relay.Active = !ent.Comp.WiresRipped;
+            relay.Active = true;
             Dirty(ent.Owner, relay);
         }
 

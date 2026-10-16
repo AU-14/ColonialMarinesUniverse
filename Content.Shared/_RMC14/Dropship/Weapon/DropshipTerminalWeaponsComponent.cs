@@ -1,6 +1,5 @@
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared.CMU14.Dropship.DirectFire;
-using Content.Shared.CMU14.Dropship.Cas;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
@@ -8,7 +7,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._RMC14.Dropship.Weapon;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
-[Access(typeof(SharedDropshipWeaponSystem), typeof(MohawkChinGunSystem), typeof(DropshipFireControlBootSystem), typeof(CMUCasRequestSystem))]
+[Access(typeof(SharedDropshipWeaponSystem), typeof(MohawkChinGunSystem), typeof(DropshipFireControlBootSystem))]
 public sealed partial class DropshipTerminalWeaponsComponent : Component
 {
     [DataField, AutoNetworkedField]
@@ -62,13 +61,6 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
     [DataField, AutoNetworkedField] public int ChinGunHeat;
     [DataField, AutoNetworkedField] public int ChinGunMaxHeat = 100;
     [DataField, AutoNetworkedField] public bool ChinGunOverheated;
-
-    /// <summary>9-line CAS requests from this console's faction RTOs.</summary>
-    [DataField, AutoNetworkedField] public List<CMUCasRequest> CasRequests = new();
-
-    /// <summary>Danger-close strike awaiting a repeat fire command to confirm. Server only.</summary>
-    public EntityCoordinates? DangerCloseTarget;
-    public TimeSpan DangerCloseExpires;
 
     /// <summary>Flare the gunner has locked with the chin gun, shared with every console on the ship.</summary>
     [DataField, AutoNetworkedField] public EntityUid? GunnerFlare;

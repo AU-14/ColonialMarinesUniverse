@@ -258,9 +258,6 @@ public sealed partial class ANPRCRadioSystem
 
     private void OnTogglePower(Entity<ANPRCRadioComponent> ent, ref ANPRCTogglePowerMsg args)
     {
-        if (!CheckWires(ent, args.Actor))
-            return;
-
         if (!ent.Comp.Enabled && !_powerCell.HasCharge(ent.Owner, 1f))
         {
             _anprcChat.Notice(Loc.GetString("anprc-battery-depleted"), args.Actor, ANPRCNotice.Warn);

@@ -25,9 +25,6 @@ public sealed partial class ANPRCRadioComponent : Component
     [DataField, AutoNetworkedField]
     public bool Enabled = true;
 
-    [DataField, AutoNetworkedField]
-    public bool WiresRipped;
-
     [DataField]
     public string RequiredSlot = "back";
 

@@ -190,7 +190,7 @@
     -   Provides a camera view centered on the selected target and its immediate surroundings.
     -   When this window is active, it will display the visual feed from the area around the target currently selected.
     <Box>[bold]Camera Control[/bold]:</Box>
-    -   Open the [bold]fire-control panel[/bold] using the header button to find the four directional arrows. Turret controls and RTO requests open in separate windows, leaving both main camera monitors unobstructed.
+    -   Open the [bold]fire-control panel[/bold] using the header button to find the four directional arrows. Turret controls open in a separate window, leaving both main camera monitors unobstructed.
     -   Using these arrows allows you to [color=#ADD8E6]slightly move the camera view around[/color] the selected target point. You can use the button in the center to reset the camera back to the target.
     -   [color=#FFD700][bold]Important Note[/bold][/color]: Selecting a different camera subject does not change the strike target, but the directional arrows change the console's shared offset. Direct CAS strikes land at the selected strike target plus that offset. Check the targeting preview and reset the offset when you no longer need it.
 
@@ -300,31 +300,9 @@
 
     Every time a CAS weapon fires (except as part of a fire mission), it can [bold]jam[/bold]. The base chance is 0.2% (server-configurable), raised by the same wear multiplier as landing faults and capped by the same limit. A mixed GAU burst rolls once, not forty times. A jam plays a stoppage sound, warns the shooter and faults the hardpoint with a reason such as a feed tray jam or a double-feed stoppage. A jammed hardpoint cannot fire until someone with [bold]Pilot skill 2 or Engineering skill 1[/bold] uses a [bold]multitool[/bold] on it. Repairs reset its wear.
 
-    ### H. Danger Close
-
-    When a console-fired strike would land within [bold]five tiles of a living friendly[/bold], the first shot is held and the gunner gets a [bold]DANGER CLOSE[/bold] warning with a warning tone. Fire again at the same spot within five seconds to confirm. Only a [bold]cleared-hot[/bold] RTO request covers that risk; an accepted request alone never grants fire clearance. Every warning and confirmation is admin-logged.
-
-    ### I. RTO Close Air Support Requests
-
-    Radio Telephone Operators wearing an AN/PRC radio pack can file a [bold]CAS request[/bold] (a simplified 9-line) on a visible mark within [bold]30 tiles[/bold]. Walls block the initial line-of-sight check; windows do not. After submitting, the RTO must remain within [bold]45 tiles[/bold] of the called mark on the same map or the request is cancelled and announced over the radio. Losing line of sight after the call does not cancel it.
-    [bold]CAS uplink[/bold]: the radio pack grants a [bold]CAS uplink[/bold] action that opens the request window. It lists every friendly flare, laser spot and radio mark in range with distance, [bold]DANGER CLOSE[/bold] and [bold]LASER[/bold] tags, plus a [bold]NO FLARE: nearest hostile[/bold] entry. Picking a mark shows a live preview of exactly what will be transmitted: mark type, target, grid, hostiles, friendlies, distance and warnings. Choose the [bold]weapon system[/bold] (any, guns, GAU-21, BOFORS, howitzer, rockets, missiles, bombs, lasers or M90 chin gun) and the [bold]desired effect[/bold] (high explosive, armor piercing, incendiary, fragmentation, smoke or illumination), add optional remarks, and press [bold]Transmit request[/bold]. The window also lists your open requests with [bold]Cleared hot[/bold] and [bold]Abort[/bold] buttons.
-    [bold]No-flare calls[/bold]: choosing the nearest-hostile entry drops a short-lived [bold]radio mark[/bold] on the closest visible living hostile within 30 tiles, which the aircrew can target and view like a flare. Hidden hostiles are skipped rather than called through walls.
-    [bold]Own-position calls[/bold]: select [bold]OWN POSITION (offset call)[/bold] to call CAS relative to where you stand when transmitting, without needing a flare or a visible hostile. Set east/west and north/south offsets from -15 to +15 tiles; both may be used together for diagonal calls. The server adds up to [bold]12 tiles of random radial deviation[/bold]. The preview shows your origin, not the eventual impact mark. The resulting radio mark stays fixed when you move and uses the normal acknowledgement and cleared-hot process. Be careful of danger close.
-    [bold]Relay your position[/bold]: press [bold]RELAY POSITION OVER JTAC[/bold] in the CAS uplink to broadcast your current raw handheld-GPS X/Y coordinates and area over your faction's JTAC channel. This is a radio message only: it creates no CAS request or target mark, applies no offsets or random deviation, and uses your position when pressed. Your radio pack must be worn, powered on and have intact wiring.
-    [bold]Radio sabotage and repair[/bold]: xenos, or players holding a sharp tool such as a knife, can right-click a radio pack or its wearer and choose [bold]Rip out radio wires[/bold]. The seven-second action breaks on movement, damage, changing hands or dropping the required tool and disables the pack's radio, relay, phone and CAS uplink. An RTO or someone with [bold]Engineer skill 1[/bold] can use [bold]five cable[/bold] on the pack or its wearer to repair it. Turn the pack back on after repair.
-    [bold]Laser designation[/bold]: a strike landing within two tiles of a spot lased by an RTO wearing a radio pack is [bold]25% more accurate[/bold] (reduced spread and dispersion).
-    You can still right-click a signal flare or laser mark (or yourself, to use the nearest friendly mark) and open [bold]Request CAS[/bold] for a quick call. The request records the callsign, target mark, grid location and area, a description of the hostiles near the target, the nearest friendlies, and whether the strike would be danger close. Request, acceptance and completion traffic is announced on [bold]ATC[/bold] for GOVFOR or [bold]ORBT[/bold] for OPFOR, included in the radio pack's standard nets.
-    Every weapons console of that faction lists open requests in a separate [bold]CAS REQUESTS[/bold] window, opened from the header:
-    1. [bold]Accept[/bold] takes the job, selects its mark as the console's target and radios the RTO.
-    2. The RTO then uses [bold]Cleared hot[/bold] in the uplink or [bold]Request CAS → Clear hot[/bold] on themselves to authorize the strike, or [bold]Abort[/bold] to cancel it. Both manual and automatic firing at the request mark are blocked until clearance, even without nearby friendlies.
-    3. [bold]Deny[/bold] declines the request.
-    4. After accepting, the pilot picks [bold]AUTO[/bold] or [bold]MANUAL[/bold] carry-out on the request card. With no choice within [bold]12 seconds[/bold], the request defaults to AUTO. AUTO waits for clear hot and the appropriate flight mode, then fires up to three volleys from matching onboard weapons, including internal mounts. It never substitutes unrelated weapons if the requested system is absent; the request closes with an explicit reason instead. The M90 chin gun and flare launchers never fire automatically. MANUAL leaves the strike to the crew.
-    5. After the strike, press [bold]Rounds complete[/bold] (AUTO completes itself after its volleys). The aircraft radios a battle damage assessment (hostiles down and still standing near the mark).
-    Each mark can carry one open request, and each faction can have six open at once. Requests expire after fifteen minutes or when their mark disappears. If a request initially identified living hostiles but none remain within four tiles of its stationary mark for five seconds, it closes and announces that the target moved or was lost. AUTO also reports an inability to begin firing instead of leaving an unusable request open indefinitely.
-
     CAS impacts, explosions and their fire effects do not gib bodies or automatically sever the head or torso. Limb loss and lethal damage remain possible; unrelated damage retains its normal gibbing behaviour.
 
-    ### J. Special Rocket Fallout
+    ### H. Special Rocket Fallout
 
     - [bold]Weedkiller[/bold]: leaves a treated zone (three-tile radius, about five minutes) where weeds cannot spread or be planted.
     - [bold]White phosphorus smoke[/bold]: leaves a smoke screen (three-tile radius, about twenty seconds). Targets inside it cannot be laser-designated, and M90 Normal and Night optics cannot track or acquire them. Thermal optics see through the smoke.
@@ -332,11 +310,11 @@
     - [bold]Thermobaric[/bold] (Mini-Mike and BLU-176): the overpressure heavily damages resin structures within two tiles.
     - [bold]HEAT[/bold]: the shaped-charge jet deals bonus damage to vehicles and heavily armored targets at the impact.
 
-    ### K. Admin Tools
+    ### I. Admin Tools
 
     Admins have [bold]CAS (Admin)[/bold] verbs. On a hardpoint: clear fault, force fault, refill ammunition and (on the M90) restore the chin gun to full working order. On a weapons console: skip the boot sequence, force a landing reboot, refill every hardpoint and clear every fault. All CAS weapon fire, fire missions, ammunition loads, setting changes, jams, overheats, requests and admin actions are written to the admin logs.
 
-    ### L. Gameplay Troubleshooting
+    ### J. Gameplay Troubleshooting
 
     - [bold]Weapon missing from the list[/bold]: Check whether it is installed on a compatible point, then browse the weapon pages. A dedicated direct-fire-only weapon is not a normal CAS selection.
     - [bold]Cannot load[/bold]: Match the ammunition to the weapon, clear the occupied ammunition slot, and use the correct method: powerloader for heavy packs, both hands free for individual hand-loaded rounds.
@@ -344,13 +322,12 @@
     - [bold]Target disappeared[/bold]: Have the ground player designate again, then reselect the target.
     - [bold]Strike rejected under cover[/bold]: Select ammunition with suitable overhead penetration. Dispersion can move an impact beneath protected cover even when the central target is valid.
     - [bold]Weapon jammed or faulted[/bold]: Examine the hardpoint for its fault reason, then multitool it (Pilot 2 or Engineering 1).
-    - [bold]First shot did nothing and DANGER CLOSE appeared[/bold]: Friendlies are within five tiles. Fire again within five seconds to confirm, or pick another target.
     - [bold]M90 stopped firing with HEAP[/bold]: The barrels overheated. Wait until heat falls to 40, or switch to Squall.
     - [bold]Belt still has rounds but will not fire[/bold]: Check that the carrier contains at least forty rounds in total. Partially used crates combine to supply a burst, but fewer than forty rounds across the entire carrier cannot start one.
     - [bold]Pattern/height button missing[/bold]: Pattern selection requires a Rapidfire laser battery; height selection requires a BOFORS Airburst magazine.
     - [bold]Turret will not track[/bold]: Take control from the gunnery seat with ammunition appropriate to the flight mode. Squall marks require a living entity inside the forward arc and range; explosive marks require an entity inside the selected flyby flare circle. Targets inside WP smoke cannot be tracked with Normal or Night optics.
 
-    ### M. Practical Gameplay Tips
+    ### K. Practical Gameplay Tips
 
     -   [bold]Use both monitors[/bold]: Keep "Target" open for firing and "Cams" or "Equip" open for observation or ammunition checks.
     -   [bold]Account for travel time[/bold]: The target can move between release and impact. Fast laser strikes and slower missiles or bombs require different lead distances.

@@ -2789,9 +2789,6 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
     /// <returns>True if a fire mission was successfully started</returns>
     public bool TryStartFireMission(Entity<DropshipComponent> dropship, EntityUid target, Direction strikeVector, int maxSteps, Vector2 offset, EntityUid user, FireMissionData missionData, EntityUid? watchingTerminal = null)
     {
-        if (!EntityManager.System<CMUCasRequestSystem>().CheckClearance(watchingTerminal ?? dropship.Owner,
-            Transform(target).Coordinates, user, target))
-            return false;
         if (HasComp<ActiveFireMissionComponent>(dropship))
         {
             var cooldownMsg = Loc.GetString("rmc-dropship-firemission-cooldown");
@@ -2900,10 +2897,6 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         if (!Resolve(weapon, ref weaponComp, false))
             return false;
 
-        if (!EntityManager.System<CMUCasRequestSystem>().CheckClearance(terminalComp?.Owner ?? dropship.Owner,
-            targetCoordinates, actor, terminalComp?.Target))
-            return false;
-
         if (weaponComp.GunneryOnly && _container.TryGetContainingContainer((weapon, null), out var mounted) &&
             TryComp(mounted.Owner, out MohawkChinGunComponent? chin))
             return strikeType == DropshipWeaponStrikeType.Direct && actor is { } gunnerActor &&
@@ -2938,12 +2931,6 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return false;
         }
 
-        // CMU14: direct strikes near friendlies need a second press to confirm.
-        if (strikeType == DropshipWeaponStrikeType.Direct && actor is { } shooter && terminalComp != null &&
-            !EntityManager.System<CMUCasRequestSystem>().CheckDangerClose((terminalComp.Owner, terminalComp),
-                targetCoordinates, shooter, weapon))
-            return false;
-
         FireWeapon(weapon, targetCoordinates, strikeType,dropship, actor, terminalComp, weaponComp);
         return true;
     }
@@ -2967,9 +2954,6 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             !_directFire.TryResolveMount((weapon, direct), out var mount, out var grid, out _, out _) ||
             !_directFire.TryGetFeedAmmo(point, out var ammo) || ammo.Comp.Rounds <= 0 ||
             !_chinGun.IsAmmoUsable(point, ammo.Comp))
-            return false;
-        if (!EntityManager.System<CMUCasRequestSystem>().CheckClearance(terminal.Owner, coordinates,
-                actor == weapon ? null : actor, terminal.Target))
             return false;
 
         var landing = coordinates;
@@ -3191,13 +3175,6 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             ammo.Comp.SoundEveryShots
         );
         RaiseLocalEvent(dropship, ref ev);
-
-        // CMU14: an RTO's laser designation tightens the strike pattern.
-        if (EntityManager.System<CMUCasRequestSystem>().IsRtoDesignated(targetCoordinates, terminalComp?.Target))
-        {
-            ev.Spread *= CMUCasRequestSystem.DesignationSpreadMultiplier;
-            ev.BulletSpread = (int) MathF.Round(ev.BulletSpread * CMUCasRequestSystem.DesignationSpreadMultiplier);
-        }
 
         ammo.Comp.Rounds -= mixed ? 1 : ammo.Comp.RoundsPerShot;
         _appearance.SetData(ammo, DropshipAmmoVisuals.Fill, ammo.Comp.Rounds);
