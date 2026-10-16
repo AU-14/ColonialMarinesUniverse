@@ -1998,6 +1998,8 @@
   name: dropship navigation console
   suffix: Mohawk, Omaha
   components:
+  - type: DropshipNavigationComputer
+    canTacticalLand: true
   - type: Transform
     anchored: true
     noRot: false
@@ -5655,6 +5657,8 @@
   name: dropship navigation console
   suffix: Mohawk, Omaha, Navy
   components:
+  - type: DropshipNavigationComputer
+    canTacticalLand: true
   - type: Transform
     anchored: true
     noRot: false
@@ -9109,6 +9113,8 @@
   name: dropship navigation console
   suffix: Mohawk, Midway
   components:
+  - type: DropshipNavigationComputer
+    canTacticalLand: true
   - type: Transform
     anchored: true
     noRot: false
@@ -12746,6 +12752,8 @@
   name: dropship navigation console
   suffix: Mohawk, Midway, Navy
   components:
+  - type: DropshipNavigationComputer
+    canTacticalLand: true
   - type: Transform
     anchored: true
     noRot: false

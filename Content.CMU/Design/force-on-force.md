@@ -25,6 +25,8 @@ Humans and xenos have a single **Initiate hijack** action. The server chooses a 
 
 Ordinary navigation respects both carrier ownership (including connected decks) and landing-zone faction whitelists. A hostile passenger on a launched dropship triggers the owning faction's ship announcement, including passengers on other dropship decks.
 
+All Mohawk variants support tactical landing from their navigation console, including deployment configurations. Pilots can designate and rotate a landing site using the existing tactical landing controls; normal navigation access and launch restrictions still apply.
+
 When a FoF hijack flight starts, living attackers on the ground or their own carrier receive a **Join / Stay** popup offering transport aboard the hijacked dropship. Living defenders on the ground or the attackers' carrier receive the same choice to return to their own carrier's spawn area. Players already aboard the hijacking dropship or defending carrier are not prompted. Closing the popup counts as staying. The offer expires at landing, on death, or when the player changes body, faction or eligible location; acceptance is validated on the server and requires a clear floor tile.
 
 Admin commands support faction recipients:
