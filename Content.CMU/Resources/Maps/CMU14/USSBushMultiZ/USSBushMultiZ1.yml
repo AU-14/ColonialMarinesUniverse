@@ -32996,7 +32996,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 9.210081,-35.277348
-- proto: GasPipeManifold
+- proto: CMUGasPipeManifold
   entities:
   - uid: 299
     components:
