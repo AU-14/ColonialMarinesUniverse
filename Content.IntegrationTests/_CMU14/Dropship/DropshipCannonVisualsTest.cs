@@ -5,12 +5,14 @@ using System.Numerics;
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
+using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.Fabricator;
 using Content.Shared._RMC14.Dropship.Utility.Components;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.PowerLoader;
 using Content.Shared.Interaction;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Shuttles.Systems;
 using Robust.Client.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
@@ -154,6 +156,14 @@ public sealed class DropshipCannonVisualsTest : GameTest
             SEntMan.EventBus.RaiseLocalEvent(point, interaction);
             Assert.That(interaction.Handled, Is.True);
             var utility = SEntMan.GetComponent<DropshipUtilityPointComponent>(point);
+            Assert.That(SEntMan.System<SharedContainerSystem>()
+                .EnsureContainer<ContainerSlot>(point, utility.AmmoContainerSlotId).ContainedEntity, Is.Null,
+                "Hand-loading must not complete instantly.");
+        });
+        await Pair.RunSeconds(4);
+        await Server.WaitAssertion(() =>
+        {
+            var utility = SEntMan.GetComponent<DropshipUtilityPointComponent>(point);
             var containers = SEntMan.System<SharedContainerSystem>();
             Assert.That(containers.EnsureContainer<ContainerSlot>(point, utility.AmmoContainerSlotId).ContainedEntity,
                 Is.EqualTo(ammo), "Hand-loading must accept the magazine or shell, not just direct container insertion.");
@@ -200,12 +210,17 @@ public sealed class DropshipCannonVisualsTest : GameTest
     [TestCase("CMAlamoWall61")]
     public async Task BoforsAcceptsEveryMagazineButRejectsHowitzerShells(string pointPrototype)
     {
+        EntityUid map = default;
+        EntityUid point = default;
+        EntityUid user = default;
+        ContainerSlot ammoSlot = default!;
+        EntityCoordinates coordinates = default;
         await Server.WaitAssertion(() =>
         {
-            var map = SEntMan.System<SharedMapSystem>().CreateMap();
-            var coordinates = new EntityCoordinates(map, Vector2.Zero);
-            var user = SEntMan.SpawnEntity("CMMobHuman", coordinates);
-            var point = SEntMan.SpawnEntity(pointPrototype, coordinates);
+            map = SEntMan.System<SharedMapSystem>().CreateMap();
+            coordinates = new EntityCoordinates(map, Vector2.Zero);
+            user = SEntMan.SpawnEntity("CMMobHuman", coordinates.Offset(new Vector2(1, 0)));
+            point = SEntMan.SpawnEntity(pointPrototype, coordinates);
             var weapon = SEntMan.SpawnEntity("CMUDropshipAttachmentBOFORS", coordinates);
             var containers = SEntMan.System<SharedContainerSystem>();
             var weaponSlotId = SEntMan.TryGetComponent<DropshipUtilityPointComponent>(point, out var utility)
@@ -216,34 +231,77 @@ public sealed class DropshipCannonVisualsTest : GameTest
                 : SEntMan.GetComponent<DropshipWeaponPointComponent>(point).AmmoContainerSlotId;
             Assert.That(containers.Insert(weapon,
                 containers.EnsureContainer<ContainerSlot>(point, weaponSlotId)), Is.True);
-            var ammoSlot = containers.EnsureContainer<ContainerSlot>(point, ammoSlotId);
+            ammoSlot = containers.EnsureContainer<ContainerSlot>(point, ammoSlotId);
+        });
 
-            foreach (var ammoPrototype in new[]
-                     {
-                         "CMUDropshipAmmoBOFORSMagHE",
-                         "CMUDropshipAmmoBOFORSMagAP",
-                         "CMUDropshipAmmoBOFORSMagAirburst",
-                         "CMUDropshipAmmoBOFORSMagHEAT",
-                         "CMUDropshipAmmoBOFORSMagIncendiary",
-                         "CMUDropshipAmmoHowitzerHE",
-                     })
+        foreach (var ammoPrototype in new[]
+                 {
+                     "CMUDropshipAmmoBOFORSMagHE",
+                     "CMUDropshipAmmoBOFORSMagAP",
+                     "CMUDropshipAmmoBOFORSMagAirburst",
+                     "CMUDropshipAmmoBOFORSMagHEAT",
+                     "CMUDropshipAmmoBOFORSMagIncendiary",
+                     "CMUDropshipAmmoHowitzerHE",
+                 })
+        {
+            EntityUid ammo = default;
+            await Server.WaitAssertion(() =>
             {
-                var ammo = SEntMan.SpawnEntity(ammoPrototype, coordinates);
+                ammo = SEntMan.SpawnEntity(ammoPrototype, coordinates);
+                Assert.That(SEntMan.System<SharedHandsSystem>().TryPickupAnyHand(user, ammo), Is.True);
                 var interaction = new InteractUsingEvent(user, ammo, point, coordinates);
                 SEntMan.EventBus.RaiseLocalEvent(point, interaction);
                 Assert.That(interaction.Handled, Is.True);
+                Assert.That(ammoSlot.ContainedEntity, Is.Null);
+            });
+            await Pair.RunSeconds(4);
+            await Server.WaitAssertion(() =>
+            {
                 if (ammoPrototype == "CMUDropshipAmmoHowitzerHE")
                     Assert.That(ammoSlot.ContainedEntity, Is.Null, "A 105mm shell must not fit the 40mm Bofors.");
                 else
                 {
                     Assert.That(ammoSlot.ContainedEntity, Is.EqualTo(ammo), ammoPrototype);
-                    Assert.That(containers.TryRemoveFromContainer(ammo), Is.True);
+                    Assert.That(SEntMan.System<SharedContainerSystem>().TryRemoveFromContainer(ammo), Is.True);
                 }
                 SEntMan.DeleteEntity(ammo);
-            }
+            });
+        }
 
-            SEntMan.DeleteEntity(map);
+        await Server.WaitAssertion(() => SEntMan.DeleteEntity(map));
+    }
+
+    [TestCase(FTLState.Starting, false)]
+    [TestCase(FTLState.Travelling, false)]
+    [TestCase(FTLState.Arriving, false)]
+    [TestCase(FTLState.Available, true)]
+    public async Task HandLoadingRejectsFlightAndRechecksAtCompletion(FTLState state, bool takeOffDuringLoad)
+    {
+        var map = await Pair.CreateTestMap();
+        ContainerSlot slot = default!;
+        await Server.WaitAssertion(() =>
+        {
+            var ship = SEntMan.EnsureComponent<DropshipComponent>(map.Grid);
+            ship.State = state;
+            var point = SEntMan.SpawnEntity("AU14InteriorWeaponAttachmentPoint", map.GridCoords);
+            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var weapon = SEntMan.SpawnEntity("CMUDropshipAttachmentHowitzer", map.GridCoords);
+            var ammo = SEntMan.SpawnEntity("CMUDropshipAmmoHowitzerHE", map.GridCoords);
+            var utility = SEntMan.GetComponent<DropshipUtilityPointComponent>(point);
+            var containers = SEntMan.System<SharedContainerSystem>();
+            Assert.That(containers.Insert(weapon,
+                containers.EnsureContainer<ContainerSlot>(point, utility.UtilitySlotId)), Is.True);
+            slot = containers.EnsureContainer<ContainerSlot>(point, utility.AmmoContainerSlotId);
+            Assert.That(SEntMan.System<SharedHandsSystem>().TryPickupAnyHand(user, ammo), Is.True);
+            var interaction = new InteractUsingEvent(user, ammo, point, map.GridCoords);
+            SEntMan.EventBus.RaiseLocalEvent(point, interaction);
+            Assert.That(interaction.Handled, Is.True);
+            Assert.That(slot.ContainedEntity, Is.Null);
+            if (takeOffDuringLoad)
+                ship.State = FTLState.Travelling;
         });
+        await Pair.RunSeconds(4);
+        await Server.WaitAssertion(() => Assert.That(slot.ContainedEntity, Is.Null));
     }
 
     [Test]

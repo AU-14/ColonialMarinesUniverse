@@ -263,9 +263,11 @@ public sealed partial class DamageableSystem
         if (damage.Empty)
             return damageDone;
 
+        // CMU14 Begin
         using var gibbingScope = _gibbing.BeginDamage(origin, tool);
         if (_gibbing.GibbingSuppressed)
             impact = impact with { Context = impact.Context | DamageImpactContext.NonGibbing };
+        // CMU14 End
         var before = new BeforeDamageChangedEvent(damage, origin, tool, impact);
         RaiseLocalEvent(ent, ref before);
 

@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Rules;
 using Content.Shared.Buckle;
 using Content.Shared.CMU14;
 using Content.Shared.CMU14.Dropship.DirectFire;
@@ -37,6 +38,8 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
 
     private Mount Create(EntityUid grid, bool airborne, string? cratePrototype = null)
     {
+        if (!airborne)
+            SEntMan.EnsureComponent<RMCPlanetComponent>(SEntMan.GetComponent<TransformComponent>(grid).MapUid!.Value);
         var coords = new EntityCoordinates(grid, Vector2.Zero);
         var maps = Server.System<SharedMapSystem>();
         var tiles = Server.ResolveDependency<ITileDefinitionManager>();
@@ -153,6 +156,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             ui.OpenUi(mount.Console, DropshipTerminalWeaponsUi.Key, mount.Actor);
             Assert.That(boot.ReadyAt, Is.GreaterThan(SGameTiming.CurTime));
             mount.Chin.DefensiveFire = true;
+            mount.Chin.FreeFireEnabled = true;
             var system = Server.System<MohawkChinGunSystem>();
             Assert.That(system.CanOperate((mount.Point, mount.Chin), mount.Weapon, mount.Weapon, out _), Is.False);
             Assert.That(mount.Ammo.Rounds, Is.EqualTo(2400));
@@ -486,12 +490,12 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             mount.Chin.NextScan = TimeSpan.Zero;
             system.Update(0);
             Assert.That(MathF.Abs(mount.Chin.DesiredAimDegrees), Is.EqualTo(180).Within(0.001));
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(2400), "Close defense waits for individual approval.");
-            Send(mount, new MohawkChinGunApproveAiMessage(SEntMan.GetNetEntity(target)));
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(2400), "Close defense requires AI free-fire activation.");
+            Send(mount, new MohawkChinGunFreeFireMessage());
             system.Update(6);
             mount.Chin.NextScan = TimeSpan.Zero;
             system.Update(0);
-            Assert.That(mount.Ammo.Rounds, Is.EqualTo(2399), "An approved aligned rear close threat permits defense fire.");
+            Assert.That(mount.Ammo.Rounds, Is.EqualTo(2399), "Activated aligned rear close threats permit defense fire.");
         });
     }
 
@@ -830,6 +834,62 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             Assert.That(SEntMan.QueryEntities<AmmoInFlightComponent>().Count(ent => ent.Comp.Explosion != null), Is.EqualTo(1));
             SEntMan.RemoveComponent<FTLComponent>(shipMap.Grid);
             SEntMan.RemoveComponent<DropshipInFlyByComponent>(shipMap.Grid);
+        });
+    }
+
+    [Test]
+    public async Task ThermalManualViewDoesNotLetAiTrackOrShootThroughWalls()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var mount = Create(map.Grid, false);
+            var turret = Server.System<MohawkChinGunSystem>();
+            var target = Hostile(map.GridCoords.Offset(new Vector2(1.5f, 10)));
+            SEntMan.SpawnEntity("CMWallMetal", map.GridCoords.Offset(new Vector2(1.5f, 6)));
+            mount.Chin.VisionMode = MohawkChinGunVisionMode.Thermal;
+            var transform = Server.System<SharedTransformSystem>();
+            var muzzle = transform.ToMapCoordinates(turret.GetMountCoordinates((mount.Point, mount.Chin)));
+            var location = transform.GetMapCoordinates(target);
+            Assert.That(turret.CanTrack((mount.Point, mount.Chin), target), Is.True,
+                "A manual gunner may observe targets through walls in thermal.");
+            Send(mount, new MohawkChinGunFreeFireMessage());
+            Assert.That(mount.Chin.Operator, Is.Null);
+            Assert.That(turret.CanTrack((mount.Point, mount.Chin), target), Is.False,
+                "Thermal must not bypass AI acquisition line of sight.");
+            Assert.That(turret.IsSafeShot((mount.Point, mount.Chin), muzzle, location, mount.Weapon), Is.False,
+                "Thermal must not bypass the AI firing line-of-sight check.");
+        });
+    }
+
+    [TestCase(false, false)]
+    [TestCase(false, true)]
+    [TestCase(true, false)]
+    [TestCase(true, true)]
+    public async Task AutomaticGroundFireRequiresActivationAndPlanet(bool planet, bool enabled)
+    {
+        var map = await Pair.CreateTestMap();
+        Mount mount = null!;
+        await Server.WaitAssertion(() =>
+        {
+            mount = Create(map.Grid, false);
+            if (!planet)
+                SEntMan.RemoveComponent<RMCPlanetComponent>(map.MapUid);
+            Hostile(map.GridCoords.Offset(new Vector2(1.5f, 5)));
+            if (enabled)
+                Send(mount, new MohawkChinGunFreeFireMessage());
+            else
+                Send(mount, new MohawkChinGunControlMessage());
+            Assert.That(mount.Chin.Operator, Is.Null);
+        });
+        await Pair.RunSeconds(1);
+        await Server.WaitAssertion(() =>
+        {
+            if (planet && enabled)
+                Assert.That(mount.Ammo.Rounds, Is.LessThan(2400));
+            else
+                Assert.That(mount.Ammo.Rounds, Is.EqualTo(2400),
+                    "Neither an unactivated turret nor a shipside turret may fire automatically.");
         });
     }
 

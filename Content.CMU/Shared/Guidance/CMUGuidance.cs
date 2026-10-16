@@ -24,6 +24,9 @@ public sealed partial class CMUMunitionGuidanceComponent : Component
 
     [DataField, AutoNetworkedField]
     public MapCoordinates? Coordinates;
+
+    [DataField, AutoNetworkedField]
+    public Vector2i? PlanetCoordinates;
 }
 
 [RegisterComponent, NetworkedComponent]
@@ -40,16 +43,16 @@ public sealed record CMUGuidanceAmmo(NetEntity Id, string Name, CMUGuidanceMode 
     NetEntity? Map, int X, int Y);
 
 [Serializable, NetSerializable]
-public sealed record CMUGuidanceMap(NetEntity Id, string Name);
+public sealed record CMUGuidanceReport(int Id, string Observer, string Map, int X, int Y);
 
 [Serializable, NetSerializable]
 public sealed class CMUGuidanceState(string? receiverCode, string? designatorCode,
-    List<CMUGuidanceAmmo> ammo, List<CMUGuidanceMap> maps) : BoundUserInterfaceState
+    List<CMUGuidanceAmmo> ammo, List<CMUGuidanceReport> reports) : BoundUserInterfaceState
 {
     public readonly string? ReceiverCode = receiverCode;
     public readonly string? DesignatorCode = designatorCode;
     public readonly List<CMUGuidanceAmmo> Ammo = ammo;
-    public readonly List<CMUGuidanceMap> Maps = maps;
+    public readonly List<CMUGuidanceReport> Reports = reports;
 }
 
 [Serializable, NetSerializable]
@@ -60,14 +63,12 @@ public sealed class CMUSetLaserCodeMessage(string code, bool designator) : Bound
 }
 
 [Serializable, NetSerializable]
-public sealed class CMUProgramGpsMessage(NetEntity ammo, CMUGuidanceMode mode, NetEntity? map, int x, int y)
+public sealed class CMUProgramGpsMessage(NetEntity ammo, CMUGuidanceMode mode, int? reportId)
     : BoundUserInterfaceMessage
 {
     public readonly NetEntity Ammo = ammo;
     public readonly CMUGuidanceMode Mode = mode;
-    public readonly NetEntity? Map = map;
-    public readonly int X = x;
-    public readonly int Y = y;
+    public readonly int? ReportId = reportId;
 }
 
 [Serializable, NetSerializable]

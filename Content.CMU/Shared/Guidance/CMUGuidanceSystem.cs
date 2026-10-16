@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Numerics;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Rangefinder;
@@ -9,11 +8,14 @@ using Content.Shared.Buckle.Components;
 using Content.Shared.CMU14.Fighter;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
+using Content.Shared.GameTicking;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
+using Robust.Shared.Random;
+using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.Guidance;
 
@@ -26,14 +28,25 @@ public sealed class CMUGuidanceSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedMapSystem _maps = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private RMCPlanetSystem _planet = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private SharedDropshipWeaponSystem _weapons = default!;
+
+    public const int GpsDeviation = 15;
+    public static readonly TimeSpan ReportLifetime = TimeSpan.FromMinutes(5);
+    private int _nextReportId;
+    private readonly List<GroundReport> _reports = [];
+    private sealed record GroundReport(EntityUid Source, string Faction, MapCoordinates Target,
+        Vector2i Coordinates, Vector2i Deviation, TimeSpan ExpiresAt, CMUGuidanceReport Report);
 
     public override void Initialize()
     {
         SubscribeLocalEvent<RangefinderComponent, GetVerbsEvent<Verb>>(OnVerbs);
         SubscribeLocalEvent<CMUMunitionGuidanceComponent, ExaminedEvent>(OnAmmoExamined);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => _reports.Clear());
         Subs.BuiEvents<CMUGuidanceControlComponent>(CMUGuidanceUi.Key, subs =>
         {
             subs.Event<CMUSetLaserCodeMessage>(OnCode);
@@ -162,30 +175,63 @@ public sealed class CMUGuidanceSystem : EntitySystem
         return result;
     }
 
-    private List<CMUGuidanceMap> GetMaps(EntityUid host)
+    public bool RecordGroundReport(Entity<RangefinderComponent> rangefinder, EntityUid user)
     {
-        var result = new List<CMUGuidanceMap>();
-        var receiver = Receiver(host);
-        var maps = EntityQueryEnumerator<MapComponent>();
-        while (maps.MoveNext(out var uid, out _))
+        if (_net.IsClient)
+            return false;
+        if (!_blocker.CanInteract(user, rangefinder.Owner) || !_interaction.InRangeUnobstructed(user, rangefinder.Owner) ||
+            !_planet.IsOnPlanet(Transform(user)) || _dropships.IsOnDropship(user) ||
+            _weapons.GetUserFaction(user) is not { } faction ||
+            rangefinder.Comp.LastCoords is not { } measured ||
+            !_planet.TryGetPlanetSurfaceCoordinates(measured, out var target) ||
+            !_planet.TryGetOffset(target, out var offset) ||
+            _transform.GetMap(_transform.ToCoordinates(target)) is not { } map)
         {
-            if (TryComp(receiver, out FighterAircraftComponent? fighter))
-            {
-                if (uid != fighter.TerrainMap)
-                    continue;
-            }
-            else
-            {
-                var planet = HasComp<RMCPlanetComponent>(uid);
-                var grids = EntityQueryEnumerator<RMCPlanetComponent, TransformComponent>();
-                while (!planet && grids.MoveNext(out _, out _, out var transform))
-                    planet = transform.MapUid == uid;
-                if (!planet)
-                    continue;
-            }
-            result.Add(new CMUGuidanceMap(GetNetEntity(uid), Name(uid)));
+            Error(rangefinder, user, "cmu-guidance-ground-report-invalid");
+            return false;
         }
-        return result;
+        var coordinates = target.Position.Floored() + offset;
+        var previous = _reports.FirstOrDefault(report => report.Target.MapId == target.MapId &&
+            report.Coordinates == coordinates && report.ExpiresAt > _timing.CurTime &&
+            report.Faction.Equals(faction, StringComparison.OrdinalIgnoreCase));
+        var deviation = previous?.Deviation ??
+            new Vector2i(_random.Next(-GpsDeviation, GpsDeviation + 1), _random.Next(-GpsDeviation, GpsDeviation + 1));
+        _reports.RemoveAll(report => report.Source == rangefinder.Owner);
+        var state = new CMUGuidanceReport(++_nextReportId, Name(user), Name(map), coordinates.X, coordinates.Y);
+        _reports.Add(new GroundReport(rangefinder, faction, target, coordinates, deviation,
+            _timing.CurTime + ReportLifetime, state));
+        _popup.PopupEntity(Loc.GetString("cmu-guidance-ground-report-sent", ("x", coordinates.X), ("y", coordinates.Y)),
+            rangefinder, user);
+        RefreshOpenControls();
+        return true;
+    }
+
+    private bool CanUseReport(EntityUid host, GroundReport report)
+    {
+        var receiver = Receiver(host);
+        var faction = TryComp(receiver, out FighterWeaponsComponent? fighter)
+            ? fighter.Faction : _weapons.GetConsoleFaction(host);
+        return report.ExpiresAt > _timing.CurTime && !TerminatingOrDeleted(report.Source) &&
+            report.Faction.Equals(faction, StringComparison.OrdinalIgnoreCase) &&
+            (!TryComp(receiver, out FighterAircraftComponent? aircraft) ||
+                _transform.GetMapId(aircraft.TerrainMap) == report.Target.MapId);
+    }
+
+    public List<CMUGuidanceReport> GetReports(EntityUid host) =>
+        _reports.Where(report => CanUseReport(host, report)).Select(report => report.Report).ToList();
+
+    public override void Update(float frameTime)
+    {
+        if (!_net.IsClient && _reports.RemoveAll(report =>
+            report.ExpiresAt <= _timing.CurTime || TerminatingOrDeleted(report.Source)) > 0)
+            RefreshOpenControls();
+    }
+
+    private void RefreshOpenControls()
+    {
+        var controls = EntityQueryEnumerator<CMUGuidanceControlComponent>();
+        while (controls.MoveNext(out var uid, out _))
+            Refresh(uid);
     }
 
     private void Refresh(EntityUid host)
@@ -201,10 +247,12 @@ public sealed class CMUGuidanceSystem : EntitySystem
             var y = 0;
             if (TryGetGps(uid, out var coordinates))
             {
-                var mapCoordinates = _transform.ToMapCoordinates(coordinates);
                 map = GetNetEntity(_transform.GetMap(coordinates));
-                x = (int) mapCoordinates.X;
-                y = (int) mapCoordinates.Y;
+                if (settings?.PlanetCoordinates is { } planetCoordinates)
+                {
+                    x = planetCoordinates.X;
+                    y = planetCoordinates.Y;
+                }
             }
             ammo.Add(new CMUGuidanceAmmo(GetNetEntity(uid), Name(uid), settings?.Mode ?? CMUGuidanceMode.Laser,
                 settings?.GpsOnly ?? false, map, x, y));
@@ -212,7 +260,7 @@ public sealed class CMUGuidanceSystem : EntitySystem
         var designator = HasComp<RangefinderComponent>(host) || HasComp<FighterSeatComponent>(host);
         _ui.SetUiState(host, CMUGuidanceUi.Key, new CMUGuidanceState(
             HasComp<RangefinderComponent>(host) ? null : GetCode(Receiver(host)),
-            designator ? GetCode(host) : null, ammo, GetMaps(host)));
+            designator ? GetCode(host) : null, ammo, GetReports(host)));
     }
 
     private void OnCode(Entity<CMUGuidanceControlComponent> ent, ref CMUSetLaserCodeMessage args)
@@ -265,14 +313,16 @@ public sealed class CMUGuidanceSystem : EntitySystem
         }
         if (args.Mode == CMUGuidanceMode.Gps)
         {
-            if (args.Map is not { } map || !GetMaps(ent).Any(candidate => candidate.Id == map) ||
-                !TryComp(GetEntity(map), out MapComponent? mapComp) ||
-                Math.Abs((long) args.X) > 1000000 || Math.Abs((long) args.Y) > 1000000)
+            var reportId = args.ReportId;
+            var report = _reports.FirstOrDefault(report => report.Report.Id == reportId && CanUseReport(ent, report));
+            if (report == null ||
+                !_planet.TryPlanetToCoordinates(report.Coordinates, out var coordinates, report.Target.MapId))
             {
                 Error(ent, args.Actor, "cmu-guidance-invalid-gps");
                 return;
             }
-            guidance.Coordinates = new MapCoordinates(new Vector2(args.X, args.Y), mapComp.MapId);
+            guidance.Coordinates = new MapCoordinates(coordinates.Position + report.Deviation, coordinates.MapId);
+            guidance.PlanetCoordinates = report.Coordinates;
         }
         guidance.Mode = args.Mode;
         Dirty(uid, guidance);
@@ -287,7 +337,7 @@ public sealed class CMUGuidanceSystem : EntitySystem
     private void OnAmmoExamined(Entity<CMUMunitionGuidanceComponent> ent, ref ExaminedEvent args)
     {
         args.PushText(Loc.GetString(ent.Comp.Mode == CMUGuidanceMode.Gps ? "cmu-guidance-gps" : "cmu-guidance-laser"));
-        if (ent.Comp.Coordinates is { } coordinates)
+        if (ent.Comp.PlanetCoordinates is { } coordinates)
             args.PushText(Loc.GetString("cmu-guidance-gps-examine", ("x", coordinates.X), ("y", coordinates.Y)));
     }
 }

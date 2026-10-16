@@ -34,6 +34,7 @@
     cost: 800
   - type: PowerLoaderAttachable
     attachableTypes:
+    - AU14InteriorWeaponPoint
     - RMCDropshipUtilityPoint
     - RMCDropshipWeaponPoint
 
@@ -41,7 +42,7 @@
   parent: RMCDropshipAttachmentWeapon
   id: CMUDropshipAttachmentHowitzer
   name: M137 105mm Howitzer
-  description: A 105mm Howitzer, capable of wiping out reinforced positions. This model only holds one round, but can be reloaded in flight if mounted on the interior. Fits on both the external weapon and crew compartment attach points of dropships.
+  description: A 105mm Howitzer, capable of wiping out reinforced positions. Holds one round and can be reloaded by hand while landed. Fits on external weapon, dedicated interior weapon, and crew compartment attach points of dropships.
   components:
   - type: Sprite
     layers:
@@ -73,5 +74,6 @@
     cost: 600
   - type: PowerLoaderAttachable
     attachableTypes:
+    - AU14InteriorWeaponPoint
     - RMCDropshipUtilityPoint
     - RMCDropshipWeaponPoint

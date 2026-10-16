@@ -272,6 +272,9 @@ public sealed partial class RangefinderSystem : EntitySystem
 
             Dirty(rangefinder);
 
+            // CMU14 Begin
+            EntityManager.System<Content.Shared.CMU14.Guidance.CMUGuidanceSystem>().RecordGroundReport(rangefinder, user);
+            // CMU14 End
             _ui.OpenUi(rangefinder.Owner, RangefinderUiKey.Key, args.User);
             return;
         }
