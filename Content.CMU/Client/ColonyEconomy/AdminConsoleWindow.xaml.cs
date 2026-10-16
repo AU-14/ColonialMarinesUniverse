@@ -21,6 +21,8 @@ public sealed partial class AdminConsoleWindow : DefaultWindow
         TaxInput.Text = $"{state.SalesTaxPercent:F0}";
         CurrentIncomeTaxLabel.Text = Loc.GetString("admin-console-current-income-tax", ("percent", $"{state.IncomeTaxPercent:F0}"));
         IncomeTaxInput.Text = $"{state.IncomeTaxPercent:F0}";
+        CurrentTradeTaxLabel.Text = Loc.GetString("admin-console-current-trade-tax", ("percent", $"{state.TradeTaxPercent:F0}"));
+        TradeTaxInput.Text = $"{state.TradeTaxPercent:F0}";
         UpdateEconomyStatus(state.EconomyStatus);
     }
 

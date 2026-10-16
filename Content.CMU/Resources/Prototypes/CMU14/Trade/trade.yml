@@ -1,0 +1,154 @@
+# The trade: things are packed into a parcel at the packer (it asks for cardboard), the parcel is put on the trade platform, and a drone comes ten seconds after the call
+# (only to a pad under the open sky), takes it and pays the card of the seller, less the tax of the colony. What the platform sells is left by the drone in a parcel.
+# The sprites of the parcels and of the drone are the user's own; the packer and the pad use placeholders.
+
+- type: entity
+  parent: BaseItem
+  id: RUMCTradeParcel
+  name: parcel
+  description: A sealed cardboard parcel. Whatever is packed in it is sold with it on a trade platform. Tear it open to take the things out.
+  components:
+  - type: Sprite
+    sprite: CMU14/Trade/boxes.rsi
+    scale: 0.9, 0.9
+    layers:
+    - state: box0
+      map: [ "random_box" ]
+  - type: RandomSprite
+    available:
+    - random_box:
+        box0: ""
+        box1: ""
+        box2: ""
+        box3: ""
+        box4: ""
+        box5: ""
+        box6: ""
+        box7: ""
+        box8: ""
+        box9: ""
+        box10: ""
+        box11: ""
+        box12: ""
+  - type: Item
+    size: Large
+  - type: TradeParcel
+
+- type: entity
+  parent: RUMCSteamMachineBase
+  id: RUMCTradePacker
+  name: parcel packer
+  description: Takes cardboard and whatever is put into it, and when it is switched on it seals the things in a parcel. One sheet of cardboard seals eight things. Click it with an empty hand to pack.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Trade/packer.rsi
+    scale: 0.5, 0.5
+    state: base
+  - type: TradePacker
+
+- type: entity
+  id: RUMCTradePlatform
+  name: trade platform
+  description: A landing pad for the drones of the trade. Put the contracts of the companies into it (nine at most), they open what the drones buy and sell. A parcel put on the pad can be sold, and what is bought is left on it. A drone comes ten seconds after the call, and only to a pad under the open sky.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+  - type: Sprite
+    sprite: CMU14/Trade/platform.rsi
+    state: base
+    drawdepth: FloorObjects
+  - type: PortableStructure
+  - type: TradePlatform
+  - type: ActivatableUI
+    key: enum.TradeUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.TradeUiKey.Key:
+        type: TradePlatformBoundUserInterface
+
+# The drone: it only flies, and the client draws the flight.
+- type: entity
+  id: RUMCTradeDrone
+  name: trade drone
+  description: A drone of the trade. It comes for a parcel or brings one.
+  components:
+  - type: Transform
+    noRot: true
+  - type: Sprite
+    sprite: CMU14/Trade/drone.rsi
+    state: drone
+    noRot: true
+    drawdepth: Overlays
+  - type: TradeDrone
+
+# ---------------------------------------------------------------- the crafts
+- type: craftRecipe
+  id: RUMCCraftTradePacker
+  name: au14-craft-recipe-tradepacker
+  output: RUMCTradePacker
+  time: 20
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCIronSheet
+    amount: 6
+  - stack: RUMCIronRod
+    amount: 4
+
+- type: craftRecipe
+  id: RUMCCraftTradePlatform
+  name: au14-craft-recipe-tradeplatform
+  output: RUMCTradePlatform
+  time: 20
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCIronSheet
+    amount: 8
+  - stack: RUMCBasicCircuit
+    amount: 1
+  - stack: RUMCInsulatedCable
+    amount: 2
+
+# Paper is pressed of plant fiber: three of it make two sheets.
+- type: craftRecipe
+  id: RUMCCraftCardboard
+  name: au14-craft-recipe-cardboard
+  output: RMCSheetCardboard1
+  outputCount: 2
+  time: 6
+  consumables:
+  - stack: RUMCPlantFiber
+    amount: 3
+
+# ---------------------------------------------------------------- the kit of the foreman
+# The crate that the foreman spawns with (see jobStartingCrate below). It is sealed and opens with a crowbar, and everything in it comes out next to where it stood: the packer,
+# a stack of cardboard, four contracts (the ores and crystals, the sheets, the gems and the fuel) and the platform itself.
+- type: entity
+  parent: RMCSecureCaseStrapped
+  id: RUMCCrateTradeStart
+  name: trade kit crate
+  description: A sealed crate with the start of the trade, a parcel packer with cardboard, a trade platform and four contracts. Open it with a crowbar.
+  components:
+  - type: CrateOpenable
+    spawn:
+    - id: RUMCTradePacker
+    - id: RMCSheetCardboard30
+    - id: RUMCTradeContractMetals
+    - id: RUMCTradeContractSheets
+    - id: RUMCTradeContractGems
+    - id: RUMCTradeContractFuel
+    - id: RUMCTradePlatform
+
+- type: jobStartingCrate
+  id: RUMCJobStartingCrateForeman
+  job: AU14JobCivilianForeman
+  crate: RUMCCrateTradeStart

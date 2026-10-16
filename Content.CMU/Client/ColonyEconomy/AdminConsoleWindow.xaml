@@ -32,6 +32,18 @@
                 <Button Name="SetIncomeTaxButton" Access="Public" Text="{Loc colony-economy-apply}" />
             </BoxContainer>
 
+            <Label Text="{Loc admin-console-trade-tax-section}" Margin="0 6" />
+            <Label Name="CurrentTradeTaxLabel" Access="Public" Text=""
+                   Margin="0 2" />
+            <Label Text="{Loc admin-console-trade-tax-description}"
+                   StyleClasses="LabelSubText" Margin="0 2" />
+            <BoxContainer Orientation="Horizontal" SeparationOverride="4" Margin="0 4">
+                <Label Text="{Loc admin-console-new-tax}" />
+                <LineEdit Name="TradeTaxInput" Access="Public" PlaceHolder="{Loc admin-console-tax-placeholder}"
+                          HorizontalExpand="True" SizeFlagsStretchRatio="2" />
+                <Button Name="SetTradeTaxButton" Access="Public" Text="{Loc colony-economy-apply}" />
+            </BoxContainer>
+
             <Label Text="{Loc colony-economy-overview}" Margin="0 6" />
             <BoxContainer Name="EconomyStatusPanel" Access="Public" Orientation="Vertical" Margin="4 2" />
 

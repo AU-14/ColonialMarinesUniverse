@@ -24,6 +24,12 @@ public sealed class AdminConsoleBui(EntityUid owner, Enum uiKey) : BoundUserInte
                 SendPredictedMessage(new AdminConsoleSetIncomeTaxBuiMsg(pct));
         };
 
+        _window.SetTradeTaxButton.OnPressed += _ =>
+        {
+            if (_window.TradeTaxInput.Text is { } text && float.TryParse(text, out var pct))
+                SendPredictedMessage(new AdminConsoleSetTradeTaxBuiMsg(pct));
+        };
+
         _window.OpenThirdPartyBtn.OnPressed += _ =>
         {
             SendPredictedMessage(new AdminConsoleOpenThirdPartyBuiMsg());

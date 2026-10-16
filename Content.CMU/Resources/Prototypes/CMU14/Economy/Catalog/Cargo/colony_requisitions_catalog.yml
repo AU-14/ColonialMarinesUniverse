@@ -61,6 +61,14 @@
         crate: CMUCrateBiosuitGeneral # Yellow engineering colors
     - name: Materials
       entries:
+      - cost: 120
+        crate: RUMCTradeContractMetals # CMU14: the contracts of the companies, for a trade platform
+      - cost: 150
+        crate: RUMCTradeContractSheets
+      - cost: 100
+        crate: RUMCTradeContractGems
+      - cost: 40
+        crate: RUMCTradeContractFuel
       - cost: 350
         crate: RMCCrateResearchPhoron
       - cost: 350
