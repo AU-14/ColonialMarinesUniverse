@@ -457,6 +457,10 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
 
         var flags = _pathfindingSystem.GetFlags(uid);
 
+        // CMU14: hive-controlled swarms have steering capabilities but no HTN blackboard.
+        if (IsSwarmLesser(uid))
+            flags = steering.Flags;
+
         var result = await _pathfindingSystem.GetPathSafe(
             uid,
             xform.Coordinates,

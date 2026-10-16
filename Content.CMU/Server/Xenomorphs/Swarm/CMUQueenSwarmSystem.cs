@@ -4,6 +4,8 @@ using Content.Server.NPC.Components;
 using Content.Server.NPC.Pathfinding;
 using Content.Server.NPC.Systems;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Construction.Nest;
+using Content.Shared._RMC14.Xenonids.Devour;
 using Content.Shared._RMC14.Input;
 using Content.Shared._RMC14.Xenonids.Eye;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -37,6 +39,7 @@ public sealed partial class CMUQueenSwarmSystem : EntitySystem
 
     public override void Initialize()
     {
+        InitializeRules();
         SubscribeLocalEvent<CMUQueenSwarmComponent, MapInitEvent>(OnQueenInit);
         SubscribeLocalEvent<CMUQueenSwarmComponent, CMUSummonSwarmActionEvent>(OnSummon);
         SubscribeLocalEvent<CMUQueenSwarmComponent, CMUGuardSwarmActionEvent>(OnGuard);
@@ -49,6 +52,8 @@ public sealed partial class CMUQueenSwarmSystem : EntitySystem
 
     private void OnQueenInit(Entity<CMUQueenSwarmComponent> ent, ref MapInitEvent args)
     {
+        _actions.AddAction(ent, ent.Comp.MenuAction);
+        _actions.AddAction(ent, ent.Comp.RulesAction);
         _actions.AddAction(ent, ent.Comp.SummonAction);
         _actions.AddAction(ent, ent.Comp.GuardAction);
         _actions.AddAction(ent, ent.Comp.FollowAction);
@@ -73,13 +78,13 @@ public sealed partial class CMUQueenSwarmSystem : EntitySystem
 
         if (controller.NextSummon > _timing.CurTime)
         {
-            _popup.PopupEntity(Loc.GetString("cmu-swarm-cooldown"), ent, ent);
+            _popup.PopupCursor(Loc.GetString("cmu-swarm-cooldown"), ent);
             return;
         }
 
         if (_hive.GetHive(ent.Owner) is not { } hiveEntity || _hive.GetHiveCore(hiveEntity) is not { } core || TerminatingOrDeleted(core))
         {
-            _popup.PopupEntity(Loc.GetString("cmu-swarm-no-core"), ent, ent);
+            _popup.PopupCursor(Loc.GetString("cmu-swarm-no-core"), ent);
             return;
         }
 
@@ -94,6 +99,8 @@ public sealed partial class CMUQueenSwarmSystem : EntitySystem
             controller.Anchor = ent.Owner;
 
         controller.NextSummon = _timing.CurTime + controller.Cooldown;
+        // The queen's body may be off-screen while commanding through her eye.
+        _popup.PopupCursor(Loc.GetString("cmu-swarm-summoned", ("count", controller.SpawnCount)), ent);
         args.Handled = true;
     }
 
@@ -208,17 +215,19 @@ public sealed partial class CMUQueenSwarmSystem : EntitySystem
             var expired = new List<EntityUid>();
             foreach (var (target, seenUntil) in sightings)
             {
-                if (seenUntil <= _timing.CurTime || TerminatingOrDeleted(target) ||
-                    !_mobState.IsAlive(target) || _hive.IsAllyOfHive(target, hive))
+                if (controller.Passive || seenUntil <= _timing.CurTime || TerminatingOrDeleted(target) ||
+                    !CanAttack(target, hive))
                     expired.Add(target);
             }
             foreach (var target in expired)
                 sightings.Remove(target);
             foreach (var member in controller.Members)
             {
+                if (controller.Passive)
+                    break;
                 foreach (var hostile in _factions.GetNearbyHostiles(member, controller.SightRange))
                 {
-                    if (!_mobState.IsAlive(hostile) || _hive.IsAllyOfHive(hostile, hive) ||
+                    if (!CanAttack(hostile, hive) ||
                         (Within(anchor, member, controller.LeashRange) && !Within(anchor, hostile, controller.LeashRange)) ||
                         !_interaction.InRangeUnobstructed(member, hostile, controller.SightRange))
                         continue;
@@ -226,25 +235,20 @@ public sealed partial class CMUQueenSwarmSystem : EntitySystem
                 }
             }
 
+            var assignedTargets = new Dictionary<EntityUid, int>();
             for (var i = 0; i < controller.Members.Count; i++)
             {
                 var member = controller.Members[i];
                 if (TryComp<NPCSteeringComponent>(member, out var failed) && failed.Status == SteeringStatus.NoPath)
                     _steering.Unregister(member);
-                EntityUid? target = null;
-                var bestDistance = float.MaxValue;
-                foreach (var hostile in sightings.Keys)
+                if (SelectEnemy(member, sightings, assignedTargets) is { } enemy)
                 {
-                    if (!Transform(member).Coordinates.TryDistance(EntityManager, _transform, Transform(hostile).Coordinates, out var distance) || distance >= bestDistance)
-                        continue;
-                    target = hostile;
-                    bestDistance = distance;
-                }
-
-                if (target is { } enemy)
-                {
-                    ConfigureSteering(_steering.Register(member, new EntityCoordinates(enemy, Vector2.Zero)));
-                    EnsureComp<NPCMeleeCombatComponent>(member).Target = enemy;
+                    assignedTargets[enemy] = assignedTargets.GetValueOrDefault(enemy) + 1;
+                    var target = BlockingBarricade(member, enemy) ?? enemy;
+                    var pursuit = _steering.Register(member, new EntityCoordinates(target, Vector2.Zero));
+                    ConfigureSteering(pursuit);
+                    pursuit.Range = target == enemy ? 0.2f : 0.6f;
+                    EnsureComp<NPCMeleeCombatComponent>(member).Target = target;
                     continue;
                 }
 
@@ -267,6 +271,15 @@ public sealed partial class CMUQueenSwarmSystem : EntitySystem
         // These lessers inherit climbing and prying, but have no HTN blackboard
         // from which the general steering system could infer those capabilities.
         steering.Flags = PathFlags.Climbing | PathFlags.Prying | PathFlags.Interact;
+        // Keep planning around nearby obstacles until within the arrival radius.
+        // The normal 1.5-tile shortcut can strand a lesser on the other side of a corner.
+        steering.RepathRange = 0.2f;
+    }
+
+    private bool CanAttack(EntityUid target, EntityUid hive)
+    {
+        return _mobState.IsAlive(target) && !_hive.IsAllyOfHive(target, hive) &&
+               !HasComp<XenoNestedComponent>(target) && !HasComp<DevouredComponent>(target);
     }
 
     private bool Within(EntityUid origin, EntityUid target, float range)

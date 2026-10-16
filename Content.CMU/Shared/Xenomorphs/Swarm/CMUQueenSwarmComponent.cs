@@ -7,6 +7,8 @@ namespace Content.Shared.CMU14.Xenomorphs.Swarm;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class CMUQueenSwarmComponent : Component
 {
+    [DataField] public EntProtoId MenuAction = "CMUActionSwarmMenu";
+    [DataField] public EntProtoId RulesAction = "CMUActionSwarmRules";
     [DataField] public EntProtoId SummonAction = "CMUActionSummonSwarm";
     [DataField] public EntProtoId GuardAction = "CMUActionGuardSwarm";
     [DataField] public EntProtoId FollowAction = "CMUActionFollowSwarm";
@@ -16,5 +18,7 @@ public sealed partial class CMUQueenSwarmComponent : Component
 public sealed partial class CMUSwarmLesserComponent : Component;
 
 public sealed partial class CMUSummonSwarmActionEvent : InstantActionEvent;
+public sealed partial class CMUSwarmMenuActionEvent : InstantActionEvent;
+public sealed partial class CMUSwarmRulesActionEvent : InstantActionEvent;
 public sealed partial class CMUGuardSwarmActionEvent : WorldTargetActionEvent;
 public sealed partial class CMUFollowSwarmActionEvent : EntityTargetActionEvent;

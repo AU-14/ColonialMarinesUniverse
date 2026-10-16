@@ -1,11 +1,41 @@
 - type: entity
   parent: ActionXenoBase
-  id: CMUActionSummonSwarm
-  name: Summon lesser swarm
-  description: Spawn fifteen AI lessers at the hive core. Survivors accumulate. Usable every six minutes.
+  id: CMUActionSwarmMenu
+  name: Lesser swarm
+  description: Open commands to summon, guard a position, or escort a xeno with your lesser swarm.
   components:
   - type: Action
-    useDelay: 360
+    clientExclusive: true
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: queen_order
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUSwarmMenuActionEvent
+
+- type: entity
+  parent: CMUActionSwarmMenu
+  id: CMUActionSwarmRules
+  name: Swarm behavior and allies
+  description: Set passive movement or automatic attacks and manage your hive's allies.
+  components:
+  - type: Action
+    clientExclusive: false
+    autoPopulate: false
+  - type: InstantAction
+    event: !type:CMUSwarmRulesActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionSummonSwarm
+  name: Summon lesser swarm
+  description: Spawn fifteen AI lessers at the hive core. Survivors accumulate. Usable every fifteen minutes.
+  components:
+  - type: Action
+    autoPopulate: false
+    useDelay: 900
     itemIconStyle: NoItem
   - type: Sprite
     layers:
@@ -22,6 +52,7 @@
   description: Order your lessers to move to a marker, spread out, and defend it. They return after fighting nearby enemies.
   components:
   - type: Action
+    autoPopulate: false
     itemIconStyle: NoItem
   - type: Sprite
     layers:
@@ -31,7 +62,6 @@
   - type: TargetAction
     range: 0
     checkCanAccess: false
-    repeat: true
   - type: WorldTargetAction
     event: !type:CMUGuardSwarmActionEvent
 
@@ -42,6 +72,7 @@
   description: Order your lessers to escort a living player-controlled xeno in your hive, including yourself, and attack nearby enemies.
   components:
   - type: Action
+    autoPopulate: false
     itemIconStyle: NoItem
   - type: Sprite
     layers:

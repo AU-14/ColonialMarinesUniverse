@@ -513,6 +513,10 @@ public sealed partial class NPCSteeringSystem
         foreach (var ent in ents)
         {
             // TODO: If we can access the door or smth.
+            // CMU14: do not steer away from bodies the swarm can pass through.
+            if (IsSwarmPassable(uid, ent))
+                continue;
+
             if (!_physicsQuery.TryGetComponent(ent, out var otherBody) ||
                 !otherBody.Hard ||
                 !otherBody.CanCollide ||
@@ -592,6 +596,10 @@ public sealed partial class NPCSteeringSystem
         foreach (var ent in ents)
         {
             // TODO: If we can access the door or smth.
+            // CMU14: overlapping swarm members must not repel one another.
+            if (IsSwarmPassable(uid, ent))
+                continue;
+
             if (!_physicsQuery.TryGetComponent(ent, out var otherBody) ||
                 !otherBody.Hard ||
                 !otherBody.CanCollide ||
