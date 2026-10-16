@@ -24,6 +24,8 @@
     - RMCShovel
     - CMPackFlare
     - CMUExpeditionBlastGrenade
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionSmokeGrenade
     - CMUExpeditionSmokeGrenade
     belt:
     - RMCMagazineRifleMAR40
@@ -105,6 +107,7 @@
     - RMCM5Bayonet
     - RMCShovel
     - CMPackFlare
+    - CMUExpeditionBlastGrenade
     - CMUExpeditionSmokeGrenade
     belt:
     - CMMagazinePistolM1984
@@ -134,6 +137,9 @@
     - RMCShovel
     - CMPackFlare
     - CMUExpeditionBlastGrenade
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionSmokeGrenade
     - CMUExpeditionSmokeGrenade
     belt:
     - CMMagazineRifleM54C
@@ -165,6 +171,8 @@
     - RMCM5Bayonet
     - RMCShovel
     - CMPackFlare
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionBlastGrenade
     - CMUExpeditionSmokeGrenade
     - CMUExpeditionSmokeGrenade
     belt:
@@ -219,7 +227,7 @@
     disposition: Cautious
     aggression: 0.4
     courage: 0.55
-    detectionRange: 22
+    detectionRange: 21
     preferredFireRange: 10
     retreatDamage: 45
     repositionCooldown: 3
@@ -232,12 +240,16 @@
   parent: CMGrenadeHighExplosive
   id: CMUExpeditionBlastGrenade
   components:
+  - type: CMUSmartGrenade
+    enabled: false
   - type: CMUExpeditionGrenade
 
 - type: entity
   parent: CMGrenadeSmoke
   id: CMUExpeditionSmokeGrenade
   components:
+  - type: CMUSmartGrenade
+    enabled: false
   - type: CMUExpeditionGrenade
     smoke: true
     safeRadius: 1

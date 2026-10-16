@@ -59,10 +59,12 @@
     - RMCM5Bayonet
     - RMCShovel
     - CMPackFlare
-    - CMUExpeditionSmokeGrenade
-    - CMUExpeditionSmokeGrenade
     - RMCShellShotgunHeavySlugs
     - RMCShellShotgunHeavySlugs
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionSmokeGrenade
+    - CMUExpeditionSmokeGrenade
     belt:
     - RMCShellShotgunHeavySlugs
     - RMCShellShotgunHeavySlugs
@@ -113,6 +115,8 @@
     - RMCM5Bayonet
     - RMCShovel
     - CMPackFlare
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionBlastGrenade
     - CMUExpeditionSmokeGrenade
     - CMUExpeditionSmokeGrenade
     belt:
@@ -164,6 +168,9 @@
     - RMCM5Bayonet
     - RMCShovel
     - CMPackFlare
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionSmokeGrenade
     - CMUExpeditionSmokeGrenade
     belt:
     - RMCMagazineLMGM60
@@ -214,6 +221,8 @@
     - RMCShovel
     - CMPackFlare
     - CMUExpeditionBlastGrenade
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionSmokeGrenade
     - CMUExpeditionSmokeGrenade
     belt:
     - RMCMagazineRifleAR10

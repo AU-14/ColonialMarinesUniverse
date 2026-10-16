@@ -254,11 +254,15 @@ public sealed partial class GunSystem : SharedGunSystem
         // CMU14: Keep aim on the moving grid without depending on the shooter's facing.
         var coordinateEntity = HasComp<GunUseGunOriginComponent>(gun.Owner) ? gun.Owner : entity;
         // var coordinates = TransformSystem.ToCoordinates(coordinateEntity, mousePos); // CMU14
-        var coordinates = GetAimCoordinates(TransformSystem, coordinateEntity, mousePos); // CMU14
+        // CMU14: cross-z shots aim at what you see on that level, not the raw cursor spot
+        var zAim = mousePos;
+        var crossZ = !firstPerson &&
+            EntityManager.System<CMU14.ZLevels.Core.CMUZLevelAimSystem>().TryGetCrossZAim(entity, mousePos, out zAim);
+        var coordinates = GetAimCoordinates(TransformSystem, coordinateEntity, zAim); // CMU14
 
         // CMU14: keep the source entity selected by the visible 3D ray.
-        var target = firstPerson ? GetNetEntity(firstPersonTarget) : GetBestTarget(_eyeManager.CurrentEye, mousePos);
-        if (!firstPerson && _state.CurrentState is GameplayStateBase screen &&
+        var target = crossZ ? null : firstPerson ? GetNetEntity(firstPersonTarget) : GetBestTarget(_eyeManager.CurrentEye, mousePos); // CMU14
+        if (!crossZ && !firstPerson && _state.CurrentState is GameplayStateBase screen && // CMU14
             screen.GetClickedEntity(mousePos) is { } clicked && CheckFixtures(clicked))
             target = GetNetEntity(clicked);
 

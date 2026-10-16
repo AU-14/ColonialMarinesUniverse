@@ -1,7 +1,7 @@
 - type: entity
   abstract: false
   id: ProdigyCargoCatalog
-  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies, CMUASRSManpad ]
+  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies, CMUASRSManpad, CMUASRSAntiArmor ]
   components:
   - type: RequisitionsComputer
     categories:
@@ -199,6 +199,8 @@
         crate: RMCCrateMortarShellHE
       - cost: 750
         crate: RMCCrateMortarShellIncendiary
+      - cost: 750
+        crate: CMUCrateMortarShellWP
       - cost: 800
         crate: AU14CrateMortarShellHEATMP
       - cost: 950

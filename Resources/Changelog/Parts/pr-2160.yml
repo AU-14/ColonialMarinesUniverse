@@ -1,0 +1,9 @@
+author: flex5hybrid
+category: CMU
+changes:
+- message: Retain recently visible HUD caches when new entities enter view, reduce
+    xenomorph visual allocations and skip unnecessary footprint grid lookups between
+    steps.
+  type: Code
+time: '2026-10-11T19:47:15.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2160

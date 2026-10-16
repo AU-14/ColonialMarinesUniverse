@@ -19,3 +19,170 @@
     collection: CMExplosion
     params:
       volume: 0
+
+# A.T.G.M. warhead. Fields copied from the RMC type (Resources/Prototypes/_RMC14/explosion.yml) so it looks and
+# sounds the same; the Structural share wrecks barricades and machines near the impact. Registered as a
+# fragmenting type in SharedCMUShrapnelSystem.
+# FLOW-08: Structural 40 keeps the peak-intensity blast on a tank frame (x1.15 Structural) under a stock tank's
+# 750 hull, so the blast alone never counts as a catastrophic single hit. Metal barricades (450) still break within
+# about 2 tiles and airlocks (500) within 1; RMCExplosiveDelete on the missile breaches walls at the impact.
+- type: explosion
+  id: CMUATGM
+  damagePerIntensity:
+    types:
+      Blunt: 5
+      Heat: 5
+      Structural: 40
+  tileBreakChance: [0, 0.5, 1]
+  tileBreakIntensity: [0, 10, 30]
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+
+# FLOW-09: copies of the RMC type (Resources/Prototypes/_RMC14/explosion.yml), identical against everything but tanks.
+# They only give these munitions their own identity for a tank's CMUTankBlastProfile multipliers. Registered as
+# fragmenting types in SharedCMUShrapnelSystem like RMC, so their effect on infantry is unchanged.
+# High-explosive rockets (84mm, 70mm, HJRA-12 HE).
+- type: explosion
+  id: CMUAntiVehicleHE
+  damagePerIntensity:
+    types:
+      Blunt: 5
+      Heat: 5
+  tileBreakChance: [0, 0.5, 1]
+  tileBreakIntensity: [0, 10, 30]
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+
+# M38 HEAP launcher grenade.
+- type: explosion
+  id: CMUHEAP
+  damagePerIntensity:
+    types:
+      Blunt: 5
+      Heat: 5
+  tileBreakChance: [0, 0.5, 1]
+  tileBreakIntensity: [0, 10, 30]
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+
+# Improvised explosive devices (IEDs, IED vest, sapper IED).
+- type: explosion
+  id: CMUIED
+  damagePerIntensity:
+    types:
+      Blunt: 5
+      Heat: 5
+  tileBreakChance: [0, 0.5, 1]
+  tileBreakIntensity: [0, 10, 30]
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+
+# Dropship (CAS) rockets and bombs.
+- type: explosion
+  id: CMUCASMunition
+  damagePerIntensity:
+    types:
+      Blunt: 5
+      Heat: 5
+  tileBreakChance: [0, 0.5, 1]
+  tileBreakIntensity: [0, 10, 30]
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+
+# Plastic explosives (C4). Its 350 total / 20 max is a demolition charge's blast; under the shared RMC multiplier it
+# barely marked a tank.
+- type: explosion
+  id: CMUPlasticExplosive
+  damagePerIntensity:
+    types:
+      Blunt: 5
+      Heat: 5
+  tileBreakChance: [0, 0.5, 1]
+  tileBreakIntensity: [0, 10, 30]
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+
+# FLOW-09: copy of RMCMortar (Resources/Prototypes/_RMC14/explosion.yml) for the AU14 M971 HEAT-MP mortar shell, whose
+# 300-intensity peak would otherwise take a tank's whole blast cap. Identical against everything but tanks; registered
+# as fragmenting in SharedCMUShrapnelSystem like RMCMortar.
+- type: explosion
+  id: CMUMortarHEATMP
+  damagePerIntensity:
+    types:
+      Blunt: 6.25
+      Heat: 6.25
+      Structural: 90
+  tileBreakChance: [0, 0.5, 1]
+  tileBreakIntensity: [0, 10, 30]
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: AU14MortarExplosion
+    params:
+      volume: -3
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: -3

@@ -130,6 +130,12 @@
       - id: RMCM2CMount
         amount: 1
         points: 17
+      - id: CMUATGMCase
+        amount: 1
+        points: 35
+      - id: CMUATGMMissile
+        amount: 6
+        points: 15
     - name: Attachments
       entries:
       - id: AU14AttachmentTwoPointSling
@@ -350,7 +356,10 @@
       - id: CMMaskCoif
         amount: 15
         points: 1
-      - id: CMMaskGas
+      - id: CMUMaskGas
+        amount: 5
+        points: 3
+      - id: CMUMaskGasBlack
         amount: 5
         points: 3
       - id: CMUGasMaskFilter

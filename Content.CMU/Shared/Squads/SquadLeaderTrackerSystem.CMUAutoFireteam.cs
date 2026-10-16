@@ -116,7 +116,11 @@ public sealed partial class SquadLeaderTrackerSystem
         Dirty(member, fireteamMember);
 
         var currentLeader = leaders[chosen];
-        if (isFireteamLeader &&
+
+        // A squad set to manual leadership from overwatch only gets leaders chosen by hand.
+        var manualLeadership = HasComp<CMUManualLeadershipComponent>(squadId);
+        if (!manualLeadership &&
+            isFireteamLeader &&
             CMUCanAutoLead(member) &&
             (currentLeader == null || !CMUIsFireteamLeaderJob(currentLeader.Value)))
         {
@@ -128,7 +132,7 @@ public sealed partial class SquadLeaderTrackerSystem
 
             EnsureComp<FireteamLeaderComponent>(member);
         }
-        else if (currentLeader == null && CMUPickFireteamLeader(squad, chosen, member) is { } pickedLeader)
+        else if (!manualLeadership && currentLeader == null && CMUPickFireteamLeader(squad, chosen, member) is { } pickedLeader)
         {
             EnsureComp<FireteamLeaderComponent>(pickedLeader);
         }

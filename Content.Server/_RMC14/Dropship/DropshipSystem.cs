@@ -857,6 +857,10 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                 var gqMap = Transform(destination).MapUid; // CMU14: hijack victim's ship, the dropship is mid-transit
                 Timer.Spawn(TimeSpan.FromSeconds(10), () =>
                 {
+                    // CMU14: timers outlive the round, a restart inside these 10s leaves a deleted ship and map here
+                    if (TerminatingOrDeleted(dropshipId.Value) || gqMap is { } gq && TerminatingOrDeleted(gq))
+                        return;
+
                     _alertLevelSystem.Set(RMCAlertLevels.Red, dropshipId.Value, false, false, gqMap); // CMU14
                     _marineAnnounce.AnnounceARESStaging(dropshipId.Value, generalQuartersText, dropship.GeneralQuartersSound, null, gqFaction);
                 });

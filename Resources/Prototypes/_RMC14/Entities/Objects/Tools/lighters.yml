@@ -62,7 +62,7 @@
       sprite: _RMC14/Objects/Clothing/HelmetGarb/Smoking/Zippos/zippo.rsi
       state: helmet
   - type: ToggleableVisuals
-    spriteLayer: lighter_flame
+    spriteLayer: flame # CMU14: the layer is mapped as "flame", lighter_flame is only the state
     inhandVisuals:
       left:
       - state: inhand-left-flame
@@ -128,7 +128,7 @@
       shader: unshaded
 
   - type: ToggleableVisuals
-    spriteLayer: lighter_flame
+    spriteLayer: flame # CMU14: the layer is mapped as "flame", lighter_flame is only the state
     inhandVisuals:
       left:
       - state: inhand-left-flame

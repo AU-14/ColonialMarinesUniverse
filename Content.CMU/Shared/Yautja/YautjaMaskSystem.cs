@@ -254,7 +254,8 @@ public sealed partial class YautjaMaskSystem : EntitySystem
         if (!feedback)
             return;
 
-        _audio.PlayPvs(zoomed ? mask.Comp.ZoomOnSound : mask.Comp.ZoomOffSound, mask.Owner);
+        // the zoom whirr is inside the mask, only the wearer hears it
+        _audio.PlayEntity(zoomed ? mask.Comp.ZoomOnSound : mask.Comp.ZoomOffSound, user, user);
         _popup.PopupEntity(Loc.GetString(zoomed ? "cmu-yautja-mask-zoom-enabled" : "cmu-yautja-mask-zoom-disabled"), user, user);
     }
 

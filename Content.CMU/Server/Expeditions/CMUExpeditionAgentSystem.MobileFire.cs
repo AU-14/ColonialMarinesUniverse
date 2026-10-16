@@ -7,6 +7,19 @@ namespace Content.Server.CMU14.Expeditions;
 
 public sealed partial class CMUExpeditionAgentSystem
 {
+    private bool MovementActionAllowsFire(EntityUid uid, CMUExpeditionAgentComponent agent) =>
+        agent.Action == null || agent.Action is CMUTacticalAction.Flank or CMUTacticalAction.TakeCover or
+            CMUTacticalAction.ApproachCasualty ||
+        agent.Action == CMUTacticalAction.ThrowGrenade && agent.GrenadeThrowStance != null &&
+            agent.State == CMUExpeditionAgentState.PlanMove ||
+        agent.Action == CMUTacticalAction.MedicalAid &&
+            TryComp<CMUExpeditionMedicComponent>(uid, out var medic) && medic.Item == null && medic.DoAfter == null &&
+            medic.Phase is CMUExpeditionMedicalPhase.Approach or CMUExpeditionMedicalPhase.Extract ||
+        agent.Action == CMUTacticalAction.DragCasualty;
+
+    private bool Traversing(EntityUid uid) =>
+        TryComp<NPCSteeringComponent>(uid, out var steering) && steering.Status == SteeringStatus.Moving;
+
     // A carried utility does not occupy the gun hand. Keep firing an already active
     // one-handed gun; never draw another weapon or bypass a required two-handed grip.
     private bool CanFireDuringUtility(EntityUid uid, CMUExpeditionAgentComponent agent) =>
@@ -21,15 +34,17 @@ public sealed partial class CMUExpeditionAgentSystem
     private bool CanFireWhileMoving(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
         var utilityFire = CanFireDuringUtility(uid, agent);
+        var retrieving = agent.ScavengeTarget == null || agent.RifleLoweredUntil == TimeSpan.Zero;
         return agent.FireRescueTarget == null && (agent.FlareItem == null || utilityFire) &&
-            agent.PendingWeapon == null && agent.ScavengeTarget == null && agent.Treatment == null && agent.TreatmentMedicine == null &&
+            agent.PendingWeapon == null && retrieving && agent.Treatment == null && agent.TreatmentMedicine == null &&
             agent.WorkItem == null && !agent.PreparingWork &&
-            (agent.Action == null || agent.Action is CMUTacticalAction.Flank or CMUTacticalAction.TakeCover ||
-                agent.Action == CMUTacticalAction.ThrowGrenade &&
-                (utilityFire || agent.GrenadeThrowStance != null && agent.State == CMUExpeditionAgentState.PlanMove)) &&
+            (MovementActionAllowsFire(uid, agent) || utilityFire) &&
             (agent.State is CMUExpeditionAgentState.Guard or CMUExpeditionAgentState.Investigate or
                 CMUExpeditionAgentState.Reposition or CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Withdraw or
-                CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.PlanMove or CMUExpeditionAgentState.Watch ||
+                CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.PlanMove or CMUExpeditionAgentState.Watch or
+                CMUExpeditionAgentState.Scavenge or CMUExpeditionAgentState.RecoverWeapon ||
+                agent.State is CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage or
+                    CMUExpeditionAgentState.Recover or CMUExpeditionAgentState.HoldAngle && Traversing(uid) ||
                 utilityFire && agent.State == CMUExpeditionAgentState.Throwing);
     }
 
@@ -45,7 +60,7 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.MovingShotsFired = 0;
             agent.MovingBurstEnd = now + FireControlDuration(agent);
         }
-        if (!_guns.TryGetGun(uid, out var gun) || !PrepareNativeWeapon(uid, agent, gun, now) || !_guns.CanShoot(gun))
+        if (!_guns.TryGetGun(uid, out var gun))
         {
             agent.LastFireCheck = "moving-weapon-not-ready";
             return;
@@ -53,6 +68,13 @@ public sealed partial class CMUExpeditionAgentSystem
         if (!TryAimPoint(uid, agent, gun, out var point))
         {
             agent.LastFireCheck = "moving-no-visible-aim-point";
+            return;
+        }
+        agent.WeaponRaisedUntil = now + TimeSpan.FromSeconds(1);
+        ReadyRifle(uid, agent);
+        if (!PrepareNativeWeapon(uid, agent, gun, now) || !_guns.CanShoot(gun))
+        {
+            agent.LastFireCheck = "moving-weapon-not-ready";
             return;
         }
         if (!SafeShot(uid, agent, gun, point))
@@ -65,7 +87,8 @@ public sealed partial class CMUExpeditionAgentSystem
                 return;
             // A stalled travel leg must not strand a ready rifle behind a pole or ally.
             // Escape/utility actions retain priority; ordinary contact can step out once.
-            if (agent.Action == null && agent.SpacingDestination == null &&
+            if (agent.Action == null && agent.SpacingDestination == null && agent.SmokeEscapeDestination == null &&
+                agent.IncomingEscapeDestination == null &&
                 (agent.TrafficNudgeDestination == null || now >= agent.TrafficNudgeUntil) &&
                 now - agent.BlockedShotSince >= TimeSpan.FromSeconds(0.3) &&
                 (now - agent.LastHit < TimeSpan.FromSeconds(1) ||
@@ -83,8 +106,8 @@ public sealed partial class CMUExpeditionAgentSystem
             _combat.SetInCombatMode(uid, true, combat);
         var direction = _transform.ToMapCoordinates(point).Position - _transform.GetWorldPosition(uid);
         _transform.SetWorldRotation(uid, direction.ToWorldAngle());
-        agent.LastFireCheck = _guns.AttemptShoot(uid, gun, point, agent.FiringAtFlash ? null : agent.Target)
-            ? "moving-trigger-accepted" : "moving-native-trigger-rejected";
+        agent.LastFireCheck = _guns.AttemptShoot(uid, gun, point, agent.FiringAtFlash || agent.FiringAtSuppression ? null : agent.Target)
+            ? agent.FiringAtSuppression ? "moving-suppression-accepted" : "moving-trigger-accepted" : "moving-native-trigger-rejected";
     }
 
     private bool MovingShotAllowed(EntityUid uid, CMUExpeditionAgentComponent agent) =>

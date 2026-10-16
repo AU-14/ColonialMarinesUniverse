@@ -254,39 +254,117 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # CMU14: longest first, so the slow shards ask for runners before the quick ones. github doesn't
+        # promise to start them in this order, it's only a nudge. keep new shards in rough time order
         shard:
-          - name: root_1
-            root_group: 0
-            root_groups: 2
-          - name: root_2
-            root_group: 1
-            root_groups: 2
-          # Bulk entity/component sweeps remain in the manual Build & Test Debug workflow.
-          - name: admin_access_ui
+          # CMU14: keep the largest Yautja fixtures in separate test processes.
+          - name: cmu_yautja
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Administration.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Access.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Commands.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.EncryptionKeys.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Lobby.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Roles.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Toolshed.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.UserInterface.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Afk.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Alerts.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.ClientSession.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.GameTestTests.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Helpers.
-          - name: atmos_fluids_physics
+              FullyQualifiedName~CMU14.Yautja.
+              & FullyQualifiedName!~CMU14.Yautja.YautjaBowTest.
+              & FullyQualifiedName!~CMU14.Yautja.YautjaPredatorRoleTest.
+              & FullyQualifiedName!~CMU14.Yautja.YautjaSmokeTest.
+              & FullyQualifiedName!~CMU14.Yautja.YautjaHuntingGroundMapTest.
+          # CMU14: full-rotation map sweeps exceed the normal per-test watchdog.
+          - name: map_loading
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Atmos.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Explosion.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Fluids.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Gravity.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Physics.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Decals.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.FootPrint.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Weather.
+              FullyQualifiedName~RMC14.PlanetMapLoadTests.
+              | FullyQualifiedName~CMU14.Dropship.MohawkLandingTest.
+          - name: cmu
+            filter: >-
+              FullyQualifiedName~CMU14.
+              & FullyQualifiedName!~CMU14.ColonyEconomy.
+              & FullyQualifiedName!~CMU14.Fire.
+              & FullyQualifiedName!~CMU14.ForceOnForce.
+              & FullyQualifiedName!~CMU14.ThreeD.
+              & FullyQualifiedName!~CMU14.Threats.
+              & FullyQualifiedName!~CMU14.DroneOperator.
+              & FullyQualifiedName!~CMU14.Evacuation.
+              & FullyQualifiedName!~CMU14.Weapons.
+              & FullyQualifiedName!~CMU14.TacticalMap.
+              & FullyQualifiedName!~CMU14.Traits.
+              & FullyQualifiedName!~CMU14.Trigger.
+              & FullyQualifiedName!~CMU14.Minds.
+              & FullyQualifiedName!~CMU14.Construction.
+              & FullyQualifiedName!~CMU14.Light.
+              & FullyQualifiedName!~CMU14.Medical.
+              & FullyQualifiedName!~CMU14.Chemistry.
+              & FullyQualifiedName!~CMU14.Dropship.
+              & FullyQualifiedName!~CMU14.Blackfoot.
+              & FullyQualifiedName!~CMU14.Fighter.
+              & FullyQualifiedName!~CMU14.CargoVehicle.
+              & FullyQualifiedName!~CMU14.Maps.
+              & FullyQualifiedName!~CMU14.ZLevels.
+              & FullyQualifiedName!~CMU14.Camera.
+              & FullyQualifiedName!~CMU14.Yautja.
+              & FullyQualifiedName!~CMU14.Diagnostics.
+              & FullyQualifiedName!~CMU14.Round.CMUPresetVoteTest.
+              & FullyQualifiedName!~CMU14.Chat.ChatLogLayoutTest.
+              & FullyQualifiedName!~CMU14.Lobby.OptionsThemeRegressionTest.
+              & FullyQualifiedName!~CMU14.Overwatch.SupportLaunchButtonTest.
+          # CMU14: the heaviest areas of the cmu catch-all, about half its time. cmu stays the
+          # catch-all so new areas always land somewhere; keep this list and its exclusions in sync
+          - name: cmu_systems
+            filter: >-
+              FullyQualifiedName~CMU14.ColonyEconomy.
+              | FullyQualifiedName~CMU14.Fire.
+              | FullyQualifiedName~CMU14.ForceOnForce.
+              | FullyQualifiedName~CMU14.Threats.
+              | FullyQualifiedName~CMU14.DroneOperator.
+              | FullyQualifiedName~CMU14.Evacuation.
+              | FullyQualifiedName~CMU14.Weapons.
+              | FullyQualifiedName~CMU14.TacticalMap.
+              | FullyQualifiedName~CMU14.Traits.
+              | FullyQualifiedName~CMU14.Trigger.
+              | FullyQualifiedName~CMU14.Minds.
+              | FullyQualifiedName~CMU14.Construction.
+              | FullyQualifiedName~CMU14.Light.
+          - name: cmu_chemistry
+            filter: >-
+              FullyQualifiedName~CMU14.Chemistry.
+          # CMU14: PostMapInitTest loads every map, two thirds of the old root_1. split by method so
+          # neither half is the slowest shard; post_map_init is the catch-all for new methods
+          - name: post_map_init
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.PostMapInitTest.
+              & FullyQualifiedName!~Content.IntegrationTests.Tests.PostMapInitTest.NonGameMapsLoadableTest
+          - name: post_map_init_nongame
+            filter: FullyQualifiedName~Content.IntegrationTests.Tests.PostMapInitTest.NonGameMapsLoadableTest
+          - name: rmc
+            filter: >-
+              FullyQualifiedName~RMC14.
+              & FullyQualifiedName!~RMC14.PlanetMapLoadTests.
+          # CMU14: the smoke fixture runs one pair at a time, so it's split by method name instead.
+          # cmu_yautja_smoke is the catch-all, keep these words in sync with its exclusions
+          - name: cmu_yautja_smoke_blooding
+            filter: >-
+              FullyQualifiedName~CMU14.Yautja.YautjaSmokeTest.
+              & (Name~Blooding | Name~Bracer | Name~Huntsmaster)
+          - name: cmu_yautja_smoke
+            filter: >-
+              FullyQualifiedName~CMU14.Yautja.YautjaSmokeTest.
+              & Name!~Blooding & Name!~Bracer & Name!~Huntsmaster
+          - name: cmu_spatial
+            filter: >-
+              (FullyQualifiedName~CMU14.ZLevels.
+              | FullyQualifiedName~CMU14.Camera.
+              | FullyQualifiedName~Content.IntegrationTests.CMU.)
+              & (FullyQualifiedName!~CMU14.Camera.CameraNetworkSystemTest.
+              | (Name!~Rmc & Name!~Static & Name!~Member & Name!~Cmu))
+          # CMU14: half of CameraNetworkSystemTest by method name, it was most of cmu_spatial.
+          # cmu_spatial runs the other half, keep these words in sync with its exclusions
+          - name: cmu_camera
+            filter: >-
+              FullyQualifiedName~CMU14.Camera.CameraNetworkSystemTest.
+              & (Name~Rmc | Name~Static | Name~Member | Name~Cmu)
+          - name: cmu_ships
+            filter: >-
+              (FullyQualifiedName~CMU14.Dropship.
+              | FullyQualifiedName~CMU14.Blackfoot.
+              | FullyQualifiedName~CMU14.Fighter.
+              | FullyQualifiedName~CMU14.CargoVehicle.
+              | FullyQualifiedName~CMU14.Maps.)
+              & FullyQualifiedName!~CMU14.Dropship.MohawkLandingTest.
           - name: mapping_station_shuttle_round
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.GameRules.
@@ -299,24 +377,6 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Tiles.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Chasm.
               | FullyQualifiedName~Content.IntegrationTests.Tests.EntityTable.
-          - name: cleanup_entities_world
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Cleanup.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Damageable.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Destructible.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.DeviceLinking.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.DeviceNetwork.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Disposal.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Doors.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Embedding.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.GameObjects.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Payload.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Power.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Weldable.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Wires.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Containers.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Forensics.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Mobs.
           - name: gameplay_core
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.Actions.
@@ -342,6 +402,9 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Speech.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Stunnable.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Zombie.
+          # CMU14: walks every hunting ground map, ~11 of cmu_yautja's 17 minutes on its own
+          - name: cmu_yautja_maps
+            filter: FullyQualifiedName~CMU14.Yautja.YautjaHuntingGroundMapTest.
           - name: gameplay_runtime
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.Interaction.
@@ -354,6 +417,25 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Follower.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Vehicle.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Trigger.
+          # CMU14: the files directly in Tests/, minus PostMapInitTest which has its own shards
+          - name: root
+          - name: cmu_medical
+            filter: >-
+              FullyQualifiedName~CMU14.Medical.
+              & FullyQualifiedName!~CMU14.Medical.Anatomy.
+          - name: storage_misc_au14
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Storage.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Strip.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Tag.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Utility.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Vending.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.IconSmoothing.
+              | FullyQualifiedName~Content.IntegrationTests._AU14
+          # CMU14: the 3D tests build fresh client/server pairs and load the 3D libraries, ~10 GB by the
+          # end. they were most of cmu_systems' memory, on their own they can't push the others over
+          - name: cmu_threed
+            filter: FullyQualifiedName~CMU14.ThreeD.
           - name: items_storage_crafting
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.Chemistry.
@@ -375,14 +457,10 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Stacks.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Tools.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Weapons.
-          - name: storage_crafting_misc
+          - name: cmu_diagnostics
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Storage.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Strip.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Tag.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Utility.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Vending.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.IconSmoothing.
+              FullyQualifiedName~CMU14.Diagnostics.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Performance.
           - name: proto_lint_serial
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.Guidebook.
@@ -393,58 +471,9 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Audio.
               | FullyQualifiedName~Content.IntegrationTests.Tests.NameIdentifier.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Research.
-          - name: rmc
-            filter: >-
-              FullyQualifiedName~RMC14.
-              & FullyQualifiedName!~RMC14.PlanetMapLoadTests.
-          # CMU14: full-rotation map sweeps exceed the normal per-test watchdog.
-          - name: map_loading
-            filter: >-
-              FullyQualifiedName~RMC14.PlanetMapLoadTests.
-              | FullyQualifiedName~CMU14.Dropship.MohawkLandingTest.
           - name: cmu_medical_anatomy
             filter: >-
               FullyQualifiedName~CMU14.Medical.Anatomy.
-          - name: cmu_medical_treatment
-            filter: >-
-              FullyQualifiedName~CMU14.Medical.Treatment.
-          - name: cmu_chemistry
-            filter: >-
-              FullyQualifiedName~CMU14.Chemistry.
-          - name: cmu_ships
-            filter: >-
-              (FullyQualifiedName~CMU14.Dropship.
-              | FullyQualifiedName~CMU14.Blackfoot.
-              | FullyQualifiedName~CMU14.Fighter.
-              | FullyQualifiedName~CMU14.CargoVehicle.
-              | FullyQualifiedName~CMU14.Maps.)
-              & FullyQualifiedName!~CMU14.Dropship.MohawkLandingTest.
-          - name: cmu_spatial
-            filter: >-
-              FullyQualifiedName~CMU14.ZLevels.
-              | FullyQualifiedName~CMU14.Camera.
-              | FullyQualifiedName~Content.IntegrationTests.CMU.
-          # CMU14: keep the largest Yautja fixtures in separate test processes.
-          - name: cmu_yautja
-            filter: >-
-              FullyQualifiedName~CMU14.Yautja.
-              & FullyQualifiedName!~CMU14.Yautja.YautjaBowTest.
-              & FullyQualifiedName!~CMU14.Yautja.YautjaPredatorRoleTest.
-              & FullyQualifiedName!~CMU14.Yautja.YautjaSmokeTest.
-              & FullyQualifiedName!~CMU14.Yautja.YautjaHuntingGroundMapTest.
-          # CMU14: walks every hunting ground map, ~11 of cmu_yautja's 17 minutes on its own
-          - name: cmu_yautja_maps
-            filter: FullyQualifiedName~CMU14.Yautja.YautjaHuntingGroundMapTest.
-          - name: cmu_yautja_weapons
-            filter: FullyQualifiedName~CMU14.Yautja.YautjaBowTest.
-          - name: cmu_yautja_roles
-            filter: FullyQualifiedName~CMU14.Yautja.YautjaPredatorRoleTest.
-          - name: cmu_yautja_smoke
-            filter: FullyQualifiedName~CMU14.Yautja.YautjaSmokeTest.
-          - name: cmu_diagnostics
-            filter: >-
-              FullyQualifiedName~CMU14.Diagnostics.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Performance.
           # CMU14: fresh lobby pairs need memory headroom after the gameplay fixtures.
           - name: cmu_lobby_ui
             filter: >-
@@ -452,53 +481,54 @@ jobs:
               | FullyQualifiedName~CMU14.Chat.ChatLogLayoutTest.
               | FullyQualifiedName~CMU14.Lobby.OptionsThemeRegressionTest.
               | FullyQualifiedName~CMU14.Overwatch.SupportLaunchButtonTest.
-          - name: cmu_medical
+          - name: cleanup_entities_world
             filter: >-
-              FullyQualifiedName~CMU14.Medical.
-              & FullyQualifiedName!~CMU14.Medical.Anatomy.
-              & FullyQualifiedName!~CMU14.Medical.Treatment.
-          # CMU14: the heaviest areas of the cmu catch-all, about half its time. cmu stays the
-          # catch-all so new areas always land somewhere; keep this list and its exclusions in sync
-          - name: cmu_systems
+              FullyQualifiedName~Content.IntegrationTests.Tests.Cleanup.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Damageable.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Destructible.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.DeviceLinking.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.DeviceNetwork.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Disposal.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Doors.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Embedding.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.GameObjects.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Payload.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Power.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Weldable.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Wires.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Containers.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Forensics.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Mobs.
+          - name: atmos_fluids_physics
             filter: >-
-              FullyQualifiedName~CMU14.ColonyEconomy.
-              | FullyQualifiedName~CMU14.Fire.
-              | FullyQualifiedName~CMU14.ForceOnForce.
-              | FullyQualifiedName~CMU14.ThreeD.
-              | FullyQualifiedName~CMU14.Threats.
-              | FullyQualifiedName~CMU14.DroneOperator.
-              | FullyQualifiedName~CMU14.Evacuation.
-              | FullyQualifiedName~CMU14.Weapons.
-              | FullyQualifiedName~CMU14.TacticalMap.
-          - name: cmu
+              FullyQualifiedName~Content.IntegrationTests.Tests.Atmos.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Explosion.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Fluids.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Gravity.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Physics.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Decals.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.FootPrint.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Weather.
+          # Bulk entity/component sweeps remain in the manual Build & Test Debug workflow.
+          - name: admin_access_ui
             filter: >-
-              FullyQualifiedName~CMU14.
-              & FullyQualifiedName!~CMU14.ColonyEconomy.
-              & FullyQualifiedName!~CMU14.Fire.
-              & FullyQualifiedName!~CMU14.ForceOnForce.
-              & FullyQualifiedName!~CMU14.ThreeD.
-              & FullyQualifiedName!~CMU14.Threats.
-              & FullyQualifiedName!~CMU14.DroneOperator.
-              & FullyQualifiedName!~CMU14.Evacuation.
-              & FullyQualifiedName!~CMU14.Weapons.
-              & FullyQualifiedName!~CMU14.TacticalMap.
-              & FullyQualifiedName!~CMU14.Medical.
-              & FullyQualifiedName!~CMU14.Chemistry.
-              & FullyQualifiedName!~CMU14.Dropship.
-              & FullyQualifiedName!~CMU14.Blackfoot.
-              & FullyQualifiedName!~CMU14.Fighter.
-              & FullyQualifiedName!~CMU14.CargoVehicle.
-              & FullyQualifiedName!~CMU14.Maps.
-              & FullyQualifiedName!~CMU14.ZLevels.
-              & FullyQualifiedName!~CMU14.Camera.
-              & FullyQualifiedName!~CMU14.Yautja.
-              & FullyQualifiedName!~CMU14.Diagnostics.
-              & FullyQualifiedName!~CMU14.Round.CMUPresetVoteTest.
-              & FullyQualifiedName!~CMU14.Chat.ChatLogLayoutTest.
-              & FullyQualifiedName!~CMU14.Lobby.OptionsThemeRegressionTest.
-              & FullyQualifiedName!~CMU14.Overwatch.SupportLaunchButtonTest.
-          - name: au14
-            filter: FullyQualifiedName~Content.IntegrationTests._AU14
+              FullyQualifiedName~Content.IntegrationTests.Tests.Administration.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Access.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Commands.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.EncryptionKeys.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Lobby.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Roles.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Toolshed.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.UserInterface.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Afk.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Alerts.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.ClientSession.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.GameTestTests.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Helpers.
+          - name: cmu_yautja_weapons
+            filter: FullyQualifiedName~CMU14.Yautja.YautjaBowTest.
+          - name: cmu_yautja_roles
+            filter: FullyQualifiedName~CMU14.Yautja.YautjaPredatorRoleTest.
     steps:
       - uses: actions/checkout@v7
         with:
@@ -525,6 +555,30 @@ jobs:
           cp -r Resources/* bin/Resources/
           cp -r RobustToolbox/Resources/* bin/RobustToolbox/Resources/
 
+      # CMU14: the runner has 16 GB and no real headroom, a memory spike used to kill it outright
+      # ("received a shutdown signal"). with swap the spike just runs slower. goes on the /mnt scratch
+      # disk when the image has one, the root disk is small
+      - name: Add swap
+        shell: bash
+        run: |
+          echo "--- before ---"; swapon --show; free -h; df -h / /mnt 2>/dev/null || true
+          dir=/mnt
+          if ! mountpoint -q /mnt || (( $(df --output=avail -BG /mnt | tail -1 | tr -dc 0-9) < 20 )); then
+            dir=/
+          fi
+          size=16
+          if (( $(df --output=avail -BG "$dir" | tail -1 | tr -dc 0-9) < size + 4 )); then
+            echo "::warning::not enough disk for ${size}G swap on $dir, keeping the image's swap"
+            exit 0
+          fi
+          sudo swapoff -a || true
+          sudo rm -f /mnt/swapfile /swapfile
+          sudo fallocate -l ${size}G "$dir/ci-swap"
+          sudo chmod 600 "$dir/ci-swap"
+          sudo mkswap "$dir/ci-swap"
+          sudo swapon "$dir/ci-swap"
+          echo "--- after ---"; swapon --show; free -h
+
       - name: Run ${{ matrix.shard.name }}
         shell: bash
         env:
@@ -540,17 +594,24 @@ jobs:
           # CMU14: bound concurrent pairs and allow the full-rotation map sweeps to finish.
           workers=4
           hang_timeout=5m
+          # CMU14: cap the managed heap at 80% (~12.8 GB of the 16 GB runner). uncapped, server GC let
+          # long shards grow past the runner and it died mid-run ("received a shutdown signal").
+          # not lower: the linters and the 3D model tests really hold ~10 GB and ran out of memory at 60%
+          export DOTNET_GCHeapHardLimitPercent=0x50
           case "$shard" in
             # CMU14: destructive smoke pairs approach the runner's memory limit in parallel.
-            cmu_yautja_smoke) workers=1 ;;
-            root_1|cmu|cmu_systems|cmu_spatial|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
+            cmu_yautja_smoke*) workers=1 ;;
+            post_map_init*|cmu|cmu_systems|cmu_spatial|cmu_camera|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
             cmu_lobby_ui) workers=1 ;;
+            # CMU14: every 3D case makes its own pair, two at once is the memory peak
+            cmu_threed) workers=1 ;;
             map_loading) workers=1; hang_timeout=20m ;;
+            # CMU14: four linter pairs at once went past the runner's RAM into swap and the GC crawled
+            # until the hang watchdog killed it. two keep it in memory
+            proto_lint_serial) workers=2 ;;
           esac
 
-          if [[ "$shard" == root_* ]]; then
-            root_group='${{ matrix.shard.root_group }}'
-            root_groups='${{ matrix.shard.root_groups }}'
+          if [[ "$shard" == root ]]; then
             shopt -s nullglob
             files=(Content.IntegrationTests/Tests/*.cs)
             if [ ${#files[@]} -eq 0 ]; then
@@ -558,10 +619,9 @@ jobs:
               exit 1
             fi
             FILTER=""
-            for i in "${!files[@]}"; do
-              f="${files[$i]}"
+            for f in "${files[@]}"; do
               base=$(basename "$f" .cs)
-              if [[ "$base" == "EntityTest" ]] || (( i % root_groups != root_group )); then
+              if [[ "$base" == "EntityTest" || "$base" == "PostMapInitTest" ]]; then
                 continue
               fi
               FILTER="${FILTER:+$FILTER | }FullyQualifiedName~Content.IntegrationTests.Tests.$base."

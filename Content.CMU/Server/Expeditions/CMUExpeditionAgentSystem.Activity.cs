@@ -7,6 +7,9 @@ public sealed partial class CMUExpeditionAgentSystem
     private void CancelAgentActivity(EntityUid uid, CMUExpeditionAgentComponent agent, string reason)
     {
         agent.ReturningHome = false;
+        agent.SmokeEscapeDestination = null;
+        agent.SmokeWithdrawalDestination = null;
+        agent.IncomingEscapeDestination = null;
         CancelVault(agent);
         CancelPortalClimb(uid, agent);
         CancelAimedWeapon(agent);
@@ -37,6 +40,12 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.MovingFire = false;
         agent.ResumeVolley = false;
         agent.FiringAtFlash = false;
+        agent.FiringAtSuppression = false;
+        agent.ReturnFirePoint = null;
+        agent.ReturnFireUntil = TimeSpan.Zero;
+        agent.ReturnFireWindowEnd = TimeSpan.Zero;
+        agent.ReturnFireRounds = 0;
+        agent.WeaponRaisedUntil = TimeSpan.Zero;
         agent.MoveProgressDestination = null;
         ClearCover(agent);
         _steering.Unregister(uid);

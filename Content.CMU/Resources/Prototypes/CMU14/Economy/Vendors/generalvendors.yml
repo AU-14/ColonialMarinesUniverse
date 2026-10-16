@@ -99,6 +99,14 @@
         amount: 30
       - id: CMJumpsuitLiaisonCharcoal
         amount: 30
+      - id: RMCJumpsuitLiaisonBlackSuitskirt
+        amount: 30
+      - id: RMCJumpsuitLiaisonCharcoalSuitskirt
+        amount: 30
+      - id: RMCJumpsuitLiaisonFieldSuitskirt
+        amount: 30
+      - id: RMCJumpsuitLiaisonSkirt
+        amount: 30
     - name: Miscellaneous Clothes
       entries:
       - id: RMCJumpsuitDutchBandolier

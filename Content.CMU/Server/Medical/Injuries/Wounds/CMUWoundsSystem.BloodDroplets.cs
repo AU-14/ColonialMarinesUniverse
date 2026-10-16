@@ -28,11 +28,21 @@ public sealed partial class CMUWoundsSystem
     {
         base.Initialize();
         SubscribeLocalEvent<BloodstreamComponent, CMUWoundBloodSpillEvent>(OnWoundBloodSpill);
+        SubscribeLocalEvent<BloodstreamComponent, ComponentShutdown>(OnArterialBodyShutdown);
     }
 
     private void OnWoundBloodSpill(Entity<BloodstreamComponent> ent, ref CMUWoundBloodSpillEvent args)
     {
-        if (args.Handled || !ShouldLeaveBloodDroplets(ent))
+        if (args.Handled)
+            return;
+
+        if (TrySprayArterialBlood(ent, args.Solution))
+        {
+            args.Handled = true;
+            return;
+        }
+
+        if (!ShouldLeaveBloodDroplets(ent))
             return;
 
         // Decals have no contact fixture or reagent transfer, so small drips cannot stain feet.

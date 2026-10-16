@@ -87,8 +87,12 @@
   description: High-Explosive Dual-Purpose. A small, but deceptively strong grenade that has been phasing out the M15 HE grenade. Explodes with a powerful blast. Can be fired from a grenade launcher for impact detonation, or primed in-hand and thrown to detonate after 4 seconds.
   # cmu edit end
   components:
+  - type: CMUSmartGrenade # CMU14
   # cmu edit start: detonate on impact when fired from a launcher (cmss13-pve#517)
   - type: TriggerOnFixedDistanceStop
+  # cmu edit end
+  # cmu edit start: the mob it hits from a launcher isn't stunned
+  - type: CMULauncherImpactNoStun
   # cmu edit end
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40hedp.rsi
@@ -119,6 +123,7 @@
   description: The M47 HSDP is a small, but powerful smoke grenade. Based off the same platform as the M40 HEDP. Can be fired from a grenade launcher for impact detonation, or primed in-hand and thrown to detonate after 2.5 seconds.
   # cmu edit end
   components:
+  - type: CMUSmartGrenade # CMU14
   # cmu edit start: detonate on impact when fired from a launcher (cmss13-pve#517)
   - type: TriggerOnFixedDistanceStop
   # cmu edit end
@@ -307,6 +312,8 @@
   description: An outdated fragmentation grenade. After decades of service, the old M15 Fragmentation Grenade is slowly being replaced by the slightly safer 30mm-series grenades. It is set to detonate in 4 seconds.
   # cmu edit end
   components:
+  - type: CMUSmartGrenade # CMU14
+    enabled: false
   # cmu edit start: not dual-purpose, so no impact fuse; the launcher's own fuse sets it off (cmss13-pve#517)
   - type: TriggerOnFixedDistanceStop
     delay: 10
@@ -401,6 +408,7 @@
   description: High-explosive-Incendiary, Anti-Mobility. The M77 is a small, but deceptively strong incendiary grenade designed to disrupt enemy mobility with long-lasting Type B napalm spread by a small explosive charge within the casing. It is set to detonate in 4 seconds.
   # cmu edit end
   components:
+  - type: CMUSmartGrenade # CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40hidp.rsi
   - type: TimerTrigger
@@ -419,6 +427,7 @@
   name: 30mm WPDP white phosphorus grenade
   description: The 30mm WPDP is a small, but powerful phosphorus grenade. It is set to detonate in 2 seconds.
   components:
+  - type: CMUSmartGrenade # CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40wpdp.rsi
   - type: TimerTrigger
@@ -517,6 +526,7 @@
   suffix: PvE
   description: A 20mm grenade that creates flames upon impact. Less powerful than full-sized grenades. Be careful how you handle these.
   components:
+  - type: CMUSmartGrenade # CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/rcm20mm/incend.rsi
   - type: TriggerOnThrowEnd
@@ -539,6 +549,7 @@
   suffix: PVE
   description: A 20mm grenade that explodes upon impact. Less powerful than full-sized grenades. Be careful how you handle these.
   components:
+  - type: CMUSmartGrenade # CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/rcm20mm/he.rsi
   - type: TriggerOnThrowEnd

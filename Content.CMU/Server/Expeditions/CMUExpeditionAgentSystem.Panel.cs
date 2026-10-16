@@ -282,10 +282,9 @@ public sealed partial class CMUExpeditionAgentSystem
             return started == 0 ? Loc.GetString("cmu-squads-patrol-no-space") :
                 Loc.GetString("cmu-squads-applied", ("count", started));
         }
-        var factions = message.Value == "default" ? Array.Empty<string>() :
-            message.Value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        var factions = Array.Empty<string>();
         if (message.Action is CMUSquadPanelAction.Friendly or CMUSquadPanelAction.Target &&
-            factions.Any(faction => !ProtoMan.HasIndex<NpcFactionPrototype>(faction)))
+            !TryParseFactionOrders(message.Value, message.Action == CMUSquadPanelAction.Target, out factions, out _))
             return Loc.GetString("cmu-squads-invalid");
         Direction? facing = null;
         if (message.Facing != "auto")
@@ -337,7 +336,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 case CMUSquadPanelAction.AimSkill:
                     agent.AimSkill = message.AimSkillPercent / 100f;
                     agent.NextAimCorrection = TimeSpan.Zero;
-                    agent.NextThink = _timing.CurTime;
+                    RequestThink(agent, _timing.CurTime);
                     break;
                 case CMUSquadPanelAction.Friendly:
                 case CMUSquadPanelAction.Target:

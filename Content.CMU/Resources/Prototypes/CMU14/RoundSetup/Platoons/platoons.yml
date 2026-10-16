@@ -4,6 +4,7 @@
   - CMUFighterGround
   - VehicleTank
   - VehicleAPC
+  - CMUVehicleAPCWolfpack
   - VehicleAPCMed
   - VehicleAPCCommand
   - VehicleAev
@@ -12,7 +13,7 @@
   - VehicleHumveeMedical
   - VehicleBlackfootDoorGunVariant
   - VehicleBlackfootTransport
-  name: US Colonial Marines
+  name: cmu-platoon-uscm-name
   lorePrimer: AU14PrimerPlatoonUSCM
   Allegiance: UA
   reqlist: USCMCargoCatalog
@@ -22,8 +23,8 @@
   languages:
     - English
   CompatibleDropships:
-  - /Maps/CMU14/Shuttles/alamo.yml
   - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
+  - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters:
     - /Maps/CMU14/Vehicles/Dropships/ud_6.yml
   possibleships:
@@ -36,13 +37,14 @@
   - CMUFighterGround
   - VehicleTank
   - VehicleAPC
+  - CMUVehicleAPCWolfpack
   - VehicleAPCMed
   - VehicleHumvee
   - VehicleHumveeTransport
   - VehicleHumveeMedical
   - VehicleBlackfootDoorGunVariant
   - VehicleBlackfootTransport
-  name: Latin American Colonial Navy
+  name: cmu-platoon-lacn-name
   lorePrimer: AU14PrimerPlatoonLACN
   Allegiance: UA
   languages:
@@ -369,7 +371,7 @@
   - VehicleSPPVanMedical
   - VehicleSPPVanLogistics
   - VehicleSPPVanPrisoner
-  name: "PMC 'BEAR'"
+  name: cmu-platoon-bear-name
   lorePrimer: RuMCPrimerPlatoonBEAR
   Allegiance: UPP
   languages:
@@ -691,7 +693,7 @@
   #   DCC: AU14JobGOVFORDCCUPP
   #   SupportSynth: AU14JobGOVFORAuxSupportSynthUPP
   CompatibleDropships:
-  - /Maps/CMU14/Shuttles/alamo.yml
+  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   techTree: CMUIntelTechTree_GOVFOR
 
@@ -706,7 +708,7 @@
   - VehicleSPPVanMedical
   - VehicleSPPVanLogistics
   - VehicleSPPVanPrisoner
-  name: UPP Naval Infantry
+  name: cmu-platoon-upp-name
   lorePrimer: AU14PrimerPlatoonUPP
   Allegiance: UPP
   languages:
@@ -1026,7 +1028,7 @@
   #   DCC: AU14JobGOVFORDCCUPP
   #   SupportSynth: AU14JobGOVFORAuxSupportSynthUPP
   CompatibleDropships:
-  - /Maps/CMU14/Shuttles/alamo.yml
+  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   techTree: CMUIntelTechTree_GOVFOR
 
@@ -1041,7 +1043,7 @@
   - VehicleHumveeMedical
   - VehicleBlackfootDoorGunVariant
   - VehicleBlackfootTransport
-  name: WY PMC
+  name: cmu-platoon-weyu-name
   lorePrimer: AU14PrimerPlatoonWEYU
   reqlist: WYPMCCargoCatalog
   vendorSet: WYPMC
@@ -1350,7 +1352,7 @@
   #   DCC: AU14JobGOVFORDCCWYPMC
     # Synth
   CompatibleDropships:
-  - /Maps/CMU14/Shuttles/alamo.yml
+  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   possibleships:
       - USSBushRedux
@@ -1369,12 +1371,13 @@
   - AU14VehicleCivEMSAmbulance
   - VehicleBlackfootTransport
   - VehicleAPC
+  - CMUVehicleAPCWolfpack
   - VehicleAPCMed
   - VehicleHumvee
   - VehicleHumveeTransport
   - VehicleHumveeMedical
   - VehicleBlackfootDoorGunVariant
-  name: CMB Crisis Intervention
+  name: cmu-platoon-cmbciu-name
   lorePrimer: AU14PrimerPlatoonCMBCIU
   Allegiance: UA
   languages:
@@ -1583,7 +1586,7 @@
   possibleships:
       - USSBushRedux
   CompatibleDropships:
-  - /Maps/CMU14/Shuttles/alamo.yml
+  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters:
     - /Maps/CMU14/Vehicles/Dropships/cmbsquadcar.yml
@@ -1596,12 +1599,13 @@
   - CMUFighterGround
   - VehicleAev
   - VehicleAPC
+  - CMUVehicleAPCWolfpack
   - VehicleAPCMed
   - VehicleHumvee
   - VehicleHumveeMedical
   - VehicleHumveeTransport
   - VehicleBlackfootTransport
-  name: USCM Hazardous Operations Unit
+  name: cmu-platoon-hazops-name
   lorePrimer: AU14PrimerPlatoonHAZOPS
   Allegiance: UA
   languages:
@@ -1631,7 +1635,7 @@
   - AU14VehicleCivTruck
   - AU14VehicleCivEMSAmbulance
   - VehicleAev
-  name: Prodigy Security Forces
+  name: cmu-platoon-prodigysf-name
   lorePrimer: AU14PrimerPlatoonProdigySF
   reqlist: ProdigyCargoCatalog
   languages:
@@ -1900,7 +1904,7 @@
 
   #platoonflag:  uaflag
   CompatibleDropships:
-  - /Maps/CMU14/Shuttles/alamo.yml
+  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters:
     - /Maps/CMU14/Vehicles/Dropships/f84owl.yml
@@ -1915,13 +1919,14 @@
   - CMUFighterGround
   - VehicleTank
   - VehicleAPC
+  - CMUVehicleAPCWolfpack
   - VehicleHumvee
   - VehicleHumveeTransport
   - VehicleHumveeMedical
   - VehicleBlackfootDoorGunVariant
   - VehicleBlackfootTransport
   - VehicleAev
-  name: VAI Primary Operations
+  name: cmu-platoon-vaipo-name
   lorePrimer: AU14PrimerPlatoonVAIPO
   reqlist: VAIPOCargoCatalog
   Allegiance: UA
@@ -2092,7 +2097,7 @@
         requirements: []
 
   CompatibleDropships:
-  - /Maps/CMU14/Shuttles/alamo.yml
+  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters:
     - /Maps/CMU14/Vehicles/Dropships/f84owl.yml
@@ -2109,7 +2114,7 @@
   - VehicleHumvee
   - VehicleHumveeTransport
   - VehicleHumveeMedical
-  name: TWE Royal Marine Commandos
+  name: cmu-platoon-rmc-name
   lorePrimer: AU14PrimerPlatoonRMC
   Allegiance: TWE
   languages:
@@ -2419,7 +2424,7 @@
   #   DCC: AU14JobGOVFORDCCRMC
   #   SupportSynth: AU14JobGOVFORAuxSupportSynthRMC
   CompatibleDropships:
-  - /Maps/CMU14/Shuttles/alamo.yml
+  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters: #TODO: RMC Fighters
     - /Maps/CMU14/Vehicles/Dropships/f84owl.yml

@@ -306,7 +306,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
                         }
                         if (properties[ent.Comp.ReferenceProperty].Category.HasFlag(ReagentPropertyTypeEnum.Unadjustable))
                         {
-                            ent.Comp.StatusBar = Loc.GetString("reseach-sim-status-reference-unadjustable");
+                            ent.Comp.StatusBar = Loc.GetString("research-sim-status-reference-unadjustable");
                             Dirty(ent);
                             return false;
                         }
@@ -343,7 +343,10 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
         }
         if (ent.Comp.Stage == ChemSimulatorStage.Off)
         {
-            ent.Comp.StatusBar = Loc.GetString("research-sim-status-ready");
+            // warn before they pay, a conflicting insert silently eats properties otherwise
+            ent.Comp.StatusBar = TryGetConflictWarning(ent, out var conflictWarning)
+                ? conflictWarning
+                : Loc.GetString("research-sim-status-ready");
         }
         Dirty(ent);
         return true;

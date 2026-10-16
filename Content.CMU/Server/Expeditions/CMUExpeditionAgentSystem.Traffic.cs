@@ -82,7 +82,9 @@ public sealed partial class CMUExpeditionAgentSystem
             KnownDangerPassage(uid, agent, start, pocket))
         {
             PauseTravelClock(agent, now);
-            if (_transform.InRange(start, pocket, 0.12f))
+            // a body in a firefight gets shoved and thinks every few ticks, so it rarely sits within
+            // a tenth of the pocket. 0.12 left flankers circling it until their deadline ran out
+            if (_transform.InRange(start, pocket, 0.25f))
             {
                 if (passing.TrafficActiveUntil > now)
                 {
@@ -146,9 +148,25 @@ public sealed partial class CMUExpeditionAgentSystem
             // Wide open paths retain native local avoidance. Narrow passages receive entry priority.
             var narrow = !BodyFits(uid, start, 0.85f) ||
                 !BodyFits(uid, _transform.ToCoordinates(start.EntityId, new MapCoordinates(end, origin.MapId)), 0.85f);
-            var conflict = bodyInFront || !sameDirection && narrow && CorridorsConflict(origin.Position, end, otherStart, otherEnd);
+            var conflict = bodyInFront || travelling && !sameDirection && narrow &&
+                CorridorsConflict(origin.Position, end, otherStart, otherEnd);
             if (!conflict || sameDirection && !bodyInFront)
                 continue;
+            // A follower's older ticket cannot stop the leading body from clearing a
+            // bend. Their headings differ there even though they share the same queue.
+            if (travelling && Vector2.Dot(forward, otherDirection) > -0.5f &&
+                Vector2.Dot(origin.Position - otherStart, otherDirection) > 0 &&
+                SegmentDistance(origin.Position, otherStart, otherEnd) < 0.8f &&
+                !bodyInFront) // a follower right behind us is close to our path start but not in our way
+                continue;
+            // at a bend both bodies can sit just "in front" of each other's new heading and each
+            // waits on the other forever. whoever is further along goes, the other keeps queueing
+            if (bodyInFront && travelling && buddy.TrafficYieldTo == uid)
+            {
+                var behind = Vector2.Dot(origin.Position - otherStart, otherDirection);
+                if (behind > ahead || behind == ahead && uid.CompareTo(other) < 0)
+                    continue;
+            }
             var otherFirst = !travelling || buddy.TrafficTicket < agent.TrafficTicket ||
                 buddy.TrafficTicket == agent.TrafficTicket && other.CompareTo(uid) < 0;
             if (!bodyInFront && !otherFirst || separation >= closest)
@@ -168,8 +186,9 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.TrafficYieldTo = waitingFor;
         agent.TrafficWaitingSince ??= now;
         PauseTravelClock(agent, now);
-        if (now >= agent.NextTrafficPocket && (opposing || stationary || underFire ||
-                now - agent.TrafficWaitingSince.Value >= TimeSpan.FromSeconds(1.2)))
+        // Followers wait for the front to clear; waiting alone is not a reason to
+        // reverse through the rest of a one-wide queue and start another passing cycle.
+        if (now >= agent.NextTrafficPocket && (opposing || stationary || underFire))
         {
             agent.NextTrafficPocket = now + TimeSpan.FromSeconds(0.6);
             if (FindPassingPocket(uid, agent, start, forward, waitingFor, stationary, out var exit) is { } yield)
@@ -206,13 +225,20 @@ public sealed partial class CMUExpeditionAgentSystem
         var localForward = _transform.ToCoordinates(start.EntityId,
             _transform.ToMapCoordinates(start).Offset(forward)).Position - start.Position;
         var otherPoint = _transform.ToCoordinates(start.EntityId, _transform.GetMapCoordinates(other));
+        var passing = Comp<CMUExpeditionAgentComponent>(other);
+        var passingEnd = passing.TrafficGoal is { } goal
+            ? _transform.ToCoordinates(start.EntityId, _transform.ToMapCoordinates(goal)) : otherPoint;
         var side = new Vector2(-localForward.Y, localForward.X);
+        var bodyOffset = otherPoint.Position - start.Position;
+        var bodySide = bodyOffset.LengthSquared() > 0.01f
+            ? Vector2.Normalize(new Vector2(-bodyOffset.Y, bodyOffset.X)) : side;
         var exposure = ExposureScore(uid, agent, start);
         EntityCoordinates? best = null;
         var bestScore = float.MinValue;
         foreach (var distance in new[] { 1.05f, 1.4f, 1.75f, 2.5f })
         foreach (var direction in new[] { side, -side, -localForward, Vector2.Normalize(side - localForward),
-                     Vector2.Normalize(-side - localForward), Vector2.Normalize(side + localForward), Vector2.Normalize(-side + localForward) })
+                     Vector2.Normalize(-side - localForward), Vector2.Normalize(side + localForward), Vector2.Normalize(-side + localForward),
+                     bodySide, -bodySide })
         {
             var point = start.Offset(direction * distance);
             var candidateExposure = ExposureScore(uid, agent, point);
@@ -223,15 +249,30 @@ public sealed partial class CMUExpeditionAgentSystem
                 agent.Home is { } home && agent.OrderedDestination == null && !_transform.InRange(home, point, agent.LeashRange) ||
                 _transform.InRange(point, Transform(other).Coordinates, 0.8f) || candidateExposure > exposure + 0.5f)
                 continue;
+            // A pocket must free the other guard's route, not merely move away from
+            // their present body while remaining in the same narrow lane.
+            if (!stationary && SegmentDistance(point.Position, otherPoint.Position, passingEnd.Position) < 0.8f)
+                continue;
             EntityCoordinates? passExit = null;
             if (stationary)
             {
                 var advance = Vector2.Dot(otherPoint.Position - point.Position, localForward) + 1.05f;
                 var beyond = point.Offset(localForward * Math.Clamp(advance, 0, 2.5f));
-                if (TraversablePassage(uid, point, beyond, allowVault: false) && TrafficPassageClear(uid, point, beyond) &&
+                // A short final leg can end beside the blocker. Rejoin that actual
+                // goal rather than overshooting into guards already in formation.
+                if (agent.TrafficGoal is { } rejoin && _transform.InRange(start, rejoin, 3) &&
+                    TraversablePassage(uid, point, rejoin, allowVault: false) && TrafficPassageClear(uid, point, rejoin) &&
+                    KnownDangerPassage(uid, agent, point, rejoin) && ExposureScore(uid, agent, rejoin) <= exposure + 0.5f)
+                    passExit = rejoin;
+                if (passExit == null && Vector2.Dot(beyond.Position - otherPoint.Position, localForward) >= 0.8f &&
+                    TraversablePassage(uid, point, beyond, allowVault: false) && TrafficPassageClear(uid, point, beyond) &&
                     KnownDangerPassage(uid, agent, point, beyond) &&
                     ExposureScore(uid, agent, beyond) <= exposure + 0.5f)
                     passExit = beyond;
+                // Backing up in the same lane does not pass a stationary guard.
+                // Approach close enough to request clearance when no bypass exists.
+                if (passExit == null)
+                    continue;
             }
             var score = (exposure - candidateExposure) * 3 - distance * 0.5f - KnownDangerCost(agent, point) +
                 Vector2.Dot(direction, localForward) * 0.25f + (passExit != null ? 1.5f : 0);

@@ -395,10 +395,7 @@ public sealed class CMUAutodocIdentityTest
                 Assert.That(rig.Component.Queue.Count, Is.EqualTo(CMUAutodocPodComponent.MaximumQueueEntries));
                 Assert.That(Context(em, rig), Is.EqualTo(context));
 
-                em.System<SkillsSystem>().SetSkill(rig.Operator, "RMCSkillSurgery", 0);
-                Send(em, rig, new CMUAutodocClearQueueMessage(context));
-                Assert.That(rig.Component.Queue.Count, Is.EqualTo(CMUAutodocPodComponent.MaximumQueueEntries));
-                em.System<SkillsSystem>().SetSkill(rig.Operator, "RMCSkillSurgery", 2);
+                // The autodoc needs no surgery training, but the operator still has to be at the console.
                 em.System<SharedTransformSystem>().SetCoordinates(rig.Operator, map.GridCoords.Offset(new Vector2(20, 0)));
                 Send(em, rig, new CMUAutodocClearQueueMessage(context));
                 Assert.That(rig.Component.Queue.Count, Is.EqualTo(CMUAutodocPodComponent.MaximumQueueEntries));

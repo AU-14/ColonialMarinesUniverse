@@ -1,0 +1,8 @@
+- type: entity
+  id: CMUCrayonStamp
+  name: crayon drawing
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: FloorObjects
+  - type: CMUCrayonStamp

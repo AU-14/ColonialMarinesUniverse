@@ -477,6 +477,30 @@ public abstract partial class SharedBoneSystem : EntitySystem
         return treated;
     }
 
+    /// <summary>
+    /// Cryogenic repair restores structural integrity on every fractured native bone,
+    /// including compound and shattered fractures that ordinary chemicals cannot mend.
+    /// </summary>
+    public void CryogenicallyMendFractures(EntityUid body, FixedPoint2 amount)
+    {
+        if (amount <= FixedPoint2.Zero)
+            return;
+
+        foreach (var (part, _) in _medicalIndex.GetBodyParts(body))
+        {
+            if (!TryComp<BoneComponent>(part, out var bone) ||
+                !TryComp<FractureComponent>(part, out var fracture) ||
+                fracture.Severity == FractureSeverity.None ||
+                HasComp<CMURoboticLimbComponent>(part))
+                continue;
+
+            RestoreIntegrity((part, bone), bone.Integrity + amount);
+            var healedSeverity = SeverityFromIntegrity(bone);
+            if (healedSeverity < fracture.Severity)
+                Fracture.SetSeverity((part, fracture), healedSeverity, forceUpgrade: false);
+        }
+    }
+
     public bool ApplyChemicalMalunion(EntityUid body)
     {
         foreach (var (part, _) in _medicalIndex.GetBodyParts(body))

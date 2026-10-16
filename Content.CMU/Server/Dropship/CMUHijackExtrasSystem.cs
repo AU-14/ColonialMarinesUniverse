@@ -1,3 +1,4 @@
+using Content.Server.GameTicking;
 using Content.Server.Ghost;
 using Content.Server.Mind;
 using Content.Server.Popups;
@@ -53,6 +54,7 @@ public sealed partial class CMUHijackExtrasSystem : EntitySystem
 {
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private GhostSystem _ghost = default!;
     [Dependency] private DestructibleSystem _destruction = default!;
     [Dependency] private LarvaQueueSystem _larvaQueue = default!;
@@ -83,6 +85,7 @@ public sealed partial class CMUHijackExtrasSystem : EntitySystem
     {
         SubscribeLocalEvent<DropshipHijackStartEvent>(OnDropshipHijackStart);
         SubscribeLocalEvent<DropshipHijackLandedEvent>(OnDropshipHijackLanded);
+        SubscribeLocalEvent<DropshipHijackDeclinedEvent>(OnDropshipHijackDeclined);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
 
         Subs.CVar(_config, RMCCVars.RMCHijackShipWeight, v => _hijackShipWeight = v, true);
@@ -282,6 +285,17 @@ public sealed partial class CMUHijackExtrasSystem : EntitySystem
 
             StunAllOnShip(xform);
         }
+    }
+
+    // only the classic distress rule listened for this, so on our presets the queen's
+    // "do not hijack" button always bounced with the unavailable popup
+    private void OnDropshipHijackDeclined(ref DropshipHijackDeclinedEvent ev)
+    {
+        if (ev.Handled || HasActiveDistressRule() || _gameTicker.RunLevel != GameRunLevel.InRound)
+            return;
+
+        _gameTicker.EndRound(Loc.GetString("cmu-distress-signal-minorxenovictory-no-hijack"));
+        ev.Handled = true;
     }
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)

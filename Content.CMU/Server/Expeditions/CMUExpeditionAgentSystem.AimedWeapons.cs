@@ -40,7 +40,7 @@ public sealed partial class CMUExpeditionAgentSystem
     private bool StartAimedWeapon(EntityUid uid, CMUExpeditionAgentComponent agent, Entity<GunComponent> gun)
     {
         var now = _timing.CurTime;
-        if (now < agent.NextAimedShot || agent.FiringAtFlash || agent.RushTarget != null ||
+        if (now < agent.NextAimedShot || agent.FiringAtFlash || agent.FiringAtSuppression || agent.RushTarget != null ||
             agent.SpacingDestination != null || now - agent.LastHit < TimeSpan.FromSeconds(3) ||
             agent.VisibleThreats.Count > 1 || agent.Target is not { } target ||
             _transform.InRange(uid, target, 5) || !TryComp<AimedShotComponent>(gun, out var aimed) || !HasSteadyAim(uid, agent, gun))
