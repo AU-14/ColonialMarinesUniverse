@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Server.CMU14.Xenomorphs.Swarm;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.CMU14.Xenomorphs.Swarm;
 using Content.Shared.NPC;
@@ -12,6 +13,9 @@ public sealed partial class NPCSteeringSystem
     {
         if (uid == other || !IsSwarmLesser(uid) || !IsSwarmLesser(other))
             return false;
+
+        if (TryComp<CMUSwarmTraversalComponent>(uid, out var traversal) && traversal.Crossing)
+            return true;
 
         const float spacing = 0.9f;
         var toward = _transform.GetWorldPosition(other) - worldPos;

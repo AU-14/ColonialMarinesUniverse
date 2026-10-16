@@ -117,7 +117,7 @@ public sealed partial class CMUQueenSwarmSystem : EntitySystem
     private bool CanCommandAt(EntityUid queen, EntityCoordinates coordinates)
     {
         if (!coordinates.IsValid(EntityManager) || !float.IsFinite(coordinates.X) || !float.IsFinite(coordinates.Y) ||
-            _transform.GetMapId(coordinates) != Transform(queen).MapID)
+            !_zLevels.IsSameZNetwork(_transform.GetMapId(coordinates), Transform(queen).MapID))
             return false;
 
         if (_eye.IsInQueenEye(queen))
@@ -163,6 +163,7 @@ public sealed partial class CMUQueenSwarmSystem : EntitySystem
             if (TerminatingOrDeleted(member))
                 continue;
             RemComp<NPCMeleeCombatComponent>(member);
+            RemComp<CMUSwarmTraversalComponent>(member);
             _steering.Unregister(member);
         }
         controller.NextThink = TimeSpan.Zero;
@@ -251,10 +252,15 @@ public sealed partial class CMUQueenSwarmSystem : EntitySystem
             for (var i = 0; i < controller.Members.Count; i++)
             {
                 var member = controller.Members[i];
-                if (TryComp<NPCSteeringComponent>(member, out var failed) && failed.Status == SteeringStatus.NoPath)
-                    _steering.Unregister(member);
+                if (TryComp<CMUSwarmTraversalComponent>(member, out var traversal) && traversal.Crossing &&
+                    TraverseToAnchor(member, anchor))
+                    continue;
                 if (SelectEnemy(member, sightings, assignedTargets) is { } enemy)
                 {
+                    if (traversal?.Route != null)
+                        ClearTraversal(member, traversal);
+                    if (TryComp<NPCSteeringComponent>(member, out var failedPursuit) && failedPursuit.Status == SteeringStatus.NoPath)
+                        _steering.Unregister(member);
                     assignedTargets[enemy] = assignedTargets.GetValueOrDefault(enemy) + 1;
                     var target = BlockingBarricade(member, enemy) ?? enemy;
                     var pursuit = _steering.Register(member, new EntityCoordinates(target, Vector2.Zero));
@@ -264,6 +270,10 @@ public sealed partial class CMUQueenSwarmSystem : EntitySystem
                     continue;
                 }
 
+                if (TraverseToAnchor(member, anchor))
+                    continue;
+                if (TryComp<NPCSteeringComponent>(member, out var failed) && failed.Status == SteeringStatus.NoPath)
+                    _steering.Unregister(member);
                 RemComp<NPCMeleeCombatComponent>(member);
                 // Fill an expanding disk instead of squeezing every summon onto one ring.
                 var angle = i * 2.39996323f;
