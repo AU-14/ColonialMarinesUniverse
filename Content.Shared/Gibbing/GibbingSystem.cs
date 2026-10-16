@@ -18,6 +18,7 @@ public sealed partial class GibbingSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
 
     private static readonly SoundSpecifier? GibSound = new SoundCollectionSpecifier("gib", AudioParams.Default.WithVariation(0.025f));
+    // CMU14 Begin
     private int _suppressedDamageDepth;
 
     public bool GibbingSuppressed => _suppressedDamageDepth > 0;
@@ -42,6 +43,7 @@ public sealed partial class GibbingSystem : EntitySystem
             if (system != null)
                 system._suppressedDamageDepth--;
         }
+        // CMU14 End
     }
 
     /// <summary>
@@ -64,8 +66,10 @@ public sealed partial class GibbingSystem : EntitySystem
         if (!_net.IsServer)
             return new();
 
+        // CMU14 Begin
         if (GibbingSuppressed && HasComp<Content.Shared.Body.BodyComponent>(ent))
             return new();
+        // CMU14 End
 
         if (!_destructible.DestroyEntity(ent))
             return new();

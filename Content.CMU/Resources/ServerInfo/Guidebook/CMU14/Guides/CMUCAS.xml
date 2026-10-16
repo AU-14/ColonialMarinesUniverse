@@ -29,6 +29,8 @@
 
   ### Preparing a Loadout
 
+  Hand-loading a BOFORS magazine or Howitzer shell takes three uninterrupted seconds and requires the dropship to be landed. The four-shell HE rack costs 1000 points. Dedicated interior weapon points and ordinary utility points both accept compatible internal weapons; utility mounts are not capped to one weapon. The JDAM clamp has a ten-second firing delay. Existing mini-rockets retain their eight-second travel time and two-second fire-mission delay.
+
   1. Print the weapon and its matching ammunition from the Dropship Part Fabricator.
   2. Use a powerloader to move and install heavy weapon attachments on compatible points.
   3. Load heavy GAU crates, laser batteries, and rocket packs with a powerloader. Match the ammunition to the installed weapon.

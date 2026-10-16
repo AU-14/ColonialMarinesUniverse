@@ -747,6 +747,6 @@
           - CMUHowitzerShell
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 2000
+    cost: 1000
 
 # endregion

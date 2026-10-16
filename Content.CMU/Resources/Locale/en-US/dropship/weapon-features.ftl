@@ -27,3 +27,5 @@ cmu-dropship-track-invalid = No visible IFF-hostile target in range and inside t
 cmu-dropship-payload-preview = Bursts left: {$bursts} | Impacts per volley: {$impacts}
     Next round: {$ammo}
 cmu-dropship-preview-help = Yellow: estimated payload footprint. Orange: dispersion envelope. Cover and blast resistance affect actual damage. Laser patterns follow the dropship's orientation.
+cmu-dropship-hand-load-flight = Land the dropship before loading ammunition by hand.
+cmu-dropship-hand-load-failed = The ammunition could not be loaded.
