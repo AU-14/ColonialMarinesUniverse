@@ -12,6 +12,8 @@ public sealed partial class DropshipWeaponSystem : SharedDropshipWeaponSystem
     protected override void AddPvs(Entity<DropshipTerminalWeaponsComponent> terminal, Entity<ActorComponent?> actor)
     {
         base.AddPvs(terminal, actor);
+        if (terminal.Comp.ChinGunEye is { } gunEye && Resolve(actor, ref actor.Comp, false))
+            _viewSubscriber.AddViewSubscriber(gunEye, actor.Comp.PlayerSession);
         if (terminal.Comp.CameraTarget is { } camera && Resolve(actor, ref actor.Comp, false) &&
             TryGetTargetEye(terminal, camera, out var cameraEye) && cameraEye != camera)
             _viewSubscriber.AddViewSubscriber(cameraEye, actor.Comp.PlayerSession);
@@ -44,6 +46,8 @@ public sealed partial class DropshipWeaponSystem : SharedDropshipWeaponSystem
     protected override void RemovePvs(Entity<DropshipTerminalWeaponsComponent> terminal, Entity<ActorComponent?> actor)
     {
         base.RemovePvs(terminal, actor);
+        if (terminal.Comp.ChinGunEye is { } gunEye && Resolve(actor, ref actor.Comp, false))
+            _viewSubscriber.RemoveViewSubscriber(gunEye, actor.Comp.PlayerSession);
         if (terminal.Comp.CameraTarget is { } camera && Resolve(actor, ref actor.Comp, false) &&
             TryGetTargetEye(terminal, camera, out var cameraEye) && cameraEye != camera)
             _viewSubscriber.RemoveViewSubscriber(cameraEye, actor.Comp.PlayerSession);

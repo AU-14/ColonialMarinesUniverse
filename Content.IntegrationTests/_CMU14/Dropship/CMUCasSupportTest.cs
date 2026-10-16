@@ -98,6 +98,56 @@ public sealed class CMUCasSupportTest
     }
 
     [Test]
+    public async Task HeapIsGroundCompatibleAndOverheatsFasterThanSquall()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var prototypes = pair.Server.ProtoMan;
+        var factory = pair.Server.ResolveDependency<IComponentFactory>();
+        await pair.Server.WaitAssertion(() =>
+        {
+            Assert.That(prototypes.Index<EntityPrototype>("CMUMohawkM90Ammo")
+                .TryGetComponent(out DropshipAmmoComponent? heap, factory), Is.True);
+            Assert.That(prototypes.Index<EntityPrototype>("CMUMohawkM90AmmoKinetic")
+                .TryGetComponent(out DropshipAmmoComponent? squall, factory), Is.True);
+            Assert.That(heap!.GroundCompatible, Is.True, "HEAP must fire on the ground.");
+            Assert.That(heap.DirectFireHeat, Is.GreaterThan(squall!.DirectFireHeat * 5),
+                "HEAP must heat the barrels much faster than Squall.");
+
+            var entities = pair.Server.EntMan;
+            var maps = entities.System<SharedMapSystem>();
+            maps.CreateMap(out var mapId);
+            var grid = maps.CreateGridEntity(mapId);
+            var tiles = pair.Server.ResolveDependency<ITileDefinitionManager>();
+            maps.SetTile(grid, Vector2i.Zero, new Tile(tiles["FloorSteel"].TileId));
+            var point = entities.SpawnEntity("CMUMohawkM90Point", new EntityCoordinates(grid.Owner, Vector2.Zero));
+            var chin = entities.GetComponent<MohawkChinGunComponent>(point);
+            var turret = entities.System<MohawkChinGunSystem>();
+
+            var shots = 0;
+            while (!chin.Overheated && shots < 1000)
+            {
+                turret.AddHeat((point, chin), heap.DirectFireHeat);
+                shots++;
+            }
+
+            Assert.That(chin.Overheated, Is.True);
+            Assert.That(shots, Is.LessThanOrEqualTo(20), "Sustained HEAP fire must overheat quickly.");
+
+            chin.Heat = 0;
+            chin.Overheated = false;
+            for (var i = 0; i < shots; i++)
+                turret.AddHeat((point, chin), squall.DirectFireHeat);
+            Assert.That(chin.Overheated, Is.False, "The same number of Squall rounds must not overheat the guns.");
+
+            chin.Heat = chin.MaxHeat;
+            chin.Overheated = true;
+            turret.Update((chin.MaxHeat - chin.OverheatRecoveredAt) / chin.CoolPerSecond + 1);
+            Assert.That(chin.Overheated, Is.False, "Cooling below the recovery threshold must clear the lockout.");
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task JamsFaultTheHardpointAndAdminToolsRecoverIt()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
@@ -137,12 +187,21 @@ public sealed class CMUCasSupportTest
 
             var mount = entities.GetComponent<DropshipWeaponPointComponent>(point);
             var containers = entities.System<SharedContainerSystem>();
-            var ammo = entities.SpawnEntity("CMUMohawkM90Ammo", coordinates);
+            var ammo = entities.SpawnEntity("CMUMohawkM90AmmoKinetic", coordinates);
             Assert.That(containers.Insert(ammo, containers.GetContainer(point, mount.AmmoContainerSlotId)), Is.True);
             var payload = entities.GetComponent<DropshipAmmoComponent>(ammo);
             payload.Rounds = 0;
             Assert.That(entities.System<SharedDropshipWeaponSystem>().AdminRefillAmmo(point), Is.GreaterThan(0));
             Assert.That(payload.Rounds, Is.EqualTo(payload.MaxRounds));
+
+            var chin = entities.GetComponent<MohawkChinGunComponent>(point);
+            chin.Calibrated = false;
+            chin.Heat = chin.MaxHeat;
+            chin.Overheated = true;
+            entities.System<MohawkChinGunSystem>().AdminRestore((point, chin));
+            Assert.That(chin.Calibrated, Is.True);
+            Assert.That(chin.Overheated, Is.False);
+            Assert.That(chin.Heat, Is.Zero);
         });
         await pair.CleanReturnAsync();
     }

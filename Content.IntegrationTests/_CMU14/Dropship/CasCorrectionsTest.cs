@@ -68,6 +68,41 @@ public sealed class CasCorrectionsTest : GameTest
         });
     }
 
+    [Test]
+    public async Task AirborneHeatCapacityDoublesWithoutChangingHeatPerRound()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid point = default;
+        await Server.WaitAssertion(() =>
+        {
+            SEntMan.EnsureComponent<DropshipComponent>(map.Grid);
+            point = SEntMan.SpawnEntity("CMUMohawkM90Point", map.GridCoords);
+            var chin = SEntMan.GetComponent<MohawkChinGunComponent>(point);
+            var turret = Server.System<MohawkChinGunSystem>();
+            Assert.That(turret.GetMaxHeat((point, chin)), Is.EqualTo(100));
+            SEntMan.EnsureComponent<FTLComponent>(map.Grid).State = FTLState.Travelling;
+            Assert.That(turret.GetMaxHeat((point, chin)), Is.EqualTo(200));
+            turret.AddHeat((point, chin), 100);
+            Assert.That(chin.Heat, Is.EqualTo(100));
+            Assert.That(chin.Overheated, Is.False);
+            turret.AddHeat((point, chin), 100);
+            Assert.That(chin.Heat, Is.EqualTo(200));
+            Assert.That(chin.Overheated, Is.True);
+            var config = Server.ResolveDependency<IConfigurationManager>();
+            Assert.That(config.GetCVar(CCVars.DropshipBootFaultChance), Is.EqualTo(0.02f));
+            Assert.That(config.GetCVar(CCVars.DropshipLandingFaultChance), Is.EqualTo(0.005f));
+            Assert.That(config.GetCVar(CCVars.DropshipLandingFaultStep), Is.EqualTo(0.002f));
+            Assert.That(config.GetCVar(CCVars.DropshipFaultUseMultiplier), Is.EqualTo(0.01f));
+            chin.Heat = 150;
+            chin.Overheated = false;
+            SEntMan.RemoveComponent<FTLComponent>(map.Grid);
+        });
+        await Pair.RunTicksSync(2);
+        await Server.WaitAssertion(() =>
+            Assert.That(SEntMan.GetComponent<MohawkChinGunComponent>(point).Overheated, Is.True,
+                "Landing above the ground limit immediately locks the barrels."));
+    }
+
     [TestCase(false)]
     [TestCase(true)]
     public async Task CasExplosionsDoNotGibEvenAfterTheSourceIsDeleted(bool projectileImpact)
@@ -80,7 +115,7 @@ public sealed class CasCorrectionsTest : GameTest
             var gib = SEntMan.EnsureComponent<MobGibbedByExplosionTypeComponent>(victim);
             gib.Explosions = ["RMC", "RMCLTBCannon"];
             gib.Threshold = 0;
-            var source = SEntMan.SpawnEntity(projectileImpact ? "CMUProjectileLTBCannonHEAT" : null, map.GridCoords);
+            var source = SEntMan.SpawnEntity(projectileImpact ? "CMUMohawkM90HEAP" : null, map.GridCoords);
             SEntMan.AddComponent<NonGibbingDamageComponent>(source);
             if (!projectileImpact)
             {

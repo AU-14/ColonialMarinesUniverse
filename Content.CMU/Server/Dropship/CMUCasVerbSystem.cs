@@ -20,6 +20,7 @@ public sealed class CMUCasVerbSystem : EntitySystem
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private DropshipFireControlBootSystem _boot = default!;
     [Dependency] private SharedDropshipSystem _dropships = default!;
+    [Dependency] private MohawkChinGunSystem _mohawk = default!;
     [Dependency] private SharedDropshipWeaponSystem _weapons = default!;
 
     private static readonly VerbCategory AdminCategory = new("cmu-cas-admin-verb-category", null);
@@ -47,6 +48,8 @@ public sealed class CMUCasVerbSystem : EntitySystem
             AddAdmin(args, "cmu-cas-admin-clear-fault", () => _boot.ClearFault(target), "cleared the fault and wear on");
             AddAdmin(args, "cmu-cas-admin-force-fault", () => _boot.ForceFault(target), "forced a fault on");
             AddAdmin(args, "cmu-cas-admin-refill", () => _weapons.AdminRefillAmmo(target), "refilled ammunition on");
+            if (TryComp(target, out MohawkChinGunComponent? chin))
+                AddAdmin(args, "cmu-cas-admin-restore-m90", () => _mohawk.AdminRestore((target, chin)), "restored M90");
         }
 
         if (HasComp<DropshipTerminalWeaponsComponent>(target) && _dropships.TryGetGridDropship(target, out var ship))
@@ -63,7 +66,11 @@ public sealed class CMUCasVerbSystem : EntitySystem
             AddAdmin(args, "cmu-cas-admin-clear-all", () =>
             {
                 foreach (var point in ship.Comp.AttachmentPoints)
+                {
                     _boot.ClearFault(point);
+                    if (TryComp(point, out MohawkChinGunComponent? chin))
+                        _mohawk.AdminRestore((point, chin));
+                }
                 _boot.SkipBoot(shipUid);
             }, "cleared every fault on");
         }

@@ -33,12 +33,18 @@ cmu-dropship-preflight-ok = ALL SYSTEMS NOMINAL
 
 ## M90 heat
 
+cmu-mohawk-heat = BARREL HEAT: {$heat}/{$max}
+cmu-mohawk-heat-overheated = BARREL HEAT: {$heat}/{$max} - OVERHEATED
+cmu-mohawk-overheated = M90 OVERHEATED: barrels locked until they cool.
+cmu-mohawk-overheat-cleared = M90 barrels cooled. Fire control restored.
+
 ## Admin verbs
 
 cmu-cas-admin-verb-category = CAS (Admin)
 cmu-cas-admin-clear-fault = Clear fault and wear
 cmu-cas-admin-force-fault = Force fault
 cmu-cas-admin-refill = Refill ammunition
+cmu-cas-admin-restore-m90 = Restore M90 (repair, cool, calibrate)
 cmu-cas-admin-skip-boot = Skip fire-control boot
 cmu-cas-admin-landing-reboot = Force landing reboot roll
 cmu-cas-admin-refill-all = Refill every hardpoint

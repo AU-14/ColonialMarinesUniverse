@@ -80,7 +80,9 @@ public sealed class DropshipWeaponFeaturesTest
                     var window = (DropshipWeaponsWindow)typeof(DropshipWeaponsBui)
                         .GetProperty("Window", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)!.GetValue(bui)!;
                     Assert.That(window.ScreenOne.Parent, Is.SameAs(window.ScreenTwo.Parent));
-                    Assert.That(window.ControlPanel.Parent, Is.SameAs(window.ScreenOne.Parent));
+                    Assert.That(window.ScreenOne.Parent!.Children.Count(), Is.EqualTo(2),
+                        "Only the two camera screens remain in the main monitor row.");
+                    Assert.That(window.TurretPanel.Parent, Is.Not.SameAs(window.ScreenOne.Parent));
                     Assert.That(window.ScreenOne.LaserPatternButton.Visible, Is.True);
                     Assert.That(window.ScreenOne.LaserPatternButton.Text, Is.EqualTo(patternLabel));
                     Assert.That(window.ScreenOne.AirburstHeightButton.Visible, Is.False);

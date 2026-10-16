@@ -20,6 +20,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input;
 using Robust.Shared.Maths;
 using Robust.Shared.Utility;
+using Robust.Client.Input;
 using static Content.Shared._RMC14.Dropship.Weapon.DropshipTerminalWeaponsComponent;
 using static Content.Shared._RMC14.Dropship.Weapon.DropshipTerminalWeaponsScreen;
 using static Robust.Client.UserInterface.Control;
@@ -39,6 +40,8 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
     private readonly TacticalMapSystem _tacticalMapSystem;
 
     private EntityUid? _oldEye;
+    private bool _manualTriggerHeld;
+    private readonly IInputManager _input = IoCManager.Resolve<IInputManager>();
     private TacticalMapWrapper? _embeddedTacMapWrapperScreen1;
     private TacticalMapWrapper? _embeddedTacMapWrapperScreen2;
 
@@ -62,6 +65,76 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         base.Open();
         Window = this.CreatePopOutableWindow<DropshipWeaponsWindow>();
 
+        Window.ChinGunControlButton.OnPressed += _ =>
+            SendMessage(new MohawkChinGunControlMessage());
+        Window.ArButton.OnPressed += _ =>
+        {
+            StopManualTrigger();
+            SendMessage(new MohawkChinGunArMessage());
+        };
+        Window.FreeFireButton.OnPressed += _ =>
+        {
+            StopManualTrigger();
+            SendMessage(new MohawkChinGunFreeFireMessage());
+        };
+        Window.IffButton.OnPressed += _ =>
+        {
+            StopManualTrigger();
+            SendMessage(new MohawkChinGunIffMessage());
+        };
+        Window.VisionButton.OnPressed += _ => SendMessage(new MohawkChinGunVisionMessage());
+        Window.ApproveAiButton.OnPressed += _ =>
+        {
+            if (EntMan.TryGetComponent(Owner, out DropshipTerminalWeaponsComponent? terminal))
+                SendMessage(new MohawkChinGunApproveAiMessage(EntMan.GetNetEntity(terminal.ChinGunAiTarget)));
+        };
+        Window.ConfirmTrackingButton.OnPressed += _ =>
+        {
+            if (EntMan.TryGetComponent(Owner, out DropshipTerminalWeaponsComponent? terminal) &&
+                terminal.TrackedTarget is { } target)
+                SendMessage(new MohawkChinGunConfirmTrackingMessage(EntMan.GetNetEntity(target)));
+        };
+        Window.ClearTrackingButton.OnPressed += _ => SendMessage(new MohawkChinGunClearTrackingMessage());
+        Window.TrackTargetButton.OnPressed += _ =>
+            Window.TrackingStatusLabel.Text = Loc.GetString(Window.TrackTargetButton.Pressed
+                ? "cmu-mohawk-gunnery-mark-pending" : "cmu-mohawk-gunnery-unmarked");
+        Window.AcquireTargetButton.OnPressed += _ => SendMessage(new MohawkChinGunAcquireMessage());
+        Window.PriorityButton.OnPressed += _ => SendMessage(new MohawkChinGunPriorityMessage());
+        Window.ClearFlareButton.OnPressed += _ => SendMessage(new MohawkChinGunFlareMessage(null));
+        Window.FeedModeButton.OnPressed += _ => SendMessage(new MohawkChinGunFeedMessage());
+        Window.FeedOneButton.OnPressed += _ => SendMessage(new MohawkChinGunFeedMessage(0));
+        Window.FeedTwoButton.OnPressed += _ => SendMessage(new MohawkChinGunFeedMessage(1));
+        Window.FeedThreeButton.OnPressed += _ => SendMessage(new MohawkChinGunFeedMessage(2));
+        Window.ScreenOne.Viewport.OnKeyBindUp += args =>
+        {
+            if (args.Function == EngineKeyFunctions.UIClick)
+            {
+                StopManualTrigger();
+                args.Handle();
+            }
+        };
+        Window.ScreenOne.Viewport.OnMouseExited += _ => StopManualTrigger();
+        Window.ScreenOne.Viewport.OnKeyBindDown += args =>
+        {
+            if (args.Function != EngineKeyFunctions.UIClick ||
+                !EntMan.TryGetComponent(Owner, out DropshipTerminalWeaponsComponent? terminal) ||
+                terminal.ChinGunOperator == null)
+                return;
+
+            var target = Window.ScreenOne.Viewport.PixelToMap(args.PointerLocation.Position);
+            var coordinates = EntMan.System<SharedTransformSystem>().ToCoordinates(target);
+            if (Window.TrackTargetButton.Pressed)
+            {
+                SendMessage(new MohawkChinGunTrackMessage(EntMan.GetNetCoordinates(coordinates)));
+                Window.TrackTargetButton.Pressed = false;
+            }
+            else
+            {
+                _manualTriggerHeld = true;
+                SendMessage(new MohawkChinGunTriggerMessage(true, EntMan.GetNetCoordinates(coordinates)));
+            }
+            args.Handle();
+        };
         foreach (var first in new[] { true, false })
         {
             var screen = first ? Window.ScreenOne : Window.ScreenTwo;
@@ -71,22 +144,22 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
         Window.OffsetUpButton.Text = "^";
         Window.OffsetUpButton.OnPressed += _ =>
-            SendPredictedMessage(new DropshipTerminalWeaponsAdjustOffsetMsg(Direction.North));
+            PanOrAdjust(Direction.North);
 
         Window.OffsetLeftButton.Text = "<";
         Window.OffsetLeftButton.OnPressed += _ =>
-            SendPredictedMessage(new DropshipTerminalWeaponsAdjustOffsetMsg(Direction.West));
+            PanOrAdjust(Direction.West);
 
         Window.OffsetRightButton.Text = ">";
         Window.OffsetRightButton.OnPressed += _ =>
-            SendPredictedMessage(new DropshipTerminalWeaponsAdjustOffsetMsg(Direction.East));
+            PanOrAdjust(Direction.East);
 
         Window.OffsetDownButton.Text = "v";
         Window.OffsetDownButton.OnPressed += _ =>
-            SendPredictedMessage(new DropshipTerminalWeaponsAdjustOffsetMsg(Direction.South));
+            PanOrAdjust(Direction.South);
 
         Window.ResetOffsetButton.OnPressed += _ =>
-            SendPredictedMessage(new DropshipTerminalWeaponsResetOffsetMsg());
+            PanOrAdjust(null);
 
         foreach (var screen in new[] { Window.ScreenOne, Window.ScreenTwo })
         {
@@ -113,6 +186,26 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         Refresh();
     }
 
+    private void PanOrAdjust(Direction? direction)
+    {
+        StopManualTrigger();
+        if (EntMan.TryGetComponent(Owner, out DropshipTerminalWeaponsComponent? terminal) &&
+            terminal.ChinGunOperator != null)
+            SendMessage(new MohawkChinGunPanMessage(direction));
+        else if (direction is { } pan)
+            SendPredictedMessage(new DropshipTerminalWeaponsAdjustOffsetMsg(pan));
+        else
+            SendPredictedMessage(new DropshipTerminalWeaponsResetOffsetMsg());
+    }
+
+    private void StopManualTrigger()
+    {
+        if (!_manualTriggerHeld)
+            return;
+        _manualTriggerHeld = false;
+        SendMessage(new MohawkChinGunTriggerMessage(false));
+    }
+
     private static string LocationTag(DropshipWeaponPointLocation location)
     {
         return location == DropshipWeaponPointLocation.Internal ? "INT" : ((int) location).ToString();
@@ -123,10 +216,120 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         if (Window == null)
             return;
 
+        string FlareName(DropshipTerminalWeaponsComponent terminal, EntityUid? flare)
+        {
+            if (flare is not { } uid)
+                return Loc.GetString("cmu-dropship-shared-flare-none");
+            var net = EntMan.GetNetEntity(uid);
+            foreach (var target in terminal.Targets)
+            {
+                if (target.Id == net)
+                    return target.Name;
+            }
+            return EntMan.TryGetComponent(uid, out MetaDataComponent? meta)
+                ? meta.EntityName
+                : Loc.GetString("cmu-dropship-shared-flare-none");
+        }
+
         if (EntMan.TryGetComponent(Owner, out DropshipTerminalWeaponsComponent? terminal))
         {
+            Window.ChinGunControlButton.Visible = terminal.Gunnery;
+            Window.FreeFireButton.Visible = terminal.Gunnery;
+            Window.FreeFireButton.Disabled = !terminal.ChinGunAiEnabled &&
+                (terminal.ChinGunDisabled || terminal.ChinGunFreeFireCooldown > 0 ||
+                 !terminal.ChinGunSetupReady || terminal.FireControlBooting);
+            Window.ChinGunControlButton.Disabled = terminal.ChinGunDisabled || !terminal.ChinGunSetupReady || terminal.FireControlBooting;
+            Window.ChinGunHealthLabel.Visible = terminal.Gunnery;
             Window.BootStatusLabel.Text = terminal.FireControlStatus;
             Window.BootStatusLabel.ToolTip = terminal.FireControlStatus;
+            Window.IffButton.Visible = terminal.Gunnery;
+            Window.IffButton.Disabled = !terminal.ChinGunSetupReady;
+            Window.IffButton.Text = terminal.ChinGunIffOverride switch
+            {
+                MohawkIffOverride.Forced => Loc.GetString("cmu-mohawk-iff-locked"),
+                MohawkIffOverride.SelfDefense => Loc.GetString("cmu-mohawk-iff-self-defense",
+                    ("state", Loc.GetString(terminal.ChinGunIff ? "cmu-mohawk-iff-on" : "cmu-mohawk-iff-off"))),
+                MohawkIffOverride.Overwhelmed => Loc.GetString("cmu-mohawk-iff-overwhelmed",
+                    ("state", Loc.GetString(terminal.ChinGunIff ? "cmu-mohawk-iff-on" : "cmu-mohawk-iff-off"))),
+                _ => Loc.GetString(terminal.ChinGunIff ? "cmu-mohawk-iff-on" : "cmu-mohawk-iff-off"),
+            };
+            Window.LowAmmoLabel.Visible = terminal.Gunnery && terminal.ChinGunLowAmmo.Length > 0;
+            Window.LowAmmoLabel.Text = Loc.GetString("cmu-mohawk-low-ammo-label", ("feeds", terminal.ChinGunLowAmmo));
+            Window.LowAmmoLabel.ToolTip = Window.LowAmmoLabel.Text;
+            Window.VisionButton.Visible = terminal.Gunnery;
+            Window.VisionButton.Disabled = !terminal.ChinGunSetupReady;
+            Window.VisionButton.Text = Loc.GetString(MohawkChinGunSystem.VisionLoc(terminal.ChinGunVision));
+            Window.SharedFlareLabel.Text = Loc.GetString("cmu-dropship-shared-flares",
+                ("pilot", FlareName(terminal, terminal.PilotFlare)), ("gunner", FlareName(terminal, terminal.GunnerFlare)));
+            Window.SharedFlareLabel.ToolTip = Window.SharedFlareLabel.Text;
+            Window.AiTargetLabel.Visible = terminal.Gunnery;
+            Window.AiTargetLabel.Text = terminal.ChinGunAiTarget is { } aiTarget && EntMan.TryGetComponent(aiTarget, out MetaDataComponent? aiMeta)
+                ? Loc.GetString("cmu-mohawk-ai-lock", ("target", aiMeta.EntityName))
+                : Loc.GetString("cmu-mohawk-ai-none");
+            Window.ApproveAiButton.Visible = terminal.Gunnery;
+            Window.ApproveAiButton.Disabled = terminal.ChinGunOperator != null || terminal.ChinGunAiTarget == null ||
+                !terminal.ChinGunInFlight ||
+                !terminal.ChinGunSetupReady || terminal.FireControlBooting || terminal.ChinGunDisabled;
+            Window.ApproveAiButton.Text = Loc.GetString(terminal.ChinGunAiApproved ? "cmu-mohawk-ai-revoke" : "cmu-mohawk-ai-approve");
+            Window.ChinGunHealthLabel.Text = terminal.ChinGunDisabled
+                ? Loc.GetString("cmu-mohawk-gunnery-disabled")
+                : Loc.GetString("cmu-mohawk-gunnery-health", ("health", terminal.ChinGunHealth), ("max", 2000));
+            Window.FreeFireButton.Text = terminal.ChinGunAiEnabled
+                ? Loc.GetString("cmu-mohawk-free-fire-active")
+                : terminal.ChinGunFreeFireCooldown > 0
+                    ? Loc.GetString("cmu-mohawk-free-fire-cooldown", ("seconds", terminal.ChinGunFreeFireCooldown))
+                    : Loc.GetString("cmu-mohawk-free-fire-enable");
+            Window.ChinGunControlButton.Text = Loc.GetString(terminal.ChinGunOperator == null
+                ? "cmu-mohawk-gunnery-manual"
+                : terminal.ChinGunAiEnabled ? "cmu-mohawk-gunnery-resume-ai" : "cmu-mohawk-gunnery-automatic");
+            var manual = terminal.ChinGunOperator != null;
+            Window.ArButton.Visible = manual;
+            Window.SetConsoleVisible(!manual || !terminal.ChinGunAr);
+            if (!manual)
+                _manualTriggerHeld = false;
+            Window.FeedModeButton.Visible = manual;
+            Window.FeedOneButton.Visible = manual;
+            Window.FeedTwoButton.Visible = manual;
+            Window.FeedThreeButton.Visible = manual;
+            Window.FeedStatusLabel.Visible = manual;
+            Window.FeedModeButton.Text = Loc.GetString(terminal.ChinGunAlternateFeeds
+                ? "cmu-mohawk-gunnery-feed-alternate" : "cmu-mohawk-gunnery-feed-selected");
+            Window.FeedOneButton.Text = Loc.GetString("cmu-mohawk-gunnery-feed-select",
+                ("feed", 1), ("active", terminal.ChinGunFeed == 0 ? "*" : ""));
+            Window.FeedTwoButton.Text = Loc.GetString("cmu-mohawk-gunnery-feed-select",
+                ("feed", 2), ("active", terminal.ChinGunFeed == 1 ? "*" : ""));
+            Window.FeedThreeButton.Text = Loc.GetString("cmu-mohawk-gunnery-feed-select",
+                ("feed", 3), ("active", terminal.ChinGunFeed == 2 ? "*" : ""));
+            Window.FeedStatusLabel.Text =
+                $"1: {terminal.ChinGunFeedOne}\n2: {terminal.ChinGunFeedTwo}\n3: {terminal.ChinGunFeedThree}";
+            Window.FeedStatusLabel.ToolTip = Window.FeedStatusLabel.Text;
+            Window.TrackTargetButton.Visible = manual;
+            Window.AcquireTargetButton.Visible = manual;
+            Window.ConfirmTrackingButton.Visible = manual;
+            Window.ConfirmTrackingButton.Disabled = terminal.TrackedTarget == null || terminal.TrackingFireConfirmed;
+            Window.ClearTrackingButton.Visible = manual;
+            Window.PriorityButton.Visible = terminal.Gunnery;
+            Window.PriorityButton.Text = Loc.GetString(terminal.ChinGunPriority == MohawkTargetPriority.Distance
+                ? "cmu-mohawk-gunnery-priority-distance" : "cmu-mohawk-gunnery-priority-health");
+            Window.ClearFlareButton.Visible = manual && terminal.ChinGunAirborne && terminal.Target != null;
+            Window.ChinGunHelpLabel.Visible = manual;
+            Window.ResetOffsetButton.ToolTip = Loc.GetString(manual
+                ? "cmu-mohawk-gunnery-pan-help" : "rmc-dropship-weapons-offset-calibration-does-not-affect-direct-bombardment");
+            if (!manual)
+                Window.TrackTargetButton.Pressed = false;
+            Window.TrackingStatusLabel.Text = terminal.TrackedTarget is { } tracked
+                ? Loc.GetString(terminal.TrackingFireConfirmed ? "cmu-dropship-track-firing" : "cmu-dropship-track-ready",
+                    ("target", EntMan.GetComponent<MetaDataComponent>(tracked).EntityName))
+                : manual ? Loc.GetString(Window.TrackTargetButton.Pressed
+                    ? "cmu-mohawk-gunnery-mark-pending" : "cmu-mohawk-gunnery-unmarked") : "";
+            Window.HeatLabel.Visible = terminal.Gunnery;
+            Window.HeatBar.Visible = terminal.Gunnery;
+            Window.HeatBar.MaxValue = terminal.ChinGunMaxHeat;
+            Window.HeatBar.Value = terminal.ChinGunHeat;
+            Window.HeatLabel.Text = Loc.GetString(terminal.ChinGunOverheated ? "cmu-mohawk-heat-overheated" : "cmu-mohawk-heat",
+                ("heat", terminal.ChinGunHeat), ("max", terminal.ChinGunMaxHeat));
+            Window.HeatLabel.FontColorOverride = terminal.ChinGunOverheated ? Color.Red
+                : terminal.ChinGunHeat >= terminal.ChinGunMaxHeat * 0.7f ? Color.Orange : null;
             RefreshLoadout(terminal);
             SetScreen(true, terminal.ScreenOne);
             SetScreen(false, terminal.ScreenTwo);
@@ -291,10 +494,24 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
         if (!screen.Viewport.Children.OfType<DropshipTargetingPreview>().Any())
         {
-            screen.Viewport.AddChild(new DropshipTargetingPreview(EntMan, Owner, first, screen));
+            var preview = new DropshipTargetingPreview(EntMan, Owner, first, screen);
+            preview.CursorAim += coordinates =>
+            {
+                if (_manualTriggerHeld && !_input.IsKeyDown(Keyboard.Key.MouseLeft))
+                    StopManualTrigger();
+                var netCoordinates = EntMan.GetNetCoordinates(EntMan.System<SharedTransformSystem>().ToCoordinates(coordinates));
+                SendMessage(_manualTriggerHeld
+                    ? new MohawkChinGunTriggerMessage(true, netCoordinates)
+                    : new MohawkChinGunAimMessage(netCoordinates));
+            };
+            preview.CursorUnavailable += StopManualTrigger;
+            screen.Viewport.AddChild(preview);
         }
+        var turretCamera = first && terminal.ChinGunEye != null;
+        screen.Viewport.MouseFilter = turretCamera ? MouseFilterMode.Stop : MouseFilterMode.Ignore;
         RefreshPayloadSettings(screen, compScreen);
-        screen.Viewport.Visible = false;
+        if (!turretCamera)
+            screen.Viewport.Visible = false;
         screen.FireMissionCreate.Visible = false;
         screen.FireMissionView.Visible = false;
         screen.FireMissionEdit.Visible = false;
@@ -374,7 +591,15 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                     return null;
 
                 var msg = selectMsg(target.Id);
-                return new DropshipWeaponsButtonData(target.Name, _ => SendPredictedMessage(msg));
+                var name = target.Name;
+                if (ReferenceEquals(targets, terminal.Targets) && EntMan.GetEntity(target.Id) is { Valid: true } flare)
+                {
+                    if (flare == terminal.PilotFlare)
+                        name += " " + Loc.GetString("cmu-dropship-flare-marker-pilot");
+                    if (flare == terminal.GunnerFlare)
+                        name += " " + Loc.GetString("cmu-dropship-flare-marker-gunner");
+                }
+                return new DropshipWeaponsButtonData(name, _ => SendPredictedMessage(msg));
             }
 
             if (firstTarget > 0)
@@ -394,7 +619,8 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         void AddTargets(out DropshipWeaponsButtonData? previous, out DropshipWeaponsButtonData? next)
         {
             AddButtons(
-                id => new DropshipTerminalWeaponsTargetsSelectMsg(id),
+                id => terminal.Gunnery && terminal.ChinGunOperator != null && terminal.ChinGunAirborne
+                    ? new MohawkChinGunFlareMessage(id) : new DropshipTerminalWeaponsTargetsSelectMsg(id),
                 new DropshipTerminalWeaponsTargetsPreviousMsg(),
                 new DropshipTerminalWeaponsTargetsNextMsg(),
                 screen.RightRow,
@@ -457,6 +683,27 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             _ => SendPredictedMessage(new DropshipTerminalWeaponsDeleteFireMissionMsg(first)));
         var firemission = Button("fire-mission", StrikeFireMission);
         var strikeVector = Button("vector", StrikeVector);
+
+        if (first && terminal.ChinGunEye is { } chinEye &&
+            EntMan.TryGetComponent(chinEye, out EyeComponent? turretEye))
+        {
+            screen.Viewport.Eye = turretEye.Eye;
+            screen.Viewport.ModulateSelfOverride = terminal.ChinGunVision switch
+            {
+                MohawkChinGunVisionMode.Night => Color.FromHex("#7CFF8C"),
+                MohawkChinGunVisionMode.Thermal => Color.FromHex("#FFB070"),
+                _ => null,
+            };
+            screen.Viewport.MouseFilter = MouseFilterMode.Stop;
+            screen.Viewport.Visible = true;
+            screen.ScreenLabel.Visible = false;
+            screen.TopRow.SetData();
+            screen.LeftRow.SetData();
+            screen.RightRow.SetData();
+            screen.BottomRow.SetData();
+            return;
+        }
+        screen.Viewport.ModulateSelfOverride = null;
 
         void SetWeaponPageControls()
         {
@@ -1435,6 +1682,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
     {
         if (disposing)
         {
+            Window?.DisposeAuxiliaryWindows();
             _embeddedTacMapWrapperScreen1?.Orphan();
             _embeddedTacMapWrapperScreen1 = null;
 
