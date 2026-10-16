@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Dropship.Fabricator;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.PowerLoader;
 using Content.Shared._RMC14.Sentry;
+using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.CMU14.Dropship.DirectFire;
 using Content.Shared.CMU14;
@@ -207,7 +208,7 @@ public sealed class MohawkAmmoTest : GameTest
         });
     }
 
-    [TestCase("CMUMohawkM90Ammo", "CMUMohawkM90HEAP", 165, 165, 0, 975, false)]
+    [TestCase("CMUMohawkM90Ammo", "CMUMohawkM90HEAP", 165, 165, 0, 1250, false)]
     [TestCase("CMUMohawkM90AmmoScatter", "CMUMohawkM90Scatter", 60, 60, 10, 1500, false)]
     [TestCase("CMUMohawkM90AmmoIncendiary", "CMUMohawkM90Incendiary", 130, 130, 2, 1250, true)]
     [TestCase("CMUMohawkM90AmmoDevastator", "CMUMohawkM90Devastator", 300, 300, 12, 3500, false)]
@@ -218,6 +219,7 @@ public sealed class MohawkAmmoTest : GameTest
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
         {
+            SEntMan.EnsureComponent<RMCPlanetComponent>(map.MapUid);
             SEntMan.EnsureComponent<DropshipComponent>(map.Grid).AttachmentPoints.Clear();
             SEntMan.EnsureComponent<ShipFactionComponent>(map.Grid).Faction = "GOVFOR";
             var point = SEntMan.SpawnEntity("CMUMohawkM90Point", map.GridCoords);
@@ -253,6 +255,7 @@ public sealed class MohawkAmmoTest : GameTest
             var transform = Server.System<SharedTransformSystem>();
             var maximumScatter = 0f;
             chin.DefensiveFire = true;
+            chin.FreeFireEnabled = true;
             for (var sample = 0; sample < 100; sample++)
             {
                 var attempt = new AttemptShootEvent(weapon, null, map.GridCoords,
