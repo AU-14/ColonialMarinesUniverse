@@ -96,6 +96,9 @@
   description: A small, expendable drone directed by its queen.
   components:
   - type: CMUSwarmLesser
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 1.43
+    baseSprintSpeed: 2.6
   - type: MobThresholds
     thresholds:
       0: Alive
