@@ -307,7 +307,7 @@ public sealed class CMURtoRadioTest : GameTest
             SEntMan.GetComponent<ANPRCRadioComponent>(pack).WiresRipped = true;
             Assert.That(Server.System<CMUCasRequestSystem>().TryCreatePositionRequest(user, 0, 0,
                 CMUCasMunition.Any, CMUCasEffect.Any, "", out _), Is.False);
-            Assert.That(Server.System<CMUCasRequestSystem>().TryCreateRadioMarkRequest(user, CMUCasMunition.Any,
+            Assert.That(Server.System<CMUCasRequestSystem>().TryCreateGpsRequest(user, 1, CMUCasMunition.Any,
                 CMUCasEffect.Any, "", out _), Is.False);
         });
     }

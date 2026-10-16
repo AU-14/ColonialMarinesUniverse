@@ -15,6 +15,7 @@ using Content.Shared.Body.Systems;
 using Content.Shared.CCVar;
 using Content.Shared.CMU14.Dropship.Cas;
 using Content.Shared.CMU14.Dropship.DirectFire;
+using Content.Shared.CMU14.Radio;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -77,7 +78,7 @@ public sealed class CasCorrectionsTest : GameTest
     }
 
     [Test]
-    public async Task RadioCallsSkipHiddenAndOutOfRangeHostiles()
+    public async Task UplinkCannotGenerateNearestHostileMarks()
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
@@ -97,15 +98,14 @@ public sealed class CasCorrectionsTest : GameTest
             Mob(new Vector2(31, 0), "OPFOR");
             SEntMan.SpawnEntity("CMWallMetal", map.GridCoords.Offset(new Vector2(5, 0)));
             var requests = Server.System<CMUCasRequestSystem>();
-            Assert.That(requests.TryCreateRadioMarkRequest(rto, CMUCasMunition.Any, CMUCasEffect.Any, "", out _),
-                Is.False, "A nearby hidden hostile must not bypass the LOS check.");
-            var visible = Mob(new Vector2(0, 15), "OPFOR");
-            Assert.That(requests.TryCreateRadioMarkRequest(rto, CMUCasMunition.Any, CMUCasEffect.Any, "", out var id),
-                Is.True);
-            Assert.That(requests.TryGetRequest(id, out var request), Is.True);
-            var xforms = Server.System<SharedTransformSystem>();
-            Assert.That(xforms.GetMapCoordinates(SEntMan.GetEntity(request.Target)),
-                Is.EqualTo(xforms.GetMapCoordinates(visible)));
+            Mob(new Vector2(0, 15), "OPFOR");
+            var radio = SEntMan.SpawnEntity("ANPRC117GRadio", map.GridCoords);
+            SEntMan.EnsureComponent<WearingANPRCComponent>(rto).Radio = radio;
+            SEntMan.EventBus.RaiseLocalEvent(radio, new CMUCasCallSendMsg(null, CMUCasMunition.Any,
+                CMUCasEffect.Any, "") { Actor = rto, UiKey = CMUCasCallUi.Key });
+            Assert.That(requests.GetRequests("GOVFOR"), Is.Empty,
+                "A null target must not scan for or generate a nearest-hostile mark.");
+            Assert.That(SEntMan.QueryEntities<DropshipTargetComponent>(), Is.Empty);
         });
     }
 
@@ -277,9 +277,17 @@ public sealed class CasCorrectionsTest : GameTest
             { Actor = rto, UiKey = DropshipTerminalWeaponsUi.Key });
             Assert.That(requests.SetCarryMode(id, CMUCasCarryMode.Auto), Is.True);
             var terminal = SEntMan.GetComponent<DropshipTerminalWeaponsComponent>(console);
+            Assert.That(requests.SetCarryMode(id, CMUCasCarryMode.Manual), Is.True);
+            Assert.That(weapons.TryFireWeapon(requestedWeapon, SEntMan.GetComponent<TransformComponent>(mark).Coordinates,
+                DropshipWeaponStrikeType.Direct, rto, terminal), Is.True,
+                "Manual carry-out must not require cleared hot.");
+            Assert.That(weapons.TryGetWeaponAmmo(requestedWeapon, out var manualAmmo), Is.True);
+            manualAmmo.Comp.Rounds = 1200;
+            SEntMan.GetComponent<DropshipWeaponComponent>(requestedWeapon).NextFireAt = TimeSpan.Zero;
+            Assert.That(requests.SetCarryMode(id, CMUCasCarryMode.Auto), Is.True);
             Assert.That(weapons.TryFireWeapon(requestedWeapon, SEntMan.GetComponent<TransformComponent>(mark).Coordinates,
                 DropshipWeaponStrikeType.Direct, rto, terminal), Is.False,
-                "Manual fire cannot bypass an RTO's outstanding clearance.");
+                "Automatic carry-out still requires cleared hot.");
         });
         await Pair.RunSeconds(1);
         await Server.WaitAssertion(() =>
@@ -339,7 +347,9 @@ public sealed class CasCorrectionsTest : GameTest
             var enemy = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(10, 0)));
             SEntMan.EnsureComponent<MarineComponent>(enemy).Faction = "OPFOR";
             var requests = Server.System<CMUCasRequestSystem>();
-            Assert.That(requests.TryCreateRadioMarkRequest(rto, CMUCasMunition.Gau, CMUCasEffect.Any, "", out id), Is.True);
+            var mark = SEntMan.SpawnEntity(null, map.GridCoords.Offset(new Vector2(10, 0)));
+            Server.System<SharedDropshipWeaponSystem>().MakeDropshipTarget(mark, "TST", "GOVFOR");
+            Assert.That(requests.TryCreateRequest(rto, mark, CMUCasMunition.Gau, out id), Is.True);
             Server.System<SharedTransformSystem>().SetCoordinates(enemy, map.GridCoords.Offset(new Vector2(30, 0)));
         });
         await Pair.RunSeconds(6);

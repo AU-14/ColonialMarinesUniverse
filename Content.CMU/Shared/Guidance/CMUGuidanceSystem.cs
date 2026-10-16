@@ -210,7 +210,7 @@ public sealed class CMUGuidanceSystem : EntitySystem
     {
         var receiver = Receiver(host);
         var faction = TryComp(receiver, out FighterWeaponsComponent? fighter)
-            ? fighter.Faction : _weapons.GetConsoleFaction(host);
+            ? fighter.Faction : _weapons.GetUserFaction(host) ?? _weapons.GetConsoleFaction(host);
         return report.ExpiresAt > _timing.CurTime && !TerminatingOrDeleted(report.Source) &&
             report.Faction.Equals(faction, StringComparison.OrdinalIgnoreCase) &&
             (!TryComp(receiver, out FighterAircraftComponent? aircraft) ||
@@ -219,6 +219,16 @@ public sealed class CMUGuidanceSystem : EntitySystem
 
     public List<CMUGuidanceReport> GetReports(EntityUid host) =>
         _reports.Where(report => CanUseReport(host, report)).Select(report => report.Report).ToList();
+
+    public bool TryGetGroundReport(EntityUid user, int id, out MapCoordinates coordinates)
+    {
+        coordinates = default;
+        var report = _reports.FirstOrDefault(report => report.Report.Id == id && CanUseReport(user, report));
+        if (report == null)
+            return false;
+        coordinates = new MapCoordinates(report.Target.Position.Floored() + report.Deviation, report.Target.MapId);
+        return true;
+    }
 
     public override void Update(float frameTime)
     {

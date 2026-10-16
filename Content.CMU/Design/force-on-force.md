@@ -21,7 +21,12 @@ RTO CAS uplinks can call **OWN POSITION** without a visible hostile or a flare.
 The operator may offset the call by up to 15 tiles east/west and north/south,
 including diagonally. The server adds up to 12 tiles of random radial deviation
 to the requested position; the resulting mark stays fixed when the RTO moves.
-Existing acknowledgement and cleared-hot requirements still apply.
+Nearest-hostile target generation is unavailable. RTOs can instead request
+existing friendly flare/laser marks or current friendly ground GPS reports.
+GPS requests retain the report's fixed deviation and normal call/control ranges.
+Pilots selecting MANUAL carry-out do not need cleared-hot authorization;
+AUTO still waits for the RTO to clear hot. Normal danger-close confirmation,
+flight, range and protected-area checks remain in force.
 
 Xenos, or players holding a sharp tool such as a knife, can right-click an RTO
 radio pack or its wearer to **Rip out radio wires**.

@@ -7,7 +7,7 @@ using Robust.Client.UserInterface.CustomControls;
 
 namespace Content.Client.CMU14.Dropship;
 
-/// <summary>The RTO's CAS uplink: call a mark, nearest hostile or offset position, then transmit the 9-line.</summary>
+/// <summary>The RTO's CAS uplink: call a mark, GPS report or offset position, then transmit the 9-line.</summary>
 public sealed class CMUCasCallBui : BoundUserInterface
 {
     private static readonly Color Amber = Color.FromHex("#FFB000");
@@ -26,8 +26,8 @@ public sealed class CMUCasCallBui : BoundUserInterface
     private SpinBox _offsetY = default!;
 
     private CMUCasCallBuiState? _state;
-    // Null target = own position or nearest hostile. _selected false = nothing picked.
     private NetEntity? _target;
+    private int? _gpsReportId;
     private bool _selected;
     private bool _ownPosition;
 
@@ -96,7 +96,8 @@ public sealed class CMUCasCallBui : BoundUserInterface
             if (!_selected)
                 return;
             SendMessage(new CMUCasCallSendMsg(_target, (CMUCasMunition) _munition.SelectedId,
-                (CMUCasEffect) _effect.SelectedId, _remarks.Text, _ownPosition, _offsetX.Value, _offsetY.Value));
+                (CMUCasEffect) _effect.SelectedId, _remarks.Text, _ownPosition, _offsetX.Value, _offsetY.Value,
+                _gpsReportId));
             _remarks.Text = string.Empty;
         };
         right.AddChild(_send);
@@ -141,8 +142,9 @@ public sealed class CMUCasCallBui : BoundUserInterface
         _header.Text = Loc.GetString("cmu-cas-call-header", ("callsign", call.Callsign), ("range", call.Range));
 
         // Drop a selection whose mark burned out.
-        if (!_ownPosition && (_selected && _target is { } picked && call.Marks.All(mark => mark.Target != picked) ||
-            _selected && _target == null && call.NearestHostile == null))
+        if (!_ownPosition && _selected &&
+            (_gpsReportId is { } reportId ? call.GpsReports.All(report => report.Id != reportId)
+                : _target is not { } picked || call.Marks.All(mark => mark.Target != picked)))
             _selected = false;
 
         RebuildTargets();
@@ -156,9 +158,29 @@ public sealed class CMUCasCallBui : BoundUserInterface
             return;
         _targets.RemoveAllChildren();
         AddTarget(state.OwnPosition, null, Loc.GetString("cmu-cas-call-own-position"), ownPosition: true);
-        AddTarget(state.NearestHostile, null, Loc.GetString("cmu-cas-call-no-flare"));
         foreach (var mark in state.Marks)
             AddTarget(mark, mark.Target, mark.Name);
+        foreach (var report in state.GpsReports)
+        {
+            var button = new Button
+            {
+                Text = Loc.GetString("cmu-guidance-ground-report", ("observer", report.Observer),
+                    ("map", report.Map), ("x", report.X), ("y", report.Y)),
+                ToggleMode = true,
+                Pressed = _selected && _gpsReportId == report.Id,
+                HorizontalExpand = true,
+            };
+            button.OnPressed += _ =>
+            {
+                _selected = true;
+                _target = null;
+                _ownPosition = false;
+                _gpsReportId = report.Id;
+                RebuildTargets();
+                RebuildPreview();
+            };
+            _targets.AddChild(button);
+        }
         if (state.Marks.Count == 0)
             _targets.AddChild(new Label { Text = Loc.GetString("cmu-cas-call-no-marks"), FontColorOverride = Dim });
     }
@@ -177,7 +199,7 @@ public sealed class CMUCasCallBui : BoundUserInterface
             ClipText = true,
             HorizontalExpand = true,
             Disabled = target == null,
-            Pressed = _selected && _target == net && _ownPosition == ownPosition,
+            Pressed = _selected && _gpsReportId == null && _target == net && _ownPosition == ownPosition,
         };
         if (target?.DangerClose == true)
             button.ModulateSelfOverride = Color.FromHex("#FFC8A0");
@@ -186,6 +208,7 @@ public sealed class CMUCasCallBui : BoundUserInterface
             _selected = true;
             _target = net;
             _ownPosition = ownPosition;
+            _gpsReportId = null;
             RebuildTargets();
             RebuildPreview();
         };
@@ -197,11 +220,24 @@ public sealed class CMUCasCallBui : BoundUserInterface
         _preview.RemoveAllChildren();
         var target = !_selected || _state == null ? null
             : _ownPosition ? _state.OwnPosition
-            : _target == null ? _state.NearestHostile
             : _state.Marks.FirstOrDefault(mark => mark.Target == _target);
         _offsetX.LineEditDisabled = _offsetY.LineEditDisabled = !_ownPosition;
         _offsetX.SetButtonDisabled(!_ownPosition);
         _offsetY.SetButtonDisabled(!_ownPosition);
+        if (_selected && _gpsReportId is { } reportId &&
+            _state?.GpsReports.FirstOrDefault(report => report.Id == reportId) is { } report)
+        {
+            var label = new RichTextLabel { MaxWidth = 440 };
+            label.SetMessage(Loc.GetString("cmu-guidance-ground-report", ("observer", report.Observer),
+                ("map", report.Map), ("x", report.X), ("y", report.Y)));
+            _preview.AddChild(label);
+            var help = new RichTextLabel { MaxWidth = 440 };
+            help.SetMessage(Loc.GetString("cmu-cas-call-gps-help"));
+            _preview.AddChild(help);
+            _send.Disabled = false;
+            _send.ModulateSelfOverride = null;
+            return;
+        }
         _send.Disabled = target == null;
         if (target == null)
         {

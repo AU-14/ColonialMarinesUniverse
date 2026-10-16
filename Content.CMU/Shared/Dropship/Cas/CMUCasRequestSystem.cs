@@ -11,6 +11,7 @@ using Content.Shared._RMC14.Dropship.Utility.Components;
 using Content.Shared.Actions;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CMU14.Radio;
+using Content.Shared.CMU14.Guidance;
 using Content.Shared.CMU14.Round;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
@@ -55,7 +56,7 @@ public sealed class CMUCasRequestSystem : EntitySystem
     public const float RequestCoverRange = 6f;
     public const float TargetScanRange = 4f;
     public const int MaxOpenRequests = 6;
-    /// <summary>How far from the RTO a mark, or the hostile for a radio mark, can be.</summary>
+    /// <summary>How far from the RTO a requested mark can be.</summary>
     public const float CallRange = 30f;
     public const float MaintainRange = 45f;
     public const int PositionOffsetLimit = 15;
@@ -141,7 +142,7 @@ public sealed class CMUCasRequestSystem : EntitySystem
     }
 
     private bool TryCreateRequestCore(EntityUid rto, EntityUid target, CMUCasMunition munition, out int id,
-        CMUCasEffect effect, string remarks, bool radioMark, bool ownPosition = false)
+        CMUCasEffect effect, string remarks, bool radioMark, bool ownPosition = false, bool gpsReport = false)
     {
         id = 0;
         if (_net.IsClient || !CheckRadioWires(rto) || !TryComp(target, out DropshipTargetComponent? mark) ||
@@ -161,7 +162,7 @@ public sealed class CMUCasRequestSystem : EntitySystem
                 PopupType.SmallCaution);
             return false;
         }
-        if (!ownPosition && !CanCallTarget(rto, target))
+        if (!ownPosition && !gpsReport && !CanCallTarget(rto, target))
         {
             _popup.PopupEntity(Loc.GetString("cmu-cas-request-no-los"), rto, rto, PopupType.SmallCaution);
             return false;
@@ -254,27 +255,22 @@ public sealed class CMUCasRequestSystem : EntitySystem
                 !TryComp(blocker, out OccluderComponent? occluder) || !occluder.Enabled);
     }
 
-    /// <summary>
-    /// Calls CAS without a flare: the uplink drops a radio mark on the nearest hostile within <see cref="CallRange"/>.
-    /// </summary>
-    public bool TryCreateRadioMarkRequest(EntityUid rto, CMUCasMunition munition, CMUCasEffect effect, string remarks,
-        out int id, EntProtoId? markPrototype = null)
+    public bool TryCreateGpsRequest(EntityUid rto, int reportId, CMUCasMunition munition, CMUCasEffect effect,
+        string remarks, out int id)
     {
         id = 0;
-        if (_net.IsClient || !CheckRadioWires(rto) || _weapons.GetUserFaction(rto) is not { } faction)
+        if (_net.IsClient || !CanUseUplink(rto) || _weapons.GetUserFaction(rto) is not { } faction)
             return false;
-        if (FindNearestHostile(rto, faction) is not { } hostile)
+        if (!EntityManager.System<CMUGuidanceSystem>().TryGetGroundReport(rto, reportId, out var coordinates))
         {
-            _popup.PopupEntity(Loc.GetString("cmu-cas-request-no-hostile", ("range", (int) CallRange)), rto, rto,
-                PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-guidance-invalid-gps"), rto, rto, PopupType.SmallCaution);
             return false;
         }
-
-        var mark = Spawn(markPrototype ?? "CMUCasRadioMark", _transform.GetMapCoordinates(hostile));
+        var mark = Spawn("CMUCasRadioMark", coordinates);
         var abbreviation = _weapons.GetUserAbbreviation(rto, _weapons.ComputeNextId());
         _weapons.MakeDropshipTarget(mark, abbreviation, faction);
-        _metaData.SetEntityName(mark, Loc.GetString("cmu-cas-radio-mark-name", ("id", abbreviation)));
-        if (TryCreateRequest(rto, mark, munition, out id, effect, remarks, true))
+        _metaData.SetEntityName(mark, Loc.GetString("cmu-cas-gps-mark-name", ("id", abbreviation)));
+        if (TryCreateRequestCore(rto, mark, munition, out id, effect, remarks, true, gpsReport: true))
             return true;
         QueueDel(mark);
         return false;
@@ -295,27 +291,6 @@ public sealed class CMUCasRequestSystem : EntitySystem
     public bool IsRtoDesignated(EntityUid target)
     {
         return IsRtoDesignated(Transform(target).Coordinates, target);
-    }
-
-    private EntityUid? FindNearestHostile(EntityUid rto, string faction)
-    {
-        var origin = _transform.GetMapCoordinates(rto);
-        _mobs.Clear();
-        _lookup.GetEntitiesInRange(origin, CallRange, _mobs);
-        EntityUid? best = null;
-        var bestDistance = float.MaxValue;
-        foreach (var mob in _mobs)
-        {
-            if (mob.Owner == rto || mob.Comp.CurrentState != MobState.Alive || IsFriendly(faction, mob))
-                continue;
-            var distance = (_transform.GetMapCoordinates(mob).Position - origin.Position).LengthSquared();
-            if (distance >= bestDistance || !CanCallTarget(rto, mob))
-                continue;
-            bestDistance = distance;
-            best = mob;
-        }
-
-        return best;
     }
 
     /// <summary>The RTO's clearance for an accepted request.</summary>
@@ -610,7 +585,7 @@ public sealed class CMUCasRequestSystem : EntitySystem
         var impact = _transform.ToMapCoordinates(coordinates);
         foreach (var entry in _requests)
         {
-            if (entry.ClosedAt != null ||
+            if (entry.ClosedAt != null || entry.Request.CarryMode != CMUCasCarryMode.Auto ||
                 !FactionMatches(faction, entry.Faction) ||
                 !TryGetEntity(entry.Request.Target, out var mark) || TerminatingOrDeleted(mark))
                 continue;
@@ -708,9 +683,13 @@ public sealed class CMUCasRequestSystem : EntitySystem
             if (TryGetEntity(netTarget, out var target) && HasComp<DropshipTargetComponent>(target))
                 sent = TryCreateRequest(rto, target.Value, munition, out id, effect, args.Remarks);
         }
+        else if (args.GpsReportId is { } reportId)
+        {
+            sent = TryCreateGpsRequest(rto, reportId, munition, effect, args.Remarks, out id);
+        }
         else
         {
-            sent = TryCreateRadioMarkRequest(rto, munition, effect, args.Remarks, out id, ent.Comp.RadioMark);
+            _popup.PopupEntity(Loc.GetString("cmu-cas-request-no-target"), rto, rto, PopupType.SmallCaution);
         }
 
         if (sent)
@@ -813,14 +792,11 @@ public sealed class CMUCasRequestSystem : EntitySystem
                 mark.Comp.Abbreviation ?? Name(mark), IsRtoDesignated(mark)));
         }
 
-        CMUCasCallTarget? nearest = null;
-        if (FindNearestHostile(rto, faction) is { } hostile)
-            nearest = DescribeCallTarget(faction, origin, hostile, null, Loc.GetString("cmu-cas-call-nearest-hostile"), false);
-
         var requests = _requests.Where(entry => entry.Rto == rto).Select(entry => entry.Request).ToList();
         var ownPosition = DescribeCallTarget(faction, origin, rto, null,
             Loc.GetString("cmu-cas-call-own-position"), false);
-        return new CMUCasCallBuiState(Name(rto), marks, nearest, requests, (int) CallRange, ownPosition);
+        return new CMUCasCallBuiState(Name(rto), marks, EntityManager.System<CMUGuidanceSystem>().GetReports(rto),
+            requests, (int) CallRange, ownPosition);
     }
 
     private CMUCasCallTarget DescribeCallTarget(string faction, MapCoordinates origin, EntityUid target,

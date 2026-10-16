@@ -259,7 +259,7 @@ public sealed class CMUCasSupportTest
     }
 
     [Test]
-    public async Task UplinkRadioMarksDesignationsAndAutoCarryOut()
+    public async Task UplinkMarkedTargetsDesignationsAndAutoCarryOut()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         var entities = pair.Server.EntMan;
@@ -286,22 +286,20 @@ public sealed class CMUCasSupportTest
             var weapons = entities.System<SharedDropshipWeaponSystem>();
             var rto = Mob(0, "GOVFOR");
             Mob(1, "GOVFOR");
-            var hostile = Mob(30, "OPFOR");
+            Mob(30, "OPFOR");
             Mob(55, "OPFOR");
 
-            Assert.That(requests.TryCreateRadioMarkRequest(rto, CMUCasMunition.Gau, CMUCasEffect.Incendiary, "  bunker  ", out id),
-                Is.True, "The uplink calls CAS onto the nearest hostile without a flare.");
+            var calledMark = entities.SpawnEntity(null, At(30));
+            weapons.MakeDropshipTarget(calledMark, "TST", "GOVFOR");
+            Assert.That(requests.TryCreateRequest(rto, calledMark, CMUCasMunition.Gau, out id,
+                    CMUCasEffect.Incendiary, "  bunker  "),
+                Is.True, "The uplink can request CAS onto an existing marked target.");
             Assert.That(requests.TryGetRequest(id, out var request), Is.True);
-            Assert.That(request.RadioMark, Is.True);
+            Assert.That(request.RadioMark, Is.False);
             Assert.That(request.Munition, Is.EqualTo(CMUCasMunition.Gau));
             Assert.That(request.Effect, Is.EqualTo(CMUCasEffect.Incendiary));
             Assert.That(request.Remarks, Is.EqualTo("bunker"));
-            Assert.That(entities.TryGetEntity(request.Target, out var radioMark), Is.True);
-            var xforms = entities.System<SharedTransformSystem>();
-            Assert.That((xforms.GetMapCoordinates(radioMark!.Value).Position -
-                         xforms.GetMapCoordinates(hostile).Position).Length(), Is.LessThan(0.5f),
-                "The radio mark drops on the nearest hostile, not the friendly or the out-of-range one.");
-            Assert.That(entities.HasComponent<DropshipTargetComponent>(radioMark.Value), Is.True);
+            Assert.That(entities.GetEntity(request.Target), Is.EqualTo(calledMark));
 
             var farMark = entities.SpawnEntity(null, At(55));
             weapons.MakeDropshipTarget(farMark, "FAR", "GOVFOR");

@@ -11,6 +11,8 @@ using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Marines;
 using Content.Shared.CMU14;
 using Content.Shared.CMU14.Guidance;
+using Content.Shared.CMU14.Dropship.Cas;
+using Content.Shared.CMU14.Radio;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
@@ -224,6 +226,51 @@ public sealed class CMUGuidanceTest : GameTest
             SEntMan.EventBus.RaiseLocalEvent(host, new CMUProgramGpsMessage(SEntMan.GetNetEntity(ammo),
                 CMUGuidanceMode.Gps, report.Id) { Actor = user, UiKey = CMUGuidanceUi.Key });
             Assert.That(guidance.TryGetGps(ammo, out _), Is.False, "Expired IDs cannot authorize programming.");
+        });
+    }
+
+    [Test]
+    public async Task RtoGpsRequestsUseValidatedGroundSolutionsWithoutRerolling()
+    {
+        var ground = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            SEntMan.EnsureComponent<RMCPlanetComponent>(ground.MapUid).Offset = new Vector2i(350, -275);
+            var rto = SEntMan.SpawnEntity("CMMobHuman", ground.GridCoords);
+            var marine = SEntMan.EnsureComponent<MarineComponent>(rto);
+            marine.Faction = "govfor";
+            var radio = SEntMan.SpawnEntity("ANPRC117GRadio", ground.GridCoords);
+            SEntMan.EnsureComponent<WearingANPRCComponent>(rto).Radio = radio;
+            var finder = SEntMan.SpawnEntity("RMCRangefinder", ground.GridCoords);
+            var rangefinder = SEntMan.GetComponent<RangefinderComponent>(finder);
+            var transform = Server.System<SharedTransformSystem>();
+#pragma warning disable RA0002 // Arrange a completed ground measurement.
+            rangefinder.LastCoords = transform.ToMapCoordinates(ground.GridCoords);
+#pragma warning restore RA0002
+            var guidance = Server.System<CMUGuidanceSystem>();
+            Assert.That(guidance.RecordGroundReport((finder, rangefinder), rto), Is.True);
+            var report = guidance.GetReports(rto).Single();
+            Assert.That(guidance.TryGetGroundReport(rto, report.Id, out var solution), Is.True);
+            var requests = Server.System<CMUCasRequestSystem>();
+            Assert.That(requests.TryCreateGpsRequest(rto, int.MaxValue, CMUCasMunition.Any,
+                CMUCasEffect.Any, "", out _), Is.False);
+            marine.Faction = "opfor";
+            Assert.That(requests.TryCreateGpsRequest(rto, report.Id, CMUCasMunition.Any,
+                CMUCasEffect.Any, "", out _), Is.False, "Enemy GPS report IDs cannot create requests.");
+            marine.Faction = "govfor";
+            SEntMan.EventBus.RaiseLocalEvent(radio, new CMUCasCallSendMsg(null, CMUCasMunition.Any,
+                CMUCasEffect.Any, "", gpsReportId: report.Id) { Actor = rto, UiKey = CMUCasCallUi.Key });
+            var request = requests.GetOwnRequests(rto).Single();
+            Assert.That(transform.GetMapCoordinates(SEntMan.GetEntity(request.Target)), Is.EqualTo(solution),
+                "The RTO request must use the same deviated solution as aircraft GPS programming.");
+            Assert.That(requests.TryAbort(rto, request.Id), Is.True);
+            Assert.That(requests.TryCreateGpsRequest(rto, report.Id, CMUCasMunition.Any,
+                CMUCasEffect.Any, "", out var second), Is.True);
+            Assert.That(requests.TryGetRequest(second, out request), Is.True);
+            Assert.That(transform.GetMapCoordinates(SEntMan.GetEntity(request.Target)), Is.EqualTo(solution));
+            SEntMan.DeleteEntity(finder);
+            Assert.That(requests.TryCreateGpsRequest(rto, report.Id, CMUCasMunition.Any,
+                CMUCasEffect.Any, "", out _), Is.False, "Deleted-source reports cannot create new requests.");
         });
     }
 

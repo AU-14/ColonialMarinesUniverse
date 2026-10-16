@@ -1,4 +1,5 @@
 using Robust.Shared.Serialization;
+using Content.Shared.CMU14.Guidance;
 
 namespace Content.Shared.CMU14.Dropship.Cas;
 
@@ -68,7 +69,7 @@ public partial record struct CMUCasRequest(
 {
     public CMUCasEffect Effect { get; init; }
     public string Remarks { get; init; } = string.Empty;
-    /// <summary>The uplink created a radio mark instead of using a flare or laser.</summary>
+    /// <summary>The uplink created a position or GPS report mark instead of using a flare or laser.</summary>
     public bool RadioMark { get; init; }
     /// <summary>The target is under an RTO's laser designation.</summary>
     public bool Designated { get; init; }
@@ -115,24 +116,23 @@ public sealed record CMUCasCallTarget(
 public sealed class CMUCasCallBuiState(
     string callsign,
     List<CMUCasCallTarget> marks,
-    CMUCasCallTarget? nearestHostile,
+    List<CMUGuidanceReport> gpsReports,
     List<CMUCasRequest> requests,
     int range,
     CMUCasCallTarget ownPosition) : BoundUserInterfaceState
 {
     public readonly string Callsign = callsign;
     public readonly List<CMUCasCallTarget> Marks = marks;
-    /// <summary>The nearest hostile with no mark on it, for a call without a flare.</summary>
-    public readonly CMUCasCallTarget? NearestHostile = nearestHostile;
+    public readonly List<CMUGuidanceReport> GpsReports = gpsReports;
     public readonly List<CMUCasRequest> Requests = requests;
     public readonly int Range = range;
     public readonly CMUCasCallTarget OwnPosition = ownPosition;
 }
 
-/// <summary>Sends a request. Own-position calls use offsets; otherwise a null target selects the nearest hostile.</summary>
+/// <summary>Sends a request for a mark, ground GPS report, or offset own-position call.</summary>
 [Serializable, NetSerializable]
 public sealed class CMUCasCallSendMsg(NetEntity? target, CMUCasMunition munition, CMUCasEffect effect, string remarks,
-    bool ownPosition = false, int offsetX = 0, int offsetY = 0)
+    bool ownPosition = false, int offsetX = 0, int offsetY = 0, int? gpsReportId = null)
     : BoundUserInterfaceMessage
 {
     public readonly NetEntity? Target = target;
@@ -142,6 +142,7 @@ public sealed class CMUCasCallSendMsg(NetEntity? target, CMUCasMunition munition
     public readonly bool OwnPosition = ownPosition;
     public readonly int OffsetX = offsetX;
     public readonly int OffsetY = offsetY;
+    public readonly int? GpsReportId = gpsReportId;
 }
 
 [Serializable, NetSerializable]
