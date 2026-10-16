@@ -35,6 +35,11 @@ public sealed class CMURtoRadioTest : GameTest
             var pack = SEntMan.SpawnEntity("ANPRC117GRadio", map.GridCoords);
             SEntMan.EnsureComponent<MarineComponent>(rto).Faction = faction;
             SEntMan.AddComponent<WearingANPRCComponent>(rto).Radio = pack;
+            var requests = Server.System<CMUCasRequestSystem>();
+            Assert.That(requests.TryCreatePositionRequest(rto, 0, 0, CMUCasMunition.Any,
+                CMUCasEffect.Any, "", out var id), Is.True);
+            Assert.That(requests.TryAbort(rto, id), Is.True);
+            var existingRequests = requests.GetRequests(null).ToArray();
             _ = Server.System<PositionRadioProbeSystem>();
             var probe = SEntMan.AddComponent<PositionRadioProbeComponent>(rto);
             var transform = Server.System<SharedTransformSystem>();
@@ -51,7 +56,8 @@ public sealed class CMURtoRadioTest : GameTest
             transform.SetCoordinates(rto, map.GridCoords.Offset(new Vector2(4.8f, -7.9f)));
             Relay();
             Assert.That(probe.Messages.Count, Is.EqualTo(2));
-            Assert.That(Server.System<CMUCasRequestSystem>().GetRequests(faction), Is.Empty);
+            Assert.That(requests.GetRequests(null), Is.EqualTo(existingRequests),
+                "Relaying must neither create requests nor change existing request history.");
             Assert.That(SEntMan.QueryEntities<DropshipTargetComponent>().Count(), Is.EqualTo(marks));
         });
     }
@@ -78,10 +84,12 @@ public sealed class CMURtoRadioTest : GameTest
             radio.Enabled = failure != "off";
             _ = Server.System<PositionRadioProbeSystem>();
             var probe = SEntMan.AddComponent<PositionRadioProbeComponent>(rto);
+            var requests = Server.System<CMUCasRequestSystem>();
+            var existingRequests = requests.GetRequests(null).ToArray();
             SEntMan.EventBus.RaiseLocalEvent(pack, new CMUCasRelayPositionMsg()
                 { Actor = rto, UiKey = CMUCasCallUi.Key });
             Assert.That(probe.Messages, Is.Empty);
-            Assert.That(Server.System<CMUCasRequestSystem>().GetRequests("govfor"), Is.Empty);
+            Assert.That(requests.GetRequests(null), Is.EqualTo(existingRequests));
         });
     }
 
