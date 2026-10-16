@@ -10,6 +10,22 @@ namespace Content.IntegrationTests.CMU14.BugReports;
 [TestFixture]
 public sealed class OctoberSixteenRegressionTest : GameTest
 {
+    [Test]
+    public async Task DefibrillatorsDoNotFitInTheMedicalPouch()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var pouch = SEntMan.SpawnEntity("RMCPouchMedical", MapCoordinates.Nullspace);
+            var defib = SEntMan.SpawnEntity("AU14CMDefibrillator", MapCoordinates.Nullspace);
+            var storage = SEntMan.System<SharedStorageSystem>();
+
+            Assert.That(storage.CanInsert(pouch, defib, out _, ignoreLocation: true), Is.False);
+
+            SEntMan.DeleteEntity(defib);
+            SEntMan.DeleteEntity(pouch);
+        });
+    }
+
     // standing on a coat rack's tile blocked clicks on anything past it, like the light fixture
     [Test]
     public async Task CoatRackDoesNotBlockInteractionsPastIt()
