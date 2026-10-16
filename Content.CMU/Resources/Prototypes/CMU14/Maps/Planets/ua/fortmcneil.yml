@@ -85,7 +85,7 @@
   - "/Maps/CMU14/FortMcNeilMultiZ/FortMcNeilMultiZ1.yml"
   - "/Maps/CMU14/FortMcNeilMultiZ/FortMcNeilMultiZ2.yml"
   minPlayers: 0
-  maxPlayers: 75
+  maxPlayers: 80
   maxRandomOffset: 0
   randomRotation: false
   stations:
