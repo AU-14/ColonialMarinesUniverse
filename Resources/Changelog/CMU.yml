@@ -13516,5 +13516,34 @@
   id: 811
   time: '2026-10-15T13:10:06.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2179
+- author: TheHellFireo
+  changes:
+  - message: Reapers can spend 500 flesh to reanimate a recently dead hive sister
+      with a two-minute ritual and a ten-minute cooldown.
+    type: Add
+  - message: Reaper revival and flesh harvesting now use vascular animations with
+      visible interruption states.
+    type: Tweak
+  - message: Flesh Bloom slowly encloses its target before accelerating into a visible
+      inward poison spray.
+    type: Tweak
+  id: 812
+  time: '2026-10-15T15:40:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2183
+- author: TheHellFireo
+  changes:
+  - message: Queens can summon 15 AI lessers every six minutes and command them to
+      guard a marker or escort a hive member, in both body and eye mode.
+    type: Add
+  id: 813
+  time: '2026-10-15T16:33:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2184
+- author: Vixting
+  changes:
+  - message: Added new simulator UI
+    type: Add
+  id: 814
+  time: '2026-10-15T17:48:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2185
 Name: CMU
 Order: -1
