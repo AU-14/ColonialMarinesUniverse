@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Sentry;
+using Content.Shared._RMC14.Rules;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.Dropship.TacticalLand;
@@ -45,6 +46,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private RMCPlanetSystem _planet = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedSentryTargetingSystem _targeting = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -128,6 +130,10 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                ftl.State is FTLState.Travelling or FTLState.Arriving;
     }
 
+    public bool IsGroundedOnPlanet(EntityUid point) =>
+        IsGrounded(point) && _dropships.TryGetGridDropship(point, out var ship) &&
+        _planet.IsOnPlanet(Transform(ship));
+
     private bool IsSeatedOperator(EntityUid point, EntityUid actor)
     {
         if (!TryComp(actor, out BuckleComponent? buckle) ||
@@ -166,7 +172,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
 
         if (actor == weapon)
             return _net.IsServer && point.Comp.Operator == null && point.Comp.DefensiveFire &&
-                   (IsGrounded(point) || IsFreeFireActive(point.Comp) && IsAirborne(point));
+                   IsFreeFireActive(point.Comp) && (IsGroundedOnPlanet(point) || IsAirborne(point));
 
         if (point.Comp.Operator != actor || !IsSeatedOperator(point, actor))
         {
@@ -558,7 +564,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             }
 
             var freeFire = IsFreeFireActive(chin);
-            if ((!IsGrounded(uid) && !(freeFire && IsAirborne(uid))) ||
+            if ((!IsGroundedOnPlanet(uid) && !(freeFire && IsAirborne(uid))) ||
                 !TryGetWeapon(uid, out var weapon) || !TryComp(weapon, out GunComponent? gun) ||
                 !TryComp(weapon, out GunshipDirectFireWeaponComponent? direct))
                 continue;
@@ -592,8 +598,9 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             {
                 if (IsGrounded(uid))
                     RequestAim(point, weapon, Transform(hostile).Coordinates);
-                // Grounded close defense engages on its own; airborne AI picks still need the gunner's approval.
-                if (selected != null && (IsGrounded(uid) || chin.ApprovedAutomaticTarget == selected))
+                // All AI fire requires activation; airborne picks also need individual approval.
+                if (freeFire && selected != null &&
+                    (IsGroundedOnPlanet(uid) || chin.ApprovedAutomaticTarget == selected))
                 {
                     chin.DefensiveFire = true;
                     try
@@ -633,7 +640,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
     private void UpdateForcedIff(Entity<MohawkChinGunComponent> point, bool freeFire)
     {
         var state = MohawkIffOverride.None;
-        if (freeFire && point.Comp.Operator == null && IsGrounded(point) && point.Comp.IffConfigured)
+        if (freeFire && point.Comp.Operator == null && IsGroundedOnPlanet(point) && point.Comp.IffConfigured)
         {
             if (_timing.CurTime < point.Comp.NextIffEvaluation)
                 return;
@@ -976,7 +983,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             !IsInFlareArea(point, Transform(target).Coordinates))
             return false;
         var muzzle = new MapCoordinates(position + Vector2.Normalize(delta) * direct.MuzzleOffset, origin.MapId);
-        if (point.Comp.VisionMode == MohawkChinGunVisionMode.Thermal)
+        if (point.Comp.VisionMode == MohawkChinGunVisionMode.Thermal && point.Comp.Operator != null)
             return true;
         return _interaction.InRangeUnobstructed(muzzle, location, point.Comp.Range, CollisionGroup.Opaque,
             predicate: blocker => blocker == target || blocker == point.Owner || blocker == weapon ||
@@ -1795,10 +1802,10 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
     public bool IsSafeShot(Entity<MohawkChinGunComponent> point, MapCoordinates muzzle, MapCoordinates target,
         EntityUid weapon)
     {
-        var freeTravel = point.Comp.Operator != null && IsGrounded(point) &&
+        var freeTravel = point.Comp.Operator != null && (IsGrounded(point) &&
             Vector2.DistanceSquared(_transform.ToMapCoordinates(GetMountCoordinates(point)).Position,
                 target.Position) > point.Comp.Range * point.Comp.Range ||
-            point.Comp.VisionMode == MohawkChinGunVisionMode.Thermal;
+            point.Comp.VisionMode == MohawkChinGunVisionMode.Thermal);
         if (!EnsureTrackingFaction(point) || !TryComp(point, out SentryTargetingComponent? targeting) ||
             !freeTravel && !_interaction.InRangeUnobstructed(muzzle, target, MathF.Max(point.Comp.Range, Vector2.Distance(muzzle.Position, target.Position)), CollisionGroup.Opaque,
                 predicate: blocker => blocker == point.Owner || blocker == weapon || HasComp<MobStateComponent>(blocker) ||

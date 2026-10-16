@@ -2,6 +2,7 @@ using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.Fabricator;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.CMU14.Dropship.DirectFire;
 using Content.Shared.Damage;
@@ -32,12 +33,14 @@ public sealed class MohawkDamageRepairTest : GameTest
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
         {
+            SEntMan.EnsureComponent<RMCPlanetComponent>(map.MapUid);
             SEntMan.EnsureComponent<DropshipComponent>(map.Grid);
             var point = SEntMan.SpawnEntity("CMUMohawkM90Point", map.GridCoords);
             var chin = SEntMan.GetComponent<MohawkChinGunComponent>(point);
             var slots = SEntMan.GetComponent<DropshipWeaponPointComponent>(point);
             var weapon = Server.System<SharedContainerSystem>().GetContainer(point, slots.WeaponContainerSlotId).ContainedEntities.Single();
             chin.DefensiveFire = true;
+            chin.FreeFireEnabled = true;
             var system = Server.System<MohawkChinGunSystem>();
             Assert.That(system.CanOperate((point, chin), weapon, weapon, out _), Is.False);
             var actor = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(0, 0.5f)));

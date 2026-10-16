@@ -1,14 +1,17 @@
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.PowerLoader;
+using Content.Shared.DoAfter;
 using Content.Shared.Hands;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Popups;
+using Content.Shared.Shuttles.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Dropship.Weapon;
 
@@ -21,6 +24,8 @@ namespace Content.Shared._RMC14.Dropship.Weapon;
 public sealed class DropshipHandLoadSystem : EntitySystem
 {
     [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly SharedDropshipSystem _dropships = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly INetManager _net = default!;
@@ -32,6 +37,8 @@ public sealed class DropshipHandLoadSystem : EntitySystem
     {
         SubscribeLocalEvent<DropshipWeaponPointComponent, InteractUsingEvent>(OnWeaponPointInteractUsing);
         SubscribeLocalEvent<DropshipUtilityPointComponent, InteractUsingEvent>(OnUtilityPointInteractUsing);
+        SubscribeLocalEvent<DropshipWeaponPointComponent, DropshipHandLoadDoAfterEvent>(OnLoadFinished);
+        SubscribeLocalEvent<DropshipUtilityPointComponent, DropshipHandLoadDoAfterEvent>(OnLoadFinished);
 
         SubscribeLocalEvent<DropshipHandLoadedAmmoComponent, GotEquippedHandEvent>(OnAmmoEquipped);
         SubscribeLocalEvent<DropshipHandLoadedAmmoComponent, GotUnequippedHandEvent>(OnAmmoUnequipped);
@@ -88,39 +95,77 @@ public sealed class DropshipHandLoadSystem : EntitySystem
             return;
 
         if (!HasComp<DropshipHandLoadedAmmoComponent>(args.Used) ||
-            !TryComp(args.Used, out DropshipAmmoComponent? ammo))
+            !HasComp<DropshipAmmoComponent>(args.Used))
         {
             return;
         }
 
-        if (!TryGetInstalledWeapon(point, out var weapon))
+        if (!TryGetInstalledWeapon(point, out _))
             return;
 
         args.Handled = true;
 
-        if (ammo.Weapon.Id != Prototype(weapon)?.ID)
-        {
-            _popup.PopupClient(Loc.GetString("rmc-power-loader-wrong-weapon"), point, args.User, PopupType.SmallCaution);
+        if (!CanLoad(point, args.User, args.Used))
             return;
-        }
-
-        var slot = GetAmmoSlot(point);
-        if (slot == null)
-            return;
-
-        if (slot.ContainedEntity != null)
-        {
-            _popup.PopupClient(Loc.GetString("rmc-dropship-hand-load-occupied", ("weapon", weapon)), point, args.User, PopupType.SmallCaution);
-            return;
-        }
 
         if (_net.IsClient)
             return;
 
-        _container.Insert(args.Used, slot);
+        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, TimeSpan.FromSeconds(3),
+            new DropshipHandLoadDoAfterEvent(), point, point, args.Used)
+        {
+            BreakOnMove = true,
+            BreakOnDamage = true,
+            NeedHand = true,
+        });
+    }
 
-        if (TryComp(point, out DropshipWeaponPointComponent? weaponPoint))
-            _powerLoader.SyncAppearance((point, weaponPoint));
+    private bool CanLoad(EntityUid point, EntityUid user, EntityUid used)
+    {
+        if (!TryComp(used, out DropshipAmmoComponent? ammo) || !TryGetInstalledWeapon(point, out var weapon))
+            return false;
+
+        if (_dropships.TryGetGridDropship(point, out var ship) &&
+            (_dropships.IsInFlight((ship.Owner, ship.Comp)) || ship.Comp.State == FTLState.Starting))
+        {
+            _popup.PopupClient(Loc.GetString("cmu-dropship-hand-load-flight"), point, user, PopupType.SmallCaution);
+            return false;
+        }
+
+        if (ammo.Weapon.Id != Prototype(weapon)?.ID)
+        {
+            _popup.PopupClient(Loc.GetString("rmc-power-loader-wrong-weapon"), point, user, PopupType.SmallCaution);
+            return false;
+        }
+
+        var slot = GetAmmoSlot(point);
+        if (slot == null)
+            return false;
+
+        if (slot.ContainedEntity != null)
+        {
+            _popup.PopupClient(Loc.GetString("rmc-dropship-hand-load-occupied", ("weapon", weapon)), point, user, PopupType.SmallCaution);
+            return false;
+        }
+
+        return true;
+    }
+
+    private void OnLoadFinished<T>(Entity<T> ent, ref DropshipHandLoadDoAfterEvent args) where T : IComponent
+    {
+        if (_net.IsClient || args.Cancelled || args.Handled || args.Used is not { } used ||
+            !CanLoad(ent, args.User, used) || GetAmmoSlot(ent) is not { } slot)
+            return;
+
+        args.Handled = true;
+        if (!_container.Insert(used, slot))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-dropship-hand-load-failed"), ent, args.User, PopupType.SmallCaution);
+            return;
+        }
+
+        if (TryComp(ent, out DropshipWeaponPointComponent? weaponPoint))
+            _powerLoader.SyncAppearance((ent, weaponPoint));
     }
 
     /// <summary>
@@ -196,3 +241,6 @@ public sealed class DropshipHandLoadSystem : EntitySystem
         return _container.EnsureContainer<ContainerSlot>(point, ammoSlotId);
     }
 }
+
+[Serializable, NetSerializable]
+public sealed partial class DropshipHandLoadDoAfterEvent : SimpleDoAfterEvent;

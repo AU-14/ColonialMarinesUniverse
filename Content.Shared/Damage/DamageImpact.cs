@@ -54,7 +54,9 @@ public enum DamageImpactContext : byte
 {
     None = 0,
     PointBlank = 1 << 0,
+    // CMU14 Begin
     NonGibbing = 1 << 1,
+    // CMU14 End
 }
 
 public readonly record struct DamageImpact(

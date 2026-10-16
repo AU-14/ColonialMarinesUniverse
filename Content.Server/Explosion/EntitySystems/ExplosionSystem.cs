@@ -236,7 +236,9 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
     /// </summary>
     public float IntensityToRadius(float totalIntensity, float slope, float maxIntensity)
     {
+        // CMU14 Begin
         return CalculateBlastRadius(totalIntensity, slope, maxIntensity);
+        // CMU14 End
     }
 
     /// <inheritdoc />
@@ -307,16 +309,21 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
         if (addLog) // dont log if already created a separate, more detailed, log.
             _adminLogger.Add(LogType.Explosion, LogImpact.High, $"Explosion ({typeId}) spawned at {epicenter:coordinates} with intensity {totalIntensity} slope {slope}");
 
+        // CMU14 Begin
         var nonGibbing = HasComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(cause) ||
                         EntityManager.System<Content.Shared.Gibbing.GibbingSystem>().GibbingSuppressed;
+        // CMU14 End
         // try to combine explosions on the same tile if they are the same type
         foreach (var queued in _queuedExplosions)
         {
             // ignore different types or those on different maps
-            if (queued.Proto.ID != type.ID || queued.Epicenter.MapId != epicenter.MapId ||
-                queued.NonGibbing != nonGibbing)
+            if (queued.Proto.ID != type.ID || queued.Epicenter.MapId != epicenter.MapId)
                 continue;
 
+            // CMU14 Begin
+            if (queued.NonGibbing != nonGibbing)
+                continue;
+            // CMU14 End
             var dst2 = queued.Proto.MaxCombineDistance * queued.Proto.MaxCombineDistance;
             var direction = queued.Epicenter.Position - epicenter.Position;
             if (direction.LengthSquared() > dst2)
@@ -337,7 +344,9 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             MaxTileBreak = maxTileBreak,
             CanCreateVacuum = canCreateVacuum,
             Cause = cause,
+            // CMU14 Begin
             NonGibbing = nonGibbing,
+            // CMU14 End
         };
         _explosionQueue.Enqueue(boom);
         _queuedExplosions.Add(boom);
@@ -429,7 +438,9 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             EntityManager,
             visualEnt,
             queued.Cause,
+            // CMU14 Begin
             queued.NonGibbing,
+            // CMU14 End
             _map,
             _damageableSystem,
             _tileHistoryQuery);
