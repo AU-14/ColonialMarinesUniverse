@@ -14,7 +14,7 @@
 # An airtight heavy hull that has no visual or physical obstruction.
 - type: entity
   parent: CMWallReinforcedHeavyAlmayer
-  id: CMUSpaceAirtightSeal
+  id: CMUAirtightSealSpace
   suffix: CMU, Space
   components:
   - type: RemoveComponents
