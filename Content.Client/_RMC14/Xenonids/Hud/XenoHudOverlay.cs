@@ -37,6 +37,7 @@ using Content.Shared._RMC14.Synth;
 using Content.Shared.FixedPoint;
 using BiomorphComponent = Content.Shared.CMU14.Threats.Mobs.Biomorph.BiomorphComponent; // CMU14
 using BiomorphMimicTransformedComponent = Content.Shared.CMU14.Threats.Mobs.Biomorph.BiomorphMimicTransformedComponent; // CMU14
+using YautjaHudViewerComponent = Content.Shared.CMU14.Yautja.YautjaHudViewerComponent; // CMU14
 
 namespace Content.Client._RMC14.Xenonids.Hud;
 
@@ -151,10 +152,11 @@ public sealed partial class XenoHudOverlay : Overlay
         var isBiomorph = _entity.HasComponent<BiomorphComponent>(_players.LocalEntity) || // CMU14
                          _entity.HasComponent<BiomorphMimicTransformedComponent>(_players.LocalEntity); // CMU14
         var isGhost = false;
+        var isHunter = _entity.HasComponent<YautjaHudViewerComponent>(_players.LocalEntity); // CMU14: clan masks carry the xeno status HUD
 
         if (!_entity.HasComponent<CMGhostXenoHudComponent>(_players.LocalEntity))
         {
-            if (!isXeno && !isAdminGhost && !isBiomorph) // CMU14
+            if (!isXeno && !isAdminGhost && !isBiomorph && !isHunter) // CMU14
                 return;
         }
         else
@@ -186,6 +188,10 @@ public sealed partial class XenoHudOverlay : Overlay
             DrawSlow(in args, scaleMatrix, rotationMatrix);
             DrawStun(in args, scaleMatrix, rotationMatrix);
         }
+        else if (isHunter) // CMU14
+        {
+            DrawBars(in args, scaleMatrix, rotationMatrix, skipInvisible: true); // CMU14: no bars giving away a cloaked lurker
+        }
 
         if (isXeno || isAdminGhost)
             DrawInfectedIcon(in args, scaleMatrix, rotationMatrix);
@@ -197,7 +203,7 @@ public sealed partial class XenoHudOverlay : Overlay
         handle.SetTransform(Matrix3x2.Identity);
     }
 
-    private void DrawBars(in OverlayDrawArgs args, Matrix3x2 scaleMatrix, Matrix3x2 rotationMatrix)
+    private void DrawBars(in OverlayDrawArgs args, Matrix3x2 scaleMatrix, Matrix3x2 rotationMatrix, bool skipInvisible = false) // CMU14
     {
         var handle = args.WorldHandle;
         var xenos = _entity.AllEntityQueryEnumerator<XenoComponent, SpriteComponent, TransformComponent>();
@@ -207,6 +213,9 @@ public sealed partial class XenoHudOverlay : Overlay
                 continue;
 
             if (_container.IsEntityOrParentInContainer(uid, xform: xform))
+                continue;
+
+            if (skipInvisible && _invisQuery.HasComp(uid)) // CMU14
                 continue;
 
             var bounds = _sprite.GetLocalBounds((uid, sprite));
