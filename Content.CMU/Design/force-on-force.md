@@ -39,8 +39,13 @@ spots cannot be detected, selected, tracked, or used for release.
 The fighter's onboard designators can be programmed separately from its receiver.
 
 Loaded guided missiles and JDAMs can select laser or GPS guidance independently.
-For GPS, select the ground map and enter the raw X/Y shown by a handheld GPS,
-then program the round. GPS release requires no flare or laser lock and ignores
+For GPS, a ground observer must complete a measurement in rangefinder mode.
+Aircraft select that faction's ground report instead of entering arbitrary X/Y.
+Reports use the same round-randomized planet coordinate offset as the rangefinder
+and orbital cannon, expire after five minutes, and include a fixed random error
+of up to 15 tiles on each axis. Reprogramming the same report does not reroll it.
+Automatic ground reports cannot originate inside a dropship or in a shipside hangar.
+GPS release requires no continuing flare or laser lock and ignores
 the console's selected mark and manual offsets, while retaining normal flight,
 range, protected-area, clearance, and danger-close checks.
 The GPS-only **PGU-44/G 105mm HE shell** costs **1400** (twice standard HE)

@@ -48,38 +48,31 @@ public sealed class CMUGuidanceBui(EntityUid owner, Enum key) : BoundUserInterfa
             mode.SelectId((int) ammo.Mode);
             mode.OnItemSelected += args => mode.SelectId(args.Id);
             _body.AddChild(mode);
-            var maps = new OptionButton { HorizontalExpand = true };
-            foreach (var map in settings.Maps)
-                maps.AddItem(map.Name);
-            var selectedMap = settings.Maps.FindIndex(map => map.Id == ammo.Map);
-            if (settings.Maps.Count > 0)
-                maps.Select(selectedMap >= 0 ? selectedMap : 0);
-            maps.OnItemSelected += args => maps.SelectId(args.Id);
-            _body.AddChild(maps);
-            var x = Coordinate(ammo.X);
-            var y = Coordinate(ammo.Y);
+            var reports = new OptionButton { HorizontalExpand = true, Disabled = settings.Reports.Count == 0 };
+            foreach (var report in settings.Reports)
+                reports.AddItem(Loc.GetString("cmu-guidance-ground-report",
+                    ("observer", report.Observer), ("map", report.Map), ("x", report.X), ("y", report.Y)));
+            if (settings.Reports.Count > 0)
+                reports.Select(0);
+            else
+                reports.AddItem(Loc.GetString("cmu-guidance-no-ground-reports"));
+            reports.OnItemSelected += args => reports.SelectId(args.Id);
+            _body.AddChild(reports);
+            if (ammo.Map != null)
+                _body.AddChild(new Label
+                {
+                    Text = Loc.GetString("cmu-guidance-gps-examine", ("x", ammo.X), ("y", ammo.Y)),
+                });
             var row = new BoxContainer();
-            row.AddChild(new Label { Text = "X " });
-            row.AddChild(x);
-            row.AddChild(new Label { Text = " Y " });
-            row.AddChild(y);
             var apply = new Button { Text = Loc.GetString("cmu-guidance-program") };
             apply.OnPressed += _ =>
             {
-                var map = settings.Maps.ElementAtOrDefault(maps.SelectedId)?.Id;
-                SendMessage(new CMUProgramGpsMessage(ammo.Id, (CMUGuidanceMode) mode.SelectedId, map, x.Value, y.Value));
+                var report = settings.Reports.ElementAtOrDefault(reports.SelectedId);
+                SendMessage(new CMUProgramGpsMessage(ammo.Id, (CMUGuidanceMode) mode.SelectedId, report?.Id));
             };
             row.AddChild(apply);
             _body.AddChild(row);
         }
-    }
-
-    private static SpinBox Coordinate(int value)
-    {
-        var spin = new SpinBox { HorizontalExpand = true, IsValid = input => input is >= -1000000 and <= 1000000 };
-        spin.OverrideValue(value);
-        spin.InitDefaultButtons();
-        return spin;
     }
 
     private void AddCode(string label, string code, bool designator)
