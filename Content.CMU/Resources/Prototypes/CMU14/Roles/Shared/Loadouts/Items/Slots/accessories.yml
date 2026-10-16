@@ -1,47 +1,39 @@
 - type: loadout
   id: WebbingSurgicalBlueAU14
-  cost: 10
   inhand:
   - CMWebbingSurgicalBlue
 
 - type: loadout
   id: WebbingSurgicalGreenCMU14
-  cost: 10
   inhand:
   - CMWebbingSurgicalGreen
 
 - type: loadout
   id: DropSurgicalGreenCMU14
-  cost: 10
   inhand:
   - CMU14DropSurgicalGreen
 
 - type: loadout
   id: DropSurgicalBlueCMU14
-  cost: 10
   inhand:
   - CMU14DropSurgicalBlue
 
 - type: loadout
   id: DropSurgicalBlackCMU14
-  cost: 10
   inhand:
   - CMU14DropSurgicalBlack
 
 - type: loadout
   id: ToolWebbingFilledAU14
-  cost: 10
   inhand:
   - RMCToolWebbingFilled
 
 - type: loadout
   id: WebbingBlackAU14
-  cost: 2
   inhand:
   - CMWebbingBlack
 
 - type: loadout
   id: WebbingBrownAU14
-  cost: 2
   inhand:
   - CMWebbingBrown

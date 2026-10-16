@@ -124,7 +124,6 @@
 
 - type: loadout
   id: WebbingDropPouchAU14
-  cost: 2
   storage:
     back:
     - RMCWebbingDropPouch
