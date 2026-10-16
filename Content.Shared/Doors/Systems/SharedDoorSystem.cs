@@ -732,10 +732,12 @@ public abstract partial class SharedDoorSystem : EntitySystem
         if (TryComp<AirlockComponent>(uid, out var airlock) && airlock.EmergencyAccess)
             return true;
 
-        // Anyone can click to open firelocks
+        // CMU14 Begin: keep unrestricted firelocks manually openable while honoring access-controlled variants.
         if (Resolve(uid, ref door) && door.State == DoorState.Closed &&
-            TryComp<FirelockComponent>(uid, out var firelock))
+            TryComp<FirelockComponent>(uid, out var firelock) &&
+            (!Resolve(uid, ref access, false) || access?.AccessLists.Count == 0))
             return true;
+        // CMU14 End
 
         if (!Resolve(uid, ref access, false))
             return true;

@@ -4,7 +4,6 @@
   id: SharedPlanetPool
   planets:
   - AUPlanetShepherdsPride
-  - CMUPlanetLament # Barkers
   - CMUPlanetHopesRetreat
   - CMUPlanetStableGarrisonRedux
 
