@@ -107,19 +107,28 @@ research-data-ui-print = [color=#ffbf00][bold]Print[/bold][/color]
 
 ui-chem-simulator-window-name = Chemical Simulator
 
-research-sim-ui-credits = [bold]RESEARCH CREDITS: {$NUM}[/bold]
+research-sim-already-inserted = A report is already inserted.
+research-sim-refused = The simulator rejects the report: it has no chemical data.
+research-sim-refuses = {CAPITALIZE(THE($SCANNER))} refuses {THE($PAPER)}.
+
+research-sim-ui-header-status = Simulator status
+research-sim-ui-header-mode = Mode
+research-sim-ui-header-actions = Actions
+research-sim-ui-header-target = Target
+research-sim-ui-header-reference = Reference
+research-sim-ui-header-pick-recipe = Pick a recipe
+
+research-sim-ui-credits = RESEARCH CREDITS: {$NUM}
+research-sim-ui-status-not-ready = NOT READY
 research-sim-ui-cost-null = ESTIMATED SIMULATING COST: NULL
 research-sim-ui-cost = ESTIMATED SIMULATING COST: {$NUM}
-research-sim-ui-target-name = TARGET NAME: {$NAME}
-research-sim-ui-ref-name = REFERENCE NAME: {$NAME}
-research-sim-ui-no-targ-chem = TARGET NAME: CHEMICAL DATA NOT INSERTED
-research-sim-ui-no-ref-chem = REFERENCE NAME: CHEMICAL DATA NOT INSERTED
 research-sim-ui-overdose = OVERDOSE LEVEL AFTER SIMULATION: {$NUM}
-research-sim-ui-no-overdose = OVERDOSE LEVEL AFTER SIMULATION:
+research-sim-ui-no-overdose = OVERDOSE LEVEL AFTER SIMULATION: NULL
 
 research-sim-ui-simulate = SIMULATE
 research-sim-ui-eject-targ = EJECT TARGET
 research-sim-ui-eject-ref = EJECT REFERENCE
+research-sim-ui-finalize = FINALIZE
 research-sim-ui-override = OVERRIDE
 research-sim-ui-override-tooltip = Disable the protection for relating conflicting properties.
 research-sim-ui-amplify = AMPLIFY
@@ -131,11 +140,11 @@ research-sim-ui-relate-tooltip = Use the reference chemical to replace one chose
 research-sim-ui-add = ADD
 research-sim-ui-add-tooltip = Use the property in the reference chemical to add a property to the target chemical, with no downsides to the target chemical, however it damages the chemical structure of reference chemical, Making any other modification impossible.
 
-research-sim-ui-no-data = [color=black][bold]No data inserted![/bold][/color]
+research-sim-ui-no-data = No data inserted!
 
 research-sim-ui-target-data = [head=3]Target Data[/head]
 research-sim-ui-reference-data = [head=3]Reference Data[/head]
-research-sim-ui-price = [bold]Price of the operation: {$COST}[/bold]
+research-sim-ui-price = Price of the operation: {$COST}
 research-sim-ui-sim-cost = ESTIMATED SIMULATING COST: {$NUM}
 research-sim-ui-selected-ref-conflict = Conflicts with the selected reference property.
 research-sim-ui-selected-targ-conflict = Conflicts with the selected target property.
@@ -144,36 +153,36 @@ research-sim-already-inserted = The simulator already has data inserted.
 research-sim-refused = The simulator refuses the empty report.
 research-sim-refuses = {CAPITALIZE(THE($SCANNER))} refuses {THE($PAPER)}.
 
-research-sim-status-ready = [bold]STATUS: READY[/bold]
-research-sim-status-commencing = [bold]STATUS: COMMENCING SIMULATION[/bold]
-research-sim-status-pick-ready = [bold]STATUS: SELECT A RECIPE COMPONENT[/bold]
-research-sim-status-done = [bold]STATUS: SIMULATION COMPLETE[/bold]
-research-sim-status-critfail = [color=red][bold]CRITICAL FAILURE[/bold][/color]
-research-sim-status-no-target = [color=red]ERROR: NO TARGET INSERTED[/color]
-research-sim-status-no-target-picked = [color=red]ERROR: NO TARGET PROPERTY SELECTED[/color]
-research-sim-status-no-reference = [color=red]ERROR: NO REFERENCE INSERTED[/color]
-research-sim-status-no-reference-picked = [color=red]ERROR: NO REFERENCE PROPERTY SELECTED[/color]
-research-sim-status-bad-target-data = [color=red]ERROR: TARGET DATA UNREADABLE[/color]
-research-sim-status-bad-reference-data = [color=red]ERROR: REFERENCE DATA UNREADABLE[/color]
-research-sim-status-incomplete-target = [color=red]ERROR: TARGET DATA INCOMPLETE[/color]
-research-sim-status-incomplete-reference = [color=red]ERROR: REFERENCE DATA INCOMPLETE[/color]
-research-sim-status-target-corrupted = [color=red]ERROR: TARGET DATA CORRUPTED[/color]
-research-sim-status-reference-corrupted = [color=red]ERROR: REFERENCE DATA CORRUPTED[/color]
-research-sim-status-target-destroyed = [color=red]ERROR: TARGET STRUCTURE DESTROYED[/color]
-research-sim-status-reference-destroyed = [color=red]ERROR: REFERENCE STRUCTURE DESTROYED[/color]
-research-sim-status-target-cannot-alter = [color=red]ERROR: TARGET CANNOT BE ALTERED[/color]
-research-sim-status-target-no-complexity = [color=red]ERROR: TARGET NOT COMPLEX ENOUGH[/color]
-research-sim-status-unknown-catalysts = [color=red]ERROR: TARGET HAS UNKNOWN CATALYSTS[/color]
-research-sim-status-unknown-components = [color=red]ERROR: TARGET HAS UNKNOWN COMPONENTS[/color]
-research-sim-status-insufficient-funds = [color=red]ERROR: INSUFFICIENT RESEARCH CREDITS[/color]
-research-sim-status-insufficient-clearance-amplify = [color=red]ERROR: INSUFFICIENT CLEARANCE TO AMPLIFY FURTHER[/color]
-research-sim-status-unable-amplify-further = [color=red]ERROR: PROPERTY CANNOT BE AMPLIFIED FURTHER[/color]
-research-sim-status-unadjustable = [color=red]ERROR: TARGET PROPERTY CANNOT BE ADJUSTED[/color]
-reseach-sim-status-reference-unadjustable = [color=red]ERROR: REFERENCE PROPERTY CANNOT BE ADJUSTED[/color]
-research-sim-status-already-in-target = [color=red]ERROR: PROPERTY ALREADY IN TARGET[/color]
-research-sim-status-inequal = [color=red]ERROR: PROPERTY LEVELS MUST BE EQUAL[/color]
-research-sim-status-conflict-cancel = [color=yellow]WARNING: {$REFERENCE} CONFLICTS WITH {$TARGET} - BOTH WILL CANCEL OUT[/color]
-research-sim-status-conflict-target-survives = [color=yellow]WARNING: {$REFERENCE} CONFLICTS WITH {$TARGET} - {$REFERENCE} WILL NOT BE ADDED, {$TARGET} DROPS TO LEVEL {$LEVEL}[/color]
-research-sim-status-conflict-reference-survives = [color=yellow]WARNING: {$REFERENCE} CONFLICTS WITH {$TARGET} - {$TARGET} WILL BE REMOVED, {$REFERENCE} ADDED AT LEVEL {$LEVEL}[/color]
+research-sim-status-ready = STATUS: READY
+research-sim-status-commencing = STATUS: COMMENCING SIMULATION
+research-sim-status-pick-ready = STATUS: SELECT A RECIPE COMPONENT
+research-sim-status-done = STATUS: SIMULATION COMPLETE
+research-sim-status-critfail = CRITICAL FAILURE
+research-sim-status-no-target = ERROR: NO TARGET INSERTED
+research-sim-status-no-target-picked = ERROR: NO TARGET PROPERTY SELECTED
+research-sim-status-no-reference = ERROR: NO REFERENCE INSERTED
+research-sim-status-no-reference-picked = ERROR: NO REFERENCE PROPERTY SELECTED
+research-sim-status-bad-target-data = ERROR: TARGET DATA UNREADABLE
+research-sim-status-bad-reference-data = ERROR: REFERENCE DATA UNREADABLE
+research-sim-status-incomplete-target = ERROR: TARGET DATA INCOMPLETE
+research-sim-status-incomplete-reference = ERROR: REFERENCE DATA INCOMPLETE
+research-sim-status-target-corrupted = ERROR: TARGET DATA CORRUPTED
+research-sim-status-reference-corrupted = ERROR: REFERENCE DATA CORRUPTED
+research-sim-status-target-destroyed = ERROR: TARGET STRUCTURE DESTROYED
+research-sim-status-reference-destroyed = ERROR: REFERENCE STRUCTURE DESTROYED
+research-sim-status-target-cannot-alter = ERROR: TARGET CANNOT BE ALTERED
+research-sim-status-target-no-complexity = ERROR: TARGET NOT COMPLEX ENOUGH
+research-sim-status-unknown-catalysts = ERROR: TARGET HAS UNKNOWN CATALYSTS
+research-sim-status-unknown-components = ERROR: TARGET HAS UNKNOWN COMPONENTS
+research-sim-status-insufficient-funds = ERROR: INSUFFICIENT RESEARCH CREDITS
+research-sim-status-insufficient-clearance-amplify = ERROR: INSUFFICIENT CLEARANCE TO AMPLIFY FURTHER
+research-sim-status-unable-amplify-further = ERROR: PROPERTY CANNOT BE AMPLIFIED FURTHER
+research-sim-status-unadjustable = ERROR: TARGET PROPERTY CANNOT BE ADJUSTED
+reseach-sim-status-reference-unadjustable = ERROR: REFERENCE PROPERTY CANNOT BE ADJUSTED
+research-sim-status-already-in-target = ERROR: PROPERTY ALREADY IN TARGET
+research-sim-status-inequal = ERROR: PROPERTY LEVELS MUST BE EQUAL
+research-sim-status-conflict-cancel = WARNING: {$REFERENCE} CONFLICTS WITH {$TARGET} - BOTH WILL CANCEL OUT
+research-sim-status-conflict-target-survives = WARNING: {$REFERENCE} CONFLICTS WITH {$TARGET} - {$REFERENCE} WILL NOT BE ADDED, {$TARGET} DROPS TO LEVEL {$LEVEL}
+research-sim-status-conflict-reference-survives = WARNING: {$REFERENCE} CONFLICTS WITH {$TARGET} - {$TARGET} WILL BE REMOVED, {$REFERENCE} ADDED AT LEVEL {$LEVEL}
 
 cmu-research-reduce-cooldown = [color=#ffbf00][head=3]-60s 1CR[/head][/color]

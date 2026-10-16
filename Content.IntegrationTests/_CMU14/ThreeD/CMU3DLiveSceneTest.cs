@@ -1,6 +1,7 @@
 #nullable enable
 using System.Reflection;
 using Content.Client.Administration.Managers;
+using Content.Client.CMU14.ThreeD;
 using Content.Client.CMU14.ThreeD.Scene;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.Administration.Managers;
@@ -49,6 +50,9 @@ public sealed class CMU3DLiveSceneTest : GameTest
         });
         await WaitForDebugFlag(true);
         await Pair.RunUntilSynced();
+        // the chairs reach 20 tiles out, past the 12 tile default view distance
+        var distance = Client.CfgMan.GetCVar(CMU3DViewSettings.Distance);
+        await Client.WaitPost(() => Client.CfgMan.SetCVar(CMU3DViewSettings.Distance, 24f));
         try
         {
             await Client.WaitAssertion(() =>
@@ -74,7 +78,11 @@ public sealed class CMU3DLiveSceneTest : GameTest
         }
         finally
         {
-            await Client.WaitPost(() => Client.System<CMU3DLiveSceneSystem>().Close());
+            await Client.WaitPost(() =>
+            {
+                Client.System<CMU3DLiveSceneSystem>().Close();
+                Client.CfgMan.SetCVar(CMU3DViewSettings.Distance, distance);
+            });
             await Server.WaitPost(() => Server.PlayerMan.SetAttachedEntity(session, original));
         }
     }

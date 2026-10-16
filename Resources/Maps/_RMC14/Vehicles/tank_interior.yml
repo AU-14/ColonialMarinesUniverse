@@ -1,11 +1,11 @@
 meta:
   format: 7
   category: Map
-  engineVersion: v278.0.0
+  engineVersion: v290.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/30/2026 10:00:13
-  entityCount: 41
+  time: 10/15/2026 23:39:03
+  entityCount: 43
 maps:
 - 1
 grids:
@@ -37,13 +37,15 @@ entities:
     - type: GridTree
     - type: Broadphase
     - type: OccluderTree
+    - type: ChunkContainer
+      chunkEntities: []
   - uid: 2
     components:
     - type: MetaData
       name: grid
     - type: Transform
-      pos: -4.5716534,-0.7101771
       parent: 1
+      pos: -4.5716534,-0.7101771
     - type: MapGrid
       chunks:
         0,0:
@@ -64,9 +66,9 @@ entities:
           version: 7
     - type: Broadphase
     - type: Physics
-      bodyStatus: InAir
       fixedRotation: False
       bodyType: Dynamic
+      bodyStatus: InAir
     - type: Fixtures
       fixtures: {}
     - type: OccluderTree
@@ -76,53 +78,43 @@ entities:
     - type: ImplicitRoof
     - type: GridPathfinding
     - type: Gravity
+      inherent: True
       gravityShakeSound: !type:SoundPathSpecifier
         path: /Audio/Effects/alert.ogg
-      inherent: True
       enabled: True
-    - type: DecalGrid
-      chunkCollection:
-        version: 2
-        nodes: []
     - type: MapAtmosphere
       space: False
       mixture:
-        volume: 2500
-        immutable: True
         temperature: 293.15
+        volume: 2500
         moles:
-        - 21.8124
-        - 81.1594
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
+          Oxygen: 21.8124
+          Nitrogen: 81.1594
+        immutable: True
     - type: GridAtmosphere
       version: 2
       data:
         chunkSize: 4
     - type: GasTileOverlay
+    - type: ChunkContainer
+      chunkEntities: []
+    - type: TileHistory
+      chunkHistory: {}
 - proto: AU14VehicleRadioSet
   entities:
-  - uid: 500
+  - uid: 41
     components:
     - type: Transform
-      pos: 1.5,-0.5
       parent: 2
+      pos: 1.5,-1.5
 - proto: RMCRotaryPhoneWallmount
   entities:
   - uid: 28
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 1.3380296,-1.647059
       parent: 2
+      rot: -1.5707963267948966 rad
+      pos: 1.1748338,-1.8827615
     - type: Fixtures
       fixtures: {}
 - proto: RMCSeatTankDriver
@@ -130,141 +122,149 @@ entities:
   - uid: 30
     components:
     - type: Transform
+      parent: 2
       rot: 1.5707963267948966 rad
       pos: 1.4387805,-0.43172377
-      parent: 2
     missingComponents:
     - Corrodible
     - Damageable
+    - Injurable
     - Destructible
 - proto: RMCSeatTankGunner
   entities:
   - uid: 26
     components:
     - type: Transform
+      parent: 2
       rot: 1.5707963267948966 rad
       pos: 0.70269585,-2.3210986
-      parent: 2
     missingComponents:
     - Corrodible
     - Damageable
+    - Injurable
     - Destructible
 - proto: RMCWallInvisibleBulletBlocker
   entities:
   - uid: 32
     components:
     - type: Transform
-      pos: 1.5094132,-3.3260386
       parent: 2
+      pos: 1.5094132,-3.3260386
   - uid: 34
     components:
     - type: Transform
+      parent: 2
       rot: 1.5707963267948966 rad
       pos: 2.0011587,-2.441083
-      parent: 2
   - uid: 35
     components:
     - type: Transform
-      pos: 0.4718294,-3.3309548
       parent: 2
+      pos: 0.4718294,-3.3309548
   - uid: 46
     components:
     - type: Transform
+      parent: 2
       rot: 1.5707963267948966 rad
       pos: 2.5,-0.5
-      parent: 2
 - proto: RMCWallInvisibleBulletLightBlocker
   entities:
   - uid: 33
     components:
     - type: Transform
-      pos: 1.5,-3.5
       parent: 2
+      pos: 1.5,-3.5
   - uid: 36
     components:
     - type: Transform
-      pos: 0.5,-3.5
       parent: 2
+      pos: 0.5,-3.5
   - uid: 37
     components:
     - type: Transform
+      parent: 2
       pos: 2.5,-3.5
-      parent: 2
-- proto: VehicleInteriorExtinguisher
-  entities:
-  - uid: 29
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 0.8297322,0.3712867
-      parent: 2
-    - type: Physics
-      canCollide: False
-    - type: Fixtures
-      fixtures: {}
-- proto: VehicleInteriorNanomed
+- proto: VehicleInteriorCamera
   entities:
   - uid: 27
     components:
     - type: Transform
-      pos: 0.28445482,0.37976068
       parent: 2
+      pos: 1.8984292,0.32734722
+    - type: Fixtures
+      fixtures: {}
+- proto: VehicleInteriorExtinguisher
+  entities:
+  - uid: 42
+    components:
+    - type: Transform
+      parent: 2
+      pos: 0.81461334,0.73714155
+- proto: VehicleInteriorNanomed
+  entities:
+  - uid: 29
+    components:
+    - type: Transform
+      parent: 2
+      pos: 0.3439746,0.48867184
 - proto: VehicleTankAmmoLoader
   entities:
   - uid: 38
     components:
     - type: Transform
-      pos: 1.340075,-1.3274913
       parent: 2
+      pos: 1.340075,-1.3274913
     missingComponents:
+    - Tag
     - InteractionTransparency
 - proto: VehicleTankBack1
   entities:
   - uid: 21
     components:
     - type: Transform
-      pos: -0.5,-2.5
       parent: 2
+      pos: -0.5,-2.5
 - proto: VehicleTankBack2
   entities:
   - uid: 11
     components:
     - type: Transform
-      pos: -0.5,-0.5
       parent: 2
+      pos: -0.5,-0.5
   - uid: 16
     components:
     - type: Transform
-      pos: -0.5,-1.5
       parent: 2
+      pos: -0.5,-1.5
 - proto: VehicleTankBack3
   entities:
   - uid: 20
     components:
     - type: Transform
-      pos: -0.5,0.5
       parent: 2
+      pos: -0.5,0.5
 - proto: VehicleTankExitHatch
   entities:
   - uid: 31
     components:
     - type: Transform
+      parent: 2
       rot: -1.5707963267948966 rad
       pos: 0.4946289,-0.9561468
-      parent: 2
     - type: Fixtures
       fixtures: {}
     - type: PointLight
     missingComponents:
     - Occluder
+    - Tag
     - InteractionTransparency
 - proto: VehicleTankExterior1
   entities:
   - uid: 10
     components:
     - type: Transform
-      pos: 0.5,-2.5
       parent: 2
+      pos: 0.5,-2.5
     - type: Fixtures
       fixtures: {}
 - proto: VehicleTankExterior3
@@ -272,104 +272,113 @@ entities:
   - uid: 24
     components:
     - type: Transform
-      pos: 2.5,-2.5
       parent: 2
+      pos: 2.5,-2.5
 - proto: VehicleTankFront1
   entities:
   - uid: 25
     components:
     - type: Transform
-      pos: 3.5,-2.5
       parent: 2
+      pos: 3.5,-2.5
 - proto: VehicleTankFront2
   entities:
   - uid: 15
     components:
     - type: Transform
-      pos: 3.5,-0.5
       parent: 2
+      pos: 3.5,-0.5
   - uid: 23
     components:
     - type: Transform
-      pos: 3.5,-1.5
       parent: 2
+      pos: 3.5,-1.5
 - proto: VehicleTankFront3
   entities:
   - uid: 22
     components:
     - type: Transform
-      pos: 3.5,0.5
       parent: 2
+      pos: 3.5,0.5
+- proto: VehicleTankLocker
+  entities:
+  - uid: 40
+    components:
+    - type: Transform
+      parent: 2
+      pos: 0.51551104,-0.1308642
+    missingComponents:
+    - Fixtures
 - proto: VehicleTankProp0
   entities:
   - uid: 5
     components:
     - type: Transform
-      pos: 1.5,-2.5
       parent: 2
+      pos: 1.5,-2.5
 - proto: VehicleTankProp2
   entities:
   - uid: 4
     components:
     - type: Transform
-      pos: 1.5,-1.5
       parent: 2
+      pos: 1.5,-1.5
 - proto: VehicleTankProp3
   entities:
   - uid: 13
     components:
     - type: Transform
+      parent: 2
       rot: 1.5707963267948966 rad
       pos: 2.5,-2.5
-      parent: 2
   - uid: 14
     components:
     - type: Transform
+      parent: 2
       rot: 1.5707963267948966 rad
       pos: 2.5,-1.5
-      parent: 2
 - proto: VehicleTankProp4
   entities:
   - uid: 6
     components:
     - type: Transform
-      pos: 1.5,-0.5
       parent: 2
+      pos: 1.5,-0.5
 - proto: VehicleTankProp5
   entities:
   - uid: 8
     components:
     - type: Transform
-      pos: 2.5,-0.5
       parent: 2
+      pos: 2.5,-0.5
 - proto: VehicleTankProp6
   entities:
   - uid: 3
     components:
     - type: Transform
-      pos: 1.5,0.5
       parent: 2
+      pos: 1.5,0.5
 - proto: VehicleTankProp7
   entities:
   - uid: 7
     components:
     - type: Transform
-      pos: 2.5,0.5
       parent: 2
+      pos: 2.5,0.5
 - proto: VehicleTankProp8Extra
   entities:
   - uid: 9
     components:
     - type: Transform
-      pos: 1.5,-0.5
       parent: 2
+      pos: 1.5,-0.5
 - proto: VehicleTankTankRight2
   entities:
   - uid: 12
     components:
     - type: Transform
-      pos: 1.5,-2.5
       parent: 2
+      pos: 1.5,-2.5
     - type: Fixtures
       fixtures: {}
 - proto: VehicleTankWall
@@ -377,28 +386,29 @@ entities:
   - uid: 17
     components:
     - type: Transform
-      pos: 0.5,0.5
       parent: 2
+      pos: 0.5,0.5
   - uid: 18
     components:
     - type: Transform
-      pos: 1.5,0.5
       parent: 2
+      pos: 1.5,0.5
   - uid: 19
     components:
     - type: Transform
-      pos: 2.5,0.5
       parent: 2
+      pos: 2.5,0.5
 - proto: VehicleViewportUnanchored
   entities:
   - uid: 39
     components:
     - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 0.30790615,-0.14253885
       parent: 2
+      rot: 1.5707963267948966 rad
+      pos: 0.3090825,-1.8052175
     - type: Fixtures
       fixtures: {}
     missingComponents:
+    - Tag
     - InteractionTransparency
 ...

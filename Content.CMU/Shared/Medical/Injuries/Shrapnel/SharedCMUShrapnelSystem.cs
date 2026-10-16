@@ -487,7 +487,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
 
         _pain.AddPainPulse(ent.Owner, (FixedPoint2)pulse);
         _pain.OnRecomputeTrigger(ent.Owner);
-        _popup.PopupEntity(Loc.GetString("cmu-medical-shrapnel-movement-pain"), ent.Owner, ent.Owner, PopupType.SmallCaution);
+        // The message is CMUShrapnelMovePainSystem's, once when they set off; one per pulse was spam.
     }
 
     private void OnHumanRemove(Entity<CMUHumanMedicalComponent> ent, ref ComponentRemove args)
@@ -678,7 +678,15 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
             || explosion == "RMC"
             || explosion == "RMCMortar"
             || explosion == "RMCOB"
-            || explosion == "RMCOBXenoTunnel";
+            || explosion == "RMCOBXenoTunnel"
+            || explosion == "CMUATGM"
+            // FLOW-09: copies of RMC that only differ against tanks.
+            || explosion == "CMUAntiVehicleHE"
+            || explosion == "CMUHEAP"
+            || explosion == "CMUIED"
+            || explosion == "CMUCASMunition"
+            || explosion == "CMUPlasticExplosive"
+            || explosion == "CMUMortarHEATMP";
     }
 
     private static float MovementFracturePulse(FractureSeverity severity) => severity switch

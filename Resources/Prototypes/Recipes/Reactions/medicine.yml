@@ -77,6 +77,32 @@
     Doxarubixadone: 2
 
 - type: reaction
+  id: Urishoxadone
+  reactants:
+    Cryoxadone:
+      amount: 3
+    CMUUrishiol:
+      amount: 5
+    Arithrazine:
+      amount: 2
+  products:
+    Urishoxadone: 5
+
+- type: reaction
+  id: Necrosol
+  impact: Medium
+  minTemp: 370
+  reactants:
+    CMUCardiocaine:
+      amount: 3
+    MindbreakerToxin:
+      amount: 1
+    Cryoxadone:
+      amount: 2
+  products:
+    Necrosol: 2
+
+- type: reaction
   id: Epinephrine
   reactants:
     Phenol:
@@ -579,27 +605,14 @@
   id: Opporozidone
   minTemp: 400 #Maybe if a method of reducing reagent temp exists one day, this could be -50
   reactants:
-    Cognizine:
+    MindbreakerToxin:
       amount: 1
-    Plasma:
-      amount: 2
+    RMCPhoron:
+      amount: 1
     Doxarubixadone:
       amount: 1
   products:
     Opporozidone: 3
-
-- type: reaction
-  id: OpporozidoneLivingTissue
-  minTemp: 400
-  reactants:
-    LivingTissue: # Do you want to save the victim from rotting, or check if the dude is a changeling? Hmm...
-      amount: 2
-    Plasma:
-      amount: 2
-    Doxarubixadone:
-      amount: 2
-  products:
-    Opporozidone: 6
 
 - type: reaction
   id: Arcryox

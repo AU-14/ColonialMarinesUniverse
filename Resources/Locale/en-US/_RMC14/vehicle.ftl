@@ -147,6 +147,7 @@ rmc-hardpoint-removal-prying-tool = Hold a crowbar or maintenance jack to remove
 # CMU14
 cmu-vehicle-supply-unassigned = No platoon assigned to this depot.
 cmu-vehicle-supply-allowance = {$platoon} — Vehicles issued: {$used}/{$limit} (maximum one tank and one VTOL)
+cmu-vehicle-supply-no-refund = NOTICE: Vehicle issue is final. Command will not replace or credit back any hull drawn from this depot - returned or lost, it stays on the platoon's books for the rest of the operation.
 cmu-vehicle-supply-preview-title = Vehicle Preview
 cmu-vehicle-supply-stored-vehicles = Stored Vehicles
 cmu-vehicle-supply-loadout = Vehicle Loadout

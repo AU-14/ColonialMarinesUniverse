@@ -59,6 +59,8 @@ public sealed class HealthScannerBuiState(
     public bool HolocardXeno;
     // cmu edit start
     public TimeSpan? CMUTimeUntilUnrevivable;
+    public string? CMUBloodType;
+    public float CMUSalinePercent;
     // cmu edit end
 }
 
@@ -106,6 +108,9 @@ public sealed class HealthScannerAdviceReadout
     public bool ShowBicaridine;
     public bool ShowKelotane;
     public bool ShowDylovene;
+    // cmu edit start
+    public bool CMUShowInternals;
+    // cmu edit end
 }
 
 [Serializable, NetSerializable]

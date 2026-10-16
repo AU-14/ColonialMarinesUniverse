@@ -12,3 +12,4 @@ ui-options-function-cmu-target-body-zone-right-leg = Target right leg/foot
 ui-options-function-cmu-inspect-injuries = Inspect injuries
 ui-options-function-cmu-open-medical-crafting-menu = Open medical crafting menu
 ui-options-function-cmu-toggle-shoot-down-z-level = Toggle shoot down Z-level
+ui-options-cmu-zlevels-look-aim = Shoot where you look across Z-levels (off: use the shoot down hotkey)

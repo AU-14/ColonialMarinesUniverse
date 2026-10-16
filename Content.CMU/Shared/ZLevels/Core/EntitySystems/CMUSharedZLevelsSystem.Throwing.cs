@@ -114,6 +114,8 @@ public abstract partial class CMUSharedZLevelsSystem
             return 1;
         }
 
+        // no AimDown here on purpose. a throw flies to where you threw it and falls if
+        // it lands over a hole, it doesn't dive down the first opening it crosses
         return 0;
     }
 

@@ -10,6 +10,7 @@ using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.OnCollide;
 // CMU14: fire growth and synthetic resistance.
 using Content.Shared._RMC14.Synth;
+using Content.Shared._RMC14.Water; // CMU14
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.Atmos;
@@ -75,6 +76,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private RMCWaterSystem _rmcWater = default!; // CMU14
 
     private static readonly ProtoId<ReagentPrototype> WaterReagent = "Water";
     private static readonly ProtoId<TagPrototype> StructureTag = "Structure";
@@ -150,6 +152,13 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
 
     private void OnTileFireMapInit(Entity<TileFireComponent> ent, ref MapInitEvent args)
     {
+        // CMU14: flames cannot burn on uncovered water.
+        if (_net.IsServer && _rmcWater.IsOnWater(ent))
+        {
+            QueueDel(ent);
+            return;
+        }
+
         ent.Comp.SpawnedAt = _timing.CurTime;
         // CMU14: fire growth and synthetic resistance.
         if (ent.Comp.GrowthDuration > TimeSpan.Zero && TryComp(ent, out RMCIgniteOnCollideComponent? ignition))

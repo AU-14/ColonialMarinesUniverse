@@ -1,0 +1,43 @@
+- type: reagent
+  parent: CMReagentMedicine
+  id: CMUTranexamicAcid
+  name: reagent-name-cmu-tranexamic-acid
+  desc: reagent-desc-cmu-tranexamic-acid
+  flavor: medicine
+  physicalDesc: reagent-physical-desc-viscous
+  color: "#ba7d7d"
+  overdose: 20
+  criticalOverdose: 40
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.1
+      effects:
+      # Stops surface bleeding and holds internal bleeding back for as long as it's in the blood.
+      # The wounds themselves still need treating.
+      - !type:Hemostatic
+        potency: 1
+
+# CMU14: blood plasma. A plasma pack turns it straight into blood volume and slows bleeding for a while.
+- type: reagent
+  id: CMUBloodPlasma
+  name: reagent-name-cmu-blood-plasma
+  desc: reagent-desc-cmu-blood-plasma
+  group: Medicine
+  flavor: metallic
+  physicalDesc: reagent-physical-desc-viscous
+  color: "#e8c46a"
+  metabolisms:
+    Bloodstream:
+      effects:
+      - !type:ModifyBloodLevel
+        amount: 2
+
+# Precursor for tranexamic acid. Does nothing by itself.
+- type: reagent
+  parent: CMReagent
+  id: CMUAminomethylbenzoicAcid
+  name: reagent-name-cmu-aminomethylbenzoic-acid
+  desc: reagent-desc-cmu-aminomethylbenzoic-acid
+  physicalDesc: reagent-physical-desc-powdery
+  flavor: bitter
+  color: "#e3dccb"

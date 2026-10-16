@@ -40,6 +40,7 @@
     - radioGovforCharlie
     - radioGovforCommand
     - radioGovforIntel
+    - radioGovforFoxtrot
     - radioGovforJTAC
     - radioGovforMILP
     defaultChannel: radioGovforCommand
@@ -65,6 +66,17 @@
     channels:
     - radioGovforIntel
     defaultChannel: radioGovforIntel
+
+- type: entity
+  parent: AU14EncryptionKeyGovfor
+  id: AU14EncryptionKeyGovforFoxtrot
+  name: GOVFOR Foxtrot encryption key
+  description: An encryption key used to communicate on the GOVFOR Foxtrot channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioGovforFoxtrot
+    defaultChannel: radioGovforFoxtrot
 
 - type: entity
   parent: AU14EncryptionKeyGovfor
@@ -254,6 +266,7 @@
     - radioGovforCharlie
     - radioGovforCommand
     - radioGovforIntel
+    - radioGovforFoxtrot
     - radioGovforJTAC
     - radioGovforMILP
     defaultChannel: radioGovforIntel

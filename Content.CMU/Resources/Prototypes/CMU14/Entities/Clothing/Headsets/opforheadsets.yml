@@ -40,6 +40,7 @@
     - radioOpforBravo
     - radioOpforCommand
     - radioOpforIntel
+    - radioOpforVictor
     - radioOpforJTAC
     - radioOpforMILP
     defaultChannel: radioOpforCommand
@@ -65,6 +66,17 @@
     channels:
     - radioOpforIntel
     defaultChannel: radioOpforIntel
+
+- type: entity
+  parent: AU14EncryptionKeyOpfor
+  id: AU14EncryptionKeyOpforVictor
+  name: OPFOR Victor encryption key
+  description: An encryption key used to communicate on the OPFOR Victor channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioOpforVictor
+    defaultChannel: radioOpforVictor
 
 - type: entity
   parent: AU14EncryptionKeyOpfor
@@ -253,6 +265,7 @@
     - radioOpforBravo
     - radioOpforCommand
     - radioOpforIntel
+    - radioOpforVictor
     - radioOpforJTAC
     - radioOpforMILP
     defaultChannel: radioOpforIntel
