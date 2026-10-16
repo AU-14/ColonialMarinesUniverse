@@ -3,6 +3,7 @@ using Content.Shared.CMU14.Yautja;
 // CMU14 Devolution Refund Begin: import the CMU-owned refund state
 using Content.Shared.CMU14.Xenonids.Evolution;
 // CMU14 End
+using Content.Shared.CMU14.Xenomorphs.Pathogen; // CMU14: adaptability boon skips pathogen castes
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dropship; // CMU14
 using Content.Shared._RMC14.Roles;
@@ -398,7 +399,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
 
     private void OnBoonAdaptability(HiveBoonActivateAdaptabilityEvent ev)
     {
-        var castes = new List<(EntProtoId Id, int Tier)>();
+        var castes = new List<(EntProtoId Id, int Tier, bool Pathogen)>(); // CMU14: track pathogen family
         foreach (var prototype in _prototypes.EnumeratePrototypes<EntityPrototype>())
         {
             if (!prototype.TryComp(out XenoEvolutionComponent? evolution, _compFactory))
@@ -409,7 +410,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
                 if (_prototypes.TryIndex(id, out var caste) &&
                     caste.TryComp(out XenoComponent? xeno, _compFactory))
                 {
-                    castes.Add((id, xeno.Tier));
+                    castes.Add((id, xeno.Tier, caste.HasComp<CMUPathogenHiveMemberComponent>(_compFactory))); // CMU14: track pathogen family
                 }
             }
         }
@@ -421,9 +422,12 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
                 continue;
 
             var self = Prototype(uid)?.ID;
-            foreach (var (id, tier) in castes)
+            // CMU14: pathogen castes (neomorph, blight...) sit in the same tiers, so a normal hive could swap into them
+            var selfPathogen = HasComp<CMUPathogenHiveMemberComponent>(uid);
+            foreach (var (id, tier, pathogen) in castes) // CMU14: pathogen flag
             {
                 if (tier != xenoComp.Tier ||
+                    pathogen != selfPathogen || // CMU14: stay in your own family
                     id.Id == self ||
                     comp.EvolvesToWithoutPoints.Contains(id))
                 {
