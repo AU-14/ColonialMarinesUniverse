@@ -10,6 +10,7 @@
             <BoxContainer Orientation="Horizontal">
                 <Label StyleClasses="CrtHeading" Text="{Loc 'rmc-dropship-weapons-title'}" Margin="8 4" HorizontalExpand="True" />
                 <Button Name="TurretPanelButton" Access="Public" Text="{Loc 'cmu-mohawk-gunnery-panel-title'}" />
+                <Button Name="RtoPanelButton" Access="Public" Text="{Loc 'cmu-cas-requests-title'}" />
             </BoxContainer>
         </PanelContainer>
         <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
@@ -84,6 +85,13 @@
                 <PanelContainer Margin="0 10 0 0" MouseFilter="Pass" StyleClasses="CrtQuietPanel"
                                 ToolTip="{Loc 'rmc-dropship-weapons-offset-calibration-does-not-affect-direct-bombardment'}">
                     <Label Align="Center" Text="{Loc 'rmc-dropship-weapons-offset-calibration'}" />
+                </PanelContainer>
+                <PanelContainer Name="RtoPanel" Access="Public" Margin="0 10 0 0" StyleClasses="CrtQuietPanel">
+                    <BoxContainer Orientation="Vertical" Margin="4">
+                        <Label Text="{Loc 'cmu-cas-requests-title'}" />
+                        <BoxContainer Name="CasRequestsBox" Access="Public" Orientation="Vertical"
+                                      SeparationOverride="4" />
+                    </BoxContainer>
                 </PanelContainer>
                 <PanelContainer Margin="0 10 0 0" StyleClasses="CrtQuietPanel">
                     <BoxContainer Orientation="Vertical" Margin="4">

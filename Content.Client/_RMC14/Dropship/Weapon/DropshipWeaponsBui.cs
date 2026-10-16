@@ -7,6 +7,7 @@ using Content.Client.Eye;
 using Content.Client.UserInterface.ControlExtensions;
 using Content.Shared._RMC14.Areas;
 using Content.Shared.CMU14.Dropship.DirectFire;
+using Content.Shared.CMU14.Dropship.Cas;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.ElectronicSystem;
 using Content.Shared._RMC14.Dropship.Utility.Components;
@@ -330,6 +331,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 ("heat", terminal.ChinGunHeat), ("max", terminal.ChinGunMaxHeat));
             Window.HeatLabel.FontColorOverride = terminal.ChinGunOverheated ? Color.Red
                 : terminal.ChinGunHeat >= terminal.ChinGunMaxHeat * 0.7f ? Color.Orange : null;
+            RefreshCasRequests(terminal);
             RefreshLoadout(terminal);
             SetScreen(true, terminal.ScreenOne);
             SetScreen(false, terminal.ScreenTwo);
@@ -353,6 +355,108 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             {
                 createScreen.RefreshFireMissions(terminal.FireMissions);
             }
+        }
+    }
+
+    private void RefreshCasRequests(DropshipTerminalWeaponsComponent terminal)
+    {
+        if (Window == null)
+            return;
+
+        var box = Window.CasRequestsBox;
+        box.RemoveAllChildren();
+        if (terminal.CasRequests.Count == 0)
+        {
+            box.AddChild(new Label { Text = Loc.GetString("cmu-cas-requests-none"), FontColorOverride = Color.Gray });
+            return;
+        }
+
+        foreach (var request in terminal.CasRequests)
+        {
+            var id = request.Id;
+            var card = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, Margin = new Thickness(0, 0, 0, 4) };
+            var text = Loc.GetString("cmu-cas-request-card",
+                ("id", id), ("callsign", request.Callsign),
+                ("status", Loc.GetString($"cmu-cas-status-{request.Status.ToString().ToLowerInvariant()}")),
+                ("target", request.TargetName), ("location", request.Location),
+                ("description", request.TargetDescription), ("friendlies", request.Friendlies),
+                ("munition", CMUCasRequestSystem.MunitionName(request.Munition)),
+                ("danger", request.DangerClose ? Loc.GetString("cmu-cas-request-card-danger") : ""));
+            var details = new List<string>();
+            if (request.StatusDetail.Length > 0)
+                details.Add(request.StatusDetail);
+            if (request.Effect != CMUCasEffect.Any)
+                details.Add(Loc.GetString("cmu-cas-request-card-effect", ("effect", CMUCasRequestSystem.EffectName(request.Effect))));
+            if (request.RadioMark)
+                details.Add(Loc.GetString("cmu-cas-request-card-radio-mark"));
+            if (request.Designated)
+                details.Add(Loc.GetString("cmu-cas-request-card-laser"));
+            if (request.Remarks.Length > 0)
+                details.Add(Loc.GetString("cmu-cas-request-card-remarks", ("remarks", request.Remarks)));
+            if (request.Status is CMUCasRequestStatus.Accepted or CMUCasRequestStatus.ClearedHot)
+                details.Add(Loc.GetString($"cmu-cas-carry-{request.CarryMode.ToString().ToLowerInvariant()}",
+                    ("seconds", request.CarryCountdown), ("volleys", request.CarryVolleys)));
+            if (details.Count > 0)
+                text += "\n" + string.Join("\n", details);
+            card.AddChild(new Label
+            {
+                Text = text,
+                MaxWidth = 520,
+                FontColorOverride = request.Status switch
+                {
+                    CMUCasRequestStatus.ClearedHot => Color.Red,
+                    CMUCasRequestStatus.Pending => Color.Yellow,
+                    CMUCasRequestStatus.Denied or CMUCasRequestStatus.Complete => Color.Gray,
+                    _ => request.DangerClose ? Color.Orange : null,
+                },
+            });
+
+            // Stacked, full-width buttons: the console column is too narrow for three labels side by side.
+            var buttons = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, HorizontalExpand = true };
+            void AddAction(string loc, CMUCasRequestStatus status, bool enabled)
+            {
+                var button = new Button
+                {
+                    Text = Loc.GetString(loc),
+                    Disabled = !enabled,
+                    HorizontalExpand = true,
+                    ClipText = true,
+                    MaxWidth = 260,
+                };
+                button.OnPressed += _ => SendMessage(new CMUCasRequestActionMsg(id, status));
+                buttons.AddChild(button);
+            }
+
+            if (request.Status is CMUCasRequestStatus.Accepted or CMUCasRequestStatus.ClearedHot)
+            {
+                var carry = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, HorizontalExpand = true };
+                void AddCarry(string loc, CMUCasCarryMode mode)
+                {
+                    var button = new Button
+                    {
+                        Text = Loc.GetString(loc),
+                        ToggleMode = true,
+                        Pressed = request.CarryMode == mode,
+                        HorizontalExpand = true,
+                        ClipText = true,
+                        StyleClasses = { mode == CMUCasCarryMode.Auto ? "OpenRight" : "OpenLeft" },
+                    };
+                    button.OnPressed += _ => SendMessage(new CMUCasCarryModeMsg(id, mode));
+                    carry.AddChild(button);
+                }
+
+                AddCarry("cmu-cas-carry-auto-button", CMUCasCarryMode.Auto);
+                AddCarry("cmu-cas-carry-manual-button", CMUCasCarryMode.Manual);
+                buttons.AddChild(carry);
+            }
+
+            AddAction("cmu-cas-request-accept", CMUCasRequestStatus.Accepted, request.Status == CMUCasRequestStatus.Pending);
+            AddAction("cmu-cas-request-deny", CMUCasRequestStatus.Denied,
+                request.Status is CMUCasRequestStatus.Pending or CMUCasRequestStatus.Accepted);
+            AddAction("cmu-cas-request-complete", CMUCasRequestStatus.Complete,
+                request.Status is CMUCasRequestStatus.Accepted or CMUCasRequestStatus.ClearedHot);
+            card.AddChild(buttons);
+            box.AddChild(card);
         }
     }
 
