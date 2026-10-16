@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Server.CMU14.Round;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.NPC.Components;
 using Content.Server.NPC.Pathfinding;
@@ -34,6 +35,7 @@ public sealed partial class CMUQueenSwarmSystem : EntitySystem
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private AuRoundSystem _round = default!;
     [Dependency] private NPCSteeringSystem _steering = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -66,6 +68,13 @@ public sealed partial class CMUQueenSwarmSystem : EntitySystem
         controller = default!;
         if (!_mobState.IsAlive(queen) || _hive.GetHive(queen) is not { } current || current.Comp.CurrentQueen != queen)
             return false;
+
+        if (!TryComp<CMUQueenSwarmComponent>(queen, out var swarm) ||
+            !(swarm.Enabled ?? _round.SelectedPreset?.ID == "DistressSignal"))
+        {
+            _popup.PopupCursor(Loc.GetString("cmu-swarm-disabled"), queen);
+            return false;
+        }
 
         hive = current.Owner;
         controller = EnsureComp<CMUSwarmControllerComponent>(hive);

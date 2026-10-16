@@ -7,6 +7,10 @@ namespace Content.Shared.CMU14.Xenomorphs.Swarm;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class CMUQueenSwarmComponent : Component
 {
+    /// <summary>Null follows the round mode (Distress Signal only); admins can override this per queen through VV.</summary>
+    [DataField]
+    public bool? Enabled;
+
     [DataField] public EntProtoId MenuAction = "CMUActionSwarmMenu";
     [DataField] public EntProtoId RulesAction = "CMUActionSwarmRules";
     [DataField] public EntProtoId SummonAction = "CMUActionSummonSwarm";

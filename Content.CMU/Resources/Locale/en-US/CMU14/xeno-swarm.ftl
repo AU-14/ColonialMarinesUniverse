@@ -30,3 +30,4 @@ ent-CMUSwarmLesser = lesser swarm drone
     .desc = A small, expendable drone directed by its queen.
 ent-CMUSwarmGuardMarker = swarm guard marker
     .desc = The queen has ordered her lesser swarm to defend this position.
+cmu-swarm-disabled = Swarm commands are disabled for this queen in this game mode.

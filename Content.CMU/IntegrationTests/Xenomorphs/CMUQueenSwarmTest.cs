@@ -1,6 +1,8 @@
 using System.Numerics;
 using Content.Client.Actions;
 using Content.IntegrationTests.Fixtures;
+using Content.Server.CMU14.Round;
+using Content.Server.GameTicking.Presets;
 using Content.Server.CMU14.Xenomorphs.Swarm;
 using Content.Server.NPC.Components;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -23,6 +25,52 @@ namespace Content.IntegrationTests.CMU14.Xenomorphs;
 public sealed class CMUQueenSwarmTest : GameTest
 {
     private static readonly ProtoId<NpcFactionPrototype> EnemyFaction = "GOVFOR";
+
+    [TestCase("DistressSignal", true)]
+    [TestCase("ColonyFall", false)]
+    public async Task RoundModeRestrictsSummoningUnlessQueenOverridesIt(string preset, bool allowed)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var round = SEntMan.System<AuRoundSystem>();
+            var previous = round.SelectedPreset;
+            try
+            {
+                round.SetPreset(SProtoMan.Index<GamePresetPrototype>(preset));
+                var hives = SEntMan.System<SharedXenoHiveSystem>();
+                var hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
+                var queen = SEntMan.SpawnEntity("CMXenoQueen", map.GridCoords);
+                hives.SetHive(queen, hive);
+                hives.SetHiveQueen(queen, (hive, SEntMan.GetComponent<HiveComponent>(hive)));
+                hives.SetHive(SEntMan.SpawnEntity("HiveCoreXeno", map.GridCoords), hive);
+                var settings = SEntMan.GetComponent<CMUQueenSwarmComponent>(queen);
+                var swarm = SEntMan.EnsureComponent<CMUSwarmControllerComponent>(hive);
+
+                void Summon(bool expected)
+                {
+                    swarm.NextSummon = SGameTiming.CurTime;
+                    var count = swarm.Members.Count;
+                    var action = new CMUSummonSwarmActionEvent { Performer = queen };
+                    SEntMan.EventBus.RaiseLocalEvent(queen, action);
+                    Assert.That(action.Handled, Is.EqualTo(expected));
+                    Assert.That(swarm.Members.Count, Is.EqualTo(count + (expected ? swarm.SpawnCount : 0)));
+                    if (!expected)
+                        Assert.That(swarm.NextSummon, Is.EqualTo(SGameTiming.CurTime), "Disabled summons must not consume cooldown.");
+                }
+
+                Summon(allowed);
+                settings.Enabled = !allowed;
+                Summon(!allowed);
+                settings.Enabled = null;
+                Summon(allowed);
+            }
+            finally
+            {
+                round.SetPreset(previous);
+            }
+        });
+    }
 
     [TestPrototypes]
     private const string Prototypes = """
@@ -48,6 +96,7 @@ public sealed class CMUQueenSwarmTest : GameTest
             var hives = SEntMan.System<SharedXenoHiveSystem>();
             hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
             queen = SEntMan.SpawnEntity("CMXenoQueen", map.GridCoords);
+            SEntMan.GetComponent<CMUQueenSwarmComponent>(queen).Enabled = true;
             netQueen = SEntMan.GetNetEntity(queen);
             hives.SetHive(queen, hive);
             hives.SetHiveQueen(queen, (hive, SEntMan.GetComponent<HiveComponent>(hive)));
@@ -223,6 +272,7 @@ public sealed class CMUQueenSwarmTest : GameTest
             var hiveSystem = SEntMan.System<SharedXenoHiveSystem>();
             var hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
             var queen = SEntMan.SpawnEntity("CMXenoQueen", map.GridCoords);
+            SEntMan.GetComponent<CMUQueenSwarmComponent>(queen).Enabled = true;
             hiveSystem.SetHive(queen, hive);
             hiveSystem.SetHiveQueen(queen, (hive, SEntMan.GetComponent<HiveComponent>(hive)));
             var core = SEntMan.SpawnEntity("HiveCoreXeno", map.GridCoords);
@@ -253,6 +303,7 @@ public sealed class CMUQueenSwarmTest : GameTest
             var hiveSystem = SEntMan.System<SharedXenoHiveSystem>();
             var hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
             var queen = SEntMan.SpawnEntity("CMXenoQueen", map.GridCoords);
+            SEntMan.GetComponent<CMUQueenSwarmComponent>(queen).Enabled = true;
             hiveSystem.SetHive(queen, hive);
             hiveSystem.SetHiveQueen(queen, (hive, SEntMan.GetComponent<HiveComponent>(hive)));
             var missingCore = new CMUSummonSwarmActionEvent { Performer = queen };
@@ -293,6 +344,7 @@ public sealed class CMUQueenSwarmTest : GameTest
             var hives = SEntMan.System<SharedXenoHiveSystem>();
             var hive = SEntMan.SpawnEntity("CMUCorruptedHive", map.GridCoords);
             var queen = SEntMan.SpawnEntity("CMXenoQueen", map.GridCoords);
+            SEntMan.GetComponent<CMUQueenSwarmComponent>(queen).Enabled = true;
             hives.SetHive(queen, hive);
             hives.SetHiveQueen(queen, (hive, SEntMan.GetComponent<HiveComponent>(hive)));
             SEntMan.EventBus.RaiseLocalEvent(queen, new CMUGuardSwarmActionEvent { Performer = queen, Target = map.GridCoords });
@@ -420,6 +472,7 @@ public sealed class CMUQueenSwarmTest : GameTest
             var hiveSystem = SEntMan.System<SharedXenoHiveSystem>();
             var hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
             var queen = SEntMan.SpawnEntity("CMXenoQueen", map.GridCoords);
+            SEntMan.GetComponent<CMUQueenSwarmComponent>(queen).Enabled = true;
             hiveSystem.SetHive(queen, hive);
             hiveSystem.SetHiveQueen(queen, (hive, SEntMan.GetComponent<HiveComponent>(hive)));
             var guard = new CMUGuardSwarmActionEvent { Performer = queen, Target = map.GridCoords };
