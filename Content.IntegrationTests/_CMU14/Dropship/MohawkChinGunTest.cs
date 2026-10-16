@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Sentry;
+using Content.Shared._RMC14.Rules;
 using Content.Shared.Buckle;
 using Content.Shared.CMU14;
 using Content.Shared.CMU14.Dropship.DirectFire;
@@ -66,6 +67,7 @@ public sealed class MohawkChinGunTest
             var entities = pair.Server.EntMan;
             var maps = entities.System<SharedMapSystem>();
             var map = maps.CreateMap(out var mapId);
+            entities.AddComponent<RMCPlanetComponent>(map);
             var grid = maps.CreateGridEntity(mapId);
             var ship = grid.Owner;
             var tiles = pair.Server.ResolveDependency<ITileDefinitionManager>();
@@ -314,8 +316,13 @@ public sealed class MohawkChinGunTest
             Assert.That(turret.SelectTarget((point, chin), chin.CloseDefenseRange), Is.EqualTo(hostile),
                 "The exact boundary threat must remain an eligible AI target.");
             Scan();
+            Assert.That(payload.Rounds, Is.EqualTo(2396),
+                "Unmanned close defense must not fire without activating AI free fire.");
+            chin.FreeFireEnabled = true;
+            Scan();
             Assert.That(payload.Rounds, Is.EqualTo(2395),
-                "Grounded close defense engages without airborne gunner approval.");
+                "Activated planet-side defense engages without airborne gunner approval.");
+            chin.FreeFireEnabled = false;
             transform.SetCoordinates(hostile, new EntityCoordinates(map, 1.5f, 9.01f));
             Scan();
             Assert.That(payload.Rounds, Is.EqualTo(2395), "Targets outside close-defense range require authorization.");
