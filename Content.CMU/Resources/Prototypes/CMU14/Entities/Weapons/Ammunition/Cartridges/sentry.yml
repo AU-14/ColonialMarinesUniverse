@@ -9,7 +9,7 @@
     muzzleFlash: MuzzleFlashEffectVehicleOver
 
 - type: entity
-  parent: CMBulletSentry10x50mm
+  parent: VehicleBulletSentry10x50mm
   id: CMUBulletCupolaTracer
   name: bullet (10x50mm, tracer)
   categories: [ HideSpawnMenu ]
@@ -25,8 +25,3 @@
     color: "#ff4300"
     radius: 2.0
     energy: 7.0
-  - type: RMCProjectileAccuracy
-    accuracy: 115
-    thresholds:
-    - range: 22
-      falloff: 10
