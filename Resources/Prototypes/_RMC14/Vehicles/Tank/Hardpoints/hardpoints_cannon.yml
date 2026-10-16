@@ -367,8 +367,6 @@
       params:
         variation: 0.06
     cameraRecoilScalar: 0
-  - type: GunIFF
-    enabled: true
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 6
     accuracyMultiplierUnwielded: 6
