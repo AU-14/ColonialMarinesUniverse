@@ -11,6 +11,7 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.PowerLoader.Events;
 using Content.Shared.Buckle;
 using Content.Shared.CCVar;
+using Content.Shared.CMU14.Dropship.DirectFire;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
@@ -238,6 +239,7 @@ public sealed class MohawkAttachmentsTest
             if (variant == "midway")
             {
                 var chin = points.Single(p => entities.GetComponent<MetaDataComponent>(p).EntityPrototype?.ID == "CMUMohawkM90Point");
+                entities.EnsureComponent<DropshipFireControlBootComponent>(ship).Complete = true;
                 var weaponPoint = entities.GetComponent<DropshipWeaponPointComponent>(chin);
                 chinGun = containers.GetContainer(chin, weaponPoint.WeaponContainerSlotId).ContainedEntities.Single();
                 chinAmmo = Install(chin, "CMUMohawkM90Ammo");

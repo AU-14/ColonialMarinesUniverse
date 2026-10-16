@@ -1,0 +1,87 @@
+using Content.Server.Administration.Managers;
+using Content.Shared._RMC14.Dropship;
+using Content.Shared._RMC14.Dropship.AttachmentPoint;
+using Content.Shared._RMC14.Dropship.Weapon;
+using Content.Shared.Administration;
+using Content.Shared.Administration.Logs;
+using Content.Shared.CMU14.Dropship.DirectFire;
+using Content.Shared.Database;
+using Content.Shared.Verbs;
+using Robust.Shared.Player;
+
+namespace Content.Server.CMU14.Dropship;
+
+/// <summary>
+/// Right-click verbs for admins servicing dropship fire control.
+/// </summary>
+public sealed class CMUCasVerbSystem : EntitySystem
+{
+    [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private DropshipFireControlBootSystem _boot = default!;
+    [Dependency] private SharedDropshipSystem _dropships = default!;
+    [Dependency] private SharedDropshipWeaponSystem _weapons = default!;
+
+    private static readonly VerbCategory AdminCategory = new("cmu-cas-admin-verb-category", null);
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<GetVerbsEvent<Verb>>(OnGetVerbs);
+    }
+
+    private void OnGetVerbs(GetVerbsEvent<Verb> args)
+    {
+        AddAdminVerbs(args);
+    }
+
+    private void AddAdminVerbs(GetVerbsEvent<Verb> args)
+    {
+        if (!TryComp(args.User, out ActorComponent? actor) ||
+            !_admin.HasAdminFlag(actor.PlayerSession, AdminFlags.Admin))
+            return;
+
+        var user = args.User;
+        var target = args.Target;
+        if (HasComp<DropshipWeaponPointComponent>(target) || HasComp<DropshipUtilityPointComponent>(target))
+        {
+            AddAdmin(args, "cmu-cas-admin-clear-fault", () => _boot.ClearFault(target), "cleared the fault and wear on");
+            AddAdmin(args, "cmu-cas-admin-force-fault", () => _boot.ForceFault(target), "forced a fault on");
+            AddAdmin(args, "cmu-cas-admin-refill", () => _weapons.AdminRefillAmmo(target), "refilled ammunition on");
+        }
+
+        if (HasComp<DropshipTerminalWeaponsComponent>(target) && _dropships.TryGetGridDropship(target, out var ship))
+        {
+            var shipUid = ship.Owner;
+            AddAdmin(args, "cmu-cas-admin-skip-boot", () => _boot.SkipBoot(shipUid), "skipped the fire-control boot of");
+            AddAdmin(args, "cmu-cas-admin-landing-reboot", () => _boot.ForceLandingReboot(shipUid, false),
+                "forced a landing reboot on");
+            AddAdmin(args, "cmu-cas-admin-refill-all", () =>
+            {
+                foreach (var point in ship.Comp.AttachmentPoints)
+                    _weapons.AdminRefillAmmo(point);
+            }, "refilled every hardpoint on");
+            AddAdmin(args, "cmu-cas-admin-clear-all", () =>
+            {
+                foreach (var point in ship.Comp.AttachmentPoints)
+                    _boot.ClearFault(point);
+                _boot.SkipBoot(shipUid);
+            }, "cleared every fault on");
+        }
+
+        void AddAdmin(GetVerbsEvent<Verb> verbs, string loc, Action act, string logText)
+        {
+            verbs.Verbs.Add(new Verb
+            {
+                Text = Loc.GetString(loc),
+                Category = AdminCategory,
+                Impact = LogImpact.Medium,
+                Act = () =>
+                {
+                    act();
+                    _adminLog.Add(LogType.RMCDropshipWeapon, LogImpact.Medium,
+                        $"{ToPrettyString(user)} {logText} {ToPrettyString(target)} via admin verb");
+                },
+            });
+        }
+    }
+}

@@ -12,4 +12,19 @@ public sealed partial class DropshipUtilityPointComponent : Component
 
     [DataField, AutoNetworkedField]
     public string DeployableContainerSlotId = "rmc_orbital_deployer_deployable_container_slot";
+
+    /// <summary>
+    ///     Ammo container for weapons (e.g. the 40mm BOFORS and 105mm howitzer)
+    ///     mounted on this crew compartment attach point.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public string AmmoContainerSlotId = "rmc_dropship_utility_point_ammo_container_slot";
+
+    /// <summary>
+    ///     AU-14: optional weapon-point location for weapons mounted on this crew
+    ///     compartment point, so they can be fired from the pilot weapons console
+    ///     and used in fire missions. Leave null for pure utility mounts.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public DropshipWeaponPointLocation? Location;
 }

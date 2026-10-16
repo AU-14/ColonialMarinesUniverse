@@ -224,7 +224,7 @@ public sealed partial class SharedBodySystem : EntitySystem
         Angle splatCone = default,
         SoundSpecifier? gibSoundOverride = null)
     {
-        if (!Resolve(bodyId, ref body, false))
+        if (_gibbing.GibbingSuppressed || !Resolve(bodyId, ref body, false))
             return new();
 
         var bodyParts = GetBodyChildren(bodyId, body).Select(part => part.Id).ToArray();

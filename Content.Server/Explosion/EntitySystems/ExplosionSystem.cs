@@ -236,19 +236,7 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
     /// </summary>
     public float IntensityToRadius(float totalIntensity, float slope, float maxIntensity)
     {
-        // max radius to avoid being capped by max-intensity
-        var r0 = maxIntensity / slope;
-
-        // volume at r0
-        var v0 = RadiusToIntensity(r0, slope);
-
-        if (totalIntensity <= v0)
-        {
-            // maxIntensity is a non-issue, can use simple inverse formula
-            return MathF.Cbrt(3 * totalIntensity / (slope * MathF.PI));
-        }
-
-        return r0 * (MathF.Sqrt(12 * totalIntensity / v0 - 3) / 6 + 0.5f);
+        return CalculateBlastRadius(totalIntensity, slope, maxIntensity);
     }
 
     /// <inheritdoc />
@@ -319,11 +307,14 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
         if (addLog) // dont log if already created a separate, more detailed, log.
             _adminLogger.Add(LogType.Explosion, LogImpact.High, $"Explosion ({typeId}) spawned at {epicenter:coordinates} with intensity {totalIntensity} slope {slope}");
 
+        var nonGibbing = HasComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(cause) ||
+                        EntityManager.System<Content.Shared.Gibbing.GibbingSystem>().GibbingSuppressed;
         // try to combine explosions on the same tile if they are the same type
         foreach (var queued in _queuedExplosions)
         {
             // ignore different types or those on different maps
-            if (queued.Proto.ID != type.ID || queued.Epicenter.MapId != epicenter.MapId)
+            if (queued.Proto.ID != type.ID || queued.Epicenter.MapId != epicenter.MapId ||
+                queued.NonGibbing != nonGibbing)
                 continue;
 
             var dst2 = queued.Proto.MaxCombineDistance * queued.Proto.MaxCombineDistance;
@@ -345,7 +336,8 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             TileBreakScale = tileBreakScale,
             MaxTileBreak = maxTileBreak,
             CanCreateVacuum = canCreateVacuum,
-            Cause = cause
+            Cause = cause,
+            NonGibbing = nonGibbing,
         };
         _explosionQueue.Enqueue(boom);
         _queuedExplosions.Add(boom);
@@ -437,6 +429,7 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             EntityManager,
             visualEnt,
             queued.Cause,
+            queued.NonGibbing,
             _map,
             _damageableSystem,
             _tileHistoryQuery);

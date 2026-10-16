@@ -21,3 +21,5 @@ rmc-power-loader-occupied-deployable = You need to unload the ordnance inside fi
 rmc-power-loader-ammo-no-weapon = You need to install a weapon first!
 
 rmc-power-loader-occupied = There's already something installed there!
+
+rmc-dropship-hand-load-occupied = {CAPITALIZE(THE($weapon))} is already loaded! Unload it first!

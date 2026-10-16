@@ -43,4 +43,6 @@ public enum DropshipWeaponPointLocation
     StarboardWing = 2,
     PortFore = 3,
     StarboardFore = 4,
+    /// <summary>CMU14: weapons in internal utility attachment points, used for fire-mission offsets.</summary>
+    Internal = 5,
 }

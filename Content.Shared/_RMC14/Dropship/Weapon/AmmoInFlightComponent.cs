@@ -39,6 +39,15 @@ public sealed partial class AmmoInFlightComponent : Component
     public int ShotsPerVolley;
 
     [DataField, AutoNetworkedField]
+    public int ImpactsPerVolley = 1;
+
+    [DataField, AutoNetworkedField]
+    public DropshipLaserPattern LaserPattern;
+
+    [DataField, AutoNetworkedField]
+    public Angle? PatternRotation;
+
+    [DataField, AutoNetworkedField]
     public int SoundEveryShots = 3;
 
     [DataField, AutoNetworkedField]
