@@ -4,7 +4,6 @@ using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Rangefinder;
 using Content.Shared.CMU14.Fighter;
-using Content.Shared.CMU14.Guidance;
 using Content.Shared.Light.Components;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
@@ -19,7 +18,6 @@ public sealed partial class FighterSystem
     [Dependency] private FighterHardpointSystem _hardpoints = default!;
     [Dependency] private AreaSystem _areas = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
-    [Dependency] private CMUGuidanceSystem _guidance = default!;
 
     private void InitializeWeapons()
     {
@@ -90,7 +88,6 @@ public sealed partial class FighterSystem
         flare = default!;
         if (TerminatingOrDeleted(uid) ||
             !TryComp(uid, out DropshipTargetComponent? target) || !target.IsTargetableByWeapons ||
-            !_guidance.CanDetect(weapons.Owner, uid) ||
             _containers.IsEntityInContainer(uid) || Transform(uid).MapUid != aircraft.TerrainMap ||
             !FighterIFFSystem.Same(weapons.Faction, target.CreatorFaction)) return false;
 
@@ -116,12 +113,6 @@ public sealed partial class FighterSystem
             if (!TerminatingOrDeleted(uid) && TryComp(uid, out FighterHardpointComponent? point))
                 weapons.Loadout.Add(GetWeaponStatus((uid, point)));
         weapons.Targets.Clear();
-        foreach (var pointUid in weapons.Hardpoints)
-        {
-            if (TryComp(pointUid, out FighterHardpointComponent? point) && point.Ammo is { } ammo &&
-                TryGetGpsTarget(ammo, aircraft, weapons, out var gps))
-                weapons.Targets.Add(gps);
-        }
         var targets = EntityQueryEnumerator<DropshipTargetComponent>();
         while (targets.MoveNext(out var uid, out _))
             if (TryGetGroundDesignation(uid, aircraft.Comp, weapons, out var target)) weapons.Targets.Add(target);
@@ -132,27 +123,7 @@ public sealed partial class FighterSystem
         weapons.Targets.Sort((left, right) => string.CompareOrdinal(left.Name, right.Name));
         foreach (var seatUid in new[] { aircraft.Comp.FrontSeat, aircraft.Comp.RearSeat })
         {
-            if (seatUid is not { } uid || !TryComp(uid, out FighterSeatComponent? seat))
-                continue;
-            if (seat.WeaponSlot >= 0 && seat.WeaponSlot < weapons.Hardpoints.Count &&
-                TryComp(weapons.Hardpoints[seat.WeaponSlot], out FighterHardpointComponent? selected) &&
-                selected.Ammo is { } ammo && _guidance.UsesGps(ammo))
-            {
-                var gps = weapons.Targets.FirstOrDefault(t => t.Gps && t.Id == GetNetEntity(ammo));
-                if (seat.Target != gps?.Id)
-                {
-                    CancelLaserLock((uid, seat));
-                    CancelQueuedFire((uid, seat));
-                    seat.Target = gps?.Id;
-                    seat.TargetPosition = gps?.Position;
-                    seat.SensorLock = gps?.Position;
-                }
-            }
-            if (seat.Target is not { } target)
-            {
-                Dirty(uid, seat);
-                continue;
-            }
+            if (seatUid is not { } uid || !TryComp(uid, out FighterSeatComponent? seat) || seat.Target is not { } target) continue;
             var current = weapons.Targets.FirstOrDefault(flare => flare.Id == target);
             if (current == null)
             {
@@ -183,19 +154,6 @@ public sealed partial class FighterSystem
             CancelQueuedFire(seat);
         }
         seat.Comp.WeaponSlot = slot;
-        if (TryComp(weapons.Hardpoints[slot], out FighterHardpointComponent? point) && point.Ammo is { } ammo &&
-            TryGetGpsTarget(ammo, aircraft, weapons, out var gps))
-        {
-            seat.Comp.Target = gps.Id;
-            seat.Comp.TargetPosition = gps.Position;
-            seat.Comp.SensorLock = gps.Position;
-        }
-        else if (seat.Comp.Target is { } previous && TryGetEntity(previous, out var previousUid) &&
-                 previousUid is { } oldAmmo && _guidance.UsesGps(oldAmmo))
-        {
-            seat.Comp.Target = null;
-            seat.Comp.TargetPosition = null;
-        }
         Dirty(seat);
         return true;
     }
@@ -206,12 +164,6 @@ public sealed partial class FighterSystem
     {
         if (!TryGetSeat(user, out var seat, out var aircraft) || !TryComp(aircraft, out FighterWeaponsComponent? weapons) ||
             !TryGetEntity(target, out var uid) || uid == null || !TryGetTarget(uid.Value, aircraft, weapons, out var flare)) return false;
-        if (!_guidance.CanDetect(aircraft, uid.Value))
-            return false;
-        if (flare.Gps && (seat.Comp.WeaponSlot < 0 || seat.Comp.WeaponSlot >= weapons.Hardpoints.Count ||
-            !TryComp(weapons.Hardpoints[seat.Comp.WeaponSlot], out FighterHardpointComponent? selected) ||
-            selected.Ammo != uid.Value))
-            return false;
         // A radio designation can be selected out of range or through cloud; the feed
         // and release remain gated. This lets the pilot plan a pass toward it.
         if (seat.Comp.Target != target)
@@ -235,22 +187,10 @@ public sealed partial class FighterSystem
             seat.Comp.WeaponSlot < 0 || seat.Comp.WeaponSlot >= weapons.Hardpoints.Count ||
             !TryComp(weapons.Hardpoints[seat.Comp.WeaponSlot], out FighterHardpointComponent? point)) return false;
         var mount = new Entity<FighterHardpointComponent>(weapons.Hardpoints[seat.Comp.WeaponSlot], point);
-        if (point.Ammo is { } gpsAmmo && _guidance.UsesGps(gpsAmmo))
-        {
-            if (!TryGetGpsTarget(gpsAmmo, aircraft, weapons, out var gps))
-            {
-                status = FighterFireStatus.NoTarget;
-                return false;
-            }
-            seat.Comp.Target = gps.Id;
-            seat.Comp.TargetPosition = gps.Position;
-        }
         FighterTarget? flare = null;
         EntityUid? target = null;
         if (seat.Comp.Target is { } id && TryGetEntity(id, out target) && target != null &&
-            _guidance.CanDetect(aircraft, target.Value) &&
-            TryGetTarget(target.Value, aircraft, weapons, out var live) &&
-            (!live.Gps || point.Ammo == target)) flare = live;
+            TryGetTarget(target.Value, aircraft, weapons, out var live)) flare = live;
         var weapon = GetWeaponStatus(mount);
         status = FighterWeapons.Status(aircraft.Comp, weapons, seat.Comp, weapon, flare, _timing.CurTime);
         if (status != FighterFireStatus.Ready || target == null || point.Ammo is not { } ammo || !TryComp(ammo, out DropshipAmmoComponent? payload)) return false;
@@ -279,9 +219,7 @@ public sealed partial class FighterSystem
             FighterWeaponKind.Rockets => weapons.RocketTravelTime,
             _ => null,
         };
-        var coordinates = flare is { Gps: true } && _guidance.TryGetGps(ammo, out var gpsCoordinates)
-            ? gpsCoordinates : Transform(target.Value).Coordinates;
-        if (!_payloads.TryFireFighterAmmo((ammo, payload), mount, coordinates, user!.Value,
+        if (!_payloads.TryFireFighterAmmo((ammo, payload), mount, Transform(target.Value).Coordinates, user!.Value,
                 strikeTravelTime, weapon.Kind, aircraft.Comp.Position)) return false;
         var effect = weapon.Kind switch
         {
@@ -301,21 +239,6 @@ public sealed partial class FighterSystem
         });
         Dirty(mount);
         RefreshWeapons(aircraft, weapons);
-        return true;
-    }
-
-    private bool TryGetGpsTarget(EntityUid ammo, Entity<FighterAircraftComponent> aircraft,
-        FighterWeaponsComponent weapons, out FighterTarget target)
-    {
-        target = default!;
-        if (!weapons.Hardpoints.Any(uid => TryComp(uid, out FighterHardpointComponent? point) && point.Ammo == ammo) ||
-            !_guidance.TryGetGps(ammo, out var coordinates) || _transform.GetMap(coordinates) != aircraft.Comp.TerrainMap)
-            return false;
-        var position = _transform.ToMapCoordinates(coordinates).Position;
-        if (!aircraft.Comp.Battlefield.Contains(position))
-            return false;
-        target = new FighterTarget(GetNetEntity(ammo), $"{Loc.GetString("cmu-guidance-gps")}: {Name(ammo)}",
-            position, _areas.CanCAS(coordinates), Gps: true);
         return true;
     }
 }

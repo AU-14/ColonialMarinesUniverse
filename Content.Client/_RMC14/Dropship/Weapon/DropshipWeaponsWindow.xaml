@@ -11,7 +11,6 @@
                 <Label StyleClasses="CrtHeading" Text="{Loc 'rmc-dropship-weapons-title'}" Margin="8 4" HorizontalExpand="True" />
                 <Button Name="TurretPanelButton" Access="Public" Text="{Loc 'cmu-mohawk-gunnery-panel-title'}" />
                 <Button Name="RtoPanelButton" Access="Public" Text="{Loc 'cmu-cas-requests-title'}" />
-                <Button Name="GuidanceButton" Access="Public" Text="{Loc 'cmu-guidance-title'}" /> <!-- CMU14 -->
             </BoxContainer>
         </PanelContainer>
         <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">

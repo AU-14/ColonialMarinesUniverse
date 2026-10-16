@@ -9,7 +9,6 @@ using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Rangefinder;
 using Content.Shared.Buckle;
 using Content.Shared.CMU14.Fighter;
-using Content.Shared.CMU14.Guidance;
 using Content.Shared.Light.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects;
@@ -91,103 +90,6 @@ public sealed class FighterLaserTest : GameTest
         foreach (var payload in SEntMan.QueryEntities<AmmoInFlightComponent>().ToArray()) SEntMan.DeleteEntity(payload.Owner);
         if (!SEntMan.Deleted(_flare)) SEntMan.DeleteEntity(_flare);
         SEntMan.DeleteEntity(Server.Transform(_aircraft).MapUid!.Value);
-    }
-
-    [Test]
-    public async Task CodesFilterDetectionSelectionAndStaleLocks()
-    {
-        await CreateWorld(false);
-        EntityUid marker = default;
-        EntityUid designator = default;
-        await Server.WaitAssertion(() =>
-        {
-            var guidance = Server.System<CMUGuidanceSystem>();
-            Assert.That(guidance.GetCode(_aircraft), Is.EqualTo("1111-1"));
-            designator = SEntMan.SpawnEntity(null, Server.Transform(_flare).Coordinates);
-            marker = SEntMan.SpawnEntity("RMCLaserDesignatorTarget", Server.Transform(_flare).Coordinates);
-#pragma warning disable RA0002
-            SEntMan.GetComponent<LaserDesignatorTargetComponent>(marker).LaserDesignator = designator;
-            var active = SEntMan.AddComponent<ActiveLaserDesignatorComponent>(designator);
-            active.Target = marker;
-            active.Origin = Server.Transform(designator).Coordinates;
-#pragma warning restore RA0002
-            Server.System<SharedDropshipWeaponSystem>().MakeDropshipTarget(marker, "CODED", "govfor");
-            Assert.That(System.TryLockTarget(_user, SEntMan.GetNetEntity(marker)), Is.True);
-            SEntMan.EnsureComponent<CMULaserCodeComponent>(designator).Code = "2222-2";
-            Assert.That(guidance.CanDetect(_aircraft, marker), Is.False);
-            Assert.That(System.TryLockTarget(_user, SEntMan.GetNetEntity(marker)), Is.False);
-            Assert.That(System.TryFire(_user, out _), Is.False);
-            SEntMan.GetComponent<FighterWeaponsComponent>(_aircraft).NextRefresh = TimeSpan.Zero;
-        });
-        await Advance(.25);
-        await Server.WaitAssertion(() =>
-        {
-            Assert.That(_seat.Target, Is.Null);
-            Assert.That(SEntMan.GetComponent<FighterWeaponsComponent>(_aircraft).Targets.Any(t =>
-                t.Id == SEntMan.GetNetEntity(marker)), Is.False);
-            var otherSeat = (_aircraft.Comp.FrontSeat == _seat.Owner
-                ? _aircraft.Comp.RearSeat : _aircraft.Comp.FrontSeat)!.Value;
-            Server.System<CMUGuidanceSystem>().Open(otherSeat, _other);
-            SEntMan.EventBus.RaiseLocalEvent(otherSeat, new CMUSetLaserCodeMessage("2222-2", false)
-                { Actor = _other, UiKey = CMUGuidanceUi.Key });
-            Assert.That(Server.System<CMUGuidanceSystem>().GetCode(_aircraft), Is.EqualTo("2222-2"));
-            Assert.That(System.TryLockTarget(_other, SEntMan.GetNetEntity(marker)), Is.True,
-                "both seats share the aircraft receiver");
-            CleanWorld();
-        });
-    }
-
-    [Test]
-    public async Task GpsProgrammingIsPerLoadedRoundAndNeedsNoDesignation()
-    {
-        await CreateWorld(false);
-        await Server.WaitAssertion(() =>
-        {
-            var guidance = Server.System<CMUGuidanceSystem>();
-            var host = _seat.Owner;
-            guidance.Open(host, _user);
-            var map = _aircraft.Comp.TerrainMap;
-            SEntMan.EventBus.RaiseLocalEvent(host, new CMUProgramGpsMessage(SEntMan.GetNetEntity(_missile),
-                CMUGuidanceMode.Gps, SEntMan.GetNetEntity(map), 0, 0)
-                { Actor = _user, UiKey = CMUGuidanceUi.Key });
-            Assert.That(guidance.TryGetGps(_missile, out var target), Is.True);
-            Assert.That(Server.System<SharedTransformSystem>().ToMapCoordinates(target).Position, Is.EqualTo(Vector2.Zero));
-            Assert.That(Server.System<SharedTransformSystem>().GetMap(target), Is.EqualTo(map));
-            Assert.That(guidance.UsesGps(_secondMissile), Is.False);
-            SEntMan.EventBus.RaiseLocalEvent(host, new CMUProgramGpsMessage(SEntMan.GetNetEntity(_secondMissile),
-                CMUGuidanceMode.Gps, null, 0, 0)
-                { Actor = _user, UiKey = CMUGuidanceUi.Key });
-            Assert.That(guidance.UsesGps(_secondMissile), Is.False, "invalid GPS programming must not change the mode");
-            SEntMan.EventBus.RaiseLocalEvent(host, new CMUProgramGpsMessage(SEntMan.GetNetEntity(_missile),
-                CMUGuidanceMode.Gps, SEntMan.GetNetEntity(map), 100, 100)
-                { Actor = _other, UiKey = CMUGuidanceUi.Key });
-            Assert.That(guidance.TryGetGps(_missile, out target), Is.True);
-            Assert.That(Server.System<SharedTransformSystem>().ToMapCoordinates(target).Position, Is.EqualTo(Vector2.Zero),
-                "the other seat cannot program through this seat's UI host");
-        });
-        await Advance(.25);
-        await Server.WaitAssertion(() =>
-        {
-            Assert.That(_seat.Target, Is.EqualTo(SEntMan.GetNetEntity(_missile)),
-                "programming the selected round must update the cockpit without selecting a flare");
-            Assert.That(System.TrySelectWeapon(_user, 0), Is.True);
-            _aircraft.Comp.GroundState = FighterGroundState.Airborne;
-            _aircraft.Comp.Flying = true;
-            _aircraft.Comp.Phase = FighterPhase.Pass;
-            _aircraft.Comp.Position = Vector2.Zero;
-            Assert.That(System.TrySelectWeapon(_user, 1), Is.True);
-            Assert.That(System.TryLockTarget(_user, SEntMan.GetNetEntity(_missile)), Is.False,
-                "a GPS solution belongs only to its programmed round");
-            Assert.That(System.TryFire(_user, out _), Is.False,
-                "switching to an unprogrammed round must not retain the previous GPS solution");
-            Assert.That(System.TrySelectWeapon(_user, 0), Is.True);
-            SEntMan.DeleteEntity(_flare);
-            Assert.That(System.TryFire(_user, out var status), Is.True, status.ToString());
-            var flight = SEntMan.QueryEntities<AmmoInFlightComponent>().Single();
-            Assert.That(Server.System<SharedTransformSystem>().ToMapCoordinates(flight.Comp.Target).Position,
-                Is.EqualTo(Vector2.Zero));
-            CleanWorld();
-        });
     }
 
     [Test]

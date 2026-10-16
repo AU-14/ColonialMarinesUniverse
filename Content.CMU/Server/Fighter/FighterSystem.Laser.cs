@@ -1,5 +1,4 @@
 using Content.Shared.CMU14.Fighter;
-using Content.Shared.CMU14.Guidance;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -84,9 +83,6 @@ public sealed partial class FighterSystem
         ClearLaser(seat);
         var uid = Spawn("CMUFighterLaser", coordinates);
         var laser = Comp<FighterLaserComponent>(uid);
-        var code = EnsureComp<CMULaserCodeComponent>(uid);
-        code.Code = _guidance.GetCode(seat);
-        Dirty(uid, code);
         laser.Aircraft = aircraft;
         laser.Seat = seat;
         laser.StartedAt = _timing.CurTime;
@@ -106,10 +102,6 @@ public sealed partial class FighterSystem
     {
         target = default!;
         if (TerminatingOrDeleted(uid)) return false;
-        if (_guidance.UsesGps(uid))
-            return TryGetGpsTarget(uid, aircraft, weapons, out target);
-        if (!_guidance.CanDetect(aircraft, uid))
-            return false;
         if (!TryComp(uid, out FighterLaserComponent? laser))
             return TryGetGroundDesignation(uid, aircraft.Comp, weapons, out target);
         if (laser.Aircraft != aircraft.Owner || _timing.CurTime >= laser.ExpiresAt ||
@@ -149,8 +141,7 @@ public sealed partial class FighterSystem
     {
         if (seat.Comp.Laser is { } laser)
         {
-            if (TryComp(laser, out FighterLaserComponent? live) && _timing.CurTime < live.ExpiresAt)
-                OrientLaser(laser, aircraft.Comp);
+            if (TryGetTarget(laser, aircraft, weapons, out _)) OrientLaser(laser, aircraft.Comp);
             else ClearLaser(seat);
         }
         if (seat.Comp.LaserLockTarget is not { } id) return;
