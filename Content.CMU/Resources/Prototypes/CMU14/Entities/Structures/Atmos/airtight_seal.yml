@@ -10,3 +10,24 @@
   - type: Airtight
     fixVacuum: true
     noAirWhenFullyAirBlocked: false
+
+# An airtight heavy hull that has no visual or physical obstruction.
+- type: entity
+  parent: CMWallReinforcedHeavyAlmayer
+  id: CMUSpaceAirtightSeal
+  suffix: CMU, Space
+  components:
+  - !Remove type: Sprite
+  - !Remove type: IconSmooth
+  - !Remove type: Occluder
+  - !Remove type: Physics
+  - !Remove type: Fixtures
+  - !Remove type: IsRoof
+  - !Remove type: SunShadowCast
+  - !Remove type: MinimapColor
+  - !Remove type: RMCDropshipBlocked
+  - !Remove type: PlacementReplacement
+  - !Remove type: Clickable
+  - !Remove type: CMUWallLeanable
+  - type: Airtight
+    noAirWhenFullyAirBlocked: false
