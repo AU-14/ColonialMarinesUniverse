@@ -31,6 +31,21 @@ pack cannot operate its radio, relay, phone or CAS uplink. An RTO or someone wit
 Engineer skill 1 can use five cable on the pack (or its wearer) to repair it,
 then power it back on.
 
+Laser designators default to **1111-1**. Right-click a designator to open
+**Guidance programming** and set its code (four digits, a dash, one digit).
+The dropship weapons console and fighter cockpit have a guidance button.
+Each aircraft shares one receiver code across its weapons; mismatched laser
+spots cannot be detected, selected, tracked, or used for release.
+The fighter's onboard designators can be programmed separately from its receiver.
+
+Loaded guided missiles and JDAMs can select laser or GPS guidance independently.
+For GPS, select the ground map and enter the raw X/Y shown by a handheld GPS,
+then program the round. GPS release requires no flare or laser lock and ignores
+the console's selected mark and manual offsets, while retaining normal flight,
+range, protected-area, clearance, and danger-close checks.
+The GPS-only **PGU-44/G 105mm HE shell** costs **1400** (twice standard HE)
+and has the same explosive payload, with zero target spread.
+
 Dropship part fabricators share a budget within their carrier's faction, including linked decks. GOVFOR and OPFOR have separate accounts for purchases, refunds, passive income and faction tech rewards.
 
 In FoF, squad leaders, acting squad leaders, officers and command personnel can hack an opposing dropship's navigation console. The hack takes 60 seconds and breaks on movement, damage or resting. Existing launch and hijack timing limits apply. Authorization is tied to the user and console and expires after one minute.

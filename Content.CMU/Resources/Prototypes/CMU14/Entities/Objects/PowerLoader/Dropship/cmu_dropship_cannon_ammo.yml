@@ -500,6 +500,22 @@
 # region 105mm Howitzer shells (1 shot each, hand loaded)
 
 - type: entity
+  parent: CMUDropshipAmmoHowitzerHE
+  id: CMUDropshipAmmoHowitzerGPS
+  name: PGU-44/G 105mm GPS-guided High-Explosive shell
+  description: A GPS-guided variant of the PGU-44/B with an identical high-explosive payload. Program its target coordinates from the aircraft's guidance panel before firing.
+  components:
+  - type: DropshipAmmo
+    ammoType: howitzer_105mm_gps
+    targetSpread: 0
+  - type: CMUMunitionGuidance
+    mode: Gps
+    gpsOnly: true
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 1400
+
+- type: entity
   parent: CMUDropshipAmmoHandLoadable
   id: CMUDropshipAmmoHowitzerHE
   name: PGU-44/B 105mm High-Explosive shell
