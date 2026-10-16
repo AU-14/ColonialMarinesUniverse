@@ -21,7 +21,7 @@
     cost: 450
   - type: DropshipWeapon
     abbreviation: BMB
-    fireDelay: 0.5
+    fireDelay: 10
     utilityAmmoAttachedSprite:
       sprite: _RMC14/Objects/dropship_utility_attachments.rsi
       state: bomb_clamp_interior_loaded
@@ -37,6 +37,7 @@
     - CMUJDAMBombClamp
   - type: PowerLoaderAttachable
     attachableTypes:
+    - AU14InteriorWeaponPoint
     - RMCDropshipUtilityPoint
 
 # region JDAM family bombs (loaded into the JDAM Bomb Clamp)
@@ -48,6 +49,7 @@
   components:
   - type: PowerLoaderAttachable
     attachableTypes:
+    - AU14InteriorWeaponPoint
     - RMCDropshipUtilityPoint
 
 - type: entity
