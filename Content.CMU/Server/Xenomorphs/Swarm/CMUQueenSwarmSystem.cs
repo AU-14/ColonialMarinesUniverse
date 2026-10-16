@@ -4,6 +4,7 @@ using Content.Server.NPC.Components;
 using Content.Server.NPC.Pathfinding;
 using Content.Server.NPC.Systems;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Announce;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared._RMC14.Xenonids.Devour;
 using Content.Shared._RMC14.Input;
@@ -171,6 +172,8 @@ public sealed partial class CMUQueenSwarmSystem : EntitySystem
         RemComp<GhostRoleComponent>(ent);
         RemComp<GhostTakeoverAvailableComponent>(ent);
         RemComp<DamageOffWeedsComponent>(ent);
+        // Expendable AI losses must not flood hive chat with player death announcements.
+        RemComp<XenoAnnounceDeathComponent>(ent);
         EnsureComp<ActiveNPCComponent>(ent);
     }
 
@@ -253,15 +256,17 @@ public sealed partial class CMUQueenSwarmSystem : EntitySystem
                 }
 
                 RemComp<NPCMeleeCombatComponent>(member);
-                var angle = i * MathF.Tau / controller.Members.Count;
-                var offset = new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * controller.FormationRadius;
+                // Fill an expanding disk instead of squeezing every summon onto one ring.
+                var angle = i * 2.39996323f;
+                var radius = controller.FormationRadius * MathF.Sqrt((i + 0.5f) / 15f);
+                var offset = new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * radius;
                 var destination = new EntityCoordinates(anchor, offset);
                 // If a formation slot is inside a wall, converge on the anchor instead.
-                if (!_interaction.InRangeUnobstructed(_transform.GetMapCoordinates(anchor), _transform.ToMapCoordinates(destination), controller.FormationRadius + 0.1f))
+                if (!_interaction.InRangeUnobstructed(_transform.GetMapCoordinates(anchor), _transform.ToMapCoordinates(destination), radius + 0.1f))
                     destination = new EntityCoordinates(anchor, Vector2.Zero);
                 var steering = _steering.Register(member, destination);
                 ConfigureSteering(steering);
-                steering.Range = 0.6f;
+                steering.Range = 0.2f;
             }
         }
     }

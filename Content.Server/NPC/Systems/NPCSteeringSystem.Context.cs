@@ -584,11 +584,25 @@ public sealed partial class NPCSteeringSystem
         int mask,
         PhysicsComponent body,
         TransformComponent xform,
+        Span<float> interest, // CMU14: soft spacing for swarm members.
         Span<float> danger)
     {
         var objectRadius = 0.25f;
         var detectionRadius = MathF.Max(0.35f, agentRadius + objectRadius);
         var ourVelocity = body.LinearVelocity;
+        // CMU14: accumulate soft spacing before blending it into the destination seek.
+        var swarmSeparation = Vector2.Zero;
+        var swarmProximity = 0f;
+        var allowSwarmSpacing = TryComp<NPCSteeringComponent>(uid, out var swarmSteering) &&
+            (swarmSteering.Status == SteeringStatus.InRange || swarmSteering.CurrentPath.Count > 0);
+        // In a narrow passage, yield spacing to the route rather than pinning members against walls.
+        foreach (var obstacleDanger in danger)
+        {
+            if (obstacleDanger <= 0.01f)
+                continue;
+            allowSwarmSpacing = false;
+            break;
+        }
         _factionQuery.TryGetComponent(uid, out var ourFaction);
         var ents = _entSetPool.Get();
         _lookup.GetEntitiesInRange(uid, detectionRadius, ents, LookupFlags.Dynamic | LookupFlags.Approximate);
@@ -596,7 +610,10 @@ public sealed partial class NPCSteeringSystem
         foreach (var ent in ents)
         {
             // TODO: If we can access the door or smth.
-            // CMU14: overlapping swarm members must not repel one another.
+            // CMU14: passable bodies do not block paths, but lessers keep soft spacing.
+            if (allowSwarmSpacing && AccumulateSwarmSeparation(uid, ent, worldPos, ref swarmSeparation, ref swarmProximity))
+                continue;
+
             if (IsSwarmPassable(uid, ent))
                 continue;
 
@@ -653,6 +670,8 @@ public sealed partial class NPCSteeringSystem
             }
         }
 
+        // CMU14: static obstacle danger still wins over this soft movement preference.
+        ApplySwarmSeparation(offsetRot, swarmSeparation, swarmProximity, interest);
         _entSetPool.Return(ents);
     }
 

@@ -128,6 +128,45 @@ public sealed class CMUQueenSwarmTest : GameTest
         });
     }
 
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task CoincidentLessersSpreadOutInsteadOfStacking(bool attacking)
+    {
+        var map = await Pair.CreateTestMap();
+        var lessers = new List<EntityUid>();
+        await Server.WaitPost(() =>
+        {
+            var maps = SEntMan.System<SharedMapSystem>();
+            for (var x = -6; x <= 6; x++)
+            for (var y = -6; y <= 6; y++)
+                maps.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, y), map.Tile.Tile);
+            var hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
+            var swarm = SEntMan.AddComponent<CMUSwarmControllerComponent>(hive);
+            swarm.Passive = !attacking;
+            swarm.Anchor = SEntMan.SpawnEntity("CMUSwarmGuardMarker", map.GridCoords);
+            if (attacking)
+            {
+                var enemy = SEntMan.SpawnEntity(null, map.GridCoords);
+                SEntMan.AddComponent<MobStateComponent>(enemy);
+                SEntMan.System<NpcFactionSystem>().AddFaction(enemy, EnemyFaction);
+            }
+            for (var i = 0; i < 30; i++)
+            {
+                var lesser = SEntMan.SpawnEntity("CMUSwarmLesser", map.GridCoords);
+                SEntMan.System<SharedXenoHiveSystem>().SetHive(lesser, hive);
+                swarm.Members.Add(lesser);
+                lessers.Add(lesser);
+            }
+        });
+        await Pair.RunTicksSync(600);
+        await Server.WaitAssertion(() =>
+        {
+            var positions = lessers.Select(uid => SEntMan.GetComponent<TransformComponent>(uid).Coordinates.Position).ToArray();
+            var visibleMembers = positions.Count(pos => positions.Count(other => Vector2.DistanceSquared(pos, other) < 0.09f) == 1);
+            Assert.That(visibleMembers, Is.GreaterThanOrEqualTo(24), "Accumulated summons must spread into individually visible positions.");
+        });
+    }
+
     [TestCase("DoorXenoResin")]
     [TestCase("CMAirlock")]
     public async Task SwarmNavigatesThroughClosedDoor(string prototype)
@@ -135,20 +174,19 @@ public sealed class CMUQueenSwarmTest : GameTest
         var map = await Pair.CreateTestMap();
         var lessers = new List<EntityUid>();
         EntityUid door = default;
-        var destination = map.GridCoords.Offset(new Vector2(6.5f, 0.5f));
+        var destination = map.GridCoords.Offset(new Vector2(7.5f, 0.5f));
         await Server.WaitAssertion(() =>
         {
             var maps = SEntMan.System<SharedMapSystem>();
-            for (var x = -1; x <= 7; x++)
-            for (var y = -1; y <= 1; y++)
+            for (var x = -1; x <= 10; x++)
+            for (var y = -3; y <= 3; y++)
             {
                 maps.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, y), map.Tile.Tile);
-                if (y != 0 || x == -1 || x == 7)
+                if (x <= 4 && y != 0 || x == -1 || x == 10 || y == -3 || y == 3)
                     SEntMan.SpawnEntity("WallSolid", map.GridCoords.Offset(new Vector2(x + 0.5f, y + 0.5f)));
             }
             var hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
             var swarm = SEntMan.AddComponent<CMUSwarmControllerComponent>(hive);
-            swarm.FormationRadius = 0;
             swarm.Anchor = SEntMan.SpawnEntity("CMUSwarmGuardMarker", destination);
             swarm.Marker = swarm.Anchor;
             for (var i = 0; i < swarm.SpawnCount; i++)
@@ -169,8 +207,9 @@ public sealed class CMUQueenSwarmTest : GameTest
             {
                 var position = SEntMan.GetComponent<TransformComponent>(lesser).Coordinates;
                 Assert.That(position.TryDistance(SEntMan, destination, out var distance), Is.True);
-                Assert.That(distance, Is.LessThan(1),
+                Assert.That(position.X, Is.GreaterThan(4.5f),
                     $"Every lesser must cross the closed {prototype}; position: {position}, door: {SEntMan.GetComponent<DoorComponent>(door).State}.");
+                Assert.That(distance, Is.LessThan(3), "The swarm must reach its formation in the room beyond the corridor.");
             }
         });
     }
