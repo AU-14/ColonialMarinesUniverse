@@ -8164,7 +8164,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 11.5,-29.5
-- proto: AU14CashVendorMedicalGeneral
+- proto: AU14GeneralMedicalVendor
   entities:
   - uid: 20
     components:
