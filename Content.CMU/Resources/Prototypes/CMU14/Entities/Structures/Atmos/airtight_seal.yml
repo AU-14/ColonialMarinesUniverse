@@ -17,17 +17,19 @@
   id: CMUSpaceAirtightSeal
   suffix: CMU, Space
   components:
-  - !Remove type: Sprite
-  - !Remove type: IconSmooth
-  - !Remove type: Occluder
-  - !Remove type: Physics
-  - !Remove type: Fixtures
-  - !Remove type: IsRoof
-  - !Remove type: SunShadowCast
-  - !Remove type: MinimapColor
-  - !Remove type: RMCDropshipBlocked
-  - !Remove type: PlacementReplacement
-  - !Remove type: Clickable
-  - !Remove type: CMUWallLeanable
+  - type: RemoveComponents
+    components:
+    - type: Sprite
+    - type: IconSmooth
+    - type: Occluder
+    - type: Physics
+    - type: Fixtures
+    - type: IsRoof
+    - type: SunShadowCast
+    - type: MinimapColor
+    - type: RMCDropshipBlocked
+    - type: PlacementReplacement
+    - type: Clickable
+    - type: CMUWallLeanable
   - type: Airtight
     noAirWhenFullyAirBlocked: false

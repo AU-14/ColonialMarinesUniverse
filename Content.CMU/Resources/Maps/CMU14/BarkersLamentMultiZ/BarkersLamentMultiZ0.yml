@@ -627945,6 +627945,7 @@ entities:
       parent: 1
       pos: 23.5,-25.5
     - type: YautjaRelayDestination
+      kind: Ground
       id: barkers-lament.ground.relay
       displayName: Barker's Lament Ground Relay
 - proto: CMWallReinforced
