@@ -4,6 +4,7 @@ using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Attachable.Components;
 using Content.Shared._RMC14.Attachable.Systems;
 using Content.Shared._RMC14.NightVision;
+using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared._RMC14.Scoping;
 using Content.Shared._RMC14.Vendors;
 using Content.Shared.Containers.ItemSlots;
@@ -13,6 +14,7 @@ using Content.Shared.Power.Components;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.PowerCell;
 using Content.Shared.PowerCell.Components;
+using Content.Shared.Storage.Components;
 using Content.Shared.Wieldable;
 using Content.Shared.Wieldable.Components;
 using Robust.Shared.GameObjects;
@@ -246,6 +248,64 @@ public sealed class CMUNightVisionScopeTest : GameTest
                 Assert.That(entries[0].Amount, Is.EqualTo(amount), vendorId);
                 Assert.That(entries[0].Spawn, Is.EqualTo(1), vendorId);
             }
+        });
+    }
+
+    [Test]
+    public async Task PlatoonAsrsSellsFiveScopesFor2500ButColonyAndCorporateDoNot()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            EntProtoId crateId = "CMUCrateAttachmentNightVisionScope";
+            string[] catalogs =
+            [
+                "USCMCargoCatalog",
+                "UPPCargoCatalog",
+                "RMCCargoCatalog",
+                "HAZOPSCargoCatalog",
+                "ProdigyCargoCatalog",
+                "VAIPOCargoCatalog",
+                "LACNCargoCatalog",
+                "CMBCIUCargoCatalog",
+                "WYPMCCargoCatalog",
+                "BEARCargoCatalog",
+            ];
+            foreach (var catalogId in catalogs)
+            {
+                var prototype = SProtoMan.Index<EntityPrototype>(catalogId);
+                Assert.That(prototype.TryComp<RequisitionsComputerComponent>(out var catalog, SEntMan.ComponentFactory), Is.True);
+                var entries = catalog!.Categories.SelectMany(category => category.Entries)
+                    .Where(entry => entry.Crate == crateId).ToArray();
+                Assert.That(entries, Has.Length.EqualTo(1), catalogId);
+                Assert.That(entries[0].Cost, Is.EqualTo(2500), catalogId);
+            }
+
+            string[] excluded = ["CMASRSConsole", "CMASRSConsoleColony", "AU14CorporateASRSConsole"];
+            foreach (var consoleId in excluded)
+            {
+                var prototype = SProtoMan.Index<EntityPrototype>(consoleId);
+                Assert.That(prototype.TryComp<RequisitionsComputerComponent>(out var catalog, SEntMan.ComponentFactory), Is.True);
+                Assert.That(catalog!.Categories.SelectMany(category => category.Entries)
+                    .Any(entry => entry.Crate == crateId), Is.False, consoleId);
+            }
+        });
+
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var crate = SEntMan.SpawnEntity("CMUCrateAttachmentNightVisionScope", map.GridCoords);
+            var storage = SEntMan.GetComponent<EntityStorageComponent>(crate);
+            var contents = storage.Contents.ContainedEntities;
+            Assert.That(contents, Has.Count.EqualTo(5));
+            foreach (var scope in contents)
+            {
+                Assert.That(SEntMan.GetComponent<MetaDataComponent>(scope).EntityPrototype?.ID,
+                    Is.EqualTo("CMUAttachmentNightVisionScope"));
+                Assert.That(Server.System<PowerCellSystem>().TryGetBatteryFromSlot(scope, out var battery), Is.True);
+                Assert.That(Server.System<SharedBatterySystem>().GetCharge(battery!.Value.AsNullable()),
+                    Is.EqualTo(battery.Value.Comp.MaxCharge), "purchased scopes must arrive fully charged");
+            }
+            SEntMan.DeleteEntity(crate);
         });
     }
 

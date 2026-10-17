@@ -165,6 +165,8 @@
         crate: RMCCrateGearParachute
       - cost: 800
         crate: RMCCrateAttachmentSmartScope
+      - cost: 2500
+        crate: CMUCrateAttachmentNightVisionScope
     - name: Pouches
       entries:
       - cost: 150
