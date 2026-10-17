@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared._RMC14.Attachable.Events;
 using Content.Shared._RMC14.Emplacements;
+using Content.Shared._RMC14.NightVision; // CMU14
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared.Actions;
 using Content.Shared.Camera;
@@ -33,6 +34,7 @@ public abstract partial class SharedScopeSystem : EntitySystem
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedItemSystem _item = default!;
     [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedNightVisionSystem _nightVision = default!; // CMU14
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private PullingSystem _pulling = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -328,6 +330,10 @@ public abstract partial class SharedScopeSystem : EntitySystem
 
         var ev = new ScopedEvent(user, scope);
         RaiseLocalEvent(user, ref ev);
+
+        // CMU14: apply scope optics after worn visors have been deactivated.
+        if (TryComp<NightVisionItemComponent>(scope, out var nightVision))
+            _nightVision.EnableNightVisionItem((scope, nightVision), user);
     }
 
     public virtual bool Unscope(Entity<ScopeComponent> scope)
@@ -358,6 +364,10 @@ public abstract partial class SharedScopeSystem : EntitySystem
         scope.Comp.User = null;
         scope.Comp.ScopingDirection = null;
         Dirty(scope);
+
+        // CMU14: restore the user's vision when leaving a night-vision scope.
+        if (TryComp<NightVisionItemComponent>(scope, out var nightVision) && nightVision.User == user)
+            _nightVision.DisableNightVisionItem((scope, nightVision), user);
 
         if (scope.Comp.UnScopePopup != null)
         {
