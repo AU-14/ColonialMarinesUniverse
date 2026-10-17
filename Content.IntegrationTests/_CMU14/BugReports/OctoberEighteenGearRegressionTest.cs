@@ -85,4 +85,50 @@ public sealed class OctoberEighteenGearRegressionTest : GameTest
             Assert.That(flares, Is.EqualTo(1), "a flare should land where the round stopped");
         });
     }
+
+    // the grenade hit a wall, then got teleported to the clicked spot behind it at fly end
+    [Test]
+    public async Task LaunchedGrenadeIsNotSnappedThroughAWall()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid gun = default, shell = default, wall = default;
+        await Server.WaitPost(() =>
+        {
+            var maps = SEntMan.System<SharedMapSystem>();
+            var floor = new Tile(Server.ResolveDependency<ITileDefinitionManager>()["CMFloorSteel"].TileId);
+            for (var x = -1; x <= 7; x++)
+            for (var y = -1; y <= 1; y++)
+                maps.SetTile(map.Grid, new Vector2i(x, y), floor);
+
+            wall = SEntMan.SpawnEntity("WallSolid", maps.GridTileToLocal(map.Grid, map.Grid, new Vector2i(3, 0)));
+            gun = SEntMan.SpawnEntity("CMUOct18TestLauncher", maps.GridTileToLocal(map.Grid, map.Grid, Vector2i.Zero));
+            shell = SEntMan.SpawnEntity("CMUOct18TestShell", maps.GridTileToLocal(map.Grid, map.Grid, Vector2i.Zero));
+
+            var guns = SEntMan.System<SharedGunSystem>();
+            guns.RefreshModifiers(gun);
+            SEntMan.GetComponent<GunComponent>(gun).ShootCoordinates =
+                maps.GridTileToLocal(map.Grid, map.Grid, new Vector2i(5, 0));
+            SEntMan.EventBus.RaiseLocalEvent(gun, new AmmoShotEvent { FiredProjectiles = new List<EntityUid> { shell } });
+            Assert.That(SEntMan.HasComponent<ProjectileFixedDistanceComponent>(shell), Is.True);
+
+            // where it ends up after bouncing off the wall
+            SEntMan.System<SharedTransformSystem>().SetCoordinates(shell,
+                maps.GridTileToLocal(map.Grid, map.Grid, new Vector2i(1, 0)));
+            SEntMan.System<SharedPhysicsSystem>().SetLinearVelocity(shell, Vector2.Zero);
+        });
+
+        await Pair.RunTicksSync(30);
+
+        await Server.WaitAssertion(() =>
+        {
+            var transform = SEntMan.System<SharedTransformSystem>();
+            Assert.That(SEntMan.HasComponent<ProjectileFixedDistanceComponent>(shell), Is.False, "flight should be over");
+            Assert.That(transform.GetWorldPosition(shell).X, Is.LessThan(transform.GetWorldPosition(wall).X),
+                "the grenade has to stay on the shooter's side of the wall");
+
+            SEntMan.DeleteEntity(shell);
+            SEntMan.DeleteEntity(gun);
+            SEntMan.DeleteEntity(wall);
+        });
+    }
 }

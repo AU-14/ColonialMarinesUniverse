@@ -671,7 +671,7 @@ public sealed partial class CMGunSystem : EntitySystem
             if (time < comp.FlyEndTime)
                 continue;
 
-            if (comp.TargetCoordinates is { } targetCoords)
+            if (comp.TargetCoordinates is { } targetCoords && !IsSnapBlocked(uid, targetCoords)) // CMU14
                 _transform.SetMapCoordinates(uid, targetCoords);
 
             StopProjectile((uid, comp));
@@ -685,6 +685,25 @@ public sealed partial class CMGunSystem : EntitySystem
                 QueueDel(uid);
         }
     }
+
+    // CMU14 Begin
+    // a launched grenade that bounced off a wall used to get teleported to the clicked spot behind it,
+    // so it looked like it vanished and then blew up out of sight
+    private bool IsSnapBlocked(EntityUid uid, MapCoordinates target)
+    {
+        var current = _transform.GetMapCoordinates(uid);
+        if (current.MapId != target.MapId)
+            return false;
+
+        var direction = target.Position - current.Position;
+        var length = direction.Length();
+        if (length < 0.01f)
+            return false;
+
+        var ray = new CollisionRay(current.Position, direction / length, _blockArcCollisionGroup);
+        return _physics.IntersectRay(current.MapId, ray, length, uid).Any();
+    }
+    // CMU14 End
 
     // RMC revolver cylinder spin default unique action
     private void OnRevolverUniqueAction(Entity<RevolverAmmoProviderComponent> gun, ref UniqueActionEvent args)
