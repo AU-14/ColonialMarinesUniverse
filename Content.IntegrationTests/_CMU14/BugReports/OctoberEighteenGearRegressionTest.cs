@@ -186,6 +186,71 @@ public sealed class OctoberEighteenGearRegressionTest : GameTest
         });
     }
 
+    // grenades come out of the launcher on your own level, so a shot aimed up just lobbed across your own floor
+    [Test]
+    public async Task LauncherGrenadeAimedUpLeavesOnTheLevelAbove()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            var zLevels = Server.System<CMUZLevelsSystem>();
+            var guns = Server.System<SharedGunSystem>();
+            var floor = new Tile(Server.ResolveDependency<ITileDefinitionManager>()["Plating"].TileId);
+            var network = zLevels.CreateZNetwork();
+            var levels = new EntityUid[3];
+
+            try
+            {
+                var depths = new Dictionary<EntityUid, int>();
+                for (var i = 0; i < levels.Length; i++)
+                {
+                    var level = maps.CreateMap(runMapInit: true);
+                    levels[i] = level;
+                    var grid = SEntMan.EnsureComponent<MapGridComponent>(level);
+                    // floor under the shooter, the level above stays open over them
+                    maps.SetTile(level, grid, new Vector2i(8, 8), floor);
+                    if (i == 1)
+                        maps.SetTile(level, grid, Vector2i.Zero, floor);
+                    depths.Add(level, i);
+                }
+
+                Assert.That(zLevels.TryAddMapsIntoZNetwork(network, depths), Is.True);
+                var origin = new EntityCoordinates(levels[1], new Vector2(0.5f));
+                var shooter = SEntMan.SpawnEntity("MobHuman", origin);
+                var gun = SEntMan.SpawnEntity("CMUOct18TestLauncher", origin);
+                var shell = SEntMan.SpawnEntity("CMUOct18TestShell", origin);
+                Assert.That(Server.System<SharedHandsSystem>().TryPickupAnyHand(shooter, gun), Is.True);
+                Assert.That(guns.TryBallisticInsert((gun, SEntMan.GetComponent<BallisticAmmoProviderComponent>(gun)), shell, null, true), Is.True);
+                SEntMan.EnsureComponent<CMUZLevelViewerComponent>(shooter).LookUp = true;
+
+                guns.RefreshModifiers(gun);
+                var gunComp = SEntMan.GetComponent<GunComponent>(gun);
+                gunComp.NextFire = SGameTiming.CurTime;
+                gunComp.ShootCoordinates = new EntityCoordinates(levels[1], new Vector2(3.5f, 0.5f));
+                var projectiles = guns.AttemptShoot(shooter, (gun, gunComp));
+
+                Assert.That(projectiles, Has.Count.EqualTo(1), "the launcher has to fire");
+                Assert.That(projectiles![0], Is.EqualTo(shell));
+                Assert.That(SEntMan.GetComponent<TransformComponent>(shell).MapUid, Is.EqualTo(levels[2]),
+                    "the grenade leaves from the level it was aimed at");
+                Assert.That(SEntMan.TryGetComponent(shell, out ProjectileFixedDistanceComponent? fixedDistance), Is.True,
+                    "the launcher's fixed range has to apply across levels too");
+                Assert.That(fixedDistance!.TargetCoordinates?.MapId,
+                    Is.EqualTo(SEntMan.GetComponent<TransformComponent>(levels[2]).MapID));
+            }
+            finally
+            {
+                foreach (var level in levels)
+                {
+                    if (level.Valid && !SEntMan.Deleted(level))
+                        SEntMan.DeleteEntity(level);
+                }
+
+                SEntMan.DeleteEntity(network);
+            }
+        });
+    }
+
     // a small box that took any small item was a free pocket expander
     [Test]
     public async Task RegulationTapeBoxOnlyTakesTapes()
