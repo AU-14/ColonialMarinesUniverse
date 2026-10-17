@@ -87,6 +87,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
     private readonly HashSet<EntityUid> _intersecting = new();
 
     private static readonly TimeSpan CorruptedHiveQueenPlaytime = TimeSpan.FromHours(30);
+    private static readonly TimeSpan EvolutionRefundWindow = TimeSpan.FromSeconds(15);
 
     private EntityQuery<MobStateComponent> _mobStateQuery;
 
@@ -344,12 +345,25 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
     private void OnXenoEvolutionNewEvolved(Entity<XenoEvolutionComponent> xeno, ref NewXenoEvolvedEvent args)
     {
         TransferPoints((args.OldXeno, args.OldXeno), xeno, args.SubtractPoints);
+        if (args.SubtractPoints && Prototype(args.OldXeno) is { } oldPrototype)
+        {
+            var refund = EnsureComp<XenoEvolutionRefundComponent>(xeno);
+            refund.PreviousCaste = oldPrototype.ID;
+            refund.EvolvedAt = _timing.CurTime;
+            refund.Points = args.OldXeno.Comp.Max;
+        }
+
         _jitter.DoJitter(xeno, xeno.Comp.EvolutionJitterDuration, true, 80, 8, true);
     }
 
     private void OnXenoEvolutionDevolved(Entity<XenoEvolutionComponent> xeno, ref XenoDevolvedEvent args)
     {
         TransferPoints(args.OldXeno, (xeno, xeno), false);
+        if (args.PointsRefund > 0)
+        {
+            xeno.Comp.Points += args.PointsRefund;
+            Dirty(xeno);
+        }
     }
 
     private void TransferPoints(Entity<XenoEvolutionComponent?> old, Entity<XenoEvolutionComponent> xeno, bool subtract)
@@ -934,8 +948,9 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
             return null;
         }
 
+        var pointsRefund = GetEvolutionRefund(xeno, to);
         var newXeno = TransferXeno(xeno, to);
-        var ev = new XenoDevolvedEvent(xeno, newXeno);
+        var ev = new XenoDevolvedEvent(xeno, newXeno, pointsRefund);
         RaiseLocalEvent(newXeno, ref ev, true);
 
         _adminLog.Add(LogType.RMCDevolve, $"Xenonid {ToPrettyString(xeno)} devolved into {ToPrettyString(newXeno)}");
@@ -946,6 +961,26 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         RaiseLocalEvent(newXeno, ref afterEv);
 
         return newXeno;
+    }
+
+    private FixedPoint2 GetEvolutionRefund(Entity<XenoDevolveComponent> xeno, EntProtoId to)
+    {
+        if (!TryComp<XenoEvolutionRefundComponent>(xeno, out var refund) ||
+            refund.PreviousCaste != to ||
+            refund.EvolvedAt + EvolutionRefundWindow <= _timing.CurTime ||
+            !TryComp(xeno, out TransformComponent? xform) ||
+            !_xenoWeeds.IsOnWeeds((xeno.Owner, xform)))
+        {
+            return 0;
+        }
+
+        if (!TryComp(xeno, out DamageableComponent? damageable) ||
+            _damageable.GetTotalDamage((xeno, damageable)) > 0)
+        {
+            return 0;
+        }
+
+        return refund.Points;
     }
 
     public override void Update(float frameTime)
