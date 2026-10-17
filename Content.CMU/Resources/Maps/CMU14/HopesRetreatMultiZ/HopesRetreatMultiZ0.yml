@@ -4,7 +4,7 @@ meta:
   engineVersion: 290.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/17/2026 22:00:16
+  time: 10/17/2026 22:16:32
   entityCount: 41721
 maps:
 - 1
@@ -124475,7 +124475,7 @@ entities:
         -8,1: 18446744073709551615
         -8,0: 18446744073709551615
         -8,-1: 18429574100130263280
-        -8,-2: 17361641477096079360
+        -8,-2: 17352634277841338368
         -8,-3: 58824958594286495
         -8,-4: 4575657221408423935
         -8,-5: 18446744073709551615
@@ -124752,7 +124752,7 @@ entities:
         4,-10: 9277662502240387071
         4,-9: 0
         4,-8: 4539628424389459968
-        4,-7: 1152921776250896191
+        4,-7: 1152921776116678463
         3,-10: 1069446856703
         3,-9: 0
         3,-8: 7696581394432
@@ -153041,7 +153041,7 @@ entities:
     components:
     - type: Transform
       parent: 1
-      pos: 31.5,-55.5
+      pos: -58.5,-9.5
     - type: Fixtures
       fixtures: {}
   - uid: 10159
@@ -153062,7 +153062,7 @@ entities:
     components:
     - type: Transform
       parent: 1
-      pos: -60.5,-10.5
+      pos: 35.5,-52.5
     - type: Fixtures
       fixtures: {}
   - uid: 10162
@@ -169906,7 +169906,7 @@ entities:
       pos: -29.5,-46.5
     - type: Door
       state: Closing
-      secondsUntilStateChange: -55045.727
+      secondsUntilStateChange: -55637.375
   - uid: 9768
     components:
     - type: Transform
