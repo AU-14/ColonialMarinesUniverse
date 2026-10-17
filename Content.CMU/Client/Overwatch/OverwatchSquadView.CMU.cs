@@ -1,10 +1,14 @@
 using Content.Client.CMU14.Overwatch;
+using Content.Client.CMU14.ShipWeapons;
 
 namespace Content.Client._RMC14.Overwatch;
 
 // CMU14: the console's tab column lights the open tab (CRT terminal look).
 public sealed partial class OverwatchSquadView
 {
+    public bool CMUShipWeaponDepleted;
+    public CMUShipWeaponPicker? CMUWeaponPicker;
+
     public bool CMUSquadInfoHidden => _squadInfoHidden;
 
     public void CMUSetSquadInfoHidden(bool hidden)
