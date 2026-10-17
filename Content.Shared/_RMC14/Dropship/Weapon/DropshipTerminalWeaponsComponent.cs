@@ -1,15 +1,20 @@
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
+using Content.Shared.CMU14.Dropship.DirectFire;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Dropship.Weapon;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
-[Access(typeof(SharedDropshipWeaponSystem))]
+[Access(typeof(SharedDropshipWeaponSystem), typeof(DropshipFireControlBootSystem))]
 public sealed partial class DropshipTerminalWeaponsComponent : Component
 {
     [DataField, AutoNetworkedField]
     public bool Gunnery; // CMU14: dedicated chin-gun console
+
+    // CMU14: fire control boot status, shown on the weapons console.
+    [DataField, AutoNetworkedField] public bool FireControlBooting;
+    [DataField, AutoNetworkedField] public string FireControlStatus = "";
 
     [DataField, AutoNetworkedField]
     public Screen ScreenOne;
@@ -93,6 +98,7 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
         { DropshipWeaponPointLocation.PortWing, new List<int?> { -6, -5, -4, -3, -2, -1, 0, null } },
         { DropshipWeaponPointLocation.StarboardFore, new List<int?> { null, 0, 1, 2, 3, 4, 5, 6 } },
         { DropshipWeaponPointLocation.StarboardWing, new List<int?> { null, 0, 1, 2, 3, 4, 5, 6 } },
+        { DropshipWeaponPointLocation.Internal, new List<int?> { -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, null } },
     };
 
     /// <summary>

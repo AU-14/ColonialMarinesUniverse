@@ -6,6 +6,7 @@ using Content.Client._RMC14.UserInterface;
 using Content.Client.Eye;
 using Content.Client.UserInterface.ControlExtensions;
 using Content.Shared._RMC14.Areas;
+using Content.Shared.CMU14.Dropship.DirectFire;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.ElectronicSystem;
 using Content.Shared._RMC14.Dropship.Utility.Components;
@@ -16,6 +17,7 @@ using Content.Shared.ParaDrop;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Input;
 using Robust.Shared.Maths;
 using Robust.Shared.Utility;
 using static Content.Shared._RMC14.Dropship.Weapon.DropshipTerminalWeaponsComponent;
@@ -59,6 +61,13 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
     {
         base.Open();
         Window = this.CreatePopOutableWindow<DropshipWeaponsWindow>();
+
+        foreach (var first in new[] { true, false })
+        {
+            var screen = first ? Window.ScreenOne : Window.ScreenTwo;
+            screen.LaserPatternButton.OnPressed += _ => ChangePayloadSetting(first, true);
+            screen.AirburstHeightButton.OnPressed += _ => ChangePayloadSetting(first, false);
+        }
 
         Window.OffsetUpButton.Text = "^";
         Window.OffsetUpButton.OnPressed += _ =>
@@ -104,6 +113,11 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         Refresh();
     }
 
+    private static string LocationTag(DropshipWeaponPointLocation location)
+    {
+        return location == DropshipWeaponPointLocation.Internal ? "INT" : ((int) location).ToString();
+    }
+
     public void Refresh()
     {
         if (Window == null)
@@ -111,6 +125,9 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
         if (EntMan.TryGetComponent(Owner, out DropshipTerminalWeaponsComponent? terminal))
         {
+            Window.BootStatusLabel.Text = terminal.FireControlStatus;
+            Window.BootStatusLabel.ToolTip = terminal.FireControlStatus;
+            RefreshLoadout(terminal);
             SetScreen(true, terminal.ScreenOne);
             SetScreen(false, terminal.ScreenTwo);
         }
@@ -136,6 +153,80 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         }
     }
 
+    private void RefreshLoadout(DropshipTerminalWeaponsComponent terminal)
+    {
+        if (Window == null)
+            return;
+
+        var loadout = new StringBuilder();
+        var preflight = new StringBuilder();
+        if (terminal.FireControlBooting)
+            preflight.AppendLine(Loc.GetString("cmu-dropship-preflight-booting"));
+
+        if (_system.TryGetGridDropship(Owner, out var dropship))
+        {
+            var boot = EntMan.System<DropshipFireControlBootSystem>();
+            foreach (var point in dropship.Comp.AttachmentPoints)
+            {
+                string? slot = null;
+                if (EntMan.TryGetComponent(point, out DropshipWeaponPointComponent? weaponPoint))
+                    slot = weaponPoint.WeaponContainerSlotId;
+                else if (EntMan.TryGetComponent(point, out DropshipUtilityPointComponent? utilityPoint))
+                    slot = utilityPoint.UtilitySlotId;
+                else
+                    continue;
+
+                EntityUid? mounted = _container.TryGetContainer(point, slot, out var container) &&
+                    container.ContainedEntities.Count > 0 ? container.ContainedEntities[0] : null;
+                var isWeapon = mounted != null && EntMan.TryGetComponent(mounted, out DropshipWeaponComponent? _);
+                if (weaponPoint == null && !isWeapon)
+                    continue;
+
+                var location = mounted is { } m && _weaponSystem.TryGetWeaponLocation(m, out var loc)
+                    ? LocationTag(loc)
+                    : weaponPoint != null ? LocationTag(weaponPoint.Location ?? DropshipWeaponPointLocation.Internal) : "INT";
+
+                if (EntMan.TryGetComponent(point, out DropshipHardpointFaultComponent? fault) && fault.Faulted)
+                {
+                    preflight.AppendLine(Loc.GetString("cmu-dropship-preflight-fault",
+                        ("location", location), ("reason", boot.FaultReason(fault))));
+                }
+
+                if (mounted is not { } weapon || !EntMan.TryGetComponent(weapon, out DropshipWeaponComponent? weaponComp))
+                {
+                    preflight.AppendLine(Loc.GetString("cmu-dropship-preflight-empty", ("location", location)));
+                    continue;
+                }
+
+                string ammoText;
+                if (_weaponSystem.TryGetWeaponAmmo((weapon, weaponComp), out var ammo))
+                {
+                    ammoText = Loc.GetString("cmu-dropship-loadout-ammo",
+                        ("ammo", EntMan.GetComponent<MetaDataComponent>(ammo).EntityName),
+                        ("rounds", ammo.Comp.Rounds), ("max", ammo.Comp.MaxRounds));
+                    if (ammo.Comp.Rounds <= 0)
+                        preflight.AppendLine(Loc.GetString("cmu-dropship-preflight-dry", ("location", location)));
+                }
+                else
+                {
+                    ammoText = Loc.GetString("cmu-dropship-loadout-empty");
+                    preflight.AppendLine(Loc.GetString("cmu-dropship-preflight-dry", ("location", location)));
+                }
+
+                loadout.AppendLine(Loc.GetString("cmu-dropship-loadout-line",
+                    ("location", location), ("weapon", weaponComp.Abbreviation), ("ammo", ammoText)));
+            }
+        }
+
+        Window.LoadoutLabel.Text = loadout.Length == 0
+            ? Loc.GetString("cmu-dropship-loadout-none")
+            : loadout.ToString().TrimEnd();
+        Window.PreflightLabel.Text = preflight.Length == 0
+            ? Loc.GetString("cmu-dropship-preflight-ok")
+            : preflight.ToString().TrimEnd();
+        Window.PreflightLabel.FontColorOverride = preflight.Length == 0 ? Color.LimeGreen : Color.Orange;
+    }
+
     private void RefreshButtons()
     {
         if (Window == null)
@@ -152,6 +243,42 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         }
     }
 
+    private void ChangePayloadSetting(bool first, bool laser)
+    {
+        if (!EntMan.TryGetComponent(Owner, out DropshipTerminalWeaponsComponent? terminal))
+            return;
+        var selected = first ? terminal.ScreenOne : terminal.ScreenTwo;
+        if (!EntMan.TryGetEntity(selected.Weapon, out var uid) ||
+            !EntMan.TryGetComponent(uid, out DropshipWeaponComponent? weapon))
+            return;
+        var pattern = laser ? (weapon.LaserPattern == DropshipLaserPattern.Ring
+            ? DropshipLaserPattern.Line : DropshipLaserPattern.Ring) : weapon.LaserPattern;
+        var height = laser ? weapon.AirburstHeight
+            : (DropshipAirburstHeight)(((int)weapon.AirburstHeight + 1) % 3);
+        SendMessage(new DropshipWeaponSettingsMessage(first, pattern, height));
+    }
+
+    private void RefreshPayloadSettings(DropshipWeaponsScreen screen, Screen selection)
+    {
+        screen.LaserPatternButton.Visible = false;
+        screen.AirburstHeightButton.Visible = false;
+        screen.PayloadPreviewLabel.Text = "";
+        if (!EntMan.TryGetEntity(selection.Weapon, out var uid) ||
+            !EntMan.TryGetComponent(uid, out DropshipWeaponComponent? weapon) ||
+            !_weaponSystem.TryGetWeaponAmmo(uid.Value, out var ammo))
+            return;
+        screen.LaserPatternButton.Visible = ammo.Comp.SelectableLaserPattern;
+        screen.LaserPatternButton.Text = Loc.GetString(weapon.LaserPattern == DropshipLaserPattern.Ring
+            ? "cmu-dropship-laser-ring" : "cmu-dropship-laser-line");
+        screen.AirburstHeightButton.Visible = ammo.Comp.SelectableAirburstHeight;
+        var height = weapon.AirburstHeight;
+        screen.AirburstHeightButton.Text = Loc.GetString("cmu-dropship-airburst-" + height.ToString().ToLowerInvariant());
+        screen.PayloadPreviewLabel.Text = Loc.GetString("cmu-dropship-payload-preview",
+            ("ammo", EntMan.GetComponent<MetaDataComponent>(ammo).EntityName),
+            ("bursts", _weaponSystem.GetAvailableBursts(ammo)),
+            ("impacts", ammo.Comp.ImpactsPerVolley));
+    }
+
     private void SetScreen(bool first, Screen compScreen)
     {
         if (Window == null ||
@@ -162,7 +289,11 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
         var screen = first ? Window.ScreenOne : Window.ScreenTwo;
 
-        screen.Viewport.RemoveAllChildren();
+        if (!screen.Viewport.Children.OfType<DropshipTargetingPreview>().Any())
+        {
+            screen.Viewport.AddChild(new DropshipTargetingPreview(EntMan, Owner, first, screen));
+        }
+        RefreshPayloadSettings(screen, compScreen);
         screen.Viewport.Visible = false;
         screen.FireMissionCreate.Visible = false;
         screen.FireMissionView.Visible = false;
@@ -327,12 +458,34 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         var firemission = Button("fire-mission", StrikeFireMission);
         var strikeVector = Button("vector", StrikeVector);
 
+        void SetWeaponPageControls()
+        {
+            var weapons = TryGetWeapons(first, out _, out _, out _, out _, out _, out _, out _, out _, out _);
+            var page = first ? _screenOneWeaponPage : _screenTwoWeaponPage;
+            DropshipWeaponsButtonData? previous = page > 0
+                ? ButtonAction("previous", _ => ChangeWeaponPage(-1))
+                : null;
+            DropshipWeaponsButtonData? next = (page + 1) * 4 < weapons.Count
+                ? ButtonAction("next", _ => ChangeWeaponPage(1))
+                : null;
+            screen.BottomRow.SetData(exit, four: previous, five: next);
+        }
+
+        void ChangeWeaponPage(int delta)
+        {
+            if (first)
+                _screenOneWeaponPage += delta;
+            else
+                _screenTwoWeaponPage += delta;
+            Refresh();
+        }
+
         void SetQuickTargetControls(DropshipWeaponsButtonData? previous, DropshipWeaponsButtonData? next)
         {
             TryGetWeapons(first, out var one, out var two, out var three, out var four, out _, out _, out _, out _, out _);
             screen.TopRow.SetData(fire, quick, four: previous, five: next);
             screen.LeftRow.SetData(one, two, three, four);
-            screen.BottomRow.SetData(exit);
+            SetWeaponPageControls();
             screen.ScreenLabel.Text = TargetAcquisition();
         }
 
@@ -350,8 +503,8 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 break;
             case Equip:
             {
-                screen.BottomRow.SetData(exit);
-                TryGetWeapons(
+                SetWeaponPageControls();
+                var allWeapons = TryGetWeapons(
                     first,
                     out var one,
                     out var two,
@@ -389,10 +542,8 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                     text.AppendLine();
                 }
 
-                AddWeaponEntry(one);
-                AddWeaponEntry(two);
-                AddWeaponEntry(three);
-                AddWeaponEntry(four);
+                foreach (var entry in allWeapons)
+                    AddWeaponEntry(entry);
 
                 screen.ScreenLabel.Text = text.ToString();
                 screen.ScreenLabel.VerticalAlignment = VAlignment.Top;
@@ -442,6 +593,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 screen.TopRow.SetData(fire, quick, five: previous);
                 TryGetWeapons(first, out var one, out var two, out var three, out var four, out _, out _, out _, out _, out _);
                 screen.LeftRow.SetData(cancel, one, two, three, four);
+                SetWeaponPageControls();
                 screen.ScreenLabel.Text = TargetAcquisition();
                 break;
             }
@@ -452,11 +604,12 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 {
                     if (_weaponSystem.TryGetWeaponAmmo(selectedWeapon.Value, out var ammo))
                     {
+                        var summary = _weaponSystem.GetLoadedAmmoSummary(ammo);
                         screen.ScreenLabel.Text = Loc.GetString("rmc-dropship-weapons-weapon-selected-ammo",
                             ("weapon", selectedWeapon.Value),
                             ("ammo", ammo),
-                            ("rounds", ammo.Comp.Rounds),
-                            ("maxRounds", ammo.Comp.MaxRounds));
+                            ("rounds", summary.Comp.Rounds),
+                            ("maxRounds", summary.Comp.MaxRounds));
                     }
                     else
                     {
@@ -733,7 +886,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                     var selectedMission = terminal.FireMissions
                         .FirstOrDefault(fm => fm.Id == selectedId.Value);
 
-                    TryGetWeapons(
+                    var weaponButtons = TryGetWeapons(
                         first,
                         out var one,
                         out var two,
@@ -746,20 +899,19 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                         out _
                     );
 
-                    var weaponButtons = new [] { one, two, three, four };
                     var weaponData = new List<WeaponDisplayInfo>();
 
                     foreach (var button in weaponButtons)
                     {
-                        if (button?.Weapon == null)
+                        if (button.Weapon is not { } weaponNet)
                             continue;
 
-                        var weaponEntity = EntMan.GetEntity(button.Value.Weapon.Value);
+                        var weaponEntity = EntMan.GetEntity(weaponNet);
                         if (!EntMan.TryGetComponent(weaponEntity, out DropshipWeaponComponent? weaponComp))
                             continue;
 
                         var offsets = selectedMission.WeaponOffsets
-                            .Where(wo => wo.WeaponId == button.Value.Weapon.Value)
+                            .Where(wo => wo.WeaponId == weaponNet)
                             .ToList();
 
                         var hasLocation = _weaponSystem.TryGetWeaponLocation(weaponEntity, out var locationId);
@@ -767,7 +919,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                         var info = new WeaponDisplayInfo
                         {
                             Name = hasLocation
-                                ? $"{weaponComp.Abbreviation} {(int) locationId}"
+                                ? $"{weaponComp.Abbreviation} {LocationTag(locationId)}"
                                 : weaponComp.Abbreviation,
                             Offsets = offsets,
                         };
@@ -781,8 +933,9 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
                         if (_weaponSystem.TryGetWeaponAmmo(weaponEntity, out var weaponAmmo))
                         {
-                            info.MaxAmmo = weaponAmmo.Comp.MaxRounds;
-                            info.Ammo = weaponAmmo.Comp.Rounds;
+                            var summary = _weaponSystem.GetLoadedAmmoSummary(weaponAmmo);
+                            info.MaxAmmo = summary.Comp.MaxRounds;
+                            info.Ammo = summary.Comp.Rounds;
                             info.AmmoConsumption = weaponAmmo.Comp.RoundsPerShot * setOffsetCount;
                         }
 
@@ -810,6 +963,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                     out _
                 );
                 screen.RightRow.SetData(one, two, three, four);
+                SetWeaponPageControls();
 
                 var selectedWeaponId = first
                     ? terminal.ScreenOne.Weapon
@@ -845,15 +999,16 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                     var weaponInfo = new WeaponDisplayInfo
                     {
                         Name = hasLocation
-                            ? $"{weaponComp.Abbreviation} {(int) location}"
+                            ? $"{weaponComp.Abbreviation} {LocationTag(location)}"
                             : weaponComp.Abbreviation,
                         Offsets = offsets,
                     };
 
                     if (_weaponSystem.TryGetWeaponAmmo(weaponEntity, out var weaponAmmo))
                     {
-                        weaponInfo.MaxAmmo = weaponAmmo.Comp.MaxRounds;
-                        weaponInfo.Ammo = weaponAmmo.Comp.Rounds;
+                        var summary = _weaponSystem.GetLoadedAmmoSummary(weaponAmmo);
+                        weaponInfo.MaxAmmo = summary.Comp.MaxRounds;
+                        weaponInfo.Ammo = summary.Comp.Rounds;
                         weaponInfo.AmmoConsumption = weaponAmmo.Comp.RoundsPerShot;
 
                         if (weaponAmmo.Comp.FireMissionDelay != null)
@@ -874,7 +1029,6 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 }
 
                 screen.TopRow.SetData(firemissionDelete,firemissionCreate, firemissionView);
-                screen.BottomRow.SetData(exit);
                 screen.ScreenLabel.Text = labelMessage;
                 break;
             }
@@ -940,6 +1094,15 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             default:
                 screen.BottomRow.SetData(exit);
                 break;
+        }
+
+        if (compScreen.Weapon != null && compScreen.State is Strike or StrikeWeapon or SelectingWeapon &&
+            terminal.Target is { } aim && _weaponSystem.TryGetTargetEye((Owner, terminal), aim, out var eyeUid) &&
+            EntMan.TryGetComponent(eyeUid, out EyeComponent? targetingEye))
+        {
+            screen.Viewport.Eye = targetingEye.Eye;
+            screen.Viewport.Visible = true;
+            screen.ScreenLabel.Visible = false;
         }
 
         RefreshButtons();
@@ -1070,7 +1233,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         screen.BottomRow.SetData();
     }
 
-    private void TryGetWeapons(
+    private List<DropshipWeaponsButtonData> TryGetWeapons(
         bool first,
         out DropshipWeaponsButtonData? one,
         out DropshipWeaponsButtonData? two,
@@ -1092,7 +1255,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         electronicSystemOne = default;
         electronicSystemTwo = default;
         if (!_system.TryGetGridDropship(Owner, out var dropship))
-            return;
+            return new List<DropshipWeaponsButtonData>();
 
         var weapons = new List<OrderedWeapon>();
         var utility = new List<DropshipWeaponsButtonData?>();
@@ -1106,6 +1269,28 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 string text;
                 BoundUserInterfaceMessage msg;
                 var utilityMount = utilityContainer.ContainedEntities[0];
+
+                // AU-14: crew-compartment-mounted weapons (BOFORS, howitzer, bomb clamp)
+                // are fireable from the weapons console, listed with the weapons.
+                if (EntMan.TryGetComponent(utilityMount, out DropshipWeaponComponent? utilityWeapon) &&
+                    utilityWeapon.DirectFireOnly != true)
+                {
+                    var weaponNetEnt = EntMan.GetNetEntity(utilityMount);
+                    var hasWeaponLocation = _weaponSystem.TryGetWeaponLocation(utilityMount, out var weaponLocation);
+                    var weaponMsg = new DropshipTerminalWeaponsChooseWeaponMsg(first, weaponNetEnt);
+                    var weaponData = new DropshipWeaponsButtonData(
+                        hasWeaponLocation
+                            ? $"{utilityWeapon.Abbreviation} {LocationTag(weaponLocation)}"
+                            : utilityWeapon.Abbreviation,
+                        _ => SendPredictedMessage(weaponMsg),
+                        weaponNetEnt
+                    );
+
+                    var weaponOrder = hasWeaponLocation ? (int) weaponLocation : int.MaxValue;
+                    weapons.Add(new OrderedWeapon(weaponData, weaponOrder));
+                    continue;
+                }
+
                 if (EntMan.HasComponent<MedevacComponent>(utilityMount))
                 {
                     text = "Medevac";
@@ -1200,7 +1385,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 var msg = new DropshipTerminalWeaponsChooseWeaponMsg(first, netEnt);
                 var data = new DropshipWeaponsButtonData(
                     hasLocation
-                        ? $"{abbreviation} {(int) location}"
+                        ? $"{abbreviation} {LocationTag(location)}"
                         : abbreviation,
                     _ => SendPredictedMessage(msg),
                     netEnt
@@ -1208,18 +1393,19 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
                 var order = hasLocation ? (int)location : int.MaxValue;
                 weapons.Add(new OrderedWeapon(data, order));
-
-                if (weapons.Count >= 4)
-                    break;
             }
         }
 
         weapons.Sort((a, b) => a.Order.CompareTo(b.Order));
 
-        one = weapons.Count > 0 ? weapons[0].Data : null;
-        two = weapons.Count > 1 ? weapons[1].Data : null;
-        three = weapons.Count > 2 ? weapons[2].Data : null;
-        four = weapons.Count > 3 ? weapons[3].Data : null;
+        var dataList = weapons.Select(weapon => weapon.Data).ToList();
+        ref var page = ref first ? ref _screenOneWeaponPage : ref _screenTwoWeaponPage;
+        page = Math.Clamp(page, 0, Math.Max(0, (dataList.Count - 1) / 4));
+        var start = page * 4;
+        one = dataList.Count > start ? dataList[start] : null;
+        two = dataList.Count > start + 1 ? dataList[start + 1] : null;
+        three = dataList.Count > start + 2 ? dataList[start + 2] : null;
+        four = dataList.Count > start + 3 ? dataList[start + 3] : null;
 
         utility.TryGetValue(0, out utilityOne);
         utility.TryGetValue(1, out utilityTwo);
@@ -1227,7 +1413,11 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
         electronicSystem.TryGetValue(0, out electronicSystemOne);
         electronicSystem.TryGetValue(1, out electronicSystemTwo);
+        return dataList;
     }
+
+    private int _screenOneWeaponPage;
+    private int _screenTwoWeaponPage;
 
     private readonly struct OrderedWeapon
     {

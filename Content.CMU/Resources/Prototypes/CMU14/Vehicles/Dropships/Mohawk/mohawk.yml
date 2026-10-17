@@ -342,6 +342,10 @@
     # Ordinary installed states contain only the exposed tips below a hull.
     # The Mohawk's underside displays the complete weapon instead.
     spriteOverrides:
+      bofors_cannon_loaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: boforsnew2}
+      bofors_cannon_unloaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: boforsnew2}
+      cas_howitzer_105_installed_loaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: cas_howitzer_105_uninstalled}
+      cas_howitzer_105_installed_unloaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: cas_howitzer_105_uninstalled}
       30mm_cannon_installed: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: 30mm_cannon}
       30mm_cannon_loaded0: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: 30mm_cannon}
       30mm_cannon_loaded1: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: 30mm_cannon}

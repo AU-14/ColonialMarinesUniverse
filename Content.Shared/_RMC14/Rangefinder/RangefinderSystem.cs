@@ -208,6 +208,15 @@ public sealed partial class RangefinderSystem : EntitySystem
             }
         }
 
+        // CMU14: smoke fallout from CAS rockets scatters the designator beam.
+        if (rangefinder.Comp.Mode == Designator &&
+            EntityManager.System<Content.Shared.CMU14.Dropship.Cas.CMUCasFalloutSystem>().IsObscured(_transform.ToMapCoordinates(coordinates)))
+        {
+            msg = Loc.GetString("cmu-cas-fallout-designator-obscured");
+            _popup.PopupCoordinates(msg, coordinates, user, PopupType.SmallCaution);
+            return;
+        }
+
         TryTarget(rangefinder, args.User, delay, coordinates);
     }
 
