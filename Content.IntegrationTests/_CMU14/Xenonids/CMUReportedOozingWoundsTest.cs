@@ -37,7 +37,7 @@ public sealed class CMUReportedOozingWoundsTest
         {
             var entities = pair.Server.EntMan;
             Assert.That(entities.System<DamageableSystem>().GetAllDamage((target, null)).DamageDict["Heat"],
-                Is.EqualTo((FixedPoint2)30), "A body straddling delayed spray tiles gets one hit.");
+                Is.EqualTo((FixedPoint2)21), "A body straddling delayed spray tiles gets one hit.");
             entities.System<SharedTransformSystem>().SetCoordinates(target, map.GridCoords.Offset(new Vector2(4, 0)));
         });
         await pair.Server.WaitRunTicks(2);
@@ -48,7 +48,7 @@ public sealed class CMUReportedOozingWoundsTest
         {
             var entities = pair.Server.EntMan;
             Assert.That(entities.System<DamageableSystem>().GetAllDamage((target, null)).DamageDict["Heat"],
-                Is.EqualTo((FixedPoint2)30), "Re-entering the same cast does not damage again.");
+                Is.EqualTo((FixedPoint2)21), "Re-entering the same cast does not damage again.");
             var cast = new XenoDespoilerOozingWoundsActionEvent
             {
                 Performer = caster,
@@ -60,7 +60,7 @@ public sealed class CMUReportedOozingWoundsTest
         await pair.Server.WaitRunTicks(40);
         await pair.Server.WaitAssertion(() => Assert.That(
             pair.Server.EntMan.System<DamageableSystem>().GetAllDamage((target, null)).DamageDict["Heat"],
-            Is.EqualTo((FixedPoint2)60), "A later cast has its own victim set."));
+            Is.EqualTo((FixedPoint2)42), "A later cast has its own victim set."));
         await pair.CleanReturnAsync();
     }
 }
