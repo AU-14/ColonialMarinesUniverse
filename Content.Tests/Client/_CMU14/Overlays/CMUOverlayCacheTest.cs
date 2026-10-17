@@ -78,14 +78,21 @@ public sealed class CMUOverlayCacheTest
             cache.TryGetValue(i, out _);
         }
 
-        var before = GC.GetAllocatedBytesForCurrentThread();
-        for (var i = 5000; i < 15000; i++)
+        // One-off runtime work (tiered JIT, OSR) can land inside a single window on CI;
+        // per-replacement allocation would show up in every round.
+        var allocated = long.MaxValue;
+        var next = 5000;
+        for (var round = 0; round < 3 && allocated != 0; round++)
         {
-            cache.Set(i, i);
-            cache.TryGetValue(i, out _);
+            var before = GC.GetAllocatedBytesForCurrentThread();
+            for (var end = next + 10000; next < end; next++)
+            {
+                cache.Set(next, next);
+                cache.TryGetValue(next, out _);
+            }
+            allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+            TestContext.Progress.WriteLine($"CMU_OVERLAY_CACHE round={round} replacements=10000 allocated={allocated}");
         }
-        var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
-        TestContext.Progress.WriteLine($"CMU_OVERLAY_CACHE replacements=10000 allocated={allocated}");
         Assert.That(allocated, Is.Zero);
         Assert.That(cache.Count, Is.EqualTo(32));
     }

@@ -1,0 +1,39 @@
+# Placeholder sprites: swap Objects/Tanks/Jetpacks/blue.rsi for the CMU jump pack RSI once it exists.
+- type: entity
+  parent: CMGasTankBase
+  id: CMUJumpPack
+  name: jump pack
+  description: A back-mounted thruster pack. Boosts the wearer along a set heading, hops a level up, or hovers above the ground for a short time. Refuel it from a gas canister like any other tank. It can hold 5 L of gas.
+  components:
+  - type: Sprite
+    sprite: Objects/Tanks/Jetpacks/blue.rsi
+  - type: Item
+    size: Huge
+    sprite: Objects/Tanks/Jetpacks/blue.rsi
+  - type: Clothing
+    sprite: Objects/Tanks/Jetpacks/blue.rsi
+    quickEquip: false
+    slots:
+    - Back
+  - type: GasTank
+    releasePressure: 21.3
+    air:
+      volume: 5
+      temperature: 293.15
+  - type: CMUJumpPack
+  - type: StaticPrice
+    price: 150
+
+- type: entity
+  parent: CMUJumpPack
+  id: CMUJumpPackFilled
+  suffix: Filled
+  components:
+  - type: GasTank
+    releasePressure: 21.3
+    air:
+      # Five minutes of hovering, or a boost every cooldown for five minutes.
+      volume: 5
+      moles:
+      - 2.051379050 # oxygen
+      temperature: 293.15
