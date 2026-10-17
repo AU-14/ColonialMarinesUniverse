@@ -367,7 +367,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         {
             case "govfor":
             case "opfor":
-                comp.Balance = 20000;
+                comp.Balance = 30000;
                 break;
             case "colony":
                 comp.Balance = 450;
