@@ -95,6 +95,84 @@ public sealed class CMUNightVisionScopeTest : GameTest
 
     [TestCase(false)]
     [TestCase(true)]
+    public async Task M96SIntegratedNightVisionWorksWithoutBatteryAndRestoresVision(bool innate)
+    {
+        EntityUid user = default;
+        EntityUid gun = default;
+        EntityUid scope = default;
+
+        await Server.WaitAssertion(() =>
+        {
+            user = SEntMan.SpawnEntity(innate ? "CMUNightVisionScopeTestUser" : "CMMobHuman", MapCoordinates.Nullspace);
+            gun = SEntMan.SpawnEntity("CMM96SSniperRifle", MapCoordinates.Nullspace);
+            var holder = SEntMan.GetComponent<AttachableHolderComponent>(gun);
+            Assert.That(Server.System<AttachableHolderSystem>().TryGetAttachable((gun, holder), "rmc-aslot-rail", out var attachment), Is.True);
+            scope = attachment.Owner;
+            Assert.That(Server.System<SharedHandsSystem>().TryPickupAnyHand(user, gun), Is.True);
+            Assert.That(Server.System<SharedWieldableSystem>().TryWield((gun, SEntMan.GetComponent<WieldableComponent>(gun)), user), Is.True);
+            Assert.That(SEntMan.HasComponent<BatteryComponent>(scope), Is.False);
+            Assert.That(SEntMan.HasComponent<PowerCellSlotComponent>(scope), Is.False);
+            Assert.That(SEntMan.HasComponent<PowerCellDrawComponent>(scope), Is.False);
+            var scopeComp = SEntMan.GetComponent<ScopeComponent>(scope);
+            Assert.That(scopeComp.ZoomLevels.Select(level => level.Zoom), Is.EqualTo(new[] { 1.6f, 1f }));
+            Assert.That(Server.System<SharedScopeSystem>().StartScoping((scope, scopeComp), user), Is.Not.Null);
+        });
+
+        await Pair.RunTicksSync(2);
+
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.GetComponent<NightVisionItemComponent>(scope).User, Is.EqualTo(user));
+            var vision = SEntMan.GetComponent<NightVisionComponent>(user);
+            Assert.That(vision.Green, Is.True);
+            Assert.That(vision.State, Is.EqualTo(NightVisionState.Full));
+            Assert.That(SEntMan.GetComponent<ContentEyeComponent>(user).TargetZoom, Is.EqualTo(new Vector2(1.6f)));
+            Assert.That(Server.System<SharedWieldableSystem>().TryUnwield((gun, SEntMan.GetComponent<WieldableComponent>(gun)), user), Is.True);
+        });
+
+        await Pair.RunTicksSync(2);
+
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.HasComponent<ScopingComponent>(user), Is.False);
+            Assert.That(SEntMan.GetComponent<NightVisionItemComponent>(scope).User, Is.Null);
+            AssertOriginalVision(user, innate);
+            SEntMan.DeleteEntity(gun);
+            SEntMan.DeleteEntity(user);
+        });
+    }
+
+    [Test]
+    public async Task M96SDerivedScopesInheritBatteryFreeNightVision()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            string[] scopes =
+            [
+                "RMCM96SIntegratedScope",
+                "RMCXM43E1IntegratedScope",
+                "RMCType88IntegratedScope",
+                "RMCL112IntegratedScope",
+                "RMCVultureScope",
+            ];
+            foreach (var scopeId in scopes)
+            {
+                var prototype = SProtoMan.Index<EntityPrototype>(scopeId);
+                var factory = SEntMan.ComponentFactory;
+                Assert.That(prototype.TryComp<NightVisionItemComponent>(out var vision, factory), Is.True, scopeId);
+                Assert.That(vision!.Green, Is.True, scopeId);
+                Assert.That(vision.RestorePreviousState, Is.True, scopeId);
+                Assert.That(vision.EnableOnEquip, Is.False, scopeId);
+                Assert.That(vision.ActionId, Is.Null, scopeId);
+                Assert.That(prototype.TryComp<BatteryComponent>(out _, factory), Is.False, scopeId);
+                Assert.That(prototype.TryComp<PowerCellSlotComponent>(out _, factory), Is.False, scopeId);
+                Assert.That(prototype.TryComp<PowerCellDrawComponent>(out _, factory), Is.False, scopeId);
+            }
+        });
+    }
+
+    [TestCase(false)]
+    [TestCase(true)]
     public async Task BatteryDrainsOnlyWhileScopedAndRechargesWithoutLosingOpticalZoom(bool innate)
     {
         EntityUid user = default;

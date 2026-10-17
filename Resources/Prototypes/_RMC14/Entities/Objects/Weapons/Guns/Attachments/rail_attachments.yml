@@ -477,7 +477,7 @@
   parent: RMCAttachmentScopeBase
   id: RMCM96SIntegratedScope
   name: M96S integrated scope
-  description: This isn't supposed to come off the gun. How did you get it?
+  description: An integrated scope with night vision. This isn't supposed to come off the gun. How did you get it? # CMU14
   components:
   - type: Sprite
     state: m96s-scope
@@ -494,7 +494,14 @@
       sprite: _RMC14/Objects/Weapons/Guns/Attachments/rail.rsi
       state: m96s-scope
     actionName: Look through M96S Integrated Scope
-    actionDesc: Lets you see further.
+    actionDesc: Lets you see further with night vision. # CMU14
+  # CMU14: inherited integrated optics provide night vision without a battery.
+  - type: NightVisionItem
+    actionId: null
+    toggleable: false
+    enableOnEquip: false
+    green: true
+    restorePreviousState: true
   - type: AttachableSpeedMods
     modifiers:
     - conditions:
