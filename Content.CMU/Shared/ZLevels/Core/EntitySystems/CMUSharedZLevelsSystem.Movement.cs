@@ -286,6 +286,12 @@ public abstract partial class CMUSharedZLevelsSystem
                 continue;
             }
 
+            if (_hoverQuery.TryComp(uid, out var hover))
+            {
+                UpdateZHover(uid, zPhys, hover, xform, physics, frameTime);
+                continue;
+            }
+
             var oldVelocity = zPhys.Velocity;
             var oldHeight = zPhys.LocalPosition;
 
@@ -689,6 +695,7 @@ public abstract partial class CMUSharedZLevelsSystem
         zPhys.LocalPosition = 0;
         DirtyZPhysics(uid, zPhys, oldVelocity, oldHeight);
         RemComp<CMUZFallingComponent>(uid);
+        RemComp<CMUZHoverComponent>(uid);
     }
 
     private void TryProcessZLevelBoundary(EntityUid uid, CMUZPhysicsComponent zPhys, bool stickyGround)
