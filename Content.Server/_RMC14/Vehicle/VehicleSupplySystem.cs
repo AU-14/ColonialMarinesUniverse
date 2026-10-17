@@ -730,6 +730,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
             var mapCoords = _transform.ToMapCoordinates(moverCoords);
             _transform.SetMapCoordinates(pendingEntity, mapCoords);
 
+            GetIssued(comp.PendingSupplySide!).Add(new IssuedVehicle(entry.Vehicle, GetEntryGroupKey(entry), pendingEntity));
             FinishRaisedVehicle(lift, pendingEntity, pending, key);
             return;
         }
@@ -915,28 +916,48 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         slot = itemSlot;
         return true;
     }
-    private void StoreVehicle(Entity<VehicleSupplyLiftComponent> elevator) // yeah zone
+    private void StoreVehicle(Entity<VehicleSupplyLiftComponent> lift)
     {
-        var side = GetSupplySide(elevator.Owner);
-        if(string.IsNullOrEmpty(side))
+        var comp = lift.Comp;
+        if (comp.ActiveVehicle == null)
             return;
-        var current_stock = GetIssued(side);
-        var entities = _lookup.GetEntitiesIntersecting(elevator);
 
-        foreach (var entity in entities)
+        var active = comp.ActiveVehicle.Value;
+        if (!IsOnLift(lift, active))
+            return;
+
+        if (!string.IsNullOrWhiteSpace(comp.ActiveVehicleId))
         {
-            if (entity == elevator.Comp.Audio)
-                continue;
+            var key = Normalize(comp.ActiveVehicleId);
+            comp.Deployed.Remove(key);
+            AddStored(comp, key);
+            AddStoredEntity(comp, key, active);
+        }
 
-            if(HasComp<VehicleComponent>(entity))
-            {
-                if (current_stock.Any(vehicle => vehicle.Entity == entity))
+        _transform.SetParent(active, EntityUid.Invalid);
+        comp.ActiveVehicle = null;
+        comp.ActiveVehicleId = string.Empty;
+        UpdateVendorSectionsAll();
+
+        var side = GetSupplySide(lift.Owner);
+        if(!string.IsNullOrEmpty(side))
+        {
+            var current_stock = GetIssued(side);
+            if (current_stock.Any(vehicle => vehicle.Entity == active))
                 {
-                    current_stock.RemoveAll(issued => issued.Entity == entity);
+                    current_stock.RemoveAll(issued => issued.Entity == active);
+                }
+            var entities = _lookup.GetEntitiesIntersecting(lift);
+            foreach (var entity in entities)
+            {
+                if (entity == lift.Comp.Audio)
+                    continue;
+
+                if(!HasComp<VehicleComponent>(entity))
+                {
+                    QueueDel(entity);
                 }
             }
-
-            QueueDel(entity);
         }
     }
 
