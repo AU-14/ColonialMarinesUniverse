@@ -168,7 +168,7 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
                 damage = _xeno.TryApplyXenoAcidDamageMultiplier(other, damage);
             var ignoreResistances = ent.Comp.IgnoreResistances
                 && !(ent.Comp.Fire && HasComp<YautjaComponent>(other));
-            _damageable.TryChangeDamage(other, damage, ignoreResistances, armorPiercing: ent.Comp.ArmorPenetration);
+            _damageable.TryChangeDamage(other, damage, ignoreResistances, origin: ent, armorPiercing: ent.Comp.ArmorPenetration);
             DoEmote(ent, other);
             didEmote = true;
         }
@@ -179,7 +179,7 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
                 damage = _xeno.TryApplyXenoAcidDamageMultiplier(other, damage);
             var ignoreResistances = ent.Comp.IgnoreResistances
                 && !(ent.Comp.Fire && HasComp<YautjaComponent>(other));
-            _damageable.TryChangeDamage(other, damage, ignoreResistances);
+            _damageable.TryChangeDamage(other, damage, ignoreResistances, origin: ent);
         }
 
         // CMU14: the damage above can delete the target outright, and everything after
@@ -243,6 +243,8 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
             return;
 
         ent.Comp.Chain = chain;
+        if (HasComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(chain))
+            EnsureComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(ent);
         Dirty(ent);
     }
 

@@ -808,6 +808,8 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
     /// </summary>
     public void MatchTileFire(Entity<TileFireComponent> child, Entity<TileFireComponent> parent)
     {
+        if (HasComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(parent))
+            EnsureComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(child);
         child.Comp.SpawnedAt = parent.Comp.SpawnedAt;
         child.Comp.Duration = parent.Comp.Duration;
         child.Comp.GrowthDuration = parent.Comp.GrowthDuration;
