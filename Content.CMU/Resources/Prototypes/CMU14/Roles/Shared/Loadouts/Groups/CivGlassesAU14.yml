@@ -2,7 +2,7 @@
   id: CivGlassesAU14
   name: au14-loadout-group-civilian-glasses
   minLimit: 0
-  maxLimit: 2
+  maxLimit: 3
   loadouts:
   - SunglassesAU14
   - HipsterGlassesAU14
