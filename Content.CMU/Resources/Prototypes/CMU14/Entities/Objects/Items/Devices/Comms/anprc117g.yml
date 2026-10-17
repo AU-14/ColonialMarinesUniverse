@@ -50,6 +50,8 @@
     standardNets:
     - label: CMD
       channel: radioGovforCommand
+    - label: ATC
+      channel: radioGovforJTAC
   - type: ANPRCCryptoSlot
   - type: PowerCellSlot
     cellSlotId: cell_slot
@@ -105,6 +107,10 @@
         type: RMCTelephoneBui
       enum.StorageUiKey.Key:
         type: StorageBoundUserInterface
+      enum.CMUCasCallUi.Key:
+        type: CMUCasCallBui
+  # CAS uplink: the wearer files 9-line close air support requests to the faction's dropships
+  - type: CMUCasUplink
   # the set is a phone on the RMC exchange, on the same handset it uses for the net. its
   # side is the fill card's, set by ANPRCRadioSystem.Phone - not whoever is wearing it
   - type: RotaryPhone
@@ -154,6 +160,8 @@
     standardNets:
     - label: CMD
       channel: radioOpforCommand
+    - label: ORBT
+      channel: radioOpforJTAC
   - type: RTORelay
     bridgedChannels:
     - radioOpforAlpha
@@ -417,3 +425,42 @@
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:ANPRCPhoneActionEvent
+
+- type: entity
+  id: CMUActionCasUplink
+  name: CAS uplink
+  description: Open the close air support uplink. Call a dropship onto a flare, a laser spot, or the nearest hostile.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Devices/binoculars.rsi
+      state: designator_r
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUCasUplinkActionEvent
+
+# dropped by the CAS uplink on the nearest hostile when the RTO has no flare out
+- type: entity
+  id: CMUCasRadioMark
+  name: radio mark
+  description: A grid reference called up the net. There is nothing here but the aircrew's attention.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/cas_flares.rsi
+    state: flare_flame
+    color: "#FF6A6A"
+    scale: 0.5, 0.5
+  - type: PointLight
+    color: "#FF6A6A"
+    radius: 1.5
+    energy: 0.8
+  - type: TimedDespawn
+    lifetime: 300
+  - type: RMCStaticZoomLevel
+  - type: Eye
+    zoom: 0.5, 0.5
+    drawFov: false

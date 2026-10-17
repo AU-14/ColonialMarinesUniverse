@@ -1,0 +1,57 @@
+ent-CMUDropshipAmmoHowitzerRackHEFrag = M137 105mm HE-FRAG shell rack
+ent-CMUDropshipAmmoHowitzerRackHEFrag-desc = A heavy rack holding four PGU-45/B 105mm high-explosive fragmentation shells for the M137 105mm Howitzer. Too heavy to carry - drag it or move it with a powerloader.
+ent-CMUDropshipAmmoHowitzerRackHEAT = M137 105mm HEAT shell rack
+ent-CMUDropshipAmmoHowitzerRackHEAT-desc = A heavy rack holding four PGU-46/B 105mm high-explosive anti-tank shells for the M137 105mm Howitzer. Too heavy to carry - drag it or move it with a powerloader.
+ent-CMUDropshipAmmoHowitzerRackAirburst = M137 105mm airburst shell rack
+ent-CMUDropshipAmmoHowitzerRackAirburst-desc = A heavy rack holding four PGU-47/B 105mm high-explosive airburst shells for the M137 105mm Howitzer. Too heavy to carry - drag it or move it with a powerloader.
+
+ent-CMUDropshipAttachmentBOFORS = L/60 40mm BOFORS Autocannon
+ent-CMUDropshipAttachmentBOFORS-desc = A 40mm BOFORS autocannon capable of sustained fire on a position. It is fed from 20-round trays loaded by hand. Fits on both the external weapon and crew compartment attach points of dropships.
+ent-CMUDropshipAttachmentHowitzer = M137 105mm Howitzer
+ent-CMUDropshipAttachmentHowitzer-desc = A 105mm Howitzer, capable of wiping out reinforced positions. This model only holds one round, but can be reloaded in flight if mounted on the interior. Fits on both the external weapon and crew compartment attach points of dropships.
+
+ent-CMUDropshipAmmoBOFORSMagHE = 40mm BOFORS HE magazine
+ent-CMUDropshipAmmoBOFORSMagHE-desc = A 20-round magazine of 40mm high-explosive BOFORS shells. Loaded by hand into the L/60 40mm BOFORS Autocannon.
+ent-CMUDropshipAmmoBOFORSMagAP = 40mm BOFORS AP magazine
+ent-CMUDropshipAmmoBOFORSMagAP-desc = A 20-round magazine of 40mm armor-piercing BOFORS shells. Loaded by hand into the L/60 40mm BOFORS Autocannon.
+ent-CMUDropshipAmmoBOFORSMagAirburst = 40mm BOFORS Airburst magazine
+ent-CMUDropshipAmmoBOFORSMagAirburst-desc = A 20-round magazine of 40mm airburst BOFORS shells that shower a wide area with shrapnel. Loaded by hand into the L/60 40mm BOFORS Autocannon.
+ent-CMUDropshipAmmoBOFORSMagHEAT = 40mm BOFORS HEAT magazine
+ent-CMUDropshipAmmoBOFORSMagHEAT-desc = A 20-round magazine of 40mm high-explosive anti-tank BOFORS shells. Loaded by hand into the L/60 40mm BOFORS Autocannon.
+ent-CMUDropshipAmmoBOFORSMagIncendiary = 40mm BOFORS Incendiary magazine
+ent-CMUDropshipAmmoBOFORSMagIncendiary-desc = A 20-round magazine of 40mm incendiary BOFORS shells that set the target area alight. Loaded by hand into the L/60 40mm BOFORS Autocannon.
+ent-CMUDropshipAmmoBOFORSTray = 40mm BOFORS ammo tray
+ent-CMUDropshipAmmoBOFORSTrayHE = 40mm BOFORS HE ammo tray
+ent-CMUDropshipAmmoBOFORSTrayHE-desc = A heavy tray holding three 20-round 40mm HE magazines for the L/60 BOFORS Autocannon. Too heavy to carry - drag it or move it with a powerloader.
+ent-CMUDropshipAmmoBOFORSTrayAP = 40mm BOFORS AP ammo tray
+ent-CMUDropshipAmmoBOFORSTrayAP-desc = A heavy tray holding three 20-round 40mm AP magazines for the L/60 BOFORS Autocannon. Too heavy to carry - drag it or move it with a powerloader.
+ent-CMUDropshipAmmoBOFORSTrayAirburst = 40mm BOFORS Airburst ammo tray
+ent-CMUDropshipAmmoBOFORSTrayAirburst-desc = A heavy tray holding three 20-round 40mm airburst magazines for the L/60 BOFORS Autocannon. Too heavy to carry - drag it or move it with a powerloader.
+ent-CMUDropshipAmmoBOFORSTrayHEAT = 40mm BOFORS HEAT ammo tray
+ent-CMUDropshipAmmoBOFORSTrayHEAT-desc = A heavy tray holding three 20-round 40mm HEAT magazines for the L/60 BOFORS Autocannon. Too heavy to carry - drag it or move it with a powerloader.
+ent-CMUDropshipAmmoBOFORSTrayIncendiary = 40mm BOFORS Incendiary ammo tray
+ent-CMUDropshipAmmoBOFORSTrayIncendiary-desc = A heavy tray holding three 20-round 40mm incendiary magazines for the L/60 BOFORS Autocannon. Too heavy to carry - drag it or move it with a powerloader.
+
+ent-CMUDropshipAmmoHowitzerHE = PGU-44/B 105mm High-Explosive shell
+ent-CMUDropshipAmmoHowitzerHE-desc = The PGU-44/B is a powerful 105mm high-explosive shell designed for destroying fortified positions. It must be hand loaded into the M137 105mm Howitzer.
+ent-CMUDropshipAmmoHowitzerHEFrag = PGU-45/B 105mm High-Explosive Fragmentation shell
+ent-CMUDropshipAmmoHowitzerHEFrag-desc = The PGU-45/B is a 105mm high-explosive fragmentation shell that showers a wide area with lethal shrapnel. It must be hand loaded into the M137 105mm Howitzer.
+ent-CMUDropshipAmmoHowitzerHEAT = PGU-46/B 105mm High-Explosive Anti-Tank shell
+ent-CMUDropshipAmmoHowitzerHEAT-desc = The PGU-46/B is a 105mm high-explosive anti-tank shell built to crack hardened and armored targets. It must be hand loaded into the M137 105mm Howitzer.
+ent-CMUDropshipAmmoHowitzerAirburst = PGU-47/B 105mm High-Explosive Airburst shell
+ent-CMUDropshipAmmoHowitzerAirburst-desc = The PGU-47/B is a 105mm high-explosive airburst shell that detonates above the target, scattering bomblets over a wide area. It must be hand loaded into the M137 105mm Howitzer.
+ent-CMUDropshipAmmoHowitzerRackHE = M137 105mm HE shell rack
+ent-CMUDropshipAmmoHowitzerRackHE-desc = A heavy rack holding four PGU-44/B 105mm high-explosive shells for the M137 105mm Howitzer. Too heavy to carry - drag it or move it with a powerloader.
+
+ent-CMUDropshipAttachmentJDAMBombClamp = JDAM Bomb Clamp
+ent-CMUDropshipAttachmentJDAMBombClamp-desc = A JDAM bomb clamp, holds one JDAM family bomb. Fits on the crew compartment attach points of dropships.
+ent-CMUDropshipAmmoJDAMHE = GBU-89B JDAM (HE)
+ent-CMUDropshipAmmoJDAMHE-desc = The GBU-89B Joint Direct Attack Munition is an old but reliable large guided munition. It has an excessively long travel time, but can level entire buildings. Loaded into the JDAM Bomb Clamp.
+ent-CMUDropshipAmmoJDAMIncendiary = GBU-89C/N JDAM-I (Incendiary)
+ent-CMUDropshipAmmoJDAMIncendiary-desc = The GBU-89C/N Joint Direct Attack Munition is an old but reliable large guided munition fitted with a napalm payload. It can level and set alight entire buildings. Loaded into the JDAM Bomb Clamp.
+ent-CMUDropshipAmmoJDAMAP = GBU-89D/AP JDAM-AP
+ent-CMUDropshipAmmoJDAMAP-desc = The GBU-89D/AP Joint Direct Attack Munition trades blast radius for a hardened penetrator capable of cracking reinforced structures and armor. Loaded into the JDAM Bomb Clamp.
+ent-CMUDropshipAmmoJDAMCluster = GBU-89E/CL JDAM-CLUSTER
+ent-CMUDropshipAmmoJDAMCluster-desc = The GBU-89E/CL Joint Direct Attack Munition separates into a spread of low-yield bomblets over a wide area. Loaded into the JDAM Bomb Clamp.
+ent-CMUDropshipAmmoJDAMNapalm = GBU-89F/N JDAM-NAPALM
+ent-CMUDropshipAmmoJDAMNapalm-desc = The GBU-89F/N Joint Direct Attack Munition blankets the target area in a persistent napalm firestorm. Loaded into the JDAM Bomb Clamp.

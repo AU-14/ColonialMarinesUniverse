@@ -24,6 +24,7 @@ public static partial class PoolManager
         (CCVars.HolidaysEnabled.Name,         "false"),
         (CCVars.GameMap.Name,                 TestMap),
         (CCVars.AdminLogsQueueSendDelay.Name, "0"),
+        (CCVars.DropshipJamChance.Name,       "0"), // CMU14: random CAS stoppages would make weapon tests flaky
         (CCVars.NPCMaxUpdates.Name,           "999999"),
         (CCVars.GameRoleTimers.Name,          "false"),
         (CCVars.GameRoleLoadoutTimers.Name,   "false"),

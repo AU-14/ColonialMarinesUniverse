@@ -667,6 +667,10 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
         // CMU: boarding ramps overlap the landing site's grid. Check the same
         // world position on every grid so ground weeds cannot grow through them.
         var coordinates = _transform.ToMapCoordinates(_mapSystem.GridTileToLocal(grid, grid, tile));
+        // CMU14: weedkiller rocket fallout keeps the treated area clear.
+        if (EntityManager.System<Content.Shared.CMU14.Dropship.Cas.CMUCasFalloutSystem>().IsWeedKilled(coordinates))
+            return true;
+
         _weedBlockingGrids.Clear();
         var grids = _weedBlockingGrids;
         _mapSystem.FindGridsIntersecting(coordinates.MapId,
