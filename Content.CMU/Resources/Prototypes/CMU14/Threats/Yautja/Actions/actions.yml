@@ -331,24 +331,6 @@
   description: Trigger your thrall's self-destruct.
 - type: entity
   parent: CMUYautjaActionBase
-  id: CMUActionYautjaRecall
-  components:
-  - type: Action
-    useDelay: 5
-  - type: Sprite
-    layers:
-    - sprite: CMU14/Yautja/actions.rsi
-      state: smartdisc_framed
-      map: [enum.ActionVisuals.Icon]
-  - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaRecallActionEvent
-  - type: YautjaPowerAction
-    cost: 0
-
-  name: Recall Gear
-  description: Recall your deployed Yautja gear.
-- type: entity
-  parent: CMUYautjaActionBase
   id: CMUActionYautjaSelfDestruct
   components:
   - type: Action

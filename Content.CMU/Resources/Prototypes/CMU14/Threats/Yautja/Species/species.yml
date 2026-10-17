@@ -40,6 +40,13 @@
   categories: [ HideSpawnMenu ]
   name: yautja appearance
   components:
+  # CMU14: innate half-strength night vision for every Yautja-variant mob. This prototype is inherited only by
+  # Yautja mobs (CMUMobYautja, CMUMobYautjaDummy, CMUMobYautjaYoungblood), so a single definition reaches all of
+  # them - including the two that do not parent through CMUMobYautja. NightVisionState.Half is the game's native
+  # half level; Innate keeps it active without equipment and stops the item path from clearing it.
+  - type: NightVision
+    state: Half
+    innate: true
   - type: InitialBody
     organs:
       Torso: CMUPartYautjaTorso

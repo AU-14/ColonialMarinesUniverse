@@ -110,8 +110,8 @@ public sealed class YautjaResistanceParityTest
 
                 var unconscious = new RMCStatusEffectTimeEvent("Unconscious", TimeSpan.FromSeconds(3));
                 server.EntMan.EventBus.RaiseLocalEvent(yautja, ref unconscious);
-                Assert.That(unconscious.Duration, Is.EqualTo(TimeSpan.Zero),
-                    "Regular Yautja retain CMU's unconsciousness immunity.");
+                Assert.That(unconscious.Duration, Is.EqualTo(TimeSpan.FromSeconds(2)),
+                    "CM-SS13 reduces a hunter's knockout with stun_reduction 1.5 instead of immunising them.");
             });
         }
         finally

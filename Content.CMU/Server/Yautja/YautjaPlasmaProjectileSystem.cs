@@ -27,8 +27,6 @@ namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
 {
-    private const string YautjaInterferenceStatus = "YautjaInterference";
-
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
@@ -206,7 +204,6 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
         };
 
         _damage.TryChangeDamage(args.Target, extraDamage, true, origin: args.Shooter, tool: ent);
-        _status.TryAddStatusEffect(args.Target, YautjaInterferenceStatus, ent.Comp.XenoInterferenceDuration, true);
     }
 
     private void DoCasterImmobilizerAreaStun(Entity<YautjaCasterImmobilizerProjectileComponent> ent)

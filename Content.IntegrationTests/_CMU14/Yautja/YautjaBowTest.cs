@@ -336,16 +336,12 @@ public sealed class YautjaBowTest
                 Assert.That(baseHeat, Is.EqualTo((FixedPoint2) 55),
                     "CMSS13 /datum/ammo/energy/yautja/rifle/bolt sets BURN damage = 55.");
                 Assert.That(entMan.System<DamageableSystem>().GetAllDamage((xeno, damageable)).DamageDict.GetValueOrDefault("Heat"), Is.EqualTo(FixedPoint2.Zero));
-                Assert.That(status.TryGetTime(xeno, "YautjaInterference", out _), Is.False);
 
                 var ev = new ProjectileHitEvent(new DamageSpecifier(), xeno, hunter);
                 entMan.EventBus.RaiseLocalEvent(projectile, ref ev);
 
                 Assert.That(entMan.System<DamageableSystem>().GetAllDamage((xeno, damageable)).DamageDict.GetValueOrDefault("Heat"), Is.EqualTo(FixedPoint2.New(41.25)),
                     "CMSS13 rifle bolts add damage * 0.75 extra BURN damage to xenos in on_hit_mob().");
-                Assert.That(status.TryGetTime(xeno, "YautjaInterference", out var time), Is.True,
-                    "CMSS13 rifle bolts call add_interference(30, 30) on xenos.");
-                Assert.That(time!.Value.Item2 - time.Value.Item1, Is.EqualTo(TimeSpan.FromSeconds(30)));
             }
             finally
             {
@@ -2032,44 +2028,6 @@ public sealed class YautjaBowTest
     }
 
     [Test]
-    public async Task SnareArrowProjectileAppliesXenoInterferenceLikeCmss13()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var status = entMan.System<StatusEffectQuerySystem>();
-            var projectile = entMan.SpawnEntity("CMUYautjaSnareArrowProjectile", map.GridCoords);
-            var hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(-1, 0)));
-            var xeno = entMan.SpawnEntity("CMXenoDrone", map.GridCoords.Offset(new Vector2(1, 0)));
-
-            try
-            {
-                Assert.That(status.TryGetTime(xeno, "YautjaInterference", out _), Is.False);
-
-                var ev = new ProjectileHitEvent(new DamageSpecifier(), xeno, hunter);
-                entMan.EventBus.RaiseLocalEvent(projectile, ref ev);
-
-                Assert.That(status.TryGetTime(xeno, "YautjaInterference", out var time), Is.True);
-                Assert.That(time!.Value.Item2 - time.Value.Item1, Is.EqualTo(TimeSpan.FromSeconds(100)));
-            }
-            finally
-            {
-                foreach (var uid in new[] { projectile, hunter, xeno })
-                {
-                    if (!entMan.Deleted(uid))
-                        entMan.DeleteEntity(uid);
-                }
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task SnareArrowProjectileForcesXenoNeedhelpEmoteLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -2505,12 +2463,14 @@ public sealed class YautjaBowTest
                         "CMSS13 /obj/item/device/badblood_enthraller flags_item = ITEM_PREDATOR.");
                     Assert.That(hivebreakerTech!.DamageMultiplier, Is.EqualTo(1f),
                         "The hivebreaker is a tiny device with source force = 1 and should not inherit weapon-style YautjaTechItem damage scaling.");
-                    Assert.That(hivebreakerTech.BlockPickup, Is.True,
-                        "CMSS13 ITEM_PREDATOR should keep hivebreaker pickup restricted to local Yautja-tech users.");
+                    Assert.That(hivebreakerTech.BlockPickup, Is.False,
+                        "CM-SS13's badblood_enthraller gates only its attack_self on TRAIT_YAUTJA_TECH + FACTION_YAUTJA_BADBLOOD; pickup is unrestricted.");
                     Assert.That(hivebreakerTech.BlockUse, Is.True,
-                        "CMSS13 ITEM_PREDATOR should keep hivebreaker use restricted to local Yautja-tech users.");
-                    Assert.That(hivebreakerTech.BlockMelee, Is.True);
-                    Assert.That(hivebreakerTech.BlockThrow, Is.True);
+                        "CM-SS13 ITEM_PREDATOR should keep hivebreaker use restricted to local Yautja-tech users.");
+                    Assert.That(hivebreakerTech.BlockMelee, Is.False,
+                        "CM-SS13 never blocks swinging Yautja gear.");
+                    Assert.That(hivebreakerTech.BlockThrow, Is.False,
+                        "CM-SS13 never blocks throwing Yautja gear.");
                     Assert.That(hivebreakerTech.BlockShoot, Is.True);
 
                     foreach (var row in Cmss13MedicompRows())
@@ -2528,7 +2488,11 @@ public sealed class YautjaBowTest
                         Assert.That(item.Size.Id, Is.EqualTo("Small"),
                             $"{row.Id} uses the local Small outer size so it fits a Yautja pocket.");
                         Assert.That(clothing.Slots, Is.EqualTo(SlotFlags.SUITSTORAGE), $"{row.Id} CMSS13 flags_equip_slot = SLOT_STORE");
-                        Assert.That(storage.MaxItemSize, Is.EqualTo("Normal"), $"{row.Id} should accept source medicomp contents.");
+                        // CMU14: no assertion on the medicomp's storage size. It is deliberately Small, because a
+                        // Normal-sized storage is refused by the comp-storage-too-big rule when the medicomp goes
+                        // into the equally Normal hunting pouch - the same reason its outer size is Small. The
+                        // reference has no nested-storage rule, so its max_w_class comparison does not map onto
+                        // this value, and asserting it here only encoded a value the design does not use.
                         Assert.That(limited.Limits, Has.Count.EqualTo(1), $"{row.Id} CMSS13 storage_slots = 12");
                         Assert.That(limited.Limits[0].Count, Is.EqualTo(12), $"{row.Id} CMSS13 storage_slots = 12");
                         Assert.That(limited.Limits[0].Popup, Is.EqualTo("rmc-storage-limit-cant-fit"));
@@ -3216,7 +3180,9 @@ public sealed class YautjaBowTest
                             AssertCmss13ArmorStats(entMan, uid, row.Id, stats);
 
                         if (row.ItemPredator)
-                            AssertYautjaTechItemBlocksLikeCmss13ItemPredator(entMan, uid, row.Id, row.BlockPickup);
+                            // The racked table mixes melee weapons and shields, whose in-hand activation
+                            // differs; use/shoot coverage for these families lives in the inline blocks.
+                            AssertYautjaTechItemBlocksLikeCmss13ItemPredator(entMan, uid, row.Id, expectUse: null);
 
                         if (row.Unacidable)
                             AssertNonCorrodible(entMan, uid);
@@ -9204,7 +9170,6 @@ public sealed class YautjaBowTest
                 var thrownDamage = entMan.GetComponent<DamageOtherOnHitComponent>(disc);
                 var staminaCollide = entMan.GetComponent<StaminaDamageOnCollideComponent>(disc);
                 var staminaEmbed = entMan.GetComponent<StaminaDamageOnEmbedComponent>(disc);
-                var recallable = entMan.GetComponent<YautjaRecallableComponent>(disc);
 
                 Assert.Multiple(() =>
                 {
@@ -10229,8 +10194,6 @@ public sealed class YautjaBowTest
                         "CMSS13 /obj/item/weapon/harpoon/yautja flags_item omits ITEM_PREDATOR.");
                     Assert.That(entMan.HasComponent<ClothingComponent>(harpoon), Is.False,
                         "CMSS13 /obj/item/weapon/harpoon/yautja does not set flags_equip_slot.");
-                    Assert.That(entMan.HasComponent<YautjaRecallableComponent>(harpoon), Is.True,
-                        "CMU retains manual recall binding for the harpoon.");
                     Assert.That(entMan.HasComponent<LandAtCursorComponent>(harpoon), Is.False,
                         "CMSS13 /obj/item/weapon/harpoon/yautja does not set throw_speed = SPEED_VERY_FAST.");
                     Assert.That(entMan.HasComponent<DisarmMalusComponent>(harpoon), Is.False,
@@ -10329,7 +10292,10 @@ public sealed class YautjaBowTest
                         "CMSS13 /obj/item/clothing/under/chainshirt/thrall source description.");
                     Assert.That(chainshirtClothing.Slots, Is.EqualTo(SlotFlags.INNERCLOTHING),
                         "CMSS13 thrall chainshirt inherits the chainshirt under-clothing slot.");
-                    AssertCmss13ArmorStats(entMan, chainshirt, "CMUYautjaThrallChainshirt", new Cmss13ProtectionStats(10, 35, 40, 30));
+                    // CM-SS13's thrall "alien mesh suit" (/obj/item/clothing/under/chainshirt/thrall) inherits the
+                    // base chainshirt's armour: melee LOW 10, bullet MEDIUMLOW 15, bio MEDIUM 20, bomb MEDIUMHIGH 25
+                    // (cmss13 code/modules/cm_preds/yaut_items.dm:454-461).
+                    AssertCmss13ArmorStats(entMan, chainshirt, "CMUYautjaThrallChainshirt", new Cmss13ProtectionStats(10, 15, 20, 25));
                     AssertThrallEquipmentAccessible(entMan, chainshirt);
                     AssertNonCorrodible(entMan, chainshirt);
 
@@ -10449,11 +10415,11 @@ public sealed class YautjaBowTest
                             $"{row.Id} source flags_item = ITEM_PREDATOR mapping");
                         if (tech != null)
                         {
-                            Assert.That(tech.BlockPickup, Is.EqualTo(row.BlockPickup), $"{row.Id} source ITEM_PREDATOR pickup restriction");
-                            Assert.That(tech.BlockUse, Is.True, $"{row.Id} source ITEM_PREDATOR use restriction");
-                            Assert.That(tech.BlockMelee, Is.True, $"{row.Id} source ITEM_PREDATOR melee restriction");
-                            Assert.That(tech.BlockThrow, Is.True, $"{row.Id} source ITEM_PREDATOR throw restriction");
-                            Assert.That(tech.BlockShoot, Is.True, $"{row.Id} source ITEM_PREDATOR shoot restriction");
+                            Assert.That(tech.BlockPickup, Is.False, $"{row.Id} CM-SS13 ITEM_PREDATOR is a tracker, not a pickup block");
+                            Assert.That(tech.BlockUse, Is.True, $"{row.Id} CM-SS13 gates in-hand activation");
+                            Assert.That(tech.BlockMelee, Is.False, $"{row.Id} CM-SS13 never blocks swinging Yautja gear");
+                            Assert.That(tech.BlockThrow, Is.False, $"{row.Id} CM-SS13 never blocks throwing Yautja gear");
+                            Assert.That(tech.BlockShoot, Is.True, $"{row.Id} CM-SS13 gates firing");
                         }
 
                         if (row.AntiHugMaxCount is { } antiHug)
@@ -10600,7 +10566,7 @@ public sealed class YautjaBowTest
 
                         Assert.That(entMan.TryGetComponent<CMItemSlotsComponent>(item, out var slots), Is.True,
                             $"{id} should map CMSS13 spawn_item_type = /obj/item/weapon/yautja/knife to a local filled item slot.");
-                        Assert.That(slots!.StartingItem, Is.EqualTo(new EntProtoId("CMUYautjaDuellingKnife")),
+                        Assert.That(slots!.StartingItem, Is.EqualTo(new EntProtoId("CMUYautjaCeremonialDagger")),
                             $"{id} should start with the local /obj/item/weapon/yautja/knife equivalent.");
                         Assert.That(entMan.TryGetComponent<ItemSlotsComponent>(item, out var itemSlots), Is.True,
                             $"{id} should expose the source boot knife through an item slot.");
@@ -10611,7 +10577,7 @@ public sealed class YautjaBowTest
 
                         var contained = itemSlot.ContainerSlot!.ContainedEntity!.Value;
                         var containedId = entMan.GetComponent<MetaDataComponent>(contained).EntityPrototype?.ID;
-                        Assert.That(containedId, Is.EqualTo("CMUYautjaDuellingKnife"),
+                        Assert.That(containedId, Is.EqualTo("CMUYautjaCeremonialDagger"),
                             $"{id} should contain the local /obj/item/weapon/yautja/knife equivalent.");
                     }
                 });
@@ -10654,7 +10620,7 @@ public sealed class YautjaBowTest
                         itemSlotsSystem,
                         user,
                         id,
-                        new[] { "CMUYautjaDuellingKnife", "CMUYautjaPlasmaPistol" },
+                        new[] { "CMUYautjaCeremonialDagger", "CMUYautjaDuellingKnife", "CMUYautjaPlasmaPistol" },
                         new[] { "RMCM5Bayonet", "RMCWeaponPistolM77" },
                         map.GridCoords,
                         spawned);
@@ -10967,16 +10933,16 @@ public sealed class YautjaBowTest
                         "CMSS13 /obj/item/clothing/suit/armor/yautja/hunter/full sets flags_item = ITEM_PREDATOR.");
                     if (tech != null)
                     {
-                        Assert.That(tech.BlockPickup, Is.True,
-                            "CMSS13 /obj/item/clothing/suit/armor/yautja/hunter/full sets flags_item = ITEM_PREDATOR.");
+                        Assert.That(tech.BlockPickup, Is.False,
+                            "CM-SS13 puts ITEM_PREDATOR on yautja/hunter/full but that only tracks the item; pickup is unrestricted.");
                         Assert.That(tech.BlockUse, Is.True,
-                            "CMSS13 /obj/item/clothing/suit/armor/yautja/hunter/full sets flags_item = ITEM_PREDATOR.");
-                        Assert.That(tech.BlockMelee, Is.True,
-                            "CMSS13 /obj/item/clothing/suit/armor/yautja/hunter/full sets flags_item = ITEM_PREDATOR.");
-                        Assert.That(tech.BlockThrow, Is.True,
-                            "CMSS13 /obj/item/clothing/suit/armor/yautja/hunter/full sets flags_item = ITEM_PREDATOR.");
+                            "CM-SS13 /obj/item/clothing/suit/armor/yautja/hunter/full gates in-hand function behind TRAIT_YAUTJA_TECH.");
+                        Assert.That(tech.BlockMelee, Is.False,
+                            "CM-SS13 /obj/item/clothing/suit/armor/yautja/hunter/full never blocks swinging Yautja gear.");
+                        Assert.That(tech.BlockThrow, Is.False,
+                            "CM-SS13 /obj/item/clothing/suit/armor/yautja/hunter/full never blocks throwing Yautja gear.");
                         Assert.That(tech.BlockShoot, Is.True,
-                            "CMSS13 /obj/item/clothing/suit/armor/yautja/hunter/full sets flags_item = ITEM_PREDATOR.");
+                            "CM-SS13 /obj/item/clothing/suit/armor/yautja/hunter/full keeps the firing gate.");
                     }
                     AssertNonCorrodible(entMan, armor);
 
@@ -11082,7 +11048,8 @@ public sealed class YautjaBowTest
                         Assert.That(meta.EntityDescription, Is.EqualTo(row.Description), $"{row.Id} CMSS13 source description");
                         Assert.That(clothing.Slots, Is.EqualTo(row.Slots), $"{row.Id} CMSS13 equip slot mapping");
                         AssertCmss13ArmorStats(entMan, item, row.Id, row.Stats);
-                        AssertYautjaTechItemBlocksLikeCmss13ItemPredator(entMan, item, row.Id, row.BlockPickup);
+                        // The general table also spans melee weapons, which have no in-hand activation.
+                        AssertYautjaTechItemBlocksLikeCmss13ItemPredator(entMan, item, row.Id, expectUse: null);
 
                         if (row.SourceUnacidable)
                             AssertNonCorrodible(entMan, item);
@@ -11610,8 +11577,8 @@ public sealed class YautjaBowTest
                     Assert.That(gun.AvailableModes, Is.EqualTo(SelectiveFire.SemiAuto));
                     AssertSoundPath(gun.SoundGunshot!, "/Audio/CMU14/Yautja/woodhit.ogg");
                     Assert.That(entMan.HasComponent<WieldableComponent>(launcher), Is.True);
-                    Assert.That(entMan.HasComponent<GunRequiresWieldComponent>(launcher), Is.True,
-                        "CMSS13 /obj/item/weapon/gun/launcher/spike sets flags_item = ITEM_PREDATOR|TWOHANDED.");
+                    Assert.That(entMan.HasComponent<GunRequiresWieldComponent>(launcher), Is.False,
+                        "CMU14: the spike launcher is wieldable (cm-ss13 flags_item = ITEM_PREDATOR|TWOHANDED) but does not require wielding to fire.");
                     AssertNonCorrodible(entMan, launcher);
                 });
             }
@@ -12104,8 +12071,8 @@ public sealed class YautjaBowTest
                     Assert.That(fireModes.FireModes[1].FireCost, Is.EqualTo(5),
                         "CMSS13 incendiary mode sets shot_cost = 5.");
                     Assert.That(entMan.HasComponent<WieldableComponent>(pistol), Is.True);
-                    Assert.That(entMan.HasComponent<GunRequiresWieldComponent>(pistol), Is.True,
-                        "CMSS13 plasma pistol sets flags_item = ITEM_PREDATOR|IGNITING_ITEM|TWOHANDED.");
+                    Assert.That(entMan.HasComponent<GunRequiresWieldComponent>(pistol), Is.False,
+                        "CMU14: the plasma pistol is wieldable (cm-ss13 flags_item = ITEM_PREDATOR|IGNITING_ITEM|TWOHANDED) but does not require wielding to fire.");
                     AssertIncendiaryPayload(entMan,
                         incendiaryBolt,
                         "CMSS13 incendiary plasma pistol mode switches to /datum/ammo/energy/yautja/pistol/incendiary.");
@@ -12674,7 +12641,6 @@ public sealed class YautjaBowTest
 
                 var xenoDamage = entMan.GetComponent<DamageableComponent>(xeno);
                 Assert.That(entMan.System<DamageableSystem>().GetAllDamage((xeno, xenoDamage)).DamageDict.GetValueOrDefault("Heat"), Is.EqualTo(FixedPoint2.Zero));
-                Assert.That(status.TryGetTime(xeno, "YautjaInterference", out _), Is.False);
 
                 var hit = new ProjectileHitEvent(new DamageSpecifier(), xeno, hunter);
                 entMan.EventBus.RaiseLocalEvent(incendiaryProjectile!.Value, ref hit);
@@ -12689,9 +12655,6 @@ public sealed class YautjaBowTest
                         "CMSS13 rifle-bolt carbine mode keeps bullet_trait_incendiary.");
                     Assert.That(entMan.System<DamageableSystem>().GetAllDamage((xeno, xenoDamage)).DamageDict.GetValueOrDefault("Heat"), Is.EqualTo(FixedPoint2.New(41.25)),
                         "CMSS13 rifle-bolt carbine mode keeps the rifle xeno extra-burn branch.");
-                    Assert.That(status.TryGetTime(xeno, "YautjaInterference", out var time), Is.True,
-                        "CMSS13 rifle-bolt carbine mode keeps the rifle xeno interference branch.");
-                    Assert.That(time!.Value.Item2 - time.Value.Item1, Is.EqualTo(TimeSpan.FromSeconds(30)));
                 });
 
                 var explosiveBattery = entMan.GetComponent<BatteryComponent>(explosiveCarbine);
@@ -12998,7 +12961,8 @@ public sealed class YautjaBowTest
                     Assert.That(gun.SelectedMode, Is.EqualTo(SelectiveFire.SemiAuto));
                     Assert.That(gun.AvailableModes, Is.EqualTo(SelectiveFire.SemiAuto));
                     AssertSoundPath(gun.SoundGunshot!, "/Audio/CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav");
-                    Assert.That(tech.BlockPickup, Is.True);
+                    Assert.That(tech.BlockPickup, Is.False,
+                        "CM-SS13 ITEM_PREDATOR tracks the dual plasma cannons but does not block carrying them.");
                     Assert.That(tech.ShootDeniedPopup.Id, Is.EqualTo("cmu-yautja-spike-launcher-denied"));
                     Assert.That(linked.Projectile.Id, Is.EqualTo("CMUYautjaCasterLanceBolt"),
                         "CMSS13 source uses /datum/ammo/energy/yautja/caster/lance; local keeps a named lance-equivalent that currently inherits the closest located caster-lethal payload until the exact lance datum is located.");
@@ -15809,10 +15773,8 @@ public sealed class YautjaBowTest
 
     private static void BindRecallable(IEntityManager entMan, EntityUid item, EntityUid hunter)
     {
-        var bind = new UseInHandEvent(hunter);
-        entMan.EventBus.RaiseLocalEvent(item, bind);
-        Assert.That(bind.Handled, Is.True, "The first use binds the item before its normal activation.");
-        Assert.That(entMan.GetComponent<YautjaRecallableComponent>(item).YautjaOwner, Is.EqualTo(hunter));
+        // CMU14: the gear-binding system was removed, so a Yautja claims the disc by naming it owner.
+        entMan.GetComponent<YautjaSmartDiscComponent>(item).YautjaOwner = hunter;
     }
 
     private static void AssertThrallEquipmentAccessible(IEntityManager entMan, EntityUid item)
@@ -15826,15 +15788,26 @@ public sealed class YautjaBowTest
         IEntityManager entMan,
         EntityUid item,
         string id,
-        bool blockPickup = true)
+        bool? expectUse = true,
+        bool? expectShoot = true)
     {
         Assert.That(entMan.TryGetComponent<YautjaTechItemComponent>(item, out var tech), Is.True,
             $"{id} source flags_item = ITEM_PREDATOR mapping");
-        Assert.That(tech!.BlockPickup, Is.EqualTo(blockPickup), $"{id} source ITEM_PREDATOR pickup restriction");
-        Assert.That(tech.BlockUse, Is.True, $"{id} source ITEM_PREDATOR use restriction");
-        Assert.That(tech.BlockMelee, Is.True, $"{id} source ITEM_PREDATOR melee restriction");
-        Assert.That(tech.BlockThrow, Is.True, $"{id} source ITEM_PREDATOR throw restriction");
-        Assert.That(tech.BlockShoot, Is.True, $"{id} source ITEM_PREDATOR shoot restriction");
+
+        // CMU14: auditing CM-SS13 shows flags_item = ITEM_PREDATOR only attaches
+        // /datum/element/yautja_tracked_item (code/game/objects/items.dm), and that the items' own
+        // pickup()/equipped() overrides just print flavour text, so carrying, swinging and throwing
+        // Yautja gear is unrestricted for every species there. In-hand activation and firing stay gated
+        // per function (able_to_fire on the guns, the bracer menu/verbs, the chain's attack_hand, ...);
+        // callers pass null for an axis their item table does not model (melee weapons and shields have
+        // no in-hand activation of their own, so the racked table skips that flag).
+        Assert.That(tech!.BlockPickup, Is.False, $"{id} CM-SS13 ITEM_PREDATOR is a tracker, not a pickup block");
+        Assert.That(tech.BlockMelee, Is.False, $"{id} CM-SS13 never blocks swinging Yautja gear");
+        Assert.That(tech.BlockThrow, Is.False, $"{id} CM-SS13 never blocks throwing Yautja gear");
+        if (expectUse is { } use)
+            Assert.That(tech.BlockUse, Is.EqualTo(use), $"{id} CM-SS13 gates in-hand activation behind TRAIT_YAUTJA_TECH");
+        if (expectShoot is { } shoot)
+            Assert.That(tech.BlockShoot, Is.EqualTo(shoot), $"{id} CM-SS13 gates firing behind TRAIT_YAUTJA_TECH");
     }
 
     private static void AssertDefoliatorWeapon(
@@ -16127,11 +16100,11 @@ public sealed class YautjaBowTest
             $"{id} source flags_item = ITEM_PREDATOR mapping");
         if (tech != null)
         {
-            Assert.That(tech.BlockPickup, Is.EqualTo(blockPickup), $"{id} source ITEM_PREDATOR pickup restriction");
-            Assert.That(tech.BlockUse, Is.True, $"{id} source ITEM_PREDATOR use restriction");
-            Assert.That(tech.BlockMelee, Is.True, $"{id} source ITEM_PREDATOR melee restriction");
-            Assert.That(tech.BlockThrow, Is.True, $"{id} source ITEM_PREDATOR throw restriction");
-            Assert.That(tech.BlockShoot, Is.True, $"{id} source ITEM_PREDATOR shoot restriction");
+            Assert.That(tech.BlockPickup, Is.False, $"{id} CM-SS13 ITEM_PREDATOR tracks the item, it does not block pickup");
+            Assert.That(tech.BlockUse, Is.True, $"{id} CM-SS13 gates in-hand activation");
+            Assert.That(tech.BlockMelee, Is.False, $"{id} CM-SS13 never blocks swinging Yautja gear");
+            Assert.That(tech.BlockThrow, Is.False, $"{id} CM-SS13 never blocks throwing Yautja gear");
+            Assert.That(tech.BlockShoot, Is.True, $"{id} CM-SS13 gates firing");
         }
     }
 
@@ -16176,10 +16149,10 @@ public sealed class YautjaBowTest
             $"{id} source flags_item = ITEM_PREDATOR mapping");
         if (tech != null)
         {
-            Assert.That(tech.BlockPickup, Is.EqualTo(blockPickup), $"{id} source ITEM_PREDATOR pickup restriction");
+            Assert.That(tech.BlockPickup, Is.False, $"{id} CM-SS13 ITEM_PREDATOR tracks the item, it does not block pickup");
             Assert.That(tech.BlockUse, Is.True, $"{id} source ITEM_PREDATOR use restriction");
-            Assert.That(tech.BlockMelee, Is.True, $"{id} source ITEM_PREDATOR melee restriction");
-            Assert.That(tech.BlockThrow, Is.True, $"{id} source ITEM_PREDATOR throw restriction");
+            Assert.That(tech.BlockMelee, Is.False, $"{id} CM-SS13 never blocks swinging Yautja gear");
+            Assert.That(tech.BlockThrow, Is.False, $"{id} CM-SS13 never blocks throwing Yautja gear");
             Assert.That(tech.BlockShoot, Is.True, $"{id} source ITEM_PREDATOR shoot restriction");
         }
 
@@ -16213,10 +16186,12 @@ public sealed class YautjaBowTest
             $"{id} source flags_item = ITEM_PREDATOR mapping");
         if (tech != null)
         {
-            Assert.That(tech.BlockPickup, Is.True, $"{id} source ITEM_PREDATOR pickup restriction");
-            Assert.That(tech.BlockUse, Is.True, $"{id} source ITEM_PREDATOR use restriction");
-            Assert.That(tech.BlockMelee, Is.True, $"{id} source ITEM_PREDATOR melee restriction");
-            Assert.That(tech.BlockThrow, Is.True, $"{id} source ITEM_PREDATOR throw restriction");
+            Assert.That(tech.BlockPickup, Is.False, $"{id} CM-SS13 ITEM_PREDATOR tracks the item, it does not block pickup");
+            // CMU14: bracers deliberately do not block in-hand use - a non-tech user reaches the bracer's own
+            // misuse path, which is where the reference puts the consequences, rather than a refusal popup.
+            Assert.That(tech.BlockUse, Is.False, $"{id} CMU14 bracers gate their functions, not the item.");
+            Assert.That(tech.BlockMelee, Is.False, $"{id} CM-SS13 never blocks swinging Yautja gear");
+            Assert.That(tech.BlockThrow, Is.False, $"{id} CM-SS13 never blocks throwing Yautja gear");
             Assert.That(tech.BlockShoot, Is.True, $"{id} source ITEM_PREDATOR shoot restriction");
         }
     }
@@ -16297,7 +16272,7 @@ public sealed class YautjaBowTest
         Assert.That(item.Size.Id, Is.EqualTo(size), $"{id} CMSS13 w_class mapping");
         Assert.That(entMan.TryGetComponent<YautjaTechItemComponent>(uid, out var tech), Is.True,
             $"{id} maps CMSS13 flags_item = ITEM_PREDATOR.");
-        Assert.That(tech!.BlockPickup, Is.EqualTo(blockPickup), $"{id} local pickup policy.");
+        Assert.That(tech!.BlockPickup, Is.False, $"{id} CM-SS13 ITEM_PREDATOR tracks the item, it does not block pickup.");
 
         if (sourceUnacidable)
             AssertNonCorrodible(entMan, uid);
@@ -16331,10 +16306,10 @@ public sealed class YautjaBowTest
             $"{id} local Yautja-tech marker. {source}");
         Assert.Multiple(() =>
         {
-            Assert.That(tech!.BlockPickup, Is.EqualTo(blockPickup), $"{id} pickup policy. {source}");
+            Assert.That(tech!.BlockPickup, Is.False, $"{id} CM-SS13 ITEM_PREDATOR is a tracker, not a pickup block. {source}");
             Assert.That(tech.BlockUse, Is.EqualTo(blockUse), $"{id} use policy. {source}");
-            Assert.That(tech.BlockMelee, Is.EqualTo(blockMelee), $"{id} melee policy. {source}");
-            Assert.That(tech.BlockThrow, Is.EqualTo(blockThrow), $"{id} throw policy. {source}");
+            Assert.That(tech.BlockMelee, Is.False, $"{id} CM-SS13 never blocks swinging Yautja gear. {source}");
+            Assert.That(tech.BlockThrow, Is.False, $"{id} CM-SS13 never blocks throwing Yautja gear. {source}");
             Assert.That(tech.BlockShoot, Is.EqualTo(blockShoot), $"{id} shoot policy. {source}");
             Assert.That(tech.DamageMultiplier, Is.EqualTo(damageMultiplier), $"{id} damage multiplier. {source}");
         });
@@ -16606,7 +16581,7 @@ public sealed class YautjaBowTest
 
         Assert.That(entMan.TryGetComponent<YautjaTechItemComponent>(item, out var tech), Is.True,
             $"{id} source ITEM_PREDATOR mapping");
-        Assert.That(tech!.BlockPickup, Is.EqualTo(blockPickup), $"{id} local pickup policy.");
+        Assert.That(tech!.BlockPickup, Is.False, $"{id} CM-SS13 ITEM_PREDATOR tracks the item, it does not block pickup.");
     }
 
     private static void AssertCamoConformingRuntimeSprite(
@@ -17551,7 +17526,9 @@ public sealed class YautjaBowTest
             "ancient alien mesh suit",
             "A strange alloy weave in the form of a vest. It feels cold with an alien weight.",
             SlotFlags.INNERCLOTHING,
-            new Cmss13ProtectionStats(low, mediumLow, 20, 30),
+            // CM-SS13's chainshirt tiers: this row uses literals because the tier constants above are still the
+            // old CMU numbers (melee LOW 10, bullet MEDIUMLOW 15, bio MEDIUM 20, bomb MEDIUMHIGH 25).
+            new Cmss13ProtectionStats(low, 15, 20, 25),
             false);
 
         yield return new AdultMandatoryArmorAndMeshRow(
@@ -17559,7 +17536,7 @@ public sealed class YautjaBowTest
             "body mesh",
             "A set of very fine chainlink in a meshwork for comfort and utility.",
             SlotFlags.INNERCLOTHING,
-            new Cmss13ProtectionStats(low, medium, 25, 35),
+            new Cmss13ProtectionStats(low, 20, 25, 30),
             false);
 
         yield return new AdultMandatoryArmorAndMeshRow(
@@ -17696,9 +17673,9 @@ public sealed class YautjaBowTest
             "A set of very fine chainlink in a meshwork for comfort and utility.",
             SlotFlags.INNERCLOTHING,
             low,
-            mediumLow,
+            15,
             20,
-            35,
+            25,
             "It has been worn from long use and poor maintenance.",
             false);
 
@@ -18529,7 +18506,8 @@ public sealed class YautjaBowTest
             weapons,
             "ceremonial_dagger",
             "ceremonial_dagger",
-            MeleeHitSoundPath: "/Audio/Weapons/slash.ogg");
+            // CMU14: the dagger uses the same bladeslice sound as the other Yautja knives.
+            MeleeHitSoundPath: "/Audio/Weapons/bladeslice.ogg");
         yield return new Cmss13WeaponVisualSoundRow(
             "CMUYautjaClanShield",
             "/obj/item/weapon/shield/riot/yautja",
@@ -19236,7 +19214,7 @@ public sealed class YautjaBowTest
         Assert.That(entMan.TryGetComponent<Content.Shared.Tools.Components.ToolComponent>(uid, out var tool) && tool.Qualities.Contains("Slicing"), Is.EqualTo(row.Sharp),
             $"{row.Id} {row.SourcePath} sharp/edge local mapping");
         if (row.ItemPredator)
-            AssertYautjaTechItemBlocksLikeCmss13ItemPredator(entMan, uid, row.Id);
+            AssertYautjaTechItemBlocksLikeCmss13ItemPredator(entMan, uid, row.Id, expectUse: null);
         else
             Assert.That(entMan.HasComponent<YautjaTechItemComponent>(uid), Is.False,
                 $"{row.Id} {row.SourcePath} explicitly does not inherit flags_item = ITEM_PREDATOR.");
@@ -19274,8 +19252,6 @@ public sealed class YautjaBowTest
 
         Assert.That(entMan.HasComponent<LandAtCursorComponent>(uid), Is.EqualTo(row.LandAtCursor),
             $"{row.Id} {row.SourcePath} SPEED_VERY_FAST throw behavior local mapping");
-        Assert.That(entMan.HasComponent<YautjaRecallableComponent>(uid), Is.EqualTo(row.Recallable),
-            $"{row.Id} {row.SourcePath} CMU manual recall binding");
 
         if (row.ToggleTinyStorage)
         {

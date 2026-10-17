@@ -36,7 +36,6 @@ public sealed class YautjaHealingGunTest : GameTest
             var gun = SEntMan.SpawnEntity("CMUYautjaHealingGun", coordinates);
             try
             {
-                SEntMan.GetComponent<YautjaRecallableComponent>(gun).YautjaOwner = hunter;
                 var damage = SEntMan.System<DamageableSystem>();
                 var blunt = new DamageSpecifier();
                 blunt.DamageDict.Add("Blunt", FixedPoint2.New(10));
@@ -77,7 +76,6 @@ public sealed class YautjaHealingGunTest : GameTest
             var coordinates = new MapCoordinates(Vector2.Zero, mapId);
             hunter = SEntMan.SpawnEntity("CMUMobYautja", coordinates);
             gun = SEntMan.SpawnEntity("CMUYautjaHealingGun", coordinates);
-            SEntMan.GetComponent<YautjaRecallableComponent>(gun).YautjaOwner = hunter;
             Assert.That(SEntMan.System<SharedHandsSystem>()
                 .TryPickupAnyHand(hunter, gun, checkActionBlocker: false), Is.True);
 

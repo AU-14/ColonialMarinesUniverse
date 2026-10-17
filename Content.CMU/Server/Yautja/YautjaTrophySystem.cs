@@ -475,9 +475,22 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
         args.Handled = true;
         if (args.Procedure == YautjaButcherProcedure.Skin)
-            TryCompleteButcherStage(args.User, target, args.Stage);
+        {
+            if (!TryCompleteButcherStage(args.User, target, args.Stage))
+                return;
+
+            // CMU14: chain the four skinning stages, so one Skin selection runs the whole pelt instead of making
+            // the player reopen the action three more times. Each stage starts only after the previous one
+            // completes successfully - a cancelled do-after returns above, so the chain simply stops there, and
+            // BreakOnMove on the do-after is what cancels it. ButcheryProgress is advanced by the completion above,
+            // so the next stage passes its own progress validation and no stage can run twice.
+            if (args.Stage < 4)
+                TryStartButcher(args.User, target.Owner, YautjaButcherProcedure.Skin);
+        }
         else
+        {
             TryCompleteButcherLimb(args.User, target.Owner, args.Procedure);
+        }
     }
 
     public bool TryHarvestTrophy(EntityUid hunter, EntityUid target, YautjaTrophyKind kind, out EntityUid trophy)

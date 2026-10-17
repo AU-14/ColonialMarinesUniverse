@@ -422,7 +422,6 @@ cmu-yautja-ritual-examine-captive = Заявлен как ритуальная �
 cmu-yautja-ritual-examine-duel = Связан активной ритуальной дуэлью с {$hunter}.
 cmu-yautja-self-destruct-armed = Таймер запущен. Пусть путь в великие охотничьи угодья будет быстрым.
 cmu-yautja-self-destruct-warning = Самоуничтожение наруча: {$seconds} секунд.
-cmu-yautja-self-destruct-cancelled = Самоуничтожение наруча отменено.
 cmu-yautja-self-destruct-dead = Наруч не отвечает мёртвому охотнику.
 cmu-yautja-trap-arm-failed = Здесь нельзя установить ловушку.
 cmu-yautja-trap-armed = Вы взводите охотничью ловушку.
@@ -559,9 +558,6 @@ ent-CMUActionYautjaStunThrall = Оглушить Тралла
 
 ent-CMUActionYautjaSelfDestructThrall = Тралл Самоуничтожение
     .desc = Активируйте или отмените самоуничтожение связанного с вами наруча раба.
-
-ent-CMUActionYautjaRecall = Вызов диска
-    .desc = Вспомните ближайший смарт-диск под рукой.
 
 ent-CMUActionYautjaSelfDestruct = Наруч самоуничтожения
     .desc = Активируйте или отмените отложенный заряд самоуничтожения наручей.

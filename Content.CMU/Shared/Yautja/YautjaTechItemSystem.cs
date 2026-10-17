@@ -12,7 +12,9 @@ using Content.Shared.Projectiles;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Systems;
+using Content.Shared.Wieldable.Components;
 using Content.Shared.Hands.EntitySystems;
+using Robust.Shared.GameObjects;
 
 namespace Content.Shared.CMU14.Yautja;
 
@@ -23,30 +25,42 @@ public sealed partial class YautjaTechItemSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<DamageableComponent, DamageModifyAfterResistEvent>(OnDamageModifyAfterResist);
+        // CMU14: the melee health-damage modifier is removed (pred2 #10); the handler is kept commented out below.
+        // SubscribeLocalEvent<DamageableComponent, DamageModifyAfterResistEvent>(OnDamageModifyAfterResist);
         SubscribeLocalEvent<YautjaTechItemComponent, StaminaMeleeHitEvent>(OnStaminaMeleeHit);
         SubscribeLocalEvent<YautjaTechItemComponent, ProjectileHitEvent>(OnProjectileHit);
         SubscribeLocalEvent<YautjaTechItemComponent, GettingPickedUpAttemptEvent>(OnPickupAttempt);
         SubscribeLocalEvent<YautjaTechItemComponent, InteractHandEvent>(OnInteractHand, before: [typeof(SharedItemSystem)]);
         SubscribeLocalEvent<YautjaTechItemComponent, UseInHandEvent>(OnUseInHand);
+        // CMU14: items.dm:183 does AddElement(/datum/element/yautja_tracked_item) for every item whose
+        // flags_item carries ITEM_PREDATOR, i.e. all Yautja gear is registered for tracking the moment it
+        // exists - no marking required. The element then keeps it in GLOB.loose_yautja_gear whenever it is
+        // not in an honorable carrier's hands, which is what track_gear_internal (yaut_bracers.dm:693) reads.
+        // Mirror that here so gear stripped off a dead Yautja is locatable; an item the owner deliberately
+        // hid via "Remove Item from Tracker" (YautjaUntrackedItemComponent) stays out of the readout.
+        SubscribeLocalEvent<YautjaTechItemComponent, MapInitEvent>(OnTechItemMapInit);
         SubscribeLocalEvent<YautjaTechItemComponent, AttemptMeleeEvent>(OnAttemptMelee);
         SubscribeLocalEvent<YautjaTechItemComponent, ThrowItemAttemptEvent>(OnThrowAttempt);
         SubscribeLocalEvent<YautjaTechItemComponent, AttemptShootEvent>(OnShootAttempt, before: [typeof(SharedRMCFlamerSystem)]);
     }
 
-    private void OnDamageModifyAfterResist(Entity<DamageableComponent> ent, ref DamageModifyAfterResistEvent args)
-    {
-        if (args.Tool is not { } tool ||
-            HasComp<ProjectileComponent>(tool) ||
-            !TryComp(tool, out YautjaTechItemComponent? tech) ||
-            tech.DamageMultiplier == 1f ||
-            !args.Damage.AnyPositive())
-        {
-            return;
-        }
-
-        args.Damage *= tech.DamageMultiplier;
-    }
+    // CMU14: the old per-weapon YautjaTechItem melee modifier is removed (pred2 #10): it scaled melee *health*
+    // damage, which CM-SS13 does not do - a Yautja weapon gets no melee damage bonus - and melee scaling now
+    // belongs to the xeno melee configuration in CMArmorSystem. DamageMultiplier stays for the projectile and
+    // melee-stamina paths that still use it. Kept commented out for merge safety (AGENTS-CMU.md:62).
+    // private void OnDamageModifyAfterResist(Entity<DamageableComponent> ent, ref DamageModifyAfterResistEvent args)
+    // {
+    //     if (args.Tool is not { } tool ||
+    //         HasComp<ProjectileComponent>(tool) ||
+    //         !TryComp(tool, out YautjaTechItemComponent? tech) ||
+    //         tech.DamageMultiplier == 1f ||
+    //         !args.Damage.AnyPositive())
+    //     {
+    //         return;
+    //     }
+    //
+    //     args.Damage *= tech.DamageMultiplier;
+    // }
 
     private void OnProjectileHit(Entity<YautjaTechItemComponent> ent, ref ProjectileHitEvent args)
     {
@@ -88,8 +102,21 @@ public sealed partial class YautjaTechItemSystem : EntitySystem
         args.Handled = true;
     }
 
+    private void OnTechItemMapInit(Entity<YautjaTechItemComponent> ent, ref MapInitEvent args)
+    {
+        if (HasComp<YautjaUntrackedItemComponent>(ent.Owner))
+            return;
+
+        EnsureComp<YautjaTrackedItemComponent>(ent.Owner);
+    }
+
     private void OnUseInHand(Entity<YautjaTechItemComponent> ent, ref UseInHandEvent args)
     {
+        // CMU14: CM-SS13 only ever gates a gun's able_to_fire, wielding one is free even for a human
+        // (SharedWieldableSystem wields through this same event), so a wieldable item is never refused.
+        if (HasComp<WieldableComponent>(ent.Owner))
+            return;
+
         if (!ent.Comp.BlockUse ||
             IsAllowed(args.User) ||
             ent.Comp.AllowNonYautjaActiveHandUse && _hands.GetActiveItem(args.User) == ent.Owner)

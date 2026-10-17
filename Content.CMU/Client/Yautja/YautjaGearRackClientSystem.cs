@@ -38,6 +38,7 @@ public sealed partial class YautjaGearRackClientSystem : EntitySystem
     [Dependency] private AccessReaderSystem _accessReader = default!;
     [Dependency] private SharedJobSystem _job = default!;
     [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private YautjaGearRackAccessSystem _rackAccess = default!;
 
     private static readonly ProtoId<AccessLevelPrototype> YautjaSecureAccess = "CMUAccessYautjaSecure";
     private static readonly ProtoId<AccessLevelPrototype> YautjaElderAccess = "CMUAccessYautjaElder";
@@ -61,32 +62,7 @@ public sealed partial class YautjaGearRackClientSystem : EntitySystem
         if (args.Cancelled)
             return;
 
-        var denial = ent.Comp.Kind switch
-        {
-            YautjaGearRackKind.Adult => DenyIfMissingAccessThenWrongRole(
-                HasAccess(args.User, YautjaSecureAccess),
-                HasJob(args.User, HunterJob)),
-            YautjaGearRackKind.Youngblood => DenyIfMissingAccessThenWrongRole(
-                HasAccess(args.User, YautjaSecureAccess),
-                HasJob(args.User, YoungbloodJob) || HasJob(args.User, HunterJob)),
-            YautjaGearRackKind.Elder => DenyIfMissingAccessThenWrongRole(
-                HasAccess(args.User, YautjaElderAccess) || HasAccess(args.User, YautjaAncientAccess),
-                HasJob(args.User, HunterJob)),
-            YautjaGearRackKind.Thrall => HasComp<YautjaThrallComponent>(args.User)
-                ? null
-                : "cm-vending-machine-access-denied",
-            YautjaGearRackKind.BloodedThrall => HasComp<YautjaTechAuthorizedComponent>(args.User)
-                ? null
-                : "cm-vending-machine-access-denied",
-            YautjaGearRackKind.BadBlood => HasAccess(args.User, YautjaBadBloodAccess)
-                ? null
-                : "cm-vending-machine-access-denied",
-            YautjaGearRackKind.Stranded => HasAccess(args.User, YautjaSecureAccess) &&
-                                            !HasAccess(args.User, YautjaBadBloodAccess)
-                ? null
-                : "cm-vending-machine-access-denied",
-            _ => null,
-        };
+        var denial = _rackAccess.GetOpenDenial(args.User, ent.Comp.Kind);
 
         if (denial == null)
             return;
@@ -105,6 +81,13 @@ public sealed partial class YautjaGearRackClientSystem : EntitySystem
     private bool HasAccess(EntityUid user, ProtoId<AccessLevelPrototype> access)
     {
         return _accessReader.FindAccessTags(user).Contains(access);
+    }
+
+    /// CMU14 (pred2 #5): no ID card required - a Yautja of the rack's rank or above may open it. Mirrors the
+    /// server's rule so a Yautja carrying no ID is not denied locally before the server even sees the request.
+    private bool HasRackRank(EntityUid user, YautjaRank rank)
+    {
+        return TryComp<YautjaComponent>(user, out var yautja) && yautja.ClanRank >= rank;
     }
 
     private bool HasJob(EntityUid user, ProtoId<JobPrototype> job)

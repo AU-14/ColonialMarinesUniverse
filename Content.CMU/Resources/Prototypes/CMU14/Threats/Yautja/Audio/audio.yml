@@ -93,9 +93,12 @@
 
 - type: soundCollection
   id: CMUYautjaDeath
+  # CMU14: CM-SS13's /datum/species/yautja death_sound = "pred_death", which picks randomly between
+  # sound/voice/pred_death1.ogg and pred_death2.ogg. Those two are this repo's pred_death1.wav / pred_death2.wav,
+  # so the deathgasp uses them; the scream variants stay on the CMUYautjaDeathCries emote collection.
   files:
-  - /Audio/CMU14/Yautja/Voice/Death/pred_death_scream_01.wav
-  - /Audio/CMU14/Yautja/Voice/Death/pred_death_scream_02.wav
+  - /Audio/CMU14/Yautja/Voice/Death/pred_death1.wav
+  - /Audio/CMU14/Yautja/Voice/Death/pred_death2.wav
 
 - type: soundCollection
   id: CMUYautjaDeathCries

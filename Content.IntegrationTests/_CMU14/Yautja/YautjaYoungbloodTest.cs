@@ -988,12 +988,13 @@ public sealed class YautjaYoungbloodTest
                 {
                     Assert.That(actionIds, Does.Contain("CMUActionYautjaOpenBracerMenu"));
                     Assert.That(actionIds, Does.Contain("CMUActionYautjaToggleCloak"));
-                    Assert.That(actionIds, Does.Contain("CMUActionYautjaRecall"));
                     Assert.That(actionIds, Does.Contain("CMUActionYautjaTranslator"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleWristBlades"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleScimitar"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleChainGauntlet"));
-                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaSelfDestruct"));
+                    // CMU14: CM-SS13 grants the self-destruct action to every bracer wearer (equipped()
+                    // hands out bracer_actions wholesale); a youngblood simply cannot arm it.
+                    Assert.That(actionIds, Does.Contain("CMUActionYautjaSelfDestruct"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleCaster"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleShield"));
                 });

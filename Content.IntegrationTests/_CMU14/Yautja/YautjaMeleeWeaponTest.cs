@@ -102,56 +102,6 @@ public sealed class YautjaMeleeWeaponTest
     }
 
     [Test]
-    public async Task YautjaMeleeXenoInterferenceRequiresYautjaSpeciesLikeCmss13()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var status = entMan.System<StatusEffectQuerySystem>();
-            var techHuman = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            var chainwhip = entMan.SpawnEntity("CMUYautjaChainwhip", map.GridCoords);
-            var sword = entMan.SpawnEntity("CMUYautjaClanSword", map.GridCoords);
-            var scythe = entMan.SpawnEntity("CMUYautjaDualWarScythe", map.GridCoords);
-            var combistick = entMan.SpawnEntity("CMUYautjaCombistick", map.GridCoords);
-            var glaive = entMan.SpawnEntity("CMUYautjaWarGlaive", map.GridCoords);
-
-            try
-            {
-                entMan.EnsureComponent<YautjaTechAuthorizedComponent>(techHuman);
-
-                AssertWeaponDoesNotApplyInterference(entMan, status, chainwhip, techHuman,
-                    "CMSS13 /obj/item/weapon/yautja/chain/attack() gates xeno interference on human_adapted || isyautja(user), not TRAIT_YAUTJA_TECH.");
-
-                AssertWeaponDoesNotApplyInterference(entMan, status, sword, techHuman,
-                    "CMSS13 /obj/item/weapon/yautja/sword/attack() gates xeno interference on human_adapted || isyautja(user), not TRAIT_YAUTJA_TECH.");
-
-                AssertWeaponDoesNotApplyInterference(entMan, status, scythe, techHuman,
-                    "CMSS13 /obj/item/weapon/yautja/scythe/attack() gates xeno interference on human_adapted || isyautja(user), not TRAIT_YAUTJA_TECH.");
-
-                AssertWeaponDoesNotApplyInterference(entMan, status, combistick, techHuman,
-                    "CMSS13 /obj/item/weapon/yautja/chained/attack() gates xeno interference on human_adapted || isspeciesyautja(user), not TRAIT_YAUTJA_TECH.");
-
-                AssertWeaponDoesNotApplyInterference(entMan, status, glaive, techHuman,
-                    "CMSS13 /obj/item/weapon/twohanded/yautja/glaive/attack() gates xeno interference on human_adapted || isyautja(user), not TRAIT_YAUTJA_TECH.");
-            }
-            finally
-            {
-                foreach (var uid in new[] { techHuman, chainwhip, sword, scythe, combistick, glaive })
-                {
-                    if (!entMan.Deleted(uid))
-                        entMan.DeleteEntity(uid);
-                }
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task WarAxeAndGlaiveVariantsInheritCmss13XenoInterferenceCallbacks()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -1936,5 +1886,78 @@ public sealed class YautjaMeleeWeaponTest
             var labels = client.EntMan.System<PopupSystem>().WorldLabels.Select(label => label.Text).ToList();
             Assert.That(labels, Does.Contain(expected), $"Actual popups:\n{string.Join("\n", labels)}");
         });
+    }
+
+    // CMU14: Yautja melee weapons must not perform wide (arc) attacks. The restriction lives on the shared
+    // MeleeWeaponComponent.WideAttackAllowed plus a guard in SharedMeleeWeaponSystem.AttemptAttack (server) and
+    // MeleeWeaponSystem.ClientHeavyAttack (client), and every CMUYautjaWeaponBase child opts out here.
+    [Test]
+    public async Task YautjaMeleeWeaponsDoNotAllowWideAttacks()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var protos = server.ProtoMan;
+
+            // Wall decor knives inherit the weapon base but strip MeleeWeapon on purpose.
+            // They are display pieces, not weapons.
+            var weapons = protos.EnumeratePrototypes<EntityPrototype>()
+                .Where(proto => !proto.Abstract &&
+                                !pair.IsTestEntityPrototype(proto.ID) &&
+                                !InheritsFrom(protos, proto, "CMUHunterShipFixedGearWallDecor") &&
+                                InheritsFrom(protos, proto, "CMUYautjaWeaponBase"))
+                .ToList();
+
+            Assert.That(weapons, Is.Not.Empty,
+                "Expected concrete weapons inheriting CMUYautjaWeaponBase to exist.");
+
+            foreach (var proto in weapons)
+            {
+                var uid = entMan.SpawnEntity(proto.ID, map.GridCoords);
+                try
+                {
+                    Assert.That(entMan.TryGetComponent<MeleeWeaponComponent>(uid, out var melee), Is.True,
+                        $"{proto.ID} inherits CMUYautjaWeaponBase and must have a MeleeWeaponComponent.");
+
+                    Assert.That(melee!.WideAttackAllowed, Is.False,
+                        $"{proto.ID} must set wideAttackAllowed: false so it cannot perform wide (arc) attacks.");
+                }
+                finally
+                {
+                    if (!entMan.Deleted(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    private static bool InheritsFrom(IPrototypeManager prototypes, EntityPrototype proto, string ancestor)
+    {
+        var pending = new Queue<string>(proto.Parents ?? Array.Empty<string>());
+        var seen = new HashSet<string>();
+
+        while (pending.Count > 0)
+        {
+            var parentId = pending.Dequeue();
+            if (!seen.Add(parentId))
+                continue;
+
+            if (parentId == ancestor)
+                return true;
+
+            if (prototypes.TryIndex<EntityPrototype>(parentId, out var parent) && parent.Parents != null)
+            {
+                foreach (var grandParent in parent.Parents)
+                    pending.Enqueue(grandParent);
+            }
+        }
+
+        return false;
     }
 }

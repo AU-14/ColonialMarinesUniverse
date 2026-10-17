@@ -27,7 +27,6 @@ public sealed partial class YautjaBowSystem : EntitySystem
     [Dependency] private YautjaTrapSystem _trap = default!;
 
     private const string ProjectileSlotId = "projectiles";
-    private static readonly TimeSpan YautjaTrapXenoInterferenceDuration = TimeSpan.FromSeconds(100);
     private static readonly SoundSpecifier SnareTriggerSound = new SoundPathSpecifier("/Audio/CMU14/Yautja/tablehit1.ogg");
     private readonly Dictionary<EntityUid, (EntityUid User, EntityUid Arrow)> _pendingNockPopups = new();
     private readonly Dictionary<EntityUid, (EntityUid User, EntityUid Arrow)> _pendingUnloadPopups = new();
@@ -301,7 +300,6 @@ public sealed partial class YautjaBowSystem : EntitySystem
         trap.LogTrappedMobFreed = true;
         trap.ForceXenoHelpEmote = true;
         trap.ForceHumanPainEmote = true;
-        trap.XenoInterferenceDuration = YautjaTrapXenoInterferenceDuration;
         Dirty(snare, trap);
 
         if (!_trap.TryTriggerTrap((snare, trap), args.Target))

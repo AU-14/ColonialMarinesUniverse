@@ -621,6 +621,20 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
 
         if (!TryComp(uid, out ThrownItemComponent? thrown))
         {
+            // CMU14: a disc that a wall stopped has no ThrownItemComponent, and SteerDisc/SteerBoomerangReturn
+            // run every tick, so this used to re-throw it - and spam the engine's throwing message
+            // ("smart-disc throws smart-disc") - on every tick while it was pinned. Only attempt a fresh throw
+            // once the disc has actually moved since the last attempt, so a pinned disc waits; when it can move
+            // again the position differs and the launch goes through exactly as before.
+            var position = _transform.GetMapCoordinates(uid).Position;
+            if (disc.LastThrowAttemptPosition is { } lastAttempt &&
+                (position - lastAttempt).LengthSquared() < 0.01f)
+            {
+                return false;
+            }
+
+            disc.LastThrowAttemptPosition = position;
+
             _throwing.TryThrow(
                 uid,
                 direction,
@@ -934,15 +948,8 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
             return true;
         }
 
-        if (TryComp(ent.Owner, out YautjaRecallableComponent? recallable) &&
-            recallable.YautjaOwner is { } recallOwner &&
-            !TerminatingOrDeleted(recallOwner))
-        {
-            owner = recallOwner;
-            ent.Comp.YautjaOwner = recallOwner;
-            return true;
-        }
-
+        // CMU14: the gear-binding component that used to carry the owner is gone, so the disc only
+        // trusts its own field and the rogue-target path above.
         owner = default;
         return false;
     }
@@ -953,15 +960,16 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
         if (!HasComp<YautjaComponent>(user))
             return false;
 
-        if (!TryComp(ent.Owner, out YautjaRecallableComponent? recallable) ||
-            recallable.YautjaOwner is not { } existing ||
-            TerminatingOrDeleted(existing))
-            return false;
+        // CMU14: the removed binding system used to register the owner, so a Yautja claiming an
+        // unowned disc now records it directly and keeps the disc's return-to-owner behaviour.
+        if (ent.Comp.YautjaOwner is not { } existing || TerminatingOrDeleted(existing))
+        {
+            ent.Comp.YautjaOwner = user;
+            owner = user;
+            return true;
+        }
 
         owner = existing;
-        if (owner == user)
-            ent.Comp.YautjaOwner = user;
-
         return true;
     }
 

@@ -2,14 +2,16 @@
   abstract: true
   id: RMCBaseMeleeWeapon
   components:
-  - type: MeleeDamageMultiplier
-    whitelist:
-      components:
-      - Xeno
+  # CMU14: resolved centrally by CMArmorSystem; per-weapon multiplier disabled.
+  # - type: MeleeDamageMultiplier
+#    whitelist:
+#      components:
+#      - Xeno
   - type: MeleeWeapon
     angle: 0
-  - type: CMArmorPiercing
-    amount: 20
+  # CMU14: the 20 AP is applied centrally in CMArmorSystem for the item-attack path.
+  # - type: CMArmorPiercing
+  #   amount: 20
   - type: InteractedBlacklist
     blacklist:
       components:

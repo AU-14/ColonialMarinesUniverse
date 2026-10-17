@@ -64,18 +64,6 @@ public sealed partial class YautjaComponent : Component
     public float StunResistance = 1.5f;
 
     [DataField]
-    public float ShoveChanceBonus = 0.2f;
-
-    [DataField]
-    public float XenoTackleSuccessChance = 0.75f;
-
-    [DataField]
-    public int XenoTackleSuccessesRequired = 2;
-
-    [DataField]
-    public TimeSpan XenoTackleExpireAfter = TimeSpan.FromSeconds(4);
-
-    [DataField]
     public Dictionary<FixedPoint2, float> SlowOnDamageThresholds = new()
     {
         { 160, 0.9f },
@@ -478,15 +466,6 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public EntityUid? OpenMarkPanelAction;
 
     [DataField]
-    public bool EnableRecall = true;
-
-    [DataField]
-    public EntProtoId RecallActionId = "CMUActionYautjaRecall";
-
-    [ViewVariables]
-    public EntityUid? RecallAction;
-
-    [DataField]
     public EntProtoId CallDiscActionId = "CMUActionYautjaCallDisc";
 
     [ViewVariables]
@@ -830,6 +809,9 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public EntityUid? SelfDestructArmStream;
 
     [ViewVariables]
+    public EntityUid? SelfDestructWarningStream;
+
+    [ViewVariables]
     public EntityUid? SelfDestructLaughStream;
 
     [DataField]
@@ -895,11 +877,20 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     [DataField]
     public TimeSpan NonYautjaCloakShockEvery = TimeSpan.FromSeconds(2);
 
+    // CMU14: yaut_bracers.dm:107-114 (base bracer) shocks a non-tech wearer with prob(2) while cloaked.
     [DataField]
-    public float NonYautjaCloakShockChance = 0.04f;
+    public float NonYautjaCloakShockChance = 0.02f;
 
     [DataField]
     public TimeSpan NextNonYautjaCloakShock;
+
+    // CMU14: yaut_bracers.dm:392-400 (hunter bracer) shocks a non-tech wearer with prob(4) every tick
+    // whether or not they are cloaked; the hunter also inherits the cloak-gated prob(2) above.
+    [DataField]
+    public float NonYautjaShockChance;
+
+    [DataField]
+    public TimeSpan NextNonYautjaShock;
 
     [DataField]
     public float BulletDecloakChance = 0.20f;
@@ -1384,13 +1375,6 @@ public sealed partial class YautjaAbominationRoarBuffComponent : Component
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class YautjaRecallableComponent : Component
-{
-    [DataField, AutoNetworkedField]
-    public EntityUid? YautjaOwner;
-}
-
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class YautjaChainedWeaponComponent : Component
 {
     [DataField]
@@ -1436,6 +1420,13 @@ public sealed partial class YautjaSmartDiscComponent : Component
 
     [DataField]
     public float SpinVelocity = 24f;
+
+    // CMU14: where the disc was when a throw was last attempted while it had no ThrownItemComponent. The
+    // steering helpers run every tick and re-throw in that state, so a disc stopped by a wall used to be
+    // re-thrown - and announced by the engine's throwing chat line ("smart-disc throws smart-disc") - on every
+    // tick. While the disc has not moved since this position the throw is skipped instead.
+    [DataField]
+    public Vector2? LastThrowAttemptPosition;
 
     [DataField]
     public int MaxHits = 3;
@@ -1571,8 +1562,13 @@ public sealed partial class YautjaTechItemComponent : Component
     [DataField]
     public float DamageMultiplier = 1.5f;
 
+    // CMU14: CM-SS13's flags_item = ITEM_PREDATOR only attaches /datum/element/yautja_tracked_item
+    // (code/game/objects/items.dm); carrying, swinging and throwing Yautja gear is unrestricted for
+    // everyone there, and the item's own pickup()/equipped() overrides only add flavour text. The two
+    // flags that stay on by default mirror the functions CM-SS13 really does gate behind
+    // TRAIT_YAUTJA_TECH: in-hand activation and firing.
     [DataField]
-    public bool BlockPickup = true;
+    public bool BlockPickup;
 
     [DataField]
     public bool BlockUse = true;
@@ -1581,10 +1577,10 @@ public sealed partial class YautjaTechItemComponent : Component
     public bool AllowNonYautjaActiveHandUse;
 
     [DataField]
-    public bool BlockMelee = true;
+    public bool BlockMelee;
 
     [DataField]
-    public bool BlockThrow = true;
+    public bool BlockThrow;
 
     [DataField]
     public bool BlockShoot = true;
@@ -2844,9 +2840,6 @@ public sealed partial class YautjaTrapComponent : Component
 
     [DataField]
     public bool ForceHumanPainEmote;
-
-    [DataField]
-    public TimeSpan XenoInterferenceDuration;
 }
 
 [Serializable, NetSerializable]
@@ -3221,13 +3214,6 @@ public sealed partial class YautjaChainGauntletPullComponent : Component
 public sealed partial class YautjaChainWrapperComponent : Component;
 
 [RegisterComponent]
-public sealed partial class YautjaMeleeXenoInterferenceComponent : Component
-{
-    [DataField]
-    public TimeSpan Duration = TimeSpan.FromSeconds(30);
-}
-
-[RegisterComponent]
 public sealed partial class YautjaScytheBonusStrikeComponent : Component
 {
     [DataField]
@@ -3392,9 +3378,6 @@ public sealed partial class YautjaPlasmaRifleBoltComponent : Component
 
     [DataField]
     public float XenoExtraDamageMultiplier = 0.75f;
-
-    [DataField]
-    public TimeSpan XenoInterferenceDuration = TimeSpan.FromSeconds(30);
 }
 
 [RegisterComponent]

@@ -1367,8 +1367,8 @@ public sealed class YautjaPlasmaWeaponTest
                     "CMSS13 plasma immobilizer area stun uses stun_time = 6 for normal carbon targets.");
                 AssertCasterStun(entMan, xeno, TimeSpan.FromSeconds(6 * 0.667),
                     "The immobilizer's six-second area stun respects RMC's 0.667 xeno duration multiplier.");
-                AssertNoCasterStun(entMan, yautja,
-                    "The current master's regular hunter immunity also rejects immobilizer stun.");
+                AssertCasterStun(entMan, yautja, TimeSpan.FromSeconds(4) / 1.5,
+                    "CMSS13's immobilizer applies stun_time - 2 for hunters, cut by their 1.5x stun reduction.");
                 AssertNoCasterStun(entMan, predalien,
                     "CMSS13 plasma immobilizer skips predalien targets.");
                 AssertNoCasterStun(entMan, outsideRange,
@@ -1376,14 +1376,15 @@ public sealed class YautjaPlasmaWeaponTest
 
                 ClearCasterStun(entMan, human);
                 ClearCasterStun(entMan, xeno);
+                ClearCasterStun(entMan, yautja);
 
                 var maxRange = new ProjectileFixedDistanceStopEvent();
                 entMan.EventBus.RaiseLocalEvent(projectile, ref maxRange);
 
                 AssertCasterStun(entMan, human, TimeSpan.FromSeconds(6),
                     "CMSS13 plasma immobilizer do_at_max_range() runs the same area stun as direct impact.");
-                AssertNoCasterStun(entMan, yautja,
-                    "Max-range immobilizer stun respects the same regular hunter immunity.");
+                AssertCasterStun(entMan, yautja, TimeSpan.FromSeconds(4) / 1.5,
+                    "Max-range immobilizer stun hits hunters exactly like a direct hit.");
                 AssertNoCasterStun(entMan, predalien,
                     "CMSS13 max-range immobilizer area stun still skips predaliens.");
             }

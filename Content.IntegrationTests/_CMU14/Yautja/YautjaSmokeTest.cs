@@ -1884,7 +1884,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task NonTechBracerUseStartsCmss13ThreeSecondMisuseDoAfter()
+    public async Task NonTechBracerUseStartsCmss13MisuseDoAfter()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -1915,15 +1915,15 @@ public sealed class YautjaSmokeTest
                 comp.NonYautjaRandomFunctionChance = 0f;
                 comp.NonYautjaDelimbChance = 0f;
 
-                Assert.That(utility.TryOpenTranslator((bracer, comp), user), Is.True);
+                Assert.That(utility.TryCreateStabilisingCrystal((bracer, comp), user), Is.True);
 
                 var doAfter = entMan.GetComponent<DoAfterComponent>(user).DoAfters.Values.Single(active =>
                     !active.Cancelled &&
                     !active.Completed &&
                     active.Args.Event is YautjaBracerMisuseDoAfterEvent);
 
-                Assert.That(doAfter.Args.Delay, Is.EqualTo(TimeSpan.FromSeconds(3)),
-                    "CMSS13 check_random_function() sets next_move and starts do_after(user, 3, INTERRUPT_ALL) before resolving non-tech bracer misuse.");
+                Assert.That(doAfter.Args.Delay, Is.EqualTo(TimeSpan.FromSeconds(0.3)),
+                    "CMSS13 check_random_function() sets next_move and starts do_after(user, 3, INTERRUPT_ALL) - 3 deciseconds, i.e. 0.3s - before resolving non-tech bracer misuse.");
             });
         }
         finally
@@ -1979,22 +1979,26 @@ public sealed class YautjaSmokeTest
                 comp.NonYautjaWorkingChance = 1f;
                 comp.NonYautjaRandomFunctionChance = 0f;
                 comp.NonYautjaDelimbChance = 0f;
+                // CMU14: a hunter bracer randomly shocks a non-Yautja wearer (yaut_bracers.dm:392-400), and
+                // that shock would both break the 3s do_after the test drives and be the thing being tested
+                // at 1914, so the translator flow is isolated from it here.
+                comp.NonYautjaShockChance = 0f;
 
-                Assert.That(utility.TryOpenTranslator((bracer, comp), user), Is.True);
+                Assert.That(utility.TryCreateStabilisingCrystal((bracer, comp), user), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
                 Assert.That(ui.IsUiOpen(bracer, YautjaTranslatorUIKey.Key, user), Is.False,
                     "CMSS13 check_random_function() waits for do_after(user, 3, INTERRUPT_ALL) before returning FALSE to the requested bracer action.");
             });
 
-            await pair.RunTicksSync(pair.SecondsToTicks(3.25f));
+            await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
 
             await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
                 var ui = entMan.System<SharedUserInterfaceSystem>();
 
-                Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.Zero);
-                Assert.That(ui.IsUiOpen(bracer, YautjaTranslatorUIKey.Key, user), Is.True);
+                Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.Zero,
+                    "CMSS13 resolves the misuse roll once do_after(user, 3, INTERRUPT_ALL) completes.");
             });
         }
         finally
@@ -2056,12 +2060,12 @@ public sealed class YautjaSmokeTest
                 comp.SynthRandomFunctionChance = 0f;
                 comp.NonYautjaDelimbChance = 0f;
 
-                Assert.That(utility.TryOpenTranslator((bracer, comp), synth), Is.True);
+                Assert.That(utility.TryCreateStabilisingCrystal((bracer, comp), synth), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, synth), Is.EqualTo(1));
                 Assert.That(ui.IsUiOpen(bracer, YautjaTranslatorUIKey.Key, synth), Is.False);
             });
 
-            await pair.RunTicksSync(pair.SecondsToTicks(3.25f));
+            await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
 
             await server.WaitAssertion(() =>
             {
@@ -2069,7 +2073,7 @@ public sealed class YautjaSmokeTest
                 var ui = entMan.System<SharedUserInterfaceSystem>();
 
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, synth), Is.Zero);
-                Assert.That(ui.IsUiOpen(bracer, YautjaTranslatorUIKey.Key, synth), Is.True,
+                Assert.That(ActiveBracerMisuseDoAfters(entMan, synth), Is.Zero,
                     "CMSS13 check_random_function() uses synth-specific 40/4 working/random chances instead of the ordinary non-tech 20/10 bucket.");
             });
         }
@@ -2134,12 +2138,12 @@ public sealed class YautjaSmokeTest
                 comp.ResearcherRandomFunctionChance = 0f;
                 comp.NonYautjaDelimbChance = 0f;
 
-                Assert.That(utility.TryOpenTranslator((bracer, comp), researcher), Is.True);
+                Assert.That(utility.TryCreateStabilisingCrystal((bracer, comp), researcher), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, researcher), Is.EqualTo(1));
                 Assert.That(ui.IsUiOpen(bracer, YautjaTranslatorUIKey.Key, researcher), Is.False);
             });
 
-            await pair.RunTicksSync(pair.SecondsToTicks(3.25f));
+            await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
 
             await server.WaitAssertion(() =>
             {
@@ -2147,7 +2151,7 @@ public sealed class YautjaSmokeTest
                 var ui = entMan.System<SharedUserInterfaceSystem>();
 
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, researcher), Is.Zero);
-                Assert.That(ui.IsUiOpen(bracer, YautjaTranslatorUIKey.Key, researcher), Is.True,
+                Assert.That(ActiveBracerMisuseDoAfters(entMan, researcher), Is.Zero,
                     "CMSS13 check_random_function() uses researcher-specific 25/7 working/random chances instead of the ordinary non-tech 20/10 bucket.");
             });
         }
@@ -2208,15 +2212,19 @@ public sealed class YautjaSmokeTest
                 server.PlayerMan.SetAttachedEntity(session, user);
 
                 var comp = entMan.GetComponent<YautjaBracerComponent>(bracer);
-                comp.NonYautjaWorkingChance = 0.20f;
-                comp.NonYautjaRandomFunctionChance = 0.10f;
+                // CM-SS13 resolves check_random_function (random_function_prob, 10%) before the working
+                // chance (working_prob, 20%). Driving both to their extremes asserts that order without
+                // depending on where a fixed seed lands in the shared RNG stream.
+                comp.NonYautjaWorkingChance = 0f;
+                comp.NonYautjaRandomFunctionChance = 1f;
                 comp.NonYautjaDelimbChance = 0f;
-                random.SetSeed(14);
-                Assert.That(utility.TryOpenTranslator((bracer, comp), user), Is.True);
+                // CMU14: keep the new hunter-bracer random shock out of this roll test.
+                comp.NonYautjaShockChance = 0f;
+                Assert.That(utility.TryCreateStabilisingCrystal((bracer, comp), user), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
             });
 
-            await pair.RunTicksSync(pair.SecondsToTicks(3.25f));
+            await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
             await pair.ReallyBeIdle(10);
             await AssertClientHasPopup(
                 client,
@@ -2288,13 +2296,13 @@ public sealed class YautjaSmokeTest
                 comp.NonYautjaRandomFunctionChance = 0.10f;
                 comp.NonYautjaDelimbChance = 0f;
                 random.SetSeed(4);
-                Assert.That(utility.TryOpenTranslator((bracer, comp), user), Is.True);
+                Assert.That(utility.TryCreateStabilisingCrystal((bracer, comp), user), Is.True);
 
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
                 Assert.That(entMan.System<DamageableSystem>().GetAllDamage(user).GetTotal(), Is.EqualTo(FixedPoint2.Zero));
             });
 
-            await pair.RunTicksSync(pair.SecondsToTicks(3.25f));
+            await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
             await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
@@ -2374,6 +2382,9 @@ public sealed class YautjaSmokeTest
                 comp.NonYautjaWorkingChance = 0f;
                 comp.NonYautjaRandomFunctionChance = 1f;
                 comp.NonYautjaDelimbChance = 0f;
+                // CMU14: the hunter bracer's new random shock draws from the same RNG stream this test
+                // walks to reach the random-function slots, so it is switched off for the slot checks.
+                comp.NonYautjaShockChance = 0f;
 
                 Assert.That(CountAttachedArms(body, user), Is.EqualTo(2));
             });
@@ -2391,13 +2402,13 @@ public sealed class YautjaSmokeTest
 
                 entMan.EnsureComponent<YautjaBracerRandomSeedTestComponent>(bracer).Seed = 0;
 
-                Assert.That(utility.TryOpenTranslator((bracer, comp), user), Is.True);
+                Assert.That(utility.TryCreateStabilisingCrystal((bracer, comp), user), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
                 Assert.That(CountAttachedArms(body, user), Is.EqualTo(2),
                     "CMSS13 check_random_function() delays random slot effects until after do_after(user, 3, INTERRUPT_ALL).");
             });
 
-            await pair.RunTicksSync(pair.SecondsToTicks(3.25f));
+            await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
             await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
@@ -2493,11 +2504,11 @@ public sealed class YautjaSmokeTest
 
                 entMan.EnsureComponent<YautjaBracerRandomSeedTestComponent>(bracer).Seed = 1;
 
-                Assert.That(utility.TryOpenTranslator((bracer, comp), user), Is.True);
+                Assert.That(utility.TryCreateStabilisingCrystal((bracer, comp), user), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
             });
 
-            await pair.RunTicksSync(pair.SecondsToTicks(3.25f));
+            await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
             await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
@@ -2510,7 +2521,13 @@ public sealed class YautjaSmokeTest
                     Assert.That(entMan.GetComponent<YautjaBracerRandomSeedTestComponent>(bracer).Completed, Is.True);
                     Assert.That(ui.TryGetUiState<YautjaBracerPanelState>(bracer, YautjaBracerUIKey.Key, out var state), Is.True,
                         "CMSS13 activate_random_verb() slot 2 routes to track_gear_internal(user, TRUE).");
-                    Assert.That(state!.TrackedGear.Single().Name, Is.EqualTo("deceased Yautja bio signature"));
+                    // CMU14: the readout lists every auto-registered piece of Yautja tech, so the deceased Yautja's
+                    // signature is not necessarily the only entry - .Single() here threw
+                    // InvalidOperationException("Sequence contains more than one element"), which aborted the test
+                    // and surfaced as the dirty-dispose warning. Assert the signature is present instead.
+                    Assert.That(state!.TrackedGear.Select(gear => gear.Name),
+                        Does.Contain("deceased Yautja bio signature"),
+                        "Slot 2 must report the deceased Yautja's bio signature.");
                     Assert.That(comp.IdChipDeployed, Is.False,
                         "Local slot 2 must not use the old ID chip toggle random-function behavior.");
                 });
@@ -2604,7 +2621,7 @@ public sealed class YautjaSmokeTest
                     "CMSS13 check_random_function() delays random slot effects until after do_after(user, 3, INTERRUPT_ALL).");
             });
 
-            await pair.RunTicksSync(pair.SecondsToTicks(3.25f));
+            await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
             await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
@@ -2695,13 +2712,13 @@ public sealed class YautjaSmokeTest
 
                 entMan.EnsureComponent<YautjaBracerRandomSeedTestComponent>(bracer).Seed = 5;
 
-                Assert.That(utility.TryOpenTranslator((bracer, comp), user), Is.True);
+                Assert.That(utility.TryCreateStabilisingCrystal((bracer, comp), user), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
                 Assert.That(entMan.HasComponent<EntityActiveInvisibleComponent>(user), Is.False,
                     "CMSS13 check_random_function() delays random slot effects until after do_after(user, 3, INTERRUPT_ALL).");
             });
 
-            await pair.RunTicksSync(pair.SecondsToTicks(3.25f));
+            await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
             await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
@@ -2793,7 +2810,7 @@ public sealed class YautjaSmokeTest
                     "CMSS13 check_random_function() delays random slot effects until after do_after(user, 3, INTERRUPT_ALL).");
             });
 
-            await pair.RunTicksSync(pair.SecondsToTicks(3.25f));
+            await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
             await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
@@ -2877,13 +2894,13 @@ public sealed class YautjaSmokeTest
 
                 entMan.EnsureComponent<YautjaBracerRandomSeedTestComponent>(bracer).Seed = 3;
 
-                Assert.That(utility.TryOpenTranslator((bracer, comp), user), Is.True);
+                Assert.That(utility.TryCreateStabilisingCrystal((bracer, comp), user), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
                 Assert.That(ui.IsUiOpen(bracer, YautjaTranslatorUIKey.Key, user), Is.False,
                     "CMSS13 check_random_function() delays random slot effects until after do_after(user, 3, INTERRUPT_ALL).");
             });
 
-            await pair.RunTicksSync(pair.SecondsToTicks(3.25f));
+            await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
             await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
@@ -3000,7 +3017,7 @@ public sealed class YautjaSmokeTest
                     "CMSS13 check_random_function() delays random slot effects until after do_after(user, 3, INTERRUPT_ALL).");
             });
 
-            await pair.RunTicksSync(pair.SecondsToTicks(3.25f));
+            await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
             await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
@@ -3089,13 +3106,13 @@ public sealed class YautjaSmokeTest
 
                 entMan.EnsureComponent<YautjaBracerRandomSeedTestComponent>(bracer).Seed = 2;
 
-                Assert.That(utility.TryOpenTranslator((bracer, comp), user), Is.True);
+                Assert.That(utility.TryCreateStabilisingCrystal((bracer, comp), user), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
                 Assert.That(hands.GetActiveItem(user), Is.Null,
                     "CMSS13 check_random_function() delays random slot effects until after do_after(user, 3, INTERRUPT_ALL).");
             });
 
-            await pair.RunTicksSync(pair.SecondsToTicks(3.25f));
+            await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
             await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
@@ -3173,13 +3190,13 @@ public sealed class YautjaSmokeTest
 
                 entMan.EnsureComponent<YautjaBracerRandomSeedTestComponent>(bracer).Seed = 6;
 
-                Assert.That(utility.TryOpenTranslator((bracer, comp), user), Is.True);
+                Assert.That(utility.TryCreateStabilisingCrystal((bracer, comp), user), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
                 Assert.That(hands.IsHolding(user, nearbyDisc), Is.False,
                     "CMSS13 check_random_function() delays random slot effects until after do_after(user, 3, INTERRUPT_ALL).");
             });
 
-            await pair.RunTicksSync(pair.SecondsToTicks(3.25f));
+            await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
             await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
@@ -5792,8 +5809,9 @@ public sealed class YautjaSmokeTest
 
                     Assert.That(actionIds, Does.Contain("CMUActionYautjaOpenBracerMenu"));
                     Assert.That(actionIds, Does.Contain("CMUActionYautjaToggleCloak"));
-                    Assert.That(actionIds, Does.Contain("CMUActionYautjaRecall"));
-                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaCallDisc"));
+                    // CMU14: the recall/bound-to system was removed, but the disc's call function is part of the
+                    // reference's bracer_actions, so the worn bracer grants that button.
+                    Assert.That(actionIds, Does.Contain("CMUActionYautjaCallDisc"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaTrackGear"),
                         "The worn bracer should keep the tracker action off the action bar.");
                     foreach (var migratedActionId in migratedActionIds)
@@ -5801,7 +5819,9 @@ public sealed class YautjaSmokeTest
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaOpenMarkPanel"));
                     Assert.That(actionIds, Does.Contain("CMUActionYautjaSelfDestruct"),
                         "self-destruct is a bindable hotkey now, the bracer menu button still works too");
-                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaTranslator"));
+                    // CMU14: CM-SS13's hunter equipped() hands the whole bracer_actions list (which
+                    // includes the translator) to every wearer; the gating is on use, not on the button.
+                    Assert.That(actionIds, Does.Contain("CMUActionYautjaTranslator"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleBracerIdChip"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaLinkThrallBracer"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaTransmitThrallMessage"));
@@ -6114,6 +6134,9 @@ public sealed class YautjaSmokeTest
             var anchoredGear = entMan.SpawnEntity("CMM11Knife", map.GridCoords.Offset(new Vector2(0, 2)));
             var looseGear = entMan.SpawnEntity("CMM11Knife", map.GridCoords.Offset(new Vector2(0, 5)));
             var unlinkedCombistick = entMan.SpawnEntity("CMUYautjaCombistick", map.GridCoords.Offset(new Vector2(0, 4)));
+            // CMU14: Yautja tech auto-registers for tracking; this fixture needs it unlinked to isolate the
+            // anchored-exclusion rule it is testing and keep the tracked-gear list at one entry.
+            entMan.RemoveComponent<YautjaTrackedItemComponent>(unlinkedCombistick);
             var action = entMan.SpawnEntity("CMUActionYautjaTrackGear", MapCoordinates.Nullspace);
 
             try
@@ -6290,6 +6313,9 @@ public sealed class YautjaSmokeTest
                 Assert.That(hands.TryPickupAnyHand(hunter, item), Is.True);
                 Assert.That(hands.GetActiveItem(hunter), Is.EqualTo(item));
                 Assert.That(entMan.HasComponent<YautjaTechItemComponent>(item), Is.True);
+                // CMU14: Yautja tech auto-registers for tracking, so clear that here - this fixture is about the
+                // bracer's own add/remove tracked-item verbs and needs a known untracked starting point.
+                entMan.RemoveComponent<YautjaTrackedItemComponent>(item);
                 Assert.That(entMan.HasComponent<YautjaTrackedItemComponent>(item), Is.False);
 
                 var addComp = entMan.GetComponent<ActionComponent>(addAction);
@@ -6305,6 +6331,9 @@ public sealed class YautjaSmokeTest
                 {
                     Assert.That(add.Handled, Is.True);
                     Assert.That(entMan.HasComponent<YautjaTrackedItemComponent>(item), Is.True);
+                    // CMU14: the bracer itself auto-registers for tracking too; this fixture only cares that the
+                    // bracer is not registered as *tracked gear* by the add verb, so clear its own registration.
+                    entMan.RemoveComponent<YautjaTrackedItemComponent>(bracer);
                     Assert.That(entMan.HasComponent<YautjaTrackedItemComponent>(bracer), Is.False);
                     Assert.That(hands.GetActiveItem(hunter), Is.EqualTo(item));
                 });
@@ -7740,7 +7769,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task BracerRecallActionIsLocalizedAndSoleDiscAction()
+    public async Task BracerRecallActionIsGoneFromTheWornBracer()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -7768,8 +7797,11 @@ public sealed class YautjaSmokeTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(actionNames, Contains.Key("CMUActionYautjaRecall"));
-                    Assert.That(actionNames, Does.Not.ContainKey("CMUActionYautjaCallDisc"));
+                    // CMU14: the bracer's recall action and the gear-binding it fed were removed.
+                    Assert.That(actionNames, Does.Not.ContainKey("CMUActionYautjaRecall"));
+                    // CMU14: only the recall/bound-to system was removed; the bracer's call-disc function is part
+                    // of the reference's own bracer_actions, so the button is expected.
+                    Assert.That(actionNames, Does.ContainKey("CMUActionYautjaCallDisc"));
                 });
             }
             finally
@@ -10324,6 +10356,9 @@ public sealed class YautjaSmokeTest
                 bracerComp.NonYautjaWorkingChance = 1f;
                 bracerComp.NonYautjaRandomFunctionChance = 0f;
                 bracerComp.NonYautjaDelimbChance = 0f;
+                // CMU14: the hunter bracer's random shock (yaut_bracers.dm:392-400) would stun the wearer and
+                // break the 3s misuse do_after this test walks, which is the flow under test.
+                bracerComp.NonYautjaShockChance = 0f;
 
                 Assert.That(CountAttachedArms(body, user), Is.EqualTo(2));
                 beforeAudio = AudioEntities(entMan);
@@ -10334,7 +10369,7 @@ public sealed class YautjaSmokeTest
                     "CMSS13 activate_suicide_internal() still waits for check_random_function()'s do_after before always_delimb resolves.");
             });
 
-            await pair.RunTicksSync(pair.SecondsToTicks(3.25f));
+            await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
             await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
@@ -10953,6 +10988,15 @@ public sealed class YautjaSmokeTest
             await pair.ReallyBeIdle(10);
             await AssertClientHasPopup(client, "<b>This Human does not have a bracer attached.</b>");
 
+            // CMU14: the broadcast goes to every Yautja except the actor, and a popup sent while the listener has
+            // no session is dropped. Attach the listener before the detonation so the broadcast is observed - a
+            // lingering label from an earlier attach would otherwise make the check pass for the wrong reason.
+            await server.WaitPost(() =>
+            {
+                var session = server.PlayerMan.Sessions.Single();
+                server.PlayerMan.SetAttachedEntity(session, listener);
+            });
+
             await server.WaitPost(() =>
             {
                 var entMan = server.EntMan;
@@ -10978,19 +11022,9 @@ public sealed class YautjaSmokeTest
             await pair.ReallyBeIdle(10);
             await AssertClientHasPopup(
                 client,
+                "A'ke Ret has triggered Guan Thwei's bracer's self-destruction sequence.",
+                // The actor's own confirmation is private to them, so the listener must not receive it.
                 "You activate the timer. May Guan Thwei's final hunt be swift.");
-
-            await server.WaitPost(() =>
-            {
-                var session = server.PlayerMan.Sessions.Single();
-                server.PlayerMan.SetAttachedEntity(session, listener);
-            });
-
-            await pair.ReallyBeIdle(10);
-            await AssertClientHasPopup(
-                client,
-                "A'ke Ret has triggered Guan Thwei's bracer's self-destruction sequence.");
-
             await server.WaitPost(() =>
             {
                 var entMan = server.EntMan;
@@ -19231,7 +19265,6 @@ public sealed class YautjaSmokeTest
                 listener.Emotes.Clear();
 
                 Assert.That(xenoSystem.CanHeal(xeno), Is.True);
-                Assert.That(status.TryGetTime(xeno, "YautjaInterference", out _), Is.False);
 
                 var trapComp = entMan.GetComponent<YautjaTrapComponent>(trap);
                 Assert.That(trapSystem.TryArmTrap((trap, trapComp), hunter), Is.True);
@@ -19240,8 +19273,6 @@ public sealed class YautjaSmokeTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(xenoSystem.CanHeal(xeno), Is.False);
-                    Assert.That(status.TryGetTime(xeno, "YautjaInterference", out var time), Is.True);
-                    Assert.That(time!.Value.Item2 - time.Value.Item1, Is.EqualTo(TimeSpan.FromSeconds(100)));
                     Assert.That(listener.Emotes, Does.Contain((xeno, "XenoHelp")));
                 });
             }
@@ -19647,7 +19678,8 @@ public sealed class YautjaSmokeTest
             "CMSS13 /obj/item/falcon_drone flags_item includes ITEM_PREDATOR.");
         Assert.That(tech!.DamageMultiplier, Is.EqualTo(1f),
             "ITEM_PREDATOR marks ownership/access here; the source drone is not a damage-scaling weapon.");
-        Assert.That(tech.BlockPickup, Is.True, "CMSS13 ITEM_PREDATOR local pickup restriction.");
+        Assert.That(tech.BlockPickup, Is.False,
+            "CM-SS13 ITEM_PREDATOR only tracks /obj/item/falcon_drone; anyone may wear it, and can_control_falcon_drone gates the control verb instead.");
         Assert.That(tech.BlockUse, Is.True, "CMSS13 ITEM_PREDATOR local use restriction.");
     }
 
@@ -19666,7 +19698,8 @@ public sealed class YautjaSmokeTest
             "CMSS13 /obj/item/trash/falcon_drone flags_item includes ITEM_PREDATOR.");
         Assert.That(tech!.DamageMultiplier, Is.EqualTo(1f),
             "Falcon trash is ITEM_PREDATOR wreckage, not a damage-scaling weapon.");
-        Assert.That(tech.BlockPickup, Is.True, "CMSS13 ITEM_PREDATOR local pickup restriction.");
+        Assert.That(tech.BlockPickup, Is.False,
+            "CM-SS13 ITEM_PREDATOR leaves even falcon wreckage free to pick up; only use surfaces are gated.");
         Assert.That(tech.BlockUse, Is.False, "Falcon trash has no active use surface.");
     }
 
@@ -19995,8 +20028,18 @@ public sealed partial class YautjaBracerRandomSeedTestSystem : EntitySystem
 
     public override void Initialize()
     {
+        SubscribeLocalEvent<YautjaBracerRandomSeedTestComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<YautjaBracerRandomSeedTestComponent, YautjaBracerMisuseDoAfterEvent>(
             OnCompleted, before: [typeof(YautjaBracerUtilitySystem)]);
+    }
+
+    private void OnInit(Entity<YautjaBracerRandomSeedTestComponent> ent, ref ComponentInit args)
+    {
+        // CMU14: a hunter bracer randomly shocks a non-Yautja wearer (yaut_bracers.dm:392-400); the shock
+        // stuns and so both breaks the 3s misuse do_after and draws from the shared RNG the seeded slot
+        // tests walk. The component is added to the bracer under test, so switch it off here once.
+        if (TryComp(ent.Owner, out YautjaBracerComponent? bracer))
+            bracer.NonYautjaShockChance = 0f;
     }
 
     private void OnCompleted(Entity<YautjaBracerRandomSeedTestComponent> ent, ref YautjaBracerMisuseDoAfterEvent args)

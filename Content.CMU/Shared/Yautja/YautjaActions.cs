@@ -18,8 +18,6 @@ public sealed partial class YautjaMarkForHuntActionEvent : EntityTargetActionEve
 
 public sealed partial class YautjaOpenBracerMenuActionEvent : InstantActionEvent;
 
-public sealed partial class YautjaRecallActionEvent : InstantActionEvent;
-
 public sealed partial class YautjaCallDiscActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaCallCombiActionEvent : InstantActionEvent;

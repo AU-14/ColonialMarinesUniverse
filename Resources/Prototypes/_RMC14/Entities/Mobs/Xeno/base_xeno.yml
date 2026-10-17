@@ -291,7 +291,7 @@
     - Unconscious
     - TemporaryBlindness
     - Deaf
-    - YautjaInterference
+    # CMU14: YautjaInterference status removed - hivemind interference is no longer a feature.
   - type: ImmuneToClothingRequiredStepTrigger
   - type: IntrinsicRadioReceiver
   - type: IntrinsicRadioTransmitter
@@ -473,10 +473,12 @@
       params:
         variation: 0.1
         volume: -5
-  - type: MeleeDamageMultiplier # 1.5x Damage against other xenos
-    whitelist:
-      components:
-      - Xeno
+  # CMU14: melee-vs-xeno damage is resolved centrally by CMArmorSystem; per-entity multiplier disabled.
+  # Upstream lines kept commented for merge safety.
+#  - type: MeleeDamageMultiplier # 1.5x Damage against other xenos
+#    whitelist:
+#      components:
+#      - Xeno
   - type: Tackle
   - type: XenoClaws
 

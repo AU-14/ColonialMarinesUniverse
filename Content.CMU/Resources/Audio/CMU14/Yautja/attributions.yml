@@ -87,3 +87,8 @@
   license: "CC-BY-SA-3.0"
   copyright: "Taken from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
   source: "https://github.com/cmss13-devs/cmss13/blob/e97c5f08fdcfd60743481011e30ccdccc7fd7c88/sound/hallucinations/i_see_you2.ogg"
+
+- files: ["alien_claw_metal1.ogg", "alien_claw_metal2.ogg", "alien_claw_metal3.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
+  source: "https://github.com/cmss13-devs/cmss13/blob/37531301e872ff2726146a24fbb1a84a39d1a2da/sound/weapons/alien_claw_metal1.ogg"

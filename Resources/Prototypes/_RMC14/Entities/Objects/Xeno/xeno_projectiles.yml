@@ -113,6 +113,7 @@
       shader: unshaded
   - type: XenoSlowingSpitProjectile
     armorResistsKnockdown: true
+    neurotoxin: true # CMU14: CM-SS13 /datum/ammo/xeno/toxin (the Sentinel's neurotoxic spit)
   - type: XenoProjectile
     deleteOnFriendlyXeno: true
   - type: DrainOnHit
@@ -157,6 +158,8 @@
     armorResistsKnockdown: false
     slow: 0
     paralyze: 4
+    neurotoxin: true # CMU14: NO_NEURO species shrug this spit's paralysis (CM-SS13 apply_neuro)
+    instaNeuro: true # CMU14: /datum/ammo/xeno/toxin/queen passes insta_neuro, so Endurance does not protect
   - type: XenoProjectile
     deleteOnFriendlyXeno: true
   - type: ProjectileMaxRange
@@ -176,9 +179,13 @@
     - state: neurotoxin
       shader: unshaded
   - type: XenoSlowingSpitProjectile
+    # CMU14: ActionXenoScatteredSpit is the one neuro-spit whose knockdown reaches a neuro-immune
+    # Yautja. slow stays 0 here, so the ability's slow never applies to them.
+    knocksDownNeuroImmune: true
     slow: 0
     paralyze: 1
     armorResistsKnockdown: false
+    neurotoxin: true # CMU14: NO_NEURO species shrug this spit's paralysis (CM-SS13 apply_neuro)
   - type: XenoProjectile
     deleteOnFriendlyXeno: true
   - type: ProjectileMaxRange
@@ -353,6 +360,8 @@
     slow: 0
     paralyze: 4
     armorResistsKnockdown: false
+    neurotoxin: true # CMU14: NO_NEURO species shrug this spit's paralysis (CM-SS13 apply_neuro)
+    instaNeuro: true # CMU14: CM-SS13's neurotoxin glob is gas, not /proc/apply_neuro, so Endurance never protects
   - type: NeurotoxinInjector
     neuroPerSecond: 5
     injectInContact: false

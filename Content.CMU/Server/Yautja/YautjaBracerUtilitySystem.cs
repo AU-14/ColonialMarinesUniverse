@@ -56,7 +56,11 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
     private const string IdSlot = "id";
     private const string GlovesSlot = "gloves";
     private const int TranslatorMaxMessageLength = 160;
-    private static readonly TimeSpan NonYautjaBracerMisuseDoAfter = TimeSpan.FromSeconds(3);
+    // CMU14: CM-SS13's check_random_function (yaut_bracers.dm:214-215) runs
+    // "do_after(user, 3, INTERRUPT_ALL, BUSY_ICON_FRIENDLY, numticks = 1)" — 3 DECISECONDS, i.e. 0.3s, with the
+    // comment "Add a little delay so the user wouldn't be just spamming all the buttons". The port read it
+    // as 3 seconds, which made every button press on a stolen bracer take 10x too long.
+    private static readonly TimeSpan NonYautjaBracerMisuseDoAfter = TimeSpan.FromSeconds(0.3);
     private static readonly Color ModernTranslatorColor = Color.FromHex("#ff4d4d");
     private static readonly Color RetroTranslatorColor = Color.White;
     private static readonly ProtoId<EmotePrototype> HumanPainEmote = "Scream";
@@ -125,6 +129,7 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
         SubscribeLocalEvent<YautjaTechItemComponent, YautjaTechMisusedEvent>(OnTechMisused);
 
         EntityManager.System<YautjaSelfDestructSystem>().TryStartNonTechMisuse = TryStartSelfDestructMisuse;
+        EntityManager.System<YautjaCloakSystem>().TryToggleCloakMisuse = TryToggleCloakMisuse;
 
         Subs.BuiEvents<YautjaBracerComponent>(YautjaTranslatorUIKey.Key, subs =>
         {
@@ -144,9 +149,13 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
         if (!ent.Comp.Locked)
             return;
 
+        // CMU14: cancel silently rather than popping "The bracer is locked to its wearer." The engine raises
+        // this for any unequip attempt, including the one a plain right-click produces, and CM-SS13 displays
+        // nothing for it, so the message only spammed an interaction that does not take the bracer off anyway.
+        // The protection is unchanged - the attempt is still cancelled and the reason still reaches the caller -
+        // and the deliberate route (the unlock verb) keeps its own feedback.
         args.Cancel();
         args.Reason = "cmu-yautja-bracer-locked";
-        _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-locked"), args.User, args.User, PopupType.SmallCaution);
     }
 
     private void OnGetEquipmentVerbs(Entity<YautjaBracerComponent> ent, ref InventoryRelayedEvent<GetVerbsEvent<EquipmentVerb>> args)
@@ -446,6 +455,16 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
             return false;
         }
 
+        // CMU14: CM-SS13's /obj/item/clothing/gloves/yautja/hunter/verb/idchip() (yaut_bracers.dm:1503-1515)
+        // is a plain tech check with no misuse roll:
+        //     if(!istype(H) || !HAS_TRAIT(usr, TRAIT_YAUTJA_TECH))
+        //         to_chat(usr, SPAN_WARNING("You do not know how to use this.")); return
+        if (!IsYautjaTechUser(user))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-idchip-denied"), user, user, PopupType.SmallCaution);
+            return false;
+        }
+
         return TryRunBracerAction(bracer, user, YautjaBracerMisuseAction.ToggleIdChip, requireWorn: false);
     }
 
@@ -468,6 +487,10 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
             _mobState.IsIncapacitated(user) ||
             !TryComp(user, out YautjaComponent? yautja))
         {
+            // CMU14: yaut_bracers.dm's bracer-name verb is trait-gated, and a user who lacks the trait must be
+            // told so - "You have no idea how to use this." (the same wording the ID chip and the lock use).
+            // This used to return silently, so pressing the button did nothing with no feedback at all.
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-lock-no-idea"), user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -513,6 +536,23 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
         YautjaBracerMisuseAction action,
         bool requireWorn = true)
     {
+        // CMU14: these two have no tech gate at all in CM-SS13, so they are not rolled for a non-tech wearer.
+        // yaut_bracers.dm:232 toggle_notification_sound only checks consciousness, and the explosion-type verb
+        // (:989) checks nothing but the small-and-arming guard. The translator is NOT exempt here: its proc
+        // (yaut_bracers.dm:1423 translate) opens with ". = check_random_function(user, forced)" before the
+        // mute check, so a non-tech translator press must roll (and a Yautja bypasses it as usual).
+        if (action is YautjaBracerMisuseAction.ToggleNotificationSound
+            or YautjaBracerMisuseAction.ChangeExplosionType)
+        {
+            if (requireWorn && !IsBracerWornBy(bracer, user))
+            {
+                _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-must-be-worn"), user, user, PopupType.SmallCaution);
+                return false;
+            }
+
+            return RunResolvedBracerAction(bracer, user, action);
+        }
+
         var use = TryResolveBracerUse(bracer, user, action, requireWorn);
         switch (use)
         {
@@ -566,6 +606,19 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
                 return TryCreateItem(bracer, user, bracer.Comp.HealingCapsulePrototype, bracer.Comp.HealingCapsuleCost, bracer.Comp.HealingCapsuleCooldown, ref bracer.Comp.NextHealingCapsule);
             case YautjaBracerMisuseAction.CreateHuntingTrap:
                 return TryCreateItem(bracer, user, bracer.Comp.HuntingTrapPrototype, bracer.Comp.HuntingTrapCost, bracer.Comp.HuntingTrapCooldown, ref bracer.Comp.NextHuntingTrap);
+            case YautjaBracerMisuseAction.Cloak:
+                // CM-SS13's cloak has no species gate; the misuse roll is what gates it.
+                return EntityManager.System<YautjaCloakSystem>().TryToggleCloakForced(bracer, user, 25);
+            case YautjaBracerMisuseAction.ToggleWristBlades:
+                return TryRunBracerGearToggle?.Invoke(bracer.Owner, user, YautjaGearKind.WristBlades) ?? false;
+            case YautjaBracerMisuseAction.ToggleScimitar:
+                return TryRunBracerGearToggle?.Invoke(bracer.Owner, user, YautjaGearKind.Scimitar) ?? false;
+            case YautjaBracerMisuseAction.ToggleChainGauntlet:
+                return TryRunBracerGearToggle?.Invoke(bracer.Owner, user, YautjaGearKind.ChainGauntlet) ?? false;
+            case YautjaBracerMisuseAction.ToggleShield:
+                return TryRunBracerGearToggle?.Invoke(bracer.Owner, user, YautjaGearKind.Shield) ?? false;
+            case YautjaBracerMisuseAction.ToggleCaster:
+                return TryRunBracerGearToggle?.Invoke(bracer.Owner, user, YautjaGearKind.Caster) ?? false;
             case YautjaBracerMisuseAction.None:
             case YautjaBracerMisuseAction.SelfDestruct:
             default:
@@ -575,16 +628,21 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
 
     private void OnTechMisused(Entity<YautjaTechItemComponent> ent, ref YautjaTechMisusedEvent args)
     {
-        if (HasComp<YautjaComponent>(args.User))
+        // CMU14: CM-SS13's misuse punishment only fires for "!HAS_TRAIT(user, TRAIT_YAUTJA_TECH)" users
+        // (yaut_bracers.dm:175/398), and thralls hold that trait (yaut_hudprocs.dm:526), so an authorized
+        // user skips the shock/delimb path like a Yautja does.
+        if (HasComp<YautjaComponent>(args.User) || HasComp<YautjaTechAuthorizedComponent>(args.User))
             return;
 
         if (TryComp(args.Item, out YautjaBracerComponent? bracer))
         {
             TryResolveBracerUse((args.Item, bracer), args.User, YautjaBracerMisuseAction.None, requireWorn: false);
-            return;
         }
 
-        ApplyTechPunishment(args.User, args.Item, DefaultTechShockDamage, TimeSpan.FromSeconds(2), 0.08f);
+        // CMU14: CM-SS13 has no punishment for handling other Yautja technology. Its only shocks are the
+        // bracer's own processes and the bracer misuse roll (yaut_bracers.dm:107-114, 174-189, 392-400), and
+        // a non-tech trying to fire a gun just fails the able_to_fire check. Wielding or touching a spike
+        // launcher/plasma rifle must therefore not hurt.
     }
 
     public override void Update(float frameTime)
@@ -593,9 +651,27 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
         var query = EntityQueryEnumerator<YautjaBracerComponent>();
         while (query.MoveNext(out var uid, out var bracer))
         {
-            if (bracer.User is not { } user ||
-                IsYautjaTechUser(user) ||
-                !HasComp<EntityActiveInvisibleComponent>(user) ||
+            if (bracer.User is not { } user || IsYautjaTechUser(user))
+                continue;
+
+            // CMU14: CM-SS13's hunter bracer shocks a non-tech wearer with prob(4) on its own timer
+            // whether or not the wearer is cloaked (yaut_bracers.dm:392-400, "Non-Yautja have a chance
+            // to get stunned with each power drain").
+            if (bracer.NonYautjaShockChance > 0f && time >= bracer.NextNonYautjaShock)
+            {
+                bracer.NextNonYautjaShock = time + bracer.NonYautjaCloakShockEvery;
+                if (_random.Prob(bracer.NonYautjaShockChance))
+                {
+                    if (HasComp<EntityActiveInvisibleComponent>(user))
+                        _cloak.ForceDecloak(user);
+
+                    ApplyTechPunishment(user, uid, bracer.TechShockDamage, bracer.TechShockStun, 0f, true);
+                    continue;
+                }
+            }
+
+            // CMU14: the base bracer only rolls while cloaked (yaut_bracers.dm:107-114).
+            if (!HasComp<EntityActiveInvisibleComponent>(user) ||
                 time < bracer.NextNonYautjaCloakShock)
             {
                 continue;
@@ -605,8 +681,12 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
             if (!_random.Prob(bracer.NonYautjaCloakShockChance))
                 continue;
 
+            // CMU14: no delimb here. yaut_bracers.dm's shock_user() (the base process() at :107-114 and the
+            // hunter process() at :392-400) only stuns, weakens and burns both arms - delimbing exists solely
+            // in delimb_user() (the misuse roll's always_delimb fall-through and the random-function punishment
+            // branch), so an 8% delimb riding every random shock was pure CMU extra limb loss.
             _cloak.ForceDecloak(user);
-            ApplyTechPunishment(user, uid, bracer.TechShockDamage, bracer.TechShockStun, bracer.NonYautjaDelimbChance, true);
+            ApplyTechPunishment(user, uid, bracer.TechShockDamage, bracer.TechShockStun, 0f, true);
         }
     }
 
@@ -694,6 +774,46 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
                 RunRandomBracerFunction(bracer, args.User);
                 break;
         }
+    }
+
+    /// <summary>
+    /// CMU14: the cloak button for a non-tech wearer. CM-SS13 has no species gate on the cloak itself
+    /// (yaut_bracers.dm cloaker_internal), it just runs this bracer's check_random_function roll first.
+    /// </summary>
+    public bool TryToggleCloakMisuse(Entity<YautjaBracerComponent> bracer, EntityUid user)
+    {
+        return TryRunBracerAction(bracer, user, YautjaBracerMisuseAction.Cloak);
+    }
+
+    /// <summary>
+    /// CMU14: set by <c>YautjaAttachmentSystem</c> so the resolved gear-toggle misuse actions can run the
+    /// real bracer-gear toggle, which lives in that (server) system.
+    /// </summary>
+    public Func<EntityUid, EntityUid, YautjaGearKind, bool>? TryRunBracerGearToggle;
+
+    /// <summary>
+    /// CMU14: the gear-toggle buttons for a non-tech wearer. yaut_bracers.dm:629 attachment_internal runs
+    /// check_random_function(user, forced) before deciding, so these roll like the cloak does.
+    /// </summary>
+    public bool TryToggleGearMisuse(
+        Entity<YautjaBracerComponent> bracer,
+        EntityUid user,
+        YautjaGearKind kind)
+    {
+        var action = kind switch
+        {
+            YautjaGearKind.WristBlades => YautjaBracerMisuseAction.ToggleWristBlades,
+            YautjaGearKind.Scimitar => YautjaBracerMisuseAction.ToggleScimitar,
+            YautjaGearKind.ChainGauntlet => YautjaBracerMisuseAction.ToggleChainGauntlet,
+            YautjaGearKind.Shield => YautjaBracerMisuseAction.ToggleShield,
+            YautjaGearKind.Caster => YautjaBracerMisuseAction.ToggleCaster,
+            _ => YautjaBracerMisuseAction.None,
+        };
+
+        if (action == YautjaBracerMisuseAction.None)
+            return false;
+
+        return TryRunBracerAction(bracer, user, action);
     }
 
     private YautjaBracerUseResult ResolveCompletedNonTechBracerUse(
@@ -893,6 +1013,14 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
 
     private bool AddTrackedItem(Entity<YautjaBracerComponent> bracer, EntityUid user)
     {
+        // CMU14: yaut_bracers.dm:1403 add_tracked_item is an isyautja species check ("You have no idea how
+        // to use this."), not the misuse roll - so it is refused outright rather than left to chance.
+        if (!HasComp<YautjaComponent>(user))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-lock-no-idea"), user, user, PopupType.SmallCaution);
+            return false;
+        }
+
         if (!TryGetActiveTrackableItem(user, out var item))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-tracker-active-hand-required"), user, user, PopupType.SmallCaution);
@@ -913,6 +1041,13 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
 
     private bool RemoveTrackedItem(Entity<YautjaBracerComponent> bracer, EntityUid user)
     {
+        // CMU14: yaut_bracers.dm:1372 remove_tracked_item uses the same isyautja species check.
+        if (!HasComp<YautjaComponent>(user))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-lock-no-idea"), user, user, PopupType.SmallCaution);
+            return false;
+        }
+
         if (!TryGetActiveTrackableItem(user, out var item))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-tracker-active-hand-required"), user, user, PopupType.SmallCaution);
@@ -936,6 +1071,15 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
 
     private bool ToggleLock(Entity<YautjaBracerComponent> bracer, EntityUid user, EntityUid target)
     {
+        // CMU14: CM-SS13's /obj/item/clothing/gloves/yautja/hunter/verb/toggle_lock() (yaut_bracers.dm:1542-1556)
+        // is a plain tech check - "You have no idea how to use this..." and return - with no misuse roll, so
+        // the bracer's lock cannot be worked even by the ~18% successful-roll branch.
+        if (!IsYautjaTechUser(user))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-lock-no-idea"), user, user, PopupType.SmallCaution);
+            return false;
+        }
+
         if (user == target)
         {
             if (!IsBracerWornBy(bracer, user))
@@ -1430,6 +1574,16 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
                 TryCreateItem(bracer, user, bracer.Comp.StabilisingCrystalPrototype, bracer.Comp.StabilisingCrystalCost, bracer.Comp.StabilisingCrystalCooldown, ref bracer.Comp.NextStabilisingCrystal);
                 break;
             case 6:
+                // CMU14: call_disc_internal (yaut_bracers.dm:1328) refuses with "These bracers lack this
+                // function." when smartdisc_enabled is FALSE, so this case is gated on the bracer's own
+                // function list (ActionWhitelist), not on whether the user owns the recall action.
+                if (bracer.Comp.ActionWhitelist != null &&
+                    !bracer.Comp.ActionWhitelist.Contains(bracer.Comp.CallDiscActionId))
+                {
+                    _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-menu-command-unavailable"), user, user, PopupType.SmallCaution);
+                    break;
+                }
+
                 EntityManager.System<YautjaSmartDiscSystem>().TryCallDisc(bracer, user);
                 break;
             case 7:

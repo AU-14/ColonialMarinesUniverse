@@ -133,6 +133,15 @@ public enum YautjaBracerMisuseAction : byte
     CreateHealingCapsule,
     CreateHuntingTrap,
     SelfDestruct,
+
+    // CMU14: gear-toggle and cloak misuse entries used by the bracer misuse roll (pred3 work, kept on top of the
+    // 1:1 pred2 port of this file).
+    Cloak,
+    ToggleWristBlades,
+    ToggleScimitar,
+    ToggleChainGauntlet,
+    ToggleShield,
+    ToggleCaster,
 }
 
 [Serializable, NetSerializable]
@@ -223,6 +232,8 @@ public sealed partial class YautjaBracerAttachmentForceDoorDoAfterEvent : Simple
 public sealed partial class YautjaTrapArmDoAfterEvent : SimpleDoAfterEvent;
 
 public sealed partial class YautjaTrapBreakFreeAlertEvent : BaseAlertEvent;
+
+public sealed partial class YautjaSelfDestructAlertEvent : BaseAlertEvent;
 
 [Serializable, NetSerializable]
 public sealed partial class YautjaTrapBreakFreeDoAfterEvent : SimpleDoAfterEvent;

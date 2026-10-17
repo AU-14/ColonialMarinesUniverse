@@ -6,7 +6,12 @@
   - type: Corrodible
     isCorrodible: false
   - type: YautjaTechItem
-  - type: YautjaRecallable
+    # CMU14: CM-SS13 never restricted Yautja melee weapons to Yautja, so a stolen one can be picked
+    # up, wielded, swung and thrown by anyone (the recall binding that used to sit here is gone).
+    blockPickup: false
+    blockUse: false
+    blockMelee: false
+    blockThrow: false
   - type: Sprite
     sprite: CMU14/Yautja/weapons.rsi
     state: clan_sword
@@ -14,6 +19,7 @@
     sprite: CMU14/Yautja/weapons.rsi
     size: Large
   - type: MeleeWeapon
+    wideAttackAllowed: false # CMU14: Yautja melee weapons cannot wide (arc) swing.
     wideAnimationRotation: -135
     attackRate: 1
     damage:
@@ -28,13 +34,6 @@
     thrown:
       contact: Crush
       penetration: None
-  - type: MeleeDamageMultiplier
-    multiplier: 0
-    whitelist:
-      components:
-      - Xeno
-  - type: CMArmorPiercing
-    amount: 0
   - type: DisarmMalus
     malus: 0.2
   - type: Clothing
@@ -110,7 +109,6 @@
     - belt
     - suitStorage
   - type: YautjaChainWrapper
-  - type: YautjaMeleeXenoInterference
 
 - type: entity
   parent: CMUYautjaWeaponBase
@@ -145,7 +143,6 @@
     slots:
     - back
     - suitStorage
-  - type: YautjaMeleeXenoInterference
 
 - type: entity
   parent: CMUYautjaClanSword
@@ -233,8 +230,6 @@
     - back
     - belt
     - suitStorage
-  - type: YautjaMeleeXenoInterference
-    duration: 15
   - type: YautjaScytheBonusStrike
 
 - type: entity
@@ -398,7 +393,6 @@
   - type: Damageable
   - type: Injurable
     damageContainer: Shield
-  - type: YautjaMeleeXenoInterference
   - type: Appearance
   - type: GenericVisualizer
     visuals:
@@ -444,7 +438,6 @@
     slots:
     - back
     - suitStorage
-  - type: YautjaMeleeXenoInterference
 
 - type: entity
   parent: CMUYautjaWeaponBase
@@ -456,6 +449,10 @@
   - type: Tool
     qualities:
     - Slicing
+  # CMU14: tags the dagger so the greaves knife slots can whitelist it for reinsertion.
+  - type: Tag
+    tags:
+    - CMUYautjaCeremonialDagger
   - type: Sprite
     state: ceremonial_dagger
   - type: Item
@@ -466,7 +463,11 @@
       types:
         Slash: 25
     soundHit:
-      path: /Audio/Weapons/slash.ogg
+      # CMU14: the dagger uses the same sound as the rest of the Yautja knives in this file,
+      # /Audio/Weapons/bladeslice.ogg. The reference's own dagger line reads hitsound = 'sound/weapons/slash.ogg'
+      # (yaut_weapons.dm:774, over the parent knife's bladeslice), but that path did not take effect in game here,
+      # so this follows the sibling knives and the sound the Yautja weapons actually use.
+      path: /Audio/Weapons/bladeslice.ogg
   - type: DamageOtherOnHit
     damage:
       types:
@@ -486,7 +487,6 @@
   abstract: true
   components:
   - type: YautjaTechItem
-  - type: YautjaRecallable
   - type: Sprite
     sprite: CMU14/Yautja/weapons.rsi
     state: clan_shield
@@ -681,6 +681,7 @@
   - type: Sprite
     state: war_glaive
   - type: Item
+    sprite: CMU14/Yautja/weapons.rsi
     heldPrefix: war_glaive
     size: Large
   - type: MeleeWeapon
@@ -710,7 +711,6 @@
     slots:
     - back
     - suitStorage
-  - type: YautjaMeleeXenoInterference
 
 - type: entity
   parent: CMUYautjaWarGlaive
@@ -724,6 +724,9 @@
     - state: cleaving_glaive
       map: [base]
   - type: Item
+    # CMU14: the in-hand states (cleaving_glaive-inhand-left/right) live in weapons.rsi, so the Item needs its own
+    # sprite rsi - without it the held-prefix lookup has no sheet to resolve against and neither pose renders.
+    sprite: CMU14/Yautja/weapons.rsi
     heldPrefix: cleaving_glaive
   - type: Wieldable
     wieldedInhandPrefix: cleaving_glaive
@@ -750,6 +753,7 @@
   - type: Sprite
     state: ancient_war_glaive
   - type: Item
+    sprite: CMU14/Yautja/weapons.rsi
     heldPrefix: war_glaive
     size: Large
   - type: Clothing
@@ -986,7 +990,6 @@
   components:
   - type: YautjaTechItem
     shootDeniedPopup: cmu-yautja-spike-launcher-denied
-  - type: YautjaRecallable
   - type: Sprite
     sprite: CMU14/Yautja/guns.rsi
     layers:
@@ -994,7 +997,7 @@
       map: ["enum.GunVisualLayers.Base"]
   - type: Item
     sprite: CMU14/Yautja/gun_inhands.rsi
-    heldPrefix: spike_launcher
+    heldPrefix: spikelauncher
     size: Normal
   - type: AmmoCounter
   - type: Gun
@@ -1012,11 +1015,9 @@
     capacity: 12
     count: 12
   - type: Wieldable
-    wieldedInhandPrefix: spike_launcher
-  - type: GunRequiresWield
-  - type: WieldDelay
-    baseDelay: 0.45
-    preventFiring: true
+    wieldedInhandPrefix: spikelauncher_w
+  # CMU14: pred2 #8 - the spike launcher fires without being wielded. Wielding stays possible (Wieldable
+  # above); only the requirement and the firing-preventing wield delay are gone.
   - type: WieldableSpeedModifiers
     base: 0.75
     light: 0.9
@@ -1057,15 +1058,14 @@
   components:
   - type: YautjaTechItem
     shootDeniedPopup: cmu-yautja-spike-launcher-denied
-  - type: YautjaRecallable
   - type: Sprite
     sprite: CMU14/Yautja/guns.rsi
     layers:
     - state: plasma_rifle
       map: ["enum.GunVisualLayers.Base"]
   - type: Item
-    sprite: CMU14/Yautja/gun_inhands.rsi
-    heldPrefix: plasma_rifle
+    sprite: CMU14/Yautja/pred_guns_inhands.rsi
+    heldPrefix: plasmarifle
     size: Huge
   - type: AmmoCounter
   - type: Gun
@@ -1085,7 +1085,7 @@
     maxCharge: 100
     startingCharge: 100
   - type: Wieldable
-    wieldedInhandPrefix: plasma_rifle
+    wieldedInhandPrefix: plasmarifle_w
   - type: WieldDelay
     baseDelay: 0.6
   - type: WieldableSpeedModifiers
@@ -1132,15 +1132,14 @@
   components:
   - type: YautjaTechItem
     shootDeniedPopup: cmu-yautja-spike-launcher-denied
-  - type: YautjaRecallable
   - type: Sprite
     sprite: CMU14/Yautja/guns.rsi
     layers:
     - state: plasma_pistol
       map: ["enum.GunVisualLayers.Base"]
   - type: Item
-    sprite: CMU14/Yautja/gun_inhands.rsi
-    heldPrefix: plasma_pistol
+    sprite: CMU14/Yautja/pred_guns_inhands.rsi
+    heldPrefix: plasmapistol
     size: Normal
   - type: AmmoCounter
   - type: Gun
@@ -1164,6 +1163,9 @@
     rechargeRate: 1
     showFireMode: true
     nonYautjaExamineText: This thing looks like an alien gun of some kind. Strange.
+    # CMU14: require the charge the ammo provider actually consumes before firing, so the ammo counter
+    # cannot read empty while the gun still shoots (mirrors the carbine's minimumShootCharge: 7).
+    minimumShootCharge: 1
     primaryFireModeText: cmu-yautja-plasma-pistol-primary-fire-mode
     secondaryFireModeText: cmu-yautja-plasma-pistol-secondary-fire-mode
     minimumAmmoCharge: 1
@@ -1201,8 +1203,8 @@
       popupText: plasma pistol will now fire incendiary plasma bolts.
   - type: UniqueAction
   - type: Wieldable
-    wieldedInhandPrefix: plasma_pistol
-  - type: GunRequiresWield
+    wieldedInhandPrefix: plasmapistol_w
+  # CMU14: pred2 #8 - the plasma pistol fires without being wielded; wielding stays possible.
 - type: entity
   parent: BaseItem
   id: CMUYautjaPlasmaCarbine
@@ -1217,6 +1219,9 @@
     rechargeRate: 1
     showFireMode: true
     nonYautjaExamineText: This thing looks like a rifle, but there's no mag or proper barrel. What the hell is it?
+    # CMU14: require the charge the ammo provider actually consumes before firing, so the ammo counter
+    # cannot read empty while the gun still shoots (mirrors the carbine's minimumShootCharge: 7).
+    minimumShootCharge: 1
     primaryFireModeText: cmu-yautja-plasma-carbine-primary-fire-mode
     secondaryFireModeText: cmu-yautja-plasma-carbine-secondary-fire-mode
     minimumAmmoCharge: 1
@@ -1281,7 +1286,7 @@
     startingCharge: 40
   - type: UniqueAction
   - type: Wieldable
-    wieldedInhandPrefix: plasmacarbine
+    wieldedInhandPrefix: plasmacarbine_w
   - type: WieldDelay
     baseDelay: 0.6
   - type: WieldableSpeedModifiers
@@ -1322,7 +1327,7 @@
     slots:
     - back
   - type: Wieldable
-    wieldedInhandPrefix: defoliator
+    wieldedInhandPrefix: defoliator_w
   - type: Gun
     soundGunshot:
       collection: RMCFlamerFL3Shoot

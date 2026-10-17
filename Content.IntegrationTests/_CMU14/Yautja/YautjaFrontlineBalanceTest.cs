@@ -133,7 +133,7 @@ public sealed class YautjaFrontlineBalanceTest
     }
 
     [Test]
-    public async Task RegularHunterRejectsStunsAndRmcMovementDebuffs()
+    public async Task RegularHunterTakesStunsAndRmcMovementDebuffs()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -145,16 +145,18 @@ public sealed class YautjaFrontlineBalanceTest
             var stun = entities.System<SharedStunSystem>();
             var slow = entities.System<RMCSlowSystem>();
 
+            // CM-SS13 (/datum/species/yautja) only reduces duration: stun_reduction / knock_down_reduction 1.5
+            // and weed_slowdown_mult 0. It has no blanket stun or slow immunity.
             Assert.Multiple(() =>
             {
-                Assert.That(stun.TryParalyze(hunter, TimeSpan.FromSeconds(5), true, force: true), Is.False);
-                Assert.That(slow.TrySlowdown(hunter, TimeSpan.FromSeconds(5), ignoreDurationModifier: true), Is.False);
-                Assert.That(slow.TrySuperSlowdown(hunter, TimeSpan.FromSeconds(5), ignoreDurationModifier: true), Is.False);
-                Assert.That(slow.TryRoot(hunter, TimeSpan.FromSeconds(5)), Is.False);
-                Assert.That(entities.HasComponent<StunnedComponent>(hunter), Is.False);
-                Assert.That(entities.HasComponent<RMCSlowdownComponent>(hunter), Is.False);
-                Assert.That(entities.HasComponent<RMCSuperSlowdownComponent>(hunter), Is.False);
-                Assert.That(entities.HasComponent<RMCRootedComponent>(hunter), Is.False);
+                Assert.That(stun.TryParalyze(hunter, TimeSpan.FromSeconds(5), true, force: true), Is.True);
+                Assert.That(slow.TrySlowdown(hunter, TimeSpan.FromSeconds(5), ignoreDurationModifier: true), Is.True);
+                Assert.That(slow.TrySuperSlowdown(hunter, TimeSpan.FromSeconds(5), ignoreDurationModifier: true), Is.True);
+                Assert.That(slow.TryRoot(hunter, TimeSpan.FromSeconds(5)), Is.True);
+                Assert.That(entities.HasComponent<StunnedComponent>(hunter), Is.True);
+                Assert.That(entities.HasComponent<RMCSlowdownComponent>(hunter), Is.True);
+                Assert.That(entities.HasComponent<RMCSuperSlowdownComponent>(hunter), Is.True);
+                Assert.That(entities.HasComponent<RMCRootedComponent>(hunter), Is.True);
             });
         });
 
@@ -162,7 +164,7 @@ public sealed class YautjaFrontlineBalanceTest
     }
 
     [Test]
-    public async Task RegularHunterCannotBeDisarmedOrDropItemsWhenKnockedDown()
+    public async Task RegularHunterCanBeDisarmedAndDropsItemsWhenKnockedDown()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -182,14 +184,16 @@ public sealed class YautjaFrontlineBalanceTest
             var disarmed = new DisarmedEvent(hunter, attacker, 1f);
             entities.EventBus.RaiseLocalEvent(hunter, ref disarmed);
             var knockedDown = entities.System<SharedStunSystem>()
-                .TryKnockdown(hunter, TimeSpan.FromSeconds(2), force: true);
+                .TryKnockdown(hunter, TimeSpan.FromSeconds(2));
 
+            // CM-SS13 (human_attackhand.dm disarm intent) has no Yautja exception, and only
+            // knock_down_reduction 1.5 makes them harder to floor - no immunity, no drop protection.
             Assert.Multiple(() =>
             {
-                Assert.That(attempt.Cancelled, Is.True);
-                Assert.That(disarmed.Handled, Is.True);
+                Assert.That(attempt.Cancelled, Is.False);
                 Assert.That(knockedDown, Is.True);
-                Assert.That(hands.IsHolding(hunter, weapon), Is.True);
+                Assert.That(hands.IsHolding(hunter, weapon), Is.False,
+                    "the disarm now throws the held weapon instead of being ignored");
             });
         });
 

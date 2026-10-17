@@ -90,7 +90,10 @@ public sealed partial class YautjaCombistickSystem : EntitySystem
 
     private void OnGetItemActions(Entity<YautjaCombistickComponent> ent, ref GetItemActionsEvent args)
     {
-        if (!args.InHands || !HasComp<YautjaComponent>(args.User))
+        // CMU14: yaut_weapons.dm:724 gates the chain's attack_hand on
+        // "!HAS_TRAIT(user, TRAIT_YAUTJA_TECH) && !isthrall(user)", so authorized users (which include
+        // thralls) get the fold action too.
+        if (!args.InHands || !CanUseChainedWeapon(args.User))
             return;
 
         args.AddAction(ref ent.Comp.FoldAction, ent.Comp.FoldActionId);

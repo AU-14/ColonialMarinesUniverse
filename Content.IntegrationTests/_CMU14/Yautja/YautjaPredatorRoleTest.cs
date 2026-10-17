@@ -3855,7 +3855,6 @@ public sealed class YautjaPredatorRoleTest
                 "CMUActionYautjaToggleThrallBracerLock",
                 "CMUActionYautjaStunThrall",
                 "CMUActionYautjaSelfDestructThrall",
-                "CMUActionYautjaRecall",
                 "CMUActionYautjaCallDisc",
                 "CMUActionYautjaFalconRecall",
                 "CMUActionYautjaSelfDestruct",
@@ -4021,7 +4020,6 @@ public sealed class YautjaPredatorRoleTest
                 ["CMUActionYautjaToggleLantern"] = 1,
                 ["CMUActionYautjaHonorRoar"] = 45,
                 ["CMUActionYautjaHuntingLeap"] = 12,
-                ["CMUActionYautjaRecall"] = 5,
                 ["CMUActionYautjaRaiseThrall"] = 120,
             };
 
