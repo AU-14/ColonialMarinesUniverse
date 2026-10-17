@@ -190,4 +190,42 @@ public sealed class OctoberEighteenXenoRegressionTest : GameTest
             SEntMan.DeleteEntity(hive);
         });
     }
+
+    // StartLunge paralyzes the charger, and grid vehicles let downed mobs pass through them,
+    // so the lunge never touched the hull and the crew never got shaken
+    [Test]
+    public async Task LungingChargerStillCollidesWithGridVehicles()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var tank = SEntMan.SpawnEntity("VehicleTank", map.GridCoords);
+            var charger = SEntMan.SpawnEntity("RMCXenoCrusherCharger", map.GridCoords.Offset(new Vector2(6, 0)));
+            var standing = SEntMan.System<StandingStateSystem>();
+            standing.Down(charger, playSound: false, dropHeldItems: false, force: true);
+            Assert.That(standing.IsDown(charger), Is.True);
+
+            bool Cancelled()
+            {
+                var tankFixture = SEntMan.GetComponent<FixturesComponent>(tank).Fixtures.Values.First();
+                var chargerFixture = SEntMan.GetComponent<FixturesComponent>(charger).Fixtures.Values.First();
+                var ev = new PreventCollideEvent(tank, charger,
+                    SEntMan.GetComponent<PhysicsComponent>(tank),
+                    SEntMan.GetComponent<PhysicsComponent>(charger),
+                    tankFixture,
+                    chargerFixture);
+                SEntMan.EventBus.RaiseLocalEvent(tank, ref ev);
+                return ev.Cancelled;
+            }
+
+            // a plain downed xeno still slides under, that's the exemption working as meant
+            Assert.That(Cancelled(), Is.True);
+
+            SEntMan.EnsureComponent<XenoChargerStateComponent>(charger).MoveState = XenoChargerMoveState.Lunging;
+            Assert.That(Cancelled(), Is.False);
+
+            SEntMan.DeleteEntity(charger);
+            SEntMan.DeleteEntity(tank);
+        });
+    }
 }
