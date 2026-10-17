@@ -128,4 +128,35 @@ public sealed class OctoberEighteenXenoRegressionTest : GameTest
             SEntMan.DeleteEntity(server);
         });
     }
+
+    // kill threats paid intel for every hugger, lesser drone and popper
+    [TestCase("CMXenoLesserDrone", 0)]
+    [TestCase("CMUSwarmLesser", 0)]
+    [TestCase("CMXenoParasite", 0)]
+    [TestCase("CMU14XenoPopper", 0)]
+    [TestCase("CMXenoDrone", 1)]
+    public async Task KillThreatObjectiveIgnoresMinions(string prototype, int credited)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var killer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.System<NpcFactionSystem>().AddFaction(killer, Govfor);
+            var objective = SEntMan.SpawnEntity("killthreatobjectiveds", map.GridCoords);
+            var data = SEntMan.GetComponent<CMUObjectiveComponent>(objective);
+            data.Active = true;
+            data.Faction = "govfor";
+            var kill = SEntMan.GetComponent<KillObjectiveComponent>(objective);
+            kill.KillCount = 100;
+
+            var mob = SEntMan.SpawnEntity(prototype, map.GridCoords.Offset(new Vector2(3, 0)));
+            SEntMan.EnsureComponent<KillMarkedForComponent>(mob).AssociatedObjectives[objective] = "govfor";
+            SEntMan.System<MobStateSystem>().ChangeMobState(mob, MobState.Dead, origin: killer);
+
+            Assert.That(kill.AmountKilledPerFaction.GetValueOrDefault("govfor"), Is.EqualTo(credited));
+
+            SEntMan.DeleteEntity(objective);
+            SEntMan.DeleteEntity(killer);
+        });
+    }
 }
