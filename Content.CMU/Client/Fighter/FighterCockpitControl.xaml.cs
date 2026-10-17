@@ -101,6 +101,8 @@ public sealed partial class FighterCockpitControl : LayoutContainer
             _weapons.Add(button);
         }
         Fire.OnPressed += _ => send(FighterCommand.Fire);
+        Guidance.OnPressed += _ => send(FighterCommand.ProgramGuidance);
+        Guidance.Disabled = spectating;
         PrepareRun.OnPressed += _ => { send(FighterCommand.PrepareRun); ShowRoute(true); };
         PrepareRun.ToolTip = Loc.GetString("cmu-fighter-prepare-help");
         QueueFire.OnPressed += _ => send(FighterCommand.QueueFire);

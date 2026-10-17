@@ -1,0 +1,77 @@
+- type: entity
+  parent: RMCDropshipAttachmentAmmoGAU
+  id: CMUDropshipAmmoGAUFragmentation
+  name: PGU-110 'Hornet' 30mm fragmentation ammo crate
+  description: Four hundred prefragmented 30mm rounds for the GAU-21. Forty-round bursts saturate a wide area with small explosive impacts, trading armor penetration for anti-infantry coverage.
+  components:
+  - type: DropshipAmmo
+    ammoType: gau_fragmentation
+    ammoSpriteType: 30mm_crate
+    targetSpread: 4
+    bulletSpread: 5
+    armorPiercing: 5
+    zLevelPenetration: 0
+    damage:
+      types:
+        Piercing: 15
+        Slash: 35
+    explosion:
+      total: 20
+      slope: 8
+      max: 4
+  - type: RMCGenericExamine
+    message: Fragmentation rounds cannot penetrate overhead cover.
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 500
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoGAUAP
+  id: CMUDropshipAmmoGAUArmorPiercing
+  name: PGU-115 'Lance' 30mm precision AP ammo crate
+  description: Four hundred heavy 30mm penetrators for the GAU-21. Focused forty-round bursts pierce armored targets and three levels of overhead cover, sacrificing area coverage for penetration.
+  components:
+  - type: DropshipAmmo
+    ammoType: gau_precision_ap
+    ammoSpriteType: 30mm_crate_hv
+    targetSpread: 1
+    bulletSpread: 1
+    armorPiercing: 80
+    zLevelPenetration: 3
+    damage:
+      types:
+        Piercing: 100
+    explosion: null
+    impactEffects: []
+  - type: RMCGenericExamine
+    message: It can penetrate 3 z-levels.
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 600
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoGAU
+  id: CMUDropshipAmmoGAUIncendiary
+  name: PGU-120 'Cinder' 30mm incendiary ammo crate
+  description: Four hundred 30mm incendiary rounds for the GAU-21. Forty-round bursts ignite scattered impact sites for area denial, with reduced direct damage and no overhead penetration.
+  components:
+  - type: DropshipAmmo
+    ammoType: gau_incendiary
+    ammoSpriteType: 30mm_crate
+    targetSpread: 3
+    bulletSpread: 4
+    armorPiercing: 5
+    zLevelPenetration: 0
+    damage:
+      types:
+        Piercing: 15
+        Heat: 30
+    fire:
+      type: RMCTileFireMiniMike
+      range: 0
+      cardinalRange: 0
+  - type: RMCGenericExamine
+    message: Incendiary rounds cannot penetrate overhead cover.
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 550

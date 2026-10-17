@@ -23,6 +23,9 @@ public sealed partial class DamageableSystem : EntitySystem
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private SharedChemistryGuideDataSystem _chemistryGuideData = default!;
     [Dependency] private SharedExplosionSystem _explosion = default!;
+    // CMU14 Begin
+    [Dependency] private Content.Shared.Gibbing.GibbingSystem _gibbing = default!;
+    // CMU14 End
 
     // CMU14: wearable rad shielding, relayed to inventory on irradiation
     [Dependency] private InventorySystem _inventory = default!;

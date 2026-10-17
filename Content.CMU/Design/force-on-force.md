@@ -17,6 +17,40 @@ The roll maximizes balanced assignments, then prefers higher role priorities and
 
 ## Dropships
 
+RTO CAS uplinks can call **OWN POSITION** without a visible hostile or a flare.
+The operator may offset the call by up to 15 tiles east/west and north/south,
+including diagonally. The server adds up to 12 tiles of random radial deviation
+to the requested position; the resulting mark stays fixed when the RTO moves.
+Existing acknowledgement and cleared-hot requirements still apply.
+
+Xenos, or players holding a sharp tool such as a knife, can right-click an RTO
+radio pack or its wearer to **Rip out radio wires**.
+This takes seven seconds and is interrupted by movement, damage, or changing
+hands/dropping the required tool. The broken
+pack cannot operate its radio, relay, phone or CAS uplink. An RTO or someone with
+Engineer skill 1 can use five cable on the pack (or its wearer) to repair it,
+then power it back on.
+
+Laser designators default to **1111-1**. Right-click a designator to open
+**Guidance programming** and set its code (four digits, a dash, one digit).
+The dropship weapons console and fighter cockpit have a guidance button.
+Each aircraft shares one receiver code across its weapons; mismatched laser
+spots cannot be detected, selected, tracked, or used for release.
+The fighter's onboard designators can be programmed separately from its receiver.
+
+Loaded guided missiles and JDAMs can select laser or GPS guidance independently.
+For GPS, a ground observer must complete a measurement in rangefinder mode.
+Aircraft select that faction's ground report instead of entering arbitrary X/Y.
+Reports use the same round-randomized planet coordinate offset as the rangefinder
+and orbital cannon, expire after five minutes, and include a fixed random error
+of up to 15 tiles on each axis. Reprogramming the same report does not reroll it.
+Automatic ground reports cannot originate inside a dropship or in a shipside hangar.
+GPS release requires no continuing flare or laser lock and ignores
+the console's selected mark and manual offsets, while retaining normal flight,
+range, protected-area, clearance, and danger-close checks.
+The GPS-only **PGU-44/G 105mm HE shell** costs **1400** (twice standard HE)
+and has the same explosive payload, with zero target spread.
+
 Dropship part fabricators share a budget within their carrier's faction, including linked decks. GOVFOR and OPFOR have separate accounts for purchases, refunds, passive income and faction tech rewards.
 
 In FoF, squad leaders, acting squad leaders, officers and command personnel can hack an opposing dropship's navigation console. The hack takes 60 seconds and breaks on movement, damage or resting. Existing launch and hijack timing limits apply. Authorization is tied to the user and console and expires after one minute.

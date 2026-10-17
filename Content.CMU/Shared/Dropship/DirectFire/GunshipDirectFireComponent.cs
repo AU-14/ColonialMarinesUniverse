@@ -20,6 +20,9 @@ public sealed partial class GunshipDirectFirePointComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public float ForwardOffset = 1f;
+
+    [DataField, AutoNetworkedField]
+    public float LateralOffset = 0.5f;
 }
 
 /// <summary>
@@ -45,6 +48,10 @@ public sealed partial class GunshipDirectFireWeaponComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public float MuzzleOffset = 1.25f;
+
+    /// <summary>Overrides CAS burst consumption for individual direct-fire projectiles.</summary>
+    [DataField]
+    public int? RoundsPerProjectile;
 }
 
 [Serializable, NetSerializable]

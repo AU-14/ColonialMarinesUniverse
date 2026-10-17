@@ -28,7 +28,7 @@ public static class FighterFlight
         FighterCommand.TrainingRelease => !pilot,
         FighterCommand.Mark or FighterCommand.Zoom or FighterCommand.Center or FighterCommand.Lock or FighterCommand.Fire => true,
         FighterCommand.VisionNormal or FighterCommand.VisionNight or FighterCommand.VisionThermal => true,
-        FighterCommand.Laser => true,
+        FighterCommand.Laser or FighterCommand.ProgramGuidance => true,
         FighterCommand.SwapSeat or FighterCommand.LeaveSeat or FighterCommand.ConfirmEject or FighterCommand.CancelEject => true,
         _ => false,
     };
