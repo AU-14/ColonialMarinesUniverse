@@ -131,4 +131,58 @@ public sealed class OctoberEighteenGearRegressionTest : GameTest
             SEntMan.DeleteEntity(wall);
         });
     }
+
+    // flashlights have a 0 damage MeleeWeapon so the holster keys pulled them off the belt like a weapon
+    [Test]
+    public async Task FlashlightsAreNotUnholsteredAsWeapons()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var flashlight = SEntMan.SpawnEntity("RMCFlashlight", MapCoordinates.Nullspace);
+            var knife = SEntMan.SpawnEntity("RMCM5Bayonet", MapCoordinates.Nullspace);
+
+            var flashlightEv = new IsUnholsterableEvent();
+            SEntMan.EventBus.RaiseLocalEvent(flashlight, ref flashlightEv);
+            var knifeEv = new IsUnholsterableEvent();
+            SEntMan.EventBus.RaiseLocalEvent(knife, ref knifeEv);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(flashlightEv.Unholsterable, Is.False);
+                Assert.That(knifeEv.Unholsterable, Is.True);
+            });
+
+            SEntMan.DeleteEntity(flashlight);
+            SEntMan.DeleteEntity(knife);
+        });
+    }
+
+    // secondary started at the belt, so with empty suit storage it drew the same pistol primary would
+    [Test]
+    public async Task SecondaryUnholsterSkipsWhatPrimaryWouldDraw()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var inventory = SEntMan.System<InventorySystem>();
+            var human = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var belt = SEntMan.SpawnEntity("RMCBeltHolsterPistol", map.GridCoords);
+            var boots = SEntMan.SpawnEntity("CMBootsBlackFilled", map.GridCoords);
+            var pistol = SEntMan.SpawnEntity("RMCWeaponPistolB92FS", map.GridCoords);
+
+            Assert.That(SEntMan.System<SharedContainerSystem>()
+                .Insert(pistol, SEntMan.GetComponent<StorageComponent>(belt).Container), Is.True);
+            Assert.That(inventory.TryEquip(human, belt, "belt", silent: true, force: true), Is.True);
+            Assert.That(inventory.TryEquip(human, boots, "shoes", silent: true, force: true), Is.True);
+
+            SEntMan.System<SharedCMInventorySystem>().OnHolsterSecondary(human);
+
+            var held = SEntMan.System<SharedHandsSystem>().GetActiveItem(human);
+            Assert.That(held, Is.Not.Null, "secondary should draw something");
+            Assert.That(SEntMan.GetComponent<MetaDataComponent>(held!.Value).EntityPrototype?.ID,
+                Is.EqualTo("RMCM5Bayonet"), "the boot knife, the pistol is primary's");
+
+            SEntMan.DeleteEntity(human);
+        });
+    }
 }
