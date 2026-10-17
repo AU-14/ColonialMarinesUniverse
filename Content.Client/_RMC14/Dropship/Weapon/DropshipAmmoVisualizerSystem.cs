@@ -23,8 +23,12 @@ public sealed partial class DropshipAmmoVisualizerSystem : VisualizerSystem<Drop
         if (component.AmmoType == null)
             return;
 
-        var fillNum = Math.Clamp(fill / component.RoundsPerShot, 0, component.MaxRounds / component.RoundsPerShot);
-        var state = component.AmmoType + "_" + fillNum;
+        var step = component.RoundsPerSprite ?? component.RoundsPerShot;
+        var fillNum = component.RoundsPerSprite != null
+            ? Math.Clamp((int) MathF.Ceiling((float) fill / step), 0,
+                (int) MathF.Ceiling((float) component.MaxRounds / step))
+            : Math.Clamp(fill / step, 0, component.MaxRounds / step);
+        var state = (component.AmmoSpriteType ?? component.AmmoType) + "_" + fillNum;
 
         _sprite.LayerSetRsiState((uid, spriteComp), layer, state);
     }

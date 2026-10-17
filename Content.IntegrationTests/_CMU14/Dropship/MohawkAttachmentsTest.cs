@@ -11,6 +11,7 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.PowerLoader.Events;
 using Content.Shared.Buckle;
 using Content.Shared.CCVar;
+using Content.Shared.CMU14.Dropship.DirectFire;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
@@ -238,6 +239,10 @@ public sealed class MohawkAttachmentsTest
             if (variant == "midway")
             {
                 var chin = points.Single(p => entities.GetComponent<MetaDataComponent>(p).EntityPrototype?.ID == "CMUMohawkM90Point");
+                var chinGunComponent = entities.GetComponent<MohawkChinGunComponent>(chin);
+                chinGunComponent.Calibrated = true;
+                chinGunComponent.IffConfigured = true;
+                entities.EnsureComponent<DropshipFireControlBootComponent>(ship).Complete = true;
                 var weaponPoint = entities.GetComponent<DropshipWeaponPointComponent>(chin);
                 chinGun = containers.GetContainer(chin, weaponPoint.WeaponContainerSlotId).ContainedEntities.Single();
                 chinAmmo = Install(chin, "CMUMohawkM90Ammo");
@@ -278,10 +283,38 @@ public sealed class MohawkAttachmentsTest
                 var seat = entities.QueryEntities<MohawkGunnerySeatComponent>().Single().Owner;
                 var gunner = entities.SpawnEntity("CMMobHuman", entities.GetComponent<TransformComponent>(seat).Coordinates);
                 Assert.That(entities.System<SharedBuckleSystem>().TryBuckle(gunner, null, seat, popup: false), Is.True);
+                entities.System<SkillsSystem>().SetSkill(gunner, "RMCSkillPilot", 1);
                 var terminal = entities.QueryEntities<DropshipTerminalWeaponsComponent>().Single(c => c.Comp.Gunnery);
-                Assert.That(weapons.TryFireWeapon(chinGun, new EntityCoordinates(ground, 25, 25),
-                    DropshipWeaponStrikeType.Direct, gunner, terminal), Is.True);
-                Assert.That(entities.GetComponent<DropshipAmmoComponent>(chinAmmo).Rounds, Is.EqualTo(360));
+                var ui = entities.System<SharedUserInterfaceSystem>();
+                ui.OpenUi(terminal.Owner, DropshipTerminalWeaponsUi.Key, gunner);
+                entities.EventBus.RaiseLocalEvent(terminal.Owner, new MohawkChinGunControlMessage
+                {
+                    Actor = gunner,
+                    UiKey = DropshipTerminalWeaponsUi.Key,
+                });
+                var chinPoint = entities.QueryEntities<MohawkChinGunComponent>().Single();
+                Assert.That(chinPoint.Comp.Operator, Is.EqualTo(gunner));
+                var flare = entities.SpawnEntity(null, new EntityCoordinates(ground, 25, 25));
+                entities.AddComponent<FlareSignalComponent>(flare);
+                weapons.MakeDropshipTarget(flare, "TEST");
+                entities.EventBus.RaiseLocalEvent(terminal.Owner, new MohawkChinGunFlareMessage(entities.GetNetEntity(flare))
+                {
+                    Actor = gunner,
+                    UiKey = DropshipTerminalWeaponsUi.Key,
+                });
+                var config = pair.Server.ResolveDependency<IConfigurationManager>();
+                var casDebug = config.GetCVar(Content.Shared._RMC14.CCVar.RMCCVars.RMCDropshipCASDebug);
+                config.SetCVar(Content.Shared._RMC14.CCVar.RMCCVars.RMCDropshipCASDebug, true);
+                try
+                {
+                    Assert.That(weapons.TryFireWeapon(chinGun, new EntityCoordinates(ground, 25, 25),
+                        DropshipWeaponStrikeType.Direct, gunner, terminal), Is.True);
+                }
+                finally
+                {
+                    config.SetCVar(Content.Shared._RMC14.CCVar.RMCCVars.RMCDropshipCASDebug, casDebug);
+                }
+                Assert.That(entities.GetComponent<DropshipAmmoComponent>(chinAmmo).Rounds, Is.EqualTo(399));
             }
 
             var utility = entities.GetComponent<DropshipUtilityComponent>(medevac);

@@ -30,6 +30,7 @@ public abstract partial class SharedDropshipWeaponSystem
             MarkerAt = time + (strikeTravelTime ?? payload.TravelTime),
             ShotsLeft = payload.RoundsPerShot,
             ShotsPerVolley = payload.ShotsPerVolley,
+            ImpactsPerVolley = payload.ImpactsPerVolley,
             Damage = payload.Damage,
             ArmorPiercing = payload.ArmorPiercing,
             BulletSpread = payload.BulletSpread,
