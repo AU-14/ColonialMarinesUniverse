@@ -94,4 +94,38 @@ public sealed class OctoberEighteenXenoRegressionTest : GameTest
             Assert.That(heads, Is.Zero);
         });
     }
+
+    // damage state landing on the client after a predicted heal read as "damage taken" and the
+    // client handed itself hypertension stacks the server never had
+    [Test]
+    public async Task DespoilerHypertensionOnlyBuildsOnTheServer()
+    {
+        var map = await Pair.CreateTestMap();
+        var server = EntityUid.Invalid;
+        await Server.WaitPost(() => server = SSpawnAtPosition("RMCXenoDespoiler", map.GridCoords));
+        await RunUntilSynced();
+
+        var client = ToClientUid(server);
+        await Client.WaitAssertion(() =>
+        {
+            var damage = new DamageSpecifier();
+            damage.DamageDict["Blunt"] = 20;
+            CEntMan.System<DamageableSystem>().TryChangeDamage(client, damage, ignoreResistances: true);
+
+            var hyper = CEntMan.GetComponent<XenoDespoilerHypertensionComponent>(client);
+            Assert.That(hyper.Points, Is.Zero);
+            Assert.That(hyper.Stacks, Is.Zero);
+        });
+
+        await Server.WaitAssertion(() =>
+        {
+            var damage = new DamageSpecifier();
+            damage.DamageDict["Blunt"] = 20;
+            SEntMan.System<DamageableSystem>().TryChangeDamage(server, damage, ignoreResistances: true);
+
+            // real hits still pay out
+            Assert.That(SEntMan.GetComponent<XenoDespoilerHypertensionComponent>(server).Points, Is.GreaterThan(0));
+            SEntMan.DeleteEntity(server);
+        });
+    }
 }

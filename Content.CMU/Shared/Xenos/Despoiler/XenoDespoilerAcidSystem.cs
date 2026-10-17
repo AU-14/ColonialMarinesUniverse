@@ -9,6 +9,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Weapons.Melee.Events;
+using Robust.Shared.Network;
 
 namespace Content.Server._RMC14.Xenonids.Despoiler;
 
@@ -18,6 +19,7 @@ public sealed partial class XenoDespoilerAcidSystem : SharedXenoDespoilerAcidSys
     [Dependency] private XenoSpitSystem _xenoSpit = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private XenoSystem _xeno = default!; // CMU14
+    [Dependency] private INetManager _net = default!;
 
     private EntityQuery<XenoComponent> _xenoQuery;
     private EntityQuery<XenoDespoilerComponent> _despoilerQuery;
@@ -62,6 +64,12 @@ public sealed partial class XenoDespoilerAcidSystem : SharedXenoDespoilerAcidSys
     private void OnDamageTaken(EntityUid uid, XenoDespoilerHypertensionComponent comp, DamageChangedEvent args)
     {
         if (!args.DamageIncreased || args.DamageDelta is not { } delta)
+            return;
+
+        // this system lives in shared now, so the client saw a "damage increase" every time a server
+        // damage state landed on top of a predicted heal and handed itself stacks the server never had.
+        // Stacks is networked, the server's count is the only one that matters
+        if (_net.IsClient)
             return;
 
         _hyper.AddPoints(uid, comp, (float) delta.GetTotal() * comp.PointsPerDamageTaken);
