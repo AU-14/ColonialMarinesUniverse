@@ -52,6 +52,11 @@
     antagPrototype: SerialKillerRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-serial-killer
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: hudmutineerleader
 
 - type: antag
   parent: CMUAntagColonyBase
