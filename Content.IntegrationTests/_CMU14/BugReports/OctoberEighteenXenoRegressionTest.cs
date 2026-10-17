@@ -228,4 +228,30 @@ public sealed class OctoberEighteenXenoRegressionTest : GameTest
             SEntMan.DeleteEntity(tank);
         });
     }
+
+    // death clears CurrentQueen, but only the reaper put it back on revival, so hive collapse
+    // ended the round over a living queen
+    [Test]
+    public async Task RevivedQueenIsTheHiveQueenAgain()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
+            var component = SEntMan.GetComponent<HiveComponent>(hive);
+            var queen = SEntMan.SpawnEntity("CMXenoQueen", map.GridCoords);
+            SEntMan.System<SharedXenoHiveSystem>().SetHive(queen, hive);
+            Assert.That(component.CurrentQueen, Is.EqualTo(queen));
+
+            var mobStates = SEntMan.System<MobStateSystem>();
+            mobStates.ChangeMobState(queen, MobState.Dead);
+            Assert.That(component.CurrentQueen, Is.Null);
+
+            mobStates.ChangeMobState(queen, MobState.Alive);
+            Assert.That(component.CurrentQueen, Is.EqualTo(queen));
+
+            SEntMan.DeleteEntity(queen);
+            SEntMan.DeleteEntity(hive);
+        });
+    }
 }
