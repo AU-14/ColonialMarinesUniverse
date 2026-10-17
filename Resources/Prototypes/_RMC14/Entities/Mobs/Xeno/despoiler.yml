@@ -2,7 +2,6 @@
   parent:
   - CMXenoDeveloped
   - CMXenoTail
-  - CMXenoFlammable
   - RMCXenoSpeechSounds
   - RMCXenoCommendationReceiver
   - RMCXenoMobCollision
@@ -152,8 +151,6 @@
     stunMax: 3
   - type: AcidBloodSplash
     isActivateSplashOnGib: false
-  - type: RMCGibOnDeath
-    gibChance: 1.0
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.4
     baseSprintSpeed: 4.8
@@ -171,12 +168,6 @@
       whitelist:
         components:
         - XenoHeavy
-  - type: PointLight
-    enabled: true
-    radius: 1.7
-    softness: 1
-    color: "#83ff66"
-    autoRot: true
   - type: RMCSize
     size: Big
   - type: RMCXenoDamageVisuals
@@ -185,10 +176,6 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: boiler
-  - type: Flammable
-    damage:
-      types:
-        Heat: 2
   - type: FixedIdentity
     name: cmu-job-name-xeno-unknown
   - type: RMCActionOrder
