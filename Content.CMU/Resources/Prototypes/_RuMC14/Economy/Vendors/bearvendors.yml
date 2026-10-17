@@ -1381,6 +1381,8 @@
         amount: 5
     - name: au14-vendor-section-rail-attachments
       entries:
+      - id: CMUAttachmentNightVisionScope
+        amount: 3
       - id: RMCAttachmentTwoPointSling
         amount: 50
       - id: RMCAttachmentRailFlashlight

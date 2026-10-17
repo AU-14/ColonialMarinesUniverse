@@ -138,6 +138,9 @@
         points: 15
     - name: Attachments
       entries:
+      - id: CMUAttachmentNightVisionScope
+        amount: 3
+        points: 3
       - id: AU14AttachmentTwoPointSling
         amount: 5
         points: 0
