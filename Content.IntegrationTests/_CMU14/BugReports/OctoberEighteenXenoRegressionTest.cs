@@ -64,4 +64,34 @@ public sealed class OctoberEighteenXenoRegressionTest : GameTest
             SEntMan.DeleteEntity(hive);
         });
     }
+
+    // nubody gave xenos a real head part, and GibBody drops every part
+    [Test]
+    public async Task GibbedXenoDoesNotLeaveItsHeadBehind()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var drone = SEntMan.SpawnEntity("CMXenoDrone", map.GridCoords);
+            SEntMan.System<SharedBodySystem>().GibBody(drone);
+        });
+        await RunTicksSync(5);
+        await Server.WaitAssertion(() =>
+        {
+            var containers = SEntMan.System<SharedContainerSystem>();
+            var heads = 0;
+            var query = SEntMan.EntityQueryEnumerator<MetaDataComponent, TransformComponent>();
+            while (query.MoveNext(out var uid, out var meta, out var xform))
+            {
+                if (meta.EntityPrototype?.ID == "RMCHeadXeno" &&
+                    xform.MapID == map.MapId &&
+                    !containers.IsEntityInContainer(uid))
+                {
+                    heads++;
+                }
+            }
+
+            Assert.That(heads, Is.Zero);
+        });
+    }
 }
