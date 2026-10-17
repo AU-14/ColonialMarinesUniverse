@@ -1,0 +1,10 @@
+cmu-govfor-name-adjutant-dress = High Command Adjutant
+cmu-govfor-description-adjutant-dress = An adjutant of High Command in full dress uniform, all brass and paperwork, dispatched to represent the flag.
+cmu-govfor-prefix-adjutant-dress = ADJ
+cmu-govfor-name-brigadier-general = Brigadier General
+cmu-govfor-description-brigadier-general = A Brigadier General of the colonial marine corps. A walking inspection, and the reason the deck got buffed.
+cmu-govfor-prefix-brigadier-general = BG
+cmu-govfor-name-vip-escort = VIP Escort Detail
+cmu-govfor-description-vip-escort = A marine of the escort detail assigned to protect visiting dignitaries, in dress blues with a very straight face.
+cmu-govfor-prefix-vip-escort = ESC
+cmu-govfor-supervisors-adjutant-dress = High Command

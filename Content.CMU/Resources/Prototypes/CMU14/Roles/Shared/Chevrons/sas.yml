@@ -1,0 +1,33 @@
+- type: entity
+  parent: RMCArmbandBase
+  id: CMU14ChevronSASPrivate
+  name: private chevron
+  description: What the hell kind of name is Soap.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/usarmy.rsi
+    state: ranks_ae1
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/usarmy.rsi
+      state: equipped-ranks_ae1
+  - type: RankChanger
+    rank: USArmy_Private1 # i was too lazy to make a rank for 1 situation, lets reuse
+    override: true
+
+- type: entity
+  parent: RMCArmbandBase
+  id: CMU14ChevronSASSergeant
+  name: sergeant chevron
+  description: I like to keep this for close encounters.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: RMC_Sergeant
+    override: true

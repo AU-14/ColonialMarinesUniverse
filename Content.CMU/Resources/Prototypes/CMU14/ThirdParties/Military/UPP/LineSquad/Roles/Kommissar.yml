@@ -1,0 +1,88 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobUPPKommissar
+  roundSide: ThirdParty
+  roundForce: UPPLine
+  roundRole: UPPKommissar
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 1
+      RMCSkillLeadership: 1
+      RMCSkillMedical: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 1
+  - type: MarineOrders
+  - type: JobPrefix
+    prefix: cmu-upp-kommissar-prefix
+  - type: Language
+    spokenLanguages:
+    - Russian
+    - English
+    - Mandarin
+    understoodLanguages:
+    - Russian
+    - English
+    - Mandarin
+    currentLanguage: Russian
+    defaultLanguage: Russian
+  name: cmu-upp-kommissar-name
+  description: cmu-upp-kommissar-description
+  playTimeTracker: CMUJobUPPKommissar
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearUPPKommissar
+  spawnMenuRoleName: UPP Kommissar (3rd party)
+  greeting: cmu-upp-kommissar-greeting
+  icon: RMCJobIconSPPKommissar
+  joinNotifyCrew: false
+  supervisors: cmu-upp-kommissar-supervisors
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPKommissar
+  name: UPP Kommissar
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPLine
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-upp-kommissar-name
+    description: cmu-upp-kommissar-description
+    reregister: false
+    job: CMUJobUPPKommissar
+    raffle:
+      settings: short
+    rules: cmu-upp-kommissar-rules
+
+- type: startingGear
+  id: CMUGearUPPKommissar
+  equipment:
+    id: CMUIDCardUPPKommissar
+    head: RMCHeadCapSPPPolBlack
+    ears2: RMCM5CameraGear
+    outerClothing: RMCCoatKommissarShortBlack
+    gloves: RMCHandsVeteranSPP
+    shoes: RMCBootsSPPFilled
+    belt: RMCBeltHolsterRevolverZHNK72Fill
+    back: CMSatchel
+    pocket1: RMCPouchAutoinjectorFill
+  storage:
+    back:
+    - RMCBoxZiptie
+    - RMCSpeedLoaderZHNK72
+    - RMCSpeedLoaderZHNK72
+
+- type: playTimeTracker
+  id: CMUJobUPPKommissar

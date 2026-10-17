@@ -1,0 +1,10 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Restored missing tank cook-off fire, smoke, and debris effects.
+  type: Fix
+- message: Restored the red injury vignette and its increasing intensity as health
+    falls.
+  type: Fix
+time: '2026-09-27T14:39:37.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2039

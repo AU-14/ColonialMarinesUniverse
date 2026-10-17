@@ -1,0 +1,185 @@
+- type: entity
+  parent: BaseItem
+  id: AU14BaseDefibrillator
+  name: lifepak 15f
+  description: A portable emergency defibrillator and patient monitor designed for fibrillating patients, it delivers powerful defibrillation to restore normal heart rhythms in patients, sometimes even pulling them back from the brink of death.
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: CMU14/Items/audefib.rsi
+    layers:
+    - state: defib
+    - state: defib_on
+      map: [ "enum.ToggleableVisuals.Layer" ]
+      visible: false
+    # The paddles sit docked on top and only come off while it's charged for a shock.
+    - state: defibpaddlesoverlay
+      map: [ "paddles" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: { visible: true }
+          False: { visible: false }
+      enum.CMUDefibVisuals.PaddlesOut:
+        paddles:
+          True: { visible: false }
+          False: { visible: true }
+  - type: CMUDefibPaddles
+  - type: Item
+    size: Normal
+    sprite: CMU14/Items/audefib.rsi
+    heldPrefix: defib
+  - type: Clothing
+    sprite: CMU14/Items/audefib.rsi
+    slots:
+    - OUTERCLOTHING
+    - back
+    quickEquip: false
+  - type: Speech
+    speechVerb: Robotic
+  - type: ItemToggle
+    soundActivate:
+      path: /Audio/CMU14/Medical/MedicalDevices/Old Defib/defib_SafetyOn.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+    soundDeactivate:
+      path: /Audio/CMU14/Medical/MedicalDevices/Old Defib/defib_SafetyOff.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+  - type: Defibrillator
+    zapDelay: 0
+    # Charges for exactly as long as the power-up tone plays.
+    doAfterDuration: 7.63
+    skillMultiplierDuration: 0
+    allowDoAfterMovement: true
+    canDefibCrit: false
+    zapHeal:
+      types:
+        Asphyxiation: -75
+        Bloodloss: -75
+    zapSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/Lifepak/shock.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+    chargeSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/Lifepak/powerupforshock.ogg
+      params:
+        volume: -9
+        maxDistance: 6
+    failureSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/Lifepak/checkpatient.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+    successSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/Lifepak/checkforpulse.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+    readySound:
+      path: /Audio/CMU14/Medical/MedicalDevices/Old Defib/defib_ready.ogg
+      params:
+        volume: -5.9
+        maxDistance: 6
+    zapDamage: 25
+  - type: DoAfter
+  - type: UseDelay
+  - type: StaticPrice
+    price: 100
+  - type: GuideHelp
+    guides:
+    - CMUGuideDefibrillators
+    - MedicalDoctor
+  - type: RequiresSkill
+    skills:
+      RMCSkillMedical: 2
+  - type: CMUDefibVoice
+    analyzingSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/Lifepak/analyseingnow.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+    shockAdvisedSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/Lifepak/shockadvised.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+    noShockAdvisedSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/Lifepak/noshockadvised.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+    standClearSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/Lifepak/standclear.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+  - type: CMUPatientMonitor
+    beatSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/Lifepak/heartratebeep.ogg
+      params:
+        volume: -12
+        maxDistance: 6
+    lethalAlarmSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/Lifepak/checkpatientalarm.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+    lethalAlarmInterval: 0.85
+    flatlineSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/Lifepak/noheartratecontinousbeeploop.ogg
+      params:
+        volume: -10
+        maxDistance: 6
+    warningAlarmSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/pulseoximeter_warningbeep.ogg
+      params:
+        volume: -10
+        maxDistance: 6
+  - type: ActivatableUI
+    key: enum.CMUPatientMonitorUi.Key
+    verbOnly: true
+    verbText: cmu-monitor-verb-open
+    requireActiveHand: false
+  - type: UserInterface
+    interfaces:
+      enum.CMUPatientMonitorUi.Key:
+        type: CMUPatientMonitorBui
+
+- type: entity
+  id: AU14CMDefibrillator
+  parent: [AU14BaseDefibrillator, RMCPowerCellSlotUnremovable]
+  suffix: AU14
+  components:
+  - type: PowerCellDraw
+    enabled: false
+    useCharge: 50
+  - type: RMCPowerUsageDisplay
+
+- type: entity
+  id: AUCMDefibrillatorEmpty
+  parent: AU14CMDefibrillator
+  suffix: AU14, Empty
+  components:
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+
+- type: entity
+  parent: AU14BaseDefibrillator
+  id: AUDefibrillatorInfinite
+  suffix: AU14, Infinite
+
+- type: entity
+  parent: RMCDefibrillatorCompact
+  id: CMUDefibrillatorCompact
+  suffix: CMU, No Skill
+  components:
+  - type: RequiresSkill
+    skills: {}

@@ -1,0 +1,87 @@
+- type: entity
+  parent: RMCBaseWeaponLauncher
+  id: RuMCWeaponLauncherDisposable
+  name: RPG-36
+  description: "The RPG-36 is a shot with no second chance. The tube, the charge, and the primer are three elements that come together only to fly apart. Disposability is not a flaw, but a philosophy: it is designed for a single strike, but that strike is enough."
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpg36.rsi
+    layers:
+      - state: icon
+        map: ["enum.GunVisualLayers.Base"]
+  - type: Clothing
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpg36.rsi
+  - type: Item
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpg36.rsi
+  - type: BallisticAmmoProvider
+    proto: RMCRocketHJRA12AT
+    cycleable: false
+    whitelist:
+      tags: []
+  - type: RMCFoldableGun
+    foldDelay: 1.95
+    foldText: rmc-gun-foldable-launcher-fold-self
+    foldTextOthers: rmc-gun-foldable-launcher-fold-others
+    finishText: rmc-gun-foldable-launcher-fold-finish-self
+    finishTextOthers: rmc-gun-foldable-launcher-fold-finish-others
+    toggleFoldSound:
+      path: /Audio/_RMC14/Weapons/Handling/component_pickup.ogg
+      params:
+        variation: 0.2
+    foldedEntity: RuMCWeaponLauncherDisposableFolded
+
+- type: entity
+  parent: [BaseItem, RMCBaseMeleeWeapon]
+  id: RuMCWeaponLauncherDisposableFolded
+  name: RPG-36
+  description: "The RPG-36 is a shot with no second chance. The tube, the charge, and the primer are three elements that come together only to fly apart. Disposability is not a flaw, but a philosophy: it is designed for a single strike, but that strike is enough."
+  suffix: Folded
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpg36.rsi
+    state: icon-folded
+  - type: Clothing
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpg36.rsi
+    equippedPrefix: folded
+    quickEquip: false
+    slots:
+    - suitStorage
+  - type: Item
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpg36.rsi
+    heldPrefix: folded
+    size: Normal
+  - type: RMCFoldableGun
+    foldDelay: 4
+    foldText: rmc-gun-foldable-launcher-unfold-self
+    foldTextOthers: rmc-gun-foldable-launcher-unfold-others
+    finishText: rmc-gun-foldable-launcher-unfold-finish-self
+    finishTextOthers: rmc-gun-foldable-launcher-unfold-finish-others
+    toggleFoldSound:
+      path: /Audio/_RMC14/Weapons/Handling/component_pickup.ogg
+      params:
+        variation: 0.2
+    foldedEntity: RuMCWeaponLauncherDisposable
+    examineText: rmc-gun-foldable-launcher-examine-unfold
+    onActivate: true
+  - type: EmitSoundOnPickup
+    sound:
+      collection: RMCEquipGun
+      params:
+        volume: -6
+  - type: EmitSoundOnDrop
+    sound:
+      collection: RMCRustleGun
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
+    sound:
+      collection: RMCRustleGun
+      params:
+        volume: -4
+  - type: MeleeWeapon
+    attackRate: 1
+    damage:
+      types:
+        Blunt: 5
+    soundHit:
+      collection: GenericHit

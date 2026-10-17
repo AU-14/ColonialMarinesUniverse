@@ -6,6 +6,6 @@ namespace Content.Shared._RMC14.Intel;
 [Access(typeof(IntelSystem))]
 public sealed partial class IntelKnowledgeComponent : Component
 {
-    [DataField, AutoNetworkedField]
-    public HashSet<EntityUid> Read = new();
+    [DataField("read"), AutoNetworkedField]
+    public HashSet<EntityUid> ReadIntel = new();
 }

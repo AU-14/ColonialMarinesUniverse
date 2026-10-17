@@ -1,6 +1,7 @@
 using Content.Server.Chat.Systems;
 using Content.Server.Speech.EntitySystems;
 using Content.Shared._RMC14.Emote;
+using Content.Shared.Chat;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Speech;
 using Robust.Shared.Prototypes;
@@ -17,11 +18,14 @@ public sealed partial class RMCEmoteSystem : SharedRMCEmoteSystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<EmoteCooldownComponent, ScreamActionEvent>(OnCooldownScreamAction, before: [typeof(VocalSystem)]);
+        SubscribeLocalEvent<EmoteCooldownComponent, EmoteActionEvent>(OnCooldownEmoteAction, before: [typeof(VocalSystem)]);
     }
 
-    private void OnCooldownScreamAction(Entity<EmoteCooldownComponent> ent, ref ScreamActionEvent args)
+    private void OnCooldownEmoteAction(Entity<EmoteCooldownComponent> ent, ref EmoteActionEvent args)
     {
+        if (args.Emote != "Scream")
+            return;
+
         // always allow off-cooldown scream action emote
         ResetCooldown((ent, ent));
     }
@@ -35,6 +39,10 @@ public sealed partial class RMCEmoteSystem : SharedRMCEmoteSystem
         bool forceEmote = false,
         TimeSpan? cooldown = null)
     {
+        // Collision damage can delete its target before requesting a pain emote.
+        if (TerminatingOrDeleted(source))
+            return;
+
         var recently = EnsureComp<RecentlyEmotedComponent>(source);
         var time = _timing.CurTime;
         if (recently.Emotes.TryGetValue(emote, out var next) &&

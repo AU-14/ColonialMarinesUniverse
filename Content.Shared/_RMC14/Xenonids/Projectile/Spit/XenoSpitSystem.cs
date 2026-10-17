@@ -10,6 +10,7 @@ using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids.Construction.DeployedTraps;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Insight;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Ball;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Charge;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Scattered;
@@ -27,6 +28,7 @@ using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Effects;
 using Content.Shared.Inventory;
@@ -72,6 +74,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private XenoInsightSystem _insight = default!;
+    [Dependency] private YautjaAcidResponseSystem _yautjaAcid = default!;
 
     private static readonly ProtoId<AlertPrototype> FireAlert = "Fire";
     private static readonly ProtoId<ReagentPrototype> AcidRemovedBy = "Water";
@@ -125,7 +128,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
     {
         if (!TerminatingOrDeleted(ent))
         {
-            _movementSpeed.RefreshMovementSpeedModifiers(ent);
+            _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
             _armor.UpdateArmorValue((ent, null));
         }
     }
@@ -181,7 +184,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
 
         active.FiredProjectile = true;
         Dirty(xeno, active);
-        _popup.PopupClient(Loc.GetString("cm-xeno-charge-spit-expire"), xeno, xeno, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-charge-spit-expire"), xeno, xeno, PopupType.SmallCaution);
     }
 
     private void OnXenoSlowingSpitAction(Entity<XenoSlowingSpitComponent> xeno, ref XenoSlowingSpitActionEvent args)
@@ -274,7 +277,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
             projectile.Shooter is not { Valid: true } shooter)
             return;
 
-        if (!_xeno.CanAbilityAttackTarget(shooter, args.Target))
+        if (!_xeno.CanGainRewardsFromTarget(shooter, args.Target)) // CMU14: no rewards from vehicles
             return;
 
         if (HasComp<XenoCaughtInTrapComponent>(args.Target))
@@ -309,9 +312,9 @@ public sealed partial class XenoSpitSystem : EntitySystem
         charging.Speed = xeno.Comp.Speed;
         Dirty(xeno, charging);
 
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
 
-        _popup.PopupClient(Loc.GetString("cm-xeno-charge-spit"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-charge-spit"), xeno, xeno);
         if(_net.IsServer)
             SpawnAttachedTo(xeno.Comp.Effect, xeno.Owner.ToCoordinates());
     }
@@ -330,6 +333,15 @@ public sealed partial class XenoSpitSystem : EntitySystem
         {
             var immuneMsg = Loc.GetString("cm-xeno-paralyzing-slash-immune", ("target", target));
             _popup.PopupEntity(immuneMsg, target, target, PopupType.SmallCaution);
+            return;
+        }
+
+        // CMU Related Change
+        // Yautja are immune to acid-imposed slows and paralysis, but damage still applies
+        if (HasComp<XenoAcidProjectileComponent>(spit.Owner) &&
+            _yautjaAcid.ShouldSkipAcidMoveEffects(target))
+        {
+            PredictedQueueDel(spit.Owner);
             return;
         }
 
@@ -401,15 +413,18 @@ public sealed partial class XenoSpitSystem : EntitySystem
             predicted: false
         );
 
+        if (!args.Handled)
+            return; // CMU14: failed casts (e.g. blocked cross-z shots) must not start the cooldown
+
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoAcidBallActionEvent>(ent))
         {
             _actions.SetCooldown(action.AsNullable(), ent.Comp.Cooldown);
         }
 
-        if (!args.Handled)
-            return;
+        // if (!args.Handled) // CMU14
+        //     return;
 
-        _popup.PopupClient(Loc.GetString("rmc-xeno-acid-ball-shoot-self"), ent, ent);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-acid-ball-shoot-self"), ent, ent);
     }
 
     private void OnApplyAcidStacksProjectileHit(Entity<ApplyAcidStacksComponent> ent, ref ProjectileHitEvent args)
@@ -433,7 +448,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
             return;
         }
 
-        if (!_xeno.CanAbilityAttackTarget(shooter, args.Target))
+        if (!_xeno.CanGainRewardsFromTarget(shooter, args.Target)) // CMU14: no rewards from vehicles
             return;
 
         _xenoShield.ApplyShield(shooter, ent.Comp.Shield, ent.Comp.Amount, addShield: true, maxShield: ent.Comp.Max.Double());
@@ -457,10 +472,11 @@ public sealed partial class XenoSpitSystem : EntitySystem
     private void OnUserAcidedMapInit(Entity<UserAcidedComponent> ent, ref MapInitEvent args)
     {
         ent.Comp.ExpiresAt = _timing.CurTime + ent.Comp.Duration;
+        ent.Comp.NextDamageAt = _timing.CurTime; // CMU14: anchor ticks to the application time.
         Dirty(ent);
         UpdateAppearance(ent);
 
-        _alerts.ShowAlert(ent, FireAlert);
+        _alerts.ShowAlert((ent.Owner, null), FireAlert);
     }
 
     private void OnUserAcidedRemove(Entity<UserAcidedComponent> ent, ref ComponentRemove args)
@@ -473,7 +489,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
             return;
         }
 
-        _alerts.ClearAlert(ent, FireAlert);
+        _alerts.ClearAlert((ent.Owner, null), FireAlert);
     }
 
     private void OnUserAcidedShowFireAlert(Entity<UserAcidedComponent> ent, ref ShowFireAlertEvent args)
@@ -486,23 +502,17 @@ public sealed partial class XenoSpitSystem : EntitySystem
         if (ent.Comp.AllowVaporHitAfter > _timing.CurTime)
             return;
 
-        var solEnt = args.Solution;
-        foreach (var (_, solution) in _solution.EnumerateSolutions((solEnt, solEnt)))
+        if (!args.Solution.Comp.Solution.ContainsReagent(AcidRemovedBy, null))
+            return;
+
+        if (--ent.Comp.ResistsNeeded <= 0)
         {
-            if (!solution.Comp.Solution.ContainsReagent(AcidRemovedBy, null))
-                continue;
-
-            if (--ent.Comp.ResistsNeeded <= 0)
-            {
-                RemCompDeferred<UserAcidedComponent>(ent);
-            }
-            else
-            {
-                ent.Comp.AllowVaporHitAfter = _timing.CurTime + ent.Comp.ExtinguishGracePeriod;
-                Dirty(ent);
-            }
-
-            break;
+            RemCompDeferred<UserAcidedComponent>(ent);
+        }
+        else
+        {
+            ent.Comp.AllowVaporHitAfter = _timing.CurTime + ent.Comp.ExtinguishGracePeriod;
+            Dirty(ent);
         }
     }
 
@@ -521,6 +531,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
             return;
 
         acided.Comp.Combo = true;
+        acided.Comp.Tier = 2; // CMU14: share tier identity with Despoiler applications.
 
         if (damage != null)
             acided.Comp.Damage = damage;
@@ -534,7 +545,12 @@ public sealed partial class XenoSpitSystem : EntitySystem
 
         if (paralyze != default)
         {
-            _stun.TryParalyze(acided.Owner, paralyze, true);
+            // CMU Related Change
+            // Yautja are immune to acid-imposed paralysis
+            if (!_yautjaAcid.ShouldSkipAcidMoveEffects(acided.Owner))
+            {
+                _stun.TryParalyze(acided.Owner, paralyze, true);
+            }
             acided.Comp.ResistsNeeded = resists;
         }
 
@@ -548,12 +564,12 @@ public sealed partial class XenoSpitSystem : EntitySystem
         _appearance.SetData(acided, UserAcidedVisuals.Acided, effect);
     }
 
-    public void Resist(Entity<UserAcidedComponent?> player)
+    public void Resist(Entity<UserAcidedComponent?> player, bool interactionAlreadyValidated = false)
     {
         if (!Resolve(player, ref player.Comp, false))
             return;
 
-        if (!_actionBlocker.CanInteract(player, null))
+        if (!interactionAlreadyValidated && !_actionBlocker.CanInteract(player, null))
             return;
 
         _stun.TryParalyze(player.Owner, player.Comp.ResistDuration, true);
@@ -638,7 +654,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
             if (!charging.DidPopup)
             {
                 charging.DidPopup = true;
-                _popup.PopupClient(Loc.GetString("cm-xeno-charge-spit-expire"), uid, uid, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("cm-xeno-charge-spit-expire"), uid, uid, PopupType.SmallCaution);
             }
         }
 
@@ -654,7 +670,9 @@ public sealed partial class XenoSpitSystem : EntitySystem
             if (time < acided.NextDamageAt)
                 continue;
 
-            acided.NextDamageAt = time + acided.DamageEvery;
+            // CMU14: scheduling from the current frame accumulates delay and loses damage ticks.
+            // acided.NextDamageAt = time + acided.DamageEvery;
+            acided.NextDamageAt += acided.DamageEvery;
             _damageable.TryChangeDamage(uid, acided.Damage, armorPiercing: acided.ArmorPiercing);
         }
 

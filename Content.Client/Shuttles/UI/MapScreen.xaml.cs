@@ -28,7 +28,6 @@ public sealed partial class MapScreen : BoxContainer
 {
     [Dependency] private IEntityManager _entManager = default!;
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     private readonly SharedAudioSystem _audio;
     private readonly SharedMapSystem _maps;
@@ -153,7 +152,7 @@ public sealed partial class MapScreen : BoxContainer
                 break;
         }
 
-        if (IsFTLBlocked())
+        if (IsPingBlocked())
         {
             MapRebuildButton.Disabled = true;
             ClearMapObjects();
@@ -237,7 +236,7 @@ public sealed partial class MapScreen : BoxContainer
     private void ClearMapObjects()
     {
         _mapObjectControls.Clear();
-        HyperspaceDestinations.DisposeAllChildren();
+        HyperspaceDestinations.RemoveAllChildren();
         _pendingMapObjects.Clear();
         _mapObjects.Clear();
         _mapHeadings.Clear();
@@ -408,9 +407,21 @@ public sealed partial class MapScreen : BoxContainer
         }
     }
 
+    /// <summary>
+    /// Returns true if we shouldn't be able to select the Scan for Objects button.
+    /// </summary>
+    private bool IsPingBlocked()
+    {
+        return _state switch
+        {
+            FTLState.Available or FTLState.Cooldown => false,
+            _ => true,
+        };
+    }
+
     private void OnMapObjectPress(IMapObject mapObject)
     {
-        if (IsFTLBlocked())
+        if (IsPingBlocked())
             return;
 
         var coordinates = _shuttles.GetMapCoordinates(mapObject);
@@ -506,7 +517,7 @@ public sealed partial class MapScreen : BoxContainer
             BumpMapDequeue();
         }
 
-        if (!IsFTLBlocked() && _nextPing < curTime)
+        if (!IsPingBlocked() && _nextPing < curTime)
         {
             MapRebuildButton.Disabled = false;
         }

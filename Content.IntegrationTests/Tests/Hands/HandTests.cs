@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.IntegrationTests.Fixtures;
 using Content.Server.Storage.EntitySystems;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
@@ -10,7 +11,7 @@ using Robust.Shared.GameObjects;
 namespace Content.IntegrationTests.Tests.Hands;
 
 [TestFixture]
-public sealed class HandTests
+public sealed class HandTests : GameTest
 {
     [TestPrototypes]
     private const string Prototypes = @"
@@ -25,23 +26,46 @@ public sealed class HandTests
 ";
 
 
+    private EntityUid? _originalAttached;
+    private EntityUid? _testPlayer;
+
+    [SetUp]
+    public async Task SetUpHandsPlayer()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitPost(() =>
+        {
+            _originalAttached = ServerSession!.AttachedEntity;
+            // Round selection can attach the session to an observer, which has no hands.
+            _testPlayer = SSpawnAtPosition("MobHuman", map.GridCoords);
+            Server.PlayerMan.SetAttachedEntity(ServerSession, _testPlayer);
+        });
+        await Pair.RunUntilSynced();
+    }
+
+    [TearDown]
+    public async Task TearDownHandsPlayer()
+    {
+        if (_testPlayer == null || !Server.IsAlive)
+            return;
+
+        await Server.WaitPost(() =>
+        {
+            Server.PlayerMan.SetAttachedEntity(ServerSession!, _originalAttached);
+        });
+        await Pair.RunUntilSynced();
+    }
+
     [Test]
     public async Task TestPickupDrop()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            Connected = true,
-            DummyTicker = false
-        });
+        var pair = Pair;
         var server = pair.Server;
 
         var entMan = server.ResolveDependency<IEntityManager>();
         var playerMan = server.ResolveDependency<IPlayerManager>();
-        var mapSystem = server.System<SharedMapSystem>();
         var sys = entMan.System<SharedHandsSystem>();
-        var tSys = entMan.System<TransformSystem>();
 
-        var data = await pair.CreateTestMap();
         await pair.RunTicksSync(5);
 
         EntityUid item = default;
@@ -51,7 +75,7 @@ public sealed class HandTests
         {
             player = playerMan.Sessions.First().AttachedEntity!.Value;
             var xform = entMan.GetComponent<TransformComponent>(player);
-            item = entMan.SpawnEntity("Crowbar", tSys.GetMapCoordinates(player, xform: xform));
+            item = SSpawnAtPosition("Crowbar", xform.Coordinates);
             hands = entMan.GetComponent<HandsComponent>(player);
             sys.TryPickup(player, item, hands.ActiveHandId!);
         });
@@ -68,25 +92,18 @@ public sealed class HandTests
         await pair.RunTicksSync(5);
         Assert.That(sys.GetActiveItem((player, hands)), Is.Null);
 
-        await server.WaitPost(() => mapSystem.DeleteMap(data.MapId));
-        await pair.CleanReturnAsync();
     }
 
     [Test]
     public async Task TestPickUpThenDropInContainer()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            Connected = true,
-            DummyTicker = false
-        });
+        var pair = Pair;
         var server = pair.Server;
-        var map = await pair.CreateTestMap();
+        var map = pair.TestMap!;
         await pair.RunTicksSync(5);
 
         var entMan = server.ResolveDependency<IEntityManager>();
         var playerMan = server.ResolveDependency<IPlayerManager>();
-        var mapSystem = server.System<SharedMapSystem>();
         var sys = entMan.System<SharedHandsSystem>();
         var tSys = entMan.System<TransformSystem>();
         var containerSystem = server.System<SharedContainerSystem>();
@@ -94,15 +111,17 @@ public sealed class HandTests
         EntityUid item = default;
         EntityUid box = default;
         EntityUid player = default;
+        EntityCoordinates originalPlayerCoordinates = default;
         HandsComponent hands = default!;
 
         // spawn the elusive box and crowbar at the coordinates
-        await server.WaitPost(() => box = server.EntMan.SpawnEntity("TestPickUpThenDropInContainerTestBox", map.GridCoords));
-        await server.WaitPost(() => item = server.EntMan.SpawnEntity("Crowbar", map.GridCoords));
+        await server.WaitPost(() => box = SSpawnAtPosition("TestPickUpThenDropInContainerTestBox", map.GridCoords));
+        await server.WaitPost(() => item = SSpawnAtPosition("Crowbar", map.GridCoords));
         // place the player at the exact same coordinates and have them grab the crowbar
         await server.WaitPost(() =>
         {
             player = playerMan.Sessions.First().AttachedEntity!.Value;
+            originalPlayerCoordinates = entMan.GetComponent<TransformComponent>(player).Coordinates;
             tSys.PlaceNextTo(player, item);
             hands = entMan.GetComponent<HandsComponent>(player);
             sys.TryPickup(player, item, hands.ActiveHandId!);
@@ -133,7 +152,14 @@ public sealed class HandTests
         Assert.That(sys.GetActiveItem((player, hands)), Is.Not.EqualTo(item));
         Assert.That(containerSystem.IsInSameOrNoContainer((player, xform), (item, itemXform)));
 
-        await server.WaitPost(() => mapSystem.DeleteMap(map.MapId));
-        await pair.CleanReturnAsync();
+        var removedPlayer = false;
+        await server.WaitPost(() =>
+        {
+            removedPlayer = containerSystem.TryRemoveFromContainer(player, force: true);
+            if (removedPlayer)
+                tSys.SetCoordinates(player, originalPlayerCoordinates);
+        });
+        Assert.That(removedPlayer, Is.True, "the test player must leave the storage tree before map cleanup");
+        await pair.RunUntilSynced();
     }
 }

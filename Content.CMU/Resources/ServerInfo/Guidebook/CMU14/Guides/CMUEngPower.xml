@@ -1,0 +1,73 @@
+<Document>
+  # Power
+
+  ## Reactors and Generators
+  <Box>
+    <GuideEntityEmbed Entity="RMCGeneratorFusion" Caption="S-52 fusion reactor"/>
+    <GuideEntityEmbed Entity="RMCGeneratorFusionColony" Caption="G-11 geothermal generator"/>
+    <GuideEntityEmbed Entity="RMCGeneratorFusionCell" Caption="WL-6 fuel cell"/>
+  </Box>
+  Colonies and ships alike run on big fixed power plants. If they go down, so does everything they feed.
+  - The [bold]S-52 fusion reactor[/bold] puts out 50 kW.
+  - The [bold]G-11 geothermal generator[/bold] puts out 100 kW.
+  - Both take a [bold]WL-6 fuel cell[/bold]. To load a cell, use it on the reactor. To pull one out, use a crowbar. Each takes 10 seconds, less with engineering skill.
+  - Colony requisitions sells a crate of four fuel cells.
+
+  ### Repairing a Reactor
+  Reactors and generators are often broken when you arrive, and they can be sabotaged or torn apart. A damaged reactor puts out no power until it's fully repaired. Examine it to see which tool it needs next.
+
+  Repair it in this order. Each step takes [bold]20 seconds[/bold], and using the wrong tool out of order does nothing:
+  1. Weld it with a [bold]blowtorch[/bold].
+
+  2. Fix the wiring with [bold]wire cutters[/bold].
+
+  3. Tighten it with a [bold]wrench[/bold].
+
+  Once the last step is done it's working again, as long as it has a fuel cell in it.
+
+  ## Area Power Controllers
+  Every room (area) has an [bold]area power controller (APC)[/bold] on the wall. It takes power from the grid and feeds everything in its area, split into three channels: [bold]equipment[/bold], [bold]lighting[/bold] and [bold]environment[/bold]. If the area's APC is dead or missing, nothing in that area has power, even with the grid running.
+  - Its power cell keeps the area running for a while when the grid goes down, and recharges when the grid comes back.
+  - You need [bold]engineering training[/bold] (level 2) to use one or work on it.
+  - Examine an APC to see what to do next with it.
+
+  ### Working on an APC
+  - [bold]Lock or unlock[/bold] its interface by swiping an ID on it. Once unlocked, the interface lets you unlock the cover.
+  - [bold]Open the cover[/bold] with a crowbar (the cover has to be unlocked first). Use the crowbar again to close it.
+  - [bold]Swap the cell[/bold]: with the cover open, take the cell out with an empty hand, or put a new one in. Each takes 7 seconds, less with engineering skill.
+  - [bold]Fix a broken APC[/bold]: damage leaves the wires exposed and the APC stops working. Use a [bold]screwdriver[/bold] on it to repair the wiring.
+
+  ### Building an APC
+  - Open the construction menu and pick the APC under utilities. It costs [bold]2 metal and 10 cable[/bold] and goes on a wall.
+  - Put [bold]APC electronics[/bold] into the frame, then finish it with a screwdriver.
+  - A newly built APC comes with a high-capacity power cell already in it, and takes its name from the area it's in.
+  - To take a frame back down, weld it apart.
+
+  ## PACMAN Generators
+  <Box>
+    <GuideEntityEmbed Entity="RMCPortableGenerator" Caption="P.A.C.M.A.N."/>
+    <GuideEntityEmbed Entity="RMCPortableGenerator2" Caption="S.U.P.E.R.P.A.C.M.A.N."/>
+  </Box>
+  Portable generators for powering a forward position, or for emergency backup when the grid goes down. Load fuel sheets into one, wire it into the grid, and switch it on.
+
+  [bold]P.A.C.M.A.N.[/bold]
+  - Burns [bold]phoron[/bold] sheets.
+  - Puts out [bold]5 kW[/bold].
+  - Each sheet lasts about 70 seconds.
+  - Makes a small explosion if it's destroyed.
+
+  [bold]S.U.P.E.R.P.A.C.M.A.N.[/bold]
+  - Burns [bold]uranium[/bold] sheets.
+  - Puts out [bold]15 kW[/bold], three times as much.
+  - Each sheet lasts about 120 seconds.
+  - Makes a bigger explosion if it's destroyed, so keep it away from anything you care about.
+
+  Use the regular PACMAN for small jobs like a few lights or a sentry network, and the super PACMAN when you need to run a whole outpost.
+
+  ### Where to Get One
+  - Ready-made generators are kept in the [bold]ship's engineering department[/bold]. They're on wheels, so you can drag them where you need them.
+  - You can also build your own: construct a machine frame from metal, then install a PACMAN or super PACMAN [bold]machine board[/bold]. Combat Technicians can buy the boards, and the phoron and uranium to fuel them, from their gear rack.
+
+  ## Power Cells
+  Carry spare power cells for sentries and equipment in the field.
+</Document>

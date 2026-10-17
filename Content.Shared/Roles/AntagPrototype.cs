@@ -1,6 +1,8 @@
 using Content.Shared.Guidebook;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
+using Robust.Shared.Serialization.Manager.Attributes; // CMU14
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array; // CMU14
 
 namespace Content.Shared.Roles;
 
@@ -8,11 +10,24 @@ namespace Content.Shared.Roles;
 ///     Describes information for a single antag.
 /// </summary>
 [Prototype]
-public sealed partial class AntagPrototype : IPrototype
+public sealed partial class AntagPrototype : IPrototype, IInheritingPrototype // CMU14: antag prototype inheritance
 {
+    // The name to group all antagonists under. Equivalent to DepartmentPrototype IDs.
+    public static readonly string GroupName = "Antagonist";
+
+    // The colour to group all antagonists using. Equivalent to DepartmentPrototype Color fields.
+    public static readonly Color GroupColor = Color.Red;
+
     [ViewVariables]
     [IdDataField]
     public string ID { get; private set; } = default!;
+
+    [ParentDataField(typeof(AbstractPrototypeIdArraySerializer<AntagPrototype>))]
+    public string[]? Parents { get; private set; } // CMU14
+
+    [NeverPushInheritance]
+    [AbstractDataField]
+    public bool Abstract { get; private set; } // CMU14
 
     /// <summary>
     ///     The name of this antag as displayed to players.
@@ -41,8 +56,6 @@ public sealed partial class AntagPrototype : IPrototype
     /// <summary>
     ///     Requirements that must be met to opt in to this antag role.
     /// </summary>
-    // TODO ROLE TIMERS
-    // Actually check if the requirements are met. Because apparently this is actually unused.
     [DataField, Access(typeof(SharedRoleSystem), Other = AccessPermissions.None)]
     public HashSet<JobRequirement>? Requirements;
 

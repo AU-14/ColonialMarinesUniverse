@@ -14,8 +14,9 @@
     bodyType: Static
     canCollide: false
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Wood
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -44,6 +45,7 @@
   abstract: true
   name: grass
   components:
+  - type: ResinClearable # CMU14
   - type: Sprite
     sprite: Decals/Flora/flora_grass.rsi
 

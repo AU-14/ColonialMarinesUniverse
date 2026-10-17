@@ -29,7 +29,6 @@ public sealed partial class RangefinderSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedDropshipWeaponSystem _dropshipWeapon = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -156,7 +155,7 @@ public sealed partial class RangefinderSystem : EntitySystem
     private void OnRangefinderAfterInteract(Entity<RangefinderComponent> rangefinder, ref AfterInteractEvent args)
     {
         var user = args.User;
-        var coordinates = args.ClickLocation.SnapToGrid(EntityManager, _mapManager);
+        var coordinates = args.ClickLocation.SnapToGrid(EntityManager);
         if (!coordinates.IsValid(EntityManager))
             return;
 
@@ -166,7 +165,7 @@ public sealed partial class RangefinderSystem : EntitySystem
         if (!_examine.InRangeUnOccluded(user, coordinates, rangefinder.Comp.Range))
         {
             msg = Loc.GetString("rmc-laser-designator-out-of-range");
-            _popup.PopupClient(msg, coordinates, user, PopupType.SmallCaution);
+            _popup.PopupCoordinates(msg, coordinates, user, PopupType.SmallCaution);
             return;
         }
 
@@ -181,7 +180,7 @@ public sealed partial class RangefinderSystem : EntitySystem
         if (!HasComp<RMCPlanetComponent>(grid))
         {
             msg = Loc.GetString("rmc-laser-designator-not-surface");
-            _popup.PopupClient(msg, coordinates, user, PopupType.SmallCaution);
+            _popup.PopupCoordinates(msg, coordinates, user, PopupType.SmallCaution);
             return;
         }
 
@@ -194,7 +193,7 @@ public sealed partial class RangefinderSystem : EntitySystem
         if (HasComp<ActiveLaserDesignatorComponent>(rangefinder))
         {
             msg = Loc.GetString("rmc-laser-designator-already-targeting");
-            _popup.PopupClient(msg, coordinates, user, PopupType.SmallCaution);
+            _popup.PopupCoordinates(msg, coordinates, user, PopupType.SmallCaution);
             return;
         }
 
@@ -204,7 +203,7 @@ public sealed partial class RangefinderSystem : EntitySystem
                 (rangefinder.Comp.Mode == Designator && !_area.CanLase(coordinates)))
             {
                 msg = Loc.GetString("rmc-laser-designator-not-cas");
-                _popup.PopupClient(msg, coordinates, user, PopupType.SmallCaution);
+                _popup.PopupCoordinates(msg, coordinates, user, PopupType.SmallCaution);
                 return;
             }
         }
@@ -230,7 +229,7 @@ public sealed partial class RangefinderSystem : EntitySystem
         if (rangefinder.Comp.Mode == Designator)
         {
             var msg = Loc.GetString("rmc-laser-designator-acquired");
-            _popup.PopupClient(msg, coords, user, PopupType.Medium);
+            _popup.PopupCoordinates(msg, coords, user, PopupType.Medium);
         }
 
         _audio.PlayPredicted(rangefinder.Comp.AcquireSound, rangefinder, user);
@@ -425,7 +424,7 @@ public sealed partial class RangefinderSystem : EntitySystem
         if (_doAfter.TryStartDoAfter(doAfter))
         {
             var msg = Loc.GetString("rmc-laser-designator-start");
-            _popup.PopupClient(msg, coordinates, user, PopupType.Medium);
+            _popup.PopupCoordinates(msg, coordinates, user, PopupType.Medium);
             _audio.PlayPredicted(rangefinder.Comp.TargetSound, rangefinder, user);
 
             rangefinder.Comp.DoAfter = ev.DoAfter;

@@ -1,0 +1,11 @@
+cmu-whiteout-name = WY Whiteout Operative
+cmu-whiteout-name-gunner = WY Whiteout Smartgunner
+cmu-whiteout-name-synthetic = WY PMC Synthetic
+cmu-whiteout-description = A Weyland-Yutani Whiteout operative. Whiteout teams are scorched-earth cleanup squads: no witnesses, no evidence, no survivors.
+cmu-whiteout-description-synthetic = A Weyland-Yutani synthetic attached to a Whiteout cleanup team. It supports the operation without question or hesitation.
+cmu-whiteout-prefix = WHO
+cmu-whiteout-prefix-gunner = WHG
+cmu-whiteout-prefix-synthetic = SYN
+cmu-whiteout-leader = the Whiteout team leader
+cmu-whiteout-rules = You are a Weyland-Yutani Whiteout operative. Your team has been dispatched to erase every trace of the company's involvement in this theatre, including all witnesses. This is an admin event role: follow the event runner's direction and prioritize roleplay over raw kills.
+cmu-whiteout-greeting = You are a Weyland-Yutani Whiteout operative. Your orders are absolute: sterilize the site, destroy the evidence, leave no witnesses. The company denies your existence. Good hunting.

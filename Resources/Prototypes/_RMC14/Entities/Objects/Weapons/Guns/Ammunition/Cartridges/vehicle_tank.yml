@@ -4,7 +4,7 @@
   name: cartridge (LTB cannon, HESH)
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
     layers:
     - state: lbtshell_hesh
       map: ["enum.AmmoVisualLayers.Base"]
@@ -31,6 +31,20 @@
       map: ["enum.AmmoVisualLayers.Base"]
   - type: CartridgeAmmo
     proto: RMCProjectileAceAutocannonFlak
+    muzzleFlash: MuzzleFlashEffectVehicleOver
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: VehicleCartridgeElectrolaser
+  name: Power Bank (Electrolaser)
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Casings/large_casing.rsi
+    layers:
+    - state: base
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: CartridgeAmmo
+    proto: RMCProjectileElectrolaser
     muzzleFlash: MuzzleFlashEffectVehicleOver
 
 - type: entity
@@ -99,6 +113,12 @@
   name: ACE flak round
   categories: [ HideSpawnMenu ]
   components:
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/bullet_projectiles.rsi
     drawdepth: Effects
@@ -110,9 +130,14 @@
     maxFixedRange: 32
     damage:
       types:
-        Piercing: 60
+        Piercing: 75
     soundHit:
       path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
+  - type: DamageImpactProfile
+    projectile:
+      contact: Fragment
+      penetration: Forced
+      energy: Severe
   - type: RMCProjectileAccuracy
     accuracy: 130
     thresholds:
@@ -132,12 +157,53 @@
     capacity: 10
     spreadAngle: 28
   - type: RMCAreaDamage
-    damageArea: 2.5
+    damageArea: 2.8
     falloffDistance: 1.5
   - type: CMArmorPiercing
     amount: 30
   - type: IgnorePredictionHide
 
+- type: entity
+  parent: RMCBaseBullet
+  id: RMCProjectileElectrolaser
+  name: Electrolaser Projectile
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Structures/Power/Generation/Tesla/energy_miniball.rsi
+    layers:
+    - state: tesla_projectile
+      shader: unshaded
+  - type: Electrified
+    requirePower: false
+  - type: StaminaDamageOnCollide
+    damage: 15
+  - type: Projectile
+    impactEffect: BulletImpactEffect
+    maxFixedRange: 32
+    damage:
+      types:
+        Piercing: 10
+        Heat: 160
+        Asphyxiation: 15
+    soundHit:
+      path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
+  - type: RMCProjectileAccuracy
+    accuracy: 130
+    thresholds:
+    - range: 32
+      falloff: 5
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 32
+      falloff: 9999
+      ignoreModifiers: true
+  - type: RMCAreaDamage
+    damageArea: 0.65
+    falloffDistance: 1.0
+  - type: CMArmorPiercing
+    amount: 15
+  - type: IgnorePredictionHide
 - type: entity
   parent: RMCBaseBullet
   id: VehicleProjectileDragonFlame
@@ -205,10 +271,10 @@
   - type: TriggerOnSpawn
   - type: SpawnOnTrigger
     proto: RMCSmokeFireSentry
-    mapCoords: true
+    useMapCoords: true
   - type: TileFireOnTrigger
     range: 1
-    spawn: RMCTileFireHCNapalm
+    spawn: RMCTileFireBlue
     sound: null
 
 - type: entity
@@ -237,7 +303,7 @@
     delay: 0
   - type: DeleteOnTrigger
   - type: SpawnOnTerminate
-    spawn: RMCTileFireHCNapalm
+    spawn: RMCTileFireBlue
   - type: IgnoreArc
   - type: IgnorePredictionHide
   - type: Fixtures
@@ -299,7 +365,7 @@
   - type: TriggerOnSpawn
   - type: SpawnOnTrigger
     proto: RMCSmokeFireSentry
-    mapCoords: true
+    useMapCoords: true
   - type: TileFireOnTrigger
-    range: 0
-    spawn: RMCTileFireHCNapalm
+    range: 2
+    spawn: RMCTileFireBlue

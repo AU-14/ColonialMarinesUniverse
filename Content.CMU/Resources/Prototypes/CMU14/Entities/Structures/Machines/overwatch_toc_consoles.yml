@@ -1,0 +1,46 @@
+# Opfor twins of the Govfor TOC consoles
+- type: entity
+  parent: RMCOverwatchConsoleOpfor
+  id: RMCOverwatchConsoleOpforTOCShuttle
+  name: shuttle tactical operations console
+  suffix: Opfor
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: toc_shuttle
+    overrideDir: West
+    enableOverrideDir: true
+  - type: OverwatchConsole
+    canOrbitalBombardment: false
+
+- type: entity
+  parent: RMCOverwatchConsoleOpforTOCShuttle
+  id: RMCOverwatchConsoleOpforTOCShuttleRotating
+  suffix: Opfor, Rotating
+  components:
+  - type: Sprite
+    overrideDir: South
+    enableOverrideDir: false
+
+- type: entity
+  parent: RMCOverwatchConsoleOpfor
+  id: RMCOverwatchConsoleOpforTOCMap
+  name: tactical map operations console
+  suffix: Opfor
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: toc_map
+    overrideDir: West
+    enableOverrideDir: true
+  - type: OverwatchConsole
+    canOrbitalBombardment: false
+
+- type: entity
+  parent: RMCOverwatchConsoleOpforTOCMap
+  id: RMCOverwatchConsoleOpforTOCMapRotating
+  suffix: Opfor, Rotating
+  components:
+  - type: Sprite
+    overrideDir: South
+    enableOverrideDir: false

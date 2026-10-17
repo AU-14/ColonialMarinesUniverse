@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
+using Content.Server.CMU14.Roles;
 using Content.Server.Jobs;
-using Content.Shared._CMU14.Round.Roles;
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14.Round.Roles;
+using Content.Shared.CMU14.util;
 using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._AU14.Platoons;
+namespace Content.IntegrationTests.CMU14.Platoons;
 
 [TestFixture]
 public sealed class PlatoonOverrideGearTest
@@ -60,6 +61,7 @@ public sealed class PlatoonOverrideGearTest
         await server.WaitAssertion(() =>
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var profiles = server.System<RoundJobProfileSystem>();
             var jobs = new HashSet<string>();
 
             foreach (var platoon in prototypes.EnumeratePrototypes<PlatoonPrototype>())
@@ -87,8 +89,8 @@ public sealed class PlatoonOverrideGearTest
                     continue;
                 }
 
-                if (!HasSkillsSpecial(prototypes, job))
-                    missing.Add($"{job.ID} has no Skills job special");
+                if (!HasResolvedComponent(profiles, job, "Skills"))
+                    missing.Add($"{job.ID} resolves no Skills component");
             }
 
             Assert.That(missing, Is.Empty, string.Join("\n", missing));
@@ -106,6 +108,7 @@ public sealed class PlatoonOverrideGearTest
         await server.WaitAssertion(() =>
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var profiles = server.System<RoundJobProfileSystem>();
             var jobs = GetGovforFactionPlatoonJobs(prototypes);
 
             var missing = new List<string>();
@@ -117,14 +120,14 @@ public sealed class PlatoonOverrideGearTest
                     continue;
                 }
 
-                if (!HasSpecialComponent(prototypes, job, "Marine"))
-                    missing.Add($"{job.ID} has no Marine job special");
+                if (!HasResolvedComponent(profiles, job, "Marine"))
+                    missing.Add($"{job.ID} resolves no Marine component");
 
-                if (!HasSpecialComponent(prototypes, job, "UserIFF"))
-                    missing.Add($"{job.ID} has no UserIFF job special");
+                if (!HasResolvedComponent(profiles, job, "UserIFF"))
+                    missing.Add($"{job.ID} resolves no UserIFF component");
 
-                if (!HasSpecialComponent(prototypes, job, "TacticalMapIcon"))
-                    missing.Add($"{job.ID} has no TacticalMapIcon job special");
+                if (!HasResolvedComponent(profiles, job, "TacticalMapIcon"))
+                    missing.Add($"{job.ID} resolves no TacticalMapIcon component");
             }
 
             Assert.That(missing, Is.Empty, string.Join("\n", missing));
@@ -133,44 +136,15 @@ public sealed class PlatoonOverrideGearTest
         await pair.CleanReturnAsync();
     }
 
-    private static bool HasSkillsSpecial(IPrototypeManager prototypes, JobPrototype job)
+    private static bool HasResolvedComponent(
+        RoundJobProfileSystem profiles,
+        JobPrototype job,
+        string componentName)
     {
-        foreach (var special in job.Special)
+        foreach (var resolved in profiles.GetProfileComponents(job))
         {
-            if (special is AddComponentSpecial { Components: { } components } &&
-                components.ContainsKey("Skills"))
-            {
+            if (resolved.Components.ContainsKey(componentName))
                 return true;
-            }
-        }
-
-        return HasProfileComponent(prototypes, job, "Skills");
-    }
-
-    private static bool HasProfileComponent(IPrototypeManager prototypes, JobPrototype job, string componentName)
-    {
-        foreach (var profileId in job.RoundProfiles)
-        {
-            if (!prototypes.TryIndex(profileId, out var profile))
-                continue;
-
-            if (profile.Components.ContainsKey(componentName))
-                return true;
-
-            var side = GetRoundSide(job);
-            if (side != RoundJobSide.None &&
-                TryGetSideComponents(profile, side, out var sideComponents) &&
-                sideComponents.ContainsKey(componentName))
-            {
-                return true;
-            }
-
-            if (job.RoundForce is { } force &&
-                TryGetForceComponents(profile, force, out var forceComponents) &&
-                forceComponents.ContainsKey(componentName))
-            {
-                return true;
-            }
         }
 
         return false;
@@ -204,91 +178,4 @@ public sealed class PlatoonOverrideGearTest
         return jobs;
     }
 
-    private static bool HasSpecialComponent(IPrototypeManager prototypes, JobPrototype job, string componentName)
-    {
-        foreach (var special in GetAppliedAddComponentSpecials(prototypes, job))
-        {
-            if (special.Components.ContainsKey(componentName))
-                return true;
-        }
-
-        return HasProfileComponent(prototypes, job, componentName);
-    }
-
-    private static bool TryGetForceComponents(
-        RoundJobProfilePrototype profile,
-        string force,
-        out ComponentRegistry components)
-    {
-        foreach (var (key, registry) in profile.ForceComponents)
-        {
-            if (!key.Equals(force, StringComparison.OrdinalIgnoreCase))
-                continue;
-
-            components = registry;
-            return true;
-        }
-
-        components = default!;
-        return false;
-    }
-
-    private static bool TryGetSideComponents(
-        RoundJobProfilePrototype profile,
-        RoundJobSide side,
-        out ComponentRegistry components)
-    {
-        foreach (var (key, registry) in profile.SideComponents)
-        {
-            if (!key.Equals(side.ToString(), StringComparison.OrdinalIgnoreCase))
-                continue;
-
-            components = registry;
-            return true;
-        }
-
-        components = default!;
-        return false;
-    }
-
-    private static RoundJobSide GetRoundSide(JobPrototype job)
-    {
-        if (job.RoundSide != RoundJobSide.None)
-            return job.RoundSide;
-
-        if (job.ID.Contains("OPFOR", StringComparison.OrdinalIgnoreCase))
-            return RoundJobSide.Opfor;
-
-        if (job.ID.Contains("GOVFOR", StringComparison.OrdinalIgnoreCase))
-            return RoundJobSide.Govfor;
-
-        return RoundJobSide.None;
-    }
-
-    private static List<AddComponentSpecial> GetAppliedAddComponentSpecials(IPrototypeManager prototypes, JobPrototype job)
-    {
-        if (!job.InheritAddComponentSpecials)
-            return job.Special.OfType<AddComponentSpecial>().ToList();
-
-        var results = new List<AddComponentSpecial>();
-        AddInheritedAddComponentSpecials(prototypes, job, results);
-        return results;
-    }
-
-    private static void AddInheritedAddComponentSpecials(
-        IPrototypeManager prototypes,
-        JobPrototype job,
-        List<AddComponentSpecial> results)
-    {
-        if (job.Parents is { Length: > 0 })
-        {
-            foreach (var parentId in job.Parents)
-            {
-                if (prototypes.TryIndex<JobPrototype>(parentId, out var parent))
-                    AddInheritedAddComponentSpecials(prototypes, parent, results);
-            }
-        }
-
-        results.AddRange(job.Special.OfType<AddComponentSpecial>());
-    }
 }

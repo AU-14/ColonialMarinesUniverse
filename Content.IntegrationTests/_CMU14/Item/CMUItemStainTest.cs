@@ -1,9 +1,9 @@
 using System.Linq;
-using Content.Client._CMU14.Item.Stain;
-using Content.Server.Forensics;
-using Content.Shared._CMU14.Item.Stain;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
+using System.Numerics;
+using Content.Client.CMU14.Item.Stain;
+using Content.Shared.CMU14.Item.Stain;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Body.Part;
 using Content.Shared.Chemistry;
@@ -15,8 +15,11 @@ using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.Forensics;
+using Content.Shared.Forensics.Components;
+using Content.Shared.Forensics.Systems;
+using Content.Shared.FootPrint;
+using Content.Shared.Gravity;
 using Content.Shared.Inventory;
-using Content.Shared.StepTrigger.Systems;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -24,7 +27,7 @@ using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.Item;
+namespace Content.IntegrationTests.CMU14.Item;
 
 [TestFixture]
 [TestOf(typeof(CMUItemStainSystem))]
@@ -33,6 +36,7 @@ public sealed class CMUItemStainTest
     private const string StainableItem = "CMUItemStainTestItem";
     private const string UnstainableItem = "CMUItemStainTestImmuneItem";
     private const string CleanerItem = "CMUItemStainTestCleaner";
+    private const string PreEffectReactionItem = "CMUItemStainTestPreEffectReactionItem";
     private const string VisualItem = "CMUItemStainTestVisualItem";
     private const string WaterPuddle = "CMUItemStainTestWaterPuddle";
 
@@ -54,7 +58,30 @@ public sealed class CMUItemStainTest
   id: {CleanerItem}
   components:
   - type: CleansForensics
-    cleanDelay: 0
+    cleanDelay: 0.1
+  - type: Forensics
+
+- type: entity
+  parent: BaseItem
+  id: {PreEffectReactionItem}
+  components:
+  - type: Solution
+    id: stain
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: Blood
+        Quantity: 10
+      - ReagentId: Oil
+        Quantity: 5
+  - type: Reactive
+    reactions:
+    - reagents: [ Blood ]
+      methods: [ Touch ]
+      effects:
+      - !type:AdjustReagent
+        reagent: Blood
+        amount: -1
 
 - type: entity
   parent: BaseItem
@@ -72,13 +99,13 @@ public sealed class CMUItemStainTest
   parent: Puddle
   id: {WaterPuddle}
   components:
-  - type: SolutionContainerManager
-    solutions:
-      puddle:
-        maxVol: 1000
-        reagents:
-        - ReagentId: Water
-          Quantity: 10
+  - type: Solution
+    id: puddle
+    solution:
+      maxVol: 1000
+      reagents:
+      - ReagentId: Water
+        Quantity: 10
 ";
 
     [Test]
@@ -193,6 +220,46 @@ public sealed class CMUItemStainTest
     }
 
     [Test]
+    public async Task TouchStainSelectionRunsBeforeReactiveEntityEffects()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var reactive = entMan.System<ReactiveSystem>();
+            var item = entMan.SpawnEntity(PreEffectReactionItem, MapCoordinates.Nullspace);
+
+            try
+            {
+                var solution = entMan.GetComponent<SolutionComponent>(item).Solution;
+                reactive.ReactionEntity(
+                    item,
+                    ReactionMethod.Touch,
+                    new ReagentQuantity("Blood", FixedPoint2.New(10)),
+                    solution);
+
+                var stain = entMan.GetComponent<CMUItemStainComponent>(item);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(stain.Kind, Is.EqualTo(CMUItemStainKind.Blood));
+                    Assert.That(stain.Color, Is.EqualTo(Color.FromHex("#800000")));
+                    Assert.That(solution.GetReagentQuantity(new ReagentId("Blood", null)), Is.EqualTo(FixedPoint2.Zero));
+                    Assert.That(solution.GetReagentQuantity(new ReagentId("Oil", null)), Is.EqualTo(FixedPoint2.New(5)));
+                    Assert.That(solution.Volume, Is.EqualTo(FixedPoint2.New(5)));
+                });
+            }
+            finally
+            {
+                entMan.DeleteEntity(item);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task ReagentAndClothingPrototypeMetadataIsConfigured()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -286,47 +353,52 @@ public sealed class CMUItemStainTest
     public async Task PuddlesStainAndCleanEquippedShoesButIgnoreBareFeet()
     {
         await using var pair = await PoolManager.GetServerClient();
+        var map = await pair.CreateTestMap();
         var server = pair.Server;
+        EntityUid wearer = default, barefoot = default, shoes = default;
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var maps = server.System<SharedMapSystem>();
+            for (var x = 0; x < 6; x++)
+                maps.SetTile(map.Grid, new Vector2i(x, 0), map.Tile.Tile);
+            entMan.EnsureComponent<GravityComponent>(map.Grid).Enabled = true;
             var inventory = entMan.System<InventorySystem>();
-            var wearer = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var barefoot = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var shoes = entMan.SpawnEntity("CMBootsBlack", MapCoordinates.Nullspace);
-            var bloodPuddle = entMan.SpawnEntity("PuddleBlood", MapCoordinates.Nullspace);
-            var waterPuddle = entMan.SpawnEntity(WaterPuddle, MapCoordinates.Nullspace);
+            wearer = entMan.SpawnEntity("CMMobHuman", new EntityCoordinates(map.Grid, 0.5f, 0.5f));
+            barefoot = entMan.SpawnEntity("CMMobHuman", new EntityCoordinates(map.Grid, 1.5f, 0.5f));
+            shoes = entMan.SpawnEntity("CMBootsBlack", map.GridCoords);
+            entMan.SpawnEntity("PuddleBlood", new EntityCoordinates(map.Grid, 2.5f, 0.5f));
+            entMan.SpawnEntity(WaterPuddle, new EntityCoordinates(map.Grid, 4.5f, 0.5f));
 
-            try
+            Assert.That(inventory.TryEquip(wearer, shoes, CMUItemStainSystem.ShoesSlot, silent: true, force: true), Is.True);
+        });
+        await pair.RunTicksSync(2);
+        await server.WaitPost(() => server.System<SharedTransformSystem>()
+            .SetLocalPosition(wearer, new Vector2(2.5f, 0.5f)));
+        await pair.RunTicksSync(3);
+        await server.WaitAssertion(() =>
+        {
+            var stain = server.EntMan.GetComponent<CMUItemStainComponent>(shoes);
+            Assert.Multiple(() =>
             {
-                Assert.That(inventory.TryEquip(wearer, shoes, CMUItemStainSystem.ShoesSlot, silent: true, force: true), Is.True);
-
-                var bloodStep = new StepTriggeredOffEvent(bloodPuddle, wearer);
-                entMan.EventBus.RaiseLocalEvent(bloodPuddle, ref bloodStep);
-                var stain = entMan.GetComponent<CMUItemStainComponent>(shoes);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(stain.Kind, Is.EqualTo(CMUItemStainKind.Blood));
-                    Assert.That(stain.Color, Is.EqualTo(Color.FromHex("#800000")));
-                });
-
-                var cleanStep = new StepTriggeredOffEvent(waterPuddle, wearer);
-                entMan.EventBus.RaiseLocalEvent(waterPuddle, ref cleanStep);
-                Assert.That(stain.Color, Is.Null);
-
-                var bareStep = new StepTriggeredOffEvent(bloodPuddle, barefoot);
-                entMan.EventBus.RaiseLocalEvent(bloodPuddle, ref bareStep);
-                Assert.That(entMan.HasComponent<CMUItemStainComponent>(barefoot), Is.False);
-            }
-            finally
-            {
-                entMan.DeleteEntity(wearer);
-                entMan.DeleteEntity(barefoot);
-                entMan.DeleteEntity(shoes);
-                entMan.DeleteEntity(bloodPuddle);
-                entMan.DeleteEntity(waterPuddle);
-            }
+                Assert.That(stain.Kind, Is.EqualTo(CMUItemStainKind.Blood));
+                Assert.That(stain.Color, Is.EqualTo(Color.FromHex("#800000")));
+            });
+        });
+        await server.WaitPost(() =>
+        {
+            var transforms = server.System<SharedTransformSystem>();
+            transforms.SetLocalPosition(wearer, new Vector2(4.5f, 0.5f));
+            transforms.SetLocalPosition(barefoot, new Vector2(2.5f, 0.5f));
+        });
+        await pair.RunTicksSync(3);
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            Assert.That(entMan.GetComponent<CMUItemStainComponent>(shoes).Color, Is.Null);
+            Assert.That(entMan.GetComponent<FootPrintsComponent>(barefoot).PrintsColor.A, Is.GreaterThan(0));
+            Assert.That(entMan.HasComponent<CMUItemStainComponent>(barefoot), Is.False);
         });
 
         await pair.CleanReturnAsync();
@@ -370,7 +442,7 @@ public sealed class CMUItemStainTest
                 layer.Item1 == "cmu-item-stain-equipped-head").Item2;
             Assert.Multiple(() =>
             {
-                Assert.That(wornLayer.RsiPath, Is.EqualTo("_CMU14/Effects/item_stains.rsi"));
+                Assert.That(wornLayer.RsiPath, Is.EqualTo("CMU14/Effects/item_stains.rsi"));
                 Assert.That(wornLayer.State, Is.EqualTo("m10helmet_blood"));
                 Assert.That(wornLayer.Color, Is.EqualTo(Color.FromHex("#800000")));
             });
@@ -401,47 +473,131 @@ public sealed class CMUItemStainTest
     }
 
     [Test]
-    public async Task ForensicCleanerAcceptsStainOnlyTarget()
+    public async Task ForensicCleanerUsesOneCanonicalDoAfterForEvidenceAndStains()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
+
+        EntityUid forensicUser = default;
+        EntityUid forensicItem = default;
+        EntityUid forensicCleaner = default;
+        EntityUid stainUser = default;
+        EntityUid stainItem = default;
+        EntityUid stainCleaner = default;
+        EntityUid bothUser = default;
+        EntityUid bothItem = default;
+        EntityUid bothCleaner = default;
+        EntityUid neitherUser = default;
+        EntityUid neitherItem = default;
+        EntityUid neitherCleaner = default;
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
             var stains = entMan.System<CMUItemStainSystem>();
             var forensics = entMan.System<ForensicsSystem>();
-            var user = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var item = entMan.SpawnEntity(StainableItem, MapCoordinates.Nullspace);
-            var cleaner = entMan.SpawnEntity(CleanerItem, MapCoordinates.Nullspace);
 
-            try
+            forensicUser = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            forensicItem = entMan.SpawnEntity(StainableItem, MapCoordinates.Nullspace);
+            forensicCleaner = entMan.SpawnEntity(CleanerItem, MapCoordinates.Nullspace);
+            var forensicEvidence = entMan.EnsureComponent<ForensicsComponent>(forensicItem);
+            forensicEvidence.Fingerprints.Add("forensic-only");
+            forensicEvidence.CleanDistance = 2.75f;
+
+            stainUser = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            stainItem = entMan.SpawnEntity(StainableItem, MapCoordinates.Nullspace);
+            stainCleaner = entMan.SpawnEntity(CleanerItem, MapCoordinates.Nullspace);
+            Assert.That(stains.TryStain(stainItem, CMUItemStainKind.Blood, Color.Red), Is.True);
+
+            bothUser = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            bothItem = entMan.SpawnEntity(StainableItem, MapCoordinates.Nullspace);
+            bothCleaner = entMan.SpawnEntity(CleanerItem, MapCoordinates.Nullspace);
+            var bothEvidence = entMan.EnsureComponent<ForensicsComponent>(bothItem);
+            bothEvidence.Fibers.Add("both");
+            bothEvidence.CleanDistance = 3.25f;
+            Assert.That(stains.TryStain(bothItem, CMUItemStainKind.Oil, Color.Black), Is.True);
+
+            neitherUser = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            neitherItem = entMan.SpawnEntity(StainableItem, MapCoordinates.Nullspace);
+            neitherCleaner = entMan.SpawnEntity(CleanerItem, MapCoordinates.Nullspace);
+
+            Assert.Multiple(() =>
             {
-                Assert.That(stains.TryStain(item, CMUItemStainKind.Blood, Color.Red), Is.True);
+                Assert.That(StartCleaning(forensicCleaner, forensicUser, forensicItem), Is.True);
+                Assert.That(StartCleaning(stainCleaner, stainUser, stainItem), Is.True);
+                Assert.That(StartCleaning(bothCleaner, bothUser, bothItem), Is.True);
+                Assert.That(StartCleaning(neitherCleaner, neitherUser, neitherItem), Is.False);
+            });
+
+            AssertCleaningDoAfter(forensicUser, forensicCleaner, forensicItem, 2.75f);
+            AssertCleaningDoAfter(stainUser, stainCleaner, stainItem, 1.5f);
+            AssertCleaningDoAfter(bothUser, bothCleaner, bothItem, 3.25f);
+
+            var neitherDoAfters = entMan.GetComponent<DoAfterComponent>(neitherUser);
+            Assert.That(neitherDoAfters.DoAfters.Values.Count(IsActive), Is.Zero);
+
+            bool StartCleaning(EntityUid cleaner, EntityUid user, EntityUid target)
+            {
                 var cleanerComponent = entMan.GetComponent<CleansForensicsComponent>(cleaner);
-                Assert.That(forensics.TryStartCleaning((cleaner, cleanerComponent), user, item), Is.True);
-
-                var completion = new CleanForensicsDoAfterEvent();
-                completion.DoAfter = new DoAfter(
-                    ushort.MaxValue,
-                    new DoAfterArgs(
-                        entMan,
-                        user,
-                        TimeSpan.Zero,
-                        completion,
-                        cleaner,
-                        item,
-                        cleaner),
-                    TimeSpan.Zero);
-                entMan.EventBus.RaiseLocalEvent(cleaner, completion);
-
-                Assert.That(entMan.GetComponent<CMUItemStainComponent>(item).Color, Is.Null);
+                return forensics.TryStartCleaning((cleaner, cleanerComponent), user, target);
             }
-            finally
+
+            void AssertCleaningDoAfter(
+                EntityUid user,
+                EntityUid cleaner,
+                EntityUid target,
+                float expectedDistance)
             {
-                entMan.DeleteEntity(user);
-                entMan.DeleteEntity(item);
-                entMan.DeleteEntity(cleaner);
+                var component = entMan.GetComponent<DoAfterComponent>(user);
+                var active = component.DoAfters.Values.Where(IsActive).ToArray();
+                Assert.That(active, Has.Length.EqualTo(1));
+                Assert.Multiple(() =>
+                {
+                    Assert.That(active[0].Args.Event, Is.TypeOf<CleanForensicsDoAfterEvent>());
+                    Assert.That(active[0].Args.EventTarget, Is.EqualTo(cleaner));
+                    Assert.That(active[0].Args.Target, Is.EqualTo(target));
+                    Assert.That(active[0].Args.Used, Is.EqualTo(cleaner));
+                    Assert.That(active[0].Args.DistanceThreshold, Is.EqualTo(expectedDistance).Within(0.001f));
+                });
+            }
+
+            static bool IsActive(DoAfter doAfter) => !doAfter.Cancelled && !doAfter.Completed;
+        });
+
+        await pair.RunTicksSync(20);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var stains = entMan.System<CMUItemStainSystem>();
+            var forensicEvidence = entMan.GetComponent<ForensicsComponent>(forensicItem);
+            var bothEvidence = entMan.GetComponent<ForensicsComponent>(bothItem);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(forensicEvidence.Fingerprints, Is.Empty);
+                Assert.That(entMan.GetComponent<CMUItemStainComponent>(stainItem).Color, Is.Null);
+                Assert.That(bothEvidence.Fibers, Is.Empty);
+                Assert.That(entMan.GetComponent<CMUItemStainComponent>(bothItem).Color, Is.Null);
+                Assert.That(stains.TryClean(stainItem), Is.False,
+                    "The stain must have been cleaned by the single canonical completion.");
+                Assert.That(stains.TryClean(bothItem), Is.False,
+                    "The shared completion must not leave a second stain-cleaning pass.");
+            });
+        });
+
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            foreach (var uid in new[]
+                     {
+                         forensicUser, forensicItem, forensicCleaner,
+                         stainUser, stainItem, stainCleaner,
+                         bothUser, bothItem, bothCleaner,
+                         neitherUser, neitherItem, neitherCleaner,
+                     })
+            {
+                entMan.DeleteEntity(uid);
             }
         });
 

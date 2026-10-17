@@ -1,4 +1,5 @@
-ui-lobby-title = Lobby: {$serverName}
+# Bare server name: the sidebar header is the only user, and it is already obviously the lobby.
+ui-lobby-title = {$serverName}
 ui-lobby-ahelp-button = AHelp
 ui-lobby-options-button = Options
 ui-lobby-leave-button = Leave

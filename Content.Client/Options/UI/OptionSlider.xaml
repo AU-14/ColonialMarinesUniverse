@@ -1,7 +1,21 @@
 <Control xmlns="https://spacestation14.io">
-    <BoxContainer Orientation="Horizontal">
-        <Label Name="NameLabel" MinWidth="400" />
-        <Slider Name="Slider" Access="Public" HorizontalExpand="True" />
-        <Label Name="ValueLabel" Access="Public" Margin="8 0 4 0" MinWidth="48" Align="Right" />
-    </BoxContainer>
+    <!-- CrtOptionRow carries the divider the whole width of the row, so the line runs under the
+         label too rather than starting at the control. -->
+    <PanelContainer StyleClasses="CrtOptionRow">
+        <BoxContainer Orientation="Horizontal">
+            <!-- The label expands and the slider is a fixed width, so every slider is the same size
+                 and sits in the same column no matter how long its label is. A fixed *label* gutter
+                 can't do that: anything wider than the gutter pushes its own slider right and
+                 shortens it, which is what made the opacity group look ragged. -->
+            <Label Name="NameLabel" HorizontalExpand="True" MinWidth="160" VerticalAlignment="Center" />
+            <Slider Name="Slider" Access="Public" MinWidth="300" />
+            <!-- Named so code-behind can swap it to the base/NanoUI box (see the constructor):
+                 butted straight against the track with no margin and no left border, its frame
+                 continues the slider's own - a treatment that only reads correctly on the CRT
+                 slider, which draws a matching frame around its track for it to continue. -->
+            <PanelContainer Name="ValuePanel" StyleClasses="CrtSliderValue">
+                <Label Name="ValueLabel" Access="Public" MinWidth="42" Align="Right" VerticalAlignment="Center" />
+            </PanelContainer>
+        </BoxContainer>
+    </PanelContainer>
 </Control>

@@ -1,0 +1,39 @@
+- type: entity
+  parent: MarkerBase
+  id: CMUSelfDestructWarheadExplosion
+  name: explosive Warship Scuttle
+  suffix: CMU, WARSHIP SCUTTLE!!! MULTIZ
+  components:
+  - type: OrbitalCannonExplosion
+    multiZ: true
+    steps:
+    # Stage 1 - t=0s
+    - fire: CMUTileFireOBAegis
+      fireRange: 45
+      delay: 0
+    # Stage 2 - t=15s
+    - fire: CMUTileFireOBAegis
+      fireRange: 60
+      delay: 15
+    # Stage 3 - t=30s
+    - fire: CMUTileFireOBAegis
+      fireRange: 75
+      delay: 30
+
+- type: entity
+  parent: CMUSelfDestructWarheadExplosion
+  id: CMUSelfDestructScatterExplosion
+  name: explosive Warship Scuttle Fragment
+  suffix: CMU, WARSHIP SCUTTLE SCATTER! MULTIZ
+  components:
+  - type: OrbitalCannonExplosion
+    multiZ: true
+    steps:
+    # Stage 1 - t=0s
+    - fire: CMUTileFireOBAegis
+      fireRange: 30
+      delay: 0
+    # Stage 2 - t=15s
+    - fire: CMUTileFireOBAegis
+      fireRange: 45
+      delay: 15

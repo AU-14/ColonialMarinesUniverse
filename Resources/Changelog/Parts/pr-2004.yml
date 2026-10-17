@@ -1,0 +1,11 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Removed inaccurate prediction and bouncing from 3D tactical-map tracking
+    icons.
+  type: Fix
+- message: Tactical-map icons arrive with the opening survey, with faster recovery
+    when an opening request is missed.
+  type: Fix
+time: '2026-09-23T17:55:47.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2004

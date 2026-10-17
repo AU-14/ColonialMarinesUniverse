@@ -1,0 +1,259 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "CM-SS13 contributors: thwomper, PoltavskaPraca, Steelpoint. https://github.com/cmss13-devs/cmss13/pull/12866; 0d711eddc539ea7ac67cf6b5869a08fa33dc9391.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "1,0",
+            "directions": 1
+        },
+        {
+            "name": "2,0",
+            "directions": 1
+        },
+        {
+            "name": "3,0",
+            "directions": 1
+        },
+        {
+            "name": "4,0",
+            "directions": 1
+        },
+        {
+            "name": "5,0",
+            "directions": 1
+        },
+        {
+            "name": "6,0",
+            "directions": 1
+        },
+        {
+            "name": "7,0",
+            "directions": 1
+        },
+        {
+            "name": "0,2",
+            "directions": 1
+        },
+        {
+            "name": "8,2",
+            "directions": 1
+        },
+        {
+            "name": "0,3",
+            "directions": 1
+        },
+        {
+            "name": "8,3",
+            "directions": 1
+        },
+        {
+            "name": "0,4",
+            "directions": 1
+        },
+        {
+            "name": "8,4",
+            "directions": 1
+        },
+        {
+            "name": "0,5",
+            "directions": 1
+        },
+        {
+            "name": "8,5",
+            "directions": 1
+        },
+        {
+            "name": "0,6",
+            "directions": 1
+        },
+        {
+            "name": "8,6",
+            "directions": 1
+        },
+        {
+            "name": "0,7",
+            "directions": 1
+        },
+        {
+            "name": "8,7",
+            "directions": 1
+        },
+        {
+            "name": "0,9",
+            "directions": 1
+        },
+        {
+            "name": "1,9",
+            "directions": 1
+        },
+        {
+            "name": "2,9",
+            "directions": 1
+        },
+        {
+            "name": "6,9",
+            "directions": 1
+        },
+        {
+            "name": "7,9",
+            "directions": 1
+        },
+        {
+            "name": "8,9",
+            "directions": 1
+        },
+        {
+            "name": "1,11",
+            "directions": 1
+        },
+        {
+            "name": "2,11",
+            "directions": 1
+        },
+        {
+            "name": "4,11",
+            "directions": 1
+        },
+        {
+            "name": "6,11",
+            "directions": 1
+        },
+        {
+            "name": "7,11",
+            "directions": 1
+        },
+        {
+            "name": "0,12",
+            "directions": 1
+        },
+        {
+            "name": "1,12",
+            "directions": 1
+        },
+        {
+            "name": "4,12",
+            "directions": 1
+        },
+        {
+            "name": "7,12",
+            "directions": 1
+        },
+        {
+            "name": "8,12",
+            "directions": 1
+        },
+        {
+            "name": "0,13",
+            "directions": 1
+        },
+        {
+            "name": "8,13",
+            "directions": 1
+        },
+        {
+            "name": "0,14",
+            "directions": 1
+        },
+        {
+            "name": "8,14",
+            "directions": 1
+        },
+        {
+            "name": "0,15",
+            "directions": 1
+        },
+        {
+            "name": "1,15",
+            "directions": 1
+        },
+        {
+            "name": "7,15",
+            "directions": 1
+        },
+        {
+            "name": "8,15",
+            "directions": 1
+        },
+        {
+            "name": "1,16",
+            "directions": 1
+        },
+        {
+            "name": "2,16",
+            "directions": 1
+        },
+        {
+            "name": "3,16",
+            "directions": 1
+        },
+        {
+            "name": "5,16",
+            "directions": 1
+        },
+        {
+            "name": "6,16",
+            "directions": 1
+        },
+        {
+            "name": "7,16",
+            "directions": 1
+        },
+        {
+            "name": "2,17",
+            "directions": 1
+        },
+        {
+            "name": "6,17",
+            "directions": 1
+        },
+        {
+            "name": "2,18",
+            "directions": 1
+        },
+        {
+            "name": "6,18",
+            "directions": 1
+        },
+        {
+            "name": "2,19",
+            "directions": 4
+        },
+        {
+            "name": "3,19",
+            "directions": 4
+        },
+        {
+            "name": "5,19",
+            "directions": 4
+        },
+        {
+            "name": "6,19",
+            "directions": 4
+        },
+        {
+            "name": "2,20",
+            "directions": 4
+        },
+        {
+            "name": "3,20",
+            "directions": 4
+        },
+        {
+            "name": "4,20",
+            "directions": 4
+        },
+        {
+            "name": "5,20",
+            "directions": 4
+        },
+        {
+            "name": "6,20",
+            "directions": 4
+        }
+    ]
+}

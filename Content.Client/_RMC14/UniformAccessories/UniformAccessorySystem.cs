@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Client._RMC14.Humanoid;
 using Content.Shared._RMC14.Humanoid;
 using Content.Shared._RMC14.UniformAccessories;
 using Content.Shared._RMC14.Xenonids;
@@ -19,7 +20,7 @@ public sealed partial class UniformAccessorySystem : SharedUniformAccessorySyste
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedItemSystem _item = default!;
     [Dependency] private IPlayerManager _player = default!;
-    [Dependency] private RMCHumanoidAppearanceSystem _rmcHumanoid = default!;
+    [Dependency] private HiddenAppearanceSystem _hiddenAppearance = default!;
     [Dependency] private SpriteSystem _sprite = default!;
 
     public event Action? PlayerMedalUpdated;
@@ -37,7 +38,7 @@ public sealed partial class UniformAccessorySystem : SharedUniformAccessorySyste
 
     private void OnHolderGetEquipmentVisuals(Entity<UniformAccessoryHolderComponent> ent, ref GetEquipmentVisualsEvent args)
     {
-        if (_rmcHumanoid.HidePlayerIdentities && HasComp<XenoComponent>(_player.LocalEntity))
+        if (_hiddenAppearance.HidePlayerIdentities && HasComp<XenoComponent>(_player.LocalEntity))
             return;
 
         var clothingSprite = CompOrNull<SpriteComponent>(ent);
@@ -131,7 +132,7 @@ public sealed partial class UniformAccessorySystem : SharedUniformAccessorySyste
 
     private void OnHolderVisualsUpdated(Entity<UniformAccessoryHolderComponent> ent, ref EquipmentVisualsUpdatedEvent args)
     {
-        if (_rmcHumanoid.HidePlayerIdentities && HasComp<XenoComponent>(_player.LocalEntity))
+        if (_hiddenAppearance.HidePlayerIdentities && HasComp<XenoComponent>(_player.LocalEntity))
             return;
 
         if (!_container.TryGetContainer(ent, ent.Comp.ContainerId, out var container))
@@ -184,7 +185,7 @@ public sealed partial class UniformAccessorySystem : SharedUniformAccessorySyste
 
     private string GetKey(EntityUid uid, UniformAccessoryComponent component, int index)
     {
-        var key = $"enum.{nameof(UniformAccessoryLayer)}.{UniformAccessoryLayer.Base}{index}_{Name(uid)}_{uid.Id}";
+        var key = $"uniform-accessory-{uid.Id}-{index}";
 
         if (component.LayerKeys != null && component.LayerKeys.Count > 0 && component.Limit > 1)
         {

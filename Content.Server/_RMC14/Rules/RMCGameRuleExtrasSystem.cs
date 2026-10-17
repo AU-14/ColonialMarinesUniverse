@@ -2,6 +2,9 @@ using Content.Server._RMC14.Commendations;
 using Content.Server.GameTicking;
 using Content.Shared._RMC14.Commendations;
 using Content.Shared._RMC14.Marines.Dogtags;
+using Content.Shared._RMC14.Rules; // CMU14
+using Content.Shared.GameTicking; // CMU14
+using Content.Shared.GameTicking.Components; // CMU14
 using Content.Shared.Database;
 using System.Linq;
 
@@ -13,6 +16,28 @@ public sealed partial class RMCGameRuleExtrasSystem : EntitySystem
 {
     [Dependency] private DogtagsSystem _dogtags = default!;
     [Dependency] private CommendationSystem _commendation = default!;
+
+    // CMU14 method: memorial/awards for presets that don't run the classic distress rule
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEndTextAppend);
+    }
+
+    // CMU14 method: the classic rule appends these itself; skip when it is active to avoid doubling them
+    private void OnRoundEndTextAppend(RoundEndTextAppendEvent ev)
+    {
+        var rules = EntityQueryEnumerator<ActiveGameRuleComponent, CMDistressSignalRuleComponent>();
+        if (rules.MoveNext(out _, out _))
+            return;
+
+        if (MemorialEntry(ref ev))
+            ev.AddLine(string.Empty);
+
+        if (MarineAwards(ref ev))
+            ev.AddLine(string.Empty);
+
+        XenoAwards(ref ev);
+    }
 
     /// <summary>
     /// Shows names from memorials in the round end text. Returns true if there was any fallen listed.

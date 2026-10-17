@@ -1,0 +1,147 @@
+# Money each character starts with in their ID card's bank account, by pay tier.
+# The highest priority tier that lists the job (or one of its departments) is used. Anything unlisted gets the default tier.
+
+# Synthetics and Working Joes are not paid.
+- type: cmuStartingFunds
+  id: CMUStartingFundsNone
+  min: 0
+  max: 0
+  priority: 60
+  jobs:
+  - AU14JobCivilianColonySynthetic
+  - AU14JobColonyWorkingJoe
+  - AU14JobGOVFORAuxSupportSynth
+  - AU14JobGOVFORWorkingJoe
+  - AU14JobOPFORAuxSupportSynth
+  - AU14JobOPFORWorkingJoe
+
+- type: cmuStartingFunds
+  id: CMUStartingFundsMinimal
+  min: 25
+  max: 35
+  priority: 40
+  jobs:
+  - AU14JobCivilianPrisoner
+  - AU14JobCivilianColonist
+
+- type: cmuStartingFunds
+  id: CMUStartingFundsExecutive
+  min: 120
+  max: 150
+  priority: 30
+  jobs:
+  - AU14JobCivilianColonyAdministrator
+  - AU14JobCivilianCorporateAdministrator
+  - AU14JobCivilianCorporateLiaison
+  - AU14JobCivilianCMBMarshal
+  - AU14JobCivilianOrbitalManager
+  - AU14JobCivilianOrbitalArbiter
+  - AU14JobCivilianAmbassadorUPP
+  - AU14JobCivilianAmbassadorUA
+  - AU14JobCivilianAmbassadorTWE
+  - AU14JobCivilianAmbassadorICSC
+  - AU14JobCivilianAmbassadorCCA
+  - AU14JobMobBoss
+  - AU14JobGOVFORPlatCo
+  - AU14JobGOVFORAdjutant
+  - AU14JobGOVFORadvisor
+  - AU14JobOPFORPlatCo
+  - AU14JobOPFORAdjutant
+  - AU14JobOPFORadvisor
+
+- type: cmuStartingFunds
+  id: CMUStartingFundsSenior
+  min: 90
+  max: 125
+  priority: 20
+  jobs:
+  - AU14JobCivilianHeadPhysician
+  - AU14JobCivilianHeadOfEngineering
+  - AU14JobCivilianHeadOfService
+  - AU14JobCivilianForeman
+  - AU14JobCivilianColonySecurityLeader
+  - AU14JobCivilianNSPAInspector
+  - AU14JobCivilianPhysician
+  - AU14JobCivilianScientist
+  - AU14JobCivilianOrbitalLawyer
+  - AU14JobCivilianLaselleLiaison
+  - AU14JobCivilianUSASFRecruiter
+  - AU14JobGOVFORPlatOp
+  - AU14JobGOVFOROfficerIntel
+  - AU14JobGOVFOROfficerLogistics
+  - AU14JobGOVFOROfficerMedical
+  - AU14JobGOVFOROfficerMP
+  - AU14JobGOVFOROfficerEngi
+  - AU14JobGOVFORMilitaryDoctor
+  - AU14JobGOVFORDSPilot
+  - AU14JobGOVFORGunshipPilot
+  - AU14JobGOVFORFighterPilot
+  - AU14JobGOVFORFighterSystemsOfficer
+  - AU14JobGOVFORVehicleCommander
+  - AU14JobOPFORPlatOp
+  - AU14JobOPFOROfficerIntel
+  - AU14JobOPFOROfficerLogistics
+  - AU14JobOPFOROfficerMedical
+  - AU14JobOPFOROfficerMP
+  - AU14JobOPFOROfficerEngi
+  - AU14JobOPFORMilitaryDoctor
+  - AU14JobOPFORDSPilot
+  - AU14JobOPFORGunshipPilot
+  - AU14JobOPFORFighterPilot
+  - AU14JobOPFORFighterSystemsOfficer
+  - AU14JobOPFORVehicleCommander
+
+- type: cmuStartingFunds
+  id: CMUStartingFundsSkilled
+  min: 60
+  max: 95
+  priority: 10
+  departments:
+  - AU14DepartmentColonySecurity
+  - AU14DepartmentColonyMedical
+  - AU14DepartmentEngineering
+  - AU14DepartmentCorporate
+  - AU14DepartmentOrbital
+  jobs:
+  - AU14JobCivilianJournalist
+  - AU14JobCivilianColonyAdminAssistant
+  - AU14JobCivilianShopkeep
+  - AU14JobGOVFORSectionSergeant
+  - AU14JobGOVFORSquadSergeant
+  - AU14JobGOVFORPlatoonCorpsman
+  - AU14JobGOVFORNurse
+  - AU14JobGOVFOREngineeringTech
+  - AU14JobGOVFORSquadCombatTech
+  - AU14JobGOVFORMilitaryPoliceMan
+  - AU14JobGOVFORDCC
+  - AU14JobGOVFORVehicleCrewman
+  - AU14JobGOVFORRadioTelephoneOperator
+  - AU14JobGOVFORRadioTrafficOperator
+  - AU14JobGOVFORWeaponsSpecialist
+  - CMUJobGOVFORDroneOperator
+  - AU14JobGOVFORCombatCorrespondent
+  - AU14JobOPFORSectionSergeant
+  - AU14JobOPFORSquadSergeant
+  - AU14JobOPFORPlatoonCorpsman
+  - AU14JobOPFORNurse
+  - AU14JobOPFOREngineeringTech
+  - AU14JobOPFORSquadCombatTech
+  - AU14JobOPFORMilitaryPoliceMan
+  - AU14JobOPFORDCC
+  - AU14JobOPFORVehicleCrewman
+  - AU14JobOPFORRadioTelephoneOperator
+  - AU14JobOPFORRadioTrafficOperator
+  - AU14JobOPFORWeaponsSpecialist
+  - CMUJobOPFORDroneOperator
+  - AU14JobOPFORCombatCorrespondent
+
+# Colonists, service and labour workers, rank-and-file troops and anyone else.
+# Every CLF role gets this tier regardless of rank.
+- type: cmuStartingFunds
+  id: CMUStartingFundsBasic
+  min: 35
+  max: 60
+  priority: 50
+  default: true
+  departments:
+  - AU14DepartmentColonialLiberationFront

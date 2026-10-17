@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Xenonids.Rest;
 using Content.Shared.Database;
 using Content.Shared.Examine;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Mobs;
 using Content.Shared.StatusEffect;
 using Content.Shared.Stunnable;

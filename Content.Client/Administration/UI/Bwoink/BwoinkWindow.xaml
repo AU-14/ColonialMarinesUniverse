@@ -1,6 +1,12 @@
-﻿<DefaultWindow xmlns="https://spacestation14.io"
+﻿<!-- MinSize, not just SetSize: BaseWindow clamps a resize drag to MinSize, and without one this
+     falls back to DefaultWindow's 50x50 floor. Dragged that small, the message RichTextLabels are
+     measured at a width narrower than a single word, which trips a word-wrap assert in the engine
+     and takes the client down. Larger than the player-side AHelp window's 500x300 because this one
+     also carries the player list beside the chat and a row of admin buttons underneath. -->
+<DefaultWindow xmlns="https://spacestation14.io"
             xmlns:cc="clr-namespace:Content.Client.Administration.UI.Bwoink"
             SetSize="900 500"
+            MinSize="800 450"
             Title="{Loc 'bwoink-user-title'}" >
     <cc:BwoinkControl Name="Bwoink" Access="Public" HorizontalExpand="True" VerticalExpand="True"/>
 </DefaultWindow>

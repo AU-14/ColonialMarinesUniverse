@@ -71,6 +71,11 @@ public sealed partial class VehicleSupplyLiftComponent : Component
     [NonSerialized]
     public string PendingVehicle = string.Empty;
 
+    public EntityUid? PendingRequester; // CMU14: authenticate delivered fighter equipment.
+
+    public string? PendingSupplySide; // CMU14
+    public EntityUid? PendingSupplyConsole; // CMU14
+
     [NonSerialized]
     public EntityUid? PendingVehicleEntity;
 
@@ -94,6 +99,9 @@ public sealed partial class VehicleSupplyLiftComponent : Component
 
     [NonSerialized]
     public readonly HashSet<string> Ordered = new();
+
+    [NonSerialized]
+    public readonly HashSet<string> TechGranted = new(); // CMU14: legacy data; does not grant supply allowances
 
     [NonSerialized]
     public readonly Dictionary<string, string> OrderedGroups = new();

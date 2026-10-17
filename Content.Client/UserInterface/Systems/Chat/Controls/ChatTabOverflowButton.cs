@@ -15,6 +15,7 @@ public sealed class ChatTabOverflowButton : ChatPopupButton<ChatTabOverflowPopup
         Visible = false;
         ToolTip = Loc.GetString("hud-chatbox-tabs");
         StyleClasses.Add(StyleNano.StyleClassChatChannelSelectorButton);
+        StyleClasses.Add(StyleNano.StyleClassCrtChatTab);
     }
 
     public void SetHiddenCount(int count)

@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Power;
@@ -8,12 +8,14 @@ using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids.ManageHive.Boons;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
+using Content.Shared.Inventory;
 using Content.Shared.Popups;
 using Content.Shared.Power;
 using Content.Shared.Radio;
@@ -29,6 +31,7 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private HiveBoonSystem _hiveBoon = default!;
@@ -64,7 +67,7 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
 
     private void OnTowerDamageChanged(Entity<CommunicationsTowerComponent> ent, ref DamageChangedEvent args)
     {
-        if (args.Damageable.TotalDamage > FixedPoint2.Zero)
+        if (_damageable.GetTotalDamage((ent, args.Damageable)) > FixedPoint2.Zero)
             return;
 
         if (ent.Comp.State != CommunicationsTowerState.Broken)
@@ -152,7 +155,7 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
 
         args.Handled = true;
         var msg = $"You wipe the preexisting frequencies from the {Name(ent)}.";
-        _popup.PopupClient(msg, ent, args.User, PopupType.Medium);
+        _popup.PopupEntity(msg, ent, args.User, PopupType.Medium);
         ent.Comp.Faction = string.Empty;
         ent.Comp.Channels.Clear();
     }
@@ -166,7 +169,7 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
             return;
 
         var factions = new HashSet<EntProtoId<IFFFactionComponent>>();
-        if (_gunIFF.TryGetFactions(args.User, factions))
+        if (_gunIFF.TryGetFactions(args.User, factions, SlotFlags.IDCARD | SlotFlags.EARS))
         {
             foreach (var faction in factions)
             {
@@ -183,7 +186,7 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
 
         args.Handled = true;
         var msg = $"You add your faction's communication frequencies to the {Name(ent)}'s comm list.";
-        _popup.PopupClient(msg, ent, args.User, PopupType.Medium);
+        _popup.PopupEntity(msg, ent, args.User, PopupType.Medium);
         ent.Comp.Faction = factions.FirstOrDefault().ToString() ?? string.Empty;
     }
 
@@ -191,13 +194,13 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
     {
         if (ent.Comp.State == CommunicationsTowerState.Broken)
         {
-            _popup.PopupClient($"{Name(ent)} needs repairs to be turned back on!", ent, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity($"{Name(ent)} needs repairs to be turned back on!", ent, args.User, PopupType.MediumCaution);
             return;
         }
 
         if (!_rmcPower.IsPowered(ent))
         {
-            _popup.PopupClient($"{Name(ent)} makes a small plaintful beep, and nothing happens. It seems to be out of power.", ent, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity($"{Name(ent)} makes a small plaintful beep, and nothing happens. It seems to be out of power.", ent, args.User, PopupType.MediumCaution);
             return;
         }
 

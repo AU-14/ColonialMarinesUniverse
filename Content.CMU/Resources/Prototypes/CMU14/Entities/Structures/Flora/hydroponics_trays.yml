@@ -1,0 +1,9 @@
+- type: entity
+  parent: hydroponicsTray
+  id: CMUHydroponicsTrayPortable
+  suffix: Portable
+  components:
+  - type: Transform
+    anchored: false # parent trays anchor themselves; this one must stay movable
+  - type: Physics
+    bodyType: Dynamic # movable (powerloader), not fixed to the ASRS elevator

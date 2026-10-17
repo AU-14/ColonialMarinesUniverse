@@ -1,0 +1,46 @@
+<Document>
+  # Fractures
+
+  Heavy hits can break bones. A broken bone hurts, and moving on one that isn't supported can make it worse.
+
+  <Box>
+    <GuideEntityEmbed Entity="CMUSplintItem" Caption="Splint"/>
+    <GuideEntityEmbed Entity="CMUCastItem" Caption="Medical cast"/>
+    <GuideEntityEmbed Entity="CMBonesetter" Caption="Bone setter"/>
+    <GuideEntityEmbed Entity="CMBoneGel" Caption="Bone gel"/>
+  </Box>
+
+  ## Severity
+  From least to most serious:
+  - [bold]Hairline[/bold]: a crack.
+  - [bold]Simple[/bold]: a clean break.
+  - [bold]Compound[/bold]: the bone has broken through. It also bleeds internally.
+  - [bold]Shattered[/bold]: the bone is in pieces. It bleeds internally even faster.
+
+  Examining a patient shows fractures, and a health analyzer shows them to anyone with basic medical training. With more training it shows the exact severity.
+
+  ## Splints
+  - A splint stabilizes a broken limb, so moving on it stops making it worse. It works on hairline and simple fractures.
+  - [bold]A splint doesn't heal the bone.[/bold] It only holds things together until the patient can get a cast or surgery.
+  - Each splint has 4 uses and takes 3 seconds to apply.
+
+  ## Casts
+  - A cast immobilizes a hairline or simple fracture and heals it completely over 5 minutes.
+  - Each cast has 4 uses and takes 6 seconds to apply.
+  - When the bone has healed, the patient is told the cast is ready to come off. Remove it with the [bold]Remove cast[/bold] option.
+  - If the bone breaks again while it's in a cast, the cast cracks apart.
+  - [bold]OsteoCalc[/bold] speeds up bone healing by half again while it's in the patient's system.
+
+  ## Surgery
+  Compound and shattered fractures can't be fixed with a cast; they need surgery. Surgery can fix any fracture, including hairline and simple ones.
+  - [bold]Set Simple Fracture[/bold] (hairline or simple): open the incision, realign the bone with a bone setter, apply bone gel, then close up.
+  - [bold]Set Compound Fracture[/bold]: open the incision, realign the bone with a bone setter, apply bone gel, then close up.
+  - [bold]Set Shattered Fracture[/bold]: open the incision, realign the bone with a bone setter, apply bone gel, insert a bone graft, set it with the bone setter again, then close up.
+  - Fractures in the chest or skull are reached by opening the bone cavity first.
+
+  See [textlink="Surgery" link="CMUGuideMedicalSurgery"] for how to operate.
+
+  ## After Surgery
+  - [color=red]Put a cast on within 5 minutes of setting a bone.[/color] If you don't, there's a 30% chance it sets wrong, leaving the patient with a simple fracture again.
+  - A cast on a freshly set bone finishes healing it in 5 minutes. A cast also fixes a bone that has set wrong.
+</Document>

@@ -18,6 +18,11 @@
                     <Button Name="DisplayPageButton" Text="{Loc 'hud-chatbox-settings-display'}"/>
                 </BoxContainer>
             </PanelContainer>
+            <!-- All four pages share one fixed footprint so switching between them doesn't resize
+                 the popup. 650 is the widest page's own MinWidth (Fonts); 370 clears the tallest,
+                 which is Tabs - its scroll list is capped at 220 but it carries three rows of
+                 controls underneath, where Fonts is one 310px list. Raise these if a page grows. -->
+            <Control Name="SettingsPages" MinSize="650 370">
             <BoxContainer Name="FiltersPage" Orientation="Horizontal" SeparationOverride="10">
                 <BoxContainer Orientation="Vertical" SeparationOverride="6">
                     <Label Text="{Loc 'hud-chatbox-filter-channels'}"/>
@@ -25,7 +30,9 @@
                         <PanelContainer.PanelOverride>
                             <gfx:StyleBoxFlat BackgroundColor="#101317" BorderColor="#2F3941" BorderThickness="1" ContentMarginLeftOverride="7" ContentMarginRightOverride="7" ContentMarginTopOverride="6" ContentMarginBottomOverride="6"/>
                         </PanelContainer.PanelOverride>
-                        <ScrollContainer MinWidth="160" MinHeight="230" MaxHeight="230" HScrollEnabled="False" VScrollEnabled="True">
+                        <!-- Sized to fill the fixed page rather than leaving the right third of it
+                             empty; the old 160 also clipped the longer channel names. -->
+                        <ScrollContainer MinWidth="190" MinHeight="300" MaxHeight="300" HScrollEnabled="False" VScrollEnabled="True">
                             <BoxContainer Name="FilterVBox" Orientation="Vertical" SeparationOverride="3"/>
                         </ScrollContainer>
                     </PanelContainer>
@@ -36,18 +43,18 @@
                         <PanelContainer.PanelOverride>
                             <gfx:StyleBoxFlat BackgroundColor="#101915" BorderColor="#2A4938" BorderThickness="1" ContentMarginLeftOverride="7" ContentMarginRightOverride="7" ContentMarginTopOverride="6" ContentMarginBottomOverride="6"/>
                         </PanelContainer.PanelOverride>
-                        <ScrollContainer MinWidth="170" MinHeight="230" MaxHeight="230" HScrollEnabled="False" VScrollEnabled="True">
+                        <ScrollContainer MinWidth="190" MinHeight="300" MaxHeight="300" HScrollEnabled="False" VScrollEnabled="True">
                             <BoxContainer Name="RadioFilterVBox" Orientation="Vertical" SeparationOverride="3"/>
                         </ScrollContainer>
                     </PanelContainer>
                 </BoxContainer>
-                <BoxContainer Name="HighlightsVBox" MinWidth="175" Orientation="Vertical" SeparationOverride="6">
+                <BoxContainer Name="HighlightsVBox" MinWidth="200" Orientation="Vertical" SeparationOverride="6">
                     <Label Text="{Loc 'hud-chatbox-highlights'}"/>
                     <PanelContainer>
                         <PanelContainer.PanelOverride>
                             <gfx:StyleBoxFlat BackgroundColor="#101317" BorderColor="#2F3941" BorderThickness="1" ContentMarginLeftOverride="5" ContentMarginRightOverride="5" ContentMarginTopOverride="5" ContentMarginBottomOverride="5"/>
                         </PanelContainer.PanelOverride>
-                        <TextEdit Name="HighlightEdit" MinHeight="195" Margin="2 2"/>
+                        <TextEdit Name="HighlightEdit" MinHeight="255" Margin="2 2"/>
                     </PanelContainer>
                     <Button Name="HighlightButton" Text="{Loc 'hud-chatbox-highlights-button'}" ToolTip="{Loc 'hud-chatbox-highlights-tooltip'}"/>
                 </BoxContainer>
@@ -89,14 +96,19 @@
                     <PanelContainer.PanelOverride>
                         <gfx:StyleBoxFlat BackgroundColor="#101317" BorderColor="#2F3941" BorderThickness="1" ContentMarginLeftOverride="9" ContentMarginRightOverride="9" ContentMarginTopOverride="8" ContentMarginBottomOverride="8"/>
                     </PanelContainer.PanelOverride>
+                    <!-- Help text is RichTextLabel, not Label: Label has no wrapping at all, so these
+                         lines ran on and stretched the whole popup wider than every other page.
+                         RichTextLabel wraps to its available width, and MaxWidth is what bounds that
+                         width - without it there is nothing to wrap against and it stays one line. -->
                     <BoxContainer Orientation="Vertical" SeparationOverride="6">
                         <CheckBox Name="ColorWholeMessageCheckBox" Text="{Loc 'hud-chatbox-display-color-whole-message'}"/>
-                        <Label Text="{Loc 'hud-chatbox-display-color-whole-message-help'}" Modulate="#7F8792"/>
+                        <RichTextLabel Text="{Loc 'hud-chatbox-display-color-whole-message-help'}" MaxWidth="400" Modulate="#7F8792"/>
                         <CheckBox Name="LegacyChatCheckBox" Text="{Loc 'hud-chatbox-display-legacy'}"/>
-                        <Label Text="{Loc 'hud-chatbox-display-legacy-help'}" Modulate="#7F8792"/>
+                        <RichTextLabel Text="{Loc 'hud-chatbox-display-legacy-help'}" MaxWidth="400" Modulate="#7F8792"/>
                     </BoxContainer>
                 </PanelContainer>
             </BoxContainer>
+            </Control>
         </BoxContainer>
     </PanelContainer>
 </controls:ChannelFilterPopup>

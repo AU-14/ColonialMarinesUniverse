@@ -108,7 +108,7 @@
   - type: HiveConstructionLimited
     id: HiveEggMorpherXeno
   - type: WarpPoint
-    location: egg morpher
+    location: cmu-warp-location-egg-morpher
   - type: RMCAlternateSprite
     normalSprite: _RMC14/Structures/Xenos/hive_structures.rsi
     alternateSprite: _RMC14/Structures/Xenos/hive_structures_old.rsi

@@ -17,17 +17,17 @@
         - Marine
   - type: EmitSoundOnPickup
     sound:
-      path: /Audio/_RMC14/Handling/paper_pickup.ogg
+      collection: RMCPaperPickup
       params:
         volume: -4
   - type: EmitSoundOnDrop
     sound:
-      path: /Audio/_RMC14/Handling/paper_drop.ogg
+      collection: RMCPaperDrop
       params:
         volume: -5
   - type: EmitSoundOnLand
     sound:
-      path: /Audio/_RMC14/Handling/paper_drop.ogg
+      collection: RMCPaperDrop
       params:
         volume: -5
   - type: Tag
@@ -237,12 +237,7 @@
     giveJobTitle: rmc-job-name-mortar-operator
     givePrefix: rmc-job-prefix-mortar-operator
     isAppendPrefix: false
-    giveIcon:
-      sprite: _RMC14/Interface/cm_job_icons.rsi
-      state: hudsquad_mortar
-    giveMapBlip:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: mortar
+    # CMU: Retain the reader's faction-specific role and tactical map icons.
     bypassLimit: true
     # jobWhitelists:
     # - popup: rmc-pamphlets-rifleman-warning
@@ -397,3 +392,16 @@
   components:
   - type: SkillPamphlet
     language: Primitive
+
+# gives k9 handler training
+- type: entity
+  parent: CMPamphlet
+  id: CMPamphletK9Handler
+  name: K9 handler instructional pamphlet
+  description: A pamphlet used to quickly impart vital knowledge on handling synthetic K9 units.
+  components:
+  - type: Sprite
+    state: pamphlet_k9_handler
+  - type: SkillPamphlet
+    addComps:
+    - type: K9Handler

@@ -140,6 +140,10 @@
       "name": "m56cupola_1",
       "directions": 4
     },
+	{
+      "name": "re700cupola_0",
+      "directions": 4
+    },
     {
       "name": "damaged_hardpt_secondary",
       "directions": 4
@@ -190,6 +194,32 @@
     {
       "name": "MISC"
     },
+	{
+      "name": "mountedflag_0",
+      "directions": 4,
+      "delays": [
+        [
+          0.8,
+          0.8
+        ],
+        [
+          0.8,
+          0.8
+        ],
+        [
+          0.8,
+          0.8
+        ],
+        [
+          0.8,
+          0.8
+        ]
+      ]
+    },
+	{
+      "name": "mountedflag_1",
+      "directions": 4
+    },
     {
       "name": "wheels_0",
       "directions": 4,
@@ -212,7 +242,7 @@
         ]
       ]
     },
-    {
+	{
       "name": "wheels_1",
       "directions": 4
     },

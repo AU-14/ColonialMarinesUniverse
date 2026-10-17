@@ -9,7 +9,7 @@ public sealed partial class TrapParasiteComponent : Component
     public TimeSpan JumpTime = TimeSpan.FromSeconds(1.5);
 
     [DataField, AutoNetworkedField]
-    public TimeSpan DisableTime = TimeSpan.FromSeconds(0.25);
+    public TimeSpan DisableTime = TimeSpan.FromSeconds(2); // CMU14: awake window must outlast HTN planning; 2s matches the trap's own stun
 
     [DataField, AutoNetworkedField]
     public TimeSpan? LeapAt;

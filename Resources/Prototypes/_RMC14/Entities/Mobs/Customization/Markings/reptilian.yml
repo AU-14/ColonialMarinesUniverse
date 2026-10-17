@@ -1,8 +1,7 @@
 - type: marking
   id: RMCLizardChestDragonwings
   bodyPart: Tail
-  markingCategory: Chest
-  speciesRestriction: [Reptilian]
+  groupWhitelist: [Reptilian]
   sprites:
   - sprite: _RMC14/Mobs/Customization/reptilian.rsi
     state: body_dragonwings
@@ -12,8 +11,7 @@
 - type: marking
   id: RMCLizardSnakeTail
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Reptilian]
+  groupWhitelist: [Reptilian]
   sprites:
   - sprite: _RMC14/Mobs/Customization/snake_tail.rsi
     state: m_tail_snaketail
@@ -21,8 +19,7 @@
 - type: marking
   id: RMCLizardSnakeTailAlt
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Reptilian]
+  groupWhitelist: [Reptilian]
   sprites:
   - sprite: _RMC14/Mobs/Customization/snake_tail.rsi
     state: m_tail_snakedual_primary
@@ -32,8 +29,7 @@
 - type: marking
   id: RMCLizardSnakeTailStripe
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Reptilian]
+  groupWhitelist: [Reptilian]
   sprites:
   - sprite: _RMC14/Mobs/Customization/snake_tail.rsi
     state: m_tail_snakestripe_primary
@@ -43,8 +39,7 @@
 - type: marking
   id: RMCLizardSnakeTailStripeAlt
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Reptilian]
+  groupWhitelist: [Reptilian]
   sprites:
   - sprite: _RMC14/Mobs/Customization/snake_tail.rsi
     state: m_tail_snakestripealt_primary
@@ -54,8 +49,7 @@
 - type: marking
   id: RMCLizardSnakeTailUnder
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Reptilian]
+  groupWhitelist: [Reptilian]
   sprites:
   - sprite: _RMC14/Mobs/Customization/snake_tail.rsi
     state: m_tail_snakeunder_primary
@@ -65,8 +59,7 @@
 - type: marking
   id: RMCLizardSnakeTailAnimated
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: []
+  groupWhitelist: []
   sprites:
   - sprite: _RMC14/Mobs/Customization/snake_tail.rsi
     state: m_waggingtail_snaketail
@@ -74,8 +67,7 @@
 - type: marking
   id: RMCLizardSnakeTailAltAnimated
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: []
+  groupWhitelist: []
   sprites:
   - sprite: _RMC14/Mobs/Customization/snake_tail.rsi
     state: m_waggingtail_snakedual_primary
@@ -85,8 +77,7 @@
 - type: marking
   id: RMCLizardSnakeTailStripeAnimated
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: []
+  groupWhitelist: []
   sprites:
   - sprite: _RMC14/Mobs/Customization/snake_tail.rsi
     state: m_waggingtail_snakestripe_primary
@@ -96,8 +87,7 @@
 - type: marking
   id: RMCLizardSnakeTailStripeAltAnimated
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: []
+  groupWhitelist: []
   sprites:
   - sprite: _RMC14/Mobs/Customization/snake_tail.rsi
     state: m_waggingtail_snakestripealt_primary
@@ -107,12 +97,10 @@
 - type: marking
   id: RMCLizardSnakeTailUnderAnimated
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: []
+  groupWhitelist: []
   sprites:
   - sprite: _RMC14/Mobs/Customization/snake_tail.rsi
     state: m_waggingtail_snakeunder_primary
   - sprite: _RMC14/Mobs/Customization/snake_tail.rsi
     state: m_waggingtail_snakeunder_secondary
-
 

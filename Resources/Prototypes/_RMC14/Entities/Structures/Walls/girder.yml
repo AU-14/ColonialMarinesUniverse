@@ -1,10 +1,8 @@
-- type: examinableDamage
+- type: localizedDataset
   id: RMCGirderMessages
-  messages:
-    - rmc-girder-integrity-1
-    - rmc-girder-integrity-2
-    - rmc-girder-integrity-3
-    - rmc-girder-integrity-4
+  values:
+    prefix: rmc-girder-integrity-
+    count: 4
 
 - type: entity
   parent: BaseStructure
@@ -41,6 +39,7 @@
     node: girder
   - type: Damageable
     damageModifierSet: RMCGirder
+  - type: Injurable
   - type: Destructible
     thresholds:
     - trigger:
@@ -161,8 +160,9 @@
   - type: ExaminableDamage
     messages: RMCGirderMessages
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: Destructible
     thresholds:
     - trigger:

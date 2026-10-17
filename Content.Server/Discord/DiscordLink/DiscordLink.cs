@@ -1,9 +1,13 @@
+﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.Threading;
 using Content.Shared.CCVar;
 using NetCord;
 using NetCord.Gateway;
 using NetCord.Rest;
 using Robust.Shared.Configuration;
+using Robust.Shared.Utility;
 
 namespace Content.Server.Discord.DiscordLink;
 
@@ -18,9 +22,16 @@ public sealed partial class CommandReceivedEventArgs
     public string Command { get; init; } = string.Empty;
 
     /// <summary>
-    /// The arguments to the command. This is everything after the command
+    /// The raw arguments to the command. This is everything after the command
     /// </summary>
-    public string Arguments { get; init; } = string.Empty;
+    public string RawArguments { get; init; } = string.Empty;
+
+    /// <summary>
+    /// A list of arguments to the command.
+    /// This uses <see cref="CommandParsing.ParseArguments"/> mostly for maintainability.
+    /// </summary>
+    public List<string> Arguments { get; init; } = [];
+
     /// <summary>
     /// Information about the message that the command was received from. This includes the message content, author, etc.
     /// Use this to reply to the message, delete it, etc.
@@ -45,6 +56,7 @@ public sealed partial class DiscordLink : IPostInjectInit
     private GatewayClient? _client;
     private ISawmill _sawmill = default!;
     private ISawmill _sawmillLog = default!;
+    private readonly ConcurrentDictionary<ulong, SemaphoreSlim> _channelSendLocks = new();
 
     private ulong _guildId;
     private string _botToken = string.Empty;
@@ -66,6 +78,7 @@ public sealed partial class DiscordLink : IPostInjectInit
     /// </summary>
     public event Action<Message>? OnMessageReceived;
 
+    // TODO: consider implementing this in a way where we can unregister it in a similar way
     public void RegisterCommandCallback(Action<CommandReceivedEventArgs> callback, string command)
     {
         OnCommandReceived += args =>
@@ -180,24 +193,28 @@ public sealed partial class DiscordLink : IPostInjectInit
         var trimmedInput = content[BotPrefix.Length..].Trim();
         var firstSpaceIndex = trimmedInput.IndexOf(' ');
 
-        string command, arguments;
+        string command, rawArguments;
 
         if (firstSpaceIndex == -1)
         {
             command = trimmedInput;
-            arguments = string.Empty;
+            rawArguments = string.Empty;
         }
         else
         {
             command = trimmedInput[..firstSpaceIndex];
-            arguments = trimmedInput[(firstSpaceIndex + 1)..].Trim();
+            rawArguments = trimmedInput[(firstSpaceIndex + 1)..].Trim();
         }
+
+        var argumentList = new List<string>();
+        CommandParsing.ParseArguments(rawArguments, argumentList);
 
         // Raise the event!
         OnCommandReceived?.Invoke(new CommandReceivedEventArgs
         {
             Command = command,
-            Arguments = arguments,
+            Arguments = argumentList,
+            RawArguments = rawArguments,
             Message = message,
         });
         return ValueTask.CompletedTask;
@@ -221,18 +238,29 @@ public sealed partial class DiscordLink : IPostInjectInit
             return;
         }
 
-        var channel = await _client.Rest.GetChannelAsync(channelId) as TextChannel;
-        if (channel == null)
+        var sendLock = _channelSendLocks.GetOrAdd(channelId, _ => new SemaphoreSlim(1, 1));
+        await sendLock.WaitAsync();
+        try
         {
-            _sawmill.Error("Tried to send a message to Discord but the channel {Channel} was not found.", channel);
-            return;
-        }
+            var channel = await _client.Rest.GetChannelAsync(channelId) as TextChannel;
+            if (channel == null)
+            {
+                _sawmill.Error("Tried to send a message to Discord but channel {Channel} was not found.", channelId);
+                return;
+            }
 
-        await channel.SendMessageAsync(new MessageProperties()
+            await channel.SendMessageAsync(new MessageProperties()
+            {
+                AllowedMentions = AllowedMentionsProperties.None,
+                Content = message,
+            });
+        }
+        finally
         {
-            AllowedMentions = AllowedMentionsProperties.None,
-            Content = message,
-        });
+            // Pace bursts per channel; the REST client still handles Discord's changing rate limits.
+            await Task.Delay(TimeSpan.FromSeconds(1.25));
+            sendLock.Release();
+        }
     }
 
     #endregion

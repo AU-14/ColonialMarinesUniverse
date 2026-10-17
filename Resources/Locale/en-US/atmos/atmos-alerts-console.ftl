@@ -9,7 +9,8 @@ atmos-alerts-window-tab-fire-alarms = Fire alarms
 
 atmos-alerts-window-alarm-label = {CAPITALIZE($name)} ({$address})
 atmos-alerts-window-temperature-label = Temperature
-atmos-alerts-window-temperature-value = {$valueInC} °C ({$valueInK} K)
+# atmos-alerts-window-temperature-value = {$valueInC} °C ({$valueInK} K) # CMU14
+atmos-alerts-window-temperature-value = {$valueInC} °{$unit} ({$valueInK} K)
 atmos-alerts-window-invalid-value = N/A
 atmos-alerts-window-total-mol-label = Total moles
 atmos-alerts-window-total-mol-value = {$value} mol

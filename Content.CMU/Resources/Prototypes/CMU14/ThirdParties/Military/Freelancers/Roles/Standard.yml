@@ -1,0 +1,69 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobFreelancerStandard
+  roundSide: ThirdParty
+  roundForce: CMUFreelancers
+  roundRole: FreelancerStandard
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillFireman: 1
+  - type: JobPrefix
+    prefix: cmu-freelancer-prefix-rifleman
+  name: cmu-freelancer-name-rifleman
+  description: cmu-freelancer-description
+  playTimeTracker: CMUJobFreelancerStandard
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearFreelancerStandard
+  spawnMenuRoleName: Freelancer Rifleman (3rd party)
+  greeting: cmu-freelancer-greeting
+  icon: RMCJobIconFreelancerStandard
+  joinNotifyCrew: false
+  supervisors: cmu-freelancer-leader
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesFreelancers
+  id: CMUJobFreelancerStandard
+  name: Freelancer Rifleman
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-freelancer-name-rifleman
+    description: cmu-freelancer-description
+    reregister: false
+    job: CMUJobFreelancerStandard
+    raffle:
+      settings: short
+    rules: cmu-freelancer-rules
+
+- type: startingGear
+  id: CMUGearFreelancerStandard
+  equipment:
+    back: RMCSatchelLightpackFreelancerStandard
+    belt: RMCMAR40BeltFilled
+    suitstorage: WeaponRifleMAR40
+    gloves: RMCHandsVeteranPMC
+    jumpsuit: RMCJumpsuitFreelancer
+    outerClothing: CMArmorFreelancer
+    shoes: RMCBootsSPPFilled
+    id: CMUIDCardFreelancer
+    ears: RMCHeadsetDistressDukes
+    pocket1: RMCPouchFirstAidERTFill
+    pocket2: RMCPouchExplosiveFilledHEDP
+
+- type: playTimeTracker
+  id: CMUJobFreelancerStandard

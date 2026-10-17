@@ -18,6 +18,7 @@ using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
 using Robust.Client.GameObjects;
 using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
+using Content.Shared.CMU14.Xenomorphs.Larva;
 
 namespace Content.Client._RMC14.Xenonids;
 
@@ -34,6 +35,7 @@ public sealed partial class XenoVisualizerSystem : VisualizerSystem<XenoComponen
 
         SubscribeLocalEvent<XenoComponent, KnockedDownEvent>(OnXenoKnockedDown);
         SubscribeLocalEvent<XenoComponent, StatusEffectEndedEvent>(OnXenoStatusEffectEnded);
+        SubscribeLocalEvent<KnockedDownComponent, ComponentStartup>(OnKnockedDownStartup);
         SubscribeLocalEvent<XenoComponent, GetDrawDepthEvent>(OnXenoGetDrawDepth);
 
         _animateQuery = GetEntityQuery<XenoAnimateMovementComponent>();
@@ -47,6 +49,12 @@ public sealed partial class XenoVisualizerSystem : VisualizerSystem<XenoComponen
     private void OnXenoStatusEffectEnded(Entity<XenoComponent> xeno, ref StatusEffectEndedEvent args)
     {
         UpdateSprite(xeno.Owner);
+    }
+
+    private void OnKnockedDownStartup(Entity<KnockedDownComponent> ent, ref ComponentStartup args)
+    {
+        if (HasComp<XenoComponent>(ent))
+            UpdateSprite(ent.Owner);
     }
 
     private void OnXenoGetDrawDepth(Entity<XenoComponent> ent, ref GetDrawDepthEvent args)
@@ -76,7 +84,7 @@ public sealed partial class XenoVisualizerSystem : VisualizerSystem<XenoComponen
             state = mobState.CurrentState;
 
         Resolve(entity, ref input, ref thrown, ref leaping, ref knocked, false);
-        if (knocked != null && state != MobState.Dead)
+        if (knocked is { LifeStage: <= ComponentLifeStage.Running } && state != MobState.Dead)
             state = MobState.Critical;
 
         if (sprite is not { BaseRSI: { } rsi } ||
@@ -85,14 +93,16 @@ public sealed partial class XenoVisualizerSystem : VisualizerSystem<XenoComponen
             return;
         }
 
-        // TODO RMC14 split this up into multiple systems with ordered event subscription
-        // TODO RMC14 please god
         string? oviState = null;
+        string? chosenState = null;
         switch (state)
         {
             case MobState.Critical:
                 if (rsi.TryGetState("crit", out _))
+                {
                     SpriteSystem.LayerSetRsiState((entity.Owner, sprite), layer, "crit");
+                    chosenState = "crit";
+                }
                 break;
             case MobState.Dead:
                 if (HasComp<ParasiteSpentComponent>(entity))
@@ -101,7 +111,10 @@ public sealed partial class XenoVisualizerSystem : VisualizerSystem<XenoComponen
                     break;
                 }
                 if (rsi.TryGetState("dead", out _))
+                {
                     SpriteSystem.LayerSetRsiState((entity.Owner, sprite), layer, "dead");
+                    chosenState = "dead";
+                }
                 break;
             default:
                 if (HasComp<XenoAttachedOvipositorComponent>(entity) &&
@@ -124,6 +137,7 @@ public sealed partial class XenoVisualizerSystem : VisualizerSystem<XenoComponen
                     rsi.TryGetState("sleeping", out _))
                 {
                     SpriteSystem.LayerSetRsiState((entity.Owner, sprite), layer, "sleeping");
+                    chosenState = "sleeping";
                     break;
                 }
 
@@ -131,6 +145,7 @@ public sealed partial class XenoVisualizerSystem : VisualizerSystem<XenoComponen
                     IsThrown((entity, leaping, thrown, null)))
                 {
                     SpriteSystem.LayerSetRsiState((entity.Owner, sprite), layer, "thrown");
+                    chosenState = "thrown";
                     break;
                 }
 
@@ -139,6 +154,7 @@ public sealed partial class XenoVisualizerSystem : VisualizerSystem<XenoComponen
                     rsi.TryGetState("fortify", out _))
                 {
                     SpriteSystem.LayerSetRsiState((entity.Owner, sprite), layer, "fortify");
+                    chosenState = "fortify";
                     break;
                 }
 
@@ -147,6 +163,7 @@ public sealed partial class XenoVisualizerSystem : VisualizerSystem<XenoComponen
                     rsi.TryGetState("crest", out _))
                 {
                     SpriteSystem.LayerSetRsiState((entity.Owner, sprite), layer, "crest");
+                    chosenState = "crest";
                     break;
                 }
 
@@ -155,6 +172,7 @@ public sealed partial class XenoVisualizerSystem : VisualizerSystem<XenoComponen
                     rsi.TryGetState("burrowed", out _))
                 {
                     SpriteSystem.LayerSetRsiState((entity.Owner, sprite), layer, "burrowed");
+                    chosenState = "burrowed";
                     break;
                 }
 
@@ -163,14 +181,20 @@ public sealed partial class XenoVisualizerSystem : VisualizerSystem<XenoComponen
                     rsi.TryGetState("running", out _))
                 {
                     SpriteSystem.LayerSetRsiState((entity.Owner, sprite), layer, "running");
+                    chosenState = "running";
                     break;
                 }
 
                 if (rsi.TryGetState("alive", out _))
+                {
                     SpriteSystem.LayerSetRsiState((entity.Owner, sprite), layer, "alive");
+                    chosenState = "alive";
+                }
 
                 break;
         }
+
+        UpdateBloodyLayer(entity, sprite, rsi, appearance, chosenState);
 
         if (!SpriteSystem.LayerMapTryGet((entity.Owner, sprite), XenoVisualLayers.Ovipositor, out var oviLayer, false))
             return;
@@ -185,6 +209,51 @@ public sealed partial class XenoVisualizerSystem : VisualizerSystem<XenoComponen
         SpriteSystem.LayerSetRsiState((entity.Owner, sprite), oviLayer, oviState);
         SpriteSystem.LayerSetVisible((entity.Owner, sprite), oviLayer, true);
         SpriteSystem.LayerSetVisible((entity.Owner, sprite), layer, false);
+    }
+
+    private void UpdateBloodyLayer(EntityUid uid, SpriteComponent sprite, Robust.Client.Graphics.RSI rsi, AppearanceComponent appearance, string? chosenState)
+    {
+        if (!SpriteSystem.LayerMapTryGet((uid, sprite), "bloody", out var bloodyLayer, false))
+            return;
+
+        var isBloody = AppearanceSystem.TryGetData(uid, BloodyLarvaVisuals.Bloody, out bool bloody, appearance) && bloody;
+
+        if (!isBloody || chosenState == null)
+        {
+            SpriteSystem.LayerSetVisible((uid, sprite), bloodyLayer, false);
+            return;
+        }
+
+        var bloodyState = GetBloodyState(chosenState); // CMU14: reuse fixed RSI IDs instead of allocating every visual update.
+        var bloodyRsi = sprite[bloodyLayer].ActualRsi ?? rsi;
+
+        if (bloodyRsi.TryGetState(bloodyState, out _))
+        {
+            SpriteSystem.LayerSetRsiState((uid, sprite), bloodyLayer, bloodyState);
+            SpriteSystem.LayerSetVisible((uid, sprite), bloodyLayer, true);
+        }
+        else
+        {
+            SpriteSystem.LayerSetVisible((uid, sprite), bloodyLayer, false);
+        }
+    }
+
+    // CMU14 method: all current visual choices are fixed IDs; retain concatenation for future/custom states.
+    internal static string GetBloodyState(string state)
+    {
+        return state switch
+        {
+            "alive" => "alive_bloody",
+            "running" => "running_bloody",
+            "crit" => "crit_bloody",
+            "dead" => "dead_bloody",
+            "sleeping" => "sleeping_bloody",
+            "thrown" => "thrown_bloody",
+            "fortify" => "fortify_bloody",
+            "crest" => "crest_bloody",
+            "burrowed" => "burrowed_bloody",
+            _ => state + "_bloody",
+        };
     }
 
     private bool IsThrown(Entity<XenoLeapingComponent?, ThrownItemComponent?, ActiveXenoToggleChargingComponent?> xeno)

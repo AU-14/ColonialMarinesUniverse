@@ -1,0 +1,11 @@
+author: Operator
+category: CMU
+changes:
+- message: Grenade Detonation Modes [Impact+Timed]
+  type: Add
+- message: Gave all 30mm grenade types the GrenadeDetonationMode tag, allowing all
+    30mm base types [starting with HEDP] to toggle between an impact mode and explosive
+    mode.
+  type: Tweak
+time: '2026-08-29T05:30:14.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1869

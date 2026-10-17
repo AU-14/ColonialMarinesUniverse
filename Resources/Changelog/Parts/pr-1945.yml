@@ -1,0 +1,8 @@
+author: ILoveDespoiler
+category: CMU
+changes:
+- message: changed Despoilers Armor, Explosion Armor, Speed, Plasma Costs, Catalyze
+    Hypertension Cost, Hypertension Bonus Damage, and Catalyze Buff Duration
+  type: Tweak
+time: '2026-09-13T14:30:30.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1945

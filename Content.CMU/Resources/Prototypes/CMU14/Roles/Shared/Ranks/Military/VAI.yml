@@ -1,0 +1,66 @@
+# VASC Ranks
+- type: rank
+  id: VAI_TeamLeader
+  name: VASC Team Leader
+  prefix: VASC TL
+  paygrade: VASCTL
+
+- type: rank
+  id: VAI_Engineer
+  name: VASC Engineering Specialist
+  prefix: VASC ENG
+  paygrade: VASCE
+
+- type: rank
+  id: VAI_Machinegunner
+  name: VASC Machinegunner
+  prefix: VASC MG
+  paygrade: VASCMG
+
+- type: rank
+  id: VAI_MedicalSpecialist
+  name: VASC Medical Specialist
+  prefix: VASC MED
+  paygrade: VASCM
+
+- type: rank
+  id: VAI_Mercenary
+  name: VASC Mercenary
+  prefix: VASC
+  paygrade: VASC
+
+- type: rank
+  id: VAI_Synthetic
+  name: VASC Synthetic
+  prefix: VASC SYN
+  paygrade: VASCS
+
+- type: rank
+  id: VAI_VASCGroupCommander
+  name: VASC Group Commander
+  prefix: VASC GC
+  paygrade: VASGC
+
+- type: rank
+  id: VAI_VASCGroupAdvisor
+  name: VASC Group Advisor
+  prefix: VASC GA
+  paygrade: VASGA
+
+- type: rank
+  id: VAI_VASCGroupCommanderAssistant
+  name: VASC Group Commander Assistant
+  prefix: VASC GCA
+  paygrade: VASGCA
+
+- type: rank
+  id: VAI_VASCSpecialist
+  name: VASC Specialist
+  prefix: VASC SPC
+  paygrade: VASPC
+
+- type: rank
+  id: VAI_VASCDepartamentLeader
+  name: VASC Departament Leader
+  prefix: VASC DPTLDR
+  paygrade: VADPTLDR

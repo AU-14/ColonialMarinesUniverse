@@ -24,6 +24,7 @@ public sealed partial class OverwatchConsoleSystem : SharedOverwatchConsoleSyste
         SubscribeLocalEvent<OverwatchCameraComponent, EntityTerminatingEvent>(OnWatchedRemove);
         SubscribeLocalEvent<OverwatchWatchingComponent, ComponentRemove>(OnWatchingRemove);
         SubscribeLocalEvent<OverwatchWatchingComponent, EntityTerminatingEvent>(OnWatchingRemove);
+        SubscribeLocalEvent<OverwatchWatchingComponent, PlayerDetachedEvent>(OnWatcherDetached);
 
         SubscribeLocalEvent<ExpandICChatRecipientsEvent>(OnExpandRecipients);
     }
@@ -76,7 +77,12 @@ public sealed partial class OverwatchConsoleSystem : SharedOverwatchConsoleSyste
 
     private void OnWatchingRemove<T>(Entity<OverwatchWatchingComponent> ent, ref T args)
     {
-        RemoveWatcher(ent);
+        RemoveWatcher(ent.Owner, ent.Comp);
+    }
+
+    private void OnWatcherDetached(Entity<OverwatchWatchingComponent> ent, ref PlayerDetachedEvent args)
+    {
+        Unwatch(ent.Owner, args.Player);
     }
 
     protected override void Watch(Entity<ActorComponent?, EyeComponent?> watcher, Entity<OverwatchCameraComponent?> toWatch)
@@ -138,10 +144,18 @@ public sealed partial class OverwatchConsoleSystem : SharedOverwatchConsoleSyste
         RemoveWatcher(watcher);
     }
 
-    private void RemoveWatcher(EntityUid toRemove)
+    private void RemoveWatcher(EntityUid toRemove, OverwatchWatchingComponent? watching = null)
     {
-        if (!TryComp(toRemove, out OverwatchWatchingComponent? watching))
+        // ComponentRemove runs after the component is marked deleted; retain the event's instance.
+        if (watching == null && !TryComp(toRemove, out watching))
             return;
+
+        if (watching.Watching is { } oldView && TryComp<ActorComponent>(toRemove, out var actor))
+            _viewSubscriber.RemoveViewSubscriber(oldView, actor.PlayerSession);
+
+        if (TryComp<EyeComponent>(toRemove, out var eye) && eye.Target == watching.Watching &&
+            !TerminatingOrDeleted(toRemove))
+            _eye.SetTarget(toRemove, null, eye);
 
         if (watching.Watching is { } watchedEntity &&
             TryComp(watchedEntity, out OverwatchCameraComponent? watched))

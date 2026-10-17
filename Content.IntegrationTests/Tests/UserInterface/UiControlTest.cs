@@ -1,5 +1,7 @@
+using Content.Client.CMU14.UserInterface;
 using System.Linq;
 using Content.Client.LateJoin;
+using Content.IntegrationTests.Fixtures;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.ContentPack;
 using Robust.Shared.IoC;
@@ -8,7 +10,7 @@ using Robust.Shared.Reflection;
 namespace Content.IntegrationTests.Tests.UserInterface;
 
 [TestFixture]
-public sealed class UiControlTest
+public sealed class UiControlTest : GameTest
 {
     // You should not be adding to this.
     private Type[] _ignored = new Type[]
@@ -22,32 +24,33 @@ public sealed class UiControlTest
     [Test]
     public async Task TestWindows()
     {
-        var pair = await PoolManager.GetServerClient(new PoolSettings()
-        {
-            Connected = true,
-        });
+        var pair = Pair;
         var activator = pair.Client.ResolveDependency<IDynamicTypeFactory>();
         var refManager = pair.Client.ResolveDependency<IReflectionManager>();
         var loader = pair.Client.ResolveDependency<IModLoader>();
 
-        var windowTypes = refManager.GetAllChildren(typeof(BaseWindow))
-            .Where(type => !type.IsAbstract && !_ignored.Contains(type))
-            .Where(loader.IsContentType)
-            .Where(type => type.GetConstructor(Type.EmptyTypes) != null)
-            .ToArray();
-
         await pair.Client.WaitAssertion(() =>
         {
-            foreach (var type in windowTypes)
+            foreach (var type in refManager.GetAllChildren(typeof(BaseWindow)))
             {
+                if (type.IsAbstract || _ignored.Contains(type))
+                    continue;
+
+                if (!loader.IsContentType(type))
+                    continue;
+
+                // If it has no empty ctor then skip it instead of figuring out what args it needs.
+                var ctor = type.GetConstructor(Type.EmptyTypes);
+
+                if (ctor == null)
+                    continue;
+
                 // Don't inject because the control themselves have to do it.
                 var window = (BaseWindow) activator.CreateInstance(type, oneOff: true, inject: false);
-                window.DisposeAllChildren();
+                window.ReleaseChildren();
             }
         });
 
         await pair.Client.WaitIdleAsync();
-
-        await pair.CleanReturnAsync();
     }
 }

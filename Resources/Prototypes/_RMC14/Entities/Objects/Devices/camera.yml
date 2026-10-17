@@ -8,7 +8,14 @@
     sprite: _RMC14/Objects/Devices/broadcasting_camera.rsi
     state: icon
   - type: Item
-    size: Huge
+    size: Normal # CMU14: fits in backpacks, was Huge
+  # CMU14 start: fits in any suit storage slot
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - suitstorage
+  - type: CMUAllowAnySuitStorage
+  # CMU14 end
   - type: Wieldable
     freeHandsRequired: 0
   - type: Eye
@@ -32,7 +39,9 @@
   - type: ActiveListener
     range: 10
   - type: RMCCamera
-    id: RMCTelevision
     rename: false
+  - type: CameraNetworkMember
+    networks: [RMCTelevision]
+    sourceKinds: Rmc
   - type: Corrodible
     isCorrodible: false

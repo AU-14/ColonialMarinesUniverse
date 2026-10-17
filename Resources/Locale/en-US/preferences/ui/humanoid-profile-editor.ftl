@@ -40,16 +40,31 @@ humanoid-profile-editor-military-jobs-tab = Military Jobs
 humanoid-profile-editor-threat-jobs-tab = Threat Jobs
 humanoid-profile-editor-civilian-jobs-tab = Civilian Jobs
 humanoid-profile-editor-insurgency-tab = Insurgency
+# CMU14: Force on Force reuses these role lists
+humanoid-profile-editor-fof-included-label = Insurgency and FoF
 humanoid-profile-editor-colony-fall-tab = Colony Fall
 humanoid-profile-editor-distress-signal-tab = Distress Signal
 humanoid-profile-editor-government-jobs-tab = Government Jobs
 humanoid-profile-editor-insurgency-jobs-tab = Insurgency Jobs
 humanoid-profile-editor-threat-roles-tab = Threat Jobs
+humanoid-profile-editor-threats-label = Threats
+humanoid-profile-editor-threat-jobs-section = Threat Jobs
+humanoid-profile-editor-threat-marker-suffix = (Marker)
+humanoid-profile-editor-threat-xeno = Xenomorph
+humanoid-profile-editor-threat-ape = Apes
+humanoid-profile-editor-threat-cultist = Cultists
+humanoid-profile-editor-threat-wendigo = Wendigo
+humanoid-profile-editor-threat-abomination = Abominations
+humanoid-profile-editor-threat-tribal = Tribals
+humanoid-profile-editor-threat-neomorph = Neomorphs
+humanoid-profile-editor-threat-badbloodclan = Bad Blood Clan
 humanoid-profile-editor-allegiance-label = Allegiance:
 humanoid-profile-editor-allegiance-none = None
 humanoid-profile-editor-origin-label = Origin:
 humanoid-profile-editor-origin-none = None
-humanoid-profile-editor-character-description-tab = Character
+# cmu edit start
+humanoid-profile-editor-character-description-tab = Character Records
+# cmu edit end
 humanoid-profile-editor-short-examine-label = Short Examine Text:
 humanoid-profile-editor-height-label = Height:
 humanoid-profile-editor-weight-label = Weight:
@@ -89,7 +104,7 @@ humanoid-profile-editor-synthetic-locked = You are not whitelisted for the synth
 humanoid-profile-editor-synthetic-locked-job = This character is not marked as synthetic.
 humanoid-profile-editor-synthetic-locked-job-non-synthetic = This character is marked as synthetic and can only take synthetic jobs.
 humanoid-profile-editor-preference-unavailable-stay-in-lobby-button = Stay in lobby if preference unavailable.
-humanoid-profile-editor-preference-unavailable-spawn-as-overflow-button = Be default job if preference unavailable.
+humanoid-profile-editor-preference-unavailable-spawn-as-overflow-button = Be {INDEFINITE($overflowJob)} {$overflowJob} if preference unavailable.
 humanoid-profile-editor-preference-jumpsuit = Jumpsuit
 humanoid-profile-editor-preference-jumpskirt = Jumpskirt
 humanoid-profile-editor-preference-backpack = Backpack
@@ -135,3 +150,42 @@ humanoid-profile-editor-segment-flight = Vehicle Crew
 humanoid-profile-editor-segment-support = Support
 humanoid-profile-editor-segment-leader = Infantry NCO
 humanoid-profile-editor-segment-line = Line Infantry
+
+# Armor
+humanoid-profile-editor-preference-armor-random = Random
+humanoid-profile-editor-preference-armor-padded = Padded
+humanoid-profile-editor-preference-armor-padless = Padless
+humanoid-profile-editor-preference-armor-ridged = Ridged
+humanoid-profile-editor-preference-armor-carrier = Carrier
+humanoid-profile-editor-preference-armor-skull = Skull
+humanoid-profile-editor-preference-armor-smooth = Smooth
+
+humanoid-profile-editor-randomize = Randomize
+
+humanoid-profile-editor-randomize-unlocked-button = Randomize unlocked
+
+humanoid-profile-editor-randomize-name-button = Name
+
+humanoid-profile-editor-randomize-species-button = Species
+
+humanoid-profile-editor-randomize-age-button = Age
+
+humanoid-profile-editor-randomize-sex-button = Sex
+
+humanoid-profile-editor-randomize-skin-button = Skin color
+
+humanoid-profile-editor-randomize-eye-button = Eye color
+
+humanoid-profile-editor-randomize-markings-button = Markings
+
+humanoid-profile-editor-voice-label = Voice:
+
+humanoid-profile-editor-randomizer-lock-tooltip = Prevents the value from being randomized
+
+humanoid-profile-editor-voice-masculine = Masculine
+
+humanoid-profile-editor-voice-feminine = Feminine
+
+humanoid-profile-editor-voice-neutral = Neutral
+
+humanoid-profile-editor-voice-none = Unnamed Voice

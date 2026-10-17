@@ -1,0 +1,271 @@
+#work wear
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianWorkwearBlue
+  name: blue workwear
+  description: Work clothes designed for getting dirty while still looking good.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/blueworkwear.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianWorkwearGreen
+  name: green workwear
+  description: Work clothes designed for getting dirty while still looking good.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/greenworkwear.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianWorkwearPink
+  name: pink workwear
+  description: Work clothes designed for getting dirty while still looking good.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/pinkworkwear.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianWorkwearYellow
+  name: yellow workwear
+  description: Work clothes designed for getting dirty while still looking good.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/yellowworkwear.rsi
+
+#boilersuit
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianBoilerSuitCyan
+  name: cyan boilersuit
+  description: Rugged waterproof clothes for the hardworking man.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/cyanboilersuit.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianBoilerSuitDarkBlue
+  name: dark blue boilersuit
+  description: Rugged waterproof clothes for the hardworking man.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/darkblueboilersuit.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianBoilerSuitDarkBlueSynth
+  name: support synthetic uniform
+  description: Rugged waterproof clothes for the hardworking synth.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/darkblueboilersuit.rsi
+
+- type: entity
+  parent: AU14CivilianBoilerSuitDarkBlueSynth
+  id: AU14CivilianBoilerSuitDarkBlueSynthRMC
+  components:
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14RMCPatch
+    - AU14TWEPatch
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianBoilerSuitGray
+  name: gray boilersuit
+  description: Rugged waterproof clothes for the hardworking man.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/grayboilersuit.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianBoilerSuitGreen
+  name: green boilersuit
+  description: Rugged waterproof clothes for the hardworking man.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/greenboilersuit.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianBoilerSuitKhaki
+  name: khaki boilersuit
+  description: Rugged waterproof clothes for the hardworking man.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/kahkiboilersuit.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianBoilerSuitLightBlue
+  name: light blue boilersuit
+  description: Rugged waterproof clothes for the hardworking man.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/lightblueboilersuit.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianBoilerSuitWhite
+  name: white boilersuit
+  description: Rugged waterproof clothes for the hardworking man.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/whiteboilersuit.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianPrisonJumpsuit
+  name: prison jumpsuit
+  description: A jumpsuit designed for inmates.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/prisonsuit.rsi
+
+#service jumpsuits
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianWeYuEngineerClothes
+  name: We-Yu engineer clothes
+  description: Clothes designed for WeYu engineers.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/WeYuEngineer.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14JoeHazmat
+  name: Working Joe hazardous uniform
+  description: A reinforced uniform used for Synthetic labor in hazardous areas. Tomorrow, Together. Its vital tracker and tracking beacon appear to be enabled.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/joehazmat.rsi
+  - type: CMArmor
+    bio: 20
+    explosionArmor: 15
+    melee: 10
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianParamedicClothesRed
+  name: red paramedic clothes
+  description: Clothes designed for paramedics.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/RedParamedic.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianParamedicClothesGreen
+  name: green paramedic clothes
+  description: Clothes designed for paramedics.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/GreenParamedic.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianSanitationClothes
+  name: sanitation clothes
+  description: Clothes designed for Sanitation workers.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/Sanitation.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: CMUJumpsuitCivilianForeman
+  name: We-Yu engineering foreman clothes
+  description: Clothes designed for WeYu engineering formans.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/foremanuniform.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianKellandMiningClothes
+  name: Kelland Mining clothes
+  description: Clothes made for the miners of the Kelland Mining Corporation.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/kellandmininguniform.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianBaristaClothes
+  name: barista clothes
+  description: Clothes designed for those who make coffee.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/cuppajoesuniform.rsi
+
+- type: entity
+  parent: CMScrubsGreen
+  id: AU14ScrubsGreenDoctorSurgical
+  components:
+  - type: WebbingClothing
+    startingWebbing: CMWebbingSurgicalGreen
+
+- type: entity
+  parent: RMCJumpsuitVeteranPMCHybrisaLead
+  id: AU14WYSecurityUniformRig
+  components:
+  - type: WebbingClothing
+    startingWebbing: CMWebbingBlack
+
+# Flannels
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianFlannelPurple
+  name: purple flannel shirt
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/flannelpurple.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianFlannelRed
+  name: red flannel shirt
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/flannelred.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianFlannelWhite
+  name: white flannel shirt
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/flannelwhite.rsi
+
+# Floral Shirts
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianFloralBlue
+  name: blue floral shirt
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/floralshirtblue.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianFloralRed
+  name: red floral shirt
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/floralshirtred.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianFloralYellow
+  name: yellow floral shirt
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Uniforms/floralshirtyellow.rsi

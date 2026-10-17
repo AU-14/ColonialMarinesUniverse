@@ -3,16 +3,17 @@ using Content.Shared.FixedPoint;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared.Projectiles;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentPause]
 public sealed partial class ProjectileComponent : Component
 {
     /// <summary>
     ///     The angle of the fired projectile.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public Angle Angle;
 
     /// <summary>
@@ -24,20 +25,31 @@ public sealed partial class ProjectileComponent : Component
     /// <summary>
     ///     User that shot this projectile.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? Shooter;
 
     /// <summary>
     ///     Weapon used to shoot.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? Weapon;
 
     /// <summary>
-    ///     The projectile spawns inside the shooter most of the time, this prevents entities from shooting themselves.
+    /// How much time after being shot the projectile can collide with the shooter.
     /// </summary>
-    [DataField, AutoNetworkedField]
-    public bool IgnoreShooter = true;
+    /// <remarks>
+    /// Since projectiles spawn inside the shooter,
+    /// they have to ignore the shooter for a little while while they fly away.
+    /// </remarks>
+    [DataField]
+    public TimeSpan DelayToAcknowledgeShooter = TimeSpan.FromSeconds(1);
+
+    /// <summary>
+    /// Time from which after the projectile can hit the shooter.
+    /// </summary>
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
+    [AutoPausedField]
+    public TimeSpan? WhenToStopIgnoringShooter;
 
     /// <summary>
     ///     The amount of damage the projectile will do.
@@ -78,7 +90,7 @@ public sealed partial class ProjectileComponent : Component
     /// <summary>
     ///     If true, the projectile has hit enough targets and should no longer interact with further collisions pending deletion.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool ProjectileSpent;
 
     /// <summary>
@@ -104,6 +116,6 @@ public sealed partial class ProjectileComponent : Component
     /// This can be set on both the Projectile and ShootAtFixedPoint Components.
     /// The default value is null for no cap. The minimum value between the two is used.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public float? MaxFixedRange;
 }

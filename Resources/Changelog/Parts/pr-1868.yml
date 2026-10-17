@@ -1,0 +1,46 @@
+author: maertayn
+category: CMU
+changes:
+- message: Nuked the SCADA-like scenario system (overkill design, drift with legacy
+    systems, and overly complex for its usecase)
+  type: Code
+- message: CLF no longer show their faction affiliation when you shift+click them
+  type: Fix
+- message: Facehugger/parasite unable to leap or infect buckled (chairs) players
+  type: Fix
+- message: Caseless weapons don't eject casings anymore (let me know if I missed some)
+  type: Tweak
+- message: Neomorph caste (neomorph) can regurgitate now
+  type: Fix
+- message: Consoles have lost their hard collision, so you can move through them (they
+    blocked Z-transitions)
+  type: Tweak
+- message: Fixed offset for the upper right weapon slot on GP
+  type: Fix
+- message: Fixed the firemissions display showing inverted cardinal directions
+  type: Fix
+- message: Loadout items not spawning if there is no room for them (storage), they
+    drop on the ground
+  type: Fix
+- message: TacMap table for WeYu (tracks WY PMCs too) and Govfor/Opfor dynamic (vmarker)
+    on Bush
+  type: Add
+- message: TacMap providing full map vision without having sensors (on Stable Garrison
+    et al.)
+  type: Fix
+- message: Kill/Eliminate objectives not tracking threats that spawned late (threat
+    vote) or evolutions (WIP)
+  type: Fix
+- message: Structures like weeds, walls, missing proper npcFaction groupings (sentries
+    now target)
+  type: Fix
+- message: Merged cluttered spaghetti planet map files into _CMU14/Maps/Planets/<allegiance>/*
+  type: Code
+- message: Added spawnthreat (manually spawn threat on markers or your location),
+    endroundhold (block going to postround if victory conditions are met, e.g. three
+    spawned threats don't fight to end early) commands
+  type: Admin
+- message: Fixed the CMU TacMap blips after far too long of having to squint
+  type: Add
+time: '2026-08-26T00:14:54.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1868

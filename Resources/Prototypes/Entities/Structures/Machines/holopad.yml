@@ -1,5 +1,5 @@
 - type: entity
-  parent: [ BaseMachinePowered, ConstructibleMachine ]
+  parent: [ BaseMachinePowered, ConstructibleMachine, BaseConstructibleMachineDestructible ]
   id: Holopad
   name: holopad
   description: "A floor-mounted device for projecting holographic images."
@@ -15,7 +15,10 @@
         mask:
         - Impassable
   - type: ApcPowerReceiver
-    powerLoad: 300
+    powerLoad: 5
+  - type: PowerState
+    idlePowerDraw: 5
+    workingPowerDraw: 300
   - type: StationAiVision
     range: 1
     needsAnchoring: true
@@ -46,10 +49,6 @@
         enum.PowerDeviceVisualLayers.Powered:
           False: { visible: true }
           True: { visible: false }
-      enum.WiresVisuals.MaintenancePanelState:
-        enum.WiresVisualLayers.MaintenancePanel:
-          True: { visible: false }
-          False: { visible: true }
   - type: Machine
     board: HolopadMachineCircuitboard
   - type: StationAiWhitelist
@@ -76,6 +75,7 @@
     speakerVolume: Speak
   - type: AccessReader
     access: [[ "Command" ]]
+    examinationText: access-reader-examination-functionality-restricted
   - type: ActivatableUI
     key: enum.HolopadUiKey.InteractionWindow
   - type: ActivatableUIRequiresPower
@@ -90,19 +90,17 @@
   - type: Wires
     boardName: wires-board-name-holopad
     layoutId: Holopad
+  - type: Damageable
+    damageModifierSet: GlassMod
   - type: Destructible
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 100
+        damage: 175
       behaviors:
       - !type:PlaySoundBehavior
         sound:
-          collection: MetalBreak
-      - !type:ChangeConstructionNodeBehavior
-        node: machineFrame
-      - !type:DoActsBehavior
-        acts: ["Destruction"]
+          collection: MetalGlassBreak
 
 - type: entity
   name: long-range holopad

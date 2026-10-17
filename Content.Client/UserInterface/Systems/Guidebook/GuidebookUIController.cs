@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Content.Client.Gameplay;
 using Content.Client.Guidebook;
 using Content.Client.Guidebook.Controls;
@@ -27,11 +27,11 @@ public sealed partial class GuidebookUIController : UIController, IOnStateEntere
     [Dependency] private IConfigurationManager _configuration = default!;
     [Dependency] private JobRequirementsManager _jobRequirements = default!;
 
-    private const int PlaytimeOpenGuidebook = 60;
+    // Was a const. A second client on the same machine is always "new", so this fired every launch
+    // and covered the screen - see CMUGuidebookAutoOpenPlaytime.
 
     private GuidebookWindow? _guideWindow;
     private MenuButton? GuidebookButton => UIManager.GetActiveUIWidgetOrNull<MenuBar.Widgets.GameTopMenuBar>()?.GuidebookButton;
-    private ProtoId<GuideEntryPrototype>? _lastEntry;
 
     public void OnStateEntered(LobbyState state)
     {
@@ -52,8 +52,11 @@ public sealed partial class GuidebookUIController : UIController, IOnStateEntere
         _guideWindow.OnClose += OnWindowClosed;
         _guideWindow.OnOpen += OnWindowOpen;
 
+        var autoOpenBelow = _configuration.GetCVar(CCVars.CMUGuidebookAutoOpenPlaytime);
+
         if (state is LobbyState &&
-            _jobRequirements.FetchOverallPlaytime() < TimeSpan.FromMinutes(PlaytimeOpenGuidebook))
+            autoOpenBelow > 0 &&
+            _jobRequirements.FetchOverallPlaytime() < TimeSpan.FromMinutes(autoOpenBelow))
         {
             OpenGuidebook();
             _guideWindow.RecenterWindow(new(0.5f, 0.5f));
@@ -86,6 +89,7 @@ public sealed partial class GuidebookUIController : UIController, IOnStateEntere
         _guideWindow.OnOpen -= OnWindowOpen;
 
         // shutdown
+        _guideWindow.Shutdown();
         _guideWindow.Close();
         _guideWindow = null;
         CommandBinds.Unregister<GuidebookUIController>();
@@ -146,7 +150,6 @@ public sealed partial class GuidebookUIController : UIController, IOnStateEntere
         if (_guideWindow != null)
         {
             _guideWindow.ReturnContainer.Visible = false;
-            _lastEntry = _guideWindow.LastEntry;
         }
     }
 
@@ -184,7 +187,26 @@ public sealed partial class GuidebookUIController : UIController, IOnStateEntere
         if (guides == null)
         {
             guides = _prototypeManager.EnumerateCM<GuideEntryPrototype>()
-                .ToDictionary(x => new ProtoId<GuideEntryPrototype>(x.ID), x => (GuideEntry) x);
+                .ToDictionary(x => new ProtoId<GuideEntryPrototype>(x.ID), x => (GuideEntry)x);
+
+            // cmu edit start
+            // The full guidebook only shows the CMU section, RMC's own guides stay hidden.
+            if (guides.ContainsKey(CMUGuidebookRoot))
+            {
+                if (rootEntries == null)
+                {
+                    rootEntries = new List<ProtoId<GuideEntryPrototype>>();
+                    foreach (var root in CMUGuidebookRoots)
+                    {
+                        if (guides.ContainsKey(root))
+                            rootEntries.Add(root);
+                    }
+                }
+
+                if (selected == null && (_guideWindow.Selected is not { } last || !IsUnderCMURoot(last, guides)))
+                    selected = CMUGuidebookRoot;
+            }
+            // cmu edit end
         }
         else if (includeChildren)
         {
@@ -198,20 +220,23 @@ public sealed partial class GuidebookUIController : UIController, IOnStateEntere
 
         if (selected == null)
         {
-            if (_lastEntry is { } lastEntry && guides.ContainsKey(lastEntry))
+            if (_guideWindow.Selected is { } lastEntry && guides.ContainsKey(lastEntry))
             {
-                selected = _lastEntry;
+                selected = lastEntry;
             }
             else
             {
                 selected = _configuration.GetCVar(CCVars.DefaultGuide);
             }
         }
-        _guideWindow.UpdateGuides(guides, rootEntries, forceRoot, selected);
+        var changed = _guideWindow.UpdateGuides(guides, rootEntries, forceRoot, selected);
 
         // Expand up to depth-2.
-        _guideWindow.Tree.SetAllExpanded(false);
-        _guideWindow.Tree.SetAllExpanded(true, 1);
+        if (changed)
+        {
+            _guideWindow.Tree.SetAllExpanded(false);
+            _guideWindow.Tree.SetAllExpanded(true, 1);
+        }
 
         _guideWindow.OpenCenteredRight();
     }
@@ -236,6 +261,43 @@ public sealed partial class GuidebookUIController : UIController, IOnStateEntere
 
         OpenGuidebook(guides, rootEntries, forceRoot, includeChildren, selected);
     }
+
+    // cmu edit start
+    private static readonly ProtoId<GuideEntryPrototype> CMUGuidebookRoot = "CMUGuidebook";
+
+    // Top-level entries shown when the guidebook is opened normally.
+    private static readonly ProtoId<GuideEntryPrototype>[] CMUGuidebookRoots =
+    {
+        "RMCOverview",
+        "AU14SOP",
+        "AU14UCMJ",
+        "AU14CCLaw",
+        CMUGuidebookRoot,
+    };
+
+    private static bool IsUnderCMURoot(
+        ProtoId<GuideEntryPrototype> id,
+        Dictionary<ProtoId<GuideEntryPrototype>, GuideEntry> guides)
+    {
+        var stack = new Stack<ProtoId<GuideEntryPrototype>>();
+        var seen = new HashSet<ProtoId<GuideEntryPrototype>>();
+        foreach (var root in CMUGuidebookRoots)
+            stack.Push(root);
+        while (stack.TryPop(out var current))
+        {
+            if (current == id)
+                return true;
+
+            if (!seen.Add(current) || !guides.TryGetValue(current, out var entry))
+                continue;
+
+            foreach (var child in entry.Children)
+                stack.Push(child);
+        }
+
+        return false;
+    }
+    // cmu edit end
 
     public void CloseGuidebook()
     {

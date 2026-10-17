@@ -36,6 +36,7 @@
       choices: { CMHat: 1 }
       entries:
       - id: CMHeadBeretRed
+      - id: CMMPFlatBeret
     - name: Handgun Case
       choices: { CMGunCase: 1 }
       entries:

@@ -1,0 +1,151 @@
+{ 
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "taken from cm13 https://github.com/realforest2001/forest-cm13/blob/ecb68c1e25fd4f02d19a9e940cd08e3d8fba7bd1/icons/mob/pathogen/pathogen_structures.dmi",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "mycelium"
+        },
+        {
+            "name": "mycelium0",
+            "directions": 4
+        },
+        {
+            "name": "mycelium1",
+            "directions": 4
+        },
+        {
+            "name": "mycelium2",
+            "directions": 4
+        },
+        {
+            "name": "mycelium3",
+            "directions": 4
+        },
+        {
+            "name": "mycelium4",
+            "directions": 4
+        },
+        {
+            "name": "mycelium5",
+            "directions": 4
+        },
+        {
+            "name": "mycelium6",
+            "directions": 4
+        },
+        {
+            "name": "mycelium7",
+            "directions": 4
+        },
+        {
+            "name": "membrane"
+        },
+        {
+            "name": "membrane0",
+            "directions": 4
+        },
+        {
+            "name": "membrane1",
+            "directions": 4
+        },
+        {
+            "name": "membrane2",
+            "directions": 4
+        },
+        {
+            "name": "membrane3",
+            "directions": 4
+        },
+        {
+            "name": "membrane4",
+            "directions": 4
+        },
+        {
+            "name": "membrane5",
+            "directions": 4
+        },
+        {
+            "name": "membrane6",
+            "directions": 4
+        },
+        {
+            "name": "membrane7",
+            "directions": 4
+        },
+        {
+            "name": "thickmycelium"
+        },
+        {
+            "name": "thickmycelium0",
+            "directions": 4
+        },
+        {
+            "name": "thickmycelium1",
+            "directions": 4
+        },
+        {
+            "name": "thickmycelium2",
+            "directions": 4
+        },
+        {
+            "name": "thickmycelium3",
+            "directions": 4
+        },
+        {
+            "name": "thickmycelium4",
+            "directions": 4
+        },
+        {
+            "name": "thickmycelium5",
+            "directions": 4
+        },
+        {
+            "name": "thickmycelium6",
+            "directions": 4
+        },
+        {
+            "name": "thickmycelium7",
+            "directions": 4
+        },
+        {
+            "name": "thickmembrane"
+        },
+        {
+            "name": "thickmembrane0",
+            "directions": 4
+        },
+        {
+            "name": "thickmembrane1",
+            "directions": 4
+        },
+        {
+            "name": "thickmembrane2",
+            "directions": 4
+        },
+        {
+            "name": "thickmembrane3",
+            "directions": 4
+        },
+        {
+            "name": "thickmembrane4",
+            "directions": 4
+        },
+        {
+            "name": "thickmembrane5",
+            "directions": 4
+        },
+        {
+            "name": "thickmembrane6",
+            "directions": 4
+        },
+        {
+            "name": "thickmembrane7",
+            "directions": 4
+        }
+    ]
+}

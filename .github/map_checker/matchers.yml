@@ -14,7 +14,6 @@
   - "RMCAdminFax"
   - "AdminPDA"
   - "AdminHypo"
-  - "RMCPlushie.*"
 
 - id: "AllowAllOnAdminMaps"
   type: "Whitelist"
@@ -118,3 +117,30 @@
 #   type: "Blacklist"
 #   entityMatchers:
 #   - "ColMarTech.*"
+
+# Unused Upstream Prototypes (Use the CMU variants)
+- id: "DeprecatedUpstreamPrototypes"
+  type: "Blacklist"
+  entityMatchers:
+  - "RMCPlushie.*"
+  - "RMCPickaxe"
+  - "RMCAegisCorpseSpawner"
+  - "RMCAegisSpawner"
+  - "RMCIDCardAegis"
+  - "RMCIDCardAegisIntel"
+  - "RMCTacticalMapTableLarge"
+  - "RMCTacticalMapTableLargeRotated"
+  - "RMCTacticalMapTableLargeSquare"
+  - "RMCTacticalMapTable"
+
+# Unused Upstream Prototypes for Atmos (Use the CMU variants)
+- id: "DeprecatedAtmosUpstreamPrototypes"
+  type: "Blacklist"
+  entityMatchers:
+  - "RMCCanister.*"
+  - "(Air|Portable)Scrubber"
+  - "AtmosDeviceFan(Tiny|Directional)"
+  - "Gas(Pipe(Half|Straight|Fourway|Sensor|Manifold)|Vent(Pump|Scrubber)|Passive(Vent|Gate)|OutletInjector|PressurePump|VolumePump|Valve|Port|DualPortVentPump|Filter|Mixer|ThermoMachine(Heater|Freezer)|MinerOxygen).*"
+  - "(Signal|Pressure)ControlledValve.*"
+  - "HeatExchanger.*"
+  - "SpaceHeater"

@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using Content.Client._CMU14.ZLevels.Core;
+using Content.Client.CMU14.ZLevels.Core;
+using Content.Client.CMU14.ThreeD.Scene; // CMU14
 // CMU14
 using Content.Client._RMC14.Language;
 // RMC14
@@ -22,8 +23,6 @@ using Robust.Shared.IoC;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using Robust.Shared.Player;
-using Robust.Client.Player;
 
 namespace Content.Client.Chat.UI
 {
@@ -33,7 +32,6 @@ namespace Content.Client.Chat.UI
         [Dependency] private IEyeManager _eyeManager = default!;
         [Dependency] private IEntityManager _entityManager = default!;
         [Dependency] protected IConfigurationManager ConfigManager = default!;
-        [Dependency] private IPlayerManager _playerManager = default!;
         private readonly SharedTransformSystem _transformSystem;
         private readonly CMUClientZLevelsSystem _zLevels;
 
@@ -181,7 +179,8 @@ namespace Content.Client.Chat.UI
             }
 
             var zPassOffset = Vector2.Zero;
-            if (xform.MapID != _eyeManager.CurrentEye.Position.MapId &&
+            var firstPerson = _eyeManager.MainViewport as CMU3DSceneControl; // CMU14
+            if (firstPerson is not { FirstPerson: true } && xform.MapID != _eyeManager.CurrentEye.Position.MapId && // CMU14
                 !_zLevels.TryGetSpeechBubbleZOffset(_senderEntity, out zPassOffset, xform))
             {
                 Modulate = Color.White.WithAlpha(0);
@@ -214,6 +213,17 @@ namespace Content.Client.Chat.UI
 
             var lowerCenter = _eyeManager.WorldToScreen(worldPos) / UIScale +
                               GetScreenPositionOffset(_senderEntity, xform);
+            // CMU14: the affine map projection has no entity height or floor information.
+            if (firstPerson is { FirstPerson: true })
+            {
+                if (!firstPerson.TryProjectHead(_senderEntity, baseOffset, out var head))
+                {
+                    Modulate = Color.White.WithAlpha(0);
+                    return;
+                }
+                lowerCenter = head / UIScale + GetScreenPositionOffset(_senderEntity, xform) - (Parent?.GlobalPosition ?? Vector2.Zero);
+            }
+            // CMU14
             var screenPos = lowerCenter - new Vector2(ContentSize.X / 2, ContentSize.Y + _verticalOffsetAchieved);
             // Round to nearest 0.5
             screenPos = (screenPos * 2).Rounded() / 2;
@@ -288,6 +298,7 @@ namespace Content.Client.Chat.UI
             var label = new RichTextLabel
             {
                 MaxWidth = SpeechMaxWidth,
+                OutlineColorOverride = TextOutline.Default.Color,
             };
 
             label.SetMessage(FormatSpeech(message.WrappedMessage, fontColor));
@@ -344,6 +355,7 @@ namespace Content.Client.Chat.UI
                 {
                     MaxWidth = SpeechMaxWidth,
                     StyleClasses = { "bubbleContent" }, // RMC14 The simplified bubble does not have any styles of its own and in order to apply styles to it we mark it in the same way as a regular bubble but it's a dummy, just a marker. damned.
+                    OutlineColorOverride = TextOutline.Default.Color,
                 };
 
                 label.SetMessage(ExtractAndFormatSpeechSubstring(message, "BubbleContent", fontColor));
@@ -365,15 +377,17 @@ namespace Content.Client.Chat.UI
             var bubbleHeader = new RichTextLabel
             {
                 ModulateSelfOverride = Color.White.WithAlpha(ConfigManager.GetCVar(CCVars.SpeechBubbleSpeakerOpacity)),
-                Margin = new Thickness(1, 1, 1, 1),
+                Margin = new Thickness(2, 0, 2, 0),
+                OutlineColorOverride = TextOutline.Default.Color,
             };
 
             var bubbleContent = new RichTextLabel
             {
                 ModulateSelfOverride = Color.White.WithAlpha(ConfigManager.GetCVar(CCVars.SpeechBubbleTextOpacity)),
                 MaxWidth = SpeechMaxWidth,
-                Margin = new Thickness(2, 6, 2, 2),
+                Margin = new Thickness(2, 0, 2, 0),
                 StyleClasses = { "bubbleContent" },
+                OutlineColorOverride = TextOutline.Default.Color,
             };
 
             //We'll be honest. *Yes* this is hacky. Doing this in a cleaner way would require a bottom-up refactor of how saycode handles sending chat messages. -Myr
@@ -405,7 +419,7 @@ namespace Content.Client.Chat.UI
                 ModulateSelfOverride = Color.White.WithAlpha(ConfigManager.GetCVar(CCVars.SpeechBubbleBackgroundOpacity)),
                 HorizontalAlignment = HAlignment.Center,
                 VerticalAlignment = VAlignment.Bottom,
-                Margin = new Thickness(4, 14, 4, 2)
+                Margin = new Thickness(4, 20, 4, 2)
             };
 
             var headerPanel = new PanelContainer

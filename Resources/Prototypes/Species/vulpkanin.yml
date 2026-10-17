@@ -1,0 +1,18 @@
+- type: species
+  id: Vulpkanin
+  name: species-name-vulpkanin
+  roundStart: false # CMU14
+  prototype: RMCMobVulpkanin # CMU14
+  defaultSkinTone: "#985629" # CMU14
+  dollPrototype: AppearanceVulpkanin
+  skinColoration: Hues # CMU14
+  maleFirstNames: RMCNamesVulpkaninMale
+  femaleFirstNames: RMCNamesVulpkaninFemale
+  lastNames: RMCNamesVulpkaninLast
+  defaultSoundsBySex:
+  - RMCMaleVulpkanin
+  - RMCFemaleVulpkanin
+  - RMCMaleVulpkanin
+  voices:
+  - RMCMaleVulpkanin
+  - RMCFemaleVulpkanin

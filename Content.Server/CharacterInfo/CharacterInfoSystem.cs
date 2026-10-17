@@ -1,20 +1,26 @@
 using System.Linq;
+using Content.Server.CMU14.ColonyEconomy; // CMU14: ATM card details in character notes
 using Content.Server.Mind;
 using Content.Server.Roles;
 using Content.Server.Roles.Jobs;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Round;
+using Content.Shared.Access.Components; // CMU14: ATM card details in character notes
 using Content.Shared.Mind;
 using Content.Server.GameTicking;
+using Content.Server.CMU14.Yautja;
 using Content.Shared._RMC14.Rules;
-using Content.Shared.AU14.Util;
-using Content.Shared._CMU14.Threats;
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14.Util;
+using Content.Shared.CMU14.Threats;
+using Content.Shared.CMU14.util;
+
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.CharacterInfo;
 using Content.Shared.Inventory;
 using Content.Shared.Objectives;
 using Content.Shared.Objectives.Components;
 using Content.Shared.Objectives.Systems;
 using Content.Shared.Roles;
+using Content.Shared.Roles.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
@@ -31,6 +37,8 @@ public sealed partial class CharacterInfoSystem : EntitySystem
     [Dependency] private PlatoonSpawnRuleSystem _platoons = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ColonyBankSystem _bank = default!; // CMU14: ATM card details in character notes
+    [Dependency] private YautjaRankManager _yautjaRank = default!;
 
     private (int roundId, string? threatId) _knowledgeKey = (-1, null);
     private string? _roundKnowledgeLine;
@@ -51,10 +59,11 @@ public sealed partial class CharacterInfoSystem : EntitySystem
         var entity = args.SenderSession.AttachedEntity.Value;
 
         var objectives = new Dictionary<string, List<ObjectiveInfo>>();
-        var jobTitle = Loc.GetString("character-info-no-profession");
+        var jobTitle = string.Empty;
         var lorePrimerLines = new List<string>();
         string? jobId = null;
         string? briefing = null;
+        ProtoId<JobPrototype>? job = null;
         if (_minds.TryGetMind(entity, out var mindId, out var mind))
         {
             // Get objectives
@@ -64,15 +73,21 @@ public sealed partial class CharacterInfoSystem : EntitySystem
                 if (info == null)
                     continue;
 
+                if (!ProtoMan.TryIndex(Comp<ObjectiveComponent>(objective).Issuer, out var issuerProto))
+                {
+                    Log.Error($"Found incorrect objective issuer {issuerProto} when generating character info for objective {MetaData(objective).EntityPrototype}.");
+                    continue;
+                }
+
                 // group objectives by their issuer
-                var issuer = Comp<ObjectiveComponent>(objective).LocIssuer;
+                var issuer = issuerProto.LocalizedName;
                 if (!objectives.ContainsKey(issuer))
                     objectives[issuer] = new List<ObjectiveInfo>();
                 objectives[issuer].Add(info.Value);
             }
 
-            if (_jobs.MindTryGetJobName(mindId, out var jobName))
-                jobTitle = jobName;
+            if (_jobs.MindTryGetJob(mindId, out var j))
+                job = j;
 
             if (_jobs.MindTryGetJobId(mindId, out var protoId))
                 jobId = protoId?.Id;
@@ -81,8 +96,19 @@ public sealed partial class CharacterInfoSystem : EntitySystem
             briefing = _roles.MindGetBriefing(mindId);
         }
 
+        // The character info panel must use the server-owned whitelist rank.
+        // A Yautja may be clanless, so the entity's ClanRank is not authoritative here.
+        if (HasComp<YautjaComponent>(entity) && jobId != "CMUYautjaBadBlood")
+        {
+            var youngbloodRole = jobId == "CMUYautjaYoungblood";
+            var rank = _yautjaRank.ResolveCached(args.SenderSession.UserId, youngbloodRole);
+            jobTitle = Loc.GetString(YautjaRankMetadata.For(rank).LocalizedName);
+        }
+
         var isThreatRole = mind != null && IsThreatMind(mind);
         PopulateLorePrimerLines(lorePrimerLines, jobId, isThreatRole);
+        AddCLFStandingOrders(lorePrimerLines, entity);
+        AddAtmCardLines(lorePrimerLines, entity); // CMU14: ATM card details in character notes
 
         // Check inventory and hands for JobTitleChangerComponent
         if (TryComp(entity, out InventoryComponent? _))
@@ -115,7 +141,15 @@ public sealed partial class CharacterInfoSystem : EntitySystem
             }
         }
 
-        RaiseNetworkEvent(new CharacterInfoEvent(GetNetEntity(entity), jobTitle, objectives, briefing, lorePrimerLines), args.SenderSession);
+        RaiseNetworkEvent(
+            new CharacterInfoEvent(
+                GetNetEntity(entity),
+                objectives,
+                briefing,
+                job,
+                jobTitle,
+                lorePrimerLines),
+            args.SenderSession);
     }
 
     private void PopulateLorePrimerLines(List<string> lines, string? jobId, bool isThreatRole)
@@ -252,9 +286,9 @@ public sealed partial class CharacterInfoSystem : EntitySystem
 
         if (selectedPlanet.LorePrimer is { } planetPrimerId &&
             _prototypes.TryIndex(planetPrimerId, out LorePrimerPrototype? primer) &&
-            !string.IsNullOrWhiteSpace(primer.PlanetText))
+            primer.PlanetText is { } planetTextKey) // RuMC edit
         {
-            lines.Add(primer.PlanetText);
+            lines.Add(LocOrText(planetTextKey)); // RuMC edit // cmu edit
             return;
         }
 
@@ -269,23 +303,31 @@ public sealed partial class CharacterInfoSystem : EntitySystem
 
         if (platoon.LorePrimer is { } platoonPrimerId &&
             _prototypes.TryIndex(platoonPrimerId, out LorePrimerPrototype? primer) &&
-            !string.IsNullOrWhiteSpace(primer.PlatoonInfo))
+            // RuMC edit start
+            primer.PlatoonInfo is { } platoonInfoKey)
         {
-            var platoonInfo = primer.PlatoonInfo.Trim();
-            lines.Add(platoonInfo.StartsWith("Platoon:", StringComparison.OrdinalIgnoreCase)
-                ? platoonInfo
-                : $"Platoon: {platoonInfo}");
+            lines.Add(Loc.GetString("lore-primer-platoon-label",
+                ("info", LocOrText(platoonInfoKey)))); // cmu edit
+            // RuMC edit end
             return;
         }
 
         if (!string.IsNullOrWhiteSpace(platoon.Name))
-            lines.Add($"Platoon: {platoon.Name}");
+            lines.Add(Loc.GetString("lore-primer-platoon-label", ("info", Loc.GetString(platoon.Name)))); // CMU14: Hardcode localization
     }
+
+    // cmu edit start
+    /// <summary>Primer fields hold either a locale key or plain text; plain text is shown as-is.</summary>
+    private string LocOrText(string keyOrText)
+    {
+        return Loc.TryGetString(keyOrText, out var text) ? text : keyOrText;
+    }
+    // cmu edit end
 
     private bool IsThreatMind(MindComponent mind)
     {
         // Threat players may keep a previous job role; check all job role entries on the mind.
-        foreach (var roleUid in mind.MindRoles)
+        foreach (var roleUid in mind.MindRoleContainer.ContainedEntities)
         {
             if (!TryComp<MindRoleComponent>(roleUid, out var roleComp))
                 continue;
@@ -301,6 +343,44 @@ public sealed partial class CharacterInfoSystem : EntitySystem
     {
 
         lines.Add("You are aligned with the active threat. Keep your identity and goals in mind.");
+    }
+
+    // CMU14 method
+    /// <summary>
+    ///     Injects ATM account number and PIN into the character notes for
+    ///     ColonyFall and Insurgency gamemodes. Only ever shows this character's own card.
+    ///     Read-only: opening character info never assigns or changes a PIN.
+    /// </summary>
+    private void AddAtmCardLines(List<string> lines, EntityUid entity)
+    {
+        var presetId = (_ticker.CurrentPreset?.ID ?? _ticker.Preset?.ID ?? string.Empty).ToLowerInvariant();
+        if (presetId != "colonyfall" && presetId != "insurgency")
+            return;
+
+        // The card bound to this character (OriginalOwner), wherever it is now, so losing the card
+        // does not lose the details and holding someone else's card never shows theirs.
+        var owned = _bank.FindOwnedCard(entity);
+
+        // A card nobody has claimed yet: fall back to one we carry that has our name printed on it.
+        if (owned == null)
+        {
+            var invSys = EntityManager.System<InventorySystem>();
+            var ownName = Name(entity);
+            foreach (var item in invSys.GetHandOrInventoryEntities(entity))
+            {
+                if (TryComp<IdCardComponent>(item, out var card) && card.OriginalOwner == null && card.FullName == ownName)
+                {
+                    owned = (item, card);
+                    break;
+                }
+            }
+        }
+
+        // Credentials are assigned when the card is created; this only reads them.
+        if (owned is not { } found || found.card.AccountNumber == 0)
+            return;
+
+        lines.Add($"ATM Card: Account #{found.card.AccountNumber}  ·  PIN: {found.card.AtmPin}");
     }
 
 }

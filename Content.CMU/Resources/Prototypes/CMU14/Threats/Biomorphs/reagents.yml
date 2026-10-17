@@ -1,0 +1,70 @@
+# Abomination venom — bloodstream metabolism applies the abomination
+# infection. Same end state as a mimic-melee infection.
+- type: reagent
+  id: BiomorphVenom
+  name: reagent-name-biomorph-venom
+  group: Biological
+  desc: reagent-desc-biomorph-venom
+  physicalDesc: reagent-physical-desc-viscous
+  flavor: bitter
+  color: "#56213a"
+  metabolisms:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
+      effects:
+      - !type:CauseBiomorphInfection
+        probability: 1.0
+      - !type:HealthChange
+        damage:
+          types:
+            Poison: 0.5
+
+# Pre-filled syringe used by mimics / admins / Weyland-Yutani researchers
+# to inject the venom directly. Player-facing name is "clotted syringe"
+# so it doesn't telegraph what it actually is on examine.
+- type: entity
+  parent: BaseSyringe
+  id: AU14BiomorphVenomSyringe
+  name: clotted syringe
+  description: A syringe filled with a viscous, dark fluid that smells like rotted flesh.
+  components:
+  - type: Solution
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: BiomorphVenom
+        Quantity: 15
+  - type: Injector
+
+# WeYu counteragent: the cure the company keeps for its own experiments.
+# Metabolising it purges the abomination infection outright, at any stage.
+# The expensive sure-thing alternative to gambling a limb on emergency
+# amputation; only obtainable through the req-ordered WY experiment crates.
+- type: reagent
+  id: BiomorphCounteragent
+  name: reagent-name-biomorph-counteragent
+  group: Biological
+  desc: reagent-desc-biomorph-counteragent
+  physicalDesc: reagent-physical-desc-opaque
+  flavor: bitter
+  color: "#7fb2a5"
+  metabolisms:
+    Bloodstream:
+      effects:
+      - !type:CureBiomorphInfection
+        probability: 1.0
+
+# Pre-filled counteragent syringe, this pairs with the clotted syringe in the WY experiment crates.
+- type: entity
+  parent: BaseSyringe
+  id: AU14BiomorphCounteragentSyringe
+  name: experimental counteragent syringe
+  description: A syringe of pale, opaque fluid. The label just reads 'COUNTERAGENT - TEST BATCH'.
+  components:
+  - type: Solution
+    solution:
+        maxVol: 15
+        reagents:
+        - ReagentId: BiomorphCounteragent
+          Quantity: 15
+  - type: Injector

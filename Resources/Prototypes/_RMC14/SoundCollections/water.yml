@@ -1,0 +1,31 @@
+- type: soundCollection
+  id: RMCWaterShallowWading
+  files:
+  - /Audio/_RMC14/Effects/Water/shallowwading1.ogg
+  - /Audio/_RMC14/Effects/Water/shallowwading2.ogg
+  - /Audio/_RMC14/Effects/Water/shallowwading3.ogg
+  - /Audio/_RMC14/Effects/Water/shallowwading4.ogg
+  - /Audio/_RMC14/Effects/Water/shallowwading5.ogg
+  - /Audio/_RMC14/Effects/Water/shallowwading6.ogg
+
+- type: soundCollection
+  id: RMCWaterWading
+  files:
+  - /Audio/_RMC14/Effects/Water/wading1.ogg
+  - /Audio/_RMC14/Effects/Water/wading2.ogg
+  - /Audio/_RMC14/Effects/Water/wading3.ogg
+
+- type: soundCollection
+  id: RMCWaterDeepWading
+  files:
+  - /Audio/_RMC14/Effects/Water/deepwading1.ogg
+  - /Audio/_RMC14/Effects/Water/deepwading2.ogg
+  - /Audio/_RMC14/Effects/Water/deepwading3.ogg
+  - /Audio/_RMC14/Effects/Water/deepwading4.ogg
+
+- type: soundCollection
+  id: RMCWaterLargeFootsteps
+  files:
+  - /Audio/_RMC14/Effects/Water/alien_footstep_large_water1.ogg
+  - /Audio/_RMC14/Effects/Water/alien_footstep_large_water2.ogg
+  - /Audio/_RMC14/Effects/Water/alien_footstep_large_water3.ogg

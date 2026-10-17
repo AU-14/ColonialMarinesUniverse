@@ -1,0 +1,100 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobUPPLineCommandoMedic
+  roundSide: ThirdParty
+  roundForce: UPPLine
+  roundRole: UPPLineCommandoMedic
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 2
+  - type: JobPrefix
+    prefix: cmu-uppline-prefix-commando-medic
+  - type: Language
+    spokenLanguages:
+    - Russian
+    - English
+    - Mandarin
+    understoodLanguages:
+    - Russian
+    - English
+    - Mandarin
+    currentLanguage: Russian
+    defaultLanguage: Russian
+  name: cmu-uppline-name-commando-medic
+  description: cmu-uppline-description-commando
+  playTimeTracker: CMUJobUPPLineCommandoMedic
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearUPPLineCommandoMedic
+  spawnMenuRoleName: UPP Naval Infantry Commando Medic (3rd party)
+  greeting: cmu-uppline-greeting
+  icon: RMCJobIconSPPCommandoMedic
+  joinNotifyCrew: false
+  supervisors: cmu-uppline-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPLineCommandoMedic
+  name: UPP Naval Infantry Commando Medic
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPLine
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-uppline-name-commando-medic
+    description: cmu-uppline-description-commando
+    reregister: false
+    job: CMUJobUPPLineCommandoMedic
+    raffle:
+      settings: short
+    rules: cmu-uppline-rules
+
+- type: startingGear
+  id: CMUGearUPPLineCommandoMedic
+  equipment:
+    head: CMHeadCapSPP
+    jumpsuit: CMJumpsuitSPP
+    outerClothing: RMCArmorSPPCommando
+    gloves: RMCHandsVeteranSPP
+    shoes: RMCBootsSPPFilled
+    suitstorage: RMCWeaponRifleType73Filled
+    mask: RMCMaskBalaclavaSPPCommando
+    id: CMUIDCardUPPLineCommandoMedic
+    belt: RMCBeltMedicBagSPPCommandoFilled
+    back: RMCBackpackSPPCommando
+    pocket1: RMCPouchMagazineLarge
+    pocket2: RMCPouchExplosiveFilledPlasticExplosives
+  storage:
+    back:
+    - CMHealthAnalyzer
+    - CMSurgicalLine
+    - CMSynthGraft
+    - CMDefibrillator
+    - CMAdvFirstAidKit
+    - CMCrowbar
+    - RMCMRESPP
+    outerClothing:
+    - RMCHandcuffs
+    - RMCHandcuffs
+    pocket1:
+    - RMCMagazineRifleType71AP
+    - RMCMagazineRifleType71AP
+    - RMCMagazineRifleType71AP
+    - RMCMagazineRifleType71AP
+
+- type: playTimeTracker
+  id: CMUJobUPPLineCommandoMedic

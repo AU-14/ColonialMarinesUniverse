@@ -1,0 +1,93 @@
+- type: entity
+  parent: RMCKitBase
+  id: CMUKitWeaponKramerKarbine
+  name: kramer karbine case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: CMUWeaponRifleKramerKarbine
+        amount: 1
+      - id: AU14WeaponRifleKramerMagazineAP
+        amount: 1
+      - id: AU14WeaponRifleKramerMagazineStandard
+        amount: 8
+
+- type: entity
+  parent: RMCKitBase
+  id: CMUKitWeaponLACNBreacher
+  name: LACN breacher shotgun case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: CMUWeaponShotgunLACNBreacher
+        amount: 1
+      - id: RMCBoxShotgunBuckshot
+        amount: 1
+      - id: RMCBoxShotgunSlugs
+        amount: 1
+
+- type: entity
+  parent: RMCKitBase
+  id: CMUKitWeaponLACNPenta
+  name: LACN Penta shotgun case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: CMUWeaponShotgunLACNPenta
+        amount: 1
+      - id: RMCBoxShotgunBuckshot
+        amount: 1
+      - id: RMCBoxShotgunSlugs
+        amount: 1
+
+- type: entity
+  parent: RMCKitBase
+  id: CMUKitWeaponLACNJudge
+  name: LACN Judge case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: CMUWeaponRevolverLACNJudge
+        amount: 1
+      - id: RMCBoxShotgunBuckshot
+        amount: 1

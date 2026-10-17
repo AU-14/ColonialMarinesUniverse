@@ -2,10 +2,11 @@
 
 import argparse
 import concurrent.futures
-import requests
 import os
 import subprocess
 from typing import Iterable
+
+import requests
 
 PUBLISH_TOKEN = os.environ["PUBLISH_TOKEN"]
 VERSION = os.environ.get("PUBLISH_VERSION") or os.environ["GITHUB_SHA"]
@@ -30,17 +31,44 @@ def main():
         default=int(os.environ.get("PUBLISH_UPLOAD_WORKERS", DEFAULT_UPLOAD_WORKERS)),
         help="Maximum number of release files to upload concurrently.",
     )
+    subparsers = parser.add_subparsers(dest="command")
+    subparsers.add_parser("start", help="Start a publish operation.")
+    upload_parser = subparsers.add_parser(
+        "upload", help="Upload files to an existing publish operation."
+    )
+    upload_parser.add_argument("files", nargs="+")
+    subparsers.add_parser("finish", help="Finish a publish operation.")
 
     args = parser.parse_args()
     fork_id = args.fork_id
     upload_workers = max(1, args.upload_workers)
 
-    session = requests.Session()
-    session.headers.update(
-        {
-            "Authorization": f"Bearer {PUBLISH_TOKEN}",
-        }
-    )
+    if args.command == "start":
+        started = start_publish(fork_id)
+        set_github_output("already-published", str(not started).lower())
+        return
+
+    if args.command == "upload":
+        publish_files(args.files, fork_id, upload_workers)
+        return
+
+    if args.command == "finish":
+        finish_publish(fork_id)
+        return
+
+    if not start_publish(fork_id):
+        return
+
+    files = list(get_files_to_publish())
+    if not files:
+        raise RuntimeError(f"No release files found in {RELEASE_DIR}")
+
+    publish_files(files, fork_id, upload_workers)
+    finish_publish(fork_id)
+
+
+def start_publish(fork_id: str) -> bool:
+    session = create_session()
     print(f"Starting publish on Robust.Cdn for version {VERSION}")
 
     data = {
@@ -58,13 +86,20 @@ def main():
         except Exception:
             msg = resp.text
         print(f"Version {VERSION} already published (CDN: {msg}), skipping...")
-        return
+        return False
     resp.raise_for_status()
-    print("Publish successfully started, adding files...")
+    print("Publish successfully started.")
+    return True
 
-    files = list(get_files_to_publish())
+
+def publish_files(files: Iterable[str], fork_id: str, upload_workers: int):
+    files = list(files)
     if not files:
-        raise RuntimeError(f"No release files found in {RELEASE_DIR}")
+        raise RuntimeError("No files specified for upload")
+
+    for file in files:
+        if not os.path.isfile(file):
+            raise FileNotFoundError(file)
 
     with concurrent.futures.ThreadPoolExecutor(
         max_workers=min(upload_workers, len(files))
@@ -76,8 +111,12 @@ def main():
         for future in concurrent.futures.as_completed(futures):
             future.result()
 
-    print("Successfully pushed files, finishing publish...")
+    print("Successfully pushed files.")
 
+
+def finish_publish(fork_id: str):
+    session = create_session()
+    print(f"Finishing publish on Robust.Cdn for version {VERSION}")
     data = {"version": VERSION}
     headers = {"Content-Type": "application/json"}
     resp = session.post(
@@ -85,6 +124,21 @@ def main():
     )
     resp.raise_for_status()
     print("SUCCESS!")
+
+
+def create_session() -> requests.Session:
+    session = requests.Session()
+    session.headers.update({"Authorization": f"Bearer {PUBLISH_TOKEN}"})
+    return session
+
+
+def set_github_output(name: str, value: str):
+    output_path = os.environ.get("GITHUB_OUTPUT")
+    if output_path is None:
+        return
+
+    with open(output_path, "a", encoding="UTF-8") as output:
+        output.write(f"{name}={value}\n")
 
 
 def get_files_to_publish() -> Iterable[str]:

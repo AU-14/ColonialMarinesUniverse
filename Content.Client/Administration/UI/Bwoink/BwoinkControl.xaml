@@ -6,9 +6,14 @@
     VerticalExpand="True">
     <PanelContainer StyleClasses="BackgroundDark" HorizontalExpand="True" VerticalExpand="True">
         <SplitContainer Orientation="Vertical" ResizeMode="NotResizable" HorizontalExpand="True" VerticalExpand="True">
+            <!-- The MinWidths matter as much as the window's MinSize. This divider is draggable, and
+                 SplitContainer defaults to SplitResizeMode.RespectChildrenMinSize, which clamps it
+                 against each child's DesiredSize - so without a floor here the chat pane can be
+                 dragged down to nothing even in a full-size window, measuring its message labels
+                 narrower than a single word and tripping the engine's word-wrap assert. -->
             <SplitContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
-                <cc:PlayerListControl Access="Public" Name="ChannelSelector" HorizontalExpand="True" VerticalExpand="True" SizeFlagsStretchRatio="2" />
-                <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SizeFlagsStretchRatio="2">
+                <cc:PlayerListControl Access="Public" Name="ChannelSelector" HorizontalExpand="True" VerticalExpand="True" SizeFlagsStretchRatio="2" MinWidth="200" />
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SizeFlagsStretchRatio="2" MinWidth="360">
                     <BoxContainer Access="Public" Name="BwoinkArea" VerticalExpand="True" HorizontalExpand="True" />
                 </BoxContainer>
             </SplitContainer>
@@ -19,8 +24,8 @@
                 <Control HorizontalExpand="True" MinWidth="5" />
                 <Button Visible="True" Name="PopOut" Access="Public" Text="{Loc 'admin-logs-pop-out'}" StyleClasses="OpenBoth" HorizontalAlignment="Left" />
                 <Control HorizontalExpand="True" />
-                <Button Visible="False" Name="Bans" Text="{Loc 'admin-player-actions-bans'}" StyleClasses="OpenRight" />
-                <Button Visible="False" Name="Notes" Text="{Loc 'admin-player-actions-notes'}" StyleClasses="OpenBoth" />
+                <Button Visible="False" Name="PlayerLogs" Text="{Loc 'admin-player-actions-logs'}" StyleClasses="OpenRight" />
+                <Button Visible="False" Access="Public" Name="Notes" Text="{Loc 'admin-player-actions-notes'}" StyleClasses="OpenBoth" />
                 <controls:ConfirmButton Visible="False" Name="Kick" Text="{Loc 'admin-player-actions-kick'}" ConfirmationText="{Loc 'admin-player-actions-confirm'}" StyleClasses="OpenBoth" />
                 <Button Visible="False" Name="Ban" Text="{Loc 'admin-player-actions-ban'}" StyleClasses="OpenBoth" />
                 <controls:ConfirmButton Visible="False" Name="Respawn" Text="{Loc 'admin-player-actions-respawn'}" ConfirmationText="{Loc 'admin-player-actions-confirm'}" StyleClasses="OpenBoth" />

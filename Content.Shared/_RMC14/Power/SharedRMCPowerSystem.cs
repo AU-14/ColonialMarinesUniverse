@@ -1,4 +1,5 @@
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.Power;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Sprite;
@@ -8,6 +9,8 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Access.Components;
 using Content.Shared.Audio;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
@@ -19,6 +22,7 @@ using Content.Shared.Power;
 using Content.Shared.Power.Components;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.PowerCell;
+using Content.Shared.PowerCell.Components;
 using Content.Shared.Stacks;
 using Content.Shared.Toggleable;
 using Content.Shared.Tools.Systems;
@@ -76,6 +80,8 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         _areaQuery = GetEntityQuery<AreaComponent>();
         _powerReceiverQuery = GetEntityQuery<RMCPowerReceiverComponent>();
 
+        InitializeCMUAreaPowerState(); // CMU14: handle stale members without mutating collections during PVS.
+
         SubscribeLocalEvent<RMCApcComponent, ComponentStartup>(OnApcStartup);
         SubscribeLocalEvent<RMCApcComponent, MapInitEvent>(OnApcUpdate);
         SubscribeLocalEvent<RMCApcComponent, EntParentChangedMessage>(OnApcUpdate);
@@ -84,6 +90,8 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         SubscribeLocalEvent<RMCApcComponent, BreakageEventArgs>(OnApcBreakage);
         SubscribeLocalEvent<RMCApcComponent, InteractUsingEvent>(OnApcInteractUsing);
         SubscribeLocalEvent<RMCApcComponent, InteractHandEvent>(OnApcInteractHand);
+        SubscribeLocalEvent<RMCApcComponent, CMUApcCellRemoveDoAfterEvent>(OnApcCellRemoveDoAfter);
+        SubscribeLocalEvent<RMCApcComponent, CMUApcCellInsertDoAfterEvent>(OnApcCellInsertDoAfter);
         SubscribeLocalEvent<RMCApcComponent, ActivatableUIOpenAttemptEvent>(OnApcActivatableUIOpenAttempt);
         SubscribeLocalEvent<RMCApcComponent, ExaminedEvent>(OnApcExamined);
 
@@ -202,7 +210,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         var user = args.User;
         if (!_skills.HasSkill(user, ent.Comp.Skill, ent.Comp.SkillLevel))
         {
-            _popup.PopupClient($"You don't know how to use the {Name(ent)}'s interface.", ent, user, SmallCaution);
+            _popup.PopupEntity($"You don't know how to use the {Name(ent)}'s interface.", ent, user, SmallCaution);
             return;
         }
 
@@ -215,7 +223,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
                 case RMCApcState.WiresExposed:
                     if (ent.Comp.CoverLockedButton)
                     {
-                        _popup.PopupClient("The cover is locked and cannot be opened.", user, user, MediumCaution);
+                        _popup.PopupEntity("The cover is locked and cannot be opened.", user, user, MediumCaution);
                         return;
                     }
 
@@ -236,18 +244,16 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
             }
         }
 
-        if (HasComp<PowerCellComponent>(used) && ent.Comp.State == RMCApcState.CoverOpenNoBattery)
+        if (HasComp<PowerCellComponent>(used) && ent.Comp.State == RMCApcState.CoverOpenNoBattery) // CMU14 Statement
         {
-            var container = _container.EnsureContainer<ContainerSlot>(ent, ent.Comp.CellContainerSlot);
-            _hands.TryDropIntoContainer(user, used, container);
-            if (container.ContainedEntities.Count > 0)
+            var delay = ent.Comp.CellDelay * _skills.GetSkillDelayMultiplier(user, ent.Comp.Skill);
+            var doAfter = new DoAfterArgs(EntityManager, user, delay, new CMUApcCellInsertDoAfterEvent(), ent, used: used)
             {
-                ent.Comp.State = RMCApcState.CoverOpenBattery;
-                Dirty(ent);
-                _appearance.SetData(ent, RMCApcVisualsLayers.Layer, ent.Comp.State);
-                ToUpdate.Add(ent);
-            }
+                BreakOnMove = true,
+                DuplicateCondition = DuplicateConditions.SameEvent,
+            };
 
+            _doAfter.TryStartDoAfter(doAfter);
             return;
         }
 
@@ -281,32 +287,75 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         _appearance.SetData(ent, RMCApcVisualsLayers.Layer, ent.Comp.State);
 
         if (TryComp(ent, out DamageableComponent? damageable))
-            _damageable.SetAllDamage(ent, damageable, FixedPoint2.Zero);
+            _damageable.SetAllDamage((ent.Owner, damageable), FixedPoint2.Zero);
     }
 
-    private void OnApcInteractHand(Entity<RMCApcComponent> ent, ref InteractHandEvent args)
+    private void OnApcInteractHand(Entity<RMCApcComponent> ent, ref InteractHandEvent args) // CMU14 Method
     {
         if (ent.Comp.State != RMCApcState.CoverOpenBattery)
             return;
 
-        if (!_container.TryGetContainer(ent, ent.Comp.CellContainerSlot, out var container))
+        if (!_container.TryGetContainer(ent, ent.Comp.CellContainerSlot, out var container)
+            || container.ContainedEntities.Count == 0)
+            return;
+
+        var delay = ent.Comp.CellDelay * _skills.GetSkillDelayMultiplier(args.User, ent.Comp.Skill);
+        var doAfter = new DoAfterArgs(EntityManager, args.User, delay, new CMUApcCellRemoveDoAfterEvent(), ent)
+        {
+            BreakOnMove = true,
+            DuplicateCondition = DuplicateConditions.SameEvent,
+        };
+
+        _doAfter.TryStartDoAfter(doAfter);
+    }
+
+    private void OnApcCellRemoveDoAfter(Entity<RMCApcComponent> ent, ref CMUApcCellRemoveDoAfterEvent args) // CMU14 Method
+    {
+        if (args.Cancelled || args.Handled)
+            return;
+
+        args.Handled = true;
+
+        if (ent.Comp.State != RMCApcState.CoverOpenBattery
+            || !_container.TryGetContainer(ent, ent.Comp.CellContainerSlot, out var container))
             return;
 
         foreach (var contained in container.ContainedEntities)
         {
-            if (_container.Remove(contained, container))
-            {
-                _hands.TryPickupAnyHand(args.User, contained);
+            if (!_container.Remove(contained, container))
+                continue;
 
-                ent.Comp.State = RMCApcState.CoverOpenNoBattery;
-                ent.Comp.ChargePercentage = 0;
-                Dirty(ent);
+            _hands.TryPickupAnyHand(args.User, contained);
 
-                _appearance.SetData(ent, RMCApcVisualsLayers.Layer, ent.Comp.State);
-                ToUpdate.Add(ent);
-                break;
-            }
+            ent.Comp.State = RMCApcState.CoverOpenNoBattery;
+            ent.Comp.ChargePercentage = 0;
+            Dirty(ent);
+
+            _appearance.SetData(ent, RMCApcVisualsLayers.Layer, ent.Comp.State);
+            ToUpdate.Add(ent);
+            break;
         }
+    }
+
+    private void OnApcCellInsertDoAfter(Entity<RMCApcComponent> ent, ref CMUApcCellInsertDoAfterEvent args) // CMU14
+    {
+        if (args.Cancelled || args.Handled || args.Used is not { } used)
+            return;
+
+        args.Handled = true;
+
+        if (ent.Comp.State != RMCApcState.CoverOpenNoBattery)
+            return;
+
+        var container = _container.EnsureContainer<ContainerSlot>(ent, ent.Comp.CellContainerSlot);
+        if (!_hands.TryDropIntoContainer(args.User, used, container) || container.ContainedEntities.Count == 0)
+            return;
+
+        ent.Comp.State = RMCApcState.CoverOpenBattery;
+        Dirty(ent);
+
+        _appearance.SetData(ent, RMCApcVisualsLayers.Layer, ent.Comp.State);
+        ToUpdate.Add(ent);
     }
 
     private void OnApcActivatableUIOpenAttempt(Entity<RMCApcComponent> ent, ref ActivatableUIOpenAttemptEvent args)
@@ -317,7 +366,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         if (!_skills.HasSkill(args.User, ent.Comp.Skill, ent.Comp.SkillLevel))
         {
             args.Cancel();
-            _popup.PopupClient($"You don't know how to use the {Name(ent)}'s interface.", ent, args.User, SmallCaution);
+            _popup.PopupEntity($"You don't know how to use the {Name(ent)}'s interface.", ent, args.User, SmallCaution);
             return;
         }
 
@@ -359,16 +408,9 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         ToUpdate.Add(ent);
     }
 
+    // CMU14 method: spatial lookup is no longer reliable after detach or during deletion.
     private void OnReceiverRemove<T>(Entity<RMCPowerReceiverComponent> ent, ref T args)
-    {
-        if (!TryGetPowerArea(ent, out var area) ||
-            TerminatingOrDeleted(area))
-        {
-            return;
-        }
-
-        GetAreaReceivers(area, ent.Comp.Channel).Remove(ent);
-    }
+        => RemoveCMUReceiverFromArea(ent);
 
     private void OnFusionReactorMapInit(Entity<RMCFusionReactorComponent> ent, ref MapInitEvent args)
     {
@@ -405,7 +447,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
             if (container.ContainedEntity != null)
             {
                 var msg = Loc.GetString("rmc-fusion-reactor-insert-already-has-cell", ("reactor", ent));
-                _popup.PopupClient(msg, ent, user, SmallCaution);
+                _popup.PopupEntity(msg, ent, user, SmallCaution);
                 return;
             }
 
@@ -420,7 +462,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
             if (_doAfter.TryStartDoAfter(doAfter))
             {
                 var msg = Loc.GetString("rmc-fusion-reactor-insert-start-self", ("cell", used), ("reactor", ent));
-                _popup.PopupClient(msg, ent, user);
+                _popup.PopupEntity(msg, ent, user);
             }
         }
         else if (_tool.HasQuality(used, ent.Comp.CrowbarQuality))
@@ -428,7 +470,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
             if (container.ContainedEntity == null)
             {
                 var msg = Loc.GetString("rmc-fusion-reactor-remove-none", ("reactor", ent));
-                _popup.PopupClient(msg, ent, user, SmallCaution);
+                _popup.PopupEntity(msg, ent, user, SmallCaution);
                 return;
             }
 
@@ -445,7 +487,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
                 var msg = Loc.GetString("rmc-fusion-reactor-remove-start-self",
                     ("cell", container.ContainedEntity.Value),
                     ("reactor", ent));
-                _popup.PopupClient(msg, ent, user);
+                _popup.PopupEntity(msg, ent, user);
             }
         }
         else if (_tool.HasQuality(used, ent.Comp.WeldingQuality))
@@ -488,13 +530,13 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         if (!_container.Insert(used, container))
         {
             msg = Loc.GetString("rmc-fusion-reactor-insert-fail-self", ("cell", used), ("reactor", ent));
-            _popup.PopupClient(msg, ent, user, SmallCaution);
+            _popup.PopupEntity(msg, ent, user, SmallCaution);
             return;
         }
 
         // TODO RMC14 reactor failure
         msg = Loc.GetString("rmc-fusion-reactor-insert-finish-self", ("cell", used), ("reactor", ent));
-        _popup.PopupClient(msg, ent, user);
+        _popup.PopupEntity(msg, ent, user);
 
         UpdateAppearance(ent);
     }
@@ -512,7 +554,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         if (container.ContainedEntity is not { } cell)
         {
             msg = Loc.GetString("rmc-fusion-reactor-remove-none", ("reactor", ent));
-            _popup.PopupClient(msg, ent, user, SmallCaution);
+            _popup.PopupEntity(msg, ent, user, SmallCaution);
             return;
         }
 
@@ -520,7 +562,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
             _hands.TryPickupAnyHand(user, cell);
 
         msg = Loc.GetString("rmc-fusion-reactor-remove-finish-self", ("cell", cell), ("reactor", ent));
-        _popup.PopupClient(msg, ent, user);
+        _popup.PopupEntity(msg, ent, user);
 
         UpdateAppearance(ent);
     }
@@ -556,7 +598,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
 
         if (ent.Comp.State == RMCFusionReactorState.Weld)
         {
-            _popup.PopupClient(Loc.GetString("rmc-fusion-reactor-already-destroyed", ("reactor", ent)), ent, user);
+            _popup.PopupEntity(Loc.GetString("rmc-fusion-reactor-already-destroyed", ("reactor", ent)), ent, user);
             return;
         }
 
@@ -578,7 +620,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
 
         if (ent.Comp.State == RMCFusionReactorState.Weld)
         {
-            _popup.PopupClient(Loc.GetString("rmc-fusion-reactor-already-destroyed", ("reactor", ent)), ent, user);
+            _popup.PopupEntity(Loc.GetString("rmc-fusion-reactor-already-destroyed", ("reactor", ent)), ent, user);
             return;
         }
 
@@ -602,7 +644,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         Dirty(ent);
         UpdateAppearance(ent);
 
-        _popup.PopupClient(Loc.GetString("rmc-fusion-reactor-destroyed", ("reactor", ent)), ent, user, SmallCaution);
+        _popup.PopupEntity(Loc.GetString("rmc-fusion-reactor-destroyed", ("reactor", ent)), ent, user, SmallCaution);
 
         ReactorUpdated(ent);
     }
@@ -658,7 +700,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         // Gen is already full so we can skip the partial stack math below
         if (ent.Comp.Sheets >= ent.Comp.MaxSheets)
         {
-            _popup.PopupClient(Loc.GetString("rmc-portable-generator-fuel-full", ("generator", ent)), ent, user, SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-portable-generator-fuel-full", ("generator", ent)), ent, user, SmallCaution);
             args.Handled = true;
             return;
         }
@@ -667,7 +709,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         if (amount <= 0)
             return;
 
-        _stack.Use(used, amount, stack);
+        _stack.TryUse((used, stack), amount);
         ent.Comp.Sheets += amount;
         Dirty(ent);
 
@@ -675,7 +717,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
             ("amount", amount),
             ("fuel", ent.Comp.FuelName),
             ("generator", ent));
-        _popup.PopupClient(addMsg, ent, user);
+        _popup.PopupEntity(addMsg, ent, user);
 
         args.Handled = true;
     }
@@ -688,7 +730,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         {
             if (_sizeStun.TryGetSize(user, out var size) && size < RMCSizes.Xeno)
             {
-                _popup.PopupClient(Loc.GetString("rmc-portable-generator-xeno-too-small", ("generator", ent)), ent, user, SmallCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-portable-generator-xeno-too-small", ("generator", ent)), ent, user, SmallCaution);
                 args.Handled = true;
                 return;
             }
@@ -726,7 +768,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
             return;
 
         SetPortableGeneratorOn(ent, true);
-        _popup.PopupClient(Loc.GetString("rmc-portable-generator-start-success", ("generator", ent)), ent, args.User);
+        _popup.PopupEntity(Loc.GetString("rmc-portable-generator-start-success", ("generator", ent)), ent, args.User);
     }
 
     private void OnPortableGeneratorExamined(Entity<RMCPortableGeneratorComponent> ent, ref ExaminedEvent args)
@@ -769,7 +811,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
 
         if (!Transform(ent).Anchored)
         {
-            _popup.PopupClient(Loc.GetString("rmc-portable-generator-not-anchored", ("generator", ent)), ent, user, SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-portable-generator-not-anchored", ("generator", ent)), ent, user, SmallCaution);
             return;
         }
 
@@ -806,7 +848,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
                     break;
 
                 var amount = Math.Min(remaining, _stack.GetMaxCount(spawnedStack));
-                _stack.SetCount(spawned, amount, spawnedStack);
+                _stack.SetCount((spawned, spawnedStack), amount);
                 remaining -= amount;
             }
         }
@@ -907,13 +949,13 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         if (ent.Comp.State == RMCFusionReactorState.Working)
         {
             msg = Loc.GetString("rmc-fusion-reactor-repair-not-needed", ("reactor", ent));
-            _popup.PopupClient(msg, ent, user, SmallCaution);
+            _popup.PopupEntity(msg, ent, user, SmallCaution);
             return;
         }
         else if (ent.Comp.State != state)
         {
             msg = Loc.GetString("rmc-fusion-reactor-repair-different-tool", ("reactor", ent));
-            _popup.PopupClient(msg, ent, user, SmallCaution);
+            _popup.PopupEntity(msg, ent, user, SmallCaution);
             return;
         }
 
@@ -940,12 +982,15 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
             return;
 
         msg = Loc.GetString("rmc-fusion-reactor-repair-start-self", ("reactor", ent), ("tool", used));
-        _popup.PopupClient(msg, ent, user);
+        _popup.PopupEntity(msg, ent, user);
     }
 
     private bool TryGetPowerArea(EntityUid ent, out Entity<RMCAreaPowerComponent> areaPower)
     {
         areaPower = default;
+        if (Transform(ent).MapUid is { } map && HasComp<CMUMapUsesTilePowerComponent>(map)) // CMU14
+            return false;
+
         if (!_area.TryGetArea(ent, out var area, out _))
             return false;
 
@@ -1197,12 +1242,10 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
 
                 if (_powerReceiverQuery.TryComp(update, out var receiver))
                 {
-                    if (_areaPowerQuery.TryComp(receiver.Area, out var oldArea))
-                    {
-                        GetAreaReceivers((receiver.Area.Value, oldArea), receiver.Channel).Remove(update);
-                        oldArea.Load[(int) receiver.Channel] -= receiver.LastLoad;
-                        Dirty(update, receiver);
-                    }
+                    // CMU14 Begin: update old membership/load once and notify clients of the old area.
+                    RemoveCMUReceiverFromArea((update, receiver));
+                    Dirty(update, receiver);
+                    // CMU14 End
                 }
 
                 if (!TryGetPowerArea(update, out var area))

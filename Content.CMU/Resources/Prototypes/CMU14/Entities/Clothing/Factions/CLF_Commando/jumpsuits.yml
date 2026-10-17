@@ -1,0 +1,38 @@
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: CMU14FatiguesCLFCommando
+  suffix: CLF
+  name: Colonial Liberation Front Combat Clothes
+  description: A stylish Brown-Green mix of Hunting and Sports Clothes - standard issue for Frontier colonists. This version appears to have the symbol of the Colonial Liberation Front emblazoned in select areas.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/CLF_Commandos/clfspec.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - RMCPatchCLF
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: CMU14FatiguesCLFCommandoMedic
+  suffix: CLF
+  name: Colonial Liberation Front Medic Clothes
+  description: A stylish Light Blue-White mix of Hunting and Sports Clothes - standard issue for Frontier colonists. This version appears to have the symbol of the Colonial Liberation Front emblazoned in select areas.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/CLF_Commandos/clfspecmed.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - RMCPatchCLF
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: CMU14FatiguesCLFCommandoLeader
+  suffix: CLF
+  name: Colonial Liberation Front Clothes
+  description: A stylish Dark blue mix of Military Clothes - standard issue for Frontier colonists. This version appears to have the symbol of the Colonial Liberation Front emblazoned in select areas, shows the rank of the leaders on the shoulder
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/CLF_Commandos/clfspeclead.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - RMCPatchCLF

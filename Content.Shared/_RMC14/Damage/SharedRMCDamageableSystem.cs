@@ -15,6 +15,8 @@ using Content.Shared.Armor;
 using Content.Shared.Blocking;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Inventory;
@@ -38,7 +40,9 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Shared.Containers.ItemSlots;
-using Content.Shared._CMU14.GasMask;
+using Content.Shared.CMU14.GasMask;
+using Content.Shared.CMU14.Yautja;
+using Content.Shared._RMC14.Smoke;
 using Content.Shared.Storage;
 using Robust.Shared.Containers;
 
@@ -66,6 +70,8 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
     [Dependency] private SharedContainerSystem _con = default!;
     [Dependency] private ItemSlotsSystem _itemSlot = default!;
     [Dependency] private SharedGasMaskSystem _mask = default!;
+
+    private readonly List<(EntityUid, UserDamageOverTimeComponent)> _damagedUsers = new(); // CMU14
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
@@ -203,18 +209,29 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
 
     private void OnMultiplierFlagsDamageModify(Entity<DamageMultiplierFlagsComponent> ent, ref DamageModifyEvent args)
     {
-        if (!_damageableQuery.HasComp(ent) ||
-            !TryComp(args.Tool, out DamageMultipliersComponent? multComponent))
-        {
+        if (!_damageableQuery.HasComp(ent))
             return;
+
+        if (TryComp(args.Tool, out DamageMultipliersComponent? multComponent))
+        {
+            foreach (var flag in multComponent.Multipliers.Keys)
+            {
+                if ((ent.Comp.Flags & flag) == DamageMultiplierFlag.None)
+                    continue;
+
+                args.Damage *= multComponent.Multipliers[flag];
+            }
         }
 
-        foreach (var flag in multComponent.Multipliers.Keys)
+        if (TryComp(args.Tool, out DamageBoostsComponent? boostComponent))
         {
-            if ((ent.Comp.Flags & flag) == DamageMultiplierFlag.None)
-                continue;
+            foreach (var boost in boostComponent.Boosts)
+            {
+                if ((ent.Comp.Flags & boost.Flags) == DamageMultiplierFlag.None)
+                    continue;
 
-            args.Damage *= multComponent.Multipliers[flag];
+                args.Damage += boost.Damage;
+            }
         }
     }
 
@@ -235,8 +252,11 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
             return;
         }
 
-        if (damageable.TotalDamage >= ent.Comp.Max && args.Damage.GetTotal() > FixedPoint2.Zero)
+        if (_damageable.GetTotalDamage((ent.Owner, damageable)) >= ent.Comp.Max &&
+            args.Damage.GetTotal() > FixedPoint2.Zero)
+        {
             args.Cancelled = true;
+        }
     }
 
     private void OnMaxDamageModify(Entity<MaxDamageComponent> ent, ref DamageModifyEvent args)
@@ -245,10 +265,22 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
             return;
 
         var modifyTotal = args.Damage.GetTotal();
-        if (modifyTotal <= FixedPoint2.Zero || damageable.TotalDamage + modifyTotal <= ent.Comp.Max)
+        // Structural blast damage cannot consume a human's remaining damage budget.
+        // Injurable discards unsupported types when committing the damage.
+        if (TryComp<InjurableComponent>(ent, out var injurable))
+        {
+            modifyTotal = FixedPoint2.Zero;
+            foreach (var (type, amount) in args.Damage.DamageDict)
+            {
+                if (_damageable.CanBeDamagedBy((ent.Owner, injurable), type))
+                    modifyTotal += amount;
+            }
+        }
+        var totalDamage = _damageable.GetTotalDamage((ent.Owner, damageable));
+        if (modifyTotal <= FixedPoint2.Zero || totalDamage + modifyTotal <= ent.Comp.Max)
             return;
 
-        var remaining = ent.Comp.Max - damageable.TotalDamage;
+        var remaining = ent.Comp.Max - totalDamage;
         if (ent.Comp.Max <= FixedPoint2.Zero)
         {
             args.Damage *= 0;
@@ -339,7 +371,7 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
     {
         if (_mobThresholds.TryGetDeadThreshold(ent.Owner, out var mobThreshold) && TryComp<DamageableComponent>(ent, out var damageable))
         {
-            var lethalAmountOfDamage = mobThreshold.Value - damageable.TotalDamage;
+            var lethalAmountOfDamage = mobThreshold.Value - _damageable.GetTotalDamage((ent.Owner, damageable));
             var type = _prototypes.Index<DamageTypePrototype>(LethalDamageType);
             var damage = new DamageSpecifier(type, lethalAmountOfDamage);
             _damageable.TryChangeDamage(ent.Owner, damage, true);
@@ -373,10 +405,11 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
         if (!_prototypes.TryIndex(groupId, out var group))
             return equal;
 
+        var currentDamage = _damageable.GetAllDamage(damageable);
         _types.Clear();
         foreach (var type in group.DamageTypes)
         {
-            if (damageable.Comp.Damage.DamageDict.TryGetValue(type, out var current) &&
+            if (currentDamage.DamageDict.TryGetValue(type, out var current) &&
                 current > FixedPoint2.Zero)
             {
                 _types.Add(type);
@@ -392,7 +425,7 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
             for (var i = _types.Count - 1; i >= 0; i--)
             {
                 var type = _types[i];
-                var current = damageable.Comp.Damage.DamageDict[type];
+                var current = currentDamage.DamageDict[type];
 
                 var existingHeal = add ? -damage.GetValueOrDefault(type) : damage.GetValueOrDefault(type);
                 left += existingHeal;
@@ -512,6 +545,17 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
         _damageable.TryChangeDamage(target, damageBase, ignoreResistances);
     }
 
+    // CMU14 method
+    private static DamageSpecifier WithoutInhaledDamage(DamageSpecifier damage)
+    {
+        if (!damage.DamageDict.ContainsKey(LethalDamageType))
+            return damage;
+
+        var filtered = new DamageSpecifier(damage);
+        filtered.DamageDict.Remove(LethalDamageType);
+        return filtered;
+    }
+
     public virtual bool TryGetDestroyedAt(EntityUid destructible, [NotNullWhen(true)] out FixedPoint2? destroyed)
     {
         // TODO RMC14
@@ -524,9 +568,10 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
         if (!_damageableQuery.Resolve(damageable, ref damageable.Comp, false))
             return false;
 
+        var currentDamage = _damageable.GetAllDamage(damageable);
         foreach (var (type, _) in damage.DamageDict)
         {
-            if (damageable.Comp.Damage.DamageDict.TryGetValue(type, out var healValue) &&
+            if (currentDamage.DamageDict.TryGetValue(type, out var healValue) &&
                 healValue > FixedPoint2.Zero)
             {
                 return true;
@@ -630,8 +675,14 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
             }
         }
 
+        // CMU14: DoDamage can kill entities and mutate this component set through death
+        // hooks, which invalidates the live enumerator mid-scan. Iterate a snapshot.
+        _damagedUsers.Clear();
         var userDamageOverTimeQuery = EntityQueryEnumerator<UserDamageOverTimeComponent>();
         while (userDamageOverTimeQuery.MoveNext(out var user, out var userDamage))
+            _damagedUsers.Add((user, userDamage));
+
+        foreach (var (user, userDamage) in _damagedUsers)
         {
             if (time < userDamage.NextDamageAt)
                 continue;
@@ -694,6 +745,14 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
 
                 userDamage.NextDamageAt = time + userDamage.DamageEvery;
 
+                // CMU14: internals keep out the same gases a filter does, but only hold neurotoxin out for a while per exposure.
+                var internalsSealed = _mask.IsBreathingInternals(user);
+                if (internalsSealed && TryComp<GasMaskFilterDamageComponent>(contact, out var internalsDamage) && internalsDamage.Neurotoxin)
+                    internalsSealed = _mask.TryBlockNeurotoxinWithInternals(user);
+
+                if (internalsSealed && HasComp<GasMaskFilterDamageComponent>(contact))
+                    continue;
+
                 //this is horrible
                 if (TryComp<ContainerManagerComponent>(user, out var uinv))
                 {
@@ -706,7 +765,7 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
                             foreach (var item in mask.ContainedEntities)
                             {
                                 if (TryComp<ItemSlotsComponent>(item, out var islot) &&
-                                    _itemSlot.TryGetSlot(item, "filter", out var slot, islot) &&
+                                    _itemSlot.TryGetSlot((item, islot), "filter", out var slot) &&
                                     slot.ContainerSlot is not null && slot.ContainerSlot.ContainedEntity is not null &&
                                     TryComp<GasMaskFilterComponent>(slot.ContainerSlot.ContainedEntity.Value, out var filt))
                                 {
@@ -734,7 +793,7 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
                                     foreach (var aitem in hslot.Container.ContainedEntities)
                                     {
                                         if (TryComp<ItemSlotsComponent>(aitem, out var islot) &&
-                                            _itemSlot.TryGetSlot(aitem, "filter", out var slot, islot) &&
+                                            _itemSlot.TryGetSlot((aitem, islot), "filter", out var slot) &&
                                             slot.ContainerSlot is not null && slot.ContainerSlot.ContainedEntity is not null &&
                                             TryComp<GasMaskFilterComponent>
                                             (slot.ContainerSlot.ContainedEntity.Value, out var filt))
@@ -756,20 +815,33 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
                         continue;
                 }
 
+                if (HasComp<YautjaComponent>(user) &&
+                    HasComp<EvenSmokeComponent>(contact) &&
+                    _random.Prob(0.75f))
+                {
+                    continue;
+                }
+
+                // CMU14 Begin: internals keep smoke out of the lungs, so only the burn on the skin gets through
+                var sealedLungs = HasComp<EvenSmokeComponent>(contact) && internalsSealed;
+
                 if (damage.Damage != null)
-                    DoDamage((contact, damage), user, damage.Damage);
+                    DoDamage((contact, damage), user, sealedLungs ? WithoutInhaledDamage(damage.Damage) : damage.Damage);
 
                 if (damage.ArmorPiercingDamage != null)
-                    DoDamage((contact, damage), user, damage.ArmorPiercingDamage, true, acidic: damage.Acidic);
+                    DoDamage((contact, damage), user, sealedLungs ? WithoutInhaledDamage(damage.ArmorPiercingDamage) : damage.ArmorPiercingDamage, true, acidic: damage.Acidic);
 
-                if (damage.Emotes is { Count: > 0 } emotes)
+                if (!sealedLungs && damage.Emotes is { Count: > 0 } emotes)
                 {
                     var emote = _random.Pick(emotes);
                     DoEmote(user, emote);
                 }
 
-                if (damage.Popup is { } popup && _random.Prob(0.5f))
+                if (sealedLungs && _random.Prob(0.5f))
+                    _popup.PopupEntity(Loc.GetString("cmu-smoke-internals-acid-burns"), user, user, PopupType.SmallCaution);
+                else if (!sealedLungs && damage.Popup is { } popup && _random.Prob(0.5f))
                     _popup.PopupEntity(popup, user, user, PopupType.SmallCaution);
+                // CMU14 End
 
                 _audio.PlayPvs(damage.Sound, user);
 

@@ -26,4 +26,7 @@ public sealed partial class TacticalMapAlwaysVisibleComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool VisibleToClf = false;
+
+    [DataField, AutoNetworkedField]
+    public bool VisibleToYautja = false;
 }

@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Client._RMC14.LinkAccount;
+using Content.Client.Body;
 using Content.Client.Guidebook;
-using Content.Client.Humanoid;
 using Content.Client.Inventory;
 using Content.Client.Lobby.UI;
 using Content.Client.Players.PlayTimeTracking;
 using Content.Shared._RMC14.Armor;
-using Content.Shared.AU14.Allegiance;
-using Content.Shared.AU14.Origin;
-using Content.Shared._CMU14.Threats;
+using Content.Shared.CMU14.Allegiance;
+using Content.Shared.CMU14.Origin;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
 using Content.Shared.GameTicking;
@@ -48,7 +48,8 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
     [Dependency] private JobRequirementsManager _requirements = default!;
     [Dependency] private MarkingManager _markings = default!;
     [Dependency] private LinkAccountManager _linkAccount = default!;
-    [UISystemDependency] private HumanoidAppearanceSystem _humanoid = default!;
+    [UISystemDependency] private VisualBodySystem _visualBody = default!;
+    [UISystemDependency] private HumanoidProfileSystem _humanoidProfile = default!;
     [UISystemDependency] private ClientInventorySystem _inventory = default!;
     [UISystemDependency] private GuidebookSystem _guide = default!;
     [UISystemDependency] private CMArmorSystem _armorSystem = default!;
@@ -88,6 +89,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         });
 
         _configurationManager.OnValueChanged(CCVars.GameRoleTimers, _ => RefreshProfileEditor());
+        _configurationManager.OnValueChanged(CCVars.GameRoleLoadoutTimers, _ => RefreshProfileEditor());
 
         _configurationManager.OnValueChanged(CCVars.GameRoleWhitelist, _ => RefreshProfileEditor());
 
@@ -183,6 +185,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
     public void OnStateExited(LobbyState state)
     {
         PreviewPanel?.SetLoaded(false);
+        _characterSetup?.Shutdown();
         _profileEditor?.Orphan();
         _characterSetup?.Orphan();
 
@@ -228,8 +231,8 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
 
         if (character is not HumanoidCharacterProfile humanoid)
         {
-            PreviewPanel.SetSprite(EntityUid.Invalid);
-            PreviewPanel.SetSummaryText(string.Empty);
+            PreviewPanel.ProfilePreviewSpriteView.ClearPreview();
+            PreviewPanel.SetSummaryText(string.Empty, string.Empty);
             PreviewPanel.SetJobText(string.Empty);
             _lobbyPreviewJobIndex = 0;
             _lobbyPreviewJobTimer = 0;
@@ -243,7 +246,14 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         var entry = GetCurrentLobbyPreviewJob(humanoid);
         var dummy = LoadProfileEntity(humanoid, entry?.Job, true);
         PreviewPanel.SetSprite(dummy);
-        PreviewPanel.SetSummaryText(humanoid.Summary);
+        // Built here rather than using humanoid.Summary so the name, pronoun and age can be
+        // coloured individually; Summary is a single plain string shared with other UI.
+        PreviewPanel.SetSummaryText(
+            Loc.GetString("lobby-character-summary-name", ("name", humanoid.Name)),
+            Loc.GetString(
+                "lobby-character-summary-age",
+                ("gender", humanoid.Gender.ToString().ToLowerInvariant()),
+                ("age", humanoid.Age)));
         PreviewPanel.SetJobText(entry?.DisplayName ?? string.Empty);
     }
 
@@ -536,58 +546,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         if (!_inventory.TryGetSlots(dummy, out var slots))
             return;
 
-        // Apply loadout
-        var (key, _) = LoadoutSystem.GetJobLoadoutInfo(job.ID, _prototypeManager);
-        if (profile.Loadouts.TryGetValue(key, out var jobLoadout))
-        {
-            foreach (var loadouts in jobLoadout.SelectedLoadouts.Values)
-            {
-                foreach (var loadout in loadouts)
-                {
-                    if (!_prototypeManager.TryIndex(loadout.Prototype, out var loadoutProto))
-                        continue;
-
-                    // TODO: Need some way to apply starting gear to an entity and replace existing stuff coz holy fucking shit dude.
-                    foreach (var slot in slots)
-                    {
-                        // Try startinggear first
-                        if (_prototypeManager.TryIndex(loadoutProto.StartingGear, out var loadoutGear))
-                        {
-                            var itemType = ((IEquipmentLoadout)loadoutGear).GetGear(slot.Name);
-
-                            if (_inventory.TryUnequip(dummy, slot.Name, out var unequippedItem, silent: true, force: true, reparent: false))
-                            {
-                                EntityManager.DeleteEntity(unequippedItem.Value);
-                            }
-
-                            if (itemType != string.Empty)
-                            {
-                                var item = EntityManager.SpawnEntity(itemType, MapCoordinates.Nullspace);
-                                MarkPreviewEntity(item);
-                                _inventory.TryEquip(dummy, item, slot.Name, true, true);
-                            }
-                        }
-                        else
-                        {
-                            var itemType = ((IEquipmentLoadout)loadoutProto).GetGear(slot.Name);
-
-                            if (_inventory.TryUnequip(dummy, slot.Name, out var unequippedItem, silent: true, force: true, reparent: false))
-                            {
-                                EntityManager.DeleteEntity(unequippedItem.Value);
-                            }
-
-                            if (itemType != string.Empty)
-                            {
-                                var item = EntityManager.SpawnEntity(itemType, MapCoordinates.Nullspace);
-                                MarkPreviewEntity(item);
-                                _inventory.TryEquip(dummy, item, slot.Name, true, true);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
+        // CMU14: apply base clothing once; the caller then overlays the selected loadout.
         if (!_prototypeManager.TryIndex(job.StartingGear, out var gear))
             return;
 
@@ -646,7 +605,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
             // Special type like borg or AI, do not spawn a human just spawn the entity.
             dummyEnt = EntityManager.SpawnEntity(previewEntity, MapCoordinates.Nullspace);
             MarkPreviewEntity(dummyEnt);
-            return dummyEnt;
+            // CMU14: custom job bodies must also display their selected loadout below.
         }
         else if (humanoid is not null)
         {
@@ -656,11 +615,15 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         }
         else
         {
-            dummyEnt = EntityManager.SpawnEntity(_prototypeManager.Index<SpeciesPrototype>(SharedHumanoidAppearanceSystem.DefaultSpecies).DollPrototype, MapCoordinates.Nullspace);
+            dummyEnt = EntityManager.SpawnEntity(_prototypeManager.Index<SpeciesPrototype>(HumanoidCharacterProfile.DefaultSpecies).DollPrototype, MapCoordinates.Nullspace);
             MarkPreviewEntity(dummyEnt);
         }
 
-        _humanoid.LoadProfile(dummyEnt, humanoid);
+        if (humanoid is not null && previewEntity == null) // CMU14: retain the custom body's appearance.
+        {
+            _visualBody.ApplyProfileTo(dummyEnt, humanoid);
+            _humanoidProfile.ApplyProfileTo(dummyEnt, humanoid);
+        }
 
         if (humanoid != null && jobClothes)
         {

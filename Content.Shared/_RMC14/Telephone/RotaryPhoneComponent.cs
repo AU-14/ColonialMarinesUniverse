@@ -10,7 +10,7 @@ namespace Content.Shared._RMC14.Telephone;
 public sealed partial class RotaryPhoneComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public string Category = "Almayer";
+    public string Category = "Warship"; // CMU14
 
     [DataField, AutoNetworkedField]
     public bool CanDnd;

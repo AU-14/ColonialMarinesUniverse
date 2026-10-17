@@ -7,7 +7,6 @@ using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Projectile;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
-using Content.Shared.Explosion.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
@@ -15,6 +14,8 @@ using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
+using Content.Shared.Trigger.Systems;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Whitelist;
@@ -23,6 +24,7 @@ using Robust.Shared.Maths;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random; // CMU14: cloak malfunction flicker rolls
 using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Armor.ThermalCloak;
@@ -34,10 +36,11 @@ public sealed partial class ThermalCloakSystem : EntitySystem
 {
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedHumanoidAppearanceSystem _humanoidSystem = default!;
+    [Dependency] private SharedHideableHumanoidLayersSystem _humanoidLayers = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!; // CMU14: cloak malfunction flicker
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private EntityWhitelistSystem _whitelist = default!;
     [Dependency] private INetManager _net = default!;
@@ -57,7 +60,8 @@ public sealed partial class ThermalCloakSystem : EntitySystem
         SubscribeLocalEvent<EntityActiveInvisibleComponent, XenoParasiteInfectEvent>(OnParasiteInfect);
 
         SubscribeLocalEvent<GunComponent, AttemptShootEvent>(OnAttemptShoot);
-        SubscribeLocalEvent<CancelUseWithCloakComponent, UseInHandEvent>(OnTimerUse, before: [typeof(SharedTriggerSystem)]);
+        SubscribeLocalEvent<CancelUseWithCloakComponent, UseInHandEvent>(OnTimerUse,
+            before: [typeof(TriggerSystem), typeof(TriggerOnIgniterUseSystem)]);
         SubscribeLocalEvent<UncloakOnHitComponent, ProjectileHitEvent>(OnAcidProjectile);
     }
 
@@ -71,7 +75,17 @@ public sealed partial class ThermalCloakSystem : EntitySystem
         {
             var isMoving = physics.LinearVelocity.LengthSquared() > 0.01f;
             var target = isMoving ? cloakUser.MovingOpacity : cloakUser.Opacity;
-            var delta = MathF.Min(cloakUser.LerpSpeed * frameTime, MathF.Abs(target - cloakUser.CurrentOpacity));
+            // CMU14: rain malfunction flicker. Malfunction is set by YautjaCloakSystem on rain-exposed tiles.
+            // Target opacity spikes toward visible and the lerp runs faster so it reads as static.
+            var lerpSpeed = cloakUser.LerpSpeed;
+            if (cloakUser.Malfunction)
+            {
+                if (_random.Prob(0.35f))
+                    target = _random.NextFloat(0.4f, 1.0f);
+                lerpSpeed = 4f;
+            }
+
+            var delta = MathF.Min(lerpSpeed * frameTime, MathF.Abs(target - cloakUser.CurrentOpacity)); // CMU14: lerpSpeed covers the flicker rate
             var newOpacity = cloakUser.CurrentOpacity + MathF.Sign(target - cloakUser.CurrentOpacity) * delta;
 
             if (!MathHelper.CloseToPercent(newOpacity, cloakUser.CurrentOpacity))
@@ -105,7 +119,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
         if (!_whitelist.IsWhitelistPass(ent.Comp.Whitelist, args.Performer))
         {
             var popup = Loc.GetString("cm-gun-unskilled", ("gun", ent.Owner));
-            _popup.PopupClient(popup, args.Performer, args.Performer, PopupType.SmallCaution);
+            _popup.PopupEntity(popup, args.Performer, args.Performer, PopupType.SmallCaution);
             return;
         }
 
@@ -120,10 +134,10 @@ public sealed partial class ThermalCloakSystem : EntitySystem
         if (!_inventory.InSlotWithFlags((ent, null, null), SlotFlags.BACK))
             return;
 
-        var comp = EnsureComp<EntityTurnInvisibleComponent>(args.Equipee);
+        var comp = EnsureComp<EntityTurnInvisibleComponent>(args.EquipTarget);
         comp.RestrictWeapons = ent.Comp.RestrictWeapons;
         comp.UncloakWeaponLock = ent.Comp.UncloakWeaponLock;
-        Dirty(args.Equipee, comp);
+        Dirty(args.EquipTarget, comp);
     }
 
     private void OnUnequipped(Entity<ThermalCloakComponent> ent, ref GotUnequippedEvent args)
@@ -134,8 +148,8 @@ public sealed partial class ThermalCloakSystem : EntitySystem
         if (_inventory.InSlotWithFlags((ent, null, null), SlotFlags.BACK))
             return;
 
-        SetInvisibility(ent, args.Equipee, false, false);
-        RemCompDeferred<EntityTurnInvisibleComponent>(args.Equipee);
+        SetInvisibility(ent, args.EquipTarget, false, false);
+        RemCompDeferred<EntityTurnInvisibleComponent>(args.EquipTarget);
     }
 
     public void SetInvisibility(Entity<ThermalCloakComponent> ent, EntityUid user, bool enabling, bool forced)
@@ -171,7 +185,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
             SpawnCloakEffects(user, ent.Comp.CloakEffect);
 
             var popupOthers = Loc.GetString("rmc-cloak-activate-others", ("user", user));
-            _popup.PopupPredicted(Loc.GetString("rmc-cloak-activate-self"), popupOthers, user, user, PopupType.Medium);
+            _popup.PopupEntity(Loc.GetString("rmc-cloak-activate-self"), popupOthers, user, user, PopupType.Medium);
 
             if (_net.IsServer)
                 _audio.PlayPvs(ent.Comp.CloakSound, user);
@@ -200,7 +214,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
                 turnInvisible.UncloakTime = _timing.CurTime;
 
                 var forcedPopupOthers = Loc.GetString("rmc-cloak-forced-deactivate-others", ("user", user));
-                _popup.PopupPredicted(Loc.GetString("rmc-cloak-forced-deactivate-self"), forcedPopupOthers, user, user, PopupType.Medium);
+                _popup.PopupEntity(Loc.GetString("rmc-cloak-forced-deactivate-self"), forcedPopupOthers, user, user, PopupType.Medium);
             }
             else
             {
@@ -213,7 +227,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
 
                 turnInvisible.UncloakTime = _timing.CurTime;
                 var popupOthers = Loc.GetString("rmc-cloak-deactivate-others", ("user", user));
-                _popup.PopupPredicted(Loc.GetString("rmc-cloak-deactivate-self"), popupOthers, user, user, PopupType.Medium);
+                _popup.PopupEntity(Loc.GetString("rmc-cloak-deactivate-self"), popupOthers, user, user, PopupType.Medium);
             }
 
             ToggleLayers(user, ent.Comp.CloakedHideLayers, true);
@@ -245,12 +259,14 @@ public sealed partial class ThermalCloakSystem : EntitySystem
         if (args.Cancelled || !TryComp<EntityTurnInvisibleComponent>(args.User, out var comp))
             return;
 
-        if (comp.RestrictWeapons && comp.Enabled || comp.UncloakTime + comp.UncloakWeaponLock > _timing.CurTime)
+        var isYautjaCaster = HasComp<YautjaComponent>(args.User) && HasComp<YautjaCasterComponent>(ent.Owner);
+        if ((!isYautjaCaster && comp.RestrictWeapons && comp.Enabled) ||
+            comp.UncloakTime + comp.UncloakWeaponLock > _timing.CurTime)
         {
             args.Cancelled = true;
 
             var popup = Loc.GetString("rmc-cloak-attempt-shoot");
-            _popup.PopupClient(popup, args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(popup, args.User, args.User, PopupType.SmallCaution);
         }
     }
 
@@ -264,7 +280,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
             args.Handled = true;
 
             var popup = Loc.GetString(ent.Comp.CancelMessage);
-            _popup.PopupClient(popup, args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(popup, args.User, args.User, PopupType.SmallCaution);
         }
     }
 
@@ -312,7 +328,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
     {
         foreach (HumanoidVisualLayers layer in layers)
         {
-            _humanoidSystem.SetLayerVisibility(equipee, layer, showLayers);
+            _humanoidLayers.SetPermanentLayerOcclusion(equipee, layer, !showLayers);
         }
     }
 

@@ -1,0 +1,51 @@
+- type: accessLevel
+  id: AU14AccessGovfor
+  name: cmu-access-govfor
+
+- type: accessLevel
+  id: AU14AccessGovforSquad
+  name: cmu-access-govfor-squad
+
+- type: accessLevel
+  id: AU14AccessGovforSquadWeaponsSpecialist
+  name: cmu-access-govfor-squad-weapons-specialist
+
+- type: accessLevel
+  id: AU14AccessGovforCommand
+  name: cmu-access-govfor-command
+
+- type: accessLevel
+  id: AU14AccessGovforSecurity
+  name: cmu-access-govfor-security
+
+- type: accessLevel
+  id: AU14AccessGovforMedical
+  name: cmu-access-govfor-medical
+
+- type: accessLevel
+  id: AU14AccessGovforEngineering
+  name: cmu-access-govfor-engineering
+
+- type: accessLevel
+  id: AU14AccessGovforFTL
+  name: cmu-access-govfor-squad-leader
+
+- type: accessLevel
+  id: AU14AccessGovforGunner
+  name: cmu-access-govfor-gunner
+
+- type: accessLevel
+  id: AU14AccessGovforPilot
+  name: cmu-access-govfor-pilot
+
+- type: accessLevel
+  id: AU14AccessGovforJuniorOfficer
+  name: cmu-access-staff-officer
+
+- type: accessLevel
+  id: AU14AccessGovforReq
+  name: cmu-access-govfor-requisitions
+
+- type: accessLevel
+  id: AU14AccessGovforVehicleCrew
+  name: cmu-access-govfor-vehicle-crew

@@ -13,6 +13,7 @@ public record struct SpreadNeighborsEvent
 {
     public ValueList<(MapGridComponent Grid, TileRef Tile)> NeighborFreeTiles;
     public ValueList<EntityUid> Neighbors;
+    public ValueList<EntityCoordinates> NeighborFreeCoordinates; // CMU14: air without a terrain grid.
 
     /// <summary>
     /// How many updates allowed are remaining.

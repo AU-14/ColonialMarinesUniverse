@@ -1,0 +1,70 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobParamarinePilot
+  roundSide: ThirdParty
+  roundForce: CMUParamarines
+  roundRole: ParamarinePilot
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_marksman
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillPilot: 3
+  - type: JobPrefix
+    prefix: cmu-paramarines-prefix-pilot
+  - type: Language
+    spokenLanguages:
+    - English
+    understoodLanguages:
+    - English
+    currentLanguage: English
+    defaultLanguage: English
+  name: cmu-paramarines-name-pilot
+  description: cmu-paramarines-description
+  playTimeTracker: CMUJobParamarinePilot
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearParamarinePilot
+  spawnMenuRoleName: TWE Royal Paramarine Pilot (3rd party)
+  greeting: cmu-paramarines-greeting
+  icon: RMCJobIconParaPilot
+  joinNotifyCrew: false
+  supervisors: cmu-paramarines-commander
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesParamarines
+  id: CMUJobParamarinePilot
+  name: TWE Royal Paramarine Pilot
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadParamarines
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-paramarines-name-pilot
+    description: cmu-paramarines-description
+    reregister: false
+    job: CMUJobParamarinePilot
+    raffle:
+      settings: short
+    rules: cmu-paramarines-rules
+
+- type: startingGear
+  parent: CMUGearParamarineRifleman
+  id: CMUGearParamarinePilot
+  equipment:
+    head: RMCHeadRoyalFlightHelmet
+    jumpsuit: RMCJumpsuitMarineParaPDW90
+    suitstorage: RMCWeaponSMGPDW90TSE
+
+- type: playTimeTracker
+  id: CMUJobParamarinePilot

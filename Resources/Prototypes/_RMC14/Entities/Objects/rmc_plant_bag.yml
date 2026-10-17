@@ -19,4 +19,5 @@
       - Produce
       - Seed
   - type: Dumpable
+  - type: CMUPlantBag
   - type: FixedItemSizeStorage

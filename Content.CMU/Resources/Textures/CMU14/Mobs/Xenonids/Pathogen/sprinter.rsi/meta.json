@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Sprites from cm13 https://github.com/realforest2001/forest-cm13/blob/8624d4b3e3e7339c6a9928ad1af33edb830452f8/icons/mob/pathogen/sprinter.dmi",
+  "size": {
+    "x": 64,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "alive",
+      "directions": 4
+    },
+    {
+      "name": "running",
+      "directions": 4
+    },
+    {
+      "name": "dead"
+    },
+    {
+      "name": "crit"
+	  },
+    {
+      "name": "sleeping"
+    },
+    {
+      "name": "sprinter_gib",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "sprinter_dissection"
+    },
+    {
+      "name": "sprinter_downed_0"
+    },
+    {
+      "name": "sprinter_downed_1"
+    },
+    {
+      "name": "sprinter_downed_2"
+    },
+    {
+      "name": "sprinter_downed_3"
+    },
+    {
+      "name": "sprinter_walk_0"
+    },
+    {
+      "name": "sprinter_walk_1"
+    },
+    {
+      "name": "sprinter_walk_2"
+    },
+    {
+      "name": "sprinter_walk_3"
+    },
+    {
+      "name": "sprinter_rest_0"
+    },
+    {
+      "name": "sprinter_rest_1"
+    },
+    {
+      "name": "sprinter_rest_2"
+    },
+    {
+      "name": "sprinter_rest_3"
+    },
+    {
+      "name": "sprinter_corpse"
+    }
+  ]
+}

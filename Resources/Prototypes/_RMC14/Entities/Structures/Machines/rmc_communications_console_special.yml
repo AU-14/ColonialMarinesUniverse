@@ -2,7 +2,7 @@
 - type: entity
   parent: RMCOverwatchConsole
   id: RMCOverwatchConsoleSPP
-  suffix: SPP
+  suffix: UPP
   components:
   - type: OverwatchConsole
     canOrbitalBombardment: false
@@ -11,7 +11,7 @@
 - type: entity
   parent: RMCOverwatchConsoleSPP
   id: RMCOverwatchConsoleSPPRotating
-  suffix: SPP, Rotating
+  suffix: UPP, Rotating
   components:
   - type: Sprite
     overrideDir: South
@@ -100,7 +100,7 @@
   suffix: Opfor
   components:
   - type: OverwatchConsole
-    canOrbitalBombardment: false
+    canOrbitalBombardment: true
     group: OPFOR
   - type: TacticalMapComputer
     faction: opfor

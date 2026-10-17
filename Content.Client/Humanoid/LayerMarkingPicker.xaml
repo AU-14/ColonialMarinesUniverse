@@ -1,0 +1,14 @@
+<BoxContainer xmlns="https://spacestation14.io" Orientation="Vertical">
+    <LineEdit Name="SearchBar" PlaceHolder="{Loc 'markings-search'}" HorizontalExpand="True" />
+    <ScrollContainer Name="SelectionItems" HorizontalExpand="True" VerticalExpand="True">
+        <GridContainer Name="Items" Columns="2" Margin="4" />
+    </ScrollContainer>
+    <ScrollContainer Name="OrderingItems" HorizontalExpand="True" VerticalExpand="True" Visible="False">
+    </ScrollContainer>
+    <!-- cmu edit start -->
+    <BoxContainer Name="Footer" HorizontalExpand="True" Margin="4">
+    <!-- cmu edit end -->
+        <Label Name="MarkingsStatus" HorizontalExpand="True" />
+        <Button Name="ReorderButton" ToggleMode="True" Text="{Loc 'markings-reorder'}" />
+    </BoxContainer>
+</BoxContainer>

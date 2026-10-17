@@ -1,0 +1,41 @@
+author: maertayn
+category: CMU
+changes:
+- message: Aboms tactical map (shows aboms & nest blips)
+  type: Add
+- message: Abom infection can be cured by severing the respective limb within 4 minutes
+    of infection, 'tis but a scratch!
+  type: Add
+- message: Abom spit/acid spray flies much faster (doubled speed) and at proper ranges
+  type: Tweak
+- message: Disguised mimics can secrete clotted syringes
+  type: Add
+- message: Grunt aboms sprint at human speeds & aboms slowly heal burn damage when
+    off-weeds
+  type: Tweak
+- message: Abom projectiles and melee no longer hit fellow abominations
+  type: Fix
+- message: Flesh kudzu spreads faster and no longer harms abominations or disguised
+    mimics
+  type: Tweak
+- message: Flesh nests spawn aboms faster as more nests are built (doubled), and are
+    now visible to motion trackers
+  type: Tweak
+- message: Assimilated players become ghosts and their body is raffled
+  type: Tweak
+- message: Weyland-Yutani counteragent syringes that cure any stage of infection,
+    bought via ASRS ($9500)
+  type: Add
+- message: DS rounds now get map inserts, planet/operation names and the Apollo greeting
+    at round start
+  type: Add
+- message: Hijack song + crash FX and larva surge were missing for DS
+  type: Fix
+- message: Rounds no longer hang when xenos win without hijacking
+  type: Fix
+- message: Planet side survivors no longer block a xeno victory on dropship crashes
+  type: Fix
+- message: Xeno evolution no longer locked when dropship lands on DS
+  type: Fix
+time: '2026-08-28T14:21:30.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1876

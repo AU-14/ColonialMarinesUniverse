@@ -18,7 +18,7 @@
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Burrower/burrower.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/Burrower/burrower.rsi # AU14-Edit
   - type: MobState
     allowedStates:
     - Alive
@@ -35,17 +35,16 @@
       600: Dead
   - type: DrawableSolution
     solution: blood
-  - type: SolutionContainerManager
-    solutions:
-      blood:
-        maxVol: 600
-        reagents:
-        - ReagentId: CMUXenoBlood
-          Quantity: 300
-        - ReagentId: CMUXenoPlasmaPurple
-          Quantity: 300
+  - type: Solution
+    id: blood
+    solution:
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 300
+      - ReagentId: CMUXenoPlasmaPurple
+        Quantity: 300
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoBlood
@@ -100,12 +99,16 @@
   - type: XenoBurrow
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 27.5
+      types:
+        Blunt: 9.16
+        Slash: 9.17
+        Piercing: 9.17
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 36
+      types:
+        Blunt: 12
+        Slash: 12
+        Piercing: 12
   - type: Tackle
     min: 3
     max: 5

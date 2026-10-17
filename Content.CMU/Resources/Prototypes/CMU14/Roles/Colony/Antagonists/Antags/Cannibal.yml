@@ -1,0 +1,58 @@
+- type: antagSpecifier
+  id: Cannibal
+  prefRoles: [ CannibalRole ]
+  jobBlacklistGroup:
+  - AllGovforCommandStaff
+  - AllOpforCommandStaff
+  - AllCLFJobs
+# - AllColonyDepartmentHeadJobs
+  briefing:
+    text: cannibal-role-greeting
+    color: DarkRed
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: AU14GearCannibal
+  startingSkills:
+    RMCSkillMedical: 1
+    RMCSkillMeleeWeapons: 1
+  components:
+  - type: Cannibal
+  - type: SynthGunAccess
+  mindRoles:
+  - MindRoleCannibal
+
+- type: entity
+  id: Cannibal
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: CannibalRule
+  - type: AntagSelection
+    selectionTime: JobsAssigned
+    antags:
+    - !type:RandomAntagCount
+      proto: Cannibal
+      range:
+        min: 1
+        max: 2
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCannibal
+  name: Cannibal Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: CannibalRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: CannibalRole
+  name: roles-antag-cannibal-name
+  setPreference: true
+  objective: roles-antag-cannibal-objective
+
+- type: startingGear
+  id: AU14GearCannibal
+  equipment:
+    pocket1: KitchenKnife

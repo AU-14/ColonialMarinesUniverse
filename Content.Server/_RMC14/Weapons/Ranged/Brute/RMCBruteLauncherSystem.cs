@@ -216,7 +216,7 @@ public sealed partial class RMCBruteLauncherSystem : EntitySystem
 
         try
         {
-            _gun.AttemptShoot(args.User, launcher.Owner, gun, coordinates);
+            _gun.AttemptShoot(args.User, (launcher.Owner, gun), coordinates);
         }
         finally
         {
@@ -396,7 +396,7 @@ public sealed partial class RMCBruteLauncherSystem : EntitySystem
             if (tile == start || (tile == end && targetIsWall))
                 continue;
 
-            var anchored = _map.GetAnchoredEntitiesEnumerator(userGrid, grid, tile);
+            var anchored = _map.GetAnchoredEntities(userGrid, grid, tile);
             while (anchored.MoveNext(out var uid))
             {
                 if (uid == null || uid.Value == user || uid.Value == target)
@@ -512,6 +512,9 @@ public sealed partial class RMCBruteLauncherSystem : EntitySystem
         HashSet<Vector2i> seen,
         BruteWaveState wave)
     {
+        if (!_map.MapExists(origin.MapId))
+            return;
+
         foreach (var tile in tiles)
         {
             DetonateTile(component, origin, tile.Offset, tile.Edge, seen, wave);

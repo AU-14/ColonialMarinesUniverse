@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using Content.Server._CMU14.Threats;
-using Content.Shared._CMU14.Threats;
+using Content.Server.CMU14.Threats;
+using Content.Shared.CMU14.Threats;
 using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._AU14.ThirdParty;
+namespace Content.IntegrationTests.CMU14.ThirdParty;
 
 [TestFixture]
 public sealed class DistressSignalSurvivorPrototypeTest
@@ -14,25 +14,40 @@ public sealed class DistressSignalSurvivorPrototypeTest
     {
         "AU14IntelThirdPartyMarksmanGOVFOR",
         "AU14IntelThirdPartySniperGOVFOR",
+        "CHTORM_PMC_BEAR",
+        "CLFCellCommandosIntel",
         "CLFCellReinforcementsIntel",
+        "CLFCellReinforcementsIntelEngineer",
         "CLFCellReinforcementsIntelMachineGunner",
+        "CLFCellReinforcementsIntelSpecialist",
+        "CLFCellReinforcementsSurv",
         "CLFSurvsBig",
         "CLFSurvsMedium",
         "CLFSurvsSmall",
+        "DiplomaticAttaches",
+        "DiplomaticAttachesSurv",
         "FORECON",
         "FORECONAlt",
         "FORECONAlt2",
         "FORECONFirstRecon",
         "FORECONKillTeam",
+        "FreeCompanyRaiders",
+        "FreeCompanyRaidersSurv",
+        "Freelancers",
+        "FreelancersSurv",
+        "GROZA_PMC_BEAR",
         "IPIE",
         "IPIESynth",
         "LACNSniperteam",
         "LACNSniperteamIntel",
+        "Liquidators",
+        "Migrant_UPP",
         "NSPAInvestigationParty",
         "NSPAInvestigationPartyAlt",
         "NSPAInvestigationPartyArmored",
         "PAPInvestigationParty",
         "PAPInvestigationPartyAlt",
+        "SKALA_PMC_BEAR",
         "UPPGROM",
         "UPPGROMAlt",
         "UPPGROMAlt2",
@@ -48,9 +63,21 @@ public sealed class DistressSignalSurvivorPrototypeTest
         "WEYUSurvLarge",
         "WEYUSurvMedium",
         "WEYUSurvSmall",
+        "ProdigySurvLarge",
+        "ProdigySurvMedium",
+        "ProdigySurvSmall",
+        "ProdigyLawyer",
+        "TWEParamarines",
+        "TWEParamarinesCommand",
+        "TWEParamarinesSurv",
+        "UPPLineCommandos",
+        "UPPLineSquad",
+        "UPPLineSquadSurv",
         "WYHT",
+        "WYExecutivesSurv",
         "WYPMCParty",
         "WYPMCPartyAlt",
+        "WYPMCWhiteout",
     };
 
     [Test]

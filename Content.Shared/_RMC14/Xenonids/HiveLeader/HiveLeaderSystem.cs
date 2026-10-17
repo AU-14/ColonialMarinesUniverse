@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Overmind;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Radio;
@@ -101,7 +102,7 @@ public sealed partial class HiveLeaderSystem : EntitySystem
             if (leaders.Count == 0)
             {
                 msg = "There are no Xenonid leaders. Overwatch a Xenonid to make it a leader.";
-                _popup.PopupClient(msg, ent, ent, PopupType.MediumCaution);
+                _popup.PopupEntity(msg, ent, ent, PopupType.MediumCaution);
                 return;
             }
 
@@ -121,7 +122,7 @@ public sealed partial class HiveLeaderSystem : EntitySystem
         if (!HasComp<HiveLeaderComponent>(watching) && leaders.Count >= max)
         {
             msg = $"You can't have more than {max} promoted leaders.";
-            _popup.PopupClient(msg, watching, ent, PopupType.MediumCaution);
+            _popup.PopupEntity(msg, watching, ent, PopupType.MediumCaution);
             return;
         }
 
@@ -132,7 +133,7 @@ public sealed partial class HiveLeaderSystem : EntitySystem
             ent.Comp.Leaders.Remove(watching);
 
             msg = $"You've demoted {Name(watching)} from Hive Leader.";
-            _popup.PopupClient(msg, watching, ent, PopupType.MediumCaution);
+            _popup.PopupEntity(msg, watching, ent, PopupType.MediumCaution);
 
             msg = $"{Name(ent)} has demoted you from Hive Leader. Your leadership rights and abilities have waned.";
             _popup.PopupEntity(msg, watching, watching, PopupType.MediumCaution);
@@ -152,9 +153,9 @@ public sealed partial class HiveLeaderSystem : EntitySystem
         Dirty(ent);
 
         msg = $"You've selected {Name(watching)} as a Hive Leader.";
-        _popup.PopupClient(msg, watching, ent, PopupType.Medium);
+        _popup.PopupEntity(msg, watching, ent, PopupType.Medium);
         msg = $"{Name(ent)} has selected you as a Hive Leader. The other Xenonids must listen to you. You will also act as a beacon for the Queen's pheromones.";
-        _popup.PopupClient(msg, watching, watching, PopupType.Medium);
+        _popup.PopupEntity(msg, watching, watching, PopupType.Medium);
         _rmcChat.ChatMessageToOne(msg, watching);
     }
 
@@ -201,6 +202,23 @@ public sealed partial class HiveLeaderSystem : EntitySystem
         ent.Comp.Leaders.Clear();
     }
 
+    /// <summary>
+    /// Returns true if the granter counts as "in ovipositor" for pheromone relay purposes.
+    /// The Overmind in eye (incorporeal) form is equivalent to the queen on ovipositor.
+    /// </summary>
+    private bool GranterHasActivePresence(EntityUid uid)
+    {
+        // Standard queen: must have ovipositor attached
+        if (_attachedOvipositorQuery.HasComp(uid))
+            return true;
+
+        // Overmind: eye form (incorporeal) counts as active presence
+        if (TryComp<CMUXenoOvermindAppearanceComponent>(uid, out var appearance) && appearance.Incorporeal)
+            return true;
+
+        return false;
+    }
+
     private void SyncPheromones(Entity<HiveLeaderGranterComponent> ent, bool forceDisable = false)
     {
         if (_timing.ApplyingState)
@@ -210,9 +228,10 @@ public sealed partial class HiveLeaderSystem : EntitySystem
             return;
 
         var hasPheromones = _activePheromonesQuery.TryComp(ent, out var active) &&
-                            _attachedOvipositorQuery.HasComp(ent) &&
+                            GranterHasActivePresence(ent) &&
                             !_mobState.IsDead(ent) &&
                             !forceDisable;
+
         foreach (var leader in ent.Comp.Leaders)
         {
             if (!_hiveLeaderQuery.TryComp(leader, out var leaderComp))

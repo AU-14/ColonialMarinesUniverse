@@ -1,0 +1,4 @@
+- files: ["shallowwading1.ogg", "shallowwading2.ogg", "shallowwading3.ogg", "shallowwading4.ogg", "shallowwading5.ogg", "shallowwading6.ogg", "wading1.ogg", "wading2.ogg", "wading3.ogg", "deepwading1.ogg", "deepwading2.ogg", "deepwading3.ogg", "deepwading4.ogg", "alien_footstep_large_water1.ogg", "alien_footstep_large_water2.ogg", "alien_footstep_large_water3.ogg", "splash.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Kugamo / CM-SS13 contributors, ported from cmss13#12918; mixed to mono for positional playback"
+  source: "https://github.com/kugamo/cmss13/tree/185b5417a29541d5c314409b9125a7137ec22e05/sound/effects"

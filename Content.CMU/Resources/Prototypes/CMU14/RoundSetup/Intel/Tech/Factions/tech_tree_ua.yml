@@ -1,0 +1,74 @@
+- type: entity
+  parent: RMCIntelTechTree
+  id: CMUIntelTechTree_UA # faction specific (USCM)
+  name: intel tech tree (UA)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IntelTechTree
+    tree:
+      options:
+# ├──[ Tier 0 ]──────────────────────────────────────────────────────┤
+      -
+        - name: cmu-tech-tier-one
+          description: cmu-tech-tier-unlock-desc
+          cost: 0
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 1
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+# ├──[ Tier 1: Budget ]──────────────────────────────────────────────┤
+      -
+        - name: cmu-tech-ua-req-budget
+          description: cmu-tech-ua-req-budget-desc
+          cost: 12
+          increase: 3
+          repurchasable: true
+          events:
+          - !type:TechRequisitionsBudgetEvent
+            amount: 5000
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-ua-req-budget-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: budget_req
+        - name: cmu-tech-tier-two
+          description: cmu-tech-tier-unlock-desc
+          cost: 3
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 2
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+# ├──[ Tier 2: Reinforcements ]──────────────────────────────────────┤
+      -
+        - name: cmu-tech-ua-us-army-armored
+          description: cmu-tech-ua-us-army-armored-desc
+          cost: 55
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: USArmyArmored
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-ua-us-army-armored-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+
+        - name: cmu-tech-ua-prodigy-yankee
+          description: cmu-tech-ua-prodigy-yankee-desc
+          cost: 45
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: ProdigyPARTY
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-ua-prodigy-yankee-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon

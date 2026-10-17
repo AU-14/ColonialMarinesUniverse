@@ -56,38 +56,40 @@ public sealed partial class PopupUIController : UIController, IOnStateEntered<Ga
 
         var updatedPosition = position - new Vector2(0f, MathF.Min(8f, 12f * (popup.TotalTime * popup.TotalTime + popup.TotalTime)));
         var font = _smallFont;
-        var color = Color.White.WithAlpha(alpha);
+        // CMU14: colour lookup shared with popups echoed to chat
+        var color = GetPopupColor(popup.Type);
 
         switch (popup.Type)
         {
-            case PopupType.SmallCaution:
-                color = Color.Red;
-                break;
             case PopupType.Medium:
-                font = _mediumFont;
-                color = Color.LightGray;
-                break;
             case PopupType.MediumCaution:
                 font = _mediumFont;
-                color = Color.Red;
                 break;
             case PopupType.Large:
-                font = _largeFont;
-                color = Color.LightGray;
-                break;
             case PopupType.LargeCaution:
-                font = _largeFont;
-                color = Color.Red;
-                break;
             case PopupType.MediumXeno:
                 font = _largeFont;
-                color = Color.FromHex("#C400FF");
                 break;
         }
 
         var dimensions = handle.GetDimensions(font, popup.Text, scale);
-        handle.DrawString(font, updatedPosition - dimensions / 2f, popup.Text, scale, color.WithAlpha(alpha));
+        var drawPosition = updatedPosition - dimensions / 2f;
+        var outline = TextOutline.Default with { Color = TextOutline.Default.Color.WithAlpha(alpha) };
+        handle.DrawString(font, drawPosition, popup.Text, scale, color.WithAlpha(alpha), outline);
     }
+
+    // CMU14 start: the text colour each popup type is drawn in, also used when popups are copied to chat.
+    public static Color GetPopupColor(PopupType type)
+    {
+        return type switch
+        {
+            PopupType.SmallCaution or PopupType.MediumCaution or PopupType.LargeCaution => Color.Red,
+            PopupType.Medium or PopupType.Large => Color.LightGray,
+            PopupType.MediumXeno => Color.FromHex("#C400FF"),
+            _ => Color.White,
+        };
+    }
+    // CMU14 end
 
     /// <summary>
     /// Handles drawing all screen popups.

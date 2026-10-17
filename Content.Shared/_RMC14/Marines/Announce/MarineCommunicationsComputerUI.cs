@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Serialization;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Marines.Announce;
 
@@ -30,8 +30,11 @@ public sealed class MarineCommunicationsDesignatePrimaryLZMsg(NetEntity lz) : Bo
 }
 
 [Serializable, NetSerializable]
-public sealed class MarineCommunicationsComputerBuiState(string planet, string operation, List<LandingZone> landingZones) : BoundUserInterfaceState
+// CMU14: Force on Force roles, hijacking, announcements and identification.
+public sealed class MarineCommunicationsComputerBuiState(string planet, string operation, List<LandingZone> landingZones, bool forceOnForce = false) : BoundUserInterfaceState
 {
+    // CMU14: Force on Force roles, hijacking, announcements and identification.
+    public readonly bool ForceOnForce = forceOnForce;
     public readonly string Planet = planet;
     public readonly string Operation = operation;
     public readonly List<LandingZone> LandingZones = landingZones;

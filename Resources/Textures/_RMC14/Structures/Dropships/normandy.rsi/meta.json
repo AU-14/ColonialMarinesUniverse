@@ -455,6 +455,30 @@
       "name": "104"
     },
     {
+      "name": "105",
+      "directions": 4
+    },
+    {
+      "name": "106",
+      "directions": 4
+    },
+    {
+      "name": "107",
+      "directions": 4
+    },
+    {
+      "name": "108",
+      "directions": 4
+    },
+    {
+      "name": "109",
+      "directions": 4
+    },
+    {
+      "name": "110",
+      "directions": 4
+    },
+    {
       "name": "panel_open"
     },
     {

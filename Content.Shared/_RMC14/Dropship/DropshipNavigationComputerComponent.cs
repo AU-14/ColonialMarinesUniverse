@@ -36,7 +36,9 @@ public sealed partial class DropshipNavigationComputerComponent : Component
     public EntProtoId<IFFFactionComponent> Faction = "FactionMarine";
 
     [DataField, AutoNetworkedField]
-    public bool RemoteControl = false;
+    // CMU14: defaults on so terminals can recall a stranded or hijacked ship without someone
+    // alive aboard; pilots who want exclusivity can still toggle it off in the nav UI.
+    public bool RemoteControl = true;
 
     [DataField, AutoNetworkedField]
     public bool CanTacticalLand;

@@ -1,5 +1,6 @@
-﻿using Content.Shared._RMC14.Damage;
+using Content.Shared._RMC14.Damage;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
@@ -16,29 +17,21 @@ public sealed partial class Anticorrosive : RMCChemicalEffect
 
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
     {
-        var healing = PotencyPerSecond;
-        if (ActualPotency > 2)
-            healing += PotencyPerSecond * 0.5f;
+        var healing = PotencyPerSecond * 1.5f;
 
-        return $"Heals [color=green]{healing}[/color] burn damage.\n" +
+        return $"Heals [color=green]{healing}[/color] burn damage and restores damaged plant health.\n" +
                $"Overdoses cause [color=red]{PotencyPerSecond}[/color] brute and [color=red]{PotencyPerSecond}[/color] toxin damage.\n" +
                $"Critical overdoses cause [color=red]{PotencyPerSecond * 5}[/color] brute and [color=red]{PotencyPerSecond * 5}[/color] toxin damage";
     }
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        var rmcDamageable = args.EntityManager.System<SharedRMCDamageableSystem>();
-        var healing = rmcDamageable.DistributeHealingCached(args.TargetEntity, BurnGroup, potency);
-
+        var rmcDamageable = system.RMCDamageable;
+        var healing = rmcDamageable.DistributeHealingCached(args.TargetEntity, BurnGroup, potency * 1.5f);
         damageable.TryChangeDamage(args.TargetEntity, healing, true, interruptsDoAfters: false);
-        if (ActualPotency > 2)
-        {
-            healing = rmcDamageable.DistributeHealingCached(args.TargetEntity, BurnGroup, potency * 0.5f);
-            damageable.TryChangeDamage(args.TargetEntity, healing, true, interruptsDoAfters: false);
-        }
     }
 
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
         var damage = new DamageSpecifier();
         damage.DamageDict[BluntType] = potency;
@@ -46,11 +39,16 @@ public sealed partial class Anticorrosive : RMCChemicalEffect
         damageable.TryChangeDamage(args.TargetEntity, damage, true, interruptsDoAfters: false);
     }
 
-    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickCriticalOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
         var damage = new DamageSpecifier();
         damage.DamageDict[BluntType] = potency * 5;
         damage.DamageDict[PoisonType] = potency * 5;
         damageable.TryChangeDamage(args.TargetEntity, damage, true, interruptsDoAfters: false);
+    }
+
+    protected override void TickHydroTray(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
+    {
+        system.RaiseHydroTick<Anticorrosive>(args.TargetEntity, potency, args.Context.Quantity);
     }
 }

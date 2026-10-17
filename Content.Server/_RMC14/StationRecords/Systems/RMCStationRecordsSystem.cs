@@ -1,10 +1,10 @@
 using Content.Server.Access.Systems;
-using Content.Server.StationRecords;
-using Content.Server.StationRecords.Systems;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared.GameTicking;
 using Content.Shared.Inventory;
 using Content.Shared.StationRecords;
+using Content.Shared.StationRecords.Components;
+using Content.Shared.StationRecords.Systems;
 
 namespace Content.Server._RMC14.StationRecords.Systems;
 
@@ -36,6 +36,11 @@ public sealed partial class RMCStationRecordsSystem : EntitySystem
         if (!_record.TryGetRecord<GeneralStationRecord>(key, out var generalRecord))
             return;
 
+        if (string.IsNullOrEmpty(generalRecord.Fingerprint))
+            generalRecord.Fingerprint = "none found";
+        if (string.IsNullOrEmpty(generalRecord.DNA))
+            generalRecord.DNA = "none found";
+
         if (_squad.TryGetMemberSquad(args.Mob, out var memberSquad))
         {
             generalRecord.Squad = Name(memberSquad);
@@ -55,6 +60,7 @@ public sealed partial class RMCStationRecordsSystem : EntitySystem
         if (_record.TryGetRecord<GeneralStationRecord>(key, out var generalRecord))
         {
             generalRecord.Squad = Name(ev.Squad);
+            generalRecord.SquadColor = ev.Squad.Comp.Color;
         }
 
         _record.Synchronize(key);
@@ -70,6 +76,7 @@ public sealed partial class RMCStationRecordsSystem : EntitySystem
         if (_record.TryGetRecord<GeneralStationRecord>(key, out var generalRecord))
         {
             generalRecord.Squad = null;
+            generalRecord.SquadColor = null;
         }
 
         _record.Synchronize(key);

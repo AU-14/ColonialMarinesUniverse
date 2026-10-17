@@ -7,6 +7,7 @@ namespace Content.Shared.Damage.Systems;
 public sealed partial class DamagePopupSystem : EntitySystem
 {
     [Dependency] private SharedPopupSystem _popupSystem = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
 
     public override void Initialize()
     {
@@ -19,7 +20,7 @@ public sealed partial class DamagePopupSystem : EntitySystem
     {
         if (args.DamageDelta != null)
         {
-            var damageTotal = args.Damageable.TotalDamage;
+            var damageTotal = _damageable.GetTotalDamage((ent, args.Damageable));
             var damageDelta = args.DamageDelta.GetTotal();
 
             var msg = ent.Comp.Type switch
@@ -31,13 +32,13 @@ public sealed partial class DamagePopupSystem : EntitySystem
                 _ => "Invalid type",
             };
 
-            _popupSystem.PopupPredicted(msg, ent.Owner, args.Origin);
+            _popupSystem.PopupEntity(msg, ent.Owner);
         }
     }
 
     private void OnInteractHand(Entity<DamagePopupComponent> ent, ref InteractHandEvent args)
     {
-        //RMC14
+        // RMC14: do not cycle the target dummy after another interaction handled the click.
         if (args.Handled)
             return;
 
@@ -46,7 +47,7 @@ public sealed partial class DamagePopupSystem : EntitySystem
             var next = (DamagePopupType)(((int)ent.Comp.Type + 1) % Enum.GetValues<DamagePopupType>().Length);
             ent.Comp.Type = next;
             Dirty(ent);
-            _popupSystem.PopupPredicted(Loc.GetString("damage-popup-component-switched", ("setting", ent.Comp.Type)), ent.Owner, args.User);
+            _popupSystem.PopupEntity(Loc.GetString("damage-popup-component-switched", ("setting", ent.Comp.Type)), ent.Owner);
         }
     }
 }

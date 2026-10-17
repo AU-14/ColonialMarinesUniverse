@@ -1,4 +1,7 @@
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Destructible;
+using Content.Shared.Destructible.Thresholds.Triggers;
 using Robust.Server.Player;
 using Robust.Shared.IoC;
 
@@ -21,7 +24,7 @@ public sealed partial class PlayerCountTrigger : IThresholdTrigger
     /// </summary>
     [DataField("maxPlayers")] public int? MaxPlayers;
 
-    public bool Reached(DamageableComponent damageable, DestructibleSystem system)
+    public bool Reached(Entity<DamageableComponent> damageable, SharedDestructibleSystem system)
     {
         var playerManager = IoCManager.Resolve<IPlayerManager>();
         var count = playerManager.PlayerCount;
@@ -32,5 +35,14 @@ public sealed partial class PlayerCountTrigger : IThresholdTrigger
             return false;
 
         return true;
+    }
+
+    public int CompareTo(IThresholdTrigger? other) => 0;
+
+    public bool Equals(IThresholdTrigger? other)
+    {
+        return other is PlayerCountTrigger trigger &&
+               MinPlayers == trigger.MinPlayers &&
+               MaxPlayers == trigger.MaxPlayers;
     }
 }

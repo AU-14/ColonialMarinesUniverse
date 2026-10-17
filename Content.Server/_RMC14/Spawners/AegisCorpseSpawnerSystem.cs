@@ -71,7 +71,7 @@ public sealed partial class AegisCorpseSpawnerSystem : EntitySystem
                     QueueDel(selectedSpawner.Uid);
 
                 _aegisCorpseSpawnedThisRound = true;
-                Log.Info($"AEGIS corpse spawned at {_transform.GetWorldPosition(selectedSpawner.Uid)} (selected 1 out of {aegisCorpseSpawners.Count} spawners)");
+                Log.Info($"[AEGIS] Corpse spawned at {_transform.GetWorldPosition(selectedSpawner.Uid)} (selected 1 out of {aegisCorpseSpawners.Count} spawners)");
                 // Keep _shouldActivateAegisCorpseSpawners = true until round ends
             }
         }

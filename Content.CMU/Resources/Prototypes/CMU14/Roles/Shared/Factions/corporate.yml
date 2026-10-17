@@ -1,0 +1,12 @@
+- type: npcFaction
+  id: AUWeYu
+  name: Weyland-Yutani Corporation
+  allianceTarget: true
+  hostile:
+  - THREAT
+
+- type: npcFaction
+  parent: AUWeYu
+  id: WeYa # legacy
+  name: Weyland-Yutani Corp. (legacy)
+  allianceTarget: false

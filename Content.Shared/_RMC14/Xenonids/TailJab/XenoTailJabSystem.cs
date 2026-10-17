@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Xenonids.Rotate;
 using Content.Shared._RMC14.Xenonids.Stab;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Effects;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Audio.Systems;

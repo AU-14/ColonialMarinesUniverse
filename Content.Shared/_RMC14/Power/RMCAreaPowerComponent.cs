@@ -1,23 +1,26 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 
 namespace Content.Shared._RMC14.Power;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+// CMU14 AreaPowerState Begin: serialize retained live members through the owning power system.
+// [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
 [Access(typeof(SharedRMCPowerSystem))]
 public sealed partial class RMCAreaPowerComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    [DataField]
     public HashSet<EntityUid> Apcs = new();
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public HashSet<EntityUid> EquipmentReceivers = new();
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public HashSet<EntityUid> LightingReceivers = new();
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public HashSet<EntityUid> EnvironmentReceivers = new();
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public int[] Load = new int[Enum.GetValues<RMCPowerChannel>().Length];
 }
+// CMU14 End

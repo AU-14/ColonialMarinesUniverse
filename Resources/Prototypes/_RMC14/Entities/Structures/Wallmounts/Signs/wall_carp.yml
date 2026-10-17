@@ -1,6 +1,7 @@
 - type: entity
-  parent: BaseSign
-  id: AUWallCarp
+  parent: [ BaseWallmountMetallic, BaseSignIndestructible ]
+  id: AUWallCarpBase
+  abstract: true
   name: Wall-adapted Carp
   description: Caught migrating uphill.
   components:
@@ -11,6 +12,13 @@
     sprite: _RMC14/Structures/Wallmounts/wall_carp.rsi
     state: wall_carp
     snapCardinals: true
+  - type: Injurable
+    damageContainer: StructuralInorganic
+
+- type: entity
+  parent: AUWallCarpBase
+  id: AUWallCarp
+  components:
   - type: Destructible
     thresholds:
     - trigger:
@@ -30,7 +38,7 @@
         offset: 0
 
 - type: entity
-  parent: AUWallCarp
+  parent: AUWallCarpBase
   id: AUWallCarpDamaged
   name: empty plaque
   description: Now where did that carp go?
@@ -58,7 +66,7 @@
         offset: 0
 
 - type: entity
-  parent: AUWallCarp
+  parent: AUWallCarpBase
   id: AUWallCarpBroken
   name: broken plaque
   description: ""

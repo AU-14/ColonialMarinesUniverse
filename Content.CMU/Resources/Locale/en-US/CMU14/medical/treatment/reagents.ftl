@@ -1,0 +1,59 @@
+cmu-medical-heal-organ-guidebook            = Heals { $amount } HP per cycle on the patient's { $organ }.
+cmu-medical-pain-suppression-guidebook       = Suppresses { $percent }% of pain accumulation, masks { $tiers } pain tier(s), and adds { $decay } pain/sec decay for { $seconds } seconds per unit. Effect weakens by { $decrease } per max-pain fraction; non-additive profiles keep the strongest active profile.
+cmu-medical-bone-regen-boost-guidebook       = Multiplies bone healing rate by { $multiplier } while active.
+cmu-medical-restart-heart-guidebook          = { $chance }% chance per cycle to restart a stopped heart (only on hearts that are not yet at the Dead stage).
+cmu-medical-regenerate-limb-guidebook        = Regenerates one missing native limb per 5 units metabolized at 213K or colder.
+cmu-medical-reverse-revival-timer-guidebook   = Reverses { $seconds } seconds of an active revival countdown per unit metabolized. Cannot reverse permanent death or an expired countdown.
+cmu-medical-cryo-bone-blood-guidebook         = Gradually mends all fractures by { $bone } bone integrity per unit and restores { $blood }% blood per second during metabolism.
+cmu-medical-cryo-burn-wounds-guidebook        = Gradually closes burn wounds by { $amount } wound damage per unit, including severe burns.
+cmu-medical-cryo-brute-wounds-guidebook       = Gradually closes brute wounds by { $amount } wound damage per unit, including gaping cuts.
+cmu-medical-cryo-organs-guidebook             = Gradually restores { $amount } health per unit to every attached organ.
+
+cmu-medical-defib-no-heart                   = No heart detected in patient.
+cmu-medical-defib-heart-destroyed            = Heart is destroyed; cannot revive.
+cmu-medical-defib-heart-failing              = Heart damage is too severe for defibrillation.
+cmu-medical-defib-heart-beating              = Heart is already beating.
+
+reagent-name-cmu-hepatocytin                 = Hepatocytin
+reagent-desc-cmu-hepatocytin                 = A regenerative compound for liver tissue repair.
+reagent-name-cmu-tranexamic-acid             = Tranexamic Acid
+reagent-desc-cmu-tranexamic-acid             = A clotting agent that stops bleeding for as long as it stays in the bloodstream. It doesn't close the wounds.
+reagent-name-cmu-aminomethylbenzoic-acid     = Aminomethylbenzoic Acid
+reagent-desc-cmu-aminomethylbenzoic-acid     = A chemical precursor. Mix it with hydrogen and inaprovaline to make tranexamic acid.
+reagent-name-cmu-pulmovine                   = Pulmovine
+reagent-desc-cmu-pulmovine                   = An aerosolized agent for lung tissue repair.
+reagent-name-cmu-nephronate                  = Nephronate
+reagent-desc-cmu-nephronate                  = A renal-targeting compound for kidney tissue repair.
+reagent-name-cmu-cardiocaine                 = Cardiocaine
+reagent-desc-cmu-cardiocaine                 = A cardiac-targeting compound; attempts to restart a stopped heart.
+reagent-name-cmu-alkysine                    = Alkysine
+reagent-desc-cmu-alkysine                    = A neural-targeting compound; for brain tissue repair.
+reagent-name-cmu-osteocalc                   = Osteocalc
+reagent-desc-cmu-osteocalc                   = A calcium-rich slurry that accelerates bone integrity regeneration.
+reagent-name-cmu-biogenic-matrix             = Biogenic Matrix
+reagent-desc-cmu-biogenic-matrix             = A sterile protein-lattice slurry used by limb printers to grow graft-ready replacement limbs.
+
+reagent-name-cmu-paracetamol                 = Paracetamol
+reagent-desc-cmu-paracetamol                 = A mild pain reliever. Suppresses pain accumulation, masks one pain tier, and helps excess pain fade.
+reagent-name-cmu-tramadol                    = Tramadol
+reagent-desc-cmu-tramadol                    = A moderate opioid pain reliever. Strongly masks pain and helps excess pain fade.
+reagent-name-cmu-oxycodone                   = Oxycodone
+reagent-desc-cmu-oxycodone                   = A heavy opioid for severe pain. Can fully mask pain shock while it lasts.
+reagent-name-cmu-fentanyl                    = Fentanyl
+reagent-desc-cmu-fentanyl                    = An extremely potent synthetic opioid. Near-total pain suppression, but the margin between an effective dose and a fatal one is razor-thin.
+reagent-name-cmu-fentanyl-precursor          = Crude Fentanyl Base
+reagent-desc-cmu-fentanyl-precursor          = An unstable halogenated intermediate. Needs a final synthesis step under carefully controlled heat before it's usable.
+reagent-name-cmu-sleen                       = Sleen
+reagent-desc-cmu-sleen                       = A strong experimental painkiller. Masks severe pain, but overdoses become toxic and disorienting.
+reagent-name-cmu-soporific                   = Soporific
+reagent-desc-cmu-soporific                   = A powerful sedative painkiller. Causes drowsiness and can force sleep at surgical doses.
+
+reagent-name-cmu-meth-precursor              = Crude Amphetamine Oil
+reagent-desc-cmu-meth-precursor              = A foul-smelling reduction product. Needs further refinement before it's anything but toxic.
+reagent-name-cmu-meth-base                   = Methamphetamine Freebase
+reagent-desc-cmu-meth-base                   = A volatile freebase compound, one step removed from a stable, injectable drug.
+reagent-name-cmu-methamphetamine             = Methamphetamine
+reagent-desc-cmu-methamphetamine             = A potent synthetic stimulant. Produces a powerful rush of speed and energy, at the cost of your heart and your health.
+
+reagent-name-cmu-blood-plasma = blood plasma
+reagent-desc-cmu-blood-plasma = The liquid part of blood. Given from a plasma pack of a matching type it restores blood volume quickly and slows bleeding for a while.

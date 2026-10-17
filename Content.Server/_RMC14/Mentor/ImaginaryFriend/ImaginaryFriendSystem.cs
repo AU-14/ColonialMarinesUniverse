@@ -1,19 +1,20 @@
 using System.Linq;
 using Content.Server.Chat.Managers;
 using Content.Server.EUI;
-using Content.Server.Humanoid;
 using Content.Server.Mind;
 using Content.Server.Preferences.Managers;
 using Content.Server.Radio;
 using Content.Server.Station.Systems;
 using Content.Shared._RMC14.Mentor.ImaginaryFriend;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared.Body;
 using Content.Shared.Clothing;
 using Content.Shared.Eye;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
+using Content.Shared.Radio;
 using Content.Shared.Roles;
 using Robust.Server.GameObjects;
 using Robust.Shared.Player;
@@ -27,7 +28,7 @@ public sealed partial class ImaginaryFriendSystem : SharedImaginaryFriendSystem
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private EuiManager _euiManager = default!;
     [Dependency] private EyeSystem _eye = default!;
-    [Dependency] private HumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private HumanoidProfileSystem _humanoidProfile = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private MindSystem _mind = default!;
     [Dependency] private IServerPreferencesManager _preferencesManager = default!;
@@ -36,6 +37,7 @@ public sealed partial class ImaginaryFriendSystem : SharedImaginaryFriendSystem
     [Dependency] private TransformSystem _transform = default!;
     [Dependency] private VisibilitySystem _visibility = default!;
     [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedVisualBodySystem _visualBody = default!;
 
     private EntityQuery<ImaginaryFriendComponent> _imaginaryFriendQuery;
 
@@ -130,7 +132,7 @@ public sealed partial class ImaginaryFriendSystem : SharedImaginaryFriendSystem
         if (TerminatingOrDeleted(imaginer))
             return;
 
-        if (!_mind.TryGetMind(newFriend, out var mindId, out _))
+        if (!_mind.TryGetMind(newFriend, out var mindId, out var mind))
             return;
 
         EnsureComp<HasImaginaryFriendComponent>(imaginer, out var hasFriend);
@@ -161,16 +163,8 @@ public sealed partial class ImaginaryFriendSystem : SharedImaginaryFriendSystem
                     if (highJob != ImaginaryFriendJobPrototype)
                         continue;
 
-                    if (TryComp(friend, out HumanoidAppearanceComponent? humanoidAppearance))
-                    {
-                        humanoidAppearance.Species = humanoid.Species;
-                        humanoidAppearance.Sex = humanoid.Sex;
-                        humanoidAppearance.Age = humanoid.Age;
-                        humanoidAppearance.Gender = humanoid.Gender;
-                        Dirty(friend, humanoidAppearance);
-                    }
-
-                    _humanoid.LoadProfile(friend, humanoid);
+                    _visualBody.ApplyProfileTo(friend, humanoid);
+                    _humanoidProfile.ApplyProfileTo(friend, humanoid);
                     _metaData.SetEntityName(friend, humanoid.Name);
 
                     if (_prototypeManager.TryIndex(highJob, out var jobProto))
@@ -201,8 +195,13 @@ public sealed partial class ImaginaryFriendSystem : SharedImaginaryFriendSystem
                 _stationSpawning.EquipStartingGear(friend, startingGear, raiseEvent: false);
         }
 
+        // CMU14: mghost is a visit. Keep ownership of the mentor's current body and role.
+        var returnToBody = mind.VisitingEntity != null && mind.OwnedEntity != null;
         _mind.UnVisit(mindId);
-        _mind.TransferTo(mindId, friend, createGhost: false);
+        if (returnToBody)
+            _mind.Visit(mindId, friend, mind);
+        else
+            _mind.TransferTo(mindId, friend, createGhost: false);
 
         hasFriend.Friends.Add(friend);
         Dirty(imaginer, hasFriend);
@@ -250,10 +249,15 @@ public sealed partial class ImaginaryFriendSystem : SharedImaginaryFriendSystem
         if (TerminatingOrDeleted(friend))
             return;
 
-        if (_mind.TryGetMind(friend, out var mindId, out var mind)
-                && mind.OriginalOwnedEntity is { } originalEntNet
-                && TryGetEntity(originalEntNet, out var originalEntity))
-            _mind.TransferTo(mindId, originalEntity.Value, mind: mind);
+        // CMU14: ending a visit returns to the retained body, not the first body of the round.
+        if (_mind.TryGetMind(friend, out var mindId, out var mind))
+        {
+            if (mind.VisitingEntity == friend)
+                _mind.UnVisit(mindId, mind);
+            else if (mind.OriginalOwnedEntity is { } originalEntNet &&
+                     TryGetEntity(originalEntNet, out var originalEntity))
+                _mind.TransferTo(mindId, originalEntity.Value, mind: mind);
+        }
 
         QueueDel(friend);
     }

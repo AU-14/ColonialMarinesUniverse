@@ -1,0 +1,54 @@
+- type: entity
+  id: CMUFighterLandingPad
+  name: fighter VTOL pad
+  description: A faction-locked staging pad for tandem fighters. Taxi onto it for a marked takeoff and landing site. The aircraft returns to its takeoff position.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: CMU14/Structures/vehicles/Blackfoot/blackfoot_landing_pad.rsi
+    state: pad
+    scale: 2, 2
+    drawdepth: FloorTiles
+  - type: Clickable
+  - type: InteractionOutline
+  - type: FighterLandingPad
+  - type: FighterIFF
+  - type: PointLight
+    radius: 4
+    energy: 0.3
+    color: "#5CBAD4"
+
+- type: entity
+  parent: CMUBlackfootLandingPadFoldedProp
+  id: CMUFighterLandingPadFolded
+  name: folded fighter VTOL pad
+  description: A portable fighter staging pad. Unfold it with a wrench on a clear seven-by-seven tile area.
+  components:
+  - type: FighterIFF
+  - type: BlackfootDeployableSupport
+    prototype: CMUFighterLandingPad
+    toolPopup: Use a wrench to unfold the fighter VTOL pad.
+    deployPopup: The fighter VTOL pad unfolds and its guide lights come on.
+    requireClearFootprint: true
+    clearFootprint: 7,7
+    useFixedDeployRotation: true
+    fixedDeployRotation: 0
+
+- type: entity
+  parent: CMUFighterLandingPad
+  id: CMUFighterLandingPadGovfor
+  suffix: GOVFOR
+  components:
+  - type: FighterIFF
+    faction: govfor
+
+- type: entity
+  parent: CMUFighterLandingPad
+  id: CMUFighterLandingPadOpfor
+  suffix: OPFOR
+  components:
+  - type: FighterIFF
+    faction: opfor

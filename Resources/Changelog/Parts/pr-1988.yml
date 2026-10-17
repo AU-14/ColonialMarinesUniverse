@@ -1,0 +1,25 @@
+author: twinkle
+category: CMU
+changes:
+- message: Mutiny Rules.
+  type: Add
+- message: Corporate Rules
+  type: Add
+- message: (Self-) Antag Rules
+  type: Add
+- message: Roleplay Rules
+  type: Tweak
+- message: Insurgency Rules
+  type: Tweak
+- message: High Ropleplay Roles Rules
+  type: Tweak
+- message: Rules (go read em)
+  type: Tweak
+- message: Rule Changes
+  type: Admin
+- message: '''fixed'' certain rules and how they read'
+  type: Fix
+- message: More rule related stuff
+  type: Tweak
+time: '2026-09-24T20:06:29.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1988

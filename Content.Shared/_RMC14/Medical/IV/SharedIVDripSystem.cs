@@ -1,8 +1,10 @@
 using System.Linq;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Chat.Prototypes;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.DragDrop;
 using Content.Shared.Examine;
@@ -33,7 +35,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
     [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private SharedPowerCellSystem _powerCell = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!;
 
     private readonly HashSet<EntityUid> _packsToUpdate = [];
 
@@ -57,7 +59,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
 
         SubscribeLocalEvent<BloodPackComponent, MapInitEvent>(OnBloodPackMapInit);
         SubscribeLocalEvent<BloodPackComponent, AfterAutoHandleStateEvent>(OnBloodPackAfterState);
-        SubscribeLocalEvent<BloodPackComponent, SolutionContainerChangedEvent>(OnBloodPackSolutionChanged);
+        SubscribeLocalEvent<BloodPackComponent, SolutionChangedEvent>(OnBloodPackSolutionChanged);
         SubscribeLocalEvent<BloodPackComponent, AfterInteractEvent>(OnBloodPackAfterInteract);
         SubscribeLocalEvent<BloodPackComponent, AttachBloodPackDoAfterEvent>(OnBloodPackAttachDoAfter);
         SubscribeLocalEvent<BloodPackComponent, GotUnequippedHandEvent>(OnBloodPackUnequippedHand);
@@ -177,7 +179,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
         UpdatePackVisuals(pack);
     }
 
-    private void OnBloodPackSolutionChanged(Entity<BloodPackComponent> pack, ref SolutionContainerChangedEvent args)
+    private void OnBloodPackSolutionChanged(Entity<BloodPackComponent> pack, ref SolutionChangedEvent args)
     {
         UpdatePackVisuals(pack);
     }
@@ -201,13 +203,13 @@ public abstract partial class SharedIVDripSystem : EntitySystem
 
         if (!_skills.HasAllSkills(user, pack.Comp.SkillRequired))
         {
-            _popup.PopupClient(Loc.GetString("cm-iv-attach-no-skill"), user, user);
+            _popup.PopupEntity(Loc.GetString("cm-iv-attach-no-skill"), user, user);
             return;
         }
 
         if (user == target)
         {
-            _popup.PopupClient(Loc.GetString("cm-blood-pack-cannot-self"), user, user);
+            _popup.PopupEntity(Loc.GetString("cm-blood-pack-cannot-self"), user, user);
             return;
         }
 
@@ -219,7 +221,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
                 ("user", user),
                 ("pack", pack.Owner),
                 ("target", target));
-            _popup.PopupPredicted(selfPoke, othersPoke, target, user);
+            _popup.PopupEntity(selfPoke, othersPoke, target, user);
         }
 
         var ev = new AttachBloodPackDoAfterEvent();
@@ -299,13 +301,13 @@ public abstract partial class SharedIVDripSystem : EntitySystem
 
         if (!_skills.HasAllSkills(user, dialysis.Comp.SkillRequired))
         {
-            _popup.PopupClient(Loc.GetString("cm-iv-attach-no-skill"), user, user);
+            _popup.PopupEntity(Loc.GetString("cm-iv-attach-no-skill"), user, user);
             return;
         }
 
         if (user == target)
         {
-            _popup.PopupClient(Loc.GetString("cm-blood-pack-cannot-self"), user, user);
+            _popup.PopupEntity(Loc.GetString("cm-blood-pack-cannot-self"), user, user);
             return;
         }
 
@@ -317,7 +319,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
                 ("user", user),
                 ("pack", dialysis.Owner),
                 ("target", target));
-            _popup.PopupPredicted(selfPoke, othersPoke, target, user);
+            _popup.PopupEntity(selfPoke, othersPoke, target, user);
         }
 
         dialysis.Comp.IsAttaching = true;
@@ -380,6 +382,9 @@ public abstract partial class SharedIVDripSystem : EntitySystem
 
     protected bool InRange(EntityUid iv, EntityUid to, float range)
     {
+        if (TerminatingOrDeleted(iv) || TerminatingOrDeleted(to))
+            return false;
+
         var ivPos = _transform.GetMapCoordinates(iv);
         var toPos = _transform.GetMapCoordinates(to);
         return ivPos.InRange(toPos, range);
@@ -392,7 +397,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
 
         if (!_skills.HasAllSkills(user, iv.Comp.SkillRequired))
         {
-            _popup.PopupClient(Loc.GetString("cm-iv-attach-no-skill"), user, user);
+            _popup.PopupEntity(Loc.GetString("cm-iv-attach-no-skill"), user, user);
             return;
         }
 
@@ -409,12 +414,15 @@ public abstract partial class SharedIVDripSystem : EntitySystem
 
         if (user != null && !_skills.HasAllSkills(user.Value, iv.Comp.SkillRequired))
         {
-            _popup.PopupClient(Loc.GetString("cm-iv-detach-no-skill"), user.Value, user.Value);
+            _popup.PopupEntity(Loc.GetString("cm-iv-detach-no-skill"), user.Value, user.Value);
             return;
         }
 
         iv.Comp.AttachedTo = default;
         Dirty(iv);
+
+        if (TerminatingOrDeleted(target))
+            return;
 
         if (rip)
             DoRip(iv.Comp.RipDamage, target, user, iv.Comp.RipEmote, predict);
@@ -429,7 +437,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
 
         if (!_skills.HasAllSkills(user, pack.Comp.SkillRequired))
         {
-            _popup.PopupClient(Loc.GetString("cm-iv-attach-no-skill"), user, user);
+            _popup.PopupEntity(Loc.GetString("cm-iv-attach-no-skill"), user, user);
             return;
         }
 
@@ -446,12 +454,15 @@ public abstract partial class SharedIVDripSystem : EntitySystem
 
         if (user != null && !_skills.HasAllSkills(user.Value, pack.Comp.SkillRequired))
         {
-            _popup.PopupClient(Loc.GetString("cm-iv-detach-no-skill"), user.Value, user.Value);
+            _popup.PopupEntity(Loc.GetString("cm-iv-detach-no-skill"), user.Value, user.Value);
             return;
         }
 
         pack.Comp.AttachedTo = default;
         Dirty(pack);
+
+        if (TerminatingOrDeleted(target))
+            return;
 
         if (rip)
             DoRip(pack.Comp.RipDamage, target, user, pack.Comp.RipEmote, predict);
@@ -466,7 +477,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
 
         if (!_skills.HasAllSkills(user, dialysis.Comp.SkillRequired))
         {
-            _popup.PopupClient(Loc.GetString("cm-iv-attach-no-skill"), user, user);
+            _popup.PopupEntity(Loc.GetString("cm-iv-attach-no-skill"), user, user);
             return;
         }
 
@@ -488,7 +499,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
 
         if (user != null && !_skills.HasAllSkills(user.Value, dialysis.Comp.SkillRequired))
         {
-            _popup.PopupClient(Loc.GetString("cm-iv-detach-no-skill"), user.Value, user.Value);
+            _popup.PopupEntity(Loc.GetString("cm-iv-detach-no-skill"), user.Value, user.Value);
             return;
         }
 
@@ -529,6 +540,9 @@ public abstract partial class SharedIVDripSystem : EntitySystem
 
         _powerCell.SetDrawEnabled((dialysis.Owner, null), false);
 
+        if (TerminatingOrDeleted(target))
+            return;
+
         if (rip)
             DoRip(dialysis.Comp.RipDamage, target, user, dialysis.Comp.RipEmote, predict);
         else
@@ -559,7 +573,12 @@ public abstract partial class SharedIVDripSystem : EntitySystem
             ? Loc.GetString("cm-iv-now-injecting")
             : Loc.GetString("cm-iv-now-taking");
 
-        _popup.PopupClient(msg, iv, user);
+        _popup.PopupEntity(msg, iv, user);
+    }
+
+    private static int GetVisualFillPercentage(Solution solution)
+    {
+        return (int) SharedSolutionContainerSystem.PercentFull(solution);
     }
 
     protected void UpdatePackVisuals(Entity<BloodPackComponent> pack)
@@ -574,7 +593,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
             TryComp(container.Owner, out IVDripComponent? iv))
         {
             iv.FillColor = solution.GetColor(_prototype);
-            iv.FillPercentage = (int) (solution.Volume / solution.MaxVolume * 100);
+            iv.FillPercentage = GetVisualFillPercentage(solution);
             Dirty(container.Owner, iv);
             UpdateIVAppearance((container.Owner, iv));
         }
@@ -601,7 +620,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
                 continue;
 
             iv.Comp.FillColor = solution.GetColor(_prototype);
-            iv.Comp.FillPercentage = (int) (solution.Volume / solution.MaxVolume * 100);
+            iv.Comp.FillPercentage = GetVisualFillPercentage(solution);
             Dirty(iv);
             UpdateIVAppearance(iv);
             return;
@@ -637,7 +656,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
         if (_solutionContainer.TryGetSolution(pack.Owner, pack.Comp.Solution, out var solEnt))
         {
             var solution = solEnt.Value.Comp.Solution;
-            pack.Comp.FillPercentage = solution.Volume / solution.MaxVolume;
+            pack.Comp.FillPercentage = FixedPoint2.FromHundredths(GetVisualFillPercentage(solution));
             pack.Comp.FillColor = solution.GetColor(_prototype);
         }
         else
@@ -673,7 +692,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
         var message = Loc.GetString("cm-iv-rip", ("target", attached));
         if (predict)
         {
-            _popup.PopupClient(message, attached, user);
+            _popup.PopupEntity(message, attached, user);
 
             var others = user == null ? Filter.Pvs(attached) : Filter.PvsExcept(user.Value);
             _popup.PopupEntity(message, attached, others, true);
@@ -697,7 +716,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
             othersMessage = "cm-iv-attach-others-injecting";
         }
 
-        _popup.PopupClient(Loc.GetString(selfMessage, ("iv", iv), ("target", to)), to, user);
+        _popup.PopupEntity(Loc.GetString(selfMessage, ("iv", iv), ("target", to)), to, user);
 
         var others = Filter.PvsExcept(user);
         _popup.PopupEntity(Loc.GetString(othersMessage, ("iv", iv), ("user", user), ("target", to)), to, others, true);
@@ -707,7 +726,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
     {
         var selfMessage = Loc.GetString("cm-iv-detach-self", ("iv", iv), ("target", attached));
         if (predict)
-            _popup.PopupClient(selfMessage, attached, user);
+            _popup.PopupEntity(selfMessage, attached, user);
         else
             _popup.PopupEntity(selfMessage, attached);
 

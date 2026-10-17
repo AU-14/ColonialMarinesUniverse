@@ -1,10 +1,12 @@
 using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Pulling;
+using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Xenonids.Heal;
 using Content.Shared._RMC14.Xenonids.Rage;
 using Content.Shared._RMC14.Xenonids.Sweep;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Effects;
 using Content.Shared.Interaction;
@@ -29,6 +31,7 @@ public sealed partial class XenoEviscerateSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private RMCPullingSystem _rmcPulling = default!;
+    [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private SharedInteractionSystem _interact = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private XenoRageSystem _rage = default!;
@@ -50,7 +53,7 @@ public sealed partial class XenoEviscerateSystem : EntitySystem
 
         if (rage <= 0)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-eviscerate-fail"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-eviscerate-fail"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
@@ -71,20 +74,20 @@ public sealed partial class XenoEviscerateSystem : EntitySystem
         {
             args.Handled = true;
 
-            _stun.TrySlowdown(xeno, windupTime, false, 0f, 0f);
+            _slow.TryRoot(xeno, windupTime, refresh: false, applyChemical: true);
             _rage.IncrementRage(xeno.Owner, -1);
 
             if (rage > 1)
             {
                 var selfMsg = Loc.GetString("rmc-xeno-eviscerate-windup-self");
                 var msg = Loc.GetString("rmc-xeno-eviscerate-windup", ("xeno", xeno));
-                _popup.PopupPredicted(selfMsg, msg, xeno, xeno, PopupType.MediumCaution);
+                _popup.PopupEntity(selfMsg, msg, xeno, xeno, PopupType.MediumCaution);
             }
             else
             {
                 var selfMsg = Loc.GetString("rmc-xeno-eviscerate-windup-small-self");
                 var msg = Loc.GetString("rmc-xeno-eviscerate-windup-small", ("xeno", xeno));
-                _popup.PopupPredicted(selfMsg, msg, xeno, xeno, PopupType.MediumCaution);
+                _popup.PopupEntity(selfMsg, msg, xeno, xeno, PopupType.MediumCaution);
             }
         }
     }

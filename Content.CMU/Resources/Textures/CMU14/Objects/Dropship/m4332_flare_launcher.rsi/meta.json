@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created by rando for CMU14",
+  "size": {
+    "x": 64,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "signal_flare_launcher_loaded",
+      "directions": 4
+    },
+    {
+      "name": "signal_flare_launcher_unloaded",
+      "directions": 4
+    },
+    {
+      "name": "signal_flare_launcher_unloadedalt",
+      "directions": 4
+    }
+  ]
+}

@@ -1,11 +1,14 @@
 using System.Linq;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.CCVar;
+using Content.Shared._RMC14.Dropship; // CMU14
+using Content.Shared._RMC14.Roles;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids.Announce;
 using Content.Shared._RMC14.Xenonids.Egg;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.JoinXeno;
+using Content.Shared._RMC14.Xenonids.ManageHive.Boons;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Actions;
 using Content.Shared.Administration.Logs;
@@ -13,10 +16,14 @@ using Content.Shared.Climbing.Components;
 using Content.Shared.Climbing.Systems;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Doors.Components;
 using Content.Shared.FixedPoint;
+using Content.Shared.Follower;
+using Content.Shared.Follower.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Hands.EntitySystems;
@@ -24,6 +31,7 @@ using Content.Shared.Jittering;
 using Content.Shared.Mind;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Popups;
 using Content.Shared.Prototypes;
 using Robust.Shared.Audio.Systems;
@@ -47,12 +55,14 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
     [Dependency] private ClimbSystem _climb = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private SharedGameTicker _gameTicker = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private SharedMindSystem _mind = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MobThresholdSystem _mobThresholds = default!; // CMU14: caste-relative evolution health.
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
@@ -63,17 +73,20 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
     [Dependency] private SharedXenoHiveSystem _xenoHive = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedContainerSystem _container = default!;
-    [Dependency] private SharedXenoWeedsSystem _xenoWeeds = default!;
-    [Dependency] private IMapManager _map = default!;
+    [Dependency] private SharedXenoWeedsSystem _xenoWeeds = default!;    [Dependency] private ISharedPlaytimeManager _playtime = default!;
+    [Dependency] private FollowerSystem _follower = default!;
 
     private TimeSpan _evolutionPointsRequireOvipositorAfter;
     private TimeSpan _evolutionAccumulatePointsBefore;
     private TimeSpan _evolveSameCasteCooldown;
     private TimeSpan _earlyEvoBoostBefore;
+    private bool _marinesLanded; // CMU14
 
     private readonly HashSet<EntityUid> _climbable = new();
     private readonly HashSet<EntityUid> _doors = new();
     private readonly HashSet<EntityUid> _intersecting = new();
+
+    private static readonly TimeSpan CorruptedHiveQueenPlaytime = TimeSpan.FromHours(30);
 
     private EntityQuery<MobStateComponent> _mobStateQuery;
 
@@ -82,6 +95,8 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         _mobStateQuery = GetEntityQuery<MobStateComponent>();
 
         SubscribeLocalEvent<MarinesLandedChangedEvent>(OnMarinesLandedChanged);
+        SubscribeLocalEvent<DropshipLandedOnPlanetEvent>(OnDropshipLandedOnPlanet); // CMU14
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup); // CMU14
         SubscribeLocalEvent<HiveComponent, XenoHiveQueenChangedEvent>(OnHiveQueenChanged);
 
         SubscribeLocalEvent<XenoDevolveComponent, XenoOpenDevolveActionEvent>(OnXenoOpenDevolveAction);
@@ -97,6 +112,8 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         SubscribeLocalEvent<XenoEvolutionGranterComponent, NewXenoEvolvedEvent>(OnGranterEvolved);
 
         SubscribeLocalEvent<XenoOvipositorChangedEvent>(OnOvipositorChanged);
+
+        SubscribeLocalEvent<HiveBoonActivateAdaptabilityEvent>(OnBoonAdaptability);
 
         Subs.BuiEvents<XenoEvolutionComponent>(XenoEvolutionUIKey.Key,
             subs =>
@@ -176,7 +193,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
 
         var time = _timing.CurTime;
         if (_prototypes.TryIndex(args.Choice, out var choice) &&
-            choice.HasComponent<XenoEvolutionGranterComponent>(_compFactory) &&
+            choice.HasComp<XenoEvolutionGranterComponent>(_compFactory) &&
             _xenoHive.GetHive(xeno.Owner) is { } hive &&
             hive.Comp.LastQueenDeath is { } lastQueenDeath &&
             time < lastQueenDeath + hive.Comp.NewQueenCooldown)
@@ -202,7 +219,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         };
 
         if (xeno.Comp.EvolutionDelay > TimeSpan.Zero)
-            _popup.PopupClient(Loc.GetString("cm-xeno-evolution-start"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-evolution-start"), xeno, xeno);
 
         if (_doAfter.TryStartDoAfter(doAfter))
         {
@@ -251,6 +268,44 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         RaiseLocalEvent(newXeno, ref afterEv);
     }
 
+    private bool CanCorruptedHiveEvolveToQueen(EntityUid xeno, bool doPopup)
+    {
+        if (_net.IsClient)
+            return true;
+
+        if (!TryComp(xeno, out ActorComponent? actor))
+            return false;
+
+        var requirement = new TotalJobsTimeRequirement
+        {
+            Group = "CMJobsXeno",
+            Time = CorruptedHiveQueenPlaytime,
+        };
+
+        var playTimes = _playtime.GetPlayTimes(actor.PlayerSession);
+
+        if (requirement.Check(
+                EntityManager,
+                _prototypes,
+                null,
+                playTimes,
+                out _))
+        {
+            return true;
+        }
+
+        if (doPopup)
+        {
+            _popup.PopupEntity(
+                Loc.GetString("rmc-xeno-corruptedevolution-failed-insufficient-hours"),
+                xeno,
+                xeno,
+                PopupType.MediumCaution);
+        }
+
+        return false;
+    }
+
     private void OnXenoDevolveBui(Entity<XenoDevolveComponent> xeno, ref XenoDevolveBuiMsg args)
     {
         _ui.CloseUi(xeno.Owner, XenoEvolutionUIKey.Key, xeno);
@@ -263,7 +318,9 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
             args.Handled ||
             args.Cancelled ||
             !_mind.TryGetMind(xeno, out _, out _) ||
-            !CanEvolvePopup(xeno, args.Choice))
+            // CMU14: !CanEvolvePopup(xeno, args.Choice))
+            !CanEvolvePopup(xeno, args.Choice) ||
+            !DamagedCheckPopup(xeno, false))
         {
             return;
         }
@@ -313,7 +370,50 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
 
     private void OnGranterEvolved(Entity<XenoEvolutionGranterComponent> ent, ref NewXenoEvolvedEvent args)
     {
-        _xenoAnnounce.AnnounceSameHive(ent.Owner, Loc.GetString("rmc-new-queen"));
+        _xenoAnnounce.AnnounceSameHive(ent.Owner, Loc.GetString(ent.Comp.AnnounceMessage));
+    }
+
+    private void OnBoonAdaptability(HiveBoonActivateAdaptabilityEvent ev)
+    {
+        var castes = new List<(EntProtoId Id, int Tier)>();
+        foreach (var prototype in _prototypes.EnumeratePrototypes<EntityPrototype>())
+        {
+            if (!prototype.TryComp(out XenoEvolutionComponent? evolution, _compFactory))
+                continue;
+
+            foreach (var id in evolution.EvolvesTo)
+            {
+                if (_prototypes.TryIndex(id, out var caste) &&
+                    caste.TryComp(out XenoComponent? xeno, _compFactory))
+                {
+                    castes.Add((id, xeno.Tier));
+                }
+            }
+        }
+
+        var xenos = EntityQueryEnumerator<XenoComponent, XenoEvolutionComponent>();
+        while (xenos.MoveNext(out var uid, out var xenoComp, out var comp))
+        {
+            if (_mobState.IsDead(uid) || !_xenoHive.FromSameHive(uid, ev.Boon))
+                continue;
+
+            var self = Prototype(uid)?.ID;
+            foreach (var (id, tier) in castes)
+            {
+                if (tier != xenoComp.Tier ||
+                    id.Id == self ||
+                    comp.EvolvesToWithoutPoints.Contains(id))
+                {
+                    continue;
+                }
+
+                comp.EvolvesToWithoutPoints.Add(id);
+            }
+
+            Dirty(uid, comp);
+        }
+
+        _xenoAnnounce.AnnounceSameHiveDefaultSound(ev.Boon, "The Queen has loosened our forms. We may take the shape of another of our rank!");
     }
 
     private void OnOvipositorChanged(ref XenoOvipositorChangedEvent ev)
@@ -351,6 +451,26 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         }
     }
 
+    // CMU14 event: classic rule raises MarinesLandedChangedEvent itself; track it ourselves otherwise
+    private void OnDropshipLandedOnPlanet(ref DropshipLandedOnPlanetEvent ev)
+    {
+        if (_net.IsClient || _marinesLanded)
+            return;
+
+        var rules = EntityQueryEnumerator<ActiveGameRuleComponent, CMDistressSignalRuleComponent>();
+        if (rules.MoveNext(out _, out _))
+            return;
+
+        _marinesLanded = true;
+        var landedEv = new MarinesLandedChangedEvent(true);
+        RaiseLocalEvent(ref landedEv);
+    }
+
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev) // CMU14
+    {
+        _marinesLanded = false;
+    }
+
     private void OnHiveQueenChanged(Entity<HiveComponent> ent, ref XenoHiveQueenChangedEvent ev)
     {
         if (_net.IsClient)
@@ -378,12 +498,21 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
 
     private bool DamagedCheckPopup(EntityUid xeno, bool predicted = true, bool doPopup = true)
     {
-        if (!TryComp(xeno, out DamageableComponent? damageable) ||
-            damageable.TotalDamage <= 1)
+        // CMU14: use the same health maximum as the xeno HUD (critical threshold, then death).
+        // if (!TryComp(xeno, out DamageableComponent? damageable) ||
+        //     _damageable.GetTotalDamage((xeno, damageable)) <= 1)
+        if (!TryComp(xeno, out DamageableComponent? damageable))
             return true;
 
+        var maxDamage = _mobThresholds.TryGetIncapThreshold(xeno, out var maxHealth)
+            ? maxHealth.Value / 2
+            : (FixedPoint2) 1;
+        if (_damageable.GetTotalDamage((xeno, damageable)) <= maxDamage)
+            return true;
+        // CMU14 End
+
         if (predicted)
-            _popup.PopupClient(Loc.GetString("rmc-xeno-evolution-cant-evolve-damaged"), xeno, xeno, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-evolution-cant-evolve-damaged"), xeno, xeno, PopupType.MediumCaution);
         else
             _popup.PopupEntity(Loc.GetString("rmc-xeno-evolution-cant-evolve-damaged"), xeno, xeno, PopupType.MediumCaution);
 
@@ -428,12 +557,20 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         if (!_prototypes.TryIndex(newXeno, out var prototype))
             return true;
 
+        var hive = _xenoHive.GetHive(xeno.Owner);
+
+        if (newXeno == "CMXenoQueen" &&
+            hive is { } corruptedHive &&
+            corruptedHive.Comp.Corrupted &&
+            !CanCorruptedHiveEvolveToQueen(xeno.Owner, doPopup))
+        {
+            return false;
+        }
+
         if (!ContainedCheckPopup(xeno, doPopup))
             return false;
 
-        EntityUid? hive = _xenoHive.GetHive(xeno.Owner);
-
-        if (prototype.HasComponent<XenoEvolutionGranterComponent>(_compFactory) && HiveHasLivingQueen(xeno.Owner))
+        if (prototype.HasComp<XenoEvolutionGranterComponent>(_compFactory) && HiveHasLivingQueen(xeno.Owner))
         {
             if (doPopup)
                 _popup.PopupEntity(Loc.GetString("rmc-xeno-evolution-failed-queen-exists"), xeno, xeno, PopupType.MediumCaution);
@@ -470,7 +607,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
 
         if (TryComp<RestrictEvolveOffWeedsComponent>(xeno.Owner, out var comp))
         {
-            var coordinates = _transform.GetMoverCoordinates(xeno).SnapToGrid(EntityManager, _map);
+            var coordinates = _transform.GetMoverCoordinates(xeno).SnapToGrid(EntityManager);
             if (_transform.GetGrid(coordinates) is not { } gridUid ||
                 !TryComp(gridUid, out MapGridComponent? grid))
             {
@@ -704,7 +841,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
             return distress.MarinesLanded;
         }
 
-        return false;
+        return _marinesLanded; // CMU14
     }
 
     private bool HiveHasLivingQueen(EntityUid xeno)
@@ -763,6 +900,15 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
 
         if (Prototype(xeno)?.ID is { } oldId)
             newRecently.Recent[oldId] = _timing.CurTime;
+
+        var followers = EntityQueryEnumerator<FollowerComponent>();
+        while (followers.MoveNext(out var uid, out var follower))
+        {
+            if (follower.Following == xeno)
+            {
+                _follower.StartFollowingEntity(uid, newXeno);
+            }
+        }
 
         return newXeno;
     }
@@ -847,40 +993,37 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
 
         var time = _timing.CurTime;
         var roundDuration = _gameTicker.RoundDuration();
+
         var needsOvipositor = NeedsOvipositor();
-        if (needsOvipositor)
+
+        var granters = EntityQueryEnumerator<XenoEvolutionGranterComponent>();
+        while (granters.MoveNext(out var uid, out var granter))
         {
-            var granters = EntityQueryEnumerator<XenoEvolutionGranterComponent>();
-            while (granters.MoveNext(out var uid, out var granter))
-            {
-                if (granter.GotOvipositorPopup)
-                    continue;
+            if (granter.GotOvipositorPopup)
+                continue;
 
-                granter.GotOvipositorPopup = true;
-                Dirty(uid, granter);
+            granter.GotOvipositorPopup = true;
+            Dirty(uid, granter);
 
-                _popup.PopupEntity("It is time to settle down and let your children grow.",
-                    uid,
-                    uid,
-                    PopupType.LargeCaution
-                );
+            _popup.PopupEntity("It is time to settle down and let your children grow.",
+                uid,
+                uid,
+                PopupType.LargeCaution
+            );
 
-                _xenoHive.AnnounceNeedsOvipositorToSameHive(uid);
-            }
-        }
-
-        var evoBonus = FixedPoint2.Zero;
-        var bonuses = EntityQueryEnumerator<EvolutionBonusComponent>();
-        while (bonuses.MoveNext(out var comp))
-        {
-            evoBonus += comp.Amount;
+            _xenoHive.AnnounceNeedsOvipositorToSameHive(uid);
         }
 
         FixedPoint2? evoOverride = null;
+        var overrideIgnoresGranter = false; // CMU14
         var overrides = EntityQueryEnumerator<EvolutionOverrideComponent>();
         while (overrides.MoveNext(out var comp))
         {
-            evoOverride = comp.Amount;
+            // CMU14: xeno feedback and lifecycle.
+            // Overrides can overlap (for example a hive boon and the hijack surge).
+            // Entity iteration order must not let the weaker effect mask the stronger one.
+            evoOverride = evoOverride is { } previous ? FixedPoint2.Max(previous, comp.Amount) : comp.Amount;
+            overrideIgnoresGranter |= comp.IgnoreGranter; // CMU14
         }
 
         var evolution = EntityQueryEnumerator<XenoEvolutionComponent>();
@@ -904,11 +1047,30 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
                 _audio.PlayEntity(comp.EvolutionReadySound, uid, uid);
                 continue;
             }
+            var evoBonus = FixedPoint2.Zero;
+            var bonuses = EntityQueryEnumerator<EvolutionBonusComponent>();
+
+            while (bonuses.MoveNext(out var bonusUid, out var bonus))
+            {
+                if (_xenoHive.FromSameHive(uid, bonusUid))
+                    evoBonus += bonus.Amount;
+            }
+
             var points = (_earlyEvoBoostBefore > _gameTicker.RoundDuration()) ? comp.EarlyPointsPerSecond : comp.PointsPerSecond;
             var gain = evoOverride ?? points + evoBonus;
             if (comp.Points < comp.Max || roundDuration < _evolutionAccumulatePointsBefore)
             {
-                if (needsOvipositor && comp.RequiresGranter && !HasOvipositorForXeno(uid))
+
+                var hasGranter = needsOvipositor
+                    ? HasOvipositorForXeno(uid)
+                    : HasLiving<XenoEvolutionGranterComponent>(1);
+
+                if (needsOvipositor && HasEvolutionIgnoreGranter(uid))
+                    hasGranter = true;
+
+                // CMU14: the timed hijack surge also grants evolution without an ovipositor.
+                // if (needsOvipositor && comp.RequiresGranter && !hasGranter)
+                if (needsOvipositor && comp.RequiresGranter && !hasGranter && !overrideIgnoresGranter)
                     continue;
 
                 SetPoints((uid, comp), comp.Points + gain);
@@ -918,5 +1080,43 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
                 SetPoints((uid, comp), FixedPoint2.Max(comp.Points - gain, comp.Max));
             }
         }
+    }
+
+    private bool HasEvolutionIgnoreGranter(EntityUid xeno)
+    {
+        var ignoreGranter = EntityQueryEnumerator<EvolutionIgnoreGranterComponent>();
+        while (ignoreGranter.MoveNext(out var uid, out _))
+        {
+            if (_xenoHive.FromSameHive(xeno, uid))
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Instantly transfers a xeno into a new prototype, bypassing the evolution
+    /// do-after/BUI flow entirely. Intended for special-case transformations
+    /// (e.g. Pathogen Overmind merging with the Blight Core) rather than the
+    /// normal player-driven evolution path.
+    /// </summary>
+    public EntityUid EvolveTo(EntityUid xeno, EntProtoId proto)
+    {
+        var newXeno = TransferXeno(xeno, proto);
+
+        if (TryComp(xeno, out XenoEvolutionComponent? evolutionComp))
+        {
+            var ev = new NewXenoEvolvedEvent((xeno, evolutionComp), newXeno, false);
+            RaiseLocalEvent(newXeno, ref ev, true);
+        }
+
+        _adminLog.Add(LogType.RMCEvolve, $"{ToPrettyString(xeno)} evolved into {ToPrettyString(newXeno)} (forced)");
+
+        QueueDel(xeno);
+
+        var afterEv = new AfterNewXenoEvolvedEvent();
+        RaiseLocalEvent(newXeno, ref afterEv);
+
+        return newXeno;
     }
 }

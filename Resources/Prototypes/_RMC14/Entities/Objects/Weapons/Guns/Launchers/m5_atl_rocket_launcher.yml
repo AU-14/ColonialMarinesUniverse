@@ -83,6 +83,20 @@
   - type: Corrodible
     isCorrodible: false
   - type: RMCMagneticItem
+  # cmu edit start
+  - type: CMUBackblast
+    nearEffect: CMUBackblastSmokeNear
+    farEffect: CMUBackblastSmokeFar
+  # cmu edit end
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
+#  - type: GunUserWhitelist # CMU14
+#    whitelist:
+#      components:
+#      - DemoSpecWhitelist
 
 - type: entity
   parent: [RMCBaseWeaponLauncher, RMCBaseAttachableHolder]
@@ -91,10 +105,10 @@
   description: "A German designed MANPAD system designed to replace the aging Russian-made 'spear' missile launchers. It offers reasonable air defence capabilities at the platoon-level for members of the UPPAC. This ones electronic systems seems to be taken off, rendering it as a 'Anti-Tank Weapon'"
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/UPP/emblr/emblr_inhands.rsi
+    sprite: CMU14/Weapons/Guns/UPP/emblr/emblr_inhands.rsi
     layers:
       - state: base
-        sprite: _AU14/Weapons/Guns/UPP/emblr/emblr_icon.rsi
+        sprite: CMU14/Weapons/Guns/UPP/emblr/emblr_icon.rsi
         map: ["enum.GunVisualLayers.Base"]
   - type: BallisticAmmoProvider
     whitelist:
@@ -107,7 +121,7 @@
     cycleDelay: 6.0
     proto: CMURocket70mm
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/UPP/emblr/emblr_inhands.rsi
+    sprite: CMU14/Weapons/Guns/UPP/emblr/emblr_inhands.rsi
   - type: Gun
     fireRate: 0.83
     soundGunshot:
@@ -115,6 +129,20 @@
   - type: Corrodible
     isCorrodible: false
   - type: RMCMagneticItem
+  # cmu edit start
+  - type: CMUBackblast
+    nearEffect: CMUBackblastSmokeNear
+    farEffect: CMUBackblastSmokeFar
+  # cmu edit end
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
+  - type: GunUserWhitelist # CMU14: demo specialist only
+    whitelist:
+      components:
+      - DemoSpecWhitelist
 
 # 84mm HE
 - type: entity
@@ -222,7 +250,7 @@
     fixtureID: projectile # no parent entity from BaseBulletTrigger because it has Clickable
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: RMC
+    explosionType: CMUAntiVehicleHE # CMU14: FLOW-09 was RMC; identical but for its tank blast multiplier.
     maxIntensity: 30
     intensitySlope: 10
     totalIntensity: 290
@@ -295,7 +323,7 @@
     fixtureID: projectile # no parent entity from BaseBulletTrigger because it has Clickable
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: RMC
+    explosionType: CMUAntiVehicleHE # CMU14: FLOW-09 was RMC; identical but for its tank blast multiplier.
     maxIntensity: 30
     intensitySlope: 10
     totalIntensity: 290
@@ -343,7 +371,7 @@
   description: A squat missile canister for the EMBLR surface-to-air weapons system. Unlike it's USCM counterpart, the Goose carries a small but powerful warhead. This one has 'Armor-Piercing' written on the side.
   components:
   - type: CartridgeAmmo
-    proto: RMCProjectileRocket84mmAntiArmor
+    proto: CMUProjectileRocket70mmAntiArmor # CMU14: FLOW-09 was RMCProjectileRocket84mmAntiArmor.
     deleteOnSpawn: false
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Explosives/emblr.rsi
@@ -358,9 +386,12 @@
 - type: entity
   id: CMUProjectileRocket70mmAntiArmor
   name: 70mm anti-armor rocket
-  parent: CMUProjectileRocket70mm
+  parent: CMUProjectileRocket70mmHE # CMU14: FLOW-09 was CMUProjectileRocket70mm, which has no impact trigger.
   categories: [ HideSpawnMenu ]
   components:
+  - type: TankCookOffProjectile # CMU14
+    criticalChance: 0.15 # CMU14: FLOW-09
+    hullFraction: 0.3 # CMU14: FLOW-09
   - type: Projectile
     impactEffect: BulletImpactEffect
     damage:
@@ -402,6 +433,9 @@
   parent: RMCProjectileRocket84mm
   categories: [ HideSpawnMenu ]
   components:
+  - type: TankCookOffProjectile # CMU14
+    criticalChance: 0.15 # CMU14: FLOW-09
+    hullFraction: 0.35 # CMU14: FLOW-09
   - type: Projectile
     impactEffect: BulletImpactEffect
     damage:

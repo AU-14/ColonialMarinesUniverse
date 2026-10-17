@@ -62,7 +62,8 @@ public sealed partial class RMCReflectSystem : EntitySystem
         reflected.LastReflectedBy = reflectorId;
         Dirty(projectile, reflected);
 
-        args.Component.IgnoreShooter = false;
+        // Reflected projectiles must be able to hit their original shooter immediately.
+        args.Component.WhenToStopIgnoringShooter = _timing.CurTime;
         Dirty(projectile, args.Component);
 
         _rmcProjectile.SetMaxRange(projectile, ent.Comp.Range);

@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "'hubaruba' from Discord",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "star"
+    },
+    {
+      "name": "star_supply"
+    },
+    {
+      "name": "rifle_box_marking"
+    },
+    {
+      "name": "smg_box_marking"
+    },
+    {
+      "name": "rifle_box_47"
+    },
+    {
+      "name": "rifle_box_71"
+    },
+    {
+      "name": "rifle_box_80"
+    },
+    {
+      "name": "smg_box_64"
+    },
+    {
+      "name": "pistol_box_73"
+    },
+    {
+      "name": "pistol_box_92"
+    }
+  ]
+}

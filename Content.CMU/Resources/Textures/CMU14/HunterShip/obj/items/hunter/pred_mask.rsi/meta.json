@@ -1,0 +1,379 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/hunter/pred_mask.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "EBONY"
+    },
+    {
+      "name": "pred_mask1_ebony"
+    },
+    {
+      "name": "pred_mask2_ebony"
+    },
+    {
+      "name": "pred_mask3_ebony"
+    },
+    {
+      "name": "pred_mask4_ebony"
+    },
+    {
+      "name": "pred_mask5_ebony"
+    },
+    {
+      "name": "pred_mask6_ebony"
+    },
+    {
+      "name": "pred_mask7_ebony"
+    },
+    {
+      "name": "pred_mask8_ebony"
+    },
+    {
+      "name": "pred_mask9_ebony"
+    },
+    {
+      "name": "pred_mask10_ebony"
+    },
+    {
+      "name": "pred_mask11_ebony"
+    },
+    {
+      "name": "pred_mask12_ebony"
+    },
+    {
+      "name": "pred_mask13_ebony"
+    },
+    {
+      "name": "pred_mask14_ebony"
+    },
+    {
+      "name": "pred_mask15_ebony"
+    },
+    {
+      "name": "pred_mask16_ebony"
+    },
+    {
+      "name": "pred_mask17_ebony"
+    },
+    {
+      "name": "pred_mask18_ebony"
+    },
+    {
+      "name": "pred_mask19_ebony"
+    },
+    {
+      "name": "pred_mask20_ebony"
+    },
+    {
+      "name": "BRONZE"
+    },
+    {
+      "name": "pred_mask1_bronze"
+    },
+    {
+      "name": "pred_mask2_bronze"
+    },
+    {
+      "name": "pred_mask3_bronze"
+    },
+    {
+      "name": "pred_mask4_bronze"
+    },
+    {
+      "name": "pred_mask5_bronze"
+    },
+    {
+      "name": "pred_mask6_bronze"
+    },
+    {
+      "name": "pred_mask7_bronze"
+    },
+    {
+      "name": "pred_mask8_bronze"
+    },
+    {
+      "name": "pred_mask9_bronze"
+    },
+    {
+      "name": "pred_mask10_bronze"
+    },
+    {
+      "name": "pred_mask11_bronze"
+    },
+    {
+      "name": "pred_mask12_bronze"
+    },
+    {
+      "name": "pred_mask13_bronze"
+    },
+    {
+      "name": "pred_mask14_bronze"
+    },
+    {
+      "name": "pred_mask15_bronze"
+    },
+    {
+      "name": "pred_mask16_bronze"
+    },
+    {
+      "name": "pred_mask17_bronze"
+    },
+    {
+      "name": "pred_mask18_bronze"
+    },
+    {
+      "name": "pred_mask19_bronze"
+    },
+    {
+      "name": "pred_mask20_bronze"
+    },
+    {
+      "name": "SILVER"
+    },
+    {
+      "name": "pred_mask1_silver"
+    },
+    {
+      "name": "pred_mask2_silver"
+    },
+    {
+      "name": "pred_mask3_silver"
+    },
+    {
+      "name": "pred_mask4_silver"
+    },
+    {
+      "name": "pred_mask5_silver"
+    },
+    {
+      "name": "pred_mask6_silver"
+    },
+    {
+      "name": "pred_mask7_silver"
+    },
+    {
+      "name": "pred_mask8_silver"
+    },
+    {
+      "name": "pred_mask9_silver"
+    },
+    {
+      "name": "pred_mask10_silver"
+    },
+    {
+      "name": "pred_mask11_silver"
+    },
+    {
+      "name": "pred_mask12_silver"
+    },
+    {
+      "name": "pred_mask13_silver"
+    },
+    {
+      "name": "pred_mask14_silver"
+    },
+    {
+      "name": "pred_mask15_silver"
+    },
+    {
+      "name": "pred_mask16_silver"
+    },
+    {
+      "name": "pred_mask17_silver"
+    },
+    {
+      "name": "pred_mask18_silver"
+    },
+    {
+      "name": "pred_mask19_silver",
+      "directions": 4
+    },
+    {
+      "name": "pred_mask20_silver"
+    },
+    {
+      "name": "CRIMSON"
+    },
+    {
+      "name": "pred_mask1_crimson"
+    },
+    {
+      "name": "pred_mask2_crimson"
+    },
+    {
+      "name": "pred_mask3_crimson"
+    },
+    {
+      "name": "pred_mask4_crimson"
+    },
+    {
+      "name": "pred_mask5_crimson"
+    },
+    {
+      "name": "pred_mask6_crimson"
+    },
+    {
+      "name": "pred_mask7_crimson"
+    },
+    {
+      "name": "pred_mask8_crimson"
+    },
+    {
+      "name": "pred_mask9_crimson"
+    },
+    {
+      "name": "pred_mask10_crimson"
+    },
+    {
+      "name": "pred_mask11_crimson"
+    },
+    {
+      "name": "pred_mask12_crimson"
+    },
+    {
+      "name": "pred_mask13_crimson"
+    },
+    {
+      "name": "pred_mask14_crimson"
+    },
+    {
+      "name": "pred_mask15_crimson"
+    },
+    {
+      "name": "pred_mask16_crimson"
+    },
+    {
+      "name": "pred_mask17_crimson"
+    },
+    {
+      "name": "pred_mask18_crimson"
+    },
+    {
+      "name": "pred_mask19_crimson",
+      "directions": 4
+    },
+    {
+      "name": "pred_mask20_crimson"
+    },
+    {
+      "name": "BONE"
+    },
+    {
+      "name": "pred_mask1_bone"
+    },
+    {
+      "name": "pred_mask2_bone"
+    },
+    {
+      "name": "pred_mask3_bone"
+    },
+    {
+      "name": "pred_mask4_bone"
+    },
+    {
+      "name": "pred_mask5_bone"
+    },
+    {
+      "name": "pred_mask6_bone"
+    },
+    {
+      "name": "pred_mask7_bone"
+    },
+    {
+      "name": "pred_mask8_bone"
+    },
+    {
+      "name": "pred_mask9_bone"
+    },
+    {
+      "name": "pred_mask10_bone"
+    },
+    {
+      "name": "pred_mask11_bone"
+    },
+    {
+      "name": "pred_mask12_bone"
+    },
+    {
+      "name": "pred_mask13_bone"
+    },
+    {
+      "name": "pred_mask14_bone"
+    },
+    {
+      "name": "pred_mask15_bone"
+    },
+    {
+      "name": "pred_mask16_bone"
+    },
+    {
+      "name": "pred_mask17_bone"
+    },
+    {
+      "name": "pred_mask18_bone"
+    },
+    {
+      "name": "pred_mask19_bone"
+    },
+    {
+      "name": "pred_mask20_bone"
+    },
+    {
+      "name": "SPECIAL"
+    },
+    {
+      "name": "pred_mask_elite_cleopatra"
+    },
+    {
+      "name": "pred_mask_elite_anubys"
+    },
+    {
+      "name": "pred_mask_elite_plated"
+    },
+    {
+      "name": "pred_mask_elite_ronin"
+    },
+    {
+      "name": "pred_mask_ancient"
+    },
+    {
+      "name": "pred_mask_ancient_white"
+    },
+    {
+      "name": "pred_mask_ancient_redglow",
+      "delays": [
+        [
+          20,
+          0.2,
+          0.2,
+          0.2,
+          10,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "LEGACY"
+    },
+    {
+      "name": "pred_mask_legacy_dragon"
+    },
+    {
+      "name": "pred_mask_legacy_collector"
+    },
+    {
+      "name": "pred_mask_legacy_enforcer"
+    },
+    {
+      "name": "pred_mask_legacy_swamp"
+    }
+  ]
+}

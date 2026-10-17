@@ -1,0 +1,741 @@
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaTrophyBase
+  abstract: true
+  components:
+  - type: Item
+    size: Small
+  - type: UniformAccessory
+    category: Decor
+    limit: 99
+  - type: YautjaTrophy
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanSkullTrophy
+  name: skull
+  description: A bone that appears to be of human origin.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/yautja_items.rsi
+    state: skull2
+  - type: Item
+    sprite: CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanSkull
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanLeftArmBoneTrophy
+  name: arm bone
+  description: A bone that appears to be of human origin.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/yautja_items.rsi
+    state: l_arm
+  - type: Item
+    sprite: CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanLeftArmBone
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanRightArmBoneTrophy
+  name: arm bone
+  description: A bone that appears to be of human origin.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/yautja_items.rsi
+    state: r_arm
+  - type: Item
+    sprite: CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanRightArmBone
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanLeftHandBoneTrophy
+  name: hand bone
+  description: A bone that appears to be of human origin.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/yautja_items.rsi
+    state: l_hand
+  - type: Item
+    sprite: CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanLeftHandBone
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanRightHandBoneTrophy
+  name: hand bone
+  description: A bone that appears to be of human origin.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/yautja_items.rsi
+    state: r_hand
+  - type: Item
+    sprite: CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanRightHandBone
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanLeftLegBoneTrophy
+  name: leg bone
+  description: A bone that appears to be of human origin.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/yautja_items.rsi
+    state: l_leg
+  - type: Item
+    sprite: CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanLeftLegBone
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanRightLegBoneTrophy
+  name: leg bone
+  description: A bone that appears to be of human origin.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/yautja_items.rsi
+    state: r_leg
+  - type: Item
+    sprite: CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanRightLegBone
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanLeftFootBoneTrophy
+  name: foot bone
+  description: A bone that appears to be of human origin.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/yautja_items.rsi
+    state: l_foot
+  - type: Item
+    sprite: CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanLeftFootBone
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanRightFootBoneTrophy
+  name: foot bone
+  description: A bone that appears to be of human origin.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/yautja_items.rsi
+    state: r_foot
+  - type: Item
+    sprite: CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanRightFootBone
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanRibcageTrophy
+  name: ribcage
+  description: A bone that appears to be of human origin.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/yautja_items.rsi
+    state: torso
+  - type: Item
+    sprite: CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanRibcage
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaXenoSkullTrophy
+  name: xeno skull trophy
+  description: A resin-scarred alien skull taken from a fallen serpent.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/yautja_items.rsi
+    state: warrior_skull
+  - type: Item
+    sprite: CMU14/Yautja/yautja_items.rsi
+  - type: Corrodible
+    isCorrodible: false
+  - type: YautjaTrophy
+    kind: XenoSkull
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaXenoPeltTrophy
+  name: xeno pelt trophy
+  description: A strip of alien hide cured as a hunter's trophy.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/yautja_items.rsi
+    state: warrior_pelt
+  - type: Item
+    sprite: CMU14/Yautja/yautja_items.rsi
+  - type: Corrodible
+    isCorrodible: false
+  - type: YautjaTrophy
+    kind: XenoPelt
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaQueenSkullTrophy
+  name: Queen skull
+  description: Skull of a prime hive ruler, mother to many.
+  components:
+  - type: Sprite
+    state: queen_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaKingSkullTrophy
+  name: King skull
+  description: Skull of a militant hive ruler, lord of destruction.
+  components:
+  - type: Sprite
+    state: king_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaCrusherSkullTrophy
+  name: Crusher skull
+  description: Skull of a powerful xenomorph, capable of shattering defenses.
+  components:
+  - type: Sprite
+    state: crusher_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaPraetorianSkullTrophy
+  name: Praetorian skull
+  description: Skull of a strong xenomorph, jack of all trades, vanguard to the Queen.
+  components:
+  - type: Sprite
+    state: praetorian_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaCorroderSkullTrophy
+  name: Corroder skull
+  description: Skull of an acidic xenomorph, a boiling menace.
+  components:
+  - type: Sprite
+    state: corroder_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaDespoilerSkullTrophy
+  name: Despoiler skull
+  description: Skull of a decrepit wretch, the surface still stinging your hands.
+  components:
+  - type: Sprite
+    state: despoiler_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaDeaconSkullTrophy
+  name: Deacon skull
+  description: Skull of an unusual xenomorph, a mysterious specimen.
+  components:
+  - type: Sprite
+    state: deacon_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaRavagerSkullTrophy
+  name: Ravager skull
+  description: Skull of a ferocious xenomorph, wielding unmatched destruction.
+  components:
+  - type: Sprite
+    state: ravager_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaBoilerSkullTrophy
+  name: Boiler skull
+  description: Skull of a ranged xenomorph, known for explosive acid attacks.
+  components:
+  - type: Sprite
+    state: boiler_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaDefenderSkullTrophy
+  name: Defender skull
+  description: Skull of a sturdy xenomorph, a bulwark of the hive.
+  components:
+  - type: Sprite
+    state: defender_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaWarriorSkullTrophy
+  name: Warrior skull
+  description: Skull of a strong xenomorph, a swift fighter.
+  components:
+  - type: Sprite
+    state: warrior_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaCarrierSkullTrophy
+  name: Carrier skull
+  description: Skull of a diligent xenomorph, a lifeblood worker of the hive.
+  components:
+  - type: Sprite
+    state: carrier_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaHivelordSkullTrophy
+  name: Hivelord skull
+  description: Skull of a nurturing xenomorph, devoted to hive construction.
+  components:
+  - type: Sprite
+    state: hivelord_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaBurrowerSkullTrophy
+  name: Burrower skull
+  description: Skull of a digging xenomorph, master of subterranean assault.
+  components:
+  - type: Sprite
+    state: burrower_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaHunterSkullTrophy
+  name: Hunter skull
+  description: Skull of a stealthy xenomorph, an ambushing predator.
+  components:
+  - type: Sprite
+    state: hunter_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaLurkerSkullTrophy
+  name: Lurker skull
+  description: Skull of a stealthy xenomorph, a nocturnal entity.
+  components:
+  - type: Sprite
+    state: lurker_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaSentinelSkullTrophy
+  name: Sentinel skull
+  description: Skull of an acidic xenomorph, skilled in ranged combat.
+  components:
+  - type: Sprite
+    state: sentinel_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaSpitterSkullTrophy
+  name: Spitter skull
+  description: Skull of a highly acidic xenomorph, a venomous ranged attacker.
+  components:
+  - type: Sprite
+    state: spitter_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaRunnerSkullTrophy
+  name: Runner skull
+  description: Skull of a swift and agile xenomorph, a terror on the prowl.
+  components:
+  - type: Sprite
+    state: runner_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaDroneSkullTrophy
+  name: Drone skull
+  description: Skull of a weak but essential xenomorph, a hive worker.
+  components:
+  - type: Sprite
+    state: drone_skull
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaQueenPeltTrophy
+  name: Queen pelt
+  description: The pelt of a prime hive ruler, mother to many.
+  components:
+  - type: Sprite
+    state: queen_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaKingPeltTrophy
+  name: King pelt
+  description: The pelt of a militant hive ruler, lord of destruction.
+  components:
+  - type: Sprite
+    state: king_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaCrusherPeltTrophy
+  name: Crusher pelt
+  description: The pelt of a powerful xenomorph, capable of shattering defenses.
+  components:
+  - type: Sprite
+    state: crusher_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaPraetorianPeltTrophy
+  name: Praetorian pelt
+  description: The pelt of a versatile xenomorph, a vanguard to the Queen.
+  components:
+  - type: Sprite
+    state: praetorian_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaCorroderPeltTrophy
+  name: Corroder pelt
+  description: The pelt of an acidic xenomorph, exuding caustic menace.
+  components:
+  - type: Sprite
+    state: corroder_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaDespoilerPeltTrophy
+  name: Despoiler pelt
+  description: The pelt of a decrepit wretch, the surface still stinging your hands.
+  components:
+  - type: Sprite
+    state: despoiler_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaDeaconPeltTrophy
+  name: Deacon pelt
+  description: The pelt of an unusual xenomorph, a mysterious and rare specimen.
+  components:
+  - type: Sprite
+    state: deacon_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaRavagerPeltTrophy
+  name: Ravager pelt
+  description: The pelt of a ferocious xenomorph, wielding unmatched destruction.
+  components:
+  - type: Sprite
+    state: ravager_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaBoilerPeltTrophy
+  name: Boiler pelt
+  description: The pelt of a ranged xenomorph, known for explosive acid attacks.
+  components:
+  - type: Sprite
+    state: boiler_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaDefenderPeltTrophy
+  name: Defender pelt
+  description: The pelt of a sturdy xenomorph, a shield of the hive.
+  components:
+  - type: Sprite
+    state: defender_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaWarriorPeltTrophy
+  name: Warrior pelt
+  description: The pelt of a strong xenomorph, a fast and lethal fighter.
+  components:
+  - type: Sprite
+    state: warrior_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaCarrierPeltTrophy
+  name: Carrier pelt
+  description: The pelt of a diligent xenomorph, a lifeblood worker of the hive.
+  components:
+  - type: Sprite
+    state: carrier_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaHivelordPeltTrophy
+  name: Hivelord pelt
+  description: The pelt of a nurturing xenomorph, devoted to hive construction.
+  components:
+  - type: Sprite
+    state: hivelord_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaBurrowerPeltTrophy
+  name: Burrower pelt
+  description: The pelt of a digging xenomorph, master of subterranean assault.
+  components:
+  - type: Sprite
+    state: burrower_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaHunterPeltTrophy
+  name: Hunter pelt
+  description: The pelt of a swift xenomorph, a fearsome ambushing predator.
+  components:
+  - type: Sprite
+    state: hunter_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaLurkerPeltTrophy
+  name: Lurker pelt
+  description: The pelt of a stealthy xenomorph, an ambushing predator.
+  components:
+  - type: Sprite
+    state: lurker_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaSentinelPeltTrophy
+  name: Sentinel pelt
+  description: The pelt of an acidic xenomorph, skilled in ranged combat.
+  components:
+  - type: Sprite
+    state: sentinel_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaSpitterPeltTrophy
+  name: Spitter pelt
+  description: The pelt of a highly acidic xenomorph, a venomous ranged attacker.
+  components:
+  - type: Sprite
+    state: spitter_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaRunnerPeltTrophy
+  name: Runner pelt
+  description: The pelt of a swift and agile xenomorph, a terror on the prowl.
+  components:
+  - type: Sprite
+    state: runner_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaDronePeltTrophy
+  name: Drone pelt
+  description: The pelt of a weak but essential xenomorph, a hive worker.
+  components:
+  - type: Sprite
+    state: drone_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaLarvaPeltTrophy
+  name: Larva pelt
+  description: The hide of a juvenile Xenomorph, a grim trophy from a fledgling that never reached its full potential.
+  components:
+  - type: Sprite
+    state: larva_pelt
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaHumanHide
+  name: flayed hide
+  description: A sheet of human hide removed during Yautja butchery.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/materials.rsi
+    layers:
+    - state: hide
+      map: [ "base" ]
+  - type: Stack
+    stackType: CMUYautjaHumanHide
+    count: 1
+    baseLayer: base
+    layerStates:
+    - hide
+    - hide_2
+    - hide_3
+  - type: Item
+    sprite: Objects/Materials/materials.rsi
+    heldPrefix: hide
+    size: Small
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaHumanSpine
+  name: skull
+  description: A bone that appears to be of human origin.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/yautja_items.rsi
+    state: spine
+  - type: Item
+    sprite: CMU14/Yautja/yautja_items.rsi
+    size: Small
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaHumanTorso
+  name: ribcage
+  description: A bone that appears to be of human origin.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/yautja_items.rsi
+    state: torso
+  - type: Item
+    sprite: CMU14/Yautja/yautja_items.rsi
+    size: Small
+
+- type: entity
+  id: CMUYautjaHumanButcheredRemains
+  name: butchered remains
+  description: Remains left by ritual Yautja butchery.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: CMU14/HunterShip/effects/blood.rsi
+    state: remains
+  - type: Transform
+    anchored: true
+
+- type: entity
+  id: CMUYautjaXenoButcheredRemains
+  name: butchered xeno remains
+  description: Acid-stained remains left by ritual Yautja butchery.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: CMU14/HunterShip/effects/blood.rsi
+    state: remainsxeno
+  - type: Transform
+    anchored: true
+
+- type: stack
+  id: CMUYautjaHumanHide
+  name: stack-cmu-yautja-human-hide
+  icon: { sprite: /Textures/Objects/Materials/materials.rsi, state: hide }
+  spawn: CMUYautjaHumanHide
+  maxCount: 30
+
+- type: entity
+  parent: CMBeltBaseStorage
+  id: CMUYautjaTrophyBelt
+  name: trophy belt
+  description: A ceremonial Yautja belt for displaying claimed trophies and ritual victories.
+  suffix: Yautja
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Belt/marine/jungle-classic.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Belt/marine/jungle-classic.rsi
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,15,2
+    whitelist:
+      components:
+      - YautjaTrophy
+      - UniformAccessory
+  - type: YautjaTechItem
+  - type: YautjaTrophyDisplay
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaPolishingRag
+  name: polishing rag
+  description: An astonishingly fine, hand-tailored piece of exotic cloth.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/yautja_items.rsi
+    state: polishing_rag
+  - type: Item
+    sprite: CMU14/Yautja/yautja_items.rsi
+    size: Tiny
+  - type: YautjaTechItem
+    blockPickup: false
+    blockUse: false
+    blockMelee: false
+    blockThrow: false
+  - type: YautjaPolishingRag
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaHuntingTrap
+  name: hunting trap
+  description: A bizarre Yautja device used for trapping and killing prey.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/yautja_items.rsi
+    drawdepth: Items
+    layers:
+    - state: yauttrap0
+      map: [ "base" ]
+  - type: Item
+    sprite: CMU14/Yautja/yautja_items.rsi
+    size: Small
+  - type: StaticPrice
+    price: 50
+  - type: YautjaTechItem
+    blockPickup: false
+    blockUse: false
+  - type: YautjaTrap
+    triggerSound: !type:SoundPathSpecifier
+      path: /Audio/CMU14/Yautja/tablehit1.ogg
+    blocksXenoHeal: true
+    forceXenoHelpEmote: true
+    forceHumanPainEmote: true
+    xenoInterferenceDuration: 100
+    preyTrackingDuration: 300
+  - type: StepTrigger
+    active: false
+    intersectRatio: 0.15
+    requiredTriggeredSpeed: 0.5
+    ignoreWeightless: true
+    stepOn: true
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Layer:
+        base:
+          yauttrap0: { state: yauttrap0 }
+          yauttrap1: { state: yauttrap1 }
+          yauttrapgrass: { state: yauttrapgrass }
+          yauttrapdirt: { state: yauttrapdirt }
+  - type: Physics
+    bodyType: Dynamic
+    fixedRotation: true
+  - type: CollisionWake
+    enabled: false
+  - type: Fixtures
+    fixtures:
+      slips:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        hard: false
+        layer:
+        - LowImpassable
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        density: 30
+        mask:
+        - ItemMask

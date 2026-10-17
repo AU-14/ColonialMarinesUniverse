@@ -1,6 +1,6 @@
 using System.Numerics;
+using Content.Server.Decals;
 using Content.Server.FootPrint;
-using Content.Shared.Decals;
 using Content.Shared.FootPrint;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -42,7 +42,6 @@ public sealed class FootPrintsSystemTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
-        var mapManager = server.ResolveDependency<IMapManager>();
         var tileDefinitionManager = server.ResolveDependency<ITileDefinitionManager>();
 
         await server.WaitAssertion(() =>
@@ -53,9 +52,8 @@ public sealed class FootPrintsSystemTest
 
             map.CreateMap(out var mapId);
             var grid = map.CreateGridEntity(mapId);
-            entMan.EnsureComponent<DecalGridComponent>(grid.Owner);
 
-            var floorTile = new Tile(tileDefinitionManager["FloorSteel"].TileId);
+            var floorTile = new Tile(tileDefinitionManager["CMFloorSteel"].TileId); // CMU14
             for (var x = 0; x < 3; x++)
                 map.SetTile(grid, new Vector2i(x, 0), floorTile);
 
@@ -128,13 +126,6 @@ public sealed class FootPrintsSystemTest
 
     private static int CountDecals(IEntityManager entMan, EntityUid grid)
     {
-        var count = 0;
-        var decals = entMan.GetComponent<DecalGridComponent>(grid);
-        foreach (var chunk in decals.ChunkCollection.ChunkCollection.Values)
-        {
-            count += chunk.Decals.Count;
-        }
-
-        return count;
+        return entMan.System<DecalSystem>().GetAllDecals(grid).Count;
     }
 }

@@ -31,7 +31,7 @@
     recoilUnwielded: 4
     scatterWielded: 10
     scatterUnwielded: 20
-    baseFireRate: 0.7
+    baseFireRate: 1.5
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.15
     accuracyMultiplierUnwielded: 0.5

@@ -11,6 +11,9 @@ using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Client.UserInterface.Systems.Inventory.Controls;
 using Content.Client.UserInterface.Systems.Inventory.Widgets;
 using Content.Client.UserInterface.Systems.Inventory.Windows;
+using Content.Shared._RMC14.Storage;
+using Content.Shared.CMU14.Input;
+using Content.Shared.CMU14.Inventory;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Input;
 using Content.Shared.Inventory.VirtualItem;
@@ -19,6 +22,7 @@ using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Configuration;
 using Robust.Shared.Input;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
@@ -31,11 +35,11 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
     IOnSystemChanged<ClientInventorySystem>, IOnSystemChanged<HandsSystem>, IOnSystemChanged<WebbingSystem>, IOnSystemChanged<UniformAccessorySystem>
 {
     [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private IConfigurationManager _cfg = default!; // CMU14
 
-    [UISystemDependency] private ClientInventorySystem _inventorySystem = default!;
-    [UISystemDependency] private HandsSystem _handsSystem = default!;
-    [UISystemDependency] private ContainerSystem _container = default!;
-    [UISystemDependency] private SpriteSystem _sprite = default!;
+    [UISystemDependency] private readonly ClientInventorySystem _inventorySystem = default!;
+    [UISystemDependency] private readonly HandsSystem _handsSystem = default!;
+    [UISystemDependency] private readonly SpriteSystem _sprite = default!;
 
     private EntityUid? _playerUid;
     private InventorySlotsComponent? _playerInventory;
@@ -148,7 +152,7 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
             if (!container.TryGetButton(data.SlotName, out var button))
             {
                 button = CreateSlotButton(data);
-                container.AddButton(button);
+                container.TryAddButton(button);
             }
 
             var showStorage = _entities.HasComponent<StorageComponent>(data.HeldEntity);
@@ -194,8 +198,6 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
                 });
             }
         }
-
-        return;
 
         int GetIndex(Vector2i position)
         {
@@ -278,6 +280,20 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
     {
         var slot = control.SlotName;
 
+        // CMU14 Begin: open worn storage by key, or by an empty-handed click when the player opts in
+        if (args.Function == CMUKeyFunctions.CMUOpenWornStorage ||
+            (args.Function == EngineKeyFunctions.UIClick &&
+             _cfg.GetCVar(CMUInventoryCVars.ClickOpensWornStorage) &&
+             _handsSystem.GetActiveHandEntity() == null))
+        {
+            if (TryOpenWornStorage(slot))
+            {
+                args.Handle();
+                return;
+            }
+        }
+        // CMU14 End
+
         if (args.Function == EngineKeyFunctions.UIClick)
         {
             _inventorySystem.UIInventoryActivate(control.SlotName);
@@ -290,28 +306,47 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
             return;
         }
 
-        if (args.Function == ContentKeyFunctions.ExamineEntity)
+        switch (args.Function)
         {
-            _inventorySystem.UIInventoryExamine(slot, _playerUid.Value);
-        }
-        else if (args.Function == EngineKeyFunctions.UseSecondary)
-        {
-            _inventorySystem.UIInventoryOpenContextMenu(slot, _playerUid.Value);
-        }
-        else if (args.Function == ContentKeyFunctions.ActivateItemInWorld)
-        {
-            _inventorySystem.UIInventoryActivateItem(slot, _playerUid.Value);
-        }
-        else if (args.Function == ContentKeyFunctions.AltActivateItemInWorld)
-        {
-            _inventorySystem.UIInventoryAltActivateItem(slot, _playerUid.Value);
-        }
-        else
-        {
-            return;
+            case var _ when args.Function == ContentKeyFunctions.ExamineEntity:
+                _inventorySystem.UIInventoryExamine(slot, _playerUid.Value);
+                break;
+
+            case var _ when args.Function == EngineKeyFunctions.UseSecondary:
+                _inventorySystem.UIInventoryOpenContextMenu(slot, _playerUid.Value);
+                break;
+
+            case var _ when args.Function == ContentKeyFunctions.ActivateItemInWorld:
+                _inventorySystem.UIInventoryActivateItem(slot, _playerUid.Value);
+                break;
+
+            case var _ when args.Function == ContentKeyFunctions.AltActivateItemInWorld:
+                _inventorySystem.UIInventoryAltActivateItem(slot, _playerUid.Value);
+                break;
+
+            case var _ when args.Function == ContentKeyFunctions.Point:
+                _inventorySystem.UIInventoryPointAt(slot, _playerUid.Value);
+                break;
+
+            default:
+                return;
         }
 
         args.Handle();
+    }
+
+    // CMU14 method
+    private bool TryOpenWornStorage(string slot)
+    {
+        if (_playerUid is not { } player ||
+            !_inventorySystem.TryGetSlotEntity(player, slot, out var item) ||
+            !_entities.HasComponent<StorageComponent>(item.Value))
+        {
+            return false;
+        }
+
+        _inventorySystem.UIInventoryStorageActivate(slot);
+        return true;
     }
 
     private void StoragePressed(GUIBoundKeyEventArgs args, SlotControl control)
@@ -342,12 +377,13 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
         // Set green / red overlay at 50% transparency
         var hoverEntity = _entities.SpawnEntity("hoverentity", MapCoordinates.Nullspace);
         var hoverSprite = _entities.GetComponent<SpriteComponent>(hoverEntity);
-        var fits = _inventorySystem.CanEquip(player.Value, held.Value, control.SlotName, out _, slotDef) &&
-                   _container.CanInsert(held.Value, container);
+        var fits = _inventorySystem.CanEquip(player.Value, held.Value, control.SlotName, out _, slotDef, containerSlot: container);
 
         if (!fits && _entities.TryGetComponent<StorageComponent>(container.ContainedEntity, out var storage))
         {
-            fits = _entities.System<StorageSystem>().CanInsert(container.ContainedEntity.Value, held.Value, player.Value, out _, storage);
+            var storageUid = container.ContainedEntity.Value;
+            fits = _entities.System<StorageSystem>().CanInsert(storageUid, held.Value, out _, storage) &&
+                   _entities.System<RMCStorageSystem>().CanInsert((storageUid, storage), held.Value, player.Value, out _);
         }
         else if (!fits && _entities.TryGetComponent<ItemSlotsComponent>(container.ContainedEntity, out var itemSlots))
         {
@@ -357,7 +393,7 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
                 if (!slot.InsertOnInteract)
                     continue;
 
-                if (!itemSlotsSys.CanInsert(container.ContainedEntity.Value, held.Value, null, slot))
+                if (!itemSlotsSys.CanInsert(container.ContainedEntity.Value, slot, held.Value, null))
                     continue;
                 fits = true;
                 break;
@@ -376,7 +412,7 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
             return;
 
         var button = CreateSlotButton(data);
-        slotGroup.AddButton(button);
+        slotGroup.TryAddButton(button);
     }
 
     private void RemoveSlot(SlotData data)
@@ -384,7 +420,7 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
         if (!_slotGroups.TryGetValue(data.SlotGroup, out var slotGroup))
             return;
 
-        slotGroup.RemoveButton(data.SlotName);
+        slotGroup.TryRemoveButton(data.SlotName, out _);
     }
 
     public void ReloadSlots()

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Xenonids;
-using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
@@ -186,7 +185,7 @@ public sealed partial class SkillsSystem : EntitySystem
         if (!HasAllSkills(args.User, ent.Comp.Skills))
         {
             var msg = Loc.GetString("rmc-skills-cant-use", ("item", args.Used));
-            _popup.PopupClient(msg, args.User, PopupType.SmallCaution);
+            _popup.PopupSelf(msg, args.User, PopupType.SmallCaution);
             args.Handled = true;
         }
     }
@@ -199,7 +198,7 @@ public sealed partial class SkillsSystem : EntitySystem
         if (!HasAllSkills(args.User, ent.Comp.Skills))
         {
             var msg = Loc.GetString("rmc-skills-no-training", ("target", ent));
-            _popup.PopupClient(msg, args.User, PopupType.SmallCaution);
+            _popup.PopupSelf(msg, args.User, PopupType.SmallCaution);
             args.Cancel();
         }
     }
@@ -209,7 +208,7 @@ public sealed partial class SkillsSystem : EntitySystem
         if (!HasAllSkills(args.User, ent.Comp.Skills))
         {
             var msg = Loc.GetString("rmc-skills-cant-use", ("item", ent));
-            _popup.PopupClient(msg, args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, args.User, args.User, PopupType.SmallCaution);
             args.Handled = true;
         }
     }
@@ -219,7 +218,7 @@ public sealed partial class SkillsSystem : EntitySystem
         if (!HasAllSkills(args.User, ent.Comp.Skills))
         {
             var msg = Loc.GetString("rmc-skills-cant-use", ("item", ent));
-            _popup.PopupClient(msg, args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, args.User, args.User, PopupType.SmallCaution);
             args.Cancelled = true;
         }
     }
@@ -243,7 +242,7 @@ public sealed partial class SkillsSystem : EntitySystem
         if (!HasAllSkills(args.User, ent.Comp.Skills))
         {
             var msg = Loc.GetString("rmc-skills-cant-use", ("item", ent));
-            _popup.PopupClient(msg, args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, args.User, args.User, PopupType.SmallCaution);
             args.Handled = true;
         }
     }
@@ -262,18 +261,18 @@ public sealed partial class SkillsSystem : EntitySystem
 
     private void OnItemToggleDeactivateUnskilled(Entity<ItemToggleDeactivateUnskilledComponent> ent, ref GotEquippedEvent args)
     {
-        if (HasComp<LobbyPreviewEntityComponent>(args.Equipee) ||
+        if (HasComp<LobbyPreviewEntityComponent>(args.EquipTarget) ||
             HasComp<LobbyPreviewEntityComponent>(args.Equipment))
         {
             return;
         }
 
-        if (!HasAllSkills(args.Equipee, ent.Comp.Skills))
+        if (!HasAllSkills(args.EquipTarget, ent.Comp.Skills))
         {
-            if (_toggle.IsActivated(ent.Owner) && _toggle.TryDeactivate(ent.Owner, args.Equipee) && ent.Comp.Popup != null)
+            if (_toggle.IsActivated(ent.Owner) && _toggle.TryDeactivate(ent.Owner, args.EquipTarget) && ent.Comp.Popup != null)
             {
                 var msg = Loc.GetString(ent.Comp.Popup, ("item", ent));
-                _popup.PopupClient(msg, args.Equipee, args.Equipee, PopupType.SmallCaution);
+                _popup.PopupEntity(msg, args.EquipTarget, args.EquipTarget, PopupType.SmallCaution);
             }
         }
     }
@@ -311,16 +310,10 @@ public sealed partial class SkillsSystem : EntitySystem
             entityToExamine = contained.Value;
         }
 
-        if (!TryComp(entityToExamine, out SolutionContainerManagerComponent? solutionContainerManager))
-            return;
-
         var foundReagents = new List<ReagentQuantity>();
-        foreach (var solutionContainerId in solutionContainerManager.Containers)
+        foreach (var (_, solutionEntity) in _solutionContainerSystem.EnumerateSolutions(entityToExamine))
         {
-            if (!_solutionContainerSystem.TryGetSolution(entityToExamine, solutionContainerId, out _, out var solution))
-                continue;
-
-            foreach (var reagent in solution.Contents)
+            foreach (var reagent in solutionEntity.Comp.Solution.Contents)
             {
                 foundReagents.Add(reagent);
             }
@@ -372,7 +365,7 @@ public sealed partial class SkillsSystem : EntitySystem
         var skillsDict = ImmutableDictionary.CreateBuilder<string, EntProtoId<SkillDefinitionComponent>>();
         foreach (var prototype in _prototypes.EnumeratePrototypes<EntityPrototype>())
         {
-            if (!prototype.HasComponent<SkillDefinitionComponent>())
+            if (!prototype.HasComp<SkillDefinitionComponent>(_compFactory))
                 continue;
 
             var id = prototype.ID;
@@ -582,7 +575,7 @@ public sealed partial class SkillsSystem : EntitySystem
         }
 
         DebugTools.Assert(_prototypes.TryIndex(skill, out var entProto) &&
-                     entProto.HasComponent<SkillDefinitionComponent>());
+                     entProto.HasComp<SkillDefinitionComponent>(_compFactory));
 
         ent.Comp ??= EnsureComp<SkillsComponent>(ent);
 

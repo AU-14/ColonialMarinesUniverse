@@ -1,17 +1,36 @@
 - type: entity
   save: false
-  parent: RMCBaseMobSpeciesOrganic
+  parent:
+  - AppearanceReptilian
+  - RMCBaseMobSpeciesOrganic
   id: CMMobReptilian
   name: Urisst' C-M Mzhand
   suffix: RMC14
   components:
-  - type: HumanoidAppearance
+  - type: HumanoidProfile
     species: Reptilian
-    hideLayersOnEquip:
-    - UndergarmentTop
-    - Snout
-    - HeadTop
-    - HeadSide
+  - type: InitialBody
+    organs:
+      Torso: RMCOrganReptilianTorso
+      Head: OrganReptilianHead
+      ArmLeft: OrganReptilianArmLeft
+      ArmRight: OrganReptilianArmRight
+      HandRight: OrganReptilianHandRight
+      HandLeft: OrganReptilianHandLeft
+      LegLeft: OrganReptilianLegLeft
+      LegRight: OrganReptilianLegRight
+      FootLeft: OrganReptilianFootLeft
+      FootRight: OrganReptilianFootRight
+      Brain: OrganReptilianBrain
+      Eyes: OrganReptilianEyes
+      Tongue: OrganReptilianTongue
+      Appendix: OrganReptilianAppendix
+      Ears: OrganReptilianEars
+      Lungs: OrganReptilianLungs
+      Heart: OrganReptilianHeart
+      Stomach: OrganReptilianStomach
+      Liver: OrganReptilianLiver
+      Kidneys: OrganReptilianKidneys
   - type: Icon
     sprite: Mobs/Species/Reptilian/parts.rsi
     state: full
@@ -19,10 +38,6 @@
   - type: TypingIndicator
     proto: lizard
   - type: Vocal
-    sounds:
-      Male: RMCMaleReptilian
-      Female: RMCFemaleReptilian
-      Unsexed: RMCUnisexReptilian
   - type: Wagging
   - type: MeleeWeapon
     soundHit:
@@ -32,3 +47,11 @@
     speciesId: reptilian
   - type: FixedIdentity
     name: cm-chatsan-replacement-reptilian
+
+- type: entity
+  parent: OrganReptilianTorso
+  id: RMCOrganReptilianTorso
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.UndergarmentTop

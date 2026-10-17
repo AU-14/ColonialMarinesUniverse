@@ -1,0 +1,11 @@
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardCMBBureauObserver
+  name: CMB Bureau Observer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobCMBBureauObserver
+  - type: ItemIFF
+    factions:
+    - AUBureau

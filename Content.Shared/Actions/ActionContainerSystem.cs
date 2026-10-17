@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared.Actions.Components;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Robust.Shared.Containers;
@@ -23,13 +23,11 @@ public sealed partial class ActionContainerSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedMindSystem _mind = default!;
 
-    private EntityQuery<ActionComponent> _query;
+    [Dependency] private EntityQuery<ActionComponent> _query = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-
-        _query = GetEntityQuery<ActionComponent>();
 
         SubscribeLocalEvent<ActionsContainerComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<ActionsContainerComponent, ComponentShutdown>(OnShutdown);
@@ -91,10 +89,22 @@ public sealed partial class ActionContainerSystem : EntitySystem
         DebugTools.AssertOwner(uid, comp);
         comp ??= EnsureComp<ActionsContainerComponent>(uid);
 
+        // CMU14: on the client, applying a mob's state can initialize another component (e.g. sleeping) before the
+        // action container has set up its container. Wait for it rather than crash; the server's state brings the action.
+        if (comp.Container == null)
+            return false;
+
+        // Replicated action and container states can arrive separately. Keep server-owned references intact until
+        // containment catches up, since the client cannot authoritatively replace them.
+        var canSpawnAction = !_netMan.IsClient || IsClientSide(uid);
+
         if (Exists(actionId))
         {
             if (_actions.GetAction(actionId) is not {} ent)
             {
+                if (!canSpawnAction)
+                    return false;
+
                 actionId = null;
             }
             else
@@ -115,6 +125,9 @@ public sealed partial class ActionContainerSystem : EntitySystem
                     return true;
                 }
 
+                if (!canSpawnAction)
+                    return false;
+
                 Log.Error($"Action {ToPrettyString(ent)} is not contained in the expected container {ToPrettyString(uid)}");
                 actionId = null;
             }
@@ -125,7 +138,7 @@ public sealed partial class ActionContainerSystem : EntitySystem
             return false;
 
         // Client cannot predict entity spawning.
-        if (_netMan.IsClient && !IsClientSide(uid))
+        if (!canSpawnAction)
             return false;
 
         actionId = Spawn(actionPrototypeId);

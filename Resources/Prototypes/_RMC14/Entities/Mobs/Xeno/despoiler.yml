@@ -74,6 +74,9 @@
     - RMCActionXenoDespoilerCatalyze
     - ActionXenoDevolve
   - type: XenoHeavy
+  # CMU14: xeno feedback and lifecycle.
+  - type: XenoClaws
+    clawType: Sharp
   - type: XenoDevolve
     devolvesTo:
     - CMXenoSpitter
@@ -83,44 +86,64 @@
     plasmaRegenOnWeeds: 4
   - type: XenoAcid
   - type: CMArmor
-    xenoArmor: 30
-    explosionArmor: 20
+    xenoArmor: 35
+    explosionArmor: 40
   - type: XenoDevour
   - type: XenoTailStab
     toggle: false
+    # CMU14: reduce ability damage by 30%.
     tailDamage:
-      groups:
-        Brute: 20
+      types:
+        Blunt: 4.66
+        Slash: 4.67
+        Piercing: 4.67
   - type: MeleeWeapon
     damage:
       types:
-        Slash: 18
+        Blunt: 6
+        Slash: 6
+        Piercing: 6
         Heat: 7
   - type: XenoDespoiler
+    # CMU14: reduce finishing-stab bonuses by 30%.
     finishingStabBonusByTier:
     - types:
-        Heat: 10
+        Heat: 7
     - types:
-        Heat: 20
+        Heat: 14
     - types:
-        Heat: 30
+        Heat: 21
     - types:
-        Heat: 40
-    acidComponents:
-    - type: UserAcided
-      armorPiercing: 40
-      duration: 12
-      damageEvery: 1
+        Heat: 28
+    # CMU14: complete tier effects, totaling 14 / 70 / 183.6 before armor.
+    # acidComponents:
+    # - type: UserAcided
+    #   armorPiercing: 40
+    #   duration: 12
+    #   damageEvery: 1
+    #   damage:
+    #     types:
+    #       Heat: 1
+    acidTiers:
+    - duration: 20
       damage:
         types:
-          Heat: 1
+          Heat: 0.7
+    - duration: 40
+      damage:
+        types:
+          Heat: 1.75
+    - duration: 40
+      damage:
+        types:
+          Heat: 4.59
   - type: XenoDespoilerHypertension
     maxStacks: 4
     pointsPerStack: 200
     pointsPerSlash: 200
     decayDelay: 10
     decayPerSecond: 120
-    bonusBurnPerStack: 15
+    bonusBurnPerStack: 14 # CMU14: reduce empowered bonus damage by 30%.
   - type: XenoDespoilerSlashOnHit
     enhanceStacksThreshold: 3
   - type: Tackle
@@ -133,7 +156,7 @@
     gibChance: 1.0
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.4
-    baseSprintSpeed: 4.2
+    baseSprintSpeed: 4.8
   - type: SlowOnPull
     slowdowns:
     - multiplier: 0.6375

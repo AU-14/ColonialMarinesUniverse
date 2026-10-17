@@ -1,0 +1,107 @@
+﻿- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUNISCRifleman
+  categories: [ HideSpawnMenu ]
+  name: UNISC Rifleman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobUNISCRifleman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUNISCSquadleader
+  categories: [ HideSpawnMenu ]
+  name: UNISC Section Leader ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobUNISCSquadleader
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUNISCAutomaticRifleman
+  categories: [ HideSpawnMenu ]
+  name: UNISC Automatic Rifleman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobUNISCAutomaticRifleman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUNISCCorpsman
+  categories: [ HideSpawnMenu ]
+  name: UNISC Corpsman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobUNISCCorpsman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUNISCEnforcerDetachment
+  categories: [ HideSpawnMenu ]
+  name: UNISC Enforcer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobUNISCEnforcer
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUNISCEnforcerLeaderDetachment
+  categories: [ HideSpawnMenu ]
+  name: UNISC Lead Enforcer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobUNISCEnforcerLeader
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14JobInvestigationCMBRightsObserver
+  categories: [ HideSpawnMenu ]
+  name: UNISC Human Rights Observer Attachee.
+  components:
+  - type: PresetIdCard
+    job: AU14JobInvestigationCMBRightsObserver
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUNISCPltOpsOffDetachment
+  categories: [ HideSpawnMenu ]
+  name: UNISC Platoon Operations Officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobUNISCPltOpsOff
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUNISCAmmoBearer
+  categories: [ HideSpawnMenu ]
+  name: UNISC Ammo Bearer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobUNISCAmmoBearer
+  - type: ItemIFF
+    factions:
+    - GOVFOR

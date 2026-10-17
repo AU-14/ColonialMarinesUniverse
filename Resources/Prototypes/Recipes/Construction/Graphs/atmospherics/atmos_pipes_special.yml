@@ -1,0 +1,43 @@
+- type: constructionGraph
+  id: GasPipeSpecial
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: manifold
+      steps:
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
+        amount: 2
+        doAfter: 1
+
+  - node: broken
+    entity: GasPipeBroken
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
+        amount: 1
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: manifold
+    entity: CMUGasPipeManifold # CMU14: slot-0 cmu clone
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1

@@ -1,0 +1,42 @@
+<Document>
+# The Synthesis Simulator
+
+<GuideEntityEmbed Entity="CMUChemSimulator" Caption="Synthesis Simulator"/>
+
+This machine is necessary for making your own custom chemicals.
+
+To use this machine, you insert papers dispensed by the [textlink="XRF Scanner" link="CMUXRF"] and [textlink="Research Data Terminal" link="CMURDT"] into it.
+Any paper deemed "incomplete" will not be accepted. Incomplete papers include any chemical paper that does not have a recipe on it.
+This means that special [textlink="Hydroponics" link="CMUBotany"] chemicals cannot be used in the synthesis simulator.
+
+Making your own chemicals is not cheap, however. You will need to discover the properties of the chemicals and obtain credits using the [textlink="XRF Scanner" link="CMUXRF"].
+
+There are four modes on the synthesis simulator.
+
+## Amplify
+
+This mode takes in a target paper, and allows you to increase a targeted property's potency by one, at the cost of lowering the overdose threshold of the new chemical by 5 units.
+
+## Suppress
+
+This mode is the inverse of Amplify, taking in a target paper and decreasing a targeted property's potency by one.
+If a targeted property's potency is reduced to zero, it is removed.
+The cost of this is the same as Amplify, lowering the overdose threshold of the new chemical by 5 units.
+
+## Add
+
+This mode is simple. It takes in a target paper and a reference paper, and puts the reference property and its potency onto the new chemical.
+The cost of this is making the original reference chemical and [bold]every[/bold] chemical derived from it completely unusable in any future simulation operations.
+
+## Relate
+
+This mode takes in a target paper and a reference paper. You will need to pick a target property and a reference property.
+Both of the properties have to be of equal potency. This will create a new chemical that is a duplicate of the target chemical but with the target property
+swapped out for the reference property. This comes at the cost of lowering the overdose threshold of the new chemical by 5.
+
+
+## Override
+
+This allows you to perform Addition and Relation using properties that conflict. Conflicting properties will be subtracted. For example,
+Anticarcinogenic with a potency of 3 and Carcinogenic with a potency of 4 will conflict and the new chemical will have Carcinogenic with a potency of 1.
+</Document>

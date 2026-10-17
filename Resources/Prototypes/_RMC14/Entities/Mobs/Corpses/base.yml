@@ -9,6 +9,13 @@
         Asphyxiation: 44
         Slash: 77
         Blunt: 43
+  - type: DamageMobState # CMU14
+    critDamage:
+      types:
+        Asphyxiation: 1
+    nonDeadDamage:
+      types:
+        Asphyxiation: -0.33
   - type: Rank
     rank: RMCRankCivilian
 #  - type: Loadout # it seems that cm-ss13 doesnt use this loadout

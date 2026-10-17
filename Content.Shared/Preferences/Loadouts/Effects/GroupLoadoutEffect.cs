@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -28,5 +29,16 @@ public sealed partial class GroupLoadoutEffect : LoadoutEffect
 
         reason = reasons.Count == 0 ? null : FormattedMessage.FromMarkupOrThrow(string.Join('\n', reasons));
         return reason == null;
+    }
+
+    public override void ApplyToEntity(EntityUid entity, IEntityManager entityManager, IPrototypeManager prototypeManager)
+    {
+        if (!prototypeManager.TryIndex(Proto, out var effectsProto))
+            return;
+
+        foreach (var effect in effectsProto.Effects)
+        {
+            effect.ApplyToEntity(entity, entityManager, prototypeManager);
+        }
     }
 }

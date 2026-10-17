@@ -1,0 +1,5 @@
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicTDThirdparty
+  id: CMUBaseMobSpeciesUPPLine
+  abstract: true
+  suffix: CMU, UPP, Line

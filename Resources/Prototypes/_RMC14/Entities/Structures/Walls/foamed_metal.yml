@@ -30,16 +30,18 @@
   - type: Transform
     anchored: true
   - type: Airtight
+  - type: RadiationBlocker # CMU14
+    resistance: 2
   - type: ReplaceFloorOnSpawn
     replaceableTiles:
     - Plating
     - Lattice
-    - TrainLattice
     replacementTiles:
     - FloorMetalFoam
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: RMCMetalFoamWall
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Destructible
     thresholds:
     - trigger:

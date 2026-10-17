@@ -11,6 +11,7 @@ using Content.Shared._RMC14.Xenonids.Stab;
 using Content.Shared.Actions;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Effects;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
@@ -101,7 +102,7 @@ public sealed partial class XenoEmpowerSystem : EntitySystem
                 _actions.SetToggled(action.AsNullable(), true);
             }
 
-            _popup.PopupPredicted(Loc.GetString("rmc-xeno-empower-start-self"), Loc.GetString("rmc-xeno-empower-start-others", ("user", xeno)),
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-empower-start-self"), Loc.GetString("rmc-xeno-empower-start-others", ("user", xeno)),
                 xeno, xeno, PopupType.MediumCaution);
         }
         else

@@ -166,7 +166,7 @@ public sealed partial class AdminLogsEui : BaseEui
         ClydeWindow = _clyde.CreateWindow(new WindowCreateParameters
         {
             Maximized = false,
-            Title = "Admin Logs",
+            Title = Loc.GetString("admin-logs-title"),
             Monitor = monitor,
             Width = 1100,
             Height = 400
@@ -231,6 +231,11 @@ public sealed partial class AdminLogsEui : BaseEui
             case SetLogFilter setLogFilter:
                 if (setLogFilter.Search != null)
                     LogsControl.LogSearch.SetText(setLogFilter.Search);
+
+                if (setLogFilter.Players != null)
+                {
+                    LogsControl.SelectPlayers(setLogFilter.Players);
+                }
 
                 if (setLogFilter.Types != null)
                     LogsControl.SetTypesSelection(setLogFilter.Types, setLogFilter.InvertTypes);

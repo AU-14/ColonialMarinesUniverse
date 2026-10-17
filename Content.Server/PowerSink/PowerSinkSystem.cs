@@ -1,13 +1,13 @@
+using Content.Server.Chat.Systems;
 using Content.Server.Explosion.EntitySystems;
 using Content.Server.Power.Components;
-using Content.Shared.Examine;
-using Robust.Shared.Utility;
-using Content.Server.Chat.Systems;
-using Content.Server.Station.Systems;
-using Robust.Shared.Timing;
-using Robust.Shared.Audio;
-using Robust.Shared.Audio.Systems;
 using Content.Server.Power.EntitySystems;
+using Content.Server.Station.Systems;
+using Content.Shared.Examine;
+using Content.Shared.Power.Components;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.Server.PowerSink
 {
@@ -58,17 +58,15 @@ namespace Content.Server.PowerSink
         public override void Update(float frameTime)
         {
             var toRemove = new RemQueue<(EntityUid Entity, PowerSinkComponent Sink)>();
-            var query = EntityQueryEnumerator<PowerSinkComponent, PowerConsumerComponent, BatteryComponent, TransformComponent>();
+            var query = EntityQueryEnumerator<PowerSinkComponent, BatteryComponent, TransformComponent>();
 
             // Realistically it's gonna be like <5 per station.
-            while (query.MoveNext(out var entity, out var component, out var networkLoad, out var battery, out var transform))
+            while (query.MoveNext(out var entity, out var component, out var battery, out var transform))
             {
                 if (!transform.Anchored)
                     continue;
 
-                _battery.SetCharge(entity, battery.CurrentCharge + networkLoad.NetworkLoad.ReceivingPower / 1000, battery);
-
-                var currentBatteryThreshold = battery.CurrentCharge / battery.MaxCharge;
+                var currentBatteryThreshold = _battery.GetChargeLevel((entity, battery));
 
                 // Check for warning message threshold
                 if (!component.SentImminentExplosionWarningMessage &&
@@ -90,7 +88,7 @@ namespace Content.Server.PowerSink
                 }
 
                 // Check for explosion
-                if (battery.CurrentCharge < battery.MaxCharge)
+                if (!_battery.IsFull((entity, battery)))
                     continue;
 
                 if (component.ExplosionTime == null)

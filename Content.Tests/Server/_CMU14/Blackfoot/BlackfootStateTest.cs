@@ -1,8 +1,8 @@
-using Content.Server._CMU14.Blackfoot;
-using Content.Shared._CMU14.Blackfoot;
+using Content.Server.CMU14.Blackfoot;
+using Content.Shared.CMU14.Blackfoot;
 using NUnit.Framework;
 
-namespace Content.Tests.Server._CMU14.Blackfoot;
+namespace Content.Tests.Server.CMU14.Blackfoot;
 
 [TestFixture]
 public sealed class BlackfootStateTest

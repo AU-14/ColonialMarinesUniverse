@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Reflection;
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using NUnit.Framework;
 
-namespace Content.Tests.Shared._CMU14.ZLevels;
+namespace Content.Tests.Shared.CMU14.ZLevels;
 
 [TestFixture]
 public sealed class CMUZLevelGroundSnapTest

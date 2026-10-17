@@ -1,0 +1,36 @@
+- type: partySpawn
+  id: RaidersSpawn
+  leadersToSpawn:
+    CMUJobRaiderLeader: 1
+  gruntsToSpawn:
+    CMUJobRaider: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: FreeCompanyRaiders
+  announceAsSurvivors: true
+  partyspawn: RaidersSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_response_shuttle.yml
+  weight: 10
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 2
+  roundstart: false
+  announceinbound: Long range arrays pick up an unregistered vessel running dark toward the colony. No transponder, no flag, and no answer on any hail.
+  announcearrival: ''
+
+- type: thirdParty
+  parent: FreeCompanyRaiders
+  id: FreeCompanyRaidersSurv
+  displayName: Free Company Raiders (Survivors)
+  entrymethod: ground
+  weight: 5
+  ghostsNeeded: 0
+  roundstart: true
+  announcearrival: ''
+  blacklistedGamemodes:
+  - insurgency
+  - forceonforce
+  - colonyfall

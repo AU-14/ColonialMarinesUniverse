@@ -52348,7 +52348,7 @@ entities:
     - type: Transform
       pos: 5.4797134,-161.4341
       parent: 1
-- proto: RMCAegisCorpseSpawner
+- proto: CMUAegisCorpseSpawner
   entities:
   - uid: 2032
     components:
@@ -52370,7 +52370,7 @@ entities:
     - type: Transform
       pos: 130.5,-52.5
       parent: 1
-- proto: RMCAegisSpawner
+- proto: CMUAegisSpawner
   entities:
   - uid: 2036
     components:
@@ -63293,7 +63293,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 113.5,-81.5
       parent: 1
-- proto: RMCInflatableWall
+- proto: CMUInflatableWall # CMU14
   entities:
   - uid: 3993
     components:
@@ -63305,7 +63305,7 @@ entities:
     - type: Transform
       pos: 111.5,-63.5
       parent: 1
-- proto: RMCInflatableWallBroken
+- proto: CMUInflatableWallBroken # CMU14
   entities:
   - uid: 3995
     components:

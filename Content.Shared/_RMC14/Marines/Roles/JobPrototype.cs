@@ -5,8 +5,8 @@ using Content.Shared._RMC14.Prototypes;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
-using Content.Shared._AU14.Marines.Roles.Chevrons;
-using Content.Shared._CMU14.Round.Roles;
+using Content.Shared.CMU14.Marines.Roles.Chevrons;
+using Content.Shared.CMU14.Round.Roles;
 using Robust.Shared.GameObjects;
 
 // ReSharper disable CheckNamespace
@@ -134,6 +134,13 @@ public sealed partial class JobPrototype : IInheritingPrototype, ICMSpecific
     /// </summary>
     [DataField]
     public string? RoundRole { get; private set; }
+
+    // CMU14: distinct jobs can share a round role family without sharing their roll preference.
+    /// <summary>
+    /// Cross-side Force on Force preference key. Defaults to <see cref="RoundRole"/>.
+    /// </summary>
+    [DataField]
+    public string? ForceOnForcePreferenceRole { get; private set; }
 
     /// <summary>
     /// Reusable role profiles applied before <see cref="RoundComponents"/>.

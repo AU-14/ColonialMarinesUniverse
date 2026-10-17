@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.CMU14.TacticalMap.Reconstruction; // CMU14
 using Content.Client._RMC14.UserInterface;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Marines.Skills;
@@ -12,7 +13,7 @@ using Robust.Shared.Maths;
 namespace Content.Client._RMC14.TacticalMap;
 
 [UsedImplicitly]
-public sealed partial class TacticalMapComputerBui(EntityUid owner, Enum uiKey) : RMCPopOutBui<TacticalMapWindow>(owner, uiKey)
+public sealed partial class TacticalMapComputerBui(EntityUid owner, Enum uiKey) : CMUReconstructionBui(owner, uiKey) // CMU14: standard and classic map integration
 {
     [Dependency] private IPlayerManager _player = default!;
 
@@ -23,7 +24,14 @@ public sealed partial class TacticalMapComputerBui(EntityUid owner, Enum uiKey) 
     protected override void Open()
     {
         base.Open();
+        // CMU14: use the replacement unless classic was selected.
+        if (UsingReconstruction) return;
+        OpenClassicWindow();
+    }
 
+    // CMU14 method
+    protected override void OpenClassicWindow()
+    {
         var computer = EntMan.GetComponentOrNull<TacticalMapComputerComponent>(Owner);
 
         Window = this.CreatePopOutableWindow<TacticalMapWindow>();
@@ -38,6 +46,7 @@ public sealed partial class TacticalMapComputerBui(EntityUid owner, Enum uiKey) 
         TabContainer.SetTabVisible(Window.Wrapper.SquadTab, false);
 
         if (computer != null &&
+            computer.AllowCanvas &&
             _player.LocalEntity is { } player &&
             EntMan.System<SkillsSystem>().HasSkill(player, computer.Skill, computer.SkillLevel))
         {
@@ -132,7 +141,7 @@ public sealed partial class TacticalMapComputerBui(EntityUid owner, Enum uiKey) 
         Window.Wrapper.Map.Lines.Clear();
 
         var lines = EntMan.GetComponentOrNull<TacticalMapLinesComponent>(Owner);
-        if (lines != null)
+        if (lines != null) // CMU14 Statement
         {
             // Determine faction view for this computer
             var computerComp = EntMan.GetComponentOrNull<TacticalMapComputerComponent>(Owner);
@@ -153,13 +162,19 @@ public sealed partial class TacticalMapComputerBui(EntityUid owner, Enum uiKey) 
                 Window.Wrapper.Map.Lines.AddRange(lines.GovforLines);
             if (WantsClf())
                 Window.Wrapper.Map.Lines.AddRange(lines.ClfLines);
+            bool WantsWeYu() => faction == "WEYU";
+            if (WantsWeYu())
+                Window.Wrapper.Map.Lines.AddRange(lines.WeYuLines);
+            Window.Wrapper.Map.Lines.AddRange(lines.SharedLines); // CMU14
         }
 
-        if (_refreshed)
+        // CMU14: retain unpublished edits when the shared canvas updates.
+        if (_refreshed && KeepClassicDraft(Window.Wrapper.Canvas, Window.Wrapper.Map))
             return;
 
         // Canvas initial content
-        if (lines != null)
+        Window.Wrapper.Canvas.Lines.Clear(); // CMU14: replace the acknowledged baseline.
+        if (lines != null) // CMU14 Statement
         {
             var computerComp = EntMan.GetComponentOrNull<TacticalMapComputerComponent>(Owner);
             var faction = computerComp?.Faction?.ToUpperInvariant();
@@ -179,9 +194,14 @@ public sealed partial class TacticalMapComputerBui(EntityUid owner, Enum uiKey) 
                 Window.Wrapper.Canvas.Lines.AddRange(lines.GovforLines);
             if (WantsClf())
                 Window.Wrapper.Canvas.Lines.AddRange(lines.ClfLines);
+            bool WantsWeYuCanvas() => faction == "WEYU";
+            if (WantsWeYuCanvas())
+                Window.Wrapper.Canvas.Lines.AddRange(lines.WeYuLines);
+            Window.Wrapper.Canvas.Lines.AddRange(lines.SharedLines); // CMU14
         }
 
         _refreshed = true;
+        RememberClassicCanvas(Window.Wrapper.Canvas, Window.Wrapper.Map); // CMU14
     }
 
     private void UpdateBlips()
@@ -259,7 +279,7 @@ public sealed partial class TacticalMapComputerBui(EntityUid owner, Enum uiKey) 
             return;
 
         var labels = EntMan.GetComponentOrNull<TacticalMapLabelsComponent>(Owner);
-        if (labels != null)
+        if (labels != null) // CMU14 Statement
         {
             // Merge labels according to computer faction
             var computerComp = EntMan.GetComponentOrNull<TacticalMapComputerComponent>(Owner);
@@ -302,6 +322,13 @@ public sealed partial class TacticalMapComputerBui(EntityUid owner, Enum uiKey) 
             if (WantsClf())
             {
                 foreach (var kv in labels.ClfLabels)
+                {
+                    allLabels[kv.Key] = kv.Value;
+                }
+            }
+            if (faction == "WEYU")
+            {
+                foreach (var kv in labels.WeYuLabels)
                 {
                     allLabels[kv.Key] = kv.Value;
                 }

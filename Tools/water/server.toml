@@ -1,0 +1,30 @@
+[net]
+bindto = "127.0.0.1"
+port = 1221
+upnp = false
+
+[status]
+enabled = true
+bind = "127.0.0.1:1221"
+
+[hub]
+advertise = false
+
+[auth]
+allowlocal = true
+
+[console]
+loginlocal = true
+
+[game]
+hostname = "CMU Water Effects Test Arena"
+defaultpreset = "Sandbox"
+map = "CMUWaterTest"
+lobbyenabled = false
+role_timers = false
+
+[events]
+enabled = false
+
+[log]
+enabled = true

@@ -12,10 +12,10 @@ public sealed class WallConstruction : InteractionTest
     public async Task ConstructWall()
     {
         await StartConstruction(Wall);
-        await InteractUsing(Steel, 2);
+        await InteractUsing(CMSteel, 2); // CMU14
         Assert.That(HandSys.GetActiveItem((SEntMan.GetEntity(Player), Hands)), Is.Null);
         ClientAssertPrototype(Girder, Target);
-        await InteractUsing(Steel, 2);
+        await InteractUsing(CMSteel, 2); // CMU14
         Assert.That(HandSys.GetActiveItem((SEntMan.GetEntity(Player), Hands)), Is.Null);
         AssertPrototype(WallSolid);
     }
@@ -28,6 +28,6 @@ public sealed class WallConstruction : InteractionTest
         AssertPrototype(Girder);
         await Interact(Wrench, Screw);
         AssertDeleted();
-        await AssertEntityLookup((Steel, 4));
+        await AssertEntityLookup((CMSteel, 4)); // CMU14
     }
 }

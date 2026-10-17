@@ -1,5 +1,5 @@
 using Content.Shared._RMC14.Marines.Skills;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using System.Collections.Generic;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;

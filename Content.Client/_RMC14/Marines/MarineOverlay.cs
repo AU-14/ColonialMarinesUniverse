@@ -1,5 +1,7 @@
 using System;
 using System.Numerics;
+using Content.Client.CMU14.Overlays; // CMU14: retain recently visible HUD entries across cache overflow.
+using Content.Shared.CMU14.ForceOnForce;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.CrashLand;
 using Content.Shared._RMC14.Marines;
@@ -7,6 +9,9 @@ using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Stealth;
 using Content.Shared._RMC14.Tracker.SquadLeader;
 using Content.Shared.NPC.Components;
+// CMU14: faction gameplay fixes.
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
 using Content.Shared.ParaDrop;
@@ -25,6 +30,8 @@ namespace Content.Client._RMC14.Marines;
 public sealed partial class MarineOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> ShadedShader = "shaded";
+    // CMU14: faction identification.
+    private static readonly Color UnidentifiedColor = Color.FromHex("#FF3030");
 
     [Dependency] private IEntityManager _entity = default!;
     [Dependency] private IPlayerManager _players = default!;
@@ -36,6 +43,8 @@ public sealed partial class MarineOverlay : Overlay
     private static readonly SpriteSpecifier.Rsi FireteamTwoRsi = new(new ResPath("_RMC14/Interface/marine_hud.rsi"), "hudsquad_ft2");
     private static readonly SpriteSpecifier.Rsi FireteamThreeRsi = new(new ResPath("_RMC14/Interface/marine_hud.rsi"), "hudsquad_ft3");
     private static readonly SpriteSpecifier.Rsi FireteamLeaderRsi = new(new ResPath("_RMC14/Interface/marine_hud.rsi"), "hudsquad_ftl");
+    // CMU14: faction gameplay fixes.
+    private static readonly SpriteSpecifier.Rsi UnidentifiedRsi = new(new ResPath("Effects/text.rsi"), "question");
 
     private readonly NpcFactionSystem _npcFaction;
     private readonly ContainerSystem _container;
@@ -43,8 +52,12 @@ public sealed partial class MarineOverlay : Overlay
     private readonly SpriteSystem _sprite;
     private readonly TransformSystem _transform;
     private readonly EntityLookupSystem _lookup;
+    // CMU14: faction identification.
+    private readonly ForceOnForceUniformSystem _uniforms;
 
     private readonly ShaderInstance _shader;
+    // CMU14: faction gameplay fixes.
+    private readonly Texture _unidentifiedIcon;
     private readonly Texture _fireteamOneIcon;
     private readonly Texture _fireteamTwoIcon;
     private readonly Texture _fireteamThreeIcon;
@@ -57,7 +70,9 @@ public sealed partial class MarineOverlay : Overlay
     private readonly EntityQuery<ShowMarineIconsComponent> _marineIconsQuery;
     private readonly EntityQuery<ParaDroppingComponent> _paraDroppingQuery;
     private readonly EntityQuery<CrashLandingComponent> _crashLandingQuery;
-    private readonly Dictionary<EntityUid, CachedMarineIcon> _marineIconCache = new();
+    // CMU14: faction gameplay fixes.
+    private readonly EntityQuery<MobStateComponent> _mobStateQuery;
+    private readonly CMUOverlayCache<EntityUid, CachedMarineIcon> _marineIconCache = new(512); // CMU14: bounded per-entry eviction.
     private readonly Dictionary<SpriteSpecifier, Texture> _textureCache = new();
     private readonly HashSet<Entity<MarineComponent>> _marineCandidates = new();
 
@@ -76,12 +91,16 @@ public sealed partial class MarineOverlay : Overlay
         _sprite = _entity.System<SpriteSystem>();
         _transform = _entity.System<TransformSystem>();
         _lookup = _entity.System<EntityLookupSystem>();
+        // CMU14: faction identification.
+        _uniforms = _entity.System<ForceOnForceUniformSystem>();
 
         _npcFactionMemberQuery = _entity.GetEntityQuery<NpcFactionMemberComponent>();
         _fireteamLeaderQuery = _entity.GetEntityQuery<FireteamLeaderComponent>();
         _fireteamMemberQuery = _entity.GetEntityQuery<FireteamMemberComponent>();
         _invisQuery = _entity.GetEntityQuery<EntityActiveInvisibleComponent>();
         _marineIconsQuery = _entity.GetEntityQuery<ShowMarineIconsComponent>();
+        // CMU14: faction gameplay fixes.
+        _mobStateQuery = _entity.GetEntityQuery<MobStateComponent>();
         _paraDroppingQuery = _entity.GetEntityQuery<ParaDroppingComponent>();
         _crashLandingQuery = _entity.GetEntityQuery<CrashLandingComponent>();
 
@@ -90,6 +109,8 @@ public sealed partial class MarineOverlay : Overlay
         _fireteamTwoIcon = GetTexture(FireteamTwoRsi);
         _fireteamThreeIcon = GetTexture(FireteamThreeRsi);
         _fireteamLeaderIcon = GetTexture(FireteamLeaderRsi);
+        // CMU14: faction gameplay fixes.
+        _unidentifiedIcon = GetTexture(UnidentifiedRsi);
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -97,10 +118,13 @@ public sealed partial class MarineOverlay : Overlay
         if (!_configuration.GetCVar(RMCCVars.RMCMarineOverlayEnabled))
             return;
 
-        if (!_marineIconsQuery.TryComp(_players.LocalEntity, out var marineHudComp))
+        // CMU14: faction gameplay fixes.
+        var localEnt = _players.LocalEntity;
+        var showUnidentified = _configuration.GetCVar(Content.Shared.CCVar.CCVars.ForceOnForceUnidentifiedMarkerEnabled) &&
+                               localEnt is { } viewer && _entity.HasComponent<ForceOnForceUniformComponent>(viewer);
+        if (!_marineIconsQuery.TryComp(localEnt, out var marineHudComp) && !showUnidentified)
             return;
 
-        var localEnt = _players.LocalEntity;
         var isSpectator = false;
         if (localEnt != null && _entity.TryGetComponent(localEnt.Value, out MetaDataComponent? localMeta))
         {
@@ -133,6 +157,10 @@ public sealed partial class MarineOverlay : Overlay
         foreach (var candidate in _marineCandidates)
         {
             var uid = candidate.Owner;
+            // CMU14: faction gameplay fixes.
+            if (_mobStateQuery.TryComp(uid, out var mob) && mob.CurrentState == MobState.Dead)
+                continue;
+
             if (!statusQuery.TryGetComponent(uid, out var status) ||
                 !spriteQuery.TryGetComponent(uid, out var sprite) ||
                 !xformQuery.TryGetComponent(uid, out var xform))
@@ -160,6 +188,24 @@ public sealed partial class MarineOverlay : Overlay
             var scaledWorld = Matrix3x2.Multiply(scaleMatrix, worldMatrix);
             var matrix = Matrix3x2.Multiply(rotationMatrix, scaledWorld);
             handle.SetTransform(matrix);
+
+            // CMU14: faction identification.
+            if (showUnidentified && _uniforms.IsUnidentified(uid, localEnt))
+            {
+                var center = new Vector2(0, (bounds.Height + sprite.Offset.Y) / 2f + .3f);
+                // CMU14: faction gameplay fixes.
+                // A question mark replaces identifiers for other factions in unfamiliar uniforms.
+                // Keep its contrast in dim lighting while retaining the overlay's normal FOV.
+                handle.UseShader(null);
+                // CMU14: faction gameplay fixes.
+                DrawUnidentifiedQuestionMark(handle, center);
+                handle.UseShader(_shader);
+                continue;
+            }
+            // CMU14: faction gameplay fixes.
+
+            if (marineHudComp == null)
+                continue;
 
             var icon = GetCachedMarineIcon(uid, marineHudComp.Factions, isSpectator);
 
@@ -221,6 +267,27 @@ public sealed partial class MarineOverlay : Overlay
         handle.UseShader(null);
     }
 
+    // CMU14: faction identification.
+    private void DrawUnidentifiedQuestionMark(DrawingHandleWorld handle, Vector2 center)
+    {
+        // CMU14: faction gameplay fixes.
+        var size = new Vector2(_unidentifiedIcon.Width, _unidentifiedIcon.Height) * (3f / EyeManager.PixelsPerMeter);
+        var bounds = Box2.CenteredAround(center, size);
+        for (var x = -1; x <= 1; x++)
+        for (var y = -1; y <= 1; y++)
+        {
+            // CMU14: faction gameplay fixes.
+            if (x == 0 && y == 0)
+                continue;
+
+            var offset = new Vector2(x, y) / EyeManager.PixelsPerMeter;
+            handle.DrawTextureRect(_unidentifiedIcon, bounds.Translated(offset), Color.Black);
+        }
+        // CMU14: faction gameplay fixes.
+
+        handle.DrawTextureRect(_unidentifiedIcon, bounds, UnidentifiedColor);
+    }
+
     private Texture GetTexture(SpriteSpecifier specifier)
     {
         if (_textureCache.TryGetValue(specifier, out var texture))
@@ -253,11 +320,9 @@ public sealed partial class MarineOverlay : Overlay
 
         if (cached is null)
         {
-            if (_marineIconCache.Count > 512)
-                _marineIconCache.Clear();
-
+            // CMU14: evict one least-recently-used entity instead of invalidating the whole crowd.
             cached = new CachedMarineIcon();
-            _marineIconCache[uid] = cached;
+            _marineIconCache.Set(uid, cached);
         }
 
         cached.Expires = now + MarineIconCacheLifetime;

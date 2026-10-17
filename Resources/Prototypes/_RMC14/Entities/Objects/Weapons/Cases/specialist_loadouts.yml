@@ -20,6 +20,8 @@
     - id: CMBackpackSniper
     - id: CMM96SSniperRifle
     - id: AU14KitSpotter
+    - id: AU14ArmorGhillie
+    - id: AU14HelmetGhillie
 #    - id: CMFacepaintSniper
   - type: CMChangeUserOnVend
     addComponents:
@@ -137,7 +139,7 @@
     - state: demo
       map: [ label ]
   - type: Storage
-    maxItemSize: Huge
+    maxItemSize: Ginormous
     grid:
     - 0,0,15,3
   - type: StorageFill
@@ -181,7 +183,7 @@
     - state: demo
       map: [ label ]
   - type: Storage
-    maxItemSize: Huge
+    maxItemSize: Ginormous
     grid:
     - 0,0,15,3
   - type: StorageFill
@@ -238,6 +240,7 @@
     - id: RMCMagazineRifleM4SPRA19Impact
       amount: 4
     - id: RMCBackpackScout
+    - id: RMCBackpackScoutDS
     - id: WeaponRifleM4SPRCustom
     - id: RMCThermalTarpFolded
       amount: 2
@@ -279,6 +282,7 @@
     - id: RMCAttachmentFlashlightGrip
     - id: RMCAttachmentS5RedDotSight
     - id: RMCBackpackScout
+    - id: RMCBackpackScoutDS
     - id: WeaponRifleM5SPR2
     - id: RMCThermalTarpFolded
       amount: 2
@@ -473,13 +477,14 @@
     - 0,0,13,3
   - type: Sprite
     sprite: _RMC14/Objects/Storage/procase_mini.rsi
-  - type: Icon
-    sprite: _RMC14/Objects/Storage/procase_mini.rsi
     layers:
     - state: closed
       map: [ base ]
     - state: loader
       map: [ label ]
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+    state: closed
   - type: StorageFill
     contents:
     - id: RMCArmorM3TDemo

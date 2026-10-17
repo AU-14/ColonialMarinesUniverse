@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Hands;
 using Content.Shared._RMC14.Marines;
+using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared._RMC14.Xenonids.Construction.Tunnel;
 using Content.Shared._RMC14.Xenonids.Egg.EggRetriever;
@@ -10,15 +11,18 @@ using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared._RMC14.Xenonids.Rest;
 using Content.Shared._RMC14.Xenonids.Weeds;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Actions;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
@@ -105,6 +109,7 @@ public sealed partial class XenoEggSystem : EntitySystem
         SubscribeLocalEvent<XenoAttachedOvipositorComponent, XenoRestAttemptEvent>(OnXenoRest);
 
         SubscribeLocalEvent<XenoEggComponent, AfterAutoHandleStateEvent>(OnXenoEggAfterState);
+        SubscribeLocalEvent<XenoEggComponent, MapInitEvent>(OnXenoEggMapInit);
         SubscribeLocalEvent<XenoEggComponent, GettingPickedUpAttemptEvent>(OnXenoEggPickedUpAttempt);
         SubscribeLocalEvent<XenoEggComponent, UseInHandEvent>(OnXenoEggUseInHand);
         SubscribeLocalEvent<XenoEggComponent, InteractUsingEvent>(OnXenoEggInteractUsing);
@@ -126,10 +131,18 @@ public sealed partial class XenoEggSystem : EntitySystem
         SubscribeLocalEvent<XenoEggSustainerComponent, MobStateChangedEvent>(OnEggSustainerDeath);
     }
 
+    private void OnXenoEggMapInit(Entity<XenoEggComponent> egg, ref MapInitEvent args)
+    {
+        if (egg.Comp.State == XenoEggState.Item)
+            return;
+
+        SetEggState(egg, egg.Comp.State);
+    }
+
     private void OnDropshipHijackStart(ref DropshipHijackStartEvent ev)
     {
         // Ovipositor cooldown reset is xeno-specific; skip for human-vs-human hijacks
-        if (ev.IsHumanHijack)
+        if (ev.HijackerType == DropshipHijackerType.Human) // CMU14
             return;
 
         var query = EntityQueryEnumerator<XenoOvipositorCapableComponent>();
@@ -176,7 +189,7 @@ public sealed partial class XenoEggSystem : EntitySystem
         };
 
         if (_doAfter.TryStartDoAfter(doAfterArgs))
-            _popup.PopupClient(Loc.GetString(popup), xeno, xeno, popupType);
+            _popup.PopupEntity(Loc.GetString(popup), xeno, xeno, popupType);
     }
 
     private void OnXenoGrowOvipositorDoAfter(Entity<XenoComponent> xeno, ref XenoGrowOvipositorDoAfterEvent args)
@@ -287,7 +300,7 @@ public sealed partial class XenoEggSystem : EntitySystem
             RootEntity = true
         };
 
-        _popup.PopupPredicted(Loc.GetString("rmc-xeno-egg-plant-self"), Loc.GetString("rmc-xeno-egg-plant", ("user", args.User)), egg, args.User);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-egg-plant-self"), Loc.GetString("rmc-xeno-egg-plant", ("user", args.User)), egg, args.User);
 
         _doAfter.TryStartDoAfter(doAfter);
     }
@@ -451,6 +464,9 @@ public sealed partial class XenoEggSystem : EntitySystem
         if (ent.Comp.State != XenoEggState.Grown)
             return;
 
+        if (!ent.Comp.CanSpawnGhostParasite)
+            return;
+
         if (TryComp<XenoFragileEggComponent>(ent, out var fragile) && fragile.SustainedBy != null)
             return;
 
@@ -474,6 +490,8 @@ public sealed partial class XenoEggSystem : EntitySystem
                && !infected.BeingInfected
                && !_mobState.IsDead(user)
                && !HasComp<VictimInfectedComponent>(user)
+               && !HasComp<YautjaComponent>(user)
+               && !HasComp<SynthComponent>(user)
                && !_hive.IsAllyOfHive(user, hive);
     }
 
@@ -505,7 +523,7 @@ public sealed partial class XenoEggSystem : EntitySystem
             else
             {
                 if (user != null)
-                    _popup.PopupClient(Loc.GetString("cm-xeno-egg-clear"), egg, user.Value);
+                    _popup.PopupEntity(Loc.GetString("cm-xeno-egg-clear"), egg, user.Value);
 
                 if (_net.IsClient)
                     return true;
@@ -519,14 +537,14 @@ public sealed partial class XenoEggSystem : EntitySystem
         if (HasComp<XenoParasiteComponent>(user))
         {
             if (egg.Comp.State == XenoEggState.Grown || egg.Comp.State == XenoEggState.Growing)
-                _popup.PopupClient(Loc.GetString("rmc-xeno-egg-has-child"), user.Value);
+                _popup.PopupSelf(Loc.GetString("rmc-xeno-egg-has-child"), user.Value);
             return true;
         }
 
         if (egg.Comp.State != XenoEggState.Grown)
         {
             if (user != null)
-                _popup.PopupClient(Loc.GetString("cm-xeno-egg-not-developed"), egg, user.Value);
+                _popup.PopupEntity(Loc.GetString("cm-xeno-egg-not-developed"), egg, user.Value);
 
             return false;
         }
@@ -661,7 +679,7 @@ public sealed partial class XenoEggSystem : EntitySystem
         }
 
         RemoveOvipositorActions(xeno.Owner);
-        _popup.PopupClient(Loc.GetString("cm-xeno-ovipositor-detach"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-ovipositor-detach"), xeno, xeno);
         RemCompDeferred<EggPlantingDistanceComponent>(xeno);
     }
 

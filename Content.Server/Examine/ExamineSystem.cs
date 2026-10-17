@@ -1,8 +1,12 @@
 using System.Linq;
-using Content.Server._AU14.Examine;
+using System.Text.RegularExpressions; // CMU14
+using Content.Server.CMU14.Examine;
 using Content.Server.Chat.Managers;
 using Content.Server.Verbs;
 using Content.Shared.CCVar;
+// cmu edit start
+using Content.Shared.CMU14.Medical.Diagnostics.Examine;
+// cmu edit end
 using Content.Shared.Chat;
 using Content.Shared.Examine;
 using Content.Shared.IdentityManagement;
@@ -18,8 +22,8 @@ namespace Content.Server.Examine
     public sealed partial class ExamineSystem : ExamineSystemShared
     {
         [Dependency] private VerbSystem _verbSystem = default!;
-        [Dependency] private readonly IChatManager _chatManager = default!;
-        [Dependency] private readonly INetConfigurationManager _netConfigManager = default!;
+        [Dependency] private IChatManager _chatManager = default!;
+        [Dependency] private INetConfigurationManager _netConfigManager = default!;
 
         private readonly FormattedMessage _entityNotFoundMessage = new();
         private readonly FormattedMessage _entityOutOfRangeMessage = new();
@@ -29,6 +33,17 @@ namespace Content.Server.Examine
             ChatDisplayKind.System,
             accentColor: Color.FromHex("#a0a0a0"),
             backgroundColorOverride: Color.FromHex("#1e1e1e"));
+
+        // CMU14: examine text in chat matches the character breakdown's small gray lines, with a divider between them.
+        private const string ExamineChatDivider = "[color=#5a5a5a][font size=10]--------------------------------[/font][/color]";
+
+        private static readonly Regex ExamineChatBlankLines = new(@"\n\s*\n+", RegexOptions.Compiled);
+
+        private static string StyleExamineChatText(string markup)
+        {
+            var compact = ExamineChatBlankLines.Replace(markup.Trim(), "\n");
+            return $"[color=lightgray][font size=10]{compact}[/font][/color]";
+        }
 
         public override void Initialize()
         {
@@ -88,21 +103,41 @@ namespace Content.Server.Examine
                 request.NetEntity, request.Id, text, verbs?.ToList()), channel);
 
             // AU14/CMU: optionally echo the exact same context-menu examine text into chat.
-            // Skip this if the target already gets the detailed character breakdown message,
-            // so examining a character doesn't produce two chat messages at once.
-            var coveredByCharacterBreakdown = HasComp<ExaminableCharacterComponent>(entity)
-                && _netConfigManager.GetClientCVar(channel, CCVars.ExamineLogInChat);
-
-            if (!coveredByCharacterBreakdown && _netConfigManager.GetClientCVar(channel, CCVars.ExamineFullTextInChat))
+            // CMU14: a character's chat breakdown carries the rest of their examine text too (description,
+            // health, pain and so on), so examining a character still sends one chat message.
+            var markup = text.ToMarkup();
+            var hasText = !string.IsNullOrWhiteSpace(FormattedMessage.RemoveMarkupPermissive(markup));
+            var echoedFullText = false;
+            if (HasComp<ExaminableCharacterComponent>(entity) &&
+                _netConfigManager.GetClientCVar(channel, CCVars.ExamineLogInChat))
             {
-                var markup = text.ToMarkup();
-                if (!string.IsNullOrWhiteSpace(FormattedMessage.RemoveMarkupPermissive(markup)))
+                var combinedLog = EntityManager.System<ExaminableCharacterSystem>().BuildBreakdown(entity, playerEnt);
+                if (hasText)
+                    combinedLog += $"\n{ExamineChatDivider}\n{StyleExamineChatText(markup)}";
+
+                _chatManager.ChatMessageToOne(ChatChannel.Emotes, combinedLog, combinedLog, EntityUid.Invalid, false, channel, recordReplay: false, display: ExamineChatDisplay);
+                echoedFullText = hasText;
+            }
+            else if (_netConfigManager.GetClientCVar(channel, CCVars.ExamineFullTextInChat) && hasText)
+            {
+                var itemName = FormattedMessage.EscapeText(Identity.Name(entity, EntityManager, playerEnt));
+                var combinedLog = $"[color=gold][bold]{itemName}[/bold][/color]\n{StyleExamineChatText(markup)}";
+                _chatManager.ChatMessageToOne(ChatChannel.Emotes, combinedLog, combinedLog, EntityUid.Invalid, false, channel, recordReplay: false, display: ExamineChatDisplay);
+                echoedFullText = true;
+            }
+
+            // cmu edit start
+            if (!echoedFullText && _netConfigManager.GetClientCVar(channel, CCVars.ExamineWoundsInChat))
+            {
+                var woundLines = EntityManager.System<CMUMedicalExamineSystem>().GetBodyPartLines(entity);
+                if (woundLines.Count > 0)
                 {
-                    var itemName = FormattedMessage.EscapeText(Identity.Name(entity, EntityManager, playerEnt));
-                    var combinedLog = $"[color=gold][bold]{itemName}[/bold][/color]\n{markup}";
-                    _chatManager.ChatMessageToOne(ChatChannel.Emotes, combinedLog, combinedLog, EntityUid.Invalid, false, channel, recordReplay: false, display: ExamineChatDisplay);
+                    var name = FormattedMessage.EscapeText(Identity.Name(entity, EntityManager, playerEnt));
+                    var woundLog = $"[color=gold][bold]{name}[/bold][/color]\n{string.Join("\n", woundLines)}";
+                    _chatManager.ChatMessageToOne(ChatChannel.Emotes, woundLog, woundLog, EntityUid.Invalid, false, channel, recordReplay: false, display: ExamineChatDisplay);
                 }
             }
+            // cmu edit end
         }
     }
 }

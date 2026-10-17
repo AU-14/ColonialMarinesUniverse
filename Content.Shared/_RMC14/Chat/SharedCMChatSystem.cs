@@ -1,5 +1,5 @@
-﻿using Content.Shared._RMC14.CCVar;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared._RMC14.CCVar;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Xenonids;

@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Despoiler;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Pulling.Components;
@@ -25,11 +26,11 @@ public sealed partial class XenoDespoilerLingeringAcidSystem : EntitySystem
         _xenoQuery = GetEntityQuery<XenoComponent>();
         _pullableQuery = GetEntityQuery<PullableComponent>();
 
-        SubscribeLocalEvent<XenoDespoilerLingeringAcidComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<XenoDespoilerLingeringAcidComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<XenoDespoilerLingeringAcidComponent, StartCollideEvent>(OnCollide);
     }
 
-    private void OnInit(EntityUid uid, XenoDespoilerLingeringAcidComponent comp, ComponentInit args)
+    private void OnMapInit(EntityUid uid, XenoDespoilerLingeringAcidComponent comp, MapInitEvent args)
     {
         var min = (float)comp.MinLifetime.TotalSeconds;
         var max = (float)comp.MaxLifetime.TotalSeconds;

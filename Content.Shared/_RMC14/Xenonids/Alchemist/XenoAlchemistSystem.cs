@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Core;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Slow;
@@ -11,6 +11,7 @@ using Content.Shared.Actions;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
@@ -68,7 +69,7 @@ public sealed partial class XenoAlchemistSystem : EntitySystem
 
         foreach (var hit in args.HitEntities)
         {
-            if (!_xeno.CanAbilityAttackTarget(xeno, hit))
+            if (!_xeno.CanGainRewardsFromTarget(xeno, hit)) // CMU14: no rewards from vehicles
                 continue;
 
             if (xeno.Comp.SelectedChemical != AlchemistChemical.None)
@@ -82,7 +83,7 @@ public sealed partial class XenoAlchemistSystem : EntitySystem
     {
         if (xeno.Comp.Producing)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-alchemist-producing"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-alchemist-producing"), xeno, xeno);
             return;
         }
 
@@ -97,7 +98,7 @@ public sealed partial class XenoAlchemistSystem : EntitySystem
     {
         if (xeno.Comp.Producing)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-alchemist-producing"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-alchemist-producing"), xeno, xeno);
             return;
         }
 
@@ -108,26 +109,26 @@ public sealed partial class XenoAlchemistSystem : EntitySystem
         Dirty(xeno);
 
         _ui.CloseUi(xeno.Owner, XenoAlchemistUI.Key, xeno);
-        _popup.PopupClient(Loc.GetString($"cm-xeno-alchemist-selected-{xeno.Comp.SelectedChemical.ToString().ToLowerInvariant()}"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString($"cm-xeno-alchemist-selected-{xeno.Comp.SelectedChemical.ToString().ToLowerInvariant()}"), xeno, xeno);
     }
 
     private void OnProduceChemicalAction(Entity<XenoAlchemistComponent> xeno, ref XenoProduceChemicalActionEvent args)
     {
         if (xeno.Comp.Producing)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-alchemist-producing"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-alchemist-producing"), xeno, xeno);
             return;
         }
 
         if (xeno.Comp.SelectedChemical == AlchemistChemical.None)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-alchemist-no-selected"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-alchemist-no-selected"), xeno, xeno);
             return;
         }
 
         if (GetTotalStockpile(xeno.Comp) >= xeno.Comp.MaxStockpile)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-alchemist-stockpile-full"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-alchemist-stockpile-full"), xeno, xeno);
             return;
         }
 
@@ -180,13 +181,13 @@ public sealed partial class XenoAlchemistSystem : EntitySystem
     {
         if (xeno.Comp.Producing)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-alchemist-producing"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-alchemist-producing"), xeno, xeno);
             return;
         }
 
         if (xeno.Comp.SelectedChemical == AlchemistChemical.None)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-alchemist-no-selected"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-alchemist-no-selected"), xeno, xeno);
             return;
         }
 
@@ -195,7 +196,7 @@ public sealed partial class XenoAlchemistSystem : EntitySystem
 
         args.Handled = true;
         SetChemical(xeno, xeno.Comp.SelectedChemical, 0);
-        _popup.PopupClient(Loc.GetString("cm-xeno-alchemist-removed"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-alchemist-removed"), xeno, xeno);
     }
 
     private void OnTailInjectionAction(Entity<XenoAlchemistComponent> xeno, ref XenoTailInjectionActionEvent args)
@@ -206,7 +207,7 @@ public sealed partial class XenoAlchemistSystem : EntitySystem
         var total = xeno.Comp.Sagunine + xeno.Comp.Cholinine + xeno.Comp.Noctine;
         if (total <= 0)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-alchemist-empty"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-alchemist-empty"), xeno, xeno);
             return;
         }
 
@@ -274,12 +275,12 @@ public sealed partial class XenoAlchemistSystem : EntitySystem
         var available = xeno.Comp.MaxStockpile - GetTotalStockpile(xeno.Comp);
         if (available <= 0)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-alchemist-stockpile-full"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-alchemist-stockpile-full"), xeno, xeno);
             return;
         }
 
         SetChemical(xeno, chemical, GetChemical(xeno.Comp, chemical) + Math.Min(amount, available));
-        _popup.PopupClient(Loc.GetString("cm-xeno-alchemist-stockpile", ("amount", GetChemical(xeno.Comp, chemical))), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-alchemist-stockpile", ("amount", GetChemical(xeno.Comp, chemical))), xeno, xeno);
     }
 
     private void SetChemical(Entity<XenoAlchemistComponent> xeno, AlchemistChemical chemical, int amount)

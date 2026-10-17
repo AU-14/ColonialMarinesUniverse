@@ -1,0 +1,71 @@
+# Corporate ASRS catalog (Weyland-Yutani). Abstract: parented into
+# AU14CorporateASRSConsole, appended onto the CMCargoCatalog inheritance chain.
+- type: entity
+  abstract: true
+  id: CMUASRSCorporateGoodies
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Corporate Equipment
+      entries:
+      - cost: 800
+        crate: CMUCrateAtmosSupplies
+      - cost: 600
+        crate: CMUCrateSCBA
+      - cost: 1200
+        crate: AU14CBRNKitWeYu
+      - cost: 400
+        crate: CMUCrateGasMaskFilterHAZOPS
+      - cost: 1000
+        crate: AU14CrateBoxFirefighting
+      - cost: 150
+        crate: RMCCrateInflatableBarriers
+      - cost: 1000
+        crate: RMCCrateFoldingBarricades
+      - cost: 500
+        crate: RMCCrateElectricalMaintenance
+      - cost: 800
+        crate: RMCCrateMechanicalMaintenance
+      - cost: 1000
+        crate: RMCCrateHighCapacityPowerCell
+      - cost: 600
+        crate: RMCCrateFlashlights
+    - name: Civilian Goods
+      entries:
+      - cost: 400
+        crate: RMCCrateFoodMRE
+      - cost: 600
+        crate: RMCCrateReplacementLights
+    - name: WEYSEC Gear
+      entries:
+      - cost: 700
+        crate: CMUCrateBiosuitWYTSSArmor
+    - name: WEYSEC Weapons
+      entries:
+      - cost: 1500
+        crate: CMUCrateP90
+      - cost: 4500
+        crate: CMUCrateWYSentry
+    - name: WEYSEC Ammo
+      entries:
+      - cost: 750
+        crate: CMUCrateP90Mags
+      - cost: 2250
+        crate: CMUCrateP90APMags
+      - cost: 1500
+        crate: CMUCrateWYSentryAmmo
+    - name: Weyland-Yutani Research
+      entries:
+      # XRF crates are added via code
+      #- cost: 1000
+      #  crate: CMUCrateXRF
+      - cost: 2500
+        crate: CMUCrateSecureWYRandomExp
+      - cost: 9500
+        crate: AU14CrateSecureWeYuCounteragent
+      - cost: 350
+        crate: CMUCrateBiosuitWYTSS
+      - cost: 1500
+        crate: CMUCrateTychoRadsuit
+      - cost: 1500
+        crate: CMUCrateGasMaskFilterWY

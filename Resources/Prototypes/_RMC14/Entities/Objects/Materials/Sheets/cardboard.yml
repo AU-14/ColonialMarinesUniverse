@@ -37,8 +37,15 @@
     - RMCFolderList
     - RMCDividerConstruction
     - RMCEmptyAmmoBoxesList
-    - RMCEmptyRifleMagazineBoxesList
-    - RMCEmptySMGMagazineBoxesList
+    - RMCEmptyUALAMagazineBoxesList
+    - RMCEmptyTWEMagazineBoxesList
+    - RMCEmptyCIUMagazineBoxesList
+    - RMCEmptyUPPMagazineBoxesList
+    - RMCEmptyVAIPOMagazineBoxesList
+    - RMCEmptyProdigyMagazineBoxesList
+    - RMCEmptyWYPMCMagazineBoxesList
+    - RMCEmptyCivilianMagazineBoxesList
+    - RMCDividerConstruction
     - RMCEmptyPistolMagazineBoxesList
     - RMCEmptyShotgunShellBoxesList
     - RMCDividerConstruction

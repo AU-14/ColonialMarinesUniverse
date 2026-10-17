@@ -3,6 +3,7 @@ using Content.Shared.Actions.Components;
 using Content.Shared.Actions.Events;
 using Content.Shared.Interaction;
 using Robust.Shared.Serialization;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Actions;
 
@@ -234,6 +235,18 @@ public abstract partial class SharedRMCActionsSystem : EntitySystem
             if (TryComp(action, out T? comp))
                 yield return (action, action, comp);
         }
+    }
+
+    public void SetOrderId(EntityUid uid, EntProtoId id)
+    {
+        if (!TryComp(uid, out RMCActionOrderComponent? order))
+            return;
+
+        if (order.Id == id)
+            return;
+
+        order.Id = id;
+        Dirty(uid, order);
     }
 }
 

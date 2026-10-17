@@ -14,6 +14,7 @@ using Content.Shared.Prying.Systems;
 using Content.Shared.Radio.EntitySystems;
 using Content.Shared.Stacks;
 using Content.Shared.Temperature;
+using Content.Shared.Temperature.Components;
 using Content.Shared.Tools.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Utility;
@@ -42,7 +43,7 @@ namespace Content.Server.Construction
             SubscribeLocalEvent<ConstructionComponent, InteractUsingEvent>(EnqueueEvent,
                 new []{typeof(AnchorableSystem), typeof(PryingSystem), typeof(WeldableSystem)},
                 new []{typeof(EncryptionKeySystem)});
-            SubscribeLocalEvent<ConstructionComponent, OnTemperatureChangeEvent>(EnqueueEvent);
+            SubscribeLocalEvent<ConstructionComponent, TemperatureChangedEvent>(EnqueueRefEvent);
             SubscribeLocalEvent<ConstructionComponent, PartAssemblyPartInsertedEvent>(EnqueueEvent);
         }
 
@@ -294,8 +295,8 @@ namespace Content.Server.Construction
                     else if (!insertStep.EntityValid(insert, EntityManager, Factory))
                         return HandleResult.False;
 
-                    // Unremovable items can't be inserted, unless they are a lingering stack
-                    if(HasComp<UnremoveableComponent>(insert) && (!TryComp<StackComponent>(insert, out var comp) || !comp.Lingering))
+                    // Unremovable items can't be inserted
+                    if(HasComp<UnremoveableComponent>(insert))
                         return HandleResult.False;
 
                     // If we're only testing whether this step would be handled by the given event, then we're done.
@@ -418,7 +419,7 @@ namespace Content.Server.Construction
 
                 case TemperatureConstructionGraphStep temperatureChangeStep:
                 {
-                    if (ev is not OnTemperatureChangeEvent)
+                    if (ev is not TemperatureChangedEvent)
                         break;
 
                     // Some things, like microwaves, might need to block the temperature construction step from kicking in, or override it entirely.
@@ -436,7 +437,7 @@ namespace Content.Server.Construction
                     }
                     else if (TryComp<TemperatureComponent>(uid, out var tempComp))
                     {
-                        temp = tempComp.CurrentTemperature;
+                        temp = tempComp.Temperature;
                     }
                     else
                     {
@@ -446,7 +447,7 @@ namespace Content.Server.Construction
                     if ((!temperatureChangeStep.MinTemperature.HasValue || temp >= temperatureChangeStep.MinTemperature.Value) &&
                         (!temperatureChangeStep.MaxTemperature.HasValue || temp <= temperatureChangeStep.MaxTemperature.Value))
                     {
-                        return HandleResult.True;
+                        return validation ? HandleResult.Validated : HandleResult.True;
                     }
 
                     return HandleResult.False;
@@ -458,7 +459,7 @@ namespace Content.Server.Construction
                         break;
 
                     if (partAssemblyStep.Condition(uid, EntityManager))
-                        return HandleResult.True;
+                        return validation ? HandleResult.Validated : HandleResult.True;
                     return HandleResult.False;
                 }
 
@@ -599,6 +600,13 @@ namespace Content.Server.Construction
 
         #region Event Handlers
 
+        // Why does this system have you subscribe to an event,
+        // and then pass it through 5 layers of bullshit into a switch statement which tries to guess what event got passed?
+        private void EnqueueRefEvent<T>(Entity<ConstructionComponent> entity, ref T args) where T : struct
+        {
+            EnqueueEvent(entity, entity.Comp, args);
+        }
+
         /// <summary>
         ///     Queues a directed event to be handled by construction on the next update tick.
         ///     Used as a handler for any events that construction can listen to. <seealso cref="InitializeInteractions"/>
@@ -625,6 +633,10 @@ namespace Content.Server.Construction
 
                 handled.Handled = true;
             }
+
+            // Make sure the event passes validation before enqueuing it
+            if (HandleEvent(uid, args, true, construction) != HandleResult.Validated)
+                return;
 
             // Enqueue this event so it'll be handled in the next tick.
             // This prevents some issues that could occur from entity deletion, component deletion, etc in a handler.

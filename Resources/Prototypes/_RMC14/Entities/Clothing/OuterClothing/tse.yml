@@ -17,13 +17,13 @@
 - type: entity
   id: RMCBaseTSEArmor
   abstract: true
-  components:
-  - type: ClothingRequireEquipped
-    autoUnequip: true
-    denyReason: rmc-armor-not-tse-jumpsuit
-    whitelist:
-      tags:
-      - RMCUniformTSE
+#  components:
+#  - type: ClothingRequireEquipped
+#    autoUnequip: true
+#    denyReason: rmc-armor-not-tse-jumpsuit
+#    whitelist:
+#      tags:
+#      - RMCUniformTSE
 
 - type: entity
   parent: [RMCBaseTSEArmor, RMCBaseMarineArmorLight]
@@ -67,8 +67,8 @@
 - type: entity
   parent: [RMCJacketWindbreaker, RMCAllowSuitStorageClothingJacketMB]
   id: RMCJacketParaCombatJacket
-  name: paramarine combat jacket
-  description: A rugged, all-weather combat jacket issued to the RCM's Paramarine regiments. Designed for versatility, it serves as both a field garment and a lightweight layer of protection. Reinforced with ballistic fibers and treated for weather resistance, it offers limited defense against shrapnel and small arms fire while keeping Paramarines comfortable in harsh conditions. Its deep green color and durable fabric make it a staple for both active deployment and off-duty wear.
+  name: paratrooper combat jacket
+  description: A rugged, all-weather combat jacket issued to the IASF Paratrooper regiments. Designed for versatility, it serves as both a field garment and a lightweight layer of protection. Reinforced with ballistic fibers and treated for weather resistance, it offers limited defense against shrapnel and small arms fire while keeping Paramarines comfortable in harsh conditions. Its deep green color and durable fabric make it a staple for both active deployment and off-duty wear.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/TSE/para.rsi
@@ -90,8 +90,8 @@
 - type: entity
   parent: [RMCAllowSuitStorageClothingJacketMB, RMCBaseJacket]
   id: RMCJacketParaCOJacket
-  name: paramarine commanding officer’s service jacket
-  description: A service jacket typically worn by Commanding Officers of the RCM's Paramarine regiments. Reinforced with lightweight Kevlar shards, it offers limited protection against stabbing weapons and small arms fire while maintaining a formal yet practical design for leadership in the field.
+  name: paratrooper commanding officer’s service jacket
+  description: A service jacket typically worn by Commanding Officers of the IASF Paratrooper regiments. Reinforced with lightweight Kevlar shards, it offers limited protection against stabbing weapons and small arms fire while maintaining a formal yet practical design for leadership in the field.
   suffix: Survivor, Paramarine, CO
   components:
     - type: Sprite
@@ -105,7 +105,7 @@
 - type: entity
   parent: RMCJacketParaCOJacket
   id: RMCJacketParaCOJacketAlt
-  name: paramarine commanding officer’s service jacket
+  name: paratrooper commanding officer’s service jacket
   description: A service jacket typically worn by Commanding Officers of the RCM's Paramarine regiments. Reinforced with lightweight Kevlar shards, it offers limited protection against stabbing weapons and small arms fire while maintaining a formal yet practical design for leadership in the field.
   suffix: Survivor, Paramarine, CO alt
   components:

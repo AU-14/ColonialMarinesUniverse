@@ -7,7 +7,9 @@
   components:
   - type: GuideHelp
     guides:
-    - RMCGuideRoleMortar
+    # cmu edit start
+    - CMUGuideMortar
+    # cmu edit end
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/mortar/classic.rsi
     layers:
@@ -45,6 +47,7 @@
     isCorrodible: false
   - type: Mortar
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -63,9 +66,10 @@
   - type: ActivatableUI
     key: enum.MortarUiKey.Key
   - type: RMCCameraComputer
-    protoIds:
-    - RMCMortarKit
     title: rmc-mortar-camera-title
+  - type: CameraNetworkReceiver
+    networks: [RMCMortarCamera]
+    supportedSources: Rmc
   - type: Appearance
   - type: GenericVisualizer
     visuals:
@@ -123,6 +127,8 @@
   name: M889 HE mortar shell
   description: An 80mm mortar shell loaded with an high explosive charge.
   components:
+  - type: RMCGenericExamine
+    message: It can penetrate 2 z-levels.
   - type: Item
     heldPrefix: he
   - type: Sprite
@@ -137,6 +143,7 @@
   - type: CMExplosionEffect
   - type: RMCScorchEffect
   - type: MortarShell
+    zLevelPenetration: 2
     carvesZLevels: true
     carveFringeRadius: 1
 
@@ -146,13 +153,15 @@
   name: M971 HEAT-MP mortar shell
   description: An 80mm mortar shell loaded with an high explosive anti tank multi purpose charge. It has a smaller blast radius than an HE round, but a devastating effect.
   components:
+  - type: RMCGenericExamine
+    message: It can penetrate 2 z-levels.
   - type: Item
     heldPrefix: heat
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/mortar.rsi
     state: mortar_ammo_heat
   - type: Explosive
-    explosionType: RMCMortar
+    explosionType: CMUMortarHEATMP # CMU14: FLOW-09 was RMCMortar; identical but for its tank blast multiplier.
     maxIntensity: 300
     intensitySlope: 35
     totalIntensity: 1000
@@ -160,6 +169,7 @@
   - type: CMExplosionEffect
   - type: RMCScorchEffect
   - type: MortarShell
+    zLevelPenetration: 2
     createsZLevelOpening: true
 
 - type: entity
@@ -168,6 +178,8 @@
   name: M902 HE-INC mortar shell
   description: An 80mm mortar shell loaded with an high explosive incendiary charge. Perfect for long-range area denial.
   components:
+  - type: RMCGenericExamine
+    message: It can penetrate 2 z-levels.
   - type: Item
     heldPrefix: inc
   - type: Sprite
@@ -182,6 +194,7 @@
   - type: CMExplosionEffect
   - type: RMCScorchEffect
   - type: MortarShell
+    zLevelPenetration: 2
   - type: TileFireOnTrigger
     spawn: RMCTileFire
     range: 5
@@ -192,12 +205,15 @@
   name: M853 ILLUM-OBS mortar shell
   description: An 80mm mortar shell, loaded with an illumination flare and observation camera, attached to a parachute.
   components:
+  - type: RMCGenericExamine
+    message: It can penetrate 2 z-levels.
   - type: Item
     heldPrefix: flr
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/mortar.rsi
     state: mortar_ammo_flr
   - type: MortarShell
+    zLevelPenetration: 2
   - type: MortarCameraShell
 
 - type: entity
@@ -325,7 +341,9 @@
     drawFov: false
   - type: RMCStaticZoomLevel
   - type: RMCCamera
-    id: RMCMortarKit
+  - type: CameraNetworkMember
+    networks: [RMCMortarCamera]
+    sourceKinds: Rmc
   - type: MortarCamera
   - type: TimedDespawn
     lifetime: 180

@@ -1,0 +1,8 @@
+- type: loadoutGroup
+  id: ProvostStampGroupCMU
+  name: cmu-loadout-group-provost-stamp
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - ProvostStampCMU
+  - ProvostChiefInspectorStampCMU

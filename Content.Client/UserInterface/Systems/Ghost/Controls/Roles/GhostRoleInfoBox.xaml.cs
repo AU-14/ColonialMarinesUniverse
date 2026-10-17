@@ -20,16 +20,20 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
         [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private IUserInterfaceManager _uiManager = default!;
 
-        private EntityUid? _previewDummy;
-
-        public GhostRoleInfoBox(string name, string description, NetEntity entity, string? entityPrototype, string? jobPrototype)
+        public GhostRoleInfoBox(
+            string name,
+            string description,
+            NetEntity entity,
+            string? entityPrototype,
+            string? jobPrototype,
+            Action<EntityUid> trackPreviewDummy)
         {
             IoCManager.InjectDependencies(this);
             RobustXamlLoader.Load(this);
 
             Title.Text = name;
             Description.SetMessage(description);
-            PreviewFrame.AddChild(CreatePreview(entity, entityPrototype, jobPrototype, name));
+            PreviewFrame.AddChild(CreatePreview(entity, entityPrototype, jobPrototype, name, trackPreviewDummy));
             CrtLobbyTheme.Apply(this);
         }
 
@@ -38,7 +42,12 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
             ButtonHost.AddChild(buttons);
         }
 
-        private Control CreatePreview(NetEntity entity, string? entityPrototype, string? jobPrototype, string fallback)
+        private Control CreatePreview(
+            NetEntity entity,
+            string? entityPrototype,
+            string? jobPrototype,
+            string fallback,
+            Action<EntityUid> trackPreviewDummy)
         {
             if (_entityManager.TryGetEntity(entity, out var uid) &&
                 _entityManager.HasComponent<SpriteComponent>(uid.Value) &&
@@ -69,7 +78,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
                     fallback,
                     out var dummy))
             {
-                _previewDummy = dummy;
+                trackPreviewDummy(dummy);
                 return CreateSpritePreview(dummy);
             }
 
@@ -98,16 +107,5 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
             return preview;
         }
 
-        [System.Obsolete]
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-
-            if (!disposing || _previewDummy is not { } dummy)
-                return;
-
-            _entityManager.DeleteEntity(dummy);
-            _previewDummy = null;
-        }
     }
 }

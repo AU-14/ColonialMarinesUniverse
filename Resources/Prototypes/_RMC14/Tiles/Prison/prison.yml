@@ -95,7 +95,7 @@
 - type: tile
   parent: CMFloorSteel
   id: CMFloorSteelPrisonRampNorth
-  name: ramp
+  name: tiles-rmc-legacy-ramp
   sprite: /Textures/_RMC14/Tiles/prison/ramptop_north.png
 
 - type: tile

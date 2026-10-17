@@ -1,0 +1,7 @@
+author: Berkin101
+category: CMU
+changes:
+- message: Razorwires now make noises when walked on and have an appropriate hit sound.
+  type: Tweak
+time: '2026-08-31T14:16:25.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1882

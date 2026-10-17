@@ -1,7 +1,7 @@
-using Content.Server._CMU14.BalanceRating;
-using Content.Shared._CMU14.BalanceRating;
+using Content.Server.CMU14.BalanceRating;
+using Content.Shared.CMU14.BalanceRating;
 
-namespace Content.IntegrationTests._CMU14.BalanceRating;
+namespace Content.IntegrationTests.CMU14.BalanceRating;
 
 [TestFixture]
 public sealed class CMUBalanceRatingEuiTest

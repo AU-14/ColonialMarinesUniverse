@@ -1,12 +1,17 @@
 - type: traitCategory
   id: Disabilities
   name: trait-category-disabilities
+  # cmu edit start: up to four disabilities
+  maxTraitPoints: 4
+  # cmu edit end
 
 - type: traitCategory
   id: SpeechTraits
   name: trait-category-speech
   maxTraitPoints: 1
 
-- type: traitCategory
-  id: Quirks
-  name: trait-category-quirks
+# cmu edit start
+#- type: traitCategory
+#  id: Quirks
+#  name: trait-category-quirks
+# cmu edit end

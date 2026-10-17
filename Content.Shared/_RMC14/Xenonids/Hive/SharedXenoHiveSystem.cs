@@ -13,6 +13,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Prototypes;
+using Content.Shared.NPC.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Prototypes;
 using Content.Shared.Stunnable;
@@ -47,10 +48,12 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
+    [Dependency] private NpcFactionSystem _npcFaction = default!;
 
     private EntityQuery<HiveComponent> _query;
     private EntityQuery<HiveMemberComponent> _memberQuery;
 
+    private static readonly ProtoId<NpcFactionPrototype> RmcXenoFaction = "RMCXeno";
     private readonly HashSet<EntityUid> _contacting = new();
 
     public override void Initialize()
@@ -80,7 +83,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
     private void OnDropshipHijackStart(ref DropshipHijackStartEvent ev)
     {
         // Evolution boost is xeno-specific; skip for human-vs-human hijacks
-        if (ev.IsHumanHijack)
+        if (ev.HijackerType == DropshipHijackerType.Human) // CMU14
             return;
 
         var hives = EntityQueryEnumerator<HiveComponent>();
@@ -95,6 +98,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
             var boost = Spawn(null, MapCoordinates.Nullspace);
             var evoOverride = EnsureComp<EvolutionOverrideComponent>(boost);
             evoOverride.Amount = 10;
+            evoOverride.IgnoreGranter = true; // CMU14: hijacking requires leaving the ovipositor.
             Dirty(boost, evoOverride);
 
             EnsureComp<TimedDespawnComponent>(boost).Lifetime = 180;
@@ -156,7 +160,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
             if (!prototype.TryComp(out XenoComponent? xeno, _compFactory))
                 continue;
 
-            if (xeno.UnlockAt == TimeSpan.Zero || prototype.HasComponent<XenoHiddenComponent>(_compFactory))
+            if (xeno.UnlockAt == TimeSpan.Zero || prototype.HasComp<XenoHiddenComponent>(_compFactory))
                 continue;
 
             ent.Comp.Unlocks.GetOrNew(xeno.UnlockAt).Add(prototype.ID);
@@ -216,47 +220,29 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
     {
         if (!TryComp<HiveComponent>(hiveEnt, out var hive))
             return;
-        if (alliance)
-        {
-            hive.Allies.Add(faction);
-        }
-        else
-        {
-            hive.Allies.Remove(faction);
-        }
-        //just made some BULLSHIT!!
-        var factionsQuery = EntityQueryEnumerator<NpcFactionMemberComponent>();
-        while (factionsQuery.MoveNext(out EntityUid ent, out var comp))
-        {
-            if (comp.Factions.Contains(faction))
-                DirtyEntity(ent);
-        }
+
+        var changed = alliance ? hive.Allies.Add(faction) : hive.Allies.Remove(faction);
+        if (changed)
+            Dirty(hiveEnt, hive); // CMU14: clients read alliances from the hive, not its allies.
     }
 
     public void SetHiveIndividualAlly(EntityUid ent, EntityUid hiveEnt, bool alliance)
     {
         if (!TryComp<HiveComponent>(hiveEnt, out var hive))
             return;
-        if (alliance)
-        {
-            hive.IndividualAllies.Add(ent);
-        }
-        else
-        {
-            hive.IndividualAllies.Remove(ent);
-        }
-        DirtyEntity(ent);
+
+        var changed = alliance ? hive.IndividualAllies.Add(ent) : hive.IndividualAllies.Remove(ent);
+        if (changed)
+            Dirty(hiveEnt, hive); // CMU14
     }
 
     public void ClearHiveIndividualAllies(EntityUid hiveEnt)
     {
-        if (!TryComp<HiveComponent>(hiveEnt, out var hive))
+        if (!TryComp<HiveComponent>(hiveEnt, out var hive) || hive.IndividualAllies.Count == 0)
             return;
-        foreach (var item in hive.IndividualAllies)
-        {
-            hive.IndividualAllies.Remove(item);
-            DirtyEntity(item);
-        }
+
+        hive.IndividualAllies.Clear();
+        Dirty(hiveEnt, hive); // CMU14
     }
 
     /// <summary>
@@ -328,6 +314,27 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         {
             Log.Error($"Tried to set hive of {ToPrettyString(member)} to bad hive entity {ToPrettyString(hive)}");
             return; // invalid hive was passed, prevent it breaking anything else
+        }
+
+        var oldFaction = old is { } oldHive && _query.TryComp(oldHive, out var previousHiveComp)
+            ? previousHiveComp.NpcFaction
+            : null;
+        var newFaction = hiveEnt?.Comp.NpcFaction;
+
+        if (oldFaction != newFaction)
+        {
+            if (oldFaction is { } oldFactionId)
+                _npcFaction.RemoveFaction(member.Owner, oldFactionId);
+
+            if (newFaction is { } newFactionId)
+            {
+                _npcFaction.RemoveFaction(member.Owner, RmcXenoFaction);
+                _npcFaction.AddFaction(member.Owner, newFactionId);
+            }
+            else if (oldFaction is not null)
+            {
+                _npcFaction.AddFaction(member.Owner, RmcXenoFaction);
+            }
         }
 
         comp.Hive = hive;
@@ -527,11 +534,30 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
 
     public void ChangeBurrowedLarva(Entity<HiveComponent> hive, int amount)
     {
+        if (!hive.Comp.BurrowedLarvaEnabled) // CMU14
+            return;
+
         SetHiveBurrowedLarva(hive, hive.Comp.BurrowedLarva + amount);
+    }
+
+    // CMU14 method
+    public void SetBurrowedLarvaEnabled(Entity<HiveComponent> hive, bool enabled)
+    {
+        if (hive.Comp.BurrowedLarvaEnabled == enabled)
+            return;
+
+        hive.Comp.BurrowedLarvaEnabled = enabled;
+        if (!enabled && hive.Comp.BurrowedLarva != 0)
+            SetHiveBurrowedLarva(hive, 0);
+        else
+            Dirty(hive);
     }
 
     public bool HasBurrowedLarvaSpawnPoint(Entity<HiveComponent> hive)
     {
+        if (!hive.Comp.BurrowedLarvaEnabled) // CMU14
+            return false;
+
         return TryGetBurrowedLarvaSpawnPosition(hive, out _);
     }
 
@@ -552,12 +578,15 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         RaiseLocalEvent(hive, ref ev, true);
     }
 
-    public bool JoinBurrowedLarva(Entity<HiveComponent> hive, ICommonSession session)
+    public bool JoinBurrowedLarva(Entity<HiveComponent> hive, ICommonSession session, bool ignorePoolGate = false) // CMU14
     {
         if (_net.IsClient)
             return false;
 
-        if (hive.Comp.BurrowedLarva <= 0)
+        // CMU14: presets with the pool disabled (Colony Fall) must still reincarnate sacrificed xenos
+        if (!ignorePoolGate
+            && (!hive.Comp.BurrowedLarvaEnabled
+                || hive.Comp.BurrowedLarva <= 0))
             return false;
 
         if (!TryGetBurrowedLarvaSpawnPosition(hive, out var position))
@@ -582,6 +611,12 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
 
     private bool TryGetBurrowedLarvaSpawnPosition(Entity<HiveComponent> hive, out EntityCoordinates position)
     {
+        // CMU14: xeno feedback and lifecycle.
+        // Hijack evacuates the hive before the old core finishes being destroyed.
+        if (hive.Comp.HijackSurged &&
+            TryGetBurrowedLarvaSpawnPositionAt<XenoEvolutionGranterComponent>(hive, out position))
+            return true;
+
         if (TryGetBurrowedLarvaSpawnPositionAt<HiveCoreComponent>(hive, out position) ||
             TryGetBurrowedLarvaSpawnPositionAt<XenoEvolutionGranterComponent>(hive, out position) ||
             TryGetBurrowedLarvaSpawnPositionAtXeno(hive, out position))

@@ -25,12 +25,12 @@ namespace Content.Shared._RMC14.Attachable.Systems;
 
 public sealed partial class AttachableIFFSystem : EntitySystem
 {
-    [Dependency] private readonly AttachableHolderSystem _holder = default!;
-    [Dependency] private readonly GunIFFSystem _gunIFF = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private AttachableHolderSystem _holder = default!;
+    [Dependency] private GunIFFSystem _gunIFF = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private const float FallbackProjectileLifetime = 10f;
     private const float FallbackProjectileRadius = 0.1f;
@@ -75,18 +75,24 @@ public sealed partial class AttachableIFFSystem : EntitySystem
         if (!ent.Comp.PreventFriendlyFire)
             return;
 
+        // CMU14: attachable IFF follows the gun's toggle when the gun has one
+        // cmu edit start
+        if (HasComp<IFFToggleComponent>(ent) && TryComp<GunIFFComponent>(ent, out var gunIff) && !gunIff.Enabled)
+            return;
+        // cmu edit end
+
         CheckPreventFriendlyFire(ent.Owner, ref args);
     }
 
     private void OnGunIFFAttemptShoot(Entity<GunIFFComponent> ent, ref AttemptShootEvent args)
     {
-        if (!ent.Comp.PreventFriendlyFire)
+        if (!ent.Comp.PreventFriendlyFire || !ent.Comp.Enabled) // CMU14: honor the gun's IFF toggle
             return;
 
         CheckPreventFriendlyFire(ent.Owner, ref args);
     }
 
-    private void CheckPreventFriendlyFire(EntityUid weapon, ref AttemptShootEvent args)
+    public void CheckPreventFriendlyFire(EntityUid weapon, ref AttemptShootEvent args) // CMU14: public for squad optic IFF
     {
         if (args.Cancelled ||
             args.ToCoordinates is not { } toCoordinates ||
@@ -239,7 +245,9 @@ public sealed partial class AttachableIFFSystem : EntitySystem
 
     private void OnGunAttachableIFFAmmoShot(Entity<GunAttachableIFFComponent> ent, ref AmmoShotEvent args)
     {
-        _gunIFF.GiveAmmoIFF(ent, ref args, false, true);
+        // CMU14: hardcoded true stomped the toggle GunIFFSystem stamped before this handler
+        var enabled = !TryComp<GunIFFComponent>(ent, out var gunIff) || gunIff.Enabled;
+        _gunIFF.GiveAmmoIFF(ent, ref args, false, enabled);
     }
 
     private void OnGunAttachableIFFExamined(Entity<GunAttachableIFFComponent> ent, ref ExaminedEvent args)

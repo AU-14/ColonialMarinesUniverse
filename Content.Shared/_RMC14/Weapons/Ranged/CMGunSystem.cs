@@ -15,6 +15,7 @@ using Content.Shared._RMC14.Weapons.Ranged.Whitelist;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DoAfter;
+using Content.Shared.Damage;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands;
@@ -391,7 +392,7 @@ public sealed partial class CMGunSystem : EntitySystem
         args.Cancelled = true;
 
         var popup = Loc.GetString("cm-gun-unskilled", ("gun", ent.Owner));
-        _popup.PopupClient(popup, args.User, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity(popup, args.User, args.User, PopupType.SmallCaution);
     }
 
     private void OnGunUnskilledPenaltyRefresh(Entity<GunUnskilledPenaltyComponent> ent, ref GunRefreshModifiersEvent args)
@@ -515,7 +516,10 @@ public sealed partial class CMGunSystem : EntitySystem
                 Dirty(projectile, projectileComp);
             }
 
-            _projectile.ProjectileCollide((projectile, projectileComp, physicsComp), gunComp.Target.Value);
+            _projectile.ProjectileCollide(
+                (projectile, projectileComp, physicsComp),
+                gunComp.Target.Value,
+                context: DamageImpactContext.PointBlank);
         }
 
         userDelay.LastPBAt = _timing.CurTime;
@@ -562,7 +566,7 @@ public sealed partial class CMGunSystem : EntitySystem
         args.Cancelled = true;
 
         var popup = Loc.GetString("cm-gun-unskilled", ("gun", ent.Owner));
-        _popup.PopupClient(popup, args.User, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity(popup, args.User, args.User, PopupType.SmallCaution);
     }
 
     private void OnRequireEquippedAttemptShoot(Entity<GunRequireEquippedComponent> ent, ref AttemptShootEvent args)
@@ -644,13 +648,23 @@ public sealed partial class CMGunSystem : EntitySystem
                 return true;
         }
 
-        _popup.PopupClient(Loc.GetString("rmc-shoot-harness-required"), user, user, PopupType.MediumCaution);
+        _popup.PopupEntity(Loc.GetString("rmc-shoot-harness-required"), user, user, PopupType.MediumCaution);
         return false;
     }
 
     public override void Update(float frameTime)
     {
         var time = _timing.CurTime;
+        var assistedReload = EntityQueryEnumerator<AssistedReloadReceiverComponent>(); // CMU14
+        while (assistedReload.MoveNext(out var aUid, out var receiver)) // CMU14
+        {
+            if (receiver.Weapon is { } weapon && TerminatingOrDeleted(weapon))
+            {
+                receiver.Weapon = null;
+                Dirty(aUid, receiver);
+            }
+        }
+
         var query = EntityQueryEnumerator<ProjectileFixedDistanceComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
@@ -684,7 +698,7 @@ public sealed partial class CMGunSystem : EntitySystem
 
         _audio.PlayPredicted(gun.Comp.SoundSpin, gun.Owner, args.UserUid);
         var popup = Loc.GetString("rmc-revolver-spin", ("gun", args.UserUid));
-        _popup.PopupClient(popup, args.UserUid, args.UserUid, PopupType.SmallCaution);
+        _popup.PopupEntity(popup, args.UserUid, args.UserUid, PopupType.SmallCaution);
 
         Dirty(gun);
     }
@@ -876,28 +890,28 @@ public sealed partial class CMGunSystem : EntitySystem
         if (_whitelist.IsWhitelistFailOrNull(ballisticAmmoProvider.Whitelist, ammo.Owner))
         {
             var failMismatchPopup = Loc.GetString("rmc-assisted-reload-fail-mismatch", ("ammo", ammo.Owner), ("weapon", reloadReceiver.Weapon));
-            _popup.PopupClient(failMismatchPopup, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(failMismatchPopup, user, user, PopupType.SmallCaution);
             return;
         }
 
         if (!IsBehindTarget(user, target))
         {
             var failAnglePopup = Loc.GetString("rmc-assisted-reload-fail-angle", ("target", target));
-            _popup.PopupClient(failAnglePopup, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(failAnglePopup, user, user, PopupType.SmallCaution);
             return;
         }
 
         if (!_gun.TryAmmoInsert(reloadReceiver.Weapon.Value, ballisticAmmoProvider, ammo.Owner, user, reloadReceiver.Weapon.Value, ammo.Comp.InsertDelay))
         {
             var failFullPopup = Loc.GetString("rmc-assisted-reload-fail-full", ("target", target), ("weapon", reloadReceiver.Weapon));
-            _popup.PopupClient(failFullPopup, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(failFullPopup, user, user, PopupType.SmallCaution);
             return;
         }
 
         var userPopup = Loc.GetString("rmc-assisted-reload-start-user", ("target", target), ("weapon", reloadReceiver.Weapon));
         var targetPopup = Loc.GetString("rmc-assisted-reload-start-target", ("reloader", user), ("weapon", reloadReceiver.Weapon), ("ammo", ammo.Owner));
 
-        _popup.PopupClient(userPopup, user, user);
+        _popup.PopupEntity(userPopup, user, user);
         _popup.PopupEntity(targetPopup, target, target);
     }
 

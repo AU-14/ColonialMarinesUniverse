@@ -1,25 +1,23 @@
 using System.Linq;
 using System.Numerics;
-using Content.Server._CMU14.Ops.ThirdParty;
-using Content.Server._CMU14.Threats;
+using Content.Server.CMU14.Ops.ThirdParty;
+using Content.Server.CMU14.Threats;
 using Content.Server._RMC14.Announce;
 using Content.Server._RMC14.Xenonids.Hive;
 using Content.Server.Administration.Managers;
 using Content.Server.Administration.Systems;
-using Content.Server.AU14.Allegiance;
-using Content.Server.AU14.Origin;
-using Content.Server.AU14.Round;
-using Content.Server.AU14.Scenario;
+using Content.Server.CMU14.Allegiance;
+using Content.Server.CMU14.Origin;
+using Content.Server.CMU14.Round;
 using Content.Server.GameTicking.Events;
 using Content.Server.Spawners.Components;
 using Content.Server.Station.Components;
-using Content.Shared._CMU14.Threats;
+using Content.Shared.CMU14.Threats;
 using Content.Shared._RMC14.Rules;
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14.util;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
-using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Mind;
 using Content.Shared.Players;
@@ -47,7 +45,6 @@ namespace Content.Server.GameTicking
         [Dependency] private AdminSystem _admin = default!;
         [Dependency] private MarinePresenceAnnounceSystem _marinePresenceAnnounce = default!;
         [Dependency] private AuJobSelectionSystem _auJobSelectionSystem = default!;
-        [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
         [Dependency] private ThreatSystem _threatSystem = default!;
         [Dependency] private ThreatVoteSystem _threatVoteSystem = default!;
         [Dependency] private ThirdPartySystem _thirdParty = default!;
@@ -120,30 +117,14 @@ namespace Content.Server.GameTicking
             return null;
         }
 
-        private ScenarioPlanValidationRequest BuildScenarioPlanRuntimeRequest(string? presetId, int playerCount) => new(
-            presetId ?? string.Empty,
-            playerCount,
-            _platoonSpawnRuleSystem.SelectedGovforPlatoon?.ID,
-            _platoonSpawnRuleSystem.SelectedOpforPlatoon?.ID,
-            _auRoundSystem.GetSelectedPlanetId(),
-            _auRoundSystem.GetSelectedPlanet()?.MapId,
-            _auRoundSystem.SelectedThreat?.ID,
-            _auRoundSystem.GetSelectedGovforShip(),
-            _auRoundSystem.GetSelectedOpforShip());
-
-        private static bool ShouldGenerateScenarioPlanShadow(string? presetId)
-            => presetId != null
-                && (presetId.Equals("DistressSignal", StringComparison.OrdinalIgnoreCase)
-                    || presetId.Equals("Insurgency", StringComparison.OrdinalIgnoreCase)
-                    || presetId.Equals("ColonyFall", StringComparison.OrdinalIgnoreCase));
-
         /// <summary>
         ///     Resolves the correct character profile for a player based on allegiance.
         ///     If the player is ignoring allegiance or the job/platoon has no requirements, returns the selected profile.
         ///     If the selected profile doesn't match, searches other profiles.
         ///     Returns null if no matching profile is found and the player isn't ignoring allegiance.
         /// </summary>
-        private HumanoidCharacterProfile? ResolveProfileForAllegiance(NetUserId userId,
+        // CMU14: Force on Force roles, hijacking, announcements and identification.
+        internal HumanoidCharacterProfile? ResolveProfileForAllegiance(NetUserId userId,
             HumanoidCharacterProfile selectedProfile,
             string? jobId)
         {
@@ -152,10 +133,10 @@ namespace Content.Server.GameTicking
                 if (!_prefsManager.TryGetCachedPreferences(userId, out PlayerPreferences? cachedPrefs))
                     return null;
 
-                foreach ((int _, ICharacterProfile profile) in cachedPrefs.Characters)
+                foreach ((int _, HumanoidCharacterProfile profile) in cachedPrefs.Characters)
                 {
-                    if (profile is HumanoidCharacterProfile humanoid && predicate(humanoid))
-                        return humanoid;
+                    if (predicate(profile))
+                        return profile;
                 }
 
                 return null;
@@ -168,7 +149,7 @@ namespace Content.Server.GameTicking
             bool MeetsSynthetic(HumanoidCharacterProfile profile) =>
                 jobProto == null || _allegianceSystem.DoesCharacterMeetJobSynthetic(profile, jobProto, userId);
 
-            // Synthetic eligibility is a hard requirement — unlike allegiance/origin, it is
+            // Synthetic eligibility is a hard requirement â€” unlike allegiance/origin, it is
             // not subject to the "Ignore Allegiance" opt-out.
             if (_allegianceSystem.IsIgnoringAllegiance(userId))
                 return MeetsSynthetic(selectedProfile) ? selectedProfile : FindMatchingProfile(MeetsSynthetic);
@@ -201,7 +182,7 @@ namespace Content.Server.GameTicking
             if (_allegianceSystem.IsAllegianceApplicableForPlatoon(selectedProfile, platoon, jobProto, userId))
                 return selectedProfile;
 
-            // Selected doesn't match — search all character profiles
+            // Selected doesn't match â€” search all character profiles
             if (!_prefsManager.TryGetCachedPreferences(userId, out PlayerPreferences? prefs))
                 return null;
 
@@ -243,7 +224,8 @@ namespace Content.Server.GameTicking
             Dictionary<NetUserId, HumanoidCharacterProfile> profiles,
             bool force)
         {
-            _distressSignal.TheHive = _hive.CreateHive("xenonid hive", "CMXenoHive");
+            _distressSignal.TheHive = _hive.CreateHive("Xenomorph Prime", "CMXenoHive");
+            _hive.CreateHive("Mycelial Confluence", "CMUPathogenHive");
 
             // For presets without CMDistressSignalRule (e.g. AU14 DistressSignal), the planet map
             // has already been loaded by LoadMaps and CMDistressSignalRuleSystem.OnRulePlayerSpawning
@@ -319,26 +301,6 @@ namespace Content.Server.GameTicking
                 _auJobSelectionSystem.AssignThreatAndThirdPartyJobs(assignmentProfiles);
             }
 
-            if (GameTicker.ShouldGenerateScenarioPlanShadow(presetId))
-            {
-                try
-                {
-                    _scenarioPlan.GenerateShadowPlan(
-                        BuildScenarioPlanRuntimeRequest(presetId, assignmentProfiles.Count),
-                        usesPostRoundstartThreatVote
-                            ? "RoundStartDeferredThreatVotePrepared"
-                            : "RoundStartThreatAssignmentPrepared");
-                }
-                catch (Exception scenarioEx)
-                {
-                    Log.Error($"GenerateShadowPlan threw - round will continue without a shadow Scenario Plan. {scenarioEx}");
-                    _chatManager.DispatchServerAnnouncement(
-                        Loc.GetString("au14-scenario-plan-threw-announcement",
-                            ("preset", presetId ?? "<unknown>")),
-                        Color.Red);
-                }
-            }
-
             List<EntityUid> spawnableStations = GetSpawnableStations();
             _sawmill.Debug($"[RoundStart] Found {spawnableStations.Count} spawnable station(s).");
             Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs
@@ -356,7 +318,7 @@ namespace Content.Server.GameTicking
 
             // Defensive: any exception inside SpawnPlayers propagates to StartRound's
             // EXCEPTION_TOLERANCE catch (only enabled in Release/Tools builds), which calls
-            // RestartRound() — making the round appear to "instantly restart at start" in
+            // RestartRound() â€” making the round appear to "instantly restart at start" in
             // production. Wrap the threat spawn so a single subsystem can't take the round down.
             ThreatPrototype? selectedThreat = _auRoundSystem.SelectedThreat;
             switch (usesPostRoundstartThreatVote)
@@ -408,7 +370,7 @@ namespace Content.Server.GameTicking
                     }
                     catch (Exception threatEx)
                     {
-                        Log.Error($"SpawnThreatAtRoundStart threw — round will continue without threat spawn. {threatEx}");
+                        Log.Error($"SpawnThreatAtRoundStart threw â€” round will continue without threat spawn. {threatEx}");
                         int removed = ThreatSystem.RemoveThreatJobAssignments(assignedJobs);
                         if (removed > 0)
                         {
@@ -420,7 +382,7 @@ namespace Content.Server.GameTicking
                     break;
                 }
                 case true: _sawmill.Debug("[RoundStart] Threat spawn deferred until post-roundstart threat vote finishes."); break;
-                default:   Log.Debug("SpawnThreatAtRoundStart debug — no threat selected, skipping threat spawn."); break;
+                default:   Log.Debug("SpawnThreatAtRoundStart debug â€” no threat selected, skipping threat spawn."); break;
             }
 
             _stationJobs.AssignOverflowJobs(ref assignedJobs, playerNetIds, assignmentProfiles, spawnableStations);
@@ -461,14 +423,14 @@ namespace Content.Server.GameTicking
             // Spawn everybody in!
             foreach ((NetUserId player, (ProtoId<JobPrototype>? job, EntityUid station)) in assignedJobs)
             {
-                // Threat jobs are intentionally skipped here — ThreatSystem.SpawnThreatAtRoundStart
+                // Threat jobs are intentionally skipped here â€” ThreatSystem.SpawnThreatAtRoundStart
                 // (called above) already spawns those entities at threat markers and mind-transfers
                 // the players to them.
                 //
                 // ThirdParty jobs deliberately fall through to the standard spawn path. Putting them
                 // in this skip list (as PR #838 did) caused both distress and insurgency rounds to
                 // restart at start: those players ended up bodyless, then SpawnThirdParty's
-                // mind-transfer block (called below) hit GetMind→null→CreateMind→PlayerJoinGame on a
+                // mind-transfer block (called below) hit GetMindâ†’nullâ†’CreateMindâ†’PlayerJoinGame on a
                 // session still in lobby state, which threw, which propagated to StartRound's
                 // EXCEPTION_TOLERANCE catch and called RestartRound(). Keep them in the standard
                 // pipeline so they have a body even if SpawnThirdParty later no-ops.
@@ -487,7 +449,7 @@ namespace Content.Server.GameTicking
 
                 if (resolvedProfile == null)
                 {
-                    // No matching character for this platoon's allegiance — keep player in lobby
+                    // No matching character for this platoon's allegiance â€” keep player in lobby
                     _chatManager.DispatchServerMessage(playerSession,
                         Loc.GetString("allegiance-no-matching-character"));
                     continue;
@@ -555,7 +517,7 @@ namespace Content.Server.GameTicking
                         }
                         catch (Exception thirdPartyEx)
                         {
-                            Log.Error($"StartThirdPartySpawning threw — round will continue without third-party spawn. {thirdPartyEx}");
+                            Log.Error($"StartThirdPartySpawning threw â€” round will continue without third-party spawn. {thirdPartyEx}");
                         }
                     }
                     else if (_auRoundSystem.SelectedPreset is { ThirdPartyAutoSpawn: true } presetSchedule)
@@ -573,11 +535,11 @@ namespace Content.Server.GameTicking
                         }
                         catch (Exception thirdPartyEx)
                         {
-                            Log.Error($"Preset-owned StartThirdPartySpawning threw — round will continue without third-party spawns. {thirdPartyEx}");
+                            Log.Error($"Preset-owned StartThirdPartySpawning threw â€” round will continue without third-party spawns. {thirdPartyEx}");
                         }
                     }
                     else
-                        Log.Debug("StartThirdPartySpawning debug — no threat selected, skipping third-party spawn.");
+                        Log.Debug("StartThirdPartySpawning debug â€” no threat selected, skipping third-party spawn.");
 
                     break;
                 }
@@ -610,15 +572,16 @@ namespace Content.Server.GameTicking
             if (IsThreatVoteRoundJoinBlocked(player))
                 return;
 
-            HumanoidCharacterProfile character = GetPlayerProfile(player);
+            var character = GetPlayerProfile(player);
 
-            HashSet<ProtoId<JobPrototype>>? jobBans = _banManager.GetJobBans(player.UserId);
+            var jobBans = _banManager.GetJobBans(player.UserId);
             if (jobBans == null || (jobId != null && jobBans.Contains(jobId)))
                 return;
 
             if (jobId != null)
             {
-                var ev = new IsJobAllowedEvent(player, new(jobId));
+                var jobs = new List<ProtoId<JobPrototype>> {jobId};
+                var ev = new IsRoleAllowedEvent(player, jobs, null);
                 RaiseLocalEvent(ref ev);
                 if (ev.Cancelled)
                     return;
@@ -629,7 +592,7 @@ namespace Content.Server.GameTicking
 
             if (resolvedProfile == null)
             {
-                // No matching character for this platoon's allegiance — keep player in lobby
+                // No matching character for this platoon's allegiance â€” keep player in lobby
                 _chatManager.DispatchServerMessage(player,
                     Loc.GetString("allegiance-no-matching-character"));
                 return;
@@ -683,22 +646,30 @@ namespace Content.Server.GameTicking
                 // If blank, choose a round start species.
                 if (string.IsNullOrEmpty(weightId))
                 {
-                    IEnumerable<SpeciesPrototype> speciesPrototypes = _prototypeManager
-                        .EnumeratePrototypes<SpeciesPrototype>();
-
-                    List<ProtoId<SpeciesPrototype>> roundStart = (from proto in speciesPrototypes where proto.RoundStart select proto.ID).Select(dummy => (ProtoId<SpeciesPrototype>)dummy).ToList();
+                    var roundStart = new List<ProtoId<SpeciesPrototype>>();
+                    var speciesPrototypes = ProtoMan.EnumeratePrototypes<SpeciesPrototype>();
+                    foreach (var proto in speciesPrototypes)
+                    {
+                        if (proto.RoundStart)
+                            roundStart.Add(proto.ID);
+                    }
 
                     speciesId = roundStart.Count == 0
-                        ? SharedHumanoidAppearanceSystem.DefaultSpecies
+                        ? HumanoidCharacterProfile.DefaultSpecies
                         : _robustRandom.Pick(roundStart);
                 }
                 else
                 {
-                    var weights = _prototypeManager.Index<WeightedRandomSpeciesPrototype>(weightId);
+                    var weights = ProtoMan.Index<WeightedRandomSpeciesPrototype>(weightId);
                     speciesId = weights.Pick(_robustRandom);
                 }
 
-                character = HumanoidCharacterProfile.RandomWithSpecies(speciesId);
+                // The random profile must retain the job priorities set by the player
+                var jobs = character.JobPriorities;
+                character = HumanoidCharacterProfile.RandomWithSpecies(speciesId).WithJobPriorities(jobs);
+
+                // This does not utilize overflow job slots, so if the character profile
+                // had no available job priorities (ie Captain on Dev) set, then the player will spawn as a ghost
             }
 
             // We raise this event to allow other systems to handle spawning this player themselves. (e.g. late-join wizard,
@@ -713,6 +684,8 @@ namespace Content.Server.GameTicking
                 return;
             }
 
+            jobId = bev.JobId;
+
             // Figure out job restrictions
             var restrictedRoles = new HashSet<ProtoId<JobPrototype>>();
             var ev = new GetDisallowedJobsEvent(player, restrictedRoles);
@@ -721,6 +694,23 @@ namespace Content.Server.GameTicking
             HashSet<ProtoId<JobPrototype>>? jobBans = _banManager.GetJobBans(player.UserId);
             if (jobBans != null)
                 restrictedRoles.UnionWith(jobBans);
+
+            /* CMU14: the joint FoF roll owns fallback choices; direct late joins keep the
+             * selected job and use the capacity check below. Retain the old hooks here
+             * for upstream merge context, but never silently replace that job or side.
+            // CMU14: confirm before the FoF balancer sends a joiner to the opposite side.
+            if (lateJoin
+                && _fof.TryOpenBalanceConfirm(player, station, jobId))
+                return;
+
+            // CMU14: ForceOnForce faction lock and mid-round balance.
+            if (lateJoin
+                && _fof.TryDecideSpawn(player, station, jobId, character, restrictedRoles, out var fofJob, out var fofStation))
+            {
+                jobId = fofJob;
+                station = fofStation;
+            }
+            */
 
             // Pick best job best on prefs.
             string? presetId = CurrentPreset?.ID ?? Preset?.ID;
@@ -743,31 +733,41 @@ namespace Content.Server.GameTicking
                 return;
             }
 
-            PlayerJoinGame(player, silent);
+            if (lateJoin && CurrentPreset?.ID.Equals("ForceOnForce", StringComparison.OrdinalIgnoreCase) == true)
+            {
+                var respawn = EntityManager.System<Content.Server.CMU14.ForceOnForce.ForceOnForceRespawnSystem>();
+                if (_prototypeManager.TryIndex<JobPrototype>(jobId, out var respawnJob) &&
+                    !respawn.CanJoinSide(player.UserId, respawnJob.RoundSide))
+                {
+                    _chatManager.DispatchServerMessage(player, Loc.GetString("cmu-fof-respawn-side-locked"));
+                    return;
+                }
+                var remaining = respawn.Remaining(player.UserId);
+                if (remaining > TimeSpan.Zero)
+                {
+                    _chatManager.DispatchServerMessage(player,
+                        Loc.GetString("cmu-fof-respawn-wait", ("seconds", (int) Math.Ceiling(remaining.TotalSeconds))));
+                    return;
+                }
+                if (!_stationJobs.CanJoinForceOnForceSide(jobId))
+                {
+                    // CMU14: faction gameplay fixes.
+                    _chatManager.DispatchServerMessage(player, Loc.GetString(respawn.HasLockedSide(player.UserId)
+                        ? "cmu-fof-locked-side-full" : "cmu-fof-side-full"));
+                    return;
+                }
+            }
 
-            ContentPlayerData? data = player.ContentData();
+            // cmu edit start: ask before taking a slot only the Foxtrot squad has left
+            if (lateJoin
+                && EntityManager.System<Content.Server.CMU14.Squads.Foxtrot.CMUFoxtrotSquadSystem>()
+                    .TryOpenReservedConfirm(player, character, station, jobId))
+                return;
+            // cmu edit end
 
-            DebugTools.AssertNotNull(data);
-
-            Entity<MindComponent> newMind = _mind.CreateMind(data.UserId, character.Name);
-            _mind.SetUserId(newMind, data.UserId);
-
-            var jobPrototype = _prototypeManager.Index<JobPrototype>(jobId);
-
-            _playTimeTrackings.PlayerRolesChanged(player);
-
-            EntityUid? mobMaybe = _stationSpawning.SpawnPlayerCharacterOnStation(station, jobId, character);
-            DebugTools.AssertNotNull(mobMaybe);
-            EntityUid mob = mobMaybe.Value;
-
-            // Apply origin effects (components, accents, items)
-            _originSystem.ApplyOrigin(mob, character);
-
-            _mind.TransferTo(newMind, mob);
-
-            _roles.MindAddJobRole(newMind, silent: silent, jobPrototype: jobId);
-            string jobName = _jobs.MindTryGetJobName(newMind);
-            _admin.UpdatePlayerList(player);
+            // CMU14: DoSpawn can fail when no spawn point exists; skip this player, not the round.
+            if (!DoSpawn(player, character, station, jobId, silent, out var mob, out var jobPrototype, out var jobName))
+                return;
 
 /*
             // Deadcode
@@ -797,9 +797,9 @@ namespace Content.Server.GameTicking
             }
 */
 
-            // wtf?
-            // if (player.UserId == new Guid("{e887eb93-f503-4b65-95b6-2f282c014192}")) AddComp<OwOAccentComponent>(mob);
-
+            // CMU14: give back the player's old role slots before the new assignment takes
+            // one, so respawning reopens closed roles instead of burning a slot per death.
+            _stationJobs.RefundPlayerJobs(player.UserId);
             _stationJobs.TryAssignJob(station, jobPrototype, player.UserId);
 
             if (lateJoin)
@@ -847,6 +847,65 @@ namespace Content.Server.GameTicking
             RaiseLocalEvent(mob, aev, true);
 
             _marinePresenceAnnounce.AnnounceLateJoin(lateJoin, silent, mob, jobId, jobName, jobPrototype); // RMC14
+        }
+
+        /// <summary>
+        /// Creates a mob on the specified station, creates the new mind, equips job-specific starting gear and loadout
+        /// </summary>
+        public bool DoSpawn(
+            ICommonSession player,
+            HumanoidCharacterProfile character,
+            EntityUid station,
+            string jobId,
+            bool silent,
+            out EntityUid mob,
+            out JobPrototype jobPrototype,
+            out string jobName)
+        {
+            PlayerJoinGame(player, silent);
+
+            var data = player.ContentData();
+
+            DebugTools.AssertNotNull(data);
+
+            jobPrototype = ProtoMan.Index<JobPrototype>(jobId);
+
+            var mobMaybe = _stationSpawning.SpawnPlayerCharacterOnStation(station, jobId, character, player: player);
+            // CMU14 Begin: a missing spawn point used to throw here and abort round start.
+            // DebugTools.AssertNotNull(mobMaybe);
+            // mob = mobMaybe!.Value;
+            if (mobMaybe is not { } spawned || !spawned.IsValid())
+            {
+                mob = EntityUid.Invalid;
+                jobName = jobPrototype.Name;
+
+                if (LobbyEnabled)
+                    PlayerJoinLobby(player);
+                else
+                    JoinAsObserver(player);
+
+                _chatManager.DispatchServerMessage(player,
+                    Loc.GetString("game-ticker-player-no-spawn-point-when-joining", ("job", jobName)));
+                return false;
+            }
+
+            mob = spawned;
+            // CMU14 End
+
+            // Apply origin effects (components, accents, items) after the character exists.
+            _originSystem.ApplyOrigin(mob, character);
+
+            var newMind = _mind.CreateMind(data.UserId, Name(mob));
+            _mind.SetUserId(newMind, data.UserId);
+
+            _playTimeTrackings.PlayerRolesChanged(player);
+
+            _mind.TransferTo(newMind, mob);
+
+            _roles.MindAddJobRole(newMind, silent: silent, jobPrototype: jobId);
+            jobName = _jobs.MindTryGetJobName(newMind);
+            _admin.UpdatePlayerList(player);
+            return true; // CMU14
         }
 
         public void Respawn(ICommonSession player)
@@ -938,16 +997,16 @@ namespace Content.Server.GameTicking
                 _possiblePositions.Add(transform.Coordinates);
             }
 
-            EntityQuery<MetaDataComponent> metaQuery = GetEntityQuery<MetaDataComponent>();
-
             // Fallback to a random grid.
             if (_possiblePositions.Count == 0)
             {
                 AllEntityQueryEnumerator<MapGridComponent> query = AllEntityQuery<MapGridComponent>();
                 while (query.MoveNext(out EntityUid uid, out MapGridComponent? _))
                 {
-                    if (!metaQuery.TryGetComponent(uid, out MetaDataComponent? meta) || meta.EntityPaused
-                        || TerminatingOrDeleted(uid)) continue;
+                    if (!TryComp(uid, out MetaDataComponent? meta) || meta.EntityPaused || TerminatingOrDeleted(uid))
+                    {
+                        continue;
+                    }
 
                     _possiblePositions.Add(new(uid, Vector2.Zero));
                 }
@@ -981,7 +1040,7 @@ namespace Content.Server.GameTicking
             {
                 EntityUid mapUid = _map.GetMapOrInvalid(map);
 
-                if (!metaQuery.TryGetComponent(mapUid, out MetaDataComponent? meta)
+                if (!TryComp(mapUid, out MetaDataComponent? meta)
                     || meta.EntityPaused
                     || TerminatingOrDeleted(mapUid))
                     continue;

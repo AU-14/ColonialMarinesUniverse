@@ -22,6 +22,12 @@ public partial struct StampDisplayInfo
 
     [DataField("stampedColor")]
     public Color StampedColor;
+
+    /// <summary>Custom stamp labels are literal text; stock stamps use localization IDs.</summary>
+    public readonly string GetDisplayName()
+    {
+        return IoCManager.Resolve<ILocalizationManager>().TryGetString(StampedName, out var localized) ? localized : StampedName;
+    }
 };
 
 [RegisterComponent]

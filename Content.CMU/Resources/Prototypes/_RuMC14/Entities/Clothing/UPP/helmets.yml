@@ -1,0 +1,100 @@
+- type: entity
+  parent:  RMCMarineHelmetBase
+  id: RuMCUPPNavalInfantryHeavyHelmet
+  name: Maska-S
+  description: The helmet for the UPP. It's called a heavy helmet, but the only difference is that the mask feels like it's made of cardboard, so there's not much difference between this and the regular version. [Head, eyes]
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/helmet/Maska_s.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/UPP/helmet/Maska_s.rsi
+  - type: ItemToggle
+    activated: true
+  - type: ToggleClothing
+    action: RMCActionToggleWeldingGoggles
+  - type: ComponentToggler
+    components:
+    - type: EyeProtection
+    - type: WeldingVision
+  - type: RMCItemToggleClothingVisuals
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: {state: icon-on}
+          False: {state: icon}
+  - type: Appearance
+  - type: Tag
+    tags:
+    - RMCHelmetWelding
+  - type: Item
+    storedRotation: 0
+  - type: HelmetAccessory
+    rsi:
+      sprite: _RuMC14/Clothing/UPP/helmet/Maska_s.rsi
+      state: helmet
+    toggledRsi:
+      sprite: _RuMC14/Clothing/UPP/helmet/Maska_s.rsi
+      state: helmet-down
+  - type: CMArmor
+    melee: 35
+    bullet: 40
+    bio: 20
+    explosionArmor: 15
+    # armor_laser = 15
+    # armor_energy = 10
+    # armor_rad = 10
+    # armor_internaldamage = 20
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: RuMCUPPNavalInfantryHeavyHelmet2
+  name: Altyn-S
+  description: A heavy assault helmet featuring a wide, curved bulletproof polycarbonate visor. Unlike the Maska, it offers a full, unobstructed field of view, making it ideal for commanders and operators in close-quarters environments. The visor is resistant to most pistol rounds and shrapnel, but can be cracked by sustained heavy fire or blunt impacts. A symbol of elite status and modern protection.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/helmet/Altyn_s.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/UPP/helmet/Altyn_s.rsi
+  - type: ItemToggle
+    activated: true
+  - type: ToggleClothing
+    action: RMCActionToggleWeldingGoggles
+  - type: ComponentToggler
+    components:
+    - type: EyeProtection
+  - type: RMCItemToggleClothingVisuals
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: {state: icon-on}
+          False: {state: icon}
+  - type: Appearance
+  - type: Tag
+    tags:
+    - RMCHelmetWelding
+  - type: Item
+    storedRotation: 0
+  - type: HelmetAccessory
+    rsi:
+      sprite: _RuMC14/Clothing/UPP/helmet/Altyn_s.rsi
+      state: helmet
+    toggledRsi:
+      sprite: _RuMC14/Clothing/UPP/helmet/Altyn_s.rsi
+      state: helmet-down
+  - type: CMArmor
+    melee: 30
+    bullet: 35
+    bio: 25
+    explosionArmor: 20
+    # armor_laser = 15
+    # armor_energy = 10
+    # armor_rad = 10
+    # armor_internaldamage = 20
+
+- type: entity
+  parent: RMCArmorHelmetMercenary
+  id: RuMCUPPHeavyHelmet
+  name: 6B83 heavy helmet
+  description: EVA-capable enclosed helmet of the UPP's Naval Infantry. Despite offering a higher armor rating, this helmet's cumbersome design kept it from retaining a larger role in the equipment of the Naval Infantry, and instead is largely reserved for heavy weapons operators and other specialist roles. Usually carried alongside with 6B99-2 heavy assault armor.

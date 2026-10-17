@@ -1,7 +1,9 @@
+using System.Linq;
 using Content.Server.Humanoid;
 using Content.Server.Humanoid.Systems;
 using Content.Shared._RMC14.Humanoid.Markings;
 using Content.Shared.Humanoid;
+using Content.Shared.Humanoid.Markings;
 using Robust.Shared.Enums;
 using Robust.Shared.Random;
 
@@ -9,7 +11,7 @@ namespace Content.Server._RMC14.Humanoid.Markings;
 
 public sealed partial class RMCConditionalMarkingsSystem : EntitySystem
 {
-    [Dependency] private HumanoidAppearanceSystem _humanoidAppearance = default!;
+    [Dependency] private HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
     [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
@@ -23,7 +25,7 @@ public sealed partial class RMCConditionalMarkingsSystem : EntitySystem
 
     private void OnMapInit(Entity<RMCConditionalMarkingsComponent> ent, ref MapInitEvent args)
     {
-        if (!TryComp<HumanoidAppearanceComponent>(ent.Owner, out var humanoid))
+        if (!TryComp<HumanoidProfileComponent>(ent.Owner, out var humanoid))
             return;
 
         var listToUse = humanoid.Gender switch
@@ -41,22 +43,35 @@ public sealed partial class RMCConditionalMarkingsSystem : EntitySystem
         };
 
         var pickedMarking = _random.Pick(listToUse);
-
-        if (!humanoid.MarkingSet.Markings.TryGetValue(ent.Comp.TargetCategory, out var markings))
+        if (!ProtoMan.TryIndex<MarkingPrototype>(pickedMarking, out var prototype) ||
+            !_humanoidAppearance.TryGetMarkings(
+                ent,
+                prototype.BodyPart,
+                out var organ,
+                out _,
+                out var markings))
         {
-            _humanoidAppearance.AddMarking(ent, pickedMarking);
             return;
         }
 
         if (markings.Count == 0)
         {
-            _humanoidAppearance.AddMarking(ent, pickedMarking);
+            _humanoidAppearance.SetMarkings(ent, organ, prototype.BodyPart, [prototype.AsMarking()]);
             return;
         }
 
-        for (var idx = 0; idx < markings.Count; idx++) // Replace existing markings
+        var updated = markings.ToList();
+        for (var idx = 0; idx < updated.Count; idx++) // Replace existing markings
         {
-            _humanoidAppearance.SetMarkingId(ent, ent.Comp.TargetCategory, idx, pickedMarking);
+            var replacement = prototype.AsMarking() with { Forced = updated[idx].Forced };
+            for (var color = 0; color < replacement.MarkingColors.Count && color < updated[idx].MarkingColors.Count; color++)
+            {
+                replacement = replacement.WithColorAt(color, updated[idx].MarkingColors[color]);
+            }
+
+            updated[idx] = replacement;
         }
+
+        _humanoidAppearance.SetMarkings(ent, organ, prototype.BodyPart, updated);
     }
 }

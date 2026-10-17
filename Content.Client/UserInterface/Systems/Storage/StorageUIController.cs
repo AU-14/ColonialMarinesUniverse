@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Client.CMU14.Inventory; // CMU14
 using Content.Client.Examine;
 using Content.Client.Hands.Systems;
 using Content.Client.Interaction;
@@ -10,8 +11,10 @@ using Content.Client.UserInterface.Systems.Info;
 using Content.Client.UserInterface.Systems.Storage.Controls;
 using Content.Client.Verbs.UI;
 using Content.Shared.CCVar;
+using Content.Shared.CMU14.Input; // CMU14
 using Content.Shared.Input;
 using Content.Shared.Interaction;
+using Content.Shared.Pointing;
 using Content.Shared.Storage;
 using Robust.Client.GameObjects;
 using Robust.Client.Input;
@@ -40,8 +43,9 @@ public sealed partial class StorageUIController : UIController, IOnSystemChanged
     [Dependency] private IInputManager _input = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private CloseRecentWindowUIController _closeRecentWindowUIController = default!;
-    [UISystemDependency] private StorageSystem _storage = default!;
-    [UISystemDependency] private UserInterfaceSystem _ui = default!;
+    [UISystemDependency] private readonly StorageSystem _storage = default!;
+    [UISystemDependency] private readonly UserInterfaceSystem _ui = default!;
+    [UISystemDependency] private readonly Pointing.PointingSystem _pointing = default!;
 
     private readonly DragDropHelper<ItemGridPiece> _menuDragHelper;
 
@@ -283,6 +287,18 @@ public sealed partial class StorageUIController : UIController, IOnSystemChanged
             EntityManager.RaisePredictiveEvent(new InteractInventorySlotEvent(EntityManager.GetNetEntity(control.Entity), altInteract: true));
             args.Handle();
         }
+        else if (args.Function == ContentKeyFunctions.Point)
+        {
+            _pointing.TryPointAtEntity(EntityManager.GetNetEntity(control.Entity));
+            args.Handle();
+        }
+        // cmu edit start: the open storage keybind opens storage nested inside this one
+        else if (args.Function == CMUKeyFunctions.CMUOpenWornStorage &&
+                 EntityManager.System<CMUOpenStorageKeySystem>().TryOpenStorage(control.Entity))
+        {
+            args.Handle();
+        }
+        // cmu edit end
 
         window.FlagDirty();
     }

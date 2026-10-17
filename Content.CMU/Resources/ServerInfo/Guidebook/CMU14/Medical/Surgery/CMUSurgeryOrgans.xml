@@ -1,0 +1,79 @@
+<Document>
+  # Organ Surgery
+
+  <Box>
+    <GuideEntityEmbed Entity="CMUOrganClampItem" Caption="Organ clamp"/>
+    <GuideEntityEmbed Entity="CMHemostat" Caption="Hemostat"/>
+  </Box>
+
+  The heart, lungs, liver, kidneys and stomach are in the [bold]chest[/bold], so every chest organ surgery needs the incision and the bone cavity opened first, and the bone cavity closed at the end. The brain needs the skull opened; the eyes only need an incision. For what each organ does, see [textlink="Organs" link="CMUGuideMedicalOrgans"].
+
+  Every organ surgery starts by clamping that organ's vessels with an [bold]organ clamp[/bold].
+
+  ## Suture an Organ
+  Repairs a damaged heart, lungs, liver, kidneys or stomach.
+  1. [italic]Open the incision, then the bone cavity.[/italic]
+
+  2. Clamp the organ's vessels with an [bold]organ clamp[/bold].
+
+  3. Suture the organ with a [bold]hemostat[/bold].
+
+  4. [italic]Close the bone cavity.[/italic]
+
+  ## Remove an Organ
+  Takes out the heart, lungs, liver, kidneys or stomach.
+  1. [italic]Open the incision, then the bone cavity.[/italic]
+
+  2. Clamp the organ's vessels with an [bold]organ clamp[/bold].
+
+  3. Extract the organ with a [bold]hemostat[/bold].
+
+  4. [italic]Close the bone cavity.[/italic]
+
+  ## Replace an Organ
+  Puts a donor organ into the lungs, liver, kidneys or stomach. Remove the old one first.
+  1. [italic]Open the incision, then the bone cavity.[/italic]
+
+  2. Clamp the organ's vessels with an [bold]organ clamp[/bold].
+
+  3. Insert the replacement organ: hold it in your hand and use it on the patient.
+
+  4. [italic]Close the bone cavity.[/italic]
+
+  ## Transplant Heart
+  The heart has its own procedure. Remove the old heart first.
+  1. [italic]Open the incision, then the bone cavity.[/italic]
+
+  2. Clamp the heart vessels with an [bold]organ clamp[/bold].
+
+  3. Transplant the donor heart: hold it in your hand and use it on the patient.
+
+  4. [italic]Close the bone cavity.[/italic]
+
+  ## Repair Brain
+  1. [italic]Open the incision, then the skull.[/italic]
+
+  2. Clamp the brain vessels with an [bold]organ clamp[/bold].
+
+  3. Repair the brain with a [bold]hemostat[/bold].
+
+  4. [italic]Close the skull.[/italic]
+
+  ## Repair Eyes
+  1. [italic]Open the incision.[/italic]
+
+  2. Clamp the eye vessels with an [bold]organ clamp[/bold].
+
+  3. Repair the eyes with a [bold]hemostat[/bold].
+
+  4. Cauterize the incision shut with a [bold]cautery[/bold].
+
+  ## Alien Embryo Removal
+  1. [italic]Open the incision, then the bone cavity.[/italic]
+
+  2. Cut the larva's roots with a [bold]scalpel[/bold].
+
+  3. Remove the larva with a [bold]hemostat[/bold].
+
+  4. [italic]Close the bone cavity.[/italic]
+</Document>

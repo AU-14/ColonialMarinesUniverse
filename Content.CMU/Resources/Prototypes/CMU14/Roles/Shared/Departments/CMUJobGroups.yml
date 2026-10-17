@@ -1,0 +1,105 @@
+- type: entity
+  id: CMUDepartmentsMilitary
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: DepartmentGroup
+    name: cmu-role-timer-military-roles
+    color: "#5B6B2E"
+    departments:
+    - AU14DepartmentGovernmentForces
+    - AU14DepartmentOpfor
+
+- type: entity
+  id: CMUJobsMilitaryCommand
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: JobGroup
+    name: cmu-role-timer-military-command-roles
+    color: "#3F6FB0"
+    jobs:
+    - AU14JobGOVFORPlatCo
+    - AU14JobGOVFORAdjutant
+    - AU14JobGOVFORadvisor
+    - AU14JobGOVFORPlatOp
+    - AU14JobGOVFOROfficerIntel
+    - AU14JobGOVFOROfficerMedical
+    - AU14JobGOVFOROfficerEngi
+    - AU14JobGOVFOROfficerLogistics
+    - AU14JobGOVFOROfficerMP
+
+- type: entity
+  id: CMUJobsMedical
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: JobGroup
+    name: cmu-role-timer-medical-roles
+    color: "#008160"
+    jobs:
+    - AU14JobGOVFORPlatoonCorpsman
+    - AU14JobGOVFORNurse
+    - AU14JobGOVFORMilitaryDoctor
+    - AU14JobGOVFOROfficerMedical
+    - AU14JobCivilianHeadPhysician
+    - AU14JobCivilianPhysician
+    - AU14JobCivilianNurse
+    - AU14JobCivilianEmergencyResponseOfficer
+    - AU14JobCLFPhysician
+    - AU14JobCLFSurgeon
+
+- type: entity
+  id: CMUJobsMilitaryEngineering
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: JobGroup
+    name: cmu-role-timer-military-engineering-roles
+    color: "#A66300"
+    jobs:
+    - AU14JobGOVFORSquadCombatTech
+    - AU14JobGOVFOREngineeringTech
+    - AU14JobGOVFOROfficerEngi
+
+- type: entity
+  id: CMUJobsSecurity
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: JobGroup
+    name: cmu-role-timer-security-roles
+    color: "#A8252C"
+    jobs:
+    - AU14JobGOVFORMilitaryPoliceMan
+    - AU14JobGOVFOROfficerMP
+    - AU14JobLEOBase
+    - AU14JobLEOLeaderBase
+    - AU14JobCivilianCMBDeputy
+    - AU14JobCivilianCMBMarshal
+    - AU14JobCivilianCWPSRanger
+    - AU14JobCivilianPaPOfficer
+    - AU14JobCivilianNSPAConstable
+    - AU14JobCivilianNSPAInspector
+    - AU14JobCivilianColonySecurityOfficer
+    - AU14JobCivilianColonySecurityLeader
+
+- type: entity
+  id: CMUJobsVehicleCrew
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: JobGroup
+    name: cmu-role-timer-vehicle-crew-roles
+    color: "#6B6B6B"
+    jobs:
+    - AU14JobGOVFORVehicleCrewman
+    - AU14JobGOVFORVehicleCommander
+
+- type: entity
+  id: CMUJobsFlightCrew
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: JobGroup
+    name: cmu-role-timer-flight-crew-roles
+    color: "#C38312"
+    jobs:
+    - AU14JobGOVFORDSPilot
+    - AU14JobGOVFORGunshipPilot
+    - AU14JobGOVFORFighterPilot
+    - AU14JobGOVFORFighterSystemsOfficer
+    - AU14JobGOVFORDCC

@@ -21,13 +21,16 @@ using Content.Shared._RMC14.Xenonids.Leap;
 using Content.Shared._RMC14.Xenonids.Pheromones;
 using Content.Shared.Actions;
 using Content.Shared.Atmos.Rotting;
+using Content.Shared.Buckle; // CMU14
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Doors.Components;
 using Content.Shared.DragDrop;
 using Content.Shared.Examine;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
@@ -50,6 +53,7 @@ using Content.Shared.Throwing;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Physics;
@@ -59,6 +63,8 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
+using Content.Shared.CMU14.Xenomorphs.Larva;
+using Content.Shared.CMU14.Chemistry.Effects;
 
 namespace Content.Shared._RMC14.Xenonids.Parasite;
 
@@ -95,6 +101,8 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
     [Dependency] private RMCSizeStunSystem _size = default!;
     [Dependency] private RMCUnrevivableSystem _unrevivable = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private BloodyLarvaSystem _bloodyLarva = default!;
+    [Dependency] private SharedBuckleSystem _buckle = default!; // CMU14
 
     private const CollisionGroup LeapCollisionGroup = CollisionGroup.InteractImpassable;
     private const CollisionGroup ThrownCollisionGroup = CollisionGroup.InteractImpassable | CollisionGroup.BarricadeImpassable;
@@ -104,9 +112,15 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
 
     public override void Initialize()
     {
+        SubscribeLocalEvent<ChemicalAntiparasiticComponent, GetInfectedIncubationMultiplierEvent>(OnAntiparasiticMultiplier);
+        SubscribeLocalEvent<ChemicalAntiparasiticComponent, ComponentStartup>(OnAntiparasiticChanged);
+        SubscribeLocalEvent<ChemicalAntiparasiticComponent, ComponentShutdown>(OnAntiparasiticChanged);
+        SubscribeLocalEvent<VictimInfectedComponent, ChemicalAntiparasiticChangedEvent>(OnAntiparasiticStrengthChanged);
         SubscribeLocalEvent<InfectableComponent, ActivateInWorldEvent>(OnInfectableActivate);
         SubscribeLocalEvent<InfectableComponent, CanDropTargetEvent>(OnInfectableCanDropTarget);
 
+        SubscribeLocalEvent<XenoParasiteComponent, ComponentGetState>(OnParasiteGetState);
+        SubscribeLocalEvent<XenoParasiteComponent, ComponentHandleState>(OnParasiteHandleState);
         SubscribeLocalEvent<XenoParasiteComponent, XenoLeapHitEvent>(OnParasiteLeapHit);
         SubscribeLocalEvent<XenoParasiteComponent, AfterInteractEvent>(OnParasiteAfterInteract);
         SubscribeLocalEvent<XenoParasiteComponent, BeforeInteractHandEvent>(OnParasiteInteractHand);
@@ -134,6 +148,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         SubscribeLocalEvent<ParasiteResistanceComponent, ExaminedEvent>(OnParasiteResistanceExamined);
 
         SubscribeLocalEvent<VictimInfectedComponent, MapInitEvent>(OnVictimInfectedMapInit);
+        SubscribeLocalEvent<VictimInfectedComponent, ComponentStartup>(OnVictimInfectedStartup);
         SubscribeLocalEvent<VictimInfectedComponent, ComponentRemove>(OnVictimInfectedRemoved);
         SubscribeLocalEvent<VictimInfectedComponent, ExaminedEvent>(OnVictimInfectedExamined);
         SubscribeLocalEvent<VictimInfectedComponent, RejuvenateEvent>(OnVictimInfectedRejuvenate);
@@ -146,8 +161,54 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         SubscribeLocalEvent<VictimBurstComponent, ExaminedEvent>(OnVictimBurstExamine);
 
         SubscribeLocalEvent<BursterComponent, MoveInputEvent>(OnTryMove);
+
+        // cmu edit start
+        CMUInitialize();
+        // cmu edit end
         IntializeAI();
 
+    }
+
+    private void OnAntiparasiticMultiplier(Entity<ChemicalAntiparasiticComponent> ent,
+        ref GetInfectedIncubationMultiplierEvent args)
+    {
+        if (ent.Comp.LifeStage > ComponentLifeStage.Running)
+            return;
+        args.Multiply(MathF.Max(0f, 1f - ent.Comp.Strength * 0.5f));
+    }
+
+    private void OnAntiparasiticChanged(Entity<ChemicalAntiparasiticComponent> ent, ref ComponentStartup args)
+        => RefreshIncubationMultipliers(ent.Owner);
+
+    private void OnAntiparasiticChanged(Entity<ChemicalAntiparasiticComponent> ent, ref ComponentShutdown args)
+        => RefreshIncubationMultipliers(ent.Owner);
+
+    private void OnAntiparasiticStrengthChanged(Entity<VictimInfectedComponent> ent, ref ChemicalAntiparasiticChangedEvent args)
+        => RefreshIncubationMultipliers((ent.Owner, ent.Comp));
+
+    public bool TryCureEarlyInfection(Entity<VictimInfectedComponent?> ent)
+    {
+        if (!Resolve(ent, ref ent.Comp, false) || ent.Comp.SpawnedLarva != null)
+            return false;
+
+        RemCompDeferred<VictimInfectedComponent>(ent);
+        return true;
+    }
+
+    /// <summary>
+    /// Chemically destroys an infection at any stage. An already spawned larva is deleted from its
+    /// host container; unlike surgical extraction, it cannot survive this treatment.
+    /// </summary>
+    public bool TryChemicallyExpelInfection(Entity<VictimInfectedComponent?> ent)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return false;
+
+        if (ent.Comp.SpawnedLarva is { } larva && Exists(larva))
+            QueueDel(larva);
+
+        RemCompDeferred<VictimInfectedComponent>(ent);
+        return true;
     }
 
     private void OnInfectableActivate(Entity<InfectableComponent> ent, ref ActivateInWorldEvent args)
@@ -265,7 +326,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             !HasComp<InfectOnPullAttemptImmuneComponent>(args.PullerUid) &&
             !HasComp<SynthComponent>(args.PullerUid))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-parasite-nonplayer-pull", ("parasite", ent)), ent, args.PullerUid, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-parasite-nonplayer-pull", ("parasite", ent)), ent, args.PullerUid, PopupType.SmallCaution);
             args.Cancelled = true;
         }
     }
@@ -274,7 +335,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
     {
         if (HasComp<OnFireComponent>(args.User))
         {
-            _popup.PopupClient("Touching the parasite while you're on fire would burn it!", ent, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity("Touching the parasite while you're on fire would burn it!", ent, args.User, PopupType.MediumCaution);
             args.Cancel();
             return;
         }
@@ -317,7 +378,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             // Unable to leap while underneath an airlock
             if (HasComp<DoorComponent>(contact) && !HasComp<ResinDoorComponent>(contact))
             {
-                _popup.PopupClient(Loc.GetString("cm-xeno-leap-blocked"), Transform(ent).Coordinates, ent);
+                _popup.PopupCoordinates(Loc.GetString("cm-xeno-leap-blocked"), Transform(ent).Coordinates, ent);
                 args.Cancelled = true;
                 return;
             }
@@ -469,6 +530,12 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         victim.Comp.BurstAt = _timing.CurTime + victim.Comp.BurstDelay;
     }
 
+    private void OnVictimInfectedStartup(Entity<VictimInfectedComponent> victim, ref ComponentStartup args)
+    {
+        var changed = new VictimInfectionChangedEvent(victim.Owner);
+        RaiseLocalEvent(ref changed);
+    }
+
     private void OnVictimInfectedRemoved(Entity<VictimInfectedComponent> victim, ref ComponentRemove args)
     {
         if (_status.HasStatusEffect(victim, "Unconscious", null))
@@ -476,6 +543,8 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             _status.TryRemoveStatusEffect(victim, "Unconscious");
         }
         _standing.Stand(victim);
+        var changed = new VictimInfectionChangedEvent(victim.Owner);
+        RaiseLocalEvent(ref changed);
     }
 
     private void OnVictimInfectedCancel<T>(Entity<VictimInfectedComponent> victim, ref T args) where T : CancellableEntityEventArgs
@@ -516,8 +585,12 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
 
     private void OnVictimBurstExamine(Entity<VictimBurstComponent> burst, ref ExaminedEvent args)
     {
+        var locId = burst.Comp.BurstsFromBack
+            ? "cmu-xeno-infected-bursted-back"
+            : "rmc-xeno-infected-bursted";
+
         using (args.PushGroup(nameof(VictimBurstComponent)))
-            args.PushMarkup($"[color=red][bold]{Loc.GetString("rmc-xeno-infected-bursted", ("victim", burst))}[/bold][/color]");
+            args.PushMarkup($"[color=red][bold]{Loc.GetString(locId, ("victim", burst))}[/bold][/color]");
     }
 
     private bool StartInfect(Entity<XenoParasiteComponent> parasite, EntityUid victim, EntityUid user)
@@ -562,18 +635,19 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         if (!IsInfectable(parasite, victim))
         {
             if (popup)
-                _popup.PopupClient(Loc.GetString("rmc-xeno-failed-cant-infect", ("target", victim)), victim, user, PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-failed-cant-infect", ("target", victim)), victim, user, PopupType.MediumCaution);
 
             return false;
         }
 
         if (!force
             && !HasComp<XenoNestedComponent>(victim)
+            && !_buckle.IsBuckled(victim) // CMU14: buckled victims can't dodge or fall over, huggers can reach them
             && TryComp(victim, out StandingStateComponent? standing)
             && !_standing.IsDown(victim, standing))
         {
             if (popup)
-                _popup.PopupClient(Loc.GetString("rmc-xeno-failed-cant-reach", ("target", victim)), victim, user, PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-failed-cant-reach", ("target", victim)), victim, user, PopupType.MediumCaution);
 
             return false;
         }
@@ -581,7 +655,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         if (_mobState.IsDead(victim))
         {
             if (popup)
-                _popup.PopupClient(Loc.GetString("rmc-xeno-failed-target-dead"), victim, user, PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-failed-target-dead"), victim, user, PopupType.MediumCaution);
 
             return false;
         }
@@ -589,7 +663,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         if (_mobState.IsDead(parasite))
         {
             if (popup)
-                _popup.PopupClient(Loc.GetString("rmc-xeno-failed-parasite-dead"), victim, user, PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-failed-parasite-dead"), victim, user, PopupType.MediumCaution);
 
             return false;
         }
@@ -627,8 +701,8 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             return false;
 
         if (_net.IsServer &&
-            TryComp(victim, out HumanoidAppearanceComponent? appearance) &&
-            infectable.Sound.TryGetValue(appearance.Sex, out var sound))
+            TryComp(victim, out HumanoidProfileComponent? profile) &&
+            infectable.Sound.TryGetValue(profile.Sex, out var sound))
         {
             _audio.PlayPvs(sound, victim);
         }
@@ -654,7 +728,9 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         }
 
         parasite.Comp.InfectedVictim = victim;
-        parasite.Comp.FallOffAt = _timing.CurTime + parasite.Comp.FallOffDelay;
+        // cmu edit start: holds on for two to five minutes
+        CMUSetHugTime(parasite);
+        // cmu edit end
         Dirty(parasite);
 
         RemCompDeferred<RMCGibOnDeathComponent>(parasite); // No gibbing on someone's face
@@ -686,7 +762,11 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             multiplier *= multi;
         }
 
-        ent.Comp.IncubationMultiplier = multiplier;
+        if (ent.Comp.IncubationMultiplier != multiplier)
+        {
+            ent.Comp.IncubationMultiplier = multiplier;
+            Dirty(ent);
+        }
     }
 
     public override void Update(float frameTime)
@@ -747,6 +827,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
 
                 var victimComp = EnsureComp<VictimInfectedComponent>(infectedVictim);
                 victimComp.InfectorUser = para.InfectorUser;
+                victimComp.InfectorParasite = GetNetEntity(uid); // CMU14: a late dialog reply must survive parasite cleanup.
                 victimComp.InfectorWantsLarva = para.InfectorWantsLarva;
                 victimComp.InfectorLarvaClaimPending = para.InfectorLarvaClaimPending;
                 SetHive((infectedVictim, victimComp), _hive.GetHive(uid)?.Owner);
@@ -764,6 +845,9 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         {
             if (_net.IsClient)
                 continue;
+
+            if (infected.SpawnedLarva is { } spawnedLarva && TerminatingOrDeleted(spawnedLarva)) // CMU14
+                infected.SpawnedLarva = null;
 
             if (infected.BurstAt + infected.AutoBurstTime <= time && infected.SpawnedLarva != null)
             {
@@ -794,6 +878,10 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             if (infected.BurstAt <= time && infected.SpawnedLarva == null)
                 SpawnLarva((uid, infected), out _);
 
+            // CMU14: retry the infector's claim until burst
+            if (infected.InfectorWantsLarva && infected.SpawnedLarva is { } larva)
+                LarvaLinked((uid, infected), larva);
+
             // Stages
             // Percentage of how far along we out to burst time times the number of stages, truncated. You can't go back a stage once you've reached one
             int stage = Math.Max((int)((infected.BurstDelay - (infected.BurstAt - time)) / infected.BurstDelay * infected.FinalStage), infected.CurrentStage);
@@ -804,6 +892,11 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
                 // Refresh multipliers since some become more/less effective
                 RefreshIncubationMultipliers(uid);
             }
+
+            // cmu edit start: no shakes, seizures, messages or sounds until 30 seconds before the burst
+            if (time < infected.BurstAt - TimeSpan.FromSeconds(30))
+                continue;
+            // cmu edit end
 
             // Warn on the last to final stage of a burst
             if (!infected.DidBurstWarning && stage == infected.BurstWarningStart)
@@ -951,15 +1044,17 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
 
             if (_net.IsServer &&
                 TryComp(victim, out InfectableComponent? infectable) &&
-                TryComp(victim, out HumanoidAppearanceComponent? appearance) &&
-                infectable.PreburstSound.TryGetValue(appearance.Sex, out var sound) &&
+                TryComp(victim, out HumanoidProfileComponent? profile) &&
+                infectable.PreburstSound.TryGetValue(profile.Sex, out var sound) &&
                 !_mobState.IsIncapacitated(victim))
             {
                 var filter = Filter.Pvs(victim);
                 _audio.PlayEntity(sound, filter, victim, true);
             }
 
-            EnsureComp<VictimBurstComponent>(burstFrom);
+            var burstComp = EnsureComp<VictimBurstComponent>(burstFrom);
+            burstComp.BurstsFromBack = comp.BurstsFromBack;
+            Dirty(burstFrom.Owner, burstComp);
             _appearance.SetData(burstFrom.Owner, BurstVisuals.Visuals, VictimBurstState.Bursting);
 
             var shakeFilter = Filter.PvsExcept(victim);
@@ -972,20 +1067,39 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
                 _jitter.DoJitter(victim, comp.JitterTime / 1.2, true, 14f, 5f, true); // violent jitter
             }
 
-            var messageLarva = Loc.GetString("rmc-xeno-infection-burst-now-xeno", ("victim", Identity.Entity(victim, EntityManager)));
-            _popup.PopupClient(messageLarva, spawnedLarva, spawnedLarva, PopupType.MediumCaution);
+            var burstLocId = comp.BurstsFromBack
+                ? "cmu-xeno-infection-burst-now-xeno-back"
+                : "rmc-xeno-infection-burst-now-xeno";
+
+            var messageLarva = Loc.GetString(burstLocId, ("victim", Identity.Entity(victim, EntityManager)));
+            _popup.PopupEntity(messageLarva, spawnedLarva, spawnedLarva, PopupType.MediumCaution);
+        }
+        else
+        {
+            // A failed start must not disable movement and automatic burst retries.
+            comp.IsBursting = false;
+            Dirty(victim, comp);
         }
     }
 
     private void OnBurst(Entity<VictimInfectedComponent> ent, ref LarvaBurstDoAfterEvent args)
     {
-        if (args.Cancelled || args.Handled)
+        if (args.Handled)
             return;
+
+        if (args.Cancelled)
+        {
+            ent.Comp.IsBursting = false;
+            Dirty(ent);
+            return;
+        }
 
         if (_net.IsClient)
             return;
 
-        EnsureComp<VictimBurstComponent>(ent.Owner);
+        var burstComp = EnsureComp<VictimBurstComponent>(ent.Owner);
+        burstComp.BurstsFromBack = ent.Comp.BurstsFromBack;
+        Dirty(ent.Owner, burstComp);
         _appearance.SetData(ent.Owner, BurstVisuals.Visuals, VictimBurstState.Burst);
 
         if (TryComp(ent.Owner, out MobStateComponent? mobState))
@@ -1002,6 +1116,10 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             foreach (var larva in larvae)
             {
                 RemCompDeferred<BursterComponent>(larva);
+
+                if (!HasComp<BloodyLarvaComponent>(larva))
+                    _bloodyLarva.SetBloody(larva); // inject SharedBloodyLarvaSystem dependency
+
                 var invc = EnsureComp<RMCTemporaryInvincibilityComponent>(larva);
                 invc.ExpiresAt = _timing.CurTime + ent.Comp.LarvaInvincibilityTime;
                 Dirty(larva, invc);
@@ -1172,26 +1290,34 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         Dirty(burst);
     }
 
-    protected bool TrySetLarvaClaimChoice(Entity<XenoParasiteComponent> parasite, EntityUid victim, NetUserId userId, bool wantsLarva)
+    // CMU14 method: a completed infection owns the claim independently of its spent parasite.
+    protected bool TrySetLarvaClaimChoice(NetEntity parasiteId, EntityUid victim, NetUserId userId, bool wantsLarva)
     {
-        if (parasite.Comp.InfectedVictim != victim ||
-            parasite.Comp.InfectorUser != userId)
-        {
-            return false;
-        }
-
-        parasite.Comp.InfectorWantsLarva = wantsLarva;
-        parasite.Comp.InfectorLarvaClaimPending = false;
-        Dirty(parasite);
-
         if (TryComp(victim, out VictimInfectedComponent? infected) &&
-            infected.InfectorUser == userId)
+            infected.InfectorParasite == parasiteId &&
+            infected.InfectorUser == userId &&
+            infected.InfectorLarvaClaimPending)
         {
             infected.InfectorWantsLarva = wantsLarva;
             infected.InfectorLarvaClaimPending = false;
             Dirty(victim, infected);
+            return true;
         }
 
+        // Before fall-off there is no infection component, so the attached parasite still owns the claim.
+        if (!TryGetEntity(parasiteId, out var parasiteUid) ||
+            !TryComp<XenoParasiteComponent>(parasiteUid.Value, out var parasite) ||
+            parasite.FellOff ||
+            parasite.InfectedVictim != victim ||
+            parasite.InfectorUser != userId ||
+            !parasite.InfectorLarvaClaimPending)
+        {
+            return false;
+        }
+
+        parasite.InfectorWantsLarva = wantsLarva;
+        parasite.InfectorLarvaClaimPending = false;
+        Dirty(parasiteUid.Value, parasite);
         return true;
     }
 
@@ -1233,6 +1359,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
     protected void ClearInfectorUser(Entity<VictimInfectedComponent> victim)
     {
         victim.Comp.InfectorUser = null;
+        victim.Comp.InfectorParasite = null; // CMU14
         victim.Comp.InfectorWantsLarva = false;
         victim.Comp.InfectorLarvaClaimPending = false;
         Dirty(victim);
@@ -1245,7 +1372,14 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
     public void SpawnLarva(Entity<VictimInfectedComponent> victim, out EntityUid spawned)
     {
         var larvaContainer = _container.EnsureContainer<ContainerSlot>(victim.Owner, victim.Comp.LarvaContainerId);
-        spawned = SpawnInContainerOrDrop(victim.Comp.BurstSpawn, victim.Owner, larvaContainer.ID);
+        // CMU14 start: hive assignment can wake the queue during spawn initialization.
+        var overrides = new ComponentRegistry
+        {
+            ["Burster"] = new EntityPrototype.ComponentRegistryEntry(new BursterComponent { BurstFrom = victim.Owner }),
+        };
+        // spawned = SpawnInContainerOrDrop(victim.Comp.BurstSpawn, victim.Owner, larvaContainer.ID);
+        spawned = SpawnInContainerOrDrop(victim.Comp.BurstSpawn, victim.Owner, larvaContainer.ID, overrides: overrides);
+        // CMU14 end
         LinkLarvaToVictim(victim, spawned);
     }
 
@@ -1266,11 +1400,18 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         burster.BurstFrom = victim.Owner;
         Dirty(spawned, burster);
 
-        // Let the accepted infector claim this specific larva before hive assignment wakes the general larva queue.
+        // CMU14: the spawn-time victim link protects the reservation until this claim can be transferred.
         LarvaLinked(victim, spawned);
 
         if (HasComp<XenoComponent>(spawned))
-            _hive.SetHive(spawned, victim.Comp.Hive);
+            // CMU14: xeno feedback and lifecycle.
+            _hive.SetHive(spawned, victim.Comp.Hive ?? _hive.GetHive(spawned)?.Owner);
+    }
+
+    public void SetBurstsFromBack(Entity<VictimInfectedComponent> victim, bool burstsFromBack)
+    {
+        victim.Comp.BurstsFromBack = burstsFromBack;
+        Dirty(victim);
     }
 }
 

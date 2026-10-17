@@ -1,14 +1,17 @@
-﻿using Content.Shared.Power;
+using Content.Shared.Power;
 using Content.Shared.SMES;
 using Robust.Client.GameObjects;
 
 namespace Content.Client.Power.SMES;
 
-public sealed class SmesVisualizerSystem : VisualizerSystem<SmesComponent>
+public sealed partial class SmesVisualizerSystem : VisualizerSystem<SmesComponent>
 {
     protected override void OnAppearanceChange(EntityUid uid, SmesComponent comp, ref AppearanceChangeEvent args)
     {
         if (args.Sprite == null)
+            return;
+
+        if (comp.StaticOverlayStates)
             return;
 
         if (!AppearanceSystem.TryGetData<int>(uid, SmesVisuals.LastChargeLevel, out var level, args.Component) || level == 0)

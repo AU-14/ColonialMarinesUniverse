@@ -3,6 +3,8 @@
   id: RMCBookcase
   name: bookcase
   components:
+  - type: CMUReconFurniture
+    material: Bookcase
   - type: Sprite
     sprite: _RMC14/Structures/Furniture/bookshelf.rsi
     snapCardinals: true
@@ -14,6 +16,7 @@
     maxFillLevels: 5
     fillBaseName: book
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

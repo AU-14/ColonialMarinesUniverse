@@ -5,6 +5,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.DragDrop;
 using Content.Shared.GameTicking;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Movement.Events;
 using Content.Shared.Popups;
@@ -123,21 +124,22 @@ public abstract partial class SharedLadderSystem : EntitySystem
         if (ent.Comp.Other == null)
         {
             var msg = Loc.GetString("rmc-ladder-leads-nowhere");
-            _popup.PopupClient(msg, ent, user, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, ent, user, PopupType.SmallCaution);
             return;
         }
 
         var time = _timing.CurTime;
         if (ent.Comp.LastDoAfterEnt is { } lastEnt &&
             ent.Comp.LastDoAfterId is { } lastId &&
+            TryGetEntity(lastEnt, out var lastUser) && !TerminatingOrDeleted(lastUser) &&
             time - ent.Comp.LastDoAfterTime < ent.Comp.Delay * 5 &&
-            _doAfter.GetStatus(new DoAfterId(lastEnt, lastId)) == DoAfterStatus.Running &&
+            _doAfter.GetStatus(new DoAfterId(lastUser.Value, lastId)) == DoAfterStatus.Running &&
             !HasComp<GhostComponent>(user))
         {
-            if (ent.Comp.LastDoAfterEnt != user)
+            if (lastUser != user)
             {
                 var msg = Loc.GetString("rmc-ladder-someone-else-climbing");
-                _popup.PopupClient(msg, ent, user, PopupType.SmallCaution);
+                _popup.PopupEntity(msg, ent, user, PopupType.SmallCaution);
             }
 
             return;
@@ -156,7 +158,7 @@ public abstract partial class SharedLadderSystem : EntitySystem
         if (!_doAfter.TryStartDoAfter(doAfter, out var doAfterId))
             return;
 
-        ent.Comp.LastDoAfterEnt = doAfterId.Value.Uid;
+        ent.Comp.LastDoAfterEnt = GetNetEntity(doAfterId.Value.Uid);
         ent.Comp.LastDoAfterId = doAfterId.Value.Index;
         ent.Comp.LastDoAfterTime = time;
         Dirty(ent);
@@ -165,7 +167,7 @@ public abstract partial class SharedLadderSystem : EntitySystem
         {
             var selfMessage = Loc.GetString("rmc-ladder-start-climbing-self");
             var othersMessage = Loc.GetString("rmc-ladder-start-climbing-others", ("user", user));
-            _popup.PopupPredicted(selfMessage, othersMessage, user, user);
+            _popup.PopupEntity(selfMessage, othersMessage, user, user);
         }
 
         if (_actorQuery.TryComp(user, out var actor))
@@ -198,6 +200,13 @@ public abstract partial class SharedLadderSystem : EntitySystem
         if (_actorQuery.TryComp(user, out var actor))
             RemoveViewer(ent, actor.PlayerSession);
 
+        if (TryGetNetEntity(user, out var netUser) && ent.Comp.LastDoAfterEnt == netUser && ent.Comp.LastDoAfterId == args.DoAfter.Index)
+        {
+            ent.Comp.LastDoAfterEnt = null;
+            ent.Comp.LastDoAfterId = null;
+            Dirty(ent);
+        }
+
         if (args.Cancelled || args.Handled)
             return;
 
@@ -214,11 +223,7 @@ public abstract partial class SharedLadderSystem : EntitySystem
 
         var selfMessage = Loc.GetString("rmc-ladder-finish-climbing-self");
         var othersMessage = Loc.GetString("rmc-ladder-finish-climbing-others", ("user", user));
-        _popup.PopupPredicted(selfMessage, othersMessage, user, user);
-
-        ent.Comp.LastDoAfterEnt = null;
-        ent.Comp.LastDoAfterId = null;
-        Dirty(ent);
+        _popup.PopupEntity(selfMessage, othersMessage, user, user);
 
         _rmcTeleporter.HandlePulling(user, coordinates);
     }
@@ -354,7 +359,9 @@ public abstract partial class SharedLadderSystem : EntitySystem
             if (!_toUpdateIds.TryGetValue(ladder.Id, out var ids))
                 continue;
 
-            if (ids.FirstOrNull(e => e.Owner != uid) is not { } toUpdate)
+            // CMU14: queued ladders can be deleted before they are paired, which would link
+            // Other to a dead uid forever and spam PVS resolve errors.
+            if (ids.FirstOrNull(e => e.Owner != uid && !TerminatingOrDeleted(e.Owner)) is not { } toUpdate)
                 continue;
 
             if (toUpdate.Owner == uid)

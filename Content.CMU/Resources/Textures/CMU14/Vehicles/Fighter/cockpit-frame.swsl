@@ -1,0 +1,14 @@
+// Draw the airframe over crew, leaving the two cockpit openings transparent.
+// These source-pixel apertures match FighterGroundVisualSystem.Crew.cs.
+void fragment() {
+    highp vec2 pixel = vec2(UV2.x, 1.0 - UV2.y) * vec2(266.0, 335.0);
+    highp vec2 pilot = abs((pixel - vec2(133.0, 228.5)) / vec2(8.5, 12.5));
+    highp vec2 wso = abs((pixel - vec2(133.0, 193.5)) / vec2(9.5, 16.5));
+    highp float front = step(max(pilot.x, pilot.y), 1.0) * step(pilot.x + pilot.y, 1.85);
+    highp float rear = step(max(wso.x, wso.y), 1.0) * step(wso.x + wso.y, 1.85);
+    // Only the cockpit rim needs a foreground pass; keep pylons and the rest
+    // of the aircraft in their ordinary world draw order.
+    highp float cockpit = step(112.0, pixel.x) * step(pixel.x, 153.0) *
+        step(162.0, pixel.y) * step(pixel.y, 270.0);
+    COLOR = zTexture(UV) * cockpit * (1.0 - max(front, rear));
+}

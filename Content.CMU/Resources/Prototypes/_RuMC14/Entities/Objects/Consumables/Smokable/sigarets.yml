@@ -1,0 +1,27 @@
+- type: entity
+  parent: RMCCigarettePackLuckySloths
+  id: RuMCCigaretteStolica
+  name: "'Stolitsa' cigarette pack"
+  description: "A pack of cigarettes in the familiar red-and-white design. Fragrant but strong tobacco. The pick of city dwellers and officers who value stability and order. They say people were smoking these before the war."
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Smokeables/Cigarettes/stolica.rsi
+
+- type: entity
+  parent: RMCCigarettePackLuckySloths
+  id: RuMCCigaretteSouz
+  name: "'Soyuz' cigarette pack"
+  description: "Classic cigarettes with a mild, balanced taste. A symbol of unity and common purpose, favoured by those who believe in the cause and don't shy from hardship. Often found in field unit rations."
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Smokeables/Cigarettes/souz.rsi
+
+#sigar pack
+- type: entity
+  parent: RMCTarbackCase
+  id: RuMCCigaretPackBelomor
+  name: "'Belomor' cigar box"
+  description: "A connoisseur's classic - expensive cigars rolled from imported tobacco."
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Smokeables/Cigars/belomor.rsi

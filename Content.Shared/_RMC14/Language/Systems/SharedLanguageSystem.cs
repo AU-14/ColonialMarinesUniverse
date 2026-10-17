@@ -2,6 +2,7 @@ using System.Text;
 using Content.Shared._RMC14.Language.Components;
 using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 

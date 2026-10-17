@@ -1,0 +1,97 @@
+- type: antagSpecifier
+  id: CLFSaboteur
+  prefRoles: [ CLFSaboteurRole ]
+  jobBlacklistGroup:
+  - AllGovforJobs
+  - AllOpforJobs
+  - AllCLFJobs
+# - AllColonyDepartmentHeadJobs
+  - AllSynthJobs
+  briefing:
+    text: cmu-antag-clf-saboteur-greeting
+    color: OliveDrab
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: CMUGearCLFSaboteur
+  startingSkills:
+    RMCSkillEngineer: 4
+    RMCSkillConstruction: 3
+  components:
+  - type: CLFSaboteur
+    sabotageGoal: 12
+  mindRoles:
+  - MindRoleCLFSaboteur
+
+- type: entity
+  id: CLFSaboteur
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: AntagSelection
+    selectionTime: JobsAssigned
+    antags:
+    - !type:FixedAntagCount
+      proto: CLFSaboteur
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCLFSaboteur
+  name: CLF Saboteur Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: CLFSaboteurRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: CLFSaboteurRole
+  name: cmu-antag-clf-saboteur-name
+  setPreference: true
+  objective: cmu-antag-clf-saboteur-objective
+
+- type: startingGear
+  id: CMUGearCLFSaboteur
+  equipment:
+    back: CMUSatchelCLF
+    pocket1: CMHandsLatex
+    pocket2: CMMultitool
+  storage:
+    back:
+    - CMUCaseCLFSaboteur
+
+# The whole loadout ships in one box so a dropped satchel doesn't scatter explosives
+- type: entity
+  parent: RMCBoxCardboard
+  id: CMUCaseCLFSaboteur
+  name: unmarked supply box
+  description: A cardboard box. Something dense shifts inside when you lift it.
+  components:
+  - type: IgnoreContentsSize
+    items:
+      sizes:
+      - Huge
+  - type: Storage
+    grid:
+    - 0,0,19,3
+  - type: StorageFill
+    contents:
+    - id: RMCExplosivePlastic
+      amount: 6
+    - id: AU14RemoteSignallerAdvanced
+    - id: AU14IEDLarge
+      amount: 2
+    - id: AU14IED
+      amount: 2
+
+- type: entity
+  parent: CMSatchel
+  id: CMUSatchelCLF
+  suffix: CLF Saboteur
+  components:
+  - type: IgnoreContentsSize
+    items:
+      sizes:
+      - Large
+  - type: Storage
+    grid:
+    - 0,0,19,3

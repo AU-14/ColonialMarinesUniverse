@@ -1,0 +1,7 @@
+- type: loadoutGroup
+  id: AegisStampGroupCMU
+  name: cmu-loadout-group-aegis-stamp
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - AegisStampCMU

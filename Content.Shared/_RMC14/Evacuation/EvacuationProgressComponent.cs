@@ -1,9 +1,9 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared._RMC14.Evacuation;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true), AutoGenerateComponentPause]
 [Access(typeof(SharedEvacuationSystem))]
 public sealed partial class EvacuationProgressComponent : Component
 {
@@ -49,4 +49,10 @@ public sealed partial class EvacuationProgressComponent : Component
 
     [DataField]
     public Dictionary<EntityUid, bool> LastPower = new();
+
+    [DataField, AutoNetworkedField] public TimeSpan? EnabledAt;
+    [DataField, AutoNetworkedField] public TimeSpan AbortCutoff = TimeSpan.FromSeconds(600);
+    [DataField, AutoNetworkedField] public TimeSpan? SelfDestructAt;
+    [DataField, AutoNetworkedField] public TimeSpan SelfDestructDelay = TimeSpan.FromSeconds(900);
+    [DataField, AutoNetworkedField] public bool SelfDestructed;
 }

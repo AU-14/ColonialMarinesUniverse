@@ -107,6 +107,25 @@
     - RMCMachineGunM2C
   - type: Overheat
 
+- type: entity
+  parent: RMCMachineGunM2C
+  id: CMUMachineGunM2CDropshipLoaded
+  suffix: Dropship, Loaded
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: RMCMagazineM2C
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RMCMagazineM2C
+          - AU14MagazineM2CTracter
+
 # Magazines
 - type: entity
   parent: CMMagazineRifleBase
@@ -166,6 +185,7 @@
       map: ["enum.AmmoVisualLayers.Base"]
   - type: CartridgeAmmo
     proto: RMCBulletHMG10x28mmTungsten
+    deleteOnSpawn: true # CMU14: caseless ammo, no casing to eject
   - type: Tag
     tags:
     - RMCCartridgeHMG10x28mmTungsten
@@ -198,6 +218,11 @@
     damage:
       types:
         Piercing: 50
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: High
+      energy: High
   - type: CMArmorPiercing
     amount: 30
   - type: RMCProjectileDamageFalloff

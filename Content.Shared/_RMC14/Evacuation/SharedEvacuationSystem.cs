@@ -8,7 +8,7 @@ using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Marines.HyperSleep;
 using Content.Shared._RMC14.Power;
 using Content.Shared._RMC14.Xenonids.Announce;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Audio;
 using Content.Shared.CCVar;
 using Content.Shared.Coordinates;
@@ -41,6 +41,8 @@ namespace Content.Shared._RMC14.Evacuation;
 
 public abstract partial class SharedEvacuationSystem : EntitySystem
 {
+    protected override string SawmillName => "evacuation";
+
     [Dependency] private SharedAmbientSoundSystem _ambientSound = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private AreaSystem _area = default!;
@@ -80,6 +82,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         SubscribeLocalEvent<EvacuationDisabledEvent>(OnEvacuationDisabled);
         SubscribeLocalEvent<EvacuationProgressEvent>(OnEvacuationProgress);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+        SubscribeLocalEvent<MapRemovedEvent>(OnMapRemoved);
 
         SubscribeLocalEvent<GridSpawnerComponent, MapInitEvent>(OnGridSpawnerMapInit);
 
@@ -109,17 +112,18 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
 
     private void OnDropshipHijackLanded(ref DropshipHijackLandedEvent ev)
     {
-        var evacuationProgress = EnsureComp<EvacuationProgressComponent>(ev.Map);
+        var trackerMap = GetEvacuationMap(ev.Map); // CMU14: one fuel tracker per multi-deck ship
+        var evacuationProgress = EnsureComp<EvacuationProgressComponent>(trackerMap); // CMU14
         evacuationProgress.DropShipCrashed = true;
         evacuationProgress.VictimFaction = ev.VictimFaction;
         evacuationProgress.IsHumanHijack = ev.IsHumanHijack;
-        Dirty(ev.Map, evacuationProgress);
+        Dirty(trackerMap, evacuationProgress); // CMU14
 
         // Only unlock doors on the victim's ship map
         var doors = EntityQueryEnumerator<EvacuationDoorComponent, TransformComponent>();
         while (doors.MoveNext(out var uid, out var door, out var xform))
         {
-            if (!IsSameShip(xform.MapUid, ev.Map))
+            if (!_zLevels.IsSameZNetwork(xform.MapUid, ev.Map)) // CMU14
                 continue;
 
             door.Locked = false;
@@ -135,7 +139,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         var lifeboats = EntityQueryEnumerator<LifeboatComputerComponent, TransformComponent>();
         while (lifeboats.MoveNext(out var uid, out var computer, out var xform))
         {
-            if (!IsSameShip(xform.MapUid, ev.Map))
+            if (!_zLevels.IsSameZNetwork(xform.MapUid, ev.Map)) // CMU14
                 continue;
 
             computer.Enabled = true;
@@ -145,7 +149,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         var evacuation = EntityQueryEnumerator<EvacuationComputerComponent, TransformComponent>();
         while (evacuation.MoveNext(out var computerId, out var computer, out var xform))
         {
-            if (!IsSameShip(xform.MapUid, ev.Map))
+            if (!_zLevels.IsSameZNetwork(xform.MapUid, ev.Map)) // CMU14
                 continue;
 
             if (computer.Mode == EvacuationComputerMode.Disabled)
@@ -162,7 +166,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         var lifeboats = EntityQueryEnumerator<LifeboatComputerComponent, TransformComponent>();
         while (lifeboats.MoveNext(out var uid, out var computer, out var xform))
         {
-            if (!IsSameShip(xform.MapUid, ev.Map))
+            if (!_zLevels.IsSameZNetwork(xform.MapUid, ev.Map)) // CMU14
                 continue;
 
             computer.Enabled = false;
@@ -176,7 +180,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         var evacuation = EntityQueryEnumerator<EvacuationComputerComponent, TransformComponent>();
         while (evacuation.MoveNext(out var computerId, out var computer, out var xform))
         {
-            if (!IsSameShip(xform.MapUid, ev.Map))
+            if (!_zLevels.IsSameZNetwork(xform.MapUid, ev.Map)) // CMU14
                 continue;
 
             if (computer.Mode == EvacuationComputerMode.Disabled)
@@ -193,6 +197,15 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         _index = 0;
     }
 
+    private void OnMapRemoved(MapRemovedEvent ev)
+    {
+        if (_map != ev.MapId)
+            return;
+
+        _map = null;
+        _index = 0;
+    }
+
     private void OnGridSpawnerMapInit(Entity<GridSpawnerComponent> ent, ref MapInitEvent args)
     {
         if (ent.Comp.Spawn is not { } spawn)
@@ -201,8 +214,9 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        if (!_config.GetCVar(CCVars.GridFill))
-            return;
+        // CMU14: lifeboats and escape pods must always spawn for warships.
+        // if (!_config.GetCVar(CCVars.GridFill))
+        //     return;
 
         if (_map == null)
         {
@@ -213,9 +227,15 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         var offset = new Vector2(_index * 50, _index * 50);
         _index++;
 
-        if (!_mapSystem.MapExists(_map) ||
-            !_mapLoader.TryLoadGrid(_map.Value, spawn, out var result, offset: offset))
+        if (!_mapSystem.MapExists(_map))
         {
+            Log.Warning($"Grid spawner {ToPrettyString(ent)} skipped: holding map {_map.Value} no longer exists. Spawn: {spawn}");
+            return;
+        }
+
+        if (!_mapLoader.TryLoadGrid(_map.Value, spawn, out var result, offset: offset))
+        {
+            Log.Warning($"Grid spawner {ToPrettyString(ent)} failed to load grid '{spawn}'");
             return;
         }
 
@@ -282,7 +302,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
             _ => throw new ArgumentOutOfRangeException(),
         };
 
-        _popup.PopupClient(msg, ent, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity(msg, ent, args.User, PopupType.SmallCaution);
     }
 
     private void OnEvacuationPumpExamined(Entity<EvacuationPumpComponent> ent, ref ExaminedEvent args)
@@ -291,7 +311,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
             return;
         using (args.PushGroup(nameof(EvacuationPumpComponent)))
         {
-            var progress = GetEvacuationProgress();
+            var progress = GetEvacuationProgress(ent.Owner);
             if (progress < 25)
                 args.PushMarkup("It looks like it barely has any fuel yet.");
             else if (progress < 50)
@@ -311,7 +331,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
             return;
 
         args.Cancel();
-        _popup.PopupClient("Evacuation has not been authorized.", ent, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity("Evacuation has not been authorized.", ent, args.User, PopupType.SmallCaution);
     }
 
     private void OnEvacuationComputerLaunch(Entity<EvacuationComputerComponent> ent, ref EvacuationComputerLaunchBuiMsg args)
@@ -362,7 +382,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
 
             if (mobs.Count > maxMobs)
             {
-                _popup.PopupPredicted("The evacuation pod is overloaded with this many people inside!", ent, null, PopupType.LargeCaution);
+                _popup.PopupBroadcast("The evacuation pod is overloaded with this many people inside!", ent, null, PopupType.LargeCaution);
                 ent.Comp.Mode = EvacuationComputerMode.Crashed;
                 Dirty(ent);
 
@@ -381,7 +401,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         ent.Comp.Mode = EvacuationComputerMode.Travelling;
         Dirty(ent);
 
-        var crashChance = IsEvacuationComplete() ? 0 : ent.Comp.EarlyCrashChance;
+        var crashChance = IsEvacuationComplete(gridId) ? 0 : ent.Comp.EarlyCrashChance;
         LaunchEvacuationFTL(gridId, crashChance, ent.Comp.LaunchSound);
     }
 
@@ -400,7 +420,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         ent.Comp.Enabled = false;
         Dirty(ent);
 
-        var crashChance = IsEvacuationComplete() ? 0 : ent.Comp.EarlyCrashChance;
+        var crashChance = IsEvacuationComplete(gridId) ? 0 : ent.Comp.EarlyCrashChance;
         LaunchEvacuationFTL(gridId, crashChance, null);
     }
 
@@ -408,25 +428,26 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
     {
     }
 
-    private bool IsSameShip(EntityUid? mapUid, EntityUid primaryMapUid)
-    {
-        if (mapUid == null)
-            return false;
+    // CMU14: superseded by CMUSharedZLevelsSystem.IsSameZNetwork
+    // private bool IsSameShip(EntityUid? mapUid, EntityUid primaryMapUid)
+    // {
+    //     if (mapUid == null)
+    //         return false;
 
-        // Single level (legacy) ships
-        if (mapUid == primaryMapUid)
-            return true;
+    //     // Single level (legacy) ships
+    //     if (mapUid == primaryMapUid)
+    //         return true;
 
-        return _zLevels.TryGetZNetwork(primaryMapUid, out var network)
-            && network.Value.Comp.ZLevels.Values.Any(u => u == mapUid);
-    }
+    //     return _zLevels.TryGetZNetwork(primaryMapUid, out var network)
+    //         && network.Value.Comp.ZLevels.Values.Any(u => u == mapUid);
+    // }
 
     private void SetPumpAppearance(EntityUid mapUid, EvacuationPumpVisuals visual)
     {
         var pumps = EntityQueryEnumerator<EvacuationPumpComponent, TransformComponent>();
         while (pumps.MoveNext(out var uid, out _, out var xform))
         {
-            if (!IsSameShip(xform.MapUid, mapUid))
+            if (!_zLevels.IsSameZNetwork(xform.MapUid, mapUid)) // CMU14
                 continue;
 
             _appearance.SetData(uid, EvacuationPumpLayers.Layer, visual);
@@ -438,7 +459,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         var pumps = EntityQueryEnumerator<EvacuationPumpComponent, TransformComponent>();
         while (pumps.MoveNext(out var uid, out var pump, out var xform))
         {
-            if (!IsSameShip(xform.MapUid, mapUid))
+            if (!_zLevels.IsSameZNetwork(xform.MapUid, mapUid)) // CMU14
                 continue;
 
             _ambientSound.SetSound(uid, pump.ActiveSound);
@@ -454,11 +475,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         if (entXform.MapUid is not { } targetMap)
             yield break;
 
-        var searchMaps = new HashSet<EntityUid> { targetMap };
-        if (_zLevels.TryGetZNetwork(targetMap, out var network))
-            foreach (var (_, netMapUid) in network.Value.Comp.ZLevels)
-                if (netMapUid.HasValue)
-                    searchMaps.Add(netMapUid.Value);
+        var searchMaps = new HashSet<EntityUid>(_zLevels.GetAllNetworkMaps(targetMap)); // CMU14
 
         var seen = new HashSet<EntityUid>();
         var gridQuery = EntityQueryEnumerator<AreaGridComponent, TransformComponent>();
@@ -489,6 +506,21 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         return _rmcPower.IsAreaPowered(area, RMCPowerChannel.Equipment);
     }
 
+    // CMU14 method
+    // multi-deck ships could end up with two fuel trackers (CO evacuates on one deck, hijack crashes onto
+    // another) and lifeboats read the empty one
+    public EntityUid GetEvacuationMap(EntityUid map)
+    {
+        var query = EntityQueryEnumerator<EvacuationProgressComponent>();
+        while (query.MoveNext(out var trackerMap, out _))
+        {
+            if (_zLevels.IsSameZNetwork(trackerMap, map))
+                return trackerMap;
+        }
+
+        return map;
+    }
+
     public void TriggerColonyEvacuation(EntityUid planetMapUid)
     {
         if (_net.IsClient)
@@ -508,38 +540,56 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
 
     public void ToggleEvacuation(SoundSpecifier? startSound, SoundSpecifier? cancelSound, EntityUid? map)
     {
+        if (_net.IsClient) return;
         DebugTools.Assert(map != null);
-
+        map = GetEvacuationMap(map.Value); // CMU14: one fuel tracker per multi-deck ship
         var progress = EnsureComp<EvacuationProgressComponent>(map.Value);
 
+        if (progress.Enabled && progress.EnabledAt is { } enabledAt)
+        {
+            if (_timing.CurTime >= enabledAt + progress.AbortCutoff)
+            {
+                _marineAnnounce.AnnounceARESStaging(null,
+                    "ALL STATIONS. Engine is at critical mass, scuttling cannot be aborted. Abandon ship.",
+                    cancelSound, faction: progress.VictimFaction);
+                return;
+            }
+        }
+
         progress.Enabled = !progress.Enabled;
+        progress.EnabledAt = progress.Enabled ? _timing.CurTime : null;
+        progress.SelfDestructAt = progress.Enabled ? _timing.CurTime + progress.SelfDestructDelay : null;
+        progress.SelfDestructed = false;
         Dirty(map.Value, progress);
 
         if (progress.Enabled)
         {
-            _marineAnnounce.AnnounceARESStaging(
-                null,
+            _marineAnnounce.AnnounceARESStaging(null,
                 "ALL STATIONS. Emergency. Lifeboat fuel lines pressurized. Pumps at full capacity. Muster stations. Evacuation protocol engaged.",
-                startSound,
-                faction: progress.VictimFaction
-            );
+                startSound, faction: progress.VictimFaction);
 
-            Timer.Spawn(TimeSpan.FromSeconds(25), () =>
+            if (!_config.GetCVar(CCVars.EnableEvacSfx))
             {
-                if (map == null || !Exists(map.Value)) return;
-                if (!progress.Enabled || !TryComp<EvacuationProgressComponent>(map.Value, out var curProgress)) return;
+                Timer.Spawn(TimeSpan.FromSeconds(25), () =>
+                {
+                    if (map == null || !Exists(map.Value)) return;
+                    if (!TryComp<EvacuationProgressComponent>(map.Value, out var curProgress) || !curProgress.Enabled) return;
 
-                _marineAnnounce.AnnounceARESStaging(null,
-                    "ALL STATIONS. Scuttling failure. Self-destruct sequence unresponsive. All personnel abandon ship immediately.",
-                    startSound,
-                    faction: curProgress.VictimFaction);
-            });
+                    _marineAnnounce.AnnounceARESStaging(null,
+                        "ALL STATIONS. Scuttling malfunction. Self-destruct sequence failure. All personnel abandon ship immediately.",
+                        startSound, faction: curProgress.VictimFaction);
+                });
+            }
+
             var ev = new EvacuationEnabledEvent(map.Value);
             RaiseLocalEvent(map.Value, ref ev, true);
         }
         else
         {
-            _marineAnnounce.AnnounceARESStaging(null, "ALL STATIONS. Evacuation protocol aborted. Lifeboat launch suspended. Emergency stand-down.", cancelSound, faction: progress.VictimFaction);
+            _marineAnnounce.AnnounceARESStaging(null,
+                "ALL STATIONS. Evacuation protocol aborted. Lifeboat launch suspended. Emergency stand-down.",
+                cancelSound, faction: progress.VictimFaction);
+
             var ev = new EvacuationDisabledEvent(map.Value);
             RaiseLocalEvent(map.Value, ref ev, true);
         }
@@ -568,20 +618,24 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         return false;
     }
 
-    public int GetEvacuationProgress()
+    public int GetEvacuationProgress(EntityUid reference)
     {
-        var query = EntityQueryEnumerator<EvacuationProgressComponent>();
-        while (query.MoveNext(out var progress))
+        if (Transform(reference).MapUid is not { } mapUid)
+            return 0;
+
+        var query = EntityQueryEnumerator<EvacuationProgressComponent, TransformComponent>();
+        while (query.MoveNext(out _, out var progress, out var transform))
         {
-            return (int)progress.Progress;
+            if (_zLevels.IsSameZNetwork(transform.MapUid, mapUid))
+                return (int)progress.Progress;
         }
 
         return 0;
     }
 
-    public bool IsEvacuationComplete()
+    public bool IsEvacuationComplete(EntityUid reference)
     {
-        return GetEvacuationProgress() >= 100;
+        return GetEvacuationProgress(reference) >= 100;
     }
 
     private void ProcessEvacuation()
@@ -811,5 +865,29 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
     {
         ProcessEvacuation();
         ProcessExplodingPods();
+        ProcessSelfDestruct();
+    }
+
+    private void ProcessSelfDestruct()
+    {
+        if (_net.IsClient)
+            return;
+
+        var time = _timing.CurTime;
+        var query = EntityQueryEnumerator<EvacuationProgressComponent>();
+        while (query.MoveNext(out var uid, out var progress))
+        {
+            if (progress.SelfDestructed || progress.SelfDestructAt is not { } at)
+                continue;
+
+            if (time < at)
+                continue;
+
+            progress.SelfDestructed = true;
+            Dirty(uid, progress);
+
+            var ev = new ShipSelfDestructEvent(uid);
+            RaiseLocalEvent(uid, ref ev, true);
+        }
     }
 }

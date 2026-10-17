@@ -6,14 +6,24 @@
   suffix: Filled
   components:
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/SMGs/mp5alt.rsi
+    sprite: CMU14/Objects/Weapons/Guns/SMGs/mp5.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
-    - state: mag-0
-      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: ItemMapper
+    containerWhitelist:
+    - gun_magazine
+    mapLayers:
+      mag-0:
+        whitelist:
+          tags:
+          - CMUMagazineSMGMP5Stick
+      mag-1:
+        whitelist:
+          tags:
+          - CMUMagazineSMGMP5Drum
   - type: Clothing
-    sprite: _RMC14/Objects/Weapons/Guns/SMGs/mp5alt.rsi
+    sprite: CMU14/Objects/Weapons/Guns/SMGs/mp5.rsi
   - type: Gun
     shotsPerBurst: 3
     soundGunshot:
@@ -93,15 +103,22 @@
         - RMCAttachmentM203GrenadeLauncher
       rmc-aslot-stock:
         locked: true
-        startingAttachable: RMCAttachmentMP5AltStockCollapsible
+        startingAttachable: RMCAttachmentM54CStockCollapsible
         whitelist:
           tags:
-          - RMCAttachmentMP5AltStockCollapsible
+          - RMCAttachmentM54CStockCollapsible
   - type: AttachableHolderVisuals
     offsets:
-      rmc-aslot-barrel: 0.715, 0
+      rmc-aslot-barrel: 0.785, 0.085
       rmc-aslot-rail: 0, 0.09
-      rmc-aslot-underbarrel: 0.35, -0.28
-      rmc-aslot-stock: -0.1, 0
+      rmc-aslot-underbarrel: 0.4, -0.3125
+      rmc-aslot-stock: -0.69, 0.01
   - type: GunDamageModifier
     multiplier: 1.2
+  - type: Tag
+    tags:
+    - RMCWeaponSMG
+    - RMCWeaponSMGMP5Alt
+
+- type: Tag
+  id: RMCWeaponSMGMP5Alt

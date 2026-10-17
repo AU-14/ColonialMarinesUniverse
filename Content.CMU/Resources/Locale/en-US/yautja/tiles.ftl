@@ -1,0 +1,13 @@
+tiles-cmu-yautja-floor-hunter-tile-2-south = yautja floor hunter tile 2 south
+tiles-cmu-yautja-floor-hunter-tile-2-north = yautja floor hunter tile 2 north
+tiles-cmu-yautja-floor-hunter-tile-2-east = yautja floor hunter tile 2 east
+tiles-cmu-yautja-floor-hunter-tile-2-west = yautja floor hunter tile 2 west
+tiles-cmu-yautja-floor-17-15-south = yautja floor 17,15 south
+tiles-cmu-yautja-floor-17-15-north = yautja floor 17,15 north
+tiles-cmu-yautja-floor-17-15-east = yautja floor 17,15 east
+tiles-cmu-yautja-floor-17-15-west = yautja floor 17,15 west
+tiles-cmu-yautja-floor-6-6-south = yautja floor 6,6 south
+tiles-cmu-yautja-floor-6-6-north = yautja floor 6,6 north
+tiles-cmu-yautja-floor-6-6-east = yautja floor 6,6 east
+tiles-cmu-yautja-floor-6-6-west = yautja floor 6,6 west
+cmu-tile-hybrisa-carpet-colorable = colorable carpet

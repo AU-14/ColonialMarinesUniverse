@@ -21,8 +21,9 @@
     isCorrodible: false
   - type: InteractionOutline
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -87,7 +88,7 @@
     energy: 1
     offset: "0,0"
     color: "#FFEFD2"
-    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+    lightMask: ConeQuad
 
 - type: entity
   parent: RMCPropComputerBase

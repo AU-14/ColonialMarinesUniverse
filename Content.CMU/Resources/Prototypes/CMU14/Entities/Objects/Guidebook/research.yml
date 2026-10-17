@@ -1,0 +1,48 @@
+- type: guideEntry
+  parent: RMC
+  id: CMUResearchIndex
+  name: cmu-guide-entry-research
+  text: "/ServerInfo/Guidebook/CMU14/research/CMURBIndex.xml"
+  priority: 3
+  children:
+  - CMUResearch
+  - CMUBotany
+  
+- type: guideEntry
+  parent: RMC
+  id: CMUResearch
+  name: cmu-guide-entry-research-chemistry
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/research/CMUResearch.xml"
+  children:
+  - CMURDT
+  - CMUXRF
+  - CMUSIM
+
+- type: guideEntry
+  parent: RMC
+  id: CMURDT
+  name: cmu-guide-entry-research-rdt
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/research/CMURDT.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUXRF
+  name: cmu-guide-entry-research-xrf
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/research/CMUXRF.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUSIM
+  name: cmu-guide-entry-research-simulator
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/research/CMUSIM.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUBotany
+  name: cmu-guide-entry-research-hydroponics
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/research/CMUBotany.xml"

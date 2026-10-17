@@ -101,7 +101,7 @@
 - type: entity
   parent: RMCCrateAmmo
   id: RMCCrateVehicleAmmoFrontalCannon
-  name: RE-RE700 frontal cannon magazines crate (x2)
+  name: APC frontal cannon magazines crate (x2)
   components:
   - type: StorageFill
     contents:
@@ -121,7 +121,7 @@
 - type: entity
   parent: RMCCrateAmmo
   id: RMCCrateVehicleAmmoRotaryCannon
-  name: RE700 rotary cannon magazines crate (x3)
+  name: RE-RE700 rotary cannon magazines crate (x3)
   components:
   - type: StorageFill
     contents:

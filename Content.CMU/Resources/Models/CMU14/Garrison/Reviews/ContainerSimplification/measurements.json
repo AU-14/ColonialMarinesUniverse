@@ -1,0 +1,345 @@
+{
+  "baseline": "ec88fbf9d62",
+  "date": "2026-10-09",
+  "renderer": "NVIDIA GeForce RTX 4070 Ti SUPER/PCIe/SSE2",
+  "shaderSha256": "2d2b5041425a0ad98ecc4b7683df5c6b32b5384d5350b51071220c33847759f2",
+  "resolution": [
+    1280,
+    720
+  ],
+  "warmupDraws": 3,
+  "scene": "Six chemistry bottles, 0.6-unit spacing, three columns and two rows. Origin (0,-1.9,1), target (0,0.25,0.2), tanHalfFov 0.414213562, extended encoding, no map, sprites, live lighting or UI. GL_TIME_ELAPSED measures only the scene draw, not game frame rate.",
+  "measurements": {
+    "before": {
+      "parts": 480,
+      "gridReferences": 580,
+      "omittedParts": 0,
+      "gpuVariants": [
+        {
+          "glsl": "140",
+          "nativeSrgb": false,
+          "uniformBuffers": false,
+          "gpuMillisecondsMedian": 2.9204480000000004,
+          "gpuMillisecondsMax": 3.017728,
+          "gpuSamples": 12
+        },
+        {
+          "glsl": "140",
+          "nativeSrgb": true,
+          "uniformBuffers": true,
+          "gpuMillisecondsMedian": 2.855424,
+          "gpuMillisecondsMax": 2.910208,
+          "gpuSamples": 12
+        }
+      ]
+    },
+    "after": {
+      "parts": 222,
+      "gridReferences": 322,
+      "omittedParts": 0,
+      "gpuVariants": [
+        {
+          "glsl": "140",
+          "nativeSrgb": false,
+          "uniformBuffers": false,
+          "gpuMillisecondsMedian": 1.714176,
+          "gpuMillisecondsMax": 1.74592,
+          "gpuSamples": 12
+        },
+        {
+          "glsl": "140",
+          "nativeSrgb": true,
+          "uniformBuffers": true,
+          "gpuMillisecondsMedian": 1.669632,
+          "gpuMillisecondsMax": 1.727488,
+          "gpuSamples": 12
+        }
+      ]
+    }
+  },
+  "validation": {
+    "rings": 141,
+    "azimuthsPerRing": 721,
+    "poses": 98,
+    "glbs": 46,
+    "metadataUnchanged": true
+  },
+  "models": [
+    {
+      "id": "CMU3DBottleEmptyCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 78,
+      "after": 35
+    },
+    {
+      "id": "CMU3DBottleBicaridineCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 80,
+      "after": 37
+    },
+    {
+      "id": "CMU3DBottleDexalinCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 80,
+      "after": 37
+    },
+    {
+      "id": "CMU3DBottleDyloveneCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 80,
+      "after": 37
+    },
+    {
+      "id": "CMU3DBottleInaprovalineCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 80,
+      "after": 37
+    },
+    {
+      "id": "CMU3DBottleKelotaneCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 80,
+      "after": 37
+    },
+    {
+      "id": "CMU3DBottleTricordrazineCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 80,
+      "after": 37
+    },
+    {
+      "id": "CMU3DBottleCappedStudyCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 80,
+      "after": 37
+    },
+    {
+      "id": "CMU3DBottleFill1StudyCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 80,
+      "after": 37
+    },
+    {
+      "id": "CMU3DBottleFill2StudyCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 80,
+      "after": 37
+    },
+    {
+      "id": "CMU3DBottleFill3StudyCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 80,
+      "after": 37
+    },
+    {
+      "id": "CMU3DBottleFill4StudyCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 80,
+      "after": 37
+    },
+    {
+      "id": "CMU3DBottleFill5StudyCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 80,
+      "after": 37
+    },
+    {
+      "id": "CMU3DReagentJugCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 49,
+      "after": 41
+    },
+    {
+      "id": "CMU3DReagentJugCappedStudyCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 51,
+      "after": 43
+    },
+    {
+      "id": "CMU3DReagentJugFill1StudyCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 51,
+      "after": 43
+    },
+    {
+      "id": "CMU3DReagentJugFill2StudyCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 51,
+      "after": 43
+    },
+    {
+      "id": "CMU3DReagentJugFill3StudyCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 51,
+      "after": 43
+    },
+    {
+      "id": "CMU3DReagentJugFill4StudyCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 51,
+      "after": 43
+    },
+    {
+      "id": "CMU3DReagentJugFill5StudyCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 51,
+      "after": 43
+    },
+    {
+      "id": "CMU3DBobdaBlueCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 45,
+      "after": 22
+    },
+    {
+      "id": "CMU3DBobdaCherryCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 45,
+      "after": 22
+    },
+    {
+      "id": "CMU3DBobdaClassicCloud",
+      "file": "garrison_containers_cloud.yml",
+      "before": 45,
+      "after": 22
+    },
+    {
+      "id": "CMU3DRMCDrinkAlcoholWhiskeyDrinksExtraCloud",
+      "file": "garrison_drinks_extra_cloud.yml",
+      "before": 78,
+      "after": 55
+    },
+    {
+      "id": "CMU3DRMCDrinkAlcoholSakeDrinksExtraCloud",
+      "file": "garrison_drinks_extra_cloud.yml",
+      "before": 78,
+      "after": 55
+    },
+    {
+      "id": "CMU3DRMCDrinkAlcoholVodkaDrinksExtraCloud",
+      "file": "garrison_drinks_extra_cloud.yml",
+      "before": 78,
+      "after": 55
+    },
+    {
+      "id": "CMU3DDrinkCoffeeLiqueurBottleFullDrinksExtraCloud",
+      "file": "garrison_drinks_extra_cloud.yml",
+      "before": 78,
+      "after": 55
+    },
+    {
+      "id": "CMU3DDrinkBottleWhiskeyDrinksExtraCloud",
+      "file": "garrison_drinks_extra_cloud.yml",
+      "before": 78,
+      "after": 55
+    },
+    {
+      "id": "CMU3DDrinkBottleWhiskeyDrinksExtraCloudOpenStudy",
+      "file": "garrison_drinks_extra_cloud.yml",
+      "before": 76,
+      "after": 53
+    },
+    {
+      "id": "CMU3DCMDrinkCanColaDrinksExtraCloud",
+      "file": "garrison_drinks_extra_cloud.yml",
+      "before": 49,
+      "after": 34
+    },
+    {
+      "id": "CMU3DCMDrinkCanMountainWindDrinksExtraCloud",
+      "file": "garrison_drinks_extra_cloud.yml",
+      "before": 49,
+      "after": 34
+    },
+    {
+      "id": "CMU3DDrinkColaCanEmptyDrinksExtraCloud",
+      "file": "garrison_drinks_extra_cloud.yml",
+      "before": 64,
+      "after": 49
+    },
+    {
+      "id": "CMU3DDrinkEnergyDrinkCanDrinksExtraCloud",
+      "file": "garrison_drinks_extra_cloud.yml",
+      "before": 49,
+      "after": 34
+    },
+    {
+      "id": "CMU3DRMCCoffeeCupDrinksExtraCloud",
+      "file": "garrison_drinks_extra_cloud.yml",
+      "before": 42,
+      "after": 26
+    },
+    {
+      "id": "CMU3DRMCCoffeeCupFilledDrinksExtraCloud",
+      "file": "garrison_drinks_extra_cloud.yml",
+      "before": 44,
+      "after": 28
+    },
+    {
+      "id": "CMU3DDrinkMugOneDrinksExtraCloud",
+      "file": "garrison_drinks_extra_cloud.yml",
+      "before": 45,
+      "after": 29
+    },
+    {
+      "id": "CMU3DRMCCoffeeCupFilledDrinksExtraCloudFill1Study",
+      "file": "garrison_drinks_extra_cloud.yml",
+      "before": 44,
+      "after": 28
+    },
+    {
+      "id": "CMU3DRMCCoffeeCupFilledDrinksExtraCloudFill2Study",
+      "file": "garrison_drinks_extra_cloud.yml",
+      "before": 44,
+      "after": 28
+    },
+    {
+      "id": "CMU3DCryoxadoneBeakerSmallDrinksExtraCloud",
+      "file": "garrison_drinks_extra_cloud.yml",
+      "before": 40,
+      "after": 24
+    },
+    {
+      "id": "CMU3DCryoxadoneBeakerSmallDrinksExtraCloudEmptyStudy",
+      "file": "garrison_drinks_extra_cloud.yml",
+      "before": 38,
+      "after": 22
+    },
+    {
+      "id": "CMU3DCMBeakerMedicalSmallCloud",
+      "file": "garrison_medical_small_cloud.yml",
+      "before": 57,
+      "after": 33
+    },
+    {
+      "id": "CMU3DCMBeakerMedicalSmallCloudLidStudy",
+      "file": "garrison_medical_small_cloud.yml",
+      "before": 59,
+      "after": 35
+    },
+    {
+      "id": "CMU3DCMBeakerLargeMedicalSmallCloud",
+      "file": "garrison_medical_small_cloud.yml",
+      "before": 58,
+      "after": 34
+    },
+    {
+      "id": "CMU3DCMBeakerLargeMedicalSmallCloudLidStudy",
+      "file": "garrison_medical_small_cloud.yml",
+      "before": 60,
+      "after": 36
+    },
+    {
+      "id": "CMU3DRMCBeakerHighCapacityMedicalSmallCloud",
+      "file": "garrison_medical_small_cloud.yml",
+      "before": 55,
+      "after": 31
+    },
+    {
+      "id": "CMU3DRMCBeakerHighCapacityMedicalSmallCloudLidStudy",
+      "file": "garrison_medical_small_cloud.yml",
+      "before": 57,
+      "after": 33
+    }
+  ]
+}

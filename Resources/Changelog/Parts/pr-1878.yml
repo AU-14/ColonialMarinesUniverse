@@ -1,0 +1,7 @@
+author: Berkin101
+category: CMU
+changes:
+- message: Barricade collisions are now fixed!
+  type: Fix
+time: '2026-09-06T13:24:11.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1878

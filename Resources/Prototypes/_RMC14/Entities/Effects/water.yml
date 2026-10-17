@@ -1,0 +1,22 @@
+- type: entity
+  id: RMCWaterWake
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    sprite: _RMC14/Effects/Water/splash32.rsi
+    state: shallow
+
+- type: entity
+  id: RMCWaterImpact
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    sprite: _RMC14/Effects/Water/impact.rsi
+    state: splash
+    loop: false
+  - type: TimedDespawn
+    lifetime: 2

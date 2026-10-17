@@ -118,9 +118,6 @@ public sealed partial class RMCPenetratingProjectileSystem : EntitySystem
             (_transform.GetMoverCoordinates(ent).Position - ent.Comp.ShotFrom.Value.Position).Length();
         var range = ent.Comp.Range - distanceTravelled;
 
-        ent.Comp.HitTargetIds.Add(GetNetEntity(args.Target).Id);
-        Dirty(ent);
-
         if (range < 0)
             return;
 
@@ -134,4 +131,3 @@ public sealed partial class RMCPenetratingProjectileSystem : EntitySystem
 /// </summary>
 [ByRefEvent]
 public record struct AfterProjectileHitEvent(Entity<ProjectileComponent> Projectile, EntityUid Target);
-

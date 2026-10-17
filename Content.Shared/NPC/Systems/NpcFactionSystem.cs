@@ -12,7 +12,6 @@ namespace Content.Shared.NPC.Systems;
 public sealed partial class NpcFactionSystem : EntitySystem
 {
     [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private SharedTransformSystem _xform = default!;
 
     /// <summary>
@@ -68,6 +67,9 @@ public sealed partial class NpcFactionSystem : EntitySystem
         {
             ent.Comp.HostileFactions.UnionWith(ent.Comp.AddHostileFactions);
         }
+
+        // CMU14: runtime faction membership and relations are also used by client ally checks.
+        Dirty(ent);
     }
 
     /// <summary>
@@ -104,7 +106,7 @@ public sealed partial class NpcFactionSystem : EntitySystem
     /// </summary>
     public void AddFaction(Entity<NpcFactionMemberComponent?> ent, [ForbidLiteral] string faction, bool dirty = true)
     {
-        if (!_proto.HasIndex<NpcFactionPrototype>(faction))
+        if (!ProtoMan.HasIndex<NpcFactionPrototype>(faction))
         {
             Log.Error($"Unable to find faction {faction}");
             return;
@@ -127,7 +129,7 @@ public sealed partial class NpcFactionSystem : EntitySystem
 
         foreach (var faction in factions)
         {
-            if (!_proto.HasIndex(faction))
+            if (!ProtoMan.HasIndex(faction))
             {
                 Log.Error($"Unable to find faction {faction}");
                 continue;
@@ -145,7 +147,7 @@ public sealed partial class NpcFactionSystem : EntitySystem
     /// </summary>
     public void RemoveFaction(Entity<NpcFactionMemberComponent?> ent, [ForbidLiteral] string faction, bool dirty = true)
     {
-        if (!_proto.HasIndex<NpcFactionPrototype>(faction))
+        if (!ProtoMan.HasIndex<NpcFactionPrototype>(faction))
         {
             Log.Error($"Unable to find faction {faction}");
             return;
@@ -305,14 +307,64 @@ public sealed partial class NpcFactionSystem : EntitySystem
         RefreshFactions();
     }
 
-    private void RefreshFactions()
+    private void RefreshFactions() // CMU14 Method: faction hostile uses inheritance (e.g. RMCXeno -> CMU14PathogenWalker)
     {
-        _factions = _proto.EnumeratePrototypes<NpcFactionPrototype>().ToFrozenDictionary(
-            faction => faction.ID,
-            faction =>  new FactionData
+        var children = new Dictionary<string, List<string>>();
+        foreach (var faction in ProtoMan.EnumeratePrototypes<NpcFactionPrototype>())
+        {
+            if (faction.Parents == null)
+                continue;
+
+            foreach (var parent in faction.Parents)
             {
-                Friendly = faction.Friendly.ToHashSet(),
-                Hostile = faction.Hostile.ToHashSet()
+                if (!children.TryGetValue(parent, out var list))
+                    children[parent] = list = new List<string>();
+                list.Add(faction.ID);
+            }
+        }
+
+        var descendants = new Dictionary<string, HashSet<ProtoId<NpcFactionPrototype>>>();
+
+        HashSet<ProtoId<NpcFactionPrototype>> DescendantsOf(string id)
+        {
+            if (descendants.TryGetValue(id, out var found))
+                return found;
+
+            // Cache only complete per-root traversals so malformed cycles cannot expose partial closures.
+            found = new HashSet<ProtoId<NpcFactionPrototype>>();
+            var remaining = new Stack<string>();
+            remaining.Push(id);
+            while (remaining.TryPop(out var current))
+            {
+                if (!found.Add(current) || !children.TryGetValue(current, out var kids))
+                    continue;
+
+                foreach (var kid in kids)
+                    remaining.Push(kid);
+            }
+
+            descendants[id] = found;
+            return found;
+        }
+
+        foreach (var faction in ProtoMan.EnumeratePrototypes<NpcFactionPrototype>())
+            DescendantsOf(faction.ID);
+
+        _factions = ProtoMan.EnumeratePrototypes<NpcFactionPrototype>().ToFrozenDictionary(
+            faction => faction.ID,
+            faction =>
+            {
+                var hostile = new HashSet<ProtoId<NpcFactionPrototype>>();
+                foreach (var h in faction.Hostile)
+                    hostile.UnionWith(DescendantsOf(h));
+
+                hostile.Remove(faction.ID);
+
+                return new FactionData
+                {
+                    Friendly = faction.Friendly.ToHashSet(),
+                    Hostile = hostile,
+                };
             });
 
         var query = AllEntityQuery<NpcFactionMemberComponent>();

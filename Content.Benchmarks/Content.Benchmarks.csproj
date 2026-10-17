@@ -1,4 +1,5 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\RobustToolbox\MSBuild\Robust.Properties.targets" />
   <PropertyGroup>
     <OutputPath>..\bin\Content.Benchmarks\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -11,6 +12,10 @@
   <Import Project="../MSBuild/Content.props" />
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" />
+
+    <!-- pin transitive deps -->
+    <PackageReference Include="System.Management" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Content.Client\Content.Client.csproj" />
@@ -20,7 +25,6 @@
     <ProjectReference Include="..\Content.IntegrationTests\Content.IntegrationTests.csproj" />
   </ItemGroup>
 
-  <Import Project="..\RobustToolbox\MSBuild\Robust.Properties.targets" />
   <Import Project="..\RobustToolbox\Imports\Lidgren.props" />
   <Import Project="..\RobustToolbox\Imports\Client.props" />
   <Import Project="..\RobustToolbox\Imports\Server.props" />

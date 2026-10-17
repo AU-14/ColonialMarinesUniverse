@@ -1,0 +1,92 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobUPPLineSynthetic
+  roundSide: ThirdParty
+  roundForce: UPPLine
+  roundRole: UPPLineSynthetic
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillConstruction: 3
+      RMCSkillEngineer: 3
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 3
+      RMCSkillMeleeWeapons: 2
+  - type: JobPrefix
+    prefix: cmu-uppline-prefix-synthetic
+  - type: Language
+    spokenLanguages:
+    - Russian
+    - English
+    - Mandarin
+    - TacticalSignLanguage
+    understoodLanguages:
+    - Russian
+    - English
+    - Mandarin
+    - TacticalSignLanguage
+    currentLanguage: Russian
+    defaultLanguage: Russian
+  name: cmu-uppline-name-synthetic
+  description: cmu-uppline-description-synthetic
+  playTimeTracker: CMUJobUPPLineSynthetic
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearUPPLineSynthetic
+  spawnMenuRoleName: UPP Support Synthetic (3rd party)
+  greeting: cmu-uppline-greeting
+  icon: RMCJobIconPMCSynthetic
+  joinNotifyCrew: false
+  supervisors: cmu-uppline-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPLineSynthetic
+  name: UPP Support Synthetic
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPLine
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-uppline-name-synthetic
+    description: cmu-uppline-description-synthetic
+    reregister: false
+    job: CMUJobUPPLineSynthetic
+    raffle:
+      settings: short
+    rules: cmu-uppline-rules
+
+- type: startingGear
+  id: CMUGearUPPLineSynthetic
+  equipment:
+    head: ArmorHelmetPMCOfficer
+    back: RMCPMCSyntheticSmartpack
+    belt: RMCBeltMedicBagPMCFilled
+    suitstorage: RMCScabbardMacheteFilled
+    jumpsuit: RMCJumpsuitVeteranPMCSynth
+    outerClothing: RMCArmorM4PMCSynthFilled
+    shoes: RMCBootsPMCFilled
+    id: CMUIDCardUPPLineSynthetic
+    pocket1: RMCPouchToolsSocFilledSynthetic
+    pocket2: RMCPouchConstructionFillLowGrade
+  storage:
+    back:
+    - RMCUniversalRecorder
+  inhand:
+  - RMCMotionDetector
+  - CMFirstAidKitFilled
+
+- type: playTimeTracker
+  id: CMUJobUPPLineSynthetic

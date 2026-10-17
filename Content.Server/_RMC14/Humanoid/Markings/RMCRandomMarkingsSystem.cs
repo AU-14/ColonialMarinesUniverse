@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Server.Humanoid;
 using Content.Server.Humanoid.Systems;
 using Content.Shared._RMC14.Humanoid.Markings;
@@ -9,7 +10,7 @@ namespace Content.Server._RMC14.Humanoid.Markings;
 
 public sealed partial class RMCRandomMarkingsSystem : EntitySystem
 {
-    [Dependency] private HumanoidAppearanceSystem _humanoidAppearance = default!;
+    [Dependency] private HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
     [Dependency] private MarkingManager _markings = default!;
     [Dependency] private IRobustRandom _random = default!;
 
@@ -24,8 +25,11 @@ public sealed partial class RMCRandomMarkingsSystem : EntitySystem
 
     private void OnMapInit(Entity<RMCRandomMarkingsComponent> ent, ref MapInitEvent args)
     {
-        if (!TryComp<HumanoidAppearanceComponent>(ent.Owner, out var humanoid))
+        if (!TryComp<HumanoidProfileComponent>(ent.Owner, out var humanoid) ||
+            !_humanoidAppearance.TryGetSkinColor(ent, out var skinColor))
+        {
             return;
+        }
 
         if (!ent.Comp.Markings.TryGetValue(humanoid.Species, out var speciesCategory))
             return;
@@ -35,39 +39,59 @@ public sealed partial class RMCRandomMarkingsSystem : EntitySystem
             if (!_random.Prob(type.Value))
                 continue;
 
-            var possibleMarkings = _markings.MarkingsByCategoryAndSpeciesAndSex(type.Key, humanoid.Species, humanoid.Sex);
-
-            if (possibleMarkings.Count == 0)
-                continue;
-
-            var pickedMarking = _random.Pick(possibleMarkings);
-
-            if (!humanoid.MarkingSet.Markings.TryGetValue(type.Key, out var markings))
+            foreach (var layer in MarkingCategoriesConversion.ToHumanoidVisualLayers(type.Key))
             {
-                _humanoidAppearance.AddMarking(ent, pickedMarking.Key, humanoid.SkinColor, forced: true);
-                continue;
-            }
-
-            if (markings.Count == 0)
-            {
-                _humanoidAppearance.AddMarking(ent, pickedMarking.Key, humanoid.SkinColor, forced: true);
-                continue;
-            }
-
-            for (var idx = 0; idx < markings.Count; idx++) // Replace existing markings
-            {
-                _humanoidAppearance.SetMarkingId(ent, type.Key, idx, pickedMarking.Key);
-
-                var colors = new List<Color>();
-                var markingColors = markings[idx].MarkingColors.Count;
-
-                for (int i = 0; i < markingColors - 1; i++)
-                {
-                    colors.Add(humanoid.SkinColor);
-                }
-
-                _humanoidAppearance.SetMarkingColor(ent, type.Key, idx, colors);
+                RandomizeLayer(ent, humanoid, skinColor, layer);
             }
         }
+    }
+
+    private void RandomizeLayer(
+        EntityUid ent,
+        HumanoidProfileComponent humanoid,
+        Color skinColor,
+        HumanoidVisualLayers layer)
+    {
+        if (!_humanoidAppearance.TryGetMarkings(
+                ent,
+                layer,
+                out var organ,
+                out var markingData,
+                out var markings))
+        {
+            return;
+        }
+
+        var possibleMarkings = _markings.MarkingsByLayerAndGroupAndSex(layer, markingData.Group, humanoid.Sex);
+        if (possibleMarkings.Count == 0)
+            return;
+
+        var pickedMarking = _random.Pick(possibleMarkings);
+
+        if (markings.Count == 0)
+        {
+            var added = pickedMarking.Value.AsMarking().WithColor(skinColor) with { Forced = true };
+            _humanoidAppearance.SetMarkings(ent, organ, layer, [added]);
+            return;
+        }
+
+        var updated = markings.ToList();
+        for (var idx = 0; idx < updated.Count; idx++) // Replace existing markings
+        {
+            var current = updated[idx];
+            var replacement = pickedMarking.Value.AsMarking() with { Forced = current.Forced };
+
+            for (var color = 0; color < replacement.MarkingColors.Count && color < current.MarkingColors.Count; color++)
+            {
+                var replacementColor = color < replacement.MarkingColors.Count - 1
+                    ? skinColor
+                    : current.MarkingColors[color];
+                replacement = replacement.WithColorAt(color, replacementColor);
+            }
+
+            updated[idx] = replacement;
+        }
+
+        _humanoidAppearance.SetMarkings(ent, organ, layer, updated);
     }
 }

@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Damage;
@@ -15,6 +15,8 @@ using Content.Shared._RMC14.Xenonids.Strain;
 using Content.Shared.Body.Systems;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
@@ -26,11 +28,13 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.StatusEffect;
 using Content.Shared.StatusEffectNew;
+using Content.Shared.Stunnable;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using NewStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSystem;
 
 namespace Content.Shared._RMC14.Xenonids.Heal;
 
@@ -59,8 +63,9 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private XenoStrainSystem _xenoStrain = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
-    [Dependency] private SharedStatusEffectsSystem _statusEffect = default!;
+    [Dependency] private NewStatusEffectsSystem _statusEffect = default!;
     [Dependency] private StatusEffectQuerySystem _status = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
@@ -98,7 +103,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
             return;
 
         var msg = "We channel our plasma to heal our sisters' wounds around this area.";
-        _popup.PopupClient(msg, args.Target, ent, PopupType.Large);
+        _popup.PopupCoordinates(msg, args.Target, ent, PopupType.Large);
 
         foreach (var xeno in _xenos)
         {
@@ -186,12 +191,13 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
         if (_flammable.IsOnFire(target))
             failureMessageId = "rmc-xeno-apply-salve-target-on-fire-failure";
 
-        if (TryComp(target, out DamageableComponent? damageComp) && damageComp.TotalDamage == 0)
+        if (TryComp(target, out DamageableComponent? damageComp) &&
+            _damageable.GetTotalDamage((target, damageComp)) == 0)
             failureMessageId = "rmc-xeno-apply-salve-target-full-health-failure";
 
         if (failureMessageId != null)
         {
-            _popup.PopupClient(Loc.GetString(failureMessageId, ("target_xeno", target)), ent);
+            _popup.PopupSelf(Loc.GetString(failureMessageId, ("target_xeno", target)), ent);
             return;
         }
 
@@ -229,7 +235,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
         if (TryComp<DamageableComponent>(ent, out var damage))
             _damageable.AddDamage(ent.Owner, damage, damageTakenSpecifier);
 
-        _popup.PopupClient(Loc.GetString("rmc-xeno-apply-salve-self", ("target_xeno", target)), ent, PopupType.Medium);
+        _popup.PopupSelf(Loc.GetString("rmc-xeno-apply-salve-self", ("target_xeno", target)), ent, PopupType.Medium);
 
         args.Handled = true;
 
@@ -253,14 +259,14 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
 
         _audio.PlayPredicted(args.HealSound, target.ToCoordinates(), ent);
 
-        _popup.PopupClient(Loc.GetString("rmc-xeno-apply-salve-target", ("healer_xeno", ent)), target, PopupType.SmallCaution);
+        _popup.PopupSelf(Loc.GetString("rmc-xeno-apply-salve-target", ("healer_xeno", ent)), target, PopupType.SmallCaution);
 
         if (!healedHealerOrSmallXeno && TryComp(ent, out XenoEnergyComponent? xenoEnergyComp) && !_xenoEnergy.HasEnergy((ent, xenoEnergyComp), xenoEnergyComp.Max))
         {
             _xenoEnergy.AddEnergy((ent, xenoEnergyComp), (int)damageTaken, false);
             if (_xenoEnergy.HasEnergy((ent, xenoEnergyComp), xenoEnergyComp.Max))
             {
-                _popup.PopupClient(Loc.GetString("rmc-xeno-sacrifice-heal-will-respawn"), ent, PopupType.Large);
+                _popup.PopupSelf(Loc.GetString("rmc-xeno-sacrifice-heal-will-respawn"), ent, PopupType.Large);
             }
         }
         Dirty(target, heal);
@@ -293,12 +299,13 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
         if (_mobState.IsDead(target))
             failureMessageId = "rmc-xeno-sacrifice-heal-target-dead-failure";
 
-        if (TryComp(target, out DamageableComponent? targetDamageComp) && targetDamageComp.TotalDamage == 0)
+        if (TryComp(target, out DamageableComponent? targetDamageComp) &&
+            _damageable.GetTotalDamage((target, targetDamageComp)) == 0)
             failureMessageId = "rmc-xeno-sacrifice-heal-target-full-health-failure";
 
         if (failureMessageId != null)
         {
-            _popup.PopupClient(Loc.GetString(failureMessageId, ("target_xeno", target)), ent);
+            _popup.PopupSelf(Loc.GetString(failureMessageId, ("target_xeno", target)), ent);
             return;
         }
 
@@ -339,27 +346,37 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
 
         SacrificialHealShout(ent);
         _xenoAnnounce.AnnounceSameHive(ent.Owner, Loc.GetString("rmc-xeno-sacrifice-heal-target-announcement", ("healer_xeno", ent), ("target_xeno", target)), popup:PopupType.Large);
-        _popup.PopupPredicted(Loc.GetString("rmc-xeno-sacrifice-heal-target-enviorment", ("healer_xeno", ent), ("target_xeno", target)), target, ent, PopupType.Medium);
+        _popup.PopupBroadcast(Loc.GetString("rmc-xeno-sacrifice-heal-target-enviorment", ("healer_xeno", ent), ("target_xeno", target)), target, ent, PopupType.Medium);
 
         // Heal from crit
-        var targetTotalDamage = targetDamageComp.TotalDamage;
+        var targetTotalDamage = _damageable.GetTotalDamage((target, targetDamageComp));
         var diffToThreshold = targetTotalDamage - targetCriticalThreshold.Value;
 
         if (diffToThreshold > 0)
             Heal(target, diffToThreshold);
 
         // Use up user's health to heal target
-        var userTotalDamage = userDamageComp.TotalDamage;
+        var userTotalDamage = _damageable.GetTotalDamage((ent, userDamageComp));
         var remainingHealth = userDeathThreshold.Value - userTotalDamage;
         var healAmount = remainingHealth * args.TransferProportion;
 
         Heal(target, healAmount);
 
 
+        var clearParalysis = false;
         foreach (var status in args.AilmentsRemove)
         {
+            if (status.Id is "Stun" or "KnockedDown")
+            {
+                clearParalysis = true;
+                continue;
+            }
+
             _status.TryRemoveStatusEffect(target, status);
         }
+
+        if (clearParalysis)
+            _stun.TryClearStunAndKnockdown(target);
 
         foreach (var status in args.AilmentsRemoveNew)
         {

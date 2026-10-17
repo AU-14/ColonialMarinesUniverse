@@ -52,6 +52,7 @@ rmc-mortar-view-camera = View
   Camera
 
 rmc-mortar-camera-title = Mortar Camera Interface
+rmc-mortar-camera-network = Mortar Cameras
 rmc-mortar-camera-name = Para-Cam ({$x}):({$y})
 
 # Targeting mode

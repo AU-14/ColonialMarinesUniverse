@@ -22,7 +22,6 @@ namespace Content.Shared._RMC14.Xenonids.DeployTraps;
 
 public sealed partial class XenoDeployTrapsSystem : EntitySystem
 {
-    [Dependency] private IMapManager _map = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -51,11 +50,11 @@ public sealed partial class XenoDeployTrapsSystem : EntitySystem
             !TryComp(gridId, out MapGridComponent? grid))
             return;
 
-        var coords = args.Target.SnapToGrid(EntityManager, _map);
+        var coords = args.Target.SnapToGrid(EntityManager);
 
         if (!_examine.InRangeUnOccluded(xeno.Owner, coords, xeno.Comp.Range))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-deploy-traps-see-fail"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-deploy-traps-see-fail"), xeno, xeno);
             return;
         }
 
@@ -71,7 +70,7 @@ public sealed partial class XenoDeployTrapsSystem : EntitySystem
 
         var popupSelf = Loc.GetString("rmc-xeno-deploy-traps-self");
         var popupOthers = Loc.GetString("rmc-xeno-deploy-traps-others", ("xeno", xeno));
-        _popup.PopupPredicted(popupSelf, popupOthers, xeno, xeno);
+        _popup.PopupEntity(popupSelf, popupOthers, xeno, xeno);
 
         if (_net.IsServer)
         {
@@ -147,7 +146,7 @@ public sealed partial class XenoDeployTrapsSystem : EntitySystem
 
         if (TryComp(xeno.Owner, out XenoAcidMineComponent? acidMine))
             acidMine.Empowered = true;
-        _popup.PopupPredicted(Loc.GetString("rmc-xeno-deploy-traps-empower"), xeno, xeno, PopupType.Medium);
+        _popup.PopupBroadcast(Loc.GetString("rmc-xeno-deploy-traps-empower"), xeno, xeno, PopupType.Medium);
         foreach (var action in _actions.GetActions(xeno.Owner))
         {
             if (_actions.GetEvent(action) is XenoAcidMineActionEvent)

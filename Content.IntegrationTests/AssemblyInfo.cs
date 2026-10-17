@@ -1,8 +1,7 @@
 ﻿[assembly: Parallelizable(ParallelScope.Children)]
 
-// I don't know why this parallelism limit was originally put here.
-// I *do* know that I tried removing it, and ran into the following .NET runtime problem:
+// Run four tests concurrently, while retaining a bounded pool: unrestricted
+// concurrency can contend heavily while compiling serialization expression trees.
 // https://github.com/dotnet/runtime/issues/107197
-// So we can't really parallelize integration tests harder either until the runtime fixes that,
-// *or* we fix serv3 to not spam expression trees.
-[assembly: LevelOfParallelism(2)]
+// NUnit.NumberOfTestWorkers can override this for profiling or smaller machines.
+[assembly: LevelOfParallelism(4)]

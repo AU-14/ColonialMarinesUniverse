@@ -1,7 +1,8 @@
+using System.Linq;
 using Content.Server.Chat.Systems;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Vehicle.Viewport;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Vehicle.Components;
 using Robust.Shared.Player;
 using static Content.Server.Chat.Systems.ChatSystem;
@@ -18,12 +19,23 @@ public sealed partial class VehicleChatRelaySystem : EntitySystem
         SubscribeLocalEvent<ExpandICChatRecipientsEvent>(OnExpandRecipients);
     }
 
+    // CMU14 method: vehicle damage and usability.
     private void OnExpandRecipients(ExpandICChatRecipientsEvent ev)
     {
         if (TryGetRelayTarget(ev.Source, out var sourceTarget))
         {
             AddRecipientsNearTarget(ev, sourceTarget);
             AddRelayUsersNearTarget(ev, sourceTarget);
+            foreach (var (session, data) in ev.Recipients.ToArray())
+            {
+                if (session.AttachedEntity is not { } listener)
+                    continue;
+                // Keep the speaker as the message author. Only the bubble anchor
+                // moves to the hull for listeners looking at the exterior.
+                if (TryComp(listener, out EyeComponent? eye) && eye.Target == sourceTarget ||
+                    Transform(listener).MapID == Transform(sourceTarget).MapID)
+                    ev.Recipients[session] = data with { BubbleSource = sourceTarget };
+            }
         }
 
         AddRelayUsersNearSource(ev);

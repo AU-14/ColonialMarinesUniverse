@@ -1,0 +1,66 @@
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCComputerIntelGovfor
+  name: govfor intel computer
+  description: A GovFor Intel Computer for data cataloguing and distribution.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: InteractionOutline
+  - type: IntelConsole
+    team: govfor
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCComputerIntelOpfor
+  name: opfor intel computer
+  description: An OpFor Intel Computer for data cataloguing and distribution.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: InteractionOutline
+  - type: IntelConsole
+    team: opfor
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCComputerIntelCLF
+  name: CLF intel computer
+  suffix: RMC, Don't Use
+  description: A CLF Intel Computer for data cataloguing and distribution.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: InteractionOutline
+  - type: IntelConsole
+    team: clf
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+
+- type: entity
+  parent: RMCComputerIntelCLF
+  id: CMUComputerIntelCLFClaimable
+  suffix: CMU
+  description: A CLF Intelligence Computer for data cataloguing and distribution. It has valuable but very secret information stored on it, don't let the military seize this.
+  components:
+  - type: ClaimableIntelConsole
+    claimingTeam: govfor
+    requiredPreset: Insurgency
+    claimTime: 45

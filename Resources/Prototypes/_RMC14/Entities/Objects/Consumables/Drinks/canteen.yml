@@ -7,14 +7,12 @@
     sprite: _RMC14/Objects/Consumable/Drinks/canteen.rsi
   - type: Item
     size: Small
-  - type: Drink
   - type: InteractedBlacklist
     blacklist:
       components:
       - Xeno
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         maxVol: 60
         reagents:
         - ReagentId: Water
@@ -35,6 +33,7 @@
     - 40
     - 60
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -68,9 +67,8 @@
   components:
   - type: Sprite
     state: flask
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         maxVol: 60
 
 - type: entity
@@ -92,10 +90,16 @@
     state: flask_we_ya
 
 - type: entity
-  parent: [CMCanteenBase, DrinkFlaskVisualsOpenable]
+  parent: [CMCanteenBase, DrinkBaseOpenable, DrinkVisualsOpenable]
   id: RMCWeYaThermos
   name: We-Ya thermos
   description: A sleek metal thermos, decorated with the colours of the Weyland-Yutani Corporation. The marketing claims it can withstands equivalent to a nuclear blast, though that's probably just PR talking.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/weya_thermos.rsi
+  - type: Openable
+    sound:
+      collection: flaskOpenSounds
+    closeable: true
+    closeSound:
+      collection: flaskCloseSounds

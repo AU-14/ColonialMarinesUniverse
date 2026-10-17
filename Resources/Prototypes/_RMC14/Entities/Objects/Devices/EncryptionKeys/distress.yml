@@ -41,3 +41,17 @@
     defaultChannel: Colony
   - type: Sprite
     state: cap_key
+
+# UNISC
+
+- type: entity
+  parent: CMEncryptionKey
+  id: CMEncryptionKeyUNISC
+  name: unisc encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - UNISOF
+    defaultChannel: UNISOF
+  - type: Sprite
+    state: binary_key

@@ -1,0 +1,601 @@
+#-------------------------------------------- Bullets AG80 (9.7x16mm)
+- type: construction
+  parent: RMC
+  name: Bullet box (9.7x16mm)
+  id: RuMCBoxBulletsRifleAG80
+  graph: RuMCBoxBulletAG80
+  startNode: start
+  targetNode: RuMCBoxBulletsRifleAG80Empty
+  category: construction-category-cm-box-magazine
+  description: A bullet box for 9.7x16mm.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxBulletsRifleAG80EmptyBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxBulletsRifleAG80Empty
+
+- type: construction
+  parent: RMC
+  name: Bullet box (9.7x16mm AP)
+  id: RuMCBoxBulletsRifleAG80AP
+  graph: RuMCBoxBulletAG80
+  startNode: start
+  targetNode: RuMCBoxBulletsRifleAG80APEmpty
+  category: construction-category-cm-box-magazine
+  description: A bullet box for 9.7x16mm AP.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxBulletsRifleAG80APEmptyBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxBulletsRifleAG80APEmpty
+
+- type: constructionGraph
+  id: RuMCBoxBulletAG80
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: RuMCBoxBulletsRifleAG80Empty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+    - to: RuMCBoxBulletsRifleAG80APEmpty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+  - node: RuMCBoxBulletsRifleAG80Empty
+    entity: RuMCBoxBulletsRifleAG80Empty
+  - node: RuMCBoxBulletsRifleAG80APEmpty
+    entity: RuMCBoxBulletsRifleAG80APEmpty
+
+#-------------------------------------------- Bullets Type64 (10x20mm)
+- type: construction
+  parent: RMC
+  name: Bullet box (10x20mm)
+  id: RuMCBoxBulletsSMG10x20mm
+  graph: RuMCBoxBulletType64
+  startNode: start
+  targetNode: RuMCBoxBulletsSMG10x20mmEmpty
+  category: construction-category-cm-box-magazine
+  description: A bullet box for 10x20mm.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxBulletsSMG10x20mmEmptyBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxBulletsSMG10x20mmEmpty
+
+- type: constructionGraph
+  id: RuMCBoxBulletType64
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: RuMCBoxBulletsSMG10x20mmEmpty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+  - node: RuMCBoxBulletsSMG10x20mmEmpty
+    entity: RuMCBoxBulletsSMG10x20mmEmpty
+
+#-------------------------------------------- Bullets Type64 (7.62x25mm)
+- type: construction
+  parent: RMC
+  name: Bullet box (7.62x25mm)
+  id: RuMCBoxBulletsPistol762x25mm
+  graph: RuMCBoxBulletType19
+  startNode: start
+  targetNode: RuMCBoxBulletsPistol762x25mmEmpty
+  category: construction-category-cm-box-magazine
+  description: A bullet box for 7.62x25mm.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxBulletsPistol762x25mmEmptyBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxBulletsPistol762x25mmEmpty
+
+- type: constructionGraph
+  id: RuMCBoxBulletType19
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: RuMCBoxBulletsPistol762x25mmEmpty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+  - node: RuMCBoxBulletsPistol762x25mmEmpty
+    entity: RuMCBoxBulletsPistol762x25mmEmpty
+
+#-------------------------------------------- Bullets Type71 (5.45x39mm)
+- type: construction
+  parent: RMC
+  name: Bullet box (5.45x39mm)
+  id: RuMCBoxBulletsRifleType71
+  graph: RuMCBoxBulletType71
+  startNode: start
+  targetNode: RuMCBoxBulletsRifleType71Empty
+  category: construction-category-cm-box-magazine
+  description: A bullet box for 5.45x39mm.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxBulletsRifleType71EmptyBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxBulletsRifleType71Empty
+
+- type: construction
+  parent: RMC
+  name: Bullet box (5.45x39mm AP)
+  id: RuMCBoxBulletsRifleType71AP
+  graph: RuMCBoxBulletType71
+  startNode: start
+  targetNode: RuMCBoxBulletsRifleType71APEmpty
+  category: construction-category-cm-box-magazine
+  description: A bullet box for 5.45x39mm AP.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxBulletsRifleType71APEmptyBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxBulletsRifleType71APEmpty
+
+- type: constructionGraph
+  id: RuMCBoxBulletType71
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: RuMCBoxBulletsRifleType71Empty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+    - to: RuMCBoxBulletsRifleType71APEmpty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+  - node: RuMCBoxBulletsRifleType71Empty
+    entity: RuMCBoxBulletsRifleType71Empty
+  - node: RuMCBoxBulletsRifleType71APEmpty
+    entity: RuMCBoxBulletsRifleType71APEmpty
+
+#-------------------------------------------- Bullets AK4047 (10x24mm)
+- type: construction
+  parent: RMC
+  name: Bullet box (10x24mm)
+  id: RuMCBoxBulletsRifle10x24mm
+  graph: RuMCBoxBullet10x24mm
+  startNode: start
+  targetNode: RuMCBoxBulletsRifle10x24mmEmpty
+  category: construction-category-cm-box-magazine
+  description: A bullet box for 10x24mm.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxBulletsRifle10x24mmEmptyBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxBulletsRifle10x24mmEmpty
+
+- type: construction
+  parent: RMC
+  name: Bullet box (10x24mm AP)
+  id: RuMCBoxBulletsRifle10x24mmAP
+  graph: RuMCBoxBullet10x24mm
+  startNode: start
+  targetNode: RuMCBoxBulletsRifle10x24mmAPEmpty
+  category: construction-category-cm-box-magazine
+  description: A bullet box for 10x24mm AP.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxBulletsRifle10x24mmAPEmptyBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxBulletsRifle10x24mmAPEmpty
+
+- type: constructionGraph
+  id: RuMCBoxBullet10x24mm
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: RuMCBoxBulletsRifle10x24mmEmpty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+    - to: RuMCBoxBulletsRifle10x24mmAPEmpty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+  - node: RuMCBoxBulletsRifle10x24mmEmpty
+    entity: RuMCBoxBulletsRifle10x24mmEmpty
+  - node: RuMCBoxBulletsRifle10x24mmAPEmpty
+    entity: RuMCBoxBulletsRifle10x24mmAPEmpty
+
+#-------------------------------------------- AK4047
+- type: construction
+  parent: RMC
+  name: Magazine Box (AK4047 Reg)
+  id: RuMCBoxMagazineRifleAK4047
+  graph: RuMCBoxMagazineAK4047
+  startNode: start
+  targetNode: RuMCBoxMagazineRifleAK4047Empty
+  category: construction-category-cm-box-magazine
+  description: A magazine box that can contain regular AK4047 mags.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxMagazineRifleAK4047EmptyBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxMagazineRifleAK4047Empty
+
+- type: construction
+  parent: RMC
+  name: Magazine Box (AK4047 AP)
+  id: RuMCBoxMagazineRifleAK4047AP
+  graph: RuMCBoxMagazineAK4047
+  startNode: start
+  targetNode: RuMCBoxMagazineRifleAK4047EmptyAP
+  category: construction-category-cm-box-magazine
+  description: A magazine box that can contain AP AK4047 mags.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxMagazineRifleAK4047APEmptyBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxMagazineRifleAK4047EmptyAP
+
+- type: constructionGraph
+  id: RuMCBoxMagazineAK4047
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: RuMCBoxMagazineRifleAK4047Empty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+    - to: RuMCBoxMagazineRifleAK4047EmptyAP
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+  - node: RuMCBoxMagazineRifleAK4047Empty
+    entity: RuMCBoxMagazineRifleAK4047Empty
+  - node: RuMCBoxMagazineRifleAK4047EmptyAP
+    entity: RuMCBoxMagazineRifleAK4047EmptyAP
+
+#-------------------------------------------- AG80
+- type: construction
+  parent: RMC
+  name: Magazine Box (AG80 Reg)
+  id: RuMCBoxMagazineRifleAG80
+  graph: RuMCBoxMagazineAG80
+  startNode: start
+  targetNode: RuMCBoxMagazineRifleAG80Empty
+  category: construction-category-cm-box-magazine
+  description: A magazine box that can contain regular AG80 mags.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxMagazineRifleAG80EmptyBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxMagazineRifleAG80Empty
+
+- type: construction
+  parent: RMC
+  name: Magazine Box (AG80 AP)
+  id: RuMCBoxMagazineRifleAG80AP
+  graph: RuMCBoxMagazineAG80
+  startNode: start
+  targetNode: RuMCBoxMagazineRifleAG80EmptyAP
+  category: construction-category-cm-box-magazine
+  description: A magazine box that can contain AP AG80 mags.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxMagazineRifleAG80APEmptyBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxMagazineRifleAG80EmptyAP
+
+- type: construction
+  parent: RMC
+  name: Magazine Box (AG80 EXT)
+  id: RuMCBoxMagazineRifleAG80EXT
+  graph: RuMCBoxMagazineAG80
+  startNode: start
+  targetNode: RuMCBoxMagazineRifleAG80EmptyEXT
+  category: construction-category-cm-box-magazine
+  description: A magazine box that can contain EXT AG80 mags.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxMagazineRifleAG80EXTEmptyBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxMagazineRifleAG80EmptyEXT
+
+- type: constructionGraph
+  id: RuMCBoxMagazineAG80
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: RuMCBoxMagazineRifleAG80Empty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+    - to: RuMCBoxMagazineRifleAG80EmptyAP
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+    - to: RuMCBoxMagazineRifleAG80EmptyEXT
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+  - node: RuMCBoxMagazineRifleAG80Empty
+    entity: RuMCBoxMagazineRifleAG80Empty
+  - node: RuMCBoxMagazineRifleAG80EmptyAP
+    entity: RuMCBoxMagazineRifleAG80EmptyAP
+  - node: RuMCBoxMagazineRifleAG80EmptyEXT
+    entity: RuMCBoxMagazineRifleAG80EmptyEXT
+
+#-------------------------------------------- Type71
+
+- type: construction
+  parent: RMC
+  name: Magazine Box (Type71 Reg)
+  id: RuMCBoxMagazineRifleType71
+  graph: RuMCBoxMagazineType71
+  startNode: start
+  targetNode: RuMCBoxMagazineRifleType71Empty
+  category: construction-category-cm-box-magazine
+  description: A magazine box that can contain regular Type71 mags.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxMagazineRifleType71EmptyBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxMagazineRifleType71Empty
+
+- type: construction
+  parent: RMC
+  name: Magazine Box (Type71 AP)
+  id: RuMCBoxMagazineRifleType71AP
+  graph: RuMCBoxMagazineType71
+  startNode: start
+  targetNode: RuMCBoxMagazineRifleType71EmptyAP
+  category: construction-category-cm-box-magazine
+  description: A magazine box that can contain AP Type71 mags.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxMagazineRifleType71APEmptyBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxMagazineRifleType71EmptyAP
+
+- type: constructionGraph
+  id: RuMCBoxMagazineType71
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: RuMCBoxMagazineRifleType71Empty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+    - to: RuMCBoxMagazineRifleType71EmptyAP
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+  - node: RuMCBoxMagazineRifleType71Empty
+    entity: RuMCBoxMagazineRifleType71Empty
+  - node: RuMCBoxMagazineRifleType71EmptyAP
+    entity: RuMCBoxMagazineRifleType71EmptyAP
+
+#-------------------------------------------- Type64
+
+- type: construction
+  parent: RMC
+  name: Magazine Box (Type64 Reg)
+  id: RuMCBoxMagazineSMGType64
+  graph: RuMCBoxMagazineType64
+  startNode: start
+  targetNode: RuMCBoxMagazineSMGType64Empty
+  category: construction-category-cm-box-magazine
+  description: A magazine box that can contain regular Type64 mags.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxMagazineSMGType64EmptyBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxMagazineSMGType64Empty
+
+- type: constructionGraph
+  id: RuMCBoxMagazineType64
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: RuMCBoxMagazineSMGType64Empty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+  - node: RuMCBoxMagazineSMGType64Empty
+    entity: RuMCBoxMagazineSMGType64Empty
+
+#-------------------------------------------- Type73
+
+- type: construction
+  parent: RMC
+  name: Magazine Box (Type73 Reg)
+  id: RuMCBoxMagazinePistolType73
+  graph: RuMCBoxMagazineType73
+  startNode: start
+  targetNode: RuMCBoxMagazinePistolType73Empty
+  category: construction-category-cm-box-magazine
+  description: A magazine box that can contain regular Type73 mags.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxMagazinePistolType73EmptyBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxMagazinePistolType73Empty
+
+- type: constructionGraph
+  id: RuMCBoxMagazineType73
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: RuMCBoxMagazinePistolType73Empty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+  - node: RuMCBoxMagazinePistolType73Empty
+    entity: RuMCBoxMagazinePistolType73Empty
+
+#-------------------------------------------- NP92
+
+- type: construction
+  parent: RMC
+  name: Magazine Box (NP92 Reg)
+  id: RuMCBoxMagazinePistolNP92
+  graph: RuMCBoxMagazineNP92
+  startNode: start
+  targetNode: RuMCBoxMagazinePistolNP92Empty
+  category: construction-category-cm-box-magazine
+  description: A magazine box that can contain regular NP92 mags.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxMagazinePistolNP92EmptyBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxMagazinePistolNP92Empty
+
+- type: constructionGraph
+  id: RuMCBoxMagazineNP92
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: RuMCBoxMagazinePistolNP92Empty
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+  - node: RuMCBoxMagazinePistolNP92Empty
+    entity: RuMCBoxMagazinePistolNP92Empty
+
+#-------------------------------------------- Misc
+
+- type: construction
+  parent: RMC
+  name: Flare RPO
+  id: RuMCBoxFlare
+  graph: RuMCBoxMisc
+  startNode: start
+  targetNode: RuMCBoxFlare
+  category: construction-category-cm-box-magazine
+  description: A magazine box that can contain regular NP92 mags.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxFlareBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxFlare
+
+- type: construction
+  parent: RMC
+  name: Flare GRACH RPO
+  id: RuMCBoxFlareCAS
+  graph: RuMCBoxMisc
+  startNode: start
+  targetNode: RuMCBoxFlareCAS
+  category: construction-category-cm-box-magazine
+  description: A magazine box that can contain regular NP92 mags.
+  iconColor: "#875f42"
+  objectType: Item
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RuMCBoxFlareCASBuild
+  name: rmc-construction-ammo-boxes
+  prototype: RuMCBoxFlareCAS
+
+- type: constructionGraph
+  id: RuMCBoxMisc
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: RuMCBoxFlare
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+    - to: RuMCBoxFlareCAS
+      steps:
+      - material: RMCSheetCardboard
+        amount: 1
+        doAfter: 0.25
+  - node: RuMCBoxFlare
+    entity: RuMCBoxFlare
+  - node: RuMCBoxFlareCAS
+    entity: RuMCBoxFlareCAS
+

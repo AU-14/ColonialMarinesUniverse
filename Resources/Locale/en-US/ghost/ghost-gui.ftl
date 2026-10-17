@@ -12,20 +12,24 @@ ghost-gui-toggle-hearing-popup-on = You can now hear all messages.
 ghost-gui-toggle-hearing-popup-off = You can now only hear radio and nearby messages.
 
 ghost-target-window-title = Ghost Warp
+ghost-target-window-group-filter = Group
+ghost-target-window-role-filter = Role
 ghost-target-window-current-button = Warp: {$name}
-ghost-target-window-warp-to-most-followed = Warp To Most Followed
+ghost-target-window-warp-to-most-followed = Most Followed
 ghost-target-window-search-placeholder = Search name, role, faction
 ghost-target-window-empty = NO ACTIVE WARP TARGETS
 ghost-target-window-no-results = NO MATCHING TARGETS
 ghost-target-window-location-role = Navigation point
 ghost-target-window-tracked-count = {$count} tracked
 ghost-target-window-tab-military = Military
+ghost-target-window-tab-govfor = GOVFOR
 ghost-target-window-tab-xenos = Xenos
 ghost-target-window-tab-corrupted-hive = Corrupted Hive
 ghost-target-window-tab-opfor = OPFOR
 ghost-target-window-tab-yautja = Yautja
 ghost-target-window-tab-third-party = Third Party
-ghost-target-window-tab-survivors = Survivors
+# CMU14: survivors are shown as civilians.
+ghost-target-window-tab-survivors = Civilians
 ghost-target-window-tab-weya-pmc = WeYu/PMC
 ghost-target-window-tab-clf = CLF
 ghost-target-window-tab-spp = SPP
@@ -83,3 +87,14 @@ ghost-roles-window-rules-footer = The button will enable after {$time} seconds (
 
 ghost-return-to-body-title = Return to Body
 ghost-return-to-body-text = You are being revived! Return to your body?
+
+
+ghost-gui-toggle-lighting-manager-popup-half-bright = Half-Bright.
+
+ghost-target-window-warp-to-title = [bold]Quick Warp[/bold]
+
+ghost-target-window-warp-to-random = Random
+
+ghost-target-window-warp-to-most-followed-tooltip = Warp to the most followed player
+
+ghost-target-window-warp-to-random-tooltip = Warp to a random player

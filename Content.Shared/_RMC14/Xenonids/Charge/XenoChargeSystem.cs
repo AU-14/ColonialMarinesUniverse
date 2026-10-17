@@ -1,3 +1,6 @@
+using Content.Shared.Vehicle.Components;
+using Content.Shared.Vehicle;
+using Content.Shared._RMC14.Vehicle;
 using System.Numerics;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Damage;
@@ -17,6 +20,8 @@ using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.Actions;
 using Content.Shared.CCVar;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
@@ -50,6 +55,10 @@ namespace Content.Shared._RMC14.Xenonids.Charge;
 
 public sealed partial class XenoChargeSystem : EntitySystem
 {
+    [Dependency] private Content.Shared._RMC14.Vehicle.VehicleSystem _rmcVehicles = default!;
+    [Dependency] private VehicleWheelSystem _vehicleWheels = default!;
+    [Dependency] private HardpointSystem _hardpoints = default!;
+    [Dependency] private GridVehicleMoverSystem _gridVehicleMover = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedColorFlashEffectSystem _colorFlash = default!;
@@ -217,7 +226,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
         if (_net.IsClient &&
             damageable != null &&
             damage.Comp.DestroyDamage > FixedPoint2.Zero &&
-            damageable.TotalDamage >= damage.Comp.DestroyDamage)
+            _damageable.GetTotalDamage((damage, damageable)) >= damage.Comp.DestroyDamage)
         {
             _transform.DetachEntity(damage, Transform(damage));
         }
@@ -347,7 +356,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
             Hidden = true,
         };
 
-        _stun.TrySlowdown(xeno, TimeSpan.FromSeconds(0.6f), false, 0f, 0f);
+        _slow.TryRoot(xeno, TimeSpan.FromSeconds(0.6f), refresh: false, applyChemical: true);
         _audio.PlayPredicted(xeno.Comp.ChargeWindupSound, xeno, xeno);
         _doAfter.TryStartDoAfter(doAfter);
     }
@@ -378,6 +387,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
 
         RemCompDeferred<XenoChargingComponent>(xeno);
         xeno.Comp.AlreadyHit.Clear();
+        xeno.Comp.PrimaryTarget = null; // CMU14: the completed charge no longer owns a target.
         Dirty(xeno);
     }
 
@@ -426,7 +436,24 @@ public sealed partial class XenoChargeSystem : EntitySystem
         }
 
         var finalDamage = _xeno.TryApplyXenoSlashDamageMultiplier(targetId, structDamage);
-        var damage = _damageable.TryChangeDamage(targetId, finalDamage, origin: xeno, tool: xeno);
+        // CMU14: retain cursor charge movement and route chassis hits through hardpoint integrity.
+        var isVehicle = HasComp<VehicleWheelSlotsComponent>(targetId);
+        DamageSpecifier? damage;
+        if (isVehicle)
+        {
+            damage = _hardpoints.DamageHardpoint(targetId, targetId, xeno.Comp.VehicleDamage.GetTotal().Float())
+                ? xeno.Comp.VehicleDamage
+                : null;
+            if (_net.IsServer)
+            {
+                if (savedChargeDir is { } direction && !_vehicleWheels.HasAnyFunctionalWheel(targetId))
+                    _gridVehicleMover.TryShoveVehicle(targetId, xeno, direction);
+                if (TryComp(targetId, out GridVehicleMoverComponent? mover))
+                    _rmcVehicles.DoInteriorCrashEffect(targetId, mover.MaxSpeed, mover.MaxSpeed);
+            }
+        }
+        else
+            damage = _damageable.TryChangeDamage(targetId, finalDamage, origin: xeno, tool: xeno);
 
         if (damage?.GetTotal() > FixedPoint2.Zero && !TerminatingOrDeleted(targetId))
         {
@@ -439,7 +466,8 @@ public sealed partial class XenoChargeSystem : EntitySystem
             if (TryComp<DamageableComponent>(targetId, out var damageable))
             {
                 if (damage != null && crush.PassOnDestroy &&
-                    crush.DestroyDamage > FixedPoint2.Zero && damageable.TotalDamage >= crush.DestroyDamage)
+                    crush.DestroyDamage > FixedPoint2.Zero &&
+                    _damageable.GetTotalDamage((targetId, damageable)) >= crush.DestroyDamage)
                 {
                     if (_net.IsClient)
                         _transform.DetachEntity(targetId, Transform(targetId));
@@ -447,7 +475,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
             }
         }
 
-        if (!isValidTarget)
+        if (!isValidTarget || isVehicle)
             return;
 
         _rmcPulling.TryStopAllPullsFromAndOn(targetId);
@@ -656,7 +684,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
 
     private void OnActiveToggleChargingMapInit(Entity<ActiveXenoToggleChargingComponent> ent, ref MapInitEvent args)
     {
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
 
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoToggleChargingActionEvent>(ent))
         {
@@ -666,7 +694,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
 
     private void OnActiveToggleChargingRemove(Entity<ActiveXenoToggleChargingComponent> ent, ref ComponentRemove args)
     {
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
 
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoToggleChargingActionEvent>(ent))
         {
@@ -786,7 +814,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
         }
 
         Dirty(ent);
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
     }
 
     private void OnActiveToggleChargingCollide(Entity<ActiveXenoToggleChargingComponent> ent, ref StartCollideEvent args)
@@ -819,7 +847,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
             xeno.Comp.Direction = DirectionFlag.None;
 
         Dirty(xeno);
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
     }
 
     private void ResetStage(Entity<ActiveXenoToggleChargingComponent> xeno)
@@ -829,7 +857,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
         xeno.Comp.Stage = 0;
 
         Dirty(xeno);
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
     }
 
     private void IncrementStages(Entity<ActiveXenoToggleChargingComponent> ent, int increment)
@@ -840,7 +868,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
             ent.Comp.Stage = Math.Min(charging.MaxStage, ent.Comp.Stage);
 
         Dirty(ent);
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
     }
 
     private DirectionFlag GetHeldButton(EntityUid mover, MoveButtons button)

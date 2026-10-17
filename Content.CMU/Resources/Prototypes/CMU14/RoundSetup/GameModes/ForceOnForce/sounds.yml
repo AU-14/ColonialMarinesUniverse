@@ -1,0 +1,31 @@
+- type: soundCollection
+  id: CMUFoFSirens
+  files:
+  - /Audio/CMU14/ForceOnForce/siren-1.ogg
+  - /Audio/CMU14/ForceOnForce/siren-2.ogg
+  - /Audio/CMU14/ForceOnForce/siren-3.ogg
+  - /Audio/CMU14/ForceOnForce/siren-4.ogg
+
+- type: soundCollection
+  id: CMUFoFFlybys
+  files:
+  - /Audio/CMU14/ForceOnForce/flyby-1.ogg
+  - /Audio/CMU14/ForceOnForce/flyby-2.ogg
+  - /Audio/CMU14/ForceOnForce/flyby-3.ogg
+  - /Audio/CMU14/ForceOnForce/flyby-4.ogg
+
+- type: soundCollection
+  id: CMUFoFLasers
+  files:
+  - /Audio/CMU14/ForceOnForce/laser-1.ogg
+  - /Audio/CMU14/ForceOnForce/laser-2.ogg
+  - /Audio/CMU14/ForceOnForce/laser-3.ogg
+  - /Audio/CMU14/ForceOnForce/laser-4.ogg
+
+- type: soundCollection
+  id: CMUFoFImpacts
+  files:
+  - /Audio/CMU14/ForceOnForce/impact-1.ogg
+  - /Audio/CMU14/ForceOnForce/impact-2.ogg
+  - /Audio/CMU14/ForceOnForce/impact-3.ogg
+  - /Audio/CMU14/ForceOnForce/impact-4.ogg

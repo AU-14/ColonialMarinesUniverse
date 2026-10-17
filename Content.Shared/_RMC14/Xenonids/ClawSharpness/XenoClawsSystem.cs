@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Xenonids.Charge;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Doors.Components;
 using Content.Shared.Weapons.Melee;
@@ -67,6 +68,10 @@ public sealed partial class XenoClawsSystem : EntitySystem
 
         if (hasRequiredClaws || hasRequiredTier)
         {
+            // CMU14: preserve valid claw damage.
+            if (receiver.UseWeaponDamage)
+                return;
+
             args.Damage = new DamageSpecifier(_protoManager.Index(_clawsDamageGroup),
                                               receiver.MaxHealth / receiver.HitsToDestroy);
         }

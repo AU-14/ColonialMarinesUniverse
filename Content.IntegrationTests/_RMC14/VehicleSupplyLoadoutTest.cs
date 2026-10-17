@@ -1,18 +1,30 @@
+#pragma warning disable RA0002 // Explicitly arrange platoon and depot ownership.
+using Content.Server.CMU14.Round;
+using Content.Shared.CMU14;
+using Content.Shared.CMU14.Fighter;
+using Content.Shared.CMU14.util;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+using System.Reflection;
 using Content.Server._RMC14.Vehicle;
 using Content.Shared._RMC14.Vehicle.Supply;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.GameTicking;
 using Content.Shared.UserInterface;
 using NUnit.Framework;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 
 namespace Content.IntegrationTests._RMC14;
 
 [TestFixture]
 public sealed class VehicleSupplyLoadoutTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<PlatoonPrototype> USCMPrototype = "USCM";
+
     private const string ConsoleId = "VehicleSupplyConsole";
 
     [Test]
@@ -43,6 +55,22 @@ public sealed class VehicleSupplyLoadoutTest
 
             foreach (var entry in console!.Vehicles)
             {
+                Assert.That(prototypes.TryIndex<EntityPrototype>(entry.Vehicle.Id, out var vehicle), Is.True);
+                if (vehicle!.TryComp<FighterGroundComponent>(out _, factory))
+                {
+                    // Fighter pylons are serviced with a power loader, rather than ItemSlots loadouts.
+                    Assert.That(entry.LoadoutCategories, Is.Empty);
+                    Assert.That(entry.Bundle.Select(id => id.Id), Does.Contain("CMUFighterLandingPadFolded"));
+                    Assert.That(entry.Hardpoints.Select(id => id.Id), Is.SupersetOf(new[]
+                    {
+                        "RMCDropshipAttachmentRocketPod", "RMCDropshipAttachmentAmmoGAU",
+                        "RMCDropshipAttachmentAmmoRocketMiniMike", "RMCDropshipAttachmentAmmoRocketKeeper",
+                        "RMCDropshipAttachmentAmmoRocketWidowmaker", "RMCDropshipAttachmentAmmoRocketHarpoon",
+                        "RMCDropshipAttachmentAmmoRocketNapalm",
+                    }));
+                    continue;
+                }
+
                 Assert.That(entry.LoadoutCategories, Is.Not.Empty, $"{entry.Vehicle.Id} has no loadout categories");
 
                 foreach (var cat in entry.LoadoutCategories)
@@ -90,7 +118,7 @@ public sealed class VehicleSupplyLoadoutTest
     }
 
     [Test]
-    public async Task BlackfootEntriesRaisePackedSupportBundle()
+    public async Task BlackfootCatalogOnlyEnablesArmedAndTransport()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -103,22 +131,8 @@ public sealed class VehicleSupplyLoadoutTest
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
             Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
-            var blackfoots = console!.Vehicles
-                .Where(v => v.Vehicle.Id.StartsWith("VehicleBlackfoot"))
-                .ToList();
-
-            Assert.That(blackfoots, Is.Not.Empty);
-            foreach (var entry in blackfoots)
-            {
-                Assert.That(entry.Bundle.Select(id => id.Id), Is.EquivalentTo(new[]
-                {
-                    "CMUBlackfootLandingPadFoldedProp",
-                    "CMUBlackfootFuelPumpCrate",
-                    "CMUBlackfootFlightComputerCrate",
-                    "CMUBlackfootAerospaceTug",
-                }), entry.Vehicle.Id);
-                Assert.That(entry.Bundle.Select(id => id.Id), Does.Not.Contain("CMUBlackfootLandingPad"));
-            }
+            Assert.That(console!.Vehicles.Where(entry => entry.Vehicle.Id.StartsWith("VehicleBlackfoot")).Select(e => e.Vehicle.Id),
+                Is.EquivalentTo(new[] { "VehicleBlackfootTransport", "VehicleBlackfootDoorGunVariant" }));
         });
 
         await pair.CleanReturnAsync();
@@ -147,9 +161,8 @@ public sealed class VehicleSupplyLoadoutTest
                 "VehicleAPC", "VehicleAPCMed", "VehicleAPCCommand", "VehicleSPPAPC", "VehicleAev",
                 "VehicleTank", "VehicleSPPTank",
                 "VehicleSPPVan", "VehicleSPPVanArmed", "VehicleSPPVanMedical", "VehicleSPPVanPrisoner", "VehicleSPPVanLogistics",
-                // "VehicleBlackfoot", "VehicleBlackfootTransport", "VehicleBlackfootRecon"
             }));
-            Assert.That(entries.Keys, Does.Not.Contain("VehicleBlackfootDoorGunVariant"));
+            Assert.That(entries.Keys, Does.Contain("VehicleBlackfootDoorGunVariant"));
 
             AssertHardpoints(entries, "VehicleHumvee", HumveeArmedHardpoints);
             AssertHardpoints(entries, "VehicleHumveeMedical", HumveeSupportHardpoints);
@@ -163,17 +176,11 @@ public sealed class VehicleSupplyLoadoutTest
             AssertHardpoints(entries, "VehicleTank", TankHardpoints);
             AssertHardpoints(entries, "VehicleSPPTank", SppTankHardpoints);
 
-            // AssertHardpoints(entries, "VehicleBlackfoot", BlackfootBaseHardpoints);
-            // AssertHardpoints(entries, "VehicleBlackfootRecon", BlackfootReconHardpoints);
-            // AssertHardpoints(entries, "VehicleBlackfootTransport", BlackfootBaseHardpoints);
 
             AssertEntryGroup(entries, "VehicleHumvee", "vehicle-support");
             AssertEntryGroup(entries, "VehicleHumveeMedical", "vehicle-support");
             AssertEntryGroup(entries, "VehicleHumveeTransport", "vehicle-support");
             AssertEntryGroup(entries, "VehicleSPPAPC", "vehicle-apc");
-            // AssertEntryGroup(entries, "VehicleBlackfoot", "vehicle-support");
-            // AssertEntryGroup(entries, "VehicleBlackfootRecon", "vehicle-support");
-            // AssertEntryGroup(entries, "VehicleBlackfootTransport", "vehicle-support");
             AssertEntryGroup(entries, "VehicleAPC", "vehicle-apc");
             AssertEntryGroup(entries, "VehicleAPCMed", "vehicle-apc");
             AssertEntryGroup(entries, "VehicleAPCCommand", "vehicle-apc");
@@ -181,8 +188,7 @@ public sealed class VehicleSupplyLoadoutTest
             AssertEntryGroup(entries, "VehicleSPPTank", "vehicle-tank");
 
             Assert.That(TankHardpoints, Does.Not.Contain("VehicleTankLTBCannon"));
-            Assert.That(SppTankHardpoints, Does.Not.Contain("VehicleSPPTankRailgun"));
-            // Assert.That(BlackfootReconHardpoints, Does.Not.Contain("VehicleBlackfootDoorGun"));
+            Assert.That(SppTankHardpoints, Does.Contain("VehicleSPPTankRailgun"));
         });
 
         await pair.CleanReturnAsync();
@@ -244,8 +250,11 @@ public sealed class VehicleSupplyLoadoutTest
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
             Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
-            vehicleIds = console!.Vehicles.Select(v => v.Vehicle.Id.ToLowerInvariant()).ToList();
+            vehicleIds = console!.Vehicles
+                .Where(v => prototypes.Index<PlatoonPrototype>(USCMPrototype).VehicleSupplyCatalog.Contains(v.Vehicle))
+                .Select(v => v.Vehicle.Id.ToLowerInvariant()).ToList();
 
+            ConfigureUSCM(entMan, map.GridCoords.EntityId);
             consoleUid = entMan.SpawnEntity(ConsoleId, map.GridCoords);
             lift = entMan.SpawnEntity("VehicleLift", map.GridCoords);
         });
@@ -266,53 +275,6 @@ public sealed class VehicleSupplyLoadoutTest
 
             var liftComp = server.EntMan.GetComponent<VehicleSupplyLiftComponent>(lift);
             Assert.That(liftComp.Stored.Keys, Is.SupersetOf(vehicleIds));
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task ConsoleHidesOrderedVehicleAndClaimedGroup()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-        EntityUid consoleUid = default;
-        EntityUid lift = default;
-
-        await server.WaitPost(() =>
-        {
-            var entMan = server.EntMan;
-            consoleUid = entMan.SpawnEntity(ConsoleId, map.GridCoords);
-            lift = entMan.SpawnEntity("VehicleLift", map.GridCoords);
-        });
-
-        await pair.RunTicksSync(5);
-
-        await server.WaitPost(() =>
-        {
-            var entMan = server.EntMan;
-            var liftComp = entMan.GetComponent<VehicleSupplyLiftComponent>(lift);
-            liftComp.Ordered.Add("vehicleapc");
-            liftComp.OrderedGroups["vehicle-apc"] = "vehicleapc";
-            liftComp.Stored.Remove("vehicleapc");
-            entMan.Dirty(lift, liftComp);
-
-            var ev = new BeforeActivatableUIOpenEvent(consoleUid);
-            entMan.EventBus.RaiseLocalEvent(consoleUid, ev);
-        });
-
-        await server.WaitAssertion(() =>
-        {
-            var ui = server.EntMan.System<SharedUserInterfaceSystem>();
-            Assert.That(ui.TryGetUiState<VehicleSupplyBuiState>(consoleUid, VehicleSupplyUIKey.Key, out var state), Is.True);
-
-            var available = state!.Available.Select(v => v.Id).ToHashSet();
-            Assert.That(available, Does.Not.Contain("VehicleAPC"));
-            Assert.That(available, Does.Not.Contain("VehicleAPCMed"));
-            Assert.That(available, Does.Not.Contain("VehicleAPCCommand"));
-            Assert.That(available, Does.Contain("VehicleHumvee"));
-            Assert.That(available, Does.Contain("VehicleTank"));
         });
 
         await pair.CleanReturnAsync();
@@ -339,7 +301,9 @@ public sealed class VehicleSupplyLoadoutTest
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
             Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
-            vehicleIds = console!.Vehicles.Select(v => v.Vehicle.Id.ToLowerInvariant()).ToList();
+            vehicleIds = console!.Vehicles
+                .Where(v => prototypes.Index<PlatoonPrototype>(USCMPrototype).VehicleSupplyCatalog.Contains(v.Vehicle))
+                .Select(v => v.Vehicle.Id.ToLowerInvariant()).ToList();
             lift = entMan.SpawnEntity("VehicleLift", map.GridCoords);
         });
 
@@ -347,6 +311,7 @@ public sealed class VehicleSupplyLoadoutTest
 
         await server.WaitPost(() =>
         {
+            ConfigureUSCM(server.EntMan, map.GridCoords.EntityId);
             consoleUid = server.EntMan.SpawnEntity(ConsoleId, map.GridCoords);
         });
 
@@ -372,7 +337,6 @@ public sealed class VehicleSupplyLoadoutTest
     }
 
     [Test]
-    [Ignore("Blackfoot commented out from vehicle_supply.yml (PR1625)")]
     public async Task BlackfootBundleSpawnsPackedSupportObjects()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -391,7 +355,7 @@ public sealed class VehicleSupplyLoadoutTest
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
             Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
-            var entry = console!.Vehicles.Single(v => v.Vehicle.Id == "VehicleBlackfoot");
+            var entry = console!.Vehicles.Single(v => v.Vehicle.Id == "VehicleBlackfootTransport");
             Assert.That(supply.DebugSpawnBundleForTest(lift, entry), Is.True);
         });
 
@@ -523,11 +487,11 @@ public sealed class VehicleSupplyLoadoutTest
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var map = await pair.CreateTestMap();
-        EntityUid reconBlackfoot = default;
+        EntityUid armedBlackfoot = default;
 
         await server.WaitPost(() =>
         {
-            reconBlackfoot = server.EntMan.SpawnEntity("VehicleBlackfootRecon", map.GridCoords);
+            armedBlackfoot = server.EntMan.SpawnEntity("VehicleBlackfootDoorGunVariant", map.GridCoords);
         });
 
         await pair.RunTicksSync(5);
@@ -543,20 +507,20 @@ public sealed class VehicleSupplyLoadoutTest
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
             Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
-            var reconEntry = console!.Vehicles.Single(v => v.Vehicle.Id == "VehicleBlackfootRecon");
+            var armedEntry = console!.Vehicles.Single(v => v.Vehicle.Id == "VehicleBlackfootDoorGunVariant");
             Assert.That(supply.DebugApplyLoadoutForTest(
-                reconBlackfoot,
-                reconEntry,
-                new Dictionary<string, string> { ["secondary"] = "VehicleBlackfootReconSystem" }),
+                armedBlackfoot,
+                armedEntry,
+                new Dictionary<string, string> { ["primary"] = "VehicleBlackfootDoorGun" }),
                 Is.True);
-            AssertSlotItem(entMan, itemSlots, reconBlackfoot, "recon", "VehicleBlackfootReconSystem");
+            AssertSlotItem(entMan, itemSlots, armedBlackfoot, "door-gun", "VehicleBlackfootDoorGun");
 
             Assert.That(supply.DebugApplyLoadoutForTest(
-                reconBlackfoot,
-                reconEntry,
-                new Dictionary<string, string> { ["support"] = "VehicleBlackfootSensorArray" }),
+                armedBlackfoot,
+                armedEntry,
+                new Dictionary<string, string> { ["secondary"] = "VehicleBlackfootLaunchers" }),
                 Is.True);
-            AssertSlotItem(entMan, itemSlots, reconBlackfoot, "sensors", "VehicleBlackfootSensorArray");
+            AssertSlotItem(entMan, itemSlots, armedBlackfoot, "launchers", "VehicleBlackfootLaunchers");
         });
 
         await pair.CleanReturnAsync();
@@ -574,9 +538,7 @@ public sealed class VehicleSupplyLoadoutTest
         "VehicleHumveeWheel",
         "VehicleHumveeTurret",
         "VehicleHumveeTurretArmed",
-        "VehicleHumveeARCTurret",
         "VehicleHumveeCannon",
-        "VehicleHumveeARCCannon",
         "VehicleHumveeLauncher",
         "VehicleHumveeSnowplow",
         "VehicleHumveeOverlight",
@@ -634,6 +596,7 @@ public sealed class VehicleSupplyLoadoutTest
         "VehicleTankTreads",
         "VehicleTankReinforcedTreads",
         "VehicleSPPTankP17702",
+        "VehicleSPPTankRailgun",
         "VehicleSPPTankHJ35TLauncher",
         "VehicleSPPTankCupola",
         "VehicleSPPTankReactiveArmor",
@@ -717,6 +680,22 @@ public sealed class VehicleSupplyLoadoutTest
         }
 
         return count;
+    }
+
+    private static void ConfigureUSCM(IEntityManager entMan, EntityUid grid)
+    {
+        // Pooled tests delete maps without restarting the round's systems.
+        typeof(VehicleSupplySystem).GetMethod("OnSupplyRoundRestart", BindingFlags.Instance | BindingFlags.NonPublic)!
+            .Invoke(entMan.System<VehicleSupplySystem>(), new object[] { new RoundRestartCleanupEvent() });
+        var maps = entMan.System<SharedMapSystem>();
+        var comp = entMan.GetComponent<MapGridComponent>(grid);
+        var tile = maps.GetAllTiles(grid, comp).First().Tile;
+        for (var x = -6; x < 8; x++)
+        for (var y = -6; y < 8; y++)
+            maps.SetTile(grid, comp, new EntityCoordinates(grid, new Vector2(x, y)), tile);
+        entMan.EnsureComponent<ShipFactionComponent>(grid).Faction = "govfor";
+        entMan.System<PlatoonSpawnRuleSystem>().SelectedGovforPlatoon =
+            Robust.Shared.IoC.IoCManager.Resolve<IPrototypeManager>().Index<PlatoonPrototype>(USCMPrototype);
     }
 
     private static void ClearVehicleTechUnlocks(IEntityManager entMan)

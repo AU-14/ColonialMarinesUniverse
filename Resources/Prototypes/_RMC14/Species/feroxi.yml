@@ -1,156 +1,184 @@
-# port from DeltaV
+# Ported from Delta-V.
 
 - type: species
   id: Feroxi
   name: species-name-feroxi
   roundStart: false
   prototype: RMCMobFeroxi
-  sprites: MobFeroxiSprites
   defaultSkinTone: "#985629"
-  markingLimits: MobFeroxiMarkingLimits
-  dollPrototype: MobFeroxiDummy
+  dollPrototype: AppearanceFeroxi
   skinColoration: Hues
   maleFirstNames: names_feroxi_male
   femaleFirstNames: names_feroxi_female
   lastNames: names_feroxi_last
+  defaultSoundsBySex:
+  - RMCMaleFeroxi
+  - RMCFemaleFeroxi
+  - RMCMaleFeroxi
+  voices:
+  - RMCMaleFeroxi
+  - RMCFemaleFeroxi
 
-- type: speciesBaseSprites
-  id: MobFeroxiSprites
-  sprites:
-    Head: MobFeroxiHead
-    Snout: MobHumanoidAnyMarking
-    Chest: MobFeroxiTorso
-    UndergarmentTop: MobHumanoidAnyMarking
-    UndergarmentBottom: MobHumanoidAnyMarking
-    HeadTop: MobHumanoidAnyMarking
-    HeadSide: MobHumanoidAnyMarking
-    Tail: MobHumanoidAnyMarking
-    Eyes: MobHumanoidEyes
-    LArm: MobFeroxiLArm
-    RArm: MobFeroxiRArm
-    LHand: MobFeroxiLHand
-    RHand: MobFeroxiRHand
-    LLeg: MobFeroxiLLeg
-    RLeg: MobFeroxiRLeg
-    LFoot: MobFeroxiLFoot
-    RFoot: MobFeroxiRFoot
-
-- type: markingPoints
-  id: MobFeroxiMarkingLimits
-  points:
-    Head:
-      points: 3
+- type: markingsGroup
+  parent: Undergarments
+  id: Feroxi
+  limits:
+    enum.HumanoidVisualLayers.Head:
+      limit: 3
       required: false
-    Tail:
-      points: 1
+    enum.HumanoidVisualLayers.Tail:
+      limit: 1
       required: true
-      defaultMarkings: [ FeroxiTailAndDorsal ]
-    Legs:
-      points: 1
+      default: [ FeroxiTailAndDorsal ]
+    enum.HumanoidVisualLayers.LLeg:
+      limit: 1
       required: false
-    Arms:
-      points: 1
+    enum.HumanoidVisualLayers.RLeg:
+      limit: 1
       required: false
-    Snout:
-      points: 1
-      required: true
-      defaultMarkings: [ FeroxiSnout ]
-    HeadTop:
-      points: 1
-      required: true
-      defaultMarkings: [ FeroxiEars ]
-    Chest:
-      points: 1
+    enum.HumanoidVisualLayers.LFoot:
+      limit: 1
       required: false
-    UndergarmentBottom:
-      points: 1
+    enum.HumanoidVisualLayers.RFoot:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.LArm:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.RArm:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.LHand:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.RHand:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.Snout:
+      limit: 1
       required: true
-      defaultMarkings: [ RMCUnderwearBoxersBlue ]
-    UndergarmentTop:
-      points: 1
+      default: [ FeroxiSnout ]
+    enum.HumanoidVisualLayers.HeadTop:
+      limit: 1
       required: true
-      defaultMarkings: [ RMCUndershirtStandard ]
+      default: [ FeroxiEars ]
+    enum.HumanoidVisualLayers.Chest:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.UndergarmentBottom:
+      limit: 1
+      required: true
+      default: [ RMCUnderwearBoxersBlue ]
+    enum.HumanoidVisualLayers.UndergarmentTop:
+      limit: 1
+      required: true
+      default: [ RMCUndershirtStandard ]
 
-- type: humanoidBaseSprite
-  id: MobFeroxiHead
-  baseSprite:
-    sprite: _RMC14/Mobs/Feroxi/parts.rsi
-    state: head_m
+- type: entity
+  parent: BaseSpeciesAppearance
+  id: AppearanceFeroxi
+  categories: [ HideSpawnMenu ]
+  name: feroxi appearance
+  components:
+  - type: InitialBody
+    organs:
+      Torso: OrganFeroxiTorso
+      Head: OrganFeroxiHead
+      ArmLeft: OrganFeroxiArmLeft
+      ArmRight: OrganFeroxiArmRight
+      HandRight: OrganFeroxiHandRight
+      HandLeft: OrganFeroxiHandLeft
+      LegLeft: OrganFeroxiLegLeft
+      LegRight: OrganFeroxiLegRight
+      FootLeft: OrganFeroxiFootLeft
+      FootRight: OrganFeroxiFootRight
+      Brain: OrganHumanBrain
+      Eyes: OrganHumanEyes
+      Tongue: OrganHumanTongue
+      Appendix: OrganHumanAppendix
+      Ears: OrganHumanEars
+      Lungs: OrganHumanLungs
+      Heart: OrganHumanHeart
+      Stomach: OrganHumanStomach
+      Liver: OrganHumanLiver
+      Kidneys: OrganHumanKidneys
+  - type: HumanoidProfile
+    species: Feroxi
+    voice: RMCMaleFeroxi
+  - type: Inventory
+    speciesId: feroxi
 
-- type: humanoidBaseSprite
-  id: MobFeroxiHeadMale
-  baseSprite:
-    sprite: _RMC14/Mobs/Feroxi/parts.rsi
-    state: head_m
+- type: entity
+  parent: OrganBaseOrganic
+  id: OrganFeroxi
+  abstract: true
+  suffix: feroxi
 
-- type: humanoidBaseSprite
-  id: MobFeroxiHeadFemale
-  baseSprite:
-    sprite: _RMC14/Mobs/Feroxi/parts.rsi
-    state: head_f
+- type: entity
+  id: OrganFeroxiVisual
+  abstract: true
+  components:
+  - type: VisualOrgan
+    data:
+      sprite: _RMC14/Mobs/Feroxi/parts.rsi
+  - type: VisualOrganMarkings
+    markingData:
+      group: Feroxi
 
-- type: humanoidBaseSprite
-  id: MobFeroxiTorso
-  baseSprite:
+- type: entity
+  parent: [ OrganFeroxi, OrganFeroxiVisual ]
+  id: OrganFeroxiExternal
+  abstract: true
+  components:
+  - type: Sprite
     sprite: _RMC14/Mobs/Feroxi/parts.rsi
-    state: torso_m
 
-- type: humanoidBaseSprite
-  id: MobFeroxiTorsoMale
-  baseSprite:
-    sprite: _RMC14/Mobs/Feroxi/parts.rsi
-    state: torso_m
+- type: entity
+  parent: [ OrganBaseTorsoSexed, OrganBaseTorso, OrganFeroxiExternal ]
+  id: OrganFeroxiTorso
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.UndergarmentTop
 
-- type: humanoidBaseSprite
-  id: MobFeroxiTorsoFemale
-  baseSprite:
-    sprite: _RMC14/Mobs/Feroxi/parts.rsi
-    state: torso_f
+- type: entity
+  parent: [ OrganBaseHeadSexed, OrganBaseHead, OrganFeroxiExternal ]
+  id: OrganFeroxiHead
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.Snout
+    - enum.HumanoidVisualLayers.HeadTop
+    - enum.HumanoidVisualLayers.HeadSide
 
-- type: humanoidBaseSprite
-  id: MobFeroxiLLeg
-  baseSprite:
-    sprite: _RMC14/Mobs/Feroxi/parts.rsi
-    state: l_leg
+- type: entity
+  parent: [ OrganBaseArmLeft, OrganFeroxiExternal ]
+  id: OrganFeroxiArmLeft
 
-- type: humanoidBaseSprite
-  id: MobFeroxiLHand
-  baseSprite:
-    sprite: _RMC14/Mobs/Feroxi/parts.rsi
-    state: l_hand
+- type: entity
+  parent: [ OrganBaseArmRight, OrganFeroxiExternal ]
+  id: OrganFeroxiArmRight
 
-- type: humanoidBaseSprite
-  id: MobFeroxiLArm
-  baseSprite:
-    sprite: _RMC14/Mobs/Feroxi/parts.rsi
-    state: l_arm
+- type: entity
+  parent: [ OrganBaseHandLeft, OrganFeroxiExternal ]
+  id: OrganFeroxiHandLeft
 
-- type: humanoidBaseSprite
-  id: MobFeroxiLFoot
-  baseSprite:
-    sprite: _RMC14/Mobs/Feroxi/parts.rsi
-    state: l_foot
+- type: entity
+  parent: [ OrganBaseHandRight, OrganFeroxiExternal ]
+  id: OrganFeroxiHandRight
 
-- type: humanoidBaseSprite
-  id: MobFeroxiRLeg
-  baseSprite:
-    sprite: _RMC14/Mobs/Feroxi/parts.rsi
-    state: r_leg
+- type: entity
+  parent: [ OrganBaseLegLeft, OrganFeroxiExternal ]
+  id: OrganFeroxiLegLeft
 
-- type: humanoidBaseSprite
-  id: MobFeroxiRHand
-  baseSprite:
-    sprite: _RMC14/Mobs/Feroxi/parts.rsi
-    state: r_hand
+- type: entity
+  parent: [ OrganBaseLegRight, OrganFeroxiExternal ]
+  id: OrganFeroxiLegRight
 
-- type: humanoidBaseSprite
-  id: MobFeroxiRArm
-  baseSprite:
-    sprite: _RMC14/Mobs/Feroxi/parts.rsi
-    state: r_arm
+- type: entity
+  parent: [ OrganBaseFootLeft, OrganFeroxiExternal ]
+  id: OrganFeroxiFootLeft
 
-- type: humanoidBaseSprite
-  id: MobFeroxiRFoot
-  baseSprite:
-    sprite: _RMC14/Mobs/Feroxi/parts.rsi
-    state: r_foot
+- type: entity
+  parent: [ OrganBaseFootRight, OrganFeroxiExternal ]
+  id: OrganFeroxiFootRight

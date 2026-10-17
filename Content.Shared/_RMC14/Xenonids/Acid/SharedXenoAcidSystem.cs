@@ -11,9 +11,9 @@ using Content.Shared.Explosion.EntitySystems;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Coordinates;
 using Content.Shared.Body.Part;
-using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
@@ -21,6 +21,7 @@ using Content.Shared.Item;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Storage;
+using Content.Shared.Storage.Components;
 using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Physics;
@@ -40,6 +41,7 @@ namespace Content.Shared._RMC14.Xenonids.Acid;
 
 public abstract partial class SharedXenoAcidSystem : EntitySystem
 {
+    [Dependency] private HardpointSystem _hardpoints = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private DamageableSystem _damageable = default!;
@@ -49,7 +51,6 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private XenoAcidHoleSystem _acidHole = default!;
     [Dependency] protected IPrototypeManager PrototypeManager = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -137,7 +138,7 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
                 target = containedEntity;
             else
             {
-                _popup.PopupClient(Loc.GetString("cm-xeno-acid-not-corrodible", ("target", target)), xeno, xeno, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("cm-xeno-acid-not-corrodible", ("target", target)), xeno, xeno, PopupType.SmallCaution);
                 return;
             }
         }
@@ -176,7 +177,7 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
         if (_interaction.InRangeUnobstructed(xeno.Owner, target, range))
             return true;
 
-        _popup.PopupClient(Loc.GetString("shared-interaction-system-in-range-unobstructed-cannot-reach"), xeno, xeno, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("shared-interaction-system-in-range-unobstructed-cannot-reach"), xeno, xeno, PopupType.SmallCaution);
         return false;
     }
 
@@ -201,6 +202,24 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
 
         if (!xeno.Comp.CanMeltStructures && corrodible.Structure)
             return;
+
+        if (HasComp<HardpointSlotsComponent>(target))
+        {
+            if (args.PlasmaCost != 0 && !_xenoPlasma.TryRemovePlasmaPopup(xeno.Owner, args.PlasmaCost))
+                return;
+
+            if (args.EnergyCost != 0 && !_xenoEnergy.TryRemoveEnergyPopup(xeno.Owner, args.EnergyCost))
+                return;
+
+            if (_net.IsClient)
+                return;
+
+            args.Handled = true;
+
+            var vehicleDamage = args.VehicleDamage ?? GetDefaultVehicleAcidDamage(args.Strength);
+            _hardpoints.DamageHardpoint(target, target, vehicleDamage);
+            return;
+        }
 
         // Re-check if acid can be replaced at DoAfter end to prevent race conditions
         // (e.g., weak acid downgrading strong acid if both DoAfters were started before any completed)
@@ -267,7 +286,7 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
             return;
 
         args.Cancel();
-        _popup.PopupClient(Loc.GetString("rmc-acid-pickup-blocked", ("target", args.Item)), args.User, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("rmc-acid-pickup-blocked", ("target", args.Item)), args.User, args.User, PopupType.SmallCaution);
     }
 
     private void OnAcidVaporHit<T>(Entity<T> ent, ref VaporHitEvent args) where T : Component
@@ -278,25 +297,20 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
         if (!HasComp<ItemComponent>(ent.Owner))
             return;
 
-        var vaporSolution = (args.Solution.Owner, (SolutionContainerManagerComponent?) args.Solution.Comp);
-        foreach (var (_, solution) in _solutionContainer.EnumerateSolutions(vaporSolution))
+        if (!args.Solution.Comp.Solution.ContainsReagent(AcidRemovedBy, null))
+            return;
+
+        if (HasComp<GunComponent>(ent.Owner) &&
+            (!TryComp(ent.Owner, out GunSecondWindComponent? secondWind) || !secondWind.HasSecondWind))
         {
-            if (!solution.Comp.Solution.ContainsReagent(AcidRemovedBy, null))
-                continue;
-
-            if (HasComp<GunComponent>(ent.Owner) &&
-                (!TryComp(ent.Owner, out GunSecondWindComponent? secondWind) || !secondWind.HasSecondWind))
-            {
-                _popup.PopupEntity(
-                    Loc.GetString("rmc-acid-gun-second-wind-spent", ("target", ent.Owner)),
-                    ent.Owner,
-                    PopupType.SmallCaution);
-                return;
-            }
-
-            RemoveAcid(ent.Owner);
-            break;
+            _popup.PopupEntity(
+                Loc.GetString("rmc-acid-gun-second-wind-spent", ("target", ent.Owner)),
+                ent.Owner,
+                PopupType.SmallCaution);
+            return;
         }
+
+        RemoveAcid(ent.Owner);
     }
 
     private void OnPickupAttempt(PickupAttemptEvent args)
@@ -311,7 +325,7 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
         }
 
         args.Cancel();
-        _popup.PopupClient(Loc.GetString("rmc-acid-pickup-blocked", ("target", args.Item)), args.User, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("rmc-acid-pickup-blocked", ("target", args.Item)), args.User, args.User, PopupType.SmallCaution);
     }
 
     private bool CheckCorrodiblePopupsWithReplacement(Entity<XenoAcidComponent> xeno, EntityUid target, XenoAcidStrength newStrength, out TimeSpan time, out float mult)
@@ -321,7 +335,7 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
 
         if (HasComp<VehicleInteriorIndestructibleComponent>(target))
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-acid-not-corrodible", ("target", target)), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-acid-not-corrodible", ("target", target)), xeno, xeno, PopupType.SmallCaution);
             return false;
         }
 
@@ -329,13 +343,13 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
             !TryComp(target, out CorrodibleComponent? corrodible) ||
             !corrodible.IsCorrodible)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-acid-not-corrodible", ("target", target)), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-acid-not-corrodible", ("target", target)), xeno, xeno, PopupType.SmallCaution);
             return false;
         }
 
         if (_acidHole.HasActiveHole(target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-acid-hole-already-weakened"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-acid-hole-already-weakened"), xeno, xeno, PopupType.SmallCaution);
             return false;
         }
 
@@ -344,21 +358,21 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
         {
             if (!CanReplaceAcid(target, newStrength))
             {
-                _popup.PopupClient(Loc.GetString("cm-xeno-acid-already-corroding", ("target", target)), xeno, xeno);
+                _popup.PopupEntity(Loc.GetString("cm-xeno-acid-already-corroding", ("target", target)), xeno, xeno);
                 return false;
             }
         }
 
         if (!xeno.Comp.CanMeltStructures && corrodible.Structure)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-acid-structure-unmeltable"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-acid-structure-unmeltable"), xeno, xeno);
             return false;
         }
 
         var hasRequiredAcidStrength = newStrength.CompareTo(corrodible.MinimumAcidStrength) >= 0;
         if (!hasRequiredAcidStrength)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-acid-too-weak", ("target", target)), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-acid-too-weak", ("target", target)), xeno, xeno, PopupType.SmallCaution);
             return false;
         }
 
@@ -457,7 +471,8 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
                 continue;
             }
 
-            _entityStorage.EmptyContents(uid);
+            if (TryComp(uid, out EntityStorageComponent? entityStorage))
+                _entityStorage.EmptyContents(uid, entityStorage);
 
             if (TryComp(uid, out StorageComponent? storage))
             {
@@ -485,6 +500,16 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
         Dirty(uid, secondWind);
         RemoveAcid(uid);
         return true;
+    }
+
+    private static float GetDefaultVehicleAcidDamage(XenoAcidStrength strength)
+    {
+        return strength switch
+        {
+            XenoAcidStrength.Weak => 16f,
+            XenoAcidStrength.Strong => 100f,
+            _ => 40f,
+        };
     }
 
     public bool IsMelted(EntityUid uid)

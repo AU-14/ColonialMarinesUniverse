@@ -6,9 +6,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
       state: evolve
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoOpenEvolutionsActionEvent
 
@@ -20,9 +22,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
       state: xeno_deevolve
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoOpenDevolveActionEvent
 

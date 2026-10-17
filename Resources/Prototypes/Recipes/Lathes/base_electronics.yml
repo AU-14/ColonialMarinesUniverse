@@ -5,24 +5,24 @@
   id: BaseElectronicsRecipe
   completetime: 2
   materials:
-    Steel: 100
-    Plastic: 300
+    CMSteel: 100 # CMU14: fork material ids (CMSteel/CMGlass/RMCPlastic), not upstream
+    RMCPlastic: 300 # CMU14: fork material ids (CMSteel/CMGlass/RMCPlastic), not upstream
 
 - type: latheRecipe
   parent: BaseElectronicsRecipe
   abstract: true
   id: BaseCheapElectronicsRecipe
   materials:
-    Steel: 50
-    Plastic: 50
+    CMSteel: 50 # CMU14: fork material ids (CMSteel/CMGlass/RMCPlastic), not upstream
+    RMCPlastic: 50 # CMU14: fork material ids (CMSteel/CMGlass/RMCPlastic), not upstream
 
 - type: latheRecipe
   parent: BaseElectronicsRecipe
   abstract: true
   id: BaseCheapCircuitboardRecipe
   materials:
-     Steel: 50
-     Glass: 250
+     CMSteel: 50 # CMU14: fork materials (CMSteel/CMGlass), not upstream Steel/Glass
+     CMGlass: 250 # CMU14: fork materials (CMSteel/CMGlass), not upstream Steel/Glass
 
 - type: latheRecipe
   parent: BaseElectronicsRecipe
@@ -30,16 +30,16 @@
   id: BaseCircuitboardRecipe
   completetime: 4
   materials:
-    Steel: 100
-    Glass: 500
+    CMSteel: 100 # CMU14: fork material ids (CMSteel/CMGlass/RMCPlastic), not upstream
+    CMGlass: 500 # CMU14: fork material ids (CMSteel/CMGlass/RMCPlastic), not upstream
 
 - type: latheRecipe
   parent: BaseCircuitboardRecipe
   abstract: true
   id: BaseGoldCircuitboardRecipe
   materials:
-    Steel: 100
-    Glass: 500
+    CMSteel: 100 # CMU14: fork material ids (CMSteel/CMGlass/RMCPlastic), not upstream
+    CMGlass: 500 # CMU14: fork material ids (CMSteel/CMGlass/RMCPlastic), not upstream
     Gold: 100
 
 - type: latheRecipe
@@ -47,8 +47,8 @@
   abstract: true
   id: BaseSilverCircuitboardRecipe
   materials:
-    Steel: 100
-    Glass: 500
+    CMSteel: 100 # CMU14: fork material ids (CMSteel/CMGlass/RMCPlastic), not upstream
+    CMGlass: 500 # CMU14: fork material ids (CMSteel/CMGlass/RMCPlastic), not upstream
     Silver: 100
 
 - type: latheRecipe
@@ -56,6 +56,6 @@
   abstract: true
   id: BaseBananiumCircuitboardRecipe
   materials:
-    Steel: 100
-    Glass: 500
+    CMSteel: 100 # CMU14: fork material ids (CMSteel/CMGlass/RMCPlastic), not upstream
+    CMGlass: 500 # CMU14: fork material ids (CMSteel/CMGlass/RMCPlastic), not upstream
     Bananium: 100

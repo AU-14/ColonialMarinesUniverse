@@ -1,0 +1,81 @@
+name: Build & Test Debug
+
+on:
+  # Optional full suite, including bulk entity sweeps and upstream policy tests.
+  workflow_dispatch:
+  # CMU14: nightly on master so the tests left out of PR CI still get run
+  schedule:
+    - cron: '0 3 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: full-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Debug / ${{ matrix.suite.name }}
+    if: github.actor != 'PJBot'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        suite:
+          - name: content
+            filter: FullyQualifiedName!~Content.IntegrationTests.Tests.
+          - name: maps_prototypes
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.
+              & (FullyQualifiedName~Map | FullyQualifiedName~Prototype | FullyQualifiedName~EntityTest)
+          - name: gameplay
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.
+              & FullyQualifiedName!~Map & FullyQualifiedName!~Prototype & FullyQualifiedName!~EntityTest
+
+    runs-on: ${{ matrix.os }}
+    # Leave room for map-heavy groups on slower runners.
+    timeout-minutes: 90
+
+    steps:
+    - name: Checkout Master
+      uses: actions/checkout@v7
+
+    - name: Setup Submodule
+      run: |
+        git submodule update --init --recursive
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v6.0.0
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Install dependencies
+      run: dotnet restore
+
+    - name: Build Project
+      run: dotnet build --configuration DebugOpt --no-restore /m
+
+    - name: Run Content.Tests
+      if: matrix.suite.name == 'content'
+      shell: pwsh
+      run: dotnet test --no-build --configuration DebugOpt Content.Tests/Content.Tests.csproj -- NUnit.ConsoleOut=0 NUnit.TestOutputXml="logs" NUnit.WorkDirectory="$(pwd)/test_results"
+
+    - name: Run Content.IntegrationTests
+      shell: pwsh
+      env:
+        CMU_TEST_FILTER: ${{ matrix.suite.filter }}
+      run: |
+        $env:DOTNET_gcServer=1
+        # NUnit otherwise drops the execution filter when a group exceeds 2,000 tests.
+        dotnet test --no-build --configuration DebugOpt --verbosity normal --filter "$env:CMU_TEST_FILTER" Content.IntegrationTests/Content.IntegrationTests.csproj -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.AssemblySelectLimit=10000 NUnit.TestOutputXml="logs" NUnit.WorkDirectory="$(pwd)/test_results"
+
+    - name: Archive NUnit3 test results.
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: nunit3-results-${{ matrix.os }}-${{ matrix.suite.name }}
+        path: test_results/*
+        retention-days: 7
+        compression-level: 9

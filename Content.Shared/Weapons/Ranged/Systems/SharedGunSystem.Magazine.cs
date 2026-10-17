@@ -5,13 +5,12 @@ using Content.Shared.Verbs;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.Containers;
 using Robust.Shared.Player;
+using Robust.Shared.Utility;
 
 namespace Content.Shared.Weapons.Ranged.Systems;
 
 public abstract partial class SharedGunSystem
 {
-    public const string MagazineSlot = "gun_magazine";
-
     protected virtual void InitializeMagazine()
     {
         SubscribeLocalEvent<MagazineAmmoProviderComponent, MapInitEvent>(OnMagazineMapInit);
@@ -57,6 +56,20 @@ public abstract partial class SharedGunSystem
         if (!args.CanInteract || !args.CanAccess)
             return;
 
+        if (component.AutoEject && args.CanComplexInteract)
+        {
+            var ejectToHand = !component.EjectToHand;
+            args.Verbs.Add(new AlternativeVerb
+            {
+                Text = Loc.GetString(ejectToHand
+                    ? "cmu-gun-magazine-auto-eject-to-hand"
+                    : "cmu-gun-magazine-auto-eject-to-ground"),
+                Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/flip.svg.192dpi.png")),
+                Priority = -2,
+                Act = () => SetMagazineEjectDestination((uid, component), ejectToHand, args.User),
+            });
+        }
+
         var magEnt = GetMagazineEntity(uid);
 
         if (magEnt != null)
@@ -64,6 +77,19 @@ public abstract partial class SharedGunSystem
             RaiseLocalEvent(magEnt.Value, args);
             UpdateMagazineAppearance(magEnt.Value, component, magEnt.Value);
         }
+    }
+
+    private void SetMagazineEjectDestination(Entity<MagazineAmmoProviderComponent> ent, bool ejectToHand, EntityUid user)
+    {
+        if (ent.Comp.EjectToHand == ejectToHand)
+            return;
+
+        ent.Comp.EjectToHand = ejectToHand;
+        Dirty(ent);
+
+        PopupSystem.PopupEntity(Loc.GetString(ejectToHand
+            ? "cmu-gun-magazine-auto-eject-set-to-hand"
+            : "cmu-gun-magazine-auto-eject-set-to-ground"), ent, user);
     }
 
     protected virtual void OnMagazineSlotChange(EntityUid uid, MagazineAmmoProviderComponent component, ContainerModifiedMessage args)
@@ -189,17 +215,28 @@ public abstract partial class SharedGunSystem
         // Copy the magazine's appearance data
         Appearance.SetData(uid, AmmoVisuals.MagLoaded, magLoaded, appearance);
         Appearance.SetData(uid, AmmoVisuals.HasAmmo, count != 0, appearance);
+        Appearance.SetData(uid, AmmoVisuals.IsFull, count == capacity, appearance);
         Appearance.SetData(uid, AmmoVisuals.AmmoCount, count, appearance);
         Appearance.SetData(uid, AmmoVisuals.AmmoMax, capacity, appearance);
     }
 
-    private void EjectMagazine(EntityUid uid, MagazineAmmoProviderComponent component, EntityUid? user) //RMC14
+    private void EjectMagazine(EntityUid uid, MagazineAmmoProviderComponent component, EntityUid? user) // CMU14 Method
     {
         var ent = GetMagazineEntity(uid);
 
         if (ent == null)
             return;
 
-        _slots.TryEject(uid, MagazineSlot, user, out var a, excludeUserAudio: true); //RMC14
+        _slots.TryEject(uid, MagazineSlot, user, out var mag, excludeUserAudio: true);
+
+        if (mag == null)
+            return;
+
+        if (component.EjectToHand && user != null && _hands.TryPickupAnyHand(user.Value, mag.Value))
+            return;
+
+        var xform = Transform(mag.Value);
+        TransformSystem.SetLocalRotation(mag.Value, Random.NextAngle(), xform);
+        TransformSystem.SetCoordinates(mag.Value, xform, xform.Coordinates.Offset(Random.NextVector2(EjectOffset)));
     }
 }

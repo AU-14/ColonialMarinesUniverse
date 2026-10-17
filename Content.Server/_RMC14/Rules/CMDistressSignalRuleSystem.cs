@@ -11,15 +11,15 @@ using Content.Server._RMC14.Xenonids.Hive;
 using Content.Server._RMC14.Xenonids.JoinXeno;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Round;
 using Content.Server.Chat.Managers;
 using Content.Server.Fax;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Ghost;
 using Content.Server.Ghost.Roles.Components;
-using Content.Server.Maps;
 using Content.Server.Mind;
+using Content.Server.Nutrition.EntitySystems;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Server.Popups;
 using Content.Server.Power.Components;
@@ -50,6 +50,8 @@ using Content.Shared._RMC14.Item;
 using Content.Shared._RMC14.Light;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Marines;
+using Content.Shared.CMU14.Marines; // CMU14
+using Content.Shared.CMU14.Threats.Mobs.Wendigo.Lab; // CMU14
 using Content.Shared._RMC14.Marines.HyperSleep;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Rules;
@@ -69,9 +71,9 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.Xenonids.Maturing;
 using Content.Shared._RMC14.Xenonids.Parasite;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Actions;
-using Content.Shared.AU14;
+using Content.Shared.CMU14;
 using Content.Shared.CCVar;
 using Content.Shared.Coordinates;
 using Content.Shared.Database;
@@ -79,6 +81,7 @@ using Content.Shared.Destructible;
 using Content.Shared.Fax.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
+using Content.Shared.Maps;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
@@ -90,7 +93,8 @@ using Content.Shared.Popups;
 using Content.Shared.Preferences;
 using Content.Shared.Random.Helpers;
 using Content.Shared.Roles;
-using Content.Shared.StatusEffect;
+using Content.Shared.Roles.Components;
+using Content.Shared.Station.Components;
 using Robust.Server.Audio;
 using Robust.Server.Containers;
 using Robust.Server.GameObjects;
@@ -125,11 +129,10 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     [Dependency] private FaxSystem _fax = default!;
     [Dependency] private GunIFFSystem _gunIFF = default!;
     [Dependency] private XenoHiveSystem _hive = default!;
-    [Dependency] private HungerSystem _hunger = default!;
+    [Dependency] private ServerSatiationSystem _satiation = default!;
     [Dependency] private ItemCamouflageSystem _camo = default!;
     [Dependency] private LarvaQueueSystem _larvaQueue = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private MapSystem _mapSystem = default!;
     [Dependency] private MarineAnnounceSystem _marineAnnounce = default!;
     [Dependency] private MindSystem _mind = default!;
@@ -210,8 +213,10 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     [ViewVariables]
     private RMCPlanet? SelectedPlanetMap { get; set; }
 
+    private string? _cmuPlanetMapName;
+
     [ViewVariables]
-    public string? SelectedPlanetMapName => SelectedPlanetMap?.Proto.Name;
+    public string? SelectedPlanetMapName => SelectedPlanetMap?.Proto.Name ?? _cmuPlanetMapName;
 
     [ViewVariables]
     public string? OperationName { get; private set; }
@@ -776,11 +781,16 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                 if (TryComp(spawner, out TransformComponent? xform) &&
                     xform.GridUid != null)
                 {
-                    EnsureComp<AlmayerComponent>(xform.GridUid.Value);
+                    EnsureComp<WarshipComponent>(xform.GridUid.Value); // CMU14
                 }
 
-                if (comp.SetHunger && TryComp(ev.SpawnResult, out HungerComponent? hunger))
-                    _hunger.SetHunger(ev.SpawnResult.Value, 50.0f, hunger);
+                if (comp.SetHunger && TryComp(ev.SpawnResult, out SatiationComponent? satiation))
+                {
+                    _satiation.SetValue(
+                        (ev.SpawnResult.Value, satiation),
+                        SatiationSystem.Hunger,
+                        50.0f);
+                }
             }
 
             return;
@@ -816,6 +826,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     {
 
         _config.SetCVar(CCVars.GameDisallowLateJoins, false);
+        _cmuPlanetMapName = null;
 
         if (!_autoBalance)
             return;
@@ -860,10 +871,15 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
     private void OnDropshipHijackStart(ref DropshipHijackStartEvent ev)
     {
+        // CMU14: other presets own their cleanup and larva accounting in CMUHijackExtrasSystem.
+        var activeRules = QueryActiveRules();
+        if (!activeRules.MoveNext(out _, out _, out _) || ev.HijackerType == DropshipHijackerType.Other)
+            return;
+
         // For human hijacks, build a set of map IDs belonging to the hijacker's faction ship(s).
         // For xeno hijacks, keep legacy behavior (Almayer maps).
         var targetShipMaps = new HashSet<MapId>();
-        if (ev.IsHumanHijack && !string.IsNullOrEmpty(ev.HijackerFaction))
+        if (ev.HijackerType == DropshipHijackerType.Human && !string.IsNullOrEmpty(ev.HijackerFaction)) // CMU14
         {
             // Scan ShipFactionComponent grids matching the hijacker's faction
             var shipQuery = EntityQueryEnumerator<ShipFactionComponent, TransformComponent>();
@@ -877,7 +893,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
             }
 
             // Also include Almayer maps as fallback
-            var almayerQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();
+            var almayerQuery = EntityQueryEnumerator<WarshipComponent, TransformComponent>(); // CMU14
             while (almayerQuery.MoveNext(out _, out var aXform))
             {
                 AddShipMapAndConnectedZLevelMapIds(targetShipMaps, aXform.MapUid);
@@ -890,24 +906,26 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
         }
 
         // Only do xeno-specific cleanup for xeno hijacks
-        if (!ev.IsHumanHijack)
+        if (ev.HijackerType != DropshipHijackerType.Human) // CMU14
         {
             var hiveStructures = EntityQueryEnumerator<HiveConstructionLimitedComponent, TransformComponent>();
             while (hiveStructures.MoveNext(out var id, out _, out var xform))
             {
-                EnsureComp<HiveConstructionSuppressAnnouncementsComponent>(id);
-
-                if (xform.ParentUid != ev.Dropship && _rmcPlanet.IsOnPlanet(id.ToCoordinates()))
+                if ((ev.Dropship == null || xform.GridUid != ev.Dropship) && _rmcPlanet.IsOnPlanetLevel(xform)) // CMU14
+                {
+                    EnsureComp<HiveConstructionSuppressAnnouncementsComponent>(id);
                     _destruction.DestroyEntity(id);
+                }
             }
 
             var xenoLimitedStructures = EntityQueryEnumerator<XenoSecretionLimitedComponent, TransformComponent>();
             while (xenoLimitedStructures.MoveNext(out var id, out _, out var xform))
             {
-                EnsureComp<HiveConstructionSuppressAnnouncementsComponent>(id);
-
-                if (xform.ParentUid != ev.Dropship && _rmcPlanet.IsOnPlanet(id.ToCoordinates()))
+                if ((ev.Dropship == null || xform.GridUid != ev.Dropship) && _rmcPlanet.IsOnPlanetLevel(xform)) // CMU14
+                {
+                    EnsureComp<HiveConstructionSuppressAnnouncementsComponent>(id);
                     _destruction.DestroyEntity(id);
+                }
             }
 
             var xenos = EntityQueryEnumerator<XenoComponent, MobStateComponent, TransformComponent>();
@@ -919,7 +937,10 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                 if (_mobState.IsDead(xeno))
                     continue;
 
-                if (transformComp.ParentUid != ev.Dropship && _rmcPlanet.IsOnPlanet(xeno.ToCoordinates()))
+                if (HasComp<CMUWendigoLabMadeComponent>(xeno)) // CMU14: lab-made Wendigos are not hive xenos
+                    continue;
+
+                if ((ev.Dropship == null || transformComp.GridUid != ev.Dropship) && _rmcPlanet.IsOnPlanetLevel(transformComp)) // CMU14
                 {
                     if (comp.CountedInSlots)
                         larva++;
@@ -978,7 +999,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                     !TryComp<MindComponent>(mindContainer.Mind, out var mind))
                     continue;
 
-                foreach (var roleId in mind.MindRoles)
+                foreach (var roleId in mind.MindRoleContainer.ContainedEntities)
                 {
                     if (!TryComp<MindRoleComponent>(roleId, out var mindRole))
                         continue;
@@ -993,8 +1014,15 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
             //Get the maximum of either remaining marines or minimum amount
             var surgeAmount = Math.Max((int)Math.Ceiling(totalHostWeights * _hijackShipWeight) - xenoAmount, _hijackMinBurrowed);
             var rules = QueryActiveRules();
-            while (rules.MoveNext(out _, out var rule, out _))
+            // CMU14: hijack rewards apply once per round, a repeat hijack must not refund larva or refill the surge
+            while (rules.MoveNext(out var ruleUid, out _, out var rule, out _))
             {
+                if (rule.HijackBoostsApplied)
+                    continue;
+
+                rule.HijackBoostsApplied = true;
+                Dirty(ruleUid, rule);
+
                 // Reset Hivecore Cooldown
                 var hiveComp = EnsureComp<HiveComponent>(rule.Hive);
                 // Add all the stranded xenos up.
@@ -1215,6 +1243,8 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
             var xenos = EntityQueryEnumerator<ActorComponent, XenoComponent, MobStateComponent, TransformComponent>();
             while (xenos.MoveNext(out var xenoId, out _, out var xeno, out var mobState, out var xform))
             {
+                if (HasComp<CMUWendigoLabMadeComponent>(xenoId)) continue; // CMU14: lab-made Wendigos never decide the round
+
                 if (!xeno.ContributesToVictory)
                     continue;
 
@@ -1334,7 +1364,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
             if (Timing.CurTime >= distress.QueenDiedCheck)
             {
-                if (_xenoEvolution.HasLiving<XenoComponent>(4))
+                if (_xenoEvolution.HasLiving<XenoComponent>(4, x => !HasComp<CMUWendigoLabMadeComponent>(x))) // CMU14: lab-made Wendigos never decide the round
                     EndRound(distress, DistressSignalRuleResult.MinorMarineVictory);
                 else
                     EndRound(distress, DistressSignalRuleResult.MajorMarineVictory, "rmc-distress-signal-majormarinevictory-timeout");
@@ -1707,7 +1737,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
         if (time >= component.QueenDiedCheck)
         {
-            if (_xenoEvolution.HasLiving<XenoComponent>(4))
+            if (_xenoEvolution.HasLiving<XenoComponent>(4, x => !HasComp<CMUWendigoLabMadeComponent>(x))) // CMU14: lab-made Wendigos never decide the round
                 EndRound(component, DistressSignalRuleResult.MinorMarineVictory);
             else
                 EndRound(component, DistressSignalRuleResult.MajorMarineVictory, "rmc-distress-signal-majormarinevictory-timeout");
@@ -1738,6 +1768,29 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     {
         OperationName = customname;
         _usingCustomOperationName = true;
+    }
+
+    public void SetCmuRoundInfo(string? planetMapName)
+    {
+        _cmuPlanetMapName = planetMapName;
+        OperationName = GetRandomOperationName();
+    }
+
+    public string? GetWarshipName(GameMapPrototype? map)
+    {
+        if (map == null)
+            return null;
+
+        foreach (var station in map.Stations.Values)
+        {
+            foreach (var entry in station.StationComponentOverrides.Values)
+            {
+                if (entry.Component is StationNameSetupComponent setup)
+                    return setup.StationNameTemplate;
+            }
+        }
+
+        return map.MapName;
     }
 
     private void StartPlanetVote()
@@ -2071,7 +2124,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
     private void AddAllShipMapIds(ICollection<MapId> shipMaps)
     {
-        var almayerQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();
+        var almayerQuery = EntityQueryEnumerator<WarshipComponent, TransformComponent>(); // CMU14
         while (almayerQuery.MoveNext(out _, out var xform))
         {
             AddShipMapAndConnectedZLevelMapIds(shipMaps, xform.MapUid);
@@ -2089,17 +2142,8 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
         if (mapUid is not { } map)
             return;
 
-        AddMapId(shipMaps, map);
-
-        if (!_zLevels.TryGetZNetwork(map, out var network) ||
-            !_zLevels.TryGetDepthBounds(network.Value, out var minDepth, out var maxDepth))
-            return;
-
-        for (var depth = minDepth; depth <= maxDepth; depth++)
-        {
-            if (_zLevels.TryGetMapAtDepth(network.Value, depth, out var connectedMap))
-                AddMapId(shipMaps, connectedMap);
-        }
+        foreach (var connectedMap in _zLevels.GetAllNetworkMaps(map)) // CMU14
+            AddMapId(shipMaps, connectedMap);
     }
 
     private void AddMapId(ICollection<MapId> shipMaps, EntityUid map)
@@ -2120,10 +2164,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
         foreach (var child in toKnock)
         {
-            if (!TryComp<StatusEffectsComponent>(child, out var status))
-                continue;
-
-            _stuns.TryParalyze(child, _hijackStunTime, true, status);
+            _stuns.TryParalyze(child, _hijackStunTime, true);
         }
     }
 

@@ -90,6 +90,14 @@ public sealed partial class DropshipComponent : Component
     [DataField]
     public EntityUid? LaunchAlarmEntity;
 
+    /// <summary>Optional takeoff cue; null preserves the standard shuttle startup sound.</summary>
+    [DataField]
+    public SoundSpecifier? StartupSound;
+
+    /// <summary>Optional flight ambience; null preserves the standard FTL travel sound.</summary>
+    [DataField]
+    public SoundSpecifier? TravelSound;
+
     [DataField]
     public SoundSpecifier ArrivalSound = new SoundPathSpecifier("/Audio/_RMC14/Machines/Shuttle/engine_landing.ogg");
 

@@ -19,7 +19,7 @@ public sealed partial class RMCMindSystem : EntitySystem
         if (!TryComp(ent.Comp.Mind, out MindComponent? mind))
             return;
 
-        foreach (var role in mind.MindRoles)
+        foreach (var role in mind.MindRoleContainer.ContainedEntities)
         {
             _rmcPvs.AddSessionOverride(role, args.Player);
         }

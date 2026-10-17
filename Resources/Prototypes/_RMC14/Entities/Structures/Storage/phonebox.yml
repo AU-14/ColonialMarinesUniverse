@@ -55,8 +55,9 @@
     placeCentered: true
     isPlaceable: false
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: Destructible
     thresholds:
     - trigger:
@@ -109,8 +110,9 @@
     placeCentered: true
     isPlaceable: false
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: Destructible
     thresholds:
     - trigger:
@@ -139,7 +141,30 @@
   parent: RMCPhoneboxBase
   id: RMCPhoneboxOn
   suffix: On
+  # cmu edit start: working payphone
+  name: payphone booth
+  description: A payphone booth, outdated but reliable technology. Right-click it to make a call, or step inside for some privacy.
+  # cmu edit end
   components:
+  # cmu edit start: working payphone
+  - type: CMUPayphone
+  - type: RotaryPhone
+    category: Payphones
+    callableByAll: true
+    tryGetHolderName: false
+  - type: ActivatableUI
+    key: enum.RMCTelephoneUiKey.Key
+    verbOnly: true
+    verbText: cmu-payphone-use
+  - type: UserInterface
+    interfaces:
+      enum.RMCTelephoneUiKey.Key:
+        type: RMCTelephoneBui
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+  # cmu edit end
   - type: Sprite
     sprite: _RMC14/Structures/Storage/Closets/phonebox_on.rsi
   - type: PointLight
@@ -149,7 +174,7 @@
     energy: 3
     offset: "0,0"
     color: "#00AAFF"
-    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+    lightMask: ConeQuad
 
 # Broken Phone Box
 

@@ -34,8 +34,9 @@
           False:
             visible: false
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMSandbag
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -65,11 +66,15 @@
     fixtures:
       fix1:
         shape: !type:PhysShapeAabb
-          bounds: "-0.49,-0.45,0.49,-0.55"
+          bounds: "-0.49,-0.55,0.49,-0.45"
         mask:
         - FullTileMask
         layer:
-        - WallLayer
+        # CMU14: Low cover must use the layers disabled by native vaulting.
+        # - WallLayer
+        - TableLayer
+        - BarricadeImpassable
+        # CMU14 end
         - BulletImpassable
   - type: BarricadeBlock
     bidirectional: true
@@ -114,8 +119,9 @@
           False:
             visible: false
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMHescoBarricade
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:

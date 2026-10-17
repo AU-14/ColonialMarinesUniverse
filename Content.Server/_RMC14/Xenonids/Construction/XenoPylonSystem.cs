@@ -1,7 +1,6 @@
 using Content.Server._RMC14.Damage;
 using Content.Server.GameTicking;
 using Content.Server.Ghost.Roles;
-using Content.Server.Ghost.Roles.Events;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Construction;
@@ -9,8 +8,11 @@ using Content.Shared._RMC14.Xenonids.Egg;
 using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Destructible;
 using Content.Shared.FixedPoint;
+using Content.Shared.Ghost;
 using Content.Shared.Ghost.Roles.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.StepTrigger.Systems;
@@ -19,6 +21,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Robust.Shared.Prototypes;
+using Content.Server.Mind;
 
 namespace Content.Server._RMC14.Xenonids.Construction;
 
@@ -34,6 +37,7 @@ public sealed partial class XenoPylonSystem : SharedXenoPylonSystem
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private TagSystem _tagSystem = default!;
+    [Dependency] private MindSystem _mind = default!;
 
     private static readonly ProtoId<TagPrototype> XenoLarvaTag = "RMCXenoLarva";
 
@@ -54,13 +58,19 @@ public sealed partial class XenoPylonSystem : SharedXenoPylonSystem
 
     private void OnHiveCoreDestruction(Entity<HiveCoreComponent> ent, ref DestructionEventArgs args)
     {
-        if (_hive.GetHive(ent.Owner) is {} hive &&
-            _gameTicker.RoundDuration() > hive.Comp.PreSetupCutoff)
+        if (_hive.GetHive(ent.Owner) is not { } hive)
+            return;
+
+        // CMU14: setup replacements are free, including when a previous cooldown was saved.
+        if (_gameTicker.RoundDuration() < hive.Comp.PreSetupCutoff)
         {
-            hive.Comp.NewCoreAt = _timing.CurTime + hive.Comp.NewCoreCooldown;
-            hive.Comp.AnnouncedHiveCoreCooldownOver = false;
+            _hive.ResetHiveCoreCooldown(hive);
+            return;
         }
 
+        hive.Comp.NewCoreAt = _timing.CurTime + hive.Comp.NewCoreCooldown;
+        hive.Comp.AnnouncedHiveCoreCooldownOver = false;
+        Dirty(hive);
     }
 
     private void OnXenoSpawnerUsed(Entity<XenoComponent> xeno, ref GhostRoleSpawnerUsedEvent args)
@@ -138,7 +148,7 @@ public sealed partial class XenoPylonSystem : SharedXenoPylonSystem
                 UpdateGhostRoles((uid, core, spawner));
 
             if (TryComp(uid, out DamageableComponent? damageable) &&
-                damageable.TotalDamage > FixedPoint2.Zero &&
+                _damageable.GetTotalDamage((uid, damageable)) > FixedPoint2.Zero &&
                 time >= core.HealAt)
             {
                 core.HealAt = time + core.HealEvery;
@@ -156,7 +166,7 @@ public sealed partial class XenoPylonSystem : SharedXenoPylonSystem
 
     private bool CanTrigger(EntityUid user)
     {
-        return _tagSystem.HasTag(user, XenoLarvaTag) && _mobState.IsDead(user);
+        return _tagSystem.HasTag(user, XenoLarvaTag) && (_mobState.IsDead(user) || _mind.GetMind(user) == null);
     }
 
     private void OnHiveCoreStepTriggered(Entity<HiveCoreComponent> core, ref StepTriggeredOffEvent args)

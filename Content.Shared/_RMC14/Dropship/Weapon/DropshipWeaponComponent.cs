@@ -22,6 +22,18 @@ public sealed partial class DropshipWeaponComponent : Component
     [DataField, AutoNetworkedField]
     public bool FireInTransport;
 
+    // CMU14 field
+    /// <summary>Requires a dedicated gunner console and manual firing.</summary>
+    [DataField, AutoNetworkedField]
+    public bool GunneryOnly;
+
+    /// <summary>
+    /// This attachment is controlled by a pilot-facing direct-fire system and
+    /// must not be selectable or fired through the traditional CAS terminal.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool DirectFireOnly;
+
     [DataField, AutoNetworkedField]
     public SkillWhitelist? Skills;
 

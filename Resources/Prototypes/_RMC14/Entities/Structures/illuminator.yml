@@ -25,6 +25,7 @@
     offset: 0, 1
   - type: DeleteOnExplosion
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -54,6 +55,6 @@
     energy: 2
     offset: "0, 1"
     color: "#ECFFFF"
-    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+    lightMask: ConeQuad
   - type: Sprite
     state: illuminator_on

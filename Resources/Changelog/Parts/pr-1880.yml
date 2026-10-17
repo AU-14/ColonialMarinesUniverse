@@ -1,0 +1,8 @@
+author: maertayn
+category: CMU
+changes:
+- message: Strip friendly IFF from yautja thralls, abom mimics, pathogen walkers default
+    items - can still pickup another id card receive friendly IFF
+  type: Fix
+time: '2026-08-29T07:25:33.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1880

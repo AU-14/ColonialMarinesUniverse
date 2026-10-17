@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <_FighterOriginalTargets>$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildProjectDirectory)'))</_FighterOriginalTargets>
+    <_FighterIntermediateRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)../../obj/FighterTest/'))</_FighterIntermediateRoot>
+  </PropertyGroup>
+  <Import Project="$(_FighterOriginalTargets)" Condition="'$(_FighterOriginalTargets)' != ''" />
+  <!-- Some dependencies explicitly glob linked source trees, including their old obj directories. -->
+  <Target Name="FighterExcludeOriginalIntermediates" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <Compile Remove="@(Compile)" Condition="$([System.String]::Copy('%(Compile.FullPath)').Contains('\obj\')) and !$([System.String]::Copy('%(Compile.FullPath)').StartsWith('$(_FighterIntermediateRoot)'))" />
+    </ItemGroup>
+  </Target>
+</Project>

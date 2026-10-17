@@ -4,6 +4,12 @@ namespace Content.Shared.CCVar;
 
 public sealed partial class CCVars
 {
+    // CMU14 Begin: keep gameplay stalls separate from routine entity growth.
+    /// <summary>Open incidents for entity/component growth and churn, even when gameplay timing is healthy.</summary>
+    public static readonly CVarDef<bool> CMUServerPerformanceChurnIncidents =
+        CVarDef.Create("cmu.server_performance.churn_incidents", false, CVar.SERVERONLY | CVar.ARCHIVE);
+    // CMU14 End
+
     /// <summary>
     ///     Enables automatic CMU server performance incident detection and reporting.
     /// </summary>
@@ -14,7 +20,7 @@ public sealed partial class CCVars
     ///     Enable the [CMU-PERF] log output. Doesn't influence normal metrics/collection, profiler or incident trackers.
     /// </summary>
     public static readonly CVarDef<bool> CMUServerPerformanceLogEnabled =
-        CVarDef.Create("cmu.server_performance.log_enabled", false, CVar.SERVERONLY | CVar.ARCHIVE);
+        CVarDef.Create("cmu.server_performance.log_enabled", true, CVar.SERVERONLY | CVar.ARCHIVE);
 
     /// <summary>
     ///     Seconds between full performance observations. Hard frame stalls are checked every server frame.
@@ -51,6 +57,12 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<float> CMUServerPerformanceStallMilliseconds =
         CVarDef.Create("cmu.server_performance.stall_ms", 250f, CVar.SERVERONLY | CVar.ARCHIVE);
+
+    // CMU14 Begin: capture short gameplay stalls independently of loading stalls.
+    /// <summary>Lower stall threshold during active gameplay. Zero uses the general stall threshold.</summary>
+    public static readonly CVarDef<float> CMUServerPerformanceGameplayStallMilliseconds =
+        CVarDef.Create("cmu.server_performance.gameplay_stall_ms", 50f, CVar.SERVERONLY | CVar.ARCHIVE);
+    // CMU14 End
 
     /// <summary>
     ///     A single real frame at or above this duration is classified as critical.
@@ -147,7 +159,7 @@ public sealed partial class CCVars
     ///     Maximum profiler events parsed for one detailed incident report.
     /// </summary>
     public static readonly CVarDef<int> CMUServerPerformanceProfileMaxEvents =
-        CVarDef.Create("cmu.server_performance.profile_max_events", 20000, CVar.SERVERONLY | CVar.ARCHIVE);
+        CVarDef.Create("cmu.server_performance.profile_max_events", 65536, CVar.SERVERONLY | CVar.ARCHIVE); // CMU14: cover the default profiler ring.
 
     /// <summary>
     ///     Maximum entries emitted per category in detailed performance reports.

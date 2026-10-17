@@ -1,0 +1,173 @@
+# Tactical map replacement in development
+
+Standard tactical-map actions, alerts, tables and tablets now open the 3D map by default through
+their existing interfaces. The CMU classic-map preference selects the original window instead.
+Unsupported survey layouts fall back to that window. Separate reconstruction tables remain development
+fixtures. See [the replacement plan](REPLACEMENT.md) for remaining embedded-display and map compatibility work.
+
+The content implementation renders the linked battlefield in a normal game window.
+RobustToolbox is unchanged. A content shader traces a 3D structural volume using public 2D render
+targets; no native graphics calls, additional context, or third-party renderer is needed.
+
+## Try it on Stable Garrison Redux
+
+1. Start Redux and open the normal tactical-map action or an existing map table. The optional
+   `CMUTacticalReconstructionTableGovfor` and Opfor variant remain available for isolated tests.
+2. Existing access and drawing permissions apply. Table drawing requires leadership level 2;
+   personal maps retain their normal `CanDraw` permission.
+3. The whole map streams automatically from its initial survey. Later construction, destruction,
+   tile changes and door movement do not update that geometry. The server keeps the survey for the
+   map's lifetime, including across long periods with no viewers. Reopening in the same session also
+   reuses the client's uploaded terrain, camera, floor and cutaway settings; only missing chunks download.
+4. Drag to pan by default; middle-drag orbits. Scroll zooms toward the cursor.
+   **Top down** looks straight down at the current location. **Reset** restores the initial
+   3D orientation and frames the map. Right-drag also pans while the pencil is selected.
+   **Center on me** selects your floor and focuses on your current position. The CMU options tab
+   enables centering on each opening by default; turn it off to retain the last cached camera.
+5. Select a floor. Low walls are enabled by default; isolation hides lower floors.
+   Area names are optional. Floor variants, structure directions and static prop appearances come
+   from the actual map and its existing resources.
+6. Pick a pencil color and width (1, 3, 5 or 8 px), then drag to draw. Releasing keeps the stroke in your local draft.
+   Strokes follow continuous map coordinates across walls, props and empty terrain. There are no
+   waypoint nodes, route-clearance checks, squad fields or expiry settings.
+   Turn **Pencil** off to return to normal dragging. **Undo drawing** removes the latest draft
+   annotation, or stages removal of the latest shared annotation when the draft is empty.
+   **Clear drawings** stages removal of the faction annotations. Press **Send** to publish all edits together. Failed submissions retain the draft.
+
+Enter marker text, enable **Text marker**, and click to place a point with a text box. Text markers join the same draft and Send operation. **Tracked icons** displays the normal authorized faction and squad feeds on the appropriate floor, including commander/SL sprites, color, medical status, fireteam numbers and vehicle occupant count. Contacts arrive with opening metadata and update independently of terrain; changed feeds are forwarded every 250–300 ms. The existing faction/sensor and publication rules still determine when intelligence becomes available.
+
+Drawings are shared across reconstruction tables of the same faction and Z network, retaining
+32 recent annotations until cleared. Each viewer has an independent camera and chunk baseline.
+Opening on a planet selects the planet. Opening aboard ship selects the ship unless the player
+previously selected Planet while aboard ship. Explicit ship-side choices are saved in the client's
+configuration and survive restarts; ordinary planet openings do not overwrite that preference.
+The **Map** selector switches between the linked planet and the current or same-faction ship.
+Position and floor come from the actor, not the console. Centering is unavailable when the player
+is on a different map. Switching maps preserves each map's unpublished draft within the window.
+The CMU options tab's **Use the classic tactical map** option opens the original interface on the
+next opening, including normal personal actions and tactical computers.
+Published planet drawings share the existing faction canvas with classic maps. Fractional stroke
+paths, colour, width and floor survive classic resubmission; classic canvas coordinates are converted
+using the map's actual origin and inverted Y axis. Text pins share tactical labels. Overwatch canvases
+remain scoped to their assigned squad and appear on that squad's personal 3D maps. Publication uses the classic faction/hive announcement and published-contact path, with announcement cooldowns. Ordinary human personal maps and ghosts remain read-only; consoles/tablets retain their normal access, range and leadership requirements. Fresh observers can request geometry and see their authorized faction drawings. A classic canvas refresh preserves unsent local edits.
+The **Map layer** selector on personal maps switches drawings, text markers and tracked icons together.
+Squad members can choose **Squad**, **Platoon**, or **Squad + platoon**. Ghosts can select each faction
+their normal tactical feed authorizes, or **All factions**. The server validates every selection;
+the selector grants no drawing permission. Switching layers keeps the same survey, loaded terrain
+and camera, and a cached reopen restores the selected layer. Losing squad access resets the view to
+the remaining authorized feed.
+
+Drawing waits for a refreshed baseline when
+reopening a cached map. Pencil sampling compacts long strokes to at most 512 points without stopping
+input or truncating the beginning of the stroke. Unchanged strokes are not resent with terrain patches.
+
+## Scope
+
+- This is a **static structural survey**, captured incrementally when the map is first requested,
+  including then-present unseen structures. It is not a round-start snapshot or a live geometry feed.
+  Tracked contacts retain the normal feed's visibility rules and continue updating.
+- The structural survey does not export actors or inventories. Tracked icons come separately from the normal faction-filtered tactical feed. Orders are markers for people reading
+  faction tables; they do not add pathfinding, automatic movement or squad HUDs. Sending a plan does produce the normal update announcement.
+  Pencil drawings are unrestricted annotations, not navigable paths.
+- Single-level map-as-grid maps and Z networks support up to eight level slots and a 1024 by 1024 tile footprint.
+  Redux's full linked footprint fits this budget. Moving grids and imported meshes are not supported.
+- Geometry is reconstructed from tiles, anchored structures and static scenery, not individually authored 3D models. One spatial query per surveyed chunk includes unanchored trees, bushes, rocks and static props while excluding dynamic entities and inventory. Large trees have broader rounded crowns.
+  It distinguishes walls, directional doors/glass/barricades/rails, machinery, furniture, crates,
+  vegetation, rocks and stairs. Props have inset footprints and independent floors underneath.
+  Double doors use both facing leaves and directional closed/open sprite frames; open doors retain their jambs and header. Water entities are shallow textured surfaces. Irregular props such as chairs and beds use alpha-cutout sprite cards with an overhead representation, preserving their silhouette instead of inventing a solid box.
+  Tables have separate tops and supports; rails have bars and posts; stairs have individual
+  treads. Machines and crates have recessed bodies and caps, and trees have trunks and rounded crowns.
+  One highest-priority structure is represented per tile. Prototype icons approximate prop appearance;
+  connected corner textures supply wall and rock materials without editor icon markings.
+  Live sprite layers, per-corner wall autotiling and terrain edge overlays are not reproduced.
+
+## Data and rendering
+
+`CMUTacticalReconstructionSystem` maintains a shared atlas per open Z network. Actual map bounds
+replace the old 48-tile sector. Metadata arrives first; 16 by 16 chunks follow in batches of at most
+128 every 0.1 seconds per viewer within an approximate 44 KiB payload budget. A lossless chunk palette compresses repeated cells, with raw fallback for highly varied chunks. Chunks absent at initial layout discovery are represented by a compact bitmask in the metadata, without individual chunk messages; other empty chunks carry coordinates without cell arrays. Encoded chunks are cached per revision and shared between viewers. Both extraction and transmission prioritize the operator's floor and nearby tiles. Each cell carries material, floor/structure appearance IDs and
+orientation. A bounded palette references existing tile variants and entity prototypes.
+The opening metadata request has an initial retry after half a second, then retries every two seconds until a baseline arrives, so closing and
+reopening during subscription updates cannot leave the window waiting indefinitely. Retries stop
+on receipt, an unavailable-map response, or window closure.
+One partial or completed survey, including its GPU textures, surface atlas and pending uploads, is retained clientside for the game session. It is scoped to the actor, table, faction, map binding and location, and cleared on connection/body changes or map deletion. Closing transfers ownership before the window leaves the UI tree. Reopening reuses the actual uploaded textures; an idle interval does not expire them or queue another upload. A stable atlas ID and per-chunk revisions allow a reopening to adopt current metadata immediately, transferring only missing chunks.
+
+After three seconds in a stable player context, the client preloads the likely personal map when there is no open tactical map or retained view. The usual ship/planet preference applies. The server derives access, actor and faction from the authenticated session; the request cannot select another source. Preloading has no drawing subscription, orders or contact feed. It shares initial extraction and a global round-robin background transfer budget of eight chunks/16 KiB per 0.1 seconds, after visible UI transfers. Requests are rate limited and subscriptions time out after two minutes. Client uploads and surface loading use the same bounded work as visible maps. Opening during a preload transfers its partial resources and fetches only what remains. Classic-map users do not preload, and a retained tablet/console view takes precedence.
+
+Blips draw directly at their latest server-reported tiles, without interpolation, velocity prediction or extrapolation. The opening response includes the authorized contact list, and computers refresh their normal faction/sensor-filtered feed before sending it. Contacts update independently of static geometry.
+If the atlas was replaced, a refreshing window assembles a separate baseline before swapping its geometry and
+palette together; contacts still update during that refresh and cached appearance IDs are never mixed with a new atlas. Camera settings survive
+that swap. Building caps, vertical faces and exposed edges receive distinct shading, and labels
+use measured text bounds with a smaller density budget at wide zoom.
+
+Initial extraction uses one global budget of at most
+128 chunks or two milliseconds per frame across active networks, checking the budget between rows
+and committing whole chunks. Initial extraction prioritizes the operator's floor and nearby tiles.
+There are no terrain change subscriptions or rolling rescans. Extraction finishes even if all viewers
+close their windows, and the server retains that baseline until all of its surveyed maps are removed. The captured floor layout also stays fixed: digging or construction that adds linked levels cannot trigger a new survey of existing walls. Reopening never
+rebuilds it from later world changes. Completed atlases skip extraction and per-viewer revision scans.
+Absent chunks on sparse floors bypass cell extraction. Contacts and drawings continue updating independently.
+
+The client packs up to four floors across data textures (only the required columns for one to three floors) and skips empty chunks during ray traversal.
+A 2048-square surface atlas contains up to 4095 actual tile/prop images. Data uploads reverse UV Y
+to match Clyde's top-left `SetSubImage` convention. CPU picking uses the same bounds, footprints,
+heights, cutaway and isolation rules as `reconstruction.swsl`, using coarse cell envelopes rather
+than the shader's individual decorative parts. Furniture instead shares its individual part bounds
+between CPU picking and the shader, so rays pass through gaps under seats and between shelves.
+Pencil strokes intersect the selected floor plane.
+
+Furniture prototypes opt in with `CMUReconFurniture`; inherited colour variants retain their original
+prototype appearances. The catalogue includes metal/folding/wooden/winged/office/padded chairs,
+stools, handed benches, sofas and couch sections, metal/wood tables, panelled desks, counters,
+beds, bunks, operating tables, open racks and bookcases. Each model has at most eight solid parts.
+A 2,176-byte RGBA8 lookup texture contains the shared centimetre bounds and part finishes, uploaded
+once per retained render resource set and reused across map selections and reopening. It adds no per-entity geometry to network packets.
+Prototype paint/upholstery colours are sampled separately from metal, wood, mattress and pillow parts.
+The first survey also includes explicitly tagged movable furniture; folded and contained furniture,
+actors and loose items are excluded. Subsequent movement does not change the saved survey.
+The existing one-structure-per-tile limit still applies, including furniture sharing a tile.
+
+Surface colors preserve prototype sprite tint and recover straight color from the alpha-composited
+atlas. Warm directional light, neutral ambient light, exposed-edge bevels, seams and contact shadows
+give structures depth. Distance filtering reduces texture shimmer when the whole map is visible.
+
+The cached view target is capped at 1440 pixels on its longest side (880 while dragging). GPU uploads
+are queued only for newly received geometry, with at most 24 chunks or two milliseconds per frame. Empty chunks skip GPU uploads unless clearing existing geometry. Surface
+icon creation is limited to four entries or two milliseconds per frame, and incremental loading redraws
+the volume at most ten times per second. Labels and order markers use
+native UI resolution. Camera, geometry, surface or viewport changes invalidate the cache.
+Contact shadows are bounded and disabled at distant zoom. The initialized occupancy mask also guards neighbour/shadow reads, so terrain textures need no map-sized clear allocation or upload on opening. GPU resources are released when their cached survey is replaced, invalidated or disconnected.
+
+Read-only viewers see navigation and viewing controls only; the pencil, text, Send, colour, width, undo and clear UI is hidden until the server confirms drawing access.
+
+Friendly marine contacts include their names; the Marine names checkbox hides these labels without hiding icons.
+Anonymous enemy sensor contacts never include names or camera targets. Trained overwatch operators using an
+overwatch console can click highlighted marine icons to open the existing helmet camera in a separate window.
+The map remains open, and dragging, pencil strokes and text placement retain their normal behavior.
+The server checks the current visible contact, console access, skill, squad faction and worn camera.
+Closing the map or camera, removing the helmet, or losing access releases the existing overwatch eye and PVS
+subscription. This uses the usual movement/damage cancellation and does not add camera access to personal maps,
+ghost maps, map tables or command tablets.
+
+Batched edits carry a generation, request ID, bounded additions and removals. Each addition contains continuous map points, color, width, signed floor and optional plain text. The server validates the whole batch before applying any mutation and acknowledges it before the client discards its draft. The server checks open UI,
+access, range, leadership, generation, current faction/network membership, finite coordinates, map bounds,
+color and payload size. Terrain clearance is irrelevant to pencil annotations.
+
+## Focused checks
+
+```powershell
+dotnet test Content.Tests/Content.Tests.csproj --no-restore --filter 'FullyQualifiedName~CMUReconGeometryTest|FullyQualifiedName~CMUReconFurnitureTest|FullyQualifiedName~CMUReconRoutesTest'
+dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj --no-restore --filter FullyQualifiedName~CMUReconstructionTest
+```
+
+Coverage includes stacked floors, occlusion, map-edge rays, directional footprints, floors underneath
+props, distant orders, frozen geometry after world changes and idle reopening, actual floor appearances, connected chunk delivery and order
+authorization. Reopening checks drop the first request or metadata reply and verify recovery,
+complete chunk delivery, and retry cancellation on success and closure.
+Further checks cover camera retention, cached refresh staging, malformed drawing payloads, strokes
+across walls and missing ground, fractional coordinate/color transport, undo, and sample compaction.
+Draft/Send checks cover acknowledgement, atomic validation, widths, text markers and rejected submissions.
+Extraction and contact checks cover water, facing double-door leaves, sparse chunk clearing and faction filtering.
+GPU checks must emulate Clyde's upload row reversal and packed-floor layout.
+Graphical verification is still required for resource appearance and navigation; these checks are
+not a representative performance benchmark for target hardware.

@@ -7,14 +7,12 @@ using Robust.Server.GameObjects;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 namespace Content.Server.GameTicking.Rules;
 
 public sealed partial class LoadMapRuleSystem : StationEventSystem<LoadMapRuleComponent>
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private MapSystem _map = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
     [Dependency] private TransformSystem _transform = default!;
@@ -22,6 +20,7 @@ public sealed partial class LoadMapRuleSystem : StationEventSystem<LoadMapRuleCo
 
     protected override void Added(EntityUid uid, LoadMapRuleComponent comp, GameRuleComponent rule, GameRuleAddedEvent args)
     {
+#pragma warning disable CS0618 // CMU14: The loader must still handle rules authored with the legacy preloaded-grid field.
         if (comp.PreloadedGrid != null && !_gridPreloader.PreloadingEnabled)
         {
             // Preloading will never work if it's disabled, duh
@@ -39,7 +38,7 @@ public sealed partial class LoadMapRuleSystem : StationEventSystem<LoadMapRuleCo
             DebugTools.AssertNull(comp.GridPath);
             DebugTools.AssertNull(comp.PreloadedGrid);
 
-            var gameMap = _prototypeManager.Index(comp.GameMap.Value);
+            var gameMap = ProtoMan.Index(comp.GameMap.Value);
             grids = GameTicker.LoadGameMap(gameMap, out mapId, null);
             Log.Info($"Created map {mapId} for {ToPrettyString(uid):rule}");
         }
@@ -101,5 +100,6 @@ public sealed partial class LoadMapRuleSystem : StationEventSystem<LoadMapRuleCo
         RaiseLocalEvent(uid, ref ev);
 
         base.Added(uid, comp, rule, args);
+#pragma warning restore CS0618
     }
 }

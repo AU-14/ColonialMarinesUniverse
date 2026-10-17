@@ -1,0 +1,90 @@
+- type: antagSpecifier
+  id: RunawaySynth
+  prefRoles: [ RunawaySynthRole ]
+  jobBlacklistGroup:
+  - AllGovforCommandStaff
+  - AllOpforCommandStaff
+# jobBlacklist:
+# - AU14JobCivilianCorporateLiaison
+# - AU14JobCivilianColonyAdministrator
+# - AU14JobCivilianOrbitalArbiter
+  briefing:
+    text: runawaysynth-role-greeting
+    color: CornflowerBlue
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingSkills:
+    RMCSkillCqc: 4
+    RMCSkillEngineer: 4
+    RMCSkillConstruction: 3
+    RMCSkillOverwatch: 1
+    RMCSkillMedical: 4
+    RMCSkillSurgery: 3
+    RMCSkillResearch: 1
+    RMCSkillMeleeWeapons: 2
+    RMCSkillPilot: 2
+    RMCSkillPolice: 2
+    RMCSkillFireman: 5
+    RMCSkillFirearms: 2
+    RMCSkillPowerLoader: 2
+    RMCSkillVehicles: 2
+    RMCSkillJtac: 3
+    RMCSkillIntel: 2
+    RMCSkillDomestics: 2
+    RMCSkillNavigations: 1
+  components:
+  - type: RunawaySynth
+  - type: Synth
+    changeBrain: false
+    canUseGuns: true
+    hideGeneration: true
+    useHumanHealthIcons: true
+# - type: SynthGunAccess
+  - type: ColonyBounty
+    bounty: 2800
+    reason: Defective Equipment
+    recordName: Runaway Synthetic
+    captureCounts: false
+    capturedFaxPaper: AUPaperRunawaySynthDead
+    capturedFaxExtraRecipient: Colony Administrator
+  mindRoles:
+  - MindRoleRunawaySynth
+  startingGear: AU14GearRunawaySynth
+
+- type: entity
+  id: RunawaySynth
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: RunawaySynthRule
+  - type: AntagSelection
+    selectionTime: JobsAssigned
+    antags:
+    - !type:RandomAntagCount
+      proto: RunawaySynth
+      range:
+        min: 1
+        max: 3
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleRunawaySynth
+  name: Runaway Synth Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: RunawaySynthRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: RunawaySynthRole
+  name: roles-antag-runaway-synth-name
+  setPreference: true
+  objective: roles-antag-synth-objective
+
+- type: startingGear
+  id: AU14GearRunawaySynth
+  storage:
+    back:
+    - AUPaperRunawaySynth
+    - RMCLighter

@@ -66,9 +66,15 @@ public sealed partial class FoldableClothingSystem : EntitySystem
             // This should instead work via an event or something that gets raised to optionally modify the currently hidden layers.
             // Or at the very least it should stash the old layers and restore them when unfolded.
             // TODO CLOTHING fix this.
-            if (ent.Comp.FoldedHideLayers.Count != 0 && TryComp<HideLayerClothingComponent>(ent.Owner, out var hideLayerComp))
-                SetHiddenLayers(hideLayerComp, ent.Comp.FoldedHideLayers, clothingComp.Slots);
-
+            if ((ent.Comp.FoldedHideLayers.Count != 0 || ent.Comp.UnfoldedHideLayers.Count != 0) &&
+                TryComp<HideLayerClothingComponent>(ent.Owner, out var hideLayerComp))
+            {
+                SetHiddenLayers(
+                    (ent.Owner, hideLayerComp),
+                    ent.Comp.FoldedHideLayers,
+                    ent.Comp.UnfoldedHideLayers,
+                    clothingComp.Slots);
+            }
         }
         else
         {
@@ -81,29 +87,36 @@ public sealed partial class FoldableClothingSystem : EntitySystem
             if (ent.Comp.FoldedHeldPrefix != null)
                 _itemSystem.SetHeldPrefix(ent.Owner, null, false, itemComp);
 
-            // RMC14 fix unfolded layers with nothing not changing the hide layer slots
-            if (!TryComp<HideLayerClothingComponent>(ent.Owner, out var hideLayerComp))
-                return;
-
-            if (ent.Comp.UnfoldedHideLayers.Count != 0)
-                SetHiddenLayers(hideLayerComp, ent.Comp.UnfoldedHideLayers, clothingComp.Slots);
-            else
-                hideLayerComp.Layers.Clear();
-
-            Dirty(ent.Owner, hideLayerComp);
-            // RMC14 end
+            // TODO CLOTHING fix this.
+            if ((ent.Comp.FoldedHideLayers.Count != 0 || ent.Comp.UnfoldedHideLayers.Count != 0) &&
+                TryComp<HideLayerClothingComponent>(ent.Owner, out var hideLayerComp))
+            {
+                SetHiddenLayers(
+                    (ent.Owner, hideLayerComp),
+                    ent.Comp.UnfoldedHideLayers,
+                    ent.Comp.FoldedHideLayers,
+                    clothingComp.Slots);
+            }
         }
     }
 
-    private static void SetHiddenLayers(
-        HideLayerClothingComponent hideLayer,
+    private void SetHiddenLayers(
+        Entity<HideLayerClothingComponent> hideLayer,
         HashSet<HumanoidVisualLayers> layers,
+        HashSet<HumanoidVisualLayers> otherLayers,
         SlotFlags slots)
     {
-        hideLayer.Layers.Clear();
+        // Only replace the layers controlled by this foldable item. Other systems may
+        // configure unrelated hidden layers on the same component.
         foreach (var layer in layers)
-        {
-            hideLayer.Layers[layer] = slots;
-        }
+            hideLayer.Comp.Layers.Remove(layer);
+
+        foreach (var layer in otherLayers)
+            hideLayer.Comp.Layers.Remove(layer);
+
+        foreach (var layer in layers)
+            hideLayer.Comp.Layers[layer] = slots;
+
+        Dirty(hideLayer);
     }
 }

@@ -1,0 +1,17 @@
+# Plasma's refined high-tier phoron (hot N2 fixation, see Atmospherics/reactions.yml).
+# TODO: Overlay use the orphaned nitryl sprite state, until a custom texture is made
+- type: gas
+  id: Phoron
+  name: gas-phoron
+  abbreviation: gas-phoron-abbreviation
+  molarHeatCapacity: 300
+  heatCapacityRatio: 1.35
+  molarMass: 180
+  gasOverlaySprite:
+    sprite: /Textures/Effects/atmospherics.rsi
+    state: nitryl
+  gasMolesVisible: 0.6
+  color: '#7e009e'
+  reagent: RMCPhoron
+  pricePerMole: 2
+  isFuel: true

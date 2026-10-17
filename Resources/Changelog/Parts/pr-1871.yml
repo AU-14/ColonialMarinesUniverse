@@ -1,0 +1,65 @@
+author: maertayn
+category: CMU
+changes:
+- message: Bad Blood bracers can raise dead humanoids as thralls (DS) and any ghost
+    can claim - raised thralls show an ashen pallor and yellow-green eyes, and cannot
+    cover their hands or face
+  type: Add
+- message: Yautja bracers can fabricate field rations and hunting canteens, to mitigate
+    hunger/thirst
+  type: Add
+- message: Bad Blood clans spawn 1 leader + 3 grunts, scaling with pip from 40 players
+    - threat votes no longer pad the clan with absurd amounts
+  type: Tweak
+- message: Bad Blood cloak lasts 8 sec with a 30 sec recharge and 3 sec warning before
+    failing; moving while cloaked produces a faint shimmer (like the Scout)
+  type: Tweak
+- message: 'Bad Blood plasma caster lethal bolts no longer hit like atomic warheads:
+    aimed shots still hurt, nearby tiles barely scorch (immobilizer/eradicator modes
+    are disabled pending tweaks)'
+  type: Tweak
+- message: Bad Blood armor no longer shrugs off rifle munitions
+  type: Tweak
+- message: Yautja move slower, are less fire-resistant, and can no longer fire or
+    pick up human guns (their own tech and melee tools still work)
+  type: Tweak
+- message: Rounds no longer end when all Yautja die while another hostile threat is
+    still active
+  type: Fix
+- message: Wrist blades and scimitars extract embedded shrapnel like a knife
+  type: Fix
+- message: The CLF cell (DAGD) broadcast now goes out 25-40 seconds after the intel
+    console is claimed, and fluent translations
+  type: Tweak
+- message: Tile movement fixes for grid seams and z-level transitions (WIP)
+  type: Fix
+- message: 'Survivor supplements: roundstart survivors receive bonus gear (gasmasks
+    + filter), gated by skills (construction >=2  gives metal sheets)'
+  type: Add
+- message: 'Third Party military squads and civilians ported from upstream roles:
+    UPP line squads/variants, Govforr, CMB, WeYu civilian parties, dropship-inserted
+    CLF, freelancer, raider, TWE paramarine (WIP)'
+  type: Add
+- message: WeYu fetch objectives with a WeYu intel analyzer machine
+  type: Add
+- message: 'Pathogen xeno fixes: spore sac targeting, direct spore infection (poppers),
+    mycotoxin injection, watch tracking, tactical map blips, and corrected sprites,
+    hive/tacmap always show and more'
+  type: Fix
+- message: Evacuation announcements only play once self-destruct is armed; xeno tier
+    caps count living xenos only (burrowed larva banks no longer inflate them); abominations
+    can pry doors
+  type: Fix
+- message: 'Analyzer-warning sweep: readonly DI fields, partial classes, unused fields
+    removed (bulk of files changes)'
+  type: Code
+- message: Tribal Threat (CF) got armor, skill buffs and speaks English
+  type: Tweak
+- message: Crit whispering is back (can be disabled with the cmu.game.crit_whisper
+    CVar)
+  type: Add
+- message: Threat vote happens at round start, so losing no longer holds you as a
+    locked observer until threat spawn, you're notified immediately and free to JIP
+  type: Add
+time: '2026-08-27T07:11:40.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1871

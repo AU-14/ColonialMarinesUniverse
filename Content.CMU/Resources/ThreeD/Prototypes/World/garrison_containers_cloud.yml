@@ -1,0 +1,5444 @@
+# Editable physical drafts; dynamic bottle/jug composition remains unclaimed.
+- type: cmu3DModel
+  id: CMU3DBottleEmptyCloud
+  label: Empty chemistry bottle
+  status: draft
+  sourcePrototypes:
+  - CMBottleEmpty
+  referencePrototype: CMBottleEmpty
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/bottles.rsi
+  referenceState: bottle-1
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Physical hollow bottle-1 with a narrow neck and rolled mouth. Static
+    empty/open source-default study. The lid, fill level, mixture color, in-hand art,
+    breakage and saved appearance overrides are not runtime-selected by this draft.
+    Source alpha is opaque; wall translucency and circular section are inferred physical
+    interpretation, not source alpha fidelity.
+  parts:
+  - label: thick circular glass heel
+    min: -0.148000, -0.148000, 0.000000
+    max: 0.148000, 0.148000, 0.045000
+    color: '#3C5E5A'
+    shape: CylinderZ
+  - label: hollow bottle wall 01
+    min: 0.145000, -0.070502, 0.032000
+    max: 0.169000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 0.0
+  - label: hollow bottle wall 02
+    min: 0.099016, 0.040514, 0.032000
+    max: 0.123016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 45.0
+  - label: hollow bottle wall 03
+    min: -0.012000, 0.086498, 0.032000
+    max: 0.012000, 0.227502, 0.285000
+    color: '#8BABA88C'
+    yaw: 90.0
+  - label: hollow bottle wall 04
+    min: -0.123016, 0.040514, 0.032000
+    max: -0.099016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 135.0
+  - label: hollow bottle wall 05
+    min: -0.169000, -0.070502, 0.032000
+    max: -0.145000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 180.0
+  - label: hollow bottle wall 06
+    min: -0.123016, -0.181518, 0.032000
+    max: -0.099016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 225.0
+  - label: hollow bottle wall 07
+    min: -0.012000, -0.227502, 0.032000
+    max: 0.012000, -0.086498, 0.285000
+    color: '#8BABA88C'
+    yaw: 270.0
+  - label: hollow bottle wall 08
+    min: 0.099016, -0.181518, 0.032000
+    max: 0.123016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 315.0
+  - label: bottom glass welt
+    min: -0.168500, -0.168500, 0.030000
+    max: 0.168500, 0.168500, 0.052000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: inward glass shoulder 01
+    min: 0.056000, -0.070198, 0.317000
+    max: 0.174000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 0.0
+    pitch: -38
+  - label: inward glass shoulder 02
+    min: 0.022317, 0.011120, 0.317000
+    max: 0.140317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 45.0
+    pitch: -38
+  - label: inward glass shoulder 03
+    min: -0.059000, 0.044802, 0.317000
+    max: 0.059000, 0.185198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 90.0
+    pitch: -38
+  - label: inward glass shoulder 04
+    min: -0.140317, 0.011120, 0.317000
+    max: -0.022317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 135.0
+    pitch: -38
+  - label: inward glass shoulder 05
+    min: -0.174000, -0.070198, 0.317000
+    max: -0.056000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 180.0
+    pitch: -38
+  - label: inward glass shoulder 06
+    min: -0.140317, -0.151515, 0.317000
+    max: -0.022317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 225.0
+    pitch: -38
+  - label: inward glass shoulder 07
+    min: -0.059000, -0.185198, 0.317000
+    max: 0.059000, -0.044802, 0.339000
+    color: '#5A8D88B8'
+    yaw: 270.0
+    pitch: -38
+  - label: inward glass shoulder 08
+    min: 0.022317, -0.151515, 0.317000
+    max: 0.140317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 315.0
+    pitch: -38
+  - label: narrow open neck 01
+    min: 0.065000, -0.036537, 0.360000
+    max: 0.087000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 0.0
+  - label: narrow open neck 02
+    min: 0.042740, 0.017204, 0.360000
+    max: 0.064740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 45.0
+  - label: narrow open neck 03
+    min: -0.011000, 0.039463, 0.360000
+    max: 0.011000, 0.112537, 0.426000
+    color: '#8BABA8'
+    yaw: 90.0
+  - label: narrow open neck 04
+    min: -0.064740, 0.017204, 0.360000
+    max: -0.042740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 135.0
+  - label: narrow open neck 05
+    min: -0.087000, -0.036537, 0.360000
+    max: -0.065000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 180.0
+  - label: narrow open neck 06
+    min: -0.064740, -0.090277, 0.360000
+    max: -0.042740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 225.0
+  - label: narrow open neck 07
+    min: -0.011000, -0.112537, 0.360000
+    max: 0.011000, -0.039463, 0.426000
+    color: '#8BABA8'
+    yaw: 270.0
+  - label: narrow open neck 08
+    min: 0.042740, -0.090277, 0.360000
+    max: 0.064740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 315.0
+  - label: rolled open mouth rim 01
+    min: 0.081000, -0.045649, 0.424000
+    max: 0.109000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rolled open mouth rim 02
+    min: 0.053175, 0.021526, 0.424000
+    max: 0.081175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rolled open mouth rim 03
+    min: -0.014000, 0.049351, 0.424000
+    max: 0.014000, 0.140649, 0.453000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rolled open mouth rim 04
+    min: -0.081175, 0.021526, 0.424000
+    max: -0.053175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rolled open mouth rim 05
+    min: -0.109000, -0.045649, 0.424000
+    max: -0.081000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rolled open mouth rim 06
+    min: -0.081175, -0.112824, 0.424000
+    max: -0.053175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rolled open mouth rim 07
+    min: -0.014000, -0.140649, 0.424000
+    max: 0.014000, -0.049351, 0.453000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rolled open mouth rim 08
+    min: 0.053175, -0.112824, 0.424000
+    max: 0.081175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: rear glass glint
+    min: -0.109000, 0.109000, 0.100000
+    max: -0.096000, 0.127000, 0.252000
+    color: '#B7C9C3A0'
+- type: cmu3DModel
+  id: CMU3DBottleBicaridineCloud
+  label: Bicaridine chemistry bottle
+  status: draft
+  sourcePrototypes:
+  - CMBottleBicaridine
+  referencePrototype: CMBottleBicaridine
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/bottles.rsi
+  referenceState: bottle-1
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Physical hollow bottle-1 with a narrow neck and rolled mouth. Static
+    source-default 60/60 single-reagent full study; reagent RGB from medicine.yml.
+    The lid, fill level, mixture color, in-hand art, breakage and saved appearance
+    overrides are not runtime-selected by this draft. Source alpha is opaque; wall
+    translucency and circular section are inferred physical interpretation, not source
+    alpha fidelity.
+  parts:
+  - label: thick circular glass heel
+    min: -0.148000, -0.148000, 0.000000
+    max: 0.148000, 0.148000, 0.045000
+    color: '#3C5E5A'
+    shape: CylinderZ
+  - label: hollow bottle wall 01
+    min: 0.145000, -0.070502, 0.032000
+    max: 0.169000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 0.0
+  - label: hollow bottle wall 02
+    min: 0.099016, 0.040514, 0.032000
+    max: 0.123016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 45.0
+  - label: hollow bottle wall 03
+    min: -0.012000, 0.086498, 0.032000
+    max: 0.012000, 0.227502, 0.285000
+    color: '#8BABA88C'
+    yaw: 90.0
+  - label: hollow bottle wall 04
+    min: -0.123016, 0.040514, 0.032000
+    max: -0.099016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 135.0
+  - label: hollow bottle wall 05
+    min: -0.169000, -0.070502, 0.032000
+    max: -0.145000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 180.0
+  - label: hollow bottle wall 06
+    min: -0.123016, -0.181518, 0.032000
+    max: -0.099016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 225.0
+  - label: hollow bottle wall 07
+    min: -0.012000, -0.227502, 0.032000
+    max: 0.012000, -0.086498, 0.285000
+    color: '#8BABA88C'
+    yaw: 270.0
+  - label: hollow bottle wall 08
+    min: 0.099016, -0.181518, 0.032000
+    max: 0.123016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 315.0
+  - label: bottom glass welt
+    min: -0.168500, -0.168500, 0.030000
+    max: 0.168500, 0.168500, 0.052000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: inward glass shoulder 01
+    min: 0.056000, -0.070198, 0.317000
+    max: 0.174000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 0.0
+    pitch: -38
+  - label: inward glass shoulder 02
+    min: 0.022317, 0.011120, 0.317000
+    max: 0.140317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 45.0
+    pitch: -38
+  - label: inward glass shoulder 03
+    min: -0.059000, 0.044802, 0.317000
+    max: 0.059000, 0.185198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 90.0
+    pitch: -38
+  - label: inward glass shoulder 04
+    min: -0.140317, 0.011120, 0.317000
+    max: -0.022317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 135.0
+    pitch: -38
+  - label: inward glass shoulder 05
+    min: -0.174000, -0.070198, 0.317000
+    max: -0.056000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 180.0
+    pitch: -38
+  - label: inward glass shoulder 06
+    min: -0.140317, -0.151515, 0.317000
+    max: -0.022317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 225.0
+    pitch: -38
+  - label: inward glass shoulder 07
+    min: -0.059000, -0.185198, 0.317000
+    max: 0.059000, -0.044802, 0.339000
+    color: '#5A8D88B8'
+    yaw: 270.0
+    pitch: -38
+  - label: inward glass shoulder 08
+    min: 0.022317, -0.151515, 0.317000
+    max: 0.140317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 315.0
+    pitch: -38
+  - label: narrow open neck 01
+    min: 0.065000, -0.036537, 0.360000
+    max: 0.087000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 0.0
+  - label: narrow open neck 02
+    min: 0.042740, 0.017204, 0.360000
+    max: 0.064740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 45.0
+  - label: narrow open neck 03
+    min: -0.011000, 0.039463, 0.360000
+    max: 0.011000, 0.112537, 0.426000
+    color: '#8BABA8'
+    yaw: 90.0
+  - label: narrow open neck 04
+    min: -0.064740, 0.017204, 0.360000
+    max: -0.042740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 135.0
+  - label: narrow open neck 05
+    min: -0.087000, -0.036537, 0.360000
+    max: -0.065000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 180.0
+  - label: narrow open neck 06
+    min: -0.064740, -0.090277, 0.360000
+    max: -0.042740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 225.0
+  - label: narrow open neck 07
+    min: -0.011000, -0.112537, 0.360000
+    max: 0.011000, -0.039463, 0.426000
+    color: '#8BABA8'
+    yaw: 270.0
+  - label: narrow open neck 08
+    min: 0.042740, -0.090277, 0.360000
+    max: 0.064740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 315.0
+  - label: rolled open mouth rim 01
+    min: 0.081000, -0.045649, 0.424000
+    max: 0.109000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rolled open mouth rim 02
+    min: 0.053175, 0.021526, 0.424000
+    max: 0.081175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rolled open mouth rim 03
+    min: -0.014000, 0.049351, 0.424000
+    max: 0.014000, 0.140649, 0.453000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rolled open mouth rim 04
+    min: -0.081175, 0.021526, 0.424000
+    max: -0.053175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rolled open mouth rim 05
+    min: -0.109000, -0.045649, 0.424000
+    max: -0.081000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rolled open mouth rim 06
+    min: -0.081175, -0.112824, 0.424000
+    max: -0.053175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rolled open mouth rim 07
+    min: -0.014000, -0.140649, 0.424000
+    max: 0.014000, -0.049351, 0.453000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rolled open mouth rim 08
+    min: 0.053175, -0.112824, 0.424000
+    max: 0.081175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: rear glass glint
+    min: -0.109000, 0.109000, 0.100000
+    max: -0.096000, 0.127000, 0.252000
+    color: '#B7C9C3A0'
+  - label: static liquid volume level 5
+    min: -0.139000, -0.139000, 0.045000
+    max: 0.139000, 0.139000, 0.282000
+    color: '#ED4847'
+    shape: CylinderZ
+  - label: flat liquid meniscus
+    min: -0.141000, -0.141000, 0.276000
+    max: 0.141000, 0.141000, 0.285000
+    color: '#C73C3C'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DBottleDexalinCloud
+  label: Dexalin chemistry bottle
+  status: draft
+  sourcePrototypes:
+  - CMBottleDexalin
+  referencePrototype: CMBottleDexalin
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/bottles.rsi
+  referenceState: bottle-1
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Physical hollow bottle-1 with a narrow neck and rolled mouth. Static
+    source-default 60/60 single-reagent full study; reagent RGB from medicine.yml.
+    The lid, fill level, mixture color, in-hand art, breakage and saved appearance
+    overrides are not runtime-selected by this draft. Source alpha is opaque; wall
+    translucency and circular section are inferred physical interpretation, not source
+    alpha fidelity.
+  parts:
+  - label: thick circular glass heel
+    min: -0.148000, -0.148000, 0.000000
+    max: 0.148000, 0.148000, 0.045000
+    color: '#3C5E5A'
+    shape: CylinderZ
+  - label: hollow bottle wall 01
+    min: 0.145000, -0.070502, 0.032000
+    max: 0.169000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 0.0
+  - label: hollow bottle wall 02
+    min: 0.099016, 0.040514, 0.032000
+    max: 0.123016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 45.0
+  - label: hollow bottle wall 03
+    min: -0.012000, 0.086498, 0.032000
+    max: 0.012000, 0.227502, 0.285000
+    color: '#8BABA88C'
+    yaw: 90.0
+  - label: hollow bottle wall 04
+    min: -0.123016, 0.040514, 0.032000
+    max: -0.099016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 135.0
+  - label: hollow bottle wall 05
+    min: -0.169000, -0.070502, 0.032000
+    max: -0.145000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 180.0
+  - label: hollow bottle wall 06
+    min: -0.123016, -0.181518, 0.032000
+    max: -0.099016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 225.0
+  - label: hollow bottle wall 07
+    min: -0.012000, -0.227502, 0.032000
+    max: 0.012000, -0.086498, 0.285000
+    color: '#8BABA88C'
+    yaw: 270.0
+  - label: hollow bottle wall 08
+    min: 0.099016, -0.181518, 0.032000
+    max: 0.123016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 315.0
+  - label: bottom glass welt
+    min: -0.168500, -0.168500, 0.030000
+    max: 0.168500, 0.168500, 0.052000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: inward glass shoulder 01
+    min: 0.056000, -0.070198, 0.317000
+    max: 0.174000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 0.0
+    pitch: -38
+  - label: inward glass shoulder 02
+    min: 0.022317, 0.011120, 0.317000
+    max: 0.140317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 45.0
+    pitch: -38
+  - label: inward glass shoulder 03
+    min: -0.059000, 0.044802, 0.317000
+    max: 0.059000, 0.185198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 90.0
+    pitch: -38
+  - label: inward glass shoulder 04
+    min: -0.140317, 0.011120, 0.317000
+    max: -0.022317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 135.0
+    pitch: -38
+  - label: inward glass shoulder 05
+    min: -0.174000, -0.070198, 0.317000
+    max: -0.056000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 180.0
+    pitch: -38
+  - label: inward glass shoulder 06
+    min: -0.140317, -0.151515, 0.317000
+    max: -0.022317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 225.0
+    pitch: -38
+  - label: inward glass shoulder 07
+    min: -0.059000, -0.185198, 0.317000
+    max: 0.059000, -0.044802, 0.339000
+    color: '#5A8D88B8'
+    yaw: 270.0
+    pitch: -38
+  - label: inward glass shoulder 08
+    min: 0.022317, -0.151515, 0.317000
+    max: 0.140317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 315.0
+    pitch: -38
+  - label: narrow open neck 01
+    min: 0.065000, -0.036537, 0.360000
+    max: 0.087000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 0.0
+  - label: narrow open neck 02
+    min: 0.042740, 0.017204, 0.360000
+    max: 0.064740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 45.0
+  - label: narrow open neck 03
+    min: -0.011000, 0.039463, 0.360000
+    max: 0.011000, 0.112537, 0.426000
+    color: '#8BABA8'
+    yaw: 90.0
+  - label: narrow open neck 04
+    min: -0.064740, 0.017204, 0.360000
+    max: -0.042740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 135.0
+  - label: narrow open neck 05
+    min: -0.087000, -0.036537, 0.360000
+    max: -0.065000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 180.0
+  - label: narrow open neck 06
+    min: -0.064740, -0.090277, 0.360000
+    max: -0.042740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 225.0
+  - label: narrow open neck 07
+    min: -0.011000, -0.112537, 0.360000
+    max: 0.011000, -0.039463, 0.426000
+    color: '#8BABA8'
+    yaw: 270.0
+  - label: narrow open neck 08
+    min: 0.042740, -0.090277, 0.360000
+    max: 0.064740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 315.0
+  - label: rolled open mouth rim 01
+    min: 0.081000, -0.045649, 0.424000
+    max: 0.109000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rolled open mouth rim 02
+    min: 0.053175, 0.021526, 0.424000
+    max: 0.081175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rolled open mouth rim 03
+    min: -0.014000, 0.049351, 0.424000
+    max: 0.014000, 0.140649, 0.453000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rolled open mouth rim 04
+    min: -0.081175, 0.021526, 0.424000
+    max: -0.053175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rolled open mouth rim 05
+    min: -0.109000, -0.045649, 0.424000
+    max: -0.081000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rolled open mouth rim 06
+    min: -0.081175, -0.112824, 0.424000
+    max: -0.053175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rolled open mouth rim 07
+    min: -0.014000, -0.140649, 0.424000
+    max: 0.014000, -0.049351, 0.453000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rolled open mouth rim 08
+    min: 0.053175, -0.112824, 0.424000
+    max: 0.081175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: rear glass glint
+    min: -0.109000, 0.109000, 0.100000
+    max: -0.096000, 0.127000, 0.252000
+    color: '#B7C9C3A0'
+  - label: static liquid volume level 5
+    min: -0.139000, -0.139000, 0.045000
+    max: 0.139000, 0.139000, 0.282000
+    color: '#1F28A7'
+    shape: CylinderZ
+  - label: flat liquid meniscus
+    min: -0.141000, -0.141000, 0.276000
+    max: 0.141000, 0.141000, 0.285000
+    color: '#1A228C'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DBottleDyloveneCloud
+  label: Dylovene chemistry bottle
+  status: draft
+  sourcePrototypes:
+  - CMBottleDylovene
+  referencePrototype: CMBottleDylovene
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/bottles.rsi
+  referenceState: bottle-1
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Physical hollow bottle-1 with a narrow neck and rolled mouth. Static
+    source-default 60/60 single-reagent full study; reagent RGB from medicine.yml.
+    The lid, fill level, mixture color, in-hand art, breakage and saved appearance
+    overrides are not runtime-selected by this draft. Source alpha is opaque; wall
+    translucency and circular section are inferred physical interpretation, not source
+    alpha fidelity.
+  parts:
+  - label: thick circular glass heel
+    min: -0.148000, -0.148000, 0.000000
+    max: 0.148000, 0.148000, 0.045000
+    color: '#3C5E5A'
+    shape: CylinderZ
+  - label: hollow bottle wall 01
+    min: 0.145000, -0.070502, 0.032000
+    max: 0.169000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 0.0
+  - label: hollow bottle wall 02
+    min: 0.099016, 0.040514, 0.032000
+    max: 0.123016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 45.0
+  - label: hollow bottle wall 03
+    min: -0.012000, 0.086498, 0.032000
+    max: 0.012000, 0.227502, 0.285000
+    color: '#8BABA88C'
+    yaw: 90.0
+  - label: hollow bottle wall 04
+    min: -0.123016, 0.040514, 0.032000
+    max: -0.099016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 135.0
+  - label: hollow bottle wall 05
+    min: -0.169000, -0.070502, 0.032000
+    max: -0.145000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 180.0
+  - label: hollow bottle wall 06
+    min: -0.123016, -0.181518, 0.032000
+    max: -0.099016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 225.0
+  - label: hollow bottle wall 07
+    min: -0.012000, -0.227502, 0.032000
+    max: 0.012000, -0.086498, 0.285000
+    color: '#8BABA88C'
+    yaw: 270.0
+  - label: hollow bottle wall 08
+    min: 0.099016, -0.181518, 0.032000
+    max: 0.123016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 315.0
+  - label: bottom glass welt
+    min: -0.168500, -0.168500, 0.030000
+    max: 0.168500, 0.168500, 0.052000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: inward glass shoulder 01
+    min: 0.056000, -0.070198, 0.317000
+    max: 0.174000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 0.0
+    pitch: -38
+  - label: inward glass shoulder 02
+    min: 0.022317, 0.011120, 0.317000
+    max: 0.140317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 45.0
+    pitch: -38
+  - label: inward glass shoulder 03
+    min: -0.059000, 0.044802, 0.317000
+    max: 0.059000, 0.185198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 90.0
+    pitch: -38
+  - label: inward glass shoulder 04
+    min: -0.140317, 0.011120, 0.317000
+    max: -0.022317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 135.0
+    pitch: -38
+  - label: inward glass shoulder 05
+    min: -0.174000, -0.070198, 0.317000
+    max: -0.056000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 180.0
+    pitch: -38
+  - label: inward glass shoulder 06
+    min: -0.140317, -0.151515, 0.317000
+    max: -0.022317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 225.0
+    pitch: -38
+  - label: inward glass shoulder 07
+    min: -0.059000, -0.185198, 0.317000
+    max: 0.059000, -0.044802, 0.339000
+    color: '#5A8D88B8'
+    yaw: 270.0
+    pitch: -38
+  - label: inward glass shoulder 08
+    min: 0.022317, -0.151515, 0.317000
+    max: 0.140317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 315.0
+    pitch: -38
+  - label: narrow open neck 01
+    min: 0.065000, -0.036537, 0.360000
+    max: 0.087000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 0.0
+  - label: narrow open neck 02
+    min: 0.042740, 0.017204, 0.360000
+    max: 0.064740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 45.0
+  - label: narrow open neck 03
+    min: -0.011000, 0.039463, 0.360000
+    max: 0.011000, 0.112537, 0.426000
+    color: '#8BABA8'
+    yaw: 90.0
+  - label: narrow open neck 04
+    min: -0.064740, 0.017204, 0.360000
+    max: -0.042740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 135.0
+  - label: narrow open neck 05
+    min: -0.087000, -0.036537, 0.360000
+    max: -0.065000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 180.0
+  - label: narrow open neck 06
+    min: -0.064740, -0.090277, 0.360000
+    max: -0.042740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 225.0
+  - label: narrow open neck 07
+    min: -0.011000, -0.112537, 0.360000
+    max: 0.011000, -0.039463, 0.426000
+    color: '#8BABA8'
+    yaw: 270.0
+  - label: narrow open neck 08
+    min: 0.042740, -0.090277, 0.360000
+    max: 0.064740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 315.0
+  - label: rolled open mouth rim 01
+    min: 0.081000, -0.045649, 0.424000
+    max: 0.109000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rolled open mouth rim 02
+    min: 0.053175, 0.021526, 0.424000
+    max: 0.081175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rolled open mouth rim 03
+    min: -0.014000, 0.049351, 0.424000
+    max: 0.014000, 0.140649, 0.453000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rolled open mouth rim 04
+    min: -0.081175, 0.021526, 0.424000
+    max: -0.053175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rolled open mouth rim 05
+    min: -0.109000, -0.045649, 0.424000
+    max: -0.081000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rolled open mouth rim 06
+    min: -0.081175, -0.112824, 0.424000
+    max: -0.053175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rolled open mouth rim 07
+    min: -0.014000, -0.140649, 0.424000
+    max: 0.014000, -0.049351, 0.453000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rolled open mouth rim 08
+    min: 0.053175, -0.112824, 0.424000
+    max: 0.081175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: rear glass glint
+    min: -0.109000, 0.109000, 0.100000
+    max: -0.096000, 0.127000, 0.252000
+    color: '#B7C9C3A0'
+  - label: static liquid volume level 5
+    min: -0.139000, -0.139000, 0.045000
+    max: 0.139000, 0.139000, 0.282000
+    color: '#3FC92A'
+    shape: CylinderZ
+  - label: flat liquid meniscus
+    min: -0.141000, -0.141000, 0.276000
+    max: 0.141000, 0.141000, 0.285000
+    color: '#35A923'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DBottleInaprovalineCloud
+  label: Inaprovaline chemistry bottle
+  status: draft
+  sourcePrototypes:
+  - CMBottleInaprovaline
+  referencePrototype: CMBottleInaprovaline
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/bottles.rsi
+  referenceState: bottle-1
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Physical hollow bottle-1 with a narrow neck and rolled mouth. Static
+    source-default 60/60 single-reagent full study; reagent RGB from medicine.yml.
+    The lid, fill level, mixture color, in-hand art, breakage and saved appearance
+    overrides are not runtime-selected by this draft. Source alpha is opaque; wall
+    translucency and circular section are inferred physical interpretation, not source
+    alpha fidelity.
+  parts:
+  - label: thick circular glass heel
+    min: -0.148000, -0.148000, 0.000000
+    max: 0.148000, 0.148000, 0.045000
+    color: '#3C5E5A'
+    shape: CylinderZ
+  - label: hollow bottle wall 01
+    min: 0.145000, -0.070502, 0.032000
+    max: 0.169000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 0.0
+  - label: hollow bottle wall 02
+    min: 0.099016, 0.040514, 0.032000
+    max: 0.123016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 45.0
+  - label: hollow bottle wall 03
+    min: -0.012000, 0.086498, 0.032000
+    max: 0.012000, 0.227502, 0.285000
+    color: '#8BABA88C'
+    yaw: 90.0
+  - label: hollow bottle wall 04
+    min: -0.123016, 0.040514, 0.032000
+    max: -0.099016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 135.0
+  - label: hollow bottle wall 05
+    min: -0.169000, -0.070502, 0.032000
+    max: -0.145000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 180.0
+  - label: hollow bottle wall 06
+    min: -0.123016, -0.181518, 0.032000
+    max: -0.099016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 225.0
+  - label: hollow bottle wall 07
+    min: -0.012000, -0.227502, 0.032000
+    max: 0.012000, -0.086498, 0.285000
+    color: '#8BABA88C'
+    yaw: 270.0
+  - label: hollow bottle wall 08
+    min: 0.099016, -0.181518, 0.032000
+    max: 0.123016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 315.0
+  - label: bottom glass welt
+    min: -0.168500, -0.168500, 0.030000
+    max: 0.168500, 0.168500, 0.052000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: inward glass shoulder 01
+    min: 0.056000, -0.070198, 0.317000
+    max: 0.174000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 0.0
+    pitch: -38
+  - label: inward glass shoulder 02
+    min: 0.022317, 0.011120, 0.317000
+    max: 0.140317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 45.0
+    pitch: -38
+  - label: inward glass shoulder 03
+    min: -0.059000, 0.044802, 0.317000
+    max: 0.059000, 0.185198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 90.0
+    pitch: -38
+  - label: inward glass shoulder 04
+    min: -0.140317, 0.011120, 0.317000
+    max: -0.022317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 135.0
+    pitch: -38
+  - label: inward glass shoulder 05
+    min: -0.174000, -0.070198, 0.317000
+    max: -0.056000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 180.0
+    pitch: -38
+  - label: inward glass shoulder 06
+    min: -0.140317, -0.151515, 0.317000
+    max: -0.022317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 225.0
+    pitch: -38
+  - label: inward glass shoulder 07
+    min: -0.059000, -0.185198, 0.317000
+    max: 0.059000, -0.044802, 0.339000
+    color: '#5A8D88B8'
+    yaw: 270.0
+    pitch: -38
+  - label: inward glass shoulder 08
+    min: 0.022317, -0.151515, 0.317000
+    max: 0.140317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 315.0
+    pitch: -38
+  - label: narrow open neck 01
+    min: 0.065000, -0.036537, 0.360000
+    max: 0.087000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 0.0
+  - label: narrow open neck 02
+    min: 0.042740, 0.017204, 0.360000
+    max: 0.064740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 45.0
+  - label: narrow open neck 03
+    min: -0.011000, 0.039463, 0.360000
+    max: 0.011000, 0.112537, 0.426000
+    color: '#8BABA8'
+    yaw: 90.0
+  - label: narrow open neck 04
+    min: -0.064740, 0.017204, 0.360000
+    max: -0.042740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 135.0
+  - label: narrow open neck 05
+    min: -0.087000, -0.036537, 0.360000
+    max: -0.065000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 180.0
+  - label: narrow open neck 06
+    min: -0.064740, -0.090277, 0.360000
+    max: -0.042740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 225.0
+  - label: narrow open neck 07
+    min: -0.011000, -0.112537, 0.360000
+    max: 0.011000, -0.039463, 0.426000
+    color: '#8BABA8'
+    yaw: 270.0
+  - label: narrow open neck 08
+    min: 0.042740, -0.090277, 0.360000
+    max: 0.064740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 315.0
+  - label: rolled open mouth rim 01
+    min: 0.081000, -0.045649, 0.424000
+    max: 0.109000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rolled open mouth rim 02
+    min: 0.053175, 0.021526, 0.424000
+    max: 0.081175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rolled open mouth rim 03
+    min: -0.014000, 0.049351, 0.424000
+    max: 0.014000, 0.140649, 0.453000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rolled open mouth rim 04
+    min: -0.081175, 0.021526, 0.424000
+    max: -0.053175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rolled open mouth rim 05
+    min: -0.109000, -0.045649, 0.424000
+    max: -0.081000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rolled open mouth rim 06
+    min: -0.081175, -0.112824, 0.424000
+    max: -0.053175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rolled open mouth rim 07
+    min: -0.014000, -0.140649, 0.424000
+    max: 0.014000, -0.049351, 0.453000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rolled open mouth rim 08
+    min: 0.053175, -0.112824, 0.424000
+    max: 0.081175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: rear glass glint
+    min: -0.109000, 0.109000, 0.100000
+    max: -0.096000, 0.127000, 0.252000
+    color: '#B7C9C3A0'
+  - label: static liquid volume level 5
+    min: -0.139000, -0.139000, 0.045000
+    max: 0.139000, 0.139000, 0.282000
+    color: '#FE33CB'
+    shape: CylinderZ
+  - label: flat liquid meniscus
+    min: -0.141000, -0.141000, 0.276000
+    max: 0.141000, 0.141000, 0.285000
+    color: '#D52BAB'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DBottleKelotaneCloud
+  label: Kelotane chemistry bottle
+  status: draft
+  sourcePrototypes:
+  - CMBottleKelotane
+  referencePrototype: CMBottleKelotane
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/bottles.rsi
+  referenceState: bottle-1
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Physical hollow bottle-1 with a narrow neck and rolled mouth. Static
+    source-default 60/60 single-reagent full study; reagent RGB from medicine.yml.
+    The lid, fill level, mixture color, in-hand art, breakage and saved appearance
+    overrides are not runtime-selected by this draft. Source alpha is opaque; wall
+    translucency and circular section are inferred physical interpretation, not source
+    alpha fidelity.
+  parts:
+  - label: thick circular glass heel
+    min: -0.148000, -0.148000, 0.000000
+    max: 0.148000, 0.148000, 0.045000
+    color: '#3C5E5A'
+    shape: CylinderZ
+  - label: hollow bottle wall 01
+    min: 0.145000, -0.070502, 0.032000
+    max: 0.169000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 0.0
+  - label: hollow bottle wall 02
+    min: 0.099016, 0.040514, 0.032000
+    max: 0.123016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 45.0
+  - label: hollow bottle wall 03
+    min: -0.012000, 0.086498, 0.032000
+    max: 0.012000, 0.227502, 0.285000
+    color: '#8BABA88C'
+    yaw: 90.0
+  - label: hollow bottle wall 04
+    min: -0.123016, 0.040514, 0.032000
+    max: -0.099016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 135.0
+  - label: hollow bottle wall 05
+    min: -0.169000, -0.070502, 0.032000
+    max: -0.145000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 180.0
+  - label: hollow bottle wall 06
+    min: -0.123016, -0.181518, 0.032000
+    max: -0.099016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 225.0
+  - label: hollow bottle wall 07
+    min: -0.012000, -0.227502, 0.032000
+    max: 0.012000, -0.086498, 0.285000
+    color: '#8BABA88C'
+    yaw: 270.0
+  - label: hollow bottle wall 08
+    min: 0.099016, -0.181518, 0.032000
+    max: 0.123016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 315.0
+  - label: bottom glass welt
+    min: -0.168500, -0.168500, 0.030000
+    max: 0.168500, 0.168500, 0.052000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: inward glass shoulder 01
+    min: 0.056000, -0.070198, 0.317000
+    max: 0.174000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 0.0
+    pitch: -38
+  - label: inward glass shoulder 02
+    min: 0.022317, 0.011120, 0.317000
+    max: 0.140317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 45.0
+    pitch: -38
+  - label: inward glass shoulder 03
+    min: -0.059000, 0.044802, 0.317000
+    max: 0.059000, 0.185198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 90.0
+    pitch: -38
+  - label: inward glass shoulder 04
+    min: -0.140317, 0.011120, 0.317000
+    max: -0.022317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 135.0
+    pitch: -38
+  - label: inward glass shoulder 05
+    min: -0.174000, -0.070198, 0.317000
+    max: -0.056000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 180.0
+    pitch: -38
+  - label: inward glass shoulder 06
+    min: -0.140317, -0.151515, 0.317000
+    max: -0.022317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 225.0
+    pitch: -38
+  - label: inward glass shoulder 07
+    min: -0.059000, -0.185198, 0.317000
+    max: 0.059000, -0.044802, 0.339000
+    color: '#5A8D88B8'
+    yaw: 270.0
+    pitch: -38
+  - label: inward glass shoulder 08
+    min: 0.022317, -0.151515, 0.317000
+    max: 0.140317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 315.0
+    pitch: -38
+  - label: narrow open neck 01
+    min: 0.065000, -0.036537, 0.360000
+    max: 0.087000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 0.0
+  - label: narrow open neck 02
+    min: 0.042740, 0.017204, 0.360000
+    max: 0.064740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 45.0
+  - label: narrow open neck 03
+    min: -0.011000, 0.039463, 0.360000
+    max: 0.011000, 0.112537, 0.426000
+    color: '#8BABA8'
+    yaw: 90.0
+  - label: narrow open neck 04
+    min: -0.064740, 0.017204, 0.360000
+    max: -0.042740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 135.0
+  - label: narrow open neck 05
+    min: -0.087000, -0.036537, 0.360000
+    max: -0.065000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 180.0
+  - label: narrow open neck 06
+    min: -0.064740, -0.090277, 0.360000
+    max: -0.042740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 225.0
+  - label: narrow open neck 07
+    min: -0.011000, -0.112537, 0.360000
+    max: 0.011000, -0.039463, 0.426000
+    color: '#8BABA8'
+    yaw: 270.0
+  - label: narrow open neck 08
+    min: 0.042740, -0.090277, 0.360000
+    max: 0.064740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 315.0
+  - label: rolled open mouth rim 01
+    min: 0.081000, -0.045649, 0.424000
+    max: 0.109000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rolled open mouth rim 02
+    min: 0.053175, 0.021526, 0.424000
+    max: 0.081175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rolled open mouth rim 03
+    min: -0.014000, 0.049351, 0.424000
+    max: 0.014000, 0.140649, 0.453000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rolled open mouth rim 04
+    min: -0.081175, 0.021526, 0.424000
+    max: -0.053175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rolled open mouth rim 05
+    min: -0.109000, -0.045649, 0.424000
+    max: -0.081000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rolled open mouth rim 06
+    min: -0.081175, -0.112824, 0.424000
+    max: -0.053175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rolled open mouth rim 07
+    min: -0.014000, -0.140649, 0.424000
+    max: 0.014000, -0.049351, 0.453000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rolled open mouth rim 08
+    min: 0.053175, -0.112824, 0.424000
+    max: 0.081175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: rear glass glint
+    min: -0.109000, 0.109000, 0.100000
+    max: -0.096000, 0.127000, 0.252000
+    color: '#B7C9C3A0'
+  - label: static liquid volume level 5
+    min: -0.139000, -0.139000, 0.045000
+    max: 0.139000, 0.139000, 0.282000
+    color: '#F5E123'
+    shape: CylinderZ
+  - label: flat liquid meniscus
+    min: -0.141000, -0.141000, 0.276000
+    max: 0.141000, 0.141000, 0.285000
+    color: '#CEBD1D'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DBottleTricordrazineCloud
+  label: Tricordrazine chemistry bottle
+  status: draft
+  sourcePrototypes:
+  - CMBottleTricordrazine
+  referencePrototype: CMBottleTricordrazine
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/bottles.rsi
+  referenceState: bottle-1
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Physical hollow bottle-1 with a narrow neck and rolled mouth. Static
+    source-default 60/60 single-reagent full study; reagent RGB from medicine.yml.
+    The lid, fill level, mixture color, in-hand art, breakage and saved appearance
+    overrides are not runtime-selected by this draft. Source alpha is opaque; wall
+    translucency and circular section are inferred physical interpretation, not source
+    alpha fidelity.
+  parts:
+  - label: thick circular glass heel
+    min: -0.148000, -0.148000, 0.000000
+    max: 0.148000, 0.148000, 0.045000
+    color: '#3C5E5A'
+    shape: CylinderZ
+  - label: hollow bottle wall 01
+    min: 0.145000, -0.070502, 0.032000
+    max: 0.169000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 0.0
+  - label: hollow bottle wall 02
+    min: 0.099016, 0.040514, 0.032000
+    max: 0.123016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 45.0
+  - label: hollow bottle wall 03
+    min: -0.012000, 0.086498, 0.032000
+    max: 0.012000, 0.227502, 0.285000
+    color: '#8BABA88C'
+    yaw: 90.0
+  - label: hollow bottle wall 04
+    min: -0.123016, 0.040514, 0.032000
+    max: -0.099016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 135.0
+  - label: hollow bottle wall 05
+    min: -0.169000, -0.070502, 0.032000
+    max: -0.145000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 180.0
+  - label: hollow bottle wall 06
+    min: -0.123016, -0.181518, 0.032000
+    max: -0.099016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 225.0
+  - label: hollow bottle wall 07
+    min: -0.012000, -0.227502, 0.032000
+    max: 0.012000, -0.086498, 0.285000
+    color: '#8BABA88C'
+    yaw: 270.0
+  - label: hollow bottle wall 08
+    min: 0.099016, -0.181518, 0.032000
+    max: 0.123016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 315.0
+  - label: bottom glass welt
+    min: -0.168500, -0.168500, 0.030000
+    max: 0.168500, 0.168500, 0.052000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: inward glass shoulder 01
+    min: 0.056000, -0.070198, 0.317000
+    max: 0.174000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 0.0
+    pitch: -38
+  - label: inward glass shoulder 02
+    min: 0.022317, 0.011120, 0.317000
+    max: 0.140317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 45.0
+    pitch: -38
+  - label: inward glass shoulder 03
+    min: -0.059000, 0.044802, 0.317000
+    max: 0.059000, 0.185198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 90.0
+    pitch: -38
+  - label: inward glass shoulder 04
+    min: -0.140317, 0.011120, 0.317000
+    max: -0.022317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 135.0
+    pitch: -38
+  - label: inward glass shoulder 05
+    min: -0.174000, -0.070198, 0.317000
+    max: -0.056000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 180.0
+    pitch: -38
+  - label: inward glass shoulder 06
+    min: -0.140317, -0.151515, 0.317000
+    max: -0.022317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 225.0
+    pitch: -38
+  - label: inward glass shoulder 07
+    min: -0.059000, -0.185198, 0.317000
+    max: 0.059000, -0.044802, 0.339000
+    color: '#5A8D88B8'
+    yaw: 270.0
+    pitch: -38
+  - label: inward glass shoulder 08
+    min: 0.022317, -0.151515, 0.317000
+    max: 0.140317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 315.0
+    pitch: -38
+  - label: narrow open neck 01
+    min: 0.065000, -0.036537, 0.360000
+    max: 0.087000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 0.0
+  - label: narrow open neck 02
+    min: 0.042740, 0.017204, 0.360000
+    max: 0.064740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 45.0
+  - label: narrow open neck 03
+    min: -0.011000, 0.039463, 0.360000
+    max: 0.011000, 0.112537, 0.426000
+    color: '#8BABA8'
+    yaw: 90.0
+  - label: narrow open neck 04
+    min: -0.064740, 0.017204, 0.360000
+    max: -0.042740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 135.0
+  - label: narrow open neck 05
+    min: -0.087000, -0.036537, 0.360000
+    max: -0.065000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 180.0
+  - label: narrow open neck 06
+    min: -0.064740, -0.090277, 0.360000
+    max: -0.042740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 225.0
+  - label: narrow open neck 07
+    min: -0.011000, -0.112537, 0.360000
+    max: 0.011000, -0.039463, 0.426000
+    color: '#8BABA8'
+    yaw: 270.0
+  - label: narrow open neck 08
+    min: 0.042740, -0.090277, 0.360000
+    max: 0.064740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 315.0
+  - label: rolled open mouth rim 01
+    min: 0.081000, -0.045649, 0.424000
+    max: 0.109000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rolled open mouth rim 02
+    min: 0.053175, 0.021526, 0.424000
+    max: 0.081175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rolled open mouth rim 03
+    min: -0.014000, 0.049351, 0.424000
+    max: 0.014000, 0.140649, 0.453000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rolled open mouth rim 04
+    min: -0.081175, 0.021526, 0.424000
+    max: -0.053175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rolled open mouth rim 05
+    min: -0.109000, -0.045649, 0.424000
+    max: -0.081000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rolled open mouth rim 06
+    min: -0.081175, -0.112824, 0.424000
+    max: -0.053175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rolled open mouth rim 07
+    min: -0.014000, -0.140649, 0.424000
+    max: 0.014000, -0.049351, 0.453000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rolled open mouth rim 08
+    min: 0.053175, -0.112824, 0.424000
+    max: 0.081175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: rear glass glint
+    min: -0.109000, 0.109000, 0.100000
+    max: -0.096000, 0.127000, 0.252000
+    color: '#B7C9C3A0'
+  - label: static liquid volume level 5
+    min: -0.139000, -0.139000, 0.045000
+    max: 0.139000, 0.139000, 0.282000
+    color: '#D87F2B'
+    shape: CylinderZ
+  - label: flat liquid meniscus
+    min: -0.141000, -0.141000, 0.276000
+    max: 0.141000, 0.141000, 0.285000
+    color: '#B56B24'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DBottleCappedStudyCloud
+  label: Chemistry bottle capped study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMBottleEmpty
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/bottles.rsi
+  referenceState: bottle-1
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound static empty/capped art study using bottle-1 plus lid_bottle-1.
+    Not a gameplay state binding.
+  parts:
+  - label: thick circular glass heel
+    min: -0.148000, -0.148000, 0.000000
+    max: 0.148000, 0.148000, 0.045000
+    color: '#3C5E5A'
+    shape: CylinderZ
+  - label: hollow bottle wall 01
+    min: 0.145000, -0.070502, 0.032000
+    max: 0.169000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 0.0
+  - label: hollow bottle wall 02
+    min: 0.099016, 0.040514, 0.032000
+    max: 0.123016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 45.0
+  - label: hollow bottle wall 03
+    min: -0.012000, 0.086498, 0.032000
+    max: 0.012000, 0.227502, 0.285000
+    color: '#8BABA88C'
+    yaw: 90.0
+  - label: hollow bottle wall 04
+    min: -0.123016, 0.040514, 0.032000
+    max: -0.099016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 135.0
+  - label: hollow bottle wall 05
+    min: -0.169000, -0.070502, 0.032000
+    max: -0.145000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 180.0
+  - label: hollow bottle wall 06
+    min: -0.123016, -0.181518, 0.032000
+    max: -0.099016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 225.0
+  - label: hollow bottle wall 07
+    min: -0.012000, -0.227502, 0.032000
+    max: 0.012000, -0.086498, 0.285000
+    color: '#8BABA88C'
+    yaw: 270.0
+  - label: hollow bottle wall 08
+    min: 0.099016, -0.181518, 0.032000
+    max: 0.123016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 315.0
+  - label: bottom glass welt
+    min: -0.168500, -0.168500, 0.030000
+    max: 0.168500, 0.168500, 0.052000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: inward glass shoulder 01
+    min: 0.056000, -0.070198, 0.317000
+    max: 0.174000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 0.0
+    pitch: -38
+  - label: inward glass shoulder 02
+    min: 0.022317, 0.011120, 0.317000
+    max: 0.140317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 45.0
+    pitch: -38
+  - label: inward glass shoulder 03
+    min: -0.059000, 0.044802, 0.317000
+    max: 0.059000, 0.185198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 90.0
+    pitch: -38
+  - label: inward glass shoulder 04
+    min: -0.140317, 0.011120, 0.317000
+    max: -0.022317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 135.0
+    pitch: -38
+  - label: inward glass shoulder 05
+    min: -0.174000, -0.070198, 0.317000
+    max: -0.056000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 180.0
+    pitch: -38
+  - label: inward glass shoulder 06
+    min: -0.140317, -0.151515, 0.317000
+    max: -0.022317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 225.0
+    pitch: -38
+  - label: inward glass shoulder 07
+    min: -0.059000, -0.185198, 0.317000
+    max: 0.059000, -0.044802, 0.339000
+    color: '#5A8D88B8'
+    yaw: 270.0
+    pitch: -38
+  - label: inward glass shoulder 08
+    min: 0.022317, -0.151515, 0.317000
+    max: 0.140317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 315.0
+    pitch: -38
+  - label: narrow open neck 01
+    min: 0.065000, -0.036537, 0.360000
+    max: 0.087000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 0.0
+  - label: narrow open neck 02
+    min: 0.042740, 0.017204, 0.360000
+    max: 0.064740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 45.0
+  - label: narrow open neck 03
+    min: -0.011000, 0.039463, 0.360000
+    max: 0.011000, 0.112537, 0.426000
+    color: '#8BABA8'
+    yaw: 90.0
+  - label: narrow open neck 04
+    min: -0.064740, 0.017204, 0.360000
+    max: -0.042740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 135.0
+  - label: narrow open neck 05
+    min: -0.087000, -0.036537, 0.360000
+    max: -0.065000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 180.0
+  - label: narrow open neck 06
+    min: -0.064740, -0.090277, 0.360000
+    max: -0.042740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 225.0
+  - label: narrow open neck 07
+    min: -0.011000, -0.112537, 0.360000
+    max: 0.011000, -0.039463, 0.426000
+    color: '#8BABA8'
+    yaw: 270.0
+  - label: narrow open neck 08
+    min: 0.042740, -0.090277, 0.360000
+    max: 0.064740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 315.0
+  - label: rolled open mouth rim 01
+    min: 0.081000, -0.045649, 0.424000
+    max: 0.109000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rolled open mouth rim 02
+    min: 0.053175, 0.021526, 0.424000
+    max: 0.081175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rolled open mouth rim 03
+    min: -0.014000, 0.049351, 0.424000
+    max: 0.014000, 0.140649, 0.453000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rolled open mouth rim 04
+    min: -0.081175, 0.021526, 0.424000
+    max: -0.053175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rolled open mouth rim 05
+    min: -0.109000, -0.045649, 0.424000
+    max: -0.081000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rolled open mouth rim 06
+    min: -0.081175, -0.112824, 0.424000
+    max: -0.053175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rolled open mouth rim 07
+    min: -0.014000, -0.140649, 0.424000
+    max: 0.014000, -0.049351, 0.453000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rolled open mouth rim 08
+    min: 0.053175, -0.112824, 0.424000
+    max: 0.081175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: rear glass glint
+    min: -0.109000, 0.109000, 0.100000
+    max: -0.096000, 0.127000, 0.252000
+    color: '#B7C9C3A0'
+  - label: source grey removable lid
+    min: -0.111000, -0.111000, 0.440000
+    max: 0.111000, 0.111000, 0.472000
+    color: '#73706C'
+    shape: CylinderZ
+  - label: recessed lid crown
+    min: -0.092000, -0.092000, 0.470000
+    max: 0.092000, 0.092000, 0.482000
+    color: '#A9A6A2'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DBottleFill1StudyCloud
+  label: Chemistry bottle neutral fill 1 study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMBottleEmpty
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/bottles.rsi
+  referenceState: bottle-1
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound static bottle-1 plus bottle-1-1 neutral-color study. No runtime
+    fill, lid or mixture selection.
+  parts:
+  - label: thick circular glass heel
+    min: -0.148000, -0.148000, 0.000000
+    max: 0.148000, 0.148000, 0.045000
+    color: '#3C5E5A'
+    shape: CylinderZ
+  - label: hollow bottle wall 01
+    min: 0.145000, -0.070502, 0.032000
+    max: 0.169000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 0.0
+  - label: hollow bottle wall 02
+    min: 0.099016, 0.040514, 0.032000
+    max: 0.123016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 45.0
+  - label: hollow bottle wall 03
+    min: -0.012000, 0.086498, 0.032000
+    max: 0.012000, 0.227502, 0.285000
+    color: '#8BABA88C'
+    yaw: 90.0
+  - label: hollow bottle wall 04
+    min: -0.123016, 0.040514, 0.032000
+    max: -0.099016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 135.0
+  - label: hollow bottle wall 05
+    min: -0.169000, -0.070502, 0.032000
+    max: -0.145000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 180.0
+  - label: hollow bottle wall 06
+    min: -0.123016, -0.181518, 0.032000
+    max: -0.099016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 225.0
+  - label: hollow bottle wall 07
+    min: -0.012000, -0.227502, 0.032000
+    max: 0.012000, -0.086498, 0.285000
+    color: '#8BABA88C'
+    yaw: 270.0
+  - label: hollow bottle wall 08
+    min: 0.099016, -0.181518, 0.032000
+    max: 0.123016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 315.0
+  - label: bottom glass welt
+    min: -0.168500, -0.168500, 0.030000
+    max: 0.168500, 0.168500, 0.052000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: inward glass shoulder 01
+    min: 0.056000, -0.070198, 0.317000
+    max: 0.174000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 0.0
+    pitch: -38
+  - label: inward glass shoulder 02
+    min: 0.022317, 0.011120, 0.317000
+    max: 0.140317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 45.0
+    pitch: -38
+  - label: inward glass shoulder 03
+    min: -0.059000, 0.044802, 0.317000
+    max: 0.059000, 0.185198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 90.0
+    pitch: -38
+  - label: inward glass shoulder 04
+    min: -0.140317, 0.011120, 0.317000
+    max: -0.022317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 135.0
+    pitch: -38
+  - label: inward glass shoulder 05
+    min: -0.174000, -0.070198, 0.317000
+    max: -0.056000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 180.0
+    pitch: -38
+  - label: inward glass shoulder 06
+    min: -0.140317, -0.151515, 0.317000
+    max: -0.022317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 225.0
+    pitch: -38
+  - label: inward glass shoulder 07
+    min: -0.059000, -0.185198, 0.317000
+    max: 0.059000, -0.044802, 0.339000
+    color: '#5A8D88B8'
+    yaw: 270.0
+    pitch: -38
+  - label: inward glass shoulder 08
+    min: 0.022317, -0.151515, 0.317000
+    max: 0.140317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 315.0
+    pitch: -38
+  - label: narrow open neck 01
+    min: 0.065000, -0.036537, 0.360000
+    max: 0.087000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 0.0
+  - label: narrow open neck 02
+    min: 0.042740, 0.017204, 0.360000
+    max: 0.064740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 45.0
+  - label: narrow open neck 03
+    min: -0.011000, 0.039463, 0.360000
+    max: 0.011000, 0.112537, 0.426000
+    color: '#8BABA8'
+    yaw: 90.0
+  - label: narrow open neck 04
+    min: -0.064740, 0.017204, 0.360000
+    max: -0.042740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 135.0
+  - label: narrow open neck 05
+    min: -0.087000, -0.036537, 0.360000
+    max: -0.065000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 180.0
+  - label: narrow open neck 06
+    min: -0.064740, -0.090277, 0.360000
+    max: -0.042740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 225.0
+  - label: narrow open neck 07
+    min: -0.011000, -0.112537, 0.360000
+    max: 0.011000, -0.039463, 0.426000
+    color: '#8BABA8'
+    yaw: 270.0
+  - label: narrow open neck 08
+    min: 0.042740, -0.090277, 0.360000
+    max: 0.064740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 315.0
+  - label: rolled open mouth rim 01
+    min: 0.081000, -0.045649, 0.424000
+    max: 0.109000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rolled open mouth rim 02
+    min: 0.053175, 0.021526, 0.424000
+    max: 0.081175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rolled open mouth rim 03
+    min: -0.014000, 0.049351, 0.424000
+    max: 0.014000, 0.140649, 0.453000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rolled open mouth rim 04
+    min: -0.081175, 0.021526, 0.424000
+    max: -0.053175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rolled open mouth rim 05
+    min: -0.109000, -0.045649, 0.424000
+    max: -0.081000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rolled open mouth rim 06
+    min: -0.081175, -0.112824, 0.424000
+    max: -0.053175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rolled open mouth rim 07
+    min: -0.014000, -0.140649, 0.424000
+    max: 0.014000, -0.049351, 0.453000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rolled open mouth rim 08
+    min: 0.053175, -0.112824, 0.424000
+    max: 0.081175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: rear glass glint
+    min: -0.109000, 0.109000, 0.100000
+    max: -0.096000, 0.127000, 0.252000
+    color: '#B7C9C3A0'
+  - label: static liquid volume level 1
+    min: -0.139000, -0.139000, 0.045000
+    max: 0.139000, 0.139000, 0.078000
+    color: '#B1B1B1'
+    shape: CylinderZ
+  - label: flat liquid meniscus
+    min: -0.141000, -0.141000, 0.072000
+    max: 0.141000, 0.141000, 0.081000
+    color: '#959595'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DBottleFill2StudyCloud
+  label: Chemistry bottle neutral fill 2 study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMBottleEmpty
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/bottles.rsi
+  referenceState: bottle-1
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound static bottle-1 plus bottle-1-2 neutral-color study. No runtime
+    fill, lid or mixture selection.
+  parts:
+  - label: thick circular glass heel
+    min: -0.148000, -0.148000, 0.000000
+    max: 0.148000, 0.148000, 0.045000
+    color: '#3C5E5A'
+    shape: CylinderZ
+  - label: hollow bottle wall 01
+    min: 0.145000, -0.070502, 0.032000
+    max: 0.169000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 0.0
+  - label: hollow bottle wall 02
+    min: 0.099016, 0.040514, 0.032000
+    max: 0.123016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 45.0
+  - label: hollow bottle wall 03
+    min: -0.012000, 0.086498, 0.032000
+    max: 0.012000, 0.227502, 0.285000
+    color: '#8BABA88C'
+    yaw: 90.0
+  - label: hollow bottle wall 04
+    min: -0.123016, 0.040514, 0.032000
+    max: -0.099016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 135.0
+  - label: hollow bottle wall 05
+    min: -0.169000, -0.070502, 0.032000
+    max: -0.145000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 180.0
+  - label: hollow bottle wall 06
+    min: -0.123016, -0.181518, 0.032000
+    max: -0.099016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 225.0
+  - label: hollow bottle wall 07
+    min: -0.012000, -0.227502, 0.032000
+    max: 0.012000, -0.086498, 0.285000
+    color: '#8BABA88C'
+    yaw: 270.0
+  - label: hollow bottle wall 08
+    min: 0.099016, -0.181518, 0.032000
+    max: 0.123016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 315.0
+  - label: bottom glass welt
+    min: -0.168500, -0.168500, 0.030000
+    max: 0.168500, 0.168500, 0.052000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: inward glass shoulder 01
+    min: 0.056000, -0.070198, 0.317000
+    max: 0.174000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 0.0
+    pitch: -38
+  - label: inward glass shoulder 02
+    min: 0.022317, 0.011120, 0.317000
+    max: 0.140317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 45.0
+    pitch: -38
+  - label: inward glass shoulder 03
+    min: -0.059000, 0.044802, 0.317000
+    max: 0.059000, 0.185198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 90.0
+    pitch: -38
+  - label: inward glass shoulder 04
+    min: -0.140317, 0.011120, 0.317000
+    max: -0.022317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 135.0
+    pitch: -38
+  - label: inward glass shoulder 05
+    min: -0.174000, -0.070198, 0.317000
+    max: -0.056000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 180.0
+    pitch: -38
+  - label: inward glass shoulder 06
+    min: -0.140317, -0.151515, 0.317000
+    max: -0.022317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 225.0
+    pitch: -38
+  - label: inward glass shoulder 07
+    min: -0.059000, -0.185198, 0.317000
+    max: 0.059000, -0.044802, 0.339000
+    color: '#5A8D88B8'
+    yaw: 270.0
+    pitch: -38
+  - label: inward glass shoulder 08
+    min: 0.022317, -0.151515, 0.317000
+    max: 0.140317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 315.0
+    pitch: -38
+  - label: narrow open neck 01
+    min: 0.065000, -0.036537, 0.360000
+    max: 0.087000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 0.0
+  - label: narrow open neck 02
+    min: 0.042740, 0.017204, 0.360000
+    max: 0.064740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 45.0
+  - label: narrow open neck 03
+    min: -0.011000, 0.039463, 0.360000
+    max: 0.011000, 0.112537, 0.426000
+    color: '#8BABA8'
+    yaw: 90.0
+  - label: narrow open neck 04
+    min: -0.064740, 0.017204, 0.360000
+    max: -0.042740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 135.0
+  - label: narrow open neck 05
+    min: -0.087000, -0.036537, 0.360000
+    max: -0.065000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 180.0
+  - label: narrow open neck 06
+    min: -0.064740, -0.090277, 0.360000
+    max: -0.042740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 225.0
+  - label: narrow open neck 07
+    min: -0.011000, -0.112537, 0.360000
+    max: 0.011000, -0.039463, 0.426000
+    color: '#8BABA8'
+    yaw: 270.0
+  - label: narrow open neck 08
+    min: 0.042740, -0.090277, 0.360000
+    max: 0.064740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 315.0
+  - label: rolled open mouth rim 01
+    min: 0.081000, -0.045649, 0.424000
+    max: 0.109000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rolled open mouth rim 02
+    min: 0.053175, 0.021526, 0.424000
+    max: 0.081175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rolled open mouth rim 03
+    min: -0.014000, 0.049351, 0.424000
+    max: 0.014000, 0.140649, 0.453000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rolled open mouth rim 04
+    min: -0.081175, 0.021526, 0.424000
+    max: -0.053175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rolled open mouth rim 05
+    min: -0.109000, -0.045649, 0.424000
+    max: -0.081000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rolled open mouth rim 06
+    min: -0.081175, -0.112824, 0.424000
+    max: -0.053175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rolled open mouth rim 07
+    min: -0.014000, -0.140649, 0.424000
+    max: 0.014000, -0.049351, 0.453000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rolled open mouth rim 08
+    min: 0.053175, -0.112824, 0.424000
+    max: 0.081175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: rear glass glint
+    min: -0.109000, 0.109000, 0.100000
+    max: -0.096000, 0.127000, 0.252000
+    color: '#B7C9C3A0'
+  - label: static liquid volume level 2
+    min: -0.139000, -0.139000, 0.045000
+    max: 0.139000, 0.139000, 0.135000
+    color: '#B1B1B1'
+    shape: CylinderZ
+  - label: flat liquid meniscus
+    min: -0.141000, -0.141000, 0.129000
+    max: 0.141000, 0.141000, 0.138000
+    color: '#959595'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DBottleFill3StudyCloud
+  label: Chemistry bottle neutral fill 3 study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMBottleEmpty
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/bottles.rsi
+  referenceState: bottle-1
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound static bottle-1 plus bottle-1-3 neutral-color study. No runtime
+    fill, lid or mixture selection.
+  parts:
+  - label: thick circular glass heel
+    min: -0.148000, -0.148000, 0.000000
+    max: 0.148000, 0.148000, 0.045000
+    color: '#3C5E5A'
+    shape: CylinderZ
+  - label: hollow bottle wall 01
+    min: 0.145000, -0.070502, 0.032000
+    max: 0.169000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 0.0
+  - label: hollow bottle wall 02
+    min: 0.099016, 0.040514, 0.032000
+    max: 0.123016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 45.0
+  - label: hollow bottle wall 03
+    min: -0.012000, 0.086498, 0.032000
+    max: 0.012000, 0.227502, 0.285000
+    color: '#8BABA88C'
+    yaw: 90.0
+  - label: hollow bottle wall 04
+    min: -0.123016, 0.040514, 0.032000
+    max: -0.099016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 135.0
+  - label: hollow bottle wall 05
+    min: -0.169000, -0.070502, 0.032000
+    max: -0.145000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 180.0
+  - label: hollow bottle wall 06
+    min: -0.123016, -0.181518, 0.032000
+    max: -0.099016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 225.0
+  - label: hollow bottle wall 07
+    min: -0.012000, -0.227502, 0.032000
+    max: 0.012000, -0.086498, 0.285000
+    color: '#8BABA88C'
+    yaw: 270.0
+  - label: hollow bottle wall 08
+    min: 0.099016, -0.181518, 0.032000
+    max: 0.123016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 315.0
+  - label: bottom glass welt
+    min: -0.168500, -0.168500, 0.030000
+    max: 0.168500, 0.168500, 0.052000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: inward glass shoulder 01
+    min: 0.056000, -0.070198, 0.317000
+    max: 0.174000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 0.0
+    pitch: -38
+  - label: inward glass shoulder 02
+    min: 0.022317, 0.011120, 0.317000
+    max: 0.140317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 45.0
+    pitch: -38
+  - label: inward glass shoulder 03
+    min: -0.059000, 0.044802, 0.317000
+    max: 0.059000, 0.185198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 90.0
+    pitch: -38
+  - label: inward glass shoulder 04
+    min: -0.140317, 0.011120, 0.317000
+    max: -0.022317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 135.0
+    pitch: -38
+  - label: inward glass shoulder 05
+    min: -0.174000, -0.070198, 0.317000
+    max: -0.056000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 180.0
+    pitch: -38
+  - label: inward glass shoulder 06
+    min: -0.140317, -0.151515, 0.317000
+    max: -0.022317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 225.0
+    pitch: -38
+  - label: inward glass shoulder 07
+    min: -0.059000, -0.185198, 0.317000
+    max: 0.059000, -0.044802, 0.339000
+    color: '#5A8D88B8'
+    yaw: 270.0
+    pitch: -38
+  - label: inward glass shoulder 08
+    min: 0.022317, -0.151515, 0.317000
+    max: 0.140317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 315.0
+    pitch: -38
+  - label: narrow open neck 01
+    min: 0.065000, -0.036537, 0.360000
+    max: 0.087000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 0.0
+  - label: narrow open neck 02
+    min: 0.042740, 0.017204, 0.360000
+    max: 0.064740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 45.0
+  - label: narrow open neck 03
+    min: -0.011000, 0.039463, 0.360000
+    max: 0.011000, 0.112537, 0.426000
+    color: '#8BABA8'
+    yaw: 90.0
+  - label: narrow open neck 04
+    min: -0.064740, 0.017204, 0.360000
+    max: -0.042740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 135.0
+  - label: narrow open neck 05
+    min: -0.087000, -0.036537, 0.360000
+    max: -0.065000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 180.0
+  - label: narrow open neck 06
+    min: -0.064740, -0.090277, 0.360000
+    max: -0.042740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 225.0
+  - label: narrow open neck 07
+    min: -0.011000, -0.112537, 0.360000
+    max: 0.011000, -0.039463, 0.426000
+    color: '#8BABA8'
+    yaw: 270.0
+  - label: narrow open neck 08
+    min: 0.042740, -0.090277, 0.360000
+    max: 0.064740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 315.0
+  - label: rolled open mouth rim 01
+    min: 0.081000, -0.045649, 0.424000
+    max: 0.109000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rolled open mouth rim 02
+    min: 0.053175, 0.021526, 0.424000
+    max: 0.081175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rolled open mouth rim 03
+    min: -0.014000, 0.049351, 0.424000
+    max: 0.014000, 0.140649, 0.453000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rolled open mouth rim 04
+    min: -0.081175, 0.021526, 0.424000
+    max: -0.053175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rolled open mouth rim 05
+    min: -0.109000, -0.045649, 0.424000
+    max: -0.081000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rolled open mouth rim 06
+    min: -0.081175, -0.112824, 0.424000
+    max: -0.053175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rolled open mouth rim 07
+    min: -0.014000, -0.140649, 0.424000
+    max: 0.014000, -0.049351, 0.453000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rolled open mouth rim 08
+    min: 0.053175, -0.112824, 0.424000
+    max: 0.081175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: rear glass glint
+    min: -0.109000, 0.109000, 0.100000
+    max: -0.096000, 0.127000, 0.252000
+    color: '#B7C9C3A0'
+  - label: static liquid volume level 3
+    min: -0.139000, -0.139000, 0.045000
+    max: 0.139000, 0.139000, 0.190000
+    color: '#B1B1B1'
+    shape: CylinderZ
+  - label: flat liquid meniscus
+    min: -0.141000, -0.141000, 0.184000
+    max: 0.141000, 0.141000, 0.193000
+    color: '#959595'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DBottleFill4StudyCloud
+  label: Chemistry bottle neutral fill 4 study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMBottleEmpty
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/bottles.rsi
+  referenceState: bottle-1
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound static bottle-1 plus bottle-1-4 neutral-color study. No runtime
+    fill, lid or mixture selection.
+  parts:
+  - label: thick circular glass heel
+    min: -0.148000, -0.148000, 0.000000
+    max: 0.148000, 0.148000, 0.045000
+    color: '#3C5E5A'
+    shape: CylinderZ
+  - label: hollow bottle wall 01
+    min: 0.145000, -0.070502, 0.032000
+    max: 0.169000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 0.0
+  - label: hollow bottle wall 02
+    min: 0.099016, 0.040514, 0.032000
+    max: 0.123016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 45.0
+  - label: hollow bottle wall 03
+    min: -0.012000, 0.086498, 0.032000
+    max: 0.012000, 0.227502, 0.285000
+    color: '#8BABA88C'
+    yaw: 90.0
+  - label: hollow bottle wall 04
+    min: -0.123016, 0.040514, 0.032000
+    max: -0.099016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 135.0
+  - label: hollow bottle wall 05
+    min: -0.169000, -0.070502, 0.032000
+    max: -0.145000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 180.0
+  - label: hollow bottle wall 06
+    min: -0.123016, -0.181518, 0.032000
+    max: -0.099016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 225.0
+  - label: hollow bottle wall 07
+    min: -0.012000, -0.227502, 0.032000
+    max: 0.012000, -0.086498, 0.285000
+    color: '#8BABA88C'
+    yaw: 270.0
+  - label: hollow bottle wall 08
+    min: 0.099016, -0.181518, 0.032000
+    max: 0.123016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 315.0
+  - label: bottom glass welt
+    min: -0.168500, -0.168500, 0.030000
+    max: 0.168500, 0.168500, 0.052000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: inward glass shoulder 01
+    min: 0.056000, -0.070198, 0.317000
+    max: 0.174000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 0.0
+    pitch: -38
+  - label: inward glass shoulder 02
+    min: 0.022317, 0.011120, 0.317000
+    max: 0.140317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 45.0
+    pitch: -38
+  - label: inward glass shoulder 03
+    min: -0.059000, 0.044802, 0.317000
+    max: 0.059000, 0.185198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 90.0
+    pitch: -38
+  - label: inward glass shoulder 04
+    min: -0.140317, 0.011120, 0.317000
+    max: -0.022317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 135.0
+    pitch: -38
+  - label: inward glass shoulder 05
+    min: -0.174000, -0.070198, 0.317000
+    max: -0.056000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 180.0
+    pitch: -38
+  - label: inward glass shoulder 06
+    min: -0.140317, -0.151515, 0.317000
+    max: -0.022317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 225.0
+    pitch: -38
+  - label: inward glass shoulder 07
+    min: -0.059000, -0.185198, 0.317000
+    max: 0.059000, -0.044802, 0.339000
+    color: '#5A8D88B8'
+    yaw: 270.0
+    pitch: -38
+  - label: inward glass shoulder 08
+    min: 0.022317, -0.151515, 0.317000
+    max: 0.140317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 315.0
+    pitch: -38
+  - label: narrow open neck 01
+    min: 0.065000, -0.036537, 0.360000
+    max: 0.087000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 0.0
+  - label: narrow open neck 02
+    min: 0.042740, 0.017204, 0.360000
+    max: 0.064740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 45.0
+  - label: narrow open neck 03
+    min: -0.011000, 0.039463, 0.360000
+    max: 0.011000, 0.112537, 0.426000
+    color: '#8BABA8'
+    yaw: 90.0
+  - label: narrow open neck 04
+    min: -0.064740, 0.017204, 0.360000
+    max: -0.042740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 135.0
+  - label: narrow open neck 05
+    min: -0.087000, -0.036537, 0.360000
+    max: -0.065000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 180.0
+  - label: narrow open neck 06
+    min: -0.064740, -0.090277, 0.360000
+    max: -0.042740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 225.0
+  - label: narrow open neck 07
+    min: -0.011000, -0.112537, 0.360000
+    max: 0.011000, -0.039463, 0.426000
+    color: '#8BABA8'
+    yaw: 270.0
+  - label: narrow open neck 08
+    min: 0.042740, -0.090277, 0.360000
+    max: 0.064740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 315.0
+  - label: rolled open mouth rim 01
+    min: 0.081000, -0.045649, 0.424000
+    max: 0.109000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rolled open mouth rim 02
+    min: 0.053175, 0.021526, 0.424000
+    max: 0.081175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rolled open mouth rim 03
+    min: -0.014000, 0.049351, 0.424000
+    max: 0.014000, 0.140649, 0.453000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rolled open mouth rim 04
+    min: -0.081175, 0.021526, 0.424000
+    max: -0.053175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rolled open mouth rim 05
+    min: -0.109000, -0.045649, 0.424000
+    max: -0.081000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rolled open mouth rim 06
+    min: -0.081175, -0.112824, 0.424000
+    max: -0.053175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rolled open mouth rim 07
+    min: -0.014000, -0.140649, 0.424000
+    max: 0.014000, -0.049351, 0.453000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rolled open mouth rim 08
+    min: 0.053175, -0.112824, 0.424000
+    max: 0.081175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: rear glass glint
+    min: -0.109000, 0.109000, 0.100000
+    max: -0.096000, 0.127000, 0.252000
+    color: '#B7C9C3A0'
+  - label: static liquid volume level 4
+    min: -0.139000, -0.139000, 0.045000
+    max: 0.139000, 0.139000, 0.241000
+    color: '#B1B1B1'
+    shape: CylinderZ
+  - label: flat liquid meniscus
+    min: -0.141000, -0.141000, 0.235000
+    max: 0.141000, 0.141000, 0.244000
+    color: '#959595'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DBottleFill5StudyCloud
+  label: Chemistry bottle neutral fill 5 study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMBottleEmpty
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/bottles.rsi
+  referenceState: bottle-1
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound static bottle-1 plus bottle-1-5 neutral-color study. No runtime
+    fill, lid or mixture selection.
+  parts:
+  - label: thick circular glass heel
+    min: -0.148000, -0.148000, 0.000000
+    max: 0.148000, 0.148000, 0.045000
+    color: '#3C5E5A'
+    shape: CylinderZ
+  - label: hollow bottle wall 01
+    min: 0.145000, -0.070502, 0.032000
+    max: 0.169000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 0.0
+  - label: hollow bottle wall 02
+    min: 0.099016, 0.040514, 0.032000
+    max: 0.123016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 45.0
+  - label: hollow bottle wall 03
+    min: -0.012000, 0.086498, 0.032000
+    max: 0.012000, 0.227502, 0.285000
+    color: '#8BABA88C'
+    yaw: 90.0
+  - label: hollow bottle wall 04
+    min: -0.123016, 0.040514, 0.032000
+    max: -0.099016, 0.181518, 0.285000
+    color: '#8BABA88C'
+    yaw: 135.0
+  - label: hollow bottle wall 05
+    min: -0.169000, -0.070502, 0.032000
+    max: -0.145000, 0.070502, 0.285000
+    color: '#8BABA88C'
+    yaw: 180.0
+  - label: hollow bottle wall 06
+    min: -0.123016, -0.181518, 0.032000
+    max: -0.099016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 225.0
+  - label: hollow bottle wall 07
+    min: -0.012000, -0.227502, 0.032000
+    max: 0.012000, -0.086498, 0.285000
+    color: '#8BABA88C'
+    yaw: 270.0
+  - label: hollow bottle wall 08
+    min: 0.099016, -0.181518, 0.032000
+    max: 0.123016, -0.040514, 0.285000
+    color: '#8BABA88C'
+    yaw: 315.0
+  - label: bottom glass welt
+    min: -0.168500, -0.168500, 0.030000
+    max: 0.168500, 0.168500, 0.052000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: inward glass shoulder 01
+    min: 0.056000, -0.070198, 0.317000
+    max: 0.174000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 0.0
+    pitch: -38
+  - label: inward glass shoulder 02
+    min: 0.022317, 0.011120, 0.317000
+    max: 0.140317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 45.0
+    pitch: -38
+  - label: inward glass shoulder 03
+    min: -0.059000, 0.044802, 0.317000
+    max: 0.059000, 0.185198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 90.0
+    pitch: -38
+  - label: inward glass shoulder 04
+    min: -0.140317, 0.011120, 0.317000
+    max: -0.022317, 0.151515, 0.339000
+    color: '#5A8D88B8'
+    yaw: 135.0
+    pitch: -38
+  - label: inward glass shoulder 05
+    min: -0.174000, -0.070198, 0.317000
+    max: -0.056000, 0.070198, 0.339000
+    color: '#5A8D88B8'
+    yaw: 180.0
+    pitch: -38
+  - label: inward glass shoulder 06
+    min: -0.140317, -0.151515, 0.317000
+    max: -0.022317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 225.0
+    pitch: -38
+  - label: inward glass shoulder 07
+    min: -0.059000, -0.185198, 0.317000
+    max: 0.059000, -0.044802, 0.339000
+    color: '#5A8D88B8'
+    yaw: 270.0
+    pitch: -38
+  - label: inward glass shoulder 08
+    min: 0.022317, -0.151515, 0.317000
+    max: 0.140317, -0.011120, 0.339000
+    color: '#5A8D88B8'
+    yaw: 315.0
+    pitch: -38
+  - label: narrow open neck 01
+    min: 0.065000, -0.036537, 0.360000
+    max: 0.087000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 0.0
+  - label: narrow open neck 02
+    min: 0.042740, 0.017204, 0.360000
+    max: 0.064740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 45.0
+  - label: narrow open neck 03
+    min: -0.011000, 0.039463, 0.360000
+    max: 0.011000, 0.112537, 0.426000
+    color: '#8BABA8'
+    yaw: 90.0
+  - label: narrow open neck 04
+    min: -0.064740, 0.017204, 0.360000
+    max: -0.042740, 0.090277, 0.426000
+    color: '#8BABA8'
+    yaw: 135.0
+  - label: narrow open neck 05
+    min: -0.087000, -0.036537, 0.360000
+    max: -0.065000, 0.036537, 0.426000
+    color: '#8BABA8'
+    yaw: 180.0
+  - label: narrow open neck 06
+    min: -0.064740, -0.090277, 0.360000
+    max: -0.042740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 225.0
+  - label: narrow open neck 07
+    min: -0.011000, -0.112537, 0.360000
+    max: 0.011000, -0.039463, 0.426000
+    color: '#8BABA8'
+    yaw: 270.0
+  - label: narrow open neck 08
+    min: 0.042740, -0.090277, 0.360000
+    max: 0.064740, -0.017204, 0.426000
+    color: '#8BABA8'
+    yaw: 315.0
+  - label: rolled open mouth rim 01
+    min: 0.081000, -0.045649, 0.424000
+    max: 0.109000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rolled open mouth rim 02
+    min: 0.053175, 0.021526, 0.424000
+    max: 0.081175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rolled open mouth rim 03
+    min: -0.014000, 0.049351, 0.424000
+    max: 0.014000, 0.140649, 0.453000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rolled open mouth rim 04
+    min: -0.081175, 0.021526, 0.424000
+    max: -0.053175, 0.112824, 0.453000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rolled open mouth rim 05
+    min: -0.109000, -0.045649, 0.424000
+    max: -0.081000, 0.045649, 0.453000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rolled open mouth rim 06
+    min: -0.081175, -0.112824, 0.424000
+    max: -0.053175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rolled open mouth rim 07
+    min: -0.014000, -0.140649, 0.424000
+    max: 0.014000, -0.049351, 0.453000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rolled open mouth rim 08
+    min: 0.053175, -0.112824, 0.424000
+    max: 0.081175, -0.021526, 0.453000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: rear glass glint
+    min: -0.109000, 0.109000, 0.100000
+    max: -0.096000, 0.127000, 0.252000
+    color: '#B7C9C3A0'
+  - label: static liquid volume level 5
+    min: -0.139000, -0.139000, 0.045000
+    max: 0.139000, 0.139000, 0.282000
+    color: '#B1B1B1'
+    shape: CylinderZ
+  - label: flat liquid meniscus
+    min: -0.141000, -0.141000, 0.276000
+    max: 0.141000, 0.141000, 0.285000
+    color: '#959595'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DReagentJugCloud
+  label: Empty open reagent jug
+  status: draft
+  sourcePrototypes:
+  - RMCReagentJug
+  referencePrototype: RMCReagentJug
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/reagent_jug.rsi
+  referenceState: reagentjug
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Source-default empty/open 500-unit jug. Separate hollow canister, actual
+    handle aperture and hollow pouring neck. Five fill layers and lid are review studies
+    only; their runtime composition, tint, mixtures, spills and in-hand art remain
+    unsupported. Physical depth, translucency and hidden construction inferred.
+  parts:
+  - label: closed molded jug floor
+    min: -0.215000, -0.115000, 0.000000
+    max: 0.215000, 0.115000, 0.046000
+    color: '#5A8D88'
+  - label: front translucent jug wall
+    min: -0.221000, -0.144000, 0.033000
+    max: 0.221000, -0.120000, 0.533000
+    color: '#8BABA8B0'
+  - label: back molded jug wall
+    min: -0.221000, 0.120000, 0.033000
+    max: 0.221000, 0.144000, 0.533000
+    color: '#8BABA8'
+  - label: left molded jug wall
+    min: -0.250000, -0.120000, 0.046000
+    max: -0.219000, 0.120000, 0.520000
+    color: '#5A8D88'
+  - label: right molded jug wall
+    min: 0.219000, -0.120000, 0.046000
+    max: 0.250000, 0.120000, 0.520000
+    color: '#5A8D88'
+  - label: rounded canister corner
+    min: -0.251000, -0.148000, 0.048000
+    max: -0.193000, -0.090000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: -0.251000, 0.090000, 0.048000
+    max: -0.193000, 0.148000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: 0.193000, -0.148000, 0.048000
+    max: 0.251000, -0.090000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: 0.193000, 0.090000, 0.048000
+    max: 0.251000, 0.148000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: jug shoulder left deck
+    min: -0.245000, -0.125000, 0.514000
+    max: 0.092000, 0.125000, 0.560000
+    color: '#8BABA8'
+  - label: jug shoulder front around spout
+    min: 0.075000, -0.130000, 0.514000
+    max: 0.250000, -0.054000, 0.578000
+    color: '#8BABA8'
+  - label: jug shoulder rear around spout
+    min: 0.075000, 0.054000, 0.514000
+    max: 0.250000, 0.130000, 0.578000
+    color: '#8BABA8'
+  - label: jug shoulder right around spout
+    min: 0.222000, -0.062000, 0.514000
+    max: 0.250000, 0.062000, 0.578000
+    color: '#5A8D88'
+  - label: hollow pouring neck 01
+    min: 0.209500, -0.027217, 0.550000
+    max: 0.228500, 0.027217, 0.631000
+    color: '#5A8D88'
+    yaw: 0.0
+  - label: hollow pouring neck 02
+    min: 0.193391, 0.011674, 0.550000
+    max: 0.212391, 0.066108, 0.631000
+    color: '#5A8D88'
+    yaw: 45.0
+  - label: hollow pouring neck 03
+    min: 0.154500, 0.027783, 0.550000
+    max: 0.173500, 0.082217, 0.631000
+    color: '#5A8D88'
+    yaw: 90.0
+  - label: hollow pouring neck 04
+    min: 0.115609, 0.011674, 0.550000
+    max: 0.134609, 0.066108, 0.631000
+    color: '#5A8D88'
+    yaw: 135.0
+  - label: hollow pouring neck 05
+    min: 0.099500, -0.027217, 0.550000
+    max: 0.118500, 0.027217, 0.631000
+    color: '#5A8D88'
+    yaw: 180.0
+  - label: hollow pouring neck 06
+    min: 0.115609, -0.066108, 0.550000
+    max: 0.134609, -0.011674, 0.631000
+    color: '#5A8D88'
+    yaw: 225.0
+  - label: hollow pouring neck 07
+    min: 0.154500, -0.082217, 0.550000
+    max: 0.173500, -0.027783, 0.631000
+    color: '#5A8D88'
+    yaw: 270.0
+  - label: hollow pouring neck 08
+    min: 0.193391, -0.066108, 0.550000
+    max: 0.212391, -0.011674, 0.631000
+    color: '#5A8D88'
+    yaw: 315.0
+  - label: rounded pouring lip 01
+    min: 0.211000, -0.028252, 0.622000
+    max: 0.231000, 0.028252, 0.648000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rounded pouring lip 02
+    min: 0.194305, 0.012053, 0.622000
+    max: 0.214305, 0.068557, 0.648000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rounded pouring lip 03
+    min: 0.154000, 0.028748, 0.622000
+    max: 0.174000, 0.085252, 0.648000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rounded pouring lip 04
+    min: 0.113695, 0.012053, 0.622000
+    max: 0.133695, 0.068557, 0.648000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rounded pouring lip 05
+    min: 0.097000, -0.028252, 0.622000
+    max: 0.117000, 0.028252, 0.648000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rounded pouring lip 06
+    min: 0.113695, -0.068557, 0.622000
+    max: 0.133695, -0.012053, 0.648000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rounded pouring lip 07
+    min: 0.154000, -0.085252, 0.622000
+    max: 0.174000, -0.028748, 0.648000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rounded pouring lip 08
+    min: 0.194305, -0.068557, 0.622000
+    max: 0.214305, -0.012053, 0.648000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: handle left upright
+    min: -0.241000, -0.050000, 0.520000
+    max: -0.206000, 0.050000, 0.674000
+    color: '#5A8D88'
+  - label: handle right upright
+    min: 0.012000, -0.050000, 0.539000
+    max: 0.052000, 0.050000, 0.659000
+    color: '#5A8D88'
+  - label: handle rounded bridge
+    min: -0.220000, -0.052000, 0.649000
+    max: 0.034000, 0.052000, 0.688000
+    color: '#8BABA8'
+    shape: CylinderX
+  - label: handle top glint
+    min: -0.201000, -0.051000, 0.674000
+    max: 0.006000, -0.040000, 0.686000
+    color: '#B7C9C3'
+  - label: handle inner lower ledge
+    min: -0.206000, -0.055000, 0.550000
+    max: 0.018000, 0.055000, 0.575000
+    color: '#B7C9C3'
+  - label: front calibration tick 1
+    min: 0.101000, -0.150000, 0.112000
+    max: 0.190000, -0.142000, 0.131000
+    color: '#B7C9C3'
+  - label: front calibration tick 2
+    min: 0.101000, -0.150000, 0.174500
+    max: 0.190000, -0.142000, 0.193500
+    color: '#B7C9C3'
+  - label: front calibration tick 3
+    min: 0.101000, -0.150000, 0.237000
+    max: 0.190000, -0.142000, 0.256000
+    color: '#B7C9C3'
+  - label: front calibration tick 4
+    min: 0.101000, -0.150000, 0.299500
+    max: 0.190000, -0.142000, 0.318500
+    color: '#B7C9C3'
+  - label: front calibration tick 5
+    min: 0.101000, -0.150000, 0.362000
+    max: 0.190000, -0.142000, 0.381000
+    color: '#B7C9C3'
+  - label: front calibration tick 6
+    min: 0.101000, -0.150000, 0.424500
+    max: 0.190000, -0.142000, 0.443500
+    color: '#B7C9C3'
+  - label: front vertical molding
+    min: -0.095000, -0.150000, 0.060000
+    max: -0.061000, -0.143000, 0.476000
+    color: '#B7C9C3CF'
+- type: cmu3DModel
+  id: CMU3DReagentJugCappedStudyCloud
+  label: Reagent jug capped study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCReagentJug
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/reagent_jug.rsi
+  referenceState: reagentjug
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound static empty/capped study; no runtime state selection.
+  parts:
+  - label: closed molded jug floor
+    min: -0.215000, -0.115000, 0.000000
+    max: 0.215000, 0.115000, 0.046000
+    color: '#5A8D88'
+  - label: front translucent jug wall
+    min: -0.221000, -0.144000, 0.033000
+    max: 0.221000, -0.120000, 0.533000
+    color: '#8BABA8B0'
+  - label: back molded jug wall
+    min: -0.221000, 0.120000, 0.033000
+    max: 0.221000, 0.144000, 0.533000
+    color: '#8BABA8'
+  - label: left molded jug wall
+    min: -0.250000, -0.120000, 0.046000
+    max: -0.219000, 0.120000, 0.520000
+    color: '#5A8D88'
+  - label: right molded jug wall
+    min: 0.219000, -0.120000, 0.046000
+    max: 0.250000, 0.120000, 0.520000
+    color: '#5A8D88'
+  - label: rounded canister corner
+    min: -0.251000, -0.148000, 0.048000
+    max: -0.193000, -0.090000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: -0.251000, 0.090000, 0.048000
+    max: -0.193000, 0.148000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: 0.193000, -0.148000, 0.048000
+    max: 0.251000, -0.090000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: 0.193000, 0.090000, 0.048000
+    max: 0.251000, 0.148000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: jug shoulder left deck
+    min: -0.245000, -0.125000, 0.514000
+    max: 0.092000, 0.125000, 0.560000
+    color: '#8BABA8'
+  - label: jug shoulder front around spout
+    min: 0.075000, -0.130000, 0.514000
+    max: 0.250000, -0.054000, 0.578000
+    color: '#8BABA8'
+  - label: jug shoulder rear around spout
+    min: 0.075000, 0.054000, 0.514000
+    max: 0.250000, 0.130000, 0.578000
+    color: '#8BABA8'
+  - label: jug shoulder right around spout
+    min: 0.222000, -0.062000, 0.514000
+    max: 0.250000, 0.062000, 0.578000
+    color: '#5A8D88'
+  - label: hollow pouring neck 01
+    min: 0.209500, -0.027217, 0.550000
+    max: 0.228500, 0.027217, 0.631000
+    color: '#5A8D88'
+    yaw: 0.0
+  - label: hollow pouring neck 02
+    min: 0.193391, 0.011674, 0.550000
+    max: 0.212391, 0.066108, 0.631000
+    color: '#5A8D88'
+    yaw: 45.0
+  - label: hollow pouring neck 03
+    min: 0.154500, 0.027783, 0.550000
+    max: 0.173500, 0.082217, 0.631000
+    color: '#5A8D88'
+    yaw: 90.0
+  - label: hollow pouring neck 04
+    min: 0.115609, 0.011674, 0.550000
+    max: 0.134609, 0.066108, 0.631000
+    color: '#5A8D88'
+    yaw: 135.0
+  - label: hollow pouring neck 05
+    min: 0.099500, -0.027217, 0.550000
+    max: 0.118500, 0.027217, 0.631000
+    color: '#5A8D88'
+    yaw: 180.0
+  - label: hollow pouring neck 06
+    min: 0.115609, -0.066108, 0.550000
+    max: 0.134609, -0.011674, 0.631000
+    color: '#5A8D88'
+    yaw: 225.0
+  - label: hollow pouring neck 07
+    min: 0.154500, -0.082217, 0.550000
+    max: 0.173500, -0.027783, 0.631000
+    color: '#5A8D88'
+    yaw: 270.0
+  - label: hollow pouring neck 08
+    min: 0.193391, -0.066108, 0.550000
+    max: 0.212391, -0.011674, 0.631000
+    color: '#5A8D88'
+    yaw: 315.0
+  - label: rounded pouring lip 01
+    min: 0.211000, -0.028252, 0.622000
+    max: 0.231000, 0.028252, 0.648000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rounded pouring lip 02
+    min: 0.194305, 0.012053, 0.622000
+    max: 0.214305, 0.068557, 0.648000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rounded pouring lip 03
+    min: 0.154000, 0.028748, 0.622000
+    max: 0.174000, 0.085252, 0.648000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rounded pouring lip 04
+    min: 0.113695, 0.012053, 0.622000
+    max: 0.133695, 0.068557, 0.648000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rounded pouring lip 05
+    min: 0.097000, -0.028252, 0.622000
+    max: 0.117000, 0.028252, 0.648000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rounded pouring lip 06
+    min: 0.113695, -0.068557, 0.622000
+    max: 0.133695, -0.012053, 0.648000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rounded pouring lip 07
+    min: 0.154000, -0.085252, 0.622000
+    max: 0.174000, -0.028748, 0.648000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rounded pouring lip 08
+    min: 0.194305, -0.068557, 0.622000
+    max: 0.214305, -0.012053, 0.648000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: handle left upright
+    min: -0.241000, -0.050000, 0.520000
+    max: -0.206000, 0.050000, 0.674000
+    color: '#5A8D88'
+  - label: handle right upright
+    min: 0.012000, -0.050000, 0.539000
+    max: 0.052000, 0.050000, 0.659000
+    color: '#5A8D88'
+  - label: handle rounded bridge
+    min: -0.220000, -0.052000, 0.649000
+    max: 0.034000, 0.052000, 0.688000
+    color: '#8BABA8'
+    shape: CylinderX
+  - label: handle top glint
+    min: -0.201000, -0.051000, 0.674000
+    max: 0.006000, -0.040000, 0.686000
+    color: '#B7C9C3'
+  - label: handle inner lower ledge
+    min: -0.206000, -0.055000, 0.550000
+    max: 0.018000, 0.055000, 0.575000
+    color: '#B7C9C3'
+  - label: front calibration tick 1
+    min: 0.101000, -0.150000, 0.112000
+    max: 0.190000, -0.142000, 0.131000
+    color: '#B7C9C3'
+  - label: front calibration tick 2
+    min: 0.101000, -0.150000, 0.174500
+    max: 0.190000, -0.142000, 0.193500
+    color: '#B7C9C3'
+  - label: front calibration tick 3
+    min: 0.101000, -0.150000, 0.237000
+    max: 0.190000, -0.142000, 0.256000
+    color: '#B7C9C3'
+  - label: front calibration tick 4
+    min: 0.101000, -0.150000, 0.299500
+    max: 0.190000, -0.142000, 0.318500
+    color: '#B7C9C3'
+  - label: front calibration tick 5
+    min: 0.101000, -0.150000, 0.362000
+    max: 0.190000, -0.142000, 0.381000
+    color: '#B7C9C3'
+  - label: front calibration tick 6
+    min: 0.101000, -0.150000, 0.424500
+    max: 0.190000, -0.142000, 0.443500
+    color: '#B7C9C3'
+  - label: front vertical molding
+    min: -0.095000, -0.150000, 0.060000
+    max: -0.061000, -0.143000, 0.476000
+    color: '#B7C9C3CF'
+  - label: small grey removable spout lid
+    min: 0.100000, -0.064000, 0.636000
+    max: 0.228000, 0.064000, 0.665000
+    color: '#777571'
+    shape: CylinderZ
+  - label: spout lid crown
+    min: 0.113000, -0.052000, 0.664000
+    max: 0.215000, 0.052000, 0.677000
+    color: '#9B9995'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DReagentJugFill1StudyCloud
+  label: Reagent jug neutral fill 1 study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCReagentJug
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/reagent_jug.rsi
+  referenceState: reagentjug
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound neutral-color layer study of reagentjug plus reagentjug-1.
+    Not a claimed live chemistry, mixture or lid-state adapter.
+  parts:
+  - label: closed molded jug floor
+    min: -0.215000, -0.115000, 0.000000
+    max: 0.215000, 0.115000, 0.046000
+    color: '#5A8D88'
+  - label: front translucent jug wall
+    min: -0.221000, -0.144000, 0.033000
+    max: 0.221000, -0.120000, 0.533000
+    color: '#8BABA8B0'
+  - label: back molded jug wall
+    min: -0.221000, 0.120000, 0.033000
+    max: 0.221000, 0.144000, 0.533000
+    color: '#8BABA8'
+  - label: left molded jug wall
+    min: -0.250000, -0.120000, 0.046000
+    max: -0.219000, 0.120000, 0.520000
+    color: '#5A8D88'
+  - label: right molded jug wall
+    min: 0.219000, -0.120000, 0.046000
+    max: 0.250000, 0.120000, 0.520000
+    color: '#5A8D88'
+  - label: rounded canister corner
+    min: -0.251000, -0.148000, 0.048000
+    max: -0.193000, -0.090000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: -0.251000, 0.090000, 0.048000
+    max: -0.193000, 0.148000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: 0.193000, -0.148000, 0.048000
+    max: 0.251000, -0.090000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: 0.193000, 0.090000, 0.048000
+    max: 0.251000, 0.148000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: jug shoulder left deck
+    min: -0.245000, -0.125000, 0.514000
+    max: 0.092000, 0.125000, 0.560000
+    color: '#8BABA8'
+  - label: jug shoulder front around spout
+    min: 0.075000, -0.130000, 0.514000
+    max: 0.250000, -0.054000, 0.578000
+    color: '#8BABA8'
+  - label: jug shoulder rear around spout
+    min: 0.075000, 0.054000, 0.514000
+    max: 0.250000, 0.130000, 0.578000
+    color: '#8BABA8'
+  - label: jug shoulder right around spout
+    min: 0.222000, -0.062000, 0.514000
+    max: 0.250000, 0.062000, 0.578000
+    color: '#5A8D88'
+  - label: hollow pouring neck 01
+    min: 0.209500, -0.027217, 0.550000
+    max: 0.228500, 0.027217, 0.631000
+    color: '#5A8D88'
+    yaw: 0.0
+  - label: hollow pouring neck 02
+    min: 0.193391, 0.011674, 0.550000
+    max: 0.212391, 0.066108, 0.631000
+    color: '#5A8D88'
+    yaw: 45.0
+  - label: hollow pouring neck 03
+    min: 0.154500, 0.027783, 0.550000
+    max: 0.173500, 0.082217, 0.631000
+    color: '#5A8D88'
+    yaw: 90.0
+  - label: hollow pouring neck 04
+    min: 0.115609, 0.011674, 0.550000
+    max: 0.134609, 0.066108, 0.631000
+    color: '#5A8D88'
+    yaw: 135.0
+  - label: hollow pouring neck 05
+    min: 0.099500, -0.027217, 0.550000
+    max: 0.118500, 0.027217, 0.631000
+    color: '#5A8D88'
+    yaw: 180.0
+  - label: hollow pouring neck 06
+    min: 0.115609, -0.066108, 0.550000
+    max: 0.134609, -0.011674, 0.631000
+    color: '#5A8D88'
+    yaw: 225.0
+  - label: hollow pouring neck 07
+    min: 0.154500, -0.082217, 0.550000
+    max: 0.173500, -0.027783, 0.631000
+    color: '#5A8D88'
+    yaw: 270.0
+  - label: hollow pouring neck 08
+    min: 0.193391, -0.066108, 0.550000
+    max: 0.212391, -0.011674, 0.631000
+    color: '#5A8D88'
+    yaw: 315.0
+  - label: rounded pouring lip 01
+    min: 0.211000, -0.028252, 0.622000
+    max: 0.231000, 0.028252, 0.648000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rounded pouring lip 02
+    min: 0.194305, 0.012053, 0.622000
+    max: 0.214305, 0.068557, 0.648000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rounded pouring lip 03
+    min: 0.154000, 0.028748, 0.622000
+    max: 0.174000, 0.085252, 0.648000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rounded pouring lip 04
+    min: 0.113695, 0.012053, 0.622000
+    max: 0.133695, 0.068557, 0.648000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rounded pouring lip 05
+    min: 0.097000, -0.028252, 0.622000
+    max: 0.117000, 0.028252, 0.648000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rounded pouring lip 06
+    min: 0.113695, -0.068557, 0.622000
+    max: 0.133695, -0.012053, 0.648000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rounded pouring lip 07
+    min: 0.154000, -0.085252, 0.622000
+    max: 0.174000, -0.028748, 0.648000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rounded pouring lip 08
+    min: 0.194305, -0.068557, 0.622000
+    max: 0.214305, -0.012053, 0.648000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: handle left upright
+    min: -0.241000, -0.050000, 0.520000
+    max: -0.206000, 0.050000, 0.674000
+    color: '#5A8D88'
+  - label: handle right upright
+    min: 0.012000, -0.050000, 0.539000
+    max: 0.052000, 0.050000, 0.659000
+    color: '#5A8D88'
+  - label: handle rounded bridge
+    min: -0.220000, -0.052000, 0.649000
+    max: 0.034000, 0.052000, 0.688000
+    color: '#8BABA8'
+    shape: CylinderX
+  - label: handle top glint
+    min: -0.201000, -0.051000, 0.674000
+    max: 0.006000, -0.040000, 0.686000
+    color: '#B7C9C3'
+  - label: handle inner lower ledge
+    min: -0.206000, -0.055000, 0.550000
+    max: 0.018000, 0.055000, 0.575000
+    color: '#B7C9C3'
+  - label: front calibration tick 1
+    min: 0.101000, -0.150000, 0.112000
+    max: 0.190000, -0.142000, 0.131000
+    color: '#B7C9C3'
+  - label: front calibration tick 2
+    min: 0.101000, -0.150000, 0.174500
+    max: 0.190000, -0.142000, 0.193500
+    color: '#B7C9C3'
+  - label: front calibration tick 3
+    min: 0.101000, -0.150000, 0.237000
+    max: 0.190000, -0.142000, 0.256000
+    color: '#B7C9C3'
+  - label: front calibration tick 4
+    min: 0.101000, -0.150000, 0.299500
+    max: 0.190000, -0.142000, 0.318500
+    color: '#B7C9C3'
+  - label: front calibration tick 5
+    min: 0.101000, -0.150000, 0.362000
+    max: 0.190000, -0.142000, 0.381000
+    color: '#B7C9C3'
+  - label: front calibration tick 6
+    min: 0.101000, -0.150000, 0.424500
+    max: 0.190000, -0.142000, 0.443500
+    color: '#B7C9C3'
+  - label: front vertical molding
+    min: -0.095000, -0.150000, 0.060000
+    max: -0.061000, -0.143000, 0.476000
+    color: '#B7C9C3CF'
+  - label: neutral source fill study 1
+    min: -0.211000, -0.116000, 0.046000
+    max: 0.211000, 0.116000, 0.142000
+    color: '#B1B1B1'
+  - label: level liquid meniscus
+    min: -0.211000, -0.116000, 0.137000
+    max: 0.211000, 0.116000, 0.146000
+    color: '#D5D5D5'
+- type: cmu3DModel
+  id: CMU3DReagentJugFill2StudyCloud
+  label: Reagent jug neutral fill 2 study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCReagentJug
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/reagent_jug.rsi
+  referenceState: reagentjug
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound neutral-color layer study of reagentjug plus reagentjug-2.
+    Not a claimed live chemistry, mixture or lid-state adapter.
+  parts:
+  - label: closed molded jug floor
+    min: -0.215000, -0.115000, 0.000000
+    max: 0.215000, 0.115000, 0.046000
+    color: '#5A8D88'
+  - label: front translucent jug wall
+    min: -0.221000, -0.144000, 0.033000
+    max: 0.221000, -0.120000, 0.533000
+    color: '#8BABA8B0'
+  - label: back molded jug wall
+    min: -0.221000, 0.120000, 0.033000
+    max: 0.221000, 0.144000, 0.533000
+    color: '#8BABA8'
+  - label: left molded jug wall
+    min: -0.250000, -0.120000, 0.046000
+    max: -0.219000, 0.120000, 0.520000
+    color: '#5A8D88'
+  - label: right molded jug wall
+    min: 0.219000, -0.120000, 0.046000
+    max: 0.250000, 0.120000, 0.520000
+    color: '#5A8D88'
+  - label: rounded canister corner
+    min: -0.251000, -0.148000, 0.048000
+    max: -0.193000, -0.090000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: -0.251000, 0.090000, 0.048000
+    max: -0.193000, 0.148000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: 0.193000, -0.148000, 0.048000
+    max: 0.251000, -0.090000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: 0.193000, 0.090000, 0.048000
+    max: 0.251000, 0.148000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: jug shoulder left deck
+    min: -0.245000, -0.125000, 0.514000
+    max: 0.092000, 0.125000, 0.560000
+    color: '#8BABA8'
+  - label: jug shoulder front around spout
+    min: 0.075000, -0.130000, 0.514000
+    max: 0.250000, -0.054000, 0.578000
+    color: '#8BABA8'
+  - label: jug shoulder rear around spout
+    min: 0.075000, 0.054000, 0.514000
+    max: 0.250000, 0.130000, 0.578000
+    color: '#8BABA8'
+  - label: jug shoulder right around spout
+    min: 0.222000, -0.062000, 0.514000
+    max: 0.250000, 0.062000, 0.578000
+    color: '#5A8D88'
+  - label: hollow pouring neck 01
+    min: 0.209500, -0.027217, 0.550000
+    max: 0.228500, 0.027217, 0.631000
+    color: '#5A8D88'
+    yaw: 0.0
+  - label: hollow pouring neck 02
+    min: 0.193391, 0.011674, 0.550000
+    max: 0.212391, 0.066108, 0.631000
+    color: '#5A8D88'
+    yaw: 45.0
+  - label: hollow pouring neck 03
+    min: 0.154500, 0.027783, 0.550000
+    max: 0.173500, 0.082217, 0.631000
+    color: '#5A8D88'
+    yaw: 90.0
+  - label: hollow pouring neck 04
+    min: 0.115609, 0.011674, 0.550000
+    max: 0.134609, 0.066108, 0.631000
+    color: '#5A8D88'
+    yaw: 135.0
+  - label: hollow pouring neck 05
+    min: 0.099500, -0.027217, 0.550000
+    max: 0.118500, 0.027217, 0.631000
+    color: '#5A8D88'
+    yaw: 180.0
+  - label: hollow pouring neck 06
+    min: 0.115609, -0.066108, 0.550000
+    max: 0.134609, -0.011674, 0.631000
+    color: '#5A8D88'
+    yaw: 225.0
+  - label: hollow pouring neck 07
+    min: 0.154500, -0.082217, 0.550000
+    max: 0.173500, -0.027783, 0.631000
+    color: '#5A8D88'
+    yaw: 270.0
+  - label: hollow pouring neck 08
+    min: 0.193391, -0.066108, 0.550000
+    max: 0.212391, -0.011674, 0.631000
+    color: '#5A8D88'
+    yaw: 315.0
+  - label: rounded pouring lip 01
+    min: 0.211000, -0.028252, 0.622000
+    max: 0.231000, 0.028252, 0.648000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rounded pouring lip 02
+    min: 0.194305, 0.012053, 0.622000
+    max: 0.214305, 0.068557, 0.648000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rounded pouring lip 03
+    min: 0.154000, 0.028748, 0.622000
+    max: 0.174000, 0.085252, 0.648000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rounded pouring lip 04
+    min: 0.113695, 0.012053, 0.622000
+    max: 0.133695, 0.068557, 0.648000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rounded pouring lip 05
+    min: 0.097000, -0.028252, 0.622000
+    max: 0.117000, 0.028252, 0.648000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rounded pouring lip 06
+    min: 0.113695, -0.068557, 0.622000
+    max: 0.133695, -0.012053, 0.648000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rounded pouring lip 07
+    min: 0.154000, -0.085252, 0.622000
+    max: 0.174000, -0.028748, 0.648000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rounded pouring lip 08
+    min: 0.194305, -0.068557, 0.622000
+    max: 0.214305, -0.012053, 0.648000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: handle left upright
+    min: -0.241000, -0.050000, 0.520000
+    max: -0.206000, 0.050000, 0.674000
+    color: '#5A8D88'
+  - label: handle right upright
+    min: 0.012000, -0.050000, 0.539000
+    max: 0.052000, 0.050000, 0.659000
+    color: '#5A8D88'
+  - label: handle rounded bridge
+    min: -0.220000, -0.052000, 0.649000
+    max: 0.034000, 0.052000, 0.688000
+    color: '#8BABA8'
+    shape: CylinderX
+  - label: handle top glint
+    min: -0.201000, -0.051000, 0.674000
+    max: 0.006000, -0.040000, 0.686000
+    color: '#B7C9C3'
+  - label: handle inner lower ledge
+    min: -0.206000, -0.055000, 0.550000
+    max: 0.018000, 0.055000, 0.575000
+    color: '#B7C9C3'
+  - label: front calibration tick 1
+    min: 0.101000, -0.150000, 0.112000
+    max: 0.190000, -0.142000, 0.131000
+    color: '#B7C9C3'
+  - label: front calibration tick 2
+    min: 0.101000, -0.150000, 0.174500
+    max: 0.190000, -0.142000, 0.193500
+    color: '#B7C9C3'
+  - label: front calibration tick 3
+    min: 0.101000, -0.150000, 0.237000
+    max: 0.190000, -0.142000, 0.256000
+    color: '#B7C9C3'
+  - label: front calibration tick 4
+    min: 0.101000, -0.150000, 0.299500
+    max: 0.190000, -0.142000, 0.318500
+    color: '#B7C9C3'
+  - label: front calibration tick 5
+    min: 0.101000, -0.150000, 0.362000
+    max: 0.190000, -0.142000, 0.381000
+    color: '#B7C9C3'
+  - label: front calibration tick 6
+    min: 0.101000, -0.150000, 0.424500
+    max: 0.190000, -0.142000, 0.443500
+    color: '#B7C9C3'
+  - label: front vertical molding
+    min: -0.095000, -0.150000, 0.060000
+    max: -0.061000, -0.143000, 0.476000
+    color: '#B7C9C3CF'
+  - label: neutral source fill study 2
+    min: -0.211000, -0.116000, 0.046000
+    max: 0.211000, 0.116000, 0.230000
+    color: '#B1B1B1'
+  - label: level liquid meniscus
+    min: -0.211000, -0.116000, 0.225000
+    max: 0.211000, 0.116000, 0.234000
+    color: '#D5D5D5'
+- type: cmu3DModel
+  id: CMU3DReagentJugFill3StudyCloud
+  label: Reagent jug neutral fill 3 study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCReagentJug
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/reagent_jug.rsi
+  referenceState: reagentjug
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound neutral-color layer study of reagentjug plus reagentjug-3.
+    Not a claimed live chemistry, mixture or lid-state adapter.
+  parts:
+  - label: closed molded jug floor
+    min: -0.215000, -0.115000, 0.000000
+    max: 0.215000, 0.115000, 0.046000
+    color: '#5A8D88'
+  - label: front translucent jug wall
+    min: -0.221000, -0.144000, 0.033000
+    max: 0.221000, -0.120000, 0.533000
+    color: '#8BABA8B0'
+  - label: back molded jug wall
+    min: -0.221000, 0.120000, 0.033000
+    max: 0.221000, 0.144000, 0.533000
+    color: '#8BABA8'
+  - label: left molded jug wall
+    min: -0.250000, -0.120000, 0.046000
+    max: -0.219000, 0.120000, 0.520000
+    color: '#5A8D88'
+  - label: right molded jug wall
+    min: 0.219000, -0.120000, 0.046000
+    max: 0.250000, 0.120000, 0.520000
+    color: '#5A8D88'
+  - label: rounded canister corner
+    min: -0.251000, -0.148000, 0.048000
+    max: -0.193000, -0.090000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: -0.251000, 0.090000, 0.048000
+    max: -0.193000, 0.148000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: 0.193000, -0.148000, 0.048000
+    max: 0.251000, -0.090000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: 0.193000, 0.090000, 0.048000
+    max: 0.251000, 0.148000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: jug shoulder left deck
+    min: -0.245000, -0.125000, 0.514000
+    max: 0.092000, 0.125000, 0.560000
+    color: '#8BABA8'
+  - label: jug shoulder front around spout
+    min: 0.075000, -0.130000, 0.514000
+    max: 0.250000, -0.054000, 0.578000
+    color: '#8BABA8'
+  - label: jug shoulder rear around spout
+    min: 0.075000, 0.054000, 0.514000
+    max: 0.250000, 0.130000, 0.578000
+    color: '#8BABA8'
+  - label: jug shoulder right around spout
+    min: 0.222000, -0.062000, 0.514000
+    max: 0.250000, 0.062000, 0.578000
+    color: '#5A8D88'
+  - label: hollow pouring neck 01
+    min: 0.209500, -0.027217, 0.550000
+    max: 0.228500, 0.027217, 0.631000
+    color: '#5A8D88'
+    yaw: 0.0
+  - label: hollow pouring neck 02
+    min: 0.193391, 0.011674, 0.550000
+    max: 0.212391, 0.066108, 0.631000
+    color: '#5A8D88'
+    yaw: 45.0
+  - label: hollow pouring neck 03
+    min: 0.154500, 0.027783, 0.550000
+    max: 0.173500, 0.082217, 0.631000
+    color: '#5A8D88'
+    yaw: 90.0
+  - label: hollow pouring neck 04
+    min: 0.115609, 0.011674, 0.550000
+    max: 0.134609, 0.066108, 0.631000
+    color: '#5A8D88'
+    yaw: 135.0
+  - label: hollow pouring neck 05
+    min: 0.099500, -0.027217, 0.550000
+    max: 0.118500, 0.027217, 0.631000
+    color: '#5A8D88'
+    yaw: 180.0
+  - label: hollow pouring neck 06
+    min: 0.115609, -0.066108, 0.550000
+    max: 0.134609, -0.011674, 0.631000
+    color: '#5A8D88'
+    yaw: 225.0
+  - label: hollow pouring neck 07
+    min: 0.154500, -0.082217, 0.550000
+    max: 0.173500, -0.027783, 0.631000
+    color: '#5A8D88'
+    yaw: 270.0
+  - label: hollow pouring neck 08
+    min: 0.193391, -0.066108, 0.550000
+    max: 0.212391, -0.011674, 0.631000
+    color: '#5A8D88'
+    yaw: 315.0
+  - label: rounded pouring lip 01
+    min: 0.211000, -0.028252, 0.622000
+    max: 0.231000, 0.028252, 0.648000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rounded pouring lip 02
+    min: 0.194305, 0.012053, 0.622000
+    max: 0.214305, 0.068557, 0.648000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rounded pouring lip 03
+    min: 0.154000, 0.028748, 0.622000
+    max: 0.174000, 0.085252, 0.648000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rounded pouring lip 04
+    min: 0.113695, 0.012053, 0.622000
+    max: 0.133695, 0.068557, 0.648000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rounded pouring lip 05
+    min: 0.097000, -0.028252, 0.622000
+    max: 0.117000, 0.028252, 0.648000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rounded pouring lip 06
+    min: 0.113695, -0.068557, 0.622000
+    max: 0.133695, -0.012053, 0.648000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rounded pouring lip 07
+    min: 0.154000, -0.085252, 0.622000
+    max: 0.174000, -0.028748, 0.648000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rounded pouring lip 08
+    min: 0.194305, -0.068557, 0.622000
+    max: 0.214305, -0.012053, 0.648000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: handle left upright
+    min: -0.241000, -0.050000, 0.520000
+    max: -0.206000, 0.050000, 0.674000
+    color: '#5A8D88'
+  - label: handle right upright
+    min: 0.012000, -0.050000, 0.539000
+    max: 0.052000, 0.050000, 0.659000
+    color: '#5A8D88'
+  - label: handle rounded bridge
+    min: -0.220000, -0.052000, 0.649000
+    max: 0.034000, 0.052000, 0.688000
+    color: '#8BABA8'
+    shape: CylinderX
+  - label: handle top glint
+    min: -0.201000, -0.051000, 0.674000
+    max: 0.006000, -0.040000, 0.686000
+    color: '#B7C9C3'
+  - label: handle inner lower ledge
+    min: -0.206000, -0.055000, 0.550000
+    max: 0.018000, 0.055000, 0.575000
+    color: '#B7C9C3'
+  - label: front calibration tick 1
+    min: 0.101000, -0.150000, 0.112000
+    max: 0.190000, -0.142000, 0.131000
+    color: '#B7C9C3'
+  - label: front calibration tick 2
+    min: 0.101000, -0.150000, 0.174500
+    max: 0.190000, -0.142000, 0.193500
+    color: '#B7C9C3'
+  - label: front calibration tick 3
+    min: 0.101000, -0.150000, 0.237000
+    max: 0.190000, -0.142000, 0.256000
+    color: '#B7C9C3'
+  - label: front calibration tick 4
+    min: 0.101000, -0.150000, 0.299500
+    max: 0.190000, -0.142000, 0.318500
+    color: '#B7C9C3'
+  - label: front calibration tick 5
+    min: 0.101000, -0.150000, 0.362000
+    max: 0.190000, -0.142000, 0.381000
+    color: '#B7C9C3'
+  - label: front calibration tick 6
+    min: 0.101000, -0.150000, 0.424500
+    max: 0.190000, -0.142000, 0.443500
+    color: '#B7C9C3'
+  - label: front vertical molding
+    min: -0.095000, -0.150000, 0.060000
+    max: -0.061000, -0.143000, 0.476000
+    color: '#B7C9C3CF'
+  - label: neutral source fill study 3
+    min: -0.211000, -0.116000, 0.046000
+    max: 0.211000, 0.116000, 0.323000
+    color: '#B1B1B1'
+  - label: level liquid meniscus
+    min: -0.211000, -0.116000, 0.318000
+    max: 0.211000, 0.116000, 0.327000
+    color: '#D5D5D5'
+- type: cmu3DModel
+  id: CMU3DReagentJugFill4StudyCloud
+  label: Reagent jug neutral fill 4 study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCReagentJug
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/reagent_jug.rsi
+  referenceState: reagentjug
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound neutral-color layer study of reagentjug plus reagentjug-4.
+    Not a claimed live chemistry, mixture or lid-state adapter.
+  parts:
+  - label: closed molded jug floor
+    min: -0.215000, -0.115000, 0.000000
+    max: 0.215000, 0.115000, 0.046000
+    color: '#5A8D88'
+  - label: front translucent jug wall
+    min: -0.221000, -0.144000, 0.033000
+    max: 0.221000, -0.120000, 0.533000
+    color: '#8BABA8B0'
+  - label: back molded jug wall
+    min: -0.221000, 0.120000, 0.033000
+    max: 0.221000, 0.144000, 0.533000
+    color: '#8BABA8'
+  - label: left molded jug wall
+    min: -0.250000, -0.120000, 0.046000
+    max: -0.219000, 0.120000, 0.520000
+    color: '#5A8D88'
+  - label: right molded jug wall
+    min: 0.219000, -0.120000, 0.046000
+    max: 0.250000, 0.120000, 0.520000
+    color: '#5A8D88'
+  - label: rounded canister corner
+    min: -0.251000, -0.148000, 0.048000
+    max: -0.193000, -0.090000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: -0.251000, 0.090000, 0.048000
+    max: -0.193000, 0.148000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: 0.193000, -0.148000, 0.048000
+    max: 0.251000, -0.090000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: 0.193000, 0.090000, 0.048000
+    max: 0.251000, 0.148000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: jug shoulder left deck
+    min: -0.245000, -0.125000, 0.514000
+    max: 0.092000, 0.125000, 0.560000
+    color: '#8BABA8'
+  - label: jug shoulder front around spout
+    min: 0.075000, -0.130000, 0.514000
+    max: 0.250000, -0.054000, 0.578000
+    color: '#8BABA8'
+  - label: jug shoulder rear around spout
+    min: 0.075000, 0.054000, 0.514000
+    max: 0.250000, 0.130000, 0.578000
+    color: '#8BABA8'
+  - label: jug shoulder right around spout
+    min: 0.222000, -0.062000, 0.514000
+    max: 0.250000, 0.062000, 0.578000
+    color: '#5A8D88'
+  - label: hollow pouring neck 01
+    min: 0.209500, -0.027217, 0.550000
+    max: 0.228500, 0.027217, 0.631000
+    color: '#5A8D88'
+    yaw: 0.0
+  - label: hollow pouring neck 02
+    min: 0.193391, 0.011674, 0.550000
+    max: 0.212391, 0.066108, 0.631000
+    color: '#5A8D88'
+    yaw: 45.0
+  - label: hollow pouring neck 03
+    min: 0.154500, 0.027783, 0.550000
+    max: 0.173500, 0.082217, 0.631000
+    color: '#5A8D88'
+    yaw: 90.0
+  - label: hollow pouring neck 04
+    min: 0.115609, 0.011674, 0.550000
+    max: 0.134609, 0.066108, 0.631000
+    color: '#5A8D88'
+    yaw: 135.0
+  - label: hollow pouring neck 05
+    min: 0.099500, -0.027217, 0.550000
+    max: 0.118500, 0.027217, 0.631000
+    color: '#5A8D88'
+    yaw: 180.0
+  - label: hollow pouring neck 06
+    min: 0.115609, -0.066108, 0.550000
+    max: 0.134609, -0.011674, 0.631000
+    color: '#5A8D88'
+    yaw: 225.0
+  - label: hollow pouring neck 07
+    min: 0.154500, -0.082217, 0.550000
+    max: 0.173500, -0.027783, 0.631000
+    color: '#5A8D88'
+    yaw: 270.0
+  - label: hollow pouring neck 08
+    min: 0.193391, -0.066108, 0.550000
+    max: 0.212391, -0.011674, 0.631000
+    color: '#5A8D88'
+    yaw: 315.0
+  - label: rounded pouring lip 01
+    min: 0.211000, -0.028252, 0.622000
+    max: 0.231000, 0.028252, 0.648000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rounded pouring lip 02
+    min: 0.194305, 0.012053, 0.622000
+    max: 0.214305, 0.068557, 0.648000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rounded pouring lip 03
+    min: 0.154000, 0.028748, 0.622000
+    max: 0.174000, 0.085252, 0.648000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rounded pouring lip 04
+    min: 0.113695, 0.012053, 0.622000
+    max: 0.133695, 0.068557, 0.648000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rounded pouring lip 05
+    min: 0.097000, -0.028252, 0.622000
+    max: 0.117000, 0.028252, 0.648000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rounded pouring lip 06
+    min: 0.113695, -0.068557, 0.622000
+    max: 0.133695, -0.012053, 0.648000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rounded pouring lip 07
+    min: 0.154000, -0.085252, 0.622000
+    max: 0.174000, -0.028748, 0.648000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rounded pouring lip 08
+    min: 0.194305, -0.068557, 0.622000
+    max: 0.214305, -0.012053, 0.648000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: handle left upright
+    min: -0.241000, -0.050000, 0.520000
+    max: -0.206000, 0.050000, 0.674000
+    color: '#5A8D88'
+  - label: handle right upright
+    min: 0.012000, -0.050000, 0.539000
+    max: 0.052000, 0.050000, 0.659000
+    color: '#5A8D88'
+  - label: handle rounded bridge
+    min: -0.220000, -0.052000, 0.649000
+    max: 0.034000, 0.052000, 0.688000
+    color: '#8BABA8'
+    shape: CylinderX
+  - label: handle top glint
+    min: -0.201000, -0.051000, 0.674000
+    max: 0.006000, -0.040000, 0.686000
+    color: '#B7C9C3'
+  - label: handle inner lower ledge
+    min: -0.206000, -0.055000, 0.550000
+    max: 0.018000, 0.055000, 0.575000
+    color: '#B7C9C3'
+  - label: front calibration tick 1
+    min: 0.101000, -0.150000, 0.112000
+    max: 0.190000, -0.142000, 0.131000
+    color: '#B7C9C3'
+  - label: front calibration tick 2
+    min: 0.101000, -0.150000, 0.174500
+    max: 0.190000, -0.142000, 0.193500
+    color: '#B7C9C3'
+  - label: front calibration tick 3
+    min: 0.101000, -0.150000, 0.237000
+    max: 0.190000, -0.142000, 0.256000
+    color: '#B7C9C3'
+  - label: front calibration tick 4
+    min: 0.101000, -0.150000, 0.299500
+    max: 0.190000, -0.142000, 0.318500
+    color: '#B7C9C3'
+  - label: front calibration tick 5
+    min: 0.101000, -0.150000, 0.362000
+    max: 0.190000, -0.142000, 0.381000
+    color: '#B7C9C3'
+  - label: front calibration tick 6
+    min: 0.101000, -0.150000, 0.424500
+    max: 0.190000, -0.142000, 0.443500
+    color: '#B7C9C3'
+  - label: front vertical molding
+    min: -0.095000, -0.150000, 0.060000
+    max: -0.061000, -0.143000, 0.476000
+    color: '#B7C9C3CF'
+  - label: neutral source fill study 4
+    min: -0.211000, -0.116000, 0.046000
+    max: 0.211000, 0.116000, 0.418000
+    color: '#B1B1B1'
+  - label: level liquid meniscus
+    min: -0.211000, -0.116000, 0.413000
+    max: 0.211000, 0.116000, 0.422000
+    color: '#D5D5D5'
+- type: cmu3DModel
+  id: CMU3DReagentJugFill5StudyCloud
+  label: Reagent jug neutral fill 5 study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCReagentJug
+  referenceRsi: /Textures/_RMC14/Objects/Chemistry/reagent_jug.rsi
+  referenceState: reagentjug
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound neutral-color layer study of reagentjug plus reagentjug-5.
+    Not a claimed live chemistry, mixture or lid-state adapter.
+  parts:
+  - label: closed molded jug floor
+    min: -0.215000, -0.115000, 0.000000
+    max: 0.215000, 0.115000, 0.046000
+    color: '#5A8D88'
+  - label: front translucent jug wall
+    min: -0.221000, -0.144000, 0.033000
+    max: 0.221000, -0.120000, 0.533000
+    color: '#8BABA8B0'
+  - label: back molded jug wall
+    min: -0.221000, 0.120000, 0.033000
+    max: 0.221000, 0.144000, 0.533000
+    color: '#8BABA8'
+  - label: left molded jug wall
+    min: -0.250000, -0.120000, 0.046000
+    max: -0.219000, 0.120000, 0.520000
+    color: '#5A8D88'
+  - label: right molded jug wall
+    min: 0.219000, -0.120000, 0.046000
+    max: 0.250000, 0.120000, 0.520000
+    color: '#5A8D88'
+  - label: rounded canister corner
+    min: -0.251000, -0.148000, 0.048000
+    max: -0.193000, -0.090000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: -0.251000, 0.090000, 0.048000
+    max: -0.193000, 0.148000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: 0.193000, -0.148000, 0.048000
+    max: 0.251000, -0.090000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: rounded canister corner
+    min: 0.193000, 0.090000, 0.048000
+    max: 0.251000, 0.148000, 0.510000
+    color: '#5A8D88'
+    shape: CylinderZ
+  - label: jug shoulder left deck
+    min: -0.245000, -0.125000, 0.514000
+    max: 0.092000, 0.125000, 0.560000
+    color: '#8BABA8'
+  - label: jug shoulder front around spout
+    min: 0.075000, -0.130000, 0.514000
+    max: 0.250000, -0.054000, 0.578000
+    color: '#8BABA8'
+  - label: jug shoulder rear around spout
+    min: 0.075000, 0.054000, 0.514000
+    max: 0.250000, 0.130000, 0.578000
+    color: '#8BABA8'
+  - label: jug shoulder right around spout
+    min: 0.222000, -0.062000, 0.514000
+    max: 0.250000, 0.062000, 0.578000
+    color: '#5A8D88'
+  - label: hollow pouring neck 01
+    min: 0.209500, -0.027217, 0.550000
+    max: 0.228500, 0.027217, 0.631000
+    color: '#5A8D88'
+    yaw: 0.0
+  - label: hollow pouring neck 02
+    min: 0.193391, 0.011674, 0.550000
+    max: 0.212391, 0.066108, 0.631000
+    color: '#5A8D88'
+    yaw: 45.0
+  - label: hollow pouring neck 03
+    min: 0.154500, 0.027783, 0.550000
+    max: 0.173500, 0.082217, 0.631000
+    color: '#5A8D88'
+    yaw: 90.0
+  - label: hollow pouring neck 04
+    min: 0.115609, 0.011674, 0.550000
+    max: 0.134609, 0.066108, 0.631000
+    color: '#5A8D88'
+    yaw: 135.0
+  - label: hollow pouring neck 05
+    min: 0.099500, -0.027217, 0.550000
+    max: 0.118500, 0.027217, 0.631000
+    color: '#5A8D88'
+    yaw: 180.0
+  - label: hollow pouring neck 06
+    min: 0.115609, -0.066108, 0.550000
+    max: 0.134609, -0.011674, 0.631000
+    color: '#5A8D88'
+    yaw: 225.0
+  - label: hollow pouring neck 07
+    min: 0.154500, -0.082217, 0.550000
+    max: 0.173500, -0.027783, 0.631000
+    color: '#5A8D88'
+    yaw: 270.0
+  - label: hollow pouring neck 08
+    min: 0.193391, -0.066108, 0.550000
+    max: 0.212391, -0.011674, 0.631000
+    color: '#5A8D88'
+    yaw: 315.0
+  - label: rounded pouring lip 01
+    min: 0.211000, -0.028252, 0.622000
+    max: 0.231000, 0.028252, 0.648000
+    color: '#B7C9C3'
+    yaw: 0.0
+  - label: rounded pouring lip 02
+    min: 0.194305, 0.012053, 0.622000
+    max: 0.214305, 0.068557, 0.648000
+    color: '#B7C9C3'
+    yaw: 45.0
+  - label: rounded pouring lip 03
+    min: 0.154000, 0.028748, 0.622000
+    max: 0.174000, 0.085252, 0.648000
+    color: '#B7C9C3'
+    yaw: 90.0
+  - label: rounded pouring lip 04
+    min: 0.113695, 0.012053, 0.622000
+    max: 0.133695, 0.068557, 0.648000
+    color: '#B7C9C3'
+    yaw: 135.0
+  - label: rounded pouring lip 05
+    min: 0.097000, -0.028252, 0.622000
+    max: 0.117000, 0.028252, 0.648000
+    color: '#B7C9C3'
+    yaw: 180.0
+  - label: rounded pouring lip 06
+    min: 0.113695, -0.068557, 0.622000
+    max: 0.133695, -0.012053, 0.648000
+    color: '#B7C9C3'
+    yaw: 225.0
+  - label: rounded pouring lip 07
+    min: 0.154000, -0.085252, 0.622000
+    max: 0.174000, -0.028748, 0.648000
+    color: '#B7C9C3'
+    yaw: 270.0
+  - label: rounded pouring lip 08
+    min: 0.194305, -0.068557, 0.622000
+    max: 0.214305, -0.012053, 0.648000
+    color: '#B7C9C3'
+    yaw: 315.0
+  - label: handle left upright
+    min: -0.241000, -0.050000, 0.520000
+    max: -0.206000, 0.050000, 0.674000
+    color: '#5A8D88'
+  - label: handle right upright
+    min: 0.012000, -0.050000, 0.539000
+    max: 0.052000, 0.050000, 0.659000
+    color: '#5A8D88'
+  - label: handle rounded bridge
+    min: -0.220000, -0.052000, 0.649000
+    max: 0.034000, 0.052000, 0.688000
+    color: '#8BABA8'
+    shape: CylinderX
+  - label: handle top glint
+    min: -0.201000, -0.051000, 0.674000
+    max: 0.006000, -0.040000, 0.686000
+    color: '#B7C9C3'
+  - label: handle inner lower ledge
+    min: -0.206000, -0.055000, 0.550000
+    max: 0.018000, 0.055000, 0.575000
+    color: '#B7C9C3'
+  - label: front calibration tick 1
+    min: 0.101000, -0.150000, 0.112000
+    max: 0.190000, -0.142000, 0.131000
+    color: '#B7C9C3'
+  - label: front calibration tick 2
+    min: 0.101000, -0.150000, 0.174500
+    max: 0.190000, -0.142000, 0.193500
+    color: '#B7C9C3'
+  - label: front calibration tick 3
+    min: 0.101000, -0.150000, 0.237000
+    max: 0.190000, -0.142000, 0.256000
+    color: '#B7C9C3'
+  - label: front calibration tick 4
+    min: 0.101000, -0.150000, 0.299500
+    max: 0.190000, -0.142000, 0.318500
+    color: '#B7C9C3'
+  - label: front calibration tick 5
+    min: 0.101000, -0.150000, 0.362000
+    max: 0.190000, -0.142000, 0.381000
+    color: '#B7C9C3'
+  - label: front calibration tick 6
+    min: 0.101000, -0.150000, 0.424500
+    max: 0.190000, -0.142000, 0.443500
+    color: '#B7C9C3'
+  - label: front vertical molding
+    min: -0.095000, -0.150000, 0.060000
+    max: -0.061000, -0.143000, 0.476000
+    color: '#B7C9C3CF'
+  - label: neutral source fill study 5
+    min: -0.211000, -0.116000, 0.046000
+    max: 0.211000, 0.116000, 0.505000
+    color: '#B1B1B1'
+  - label: level liquid meniscus
+    min: -0.211000, -0.116000, 0.500000
+    max: 0.211000, 0.116000, 0.509000
+    color: '#D5D5D5'
+- type: cmu3DModel
+  id: CMU3DBobdaBlueCloud
+  label: Bobda blueraspberry can
+  status: draft
+  sourcePrototypes:
+  - CMDrinkCanBobdaBlue
+  referencePrototype: CMDrinkCanBobdaBlue
+  referenceRsi: /Textures/_RMC14/Objects/Consumable/Drinks/Bobda/blueraspberry.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Source-labelled round metal can with physical rims and pull-tab. CMDrinkCanBase
+    uses icon for both open and closed. icon and crushed are authored static RSI frames,
+    no invented transition. Crushed selection, native gameplay and support contacts
+    unverified. Cylindrical depth and hidden rear inferred.
+  parts:
+  - label: closed aluminium can body
+    min: -0.137000, -0.137000, 0.020000
+    max: 0.137000, 0.137000, 0.560000
+    color: '#8C8C8C'
+    shape: CylinderZ
+  - label: rolled bottom seam
+    min: -0.139000, -0.139000, 0.008000
+    max: 0.139000, 0.139000, 0.035000
+    color: '#737373'
+    shape: CylinderZ
+  - label: recessed aluminium lid
+    min: -0.116000, -0.116000, 0.560000
+    max: 0.116000, 0.116000, 0.569000
+    color: '#A6A6A6'
+    shape: CylinderZ
+  - label: raised upper rim 01
+    min: 0.118500, -0.057454, 0.556000
+    max: 0.137500, 0.057454, 0.583000
+    color: '#BFBFBF'
+    yaw: 0.0
+  - label: raised upper rim 02
+    min: 0.081010, 0.033055, 0.556000
+    max: 0.100010, 0.147964, 0.583000
+    color: '#BFBFBF'
+    yaw: 45.0
+  - label: raised upper rim 03
+    min: -0.009500, 0.070546, 0.556000
+    max: 0.009500, 0.185454, 0.583000
+    color: '#BFBFBF'
+    yaw: 90.0
+  - label: raised upper rim 04
+    min: -0.100010, 0.033055, 0.556000
+    max: -0.081010, 0.147964, 0.583000
+    color: '#BFBFBF'
+    yaw: 135.0
+  - label: raised upper rim 05
+    min: -0.137500, -0.057454, 0.556000
+    max: -0.118500, 0.057454, 0.583000
+    color: '#BFBFBF'
+    yaw: 180.0
+  - label: raised upper rim 06
+    min: -0.100010, -0.147964, 0.556000
+    max: -0.081010, -0.033055, 0.583000
+    color: '#BFBFBF'
+    yaw: 225.0
+  - label: raised upper rim 07
+    min: -0.009500, -0.185454, 0.556000
+    max: 0.009500, -0.070546, 0.583000
+    color: '#BFBFBF'
+    yaw: 270.0
+  - label: raised upper rim 08
+    min: 0.081010, -0.147964, 0.556000
+    max: 0.100010, -0.033055, 0.583000
+    color: '#BFBFBF'
+    yaw: 315.0
+  - label: pull tab rear bridge
+    min: -0.040000, -0.008000, 0.571000
+    max: 0.040000, 0.016000, 0.582000
+    color: '#737373'
+  - label: pull tab left arm
+    min: -0.040000, -0.057000, 0.571000
+    max: -0.019000, 0.010000, 0.582000
+    color: '#BFBFBF'
+  - label: pull tab right arm
+    min: 0.019000, -0.057000, 0.571000
+    max: 0.040000, 0.010000, 0.582000
+    color: '#BFBFBF'
+  - label: pull tab end bar
+    min: -0.039000, -0.062000, 0.571000
+    max: 0.039000, -0.045000, 0.582000
+    color: '#8C8C8C'
+  - label: original printed label strip 1
+    min: -0.114789, -0.105976, 0.035000
+    max: -0.072711, -0.101976, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt0
+    surfaceAxis: XZ
+    yaw: -42.039506
+  - label: original printed label strip 2
+    min: -0.079962, -0.127275, 0.035000
+    max: -0.045038, -0.123275, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt1
+    surfaceAxis: XZ
+    yaw: -26.514775
+  - label: original printed label strip 3
+    min: -0.047279, -0.138468, 0.035000
+    max: -0.015221, -0.134468, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt2
+    surfaceAxis: XZ
+    yaw: -12.897894
+  - label: original printed label strip 4
+    min: -0.015625, -0.142000, 0.035000
+    max: 0.015625, -0.138000, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt3
+    surfaceAxis: XZ
+    yaw: 0.0
+  - label: original printed label strip 5
+    min: 0.015221, -0.138468, 0.035000
+    max: 0.047279, -0.134468, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt4
+    surfaceAxis: XZ
+    yaw: 12.897894
+  - label: original printed label strip 6
+    min: 0.045038, -0.127275, 0.035000
+    max: 0.079962, -0.123275, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt5
+    surfaceAxis: XZ
+    yaw: 26.514775
+  - label: original printed label strip 7
+    min: 0.072711, -0.105976, 0.035000
+    max: 0.114789, -0.101976, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt6
+    surfaceAxis: XZ
+    yaw: 42.039506
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0, 0
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: closed aluminium can body
+          min: -0.137000, -0.137000, 0.020000
+          max: 0.137000, 0.137000, 0.560000
+          color: '#8C8C8C'
+          shape: CylinderZ
+        - label: rolled bottom seam
+          min: -0.139000, -0.139000, 0.008000
+          max: 0.139000, 0.139000, 0.035000
+          color: '#737373'
+          shape: CylinderZ
+        - label: recessed aluminium lid
+          min: -0.116000, -0.116000, 0.560000
+          max: 0.116000, 0.116000, 0.569000
+          color: '#A6A6A6'
+          shape: CylinderZ
+        - label: raised upper rim 01
+          min: 0.118500, -0.057454, 0.556000
+          max: 0.137500, 0.057454, 0.583000
+          color: '#BFBFBF'
+          yaw: 0.0
+        - label: raised upper rim 02
+          min: 0.081010, 0.033055, 0.556000
+          max: 0.100010, 0.147964, 0.583000
+          color: '#BFBFBF'
+          yaw: 45.0
+        - label: raised upper rim 03
+          min: -0.009500, 0.070546, 0.556000
+          max: 0.009500, 0.185454, 0.583000
+          color: '#BFBFBF'
+          yaw: 90.0
+        - label: raised upper rim 04
+          min: -0.100010, 0.033055, 0.556000
+          max: -0.081010, 0.147964, 0.583000
+          color: '#BFBFBF'
+          yaw: 135.0
+        - label: raised upper rim 05
+          min: -0.137500, -0.057454, 0.556000
+          max: -0.118500, 0.057454, 0.583000
+          color: '#BFBFBF'
+          yaw: 180.0
+        - label: raised upper rim 06
+          min: -0.100010, -0.147964, 0.556000
+          max: -0.081010, -0.033055, 0.583000
+          color: '#BFBFBF'
+          yaw: 225.0
+        - label: raised upper rim 07
+          min: -0.009500, -0.185454, 0.556000
+          max: 0.009500, -0.070546, 0.583000
+          color: '#BFBFBF'
+          yaw: 270.0
+        - label: raised upper rim 08
+          min: 0.081010, -0.147964, 0.556000
+          max: 0.100010, -0.033055, 0.583000
+          color: '#BFBFBF'
+          yaw: 315.0
+        - label: pull tab rear bridge
+          min: -0.040000, -0.008000, 0.571000
+          max: 0.040000, 0.016000, 0.582000
+          color: '#737373'
+        - label: pull tab left arm
+          min: -0.040000, -0.057000, 0.571000
+          max: -0.019000, 0.010000, 0.582000
+          color: '#BFBFBF'
+        - label: pull tab right arm
+          min: 0.019000, -0.057000, 0.571000
+          max: 0.040000, 0.010000, 0.582000
+          color: '#BFBFBF'
+        - label: pull tab end bar
+          min: -0.039000, -0.062000, 0.571000
+          max: 0.039000, -0.045000, 0.582000
+          color: '#8C8C8C'
+        - label: original printed label strip 1
+          min: -0.114789, -0.105976, 0.035000
+          max: -0.072711, -0.101976, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt0
+          surfaceAxis: XZ
+          yaw: -42.039506
+        - label: original printed label strip 2
+          min: -0.079962, -0.127275, 0.035000
+          max: -0.045038, -0.123275, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt1
+          surfaceAxis: XZ
+          yaw: -26.514775
+        - label: original printed label strip 3
+          min: -0.047279, -0.138468, 0.035000
+          max: -0.015221, -0.134468, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt2
+          surfaceAxis: XZ
+          yaw: -12.897894
+        - label: original printed label strip 4
+          min: -0.015625, -0.142000, 0.035000
+          max: 0.015625, -0.138000, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt3
+          surfaceAxis: XZ
+          yaw: 0.0
+        - label: original printed label strip 5
+          min: 0.015221, -0.138468, 0.035000
+          max: 0.047279, -0.134468, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt4
+          surfaceAxis: XZ
+          yaw: 12.897894
+        - label: original printed label strip 6
+          min: 0.045038, -0.127275, 0.035000
+          max: 0.079962, -0.123275, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt5
+          surfaceAxis: XZ
+          yaw: 26.514775
+        - label: original printed label strip 7
+          min: 0.072711, -0.105976, 0.035000
+          max: 0.114789, -0.101976, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt6
+          surfaceAxis: XZ
+          yaw: 42.039506
+      delays:
+      - 1
+    crushed:
+      frames:
+      - parts:
+        - label: closed aluminium can body
+          min: -0.137000, -0.137000, 0.020000
+          max: 0.137000, 0.137000, 0.195000
+          color: '#8C8C8C'
+          shape: CylinderZ
+        - label: rolled bottom seam
+          min: -0.139000, -0.139000, 0.008000
+          max: 0.139000, 0.139000, 0.035000
+          color: '#737373'
+          shape: CylinderZ
+        - label: recessed aluminium lid
+          min: -0.116000, -0.116000, 0.195000
+          max: 0.116000, 0.116000, 0.204000
+          color: '#A6A6A6'
+          shape: CylinderZ
+        - label: raised upper rim 01
+          min: 0.118500, -0.057454, 0.191000
+          max: 0.137500, 0.057454, 0.218000
+          color: '#BFBFBF'
+          yaw: 0.0
+        - label: raised upper rim 02
+          min: 0.081010, 0.033055, 0.191000
+          max: 0.100010, 0.147964, 0.218000
+          color: '#BFBFBF'
+          yaw: 45.0
+        - label: raised upper rim 03
+          min: -0.009500, 0.070546, 0.191000
+          max: 0.009500, 0.185454, 0.218000
+          color: '#BFBFBF'
+          yaw: 90.0
+        - label: raised upper rim 04
+          min: -0.100010, 0.033055, 0.191000
+          max: -0.081010, 0.147964, 0.218000
+          color: '#BFBFBF'
+          yaw: 135.0
+        - label: raised upper rim 05
+          min: -0.137500, -0.057454, 0.191000
+          max: -0.118500, 0.057454, 0.218000
+          color: '#BFBFBF'
+          yaw: 180.0
+        - label: raised upper rim 06
+          min: -0.100010, -0.147964, 0.191000
+          max: -0.081010, -0.033055, 0.218000
+          color: '#BFBFBF'
+          yaw: 225.0
+        - label: raised upper rim 07
+          min: -0.009500, -0.185454, 0.191000
+          max: 0.009500, -0.070546, 0.218000
+          color: '#BFBFBF'
+          yaw: 270.0
+        - label: raised upper rim 08
+          min: 0.081010, -0.147964, 0.191000
+          max: 0.100010, -0.033055, 0.218000
+          color: '#BFBFBF'
+          yaw: 315.0
+        - label: pull tab rear bridge
+          min: -0.040000, -0.008000, 0.206000
+          max: 0.040000, 0.016000, 0.217000
+          color: '#737373'
+        - label: pull tab left arm
+          min: -0.040000, -0.057000, 0.206000
+          max: -0.019000, 0.010000, 0.217000
+          color: '#BFBFBF'
+        - label: pull tab right arm
+          min: 0.019000, -0.057000, 0.206000
+          max: 0.040000, 0.010000, 0.217000
+          color: '#BFBFBF'
+        - label: pull tab end bar
+          min: -0.039000, -0.062000, 0.206000
+          max: 0.039000, -0.045000, 0.217000
+          color: '#8C8C8C'
+        - label: original printed label strip 1
+          min: -0.090307, -0.097523, 0.035000
+          max: -0.034693, -0.093523, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt7
+          surfaceAxis: XZ
+          yaw: -55.812775
+        - label: original printed label strip 2
+          min: -0.051660, -0.132143, 0.035000
+          max: -0.010840, -0.128143, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt8
+          surfaceAxis: XZ
+          yaw: -40.044498
+        - label: original printed label strip 3
+          min: -0.017593, -0.152985, 0.035000
+          max: 0.017593, -0.148985, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt9
+          surfaceAxis: XZ
+          yaw: -27.358643
+        - label: original printed label strip 4
+          min: 0.014995, -0.165410, 0.035000
+          max: 0.047505, -0.161410, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt10
+          surfaceAxis: XZ
+          yaw: -16.005838
+        - label: original printed label strip 5
+          min: 0.046809, -0.171280, 0.035000
+          max: 0.078191, -0.167280, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt11
+          surfaceAxis: XZ
+          yaw: -5.273599
+        - label: original printed label strip 6
+          min: 0.078059, -0.171280, 0.035000
+          max: 0.109441, -0.167280, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt12
+          surfaceAxis: XZ
+          yaw: 5.273599
+        - label: original printed label strip 7
+          min: 0.108745, -0.165410, 0.035000
+          max: 0.141255, -0.161410, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt13
+          surfaceAxis: XZ
+          yaw: 16.005838
+        - label: original printed label strip 8
+          min: 0.138657, -0.152985, 0.035000
+          max: 0.173843, -0.148985, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt14
+          surfaceAxis: XZ
+          yaw: 27.358643
+        - label: original printed label strip 9
+          min: 0.167090, -0.132143, 0.035000
+          max: 0.207910, -0.128143, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt15
+          surfaceAxis: XZ
+          yaw: 40.044498
+        - label: original printed label strip 10
+          min: 0.190943, -0.097523, 0.035000
+          max: 0.246557, -0.093523, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt16
+          surfaceAxis: XZ
+          yaw: 55.812775
+        - label: buckled lower aluminium fold
+          min: -0.072000, -0.142000, 0.020000
+          max: 0.221000, 0.117000, 0.078000
+          color: '#737373'
+          shape: Ellipsoid
+          yaw: 12
+          pitch: 8
+        - label: crumpled left flank
+          min: -0.149000, -0.083000, 0.064000
+          max: -0.111000, 0.084000, 0.137000
+          color: '#636363'
+          shape: Ellipsoid
+          yaw: -12
+          pitch: -12
+        - label: crumpled right flank
+          min: 0.124000, -0.076000, 0.040000
+          max: 0.207000, 0.100000, 0.130000
+          color: '#737373'
+          shape: Ellipsoid
+          yaw: 17
+          pitch: 14
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DBobdaCherryCloud
+  label: Bobda cherry can
+  status: draft
+  sourcePrototypes:
+  - CMDrinkCanBobdaCherry
+  referencePrototype: CMDrinkCanBobdaCherry
+  referenceRsi: /Textures/_RMC14/Objects/Consumable/Drinks/Bobda/cherry.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Source-labelled round metal can with physical rims and pull-tab. CMDrinkCanBase
+    uses icon for both open and closed. icon and crushed are authored static RSI frames,
+    no invented transition. Crushed selection, native gameplay and support contacts
+    unverified. Cylindrical depth and hidden rear inferred.
+  parts:
+  - label: closed aluminium can body
+    min: -0.137000, -0.137000, 0.020000
+    max: 0.137000, 0.137000, 0.560000
+    color: '#8C8C8C'
+    shape: CylinderZ
+  - label: rolled bottom seam
+    min: -0.139000, -0.139000, 0.008000
+    max: 0.139000, 0.139000, 0.035000
+    color: '#737373'
+    shape: CylinderZ
+  - label: recessed aluminium lid
+    min: -0.116000, -0.116000, 0.560000
+    max: 0.116000, 0.116000, 0.569000
+    color: '#A6A6A6'
+    shape: CylinderZ
+  - label: raised upper rim 01
+    min: 0.118500, -0.057454, 0.556000
+    max: 0.137500, 0.057454, 0.583000
+    color: '#BFBFBF'
+    yaw: 0.0
+  - label: raised upper rim 02
+    min: 0.081010, 0.033055, 0.556000
+    max: 0.100010, 0.147964, 0.583000
+    color: '#BFBFBF'
+    yaw: 45.0
+  - label: raised upper rim 03
+    min: -0.009500, 0.070546, 0.556000
+    max: 0.009500, 0.185454, 0.583000
+    color: '#BFBFBF'
+    yaw: 90.0
+  - label: raised upper rim 04
+    min: -0.100010, 0.033055, 0.556000
+    max: -0.081010, 0.147964, 0.583000
+    color: '#BFBFBF'
+    yaw: 135.0
+  - label: raised upper rim 05
+    min: -0.137500, -0.057454, 0.556000
+    max: -0.118500, 0.057454, 0.583000
+    color: '#BFBFBF'
+    yaw: 180.0
+  - label: raised upper rim 06
+    min: -0.100010, -0.147964, 0.556000
+    max: -0.081010, -0.033055, 0.583000
+    color: '#BFBFBF'
+    yaw: 225.0
+  - label: raised upper rim 07
+    min: -0.009500, -0.185454, 0.556000
+    max: 0.009500, -0.070546, 0.583000
+    color: '#BFBFBF'
+    yaw: 270.0
+  - label: raised upper rim 08
+    min: 0.081010, -0.147964, 0.556000
+    max: 0.100010, -0.033055, 0.583000
+    color: '#BFBFBF'
+    yaw: 315.0
+  - label: pull tab rear bridge
+    min: -0.040000, -0.008000, 0.571000
+    max: 0.040000, 0.016000, 0.582000
+    color: '#737373'
+  - label: pull tab left arm
+    min: -0.040000, -0.057000, 0.571000
+    max: -0.019000, 0.010000, 0.582000
+    color: '#BFBFBF'
+  - label: pull tab right arm
+    min: 0.019000, -0.057000, 0.571000
+    max: 0.040000, 0.010000, 0.582000
+    color: '#BFBFBF'
+  - label: pull tab end bar
+    min: -0.039000, -0.062000, 0.571000
+    max: 0.039000, -0.045000, 0.582000
+    color: '#8C8C8C'
+  - label: original printed label strip 1
+    min: -0.114789, -0.105976, 0.035000
+    max: -0.072711, -0.101976, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt17
+    surfaceAxis: XZ
+    yaw: -42.039506
+  - label: original printed label strip 2
+    min: -0.079962, -0.127275, 0.035000
+    max: -0.045038, -0.123275, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt18
+    surfaceAxis: XZ
+    yaw: -26.514775
+  - label: original printed label strip 3
+    min: -0.047279, -0.138468, 0.035000
+    max: -0.015221, -0.134468, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt19
+    surfaceAxis: XZ
+    yaw: -12.897894
+  - label: original printed label strip 4
+    min: -0.015625, -0.142000, 0.035000
+    max: 0.015625, -0.138000, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt20
+    surfaceAxis: XZ
+    yaw: 0.0
+  - label: original printed label strip 5
+    min: 0.015221, -0.138468, 0.035000
+    max: 0.047279, -0.134468, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt21
+    surfaceAxis: XZ
+    yaw: 12.897894
+  - label: original printed label strip 6
+    min: 0.045038, -0.127275, 0.035000
+    max: 0.079962, -0.123275, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt22
+    surfaceAxis: XZ
+    yaw: 26.514775
+  - label: original printed label strip 7
+    min: 0.072711, -0.105976, 0.035000
+    max: 0.114789, -0.101976, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt23
+    surfaceAxis: XZ
+    yaw: 42.039506
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0, 0
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: closed aluminium can body
+          min: -0.137000, -0.137000, 0.020000
+          max: 0.137000, 0.137000, 0.560000
+          color: '#8C8C8C'
+          shape: CylinderZ
+        - label: rolled bottom seam
+          min: -0.139000, -0.139000, 0.008000
+          max: 0.139000, 0.139000, 0.035000
+          color: '#737373'
+          shape: CylinderZ
+        - label: recessed aluminium lid
+          min: -0.116000, -0.116000, 0.560000
+          max: 0.116000, 0.116000, 0.569000
+          color: '#A6A6A6'
+          shape: CylinderZ
+        - label: raised upper rim 01
+          min: 0.118500, -0.057454, 0.556000
+          max: 0.137500, 0.057454, 0.583000
+          color: '#BFBFBF'
+          yaw: 0.0
+        - label: raised upper rim 02
+          min: 0.081010, 0.033055, 0.556000
+          max: 0.100010, 0.147964, 0.583000
+          color: '#BFBFBF'
+          yaw: 45.0
+        - label: raised upper rim 03
+          min: -0.009500, 0.070546, 0.556000
+          max: 0.009500, 0.185454, 0.583000
+          color: '#BFBFBF'
+          yaw: 90.0
+        - label: raised upper rim 04
+          min: -0.100010, 0.033055, 0.556000
+          max: -0.081010, 0.147964, 0.583000
+          color: '#BFBFBF'
+          yaw: 135.0
+        - label: raised upper rim 05
+          min: -0.137500, -0.057454, 0.556000
+          max: -0.118500, 0.057454, 0.583000
+          color: '#BFBFBF'
+          yaw: 180.0
+        - label: raised upper rim 06
+          min: -0.100010, -0.147964, 0.556000
+          max: -0.081010, -0.033055, 0.583000
+          color: '#BFBFBF'
+          yaw: 225.0
+        - label: raised upper rim 07
+          min: -0.009500, -0.185454, 0.556000
+          max: 0.009500, -0.070546, 0.583000
+          color: '#BFBFBF'
+          yaw: 270.0
+        - label: raised upper rim 08
+          min: 0.081010, -0.147964, 0.556000
+          max: 0.100010, -0.033055, 0.583000
+          color: '#BFBFBF'
+          yaw: 315.0
+        - label: pull tab rear bridge
+          min: -0.040000, -0.008000, 0.571000
+          max: 0.040000, 0.016000, 0.582000
+          color: '#737373'
+        - label: pull tab left arm
+          min: -0.040000, -0.057000, 0.571000
+          max: -0.019000, 0.010000, 0.582000
+          color: '#BFBFBF'
+        - label: pull tab right arm
+          min: 0.019000, -0.057000, 0.571000
+          max: 0.040000, 0.010000, 0.582000
+          color: '#BFBFBF'
+        - label: pull tab end bar
+          min: -0.039000, -0.062000, 0.571000
+          max: 0.039000, -0.045000, 0.582000
+          color: '#8C8C8C'
+        - label: original printed label strip 1
+          min: -0.114789, -0.105976, 0.035000
+          max: -0.072711, -0.101976, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt17
+          surfaceAxis: XZ
+          yaw: -42.039506
+        - label: original printed label strip 2
+          min: -0.079962, -0.127275, 0.035000
+          max: -0.045038, -0.123275, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt18
+          surfaceAxis: XZ
+          yaw: -26.514775
+        - label: original printed label strip 3
+          min: -0.047279, -0.138468, 0.035000
+          max: -0.015221, -0.134468, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt19
+          surfaceAxis: XZ
+          yaw: -12.897894
+        - label: original printed label strip 4
+          min: -0.015625, -0.142000, 0.035000
+          max: 0.015625, -0.138000, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt20
+          surfaceAxis: XZ
+          yaw: 0.0
+        - label: original printed label strip 5
+          min: 0.015221, -0.138468, 0.035000
+          max: 0.047279, -0.134468, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt21
+          surfaceAxis: XZ
+          yaw: 12.897894
+        - label: original printed label strip 6
+          min: 0.045038, -0.127275, 0.035000
+          max: 0.079962, -0.123275, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt22
+          surfaceAxis: XZ
+          yaw: 26.514775
+        - label: original printed label strip 7
+          min: 0.072711, -0.105976, 0.035000
+          max: 0.114789, -0.101976, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt23
+          surfaceAxis: XZ
+          yaw: 42.039506
+      delays:
+      - 1
+    crushed:
+      frames:
+      - parts:
+        - label: closed aluminium can body
+          min: -0.137000, -0.137000, 0.020000
+          max: 0.137000, 0.137000, 0.195000
+          color: '#8C8C8C'
+          shape: CylinderZ
+        - label: rolled bottom seam
+          min: -0.139000, -0.139000, 0.008000
+          max: 0.139000, 0.139000, 0.035000
+          color: '#737373'
+          shape: CylinderZ
+        - label: recessed aluminium lid
+          min: -0.116000, -0.116000, 0.195000
+          max: 0.116000, 0.116000, 0.204000
+          color: '#A6A6A6'
+          shape: CylinderZ
+        - label: raised upper rim 01
+          min: 0.118500, -0.057454, 0.191000
+          max: 0.137500, 0.057454, 0.218000
+          color: '#BFBFBF'
+          yaw: 0.0
+        - label: raised upper rim 02
+          min: 0.081010, 0.033055, 0.191000
+          max: 0.100010, 0.147964, 0.218000
+          color: '#BFBFBF'
+          yaw: 45.0
+        - label: raised upper rim 03
+          min: -0.009500, 0.070546, 0.191000
+          max: 0.009500, 0.185454, 0.218000
+          color: '#BFBFBF'
+          yaw: 90.0
+        - label: raised upper rim 04
+          min: -0.100010, 0.033055, 0.191000
+          max: -0.081010, 0.147964, 0.218000
+          color: '#BFBFBF'
+          yaw: 135.0
+        - label: raised upper rim 05
+          min: -0.137500, -0.057454, 0.191000
+          max: -0.118500, 0.057454, 0.218000
+          color: '#BFBFBF'
+          yaw: 180.0
+        - label: raised upper rim 06
+          min: -0.100010, -0.147964, 0.191000
+          max: -0.081010, -0.033055, 0.218000
+          color: '#BFBFBF'
+          yaw: 225.0
+        - label: raised upper rim 07
+          min: -0.009500, -0.185454, 0.191000
+          max: 0.009500, -0.070546, 0.218000
+          color: '#BFBFBF'
+          yaw: 270.0
+        - label: raised upper rim 08
+          min: 0.081010, -0.147964, 0.191000
+          max: 0.100010, -0.033055, 0.218000
+          color: '#BFBFBF'
+          yaw: 315.0
+        - label: pull tab rear bridge
+          min: -0.040000, -0.008000, 0.206000
+          max: 0.040000, 0.016000, 0.217000
+          color: '#737373'
+        - label: pull tab left arm
+          min: -0.040000, -0.057000, 0.206000
+          max: -0.019000, 0.010000, 0.217000
+          color: '#BFBFBF'
+        - label: pull tab right arm
+          min: 0.019000, -0.057000, 0.206000
+          max: 0.040000, 0.010000, 0.217000
+          color: '#BFBFBF'
+        - label: pull tab end bar
+          min: -0.039000, -0.062000, 0.206000
+          max: 0.039000, -0.045000, 0.217000
+          color: '#8C8C8C'
+        - label: original printed label strip 1
+          min: -0.090307, -0.097523, 0.035000
+          max: -0.034693, -0.093523, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt24
+          surfaceAxis: XZ
+          yaw: -55.812775
+        - label: original printed label strip 2
+          min: -0.051660, -0.132143, 0.035000
+          max: -0.010840, -0.128143, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt25
+          surfaceAxis: XZ
+          yaw: -40.044498
+        - label: original printed label strip 3
+          min: -0.017593, -0.152985, 0.035000
+          max: 0.017593, -0.148985, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt26
+          surfaceAxis: XZ
+          yaw: -27.358643
+        - label: original printed label strip 4
+          min: 0.014995, -0.165410, 0.035000
+          max: 0.047505, -0.161410, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt27
+          surfaceAxis: XZ
+          yaw: -16.005838
+        - label: original printed label strip 5
+          min: 0.046809, -0.171280, 0.035000
+          max: 0.078191, -0.167280, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt28
+          surfaceAxis: XZ
+          yaw: -5.273599
+        - label: original printed label strip 6
+          min: 0.078059, -0.171280, 0.035000
+          max: 0.109441, -0.167280, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt29
+          surfaceAxis: XZ
+          yaw: 5.273599
+        - label: original printed label strip 7
+          min: 0.108745, -0.165410, 0.035000
+          max: 0.141255, -0.161410, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt30
+          surfaceAxis: XZ
+          yaw: 16.005838
+        - label: original printed label strip 8
+          min: 0.138657, -0.152985, 0.035000
+          max: 0.173843, -0.148985, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt31
+          surfaceAxis: XZ
+          yaw: 27.358643
+        - label: original printed label strip 9
+          min: 0.167090, -0.132143, 0.035000
+          max: 0.207910, -0.128143, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt32
+          surfaceAxis: XZ
+          yaw: 40.044498
+        - label: original printed label strip 10
+          min: 0.190943, -0.097523, 0.035000
+          max: 0.246557, -0.093523, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt33
+          surfaceAxis: XZ
+          yaw: 55.812775
+        - label: buckled lower aluminium fold
+          min: -0.072000, -0.142000, 0.020000
+          max: 0.221000, 0.117000, 0.078000
+          color: '#737373'
+          shape: Ellipsoid
+          yaw: 12
+          pitch: 8
+        - label: crumpled left flank
+          min: -0.149000, -0.083000, 0.064000
+          max: -0.111000, 0.084000, 0.137000
+          color: '#636363'
+          shape: Ellipsoid
+          yaw: -12
+          pitch: -12
+        - label: crumpled right flank
+          min: 0.124000, -0.076000, 0.040000
+          max: 0.207000, 0.100000, 0.130000
+          color: '#737373'
+          shape: Ellipsoid
+          yaw: 17
+          pitch: 14
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DBobdaClassicCloud
+  label: Bobda classic can
+  status: draft
+  sourcePrototypes:
+  - CMDrinkCanBobdaClassic
+  referencePrototype: CMDrinkCanBobdaClassic
+  referenceRsi: /Textures/_RMC14/Objects/Consumable/Drinks/Bobda/classic.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Source-labelled round metal can with physical rims and pull-tab. CMDrinkCanBase
+    uses icon for both open and closed. icon and crushed are authored static RSI frames,
+    no invented transition. Crushed selection, native gameplay and support contacts
+    unverified. Cylindrical depth and hidden rear inferred.
+  parts:
+  - label: closed aluminium can body
+    min: -0.137000, -0.137000, 0.020000
+    max: 0.137000, 0.137000, 0.560000
+    color: '#8C8C8C'
+    shape: CylinderZ
+  - label: rolled bottom seam
+    min: -0.139000, -0.139000, 0.008000
+    max: 0.139000, 0.139000, 0.035000
+    color: '#737373'
+    shape: CylinderZ
+  - label: recessed aluminium lid
+    min: -0.116000, -0.116000, 0.560000
+    max: 0.116000, 0.116000, 0.569000
+    color: '#A6A6A6'
+    shape: CylinderZ
+  - label: raised upper rim 01
+    min: 0.118500, -0.057454, 0.556000
+    max: 0.137500, 0.057454, 0.583000
+    color: '#BFBFBF'
+    yaw: 0.0
+  - label: raised upper rim 02
+    min: 0.081010, 0.033055, 0.556000
+    max: 0.100010, 0.147964, 0.583000
+    color: '#BFBFBF'
+    yaw: 45.0
+  - label: raised upper rim 03
+    min: -0.009500, 0.070546, 0.556000
+    max: 0.009500, 0.185454, 0.583000
+    color: '#BFBFBF'
+    yaw: 90.0
+  - label: raised upper rim 04
+    min: -0.100010, 0.033055, 0.556000
+    max: -0.081010, 0.147964, 0.583000
+    color: '#BFBFBF'
+    yaw: 135.0
+  - label: raised upper rim 05
+    min: -0.137500, -0.057454, 0.556000
+    max: -0.118500, 0.057454, 0.583000
+    color: '#BFBFBF'
+    yaw: 180.0
+  - label: raised upper rim 06
+    min: -0.100010, -0.147964, 0.556000
+    max: -0.081010, -0.033055, 0.583000
+    color: '#BFBFBF'
+    yaw: 225.0
+  - label: raised upper rim 07
+    min: -0.009500, -0.185454, 0.556000
+    max: 0.009500, -0.070546, 0.583000
+    color: '#BFBFBF'
+    yaw: 270.0
+  - label: raised upper rim 08
+    min: 0.081010, -0.147964, 0.556000
+    max: 0.100010, -0.033055, 0.583000
+    color: '#BFBFBF'
+    yaw: 315.0
+  - label: pull tab rear bridge
+    min: -0.040000, -0.008000, 0.571000
+    max: 0.040000, 0.016000, 0.582000
+    color: '#737373'
+  - label: pull tab left arm
+    min: -0.040000, -0.057000, 0.571000
+    max: -0.019000, 0.010000, 0.582000
+    color: '#BFBFBF'
+  - label: pull tab right arm
+    min: 0.019000, -0.057000, 0.571000
+    max: 0.040000, 0.010000, 0.582000
+    color: '#BFBFBF'
+  - label: pull tab end bar
+    min: -0.039000, -0.062000, 0.571000
+    max: 0.039000, -0.045000, 0.582000
+    color: '#8C8C8C'
+  - label: original printed label strip 1
+    min: -0.114789, -0.105976, 0.035000
+    max: -0.072711, -0.101976, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt34
+    surfaceAxis: XZ
+    yaw: -42.039506
+  - label: original printed label strip 2
+    min: -0.079962, -0.127275, 0.035000
+    max: -0.045038, -0.123275, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt35
+    surfaceAxis: XZ
+    yaw: -26.514775
+  - label: original printed label strip 3
+    min: -0.047279, -0.138468, 0.035000
+    max: -0.015221, -0.134468, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt36
+    surfaceAxis: XZ
+    yaw: -12.897894
+  - label: original printed label strip 4
+    min: -0.015625, -0.142000, 0.035000
+    max: 0.015625, -0.138000, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt37
+    surfaceAxis: XZ
+    yaw: 0.0
+  - label: original printed label strip 5
+    min: 0.015221, -0.138468, 0.035000
+    max: 0.047279, -0.134468, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt38
+    surfaceAxis: XZ
+    yaw: 12.897894
+  - label: original printed label strip 6
+    min: 0.045038, -0.127275, 0.035000
+    max: 0.079962, -0.123275, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt39
+    surfaceAxis: XZ
+    yaw: 26.514775
+  - label: original printed label strip 7
+    min: 0.072711, -0.105976, 0.035000
+    max: 0.114789, -0.101976, 0.542000
+    color: '#FFFFFF'
+    surface: CMU3DContainerCloudArt40
+    surfaceAxis: XZ
+    yaw: 42.039506
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0, 0
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: closed aluminium can body
+          min: -0.137000, -0.137000, 0.020000
+          max: 0.137000, 0.137000, 0.560000
+          color: '#8C8C8C'
+          shape: CylinderZ
+        - label: rolled bottom seam
+          min: -0.139000, -0.139000, 0.008000
+          max: 0.139000, 0.139000, 0.035000
+          color: '#737373'
+          shape: CylinderZ
+        - label: recessed aluminium lid
+          min: -0.116000, -0.116000, 0.560000
+          max: 0.116000, 0.116000, 0.569000
+          color: '#A6A6A6'
+          shape: CylinderZ
+        - label: raised upper rim 01
+          min: 0.118500, -0.057454, 0.556000
+          max: 0.137500, 0.057454, 0.583000
+          color: '#BFBFBF'
+          yaw: 0.0
+        - label: raised upper rim 02
+          min: 0.081010, 0.033055, 0.556000
+          max: 0.100010, 0.147964, 0.583000
+          color: '#BFBFBF'
+          yaw: 45.0
+        - label: raised upper rim 03
+          min: -0.009500, 0.070546, 0.556000
+          max: 0.009500, 0.185454, 0.583000
+          color: '#BFBFBF'
+          yaw: 90.0
+        - label: raised upper rim 04
+          min: -0.100010, 0.033055, 0.556000
+          max: -0.081010, 0.147964, 0.583000
+          color: '#BFBFBF'
+          yaw: 135.0
+        - label: raised upper rim 05
+          min: -0.137500, -0.057454, 0.556000
+          max: -0.118500, 0.057454, 0.583000
+          color: '#BFBFBF'
+          yaw: 180.0
+        - label: raised upper rim 06
+          min: -0.100010, -0.147964, 0.556000
+          max: -0.081010, -0.033055, 0.583000
+          color: '#BFBFBF'
+          yaw: 225.0
+        - label: raised upper rim 07
+          min: -0.009500, -0.185454, 0.556000
+          max: 0.009500, -0.070546, 0.583000
+          color: '#BFBFBF'
+          yaw: 270.0
+        - label: raised upper rim 08
+          min: 0.081010, -0.147964, 0.556000
+          max: 0.100010, -0.033055, 0.583000
+          color: '#BFBFBF'
+          yaw: 315.0
+        - label: pull tab rear bridge
+          min: -0.040000, -0.008000, 0.571000
+          max: 0.040000, 0.016000, 0.582000
+          color: '#737373'
+        - label: pull tab left arm
+          min: -0.040000, -0.057000, 0.571000
+          max: -0.019000, 0.010000, 0.582000
+          color: '#BFBFBF'
+        - label: pull tab right arm
+          min: 0.019000, -0.057000, 0.571000
+          max: 0.040000, 0.010000, 0.582000
+          color: '#BFBFBF'
+        - label: pull tab end bar
+          min: -0.039000, -0.062000, 0.571000
+          max: 0.039000, -0.045000, 0.582000
+          color: '#8C8C8C'
+        - label: original printed label strip 1
+          min: -0.114789, -0.105976, 0.035000
+          max: -0.072711, -0.101976, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt34
+          surfaceAxis: XZ
+          yaw: -42.039506
+        - label: original printed label strip 2
+          min: -0.079962, -0.127275, 0.035000
+          max: -0.045038, -0.123275, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt35
+          surfaceAxis: XZ
+          yaw: -26.514775
+        - label: original printed label strip 3
+          min: -0.047279, -0.138468, 0.035000
+          max: -0.015221, -0.134468, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt36
+          surfaceAxis: XZ
+          yaw: -12.897894
+        - label: original printed label strip 4
+          min: -0.015625, -0.142000, 0.035000
+          max: 0.015625, -0.138000, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt37
+          surfaceAxis: XZ
+          yaw: 0.0
+        - label: original printed label strip 5
+          min: 0.015221, -0.138468, 0.035000
+          max: 0.047279, -0.134468, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt38
+          surfaceAxis: XZ
+          yaw: 12.897894
+        - label: original printed label strip 6
+          min: 0.045038, -0.127275, 0.035000
+          max: 0.079962, -0.123275, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt39
+          surfaceAxis: XZ
+          yaw: 26.514775
+        - label: original printed label strip 7
+          min: 0.072711, -0.105976, 0.035000
+          max: 0.114789, -0.101976, 0.542000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt40
+          surfaceAxis: XZ
+          yaw: 42.039506
+      delays:
+      - 1
+    crushed:
+      frames:
+      - parts:
+        - label: closed aluminium can body
+          min: -0.137000, -0.137000, 0.020000
+          max: 0.137000, 0.137000, 0.195000
+          color: '#8C8C8C'
+          shape: CylinderZ
+        - label: rolled bottom seam
+          min: -0.139000, -0.139000, 0.008000
+          max: 0.139000, 0.139000, 0.035000
+          color: '#737373'
+          shape: CylinderZ
+        - label: recessed aluminium lid
+          min: -0.116000, -0.116000, 0.195000
+          max: 0.116000, 0.116000, 0.204000
+          color: '#A6A6A6'
+          shape: CylinderZ
+        - label: raised upper rim 01
+          min: 0.118500, -0.057454, 0.191000
+          max: 0.137500, 0.057454, 0.218000
+          color: '#BFBFBF'
+          yaw: 0.0
+        - label: raised upper rim 02
+          min: 0.081010, 0.033055, 0.191000
+          max: 0.100010, 0.147964, 0.218000
+          color: '#BFBFBF'
+          yaw: 45.0
+        - label: raised upper rim 03
+          min: -0.009500, 0.070546, 0.191000
+          max: 0.009500, 0.185454, 0.218000
+          color: '#BFBFBF'
+          yaw: 90.0
+        - label: raised upper rim 04
+          min: -0.100010, 0.033055, 0.191000
+          max: -0.081010, 0.147964, 0.218000
+          color: '#BFBFBF'
+          yaw: 135.0
+        - label: raised upper rim 05
+          min: -0.137500, -0.057454, 0.191000
+          max: -0.118500, 0.057454, 0.218000
+          color: '#BFBFBF'
+          yaw: 180.0
+        - label: raised upper rim 06
+          min: -0.100010, -0.147964, 0.191000
+          max: -0.081010, -0.033055, 0.218000
+          color: '#BFBFBF'
+          yaw: 225.0
+        - label: raised upper rim 07
+          min: -0.009500, -0.185454, 0.191000
+          max: 0.009500, -0.070546, 0.218000
+          color: '#BFBFBF'
+          yaw: 270.0
+        - label: raised upper rim 08
+          min: 0.081010, -0.147964, 0.191000
+          max: 0.100010, -0.033055, 0.218000
+          color: '#BFBFBF'
+          yaw: 315.0
+        - label: pull tab rear bridge
+          min: -0.040000, -0.008000, 0.206000
+          max: 0.040000, 0.016000, 0.217000
+          color: '#737373'
+        - label: pull tab left arm
+          min: -0.040000, -0.057000, 0.206000
+          max: -0.019000, 0.010000, 0.217000
+          color: '#BFBFBF'
+        - label: pull tab right arm
+          min: 0.019000, -0.057000, 0.206000
+          max: 0.040000, 0.010000, 0.217000
+          color: '#BFBFBF'
+        - label: pull tab end bar
+          min: -0.039000, -0.062000, 0.206000
+          max: 0.039000, -0.045000, 0.217000
+          color: '#8C8C8C'
+        - label: original printed label strip 1
+          min: -0.090307, -0.097523, 0.035000
+          max: -0.034693, -0.093523, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt41
+          surfaceAxis: XZ
+          yaw: -55.812775
+        - label: original printed label strip 2
+          min: -0.051660, -0.132143, 0.035000
+          max: -0.010840, -0.128143, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt42
+          surfaceAxis: XZ
+          yaw: -40.044498
+        - label: original printed label strip 3
+          min: -0.017593, -0.152985, 0.035000
+          max: 0.017593, -0.148985, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt43
+          surfaceAxis: XZ
+          yaw: -27.358643
+        - label: original printed label strip 4
+          min: 0.014995, -0.165410, 0.035000
+          max: 0.047505, -0.161410, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt44
+          surfaceAxis: XZ
+          yaw: -16.005838
+        - label: original printed label strip 5
+          min: 0.046809, -0.171280, 0.035000
+          max: 0.078191, -0.167280, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt45
+          surfaceAxis: XZ
+          yaw: -5.273599
+        - label: original printed label strip 6
+          min: 0.078059, -0.171280, 0.035000
+          max: 0.109441, -0.167280, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt46
+          surfaceAxis: XZ
+          yaw: 5.273599
+        - label: original printed label strip 7
+          min: 0.108745, -0.165410, 0.035000
+          max: 0.141255, -0.161410, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt47
+          surfaceAxis: XZ
+          yaw: 16.005838
+        - label: original printed label strip 8
+          min: 0.138657, -0.152985, 0.035000
+          max: 0.173843, -0.148985, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt48
+          surfaceAxis: XZ
+          yaw: 27.358643
+        - label: original printed label strip 9
+          min: 0.167090, -0.132143, 0.035000
+          max: 0.207910, -0.128143, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt49
+          surfaceAxis: XZ
+          yaw: 40.044498
+        - label: original printed label strip 10
+          min: 0.190943, -0.097523, 0.035000
+          max: 0.246557, -0.093523, 0.147000
+          color: '#FFFFFF'
+          surface: CMU3DContainerCloudArt50
+          surfaceAxis: XZ
+          yaw: 55.812775
+        - label: buckled lower aluminium fold
+          min: -0.072000, -0.142000, 0.020000
+          max: 0.221000, 0.117000, 0.078000
+          color: '#737373'
+          shape: Ellipsoid
+          yaw: 12
+          pitch: 8
+        - label: crumpled left flank
+          min: -0.149000, -0.083000, 0.064000
+          max: -0.111000, 0.084000, 0.137000
+          color: '#636363'
+          shape: Ellipsoid
+          yaw: -12
+          pitch: -12
+        - label: crumpled right flank
+          min: 0.124000, -0.076000, 0.040000
+          max: 0.207000, 0.100000, 0.130000
+          color: '#737373'
+          shape: Ellipsoid
+          yaw: 17
+          pitch: 14
+      delays:
+      - 1

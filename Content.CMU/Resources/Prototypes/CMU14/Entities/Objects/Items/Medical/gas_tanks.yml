@@ -1,0 +1,20 @@
+# Medical oxygen tank: the anesthetic tank's body, filled with pure oxygen for patients on internals.
+- type: entity
+  parent: CMAnestheticTank
+  id: CMUMedicalOxygenTank
+  name: medical oxygen tank
+  description: A tank of pure medical oxygen. Put a patient on it through a breath mask to help them recover from suffocation.
+
+- type: entity
+  parent: CMUMedicalOxygenTank
+  id: CMUMedicalOxygenTankFilled
+  suffix: Filled
+  components:
+  - type: GasTank
+    releasePressure: 21.3
+    air:
+      # same fill as the standard oxygen tank, about 31 minutes
+      volume: 5
+      moles:
+      - 2.051379050 # oxygen
+      temperature: 293.15

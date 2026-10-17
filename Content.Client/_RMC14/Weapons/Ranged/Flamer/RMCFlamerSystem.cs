@@ -37,7 +37,7 @@ public sealed partial class RMCFlamerSystem : SharedRMCFlamerSystem
             var message = _input.TryGetKeyBinding(CMKeyFunctions.CMUniqueAction, out var bind)
                 ? Loc.GetString(ent.Comp.PopupKey, ("key", bind.GetKeyString()))
                 : Loc.GetString(ent.Comp.Popup);
-            _popup.PopupClient(message, args.User, args.User);
+            _popup.PopupEntity(message, args.User, args.User);
         }
     }
 }

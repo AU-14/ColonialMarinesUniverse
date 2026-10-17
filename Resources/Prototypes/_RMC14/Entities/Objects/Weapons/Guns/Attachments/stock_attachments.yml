@@ -330,6 +330,8 @@
     - RMCAttachmentDoubleBarrelShotgunStock
   - type: AttachableWieldDelayMods
     modifiers: []
+  - type: AttachableSizeMods # CMU14: the launcher's built-in breech is already included in its base size.
+    modifiers: []
 
 - type: entity
   parent: RMCStockAttachmentBase
@@ -1153,7 +1155,7 @@
   description: Intergrated into the L23. You shouldn't have this.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Attachments/royal_stock.rsi
+    sprite: CMU14/Weapons/Guns/Attachments/royal_stock.rsi
     state: rmc_nsg_stock
   - type: AttachableVisuals
     suffix: ""
@@ -1231,7 +1233,7 @@
   description: Intergrated into the Two Bore Rifle. You shouldn't have this.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Attachments/stock.rsi
+    sprite: CMU14/Weapons/Guns/Attachments/stock.rsi
     state: twobore_stock
   - type: AttachableVisuals
     suffix: ""

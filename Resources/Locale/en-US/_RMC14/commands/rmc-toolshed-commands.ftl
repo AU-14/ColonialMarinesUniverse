@@ -4,6 +4,7 @@ command-description-alertlevel-set = Changes the alert level on the warship.
 command-description-areas-load = Load all saved areas to the map as entities.
 command-description-areas-loadmortar = Load only mortarable saved areas to the map as entities.
 command-description-areas-save = Save all mapped areas to the map.
+command-description-areas-cleanup = Remove saved areas and entities located over empty tiles.
 
 command-description-bioscan-marine = Manually triggers an ARES bioscan to announce to marines where xenos are and how many are left.
 command-description-bioscan-xeno = Manually triggers a Queen Mother bioscan to announce to xenos where marines are and how many are left.

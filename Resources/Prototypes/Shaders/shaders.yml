@@ -13,6 +13,8 @@
   id: GradientCircleMask
   kind: source
   path: "/Textures/Shaders/gradient_circle_mask.swsl"
+  params:
+    viewportSize: 0,0 # CMU14: defaults belong here; uniform initializers are invalid on GLES.
 
 - type: shader
   id: WorldGradientCircle
@@ -57,6 +59,11 @@
   id: CameraStatic
   kind: source
   path: "/Textures/Shaders/camera_static.swsl"
+
+- type: shader
+  id: CameraStaticAccessible
+  kind: source
+  path: "/Textures/Shaders/camera_static_accessible.swsl"
 
 - type: shader
   id: Drunk
@@ -115,3 +122,23 @@
   id: Hologram
   kind: source
   path: "/Textures/Shaders/hologram.swsl"
+
+- type: shader
+  id: HeatBlur
+  kind: source
+  path: "/Textures/Shaders/heatBlur.swsl"
+
+- type: shader
+  id: ScreechShockWave
+  kind: source
+  path: "/Textures/Shaders/screech_shock_wave.swsl"
+
+- type: shader
+  id: NightVision
+  kind: source
+  path: "/Textures/Shaders/nightvision.swsl"
+
+- type: shader
+  id: Sharpness
+  kind: source
+  path: "/Textures/Shaders/sharpness.swsl"

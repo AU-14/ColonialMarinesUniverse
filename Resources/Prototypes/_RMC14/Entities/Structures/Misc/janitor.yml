@@ -83,6 +83,7 @@
       tags:
         - Wringer
     - type: Damageable
+    - type: Injurable
       damageContainer: Inorganic
     - type: Destructible
       thresholds:
@@ -188,6 +189,7 @@
           mask:
           - MobMask
     - type: Damageable
+    - type: Injurable
       damageContainer: Inorganic
     - type: Destructible
       thresholds:

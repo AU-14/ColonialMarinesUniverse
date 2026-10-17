@@ -111,9 +111,9 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCInflatableDoorFolded
+    - id: CMUInflatableDoorFolded # CMU14
       amount: 2
-    - id: RMCInflatableWallFolded
+    - id: CMUInflatableWallFolded # CMU14
       amount: 1
 
 - type: entity

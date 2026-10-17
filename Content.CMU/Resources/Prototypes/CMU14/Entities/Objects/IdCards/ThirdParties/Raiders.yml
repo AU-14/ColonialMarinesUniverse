@@ -1,0 +1,23 @@
+- type: entity
+  parent: CMIDCardStandardDogtag
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardRaider
+  name: raider's dogtags
+  components:
+  - type: PresetIdCard
+    job: CMUJobRaider
+  - type: ItemIFF
+    factions:
+    - CMURaiders
+
+- type: entity
+  parent: CMIDCardStandardDogtag
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardRaiderLeader
+  name: raider leader's dogtags
+  components:
+  - type: PresetIdCard
+    job: CMUJobRaiderLeader
+  - type: ItemIFF
+    factions:
+    - CMURaiders

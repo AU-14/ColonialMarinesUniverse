@@ -1,0 +1,189 @@
+using Content.Server.Antag;
+using Content.Server.Antag.Components;
+using Content.Server.CMU14.Round.Antags.StrikeOrganizer;
+using Content.Server.GameTicking;
+using Content.Server.Roles;
+using Content.Shared.CMU14.Round.Antags.Arsonist;
+using Content.Shared.CMU14.Round.Antags.BountyHunter;
+using Content.Shared.CMU14.Round.Antags.Cannibal;
+using Content.Shared.CMU14.Round.Antags.CLFSaboteur;
+using Content.Shared.CMU14.Round.Antags.ColonyBounty;
+using Content.Shared.CMU14.Round.Antags.CorporateAgent;
+using Content.Shared.CMU14.Round.Antags.Replicant;
+using Content.Server.CMU14.Round.Antags.Rider;
+using Content.Shared.CMU14.Round.Antags.Rider;
+using Content.Shared.CMU14.Round.Antags.StrikeOrganizer;
+using Content.Shared.CMU14.Round.Antags.Vigilante;
+using Content.Shared.Mind;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
+using Robust.Shared.GameObjects;
+
+namespace Content.Server.CMU14.Round.Antags;
+
+/// <summary>
+/// Appends colony antag outcomes to the round end summary: who played which antag
+/// and, where tracked, what they achieved.
+/// </summary>
+public sealed partial class ColonyAntagSummarySystem : EntitySystem
+{
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private RoleSystem _role = default!;
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEndText);
+    }
+
+    private void OnRoundEndText(RoundEndTextAppendEvent args)
+    {
+        var lines = new List<string>();
+        var petitionCovered = false;
+
+        var rules = AllEntityQuery<AntagSelectionComponent>();
+        while (rules.MoveNext(out var ruleUid, out _))
+        {
+            if (MetaData(ruleUid).EntityPrototype is not { } proto
+                || !ColonyAntagsRuleSystem.IsColonyAntagRule(proto.ID))
+                continue;
+
+            foreach (var (mind, data, name) in _antag.GetAntagIdentifiers(ruleUid))
+            {
+                var mindComp = EntityManager.GetComponentOrNull<MindComponent>(mind);
+                var charName = mindComp?.CharacterName ?? name;
+                var role = "Unknown";
+                foreach (var info in _role.MindGetAllRoleInfo(mind))
+                {
+                    if (!info.Antagonist)
+                        continue;
+                    role = Loc.GetString(info.Name);
+                    break;
+                }
+
+                string detail;
+                if (mindComp?.OwnedEntity is { } strikeBody
+                    && HasComp<StrikeOrganizerComponent>(strikeBody)
+                    && BestPetition() is { } petition)
+                {
+                    petitionCovered = true;
+                    detail = Loc.GetString("cmu-summary-detail-strike",
+                        ("count", petition.count), ("goal", petition.goal));
+                }
+                else
+                    detail = DetailFor(mindComp?.OwnedEntity);
+
+                lines.Add(Loc.GetString("cmu-summary-entry",
+                    ("name", charName),
+                    ("user", data.UserName),
+                    ("role", role),
+                    ("detail", detail)));
+            }
+        }
+
+        if (!petitionCovered)
+        {
+            var petitions = AllEntityQuery<StrikePetitionComponent>();
+            while (petitions.MoveNext(out _, out var petition))
+            {
+                lines.Add(Loc.GetString("cmu-summary-petition",
+                    ("count", petition.Signatures.Count), ("goal", petition.Goal)));
+            }
+        }
+
+        if (lines.Count == 0)
+            return;
+
+        args.AddLine(string.Empty);
+        args.AddLine(Loc.GetString("cmu-summary-header"));
+        foreach (var line in lines)
+            args.AddLine(line);
+    }
+
+    private string DetailFor(EntityUid? body)
+    {
+        if (body == null)
+            return Loc.GetString("cmu-summary-detail-none");
+
+        if (TryComp<ArsonistComponent>(body, out var arsonist)
+            && arsonist.FiresCount > 0)
+            return Loc.GetString("cmu-summary-detail-arsonist", ("count", arsonist.FiresCount));
+
+        if (TryComp<CorporateAgentComponent>(body, out var agent))
+            return agent.Completed
+                ? Loc.GetString("cmu-summary-detail-agent-complete", ("corporation", agent.Corporation))
+                : Loc.GetString("cmu-summary-detail-agent-failed", ("corporation", agent.Corporation));
+
+        if (TryComp<ReplicantComponent>(body, out var replicant))
+            return replicant.Transformed
+                ? Loc.GetString("cmu-summary-detail-replicant-replaced", ("target", replicant.TargetName ?? string.Empty))
+                : Loc.GetString("cmu-summary-detail-replicant-never");
+
+        if (body is { } riderBody
+            && TryComp<RiderComponent>(riderBody, out var rider))
+        {
+            var win = EntityManager.System<RiderSystem>().EvaluateWin((riderBody, rider));
+            var key = rider.Flavor switch
+            {
+                RiderFlavor.Leapfrog => win
+                    ? "cmu-summary-detail-rider-leapfrog-win"
+                    : "cmu-summary-detail-rider-leapfrog-fail",
+                RiderFlavor.Puppeteer => win
+                    ? "cmu-summary-detail-rider-puppeteer-win"
+                    : "cmu-summary-detail-rider-puppeteer-fail",
+                _ => rider.Host != null
+                    ? "cmu-summary-detail-rider-riding"
+                    : "cmu-summary-detail-rider-free",
+            };
+
+            return Loc.GetString(key,
+                ("hosts", rider.HostsRidden),
+                ("credited", rider.CreditedHosts),
+                ("minutes", (int) rider.TotalRideTime.TotalMinutes));
+        }
+
+        if (TryComp<CLFSaboteurComponent>(body, out var saboteur)
+            && saboteur.Count > 0)
+            return Loc.GetString("cmu-summary-detail-saboteur", ("count", saboteur.Count));
+
+        if (TryComp<CannibalComponent>(body, out var cannibal)
+            && cannibal.MealsEaten > 0)
+            return Loc.GetString("cmu-summary-detail-cannibal", ("count", cannibal.MealsEaten));
+
+        if (TryComp<BountyHunterComponent>(body, out var hunter))
+            return Loc.GetString("cmu-summary-detail-hunter", ("count", hunter.TargetCount));
+
+        if (TryComp<VigilanteComponent>(body, out var vigilante))
+            return Loc.GetString("cmu-summary-detail-vigilante", ("count", vigilante.TargetCount));
+
+        if (TryComp<ColonyBountyComponent>(body, out var bounty))
+        {
+            if (bounty.Paid)
+                return bounty.Captured
+                    ? Loc.GetString("cmu-summary-detail-bounty-captured")
+                    : Loc.GetString("cmu-summary-detail-bounty-killed");
+            if (IsDead(body.Value))
+                return Loc.GetString("cmu-summary-detail-bounty-dead");
+            return Loc.GetString("cmu-summary-detail-bounty-free");
+        }
+
+        return IsDead(body.Value)
+            ? Loc.GetString("cmu-summary-detail-fate-dead")
+            : Loc.GetString("cmu-summary-detail-none");
+    }
+
+    private (int count, int goal)? BestPetition()
+    {
+        (int count, int goal)? best = null;
+        var petitions = AllEntityQuery<StrikePetitionComponent>();
+        while (petitions.MoveNext(out _, out var petition))
+        {
+            if (best == null || petition.Signatures.Count > best.Value.count)
+                best = (petition.Signatures.Count, petition.Goal);
+        }
+        return best;
+    }
+
+    private bool IsDead(EntityUid body)
+        => TryComp<MobStateComponent>(body, out var mob)
+            && mob.CurrentState is MobState.Dead or MobState.Invalid;
+}

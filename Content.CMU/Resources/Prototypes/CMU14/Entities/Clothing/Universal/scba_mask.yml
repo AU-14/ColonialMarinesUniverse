@@ -1,0 +1,5 @@
+- type: entity
+  parent: CMUMaskGasLACN
+  id: CMUMaskSCBA
+  name: SCBA mask
+  description: A full-face respirator meant to be hooked up to an SCBA tank. Standard issue for firefighters and emergency responders.

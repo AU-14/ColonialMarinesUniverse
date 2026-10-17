@@ -1,18 +1,18 @@
-﻿- type: entity
+- type: entity
   parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
   name: M41A/2 assault rifle MK2
   id: RMCWeaponRifleM54C2
   description: A modified version M41A pulse rifle MK2, re-engineered for better weight, handling and accuracy. Fires precise two-round bursts. A very rare sight, often seen in use by wealthy PMCs.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/WY/m41a2.rsi
+    sprite: CMU14/Weapons/Guns/WY/m41a2.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/WY/m41a2.rsi
+    sprite: CMU14/Weapons/Guns/WY/m41a2.rsi
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot

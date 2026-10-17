@@ -2,6 +2,7 @@ using Content.Server.Body.Systems;
 using Content.Shared.Atmos;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
+using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
@@ -10,16 +11,6 @@ namespace Content.Server.Body.Components
     [RegisterComponent, Access(typeof(RespiratorSystem)), AutoGenerateComponentPause]
     public sealed partial class RespiratorComponent : Component
     {
-        /// <summary>
-        ///     Gas container for this entity
-        /// </summary>
-        [DataField]
-        public GasMixture Air = new()
-        {
-            Volume = 6, // 6 liters, the average lung capacity for a human according to Google
-            Temperature = Atmospherics.NormalBodyTemperature
-        };
-
         /// <summary>
         ///     Volume of our breath in liters
         /// </summary>
@@ -88,6 +79,12 @@ namespace Content.Server.Body.Components
 
         [DataField]
         public TimeSpan GaspEmoteCooldown = TimeSpan.FromSeconds(8);
+
+        /// <summary>
+        ///     CMU14: Asphyxiation damage needed before running short of air makes the mob gasp.
+        /// </summary>
+        [DataField]
+        public FixedPoint2 GaspDamageThreshold = FixedPoint2.New(20);
 
         [ViewVariables]
         public TimeSpan LastGaspEmoteTime;

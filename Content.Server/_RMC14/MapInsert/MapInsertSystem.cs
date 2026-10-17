@@ -3,7 +3,6 @@ using Content.Server._RMC14.Rules;
 using Content.Server.Decals;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Rules;
-using Content.Shared.Decals;
 using Content.Shared.GameTicking;
 using Robust.Server.Physics;
 using Robust.Shared.EntitySerialization.Systems;
@@ -129,16 +128,13 @@ public sealed partial class MapInsertSystem : EntitySystem
         // Clear all entities on map in insert area
         MapInsertSmimsh(insertGrid, (EntityUid)mainGrid, ent.Comp.ClearEntities, ent.Comp.ClearDecals);
 
-        //Decals not handled in Merge(), so do it here
-        if (!TryComp(insertGrid, out DecalGridComponent? insertDecalGrid))
-            return;
-
-        foreach (var chunk in insertDecalGrid.ChunkCollection.ChunkCollection.Values)
+        // Decals are chunk entities, so move a snapshot before merging the grids.
+        foreach (var (decalId, decal) in _decals.GetAllDecals(insertGrid))
         {
-            foreach (var (decalUid, decal) in chunk.Decals)
-            {
-                _decals.SetDecalPosition(insertGrid, decalUid, new EntityCoordinates(mainGrid.Value, decal.Coordinates + coordinatesi));
-            }
+            _decals.SetDecalPosition(
+                insertGrid,
+                decalId,
+                new EntityCoordinates(mainGrid.Value, decal.Coordinates + coordinatesi));
         }
 
         // Need delay to allow physics to settle, otherwise entities get pushed around

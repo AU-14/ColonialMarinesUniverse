@@ -1,5 +1,4 @@
 using System.Numerics;
-using Content.Server.Explosion.EntitySystems;
 using Content.Shared._RMC14.Aura;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Weapons.Common;
@@ -14,6 +13,7 @@ using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.StepTrigger.Components;
 using Content.Shared.StepTrigger.Systems;
+using Content.Shared.Trigger.Systems;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -105,7 +105,7 @@ public sealed partial class SharpSystem : EntitySystem
             "rmc-sharp-toggle-delay",
             ("gun", ent.Owner),
             ("seconds", ent.Comp.CurrentDelay.TotalSeconds));
-        _popup.PopupClient(msg, args.UserUid, args.UserUid, PopupType.Medium);
+        _popup.PopupEntity(msg, args.UserUid, args.UserUid, PopupType.Medium);
 
         args.Handled = true;
     }
@@ -184,6 +184,15 @@ public sealed partial class SharpSystem : EntitySystem
     {
         if (args.Handled || ent.Comp.Disarmed)
             return;
+
+        // CMU14: every shrapnel hit would previously triggers a fresh detonation
+        ent.Comp.Disarmed = true;
+        ent.Comp.Armed = false;
+        if (_landmineQuery.TryComp(ent, out var landmine))
+        {
+            landmine.Armed = false;
+            Dirty(ent, landmine);
+        }
 
         var effect = GetMineEffect(ent.Comp);
         if (effect != null)

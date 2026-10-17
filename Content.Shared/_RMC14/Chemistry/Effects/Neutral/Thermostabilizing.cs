@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Temperature;
 using Content.Shared.Atmos;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
 using Content.Shared.StatusEffect;
@@ -22,9 +23,9 @@ public sealed partial class Thermostabilizing : RMCChemicalEffect
                $"Critical overdoses cause [color=red]5[/color] seconds of unconsciousness with a [color=red]5%[/color] chance";
     }
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        var sys = args.EntityManager.EntitySysManager.GetEntitySystem<SharedRMCTemperatureSystem>();
+        var sys = system.Temperature;
         var current = sys.GetTemperature(args.TargetEntity);
         var normalBodyTemp = TemperatureHelpers.CelsiusToKelvin(Atmospherics.NormalBodyTemperature);
         if (Math.Abs(current - normalBodyTemp) < 0.01)
@@ -39,9 +40,9 @@ public sealed partial class Thermostabilizing : RMCChemicalEffect
         sys.ForceChangeTemperature(args.TargetEntity, temp);
     }
 
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        var status = args.EntityManager.System<StatusEffectQuerySystem>();
+        var status = system.StatusEffectQuery;
         status.TryAddStatusEffect<RMCUnconsciousComponent>(
             args.TargetEntity,
             Unconscious,
@@ -50,14 +51,14 @@ public sealed partial class Thermostabilizing : RMCChemicalEffect
         );
     }
 
-    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickCriticalOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
         // TODO RMC14 Drowsiness. if drowsiness > 10 5% change to paralyze(knockout) for 10 seconds.
-        var random = IoCManager.Resolve<IRobustRandom>();
+        var random = system.Random;
         if (!random.Prob(0.05f))
             return;
 
-        var status = args.EntityManager.System<StatusEffectQuerySystem>();
+        var status = system.StatusEffectQuery;
         status.TryAddStatusEffect<RMCUnconsciousComponent>(
             args.TargetEntity,
             Unconscious,

@@ -1,25 +1,25 @@
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Treatment.Effects;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Stomach;
-using Content.Shared._CMU14.Medical.Injuries.Shrapnel;
-using Content.Shared._CMU14.Medical.Injuries.Pain;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Treatment.Effects;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Stomach;
+using Content.Shared.CMU14.Medical.Injuries.Shrapnel;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Prototypes;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.DoAfter;
+using Content.Shared.EntityConditions.Conditions;
 using Content.Shared.EntityEffects;
-using Content.Shared.EntityEffects.EffectConditions;
 using Content.Shared.EntityEffects.Effects;
 using Content.Shared.EntityEffects.Effects.StatusEffects;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Metabolism;
 using Content.Shared.Verbs;
 using Content.Server.Verbs;
 using Robust.Shared.GameObjects;
@@ -28,7 +28,7 @@ using Robust.Shared.Prototypes;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Content.IntegrationTests._CMU14.Medical.Injuries.Pain;
+namespace Content.IntegrationTests.CMU14.Medical.Injuries.Pain;
 
 [TestFixture]
 public sealed class PainShockReworkTest
@@ -40,9 +40,10 @@ public sealed class PainShockReworkTest
     private static readonly ProtoId<ReagentPrototype> Soporific = "CMUSoporific";
     private static readonly ProtoId<ReagentPrototype> Epinephrine = "CMEpinephrine";
     private static readonly ProtoId<ReagentPrototype> Inaprovaline = "CMInaprovaline";
+    private static readonly ProtoId<MetabolismStagePrototype> Bloodstream = "Bloodstream";
 
     [Test]
-    public async Task ShatteredFractureAloneIsSeverePressureNotShock()
+    public async Task ShatteredFractureWithControlledBleedingIsSeverePressureNotShock()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -59,6 +60,10 @@ public sealed class PainShockReworkTest
                 var part = GetFirstPart(entMan, human);
                 var frac = entMan.EnsureComponent<FractureComponent>(part);
                 fracture.SetSeverity((part, frac), FractureSeverity.Shattered);
+                Assert.That(entMan.HasComponent<InternalBleedingComponent>(part), Is.True);
+                Assert.That(pain.ComputePainSourceProfile(human).Target.Float(), Is.EqualTo(75.5f).Within(0.001f));
+                entMan.System<SharedCMUWoundsSystem>().SuppressInternalBleed(part);
+                Assert.That(entMan.HasComponent<InternalBleedingComponent>(part), Is.False);
 
                 var profile = pain.ComputePainSourceProfile(human);
                 var rawTier = PainTierThresholds.Get(PainTier.None, profile.Target, 0f, pain.ShockThreshold);
@@ -685,11 +690,11 @@ public sealed class PainShockReworkTest
             var oxycodone = prototypes.Index(Oxycodone);
             var soporific = prototypes.Index(Soporific);
 
-            var paracetamolSuppression = AssertMedicinePainSuppression(paracetamol);
-            var tramadolSuppression = AssertMedicinePainSuppression(tramadol);
-            var sleenSuppression = AssertMedicinePainSuppression(sleen);
-            var oxycodoneSuppression = AssertMedicinePainSuppression(oxycodone);
-            var soporificSuppression = AssertMedicinePainSuppression(soporific);
+            var paracetamolSuppression = AssertBloodstreamPainSuppression(paracetamol);
+            var tramadolSuppression = AssertBloodstreamPainSuppression(tramadol);
+            var sleenSuppression = AssertBloodstreamPainSuppression(sleen);
+            var oxycodoneSuppression = AssertBloodstreamPainSuppression(oxycodone);
+            var soporificSuppression = AssertBloodstreamPainSuppression(soporific);
 
             Assert.Multiple(() =>
             {
@@ -870,13 +875,13 @@ public sealed class PainShockReworkTest
 
     private static void AssertPainkillerHasDrunkOverdoseEffect(ReagentPrototype reagent, FixedPoint2 min)
     {
-        var metabolism = reagent.Metabolisms![new ProtoId<MetabolismGroupPrototype>("Medicine")];
+        var metabolism = GetBloodstreamMetabolism(reagent);
         foreach (var effect in metabolism.Effects)
         {
-            if (effect is not Drunk drunk || !drunk.SlurSpeech)
+            if (effect is not Drunk drunk || drunk.BoozePower <= TimeSpan.Zero)
                 continue;
 
-            if (HasReagentThreshold(effect, min))
+            if (HasReagentCondition(effect, min))
                 return;
         }
 
@@ -887,7 +892,7 @@ public sealed class PainShockReworkTest
         ReagentPrototype reagent,
         int minTierSuppression)
     {
-        var metabolism = reagent.Metabolisms![new ProtoId<MetabolismGroupPrototype>("Medicine")];
+        var metabolism = GetBloodstreamMetabolism(reagent);
         foreach (var effect in metabolism.Effects)
         {
             if (effect is not CMUApplyPainSuppressionEffect suppression)
@@ -907,9 +912,9 @@ public sealed class PainShockReworkTest
         return default!;
     }
 
-    private static CMUApplyPainSuppressionEffect AssertMedicinePainSuppression(ReagentPrototype reagent)
+    private static CMUApplyPainSuppressionEffect AssertBloodstreamPainSuppression(ReagentPrototype reagent)
     {
-        var metabolism = GetMedicineMetabolism(reagent);
+        var metabolism = GetBloodstreamMetabolism(reagent);
         foreach (var effect in metabolism.Effects)
         {
             if (effect is CMUApplyPainSuppressionEffect suppression)
@@ -925,7 +930,7 @@ public sealed class PainShockReworkTest
 
     private static void AssertReagentAppliesStatusEffect(ReagentPrototype reagent, EntProtoId effectProto)
     {
-        var metabolism = GetMedicineMetabolism(reagent);
+        var metabolism = GetBloodstreamMetabolism(reagent);
         foreach (var effect in metabolism.Effects)
         {
             if (effect is ModifyStatusEffect statusEffect && statusEffect.EffectProto == effectProto)
@@ -935,21 +940,21 @@ public sealed class PainShockReworkTest
         Assert.Fail($"{reagent.ID} must apply status effect {effectProto}.");
     }
 
-    private static ReagentEffectsEntry GetMedicineMetabolism(ReagentPrototype reagent)
+    private static ReagentEffectsEntry GetBloodstreamMetabolism(ReagentPrototype reagent)
     {
         Assert.That(reagent.Metabolisms, Is.Not.Null, reagent.ID);
-        Assert.That(reagent.Metabolisms!.TryGetValue(new ProtoId<MetabolismGroupPrototype>("Medicine"), out var metabolism), Is.True, reagent.ID);
+        Assert.That(reagent.Metabolisms!.Metabolisms.TryGetValue(Bloodstream, out var metabolism), Is.True, reagent.ID);
         return metabolism!;
     }
 
-    private static bool HasReagentThreshold(EntityEffect effect, FixedPoint2 min)
+    private static bool HasReagentCondition(EntityEffect effect, FixedPoint2 min)
     {
         if (effect.Conditions == null)
             return false;
 
         foreach (var condition in effect.Conditions)
         {
-            if (condition is ReagentThreshold threshold && threshold.Min == min)
+            if (condition is ReagentCondition reagent && reagent.Min == min)
                 return true;
         }
 

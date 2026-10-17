@@ -1,0 +1,72 @@
+- type: antagSpecifier
+  id: Vigilante
+  prefRoles: [ VigilanteRole ]
+  jobBlacklistGroup:
+  - AllGovforJobs
+  - AllOpforJobs
+  - AllCLFJobs
+# - AllColonyDepartmentHeadJobs
+  briefing:
+    text: cmu-antag-vigilante-greeting
+    color: DarkRed
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: CMUGearVigilante
+  startingSkills:
+    RMCSkillCqc: 2
+    RMCSkillMeleeWeapons: 3
+    RMCSkillPolice: 2
+  components:
+  - type: Vigilante
+  - type: SynthGunAccess
+  mindRoles:
+  - MindRoleVigilante
+
+- type: entity
+  id: Vigilante
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: AntagSelection
+    selectionTime: JobsAssigned
+    antags:
+    - !type:RandomAntagCount
+      proto: Vigilante
+      range:
+        min: 1
+        max: 2
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleVigilante
+  name: Vigilante Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: VigilanteRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: VigilanteRole
+  name: cmu-antag-vigilante-name
+  setPreference: true
+  objective: cmu-antag-vigilante-objective
+
+- type: startingGear
+  id: CMUGearVigilante
+  equipment:
+    head: AU14HeadBeanieclava
+    suitstorage: CMUBaseballBatVigilante
+    pocket1: RMCZipties
+    pocket2: RMCZipties
+
+- type: entity
+  parent: RMCBaseballBatMetal
+  id: CMUBaseballBatVigilante
+  name: inscribed metal baseball bat
+  description: A heavy metal bat, balanced for breaking more than pitches. A single word, JUSTICE, is stamped into the grip.
+  components:
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 42

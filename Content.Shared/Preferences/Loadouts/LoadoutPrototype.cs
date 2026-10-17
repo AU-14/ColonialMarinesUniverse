@@ -38,6 +38,13 @@ public sealed partial class LoadoutPrototype : IPrototype, IEquipmentLoadout
     public int? Cost;
 
     /// <summary>
+    /// How many copies of this loadout may be selected. Values below one are treated as one.
+    /// This is useful for incremental purchases such as skill training.
+    /// </summary>
+    [DataField]
+    public int MaxSelections = 1;
+
+    /// <summary>
     /// Effects to be applied when the loadout is applied.
     /// These can also return true or false for validation purposes.
     /// </summary>

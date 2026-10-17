@@ -38,6 +38,9 @@ public sealed class VehicleSupplyBuiState : BoundUserInterfaceState
     public VehicleSupplyPreviewState? Preview;
     public List<VehicleSupplyEntryState> Available;
     public List<VehicleSupplyLoadoutCategoryState> Loadouts;
+    public string? PlatoonName; // CMU14
+    public int VehicleLimit = 2; // CMU14
+    public List<string> IssuedVehicles = new(); // CMU14
 
     public VehicleSupplyBuiState(
         VehicleSupplyLiftMode? liftMode,
@@ -98,17 +101,20 @@ public sealed class VehicleSupplyLoadoutCategoryState
 public sealed class VehicleSupplyPreviewState
 {
     public string VehicleId;
+    public string Name; // CMU14: Hardcode localization
     public int CopyIndex;
     public List<VehicleHardpointLayerState> Layers;
     public List<VehicleSupplyPreviewOverlay> Overlays;
 
     public VehicleSupplyPreviewState(
         string vehicleId,
+        string name, // CMU14: Hardcode localization
         int copyIndex,
         List<VehicleHardpointLayerState> layers,
         List<VehicleSupplyPreviewOverlay> overlays)
     {
         VehicleId = vehicleId;
+        Name = name; // CMU14: Hardcode localization
         CopyIndex = copyIndex;
         Layers = layers;
         Overlays = overlays;

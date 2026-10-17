@@ -1,0 +1,35 @@
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardFreelancer
+  name: Freelancer rifleman ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobFreelancerStandard
+  - type: ItemIFF
+    factions:
+    - CMUFreelancers
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardFreelancerMedic
+  name: Freelancer medic ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobFreelancerMedic
+  - type: ItemIFF
+    factions:
+    - CMUFreelancers
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardFreelancerLeader
+  name: Freelancer leader ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobFreelancerLeader
+  - type: ItemIFF
+    factions:
+    - CMUFreelancers

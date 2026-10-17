@@ -580,3 +580,27 @@
   components:
   - type: Sprite
     state: res2
+
+- type: entity
+  parent: RMCAreaShivaInteriorColony
+  id: RMCAreaShivaExteriorCentralRoof
+  name: Shiva's Snowball - MegaStruct(TM) Central Habitation Roofs
+  components:
+  - type: Sprite
+    state: res2
+
+- type: entity
+  parent: RMCAreaShivaInteriorColony
+  id: RMCAreaShivaExteriorMedSecEngRoof
+  name: Shiva's Snowball - MegaStruct(TM) Med-Sec-Eng
+  components:
+  - type: Sprite
+    state: res2
+
+- type: entity
+  parent: RMCAreaShivaInteriorColony
+  id: RMCAreaShivaExteriorAerodromeRoof
+  name: Shiva's Snowball - Aerodrome Roofs
+  components:
+  - type: Sprite
+    state: res2

@@ -79,7 +79,7 @@ public sealed partial class XenoInvisibilitySystem : EntitySystem
 
             //Half a second cooldown to prevent double clicks
             QueueActionState(args.Action, xeno.Comp.ToggleLockoutTime, true);
-            _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+            _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
         }
     }
 
@@ -96,7 +96,7 @@ public sealed partial class XenoInvisibilitySystem : EntitySystem
     private void OnXenoActiveInvisibleRemove(Entity<XenoActiveInvisibleComponent> xeno, ref ComponentRemove args)
     {
         if (!TerminatingOrDeleted(xeno))
-            _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+            _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
     }
 
     private void OnXenoActiveInvisibleMeleeHit(Entity<XenoActiveInvisibleComponent> xeno, ref MeleeHitEvent args)
@@ -168,11 +168,11 @@ public sealed partial class XenoInvisibilitySystem : EntitySystem
         else
             StartCooldown(xeno, cooldownTime, false);
 
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
 
         if (!xeno.Comp.DidPopup)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-invisibility-expire"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-invisibility-expire"), xeno, xeno, PopupType.SmallCaution);
             xeno.Comp.DidPopup = true;
             Dirty(xeno);
         }

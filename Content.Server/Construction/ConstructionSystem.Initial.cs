@@ -32,7 +32,6 @@ namespace Content.Server.Construction
         [Dependency] private ActionBlockerSystem _actionBlocker = default!;
         [Dependency] private SharedHandsSystem _handsSystem = default!;
         [Dependency] private EntityLookupSystem _lookupSystem = default!;
-        [Dependency] private SharedTransformSystem _transformSystem = default!;
         [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
         [Dependency] private RMCConstructionSystem _rmcConstruction = default!;
 
@@ -115,7 +114,7 @@ namespace Content.Server.Construction
                 }
             }
 
-            var pos = _transformSystem.GetMapCoordinates(user);
+            var pos = TransformSystem.GetMapCoordinates(user);
 
             foreach (var near in _lookupSystem.GetEntitiesInRange(pos, 2f, LookupFlags.Contained | LookupFlags.Dynamic | LookupFlags.Sundries | LookupFlags.Approximate))
             {
@@ -239,7 +238,7 @@ namespace Content.Server.Construction
 
                             // TODO allow taking from several stacks.
                             // Also update crafting steps to check if it works.
-                            var splitStack = _stackSystem.Split(entity, paidCost, user.ToCoordinates(0, 0), stack);
+                            var splitStack = _stackSystem.Split((entity, stack), paidCost, user.ToCoordinates(0, 0));
 
                             if (splitStack == null)
                                 continue;
@@ -404,7 +403,7 @@ namespace Content.Server.Construction
         // LEGACY CODE. See warning at the top of the file!
         public async Task<bool> TryStartItemConstruction(string prototype, EntityUid user)
         {
-            if (!PrototypeManager.TryCM(prototype, out ConstructionPrototype? constructionPrototype))
+            if (!ProtoMan.TryCM(prototype, out ConstructionPrototype? constructionPrototype))
             {
                 Log.Error($"Tried to start construction of invalid recipe '{prototype}'!");
                 return false;
@@ -448,7 +447,7 @@ namespace Content.Server.Construction
                 }
             }
 
-            if (!PrototypeManager.TryIndex(constructionPrototype.Graph,
+            if (!ProtoMan.TryIndex(constructionPrototype.Graph,
                     out ConstructionGraphPrototype? constructionGraph))
             {
                 Log.Error(
@@ -521,7 +520,7 @@ namespace Content.Server.Construction
         // LEGACY CODE. See warning at the top of the file!
         private async void HandleStartStructureConstruction(TryStartStructureConstructionMessage ev, EntitySessionEventArgs args)
         {
-            if (!PrototypeManager.TryCM(ev.PrototypeName, out ConstructionPrototype? constructionPrototype))
+            if (!ProtoMan.TryCM(ev.PrototypeName, out ConstructionPrototype? constructionPrototype))
             {
                 Log.Error($"Tried to start construction of invalid recipe '{ev.PrototypeName}'!");
                 RaiseNetworkEvent(new AckStructureConstructionMessage(ev.Ack));
@@ -543,7 +542,7 @@ namespace Content.Server.Construction
                 return;
             }
 
-            if (!PrototypeManager.TryIndex(constructionPrototype.Graph, out ConstructionGraphPrototype? constructionGraph))
+            if (!ProtoMan.TryIndex(constructionPrototype.Graph, out ConstructionGraphPrototype? constructionGraph))
             {
                 Log.Error($"Invalid construction graph '{constructionPrototype.Graph}' in recipe '{ev.PrototypeName}'!");
                 RaiseNetworkEvent(new AckStructureConstructionMessage(ev.Ack));
@@ -610,7 +609,7 @@ namespace Content.Server.Construction
                 return;
             }
 
-            var mapPos = _transformSystem.ToMapCoordinates(location);
+            var mapPos = TransformSystem.ToMapCoordinates(location);
             var predicate = GetPredicate(constructionPrototype.CanBuildInImpassable, mapPos);
 
             if (!_interactionSystem.InRangeUnobstructed(user, mapPos, predicate: predicate))

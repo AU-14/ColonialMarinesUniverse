@@ -51,10 +51,10 @@
   components:
   - type: EntityPreset
     randomOutfits:
-    - [ RMCHeadCapCargo, CMMaskGas, RMCJumpsuitCivilian, RMCArmorFirefighter, RMCHandsCombat, RMCShoesCombat, RMCSatchelLightpack, RMCAttachmentUnderbarrelExtinguisher, RMCFireAxe]
-    - [ RMCHeadCapCargo, CMMaskGas, RMCJumpsuitCivilian, RMCArmorFirefighter, RMCHandsCombat, RMCShoesCombat, RMCSatchelLightpack, RMCAttachmentUnderbarrelExtinguisher, RMCFireAxe]
-    - [ RMCHeadCapCargo, CMMaskGas, RMCJumpsuitCivilian, RMCArmorFirefighter, RMCHandsCombat, RMCShoesCombat, RMCSatchelLightpack, RMCAttachmentUnderbarrelExtinguisher, RMCFireAxe]
-    - [ RMCArmorHelmetFirefighter, RMCJumpsuitCivilian, RMCArmorFirefighter, RMCHandsCombat, RMCShoesCombat, RMCSatchelLightpack, RMCAttachmentUnderbarrelExtinguisher, CMFireExtinguisherPortable]
-    - [ RMCArmorHelmetFirefighter, RMCJumpsuitCivilian, RMCArmorFirefighter, RMCHandsCombat, RMCShoesCombat, RMCSatchelLightpack, RMCAttachmentUnderbarrelExtinguisher, CMFireExtinguisherPortable]
+    - [ RMCHeadCapCargo, CMMaskGas, RMCJumpsuitCivilian, CMUArmorFirefighter, RMCHandsCombat, RMCShoesCombat, RMCSatchelLightpack, RMCAttachmentUnderbarrelExtinguisher, RMCFireAxe] # CMU14
+    - [ RMCHeadCapCargo, CMMaskGas, RMCJumpsuitCivilian, CMUArmorFirefighter, RMCHandsCombat, RMCShoesCombat, RMCSatchelLightpack, RMCAttachmentUnderbarrelExtinguisher, RMCFireAxe] # CMU14
+    - [ RMCHeadCapCargo, CMMaskGas, RMCJumpsuitCivilian, CMUArmorFirefighter, RMCHandsCombat, RMCShoesCombat, RMCSatchelLightpack, RMCAttachmentUnderbarrelExtinguisher, RMCFireAxe] # CMU14
+    - [ RMCArmorHelmetFirefighter, RMCJumpsuitCivilian, CMUArmorFirefighter, RMCHandsCombat, RMCShoesCombat, RMCSatchelLightpack, RMCAttachmentUnderbarrelExtinguisher, CMFireExtinguisherPortable] # CMU14
+    - [ RMCArmorHelmetFirefighter, RMCJumpsuitCivilian, CMUArmorFirefighter, RMCHandsCombat, RMCShoesCombat, RMCSatchelLightpack, RMCAttachmentUnderbarrelExtinguisher, CMFireExtinguisherPortable] # CMU14
 
 

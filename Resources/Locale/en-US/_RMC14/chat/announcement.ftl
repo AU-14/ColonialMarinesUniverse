@@ -1,6 +1,6 @@
 rmc-announcement-author = Command
 rmc-announcement-author-shipside = Command Ship
-rmc-announcement-author-highcommand = UNMC High Command
+rmc-announcement-author-highcommand = High Command
 rmc-announcement-author-queen-mother = The Queen Mother
 rmc-announcement-message = [font size=16][bold][color=#CECECE]{$author} Priority Announcement[/color][/bold][/font][font size=16][color=red]
 
@@ -29,7 +29,7 @@ rmc-announcement-ares-online = [color=#CECECE][font size=16][bold]APOLLO Central
 
     {$message}[/bold][/font][/color]
 
-rmc-announcement-ares-map = [color=#CECECE][font size=16][bold]UNS Almayer[/bold][/font][/color][color=red][font size=16][bold]
+rmc-announcement-ares-map = [color=#CECECE][font size=16][bold]{$ship}[/bold][/font][/color][color=red][font size=16][bold]
 
     {$message}[/bold][/font][/color]
 
@@ -47,6 +47,8 @@ rmc-announcement-delta = [color=#CECECE][font size=16][bold]SELF-DESTRUCT SYSTEM
 rmc-announcement-general-quarters = ATTENTION! GENERAL QUARTERS. ALL HANDS, MAN YOUR BATTLESTATIONS.
 
 rmc-announcement-dropship-hijack = Unscheduled dropship departure detected from operational area. Hijack likely. Shutting down autopilot.
+# CMU14: human hijack announcement.
+rmc-announcement-dropship-hijack-human = Hostile personnel have hijacked a dropship. All personnel, prepare to repel boarders.
 
 rmc-announcement-dropship-hijack-hive = The Queen has commanded the metal bird to depart for the metal hive in the sky! Rejoice!
 
@@ -59,3 +61,7 @@ rmc-announcement-unidentified-lifesigns = [color=#CECECE][font size=16][bold]Uni
     Unidentified lifesigns ({$count}) detected onboard the dropship {$name}. Recommendation: lockdown of exterior access ports, including ducting and ventilation.[/bold][/font][/color]
 
 rmc-announcement-shipside-header = Please write a message to announce to the crew
+
+cmu-announcement-queen-mother = [font size=16][bold][color=#7575F3]Queen Mother Psychic Directive[/color][/bold][/font][font size=16][color=red]
+
+    {$message}[/font][/color]

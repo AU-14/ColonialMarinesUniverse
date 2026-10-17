@@ -29,6 +29,13 @@ public sealed partial class VehicleEnterComponent : Component
     [DataField(required: true)]
     public ResPath InteriorPath;
 
+    /// <summary>
+    /// CMU14: The supplying faction, retained when the vehicle leaves its ship.
+    /// Null keeps the interior's mapped configuration until a supplying faction is known.
+    /// </summary>
+    [DataField]
+    public string? InteriorFaction;
+
     [DataField]
     public int MaxPassengers = 0;
 
@@ -75,7 +82,10 @@ public sealed partial class VehicleEnterDoAfterEvent : SimpleDoAfterEvent
 }
 
 [Serializable, NetSerializable]
-public sealed partial class VehicleExitDoAfterEvent : SimpleDoAfterEvent;
+public sealed partial class VehicleExitDoAfterEvent : SimpleDoAfterEvent
+{
+    public override DoAfterEvent Clone() => new VehicleExitDoAfterEvent();
+}
 
 [ByRefEvent]
 public record struct VehicleEntryAttemptEvent(EntityUid User, int EntryIndex)
@@ -91,6 +101,11 @@ public record struct VehicleExitAttemptEvent(EntityUid User, EntityUid Exit)
 
 [ByRefEvent]
 public readonly record struct VehicleExitedEvent(EntityUid User, EntityUid Exit, MapCoordinates ExitCoordinates);
+
+// CMU14: raised once when a vehicle interior finishes loading, before the interior is
+// sealed, so opfor vehicles can swap their baked consoles before anyone sees them
+[ByRefEvent]
+public readonly record struct VehicleInteriorLoadedEvent(EntityUid Vehicle, EntityUid MapUid, EntityUid Grid, string? Faction);
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(VehicleSystem))]

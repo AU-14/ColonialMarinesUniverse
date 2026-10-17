@@ -1,0 +1,101 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobPMCWhiteoutGunner
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: PMCWhiteoutGunner
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 3
+      RMCSkillSpecialistWeapons: 2
+      RMCSkillPolice: 2
+  - type: JobPrefix
+    prefix: cmu-whiteout-prefix-gunner
+  - type: Language
+    spokenLanguages:
+    - English
+    - Japanese
+    understoodLanguages:
+    - English
+    - Japanese
+    currentLanguage: English
+    defaultLanguage: English
+  name: cmu-whiteout-name-gunner
+  description: cmu-whiteout-description
+  playTimeTracker: CMUJobPMCWhiteoutGunner
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearPMCWhiteoutGunner
+  spawnMenuRoleName: WY Whiteout Smartgunner (event)
+  greeting: cmu-whiteout-greeting
+  icon: RMCJobIconPMCGunner
+  joinNotifyCrew: false
+  supervisors: cmu-whiteout-leader
+  accessGroups:
+  - auwy
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobPMCWhiteoutGunner
+  name: WY Whiteout Smartgunner
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-whiteout-name-gunner
+    description: cmu-whiteout-description
+    reregister: false
+    job: CMUJobPMCWhiteoutGunner
+    raffle:
+      settings: short
+    rules: cmu-whiteout-rules
+
+- type: startingGear
+  id: CMUGearPMCWhiteoutGunner
+  equipment:
+    id: CMUIDCardPMCWhiteoutGunner
+    jumpsuit: RMCJumpsuitVeteranPMCCommando
+    outerClothing: CMArmorM4PMCSmartGunHarnessCommando
+    gloves: RMCHandsVeteranPMCCommando
+    head: ArmorHelmetPMCCommando
+    shoes: RMCBootsPMCCommandoFilled
+    mask: RMCMaskCoifPMC
+    ears: RMCHeadsetDistressPMC
+    back: RMCSatchelPMC
+    pocket1: RMCPouchDrumPMC
+    pocket2: RMCPouchDrumPMC
+    suitstorage: RMCSmartGunWhiteOut
+  storage:
+    back:
+    - RMCExplosivePlastic
+    - RMCExplosivePlastic
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+    - CMCrowbar
+    - RMCMagazineSmartGunirradiated
+    - RMCMagazineSmartGunirradiated
+    outerClothing:
+    - RMCMagazineSmartGunirradiated
+    - RMCMagazineSmartGunirradiated
+    pocket1:
+    - RMCMagazineSmartGunirradiated
+    - RMCMagazineSmartGunirradiated
+    - RMCMagazineSmartGunirradiated
+    pocket2:
+    - RMCMagazineSmartGunirradiated
+    - RMCMagazineSmartGunirradiated
+    - RMCMagazineSmartGunirradiated
+
+- type: playTimeTracker
+  id: CMUJobPMCWhiteoutGunner

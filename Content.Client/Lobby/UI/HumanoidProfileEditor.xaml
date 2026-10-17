@@ -5,6 +5,7 @@
          xmlns:ui="clr-namespace:Content.Client.Lobby.UI"
          xmlns:namedItems="clr-namespace:Content.Client._RMC14.NamedItems"
          xmlns:userInterface="clr-namespace:Content.Client._RMC14.UserInterface"
+         xmlns:profile="clr-namespace:Content.Client.Lobby.UI.ProfileEditorControls"
          HorizontalExpand="True">
         <!-- Left side -->
         <BoxContainer Orientation="Vertical" Margin="10 10 10 10" HorizontalExpand="True">
@@ -14,21 +15,42 @@
                 <BoxContainer Orientation="Vertical">
                     <ui:HighlightedContainer>
                         <BoxContainer Orientation="Vertical">
-                            <ui:HighlightedContainer>
-                                <BoxContainer Orientation="Vertical">
-                                    <BoxContainer Orientation="Horizontal" VerticalExpand="True">
-                                        <Label Text="{Loc 'humanoid-profile-editor-name-label'}" />
-                                        <LineEdit Name="NameEdit" StyleClasses="CharacterNameInput" MinSize="270 0" VerticalAlignment="Center" Margin="5 0 0 0" />
-                                        <Button Name="NameRandomize" Text="{Loc 'humanoid-profile-editor-name-random-button'}" />
-                                    </BoxContainer>
-                                    <Button Name="RandomizeEverythingButton" HorizontalAlignment="Center"
-                                            HorizontalExpand="False" MaxWidth="256"
-                                            Text="{Loc 'humanoid-profile-editor-randomize-everything-button'}" />
-                                    <RichTextLabel Name="WarningLabel" HorizontalExpand="False"
-                                                   VerticalExpand="True" MaxWidth="425"
-                                                   HorizontalAlignment="Left" />
-                                </BoxContainer>
-                            </ui:HighlightedContainer>
+                            <!-- cmu edit start -->
+                            <GridContainer Columns="2" VerticalExpand="True">
+                                <Label Text="{Loc 'cmu-profile-editor-first-name-label'}" />
+                                <LineEdit Name="FirstNameEdit" StyleClasses="CharacterNameInput" MinSize="270 0" VerticalAlignment="Center" Margin="5 0 0 2" />
+                                <Label Text="{Loc 'cmu-profile-editor-last-name-label'}" />
+                                <LineEdit Name="LastNameEdit" StyleClasses="CharacterNameInput" MinSize="270 0" VerticalAlignment="Center" Margin="5 0 0 2" />
+                                <Label Text="{Loc 'cmu-profile-editor-nickname-label'}" />
+                                <LineEdit Name="NicknameEdit" StyleClasses="CharacterNameInput" MinSize="270 0" VerticalAlignment="Center" Margin="5 0 0 2" />
+                            </GridContainer>
+                            <Label Name="NameRequiredLabel" Visible="False" FontColorOverride="#FF4444" />
+                            <!-- cmu edit end -->
+                            <RichTextLabel Name="WarningLabel" HorizontalExpand="False"
+                                            VerticalExpand="True" MaxWidth="425"
+                                            HorizontalAlignment="Left" />
+                        </BoxContainer>
+                    </ui:HighlightedContainer>
+                </BoxContainer>
+                <!-- Randomizer -->
+                <BoxContainer Orientation="Vertical">
+                    <ui:HighlightedContainer>
+                        <BoxContainer Orientation="Vertical">
+                            <Label Text="{Loc 'humanoid-profile-editor-randomize'}" HorizontalAlignment="Center"/>
+                            <PanelContainer StyleClasses="LowDivider" Margin="0 10"/>
+                            <GridContainer Columns="2" MinWidth="250" HorizontalExpand="True">
+                                <ui:RandomizeLockButton For="Name" LabelText="{Loc 'humanoid-profile-editor-randomize-name-button'}"/>
+                                <ui:RandomizeLockButton For="Species" LabelText="{Loc 'humanoid-profile-editor-randomize-species-button'}"/>
+                                <ui:RandomizeLockButton For="Age" LabelText="{Loc 'humanoid-profile-editor-randomize-age-button'}"/>
+                                <ui:RandomizeLockButton For="Sex" LabelText="{Loc 'humanoid-profile-editor-randomize-sex-button'}"/>
+                                <ui:RandomizeLockButton For="Skin" LabelText="{Loc 'humanoid-profile-editor-randomize-skin-button'}"/>
+                                <ui:RandomizeLockButton For="Eyes" LabelText="{Loc 'humanoid-profile-editor-randomize-eye-button'}"/>
+                                <ui:RandomizeLockButton For="Markings" LabelText="{Loc 'humanoid-profile-editor-randomize-markings-button'}"/>
+                            </GridContainer>
+                            <Button
+                                Name="RandomizeUnlockedButton"
+                                MaxWidth="256"
+                                Text="{Loc 'humanoid-profile-editor-randomize-unlocked-button'}"/>
                         </BoxContainer>
                     </ui:HighlightedContainer>
                 </BoxContainer>
@@ -64,13 +86,17 @@
                         <!-- appearanceList -->
                         <BoxContainer Orientation="Vertical">
                             <BoxContainer Margin="10" Orientation="Vertical" HorizontalExpand="True">
-                                <BoxContainer HorizontalExpand="True">
+                                <!-- cmu edit start -->
+                                <BoxContainer HorizontalExpand="True" Visible="False">
+                                <!-- cmu edit end -->
                                     <Label Text="{Loc 'humanoid-profile-editor-preferred-squad-label'}" />
                                     <Control HorizontalExpand="True" />
                                     <OptionButton Name="SquadPreferenceButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
                                 <!-- Armor Preference -->
-                                <BoxContainer HorizontalExpand="True">
+                                <!-- cmu edit start -->
+                                <BoxContainer HorizontalExpand="True" Visible="False">
+                                <!-- cmu edit end -->
                                     <Label Text="{Loc 'humanoid-profile-editor-preferred-armor-label'}" />
                                     <Control HorizontalExpand="True"/>
                                     <OptionButton Name="ArmorPreferenceButton" HorizontalAlignment="Right" />
@@ -103,7 +129,9 @@
                                 </BoxContainer>
                                 <cc:HSeparator Color="#16823E" Margin="0 5" />
                                 <!-- Species -->
-                                <BoxContainer HorizontalExpand="True">
+                                <!-- cmu edit start -->
+                                <BoxContainer HorizontalExpand="True" Visible="False">
+                                <!-- cmu edit end -->
                                     <Label Text="{Loc 'humanoid-profile-editor-species-label'}" />
                                     <Control HorizontalExpand="True"/>
                                     <TextureButton Name="SpeciesInfoButton" Scale="0.3 0.3"
@@ -111,12 +139,18 @@
                                                    ToolTip="{Loc 'humanoid-profile-editor-guidebook-button-tooltip'}"/>
                                     <OptionButton Name="SpeciesButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
-                                <!-- Sex -->
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-sex-label'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <OptionButton Name="SexButton" HorizontalAlignment="Right" />
+                                <!-- cmu edit start: sex moved to the Character Records tab -->
+                                <!-- cmu edit end -->
+                                <!-- Voice -->
+                                <!-- cmu edit start -->
+                                <BoxContainer HorizontalExpand="True" Visible="False">
+                                <!-- cmu edit end -->
+                                    <Label Text="{Loc 'humanoid-profile-editor-voice-label'}" />
+                                    <Control HorizontalExpand="True" />
+                                    <OptionButton Name="VoiceButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
+                                <!-- cmu edit start: pronouns moved to the Character Records tab -->
+                                <!-- cmu edit end -->
                                 <!-- Show clothing -->
                                 <BoxContainer HorizontalExpand="True">
                                     <Label Text="{Loc 'humanoid-profile-editor-clothing'}" />
@@ -124,30 +158,86 @@
                                     <Button Name="ShowClothes" Pressed="True" ToggleMode="True" Text="{Loc 'humanoid-profile-editor-clothing-show'}" HorizontalAlignment="Right" />
                                 </BoxContainer>
                                 <!-- Spawn Priority -->
-                                <BoxContainer HorizontalExpand="True">
+                                <!-- cmu edit start -->
+                                <BoxContainer HorizontalExpand="True" Visible="False">
+                                <!-- cmu edit end -->
                                     <Label Text="{Loc 'humanoid-profile-editor-spawn-priority-label'}" />
                                     <Control HorizontalExpand="True"/>
                                     <OptionButton Name="SpawnPriorityButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
+                                <!-- cmu edit start -->
+                                <!-- FOB security squad opt-in. Its own card so it reads as a choice with
+                                     consequences rather than another one-line setting. Short lines only:
+                                     this tab scrolls sideways, so long text never wraps. -->
+                                <PanelContainer StyleClasses="CrtInsetPanel" Margin="0 8 0 2">
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                                        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                                            <Label Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-title'}"
+                                                   StyleClasses="CrtSectionTitle"
+                                                   VerticalAlignment="Center" />
+                                            <PanelContainer StyleClasses="CrtSectionRule"
+                                                            HorizontalExpand="True"
+                                                            VerticalAlignment="Center"
+                                                            MinHeight="1" />
+                                        </BoxContainer>
+                                        <BoxContainer Orientation="Horizontal" SeparationOverride="12">
+                                            <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="2">
+                                                <Label Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-role'}"
+                                                       StyleClasses="CrtDimText" />
+                                            </BoxContainer>
+                                            <Button Name="FoxtrotSquadOptInButton"
+                                                    ToggleMode="True"
+                                                    StyleClasses="CrtReadyToggle"
+                                                    MinWidth="140"
+                                                    VerticalAlignment="Center"
+                                                    ToolTip="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-tooltip'}" />
+                                        </BoxContainer>
+                                        <BoxContainer Orientation="Vertical" SeparationOverride="1">
+                                            <Label Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-point-roles'}" StyleClasses="CrtDimText" />
+                                            <Label Text="{Loc 'cmu-humanoid-profile-editor-foxtrot-squad-point-full'}" StyleClasses="CrtDimText" />
+                                        </BoxContainer>
+                                    </BoxContainer>
+                                </PanelContainer>
+                                <!-- cmu edit end -->
                                 <!-- Synthetic -->
                                 <BoxContainer Name="SyntheticContainer" Orientation="Vertical" />
                             </BoxContainer>
                             <!-- Skin -->
-                            <BoxContainer Margin="10" HorizontalExpand="True" Orientation="Vertical">
+                            <!-- cmu edit start -->
+                            <BoxContainer Margin="10" HorizontalExpand="True" Orientation="Vertical" Visible="False">
+                            <!-- cmu edit end -->
                                 <Label Text="{Loc 'humanoid-profile-editor-skin-color-label'}" />
                                 <Slider HorizontalExpand="True" Name="Skin" MinValue="0" MaxValue="100" Value="20" />
                                 <BoxContainer Name="RgbSkinColorContainer" Visible="False" Orientation="Vertical" HorizontalExpand="True" />
                             </BoxContainer>
-                            <!-- Hair -->
-                            <BoxContainer Margin="10" Orientation="Horizontal">
-                                <humanoid:SingleMarkingPicker Name="HairStylePicker" Category="Hair" />
-                                <humanoid:SingleMarkingPicker Name="FacialHairPicker" Category="FacialHair" />
-                            </BoxContainer>
                             <!-- Eyes -->
-                            <BoxContainer Margin="10" Orientation="Vertical">
+                            <!-- cmu edit start -->
+                            <BoxContainer Margin="10" Orientation="Vertical" Visible="False">
+                            <!-- cmu edit end -->
                                 <Label Text="{Loc 'humanoid-profile-editor-eyes-label'}" />
                                 <humanoid:EyeColorPicker Name="EyeColorPicker" />
                             </BoxContainer>
+                            <!-- cmu edit start -->
+                            <!-- Character appearance -->
+                            <BoxContainer Margin="10" Orientation="Vertical" SeparationOverride="12" HorizontalExpand="True">
+                                <cc:HSeparator Color="#16823E" Margin="0 5" />
+                                <BoxContainer HorizontalExpand="True">
+                                    <Label Text="{Loc 'humanoid-profile-editor-skin-tone-label'}" ToolTip="{Loc 'humanoid-profile-editor-skin-tone-tooltip'}" />
+                                    <Control HorizontalExpand="True"/>
+                                    <Label Name="SkinToneNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
+                                </BoxContainer>
+                                <Slider Name="CharacterSkinSlider" HorizontalExpand="True" MinValue="0" MaxValue="100" />
+                                <ColorSelectorSliders Name="CharacterSkinColorPicker" HorizontalExpand="True" />
+                                <BoxContainer Name="CharacterHairPickers" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="6" />
+                                <cc:HSeparator Color="#16823E" Margin="0 5" />
+                                <BoxContainer HorizontalExpand="True">
+                                    <Label Text="{Loc 'humanoid-profile-editor-eye-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-eye-color-tooltip'}" />
+                                    <Control HorizontalExpand="True"/>
+                                    <Label Name="EyeColorNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
+                                </BoxContainer>
+                                <ColorSelectorSliders Name="CharacterEyeColorPicker" HorizontalExpand="True" />
+                            </BoxContainer>
+                            <!-- cmu edit end -->
                         </BoxContainer>
                     </ScrollContainer>
                 </BoxContainer>
@@ -175,11 +265,25 @@
                                 <Control HorizontalExpand="True"/>
                                 <OptionButton Name="OriginButton" HorizontalAlignment="Right" />
                             </BoxContainer>
+                            <!-- cmu edit start -->
                             <BoxContainer HorizontalExpand="True">
-                                <Label Text="{Loc 'humanoid-profile-editor-pronouns-label'}" ToolTip="{Loc 'humanoid-profile-editor-pronouns-tooltip'}" />
+                                <Label Text="{Loc 'cmu-humanoid-profile-editor-religion-label'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-religion-tooltip'}" />
+                                <Control HorizontalExpand="True"/>
+                                <OptionButton Name="ReligionButton" HorizontalAlignment="Right" />
+                            </BoxContainer>
+                            <!-- cmu edit end -->
+                            <!-- cmu edit start: sex and pronouns, moved from the main tab -->
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-sex-label'}" />
+                                <Control HorizontalExpand="True"/>
+                                <OptionButton Name="SexButton" HorizontalAlignment="Right" />
+                            </BoxContainer>
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-pronouns-label'}" />
                                 <Control HorizontalExpand="True"/>
                                 <OptionButton Name="PronounsButton" HorizontalAlignment="Right" />
                             </BoxContainer>
+                            <!-- cmu edit end -->
                             <BoxContainer HorizontalExpand="True">
                                 <Label Text="{Loc 'humanoid-profile-editor-height-label'}" ToolTip="{Loc 'humanoid-profile-editor-height-tooltip'}" />
                                 <Control HorizontalExpand="True"/>
@@ -197,21 +301,16 @@
                                 <Control HorizontalExpand="True"/>
                                 <OptionButton Name="BuildButton" HorizontalAlignment="Right" />
                             </BoxContainer>
+                            <!-- cmu edit start -->
                             <BoxContainer HorizontalExpand="True">
-                                <Label Text="{Loc 'humanoid-profile-editor-skin-tone-label'}" ToolTip="{Loc 'humanoid-profile-editor-skin-tone-tooltip'}" />
+                                <Label Text="{Loc 'cmu-humanoid-profile-editor-blood-type-label'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-blood-type-tooltip'}" />
                                 <Control HorizontalExpand="True"/>
-                                <Label Name="SkinToneNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
+                                <OptionButton Name="BloodTypeButton" HorizontalAlignment="Right" />
                             </BoxContainer>
-                            <BoxContainer HorizontalExpand="True">
-                                <Label Text="{Loc 'humanoid-profile-editor-hair-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-hair-color-tooltip'}" />
-                                <Control HorizontalExpand="True"/>
-                                <Label Name="HairColorNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
-                            </BoxContainer>
-                            <BoxContainer HorizontalExpand="True">
-                                <Label Text="{Loc 'humanoid-profile-editor-eye-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-eye-color-tooltip'}" />
-                                <Control HorizontalExpand="True"/>
-                                <Label Name="EyeColorNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
-                            </BoxContainer>
+                            <!-- cmu edit end -->
+                            <!-- cmu edit start -->
+                            <!-- skin tone, hair color and eye color moved to the Appearance tab -->
+                            <!-- cmu edit end -->
                             <BoxContainer HorizontalExpand="True">
                                 <Label Text="{Loc 'humanoid-profile-editor-hide-meta-label'}" ToolTip="{Loc 'humanoid-profile-editor-hide-meta-tooltip'}" />
                                 <Control HorizontalExpand="True"/>
@@ -220,12 +319,34 @@
                             <cc:HSeparator Color="#16823E" Margin="0 5" />
                             <Label Text="{Loc 'humanoid-profile-editor-full-description-label'}" ToolTip="{Loc 'humanoid-profile-editor-full-description-tooltip'}" />
                             <TextEdit Name="FullDescriptionEdit" MinSize="220 90" Margin="0 0 0 8" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-full-description-tooltip'}" />
+                            <!-- cmu edit start -->
+                            <cc:HSeparator Color="#16823E" Margin="0 5" />
+                            <!-- cmu edit end -->
                             <Label Text="{Loc 'humanoid-profile-editor-medical-record-label'}" ToolTip="{Loc 'humanoid-profile-editor-medical-record-tooltip'}" />
                             <TextEdit Name="MedicalRecordEdit" MinSize="220 90" Margin="0 0 0 8" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-medical-record-tooltip'}" />
+                            <!-- cmu edit start -->
+                            <cc:HSeparator Color="#16823E" Margin="0 5" />
+                            <!-- cmu edit end -->
                             <Label Text="{Loc 'humanoid-profile-editor-criminal-record-label'}" ToolTip="{Loc 'humanoid-profile-editor-criminal-record-tooltip'}" />
                             <TextEdit Name="CriminalRecordEdit" MinSize="220 70" Margin="0 0 0 8" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-criminal-record-tooltip'}" />
+                            <!-- cmu edit start -->
+                            <cc:HSeparator Color="#16823E" Margin="0 5" />
+                            <!-- cmu edit end -->
                             <Label Text="{Loc 'humanoid-profile-editor-general-record-label'}" ToolTip="{Loc 'humanoid-profile-editor-general-record-tooltip'}" />
                             <TextEdit Name="GeneralRecordEdit" MinSize="220 70" Margin="0 0 0 8" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-general-record-tooltip'}" />
+                            <!-- cmu edit start: text on GOVFOR/OPFOR vendor armor and helmets -->
+                            <cc:HSeparator Color="#16823E" Margin="0 5" />
+                            <Label Text="{Loc 'cmu-humanoid-profile-editor-armor-flavor-label'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-gear-flavor-tooltip'}" />
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'cmu-humanoid-profile-editor-armor-flavor-prefix'}" Margin="0 0 6 0" FontColorOverride="#A0A0A0" />
+                                <LineEdit Name="ArmorFlavorTextEdit" HorizontalExpand="True" PlaceHolder="{Loc 'cmu-humanoid-profile-editor-gear-flavor-placeholder'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-gear-flavor-tooltip'}" />
+                            </BoxContainer>
+                            <Label Text="{Loc 'cmu-humanoid-profile-editor-helmet-flavor-label'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-gear-flavor-tooltip'}" />
+                            <BoxContainer HorizontalExpand="True" Margin="0 0 0 8">
+                                <Label Text="{Loc 'cmu-humanoid-profile-editor-helmet-flavor-prefix'}" Margin="0 0 6 0" FontColorOverride="#A0A0A0" />
+                                <LineEdit Name="HelmetFlavorTextEdit" HorizontalExpand="True" PlaceHolder="{Loc 'cmu-humanoid-profile-editor-gear-flavor-placeholder'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-gear-flavor-tooltip'}" />
+                            </BoxContainer>
+                            <!-- cmu edit end -->
                         </BoxContainer>
                     </ScrollContainer>
                 </BoxContainer>
@@ -235,13 +356,28 @@
                             <RichTextLabel Name="RegulationAppearanceInfo" HorizontalExpand="True" Margin="10 10 10 0" />
                             <!-- Hair -->
                             <BoxContainer Margin="10" Orientation="Horizontal">
-                                <humanoid:SingleMarkingPicker Name="RegulationHairStylePicker" Category="Hair" />
-                                <humanoid:SingleMarkingPicker Name="RegulationFacialHairPicker" Category="FacialHair" />
+                                <humanoid:RegulationMarkingPicker Name="RegulationHairStylePicker" Layer="Hair" />
+                                <humanoid:RegulationMarkingPicker Name="RegulationFacialHairPicker" Layer="FacialHair" />
                             </BoxContainer>
                         </BoxContainer>
                     </ScrollContainer>
                 </BoxContainer>
-                <BoxContainer Orientation="Vertical">
+                <!-- cmu edit start: traits and markings sit between regulation appearance and insurgency -->
+                <BoxContainer Orientation="Vertical" Margin="10">
+                    <!-- Traits -->
+                    <ScrollContainer VerticalExpand="True">
+                        <BoxContainer Name="TraitsList" Orientation="Vertical" />
+                    </ScrollContainer>
+                </BoxContainer>
+                <BoxContainer Name="MarkingsTab" Orientation="Vertical" Margin="10">
+                    <!-- Markings -->
+                    <!-- cmu edit start -->
+                    <humanoid:MarkingPicker Name="Markings" IgnoreLayers="Hair,FacialHair" HorizontalExpand="True" VerticalExpand="True" />
+                    <!-- cmu edit end -->
+                </BoxContainer>
+                <!-- cmu edit end -->
+                <!-- CMU14: strip-level FoF annotation, overlaid on the tab header row -->
+                <Control VerticalExpand="True">
                     <TabContainer Name="InsurgencyTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
                         <BoxContainer Orientation="Vertical">
                             <ScrollContainer VerticalExpand="True">
@@ -264,7 +400,10 @@
                             </ScrollContainer>
                         </BoxContainer>
                     </TabContainer>
-                </BoxContainer>
+                    <Label Text="{Loc 'humanoid-profile-editor-fof-included-label'}"
+                           HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 3 6 0"
+                           MouseFilter="Ignore" StyleClasses="CrtText" />
+                </Control>
                 <BoxContainer Orientation="Vertical">
                     <TabContainer Name="ColonyFallTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
                         <BoxContainer Orientation="Vertical">
@@ -314,16 +453,23 @@
                     </TabContainer>
                 </BoxContainer>
                 <BoxContainer Orientation="Vertical" Margin="10">
-                    <!-- Traits -->
-                    <ScrollContainer VerticalExpand="True">
-                        <BoxContainer Name="TraitsList" Orientation="Vertical" />
-                    </ScrollContainer>
-                </BoxContainer>
-                <BoxContainer Name="MarkingsTab" Orientation="Vertical" Margin="10">
-                    <!-- Markings -->
-                    <ScrollContainer VerticalExpand="True">
-                        <humanoid:MarkingPicker Name="Markings" IgnoreCategories="Hair,FacialHair" />
-                    </ScrollContainer>
+                    <!-- CMU14: separate FoF priorities and explicit side/role fallbacks. -->
+                    <Label Text="{Loc 'cmu-fof-balancing'}" />
+                    <BoxContainer Orientation="Horizontal" Margin="0 5">
+                        <Label Text="{Loc 'cmu-fof-preferred-side'}" />
+                        <OptionButton Name="FoFSideButton" />
+                    </BoxContainer>
+                    <BoxContainer Orientation="Horizontal" Margin="0 5">
+                        <Label Text="{Loc 'cmu-fof-fallback-label'}" />
+                        <OptionButton Name="FoFFallbackButton" />
+                    </BoxContainer>
+                    <Label Text="{Loc 'cmu-fof-fallback-explanation'}" />
+                    <TabContainer Name="ForceOnForceTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
+                        <ScrollContainer VerticalExpand="True">
+                            <!-- CMU14: faction gameplay options. -->
+                            <BoxContainer Name="FoFJobList" Orientation="Vertical" />
+                        </ScrollContainer>
+                    </TabContainer>
                 </BoxContainer>
                 <BoxContainer Name="NamedItemsTab" Orientation="Vertical" Margin="10">
                     <!-- Named Items -->
@@ -337,7 +483,7 @@
                       VerticalAlignment="Center"
                       MinWidth="300"
                       MaxWidth="300">
-            <SpriteView Name="SpriteView" Scale="8 8" Margin="4" SizeFlagsStretchRatio="1" />
+            <profile:ProfilePreviewSpriteView Name="SpriteView" Scale="8 8" Margin="4" SizeFlagsStretchRatio="1" />
             <Label Name="PreviewJobLabel"
                    HorizontalAlignment="Center"
                    ClipText="True"

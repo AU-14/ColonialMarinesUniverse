@@ -1,0 +1,89 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobUPPDivisionKommissar
+  roundSide: ThirdParty
+  roundForce: UPPLine
+  roundRole: UPPDivisionKommissar
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_lt
+  - type: Skills
+    skills:
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 1
+      RMCSkillLeadership: 3
+      RMCSkillMedical: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 1
+      RMCSkillExecution: 1
+      RMCSkillOverwatch: 1
+      RMCSkillEndurance: 2
+  - type: MarineOrders
+  - type: JobPrefix
+    prefix: cmu-upp-division-kommissar-prefix
+  - type: Language
+    spokenLanguages:
+    - Russian
+    - English
+    - Mandarin
+    understoodLanguages:
+    - Russian
+    - English
+    - Mandarin
+    currentLanguage: Russian
+    defaultLanguage: Russian
+  name: cmu-upp-division-kommissar-name
+  description: cmu-upp-division-kommissar-description
+  playTimeTracker: CMUJobUPPDivisionKommissar
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearUPPDivisionKommissar
+  spawnMenuRoleName: UPP Division Kommissar (event)
+  greeting: cmu-upp-kommissar-greeting
+  icon: RMCJobIconSPPDivisionKommissar
+  joinNotifyCrew: false
+  supervisors: cmu-upp-kommissar-supervisors
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPDivisionKommissar
+  name: UPP Division Kommissar
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPLine
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-upp-division-kommissar-name
+    description: cmu-upp-division-kommissar-description
+    reregister: false
+    job: CMUJobUPPDivisionKommissar
+    raffle:
+      settings: short
+    rules: cmu-upp-kommissar-rules
+
+- type: startingGear
+  id: CMUGearUPPDivisionKommissar
+  equipment:
+    id: CMUIDCardUPPDivisionKommissar
+    head: RMCHeadCapSPPPolKomWhite
+    ears2: RMCM5CameraGear
+    outerClothing: RMCCoatOfficerShortWhite
+    gloves: RMCHandsVeteranSPP
+    shoes: RMCBootsSPPFilled
+    belt: RMCMatebaBeltFilled
+    back: CMSatchel
+    pocket1: RMCPouchAutoinjectorFill
+  storage:
+    back:
+    - RMCBoxZiptie
+
+- type: playTimeTracker
+  id: CMUJobUPPDivisionKommissar

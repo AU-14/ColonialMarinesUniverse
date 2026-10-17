@@ -5,6 +5,8 @@
   suffix: RMC
   description: A mattress seated on a rectangular metallic frame. This is used to support a lying person in a comfortable manner, notably for regular sleep. Ancient technology, but still useful.
   components:
+  - type: CMUReconFurniture
+    material: Bed
   - type: VehicleSmashable
   - type: Transform
     anchored: true
@@ -21,8 +23,9 @@
     node: bed
   - type: RMCMesonsNonviewable
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: MeleeReceivedMultiplier
     xenoDamage:
       types:
@@ -100,6 +103,8 @@
   id: RMCBedBunk
   name: black bunk-bed
   components:
+  - type: CMUReconFurniture
+    material: BunkBed
   - type: Sprite
     sprite: _RMC14/Structures/Furniture/bed.rsi
     state: bunk_black
@@ -110,6 +115,8 @@
   id: RMCBedBunkBlue
   name: blue bunk-bed
   components:
+  - type: CMUReconFurniture
+    material: BunkBed
   - type: Sprite
     sprite: _RMC14/Structures/Furniture/bed.rsi
     state: bunk_blue
@@ -120,6 +127,8 @@
   id: RMCBedBunkGreen
   name: green bunk-bed
   components:
+  - type: CMUReconFurniture
+    material: BunkBed
   - type: Sprite
     sprite: _RMC14/Structures/Furniture/bed.rsi
     state: bunk_green
@@ -140,6 +149,8 @@
   id: RMCBedBunkRed
   name: red bunk-bed
   components:
+  - type: CMUReconFurniture
+    material: BunkBed
   - type: Sprite
     sprite: _RMC14/Structures/Furniture/bed.rsi
     state: bunk_red
@@ -182,6 +193,7 @@
         mask:
         - TableMask
   - type: Damageable
+  - type: Injurable
   - type: Destructible
     thresholds:
       - trigger:

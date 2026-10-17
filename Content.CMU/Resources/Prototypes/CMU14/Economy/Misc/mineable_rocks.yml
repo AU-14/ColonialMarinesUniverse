@@ -1,0 +1,57 @@
+- type: entity
+  id: mineablesolarisrock
+  name: mineablerock
+  parent: BaseWall
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Transform
+    noRot: true
+  - type: SoundOnGather
+  - type: Gatherable
+    toolWhitelist:
+  - type: Tag
+    tags:
+    - Pickaxe
+  - type: Damageable
+    damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: ReceiverXenoClaws
+    maxHealth: 168
+    hitsToDestroy: 3
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 168
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: Sprite
+    sprite: Structures/Walls/stone.rsi
+  - type: Icon
+    sprite: Structures/Walls/stone.rsi
+    state: full
+  - type: IconSmooth
+    key: stone
+    additionalKeys:
+    - doors
+    index: 0
+    base: stone
+
+
+
+- type: entity
+  id: mineablesolarisrocksteel
+  parent: mineablesolarisrock
+  description: An ore vein rich with steel.
+  suffix: Gold
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: OreSteel
+
+#need to add a gold sprite, might just do a nonrotatable one, could have all veins unmarked but still in specific areas, could be interesting

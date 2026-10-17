@@ -12,4 +12,13 @@ public sealed partial class DropshipTerminalComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public string? Faction;
+
+    // CMU14 Begin: summon pacing
+    /// <summary>Minimum time between remote summons from this terminal.</summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan SummonCooldown = TimeSpan.FromSeconds(90);
+
+    /// <summary>CurTime of the last successful summon; null when never used.</summary>
+    public TimeSpan? LastSummonAt;
+    // CMU14 End
 }

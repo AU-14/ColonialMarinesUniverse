@@ -2,26 +2,32 @@ using System.Numerics;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.BlurredVision;
 using Content.Shared._RMC14.Deafness;
+using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Stun;
+using Content.Shared.CMU14.Weapons.Grenades; // cmu edit
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.Body.Systems;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Explosion;
 using Content.Shared.FixedPoint;
-using Content.Shared.Flash.Components;
+using Content.Shared.Flash;
 using Content.Shared.Inventory;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Standing;
 using Content.Shared.StatusEffect;
 using Content.Shared.Sticky.Components;
 using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
+using Content.Shared.Traits.Assorted;
 using Content.Shared.Whitelist;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using NewStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSystem;
 
 namespace Content.Shared._RMC14.Explosion;
 
@@ -39,11 +45,11 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
     [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private RMCDazedSystem _dazed = default!;
     [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
+    [Dependency] private NewStatusEffectsSystem _newStatusEffects = default!;
     [Dependency] private SharedDeafnessSystem _deafness = default!;
     [Dependency] private INetManager _net = default!;
 
     private static readonly ProtoId<DamageTypePrototype> StructuralDamage = "Structural";
-    private static readonly ProtoId<StatusEffectPrototype> FlashedKey = "Flashed";
     private static readonly ProtoId<StatusEffectPrototype> BlindKey = "Blinded";
 
     private readonly HashSet<Entity<RMCWallExplosionDeletableComponent>> _walls = new();
@@ -94,6 +100,18 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
         args.DamageCoefficient *= resistance;
     }
 
+    // cmu edit start
+    public void ApplyExplosionStunOnly(
+        Entity<StunOnExplosionReceivedComponent> ent,
+        ProtoId<ExplosionPrototype> explosion,
+        MapCoordinates epicenter,
+        Content.Shared.Damage.DamageSpecifier wouldBeDamage)
+    {
+        var ev = new ExplosionReceivedEvent(explosion, epicenter, wouldBeDamage);
+        OnStunOnExplosionReceivedBeforeExplode(ent, ref ev);
+    }
+    // cmu edit end
+
     public void ChangeExplosionStunResistance(EntityUid ent, StunOnExplosionReceivedComponent? comp, bool isStunnable)
     {
         if (!Resolve(ent, ref comp, false))
@@ -104,6 +122,15 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
 
     private void OnStunOnExplosionReceivedBeforeExplode(Entity<StunOnExplosionReceivedComponent> ent, ref ExplosionReceivedEvent args)
     {
+        // cmu edit start: the mob a launched impact grenade struck isn't stunned by its blast
+        if (TryComp(ent, out CMUExplosionStunExemptComponent? exempt) &&
+            exempt.Epicenter.MapId == args.Epicenter.MapId &&
+            (exempt.Epicenter.Position - args.Epicenter.Position).Length() <= CMUExplosionStunExemptComponent.Range)
+        {
+            return;
+        }
+        // cmu edit end
+
         var damage = args.Damage.GetTotal();
         var factor = Math.Round(damage.Double() * 0.05) / 2;
         factor = Math.Min(20, factor);
@@ -127,7 +154,10 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
             var bombArmorMult = (100 - ev.ExplosionArmor) * 0.01;
             var severity = factor * 5;
 
-            _statusEffects.TryAddStatusEffect<FlashedComponent>(ent, FlashedKey, ent.Comp.BlindTime * bombArmorMult, true);
+            _newStatusEffects.TryUpdateStatusEffectDuration(
+                ent,
+                SharedFlashSystem.FlashedKey,
+                ent.Comp.BlindTime * bombArmorMult);
             _deafness.TryDeafen(ent, TimeSpan.FromSeconds(severity * 0.5), true);
 
             var knockBackDistance = (float) Math.Clamp(severity / 5 / dir.Length(), 0.5, Math.Max(severity / 10, 0.5));
@@ -155,7 +185,7 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
         {
             var stunTime = TimeSpan.FromSeconds(factor / 2.5);
             _stun.TryStun(ent, stunTime, true);
-            _stun.TryKnockdown(ent, stunTime, true);
+            _stun.TryKnockdown((ent.Owner, null), stunTime, true);
 
             if (size < RMCSizes.Big)
             {
@@ -172,7 +202,7 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
             factor /= 5;
             var stunTime = TimeSpan.FromSeconds(factor / 5);
             _stun.TryStun(ent, stunTime, true);
-            _stun.TryKnockdown(ent, stunTime, true);
+            _stun.TryKnockdown((ent.Owner, null), stunTime, true);
             if (size < RMCSizes.Big)
             {
                 _slow.TrySlowdown(ent, TimeSpan.FromSeconds(factor));
@@ -212,6 +242,14 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
         if (total < ent.Comp.Threshold)
             return;
 
+        if (TryComp<MobStateComponent>(ent, out var mobState) &&
+            (args.StateBeforeDamage ?? mobState.CurrentState) is MobState.Critical or MobState.Dead &&
+            HasComp<RMCRevivableComponent>(ent) &&
+            !HasComp<UnrevivableComponent>(ent))
+        {
+            return;
+        }
+
         if (_net.IsClient)
             return;
 
@@ -227,7 +265,7 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
         if (ent.Comp.Explosion is { } explosion)
             SpawnNextToOrDrop(explosion, ent);
 
-        if (ent.Comp.MaxShrapnel > 0)
+        if (ent.Comp.MaxShrapnel > 0 && Transform(ent).GridUid != null) // CMU14
         {
             foreach (var effect in ent.Comp.ShrapnelEffects)
             {

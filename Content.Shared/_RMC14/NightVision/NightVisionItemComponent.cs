@@ -2,6 +2,7 @@
 using Content.Shared.Inventory;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
+using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.NightVision;
@@ -62,6 +63,13 @@ public sealed partial class NightVisionItemComponent : Component
     [DataField, AutoNetworkedField]
     public bool Green;
 
+    // CMU Related Change
+    /// <summary>
+    /// Whether night-vision-visible entities are rendered through occlusion.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool Overlay;
+
     /// <summary>
     /// Whether the wearer receives meson-style FoV behavior.
     /// </summary>
@@ -92,6 +100,18 @@ public sealed partial class NightVisionItemComponent : Component
     [DataField, AutoNetworkedField]
     public NightVisionState DefaultState = NightVisionState.Full;
 
+    [DataField, AutoNetworkedField]
+    public Color? Tint;
+
+    [DataField, AutoNetworkedField]
+    public float NoiseStrength = 0.04f;
+
+    [DataField, AutoNetworkedField]
+    public float VignetteStrength = 3.168f;
+
+    [DataField, AutoNetworkedField]
+    public bool RestorePreviousState;
+
     /// <summary>
     /// Whether the wearer had night vision before this item was enabled.
     /// </summary>
@@ -110,6 +130,10 @@ public sealed partial class NightVisionItemComponent : Component
     [DataField, AutoNetworkedField]
     public bool PreviousGreen;
 
+    // CMU Related Change
+    [DataField, AutoNetworkedField]
+    public bool PreviousOverlay;
+
     /// <summary>
     /// Previous wearer meson state restored when this item is disabled.
     /// </summary>
@@ -127,6 +151,15 @@ public sealed partial class NightVisionItemComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool PreviousBlockScopes;
+
+    [DataField, AutoNetworkedField]
+    public Color? PreviousTint;
+
+    [DataField, AutoNetworkedField]
+    public float PreviousNoiseStrength = 0.04f;
+
+    [DataField, AutoNetworkedField]
+    public float PreviousVignetteStrength = 3.168f;
 
     /// <summary>
     /// Sound played locally when this item turns on.

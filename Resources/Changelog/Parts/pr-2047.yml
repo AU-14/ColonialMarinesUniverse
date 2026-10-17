@@ -1,0 +1,73 @@
+author: troytroy400
+category: CMU
+changes:
+- message: Emergency vehicles now have a driver button for red/blue emergency lights
+    with light stage options.
+  type: Add
+- message: Colony Shot Alert System. This new structure alerts CMB radio to gunfire
+    or explosions within 25 tiles, at most once every 60 seconds. They are to be only
+    mapped at important locations like hospitals, police stations and administration.
+  type: Add
+- message: Every phone now has a 911 tab. Callers choose Fire/Medical or Law Enforcement,
+    answer the automated dispatcher's questions and the call is reported on CMB and
+    Colony Medical radio as 911 Dispatch.
+  type: Add
+- message: Colony Medical radio channel (:z).
+  type: Add
+- message: Mobile phones. Use one in hand to call, answer or hang up. It takes the
+    name of whoever picks it up first, shows up as "[name]'s Mobile Phone" under the
+    Mobile Phones tab and its caller name can be changed with a screwdriver.
+  type: Add
+- message: Colony command, corporate leadership, Head Physician, Foreman, Journalist,
+    Psychologist, ambassadors and orbital staff  now start with a mobile phone.
+  type: Add
+- message: Mobile criminal records tablet. Basically just a mobile criminal records
+    computer.
+  type: Add
+- message: Every character now starts with $25-150 in their bank account depending
+    on their job.
+  type: Add
+- message: All colonists and CLF now appear on the criminal records computer automatically
+    round start, with round pertinent information not shown.
+  type: Add
+- message: Status changes on the criminal records computer are now announced over
+    CMB radio.
+  type: Add
+- message: People now leave DNA on things they touch with bare hands and scanning
+    a person with the forensic scanner shows their DNA and fingerprints.
+  type: Add
+- message: All colony police/security roles now start with a forensic scanner.
+  type: Add
+- message: Colony locked variants of all medical doors, colony department variants
+    of the Hybrisa doors and CMB, Colony Medical, Engineering/Logistics and GOVFOR/OPFOR
+    windoors in glass, blue and reinforced.
+  type: Add
+- message: The Emergency Response Officer is now the Paramedic, with Firefighter as
+    an optional ID. Paramedics also get CMB radio to coordinate with them.
+  type: Tweak
+- message: The Ethics and Wellness Advisor is now the Psychologist, with Therapist
+    and Psychiatrist ID options.
+  type: Tweak
+- message: Freight Systems Specialist is now Logistics Specialist, Waste Management
+    Specialist is now Waste Management, Colony Engineer is now Engineer and Colony
+    Atmospheric Technician is now Atmospheric Technician.
+  type: Tweak
+- message: The criminal records computer now uses the CRT UI.
+  type: Tweak
+- message: Bounties are now set only by the game and can no longer be changed by hand
+    to prevent the infinite money glitch.
+  type: Tweak
+- message: The "Eliminated" criminal status is now "Deceased".
+  type: Tweak
+- message: Arsonists now start with only a lighter instead of a flamethrower and their
+    briefing has been rewritten, meaning they must obtain the materials to start a
+    major fire.
+  type: Tweak
+- message: The VAI radio channel has moved from :z to :+.
+  type: Tweak
+- message: The Nearsighted trait blur works again.
+  type: Fix
+- message: The forensic scanner no longer errors when opening its results.
+  type: Fix
+time: '2026-09-29T00:40:51.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2047

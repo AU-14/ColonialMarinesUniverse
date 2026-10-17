@@ -1,3 +1,4 @@
+using Robust.Shared.Map;
 using System.Linq;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Armor;
@@ -18,6 +19,7 @@ using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Content.Shared.StatusEffectNew;
+using Content.Shared.Stunnable;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Physics;
@@ -49,6 +51,7 @@ public sealed partial class XenoFortifySystem : EntitySystem
 
         SubscribeLocalEvent<XenoFortifyComponent, CMGetArmorEvent>(OnXenoFortifyGetArmor);
         SubscribeLocalEvent<XenoFortifyComponent, BeforeStatusEffectAddedEvent>(OnXenoFortifyBeforeStatusAdded);
+        SubscribeLocalEvent<XenoFortifyComponent, KnockDownAttemptEvent>(OnXenoFortifyKnockdownAttempt);
         SubscribeLocalEvent<XenoFortifyComponent, GetExplosionResistanceEvent>(OnXenoFortifyGetExplosionResistance);
 
         SubscribeLocalEvent<XenoFortifyComponent, ChangeDirectionAttemptEvent>(OnXenoFortifyCancel);
@@ -100,6 +103,12 @@ public sealed partial class XenoFortifySystem : EntitySystem
             args.Cancelled = true;
     }
 
+    private void OnXenoFortifyKnockdownAttempt(Entity<XenoFortifyComponent> xeno, ref KnockDownAttemptEvent args)
+    {
+        if (xeno.Comp.Fortified)
+            args.Cancelled = true;
+    }
+
     private void OnXenoFortifyGetExplosionResistance(Entity<XenoFortifyComponent> xeno, ref GetExplosionResistanceEvent args)
     {
         if (xeno.Comp.Fortified)
@@ -137,7 +146,7 @@ public sealed partial class XenoFortifySystem : EntitySystem
     {
         if (!xeno.Comp.CanHeadbuttFortified && xeno.Comp.Fortified)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-fortify-cant-headbutt"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-fortify-cant-headbutt"), xeno, xeno);
             args.Cancelled = true;
         }
     }
@@ -146,7 +155,7 @@ public sealed partial class XenoFortifySystem : EntitySystem
     {
         if (xeno.Comp.Fortified)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-fortify-cant-rest"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-fortify-cant-rest"), xeno, xeno);
             args.Cancelled = true;
         }
     }
@@ -155,7 +164,7 @@ public sealed partial class XenoFortifySystem : EntitySystem
     {
         if (xeno.Comp.Fortified)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-fortify-cant-tail-sweep"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-fortify-cant-tail-sweep"), xeno, xeno);
             args.Cancelled = true;
         }
     }
@@ -164,7 +173,7 @@ public sealed partial class XenoFortifySystem : EntitySystem
     {
         if (xeno.Comp.Fortified)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-fortify-cant-toggle-crest"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-fortify-cant-toggle-crest"), xeno, xeno);
             args.Cancelled = true;
         }
     }
@@ -210,7 +219,7 @@ public sealed partial class XenoFortifySystem : EntitySystem
             _transform.AnchorEntity((xeno, Transform(xeno)));
         }
         else
-            _speed.RefreshMovementSpeedModifiers(xeno);
+            _speed.RefreshMovementSpeedModifiers((xeno.Owner, null));
 
         FortifyUpdated(xeno);
     }
@@ -235,7 +244,7 @@ public sealed partial class XenoFortifySystem : EntitySystem
             _physics.TrySetBodyType(xeno, BodyType.KinematicController);
         }
         else
-            _speed.RefreshMovementSpeedModifiers(xeno);
+            _speed.RefreshMovementSpeedModifiers((xeno.Owner, null));
 
         FortifyUpdated(xeno);
     }
@@ -257,4 +266,37 @@ public sealed partial class XenoFortifySystem : EntitySystem
         var ev = new XenoFortifiedEvent(xeno.Comp.Fortified);
         RaiseLocalEvent(xeno, ref ev);
     }
+    public bool IsFortified(EntityUid xeno)
+    {
+        return TryComp<XenoFortifyComponent>(xeno, out var fortify) && fortify.Fortified;
+    }
+
+    public bool TryBreakFortify(EntityUid xeno)
+    {
+        if (!TryComp<XenoFortifyComponent>(xeno, out var fortify) || !fortify.Fortified)
+            return false;
+
+        Unfortify((xeno, fortify));
+        return true;
+    }
+
+    public bool TryRelocateFortified(Entity<XenoFortifyComponent?> xeno, EntityCoordinates target)
+    {
+        if (!Resolve(xeno, ref xeno.Comp, false) || !xeno.Comp.Fortified)
+            return false;
+
+        var xform = Transform(xeno);
+
+        if (!xeno.Comp.CanMoveFortified && xform.Anchored)
+        {
+            _transform.Unanchor(xeno.Owner, xform);
+            _transform.SetCoordinates(xeno.Owner, xform, target);
+            _transform.AnchorEntity((xeno.Owner, xform));
+            return true;
+        }
+
+        _transform.SetCoordinates(xeno.Owner, xform, target);
+        return true;
+    }
+
 }

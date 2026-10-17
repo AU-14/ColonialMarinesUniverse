@@ -8,13 +8,23 @@ namespace Content.Client.UserInterface.Controls
     {
         private const float PadSize = 4;
         private const float EdgeSize = 2;
-        private static readonly Color EdgeColor = Color.FromHex("#525252ff");
+        private static readonly Color DefaultEdgeColor = Color.FromHex("#525252ff");
 
         private bool _hasTopEdge = true;
         private bool _hasBottomEdge = true;
         private bool _hasMargins = true;
 
         public const string StylePropertyBackground = "background";
+
+        /// <summary>
+        ///     Colour of the edge lines above and below the strip.
+        /// </summary>
+        /// <remarks>
+        ///     A style property rather than a constant because these lines are drawn outside the
+        ///     background stylebox, so nothing in a stylesheet could otherwise reach them - a themed
+        ///     UI got a stray light grey rule through it with no way to override it.
+        /// </remarks>
+        public const string StylePropertyEdgeColor = "edge-color";
 
         public bool HasTopEdge
         {
@@ -99,18 +109,21 @@ namespace Content.Client.UserInterface.Controls
             UIBox2 centerBox = PixelSizeBox;
 
             var padSize = HasMargins ? PadSize : 0;
+            var edgeColor = TryGetStyleProperty(StylePropertyEdgeColor, out Color styled)
+                ? styled
+                : DefaultEdgeColor;
 
             if (HasTopEdge)
             {
                 centerBox += (0, (padSize + EdgeSize) * UIScale, 0, 0);
-                handle.DrawRect(new UIBox2(0, padSize * UIScale, PixelWidth, centerBox.Top), EdgeColor);
+                handle.DrawRect(new UIBox2(0, padSize * UIScale, PixelWidth, centerBox.Top), edgeColor);
             }
 
             if (HasBottomEdge)
             {
                 centerBox += (0, 0, 0, -((padSize + EdgeSize) * UIScale));
                 handle.DrawRect(new UIBox2(0, centerBox.Bottom, PixelWidth, PixelHeight - padSize * UIScale),
-                    EdgeColor);
+                    edgeColor);
             }
 
             GetActualStyleBox()?.Draw(handle, centerBox, UIScale);

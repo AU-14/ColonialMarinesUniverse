@@ -9,6 +9,7 @@ using Content.Shared._RMC14.Xenonids.Tail_Lash;
 using Content.Shared.Actions;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Effects;
 using Content.Shared.FixedPoint;
 using Content.Shared.Standing;

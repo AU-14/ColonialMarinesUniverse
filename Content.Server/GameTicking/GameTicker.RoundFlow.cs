@@ -3,24 +3,26 @@ using System.Net;
 using System.Numerics;
 using System.Threading.Tasks;
 using Content.Server.Announcements;
-using Content.Server._CMU14.Threats;
+using Content.Server.CMU14.Threats;
 using Content.Server.RoundEnd;
 using Content.Server.Discord;
 using Content.Server.GameTicking.Events;
-using Content.Server.Ghost;
 using Content.Server.Maps;
 using Content.Server.Roles;
 using Content.Shared._RMC14.Power;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Prototypes;
 using Content.Shared._RMC14.TacticalMap;
-using Content.Shared.AU14;
+using Content.Shared.CMU14;
+using Content.Shared.CMU14.util; // CMU14
 using Content.Shared.CCVar;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
+using Content.Shared.Maps;
 using Content.Shared.Mind;
 using Content.Shared.Players;
 using Content.Shared.Preferences;
+using Content.Shared.Roles.Components;
 using JetBrains.Annotations;
 using Prometheus;
 using Robust.Shared.Asynchronous;
@@ -29,7 +31,6 @@ using Robust.Shared.ContentPack;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
@@ -116,6 +117,9 @@ namespace Content.Server.GameTicking
 
             // Check for voted planet from AuRoundSystem
             var selectedPlanet = _auRoundSystem.GetSelectedPlanet();
+            if (selectedPlanet != null // CMU14
+                && GamePlanetPoolPrototype.ExpandPlanetIds(_prototypeManager, CurrentPreset?.PlanetPool, CurrentPreset?.SupportedPlanets).Count == 0)
+                selectedPlanet = null;
             if (selectedPlanet != null)
             {
                 // Use the voted planet's map as the primary map
@@ -149,8 +153,9 @@ namespace Content.Server.GameTicking
             }
 
             if (CurrentPreset?.MapPool != null &&
-                _prototypeManager.TryIndex<GameMapPoolPrototype>(CurrentPreset.MapPool, out var pool) &&
-                maps.Count > 0 && !pool.Maps.Contains(maps[0].ID))
+                maps.Count > 0 &&
+                ProtoMan.TryIndex<GameMapPoolPrototype>(CurrentPreset.MapPool, out var pool) &&
+                !pool.Maps.Contains(maps[0].ID))
             {
                 var msg = Loc.GetString("game-ticker-start-round-invalid-map",
                     ("map", maps[0].MapName),
@@ -205,9 +210,9 @@ namespace Content.Server.GameTicking
                             var comp = AddComp<ShipFactionComponent>(grid);
                             comp.Faction = "govfor";
                         }
-                        if (!HasComp<Content.Server.Station.Components.BecomesStationComponent>(grid))
+                        if (!HasComp<Content.Shared.Station.Components.BecomesStationComponent>(grid))
                         {
-                            AddComp<Content.Server.Station.Components.BecomesStationComponent>(grid);
+                            AddComp<Content.Shared.Station.Components.BecomesStationComponent>(grid);
                         }
                     }
                 }
@@ -222,18 +227,19 @@ namespace Content.Server.GameTicking
                             var comp = AddComp<ShipFactionComponent>(grid);
                             comp.Faction = "opfor";
                         }
-                        if (!HasComp<Content.Server.Station.Components.BecomesStationComponent>(grid))
+                        if (!HasComp<Content.Shared.Station.Components.BecomesStationComponent>(grid))
                         {
-                            AddComp<Content.Server.Station.Components.BecomesStationComponent>(grid);
+                            AddComp<Content.Shared.Station.Components.BecomesStationComponent>(grid);
                         }
                     }
                 }
             }
 
             LoadAdminFaxHubMap();
+            SendStatusToAll();
         }
 
-        private static readonly ResPath AdminFaxHubMapPath = new("/Maps/_AU14/Admin/adminfaxhub.yml");
+        private static readonly ResPath AdminFaxHubMapPath = new("/Maps/CMU14/Admin/adminfaxhub.yml");
 
         /// <summary>
         /// Loads the AU14 admin fax hub utility map every round, on an automatically
@@ -494,7 +500,11 @@ namespace Content.Server.GameTicking
                 if (_prefsManager.TryGetCachedPreferences(userId, out var preferences))
                     profile = (HumanoidCharacterProfile)preferences.SelectedCharacter;
                 else
-                    profile = HumanoidCharacterProfile.Random();
+                {
+                    var speciesToBlacklist =
+                        new HashSet<string>(_cfg.GetCVar(CCVars.ICNewAccountSpeciesBlacklist).Split(","));
+                    profile = HumanoidCharacterProfile.Random(speciesToBlacklist);
+                }
                 readyPlayerProfiles.Add(userId, profile);
             }
 
@@ -504,7 +514,10 @@ namespace Content.Server.GameTicking
 
             // Just in case it hasn't been loaded previously we'll try loading it.
             _sawmill.Debug("[RoundStart] Loading maps.");
-            LoadMaps();
+            // CMU14 Begin: preserve stage costs when a long lifecycle frame overwrites profiler history.
+            using (_cmuPerformance.MeasureOperation("round-load-maps"))
+                LoadMaps();
+            // CMU14 End
             _sawmill.Debug($"[RoundStart] Map load complete. defaultMap={DefaultMap}");
             // map has been selected so update the lobby info text
             // applies to players who didn't ready up
@@ -527,10 +540,17 @@ namespace Content.Server.GameTicking
 
             // MapInitialize *before* spawning players, our codebase is too shit to do it afterwards...
             _sawmill.Debug($"[RoundStart] Initializing default map {DefaultMap}.");
-            _map.InitializeMap(DefaultMap);
-            _power.RecalculatePower();
+            // CMU14 Begin: separate map initialization and power from player spawning.
+            using (_cmuPerformance.MeasureOperation("round-map-init"))
+                _map.InitializeMap(DefaultMap);
+            using (_cmuPerformance.MeasureOperation("round-power-init"))
+                _power.RecalculatePower();
+            // CMU14 End
             _sawmill.Debug("[RoundStart] Spawning players.");
-            SpawnPlayers(readyPlayers, readyPlayerProfiles, force);
+            // CMU14 Begin
+            using (_cmuPerformance.MeasureOperation("round-player-spawns"))
+                SpawnPlayers(readyPlayers, readyPlayerProfiles, force);
+            // CMU14 End
             _roundStartDateTime = DateTime.UtcNow;
             RunLevel = GameRunLevel.InRound;
             _sawmill.Info(
@@ -581,12 +601,29 @@ namespace Content.Server.GameTicking
             DisallowLateJoin = refresh.DisallowLateJoin;
         }
 
+        private TimeSpan _lastRoundEndHoldNotice; // CMU14
+
         public void EndRound(string text = "")
         {
             if (DummyTicker) return;
             if (RunLevel != GameRunLevel.InRound)
             {
                 _sawmill.Warning($"EndRound has been called while RunLevel is already {RunLevel}, ignoring re-run.");
+                return;
+            }
+
+            // CMU14: admin round-end hold
+            if (_cfg.GetCVar(CCVars.HoldRoundEnd))
+            {
+                if (_gameTiming.CurTime - _lastRoundEndHoldNotice > TimeSpan.FromMinutes(1))
+                {
+                    _lastRoundEndHoldNotice = _gameTiming.CurTime;
+                    _chatManager.SendAdminAnnouncement(
+                        Loc.GetString("cmu-round-end-held-announcement"));
+                }
+
+                _sawmill.Info($"EndRound swallowed by HoldRoundEnd; round continues under admin control. Suppressed end text: {text}");
+
                 return;
             }
 
@@ -690,10 +727,14 @@ namespace Content.Server.GameTicking
                 {
                     // Note that contentPlayerData?.Name sticks around after the player is disconnected.
                     // This is as opposed to ply?.Name which doesn't.
-                    PlayerOOCName = contentPlayerData?.Name ?? "(IMPOSSIBLE: REGISTERED MIND WITH NO OWNER)",
+                    // cmu edit start: players can hide their username from the round-end summary
+                    PlayerOOCName = _cmuRoundEndAnonymity.IsHidden(userId)
+                        ? Loc.GetString("cmu-round-end-hidden-username")
+                        : contentPlayerData?.Name ?? "(IMPOSSIBLE: REGISTERED MIND WITH NO OWNER)",
+                    // cmu edit end
                     // Character name takes precedence over current entity name
                     PlayerICName = playerIcName,
-                    PlayerGuid = userId,
+                    PlayerGuid = _cmuRoundEndAnonymity.IsHidden(userId) ? null : userId, // cmu edit: don't leak the account of a hidden player
                     PlayerNetEntity = GetNetEntity(entity),
                     Role = antag
                         ? roles.First(role => role.Antagonist).Name
@@ -857,7 +898,7 @@ namespace Content.Server.GameTicking
                 : Preset != null
                     ? Loc.GetString(Preset.ModeTitle)
                     : string.Empty;
-            var govfor = _platoonSpawnRuleSystem.SelectedGovforPlatoon?.Name ?? string.Empty;
+            var govfor = _platoonSpawnRuleSystem.SelectedGovforPlatoon is { } govforPlatoon ? Loc.GetString(govforPlatoon.Name) : string.Empty; // CMU14: Hardcode localization
 
             return new RoundStatusWebhookData(
                 RoundId,
@@ -1117,6 +1158,7 @@ namespace Content.Server.GameTicking
             PlayersJoinedRoundNormally = 0;
 
             _cfg.SetCVar(RMCCVars.RMCDelayRoundEnd, false);
+            _cfg.SetCVar(CCVars.HoldRoundEnd, false); // CMU14
             RunLevel = GameRunLevel.PreRoundLobby;
             RandomizeLobbyBackground();
             ResettingCleanup();
@@ -1161,8 +1203,6 @@ namespace Content.Server.GameTicking
             RaiseNetworkEvent(ev);
 
             EntityManager.FlushEntities();
-
-            _mapManager.Restart();
 
             _banManager.Restart();
 

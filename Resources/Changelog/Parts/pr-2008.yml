@@ -1,0 +1,48 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Bush research terminals now display and spend GOVFOR research credits.
+  type: Fix
+- message: AGM airburst grenades now release their damaging payloads.
+  type: Fix
+- message: HJRA kits no longer lose the launcher tube while filling.
+  type: Fix
+- message: Restored loadout selection for service, law enforcement, ethics, mob, prisoner,
+    Working Joe, orbital counsel, and shopkeeper roles.
+  type: Fix
+- message: The orange hazard vest no longer replaces the uniform, and character previews
+    retain their other clothing.
+  type: Fix
+- message: Flamethrower spray stops at closed airlocks, including doors closed while
+    flames are travelling.
+  type: Fix
+- message: Kill-threat objectives now recognize threat members without a generic threat
+    job and retain their assignment after evolution.
+  type: Fix
+- message: Reanimated zombies and summoned EO units no longer count as surviving humans.
+  type: Fix
+- message: US Army tech reinforcements arrive aboard their shuttle even when landing
+    zones are unavailable.
+  type: Fix
+- message: Tail stab accounts for moving targets' positions when the attacker saw
+    them.
+  type: Fix
+- message: Building resin removes grass, trees, chairs, and tables from the chosen
+    tile after successful placement.
+  type: Fix
+- message: Lexington takes projectile damage and applies its acid-spit vulnerability
+    to hull pieces.
+  type: Fix
+- message: Destroying a hive core during the first 15 minutes allows immediate replacement.
+  type: Fix
+- message: Becoming an imaginary friend from mghost preserves the mentor's current
+    body.
+  type: Fix
+- message: Hijacking from another grid clears stranded xenos and limited hive structures
+    across planet levels.
+  type: Fix
+- message: Third-party ships automatically depart after two minutes total, including
+    a 30-second warning.
+  type: Tweak
+time: '2026-09-24T00:17:59.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2008

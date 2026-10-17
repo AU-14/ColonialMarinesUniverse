@@ -22,11 +22,23 @@ if (!parsed.SkipBuild)
 
 if (parsed.Client)
 {
-    await ClientPackaging.PackageClient(parsed.SkipBuild, parsed.NoRestore, parsed.Configuration, logger);
+    await ClientPackaging.PackageClient(
+        parsed.SkipBuild,
+        parsed.NoRestore,
+        parsed.LogBuild,
+        parsed.Configuration,
+        logger);
 }
 else
 {
-    await ServerPackaging.PackageServer(parsed.SkipBuild, parsed.NoRestore, parsed.HybridAcz, logger, parsed.Configuration, parsed.Platforms);
+    await ServerPackaging.PackageServer(
+        parsed.SkipBuild,
+        parsed.NoRestore,
+        parsed.HybridAcz,
+        parsed.LogBuild,
+        logger,
+        parsed.Configuration,
+        parsed.Platforms);
 }
 
 void WipeBin()

@@ -38,7 +38,7 @@ public sealed partial class RMCDiscordManager : IPostInjectInit
             var token = _config.GetCVar(RMCCVars.RMCDiscordToken);
             if (string.IsNullOrWhiteSpace(token))
             {
-                _sawmill.Info($"CVar {RMCCVars.RMCDiscordToken.Name} has no value. Disabling Discord bot.");
+                // _sawmill.Info($"CVar {RMCCVars.RMCDiscordToken.Name} has no value. Disabling Discord bot.");
                 return;
             }
 

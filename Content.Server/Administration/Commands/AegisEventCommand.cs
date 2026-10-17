@@ -6,11 +6,11 @@ using Content.Shared._RMC14.Requisitions;
 
 namespace Content.Server.Administration.Commands;
 
-[AdminCommand(AdminFlags.Moderator)]
+[AdminCommand(AdminFlags.Moderator)] // CMU14 Class
 public sealed class AegisEventCommand : IConsoleCommand
 {
     public string Command => "aegis:normal";
-    public string Description => "Starts an AEGIS event immediately. Sends a fax to CIC and an AEGIS keycard and powerloader pamphlet will arrive through ASRS. You still need to spawn the crate yourself.";
+    public string Description => "Starts an AEGIS event immediately. Announces, sends a fax to CIC, spawns the AEGIS crate and corpse at their spawners, and delivers the tracking equipment crate through ASRS.";
     public string Help => $"Usage: {Command} [optional message]";
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
@@ -19,24 +19,26 @@ public sealed class AegisEventCommand : IConsoleCommand
         var entityManager = IoCManager.Resolve<IEntityManager>();
         var reqSystem = systemManager.GetEntitySystem<SharedRequisitionsSystem>();
         var aegisSystem = systemManager.GetEntitySystem<AegisLobbyEventSystem>();
-        var message = args.Length > 0 ? string.Join(" ", args) : "AEGIS event has been initiated.";
+        var spawnerSystem = systemManager.GetEntitySystem<AegisSpawnerSystem>();
+        var corpseSpawnerSystem = systemManager.GetEntitySystem<AegisCorpseSpawnerSystem>();
+        var message = args.Length > 0 ? string.Join(" ", args) : "AEGIS protocol is now in effect.";
 
         // Announce to both marines and xenos
         AegisSharedAnnouncement.AnnounceToBoth(systemManager, message);
         // Send fax to CIC
-        aegisSystem.SendCICFax(systemManager, entityManager, message, "RMCPaperAegisInfoFax", "UNS Oberon");
+        aegisSystem.SendCommandFax(entityManager, "CMUPaperAegisInfoFax", AegisLobbyEventSystem.AegisFaxGroups, "High Command", message);
 
-        // Spawn and send the Aegis ID card
-        reqSystem.CreateSpecialDelivery("RMCIDCardAegis");
+        spawnerSystem.SetAegisSpawnersForThisRound();
+        corpseSpawnerSystem.SetAegisCorpseSpawnersForThisRound();
 
-        // Spawn and send the Powerloader pamphlet
-        reqSystem.CreateSpecialDelivery("CMPamphletPowerloader");
+        aegisSystem.OpenAegisJobSlot();
+        reqSystem.CreateSpecialDelivery("CMUCrateAegisLobby");
 
         shell.WriteLine("Aegis event announced to marines and xenos, fax sent to CiC, and items sent through ASRS.");
     }
 }
 
-[AdminCommand(AdminFlags.Moderator)]
+[AdminCommand(AdminFlags.Moderator)] // CMU14 Class
 public sealed class AegisSpawnCommand : IConsoleCommand
 {
     public string Command => "aegis:lobby";
@@ -57,7 +59,7 @@ public sealed class AegisSpawnCommand : IConsoleCommand
             return;
         }
 
-        var message = args.Length > 0 ? string.Join(" ", args) : "AEGIS event has been scheduled for this round.";
+        var message = args.Length > 0 ? string.Join(" ", args) : "AEGIS protocol is in effect at this time.";
 
         // Set spawner flags to trigger at round start
         aegisSystem.SetAegisSpawnersForThisRound();
@@ -70,7 +72,7 @@ public sealed class AegisSpawnCommand : IConsoleCommand
     }
 }
 
-[AdminCommand(AdminFlags.Moderator)]
+[AdminCommand(AdminFlags.Moderator)] // CMU14 Class
 public sealed class AegisStatusCommand : IConsoleCommand
 {
     public string Command => "aegis:status";
@@ -97,6 +99,8 @@ public sealed class AegisStatusCommand : IConsoleCommand
         shell.WriteLine($"AEGIS corpse spawners spawned this round: {haveCorpseSpawned}");
         shell.WriteLine($"AEGIS lobby event scheduled: {isLobbyEventScheduled}");
         shell.WriteLine($"AEGIS lobby event executed: {hasLobbyEventExecuted}");
+        var jobSlots = aegisEventSystem.GetAegisJobSlots(); // CMU14
+        shell.WriteLine($"AEGIS researcher slots on ship: {(jobSlots == null ? "no GOVFOR ship station" : jobSlots.ToString())}"); // CMU14: null = station not found, 0 = none or taken
 
         // Count spawners on map
         var entityManager = IoCManager.Resolve<IEntityManager>();
@@ -124,10 +128,15 @@ public sealed class AegisStatusCommand : IConsoleCommand
             if (!entityManager.Deleted(uid))
                 regularCorpseSpawnerCount++;
         }
+
+        // CMU14: the counts above were computed but never shown
+        shell.WriteLine($"AEGIS crate spawners on map: {spawnerCount}");
+        shell.WriteLine($"AEGIS corpse spawners on map: {corpseSpawnerCount}");
+        shell.WriteLine($"Other corpse spawners on map: {regularCorpseSpawnerCount}");
     }
 }
 
-[AdminCommand(AdminFlags.Moderator)]
+[AdminCommand(AdminFlags.Moderator)] // CMU14 Class
 public sealed class AegisResetCommand : IConsoleCommand
 {
     public string Command => "aegis:reset";

@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "CM sprites from https://github.com/realforest2001/forest-cm13/blob/8624d4b3e3e7339c6a9928ad1af33edb830452f8/icons/mob/pathogen/bloodburster.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "dead_bloody"
+    },
+    {
+      "name": "sleeping_bloody"
+    },
+    {
+      "name": "alive_bloody",
+      "directions": 4
+    },    
+    {
+      "name": "running_bloody",
+      "directions": 4
+    },
+    {
+      "name": "crit_bloody"
+    }
+  ]
+}

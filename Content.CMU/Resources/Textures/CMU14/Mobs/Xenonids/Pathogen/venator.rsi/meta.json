@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Sprites from cm13 https://github.com/realforest2001/forest-cm13/blob/8624d4b3e3e7339c6a9928ad1af33edb830452f8/icons/mob/pathogen/venator.dmi",
+  "size": {
+    "x": 48,
+    "y": 48
+  },
+  "states": [
+    {
+      "name": "alive",
+      "directions": 4
+    },
+    {
+      "name": "running",
+      "directions": 4
+    },
+    {
+      "name": "dead"
+    },
+    {
+      "name": "crit"
+	  },
+    {
+      "name": "sleeping"
+    },
+    {
+      "name": "venator_gib",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "venator_dissection"
+    },
+    {
+      "name": "venator_downed_0"
+    },
+    {
+      "name": "venator_downed_1"
+    },
+    {
+      "name": "venator_downed_2"
+    },
+    {
+      "name": "venator_downed_3"
+    },
+    {
+      "name": "venator_walk_0"
+    },
+    {
+      "name": "venator_walk_1"
+    },
+    {
+      "name": "venator_walk_2"
+    },
+    {
+      "name": "venator_walk_3"
+    },
+    {
+      "name": "venator_rest_0"
+    },
+    {
+      "name": "venator_rest_1"
+    },
+    {
+      "name": "venator_rest_2"
+    },
+    {
+      "name": "venator_rest_3"
+    },
+    {
+      "name": "venator_corpse"
+    }
+  ]
+}

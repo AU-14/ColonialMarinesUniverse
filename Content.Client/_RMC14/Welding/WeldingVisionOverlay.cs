@@ -8,11 +8,13 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._RMC14.Welding;
 
-public sealed class WeldingVisionOverlay : Overlay
+public sealed partial class WeldingVisionOverlay : Overlay
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    private static readonly Robust.Shared.Prototypes.ProtoId<ShaderPrototype> WeldingVisionPrototype = "WeldingVision";
+
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     public override bool RequestScreenTexture => true;
@@ -24,7 +26,7 @@ public sealed class WeldingVisionOverlay : Overlay
     public WeldingVisionOverlay()
     {
         IoCManager.InjectDependencies(this);
-        _shader = _prototypeManager.Index<ShaderPrototype>("WeldingVision").InstanceUnique();
+        _shader = _prototypeManager.Index<ShaderPrototype>(WeldingVisionPrototype).InstanceUnique();
         _inventory = _entityManager.System<InventorySystem>();
     }
 

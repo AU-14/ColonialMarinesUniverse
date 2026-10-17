@@ -632,6 +632,28 @@
   suffix: L90A1, Empty
   description: A large, heavy-duty rack designed to store L90A1 rifles - locked, loaded, waiting to be fired at a moment's notice. Officially, RCM legislations advise against this practice, but it doesn't stop many armories from keeping their rifles stowed in such a condition.
   components:
+  - type: ContainerContainer
+    containers:
+      item_1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      item_2: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      item_3: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      item_4: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      item_5: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/GunRacks/l90_rack.rsi
   - type: ItemSlots
@@ -694,6 +716,28 @@
   id: RMCGunRackL90A1Filled
   suffix: L90A1, Filled
   components:
+  - type: ContainerContainer
+    containers:
+      item_1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      item_2: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      item_3: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      item_4: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      item_5: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: ContainerFill
     containers:
       item_1:
@@ -716,6 +760,28 @@
   suffix: L90A2, Empty
   description:  A large, heavy-duty rack designed to store L90A2 rifles - locked, loaded, waiting to be fired at a moment's notice. Officially, RCM legislations advise against this practice, but it doesn't stop many armories from keeping their rifles stowed in such a condition.
   components:
+  - type: ContainerContainer
+    containers:
+      item_1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      item_2: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      item_3: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      item_4: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      item_5: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/GunRacks/l90_rack.rsi
   - type: ItemSlots
@@ -778,6 +844,28 @@
   id: RMCGunRackL90A2Filled
   suffix: L90A2, Filled
   components:
+  - type: ContainerContainer
+    containers:
+      item_1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      item_2: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      item_3: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      item_4: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      item_5: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: ContainerFill
     containers:
       item_1:

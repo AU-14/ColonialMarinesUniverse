@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Chemistry;
@@ -7,12 +8,12 @@ using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.OnCollide;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Plasma;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Actions;
-using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -24,6 +25,8 @@ namespace Content.Shared._RMC14.Xenonids.Spray;
 
 public sealed partial class XenoSprayAcidSystem : EntitySystem
 {
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private VehicleWheelSystem _vehicleWheels = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -34,7 +37,6 @@ public sealed partial class XenoSprayAcidSystem : EntitySystem
     [Dependency] private SharedOnCollideSystem _onCollide = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
-    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -137,15 +139,8 @@ public sealed partial class XenoSprayAcidSystem : EntitySystem
     private void OnSprayAcidedVaporHit(Entity<SprayAcidedComponent> ent, ref VaporHitEvent args)
     {
         // this would use tile reactions if those had any way of telling what caused a reaction, imagine that
-        var solEnt = args.Solution;
-        foreach (var (_, solution) in _solutionContainer.EnumerateSolutions((solEnt, solEnt)))
-        {
-            if (!solution.Comp.Solution.ContainsReagent(AcidRemovedBy, null))
-                continue;
-
+        if (args.Solution.Comp.Solution.ContainsReagent(AcidRemovedBy, null))
             RemCompDeferred<SprayAcidedComponent>(ent);
-            break;
-        }
     }
 
     private void OnAcidSplatterExtinguishFireAttempt(Entity<XenoAcidSplatterComponent> ent, ref ExtinguishFireAttemptEvent args)
@@ -172,6 +167,25 @@ public sealed partial class XenoSprayAcidSystem : EntitySystem
         comp.Damage = acid.Comp.BarricadeDamage;
         comp.ExpireAt = time + acid.Comp.BarricadeDuration;
         Dirty(target, comp);
+    }
+
+    private void TryAcidVehicleWheels(EntityUid splatter)
+    {
+        if (!TryComp(splatter, out DamageOnCollideComponent? onCollide))
+            return;
+
+        var damage = _onCollide.GetCollideDamage((splatter, onCollide)).GetTotal().Float();
+        if (damage <= 0f)
+            return;
+
+        var splatterMap = _transform.GetMapId(splatter);
+        var splatterAabb = _lookup.GetWorldAABB(splatter);
+        var vehicles = new HashSet<Entity<VehicleWheelSlotsComponent>>();
+        _lookup.GetEntitiesIntersecting(splatterMap, splatterAabb, vehicles);
+        foreach (var vehicle in vehicles)
+        {
+            _vehicleWheels.DamageWheels(vehicle, damage);
+        }
     }
 
     public void CreateLine(EntityUid user, EntityCoordinates start, EntityCoordinates end, TimeSpan delay, float range, EntProtoId acid, bool ignoreBlocker = true)
@@ -214,6 +228,8 @@ public sealed partial class XenoSprayAcidSystem : EntitySystem
                 _hive.SetSameHive(uid, spawned);
                 splatter.Xeno = uid;
                 Dirty(spawned, splatter);
+
+                TryAcidVehicleWheels(spawned);
 
                 if (_xenoSprayAcidQuery.TryComp(uid, out var xenoSprayAcid))
                 {

@@ -1,0 +1,14 @@
+- type: survivorSupplement
+  id: CMUSurvivorSupplementDefault
+  whitelistedGamemodes:
+  - DistressSignal
+  entries:
+  - items:
+    - CMUMaskGas # CMUMaskPrescriptionGas
+    - CMUGasMaskFilter
+  - skill: RMCSkillConstruction
+    level: 2
+    items:
+    - CMSheetMetal50
+    - CMSheetMetal50
+    - CMSheetPlasteel50

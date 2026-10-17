@@ -59,7 +59,7 @@
 - type: entity
   parent: RMCPinpointerBase
   id: RMCPinpointerAegisID
-  suffix: AEGIS
+  suffix: RMC, AEGIS
   components:
   - type: Pinpointer
     component: AegisTrackable

@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Body;
 using Content.Shared._RMC14.Stun;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Drunk;
 using Content.Shared.EntityEffects;
@@ -25,45 +26,41 @@ public sealed partial class Ketogenic : RMCChemicalEffect
                $"Critical overdoses will knock you unconscious for [color=red]10[/color] seconds";
     }
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        var entityManager = args.EntityManager;
         var target = args.TargetEntity;
-        var hungerSystem = entityManager.System<HungerSystem>();
-
-        hungerSystem.ModifyHunger(target, PotencyPerSecond * -5);
+        if (system.TryGetSatiation(target, out var satiation))
+            system.Satiation.ModifyValue((target, satiation), SatiationSystem.Hunger, args.PotencyPerSecond * -5);
         // TODO RMC14 M.overeatduration = 0
 
-        var bloodstream = args.EntityManager.System<SharedRMCBloodstreamSystem>();
+        var bloodstream = system.RMCBloodstream;
         var alcoholRemoved = bloodstream.RemoveBloodstreamAlcohols(args.TargetEntity, potency);
 
         if (!alcoholRemoved)
             return;
-        var drunkSystem = args.EntityManager.System<SharedDrunkSystem>();
-        drunkSystem.TryApplyDrunkenness(args.TargetEntity, PotencyPerSecond * 5);
+        var drunkSystem = system.Drunk;
+        drunkSystem.TryApplyDrunkenness(args.TargetEntity, TimeSpan.FromSeconds(args.PotencyPerSecond * 5));
     }
 
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        var entityManager = args.EntityManager;
         var target = args.TargetEntity;
-        var hungerSystem = entityManager.System<HungerSystem>();
-        hungerSystem.ModifyHunger(target, PotencyPerSecond * -5);
+        if (system.TryGetSatiation(target, out var satiation))
+            system.Satiation.ModifyValue((target, satiation), SatiationSystem.Hunger, args.PotencyPerSecond * -5);
 
         var damage = new DamageSpecifier();
         damage.DamageDict[PoisonType] = potency;
         damageable.TryChangeDamage(target, damage, true, interruptsDoAfters: false);
 
-        var random = IoCManager.Resolve<IRobustRandom>();
-        if (!random.Prob(0.025f * ActualPotency))
+        var random = system.Random;
+        if (!random.Prob(0.025f * args.ActualPotency))
             return;
-        var vomitEvent = new RMCVomitEvent(target);
-        entityManager.EventBus.RaiseEvent(EventSource.Local, ref vomitEvent);
+        system.RaiseVomit(target);
     }
 
-    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickCriticalOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        var status = args.EntityManager.System<StatusEffectQuerySystem>();
+        var status = system.StatusEffectQuery;
         status.TryAddStatusEffect<RMCUnconsciousComponent>(
             args.TargetEntity,
             Unconscious,

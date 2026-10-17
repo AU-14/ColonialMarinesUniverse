@@ -9,6 +9,8 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Input;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Network;
+using Robust.Shared.Physics;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -22,6 +24,8 @@ namespace Content.Shared.Movement.Systems
     /// </summary>
     public abstract partial class SharedMoverController
     {
+        [Dependency] private INetManager _net = default!;
+
         public bool CameraRotationLocked { get; set; }
 
         public static ProtoId<AlertPrototype> WalkingAlert = "Walking";
@@ -57,8 +61,10 @@ namespace Content.Shared.Movement.Systems
             SubscribeLocalEvent<InputMoverComponent, ComponentGetState>(OnMoverGetState);
             SubscribeLocalEvent<InputMoverComponent, ComponentHandleState>(OnMoverHandleState);
             SubscribeLocalEvent<InputMoverComponent, EntParentChangedMessage>(OnInputParentChange);
+            SubscribeLocalEvent<InputMoverComponent, AnchorStateChangedEvent>(OnAnchorState);
 
             SubscribeLocalEvent<FollowedComponent, EntParentChangedMessage>(OnFollowedParentChange);
+            SubscribeAllEvent<CameraMouseRotationEvent>(OnCameraMouseRotation);
 
             Subs.CVar(_configManager, CCVars.CameraRotationLocked, obj => CameraRotationLocked = obj, true);
             Subs.CVar(_configManager, CCVars.GameDiagonalMovement, value => DiagonalMovementEnabled = value, true);
@@ -157,7 +163,38 @@ namespace Content.Shared.Movement.Systems
                 return;
 
             mover.TargetRelativeRotation += angle;
+            UpdateMoverStatus((uid, mover, null));
             Dirty(uid, mover);
+        }
+
+        public bool SetCameraRotation(EntityUid uid, Angle angle, bool immediate = false)
+        {
+            if (CameraRotationLocked || !MoverQuery.TryGetComponent(uid, out var mover))
+                return false;
+
+            angle = angle.Reduced();
+            mover.TargetRelativeRotation = angle;
+            if (immediate)
+            {
+                mover.RelativeRotation = angle;
+                mover.LerpTarget = TimeSpan.Zero;
+            }
+            else
+            {
+                UpdateMoverStatus((uid, mover, null));
+            }
+
+            Dirty(uid, mover);
+            return true;
+        }
+
+        private void OnCameraMouseRotation(CameraMouseRotationEvent ev, EntitySessionEventArgs args)
+        {
+            if (args.SenderSession.AttachedEntity is not { } uid || !double.IsFinite(ev.Radians))
+                return;
+
+            if (SetCameraRotation(uid, new Angle(ev.Radians), immediate: true) && _net.IsServer)
+                RaiseNetworkEvent(new CameraMouseRotationAckEvent(ev.Radians), args.SenderSession);
         }
 
         public void ResetCamera(EntityUid uid)
@@ -174,6 +211,7 @@ namespace Content.Shared.Movement.Systems
 
             mover.LerpTarget = TimeSpan.Zero;
             mover.TargetRelativeRotation = Angle.Zero;
+            UpdateMoverStatus((uid, mover, null));
             Dirty(uid, mover);
         }
 
@@ -296,15 +334,21 @@ namespace Content.Shared.Movement.Systems
             Dirty(entity.Owner, entity.Comp);
         }
 
+        private void OnAnchorState(Entity<InputMoverComponent> entity, ref AnchorStateChangedEvent args)
+        {
+            if (!args.Anchored)
+                PhysicsSystem.SetBodyType(entity, BodyType.KinematicController);
+        }
+
         private void HandleDirChange(Entity<InputMoverComponent?> entity, Direction dir, ushort subTick, bool state)
         {
-            var hasMover = MoverQuery.Resolve(entity.Owner, ref entity.Comp, false);
-
             // Relayed movement just uses the same keybinds given we're moving the relayed entity
             // the same as us.
+            if (!MoverQuery.Resolve(entity.Owner, ref entity.Comp, false))
+                return;
 
             // TODO: Should move this into HandleMobMovement itself.
-            if (hasMover && entity.Comp != null && entity.Comp.CanMove && RelayQuery.TryComp(entity, out var relayMover))
+            if (entity.Comp.CanMove && RelayQuery.TryComp(entity, out var relayMover))
             {
                 DebugTools.Assert(relayMover.RelayEntity != entity.Owner);
                 DebugTools.AssertNotNull(relayMover.RelayEntity);
@@ -312,7 +356,9 @@ namespace Content.Shared.Movement.Systems
                 if (MoverQuery.TryGetComponent(entity, out var mover))
                     SetMoveInput((entity.Owner, mover), MoveButtons.None);
 
-                HandleDirChange(relayMover.RelayEntity, dir, subTick, state);
+                if (!_mobState.IsIncapacitated(entity))
+                    HandleDirChange(relayMover.RelayEntity, dir, subTick, state);
+
                 return;
             }
 
@@ -327,10 +373,7 @@ namespace Content.Shared.Movement.Systems
                 RaiseLocalEvent(xform.ParentUid, ref relayMoveEvent);
             }
 
-            if (!hasMover || entity.Comp == null)
-                return;
-
-            SetVelocityDirection(new Entity<InputMoverComponent>(entity.Owner, entity.Comp), dir, subTick, state);
+            SetVelocityDirection((entity, entity.Comp), dir, subTick, state);
         }
 
         private void OnInputInit(Entity<InputMoverComponent> entity, ref ComponentInit args)

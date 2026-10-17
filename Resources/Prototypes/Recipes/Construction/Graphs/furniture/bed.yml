@@ -10,7 +10,7 @@
           completed:
             - !type:SnapToGrid { }
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 2
               doAfter: 1
             - material: Cloth
@@ -27,7 +27,7 @@
           completed:
             - !type:SnapToGrid { }
           steps:
-            - material: Plasteel
+            - material: CMPlasteel # CMU14: fork plasteel (CMSheetPlasteel), not upstream Plasteel
               amount: 2
               doAfter: 1
             - material: Durathread
@@ -39,7 +39,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 2
             - !type:SpawnPrototype
               prototype: MaterialCloth1
@@ -64,7 +64,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetPlasteel1
+              prototype: CMSheetPlasteel1 # CMU14: refund fork plasteel
               amount: 2
             - !type:SpawnPrototype
               prototype: MaterialDurathread1

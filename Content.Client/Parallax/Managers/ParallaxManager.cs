@@ -68,6 +68,9 @@ public sealed partial class ParallaxManager : IParallaxManager
     {
         _sawmill.Level = LogLevel.Info;
         await LoadParallaxByName("Default");
+        // cmu edit start: also load the CM13 starfield used as the fallback for maps without a parallax
+        await LoadParallaxByName("CMUParallaxSpace");
+        // cmu edit end
     }
 
     public async Task LoadParallaxByName(string name)
@@ -98,10 +101,13 @@ public sealed partial class ParallaxManager : IParallaxManager
             }
             else
             {
-                var layerTasks = new Task<ParallaxLayerPrepared[]>[2];
-                layerTasks[0] = LoadParallaxLayers(parallaxPrototype.Layers, loadedLayers, cancel);
-                layerTasks[1] = LoadParallaxLayers(parallaxPrototype.LayersLQ, loadedLayers, cancel);
-                layers = await Task.WhenAll(layerTasks);
+                // Explicitly allocate params array to avoid sandbox violation since C# 14.
+                var tasks = new[]
+                {
+                    LoadParallaxLayers(parallaxPrototype.Layers, loadedLayers, cancel),
+                    LoadParallaxLayers(parallaxPrototype.LayersLQ, loadedLayers, cancel),
+                };
+                layers = await Task.WhenAll(tasks);
             }
 
             cancel.ThrowIfCancellationRequested();

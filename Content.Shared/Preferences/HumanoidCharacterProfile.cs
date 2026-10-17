@@ -1,18 +1,24 @@
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.NamedItems;
 using Content.Shared._RMC14.Xenonids.Name;
-using Content.Shared.AU14.Allegiance;
-using Content.Shared.AU14.Origin;
-using Content.Shared._CMU14.Threats;
+using Content.Shared.CMU14.Medical.Blood; // CMU14
+using Content.Shared.CMU14.Allegiance;
+using Content.Shared.CMU14.Origin;
+using Content.Shared.CMU14.Threats;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
+using Content.Shared.Chat.Prototypes;
+using Content.Shared.EntityEffects.Effects;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
+using Content.Shared.Speech.Components;
 using Content.Shared.Traits;
 using Robust.Shared.Collections;
 using Robust.Shared.Configuration;
@@ -20,9 +26,13 @@ using Robust.Shared.Enums;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Serialization.Manager;
+using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14.util;
+using Robust.Shared;
+using YamlDotNet.RepresentationModel;
 
 namespace Content.Shared.Preferences
 {
@@ -31,8 +41,10 @@ namespace Content.Shared.Preferences
     /// </summary>
     [DataDefinition]
     [Serializable, NetSerializable]
-    public sealed partial class HumanoidCharacterProfile : ICharacterProfile
+    public sealed partial class HumanoidCharacterProfile
     {
+        public static readonly ProtoId<SpeciesPrototype> DefaultSpecies = "Human";
+        public static readonly ProtoId<EmoteSoundsPrototype> DefaultVoice = "MaleHuman";
         private static readonly Regex RestrictedNameRegex = new(@"[^A-Za-z0-9 '\-\.]", RegexOptions.Compiled);
         private static readonly Regex ICNameCaseRegex = new(@"^(?<word>\w)|\b(?<word>\w)(?=\w*$)", RegexOptions.Compiled);
 
@@ -112,7 +124,7 @@ namespace Content.Shared.Preferences
         /// Associated <see cref="SpeciesPrototype"/> for this profile.
         /// </summary>
         [DataField]
-        public ProtoId<SpeciesPrototype> Species { get; set; } = SharedHumanoidAppearanceSystem.DefaultSpecies;
+        public ProtoId<SpeciesPrototype> Species { get; set; } = DefaultSpecies;
 
         [DataField]
         public int Age { get; set; } = 18;
@@ -121,12 +133,10 @@ namespace Content.Shared.Preferences
         public Sex Sex { get; private set; } = Sex.Male;
 
         [DataField]
-        public Gender Gender { get; private set; } = Gender.Male;
+        public ProtoId<EmoteSoundsPrototype> Voice { get; set; } = DefaultVoice;
 
-        /// <summary>
-        /// <see cref="Appearance"/>
-        /// </summary>
-        public ICharacterAppearance CharacterAppearance => Appearance;
+        [DataField]
+        public Gender Gender { get; private set; } = Gender.Male;
 
         /// <summary>
         /// Stores markings, eye colors, etc for the profile.
@@ -192,7 +202,7 @@ namespace Content.Shared.Preferences
         /// </summary>
         [DataField]
         public PreferenceUnavailableMode PreferenceUnavailable { get; private set; } =
-            PreferenceUnavailableMode.SpawnAsOverflow;
+            PreferenceUnavailableMode.StayInLobby;
 
         [DataField]
         public SharedRMCNamedItems NamedItems { get; private set; } = new();
@@ -224,6 +234,8 @@ namespace Content.Shared.Preferences
         [DataField]
         public ProtoId<PlatoonPrototype>? Platoon { get; private set; } = null;
 
+        [DataField]
+        public YautjaCharacterProfile YautjaProfile { get; private set; } = YautjaCharacterProfile.Default;
         /// <summary>
         /// Whether this character is a synthetic. Requires the synthetic job whitelist to
         /// set to true; if true, the character will only be resolved into synthetic jobs.
@@ -239,6 +251,9 @@ namespace Content.Shared.Preferences
 
         [DataField]
         public string MedicalRecord { get; private set; } = string.Empty;
+
+        [DataField]
+        public Dictionary<string, Dictionary<string, string?>> RankPreferences { get; private set; } = new();
 
         [DataField]
         public string CriminalRecord { get; private set; } = string.Empty;
@@ -264,6 +279,7 @@ namespace Content.Shared.Preferences
             string species,
             int age,
             Sex sex,
+            ProtoId<EmoteSoundsPrototype> voice,
             Gender gender,
             HumanoidCharacterAppearance appearance,
             SpawnPriorityPreference spawnPriority,
@@ -289,18 +305,21 @@ namespace Content.Shared.Preferences
             string shortExamine = "",
             string fullDescription = "",
             string medicalRecord = "",
+            Dictionary<string, Dictionary<string, string?>>? rankPreferences = null,
             string criminalRecord = "",
             string generalRecord = "",
             string height = "",
             int weight = 160,
             BuildType build = BuildType.Average,
-            bool hideMetaInformation = false)
+            bool hideMetaInformation = false,
+            YautjaCharacterProfile? yautjaProfile = null)
         {
             Name = name;
             FlavorText = flavortext;
             Species = species;
             Age = age;
             Sex = sex;
+            Voice = voice;
             Gender = gender;
             Appearance = appearance;
             SpawnPriority = spawnPriority;
@@ -324,9 +343,11 @@ namespace Content.Shared.Preferences
             _gamemodeJobPriorities = NormalizeGamemodeJobPriorities(gamemodeJobPriorities);
             _gamemodeAntagPreferences = NormalizeGamemodeSetPreferences(gamemodeAntagPreferences);
             _gamemodeThreatPreferences = NormalizeGamemodeSetPreferences(gamemodeThreatPreferences);
+            YautjaProfile = yautjaProfile?.Clone() ?? YautjaCharacterProfile.Default;
             ShortExamine = shortExamine;
             FullDescription = fullDescription;
             MedicalRecord = medicalRecord;
+            RankPreferences = rankPreferences ?? new Dictionary<string, Dictionary<string, string?>>();
             CriminalRecord = criminalRecord;
             GeneralRecord = generalRecord;
             Height = height;
@@ -335,7 +356,7 @@ namespace Content.Shared.Preferences
             HideMetaInformation = hideMetaInformation;
         }
 
-        private static string NormalizePreferenceGamemode(string? gamemode)
+        private static string NormalizePreferenceGamemode(string? gamemode) // CMU14 Method
         {
             if (string.IsNullOrWhiteSpace(gamemode))
                 return string.Empty;
@@ -345,6 +366,8 @@ namespace Content.Shared.Preferences
                 "insurgency" => "Insurgency",
                 "colonyfall" => "ColonyFall",
                 "distresssignal" => "DistressSignal",
+                // CMU14: Force on Force roles, hijacking, announcements and identification.
+                "forceonforce" => "ForceOnForce",
                 _ => gamemode.Trim()
             };
         }
@@ -432,6 +455,7 @@ namespace Content.Shared.Preferences
                 other.Species,
                 other.Age,
                 other.Sex,
+                other.Voice,
                 other.Gender,
                 other.Appearance.Clone(),
                 other.SpawnPriority,
@@ -463,18 +487,32 @@ namespace Content.Shared.Preferences
                 other.ShortExamine,
                 other.FullDescription,
                 other.MedicalRecord,
+                other.RankPreferences.ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => new Dictionary<string, string?>(kvp.Value)),
                 other.CriminalRecord,
                 other.GeneralRecord,
                 other.Height,
                 other.Weight,
                 other.Build,
-                other.HideMetaInformation)
+                other.HideMetaInformation,
+                other.YautjaProfile)
         {
+            // CMU14: Force on Force roles, hijacking, announcements and identification.
+            FoFSide = other.FoFSide;
+            FoFFallback = other.FoFFallback;
+            BloodType = other.BloodType; // CMU14
+            // cmu edit start
+            FoxtrotSquadOptIn = other.FoxtrotSquadOptIn;
+            Religion = other.Religion;
+            ArmorFlavorText = other.ArmorFlavorText;
+            HelmetFlavorText = other.HelmetFlavorText;
+            // cmu edit end
         }
 
         /// <summary>
         ///     Get the default humanoid character profile, using internal constant values.
-        ///     Defaults to <see cref="SharedHumanoidAppearanceSystem.DefaultSpecies"/> for the species.
+        ///     Defaults to <see cref="DefaultSpecies"/> for the species.
         /// </summary>
         /// <returns></returns>
         public HumanoidCharacterProfile()
@@ -484,48 +522,106 @@ namespace Content.Shared.Preferences
         /// <summary>
         ///     Return a default character profile, based on species.
         /// </summary>
-        /// <param name="species">The species to use in this default profile. The default species is <see cref="SharedHumanoidAppearanceSystem.DefaultSpecies"/>.</param>
+        /// <param name="species">The species to use in this default profile. The default species is <see cref="DefaultSpecies"/>.</param>
+        /// <param name="sex">Self explanatory.</param>
         /// <returns>Humanoid character profile with default settings.</returns>
-        public static HumanoidCharacterProfile DefaultWithSpecies(string? species = null)
+        public static HumanoidCharacterProfile DefaultWithSpecies(ProtoId<SpeciesPrototype>? species = null, Sex? sex = null)
         {
-            species ??= SharedHumanoidAppearanceSystem.DefaultSpecies;
+            species ??= HumanoidCharacterProfile.DefaultSpecies;
+            sex ??= Sex.Male;
 
             return new()
             {
-                Species = species,
+                Species = species.Value,
+                Sex = sex.Value,
+                Appearance = HumanoidCharacterAppearance.DefaultWithSpecies(species.Value, sex.Value),
             };
         }
 
-        // TODO: This should eventually not be a visual change only.
-        public static HumanoidCharacterProfile Random(HashSet<string>? ignoredSpecies = null)
+        /// <summary>
+        /// An enum defining randomizable values in character editor.
+        /// </summary>
+        [Flags]
+        public enum RandomizeCfg
         {
-            var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
-            var random = IoCManager.Resolve<IRobustRandom>();
-
-            var species = random.Pick(prototypeManager
-                .EnumeratePrototypes<SpeciesPrototype>()
-                .Where(x => ignoredSpecies == null ? x.RoundStart : x.RoundStart && !ignoredSpecies.Contains(x.ID))
-                .ToArray()
-            ).ID;
-
-            return RandomWithSpecies(species);
+            // profile
+            None = 0,
+            Name = 1 << 0,
+            Species = 1 << 1,
+            Age = 1 << 2,
+            Sex = 1 << 3,
+            Gender = 1 << 4,
+            // appearance
+            Eyes = 1 << 5,
+            Skin = 1 << 6,
+            Markings = 1 << 7,
         }
 
-        public static HumanoidCharacterProfile RandomWithSpecies(string? species = null)
-        {
-            species ??= SharedHumanoidAppearanceSystem.DefaultSpecies;
+        /// <summary>
+        /// A randomize config that covers all possible values (including appearance).
+        /// </summary>
+        public const RandomizeCfg RandomizeConfigAll =
+            RandomizeCfg.Name
+            | RandomizeCfg.Species
+            | RandomizeCfg.Age
+            | RandomizeCfg.Sex
+            | RandomizeCfg.Gender
+            | RandomizeCfg.Eyes
+            | RandomizeCfg.Skin
+            | RandomizeCfg.Markings;
 
+        /// <summary>
+        /// Picks a random species from roundstart species.
+        /// <param name="ignoredSpecies">Species to exclude from randomizer.</param>
+        /// </summary>
+        public static SpeciesPrototype RandomSpecies(HashSet<string>? ignoredSpecies = null)
+        {
             var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
             var random = IoCManager.Resolve<IRobustRandom>();
 
-            var sex = Sex.Unsexed;
-            var age = 18;
-            if (prototypeManager.TryIndex<SpeciesPrototype>(species, out var speciesPrototype))
-            {
-                sex = random.Pick(speciesPrototype.Sexes);
-                age = random.Next(speciesPrototype.MinAge, speciesPrototype.OldAge); // people don't look and keep making 119 year old characters with zero rp, cap it at middle aged
-            }
+            var pool = prototypeManager.EnumeratePrototypes<SpeciesPrototype>()
+                .Where(x => ignoredSpecies == null ? x.RoundStart : x.RoundStart && !ignoredSpecies.Contains(x.ID))
+                .ToArray();
+            var species = random.Pick(pool);
+            return species;
+        }
 
+        /// <summary>
+        /// Picks a random name using species and gender.
+        /// </summary>
+        public static string RandomName(SpeciesPrototype species, Gender gender)
+        {
+            var name = GetName(species.ID, gender);
+            return name;
+        }
+
+        /// <summary>
+        /// Picks a random age using species.
+        /// </summary>
+        public static int RandomAge(SpeciesPrototype species)
+        {
+            var random = IoCManager.Resolve<IRobustRandom>();
+
+            var age = random.Next(species.MinAge, species.OldAge);
+            return age;
+        }
+
+        /// <summary>
+        /// Picks a random sex using species.
+        /// </summary>
+        public static Sex RandomSex(SpeciesPrototype species)
+        {
+            var random = IoCManager.Resolve<IRobustRandom>();
+
+            var sex = random.Pick(species.Sexes);
+            return sex;
+        }
+
+        /// <summary>
+        /// Picks a random gender using species sex;
+        /// </summary>
+        public static Gender RandomGender(Sex sex)
+        {
             var gender = Gender.Epicene;
 
             switch (sex)
@@ -537,23 +633,86 @@ namespace Content.Shared.Preferences
                     gender = Gender.Female;
                     break;
             }
+            return gender;
+        }
 
-            var name = GetName(species, gender);
+        /// <summary>
+        /// Generates a randomized character profile.
+        /// </summary>
+        /// <returns>A new character profile with values randomized</returns>
+        public static HumanoidCharacterProfile Random(HashSet<string>? ignoredSpecies = null)
+        {
+            var config = RandomizeConfigAll;
+            var baseProfile = new HumanoidCharacterProfile();
+            if (ignoredSpecies != null)
+            {
+                baseProfile.Species = RandomSpecies(ignoredSpecies);
+            }
+            var profile = Random(config, baseProfile);
+            RandomizePhysicalDescription(profile);
+            return profile;
+        }
+
+        /// <summary>
+        /// Generates a randomized character profile with selective randomizing.
+        /// </summary>
+        /// <param name="randomizeCfg">Which values to randomize.</param>
+        /// <param name="baseProfile">Profile to base the new profile on. Values that are not randomized will be taken from this profile.</param>
+        /// <returns>A new character profile with selected values randomized</returns>
+        public static HumanoidCharacterProfile Random(RandomizeCfg randomizeCfg, HumanoidCharacterProfile baseProfile)
+        {
+            var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
+
+            var profile = new HumanoidCharacterProfile();
+            if ((randomizeCfg & RandomizeCfg.Species) != 0)
+            {
+                profile.Species = RandomSpecies();
+            }
+            else
+            {
+                profile.Species = DefaultSpecies;
+                if (prototypeManager.HasIndex(baseProfile.Species))
+                {
+                    profile.Species = baseProfile.Species;
+                }
+            }
+            var speciesProto = prototypeManager.Index(profile.Species);
+
+            profile.Sex = (randomizeCfg & RandomizeCfg.Sex) != 0 ? RandomSex(speciesProto) : baseProfile.Sex;
+            profile.Voice = speciesProto.DefaultSoundsBySex[(int)profile.Sex];
+            profile.Gender = (randomizeCfg & RandomizeCfg.Gender) != 0 ? RandomGender(profile.Sex) : baseProfile.Gender;
+            profile.Name = (randomizeCfg & RandomizeCfg.Name) != 0 ? RandomName(speciesProto, profile.Gender) : baseProfile.Name;
+            profile.Age = (randomizeCfg & RandomizeCfg.Age) != 0 ? RandomAge(speciesProto) : baseProfile.Age;
+
+            profile.Appearance = HumanoidCharacterAppearance.Random(speciesProto, profile.Sex, randomizeCfg, baseProfile.Appearance);
+
+            return profile;
+        }
+
+        /// <summary>
+        /// Generates a randomized character profile.
+        /// </summary>
+        /// <param name="species">Species to constrain randomizer to.</param>
+        /// <returns>A new character profile</returns>
+        public static HumanoidCharacterProfile RandomWithSpecies(string? species = null)
+        {
+            species ??= DefaultSpecies;
+
+            var profile = Random(
+                RandomizeConfigAll ^ RandomizeCfg.Species,
+                new HumanoidCharacterProfile().WithSpecies(species)
+            );
+            RandomizePhysicalDescription(profile);
+            return profile;
+        }
+
+        private static void RandomizePhysicalDescription(HumanoidCharacterProfile profile)
+        {
+            var random = IoCManager.Resolve<IRobustRandom>();
             var heightFeet = random.Next(4, 7);
             var heightInches = random.Next(0, 12);
-            var weight = random.Next(MinWeight, MaxWeight + 1);
-
-            return new HumanoidCharacterProfile()
-            {
-                Name = name,
-                Sex = sex,
-                Age = age,
-                Gender = gender,
-                Species = species,
-                Appearance = HumanoidCharacterAppearance.Random(species, sex),
-                Height = $"{heightFeet}'{heightInches}",
-                Weight = weight,
-            };
+            profile.Height = $"{heightFeet}'{heightInches}";
+            profile.Weight = random.Next(MinWeight, MaxWeight + 1);
         }
 
         public HumanoidCharacterProfile WithName(string name)
@@ -574,6 +733,11 @@ namespace Content.Shared.Preferences
         public HumanoidCharacterProfile WithSex(Sex sex)
         {
             return new(this) { Sex = sex };
+        }
+
+        public HumanoidCharacterProfile WithVoice(ProtoId<EmoteSoundsPrototype> voice)
+        {
+            return new(this) { Voice = voice };
         }
 
         public HumanoidCharacterProfile WithGender(Gender gender)
@@ -607,6 +771,51 @@ namespace Content.Shared.Preferences
             return new(this) { SquadPreference = squadPreference };
         }
 
+        public HumanoidCharacterProfile WithRankPreferences(Dictionary<string, Dictionary<string, string?>> rankPreferences)
+        {
+            return new(this)
+            {
+                RankPreferences = rankPreferences.ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => new Dictionary<string, string?>(kvp.Value))
+            };
+        }
+
+        public HumanoidCharacterProfile WithRankPreference(string jobId, string platoonId, string? rankId)
+        {
+            var dict = RankPreferences.ToDictionary(
+                kvp => kvp.Key,
+                kvp => new Dictionary<string, string?>(kvp.Value));
+
+            if (!dict.TryGetValue(jobId, out var platoonRanks))
+            {
+                platoonRanks = new Dictionary<string, string?>();
+                dict[jobId] = platoonRanks;
+            }
+
+            if (rankId == null)
+                platoonRanks.Remove(platoonId);
+            else
+                platoonRanks[platoonId] = rankId;
+
+            if (platoonRanks.Count == 0)
+                dict.Remove(jobId);
+
+            return new(this) { RankPreferences = dict };
+        }
+
+        /// <summary>
+        /// Convenience lookup for spawn-time resolution: what rank did the player pick
+        /// for this job, given they land in this specific platoon.
+        /// </summary>
+        public string? GetRankPreference(string jobId, string platoonId)
+        {
+            return RankPreferences.TryGetValue(jobId, out var platoonRanks) &&
+                platoonRanks.TryGetValue(platoonId, out var rankId)
+                ? rankId
+                : null;
+        }
+
         public HumanoidCharacterProfile WithPlaytimePerks(bool playtimePerks)
         {
             return new(this) { PlaytimePerks = playtimePerks };
@@ -638,6 +847,11 @@ namespace Content.Shared.Preferences
             {
                 Platoon = platoon
             };
+        }
+
+        public HumanoidCharacterProfile WithYautjaProfile(YautjaCharacterProfile profile)
+        {
+            return new(this) { YautjaProfile = profile.Clone() };
         }
 
         public HumanoidCharacterProfile WithSynthetic(bool synthetic)
@@ -716,6 +930,31 @@ namespace Content.Shared.Preferences
             return new(this)
             {
                 _jobPriorities = NormalizeJobPriorities(jobPriorities)
+            };
+        }
+
+        /// <summary>
+        /// Return a HumanoidCharacterProfile with only the job priorities listed in the NewCharacterJobs cvar
+        /// </summary>
+        public HumanoidCharacterProfile WithJobFromCvar(IConfigurationManager cfg)
+        {
+            // This path should run only rarely, so the cvar does not need to be locally stored
+            var jobs = new HashSet<string>(cfg.GetCVar(CCVars.NewCharacterJobs).Split(","));
+            var priority = JobPriority.High;
+            Dictionary<ProtoId<JobPrototype>, JobPriority> priorities = new();
+
+            foreach (var job in jobs)
+            {
+                // Remove whitespaces in case the input contained any
+                priorities.Add(job.Trim(), priority);
+
+                // There can be only one High priority
+                priority = JobPriority.Medium;
+            }
+
+            return new(this)
+            {
+                _jobPriorities = priorities,
             };
         }
 
@@ -922,10 +1161,16 @@ namespace Content.Shared.Preferences
             // Category not found so dump it.
             TraitCategoryPrototype? traitCategory = null;
 
-            if (category != null && !protoManager.TryIndex(category, out traitCategory))
+            if (category != null && !protoManager.Resolve(category, out traitCategory))
                 return new(this);
 
             var list = new HashSet<ProtoId<TraitPrototype>>(_traitPreferences) { traitId };
+
+            // cmu edit start: picking a trait drops any trait it cannot be taken with
+            list.RemoveWhere(other => other != traitId &&
+                                      protoManager.TryIndex(other, out var otherTrait) &&
+                                      traitProto.CMUConflictsWith(otherTrait));
+            // cmu edit end
 
             if (traitCategory == null || traitCategory.MaxTraitPoints < 0)
             {
@@ -978,15 +1223,24 @@ namespace Content.Shared.Preferences
                 ("age", Age)
             );
 
-        public bool MemberwiseEquals(ICharacterProfile maybeOther)
+        public bool MemberwiseEquals(HumanoidCharacterProfile other)
         {
-            if (maybeOther is not HumanoidCharacterProfile other) return false;
             if (Name != other.Name) return false;
             if (Age != other.Age) return false;
             if (Sex != other.Sex) return false;
+            if (Voice != other.Voice) return false;
             if (Gender != other.Gender) return false;
             if (Species != other.Species) return false;
             if (PreferenceUnavailable != other.PreferenceUnavailable) return false;
+            // CMU14: Force on Force roles, hijacking, announcements and identification.
+            if (FoFSide != other.FoFSide || FoFFallback != other.FoFFallback) return false;
+            if (BloodType != other.BloodType) return false; // CMU14
+            // cmu edit start
+            if (FoxtrotSquadOptIn != other.FoxtrotSquadOptIn) return false;
+            if (Religion != other.Religion) return false;
+            if (ArmorFlavorText != other.ArmorFlavorText) return false;
+            if (HelmetFlavorText != other.HelmetFlavorText) return false;
+            // cmu edit end
             if (SpawnPriority != other.SpawnPriority) return false;
             if (SquadPreference != other.SquadPreference) return false;
             if (!_jobPriorities.SequenceEqual(other._jobPriorities)) return false;
@@ -1004,6 +1258,28 @@ namespace Content.Shared.Preferences
             if (Allegiance != other.Allegiance) return false;
             if (Origin != other.Origin) return false;
             if (Platoon != other.Platoon) return false;
+            if (!YautjaProfile.Appearance.Equals(other.YautjaProfile.Appearance) ||
+                YautjaProfile.Name != other.YautjaProfile.Name ||
+                YautjaProfile.Age != other.YautjaProfile.Age ||
+                YautjaProfile.Sex != other.YautjaProfile.Sex ||
+                YautjaProfile.Gender != other.YautjaProfile.Gender ||
+                YautjaProfile.ArmorPrototype != other.YautjaProfile.ArmorPrototype ||
+                YautjaProfile.MaskPrototype != other.YautjaProfile.MaskPrototype ||
+                YautjaProfile.MaskAccessoryPrototype != other.YautjaProfile.MaskAccessoryPrototype ||
+                YautjaProfile.GreavesPrototype != other.YautjaProfile.GreavesPrototype ||
+                YautjaProfile.BracerPrototype != other.YautjaProfile.BracerPrototype ||
+                YautjaProfile.CasterPrototype != other.YautjaProfile.CasterPrototype ||
+                YautjaProfile.ClanRank != other.YautjaProfile.ClanRank ||
+                YautjaProfile.OwnerRank != other.YautjaProfile.OwnerRank ||
+                YautjaProfile.Status != other.YautjaProfile.Status ||
+                YautjaProfile.CapePrototype != other.YautjaProfile.CapePrototype ||
+                YautjaProfile.CapeColor != other.YautjaProfile.CapeColor ||
+                YautjaProfile.TranslatorType != other.YautjaProfile.TranslatorType ||
+                YautjaProfile.InvisibilitySound != other.YautjaProfile.InvisibilitySound ||
+                YautjaProfile.Legacy != other.YautjaProfile.Legacy ||
+                YautjaProfile.Unique != other.YautjaProfile.Unique ||
+                YautjaProfile.FlavorText != other.YautjaProfile.FlavorText)
+                return false;
             if (Synthetic != other.Synthetic) return false;
             if (ShortExamine != other.ShortExamine) return false;
             if (FullDescription != other.FullDescription) return false;
@@ -1016,7 +1292,8 @@ namespace Content.Shared.Preferences
             if (HideMetaInformation != other.HideMetaInformation) return false;
             if (!_threatPreferences.SetEquals(other._threatPreferences)) return false;
             if (!GamemodeSetPreferencesEqual(_gamemodeThreatPreferences, other._gamemodeThreatPreferences)) return false;
-            return Appearance.MemberwiseEquals(other.Appearance);
+            if (!RankPreferencesEqual(RankPreferences, other.RankPreferences)) return false;
+            return Appearance.Equals(other.Appearance);
         }
 
         private static bool GamemodeJobPrioritiesEqual(
@@ -1066,7 +1343,7 @@ namespace Content.Shared.Preferences
 
             if (!prototypeManager.TryIndex(Species, out var speciesPrototype) || speciesPrototype.RoundStart == false)
             {
-                Species = SharedHumanoidAppearanceSystem.DefaultSpecies;
+                Species = HumanoidCharacterProfile.DefaultSpecies;
                 speciesPrototype = prototypeManager.Index(Species);
             }
 
@@ -1077,6 +1354,10 @@ namespace Content.Shared.Preferences
                 Sex.Unsexed => Sex.Unsexed,
                 _ => Sex.Male // Invalid enum values.
             };
+
+            var voice = Voice;
+            if (!speciesPrototype.Voices.Contains(voice))
+                voice = speciesPrototype.DefaultSoundsBySex[(int)sex];
 
             // ensure the species can be that sex and their age fits the founds
             if (!speciesPrototype.Sexes.Contains(sex))
@@ -1130,6 +1411,12 @@ namespace Content.Shared.Preferences
             {
                 name = GetName(Species, gender);
             }
+
+            // cmu edit start
+            name = Content.Shared.CMU14.Preferences.CMUCharacterName.Normalize(name,
+                Origin == Content.Shared.CMU14.Preferences.CMUCharacterName.ArtificialWombOrigin,
+                Synthetic);
+            // cmu edit end
 
             string flavortext;
             var maxFlavorTextLength = configManager.GetCVar(CCVars.MaxFlavorTextLength);
@@ -1245,6 +1532,7 @@ namespace Content.Shared.Preferences
             FlavorText = flavortext;
             Age = age;
             Sex = sex;
+            Voice = voice;
             Gender = gender;
             Appearance = appearance;
             SpawnPriority = spawnPriority;
@@ -1300,6 +1588,15 @@ namespace Content.Shared.Preferences
             _gamemodeJobPriorities = gamemodeJobPriorities;
 
             PreferenceUnavailable = prefsUnavailableMode;
+            // CMU14: Force on Force roles, hijacking, announcements and identification.
+            if (!Enum.IsDefined(FoFSide)) FoFSide = ForceOnForceSide.Either;
+            if (!Enum.IsDefined(FoFFallback)) FoFFallback = ForceOnForceFallback.StayInLobby;
+            if (!Enum.IsDefined(BloodType)) BloodType = CMUBloodTypes.DefaultTypes[0]; // CMU14
+            // cmu edit start
+            if (!prototypeManager.HasIndex(Religion)) Religion = Content.Shared.CMU14.Religion.CMUReligionPrototype.Atheist;
+            ArmorFlavorText = Content.Shared.CMU14.GearFlavor.CMUGearFlavorText.Clamp(ArmorFlavorText);
+            HelmetFlavorText = Content.Shared.CMU14.GearFlavor.CMUGearFlavorText.Clamp(HelmetFlavorText);
+            // cmu edit end
 
             _antagPreferences.Clear();
             _antagPreferences.UnionWith(antags);
@@ -1317,13 +1614,22 @@ namespace Content.Shared.Preferences
 
             foreach (var (roleName, loadouts) in _loadouts)
             {
-                if (!prototypeManager.HasIndex<RoleLoadoutPrototype>(roleName))
+                // CMU14: concrete pilot jobs can inherit their loadout from a parent job.
+                var resolvedRole = roleName;
+                if (!prototypeManager.HasIndex<RoleLoadoutPrototype>(resolvedRole))
                 {
-                    toRemove.Add(roleName);
-                    continue;
+                    var jobId = roleName.StartsWith("Job") ? roleName.Substring(3) : roleName;
+                    var (_, inherited) = LoadoutSystem.GetJobLoadoutInfo(jobId, prototypeManager);
+                    if (inherited == null)
+                    {
+                        toRemove.Add(roleName);
+                        continue;
+                    }
+                    resolvedRole = inherited.ID;
                 }
 
-                loadouts.Role = roleName;
+                // CMU14: preserve the concrete selection key while validating the inherited loadout.
+                loadouts.Role = resolvedRole;
                 loadouts.EnsureValid(this, session, collection);
             }
 
@@ -1400,6 +1706,21 @@ namespace Content.Shared.Preferences
                 if (!protoManager.TryIndex(trait, out var traitProto))
                     continue;
 
+                // cmu edit start: the first of two traits that cannot be taken together wins
+                var conflicts = false;
+                foreach (var kept in result)
+                {
+                    if (protoManager.TryIndex(kept, out var keptProto) && traitProto.CMUConflictsWith(keptProto))
+                    {
+                        conflicts = true;
+                        break;
+                    }
+                }
+
+                if (conflicts)
+                    continue;
+                // cmu edit end
+
                 // Always valid.
                 if (traitProto.Category == null)
                 {
@@ -1408,7 +1729,7 @@ namespace Content.Shared.Preferences
                 }
 
                 // No category so dump it.
-                if (!protoManager.TryIndex(traitProto.Category, out var category))
+                if (!protoManager.Resolve(traitProto.Category, out var category))
                     continue;
 
                 var existing = groups.GetOrNew(category.ID);
@@ -1425,7 +1746,7 @@ namespace Content.Shared.Preferences
             return result;
         }
 
-        public ICharacterProfile Validated(ICommonSession session, IDependencyCollection collection)
+        public HumanoidCharacterProfile Validated(ICommonSession session, IDependencyCollection collection)
         {
             var profile = new HumanoidCharacterProfile(this);
             profile.EnsureValid(session, collection);
@@ -1439,10 +1760,17 @@ namespace Content.Shared.Preferences
             var namingSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<NamingSystem>();
             return namingSystem.GetName(species, gender);
         }
+        public bool Equals(HumanoidCharacterProfile? other)
+        {
+            if (other is null)
+                return false;
+
+            return ReferenceEquals(this, other) || MemberwiseEquals(other);
+        }
 
         public override bool Equals(object? obj)
         {
-            return ReferenceEquals(this, obj) || obj is HumanoidCharacterProfile other && Equals(other);
+            return obj is HumanoidCharacterProfile other && Equals(other);
         }
 
         public override int GetHashCode()
@@ -1457,12 +1785,23 @@ namespace Content.Shared.Preferences
             hashCode.Add(Species);
             hashCode.Add(Age);
             hashCode.Add((int)Sex);
+            hashCode.Add(Voice);
             hashCode.Add((int)Gender);
             hashCode.Add(Appearance);
             hashCode.Add((int)SpawnPriority);
             hashCode.Add((int)ArmorPreference);
             hashCode.Add(SquadPreference);
             hashCode.Add((int)PreferenceUnavailable);
+            // CMU14: Force on Force roles, hijacking, announcements and identification.
+            hashCode.Add(FoFSide);
+            hashCode.Add(FoFFallback);
+            hashCode.Add(BloodType); // CMU14
+            // cmu edit start
+            hashCode.Add(FoxtrotSquadOptIn);
+            hashCode.Add(Religion);
+            hashCode.Add(ArmorFlavorText);
+            hashCode.Add(HelmetFlavorText);
+            // cmu edit end
             hashCode.Add(NamedItems);
             hashCode.Add(PlaytimePerks);
             hashCode.Add(XenoPrefix);
@@ -1560,6 +1899,76 @@ namespace Content.Shared.Preferences
         public HumanoidCharacterProfile Clone()
         {
             return new HumanoidCharacterProfile(this);
+        }
+
+        private static bool RankPreferencesEqual(
+            Dictionary<string, Dictionary<string, string?>> left,
+            Dictionary<string, Dictionary<string, string?>> right)
+        {
+            if (left.Count != right.Count)
+                return false;
+
+            foreach (var (jobId, leftPlatoons) in left)
+            {
+                if (!right.TryGetValue(jobId, out var rightPlatoons) ||
+                    leftPlatoons.Count != rightPlatoons.Count)
+                    return false;
+
+                foreach (var (platoonId, leftRank) in leftPlatoons)
+                {
+                    if (!rightPlatoons.TryGetValue(platoonId, out var rightRank) ||
+                        leftRank != rightRank)
+                        return false;
+                }
+            }
+
+            return true;
+        }
+
+        public DataNode ToDataNode(ISerializationManager? serialization = null, IConfigurationManager? configuration = null)
+        {
+            IoCManager.Resolve(ref serialization);
+            IoCManager.Resolve(ref configuration);
+
+            var export = new HumanoidProfileExportV2()
+            {
+                ForkId = configuration.GetCVar(CVars.BuildForkId),
+                Profile = this,
+            };
+
+            var dataNode = serialization.WriteValue(export, alwaysWrite: true, notNullableOverride: true);
+            return dataNode;
+        }
+
+        public static HumanoidCharacterProfile FromStream(Stream stream, ICommonSession session, ISerializationManager? serialization = null, IConfigurationManager? configuration = null)
+        {
+            IoCManager.Resolve(ref serialization);
+            IoCManager.Resolve(ref configuration);
+
+            using var reader = new StreamReader(stream, EncodingHelpers.UTF8);
+            var yamlStream = new YamlStream();
+            yamlStream.Load(reader);
+
+            var root = yamlStream.Documents[0].RootNode;
+            HumanoidCharacterProfile profile;
+            if (root["version"].Equals(new YamlScalarNode("1")))
+            {
+                var export = serialization.Read<HumanoidProfileExportV1>(root.ToDataNode(), notNullableOverride: true);
+                profile = export.ToV2().Profile;
+            }
+            else if (root["version"].Equals(new YamlScalarNode("2")))
+            {
+                var export = serialization.Read<HumanoidProfileExportV2>(root.ToDataNode(), notNullableOverride: true);
+                profile = export.Profile;
+            }
+            else
+            {
+                throw new InvalidOperationException($"Unknown version {root["version"]}");
+            }
+
+            var collection = IoCManager.Instance;
+            profile.EnsureValid(session, collection!);
+            return profile;
         }
     }
 }

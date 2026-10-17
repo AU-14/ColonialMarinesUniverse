@@ -1,6 +1,6 @@
 - type: entity
   parent: [ClothingHandsBase, RMCBaseUniformAccessoryItemGloves]
-  id: CMHandsBlackMarine # TODO RMC14 armor
+  id: CMHandsBlackMarine # CMU14: armored
   name: marine combat gloves
   description: "Standard issue marine tactical gloves. It reads: 'knit by Marine Widows Association'."
   components:
@@ -12,6 +12,10 @@
     fiberMaterial: fibers-leather
     fiberColor: fibers-black
   - type: FingerprintMask
+  - type: CMArmor # CMU14: armored like AU14GlovesBase/RMCHandsVeteran
+    melee: 40 # CMU14
+    bullet: 40 # CMU14
+    explosionArmor: 20 # CMU14
   - type: SquadArmor
     layer: Gloves
     slot: GLOVES

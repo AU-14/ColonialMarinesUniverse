@@ -1,0 +1,29 @@
+light_mode unshaded;
+
+uniform sampler2D water_texture;
+uniform sampler2D water_light;
+uniform highp vec4 water_uv;
+uniform lowp vec4 water_color;
+uniform highp float water_line;
+uniform highp vec2 surface_origin;
+uniform highp float pixels_per_meter;
+uniform bool immersed;
+
+void fragment() {
+    highp vec4 body = zTexture(UV);
+    highp vec2 screen = SCREEN_UV / SCREEN_PIXEL_SIZE;
+    if (body.a == 0.0) {
+        discard;
+    }
+    if (!immersed && screen.y > water_line) {
+        COLOR = body;
+    } else {
+        highp vec2 tile_uv = fract((screen - surface_origin) / pixels_per_meter + vec2(0.5));
+        lowp vec4 water = zTextureSpec(water_texture, mix(water_uv.xy, water_uv.zw, tile_uv)) * water_color;
+        water.rgb *= zTextureSpec(water_light, SCREEN_UV).rgb;
+        // Preserve premultiplied alpha and the silhouette of clothing and held items.
+        // Fully immersed bodies remain faintly visible; living mobs also emit bubbles.
+        lowp float opacity = immersed ? 0.12 : 0.65;
+        COLOR = vec4(mix(body.rgb, water.rgb * body.a, 0.7 * water.a) * opacity, body.a * opacity);
+    }
+}

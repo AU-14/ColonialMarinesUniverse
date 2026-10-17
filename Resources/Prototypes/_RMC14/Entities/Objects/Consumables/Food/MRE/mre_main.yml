@@ -98,13 +98,13 @@
   parent: CMMREFoodBase
   id: CMMREFoodMain
   components:
-  - type: Food
+  - type: Edible
     transferAmount: 4
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
+      reagents:
         - ReagentId: Nutriment
           Quantity: 14
         - ReagentId: TableSalt
@@ -183,13 +183,13 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/mre_clf.rsi
-  - type: Food
+  - type: Edible
     transferAmount: 4
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 30
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 30
+      reagents:
         - ReagentId: Nutriment
           Quantity: 26
         - ReagentId: TableSalt

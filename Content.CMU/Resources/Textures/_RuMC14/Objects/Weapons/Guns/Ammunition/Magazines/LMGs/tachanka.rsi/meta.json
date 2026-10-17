@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "'hubaruba' from Discord",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "mag-1"
+    },
+    {
+      "name": "mag-2Tracer"
+    },
+    {
+      "name": "mag-3Mini"
+    },
+    {
+      "name": "mag-4MiniTracer"
+    },
+    {
+      "name": "base_mini"
+    },
+    {
+      "name": "base"
+    }
+  ]
+}

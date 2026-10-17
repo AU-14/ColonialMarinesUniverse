@@ -1,0 +1,29 @@
+// CC0-1.0. Soft particle kernels with eroded vapor, independent of world illumination.
+light_mode unshaded;
+uniform highp float clock;
+
+highp float moteHash(highp vec2 p) {
+    return fract(sin(dot(p, vec2(127.1,311.7)))*43758.5453);
+}
+highp float moteNoise(highp vec2 p) {
+    highp vec2 cell=floor(p);
+    highp vec2 f=fract(p);
+    f=f*f*(3.0-2.0*f);
+    return mix(mix(moteHash(cell),moteHash(cell+vec2(1.0,0.0)),f.x),
+        mix(moteHash(cell+vec2(0.0,1.0)),moteHash(cell+vec2(1.0)),f.x),f.y);
+}
+void fragment() {
+    highp vec2 p=UV*2.0-1.0;
+    highp float radius=dot(p,p);
+    highp float edge=1.0-smoothstep(0.48,1.0,radius);
+    highp float opacity;
+    if (UV2.x>0.5) {
+        highp vec2 drift=p*3.0+vec2(UV2.y*37.0,clock*0.22);
+        highp float cloud=moteNoise(drift)*0.65+moteNoise(drift*2.1)*0.35;
+        opacity=edge*edge*smoothstep(0.26,0.7,cloud)*0.65;
+    } else {
+        // Hot center and a small cool halo; feathered ends also shape stretched trails.
+        opacity=edge*(exp(-radius*9.0)*0.76+exp(-radius*2.8)*0.14);
+    }
+    COLOR=vec4(vec3(1.0),opacity);
+}

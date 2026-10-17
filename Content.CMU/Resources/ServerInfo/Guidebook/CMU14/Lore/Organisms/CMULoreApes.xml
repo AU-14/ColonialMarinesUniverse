@@ -1,0 +1,14 @@
+<Document>
+  # Apes
+
+  <Box>
+    <GuideEntityEmbed Entity="CMUMobApe" Caption="Ape"/>
+  </Box>
+
+  [bold]Apes[/bold] are dangerous megafauna found on some frontier worlds: huge, powerful primates with an enormous appetite. Where they live, colonists learn quickly to stay out of the wilds after dark.
+
+  - Their [bold]caloric needs[/bold] are immense, and a hungry ape will hunt anything it can catch, people included.
+  - They are frighteningly tough. An ape can shrug off wounds that would kill a person several times over, and keep coming.
+  - They see well in the dark, and have strength enough to tear a limb from a body.
+  - They are smarter than they look. Reports from colonies under attack describe apes striking together, in numbers, at supply lines and other soft targets.
+</Document>

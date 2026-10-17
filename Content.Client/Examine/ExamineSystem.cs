@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using System.Threading;
 using Content.Client.Verbs;
+using Content.Shared.CCVar; // CMU14
 using Content.Shared.Examine;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Input;
@@ -14,6 +15,7 @@ using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Configuration; // CMU14
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
 using Robust.Shared.Utility;
@@ -31,6 +33,7 @@ namespace Content.Client.Examine
         [Dependency] private IEyeManager _eyeManager = default!;
         [Dependency] private VerbSystem _verbSystem = default!;
         [Dependency] private SpriteSystem _sprite = default!;
+        [Dependency] private IConfigurationManager _config = default!; // CMU14
 
         private List<Verb> _verbList = new();
 
@@ -182,6 +185,10 @@ namespace Content.Client.Examine
             // openAtOldTooltip is true.
             ScreenCoordinates? oldTooltipPos = _examineTooltipOpen != null ? _popupPos : null;
             CloseTooltip();
+
+            // CMU14: players can turn the examine popup off and read examines in chat instead.
+            if (_config.GetCVar(CCVars.HideExamineTooltip))
+                return;
 
             // cache entity for Update function
             _examinedEntity = target;
@@ -388,6 +395,10 @@ namespace Content.Client.Examine
             vbox.AddChild(buttonsHBox);
         }
 
+        /// <summary>
+        /// Handler for the OnClick Event of a Verb Button.
+        /// </summary>
+        /// <param name="obj">The event args</param>
         public void VerbButtonPressed(BaseButton.ButtonEventArgs obj)
         {
             if (obj.Button is ExamineButton button)
@@ -398,6 +409,12 @@ namespace Content.Client.Examine
             }
         }
 
+        /// <summary>
+        /// Open and fills by query to server an examine menu with the correct tooltip and menu items.
+        /// </summary>
+        /// <param name="entity">The entity examined.</param>
+        /// <param name="centeredOnCursor">If the popup should be on the cursor or the entity's screen position.</param>
+        /// <param name="userOverride">An optional user object; if null we assume the client's player entity.</param>
         public void DoExamine(EntityUid entity, bool centeredOnCursor = true, EntityUid? userOverride = null)
         {
             var playerEnt = userOverride ?? _playerManager.LocalEntity;

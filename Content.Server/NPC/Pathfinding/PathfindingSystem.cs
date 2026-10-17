@@ -55,6 +55,13 @@ namespace Content.Server.NPC.Pathfinding
         [Dependency] private ProfManager _prof = default!;
         [Dependency] private SharedTransformSystem _transform = default!;
 
+        [Dependency] private EntityQuery<AccessReaderComponent> _accessReaderQuery = default!;
+        [Dependency] private EntityQuery<DestructibleComponent> _destructibleQuery = default!;
+        [Dependency] private EntityQuery<DoorComponent> _doorQuery = default!;
+        [Dependency] private EntityQuery<ClimbableComponent> _climbableQuery = default!;
+        [Dependency] private EntityQuery<FixturesComponent> _fixturesQuery = default!;
+        [Dependency] private EntityQuery<MapGridComponent> _mapGridQuery = default!;
+
         private readonly Dictionary<ICommonSession, PathfindingDebugMode> _subscribedSessions = new();
 
         [ViewVariables]
@@ -67,6 +74,8 @@ namespace Content.Server.NPC.Pathfinding
         /// </summary>
         private const int PathTickLimit = 256;
 
+        private readonly ParallelOptions _parallelOptions = new();
+
         private int _portalIndex;
         private readonly Dictionary<int, PathPortal> _portals = new();
 
@@ -75,26 +84,9 @@ namespace Content.Server.NPC.Pathfinding
             return min + (float) random.NextDouble() * (max - min);
         }
 
-        private EntityQuery<AccessReaderComponent> _accessQuery;
-        private EntityQuery<DestructibleComponent> _destructibleQuery;
-        private EntityQuery<DoorComponent> _doorQuery;
-        private EntityQuery<ClimbableComponent> _climbableQuery;
-        private EntityQuery<FixturesComponent> _fixturesQuery;
-        private EntityQuery<MapGridComponent> _gridQuery;
-        private EntityQuery<TransformComponent> _xformQuery;
-
         public override void Initialize()
         {
             base.Initialize();
-
-            _accessQuery = GetEntityQuery<AccessReaderComponent>();
-            _destructibleQuery = GetEntityQuery<DestructibleComponent>();
-            _doorQuery = GetEntityQuery<DoorComponent>();
-            _climbableQuery = GetEntityQuery<ClimbableComponent>();
-            _fixturesQuery = GetEntityQuery<FixturesComponent>();
-            _gridQuery = GetEntityQuery<MapGridComponent>();
-            _xformQuery = GetEntityQuery<TransformComponent>();
-
             _playerManager.PlayerStatusChanged += OnPlayerChange;
             InitializeGrid();
             SubscribeNetworkEvent<RequestPathfindingDebugMessage>(OnBreadcrumbs);
@@ -111,10 +103,8 @@ namespace Content.Server.NPC.Pathfinding
         public override void Update(float frameTime)
         {
             base.Update(frameTime);
-            var options = new ParallelOptions()
-            {
-                MaxDegreeOfParallelism = _parallel.ParallelProcessCount,
-            };
+            var options = _parallelOptions;
+            options.MaxDegreeOfParallelism = _parallel.ParallelProcessCount;
 
             var profiling = _prof.IsEnabled;
             if (profiling)
@@ -130,48 +120,77 @@ namespace Content.Server.NPC.Pathfinding
             _stopwatch.Restart();
             var queued = _pathRequests.Count;
             var amount = Math.Min(PathTickLimit, _pathRequests.Count);
+            if (amount == 0)
+            {
+                if (profiling)
+                {
+                    _prof.WriteValue("PathfinderSystem Queued Requests", 0);
+                    _prof.WriteValue("PathfinderSystem Processed Requests", 0);
+                    _prof.WriteValue("PathfinderSystem Continuing Requests", 0);
+                    _prof.WriteValue("PathfinderSystem Completed Requests", 0);
+                    _prof.WriteValue("PathfinderSystem NoPath Requests", 0);
+                }
+                return;
+            }
+
             var results = ArrayPool<PathResult>.Shared.Rent(amount);
-
-            if (profiling)
+            try
             {
-                using var profile = _prof.Group("PathfinderSystem.ProcessRequests");
-                Parallel.For(0, amount, options, i =>
+                if (profiling)
                 {
-                    ProcessPathRequest(results, i);
-                });
-            }
-            else
-            {
-                Parallel.For(0, amount, options, i =>
+                    using var profile = _prof.Group("PathfinderSystem.ProcessRequests");
+                    ProcessPathRequests(results, amount, options);
+                }
+                else
                 {
-                    ProcessPathRequest(results, i);
-                });
+                    ProcessPathRequests(results, amount, options);
+                }
+
+                var continuing = 0;
+                var completed = 0;
+                var noPath = 0;
+
+                if (profiling)
+                {
+                    using var profile = _prof.Group("PathfinderSystem.CleanupRequests");
+                    CleanupPathRequests(results, amount, ref continuing, ref completed, ref noPath);
+                }
+                else
+                {
+                    CleanupPathRequests(results, amount, ref continuing, ref completed, ref noPath);
+                }
+
+                if (profiling)
+                {
+                    _prof.WriteValue("PathfinderSystem Queued Requests", queued);
+                    _prof.WriteValue("PathfinderSystem Processed Requests", amount);
+                    _prof.WriteValue("PathfinderSystem Continuing Requests", continuing);
+                    _prof.WriteValue("PathfinderSystem Completed Requests", completed);
+                    _prof.WriteValue("PathfinderSystem NoPath Requests", noPath);
+                }
+
             }
-
-            var continuing = 0;
-            var completed = 0;
-            var noPath = 0;
-
-            if (profiling)
+            finally
             {
-                using var profile = _prof.Group("PathfinderSystem.CleanupRequests");
-                CleanupPathRequests(results, amount, ref continuing, ref completed, ref noPath);
+                ArrayPool<PathResult>.Shared.Return(results);
             }
-            else
+        }
+
+        private void ProcessPathRequests(PathResult[] results, int amount, ParallelOptions options)
+        {
+            // A single request cannot benefit from worker scheduling.
+            if (amount == 1)
             {
-                CleanupPathRequests(results, amount, ref continuing, ref completed, ref noPath);
+                ProcessPathRequest(results, 0);
+                return;
             }
 
-            if (profiling)
-            {
-                _prof.WriteValue("PathfinderSystem Queued Requests", queued);
-                _prof.WriteValue("PathfinderSystem Processed Requests", amount);
-                _prof.WriteValue("PathfinderSystem Continuing Requests", continuing);
-                _prof.WriteValue("PathfinderSystem Completed Requests", completed);
-                _prof.WriteValue("PathfinderSystem NoPath Requests", noPath);
-            }
+            ProcessPathRequestsParallel(results, amount, options);
+        }
 
-            ArrayPool<PathResult>.Shared.Return(results);
+        private void ProcessPathRequestsParallel(PathResult[] results, int amount, ParallelOptions options)
+        {
+            Parallel.For(0, amount, options, i => ProcessPathRequest(results, i));
         }
 
         private void ProcessPathRequest(PathResult[] results, int i)
@@ -485,8 +504,12 @@ namespace Content.Server.NPC.Pathfinding
             if (!TryGetChunk(origin, comp, out var chunk))
                 return null;
 
-            var chunkPos = new Vector2(MathHelper.Mod(localPos.X, ChunkSize), MathHelper.Mod(localPos.Y, ChunkSize));
-            var polys = chunk.Polygons[(int)chunkPos.X * ChunkSize + (int)chunkPos.Y];
+            // CMU14: floor before wrapping so tiny negative positions cannot round up to ChunkSize.
+            // var chunkPos = new Vector2(MathHelper.Mod(localPos.X, ChunkSize), MathHelper.Mod(localPos.Y, ChunkSize));
+            // var polys = chunk.Polygons[(int)chunkPos.X * ChunkSize + (int)chunkPos.Y];
+            var tileX = MathHelper.Mod((int) MathF.Floor(localPos.X), ChunkSize);
+            var tileY = MathHelper.Mod((int) MathF.Floor(localPos.Y), ChunkSize);
+            var polys = chunk.Polygons[tileX * ChunkSize + tileY];
 
             foreach (var poly in polys)
             {

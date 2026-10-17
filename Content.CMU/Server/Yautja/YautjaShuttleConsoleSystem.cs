@@ -1,0 +1,33 @@
+using Content.Server.Shuttles.Systems;
+using Content.Shared.Popups;
+using Content.Shared.UserInterface;
+using Content.Shared.CMU14.Yautja;
+
+namespace Content.Server.CMU14.Yautja;
+
+public sealed partial class YautjaShuttleConsoleSystem : EntitySystem
+{
+    [Dependency] private SharedPopupSystem _popup = default!;
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<YautjaShuttleConsoleComponent, ActivatableUIOpenAttemptEvent>(
+            OnOpenAttempt,
+            before: [typeof(ShuttleConsoleSystem)]);
+    }
+
+    private void OnOpenAttempt(Entity<YautjaShuttleConsoleComponent> ent, ref ActivatableUIOpenAttemptEvent args)
+    {
+        if (HasComp<YautjaTechAuthorizedComponent>(args.User))
+            return;
+
+        // A youngblood stays YoungBlood until blooded, even when ClanRank reads higher.
+        if (TryComp<YautjaComponent>(args.User, out var yautja)
+            && yautja.ClanRank >= YautjaRank.Blooded
+            && (!TryComp<YautjaYoungbloodComponent>(args.User, out var youngblood) || youngblood.Blooded))
+            return;
+
+        args.Cancel();
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-shuttle-console-denied"), ent, args.User);
+    }
+}

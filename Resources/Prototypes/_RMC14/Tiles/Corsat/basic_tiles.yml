@@ -93,10 +93,12 @@
 - type: tile
   parent: CMTileBase
   id: RMCFloorCorsatTcomms
+  name: tiles-cm-tcomms
   sprite: /Textures/_RMC14/Tiles/corsat/tcomms.png
   
 - type: tile
   parent: CMTileBase
   id: RMCFloorCorsatTeleporterStatic
+  name: tiles-rmc-corsat-teleporter-static
   sprite: /Textures/_RMC14/Tiles/corsat/corsat_teleporter_static.png
   

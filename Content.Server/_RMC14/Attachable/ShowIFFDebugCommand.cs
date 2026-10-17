@@ -5,9 +5,9 @@ using Robust.Shared.Console;
 namespace Content.Server._RMC14.Attachable;
 
 [AdminCommand(AdminFlags.Debug)]
-public sealed class ShowIFFDebugCommand : IConsoleCommand
+public sealed partial class ShowIFFDebugCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntitySystemManager _entitySystem = default!;
+    [Dependency] private  IEntitySystemManager _entitySystem = default!;
 
     public string Command => "showiffdebug";
     public string Description => "Toggles IFF prediction debug overlay for your client.";

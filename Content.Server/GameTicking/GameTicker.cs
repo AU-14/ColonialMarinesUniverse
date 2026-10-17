@@ -1,8 +1,8 @@
 using Content.Server._RMC14.Rules;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
-using Content.Server._CMU14.Round.Objectives;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Ops.ForceOnForce; // CMU14
+using Content.Server.CMU14.Round.Objectives;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Database;
@@ -18,7 +18,6 @@ using Content.Shared.GameTicking;
 using Content.Shared.Mind;
 using Content.Shared.Roles;
 using Robust.Server;
-using Robust.Server.GameObjects;
 using Robust.Server.GameStates;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Console;
@@ -45,7 +44,6 @@ namespace Content.Server.GameTicking
         [Dependency] private IGameMapManager _gameMapManager = default!;
         [Dependency] private IGameTiming _gameTiming = default!;
         [Dependency] private ILogManager _logManager = default!;
-        [Dependency] private IMapManager _mapManager = default!;
         [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private IRobustRandom _robustRandom = default!;
 #if EXCEPTION_TOLERANCE
@@ -71,6 +69,7 @@ namespace Content.Server.GameTicking
         [Dependency] private ServerDbEntryManager _dbEntryManager = default!;
         [Dependency] private CMDistressSignalRuleSystem _distressSignal = default!;
         [Dependency] private ObjectiveControlSystem _auobjectivesystem = default!;
+        [Dependency] private ForceOnForceFactionSystem _fof = default!;
         [ViewVariables] private bool _initialized;
         [ViewVariables] private bool _postInitialized;
 
@@ -96,9 +95,10 @@ namespace Content.Server.GameTicking
             InitializeStatusShell();
             InitializeCVars();
             InitializePlayer();
+            _prefsManager.SelectedCharacterChanged += OnLineupCharacterChanged;
             InitializeLobbyBackground();
             InitializeGamePreset();
-            DebugTools.Assert(_prototypeManager.Index(FallbackOverflowJob).Name == FallbackOverflowJobName,
+            DebugTools.Assert(ProtoMan.Index(FallbackOverflowJob).Name == FallbackOverflowJobName,
                 "Overflow role does not have the correct name!");
             InitializeGameRules();
             InitializeReplays();
@@ -121,6 +121,7 @@ namespace Content.Server.GameTicking
 
         public override void Shutdown()
         {
+            _prefsManager.SelectedCharacterChanged -= OnLineupCharacterChanged;
             base.Shutdown();
 
             SendServerShutdownDiscordMessage();
@@ -158,8 +159,28 @@ namespace Content.Server.GameTicking
                 return;
 
             }
+            var respawn = EntityManager.System<Content.Server.CMU14.ForceOnForce.ForceOnForceRespawnSystem>();
+            if (respawn.HasSpawned(args.SenderSession.UserId) && !respawn.HasDied(args.SenderSession.UserId))
+            {
+                _chatManager.DispatchServerMessage(args.SenderSession, Loc.GetString("cmu-fof-respawn-alive"));
+                return;
+            }
+
+            var remaining = respawn.Remaining(args.SenderSession.UserId);
+            if (remaining > TimeSpan.Zero)
+            {
+                _chatManager.DispatchServerMessage(args.SenderSession,
+                    Loc.GetString("cmu-fof-respawn-wait", ("seconds", (int) Math.Ceiling(remaining.TotalSeconds))));
+                return;
+            }
+
             // Send the requesting player to the lobby
             PlayerJoinLobby(args.SenderSession);
+        }
+
+        public static int GetRoundId(IEntitySystemManager esm)
+        {
+            return esm.GetEntitySystemOrNull<GameTicker>()?.RoundId ?? 0;
         }
     }
 }

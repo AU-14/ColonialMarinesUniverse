@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Database;
-using Content.Shared._CMU14.PlayTimeTracking;
+using Content.Shared.CMU14.PlayTimeTracking;
 using Content.Shared.CCVar;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Roles;
@@ -152,6 +152,12 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager, IP
         ["AU14JobGOVFORSquadAutomaticRiflemanWYPMC"] = "AU14JobGOVFORSquadAutomaticRifleman",
         ["AU14JobGOVFORSquadRiflemanWYPMC"] = "AU14JobGOVFORSquadRifleman",
         ["AU14JobGOVFORSquadSergeantWYPMC"] = "AU14JobGOVFORSquadSergeant",
+
+        // Abominations -> Biomorphs CMU14
+        ["AU14JobAbominationGrunt"] = "AU14JobBiomorphGrunt",
+        ["AU14JobAbominationMimic"] = "AU14JobBiomorphMimic",
+        ["AU14JobAbominationSkitter"] = "AU14JobBiomorphSkitter",
+        ["AU14JobAbominationSpider"] = "AU14JobBiomorphSpider"
     };
 
     // List of players that need some kind of update (refresh timers or resend).

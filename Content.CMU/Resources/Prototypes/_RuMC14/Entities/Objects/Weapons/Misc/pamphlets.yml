@@ -1,0 +1,12 @@
+- type: entity
+  parent: CMPamphlet
+  id: RuMCPamphletHeavyMachineGunner
+  name: heavy machinegunner instructional pamphlet
+  description: A pamphlet used to quickly impart vital knowledge. This one has an engineering and a machinegun insignia
+  components:
+  - type: Sprite
+    state: pamphlet_machinegunner
+  - type: GunRequiresSkills
+    skills:
+      RMCSkillEngineer: 1
+      RMCSkillFirearms: 1

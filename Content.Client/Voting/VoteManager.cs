@@ -57,11 +57,14 @@ namespace Content.Client.Voting
         public void Initialize()
         {
             const string sound = "/Audio/Effects/voteding.ogg";
-            _voteSource = _audio.CreateAudioSource(_res.GetResource<AudioResource>(sound));
-
-            if (_voteSource != null)
+            // CMU: A failed audio device must not prevent the client from finishing startup.
+            if (_res.TryGetResource<AudioResource>(sound, out var resource))
             {
-                _voteSource.Global = true;
+                _voteSource = _audio.CreateAudioSource(resource);
+                if (_voteSource != null)
+                {
+                    _voteSource.Global = true;
+                }
             }
 
             _netManager.RegisterNetMessage<MsgVoteData>(ReceiveVoteData);

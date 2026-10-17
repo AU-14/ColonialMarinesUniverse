@@ -76,11 +76,12 @@ public sealed partial class NightVisionSystem : SharedNightVisionSystem
 
     private void SetExperimentalMesons(bool on)
     {
-        if (_player.LocalEntity == null)
+        // Entity deletion can remove the eye before night vision and the local player session.
+        if (_player.LocalEntity is not { } local || !TryComp<EyeComponent>(local, out var eye))
             return;
 
         // Experimental synth mesons use FoV only; older RMC meson optics keep their existing visuals.
-        _eye.SetDrawFov(_player.LocalEntity.Value, !on);
+        _eye.SetDrawFov(local, !on, eye);
     }
 
     private void Off()

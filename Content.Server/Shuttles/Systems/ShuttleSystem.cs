@@ -1,6 +1,5 @@
 using Content.Server._RMC14.Dropship;
 using Content.Server.Administration.Logs;
-using Content.Server.Body.Systems;
 using Content.Server.Buckle.Systems;
 using Content.Server.Parallax;
 using Content.Server.Procedural;
@@ -9,7 +8,8 @@ using Content.Server.Shuttles.Events;
 using Content.Server.Station.Systems;
 using Content.Server.Stunnable;
 using Content.Shared.Buckle.Components;
-using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Gibbing;
 using Content.Shared.Light.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Salvage;
@@ -21,12 +21,10 @@ using Robust.Server.GameStates;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.EntitySerialization.Systems;
-using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Shared.Maps;
@@ -39,11 +37,9 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
     [Dependency] private IAdminLogManager _logger = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IGameTiming _gameTiming = default!;
-    [Dependency] private IMapManager _mapManager = default!;
-    [Dependency] private IPrototypeManager _protoManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private BiomeSystem _biomes = default!;
-    [Dependency] private BodySystem _bobby = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
     [Dependency] private BuckleSystem _buckle = default!;
     [Dependency] private DamageableSystem _damageSys = default!;
     [Dependency] private DockingSystem _dockSystem = default!;
@@ -64,23 +60,15 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
     [Dependency] private ThrusterSystem _thruster = default!;
     [Dependency] private UserInterfaceSystem _uiSystem = default!;
     [Dependency] private TurfSystem _turf = default!;
-
-    // RMC14
     [Dependency] private DropshipSystem _dropship = default!;
 
-    private EntityQuery<BuckleComponent> _buckleQuery;
-    private EntityQuery<MapGridComponent> _gridQuery;
-    private EntityQuery<PhysicsComponent> _physicsQuery;
-    private EntityQuery<TransformComponent> _xformQuery;
+    [Dependency] private EntityQuery<BuckleComponent> _buckleQuery = default!;
+    [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
+    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-
-        _buckleQuery = GetEntityQuery<BuckleComponent>();
-        _gridQuery = GetEntityQuery<MapGridComponent>();
-        _physicsQuery = GetEntityQuery<PhysicsComponent>();
-        _xformQuery = GetEntityQuery<TransformComponent>();
 
         InitializeFTL();
         InitializeGridFills();
@@ -108,7 +96,12 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
             return;
 
         EnsureComp<ShuttleComponent>(ev.EntityUid);
-        EnsureComp<ImplicitRoofComponent>(ev.EntityUid);
+
+        // This and RoofComponent should be mutually exclusive, so ImplicitRoof should be removed if the grid has RoofComponent
+        if (HasComp<RoofComponent>(ev.EntityUid))
+            RemComp<ImplicitRoofComponent>(ev.EntityUid);
+        else
+            EnsureComp<ImplicitRoofComponent>(ev.EntityUid);
     }
 
     private void OnShuttleStartup(EntityUid uid, ShuttleComponent component, ComponentStartup args)
@@ -123,7 +116,13 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
             return;
         }
 
-        if (component.Enabled)
+        // CMU14: legacy planet maps can contain saved shuttle physics.
+        // A map cannot move, but its stored velocity is inherited when boarding a grid.
+        if (HasComp<MapComponent>(uid))
+        {
+            Disable(uid, component: physicsComponent);
+        }
+        else if (component.Enabled)
         {
             Enable(uid, component: physicsComponent, shuttle: component);
         }
@@ -152,6 +151,13 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
     {
         if (!Resolve(uid, ref manager, ref component, ref shuttle, false))
             return;
+
+        // CMU14: toggling a saved map's shuttle must not make its physics movable again.
+        if (HasComp<MapComponent>(uid))
+        {
+            Disable(uid, manager, component);
+            return;
+        }
 
         _physics.SetBodyType(uid, BodyType.Dynamic, manager: manager, body: component);
         _physics.SetBodyStatus(uid, component, BodyStatus.InAir);

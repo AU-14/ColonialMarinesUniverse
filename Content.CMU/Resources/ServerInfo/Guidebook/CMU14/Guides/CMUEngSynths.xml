@@ -1,0 +1,35 @@
+<Document>
+  # Repairing Synthetics
+
+  <Box>
+    <GuideEntityEmbed Entity="CMWelder" Caption="Blowtorch"/>
+    <GuideEntityEmbed Entity="RMCCableCoil" Caption="Cable coil"/>
+    <GuideEntityEmbed Entity="RMCSynthResetKey" Caption="Synthetic reset key"/>
+    <GuideEntityEmbed Entity="RMCSyntheticMaintenanceStation" Caption="Maintenance station"/>
+  </Box>
+
+  Synthetics can't be treated like people. Medicine does nothing for them: they have to be [bold]repaired[/bold], and that makes it an engineer's job as much as a medic's.
+
+  ## Brute Damage: Blowtorch
+  - Use a lit [bold]blowtorch[/bold] on a synthetic to patch the dents. Each pass repairs [bold]15[/bold] each of blunt, piercing and slash damage, and burns 5 fuel.
+  - Only works if they actually have brute damage.
+
+  ## Burn Damage: Cable Coil
+  - Use [bold]cable coil[/bold] on a synthetic to fix burnt wiring. Each pass uses one length of cable and repairs [bold]15[/bold] each of heat, shock, cold and caustic damage.
+  - Only works if they actually have burn damage.
+
+  ## How Long It Takes
+  - Each pass takes [bold]7 seconds[/bold], and your construction skill makes it faster. Stay still, or it's interrupted.
+  - A synthetic can repair themselves, but it's slow: [bold]30 seconds[/bold] a pass. Having someone else do it is much quicker.
+
+  ## Maintenance Station
+  - The [bold]synthetic maintenance station[/bold] is a cradle that repairs a synthetic automatically while they're inside it. Use the "Enter maintenance station" verb, or drag them into it.
+  - It runs on power, with an internal charge that each repair cycle draws from. Examine it to see how much charge it has left.
+  - If it loses power, it ejects whoever is inside.
+
+  ## Rebooting a Synthetic
+  - A synthetic that suffers critical failure can't be revived with a defibrillator. It needs a [bold]synthetic reset key[/bold], which works like a defibrillator for synthetics. Repair the damage first, just as you'd heal someone before shocking them.
+  - The reset key also clears major glitches and programming errors, including a synthetic whose programming has been tampered with.
+  - Using one needs engineering training. The [bold]SMART[/bold] reset key can be used by anyone.
+  - The reset key runs on its battery, and needs recharging after use like any other battery-powered item.
+</Document>

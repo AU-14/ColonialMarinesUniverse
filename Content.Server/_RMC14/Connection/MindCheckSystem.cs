@@ -1,6 +1,6 @@
 using Content.Server.Mind;
 using Content.Shared._RMC14.Connection;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Mind.Components;
 using Robust.Server.Player;
 using Robust.Shared.Enums;

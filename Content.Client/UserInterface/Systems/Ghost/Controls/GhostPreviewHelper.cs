@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Client.Lobby;
+using Content.Shared.Body;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Preferences;
@@ -12,16 +13,23 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls;
 
 internal static class GhostPreviewHelper
 {
+    private static readonly ProtoId<OrganCategoryPrototype> Head = "Head";
+    private static readonly ProtoId<OrganCategoryPrototype> Torso = "Torso";
+
     public static bool CanUseLiveSprite(
         IEntityManager entityManager,
         IPlayerManager playerManager,
-        EntityUid target)
+        EntityUid target,
+        bool allowCrossMap = false)
     {
-        if (playerManager.LocalEntity is not { } local)
+        if (!entityManager.TryGetComponent(target, out TransformComponent? targetXform))
             return false;
 
-        if (!entityManager.TryGetComponent(local, out TransformComponent? localXform) ||
-            !entityManager.TryGetComponent(target, out TransformComponent? targetXform))
+        if (allowCrossMap)
+            return true;
+
+        if (playerManager.LocalEntity is not { } local ||
+            !entityManager.TryGetComponent(local, out TransformComponent? localXform))
         {
             return false;
         }
@@ -69,56 +77,44 @@ internal static class GhostPreviewHelper
             ? "Unknown"
             : fallbackName;
 
-        if (!entityManager.TryGetComponent(source, out HumanoidAppearanceComponent? humanoid))
+        var visualBody = entityManager.System<SharedVisualBodySystem>();
+        if (!entityManager.TryGetComponent(source, out HumanoidProfileComponent? humanoid) ||
+            !visualBody.TryGatherMarkingsData(source, null, out var organProfiles, out _, out var organMarkings) ||
+            organProfiles.Count == 0)
         {
             return HumanoidCharacterProfile.DefaultWithSpecies()
                 .WithName(name);
         }
+
+        var organProfile = SelectOrganProfile(organProfiles);
+        var appearance = new HumanoidCharacterAppearance(
+            organProfile.EyeColor,
+            organProfile.SkinColor,
+            organMarkings.ToDictionary(
+                pair => pair.Key,
+                pair => pair.Value.ToDictionary(
+                    inner => inner.Key,
+                    inner => inner.Value.Select(marking => new Marking(marking.MarkingId, marking.MarkingColors)
+                    {
+                        Forced = marking.Forced,
+                    }).ToList())));
 
         return HumanoidCharacterProfile.DefaultWithSpecies(humanoid.Species)
             .WithName(name)
             .WithAge(humanoid.Age)
             .WithSex(humanoid.Sex)
             .WithGender(humanoid.Gender)
-            .WithCharacterAppearance(CreateAppearance(humanoid));
+            .WithVoice(humanoid.Voice)
+            .WithCharacterAppearance(appearance);
     }
 
-    private static HumanoidCharacterAppearance CreateAppearance(HumanoidAppearanceComponent humanoid)
+    internal static OrganProfileData SelectOrganProfile(
+        IReadOnlyDictionary<ProtoId<OrganCategoryPrototype>, OrganProfileData> organProfiles)
     {
-        var defaults = HumanoidCharacterAppearance.DefaultWithSpecies(humanoid.Species);
-        var hair = GetFirstMarking(humanoid.MarkingSet, MarkingCategories.Hair);
-        var facialHair = GetFirstMarking(humanoid.MarkingSet, MarkingCategories.FacialHair);
-        var markings = humanoid.MarkingSet.Markings
-            .Where(pair => pair.Key != MarkingCategories.Hair &&
-                           pair.Key != MarkingCategories.FacialHair)
-            .SelectMany(pair => pair.Value.Select(marking => new Marking(marking)))
-            .ToList();
-
-        return new HumanoidCharacterAppearance(
-            hair?.MarkingId ?? defaults.HairStyleId,
-            GetMarkingColor(hair, humanoid.CachedHairColor ?? defaults.HairColor),
-            facialHair?.MarkingId ?? defaults.FacialHairStyleId,
-            GetMarkingColor(facialHair, humanoid.CachedFacialHairColor ?? defaults.FacialHairColor),
-            humanoid.EyeColor,
-            humanoid.SkinColor,
-            markings,
-            defaults.RegulationHairStyleId,
-            defaults.RegulationHairColor,
-            defaults.RegulationFacialHairStyleId,
-            defaults.RegulationFacialHairColor);
-    }
-
-    private static Marking? GetFirstMarking(MarkingSet markingSet, MarkingCategories category)
-    {
-        return markingSet.TryGetCategory(category, out var markings) && markings.Count > 0
-            ? markings[0]
-            : null;
-    }
-
-    private static Color GetMarkingColor(Marking? marking, Color fallback)
-    {
-        return marking is { MarkingColors.Count: > 0 }
-            ? marking.MarkingColors[0]
-            : fallback;
+        return organProfiles.TryGetValue(Head, out var head)
+            ? head
+            : organProfiles.TryGetValue(Torso, out var torso)
+                ? torso
+                : organProfiles.OrderBy(pair => pair.Key.Id, StringComparer.Ordinal).First().Value;
     }
 }

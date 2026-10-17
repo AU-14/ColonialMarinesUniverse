@@ -134,7 +134,7 @@ public abstract partial class InteractionTest
                 StackComponent? stack = null;
                 await server.WaitPost(() =>
                 {
-                    entProto.TryComp(CompName.Get<StackComponent>(factory), out stack);
+                    entProto.TryComp(out stack, factory);
                 });
 
                 if (stack == null)

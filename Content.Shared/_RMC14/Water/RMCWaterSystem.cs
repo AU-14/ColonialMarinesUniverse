@@ -25,6 +25,7 @@ public sealed partial class RMCWaterSystem : EntitySystem
         SubscribeLocalEvent<PurifiableWaterComponent, MapInitEvent>(OnPurifiableWaterMapInit);
         SubscribeLocalEvent<PurifiableWaterComponent, RefreshNameModifiersEvent>(OnPurifiableWaterRefreshNameModifiers);
         SubscribeLocalEvent<RMCWaterComponent, PreventCollideEvent>(OnWaterPreventCollide);
+        InitializeSubmersion();
     }
 
     private void OnWaterPreventCollide(Entity<RMCWaterComponent> ent, ref PreventCollideEvent args)

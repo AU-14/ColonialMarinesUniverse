@@ -35,6 +35,7 @@
     range: 12
     volume: -3
   - type: ApcPowerReceiver
+    powerLoad: 10 # CMU14
   - type: RMCPowerReceiver
     idleLoad: 5
     activeLoad: 10

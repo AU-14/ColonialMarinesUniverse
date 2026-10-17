@@ -43,6 +43,27 @@
       components:
       - EntityStorage
   - type: Damageable
+  - type: DamageOverlay # CMU14: red damage vignette, xenos have no MobDamageable parent to inherit it from
+  # CMU14: xenos take ambient heat damage from phoron/plasma fires; cold-immune like
+  # the wizden xeno NPC. NOTE: Disabled until we're ready.
+# - type: AtmosExposed # CMU14
+# - type: Temperature # CMU14
+#   specificHeat: 42
+# - type: ThermalRegulator # CMU14
+#   metabolismHeat: 800
+#   radiatedHeat: 100
+#   implicitHeatRegulation: 500
+#   sweatHeatRegulation: 2000
+#   shiveringHeatRegulation: 2000
+#   normalBodyTemperature: 310.15
+#   thermalRegulationTemperatureThreshold: 25
+# - type: TemperatureDamage # CMU14
+#   heatDamageThreshold: 1073.15 # 800 C, phoron fire territory
+#   coldDamageThreshold: -150
+#   heatDamage:
+#     types:
+#       Heat: 5
+  - type: Injurable
     damageContainer: Xeno
   - type: Destructible
     thresholds: []
@@ -121,7 +142,7 @@
   - type: ContentEye
   - type: CameraRecoil
   - type: MindContainer
-    showExamineInfo: true
+  - type: MindExaminable
   - type: StatusIcon
   - type: RotationVisuals
     defaultRotation: 0
@@ -181,14 +202,19 @@
         layer:
         - BulletImpassable
   - type: CMSurgeryTarget
-  - type: Gibbable
   - type: RMCGibOnDeath
   - type: RMCSpawnEntitiesOnGib
     entities:
     - RMCDecalSpawnerGibsDrone # TODO one for every caste
     - RMCGibEffectXenoSmall # TODO larger gib effect for larger xenos
   - type: Body
-    prototype: Xenonid
+    requiredLegs: 0
+  - type: InitialBody
+    organs:
+      Head: RMCHeadXeno
+      Heart: RMCOrganXenoHeart
+    relationships:
+      Head: [ Heart ]
   - type: Xeno
   - type: VehicleDamageMultiplier
   - type: XenoRegen
@@ -265,6 +291,7 @@
     - Unconscious
     - TemporaryBlindness
     - Deaf
+    - YautjaInterference
   - type: ImmuneToClothingRequiredStepTrigger
   - type: IntrinsicRadioReceiver
   - type: IntrinsicRadioTransmitter
@@ -295,14 +322,18 @@
       - Infectable
       - Synth
       - Yautja
+      tags:
+      - Carp
   - type: BlockPullingDead
   - type: XenoFriendly
   - type: Undisposable
   - type: ShortExamine
   - type: DamageMobState
     critDamage:
-      groups:
-        Brute: 1.25
+      types:
+        Blunt: 0.41
+        Slash: 0.42
+        Piercing: 0.42
   - type: AffectableByWeeds
   - type: ComplexInteraction
   - type: UserLimitHits
@@ -323,7 +354,7 @@
     - enum.VendingMachineUiKey.Key
     - enum.PaperUiKey.Key
     - enum.RMCCameraUiKey.Key
-  - type: ActiveInputMover
+  - type: RMCActiveInputMover
   - type: HiveTracker
     trackerModes:
     - Queen
@@ -388,11 +419,13 @@
     whitelist:
       components:
       - Marine
+      - Synth # CMU14: synth k9s aren't Marine, so they read real xeno names without this
   - type: FixedDescription
     description: rmc-xeno-unknown-description
     whitelist:
       components:
       - Marine
+      - Synth # CMU14: same gap as the name mask above
   - type: EmoteCooldown
   - type: RMCMesonsNonviewable
     xenoVisible: true
@@ -431,8 +464,10 @@
       collection: RCMXenoClaw
     animation: RMCWeaponArcXenoClaw
     damage:
-      groups:
-        Brute: 12
+      types:
+        Blunt: 4
+        Slash: 4
+        Piercing: 4
     soundSwing:
       path: /Audio/_RMC14/Weapons/alien_claw_swipe.ogg
       params:
@@ -489,6 +524,11 @@
     - DoorBumpOpener
   - type: Hands
     examineShowEmpty: false
+  # CMU14: only purpose-built xeno restraints can bind developed xenos.
+  - type: Cuffable
+    cuffsWhitelist:
+      components:
+      - CMUXenoRestraints
   - type: GiveHands
     hands:
     - name: Right Hand
@@ -515,8 +555,10 @@
   components:
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 30
+      types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
     tailRange: 2.5
 
 - type: entity

@@ -1,0 +1,12 @@
+- type: loadoutGroup
+  id: ColonyAdministratorBeltCMU
+  name: au14-loadout-group-commander-sidearm-belt
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - PlatCOSidearmM48A5AU14
+  - ColonyAdministratorSidearmMatebaCustomAU14
+  - ColonyAdministratorSidearmMatebaSpecialAU14
+  - ColonyAdministratorHandcannonBeltAU14
+  - ColonyAdministratorGoldHandcannonBeltAU14
+  - ColonyAdministratorWinterWyvernBeltAU14

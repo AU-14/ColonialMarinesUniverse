@@ -1,0 +1,10 @@
+author: Vencallium
+category: CMU
+changes:
+- message: Fixed tactical hovering over empty +1 airspace during Distress Signal,
+    excluding Hope’s Retreat.
+  type: Fix
+- message: Added an empty upper z-level to Bosenmori Basho.
+  type: Map
+time: '2026-09-12T23:40:12.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1939

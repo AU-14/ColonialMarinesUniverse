@@ -1,16 +1,14 @@
 - type: entity
   save: false
-  parent: RMCBaseMobSpeciesOrganic
+  parent:
+  - AppearanceCMUHuman
+  - RMCBaseMobSpeciesOrganic
   id: CMMobHuman
   name: Urist C.M. McHands
   suffix: RMC14
   components:
   - type: FlareStomper
   - type: Vocal
-    sounds:
-      Male: RMCMaleHuman
-      Unsexed: RMCMaleHuman #sorry fem-leaning enbies
-      Female: RMCFemaleHuman
   - type: EmoteOnDamage
     emotes:
     - Scream
@@ -27,9 +25,6 @@
   - type: HitLocation
   - type: PainShock
   - type: BodyZoneTargeting
-  - type: Body
-    prototype: CMUHumanBody
-    requiredLegs: 2
   - type: UserInterface
     interfaces:
       enum.VoiceMaskUIKey.Key:

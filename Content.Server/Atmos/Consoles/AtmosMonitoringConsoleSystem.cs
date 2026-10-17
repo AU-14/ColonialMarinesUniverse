@@ -17,6 +17,7 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Server.Atmos.EntitySystems;
 using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.NodeContainer;
 
@@ -53,6 +54,7 @@ public sealed partial class AtmosMonitoringConsoleSystem : SharedAtmosMonitoring
 
         // Grid events
         SubscribeLocalEvent<GridSplitEvent>(OnGridSplit);
+        SubscribeLocalEvent<PipeNodeGroupRemovedEvent>(OnPipeNodeGroupRemoved);
     }
 
     #region Event handling
@@ -69,7 +71,7 @@ public sealed partial class AtmosMonitoringConsoleSystem : SharedAtmosMonitoring
 
     private void OnConsoleParentChanged(EntityUid uid, AtmosMonitoringConsoleComponent component, EntParentChangedMessage args)
     {
-        component.ForceFullUpdate = true;
+        component.ForceFullUpdateTick = _gameTiming.CurTick;
         InitializeAtmosMonitoringConsole(uid, component);
     }
 
@@ -295,6 +297,25 @@ public sealed partial class AtmosMonitoringConsoleSystem : SharedAtmosMonitoring
 
     #region Pipe net functions
 
+    private void OnPipeNodeGroupRemoved(ref PipeNodeGroupRemovedEvent args)
+    {
+        // When a pipe node group is removed, we need to iterate over all of
+        // our pipe chunks and remove any entries with a matching net id.
+        // (We only need to check the chunks for the affected grid, though.)
+
+        if (!_gridAtmosPipeChunks.TryGetValue(args.Grid, out var chunkData))
+            return;
+
+        foreach (var chunk in chunkData.Values)
+        {
+            foreach (var key in chunk.AtmosPipeData.Keys)
+            {
+                if (key.NetId == args.NetId)
+                    chunk.AtmosPipeData.Remove(key);
+            }
+        }
+    }
+
     private void RebuildAtmosPipeGrid(EntityUid gridUid, MapGridComponent grid)
     {
         var allChunks = new Dictionary<Vector2i, AtmosPipeChunk>();
@@ -411,7 +432,7 @@ public sealed partial class AtmosMonitoringConsoleSystem : SharedAtmosMonitoring
                 continue;
 
             var netId = GetPipeNodeNetId(pipeNode);
-            var subnet = new AtmosMonitoringConsoleSubnet(netId, pipeNode.CurrentPipeLayer, pipeColor.Color.ToHex());
+            var subnet = new AtmosMonitoringConsoleSubnet(netId, pipeNode.CurrentPipeLayer, pipeColor.Color);
             var pipeDirection = pipeNode.CurrentPipeDirection;
 
             chunk.AtmosPipeData.TryGetValue(subnet, out var atmosPipeData);
@@ -463,7 +484,17 @@ public sealed partial class AtmosMonitoringConsoleSystem : SharedAtmosMonitoring
         var xform = Transform(uid);
 
         if (xform.GridUid == null)
+        {
+            if (component.AtmosPipeChunks.Count == 0 && component.AtmosDevices.Count == 0)
+                return;
+
+            // The old chunk dictionary belongs to its grid and may be shared with other consoles.
+            component.AtmosPipeChunks = new();
+            component.AtmosDevices = new();
+            component.ForceFullUpdateTick = _gameTiming.CurTick;
+            Dirty(uid, component);
             return;
+        }
 
         var grid = xform.GridUid.Value;
 

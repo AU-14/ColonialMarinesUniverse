@@ -35,7 +35,7 @@ public sealed partial class RequisitionsEntry
     /// How long it takes for a limited entry to restock.
     /// </summary>
     [DataField]
-    public TimeSpan StockReplenishDelay = TimeSpan.FromMinutes(10);
+    public TimeSpan StockReplenishDelay = TimeSpan.FromMinutes(5);
 
     /// <summary>
     /// How many units are restored each restock tick.
@@ -64,4 +64,10 @@ public sealed partial class RequisitionsEntry
     /// <summary>Name of the ordering department.</summary>
     [NonSerialized]
     public string? DeptName;
+
+    /// <summary>
+    /// The actual packed weight of an itemized ASRS shipment. Legacy catalog entries leave this at zero.
+    /// </summary>
+    [NonSerialized]
+    public int PackedWeight;
 }

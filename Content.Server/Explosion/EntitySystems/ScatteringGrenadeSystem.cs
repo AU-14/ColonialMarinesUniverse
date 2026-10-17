@@ -1,11 +1,17 @@
 using Content.Shared.Explosion.Components;
 using Content.Shared.Throwing;
+using Content.Shared.Trigger;
+using Content.Shared.Trigger.Systems;
+using Content.Shared.Trigger.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
 using System.Numerics;
 using Content.Shared.Explosion.EntitySystems;
+// CMU14: activate scattered flares.
+using Content.Server.Light.EntitySystems;
+using Content.Shared.Light.Components;
 
 namespace Content.Server.Explosion.EntitySystems;
 
@@ -15,6 +21,9 @@ public sealed partial class ScatteringGrenadeSystem : SharedScatteringGrenadeSys
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ThrowingSystem _throwingSystem = default!;
     [Dependency] private TransformSystem _transformSystem = default!;
+    [Dependency] private TriggerSystem _trigger = default!;
+    // CMU14: activate scattered flares.
+    [Dependency] private ExpendableLightSystem _expendableLight = default!;
 
     public override void Initialize()
     {
@@ -30,6 +39,9 @@ public sealed partial class ScatteringGrenadeSystem : SharedScatteringGrenadeSys
     /// </summary>
     private void OnScatteringTrigger(Entity<ScatteringGrenadeComponent> entity, ref TriggerEvent args)
     {
+        if (args.Key != entity.Comp.TriggerKey)
+            return;
+
         entity.Comp.IsTriggered = true;
         args.Handled = true;
     }
@@ -82,19 +94,24 @@ public sealed partial class ScatteringGrenadeSystem : SharedScatteringGrenadeSys
                     else
                         direction *= component.Distance;
 
+                    // CMU14: activate scattered flares.
+                    // Flare payloads must be lit before their landing event creates
+                    // the signal target (which prevents subsequent activation).
+                    if (component.ToggleContents && TryComp<ExpendableLightComponent>(contentUid, out var light))
+                        _expendableLight.TryActivate((contentUid, light));
+
                     _throwingSystem.TryThrow(contentUid, direction, component.Velocity);
 
                     // RMC14
                     var throwContent = new GrenadeContentThrownEvent(uid);
                     RaiseLocalEvent(contentUid, ref throwContent);
 
-                    if (component.TriggerContents)
+                    if (component.TriggerContents && TryComp<TimerTriggerComponent>(contentUid, out var contentTimer))
                     {
                         additionalIntervalDelay += _random.NextFloat(component.IntervalBetweenTriggersMin, component.IntervalBetweenTriggersMax);
-                        var contentTimer = EnsureComp<ActiveTimerTriggerComponent>(contentUid);
-                        contentTimer.TimeRemaining = component.DelayBeforeTriggerContents + additionalIntervalDelay;
-                        var ev = new ActiveTimerTriggerEvent(contentUid, uid);
-                        RaiseLocalEvent(contentUid, ref ev);
+
+                        _trigger.SetDelay((contentUid, contentTimer), TimeSpan.FromSeconds(component.DelayBeforeTriggerContents + additionalIntervalDelay));
+                        _trigger.ActivateTimerTrigger((contentUid, contentTimer));
                     }
                 }
 

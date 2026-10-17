@@ -1,0 +1,12 @@
+- type: entity
+  id: ActionWorkingJoeVoice
+  name: Voice Synthesizer
+  components:
+  - type: Action
+  - type: Sprite
+    layers:
+    - sprite: Interface/Actions/voice-mask.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:WorkingJoeVoiceActionEvent {}

@@ -1,7 +1,7 @@
 using Content.Client._RMC14.Weapons.Ranged.Prediction;
 using NUnit.Framework;
 
-namespace Content.Tests.Client._CMU14.Xenonids;
+namespace Content.Tests.Client.CMU14.Xenonids;
 
 [TestFixture]
 public sealed class CMUXenoWarlockGunPredictionTest

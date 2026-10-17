@@ -1,4 +1,4 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.OrbitalCannon;
@@ -24,4 +24,6 @@ public sealed partial class OrbitalCannonExplosionComponent : Component
 
     [DataField, AutoNetworkedField]
     public TimeSpan LastStepAt;
+
+    [DataField] public bool MultiZ;
 }

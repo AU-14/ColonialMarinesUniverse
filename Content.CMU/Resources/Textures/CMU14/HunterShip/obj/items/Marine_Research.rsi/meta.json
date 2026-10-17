@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/Marine_Research.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "anti-acid"
+    },
+    {
+      "name": "biomass"
+    },
+    {
+      "name": "chitin-chunk"
+    },
+    {
+      "name": "chitin-armor"
+    },
+    {
+      "name": "resin-glue"
+    },
+    {
+      "name": "blood-vial"
+    },
+    {
+      "name": "weed-killer"
+    },
+    {
+      "name": "alien-tracker",
+      "delays": [
+        [
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "claw"
+    },
+    {
+      "name": "weed_extract"
+    },
+    {
+      "name": "chitin"
+    },
+    {
+      "name": "royal_jelly"
+    },
+    {
+      "name": "xeno_tag",
+      "delays": [
+        [
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "tag_box"
+    }
+  ]
+}

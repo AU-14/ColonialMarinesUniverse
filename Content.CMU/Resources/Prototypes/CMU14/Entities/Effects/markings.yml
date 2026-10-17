@@ -1,0 +1,44 @@
+- type: decal
+  id: CMUDecalAlphaMarking
+  parent: CMDecalBase
+  tags: ["station", "markings"]
+  defaultCustomColor: true
+  sprite:
+    sprite: CMU14/Decals/markings.rsi
+    state: alpha
+
+- type: decal
+  id: CMUDecalBravoMarking
+  parent: CMDecalBase
+  tags: ["station", "markings"]
+  defaultCustomColor: true
+  sprite:
+    sprite: CMU14/Decals/markings.rsi
+    state: bravo
+
+- type: decal
+  id: CMUDecalCharlieMarking
+  parent: CMDecalBase
+  tags: ["station", "markings"]
+  defaultCustomColor: true
+  sprite:
+    sprite: CMU14/Decals/markings.rsi
+    state: charlie
+
+- type: decal
+  id: CMUDecalPilotMarking
+  parent: CMDecalBase
+  tags: ["station", "markings"]
+  defaultCustomColor: true
+  sprite:
+    sprite: CMU14/Decals/markings.rsi
+    state: pilot
+
+- type: decal
+  id: CMUDecalMedicalMarking
+  parent: CMDecalBase
+  tags: ["station", "markings"]
+  defaultCustomColor: true
+  sprite:
+    sprite: CMU14/Decals/markings.rsi
+    state: medical

@@ -95,7 +95,7 @@ public sealed partial class FireMissionSystem : EntitySystem
                         continue;
 
                     warning.MessageSent = true;
-                    _mortar.PopupWarning(_transform.ToMapCoordinates(startCoordinates), warning.MessageRange, warning.Message, warning.Message + "-above", true);
+                    _mortar.PopupWarning(_transform.ToMapCoordinates(startCoordinates), warning.MessageRange, warning.Message, warning.Message + "-above", true, Loc.GetString($"rmc-dropship-firemission-vector-{fireMission.StrikeVector}")); // CMU14
                 }
 
                 continue;

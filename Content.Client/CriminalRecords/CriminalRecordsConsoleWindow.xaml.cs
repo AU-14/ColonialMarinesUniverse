@@ -14,18 +14,22 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
 using System.Linq;
+using System.Numerics;
+using Content.Shared.StatusIcon;
+using Robust.Client.GameObjects;
 
 namespace Content.Client.CriminalRecords;
 
 // TODO: dedupe shitcode from general records theres a lot
 [GenerateTypedNameReferences]
-public sealed partial class CriminalRecordsConsoleWindow : FancyWindow
+public sealed partial class CriminalRecordsConsoleWindow : Robust.Client.UserInterface.CustomControls.DefaultWindow // cmu edit
 {
     private readonly IPlayerManager _player;
     private readonly IPrototypeManager _proto;
     private readonly IRobustRandom _random;
     private readonly AccessReaderSystem _accessReader;
     [Dependency] private IEntityManager _entManager = default!;
+    private readonly SpriteSystem _spriteSystem;
 
     public readonly EntityUid Console;
 
@@ -55,6 +59,7 @@ public sealed partial class CriminalRecordsConsoleWindow : FancyWindow
     public CriminalRecordsConsoleWindow(EntityUid console, uint maxLength, IPlayerManager playerManager, IPrototypeManager prototypeManager, IRobustRandom robustRandom, AccessReaderSystem accessReader)
     {
         RobustXamlLoader.Load(this);
+        Content.Client.Lobby.UI.CrtLobbyTheme.ApplyWindow(this, useCrtTypography: true); // cmu edit
 
         Console = console;
         _player = playerManager;
@@ -62,6 +67,7 @@ public sealed partial class CriminalRecordsConsoleWindow : FancyWindow
         _random = robustRandom;
         _accessReader = accessReader;
         IoCManager.InjectDependencies(this);
+        _spriteSystem = _entManager.System<SpriteSystem>();
 
         _maxLength = maxLength;
         _currentFilterType = StationRecordFilterType.Name;
@@ -72,6 +78,10 @@ public sealed partial class CriminalRecordsConsoleWindow : FancyWindow
 
         foreach (var item in Enum.GetValues<StationRecordFilterType>())
         {
+            // cmu edit start
+            if (item is StationRecordFilterType.Job or StationRecordFilterType.Species)
+                continue;
+            // cmu edit end
             FilterType.AddItem(GetTypeFilterLocals(item), (int)item);
         }
 
@@ -141,6 +151,8 @@ public sealed partial class CriminalRecordsConsoleWindow : FancyWindow
             if (_selectedRecord is { } record)
                 OnHistoryUpdated?.Invoke(record, _access, true);
         };
+
+        BountySetButton.OnPressed += BountySetButton_Pressed;
     }
 
     public void StatusFilterPressed(SecurityStatus statusSelected)
@@ -218,29 +230,58 @@ public sealed partial class CriminalRecordsConsoleWindow : FancyWindow
 
     private void PopulateRecordContainer(GeneralStationRecord stationRecord, CriminalRecord criminalRecord)
     {
+        var specifier = new SpriteSpecifier.Rsi(new ResPath("Interface/Misc/job_icons.rsi"), "Unknown");
         var na = Loc.GetString("generic-not-available-shorthand");
         PersonName.Text = stationRecord.Name;
+        PersonJob.Text = stationRecord.JobTitle ?? na;
+
+        if (_proto.TryIndex<JobIconPrototype>(stationRecord.JobIcon, out var proto))
+            PersonJobIcon.Texture = _spriteSystem.Frame0(proto.Icon);
+
         PersonPrints.Text = stationRecord.Fingerprint ?? na;
         PersonDna.Text = stationRecord.DNA ?? na;
+        // cmu edit start
+        PersonReligion.Text = Content.Client.CMU14.Religion.CMUReligionNames.Describe(_proto, stationRecord.Religion);
+        // cmu edit end
+
+        if (criminalRecord.Status != SecurityStatus.None)
+            specifier = new SpriteSpecifier.Rsi(new ResPath("Interface/Misc/security_icons.rsi"), GetStatusIcon(criminalRecord.Status));
+
+        PersonStatusTX.SetFromSpriteSpecifier(specifier);
+        PersonStatusTX.DisplayRect.TextureScale = new Vector2(3f, 3f);
+
+        StatusOptionButton.SelectId((int) criminalRecord.Status);
+        if (criminalRecord.Reason is { } reason)
+        {
+            var message = FormattedMessage.FromMarkupOrThrow(Loc.GetString("criminal-records-console-wanted-reason"));
+
+            if (criminalRecord.Status == SecurityStatus.Suspected)
+                message = FormattedMessage.FromMarkupOrThrow(Loc.GetString("criminal-records-console-suspected-reason"));
+
+            message.AddText($": {reason}");
+            WantedReason.SetMessage(message);
+            WantedReason.Visible = true;
+        }
+        else
+        {
+            WantedReason.Visible = false;
+        }
+
         PersonBounty.Text = criminalRecord.Bounty > 0 ? criminalRecord.Bounty.ToString() : na;
         // Show bounty input and set button only if user can edit
-        BountyInput.Visible = _access;
-        BountySetButton.Visible = _access;
+        // cmu edit start: bounties are set by the game only
+        BountyInput.Visible = false;
+        BountySetButton.Visible = false;
+        // cmu edit end
         if (_access)
         {
             BountyInput.Text = criminalRecord.Bounty > 0 ? criminalRecord.Bounty.ToString() : string.Empty;
-            BountySetButton.OnPressed += BountySetButton_Pressed;
         }
-
         else
         {
             BountyInput.Text = string.Empty;
         }
-
     }
-
-
-
     // Handler for when the bounty set button is pressed
     private void BountySetButton_Pressed(BaseButton.ButtonEventArgs args)
     {
@@ -265,7 +306,7 @@ public sealed partial class CriminalRecordsConsoleWindow : FancyWindow
 
     private void SetStatus(SecurityStatus status)
     {
-        if (status == SecurityStatus.Wanted || status == SecurityStatus.Suspected)
+        if (status == SecurityStatus.Wanted || status == SecurityStatus.Suspected || status == SecurityStatus.Hostile)
         {
             GetReason(status);
             return;
@@ -290,17 +331,40 @@ public sealed partial class CriminalRecordsConsoleWindow : FancyWindow
         var entry = new QuickDialogEntry(field, QuickDialogEntryType.LongText, prompt, placeholder);
         var entries = new List<QuickDialogEntry>() { entry };
         _reasonDialog = new DialogWindow(title, entries);
+        Content.Client.Lobby.UI.CrtLobbyTheme.Apply(_reasonDialog, useCrtTypography: true); // cmu edit
 
         _reasonDialog.OnConfirmed += responses =>
         {
             var reason = responses[field];
-            if (reason.Length < 1 || reason.Length > _maxLength)
+            // cmu edit start
+            if (reason.Length > _maxLength)
                 return;
+
+            if (string.IsNullOrWhiteSpace(reason))
+            {
+                OnStatusSelected?.Invoke(status);
+                return;
+            }
+            // cmu edit end
 
             OnDialogConfirmed?.Invoke(status, reason);
         };
 
         _reasonDialog.OnClose += () => { _reasonDialog = null; };
+    }
+    private string GetStatusIcon(SecurityStatus status)
+    {
+        return status switch
+        {
+            SecurityStatus.Paroled => "hud_paroled",
+            SecurityStatus.Wanted => "hud_wanted",
+            SecurityStatus.Detained => "hud_incarcerated",
+            SecurityStatus.Discharged => "hud_discharged",
+            SecurityStatus.Suspected => "hud_suspected",
+            SecurityStatus.Hostile => "hud_hostile",
+            SecurityStatus.Eliminated => "hud_eliminated",
+            _ => "SecurityIconNone"
+        };
     }
     private string GetTypeFilterLocals(StationRecordFilterType type)
     {

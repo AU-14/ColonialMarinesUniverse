@@ -1,0 +1,37 @@
+// CC0-1.0. Twin lift jets distort only the hot air around the rear of the aircraft.
+light_mode unshaded;
+uniform sampler2D SCREEN_TEXTURE;
+uniform lowp int count;
+uniform highp vec2[4] positions;
+uniform highp vec2[4] axisX;
+uniform highp vec2[4] axisY;
+uniform highp float[4] strength;
+uniform highp float clock;
+
+highp float vtolHash(highp vec2 p) {
+    return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);
+}
+highp float vtolNoise(highp vec2 p) {
+    highp vec2 cell=floor(p);
+    highp vec2 f=fract(p);
+    f=f*f*(3.0-2.0*f);
+    return mix(mix(vtolHash(cell),vtolHash(cell+vec2(1.0,0.0)),f.x),
+        mix(vtolHash(cell+vec2(0.0,1.0)),vtolHash(cell+vec2(1.0)),f.x),f.y);
+}
+void fragment() {
+    highp vec2 offset=vec2(0.0);
+    for (int i=0;i<4;i++) {
+        if (i>=count) break;
+        highp vec2 delta=UV-positions[i];
+        highp float det=axisX[i].x*axisY[i].y-axisX[i].y*axisY[i].x;
+        if (abs(det)<0.00000001) continue;
+        highp vec2 world=vec2(delta.x*axisY[i].y-delta.y*axisY[i].x,
+            delta.y*axisX[i].x-delta.x*axisX[i].y)/det;
+        highp vec2 q=vec2(abs(world.x)-0.42,(world.y+1.35)*0.65);
+        highp float mask=exp(-dot(q,q)*2.8)*strength[i];
+        highp float n=vtolNoise(world*6.0-vec2(0.0,clock*5.0));
+        highp float cross=vtolNoise(world*9.0+vec2(clock*3.0,0.0));
+        offset+=(axisX[i]*(n-0.5)+axisY[i]*(cross-0.5))*mask*0.07;
+    }
+    COLOR=zTextureSpec(SCREEN_TEXTURE,clamp(UV+offset,vec2(0.0),vec2(1.0)));
+}

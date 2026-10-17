@@ -1,0 +1,138 @@
+- type: job
+  parent: CMJobBase
+  id: RuMCUPPBEARCommanderGROZA
+  roundSide: ThirdParty
+  roundForce: BEAR
+  roundRole: RuMCUPPBEARCommanderGROZA
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_sl_a
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - RuMCSquadBEAR
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillEngineer: 2
+      RMCSkillConstruction: 2
+      RMCSkillFirearms: 2
+      RMCSkillOverwatch: 1
+      RMCSkillMedical: 1
+      RMCSkillMeleeWeapons: 1
+      RMCSkillPilot: 1
+      RMCSkillPolice: 2
+      RMCSkillFireman: 2
+      RMCSkillPowerLoader: 1
+      RMCSkillVehicles: 2
+      RMCSkillJtac: 4
+      RMCSkillEndurance: 4
+      RMCSkillLeadership: 3
+  - type: EquipEntityPreset
+    preset: RuMCBEARPresetGROZA
+  - type: JobPrefix
+    prefix: rumc-job-prefix-commander
+  - type: MarineOrders
+  - type: RMCTrackable
+  - type: RMCPointing
+  - type: Language
+    spokenLanguages:
+    - Polish
+    - English
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    - TacticalSignLanguage
+    understoodLanguages:
+    - Polish
+    - English
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    - TacticalSignLanguage
+    currentLanguage: Russian
+    defaultLanguage: Russian
+
+  name: Squad Leader
+  description: GROZA Squad Leader
+  playTimeTracker: RuMCJobUPPBEARCommander
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UPP_Plutonowy:
+      entity: AU14ChevronUPPNIPlutonowy
+      requirements: []
+    UPP_Sergeant:
+      entity: AU14ChevronUPPNISergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPBEARCommander
+        time: 1800 # 0.5 hours
+    UPP_SeniorSergeant:
+      entity: AU14ChevronUPPNISeniorSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPBEARCommander
+        time: 5400 # 1.5 hours
+    UPP_JuniorLieutenant:
+      entity: AU14ChevronUPPNIJuniorLieutenant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPBEARCommander
+        time: 7200 # 2 hours
+    UPP_Lieutenant:
+      entity: AU14ChevronUPPNILieutenant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPBEARCommander
+        time: 10800 # 3 hours
+  spawnMenuRoleName: GROZA Squad Leader
+  startingGear: RuMCGearUPPBEARCommanderGROZA
+  greeting: rumc-bear-greeting
+  icon: "RuMCJobIconUPPBEARCommander"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14GovforCommand
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: RuMCBaseMobSpeciesOrganicUPPBEAR
+  id: RuMCJobUPPBEARCommanderGROZA
+  name: GROZA Squad Leader
+  components:
+  - type: EquipEntityPreset
+    preset: RuMCBEARPresetGROZA
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: RuMCSquadBEAR
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: GROZA Squad Leader
+    description:  The squad leader of the BEAR PMC. Responsible for mission execution, team coordination, and on-ground decision-making. Carries secret communication with the UPP. First in battle, last to retreat.
+    job: RuMCUPPBEARCommanderGROZA
+    raffle:
+      settings: short
+
+- type: startingGear
+  parent: RuMCGearUPPBEARbaseHeavy
+  id: RuMCGearUPPBEARCommanderGROZA
+  equipment:
+    id: RuCMIDCardUPPBEARCommander
+    ears: RuMCHeadsetBEARGROZA
+  storage:
+    back:
+    - RMCLaserDesignator
+    - AU14GrenadeHighExplosiveUPP
+    - AU14GrenadeSmokeUPP
+    - AU14GrenadeSmokeUPP
+    - RMCExplosiveBreachingCharge
+    - RMCVisorWelding
+

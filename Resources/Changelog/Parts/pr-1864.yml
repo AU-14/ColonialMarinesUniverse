@@ -1,0 +1,13 @@
+author: Vencallium
+category: CMU
+changes:
+- message: Added the Stimmaster 1000 for fabricating, labeling, filling, ejecting,
+    and smartfridge-transferring custom autoinjectors.
+  type: Add
+- message: Plant bags can now bulk-load produce into reagent grinders and convert
+    eligible produce into seeds at seed extractors.
+  type: Add
+- message: Increased reagent grinder chamber capacity to 50 items.
+  type: Tweak
+time: '2026-08-25T02:46:36.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1864

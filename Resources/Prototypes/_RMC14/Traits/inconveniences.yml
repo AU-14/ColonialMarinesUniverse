@@ -10,7 +10,10 @@
   id: LightweightDrunk
   name: trait-lightweight-name
   description: trait-lightweight-desc
-  category: Quirks
+  # cmu edit start
+  category: CMUDrinkingTraits
+  cost: 1
+  # cmu edit end
   components:
   - type: LightweightDrunk
     boozeStrengthMultiplier: 2
@@ -20,6 +23,9 @@
   name: au14-trait-unrevivable-name
   description: au14-trait-unrevivable-desc
   category: Disabilities
+  # cmu edit start: disabilities are limited to four
+  cost: 1
+  # cmu edit end
   components:
     - type: Unrevivable
       cloneable: true
@@ -42,6 +48,9 @@
   name: au14-trait-epilepsy-name
   description: au14-trait-epilepsy-desc
   category: Disabilities
+  # cmu edit start: disabilities are limited to four
+  cost: 1
+  # cmu edit end
   components:
     - type: Epilepsy
 
@@ -50,6 +59,9 @@
   name: au14-trait-slowrunner-name
   description: au14-trait-slowrunner-desc
   category: Disabilities
+  # cmu edit start: disabilities are limited to four
+  cost: 1
+  # cmu edit end
   components:
     - type: SlowRunner
 
@@ -58,6 +70,9 @@
   name: au14-trait-asthmatic-name
   description: au14-trait-asthmatic-desc
   category: Disabilities
+  # cmu edit start: disabilities are limited to four
+  cost: 1
+  # cmu edit end
   components:
     - type: RespiratoryStrain
   traitGear: CMUAsthmaInhaler
@@ -67,6 +82,9 @@
   name: au14-trait-anemic-name
   description: au14-trait-anemic-desc
   category: Disabilities
+  # cmu edit start: disabilities are limited to four
+  cost: 1
+  # cmu edit end
   components:
     - type: Anemic
 
@@ -75,6 +93,9 @@
   name: au14-trait-drugallergy-name
   description: au14-trait-drugallergy-desc
   category: Disabilities
+  # cmu edit start: disabilities are limited to four
+  cost: 1
+  # cmu edit end
   components:
     - type: DrugAllergy
   traitGear: CMUEpinephrineAutoInjector
@@ -84,6 +105,9 @@
   name: au14-trait-panicprone-name
   description: au14-trait-panicprone-desc
   category: Disabilities
+  # cmu edit start: disabilities are limited to four
+  cost: 1
+  # cmu edit end
   components:
     - type: Panic
 
@@ -92,6 +116,9 @@
   name: au14-trait-nicotineaddiction-name
   description: au14-trait-nicotineaddiction-desc
   category: Disabilities
+  # cmu edit start: disabilities are limited to four
+  cost: 1
+  # cmu edit end
   components:
     - type: NicotineAddiction
 
@@ -100,6 +127,9 @@
   name: au14-trait-nearsighted-name
   description: au14-trait-nearsighted-desc
   category: Disabilities
+  # cmu edit start: disabilities are limited to four
+  cost: 1
+  # cmu edit end
   traitGear: RMCHipsterGlasses
   whitelist:
     components:

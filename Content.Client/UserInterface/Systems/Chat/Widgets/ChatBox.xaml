@@ -6,24 +6,47 @@
     MouseFilter="Stop"
     HorizontalExpand="True"
     VerticalExpand="True"
-    MinSize="465 225">
+    MinSize="500 260">
     <PanelContainer Name="ChatWindowPanel" Access="Public" HorizontalExpand="True" VerticalExpand="True"
-                    StyleClasses="StyleNano.StyleClassChatPanel">
-        <BoxContainer Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True" VerticalExpand="True">
-            <BoxContainer Name="TabHeader" Access="Public" Orientation="Horizontal" SeparationOverride="3" HorizontalExpand="True" Margin="4 3 4 0">
-                <BoxContainer Name="TabBar" Access="Public" Orientation="Horizontal" SeparationOverride="2" HorizontalExpand="True"/>
-                <controls:ChatTabOverflowButton Name="TabOverflowButton" Access="Public"/>
-                <controls:SplitChatButton Name="SplitButton" Access="Public"/>
-            </BoxContainer>
-            <BoxContainer Name="ChatPanes" Access="Public" Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True" VerticalExpand="True" Margin="4 0 4 1">
+                    StyleClasses="ChatPanel">
+        <!-- SeparationOverride="0": the input row's top rule doubles as the divider under the
+             message log, so any separation here shows up as a dead gap above that rule. Rows that
+             do want breathing space carry their own margin. -->
+        <BoxContainer Orientation="Vertical" SeparationOverride="0" HorizontalExpand="True" VerticalExpand="True">
+            <PanelContainer Name="TabHeaderPanel" Access="Public" HorizontalExpand="True">
+                <BoxContainer Name="TabHeader" Access="Public" Orientation="Horizontal" SeparationOverride="3" HorizontalExpand="True" Margin="4 4 4 4">
+                    <BoxContainer Name="TabBar" Access="Public" Orientation="Horizontal" SeparationOverride="2" HorizontalExpand="True"/>
+                    <controls:ChatTabOverflowButton Name="TabOverflowButton" Access="Public"/>
+                    <controls:SplitChatButton Name="SplitButton" Access="Public"/>
+                </BoxContainer>
+            </PanelContainer>
+            <!-- No left inset here any more - see ChatMessageRow.ContentMarginLeftOverride for why.
+                 A margin on this container insets _rows as a whole, which insets every row's own
+                 PanelOverride fill along with it: ChatAccentStyleBox.DoDraw paints the row's full
+                 arranged box regardless of content margin, so a wrapper margin reads as a band of
+                 bare ground down the left of every tinted row - exactly the "green line" the tab
+                 strip and input row don't have, because neither sits inside ChatPanes. Confirmed
+                 2026-08-27 by pixel-sampling a live capture: invisible before the row-tint feature,
+                 since a transparent row has nothing to show the gap against.
+                 The right side is 2 (was 13): the scrollbar's own gutter lives inside this container
+                 too and used to be 8px wide, so 13 + 8 was 21px of dead space between the last
+                 visible glyph and the panel edge before anything even reached the scrollbar itself.
+                 The gutter went through a 4px stopgap and settled at 10 (see crtChatScrollGrabber in
+                 StyleNanoCrt.cs - a bracket-shaped thumb needs room to read as a bracket), so this
+                 margin only has to cover the gap between the gutter and the true edge, not the
+                 gutter's own width.
+                 No bottom margin - the input row sits directly on the log. -->
+            <widgets:ChatPaneLayout Name="ChatPanes" Access="Public" Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True" VerticalExpand="True" Margin="0 2 2 0">
                 <widgets:ChatLogPanel Name="Contents" Access="Public" HorizontalExpand="True" VerticalExpand="True" />
                 <BoxContainer Name="SecondaryPane" Access="Public" Visible="False" Orientation="Vertical" SeparationOverride="0" HorizontalExpand="True" VerticalExpand="True">
                     <widgets:ChatSplitResizeHandle Name="SecondaryResizeHandle" Access="Public" HorizontalExpand="True" MinHeight="4"/>
                     <widgets:ChatLogPanel Name="SecondaryContents" Access="Public" HorizontalExpand="True" VerticalExpand="True" />
                 </BoxContainer>
-            </BoxContainer>
+            </widgets:ChatPaneLayout>
             <OutputPanel Name="LegacyContents" Access="Public" Visible="False" HorizontalExpand="True" VerticalExpand="True" Margin="8 8 8 4" ShowScrollDownButton="True" />
-            <controls:ChatInputBox HorizontalExpand="True" Name="ChatInput" Access="Public" Margin="2 0 2 2"/>
+            <!-- Flush to the chat panel's left, right and bottom borders; its own stylebox adds only
+                 the top rule. -->
+            <controls:ChatInputBox HorizontalExpand="True" Name="ChatInput" Access="Public" Margin="0"/>
         </BoxContainer>
     </PanelContainer>
 </widgets:ChatBox>

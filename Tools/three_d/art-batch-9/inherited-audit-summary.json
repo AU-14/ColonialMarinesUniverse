@@ -1,0 +1,1124 @@
+{
+  "sourceCommit": "6e37a4d0a7d9433838c393a82c02422cb704dd5a",
+  "scope": "Separate 110 inherited-candidate audit; no addition to or subtraction from original 473 physical-missing queue.",
+  "auditedPrototypeTypes": 110,
+  "reduxRecords": 483,
+  "classificationCounts": {
+    "source-compatible-existing-candidate": 27,
+    "source-specific-replacement-draft": 80,
+    "integration-unresolved-unbound-study": 3
+  },
+  "classificationReduxRecords": {
+    "source-compatible-existing-candidate": 53,
+    "source-specific-replacement-draft": 422,
+    "integration-unresolved-unbound-study": 8
+  },
+  "newCanonicalAssemblies": 73,
+  "boundReplacementAssemblies": 70,
+  "unboundStudyAssemblies": 3,
+  "canonicalDraftReplacements": 80,
+  "original1039ModelLibraryFidelityAudited": false,
+  "allOriginalModelsRemainDraft": true,
+  "rows": [
+    {
+      "id": "AU14CrateBoxABR40Magazines",
+      "family": "storage",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "AU14CrateBoxGamblingTableParts",
+      "family": "storage",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 2,
+      "classicRecords": 1,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "AU14CrateBoxM4A3",
+      "family": "storage",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "AU14CrateBoxToolbelt",
+      "family": "storage",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "AU14CrateBoxboxofingredients",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": "CMU3DInheritedCratesPlasticCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "AU14CrateCivilianClothingRandom",
+      "family": "storage",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "AU14CrateFoodMRERMC",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": "CMU3DInheritedCratesPlasticCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "AU14CrateSecureWeYuDrugs",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedCratesSecureWeYaCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "AU14CrateWorkTools",
+      "family": "storage",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 3,
+      "classicRecords": 2,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMClosetBio",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 3,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedClosetsBioCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMClosetBioJanitor",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 3,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedClosetsBioJanitorCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMClosetBioScientist",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 5,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedClosetsBioScientistCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMClosetBioScientistFilled",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 3,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedClosetsBioScientistCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMClosetTool",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedClosetsToolclosetCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMClosetToolFilled",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedClosetsToolclosetCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMCrateSecureSurgery",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedCratesSecureMedicalCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMLockerEngineerElectrical",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 5,
+      "replacementModel": "CMU3DInheritedLockersEngineerElectricCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMLockerEngineerWelder",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": "CMU3DInheritedLockersEngineerWelderCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMLockerMedical",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedLockersMedicalCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMLockerMedicalWhite",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 5,
+      "replacementModel": "CMU3DInheritedLockersMedicalWhiteCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMLockerPolice",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 8,
+      "classicRecords": 3,
+      "replacementModel": "CMU3DInheritedLockersPoliceCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMUCratePreciousMetals",
+      "family": "storage",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMUCrateSecureWYRandomExp",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedCratesSecureWeYaCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCArmoryLockerRedM890FilledSingle",
+      "family": "storage",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 8,
+      "classicRecords": 1,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCBookcaseEngineering",
+      "family": "storage",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 1,
+      "classicRecords": 2,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCBookcaseMedical",
+      "family": "storage",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 2,
+      "classicRecords": 3,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCrateAttachmentRailFlashlight",
+      "family": "storage",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCrateBlackmarketFireArms",
+      "family": "storage",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCrateElectricalMaintenance",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": "CMU3DInheritedCratesConstructionCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCrateFoodIngredients",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": "CMU3DInheritedCratesPlasticCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCrateFreezer",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": "CMU3DInheritedCratesFreezerCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCrateMetalBuildable",
+      "family": "storage",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 2,
+      "classicRecords": 2,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCrateMinecart",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 7,
+      "classicRecords": 7,
+      "replacementModel": "CMU3DInheritedCratesMinecartCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCrateSecureAmmo",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedCratesSecureAmmoCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCrateSuppliesBoxes",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 2,
+      "replacementModel": "CMU3DInheritedCratesSupplyCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCrateSupply",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedCratesSupplyCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCrateSupplyJanitor",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 4,
+      "classicRecords": 4,
+      "replacementModel": "CMU3DInheritedCratesSupplyCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCrateWeapons",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": "CMU3DInheritedCratesWeaponsCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCLockerFridgeDry",
+      "family": "storage",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 4,
+      "classicRecords": 4,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCLockerFridgeGroceries",
+      "family": "storage",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 7,
+      "classicRecords": 0,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCLockerFridgeOrganic",
+      "family": "storage",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCLockerGunBase",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 2,
+      "replacementModel": "CMU3DInheritedLockersGunCabinetCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCLockerGunStorageBrig",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 2,
+      "replacementModel": "CMU3DInheritedLockersGunCabinetCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCLockerGunStorageCommand",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 10,
+      "classicRecords": 17,
+      "replacementModel": "CMU3DInheritedLockersGunCabinetCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCTrashCart",
+      "family": "storage",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedCratesTrashCartCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-storage/inherited-storage-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "AU14CorporateASRSConsole",
+      "family": "misc",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "AUCMDefibrillatorEmpty",
+      "family": "misc",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMASRSConsoleColony",
+      "family": "misc",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMPenClicky",
+      "family": "misc",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 19,
+      "classicRecords": 6,
+      "replacementModel": "CMU3DCMPenClickyInheritedMiscCloud",
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMPenFountain",
+      "family": "misc",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 24,
+      "classicRecords": 8,
+      "replacementModel": "CMU3DCMPenFountainInheritedMiscCloud",
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMSoapDeluxe",
+      "family": "misc",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 2,
+      "replacementModel": "CMU3DCMSoapDeluxeInheritedMiscCloud",
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMSoapNT",
+      "family": "misc",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 2,
+      "replacementModel": "CMU3DCMSoapNTInheritedMiscCloud",
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMSoapSyndie",
+      "family": "misc",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 2,
+      "replacementModel": "CMU3DCMSoapSyndieInheritedMiscCloud",
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCBlackSensorComputer3",
+      "family": "misc",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 9,
+      "classicRecords": 6,
+      "replacementModel": "CMU3DRMCBlackSensorComputer3InheritedMiscCloud",
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCBoxZiptie",
+      "family": "misc",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 4,
+      "classicRecords": 0,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCarpetGreyBlue4",
+      "family": "misc",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DRMCCarpetGreyBlue4InheritedMiscCloud",
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCKitchenKnifeButcher",
+      "family": "misc",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": "CMU3DRMCKitchenKnifeButcherInheritedMiscCloud",
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCVendorColaSPP",
+      "family": "misc",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 2,
+      "replacementModel": "CMU3DRMCVendorColaSPPInheritedMiscCloud",
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCVendorNutriCoDrink",
+      "family": "misc",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": "CMU3DRMCVendorNutriCoDrinkInheritedMiscCloud",
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCWeYaClipboard",
+      "family": "misc",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DRMCWeYaClipboardInheritedMiscCloud",
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCWhiteMPSComputer",
+      "family": "misc",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DRMCWhiteMPSComputerInheritedMiscCloud",
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCWhiteMappingComputer",
+      "family": "misc",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 3,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DRMCWhiteMappingComputerInheritedMiscCloud",
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCWhiteSensorComputer2",
+      "family": "misc",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 3,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DRMCWhiteSensorComputer2InheritedMiscCloud",
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCWhiteSensorComputer3",
+      "family": "misc",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DRMCWhiteSensorComputer3InheritedMiscCloud",
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "VehicleInteriorWallPhone",
+      "family": "misc",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 5,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DVehicleInteriorWallPhoneInheritedMiscCloud",
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "captureadminobjective",
+      "family": "misc",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "capturedesertobjective",
+      "family": "misc",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "capturemineobjective",
+      "family": "misc",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "captureobjectiveneroidgeothermalgenerators",
+      "family": "misc",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "captureobjectiveneroidspaceport",
+      "family": "misc",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "captureuaflagobjective",
+      "family": "misc",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/inherited-misc-cloud-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMAirlockGlassHybrisaPersonal",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 4,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureCMAirlockGlassHybrisaPersonalCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMAirlockPrison",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 21,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureCMAirlockPrisonCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMCatwalkShiva",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 19,
+      "classicRecords": 14,
+      "replacementModel": "CMU3DInheritedStructureCMCatwalkShivaCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMChairOfficeWhite",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureCMChairOfficeWhiteCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMTableWoodenGambling",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 6,
+      "classicRecords": 6,
+      "replacementModel": "CMU3DInheritedStructureCMTableWoodenGamblingCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMUZLevelHatchThroughDown",
+      "family": "structure",
+      "classification": "integration-unresolved-unbound-study",
+      "reduxRecords": 6,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureCMUZLevelHatchThroughDownCloudStudy",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMUZLevelLadderThroughDown2",
+      "family": "structure",
+      "classification": "integration-unresolved-unbound-study",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureCMUZLevelLadderThroughDown2CloudStudy",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "CMWashingMachineDouble",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 5,
+      "classicRecords": 1,
+      "replacementModel": "CMU3DInheritedStructureCMWashingMachineDoubleCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "DecorFloorBrickStack",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 2,
+      "replacementModel": "CMU3DInheritedStructureDecorFloorBrickStackCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCAlmayerStairs",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 31,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCAlmayerStairsCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCBarricadeHandrailKutjevo",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 30,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCBarricadeHandrailKutjevoCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCBedPsych",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCBedPsychCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCatwalkHybrisa",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 17,
+      "classicRecords": 17,
+      "replacementModel": "CMU3DInheritedStructureRMCCatwalkHybrisaCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCouchEndLowerBrown",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCCouchEndLowerBrownCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCouchEndUpperBrown",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCCouchEndUpperBrownCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCouchLeftBar",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": "CMU3DInheritedStructureRMCCouchLeftBarCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCouchMidBrown",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 3,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCCouchMidBrownCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCCouchRightBar",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": "CMU3DInheritedStructureRMCCouchRightBarCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCDoubleDoorEngineerGlassEngineering",
+      "family": "structure",
+      "classification": "source-compatible-existing-candidate",
+      "reduxRecords": 3,
+      "classicRecords": 0,
+      "replacementModel": null,
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCLadderHatch",
+      "family": "structure",
+      "classification": "integration-unresolved-unbound-study",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureCMUZLevelHatchThroughDownCloudStudy",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCMechPowerLoaderGreen",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 1,
+      "replacementModel": "CMU3DInheritedStructureRMCMechPowerLoaderGreenCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCOverheadFuelLine1",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 35,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCOverheadFuelLine1Cloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCOverheadFuelLine10",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCOverheadFuelLine10Cloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCOverheadFuelLine11",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCOverheadFuelLine11Cloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCOverheadFuelLine12",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 18,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCOverheadFuelLine12Cloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCOverheadFuelLine13",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 7,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCOverheadFuelLine12Cloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCOverheadFuelLine14",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 7,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCOverheadFuelLine14Cloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCOverheadFuelLine15",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCOverheadFuelLine15Cloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCOverheadFuelLine16",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 3,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCOverheadFuelLine16Cloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCOverheadFuelLine17",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 4,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCOverheadFuelLine17Cloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCOverheadFuelLine3",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCOverheadFuelLine3Cloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCOverheadFuelLine8",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCOverheadFuelLine8Cloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCOverheadPipeCap",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 7,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCOverheadPipeCapCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCPlatformStrataThreeCornerSmall",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 12,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCPlatformStrataThreeCornerSmallCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCTablePrisonBeige",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 2,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCTablePrisonBeigeCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCWallElevatorArrivals",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCWallElevatorArrivalsCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCWallElevatorButtonDorm",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 1,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCWallElevatorButtonDormCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCWallElevatorNoConnect2",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 3,
+      "classicRecords": 0,
+      "replacementModel": "CMU3DInheritedStructureRMCWallElevatorNoConnect2Cloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    },
+    {
+      "id": "RMCWindoorSoro",
+      "family": "structure",
+      "classification": "source-specific-replacement-draft",
+      "reduxRecords": 17,
+      "classicRecords": 6,
+      "replacementModel": "CMU3DInheritedStructureRMCWindoorSoroCloud",
+      "sourceAudit": "Tools/three_d/generated/cloud-review/inherited-structure/inherited-structure-audit.json",
+      "fidelityApproved": false
+    }
+  ]
+}

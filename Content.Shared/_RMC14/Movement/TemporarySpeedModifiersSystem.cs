@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Slow;
+using Content.Shared.CMU14.Chemistry.Effects;
 using Content.Shared.Clothing;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
@@ -90,12 +91,25 @@ public sealed partial class TemporarySpeedModifiersSystem : EntitySystem
         if (_netManager.IsClient)
             return;
 
-        var comp = EnsureComp<TemporarySpeedModifiersComponent>(entUid);
+        TemporarySpeedModifiersComponent? comp = null;
 
         foreach (var modifier in modifiers)
         {
-            comp.Modifiers.Add((_timing.CurTime + modifier.Duration, modifier.Walk, modifier.Sprint));
+            var chemical = new GetChemicalStunTimeMultiplierEvent();
+            RaiseLocalEvent(entUid, ref chemical);
+            var duration = modifier.Duration * MathF.Max(0f, chemical.Multiplier);
+            if (duration <= TimeSpan.Zero)
+                continue;
+
+            comp ??= EnsureComp<TemporarySpeedModifiersComponent>(entUid);
+            comp.Modifiers.Add((_timing.CurTime + duration, modifier.Walk, modifier.Sprint));
         }
+
+        if (comp == null)
+            return;
+
+        Dirty(entUid, comp);
+        _movementSpeedSystem.RefreshMovementSpeedModifiers(entUid);
     }
 
     /// <summary>

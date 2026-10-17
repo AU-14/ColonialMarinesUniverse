@@ -1,0 +1,77 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobWeYuDivisionManager
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WeYuDivisionManager
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: div_man
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_goon
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillLeadership: 1
+      RMCSkillOverwatch: 1
+      RMCSkillVehicles: 1
+      RMCSkillMedical: 1
+      RMCSkillEngineer: 1
+      RMCSkillIntel: 2
+      RMCSkillFirearms: 2
+  - type: JobPrefix
+    prefix: cmu-weyuexec-prefix-divisionmanager
+  name: cmu-weyuexec-name-divisionmanager
+  description: cmu-weyuexec-description-divisionmanager
+  playTimeTracker: CMUJobWeYuDivisionManager
+  ranks:
+    RMCRankWeYaDivisionManager: []
+  startingGear: CMUGearWeYuDivisionManager
+  spawnMenuRoleName: WY Division Manager (event)
+  greeting: cmu-weyuexec-greeting
+  icon: CMJobIconExecDivMan
+  joinNotifyCrew: false
+  supervisors: cmu-weyuexec-supervisors-sitedirector
+  accessGroups:
+  - auwy
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWeYuDivisionManager
+  name: WY Division Manager
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-weyuexec-name-divisionmanager
+    description: cmu-weyuexec-description-divisionmanager
+    reregister: false
+    job: CMUJobWeYuDivisionManager
+    raffle:
+      settings: short
+    rules: cmu-weyuexec-rules
+
+- type: startingGear
+  id: CMUGearWeYuDivisionManager
+  equipment:
+    id: CMUIDCardWeYuDivisionManager
+    jumpsuit: RMCJumpsuitLiaisonManager
+    outerClothing: RMCJacketCorporateManager
+    head: RMCHeadCapManager
+    belt: RMCBeltHolsterPistolWeYaMK80Fill
+    shoes: RMCShoesLaceup
+    ears: RMCHeadsetDistressWeYa
+    back: CMSatchel
+    pocket1: RMCUniversalRecorder
+    pocket2: CMClipboard
+
+- type: playTimeTracker
+  id: CMUJobWeYuDivisionManager

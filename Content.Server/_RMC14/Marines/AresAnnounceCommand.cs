@@ -21,9 +21,25 @@ public sealed class AresAnnounceCommand : IConsoleCommand
             return;
         }
 
-        var message = string.Join(' ', args);
+        // CMU14: Force on Force roles, hijacking, announcements and identification.
+        string? faction = null;
+        var start = 0;
+        if (args[0].Equals("govfor", StringComparison.OrdinalIgnoreCase) ||
+            args[0].Equals("opfor", StringComparison.OrdinalIgnoreCase))
+        {
+            faction = args[0].ToLowerInvariant();
+            start = 1;
+        }
+
+        var message = string.Join(' ', args[start..]);
+        if (string.IsNullOrWhiteSpace(message))
+        {
+            shell.WriteError(Help);
+            return;
+        }
         var soundSpecifier = new SoundPathSpecifier("/Audio/_RMC14/AI/announce.ogg");
-        marineAnnounce.AnnounceARES(null, message, soundSpecifier);
+        // CMU14: Force on Force roles, hijacking, announcements and identification.
+        marineAnnounce.AnnounceARES(null, message, soundSpecifier, faction);
         shell.WriteLine("Sent!");
     }
 }

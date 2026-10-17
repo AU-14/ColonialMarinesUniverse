@@ -1,0 +1,8 @@
+- type: loadoutGroup
+  id: EROSpecializationAU14
+  name: au14-loadout-group-role-specific-ID
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - ColonyEmergencyResponseOfficerSpecializationDefaultAU14
+  - ColonyEmergencyResponseOfficerSpecializationFirefighterAU14

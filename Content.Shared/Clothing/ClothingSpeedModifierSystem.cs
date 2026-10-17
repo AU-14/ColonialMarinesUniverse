@@ -4,6 +4,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Item.ItemToggle.Components;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Standing;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
@@ -13,10 +14,11 @@ namespace Content.Shared.Clothing;
 
 public sealed partial class ClothingSpeedModifierSystem : EntitySystem
 {
-    [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
-    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private ItemToggleSystem _toggle = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
 
     public override void Initialize()
     {
@@ -55,15 +57,17 @@ public sealed partial class ClothingSpeedModifierSystem : EntitySystem
 
     private void OnRefreshMoveSpeed(EntityUid uid, ClothingSpeedModifierComponent component, InventoryRelayedEvent<RefreshMovementSpeedModifiersEvent> args)
     {
+        if (component.RequireActivated && !_toggle.IsActivated(uid))
+            return;
+
+        if (component.Standing != null && !_standing.IsMatchingState(args.Owner, component.Standing.Value))
+            return;
+
         // RMC14
         var ev = new RMCMovementSpeedRefreshedEvent(component.WalkModifier, component.SprintModifier);
         RaiseLocalEvent(uid, ref ev);
 
-        var walkModifier = ev.WalkModifier;
-        var sprintModifier = ev.SprintModifier;
-
-        if (_toggle.IsActivated(uid))
-            args.Args.ModifySpeed(walkModifier, sprintModifier);
+        args.Args.ModifySpeed(ev.WalkModifier, ev.SprintModifier);
     }
 
     private void OnClothingVerbExamine(EntityUid uid, ClothingSpeedModifierComponent component, GetVerbsEvent<ExamineVerb> args)
@@ -115,8 +119,11 @@ public sealed partial class ClothingSpeedModifierSystem : EntitySystem
 
     private void OnToggled(Entity<ClothingSpeedModifierComponent> ent, ref ItemToggledEvent args)
     {
+        if (!ent.Comp.RequireActivated)
+            return;
+
         // make sentient boots slow or fast too
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers(ent.Owner);
 
         if (_container.TryGetContainingContainer((ent.Owner, null, null), out var container))
         {

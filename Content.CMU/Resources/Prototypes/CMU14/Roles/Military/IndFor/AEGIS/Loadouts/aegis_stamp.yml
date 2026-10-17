@@ -1,0 +1,5 @@
+- type: loadout
+  id: AegisStampCMU
+  storage:
+    back:
+    - CMUStampAegis

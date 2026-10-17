@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Kugamo / CM-SS13 contributors, ported from cmss13#12918. https://raw.githubusercontent.com/kugamo/cmss13/185b5417a29541d5c314409b9125a7137ec22e05/icons/effects/water.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "splash",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.2,
+          0.2,
+          0.2,
+          0.1
+        ]
+      ]
+    }
+  ]
+}

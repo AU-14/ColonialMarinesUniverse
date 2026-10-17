@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Damage;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
@@ -20,21 +21,21 @@ public sealed partial class Anticarcinogenic : RMCChemicalEffect
                $"Critical overdoses cause [color=red]{PotencyPerSecond * 2}[/color] brute damage";
     }
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        var rmcDamageable = args.EntityManager.System<SharedRMCDamageableSystem>();
+        var rmcDamageable = system.RMCDamageable;
         var healing = rmcDamageable.DistributeHealingCached(args.TargetEntity, GeneticGroup, potency);
         damageable.TryChangeDamage(args.TargetEntity, healing, true, interruptsDoAfters: false);
     }
 
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
         var damage = new DamageSpecifier();
         damage.DamageDict[PoisonType] = potency;
         damageable.TryChangeDamage(args.TargetEntity, damage, true, interruptsDoAfters: false);
     }
 
-    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickCriticalOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
         var damage = new DamageSpecifier();
         damage.DamageDict[BluntType] = potency * 2f;

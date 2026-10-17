@@ -2,7 +2,7 @@ using Content.Shared.Clothing;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._AU14.Roles;
+namespace Content.IntegrationTests.CMU14.Roles;
 
 [TestFixture]
 public sealed class WeaponSpecialistLoadoutTest

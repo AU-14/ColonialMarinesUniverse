@@ -1,0 +1,52 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Repeated contact with the same obstacle no longer stacks vehicle damage.
+    Unreinforced obstacles and basic resin no longer damage heavy vehicles; Humvees
+    ignore light smashable obstacles.
+  type: Fix
+- message: Armor protects modules before damage is distributed. Direct hits affect
+    an exposed module with limited spillover instead of damaging every module at full
+    strength.
+  type: Fix
+- message: Malfunctions are rare after serious damage. Minor wear keeps full performance
+    and severe damage slowdowns have a floor.
+  type: Tweak
+- message: Improved tank pivots, reverse acceleration, APC and Humvee steering, and
+    low-speed alignment.
+  type: Tweak
+- message: Improved Humvee damage resistance and reduced wall-crash damage and downtime.
+  type: Tweak
+- message: Vehicle maintenance lets you repair a selected installed module without
+    removing it. Wheels and treads still use a maintenance jack; heavy module removal
+    still needs a power loader.
+  type: Add
+- message: Vehicle damage examine view shows condition, faults and their effects without
+    repair instructions.
+  type: Add
+- message: Vehicles can crush streetlights and traffic lights, broken lights no longer
+    block them, and surviving closed shutters stop movement.
+  type: Fix
+- message: Tank guns can fire during turret traverse along the actual barrel direction.
+  type: Fix
+- message: Gunner view loads the exterior area correctly and crew speech bubbles appear
+    at the vehicle for outside listeners.
+  type: Fix
+- message: Platoons now have their own vehicle, loadout and spare-parts catalogs,
+    available from round start.
+  type: Add
+- message: Each side can issue two new vehicles per round across all lifts, with at
+    most one tank and one VTOL. Returning a vehicle keeps its condition and equipment
+    without using another slot; destroyed vehicles do not refund slots.
+  type: Tweak
+- message: USCM, LACN, WY PMC and VAI can order armed or transport Blackfoots. CMB
+    and HAZOPS can order transport Blackfoots. Orders include the landing pad, fuel
+    pump, flight computer and tug.
+  type: Add
+- message: Vehicle supply consoles show issued vehicles and the shared allowance.
+    Compatible spare parts remain available after the vehicle allowance is spent.
+  type: Add
+- message: Vehicle research unlocks and additional-vehicle research purchases.
+  type: Remove
+time: '2026-09-22T22:31:19.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1990

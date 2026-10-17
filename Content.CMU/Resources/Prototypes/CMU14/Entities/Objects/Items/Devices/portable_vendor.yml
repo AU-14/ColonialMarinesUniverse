@@ -1,0 +1,90 @@
+- type: entity
+  parent: RMCPortableVendor
+  id: CMU14PortableVendorProdigy
+  name: Prodigy automated storage briefcase
+  description: A suitcase-sized automated storage and retrieval system. Designed to efficiently store and selectively dispense small items. This one has the Prodigy logo stamped on its side.
+  components:
+  - type: CMAutomatedVendor
+    jobs:
+    - CMU14JobCivilianProdigyLiaison
+    sections:
+    - name: Incentives
+      entries:
+      - id: RMCSpaceCash1000
+        name: $1000 USD, unmarked bills
+        points: 20
+    - name: Smokables
+      entries:
+      - id: AU14CigarettePackBalajj
+        points: 5
+      - id: AU14CigaretteLadyFingers
+        points: 5
+      - id: AU14CigaretteKoorlander
+        points: 5
+      - id: RMCCigarCase
+        points: 5
+      - id: RMCShioRoyalsCase
+        points: 5
+      - id: RMCZippoGold
+        points: 5
+    - name: Drinkables
+      entries:
+      - id: RMCDrinkAlcoholPurpleWine
+        points: 5
+      - id: RMCDrinkCanSequoiaBeer
+        points: 5
+      - id: CMDrinkCanAle
+        points: 5
+      - id: CMDrinkCanBeerLite
+        points: 5
+      - id: RMCDrinkGlass
+        points: 1
+    - name: Stationary
+      entries:
+      - id: CMPenFountain
+        points: 1
+      - id: CMPaper
+        points: 1
+      - id: CMClipboard
+        points: 1
+    - name: Misc
+      entries:
+      - id: RMCHollowCane
+        name: hollow cane
+        points: 10
+      - id: CMU14ProdigyLawyerBeacon
+        points: 5
+    - name: Clothing
+      entries:
+      - id: CMU14ProdigySuitBlackSkirt
+        points: 5
+      - id: CMU14ProdigySuitGreySkirt
+        points: 5
+      - id: CMU14ProdigySuitBlack
+        points: 5
+      - id: CMU14ProdigySuitGrey
+        points: 5
+      - id: CMU14ProdigyJumpsuitGrey
+        points: 1
+      - id: AU14ProdigyFatigues
+        points: 1
+      - id: CMU14ProdigyCapGrey
+        points: 1
+      - id: AU14ProdigyCap
+        points: 1
+    - name: Weapons & Ammo
+      entries:
+      - id: CMU14WeaponPistolGlock75Taser
+        points: 40
+      - id: CMU14WeaponPistolGlock77Taser
+        points: 45
+      - id: CMU14MagazinePistolGlock75
+        points: 10
+      - id: CMU14MagazinePistolGlock75Rubber
+        points: 5
+    - name: Radio keys
+      entries:
+      - id: CMEncryptionKeyColony
+        points: 5
+      - id: AU14EncryptionKeyProdigy
+        points: 5

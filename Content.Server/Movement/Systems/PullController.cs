@@ -8,9 +8,7 @@ using Content.Shared.Gravity;
 using Content.Shared.Input;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Events;
-using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Rotatable;
-using Robust.Server.Physics;
 using Robust.Shared.Containers;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
@@ -62,6 +60,10 @@ public sealed partial class PullController : VirtualController
     [Dependency] private SharedGravitySystem _gravity = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
 
+    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
+    [Dependency] private EntityQuery<PullableComponent> _pullableQuery = default!;
+    [Dependency] private EntityQuery<PullerComponent> _pullerQuery = default!;
+
     /// <summary>
     ///     If distance between puller and pulled entity lower that this threshold,
     ///     pulled entity will not change its rotation.
@@ -77,21 +79,11 @@ public sealed partial class PullController : VirtualController
     /// </summary>
     private const float ThresholdRotAngle = 22.5f;
 
-    private EntityQuery<PhysicsComponent> _physicsQuery;
-    private EntityQuery<PullableComponent> _pullableQuery;
-    private EntityQuery<PullerComponent> _pullerQuery;
-    private EntityQuery<TransformComponent> _xformQuery;
-
     public override void Initialize()
     {
         CommandBinds.Builder
             .Bind(ContentKeyFunctions.MovePulledObject, new PointerInputCmdHandler(OnRequestMovePulledObject))
             .Register<PullController>();
-
-        _physicsQuery = GetEntityQuery<PhysicsComponent>();
-        _pullableQuery = GetEntityQuery<PullableComponent>();
-        _pullerQuery = GetEntityQuery<PullerComponent>();
-        _xformQuery = GetEntityQuery<TransformComponent>();
 
         UpdatesAfter.Add(typeof(MoverController));
         SubscribeLocalEvent<PullMovingComponent, PullStoppedMessage>(OnPullStop);
@@ -114,7 +106,7 @@ public sealed partial class PullController : VirtualController
     private bool OnRequestMovePulledObject(ICommonSession? session, EntityCoordinates coords, EntityUid uid)
     {
         if (session?.AttachedEntity is not { } player ||
-            !player.IsValid())
+            !player.IsValid() || !coords.IsValid(EntityManager))
         {
             return false;
         }
@@ -137,6 +129,10 @@ public sealed partial class PullController : VirtualController
             return false;
 
         if (HasComp<BeingFiremanCarriedComponent>(pulled))
+            return false;
+
+        // Input can arrive after a ladder, medevac, or shuttle has moved the player to another map.
+        if (_transformSystem.GetMapId(coords) != Transform(player).MapID)
             return false;
 
         pullerComp.NextThrow = _timing.CurTime + pullerComp.ThrowCooldown;
@@ -206,8 +202,8 @@ public sealed partial class PullController : VirtualController
         if (!rotatable.RotateWhilePulling)
             return;
 
-        var pulledXform = _xformQuery.GetComponent(pulled);
-        var pullerXform = _xformQuery.GetComponent(puller);
+        var pulledXform = Transform(pulled);
+        var pullerXform = Transform(puller);
 
         var pullerData = TransformSystem.GetWorldPositionRotation(pullerXform);
         var pulledData = TransformSystem.GetWorldPositionRotation(pulledXform);
@@ -257,7 +253,7 @@ public sealed partial class PullController : VirtualController
             if (pullable.Puller is not {Valid: true} puller)
                 continue;
 
-            var pullerXform = _xformQuery.Get(puller);
+            var pullerXform = Transform(puller);
             var pullerPosition = TransformSystem.GetMapCoordinates(pullerXform);
 
             var movingTo = TransformSystem.ToMapCoordinates(mover.MovingTo);
@@ -298,9 +294,10 @@ public sealed partial class PullController : VirtualController
 
             var impulseModifierLerp = Math.Min(1.0f, Math.Max(0.0f, (physics.Mass - AccelModifierLowMass) / (AccelModifierHighMass - AccelModifierLowMass)));
             var impulseModifier = MathHelper.Lerp(AccelModifierLow, AccelModifierHigh, impulseModifierLerp);
-            var multiplier = diffLength < 1 ? impulseModifier * diffLength : impulseModifier;
             // Note the implication that the real rules of physics don't apply to pulling control.
-            var accel = diff.Normalized() * multiplier;
+            // Near the destination this is already proportional to distance. Avoid normalizing
+            // zero while the body still has velocity and needs the damping below.
+            var accel = diff * (impulseModifier / MathF.Max(1f, diffLength));
             // Now for the part where velocity gets shutdown...
             if (diffLength < SettleShutdownDistance && physics.LinearVelocity.Length() >= SettleMinimumShutdownVelocity)
             {
@@ -317,7 +314,7 @@ public sealed partial class PullController : VirtualController
             // if the puller is weightless or can't move, then we apply the inverse impulse (Newton's third law).
             // doing it under gravity produces an unsatisfying wiggling when pulling.
             // If player can't move, assume they are on a chair and we need to prevent pull-moving.
-            if (_gravity.IsWeightless(puller) && pullerXform.Comp.GridUid == null || !_actionBlockerSystem.CanMove(puller))
+            if (_gravity.IsWeightless(puller) && pullerXform.GridUid == null || !_actionBlockerSystem.CanMove(puller))
             {
                 PhysicsSystem.WakeBody(puller);
                 PhysicsSystem.ApplyLinearImpulse(puller, -impulse);

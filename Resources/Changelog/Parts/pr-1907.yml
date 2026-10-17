@@ -1,0 +1,10 @@
+author: maertayn
+category: CMU
+changes:
+- message: 'Updated contrib docs, AI-agent conventions: read CONTRIBUTING.md & bootstrap
+    AGENTS-CMU.md'
+  type: Code
+- message: Scope ghost warp PVS override to selected tab mobs to regain performance
+  type: Add
+time: '2026-09-07T13:11:37.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1907

@@ -20,15 +20,24 @@
       path: /Audio/Weapons/Guns/Gunshots/taser.ogg
   - type: Wieldable
   - type: Battery
-    maxCharge: 800
-    startingCharge: 800
-  - type: ProjectileBatteryAmmoProvider
+    maxCharge: 500
+    startingCharge: 500
+  - type: BatteryAmmoProvider
     proto: RMCProjectileTaser
     fireCost: 100
   - type: MagazineVisuals
     magState: mag
     steps: 5
     zeroVisible: true
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilWielded: 1
+    recoilUnwielded: 0.8
+    scatterWielded: 8
+    scatterUnwielded: 12
+    baseFireRate: 1.0
+    burstScatterMult: 4
   - type: Appearance
   - type: Tag
     tags:
@@ -48,10 +57,15 @@
         Blunt: 5
     soundHit:
       path: /Audio/Weapons/Guns/Hits/energy_metal2.ogg
-  - type: Stunbaton
-    energyPerUse: 50
+  - type: ItemToggleExaminableStatus
+  - type: ItemToggleRequiresCharge
+    requiredCharge: 50
+  - type: MeleeBatteryHitsLeft
+  - type: StaminaDamageOnHitRequiresToggle
+  - type: StaminaDamageOnHitRequiresCharge
+    requiredCharge: 50
   - type: RMCStaminaDamageOnHit
-    damage: 15
+    damage: 100 # CMU14: a charged drive stun incapacitates a healthy human.
   - type: MeleeRequiresSkill
     skills:
       RMCSkillPolice: 2

@@ -3,7 +3,7 @@ using Content.Server.GameTicking;
 using Content.Server.Maps;
 using Content.Server.Spawners.Components;
 using Content.Server.Station.Systems;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Roles;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.GameObjects;
@@ -11,7 +11,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.ZLevels;
+namespace Content.IntegrationTests.CMU14.ZLevels;
 
 [TestFixture]
 public sealed class StableGarrisonZLevelSpawningTest

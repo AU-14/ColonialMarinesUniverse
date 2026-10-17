@@ -116650,7 +116650,7 @@ entities:
     - type: Transform
       pos: 19.5,-122.5
       parent: 1
-- proto: RMCCanisterBase
+- proto: CMUCanisterPhoron
   entities:
   - uid: 10055
     components:
@@ -116702,7 +116702,7 @@ entities:
     - type: Transform
       pos: 31.5,-121.5
       parent: 1
-- proto: RMCCanisterBlack
+- proto: CMUCanisterCarbonDioxide
   entities:
   - uid: 10065
     components:
@@ -116729,7 +116729,7 @@ entities:
     - type: Transform
       pos: 138.5,-115.5
       parent: 1
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 10070
     components:
@@ -116756,7 +116756,7 @@ entities:
     - type: Transform
       pos: 128.5,-89.5
       parent: 1
-- proto: RMCCanisterGrey
+- proto: CMUCanisterAir
   entities:
   - uid: 10075
     components:
@@ -116808,7 +116808,7 @@ entities:
     - type: Transform
       pos: 142.5,-114.5
       parent: 1
-- proto: RMCCanisterOrange
+- proto: CMUCanisterPlasma
   entities:
   - uid: 10085
     components:
@@ -116820,7 +116820,7 @@ entities:
     - type: Transform
       pos: 31.5,-120.5
       parent: 1
-- proto: RMCCanisterRed
+- proto: CMUCanisterNitrogen
   entities:
   - uid: 10087
     components:

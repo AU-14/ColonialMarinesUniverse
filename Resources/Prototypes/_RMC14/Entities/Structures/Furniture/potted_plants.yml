@@ -54,6 +54,24 @@
     sprite: _RMC14/Structures/Furniture/potted_plants.rsi
   - type: SecretStash
     maxItemSize: Tiny
+    tryInsertItemSound:
+      collection: RMCPottedPlantRustle
+    tryRemoveItemSound:
+      collection: RMCPottedPlantRustle
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 40
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: RMCPottedPlantRustle
+      - !type:PlaySoundBehavior
+        sound:
+          collection: RMCPottedPlantBreak
+          params:
+            volume: -6
   - type: RMCMesonsNonviewable
 
 - type: entity

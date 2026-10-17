@@ -1,5 +1,0 @@
-- type: entity
-  id: FactionXeno
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: IFFFaction

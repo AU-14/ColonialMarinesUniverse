@@ -10,11 +10,12 @@ using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
-using Content.Shared.Forensics;
+using Content.Shared.Forensics.Systems;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs.Components;
+using Content.Shared.CMU14.Chemistry; // CMU14
 using Content.Shared.Popups;
 using Content.Shared.Timing;
 using Content.Shared.Verbs;
@@ -29,6 +30,7 @@ namespace Content.Shared._RMC14.Chemistry;
 public abstract partial class RMCSharedHypospraySystem : EntitySystem
 {
     [Dependency] protected ISharedAdminLogManager _adminLog = default!;
+    [Dependency] protected ForensicsSystem _forensics = default!;
     [Dependency] protected SharedAppearanceSystem _appearance = default!;
     [Dependency] protected SharedAudioSystem _audio = default!;
     [Dependency] protected SharedContainerSystem _container = default!;
@@ -94,7 +96,7 @@ public abstract partial class RMCSharedHypospraySystem : EntitySystem
                 Act = () =>
                 {
                     component.TransferAmount = amount;
-                    _popup.PopupClient(Loc.GetString("comp-solution-transfer-set-amount", ("amount", amount)), user, user);
+                    _popup.PopupEntity(Loc.GetString("comp-solution-transfer-set-amount", ("amount", amount)), user, user);
                     Dirty(entity);
                 },
 
@@ -142,7 +144,7 @@ public abstract partial class RMCSharedHypospraySystem : EntitySystem
         if (index >= ent.Comp.TransferAmounts.Length)
             index = 0;
         ent.Comp.TransferAmount = ent.Comp.TransferAmounts[index];
-        _popup.PopupClient(Loc.GetString("rmc-hypospray-amount-change", ("amount", ent.Comp.TransferAmount)), args.User, args.User);
+        _popup.PopupEntity(Loc.GetString("rmc-hypospray-amount-change", ("amount", ent.Comp.TransferAmount)), args.User, args.User);
         Dirty(ent);
 
         args.Handled = true;
@@ -165,25 +167,25 @@ public abstract partial class RMCSharedHypospraySystem : EntitySystem
         if (!TryComp<ItemSlotsComponent>(ent, out var slots))
             return;
 
-        if (_slots.CanInsert(ent, args.Target.Value, args.User, slots.Slots[ent.Comp.SlotId], true))
+        if (_slots.CanInsert(ent.Owner, slots.Slots[ent.Comp.SlotId], args.Target.Value, args.User, true))
         {
             args.Handled = true;
             if (!_skills.HasSkills(args.User, ent.Comp.TacticalSkills))
             {
-                _popup.PopupClient(Loc.GetString("rmc-hypospray-fail-tacreload"), args.Used, args.User);
+                _popup.PopupEntity(Loc.GetString("rmc-hypospray-fail-tacreload"), args.Used, args.User);
                 return;
             }
 
             //Tactical reload
             if (container.ContainedEntities.Count == 0)
             {
-                _popup.PopupClient(Loc.GetString("rmc-hypospray-load-tacreload", ("hypo", ent)), args.Used, args.User);
+                _popup.PopupEntity(Loc.GetString("rmc-hypospray-load-tacreload", ("hypo", ent)), args.Used, args.User);
             }
             else
             {
                 if (!_slots.TryEjectToHands(ent, slots.Slots[ent.Comp.SlotId], args.User, true))
                     return;
-                _popup.PopupClient(Loc.GetString("rmc-hypospray-swap-tacreload"), args.Used, args.User);
+                _popup.PopupEntity(Loc.GetString("rmc-hypospray-swap-tacreload"), args.Used, args.User);
             }
 
             _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, ent.Comp.TacticalReloadTime, new TacticalReloadHyposprayDoAfterEvent(), ent, args.Target, ent)
@@ -200,7 +202,7 @@ public abstract partial class RMCSharedHypospraySystem : EntitySystem
 
         if (container.ContainedEntities.Count == 0)
         {
-            _popup.PopupClient(Loc.GetString("rmc-hypospray-no-vial"), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-hypospray-no-vial"), ent, args.User);
             args.Handled = true;
             return;
         }
@@ -242,7 +244,7 @@ public abstract partial class RMCSharedHypospraySystem : EntitySystem
         if (!TryComp<ItemSlotsComponent>(ent, out var slots))
             return;
         // Dont transfer when vial is used
-        if (_slots.CanInsert(ent, args.Used, args.User, slots.Slots[ent.Comp.SlotId], true))
+        if (_slots.CanInsert(ent.Owner, slots.Slots[ent.Comp.SlotId], args.Used, args.User, true))
             return;
 
         if (container.ContainedEntities.Count == 0)
@@ -268,7 +270,7 @@ public abstract partial class RMCSharedHypospraySystem : EntitySystem
         if (transferr > 0)
         {
             var message = Loc.GetString("comp-solution-transfer-transfer-solution", ("amount", transferr), ("target", vial));
-            _popup.PopupClient(message, ent, args.User);
+            _popup.PopupEntity(message, ent, args.User);
         }
 
         Dirty(soln.Value);
@@ -310,7 +312,7 @@ public abstract partial class RMCSharedHypospraySystem : EntitySystem
 
         if (!_container.TryGetContainer(ent, ent.Comp.SlotId, out var container) || container.ContainedEntities.Count == 0)
         {
-            _popup.PopupClient(Loc.GetString("rmc-hypospray-no-vial"), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-hypospray-no-vial"), ent, args.User);
             return;
         }
 
@@ -318,17 +320,17 @@ public abstract partial class RMCSharedHypospraySystem : EntitySystem
 
         if (!_solution.TryGetSolution(vial, ent.Comp.VialName, out var soln, out var solu) || solu.Volume == 0)
         {
-            _popup.PopupClient(Loc.GetString("hypospray-component-empty-message"), target, args.User);
+            _popup.PopupEntity(Loc.GetString("hypospray-component-empty-message"), target, args.User);
             return;
         }
 
         if (!_solution.TryGetInjectableSolution(target, out var targetSoln, out var targetSolution))
         {
-            _popup.PopupClient(Loc.GetString("hypospray-cant-inject", ("target", Identity.Entity(target, EntityManager))), target, args.User);
+            _popup.PopupEntity(Loc.GetString("hypospray-cant-inject", ("target", Identity.Entity(target, EntityManager))), target, args.User);
             return;
         }
 
-        _popup.PopupClient(Loc.GetString(msgFormat ?? "hypospray-component-inject-other-message", ("other", target)), target, args.User);
+        _popup.PopupEntity(Loc.GetString(msgFormat ?? "hypospray-component-inject-other-message", ("other", target)), target, args.User);
 
         if (target != args.User)
             _popup.PopupEntity(Loc.GetString("hypospray-component-feel-prick-message"), target, target);
@@ -342,9 +344,12 @@ public abstract partial class RMCSharedHypospraySystem : EntitySystem
 
         if (transferAmount <= 0)
         {
-            _popup.PopupClient(Loc.GetString("hypospray-component-transfer-already-full-message", ("owner", target)), target, args.User);
+            _popup.PopupEntity(Loc.GetString("hypospray-component-transfer-already-full-message", ("owner", target)), target, args.User);
             return;
         }
+
+        var cmuBeforeInject = new CMUBeforeHyposprayInjectEvent(args.User, ent); // CMU14: lets CMU procedures attribute the dose
+        RaiseLocalEvent(target, ref cmuBeforeInject); // CMU14
 
         var removedSolution = _solution.SplitSolution(soln.Value, transferAmount);
 
@@ -354,8 +359,7 @@ public abstract partial class RMCSharedHypospraySystem : EntitySystem
         _reactive.DoEntityReaction(target, removedSolution, ReactionMethod.Injection);
         _solution.TryAddSolution(targetSoln.Value, removedSolution);
 
-        var ev = new TransferDnaEvent { Donor = target, Recipient = ent };
-        RaiseLocalEvent(target, ref ev);
+        _forensics.TransferDna(ent, target);
 
         // same LogType as syringes...
         _adminLog.Add(LogType.ForceFeed, $"{ToPrettyString(args.User):user} injected {ToPrettyString(target):target} with a solution {SharedSolutionContainerSystem.ToPrettyString(removedSolution):removedSolution} using a {ToPrettyString(ent):using}");

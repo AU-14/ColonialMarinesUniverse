@@ -10,10 +10,7 @@ public sealed partial class RMCLightOffsetSystem : EntitySystem
     [Dependency] private SharedPointLightSystem _pointLight = default!;
     [Dependency] private SharedRMCSpriteSystem _sprite = default!;
 
-    private static readonly Vector2 OffsetLightSouth = new(0f, -0.5f);
-    private static readonly Vector2 OffsetLightEastWest = new(0f, -0.75f);
-    private static readonly Vector2 OffsetLightNorth = new(0f, -1f);
-
+    private static readonly Vector2 OffsetLightWallFace = new(0f, -0.495f);
     private readonly HashSet<EntityUid> ToUpdate = new();
 
     public override void Initialize()
@@ -51,10 +48,7 @@ public sealed partial class RMCLightOffsetSystem : EntitySystem
     private void OffsetLight(Entity<RMCLightOffsetComponent> ent)
     {
         var sprite = EnsureComp<SpriteSetRenderOrderComponent>(ent);
-        var direction = Transform(ent).LocalRotation.GetDir();
-        ApplyPointLightOffset(ent, direction);
-        /*
-        switch (direction)
+        switch (Transform(ent).LocalRotation.GetDir())
         {
             case Direction.South:
                 _sprite.SetOffset(ent, new Vector2(0.45f, -0.32f));
@@ -69,27 +63,21 @@ public sealed partial class RMCLightOffsetSystem : EntitySystem
                 _sprite.SetOffset(ent, new Vector2(-0.7f, -0.4f));
                 break;
         }
-        */
+
+        ApplyPointLightOffset(ent);
 
         Dirty(ent, sprite);
     }
 
-    private void ApplyPointLightOffset(EntityUid uid, Direction direction)
+    private void ApplyPointLightOffset(EntityUid uid)
     {
         if (!_pointLight.TryGetLight(uid, out var light))
             return;
 
-        var offset = direction switch
-        {
-            Direction.North => OffsetLightNorth,
-            Direction.East or Direction.West => OffsetLightEastWest,
-            _ => OffsetLightSouth,
-        };
-
-        if (light.Offset == offset)
+        if (light.Offset == OffsetLightWallFace)
             return;
 
-        light.Offset = offset;
+        light.Offset = OffsetLightWallFace;
         Dirty(uid, light);
     }
 }

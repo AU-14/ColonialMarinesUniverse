@@ -30,6 +30,14 @@ public sealed partial class TileFireComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan BigFireDuration = TimeSpan.FromSeconds(0.5);
 
+    // CMU14: spread fire growth.
+    /// <summary>Spreading fires grow from embers; weapon-created fires ignite immediately.</summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan GrowthDuration;
+
+    [DataField]
+    public int? MatureIntensity;
+
     [DataField]
     public int PatsToExtinguish = 2;
 

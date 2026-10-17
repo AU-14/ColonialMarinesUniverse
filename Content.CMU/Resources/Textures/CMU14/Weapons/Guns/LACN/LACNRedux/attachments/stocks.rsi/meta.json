@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-SA-3.0",
+  "copyright": "Made by PatoGrone",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "kramer-stock"
+    },
+    {
+      "name": "karbine-stock"
+    },
+    {
+      "name": "karbine-stock-on"
+    },
+    {
+      "name": "breachershotgun-stock"
+    },
+    {
+      "name": "pentashotgun-stock"
+    }
+  ]
+}

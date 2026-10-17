@@ -3,8 +3,6 @@ using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Hands.Systems;
 using Content.Server.Radio;
-using Content.Server.Speech;
-using Content.Server.Speech.Components;
 using Content.Shared._RMC14.Communications;
 using Content.Shared._RMC14.Hands;
 using Content.Shared._RMC14.Radio;
@@ -13,6 +11,9 @@ using Content.Shared._RMC14.Telephone;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Chat;
 using Content.Shared.Coordinates;
+using Content.Shared.Radio;
+using Content.Shared.Speech;
+using Content.Shared.Speech.Components;
 using Robust.Server.Audio;
 using Robust.Shared.Audio;
 using Robust.Shared.Player;
@@ -40,6 +41,8 @@ public sealed partial class RMCTelephoneSystem : SharedRMCTelephoneSystem
 
         SubscribeLocalEvent<RMCTelephoneComponent, ListenEvent>(OnListen);
         SubscribeLocalEvent<RMCTelephoneRingEvent>(OnTelephoneRing);
+
+        CMUInitialize(); // cmu edit
     }
 
     private void OnRadioSendAttempt(ref RadioSendAttemptEvent ev)
@@ -123,12 +126,17 @@ public sealed partial class RMCTelephoneSystem : SharedRMCTelephoneSystem
         if (HasComp<RMCTelephoneComponent>(source) || HasComp<XenoComponent>(source))
             return;
 
-        if (!_hands.IsHolding(source, ent))
+        if (!CMUIsHoldingPhone(source, ent)) // cmu edit: mobile phones
             return;
+
+        // cmu edit start: 911 dispatch calls
+        if (CMUHandleEmergencyListen(ent, source, message))
+            return;
+        // cmu edit end
 
         if (ent.Comp.RotaryPhone is not { } rotary ||
             !TryGetOtherPhone(rotary, out var otherPhone) ||
-            !_rmcHands.TryGetHolder(otherPhone, out var holder) ||
+            !CMUTryGetPhoneHolder(otherPhone, out var holder) || // cmu edit: mobile phones
             !TryComp(holder, out ActorComponent? actor))
         {
             return;

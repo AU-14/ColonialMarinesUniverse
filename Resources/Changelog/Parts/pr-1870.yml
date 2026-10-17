@@ -1,0 +1,13 @@
+author: TheMaiji
+category: CMU
+changes:
+- message: Infected marines no longer cough, puke, stumble or jitter, hiding the abomination
+    infection until transformation. Health scan shows poison.
+  type: Tweak
+- message: Mimic entities no longer appear on the Bioscan threat readout.
+  type: Tweak
+- message: Mirror and mimic status icons are now only visible to admin-ghosts, not
+    regular ghosts.
+  type: Tweak
+time: '2026-08-27T01:36:44.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1870

@@ -37,7 +37,10 @@ public enum AnnouncementTarget : byte
 {
     All,
     Marines,
-    Xenos
+    // CMU14: Force on Force roles, hijacking, announcements and identification.
+    Xenos,
+    Govfor,
+    Opfor
 }
 
 [Serializable, NetSerializable]

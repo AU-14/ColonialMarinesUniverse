@@ -12,6 +12,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Configuration;
 using Robust.Shared.Maths;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client.Lobby.UI
@@ -23,12 +24,13 @@ namespace Content.Client.Lobby.UI
     public sealed partial class CharacterSetupGui : Control
     {
         [Dependency] private IClientPreferencesManager _preferencesManager = default!;
-        [Dependency] private IEntityManager _entManager = default!;
         [Dependency] private IPrototypeManager _protomanager = default!;
         [Dependency] private IConfigurationManager _cfg = default!;
         [Dependency] private IStylesheetManager _stylesheetManager = default!;
+        [Dependency] private ISharedPlayerManager _playerManager = default!;
 
         private readonly Button _createNewCharacterButton;
+        private bool _cvarSubscriptionsActive;
 
         public event Action<int>? SelectCharacter;
         public event Action<int>? DeleteCharacter;
@@ -48,7 +50,7 @@ namespace Content.Client.Lobby.UI
 
             _createNewCharacterButton.OnPressed += args =>
             {
-                _preferencesManager.CreateCharacter(HumanoidCharacterProfile.Random());
+                _preferencesManager.CreateCharacter(HumanoidCharacterProfile.Random().WithJobFromCvar(_cfg));
                 ReloadCharacterPickers();
                 args.Event.Handle();
             };
@@ -67,6 +69,8 @@ namespace Content.Client.Lobby.UI
             _cfg.OnValueChanged(CCVars.SeeOwnNotes, OnSeeOwnNotesChanged, true);
             _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+            _cfg.OnValueChanged(CCVars.GameMaxCharacterSlots, OnGameMaxCharacterSlotsChanged);
+            _cvarSubscriptionsActive = true;
         }
 
         [Obsolete("Controls should only be removed from UI tree instead of being disposed")]
@@ -74,14 +78,32 @@ namespace Content.Client.Lobby.UI
         {
             base.Dispose(disposing);
 
+            Shutdown();
+        }
+
+        /// <summary>
+        /// Releases global configuration subscriptions before this control is orphaned.
+        /// </summary>
+        internal void Shutdown()
+        {
+            if (!_cvarSubscriptionsActive)
+                return;
+
             _cfg.UnsubValueChanged(CCVars.SeeOwnNotes, OnSeeOwnNotesChanged);
             _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+            _cfg.UnsubValueChanged(CCVars.GameMaxCharacterSlots, OnGameMaxCharacterSlotsChanged);
+            _cvarSubscriptionsActive = false;
         }
 
         private void OnSeeOwnNotesChanged(bool visible)
         {
             AdminRemarksButton.Visible = visible;
+        }
+
+        private void OnGameMaxCharacterSlotsChanged(int _)
+        {
+            ReloadCharacterPickers();
         }
 
         private void OnCrtUiEnabledChanged(bool _)
@@ -110,26 +132,8 @@ namespace Content.Client.Lobby.UI
                 BackgroundColor = StyleNano.CrtBackground,
                 BorderColor = StyleNano.CrtGreenDim,
                 CornerColor = StyleNano.CrtGreen.WithAlpha(0.18f),
-                ScanlineColor = StyleNano.CrtGreen.WithAlpha(0.012f),
-                GridColor = StyleNano.CrtGreen.WithAlpha(0.01f),
-                NoiseColor = StyleNano.CrtGreenSoft.WithAlpha(0.038f),
-                PixelationColor = StyleNano.CrtGreen.WithAlpha(0.028f),
-                PixelationShadowColor = StyleNano.CrtPanelBackground.WithAlpha(0.12f),
                 BorderThickness = new Thickness(1),
-                DrawGrid = true,
-                DrawNoise = false,
-                DrawPixelation = true,
                 CornerLength = 16,
-                GridSpacing = 320,
-                PixelationBlockSize = 3,
-                PixelationSpacing = 190,
-                PixelationChance = 14,
-                PixelationClusterSize = 2,
-                PixelationSeed = 89,
-                NoiseSpacing = 8,
-                NoiseChance = 11,
-                MaxScanlines = 5,
-                NoiseSeed = 53
             };
         }
 
@@ -148,7 +152,7 @@ namespace Content.Client.Lobby.UI
         public void ReloadCharacterPickers()
         {
             _createNewCharacterButton.Orphan();
-            Characters.DisposeAllChildren();
+            Characters.RemoveAllChildren();
 
             var numberOfFullSlots = 0;
             var characterButtonsGroup = new ButtonGroup();
@@ -158,20 +162,30 @@ namespace Content.Client.Lobby.UI
                 return;
             }
 
+            var maxCharactersSlots = _cfg.GetCVar(CCVars.GameMaxCharacterSlots);
+
             _createNewCharacterButton.ToolTip =
                 Loc.GetString("character-setup-gui-create-new-character-button-tooltip",
-                    ("maxCharacters", _preferencesManager.Settings!.MaxCharacterSlots));
+                    ("maxCharacters", maxCharactersSlots));
 
             var selectedSlot = _preferencesManager.Preferences?.SelectedCharacterIndex;
 
             foreach (var (slot, character) in _preferencesManager.Preferences!.Characters)
             {
                 numberOfFullSlots++;
-                var characterPickerButton = new CharacterPickerButton(_entManager,
-                    _protomanager,
+                var characterPickerButton = new CharacterPickerButton(_protomanager,
+                    _playerManager,
                     characterButtonsGroup,
                     character,
                     slot == selectedSlot);
+
+                if (slot >= maxCharactersSlots)
+                {
+                    characterPickerButton.SetOnlyStyleClass(ContainerButton.StylePseudoClassDisabled);
+                    characterPickerButton.ToolTip =
+                        Loc.GetString("character-setup-gui-create-new-character-button-tooltip",
+                                      ("maxCharacters", maxCharactersSlots));
+                }
 
                 Characters.AddChild(characterPickerButton);
 
@@ -186,7 +200,7 @@ namespace Content.Client.Lobby.UI
                 };
             }
 
-            _createNewCharacterButton.Disabled = numberOfFullSlots >= _preferencesManager.Settings.MaxCharacterSlots;
+            _createNewCharacterButton.Disabled = numberOfFullSlots >= maxCharactersSlots;
             Characters.AddChild(_createNewCharacterButton);
         }
     }

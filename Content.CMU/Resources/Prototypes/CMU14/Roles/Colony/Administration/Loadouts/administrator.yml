@@ -1,0 +1,54 @@
+- type: loadout
+  id: ColonyAdministratorSidearmMatebaCustomAU14
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: AU14JobCivilianColonyAdministrator
+      time: 36000 # 10 hours
+  equipment:
+    belt: AU14MatebaCustomBeltFilledAmmo
+
+- type: loadout
+  id: ColonyAdministratorSidearmMatebaSpecialAU14
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: AU14JobCivilianColonyAdministrator
+      time: 36000 # 10 hours
+  equipment:
+    belt: AU14MatebaSpecialBeltFilledAmmo
+
+- type: loadout
+  id: ColonyAdministratorHandcannonBeltAU14
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: AU14JobCivilianColonyAdministrator
+      time: 72000 # 20 hours
+  equipment:
+    belt: AU14BeltHolsterPistolBlackHandcannonFilled
+
+- type: loadout
+  id: ColonyAdministratorGoldHandcannonBeltAU14
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: AU14JobCivilianColonyAdministrator
+      time: 72000 # 20 hours
+  equipment:
+    belt: AU14BeltHolsterPistolBlackHandcannonGoldFilled
+
+- type: loadout
+  id: ColonyAdministratorWinterWyvernBeltAU14
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: AU14JobCivilianColonyAdministrator
+      time: 72000 # 20 hours
+  equipment:
+    belt: AU14BeltHolsterPistolBlackHandcannonWinterWyvernFilled

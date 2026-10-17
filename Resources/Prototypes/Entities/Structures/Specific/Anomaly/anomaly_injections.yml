@@ -213,13 +213,7 @@
       - MobFleshGolem
       - MobFleshClamp
       - MobFleshLover
-    - settings:
-        spawnOnSuperCritical: true
-        minAmount: 2
-        maxAmount: 4
-        maxRange: 10
-      spawns:
-      - FleshKudzu
+    # CMU: Injected flesh anomalies no longer spawn spreading flesh kudzu.
     - settings:
         spawnOnShutdown: true
         maxAmount: 2
@@ -229,7 +223,6 @@
       - MobFleshGolem
       - MobFleshClamp
       - MobFleshLover
-      - FleshKudzu
 
 - type: entity
   parent: AnomalyInjectionBase

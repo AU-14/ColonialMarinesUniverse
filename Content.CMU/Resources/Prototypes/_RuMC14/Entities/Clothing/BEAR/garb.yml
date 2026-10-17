@@ -1,0 +1,97 @@
+- type: entity
+  parent: BaseItem
+  id: RuMCArmorGarbShinGuardsBEAR
+  name: SZ-200 "Kogot"
+  description: Heavy reinforced shin guards. Included in the SZ "Kogot" additional equipment.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/BEAR/garb/shinguards.rsi
+    state: icon
+  - type: Item
+    sprite: _RuMC14/Clothing/BEAR/garb/shinguards.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _RuMC14/Clothing/BEAR/garb/shinguards.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: RuMCArmorGarbShoulderPadsBEAR
+  name: SZ-212 "Kogot"
+  description: Heavy protection of the groin area. Included in the SZ "Kogot" additional equipment.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/BEAR/garb/shoulderpads.rsi
+    state: icon
+  - type: Item
+    sprite: _RuMC14/Clothing/BEAR/garb/shoulderpads.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _RuMC14/Clothing/BEAR/garb/shoulderpads.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: RuMCArmorGarbCrotchPadBEAR
+  name: SZ-206 "Kogot"
+  description: They are made in a "scale" pattern, so they don't restrict movement. Included in the SZ "Kogot" additional equipment.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/BEAR/garb/crotch.rsi
+    state: icon
+  - type: Item
+    sprite: _RuMC14/Clothing/BEAR/garb/crotch.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _RuMC14/Clothing/BEAR/garb/crotch.rsi
+      state: helmet
+
+# Universal
+
+- type: entity
+  parent: BaseItem
+  id: RuMCArmorGarbMagazineWebbingBEAR
+  name: RSB-M "Barsuk"
+  description: Modular unloading system for BEAR PMC soldiers.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/BEAR/garb/magazine_webbing.rsi
+    state: icon
+  - type: Item
+    sprite: _RuMC14/Clothing/BEAR/garb/magazine_webbing.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _RuMC14/Clothing/BEAR/garb/magazine_webbing.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: RuMCArmorGarbLargeWebbingBEAR
+  name: RSB-M "Groza"
+  description: Modular unloading system for BEAR PMC soldiers.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/BEAR/garb/large_webbing.rsi
+    state: icon
+  - type: Item
+    sprite: _RuMC14/Clothing/BEAR/garb/large_webbing.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _RuMC14/Clothing/BEAR/garb/large_webbing.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: RuMCArmorGarbSmallWebbingBEAR
+  name: RSB-M "Step"
+  description: Modular unloading system for BEAR PMC soldiers.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/BEAR/garb/webbing.rsi
+    state: icon
+  - type: Item
+    sprite: _RuMC14/Clothing/BEAR/garb/webbing.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _RuMC14/Clothing/BEAR/garb/webbing.rsi
+      state: helmet

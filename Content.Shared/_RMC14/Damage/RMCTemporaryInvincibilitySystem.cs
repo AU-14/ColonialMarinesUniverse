@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Evasion;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 

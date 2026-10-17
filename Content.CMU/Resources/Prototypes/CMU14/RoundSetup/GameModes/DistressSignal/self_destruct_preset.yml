@@ -1,0 +1,128 @@
+- type: announcementPreset
+  id: SelfDestructAnnouncement
+  name: "Emergency Destruct System"
+  description: "MU/TH/UR 6000 terminal readout for the self-destruct countdown"
+  target: All
+  visibleInSettings: false
+  showSprite: false
+  style:
+    animation:
+      animation: Typewriter
+      printSpeed: 0.022
+      holdDuration: 10
+      flickerChance: 0.04
+      glitchChance: 0.05
+      animationEnhancements:
+        enableCRT: true
+    layout:
+      position: TopLeft
+      spritePosition: Left
+      spriteDisplayMode: FullSprite
+      uIScale: 2
+      titlePosition: Above
+    background:
+      showBackground: true
+      backgroundAlpha: 0.72
+      backgroundColor: "#0d0505"
+    text:
+      primaryColor: "#b9e6c9"
+      fontSize: 24
+      lineHeight: 46
+      showSpeakerName: false
+    sprite:
+      showSpriteBox: false
+      spriteScale: 1
+    title:
+      title: "EMERGENCY DESTRUCT SYSTEM"
+      titleColor: "#ff3838"
+      titleFontSize: 28
+      titleFont: "DefaultBold"
+  priority: 9
+  canInterrupt: true
+  canBeInterrupted: true
+
+- type: announcementPreset
+  id: SelfDestructAnnouncementCritical
+  name: "Emergency Destruct System Critical"
+  description: "Override expired: the countdown cannot be stopped"
+  target: All
+  visibleInSettings: false
+  showSprite: false
+  style:
+    animation:
+      animation: Typewriter
+      printSpeed: 0.014
+      holdDuration: 10
+      flickerChance: 0.06
+      glitchChance: 0.12
+      animationEnhancements:
+        enableCRT: true
+    layout:
+      position: TopLeft
+      spritePosition: Left
+      spriteDisplayMode: FullSprite
+      uIScale: 2
+      titlePosition: Above
+    background:
+      showBackground: true
+      backgroundAlpha: 0.75
+      backgroundColor: "#120404"
+    text:
+      primaryColor: "#b9e6c9"
+      fontSize: 24
+      lineHeight: 46
+      showSpeakerName: false
+    sprite:
+      showSpriteBox: false
+      spriteScale: 1
+    title:
+      title: "EMERGENCY DESTRUCT SYSTEM"
+      titleColor: "#ff3838"
+      titleFontSize: 28
+      titleFont: "DefaultBold"
+  priority: 9
+  canInterrupt: true
+  canBeInterrupted: true
+
+- type: announcementPreset
+  id: SelfDestructAnnouncementTerminal
+  name: "Emergency Destruct System Terminal"
+  description: "Final seconds: the interface is failing with the ship"
+  target: All
+  visibleInSettings: false
+  showSprite: false
+  style:
+    animation:
+      animation: Typewriter
+      printSpeed: 0.008
+      holdDuration: 8
+      flickerChance: 0.12
+      glitchChance: 0.25
+      animationEnhancements:
+        enableCRT: true
+    layout:
+      position: TopLeft
+      spritePosition: Left
+      spriteDisplayMode: FullSprite
+      uIScale: 2
+      titlePosition: Above
+    background:
+      showBackground: true
+      backgroundAlpha: 0.78
+      backgroundColor: "#1a0505"
+    text:
+      primaryColor: "#c9f0d6"
+      fontSize: 24
+      lineHeight: 46
+      showSpeakerName: false
+    sprite:
+      showSpriteBox: false
+      spriteScale: 1
+    title:
+      title: "EMERGENCY DESTRUCT SYSTEM"
+      titleColor: "#ff2020"
+      titleFontSize: 28
+      titleFont: "DefaultBold"
+  priority: 10
+  canInterrupt: true
+  canBeInterrupted: true

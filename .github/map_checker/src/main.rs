@@ -20,7 +20,7 @@ struct Args {
     config_file: String,
 
     /// Map file directory location
-    #[arg(short, long, default_value_t = String::from("../../Resources/Maps/_AU14"))]
+    #[arg(short, long, default_value_t = String::from("../../Content.CMU/Resources/Maps/CMU14"))]
     maps_directory: String,
 }
 
@@ -65,4 +65,3 @@ fn main() {
         process::exit(0)
     }
 }
-

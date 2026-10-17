@@ -234,7 +234,7 @@
   - type: Stamp
     stampedName: stamp-component-stamped-name-cm-provost
     stampedColor: "#cb0000"
-    stampState: "paper_stamp-provost"
+    stampState: "paper_stamp-provost-inspector"
 
 - type: entity
   parent: CMStampBase

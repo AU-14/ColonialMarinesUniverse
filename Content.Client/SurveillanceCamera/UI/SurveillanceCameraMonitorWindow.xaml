@@ -1,25 +1,61 @@
 <DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:camera="clr-namespace:Content.Client.Camera"
                xmlns:viewport="clr-namespace:Content.Client.Viewport"
                Title="{Loc 'surveillance-camera-monitor-ui-window'}">
-    <BoxContainer Orientation="Horizontal">
-        <BoxContainer Orientation="Vertical" MinWidth="350" VerticalExpand="True">
-            <!-- lazy -->
-            <OptionButton Name="SubnetSelector" />
-            <Button Name="SubnetRefreshButton" Text="{Loc 'surveillance-camera-monitor-ui-refresh-subnets'}" />
-            <ScrollContainer VerticalExpand="True">
-                <ItemList Name="SubnetList" />
-            </ScrollContainer>
-            <Button Name="CameraRefreshButton" Text="{Loc 'surveillance-camera-monitor-ui-refresh-cameras'}" />
-            <Button Name="CameraDisconnectButton" Text="{Loc 'surveillance-camera-monitor-ui-disconnect'}" />
-            <Label Name="CameraStatus" />
+    <TabContainer Name="MonitorTabs" VerticalExpand="True" HorizontalExpand="True">
+        <BoxContainer Name="ListTab" Orientation="Horizontal">
+            <BoxContainer Orientation="Vertical" MinWidth="350" VerticalExpand="True">
+                <OptionButton Name="NetworkSelector" />
+                <Button Name="SubnetRefreshButton" Text="{Loc 'surveillance-camera-monitor-ui-refresh-subnets'}" />
+                <ScrollContainer VerticalExpand="True">
+                    <ItemList Name="SubnetList" />
+                </ScrollContainer>
+                <Button Name="CameraRefreshButton" Text="{Loc 'surveillance-camera-monitor-ui-refresh-cameras'}" />
+                <Button Name="CameraDisconnectButton" Text="{Loc 'surveillance-camera-monitor-ui-disconnect'}" />
+                <Label Name="CameraStatus" />
+            </BoxContainer>
+            <Control VerticalExpand="True" HorizontalExpand="True" Margin="5 5 5 5" Name="CameraViewBox">
+                <viewport:ScalingViewport Name="CameraView"
+                                          VerticalExpand="True"
+                                          HorizontalExpand="True"
+                                          MinSize="500 500"
+                                          MouseFilter="Ignore" />
+                <TextureRect VerticalExpand="True" HorizontalExpand="True" MinSize="500 500" Name="CameraViewBackground" />
+            </Control>
         </BoxContainer>
-        <Control VerticalExpand="True" HorizontalExpand="True" Margin="5 5 5 5" Name="CameraViewBox">
-            <viewport:ScalingViewport Name="CameraView"
-                                      VerticalExpand="True"
-                                      HorizontalExpand="True"
-                                      MinSize="500 500"
-                                      MouseFilter="Ignore" />
-            <TextureRect VerticalExpand="True" HorizontalExpand="True" MinSize="500 500" Name="CameraViewBackground" />
-        </Control>
-    </BoxContainer>
+        <BoxContainer Name="MapTab" Orientation="Horizontal" VerticalExpand="True" HorizontalExpand="True">
+            <BoxContainer Orientation="Vertical" SizeFlagsStretchRatio="2" VerticalExpand="True" HorizontalExpand="True">
+            <OptionButton Name="GridSelector" />
+            <Label Name="MapEmptyLabel"
+                   Text="{Loc 'surveillance-camera-monitor-ui-map-empty'}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Visible="False" />
+            <camera:CameraNavMapControl Name="CameraMap"
+                                        VerticalExpand="True"
+                                        HorizontalExpand="True" />
+            <BoxContainer Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label Text="▲" Modulate="#ff00ff" />
+                <Label Text="{Loc 'surveillance-camera-monitor-ui-legend-active'}" Margin="2 0 8 0" />
+                <Label Text="▲" Modulate="#ffff00" />
+                <Label Text="{Loc 'surveillance-camera-monitor-ui-legend-selected'}" Margin="2 0 8 0" />
+                <Label Text="●" Modulate="#808080" />
+                <Label Text="{Loc 'surveillance-camera-monitor-ui-legend-inactive'}" Margin="2 0 0 0" />
+                <Label Text="●" Modulate="#ff0000" Margin="8 0 0 0" />
+                <Label Text="{Loc 'surveillance-camera-monitor-ui-legend-invalid'}" Margin="2 0 0 0" />
+            </BoxContainer>
+            </BoxContainer>
+            <BoxContainer Orientation="Vertical" SizeFlagsStretchRatio="1" VerticalExpand="True" HorizontalExpand="True" Margin="5 0 0 0">
+                <Label Name="MapCameraStatus" />
+                <Control VerticalExpand="True" HorizontalExpand="True" Name="MapCameraViewBox">
+                    <viewport:ScalingViewport Name="MapCameraView"
+                                              VerticalExpand="True"
+                                              HorizontalExpand="True"
+                                              MinSize="400 400"
+                                              MouseFilter="Ignore" />
+                    <TextureRect VerticalExpand="True" HorizontalExpand="True" MinSize="400 400" Name="MapCameraViewBackground" />
+                </Control>
+            </BoxContainer>
+        </BoxContainer>
+    </TabContainer>
 </DefaultWindow>

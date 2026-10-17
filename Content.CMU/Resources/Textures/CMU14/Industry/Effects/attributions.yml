@@ -1,0 +1,4 @@
+- files: [cascade_particle.swsl]
+  license: CC0-1.0
+  copyright: Original CMU particle kernels.
+  source: https://github.com/TheHellFireo/ColonialMarinesUniverse

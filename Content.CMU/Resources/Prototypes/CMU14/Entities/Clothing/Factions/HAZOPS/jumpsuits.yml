@@ -1,0 +1,12 @@
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14HAZOPUrbanFatigues
+  name: HAZOPS urban warfare chemical overgarment
+  description: USCM HAZOPS-issue chemical-protective jacket and pants designed to protect against chemical agents, printed in the experimental T-block pattern. However, it seems the protective liner has been removed, rendering it ineffective. Unfortunate.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/HAZOPS/hazopsuniform.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUSCM
+    - AU14HAZOPShecuPatch

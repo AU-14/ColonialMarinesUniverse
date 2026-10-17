@@ -1,0 +1,89 @@
+- type: npcFaction
+  id: MILITARY
+  abstract: true
+  allianceTarget: true
+  hostile:
+  - THREAT # whole threat family (hive, walkers, apes, goo, abominations)
+
+- type: npcFaction
+  id: GOVFOR
+  name: Government Forces
+  hostile:
+  - THREAT
+  - OPFOR
+# - CLF # usually hidden/guerilla, but turrets just know
+
+- type: npcFaction
+  id: OPFOR
+  name: Opposing Forces
+  hostile:
+  - THREAT
+  - GOVFOR
+# - CLF
+
+- type: npcFaction
+  parent: MILITARY
+  id: PROVOST
+  name: Provost Office
+  allianceTarget: false # authority over both armies, never negotiable
+  sentryProtected: true
+
+- type: npcFaction
+  parent: MILITARY
+  id: UNMC # legacy
+  name: UN Marine Corps (legacy)
+  allianceTarget: false
+
+- type: npcFaction
+  parent: MILITARY
+  id: AUUnitedAmericas
+  name: United Americas
+
+- type: npcFaction
+  parent: MILITARY
+  id: CMUUSCMC
+  name: United States Colonial Marines Corps
+
+- type: npcFaction
+  parent: MILITARY
+  id: USAF
+  name: United States Armed Forces
+
+- type: npcFaction
+  parent: MILITARY
+  id: CMUTWE
+  name: Third World Empire
+
+- type: npcFaction
+  parent: MILITARY
+  id: CMUProdigy
+  name: Prodigy Corporation
+
+- type: npcFaction
+  parent: MILITARY
+  id: CMUVAI
+  name: Vanguard's Arrow Incorporated
+
+- type: npcFaction
+  parent: MILITARY
+  id: AUUpp
+  name: Union of Progressive Peoples
+
+- type: npcFaction
+  parent: MILITARY
+  id: CMUFreelancers
+  name: Freelancers
+
+- type: npcFaction
+  id: CMURaiders
+  name: Free Company Raiders # Kill and RR
+  hostile:
+  - THREAT
+  - GOVFOR
+  - OPFOR
+  - CLF
+  - AUColonist
+  - AUWeYu
+  - AUUpp
+  - CMUFreelancers
+  - PROVOST

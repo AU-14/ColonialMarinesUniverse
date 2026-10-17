@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,11 +31,16 @@ using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Content.Shared.Prying.Systems;
 using Microsoft.Extensions.ObjectPool;
+using Prometheus;
 
 namespace Content.Server.NPC.Systems;
 
 public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
 {
+    private static readonly Gauge ActiveSteeringGauge = Metrics.CreateGauge(
+        "npc_steering_active_count",
+        "Amount of NPCs trying to actively do steering");
+
     /*
      * We use context steering to determine which way to move.
      * This involves creating an array of possible directions and assigning a value for the desireability of each direction.
@@ -63,11 +69,11 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedCombatModeSystem _combat = default!;
 
-    private EntityQuery<FixturesComponent> _fixturesQuery;
-    private EntityQuery<MovementSpeedModifierComponent> _modifierQuery;
-    private EntityQuery<NpcFactionMemberComponent> _factionQuery;
-    private EntityQuery<PhysicsComponent> _physicsQuery;
-    private EntityQuery<TransformComponent> _xformQuery;
+    [Dependency] private EntityQuery<FixturesComponent> _fixturesQuery = default!;
+    [Dependency] private EntityQuery<MovementSpeedModifierComponent> _modifierQuery = default!;
+    [Dependency] private EntityQuery<NpcFactionMemberComponent> _factionQuery = default!;
+    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
+    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
 
     private ObjectPool<HashSet<EntityUid>> _entSetPool =
         new DefaultObjectPool<HashSet<EntityUid>>(new SetPolicy<EntityUid>());
@@ -87,16 +93,13 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
 
     private object _obstacles = new();
 
+    private int _activeSteeringCount;
+
     public override void Initialize()
     {
         base.Initialize();
 
         Log.Level = LogLevel.Info;
-        _fixturesQuery = GetEntityQuery<FixturesComponent>();
-        _modifierQuery = GetEntityQuery<MovementSpeedModifierComponent>();
-        _factionQuery = GetEntityQuery<NpcFactionMemberComponent>();
-        _physicsQuery = GetEntityQuery<PhysicsComponent>();
-        _xformQuery = GetEntityQuery<TransformComponent>();
 
         for (var i = 0; i < InterestDirections; i++)
         {
@@ -226,51 +229,65 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
             return;
 
         // Not every mob has the modifier component so do it as a separate query.
-        var npcs = new (EntityUid, NPCSteeringComponent, InputMoverComponent, TransformComponent)[Count<ActiveNPCComponent>()];
-
-        var query = EntityQueryEnumerator<ActiveNPCComponent, NPCSteeringComponent, InputMoverComponent, TransformComponent>();
-        var index = 0;
-
-        while (query.MoveNext(out var uid, out _, out var steering, out var mover, out var xform))
+        var count = Count<ActiveNPCComponent>();
+        if (count == 0)
         {
-            npcs[index] = (uid, steering, mover, xform);
-            index++;
+            ActiveSteeringGauge.Set(0);
+            if (_subscribedSessions.Count == 0)
+                return;
         }
 
-        // Dependency issues across threads.
-        var options = new ParallelOptions
+        var npcs = ArrayPool<(EntityUid, NPCSteeringComponent, InputMoverComponent, TransformComponent)>.Shared.Rent(count);
+        try
         {
-            MaxDegreeOfParallelism = 1,
-        };
-        var curTime = _timing.CurTime;
 
-        Parallel.For(0, index, options, i =>
-        {
-            var (uid, steering, mover, xform) = npcs[i];
-            Steer(uid, steering, mover, xform, frameTime, curTime);
-        });
+            var query = EntityQueryEnumerator<ActiveNPCComponent, NPCSteeringComponent, InputMoverComponent, TransformComponent>();
+            var index = 0;
 
+            while (query.MoveNext(out var uid, out _, out var steering, out var mover, out var xform))
+            {
+                npcs[index] = (uid, steering, mover, xform);
+                index++;
+            }
 
-        if (_subscribedSessions.Count > 0)
-        {
-            var data = new List<NPCSteeringDebugData>(index);
+            // Steering has cross-entity dependencies and must remain sequential.
+            var curTime = _timing.CurTime;
+
+            _activeSteeringCount = 0;
 
             for (var i = 0; i < index; i++)
             {
-                var (uid, steering, mover, _) = npcs[i];
-
-                data.Add(new NPCSteeringDebugData(
-                    GetNetEntity(uid),
-                    mover.CurTickSprintMovement,
-                    steering.Interest,
-                    steering.Danger,
-                    steering.DangerPoints));
+                var (uid, steering, mover, xform) = npcs[i];
+                Steer(uid, steering, mover, xform, frameTime, curTime);
             }
 
-            var filter = Filter.Empty();
-            filter.AddPlayers(_subscribedSessions);
+            ActiveSteeringGauge.Set(_activeSteeringCount);
 
-            RaiseNetworkEvent(new NPCSteeringDebugEvent(data), filter);
+            if (_subscribedSessions.Count > 0)
+            {
+                var data = new List<NPCSteeringDebugData>(index);
+
+                for (var i = 0; i < index; i++)
+                {
+                    var (uid, steering, mover, _) = npcs[i];
+
+                    data.Add(new NPCSteeringDebugData(
+                        GetNetEntity(uid),
+                        mover.CurTickSprintMovement,
+                        steering.Interest,
+                        steering.Danger,
+                        steering.DangerPoints));
+                }
+
+                var filter = Filter.Empty();
+                filter.AddPlayers(_subscribedSessions);
+
+                RaiseNetworkEvent(new NPCSteeringDebugEvent(data), filter);
+            }
+        }
+        finally
+        {
+            ArrayPool<(EntityUid, NPCSteeringComponent, InputMoverComponent, TransformComponent)>.Shared.Return(npcs, clearArray: true);
         }
     }
 
@@ -324,6 +341,8 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
             return;
         }
 
+        Interlocked.Increment(ref _activeSteeringCount);
+
         var agentRadius = steering.Radius;
         var worldPos = _transform.GetWorldPosition(xform);
         var (layer, mask) = _physics.GetHardCollision(uid);
@@ -369,7 +388,9 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         CollisionAvoidance(uid, offsetRot, worldPos, agentRadius, layer, mask, xform, danger);
         DebugTools.Assert(!float.IsNaN(danger[0]));
 
-        Separation(uid, offsetRot, worldPos, agentRadius, layer, mask, body, xform, danger);
+        // CMU14: soft swarm spacing also supplies movement when members have arrived.
+        // Separation(uid, offsetRot, worldPos, agentRadius, layer, mask, body, xform, danger);
+        Separation(uid, offsetRot, worldPos, agentRadius, layer, mask, body, xform, interest, danger);
 
         // Blend last and current tick
         Blend(steering, frameTime, interest, danger);
@@ -437,6 +458,10 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         steering.PathfindToken = new CancellationTokenSource();
 
         var flags = _pathfindingSystem.GetFlags(uid);
+
+        // CMU14: hive-controlled swarms have steering capabilities but no HTN blackboard.
+        if (IsSwarmLesser(uid))
+            flags = steering.Flags;
 
         var result = await _pathfindingSystem.GetPathSafe(
             uid,

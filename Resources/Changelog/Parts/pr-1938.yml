@@ -1,0 +1,7 @@
+author: flex5hybrid
+category: CMU
+changes:
+- message: Moved hardcoded CMU user-facing strings into Fluent localization.
+  type: Code
+time: '2026-09-12T22:41:22.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1938

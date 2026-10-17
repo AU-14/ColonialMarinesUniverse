@@ -1,0 +1,15 @@
+<Document>
+  # Burn Medications
+
+  Burn damage is heat, shock, cold and caustic: fire, electricity, freezing and acid. Treat the burns with ointment or a burn kit first (see [textlink="Wounds and Bleeding" link="CMUGuideMedicalWounds"]), then use these to heal the damage.
+
+  - [bold]Kelotane[/bold]: the standard burn medicine. Overdose at 30 units.
+  - [bold]Dermaline[/bold]: heals burns faster than kelotane. Its overdose is lower, at 15 units.
+  - [bold]Tricordrazine[/bold]: heals a little of everything, burns included.
+
+  Eschar, a full-thickness burn, doesn't heal with medicine. It has to be debrided surgically.
+
+  <GuideReagentEmbed Reagent="CMKelotane"/>
+  <GuideReagentEmbed Reagent="CMDermaline"/>
+  <GuideReagentEmbed Reagent="CMTricordrazine"/>
+</Document>

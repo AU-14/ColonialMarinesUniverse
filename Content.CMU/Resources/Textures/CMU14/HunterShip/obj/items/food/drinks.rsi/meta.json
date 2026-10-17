@@ -1,0 +1,821 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/food/drinks.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "broken"
+    },
+    {
+      "name": "broken_bottle"
+    },
+    {
+      "name": "broken_glass"
+    },
+    {
+      "name": "jar"
+    },
+    {
+      "name": "jar_metroid"
+    },
+    {
+      "name": "jar_what"
+    },
+    {
+      "name": "shake-blue"
+    },
+    {
+      "name": "shake-empty"
+    },
+    {
+      "name": "shake-meat"
+    },
+    {
+      "name": "shake-white"
+    },
+    {
+      "name": "shake-robo"
+    },
+    {
+      "name": "milkshake"
+    },
+    {
+      "name": "chocolate_milkshake"
+    },
+    {
+      "name": "shaker"
+    },
+    {
+      "name": "vacuumflask"
+    },
+    {
+      "name": "holyflask"
+    },
+    {
+      "name": "golden_cup"
+    },
+    {
+      "name": "alco-blue"
+    },
+    {
+      "name": "alco-red"
+    },
+    {
+      "name": "alco-green"
+    },
+    {
+      "name": "alco-clear"
+    },
+    {
+      "name": "alco-white"
+    },
+    {
+      "name": "alco-empty"
+    },
+    {
+      "name": "rumbottle"
+    },
+    {
+      "name": "alebottle"
+    },
+    {
+      "name": "whiskeybottle"
+    },
+    {
+      "name": "vodkabottle"
+    },
+    {
+      "name": "ginbottle"
+    },
+    {
+      "name": "red_star_vodka"
+    },
+    {
+      "name": "cognacbottle"
+    },
+    {
+      "name": "goldschlagerbottle"
+    },
+    {
+      "name": "patronbottle"
+    },
+    {
+      "name": "vermouthbottle"
+    },
+    {
+      "name": "kahluabottle"
+    },
+    {
+      "name": "tequilabottle"
+    },
+    {
+      "name": "winebottle"
+    },
+    {
+      "name": "pwinebottle"
+    },
+    {
+      "name": "(mdr)grapejuice"
+    },
+    {
+      "name": "davenport"
+    },
+    {
+      "name": "souta"
+    },
+    {
+      "name": "sakebottle"
+    },
+    {
+      "name": "blackgoo"
+    },
+    {
+      "name": "absinthebottle"
+    },
+    {
+      "name": "grenadinebottle"
+    },
+    {
+      "name": "bottleofnothing"
+    },
+    {
+      "name": "orangejuice"
+    },
+    {
+      "name": "pineapplejuice"
+    },
+    {
+      "name": "limejuice"
+    },
+    {
+      "name": "cream"
+    },
+    {
+      "name": "tomatojuice"
+    },
+    {
+      "name": "milk"
+    },
+    {
+      "name": "soymilk"
+    },
+    {
+      "name": "bigteacup"
+    },
+    {
+      "name": "teacup"
+    },
+    {
+      "name": "shotglass"
+    },
+    {
+      "name": "glass_empty"
+    },
+    {
+      "name": "glass_clear"
+    },
+    {
+      "name": "glass_white"
+    },
+    {
+      "name": "glass_yellow"
+    },
+    {
+      "name": "chocomilk_glass"
+    },
+    {
+      "name": "glass_brown"
+    },
+    {
+      "name": "gintonicglass"
+    },
+    {
+      "name": "vodkatonicglass"
+    },
+    {
+      "name": "icedteaglass"
+    },
+    {
+      "name": "screwdriverglass"
+    },
+    {
+      "name": "glass_green"
+    },
+    {
+      "name": "glass_orange"
+    },
+    {
+      "name": "glass_red"
+    },
+    {
+      "name": "glass_brown2"
+    },
+    {
+      "name": "Space_mountain_wind_glass"
+    },
+    {
+      "name": "thirteen_loko_glass"
+    },
+    {
+      "name": "dr_gibb_glass"
+    },
+    {
+      "name": "space-up_glass"
+    },
+    {
+      "name": "mojitoglass"
+    },
+    {
+      "name": "berryjuice"
+    },
+    {
+      "name": "grapejuice"
+    },
+    {
+      "name": "banana"
+    },
+    {
+      "name": "lemonjuice"
+    },
+    {
+      "name": "carrotjuice"
+    },
+    {
+      "name": "chocolateglass"
+    },
+    {
+      "name": "lemonglass"
+    },
+    {
+      "name": "poisonberryjuice"
+    },
+    {
+      "name": "nothing"
+    },
+    {
+      "name": "booger"
+    },
+    {
+      "name": "iceglass"
+    },
+    {
+      "name": "icedcoffeeglass"
+    },
+    {
+      "name": "lemonade"
+    },
+    {
+      "name": "ginfizzglass"
+    },
+    {
+      "name": "lemonadeglass"
+    },
+    {
+      "name": "cubalibreglass"
+    },
+    {
+      "name": "tequilasunriseglass"
+    },
+    {
+      "name": "doctorsdelightglass",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "aleglass"
+    },
+    {
+      "name": "beerglass"
+    },
+    {
+      "name": "iced_beerglass"
+    },
+    {
+      "name": "acidspitglass",
+      "delays": [
+        [
+          3,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "neurotoxinglass",
+      "delays": [
+        [
+          3,
+          0.3,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "hippiesdelightglass"
+    },
+    {
+      "name": "bananahonkglass"
+    },
+    {
+      "name": "silencerglass"
+    },
+    {
+      "name": "snowwhite"
+    },
+    {
+      "name": "antifreeze"
+    },
+    {
+      "name": "irishcarbomb"
+    },
+    {
+      "name": "bloodymaryglass"
+    },
+    {
+      "name": "brownstar"
+    },
+    {
+      "name": "longislandicedteaglass"
+    },
+    {
+      "name": "syndicatebomb"
+    },
+    {
+      "name": "whiskeyglass"
+    },
+    {
+      "name": "ginvodkaglass"
+    },
+    {
+      "name": "tequilaglass"
+    },
+    {
+      "name": "rumglass"
+    },
+    {
+      "name": "whiskeycolaglass"
+    },
+    {
+      "name": "irishcreamglass"
+    },
+    {
+      "name": "whiterussianglass"
+    },
+    {
+      "name": "vermouthglass"
+    },
+    {
+      "name": "whiskeysodaglass"
+    },
+    {
+      "name": "whiskeysodaglass2"
+    },
+    {
+      "name": "blackrussianglass"
+    },
+    {
+      "name": "kiraspecial",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "toxinsspecialglass",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "red_meadglass"
+    },
+    {
+      "name": "meadglass"
+    },
+    {
+      "name": "grogglass"
+    },
+    {
+      "name": "erikasurprise"
+    },
+    {
+      "name": "rewriter"
+    },
+    {
+      "name": "amasecglass"
+    },
+    {
+      "name": "kahluaglass"
+    },
+    {
+      "name": "wineglass"
+    },
+    {
+      "name": "cognacglass"
+    },
+    {
+      "name": "manlydorfglass"
+    },
+    {
+      "name": "manhattanglass"
+    },
+    {
+      "name": "proj_manhattanglass",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "devilskiss"
+    },
+    {
+      "name": "martiniglass"
+    },
+    {
+      "name": "driestmartiniglass"
+    },
+    {
+      "name": "goldschlagerglass"
+    },
+    {
+      "name": "patronglass"
+    },
+    {
+      "name": "margaritaglass"
+    },
+    {
+      "name": "irishcoffeeglass"
+    },
+    {
+      "name": "aloe"
+    },
+    {
+      "name": "andalusia"
+    },
+    {
+      "name": "alliescocktail"
+    },
+    {
+      "name": "b\u0026p"
+    },
+    {
+      "name": "demonsblood",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "bravebullglass"
+    },
+    {
+      "name": "gargleblasterglass",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "hell",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "emeraldglass"
+    },
+    {
+      "name": "curacaoglass"
+    },
+    {
+      "name": "pwineglass",
+      "delays": [
+        [
+          15,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "sdreamglass"
+    },
+    {
+      "name": "sbitenglass"
+    },
+    {
+      "name": "grenadineglass"
+    },
+    {
+      "name": "b52glass"
+    },
+    {
+      "name": "atomicbombglass",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "singulo",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "bahama_mama"
+    },
+    {
+      "name": "absintheglass"
+    },
+    {
+      "name": "nuka_colaglass",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "threemileislandglass",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "coffeecup"
+    },
+    {
+      "name": "wycup"
+    },
+    {
+      "name": "uscmcup"
+    },
+    {
+      "name": "coffee_nolid"
+    },
+    {
+      "name": "coffee"
+    },
+    {
+      "name": "soy_latte"
+    },
+    {
+      "name": "cafe_latte"
+    },
+    {
+      "name": "hot_coco"
+    },
+    {
+      "name": "tea"
+    },
+    {
+      "name": "ramen"
+    },
+    {
+      "name": "changelingsting",
+      "delays": [
+        [
+          0.2,
+          0.1,
+          0.2,
+          0.1,
+          0.2,
+          0.1,
+          0.2,
+          0.1,
+          0.2,
+          0.1,
+          0.2,
+          0.1,
+          0.2,
+          0.1,
+          0.2,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "flask"
+    },
+    {
+      "name": "flask_uscm"
+    },
+    {
+      "name": "flask_army"
+    },
+    {
+      "name": "flask_wy"
+    },
+    {
+      "name": "brownflask"
+    },
+    {
+      "name": "blackflask"
+    },
+    {
+      "name": "canteen"
+    },
+    {
+      "name": "water"
+    },
+    {
+      "name": "water_cup"
+    },
+    {
+      "name": "water_cup_e"
+    },
+    {
+      "name": "chess"
+    },
+    {
+      "name": "b_pawn"
+    },
+    {
+      "name": "b_bishop"
+    },
+    {
+      "name": "b_knight"
+    },
+    {
+      "name": "b_rook"
+    },
+    {
+      "name": "b_king"
+    },
+    {
+      "name": "b_queen"
+    },
+    {
+      "name": "w_pawn"
+    },
+    {
+      "name": "w_bishop"
+    },
+    {
+      "name": "w_knight"
+    },
+    {
+      "name": "w_rook"
+    },
+    {
+      "name": "w_king"
+    },
+    {
+      "name": "w_queen"
+    },
+    {
+      "name": "pendleton"
+    },
+    {
+      "name": "tuxedo"
+    },
+    {
+      "name": "ganucci"
+    },
+    {
+      "name": "bluemalt"
+    },
+    {
+      "name": "partypopper"
+    },
+    {
+      "name": "tazhushka"
+    },
+    {
+      "name": "reaper"
+    },
+    {
+      "name": "mono"
+    },
+    {
+      "name": "grapesoda"
+    },
+    {
+      "name": "solocup"
+    },
+    {
+      "name": "crushed_solocup"
+    },
+    {
+      "name": "broken_beer"
+    },
+    {
+      "name": "golden_teacup"
+    },
+    {
+      "name": "pinacolada"
+    },
+    {
+      "name": "coffeecuppajoe"
+    },
+    {
+      "name": "coffeecuppajoestack"
+    },
+    {
+      "name": "coffeecuppajoestack2"
+    },
+    {
+      "name": "coffeecuppajoenolid"
+    },
+    {
+      "name": "coffeecuppajoestacknolid"
+    },
+    {
+      "name": "coffeecuppajoestack2nolid"
+    },
+    {
+      "name": "coffeecuppajoelid"
+    },
+    {
+      "name": "coffeecuppajoelidstack"
+    }
+  ]
+}

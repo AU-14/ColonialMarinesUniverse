@@ -1,0 +1,69 @@
+{
+  "turbine": {
+    "author": "qubodup",
+    "title": "Jet Turbine Noise.flac",
+    "source": "https://freesound.org/people/qubodup/sounds/205581/",
+    "download": "https://cdn.freesound.org/previews/205/205581_71257-hq.mp3",
+    "license": "CC0-1.0",
+    "sha256": "2ec50b4f8a9a8935b4dde5d65f5f4c696743704c8de1da957664cfc0708a5f45"
+  },
+  "flyby": {
+    "author": "Ears68",
+    "title": "F-18-flybys--1m3s.wav",
+    "source": "https://freesound.org/people/Ears68/sounds/147819/",
+    "download": "https://cdn.freesound.org/previews/147/147819_2214631-hq.mp3",
+    "license": "CC0-1.0",
+    "sha256": "89ae946044a4e3d1e58b2c533912d205677059ec62f74edc49df6014bc4b9fd4"
+  },
+  "f18-low": {
+    "author": "Ears68",
+    "title": "F-18 fly-over-and-circle above-DR070cut.wav",
+    "source": "https://freesound.org/people/Ears68/sounds/150328/",
+    "pixabay": "https://pixabay.com/sound-effects/city-f-18-fly-over-and-circle-above-dr070cut-76968/",
+    "download": "https://cdn.freesound.org/previews/150/150328_2214631-hq.mp3",
+    "license": "CC0-1.0",
+    "sha256": "bf6c6cffc1c6e0f863432a8c5c73cfbbdc289b03501780728703aa73412d7583"
+  },
+  "f16-cruise": {
+    "author": "Rudmer_Rotteveel",
+    "title": "2 Royal Dutch Airforce F-16 Fighting Falcons flyby",
+    "source": "https://freesound.org/people/Rudmer_Rotteveel/sounds/343746/",
+    "pixabay": "https://pixabay.com/sound-effects/city-2-royal-dutch-airforce-f-16-fighting-falcons-flyby-16990/",
+    "download": "https://cdn.freesound.org/previews/343/343746_4921277-hq.mp3",
+    "license": "CC0-1.0",
+    "sha256": "3841fe476fbe09d4492cf5d3a3cf1acc55b23951d42f1489ec19ae88c7e803a3"
+  },
+  "f16-startup": {
+    "author": "ikbenraar",
+    "title": "F16 fighter jet start up.aif",
+    "source": "https://freesound.org/people/ikbenraar/sounds/322178/",
+    "pixabay": "https://pixabay.com/sound-effects/city-f16-fighter-jet-start-upaif-14690/",
+    "download": "https://cdn.freesound.org/previews/322/322178_754558-hq.mp3",
+    "license": "CC0-1.0",
+    "sha256": "5d0ba14275449ac1707aa352df14e53517dc80e83bcf5904aa57867b5c64d8a8"
+  },
+  "missile": {
+    "author": "Jacco18",
+    "title": "Missile",
+    "source": "https://freesound.org/people/Jacco18/sounds/428360/",
+    "download": "https://cdn.freesound.org/previews/428/428360_215268-hq.mp3",
+    "license": "CC0-1.0",
+    "sha256": "a318fc939426060624e4823ed93f5a79984505dc0605b15b723a453e722400b0"
+  },
+  "blast": {
+    "author": "qubodup",
+    "title": "Fire Explosion",
+    "source": "https://freesound.org/people/qubodup/sounds/855898/",
+    "download": "https://cdn.freesound.org/previews/855/855898_71257-hq.mp3",
+    "license": "CC0-1.0",
+    "sha256": "61fc9b61298d9245777fddecf8879a1ac55ef1cbb5323c0ae4c0f89bab38f259"
+  },
+  "manpad": {
+    "author": "NHMWretched",
+    "title": "Missile firing fl.mp3",
+    "source": "https://freesound.org/people/NHMWretched/sounds/151858/",
+    "download": "https://cdn.freesound.org/previews/151/151858_2754532-hq.mp3",
+    "license": "CC0-1.0",
+    "sha256": "6feab7be1b27c516e20ec03efc19ec7eed3e096d2d32a7f9a82ab7190b9288be"
+  }
+}

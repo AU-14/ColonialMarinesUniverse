@@ -50,7 +50,7 @@ public sealed partial class XenoDodgeSystem : EntitySystem
             return;
 
         EnsureComp<XenoActiveDodgeComponent>(xeno).ExpiresAt = _timing.CurTime + xeno.Comp.Duration;
-        _speed.RefreshMovementSpeedModifiers(xeno);
+        _speed.RefreshMovementSpeedModifiers((xeno.Owner, null));
         _popup.PopupEntity(Loc.GetString("rmc-xeno-dodge-self"), xeno, xeno, PopupType.Medium);
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoDodgeActionEvent>(xeno))
         {
@@ -68,7 +68,7 @@ public sealed partial class XenoDodgeSystem : EntitySystem
     {
         if (!TerminatingOrDeleted(xeno))
         {
-            _speed.RefreshMovementSpeedModifiers(xeno);
+            _speed.RefreshMovementSpeedModifiers((xeno.Owner, null));
             foreach (var action in _rmcActions.GetActionsWithEvent<XenoDodgeActionEvent>(xeno))
             {
                 _actions.SetToggled(action.AsNullable(), false);

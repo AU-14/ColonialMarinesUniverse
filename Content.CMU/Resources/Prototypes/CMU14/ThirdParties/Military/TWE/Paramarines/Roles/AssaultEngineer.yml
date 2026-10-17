@@ -1,0 +1,71 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobParamarineAssaultEngineer
+  roundSide: ThirdParty
+  roundForce: CMUParamarines
+  roundRole: ParamarineAssaultEngineer
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_breacher
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 1
+      RMCSkillConstruction: 3
+      RMCSkillEngineer: 3
+  - type: JobPrefix
+    prefix: cmu-paramarines-prefix-engineer
+  - type: Language
+    spokenLanguages:
+    - English
+    understoodLanguages:
+    - English
+    currentLanguage: English
+    defaultLanguage: English
+  name: cmu-paramarines-name-engineer
+  description: cmu-paramarines-description
+  playTimeTracker: CMUJobParamarineAssaultEngineer
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearParamarineAssaultEngineer
+  spawnMenuRoleName: TWE Royal Paramarine Assault Engineer (3rd party)
+  greeting: cmu-paramarines-greeting
+  icon: RMCJobIconParaAssaultEngineer
+  joinNotifyCrew: false
+  supervisors: cmu-paramarines-leader
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesParamarines
+  id: CMUJobParamarineAssaultEngineer
+  name: TWE Royal Paramarine Assault Engineer
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadParamarines
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-paramarines-name-engineer
+    description: cmu-paramarines-description
+    reregister: false
+    job: CMUJobParamarineAssaultEngineer
+    raffle:
+      settings: short
+    rules: cmu-paramarines-rules
+
+- type: startingGear
+  parent: CMUGearParamarineRifleman
+  id: CMUGearParamarineAssaultEngineer
+  equipment:
+    eyes: RMCWeldingGoggles
+    belt: CMBeltUtilityFilled
+
+- type: playTimeTracker
+  id: CMUJobParamarineAssaultEngineer

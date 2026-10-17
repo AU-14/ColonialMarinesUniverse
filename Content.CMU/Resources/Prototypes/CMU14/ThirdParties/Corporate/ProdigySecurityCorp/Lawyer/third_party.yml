@@ -1,0 +1,24 @@
+- type: partySpawn
+  id: ProdigyLawyerSpawn
+  leadersToSpawn:
+    CMU14JobProdigyLawyer: 1
+  gruntsToSpawn:
+    CMU14JobProdigyPPO: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: ProdigyLawyer
+  announceAsSurvivors: true
+  partyspawn: ProdigyLawyerSpawn
+  whitelistedGamemodes:
+    - insurgency
+    - colonyfall
+    - forceonforce
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_pmc_shuttle.yml
+  weight: 20
+  minplayers: 30
+  maxplayers: 400
+  ghostsNeeded: 2
+  roundstart: false

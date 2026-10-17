@@ -3,9 +3,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputPath>..\bin\Content.Client\</OutputPath>
     <OutputType Condition="'$(FullRelease)' != 'True'">Exe</OutputType>
-    <WarningsAsErrors>RA0032;nullable</WarningsAsErrors>
-    <Configurations>Debug;Release;Tools;DebugOpt</Configurations>
-    <Platforms>AnyCPU</Platforms>
+    <WarningsAsErrors>RA0032;nullable;CS8785</WarningsAsErrors>
   </PropertyGroup>
   <Import Project="../MSBuild/Content.props" />
   <ItemGroup>
@@ -15,6 +13,8 @@
     <PackageReference Include="prometheus-net" />
     <PackageReference Include="Serilog" />
     <PackageReference Include="SixLabors.ImageSharp" />
+    <PackageReference Include="Robust.Shared.AuthLib" />
+    <PackageReference Include="System.Numerics.Tensors" />
   </ItemGroup>
   <Import Project="..\RobustToolbox\Imports\Lidgren.props" />
   <Import Project="..\RobustToolbox\Imports\Client.props" />
@@ -24,15 +24,19 @@
   </ItemGroup>
   <Import Project="..\RobustToolbox\MSBuild\Robust.Properties.targets" />
   <Import Project="..\RobustToolbox\MSBuild\XamlIL.targets" />
-
-
+  <ItemGroup>
+    <Compile Include="..\Content.CMU\Client\**\*.cs" Link="CMU14\%(RecursiveDir)%(Filename)%(Extension)" />
+    <EmbeddedResource Include="..\Content.CMU\Client\**\*.xaml" Link="CMU14\%(RecursiveDir)%(Filename)%(Extension)" />
+    <AdditionalFiles Include="..\Content.CMU\Client\**\*.xaml" Link="CMU14\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Content.Analyzers\Content.Analyzers.csproj" Condition="'$(SkipRobustAnalyzer)' != 'true'" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="_AU14\Chemistry\Research\ChemSimulatorWindow.xaml.cs">
+    <Compile Update="..\Content.CMU\Client\Chemistry\Research\ChemSimulatorWindow.xaml.cs">
       <DependentUpon>ChemSimulatorWindow.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
+  <Import Project="..\RobustToolbox\MSBuild\Robust.EntitySystemSubscriptionsGenerator.targets" />
 </Project>

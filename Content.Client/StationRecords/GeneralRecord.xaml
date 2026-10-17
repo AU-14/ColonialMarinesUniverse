@@ -8,6 +8,9 @@
         <Label Name="Gender"/>
         <Label Name="Fingerprint"/>
         <Label Name="Dna"/>
+        <!-- cmu edit start -->
+        <Label Name="Religion"/>
+        <!-- cmu edit end -->
         <Button Visible="False" Name="DeleteButton" Text="{Loc 'general-station-record-console-delete'}"/>
     </BoxContainer>
 </Control>

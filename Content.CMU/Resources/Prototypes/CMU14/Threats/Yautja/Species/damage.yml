@@ -1,0 +1,8 @@
+- type: damageModifierSet
+  id: CMUYautja
+  coefficients:
+    Blunt: 0.28
+    Slash: 0.28
+    Piercing: 0.28
+    Heat: 0.65
+    Poison: 0

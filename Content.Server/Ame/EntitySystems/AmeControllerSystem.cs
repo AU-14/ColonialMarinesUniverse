@@ -115,7 +115,11 @@ public sealed partial class AmeControllerSystem : EntitySystem
 
                 // only play audio if we actually had an injection
                 if (availableInject > 0)
-                    _audioSystem.PlayPvs(controller.InjectSound, uid, AudioParams.Default.WithVolume(overloading ? 10f : 0f));
+                {
+                    var audioParams = controller.InjectSound?.Params ?? AudioParams.Default;
+                    audioParams = audioParams.AddVolume(overloading ? 10f : 0f);
+                    _audioSystem.PlayPvs(controller.InjectSound, uid, audioParams);
+                }
                 UpdateUi(uid, controller);
             }
         }
@@ -150,7 +154,7 @@ public sealed partial class AmeControllerSystem : EntitySystem
         // how much power can be produced at the current settings, in kW
         // we don't use max. here since this is what is set in the Controller, not what the AME is actually producing
         float targetedPowerSupply = 0;
-        if (TryGetAMENodeGroup(uid, out var group))
+        if (TryGetAMENodeGroup(uid, out var group) && group.CoreCount > 0)
         {
             coreCount = group.CoreCount;
             targetedPowerSupply = group.CalculatePower(controller.InjectionAmount, group.CoreCount) / 1000;
@@ -344,7 +348,10 @@ public sealed partial class AmeControllerSystem : EntitySystem
         if (!PlayerCanUseController(uid, user, needsPower, comp))
             return;
 
-        _audioSystem.PlayPvs(comp.ClickSound, uid, AudioParams.Default.WithVolume(-2f));
+        var audioParams = comp.ClickSound?.Params ?? AudioParams.Default;
+        audioParams = audioParams.AddVolume(-2f);
+        _audioSystem.PlayPvs(comp.ClickSound, uid, audioParams);
+
         switch (msg.Button)
         {
             case UiButton.Eject:

@@ -1,11 +1,11 @@
-using Content.Server._CMU14.Ops.ThirdParty;
+using Content.Server.CMU14.Ops.ThirdParty;
 using Content.Server.GameTicking.Events;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Humanoid.Components;
 using Content.Server.Spawners.Components;
 using Content.Shared._RMC14.Intel.Tech;
-using Content.Shared._CMU14.Threats;
-using Content.Shared.AU14.Util;
+using Content.Shared.CMU14.Threats;
+using Content.Shared.CMU14.Util;
 using Content.Shared.Humanoid.Prototypes;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;

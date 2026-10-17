@@ -336,6 +336,7 @@
     - RMCCartridgeRifleL83AHEAP
   - type: CartridgeAmmo
     proto: BulletRifle556x45mmHEAP
+    deleteOnSpawn: true # CMU14: caseless ammo, no casing to eject
 
 - type: entity
   parent: CMBaseCartridgeRifle
@@ -349,6 +350,7 @@
     - RMCCartridgeRifleL83AIncendiary
   - type: CartridgeAmmo
     proto: BulletRifle556x45mmIncendiary
+    deleteOnSpawn: true # CMU14: caseless ammo, no casing to eject
 
 - type: entity
   parent: BulletRifle10x24mm

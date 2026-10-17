@@ -1,8 +1,8 @@
-using Content.Server._AU14.Insurgency;
-using Content.Shared._AU14.Insurgency;
+using Content.Server.CMU14.Insurgency;
+using Content.Shared.CMU14.Insurgency;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._AU14.Insurgency;
+namespace Content.IntegrationTests.CMU14.Insurgency;
 
 [TestFixture]
 public sealed class InsurgencyFactionValidatorTest

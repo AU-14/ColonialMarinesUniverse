@@ -1,0 +1,88 @@
+- type: partySpawn
+  id: BEARSpawn
+  leadersToSpawn:
+    #AU14JobUPPBEAROperator: 1
+    RuMCJobUPPBEARCommander: 1
+  gruntsToSpawn:
+    RuMCJobUPPBEARGrenader: 1
+    RuMCJobUPPBEARMachinegunner: 2
+    RuMCJobUPPBEARRifleman: 3
+    RuMCJobUPPBEARMedic: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CHTORM_PMC_BEAR #ШТУРМ
+  displayName: BEAR CHTORM
+  announceAsSurvivors: true
+  partyspawn: BEARSpawn
+  whitelistedGamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_spp_shuttle.yml
+  weight: 20
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 0
+  roundstart: false
+
+- type: partySpawn
+  id: BEARSpawnAlt
+  leadersToSpawn:
+    #AU14JobUPPBEAROperator: 1
+    RuMCJobUPPBEARCommanderGROZA: 1
+  gruntsToSpawn:
+    #RuMCJobUPPBEARGrenader: 0
+    RuMCJobUPPBEARMachinegunnerGROZA: 2
+    RuMCJobUPPBEARRiflemanGROZA: 2
+    RuMCJobUPPBEARMedicGROZA: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id:  GROZA_PMC_BEAR #ОБОРОНА
+  displayName: BEAR GROZA
+  announceAsSurvivors: true
+  partyspawn: BEARSpawnAlt
+  whitelistedGamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_spp_shuttle.yml
+  weight: 20
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 0
+  roundstart: false
+
+- type: partySpawn
+  id: BEARSpawnAlt2
+  leadersToSpawn:
+    #AU14JobUPPBEAROperator: 1
+    RuMCJobUPPBEARCommanderSKALA: 1
+  gruntsToSpawn:
+    #RuMCJobUPPBEARGrenader: 0
+    #RuMCJobUPPBEARMachinegunner: 0
+    RuMCJobUPPBEARRiflemanSKALA: 1
+    RuMCJobUPPBEARMedicSKALA: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: SKALA_PMC_BEAR #СОПРОВОЖДЕНИЕ
+  displayName: BEAR SKALA
+  announceAsSurvivors: true
+  partyspawn: BEARSpawnAlt2
+  whitelistedGamemodes:
+    - insurgency
+    - colonyfall
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_spp_shuttle.yml
+  weight: 20
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 0
+  roundstart: false

@@ -1,0 +1,62 @@
+- type: antagSpecifier
+  id: BountyHunter
+  prefRoles: [ BountyHunterRole ]
+  jobBlacklistGroup:
+  - AllGovforJobs
+  - AllOpforJobs
+  - AllCLFJobs
+  - AllWeYuJobs
+  - AllColonyDepartmentHeadJobs
+  briefing:
+    text: cmu-antag-bounty-hunter-greeting
+    color: Goldenrod
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: CMUGearBountyHunter
+  startingSkills:
+    RMCSkillCqc: 2
+    RMCSkillMeleeWeapons: 3
+    RMCSkillPolice: 2
+    RMCSkillFirearms: 2
+  components:
+  - type: BountyHunter
+  - type: SynthGunAccess
+  mindRoles:
+  - MindRoleBountyHunter
+
+- type: entity
+  id: BountyHunter
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: AntagSelection
+    selectionTime: JobsAssigned
+    antags:
+    - !type:RandomAntagCount
+      proto: BountyHunter
+      range:
+        min: 1
+        max: 2
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleBountyHunter
+  name: Bounty Hunter Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: BountyHunterRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: BountyHunterRole
+  name: cmu-antag-bounty-hunter-name
+  setPreference: true
+  objective: cmu-antag-bounty-hunter-objective
+
+- type: startingGear
+  id: CMUGearBountyHunter
+  equipment:
+    belt: AU14BeltBrowneFilled
+    pocket1: RMCSpaceCash1000
+    pocket2: RMCSpaceCash1000

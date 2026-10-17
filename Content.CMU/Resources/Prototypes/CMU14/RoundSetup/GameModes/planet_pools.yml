@@ -1,0 +1,24 @@
+# Maps votable in every mode that inlines this pool
+# These maps are actively maintained or in excellent shape
+- type: GamePlanetPool
+  id: SharedPlanetPool
+  planets:
+  - AUPlanetShepherdsPride
+  - CMUPlanetHopesRetreat
+  - CMUPlanetStableGarrisonRedux
+
+# Reviewed Force on Force maps with dedicated GOVFOR and OPFOR landing zones.
+- type: GamePlanetPool
+  id: ForceOnForcePlanetPool
+  planets:
+# - CMUPlanetHopesRetreat # govfor spawns planetside
+# - AUPlanetLV759 # govfor spawns planetside
+  - AUPlanetTrijent
+  - AUPlanetBosenmoriBasho
+  - AuPlanetChances
+  - AUPlanetCorsatStation
+  - AUPlanetLV624
+  - AUPlanetShepherdsPride
+  - AUPlanetLV747
+# - CMUPlanetStableGarrisonRedux # govfor spawns planetside
+  - AUPlanetSorokyne

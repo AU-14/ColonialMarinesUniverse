@@ -1,0 +1,28 @@
+- type: entity
+  parent: RMCTabletCO
+  id: AU14TabletOpfor
+  name: opfor command tablet
+  description: A portable command interface for Opfor command, linked to their faction's systems.
+  components:
+  - type: AccessReader
+    access: [[ "AU14AccessOpforCommand" ]]
+  - type: MarineCommunicationsComputer
+    faction: opfor
+  - type: TacticalMapComputer
+    faction: opfor
+  - type: MarineControlComputer
+    faction: opfor
+
+- type: entity
+  parent: AU14TabletGovfor
+  id: CMUCommandTabletAdmin
+  name: admin command tablet
+  suffix: Admin, DO NOT MAP, CMU
+  components:
+  - type: AccessReader
+    access:
+    - [ "AU14AccessOpforCommand" ]
+    - [ "AU14AccessGovforCommand" ]
+  - type: CMUAdminTablet
+  - type: MarineCommunicationsComputer
+    announceAuthor: rmc-announcement-author-highcommand

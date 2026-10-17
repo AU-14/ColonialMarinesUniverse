@@ -1,0 +1,71 @@
+- type: antagSpecifier
+  id: CLFSleeperAgent
+  prefRoles: [ CLFSleeperAgentRole ]
+  jobWhitelist:
+  - AU14JobCivilianCorporateLiaison
+  - AU14JobCivilianCMBMarshal
+  - AU14JobCivilianColonyAdministrator
+  - AU14JobGOVFORPlatOp
+  - AU14JobGOVFORAdjutant
+  - AU14JobGOVFORSquadSergeant
+  - AU14JobGOVFORSectionSergeant
+# - AU14JobGOVFORRadioTelephoneOperator
+  - AU14JobGOVFORVehicleCommander
+  - AU14JobGOVFORMilitaryPoliceMan
+  - AU14JobGOVFOROfficerEngi
+  - AU14JobGOVFOROfficerIntel
+  - AU14JobGOVFOROfficerLogistics
+  - AU14JobGOVFOROfficerMedical
+# - AU14JobGOVFORMilitaryDoctor
+  - AU14JobOPFORPlatOp
+  - AU14JobOPFORAdjutant
+  - AU14JobOPFORSquadSergeant
+  - AU14JobOPFORSectionSergeant
+# - AU14JobOPFORRadioTelephoneOperator
+  - AU14JobOPFORVehicleCommander
+  - AU14JobOPFORMilitaryPoliceMan
+  - AU14JobOPFOROfficerEngi
+  - AU14JobOPFOROfficerIntel
+  - AU14JobOPFOROfficerLogistics
+  - AU14JobOPFOROfficerMedical
+# - AU14JobOPFORMilitaryDoctor
+  briefing:
+    text: clf-sleeper-agent-role-greeting
+    color: OliveDrab
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  components:
+  - type: CLFSleeperAgent
+  mindRoles:
+  - MindRoleCLFSleeperAgent
+
+- type: entity
+  id: CLFSleeperAgent
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: CLFSleeperAgentRule
+  - type: AntagSelection
+    selectionTime: JobsAssigned
+    antags:
+    - !type:RandomAntagCount
+      proto: CLFSleeperAgent
+      range:
+        min: 1
+        max: 2
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCLFSleeperAgent
+  name: CLF Sleeper Agent Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: CLFSleeperAgentRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: CLFSleeperAgentRole
+  name: roles-antag-clf-sleeper-agent-name
+  setPreference: true
+  objective: roles-antag-clf-sleeper-agent-objective

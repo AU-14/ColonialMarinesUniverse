@@ -1,0 +1,4 @@
+- type: loadout
+  id: AU14telebatonloadout
+  inhand:
+  - AU14TeleBaton

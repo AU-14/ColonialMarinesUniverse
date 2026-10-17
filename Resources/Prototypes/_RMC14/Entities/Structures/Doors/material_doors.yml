@@ -23,6 +23,7 @@
           "/Audio/Weapons/smash.ogg"
   - type: AirlockReceiverXenoClaws
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

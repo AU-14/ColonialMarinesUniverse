@@ -16,6 +16,7 @@ using Content.Shared.CombatMode;
 using Content.Shared.Construction.Components;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
@@ -145,14 +146,18 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
             TryComp(args.Used, out BallisticAmmoProviderComponent? ballistic))
         {
             if (!TryComp(args.User, out HandsComponent? hands) ||
-                !_slots.CanInsert(ent.Comp.MountedEntity.Value, args.Used, args.User, itemSlot, true) ||
+                !_slots.CanInsert(ent.Comp.MountedEntity.Value, itemSlot, args.Used, args.User, true) ||
                 !_hands.TryDrop(args.User, args.Used))
                 return;
 
             if (itemSlot.Item != null)
                 _hands.TryPickupAnyHand(args.User, itemSlot.Item.Value, handsComp: hands);
 
-            _slots.TryInsert(ent.Comp.MountedEntity.Value, MagazineKey, args.Used, args.User, null, true);
+            _slots.TryInsert(ent.Comp.MountedEntity.Value,
+                MagazineKey,
+                args.Used,
+                args.User,
+                excludeUserAudio: true);
 
             var ammoSpriteKey = WeaponMountComponentVisualLayers.MountedAmmo;
             if (TryComp(ent, out FoldableComponent? foldableComp) && foldableComp.IsFolded)
@@ -427,7 +432,7 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
         if (ent.Comp.Broken)
         {
             var msg = Loc.GetString("emplacement-mount-deploy-broken", ("mount", ent));
-            _popup.PopupClient(msg, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -436,14 +441,14 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
         if (_rmcMap.IsTileBlocked(coordinates, CollisionGroup.MidImpassable))
         {
             var msg = Loc.GetString("rmc-sentry-need-open-area", ("sentry", ent));
-            _popup.PopupClient(msg, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
             return false;
         }
 
         if (_rmcMap.HasAnchoredEntityEnumerator<WeaponMountComponent>(coordinates))
         {
             var msg = Loc.GetString("rmc-sentry-need-open-area", ("sentry", ent));
-            _popup.PopupClient(msg, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -499,7 +504,8 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
             _scope.StartScoping((weapon, scope), args.Buckle);
         }
 
-        _actions.AddAction(args.Buckle, ref ent.Comp.DismountActionEntity, ent.Comp.DismountAction, args.Buckle);
+        // The mount owns this reusable action; successive operators only receive it temporarily.
+        _actions.AddAction(args.Buckle, ref ent.Comp.DismountActionEntity, ent.Comp.DismountAction, ent.Owner);
     }
 
     private void OnUnStrapped(Entity<WeaponMountComponent> ent, ref UnstrappedEvent args)
@@ -606,15 +612,17 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
                 if (slot.EjectOnInteract || slot.DisableEject)
                     continue;
 
-                if (!_slots.CanEject(uid, args.User, slot))
+                if (!_slots.CanEject(uid, slot, args.User))
                     continue;
 
                 if (!_actionBlockerSystem.CanPickup(args.User, slot.Item!.Value))
                     continue;
 
-                var verbSubject = slot.Name != string.Empty
-                    ? Loc.GetString(slot.Name)
-                    : Comp<MetaDataComponent>(slot.Item.Value).EntityName;
+                var verbSubject = slot.Name;
+                if (slot.Name == string.Empty)
+                    verbSubject = Comp<MetaDataComponent>(slot.Item.Value).EntityName;
+                else if (Loc.TryGetString(slot.Name, out var localizedName))
+                    verbSubject = localizedName;
 
                 AlternativeVerb verb = new()
                 {
@@ -669,7 +677,7 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
             }
         }
 
-        if (checking.HasComponent<BarricadeComponent>())
+        if (checking.HasComp<BarricadeComponent>(_componentFactory))
         {
             foreach (var mount in mounts)
             {
@@ -897,7 +905,7 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
         _damage.TryChangeDamage(ent, args.Args.Damage);
         if (ent.Comp.MountedEntity != null)
         {
-            _popup.PopupClient(Loc.GetString("emplacement-mounted-weapon-overheated",
+            _popup.PopupEntity(Loc.GetString("emplacement-mounted-weapon-overheated",
                     ("weapon", ent.Comp.MountedEntity.Value)),
                 ent,
                 ent.Comp.User,
@@ -976,7 +984,7 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
 
         if (popup)
         {
-            _popup.PopupClient(Loc.GetString("emplacement-mount-need-hands-free"),
+            _popup.PopupEntity(Loc.GetString("emplacement-mount-need-hands-free"),
                 mount,
                 user,
                 PopupType.MediumCaution);

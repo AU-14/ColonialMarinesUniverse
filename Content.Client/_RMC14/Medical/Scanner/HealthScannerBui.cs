@@ -1,9 +1,11 @@
 using System.Globalization;
 using System.Numerics;
-using Content.Client._CMU14.Medical.Presentation.Windows;
+using Content.Client.CMU14.Medical.Presentation.Windows;
+using Content.Client.CMU14.Temperature; // CMU14
 using Content.Client._RMC14.Medical.HUD;
 using Content.Client.Message;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Blood; // CMU14
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.HUD;
@@ -158,6 +160,14 @@ public sealed partial class HealthScannerBui : BoundUserInterface
             _window.HealthBarText.Text = Loc.GetString("rmc-health-analyzer-healthy", ("percent", "100%"));
         }
 
+        // cmu edit start
+        if (!isPermaDead && uiState.CMUTimeUntilUnrevivable is { } untilUnrevivable)
+        {
+            var minutes = Math.Max(1, (int) Math.Ceiling(untilUnrevivable.TotalMinutes));
+            _window.HealthBarText.Text += " " + Loc.GetString("cmu-health-analyzer-time-until-unrevivable", ("minutes", minutes));
+        }
+        // cmu edit end
+
         _window.ChangeHolocardButton.Text = Loc.GetString("ui-health-scanner-holocard-change");
         if (_player.LocalEntity is { } viewer &&
             _skills.HasSkill(viewer, HolocardSystem.SkillType, HolocardSystem.MinimumRequiredSkill))
@@ -187,43 +197,44 @@ public sealed partial class HealthScannerBui : BoundUserInterface
                 panel.BackgroundColor = Color.Transparent;
         }
 
-        _window.ChemicalsContainer.DisposeAllChildren();
+        _window.ChemicalsContainer.ReleaseChildren();
 
         var anyChemicals = false;
-        var anyUnknown = false;
-        if (uiState.Chemicals != null)
+        foreach (var reagent in uiState.KnownChemicals)
         {
-            foreach (var reagent in uiState.Chemicals.Contents)
-            {
-                if (!_reagent.TryIndex(reagent.Reagent, out var prototype))
-                    continue;
+            if (!_reagent.TryIndex(reagent.Prototype, out var prototype))
+                continue;
 
-                if (prototype.Unknown)
-                {
-                    // TODO RMC14 these shouldn't be setting sent to the client
-                    anyUnknown = true;
-                    continue;
-                }
+            var text = FormattedMessage.EscapeText($"{reagent.Quantity.Float():F1} {prototype.LocalizedName}");
+            if (reagent.Overdose)
+                text = $"[bold][color=red]{text} OD[/color][/bold]";
 
-                var text = $"{reagent.Quantity.Float():F1} {prototype.LocalizedName}";
-                if (prototype.Overdose != null && reagent.Quantity > prototype.Overdose)
-                    text = $"[bold][color=red]{FormattedMessage.EscapeText(text)} OD[/color][/bold]";
+            var label = new CMUScaledRichTextLabel();
+            label.SetMarkupPermissive(text);
+            _window.ChemicalsContainer.AddChild(label);
+            anyChemicals = true;
+        }
 
-                var label = new CMUScaledRichTextLabel();
-                label.SetMarkupPermissive(text);
-                _window.ChemicalsContainer.AddChild(label);
-                anyChemicals = true;
-            }
+        if (uiState.OmittedKnownChemicals > 0)
+        {
+            var label = new CMUScaledRichTextLabel();
+            label.SetMarkupPermissive(Loc.GetString("rmc-health-analyzer-additional-reagents", ("count", uiState.OmittedKnownChemicals)));
+            _window.ChemicalsContainer.AddChild(label);
+            anyChemicals = true;
         }
 
         _window.UnknownReagentsLabel.SetMarkupPermissive(Loc.GetString("rmc-health-analyzer-unknown-reagents"));
-        _window.UnknownChemicalsPanel.Visible = anyUnknown;
+        _window.UnknownChemicalsPanel.Visible = uiState.UnknownChemicals;
         _window.ChemicalContentsLabel.Visible = anyChemicals;
         _window.ChemicalContentsSeparator.Visible = anyChemicals;
         _window.ChemicalsContainer.Visible = anyChemicals;
-        _window.ChemicalContentsCard.Visible = anyChemicals || anyUnknown;
+        _window.ChemicalContentsCard.Visible = anyChemicals || uiState.UnknownChemicals;
 
-        _window.BloodTypeLabel.Text = "Blood:";
+        // cmu edit start: blood type and saline share
+        _window.BloodTypeLabel.Text = uiState.CMUBloodType is { } bloodType
+            ? Loc.GetString("cmu-health-analyzer-blood-type", ("type", bloodType))
+            : "Blood:";
+        // cmu edit end
         var bloodMsg = new FormattedMessage();
         bloodMsg.PushColor(Color.FromHex("#25B732"));
 
@@ -231,9 +242,21 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         var percentageString = MathHelper.CloseTo(percentage, 100) ? "100%" : $"{percentage:F1}%";
         bloodMsg.AddText($"{percentageString}, {uiState.Blood}cl");
         bloodMsg.Pop();
+        // cmu edit start
+        if (uiState.CMUSalinePercent >= 1f)
+        {
+            bloodMsg.PushColor(Color.FromHex(uiState.CMUSalinePercent > 25f ? "#DF8A3E" : "#5B88B0"));
+            bloodMsg.AddText($" ({Loc.GetString("cmu-health-analyzer-saline", ("percent", (int) uiState.CMUSalinePercent))})");
+            bloodMsg.Pop();
+        }
+        // cmu edit end
         _window.BloodAmountLabel.SetMessage(bloodMsg);
 
-        if (uiState.CMUExternalBleeding)
+        // cmu edit start
+        if (uiState.CMUExternalBleeding && uiState.CMUExternalBleedTier != ExternalBleedTier.None)
+            _window.Bleeding.SetMarkup(" [bold][color=#DF3E3E]\\[" + Loc.GetString("cmu-medical-scanner-bleeding-tier", ("tier", BleedTierName(uiState.CMUExternalBleedTier))) + "\\][/color][/bold]");
+        else if (uiState.CMUExternalBleeding)
+        // cmu edit end
             _window.Bleeding.SetMarkup(" [bold][color=#DF3E3E]\\[Bleeding\\][/color][/bold]");
         else if (uiState.Bleeding)
             _window.Bleeding.SetMarkup(" [bold][color=#DF3E3E]\\[Bleeding\\][/color][/bold]");
@@ -245,7 +268,10 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         {
             var celsius = TemperatureHelpers.KelvinToCelsius(temperatureKelvin);
             var fahrenheit = TemperatureHelpers.KelvinToFahrenheit(temperatureKelvin);
-            temperatureMsg.AddText($"{celsius:F1}ºC ({fahrenheit:F1}ºF)");
+            // CMU14: client temperature unit preference, display only
+            temperatureMsg.AddText(TemperatureDisplay.Fahrenheit
+                ? $"{fahrenheit:F1}ºF"
+                : $"{celsius:F1}ºC ({fahrenheit:F1}ºF)");
         }
         else
         {
@@ -254,7 +280,7 @@ public sealed partial class HealthScannerBui : BoundUserInterface
 
         _window.BodyTemperatureLabel.SetMessage(temperatureMsg);
 
-        _window.AdviceContainer.DisposeAllChildren();
+        _window.AdviceContainer.ReleaseChildren();
         //Medication Advice
         if (!isPermaDead)
         {
@@ -277,6 +303,15 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         UpdateBigStatRow(uiState, isPermaDead);
 
         UpdateCMUBodyMap(uiState);
+
+        _window.CMURiderBanner.Visible = uiState.CMURiderReading is not null;
+        if (uiState.CMURiderReading is { } riderReading)
+            _window.CMURiderLabel.Text = riderReading;
+
+        // CMU14: lab Wendigo procedure progress
+        _window.CMUWendigoBanner.Visible = uiState.CMUWendigoReading is not null;
+        if (uiState.CMUWendigoReading is { } wendigoReading)
+            _window.CMUWendigoLabel.Text = wendigoReading;
 
         if (!_window.IsOpen)
         {
@@ -354,7 +389,8 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         if (uiState.Temperature is { } kelvin)
         {
             var celsius = TemperatureHelpers.KelvinToCelsius(kelvin);
-            _window.CMUBigTempValue.Text = $"{celsius:F1}";
+            // CMU14: unit preference is display only, fever thresholds stay Celsius
+            _window.CMUBigTempValue.Text = $"{TemperatureDisplay.FromKelvin(kelvin):F1}";
             _window.CMUBigTempValue.FontColorOverride = (celsius < 35f || celsius > 39f)
                 ? Color.FromHex("#FFAA00")
                 : Color.White;
@@ -385,8 +421,8 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         }
 
         section.Visible = true;
-        _window.CMUBodyChartContainer.DisposeAllChildren();
-        _window.CMUOrgansContainer.DisposeAllChildren();
+        _window.CMUBodyChartContainer.ReleaseChildren();
+        _window.CMUOrgansContainer.ReleaseChildren();
 
         BuildBodyChart(uiState);
         BuildOrgans(uiState);
@@ -403,16 +439,13 @@ public sealed partial class HealthScannerBui : BoundUserInterface
                 continue;
 
             attached.Add((type, sym));
-            if (!BodyPartHasScannerDamage(uiState, part.Value))
-                continue;
-
             _window!.CMUBodyChartContainer.AddChild(BuildBodyRow(uiState, part.Value));
         }
         foreach (var (type, sym) in CmuPartLayout)
         {
             if (attached.Contains((type, sym)))
                 continue;
-            _window!.CMUBodyChartContainer.AddChild(BuildSeveredRow(type, sym));
+            _window!.CMUBodyChartContainer.AddChild(BuildSeveredRow(uiState, type, sym));
         }
 
         // Skill hints — fractures + bleeds are gated at Med-1 in the
@@ -509,6 +542,9 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         };
         AppendFractureChip(chipStrip, uiState, part);
         AppendBleedChip(chipStrip, uiState, part);
+        // cmu edit start
+        AppendExternalBleedChip(chipStrip, part);
+        // cmu edit end
         AppendWoundChip(chipStrip, part);
         AppendShrapnelChip(chipStrip, part);
         if (part.Eschar)
@@ -528,7 +564,7 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         return card;
     }
 
-    private Control BuildSeveredRow(BodyPartType type, BodyPartSymmetry sym)
+    private Control BuildSeveredRow(HealthScannerBuiState uiState, BodyPartType type, BodyPartSymmetry sym)
     {
         var card = new PanelContainer
         {
@@ -589,6 +625,30 @@ public sealed partial class HealthScannerBui : BoundUserInterface
             VerticalAlignment = Control.VAlignment.Center,
             FontColorOverride = SeverityTextColor(PartSeverity.Severed),
         });
+
+        // cmu edit start
+        if (uiState.CMUStumps is { } stumps)
+        {
+            foreach (var stump in stumps)
+            {
+                if (stump.Type != type || stump.Symmetry != sym)
+                    continue;
+
+                var stumpStrip = new BoxContainer
+                {
+                    Orientation = LayoutOrientation.Horizontal,
+                    HorizontalExpand = true,
+                    Margin = new Thickness(13, 5, 0, 0),
+                };
+                stumpStrip.AddChild(stump.Clamped
+                    ? BuildChip(Loc.GetString("cmu-medical-scanner-chip-stump-clamped"), Color.FromHex("#A02020"))
+                    : BuildChip(Loc.GetString("cmu-medical-scanner-chip-stump-bleeding",
+                        ("tier", BleedTierName(ExternalBleedTier.Arterial))), Color.FromHex("#E01818")));
+                stack.AddChild(stumpStrip);
+                break;
+            }
+        }
+        // cmu edit end
         return card;
     }
 
@@ -651,62 +711,6 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         return track;
     }
 
-    private static bool BodyPartHasScannerDamage(HealthScannerBuiState uiState, CMUBodyPartReadout part)
-    {
-        if (part.Current < part.Max)
-            return true;
-        if (part.WoundDescriptor != null || part.ShrapnelFragments > 0 || part.Eschar)
-            return true;
-        if (PartHasFractureReadout(uiState, part.Type, part.Symmetry))
-            return true;
-        if (PartHasInternalBleedReadout(uiState, part.Type, part.Symmetry))
-            return true;
-
-        return false;
-    }
-
-    private static bool PartHasFractureReadout(
-        HealthScannerBuiState uiState,
-        BodyPartType type,
-        BodyPartSymmetry symmetry)
-    {
-        if (uiState.CMUFractures is not { Count: > 0 } fractures)
-            return false;
-
-        foreach (var fracture in fractures)
-        {
-            if (fracture.Part == type && fracture.Symmetry == symmetry)
-                return true;
-        }
-
-        return false;
-    }
-
-    private static bool PartHasInternalBleedReadout(
-        HealthScannerBuiState uiState,
-        BodyPartType type,
-        BodyPartSymmetry symmetry)
-    {
-        if (uiState.CMUInternalBleeds is not { Count: > 0 } bleeds)
-            return false;
-
-        foreach (var bleed in bleeds)
-        {
-            if (bleed.ExactLocationKnown)
-            {
-                if (bleed.Part == type && bleed.Symmetry == symmetry)
-                    return true;
-
-                continue;
-            }
-
-            if (type == BodyPartType.Torso)
-                return true;
-        }
-
-        return false;
-    }
-
     private static float? LineGraftRecoverableFraction(CMUBodyPartReadout part)
     {
         var max = Math.Max(1f, part.Max.Float());
@@ -766,6 +770,33 @@ public sealed partial class HealthScannerBui : BoundUserInterface
             return;
         }
     }
+
+    // cmu edit start
+    private static void AppendExternalBleedChip(BoxContainer strip, CMUBodyPartReadout part)
+    {
+        if (part.ExternalBleeding == ExternalBleedTier.None)
+            return;
+
+        var color = part.ExternalBleeding switch
+        {
+            ExternalBleedTier.Minor => Color.FromHex("#9A6A30"),
+            ExternalBleedTier.Moderate => Color.FromHex("#B05A28"),
+            ExternalBleedTier.Severe => Color.FromHex("#B83030"),
+            _ => Color.FromHex("#E01818"),
+        };
+        strip.AddChild(BuildChip(
+            Loc.GetString("cmu-medical-scanner-chip-external-bleed", ("tier", BleedTierName(part.ExternalBleeding))),
+            color));
+    }
+
+    private static string BleedTierName(ExternalBleedTier tier) => Loc.GetString(tier switch
+    {
+        ExternalBleedTier.Minor => "cmu-medical-scanner-bleed-tier-minor",
+        ExternalBleedTier.Moderate => "cmu-medical-scanner-bleed-tier-moderate",
+        ExternalBleedTier.Severe => "cmu-medical-scanner-bleed-tier-severe",
+        _ => "cmu-medical-scanner-bleed-tier-arterial",
+    });
+    // cmu edit end
 
     private static void AppendWoundChip(BoxContainer strip, CMUBodyPartReadout part)
     {
@@ -892,9 +923,9 @@ public sealed partial class HealthScannerBui : BoundUserInterface
     {
         // null = sub-Med-2 examiner (FillOrgans is gated at skill ≥ 2 in
         // the server-side populator). Empty list = Med-2+ examiner but
-        // patient has no organs (corpse / synth). Distinguish the two
-        // so the medic knows whether they need to study harder or
-        // whether the patient genuinely has nothing in there.
+        // the patient has no attached organs. Distinguish the two so the
+        // medic knows whether they need to study harder or whether the
+        // patient genuinely has nothing in there.
         if (uiState.CMUOrgans is null)
         {
             _window!.CMUOrgansContainer.AddChild(BuildSkillHint(
@@ -906,7 +937,6 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         {
             _window!.CMUOrgansContainer.AddChild(BuildSkillHint(
                 "cmu-medical-scanner-synthetic-physiology"));
-            return;
         }
 
         if (uiState.CMUOrgans is not { Count: > 0 } organs)
@@ -914,9 +944,6 @@ public sealed partial class HealthScannerBui : BoundUserInterface
 
         foreach (var organ in organs)
         {
-            if (!OrganHasScannerDamage(organ))
-                continue;
-
             var sev = organ.Removed ? PartSeverity.Severed : SeverityFromOrganStage(organ.Stage);
             var card = new PanelContainer
             {
@@ -985,16 +1012,6 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         (BodyPartType.Foot,  BodyPartSymmetry.Right),
     };
 
-    private static bool OrganHasScannerDamage(CMUOrganReadout organ)
-    {
-        if (organ.Removed)
-            return true;
-        if (organ.Stage != Content.Shared._CMU14.Medical.Anatomy.Organs.OrganDamageStage.Healthy)
-            return true;
-
-        return organ.Current < organ.Max;
-    }
-
     private static CMUBodyPartReadout? TryFindPart(
         HealthScannerBuiState uiState, BodyPartType type, BodyPartSymmetry symmetry)
     {
@@ -1022,24 +1039,24 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         return PartSeverity.Healthy;
     }
 
-    private static PartSeverity SeverityFromFracture(Content.Shared._CMU14.Medical.Anatomy.Bones.FractureSeverity severity)
+    private static PartSeverity SeverityFromFracture(Content.Shared.CMU14.Medical.Anatomy.Bones.FractureSeverity severity)
         => severity switch
         {
-            Content.Shared._CMU14.Medical.Anatomy.Bones.FractureSeverity.Hairline => PartSeverity.Bruised,
-            Content.Shared._CMU14.Medical.Anatomy.Bones.FractureSeverity.Simple => PartSeverity.Damaged,
-            Content.Shared._CMU14.Medical.Anatomy.Bones.FractureSeverity.Compound => PartSeverity.Critical,
-            Content.Shared._CMU14.Medical.Anatomy.Bones.FractureSeverity.Shattered => PartSeverity.Critical,
+            Content.Shared.CMU14.Medical.Anatomy.Bones.FractureSeverity.Hairline => PartSeverity.Bruised,
+            Content.Shared.CMU14.Medical.Anatomy.Bones.FractureSeverity.Simple => PartSeverity.Damaged,
+            Content.Shared.CMU14.Medical.Anatomy.Bones.FractureSeverity.Compound => PartSeverity.Critical,
+            Content.Shared.CMU14.Medical.Anatomy.Bones.FractureSeverity.Shattered => PartSeverity.Critical,
             _ => PartSeverity.Bruised,
         };
 
-    private static PartSeverity SeverityFromOrganStage(Content.Shared._CMU14.Medical.Anatomy.Organs.OrganDamageStage stage)
+    private static PartSeverity SeverityFromOrganStage(Content.Shared.CMU14.Medical.Anatomy.Organs.OrganDamageStage stage)
         => stage switch
         {
-            Content.Shared._CMU14.Medical.Anatomy.Organs.OrganDamageStage.Healthy => PartSeverity.Healthy,
-            Content.Shared._CMU14.Medical.Anatomy.Organs.OrganDamageStage.Bruised => PartSeverity.Bruised,
-            Content.Shared._CMU14.Medical.Anatomy.Organs.OrganDamageStage.Damaged => PartSeverity.Damaged,
-            Content.Shared._CMU14.Medical.Anatomy.Organs.OrganDamageStage.Failing => PartSeverity.Critical,
-            Content.Shared._CMU14.Medical.Anatomy.Organs.OrganDamageStage.Dead => PartSeverity.Severed,
+            Content.Shared.CMU14.Medical.Anatomy.Organs.OrganDamageStage.Healthy => PartSeverity.Healthy,
+            Content.Shared.CMU14.Medical.Anatomy.Organs.OrganDamageStage.Bruised => PartSeverity.Bruised,
+            Content.Shared.CMU14.Medical.Anatomy.Organs.OrganDamageStage.Damaged => PartSeverity.Damaged,
+            Content.Shared.CMU14.Medical.Anatomy.Organs.OrganDamageStage.Failing => PartSeverity.Critical,
+            Content.Shared.CMU14.Medical.Anatomy.Organs.OrganDamageStage.Dead => PartSeverity.Severed,
             _ => PartSeverity.Healthy,
         };
 
@@ -1224,6 +1241,17 @@ public sealed partial class HealthScannerBui : BoundUserInterface
             if (!_skills.HasAllSkills(viewer, BloodPackSkill))
                 bloodpack = $"[color=#858585]{bloodpack}[/color]";
             AddAdviceCandidate(recommendations, 78, bloodpack);
+
+            // CMU14: which blood and plasma the patient can take
+            if (CMUBloodTypes.TryParseName(uiState.CMUBloodType, out var patientType))
+            {
+                var types = Loc.GetString("cmu-health-analyzer-advice-blood-types",
+                    ("blood", CMUBloodTypes.CompatibleBloodNames(patientType)),
+                    ("plasma", CMUBloodTypes.CompatiblePlasmaGroups(patientType)));
+                if (!_skills.HasAllSkills(viewer, BloodPackSkill))
+                    types = $"[color=#858585]{types}[/color]";
+                AddAdviceCandidate(recommendations, 77, types);
+            }
         }
 
         if (uiState.Advice.ShowFood)
@@ -1246,6 +1274,10 @@ public sealed partial class HealthScannerBui : BoundUserInterface
             AddAdviceCandidate(recommendations, 60, Loc.GetString("rmc-health-analyzer-advice-dylovene"));
 
         //TODO RMC14 Clone damage advice
+
+        // cmu edit start
+        CMUMedicalAdvice(uiState, recommendations);
+        // cmu edit end
 
         recommendations.Sort((a, b) =>
         {

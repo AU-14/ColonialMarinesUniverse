@@ -1,15 +1,20 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server.Chat.Systems;
-using Content.Server.PowerCell;
+using Content.Server.Power.EntitySystems;
+using Content.Shared.PowerCell;
 using Content.Shared.PowerCell.Components;
+using Content.Shared._RMC14.Body;
 using Content.Shared._RMC14.Medical.IV;
 using Content.Shared.Body.Components;
+using Content.Shared.Body.Systems;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
+using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -20,8 +25,11 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private SharedRMCBloodstreamSystem _rmcBloodstream = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private PowerCellSystem _powerCell = default!;
+    [Dependency] private BatterySystem _battery = default!;
 
     private readonly List<string> _reagentRemovalBuffer = new();
 
@@ -48,18 +56,18 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
         EntityUid attachedTo,
         [NotNullWhen(true)] out Entity<SolutionComponent>? solEnt,
         [NotNullWhen(true)] out Solution? solution,
-        out Entity<SolutionComponent>? bloodstreamSolution)
+        [NotNullWhen(true)] out BloodstreamComponent? bloodstream)
     {
         solEnt = default;
         solution = default;
-        bloodstreamSolution = default;
-        if (!TryComp(attachedTo, out BloodstreamComponent? attachedStream) ||
-            !_solutionContainer.TryGetSolution(attachedTo, attachedStream.BloodSolutionName, out solEnt, out solution))
+        bloodstream = default;
+        if (!TryComp(attachedTo, out bloodstream) ||
+            !_solutionContainer.ResolveSolution(attachedTo, bloodstream.BloodSolutionName, ref bloodstream.BloodSolution, out solution))
         {
             return false;
         }
 
-        bloodstreamSolution = attachedStream.BloodSolution;
+        solEnt = bloodstream.BloodSolution;
         return true;
     }
 
@@ -81,7 +89,10 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
                 continue;
 
             if (!InRange(ivId, attachedTo, ivComp.Range))
+            {
                 DetachIV((ivId, ivComp), null, true, false);
+                continue;
+            }
 
             if (time < ivComp.TransferAt)
                 continue;
@@ -97,27 +108,31 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
             if (!_solutionContainer.TryGetSolution(pack, packComponent.Solution, out var packSolEnt, out var packSol))
                 continue;
 
-            if (!TryGetBloodstream(attachedTo, out var streamSolEnt, out var streamSol, out var attachedStream))
+            if (!TryGetBloodstream(attachedTo, out var streamSolEnt, out var streamSol, out var bloodstream))
                 continue;
 
             if (ivComp.Injecting)
             {
-                if (attachedStream is { } bloodSolutionEnt &&
-                    bloodSolutionEnt.Comp.Solution.Volume < bloodSolutionEnt.Comp.Solution.MaxVolume)
-                {
-                    // Don't transfer non-blood reagants
-                    Solution excludedSolution = packSol.SplitSolutionWithout(packSol.MaxVolume, packComponent.TransferableReagents);
-                    _solutionContainer.TryTransferSolution(bloodSolutionEnt, packSol, ivComp.TransferAmount);
-                    _solutionContainer.TryAddSolution(packSolEnt.Value, excludedSolution);
-                    Dirty(packSolEnt.Value);
-                }
+                // CMU14: incompatible or spoiled blood keeps flowing into a full bloodstream so it still causes a reaction
+                if (streamSolEnt.Value.Comp.Solution.Volume < streamSolEnt.Value.Comp.Solution.MaxVolume ||
+                    CMUIsHarmfulTransfusion(pack, attachedTo, bloodstream, packSol))
+                    TransferBloodToRecipient(
+                        streamSolEnt.Value,
+                        packSolEnt.Value,
+                        packSol,
+                        bloodstream,
+                        packComponent.TransferableReagents,
+                        ivComp.TransferAmount * CMUFlowMultiplier(ivId, pack), // CMU14: pressure bags and plasma flow faster
+                        pack,
+                        attachedTo);
             }
             else
             {
                 if (packSol.Volume < packSol.MaxVolume)
                 {
-                    _solutionContainer.TryTransferSolution(packSolEnt.Value, streamSol, ivComp.TransferAmount);
-                    Dirty(streamSolEnt.Value);
+                    var cmuWasEmpty = packSol.Volume <= FixedPoint2.Zero; // CMU14
+                    TransferReferenceBlood(packSolEnt.Value, streamSolEnt.Value, streamSol, bloodstream, ivComp.TransferAmount);
+                    CMUOnBloodDrawn(pack, attachedTo, cmuWasEmpty); // CMU14: label the pack with the donor's blood type
                 }
             }
 
@@ -133,7 +148,10 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
                 continue;
 
             if (!InRange(packId, attachedTo, packComp.Range))
+            {
                 DetachPack((packId, packComp), null, true, false);
+                continue;
+            }
 
             if (time < packComp.TransferAt)
                 continue;
@@ -143,27 +161,31 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
             if (!_solutionContainer.TryGetSolution(packId, packComp.Solution, out var packSolEnt, out var packSol))
                 continue;
 
-            if (!TryGetBloodstream(attachedTo, out var streamSolEnt, out var streamSol, out var attachedStream))
+            if (!TryGetBloodstream(attachedTo, out var streamSolEnt, out var streamSol, out var bloodstream))
                 continue;
 
             if (packComp.Injecting)
             {
-                if (attachedStream is { } bloodSolutionEnt &&
-                    bloodSolutionEnt.Comp.Solution.Volume < bloodSolutionEnt.Comp.Solution.MaxVolume)
-                {
-                    // Don't transfer non-blood reagants
-                    Solution excludedSolution = packSol.SplitSolutionWithout(packSol.MaxVolume, packComp.TransferableReagents);
-                    _solutionContainer.TryTransferSolution(bloodSolutionEnt, packSol, packComp.TransferAmount);
-                    _solutionContainer.TryAddSolution(packSolEnt.Value, excludedSolution);
-                    Dirty(packSolEnt.Value);
-                }
+                // CMU14: incompatible or spoiled blood keeps flowing into a full bloodstream so it still causes a reaction
+                if (streamSolEnt.Value.Comp.Solution.Volume < streamSolEnt.Value.Comp.Solution.MaxVolume ||
+                    CMUIsHarmfulTransfusion(packId, attachedTo, bloodstream, packSol))
+                    TransferBloodToRecipient(
+                        streamSolEnt.Value,
+                        packSolEnt.Value,
+                        packSol,
+                        bloodstream,
+                        packComp.TransferableReagents,
+                        packComp.TransferAmount * CMUFlowMultiplier(null, packId), // CMU14: squeezing and plasma flow faster
+                        packId,
+                        attachedTo);
             }
             else
             {
                 if (packSol.Volume < packSol.MaxVolume)
                 {
-                    _solutionContainer.TryTransferSolution(packSolEnt.Value, streamSol, packComp.TransferAmount);
-                    Dirty(streamSolEnt.Value);
+                    var cmuWasEmpty = packSol.Volume <= FixedPoint2.Zero; // CMU14
+                    TransferReferenceBlood(packSolEnt.Value, streamSolEnt.Value, streamSol, bloodstream, packComp.TransferAmount);
+                    CMUOnBloodDrawn(packId, attachedTo, cmuWasEmpty); // CMU14: label the pack with the donor's blood type
                 }
             }
 
@@ -178,7 +200,10 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
                 continue;
 
             if (!InRange(dialysisId, attachedTo, dialysisComp.Range))
+            {
                 DetachDialysis((dialysisId, dialysisComp), null, true, false);
+                continue;
+            }
 
             if (time < dialysisComp.TransferAt)
                 continue;
@@ -188,7 +213,7 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
             if (!_powerCell.HasActivatableCharge(dialysisId) || !HasComp<BloodstreamComponent>(attachedTo))
                 DetachDialysis((dialysisId, dialysisComp), null, false, false);
 
-            if (_solutionContainer.TryGetSolution(attachedTo, "chemicals", out var chemicalSolEnt, out var chemicalSol))
+            if (_rmcBloodstream.TryGetChemicalSolution(attachedTo, out var chemicalSolEnt, out var chemicalSol))
             {
                 _reagentRemovalBuffer.Clear();
 
@@ -202,21 +227,90 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
 
                 foreach (var reagent in _reagentRemovalBuffer)
                 {
-                    _solutionContainer.RemoveReagent(chemicalSolEnt.Value, reagent, dialysisComp.ReagentRemovalAmount);
+                    _solutionContainer.RemoveReagent(chemicalSolEnt, reagent, dialysisComp.ReagentRemovalAmount);
                 }
             }
 
-            if (TryComp(attachedTo, out BloodstreamComponent? bloodstreamComp) &&
-                _solutionContainer.ResolveSolution(attachedTo, bloodstreamComp.BloodSolutionName, ref bloodstreamComp.BloodSolution))
-            {
-                _solutionContainer.SplitSolution(bloodstreamComp.BloodSolution.Value, dialysisComp.BloodRemovalCost);
-            }
+            if (TryComp(attachedTo, out BloodstreamComponent? bloodstreamComp))
+                _bloodstream.TryRegulateBloodLevel((attachedTo, bloodstreamComp), dialysisComp.BloodRemovalCost, referenceFactor: 0f);
+
+            CMUOnDialysisTick(attachedTo); // CMU14: dialysis filters saline back out to real blood
 
             _powerCell.TryUseActivatableCharge(dialysisId);
 
             Dirty(dialysisId, dialysisComp);
             UpdateDialysisVisuals((dialysisId, dialysisComp));
         }
+    }
+
+    private void TransferReferenceBlood(
+        Entity<SolutionComponent> destination,
+        Entity<SolutionComponent> source,
+        Solution sourceSolution,
+        BloodstreamComponent bloodstream,
+        FixedPoint2 amount)
+    {
+        var references = _bloodstream.GetReferenceReagentPrototypes((source.Owner, bloodstream));
+        var excludedSolution = sourceSolution.SplitSolutionWithout(sourceSolution.MaxVolume, references);
+
+        _solutionContainer.TryTransferSolution(destination, sourceSolution, amount);
+        _solutionContainer.TryAddSolution(source, excludedSolution);
+        Dirty(source);
+    }
+
+    private void TransferBloodToRecipient(
+        Entity<SolutionComponent> destination,
+        Entity<SolutionComponent> source,
+        Solution sourceSolution,
+        BloodstreamComponent bloodstream,
+        string[] transferableReagents,
+        FixedPoint2 amount,
+        EntityUid pack, // CMU14
+        EntityUid recipient) // CMU14
+    {
+        // CMU14: harmful blood is destroyed rather than added, so it isn't capped by the room left in the bloodstream
+        if (!CMUIsHarmfulTransfusion(pack, recipient, bloodstream, sourceSolution))
+            amount = FixedPoint2.Min(amount, destination.Comp.Solution.AvailableVolume);
+
+        if (amount <= FixedPoint2.Zero)
+            return;
+
+        var transferablePrototypes = transferableReagents
+            .Select(reagent => (ProtoId<ReagentPrototype>) reagent)
+            .ToArray();
+        var transferred = sourceSolution.SplitSolutionWithOnly(amount, transferablePrototypes);
+        if (transferred.Volume <= FixedPoint2.Zero)
+            return;
+
+        // CMU14: plasma and saline become blood volume, and mismatched blood types are destroyed
+        CMUProcessTransfusion(pack, recipient, bloodstream, transferred);
+        if (transferred.Volume <= FixedPoint2.Zero)
+        {
+            Dirty(source);
+            return;
+        }
+
+        // Blood packs do not model compatibility yet. Convert matching donor blood IDs (including DNA data)
+        // to the recipient's reference IDs so they restore blood volume instead of metabolizing as foreign blood.
+        foreach (var (referenceReagent, _) in bloodstream.BloodReferenceSolution)
+        {
+            var quantity = transferred.GetTotalPrototypeQuantity(referenceReagent.Prototype);
+            if (quantity <= FixedPoint2.Zero)
+                continue;
+
+            transferred.RemoveReagent(referenceReagent, quantity, ignoreReagentData: true);
+            transferred.AddReagent(referenceReagent, quantity);
+        }
+
+        // CMU14: whatever doesn't fit after harmful blood was destroyed goes back into the pack
+        var overflow = transferred.Volume - destination.Comp.Solution.AvailableVolume;
+        if (overflow > FixedPoint2.Zero)
+            _solutionContainer.TryAddSolution(source, transferred.SplitSolution(overflow));
+
+        if (!_solutionContainer.TryAddSolution(destination, transferred))
+            _solutionContainer.TryAddSolution(source, transferred);
+
+        Dirty(source);
     }
 
     private void UpdateDialysisBatteryLevel(Entity<PortableDialysisComponent> dialysis)
@@ -227,10 +321,10 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
 
     private DialysisBatteryLevel GetDialysisBatteryLevel(Entity<PortableDialysisComponent> dialysis)
     {
-        if (!_powerCell.TryGetBatteryFromSlot(dialysis, out _, out var battery) || battery.MaxCharge <= 0)
+        if (!_powerCell.TryGetBatteryFromSlot(dialysis.Owner, out var battery) || battery.Value.Comp.MaxCharge <= 0)
             return DialysisBatteryLevel.Empty;
 
-        var percentCharged = battery.CurrentCharge / battery.MaxCharge;
+        var percentCharged = _battery.GetCharge(battery.Value.AsNullable()) / battery.Value.Comp.MaxCharge;
         return percentCharged switch
         {
             >= 0.86f => DialysisBatteryLevel.Full,

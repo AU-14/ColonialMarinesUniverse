@@ -1,9 +1,11 @@
+using Content.Shared._RMC14.Xenonids.Weeds;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Content.Shared._CMU14.Blackfoot;
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Vehicles;
+using Content.Shared.CMU14.Blackfoot;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Vehicles;
+using Content.Shared.Movement.Events;
 using Content.Shared.Vehicle.Components;
 using Content.Shared._RMC14.Vehicle;
 using Robust.Shared.Audio;
@@ -28,7 +30,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         VehicleComponent vehicle,
         EntityUid grid,
         MapGridComponent gridComp,
-        Vector2i inputDir,
+        VehicleControlInput input,
         bool pushing,
         float frameTime)
     {
@@ -49,18 +51,33 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         GetSmashSlowdownMultiplier(mover);
 
         mover.IsCommittedToMove = false;
+        mover.IsPoweredDemolishing = false;
         if (!pushing)
         {
             mover.IsPushMove = false;
             mover.PushDirection = Vector2i.Zero;
         }
 
+        // CMU14: apply terrain drag to both cardinal and analog driving.
+        if (!pushing)
+            ApplyTerrainSlowdown(uid, mover, frameTime);
+
         var moved = pushing
-            ? UpdatePushMovement(uid, mover, grid, gridComp, inputDir, frameTime)
-            : UpdateDriveMovement(uid, mover, grid, gridComp, inputDir, frameTime);
+            ? UpdatePushMovement(uid, mover, grid, gridComp, input.Direction, frameTime)
+            : input.CardinalSteering
+                ? UpdateDriveMovement(uid, mover, grid, gridComp, input.Direction, frameTime)
+                : UpdateDynamicDriveMovement(uid, mover, grid, gridComp, input.Throttle, input.Steering, frameTime);
 
         UpdateDerivedTileState(grid, gridComp, mover);
-        mover.IsMoving = MathF.Abs(mover.CurrentSpeed) > MinVehicleSpeed;
+        var movingLinearly = MathF.Abs(mover.CurrentSpeed) > MinVehicleSpeed;
+        var turningInPlace = mover.TurnInPlace &&
+            !movingLinearly &&
+            (MathF.Abs(mover.AngularVelocityDegrees) > 0.001f ||
+             mover.InPlaceTurnBlockUntil > _timing.CurTime);
+        mover.IsMoving = movingLinearly || turningInPlace || mover.IsPoweredDemolishing;
+
+        var spriteMove = new SpriteMoveEvent(mover.IsMoving);
+        RaiseLocalEvent(uid, ref spriteMove);
 
         if (!mover.IsMoving)
         {
@@ -77,6 +94,164 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             physics.WakeBody(uid);
 
         Dirty(uid, mover);
+    }
+
+    // CMU14 method: vehicle damage and usability.
+    private bool UpdateDynamicDriveMovement(
+        EntityUid uid,
+        GridVehicleMoverComponent mover,
+        EntityUid grid,
+        MapGridComponent gridComp,
+        float throttle,
+        float steering,
+        float frameTime)
+    {
+        var immobilized = _timing.CurTime < mover.ImmobileUntil;
+        if (immobilized)
+        {
+            mover.CurrentSpeed = GridVehicleMotionSimulator.StepIdleSpeed(
+                mover.CurrentSpeed,
+                mover.Deceleration,
+                frameTime);
+            mover.AngularVelocityDegrees = StepTowards(
+                mover.AngularVelocityDegrees,
+                0f,
+                mover.RotationDecelerationDegrees * frameTime);
+
+            if (throttle != 0f || steering != 0f)
+                TryShowImmobileRetryPopup(uid);
+
+            return false;
+        }
+
+        var rotation = transform.GetWorldRotation(uid) - transform.GetWorldRotation(grid);
+        if (!GridVehicleMotionSimulator.CanSteer(mover.TurnInPlace, mover.CurrentSpeed))
+        {
+            // Wheeled vehicles cannot retain or build yaw while stationary.
+            mover.AngularVelocityDegrees = 0f;
+        }
+        else
+        {
+            var effectiveSteering = GridVehicleMotionSimulator.GetEffectiveSteering(
+                steering,
+                mover.CurrentSpeed,
+                throttle);
+            var targetAngularVelocity = effectiveSteering * MathF.Max(0f, mover.MaxRotationSpeedDegrees);
+            var angularAcceleration = steering == 0f
+                ? mover.RotationDecelerationDegrees
+                : mover.RotationAccelerationDegrees;
+            mover.AngularVelocityDegrees = StepTowards(
+                mover.AngularVelocityDegrees,
+                targetAngularVelocity,
+                MathF.Max(0f, angularAcceleration) * frameTime);
+        }
+
+        // Help the driver finish a near-cardinal alignment at parking speed.
+        // This uses the same collision checks as manual steering.
+        if (steering == 0f && throttle != 0f && mover.AlignmentAssistDegrees > 0f &&
+            GridVehicleMotionSimulator.CanSteer(mover.TurnInPlace, mover.CurrentSpeed) &&
+            MathF.Abs(mover.CurrentSpeed) <= mover.AlignmentAssistMaxSpeed)
+        {
+            var aligned = rotation.GetCardinalDir().ToAngle();
+            var delta = Angle.ShortestDistance(rotation, aligned).Degrees;
+            if (Math.Abs(delta) <= mover.AlignmentAssistDegrees)
+                mover.AngularVelocityDegrees = (float) Math.Clamp(delta / Math.Max(frameTime, 0.001f), -30f, 30f);
+        }
+
+        if (MathF.Abs(mover.AngularVelocityDegrees) > 0.001f)
+        {
+            var desiredRotation = rotation + Angle.FromDegrees(mover.AngularVelocityDegrees * frameTime);
+            if (CanOccupyTransform(uid, mover, grid, mover.Position, desiredRotation, Clearance, applyEffects: true))
+            {
+                rotation = desiredRotation;
+                transform.SetLocalRotation(uid, rotation);
+            }
+            else
+            {
+                mover.AngularVelocityDegrees = 0f;
+            }
+        }
+
+        mover.CurrentDirection = rotation.GetCardinalDir().ToIntVec();
+
+        var hasThrottle = throttle != 0f;
+        var profile = GetDriveProfile(uid, mover);
+        // CMU14: preserve analog throttle from aircraft taxi assistance.
+        var throttleScale = Math.Clamp(MathF.Abs(throttle), 0, 1);
+        profile = profile with { MaxSpeed = profile.MaxSpeed * throttleScale, MaxReverseSpeed = profile.MaxReverseSpeed * throttleScale };
+        var throttleDirection = throttle < 0f ? new Vector2i(0, -1) : new Vector2i(0, 1);
+        var speedResult = hasThrottle
+            ? GridVehicleMotionSimulator.StepDriveSpeed(
+                mover.CurrentSpeed,
+                profile,
+                new Vector2i(0, 1),
+                throttleDirection,
+                true,
+                isCommittedToMove: false,
+                frameTime)
+            : new GridVehicleMotionSimulator.DriveSpeedResult(
+                GridVehicleMotionSimulator.StepIdleSpeed(mover.CurrentSpeed, mover.Deceleration, frameTime),
+                false,
+                false);
+
+        mover.CurrentSpeed = speedResult.CurrentSpeed;
+        if (speedResult.ChangingDirection)
+        {
+            mover.CurrentSpeed = 0f;
+            return false;
+        }
+
+        var travel = MathF.Abs(mover.CurrentSpeed) * frameTime;
+        if (travel <= MinMoveDistance)
+            return MathF.Abs(mover.AngularVelocityDegrees) > 0.001f;
+
+        var forward = rotation.ToWorldVec();
+        if (mover.CurrentSpeed < 0f)
+            forward = -forward;
+
+        var speedBeforeMove = mover.CurrentSpeed;
+        var maxSpeedBeforeMove = GetModifiedMaxSpeed(uid, mover);
+        var target = mover.Position + forward * travel;
+        bool blocked;
+        bool moved;
+        var cardinal = rotation.GetCardinalDir();
+        if (steering == 0f && mover.AlignmentAssistDegrees > 0f &&
+            MathF.Abs(mover.CurrentSpeed) <= mover.AlignmentAssistMaxSpeed &&
+            Math.Abs(Angle.ShortestDistance(rotation, cardinal.ToAngle()).Degrees) < 0.1f)
+        {
+            var direction = cardinal.ToIntVec() * (mover.CurrentSpeed < 0f ? -1 : 1);
+            moved = TryMoveWithLaneGuidance(uid, mover, grid, gridComp, direction, rotation, travel, frameTime, out blocked);
+        }
+        else
+        {
+            moved = TryMoveContinuous(uid, mover, grid, target, rotation, out blocked);
+        }
+        if (blocked)
+        {
+            mover.CurrentSpeed = 0f;
+            _rmcVehicles.DoInteriorCrashEffect(uid, speedBeforeMove, maxSpeedBeforeMove);
+        }
+
+        return moved;
+    }
+
+    private void ApplyTerrainSlowdown(EntityUid uid, GridVehicleMoverComponent mover, float frameTime)
+    {
+        if (mover.WeedsSpeedFactor < 1f)
+        {
+            var coords = Transform(uid).Coordinates;
+            if (_rmcMap.HasAnchoredEntityEnumerator<XenoWeedsComponent>(coords, out _))
+                mover.CurrentSpeed *= MathF.Pow(mover.WeedsSpeedFactor, frameTime);
+        }
+
+        var waterCoords = Transform(uid).Coordinates;
+        if (_rmcMap.HasAnchoredEntityEnumerator<VehicleWaterSlowTileComponent>(waterCoords, out var waterTile) &&
+            _rmcWater.IsActiveWater(waterTile.Owner, uid) &&
+            waterTile.Comp.SpeedFactors.TryGetValue(mover.WeightClass, out var waterFactor) &&
+            waterFactor < 1f)
+        {
+            mover.CurrentSpeed *= MathF.Pow(waterFactor, frameTime);
+        }
     }
 
     private bool UpdatePushMovement(
@@ -136,7 +311,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             travel,
             frameTime,
             out var blocked);
-        if (blocked)
+        if (blocked && !moved)
             mover.CurrentSpeed = 0f;
 
         if (moved && hasInput && mover.PushCooldown > 0f)
@@ -269,6 +444,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             ? mover.CurrentDirection
             : -mover.CurrentDirection;
         var rotation = DirectionToVehicleRotation(mover.CurrentDirection);
+        var speedBeforeMove = mover.CurrentSpeed;
+        var maxSpeedBeforeMove = GetModifiedMaxSpeed(uid, mover);
         var moved = TryMoveWithLaneGuidance(
             uid,
             mover,
@@ -280,7 +457,10 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             frameTime,
             out var blocked);
         if (blocked)
+        {
             mover.CurrentSpeed = 0f;
+            _rmcVehicles.DoInteriorCrashEffect(uid, speedBeforeMove, maxSpeedBeforeMove);
+        }
 
         return moved;
     }
@@ -312,13 +492,12 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         if (mover.CurrentDirection != Vector2i.Zero &&
             MathF.Abs(mover.CurrentSpeed) > MinVehicleSpeed)
         {
-            var moveDir = mover.CurrentSpeed >= 0f
-                ? mover.CurrentDirection
-                : -mover.CurrentDirection;
-            var forward = new Vector2(moveDir.X, moveDir.Y);
+            var rotation = transform.GetWorldRotation(uid) - transform.GetWorldRotation(grid);
+            var forward = rotation.ToWorldVec();
+            if (mover.CurrentSpeed < 0f)
+                forward = -forward;
             var travel = MathF.Abs(mover.CurrentSpeed) * frameTime;
             var target = mover.Position + forward * travel;
-            var rotation = DirectionToVehicleRotation(mover.CurrentDirection);
 
             moved = TryMoveContinuous(uid, mover, grid, target, rotation, out var blocked);
             if (blocked)
@@ -881,12 +1060,49 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         var probeStep = Math.Clamp(mover.MovementProbeStep, 0.02f, 0.5f);
         var steps = Math.Max(1, (int) MathF.Ceiling(distance / probeStep));
         var lastGood = start;
+        HashSet<EntityUid>? escapeBlockers = null;
 
         for (var i = 1; i <= steps; i++)
         {
             var candidate = start + delta * (i / (float) steps);
-            if (!CanOccupyTransform(uid, mover, grid, candidate, rotation, Clearance, applyEffects: false, debug: debugProbes, ignoredEntities: ignoredEntities))
+            if (!CanOccupyTransform(
+                    uid,
+                    mover,
+                    grid,
+                    candidate,
+                    rotation,
+                    Clearance,
+                    applyEffects: false,
+                    debug: debugProbes,
+                    ignoredEntities: ignoredEntities,
+                    escapeBlockers: escapeBlockers,
+                    escapeDirection: delta))
             {
+                escapeBlockers ??= FindInitialMovementBlockers(
+                    uid,
+                    mover,
+                    grid,
+                    rotation,
+                    ignoredEntities);
+
+                if (escapeBlockers.Count > 0 &&
+                    CanOccupyTransform(
+                        uid,
+                        mover,
+                        grid,
+                        candidate,
+                        rotation,
+                        Clearance,
+                        applyEffects: false,
+                        debug: debugProbes,
+                        ignoredEntities: ignoredEntities,
+                        escapeBlockers: escapeBlockers,
+                        escapeDirection: delta))
+                {
+                    lastGood = candidate;
+                    continue;
+                }
+
                 if (applyBlockEffects)
                     CanOccupyTransform(uid, mover, grid, candidate, rotation, Clearance, applyEffects: true, debug: false, ignoredEntities: ignoredEntities);
 
@@ -899,7 +1115,18 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         }
 
         if (applyBlockEffects &&
-            !CanOccupyTransform(uid, mover, grid, lastGood, rotation, Clearance, applyEffects: true, debug: false, ignoredEntities: ignoredEntities))
+            !CanOccupyTransform(
+                uid,
+                mover,
+                grid,
+                lastGood,
+                rotation,
+                Clearance,
+                applyEffects: true,
+                debug: false,
+                ignoredEntities: ignoredEntities,
+                escapeBlockers: escapeBlockers,
+                escapeDirection: delta))
         {
             mover.Position = start;
             blocked = true;
@@ -908,6 +1135,51 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
         mover.Position = lastGood;
         return true;
+    }
+
+    private HashSet<EntityUid> FindInitialMovementBlockers(
+        EntityUid uid,
+        GridVehicleMoverComponent mover,
+        EntityUid grid,
+        Angle? rotation,
+        HashSet<EntityUid>? ignoredEntities)
+    {
+        var initialBlockers = new HashSet<EntityUid>();
+        var ignoredDuringSearch = ignoredEntities != null
+            ? new HashSet<EntityUid>(ignoredEntities)
+            : new HashSet<EntityUid>();
+
+        // CanOccupyTransform returns after its first hard blocker. Re-probe while
+        // ignoring each discovered entity so multi-tile walls are collected too.
+        for (var i = 0; i < 16; i++)
+        {
+            var found = new HashSet<EntityUid>();
+            if (CanOccupyTransform(
+                    uid,
+                    mover,
+                    grid,
+                    mover.Position,
+                    rotation,
+                    Clearance,
+                    applyEffects: false,
+                    debug: false,
+                    blockers: found,
+                    ignoredEntities: ignoredDuringSearch))
+            {
+                break;
+            }
+
+            if (found.Count == 0)
+                break;
+
+            foreach (var blocker in found)
+            {
+                initialBlockers.Add(blocker);
+                ignoredDuringSearch.Add(blocker);
+            }
+        }
+
+        return initialBlockers;
     }
 
     private bool TryMoveKnownClear(
@@ -1078,19 +1350,19 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             mover.Deceleration);
     }
 
+    // CMU14 method: vehicle damage and usability.
     private float GetModifiedMaxSpeed(EntityUid uid, GridVehicleMoverComponent mover)
     {
         if (_timing.CurTime < mover.ImmobileUntil)
             return 0f;
 
-        var maxSpeed = mover.MaxSpeed * GetSmashSlowdownMultiplier(mover) * GetIntegritySpeedMultiplier(uid, mover);
+        var maxSpeed = mover.MaxSpeed * GetSmashSlowdownMultiplier(mover) * GetDamageSpeedMultiplier(uid, mover, false);
 
         if (TryComp<VehicleOverchargeComponent>(uid, out var overcharge) && _timing.CurTime < overcharge.ActiveUntil)
             maxSpeed *= overcharge.SpeedMultiplier;
         if (TryComp<VehicleSpeedModifierComponent>(uid, out var speedMod))
             maxSpeed *= speedMod.SpeedMultiplier;
-        if (TryComp<VehicleMechanicalFailureModifierComponent>(uid, out var failureMod))
-            maxSpeed *= failureMod.SpeedMultiplier;
+
         maxSpeed *= GetBlackfootAirSpeedMultiplier(uid);
         if (TryGetBlackfootTowTaxiMultiplier(uid, out var taxiMultiplier))
             maxSpeed *= taxiMultiplier.Speed;
@@ -1100,19 +1372,19 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         return maxSpeed;
     }
 
+    // CMU14 method: vehicle damage and usability.
     private float GetModifiedMaxReverseSpeed(EntityUid uid, GridVehicleMoverComponent mover)
     {
         if (_timing.CurTime < mover.ImmobileUntil)
             return 0f;
 
-        var maxSpeed = mover.MaxReverseSpeed * GetSmashSlowdownMultiplier(mover) * GetIntegritySpeedMultiplier(uid, mover);
+        var maxSpeed = mover.MaxReverseSpeed * GetSmashSlowdownMultiplier(mover) * GetDamageSpeedMultiplier(uid, mover, true);
 
         if (TryComp<VehicleOverchargeComponent>(uid, out var overcharge) && _timing.CurTime < overcharge.ActiveUntil)
             maxSpeed *= overcharge.SpeedMultiplier;
         if (TryComp<VehicleSpeedModifierComponent>(uid, out var speedMod))
             maxSpeed *= speedMod.SpeedMultiplier;
-        if (TryComp<VehicleMechanicalFailureModifierComponent>(uid, out var failureMod))
-            maxSpeed *= failureMod.ReverseSpeedMultiplier;
+
         maxSpeed *= GetBlackfootAirSpeedMultiplier(uid);
         if (TryGetBlackfootTowTaxiMultiplier(uid, out var taxiMultiplier))
             maxSpeed *= taxiMultiplier.Speed;
@@ -1165,6 +1437,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         return false;
     }
 
+    // CMU14 method: vehicle damage and usability.
     private float GetIntegritySpeedMultiplier(EntityUid uid, GridVehicleMoverComponent mover)
     {
         if (mover.SpeedAtZeroIntegrity >= 1f)
@@ -1174,9 +1447,18 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return 1f;
 
         var ratio = Math.Clamp(integrity.Integrity / integrity.MaxIntegrity, 0f, 1f);
-        return mover.SpeedAtZeroIntegrity + (1f - mover.SpeedAtZeroIntegrity) * ratio;
+        return VehicleDamageRules.GetConditionMultiplier(ratio, mover.FullSpeedIntegrityFraction, mover.SpeedAtZeroIntegrity);
     }
 
+    private float GetDamageSpeedMultiplier(EntityUid uid, GridVehicleMoverComponent mover, bool reversing)
+    {
+        var multiplier = GetIntegritySpeedMultiplier(uid, mover);
+        if (TryComp<VehicleMechanicalFailureModifierComponent>(uid, out var failure))
+            multiplier *= reversing ? failure.ReverseSpeedMultiplier : failure.SpeedMultiplier;
+        return MathF.Max(mover.MinimumDamageSpeedMultiplier, multiplier);
+    }
+
+    // CMU14 method: vehicle damage and usability.
     private float GetAccelerationModifier(EntityUid uid)
     {
         var multiplier = 1f;
@@ -1184,6 +1466,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             multiplier = MathF.Max(0.05f, accelMod.AccelerationMultiplier);
         if (TryComp<VehicleMechanicalFailureModifierComponent>(uid, out var failureMod))
             multiplier *= MathF.Max(0.05f, failureMod.AccelerationMultiplier);
+        if (TryComp<GridVehicleMoverComponent>(uid, out var mover))
+            multiplier = MathF.Max(mover.MinimumDamageSpeedMultiplier, multiplier);
         if (TryGetBlackfootTowTaxiMultiplier(uid, out var taxiMultiplier))
             multiplier *= taxiMultiplier.Acceleration;
 
@@ -1196,12 +1480,22 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     private void StopMover(GridVehicleMoverComponent mover)
     {
         mover.CurrentSpeed = 0f;
+        mover.AngularVelocityDegrees = 0f;
         mover.IsCommittedToMove = false;
         mover.IsPushMove = false;
         mover.IsMoving = false;
         mover.TargetPosition = mover.Position;
         mover.TargetTile = mover.CurrentTile;
         mover.PushDirection = Vector2i.Zero;
+    }
+
+    private static float StepTowards(float current, float target, float maximumDelta)
+    {
+        if (current < target)
+            return MathF.Min(current + maximumDelta, target);
+        if (current > target)
+            return MathF.Max(current - maximumDelta, target);
+        return current;
     }
 
     private void UpdateDerivedTileState(EntityUid grid, MapGridComponent gridComp, GridVehicleMoverComponent mover)
@@ -1380,6 +1674,9 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     private void ApplySmashSlowdown(EntityUid vehicle, GridVehicleMoverComponent mover, VehicleSmashableComponent smashable)
     {
         if (smashable.SlowdownDuration <= 0f || smashable.SlowdownMultiplier >= 1f)
+            return;
+
+        if (smashable.SlowdownBelowWeightClass is { } maxWeight && mover.WeightClass >= maxWeight)
             return;
 
         var now = _timing.CurTime;

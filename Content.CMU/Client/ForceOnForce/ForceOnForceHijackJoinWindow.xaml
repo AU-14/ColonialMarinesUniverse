@@ -1,0 +1,12 @@
+<ui:ForceOnForceHijackJoinWindow xmlns="https://spacestation14.io"
+                xmlns:ui="clr-namespace:Content.Client.CMU14.ForceOnForce"
+                Title="{Loc 'cmu-fof-hijack-join-title'}" MinWidth="450">
+    <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="14">
+        <RichTextLabel Name="Message" Access="Public" MaxWidth="440" />
+        <Label Text="{Loc 'cmu-fof-hijack-join-expiry'}" />
+        <BoxContainer Orientation="Horizontal" SeparationOverride="10">
+            <Button Name="JoinButton" Access="Public" Text="{Loc 'cmu-fof-hijack-join'}" HorizontalExpand="True" />
+            <Button Name="StayButton" Access="Public" Text="{Loc 'cmu-fof-hijack-stay'}" HorizontalExpand="True" />
+        </BoxContainer>
+    </BoxContainer>
+</ui:ForceOnForceHijackJoinWindow>

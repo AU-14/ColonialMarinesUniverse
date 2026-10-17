@@ -9,7 +9,9 @@
             <Label Name="PointsLabel" Access="Public" Text="Evolution points:" 
                    StyleClasses="LabelBold" HorizontalExpand="True" HorizontalAlignment="Center" />
             <RichTextLabel Name="OvipositorNeededLabel" Access="Public" 
-                           HorizontalExpand="True" HorizontalAlignment="Center" Margin="0 4" />
+                        HorizontalExpand="True" HorizontalAlignment="Center" Margin="0 4" />
+            <RichTextLabel Name="OvermindNeededLabel" Access="Public" Visible="False"
+                        HorizontalExpand="True" HorizontalAlignment="Center" Margin="0 4" />
             <BoxContainer Orientation="Vertical" Name="EvolutionsContainer" Access="Public" />
             <userInterface:BlueHorizontalSeparator Name="Separator" Access="Public" 
                            Visible="false" Margin="4 8" />

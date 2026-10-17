@@ -342,8 +342,10 @@
     sprite: _RMC14/Objects/Medical/Surgery/saw.rsi
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 15
+      types:
+        Blunt: 5
+        Slash: 5
+        Piercing: 5
     soundHit:
       path: /Audio/Items/drill_hit.ogg
   - type: Tool
@@ -426,7 +428,7 @@
 - type: entity
   parent: CMBaseToolSurgery
   id: CMAutopsy
-  name: We-Ya Brand Automatic Autopsy System(TM)
+  name: We-Yu Brand Automatic Autopsy System(TM)
   description: Putting the FUN back in Autopsy.  This little gadget performs an entire autopsy of whatever strange life form you've found in about 30 seconds.
   components: # TODO RMC14
   - type: Sprite

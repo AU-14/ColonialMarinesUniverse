@@ -9,9 +9,11 @@ using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Coordinates;
 using Content.Shared.Eye;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Popups;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
@@ -38,6 +40,8 @@ public sealed partial class QueenEyeSystem : EntitySystem
     [Dependency] private SharedVisibilitySystem _visibility = default!;
     [Dependency] private SharedViewSubscriberSystem _viewSubscriber = default!;
     [Dependency] private SharedXenoWatchSystem _xenoWatch = default!;
+    [Dependency] private SharedXenoWeedsSystem _weeds = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     private SeedJob _seedJob;
     private ViewJob _job;
@@ -152,6 +156,11 @@ public sealed partial class QueenEyeSystem : EntitySystem
             return;
 
         _xenoWatch.SetWatching(eye, args.Watching);
+
+        // CMU14: changing the camera target unsubscribes the queen eye, but the client still
+        // needs its watch state and movement relay while watching another xeno.
+        if (_net.IsServer && TryComp(ent, out ActorComponent? actor))
+            _viewSubscriber.AddViewSubscriber(eye, actor.PlayerSession);
     }
 
     private void OnQueenEyeActionUnwatch(Entity<QueenEyeActionComponent> ent, ref XenoUnwatchEvent args)
@@ -475,6 +484,36 @@ public sealed partial class QueenEyeSystem : EntitySystem
         return Resolve(queen, ref queen.Comp, false) && queen.Comp.Eye != null;
     }
 
+    // CMU14: both tactical maps use the same authoritative movement and weed checks.
+    public bool TryTeleport(EntityUid queen, EntityCoordinates target)
+    {
+        if (!_net.IsServer || !target.IsValid(EntityManager) ||
+            !float.IsFinite(target.X) || !float.IsFinite(target.Y) ||
+            !TryComp(queen, out QueenEyeActionComponent? action) || action.Eye is not { } eye ||
+            TerminatingOrDeleted(eye) || !TryComp(eye, out QueenEyeComponent? eyeComp) || eyeComp.Queen != queen ||
+            _transform.GetMapId(target) != Transform(queen).MapID ||
+            _transform.GetGrid(target) is not { } grid || !TryComp(grid, out MapGridComponent? gridComp))
+            return false;
+
+        var tile = _map.CoordinatesToTile(grid, gridComp, target);
+        var center = _map.GridTileToLocal(grid, gridComp, tile);
+        if (!_weeds.IsOnWeeds((grid, gridComp), center))
+        {
+            _popup.PopupCursor(Loc.GetString("rmc-xeno-queen-eye-no-weeds"), queen, PopupType.MediumCaution);
+            return false;
+        }
+
+        // Teleporting must also leave xeno watch; otherwise the camera stays on the watched xeno.
+        if (TryComp(queen, out ActorComponent? actor))
+        {
+            if (HasComp<XenoWatchingComponent>(queen)) _xenoWatch.Unwatch(queen, actor.PlayerSession);
+            if (HasComp<XenoWatchingComponent>(eye)) _xenoWatch.Unwatch(eye, actor.PlayerSession);
+        }
+        _eye.SetTarget(queen, eye);
+        _transform.SetCoordinates(eye, center);
+        return true;
+    }
+
     public bool CanSeeTarget(Entity<QueenEyeActionComponent?> queen, EntityUid target)
     {
         if (!Resolve(queen, ref queen.Comp, false) ||
@@ -559,5 +598,17 @@ public sealed partial class QueenEyeSystem : EntitySystem
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Assigns the controlling queen/body for a manually-spawned queen eye entity
+    /// (e.g. the Overmind's eye), so shared systems like <see cref="SharedXenoWatchSystem"/>
+    /// can resolve the owning actor via <see cref="QueenEyeComponent.Queen"/>.
+    /// </summary>
+    public void SetQueen(Entity<QueenEyeComponent?> eye, EntityUid queen)
+    {
+        eye.Comp = EnsureComp<QueenEyeComponent>(eye);
+        eye.Comp.Queen = queen;
+        Dirty(eye);
     }
 }

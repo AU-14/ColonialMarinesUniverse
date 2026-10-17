@@ -1,9 +1,9 @@
 using System.Reflection;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.Damage;
 using NUnit.Framework;
 
-namespace Content.Tests.Shared._CMU14.Medical.Anatomy.BodyParts;
+namespace Content.Tests.Shared.CMU14.Medical.Anatomy.BodyParts;
 
 [TestFixture]
 public sealed class BodyPartHealthStateApplyTest

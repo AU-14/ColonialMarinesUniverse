@@ -41,9 +41,9 @@ namespace Content.Server.Power.NodeGroups
             PowerNetSystem?.DestroyPowerNet(this);
         }
 
-        protected override void SetNetConnectorNet(IBaseNetConnectorComponent<IPowerNet> netConnectorComponent)
+        protected override void SetNetConnectorNet(EntityUid uid, IBaseNetConnectorComponent<IPowerNet> netConnectorComponent)
         {
-            netConnectorComponent.Net = this;
+            netConnectorComponent.SetNet(uid, this);
         }
 
         public void AddDischarger(EntityUid uid, BatteryDischargerComponent discharger)

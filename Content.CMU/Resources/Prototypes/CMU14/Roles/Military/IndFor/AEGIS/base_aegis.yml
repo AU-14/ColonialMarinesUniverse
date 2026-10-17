@@ -1,0 +1,29 @@
+- type: job
+  abstract: true
+  parent: CMJobBase
+  id: CMUJobBaseAegis
+  icon: "CMJobIconResearcher"
+  supervisors: cmu-job-supervisors-aegis
+  playTimeTracker: CMUJobAegisResearcher
+  roundSide: ThirdParty
+  roundForce: AEGIS
+  hidden: true
+  accessGroups:
+  - ShipMasterAccess
+  - aulegacygroupcommand
+  - AU14GovforCommand
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: researcher
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_medical
+
+- type: playTimeTracker
+  id: CMUJobAegisResearcher
+  isHumanoid: true

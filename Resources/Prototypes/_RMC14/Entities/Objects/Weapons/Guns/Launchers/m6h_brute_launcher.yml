@@ -81,6 +81,11 @@
     tags:
     - RMCWeaponLauncherM6HBrute
   - type: RMCMagneticItem
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: entity
   id: RMCRocketM5510Brute

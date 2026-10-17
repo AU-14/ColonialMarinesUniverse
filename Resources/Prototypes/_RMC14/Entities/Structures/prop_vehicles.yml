@@ -27,6 +27,7 @@
   - type: Clickable
   - type: InteractionOutline
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -60,6 +61,7 @@
     offset: 0.5, 0.5
   - type: DeleteOnExplosion
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

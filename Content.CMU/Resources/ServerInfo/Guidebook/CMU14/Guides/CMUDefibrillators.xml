@@ -1,0 +1,85 @@
+<Document>
+  # Defibrillators
+
+  A defibrillator shocks a patient who has died back to life, as long as their body can still be saved. There are two kinds: the manual [bold]Lifepak 15F[/bold], which is also a patient monitor, and the [bold]automated external defibrillator (AED)[/bold], which does the thinking for you.
+
+  <Box>
+    <GuideEntityEmbed Entity="AU14CMDefibrillator" Caption="Lifepak 15F"/>
+    <GuideEntityEmbed Entity="RMCDefibrillatorCompact" Caption="AED"/>
+  </Box>
+
+  ## How a Shock Brings Someone Back
+  - Only a [bold]dead[/bold] patient can be shocked back. A rotten body, one that can't be revived, or one protected by armour that blocks the shock can't be saved.
+  - A revival shock heals suffocation and blood loss damage. If that brings the patient's total damage back under the point where they died, they come back in critical condition.
+  - Treat the patient's other injuries before shocking, so the shock has less damage to overcome.
+  - Shocking the patient also burns them, except at the lowest energy. How badly depends on the energy (see below).
+
+  ## The Lifepak 15F
+  - Use it in your hand to switch it on. The paddles are docked on top of the unit.
+  - Switching it on or off and changing the energy need at least basic medical training. Delivering a shock needs a trained medic.
+  - With it switched on, click on a patient to start charging. The charge takes as long as the power-up tone, about 7.6 seconds. The paddles come off the unit while it charges.
+  - It says "stand clear" just before the shock. Afterwards it says "check for pulse" if the patient came back, or "check patient" if they didn't.
+
+  ### Selecting the Energy
+  The Lifepak delivers a set amount of energy, measured in joules (J). Right-click it and choose [bold]Raise energy[/bold] or [bold]Lower energy[/bold], or use the energy keys on its monitor. It starts at 150 J. Examine it to see the current setting.
+
+  More energy heals more and is more likely to bring someone back, but it burns the patient more. For the Lifepak, each setting heals up to this much suffocation damage [bold]and[/bold] up to this much blood loss damage:
+  - [bold]50 J[/bold]: heals 30 of each. No burns.
+  - [bold]70 J[/bold]: heals 37 of each. Deals 5 shock damage.
+  - [bold]100 J[/bold]: heals 45 of each. Deals 10 shock damage.
+  - [bold]120 J[/bold]: heals 60 of each. Deals 18 shock damage.
+  - [bold]150 J[/bold]: heals 75 of each. Deals 25 shock damage.
+  - [bold]170 J[/bold]: heals 90 of each. Deals 25 shock damage, plus 5 burn damage to the chest. This leaves a small burn wound a burn kit can treat, with a 1 in 10 chance of a full-thickness burn (eschar), which has to be surgically debrided.
+  - [bold]200 J[/bold]: heals 115 of each. Deals 25 shock damage, plus 10 burn damage to the chest. There's also a 1 in 4 chance of a full-thickness burn (eschar), which has to be surgically debrided.
+
+  Shock damage is a type of burn damage, treated like any other burn.
+
+  Use the lowest energy that will do the job. The monitor's ANALYZE key works this out for you.
+
+  ## The AED
+  The AED is small and simple, and chooses everything itself. It can't be adjusted by hand.
+  - Every time you start a shock, it first analyzes the patient.
+  - [bold]"Shock advised"[/bold]: the patient can be shocked back. The AED picks the lowest energy it expects to work, charges, says "stand clear, push to shock", then shocks. Afterwards it says "if no pulse, push analyze".
+  - An AED shock doesn't deal shock damage. It only leaves a chest burn if it has to pick 170 J or 200 J, the same as the Lifepak.
+  - [bold]"No shock advised"[/bold]: the AED won't charge at all. This happens if the patient is still alive, or if their body is too far gone to save.
+
+  ## The Lifepak as a Patient Monitor
+  The Lifepak can be hooked up to a patient to watch their vitals.
+  - [bold]Attaching the leads[/bold]: set the Lifepak down next to the patient, then drag it onto them. This takes basic medical training. The leads pull off if the Lifepak is moved more than 2 tiles away. Drag it onto the patient again, or use [bold]Disconnect leads[/bold], to take them off.
+  - [bold]Viewing the screen[/bold]: right-click the Lifepak and choose [bold]View monitor[/bold]. This also takes basic medical training.
+  - [bold]It must be switched on[/bold]: switched off, the screen stays dark and it makes no sound, even with the leads on. Switching it off also cancels any charge.
+
+  ### The Screen
+  - [bold]ECG[/bold] (green): the heart's electrical rhythm. The monitor beeps with every heartbeat.
+  - [bold]Pleth[/bold] (blue): the pulse reaching the patient's finger.
+  - [bold]CO2[/bold] (yellow): their breathing.
+  - [bold]HR[/bold]: heart rate and the rhythm name.
+  - [bold]HEART[/bold]: the health of the heart itself, as a health analyzer shows it: healthy, bruised, damaged, failing or dead.
+  - [bold]SpO2[/bold]: how much oxygen is in the blood. It falls with suffocation and blood loss.
+  - [bold]NIBP[/bold]: blood pressure. It's taken when the leads go on, every 2 minutes after that, and whenever you press NIBP. It drops with blood loss.
+  - [bold]EtCO2 and RR[/bold]: exhaled CO2 and breathing rate. A low EtCO2 means blood isn't getting around the body well.
+  - [bold]TEMP[/bold]: body temperature.
+  - [bold]ENERGY[/bold]: the selected energy, and whether the paddles are armed.
+  - [bold]Code summary[/bold]: a timed log of everything that happens, including rhythm changes, analyses, charges, shocks, return of pulse (ROSC) and blood pressures.
+
+  ### Rhythms
+  - [bold]Sinus rhythm[/bold]: normal.
+  - [bold]Sinus tachycardia[/bold]: a fast heart, over 100 beats a minute.
+  - [bold]Sinus bradycardia[/bold]: a slow heart, under 60.
+  - [bold]Irregular rhythm[/bold]: a damaged heart beating unevenly.
+  - [bold]Ventricular fibrillation (VF)[/bold]: no pulse, but the patient can still be shocked back. Shock advised.
+  - [bold]Asystole[/bold]: a flat line. The patient is too far gone to shock back. No shock advised.
+
+  ### Keys
+  - [bold]ANALYZE[/bold]: says "analyzing now", then after 3 seconds "shock advised" or "no shock advised". If a shock is advised, it selects the lowest energy expected to bring the patient back, or 200 J if even that might not be enough.
+  - [bold]CHARGE[/bold] and [bold]SHOCK[/bold]: shock the patient through the monitor leads, without holding the Lifepak. Press CHARGE, wait for "stand clear" and the ready tone, then press SHOCK. An unused charge is dumped after 60 seconds. These need a trained medic.
+  - [bold]ENERGY ▲ / ▼[/bold]: raise or lower the energy.
+  - [bold]NIBP[/bold]: take a blood pressure now.
+  - [bold]ALARMS[/bold]: turn the alarms and the heartbeat beep off. They stay off until someone presses it again.
+  - [bold]LEADS OFF[/bold]: disconnect the leads.
+
+  ### Alarms
+  - [bold]VF[/bold]: a rapid repeating alarm.
+  - [bold]Asystole[/bold]: a continuous flatline tone.
+  - [bold]Low SpO2 or low blood pressure[/bold]: a repeating warning beep.
+</Document>

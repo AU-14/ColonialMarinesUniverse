@@ -13,6 +13,7 @@ public sealed class HardpointBoundUserInterface : BoundUserInterface
     {
     }
 
+    // CMU14 method: vehicle damage and usability.
     protected override void Open()
     {
         base.Open();
@@ -26,6 +27,7 @@ public sealed class HardpointBoundUserInterface : BoundUserInterface
             _menu.Title = metadata.EntityName;
 
         _menu.OnRemove += slotId => SendMessage(new HardpointRemoveMessage(slotId));
+        _menu.OnRepair += slotId => SendMessage(new HardpointRepairMessage(slotId));
         _menu.OpenCentered();
     }
 

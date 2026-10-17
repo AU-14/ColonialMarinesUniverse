@@ -11,7 +11,7 @@ public sealed class XenoShardVisualizerSystem : VisualizerSystem<XenoShardCompon
         var sprite = args.Sprite;
 
         if (sprite == null || !AppearanceSystem.TryGetData(uid, XenoShardVisuals.Level, out XenoShardLevel level) ||
-            !SpriteSystem.LayerMapTryGet((uid, sprite), XenoShardVisualLayers.Base, out var layer, true))
+            !SpriteSystem.LayerMapTryGet((uid, sprite), XenoShardVisualLayers.Base, out var layer, false))
             return;
 
         string layerState = $"hedgehog_{(int)level}";

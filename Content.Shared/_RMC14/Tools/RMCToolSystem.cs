@@ -51,9 +51,9 @@ public sealed partial class RMCToolSystem : EntitySystem
             return;
 
         args.Handled = true;
-        if (ent.Comp.Amount > _stack.GetCount(ent))
+        if (ent.Comp.Amount > _stack.GetCount((ent.Owner, null)))
         {
-            _popup.PopupClient(Loc.GetString("rmc-refinable-not-enough", ("amount", ent.Comp.Amount), ("name", Name(ent))), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-refinable-not-enough", ("amount", ent.Comp.Amount), ("name", Name(ent))), ent, args.User);
             return;
         }
 
@@ -73,9 +73,9 @@ public sealed partial class RMCToolSystem : EntitySystem
 
         if (HasComp<StackComponent>(ent))
         {
-            if (!_stack.Use(ent, ent.Comp.Amount))
+            if (!_stack.TryUse(ent.Owner, ent.Comp.Amount))
             {
-                _popup.PopupClient(Loc.GetString("rmc-refinable-not-enough", ("amount", ent.Comp.Amount), ("name", Name(ent))), ent, args.User);
+                _popup.PopupEntity(Loc.GetString("rmc-refinable-not-enough", ("amount", ent.Comp.Amount), ("name", Name(ent))), ent, args.User);
                 return;
             }
         }

@@ -16,4 +16,8 @@ public sealed partial class EdgeSpreaderPrototype : IPrototype
     /// </summary>
     [DataField]
     public bool PreventSpreadOnSpaced = true;
+
+    /// <summary>CMU14: permits spreading through empty air tiles on a connected z-level map.</summary>
+    [DataField]
+    public bool SpreadOnOpenAir;
 }

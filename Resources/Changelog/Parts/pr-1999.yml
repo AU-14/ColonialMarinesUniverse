@@ -1,0 +1,19 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: The 3D tactical map retains its initial terrain survey and reduces first-open
+    loading work.
+  type: Tweak
+- message: Restore tactical-map publication announcements, squad drawing delivery
+    and fresh ghost access.
+  type: Fix
+- message: Include static forest scenery and keep drawing permissions restricted to
+    authorized tactical-map sources.
+  type: Fix
+- message: Render distinct chair, table, bed, couch and shelving models in the 3D
+    tactical map.
+  type: Add
+- message: Remove the Structures legend from the 3D tactical-map sidebar.
+  type: Tweak
+time: '2026-09-23T14:34:42.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1999

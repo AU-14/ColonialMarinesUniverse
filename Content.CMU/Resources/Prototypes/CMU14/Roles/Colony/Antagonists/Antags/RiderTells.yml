@@ -1,0 +1,33 @@
+# Admin- and ghost-facing rider tools. The marker lives on the Ghost
+# visibility layer; living players never receive it.
+
+- type: entity
+  id: CMURiderLatchedMarker
+  name: writhing shape
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: OverMobs
+    scale: "0.5, 0.5"
+    color: "#6d6552AA"
+    layers:
+    - sprite: CMU14/Mobs/thirdPartiesXenos/parasite_runner.rsi
+      state: alive
+      offset: "0, 0.5"
+
+- type: entity
+  id: ActionRiderLocator
+  name: Rider locator
+  description: List every rider and jump to them.
+  components:
+  - type: Action
+    checkCanInteract: false
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/vent_crawl.rsi
+      state: parasite
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:RiderLocatorActionEvent

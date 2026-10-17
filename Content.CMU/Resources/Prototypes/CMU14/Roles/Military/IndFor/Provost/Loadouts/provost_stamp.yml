@@ -1,0 +1,11 @@
+- type: loadout
+  id: ProvostStampCMU
+  storage:
+    back:
+    - CMUStampProvost
+
+- type: loadout
+  id: ProvostChiefInspectorStampCMU
+  storage:
+    back:
+    - CMUStampProvostInspector

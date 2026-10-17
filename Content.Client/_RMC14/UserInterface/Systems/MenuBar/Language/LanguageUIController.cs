@@ -86,7 +86,7 @@ public sealed partial class LanguageUIController : UIController, IOnStateEntered
             MinSize = new Vector2(42f, 64f),
             HorizontalExpand = true,
         };
-        button.AppendStyleClass = StyleBase.ButtonSquare;
+        button.AppendStyleClass = StyleClass.ButtonSquare;
         button.OnPressed += LanguageButtonPressed;
         if (button.ButtonRoot.Children.FirstOrDefault() is TextureRect icon)
             icon.TextureScale = new Vector2(1.2f, 1.2f);

@@ -1,0 +1,589 @@
+# Colony department variants of the Hybrisa doors, matching the colony locked doors.
+
+# Public
+- type: entity
+  parent: RMCAirlockHybrisa
+  id: CMUHybrisaAirlockPublicLockedColony
+  suffix: Hybrisa, Public, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyPublic"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisa
+  id: CMUHybrisaAirlockGlassPublicLockedColony
+  suffix: Hybrisa, Glass, Public, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyPublic"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCAirlockHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalPublicLockedColony
+  suffix: Hybrisa, Personal, Public, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyPublic"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalGlassPublicLockedColony
+  suffix: Hybrisa, Personal, Glass, Public, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyPublic"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorSolidHybrisa
+  id: CMUHybrisaDoubleDoorSolidPublicLockedColony
+  suffix: Hybrisa, Double, Solid, Public, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyPublic"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorGlassHybrisa
+  id: CMUHybrisaDoubleDoorGlassPublicLockedColony
+  suffix: Hybrisa, Double, Glass, Public, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyPublic"], ["CMAccessColonyCommand"]]
+
+# Logistics
+- type: entity
+  parent: RMCAirlockHybrisa
+  id: CMUHybrisaAirlockLogisticsLockedColony
+  suffix: Hybrisa, Logistics, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyLogistics"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisa
+  id: CMUHybrisaAirlockGlassLogisticsLockedColony
+  suffix: Hybrisa, Glass, Logistics, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyLogistics"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCAirlockHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalLogisticsLockedColony
+  suffix: Hybrisa, Personal, Logistics, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyLogistics"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalGlassLogisticsLockedColony
+  suffix: Hybrisa, Personal, Glass, Logistics, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyLogistics"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorSolidHybrisa
+  id: CMUHybrisaDoubleDoorSolidLogisticsLockedColony
+  suffix: Hybrisa, Double, Solid, Logistics, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyLogistics"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorGlassHybrisa
+  id: CMUHybrisaDoubleDoorGlassLogisticsLockedColony
+  suffix: Hybrisa, Double, Glass, Logistics, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyLogistics"], ["CMAccessColonyCommand"]]
+
+# Engineering
+- type: entity
+  parent: RMCAirlockHybrisa
+  id: CMUHybrisaAirlockEngineeringLockedColony
+  suffix: Hybrisa, Engineering, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyEngineering"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisa
+  id: CMUHybrisaAirlockGlassEngineeringLockedColony
+  suffix: Hybrisa, Glass, Engineering, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyEngineering"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCAirlockHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalEngineeringLockedColony
+  suffix: Hybrisa, Personal, Engineering, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyEngineering"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalGlassEngineeringLockedColony
+  suffix: Hybrisa, Personal, Glass, Engineering, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyEngineering"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorSolidHybrisa
+  id: CMUHybrisaDoubleDoorSolidEngineeringLockedColony
+  suffix: Hybrisa, Double, Solid, Engineering, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyEngineering"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorGlassHybrisa
+  id: CMUHybrisaDoubleDoorGlassEngineeringLockedColony
+  suffix: Hybrisa, Double, Glass, Engineering, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyEngineering"], ["CMAccessColonyCommand"]]
+
+# Research
+- type: entity
+  parent: RMCAirlockHybrisa
+  id: CMUHybrisaAirlockResearchLockedColony
+  suffix: Hybrisa, Research, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyResearch"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisa
+  id: CMUHybrisaAirlockGlassResearchLockedColony
+  suffix: Hybrisa, Glass, Research, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyResearch"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCAirlockHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalResearchLockedColony
+  suffix: Hybrisa, Personal, Research, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyResearch"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalGlassResearchLockedColony
+  suffix: Hybrisa, Personal, Glass, Research, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyResearch"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorSolidHybrisa
+  id: CMUHybrisaDoubleDoorSolidResearchLockedColony
+  suffix: Hybrisa, Double, Solid, Research, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyResearch"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorGlassHybrisa
+  id: CMUHybrisaDoubleDoorGlassResearchLockedColony
+  suffix: Hybrisa, Double, Glass, Research, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyResearch"], ["CMAccessColonyCommand"]]
+
+# Medical
+- type: entity
+  parent: RMCAirlockHybrisa
+  id: CMUHybrisaAirlockMedicalLockedColony
+  suffix: Hybrisa, Medical, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisa
+  id: CMUHybrisaAirlockGlassMedicalLockedColony
+  suffix: Hybrisa, Glass, Medical, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCAirlockHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalMedicalLockedColony
+  suffix: Hybrisa, Personal, Medical, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalGlassMedicalLockedColony
+  suffix: Hybrisa, Personal, Glass, Medical, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorSolidHybrisa
+  id: CMUHybrisaDoubleDoorSolidMedicalLockedColony
+  suffix: Hybrisa, Double, Solid, Medical, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorGlassHybrisa
+  id: CMUHybrisaDoubleDoorGlassMedicalLockedColony
+  suffix: Hybrisa, Double, Glass, Medical, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+# Chemistry
+- type: entity
+  parent: RMCAirlockHybrisa
+  id: CMUHybrisaAirlockChemistryLockedColony
+  suffix: Hybrisa, Chemistry, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyChem"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisa
+  id: CMUHybrisaAirlockGlassChemistryLockedColony
+  suffix: Hybrisa, Glass, Chemistry, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyChem"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCAirlockHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalChemistryLockedColony
+  suffix: Hybrisa, Personal, Chemistry, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyChem"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalGlassChemistryLockedColony
+  suffix: Hybrisa, Personal, Glass, Chemistry, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyChem"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorSolidHybrisa
+  id: CMUHybrisaDoubleDoorSolidChemistryLockedColony
+  suffix: Hybrisa, Double, Solid, Chemistry, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyChem"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorGlassHybrisa
+  id: CMUHybrisaDoubleDoorGlassChemistryLockedColony
+  suffix: Hybrisa, Double, Glass, Chemistry, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyChem"], ["CMAccessColonyCommand"]]
+
+# Security
+- type: entity
+  parent: RMCAirlockHybrisa
+  id: CMUHybrisaAirlockSecurityLockedColony
+  suffix: Hybrisa, Security, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyBrig"], ["AU14AccessColonyMarshall"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisa
+  id: CMUHybrisaAirlockGlassSecurityLockedColony
+  suffix: Hybrisa, Glass, Security, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyBrig"], ["AU14AccessColonyMarshall"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCAirlockHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalSecurityLockedColony
+  suffix: Hybrisa, Personal, Security, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyBrig"], ["AU14AccessColonyMarshall"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalGlassSecurityLockedColony
+  suffix: Hybrisa, Personal, Glass, Security, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyBrig"], ["AU14AccessColonyMarshall"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorSolidHybrisa
+  id: CMUHybrisaDoubleDoorSolidSecurityLockedColony
+  suffix: Hybrisa, Double, Solid, Security, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyBrig"], ["AU14AccessColonyMarshall"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorGlassHybrisa
+  id: CMUHybrisaDoubleDoorGlassSecurityLockedColony
+  suffix: Hybrisa, Double, Glass, Security, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyBrig"], ["AU14AccessColonyMarshall"], ["CMAccessColonyCommand"]]
+
+# Armory
+- type: entity
+  parent: RMCAirlockHybrisa
+  id: CMUHybrisaAirlockArmoryLockedColony
+  suffix: Hybrisa, Armory, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyArmory"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisa
+  id: CMUHybrisaAirlockGlassArmoryLockedColony
+  suffix: Hybrisa, Glass, Armory, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyArmory"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCAirlockHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalArmoryLockedColony
+  suffix: Hybrisa, Personal, Armory, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyArmory"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalGlassArmoryLockedColony
+  suffix: Hybrisa, Personal, Glass, Armory, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyArmory"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorSolidHybrisa
+  id: CMUHybrisaDoubleDoorSolidArmoryLockedColony
+  suffix: Hybrisa, Double, Solid, Armory, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyArmory"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorGlassHybrisa
+  id: CMUHybrisaDoubleDoorGlassArmoryLockedColony
+  suffix: Hybrisa, Double, Glass, Armory, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyArmory"], ["CMAccessColonyCommand"]]
+
+# Prison
+- type: entity
+  parent: RMCAirlockHybrisa
+  id: CMUHybrisaAirlockPrisonLockedColony
+  suffix: Hybrisa, Prison, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["AUAccessPrison"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisa
+  id: CMUHybrisaAirlockGlassPrisonLockedColony
+  suffix: Hybrisa, Glass, Prison, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["AUAccessPrison"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCAirlockHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalPrisonLockedColony
+  suffix: Hybrisa, Personal, Prison, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["AUAccessPrison"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalGlassPrisonLockedColony
+  suffix: Hybrisa, Personal, Glass, Prison, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["AUAccessPrison"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorSolidHybrisa
+  id: CMUHybrisaDoubleDoorSolidPrisonLockedColony
+  suffix: Hybrisa, Double, Solid, Prison, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["AUAccessPrison"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorGlassHybrisa
+  id: CMUHybrisaDoubleDoorGlassPrisonLockedColony
+  suffix: Hybrisa, Double, Glass, Prison, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["AUAccessPrison"], ["CMAccessColonyCommand"]]
+
+# Shop
+- type: entity
+  parent: RMCAirlockHybrisa
+  id: CMUHybrisaAirlockShopLockedColony
+  suffix: Hybrisa, Shop, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessShopkeep"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisa
+  id: CMUHybrisaAirlockGlassShopLockedColony
+  suffix: Hybrisa, Glass, Shop, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessShopkeep"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCAirlockHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalShopLockedColony
+  suffix: Hybrisa, Personal, Shop, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessShopkeep"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalGlassShopLockedColony
+  suffix: Hybrisa, Personal, Glass, Shop, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessShopkeep"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorSolidHybrisa
+  id: CMUHybrisaDoubleDoorSolidShopLockedColony
+  suffix: Hybrisa, Double, Solid, Shop, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessShopkeep"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorGlassHybrisa
+  id: CMUHybrisaDoubleDoorGlassShopLockedColony
+  suffix: Hybrisa, Double, Glass, Shop, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessShopkeep"], ["CMAccessColonyCommand"]]
+
+# Command
+- type: entity
+  parent: RMCAirlockHybrisa
+  id: CMUHybrisaAirlockCommandLockedColony
+  suffix: Hybrisa, Command, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisa
+  id: CMUHybrisaAirlockGlassCommandLockedColony
+  suffix: Hybrisa, Glass, Command, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCAirlockHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalCommandLockedColony
+  suffix: Hybrisa, Personal, Command, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockGlassHybrisaPersonal
+  id: CMUHybrisaAirlockPersonalGlassCommandLockedColony
+  suffix: Hybrisa, Personal, Glass, Command, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorSolidHybrisa
+  id: CMUHybrisaDoubleDoorSolidCommandLockedColony
+  suffix: Hybrisa, Double, Solid, Command, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorGlassHybrisa
+  id: CMUHybrisaDoubleDoorGlassCommandLockedColony
+  suffix: Hybrisa, Double, Glass, Command, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyCommand"]]
+
+# Hybrisa medical double doors
+- type: entity
+  parent: RMCDoubleDoorHybrisaMecical
+  id: CMUHybrisaMedicalDoubleDoorSolidResearchLockedColony
+  suffix: Hybrisa, Medical, Double, Solid, Research, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyResearch"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorHybrisaMecical
+  id: CMUHybrisaMedicalDoubleDoorSolidMedicalLockedColony
+  suffix: Hybrisa, Medical, Double, Solid, Medical, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorHybrisaMecical
+  id: CMUHybrisaMedicalDoubleDoorSolidChemistryLockedColony
+  suffix: Hybrisa, Medical, Double, Solid, Chemistry, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyChem"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorHybrisaGlassMecical
+  id: CMUHybrisaMedicalDoubleDoorGlassResearchLockedColony
+  suffix: Hybrisa, Medical, Double, Glass, Research, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyResearch"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorHybrisaGlassMecical
+  id: CMUHybrisaMedicalDoubleDoorGlassMedicalLockedColony
+  suffix: Hybrisa, Medical, Double, Glass, Medical, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorHybrisaGlassMecical
+  id: CMUHybrisaMedicalDoubleDoorGlassChemistryLockedColony
+  suffix: Hybrisa, Medical, Double, Glass, Chemistry, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyChem"], ["CMAccessColonyCommand"]]

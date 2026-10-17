@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
   name: M4RA battle rifle
   id: WeaponRifleM4SPR
@@ -106,6 +106,8 @@
   - type: Tag
     tags:
     - RMCWeaponRifleM4SPR
+  - type: Corrodible
+    isCorrodible: false
 
 - type: entity
   parent: WeaponRifleM4SPR
@@ -203,6 +205,10 @@
     baseFireRate: 2.8
     baseFireModes:
     - SemiAuto
+  - type: GunUserWhitelist # CMU14
+    whitelist:
+      components:
+      - ScoutWhitelist
   - type: ItemSlots
     slots:
       gun_magazine:
@@ -455,12 +461,18 @@
     - RMCCartridgeRifleM5SPRHVP
   - type: CartridgeAmmo
     proto: BulletRifleM5SPRHVP
+    deleteOnSpawn: true # CMU14: caseless ammo, no casing to eject
 
 - type: entity
   parent: RMCBaseBullet
   id: BulletRifleM5SPRHVP
   categories: [ HideSpawnMenu ]
   components:
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Medium
+      energy: Medium
   - type: Projectile
     damage:
       types:
@@ -495,6 +507,7 @@
     - RMCCartridgeRifleM5SPRHVHIP
   - type: CartridgeAmmo
     proto: BulletRifleM5SPRHVHIP
+    deleteOnSpawn: true # CMU14: caseless ammo, no casing to eject
 
 - type: entity
   parent: BulletRifleM5SPRHVP

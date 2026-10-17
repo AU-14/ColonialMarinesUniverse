@@ -1,0 +1,75 @@
+- type: antagSpecifier
+  id: Fugitive
+  prefRoles: [ FugitiveRole ]
+  jobBlacklistGroup:
+  - AllGovforJobs
+  - AllOpforJobs
+  - AllCLFJobs
+  - AllWeYuJobs
+  - AllSynthJobs
+  briefing:
+    text: fugitive-role-greeting
+    color: CornflowerBlue
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingSkills:
+    RMCSkillCqc: 2
+    RMCSkillMeleeWeapons: 2
+    RMCSkillFirearms: 2
+    RMCSkillPolice: 2
+    RMCSkillEndurance: 2
+  components:
+  - type: Fugitive
+  - type: ColonyBounty
+    bounty: 1550
+    reason: Fugitive from justice
+    recordName: Fugitive (Unknown)
+    includePrints: true
+    includeDna: true
+    includeLanguages: true
+    deadCounts: false
+    capturedFaxPaper: AUPaperFugitiveCaptured
+  mindRoles:
+  - MindRoleFugitive
+  startingGear: AU14GearFugitive
+
+- type: entity
+  id: Fugitive
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: FugitiveRule
+  - type: AntagSelection
+    selectionTime: JobsAssigned
+    antags:
+    - !type:RandomAntagCount
+      proto: Fugitive
+      range:
+        min: 1
+        max: 3
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleFugitive
+  name: Wanted Fugitive Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: FugitiveRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: FugitiveRole
+  name: roles-antag-fugitive-name
+  setPreference: true
+  objective: roles-antag-fugitive-objective
+
+- type: startingGear
+  id: AU14GearFugitive
+  equipment:
+    pocket1: AU14ObjectiveItemWYLaptop
+  storage:
+    back:
+    - AUPaperFugitive
+    - RMCLighter
+    - ForensicScanner

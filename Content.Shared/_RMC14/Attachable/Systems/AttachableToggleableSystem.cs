@@ -239,7 +239,7 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
             if (holderUid == null)
                 return;
 
-            _popupSystem.PopupClient(
+            _popupSystem.PopupEntity(
                 Loc.GetString("rmc-attachable-shoot-fail-not-wielded", ("holder", holderUid), ("attachable", attachable)),
                 args.User,
                 args.User);
@@ -266,7 +266,7 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
 
         args.Cancelled = true;
 
-        _popupSystem.PopupClient(gun.Comp.Message, args.User, args.User);
+        _popupSystem.PopupEntity(gun.Comp.Message, args.User, args.User);
     }
 
 /*    private void OnUniqueAction(Entity<AttachableToggleableComponent> attachable, ref UniqueActionEvent args)
@@ -451,7 +451,9 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
             used: args.Holder)
         {
             NeedHand = attachable.Comp.DoAfterNeedHand,
-            BreakOnMove = attachable.Comp.DoAfterBreakOnMove
+            BreakOnMove = attachable.Comp.DoAfterBreakOnMove,
+            // The attachable is contained by its holder, so generic world-range checks reject it.
+            DistanceThreshold = null,
         });
 
         Dirty(attachable);
@@ -470,7 +472,7 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
         if (attachable.Comp.HeldOnlyActivate && !attachable.Comp.Active && (userUid == null || !_handsSystem.IsHolding(userUid.Value, args.Holder, out _)))
         {
             if (!silent)
-                _popupSystem.PopupClient(
+                _popupSystem.PopupEntity(
                     Loc.GetString("rmc-attachable-activation-fail-not-held", ("holder", args.Holder), ("attachable", attachable)),
                     args.User,
                     args.User);
@@ -480,7 +482,7 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
         if (attachable.Comp.UserOnly && userUid != args.User)
         {
             if (!silent)
-                _popupSystem.PopupClient(
+                _popupSystem.PopupEntity(
                     Loc.GetString("rmc-attachable-activation-fail-not-owned", ("holder", args.Holder), ("attachable", attachable)),
                     args.User,
                     args.User);
@@ -490,7 +492,7 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
         if (!attachable.Comp.Active && attachable.Comp.WieldedOnly && (!TryComp(args.Holder, out WieldableComponent? wieldableComponent) || !wieldableComponent.Wielded))
         {
             if (!silent)
-                _popupSystem.PopupClient(
+                _popupSystem.PopupEntity(
                     Loc.GetString("rmc-attachable-activation-fail-not-wielded", ("holder", args.Holder), ("attachable", attachable)),
                     args.User,
                     args.User);
@@ -649,7 +651,7 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
         _actionsSystem.StartUseDelay(attachable.Comp.Action);
 
         if (attachable.Comp.ShowTogglePopup && userUid != null)
-            _popupSystem.PopupClient(popupText, userUid.Value, userUid.Value);
+            _popupSystem.PopupEntity(popupText, userUid.Value, userUid.Value);
 
         _audioSystem.PlayPredicted(
             attachable.Comp.Active ? attachable.Comp.ActivateSound : attachable.Comp.DeactivateSound,
@@ -837,6 +839,9 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
         foreach (var actionUid in actionsContainerComponent.Container.ContainedEntities)
         {
             if (!_entityWhitelistSystem.IsWhitelistPass(attachable.Comp.ActionsToRelayWhitelist, actionUid))
+                continue;
+
+            if (!TryComp(actionUid, out ActionComponent? action) || action.AttachedEntity != user) // CMU14
                 continue;
 
             _actionsSystem.RemoveProvidedAction(user, attachable.Owner, actionUid);

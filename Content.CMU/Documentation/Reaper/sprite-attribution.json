@@ -1,0 +1,38 @@
+{
+  "armor": {
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/06d35efb20e830eacc57d3c77fea047dadbcdee3/icons/mob/humans/onmob/suit_1.dmi, https://github.com/cmss13-devs/cmss13/blob/a50253802b9d56391f7b857684e345119a207f43/icons/mob/humans/onmob/items_lefthand_0.dmi, https://github.com/cmss13-devs/cmss13/blob/a50253802b9d56391f7b857684e345119a207f43/icons/mob/humans/onmob/items_righthand_0.dmi, https://github.com/cmss13-devs/cmss13/blob/06d35efb20e830eacc57d3c77fea047dadbcdee3/icons/obj/items/clothing/cm_suits.dmi"
+  },
+  "deck": {
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/29bfb8501be93dde3c2eececfcf60ae82b0e32df/icons/turf/floors/aicore.dmi"
+  },
+  "drone-alive": {
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Sprites by @aleksh and @.sigma_draconis. Parasites sprites recolor by VictorJob"
+  },
+  "drone-dead": {
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Sprites by @aleksh and @.sigma_draconis. Parasites sprites recolor by VictorJob"
+  },
+  "drone": {
+    "license": "CC-BY-SA-3.0",
+    "copyright": "In-hand sprites by @aleksh and @.sigma_draconis. Parasites sprites recolor by VictorJob. CM sprites from https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/xenos/castes/tier_1/drone.dmi."
+  },
+  "helmet": {
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/06d35efb20e830eacc57d3c77fea047dadbcdee3/icons/mob/humans/onmob/head_1.dmi, https://github.com/cmss13-devs/cmss13/blob/a50253802b9d56391f7b857684e345119a207f43/icons/mob/humans/onmob/items_lefthand_0.dmi, https://github.com/cmss13-devs/cmss13/blob/a50253802b9d56391f7b857684e345119a207f43/icons/mob/humans/onmob/items_righthand_0.dmi, https://github.com/cmss13-devs/cmss13/blob/7d096e84864542952a2bb12487fd1327bd7e5bbb/icons/obj/items/clothing/cm_hats.dmi"
+  },
+  "human": {
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/36e026fb4be5f449340e35f79edff5e952092918/icons/mob/humans/species/r_human.dmi and modified by Orion"
+  },
+  "reaper": {
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Ported from CMSS13 PR #6610 at cmss13-devs/cmss13@1e8dcab1fcb8a500232507ef8285730613b0cbd0."
+  },
+  "uniform": {
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/8d2ee2746ce1b8aa5a876266951a8d9f92499aff/icons/mob/humans/onmob/uniform_0.dmi, https://github.com/cmss13-devs/cmss13/blob/a50253802b9d56391f7b857684e345119a207f43/icons/mob/humans/onmob/items_lefthand_0.dmi, https://github.com/cmss13-devs/cmss13/blob/a50253802b9d56391f7b857684e345119a207f43/icons/mob/humans/onmob/items_righthand_0.dmi, https://github.com/cmss13-devs/cmss13/blob/06d35efb20e830eacc57d3c77fea047dadbcdee3/icons/obj/items/clothing/uniforms.dmi"
+  }
+}

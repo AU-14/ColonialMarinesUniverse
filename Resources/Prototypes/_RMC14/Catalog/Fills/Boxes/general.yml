@@ -115,17 +115,17 @@
     - 0,0,3,1 # 2 slots
     whitelist:
       tags:
-      - RMCInflatableBarrier
+      - CMUInflatableBarrier # CMU14
   - type: FixedItemSizeStorage
   - type: IgnoreContentsSize
     items:
       tags:
-      - RMCInflatableBarrier
+      - CMUInflatableBarrier # CMU14
   - type: StorageFill
     contents:
-    - id: RMCInflatableDoorFolded1
+    - id: CMUInflatableDoorFolded1 # CMU14
       amount: 3
-    - id: RMCInflatableWallFolded1
+    - id: CMUInflatableWallFolded1 # CMU14
       amount: 4
   - type: Sprite
     state: inf_box

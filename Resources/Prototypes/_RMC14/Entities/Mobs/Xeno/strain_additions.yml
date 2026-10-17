@@ -67,13 +67,17 @@
     explosionArmor: 20
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 22.5
+      types:
+        Blunt: 7.5
+        Slash: 7.5
+        Piercing: 7.5
   - type: XenoTailStab
     inject: {}
     tailDamage:
-      groups:
-        Brute: 36
+      types:
+        Blunt: 12
+        Slash: 12
+        Piercing: 12
   - type: RMCXenoDamageVisuals
     prefix: venator
   - type: MovementSpeedModifier
@@ -111,8 +115,10 @@
     explosionArmor: 15
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 22.5
+      types:
+        Blunt: 7.5
+        Slash: 7.5
+        Piercing: 7.5
   - type: XenoHidden
   - type: RMCActionOrder
     id: CMXenoSpitterAlchemist
@@ -185,39 +191,45 @@
     - ActionXenoPlantWeeds
     - ActionXenoChooseStructure
     - ActionXenoSecreteStructure
+    - CMUActionReaperRevive # CMU14
     - ActionXenoFleshHarvest
     - ActionXenoFleshBloom
     - ActionXenoCarrionMantle
     - ActionXenoRapture
     - ActionXenoReaperRedGas
     - ActionXenoDevolve
-    tier: 3
+    tier: 2 # CMU14 modified
     hudOffset: -0.1,0.1
-    unlockAt: 900
+    unlockAt: 540 # CMU14 modified
+  - type: XenoHeavy # CMU14 modified
   - type: XenoDevolve
-    devolvesTo:
-    - CMXenoCarrier
+    devolvesTo: # CMU14 modified
+    - CMXenoDrone
   - type: XenoAcid
-  - type: XenoPlasma
-    plasma: 500
-    maxPlasma: 500
+  - type: XenoPlasma # CMU14 modified
+    plasma: 900
+    maxPlasma: 900
     plasmaRegenOnWeeds: 4
   - type: XenoPheromones
     pheromonesMultiplier: 3
     pheroSuffix: strong
   - type: CMArmor
-    xenoArmor: 0
+    xenoArmor: 10 # CMU14 modified
     explosionArmor: 20
   - type: RMCXenoDamageVisuals
     prefix: reaper
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 35
+      types:
+        Blunt: 11.66
+        Slash: 11.67
+        Piercing: 11.67
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 30
+      types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
   - type: MovementSpeedModifier
     baseWalkSpeed: 1.8
     baseSprintSpeed: 3.25
@@ -238,6 +250,9 @@
     - HiveClusterXenoConstructionNode
     - HiveRecoveryNodeXenoConstructionNode
     - HivePlasmaTreeXenoConstructionNode
+  - type: CMUReaperRevival # CMU14
   - type: XenoReaper
+    fleshBloomPrototype: CMUFleshBloom # CMU14: muted vascular residue
+    fleshBloomDelay: 2.3 # CMU14: approximately 30% faster than the three-second wind-up.
   - type: RMCActionOrder
     id: CMXenoReaper

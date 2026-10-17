@@ -1,0 +1,98 @@
+- type: forceOnForceUniform
+  id: USCM
+  uniforms:
+  - AU14DesertFatigues
+  - AU14JungleFatigues
+  - AU14SnowFatigues
+  - AU14MixedSnowFatigues
+  - AU14TacticalFlightSuit
+  - AU14USCMOperationsUniform
+  - AU14USASFPilotJumpsuit
+  - AU14CBRNSuit
+  - AU14MarineUniformDressEnlistedD
+  - AU14MarineUniformDressSeniorD
+  - AU14CamoUSCMFatigues
+
+- type: forceOnForceUniform
+  id: UPP
+  uniforms:
+  - AU14FatiguesUPP
+  - AU14JumpsuitEngiUPP
+  - AU14JumpsuitMPUPP
+  - AU14JumpsuitMedicUPP
+  - AU14JumpsuitOfficerUPP
+  - AU14ServiceFatiguesUPP
+  - AU14BoilerFatiguesUPP
+  - AU14JumpsuitArmyUPP
+  - AU14SuitCBRNUPP
+  - AU14JoeUPP
+
+- type: forceOnForceUniform
+  id: RMC
+  uniforms:
+  - AU14FatiguesDesertRMC
+  - AU14FatiguesBlackRMC
+  - AU14FatiguesDesertRMCTeamlead
+  - AU14FatiguesBlackRMCTeamlead
+  - AU14FatiguesServiceRMC
+  - AU14PilotJumpsuitRMC
+
+- type: forceOnForceUniform
+  id: LACN
+  uniforms:
+  - AU14LACNUniform
+  - AU14LACNUniformCoat
+  - AU14LACNPilotJumpsuit
+
+- type: forceOnForceUniform
+  id: WEYU
+  uniforms:
+  - AU14WYPMCFatigues
+  - AU14JumpsuitVeteranPMCCorporate
+  - AU14JumpsuitVeteranPMCCorporateLead
+  - AU14WYPMCFatiguesEngineer
+  - AU14WYGuardFatigues
+
+- type: forceOnForceUniform
+  id: CMBCIU
+  uniforms:
+  - AU14CMBUniform
+
+- type: forceOnForceUniform
+  id: HAZOPS
+  uniforms:
+  - AU14HAZOPUrbanFatigues
+
+- type: forceOnForceUniform
+  id: ProdigySF
+  uniforms:
+  - AU14ProdigyFatigues
+  - AU14ProdigyFatiguesRU
+  - AU14ProdigyFatiguesRUSynth
+  - CMU14ProdigySuitBlackSkirt
+  - CMU14ProdigySuitGreySkirt
+  - CMU14ProdigySuitBlack
+  - CMU14ProdigySuitGrey
+  - CMU14ProdigyJumpsuitGrey
+
+- type: forceOnForceUniform
+  id: VAIPO
+  uniforms:
+  - AU14JumpsuitTShirtGrayVAIMAR40
+  - AU14JumpsuitTShirtGrayVAIL42A
+  - AU14JumpsuitTShirtGrayVAIM41A
+  - AU14JumpsuitTShirtGrayVAIMAR50
+  - AU14JumpsuitTShirtGrayVAIM41AE2
+  - AU14JumpsuitTShirtGrayVAIHEDP
+  - AU14JumpsuitTShirtWhiteVAIToolWebbing
+  - AU14JumpsuitTShirtWhiteVAIWebbingSurgical
+  - AU14JumpsuitTShirtRedVAIHEDP
+  - AU14JumpsuitCivilianVAIMAR40
+  - AU14JumpsuitCivilianYellowVAIL42A
+  - AU14JumpsuitCivilianBrownVAIM41A
+  - AU14JumpsuitCivilianVAIMAR50
+  - AU14JumpsuitCivilianYellowVAIM41AE2
+  - AU14JumpsuitCivilianBrownVAIHEDP
+  - AU14JumpsuitCivilianYellowVAIToolWebbing
+  - AU14JumpsuitCivilianBlueVAIWebbingSurgical
+  - AU14JumpsuitCivilianRedVAIHEDP

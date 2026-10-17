@@ -1,0 +1,36 @@
+- type: entity
+  parent: RMCIntelTechTree
+  id: CMUIntelTechTree_OPFOR # TODO
+  name: intel tech tree (OpFor)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IntelTechTree
+    tree:
+      options:
+# ├──[ Tier 0 ]──────────────────────────────────────────────────────┤
+      -
+        - name: cmu-tech-tier-one
+          description: cmu-tech-tier-unlock-desc
+          cost: 0
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 1
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+# ├──[ Tier 1: Requisition budget ]──────────────────────────────────┤
+      -
+        - name: cmu-tech-opfor-req-budget
+          description: cmu-tech-opfor-req-budget-desc
+          cost: 12
+          increase: 3
+          repurchasable: true
+          events:
+          - !type:TechRequisitionsBudgetEvent
+            amount: 5000
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-opfor-req-budget-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: budget_req

@@ -68,11 +68,12 @@
     graph: RMCCustomGrenadeGraph
     node: grenade
   - type: DeleteOnTrigger
-  - type: SoundOnTrigger
+  - type: EmitSoundOnTrigger
     sound:
         path: /Audio/Effects/Chemistry/bubbles.ogg
         params:
             variation: 0.2
+    positional: true
 
 - type: entity
   parent: ChemicalPayload
@@ -97,9 +98,8 @@
   id: RMCBeakerMetalFoamAluminum
   categories: [ HideSpawnMenu ]
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    solution:
         maxVol: 60
         reagents:
           - ReagentId: RMCAluminum
@@ -110,9 +110,8 @@
   id: RMCBeakerMetalFoamingAgent
   categories: [ HideSpawnMenu ]
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    solution:
         maxVol: 60
         reagents:
           - ReagentId: FoamingAgent
@@ -140,11 +139,12 @@
       - RMCChemicalPayloadWeedkiller
       payloadTrigger:
       - RMCTimerTrigger
-  - type: SoundOnTrigger
+  - type: EmitSoundOnTrigger
     sound:
         path: /Audio/Effects/smoke.ogg
         params:
             variation: 0.2
+    positional: true
 
 - type: entity
   parent: RMCChemicalPayloadMetalFoam
@@ -163,9 +163,8 @@
   id: RMCBeakerWeedkillerPlantBGone
   categories: [ HideSpawnMenu ]
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    solution:
         maxVol: 60
         reagents:
           - ReagentId: PlantBGone
@@ -178,9 +177,8 @@
   id: RMCBeakerWeedkillerPhosphorus
   categories: [ HideSpawnMenu ]
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    solution:
         maxVol: 60
         reagents:
           - ReagentId: RMCSugar
@@ -209,8 +207,10 @@
 - type: entity
   parent: RMCGrenadeCustomMetalFoam
   id: RMCGrenadeMFHS
-  name: M40 Metal Foam Grenade
-  description: Creates a field of liquid metal that quickly solidfies into foamed metal that acts like a temporary wall, said metal foam is easy to destroy.
+  # cmu edit start - cmss13-pve#854 rename
+  name: M42 MFHS grenade
+  description: A Metal-Foam Hull-Sealant grenade, first made for emergency hull repairs but since put to plenty of other uses in the field. Built on the same hull as the M40 HEDP, it releases liquid metal that quickly hardens into a flimsy temporary wall.
+  # cmu edit end
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40mfhs.rsi

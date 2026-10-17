@@ -70,9 +70,25 @@
   id: AU14TileFire
   suffix: AU14, 15s
   components:
+  - type: CMUAllowFireSpread # CMU14: only AU14 fires may ignite additional tiles.
   - type: TileFire
     id: AU14TileFire
     duration: 145
+
+# CMU14: gameplay bug fixes.
+- type: entity
+  parent: AU14TileFire
+  id: AU14SpreadTileFire
+  suffix: AU14, spreading
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "base" ]
+      state: red_1
+  - type: TileFire
+    id: AU14SpreadTileFire
+    growthDuration: 12
+    bigFireDuration: 0
 
 - type: entity
   parent: RMCTileFire
@@ -145,6 +161,10 @@
   parent: RMCTileFire
   id: RMCTileFireBlue
   components:
+  - type: DamageOnCollide
+    damage:
+      types:
+        Heat: 120
   - type: Sprite
     layers:
     - map: [ "base" ]
@@ -155,6 +175,10 @@
     intensity: 40
     duration: 45
     maxStacks: 40
+    armorMultiplier: 0.5
+    armorWhitelist:
+      components:
+      - Xeno
     burnColor: "#00b8ff"
   - type: TileFire
     id: RMCTileFireBlue
@@ -201,6 +225,7 @@
 - type: entity
   parent: RMCTileFire
   id: RMCTileFireOBAegis
+  suffix: RMC
   components:
   - type: Sprite
     color: "#ffffff"
@@ -554,6 +579,10 @@
   id: RMCTileFireHCNapalm
   suffix: HC Napalm
   components:
+  - type: DamageOnCollide
+    damage:
+      types:
+        Heat: 135
   - type: Sprite
     color: "#c51c1c"
     layers:
@@ -611,6 +640,10 @@
   id: RMCTileFireNapalmEX
   suffix: Napalm EX
   components:
+  - type: DamageOnCollide
+    damage:
+      types:
+        Heat: 120
   - type: Sprite
     color: "#641dd6"
     layers:
@@ -640,6 +673,10 @@
   id: RMCTileFireR189
   suffix: R189
   components:
+  - type: DamageOnCollide
+    damage:
+      types:
+        Heat: 150
   - type: Sprite
     color: "#ffe49c"
     layers:
@@ -669,6 +706,10 @@
   id: RMCTileFireNapalmBase
   suffix: Base Napalm
   components:
+  - type: DamageOnCollide
+    damage:
+      types:
+        Heat: 81
   - type: Sprite
     color: "#D05006"
     layers:

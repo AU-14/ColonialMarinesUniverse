@@ -1,0 +1,74 @@
+- type: partySpawn
+  id: CLFSurvsSpawnBig
+  leadersToSpawn:
+    AU14CLFSurvLeader: 1
+  gruntsToSpawn:
+    AU14CLFSurvFighter: 7
+    AU14JCLFSurvSurgeon: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CLFSurvsBig
+  announceAsSurvivors: true
+  partyspawn: CLFSurvsSpawnBig
+  blacklistedGamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: ground
+  weight: 25
+  minplayers: 101
+  maxplayers: 400
+  ghostsNeeded: 0
+  roundstart: true
+
+- type: partySpawn
+  id: CLFSurvsSpawnMedium
+  leadersToSpawn:
+    AU14CLFSurvLeader: 1
+  gruntsToSpawn:
+    AU14CLFSurvFighter: 4
+    AU14JCLFSurvSurgeon: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CLFSurvsMedium
+  announceAsSurvivors: true
+  partyspawn: CLFSurvsSpawnMedium
+  blacklistedGamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: ground
+  weight: 25
+  minplayers: 51
+  maxplayers: 100
+  ghostsNeeded: 0
+  roundstart: true
+
+- type: partySpawn
+  id: CLFSurvsSpawnSmall
+  leadersToSpawn:
+    AU14CLFSurvLeader: 1
+  gruntsToSpawn:
+    AU14CLFSurvFighter: 2
+    AU14JCLFSurvSurgeon: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CLFSurvsSmall
+  announceAsSurvivors: true
+  partyspawn: CLFSurvsSpawnSmall
+  blacklistedGamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: ground
+  weight: 25
+  minplayers: 20
+  maxplayers: 50
+  ghostsNeeded: 0
+  roundstart: true

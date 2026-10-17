@@ -270,6 +270,23 @@
         variation: 0.09
   - type: Corrodible
     isCorrodible: false
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+#     - CMUPathogenWalker # CMU14
+  - type: DestroyOnPreset
+    preset: DistressSignal
+
+- type: entity
+  parent: RMCBackpackScout
+  id: RMCBackpackScoutDS
+  components:
+  - type: ThermalCloak
+    movingOpacity: 0.025
+  - type: DestroyOnPreset
+    preset: DistressSignal
+    inverted: true
 
 - type: entity
   parent: RMCBackpackScout

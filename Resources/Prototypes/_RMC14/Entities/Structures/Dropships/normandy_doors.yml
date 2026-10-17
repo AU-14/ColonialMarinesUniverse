@@ -1,10 +1,26 @@
-﻿- type: entity
+- type: entity
   parent: RMCDropshipDoorBase
   id: CMNormandyDoor
   name: lexington crew hatch
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Dropships/normandy.rsi
+
+- type: entity
+  parent: CMNormandyDoor
+  id: CMNormandyDoorSinglePort
+  suffix: Single, Port
+  components:
+  - type: Door
+    location: Port
+
+- type: entity
+  parent: CMNormandyDoor
+  id: CMNormandyDoorSingleStarboard
+  suffix: Single, Starboard
+  components:
+  - type: Door
+    location: Starboard
 
 - type: entity
   parent: RMCDropshipDoorAftBase
@@ -40,11 +56,3 @@
   - type: RemoveComponents
     components:
     - type: DoorBolt
-
-- type: entity
-  parent: CMNormandyCockpit
-  id: CMNormandyCockpitOpfor
-  suffix: Normandy, Opfor
-  components:
-  - type: AccessReader
-    access: [ [ "AU14AccessOpforPilot" ] ]

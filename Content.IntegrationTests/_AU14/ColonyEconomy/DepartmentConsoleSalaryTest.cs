@@ -1,15 +1,15 @@
 using Content.Server.Access.Systems;
-using Content.Server.AU14.ColonyEconomy;
+using Content.Server.CMU14.ColonyEconomy;
 using Content.Server.Station.Systems;
 using Content.Shared.Access.Components;
-using Content.Shared.AU14.ColonyEconomy;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.GameTicking;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._AU14.ColonyEconomy;
+namespace Content.IntegrationTests.CMU14.ColonyEconomy;
 
 [TestFixture]
 public sealed class DepartmentConsoleSalaryTest
@@ -45,7 +45,6 @@ public sealed class DepartmentConsoleSalaryTest
 
                 var department = entityManager.GetComponent<DepartmentConsoleComponent>(console);
                 department.DepartmentBudget = department.DefaultSalary;
-                var initialBalance = idCard.Comp.AccountBalance;
                 Assert.That(adminConsoleSystem.GetIncomeTax(), Is.Zero, "The salary regression test requires zero income tax.");
 
                 var spawned = new PlayerSpawnCompleteEvent(
@@ -64,6 +63,8 @@ public sealed class DepartmentConsoleSalaryTest
                     Does.Contain(idCard.Owner),
                     $"The payroll console did not register {job}'s ID card.");
 
+                // Spawn registration also credits starting funds; measure only the salary payment.
+                var initialBalance = idCard.Comp.AccountBalance;
                 departmentSystem.DispenseSalaries();
 
                 Assert.Multiple(() =>

@@ -32,7 +32,7 @@
       machine_parts: !type:Container
   - type: ApcPowerReceiver
     needsPower: false # TODO RMC14
-    powerLoad: 0 #15 kW
+    powerLoad: 1
   - type: Charger
     chargeRate: 1000
     chargeLevelSteps: 6
@@ -41,10 +41,11 @@
       charger_slot:
         ejectOnInteract: true
         whitelist:
-          components:
+          tags:
           - Stunbaton
+          components:
           - PowerCell
-          - ProjectileBatteryAmmoProvider
+          - BatteryAmmoProvider
           - Defibrillator
           - Visor
           - PortableDialysis
@@ -58,8 +59,8 @@
             - Taser
       recharger-baton:
         whitelist:
-          components:
-            - Stunbaton
+          tags:
+          - Stunbaton
   - type: Machine
     board: CMUCircuitboardRecharger
 
@@ -68,6 +69,8 @@
   id: RMCRechargerLocked
   suffix: locked
   components:
+  - type: ApcPowerReceiver
+    powerLoad: 1
   - type: Transform
     anchored: true
   - type: Anchorable

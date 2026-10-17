@@ -1,0 +1,1025 @@
+# Editable physical art drafts; see SOURCES_DECOR_FINAL_CLOUD.md
+- type: cmu3DModel
+  id: CMU3DAU14FlagCarriableUADecorFinalCloud
+  label: UA loose pole flag
+  status: draft
+  sourcePrototypes:
+  - AU14FlagCarriableUA
+  referencePrototype: AU14FlagCarriableUA
+  referenceRsi: /Textures/CMU14/Objects/Flags/ua_flag.rsi
+  referenceState: icon
+  sourceDirections: 1
+  description: Actual inherited base icon, no extra visible layers. Four original cloth bands preserve the sloped
+    hoist, printed emblem and alpha contour; separate round metal pole and ferrule. Existing default-only source-state
+    adapter rejects deploy and changed offsets. Planting, in-hand poses, wind and cloth rigging unsupported. Unseen
+    reverse, thickness and support construction are inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: continuous round diagonal loose pole
+    min: -0.95429023, -0.030875, 0.0035
+    max: 0.53866523, 0.012125, 0.0465
+    color: '#6A6A6A'
+    shape: CylinderX
+    yaw: 74.334656
+  - label: rounded pole finial
+    min: -0.06225, 0.658125, 0.0
+    max: 0.04975, 0.748125, 0.05
+    color: '#9E9E9E'
+    shape: Ellipsoid
+  - label: dark lower ferrule
+    min: -0.43806974, -0.713625, 0.002
+    max: -0.36036776, -0.667625, 0.048
+    color: '#3A3A3A'
+    shape: CylinderX
+    yaw: 74.8459319
+  - label: loose cloth fold 0 contour backing 0
+    min: -0.0001, 0.59365, 0.0205
+    max: 0.09385, 0.6251, 0.0295
+    color: '#C1C1C1'
+  - label: loose cloth fold 0 original face
+    min: 0.0, 0.59375, 0.02925
+    max: 0.5, 0.625, 0.03025
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt000
+    surfaceAxis: XY
+  - label: loose cloth fold 1 contour backing 0
+    min: -0.03135, 0.5624, 0.022
+    max: 0.09385, 0.59385, 0.031
+    color: '#C1C1C1'
+  - label: loose cloth fold 1 contour backing 1
+    min: -0.03135, 0.53115, 0.022
+    max: 0.1876, 0.5626, 0.031
+    color: '#C1C1C1'
+  - label: loose cloth fold 1 contour backing 2
+    min: 0.40615, 0.53115, 0.022
+    max: 0.5001, 0.5626, 0.031
+    color: '#C1C1C1'
+  - label: loose cloth fold 1 contour backing 3
+    min: -0.03135, 0.4999, 0.022
+    max: 0.28135, 0.53135, 0.031
+    color: '#C1C1C1'
+  - label: loose cloth fold 1 contour backing 4
+    min: 0.3124, 0.4999, 0.022
+    max: 0.5001, 0.53135, 0.031
+    color: '#C1C1C1'
+  - label: loose cloth fold 1 original face
+    min: -0.03125, 0.5, 0.03075
+    max: 0.5, 0.59375, 0.03175
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt001
+    surfaceAxis: XY
+  - label: loose cloth fold 2 contour backing 0
+    min: -0.0626, 0.3749, 0.0235
+    max: 0.5001, 0.5001, 0.0325
+    color: '#C1C1C1'
+  - label: loose cloth fold 2 original face
+    min: -0.0625, 0.375, 0.03225
+    max: 0.5, 0.5, 0.03325
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt002
+    surfaceAxis: XY
+  - label: loose cloth fold 3 contour backing 0
+    min: -0.09385, 0.28115, 0.025
+    max: 0.5001, 0.3751, 0.034
+    color: '#C1C1C1'
+  - label: loose cloth fold 3 contour backing 1
+    min: -0.0001, 0.2499, 0.025
+    max: 0.5001, 0.28135, 0.034
+    color: '#C1C1C1'
+  - label: loose cloth fold 3 contour backing 2
+    min: 0.0624, 0.21865, 0.025
+    max: 0.5001, 0.2501, 0.034
+    color: '#C1C1C1'
+  - label: loose cloth fold 3 contour backing 3
+    min: 0.09365, 0.1874, 0.025
+    max: 0.3751, 0.21885, 0.034
+    color: '#C1C1C1'
+  - label: loose cloth fold 3 contour backing 4
+    min: 0.28115, 0.15615, 0.025
+    max: 0.3126, 0.1876, 0.034
+    color: '#C1C1C1'
+  - label: loose cloth fold 3 original face
+    min: -0.09375, 0.15625, 0.03375
+    max: 0.5, 0.375, 0.03475
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt003
+    surfaceAxis: XY
+  placement: surface
+  useEntityRotation: true
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: continuous round diagonal loose pole
+          min: -0.95429023, -0.030875, 0.0035
+          max: 0.53866523, 0.012125, 0.0465
+          color: '#6A6A6A'
+          shape: CylinderX
+          yaw: 74.334656
+        - label: rounded pole finial
+          min: -0.06225, 0.658125, 0.0
+          max: 0.04975, 0.748125, 0.05
+          color: '#9E9E9E'
+          shape: Ellipsoid
+        - label: dark lower ferrule
+          min: -0.43806974, -0.713625, 0.002
+          max: -0.36036776, -0.667625, 0.048
+          color: '#3A3A3A'
+          shape: CylinderX
+          yaw: 74.8459319
+        - label: loose cloth fold 0 contour backing 0
+          min: -0.0001, 0.59365, 0.0205
+          max: 0.09385, 0.6251, 0.0295
+          color: '#C1C1C1'
+        - label: loose cloth fold 0 original face
+          min: 0.0, 0.59375, 0.02925
+          max: 0.5, 0.625, 0.03025
+          color: '#FFFFFF'
+          surface: CMU3DDecorFinalCloudArt000
+          surfaceAxis: XY
+        - label: loose cloth fold 1 contour backing 0
+          min: -0.03135, 0.5624, 0.022
+          max: 0.09385, 0.59385, 0.031
+          color: '#C1C1C1'
+        - label: loose cloth fold 1 contour backing 1
+          min: -0.03135, 0.53115, 0.022
+          max: 0.1876, 0.5626, 0.031
+          color: '#C1C1C1'
+        - label: loose cloth fold 1 contour backing 2
+          min: 0.40615, 0.53115, 0.022
+          max: 0.5001, 0.5626, 0.031
+          color: '#C1C1C1'
+        - label: loose cloth fold 1 contour backing 3
+          min: -0.03135, 0.4999, 0.022
+          max: 0.28135, 0.53135, 0.031
+          color: '#C1C1C1'
+        - label: loose cloth fold 1 contour backing 4
+          min: 0.3124, 0.4999, 0.022
+          max: 0.5001, 0.53135, 0.031
+          color: '#C1C1C1'
+        - label: loose cloth fold 1 original face
+          min: -0.03125, 0.5, 0.03075
+          max: 0.5, 0.59375, 0.03175
+          color: '#FFFFFF'
+          surface: CMU3DDecorFinalCloudArt001
+          surfaceAxis: XY
+        - label: loose cloth fold 2 contour backing 0
+          min: -0.0626, 0.3749, 0.0235
+          max: 0.5001, 0.5001, 0.0325
+          color: '#C1C1C1'
+        - label: loose cloth fold 2 original face
+          min: -0.0625, 0.375, 0.03225
+          max: 0.5, 0.5, 0.03325
+          color: '#FFFFFF'
+          surface: CMU3DDecorFinalCloudArt002
+          surfaceAxis: XY
+        - label: loose cloth fold 3 contour backing 0
+          min: -0.09385, 0.28115, 0.025
+          max: 0.5001, 0.3751, 0.034
+          color: '#C1C1C1'
+        - label: loose cloth fold 3 contour backing 1
+          min: -0.0001, 0.2499, 0.025
+          max: 0.5001, 0.28135, 0.034
+          color: '#C1C1C1'
+        - label: loose cloth fold 3 contour backing 2
+          min: 0.0624, 0.21865, 0.025
+          max: 0.5001, 0.2501, 0.034
+          color: '#C1C1C1'
+        - label: loose cloth fold 3 contour backing 3
+          min: 0.09365, 0.1874, 0.025
+          max: 0.3751, 0.21885, 0.034
+          color: '#C1C1C1'
+        - label: loose cloth fold 3 contour backing 4
+          min: 0.28115, 0.15615, 0.025
+          max: 0.3126, 0.1876, 0.034
+          color: '#C1C1C1'
+        - label: loose cloth fold 3 original face
+          min: -0.09375, 0.15625, 0.03375
+          max: 0.5, 0.375, 0.03475
+          color: '#FFFFFF'
+          surface: CMU3DDecorFinalCloudArt003
+          surfaceAxis: XY
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DAU14FlagCarriableUADecorFinalCloudPlantedStudy
+  label: UA planted flag frame-zero study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: AU14FlagCarriableUA
+  referenceRsi: /Textures/CMU14/Objects/Flags/ua_flag.rsi
+  referenceState: deploy
+  sourceDirections: 1
+  description: Unbound planted construction study from deploy frame0. Source deploy has four half-second frames
+    and runtime adds (0,0.5) sprite offset; neither offset/state selection nor flapping interpolation is implemented.
+    No in-hand or character rig. Unseen reverse, thickness and support construction are inferred. All draft; no
+    native, map-fit or fidelity approval.
+  parts:
+  - label: single round planted flag pole
+    min: -0.313625, -0.048, 0.02
+    max: -0.217625, 0.048, 1.98
+    color: '#6A6A6A'
+    shape: CylinderZ
+  - label: raised top finial
+    min: -0.343625, -0.048, 1.872
+    max: -0.187625, 0.048, 2.028
+    color: '#9E9E9E'
+    shape: Ellipsoid
+  - label: source planted foot ferrule
+    min: -0.360625, -0.055, 0.0
+    max: -0.170625, 0.055, 0.06
+    color: '#3A3A3A'
+    shape: Ellipsoid
+  - label: planted cloth source frame zero contour backing 0
+    min: -0.21885, -0.018, 1.8749
+    max: -0.1874, -0.006, 1.90635
+    color: '#C1C1C1'
+  - label: planted cloth source frame zero contour backing 1
+    min: -0.03135, -0.018, 1.8749
+    max: 0.2501, -0.006, 1.90635
+    color: '#C1C1C1'
+  - label: planted cloth source frame zero contour backing 2
+    min: -0.21885, -0.018, 1.84365
+    max: 0.3126, -0.006, 1.8751
+    color: '#C1C1C1'
+  - label: planted cloth source frame zero contour backing 3
+    min: -0.21885, -0.018, 1.5624
+    max: 0.3751, -0.006, 1.84385
+    color: '#C1C1C1'
+  - label: planted cloth source frame zero contour backing 4
+    min: -0.21885, -0.018, 1.53115
+    max: -0.03115, -0.006, 1.5626
+    color: '#C1C1C1'
+  - label: planted cloth source frame zero contour backing 5
+    min: 0.2499, -0.018, 1.53115
+    max: 0.3751, -0.006, 1.5626
+    color: '#C1C1C1'
+  - label: planted cloth source frame zero contour backing 6
+    min: 0.3124, -0.018, 1.4999
+    max: 0.3751, -0.006, 1.53135
+    color: '#C1C1C1'
+  - label: planted cloth source frame zero original face
+    min: -0.21875, -0.01875, 1.46875
+    max: 0.375, -0.01775, 1.90625
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt004
+    surfaceAxis: XZ
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DAU14FlagCarriableUPPDecorFinalCloud
+  label: UPP loose pole flag
+  status: draft
+  sourcePrototypes:
+  - AU14FlagCarriableUPP
+  referencePrototype: AU14FlagCarriableUPP
+  referenceRsi: /Textures/CMU14/Objects/Flags/upp_flag.rsi
+  referenceState: icon
+  sourceDirections: 1
+  description: Actual inherited base icon, no extra visible layers. Four original cloth bands preserve the sloped
+    hoist, printed emblem and alpha contour; separate round metal pole and ferrule. Existing default-only source-state
+    adapter rejects deploy and changed offsets. Planting, in-hand poses, wind and cloth rigging unsupported. Unseen
+    reverse, thickness and support construction are inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: continuous round diagonal loose pole
+    min: -0.95429023, -0.030875, 0.0035
+    max: 0.53866523, 0.012125, 0.0465
+    color: '#6A6A6A'
+    shape: CylinderX
+    yaw: 74.334656
+  - label: rounded pole finial
+    min: -0.06225, 0.658125, 0.0
+    max: 0.04975, 0.748125, 0.05
+    color: '#9E9E9E'
+    shape: Ellipsoid
+  - label: dark lower ferrule
+    min: -0.43806974, -0.713625, 0.002
+    max: -0.36036776, -0.667625, 0.048
+    color: '#3A3A3A'
+    shape: CylinderX
+    yaw: 74.8459319
+  - label: loose cloth fold 0 contour backing 0
+    min: -0.0001, 0.59365, 0.0205
+    max: 0.09385, 0.6251, 0.0295
+    color: '#6B1515'
+  - label: loose cloth fold 0 original face
+    min: 0.0, 0.59375, 0.02925
+    max: 0.5, 0.625, 0.03025
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt005
+    surfaceAxis: XY
+  - label: loose cloth fold 1 contour backing 0
+    min: -0.03135, 0.53115, 0.022
+    max: 0.1876, 0.59385, 0.031
+    color: '#6B1515'
+  - label: loose cloth fold 1 contour backing 1
+    min: 0.40615, 0.53115, 0.022
+    max: 0.5001, 0.5626, 0.031
+    color: '#6B1515'
+  - label: loose cloth fold 1 contour backing 2
+    min: -0.03135, 0.4999, 0.022
+    max: 0.28135, 0.53135, 0.031
+    color: '#6B1515'
+  - label: loose cloth fold 1 contour backing 3
+    min: 0.3124, 0.4999, 0.022
+    max: 0.5001, 0.53135, 0.031
+    color: '#6B1515'
+  - label: loose cloth fold 1 original face
+    min: -0.03125, 0.5, 0.03075
+    max: 0.5, 0.59375, 0.03175
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt006
+    surfaceAxis: XY
+  - label: loose cloth fold 2 contour backing 0
+    min: -0.0626, 0.3749, 0.0235
+    max: 0.5001, 0.5001, 0.0325
+    color: '#6B1515'
+  - label: loose cloth fold 2 original face
+    min: -0.0625, 0.375, 0.03225
+    max: 0.5, 0.5, 0.03325
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt007
+    surfaceAxis: XY
+  - label: loose cloth fold 3 contour backing 0
+    min: -0.09385, 0.28115, 0.025
+    max: 0.5001, 0.3751, 0.034
+    color: '#6B1515'
+  - label: loose cloth fold 3 contour backing 1
+    min: -0.0001, 0.2499, 0.025
+    max: 0.5001, 0.28135, 0.034
+    color: '#6B1515'
+  - label: loose cloth fold 3 contour backing 2
+    min: 0.0624, 0.21865, 0.025
+    max: 0.5001, 0.2501, 0.034
+    color: '#6B1515'
+  - label: loose cloth fold 3 contour backing 3
+    min: 0.09365, 0.1874, 0.025
+    max: 0.3751, 0.21885, 0.034
+    color: '#6B1515'
+  - label: loose cloth fold 3 contour backing 4
+    min: 0.28115, 0.15615, 0.025
+    max: 0.3126, 0.1876, 0.034
+    color: '#6B1515'
+  - label: loose cloth fold 3 original face
+    min: -0.09375, 0.15625, 0.03375
+    max: 0.5, 0.375, 0.03475
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt008
+    surfaceAxis: XY
+  placement: surface
+  useEntityRotation: true
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: continuous round diagonal loose pole
+          min: -0.95429023, -0.030875, 0.0035
+          max: 0.53866523, 0.012125, 0.0465
+          color: '#6A6A6A'
+          shape: CylinderX
+          yaw: 74.334656
+        - label: rounded pole finial
+          min: -0.06225, 0.658125, 0.0
+          max: 0.04975, 0.748125, 0.05
+          color: '#9E9E9E'
+          shape: Ellipsoid
+        - label: dark lower ferrule
+          min: -0.43806974, -0.713625, 0.002
+          max: -0.36036776, -0.667625, 0.048
+          color: '#3A3A3A'
+          shape: CylinderX
+          yaw: 74.8459319
+        - label: loose cloth fold 0 contour backing 0
+          min: -0.0001, 0.59365, 0.0205
+          max: 0.09385, 0.6251, 0.0295
+          color: '#6B1515'
+        - label: loose cloth fold 0 original face
+          min: 0.0, 0.59375, 0.02925
+          max: 0.5, 0.625, 0.03025
+          color: '#FFFFFF'
+          surface: CMU3DDecorFinalCloudArt005
+          surfaceAxis: XY
+        - label: loose cloth fold 1 contour backing 0
+          min: -0.03135, 0.53115, 0.022
+          max: 0.1876, 0.59385, 0.031
+          color: '#6B1515'
+        - label: loose cloth fold 1 contour backing 1
+          min: 0.40615, 0.53115, 0.022
+          max: 0.5001, 0.5626, 0.031
+          color: '#6B1515'
+        - label: loose cloth fold 1 contour backing 2
+          min: -0.03135, 0.4999, 0.022
+          max: 0.28135, 0.53135, 0.031
+          color: '#6B1515'
+        - label: loose cloth fold 1 contour backing 3
+          min: 0.3124, 0.4999, 0.022
+          max: 0.5001, 0.53135, 0.031
+          color: '#6B1515'
+        - label: loose cloth fold 1 original face
+          min: -0.03125, 0.5, 0.03075
+          max: 0.5, 0.59375, 0.03175
+          color: '#FFFFFF'
+          surface: CMU3DDecorFinalCloudArt006
+          surfaceAxis: XY
+        - label: loose cloth fold 2 contour backing 0
+          min: -0.0626, 0.3749, 0.0235
+          max: 0.5001, 0.5001, 0.0325
+          color: '#6B1515'
+        - label: loose cloth fold 2 original face
+          min: -0.0625, 0.375, 0.03225
+          max: 0.5, 0.5, 0.03325
+          color: '#FFFFFF'
+          surface: CMU3DDecorFinalCloudArt007
+          surfaceAxis: XY
+        - label: loose cloth fold 3 contour backing 0
+          min: -0.09385, 0.28115, 0.025
+          max: 0.5001, 0.3751, 0.034
+          color: '#6B1515'
+        - label: loose cloth fold 3 contour backing 1
+          min: -0.0001, 0.2499, 0.025
+          max: 0.5001, 0.28135, 0.034
+          color: '#6B1515'
+        - label: loose cloth fold 3 contour backing 2
+          min: 0.0624, 0.21865, 0.025
+          max: 0.5001, 0.2501, 0.034
+          color: '#6B1515'
+        - label: loose cloth fold 3 contour backing 3
+          min: 0.09365, 0.1874, 0.025
+          max: 0.3751, 0.21885, 0.034
+          color: '#6B1515'
+        - label: loose cloth fold 3 contour backing 4
+          min: 0.28115, 0.15615, 0.025
+          max: 0.3126, 0.1876, 0.034
+          color: '#6B1515'
+        - label: loose cloth fold 3 original face
+          min: -0.09375, 0.15625, 0.03375
+          max: 0.5, 0.375, 0.03475
+          color: '#FFFFFF'
+          surface: CMU3DDecorFinalCloudArt008
+          surfaceAxis: XY
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DAU14FlagCarriableUPPDecorFinalCloudPlantedStudy
+  label: UPP planted flag frame-zero study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: AU14FlagCarriableUPP
+  referenceRsi: /Textures/CMU14/Objects/Flags/upp_flag.rsi
+  referenceState: deploy
+  sourceDirections: 1
+  description: Unbound planted construction study from deploy frame0. Source deploy has four half-second frames
+    and runtime adds (0,0.5) sprite offset; neither offset/state selection nor flapping interpolation is implemented.
+    No in-hand or character rig. Unseen reverse, thickness and support construction are inferred. All draft; no
+    native, map-fit or fidelity approval.
+  parts:
+  - label: single round planted flag pole
+    min: -0.313625, -0.048, 0.02
+    max: -0.217625, 0.048, 1.98
+    color: '#6A6A6A'
+    shape: CylinderZ
+  - label: raised top finial
+    min: -0.343625, -0.048, 1.872
+    max: -0.187625, 0.048, 2.028
+    color: '#9E9E9E'
+    shape: Ellipsoid
+  - label: source planted foot ferrule
+    min: -0.360625, -0.055, 0.0
+    max: -0.170625, 0.055, 0.06
+    color: '#3A3A3A'
+    shape: Ellipsoid
+  - label: planted cloth source frame zero contour backing 0
+    min: -0.21885, -0.018, 1.8749
+    max: -0.1874, -0.006, 1.90635
+    color: '#6B1515'
+  - label: planted cloth source frame zero contour backing 1
+    min: -0.03135, -0.018, 1.8749
+    max: 0.2501, -0.006, 1.90635
+    color: '#6B1515'
+  - label: planted cloth source frame zero contour backing 2
+    min: -0.21885, -0.018, 1.84365
+    max: 0.3126, -0.006, 1.8751
+    color: '#6B1515'
+  - label: planted cloth source frame zero contour backing 3
+    min: -0.21885, -0.018, 1.5624
+    max: 0.3751, -0.006, 1.84385
+    color: '#6B1515'
+  - label: planted cloth source frame zero contour backing 4
+    min: -0.21885, -0.018, 1.53115
+    max: -0.03115, -0.006, 1.5626
+    color: '#6B1515'
+  - label: planted cloth source frame zero contour backing 5
+    min: 0.21865, -0.018, 1.53115
+    max: 0.3751, -0.006, 1.5626
+    color: '#6B1515'
+  - label: planted cloth source frame zero contour backing 6
+    min: 0.3124, -0.018, 1.4999
+    max: 0.3751, -0.006, 1.53135
+    color: '#6B1515'
+  - label: planted cloth source frame zero original face
+    min: -0.21875, -0.01875, 1.46875
+    max: 0.375, -0.01775, 1.90625
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt009
+    surfaceAxis: XZ
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DAU14WallFlagUPPDecorFinalCloud
+  label: UPP draped wall flag
+  status: draft
+  sourcePrototypes:
+  - AU14WallFlagUPP
+  referencePrototype: AU14WallFlagUPP
+  referenceRsi: /Textures/CMU14/Structures/wallflags.rsi
+  referenceState: uppflag
+  sourceDirections: 1
+  description: Three shallow cloth fold panels follow the actual dipped top and rounded lower contour, with original
+    embroidery and rear corner tabs. The 96px canvas offset is retained (visible center x=-0.5 tile). Wall-hung
+    source remains distinct from pole flags. Fixed uppflag only; worn/broken/deploy/cloth motion unsupported. Unseen
+    reverse, thickness and support construction are inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: hanging cloth panel 0 contour backing 0
+    min: -1.1251, -0.556, 2.20865
+    max: -0.9374, -0.538, 2.2401
+    color: '#59140E'
+  - label: hanging cloth panel 0 contour backing 1
+    min: -1.1251, -0.556, 2.1774
+    max: -0.7499, -0.538, 2.20885
+    color: '#59140E'
+  - label: hanging cloth panel 0 contour backing 2
+    min: -1.1251, -0.556, 1.70865
+    max: -0.71865, -0.538, 2.1776
+    color: '#59140E'
+  - label: hanging cloth panel 0 contour backing 3
+    min: -1.09385, -0.556, 1.52115
+    max: -0.71865, -0.538, 1.70885
+    color: '#59140E'
+  - label: hanging cloth panel 0 contour backing 4
+    min: -1.0626, -0.556, 1.4899
+    max: -0.71865, -0.538, 1.52135
+    color: '#59140E'
+  - label: hanging cloth panel 0 contour backing 5
+    min: -1.0001, -0.556, 1.45865
+    max: -0.71865, -0.538, 1.4901
+    color: '#59140E'
+  - label: hanging cloth panel 0 contour backing 6
+    min: -0.84385, -0.556, 1.4274
+    max: -0.71865, -0.538, 1.45885
+    color: '#59140E'
+  - label: hanging cloth panel 0 original face
+    min: -1.125, -0.55675, 1.4275
+    max: -0.71875, -0.55575, 2.24
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt010
+    surfaceAxis: XZ
+  - label: hanging cloth panel 1 contour backing 0
+    min: -0.71885, -0.567, 1.4274
+    max: -0.28115, -0.549, 2.1776
+    color: '#59140E'
+  - label: hanging cloth panel 1 original face
+    min: -0.71875, -0.56775, 1.4275
+    max: -0.28125, -0.56675, 2.24
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt011
+    surfaceAxis: XZ
+  - label: hanging cloth panel 2 contour backing 0
+    min: -0.0626, -0.556, 2.20865
+    max: 0.1251, -0.538, 2.2401
+    color: '#59140E'
+  - label: hanging cloth panel 2 contour backing 1
+    min: -0.2501, -0.556, 2.1774
+    max: 0.1251, -0.538, 2.20885
+    color: '#59140E'
+  - label: hanging cloth panel 2 contour backing 2
+    min: -0.28135, -0.556, 1.70865
+    max: 0.1251, -0.538, 2.1776
+    color: '#59140E'
+  - label: hanging cloth panel 2 contour backing 3
+    min: -0.28135, -0.556, 1.52115
+    max: 0.09385, -0.538, 1.70885
+    color: '#59140E'
+  - label: hanging cloth panel 2 contour backing 4
+    min: -0.28135, -0.556, 1.4899
+    max: 0.0626, -0.538, 1.52135
+    color: '#59140E'
+  - label: hanging cloth panel 2 contour backing 5
+    min: -0.28135, -0.556, 1.45865
+    max: 0.0001, -0.538, 1.4901
+    color: '#59140E'
+  - label: hanging cloth panel 2 contour backing 6
+    min: -0.28135, -0.556, 1.4274
+    max: -0.15615, -0.538, 1.45885
+    color: '#59140E'
+  - label: hanging cloth panel 2 original face
+    min: -0.28125, -0.55675, 1.4275
+    max: 0.125, -0.55575, 2.24
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt012
+    surfaceAxis: XZ
+  - label: upper corner suspension tab 13.5
+    min: -1.110625, -0.55, 2.1955
+    max: -1.045625, -0.5, 2.2565
+    color: '#56140E'
+  - label: rear wall pin 13.5
+    min: -1.089625, -0.528, 2.2195
+    max: -1.066625, -0.482, 2.2425
+    color: '#A07D0B'
+    shape: CylinderY
+  - label: upper corner suspension tab 50.5
+    min: 0.045625, -0.55, 2.1955
+    max: 0.110625, -0.5, 2.2565
+    color: '#56140E'
+  - label: rear wall pin 50.5
+    min: 0.066625, -0.528, 2.2195
+    max: 0.089625, -0.482, 2.2425
+    color: '#A07D0B'
+    shape: CylinderY
+  wallMounted: true
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DAU14L4D2cardboardcutoutjohnnywayneDecorFinalCloud
+  label: Johnny Wayne Jr. die-cut cardboard stand
+  status: draft
+  sourcePrototypes:
+  - AU14L4D2cardboardcutoutjohnnywayne
+  referencePrototype: AU14L4D2cardboardcutoutjohnnywayne
+  referenceRsi: /Textures/CMU14/Structures/cardboard.rsi
+  referenceState: johnnycardboard
+  sourceDirections: 1
+  description: Original printed cardboard silhouette, exact two cut-through arm openings and retained brown web
+    between the printed legs and contour-backed edge. Narrow connected fold-out rear easel with an open triangle.
+    Source PNG contains an extra fully transparent 32px row beyond the sole metadata frame; only the declared first
+    frame is used. This is a printed prop, not a character model or rig. Unseen reverse, thickness and support construction
+    are inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: die-cut cardboard print contour backing 0
+    min: -0.09385, -0.009, 0.9374
+    max: 0.0626, 0.009, 0.96885
+    color: '#785725'
+  - label: die-cut cardboard print contour backing 1
+    min: -0.1251, -0.009, 0.90615
+    max: 0.09385, 0.009, 0.9376
+    color: '#785725'
+  - label: die-cut cardboard print contour backing 2
+    min: -0.15635, -0.009, 0.84365
+    max: 0.1251, 0.009, 0.90635
+    color: '#785725'
+  - label: die-cut cardboard print contour backing 3
+    min: -0.1876, -0.009, 0.6874
+    max: 0.15635, 0.009, 0.84385
+    color: '#785725'
+  - label: die-cut cardboard print contour backing 4
+    min: -0.1876, -0.009, 0.65615
+    max: 0.1876, 0.009, 0.6876
+    color: '#785725'
+  - label: die-cut cardboard print contour backing 5
+    min: -0.2501, -0.009, 0.6249
+    max: 0.21885, 0.009, 0.65635
+    color: '#785725'
+  - label: die-cut cardboard print contour backing 6
+    min: -0.28135, -0.009, 0.59365
+    max: 0.2501, 0.009, 0.6251
+    color: '#785725'
+  - label: die-cut cardboard print contour backing 7
+    min: -0.3126, -0.009, 0.5624
+    max: 0.2501, 0.009, 0.59385
+    color: '#785725'
+  - label: die-cut cardboard print contour backing 8
+    min: -0.3126, -0.009, 0.4999
+    max: 0.28135, 0.009, 0.5626
+    color: '#785725'
+  - label: die-cut cardboard print contour backing 9
+    min: -0.3126, -0.009, 0.4374
+    max: -0.1874, 0.009, 0.5001
+    color: '#785725'
+  - label: die-cut cardboard print contour backing 10
+    min: -0.15635, -0.009, 0.4374
+    max: 0.1251, 0.009, 0.5001
+    color: '#785725'
+  - label: die-cut cardboard print contour backing 11
+    min: 0.15615, -0.009, 0.4374
+    max: 0.28135, 0.009, 0.5001
+    color: '#785725'
+  - label: die-cut cardboard print contour backing 12
+    min: -0.3126, -0.009, 0.3124
+    max: 0.28135, 0.009, 0.4376
+    color: '#785725'
+  - label: die-cut cardboard print contour backing 13
+    min: -0.3126, -0.009, 0.28115
+    max: 0.2501, 0.009, 0.3126
+    color: '#785725'
+  - label: die-cut cardboard print contour backing 14
+    min: -0.1876, -0.009, 0.1249
+    max: 0.15635, 0.009, 0.28135
+    color: '#785725'
+  - label: die-cut cardboard print contour backing 15
+    min: -0.21885, -0.009, 0.09365
+    max: 0.1876, 0.009, 0.1251
+    color: '#785725'
+  - label: die-cut cardboard print contour backing 16
+    min: -0.2501, -0.009, -0.0001
+    max: 0.21885, 0.009, 0.09385
+    color: '#785725'
+  - label: die-cut cardboard print original face
+    min: -0.3125, -0.00975, 0.0
+    max: 0.28125, -0.00875, 0.96875
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt013
+    surfaceAxis: XZ
+  - label: rear folded easel rail
+    min: -0.41289328, 0.1185, 0.2955
+    max: 0.22889328, 0.1905, 0.3275
+    color: '#785725'
+    yaw: 90.0
+    pitch: -64.0338376
+  - label: rear easel ground shoe
+    min: -0.14, 0.215, 0.0
+    max: -0.044, 0.315, 0.026
+    color: '#60461D'
+  - label: low easel connecting stay
+    min: -0.22956816, 0.114, 0.076
+    max: 0.04556816, 0.166, 0.094
+    color: '#785725'
+    yaw: 90.0
+    pitch: -19.093492
+  - label: easel fold hinge
+    min: -0.145, 0.0005, 0.5625
+    max: -0.039, 0.0295, 0.6175
+    color: '#60461D'
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DCMMemorialMaintainersDecorFinalCloud
+  label: Maintainers remembrance memorial
+  status: draft
+  sourcePrototypes:
+  - CMMemorialMaintainers
+  referencePrototype: CMMemorialMaintainers
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/memorial.rsi
+  referenceState: ship_memorial
+  sourceDirections: 1
+  description: Structural broad memorial with two engraved face plates, separate upper header, edge mouldings, central
+    mullion, full connected slab and shallow plinth. Complete 96px source canvas preserves the visible two-tile
+    plaque half a tile left of pivot. Parent Transform.noRot=true is respected. No names/UI, dogtag insertion, reflections
+    or live memorial systems invented. Unseen reverse, thickness and support construction are inferred. All draft;
+    no native, map-fit or fidelity approval.
+  parts:
+  - label: reflective upper header contour backing 0
+    min: -1.5001, -0.167, 0.65615
+    max: 0.5001, -0.143, 0.9376
+    color: '#3B4140'
+  - label: reflective upper header original face
+    min: -1.5, -0.16775, 0.65625
+    max: 0.5, -0.16675, 0.9375
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt014
+    surfaceAxis: XZ
+  - label: left engraved remembrance plaque contour backing 0
+    min: -1.5001, -0.175, -0.0001
+    max: 0.5001, -0.151, 0.65635
+    color: '#3B4140'
+  - label: left engraved remembrance plaque original face
+    min: -1.5, -0.17575, 0.0
+    max: -0.46875, -0.17475, 0.65625
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt015
+    surfaceAxis: XZ
+  - label: right engraved remembrance plaque original face
+    min: -0.46875, -0.17575, 0.0
+    max: 0.5, -0.17475, 0.65625
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt016
+    surfaceAxis: XZ
+  - label: solid rear structural slab
+    min: -1.5, -0.16, 0.0
+    max: 0.5, 0.03, 0.926
+    color: '#2D3537'
+  - label: bottom stepped continuous plinth
+    min: -1.5, -0.192, 0.0
+    max: 0.5, 0.052, 0.034
+    color: '#1D2426'
+  - label: left raised edge moulding
+    min: -1.498, -0.1815, 0.005
+    max: -1.462, -0.1505, 0.929
+    color: '#4C5453'
+  - label: right raised edge moulding
+    min: 0.462, -0.1815, 0.005
+    max: 0.498, -0.1505, 0.929
+    color: '#4C5453'
+  - label: center dividing metal mullion
+    min: -0.501, -0.191, 0.0025
+    max: -0.469, -0.169, 0.6475
+    color: '#707576'
+  - label: upper plaque separation rail
+    min: -1.46, -0.191, 0.656
+    max: 0.46, -0.157, 0.688
+    color: '#4C5453'
+  - label: rear slab support rib left
+    min: -1.095, 0.0175, 0.017
+    max: -1.005, 0.0625, 0.907
+    color: '#2B3133'
+  - label: rear slab support rib right
+    min: 0.015, 0.0175, 0.017
+    max: 0.105, 0.0625, 0.907
+    color: '#2B3133'
+- type: cmu3DModel
+  id: CMU3DCMPamphletPowerloaderDecorFinalCloud
+  label: Powerloader clipped instruction pamphlet
+  status: draft
+  sourcePrototypes:
+  - CMPamphletPowerloader
+  referencePrototype: CMPamphletPowerloader
+  referenceRsi: /Textures/_RMC14/Objects/Misc/pamphlets.rsi
+  referenceState: pamphlet_powerloader
+  sourceDirections: 1
+  description: Thin printed paper with source-contour backing, lower folded lip and a real open gray retaining clip.
+    Original paper/insignia pixels retained. Source SkillPamphlet use/consumption and reading UI unsupported; no
+    invented inside text. Unseen reverse, thickness and support construction are inferred. All draft; no native,
+    map-fit or fidelity approval.
+  parts:
+  - label: powerloader printed pamphlet contour backing 0
+    min: -0.15635, 0.15615, 0.004
+    max: 0.1251, 0.21885, 0.016
+    color: '#B9AF9D'
+  - label: powerloader printed pamphlet contour backing 1
+    min: -0.15635, 0.1249, 0.004
+    max: 0.1876, 0.15635, 0.016
+    color: '#B9AF9D'
+  - label: powerloader printed pamphlet contour backing 2
+    min: -0.15635, -0.2501, 0.004
+    max: 0.21885, 0.1251, 0.016
+    color: '#B9AF9D'
+  - label: powerloader printed pamphlet contour backing 3
+    min: -0.15635, -0.28135, 0.004
+    max: 0.1876, -0.2499, 0.016
+    color: '#B9AF9D'
+  - label: powerloader printed pamphlet contour backing 4
+    min: -0.1251, -0.3126, 0.004
+    max: 0.15635, -0.28115, 0.016
+    color: '#B9AF9D'
+  - label: powerloader printed pamphlet original face
+    min: -0.15625, -0.3125, 0.01575
+    max: 0.21875, 0.21875, 0.01675
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt017
+    surfaceAxis: XY
+  - label: clip left inserted leg
+    min: -0.115625, 0.185875, 0.009
+    max: -0.040625, 0.207875, 0.031
+    color: '#5C5A56'
+    shape: CylinderX
+    yaw: 90.0
+  - label: clip upper arch
+    min: -0.08459709, 0.239, 0.009
+    max: -0.04040291, 0.261, 0.031
+    color: '#5C5A56'
+    shape: CylinderX
+    yaw: 45.0
+  - label: clip right arch
+    min: -0.05334709, 0.239, 0.009
+    max: -0.00915291, 0.261, 0.031
+    color: '#5C5A56'
+    shape: CylinderX
+    yaw: -45.0
+  - label: clip right return
+    min: -0.03125, 0.20775, 0.009
+    max: 0.0, 0.22975, 0.031
+    color: '#5C5A56'
+    shape: CylinderX
+    yaw: -90.0
+  - label: thin folded lower pamphlet lip
+    min: -0.124375, -0.26925, 0.0
+    max: 0.155625, -0.24325, 0.012
+    color: '#6A5B58'
+  placement: surface
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DCMPosterNoSmoking2DecorFinalCloud
+  label: No smoking printed wall sign
+  status: draft
+  sourcePrototypes:
+  - CMPosterNoSmoking2
+  referencePrototype: CMPosterNoSmoking2
+  referenceRsi: /Textures/_RMC14/Structures/decals.rsi
+  referenceState: nosmoking2
+  sourceDirections: 1
+  description: Whole original no-smoking printed face on a thin contour-backed sheet, with inferred rear mount pads
+    behind opaque paper. Clipped corners remain open. Fixed nosmoking2 only; broken poster and burning unsupported.
+    Unseen reverse, thickness and support construction are inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: no-smoking printed sign contour backing 0
+    min: -0.2501, -0.547, 2.1774
+    max: 0.21885, -0.537, 2.20885
+    color: '#30281F'
+  - label: no-smoking printed sign contour backing 1
+    min: -0.28135, -0.547, 1.52115
+    max: 0.2501, -0.537, 2.1776
+    color: '#30281F'
+  - label: no-smoking printed sign contour backing 2
+    min: -0.2501, -0.547, 1.4899
+    max: 0.21885, -0.537, 1.52135
+    color: '#30281F'
+  - label: no-smoking printed sign original face
+    min: -0.28125, -0.54775, 1.49
+    max: 0.25, -0.54675, 2.20875
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt018
+    surfaceAxis: XZ
+  - label: rear sign attachment 9
+    min: -0.24025, -0.542, 2.12475
+    max: -0.19725, -0.508, 2.16775
+    color: '#30281F'
+  - label: rear sign attachment 22
+    min: 0.166, -0.542, 2.12475
+    max: 0.209, -0.508, 2.16775
+    color: '#30281F'
+  wallMounted: true
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DPaintingSkeletonCigaretteDecorFinalCloud
+  label: Skeleton with cigarette framed painting
+  status: draft
+  sourcePrototypes:
+  - PaintingSkeletonCigarette
+  referencePrototype: PaintingSkeletonCigarette
+  referenceRsi: /Textures/Structures/Wallmounts/paintings.rsi
+  referenceState: painting9
+  sourceDirections: 1
+  description: Original painting9 pixels split without repainting among recessed canvas and four raised frame rails.
+    Connected rear board and stretcher structure. Wall source anchor retained; hanging height/thickness inferred.
+    No smoke animation, character geometry or changed artwork. Unseen reverse, thickness and support construction
+    are inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: painted skeleton canvas contour backing 0
+    min: -0.21885, -0.553, 1.5524
+    max: 0.21885, -0.537, 2.1151
+    color: '#6A4146'
+  - label: painted skeleton canvas original face
+    min: -0.21875, -0.55375, 1.5525
+    max: 0.21875, -0.55275, 2.115
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt019
+    surfaceAxis: XZ
+  - label: frame left contour backing 0
+    min: -0.3126, -0.5785, 1.45865
+    max: -0.21865, -0.5295, 2.20885
+    color: '#6A4146'
+  - label: frame left original face
+    min: -0.3125, -0.57925, 1.45875
+    max: -0.21875, -0.57825, 2.20875
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt020
+    surfaceAxis: XZ
+  - label: frame right contour backing 0
+    min: 0.21865, -0.5785, 1.45865
+    max: 0.3126, -0.5295, 2.20885
+    color: '#6A4146'
+  - label: frame right original face
+    min: 0.21875, -0.57925, 1.45875
+    max: 0.3125, -0.57825, 2.20875
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt021
+    surfaceAxis: XZ
+  - label: frame top contour backing 0
+    min: -0.21885, -0.5785, 2.1149
+    max: 0.21885, -0.5295, 2.20885
+    color: '#6A4146'
+  - label: frame top original face
+    min: -0.21875, -0.57925, 2.115
+    max: 0.21875, -0.57825, 2.20875
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt022
+    surfaceAxis: XZ
+  - label: frame bottom contour backing 0
+    min: -0.21885, -0.5785, 1.45865
+    max: 0.21885, -0.5295, 1.5526
+    color: '#6A4146'
+  - label: frame bottom original face
+    min: -0.21875, -0.57925, 1.45875
+    max: 0.21875, -0.57825, 1.5525
+    color: '#FFFFFF'
+    surface: CMU3DDecorFinalCloudArt023
+    surfaceAxis: XZ
+  - label: recessed canvas rear board
+    min: -0.25, -0.5385, 1.52375
+    max: 0.25, -0.5055, 2.14375
+    color: '#4A3133'
+  - label: rear left stretcher
+    min: -0.1995, -0.507, 1.54375
+    max: -0.1645, -0.481, 2.12375
+    color: '#633E40'
+  - label: rear right stretcher
+    min: 0.1645, -0.507, 1.54375
+    max: 0.1995, -0.481, 2.12375
+    color: '#633E40'
+  - label: rear upper stretcher
+    min: -0.195, -0.507, 2.0825
+    max: 0.195, -0.481, 2.1175
+    color: '#633E40'
+  - label: rear lower stretcher
+    min: -0.195, -0.507, 1.5505
+    max: 0.195, -0.481, 1.5855
+    color: '#633E40'
+  wallMounted: true
+  useEntityRotation: true

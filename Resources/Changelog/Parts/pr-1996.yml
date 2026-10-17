@@ -1,0 +1,17 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Added a 3D tactical map with floor cutaways, tracked role icons and player
+    centering.
+  type: Add
+- message: Added colored pencil drafts, adjustable stroke widths and text pins with
+    Send.
+  type: Add
+- message: Standard tactical-map actions and computers open the new map, with a classic-map
+    option in CMU settings.
+  type: Tweak
+- message: Synchronized published planet drawings between classic and 3D maps and
+    improved reopening after interrupted loads.
+  type: Fix
+time: '2026-09-23T00:43:11.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1996

@@ -1,0 +1,35 @@
+author: maertayn
+category: CMU
+changes:
+- message: Spent casings being recycled as live ammunition
+  type: Fix
+- message: Yautja equipment (id-locked) not severing arms
+  type: Fix
+- message: APC vehicle med vendor access
+  type: Fix
+- message: Invisibility shader and lurker cloak (again)
+  type: Fix
+- message: Turrets require LOS to fire, and stationary turrets snap to targets
+  type: Tweak
+- message: Weedkiller is roughly ~20% larger
+  type: Tweak
+- message: Cassettes not playing audio because the server package had empty placeholder
+    files (to conserve space)
+  type: Fix
+- message: Server hostname (on the Hub) changes every round based on day and game
+    preset
+  type: Add
+- message: FoF into rotation at 80 pop, time fo' fraggin' (heavy WIP)
+  type: Add
+- message: Hide colony announcements from xeno/threats
+  type: Fix
+- message: Third party dropships would announce a Govfor hijack if threats took it
+  type: Fix
+- message: Dropped magnetic weapon/flamer not returning to broiler
+  type: Fix
+- message: Tattoo gun hard-locked by an orphaned offer
+  type: Fix
+- message: No xeno rewards (e.g. lurker acid/reaper berserker) from blackfoot/vehicles
+  type: Fix
+time: '2026-08-30T16:03:07.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1887

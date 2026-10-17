@@ -9,6 +9,11 @@ lobby-state-player-status-not-ready = Not Ready
 lobby-state-player-status-ready = Ready
 lobby-state-player-status-observer = Observer
 lobby-state-player-status-round-not-started = The round hasn't started yet
+
+# Compact forms for the lobby round-info table, where the ROUND TIME heading already provides
+# the context that the longer strings above spell out.
+lobby-state-round-time-short = {$hours}h {$minutes}m
+lobby-state-round-not-started-short = Not started
 lobby-state-player-status-round-time =
     The round time is: {$hours} {$hours ->
     [1]hour
@@ -21,6 +26,10 @@ lobby-state-song-text = Playing: [color=white]{$songTitle}[/color] by [color=whi
 lobby-state-song-no-song-text = No lobby song playing.
 lobby-state-song-unknown-title = [color=dimgray]Unknown title[/color]
 lobby-state-song-unknown-artist = [color=dimgray]Unknown artist[/color]
+lobby-state-background-text = Menu art: [color=white]{$backgroundTitle}[/color] by [color=white]{$backgroundArtist}[/color]
+lobby-state-background-no-background-text = No menu art loaded.
+lobby-state-background-unknown-title = [color=dimgray]Unknown title[/color]
+lobby-state-background-unknown-artist = [color=dimgray]Unknown artist[/color]
 lobby-state-playtime-comment-normal =
     You've spent {$hours} {$hours ->
     [1]hour

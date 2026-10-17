@@ -1,0 +1,21 @@
+- type: entity
+  parent: CMUPaperCMB
+  id: CMUPaperColonyAntagCaptured
+  name: Bounty Secured
+  components:
+  - type: Paper
+    stampState: paper_stamp-cmb
+    stampedBy:
+    - stampedColor: "#b0901b"
+      stampedName: Colonial Marshals Bureau
+    content: >2-
+                     [color=#0f2042]⬢[/color] [head=2]Colonial Marshals Bureau[/head] [color=#0f2042]⬢[/color]
+      [color=#0f2042]▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[/color]
+
+      Sheriff,
+
+      • The bounty target has been secured. A transport team will assume custody shortly.
+      The bounty has been paid into the colony's account. Keep up the good work.
+
+      [color=#0f2042]▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[/color]
+      [italic][color=#8a9baf]Interstellar Jurisdiction // Sector Office[/italic]

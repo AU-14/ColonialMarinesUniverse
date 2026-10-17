@@ -1,7 +1,5 @@
-using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.Targeting;
-using Content.Shared.Coordinates;
 using Robust.Client.Graphics;
 using Robust.Client.GameObjects;
 using Robust.Shared.Timing;
@@ -46,20 +44,22 @@ public sealed class TargetingOverlay : Overlay
 
         while (query.MoveNext(out var uid, out var targeted))
         {
+            if (!xformQuery.TryGetComponent(uid, out var targetXform) || targetXform.MapID != args.MapId)
+                continue;
+
             // Laser visuals
             foreach (var targeter in targeted.TargetedBy)
             {
                 if (!targetingLaserQuery.TryGetComponent(targeter, out var targetingLaser) || !targetingLaser.ShowLaser)
                     continue;
 
-                if (!xformQuery.TryGetComponent(targeter, out var gunXform) ||
-                    !xformQuery.TryGetComponent(uid, out var xform))
+                if (!xformQuery.TryGetComponent(targeter, out var gunXform))
                     continue;
 
-                if (xform.MapID != gunXform.MapID)
+                if (targetXform.MapID != gunXform.MapID)
                     continue;
 
-                var worldPos = _transform.GetWorldPosition(xform, xformQuery);
+                var worldPos = _transform.GetWorldPosition(targetXform, xformQuery);
                 var gunWorldPos = _transform.GetWorldPosition(gunXform, xformQuery);
                 var diff = worldPos - gunWorldPos;
                 var angle = diff.ToWorldAngle();
@@ -87,9 +87,6 @@ public sealed class TargetingOverlay : Overlay
 
                 worldHandle.DrawTextureRect(laserRsi, rotated, Color.White.WithAlpha(alpha));
             }
-
-            if (!xformQuery.TryGetComponent(uid, out var targetXform))
-                continue;
 
             var worldPosCross = _transform.GetWorldPosition(targetXform, xformQuery);
 
@@ -134,9 +131,8 @@ public sealed class TargetingOverlay : Overlay
                 continue;
 
             // Direction arrow visual
-            var targetingOrigin = targeted.TargetedBy.Last().ToCoordinates();
-            var targetLocation = uid.ToCoordinates();
-            var direction = Angle.FromDegrees(90).RotateVec(_transform.ToMapCoordinates(targetingOrigin).Position - _transform.ToMapCoordinates(targetLocation).Position).ToAngle().GetCardinalDir();
+            if (!TryGetTargetDirection((uid, targeted, targetXform), out var direction))
+                continue;
 
             var rsiDirection = direction switch
             {
@@ -150,5 +146,24 @@ public sealed class TargetingOverlay : Overlay
             var directionTexture = directionRsi.GetFrame(rsiDirection, 0);
             worldHandle.DrawTexture(directionTexture, worldPosCross - centerOffset);
         }
+    }
+
+    public bool TryGetTargetDirection(Entity<RMCTargetedComponent, TransformComponent> target, out Direction direction)
+    {
+        direction = default;
+        // Network references can be unresolved while a targeter enters or leaves PVS.
+        // Use the most recent origin still available on the target's map.
+        for (var i = target.Comp1.TargetedBy.Count - 1; i >= 0; i--)
+        {
+            var origin = target.Comp1.TargetedBy[i];
+            if (!_entManager.TryGetComponent<TransformComponent>(origin, out var originXform) ||
+                originXform.MapID != target.Comp2.MapID)
+                continue;
+
+            var delta = _transform.GetWorldPosition(originXform) - _transform.GetWorldPosition(target.Comp2);
+            direction = Angle.FromDegrees(90).RotateVec(delta).ToAngle().GetCardinalDir();
+            return true;
+        }
+        return false;
     }
 }

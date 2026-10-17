@@ -1,6 +1,8 @@
+using System.Numerics;
 using Content.Shared._RMC14.AlertLevel;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
+using Robust.Shared.GameObjects;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -52,6 +54,18 @@ public sealed partial class RMCEquipmentDeployerComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool AutoDeploy;
+
+    /// <summary>
+    ///     Whether the dropship console should offer automatic deployment for this equipment.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool CanAutoDeploy = true;
+
+    /// <summary>
+    ///     Whether deployment must wait for server-side validation instead of being client-predicted.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool ServerAuthoritativeDeployment;
 
     /// <summary>
     ///     Whether the deployer should automatically undeploy when a dropship goes into FTL.
@@ -126,4 +140,27 @@ public enum EquipmentDeployState
 {
     UnDeployed,
     Deployed,
+}
+
+/// <summary>
+/// Raised before equipment is moved out of or back into its deployer.
+/// Specialized equipment can cancel deployment when its own placement requirements are not met.
+/// </summary>
+public sealed class RMCEquipmentDeployAttemptEvent(
+    bool deploy,
+    Vector2 deployOffset,
+    EntityUid? user) : CancellableEntityEventArgs
+{
+    public readonly bool Deploy = deploy;
+    public readonly Vector2 DeployOffset = deployOffset;
+    public readonly EntityUid? User = user;
+}
+
+/// <summary>
+/// Raised after equipment has been successfully moved out of or back into its deployer.
+/// </summary>
+public sealed class RMCEquipmentDeployedEvent(bool deployed, EntityUid equipment) : EntityEventArgs
+{
+    public readonly bool Deployed = deployed;
+    public readonly EntityUid Equipment = equipment;
 }

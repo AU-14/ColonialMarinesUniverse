@@ -3,7 +3,7 @@ using Content.Shared._RMC14.Requisitions.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Requisitions;
+namespace Content.IntegrationTests.CMU14.Requisitions;
 
 [TestFixture]
 public sealed class CMUAsrsVehicleAmmoCatalogTest
@@ -14,6 +14,11 @@ public sealed class CMUAsrsVehicleAmmoCatalogTest
     private static readonly EntProtoId[] VehicleAmmoCrates =
     [
         "CMUCrateVehicleAmmoLTBCannonMixed",
+        "CMUCrateVehicleAmmoLTBCannonAPFSDS",
+        "CMUCrateVehicleAmmoLTBCannonHEAT",
+        "CMUCrateVehicleAmmoLTBCannonHE",
+        "CMUCrateVehicleAmmoLTBCannonCanister",
+        "CMUCrateVehicleAmmoLTBCannonNapalm",
         "RMCCrateVehicleAmmoLTAAAP",
         "RMCCrateVehicleAmmoAceAutocannon",
         "RMCCrateVehicleAmmoDragonFlamer",
@@ -40,7 +45,7 @@ public sealed class CMUAsrsVehicleAmmoCatalogTest
         "USCMCargoCatalog",
         "RMCCargoCatalog",
         "UPPCargoCatalog",
-        "WEYUCargoCatalog",
+        "WYPMCCargoCatalog",
         "VAIPOCargoCatalog",
         "ProdigyCargoCatalog",
         "LACNCargoCatalog",

@@ -15133,14 +15133,14 @@ entities:
     - type: Transform
       pos: 26.5,-2.5
       parent: 1
-- proto: RMCTacticalMapTable
+- proto: CMUTacticalMapTableGovfor
   entities:
   - uid: 1525
     components:
     - type: Transform
       pos: 29.5,-15.5
       parent: 1
-- proto: RMCTacticalMapTableLargeRotated
+- proto: CMUTacticalMapTableLargeRotatedGovfor
   entities:
   - uid: 2548
     components:

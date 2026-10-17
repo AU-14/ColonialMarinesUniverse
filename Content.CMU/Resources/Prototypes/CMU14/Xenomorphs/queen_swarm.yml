@@ -1,0 +1,126 @@
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionSwarmMenu
+  name: Lesser swarm
+  description: Open commands to summon, guard a position, or escort a xeno with your lesser swarm.
+  components:
+  - type: Action
+    clientExclusive: true
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: queen_order
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUSwarmMenuActionEvent
+
+- type: entity
+  parent: CMUActionSwarmMenu
+  id: CMUActionSwarmRules
+  name: Swarm behavior and allies
+  description: Set passive movement or automatic attacks and manage your hive's allies.
+  components:
+  - type: Action
+    clientExclusive: false
+    autoPopulate: false
+  - type: InstantAction
+    event: !type:CMUSwarmRulesActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionSummonSwarm
+  name: Summon lesser swarm
+  description: Spawn fifteen AI lessers at the hive core. Survivors accumulate. Usable every fifteen minutes.
+  components:
+  - type: Action
+    autoPopulate: false
+    useDelay: 900
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: grow_ovipositor
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUSummonSwarmActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionGuardSwarm
+  name: Swarm guard marker
+  description: Order your lessers to move to a marker, spread out, and defend it. They return after fighting nearby enemies.
+  components:
+  - type: Action
+    autoPopulate: false
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: place_queen_beacon
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 0
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:CMUGuardSwarmActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionFollowSwarm
+  name: Swarm escort
+  description: Order your lessers to escort a living player-controlled xeno in your hive, including yourself, and attack nearby enemies.
+  components:
+  - type: Action
+    autoPopulate: false
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: queen_order
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 0
+    checkCanAccess: false
+  - type: EntityTargetAction
+    canTargetSelf: true
+    whitelist:
+      components:
+      - Xeno
+    event: !type:CMUFollowSwarmActionEvent
+
+- type: entity
+  parent: CMXenoLesserDrone
+  id: CMUSwarmLesser
+  name: lesser swarm drone
+  description: A small, expendable drone directed by its queen.
+  components:
+  - type: CMUSwarmLesser
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 1.43
+    baseSprintSpeed: 2.6
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      160: Dead
+  - type: CMArmor
+    xenoArmor: 0
+  - type: Evasion
+    evasion: 0
+  - type: Xeno
+    actionIds: []
+
+- type: entity
+  id: CMUSwarmGuardMarker
+  name: swarm guard marker
+  description: The queen has ordered her lesser swarm to defend this position.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _RMC14/Actions/xeno_actions.rsi
+    state: place_queen_beacon
+    drawdepth: FloorObjects
+    color: "#81d65c99"

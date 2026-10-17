@@ -1,0 +1,20 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Made by Pato Grone on discord for CMU14",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "underbarreltaser"
+        },
+        {
+            "name": "underbarreltaser_a"
+        },
+        {
+            "name": "underbarreltaser-on"
+        }
+    ]
+}

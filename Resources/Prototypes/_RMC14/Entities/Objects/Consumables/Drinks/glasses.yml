@@ -4,11 +4,9 @@
   name: pint glass
   description: A proper geezer's pint glass. Rarely seen without a frothy head of beer.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         maxVol: 100
-  - type: Drink
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/pint_glass.rsi
     layers:
@@ -38,9 +36,8 @@
   id: RMCPintGlassFull
   suffix: full
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         maxVol: 100
         reagents:
         - ReagentId: Beer
@@ -52,11 +49,10 @@
   name: drink glass
   description: Your standard drinking glass.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 50
-  - type: Drink
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/drink_glass.rsi
     layers:

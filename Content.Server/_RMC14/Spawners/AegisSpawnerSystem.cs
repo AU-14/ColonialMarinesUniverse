@@ -65,7 +65,7 @@ public sealed partial class AegisSpawnerSystem : EntitySystem
                     QueueDel(selectedSpawner.Uid);
 
                 _aegisSpawnedThisRound = true;
-                Log.Info($"AEGIS crate spawned at {_transform.GetWorldPosition(selectedSpawner.Uid)} (selected 1 out of {aegisSpawners.Count} spawners)");
+                Log.Info($"[AEGIS] Crate spawned at {_transform.GetWorldPosition(selectedSpawner.Uid)} (selected 1 out of {aegisSpawners.Count} spawners)");
                 // Keep _shouldActivateAegisSpawners = true until round ends
             }
         }
