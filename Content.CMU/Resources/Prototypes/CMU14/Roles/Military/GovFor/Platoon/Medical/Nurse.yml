@@ -119,6 +119,7 @@
   id: JobAU14JobGOVFORNurse
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - GOVFORNurseEquipmentAU14
   - EyewearRMCPVE
   - MasksRMCPVE

@@ -181,6 +181,7 @@
   - ForceSynthResetKeyAU14
   - PaperworkRMC
   - RecreationalRMC
+  - RMCLoadoutGroupPins
 
 - type: job
   parent: AU14JobAuxSupportSynthBase

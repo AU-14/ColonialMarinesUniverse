@@ -125,6 +125,7 @@
   id: JobAU14JobGOVFORMilitaryPoliceMan
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - MarineBackpack
   - EyewearRMCPVE
   - MasksRMCPVE

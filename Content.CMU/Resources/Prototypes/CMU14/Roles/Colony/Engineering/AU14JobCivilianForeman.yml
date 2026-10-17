@@ -89,6 +89,7 @@
   id: JobAU14JobCivilianForeman
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - EngiSatchelAU14
   - EngiJacketAU14
   - EngiGlovesAU14

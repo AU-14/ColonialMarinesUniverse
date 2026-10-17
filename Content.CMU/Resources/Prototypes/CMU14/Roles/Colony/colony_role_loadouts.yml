@@ -2,6 +2,7 @@
   id: JobAU14JobCivilianHeadOfService
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - CMUCorporateSkirts
   - PaperworkRMC
@@ -16,6 +17,7 @@
   id: JobAU14JobCivilianEthicsAndWellnessAdvisor
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - CMUCivilianPsychologistSpecialization
   - CivSatchelAU14
   - CivFootwearAU14
@@ -35,6 +37,7 @@
   id: JobAU14JobCivilianShopkeep
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - CivFootwearAU14
   - CivHatsAU14
@@ -53,6 +56,7 @@
   id: JobAU14JobCivilianOrbitalLawyer
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - CMUCorporateSkirts
   - PaperworkRMC
@@ -67,6 +71,7 @@
   id: JobAU14JobMobBoss
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - CivFootwearAU14
   - CivHatsAU14
@@ -85,6 +90,7 @@
   id: JobAU14JobMobGoon
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - CivFootwearAU14
   - CivHatsAU14
@@ -103,6 +109,7 @@
   id: JobAU14JobCivilianPrisoner
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - PaperworkRMC
   - RecreationalRMC
   - CannedDrinksAU14
@@ -112,6 +119,7 @@
   id: JobAU14JobLEOBase
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - PaperworkRMC
   - RecreationalRMC
   - CannedDrinksAU14
@@ -124,6 +132,7 @@
   id: JobAU14JobLEOLeaderBase
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - PaperworkRMC
   - RecreationalRMC
   - CannedDrinksAU14
@@ -136,6 +145,7 @@
   id: JobAU14JobWorkingJoeBase
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - PaperworkRMC
   - RecreationalRMC
   - EyewearRMC

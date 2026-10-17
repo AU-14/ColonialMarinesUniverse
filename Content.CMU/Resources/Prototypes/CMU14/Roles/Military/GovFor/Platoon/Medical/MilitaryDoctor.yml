@@ -87,6 +87,7 @@
   id: JobAU14JobGOVFORMilitaryDoctor
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - GOVFORDoctorEquipmentAU14
   - GOVFORDoctorUniformAU14
   - MedJacketMilitaryAU14

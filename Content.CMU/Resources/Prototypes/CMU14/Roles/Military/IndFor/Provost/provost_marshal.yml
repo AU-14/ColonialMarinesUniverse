@@ -104,4 +104,5 @@
   id: JobCMUJobINDFORProvostMarshal
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - ProvostStampGroupCMU

@@ -81,6 +81,7 @@
   id: JobAU14JobCivilianKellandWarden
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - CivFootwearAU14
   - CivJumpsuitAU14

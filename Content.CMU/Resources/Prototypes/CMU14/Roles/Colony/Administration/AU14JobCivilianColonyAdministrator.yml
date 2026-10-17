@@ -100,6 +100,7 @@
   id: JobAU14JobCivilianColonyAdministrator
   points: 50 #Make sure to revist the amount of points here after this has been merged for a bit, as this is initally a rather arbitrary amount
   groups:
+  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - CivFootwearAU14
   - CivJumpsuitAU14

@@ -119,6 +119,7 @@
   id: JobAU14JobGOVFORVehicleCrewman
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - MarineBackpack
   - EyewearRMCPVE
   - MasksRMCPVE

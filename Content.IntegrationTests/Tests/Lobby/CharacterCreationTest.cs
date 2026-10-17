@@ -35,7 +35,9 @@ public sealed class CharacterCreationTest : GameTest
         HumanoidCharacterProfile profile = null;
         await client.WaitPost(() =>
         {
-            profile = HumanoidCharacterProfile.Random();
+            profile = HumanoidCharacterProfile.Random()
+                .WithSyntheticGeneration(4) // CMU14: an unsupported generation clamps to Gen 3.
+                .WithSyntheticModelSuffix("1234567890123"); // CMU14: suffix clamps to 12 characters.
             clientPrefManager.CreateCharacter(profile);
         });
         await pair.RunTicksSync(5);
@@ -92,6 +94,8 @@ public sealed class CharacterCreationTest : GameTest
             Assert.That(a.PreferenceUnavailable, Is.EqualTo(b.PreferenceUnavailable));
             Assert.That(a.SpawnPriority, Is.EqualTo(b.SpawnPriority));
             Assert.That(a.FlavorText, Is.EqualTo(b.FlavorText));
+            Assert.That(a.SyntheticGeneration, Is.EqualTo(b.SyntheticGeneration)); // CMU14
+            Assert.That(a.SyntheticModelSuffix, Is.EqualTo("123456789012")); // CMU14
             Assert.That(a.JobPriorities, Is.EquivalentTo(b.JobPriorities));
             Assert.That(a.AntagPreferences, Is.EquivalentTo(b.AntagPreferences));
             Assert.That(a.TraitPreferences, Is.EquivalentTo(b.TraitPreferences));

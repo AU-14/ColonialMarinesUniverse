@@ -80,6 +80,7 @@
   id: JobAU14JobCivilianOrbitalSecurity
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - PaperworkRMC
   - RecreationalRMC
