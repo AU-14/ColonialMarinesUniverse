@@ -13,6 +13,7 @@ using Content.Shared.Item;
 using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
+using Content.Shared.PowerCell; // CMU14
 using Content.Shared.Toggleable;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -36,6 +37,7 @@ public abstract partial class SharedScopeSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedNightVisionSystem _nightVision = default!; // CMU14
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!; // CMU14
     [Dependency] private PullingSystem _pulling = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
@@ -55,6 +57,7 @@ public abstract partial class SharedScopeSystem : EntitySystem
         SubscribeLocalEvent<ScopeComponent, ActivateInWorldEvent>(OnActivateInWorld);
         SubscribeLocalEvent<ScopeComponent, GunShotEvent>(OnGunShot);
         SubscribeLocalEvent<ScopeComponent, ScopeDoAfterEvent>(OnScopeDoAfter);
+        SubscribeLocalEvent<ScopeComponent, PowerCellSlotEmptyEvent>(OnScopePowerEmpty); // CMU14
 
         SubscribeLocalEvent<GunScopingComponent, GotUnequippedHandEvent>(OnGunUnequip);
         SubscribeLocalEvent<GunScopingComponent, HandDeselectedEvent>(OnGunDeselectHand);
@@ -332,8 +335,12 @@ public abstract partial class SharedScopeSystem : EntitySystem
         RaiseLocalEvent(user, ref ev);
 
         // CMU14: apply scope optics after worn visors have been deactivated.
-        if (TryComp<NightVisionItemComponent>(scope, out var nightVision))
+        if (TryComp<NightVisionItemComponent>(scope, out var nightVision) &&
+            _powerCell.HasDrawCharge(scope.Owner, user))
+        {
             _nightVision.EnableNightVisionItem((scope, nightVision), user);
+            _powerCell.SetDrawEnabled(scope.Owner, nightVision.User == user);
+        }
     }
 
     public virtual bool Unscope(Entity<ScopeComponent> scope)
@@ -366,8 +373,7 @@ public abstract partial class SharedScopeSystem : EntitySystem
         Dirty(scope);
 
         // CMU14: restore the user's vision when leaving a night-vision scope.
-        if (TryComp<NightVisionItemComponent>(scope, out var nightVision) && nightVision.User == user)
-            _nightVision.DisableNightVisionItem((scope, nightVision), user);
+        DisableScopeNightVision(scope);
 
         if (scope.Comp.UnScopePopup != null)
         {
@@ -378,6 +384,31 @@ public abstract partial class SharedScopeSystem : EntitySystem
         _actionsSystem.SetToggled(scope.Comp.ScopingToggleActionEntity, false);
         _contentEye.ResetZoom(user);
         return true;
+    }
+
+    // CMU14: battery depletion disables night vision without interrupting optical zoom.
+    private void OnScopePowerEmpty(Entity<ScopeComponent> scope, ref PowerCellSlotEmptyEvent args)
+    {
+        if (_net.IsClient ||
+            !TryComp<NightVisionItemComponent>(scope, out var nightVision) ||
+            nightVision.User is not { } user)
+        {
+            return;
+        }
+
+        DisableScopeNightVision(scope);
+        _popup.PopupEntity(Loc.GetString("cmu-night-vision-scope-battery-empty"), scope, user, PopupType.SmallCaution);
+    }
+
+    // CMU14 method
+    private void DisableScopeNightVision(Entity<ScopeComponent> scope)
+    {
+        if (!TryComp<NightVisionItemComponent>(scope, out var nightVision))
+            return;
+
+        _powerCell.SetDrawEnabled(scope.Owner, false);
+        if (nightVision.User is { } user)
+            _nightVision.DisableNightVisionItem((scope, nightVision), user);
     }
 
     private void UnscopeGun(Entity<GunScopingComponent> gun)
