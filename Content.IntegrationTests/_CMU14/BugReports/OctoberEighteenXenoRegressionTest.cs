@@ -159,4 +159,35 @@ public sealed class OctoberEighteenXenoRegressionTest : GameTest
             SEntMan.DeleteEntity(killer);
         });
     }
+
+    // hijack respawns players in the same tick it only queues the planet core for deletion,
+    // and the surged flag that prefers the queen may not be set yet depending on handler order
+    [Test]
+    public async Task HijackRespawnSkipsAQueuedPlanetCore()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
+            var component = SEntMan.GetComponent<HiveComponent>(hive);
+            var core = SEntMan.SpawnEntity(null, map.GridCoords);
+            var queen = SEntMan.SpawnEntity(null, map.GridCoords.Offset(new Vector2(10, 0)));
+            SEntMan.EnsureComponent<HiveCoreComponent>(core);
+            SEntMan.EnsureComponent<XenoEvolutionGranterComponent>(queen);
+            var system = SEntMan.System<SharedXenoHiveSystem>();
+            system.SetHive(core, hive);
+            system.SetHive(queen, hive);
+            Assert.That(component.HijackSurged, Is.False);
+
+            SEntMan.QueueDeleteEntity(core);
+
+            var spawn = typeof(SharedXenoHiveSystem).GetMethod("TryGetBurrowedLarvaSpawnPosition", BindingFlags.Instance | BindingFlags.NonPublic)!;
+            object[] args = [new Entity<HiveComponent>(hive, component), default(EntityCoordinates)];
+            Assert.That(spawn.Invoke(system, args), Is.True);
+            Assert.That(args[1], Is.EqualTo(SEntMan.GetComponent<TransformComponent>(queen).Coordinates));
+
+            SEntMan.DeleteEntity(queen);
+            SEntMan.DeleteEntity(hive);
+        });
+    }
 }
