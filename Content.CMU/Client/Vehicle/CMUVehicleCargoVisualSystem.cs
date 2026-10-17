@@ -34,6 +34,10 @@ public sealed class CMUVehicleCargoVisualSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUVehicleCargoCrateComponent, SpriteComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var crate, out var sprite, out var xform))
         {
+            // Out of view: nothing to draw until it comes back.
+            if ((MetaData(uid).Flags & MetaDataFlags.Detached) != 0)
+                continue;
+
             // A crate taken off the bed keeps the component until the server's removal arrives.
             if (crate.Vehicle is not { } vehicle ||
                 xform.ParentUid != vehicle ||

@@ -318,7 +318,7 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
             Assert.That(SEntMan.GetComponent<CMUVehicleIgnitionComponent>(medical).KeySlot.HasItem, Is.True);
             var containers = SEntMan.System<SharedContainerSystem>();
             Assert.That(containers.GetContainer(medical, CMUOpenVehicleSystem.ExtinguisherSlot).ContainedEntities, Has.Count.EqualTo(1));
-            Assert.That(containers.GetContainer(medical, "wheel-1").ContainedEntities, Is.Empty);
+            Assert.That(containers.GetContainer(medical, "wheel-1").ContainedEntities, Has.Count.EqualTo(1), "It comes on its wheels.");
             Assert.That(containers.GetContainer(medical, CMUOpenVehicleSystem.SpareSlot).ContainedEntities, Has.Count.EqualTo(1));
         });
     }

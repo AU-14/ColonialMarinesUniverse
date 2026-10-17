@@ -116,15 +116,27 @@ public sealed class CMUVehicleTyreSystem : EntitySystem
     /// </summary>
     public bool OnRoughGround(EntityUid vehicle)
     {
+        // Asked several times a tick (top speed, reverse, acceleration, grit), so read the tile once.
+        TryComp(vehicle, out CMUVehicleTyresComponent? tyres);
+        if (tyres != null && tyres.GroundTick == _timing.CurTick)
+            return tyres.Rough;
+
+        var rough = false;
         var xform = Transform(vehicle);
-        if (xform.GridUid is not { } grid ||
-            !TryComp(grid, out MapGridComponent? gridComp) ||
-            !_map.TryGetTileRef(grid, gridComp, xform.Coordinates, out var tile))
+        if (xform.GridUid is { } grid &&
+            TryComp(grid, out MapGridComponent? gridComp) &&
+            _map.TryGetTileRef(grid, gridComp, xform.Coordinates, out var tile))
         {
-            return false;
+            rough = _tiles[tile.Tile.TypeId] is ContentTileDefinition { CanDig: true };
         }
 
-        return _tiles[tile.Tile.TypeId] is ContentTileDefinition { CanDig: true };
+        if (tyres != null)
+        {
+            tyres.GroundTick = _timing.CurTick;
+            tyres.Rough = rough;
+        }
+
+        return rough;
     }
 
     /// <summary>

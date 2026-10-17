@@ -84,6 +84,10 @@ public sealed class CMUVehicleRimVisualSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUVehiclePaintComponent, SpriteComponent>();
         while (query.MoveNext(out var uid, out var paint, out var sprite))
         {
+            // Out of view: nothing to draw until it comes back.
+            if ((MetaData(uid).Flags & MetaDataFlags.Detached) != 0)
+                continue;
+
             if (paint.RimLayers.Count == 0 && paint.RimOverlayLayers.Count == 0)
                 continue;
 

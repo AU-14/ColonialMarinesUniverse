@@ -80,9 +80,7 @@ public sealed class CMUJeepDevKitSystem : EntitySystem
 
     // A jeep crate's fall: as a supply drop with a shorter wait, shut until a second after it lands.
     private const float CrateSkyFall = 4f;
-    private const float CrateDropTime = 3f;
     private static readonly EntProtoId CrateLandingMarker = "RMCEffectAlert";
-    private static readonly SoundSpecifier CrateArrivingSound = new SoundPathSpecifier("/Audio/_RMC14/Machines/Techpod/techpod_drill.ogg");
     private const int SearchRadius = 30;
     // A player further than this from their jeeps is moved next to them.
     private const int GatherDistance = 2;
@@ -260,13 +258,16 @@ public sealed class CMUJeepDevKitSystem : EntitySystem
     /// </summary>
     private void DropCrate(EntityUid crate, MapCoordinates target)
     {
+        // The crate falls the way it does off a drop pad.
+        var drop = CompOrNull<CanBeSupplyDroppedComponent>(crate);
+        var fall = (float) (drop?.DropDuration ?? TimeSpan.FromSeconds(3)).TotalSeconds;
         _supplyDrop.LaunchSupplyDrop(crate,
             target,
             CrateSkyFall,
-            CrateDropTime,
-            TimeSpan.FromSeconds(CrateSkyFall + CrateDropTime + 1f),
+            fall,
+            TimeSpan.FromSeconds(CrateSkyFall + fall + 1f),
             landingEffect: CrateLandingMarker,
-            arrivingSound: CrateArrivingSound);
+            arrivingSound: drop?.ArrivingSound);
     }
 
     /// <summary>

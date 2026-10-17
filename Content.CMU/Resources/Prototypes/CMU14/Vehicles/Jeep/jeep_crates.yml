@@ -1,6 +1,6 @@
 # A jeep ships whole in a wooden crate a size up from its own, RMC's dense crate stretched to it:
-# assembled, key in, its one wheel set in the rear hatch. Unlatched by hand, the walls fall flat and the
-# jeep stands there without its wheels. The crate comes up the ASRS lift, parachutes in from a squad's
+# assembled, key in, on its wheels with the spare in the rear hatch. Unlatched by hand, the walls fall
+# flat and the jeep stands there ready to drive. The crate comes up the ASRS lift, parachutes in from a squad's
 # supply drop pad like any crate, from a dropship's LAG-14 launcher as a launch-bay round at a laser or
 # flare, or onto a CLF jeep drop flare.
 
@@ -9,7 +9,7 @@
   parent: BaseStructureDynamic
   id: CMUCrateJeepBase
   name: jeep crate
-  description: A whole jeep in a wooden crate, its wheel set stowed in the rear hatch. Unlatch it by hand on clear ground and the walls fall away.
+  description: A whole jeep in a wooden crate, on its wheels and ready to drive. Unlatch it by hand on clear ground and the walls fall away.
   components:
   - type: Sprite
     sprite: CMU14/Structures/vehicles/jeep/jeep_crate.rsi
@@ -23,9 +23,11 @@
   - type: Transform
     noRot: true
   - type: InteractionOutline
-  # Its parachute is big enough to show above it while it comes down.
+  # Its parachute is big enough to show above it while it comes down; without an animation player
+  # the client skips the fall and it just turns up.
   - type: ParaDroppable
     parachutePrototype: CMUParachuteJeepCrate
+  - type: AnimationPlayer
   - type: Physics
     bodyType: Static
   - type: Fixtures
@@ -41,7 +43,11 @@
         - MachineLayer
   - type: PlaceableSurface
     isPlaceable: false
+  # Comes down like a marine's paradrop, not a pod: four seconds under its chute from the same
+  # height, with the parachute's sound. The flare and the dev kit drop it with these too.
   - type: CanBeSupplyDropped
+    dropDuration: 4
+    arrivingSound: /Audio/_RMC14/Items/fulton.ogg
   - type: CargoSellBlacklist
   - type: StaticPrice
     price: 1500
@@ -79,10 +85,12 @@
     vehicle: CMUVehicleJeepGunner
 
 # Colony crates: civilian jeeps on road tyres in a random showroom paint: apple red, navy blue,
-# electric yellow, orange or gunmetal.
+# electric yellow, orange or gunmetal. Named civilian so they can't be taken for the platoons'.
 - type: entity
   parent: CMUCrateJeepCargo
   id: CMUCrateJeepCargoColony
+  name: civilian cargo jeep crate
+  description: A civilian cargo jeep in a wooden crate, on road tyres in a showroom paint and ready to drive. Unlatch it by hand on clear ground and the walls fall away.
   suffix: Colony
   components:
   - type: CMUVehicleCrate
@@ -93,6 +101,8 @@
 - type: entity
   parent: CMUCrateJeepMedical
   id: CMUCrateJeepMedicalColony
+  name: civilian medical jeep crate
+  description: A civilian medical jeep in a wooden crate, on road tyres in a showroom paint and ready to drive. Unlatch it by hand on clear ground and the walls fall away.
   suffix: Colony
   components:
   - type: CMUVehicleCrate
@@ -188,6 +198,8 @@
     deployPrototype: CMUCrateJeepCargo
     dropPod: false
     useParachute: true
+    dropDuration: 4
+    arrivingSound: /Audio/_RMC14/Items/fulton.ogg
 
 - type: entity
   parent: CMUDropshipAttachmentAmmoLaunchableJeepBase
@@ -199,6 +211,8 @@
     deployPrototype: CMUCrateJeepMedical
     dropPod: false
     useParachute: true
+    dropDuration: 4
+    arrivingSound: /Audio/_RMC14/Items/fulton.ogg
 
 - type: entity
   parent: CMUDropshipAttachmentAmmoLaunchableJeepBase
@@ -210,6 +224,8 @@
     deployPrototype: CMUCrateJeepTransport
     dropPod: false
     useParachute: true
+    dropDuration: 4
+    arrivingSound: /Audio/_RMC14/Items/fulton.ogg
 
 - type: entity
   parent: CMUDropshipAttachmentAmmoLaunchableJeepBase
@@ -221,6 +237,8 @@
     deployPrototype: CMUCrateJeepGunner
     dropPod: false
     useParachute: true
+    dropDuration: 4
+    arrivingSound: /Audio/_RMC14/Items/fulton.ogg
 
 # The CLF's jeep: a signal flare wired to a smuggler's beacon. Lit and left burning on open ground,
 # it brings a gun jeep crate down by parachute onto the spot.

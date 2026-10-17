@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared._RMC14.Crate;
 using Content.Shared._RMC14.Entrenching;
@@ -70,8 +71,25 @@ public sealed partial class GridVehicleMoverSystem
             return;
 
         var speed = mover.MaxSpeed > 0f ? MathF.Min(1f, MathF.Abs(mover.CurrentSpeed) / mover.MaxSpeed) : 0f;
-        var ev = new CMUVehicleCrashedEvent(hullDamage, CMUIsFrontalCrash(vehicle, mover, target), speed);
+        var ev = new CMUVehicleCrashedEvent(hullDamage, CMUIsFrontalCrash(vehicle, mover, target), speed, CMUCrashContact(vehicle, target));
         RaiseLocalEvent(vehicle, ref ev);
+    }
+
+    /// <summary>
+    /// Where the obstacle meets the vehicle, in the vehicle's own space.
+    /// </summary>
+    private Vector2? CMUCrashContact(EntityUid vehicle, EntityUid target)
+    {
+        if (!fixtureQ.TryComp(vehicle, out var fixtures) ||
+            !fixtureQ.TryComp(target, out var targetFixtures) ||
+            !TryGetFixtureLocalAabb(fixtures, out var local) ||
+            !TryGetFixtureAabb(targetFixtures, physics.GetPhysicsTransform(target), out var obstacle))
+        {
+            return null;
+        }
+
+        var (position, rotation) = transform.GetWorldPositionRotation(vehicle);
+        return CMUVehicleCrashComponent.ContactPoint(position, rotation, local, obstacle);
     }
 
     /// <summary>

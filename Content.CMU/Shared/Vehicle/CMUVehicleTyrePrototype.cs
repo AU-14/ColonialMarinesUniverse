@@ -1,5 +1,6 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.Vehicle;
 
@@ -68,4 +69,16 @@ public sealed partial class CMUVehicleTyresComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public ProtoId<CMUVehicleTyrePrototype>? Tyre;
+
+    /// <summary>
+    /// The tick <see cref="Rough"/> was read for.
+    /// </summary>
+    [ViewVariables]
+    public GameTick GroundTick;
+
+    /// <summary>
+    /// Whether the ground under the vehicle was rough at <see cref="GroundTick"/>.
+    /// </summary>
+    [ViewVariables]
+    public bool Rough;
 }

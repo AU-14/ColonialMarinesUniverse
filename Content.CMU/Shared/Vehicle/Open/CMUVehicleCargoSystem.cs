@@ -405,6 +405,10 @@ public sealed class CMUVehicleCargoSystem : EntitySystem
 
     private void OnCrateTerminating(Entity<CMUVehicleCargoCrateComponent> ent, ref EntityTerminatingEvent args)
     {
+        // The server sends the emptied bed; a client clearing it itself would only fall out of step.
+        if (_net.IsClient)
+            return;
+
         if (TryComp(ent.Comp.Vehicle, out CMUVehicleCargoComponent? cargo) && cargo.Crate == ent.Owner)
         {
             cargo.Crate = null;
@@ -415,7 +419,7 @@ public sealed class CMUVehicleCargoSystem : EntitySystem
 
     private void OnVehicleTerminating(Entity<CMUVehicleCargoComponent> ent, ref EntityTerminatingEvent args)
     {
-        if (ent.Comp.Crate is not { } crate)
+        if (_net.IsClient || ent.Comp.Crate is not { } crate)
             return;
 
         // A grid or map being deleted takes the crate down with the jeep; unloading would move it onto a

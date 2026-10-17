@@ -47,6 +47,8 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
 
 
     // This frame's body lift per vehicle, in the vehicle's frame, for its mounted turrets to follow.
+    // Reused each frame for every overlay's nearby mobs.
+    private readonly HashSet<Entity<MobStateComponent>> _nearbyMobs = new();
     private readonly Dictionary<EntityUid, (Vector2 Lift, Direction Direction)> _lifts = new();
 
     // Client-side glows each overlay's vehicle throws from its tail lights and turn signals. The tail
@@ -86,6 +88,10 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUVehicleOverlayVisualsComponent, SpriteComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var visuals, out var sprite, out var xform))
         {
+            // Out of view: nothing to draw until it comes back.
+            if ((MetaData(uid).Flags & MetaDataFlags.Detached) != 0)
+                continue;
+
             var ent = (uid, sprite);
             var direction = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(
                 _transform.GetWorldRotation(xform) + _eye.CurrentEye.Rotation);
@@ -134,7 +140,9 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
             visuals.DirectionOffsets.TryGetValue(direction, out var slide);
             // The overlay's states are slid so their frame ends at the vehicle's near edge.
             var nearEdge = (FrameHalf - slide.Y) / PixelsPerMeter;
-            foreach (var mob in _lookup.GetEntitiesInRange<MobStateComponent>(centre, MobDepthRange))
+            _nearbyMobs.Clear();
+            _lookup.GetEntitiesInRange(centre, MobDepthRange, _nearbyMobs);
+            foreach (var mob in _nearbyMobs)
             {
                 if (!TryComp(mob, out SpriteComponent? sprite))
                     continue;

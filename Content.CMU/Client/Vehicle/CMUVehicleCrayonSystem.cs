@@ -37,10 +37,17 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
     private readonly Dictionary<string, Image<Rgba32>?> _decals = new();
     private readonly Dictionary<EntityUid, Paint> _paints = new();
 
+    // The panel each direction's frame shows face on, as the drawings name it.
+    private static readonly string[] FrontNormals = { "+f", "-f", "+r", "-r" };
+
     private sealed class Paint
     {
         // The drawings list is refilled in place by each state, so a new state marks the paint stale.
         public bool Stale = true;
+
+        // Directions still to repaint, a bit each: only the one the vehicle is drawn in is painted
+        // each frame, the others when it turns to them.
+        public int StaleDirections;
 
         // What the paint was baked with: the overlay's slide, and the panels it left out while open.
         public CMUVehicleOverlayVisualsComponent? Visuals;
@@ -115,6 +122,10 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
         var query = EntityQueryEnumerator<CMUVehicleCrayonComponent, SpriteComponent>();
         while (query.MoveNext(out var uid, out var crayon, out var sprite))
         {
+            // Out of view: nothing to draw until it comes back.
+            if ((MetaData(uid).Flags & MetaDataFlags.Detached) != 0)
+                continue;
+
             if (crayon.Drawings.Count == 0 && crayon.Blood.Count == 0 && !_paints.ContainsKey(uid))
                 continue;
 
@@ -140,13 +151,18 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
                 paint.Stale = false;
                 paint.Visuals = overlayVisuals;
                 paint.OpenPanels = openPanels;
-                Repaint(crayon, paint, overlayVisuals, jeep);
+                paint.StaleDirections = (1 << MapDirections.Length) - 1;
             }
 
             var direction = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(
                 _transform.GetWorldRotation(uid) + _eye.CurrentEye.Rotation);
             var index = Array.IndexOf(MapDirections, direction);
             var counter = -direction.ToAngle();
+            if ((paint.StaleDirections & (1 << index)) != 0)
+            {
+                paint.StaleDirections &= ~(1 << index);
+                Repaint(crayon, paint, index, overlayVisuals, jeep);
+            }
 
             ShowLayer((uid, sprite), "fuel_door", paint.Under[index], counter);
             if (overlay != null)
@@ -171,16 +187,26 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
         _sprite.LayerSetRotation(ent.AsNullable(), index, counter);
     }
 
-    private void Repaint(CMUVehicleCrayonComponent crayon, Paint paint, CMUVehicleOverlayVisualsComponent? overlayVisuals, CMUOpenVehicleComponent? jeep)
+    /// <summary>
+    /// Paints one direction's frame of the drawings and blood, the parts under the riders and over them.
+    /// </summary>
+    private void Repaint(CMUVehicleCrayonComponent crayon, Paint paint, int i, CMUVehicleOverlayVisualsComponent? overlayVisuals, CMUOpenVehicleComponent? jeep)
     {
-        paint.Dispose();
+        paint.Under[i]?.Dispose();
+        paint.Over[i]?.Dispose();
+        paint.Under[i] = paint.Over[i] = null;
         if (crayon.Drawings.Count == 0 && crayon.Blood.Count == 0 ||
             GetImage(_maps, crayon.Map) is not { } map)
         {
             return;
         }
 
-        for (var i = 0; i < MapDirections.Length; i++)
+        // Only drawings on a top face or the panel this frame shows face on can show in it.
+        var drawings = Facing(crayon.Drawings, FrontNormals[i]);
+        var blood = Facing(crayon.Blood, FrontNormals[i]);
+        if (drawings.Count == 0 && blood.Count == 0)
+            return;
+
         {
             var direction = MapDirections[i];
             var slide = 0;
@@ -206,8 +232,8 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
                     }
 
                     // Crayon goes on over blood.
-                    if ((PaintPixel(crayon.Drawings, voxel, front, direction, Opacity) ??
-                         PaintPixel(crayon.Blood, voxel, front, direction, BloodOpacity)) is not { } color)
+                    if ((PaintPixel(drawings, voxel, front, direction, Opacity) ??
+                         PaintPixel(blood, voxel, front, direction, BloodOpacity)) is not { } color)
                         continue;
 
                     if (overRiders)
@@ -228,6 +254,18 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
             paint.Under[i] = anyUnder ? _clyde.LoadTextureFromImage(under) : null;
             paint.Over[i] = anyOver ? _clyde.LoadTextureFromImage(overImage) : null;
         }
+    }
+
+    private static List<CMUCrayonDrawing> Facing(List<CMUCrayonDrawing> drawings, string front)
+    {
+        var facing = new List<CMUCrayonDrawing>(drawings.Count);
+        foreach (var drawing in drawings)
+        {
+            if (drawing.Normal == "up" || drawing.Normal == front)
+                facing.Add(drawing);
+        }
+
+        return facing;
     }
 
     /// <summary>

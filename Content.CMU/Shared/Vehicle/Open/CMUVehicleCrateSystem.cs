@@ -92,7 +92,7 @@ public sealed class CMUVehicleCrateSystem : EntitySystem
         var vehicle = SpawnAttachedTo(ent.Comp.Vehicle, coordinates);
         _transform.SetWorldRotation(vehicle, Angle.Zero);
 
-        if (_containers.TryGetContainer(vehicle, ent.Comp.BareSlot, out var bare))
+        if (ent.Comp.BareSlot is { } bareSlot && _containers.TryGetContainer(vehicle, bareSlot, out var bare))
         {
             foreach (var item in bare.ContainedEntities.ToArray())
             {

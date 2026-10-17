@@ -25,7 +25,6 @@ public sealed class CMUVehicleDropFlareSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
 
     private static readonly EntProtoId LandingMarker = "RMCEffectAlert";
-    private static readonly SoundSpecifier ArrivingSound = new SoundPathSpecifier("/Audio/_RMC14/Machines/Techpod/techpod_drill.ogg");
 
     public override void Update(float frameTime)
     {
@@ -67,13 +66,16 @@ public sealed class CMUVehicleDropFlareSystem : EntitySystem
 
             flare.Called = true;
             var crate = Spawn(flare.Crate, target);
+            // The crate falls the way it does off a drop pad.
+            var drop = CompOrNull<CanBeSupplyDroppedComponent>(crate);
+            var fall = (float) (drop?.DropDuration ?? TimeSpan.FromSeconds(3)).TotalSeconds;
             _supplyDrop.LaunchSupplyDrop(crate,
                 target,
                 flare.SkyFall,
-                flare.DropTime,
-                TimeSpan.FromSeconds(flare.SkyFall + flare.DropTime + 1f),
+                fall,
+                TimeSpan.FromSeconds(flare.SkyFall + fall + 1f),
                 landingEffect: LandingMarker,
-                arrivingSound: ArrivingSound);
+                arrivingSound: drop?.ArrivingSound);
             _popup.PopupEntity(Loc.GetString("cmu-vehicle-drop-flare-called"), uid, PopupType.Medium);
         }
     }

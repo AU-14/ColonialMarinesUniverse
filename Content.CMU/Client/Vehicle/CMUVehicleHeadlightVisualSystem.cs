@@ -16,14 +16,13 @@ namespace Content.Client.CMU14.Vehicle;
 public sealed class CMUVehicleHeadlightVisualSystem : EntitySystem
 {
     [Dependency] private IEyeManager _eye = default!;
-    [Dependency] private SharedPointLightSystem _lights = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
     private static readonly ProtoId<ShaderPrototype> BeamShader = "CMUVehicleBeam";
 
-    private readonly Dictionary<EntityUid, ShaderInstance> _shaders = new();
+    private readonly Dictionary<EntityUid, BeamShaderState> _shaders = new();
 
     public override void Initialize()
     {
@@ -32,9 +31,9 @@ public sealed class CMUVehicleHeadlightVisualSystem : EntitySystem
 
     public override void Shutdown()
     {
-        foreach (var shader in _shaders.Values)
+        foreach (var state in _shaders.Values)
         {
-            shader.Dispose();
+            state.Shader.Dispose();
         }
 
         _shaders.Clear();
@@ -42,13 +41,13 @@ public sealed class CMUVehicleHeadlightVisualSystem : EntitySystem
 
     private void OnShutdown(Entity<CMUVehicleHeadlightBeamComponent> ent, ref ComponentShutdown args)
     {
-        if (!_shaders.Remove(ent, out var shader))
+        if (!_shaders.Remove(ent, out var state))
             return;
 
         if (TryComp(ent, out SpriteComponent? sprite) && _sprite.LayerMapTryGet((ent, sprite), "beam", out var layer, false))
             sprite.LayerSetShader(layer, (ShaderInstance?) null);
 
-        shader.Dispose();
+        state.Shader.Dispose();
     }
 
     public override void FrameUpdate(float frameTime)
@@ -57,6 +56,10 @@ public sealed class CMUVehicleHeadlightVisualSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUVehicleHeadlightBeamComponent, SpriteComponent, PointLightComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var beam, out var sprite, out var light, out var xform))
         {
+            // Out of view: nothing to draw until it comes back.
+            if ((MetaData(uid).Flags & MetaDataFlags.Detached) != 0)
+                continue;
+
             if (!_sprite.LayerMapTryGet((uid, sprite), "beam", out var layer, false))
                 continue;
 
@@ -76,21 +79,41 @@ public sealed class CMUVehicleHeadlightVisualSystem : EntitySystem
                 : beam.Driver ? lights.DriverLampAnchors : lights.PassengerLampAnchors;
             var lamp = (-direction.ToAngle()).RotateVec(anchors.GetValueOrDefault(direction) / EyeManager.PixelsPerMeter);
             _sprite.LayerSetOffset((uid, sprite), layer, lamp + new Vector2(0f, -lights.BeamHalfLength));
+            // Set on this client only: the offset follows this client's camera, and dirtying the
+            // server's light from a frame update breaks prediction (debug clients assert on it).
             if (!light.Offset.EqualsApprox(lamp))
-                _lights.SetOffset(uid, lamp, light);
+                light.Offset = lamp;
 
-            if (!_shaders.TryGetValue(uid, out var shader))
+            if (!_shaders.TryGetValue(uid, out var beamShader))
             {
-                shader = _prototypes.Index(BeamShader).InstanceUnique();
-                _shaders[uid] = shader;
-                sprite.LayerSetShader(layer, shader, BeamShader.Id);
+                beamShader = new BeamShaderState(_prototypes.Index(BeamShader).InstanceUnique());
+                _shaders[uid] = beamShader;
+                sprite.LayerSetShader(layer, beamShader.Shader, BeamShader.Id);
             }
 
+            // Each parameter set re-uploads the shader's uniforms, so only on a change.
             var ambient = TryComp(xform.MapUid, out MapLightComponent? mapLight)
                 ? mapLight.AmbientLightColor
                 : Color.Black;
-            shader.SetParameter("ambient", new Vector3(ambient.R, ambient.G, ambient.B));
-            shader.SetParameter("strength", beam.Strength);
+            var ambientRgb = new Vector3(ambient.R, ambient.G, ambient.B);
+            if (beamShader.Ambient != ambientRgb)
+            {
+                beamShader.Shader.SetParameter("ambient", ambientRgb);
+                beamShader.Ambient = ambientRgb;
+            }
+
+            if (!MathHelper.CloseTo(beamShader.Strength, beam.Strength))
+            {
+                beamShader.Shader.SetParameter("strength", beam.Strength);
+                beamShader.Strength = beam.Strength;
+            }
         }
+    }
+
+    private sealed class BeamShaderState(ShaderInstance shader)
+    {
+        public readonly ShaderInstance Shader = shader;
+        public Vector3? Ambient;
+        public float Strength = float.NaN;
     }
 }

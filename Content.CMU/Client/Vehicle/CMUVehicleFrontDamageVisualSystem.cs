@@ -18,6 +18,10 @@ public sealed class CMUVehicleFrontDamageVisualSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUVehicleFrontDamageComponent, SpriteComponent>();
         while (query.MoveNext(out var uid, out var front, out var sprite))
         {
+            // Out of view: nothing to draw until it comes back.
+            if ((MetaData(uid).Flags & MetaDataFlags.Detached) != 0)
+                continue;
+
             var level = _frontDamage.GetLevel((uid, front));
             SetLayer((uid, sprite), front.Layer, front.State, level);
             if (TryComp(uid, out CMUVehicleOverlayComponent? overlay) &&

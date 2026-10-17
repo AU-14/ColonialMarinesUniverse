@@ -18,7 +18,7 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests.CMU14.Vehicle;
 
 /// <summary>
-/// A jeep crate opens into the jeep with its wheel set in the hatch, the colony's crates come in a
+/// A jeep crate opens into the jeep on its wheels with the spare in the hatch, the colony's crates come in a
 /// showroom paint and only as cargo and medical jeeps, the autolathe prints the vehicle spray painter,
 /// the painter on the wheels or a seat repaints only them, and space cleaner takes a jeep's dirt,
 /// blood and crayon off.
@@ -44,7 +44,7 @@ public sealed class CMUJeepKitAndGrimeTest : GameTest
     }
 
     [Test]
-    public async Task CrateOpensIntoAJeepWithItsWheelsInTheHatch()
+    public async Task CrateOpensIntoAJeepOnItsWheelsWithTheSpareInTheHatch()
     {
         var map = await Floor();
         EntityUid crate = default;
@@ -70,7 +70,7 @@ public sealed class CMUJeepKitAndGrimeTest : GameTest
             Assert.That(SEntMan.GetComponent<MetaDataComponent>(jeep).EntityPrototype?.ID, Is.EqualTo("CMUVehicleJeepCargo"));
 
             var containers = SEntMan.System<SharedContainerSystem>();
-            Assert.That(containers.GetContainer(jeep, "wheel-1").ContainedEntities, Is.Empty, "The axle comes bare.");
+            Assert.That(containers.GetContainer(jeep, "wheel-1").ContainedEntities, Has.Count.EqualTo(1), "The jeep comes on its wheels.");
             var hatch = containers.GetContainer(jeep, CMUOpenVehicleSystem.SpareSlot).ContainedEntities;
             Assert.That(hatch, Has.Count.EqualTo(1), "The wheel set rides in the rear hatch.");
             Assert.That(SEntMan.GetComponent<MetaDataComponent>(hatch[0]).EntityPrototype?.ID, Is.EqualTo("CMUJeepWheel"));

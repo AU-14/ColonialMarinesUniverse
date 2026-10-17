@@ -32,10 +32,10 @@ public sealed partial class CMUOpenVehicleSystem
     /// The engine soaks up its share of a hit, all of a direct one, while it has integrity left; the
     /// rest goes on to the hull. Anti vehicle weapons hit it as hard as they hit the hull.
     /// </summary>
-    private void AbsorbIntoEngine(Entity<CMUOpenVehicleComponent> ent, ref DamageModifyEvent args, float total)
+    private void AbsorbIntoEngine(Entity<CMUOpenVehicleComponent> ent, ref DamageModifyEvent args, float total, Vector2? hitPoint)
     {
         var jeep = ent.Comp;
-        var share = HitsEngine(ent, args) ? jeep.EngineDirectHitShare : jeep.EngineDamageShare;
+        var share = hitPoint is { } at && jeep.EngineBay.Contains(at) ? jeep.EngineDirectHitShare : jeep.EngineDamageShare;
         var hit = total * _hardpoints.CMUIncomingDamageMultiplier(args.Origin, args.Tool);
         var absorbed = MathF.Min(jeep.EngineIntegrity, hit * share);
         if (absorbed <= 0f)
@@ -48,10 +48,11 @@ public sealed partial class CMUOpenVehicleSystem
     }
 
     /// <summary>
-    /// Whether a hit lands on the engine bay: a shot where its line enters the hull, a blast or an
-    /// attacker at the point of the hull nearest to it. A hit from nowhere in particular isn't direct.
+    /// Where a hit lands on the hull, in the vehicle's own space: a shot where its line enters the
+    /// hull, a blast or an attacker at the point of the hull nearest to it. A hit from nowhere in
+    /// particular lands nowhere.
     /// </summary>
-    private bool HitsEngine(Entity<CMUOpenVehicleComponent> ent, DamageModifyEvent args)
+    private Vector2? HitPoint(Entity<CMUOpenVehicleComponent> ent, DamageModifyEvent args)
     {
         var blast = _blast;
         _blast = null;
@@ -59,7 +60,7 @@ public sealed partial class CMUOpenVehicleSystem
         var jeep = ent.Comp;
         var xform = Transform(ent);
         if (xform.MapUid == null)
-            return false;
+            return null;
 
         var (position, rotation) = _transform.GetWorldPositionRotation(xform);
         Vector2 ToLocal(Vector2 world) => (-rotation).RotateVec(world - position);
@@ -87,10 +88,10 @@ public sealed partial class CMUOpenVehicleSystem
         }
         else
         {
-            return false;
+            return null;
         }
 
-        return jeep.EngineBay.Contains(hit);
+        return hit;
     }
 
     /// <summary>

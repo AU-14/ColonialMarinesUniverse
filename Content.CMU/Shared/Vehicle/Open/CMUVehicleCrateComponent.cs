@@ -29,10 +29,10 @@ public sealed partial class CMUVehicleCrateComponent : Component
     public EntProtoId? Wheels;
 
     /// <summary>
-    /// The slot whose fitted item is left out of the crate.
+    /// A slot whose fitted item is left out of the crate, if any.
     /// </summary>
     [DataField]
-    public string BareSlot = "wheel-1";
+    public string? BareSlot;
 
     [DataField]
     public EntProtoId Remains = "CMUJeepCrateRemains";

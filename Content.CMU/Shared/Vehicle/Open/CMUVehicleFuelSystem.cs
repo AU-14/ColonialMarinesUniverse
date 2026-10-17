@@ -116,7 +116,7 @@ public sealed class CMUVehicleFuelSystem : EntitySystem
             return true;
         }
 
-        var delay = TimeSpan.FromSeconds(tank.MaxVolume.Float() / fuel.PourRate);
+        var delay = TimeSpan.FromSeconds(tank.MaxVolume.Float() / MathF.Max(fuel.PourRate, 0.01f));
         var args = new DoAfterArgs(EntityManager, user, delay, new CMUVehicleRefuelDoAfterEvent(), vehicle, vehicle, can)
         {
             BreakOnMove = true,

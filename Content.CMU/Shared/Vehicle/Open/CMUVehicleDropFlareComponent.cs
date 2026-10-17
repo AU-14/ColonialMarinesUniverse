@@ -19,11 +19,12 @@ public sealed partial class CMUVehicleDropFlareComponent : Component
     [DataField]
     public TimeSpan Settle = TimeSpan.FromSeconds(2);
 
+    /// <summary>
+    /// Seconds the crate spends on its way before it shows over the flare; how long it falls under
+    /// its chute is the crate's own.
+    /// </summary>
     [DataField]
     public float SkyFall = 8f;
-
-    [DataField]
-    public float DropTime = 3f;
 
     public bool Called;
 

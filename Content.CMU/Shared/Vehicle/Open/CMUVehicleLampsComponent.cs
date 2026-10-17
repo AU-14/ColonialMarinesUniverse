@@ -27,6 +27,30 @@ public sealed partial class CMUVehicleLampsComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public List<string> Broken = new();
+
+    /// <summary>
+    /// The slowest crash, as a share of top speed, that can break a lamp.
+    /// </summary>
+    [DataField]
+    public float CrashMinSpeed = 0.25f;
+
+    /// <summary>
+    /// The crash speed, as a share of top speed, that surely breaks a lamp right where it hits.
+    /// </summary>
+    [DataField]
+    public float CrashSureSpeed = 0.75f;
+
+    /// <summary>
+    /// How far from where a crash hits, in tiles, it can still break a lamp; the nearer, the likelier.
+    /// </summary>
+    [DataField]
+    public float CrashReach = 0.9f;
+
+    /// <summary>
+    /// How near a lamp, in tiles, a shot has to land on the hull to shatter it outright.
+    /// </summary>
+    [DataField]
+    public float ShotReach = 0.3f;
 }
 
 [DataDefinition]

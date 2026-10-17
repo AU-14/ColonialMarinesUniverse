@@ -77,6 +77,10 @@ public sealed class CMUVehiclePaintVisualSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUVehiclePaintComponent, SpriteComponent>();
         while (query.MoveNext(out var uid, out var paint, out var sprite))
         {
+            // Out of view: nothing to draw until it comes back.
+            if ((MetaData(uid).Flags & MetaDataFlags.Detached) != 0)
+                continue;
+
             var dirt = CompOrNull<CMUVehicleGrimeComponent>(uid)?.Dirt ?? 0f;
             if (!_paints.TryGetValue(uid, out var entry))
             {

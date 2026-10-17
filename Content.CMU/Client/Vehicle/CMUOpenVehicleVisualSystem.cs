@@ -47,6 +47,9 @@ public sealed class CMUOpenVehicleVisualSystem : EntitySystem
     private static readonly Color InReachColor = new(0f, 1f, 0f, 0.6f);
     private static readonly Color OutOfReachColor = new(1f, 0f, 0f, 0.6f);
 
+    // Reused each frame: the panels standing raised on the vehicle being drawn.
+    private readonly HashSet<string> _raised = new();
+
     private readonly Dictionary<EntityUid, Dictionary<string, Swing>> _swings = new();
 
     private sealed class Swing
@@ -89,7 +92,8 @@ public sealed class CMUOpenVehicleVisualSystem : EntitySystem
             // A wrecked hull shows at a glance: the hood popped ajar, the windshield cracked, the body
             // sagging on its wheels (CMUVehicleOverlayVisualSystem) and the frame damage at its worst.
             var hullWrecked = _jeepSystem.IsHullWrecked(uid);
-            var raised = new HashSet<string>();
+            var raised = _raised;
+            raised.Clear();
             foreach (var part in jeep.Parts)
             {
                 var id = part.Id;
@@ -99,15 +103,15 @@ public sealed class CMUOpenVehicleVisualSystem : EntitySystem
                     {
                         var swing = SwingOf(swings, id);
                         var open = CMUOpenVehicleSystem.GetPanelFlag(jeep, id);
-                        Animate((uid, sprite), overlay, id, swing, open, StateLength(sprite, $"{id}_opening"),
-                            $"{id}_open", ClosedState(uid, id), $"{id}_opening", $"{id}_closing", part.RaisedLayer);
+                        Animate((uid, sprite), overlay, id, swing, open, StateLength(sprite, Name(id, "_opening")),
+                            Name(id, "_open"), ClosedState(uid, id), Name(id, "_opening"), Name(id, "_closing"), part.RaisedLayer);
                         var up = open || swing.Start != null;
                         if (part.AjarWhenWrecked && hullWrecked && !up)
                         {
-                            var ajar = AjarTime(sprite, $"{id}_opening");
-                            SetState((uid, sprite), id, $"{id}_opening", ajar);
+                            var ajar = AjarTime(sprite, Name(id, "_opening"));
+                            SetState((uid, sprite), id, Name(id, "_opening"), ajar);
                             if (overlay != null && part.RaisedLayer is { } raisedLayer)
-                                SetState(overlay.Value, raisedLayer, $"{id}_opening_overlay", ajar);
+                                SetState(overlay.Value, raisedLayer, Name(id, "_opening_overlay"), ajar);
 
                             up = true;
                         }
@@ -120,8 +124,8 @@ public sealed class CMUOpenVehicleVisualSystem : EntitySystem
                     {
                         var glass = jeep.WindshieldDamaged || hullWrecked ? "1" : "0";
                         Animate((uid, sprite), overlay, id, SwingOf(swings, id), jeep.WindshieldDown,
-                            StateLength(sprite, $"{id}_folding_{glass}"), $"{id}_down_{glass}", $"{id}_up_{glass}",
-                            $"{id}_folding_{glass}", $"{id}_raising_{glass}");
+                            StateLength(sprite, Name(id, "_folding_", glass)), Name(id, "_down_", glass), Name(id, "_up_", glass),
+                            Name(id, "_folding_", glass), Name(id, "_raising_", glass));
                         break;
                     }
                     // Kit swings with the panel it hangs on, a leaking jerry can drawn holed.
@@ -143,12 +147,12 @@ public sealed class CMUOpenVehicleVisualSystem : EntitySystem
                 foreach (var lamp in lamps.Lamps)
                 {
                     var look = lamps.Broken.Contains(lamp.Id) ? "1" : "0";
-                    SetState((uid, sprite), lamp.Id, $"{lamp.Id}_{look}");
+                    SetState((uid, sprite), lamp.Id, Name(lamp.Id, "_", look));
                     SetVisible((uid, sprite), lamp.Id, lamp.Slot.HasItem);
                     if (overlay == null)
                         continue;
 
-                    SetState(overlay.Value, lamp.Id, $"{lamp.Id}_overlay_{look}");
+                    SetState(overlay.Value, lamp.Id, Name(lamp.Id, "_overlay_", look));
                     SetVisible(overlay.Value, lamp.Id, lamp.Slot.HasItem);
                 }
             }
@@ -211,6 +215,10 @@ public sealed class CMUOpenVehicleVisualSystem : EntitySystem
         var parts = EntityQueryEnumerator<CMUVehiclePartComponent, SpriteComponent, TransformComponent>();
         while (parts.MoveNext(out var uid, out var part, out var sprite, out var xform))
         {
+            // Out of view: nothing to draw until it comes back.
+            if ((MetaData(uid).Flags & MetaDataFlags.Detached) != 0)
+                continue;
+
             if (part.Vehicle is not { } vehicle ||
                 !TryComp(vehicle, out CMUOpenVehicleComponent? jeep) ||
                 !TryComp(vehicle, out SpriteComponent? vehicleSprite) ||
@@ -360,21 +368,41 @@ public sealed class CMUOpenVehicleVisualSystem : EntitySystem
         var state = prefix + name;
         if (panel == null || !CMUOpenVehicleSystem.HasPart(comp, panel))
         {
-            SetState(jeep, name, $"{state}_{suffix}");
+            SetState(jeep, name, Name(state, "_", suffix));
             if (overlay != null)
-                SetState(overlay.Value, name, $"{state}_overlay_{suffix}");
+                SetState(overlay.Value, name, Name(state, "_overlay_", suffix));
 
             return;
         }
 
         Animate(jeep, overlay, name, SwingOf(swings, name), CMUOpenVehicleSystem.GetPanelFlag(comp, panel),
-            StateLength(jeep.Comp, $"{state}_opening_{suffix}"), $"{state}_open_{suffix}", $"{state}_{suffix}",
-            $"{state}_opening_{suffix}", $"{state}_closing_{suffix}");
+            StateLength(jeep.Comp, Name(state, "_opening_", suffix)), Name(state, "_open_", suffix), Name(state, "_", suffix),
+            Name(state, "_opening_", suffix), Name(state, "_closing_", suffix));
     }
 
-    private static string OverlayState(string state)
+    // State names put together from part ids, built once each: they are asked for every frame.
+    private readonly Dictionary<(string, string, string), string> _names = new();
+    private readonly Dictionary<string, string> _overlayStates = new();
+
+    private string Name(string a, string b, string c = "")
     {
-        return state.EndsWith("_0") || state.EndsWith("_1") ? $"{state[..^2]}_overlay{state[^2..]}" : $"{state}_overlay";
+        if (!_names.TryGetValue((a, b, c), out var name))
+        {
+            name = string.Concat(a, b, c);
+            _names[(a, b, c)] = name;
+        }
+
+        return name;
+    }
+
+    private string OverlayState(string state)
+    {
+        if (_overlayStates.TryGetValue(state, out var overlay))
+            return overlay;
+
+        overlay = state.EndsWith("_0") || state.EndsWith("_1") ? $"{state[..^2]}_overlay{state[^2..]}" : $"{state}_overlay";
+        _overlayStates[state] = overlay;
+        return overlay;
     }
 
     /// <summary>
@@ -386,7 +414,7 @@ public sealed class CMUOpenVehicleVisualSystem : EntitySystem
         if (!part.StartsWith("seat_") || !TryComp(vehicle, out CMUVehicleSeatsComponent? seats))
             return false;
 
-        var seat = seats.Seats.Find(s => $"seat_{s.Id}" == part);
+        var seat = seats.Seats.Find(s => Name("seat_", s.Id) == part);
         return seat?.Door is { } panel &&
                CMUOpenVehicleSystem.HasPart(jeep, panel) &&
                (CMUOpenVehicleSystem.GetPanelFlag(jeep, panel) || !_jeepSystem.IsPanelFitted(vehicle, jeep, panel));
@@ -400,16 +428,16 @@ public sealed class CMUOpenVehicleVisualSystem : EntitySystem
         return data?.Host is { } host && CMUOpenVehicleSystem.GetPanelFlag(jeep, host);
     }
 
-    private static string MaskState(CMUVehiclePartComponent part, CMUOpenVehicleComponent jeep, bool seatOpened)
+    private string MaskState(CMUVehiclePartComponent part, CMUOpenVehicleComponent jeep, bool seatOpened)
     {
         var id = part.Part;
         var data = CMUOpenVehicleSystem.PartData(jeep, id);
         return data?.Kind switch
         {
-            CMUVehiclePartKind.Panel => CMUOpenVehicleSystem.GetPanelFlag(jeep, id) ? $"click_{id}_open" : $"click_{id}_closed",
-            CMUVehiclePartKind.Windshield => jeep.WindshieldDown ? $"click_{id}_down" : $"click_{id}_up",
-            _ when HostOpen(data, jeep) || seatOpened => $"click_{id}_open",
-            _ => $"click_{id}",
+            CMUVehiclePartKind.Panel => CMUOpenVehicleSystem.GetPanelFlag(jeep, id) ? Name("click_", id, "_open") : Name("click_", id, "_closed"),
+            CMUVehiclePartKind.Windshield => jeep.WindshieldDown ? Name("click_", id, "_down") : Name("click_", id, "_up"),
+            _ when HostOpen(data, jeep) || seatOpened => Name("click_", id, "_open"),
+            _ => Name("click_", id),
         };
     }
 
@@ -449,16 +477,16 @@ public sealed class CMUOpenVehicleVisualSystem : EntitySystem
 
     private static readonly List<Direction> NoDirections = new();
 
-    private static string OutlineState(CMUVehiclePartComponent part, CMUOpenVehicleComponent jeep, bool seatOpened)
+    private string OutlineState(CMUVehiclePartComponent part, CMUOpenVehicleComponent jeep, bool seatOpened)
     {
         var id = part.Part;
         var data = CMUOpenVehicleSystem.PartData(jeep, id);
         return data?.Kind switch
         {
-            CMUVehiclePartKind.Panel => CMUOpenVehicleSystem.GetPanelFlag(jeep, id) ? $"{id}_open_outline" : $"{id}_outline",
-            CMUVehiclePartKind.Windshield => jeep.WindshieldDown ? $"{id}_down_outline" : $"{id}_up_outline",
-            _ when HostOpen(data, jeep) || seatOpened => $"{id}_open_outline",
-            _ => $"{id}_outline",
+            CMUVehiclePartKind.Panel => CMUOpenVehicleSystem.GetPanelFlag(jeep, id) ? Name(id, "_open_outline") : Name(id, "_outline"),
+            CMUVehiclePartKind.Windshield => jeep.WindshieldDown ? Name(id, "_down_outline") : Name(id, "_up_outline"),
+            _ when HostOpen(data, jeep) || seatOpened => Name(id, "_open_outline"),
+            _ => Name(id, "_outline"),
         };
     }
 
@@ -514,7 +542,7 @@ public sealed class CMUOpenVehicleVisualSystem : EntitySystem
                front.ClosedHoodState is { } dented &&
                _frontDamage.GetLevel((uid, front)) is var level and > 0
             ? dented + level
-            : $"{panel}_closed";
+            : Name(panel, "_closed");
     }
 
     private void SetVisible(Entity<SpriteComponent> ent, string key, bool visible)

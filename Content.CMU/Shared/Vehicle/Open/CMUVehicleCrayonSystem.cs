@@ -108,7 +108,7 @@ public abstract class SharedCMUVehicleCrayonSystem : EntitySystem
         if (custom && ent.Comp.Drawings.Count(d => d.Pixels != null) > ent.Comp.MaxImages)
             ent.Comp.Drawings.RemoveAt(ent.Comp.Drawings.FindIndex(d => d.Pixels != null));
 
-        Dirty(ent);
+        DirtyField(ent, ent.Comp, nameof(CMUVehicleCrayonComponent.Drawings));
         _audio.PlayPvs(crayon.UseSound, ent);
         if (custom)
         {

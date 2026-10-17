@@ -55,12 +55,39 @@ public sealed partial class CMUVehicleCrashComponent : Component
         var right = local.Right - min.X;
         return front <= MathF.Min(rear, MathF.Min(left, right));
     }
+
+    /// <summary>
+    /// Where an obstacle meets a vehicle, in the vehicle's own space (front is -y): the middle of
+    /// where the two overlap, or of the vehicle's nearest edge if they only touch.
+    /// </summary>
+    public static Vector2 ContactPoint(Vector2 position, Angle rotation, Box2 local, Box2 obstacle)
+    {
+        var toLocal = -rotation;
+        var min = new Vector2(float.MaxValue);
+        var max = new Vector2(float.MinValue);
+        foreach (var corner in new[] { obstacle.BottomLeft, obstacle.BottomRight, obstacle.TopLeft, obstacle.TopRight })
+        {
+            var point = toLocal.RotateVec(corner - position);
+            min = Vector2.Min(min, point);
+            max = Vector2.Max(max, point);
+        }
+
+        static float Middle(float min, float max, float lo, float hi)
+        {
+            var from = Math.Clamp(min, lo, hi);
+            var to = Math.Clamp(max, lo, hi);
+            return (from + to) / 2f;
+        }
+
+        return new Vector2(Middle(min.X, max.X, local.Left, local.Right), Middle(min.Y, max.Y, local.Bottom, local.Top));
+    }
 }
 
 /// <summary>
 /// A vehicle crashed into something and its hull took <see cref="HullDamage"/>. <see cref="Frontal"/>
 /// when it drove forward into something ahead of its front; <see cref="Speed"/> is how fast it hit,
-/// as a share of its top speed.
+/// as a share of its top speed; <see cref="Contact"/>, where it was hit, in its own space with it
+/// facing south (front is -y), if known.
 /// </summary>
 [ByRefEvent]
-public readonly record struct CMUVehicleCrashedEvent(float HullDamage, bool Frontal, float Speed = 0f);
+public readonly record struct CMUVehicleCrashedEvent(float HullDamage, bool Frontal, float Speed = 0f, Vector2? Contact = null);

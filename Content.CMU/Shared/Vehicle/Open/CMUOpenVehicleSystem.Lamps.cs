@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Containers.ItemSlots;
 using Robust.Shared.Random;
@@ -80,10 +81,79 @@ public sealed partial class CMUOpenVehicleSystem
         }
     }
 
-    private void RefreshLamps(Entity<ItemSlotsComponent?> vehicle)
+    /// <summary>
+    /// A crash breaks the lamps near where it hits: none below the lamps' slowest crash, surely at
+    /// their sure speed right at the lamp, less likely the farther off it hits.
+    /// </summary>
+    private void BreakLampsInCrash(Entity<CMUOpenVehicleComponent> ent, CMUVehicleCrashedEvent crash)
+    {
+        if (crash.Contact is not { } contact ||
+            !TryComp(ent, out CMUVehicleLampsComponent? lamps) ||
+            lamps.CrashSureSpeed <= lamps.CrashMinSpeed ||
+            lamps.CrashReach <= 0f)
+        {
+            return;
+        }
+
+        var force = Math.Clamp((crash.Speed - lamps.CrashMinSpeed) / (lamps.CrashSureSpeed - lamps.CrashMinSpeed), 0f, 1f);
+        if (force <= 0f)
+            return;
+
+        var broke = false;
+        foreach (var lamp in lamps.Lamps)
+        {
+            var near = 1f - Vector2.Distance(contact, lamp.Offset) / lamps.CrashReach;
+            if (near <= 0f ||
+                !_random.Prob(Math.Clamp(force * near, 0f, 1f)) ||
+                !TryGetPartSlot(ent.Owner, lamp.SlotId, out var slot) ||
+                !TryComp(slot.Item, out CMUVehiclePartIntegrityComponent? part) ||
+                part.Integrity <= part.MaxIntegrity * part.BrokenFraction)
+            {
+                continue;
+            }
+
+            WearPart(ent, lamp.SlotId, part.Integrity);
+            broke = true;
+        }
+
+        if (broke)
+            RefreshParts(ent, false);
+    }
+
+    /// <summary>
+    /// A shot landing on a lamp shatters it, however light: the nearest within reach.
+    /// </summary>
+    private void ShootLamp(Entity<CMUOpenVehicleComponent> ent, Vector2 hit)
+    {
+        if (!TryComp(ent, out CMUVehicleLampsComponent? lamps))
+            return;
+
+        CMUVehicleLampData? nearest = null;
+        var best = lamps.ShotReach;
+        foreach (var lamp in lamps.Lamps)
+        {
+            var distance = Vector2.Distance(hit, lamp.Offset);
+            if (distance > best)
+                continue;
+
+            best = distance;
+            nearest = lamp;
+        }
+
+        if (nearest != null &&
+            TryGetPartSlot(ent.Owner, nearest.SlotId, out var slot) &&
+            TryComp(slot.Item, out CMUVehiclePartIntegrityComponent? part) &&
+            part.Integrity > part.MaxIntegrity * part.BrokenFraction)
+        {
+            WearPart(ent, nearest.SlotId, part.Integrity);
+        }
+    }
+
+    /// <returns>Whether a lamp broke or was mended.</returns>
+    private bool RefreshLamps(Entity<ItemSlotsComponent?> vehicle)
     {
         if (!TryComp(vehicle, out CMUVehicleLampsComponent? lamps))
-            return;
+            return false;
 
         var broken = new List<string>();
         foreach (var lamp in lamps.Lamps)
@@ -93,10 +163,11 @@ public sealed partial class CMUOpenVehicleSystem
         }
 
         if (broken.Count == lamps.Broken.Count && broken.TrueForAll(lamps.Broken.Contains))
-            return;
+            return false;
 
         lamps.Broken = broken;
         Dirty(vehicle, lamps);
+        return true;
     }
 
     /// <summary>

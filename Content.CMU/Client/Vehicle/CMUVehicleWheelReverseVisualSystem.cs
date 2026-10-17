@@ -42,6 +42,10 @@ public sealed class CMUVehicleWheelReverseVisualSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUOpenVehicleComponent, GridVehicleMoverComponent, SpriteComponent>();
         while (query.MoveNext(out var uid, out _, out var mover, out var sprite))
         {
+            // Out of view: nothing to draw until it comes back.
+            if ((MetaData(uid).Flags & MetaDataFlags.Detached) != 0)
+                continue;
+
             if (mover.CurrentSpeed > -0.01f ||
                 !_sprite.LayerMapTryGet((uid, sprite), VehicleWheelLayers.Wheels, out var index, false) ||
                 sprite[index] is not SpriteComponent.Layer layer ||

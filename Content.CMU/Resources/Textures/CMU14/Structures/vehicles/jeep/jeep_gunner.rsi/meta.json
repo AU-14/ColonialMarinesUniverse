@@ -2424,6 +2424,10 @@
             "directions": 4
         },
         {
+            "name": "seat_gunner_open_outline",
+            "directions": 4
+        },
+        {
             "name": "mgturret_outline",
             "directions": 8
         },
@@ -3887,6 +3891,10 @@
         },
         {
             "name": "click_seat_gunner",
+            "directions": 4
+        },
+        {
+            "name": "click_seat_gunner_open",
             "directions": 4
         },
         {

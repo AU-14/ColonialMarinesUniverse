@@ -2806,7 +2806,7 @@ OUTLINE = (255, 255, 255)
 # seat's covers it turned round too, its back then against the dash.
 SEAT_PARTS = {"seat", "seat_back", "rear_bench", "rear_bench_back", "gunner_seat", "litter"}
 # The panel beside a seat: swung open, more of the seat shows (click_seat_<name>_open).
-SEAT_PANELS = {"driver": "door_driver", "passenger": "door_passenger", "bed": "tailgate"}
+SEAT_PANELS = {"driver": "door_driver", "passenger": "door_passenger", "gunner": "tailgate", "bed": "tailgate"}
 SEAT_REGIONS = {
     "driver": ((-16, -3), (-16, -5), (8, 31)),
     "passenger": ((-16, 0), (4, 15), (8, 31)),

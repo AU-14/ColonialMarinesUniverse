@@ -29,6 +29,11 @@ public sealed class CMUVehicleGrimeSystem : EntitySystem
     private const int Splats = 5;
     private const int Drips = 3;
 
+    // Blood comes in a drip at a time from every bleeding rider; it goes out to clients at most this often.
+    private const float BloodSendInterval = 1f;
+    private readonly HashSet<EntityUid> _bloodPending = new();
+    private float _bloodSendIn;
+
     // A top face's decal axes (right, down) for each direction it can be drawn from.
     private static readonly (Vector3 Right, Vector3 Down)[] TopAxes =
     [
@@ -138,9 +143,17 @@ public sealed class CMUVehicleGrimeSystem : EntitySystem
         if (blood + drawings == 0)
             return;
 
-        crayon.Blood.RemoveRange(0, blood);
-        crayon.Drawings.RemoveRange(0, drawings);
-        Dirty(ent, crayon);
+        if (blood > 0)
+        {
+            crayon.Blood.RemoveRange(0, blood);
+            DirtyField(ent, crayon, nameof(CMUVehicleCrayonComponent.Blood));
+        }
+
+        if (drawings > 0)
+        {
+            crayon.Drawings.RemoveRange(0, drawings);
+            DirtyField(ent, crayon, nameof(CMUVehicleCrayonComponent.Drawings));
+        }
     }
 
     /// <summary>
@@ -183,7 +196,26 @@ public sealed class CMUVehicleGrimeSystem : EntitySystem
         if (crayon.Blood.Count > crayon.MaxBlood)
             crayon.Blood.RemoveAt(0);
 
-        // Only the blood: the drawings can carry whole images.
-        DirtyField(vehicle, crayon, nameof(CMUVehicleCrayonComponent.Blood));
+        // Only the blood (the drawings can carry whole images), sent with whatever else spatters in the next second.
+        _bloodPending.Add(vehicle);
+    }
+
+    public override void Update(float frameTime)
+    {
+        if (_bloodPending.Count == 0)
+            return;
+
+        _bloodSendIn -= frameTime;
+        if (_bloodSendIn > 0f)
+            return;
+
+        _bloodSendIn = BloodSendInterval;
+        foreach (var vehicle in _bloodPending)
+        {
+            if (TryComp(vehicle, out CMUVehicleCrayonComponent? crayon))
+                DirtyField(vehicle, crayon, nameof(CMUVehicleCrayonComponent.Blood));
+        }
+
+        _bloodPending.Clear();
     }
 }

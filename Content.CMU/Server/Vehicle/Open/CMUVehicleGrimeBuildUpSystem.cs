@@ -77,7 +77,8 @@ public sealed class CMUVehicleGrimeBuildUpSystem : EntitySystem
                 SplashFront(hit.Vehicle, color);
         }
 
-        foreach (var mob in _runOver.Keys.ToList())
+        // Removing while walking a dictionary is allowed; no copy each tick.
+        foreach (var mob in _runOver.Keys)
         {
             if (!HasComp<VehicleRunoverComponent>(mob))
                 _runOver.Remove(mob);

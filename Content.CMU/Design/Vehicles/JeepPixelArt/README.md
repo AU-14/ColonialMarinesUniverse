@@ -441,12 +441,12 @@ Water on it first, from an extinguisher or a splash, puts the fire out and leave
 
 A jeep ships whole in a wooden crate a size up from its own, RMC's dense crate stretched to it with
 boards, battens, a shipping label and grime added (`jeep_crates.yml`, cargo, medical, transport or
-gun jeep): assembled, the key in the ignition, its axle bare and its one wheel set stowed in the
-rear hatch (the spare slot). Unlatched by hand (a 3 s do-after, `CMUVehicleCrate*`), the jeep stands
-where the crate was, facing south without its wheels. The crate leaves its floor under the jeep
+gun jeep; the colony's are named civilian): assembled, the key in the ignition, on its wheels with the
+spare in the rear hatch. Unlatched by hand (a 3 s do-after, `CMUVehicleCrate*`), the jeep stands
+where the crate was, facing south and ready to drive. The crate leaves its floor under the jeep
 (`CMUJeepCrateRemains`) and its walls fall over the jeep (`CMUJeepCrateWalls`, gone once down),
 after which the floor shows them lying flat round it. A crowbar breaks the floor and walls into 25
-planks; left alone they go after five minutes. Fit the wheel set from the hatch to drive off. While
+planks; left alone they go after five minutes. While
 a crate comes down by parachute it is drawn over everything, under a parachute made bigger and hung
 higher (`CMUParachuteJeepCrate`).
 

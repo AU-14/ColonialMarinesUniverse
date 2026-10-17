@@ -97,10 +97,14 @@ public sealed class CMUJeepTyreTest : GameTest
         await Server.WaitAssertion(() =>
         {
             var containers = SEntMan.System<SharedContainerSystem>();
-            Assert.That(containers.GetContainer(jeep, "wheel-1").ContainedEntities, Is.Empty, "The axle comes bare.");
-            var hatch = containers.GetContainer(jeep, CMUOpenVehicleSystem.SpareSlot).ContainedEntities;
-            Assert.That(hatch, Has.Count.EqualTo(1));
-            Assert.That(SEntMan.GetComponent<MetaDataComponent>(hatch[0]).EntityPrototype?.ID, Is.EqualTo("CMUJeepWheelRoad"));
+            foreach (var slot in new[] { "wheel-1", CMUOpenVehicleSystem.SpareSlot })
+            {
+                var held = containers.GetContainer(jeep, slot).ContainedEntities;
+                Assert.That(held, Has.Count.EqualTo(1), slot);
+                Assert.That(SEntMan.GetComponent<MetaDataComponent>(held[0]).EntityPrototype?.ID, Is.EqualTo("CMUJeepWheelRoad"), slot);
+            }
+
+            Assert.That(SEntMan.GetComponent<CMUVehicleTyresComponent>(jeep).Tyre?.Id, Is.EqualTo("Road"), "It rolls out on road tyres.");
         });
     }
 

@@ -15,6 +15,7 @@ using Content.Shared.Verbs;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
+using Robust.Shared.Timing;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Network;
@@ -37,6 +38,7 @@ public sealed class CMUVehicleSeatSystem : EntitySystem
     [Dependency] private CMUVehicleSeatGunsSystem _seatGuns = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private VehicleSystem _vehicles = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> FirearmsSkill = "RMCSkillFirearms";
 
@@ -323,6 +325,10 @@ public sealed class CMUVehicleSeatSystem : EntitySystem
 
     private void OnStrapped(Entity<CMUVehicleSeatComponent> ent, ref StrappedEvent args)
     {
+        // Also raised as a seat with a rider comes into view: the server's state already has it all.
+        if (_timing.ApplyingState)
+            return;
+
         EnsureComp<CMUVehicleSeatedComponent>(args.Buckle.Owner);
         if (TryComp(ent.Comp.Vehicle, out CMUVehicleSeatsComponent? seats))
         {
@@ -352,6 +358,9 @@ public sealed class CMUVehicleSeatSystem : EntitySystem
 
     private void OnUnstrapped(Entity<CMUVehicleSeatComponent> ent, ref UnstrappedEvent args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         RemComp<CMUVehicleSeatedComponent>(args.Buckle.Owner);
         if (RemComp<CMUVehicleRiderComponent>(args.Buckle.Owner))
         {
@@ -378,6 +387,9 @@ public sealed class CMUVehicleSeatSystem : EntitySystem
 
     private void OnRiderEquip(Entity<CMUVehicleRiderComponent> ent, ref DidEquipHandEvent args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         MarkGun(args.Equipped, RiderSpread(ent));
     }
 
@@ -396,6 +408,9 @@ public sealed class CMUVehicleSeatSystem : EntitySystem
 
     private void OnRiderUnequip(Entity<CMUVehicleRiderComponent> ent, ref DidUnequipHandEvent args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         UnmarkGun(args.Unequipped);
     }
 

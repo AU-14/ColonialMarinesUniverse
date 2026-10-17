@@ -130,7 +130,11 @@ public sealed partial class CMUOpenVehicleSystem : EntitySystem
     /// </summary>
     private void OnCrashed(Entity<CMUOpenVehicleComponent> ent, ref CMUVehicleCrashedEvent args)
     {
-        if (_net.IsClient || !args.Frontal || ent.Comp.EngineIntegrity <= 0f)
+        if (_net.IsClient)
+            return;
+
+        BreakLampsInCrash(ent, args);
+        if (!args.Frontal || ent.Comp.EngineIntegrity <= 0f)
             return;
 
         ent.Comp.EngineIntegrity = MathF.Max(0f, ent.Comp.EngineIntegrity - args.HullDamage * ent.Comp.EngineCrashShare);
@@ -216,7 +220,10 @@ public sealed partial class CMUOpenVehicleSystem : EntitySystem
             return;
 
         var jeep = ent.Comp;
-        AbsorbIntoEngine(ent, ref args, total);
+        var hitPoint = HitPoint(ent, args);
+        AbsorbIntoEngine(ent, ref args, total, hitPoint);
+        if (hitPoint is { } at && HasComp<ProjectileComponent>(args.Tool))
+            ShootLamp(ent, at);
 
         foreach (var part in jeep.Parts)
         {
@@ -233,7 +240,7 @@ public sealed partial class CMUOpenVehicleSystem : EntitySystem
             EnsureComp<CMUFuelLeakComponent>(can);
         }
 
-        RefreshParts(ent);
+        RefreshParts(ent, false);
     }
 
     /// <summary>
@@ -266,7 +273,7 @@ public sealed partial class CMUOpenVehicleSystem : EntitySystem
                 WearPart(ent, windshield, damage);
         }
 
-        RefreshParts(ent);
+        RefreshParts(ent, false);
     }
 
     private void WearPart(EntityUid vehicle, string slotId, float damage)
@@ -288,19 +295,25 @@ public sealed partial class CMUOpenVehicleSystem : EntitySystem
 
     /// <summary>
     /// Recomputes the damage flags the client draws from, and lets each headlight beam shine only
-    /// through an intact headlight.
+    /// through an intact headlight. Unless forced, as after a change of its own the caller made, the
+    /// vehicle is only sent again if a flag changed: hits land often.
     /// </summary>
-    private void RefreshParts(Entity<CMUOpenVehicleComponent> ent)
+    private void RefreshParts(Entity<CMUOpenVehicleComponent> ent, bool force = true)
     {
         var jeep = ent.Comp;
         Entity<ItemSlotsComponent?> vehicle = (ent.Owner, CompOrNull<ItemSlotsComponent>(ent.Owner));
+        var windshield = jeep.WindshieldDamaged;
+        var leaking = jeep.JerryCanLeaking;
         jeep.WindshieldDamaged = jeep.Parts.Exists(p => p.Kind == CMUVehiclePartKind.Windshield &&
-                                                         p.Slot is { } windshield && IsBroken(vehicle, windshield));
-        RefreshLamps(vehicle);
+                                                         p.Slot is { } slot && IsBroken(vehicle, slot));
+        var lamps = RefreshLamps(vehicle);
         jeep.JerryCanLeaking = TryGetPartSlot(vehicle, JerryCanSlot, out var can) &&
                                HasComp<CMUFuelLeakComponent>(can.Item);
-        Dirty(ent);
-        UpdateBeams(ent.Owner);
+        if (force || windshield != jeep.WindshieldDamaged || leaking != jeep.JerryCanLeaking)
+            Dirty(ent);
+
+        if (force || lamps)
+            UpdateBeams(ent.Owner);
     }
 
     /// <summary>
@@ -341,15 +354,19 @@ public sealed partial class CMUOpenVehicleSystem : EntitySystem
         var leaks = EntityQueryEnumerator<CMUFuelLeakComponent>();
         while (leaks.MoveNext(out var uid, out var leak))
         {
-            if (!_solution.TryGetSolution(uid, leak.Solution, out var solution, out var contents) || contents.Volume <= 0)
+            // Drained a second's worth at a time, not every tick: each drain updates the solution.
+            leak.Pending += leak.Rate * frameTime;
+            if (leak.Pending < leak.Rate)
                 continue;
 
-            // Volumes hold whole hundredths, so a tick's share would be truncated away; drain only
-            // what has built up to a whole hundredth and carry the rest.
-            leak.Pending += leak.Rate * frameTime;
-            var hundredths = (int) (leak.Pending * 100f);
-            if (hundredths <= 0)
+            if (!_solution.TryGetSolution(uid, leak.Solution, out var solution, out var contents) || contents.Volume <= 0)
+            {
+                leak.Pending = 0f;
                 continue;
+            }
+
+            // Volumes hold whole hundredths; the rest carries over.
+            var hundredths = (int) (leak.Pending * 100f);
 
             leak.Pending -= hundredths / 100f;
             _solution.SplitSolution(solution.Value, FixedPoint2.FromHundredths(hundredths));
