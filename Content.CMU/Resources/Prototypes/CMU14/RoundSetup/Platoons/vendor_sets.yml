@@ -134,6 +134,7 @@
   id: HAZOPS
   parent: AU14BasePlatoonVendorSet
   vendors:
+    Rifleman: AU14HAZOPSequipmentvendor
     Clothing: AU14HAZOPSclothingequipmentvendor
     ShipsideUniform: AU14HAZOPSShipsideUniformVendor
     Weapons: AU14HAZOPSWeaponsVendor
