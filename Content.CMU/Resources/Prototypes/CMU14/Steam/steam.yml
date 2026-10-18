@@ -47,6 +47,9 @@
   - type: CollideOnAnchor
   - type: Appearance
   - type: FluidPipe
+  # A pipe that a wrench has taken off the floor is carried in the hand or in a bag, as a gas pipe is, and is anchored again where it is wanted.
+  - type: Item
+    size: Normal
 
 - type: entity
   parent: RUMCFluidPipeBase
