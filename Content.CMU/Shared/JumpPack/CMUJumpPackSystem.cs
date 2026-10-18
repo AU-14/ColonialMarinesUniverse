@@ -103,14 +103,13 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
     {
         var wearer = args.Owner;
         if (ent.Comp.HoverUser != wearer ||
-            !TryComp<MovementSpeedModifierComponent>(wearer, out var speed) ||
-            speed.BaseSprintSpeed <= speed.BaseWalkSpeed)
+            !TryComp<MovementSpeedModifierComponent>(wearer, out var speed))
         {
             return;
         }
 
         // Hovering caps the wearer at their walking pace, even while sprinting.
-        args.Args.ModifySpeed(1f, speed.BaseWalkSpeed / speed.BaseSprintSpeed);
+        args.Args.CapSpeed(speed.BaseWalkSpeed);
     }
 
     private void OnBeforeZMovement(Entity<InventoryComponent> ent, ref CMUZBeforeMovementEvent args)

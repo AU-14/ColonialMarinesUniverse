@@ -340,10 +340,12 @@ public sealed class CMUJumpPackTest : GameTest
     {
         float before = 0;
         float sprintBefore = 0;
+        float walkBefore = 0;
         await Server.WaitAssertion(() =>
         {
             Equip();
             sprintBefore = SComp<MovementSpeedModifierComponent>(_rider).CurrentSprintSpeed;
+            walkBefore = SComp<MovementSpeedModifierComponent>(_rider).CurrentWalkSpeed;
             Perform(Pack.BoostActionEntity);
             Assert.That(CooldownLeft(Pack.BoostActionEntity), Is.GreaterThan(TimeSpan.Zero));
         });
@@ -364,9 +366,11 @@ public sealed class CMUJumpPackTest : GameTest
                 Assert.That(Action(Pack.HoverActionEntity).Toggled, Is.True);
                 Assert.That(CooldownLeft(Pack.BoostActionEntity), Is.EqualTo(TimeSpan.Zero),
                     "Hovering clears the boost cooldown.");
-                Assert.That(sprintBefore, Is.GreaterThan(speed.BaseWalkSpeed + 0.5f));
+                Assert.That(sprintBefore, Is.GreaterThan(speed.BaseWalkSpeed), "The rider must sprint faster than walking for this check to mean anything.");
                 Assert.That(speed.CurrentSprintSpeed, Is.EqualTo(speed.BaseWalkSpeed).Within(0.01f),
                     "Hovering moves at walking pace even when sprinting.");
+                Assert.That(speed.CurrentWalkSpeed, Is.EqualTo(MathF.Min(walkBefore, speed.BaseWalkSpeed)).Within(0.01f),
+                    "The hover cap must not stack with existing slowdowns.");
             });
         });
 
