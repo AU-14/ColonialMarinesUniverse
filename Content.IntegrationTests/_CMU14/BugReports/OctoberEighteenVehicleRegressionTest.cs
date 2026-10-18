@@ -54,4 +54,27 @@ public sealed class OctoberEighteenVehicleRegressionTest : GameTest
             SEntMan.DeleteEntity(ship);
         });
     }
+
+    // the loader sat inside the unanchored blocker column, so every interaction ray hit the blocker first
+    [Test]
+    public async Task ArmedSppVanAmmoLoaderCanBeReached()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.System<MapLoaderSystem>().TryLoadMap(
+                new ResPath("/Maps/_RMC14/Vehicles/spp_van_armed_interior.yml"), out var loadedMap, out var grids,
+                DeserializationOptions.Default with { InitializeMaps = true }), Is.True);
+            var grid = grids!.Single().Owner;
+            var transforms = SEntMan.System<SharedTransformSystem>();
+
+            var loader = SEntMan.AllEntityQueryEnumerator<VehicleAmmoLoaderComponent, TransformComponent>();
+            Assert.That(loader.MoveNext(out var loaderUid, out _, out _), Is.True);
+
+            // standing in the aisle behind the seats
+            var standing = transforms.ToMapCoordinates(new EntityCoordinates(grid, new Vector2(2.9f, 0.03f)));
+            Assert.That(SEntMan.System<SharedInteractionSystem>().InRangeUnobstructed(standing, loaderUid), Is.True);
+
+            SEntMan.DeleteEntity(loadedMap!.Value.Owner);
+        });
+    }
 }
