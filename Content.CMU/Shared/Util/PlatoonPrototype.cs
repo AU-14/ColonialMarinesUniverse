@@ -56,17 +56,16 @@ public sealed partial class PlatoonPrototype : IPrototype
     [DataField]
     public HashSet<EntProtoId> VehicleSupplyCatalog = new();
 
+    /// <summary>
+    ///     How many vehicles the side can pull up from its <see cref="VehicleSupplyCatalog"/> in a round: one tank,
+    ///     one VTOL, APC or armed light vehicle, one unarmed support vehicle and one fighter.
+    /// </summary>
     [DataField]
-    public int MaxSuppliedVehicles = 2;
+    public int MaxSuppliedVehicles = 4;
 
+    /// <summary>How many vehicles from each of those four categories the side can pull up.</summary>
     [DataField]
-    public int MaxSuppliedTanks = 1;
-
-    [DataField]
-    public int MaxSuppliedVtols = 1;
-
-    [DataField]
-    public int MaxSuppliedFighters = 1;
+    public int MaxSuppliedPerCategory = 1;
 
     [DataField]
     public ProtoId<PlatoonVendorSetPrototype>? VendorSet { get; private set; }
