@@ -51,6 +51,12 @@ public sealed partial class CMUJumpPackComponent : Component
     public bool EightDirections;
 
     /// <summary>
+    /// When false the pack needs no <c>GasTank</c>, works while empty, and never burns gas.
+    /// </summary>
+    [DataField]
+    public bool RequiresFuel = true;
+
+    /// <summary>
     /// Shared by boost and jump. Boosting ignores it while hovering.
     /// </summary>
     [DataField]
@@ -63,10 +69,10 @@ public sealed partial class CMUJumpPackComponent : Component
     public float BoostSpeed = 12f;
 
     /// <summary>
-    /// Upward z-velocity applied by the jump. Clears one level from <see cref="JumpTakeoffLocalPosition"/>.
+    /// Peak of the jump, in z-levels above the floor it was launched from. Must exceed 1 to reach the level above.
     /// </summary>
     [DataField]
-    public float JumpZVelocity = 5.5f;
+    public float JumpHeight = 1.8f;
 
     [DataField]
     public float JumpTakeoffLocalPosition = 0.25f;

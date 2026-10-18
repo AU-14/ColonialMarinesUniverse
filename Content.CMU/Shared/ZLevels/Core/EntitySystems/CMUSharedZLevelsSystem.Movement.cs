@@ -30,7 +30,7 @@ public abstract partial class CMUSharedZLevelsSystem
 {
     public const int MaxZLevelsBelowRendering = 8;
 
-    private const float ZGravityForce = 9.8f;
+    public const float ZGravityForce = 9.8f;
     private const float ZVelocityLimit = 20.0f;
     protected const float MinActiveZVelocity = 0.05f;
 

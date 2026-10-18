@@ -8,6 +8,8 @@ using Content.Shared.Examine;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Movement.Components;
+using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Throwing;
 using Content.Shared.Verbs;
@@ -29,6 +31,7 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
     [Dependency] private SharedGasTankSystem _gasTank = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -47,6 +50,7 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
         SubscribeLocalEvent<CMUJumpPackComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<CMUJumpPackComponent, GetVerbsEvent<AlternativeVerb>>(OnGetAltVerbs);
         SubscribeLocalEvent<CMUJumpPackComponent, CMUZHoverEndedEvent>(OnHoverEnded);
+        SubscribeLocalEvent<CMUJumpPackComponent, InventoryRelayedEvent<RefreshMovementSpeedModifiersEvent>>(OnRefreshMovementSpeed);
         SubscribeLocalEvent<InventoryComponent, CMUZBeforeMovementEvent>(OnBeforeZMovement);
 
         SubscribeLocalEvent<CMUJumpPackComponent, CMUJumpPackBoostActionEvent>(OnBoostAction);
@@ -95,12 +99,25 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
             _zLevels.CancelZHover(args.EquipTarget, ent);
     }
 
+    private void OnRefreshMovementSpeed(Entity<CMUJumpPackComponent> ent, ref InventoryRelayedEvent<RefreshMovementSpeedModifiersEvent> args)
+    {
+        var wearer = args.Owner;
+        if (ent.Comp.HoverUser != wearer ||
+            !TryComp<MovementSpeedModifierComponent>(wearer, out var speed) ||
+            speed.BaseSprintSpeed <= speed.BaseWalkSpeed)
+        {
+            return;
+        }
+
+        // Hovering caps the wearer at their walking pace, even while sprinting.
+        args.Args.ModifySpeed(1f, speed.BaseWalkSpeed / speed.BaseSprintSpeed);
+    }
+
     private void OnBeforeZMovement(Entity<InventoryComponent> ent, ref CMUZBeforeMovementEvent args)
     {
         if (_net.IsClient ||
             !_inventory.TryGetSlotEntity(ent, "back", out var back) ||
             !TryComp<CMUJumpPackComponent>(back, out var pack) ||
-            !TryComp<GasTankComponent>(back, out var tank) ||
             !TryComp<CMUZPhysicsComponent>(ent, out var zPhysics))
         {
             return;
@@ -120,7 +137,9 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
         }
 
         var drain = pack.LandingFuelPerSecond * args.FrameTime;
-        if (tank.Air.TotalMoles < drain || _mobState.IsDead(ent))
+        var tank = CompOrNull<GasTankComponent>(back.Value);
+        var outOfFuel = pack.RequiresFuel && (tank == null || tank.Air.TotalMoles < drain);
+        if (outOfFuel || _mobState.IsDead(ent))
         {
             if (descending)
             {
@@ -131,12 +150,15 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
             return;
         }
 
-        tank.Air.Remove(drain);
-        if (_timing.CurTime >= pack.NextFuelSync)
+        if (pack.RequiresFuel && tank != null)
         {
-            pack.NextFuelSync = _timing.CurTime + FuelSyncInterval;
-            Dirty(back.Value, tank);
-            _gasTank.UpdateUserInterface((back.Value, tank));
+            tank.Air.Remove(drain);
+            if (_timing.CurTime >= pack.NextFuelSync)
+            {
+                pack.NextFuelSync = _timing.CurTime + FuelSyncInterval;
+                Dirty(back.Value, tank);
+                _gasTank.UpdateUserInterface((back.Value, tank));
+            }
         }
 
         if (descending)
@@ -185,6 +207,7 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
             // The hover was cut short by something else (teleport, falling, admin), not by the pack.
             comp.HoverUser = null;
             ApplyHoverCooldown(ent);
+            _movementSpeed.RefreshMovementSpeedModifiers(args.Hoverer);
         }
 
         if (comp.DescendingUser == args.Hoverer)
@@ -305,7 +328,9 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
         if (zPhysics.LocalPosition < comp.JumpTakeoffLocalPosition)
             _zLevels.SetZLocalPosition((user, zPhysics), comp.JumpTakeoffLocalPosition);
 
-        _zLevels.SetZVelocity((user, zPhysics), comp.JumpZVelocity);
+        // Launch fast enough that gravity stops the rise at JumpHeight.
+        var rise = MathF.Max(0f, comp.JumpHeight - zPhysics.LocalPosition);
+        _zLevels.SetZVelocity((user, zPhysics), MathF.Sqrt(2f * CMUSharedZLevelsSystem.ZGravityForce * rise));
 
         _audio.PlayPredicted(comp.BoostSound, user, user);
         StartBoostCooldown(ent);
@@ -355,6 +380,7 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
         _actions.SetToggled(comp.HoverActionEntity, true);
         _actions.SetUseDelay(comp.HoverActionEntity, null);
         _actions.ClearCooldown(comp.BoostActionEntity);
+        _movementSpeed.RefreshMovementSpeedModifiers(user);
 
         _zLevels.StartZHover(user, targetMap.Value, ent, comp.HoverAscendSpeed, comp.HoverDescendSpeed);
 
@@ -369,8 +395,8 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
             return;
 
         var now = _timing.CurTime;
-        var query = EntityQueryEnumerator<CMUJumpPackComponent, GasTankComponent>();
-        while (query.MoveNext(out var uid, out var comp, out var tank))
+        var query = EntityQueryEnumerator<CMUJumpPackComponent>();
+        while (query.MoveNext(out var uid, out var comp))
         {
             if (comp.HoverUser is not { } user)
                 continue;
@@ -384,15 +410,20 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
                 continue;
             }
 
-            var drain = comp.HoverFuelPerSecond * frameTime;
-            var removed = tank.Air.Remove(drain);
-            var outOfFuel = removed.TotalMoles < drain * 0.99f;
-
-            if (outOfFuel || now >= comp.NextFuelSync)
+            var outOfFuel = false;
+            if (comp.RequiresFuel)
             {
-                comp.NextFuelSync = now + FuelSyncInterval;
-                Dirty(uid, tank);
-                _gasTank.UpdateUserInterface((uid, tank));
+                var drain = comp.HoverFuelPerSecond * frameTime;
+                var tank = CompOrNull<GasTankComponent>(uid);
+                var removed = tank?.Air.Remove(drain).TotalMoles ?? 0f;
+                outOfFuel = removed < drain * 0.99f;
+
+                if (tank != null && (outOfFuel || now >= comp.NextFuelSync))
+                {
+                    comp.NextFuelSync = now + FuelSyncInterval;
+                    Dirty(uid, tank);
+                    _gasTank.UpdateUserInterface((uid, tank));
+                }
             }
 
             if (outOfFuel)
@@ -444,6 +475,7 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
         comp.DescendingUser = user;
         ApplyHoverCooldown(ent);
         Dirty(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers(user);
 
         _zLevels.StopZHover(user);
     }
@@ -500,13 +532,19 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
                !_zLevels.HasTileAbove(user);
     }
 
-    private bool HasFuel(EntityUid pack, float amount)
+    private bool HasFuel(Entity<CMUJumpPackComponent> pack, float amount)
     {
+        if (!pack.Comp.RequiresFuel)
+            return true;
+
         return TryComp(pack, out GasTankComponent? tank) && tank.Air.TotalMoles >= amount;
     }
 
-    private bool TryUseFuel(EntityUid pack, EntityUid user, float amount)
+    private bool TryUseFuel(Entity<CMUJumpPackComponent> pack, EntityUid user, float amount)
     {
+        if (!pack.Comp.RequiresFuel)
+            return true;
+
         if (!TryComp(pack, out GasTankComponent? tank) || tank.Air.TotalMoles < amount)
         {
             _popup.PopupClient(Loc.GetString("cmu-jump-pack-no-fuel"), user, user, PopupType.SmallCaution);

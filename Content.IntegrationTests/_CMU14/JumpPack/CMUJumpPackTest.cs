@@ -18,6 +18,27 @@ namespace Content.IntegrationTests.CMU14.JumpPack;
 [TestOf(typeof(CMUJumpPackSystem))]
 public sealed class CMUJumpPackTest : GameTest
 {
+    [TestPrototypes]
+    private const string Prototypes = """
+        - type: entity
+          parent: CMUJumpPack
+          id: CMUJumpPackTestFuelFreeEmpty
+          components:
+          - type: CMUJumpPack
+            requiresFuel: false
+
+        - type: entity
+          id: CMUJumpPackTestFuelFreeTankless
+          components:
+          - type: Item
+            size: Huge
+          - type: Clothing
+            quickEquip: false
+            slots:
+            - Back
+          - type: CMUJumpPack
+            requiresFuel: false
+        """;
     private readonly List<EntityUid> _cleanup = new();
     private SharedMapSystem _maps = null!;
     private CMUZLevelsSystem _z = null!;
@@ -318,9 +339,11 @@ public sealed class CMUJumpPackTest : GameTest
     public async Task HoverHoldsAboveAndLandsSafelyWhenEndedEarly()
     {
         float before = 0;
+        float sprintBefore = 0;
         await Server.WaitAssertion(() =>
         {
             Equip();
+            sprintBefore = SComp<MovementSpeedModifierComponent>(_rider).CurrentSprintSpeed;
             Perform(Pack.BoostActionEntity);
             Assert.That(CooldownLeft(Pack.BoostActionEntity), Is.GreaterThan(TimeSpan.Zero));
         });
@@ -334,12 +357,16 @@ public sealed class CMUJumpPackTest : GameTest
             before = Moles;
             Perform(Pack.HoverActionEntity);
 
+            var speed = SComp<MovementSpeedModifierComponent>(_rider);
             Assert.Multiple(() =>
             {
                 Assert.That(Pack.HoverUser, Is.EqualTo(_rider));
                 Assert.That(Action(Pack.HoverActionEntity).Toggled, Is.True);
                 Assert.That(CooldownLeft(Pack.BoostActionEntity), Is.EqualTo(TimeSpan.Zero),
                     "Hovering clears the boost cooldown.");
+                Assert.That(sprintBefore, Is.GreaterThan(speed.BaseWalkSpeed + 0.5f));
+                Assert.That(speed.CurrentSprintSpeed, Is.EqualTo(speed.BaseWalkSpeed).Within(0.01f),
+                    "Hovering moves at walking pace even when sprinting.");
             });
         });
 
@@ -358,6 +385,8 @@ public sealed class CMUJumpPackTest : GameTest
             Assert.That(Pack.HoverUser, Is.Null);
             Assert.That(Action(Pack.HoverActionEntity).Toggled, Is.False);
             Assert.That(CooldownLeft(Pack.HoverActionEntity), Is.GreaterThan(TimeSpan.FromSeconds(25)));
+            Assert.That(SComp<MovementSpeedModifierComponent>(_rider).CurrentSprintSpeed, Is.EqualTo(sprintBefore).Within(0.01f),
+                "Ending the hover restores the wearer's sprint.");
         });
 
         await Pair.RunSeconds(3f);
@@ -406,6 +435,40 @@ public sealed class CMUJumpPackTest : GameTest
                 Assert.That(SEntMan.HasComponent<CMUZHoverComponent>(_rider), Is.False);
             });
             AssertUnhurt();
+        });
+    }
+
+    [TestCase("CMUJumpPackTestFuelFreeEmpty")]
+    [TestCase("CMUJumpPackTestFuelFreeTankless")]
+    public async Task FuelFreePackWorksEmptyOrWithoutATank(string prototype)
+    {
+        await Server.WaitAssertion(() =>
+        {
+            SEntMan.DeleteEntity(_pack);
+            _pack = SEntMan.SpawnEntity(prototype, SComp<TransformComponent>(_rider).Coordinates);
+            Assert.That(SEntMan.TryGetComponent<GasTankComponent>(_pack, out var tank) ? tank.Air.TotalMoles : 0f, Is.Zero);
+
+            Equip();
+            Perform(Pack.BoostActionEntity);
+            Assert.That(CooldownLeft(Pack.BoostActionEntity), Is.GreaterThan(TimeSpan.Zero), "Boost fires with no fuel.");
+        });
+
+        await Pair.RunSeconds(1.5f);
+        await Server.WaitAssertion(() =>
+        {
+            SEntMan.System<SharedTransformSystem>().SetCoordinates(_rider, new EntityCoordinates(_lower, new Vector2(0.5f, 0.5f)));
+            Perform(Pack.HoverActionEntity);
+            Assert.That(Pack.HoverUser, Is.EqualTo(_rider), "Hover starts with no fuel.");
+        });
+
+        await Pair.RunSeconds(3f);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(Pack.HoverUser, Is.EqualTo(_rider), "An empty fuel-free pack must not cut the hover.");
+                Assert.That(SComp<TransformComponent>(_rider).MapUid, Is.EqualTo(_upper));
+            });
         });
     }
 

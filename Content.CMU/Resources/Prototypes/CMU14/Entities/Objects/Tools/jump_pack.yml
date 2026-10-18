@@ -21,6 +21,16 @@
       volume: 5
       temperature: 293.15
   - type: CMUJumpPack
+    # Set false to run without a GasTank or while empty; no gas is burned.
+    requiresFuel: true
+    # Directional boost: tiles travelled per boost, and the cooldown shared with the z-level jump.
+    boostDistance: 6
+    boostCooldown: 7
+    # Hover: seconds held one level up, and its cooldown counted from when the hover started.
+    hoverDuration: 20
+    hoverCooldown: 35
+    # Z-level jump: peak height in z-levels above the starting floor. Must be above 1 to reach the level above.
+    jumpHeight: 1.8
     landingFuelPerSecond: 0.0068379
   - type: StaticPrice
     price: 150
