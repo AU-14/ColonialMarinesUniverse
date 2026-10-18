@@ -60,6 +60,7 @@
     shoes: RMCShoesLaceupBrown
     id: AU14IDCardColonyCorporateLiaison
     outerClothing: RMCJacketCorporateBlue
+    pocket1: CMUPepperSpray
   inhand:
   - RMCRadioHandheldColonyOff
   - CMUMobilePhone
