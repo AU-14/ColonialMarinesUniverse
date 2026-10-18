@@ -1,3 +1,7 @@
+using System.Numerics;
+using Content.Shared._RMC14.Emote;
+using Content.Shared.Chat.Prototypes;
+using Robust.Shared.Map;
 using Content.Shared._RMC14.BlurredVision;
 using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared.CMU14.PepperSpray;
@@ -47,8 +51,14 @@ public sealed class CMUPepperSpraySystem : EntitySystem
     private const float SplashIntensityOff = 0.25f;
     private static readonly string[] FaceSlots = ["mask", "head", "eyes"];
     private static readonly TimeSpan PainInterval = TimeSpan.FromSeconds(1);
+    private static readonly ProtoId<EmotePrototype> ScreamEmote = "Scream";
+    private static readonly TimeSpan ScreamCooldown = TimeSpan.FromSeconds(4);
+    private const float BurstHalfWidth = 0.6f;
 
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedRMCEmoteSystem _emote = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private CMUPepperSprayedSystem _sprayed = default!;
     [Dependency] private SharedStunSystem _stun = default!;
@@ -62,6 +72,8 @@ public sealed class CMUPepperSpraySystem : EntitySystem
     [Dependency] private StatusEffectsSystem _status = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private UseDelaySystem _useDelay = default!;
+
+    private readonly HashSet<Entity<MobStateComponent>> _burstMobs = new();
 
     public override void Initialize()
     {
@@ -81,12 +93,16 @@ public sealed class CMUPepperSpraySystem : EntitySystem
 
     private void OnAfterInteract(Entity<CMUPepperSprayComponent> ent, ref AfterInteractEvent args)
     {
-        if (args.Handled || args.Target is not { } target || !HasComp<MobStateComponent>(target))
+        if (args.Handled)
             return;
 
         var user = args.User;
-        if (!_interaction.InRangeUnobstructed(user, target, ent.Comp.Range, popup: false))
-            return;
+
+        // Clicking someone sprays them in the face. Clicking anywhere else sprays a burst a couple of tiles that
+        // way, catching anyone in it.
+        var direct = args.Target is { } clicked &&
+                     HasComp<MobStateComponent>(clicked) &&
+                     _interaction.InRangeUnobstructed(user, clicked, ent.Comp.Range, popup: false);
 
         args.Handled = true;
 
@@ -109,12 +125,66 @@ public sealed class CMUPepperSpraySystem : EntitySystem
             : 0f;
         _audio.PlayPvs(ent.Comp.Sound, ent);
 
+        if (direct)
+        {
+            SprayTarget(ent, user, args.Target!.Value, strength, true);
+            return;
+        }
+
+        foreach (var target in GetBurstTargets(user, _transform.ToMapCoordinates(args.ClickLocation), ent.Comp.BurstRange))
+        {
+            SprayTarget(ent, user, target, strength, false);
+        }
+    }
+
+    /// <summary>
+    ///     Everyone in a burst sprayed from <paramref name="user"/> toward <paramref name="aim"/>: a strip about a tile
+    ///     wide, <paramref name="range"/> tiles long, that walls stop.
+    /// </summary>
+    private List<EntityUid> GetBurstTargets(EntityUid user, MapCoordinates aim, float range)
+    {
+        var targets = new List<EntityUid>();
+        var origin = _transform.GetMapCoordinates(user);
+        if (aim.MapId != origin.MapId)
+            return targets;
+
+        var direction = aim.Position - origin.Position;
+        direction = direction.LengthSquared() < 0.01f
+            ? _transform.GetWorldRotation(user).ToWorldVec()
+            : Vector2.Normalize(direction);
+
+        _burstMobs.Clear();
+        _lookup.GetEntitiesInRange(origin, range + BurstHalfWidth, _burstMobs);
+        foreach (var mob in _burstMobs)
+        {
+            if (mob.Owner == user)
+                continue;
+
+            var offset = _transform.GetWorldPosition(mob) - origin.Position;
+            var along = Vector2.Dot(offset, direction);
+            if (along < 0.2f || along > range + 0.3f)
+                continue;
+
+            if ((offset - direction * along).Length() > BurstHalfWidth)
+                continue;
+
+            if (!_interaction.InRangeUnobstructed(user, mob.Owner, range + BurstHalfWidth, popup: false))
+                continue;
+
+            targets.Add(mob);
+        }
+
+        return targets;
+    }
+
+    private void SprayTarget(Entity<CMUPepperSprayComponent> ent, EntityUid user, EntityUid target, float strength, bool direct)
+    {
         var targetName = Identity.Entity(target, EntityManager);
         var userName = Identity.Entity(user, EntityManager);
 
         if (ent.Comp.Antidote)
         {
-            WashOut(target, user, strength, targetName, userName);
+            WashOut(target, user, strength, targetName, userName, direct);
             return;
         }
 
@@ -158,6 +228,13 @@ public sealed class CMUPepperSpraySystem : EntitySystem
         }
 
         _status.TryAddStatusEffect<RMCBlindedComponent>(target, BlindKey, ent.Comp.BlurTime * strength, true);
+
+        // It hurts.
+        if (now >= burning.NextScream)
+        {
+            burning.NextScream = now + ScreamCooldown;
+            _emote.TryEmoteWithChat(target, ScreamEmote, forceEmote: true, cooldown: TimeSpan.Zero);
+        }
 
         _popup.PopupEntity(Loc.GetString("cmu-pepper-spray-eyes-burn"), target, target, PopupType.LargeCaution);
         _popup.PopupEntity(Loc.GetString("cmu-pepper-spray-sprayed", ("user", userName), ("target", targetName)),
@@ -256,11 +333,12 @@ public sealed class CMUPepperSpraySystem : EntitySystem
         return false;
     }
 
-    private void WashOut(EntityUid target, EntityUid user, float strength, EntityUid targetName, EntityUid userName)
+    private void WashOut(EntityUid target, EntityUid user, float strength, EntityUid targetName, EntityUid userName, bool direct)
     {
         if (strength < 0.25f || !TryComp(target, out CMUPepperSprayedComponent? burning))
         {
-            _popup.PopupEntity(Loc.GetString("cmu-pepper-spray-antidote-nothing"), target, user);
+            if (direct)
+                _popup.PopupEntity(Loc.GetString("cmu-pepper-spray-antidote-nothing"), target, user);
             return;
         }
 

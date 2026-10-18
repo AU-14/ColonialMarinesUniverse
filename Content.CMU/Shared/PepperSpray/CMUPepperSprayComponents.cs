@@ -32,6 +32,10 @@ public sealed partial class CMUPepperSprayComponent : Component
     [DataField]
     public float Range = 2.5f;
 
+    /// <summary>How far a burst sprayed at the floor or the air reaches.</summary>
+    [DataField]
+    public float BurstRange = 2f;
+
     /// <summary>Pain each spray causes in total, spread over <see cref="PainTicks"/> seconds.</summary>
     [DataField]
     public float Pain = 35f;
@@ -104,4 +108,7 @@ public sealed partial class CMUPepperSprayedComponent : Component
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextSplash;
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan NextScream;
 }
