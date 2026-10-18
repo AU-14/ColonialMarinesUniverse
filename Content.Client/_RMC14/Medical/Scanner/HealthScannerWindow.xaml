@@ -178,26 +178,8 @@
                         </BoxContainer>
                     </PanelContainer>
 
-                    <!-- advice -->
-                    <PanelContainer Name="MedicalAdviceCard" Access="Public" Visible="False" Margin="0 0 0 4">
-                        <PanelContainer.PanelOverride>
-                            <graphics:StyleBoxFlat BackgroundColor="#1F2327" />
-                        </PanelContainer.PanelOverride>
-                        <BoxContainer Orientation="Vertical" Margin="0 4 0 5">
-                            <Label Name="MedicalAdviceLabel" Access="Public" Margin="6 0"
-                                   Text="{Loc cmu-medical-scanner-section-advice}" StyleClasses="LabelKeyText" />
-                            <PanelContainer Name="MedicalAdviceSeparator" Access="Public" MinHeight="2" Margin="0 3 0 4">
-                                <PanelContainer.PanelOverride>
-                                    <graphics:StyleBoxFlat BackgroundColor="#4972A1" />
-                                </PanelContainer.PanelOverride>
-                            </PanelContainer>
-                            <BoxContainer Name="AdviceContainer" Access="Public" Orientation="Vertical"
-                                          Margin="8 0" SeparationOverride="2" />
-                        </BoxContainer>
-                    </PanelContainer>
-
                     <!-- organs-->
-                    <PanelContainer Name="CMUOrgansCard" Access="Public" Visible="False">
+                    <PanelContainer Name="CMUOrgansCard" Access="Public" Visible="False" Margin="0 0 0 4">
                         <PanelContainer.PanelOverride>
                             <graphics:StyleBoxFlat BackgroundColor="#1F2327" />
                         </PanelContainer.PanelOverride>
@@ -210,6 +192,24 @@
                                 </PanelContainer.PanelOverride>
                             </PanelContainer>
                             <BoxContainer Name="CMUOrgansContainer" Access="Public" Orientation="Vertical"
+                                          Margin="8 0" SeparationOverride="2" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <!-- advice -->
+                    <PanelContainer Name="MedicalAdviceCard" Access="Public" Visible="False">
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#1F2327" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical" Margin="0 4 0 5">
+                            <Label Name="MedicalAdviceLabel" Access="Public" Margin="6 0"
+                                   Text="{Loc cmu-medical-scanner-section-advice}" StyleClasses="LabelKeyText" />
+                            <PanelContainer Name="MedicalAdviceSeparator" Access="Public" MinHeight="2" Margin="0 3 0 4">
+                                <PanelContainer.PanelOverride>
+                                    <graphics:StyleBoxFlat BackgroundColor="#4972A1" />
+                                </PanelContainer.PanelOverride>
+                            </PanelContainer>
+                            <BoxContainer Name="AdviceContainer" Access="Public" Orientation="Vertical"
                                           Margin="8 0" SeparationOverride="2" />
                         </BoxContainer>
                     </PanelContainer>
