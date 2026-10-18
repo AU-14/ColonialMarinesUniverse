@@ -196,3 +196,22 @@
     canCollide: false
   - type: RMCWallExplosionDeletable
   - type: CMUTileChargeAnchor
+
+# Open air inside a ship's hull, e.g. a hangar shaft looking down to the deck below. Things fall through it and
+# you can see through it like any opening, and dropships can land into it, but atmos treats it as a sealed
+# floor tile instead of space, so the room keeps its air. Can't be pried up, built on or anchored to.
+- type: tile
+  parent: CMTileBase
+  id: CMUFloorOpenAirSealed
+  name: tiles-cmu-open-air-sealed
+  sprite: /Textures/_RMC14/Tiles/shuttle/invisible.png
+  transparent: true
+  isSpace: false
+  indestructible: true
+  deconstructTools: []
+  itemDrop: null
+  blockAnchoring: true
+  blockConstruction: true
+  weedsSpreadable: false
+  canPlaceTunnel: false
+  friction: 0
