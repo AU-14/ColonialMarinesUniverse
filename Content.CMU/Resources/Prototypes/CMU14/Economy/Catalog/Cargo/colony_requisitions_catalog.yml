@@ -37,6 +37,8 @@
         crate: RUMCCrateHandSaws # RUMC: the saw for logs
       - cost: 1500
         crate: RUMCCrateIndustryStart # RUMC: the sealed kit of the start of the industry, opened with a crowbar
+      - cost: 450
+        crate: RUMCCrateConcreteMixer # RUMC: the concrete mixer, to mix bags of concrete from stone powder, sand and water
       - cost: 350
         crate: RMCCrateReplacementLights
       - cost: 350

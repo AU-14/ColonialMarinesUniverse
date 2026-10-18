@@ -1175,3 +1175,14 @@
         nodeGroupID: Pipe
         pipeDirection: Fourway
   - type: SteamPort
+
+# The concrete mixer as the colony orders it from requisitions: the machine alone in a crate. It still wants power and a water pipe.
+- type: entity
+  parent: RMCCrateConstruction
+  id: RUMCCrateConcreteMixer
+  name: concrete mixer crate
+  description: A concrete mixer for the builders of the colony. It wants power and a pipe with water.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RUMCConcreteMixer
