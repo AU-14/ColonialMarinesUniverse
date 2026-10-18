@@ -13640,5 +13640,64 @@
   id: 819
   time: '2026-10-18T02:22:26.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2210
+- author: KeiKiyomi
+  changes:
+  - message: Xenos can devolve for a full point refund within 15 seconds of evolving
+      if they are on weeds and at full health.
+    type: Tweak
+  id: 820
+  time: '2026-10-18T03:36:05.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2203
+- author: CatoChristopherMrow
+  changes:
+  - message: Both military and civilian doctors and nurses should now have relatively
+      consistent skills between their counterpart.
+    type: Tweak
+  id: 821
+  time: '2026-10-18T03:37:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2204
+- author: KeiKiyomi
+  changes:
+  - message: Added Camera Earpieces to IO's
+    type: Add
+  id: 822
+  time: '2026-10-18T03:38:39.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2205
+- author: PoltavskaPraca
+  changes:
+  - message: vehicle pit and asrs pit now correctly eat items and mobs when they arent
+      raised or are preparing to move
+    type: Add
+  - message: crewmen now have to order their vehicle parts via ASRS requisitions,
+      all parts have dollar values on purchases. That means modules are replaceable
+      now.
+    type: Add
+  - message: req starting balance now is 30k dollars
+    type: Add
+  - message: pilots now have access to the vehicle vendor (the one where the tanks/jets
+      are stored)
+    type: Add
+  - message: changed some module and vehilce weapon names to CMss13 variation (like
+      ACE acannon -> AC3-E acannon
+    type: Tweak
+  - message: asrs pit now doesn't check for obj every 0.5 seconds when it's lowered
+    type: Tweak
+  id: 823
+  time: '2026-10-18T10:04:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2173
+- author: KeiKiyomi
+  changes:
+  - message: Two Point Slings can now be alt-clicked to be put on underbarrels
+    type: Tweak
+  id: 824
+  time: '2026-10-18T10:11:33.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2212
+- author: Vixting
+  changes:
+  - message: Added new compact health analyzer UI based of cm13s
+    type: Add
+  id: 825
+  time: '2026-10-18T12:49:17.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2217
 Name: CMU
 Order: -1
