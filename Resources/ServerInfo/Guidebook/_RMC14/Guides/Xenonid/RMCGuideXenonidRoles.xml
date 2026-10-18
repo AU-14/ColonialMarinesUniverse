@@ -3,6 +3,14 @@
 
   Strain guides can be found attached to their parent caste.
 
+  <!-- CMU14: role-based host identification -->
+  Xenonids and neomorphs recognize hosts by their role. Commanders are Empress Hosts,
+  executive officers are Queen Hosts, squad and fireteam leaders are Leader Hosts,
+  radio traffic operators are Antennae Hosts, and machinegunners are Fast-Spitter Hosts.
+  Other roles have descriptive names such as Healer Host, Builder Host, and Warrior Host.
+  The identifying number suffix is unchanged. Synthetics retain their synthetic names,
+  and allied hosts remain recognizable to their allied hive.
+
   - [textlink="Defender" link="RMCGuideRoleDefender"]
   - [textlink="Sentinel" link="RMCGuideRoleSentinel"]
   - [textlink="Runner" link="RMCGuideRoleRunner"]

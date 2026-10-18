@@ -95,6 +95,8 @@ public abstract partial class SharedXenoNameSystem : EntitySystem
 
     private void OnGetFixedIdentity(Entity<XenoNameComponent> ent, ref RMCGetFixedIdentityEvent args)
     {
+        args.Name = GetHostRoleName(args.Identified) ?? args.Name; // CMU14: identify hosts by role before adding their number.
+
         if (HasComp<XenoOmitNumberComponent>(ent))
         {
             args.Name = Loc.GetString("rmc-xeno-name",
