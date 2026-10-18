@@ -93,3 +93,6 @@
 
 - type: Tag
   id: MaintenanceJack
+
+- type: Tag
+  id: CMUEvidenceMarker
