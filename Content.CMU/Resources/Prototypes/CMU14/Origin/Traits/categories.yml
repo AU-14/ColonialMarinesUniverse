@@ -7,3 +7,7 @@
   id: CMUDrinkingTraits
   name: cmu-trait-category-drinking
   maxTraitPoints: 1
+
+- type: traitCategory
+  id: CMUQuirks
+  name: trait-category-quirks

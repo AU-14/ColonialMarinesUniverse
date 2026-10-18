@@ -15,6 +15,7 @@
   id: NoLanguageLearning
   name: au14-trait-no-language-learning-name
   description: au14-trait-no-language-learning-desc
+  category: CMUQuirks
   components:
   - type: NoLanguageLearning
 

@@ -12,6 +12,7 @@
   id: CMUIronTeeth
   name: cmu-trait-iron-teeth-name
   description: cmu-trait-iron-teeth-desc
+  category: CMUQuirks
   components:
   - type: CMUIronTeeth
 
