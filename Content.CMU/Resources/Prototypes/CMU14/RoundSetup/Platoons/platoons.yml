@@ -59,7 +59,22 @@
     CMJumpsuitMaintTech: CMULACNEngineerJumpsuit
     CMJumpsuitOrdnanceTech: CMULACNEngineerFieldUniform
     RMCScrubsOliveNurse: CMULACNMedicalScrubs
+    RMCScrubsOlive: CMULACNSurgicalScrubs
     AU14ScrubsGreenDoctorSurgical: CMULACNSurgicalScrubs
+  # Support roles spawn in the full LACN set their equipment racks hand out (see lacn_starting_gear.yml).
+  startingGearJobOverrides:
+    AU14JobGOVFOREngineeringTech: CMUGearLACNGOVFOREngineeringTech
+    AU14JobOPFOREngineeringTech: CMUGearLACNOPFOREngineeringTech
+    AU14JobGOVFORAuxTech: CMUGearLACNGOVFORAuxTech
+    AU14JobOPFORAuxTech: CMUGearLACNOPFORAuxTech
+    AU14JobGOVFOROfficerEngi: CMUGearLACNGOVFOROfficerEngi
+    AU14JobOPFOROfficerEngi: CMUGearLACNOPFOROfficerEngi
+    AU14JobGOVFOROfficerLogistics: CMUGearLACNGOVFOROfficerLogistics
+    AU14JobOPFOROfficerLogistics: CMUGearLACNOPFOROfficerLogistics
+    AU14JobGOVFORNurse: CMUGearLACNGOVFORNurse
+    AU14JobOPFORNurse: CMUGearLACNOPFORNurse
+    AU14JobGOVFORMilitaryDoctor: CMUGearLACNGOVFORMilitaryDoctor
+    AU14JobOPFORMilitaryDoctor: CMUGearLACNOPFORMilitaryDoctor
   platoonPatch: /Textures/CMU14/Clothing/Patches/brazilunit_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:
@@ -380,6 +395,9 @@
   - VehicleSPPVanLogistics
   - VehicleSPPVanPrisoner
   name: cmu-platoon-bear-name
+  # The platoon's own satchel in place of the standard one.
+  startingGearOverrides:
+    CMSatchelMarine: RuMCUPPNavalInfantrySatchel
   lorePrimer: RuMCPrimerPlatoonBEAR
   Allegiance: UPP
   languages:
@@ -717,6 +735,9 @@
   - VehicleSPPVanLogistics
   - VehicleSPPVanPrisoner
   name: cmu-platoon-upp-name
+  # The platoon's own satchel in place of the standard one.
+  startingGearOverrides:
+    CMSatchelMarine: RuMCUPPNavalInfantrySatchel
   lorePrimer: AU14PrimerPlatoonUPP
   Allegiance: UPP
   languages:
@@ -1052,6 +1073,9 @@
   - VehicleBlackfootDoorGunVariant
   - VehicleBlackfootTransport
   name: cmu-platoon-weyu-name
+  # The platoon's own satchel in place of the standard one.
+  startingGearOverrides:
+    CMSatchelMarine: RMCSatchelLightpackWeYa
   lorePrimer: AU14PrimerPlatoonWEYU
   reqlist: WYPMCCargoCatalog
   vendorSet: WYPMC
@@ -1386,6 +1410,9 @@
   - VehicleHumveeMedical
   - VehicleBlackfootDoorGunVariant
   name: cmu-platoon-cmbciu-name
+  # The platoon's own satchel in place of the standard one.
+  startingGearOverrides:
+    CMSatchelMarine: RMCSatchelTSEPA
   lorePrimer: AU14PrimerPlatoonCMBCIU
   Allegiance: UA
   languages:
@@ -1644,6 +1671,9 @@
   - AU14VehicleCivEMSAmbulance
   - VehicleAev
   name: cmu-platoon-prodigysf-name
+  # The platoon's own satchel in place of the standard one.
+  startingGearOverrides:
+    CMSatchelMarine: RMCSatchelLightpackBlack
   lorePrimer: AU14PrimerPlatoonProdigySF
   reqlist: ProdigyCargoCatalog
   languages:

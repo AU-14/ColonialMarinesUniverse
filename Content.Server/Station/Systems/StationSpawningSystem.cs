@@ -390,7 +390,9 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
         if (prototype?.StartingGear != null)
         {
-            var startingGear = ProtoMan.Index<StartingGearPrototype>(prototype.StartingGear);
+            // cmu edit start: the platoon's own starting gear for this job, if it has one
+            var startingGear = ProtoMan.Index<StartingGearPrototype>(CMUPlatoonStartingGear(originalSide, prototype.ID, prototype.StartingGear.Value));
+            // cmu edit end
             EquipStartingGear(entity.Value, startingGear, raiseEvent: false);
         }
 

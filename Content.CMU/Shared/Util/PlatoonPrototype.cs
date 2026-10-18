@@ -71,6 +71,13 @@ public sealed partial class PlatoonPrototype : IPrototype
     [DataField]
     public Dictionary<EntProtoId, EntProtoId> StartingGearOverrides = new();
 
+    /// <summary>
+    ///     Jobs that spawn with a different set of starting gear in this platoon, e.g. the platoon's own uniform,
+    ///     helmet and vest for its engineers. The player's loadout is still equipped first and keeps its slots.
+    /// </summary>
+    [DataField]
+    public Dictionary<ProtoId<JobPrototype>, ProtoId<StartingGearPrototype>> StartingGearJobOverrides = new();
+
     /// <summary>How many vehicles from each of those four categories the side can pull up.</summary>
     [DataField]
     public int MaxSuppliedPerCategory = 1;

@@ -1,6 +1,7 @@
 using Content.Shared.CMU14.Round.Roles;
 using Content.Shared.CMU14.util;
 using Content.Shared.Item;
+using Content.Shared.Roles;
 using Content.Shared.Storage;
 using Robust.Shared.Prototypes;
 
@@ -28,6 +29,21 @@ public sealed partial class StationSpawningSystem
         var previous = _cmuGearOverrides;
         _cmuGearOverrides = platoon is { StartingGearOverrides.Count: > 0 } ? platoon.StartingGearOverrides : null;
         return new CMUGearOverrideScope(this, previous);
+    }
+
+    /// <summary>The starting gear a job spawns with under its side's platoon: the platoon's own set, if it has one.</summary>
+    private ProtoId<StartingGearPrototype> CMUPlatoonStartingGear(RoundJobSide side, string jobId, ProtoId<StartingGearPrototype> gear)
+    {
+        var platoon = side switch
+        {
+            RoundJobSide.Govfor => _platoonSpawnRuleSystem.SelectedGovforPlatoon,
+            RoundJobSide.Opfor => _platoonSpawnRuleSystem.SelectedOpforPlatoon,
+            _ => null,
+        };
+
+        return platoon != null && platoon.StartingGearJobOverrides.TryGetValue(jobId, out var platoonGear)
+            ? platoonGear
+            : gear;
     }
 
     protected override EntProtoId CMUOverrideGear(EntProtoId proto)

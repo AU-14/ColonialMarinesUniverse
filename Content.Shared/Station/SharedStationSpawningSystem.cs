@@ -143,7 +143,10 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
                     // cmu edit start: platoon equipment swaps
                     var equipmentEntity = Spawn(CMUOverrideGear(equipmentStr), xform.Coordinates);
                     // cmu edit end
-                    InventorySystem.TryEquip(entity, equipmentEntity, slot.Name, silent: true, force: true);
+                    // cmu edit start: the loadout already filled this slot and keeps it, so don't leave a spare on the floor
+                    if (!InventorySystem.TryEquip(entity, equipmentEntity, slot.Name, silent: true, force: true))
+                        Del(equipmentEntity);
+                    // cmu edit end
                 }
             }
         }
