@@ -65,7 +65,8 @@ public sealed class CMUShipWeaponPicker : BoxContainer
             var status = console.CMUShipWeapons[i];
             var id = i + 1;
             _weapon.SetItemText(id, Loc.GetString("cmu-ship-weapons-remaining",
-                ("weapon", Loc.GetString(prototypes.Index(status.Weapon).Name)), ("uses", status.Remaining)));
+                ("weapon", Loc.GetString(prototypes.Index(status.Weapon).Name)), ("uses", status.Remaining),
+                ("max", status.Max)));
             if (status.Weapon == console.CMUSelectedShipWeapon)
                 selectedId = id;
         }

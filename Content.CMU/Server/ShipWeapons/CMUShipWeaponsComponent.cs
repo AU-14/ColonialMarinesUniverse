@@ -12,7 +12,16 @@ namespace Content.Server.CMU14.ShipWeapons;
 public sealed partial class CMUShipWeaponsComponent : Component
 {
     [DataField]
-    public Dictionary<ProtoId<CMUShipWeaponPrototype>, int> Weapons = new();
+    public HashSet<ProtoId<CMUShipWeaponPrototype>> Weapons = new();
+
+    /// <summary>
+    /// Fire missions shared by every armed weapon, copied from the confirming terminal when the loadout locks.
+    /// </summary>
+    [DataField]
+    public int RemainingUses;
+
+    [DataField]
+    public int MaxUses;
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextLaunch;

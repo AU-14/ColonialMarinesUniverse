@@ -6,8 +6,8 @@
   ## Command: Arming the Ship
   Open the ship weapons arming terminal with command access. Choose [bold]at least one different weapon, up to the limit displayed by the terminal[/bold] and confirm. The default limit is three.
   [color=red]Confirmation permanently locks the entire loadout for the operation. Picking fewer than the limit does not leave slots available for later.[/color]
-  Each selected weapon has [bold]three fire missions[/bold]. More terminals, batteries, or ammunition cannot reset those uses.
-  Each ship has its own loadout, uses, and cooldown. Decks in one ship's Z-level network share them; identical ships do not.
+  All selected weapons share [bold]one pool of fire missions[/bold] shown by the terminal (two by default). Any armed weapon spends from that pool, and more terminals, batteries, or ammunition cannot reset it.
+  Each ship has its own loadout, fire-mission pool, and cooldown. Decks in one ship's Z-level network share them; identical ships do not.
 
   ## Loading Physical Batteries
   When the server requires physical guns, a compatible anchored battery must be installed on your ship before command can arm its weapons.
@@ -26,7 +26,7 @@
   Walking Barrage also lets you choose its travel direction.
   The first impact arrives [bold]24 seconds after launch[/bold]. A shared [bold]60-second cooldown[/bold] starts when the ship accepts a launch.
   Nearby troops receive the launch warning, then [bold]one directional warning three seconds later[/bold] pointing from their position toward the target. A final-approach warning precedes impact.
-  Rejected targets, missing rounds, cooldown failures, and depleted weapons consume nothing. Accepted launches spend one use and, when required, one round immediately.
+  Rejected targets, missing rounds, cooldown failures, and an empty fire-mission pool consume nothing. Accepted launches spend one shared mission and, when required, one round immediately.
   Protection changes can intercept later impacts without a refund. The standard orbital cannon remains separate, with its existing ammunition, fuel, and cooldown.
 
   ## Strike Profiles

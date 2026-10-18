@@ -1,7 +1,7 @@
 - type: entity
   id: CMUShipWeaponsTerminal
   name: ship weapons arming terminal
-  description: Selects orbital support weapons for this ship. The terminal displays the selection limit. Confirmed selections cannot be changed during the operation.
+  description: Selects orbital support weapons for this ship. The terminal displays the selection limit and shared fire missions. Confirmed selections cannot be changed during the operation.
   components:
   - type: Transform
     anchored: true
@@ -17,6 +17,7 @@
       - Xeno
   - type: CMUShipWeaponsTerminal
     maxSelections: 3
+    uses: 2
   - type: GuideHelp
     guides:
     - CMUGuideShipWeapons

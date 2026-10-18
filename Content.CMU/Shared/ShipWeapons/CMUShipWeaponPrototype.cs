@@ -64,7 +64,7 @@ public sealed partial class CMUShipWeaponPrototype : IPrototype
 }
 
 [Serializable, NetSerializable]
-public readonly record struct CMUShipWeaponStatus(ProtoId<CMUShipWeaponPrototype> Weapon, int Remaining);
+public readonly record struct CMUShipWeaponStatus(ProtoId<CMUShipWeaponPrototype> Weapon, int Remaining, int Max);
 
 [Serializable, NetSerializable]
 public enum CMUShipWeaponBearing : byte

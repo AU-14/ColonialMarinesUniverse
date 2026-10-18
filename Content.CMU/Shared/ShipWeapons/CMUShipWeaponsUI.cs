@@ -8,6 +8,12 @@ public sealed partial class CMUShipWeaponsTerminalComponent : Component
 {
     [DataField]
     public int MaxSelections = 3;
+
+    /// <summary>
+    /// Fire missions shared by all selected weapons. Only read when this terminal locks the ship's loadout.
+    /// </summary>
+    [DataField]
+    public int Uses = 2;
 }
 
 [Serializable, NetSerializable]
@@ -22,13 +28,15 @@ public sealed class CMUShipWeaponsBuiState(
     CMUShipWeaponStatus[] weapons,
     ProtoId<CMUShipWeaponPrototype>[] availableWeapons,
     bool requiresGuns,
-    int maxSelections) : BoundUserInterfaceState
+    int maxSelections,
+    int uses) : BoundUserInterfaceState
 {
     public readonly bool Available = available;
     public readonly CMUShipWeaponStatus[] Weapons = weapons;
     public readonly ProtoId<CMUShipWeaponPrototype>[] AvailableWeapons = availableWeapons;
     public readonly bool RequiresGuns = requiresGuns;
     public readonly int MaxSelections = maxSelections;
+    public readonly int Uses = uses;
 }
 
 [Serializable, NetSerializable]

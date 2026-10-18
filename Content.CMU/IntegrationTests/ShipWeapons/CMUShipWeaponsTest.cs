@@ -95,15 +95,15 @@ public sealed class CMUShipWeaponsTest : GameTest
             Send(second, actor, new CMUShipWeaponsArmBuiMsg("CMUGasStrike", "CMUSmokeStrike"));
             var a = SComp<CMUShipWeaponsComponent>(firstShip);
             var b = SComp<CMUShipWeaponsComponent>(secondShip);
-            Assert.That(a.Weapons.Keys.Select(k => k.Id), Is.EquivalentTo(new[] { "CMUGatlingBarrage", "CMUWalkingBarrage" }));
-            Assert.That(b.Weapons.Keys.Select(k => k.Id), Is.EquivalentTo(new[] { "CMUGasStrike", "CMUSmokeStrike" }));
+            Assert.That(a.Weapons.Select(k => k.Id), Is.EquivalentTo(new[] { "CMUGatlingBarrage", "CMUWalkingBarrage" }));
+            Assert.That(b.Weapons.Select(k => k.Id), Is.EquivalentTo(new[] { "CMUGasStrike", "CMUSmokeStrike" }));
 
             SEntMan.DeleteEntity(first);
             var replacement = Terminal(map.GridCoords);
             Send(replacement, actor, new CMUShipWeaponsArmBuiMsg("CMUPrecisionStrike", "CMUEMSStrike"));
-            Assert.That(a.Weapons.Keys.Select(k => k.Id), Is.EquivalentTo(new[] { "CMUGatlingBarrage", "CMUWalkingBarrage" }));
-            Assert.That(a.Weapons.Values, Is.All.EqualTo(3));
-            Assert.That(b.Weapons.Values, Is.All.EqualTo(3));
+            Assert.That(a.Weapons.Select(k => k.Id), Is.EquivalentTo(new[] { "CMUGatlingBarrage", "CMUWalkingBarrage" }));
+            Assert.That(a.RemainingUses, Is.EqualTo(2));
+            Assert.That(b.RemainingUses, Is.EqualTo(2));
         });
     }
 
@@ -164,9 +164,9 @@ public sealed class CMUShipWeaponsTest : GameTest
                 Send(first, actor, new CMUShipWeaponsArmBuiMsg("CMU120mmHEBarrage", "CMU380mmHEBarrage"));
                 Send(same, actor, new CMUShipWeaponsArmBuiMsg("CMUGasStrike", "CMUSmokeStrike"));
                 Send(different, actor, new CMUShipWeaponsArmBuiMsg("CMUPrecisionStrike", "CMUWalkingBarrage"));
-                Assert.That(SComp<CMUShipWeaponsComponent>(ship).Weapons.Keys.Select(k => k.Id),
+                Assert.That(SComp<CMUShipWeaponsComponent>(ship).Weapons.Select(k => k.Id),
                     Is.EquivalentTo(new[] { "CMU120mmHEBarrage", "CMU380mmHEBarrage" }));
-                Assert.That(SComp<CMUShipWeaponsComponent>(differentShip).Weapons.Keys.Select(k => k.Id),
+                Assert.That(SComp<CMUShipWeaponsComponent>(differentShip).Weapons.Select(k => k.Id),
                     Is.EquivalentTo(new[] { "CMUPrecisionStrike", "CMUWalkingBarrage" }));
             });
         }
@@ -219,8 +219,8 @@ public sealed class CMUShipWeaponsTest : GameTest
             ProtoId<CMUShipWeaponPrototype>[] weapons = ["CMUGasStrike", "CMUSmokeStrike", "CMUEMSStrike"];
             Send(terminal, actor, new CMUShipWeaponsArmBuiMsg(weapons.Take(count).ToArray()));
             var state = SComp<CMUShipWeaponsComponent>(map.Grid);
-            Assert.That(state.Weapons.Keys, Is.EquivalentTo(weapons.Take(count)));
-            Assert.That(state.Weapons.Values, Is.All.EqualTo(3));
+            Assert.That(state.Weapons, Is.EquivalentTo(weapons.Take(count)));
+            Assert.That(state.RemainingUses, Is.EqualTo(2));
             Send(terminal, actor, new CMUShipWeaponsArmBuiMsg(weapons));
             Assert.That(state.Weapons, Has.Count.EqualTo(count), "smaller loadouts cannot be topped up later");
         });
@@ -250,7 +250,7 @@ public sealed class CMUShipWeaponsTest : GameTest
             Send(terminal, actor, new CMUShipWeaponsArmBuiMsg(weapons.Take(limit).ToArray()));
             var state = SComp<CMUShipWeaponsComponent>(map.Grid);
             Assert.That(state.Weapons, Has.Count.EqualTo(limit));
-            Assert.That(state.Weapons.Values, Is.All.EqualTo(3));
+            Assert.That(state.RemainingUses, Is.EqualTo(2));
             var ui = SEntMan.System<SharedUserInterfaceSystem>();
             Assert.That(ui.TryGetUiState<CMUShipWeaponsBuiState>(terminal, CMUShipWeaponsUiKey.Key, out var choices), Is.True);
             Assert.That(choices!.MaxSelections, Is.EqualTo(limit));
@@ -260,6 +260,37 @@ public sealed class CMUShipWeaponsTest : GameTest
             Send(replacement, actor, new CMUShipWeaponsArmBuiMsg(weapons));
             Assert.That(state.Weapons, Has.Count.EqualTo(limit),
                 "a higher-limit terminal cannot expand a confirmed ship loadout");
+        });
+    }
+
+    [TestCase(1)]
+    [TestCase(5)]
+    public async Task TerminalYamlSetsTheSharedPoolOnceWhenTheLoadoutLocks(int uses)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var actor = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var terminal = Terminal(map.GridCoords);
+            var component = SComp<CMUShipWeaponsTerminalComponent>(terminal);
+            Assert.That(component.Uses, Is.EqualTo(2), "the YAML default is two shared fire missions");
+            component.Uses = uses;
+            Send(terminal, actor, new CMUShipWeaponsArmBuiMsg("CMUGasStrike", "CMUSmokeStrike"));
+            var state = SComp<CMUShipWeaponsComponent>(map.Grid);
+            Assert.That(state.RemainingUses, Is.EqualTo(uses));
+            Assert.That(state.MaxUses, Is.EqualTo(uses));
+            var ui = SEntMan.System<SharedUserInterfaceSystem>();
+            Assert.That(ui.TryGetUiState<CMUShipWeaponsBuiState>(terminal, CMUShipWeaponsUiKey.Key, out var choices), Is.True);
+            Assert.That(choices!.Weapons, Has.All.Property(nameof(CMUShipWeaponStatus.Remaining)).EqualTo(uses));
+            Assert.That(choices.Weapons, Has.All.Property(nameof(CMUShipWeaponStatus.Max)).EqualTo(uses));
+
+            state.RemainingUses = 0;
+            component.Uses = uses + 10;
+            var replacement = Terminal(map.GridCoords);
+            SComp<CMUShipWeaponsTerminalComponent>(replacement).Uses = uses + 10;
+            Send(replacement, actor, new CMUShipWeaponsArmBuiMsg("CMUEMSStrike"));
+            Assert.That(state.RemainingUses, Is.Zero, "editing or replacing terminals cannot refill a locked pool");
+            Assert.That(state.MaxUses, Is.EqualTo(uses));
         });
     }
 
@@ -325,7 +356,7 @@ public sealed class CMUShipWeaponsTest : GameTest
     }
 
     [Test]
-    public async Task OverwatchConsumesExactlyThreeUsesAcrossConsolesAndRejectsInvalidLaunches()
+    public async Task OverwatchSpendsOneSharedPoolAcrossWeaponsAndConsolesAndRejectsInvalidLaunches()
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
@@ -343,7 +374,8 @@ public sealed class CMUShipWeaponsTest : GameTest
 
             // No planet/area: launch must not consume a use.
             Send(first, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
-            Assert.That(state.Weapons["CMUSmokeStrike"], Is.EqualTo(3));
+            Assert.That(state.RemainingUses, Is.EqualTo(2));
+            Assert.That(state.MaxUses, Is.EqualTo(2));
             Assert.That(Strikes(), Is.Empty);
 
             var planet = SEntMan.EnsureComponent<RMCPlanetComponent>(map.MapUid);
@@ -356,26 +388,35 @@ public sealed class CMUShipWeaponsTest : GameTest
             SComp<OverwatchConsoleComponent>(second).OrbitalCoordinates = Vector2i.Zero;
 
             Send(first, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
-            Assert.That(state.Weapons["CMUSmokeStrike"], Is.EqualTo(2));
+            Assert.That(state.RemainingUses, Is.EqualTo(1));
+            Assert.That(SComp<OverwatchConsoleComponent>(second).CMUShipWeapons, Is.EquivalentTo(new[]
+                {
+                    new CMUShipWeaponStatus("CMUSmokeStrike", 1, 2),
+                    new CMUShipWeaponStatus("CMUEMSStrike", 1, 2),
+                }),
+                "every armed weapon reports the same shared pool");
             Send(second, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
-            Assert.That(state.Weapons["CMUSmokeStrike"], Is.EqualTo(2), "cooldown is shared across consoles");
+            Assert.That(state.RemainingUses, Is.EqualTo(1), "cooldown is shared across consoles");
             state.NextLaunch = TimeSpan.Zero;
             area.OB = false;
             Send(second, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
-            Assert.That(state.Weapons["CMUSmokeStrike"], Is.EqualTo(2), "protected targets do not consume ammunition");
+            Assert.That(state.RemainingUses, Is.EqualTo(1), "protected targets do not consume ammunition");
             area.OB = true;
+            Send(second, actor, new CMUShipWeaponSelectBuiMsg("CMUEMSStrike", CMUShipWeaponBearing.North), true);
             Send(second, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
+            Assert.That(state.RemainingUses, Is.Zero, "a different armed weapon spends from the same pool");
             state.NextLaunch = TimeSpan.Zero;
             Send(first, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
             state.NextLaunch = TimeSpan.Zero;
             Send(second, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
-            Assert.That(state.Weapons["CMUSmokeStrike"], Is.Zero);
-            Assert.That(state.Weapons["CMUEMSStrike"], Is.EqualTo(3), "each armed weapon has its own three uses");
-            Assert.That(Strikes(), Has.Count.EqualTo(3));
-            Assert.That(SComp<OverwatchConsoleComponent>(second).CMUShipWeapons.Single(w => w.Weapon.Id == "CMUSmokeStrike").Remaining, Is.Zero);
+            Assert.That(state.RemainingUses, Is.Zero);
+            Assert.That(Strikes(), Has.Count.EqualTo(2), "an empty pool rejects every armed weapon");
+            Assert.That(SComp<OverwatchConsoleComponent>(second).CMUShipWeapons.Select(w => w.Remaining), Is.All.Zero);
 
             Send(terminal, actor, new CMUShipWeaponsArmBuiMsg("CMUGasStrike", "CMUPrecisionStrike"));
-            Assert.That(state.Weapons["CMUSmokeStrike"], Is.Zero, "exhaustion never unlocks the loadout");
+            Assert.That(state.Weapons.Select(w => w.Id), Is.EquivalentTo(new[] { "CMUSmokeStrike", "CMUEMSStrike" }),
+                "exhaustion never unlocks the loadout");
+            Assert.That(state.RemainingUses, Is.Zero, "re-arming cannot refill the pool");
             Send(first, actor, new CMUShipWeaponSelectBuiMsg(null, CMUShipWeaponBearing.North), true);
             Assert.That(SComp<OverwatchConsoleComponent>(first).CMUSelectedShipWeapon, Is.Null,
                 "the standard cannon remains independently selectable");
@@ -575,7 +616,7 @@ public sealed class CMUShipWeaponsTest : GameTest
                 Assert.That(SEntMan.HasComponent<CMUShipWeaponsComponent>(map.Grid), Is.False);
                 Send(terminal, actor, new CMUShipWeaponsArmBuiMsg("CMUGasStrike", "CMUSmokeStrike"));
                 var state = SComp<CMUShipWeaponsComponent>(map.Grid);
-                Assert.That(state.Weapons.Values, Is.All.EqualTo(3), "arming does not require loaded rounds");
+                Assert.That(state.RemainingUses, Is.EqualTo(2), "arming does not require loaded rounds");
                 var ui = SEntMan.System<SharedUserInterfaceSystem>();
                 Assert.That(ui.TryGetUiState<CMUShipWeaponsBuiState>(terminal, CMUShipWeaponsUiKey.Key, out var choices), Is.True);
                 Assert.That(choices!.AvailableWeapons.Select(w => w.Id),
@@ -593,7 +634,7 @@ public sealed class CMUShipWeaponsTest : GameTest
                 SComp<OverwatchConsoleComponent>(console).OrbitalCoordinates = Vector2i.Zero;
                 Send(console, actor, new CMUShipWeaponSelectBuiMsg("CMUSmokeStrike", CMUShipWeaponBearing.North), true);
                 Send(console, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
-                Assert.That(state.Weapons["CMUSmokeStrike"], Is.EqualTo(3));
+                Assert.That(state.RemainingUses, Is.EqualTo(2));
                 Assert.That(SEntMan.Deleted(foreignRound), Is.False, "cannot fire a loaded battery on the other ship");
 
                 var wrongRound = SEntMan.SpawnEntity("CMUShipWeaponRound120mm", map.GridCoords);
@@ -603,7 +644,7 @@ public sealed class CMUShipWeaponsTest : GameTest
                 Assert.That(slots.TryGetSlot(gun, "mission-round", out var slot), Is.True);
                 Assert.That(slots.TryInsertFromHand(gun, slot!, actor), Is.True, "players can manually load mission rounds");
                 Send(console, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
-                Assert.That(state.Weapons["CMUSmokeStrike"], Is.EqualTo(3), "loaded gas cannot fire smoke");
+                Assert.That(state.RemainingUses, Is.EqualTo(2), "loaded gas cannot fire smoke");
                 Assert.That(SEntMan.Deleted(gasRound), Is.False);
                 Assert.That(slots.TryEject(gun, "mission-round", null, out var ejected), Is.True);
                 Assert.That(ejected, Is.EqualTo(gasRound));
@@ -615,7 +656,7 @@ public sealed class CMUShipWeaponsTest : GameTest
                 area.OB = true;
                 Send(console, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
                 Assert.That(SEntMan.Deleted(smokeRound), Is.True);
-                Assert.That(state.Weapons["CMUSmokeStrike"], Is.EqualTo(2));
+                Assert.That(state.RemainingUses, Is.EqualTo(1));
                 Assert.That(SEntMan.System<SharedContainerSystem>().GetContainer(gun, "mission-round").ContainedEntities, Is.Empty);
                 var reload = SEntMan.SpawnEntity("CMUShipWeaponRoundSmoke", map.GridCoords);
                 Assert.That(slots.TryInsert(gun, "mission-round", reload, actor), Is.True);
@@ -624,12 +665,12 @@ public sealed class CMUShipWeaponsTest : GameTest
                 SEntMan.DeleteEntity(gun);
                 state.NextLaunch = TimeSpan.Zero;
                 Send(console, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
-                Assert.That(state.Weapons["CMUSmokeStrike"], Is.EqualTo(2), "removing the gun prevents firing");
+                Assert.That(state.RemainingUses, Is.EqualTo(1), "removing the gun prevents firing");
                 config.SetCVar(CCVars.ShipWeaponsRequireGuns, false);
                 Send(terminal, actor, new CMUShipWeaponsArmBuiMsg("CMU120mmHEBarrage", "CMU380mmHEBarrage"));
-                Assert.That(state.Weapons.ContainsKey("CMUSmokeStrike"), Is.True, "CVar toggles cannot change locked choices");
+                Assert.That(state.Weapons.Contains("CMUSmokeStrike"), Is.True, "CVar toggles cannot change locked choices");
                 Send(console, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
-                Assert.That(state.Weapons["CMUSmokeStrike"], Is.EqualTo(1), "CVar off restores gun-free firing");
+                Assert.That(state.RemainingUses, Is.Zero, "CVar off restores gun-free firing");
                 foreach (var strike in Strikes())
                     SEntMan.DeleteEntity(strike);
             });

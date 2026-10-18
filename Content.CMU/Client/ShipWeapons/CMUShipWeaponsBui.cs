@@ -86,7 +86,7 @@ public sealed class CMUShipWeaponsWindow : DefaultWindow
     {
         _available = state.Available;
         _maxSelections = state.MaxSelections;
-        _instructions.Text = Loc.GetString("cmu-ship-weapons-instructions", ("max", _maxSelections));
+        _instructions.Text = Loc.GetString("cmu-ship-weapons-instructions", ("max", _maxSelections), ("uses", state.Uses));
         _locked = state.Weapons.Length != 0;
         _availableWeapons = state.AvailableWeapons.ToHashSet();
         _status.Text = Loc.GetString(!_available ? "cmu-ship-weapons-no-ship" :
@@ -107,7 +107,8 @@ public sealed class CMUShipWeaponsWindow : DefaultWindow
             button.Pressed = state.Weapons.Any(w => w.Weapon == id);
             var profile = IoCManager.Resolve<IPrototypeManager>().Index(id);
             button.Text = button.Pressed
-                ? Loc.GetString("cmu-ship-weapons-remaining", ("weapon", Loc.GetString(profile.Name)), ("uses", armed.Remaining))
+                ? Loc.GetString("cmu-ship-weapons-remaining", ("weapon", Loc.GetString(profile.Name)),
+                    ("uses", armed.Remaining), ("max", armed.Max))
                 : Loc.GetString(profile.Name);
         }
         UpdateChoices();

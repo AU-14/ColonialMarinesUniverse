@@ -52,7 +52,6 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _mobs = new();
-    public const int UsesPerWeapon = 3;
 
     public override void Initialize()
     {
@@ -97,7 +96,7 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
     private CMUShipWeaponStatus[] GetWeapons(EntityUid ship)
     {
         return TryComp(ship, out CMUShipWeaponsComponent? state)
-            ? state.Weapons.Select(w => new CMUShipWeaponStatus(w.Key, w.Value)).ToArray()
+            ? state.Weapons.Select(w => new CMUShipWeaponStatus(w, state.RemainingUses, state.MaxUses)).ToArray()
             : [];
     }
 
@@ -108,9 +107,10 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
             ? (_requireGuns ? GetSupportedWeapons(ship).ToArray() :
                 _prototypes.EnumeratePrototypes<CMUShipWeaponPrototype>().Select(w => new ProtoId<CMUShipWeaponPrototype>(w.ID)).ToArray())
             : [];
+        var terminalComp = Comp<CMUShipWeaponsTerminalComponent>(terminal);
         _ui.SetUiState(terminal, CMUShipWeaponsUiKey.Key,
             new CMUShipWeaponsBuiState(available, available ? GetWeapons(ship) : [], weapons, _requireGuns,
-                Comp<CMUShipWeaponsTerminalComponent>(terminal).MaxSelections));
+                terminalComp.MaxSelections, Math.Max(0, terminalComp.Uses)));
     }
 
     private void UpdateOverwatch(Entity<OverwatchConsoleComponent> console)
@@ -188,10 +188,11 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
         }
 
         var state = EnsureComp<CMUShipWeaponsComponent>(ship);
-        foreach (var weapon in args.Weapons)
-            state.Weapons.Add(weapon, UsesPerWeapon);
+        state.Weapons.UnionWith(args.Weapons);
+        state.MaxUses = Math.Max(0, ent.Comp.Uses);
+        state.RemainingUses = state.MaxUses;
         _adminLog.Add(LogType.Action, LogImpact.High,
-            $"{ToPrettyString(args.Actor)} permanently armed {string.Join(", ", args.Weapons)} on ship {ToPrettyString(ship)}");
+            $"{ToPrettyString(args.Actor)} permanently armed {string.Join(", ", args.Weapons)} on ship {ToPrettyString(ship)} with {state.MaxUses} shared uses");
         UpdateShip(ship);
     }
 
@@ -207,7 +208,7 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
             args.Weapon is { } weapon &&
             (!TryGetShip(ent, out var ship) ||
              !TryComp(ship, out CMUShipWeaponsComponent? state) ||
-             !state.Weapons.ContainsKey(weapon)))
+             !state.Weapons.Contains(weapon)))
         {
             Reject(args.Actor, "cmu-ship-weapons-not-armed");
             return;
@@ -230,13 +231,13 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
             ent.Comp.CMUSelectedShipWeapon is not { } weapon ||
             !TryGetShip(ent, out var ship) ||
             !TryComp(ship, out CMUShipWeaponsComponent? state) ||
-            !state.Weapons.TryGetValue(weapon, out var remaining))
+            !state.Weapons.Contains(weapon))
         {
             Reject(args.User, "cmu-ship-weapons-not-armed");
             return;
         }
 
-        if (remaining <= 0)
+        if (state.RemainingUses <= 0)
         {
             Reject(args.User, "cmu-ship-weapons-depleted");
             return;
@@ -270,7 +271,7 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
         firing.Bearing = ent.Comp.CMUShipWeaponBearing;
         firing.NextShot = _timing.CurTime + TimeSpan.FromSeconds(24);
         firing.DirectionalWarningAt = _timing.CurTime + TimeSpan.FromSeconds(3);
-        state.Weapons[weapon] = remaining - 1;
+        state.RemainingUses--;
         state.NextLaunch = _timing.CurTime + state.Cooldown;
         if (_requireGuns)
         {
@@ -289,7 +290,7 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
         _popup.PopupCursor(Loc.GetString("cmu-ship-weapons-launched", ("weapon", Loc.GetString(profile.Name))),
             args.User, PopupType.Large);
         _adminLog.Add(LogType.RMCOrbitalBombardment, LogImpact.High,
-            $"{ToPrettyString(args.User)} launched {weapon} from ship {ToPrettyString(ship)} at {ent.Comp.OrbitalCoordinates}; {remaining - 1} uses remain");
+            $"{ToPrettyString(args.User)} launched {weapon} from ship {ToPrettyString(ship)} at {ent.Comp.OrbitalCoordinates}; {state.RemainingUses} shared uses remain");
         UpdateShip(ship);
     }
 

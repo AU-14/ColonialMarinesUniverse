@@ -6,21 +6,26 @@ change existing maps. The generic terminal accepts RMC, GOVFOR, or OPFOR command
 access; the faction variants accept only their respective command access.
 
 The terminal component's YAML `maxSelections` field sets the maximum number of
-different weapons command can select (default: `3`):
+different weapons command can select (default: `3`). `uses` sets the number of
+fire missions shared by every selected weapon (default: `2`):
 
 ```yaml
 - type: CMUShipWeaponsTerminal
   maxSelections: 3
+  uses: 2
 ```
 
-The UI displays this terminal's limit, and the server enforces it. Set a positive
-integer; at least one weapon must be selected. Terminals on the same ship should
-use the same limit. The first confirmed loadout locks the ship regardless of
-which terminal was used.
+The UI displays this terminal's limits, and the server enforces them. Set
+positive integers; at least one weapon must be selected. Terminals on the same
+ship should use the same values. The first confirmed loadout locks the ship and
+copies that terminal's `uses` into ship state; later edits or other terminals
+cannot change or reset the pool.
 
 Command selects up to the displayed limit and confirms the permanent
 selection. Selection is available until confirmed, not restricted to a timed
-round-start window. Each weapon has three uses for the entire operation.
+round-start window. All selected weapons draw from one shared pool of fire
+missions for the entire operation (for example, two Gatling Barrages, or one
+Gatling Barrage and one Gas Strike, exhaust the default pool).
 Depletion, closing the UI, and replacing or adding terminals cannot reset the
 loadout. Confirming fewer than the limit also locks the empty slots permanently.
 Inspecting any selection terminal offers the CMU **Ship Orbital Support Weapons**
@@ -71,11 +76,11 @@ Players load matching `CMUShipWeaponRound...` items by interacting with a
 battery while holding a round. Each battery holds one round; alt-click or
 the eject verb unloads it. Incompatible ammunition is rejected. One round
 supplies the **entire fire mission**, including every shot in a barrage.
-It is consumed only when a launch is accepted, alongside one of the weapon's
-three uses. Unloaded batteries or batteries loaded with another supported
+It is consumed only when a launch is accepted, alongside one of the ship's
+shared fire missions. Unloaded batteries or batteries loaded with another supported
 weapon's ammunition cannot fire the selected mission.
 
-Accepted support strikes consume one use immediately and arrive after 24
+Accepted support strikes consume one shared mission immediately and arrive after 24
 seconds. Nearby ground troops receive a launch warning, one directional warning
 three seconds later pointing from each recipient toward the target (or warning
 that their position is targeted), and a final-approach warning;
@@ -118,10 +123,11 @@ tiles respect orbital protection and require non-space ground.
 [CMUShipWeaponsTest](../IntegrationTests/ShipWeapons/CMUShipWeaponsTest.cs)
 checks ship-instance and deck isolation, command access, malformed selections,
 permanent locking after terminal replacement, shared ammunition and cooldown,
-rejected targeting, three-use exhaustion, standard-cannon selection, ten
+rejected targeting, shared-pool exhaustion across weapons, standard-cannon selection, ten
 profiles, walking direction, bounded support clouds, battery compatibility,
 manual loading, CVar modes, Railcannon boundaries, xeno gas immunity, and EMS
 entry and recovery timing. It also verifies one-to-three permanent selections,
+YAML-configured selection limits and shared-use pools,
 empty/oversized loadout rejection, the terminal's guidebook link and document
 parsing, directional-warning timing, and Railcannon damage across separate
 Z-level maps with network isolation and protected-area checks.
