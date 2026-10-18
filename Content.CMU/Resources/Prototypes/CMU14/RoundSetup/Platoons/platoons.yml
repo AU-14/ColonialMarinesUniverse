@@ -52,6 +52,14 @@
     - Portuguese
   reqlist: LACNCargoCatalog
   vendorSet: LACN
+  # LACN versions of the standard satchels and the uniforms support roles spawn in.
+  startingGearOverrides:
+    CMSatchelMarine: CMULACNSatchel
+    CMSatchelMarineTech: CMULACNSatchelEngineer
+    CMJumpsuitMaintTech: CMULACNEngineerJumpsuit
+    CMJumpsuitOrdnanceTech: CMULACNEngineerFieldUniform
+    RMCScrubsOliveNurse: CMULACNMedicalScrubs
+    AU14ScrubsGreenDoctorSurgical: CMULACNSurgicalScrubs
   platoonPatch: /Textures/CMU14/Clothing/Patches/brazilunit_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:

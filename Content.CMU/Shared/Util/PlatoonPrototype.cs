@@ -63,6 +63,14 @@ public sealed partial class PlatoonPrototype : IPrototype
     [DataField]
     public int MaxSuppliedVehicles = 4;
 
+    /// <summary>
+    ///     Equipment this platoon swaps for its own version when its members spawn, e.g. the standard satchel for
+    ///     the platoon's satchel. Applies to the job's starting gear and the player's loadout alike. A container is
+    ///     only swapped for one that holds at least as much, so nothing that goes in it is lost.
+    /// </summary>
+    [DataField]
+    public Dictionary<EntProtoId, EntProtoId> StartingGearOverrides = new();
+
     /// <summary>How many vehicles from each of those four categories the side can pull up.</summary>
     [DataField]
     public int MaxSuppliedPerCategory = 1;

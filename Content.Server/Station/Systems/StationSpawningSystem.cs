@@ -271,6 +271,10 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         }
         // --- Platoon job override logic end ---
 
+        // cmu edit start: the platoon's own versions of starting gear and loadout equipment
+        using var cmuGearOverrides = CMUPushGearOverrides(originalSide);
+        // cmu edit end
+
         _prototypeManager.Resolve(job, out var prototype);
         // Get the original job prototype for access/faction/ID
         RoleLoadout? loadout = null;
