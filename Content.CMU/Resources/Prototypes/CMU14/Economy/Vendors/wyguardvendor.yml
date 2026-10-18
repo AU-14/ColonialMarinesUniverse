@@ -14,7 +14,7 @@
     - name: Rail Attachments
       entries:
       - id: CMUAttachmentNightVisionScope
-        amount: 5
+        amount: 3
     - name: Clothes
       takeAll: CMUCMBEssentialEquipmentClothes
       entries:
