@@ -31,6 +31,11 @@
                 <CheckBox Name="ScreamOnHotbarCheckBox"
                           Text="{Loc 'cmu-ui-options-scream-on-hotbar'}"
                           ToolTip="{Loc 'cmu-ui-options-scream-on-hotbar-tooltip'}" />
+                <!-- cmu edit start -->
+                <CheckBox Name="NoShakeWhenRestingCheckBox"
+                          Text="{Loc 'cmu-ui-options-no-shake-when-resting'}"
+                          ToolTip="{Loc 'cmu-ui-options-no-shake-when-resting-tooltip'}" />
+                <!-- cmu edit end -->
                 <CheckBox Name="VaultOnBumpCheckBox"
                           Text="{Loc 'cmu-ui-options-vault-on-bump'}"
                           ToolTip="{Loc 'cmu-ui-options-vault-on-bump-tooltip'}" />

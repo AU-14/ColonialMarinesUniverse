@@ -72,6 +72,7 @@ public sealed partial class CmuTab : Control
         Control.AddOptionCheckBox(CMUMedicalCCVars.UiLessSurgeryEnabled, UiLessSurgeryCheckBox);
         Control.AddOptionCheckBox(CCVars.CMUScreamOnHotbarEnabled, ScreamOnHotbarCheckBox);
         Control.AddOptionCheckBox(CCVars.CMUVaultOnBump, VaultOnBumpCheckBox); // cmu edit
+        Control.AddOptionCheckBox(CCVars.CMUNoShakeWhenResting, NoShakeWhenRestingCheckBox); // cmu edit
         // cmu edit start: area echo options, moved from the Misc tab
         Control.AddOptionCheckBox(Content.Shared._Mono.CCVar.MonoCVars.AreaEchoEnabled, AreaEchoCheckBox);
         Control.AddOptionCheckBox(Content.Shared._Mono.CCVar.MonoCVars.AreaEchoHighResolution, AreaEchoHighResolutionCheckBox);
