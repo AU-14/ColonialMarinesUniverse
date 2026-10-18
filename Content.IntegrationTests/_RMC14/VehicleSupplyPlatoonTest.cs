@@ -225,7 +225,9 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             var count = BundleCount();
             Assert.That(count, Is.EqualTo(4));
 
-            Queue(second, "VehicleHumvee");
+            // cmu edit start: the armed Humvee shares the Blackfoot's VTOL/APC slot, so use a support vehicle
+            Queue(second, "VehicleHumveeTransport");
+            // cmu edit end
             Complete(second);
             Invoke("StoreVehicle", depot.Lift);
             ResetLift(depot);
