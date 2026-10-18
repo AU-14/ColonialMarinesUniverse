@@ -36,6 +36,10 @@ public sealed partial class CMUPepperSprayComponent : Component
     [DataField]
     public float BurstRange = 2f;
 
+    /// <summary>The spray cloud shown along a burst.</summary>
+    [DataField]
+    public EntProtoId? PuffEffect;
+
     /// <summary>Pain each spray causes in total, spread over <see cref="PainTicks"/> seconds.</summary>
     [DataField]
     public float Pain = 35f;

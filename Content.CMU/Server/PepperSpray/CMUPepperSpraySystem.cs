@@ -131,10 +131,45 @@ public sealed class CMUPepperSpraySystem : EntitySystem
             return;
         }
 
-        foreach (var target in GetBurstTargets(user, _transform.ToMapCoordinates(args.ClickLocation), ent.Comp.BurstRange))
+        var aim = _transform.ToMapCoordinates(args.ClickLocation);
+        SpawnBurstPuffs(ent, user, aim);
+        foreach (var target in GetBurstTargets(user, aim, ent.Comp.BurstRange))
         {
             SprayTarget(ent, user, target, strength, false);
         }
+    }
+
+    /// <summary>
+    ///     A spray cloud drifting out along the burst, so everyone can see where it went.
+    /// </summary>
+    private void SpawnBurstPuffs(Entity<CMUPepperSprayComponent> ent, EntityUid user, MapCoordinates aim)
+    {
+        if (ent.Comp.PuffEffect is not { } puff)
+            return;
+
+        var origin = _transform.GetMapCoordinates(user);
+        if (aim.MapId != origin.MapId)
+            return;
+
+        var direction = BurstDirection(user, origin, aim);
+        var rotation = direction.ToWorldAngle();
+        for (var distance = 0.7f; distance <= ent.Comp.BurstRange + 0.01f; distance += 0.65f)
+        {
+            var at = new MapCoordinates(origin.Position + direction * distance, origin.MapId);
+            if (!_interaction.InRangeUnobstructed(origin, at, distance + 0.1f))
+                break;
+
+            var spawned = Spawn(puff, at);
+            _transform.SetWorldRotation(spawned, rotation);
+        }
+    }
+
+    private Vector2 BurstDirection(EntityUid user, MapCoordinates origin, MapCoordinates aim)
+    {
+        var direction = aim.Position - origin.Position;
+        return direction.LengthSquared() < 0.01f
+            ? _transform.GetWorldRotation(user).ToWorldVec()
+            : Vector2.Normalize(direction);
     }
 
     /// <summary>
@@ -148,10 +183,7 @@ public sealed class CMUPepperSpraySystem : EntitySystem
         if (aim.MapId != origin.MapId)
             return targets;
 
-        var direction = aim.Position - origin.Position;
-        direction = direction.LengthSquared() < 0.01f
-            ? _transform.GetWorldRotation(user).ToWorldVec()
-            : Vector2.Normalize(direction);
+        var direction = BurstDirection(user, origin, aim);
 
         _burstMobs.Clear();
         _lookup.GetEntitiesInRange(origin, range + BurstHalfWidth, _burstMobs);

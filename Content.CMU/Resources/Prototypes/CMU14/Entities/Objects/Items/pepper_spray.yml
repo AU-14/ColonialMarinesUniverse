@@ -30,6 +30,7 @@
     solution: spray
   - type: CMUPepperSpray
     reagent: CMUOleoresinCapsicum
+    puffEffect: CMUEffectPepperSprayPuff
 
 - type: entity
   parent: CMUPepperSpray
@@ -52,4 +53,27 @@
   - type: CMUPepperSpray
     reagent: CMUCapsicumNeutralizer
     antidote: true
+    puffEffect: CMUEffectPepperSprayAntidotePuff
     sound: /Audio/Effects/spray3.ogg
+
+# Spray clouds shown along a burst sprayed at the floor or the air.
+- type: entity
+  id: CMUEffectPepperSprayPuff
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Effects/chempuff.rsi
+    state: chempuff
+    color: "#e8661cbb"
+    drawdepth: Effects
+    noRot: false
+  - type: TimedDespawn
+    lifetime: 0.6
+
+- type: entity
+  parent: CMUEffectPepperSprayPuff
+  id: CMUEffectPepperSprayAntidotePuff
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    color: "#7fd3e8bb"
