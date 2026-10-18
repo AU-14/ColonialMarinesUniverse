@@ -19,10 +19,10 @@ public sealed partial class XenoReaperComponent : Component
     public int MaxFleshResin = 1000;
 
     [DataField, AutoNetworkedField]
-    public int MeleeGain = 10;
+    public int MeleeGain = 10; // CMU14
 
     [DataField, AutoNetworkedField]
-    public int PassiveGain = 0.5;
+    public int PassiveGain = 0.5; // CMU14
 
     [DataField, AutoNetworkedField]
     public TimeSpan PassiveGainEvery = TimeSpan.FromSeconds(1);
@@ -34,13 +34,13 @@ public sealed partial class XenoReaperComponent : Component
     public int PassiveGainMaxFleshResin = 300;
 
     [DataField, AutoNetworkedField]
-    public int FleshHarvestGain = 100;
+    public int FleshHarvestGain = 100; // CMU14
 
     [DataField, AutoNetworkedField]
     public TimeSpan FleshHarvestDelay = TimeSpan.FromSeconds(4);
 
     [DataField, AutoNetworkedField]
-    public int RaptureGain = 70;
+    public int RaptureGain = 70; // CMU14
 
     [DataField, AutoNetworkedField]
     public EntProtoId RaptureEffect = "RMCEffectExtraSlash";
