@@ -4,8 +4,8 @@ meta:
   engineVersion: 290.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/18/2026 02:37:31
-  entityCount: 40370
+  time: 10/18/2026 03:56:49
+  entityCount: 40374
 maps:
 - 1
 grids:
@@ -126210,6 +126210,26 @@ entities:
     - type: Transform
       parent: 1
       pos: 120.5,-116.5
+  - uid: 16190
+    components:
+    - type: Transform
+      parent: 1
+      pos: 8.5,-15.5
+  - uid: 16191
+    components:
+    - type: Transform
+      parent: 1
+      pos: 65.5,-42.5
+  - uid: 16192
+    components:
+    - type: Transform
+      parent: 1
+      pos: 34.5,37.5
+  - uid: 16193
+    components:
+    - type: Transform
+      parent: 1
+      pos: 117.5,80.5
 - proto: AU14SpawnPointColonyWorkingJoe
   entities:
   - uid: 473
@@ -173583,7 +173603,7 @@ entities:
       pos: -29.5,-46.5
     - type: Door
       state: Closing
-      secondsUntilStateChange: -71240.05
+      secondsUntilStateChange: -71461.695
   - uid: 9768
     components:
     - type: Transform
