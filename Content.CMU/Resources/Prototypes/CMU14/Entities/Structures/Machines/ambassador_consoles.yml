@@ -85,7 +85,7 @@
     replenishAmount: 10
     replenishInterval: 60
     callableParties:
-      MarineSecurityGuard: 3000
+      MarineSecurityGuard: 2000
       VAISP: 7000
       VAIPO: 9000
 
