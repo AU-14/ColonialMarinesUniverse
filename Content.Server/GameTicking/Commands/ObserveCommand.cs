@@ -33,6 +33,12 @@ namespace Content.Server.GameTicking.Commands
 
             var isAdminCommand = args.Length > 0 && args[0].ToLower() == "admin";
 
+            if (isAdminCommand && !_adminManager.IsAdmin(player))
+            {
+                shell.WriteError("Only admins can observe as admin.");
+                return;
+            }
+
             if (!isAdminCommand && _adminManager.IsAdmin(player))
             {
                 _adminManager.DeAdmin(player);
@@ -42,6 +48,9 @@ namespace Content.Server.GameTicking.Commands
                 status != PlayerGameStatus.JoinedGame)
             {
                 ticker.JoinAsObserver(player);
+
+                if (isAdminCommand)
+                    shell.ExecuteCommand("aghost");
             }
             else
             {
