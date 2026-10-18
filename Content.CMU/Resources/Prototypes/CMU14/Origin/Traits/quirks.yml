@@ -14,3 +14,9 @@
   description: cmu-trait-iron-teeth-desc
   components:
   - type: CMUIronTeeth
+
+# Joining a job that doesn't allow some of your traits just leaves those traits off.
+- type: trait
+  id: CMUAutoIgnoreTraits
+  name: cmu-trait-auto-ignore-name
+  description: cmu-trait-auto-ignore-desc

@@ -318,7 +318,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
                 ApplyProfileBloodType(jobEntity, profile); // CMU14
 
                 if (_configurationManager.GetCVar(CCVars.CharacterDescription))
-                    BakeCharacterDescription(jobEntity, profile);
+                    BakeCharacterDescription(jobEntity, profile, prototype?.ID); // cmu edit
             }
 
             // Make sure custom names get handled, what is gameticker control flow whoopy.
@@ -378,7 +378,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             ApplyProfileBloodType(entity.Value, profile); // CMU14
 
             if (_configurationManager.GetCVar(CCVars.CharacterDescription))
-                BakeCharacterDescription(entity.Value, profile);
+                BakeCharacterDescription(entity.Value, profile, prototype?.ID); // cmu edit
         }
 
         if (loadout != null && loadoutProto != null)
@@ -733,7 +733,9 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         Dirty(uid, bloodType);
     }
 
-    private void BakeCharacterDescription(EntityUid uid, HumanoidCharacterProfile profile)
+    // cmu edit start: the job, so traits it leaves off aren't listed
+    private void BakeCharacterDescription(EntityUid uid, HumanoidCharacterProfile profile, string? job = null)
+    // cmu edit end
     {
         var comp = AddComp<CharacterDescriptionComponent>(uid);
         comp.ShortExamine = profile.ShortExamine;
@@ -759,6 +761,14 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
             if (traitProto.Category is not { } category || category.Id != DisabilitiesTraitCategory)
                 continue;
+
+            // cmu edit start
+            if (EntityManager.System<Content.Shared.CMU14.Traits.AutoIgnore.CMUAutoIgnoreTraitsSystem>()
+                .IsIgnored(profile, job, traitId))
+            {
+                continue;
+            }
+            // cmu edit end
 
             comp.DisabilityTraitNames.Add(Loc.GetString(traitProto.Name));
 
