@@ -246,6 +246,12 @@
 	},
 	{
 	  "name": "oc_hab_securitypost_secondfloor"
+	},
+	{
+	  "name": "oc_research_secondfloor"
+	},
+	{
+	  "name": "underground"
 	}
   ]
 }
