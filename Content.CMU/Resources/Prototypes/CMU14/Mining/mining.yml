@@ -172,6 +172,10 @@
   id: RUMCDrillBase
   components:
   - type: OreDrill
+    # Where there is no deposit, the drill bores the rock floor of a cave: fragments of stone from the floor of the stone layer, of black stone from the black one.
+    rockTiles:
+      FloorBasalt: RUMCStone
+      RUMCFloorBlackBasalt: RUMCBlackStone
   - type: Appearance
   - type: WindowMachine
     outputSlots:

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
+using Content.Shared.Maps;
 using Content.Shared.Stacks;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -74,6 +75,11 @@ public sealed partial class OreDrillComponent : Component
 
     [DataField]
     public int MaxPerCycle = 10;
+
+    // The floor of a cave that the drill can bore even where there is no deposit: the tile of the floor and the fragments it gives. The
+    // rock of the floor does not run out, so the drill goes on until its head is worn out.
+    [DataField]
+    public Dictionary<ProtoId<ContentTileDefinition>, ProtoId<StackPrototype>> RockTiles = new();
 
     // Moles of water vapor used every second of work; zero for the drill that runs on the grid.
     [DataField]

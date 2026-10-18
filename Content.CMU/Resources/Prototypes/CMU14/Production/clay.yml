@@ -28,6 +28,7 @@
   - type: Stack
     stackType: RUMCClay
     count: 1
+  - type: GroundStack
   - type: Sprite
     noRot: true
     sprite: CMU14/Objects/Materials/clay.rsi

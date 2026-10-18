@@ -14,6 +14,7 @@
   components:
   - type: Stack
     stackType: RUMCIronOre
+  - type: GroundStack
   - type: Sprite
     sprite: CMU14/Objects/Materials/ore.rsi
     state: iron
@@ -51,6 +52,7 @@
   components:
   - type: Stack
     stackType: RUMCAluminumOre
+  - type: GroundStack
   - type: Sprite
     sprite: CMU14/Objects/Materials/ore.rsi
     state: aluminum
@@ -88,6 +90,7 @@
   components:
   - type: Stack
     stackType: RUMCChromeOre
+  - type: GroundStack
   - type: Sprite
     sprite: CMU14/Objects/Materials/ore.rsi
     state: chrome
@@ -125,6 +128,7 @@
   components:
   - type: Stack
     stackType: RUMCCobaltOre
+  - type: GroundStack
   - type: Sprite
     sprite: CMU14/Objects/Materials/ore.rsi
     state: cobalt
@@ -162,6 +166,7 @@
   components:
   - type: Stack
     stackType: RUMCCopperOre
+  - type: GroundStack
   - type: Sprite
     sprite: CMU14/Objects/Materials/ore.rsi
     state: copper
@@ -199,6 +204,7 @@
   components:
   - type: Stack
     stackType: RUMCGoldOre
+  - type: GroundStack
   - type: Sprite
     sprite: CMU14/Objects/Materials/ore.rsi
     state: gold
@@ -236,6 +242,7 @@
   components:
   - type: Stack
     stackType: RUMCLeadOre
+  - type: GroundStack
   - type: Sprite
     sprite: CMU14/Objects/Materials/ore.rsi
     state: lead
@@ -273,6 +280,7 @@
   components:
   - type: Stack
     stackType: RUMCSilverOre
+  - type: GroundStack
   - type: Sprite
     sprite: CMU14/Objects/Materials/ore.rsi
     state: silver
@@ -310,6 +318,7 @@
   components:
   - type: Stack
     stackType: RUMCTitaniumOre
+  - type: GroundStack
   - type: Sprite
     sprite: CMU14/Objects/Materials/ore.rsi
     state: titanium
@@ -347,6 +356,7 @@
   components:
   - type: Stack
     stackType: RUMCTungstenOre
+  - type: GroundStack
   - type: Sprite
     sprite: CMU14/Objects/Materials/ore.rsi
     state: tungsten
@@ -384,6 +394,7 @@
   components:
   - type: Stack
     stackType: RUMCPlatinumOre
+  - type: GroundStack
   - type: Sprite
     sprite: CMU14/Objects/Materials/ore.rsi
     state: platinum
@@ -421,6 +432,7 @@
   components:
   - type: Stack
     stackType: RUMCUraniumOre
+  - type: GroundStack
   - type: Sprite
     sprite: CMU14/Objects/Materials/ore.rsi
     state: uranium

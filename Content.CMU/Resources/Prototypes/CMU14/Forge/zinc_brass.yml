@@ -28,6 +28,7 @@
   components:
   - type: Stack
     stackType: RUMCZincOre
+  - type: GroundStack
   - type: Sprite
     sprite: CMU14/Objects/Materials/ore.rsi
     state: zinc

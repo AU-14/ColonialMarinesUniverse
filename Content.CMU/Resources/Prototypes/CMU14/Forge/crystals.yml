@@ -122,6 +122,7 @@
   - type: Stack
     stackType: RUMCSaltpeterCrystal
     count: 1
+  - type: GroundStack
   - type: Material
   - type: PhysicalComposition
     materialComposition:
@@ -153,6 +154,7 @@
   - type: Stack
     stackType: RUMCCinnabarCrystal
     count: 1
+  - type: GroundStack
   - type: Material
   - type: PhysicalComposition
     materialComposition:
@@ -184,6 +186,7 @@
   - type: Stack
     stackType: RUMCAsbestosCrystal
     count: 1
+  - type: GroundStack
   - type: Material
   - type: PhysicalComposition
     materialComposition:
@@ -215,6 +218,7 @@
   - type: Stack
     stackType: RUMCFluoriteCrystal
     count: 1
+  - type: GroundStack
   - type: Material
   - type: PhysicalComposition
     materialComposition:
@@ -246,6 +250,7 @@
   - type: Stack
     stackType: RUMCBerylliumCrystal
     count: 1
+  - type: GroundStack
   - type: Material
   - type: PhysicalComposition
     materialComposition:
@@ -277,6 +282,7 @@
   - type: Stack
     stackType: RUMCColtanCrystal
     count: 1
+  - type: GroundStack
   - type: Material
   - type: PhysicalComposition
     materialComposition:
@@ -308,6 +314,7 @@
   - type: Stack
     stackType: RUMCAlexandriteCrystal
     count: 1
+  - type: GroundStack
   - type: Material
   - type: PhysicalComposition
     materialComposition:
@@ -339,6 +346,7 @@
   - type: Stack
     stackType: RUMCRawDiamondCrystal
     count: 1
+  - type: GroundStack
   - type: Material
   - type: PhysicalComposition
     materialComposition:
@@ -370,6 +378,7 @@
   - type: Stack
     stackType: RUMCEmeraldCrystal
     count: 1
+  - type: GroundStack
   - type: Material
   - type: PhysicalComposition
     materialComposition:
@@ -401,6 +410,7 @@
   - type: Stack
     stackType: RUMCRubyCrystal
     count: 1
+  - type: GroundStack
   - type: Material
   - type: PhysicalComposition
     materialComposition:
@@ -432,6 +442,7 @@
   - type: Stack
     stackType: RUMCPhosphorusCrystal
     count: 1
+  - type: GroundStack
   - type: Material
   - type: PhysicalComposition
     materialComposition:
@@ -463,6 +474,7 @@
   - type: Stack
     stackType: RUMCTrimoridCrystal
     count: 1
+  - type: GroundStack
   - type: Material
   - type: PhysicalComposition
     materialComposition:
@@ -494,6 +506,7 @@
   - type: Stack
     stackType: RUMCLaxaniteCrystal
     count: 1
+  - type: GroundStack
   - type: Material
   - type: PhysicalComposition
     materialComposition:
@@ -525,6 +538,7 @@
   - type: Stack
     stackType: RUMCLaytoiteCrystal
     count: 1
+  - type: GroundStack
   - type: Material
   - type: PhysicalComposition
     materialComposition:
@@ -569,6 +583,7 @@
   - type: Stack
     stackType: RUMCQuartzCrystal
     count: 1
+  - type: GroundStack
   - type: Material
   - type: PhysicalComposition
     materialComposition:

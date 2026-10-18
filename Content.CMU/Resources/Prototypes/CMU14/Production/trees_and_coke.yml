@@ -15,6 +15,7 @@
   components:
   - type: Stack
     stackType: RUMCCokeCoal
+  - type: GroundStack
   - type: Sprite
     sprite: CMU14/Objects/Materials/coke.rsi
     state: coke
