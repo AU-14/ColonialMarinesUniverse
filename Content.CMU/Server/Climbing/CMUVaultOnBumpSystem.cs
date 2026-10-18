@@ -1,5 +1,7 @@
 using System.Numerics;
+using Content.Shared._RMC14.Entrenching;
 using Content.Shared.CCVar;
+using Content.Shared.CMU14.Climbing;
 using Content.Shared.Climbing.Components;
 using Content.Shared.Climbing.Systems;
 using Content.Shared.Movement.Components;
@@ -16,9 +18,9 @@ namespace Content.Server.CMU14.Climbing;
 
 /// <summary>
 ///     For players who turn on <see cref="CCVars.CMUVaultOnBump"/>: walking into something vaultable starts vaulting
-///     over it, like a ledge, a barricade or a railing. Tables (anything you can set things on) are left out, so
-///     bumping one doesn't put you on top of it. Keep pushing into it and the vault finishes; step away and it's
-///     cancelled like any other vault.
+///     over it, like a ledge or a railing. Tables (anything you can set things on) and barricades are left out, so
+///     bumping one doesn't put you on top of or over it. Keep pushing into it and the vault finishes; step away and
+///     it's cancelled like any other vault.
 /// </summary>
 /// <remarks>
 ///     Thin things like railings are easy to already be touching when you start pushing into them, which never
@@ -102,6 +104,7 @@ public sealed class CMUVaultOnBumpSystem : EntitySystem
         if (!TryComp(climbable, out ClimbableComponent? climbableComp) ||
             !climbableComp.Vaultable ||
             HasComp<PlaceableSurfaceComponent>(climbable) ||
+            HasComp<BarricadeComponent>(climbable) && !HasComp<CMUVaultOnBumpRailingComponent>(climbable) ||
             !Facing(ent, climbable))
         {
             return false;
