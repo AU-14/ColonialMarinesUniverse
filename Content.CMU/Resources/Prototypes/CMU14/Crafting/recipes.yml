@@ -163,6 +163,34 @@
   - stack: RUMCBranch
     amount: 1
 
+# The steel tools: sheets of metal (CMSteel) and a stick, worked with a smithing hammer, as the brass ones are. They are the pickaxe and the
+# shovel of the colony, the ones that come in the crate of work tools.
+- type: craftRecipe
+  id: RUMCCraftSteelPickaxe
+  name: au14-craft-recipe-steel-pickaxe
+  output: AU14ToolPickaxe
+  time: 10
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 4
+  - stack: RUMCBranch
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftSteelShovel
+  name: au14-craft-recipe-steel-shovel
+  output: AU14ToolShovel
+  time: 8
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 3
+  - stack: RUMCBranch
+    amount: 1
+
 # The brass molds are cut from the empty one like the iron ones.
 - type: craftRecipe
   id: RUMCCraftBrassSheetMold
