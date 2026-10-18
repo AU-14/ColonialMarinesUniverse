@@ -3,7 +3,7 @@
   "license": "CC-BY-SA-3.0",
   "copyright": "Created or reused for CMU14/CMU14",
   "size": {
-    "x": 64,
+    "x": 48,
     "y": 32
   },
   "states": [
@@ -15,9 +15,6 @@
     },
     {
       "name": "base"
-    },
-    {
-      "name": "mag-2"
     }
   ]
 }
