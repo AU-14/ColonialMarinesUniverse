@@ -99,6 +99,32 @@ public abstract partial class CMUSharedZLevelsSystem
         EnsureComp<CMUZFallingComponent>(uid);
     }
 
+    /// <summary>
+    ///     Controls an already falling body's descent without first lifting it into a hover.
+    /// </summary>
+    [PublicAPI]
+    public void StartZDescent(EntityUid uid, EntityUid source, float descendSpeed)
+    {
+        if (_net.IsClient || Transform(uid).MapUid is not { } map)
+            return;
+
+        StartZHover(uid, map, source, descendSpeed, descendSpeed);
+        StopZHover(uid);
+    }
+
+    /// <summary>
+    ///     Removes a source's vertical control immediately, resuming ordinary gravity.
+    /// </summary>
+    [PublicAPI]
+    public void CancelZHover(EntityUid uid, EntityUid source)
+    {
+        if (_net.IsClient || !_hoverQuery.TryComp(uid, out var hover) || hover.Source != source)
+            return;
+
+        RemComp<CMUZHoverComponent>(uid);
+        WakeZPhysics(uid);
+    }
+
     private void UpdateZHover(
         EntityUid uid,
         CMUZPhysicsComponent zPhys,

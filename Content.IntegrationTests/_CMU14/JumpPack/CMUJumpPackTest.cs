@@ -130,10 +130,14 @@ public sealed class CMUJumpPackTest : GameTest
     public async Task BoostBurnsFuelAndSharesCooldownWithJump()
     {
         float before = 0;
+        Vector2 start = default;
+        float distance = default;
         await Server.WaitAssertion(() =>
         {
             Equip();
             before = Moles;
+            start = SEntMan.System<SharedTransformSystem>().GetWorldPosition(_rider);
+            distance = Pack.BoostDistance;
             Perform(Pack.BoostActionEntity);
 
             Assert.Multiple(() =>
@@ -148,8 +152,98 @@ public sealed class CMUJumpPackTest : GameTest
         await Server.WaitAssertion(() =>
         {
             var position = SEntMan.System<SharedTransformSystem>().GetWorldPosition(_rider);
-            Assert.That(position.Y, Is.GreaterThan(4f), "The default heading is north.");
+            Assert.That(position.Y - start.Y, Is.InRange(distance * 0.8f, distance * 1.2f),
+                "A ground boost must travel the configured distance, not get braked by grounded movement.");
             Assert.That(SComp<TransformComponent>(_rider).MapUid, Is.EqualTo(_lower));
+        });
+    }
+
+    [Test]
+    public async Task JumpWithoutALedgeUsesFuelToLandSafely()
+    {
+        float afterJump = 0;
+        await Server.WaitAssertion(() =>
+        {
+            Equip();
+#pragma warning disable RA0002
+            Pack.JumpDashDistance = 0;
+#pragma warning restore RA0002
+            Perform(Pack.JumpActionEntity);
+            afterJump = Moles;
+        });
+
+        await Pair.RunSeconds(0.5f);
+        await Server.WaitAssertion(() =>
+            Assert.That(SComp<TransformComponent>(_rider).MapUid, Is.EqualTo(_upper)));
+        await Pair.RunSeconds(3f);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SComp<TransformComponent>(_rider).MapUid, Is.EqualTo(_lower));
+            Assert.That(Pack.DescendingUser, Is.Null);
+            Assert.That(Moles, Is.LessThan(afterJump), "Landing must consume fuel in addition to the jump.");
+            AssertUnhurt();
+        });
+    }
+
+    [TestCase(true, true, false, false)]
+    [TestCase(true, false, false, false)]
+    [TestCase(false, true, false, false)]
+    [TestCase(true, true, true, false)]
+    [TestCase(true, true, false, true)]
+    public async Task OrdinaryFallsAreBrakedOnlyByAWornFueledPack(
+        bool worn, bool fueled, bool removeWhileFalling, bool emptyWhileFalling)
+    {
+        float before = 0;
+        await Server.WaitAssertion(() =>
+        {
+            if (worn)
+                Equip();
+            if (!fueled)
+                SComp<GasTankComponent>(_pack).Air.Clear();
+            before = Moles;
+            SEntMan.System<SharedTransformSystem>().SetCoordinates(_rider,
+                new EntityCoordinates(_upper, new Vector2(0.5f, 0.5f)));
+            _z.SetZLocalPosition(_rider, 0.5f);
+            _z.SetZVelocity(_rider, -5f);
+        });
+
+        await Pair.RunTicksSync(2);
+        if (removeWhileFalling)
+        {
+            await Server.WaitAssertion(() =>
+            {
+                Assert.That(Pack.DescendingUser, Is.EqualTo(_rider));
+                Assert.That(SEntMan.System<InventorySystem>().TryUnequip(_rider, "back", force: true), Is.True);
+                Assert.That(SEntMan.HasComponent<CMUZHoverComponent>(_rider), Is.False);
+            });
+        }
+        else if (emptyWhileFalling)
+        {
+            await Server.WaitAssertion(() =>
+            {
+                Assert.That(Pack.DescendingUser, Is.EqualTo(_rider));
+                SComp<GasTankComponent>(_pack).Air.Clear();
+            });
+            await Pair.RunTicksSync(1);
+            await Server.WaitAssertion(() =>
+                Assert.That(SEntMan.HasComponent<CMUZHoverComponent>(_rider), Is.False));
+        }
+
+        await Pair.RunSeconds(3f);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SComp<TransformComponent>(_rider).MapUid, Is.EqualTo(_lower));
+            Assert.That(Pack.DescendingUser, Is.Null);
+            var damage = SEntMan.System<DamageableSystem>().GetTotalDamage(_rider).Float();
+            if (worn && fueled && !removeWhileFalling && !emptyWhileFalling)
+            {
+                Assert.That(Moles, Is.LessThan(before));
+                Assert.That(damage, Is.Zero);
+            }
+            else
+            {
+                Assert.That(damage, Is.GreaterThan(0), "Unprotected falls must retain ordinary fall damage.");
+            }
         });
     }
 
@@ -168,6 +262,26 @@ public sealed class CMUJumpPackTest : GameTest
         {
             Assert.That(SComp<TransformComponent>(_rider).MapUid, Is.EqualTo(_upper));
             AssertUnhurt();
+        });
+    }
+
+    [Test]
+    public async Task JumpCanInterruptAutomaticDescent()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            Equip();
+            _z.SetZLocalPosition(_rider, 0.5f);
+            _z.SetZVelocity(_rider, -1f);
+        });
+        await Pair.RunTicksSync(2);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(Pack.DescendingUser, Is.EqualTo(_rider));
+            Perform(Pack.JumpActionEntity);
+            Assert.That(Pack.DescendingUser, Is.Null);
+            Assert.That(SEntMan.HasComponent<CMUZHoverComponent>(_rider), Is.False);
+            Assert.That(SComp<CMUZPhysicsComponent>(_rider).Velocity, Is.GreaterThan(0));
         });
     }
 

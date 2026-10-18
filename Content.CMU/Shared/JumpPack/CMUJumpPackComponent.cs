@@ -7,7 +7,8 @@ namespace Content.Shared.CMU14.JumpPack;
 
 /// <summary>
 /// A gas-fuelled pack worn in the back slot. Grants a directional boost, a z-level jump,
-/// and a timed hover one z-level up. Fuel is the pack's <c>GasTank</c> air.
+/// and a timed hover one z-level up. Automatically brakes falls while worn and fueled.
+/// Fuel is the pack's <c>GasTank</c> air.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 [Access(typeof(CMUJumpPackSystem))]
@@ -98,6 +99,12 @@ public sealed partial class CMUJumpPackComponent : Component
     [DataField]
     public float HoverFuelPerSecond = 0.0068379f;
 
+    /// <summary>
+    ///     Gas consumed per second of automatic braking, including a descent after jumping or hovering.
+    /// </summary>
+    [DataField]
+    public float LandingFuelPerSecond = 0.0068379f;
+
     [DataField]
     public float FuelPerBoost = 0.0478655f;
 
@@ -114,13 +121,13 @@ public sealed partial class CMUJumpPackComponent : Component
     public TimeSpan HoverEnd;
 
     /// <summary>
-    /// The wearer is still gliding down after a hover ended.
+    /// The wearer is gliding down after a hover, jump, or ordinary fall.
     /// </summary>
     [DataField, AutoNetworkedField]
     public EntityUid? DescendingUser;
 
     /// <summary>
-    /// Server-only throttle for networking the gas drained while hovering.
+    /// Server-only throttle for networking the gas drained while hovering or descending.
     /// </summary>
     [ViewVariables]
     public TimeSpan NextFuelSync;

@@ -286,6 +286,9 @@ public abstract partial class CMUSharedZLevelsSystem
                 continue;
             }
 
+            var beforeMovement = new CMUZBeforeMovementEvent(frameTime);
+            RaiseLocalEvent(uid, ref beforeMovement);
+
             if (_hoverQuery.TryComp(uid, out var hover))
             {
                 UpdateZHover(uid, zPhys, hover, xform, physics, frameTime);
@@ -317,8 +320,10 @@ public abstract partial class CMUSharedZLevelsSystem
                     "tick",
                     $"frame={frameTime:F4} oldLocal={oldHeight:F3} local={zPhys.LocalPosition:F3} oldVel={oldVelocity:F3} vel={zPhys.Velocity:F3} distance={distanceToGround:F3} sticky={stickyGround} hasGround={hasGroundContact} fallingGround={fallingGroundContact} snap={groundSnapDistance:F3} body={physics.BodyStatus}");
 
+            // Throwing owns the airborne window even when a horizontal boost starts at floor height.
             if (hasGroundContact &&
-                physics.BodyStatus != BodyStatus.OnGround)
+                physics.BodyStatus != BodyStatus.OnGround &&
+                !HasComp<ThrownItemComponent>(uid))
             {
                 _physics.SetBodyStatus(uid, physics, BodyStatus.OnGround);
             }

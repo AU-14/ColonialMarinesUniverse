@@ -3,7 +3,7 @@
   parent: CMGasTankBase
   id: CMUJumpPack
   name: jump pack
-  description: A back-mounted thruster pack. Boosts the wearer along a set heading, hops a level up, or hovers above the ground for a short time. Refuel it from a gas canister like any other tank. It can hold 5 L of gas.
+  description: A back-mounted thruster pack. Boosts the wearer along a set heading, hops a level up, or hovers above the ground for a short time. Automatically burns gas to slow falls while worn. Refuel it from a gas canister like any other tank. It can hold 5 L of gas.
   components:
   - type: Sprite
     sprite: Objects/Tanks/Jetpacks/blue.rsi
@@ -21,6 +21,7 @@
       volume: 5
       temperature: 293.15
   - type: CMUJumpPack
+    landingFuelPerSecond: 0.0068379
   - type: StaticPrice
     price: 150
 

@@ -1,5 +1,5 @@
 ent-CMUJumpPack = jump pack
-    .desc = A back-mounted thruster pack. Boosts the wearer along a set heading, hops a level up, or hovers above the ground for a short time. Refuel it from a gas canister like any other tank. It can hold 5 L of gas.
+    .desc = A back-mounted thruster pack. Boosts the wearer along a set heading, hops a level up, or hovers above the ground for a short time. Automatically burns gas to slow falls while worn. Refuel it from a gas canister like any other tank. It can hold 5 L of gas.
 ent-CMUJumpPackFilled = { ent-CMUJumpPack }
     .desc = { ent-CMUJumpPack.desc }
     .suffix = Filled
@@ -36,4 +36,4 @@ cmu-jump-pack-no-room = There's no open sky above you!
 cmu-jump-pack-jump-hovering = You're already hovering!
 cmu-jump-pack-hover-start = The jump pack roars and lifts you off the ground.
 cmu-jump-pack-hover-expired = The jump pack's thrusters overheat, lowering you back down.
-cmu-jump-pack-hover-out-of-fuel = The jump pack runs dry, lowering you back down.
+cmu-jump-pack-hover-out-of-fuel = The jump pack runs dry and can no longer support you!

@@ -20,13 +20,14 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.JumpPack;
 
-public sealed class CMUJumpPackSystem : EntitySystem
+public sealed partial class CMUJumpPackSystem : EntitySystem
 {
     [Dependency] private ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private ActionContainerSystem _actionContainer = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedGasTankSystem _gasTank = default!;
+    [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
@@ -46,6 +47,7 @@ public sealed class CMUJumpPackSystem : EntitySystem
         SubscribeLocalEvent<CMUJumpPackComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<CMUJumpPackComponent, GetVerbsEvent<AlternativeVerb>>(OnGetAltVerbs);
         SubscribeLocalEvent<CMUJumpPackComponent, CMUZHoverEndedEvent>(OnHoverEnded);
+        SubscribeLocalEvent<InventoryComponent, CMUZBeforeMovementEvent>(OnBeforeZMovement);
 
         SubscribeLocalEvent<CMUJumpPackComponent, CMUJumpPackBoostActionEvent>(OnBoostAction);
         SubscribeLocalEvent<CMUJumpPackComponent, CMUJumpPackDirectionActionEvent>(OnDirectionAction);
@@ -66,7 +68,10 @@ public sealed class CMUJumpPackSystem : EntitySystem
     private void OnShutdown(Entity<CMUJumpPackComponent> ent, ref ComponentShutdown args)
     {
         if (ent.Comp.HoverUser is { } user && !TerminatingOrDeleted(user))
-            _zLevels.StopZHover(user);
+            _zLevels.CancelZHover(user, ent);
+
+        if (ent.Comp.DescendingUser is { } descending && !TerminatingOrDeleted(descending))
+            _zLevels.CancelZHover(descending, ent);
     }
 
     private void OnGetItemActions(Entity<CMUJumpPackComponent> ent, ref GetItemActionsEvent args)
@@ -85,6 +90,61 @@ public sealed class CMUJumpPackSystem : EntitySystem
     {
         if (ent.Comp.HoverUser == args.EquipTarget)
             EndHover(ent, args.EquipTarget);
+
+        if (ent.Comp.DescendingUser == args.EquipTarget)
+            _zLevels.CancelZHover(args.EquipTarget, ent);
+    }
+
+    private void OnBeforeZMovement(Entity<InventoryComponent> ent, ref CMUZBeforeMovementEvent args)
+    {
+        if (_net.IsClient ||
+            !_inventory.TryGetSlotEntity(ent, "back", out var back) ||
+            !TryComp<CMUJumpPackComponent>(back, out var pack) ||
+            !TryComp<GasTankComponent>(back, out var tank) ||
+            !TryComp<CMUZPhysicsComponent>(ent, out var zPhysics))
+        {
+            return;
+        }
+
+        if (pack.HoverUser != null)
+            return;
+
+        var descending = pack.DescendingUser == ent.Owner;
+        if (!descending &&
+            (zPhysics.Velocity >= 0f ||
+             _zLevels.IsZHovering(ent) ||
+             _zLevels.DistanceToGround((ent.Owner, zPhysics), out _) <= 0f ||
+             _mobState.IsDead(ent)))
+        {
+            return;
+        }
+
+        var drain = pack.LandingFuelPerSecond * args.FrameTime;
+        if (tank.Air.TotalMoles < drain || _mobState.IsDead(ent))
+        {
+            if (descending)
+            {
+                _zLevels.CancelZHover(ent, back.Value);
+                if (!_mobState.IsDead(ent))
+                    _popup.PopupEntity(Loc.GetString("cmu-jump-pack-no-fuel"), ent, ent, PopupType.MediumCaution);
+            }
+            return;
+        }
+
+        tank.Air.Remove(drain);
+        if (_timing.CurTime >= pack.NextFuelSync)
+        {
+            pack.NextFuelSync = _timing.CurTime + FuelSyncInterval;
+            Dirty(back.Value, tank);
+            _gasTank.UpdateUserInterface((back.Value, tank));
+        }
+
+        if (descending)
+            return;
+
+        pack.DescendingUser = ent.Owner;
+        Dirty(back.Value, pack);
+        _zLevels.StartZDescent(ent, back.Value, pack.HoverDescendSpeed);
     }
 
     private void OnExamined(Entity<CMUJumpPackComponent> ent, ref ExaminedEvent args)
@@ -122,7 +182,14 @@ public sealed class CMUJumpPackSystem : EntitySystem
         }
 
         if (comp.DescendingUser == args.Hoverer)
+        {
             comp.DescendingUser = null;
+            if (TryComp<GasTankComponent>(ent, out var tank))
+            {
+                Dirty(ent, tank);
+                _gasTank.UpdateUserInterface((ent, tank));
+            }
+        }
 
         Dirty(ent);
     }
@@ -146,7 +213,7 @@ public sealed class CMUJumpPackSystem : EntitySystem
         _throwing.TryThrow(user,
             comp.BoostDirection.ToVec() * comp.BoostDistance,
             comp.BoostSpeed,
-            compensateFriction: true,
+            compensateFriction: false,
             recoil: false,
             animated: false,
             playSound: false,
@@ -205,6 +272,9 @@ public sealed class CMUJumpPackSystem : EntitySystem
         if (!TryUseFuel(ent, user, comp.FuelPerJump))
             return;
 
+        if (comp.DescendingUser == user)
+            _zLevels.CancelZHover(user, ent);
+
         args.Handled = true;
 
         _physics.ResetDynamics(user, physics);
@@ -213,7 +283,7 @@ public sealed class CMUJumpPackSystem : EntitySystem
             _throwing.TryThrow(user,
                 comp.BoostDirection.ToVec() * comp.JumpDashDistance,
                 comp.JumpDashSpeed,
-                compensateFriction: true,
+                compensateFriction: false,
                 recoil: false,
                 animated: false,
                 playSound: false,
