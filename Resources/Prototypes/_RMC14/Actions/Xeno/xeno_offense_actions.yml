@@ -414,7 +414,7 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    useDelay: 2.5
+    useDelay: 1.5
   - type: Sprite
     layers:
     - sprite: _RMC14/Actions/xeno_actions.rsi
@@ -435,7 +435,7 @@
   parent: ActionXenoSpit
   components:
   - type: Action
-    useDelay: 2
+    useDelay: 1
 
 - type: entity
   id: ActionXenoToxicSpit
@@ -547,7 +547,7 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    useDelay: 12
+    useDelay: 10
   - type: Sprite
     layers:
     - sprite: _RMC14/Actions/xeno_actions.rsi
