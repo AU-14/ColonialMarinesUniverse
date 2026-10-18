@@ -37,6 +37,7 @@ public sealed partial class RakeComponent : Component
 [RegisterComponent]
 public sealed partial class SeedbedComponent : Component;
 
+// The do-after of raking the ground; carries the place and the target.
 [Serializable, NetSerializable]
 public sealed partial class RakeDoAfter : DoAfterEvent
 {
@@ -56,6 +57,7 @@ public sealed partial class RakeDoAfter : DoAfterEvent
     public override DoAfterEvent Clone() => this;
 }
 
+// The rake: works the ground with a do-after to make a bed, where it can.
 public sealed class RakeSystem : EntitySystem
 {
     [Dependency] private readonly SharedMapSystem _map = default!;

@@ -6,6 +6,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.ZLevelBuilding.Pit;
 
+// The do-after of digging a pit; carries the place and whether it is dug up or down.
 [Serializable, NetSerializable]
 public sealed partial class PitDigDoAfterEvent : DoAfterEvent
 {

@@ -52,6 +52,7 @@ public sealed partial class SteamSmelterComponent : Component
     public float NextDirty;
 }
 
+// Key of the steam smelter window.
 [Serializable, NetSerializable]
 public enum SteamSmelterUiKey : byte
 {

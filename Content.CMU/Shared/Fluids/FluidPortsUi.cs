@@ -19,6 +19,7 @@ public enum FluidPortsUiKey : byte
     Key,
 }
 
+// What the fluid ports window shows: the list of ports.
 [Serializable, NetSerializable]
 public sealed class FluidPortsBoundUserInterfaceState(List<FluidPortEntry> ports) : BoundUserInterfaceState
 {

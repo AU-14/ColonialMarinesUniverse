@@ -77,6 +77,7 @@ public abstract partial class CookingCraftRequirement
     public abstract float GetComplexity();
 }
 
+// A cooking requirement that is always met.
 public sealed partial class CookingAlwaysMet : CookingCraftRequirement
 {
     public override bool CheckRequirement(IEntityManager entManager, IPrototypeManager protoManager, List<ProtoId<TagPrototype>> placedTags, Solution? solution = null) => true;
@@ -84,6 +85,7 @@ public sealed partial class CookingAlwaysMet : CookingCraftRequirement
     public override float GetComplexity() => 0;
 }
 
+// A cooking requirement: the ingredients must have these tags (optionally nothing else).
 public sealed partial class CookingTagRequired : CookingCraftRequirement
 {
     // Any of these tags is enough.
@@ -107,6 +109,7 @@ public sealed partial class CookingTagRequired : CookingCraftRequirement
     public override float GetComplexity() => AllowOtherTags ? 5 : 1;
 }
 
+// A cooking requirement: the ingredients must not have these tags.
 public sealed partial class CookingTagBlocked : CookingCraftRequirement
 {
     [DataField(required: true)]
@@ -126,6 +129,7 @@ public sealed partial class CookingTagBlocked : CookingCraftRequirement
     public override float GetComplexity() => Tags.Count * -1;
 }
 
+// A cooking requirement: the pot must hold at least this amount of these reagents.
 public sealed partial class CookingReagentRequired : CookingCraftRequirement
 {
     [DataField(required: true)]
@@ -210,6 +214,7 @@ public sealed partial class FoodHolderComponent : Component
     public HashSet<string> RevealedLayers = new();
 }
 
+// The cooked dish: its recipe, name, description, look and flavors.
 [Serializable]
 [DataDefinition]
 public sealed partial class CookingFoodData
@@ -243,6 +248,7 @@ public sealed partial class CookingFoodData
     public HashSet<ProtoId<FlavorPrototype>> Flavors = new();
 }
 
+// What the appearance of a cooking vessel shows.
 [Serializable, NetSerializable]
 public enum CookingVisuals : byte
 {
@@ -250,6 +256,7 @@ public enum CookingVisuals : byte
     Burning,
 }
 
+// The do-after of cooking a dish; carries the recipe.
 [Serializable, NetSerializable]
 public sealed partial class CookingDoAfter : DoAfterEvent
 {
@@ -264,5 +271,6 @@ public sealed partial class CookingDoAfter : DoAfterEvent
     public override DoAfterEvent Clone() => this;
 }
 
+// The do-after of a dish that is burning.
 [Serializable, NetSerializable]
 public sealed partial class BurningDoAfter : SimpleDoAfterEvent;

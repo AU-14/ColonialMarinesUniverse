@@ -5,6 +5,7 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client.CMU14.Steam;
 
+// Client side of the boiler: opens its window and sends the server the slot that was pressed.
 public sealed class BoilerBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     [ViewVariables]

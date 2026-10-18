@@ -84,6 +84,7 @@ public enum RecipeMachineVisuals : byte
     Working,
 }
 
+// Key of the window of a machine that makes things by recipe.
 [Serializable, NetSerializable]
 public enum RecipeMachineUiKey : byte
 {

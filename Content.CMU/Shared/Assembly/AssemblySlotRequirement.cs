@@ -6,6 +6,7 @@ using Robust.Shared.Serialization.Manager.Attributes;
 
 namespace Content.Shared.CMU14.Assembly;
 
+// What one slot of an assembly recipe needs: a stack material and how much of it.
 [DataDefinition]
 public sealed partial class AssemblySlotRequirement
 {

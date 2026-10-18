@@ -20,6 +20,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.Assembly;
 
+// Window of an assembly machine: draws its slots (inputs, output, blueprint, upgrades) and shows what an empty slot wants as a faded ghost.
 public sealed class AssemblyWindow : DefaultWindow
 {
     [Dependency] private readonly IEntityManager _entMan = default!;

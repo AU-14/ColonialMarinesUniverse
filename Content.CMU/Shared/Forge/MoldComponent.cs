@@ -8,6 +8,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Forge;
 
+// A casting mold: takes molten metal, cools it for a while, and then gives the cast item.
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class MoldComponent : Component
 {
@@ -33,6 +34,7 @@ public sealed partial class MoldComponent : Component
     public MoldRecipe? CoolingRecipe;
 }
 
+// A casting recipe: which molten reagents are needed, what comes out and how long it cools.
 [DataDefinition]
 public sealed partial class MoldRecipe
 {
@@ -52,12 +54,14 @@ public sealed partial class MoldRecipe
     public string Name = string.Empty;
 }
 
+// What the appearance of a mold shows.
 [Serializable, NetSerializable]
 public enum MoldVisuals : byte
 {
     State,
 }
 
+// The look of a mold: empty, filled, cooling or ready.
 [Serializable, NetSerializable]
 public enum MoldSpriteState : byte
 {

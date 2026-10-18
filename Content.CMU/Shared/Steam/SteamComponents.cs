@@ -39,12 +39,14 @@ public sealed partial class BoilerComponent : Component
     public float BurnLeft;
 }
 
+// Key of the boiler window.
 [Serializable, NetSerializable]
 public enum BoilerUiKey : byte
 {
     Key,
 }
 
+// What the appearance of a boiler shows.
 [Serializable, NetSerializable]
 public enum BoilerVisuals : byte
 {

@@ -4,6 +4,7 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared.CMU14.Grinding;
 
+// A grinder: names of its slots (materials, blades, outputs) and the state of the grind that is under way.
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class GrinderComponent : Component
 {

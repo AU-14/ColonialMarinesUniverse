@@ -15,6 +15,7 @@ using Robust.Shared.Map.Components;
 
 namespace Content.Server.CMU14.ZLevelBuilding.Pit;
 
+// Server side of pits: builds in a pit what the player chose (steps, rope, hatch...) from stacks, with a do-after.
 public sealed class PitSystem : SharedPitSystem
 {
     [Dependency] private readonly ZLevelBuildingSystem _building = default!;

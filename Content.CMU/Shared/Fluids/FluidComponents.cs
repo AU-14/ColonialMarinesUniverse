@@ -84,6 +84,7 @@ public sealed partial class FluidPortsComponent : Component
     public List<FluidPort> Ports = new();
 }
 
+// One port of a fluid device: its id, the kind of fluid, whether it gives or takes, the rate and how many links it can have.
 [DataDefinition]
 public sealed partial class FluidPort
 {

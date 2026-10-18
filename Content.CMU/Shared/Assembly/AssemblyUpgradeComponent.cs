@@ -4,6 +4,7 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared.CMU14.Assembly;
 
+// An upgrade part for an assembly machine: changes its speed and energy use.
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class AssemblyUpgradeComponent : Component
 {

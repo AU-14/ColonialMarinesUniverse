@@ -6,6 +6,7 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.CMU14.Flora;
 
+// Changes the sprite of a stack by how much is in it (the "levels" of the pile).
 public sealed class StackLevelsVisualizerSystem : VisualizerSystem<StackLevelsComponent>
 {
     protected override void OnAppearanceChange(EntityUid uid, StackLevelsComponent comp, ref AppearanceChangeEvent args)

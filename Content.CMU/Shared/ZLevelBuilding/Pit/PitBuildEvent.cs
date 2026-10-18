@@ -4,6 +4,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.ZLevelBuilding.Pit;
 
+// From the player: build this option in this pit.
 [Serializable, NetSerializable]
 public sealed class PitBuildEvent : EntityEventArgs
 {

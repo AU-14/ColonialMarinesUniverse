@@ -5,6 +5,7 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client.CMU14.Steam;
 
+// Client side of the condenser: opens its window and sends the server the slot that was pressed.
 public sealed class CondenserBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     [ViewVariables]

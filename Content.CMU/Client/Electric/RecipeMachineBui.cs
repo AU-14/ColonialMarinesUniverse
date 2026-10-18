@@ -6,6 +6,7 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client.CMU14.Electric;
 
+// Client side of a machine that makes things by recipe: opens its window.
 public sealed class RecipeMachineBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     [ViewVariables]

@@ -5,6 +5,7 @@ using Content.Shared.Examine;
 
 namespace Content.Server.CMU14.ZLevelBuilding;
 
+// Tells in the examine text that nothing can be dug below this support.
 public sealed class NoDigBelowSystem : EntitySystem
 {
     public override void Initialize()

@@ -23,6 +23,7 @@ public sealed class CraftingMenuEvent : EntityEventArgs
     }
 }
 
+// From the player: start crafting this recipe.
 [Serializable, NetSerializable]
 public sealed class CraftingSelectEvent : EntityEventArgs
 {
@@ -34,9 +35,11 @@ public sealed class CraftingSelectEvent : EntityEventArgs
     }
 }
 
+// From the player: stop the craft that is under way.
 [Serializable, NetSerializable]
 public sealed class CraftingCancelEvent : EntityEventArgs;
 
+// The do-after of crafting; carries the recipe.
 [Serializable, NetSerializable]
 public sealed partial class CraftDoAfterEvent : DoAfterEvent
 {

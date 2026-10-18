@@ -4,6 +4,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Assembly;
 
+// A recipe of an assembly machine: which material goes into which slot, what it makes, how many, how long and how much energy it takes.
 [Prototype("cmuAssemblyRecipe")]
 public sealed partial class AssemblyRecipePrototype : IPrototype
 {

@@ -6,6 +6,7 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client.CMU14.Smelting;
 
+// Client side of the electric smelter: opens its window, sends the pressed slot and the temperature the player sets.
 public sealed class ElectricSmelterBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     [ViewVariables]

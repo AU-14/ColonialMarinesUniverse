@@ -5,6 +5,7 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client.CMU14.Fluids;
 
+// Client side of the fluid ports window: opens it and gives it the state of the ports.
 public sealed class FluidPortsBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     [ViewVariables]

@@ -5,6 +5,7 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client.CMU14.Mining;
 
+// Client side of the ore drill: opens its window and sends the server the slot that was pressed.
 public sealed class OreDrillBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     [ViewVariables]

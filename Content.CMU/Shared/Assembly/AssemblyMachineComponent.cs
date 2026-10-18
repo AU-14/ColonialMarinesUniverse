@@ -5,6 +5,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Assembly;
 
+// An assembly machine: names of its slots (materials, output, blueprint, upgrades) and the state of the batch it is making.
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class AssemblyMachineComponent : Component
 {
@@ -32,6 +33,7 @@ public sealed partial class AssemblyMachineComponent : Component
     public string? PendingRecipe;
 }
 
+// What the appearance of an assembly machine shows.
 [Serializable, NetSerializable]
 public enum AssemblyMachineVisuals : byte
 {

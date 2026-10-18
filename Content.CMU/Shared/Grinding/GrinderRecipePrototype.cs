@@ -5,6 +5,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Grinding;
 
+// A recipe of a grinder: the stack it takes and the stack (and extras) it makes.
 [Prototype("cmuGrinderRecipe")]
 public sealed partial class GrinderRecipePrototype : IPrototype
 {
@@ -28,6 +29,7 @@ public sealed partial class GrinderRecipePrototype : IPrototype
     public List<GrinderRecipeExtra> Extras = new();
 }
 
+// An extra product of a grinder recipe.
 [DataDefinition]
 public sealed partial class GrinderRecipeExtra
 {

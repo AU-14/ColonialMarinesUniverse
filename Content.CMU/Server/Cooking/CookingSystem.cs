@@ -5,6 +5,7 @@ using Content.Shared.CMU14.Cooking;
 
 namespace Content.Server.CMU14.Cooking;
 
+// Server side of cooking: reacts to the contents of a pot or pan changing, so that the dish can be recognised.
 public sealed class CookingSystem : SharedCookingSystem
 {
     public override void Initialize()

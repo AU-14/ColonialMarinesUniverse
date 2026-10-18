@@ -15,6 +15,7 @@ using JetBrains.Annotations;
 
 namespace Content.Server.Power.EntitySystems;
 
+// Runs a cable by hand between two devices with the coil, using the stack of cable, and lets a link be taken off with a verb.
 [UsedImplicitly]
 public sealed class DirectCableLinkerSystem : EntitySystem
 {

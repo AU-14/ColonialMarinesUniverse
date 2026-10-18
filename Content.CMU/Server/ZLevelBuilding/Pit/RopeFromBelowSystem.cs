@@ -11,6 +11,7 @@ using Robust.Shared.Map.Components;
 
 namespace Content.Server.CMU14.ZLevelBuilding.Pit;
 
+// Lets a player standing under a pit hang a rope coil up into it, so that it can be climbed.
 public sealed class RopeFromBelowSystem : EntitySystem
 {
     [Dependency] private readonly SharedTransformSystem _transform = default!;

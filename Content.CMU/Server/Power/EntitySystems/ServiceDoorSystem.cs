@@ -12,6 +12,7 @@ using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.CMU14.Power;
 
+// The service door of a machine: opens and closes with a verb, makes its sound, and blocks the interface and the panel while it is shut.
 public sealed class ServiceDoorSystem : EntitySystem
 {
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;

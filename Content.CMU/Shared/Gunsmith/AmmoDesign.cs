@@ -6,12 +6,14 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Gunsmith;
 
+// What the ammunition rules need to know: the gunsmith data plus the materials and payloads of cartridges.
 public interface IAmmoData : IGunsmithData
 {
     AmmoMaterialPrototype? AmmoMaterial(string id);
     AmmoPayloadPrototype? Payload(string reagent);
 }
 
+// Gives the ammunition rules the materials and payloads that are defined in prototypes.
 public sealed class PrototypeAmmoData : IAmmoData
 {
     private readonly IPrototypeManager _prototypes;
@@ -174,6 +176,7 @@ public sealed class AmmoEvaluation
         AmmoMechanics.ProjectileDamage(RatedDamage, Extra, PayloadDamageType, PayloadDamagePerUnit, PayloadUnits, Pellets);
 }
 
+// The numbers of the ammunition rules: powder levels, case and jacket sizes, shell pellets and the like.
 public static class AmmoMechanics
 {
     /// <summary>The powder load levels and the share of the nominal charge each puts in.</summary>
@@ -290,6 +293,7 @@ public static class AmmoMechanics
     }
 }
 
+// Checks a cartridge design and works out what it does and what a batch costs.
 public static class AmmoEvaluator
 {
     private static string Name(AmmoPart part) => part.ToString().ToLowerInvariant();

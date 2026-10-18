@@ -4,6 +4,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.ZLevelBuilding.Pit;
 
+// What can be built in a pit.
 [Serializable, NetSerializable]
 public enum PitBuildOption : byte
 {

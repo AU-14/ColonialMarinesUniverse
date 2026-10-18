@@ -4,6 +4,7 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared.CMU14.Forge;
 
+// Marks a smeltery and the highest temperature it can reach.
 [RegisterComponent, NetworkedComponent]
 public sealed partial class SmelteryComponent : Component
 {

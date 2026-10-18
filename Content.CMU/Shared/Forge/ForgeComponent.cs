@@ -8,6 +8,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Forge;
 
+// The crucible of the forge: what it can melt (ingredients), how much molten metal it holds, and what is loaded in it.
 [RegisterComponent, NetworkedComponent]
 public sealed partial class ForgeComponent : Component
 {
@@ -25,6 +26,7 @@ public sealed partial class ForgeComponent : Component
     public Dictionary<ProtoId<StackPrototype>, int> Loaded = new();
 }
 
+// What a crucible takes: a stack, the reagent it melts into, and how much per unit.
 [DataDefinition]
 public sealed partial class ForgeIngredient
 {

@@ -23,6 +23,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.Cooking;
 
+// Cooking, shared by both sides: works out which recipe fits the contents of a vessel, and cooks, burns and serves the dish.
 public abstract partial class SharedCookingSystem : EntitySystem
 {
     [Dependency] protected readonly SharedContainerSystem Container = default!;

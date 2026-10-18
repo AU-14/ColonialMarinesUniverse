@@ -11,6 +11,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.CMU14.Assembly;
 
+// Window with the list of assembly recipes of a blueprint; raises an event when the player picks one.
 public sealed class AssemblyBlueprintWindow : DefaultWindow
 {
     [Dependency] private readonly IPrototypeManager _proto = default!;

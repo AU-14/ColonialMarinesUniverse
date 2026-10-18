@@ -2,6 +2,7 @@
 // Copyright (c) 2026 wray-git
 namespace Content.Shared.CMU14.ZLevelBuilding.Pit;
 
+// A tool that digs pits: whether it digs up, and how fast.
 [RegisterComponent]
 public sealed partial class PitDiggingToolComponent : Component
 {

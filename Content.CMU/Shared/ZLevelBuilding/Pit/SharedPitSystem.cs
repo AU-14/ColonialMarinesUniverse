@@ -4,6 +4,7 @@ using Content.Shared.Verbs;
 
 namespace Content.Shared.CMU14.ZLevelBuilding.Pit;
 
+// Pits, shared by both sides: adds the verb that opens the build menu of a pit.
 public abstract class SharedPitSystem : EntitySystem
 {
     public override void Initialize()

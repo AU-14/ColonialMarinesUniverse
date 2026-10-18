@@ -6,6 +6,7 @@ using Content.Shared.Tools.Systems;
 
 namespace Content.Shared.CMU14.Forge;
 
+// The anvil, shared by both sides: checks a workpiece fits a recipe and reacts when a tool is used on it.
 public abstract class SharedAnvilSystem : EntitySystem
 {
     [Dependency] private readonly SharedToolSystem _tool = default!;

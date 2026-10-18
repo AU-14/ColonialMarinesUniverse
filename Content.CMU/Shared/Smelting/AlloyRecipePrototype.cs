@@ -5,6 +5,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Smelting;
 
+// A recipe of alloying: which stacks go in, the lowest temperature, how long it takes and what comes out.
 [Prototype("cmuAlloyRecipe")]
 public sealed partial class AlloyRecipePrototype : IPrototype
 {

@@ -20,6 +20,7 @@ public interface IGunsmithData
     GunsmithClassPrototype? Class(string id);
 }
 
+// Gives the gunsmith rules the materials, powders, actions, looks, classes and calibers that are defined in prototypes.
 public sealed class PrototypeGunsmithData : IGunsmithData
 {
     private readonly IPrototypeManager _prototypes;
@@ -63,6 +64,7 @@ public sealed class DesignCheck<T>
     public bool Valid => Errors.Count == 0;
 }
 
+// The rules of the gunsmith: checks a firearm or magazine design and works out its stats and cost.
 public static class GunsmithEvaluator
 {
     // What the grade of work asks of the material (its machinability), what it gives (quality), what it costs (waste) and adds (complexity).

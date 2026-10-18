@@ -4,6 +4,7 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client.CMU14.Trade;
 
+// Client side of the trade platform: opens its window, gives it the state and the messages the server sends.
 public sealed class TradePlatformBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     [ViewVariables]

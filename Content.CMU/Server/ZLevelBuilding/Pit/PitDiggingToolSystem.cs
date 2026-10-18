@@ -29,6 +29,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.ZLevelBuilding.Pit;
 
+// Digging a pit down with a tool (shovel, pickaxe, jackhammer): checks the tool fits the layer, runs the do-after, and breaks the ground or rock.
 public sealed class PitDiggingToolSystem : EntitySystem
 {
     [Dependency] private readonly ZLevelBuildingSystem _building = default!;

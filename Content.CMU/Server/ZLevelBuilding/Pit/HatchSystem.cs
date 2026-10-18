@@ -10,6 +10,7 @@ using Content.Shared.Verbs;
 
 namespace Content.Server.CMU14.ZLevelBuilding.Pit;
 
+// Hatches over a pit ladder: verbs to open and close it, and to camouflage it so it is invisible when closed.
 public sealed class HatchSystem : EntitySystem
 {
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;

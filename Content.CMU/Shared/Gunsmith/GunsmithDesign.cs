@@ -13,6 +13,7 @@ public enum FeedKind : byte
     Internal,
 }
 
+// The kinds of stock a gunsmith bench holds.
 public enum StockKind : byte
 {
     None,

@@ -6,6 +6,7 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.CMU14.Farming;
 
+// Client side of farming: sets the sprite of a plant to the state of its growth.
 public sealed class ClientFarmingSystem : SharedFarmingSystem
 {
     [Dependency] private readonly SpriteSystem _sprite = default!;

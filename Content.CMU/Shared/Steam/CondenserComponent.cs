@@ -39,6 +39,7 @@ public sealed partial class CondenserComponent : Component
     public float NextDirty;
 }
 
+// Key of the condenser window.
 [Serializable, NetSerializable]
 public enum CondenserUiKey : byte
 {

@@ -4,6 +4,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Gunsmith;
 
+// Key of the ammunition bench window.
 [Serializable, NetSerializable]
 public enum AmmoBenchUiKey : byte
 {
@@ -33,6 +34,7 @@ public sealed class AmmoBenchBuiState : BoundUserInterfaceState
     }
 }
 
+// From the window: make this many cartridges of this design.
 [Serializable, NetSerializable]
 public sealed class AmmoBuildMessage : BoundUserInterfaceMessage
 {
@@ -46,6 +48,7 @@ public sealed class AmmoBuildMessage : BoundUserInterfaceMessage
     }
 }
 
+// From the window: take this stack type out of the bench.
 [Serializable, NetSerializable]
 public sealed class AmmoEjectStockMessage : BoundUserInterfaceMessage
 {
@@ -57,11 +60,13 @@ public sealed class AmmoEjectStockMessage : BoundUserInterfaceMessage
     }
 }
 
+// From the window: drain the liquid tank of the bench.
 [Serializable, NetSerializable]
 public sealed class AmmoDrainTankMessage : BoundUserInterfaceMessage
 {
 }
 
+// From the window: take the item that lies on the bench.
 [Serializable, NetSerializable]
 public sealed class AmmoTakeItemMessage : BoundUserInterfaceMessage
 {

@@ -94,12 +94,14 @@ public sealed partial class OreDrillComponent : Component
     public float NextDirty;
 }
 
+// Key of the ore drill window.
 [Serializable, NetSerializable]
 public enum OreDrillUiKey : byte
 {
     Key,
 }
 
+// What the appearance of an ore drill shows.
 [Serializable, NetSerializable]
 public enum DrillVisuals : byte
 {

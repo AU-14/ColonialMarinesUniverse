@@ -6,6 +6,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.CMU14.Forge;
 
+// Client side of the anvil: shows a radial menu of recipes for the workpiece and tells the server the chosen one.
 public sealed class AnvilSystem : SharedAnvilSystem
 {
     [Dependency] private readonly IPrototypeManager _proto = default!;

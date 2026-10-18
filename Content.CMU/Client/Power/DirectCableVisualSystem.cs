@@ -4,6 +4,7 @@ using Robust.Client.Graphics;
 
 namespace Content.Client.CMU14.Power;
 
+// Adds the overlay that draws the cables run by hand between devices, and removes it on shutdown.
 public sealed class DirectCableVisualSystem : EntitySystem
 {
     [Dependency] private readonly IOverlayManager _overlay = default!;

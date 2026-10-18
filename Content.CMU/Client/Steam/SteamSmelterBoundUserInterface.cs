@@ -6,6 +6,7 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client.CMU14.Steam;
 
+// Client side of the steam smelter: opens its window, sends the pressed slot and the setting of the regulators.
 public sealed class SteamSmelterBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     [ViewVariables]

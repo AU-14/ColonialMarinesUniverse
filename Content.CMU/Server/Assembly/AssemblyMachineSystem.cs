@@ -12,6 +12,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Assembly;
 
+// Assembly machines: takes the parts from the slots, makes the batch of the recipe over time (needs power), and plays a sound when it is done.
 public sealed class AssemblyMachineSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _proto = default!;

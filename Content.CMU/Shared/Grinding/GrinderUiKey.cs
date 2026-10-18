@@ -4,6 +4,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Grinding;
 
+// Key of the grinder window.
 [Serializable, NetSerializable]
 public enum GrinderUiKey : byte
 {

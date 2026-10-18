@@ -41,6 +41,7 @@ public sealed partial class CookingStoveComponent : Component
     public TimeSpan NextTick;
 }
 
+// What the appearance of a cooking stove shows.
 [Serializable, NetSerializable]
 public enum StoveVisuals : byte
 {

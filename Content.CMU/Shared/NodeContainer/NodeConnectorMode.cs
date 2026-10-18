@@ -1,5 +1,6 @@
 namespace Content.Shared.NodeContainer;
 
+// How a cable node joins others: with the cables next to it (Adjacent), only with the ones run by hand (Direct), or both.
 public enum NodeConnectorMode : byte
 {
     Adjacent = 0,

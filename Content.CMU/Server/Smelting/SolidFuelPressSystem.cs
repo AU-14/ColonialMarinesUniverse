@@ -12,6 +12,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Smelting;
 
+// The solid fuel press: takes stacks of fuel stock, presses them with steam into fuel, and lights up while it works.
 public sealed class SolidFuelPressSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;

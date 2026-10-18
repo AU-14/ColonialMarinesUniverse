@@ -23,6 +23,7 @@ using Robust.Shared.Physics.Systems;
 
 namespace Content.Server.CMU14.Portable;
 
+// Portable structures: pick up a built structure into an item (do-after) and put it down again where there is room.
 public sealed class PortableStructureSystem : SharedPortableStructureSystem
 {
     [Dependency] private readonly SharedContainerSystem _container = default!;

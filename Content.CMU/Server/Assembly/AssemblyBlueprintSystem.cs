@@ -5,6 +5,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Assembly;
 
+// Server side of a blueprint: remembers which recipe the player picked in its window.
 public sealed class AssemblyBlueprintSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _proto = default!;

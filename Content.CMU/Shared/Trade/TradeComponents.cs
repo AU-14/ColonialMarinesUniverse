@@ -81,6 +81,7 @@ public sealed partial class TradePlatformComponent : Component
     public string ParcelPrototype = "RUMCTradeParcel";
 }
 
+// The stages of a trade drone visit: descending, hovering, ascending.
 public enum TradeDronePhase : byte
 {
     // The drone comes out of the sky and settles down on the pad.
@@ -93,6 +94,7 @@ public enum TradeDronePhase : byte
     Ascend,
 }
 
+// The drone that comes to a trade platform: which platform, which stage it is in, and how long each stage lasts.
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true), AutoGenerateComponentPause]
 public sealed partial class TradeDroneComponent : Component
 {
@@ -120,6 +122,7 @@ public sealed partial class TradeDroneComponent : Component
 
 }
 
+// What a drone is called for: to take a sale away or to bring a purchase.
 public enum TradeOrderKind : byte
 {
     Sell,
@@ -145,9 +148,11 @@ public sealed class TradeOrder
     public int Paid;
 }
 
+// The do-after of packing goods into a parcel.
 [Serializable, NetSerializable]
 public sealed partial class TradePackDoAfterEvent : SimpleDoAfterEvent;
 
+// The do-after of unpacking a parcel.
 [Serializable, NetSerializable]
 public sealed partial class TradeUnpackDoAfterEvent : SimpleDoAfterEvent;
 

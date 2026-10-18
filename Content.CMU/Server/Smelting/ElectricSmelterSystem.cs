@@ -15,6 +15,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Smelting;
 
+// The electric smelter: melts what is in its slots by recipe at the temperature the player sets, using power.
 public sealed class ElectricSmelterSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _proto = default!;

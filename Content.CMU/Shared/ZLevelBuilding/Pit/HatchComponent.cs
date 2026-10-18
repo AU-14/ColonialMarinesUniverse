@@ -5,6 +5,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.ZLevelBuilding.Pit;
 
+// A hatch over a pit: open or shut, and whether it is invisible when shut (camouflage).
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class HatchComponent : Component
 {
@@ -18,6 +19,7 @@ public sealed partial class HatchComponent : Component
     public TimeSpan CamouflageTime = TimeSpan.FromSeconds(10);
 }
 
+// What the appearance of a hatch shows.
 [Serializable, NetSerializable]
 public enum HatchVisuals : byte
 {

@@ -6,6 +6,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.CMU14.Assembly;
 
+// Client side of a blueprint reader: opens the recipe list window and tells the server which recipe was picked.
 public sealed class AssemblyBlueprintBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     [ViewVariables]

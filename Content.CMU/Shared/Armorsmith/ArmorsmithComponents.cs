@@ -41,6 +41,7 @@ public sealed partial class CraftedArmorComponent : Component
     public double MassKg;
 }
 
+// The do-after of building an armor at the armorsmith bench; carries the design that is being built.
 [Serializable, NetSerializable]
 public sealed partial class ArmorsmithBuildDoAfterEvent : DoAfterEvent
 {

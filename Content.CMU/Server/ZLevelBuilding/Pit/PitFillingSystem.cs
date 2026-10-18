@@ -7,6 +7,7 @@ using Content.Shared.Popups;
 
 namespace Content.Server.CMU14.ZLevelBuilding.Pit;
 
+// Filling a pit back in with a shovel: a 30 second do-after that removes the pit.
 public sealed class PitFillingSystem : EntitySystem
 {
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;

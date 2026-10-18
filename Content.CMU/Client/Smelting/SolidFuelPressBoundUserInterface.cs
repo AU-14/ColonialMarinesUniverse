@@ -5,6 +5,7 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client.CMU14.Smelting;
 
+// Client side of the solid fuel press: opens its window and sends the server the slot that was pressed.
 public sealed class AU14SolidFuelPressBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     [ViewVariables]

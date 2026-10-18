@@ -5,6 +5,7 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client.CMU14.Gunsmith;
 
+// Client side of the ammunition bench: opens its window and gives it the state the server sends.
 public sealed class AmmoBenchBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     [ViewVariables]

@@ -5,6 +5,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Armorsmith;
 
+// Gives the armorsmith rules the looks, materials, backings and plates that are defined in prototypes.
 public sealed class PrototypeArmorsmithData : IArmorsmithData
 {
     private readonly IPrototypeManager _prototypes;
@@ -32,6 +33,7 @@ public sealed class PrototypeArmorsmithData : IArmorsmithData
     }
 }
 
+// The rules of the armorsmith: checks an armor design (grade, backing, plates) and works out what it is worth.
 public static class ArmorsmithEvaluator
 {
     private static readonly double[] GradeWaste = { 1.15, 1.30, 1.55, 1.90 };

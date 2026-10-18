@@ -4,6 +4,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Gunsmith;
 
+// Key of the gunsmith bench window.
 [Serializable, NetSerializable]
 public enum GunsmithUiKey : byte
 {
@@ -30,6 +31,7 @@ public sealed class GunsmithBuiState : BoundUserInterfaceState
     }
 }
 
+// From the window: build a firearm of this design.
 [Serializable, NetSerializable]
 public sealed class GunsmithBuildFirearmMessage : BoundUserInterfaceMessage
 {
@@ -41,6 +43,7 @@ public sealed class GunsmithBuildFirearmMessage : BoundUserInterfaceMessage
     }
 }
 
+// From the window: build a magazine of this design.
 [Serializable, NetSerializable]
 public sealed class GunsmithBuildMagazineMessage : BoundUserInterfaceMessage
 {
@@ -52,6 +55,7 @@ public sealed class GunsmithBuildMagazineMessage : BoundUserInterfaceMessage
     }
 }
 
+// From the window: take this stack type out of the bench.
 [Serializable, NetSerializable]
 public sealed class GunsmithEjectStockMessage : BoundUserInterfaceMessage
 {
@@ -63,6 +67,7 @@ public sealed class GunsmithEjectStockMessage : BoundUserInterfaceMessage
     }
 }
 
+// From the window: take the weapon that lies on the bench.
 [Serializable, NetSerializable]
 public sealed class GunsmithTakeWeaponMessage : BoundUserInterfaceMessage
 {

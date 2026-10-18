@@ -21,6 +21,7 @@ public sealed partial class NoDigBelowComponent : Component
     public int Radius = 1;
 }
 
+// Helper: tells whether a place is held by a support that forbids digging below it.
 public static class NoDigBelow
 {
     // The farthest a support can hold from itself, to look no farther than that.

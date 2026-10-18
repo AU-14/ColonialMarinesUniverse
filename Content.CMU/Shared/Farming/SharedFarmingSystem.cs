@@ -19,6 +19,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.Farming;
 
+// Farming, shared by both sides: planting, harvesting and the state of a plant; the growth itself runs on the server.
 public abstract partial class SharedFarmingSystem : EntitySystem
 {
     [Dependency] private readonly SharedTransformSystem _transform = default!;

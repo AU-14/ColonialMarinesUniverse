@@ -7,6 +7,7 @@ using SharedDrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
 namespace Content.Client.CMU14.Forge;
 
+// Changes the sprite of a forgeable item as it heats and cools.
 public sealed class ForgeVisualsSystem : EntitySystem
 {
     [Dependency] private readonly SpriteSystem _sprite = default!;

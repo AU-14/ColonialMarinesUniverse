@@ -31,6 +31,7 @@ public sealed partial class PortableStructureComponent : Component
     public bool PowerSwitchedOff;
 }
 
+// The do-after of picking a portable structure up.
 [Serializable, NetSerializable]
 public sealed partial class PortablePickUpDoAfterEvent : SimpleDoAfterEvent;
 

@@ -37,6 +37,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Forge;
 
+// The forge: a crucible that melts metal and holds it hot, tongs that carry hot items, and forgeable items that heat and cool.
 public sealed partial class ForgeSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;

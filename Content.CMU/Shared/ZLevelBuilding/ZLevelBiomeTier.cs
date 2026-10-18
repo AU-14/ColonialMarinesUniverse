@@ -8,6 +8,7 @@ using Robust.Shared.Serialization.Manager.Attributes;
 
 namespace Content.Shared.CMU14.ZLevelBuilding;
 
+// A layer of depth (for example clay or black stone): which depths it covers, its floor, rock, digging tool, veins, deposits, caves and pools.
 [DataDefinition]
 public sealed partial class ZLevelBiomeTier
 {
@@ -114,6 +115,7 @@ public sealed partial class ZLevelDeposit
     public float ChancePerChunk = 0.08f;
 }
 
+// A vein of ore in the rock: what it is, its chance in a chunk, the size of the group and its radius.
 [DataDefinition]
 public sealed partial class ZLevelOreVein
 {

@@ -13,6 +13,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Farming;
 
+// Server side of farming: plants grow with time, take light and water from their surroundings, and spend them.
 public sealed class FarmingSystem : SharedFarmingSystem
 {
     [Dependency] private readonly IGameTiming _gameTiming = default!;

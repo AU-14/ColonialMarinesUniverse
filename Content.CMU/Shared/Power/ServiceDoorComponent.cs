@@ -14,6 +14,7 @@ public sealed partial class ServiceDoorComponent : Component
     public bool Open;
 }
 
+// What the appearance of a service door shows.
 [Serializable, NetSerializable]
 public enum ServiceDoorVisuals : byte
 {

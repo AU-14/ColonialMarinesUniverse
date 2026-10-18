@@ -8,6 +8,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Farming;
 
+// Spawns an entity every so often next to a spawner (for example fruit on a plant), but not where enough of them are already near.
 public sealed class PeriodicSpawnerSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;

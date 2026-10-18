@@ -118,6 +118,7 @@ public sealed partial class FarmMetabolizerPrototype : IPrototype
     public Dictionary<ProtoId<ReagentPrototype>, HashSet<FarmMetabolizerEffect>> Metabolization = new();
 }
 
+// Base of what a reagent does to a plant when the plant takes it up.
 [ImplicitDataDefinitionForInheritors]
 [MeansImplicitUse]
 public abstract partial class FarmMetabolizerEffect
@@ -125,6 +126,7 @@ public abstract partial class FarmMetabolizerEffect
     public abstract void Effect(Entity<FarmPlantComponent> plant, FixedPoint2 amount, EntityManager entityManager);
 }
 
+// A reagent effect that changes the energy, resource and growth of a plant.
 public sealed partial class AffectFarmPlantValues : FarmMetabolizerEffect
 {
     [DataField]
@@ -204,6 +206,7 @@ public sealed partial class FarmPlantVisualsComponent : Component
     public string? GrowState;
 }
 
+// The sprite layers of a plant.
 public enum FarmPlantVisualLayers : byte
 {
     Base,

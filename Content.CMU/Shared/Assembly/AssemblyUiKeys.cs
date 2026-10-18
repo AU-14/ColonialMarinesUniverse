@@ -4,12 +4,14 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Assembly;
 
+// Key of the assembly machine window.
 [Serializable, NetSerializable]
 public enum AssemblyMachineUiKey : byte
 {
     Key,
 }
 
+// Key of the blueprint window.
 [Serializable, NetSerializable]
 public enum AssemblyBlueprintUiKey : byte
 {

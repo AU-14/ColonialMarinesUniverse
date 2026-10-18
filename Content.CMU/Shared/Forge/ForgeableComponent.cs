@@ -8,6 +8,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Forge;
 
+// A forgeable item: its temperature and how fast it heats, cools and glows.
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class ForgeableComponent : Component
 {
@@ -45,6 +46,7 @@ public sealed partial class ForgeableComponent : Component
     public Vector2 AnvilOffset = new(0.15625f, 0.21375f);
 }
 
+// What the appearance of a forgeable item shows.
 [Serializable, NetSerializable]
 public enum ForgeableVisuals : byte
 {
@@ -53,6 +55,7 @@ public enum ForgeableVisuals : byte
     Seat,
 }
 
+// Whether a forgeable item sits cold, hot or glowing in its seat.
 [Serializable, NetSerializable]
 public enum ForgeableSeatState : byte
 {

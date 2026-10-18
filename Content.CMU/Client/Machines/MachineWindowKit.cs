@@ -23,6 +23,7 @@ public sealed class SlotView(string id, ContainerButton button, SpriteView sprit
     public readonly Label Count = count;
 }
 
+// Shared pieces for the windows of the machines: slot sizes, border colors by slot kind (input, output, fuel, tool) and the colors of water, steam and slag.
 public static class MachineWindowKit
 {
     public const int SlotSize = 44;

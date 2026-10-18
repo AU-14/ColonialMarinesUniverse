@@ -4,6 +4,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Smelting;
 
+// Key of the electric smelter window.
 [Serializable, NetSerializable]
 public enum ElectricSmelterUiKey : byte
 {

@@ -7,6 +7,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.CMU14.Forge;
 
+// A recipe of the anvil: what it makes, how many, and the tool qualities of the strikes (hammering, chiseling) in order.
 [Prototype]
 public sealed partial class AnvilRecipePrototype : IPrototype
 {

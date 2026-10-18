@@ -4,6 +4,7 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared.CMU14.Smelting;
 
+// The electric smelter: names of its slots and its target and current temperature, and how fast it heats.
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class ElectricSmelterComponent : Component
 {

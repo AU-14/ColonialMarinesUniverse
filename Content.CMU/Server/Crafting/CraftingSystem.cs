@@ -18,6 +18,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Crafting;
 
+// Crafting from the menu: checks the recipe (skill, tools, ingredients), runs the do-after, then takes the ingredients and gives the result.
 public sealed class CraftingSystem : SharedCraftingSystem
 {
     [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;

@@ -7,6 +7,7 @@ using Content.Shared.Verbs;
 
 namespace Content.Server.CMU14.ZLevelBuilding.Pit;
 
+// A rope hung in a pit: a verb takes it down and gives the coil back.
 public sealed class PitRopeSystem : EntitySystem
 {
     [Dependency] private readonly SharedHandsSystem _hands = default!;

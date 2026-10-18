@@ -10,6 +10,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Forge;
 
+// Server side of the anvil: the player strikes a workpiece with a hammer to shape it into the chosen recipe; wears the tool and plays the sounds.
 public sealed class AnvilSystem : SharedAnvilSystem
 {
     [Dependency] private readonly IPrototypeManager _proto = default!;

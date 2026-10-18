@@ -5,5 +5,6 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.ZLevelBuilding.Pit;
 
+// The do-after of camouflaging a hatch.
 [Serializable, NetSerializable]
 public sealed partial class HatchCamouflageDoAfterEvent : SimpleDoAfterEvent;

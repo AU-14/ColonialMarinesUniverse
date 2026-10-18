@@ -43,6 +43,7 @@ public sealed partial class AmmoBenchComponent : Component
     public string CartridgePrototype = "RUMCCraftedCartridge";
 }
 
+// The do-after of making cartridges at the ammunition bench; carries the design and how many.
 [Serializable, NetSerializable]
 public sealed partial class AmmoBuildDoAfterEvent : DoAfterEvent
 {

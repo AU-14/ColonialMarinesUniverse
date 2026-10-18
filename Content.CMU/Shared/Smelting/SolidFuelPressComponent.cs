@@ -56,6 +56,7 @@ public sealed partial class SolidFuelPressComponent : Component
     public string? ActiveRecipe;
 }
 
+// Key of the solid fuel press window.
 [Serializable, NetSerializable]
 public enum SolidFuelPressUiKey : byte
 {

@@ -5,6 +5,7 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client.CMU14.Assembly;
 
+// Client side of an assembly machine: opens its window and sends the server the slot that was pressed.
 public sealed class AssemblyMachineBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     [ViewVariables]

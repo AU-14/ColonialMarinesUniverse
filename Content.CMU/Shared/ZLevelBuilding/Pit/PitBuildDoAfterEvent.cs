@@ -5,6 +5,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.ZLevelBuilding.Pit;
 
+// The do-after of building something in a pit; carries the option.
 [Serializable, NetSerializable]
 public sealed partial class PitBuildDoAfterEvent : DoAfterEvent
 {

@@ -5,6 +5,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.ZLevelBuilding.Pit;
 
+// The do-after of hanging a rope up into a pit from below; carries the pit.
 [Serializable, NetSerializable]
 public sealed partial class RopeFromBelowDoAfterEvent : DoAfterEvent
 {

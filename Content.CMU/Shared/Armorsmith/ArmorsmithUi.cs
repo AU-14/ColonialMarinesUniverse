@@ -4,6 +4,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Armorsmith;
 
+// Key of the armorsmith bench window.
 [Serializable, NetSerializable]
 public enum ArmorsmithUiKey : byte
 {
@@ -26,6 +27,7 @@ public sealed class ArmorsmithBuiState : BoundUserInterfaceState
     }
 }
 
+// From the window: build this armor design.
 [Serializable, NetSerializable]
 public sealed class ArmorsmithBuildMessage : BoundUserInterfaceMessage
 {
@@ -37,6 +39,7 @@ public sealed class ArmorsmithBuildMessage : BoundUserInterfaceMessage
     }
 }
 
+// From the window: take this stack type out of the bench.
 [Serializable, NetSerializable]
 public sealed class ArmorsmithEjectStockMessage : BoundUserInterfaceMessage
 {
@@ -48,6 +51,7 @@ public sealed class ArmorsmithEjectStockMessage : BoundUserInterfaceMessage
     }
 }
 
+// From the window: take the item that lies on the bench.
 [Serializable, NetSerializable]
 public sealed class ArmorsmithTakeItemMessage : BoundUserInterfaceMessage
 {

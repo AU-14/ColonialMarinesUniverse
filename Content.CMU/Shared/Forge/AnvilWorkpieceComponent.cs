@@ -5,6 +5,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Forge;
 
+// A workpiece on the anvil: the recipe chosen, how far the strikes have gone, and the heat it needs to be worked and loses with each hit.
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class AnvilWorkpieceComponent : Component
 {

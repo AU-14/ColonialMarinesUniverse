@@ -4,6 +4,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Smelting;
 
+// From the window: set the target temperature of the smelter.
 [Serializable, NetSerializable]
 public sealed class ElectricSmelterSetTemperatureMessage(float temperature) : BoundUserInterfaceMessage
 {

@@ -45,6 +45,7 @@ public sealed partial class CraftingRecipePrototype : IPrototype
     public List<CraftConsumable> Consumables { get; private set; } = new();
 }
 
+// One ingredient of a craft that is used up: an item or a stack, and how many.
 [DataDefinition]
 public sealed partial class CraftConsumable
 {

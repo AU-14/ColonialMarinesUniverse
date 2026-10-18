@@ -7,6 +7,7 @@ using Content.Shared.Whitelist;
 
 namespace Content.Shared.CMU14.ToolDamage;
 
+// Changes the damage a thing takes by the tool that hits it: the preferred tool does more.
 public sealed class PreferredToolSystem : EntitySystem
 {
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;

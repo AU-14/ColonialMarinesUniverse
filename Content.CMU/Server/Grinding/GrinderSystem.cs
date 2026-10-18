@@ -17,6 +17,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Grinding;
 
+// Grinders: take what is in the slots and grind it by recipe, with power or steam, making items or fluids.
 public sealed class GrinderSystem : EntitySystem
 {
     [Dependency] private readonly FluidSystem _fluids = default!;

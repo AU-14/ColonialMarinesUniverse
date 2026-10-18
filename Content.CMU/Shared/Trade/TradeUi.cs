@@ -4,6 +4,7 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Trade;
 
+// Key of the trade platform window.
 [Serializable, NetSerializable]
 public enum TradeUiKey : byte
 {
@@ -35,6 +36,7 @@ public sealed class TradeOfferEntry(string id, EntProtoId product, string name, 
     public readonly bool Locked = locked;
 }
 
+// What the trade platform window shows: parcels, their value, tax, payout, contracts and offers.
 [Serializable, NetSerializable]
 public sealed class TradePlatformBuiState(
     int parcels,
@@ -62,15 +64,18 @@ public sealed class TradePlatformBuiState(
     public readonly List<TradeOfferEntry> Offers = offers;
 }
 
+// From the window: sell the parcels that are on the platform.
 [Serializable, NetSerializable]
 public sealed class TradeSellMessage : BoundUserInterfaceMessage;
 
+// From the window: buy this offer.
 [Serializable, NetSerializable]
 public sealed class TradeBuyMessage(string offer) : BoundUserInterfaceMessage
 {
     public readonly string Offer = offer;
 }
 
+// From the window: take this contract out of the platform.
 [Serializable, NetSerializable]
 public sealed class TradeEjectContractMessage(NetEntity contract) : BoundUserInterfaceMessage
 {
