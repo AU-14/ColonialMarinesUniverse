@@ -56,6 +56,52 @@ public sealed class InternalsGasProtectionTest
     }
 
     [Test]
+    public async Task InternalsKeepOutNeurotoxinForNineSecondsPerExposure()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var testMap = await pair.CreateTestMap();
+        EntityUid victim = default;
+        var blocked = new List<bool>();
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var internalsSystem = entities.System<SharedInternalsSystem>();
+            victim = entities.SpawnEntity("CMMobHuman", testMap.GridCoords);
+            var mask = entities.SpawnEntity("ClothingMaskBreath", testMap.GridCoords);
+            var tank = entities.SpawnEntity("OxygenTankFilled", testMap.GridCoords);
+            var internals = entities.EnsureComponent<InternalsComponent>(victim);
+            internalsSystem.ConnectBreathTool((victim, internals), mask);
+            Assert.That(internalsSystem.TryConnectTank((victim, internals), tank), Is.True);
+        });
+
+        // Stay in the gas: one exposure a second for 11 seconds.
+        for (var second = 0; second <= 11; second++)
+        {
+            await server.WaitPost(() =>
+                blocked.Add(server.EntMan.System<SharedGasMaskSystem>().TryBlockNeurotoxinWithInternals(victim)));
+            await pair.RunSeconds(1f);
+        }
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(blocked[8], Is.True, "internals should still hold after 8 seconds of exposure");
+            Assert.That(blocked[10], Is.False, "internals should give out after 9 seconds of exposure");
+        });
+
+        // Step out of the gas, then back in: the timer starts over.
+        await pair.RunSeconds(3f);
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(server.EntMan.System<SharedGasMaskSystem>().TryBlockNeurotoxinWithInternals(victim), Is.True,
+                "a fresh exposure should be kept out again");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task AcidGasOnlyBurnsMobsOnInternals()
     {
         await using var pair = await PoolManager.GetServerClient();

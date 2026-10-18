@@ -18,6 +18,7 @@
                 <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True" VerticalExpand="True">
                     <!-- CMU14 -->
                     <Label Name="AllowanceLabel" Access="Public"/>
+                    <Label Name="NoRefundLabel" Text="{Loc 'cmu-vehicle-supply-no-refund'}" FontColorOverride="#E0A040"/>
                     <Label Name="IssuedLabel" Access="Public"/>
                     <Label Name="StatusLabel" Access="Public" FontColorOverride="#9DB5D1"/>
                 </BoxContainer>

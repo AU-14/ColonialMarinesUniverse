@@ -50,7 +50,7 @@ public sealed partial class CMUOpenStumpSystem : SharedCMUOpenStumpSystem
             }
 
             if (open > 0)
-                _bloodstream.TryBleedOut((body, bloodstream), FixedPoint2.New(BleedPerSecond * open));
+                _bloodstream.TryBleedOut((body, bloodstream), FixedPoint2.New(BleedPerSecond * open), cmuWoundBleed: true);
         }
     }
 }

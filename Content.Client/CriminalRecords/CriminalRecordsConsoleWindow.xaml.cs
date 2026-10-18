@@ -240,6 +240,9 @@ public sealed partial class CriminalRecordsConsoleWindow : Robust.Client.UserInt
 
         PersonPrints.Text = stationRecord.Fingerprint ?? na;
         PersonDna.Text = stationRecord.DNA ?? na;
+        // cmu edit start
+        PersonReligion.Text = Content.Client.CMU14.Religion.CMUReligionNames.Describe(_proto, stationRecord.Religion);
+        // cmu edit end
 
         if (criminalRecord.Status != SecurityStatus.None)
             specifier = new SpriteSpecifier.Rsi(new ResPath("Interface/Misc/security_icons.rsi"), GetStatusIcon(criminalRecord.Status));

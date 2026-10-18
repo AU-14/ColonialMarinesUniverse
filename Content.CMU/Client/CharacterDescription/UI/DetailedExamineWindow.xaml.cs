@@ -36,6 +36,7 @@ public sealed partial class DetailedExamineWindow : DefaultWindow
         CharacterDescriptionRowBuilder.AddRow(ContentContainer, Loc.GetString("detailed-examine-eye-color"), state.EyeColorName, Loc.GetString("detailed-examine-eye-color-tooltip"));
         CharacterDescriptionRowBuilder.AddRow(ContentContainer, Loc.GetString("detailed-examine-allegiance"), state.Allegiance, Loc.GetString("detailed-examine-allegiance-tooltip"));
         CharacterDescriptionRowBuilder.AddRow(ContentContainer, Loc.GetString("detailed-examine-origin"), state.Origin, Loc.GetString("detailed-examine-origin-tooltip"));
+        CharacterDescriptionRowBuilder.AddRow(ContentContainer, Loc.GetString("detailed-examine-religion"), state.Religion, Loc.GetString("detailed-examine-religion-tooltip"));
 
         CharacterDescriptionRowBuilder.AddSeparator(ContentContainer);
 

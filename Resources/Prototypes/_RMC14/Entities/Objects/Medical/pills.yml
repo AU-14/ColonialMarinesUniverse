@@ -311,8 +311,7 @@
         reagents:
         - ReagentId: RMCIron
           Quantity: 10
-        - ReagentId: Nutriment
-          Quantity: 5
+        # CMU14: no nutriment
   - type: Sprite
     layers:
     - state: pill14

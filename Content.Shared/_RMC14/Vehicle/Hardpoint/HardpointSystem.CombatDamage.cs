@@ -17,16 +17,27 @@ public sealed partial class HardpointSystem
         if (_net.IsClient)
             return;
 
-        var incomingMultiplier = GetVehicleIncomingDamageMultiplier(args.Origin, args.Tool);
+        var incomingMultiplier = IgnoresBlastSourceMultiplier(ent.Owner, args.Impact.Delivery) // FLOW-09
+            ? 1f
+            : GetVehicleIncomingDamageMultiplier(args.Origin, args.Tool);
         if (incomingMultiplier > 1f)
             args.Damage = ScaleDamage(args.Damage, incomingMultiplier);
 
         var totalDamage = args.Damage.GetTotal().Float();
+        var blast = TakePendingBlast(ent.Owner, args.Impact.Delivery); // FLOW-09
         if (totalDamage <= 0f)
             return;
 
-        TryDestroyVehicleFrame(ent.Owner, totalDamage);
+        var hullChunk = TryApplyCatastrophicDamage(ent.Owner, totalDamage, args.Impact.Delivery, args.Tool, blast);
         TryTriggerBlackfootFuelLeak(ent.Owner, totalDamage);
+
+        // A tank's catastrophic hit was already spent as a fixed hull chunk; routing it to the modules as well
+        // would add the hit on top. The frame still takes its usual share so damage reactions (cook-off rolls) run.
+        if (hullChunk)
+        {
+            args.Damage = ScaleDamage(args.Damage, ent.Comp.FrameDamageFractionWhileIntact);
+            return;
+        }
 
         if (!TryComp(ent.Owner, out ItemSlotsComponent? itemSlots))
             return;
@@ -44,10 +55,15 @@ public sealed partial class HardpointSystem
 
         if (parts.Count > 0)
         {
+            var failureDamage = totalDamage;
             if (args.Impact.Delivery == DamageImpactDelivery.Explosion)
             {
-                foreach (var part in parts)
-                    ApplyRoutedDamage(ent.Owner, part, ScaleDamage(args.Damage, 1f / parts.Count));
+                // FLOW-09: split evenly, capped per blast on tanks with a blast profile.
+                var hullLoss = ApplyRoutedBlastDamage(ent.Owner, parts, args.Damage, blast);
+                // The profile's multiplier is a tank balance knob, not a bigger blast: roll structural failure on the
+                // hull the blast actually removed so it cannot inflate the failure chance past the blast cap.
+                if (HasComp<CMUTankBlastProfileComponent>(ent.Owner))
+                    failureDamage = hullLoss;
             }
             else
             {
@@ -62,7 +78,7 @@ public sealed partial class HardpointSystem
             }
 
             RefreshVehicleFrameIntegrityFromHardpoints(ent.Owner, ent.Comp, itemSlots);
-            TryTriggerVehicleStructuralFailure(ent.Owner, totalDamage);
+            TryTriggerVehicleStructuralFailure(ent.Owner, failureDamage);
             args.Damage = ScaleDamage(args.Damage, ent.Comp.FrameDamageFractionWhileIntact);
         }
         else if (TryComp(ent.Owner, out HardpointIntegrityComponent? frame))
@@ -103,6 +119,11 @@ public sealed partial class HardpointSystem
 
     private void ApplyRoutedDamage(EntityUid vehicle, EntityUid part, DamageSpecifier damage)
     {
+        DamageHardpoint(vehicle, part, GetRoutedDamageAmount(part, damage));
+    }
+
+    private float GetRoutedDamageAmount(EntityUid part, DamageSpecifier damage)
+    {
         // Installed armor's modifier sets are already applied to the frame event.
         // Applying them again here would protect the armor module twice.
         var amount = MathF.Max(damage.GetTotal().Float(), 0f);
@@ -115,7 +136,7 @@ public sealed partial class HardpointSystem
             amount = MathF.Max(DamageSpecifier.ApplyModifierSets(damage, sets).GetTotal().Float(), 0f);
         }
         amount *= MathF.Max(CompOrNull<HardpointItemComponent>(part)?.DamageMultiplier ?? 1f, 0f);
-        DamageHardpoint(vehicle, part, amount);
+        return amount;
     }
 
     private float GetVehicleIncomingDamageMultiplier(EntityUid? origin, EntityUid? tool)

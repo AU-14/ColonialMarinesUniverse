@@ -19,20 +19,39 @@
     <GuideEntityEmbed Entity="CMUAutodocPod" Caption="Autodoc pod"/>
     <GuideEntityEmbed Entity="CMUAutodocConsole" Caption="Autodoc console"/>
   </Box>
-  The autodoc operates by itself, so a surgeon can queue up the work and step away.
-  - Put the patient in the pod, then open the console. Queuing procedures needs [bold]surgery training[/bold] (level 2).
+  The autodoc operates by itself, so anyone can queue up the work and step away. It needs no surgery training.
+  - Put the patient in the pod, then open the console.
   - Pick a body part and the surgeries it needs, and add them to the queue. It can also run [bold]Repair Wounds / Burns[/bold] as an automated cycle.
   - Press [bold]Start[/bold]. The pod works through the queue on its own. It's thorough but slow: each step takes the better part of a minute.
   - [bold]Stop[/bold] pauses it, [bold]Clear[/bold] empties the queue, and [bold]Eject Patient[/bold] takes them out.
   - The pod counts as an operating table, so its steps never fail because of where the patient is lying.
 
+  ## Limb Printer
+  <Box>
+    <GuideEntityEmbed Entity="CMULimbPrinter" Caption="Limb printer"/>
+  </Box>
+  The limb printer makes replacement arms, hands, legs and feet for patients who've lost one. Open it to pick the limb and side you need. The printed limb drops out next to the machine.
+  - [bold]Human limbs[/bold] need [bold]30u of biogenic matrix[/bold] from the beaker and [bold]7.5u of blood[/bold] from a syringe of the patient's blood. The printer starts with a beaker of 120u matrix, enough for four limbs. Chemistry can mix more.
+  - [bold]Robotic limbs[/bold] need [bold]15 metal sheets[/bold] loaded into the printer instead.
+  - The printer only makes the limb. Attaching it is surgery; see [textlink="Limb Surgery" link="CMUGuideSurgeryLimbs"].
+
+  ## Portable Dialysis
+  <Box>
+    <GuideEntityEmbed Entity="RMCPortableDialysis" Caption="Portable dialysis machine"/>
+  </Box>
+  A battery-powered machine that cleans a patient's blood. Hook it up by using it on the patient; it needs [bold]medical training[/bold] (level 2) and stays connected while the patient is within 2 tiles.
+  - Every second it filters [bold]1.5u of each chemical[/bold] out of the bloodstream, good and bad alike. Use it to clear poisons and overdoses, not while their medicine is working.
+  - It also filters out [bold]saline[/bold], 3u a second, leaving the patient's own blood in its place. See [textlink="Blood and Transfusions" link="CMUGuideMedicalBlood"].
+  - [color=red]It costs the patient 6u of blood a second[/color]. Watch their blood level, and give blood if it drops.
+  - It disconnects when its battery runs out.
+
   ## Cryo Pod
   <Box>
     <GuideEntityEmbed Entity="CryoPod" Caption="Cryo pod"/>
   </Box>
-  The cryo pod chills a patient down and heals them with cryoxadone.
-  - Load a beaker of [bold]cryoxadone[/bold] into the pod, and make sure the pod is supplied with cold gas from a freezer.
-  - Put the patient inside. Once their body temperature drops low enough, the cryoxadone slowly heals brute, burn, toxin and suffocation damage all at once.
-  - Cryoxadone does nothing at normal body temperature. The patient has to be properly cold.
-  - It's slow, but it needs nobody standing over it, so it's good for patients who are stable but badly hurt.
+  The cryo pod injects medicine from an inserted beaker and chills the patient with gas from a connected freezer.
+  - Load a beaker with the cryogenic medicine needed for the patient's injuries, then put the patient inside.
+  - The new cryogenic medicines start healing when the patient's body reaches 213 K or colder. Opporozidone needs 150 K or colder.
+  - Cryoxadone treats suffocation and blood loss; Aloxadone treats burns; Traumoxadone treats brute damage; Urishoxadone treats poison and radiation; Doxarubixadone treats cellular damage; Necrosol heals multiple injuries and regenerates missing native limbs; Opporozidone reverses rot in dead patients.
+  - See [textlink="Other Medications" link="CMUGuideMedsOther"] for doses and reagent details.
 </Document>

@@ -38,7 +38,9 @@ public sealed class ANPRCSideKeyingTest
             Assert.That(anprc.OperatorFaction, Is.EqualTo("opfor"));
             Assert.That(anprc.StandardNets.Select(net => net.Channel.Id), Does.Contain("radioOpforCommand"));
             Assert.That(entMan.GetComponent<RTORelayComponent>(radio).BridgedChannels.Select(c => c.Id),
-                Is.EquivalentTo(new[] { "radioOpforAlpha", "radioOpforBravo", "radioOpforCharlie" }));
+                // cmu edit start
+                Is.EquivalentTo(new[] { "radioOpforAlpha", "radioOpforBravo", "radioOpforCharlie", "radioOpforVictor" }));
+                // cmu edit end
             Assert.That(entMan.GetComponent<AU14CallsignConsoleComponent>(radio).Faction, Is.EqualTo("opfor"));
 
             var slot = server.System<ItemSlotsSystem>().GetItemOrNull(radio, "fill_card");

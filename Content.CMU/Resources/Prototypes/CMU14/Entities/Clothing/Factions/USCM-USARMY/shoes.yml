@@ -10,7 +10,7 @@
     sprite: CMU14/Clothing/Shoes/jungleboots.rsi
 
 - type: entity
-  parent: [RMCItemSlotM5Bayonet, CMBootsJungle]
+  parent: [RMCItemSlotM5Bayonet, AU14BootsJungle]
   id: AU14BootsJungleFilled
   suffix: Filled
 

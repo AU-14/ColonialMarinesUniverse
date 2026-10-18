@@ -13,8 +13,6 @@
   - type: VentCrawlable
     travelDirection: South
   - type: VentExit
-  - type: RMCHijackRandomDamageTarget
-    category: Pipe
   - type: RMCContainerEmptyOnDestruction
   - type: ContainerContainer
     containers:
@@ -43,8 +41,6 @@
   - type: VentCrawlable
     travelDirection: Longitudinal
   - type: VentExit
-  - type: RMCHijackRandomDamageTarget
-    category: Pipe
   - type: RMCContainerEmptyOnDestruction
   - type: ContainerContainer
     containers:
@@ -73,8 +69,6 @@
   - type: VentCrawlable
     travelDirection: SWBend
   - type: VentExit
-  - type: RMCHijackRandomDamageTarget
-    category: Pipe
   - type: RMCContainerEmptyOnDestruction
   - type: ContainerContainer
     containers:
@@ -103,8 +97,6 @@
   - type: VentCrawlable
     travelDirection: TSouth
   - type: VentExit
-  - type: RMCHijackRandomDamageTarget
-    category: Pipe
   - type: RMCContainerEmptyOnDestruction
   - type: ContainerContainer
     containers:
@@ -133,8 +125,6 @@
   - type: VentCrawlable
     travelDirection: Fourway
   - type: VentExit
-  - type: RMCHijackRandomDamageTarget
-    category: Pipe
   - type: RMCContainerEmptyOnDestruction
   - type: ContainerContainer
     containers:
