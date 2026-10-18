@@ -53,7 +53,7 @@ public sealed partial class CMUPepperSprayComponent : Component
 /// <summary>
 ///     Someone whose eyes are burning from pepper spray.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true), AutoGenerateComponentPause]
 public sealed partial class CMUPepperSprayedComponent : Component
 {
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
@@ -62,6 +62,36 @@ public sealed partial class CMUPepperSprayedComponent : Component
     /// <summary>How many sprays they've taken since their eyes last cleared up.</summary>
     [DataField, AutoNetworkedField]
     public int Sprays;
+
+    /// <summary>
+    ///     How much spray they've taken, weighted by how strong each spray was after protection. Each full-strength
+    ///     spray adds 1. The slowdown builds with it, and at <see cref="StunLevel"/> they go down.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float Intensity;
+
+    [DataField]
+    public float SlowPerIntensity = 0.15f;
+
+    [DataField]
+    public float MaxSlow = 0.45f;
+
+    [DataField]
+    public float StunLevel = 3f;
+
+    [DataField]
+    public TimeSpan StunTime = TimeSpan.FromSeconds(6);
+
+    /// <summary>Whether they've already been knocked down by this round of spraying.</summary>
+    [DataField]
+    public bool Stunned;
+
+    /// <summary>
+    ///     How much of their current pain came from the spray, so the antidote can take that away and nothing else.
+    ///     Wears off at the same rate pain does.
+    /// </summary>
+    [DataField]
+    public float DeliveredPain;
 
     [DataField]
     public float PendingPain;

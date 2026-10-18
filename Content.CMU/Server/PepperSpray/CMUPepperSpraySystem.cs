@@ -18,7 +18,10 @@ using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Robust.Shared.Prototypes;
+using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.StatusEffect;
+using Content.Shared.Stunnable;
+using Robust.Shared.Configuration;
 using Content.Shared.Timing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
@@ -41,10 +44,14 @@ public sealed class CMUPepperSpraySystem : EntitySystem
     private static readonly TimeSpan SplashCooldown = TimeSpan.FromSeconds(1.5);
     private static readonly TimeSpan SplashTimeOff = TimeSpan.FromSeconds(4);
     private const float SplashPainKept = 0.75f;
+    private const float SplashIntensityOff = 0.25f;
     private static readonly string[] FaceSlots = ["mask", "head", "eyes"];
     private static readonly TimeSpan PainInterval = TimeSpan.FromSeconds(1);
 
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private CMUPepperSprayedSystem _sprayed = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private OpenableSystem _openable = default!;
@@ -141,6 +148,14 @@ public sealed class CMUPepperSpraySystem : EntitySystem
         if (burning.NextPain < now)
             burning.NextPain = now;
         Dirty(target, burning);
+        _sprayed.SetIntensity((target, burning), burning.Intensity + strength);
+
+        // At the top level they can't stay standing.
+        if (!burning.Stunned && burning.Intensity >= burning.StunLevel - 0.01f)
+        {
+            burning.Stunned = true;
+            _stun.TryParalyze(target, burning.StunTime, true);
+        }
 
         _status.TryAddStatusEffect<RMCBlindedComponent>(target, BlindKey, ent.Comp.BlurTime * strength, true);
 
@@ -199,6 +214,7 @@ public sealed class CMUPepperSpraySystem : EntitySystem
         burning.EndAt -= SplashTimeOff * water;
         burning.PendingPain *= 1f - (1f - SplashPainKept) * water;
         Dirty(target, burning);
+        _sprayed.SetIntensity((target, burning), burning.Intensity - SplashIntensityOff * water);
 
         _status.TryRemoveTime(target, BlindKey, SplashTimeOff * water);
 
@@ -248,6 +264,8 @@ public sealed class CMUPepperSpraySystem : EntitySystem
             return;
         }
 
+        // Only the pain the spray caused goes away, not anything else they're hurting from.
+        _pain.RemovePain(target, burning.DeliveredPain * strength);
         RemComp(target, burning);
         _status.TryRemoveStatusEffect(target, BlindKey);
 
@@ -264,15 +282,22 @@ public sealed class CMUPepperSpraySystem : EntitySystem
     public override void Update(float frameTime)
     {
         var now = _timing.CurTime;
+        var decay = _config.GetCVar(CMUMedicalCCVars.PainDecayPerSecond) * frameTime;
         var query = EntityQueryEnumerator<CMUPepperSprayedComponent>();
         while (query.MoveNext(out var uid, out var sprayed))
         {
+            sprayed.DeliveredPain = Math.Max(0f, sprayed.DeliveredPain - decay);
             if (sprayed.PendingPain > 0 && now >= sprayed.NextPain)
             {
                 var amount = Math.Min(sprayed.PainPerTick, sprayed.PendingPain);
                 sprayed.PendingPain -= amount;
                 sprayed.NextPain = now + PainInterval;
+
+                // Track what actually landed, after pain modifiers, so the antidote takes back exactly that.
+                var before = TryComp(uid, out PainShockComponent? pain) ? pain.Pain.Float() : 0f;
                 _pain.AddPainPulse(uid, amount);
+                if (pain != null)
+                    sprayed.DeliveredPain += Math.Max(0f, pain.Pain.Float() - before);
             }
 
             if (sprayed.PendingPain <= 0 && now >= sprayed.EndAt)
