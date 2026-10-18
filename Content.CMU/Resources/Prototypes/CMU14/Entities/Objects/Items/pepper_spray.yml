@@ -1,0 +1,55 @@
+- type: entity
+  parent: BaseItem
+  id: CMUPepperSpray
+  name: pepper spray
+  description: A small can of oleoresin capsicum spray. Aim for the eyes. Two or three good blasts will put most people on the ground. Refillable with oleoresin capsicum.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Items/pepper_spray.rsi
+    state: icon
+  - type: Item
+    size: Tiny
+    sprite: CMU14/Objects/Items/pepper_spray.rsi
+  - type: Tag
+    tags:
+    - SecBeltEquip
+  - type: UseDelay
+    delay: 1
+  - type: SolutionContainerManager
+    solutions:
+      spray:
+        maxVol: 40
+        reagents:
+        - ReagentId: CMUOleoresinCapsicum
+          Quantity: 40
+  - type: RefillableSolution
+    solution: spray
+  - type: DrainableSolution
+    solution: spray
+  - type: ExaminableSolution
+    solution: spray
+  - type: CMUPepperSpray
+    reagent: CMUOleoresinCapsicum
+
+- type: entity
+  parent: CMUPepperSpray
+  id: CMUPepperSprayAntidote
+  name: pepper spray antidote
+  description: A small can of capsicum neutralizer. Spray it in the eyes of someone who's been pepper sprayed to wash it out. Refillable with capsicum neutralizer.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Items/pepper_spray_antidote.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Items/pepper_spray_antidote.rsi
+  - type: SolutionContainerManager
+    solutions:
+      spray:
+        maxVol: 40
+        reagents:
+        - ReagentId: CMUCapsicumNeutralizer
+          Quantity: 40
+  - type: CMUPepperSpray
+    reagent: CMUCapsicumNeutralizer
+    antidote: true
+    sound: /Audio/Effects/spray3.ogg

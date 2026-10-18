@@ -291,6 +291,10 @@
         amount: 20
       - id: RMCZipties
         amount: 30
+      - id: CMUPepperSpray
+        amount: 10
+      - id: CMUPepperSprayAntidote
+        amount: 10
 
 - type: entity
   parent: ColMarTechBase
@@ -1017,6 +1021,8 @@
       - id: AU14GuidebookLawMarine
       - id: AU14GuidebookSOP
       - id: CMUScissorsRegulation
+      - id: CMUPepperSpray
+      - id: CMUPepperSprayAntidote
     - name: Uniform
       choices: { AU14Uniform: 1 }
       entries:

@@ -1134,6 +1134,8 @@
       - id: AU14GuidebookLawMarine
       - id: AU14GuidebookSOP
       - id: CMUScissorsRegulation
+      - id: CMUPepperSpray
+      - id: CMUPepperSprayAntidote
     - name: au14-vendor-section-fatigues
       choices: { AU14Uniform: 1 }
       entries:
