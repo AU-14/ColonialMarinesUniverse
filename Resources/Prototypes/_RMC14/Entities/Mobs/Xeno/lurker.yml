@@ -27,8 +27,8 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      450: Critical
-      550: Dead
+      400: Critical
+      500: Dead
   - type: Xeno
     role: CMXenoLurker
     actionIds:
@@ -84,19 +84,24 @@
   - type: XenoClaws
     clawType: Sharp
   - type: MeleeWeapon
-    attackRate: 0.75
+    attackRate: 1.5
     damage:
       types:
         Blunt: 11.66
         Slash: 11.67
         Piercing: 11.67
   - type: Tackle
+    min: 2
+    max: 4
+    chance: 0.45
+    stunMin: 3
+    stunMax: 4
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.7
-    baseSprintSpeed: 5
+    baseSprintSpeed: 6
   - type: SlowOnPull
     slowdowns:
-    - multiplier: 0.53
+    - multiplier: 0.30
       whitelist:
         components:
         - Marine
