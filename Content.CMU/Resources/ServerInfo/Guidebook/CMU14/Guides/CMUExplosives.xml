@@ -15,8 +15,8 @@
   ## Firing From a Launcher
   - Any grenade marked for launcher use can be loaded into a grenade launcher.
   - The launcher arms the grenade when it fires it. Most grenades go off about a second after leaving the barrel.
-  - [bold]Dual-purpose[/bold] grenades, the [bold]M40 HEDP[/bold] and [bold]M47 HSDP[/bold], also have an [bold]impact fuse[/bold] and go off the moment they reach the spot you aimed at.
-  - Fragmentation grenades like the [bold]HEFA[/bold] and [bold]M15[/bold] have no impact fuse, so they rely on the launcher's own timer.
+  - The [bold]M47 HSDP[/bold] smoke grenade also has an [bold]impact fuse[/bold] and goes off the moment it reaches the spot you aimed at.
+  - The [bold]M40 HEDP[/bold], [bold]HEFA[/bold] and [bold]M15[/bold] have no impact fuse, so they rely on the launcher's own timer.
 
   ## Hand Grenades
   <Box>
@@ -26,7 +26,7 @@
     <GuideEntityEmbed Entity="CMUGrenadeBFAB" Caption="M51A BFAB"/>
     <GuideEntityEmbed Entity="AU14GrenadeHighExplosiveUPP" Caption="Type 6"/>
   </Box>
-  - [bold]M40 HEDP[/bold]: the standard blast grenade. Dual-purpose, so it detonates on impact when fired from a launcher.
+  - [bold]M40 HEDP[/bold]: the standard blast grenade.
   - [bold]HEFA[/bold]: a fragmentation grenade that throws out a large cloud of shrapnel. Deadly in the open, dangerous to anyone nearby.
   - [bold]M15[/bold]: an older fragmentation grenade with plenty of shrapnel. It's being phased out for the safer 30mm-series grenades.
   - [bold]Type 6[/bold]: a fragmentation grenade.

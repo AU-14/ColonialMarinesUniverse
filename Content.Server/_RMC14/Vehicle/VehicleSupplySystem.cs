@@ -730,6 +730,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
             var mapCoords = _transform.ToMapCoordinates(moverCoords);
             _transform.SetMapCoordinates(pendingEntity, mapCoords);
 
+            GetIssued(comp.PendingSupplySide!).Add(new IssuedVehicle(entry.Vehicle, GetEntryGroupKey(entry), pendingEntity));
             FinishRaisedVehicle(lift, pendingEntity, pending, key);
             return;
         }
@@ -748,7 +749,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
 
         var spawnCoords = _transform.GetMoverCoordinates(lift);
         var vehicle = SpawnAtPosition(pending, spawnCoords);
-        GetIssued(comp.PendingSupplySide!).Add(new IssuedVehicle(entry.Vehicle, GetEntryGroupKey(entry)));
+        GetIssued(comp.PendingSupplySide!).Add(new IssuedVehicle(entry.Vehicle, GetEntryGroupKey(entry), vehicle));
 
         FinishRaisedVehicle(lift, vehicle, pending, key);
     }
@@ -915,7 +916,6 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         slot = itemSlot;
         return true;
     }
-
     private void StoreVehicle(Entity<VehicleSupplyLiftComponent> lift)
     {
         var comp = lift.Comp;
@@ -938,6 +938,27 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         comp.ActiveVehicle = null;
         comp.ActiveVehicleId = string.Empty;
         UpdateVendorSectionsAll();
+
+        var side = GetSupplySide(lift.Owner);
+        if(!string.IsNullOrEmpty(side))
+        {
+            var current_stock = GetIssued(side);
+            if (current_stock.Any(vehicle => vehicle.Entity == active))
+                {
+                    current_stock.RemoveAll(issued => issued.Entity == active);
+                }
+            var entities = _lookup.GetEntitiesIntersecting(lift);
+            foreach (var entity in entities)
+            {
+                if (entity == lift.Comp.Audio)
+                    continue;
+
+                if(!HasComp<VehicleComponent>(entity))
+                {
+                    QueueDel(entity);
+                }
+            }
+        }
     }
 
     private bool IsOnLift(Entity<VehicleSupplyLiftComponent> lift, EntityUid entity)
