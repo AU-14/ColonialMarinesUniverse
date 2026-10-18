@@ -61,6 +61,8 @@ public sealed class HealthScannerBuiState(
     public TimeSpan? CMUTimeUntilUnrevivable;
     public string? CMUBloodType;
     public float CMUSalinePercent;
+    /// <summary>Set during an allergic reaction: the allergen's name, or empty if unknown.</summary>
+    public string? CMUAllergicReaction;
     // cmu edit end
 }
 
