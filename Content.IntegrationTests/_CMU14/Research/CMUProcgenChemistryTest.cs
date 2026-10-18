@@ -52,6 +52,55 @@ public sealed class CMUProcgenChemistryTest : GameTest
             Recipe = [],
         };
 
+    /// <summary>
+    /// Contracts must never ask for more than 3 parts (90u at 30u per contract) of any precious metal,
+    /// whatever the first-slot multiplier, Hard bump, catalyst amount or simulator copy.
+    /// </summary>
+    [Test]
+    public async Task PreciousMetalsNeverExceedThreeParts()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var gen = SEntMan.System<ServerReagentGeneratorSystem>();
+            var seed = NewOffer(1, 0);
+            gen.GenerateStats(ref seed); // forces Setup()
+            var precious = gen.ChemicalGenClassesList[SharedReagentGeneratorSystem.PreciousMetalPool];
+            Assert.That(precious, Does.Contain("RMCUranium"));
+            const int max = ServerReagentGeneratorSystem.MaxPreciousMetalParts;
+
+            // Direct requests above the cap are clamped, for reactants and catalysts alike.
+            var direct = NewOffer(3, 970);
+            gen.AddChemical(ref direct, "RMCUranium", 7, null);
+            gen.AddChemical(ref direct, "RMCSilver", 5, null, catalyst: true);
+            gen.AddChemical(ref direct, "Water", 6, null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(direct.Recipe["RMCUranium"].Item1, Is.EqualTo(max));
+                Assert.That(direct.Recipe["RMCSilver"], Is.EqualTo((max, true)));
+                Assert.That(direct.Recipe["Water"].Item1, Is.EqualTo(6), "non-precious amounts are untouched");
+            });
+
+            // Recipes assembled elsewhere (simulator copies) are clamped too.
+            var copied = new Dictionary<string, (int, bool)> { ["RMCGold"] = (9, false), ["RMCCarbon"] = (4, false) };
+            gen.ClampPreciousAmounts(copied);
+            Assert.That(copied, Is.EqualTo(new Dictionary<string, (int, bool)> { ["RMCGold"] = (max, false), ["RMCCarbon"] = (4, false) }));
+
+            // And no generated contract ever exceeds it. Hard is where precious metals and the +1 bump live.
+            for (var i = 0; i < 200; i++)
+            {
+                var data = NewOffer(3, 2000 + i);
+                gen.GenerateStats(ref data);
+                if (!gen.GenerateRecipe(ref data, []))
+                    continue;
+                foreach (var (reagent, (amount, _)) in data.Recipe)
+                {
+                    if (precious.Contains(reagent))
+                        Assert.That(amount, Is.LessThanOrEqualTo(max), $"Hard contract asked for {amount} parts of {reagent}");
+                }
+            }
+        });
+    }
+
     [Test]
     public async Task MaterialDifficultyRisesWithTier()
     {

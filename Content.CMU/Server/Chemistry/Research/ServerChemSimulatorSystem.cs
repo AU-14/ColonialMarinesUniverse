@@ -301,7 +301,9 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
             }
             assocRecipe = rdat;
         }
-        recipe.Recipe = assocRecipe.Value.Recipe;
+        // Copy: the edits below (drop a reactant, add the picked one, precious clamp) must not rewrite the
+        // parent chemical's own recipe, which its contract and report still describe.
+        recipe.Recipe = new(assocRecipe.Value.Recipe);
         (string, int, bool, bool)? index = null;
         foreach (var tuple in ent.Comp.RecipeChemOptions)
         {
@@ -366,6 +368,8 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
         }
         _dat.UpdateSampleData(_dat.GetSampleData(faction) - credloss, faction);
         chem.Recipe = recipe.Recipe;
+        // The copied parent (or stock) recipe can ask for more precious metal than contracts allow.
+        _gen.ClampPreciousAmounts(chem.Recipe);
         _simulations.Add(chem.ID);
 
         chem.Class = ReagentClass.Rare;

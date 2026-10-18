@@ -538,11 +538,36 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
             }
             // catalyst check unnecessary
 
+            // Precious metals are the scarce part of a contract: never ask for more than a few parts of one,
+            // whatever the first-slot multiplier, Hard bump or catalyst amount rolled.
+            if (IsPreciousMetal(chemid))
+                mod = Math.Min(mod, MaxPreciousMetalParts);
+
             (int, bool) compmod = (mod, catalyst);
             data.Recipe.TryAdd(chemid, compmod);
 
         }
         return chemid;
+    }
+
+    /// <summary>Most parts of any one precious metal (CMUPreciousMetals) a procgen recipe may require.</summary>
+    public const int MaxPreciousMetalParts = 3;
+
+    public bool IsPreciousMetal(string reagent)
+        => ChemicalGenClassesList.TryGetValue(PreciousMetalPool, out var precious) && precious.Contains(reagent);
+
+    /// <summary>
+    /// Caps every precious-metal reactant or catalyst in <paramref name="recipe"/> at
+    /// <see cref="MaxPreciousMetalParts"/>. For recipes assembled outside <see cref="AddChemical"/>,
+    /// such as simulator output copied from a parent or stock reaction.
+    /// </summary>
+    public void ClampPreciousAmounts(Dictionary<string, (int, bool)> recipe)
+    {
+        foreach (var (reagent, (amount, catalyst)) in recipe.ToList())
+        {
+            if (amount > MaxPreciousMetalParts && IsPreciousMetal(reagent))
+                recipe[reagent] = (MaxPreciousMetalParts, catalyst);
+        }
     }
 
 
