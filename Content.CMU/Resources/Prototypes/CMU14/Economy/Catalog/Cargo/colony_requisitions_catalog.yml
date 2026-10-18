@@ -176,6 +176,8 @@
       - cost: 1000
         crate: CMUWeaponShotgunM37A1Colony
       - cost: 2000
+        maxStock: 2
+        stockReplenishDelay: 600
         crate: CMUCrateBoxAR10Colony
       - cost: 1800
         crate: CMUCrateBoxKramerColony
@@ -215,6 +217,10 @@
       entries:
       - cost: 533
         crate: CMUCrateBoxM16ColonyMagazines
+      - cost: 740
+        maxStock: 4
+        stockReplenishDelay: 300
+        crate: CMUCrateBoxAR10Magazines
       - cost: 533
         crate: CMUCrateBoxKramerColonyMagazines
       - cost: 483

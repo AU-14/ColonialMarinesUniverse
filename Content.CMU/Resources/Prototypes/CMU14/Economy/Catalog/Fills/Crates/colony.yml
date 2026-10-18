@@ -196,24 +196,22 @@
 - type: entity
   parent: RMCCrateBase
   id: AU14CrateBoxAR10
-  name: AR10 assault rifle crate (x1 AR10 assault rifle, x4 M16 Magazine)
+  name: AR10 assault rifle crate (x1 AR10 assault rifle)
   components:
   - type: StorageFill
     contents:
     - id: AU14WeaponRifleAR10
       amount: 1
-    - id: RMCMagazineRifleM16
-      amount: 4
 
 - type: entity
   parent: RMCCrateBase
   id: AU14CrateBoxAR10Magazines
-  name: M16/AR10 Magazine Crate (x6 M16 Magazine)
+  name: AR10 Magazine Crate (x4 AR10 Magazine)
   components:
   - type: StorageFill
     contents:
-    - id: RMCMagazineRifleM16
-      amount: 6
+    - id: CMUMagazineRifleAR10
+      amount: 4
 
 - type: entity
   parent: RMCCrateBase
