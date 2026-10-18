@@ -1,0 +1,67 @@
+# Fears, swimming, sleep and coordination.
+
+- type: trait
+  id: CMUFearOfHeights
+  name: cmu-trait-fear-of-heights-name
+  description: cmu-trait-fear-of-heights-desc
+  category: Disabilities
+  cost: 1
+  components:
+  - type: CMUFearOfHeights
+
+- type: trait
+  id: CMUFearOfWater
+  name: cmu-trait-fear-of-water-name
+  description: cmu-trait-fear-of-water-desc
+  category: Disabilities
+  cost: 1
+  components:
+  - type: CMUFearOfWater
+
+- type: trait
+  id: CMUCantSwim
+  name: cmu-trait-cant-swim-name
+  description: cmu-trait-cant-swim-desc
+  category: Disabilities
+  cost: 1
+  components:
+  - type: CMUCantSwim
+
+- type: trait
+  id: CMUClumsy
+  name: cmu-trait-clumsy-name
+  description: cmu-trait-clumsy-desc
+  category: Disabilities
+  cost: 1
+  components:
+  - type: CMUClumsy
+
+- type: trait
+  id: CMUHeavySleeper
+  name: cmu-trait-heavy-sleeper-name
+  description: cmu-trait-heavy-sleeper-desc
+  category: CMUQuirks
+  components:
+  - type: CMUHeavySleeper
+
+# Speech traits: one at most (see the SpeechTraits category).
+- type: trait
+  id: CMUSlowThinking
+  name: cmu-trait-slow-thinking-name
+  description: cmu-trait-slow-thinking-desc
+  category: SpeechTraits
+  cost: 1
+  components:
+  - type: CMUSlowThinking
+
+- type: trait
+  id: CMUMute
+  name: cmu-trait-mute-name
+  description: cmu-trait-mute-desc
+  category: SpeechTraits
+  cost: 1
+  # Only ordinary colonists can be mute.
+  cmuAllowedJobs:
+  - AU14JobCivilianColonist
+  components:
+  - type: CMUMute
