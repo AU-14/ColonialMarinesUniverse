@@ -1,11 +1,11 @@
 meta:
   format: 7
   category: Map
-  engineVersion: 264.0.2-fix-physics
+  engineVersion: v290.0.0
   forkId: ""
   forkVersion: ""
-  time: 03/20/2026 21:09:34
-  entityCount: 63
+  time: 10/16/2026 00:21:37
+  entityCount: 66
 maps:
 - 1
 grids:
@@ -34,13 +34,15 @@ entities:
     - type: GridTree
     - type: Broadphase
     - type: OccluderTree
+    - type: ChunkContainer
+      chunkEntities: []
   - uid: 2
     components:
     - type: MetaData
       name: grid
     - type: Transform
-      pos: -1.3187555,-1.2300886
       parent: 1
+      pos: -1.3187555,-1.2300886
     - type: MapGrid
       chunks:
         0,0:
@@ -61,9 +63,9 @@ entities:
           version: 7
     - type: Broadphase
     - type: Physics
-      bodyStatus: InAir
       fixedRotation: False
       bodyType: Dynamic
+      bodyStatus: InAir
     - type: Fixtures
       fixtures: {}
     - type: OccluderTree
@@ -75,22 +77,49 @@ entities:
     - type: Gravity
       gravityShakeSound: !type:SoundPathSpecifier
         path: /Audio/Effects/alert.ogg
-    - type: DecalGrid
-      chunkCollection:
-        version: 2
-        nodes: []
     - type: GridAtmosphere
       version: 2
       data:
         chunkSize: 4
     - type: GasTileOverlay
+    - type: ChunkContainer
+      chunkEntities: []
+    - type: TileHistory
+      chunkHistory: {}
+- proto: AU14VehicleRadioSet
+  entities:
+  - uid: 11
+    components:
+    - type: Transform
+      parent: 2
+      pos: 2.5,2.5
+- proto: CMFireExtinguisherPortable
+  entities:
+  - uid: 65
+    components:
+    - type: Transform
+      parent: 8
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 8
+- proto: CMUDefibrillatorCompact
+  entities:
+  - uid: 64
+    components:
+    - type: Transform
+      parent: 7
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 7
 - proto: RMCRotaryPhoneWallmount
   entities:
   - uid: 5
     components:
     - type: Transform
-      pos: 2.3685317,1.1465094
       parent: 2
+      pos: 2.3576512,1.1154251
     - type: Fixtures
       fixtures: {}
 - proto: RMCSeatTankDriver
@@ -98,390 +127,427 @@ entities:
   - uid: 4
     components:
     - type: Transform
+      parent: 2
       rot: 1.5707963267948966 rad
       pos: 2.5,0.5
-      parent: 2
     - type: PointLight
-      energy: 2
       radius: 10
+      energy: 2
+    missingComponents:
+    - Corrodible
+    - Damageable
+    - Injurable
+    - Destructible
 - proto: RMCSeatTankGunner
   entities:
   - uid: 3
     components:
     - type: Transform
+      parent: 2
       rot: 1.5707963267948966 rad
       pos: 1.559523,1.539705
-      parent: 2
-- proto: VehicleExitArea
-  entities:
-  - uid: 9
-    components:
-    - type: Transform
-      pos: -0.5,0.5
-      parent: 2
-- proto: VehicleInteriorExtinguisherClosed
-  entities:
-  - uid: 11
-    components:
-    - type: Transform
-      pos: 0.2794087,1.2742183
-      parent: 2
-    - type: Physics
-      canCollide: False
-    - type: Fixtures
-      fixtures: {}
-- proto: VehicleInvisibleWallNoVision
-  entities:
-  - uid: 63
-    components:
-    - type: Transform
-      pos: 2.5,-0.5
-      parent: 2
-- proto: VehicleSPPTankAmmoLoader
-  entities:
-  - uid: 10
-    components:
-    - type: Transform
-      pos: 1.3103718,2.201783
-      parent: 2
-- proto: VehicleSPPTankChassis
-  entities:
-  - uid: 12
-    components:
-    - type: Transform
-      pos: 2.5038629,0.9990168
-      parent: 2
-- proto: VehicleSPPTankSmallLocker
-  entities:
-  - uid: 7
-    components:
-    - type: Transform
-      pos: 0.63007855,1.336493
-      parent: 2
-  - uid: 8
-    components:
-    - type: Transform
-      pos: 0.8693948,1.3397707
-      parent: 2
-- proto: VehicleViewportUnanchored
-  entities:
-  - uid: 14
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 1.5473169,0.13372684
-      parent: 2
-    - type: Fixtures
-      fixtures: {}
     missingComponents:
-    - InteractionTransparency
+    - Corrodible
+    - Damageable
+    - Injurable
+    - Destructible
 - proto: RMCWallInvisibleBulletBlocker
   entities:
   - uid: 6
     components:
     - type: Transform
-      pos: 3.5,0.5
       parent: 2
+      pos: 3.5,0.5
   - uid: 13
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 0.5,-0.5
-      parent: 2
   - uid: 15
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 1.5,-0.5
-      parent: 2
   - uid: 16
     components:
     - type: Transform
-      pos: 2.5151103,-0.7492174
       parent: 2
+      pos: 2.5151103,-0.7492174
   - uid: 17
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 3.5,-0.5
-      parent: 2
   - uid: 18
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 4.5,-0.5
-      parent: 2
   - uid: 19
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 4.5,0.5
-      parent: 2
   - uid: 20
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 4.5,1.5
-      parent: 2
   - uid: 21
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 3.5,1.5
-      parent: 2
   - uid: 22
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 3.5,2.5
-      parent: 2
   - uid: 23
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 2.5,3.5
-      parent: 2
   - uid: 24
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 3.5,3.5
-      parent: 2
   - uid: 25
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 1.5,3.5
-      parent: 2
   - uid: 26
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 0.5,2.5
       parent: 2
+      rot: 3.141592653589793 rad
+      pos: 0.49586856,2.720707
   - uid: 27
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 0.5,3.5
-      parent: 2
   - uid: 28
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: -0.5,3.5
-      parent: 2
   - uid: 29
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: -0.5,2.5
-      parent: 2
   - uid: 30
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: -0.5,1.5
-      parent: 2
   - uid: 31
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 2.737584,1.7132401
-      parent: 2
   - uid: 32
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: -0.5,-0.5
-      parent: 2
   - uid: 33
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 2.6983542,2.5299582
-      parent: 2
   - uid: 34
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 1.9951581,2.5299582
-      parent: 2
   - uid: 35
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 1.3362192,2.8790245
-      parent: 2
-  - uid: 36
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 0.4529605,2.0186508
-      parent: 2
 - proto: RMCWallInvisibleBulletLightBlocker
   entities:
   - uid: 37
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: -1.5,-0.5
-      parent: 2
   - uid: 38
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: -1.5,-1.5
-      parent: 2
   - uid: 39
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: -0.5,-1.5
-      parent: 2
   - uid: 40
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: -1.5,0.5
-      parent: 2
   - uid: 41
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: -1.5,1.5
-      parent: 2
   - uid: 42
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: -1.5,2.5
-      parent: 2
   - uid: 43
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: -1.5,3.5
-      parent: 2
   - uid: 44
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: -1.5,4.5
-      parent: 2
   - uid: 45
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: -0.5,4.5
-      parent: 2
   - uid: 46
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 0.5,4.5
-      parent: 2
   - uid: 47
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 1.5,4.5
-      parent: 2
   - uid: 48
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 2.5,4.5
-      parent: 2
   - uid: 49
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 3.5,4.5
-      parent: 2
   - uid: 50
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 4.5,4.5
-      parent: 2
   - uid: 51
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 5.5,4.5
-      parent: 2
   - uid: 52
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 5.5,3.5
-      parent: 2
   - uid: 53
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 5.5,2.5
-      parent: 2
   - uid: 54
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 5.5,1.5
-      parent: 2
   - uid: 55
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 5.5,0.5
-      parent: 2
   - uid: 56
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 5.5,-0.5
-      parent: 2
   - uid: 57
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 5.5,-1.5
-      parent: 2
   - uid: 58
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 4.5,-1.5
-      parent: 2
   - uid: 59
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 3.5,-1.5
-      parent: 2
   - uid: 60
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 2.5,-1.5
-      parent: 2
   - uid: 61
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 1.5,-1.5
-      parent: 2
   - uid: 62
     components:
     - type: Transform
+      parent: 2
       rot: 3.141592653589793 rad
       pos: 0.5,-1.5
-      parent: 2
-- proto: AU14VehicleRadioSet
+- proto: VehicleExitArea
   entities:
-  - uid: 500
+  - uid: 9
     components:
     - type: Transform
-      pos: 2.5,0.5
       parent: 2
+      pos: -0.5,0.5
+- proto: VehicleInteriorNanomed
+  entities:
+  - uid: 14
+    components:
+    - type: MetaData
+      name: Nanomed
+    - type: Transform
+      parent: 2
+      pos: 0.25619137,1.3001845
+- proto: VehicleInvisibleWallNoVision
+  entities:
+  - uid: 63
+    components:
+    - type: Transform
+      parent: 2
+      pos: 2.5,-0.5
+- proto: VehicleSPPTankAmmoLoader
+  entities:
+  - uid: 10
+    components:
+    - type: Transform
+      parent: 2
+      pos: 1.3103718,2.201783
+    missingComponents:
+    - Tag
+- proto: VehicleSPPTankAmmoStorage
+  entities:
+  - uid: 36
+    components:
+    - type: Transform
+      parent: 2
+      pos: 0.7206811,2.000583
+- proto: VehicleSPPTankChassis
+  entities:
+  - uid: 12
+    components:
+    - type: Transform
+      parent: 2
+      pos: 2.5038629,0.9990168
+- proto: VehicleSPPTankSmallLocker
+  entities:
+  - uid: 7
+    components:
+    - type: MetaData
+      name: Defibrillator Locker
+      desc: A small storage locker for UPP tank interiors. Contains an external defibrillator
+    - type: Transform
+      parent: 2
+      pos: 0.58564645,1.340132
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
+          ents:
+          - 64
+          showEnts: False
+          occludes: True
+        paper_label: !type:ContainerSlot
+          ent: null
+          showEnts: False
+          occludes: True
+  - uid: 8
+    components:
+    - type: MetaData
+      name: Extinguisher Locker
+      desc: A small storage locker for UPP tank interiors. Contains a portable fire extinguisher.
+    - type: Transform
+      parent: 2
+      pos: 0.8693948,1.3397707
+    - type: Physics
+      canCollide: False
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
+          ents:
+          - 65
+          showEnts: False
+          occludes: True
+        paper_label: !type:ContainerSlot
+          ent: null
+          showEnts: False
+          occludes: True
+    - type: Fixtures
+      fixtures: {}
+- proto: VehicleViewportUnanchored
+  entities:
+  - uid: 66
+    components:
+    - type: Transform
+      parent: 2
+      rot: 3.141592653589793 rad
+      pos: 1.5529846,0.15837014
+    - type: Fixtures
+      fixtures: {}
+    missingComponents:
+    - Tag
+    - InteractionTransparency
 ...

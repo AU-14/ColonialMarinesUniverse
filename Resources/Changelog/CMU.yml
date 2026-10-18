@@ -13516,5 +13516,129 @@
   id: 811
   time: '2026-10-15T13:10:06.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2179
+- author: TheHellFireo
+  changes:
+  - message: Reapers can spend 500 flesh to reanimate a recently dead hive sister
+      with a two-minute ritual and a ten-minute cooldown.
+    type: Add
+  - message: Reaper revival and flesh harvesting now use vascular animations with
+      visible interruption states.
+    type: Tweak
+  - message: Flesh Bloom slowly encloses its target before accelerating into a visible
+      inward poison spray.
+    type: Tweak
+  id: 812
+  time: '2026-10-15T15:40:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2183
+- author: TheHellFireo
+  changes:
+  - message: Queens can summon 15 AI lessers every six minutes and command them to
+      guard a marker or escort a hive member, in both body and eye mode.
+    type: Add
+  id: 813
+  time: '2026-10-15T16:33:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2184
+- author: Vixting
+  changes:
+  - message: Added new simulator UI
+    type: Add
+  id: 814
+  time: '2026-10-15T17:48:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2185
+- author: Vixting
+  changes:
+  - message: Fixed vehicle cupola 1 shotting resin
+    type: Fix
+  id: 815
+  time: '2026-10-16T16:57:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2191
+- author: Vencallium
+  changes:
+  - message: Updated the USS Bush across its lower, main, and upper decks.
+    type: Map
+  - message: Updated the USS Bush's upper hull tiles.
+    type: Map
+  - message: Replaced legacy USS Bush vending machines with cash-operated vendors.
+    type: Map
+  - message: Added revised lower, ground, and upper layers for Barkers Lament.
+    type: Map
+  - message: Updated LV-376 Ulixes to load the revised Barkers Lament maps.
+    type: Map
+  - message: Removed Barkers Lament from the shared planet pool.
+    type: Remove
+  - message: Added Weyland-Yutani access-controlled airlocks and double doors.
+    type: Add
+  - message: Added Weyland-Yutani access-controlled windoors and material doors.
+    type: Add
+  - message: Added Weyland-Yutani access-controlled shutters and pod doors.
+    type: Add
+  - message: Added Weyland-Yutani access-controlled firelocks.
+    type: Add
+  - message: Added an invisible airtight space seal for mapping that allows movement
+      and does not obstruct visibility.
+    type: Add
+  - message: Weyland-Yutani door variants accept corporate or corporate liaison access.
+    type: Tweak
+  - message: Weyland-Yutani shutters and pod doors can be opened by clicking with
+      the appropriate access.
+    type: Tweak
+  - message: CMU vent pipes are no longer selected for random hijack damage.
+    type: Tweak
+  - message: Manually opening a restricted firelock now checks its access requirements.
+    type: Fix
+  id: 816
+  time: '2026-10-16T16:59:17.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2189
+- author: TheHellFireo
+  changes:
+  - message: Queen swarms now summon 15 lessers on a 15-minute cooldown through a
+      single command menu.
+    type: Tweak
+  - message: Added passive swarm orders and hive alliance controls for eligible queens.
+    type: Add
+  - message: Lessers navigate doors and ignore friendly bodies when steering, and
+      stop targeting nested or devoured hosts.
+    type: Fix
+  - message: Swarm summon feedback is visible while using the queen's eye.
+    type: Fix
+  - message: Lessers spread attacks across nearby enemies and breach barricades blocking
+      pursuit.
+    type: Tweak
+  - message: AI lesser deaths no longer flood hive chat.
+    type: Fix
+  - message: Lessers spread out in open areas while squeezing through narrow passages.
+    type: Tweak
+  - message: Reduced redundant client physics contacts for AI lesser swarms.
+    type: Fix
+  - message: Queen swarms default to Distress Signal only, with a per-queen VV override.
+    type: Tweak
+  - message: Reduced Despoiler ability damage by 30%, and Acid Barrage damage by 40%.
+    type: Tweak
+  - message: Reaper Flesh Bloom activates about 30% faster.
+    type: Tweak
+  - message: Lesser swarms move 35% slower.
+    type: Tweak
+  - message: Lesser swarms follow orders up and down stairs between linked z-levels.
+    type: Fix
+  id: 817
+  time: '2026-10-17T00:04:03.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2199
+- author: johnnny34y
+  changes:
+  - message: HAZOPS now has a specialized equipment vendor with enhanced CBRN equipment.
+    type: Add
+  - message: Added a guidebook lore page for HAZOPS.
+    type: Add
+  id: 818
+  time: '2026-10-17T16:38:57.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2202
+- author: troytroy400
+  changes:
+  - message: Removes the pre-sprited undershirts on jacketless versions of the TWE
+      RMC uniform sprites so you can use your own undershirt.
+    type: Remove
+  id: 819
+  time: '2026-10-18T02:22:26.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2210
 Name: CMU
 Order: -1
