@@ -699,6 +699,8 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             return false;
         if (!TryRipOffClothing(victim, SlotFlags.MASK, false))
             return false;
+        if (!TryRipOffClothing(victim, SlotFlags.EARS, false)) 
+            return false; // #CM14
 
         if (_net.IsServer &&
             TryComp(victim, out HumanoidProfileComponent? profile) &&
