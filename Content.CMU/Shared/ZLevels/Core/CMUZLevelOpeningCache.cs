@@ -403,6 +403,21 @@ public sealed class CMUZLevelOpeningCache
         return tileDef.Transparent;
     }
 
+    /// <summary>
+    ///     Whether someone below can see up through this tile: empty space and see-through tiles like grates, but
+    ///     not roofs, even the see-through destroyable ones.
+    /// </summary>
+    public static bool CanLookUpThrough(
+        Tile tile,
+        ITileDefinitionManager tileDefinition)
+    {
+        if (tile.IsEmpty)
+            return true;
+
+        var tileDef = (ContentTileDefinition) tileDefinition[tile.TypeId];
+        return tileDef.Transparent && !tileDef.CMUBlocksLookUp;
+    }
+
     public static bool IsOpeningTile(
         Entity<MapGridComponent> grid,
         Vector2i tile,

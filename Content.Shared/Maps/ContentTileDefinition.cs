@@ -132,6 +132,14 @@ public sealed partial class ContentTileDefinition : IPrototype, IInheritingProto
     /// </summary>
     [DataField] public bool Transparent = false;
 
+    // cmu edit start
+    /// <summary>
+    /// Stops people below from looking up through this tile even though it's <see cref="Transparent"/>, e.g. roofs.
+    /// Grates leave this off so you can see up through them.
+    /// </summary>
+    [DataField("cmuBlocksLookUp")] public bool CMUBlocksLookUp = false;
+    // cmu edit end
+
     /// <summary>
     /// Hide this tile in the tile placement editor.
     /// </summary>
