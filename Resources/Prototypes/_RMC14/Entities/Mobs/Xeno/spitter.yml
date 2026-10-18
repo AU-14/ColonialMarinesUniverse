@@ -75,12 +75,10 @@
         Heat: 5
   - type: XenoTailStab
     inject:
-      RMCMolecularAcid: 2
+      RMCMolecularAcid: 5
     tailDamage:
       types:
-        Blunt: 12
-        Slash: 12
-        Piercing: 12
+        Piercing: 5
   - type: CMArmor
     xenoArmor: 15
     explosionArmor: 20
