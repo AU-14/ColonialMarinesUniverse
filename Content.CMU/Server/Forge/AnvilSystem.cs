@@ -21,6 +21,9 @@ public sealed class AnvilSystem : SharedAnvilSystem
     [Dependency] private readonly ToolWearSystem _wear = default!;
 
     private static readonly SoundSpecifier HammerHitSound = new SoundPathSpecifier("/Audio/CMU14/Production/anvil.ogg");
+    // The sparks that fly off the hot iron under the hammer: the sparks of the game, which are gone in half a second.
+    private static readonly EntProtoId SparksEffect = "EffectSparks";
+
     private static readonly SoundSpecifier FinishedSound = new SoundPathSpecifier("/Audio/Effects/sizzle.ogg");
 
     public override void Initialize()
@@ -95,6 +98,7 @@ public sealed class AnvilSystem : SharedAnvilSystem
         Dirty(workpiece);
 
         _audio.PlayPvs(HammerHitSound, workpiece);
+        Spawn(SparksEffect, Transform(workpiece).Coordinates);
         _wear.Use(tool, user);
 
         var remaining = recipe.Steps.Count - workpiece.Comp.StepIndex;
