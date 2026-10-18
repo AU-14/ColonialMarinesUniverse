@@ -22,7 +22,7 @@ public sealed partial class XenoReaperComponent : Component
     public int MeleeGain = 10; // CMU14
 
     [DataField, AutoNetworkedField]
-    public int PassiveGain = 0.5; // CMU14
+    public int PassiveGain = 1; // CMU14
 
     [DataField, AutoNetworkedField]
     public TimeSpan PassiveGainEvery = TimeSpan.FromSeconds(1);
