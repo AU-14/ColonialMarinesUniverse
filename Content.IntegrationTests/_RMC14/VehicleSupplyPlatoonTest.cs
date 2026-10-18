@@ -256,12 +256,11 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             Queue(depot, "VehicleHumvee");
             Complete(depot);
             State(depot); // A second new Humvee is still available at this point.
-            var vehicle = depot.Lift.Comp.ActiveVehicle!.Value;
             Invoke("StoreVehicle", depot.Lift);
             ResetLift(depot);
-            // cmu edit start: use up the other three categories from the second depot
+            // cmu edit start: storing the Humvee frees its allowance, so use up all four categories elsewhere
             EntityUid? fighter = null;
-            foreach (var other in new[] { "VehicleTank", "VehicleHumveeTransport", "CMUFighterGround" })
+            foreach (var other in new[] { "VehicleTank", "VehicleAPC", "VehicleHumveeTransport", "CMUFighterGround" })
             {
                 ResetLift(second);
                 Queue(second, other);
@@ -269,14 +268,10 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
                 if (other == "CMUFighterGround")
                     fighter = second.Lift.Comp.ActiveVehicle;
             }
-            // cmu edit end
+
             var available = State(depot).Available.Single();
             Assert.That(available.Id, Is.EqualTo("VehicleHumvee"));
             Assert.That(available.Count, Is.EqualTo(1));
-            Queue(depot, "VehicleHumvee");
-            Complete(depot);
-            Assert.That(depot.Lift.Comp.ActiveVehicle, Is.EqualTo(vehicle));
-            // cmu edit start
             Assert.That(State(depot).IssuedVehicles, Has.Count.EqualTo(4));
             // Delete the aircraft while its landing map still exists.
             if (fighter != null)

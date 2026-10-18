@@ -18,7 +18,7 @@ public sealed partial class VehicleSupplySystem
     [Dependency] private PlatoonSpawnRuleSystem _platoons = default!;
     [Dependency] private SharedDropshipSystem _dropships = default!;
 
-    private readonly record struct IssuedVehicle(EntProtoId Prototype, string? Group);
+    private readonly record struct IssuedVehicle( EntProtoId Prototype, string? Group, EntityUid Entity);
     private readonly Dictionary<string, List<IssuedVehicle>> _issuedVehicles = new();
 
     private void OnSupplyRoundRestart(RoundRestartCleanupEvent args) => _issuedVehicles.Clear();
