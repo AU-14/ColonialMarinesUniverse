@@ -84,7 +84,7 @@
   - type: XenoClaws
     clawType: Sharp
   - type: MeleeWeapon
-    attackRate: 1.5
+    attackRate: 1.0
     damage:
       types:
         Blunt: 10.0
@@ -92,8 +92,8 @@
         Piercing: 10.0
   - type: Tackle
     min: 2
-    max: 4
-    chance: 0.45
+    max: 5
+    chance: 0.30
     stunMin: 3
     stunMax: 4
   - type: MovementSpeedModifier
