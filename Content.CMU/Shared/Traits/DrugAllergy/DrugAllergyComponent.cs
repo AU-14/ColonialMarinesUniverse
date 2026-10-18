@@ -26,7 +26,7 @@ public sealed partial class DrugAllergyComponent : Component
 
     /// <summary>
     ///     Whether the allergic reaction is currently active. Set when the allergen is
-    ///     ingested, cleared entirely when treated with naloxone.
+    ///     ingested, cleared entirely when treated with epinephrine.
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool ReactionActive;

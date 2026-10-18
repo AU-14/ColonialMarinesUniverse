@@ -38,7 +38,7 @@ public sealed partial class AllergicReactionSystem : EntitySystem
         var time = _timing.CurTime;
 
         // Prevents an instant re-trigger loop if the allergen is still metabolizing
-        // shortly after the reaction was just cured with naloxone/epinephrine.
+        // shortly after the reaction was just cured with epinephrine.
         if (time < comp.NextTriggerAllowed)
             return;
 
