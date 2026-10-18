@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using Content.Server.CMU14.ColonyEconomy;
 using Content.Server.Popups;
+using Content.Shared._RMC14.Areas;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.CMU14.ColonyEconomy;
@@ -32,6 +33,7 @@ namespace Content.Server.CMU14.Trade;
 public sealed class TradePlatformSystem : EntitySystem
 {
     [Dependency] private readonly AdminConsoleSystem _admin = default!;
+    [Dependency] private readonly AreaSystem _areas = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly ColonyBankSystem _bank = default!;
     [Dependency] private readonly ColonyBudgetSystem _budget = default!;
@@ -483,12 +485,18 @@ public sealed class TradePlatformSystem : EntitySystem
 
     #region The sky
 
-    // The pad stands under the open sky: no roof of the grid over it, and no floor of a level above it.
+    // The pad stands under the open sky: on a map with areas, an area that allows a drop; on any other map, no roof of the grid over it and no floor of a level above it.
     public bool IsUnderOpenSky(EntityUid uid)
     {
         var xform = Transform(uid);
         if (xform.GridUid is not { } gridUid || !TryComp<MapGridComponent>(gridUid, out var grid))
             return false;
+
+        // On a map with areas (the planets of RMC, such as Stable Garrison Redux) the sky is what the area says, as it is for a supply drop: the area must allow it, and no roofing marker must cover the place.
+        // The roof of the grid and the floors of the levels above are not looked at there. Such maps stack the same ground on the levels above (on Garrison about three quarters of the ground of the main level
+        // has ground over it), and the roof system of the z-levels marks every tile that has a floor above it as rooved, so both would say that there is no sky over the whole colony.
+        if (HasComp<AreaGridComponent>(gridUid))
+            return _areas.CanSupplyDrop(_transform.ToMapCoordinates(xform.Coordinates));
 
         var tile = _maps.CoordinatesToTile(gridUid, grid, xform.Coordinates);
 
@@ -496,6 +504,7 @@ public sealed class TradePlatformSystem : EntitySystem
             return false;
 
         var position = _transform.ToMapCoordinates(xform.Coordinates).Position;
+
         var level = xform.MapUid;
 
         // Every level above is looked at: a floor of any of them is a roof.
