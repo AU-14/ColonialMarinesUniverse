@@ -207,6 +207,7 @@
   sprite: /Textures/_RMC14/Tiles/shuttle/invisible.png
   transparent: true
   isSpace: false
+  cmuFallThrough: true
   indestructible: true
   deconstructTools: []
   itemDrop: null

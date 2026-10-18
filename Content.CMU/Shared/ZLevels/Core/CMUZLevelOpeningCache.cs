@@ -407,6 +407,20 @@ public sealed class CMUZLevelOpeningCache
     ///     Whether someone below can see up through this tile: empty space and see-through tiles like grates, but
     ///     not roofs, even the see-through destroyable ones.
     /// </summary>
+    /// <summary>
+    ///     Whether this tile is nothing to stand on: an empty tile, or one marked to act like one (sealed open air).
+    ///     Grates and other see-through floors still hold you up.
+    /// </summary>
+    public static bool IsFallThroughTile(
+        Tile tile,
+        ITileDefinitionManager tileDefinition)
+    {
+        if (tile.IsEmpty)
+            return true;
+
+        return ((ContentTileDefinition) tileDefinition[tile.TypeId]).CMUFallThrough;
+    }
+
     public static bool CanLookUpThrough(
         Tile tile,
         ITileDefinitionManager tileDefinition)
