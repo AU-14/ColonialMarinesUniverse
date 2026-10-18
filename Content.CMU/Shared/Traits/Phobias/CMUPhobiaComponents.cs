@@ -80,7 +80,7 @@ public sealed partial class CMUCantSwimComponent : Component
 
     /// <summary>How long in deep water before they're too exhausted to move at all.</summary>
     [DataField]
-    public TimeSpan StuckAfter = TimeSpan.FromSeconds(6);
+    public TimeSpan StuckAfter = TimeSpan.FromSeconds(11);
 
     /// <summary>Too exhausted fighting the water to move. Someone has to pull them out.</summary>
     [DataField, AutoNetworkedField]
