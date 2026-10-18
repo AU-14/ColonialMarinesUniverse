@@ -1132,7 +1132,7 @@
       - id: RMCBoxZiptie
       - id: AU14GuidebookLawMarine
       - id: AU14GuidebookSOP
-      - id: AU14Scissors
+      - id: CMUScissorsRegulation
     - name: au14-vendor-section-fatigues
       choices: { AU14Uniform: 1 }
       entries:

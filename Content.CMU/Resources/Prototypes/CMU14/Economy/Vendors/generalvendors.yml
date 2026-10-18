@@ -323,7 +323,7 @@
       - id: RMCBoxZiptie
       - id: AU14GuidebookLawMarine
       - id: AU14GuidebookSOP
-      - id: AU14Scissors
+      - id: CMUScissorsRegulation
     - name: Hat
       choices: { CMHat: 1 }
       entries:

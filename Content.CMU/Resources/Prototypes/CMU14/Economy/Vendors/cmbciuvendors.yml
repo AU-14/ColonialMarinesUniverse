@@ -1018,7 +1018,7 @@
       - id: RMCBoxZiptie
       - id: AU14GuidebookLawMarine
       - id: AU14GuidebookSOP
-      - id: AU14Scissors
+      - id: CMUScissorsRegulation
     - name: Uniform
       choices: { AU14Uniform: 1 }
       entries:
