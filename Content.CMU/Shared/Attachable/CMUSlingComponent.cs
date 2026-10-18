@@ -1,4 +1,5 @@
 using Robust.Shared.GameStates;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Attachable;
 
@@ -7,5 +8,13 @@ namespace Content.Shared.CMU14.Attachable;
 public sealed partial class CMUSlingComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public bool Underbarrel;
+    public CMUSlingMount Mount = CMUSlingMount.Sling;
+}
+
+[Serializable, NetSerializable]
+public enum CMUSlingMount : byte
+{
+    Sling,
+    Rail,
+    Underbarrel,
 }

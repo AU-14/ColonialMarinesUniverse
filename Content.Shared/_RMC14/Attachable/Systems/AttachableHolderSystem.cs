@@ -9,6 +9,7 @@ using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared._RMC14.Wieldable.Events;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.ActionBlocker;
+using Content.Shared.CMU14.Attachable; // CMU14
 using Content.Shared.Containers;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands;
@@ -139,7 +140,7 @@ public sealed partial class AttachableHolderSystem : EntitySystem
 
     private void OnHolderMapInit(Entity<AttachableHolderComponent> holder, ref MapInitEvent args)
     {
-        EnsureCMUSlingSlot(holder); // CMU14: slings can use an unlocked underbarrel mount.
+        EnsureCMUSlingSlot(holder); // CMU14: compatible weapons have a dedicated sling mount.
         var xform = Transform(holder.Owner);
         var coords = new EntityCoordinates(holder.Owner, Vector2.Zero);
         var doRandom = _random.Prob(holder.Comp.RandomAttachmentChance);
@@ -158,10 +159,15 @@ public sealed partial class AttachableHolderSystem : EntitySystem
             if (attachment == null)
                 continue;
 
-            var container = _container.EnsureContainer<ContainerSlot>(holder, slotId);
-            container.OccludesLight = false;
-
             var attachableUid = Spawn(attachment, coords);
+            // CMU14: loadout slings use their own mount, leaving the rail free.
+            var targetSlot = TryComp<CMUSlingComponent>(attachableUid, out var sling) &&
+                             sling.Mount == CMUSlingMount.Sling &&
+                             holder.Comp.Slots.ContainsKey(CMUSlingSlot)
+                ? CMUSlingSlot
+                : slotId;
+            var container = _container.EnsureContainer<ContainerSlot>(holder, targetSlot);
+            container.OccludesLight = false;
             if (!_container.Insert(attachableUid, container, containerXform: xform))
                 continue;
         }

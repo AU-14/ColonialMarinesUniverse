@@ -115,11 +115,12 @@ public sealed partial class AttachableHolderVisualsSystem : EntitySystem
 
     public void RefreshVisuals(Entity<AttachableHolderVisualsComponent> holder, Entity<AttachableVisualsComponent> attachable, string slotId, string suffix)
     {
-        // CMU14: rail-only weapons can gain an underbarrel sling mount without a prototype offset.
-        if (!holder.Comp.Offsets.TryGetValue(slotId, out var offset) &&
-            !(slotId == "rmc-aslot-underbarrel" &&
-              HasComp<CMUSlingComponent>(attachable) &&
-              holder.Comp.Offsets.TryGetValue("rmc-aslot-rail", out offset)))
+        // CMU14: slings keep their rail alignment on both alternate mounts.
+        var offsetSlot = HasComp<CMUSlingComponent>(attachable) &&
+                         slotId is "rmc-aslot-underbarrel" or AttachableHolderSystem.CMUSlingSlot
+            ? "rmc-aslot-rail"
+            : slotId;
+        if (!holder.Comp.Offsets.TryGetValue(offsetSlot, out var offset))
             return;
 
         if (!TryComp(holder, out SpriteComponent? holderSprite))
@@ -153,7 +154,7 @@ public sealed partial class AttachableHolderVisualsSystem : EntitySystem
         {
             RsiPath = rsi.ToString(),
             State = state,
-            Offset = offset + attachable.Comp.Offset, // CMU14: includes the sling mount fallback.
+            Offset = offset + attachable.Comp.Offset, // CMU14: includes the sling's rail alignment.
             Visible = true,
         };
 

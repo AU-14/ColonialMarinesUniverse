@@ -24,7 +24,7 @@ public sealed partial class CMUSlingSystem : EntitySystem
         var user = args.User;
         args.Verbs.Add(new AlternativeVerb
         {
-            Text = Loc.GetString(ent.Comp.Underbarrel ? "cmu-sling-switch-rail" : "cmu-sling-switch-underbarrel"),
+            Text = Loc.GetString($"cmu-sling-switch-{MountName(NextMount(ent.Comp.Mount))}"),
             Act = () => ToggleMount(ent, user),
         });
     }
@@ -37,14 +37,30 @@ public sealed partial class CMUSlingSystem : EntitySystem
             return;
         }
 
-        ent.Comp.Underbarrel = !ent.Comp.Underbarrel;
+        ent.Comp.Mount = NextMount(ent.Comp.Mount);
         Dirty(ent);
-        _popup.PopupEntity(Loc.GetString(ent.Comp.Underbarrel ? "cmu-sling-set-underbarrel" : "cmu-sling-set-rail"),
+        _popup.PopupEntity(Loc.GetString($"cmu-sling-set-{MountName(ent.Comp.Mount)}"),
             ent, user);
     }
 
     private void OnExamined(Entity<CMUSlingComponent> ent, ref ExaminedEvent args)
     {
-        args.PushMarkup(Loc.GetString(ent.Comp.Underbarrel ? "cmu-sling-examine-underbarrel" : "cmu-sling-examine-rail"));
+        args.PushMarkup(Loc.GetString($"cmu-sling-examine-{MountName(ent.Comp.Mount)}"));
     }
+
+    private static CMUSlingMount NextMount(CMUSlingMount mount) => mount switch
+    {
+        CMUSlingMount.Sling => CMUSlingMount.Rail,
+        CMUSlingMount.Rail => CMUSlingMount.Underbarrel,
+        CMUSlingMount.Underbarrel => CMUSlingMount.Sling,
+        _ => throw new ArgumentOutOfRangeException(nameof(mount), mount, null),
+    };
+
+    private static string MountName(CMUSlingMount mount) => mount switch
+    {
+        CMUSlingMount.Sling => "sling",
+        CMUSlingMount.Rail => "rail",
+        CMUSlingMount.Underbarrel => "underbarrel",
+        _ => throw new ArgumentOutOfRangeException(nameof(mount), mount, null),
+    };
 }
