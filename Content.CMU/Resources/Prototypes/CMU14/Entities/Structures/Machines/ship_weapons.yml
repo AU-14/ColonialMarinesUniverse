@@ -1,0 +1,188 @@
+- type: entity
+  id: CMUShipWeaponsTerminal
+  name: ship weapons arming terminal
+  description: Selects two orbital support weapons for this ship. Confirmed selections cannot be changed during the operation.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: ob_console
+    drawdepth: HighFloorObjects
+  - type: Clickable
+  - type: InteractionOutline
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: CMUShipWeaponsTerminal
+  - type: ActivatableUI
+    key: enum.CMUShipWeaponsUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUShipWeaponsUiKey.Key:
+        type: CMUShipWeaponsBui
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["RMCAccessCommand"], ["AU14AccessGovforCommand"], ["AU14AccessOpforCommand"]]
+
+- type: entity
+  parent: CMUShipWeaponsTerminal
+  id: CMUShipWeaponsTerminalGovfor
+  suffix: GOVFOR
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovforCommand"]]
+
+- type: entity
+  parent: CMUShipWeaponsTerminal
+  id: CMUShipWeaponsTerminalOpfor
+  suffix: OPFOR
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpforCommand"]]
+
+- type: entity
+  id: CMUShipWeaponStrike
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+
+- type: entity
+  id: CMUShipWeaponSmoke
+  name: orbital smoke
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      cloud:
+        hard: false
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        mask:
+        - MobMask
+        layer:
+        - MidImpassable
+  - type: Occluder
+  - type: Sprite
+    sprite: _RMC14/Effects/smoke.rsi
+    state: smoke2
+    color: "#adadad"
+  - type: TimedDespawn
+    lifetime: 30
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: CMUShipWeaponSmoke
+  id: CMUShipWeaponGas
+  name: orbital toxic gas
+  components:
+  - type: Sprite
+    color: "#75963c"
+  - type: DamageOverTime
+    acidic: false
+    affectsDead: false
+    damage:
+      types:
+        Poison: 12
+    whitelist:
+      components:
+      - MobState
+  - type: GasMaskFilterDamage
+    damage: 5
+    neurotoxin: false
+
+- type: entity
+  parent: CMUShipWeaponSmoke
+  id: CMUShipWeaponEmsCloud
+  name: electromagnetic interference
+  components:
+  - type: Sprite
+    color: "#88cce8"
+  - type: TimedDespawn
+    lifetime: 20
+
+- type: entity
+  id: CMUShipWeaponEmsField
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMUShipWeaponEmsField
+  - type: TimedDespawn
+    lifetime: 20
+
+- type: cmuShipWeapon
+  id: CMUGatlingBarrage
+  name: cmu-ship-weapons-gatling
+  shots: 36
+  interval: 0.15
+  spread: 5
+  blastRadius: 1.5
+  slope: 8
+  maxIntensity: 25
+
+- type: cmuShipWeapon
+  id: CMUWalkingBarrage
+  name: cmu-ship-weapons-walking
+  shots: 7
+  interval: 1
+  walkingDistance: 16
+  blastRadius: 3
+
+- type: cmuShipWeapon
+  id: CMU120mmHEBarrage
+  name: cmu-ship-weapons-120mm
+  shots: 12
+  interval: 0.75
+  spread: 6
+  blastRadius: 3
+  maxIntensity: 70
+
+- type: cmuShipWeapon
+  id: CMU380mmHEBarrage
+  name: cmu-ship-weapons-380mm
+  shots: 6
+  interval: 1.8
+  spread: 6
+  blastRadius: 6
+
+- type: cmuShipWeapon
+  id: CMUGasStrike
+  name: cmu-ship-weapons-gas
+  cloud: CMUShipWeaponGas
+  cloudRadius: 5
+
+- type: cmuShipWeapon
+  id: CMUEMSStrike
+  name: cmu-ship-weapons-ems
+  cloud: CMUShipWeaponEmsCloud
+  cloudRadius: 5
+  ems: true
+
+- type: cmuShipWeapon
+  id: CMUSmokeStrike
+  name: cmu-ship-weapons-smoke
+  cloud: CMUShipWeaponSmoke
+  cloudRadius: 6
+
+- type: cmuShipWeapon
+  id: CMUAirburstStrike
+  name: cmu-ship-weapons-airburst
+  shots: 3
+  interval: 0.8
+  spread: 3
+  blastRadius: 5
+  maxIntensity: 50
+  airburst: true
+
+- type: cmuShipWeapon
+  id: CMUPrecisionStrike
+  name: cmu-ship-weapons-precision
+  blastRadius: 4
+  slope: 25
+  maxIntensity: 200

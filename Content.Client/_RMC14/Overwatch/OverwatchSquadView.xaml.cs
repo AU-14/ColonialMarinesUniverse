@@ -321,8 +321,8 @@ public sealed partial class OverwatchSquadView : Control
                 ? "[color=green][bold] \\[ READY \\][/bold][/color]"
                 : "[color=red][bold] \\[ NOT READY \\][/bold][/color]";
             // Setting Disabled also cancels ConfirmButton's pending confirmation.
-            if (!OrbitalFireButton.IsConfirming)
-                OrbitalFireButton.Disabled = false;
+            if (!OrbitalFireButton.IsConfirming || CMUShipWeaponDepleted) // CMU14: cancel stale confirmations on depletion.
+                OrbitalFireButton.Disabled = CMUShipWeaponDepleted; // CMU14: exhausted ship weapons cannot fire.
         }
     }
 }
