@@ -18,9 +18,9 @@
   copyright: "Hood open, hood close and windshield toggle, from Pixabay, under the Pixabay Content License (free to use, credit not required). Trimmed and converted to mono WAV."
   source: "https://pixabay.com/sound-effects/"
 
-- files: ["jeep_mg_close.wav", "jeep_mg_far.wav"]
+- files: ["jeep_mg_close_1.wav", "jeep_mg_close_2.wav", "jeep_mg_close_3.wav", "jeep_mg_far_1.wav", "jeep_mg_far_2.wav", "jeep_mg_far_3.wav"]
   license: "Custom"
-  copyright: ".50 cal machine gun bursts, close and far, from Pixabay, under the Pixabay Content License (free to use, credit not required). Each cut to a single round: a burst's first crack crossfaded into the echo after its last round, converted to mono WAV."
+  copyright: ".50 cal machine gun bursts, close and far, from Pixabay, under the Pixabay Content License (free to use, credit not required). Each cut to a single round: one round up to the next, crossfaded into the full echo after the burst's last round, so rounds overlapping at the gun's rate sound like the burst; converted to mono WAV."
   source: "https://pixabay.com/sound-effects/"
 
 - files: ["jeep_horn.wav", "jeep_horn_long.wav"]

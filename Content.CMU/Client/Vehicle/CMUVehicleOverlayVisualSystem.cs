@@ -106,6 +106,7 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
             BobBody(vehicle, lift);
             MirrorWheels(ent, vehicle);
             MirrorDamage(ent, vehicle);
+            MirrorTint(ent, vehicle);
             UpdateLights(ent, visuals, vehicle);
         }
 
@@ -307,6 +308,15 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
         _sprite.LayerSetColor(ent.AsNullable(), index, wheels.Color);
         _sprite.LayerSetAutoAnimated(ent.AsNullable(), index, wheels.AutoAnimated);
         _sprite.LayerSetAnimationTime(ent.AsNullable(), index, wheels.AnimationTime);
+    }
+
+    /// <summary>
+    /// Tints the overlay as the vehicle is tinted, so a hit's flash covers the doors and bed it draws.
+    /// </summary>
+    private void MirrorTint(Entity<SpriteComponent> ent, EntityUid vehicle)
+    {
+        if (TryComp(vehicle, out SpriteComponent? sprite) && ent.Comp.Color != sprite.Color)
+            _sprite.SetColor(ent.AsNullable(), sprite.Color);
     }
 
     /// <summary>

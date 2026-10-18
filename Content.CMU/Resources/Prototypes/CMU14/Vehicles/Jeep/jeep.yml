@@ -7,6 +7,23 @@
 - type: Tag
   id: CMUJerryCan
 
+# The jeep gun's shot: three rounds of one burst, each ringing out in its echo. The client plays at
+# most 16 of any one sound at once, so a long burst spread over three never runs out mid-fire.
+- type: soundCollection
+  id: CMUJeepMGClose
+  files:
+  - /Audio/CMU14/Jeep/jeep_mg_close_1.wav
+  - /Audio/CMU14/Jeep/jeep_mg_close_2.wav
+  - /Audio/CMU14/Jeep/jeep_mg_close_3.wav
+
+# The same burst heard from afar, one round to a shot like the close one.
+- type: soundCollection
+  id: CMUJeepMGFar
+  files:
+  - /Audio/CMU14/Jeep/jeep_mg_far_1.wav
+  - /Audio/CMU14/Jeep/jeep_mg_far_2.wav
+  - /Audio/CMU14/Jeep/jeep_mg_far_3.wav
+
 - type: Tag
   id: CMUJeepWindshield
 
@@ -392,20 +409,21 @@
     maxShotCurvatureDegrees: 10
   - type: GunUseGunOrigin
   - type: GunIgnoreContainerOwnerCollision
+  # A .50 cal's rate, about 550 rounds a minute; the shot sound is cut to overlap at it.
   - type: Gun
-    fireRate: 8
+    fireRate: 9
     selectedMode: FullAuto
     availableModes:
     - FullAuto
     soundGunshot:
-      path: /Audio/CMU14/Jeep/jeep_mg_close.wav
+      collection: CMUJeepMGClose
       params:
         volume: -2
         variation: 0.05
     cameraRecoilScalar: 0
   - type: CMUGunDistantSound
     sound:
-      path: /Audio/CMU14/Jeep/jeep_mg_far.wav
+      collection: CMUJeepMGFar
       params:
         volume: -3
         variation: 0.05

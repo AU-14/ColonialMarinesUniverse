@@ -143,7 +143,9 @@ public sealed class CMUJeepCrashKnockoutTest : GameTest
 
             foreach (var path in new[]
                      {
-                         "/Audio/CMU14/Jeep/jeep_mg_close.wav", "/Audio/CMU14/Jeep/jeep_mg_far.wav",
+                         "/Audio/CMU14/Jeep/jeep_mg_close_1.wav", "/Audio/CMU14/Jeep/jeep_mg_close_2.wav",
+                         "/Audio/CMU14/Jeep/jeep_mg_close_3.wav", "/Audio/CMU14/Jeep/jeep_mg_far_1.wav",
+                         "/Audio/CMU14/Jeep/jeep_mg_far_2.wav", "/Audio/CMU14/Jeep/jeep_mg_far_3.wav",
                          "/Audio/CMU14/Jeep/jeep_horn.wav", "/Audio/CMU14/Jeep/jeep_horn_long.wav",
                      })
             {

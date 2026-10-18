@@ -60,12 +60,12 @@ public sealed partial class VehicleTurretMuzzleOffsetSystem : EntitySystem
             return false;
 
         // CMU14 VehicleGunOrigin Begin: a gun with a CMU origin flashes at its drawn barrel tip: the
-        // turret's pivot where this client draws it, out along the aim, and up the screen by the
-        // barrel's height in the art.
+        // turret's pivot where this client draws it, out along the barrel as it is drawn (the gun
+        // entity's own rotation doesn't follow the aim), and up the screen by the barrel's height.
         if (TryComp(weaponUid, out CMUVehicleGunOriginComponent? cmuOrigin) &&
-            _turretVisual.TryGetRenderedPose(weaponUid, out var pivot, out _))
+            _turretVisual.TryGetRenderedPose(weaponUid, out var pivot, out var drawn))
         {
-            rotation = _transform.GetWorldRotation(weaponUid);
+            rotation = drawn;
             var pivotMap = _transform.ToMapCoordinates(pivot);
             var up = (-_eye.CurrentEye.Rotation).RotateVec(new Vector2(0f, cmuOrigin.MuzzleUp));
             var tip = pivotMap.Position + rotation.ToWorldVec() * cmuOrigin.Barrel + up;

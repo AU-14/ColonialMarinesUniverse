@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Numerics;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Weapons.Ranged.Ammo.BulletBox;
 using Content.Shared.Damage;
@@ -140,6 +141,31 @@ public sealed class CMUJeepCrashTest : GameTest
     }
 
     [Test]
+    public async Task EngineSmokeReachesClientsAsItIsShot()
+    {
+        var jeep = await SpawnJeep();
+        float smoke = 0f, heavy = 0f;
+        await Server.WaitAssertion(() =>
+        {
+            var comp = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep);
+            var grid = SEntMan.GetComponent<TransformComponent>(jeep).ParentUid;
+            var ahead = SEntMan.SpawnEntity(null, new EntityCoordinates(grid, 0.5f, -2.5f));
+            var damage = new DamageSpecifier();
+            damage.DamageDict["Structural"] = 5;
+            var damageable = SEntMan.System<DamageableSystem>();
+            smoke = comp.EngineSmokeFraction * comp.EngineMaxIntegrity;
+            heavy = comp.EngineHeavySmokeFraction * comp.EngineMaxIntegrity;
+            while (comp.EngineIntegrity >= smoke)
+                damageable.TryChangeDamage(jeep, damage, origin: ahead);
+        });
+        await RunTicksSync(10);
+
+        var client = CEntMan.GetComponent<CMUOpenVehicleComponent>(ToClientUid(jeep));
+        Assert.That(client.EngineIntegrity, Is.LessThan(smoke).And.GreaterThanOrEqualTo(heavy),
+            "Clients see the engine smoke as soon as the hits wear it down, before it burns.");
+    }
+
+    [Test]
     public async Task WreckedHullStopsTheJeepWithoutFire()
     {
         var jeep = await SpawnJeep();
@@ -231,7 +257,53 @@ public sealed class CMUJeepCrashTest : GameTest
     }
 
     [Test]
-    public async Task GunFiresFromItsPlaceOnTheJeep()
+    public async Task GunnersBulletLeavesTheDrawnBarrelTip()
+    {
+        var jeep = await SpawnJeep("CMUVehicleJeepGunner");
+        EntityUid gunner = default;
+        await Server.WaitPost(() =>
+        {
+            var grid = SEntMan.GetComponent<TransformComponent>(jeep).ParentUid;
+            gunner = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(grid, 0.5f, 1.5f));
+        });
+        await RunTicksSync(5);
+
+        // Swing the gun round to the jeep's front left, the way it follows the gunner's cursor.
+        var target = Vector2.Zero;
+        await Server.WaitPost(() =>
+        {
+            var xforms = SEntMan.System<SharedTransformSystem>();
+            var position = xforms.GetWorldPosition(jeep);
+            target = position + new Vector2(4f, -4f);
+            var turrets = SEntMan.System<VehicleTurretSystem>();
+            Assert.That(turrets.TrySetTargetRotationWorld(Gun(jeep), (target - position).ToWorldAngle()), Is.True);
+
+        });
+        await RunSeconds(2f);
+
+        await Server.WaitAssertion(() =>
+        {
+            var xforms = SEntMan.System<SharedTransformSystem>();
+            var gun = Gun(jeep);
+            var origin = SEntMan.GetComponent<CMUVehicleGunOriginComponent>(gun);
+            var (position, rotation) = xforms.GetWorldPositionRotation(jeep);
+            var turrets = SEntMan.System<VehicleTurretSystem>();
+            turrets.TryGetAnchorTurret(gun, SEntMan.GetComponent<VehicleTurretComponent>(gun), out _, out var mount);
+            var pivot = position + rotation.RotateVec(VehicleTurretDirectionHelpers.GetLocalOffsetForRenderDirection(
+                turrets.GetPixelOffset(mount, rotation) / 32f, rotation));
+            var expected = pivot + Vector2.Normalize(target - pivot) * origin.Barrel + new Vector2(0f, origin.MuzzleUp);
+            var map = xforms.GetMapCoordinates(jeep).MapId;
+            var shot = SEntMan.System<SharedGunSystem>().AttemptShoot((gun, SEntMan.GetComponent<GunComponent>(gun)), gunner,
+                xforms.ToCoordinates(new MapCoordinates(target, map)));
+            Assert.That(shot, Is.Not.Null.And.Not.Empty, "The gunner should fire.");
+            var from = xforms.GetWorldPosition(shot![0]);
+            Assert.That((from - expected).Length(), Is.LessThan(0.35f),
+                $"The bullet should leave the drawn barrel tip {expected}, not {from} (jeep at {position}).");
+        });
+    }
+
+    [Test]
+    public async Task GunFiresFromItsDrawnBarrelTip()
     {
         var jeep = await SpawnJeep("CMUVehicleJeepGunner");
         foreach (var degrees in new[] { 0.0, 90.0, 180.0, 270.0 })
@@ -243,15 +315,22 @@ public sealed class CMUJeepCrashTest : GameTest
                 var gun = Gun(jeep);
                 var origin = SEntMan.GetComponent<CMUVehicleGunOriginComponent>(gun);
                 var (position, rotation) = xforms.GetWorldPositionRotation(jeep);
-                var pivot = position + rotation.RotateVec(origin.Pivot);
+                // The pivot where the art draws the gun for this facing: its mount's pixel offset.
+                var turrets = SEntMan.System<VehicleTurretSystem>();
+                turrets.TryGetAnchorTurret(gun, SEntMan.GetComponent<VehicleTurretComponent>(gun), out _, out var mount);
+                var drawn = VehicleTurretDirectionHelpers.GetLocalOffsetForRenderDirection(
+                    turrets.GetPixelOffset(mount, rotation) / 32f, rotation);
+                var pivot = position + rotation.RotateVec(drawn);
                 // Aim straight out to the jeep's right.
                 var target = pivot + rotation.RotateVec(new System.Numerics.Vector2(5f, 0f));
                 var map = xforms.GetMapCoordinates(jeep).MapId;
-                var ev = new AttemptShootEvent(gun, null, xforms.ToCoordinates(new MapCoordinates(pivot, map)),
+                var ev = new AttemptShootEvent(gun, null, xforms.ToCoordinates(new MapCoordinates(position, map)),
                     xforms.ToCoordinates(new MapCoordinates(target, map)));
                 SEntMan.EventBus.RaiseLocalEvent(gun, ref ev);
                 var from = xforms.ToMapCoordinates(ev.FromCoordinates).Position;
-                var expected = pivot + rotation.RotateVec(new System.Numerics.Vector2(origin.Barrel, 0f));
+                // Out of the drawn barrel tip, where the muzzle flash shows.
+                var expected = pivot + rotation.RotateVec(new System.Numerics.Vector2(origin.Barrel, 0f)) +
+                               new System.Numerics.Vector2(0f, origin.MuzzleUp);
                 Assert.That((from - expected).Length(), Is.LessThan(0.01f), $"facing {degrees}");
             });
         }

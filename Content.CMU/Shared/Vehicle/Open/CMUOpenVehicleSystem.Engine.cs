@@ -41,10 +41,25 @@ public sealed partial class CMUOpenVehicleSystem
         if (absorbed <= 0f)
             return;
 
+        var before = EngineStep(jeep);
         jeep.EngineIntegrity -= absorbed;
         args.Damage *= 1f - absorbed / hit;
+        if (EngineStep(jeep) != before)
+            Dirty(ent);
+
         if (jeep.EngineIntegrity <= 0f && TryComp(ent, out VehicleComponent? vehicle) && vehicle.Operator is { } driver)
             _popup.PopupEntity(Loc.GetString("cmu-open-vehicle-engine-dead"), ent, driver, PopupType.MediumCaution);
+    }
+
+    /// <summary>
+    /// The engine's integrity in twentieths, and which smoke it shows: a hit only goes out to clients
+    /// when it moves one, so the smoke and the examine reading keep up without sending every hit.
+    /// </summary>
+    private static (int Twentieths, int Smoke) EngineStep(CMUOpenVehicleComponent jeep)
+    {
+        var fraction = jeep.EngineIntegrity / jeep.EngineMaxIntegrity;
+        var smoke = fraction <= 0f ? 3 : fraction < jeep.EngineHeavySmokeFraction ? 2 : fraction < jeep.EngineSmokeFraction ? 1 : 0;
+        return ((int) MathF.Ceiling(fraction * 20f), smoke);
     }
 
     /// <summary>

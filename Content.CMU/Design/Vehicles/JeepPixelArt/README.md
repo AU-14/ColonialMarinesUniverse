@@ -366,9 +366,12 @@ In `Content.CMU/Resources/Audio/CMU14/Jeep/`, cut from the team's Pixabay record
 - `jeep_blinker`: one tick of the turn signal relay, played on each client as the signals blink on
   and off, quiet and heard only close by.
 - `jeep_headlight_shatter`: a headlight's bulb bursting when wear breaks it, shot or crashed.
-- `jeep_mg_close` and `jeep_mg_far`: one .50 cal round each (a burst's first crack crossfaded into
-  the echo after its last round). The gun plays the close one; listeners 10 to 45 tiles off hear
-  the far one instead, the two overlapping where the close one fades.
+- `jeep_mg_close_1` to `_3` and `jeep_mg_far_1` to `_3`: one .50 cal round each, from a close and a
+  distant recording (one round up to the next, crossfaded into the echo after the burst's last round),
+  so rounds overlapping at the gun's 9 a second sound like the recorded burst. The gun plays a close
+  one at random (`CMUJeepMGClose`): the client plays at most 16 of one sound file at once, and three
+  files keep a long burst, or several guns, under it. Listeners 10 to 45 tiles off hear a far one
+  instead (`CMUJeepMGFar`), shot for shot, the two overlapping where the close one fades.
 
 The jeep has no RMC running sound; the collision sound is RMC's.
 

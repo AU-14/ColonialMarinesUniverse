@@ -20,11 +20,11 @@ public sealed partial class CMUGunDistantSoundComponent : Component
     public float MaxRange = 45f;
 
     /// <summary>
-    /// The shortest time between two distant shots: past that range a burst blurs into one, and each
-    /// shot heard is a sound sent to everyone in the ring.
+    /// The shortest time between two distant shots, each a sound sent to everyone in the ring. None by
+    /// default, so a burst far off keeps the gun's own rate.
     /// </summary>
     [DataField]
-    public TimeSpan MinInterval = TimeSpan.FromSeconds(0.25);
+    public TimeSpan MinInterval = TimeSpan.Zero;
 
     /// <summary>
     /// When the next distant shot may play.
