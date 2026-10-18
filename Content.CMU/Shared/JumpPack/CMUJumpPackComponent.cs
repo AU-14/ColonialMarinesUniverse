@@ -57,6 +57,12 @@ public sealed partial class CMUJumpPackComponent : Component
     public bool RequiresFuel = true;
 
     /// <summary>
+    /// When true the pack only works while the wearer is weightless.
+    /// </summary>
+    [DataField]
+    public bool ZeroGravityOnly;
+
+    /// <summary>
     /// Shared by boost and jump. Boosting ignores it while hovering.
     /// </summary>
     [DataField]

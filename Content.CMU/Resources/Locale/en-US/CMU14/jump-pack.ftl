@@ -34,6 +34,7 @@ cmu-jump-pack-direction-set = Thrusters aimed { $direction }.
 
 cmu-jump-pack-no-fuel = The jump pack sputters. It's out of fuel!
 cmu-jump-pack-no-room = There's no open sky above you!
+cmu-jump-pack-needs-zero-gravity = The jump pack only works in zero gravity!
 cmu-jump-pack-jump-hovering = You're already hovering!
 cmu-jump-pack-hover-start = The jump pack roars and lifts you off the ground.
 cmu-jump-pack-hover-expired = The jump pack's thrusters overheat, lowering you back down.

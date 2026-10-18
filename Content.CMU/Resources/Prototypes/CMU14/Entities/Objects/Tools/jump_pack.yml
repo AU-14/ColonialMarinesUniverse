@@ -23,6 +23,8 @@
   - type: CMUJumpPack
     # Set false to run without a GasTank or while empty; no gas is burned.
     requiresFuel: true
+    # Set true to only allow use while weightless (zero gravity).
+    zeroGravityOnly: false
     # Directional boost: tiles travelled per boost, and the cooldown shared with the z-level jump.
     boostDistance: 6
     boostCooldown: 7

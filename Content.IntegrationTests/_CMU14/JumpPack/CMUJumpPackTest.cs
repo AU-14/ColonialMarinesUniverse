@@ -8,6 +8,7 @@ using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
+using Content.Shared.Gravity;
 using Content.Shared.Movement.Components;
 using Content.Shared.Verbs;
 using Robust.Shared.Map.Components;
@@ -38,6 +39,13 @@ public sealed class CMUJumpPackTest : GameTest
             - Back
           - type: CMUJumpPack
             requiresFuel: false
+
+        - type: entity
+          parent: CMUJumpPackFilled
+          id: CMUJumpPackTestZeroGravityOnly
+          components:
+          - type: CMUJumpPack
+            zeroGravityOnly: true
         """;
     private readonly List<EntityUid> _cleanup = new();
     private SharedMapSystem _maps = null!;
@@ -473,6 +481,37 @@ public sealed class CMUJumpPackTest : GameTest
                 Assert.That(Pack.HoverUser, Is.EqualTo(_rider), "An empty fuel-free pack must not cut the hover.");
                 Assert.That(SComp<TransformComponent>(_rider).MapUid, Is.EqualTo(_upper));
             });
+        });
+    }
+
+    [Test]
+    public async Task ZeroGravityOnlyPackRefusesUseUnderGravity()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            SEntMan.DeleteEntity(_pack);
+            _pack = SEntMan.SpawnEntity("CMUJumpPackTestZeroGravityOnly", SComp<TransformComponent>(_rider).Coordinates);
+            Equip();
+
+            var gravity = SEntMan.System<SharedGravitySystem>();
+            Assert.That(gravity.IsWeightless(_rider), Is.False);
+
+            var before = Moles;
+            Perform(Pack.BoostActionEntity);
+            Perform(Pack.HoverActionEntity);
+            Assert.Multiple(() =>
+            {
+                Assert.That(CooldownLeft(Pack.BoostActionEntity), Is.EqualTo(TimeSpan.Zero), "Boost is refused under gravity.");
+                Assert.That(Pack.HoverUser, Is.Null, "Hover is refused under gravity.");
+                Assert.That(Moles, Is.EqualTo(before));
+            });
+
+            SComp<MovementIgnoreGravityComponent>(_rider).Weightless = true;
+            gravity.RefreshWeightless(_rider);
+            Assert.That(gravity.IsWeightless(_rider), Is.True);
+
+            Perform(Pack.BoostActionEntity);
+            Assert.That(CooldownLeft(Pack.BoostActionEntity), Is.GreaterThan(TimeSpan.Zero), "Boost works when weightless.");
         });
     }
 

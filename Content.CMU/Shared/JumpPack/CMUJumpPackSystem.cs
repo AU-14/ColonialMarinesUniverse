@@ -5,6 +5,7 @@ using Content.Shared.Atmos.EntitySystems;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Examine;
+using Content.Shared.Gravity;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs.Systems;
@@ -29,6 +30,7 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedGasTankSystem _gasTank = default!;
+    [Dependency] private SharedGravitySystem _gravity = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
@@ -130,7 +132,8 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
             (zPhysics.Velocity >= 0f ||
              _zLevels.IsZHovering(ent) ||
              _zLevels.DistanceToGround((ent.Owner, zPhysics), out _) <= 0f ||
-             _mobState.IsDead(ent)))
+             _mobState.IsDead(ent) ||
+             (pack.ZeroGravityOnly && !_gravity.IsWeightless(ent.Owner))))
         {
             return;
         }
@@ -232,6 +235,9 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
         if (!_actionBlocker.CanMove(user) || !TryComp(user, out PhysicsComponent? physics))
             return;
 
+        if (!CanUseInGravity(ent, user))
+            return;
+
         if (!TryUseFuel(ent, user, comp.FuelPerBoost))
             return;
 
@@ -296,6 +302,9 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
             return;
         }
 
+        if (!CanUseInGravity(ent, user))
+            return;
+
         if (!HasOpenSkyAbove(user))
         {
             _popup.PopupClient(Loc.GetString("cmu-jump-pack-no-room"), user, user, PopupType.SmallCaution);
@@ -353,6 +362,9 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
             return;
 
         if (!_actionBlocker.CanMove(user))
+            return;
+
+        if (!CanUseInGravity(ent, user))
             return;
 
         if (!_zLevels.CanStartZHover(user, out var targetMap))
@@ -529,6 +541,15 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
                TryComp(mapUid, out CMUZLevelMapComponent? zMap) &&
                _zLevels.TryMapUp((mapUid, zMap), out _) &&
                !_zLevels.HasTileAbove(user);
+    }
+
+    private bool CanUseInGravity(Entity<CMUJumpPackComponent> pack, EntityUid user)
+    {
+        if (!pack.Comp.ZeroGravityOnly || _gravity.IsWeightless(user))
+            return true;
+
+        _popup.PopupClient(Loc.GetString("cmu-jump-pack-needs-zero-gravity"), user, user, PopupType.SmallCaution);
+        return false;
     }
 
     private bool HasFuel(Entity<CMUJumpPackComponent> pack, float amount)
