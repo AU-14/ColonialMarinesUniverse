@@ -1027,6 +1027,13 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         return depthOffset > 0 ? sourceMap.Owner : receivingMap;
     }
 
+    // every source/opening pair got re-raycast every frame (100+ rays a frame on a normal ship, each one
+    // allocating inside the engine) and almost all of them come back blocked. lights and walls barely move,
+    // so hold each answer briefly. a door opening or a light moving shows up within RayCacheLifetime
+    private static readonly TimeSpan RayCacheLifetime = TimeSpan.FromSeconds(0.5);
+    private const int RayCacheLimit = 8192;
+    private readonly Dictionary<(EntityUid Source, MapId Map, Vector2 From, Vector2 To), (bool Blocked, TimeSpan Until)> _rayCache = new();
+
     private bool IsSourceRayBlocked(SourceLight source, MapId mapId, Vector2 openingCenter)
     {
         var direction = openingCenter - source.WorldPosition;
@@ -1034,13 +1041,26 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         if (length <= 0.01f)
             return false;
 
+        var now = _timing.RealTime;
+        var key = (source.Entity, mapId, source.WorldPosition, openingCenter);
+        if (_rayCache.TryGetValue(key, out var cached) && cached.Until > now)
+            return cached.Blocked;
+
+        if (_rayCache.Count >= RayCacheLimit)
+            _rayCache.Clear();
+
         if (_diagnosticsEnabled)
             LastProjectedLightingDebugStats.Raycasts++;
         var ray = new CollisionRay(source.WorldPosition, direction / length, (int) CollisionGroup.Opaque);
+        var blocked = false;
         foreach (var _ in _physics.IntersectRay(mapId, ray, length, ignoredEnt: source.Entity, returnOnFirstHit: true))
-            return true;
+        {
+            blocked = true;
+            break;
+        }
 
-        return false;
+        _rayCache[key] = (blocked, now + RayCacheLifetime);
+        return blocked;
     }
 
     private void RebuildOpeningCandidateBuckets()
@@ -1405,6 +1425,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
     {
         base.Shutdown();
         CleanupAllProjectedLights();
+        _rayCache.Clear();
     }
 
     private readonly record struct OpeningCandidateBucketKey(
