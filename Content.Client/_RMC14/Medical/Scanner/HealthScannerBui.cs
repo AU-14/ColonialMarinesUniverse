@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Numerics;
 using Content.Client.CMU14.Medical.Presentation.Windows;
 using Content.Client.CMU14.Temperature; // CMU14
+using Content.Client.CMU14.UI;
 using Content.Client._RMC14.Medical.HUD;
 using Content.Client.Message;
 using Content.Shared.CMU14.Medical.Blood; // CMU14
@@ -14,6 +15,7 @@ using Content.Shared._RMC14.Medical.HUD.Systems;
 using Content.Shared._RMC14.Medical.Scanner;
 using Content.Shared.Body.Part;
 using Content.Shared.Chemistry.Reagent;
+using Content.Shared.FixedPoint;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Mobs;
 using Content.Shared.Temperature;
@@ -102,20 +104,16 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         _lastTarget = uiState.Target;
         _hasLastTarget = true;
 
-        _window.PatientLabel.Text = Loc.GetString("rmc-health-analyzer-patient", ("name", Identity.Name(target, _entities, _player.LocalEntity)));
+        _window.Title = Loc.GetString("rmc-health-analyzer-patient", ("name", Identity.Name(target, _entities, _player.LocalEntity)));
 
         var damage = uiState.Damage;
-        AddGroup(_window.BruteLabel, Color.FromHex("#DF3E3E"), damage.Brute, damage.UntreatedBruteWounds, Loc.GetString("rmc-health-analyzer-brute"));
-        AddGroup(_window.BurnLabel, Color.FromHex("#FFB833"), damage.Burn, damage.UntreatedBurnWounds, Loc.GetString("rmc-health-analyzer-burn"));
-        AddGroup(_window.ToxinLabel, Color.FromHex("#25CA4C"), damage.Toxin, false, Loc.GetString("rmc-health-analyzer-toxin"));
-        AddGroup(_window.OxygenLabel, Color.FromHex("#2E93DE"), damage.Airloss, false, Loc.GetString("rmc-health-analyzer-oxygen"));
+        _window.DamageRow.RemoveAllChildren();
+        _window.DamageRow.AddChild(BuildDamageChip(Loc.GetString("rmc-health-analyzer-brute"), BruteColor, damage.Brute, damage.UntreatedBruteWounds));
+        _window.DamageRow.AddChild(BuildDamageChip(Loc.GetString("rmc-health-analyzer-burn"), BurnColor, damage.Burn, damage.UntreatedBurnWounds));
+        _window.DamageRow.AddChild(BuildDamageChip(Loc.GetString("rmc-health-analyzer-toxin"), Color.FromHex("#25CA4C"), damage.Toxin, false));
+        _window.DamageRow.AddChild(BuildDamageChip(Loc.GetString("rmc-health-analyzer-oxygen"), Color.FromHex("#2E93DE"), damage.Airloss, false));
         if (damage.Genetic > 0)
-        {
-            _window.CloneBox.Visible = true;
-            AddGroup(_window.CloneLabel, Color.FromHex("#02c9c0"), damage.Genetic, false, Loc.GetString("rmc-health-analyzer-clone"));
-        }
-        else
-            _window.CloneBox.Visible = false;
+            _window.DamageRow.AddChild(BuildDamageChip(Loc.GetString("rmc-health-analyzer-clone"), Color.FromHex("#02c9c0"), damage.Genetic, false));
 
         var isPermaDead = uiState.PermaDead;
 
@@ -205,25 +203,26 @@ public sealed partial class HealthScannerBui : BoundUserInterface
             if (!_reagent.TryIndex(reagent.Prototype, out var prototype))
                 continue;
 
-            var text = FormattedMessage.EscapeText($"{reagent.Quantity.Float():F1} {prototype.LocalizedName}");
+            var text = $"{reagent.Quantity.Float():F1}u {prototype.LocalizedName}";
             if (reagent.Overdose)
-                text = $"[bold][color=red]{text} OD[/color][/bold]";
+                text += " OD";
 
-            var label = new CMUScaledRichTextLabel();
-            label.SetMarkupPermissive(text);
-            _window.ChemicalsContainer.AddChild(label);
+            _window.ChemicalsContainer.AddChild(BuildChemicalRow(text, prototype.SubstanceColor, reagent.Overdose));
             anyChemicals = true;
         }
 
         if (uiState.OmittedKnownChemicals > 0)
         {
-            var label = new CMUScaledRichTextLabel();
-            label.SetMarkupPermissive(Loc.GetString("rmc-health-analyzer-additional-reagents", ("count", uiState.OmittedKnownChemicals)));
-            _window.ChemicalsContainer.AddChild(label);
+            _window.ChemicalsContainer.AddChild(new Label
+            {
+                Text = FormattedMessage.RemoveMarkupPermissive(
+                    Loc.GetString("rmc-health-analyzer-additional-reagents", ("count", uiState.OmittedKnownChemicals))),
+                FontColorOverride = Color.FromHex("#8E9AA6"),
+            });
             anyChemicals = true;
         }
 
-        _window.UnknownReagentsLabel.SetMarkupPermissive(Loc.GetString("rmc-health-analyzer-unknown-reagents"));
+        SetSizedMarkup(_window.UnknownReagentsLabel, Loc.GetString("rmc-health-analyzer-unknown-reagents"));
         _window.UnknownChemicalsPanel.Visible = uiState.UnknownChemicals;
         _window.ChemicalContentsLabel.Visible = anyChemicals;
         _window.ChemicalContentsSeparator.Visible = anyChemicals;
@@ -235,50 +234,26 @@ public sealed partial class HealthScannerBui : BoundUserInterface
             ? Loc.GetString("cmu-health-analyzer-blood-type", ("type", bloodType))
             : "Blood:";
         // cmu edit end
-        var bloodMsg = new FormattedMessage();
-        bloodMsg.PushColor(Color.FromHex("#25B732"));
-
         var percentage = uiState.MaxBlood == 0 ? 100 : uiState.Blood.Float() / uiState.MaxBlood.Float() * 100f;
         var percentageString = MathHelper.CloseTo(percentage, 100) ? "100%" : $"{percentage:F1}%";
-        bloodMsg.AddText($"{percentageString}, {uiState.Blood}cl");
-        bloodMsg.Pop();
-        // cmu edit start
-        if (uiState.CMUSalinePercent >= 1f)
-        {
-            bloodMsg.PushColor(Color.FromHex(uiState.CMUSalinePercent > 25f ? "#DF8A3E" : "#5B88B0"));
-            bloodMsg.AddText($" ({Loc.GetString("cmu-health-analyzer-saline", ("percent", (int) uiState.CMUSalinePercent))})");
-            bloodMsg.Pop();
-        }
-        // cmu edit end
-        _window.BloodAmountLabel.SetMessage(bloodMsg);
+        _window.BloodAmountLabel.Text = $"{percentageString}, {uiState.Blood}cl";
+        _window.BloodAmountLabel.FontColorOverride = percentage < 60f
+            ? Color.FromHex("#FF6060")
+            : percentage < 85f ? Color.FromHex("#FFAA00") : Color.FromHex("#25B732");
 
         // cmu edit start
+        _window.SalineLabel.Visible = uiState.CMUSalinePercent >= 1f;
+        _window.SalineLabel.Text = $"({Loc.GetString("cmu-health-analyzer-saline", ("percent", (int) uiState.CMUSalinePercent))})";
+        _window.SalineLabel.FontColorOverride = Color.FromHex(uiState.CMUSalinePercent > 25f ? "#DF8A3E" : "#5B88B0");
+
+        string? bleeding = null;
         if (uiState.CMUExternalBleeding && uiState.CMUExternalBleedTier != ExternalBleedTier.None)
-            _window.Bleeding.SetMarkup(" [bold][color=#DF3E3E]\\[" + Loc.GetString("cmu-medical-scanner-bleeding-tier", ("tier", BleedTierName(uiState.CMUExternalBleedTier))) + "\\][/color][/bold]");
-        else if (uiState.CMUExternalBleeding)
+            bleeding = Loc.GetString("cmu-medical-scanner-bleeding-tier", ("tier", BleedTierName(uiState.CMUExternalBleedTier)));
+        else if (uiState.CMUExternalBleeding || uiState.Bleeding)
+            bleeding = Loc.GetString("cmu-medical-scanner-chip-bleeding");
         // cmu edit end
-            _window.Bleeding.SetMarkup(" [bold][color=#DF3E3E]\\[Bleeding\\][/color][/bold]");
-        else if (uiState.Bleeding)
-            _window.Bleeding.SetMarkup(" [bold][color=#DF3E3E]\\[Bleeding\\][/color][/bold]");
-        else
-            _window.Bleeding.SetMessage(string.Empty);
-
-        var temperatureMsg = new FormattedMessage();
-        if (uiState.Temperature is { } temperatureKelvin)
-        {
-            var celsius = TemperatureHelpers.KelvinToCelsius(temperatureKelvin);
-            var fahrenheit = TemperatureHelpers.KelvinToFahrenheit(temperatureKelvin);
-            // CMU14: client temperature unit preference, display only
-            temperatureMsg.AddText(TemperatureDisplay.Fahrenheit
-                ? $"{fahrenheit:F1}ºF"
-                : $"{celsius:F1}ºC ({fahrenheit:F1}ºF)");
-        }
-        else
-        {
-            temperatureMsg.AddText("None");
-        }
-
-        _window.BodyTemperatureLabel.SetMessage(temperatureMsg);
+        _window.Bleeding.Visible = bleeding != null;
+        _window.Bleeding.Text = $"[{bleeding}]";
 
         _window.AdviceContainer.ReleaseChildren();
         //Medication Advice
@@ -300,7 +275,7 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         }
         _window.MedicalAdviceCard.Visible = _window.AdviceContainer.ChildCount > 0;
 
-        UpdateBigStatRow(uiState, isPermaDead);
+        UpdateVitals(uiState);
 
         UpdateCMUBodyMap(uiState);
 
@@ -341,70 +316,120 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         Severed = 4,
     }
 
-    private void UpdateBigStatRow(
-        HealthScannerBuiState uiState,
-        bool isPermaDead)
+    private static readonly Color BruteColor = Color.FromHex("#DF3E3E");
+    private static readonly Color BurnColor = Color.FromHex("#FFB833");
+    private static readonly Color MutedColor = Color.FromHex("#8E9AA6");
+
+    private void UpdateVitals(HealthScannerBuiState uiState)
     {
         if (_window == null)
             return;
 
-        var healthValue = isPermaDead ? 0f : _window.HealthBar.Value;
-        _window.CMUBigHealthValue.Text = isPermaDead
-            ? Loc.GetString("cmu-medical-scanner-stat-deceased-short")
-            : $"{healthValue:F0}%";
-        _window.CMUBigHealthValue.FontColorOverride = isPermaDead
-            ? Color.FromHex("#A02020")
-            : SeverityTextColor(SeverityFromHpFraction(healthValue / 100f));
-
-        if (uiState.CMUHeartStopped == true)
-        {
-            _window.CMUBigPulseValue.Text = Loc.GetString("cmu-medical-scanner-stat-pulse-stopped");
-            _window.CMUBigPulseValue.FontColorOverride = Color.FromHex("#FF6060");
-        }
-        else if (uiState.CMUHeartBpm is { } bpm)
-        {
-            _window.CMUBigPulseValue.Text = bpm.ToString(CultureInfo.InvariantCulture);
-            _window.CMUBigPulseValue.FontColorOverride = Color.White;
-        }
-        else
-        {
-            _window.CMUBigPulseValue.Text = "--";
-            _window.CMUBigPulseValue.FontColorOverride = Color.FromHex("#5B88B0");
-        }
-
-        if (uiState.MaxBlood > 0)
-        {
-            var bloodPct = uiState.Blood.Float() / uiState.MaxBlood.Float() * 100f;
-            _window.CMUBigBloodValue.Text = $"{bloodPct:F0}%";
-            _window.CMUBigBloodValue.FontColorOverride = bloodPct < 60f
-                ? Color.FromHex("#FF6060")
-                : bloodPct < 85f ? Color.FromHex("#FFAA00") : Color.White;
-        }
-        else
-        {
-            _window.CMUBigBloodValue.Text = "--";
-            _window.CMUBigBloodValue.FontColorOverride = Color.FromHex("#5B88B0");
-        }
-
         if (uiState.Temperature is { } kelvin)
         {
             var celsius = TemperatureHelpers.KelvinToCelsius(kelvin);
-            // CMU14: unit preference is display only, fever thresholds stay Celsius
-            _window.CMUBigTempValue.Text = $"{TemperatureDisplay.FromKelvin(kelvin):F1}";
-            _window.CMUBigTempValue.FontColorOverride = (celsius < 35f || celsius > 39f)
-                ? Color.FromHex("#FFAA00")
-                : Color.White;
+            var fahrenheit = TemperatureHelpers.KelvinToFahrenheit(kelvin);
+            SetLabel(_window.BodyTemperatureLabel,
+                TemperatureDisplay.Fahrenheit ? $"{fahrenheit:F1}ºF" : $"{celsius:F1}ºC ({fahrenheit:F1}ºF)",
+                celsius < 35f || celsius > 39f ? Color.FromHex("#FFAA00") : Color.White);
         }
         else
         {
-            _window.CMUBigTempValue.Text = "--";
-            _window.CMUBigTempValue.FontColorOverride = Color.FromHex("#5B88B0");
+            SetLabel(_window.BodyTemperatureLabel, "None", Color.White);
         }
 
-        _window.CMUBigShockRiskValue.Text = FormatPainShockRiskValue(
-            uiState.CMUPainShockRisk,
-            uiState.CMUPainShockSuppressed);
-        _window.CMUBigShockRiskValue.FontColorOverride = PainShockRiskColor(uiState.CMUPainShockRisk);
+        if (uiState.CMUHeartStopped == true)
+            SetLabel(_window.PulseLabel, FormattedMessage.RemoveMarkupPermissive(Loc.GetString("cmu-medical-scanner-pulse-stopped")), Color.FromHex("#FF6060"));
+        else if (uiState.CMUHeartBpm is { } bpm)
+            SetLabel(_window.PulseLabel, Loc.GetString("cmu-medical-scanner-pulse-bpm", ("bpm", bpm)), Color.White);
+        else
+            SetLabel(_window.PulseLabel, "--", Color.FromHex("#5B88B0"));
+
+        SetLabel(_window.ShockRiskLabel,
+            FormatPainShockRiskValue(uiState.CMUPainShockRisk, uiState.CMUPainShockSuppressed),
+            PainShockRiskColor(uiState.CMUPainShockRisk));
+    }
+
+    private static void SetLabel(Label label, string text, Color color)
+    {
+        label.Text = text;
+        label.FontColorOverride = color;
+    }
+
+    private const int RichTextSize = 10;
+
+    private static void SetSizedMessage(RichTextLabel label, FormattedMessage message, int size = RichTextSize)
+    {
+        var sized = new FormattedMessage();
+        sized.PushTag(new MarkupNode("font", null, new Dictionary<string, MarkupParameter>
+        {
+            ["size"] = new MarkupParameter((long) size),
+        }));
+        sized.AddMessage(message);
+        sized.Pop();
+        label.SetMessage(sized);
+    }
+
+    private static void SetSizedMarkup(RichTextLabel label, string markup, int size = RichTextSize)
+    {
+        SetSizedMessage(label, FormattedMessage.FromMarkupPermissive(markup), size);
+    }
+
+    private static Control BuildDamageChip(string name, Color color, FixedPoint2 damage, bool untreated)
+    {
+        var chip = new PanelContainer
+        {
+            Margin = new Thickness(0, 0, 4, 0),
+            VerticalAlignment = Control.VAlignment.Center,
+            PanelOverride = new StyleBoxFlat
+            {
+                BackgroundColor = Color.FromHex("#16181B"),
+                BorderColor = Color.FromHex("#4972A1"),
+                BorderThickness = new Thickness(1),
+            },
+        };
+        var row = new BoxContainer
+        {
+            Orientation = LayoutOrientation.Horizontal,
+            Margin = new Thickness(4, 0),
+        };
+        row.AddChild(new Label { Text = $"{name}: " });
+        row.AddChild(new Label { Text = FormatDamage(damage, untreated), FontColorOverride = color });
+        chip.AddChild(row);
+        return chip;
+    }
+
+    private static string FormatDamage(FixedPoint2 damage, bool untreated)
+    {
+        var text = damage.Int().ToString(CultureInfo.InvariantCulture);
+        return untreated ? $"{{{text}}}" : text;
+    }
+
+    private static Control BuildChemicalRow(string text, Color reagentColor, bool overdose)
+    {
+        var row = new BoxContainer
+        {
+            Orientation = LayoutOrientation.Horizontal,
+            HorizontalExpand = true,
+        };
+        row.AddChild(new TextureRect
+        {
+            TexturePath = CMUIcons.Flask,
+            ModulateSelfOverride = reagentColor.WithAlpha(1f),
+            Stretch = TextureRect.StretchMode.KeepAspectCentered,
+            SetSize = new Vector2(11, 11),
+            Margin = new Thickness(0, 0, 5, 0),
+            VerticalAlignment = Control.VAlignment.Center,
+        });
+
+        var label = new Label { Text = text };
+        if (overdose)
+        {
+            label.FontColorOverride = Color.FromHex("#FF6060");
+            label.AddStyleClass(CMUMedicalUniformScaler.BoldStyleClass);
+        }
+        row.AddChild(label);
+        return row;
     }
 
     private void UpdateCMUBodyMap(HealthScannerBuiState uiState)
@@ -412,40 +437,40 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         if (_window == null)
             return;
 
-        var section = _window.CMUBodyMapSection;
         if (uiState.CMUParts is not { Count: > 0 })
         {
-            section.Visible = false;
+            _window.CMUBodyMapSection.Visible = false;
+            _window.CMUOrgansCard.Visible = false;
             _window.CMUStatusBanner.Visible = false;
             return;
         }
 
-        section.Visible = true;
         _window.CMUBodyChartContainer.ReleaseChildren();
         _window.CMUOrgansContainer.ReleaseChildren();
 
         BuildBodyChart(uiState);
         BuildOrgans(uiState);
         BuildStatusBanner(uiState);
+
+        // only display when something present (e.g. dmg)
+        _window.CMUBodyMapSection.Visible = _window.CMUBodyChartContainer.ChildCount > 0;
+        _window.CMUOrgansCard.Visible = _window.CMUOrgansContainer.ChildCount > 0;
     }
 
     private void BuildBodyChart(HealthScannerBuiState uiState)
     {
-        var attached = new HashSet<(BodyPartType, BodyPartSymmetry)>();
+        // only display limbs with dmg
+        var rows = 0;
         foreach (var (type, sym) in CmuPartLayout)
         {
-            var part = TryFindPart(uiState, type, sym);
-            if (part is null)
+            var row = TryFindPart(uiState, type, sym) is { } part
+                ? BuildBodyRow(uiState, part, rows)
+                : BuildSeveredRow(uiState, type, sym, rows);
+            if (row == null)
                 continue;
 
-            attached.Add((type, sym));
-            _window!.CMUBodyChartContainer.AddChild(BuildBodyRow(uiState, part.Value));
-        }
-        foreach (var (type, sym) in CmuPartLayout)
-        {
-            if (attached.Contains((type, sym)))
-                continue;
-            _window!.CMUBodyChartContainer.AddChild(BuildSeveredRow(uiState, type, sym));
+            _window!.CMUBodyChartContainer.AddChild(row);
+            rows++;
         }
 
         // Skill hints — fractures + bleeds are gated at Med-1 in the
@@ -461,170 +486,55 @@ public sealed partial class HealthScannerBui : BoundUserInterface
 
     private static Control BuildSkillHint(string locKey)
     {
-        return new Label
+        var label = new Label
         {
             Text = Loc.GetString(locKey),
-            FontColorOverride = Color.FromHex("#5B6B7B"),
-            Margin = new Thickness(0, 6, 0, 0),
+            FontColorOverride = Color.FromHex("#6F7B86"),
+            Margin = new Thickness(3, 2, 0, 0),
         };
+        label.AddStyleClass("LabelSmall");
+        return label;
     }
 
-    private Control BuildBodyRow(HealthScannerBuiState uiState, CMUBodyPartReadout part)
+    private Control? BuildBodyRow(HealthScannerBuiState uiState, CMUBodyPartReadout part, int index)
     {
-        var pct = part.Current.Float() / Math.Max(1f, part.Max.Float());
-        var recoverablePct = LineGraftRecoverableFraction(part);
-        var sev = SeverityFromHpFraction(pct);
-        var card = new PanelContainer
-        {
-            Margin = new Thickness(0, 0, 0, 6),
-            HorizontalExpand = true,
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#10191E"),
-                BorderColor = Color.FromHex("#263A42"),
-                BorderThickness = new Thickness(1),
-            },
-        };
-
-        var stack = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Vertical,
-            Margin = new Thickness(8, 6),
-            HorizontalExpand = true,
-        };
-        card.AddChild(stack);
-
-        var row = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Horizontal,
-            HorizontalExpand = true,
-        };
-        stack.AddChild(row);
-
-        row.AddChild(new PanelContainer
-        {
-            MinSize = new Vector2(5, 28),
-            Margin = new Thickness(0, 0, 8, 0),
-            PanelOverride = new StyleBoxFlat { BackgroundColor = SeverityFillColor(sev) },
-        });
-
-        row.AddChild(new Label
-        {
-            Text = PartDisplayName(part.Type, part.Symmetry),
-            MinWidth = 112,
-            VerticalAlignment = Control.VAlignment.Center,
-            ClipText = true,
-        });
-
-        row.AddChild(new Label
-        {
-            Text = $"{(int)Math.Round(pct * 100f)}%",
-            MinWidth = 48,
-            VerticalAlignment = Control.VAlignment.Center,
-            FontColorOverride = SeverityTextColor(sev),
-        });
-
-        row.AddChild(BuildHpBar(pct, sev, recoverablePct));
-
-        row.AddChild(new Label
-        {
-            Text = SeverityWord(sev),
-            MinWidth = 82,
-            Margin = new Thickness(8, 0, 0, 0),
-            VerticalAlignment = Control.VAlignment.Center,
-            FontColorOverride = SeverityTextColor(sev),
-        });
-
-        var chipStrip = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Horizontal,
-            HorizontalExpand = true,
-        };
-        AppendFractureChip(chipStrip, uiState, part);
-        AppendBleedChip(chipStrip, uiState, part);
+        var tags = new List<(string Text, Color Color)>();
+        AppendFractureTag(tags, uiState, part);
+        AppendBleedTag(tags, uiState, part);
         // cmu edit start
-        AppendExternalBleedChip(chipStrip, part);
+        AppendExternalBleedTag(tags, part);
         // cmu edit end
-        AppendWoundChip(chipStrip, part);
-        AppendShrapnelChip(chipStrip, part);
+        AppendWoundTag(tags, part);
+        AppendShrapnelTag(tags, part);
         if (part.Eschar)
-            chipStrip.AddChild(BuildChip(Loc.GetString("cmu-medical-scanner-eschar"), Color.FromHex("#7A5540")));
+            tags.Add((Loc.GetString("cmu-medical-scanner-eschar"), Color.FromHex("#C49A7A")));
         if (part.Splinted)
-            chipStrip.AddChild(BuildChip(Loc.GetString("cmu-medical-scanner-chip-splint"), Color.FromHex("#5B88B0")));
+            tags.Add((Loc.GetString("cmu-medical-scanner-chip-splint"), Color.FromHex("#7FA7D0")));
         if (part.Cast)
-            chipStrip.AddChild(BuildChip(Loc.GetString("cmu-medical-scanner-chip-cast"), Color.FromHex("#5B88B0")));
+            tags.Add((Loc.GetString("cmu-medical-scanner-chip-cast"), Color.FromHex("#7FA7D0")));
         if (part.Tourniquet)
-            chipStrip.AddChild(BuildChip(Loc.GetString("cmu-medical-scanner-chip-tourniquet"), Color.FromHex("#A02020")));
-        if (chipStrip.ChildCount > 0)
-        {
-            chipStrip.Margin = new Thickness(13, 5, 0, 0);
-            stack.AddChild(chipStrip);
-        }
+            tags.Add((Loc.GetString("cmu-medical-scanner-chip-tourniquet"), Color.FromHex("#FF6060")));
 
-        return card;
+        var hurt = part.Brute > 0 || part.Burn > 0 || part.Current < part.Max;
+        if (!hurt && tags.Count == 0)
+            return null;
+
+        return BuildLimbRow(
+            index,
+            PartDisplayName(part.Type, part.Symmetry),
+            FormatDamage(part.Brute, part.UntreatedBrute),
+            part.Brute > 0 ? BruteColor : Color.White,
+            FormatDamage(part.Burn, part.UntreatedBurn),
+            part.Burn > 0 ? BurnColor : Color.White,
+            tags);
     }
 
-    private Control BuildSeveredRow(HealthScannerBuiState uiState, BodyPartType type, BodyPartSymmetry sym)
+    private Control BuildSeveredRow(HealthScannerBuiState uiState, BodyPartType type, BodyPartSymmetry sym, int index)
     {
-        var card = new PanelContainer
+        var tags = new List<(string Text, Color Color)>
         {
-            Margin = new Thickness(0, 0, 0, 6),
-            HorizontalExpand = true,
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#10191E"),
-                BorderColor = Color.FromHex("#3B2226"),
-                BorderThickness = new Thickness(1),
-            },
+            (SeverityWord(PartSeverity.Severed), SeverityTextColor(PartSeverity.Severed)),
         };
-
-        var stack = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Vertical,
-            Margin = new Thickness(8, 6),
-            HorizontalExpand = true,
-        };
-        card.AddChild(stack);
-
-        var row = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Horizontal,
-            HorizontalExpand = true,
-        };
-        stack.AddChild(row);
-
-        row.AddChild(new PanelContainer
-        {
-            MinSize = new Vector2(5, 28),
-            Margin = new Thickness(0, 0, 8, 0),
-            PanelOverride = new StyleBoxFlat { BackgroundColor = SeverityFillColor(PartSeverity.Severed) },
-        });
-        row.AddChild(new Label
-        {
-            Text = PartDisplayName(type, sym),
-            MinWidth = 112,
-            VerticalAlignment = Control.VAlignment.Center,
-            ClipText = true,
-        });
-        // Em-dash instead of "0%" so a missing limb reads visually
-        // distinct from a 0-HP attached one.
-        row.AddChild(new Label
-        {
-            Text = "—",
-            MinWidth = 48,
-            VerticalAlignment = Control.VAlignment.Center,
-            FontColorOverride = SeverityTextColor(PartSeverity.Severed),
-        });
-        row.AddChild(BuildHpBar(0f, PartSeverity.Severed));
-
-        row.AddChild(new Label
-        {
-            Text = SeverityWord(PartSeverity.Severed),
-            MinWidth = 82,
-            Margin = new Thickness(8, 0, 0, 0),
-            VerticalAlignment = Control.VAlignment.Center,
-            FontColorOverride = SeverityTextColor(PartSeverity.Severed),
-        });
 
         // cmu edit start
         if (uiState.CMUStumps is { } stumps)
@@ -634,106 +544,64 @@ public sealed partial class HealthScannerBui : BoundUserInterface
                 if (stump.Type != type || stump.Symmetry != sym)
                     continue;
 
-                var stumpStrip = new BoxContainer
-                {
-                    Orientation = LayoutOrientation.Horizontal,
-                    HorizontalExpand = true,
-                    Margin = new Thickness(13, 5, 0, 0),
-                };
-                stumpStrip.AddChild(stump.Clamped
-                    ? BuildChip(Loc.GetString("cmu-medical-scanner-chip-stump-clamped"), Color.FromHex("#A02020"))
-                    : BuildChip(Loc.GetString("cmu-medical-scanner-chip-stump-bleeding",
-                        ("tier", BleedTierName(ExternalBleedTier.Arterial))), Color.FromHex("#E01818")));
-                stack.AddChild(stumpStrip);
+                tags.Add(stump.Clamped
+                    ? (Loc.GetString("cmu-medical-scanner-chip-stump-clamped"), Color.FromHex("#FF6060"))
+                    : (Loc.GetString("cmu-medical-scanner-chip-stump-bleeding",
+                        ("tier", BleedTierName(ExternalBleedTier.Arterial))), Color.FromHex("#FF3B3B")));
                 break;
             }
         }
         // cmu edit end
-        return card;
+
+        return BuildLimbRow(index, PartDisplayName(type, sym), "—", MutedColor, "—", MutedColor, tags);
     }
 
-    private static Control BuildHpBar(float pct, PartSeverity sev, float? recoverablePct = null)
+    private static Control BuildLimbRow(
+        int index,
+        string name,
+        string brute,
+        Color bruteColor,
+        string burn,
+        Color burnColor,
+        List<(string Text, Color Color)> tags)
     {
-        const int trackWidth = 140;
-        const int barHeight = 10;
-        var track = new PanelContainer
+        var panel = new PanelContainer
         {
-            MinSize = new Vector2(trackWidth, barHeight),
-            VerticalAlignment = Control.VAlignment.Center,
+            HorizontalExpand = true,
             PanelOverride = new StyleBoxFlat
             {
-                BackgroundColor = Color.FromHex("#223039"),
-                BorderColor = Color.FromHex("#314B55"),
-                BorderThickness = new Thickness(1),
+                BackgroundColor = index % 2 == 0 ? Color.FromHex("#272B30") : Color.Transparent,
             },
         };
-        var currentPct = Math.Clamp(pct, 0f, 1f);
-        var recoverPct = recoverablePct is { } target
-            ? Math.Clamp(target, currentPct, 1f)
-            : currentPct;
-
-        // For severed parts force the bar to render as a solid dark-red
-        // strip so the medic sees the "limb gone" cue at a glance, even
-        // though pct is 0.
-        var currentWidth = sev == PartSeverity.Severed
-            ? trackWidth
-            : (int)Math.Round(trackWidth * currentPct);
-        var recoverableWidth = sev == PartSeverity.Severed
-            ? 0
-            : (int)Math.Round(trackWidth * recoverPct) - currentWidth;
-
-        if (currentWidth > 0 || recoverableWidth > 0)
+        var row = new BoxContainer
         {
-            var fillRow = new BoxContainer { Orientation = LayoutOrientation.Horizontal };
-            if (currentWidth > 0)
-            {
-                fillRow.AddChild(new PanelContainer
-                {
-                    MinSize = new Vector2(currentWidth, barHeight),
-                    PanelOverride = new StyleBoxFlat
-                    {
-                        BackgroundColor = sev == PartSeverity.Severed
-                            ? SeverityFillColor(sev)
-                            : Color.FromHex("#3FB44A"),
-                    },
-                });
-            }
-            if (recoverableWidth > 0)
-            {
-                fillRow.AddChild(new PanelContainer
-                {
-                    MinSize = new Vector2(recoverableWidth, barHeight),
-                    PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#D9B43A") },
-                });
-            }
-            track.AddChild(fillRow);
-        }
-        return track;
+            Orientation = LayoutOrientation.Horizontal,
+            Margin = new Thickness(3, 1),
+            HorizontalExpand = true,
+        };
+        panel.AddChild(row);
+
+        var nameLabel = new Label { Text = name, MinWidth = 80, ClipText = true };
+        nameLabel.AddStyleClass(CMUMedicalUniformScaler.BoldStyleClass);
+        row.AddChild(nameLabel);
+        row.AddChild(new Label { Text = brute, MinWidth = 40, FontColorOverride = bruteColor });
+        row.AddChild(new Label { Text = burn, MinWidth = 40, FontColorOverride = burnColor });
+
+        var tagRow = new BoxContainer
+        {
+            Orientation = LayoutOrientation.Horizontal,
+            HorizontalExpand = true,
+            RectClipContent = true,
+            SeparationOverride = 5,
+        };
+        foreach (var (text, color) in tags)
+            tagRow.AddChild(new Label { Text = $"[{text}]", FontColorOverride = color });
+        row.AddChild(tagRow);
+
+        return panel;
     }
 
-    private static float? LineGraftRecoverableFraction(CMUBodyPartReadout part)
-    {
-        var max = Math.Max(1f, part.Max.Float());
-        var current = Math.Clamp(part.Current.Float(), 0f, max);
-        if (current >= max)
-            return null;
-
-        var cap = current + (max - current) * 0.5f;
-        if (part.WoundDescriptor is { } wound)
-            cap = Math.Min(cap, max * LargestWoundTreatmentCap(wound, part.WoundDamage.Float()));
-
-        cap = Math.Clamp(cap, current, max);
-        return cap > current
-            ? cap / max
-            : null;
-    }
-
-    private static float LargestWoundTreatmentCap(WoundSize size, float damage)
-    {
-        return Math.Clamp(1f - WoundSizeProfile.FieldTreatmentPenalty(size, damage), 0.35f, 1f);
-    }
-
-    private void AppendFractureChip(BoxContainer strip, HealthScannerBuiState uiState, CMUBodyPartReadout part)
+    private void AppendFractureTag(List<(string Text, Color Color)> tags, HealthScannerBuiState uiState, CMUBodyPartReadout part)
     {
         if (uiState.CMUFractures is not { Count: > 0 } fractures)
             return;
@@ -741,16 +609,17 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         {
             if (frac.Part != part.Type || frac.Symmetry != part.Symmetry)
                 continue;
-            var label = frac.ExactSeverity ? frac.Severity.ToString()
-                : Loc.GetString("cmu-medical-scanner-chip-fracture-vague");
+            var label = frac.ExactSeverity
+                ? Loc.GetString("cmu-medical-scanner-fracture", ("severity", frac.Severity.ToString()))
+                : Loc.GetString("cmu-medical-scanner-fracture-vague");
             if (frac.Suppressed)
                 label += Loc.GetString("cmu-medical-scanner-chip-suppressed-suffix");
-            strip.AddChild(BuildChip(label, SeverityFillColor(SeverityFromFracture(frac.Severity))));
+            tags.Add((label, SeverityTextColor(SeverityFromFracture(frac.Severity))));
             return;
         }
     }
 
-    private void AppendBleedChip(BoxContainer strip, HealthScannerBuiState uiState, CMUBodyPartReadout part)
+    private void AppendBleedTag(List<(string Text, Color Color)> tags, HealthScannerBuiState uiState, CMUBodyPartReadout part)
     {
         if (uiState.CMUInternalBleeds is not { Count: > 0 } bleeds)
             return;
@@ -765,28 +634,25 @@ public sealed partial class HealthScannerBui : BoundUserInterface
             {
                 continue;
             }
-            strip.AddChild(BuildChip(Loc.GetString("cmu-medical-scanner-chip-bleed"),
-                Color.FromHex("#A02020")));
+            tags.Add((Loc.GetString("cmu-medical-scanner-bleed-internal"), Color.FromHex("#FF6060")));
             return;
         }
     }
 
     // cmu edit start
-    private static void AppendExternalBleedChip(BoxContainer strip, CMUBodyPartReadout part)
+    private static void AppendExternalBleedTag(List<(string Text, Color Color)> tags, CMUBodyPartReadout part)
     {
         if (part.ExternalBleeding == ExternalBleedTier.None)
             return;
 
         var color = part.ExternalBleeding switch
         {
-            ExternalBleedTier.Minor => Color.FromHex("#9A6A30"),
-            ExternalBleedTier.Moderate => Color.FromHex("#B05A28"),
-            ExternalBleedTier.Severe => Color.FromHex("#B83030"),
-            _ => Color.FromHex("#E01818"),
+            ExternalBleedTier.Minor => Color.FromHex("#D9A05B"),
+            ExternalBleedTier.Moderate => Color.FromHex("#E08A4A"),
+            ExternalBleedTier.Severe => Color.FromHex("#FF6060"),
+            _ => Color.FromHex("#FF3B3B"),
         };
-        strip.AddChild(BuildChip(
-            Loc.GetString("cmu-medical-scanner-chip-external-bleed", ("tier", BleedTierName(part.ExternalBleeding))),
-            color));
+        tags.Add((Loc.GetString("cmu-medical-scanner-bleeding-tier", ("tier", BleedTierName(part.ExternalBleeding))), color));
     }
 
     private static string BleedTierName(ExternalBleedTier tier) => Loc.GetString(tier switch
@@ -798,64 +664,34 @@ public sealed partial class HealthScannerBui : BoundUserInterface
     });
     // cmu edit end
 
-    private static void AppendWoundChip(BoxContainer strip, CMUBodyPartReadout part)
+    private static void AppendWoundTag(List<(string Text, Color Color)> tags, CMUBodyPartReadout part)
     {
         if (part.WoundDescriptor is not { } descriptor)
             return;
 
-        strip.AddChild(BuildChip(
-            WoundChipText(descriptor, part.WoundDamage.Float()),
-            WoundDescriptorColor(descriptor, part.WoundDamage.Float())));
+        var damage = part.WoundDamage.Float();
+        tags.Add((WoundSizeProfile.StageName(descriptor, damage), WoundDescriptorColor(descriptor, damage)));
     }
 
-    private static void AppendShrapnelChip(BoxContainer strip, CMUBodyPartReadout part)
+    private static void AppendShrapnelTag(List<(string Text, Color Color)> tags, CMUBodyPartReadout part)
     {
         if (part.ShrapnelFragments <= 0)
             return;
 
         var color = part.ShrapnelSeverity >= 30f
-            ? Color.FromHex("#9A6A22")
-            : Color.FromHex("#756C5A");
-        strip.AddChild(BuildChip(
-            Loc.GetString("cmu-medical-scanner-chip-shrapnel", ("count", part.ShrapnelFragments)),
-            color));
-    }
-
-    private static string WoundChipText(WoundSize size, float damage)
-    {
-        return WoundSizeProfile.StageName(size, damage);
+            ? Color.FromHex("#D9A05B")
+            : Color.FromHex("#B8AE98");
+        tags.Add((Loc.GetString("cmu-medical-scanner-chip-shrapnel", ("count", part.ShrapnelFragments)), color));
     }
 
     private static Color WoundDescriptorColor(WoundSize descriptor, float damage) => WoundSizeProfile.SeverityRank(descriptor, damage) switch
     {
-        0 => Color.FromHex("#7A4040"),
-        1 => Color.FromHex("#8A3030"),
-        2 => Color.FromHex("#A02020"),
-        3 => Color.FromHex("#B01818"),
-        _ => Color.FromHex("#8A3030"),
+        0 => Color.FromHex("#D08A8A"),
+        1 => Color.FromHex("#E07070"),
+        2 => Color.FromHex("#FF6060"),
+        3 => Color.FromHex("#FF4040"),
+        _ => Color.FromHex("#E07070"),
     };
-
-    private static Control BuildChip(string text, Color background)
-    {
-        var panel = new PanelContainer
-        {
-            Margin = new Thickness(0, 0, 5, 0),
-            VerticalAlignment = Control.VAlignment.Center,
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = background,
-                BorderColor = Color.FromHex("#D8E2E4"),
-                BorderThickness = new Thickness(1),
-            },
-        };
-        panel.AddChild(new Label
-        {
-            Text = text,
-            FontColorOverride = Color.White,
-            Margin = new Thickness(7, 2),
-        });
-        return panel;
-    }
 
     private void BuildStatusBanner(HealthScannerBuiState uiState)
     {
@@ -928,73 +764,48 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         // patient genuinely has nothing in there.
         if (uiState.CMUOrgans is null)
         {
-            _window!.CMUOrgansContainer.AddChild(BuildSkillHint(
+            _window!.CMUBodyChartContainer.AddChild(BuildSkillHint(
                 "cmu-medical-scanner-skill-hint-organs"));
             return;
         }
 
         if (uiState.CMUSyntheticPhysiology)
         {
-            _window!.CMUOrgansContainer.AddChild(BuildSkillHint(
+            _window!.CMUBodyChartContainer.AddChild(BuildSkillHint(
                 "cmu-medical-scanner-synthetic-physiology"));
         }
 
         if (uiState.CMUOrgans is not { Count: > 0 } organs)
             return;
 
+        // only dmged / removed organs display
+        var rows = 0;
         foreach (var organ in organs)
         {
             var sev = organ.Removed ? PartSeverity.Severed : SeverityFromOrganStage(organ.Stage);
-            var card = new PanelContainer
-            {
-                Margin = new Thickness(0, 0, 0, 5),
-                HorizontalExpand = true,
-                PanelOverride = new StyleBoxFlat
-                {
-                    BackgroundColor = Color.FromHex("#10191E"),
-                    BorderColor = Color.FromHex("#263A42"),
-                    BorderThickness = new Thickness(1),
-                },
-            };
-            var row = new BoxContainer
-            {
-                Orientation = LayoutOrientation.Horizontal,
-                Margin = new Thickness(7, 5),
-                HorizontalExpand = true,
-            };
-            card.AddChild(row);
-            row.AddChild(new PanelContainer
-            {
-                MinSize = new Vector2(10, 10),
-                Margin = new Thickness(0, 4, 6, 0),
-                VerticalAlignment = Control.VAlignment.Center,
-                PanelOverride = new StyleBoxFlat { BackgroundColor = SeverityFillColor(sev) },
-            });
+            if (sev == PartSeverity.Healthy)
+                continue;
+
+            var row = new BoxContainer { Orientation = LayoutOrientation.Horizontal };
             row.AddChild(new Label
             {
-                Text = OrganDisplayName(organ.OrganName),
-                MinWidth = 80,
+                Text = $"{OrganDisplayName(organ.OrganName)}:",
+                MinWidth = 90,
+                FontColorOverride = MutedColor,
             });
-            row.AddChild(new Label
+            var status = new Label
             {
                 Text = organ.Removed
                     ? Loc.GetString("cmu-medical-scanner-organ-removed-short")
-                    : organ.Stage.ToString(),
-                MinWidth = 70,
+                    : Loc.GetString("cmu-medical-scanner-organ-damage",
+                        ("stage", organ.Stage.ToString()),
+                        ("damage", (organ.Max - organ.Current).Int())),
                 FontColorOverride = SeverityTextColor(sev),
-            });
-            // Hide Current/Max HP on Removed organs — the entity isn't on the
-            // body, so Current is undefined.
-            if (!organ.Removed)
-            {
-                row.AddChild(new Label
-                {
-                    Text = $"{organ.Current.Int()}/{organ.Max.Int()}",
-                    MinWidth = 64,
-                    FontColorOverride = Color.FromHex("#5B88B0"),
-                });
-            }
-            _window!.CMUOrgansContainer.AddChild(card);
+            };
+            status.AddStyleClass(CMUMedicalUniformScaler.BoldStyleClass);
+            row.AddChild(status);
+            _window!.CMUOrgansContainer.AddChild(row);
+            rows++;
         }
     }
 
@@ -1059,16 +870,6 @@ public sealed partial class HealthScannerBui : BoundUserInterface
             Content.Shared.CMU14.Medical.Anatomy.Organs.OrganDamageStage.Dead => PartSeverity.Severed,
             _ => PartSeverity.Healthy,
         };
-
-    private static Color SeverityFillColor(PartSeverity sev) => sev switch
-    {
-        PartSeverity.Healthy => Color.FromHex("#3FB44A"),
-        PartSeverity.Bruised => Color.FromHex("#9CCC42"),
-        PartSeverity.Damaged => Color.FromHex("#FFAA00"),
-        PartSeverity.Critical => Color.FromHex("#E04040"),
-        PartSeverity.Severed => Color.FromHex("#600000"),
-        _ => Color.Gray,
-    };
 
     private static Color SeverityTextColor(PartSeverity sev) => sev switch
     {
@@ -1152,24 +953,6 @@ public sealed partial class HealthScannerBui : BoundUserInterface
     {
         if (_player.LocalEntity is { } viewer)
             SendMessage(new OpenChangeHolocardUIEvent(_entities.GetNetEntity(viewer), _lastTarget));
-    }
-
-    private static void AddGroup(RichTextLabel label, Color color, Content.Shared.FixedPoint.FixedPoint2 damage, bool untreated, string labelStr)
-    {
-        var msg = new FormattedMessage();
-        msg.AddText($"{labelStr}: ");
-        msg.PushColor(color);
-
-        var text = damage
-            .Int()
-            .ToString(CultureInfo.InvariantCulture);
-        if (untreated)
-            msg.AddText($"{{{text}}}");
-        else
-            msg.AddText(text);
-
-        msg.Pop();
-        label.SetMessage(msg);
     }
 
     private void MedicalAdvice(HealthScannerBuiState uiState, HealthScannerWindow window)
@@ -1297,40 +1080,10 @@ public sealed partial class HealthScannerBui : BoundUserInterface
 
     private static void AddAdvice(AdviceRecommendation recommendation, HealthScannerWindow window)
     {
-        var accent = AdviceAccentColor(recommendation.Priority);
-        var panel = new PanelContainer
-        {
-            HorizontalExpand = true,
-            Margin = new Thickness(0, 0, 0, 5),
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#10191E"),
-                BorderColor = Color.FromHex("#263A42"),
-                BorderThickness = new Thickness(1),
-            },
-        };
-
-        var row = new BoxContainer
-        {
-            Orientation = LayoutOrientation.Horizontal,
-            Margin = new Thickness(7, 5),
-            HorizontalExpand = true,
-        };
-        panel.AddChild(row);
-
-        row.AddChild(new PanelContainer
-        {
-            MinSize = new Vector2(5, 24),
-            Margin = new Thickness(0, 0, 7, 0),
-            PanelOverride = new StyleBoxFlat { BackgroundColor = accent },
-        });
-
-        var label = new CMUScaledRichTextLabel();
-        label.SetMarkupPermissive(recommendation.Text);
-        label.HorizontalExpand = true;
-        row.AddChild(label);
-
-        window.AdviceContainer.AddChild(panel);
+        var accent = AdviceAccentColor(recommendation.Priority).ToHex();
+        var label = new CMUScaledRichTextLabel { HorizontalExpand = true };
+        SetSizedMarkup(label, $"[color={accent}]\u25B8[/color] {recommendation.Text}");
+        window.AdviceContainer.AddChild(label);
     }
 
     private static Color AdviceAccentColor(int priority)
