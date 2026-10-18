@@ -92,7 +92,9 @@
   id: RandomDrugAllergy
   name: au14-trait-drugallergy-name
   description: au14-trait-drugallergy-desc
-  category: Disabilities
+  # cmu edit start: in the drug allergy section, one allergy per character
+  category: CMUDrugAllergies
+  # cmu edit end
   # cmu edit start: disabilities are limited to four
   cost: 1
   # cmu edit end

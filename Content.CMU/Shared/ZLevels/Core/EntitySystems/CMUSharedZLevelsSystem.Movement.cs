@@ -1134,7 +1134,7 @@ public abstract partial class CMUSharedZLevelsSystem
 
             //No ZEntities found, check floor tiles
             var tileFound = _map.TryGetTileRef(checkingGridUid, checkingGrid, checkingTile, out var tileRef);
-            var tileEmpty = !tileFound || tileRef.Tile.IsEmpty;
+            var tileEmpty = !tileFound || CMUZLevelOpeningCache.IsFallThroughTile(tileRef.Tile, TilDefMan);
             var tileType = _debugFalling && tileFound ? tileRef.Tile.TypeId.ToString() : "none";
             if (tileFound &&
                 !tileEmpty)
@@ -1717,7 +1717,7 @@ public abstract partial class CMUSharedZLevelsSystem
             return false;
 
         if (_map.TryGetTileRef(aboveGrid, mapAboveGrid, world, out var tileRef) &&
-            !tileRef.Tile.IsEmpty)
+            !CMUZLevelOpeningCache.IsFallThroughTile(tileRef.Tile, TilDefMan))
             return true;
 
         return false;
@@ -1741,7 +1741,7 @@ public abstract partial class CMUSharedZLevelsSystem
             return false;
 
         if (_map.TryGetTileRef(aboveGrid, mapAboveGrid, world, out var tileRef) &&
-            !tileRef.Tile.IsEmpty)
+            !CMUZLevelOpeningCache.IsFallThroughTile(tileRef.Tile, TilDefMan))
             return true;
 
         return false;
@@ -1769,7 +1769,7 @@ public abstract partial class CMUSharedZLevelsSystem
         {
             var tile = _map.WorldToTile(checkingMap, checkingGrid, worldPosition);
             if (_map.TryGetTileRef(checkingMap, checkingGrid, tile, out var tileRef) &&
-                !tileRef.Tile.IsEmpty)
+                !CMUZLevelOpeningCache.IsFallThroughTile(tileRef.Tile, TilDefMan))
             {
                 if (!_mapQuery.TryComp(checkingMap.Owner, out var map))
                     return false;

@@ -76,6 +76,13 @@ public sealed class CMUOverwatchFeedsWindow : DefaultWindow
         [Dependency] private IEntityManager _entities = default!;
 
         public readonly Button Close;
+        private readonly Button _nightVision;
+
+        /// <summary>
+        ///     The feed's own eye with lighting turned off, for night vision. It copies the camera's eye every frame
+        ///     rather than changing it, so other screens watching the same camera aren't affected.
+        /// </summary>
+        private readonly Robust.Shared.Graphics.Eye _nightVisionEye = new() { DrawLight = false };
         public NetEntity? Target { get; private set; }
 
         private readonly EyeLerpingSystem _eyeLerping;
@@ -99,6 +106,12 @@ public sealed class CMUOverwatchFeedsWindow : DefaultWindow
 
             _name = new Label { HorizontalExpand = true, ClipText = true, StyleClasses = { StyleNano.StyleClassCrtHeading } };
             Close = new Button { Text = "X", ToolTip = Loc.GetString("cmu-overwatch-feeds-close") };
+            _nightVision = new Button
+            {
+                Text = Loc.GetString("cmu-overwatch-feeds-night-vision"),
+                ToolTip = Loc.GetString("cmu-overwatch-feeds-night-vision-tooltip"),
+                ToggleMode = true,
+            };
 
             _viewport = new ScalingViewport
             {
@@ -144,7 +157,7 @@ public sealed class CMUOverwatchFeedsWindow : DefaultWindow
                     new BoxContainer
                     {
                         Orientation = LayoutOrientation.Horizontal,
-                        Children = { _name, Close },
+                        Children = { _name, _nightVision, Close },
                     },
                     screen,
                 },
@@ -158,6 +171,7 @@ public sealed class CMUOverwatchFeedsWindow : DefaultWindow
             Target = feed?.Target;
             _name.Text = feed?.Name ?? Loc.GetString("cmu-overwatch-feeds-empty");
             Close.Visible = feed != null;
+            _nightVision.Visible = feed != null;
 
             if (_eyeNet == feed?.Eye)
                 return;
@@ -189,7 +203,22 @@ public sealed class CMUOverwatchFeedsWindow : DefaultWindow
 
             if (_eye is { } current && _entities.TryGetComponent(current, out EyeComponent? eyeComp) && eyeComp.Eye != null)
             {
-                _viewport.Eye = eyeComp.Eye;
+                _vhs.NightVision = _nightVision.Pressed;
+                if (_nightVision.Pressed)
+                {
+                    var source = eyeComp.Eye;
+                    _nightVisionEye.Position = source.Position;
+                    _nightVisionEye.Rotation = source.Rotation;
+                    _nightVisionEye.Zoom = source.Zoom;
+                    _nightVisionEye.Offset = source.Offset;
+                    _nightVisionEye.DrawFov = source.DrawFov;
+                    _viewport.Eye = _nightVisionEye;
+                }
+                else
+                {
+                    _viewport.Eye = eyeComp.Eye;
+                }
+
                 SetSignal(true);
             }
             else

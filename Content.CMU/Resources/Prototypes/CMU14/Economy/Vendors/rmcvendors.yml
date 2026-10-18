@@ -285,6 +285,8 @@
         amount: 40
     - name: Tools
       entries:
+      - id: RMCAttachmentRailFlashlight
+        amount: 8
       - id: CMEntrenchingTool
         recommended: true
         amount: 30
@@ -590,7 +592,6 @@
       choices: { CMUPlatoonAirCrewGloves: 1 }
       entries:
       - id: AU14PVEHandsInsulatedBlackMarine
-      - id: AU14PVEHandsFingerlessBlackGloves
     - name: Headgear
       choices: { CMUPlatoonAirCrewHeadgear: 1 }
       entries:
@@ -850,6 +851,13 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORSquadAutomaticRifleman
+    - AU14JobGOVFORSquadAutomaticRiflemanRMC
+    - AU14JobGOVFORSquadAutomaticRiflemanUPP
+    - AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+    - AU14JobOPFORSquadAutomaticRifleman
     sections:
     - name: Essential Equipment
       takeAll: CMUAREssentialEquipment
@@ -890,6 +898,14 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORSectionSergeant
+    - AU14JobGOVFORSectionSergeantCMBCIU
+    - AU14JobGOVFORSectionSergeantRMC
+    - AU14JobGOVFORSectionSergeantUPP
+    - AU14JobGOVFORSectionSergeantWYPMC
+    - AU14JobOPFORSectionSergeant
     sections:
     - name: Helmets and Hats
       choices: { CMHat: 1 }
@@ -1067,7 +1083,6 @@
     - name: Attachments
       choices: { CMUAttachmentsVendor: 1 }
       entries:
-      - id: RMCAttachmentRailFlashlight
       - id: AU14AttachmentTwoPointSling
 
 # TODO: Proper RMC RTOs

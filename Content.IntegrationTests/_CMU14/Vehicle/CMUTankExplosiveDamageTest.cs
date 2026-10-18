@@ -36,10 +36,9 @@ namespace Content.IntegrationTests.CMU14.Vehicle;
 [TestFixture]
 public sealed class CMUTankExplosiveDamageTest : GameTest
 {
-    private const string ConsoleId = "VehicleSupplyConsole";
     private const string TankId = "VehicleTank";
 
-    // A combat-loaded tank: every slot the supply console can fill on a VehicleTank.
+    // Test-only combat loadout; live supply entries intentionally expose no selectable options.
     private static readonly Dictionary<string, string> TankLoadout = new()
     {
         ["primary"] = "VehicleTankLTBCannon",
@@ -166,9 +165,7 @@ public sealed class CMUTankExplosiveDamageTest : GameTest
         {
             if (loaded)
             {
-                Assert.That(SProtoMan.Index<EntityPrototype>(ConsoleId)
-                    .TryComp<VehicleSupplyConsoleComponent>(out var console, SEntMan.ComponentFactory), Is.True);
-                var entry = console!.Vehicles.Single(v => v.Vehicle.Id == TankId);
+                var entry = CreateTankLoadoutEntry();
                 Assert.That(Server.System<VehicleSupplySystem>().DebugApplyLoadoutForTest(vehicle, entry, TankLoadout),
                     Is.True);
             }
@@ -187,6 +184,40 @@ public sealed class CMUTankExplosiveDamageTest : GameTest
 
         await RunTicksSync(5);
         return (map, vehicle);
+    }
+
+    private static VehicleSupplyEntry CreateTankLoadoutEntry()
+    {
+        return new VehicleSupplyEntry
+        {
+            Vehicle = TankId,
+            LoadoutCategories = new List<VehicleSupplyLoadoutCategory>
+            {
+                CreateTankLoadoutCategory("primary", "primary::turret-cannon"),
+                CreateTankLoadoutCategory("secondary", "primary::turret-launcher"),
+                CreateTankLoadoutCategory("standardtreads", "wheel-1"),
+                CreateTankLoadoutCategory("armor", "armor"),
+                CreateTankLoadoutCategory("support", "support"),
+            },
+        };
+    }
+
+    private static VehicleSupplyLoadoutCategory CreateTankLoadoutCategory(string categoryId, string slot)
+    {
+        var item = TankLoadout[categoryId];
+        return new VehicleSupplyLoadoutCategory
+        {
+            Id = categoryId,
+            Options = new List<VehicleSupplyLoadoutOption>
+            {
+                new()
+                {
+                    Id = item,
+                    Item = item,
+                    Slot = slot,
+                },
+            },
+        };
     }
 
     /// <summary>Waits until the explosion system has nothing queued or in progress.</summary>

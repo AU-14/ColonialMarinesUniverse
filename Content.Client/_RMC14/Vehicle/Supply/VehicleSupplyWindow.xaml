@@ -4,7 +4,7 @@
     xmlns:ui="clr-namespace:Robust.Client.UserInterface.Controls;assembly=Robust.Client"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:rmcui="clr-namespace:Content.Client._RMC14.Vehicle.Ui"
-    MinSize="900 400">
+    MinSize="450 400">
     <PanelContainer HorizontalExpand="True" VerticalExpand="True">
         <PanelContainer.PanelOverride>
             <graphics:StyleBoxFlat
@@ -18,7 +18,9 @@
                 <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True" VerticalExpand="True">
                     <!-- CMU14 -->
                     <Label Name="AllowanceLabel" Access="Public"/>
-                    <Label Name="NoRefundLabel" Text="{Loc 'cmu-vehicle-supply-no-refund'}" FontColorOverride="#E0A040"/>
+                    <Label Name="NoRefundLabel" Text="{Loc 'cmu-vehicle-supply-yes-refund'}" FontColorOverride="#E0A040"/>
+                    <Label Name="NoRefundLabel2" Text="{Loc 'cmu-vehicle-supply-yes-refund2'}" FontColorOverride="#E0A040"/>
+                    <Label Name="NoRefundLabel3" Text="{Loc 'cmu-vehicle-supply-yes-refund3'}" FontColorOverride="#FF0000"/>
                     <Label Name="IssuedLabel" Access="Public"/>
                     <Label Name="StatusLabel" Access="Public" FontColorOverride="#9DB5D1"/>
                 </BoxContainer>
