@@ -176,4 +176,4 @@ cmu-motion-sick-worse-3 = That's it, you're going to be sick!
 cmu-motion-sick-worse-4 = Your lunch comes back up, and your head spins worse than before.
 
 cmu-trait-auto-ignore-name = Auto-ignore incompatible traits
-cmu-trait-auto-ignore-desc = Not a trait for your character, but a setting: when you join a job that doesn't allow some of your traits, those traits are left off for that round instead of keeping you out of the job. Every other trait still applies as normal.
+cmu-trait-auto-ignore-desc = When you join a job that doesn't allow some of your traits, those traits are left off for that round instead of keeping you out of the job.
