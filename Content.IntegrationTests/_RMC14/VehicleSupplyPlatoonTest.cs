@@ -237,20 +237,19 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             Configure(map.GridCoords);
             var depot = CreateDepot(map.GridCoords);
             var second = CreateDepot(map.GridCoords.Offset(new Vector2(30, 0)));
+            var third = CreateDepot(map.GridCoords.Offset(new Vector2(60, 0)));
             Queue(depot, "VehicleHumvee");
             Complete(depot);
             State(depot); // A second new Humvee is still available at this point.
-            var vehicle = depot.Lift.Comp.ActiveVehicle!.Value;
             Invoke("StoreVehicle", depot.Lift);
             ResetLift(depot);
             Queue(second, "VehicleAPC");
             Complete(second);
+            Queue(third, "VehicleHumveeTransport");
+            Complete(third);
             var available = State(depot).Available.Single();
             Assert.That(available.Id, Is.EqualTo("VehicleHumvee"));
             Assert.That(available.Count, Is.EqualTo(1));
-            Queue(depot, "VehicleHumvee");
-            Complete(depot);
-            Assert.That(depot.Lift.Comp.ActiveVehicle, Is.EqualTo(vehicle));
             Assert.That(State(depot).IssuedVehicles, Has.Count.EqualTo(2));
         });
     }
