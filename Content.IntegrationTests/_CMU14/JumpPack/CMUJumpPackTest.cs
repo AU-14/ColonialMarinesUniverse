@@ -9,6 +9,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Movement.Components;
+using Content.Shared.Verbs;
 using Robust.Shared.Map.Components;
 
 namespace Content.IntegrationTests.CMU14.JumpPack;
@@ -101,6 +102,34 @@ public sealed class CMUJumpPackTest : GameTest
                 Direction.SouthWest, Direction.West, Direction.NorthWest, Direction.North,
             }));
             Assert.That(CMUJumpPackSystem.NextDirection(Direction.NorthEast, false), Is.EqualTo(Direction.East));
+        });
+    }
+
+    [Test]
+    public async Task AltClickRotatesHeadingWithoutOpeningGasValve()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            Equip();
+            var tank = SComp<GasTankComponent>(_pack);
+            var valveOpen = tank.ReleaseValveOpen;
+            var before = Pack.BoostDirection;
+            var mode = Pack.EightDirections;
+            var fuel = Moles;
+            var verbs = SEntMan.System<SharedVerbSystem>().GetLocalVerbs(_pack, _rider, typeof(AlternativeVerb));
+            Assert.That(verbs, Is.Not.Empty);
+            var primary = verbs.Min!;
+            Assert.That(primary.Disabled, Is.False);
+            Assert.That(primary.Act, Is.Not.Null);
+            primary.Act!();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(Pack.BoostDirection, Is.EqualTo(CMUJumpPackSystem.NextDirection(before, mode)));
+                Assert.That(Pack.EightDirections, Is.EqualTo(mode));
+                Assert.That(tank.ReleaseValveOpen, Is.EqualTo(valveOpen));
+                Assert.That(Moles, Is.EqualTo(fuel));
+            });
         });
     }
 

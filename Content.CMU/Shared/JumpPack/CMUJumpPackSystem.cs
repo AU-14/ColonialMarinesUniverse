@@ -165,6 +165,12 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
         var user = args.User;
         args.Verbs.Add(new AlternativeVerb
         {
+            Text = Loc.GetString("cmu-jump-pack-verb-direction"),
+            Priority = 10,
+            Act = () => RotateDirection(ent, user),
+        });
+        args.Verbs.Add(new AlternativeVerb
+        {
             Text = Loc.GetString("cmu-jump-pack-verb-toggle-mode",
                 ("mode", ModeName(!ent.Comp.EightDirections))),
             Act = () => SetEightDirections(ent, !ent.Comp.EightDirections, user),
@@ -233,14 +239,19 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
             return;
 
         args.Handled = true;
+        RotateDirection(ent, args.Performer);
+    }
+
+    private void RotateDirection(Entity<CMUJumpPackComponent> ent, EntityUid user)
+    {
         var comp = ent.Comp;
         comp.BoostDirection = NextDirection(comp.BoostDirection, comp.EightDirections);
         Dirty(ent);
 
         _popup.PopupClient(Loc.GetString("cmu-jump-pack-direction-set",
                 ("direction", DirectionName(comp.BoostDirection))),
-            args.Performer,
-            args.Performer);
+            user,
+            user);
     }
 
     private void OnJumpAction(Entity<CMUJumpPackComponent> ent, ref CMUJumpPackJumpActionEvent args)

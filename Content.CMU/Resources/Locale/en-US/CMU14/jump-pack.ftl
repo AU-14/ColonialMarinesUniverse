@@ -7,7 +7,7 @@ ent-CMUJumpPackFilled = { ent-CMUJumpPack }
 ent-CMUActionJumpPackBoost = Jump Pack Boost
     .desc = Fire the thrusters and dash six tiles along the set heading.
 ent-CMUActionJumpPackDirection = Jump Pack Heading
-    .desc = Rotate the boost heading clockwise. Alt-click the pack to switch between four and eight headings.
+    .desc = Rotate the boost heading clockwise. Alt-click the pack to rotate its heading, or use its context menu to switch between four and eight headings.
 ent-CMUActionJumpPackJump = Jump Pack Leap
     .desc = Blast upward to the level above. Shares a cooldown with the boost.
 ent-CMUActionJumpPackHover = Jump Pack Hover
@@ -28,6 +28,7 @@ cmu-jump-pack-mode-eight = eight headings
 
 cmu-jump-pack-examine = The thrusters are aimed [color=cyan]{ $direction }[/color]. The heading dial is set to [color=cyan]{ $mode }[/color].
 cmu-jump-pack-verb-toggle-mode = Switch to { $mode }
+cmu-jump-pack-verb-direction = Rotate boost heading
 cmu-jump-pack-mode-set = Heading dial set to { $mode }. Thrusters aimed { $direction }.
 cmu-jump-pack-direction-set = Thrusters aimed { $direction }.
 
