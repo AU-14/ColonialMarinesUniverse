@@ -1,4 +1,5 @@
 using Content.IntegrationTests.Fixtures;
+using Content.IntegrationTests.Fixtures.Attributes;
 using Content.Server.Ghost;
 using Content.Server.Ghost.Roles.Components;
 using Content.Shared._RMC14.Gibbing;
@@ -22,6 +23,9 @@ namespace Content.IntegrationTests.CMU14.Diagnostics;
 [TestFixture]
 public sealed class CMULogLifecycleTest : GameTest
 {
+    // Server-only lifecycle checks do not need PVS sessions or disconnect/reconnect cleanup.
+    private static PoolSettings ServerOnlySettings => new() { Connected = false };
+
     [TestPrototypes]
     private const string Prototypes = """
         - type: entity
@@ -37,6 +41,7 @@ public sealed class CMULogLifecycleTest : GameTest
         """;
 
     [Test]
+    [PairConfig(nameof(ServerOnlySettings))]
     public async Task ScatteringInventoryDropsRealItemsAndReleasesVirtualHands()
     {
         var map = await Pair.CreateTestMap();
@@ -57,6 +62,7 @@ public sealed class CMULogLifecycleTest : GameTest
     }
 
     [Test]
+    [PairConfig(nameof(ServerOnlySettings))]
     public async Task ThrowCollisionAfterContainerShutdownLeavesItemOutside()
     {
         var map = await Pair.CreateTestMap();
@@ -139,6 +145,7 @@ public sealed class CMULogLifecycleTest : GameTest
     }
 
     [Test]
+    [PairConfig(nameof(ServerOnlySettings))]
     public async Task RemovingFlightStopsOwnedTravelLoop()
     {
         var map = await Pair.CreateTestMap();
