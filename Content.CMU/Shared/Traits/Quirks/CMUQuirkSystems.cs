@@ -123,7 +123,8 @@ public sealed class CMUSlowThinkingSystem : EntitySystem
         {
             // Leading off with it: capitalise the filler instead of the first word.
             words[0] = LowerFirst(words[0]);
-            words.Insert(0, char.ToUpperInvariant(filler[0]) + filler[1..]);
+            // string + string, not char + string: the sandbox rejects the span the compiler makes for a char
+            words.Insert(0, filler.Substring(0, 1).ToUpperInvariant() + filler.Substring(1));
             return;
         }
 
