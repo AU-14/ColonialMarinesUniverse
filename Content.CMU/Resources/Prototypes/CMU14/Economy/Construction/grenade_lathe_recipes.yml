@@ -15,7 +15,7 @@
   result: RMCCustomGrenade
   completetime: 4
   materials:
-    CMSteel: 1250
+    CMSteel: 5312 # composition 4250 x 1.25, as RMCM40GrenadeCasing; must not undercut it (MaterialArbitrageTest)
 
 - type: latheRecipe
   id: CMUChemicalPayload
