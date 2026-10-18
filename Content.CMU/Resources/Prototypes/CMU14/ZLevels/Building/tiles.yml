@@ -1,12 +1,12 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # Copyright (c) 2026 wray-git
 # SPDX-License-Identifier: AGPL-3.0-only
-# CMU14 was: Building overhaul (z-level): placeholder constructable TILES for the construction menu's "Tiles" section.
-# CMU14: only the plating has a recipe now, in the main list.
+# RUMC was: Building overhaul (z-level): placeholder constructable TILES for the construction menu's "Tiles" section.
+# RUMC: only the plating has a recipe now, in the main list.
 # Building overhaul (z-level): placeholder constructable TILES (only the plating has a recipe, in the main list).
 # Tiles are not entities, so each recipe builds a tiny "tile applier" entity (TileApplier) that lays the tile and
 # deletes itself. This reuses the normal construction-ghost flow but produces a tile, letting you floor open air.
-# CMU14 was: All live in the "Tiles" spawnlist; isCM is required for the menu to list them.
+# RUMC was: All live in the "Tiles" spawnlist; isCM is required for the menu to list them.
 # The plating is in the main spawnlist; isCM is required for the menu to list it.
 
 # Invisible per-tile support marker. Lets a laid floor tile take part in the structural-support graph: on an
@@ -115,7 +115,7 @@
   - node: tile
     entity: AU14TileApplierDirt
 
-# CMU14 was: --- Construction recipes (shown in the "Tiles" spawnlist, "Flooring" category) ---
+# RUMC was: --- Construction recipes (shown in the "Tiles" spawnlist, "Flooring" category) ---
 # --- Construction recipes: only the plating is built from the menu, in the main list ("Flooring" category); the steel floor and the dirt have an applier and a graph but no recipe ---
 - type: construction
   id: AU14TilePlating
@@ -130,13 +130,13 @@
   canRotate: false
   canBuildInImpassable: true
   isCM: true
-  # CMU14: spawnlist: Tiles
-  spawnlist: AU14 # CMU14: the plating is in the main list; there is no "Tiles" list for it any more
+  # RUMC: spawnlist: Tiles
+  spawnlist: AU14 # RUMC: the plating is in the main list; there is no "Tiles" list for it any more
   # Mappers can forbid vertical building on a map with ZBuildableMap { enabled: false } (e.g. the UNS Almayer).
   conditions:
   - !type:ZBuildAllowed
 
-# CMU14: the recipes of the steel floor and of the dirt are switched off, not deleted (their appliers and graphs above stay; only the plating is built from the menu).
+# RUMC: the recipes of the steel floor and of the dirt are switched off, not deleted (their appliers and graphs above stay; only the plating is built from the menu).
 # - type: construction
 #   id: AU14TileSteel
 #   name: steel floor

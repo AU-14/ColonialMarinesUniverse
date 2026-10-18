@@ -4,8 +4,8 @@
   abstract: true
   components:
   - type: ResinClearable # CMU14
-  - type: TreeTappable # CMU14
-  - type: TreeFellable # CMU14: an axe knocks firewood off it
+  - type: TreeTappable # RUMC
+  - type: TreeFellable # RUMC: an axe knocks firewood off it
   - type: SpriteFade
   - type: Clickable
   - type: OreVein
@@ -52,7 +52,7 @@
         !type:DamageTrigger
         damage: 1250
       behaviors:
-        # CMU14: the fibers of the bark and of the branches (the first threshold is the one that is run: it destroys the tree).
+        # RUMC: the fibers of the bark and of the branches (the first threshold is the one that is run: it destroys the tree).
         - !type:SpawnEntitiesBehavior
           spawn:
             RUMCPlantFiber1:
@@ -119,7 +119,7 @@
           RMCStump1:
             min: 1
             max: 1
-          # CMU14: the fibers of the bark and of the branches
+          # RUMC: the fibers of the bark and of the branches
           RUMCPlantFiber1:
             min: 5
             max: 6
@@ -128,11 +128,11 @@
         acts: [ "Destruction" ]
 - type: ore
   id: OreWood
-  # CMU14: oreEntity: Log
-  oreEntity: RUMCWoodLog # CMU14: a heavy log, not the tower-cap one
+  # RUMC: oreEntity: Log
+  oreEntity: RUMCWoodLog # RUMC: a heavy log, not the tower-cap one
   minOreYield: 1
-  # CMU14: maxOreYield: 6
-  maxOreYield: 3 # CMU14: a heavy log is worth more than a tower-cap one
+  # RUMC: maxOreYield: 6
+  maxOreYield: 3 # RUMC: a heavy log is worth more than a tower-cap one
 
 - type: entity
   parent: RMCBaseTree
@@ -192,7 +192,7 @@
           RMCStump2:
             min: 1
             max: 1
-          # CMU14: the fibers of the bark and of the branches
+          # RUMC: the fibers of the bark and of the branches
           RUMCPlantFiber1:
             min: 5
             max: 6
@@ -242,7 +242,7 @@
           RMCStump3:
             min: 1
             max: 1
-          # CMU14: the fibers of the bark and of the branches
+          # RUMC: the fibers of the bark and of the branches
           RUMCPlantFiber1:
             min: 5
             max: 6

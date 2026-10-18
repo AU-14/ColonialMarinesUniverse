@@ -34,9 +34,9 @@
       - cost: 350
         crate: RMCCrateMechanicalMaintenance
       - cost: 150
-        crate: RUMCCrateHandSaws # CMU14: the saw for logs
+        crate: RUMCCrateHandSaws # RUMC: the saw for logs
       - cost: 1500
-        crate: RUMCCrateIndustryStart # CMU14: the sealed kit of the start of the industry, opened with a crowbar
+        crate: RUMCCrateIndustryStart # RUMC: the sealed kit of the start of the industry, opened with a crowbar
       - cost: 350
         crate: RMCCrateReplacementLights
       - cost: 350
@@ -61,16 +61,16 @@
         crate: CMUCrateBiosuitGeneral # Yellow engineering colors
     - name: Materials
       entries:
-      # CMU14 Begin: the contracts of the companies, for a trade platform
+      # RUMC Begin: the contracts of the companies, for a trade platform
       - cost: 120
-        crate: RUMCTradeContractMetals # CMU14: the contracts of the companies, for a trade platform
+        crate: RUMCTradeContractMetals # RUMC: the contracts of the companies, for a trade platform
       - cost: 150
         crate: RUMCTradeContractSheets
       - cost: 100
         crate: RUMCTradeContractGems
       - cost: 40
         crate: RUMCTradeContractFuel
-      # CMU14 End
+      # RUMC End
       - cost: 350
         crate: RMCCrateResearchPhoron
       - cost: 350

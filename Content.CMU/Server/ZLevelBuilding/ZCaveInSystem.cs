@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
-using System.Linq; // CMU14
+using System.Linq; // RUMC
 using System.Numerics;
 using Content.Server.Chat.Managers;
 using Content.Server.Shuttles.Systems;
@@ -23,7 +23,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
-using Robust.Shared.Prototypes; // CMU14: the prototypes of the rock that fell
+using Robust.Shared.Prototypes; // RUMC: the prototypes of the rock that fell
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -59,8 +59,8 @@ public sealed partial class ZCaveInSystem : EntitySystem
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private TagSystem _tag = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
-    [Dependency] private ZLandingSystem _landing = default!; // CMU14: where a falling thing lands
-    [Dependency] private IPrototypeManager _prototypes = default!; // CMU14: the parents of the rock, for its resource
+    [Dependency] private ZLandingSystem _landing = default!; // RUMC: where a falling thing lands
+    [Dependency] private IPrototypeManager _prototypes = default!; // RUMC: the parents of the rock, for its resource
 
     private static readonly TimeSpan WarningTime = TimeSpan.FromSeconds(8);
 
@@ -122,7 +122,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
             _lastDigger.Clear();
             _loadBearingTerrain.Clear();
             _loadBearingTerrainAt.Clear();
-            _resourceByTile.Clear(); // CMU14: the resources that came down are forgotten with the level
+            _resourceByTile.Clear(); // RUMC: the resources that came down are forgotten with the level
         });
     }
 
@@ -377,7 +377,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
         _chat.SendAdminAlert(Loc.GetString("au-cavein-admin-alert", ("count", region.Count), ("culprit", culprit)));
 
         // Before the roof buries the cavern, fling loose rocks and lay see-through fog for atmosphere.
-        // CMU14: ThrowDebris now knows the layer (the resource comes from it); the call that was here: ThrowDebris(grid, region, settings);
+        // RUMC: ThrowDebris now knows the layer (the resource comes from it); the call that was here: ThrowDebris(grid, region, settings);
         ThrowDebris(stoneMap, grid, region, settings);
         SpawnFog(grid, region, settings);
 
@@ -395,8 +395,8 @@ public sealed partial class ZCaveInSystem : EntitySystem
         BuildCollapseFeedbackDistances(stoneMap.Comp, region);
     }
 
-    // CMU14 was (kept): /// <summary>Spawns a handful of loose rocks across the doomed cavern and flings them 1-2 tiles in random directions.</summary>
-    // CMU14 was (kept): private void ThrowDebris(Entity<MapGridComponent> grid, List<Vector2i> region, ZBuildableMapComponent settings)
+    // RUMC was (kept): /// <summary>Spawns a handful of loose rocks across the doomed cavern and flings them 1-2 tiles in random directions.</summary>
+    // RUMC was (kept): private void ThrowDebris(Entity<MapGridComponent> grid, List<Vector2i> region, ZBuildableMapComponent settings)
     /// <summary>
     /// Spawns a handful of the resource of the layer across the doomed cavern and flings it 1-2 tiles in random directions: stone where the rock above is stone, clay where the
     /// layer above is clay, and so on.
@@ -408,7 +408,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
         {
             var tile = region[_random.Next(region.Count)];
             var coords = _map.GridTileToLocal(grid.Owner, grid.Comp, tile);
-            // CMU14: the debris is the resource of the layer; the line that was here: var rock = Spawn(settings.RockDebris, coords);
+            // RUMC: the debris is the resource of the layer; the line that was here: var rock = Spawn(settings.RockDebris, coords);
             var rock = Spawn(CollapseResourceAt(stoneMap, grid, tile, settings), coords);
 
             var direction = _random.NextAngle().ToVec() * _random.NextFloat(1f, 2f);
@@ -416,7 +416,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
         }
     }
 
-    // CMU14 method
+    // RUMC method
     /// <summary>The resource that comes down at this tile: that of the rock standing over it on the level above, or the stone of the default when nothing stands there.</summary>
     private EntProtoId CollapseResourceAt(Entity<ZGeneratedStoneComponent> stoneMap, Entity<MapGridComponent> grid, Vector2i tile, ZBuildableMapComponent settings)
     {
@@ -426,7 +426,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
         return settings.DefaultCollapseResource;
     }
 
-    // CMU14 method
+    // RUMC method
     /// <summary>The resource of a rock: its own entry in the settings, or that of the nearest parent that has one, or the default.</summary>
     private EntProtoId CollapseResourceOf(EntityPrototype proto, ZBuildableMapComponent settings)
     {
@@ -525,9 +525,9 @@ public sealed partial class ZCaveInSystem : EntitySystem
         // Animated falling-rock effect as the roof comes down on this tile.
         Spawn(settings.CollapseRockProp, coords);
 
-        // CMU14: the block that was over this tile falls in: whatever stands on the level above is what lands here, and if nothing does, nothing does.
-        // CMU14 was (kept): // Bury the tile in rock (the roof falling in).
-        // CMU14 was (kept): Spawn(settings.StoneRockEntity, coords);
+        // RUMC: the block that was over this tile falls in: whatever stands on the level above is what lands here, and if nothing does, nothing does.
+        // RUMC was (kept): // Bury the tile in rock (the roof falling in).
+        // RUMC was (kept): Spawn(settings.StoneRockEntity, coords);
         if (TakeBlockAbove(stoneMap, grid, tile) is { } fallen)
             Spawn(fallen, coords);
 
@@ -538,7 +538,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
         RemoveSurfaceTileAbove(stoneMap, grid, tile);
     }
 
-    // CMU14 method
+    // RUMC method
     /// <summary>
     /// Takes the block that stands over this stone tile on the level above (a rock, a wall: whatever holds a roof up) and returns what it is, so that the same
     /// lands below. The block above is gone; it has fallen. Nothing is taken from a ship, a staircase or a wall of the border of the map, and when
@@ -559,10 +559,10 @@ public sealed partial class ZCaveInSystem : EntitySystem
         return id;
     }
 
-    // CMU14: per cave, the resource that came down at each tile, kept until the cave-in is over.
+    // RUMC: per cave, the resource that came down at each tile, kept until the cave-in is over.
     private readonly Dictionary<EntityUid, Dictionary<Vector2i, EntProtoId>> _resourceByTile = new();
 
-    // CMU14 method
+    // RUMC method
     /// <summary>The block that stands over this stone tile on the level above (a rock, a wall: whatever holds a roof up), or null when there is none, or it is a ship, a staircase or a wall of the border of the map.</summary>
     private EntityUid? FindBlockAbove(Entity<ZGeneratedStoneComponent> stoneMap, Entity<MapGridComponent> grid, Vector2i tile)
     {
@@ -658,15 +658,15 @@ public sealed partial class ZCaveInSystem : EntitySystem
 
         // Snapshot first: unanchoring mutates the grid's anchored-entity set.
         var anchored = new List<EntityUid>(_map.GetAnchoredEntities(surfaceGridUid, surfaceGrid, surfaceTile));
-        // CMU14 Landing Begin: it falls on until there is a solid tile under it, not only to the next level.
-        // CMU14 was (kept): var belowCoords = new MapCoordinates(worldPos, belowMapComp.MapId);
+        // RUMC Landing Begin: it falls on until there is a solid tile under it, not only to the next level.
+        // RUMC was (kept): var belowCoords = new MapCoordinates(worldPos, belowMapComp.MapId);
         var landingMap = _landing.FindLandingMap(belowMap, worldPos);
         var belowCoords = new MapCoordinates(worldPos, TryComp<MapComponent>(landingMap, out var landingComp) ? landingComp.MapId : belowMapComp.MapId);
         var surfaceMap = Transform(surfaceGridUid).MapUid;
 
         // Only what would land inside something solid (a rock, a wall, a table) loses its collision; the rest keeps it.
         var inside = _landing.LandsInsideSolid(landingMap, worldPos);
-        // CMU14 End
+        // RUMC End
 
         foreach (var uid in anchored)
         {
@@ -676,7 +676,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
             if (IsIndestructibleWall(uid))
                 continue; // never drop map-border walls
 
-            // CMU14: a pit is part of the ground: when the tile under it collapses it is gone, it does not fall.
+            // RUMC: a pit is part of the ground: when the tile under it collapses it is gone, it does not fall.
             if (HasComp<ZDestroyedOnCollapseComponent>(uid))
             {
                 QueueDel(uid);
@@ -694,24 +694,24 @@ public sealed partial class ZCaveInSystem : EntitySystem
                 continue;
             }
 
-            // CMU14: on one level a thing falls only once.
+            // RUMC: on one level a thing falls only once.
             if (!_landing.TryMarkFall(uid, surfaceMap))
                 continue;
 
             RemComp<StructuralSupportComponent>(uid);
             _transform.SetMapCoordinates(uid, belowCoords);
 
-            // CMU14: only what lands inside a rock or a wall is rubble. What was here (kept), for everything that fell:
-            // CMU14 was (kept): // Fallen structures are rubble: strip fixture hardness so a wall that lands inside (or later gets buried under) a cave rock can never sit there grinding
-            // CMU14 was (kept): // contacts forever. That constant jitter was a physics drain that degraded server TPS (felt as ever-worsening UI lag) as the round ran on.
-            // CMU14 was (kept): MakeFallenDebrisNonHard(uid);
+            // RUMC: only what lands inside a rock or a wall is rubble. What was here (kept), for everything that fell:
+            // RUMC was (kept): // Fallen structures are rubble: strip fixture hardness so a wall that lands inside (or later gets buried under) a cave rock can never sit there grinding
+            // RUMC was (kept): // contacts forever. That constant jitter was a physics drain that degraded server TPS (felt as ever-worsening UI lag) as the round ran on.
+            // RUMC was (kept): MakeFallenDebrisNonHard(uid);
             // What lands inside a rock or a wall is rubble: strip fixture hardness so it can never sit there grinding contacts forever (that constant jitter was a physics drain that
             // degraded server TPS). What lands on open floor keeps its collision.
             if (inside)
                 MakeFallenDebrisNonHard(uid);
         }
 
-        // CMU14 Loose Begin: what has fallen before and lies loose here falls again with the floor: as many times as there are floors to give way.
+        // RUMC Loose Begin: what has fallen before and lies loose here falls again with the floor: as many times as there are floors to give way.
         var loose = new List<EntityUid>();
         _landing.GetFallenDebrisOnTile(surfaceGridUid, surfaceGrid, surfaceTile, loose);
         foreach (var uid in loose)
@@ -723,7 +723,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
             if (inside)
                 MakeFallenDebrisNonHard(uid);
         }
-        // CMU14 End
+        // RUMC End
     }
 
     // How far (in tiles) collapse rumble and vignette feedback reach from the collapsing region.
@@ -1037,7 +1037,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
             // Scatter some debris on the surface (30% chance per sampled tile).
             if (_random.Prob(0.30f))
             {
-                // CMU14: the scatter on the surface is the resource that came down at the tile; the line that was here (kept): Spawn(settings.RockDebris, _map.GridTileToLocal(surfaceGridUid, surfaceGridComp, surfaceTile));
+                // RUMC: the scatter on the surface is the resource that came down at the tile; the line that was here (kept): Spawn(settings.RockDebris, _map.GridTileToLocal(surfaceGridUid, surfaceGridComp, surfaceTile));
                 var resource = _resourceByTile.TryGetValue(stoneMap.Owner, out var byTile) && byTile.TryGetValue(region[i], out var fell)
                     ? fell
                     : new EntProtoId(settings.DefaultCollapseResource);
@@ -1045,7 +1045,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
             }
         }
 
-        // CMU14: the resources that came down are told; the cave-in is over.
+        // RUMC: the resources that came down are told; the cave-in is over.
         _resourceByTile.Remove(stoneMap.Owner);
 
         // Brief grey vignette blink for players on the surface NEAR the cave-in - not map-wide.

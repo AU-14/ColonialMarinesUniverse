@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
-using Content.Shared._RMC14.Vehicle; // CMU14: nothing is built under a vehicle
+using Content.Shared._RMC14.Vehicle; // RUMC: nothing is built under a vehicle
 using Content.Shared.Construction;
 using Content.Shared.Construction.Conditions;
 using JetBrains.Annotations;
@@ -30,7 +30,7 @@ public sealed partial class ZBuildAllowed : IConstructionCondition
         if (!entMan.TryGetComponent(location.EntityId, out TransformComponent? xform) || xform.MapUid is not { } mapUid)
             return true; // can't resolve the map - don't block.
 
-        // CMU14: nothing is built under the inside of a vehicle.
+        // RUMC: nothing is built under the inside of a vehicle.
         if (entMan.HasComponent<VehicleInteriorLinkComponent>(mapUid))
             return false;
 

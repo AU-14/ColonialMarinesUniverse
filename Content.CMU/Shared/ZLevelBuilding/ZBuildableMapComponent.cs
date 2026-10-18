@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
-using Content.Shared.Procedural; // CMU14: the noise features of the layers
-using Content.Shared.Whitelist; // CMU14: the tools that dig a layer
+using Content.Shared.Procedural; // RUMC: the noise features of the layers
+using Content.Shared.Whitelist; // RUMC: the tools that dig a layer
 using Robust.Shared.GameStates;
-using Robust.Shared.Prototypes; // CMU14
+using Robust.Shared.Prototypes; // RUMC
 
 namespace Content.Shared.CMU14.ZLevelBuilding;
 
@@ -49,17 +49,17 @@ public sealed partial class ZBuildableMapComponent : Component
     /// vanilla SS14 asteroid tiles.
     /// </summary>
     [DataField]
-    // CMU14: the stone layer is basalt now; the floor that was here (kept): new() { "CMPlanetMarsCave", "CMPlanetMarsDirt" }
+    // RUMC: the stone layer is basalt now; the floor that was here (kept): new() { "CMPlanetMarsCave", "CMPlanetMarsDirt" }
     public List<string> StoneFloorTiles = new() { "FloorBasalt" };
 
     /// <summary>
     /// Mineable rock entity scattered across generated chunks (drops salvageable materials when mined).
     /// </summary>
     [DataField]
-    // CMU14: the rock of the stone layer is the one of the mining of this fork; the rock that was here (kept): "mineablesolarisrocksteel"
+    // RUMC: the rock of the stone layer is the one of the mining of this fork; the rock that was here (kept): "mineablesolarisrocksteel"
     public string StoneRockEntity = "RUMCRockWall";
 
-    // CMU14 Layers Begin: the veins, the deposits, the caves, the pools and the layers of depth (clay, black stone) of the digging down, and what a cave-in brings down
+    // RUMC Layers Begin: the veins, the deposits, the caves, the pools and the layers of depth (clay, black stone) of the digging down, and what a cave-in brings down
 
     /// <summary>
     /// Veins of ore in the plain stone layer (the levels that no depth biome covers): metals in bigger groups,
@@ -219,7 +219,7 @@ public sealed partial class ZBuildableMapComponent : Component
         },
     };
 
-    // CMU14: the debris of a collapse was a loose rock (the prototype AU14RockDebris, switched off); it is the resource of the layer now
+    // RUMC: the debris of a collapse was a loose rock (the prototype AU14RockDebris, switched off); it is the resource of the layer now
     /// <summary>
     /// What a cave-in brings down instead of plain debris: the resource of the layer that stood over the tile, by the prototype of the rock (or one of its parents): clay
     /// where the layer above is clay, black stone where it is black stone. Any other rock gives <see cref="DefaultCollapseResource"/>.
@@ -235,12 +235,12 @@ public sealed partial class ZBuildableMapComponent : Component
     [DataField]
     public string DefaultCollapseResource = "RUMCStoneItem";
 
-    // CMU14 End
+    // RUMC End
 
-    // CMU14: the field that was here (kept, switched off; the prototype it named is commented out in stone.yml):
-    // CMU14: /// <summary>Loose rock debris flung outward at the moment a cave-in begins, before the roof buries the cavern.</summary>
-    // CMU14: [DataField]
-    // CMU14: public string RockDebris = "AU14RockDebris";
+    // RUMC: the field that was here (kept, switched off; the prototype it named is commented out in stone.yml):
+    // RUMC: /// <summary>Loose rock debris flung outward at the moment a cave-in begins, before the roof buries the cavern.</summary>
+    // RUMC: [DataField]
+    // RUMC: public string RockDebris = "AU14RockDebris";
 
     /// <summary>See-through fog spawned across a cavern while it is caving in (atmosphere; does not block view).</summary>
     [DataField]

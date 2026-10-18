@@ -186,7 +186,7 @@ cmu-atm-fault-stack = STACK SMASHED, ABORTING
 cmu-atm-fault-trap = UNHANDLED TRAP { $byte } AT { $address }
 cmu-atm-fault-garbled = ?? ???? ?????? ??? ??
 
-# CMU14: tax on the parcels sold through the trade platforms
+# RUMC: tax on the parcels sold through the trade platforms
 admin-console-trade-tax-section = -- Parcel Sales Tax --
 admin-console-current-trade-tax = Current Parcel Sales Tax: { $percent }%
 admin-console-trade-tax-description = Taken from what the drone pays for a parcel sold on a trade platform. That share goes to the colony budget, the rest to the seller.

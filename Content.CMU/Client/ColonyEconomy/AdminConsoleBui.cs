@@ -24,7 +24,7 @@ public sealed class AdminConsoleBui(EntityUid owner, Enum uiKey) : BoundUserInte
                 SendPredictedMessage(new AdminConsoleSetIncomeTaxBuiMsg(pct));
         };
 
-        // CMU14: the button that sets the tax on the parcels sold through the trade platforms
+        // RUMC: the button that sets the tax on the parcels sold through the trade platforms
         _window.SetTradeTaxButton.OnPressed += _ =>
         {
             if (_window.TradeTaxInput.Text is { } text && float.TryParse(text, out var pct))

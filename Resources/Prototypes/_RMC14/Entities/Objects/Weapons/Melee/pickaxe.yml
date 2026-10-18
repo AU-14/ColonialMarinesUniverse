@@ -35,5 +35,5 @@
   - type: Tag
     tags:
     - Pickaxe
-  - type: PitDiggingTool # CMU14: a pickaxe digs a pit through clay into stone
+  - type: PitDiggingTool # RUMC: a pickaxe digs a pit through clay into stone
   - type: DeleteOnExplosion

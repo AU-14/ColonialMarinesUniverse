@@ -1,7 +1,7 @@
-// CMU14: this system is switched off, not deleted: the whole file is kept below as a comment.
-// CMU14: it made what fell through a collapsed floor smaller (0.7) and darker, as rubble. What falls now is the resource of the layer it fell onto (see
-// CMU14: ZBuildableMapComponent.CollapseResources) and a structure keeps its own look, so nothing is shrunk or darkened any more.
-// CMU14: to bring it back, take the comment marks off the lines below and give ZFallenDebrisComponent its look again.
+// RUMC: this system is switched off, not deleted: the whole file is kept below as a comment.
+// RUMC: it made what fell through a collapsed floor smaller (0.7) and darker, as rubble. What falls now is the resource of the layer it fell onto (see
+// RUMC: ZBuildableMapComponent.CollapseResources) and a structure keeps its own look, so nothing is shrunk or darkened any more.
+// RUMC: to bring it back, take the comment marks off the lines below and give ZFallenDebrisComponent its look again.
 
 // // SPDX-License-Identifier: AGPL-3.0-only
 // // Copyright (c) 2026 wray-git

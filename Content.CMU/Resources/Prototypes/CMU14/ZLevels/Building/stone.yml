@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # Building overhaul (z-level): underground stone + debris.
 
-# CMU14: the rock debris is switched off, not deleted: a cave-in gives the resource of the layer instead (CollapseResources, DefaultCollapseResource), so nothing spawns it.
+# RUMC: the rock debris is switched off, not deleted: a cave-in gives the resource of the layer instead (CollapseResources, DefaultCollapseResource), so nothing spawns it.
 # Loose rock flung outward when a cave-in starts (before the roof buries the cavern). Salvage flavour.
 # Borrows ONLY the SteelOre1 (iron ore) sprite, tinted darker and scaled down so it reads as a small rock chunk.
 # - type: entity

@@ -56,7 +56,7 @@ public sealed partial class SapperWorkbenchComponent : Component
         // into a bullet hose, so the cost is the whole balance lever.
         new("AU14AttachmentSwitch", "Switch (auto-sear chip)", 8f, new() { { "CMPlasteel", 40 } },
             new() { AnyElectronics() }),
-        // CMU14 Benches Begin: the kits of the benches of the RUMC crafts
+        // RUMC Benches Begin: the kits of the benches of the RUMC crafts
         // The gunsmith's bench: a kit that unfolds into a bench where weapons, magazines and cartridges are designed and built.
         new("RUMCGunsmithBenchKit", "Gunsmith's bench kit", 10f, new() { { "CMSteel", 20 }, { "CMPlasteel", 10 }, { "RMCWood", 10 } },
             new()),
@@ -66,7 +66,7 @@ public sealed partial class SapperWorkbenchComponent : Component
         // The armorer's bench: armor and helmets are designed and built here, and armor is painted anew.
         new("RUMCArmorsmithBenchKit", "Armorer's bench kit", 10f, new() { { "CMSteel", 15 }, { "CMPlasteel", 5 }, { "RMCWood", 5 } },
             new()),
-        // CMU14 End
+        // RUMC End
     };
 
     // Ingredient shorthands so the recipe table above stays readable. IconPrototype is a

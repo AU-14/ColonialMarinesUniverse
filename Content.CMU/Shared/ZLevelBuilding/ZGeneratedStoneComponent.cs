@@ -27,7 +27,7 @@ public sealed partial class ZGeneratedStoneComponent : Component
     [ViewVariables]
     public EntityUid StoneGrid;
 
-    // CMU14 Layers Begin: what the generation of a layer of depth remembers: whether its dungeon was tried, the seed of its caves, and the caves themselves
+    // RUMC Layers Begin: what the generation of a layer of depth remembers: whether its dungeon was tried, the seed of its caves, and the caves themselves
     [ViewVariables]
     public bool DungeonAttempted;
 
@@ -38,7 +38,7 @@ public sealed partial class ZGeneratedStoneComponent : Component
     /// <summary>Tiles of the natural, noise-made caves. They hold themselves up: they never cave in and a collapse does not spread into them.</summary>
     [ViewVariables]
     public readonly HashSet<Vector2i> NaturalCaves = new();
-    // CMU14 End
+    // RUMC End
 
     /// <summary>Chunk coordinates (tile-index / chunk size) that have already been generated.</summary>
     [ViewVariables]

@@ -1004,7 +1004,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         return ev.Ignite;
     }
 
-    /// <summary>CMU14: puts on a projectile the fire of the fuel it carries: how hot, how long, and the color of the flame (the gunsmith's bullets with a fuel in them).</summary>
+    /// <summary>RUMC: puts on a projectile the fire of the fuel it carries: how hot, how long, and the color of the flame (the gunsmith's bullets with a fuel in them).</summary>
     public void SetProjectileFire(EntityUid projectile, int intensity, int duration, Color color)
     {
         var ignite = EnsureComp<IgniteOnProjectileHitComponent>(projectile);

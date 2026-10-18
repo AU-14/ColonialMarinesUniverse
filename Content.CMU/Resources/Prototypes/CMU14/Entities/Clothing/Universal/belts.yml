@@ -110,7 +110,7 @@
     - id: CMWirecutter
     - id: RMCCableCoil30
     - id: CMMultitool
-    # CMU14: the entrenching tool gives its place in the belt to the hand saw and the hammer (kept, switched off):
+    # RUMC: the entrenching tool gives its place in the belt to the hand saw and the hammer (kept, switched off):
     # - id: CMEntrenchingTool
     - id: RUMCHandSaw
     - id: RUMCHammer
@@ -129,7 +129,7 @@
     - id: CMWirecutter
     - id: RMCCableCoil30
     - id: CMMultitool
-    # CMU14: the entrenching tool gives its place in the belt to the hand saw and the hammer (kept, switched off):
+    # RUMC: the entrenching tool gives its place in the belt to the hand saw and the hammer (kept, switched off):
     # - id: CMEntrenchingTool
     - id: RUMCHandSaw
     - id: RUMCHammer
