@@ -1166,6 +1166,14 @@
       entries:
       - id: CMMagazineSMGM63
         amount: 20
+    - name: Carbines
+      entries:
+      - id: CMUWeaponRifleXM43Unloaded
+        amount: 2
+    - name: Carbine Ammunition
+      entries:
+      - id: CMMagazineRifleM54CMK1
+        amount: 12
     - name: Handguns
       entries:
       - id: RMCWeaponPistolM77Empty
@@ -1882,6 +1890,10 @@
     - name: Servicing Tools # placeholder
       entries:
       - id: AU14MaintenanceJack
+    - name: Carbines
+      entries:
+      - id: CMUXM43Case
+        amount: 2
 
 - type: entity
   parent: ColMarTechBase
