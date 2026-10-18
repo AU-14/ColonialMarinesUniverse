@@ -5,11 +5,26 @@ Spawn `CMUShipWeaponsTerminal`, `CMUShipWeaponsTerminalGovfor`, or
 change existing maps. The generic terminal accepts RMC, GOVFOR, or OPFOR command
 access; the faction variants accept only their respective command access.
 
-Command selects exactly two different weapons and confirms the permanent
+The terminal component's YAML `maxSelections` field sets the maximum number of
+different weapons command can select (default: `3`):
+
+```yaml
+- type: CMUShipWeaponsTerminal
+  maxSelections: 3
+```
+
+The UI displays this terminal's limit, and the server enforces it. Set a positive
+integer; at least one weapon must be selected. Terminals on the same ship should
+use the same limit. The first confirmed loadout locks the ship regardless of
+which terminal was used.
+
+Command selects up to the displayed limit and confirms the permanent
 selection. Selection is available until confirmed, not restricted to a timed
 round-start window. Each weapon has three uses for the entire operation.
 Depletion, closing the UI, and replacing or adding terminals cannot reset the
-loadout.
+loadout. Confirming fewer than the limit also locks the empty slots permanently.
+Inspecting any selection terminal offers the CMU **Ship Orbital Support Weapons**
+guide, also available from the CMU guidebook root.
 
 Loadouts, ammunition, and the 60-second support-battery cooldown belong to the
 ship entity: its Z-level network for multi-deck ships, otherwise its grid.
@@ -61,7 +76,9 @@ three uses. Unloaded batteries or batteries loaded with another supported
 weapon's ammunition cannot fire the selected mission.
 
 Accepted support strikes consume one use immediately and arrive after 24
-seconds. Nearby ground troops receive launch and final-approach warnings;
+seconds. Nearby ground troops receive a launch warning, one directional warning
+three seconds later pointing from each recipient toward the target (or warning
+that their position is targeted), and a final-approach warning;
 the selected squad receives a warning too. Invalid, protected, or underground
 targets, insufficient access, depleted weapons, and cooldown failures do not
 consume ammunition. Each shell rechecks the current impact column, so later
@@ -72,24 +89,27 @@ its ammunition.
 
 | Weapon | Effect |
 | --- | --- |
-| Gatling Barrage | 36 rapid small impacts scattered within 5 tiles. |
-| Walking Barrage | 7 HE shells progress along a 16-tile line centered on the target in the selected direction. |
-| 120mm HE Barrage | 12 medium HE impacts with 6-tile scatter. |
-| 380mm HE Barrage | 6 slower, larger HE impacts with 6-tile scatter. |
+| Gatling Barrage | 120 impacts, 0.15 seconds apart, with 16-tile scatter and a 1.5-tile blast radius. |
+| Walking Barrage | 9 HE shells, one second apart, progress along a 16-tile line centered on the target in the selected direction. Each has a 6-tile blast radius. |
+| 120mm HE Barrage | 12 HE impacts, 0.75 seconds apart, with 16-tile scatter and a 12-tile blast radius. |
+| 380mm HE Barrage | 6 heavy impacts, 1.8 seconds apart, with 6-tile scatter and a 16-tile blast radius. |
 | Gas Strike | A 30-tile-radius toxic cloud inflicts poison damage for 30 seconds, but never damages xenos; filters and sealed internals provide their normal protection. |
 | EMS Strike | A 30-tile-radius field lasts 15 seconds and forcibly stuns everyone, including xenos and ordinarily stun-immune targets. Initial and late entrants remain stunned until 25 seconds after the field ends; leaving early does not shorten the stun. |
 | Smoke Strike | A non-damaging, opaque 30-tile-radius screen lasts 30 seconds. |
-| Airburst Strike | 3 anti-personnel bursts with 3-tile scatter, without terrain breaking. |
-| Precision Strike | One concentrated HE impact at the exact coordinates, without scatter. |
-| Railcannon Strike | Devastating area trauma (base 2,000 piercing and 2,000 structural, bypassing resistances) confined to a 5x5 square of tiles centered on the target tile. Uses the existing whole-body blast-injury handling without a radial explosion or damage outside the square. |
+| Airburst Strike | 6 anti-personnel bursts, 0.8 seconds apart, with 8-tile scatter and a 12-tile blast radius, without terrain breaking. |
+| Precision Strike | One 120mm-strength HE impact at the exact coordinates, with a 12-tile blast radius and no scatter. |
+| Railcannon Strike | Devastating area trauma (base 2,000 piercing and 2,000 structural, bypassing resistances) in a 5x5 square on every Z-level of the target's network. Uses the existing whole-body blast-injury handling without a radial explosion or damage outside the square. |
 
 Definitions are in
 [ship_weapons.yml](../Resources/Prototypes/CMU14/Entities/Structures/Machines/ship_weapons.yml).
-Damaging barrage patterns plus their individual blast radii remain at most 12
-tiles from the requested target, smaller than the standard explosive OB's
-configured radius. The three support clouds intentionally use the expanded
+The expanded damaging patterns intentionally no longer have the original
+12-tile footprint cap. Scatter plus blast reaches 28 tiles for 120mm, 22 for
+380mm, 20 for Airburst, and 17.5 for Gatling. Walking reaches 14 tiles along its
+axis; Precision has a 12-tile radius. The three support clouds use the expanded
 30-tile radius. Railcannon affects entities whose origin lies in the exact
-5x5 tile square; every target also respects orbital protection.
+5x5 tile square on each live network map; every target also respects orbital
+protection. This includes levels above and below the resolved impact, but never
+other Z-networks. Non-Z maps receive only their own square.
 Smoke and gas do not spread beyond their initial footprint. Individual cloud
 tiles respect orbital protection and require non-space ground.
 
@@ -101,7 +121,10 @@ permanent locking after terminal replacement, shared ammunition and cooldown,
 rejected targeting, three-use exhaustion, standard-cannon selection, ten
 profiles, walking direction, bounded support clouds, battery compatibility,
 manual loading, CVar modes, Railcannon boundaries, xeno gas immunity, and EMS
-entry and recovery timing.
+entry and recovery timing. It also verifies one-to-three permanent selections,
+empty/oversized loadout rejection, the terminal's guidebook link and document
+parsing, directional-warning timing, and Railcannon damage across separate
+Z-level maps with network isolation and protected-area checks.
 
 Run:
 

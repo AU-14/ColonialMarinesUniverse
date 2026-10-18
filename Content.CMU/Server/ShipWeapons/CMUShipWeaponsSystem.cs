@@ -109,7 +109,8 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
                 _prototypes.EnumeratePrototypes<CMUShipWeaponPrototype>().Select(w => new ProtoId<CMUShipWeaponPrototype>(w.ID)).ToArray())
             : [];
         _ui.SetUiState(terminal, CMUShipWeaponsUiKey.Key,
-            new CMUShipWeaponsBuiState(available, available ? GetWeapons(ship) : [], weapons, _requireGuns));
+            new CMUShipWeaponsBuiState(available, available ? GetWeapons(ship) : [], weapons, _requireGuns,
+                Comp<CMUShipWeaponsTerminalComponent>(terminal).MaxSelections));
     }
 
     private void UpdateOverwatch(Entity<OverwatchConsoleComponent> console)
@@ -166,16 +167,19 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
             return;
         }
 
-        if (args.First == args.Second || !_prototypes.HasIndex(args.First) || !_prototypes.HasIndex(args.Second))
+        if (args.Weapons.Length < 1 || args.Weapons.Length > ent.Comp.MaxSelections ||
+            args.Weapons.Distinct().Count() != args.Weapons.Length ||
+            args.Weapons.Any(w => !_prototypes.HasIndex(w)))
         {
-            Reject(args.Actor, "cmu-ship-weapons-invalid-selection");
+            _popup.PopupCursor(Loc.GetString("cmu-ship-weapons-invalid-selection",
+                ("max", ent.Comp.MaxSelections)), args.Actor, PopupType.LargeCaution);
             return;
         }
 
         if (_requireGuns)
         {
             var supported = GetSupportedWeapons(ship);
-            if (!supported.Contains(args.First) || !supported.Contains(args.Second))
+            if (args.Weapons.Any(w => !supported.Contains(w)))
             {
                 Reject(args.Actor, "cmu-ship-weapons-missing-gun");
                 UpdateTerminal(ent);
@@ -184,10 +188,10 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
         }
 
         var state = EnsureComp<CMUShipWeaponsComponent>(ship);
-        state.Weapons.Add(args.First, UsesPerWeapon);
-        state.Weapons.Add(args.Second, UsesPerWeapon);
+        foreach (var weapon in args.Weapons)
+            state.Weapons.Add(weapon, UsesPerWeapon);
         _adminLog.Add(LogType.Action, LogImpact.High,
-            $"{ToPrettyString(args.Actor)} permanently armed {args.First} and {args.Second} on ship {ToPrettyString(ship)}");
+            $"{ToPrettyString(args.Actor)} permanently armed {string.Join(", ", args.Weapons)} on ship {ToPrettyString(ship)}");
         UpdateShip(ship);
     }
 
@@ -265,6 +269,7 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
         firing.Weapon = weapon;
         firing.Bearing = ent.Comp.CMUShipWeaponBearing;
         firing.NextShot = _timing.CurTime + TimeSpan.FromSeconds(24);
+        firing.DirectionalWarningAt = _timing.CurTime + TimeSpan.FromSeconds(3);
         state.Weapons[weapon] = remaining - 1;
         state.NextLaunch = _timing.CurTime + state.Cooldown;
         if (_requireGuns)
@@ -337,6 +342,16 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
         var strikes = EntityQueryEnumerator<CMUShipWeaponStrikeComponent>();
         while (strikes.MoveNext(out var uid, out var strike))
         {
+            if (!strike.DirectionalWarned && _timing.CurTime >= strike.DirectionalWarningAt)
+            {
+                strike.DirectionalWarned = true;
+                if (TryResolveImpact(_transform.GetMapCoordinates(uid), out var warning))
+                {
+                    _mortar.PopupWarning(warning, Math.Max(30, _prototypes.Index(strike.Weapon).FootprintRadius),
+                        "cmu-ship-weapons-directional", "cmu-ship-weapons-directional-above", true);
+                }
+            }
+
             if (!strike.Warned && _timing.CurTime >= strike.NextShot - TimeSpan.FromSeconds(4))
             {
                 strike.Warned = true;

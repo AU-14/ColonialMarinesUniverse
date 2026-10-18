@@ -84,6 +84,15 @@ public sealed partial class CMUShipWeaponsSystem
 
     private void RailImpact(EntityUid source, DamageSpecifier damage, MapCoordinates impact)
     {
+        foreach (var map in _zLevels.GetAllNetworkMaps(_map.GetMap(impact.MapId)))
+        {
+            if (_zLevels.TryGetMapCoordinates(map, impact.Position, out var projected))
+                RailImpactOnLevel(source, damage, projected);
+        }
+    }
+
+    private void RailImpactOnLevel(EntityUid source, DamageSpecifier damage, MapCoordinates impact)
+    {
         var centerTile = new Vector2(MathF.Floor(impact.X), MathF.Floor(impact.Y));
         var center = centerTile + new Vector2(0.5f);
         _railTargets.Clear();

@@ -1,13 +1,13 @@
 - type: entity
   id: CMUShipWeaponsTerminal
   name: ship weapons arming terminal
-  description: Selects two orbital support weapons for this ship. Confirmed selections cannot be changed during the operation.
+  description: Selects orbital support weapons for this ship. The terminal displays the selection limit. Confirmed selections cannot be changed during the operation.
   components:
   - type: Transform
     anchored: true
   - type: Sprite
-    sprite: _RMC14/Structures/Machines/computer.rsi
-    state: ob_console
+    sprite: CMU14/Items/laptop.rsi
+    state: laptop_off
     drawdepth: HighFloorObjects
   - type: Clickable
   - type: InteractionOutline
@@ -16,6 +16,10 @@
       components:
       - Xeno
   - type: CMUShipWeaponsTerminal
+    maxSelections: 3
+  - type: GuideHelp
+    guides:
+    - CMUGuideShipWeapons
   - type: ActivatableUI
     key: enum.CMUShipWeaponsUiKey.Key
   - type: UserInterface
@@ -130,9 +134,9 @@
 - type: cmuShipWeapon
   id: CMUGatlingBarrage
   name: cmu-ship-weapons-gatling
-  shots: 36
+  shots: 120
   interval: 0.15
-  spread: 5
+  spread: 16
   blastRadius: 1.5
   slope: 8
   maxIntensity: 25
@@ -140,18 +144,18 @@
 - type: cmuShipWeapon
   id: CMUWalkingBarrage
   name: cmu-ship-weapons-walking
-  shots: 7
+  shots: 9
   interval: 1
   walkingDistance: 16
-  blastRadius: 3
+  blastRadius: 6
 
 - type: cmuShipWeapon
   id: CMU120mmHEBarrage
   name: cmu-ship-weapons-120mm
   shots: 12
   interval: 0.75
-  spread: 6
-  blastRadius: 3
+  spread: 16
+  blastRadius: 12
   maxIntensity: 70
 
 - type: cmuShipWeapon
@@ -160,7 +164,7 @@
   shots: 6
   interval: 1.8
   spread: 6
-  blastRadius: 6
+  blastRadius: 16
 
 - type: cmuShipWeapon
   id: CMUGasStrike
@@ -186,19 +190,18 @@
 - type: cmuShipWeapon
   id: CMUAirburstStrike
   name: cmu-ship-weapons-airburst
-  shots: 3
+  shots: 6
   interval: 0.8
-  spread: 3
-  blastRadius: 5
+  spread: 8
+  blastRadius: 12
   maxIntensity: 50
   airburst: true
 
 - type: cmuShipWeapon
   id: CMUPrecisionStrike
   name: cmu-ship-weapons-precision
-  blastRadius: 4
-  slope: 25
-  maxIntensity: 200
+  blastRadius: 12
+  maxIntensity: 70
 
 - type: cmuShipWeapon
   id: CMURailcannonStrike

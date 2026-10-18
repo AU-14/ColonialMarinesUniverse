@@ -17,7 +17,7 @@ public sealed class CMUShipWeaponsBui(EntityUid owner, Enum uiKey) : BoundUserIn
     {
         base.Open();
         _window = this.CreateWindow<CMUShipWeaponsWindow>();
-        _window.OnArm += (first, second) => SendMessage(new CMUShipWeaponsArmBuiMsg(first, second));
+        _window.OnArm += weapons => SendMessage(new CMUShipWeaponsArmBuiMsg(weapons));
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
@@ -29,14 +29,16 @@ public sealed class CMUShipWeaponsBui(EntityUid owner, Enum uiKey) : BoundUserIn
 
 public sealed class CMUShipWeaponsWindow : DefaultWindow
 {
-    public event Action<ProtoId<CMUShipWeaponPrototype>, ProtoId<CMUShipWeaponPrototype>>? OnArm;
+    public event Action<ProtoId<CMUShipWeaponPrototype>[]>? OnArm;
 
     private readonly Label _status;
+    private readonly Label _instructions;
     private readonly BoxContainer _choices;
     private readonly ConfirmButton _arm;
     private readonly Dictionary<ProtoId<CMUShipWeaponPrototype>, CheckBox> _buttons = new();
     private bool _locked;
     private bool _available;
+    private int _maxSelections;
     private HashSet<ProtoId<CMUShipWeaponPrototype>> _availableWeapons = new();
 
     public CMUShipWeaponsWindow()
@@ -45,7 +47,8 @@ public sealed class CMUShipWeaponsWindow : DefaultWindow
         MinSize = new Vector2(460, 480);
         var root = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, SeparationOverride = 8 };
         AddChild(root);
-        root.AddChild(new Label { Text = Loc.GetString("cmu-ship-weapons-instructions") });
+        _instructions = new Label();
+        root.AddChild(_instructions);
         _status = new Label();
         root.AddChild(_status);
         _choices = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical };
@@ -74,14 +77,16 @@ public sealed class CMUShipWeaponsWindow : DefaultWindow
         _arm.OnPressed += _ =>
         {
             var selected = _buttons.Where(p => p.Value.Pressed).Select(p => p.Key).ToArray();
-            if (selected.Length == 2)
-                OnArm?.Invoke(selected[0], selected[1]);
+            if (selected.Length >= 1 && selected.Length <= _maxSelections)
+                OnArm?.Invoke(selected);
         };
     }
 
     public void UpdateState(CMUShipWeaponsBuiState state)
     {
         _available = state.Available;
+        _maxSelections = state.MaxSelections;
+        _instructions.Text = Loc.GetString("cmu-ship-weapons-instructions", ("max", _maxSelections));
         _locked = state.Weapons.Length != 0;
         _availableWeapons = state.AvailableWeapons.ToHashSet();
         _status.Text = Loc.GetString(!_available ? "cmu-ship-weapons-no-ship" :
@@ -112,8 +117,7 @@ public sealed class CMUShipWeaponsWindow : DefaultWindow
     {
         var count = _buttons.Values.Count(b => b.Pressed);
         foreach (var (id, button) in _buttons)
-            button.Disabled = !_available || _locked || !_availableWeapons.Contains(id) || count >= 2 && !button.Pressed;
-        if (!_arm.IsConfirming || !_available || _locked || count != 2)
-            _arm.Disabled = !_available || _locked || count != 2;
+            button.Disabled = !_available || _locked || !_availableWeapons.Contains(id) || count >= _maxSelections && !button.Pressed;
+        _arm.Disabled = !_available || _locked || count < 1 || count > _maxSelections;
     }
 }

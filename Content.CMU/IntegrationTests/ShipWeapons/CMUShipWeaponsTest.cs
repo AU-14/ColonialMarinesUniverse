@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Content.Client.Guidebook;
+using Content.Client.Guidebook.Components;
+using Content.Client.Guidebook.Richtext;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.ShipWeapons;
 using Content.Server.CMU14.ZLevels.Core;
-using Content.Server.Explosion.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Damage;
-using Content.Shared._RMC14.OrbitalCannon;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Smoke;
@@ -19,6 +20,7 @@ using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Guidebook;
 using Content.Shared.Maps;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -26,6 +28,7 @@ using Content.Shared.StatusEffectNew;
 using Content.Shared.Stunnable;
 using Content.Shared.Tag;
 using Robust.Shared.Configuration;
+using Robust.Shared.ContentPack;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -194,9 +197,130 @@ public sealed class CMUShipWeaponsTest : GameTest
             SEntMan.RemoveComponent<AccessReaderComponent>(terminal);
             Send(terminal, actor, new CMUShipWeaponsArmBuiMsg("CMUGasStrike", "CMUGasStrike"));
             Send(terminal, actor, new CMUShipWeaponsArmBuiMsg("NotAShipWeapon", "CMUSmokeStrike"));
+            Send(terminal, actor, new CMUShipWeaponsArmBuiMsg());
+            Send(terminal, actor, new CMUShipWeaponsArmBuiMsg(
+                "CMUGasStrike", "CMUSmokeStrike", "CMUEMSStrike", "CMUPrecisionStrike"));
             Assert.That(SEntMan.HasComponent<CMUShipWeaponsComponent>(map.Grid), Is.False);
             Send(terminal, actor, new CMUShipWeaponsArmBuiMsg("CMUGasStrike", "CMUSmokeStrike"));
             Assert.That(SComp<CMUShipWeaponsComponent>(map.Grid).Weapons, Has.Count.EqualTo(2));
+        });
+    }
+
+    [TestCase(1)]
+    [TestCase(2)]
+    [TestCase(3)]
+    public async Task CommandCanPermanentlySelectOneToThreeWeapons(int count)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var actor = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var terminal = Terminal(map.GridCoords);
+            ProtoId<CMUShipWeaponPrototype>[] weapons = ["CMUGasStrike", "CMUSmokeStrike", "CMUEMSStrike"];
+            Send(terminal, actor, new CMUShipWeaponsArmBuiMsg(weapons.Take(count).ToArray()));
+            var state = SComp<CMUShipWeaponsComponent>(map.Grid);
+            Assert.That(state.Weapons.Keys, Is.EquivalentTo(weapons.Take(count)));
+            Assert.That(state.Weapons.Values, Is.All.EqualTo(3));
+            Send(terminal, actor, new CMUShipWeaponsArmBuiMsg(weapons));
+            Assert.That(state.Weapons, Has.Count.EqualTo(count), "smaller loadouts cannot be topped up later");
+        });
+    }
+
+    [TestCase(1)]
+    [TestCase(2)]
+    [TestCase(4)]
+    [TestCase(9)]
+    public async Task TerminalSelectionLimitIsEnforcedAndSentToTheClient(int limit)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var actor = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var terminal = Terminal(map.GridCoords);
+            var component = SComp<CMUShipWeaponsTerminalComponent>(terminal);
+            Assert.That(component.MaxSelections, Is.EqualTo(3), "the YAML default preserves the existing loadout size");
+            component.MaxSelections = limit;
+            var weapons = SProtoMan.EnumeratePrototypes<CMUShipWeaponPrototype>()
+                .Select(p => new ProtoId<CMUShipWeaponPrototype>(p.ID)).Take(limit + 1).ToArray();
+            Assert.That(weapons, Has.Length.EqualTo(limit + 1));
+            Send(terminal, actor, new CMUShipWeaponsArmBuiMsg(weapons));
+            Assert.That(SEntMan.HasComponent<CMUShipWeaponsComponent>(map.Grid), Is.False,
+                "the server must reject messages exceeding this terminal's configured limit");
+
+            Send(terminal, actor, new CMUShipWeaponsArmBuiMsg(weapons.Take(limit).ToArray()));
+            var state = SComp<CMUShipWeaponsComponent>(map.Grid);
+            Assert.That(state.Weapons, Has.Count.EqualTo(limit));
+            Assert.That(state.Weapons.Values, Is.All.EqualTo(3));
+            var ui = SEntMan.System<SharedUserInterfaceSystem>();
+            Assert.That(ui.TryGetUiState<CMUShipWeaponsBuiState>(terminal, CMUShipWeaponsUiKey.Key, out var choices), Is.True);
+            Assert.That(choices!.MaxSelections, Is.EqualTo(limit));
+
+            var replacement = Terminal(map.GridCoords);
+            SComp<CMUShipWeaponsTerminalComponent>(replacement).MaxSelections = limit + 1;
+            Send(replacement, actor, new CMUShipWeaponsArmBuiMsg(weapons));
+            Assert.That(state.Weapons, Has.Count.EqualTo(limit),
+                "a higher-limit terminal cannot expand a confirmed ship loadout");
+        });
+    }
+
+    [Test]
+    public async Task SelectionTerminalsExposeAValidCmuShipWeaponsGuide()
+    {
+        await Client.WaitAssertion(() =>
+        {
+            ProtoId<GuideEntryPrototype> guide = "CMUGuideShipWeapons";
+            var factory = Client.ResolveDependency<IComponentFactory>();
+            foreach (EntProtoId terminal in new EntProtoId[]
+                     { "CMUShipWeaponsTerminal", "CMUShipWeaponsTerminalGovfor", "CMUShipWeaponsTerminalOpfor" })
+            {
+                Assert.That(CProtoMan.Index(terminal).TryComp<GuideHelpComponent>(out var help, factory), Is.True);
+                Assert.That(help!.Guides, Does.Contain(guide));
+            }
+            var entry = CProtoMan.Index(guide);
+            using var reader = Client.ResolveDependency<IResourceManager>().ContentFileReadText(entry.Text);
+            Assert.That(Client.ResolveDependency<DocumentParsingManager>().TryAddMarkup(new Document(), reader.ReadToEnd()),
+                Is.True, "the inspect-linked guide parses in the actual client guidebook");
+        });
+    }
+
+    [Test]
+    public async Task LaunchSchedulesOneDirectionalWarningThreeSecondsLater()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid strike = default;
+        TimeSpan warningAt = default;
+        await Server.WaitAssertion(() =>
+        {
+            var planet = SEntMan.EnsureComponent<RMCPlanetComponent>(map.MapUid);
+            planet.Offset = Vector2i.Zero;
+            var areaGrid = SEntMan.EnsureComponent<AreaGridComponent>(map.Grid);
+            SEntMan.System<AreaSystem>().ReplaceArea(areaGrid, Vector2i.Zero, "RMCAreaDesertDamInterior");
+            SComp<AreaComponent>(areaGrid.AreaEntities["RMCAreaDesertDamInterior"]).OB = true;
+            var actor = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var terminal = Terminal(map.GridCoords);
+            var console = Console(map.GridCoords);
+            Send(terminal, actor, new CMUShipWeaponsArmBuiMsg("CMUGatlingBarrage"));
+            SComp<OverwatchConsoleComponent>(console).OrbitalCoordinates = Vector2i.Zero;
+            Send(console, actor, new CMUShipWeaponSelectBuiMsg("CMUGatlingBarrage", CMUShipWeaponBearing.North), true);
+            Send(console, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
+            strike = Strikes().Single();
+            var firing = SComp<CMUShipWeaponStrikeComponent>(strike);
+            warningAt = firing.DirectionalWarningAt;
+            Assert.That(warningAt - SGameTiming.CurTime, Is.EqualTo(TimeSpan.FromSeconds(3)));
+            Assert.That(firing.DirectionalWarned, Is.False);
+        });
+        await Pair.RunSeconds(2);
+        await Server.WaitAssertion(() => Assert.That(SComp<CMUShipWeaponStrikeComponent>(strike).DirectionalWarned, Is.False));
+        await Pair.RunSeconds(2);
+        await Server.WaitAssertion(() =>
+        {
+            var firing = SComp<CMUShipWeaponStrikeComponent>(strike);
+            Assert.That(firing.DirectionalWarned, Is.True);
+            Assert.That(firing.Shot, Is.Zero, "directional warning precedes impact, not each barrage shell");
+            Assert.That(firing.Warned, Is.False, "final approach remains a separate warning");
+            SEntMan.System<CMUShipWeaponsSystem>().Update(0);
+            Assert.That(firing.DirectionalWarningAt, Is.EqualTo(warningAt), "directional warning is not rescheduled");
+            SEntMan.DeleteEntity(strike);
         });
     }
 
@@ -267,25 +391,30 @@ public sealed class CMUShipWeaponsTest : GameTest
         {
             var profiles = SProtoMan.EnumeratePrototypes<CMUShipWeaponPrototype>().ToArray();
             Assert.That(profiles, Has.Length.EqualTo(10));
-            EntProtoId standardId = "RMCOrbitalCannonExplosionExplosive";
-            var standard = SProtoMan.Index(standardId)
-                .Components["OrbitalCannonExplosion"].Component as OrbitalCannonExplosionComponent;
-            Assert.That(standard, Is.Not.Null);
-            var explosion = SEntMan.System<ExplosionSystem>();
-            var standardRadius = standard!.Steps.Where(s => s.Type != null)
-                .Max(s => explosion.IntensityToRadius(s.Total, s.Slope, s.Max));
             foreach (var profile in profiles)
             {
                 Assert.That(profile.Shots, Is.GreaterThan(0), profile.ID);
                 Assert.That(profile.Interval, Is.GreaterThan(TimeSpan.Zero), profile.ID);
                 if (profile.Cloud != null)
                     Assert.That(profile.CloudRadius, Is.EqualTo(30), profile.ID);
-                else
-                {
-                    Assert.That(profile.FootprintRadius, Is.LessThanOrEqualTo(12), profile.ID);
-                    Assert.That(profile.FootprintRadius, Is.LessThan(standardRadius), profile.ID);
-                }
             }
+
+            Assert.That(Profile("CMUGatlingBarrage").Shots, Is.EqualTo(120));
+            Assert.That(Profile("CMUGatlingBarrage").Spread, Is.EqualTo(16));
+            Assert.That(Profile("CMUWalkingBarrage").Shots, Is.EqualTo(9));
+            Assert.That(Profile("CMUWalkingBarrage").BlastRadius, Is.EqualTo(6));
+            Assert.That(Profile("CMU120mmHEBarrage").Spread, Is.EqualTo(16));
+            Assert.That(Profile("CMU120mmHEBarrage").BlastRadius, Is.EqualTo(12));
+            Assert.That(Profile("CMU380mmHEBarrage").BlastRadius, Is.EqualTo(16));
+            Assert.That(Profile("CMUAirburstStrike").Shots, Is.EqualTo(6));
+            Assert.That(Profile("CMUAirburstStrike").Spread, Is.EqualTo(8));
+            Assert.That(Profile("CMUAirburstStrike").BlastRadius, Is.EqualTo(12));
+            var precision = Profile("CMUPrecisionStrike");
+            var he120 = Profile("CMU120mmHEBarrage");
+            Assert.That(precision.Shots, Is.EqualTo(1));
+            Assert.That(precision.BlastRadius, Is.EqualTo(he120.BlastRadius));
+            Assert.That(precision.Slope, Is.EqualTo(he120.Slope));
+            Assert.That(precision.MaxIntensity, Is.EqualTo(he120.MaxIntensity));
 
             var walking = Profile("CMUWalkingBarrage");
             foreach (var bearing in Enum.GetValues<CMUShipWeaponBearing>())
@@ -508,6 +637,96 @@ public sealed class CMUShipWeaponsTest : GameTest
         finally
         {
             await Server.WaitPost(() => config.SetCVar(CCVars.ShipWeaponsRequireGuns, false));
+        }
+    }
+
+    [Test]
+    public async Task RailcannonHitsEveryNetworkLevelButNotOtherNetworksOrProtectedTiles()
+    {
+        var cleanup = new List<EntityUid>();
+        var victims = new List<EntityUid>();
+        var outside = new List<EntityUid>();
+        EntityCoordinates strikeCoordinates = default;
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var maps = SEntMan.System<SharedMapSystem>();
+                var zLevels = SEntMan.System<CMUZLevelsSystem>();
+                var network = zLevels.CreateZNetwork();
+                var unrelated = zLevels.CreateZNetwork();
+                cleanup.Add(network);
+                cleanup.Add(unrelated);
+                var members = new Dictionary<EntityUid, int>();
+                var tileId = Server.ResolveDependency<ITileDefinitionManager>()["Plating"].TileId;
+                for (var i = 0; i < 4; i++)
+                {
+                    var map = maps.CreateMap(out var mapId);
+                    cleanup.Add(map);
+                    var grid = maps.CreateGridEntity(mapId);
+                    var areaGrid = SEntMan.EnsureComponent<AreaGridComponent>(grid);
+                    for (var x = 0; x <= 3; x++)
+                    {
+                        var tile = new Vector2i(x, 0);
+                        maps.SetTile(grid, tile, new Tile(tileId));
+                        SEntMan.System<AreaSystem>().ReplaceArea(areaGrid, tile, "RMCAreaDesertDamInterior");
+                    }
+                    SComp<AreaComponent>(areaGrid.AreaEntities["RMCAreaDesertDamInterior"]).OB = true;
+                    var center = new EntityCoordinates(grid, new Vector2(.5f));
+                    var victim = SEntMan.SpawnEntity(null, center);
+                    SEntMan.EnsureComponent<DamageableComponent>(victim);
+                    SEntMan.EnsureComponent<InjurableComponent>(victim);
+                    var edge = SEntMan.SpawnEntity(null, new EntityCoordinates(grid, new Vector2(3.5f, .5f)));
+                    SEntMan.EnsureComponent<DamageableComponent>(edge);
+                    SEntMan.EnsureComponent<InjurableComponent>(edge);
+                    victims.Add(victim);
+                    outside.Add(edge);
+                    if (i < 3)
+                        members.Add(map, i - 1);
+                    else
+                        Assert.That(zLevels.TryAddMapsIntoZNetwork(unrelated, new() { [map] = 0 }), Is.True);
+                    if (i == 1)
+                        strikeCoordinates = center;
+                }
+                Assert.That(zLevels.TryAddMapsIntoZNetwork(network, members), Is.True);
+            });
+            await Pair.RunTicksSync(2);
+            await Server.WaitAssertion(() =>
+            {
+                var strike = SEntMan.SpawnEntity("CMUShipWeaponStrike", strikeCoordinates);
+                SEntMan.EnsureComponent<CMUShipWeaponStrikeComponent>(strike).Weapon = "CMURailcannonStrike";
+                SEntMan.System<CMUShipWeaponsSystem>().Update(0);
+                for (var i = 0; i < victims.Count; i++)
+                {
+                    Assert.That(SEntMan.System<DamageableSystem>()
+                        .GetTotalDamage((victims[i], SComp<DamageableComponent>(victims[i]))).Float(),
+                        Is.EqualTo(i < 3 ? 4000 : 0), $"level/network {i}");
+                    Assert.That(SEntMan.System<DamageableSystem>()
+                        .GetTotalDamage((outside[i], SComp<DamageableComponent>(outside[i]))).Float(),
+                        Is.Zero, $"no 5x5 spill on level {i}");
+                }
+
+                // A second mission must retain each level's area protection.
+                var protectedGrid = SComp<TransformComponent>(victims[0]).GridUid!.Value;
+                var protectedAreas = SComp<AreaGridComponent>(protectedGrid);
+                SComp<AreaComponent>(protectedAreas.AreaEntities["RMCAreaDesertDamInterior"]).OB = false;
+                strike = SEntMan.SpawnEntity("CMUShipWeaponStrike", strikeCoordinates);
+                SEntMan.EnsureComponent<CMUShipWeaponStrikeComponent>(strike).Weapon = "CMURailcannonStrike";
+                SEntMan.System<CMUShipWeaponsSystem>().Update(0);
+                Assert.That(SEntMan.System<DamageableSystem>()
+                    .GetTotalDamage((victims[0], SComp<DamageableComponent>(victims[0]))).Float(), Is.EqualTo(4000));
+            });
+        }
+        finally
+        {
+            await Server.WaitPost(() =>
+            {
+                foreach (var uid in cleanup)
+                {
+                    if (!SEntMan.Deleted(uid))
+                        SEntMan.DeleteEntity(uid);
+                }
+            });
         }
     }
 

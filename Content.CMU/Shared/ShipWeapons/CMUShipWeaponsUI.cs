@@ -4,7 +4,11 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.CMU14.ShipWeapons;
 
 [RegisterComponent]
-public sealed partial class CMUShipWeaponsTerminalComponent : Component;
+public sealed partial class CMUShipWeaponsTerminalComponent : Component
+{
+    [DataField]
+    public int MaxSelections = 3;
+}
 
 [Serializable, NetSerializable]
 public enum CMUShipWeaponsUiKey : byte
@@ -17,21 +21,20 @@ public sealed class CMUShipWeaponsBuiState(
     bool available,
     CMUShipWeaponStatus[] weapons,
     ProtoId<CMUShipWeaponPrototype>[] availableWeapons,
-    bool requiresGuns) : BoundUserInterfaceState
+    bool requiresGuns,
+    int maxSelections) : BoundUserInterfaceState
 {
     public readonly bool Available = available;
     public readonly CMUShipWeaponStatus[] Weapons = weapons;
     public readonly ProtoId<CMUShipWeaponPrototype>[] AvailableWeapons = availableWeapons;
     public readonly bool RequiresGuns = requiresGuns;
+    public readonly int MaxSelections = maxSelections;
 }
 
 [Serializable, NetSerializable]
-public sealed class CMUShipWeaponsArmBuiMsg(
-    ProtoId<CMUShipWeaponPrototype> first,
-    ProtoId<CMUShipWeaponPrototype> second) : BoundUserInterfaceMessage
+public sealed class CMUShipWeaponsArmBuiMsg(params ProtoId<CMUShipWeaponPrototype>[] weapons) : BoundUserInterfaceMessage
 {
-    public readonly ProtoId<CMUShipWeaponPrototype> First = first;
-    public readonly ProtoId<CMUShipWeaponPrototype> Second = second;
+    public readonly ProtoId<CMUShipWeaponPrototype>[] Weapons = weapons;
 }
 
 [Serializable, NetSerializable]

@@ -37,6 +37,12 @@ public sealed partial class CMUShipWeaponStrikeComponent : Component
     [DataField]
     public bool Warned;
 
+    [DataField]
+    public bool DirectionalWarned;
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan DirectionalWarningAt;
+
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextShot;
 }
