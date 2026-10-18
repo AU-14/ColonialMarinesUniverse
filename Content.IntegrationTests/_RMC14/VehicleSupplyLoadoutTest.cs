@@ -175,7 +175,7 @@ public sealed class VehicleSupplyLoadoutTest
             AssertHardpoints(entries, "VehicleSPPTank", SppTankHardpoints);
 
 
-            AssertEntryGroup(entries, "VehicleHumvee", "vehicle-support");
+            AssertEntryGroup(entries, "VehicleHumvee", "vehicle-armed"); // cmu edit: armed humvees take the VTOL/APC slot
             AssertEntryGroup(entries, "VehicleHumveeMedical", "vehicle-support");
             AssertEntryGroup(entries, "VehicleHumveeTransport", "vehicle-support");
             AssertEntryGroup(entries, "VehicleSPPAPC", "vehicle-apc");

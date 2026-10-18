@@ -94,6 +94,9 @@
     snap:
     - Wall
   components:
+  # cmu edit start: deep water for the Can't Swim and Fear of Water traits
+  - type: CMUTraitDeepWater
+  # cmu edit end
   - type: Sprite
     drawdepth: Overlays
     sprite: _RMC14/Tiles/planet/desert_water.rsi

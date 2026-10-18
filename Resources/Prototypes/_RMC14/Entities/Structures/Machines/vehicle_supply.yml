@@ -54,7 +54,7 @@
 
     - name: M2420 JTMV Armed
       vehicle: VehicleHumvee
-      group: vehicle-support
+      group: vehicle-armed # cmu edit: armed, so it takes the VTOL/APC slot
       hardpoints:
       - VehicleHumveeTurret
       - VehicleHumveeTurretArmed
@@ -81,22 +81,6 @@
       - VehicleHumveeOverlight
       - VehicleHumveeWheel
 
-    # CMU14: ARC equipment is available only through the WY platoon catalog.
-    - name: M2420 JTMV Armed (ARC) #arc stuff add it via the vendor list
-      vehicle: VehicleHumveeARC
-      hardpoints:
-      - VehicleHumveeTurret
-      - VehicleHumveeTurretArmed
-      - VehicleHumveeARCTurret
-      - VehicleHumveeCannon
-      - VehicleHumveeARCCannon
-      - VehicleHumveeLauncher
-      - VehicleHumveeSnowplow
-      - VehicleHumveeOverlight
-      - VehicleHumveeHatch
-      - VehicleHumveeWheel
-    # CMU14 End
-
     - name: Kheshig-1 Transport (UPP)
       vehicle: VehicleSPPVan
       group: vehicle-support
@@ -105,7 +89,7 @@
 
     - name: Kheshig-1 Armed (UPP)
       vehicle: VehicleSPPVanArmed
-      group: vehicle-support
+      group: vehicle-armed # cmu edit: armed, so it takes the VTOL/APC slot
       hardpoints:
       - VehicleSPPVanTurret
       - VehicleSPPVanCannon
@@ -131,7 +115,7 @@
 
     - name: M34E1 AEV
       vehicle: VehicleAev
-      group: vehicle-apc
+      group: vehicle-support # cmu edit: unarmed, so it takes the support slot
       hardpoints:
       - VehicleTankTreads
       - VehicleTankReinforcedTreads

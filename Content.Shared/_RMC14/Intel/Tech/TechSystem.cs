@@ -143,6 +143,11 @@ public sealed partial class TechSystem : EntitySystem
         if (option.Purchased && !option.Repurchasable)
             return;
 
+        // cmu edit start: capped repurchases
+        if (option.MaxPurchases > 0 && option.TimesPurchased >= option.MaxPurchases)
+            return;
+        // cmu edit end
+
         // cmu edit start: spend from the combined objective + intel pool shown on the console (intel first)
         if (!_intel.TrySpendCombinedPoints(team, option.CurrentCost))
             return;
@@ -152,6 +157,7 @@ public sealed partial class TechSystem : EntitySystem
         {
             CurrentCost = option.CurrentCost + option.Increase,
             Purchased = true,
+            TimesPurchased = option.TimesPurchased + 1, // cmu edit
         };
         Dirty(ent);
 

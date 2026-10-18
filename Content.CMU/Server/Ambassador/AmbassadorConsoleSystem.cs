@@ -108,6 +108,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
             // this runs every tick, don't reallocate the set unless it actually changed
             if (!comp.CalledParties.SetEquals(source.CalledParties))
                 comp.CalledParties = new HashSet<string>(source.CalledParties);
+            comp.NextCallInAt = source.NextCallInAt;
         }
     }
 
@@ -380,7 +381,11 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
                 thirdParties[id] = (displayName, cost);
             }
         }
-        var thirdPartyState = new AmbassadorThirdPartyBuiState(comp.Budget, thirdParties, comp.CalledParties);
+        var thirdPartyState = new AmbassadorThirdPartyBuiState(comp.Budget, thirdParties, comp.CalledParties)
+        {
+            CallsLeft = Math.Max(0, comp.MaxCallIns - comp.CalledParties.Count),
+            NextCallInAt = comp.NextCallInAt,
+        };
         _ui.SetUiState(uid, AmbassadorThirdPartyUi.Key, thirdPartyState);
     }
 
@@ -415,6 +420,8 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     {
         if (!comp.CallableParties.TryGetValue(msg.ThirdPartyId, out var cost)) return;
         if (comp.CalledParties.Contains(msg.ThirdPartyId)) return;
+        if (comp.CalledParties.Count >= comp.MaxCallIns) return;
+        if (_timing.CurTime < comp.NextCallInAt) return;
         if (comp.Budget < cost) return;
         if (!_proto.TryIndex<ThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto)) return;
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto)) return;
@@ -422,6 +429,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
 
         comp.Budget -= cost;
         comp.CalledParties.Add(msg.ThirdPartyId);
+        comp.NextCallInAt = _timing.CurTime + comp.CallInCooldown;
         UpdateAllFactionUi(comp);
     }
 
