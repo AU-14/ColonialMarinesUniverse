@@ -131,7 +131,11 @@ public readonly record struct CMUBodyPartReadout(
     bool Cast,
     bool Tourniquet,
     // cmu edit start
-    ExternalBleedTier ExternalBleeding = ExternalBleedTier.None);
+    ExternalBleedTier ExternalBleeding = ExternalBleedTier.None,
+    FixedPoint2 Brute = default,
+    FixedPoint2 Burn = default,
+    bool UntreatedBrute = false,
+    bool UntreatedBurn = false);
     // cmu edit end
 
 // cmu edit start

@@ -145,6 +145,11 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
             ? health.BodyDamage.DamageDict.GetValueOrDefault(type)
             : FixedPoint2.Zero;
 
+    public Dictionary<ProtoId<DamageGroupPrototype>, FixedPoint2> GetAttributedDamagePerGroup(EntityUid part)
+        => TryComp<BodyPartHealthComponent>(part, out var health)
+            ? health.BodyDamage.GetDamagePerGroup(_prototypes)
+            : new Dictionary<ProtoId<DamageGroupPrototype>, FixedPoint2>();
+
     /// <summary>Returns this site's outstanding contribution to aggregate brute/burn damage.</summary>
     public FixedPoint2 GetOutstandingBodyDamage(EntityUid part)
         => TryComp<BodyPartHealthComponent>(part, out var health) ? health.BodyDamage.GetTotal() : FixedPoint2.Zero;
