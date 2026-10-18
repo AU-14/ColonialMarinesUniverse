@@ -1494,7 +1494,7 @@
     - name: Rail Attachments
       entries:
       - id: CMUAttachmentNightVisionScope
-        amount: 15
+        amount: 3
       - id: RMCAttachmentTwoPointSling
         amount: 50
       - id: RMCAttachmentRailFlashlight
