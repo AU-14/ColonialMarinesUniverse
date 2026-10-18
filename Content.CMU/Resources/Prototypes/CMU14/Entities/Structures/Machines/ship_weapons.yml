@@ -94,6 +94,11 @@
     whitelist:
       components:
       - MobState
+    multipliers:
+    - multiplier: 0
+      whitelist:
+        components:
+        - Xeno
   - type: GasMaskFilterDamage
     damage: 5
     neurotoxin: false
@@ -106,15 +111,21 @@
   - type: Sprite
     color: "#88cce8"
   - type: TimedDespawn
-    lifetime: 20
+    lifetime: 15
+
+- type: entity
+  parent: StatusEffectStunned
+  id: CMUShipWeaponEmsStun
+  name: EMS paralysis
+  components:
+  - type: StatusEffect
+    blacklist: null
 
 - type: entity
   id: CMUShipWeaponEmsField
   categories: [ HideSpawnMenu ]
   components:
   - type: CMUShipWeaponEmsField
-  - type: TimedDespawn
-    lifetime: 20
 
 - type: cmuShipWeapon
   id: CMUGatlingBarrage
@@ -155,20 +166,22 @@
   id: CMUGasStrike
   name: cmu-ship-weapons-gas
   cloud: CMUShipWeaponGas
-  cloudRadius: 5
+  cloudRadius: 30
 
 - type: cmuShipWeapon
   id: CMUEMSStrike
   name: cmu-ship-weapons-ems
   cloud: CMUShipWeaponEmsCloud
-  cloudRadius: 5
+  cloudRadius: 30
   ems: true
+  fieldDuration: 15
+  stunAfterField: 25
 
 - type: cmuShipWeapon
   id: CMUSmokeStrike
   name: cmu-ship-weapons-smoke
   cloud: CMUShipWeaponSmoke
-  cloudRadius: 6
+  cloudRadius: 30
 
 - type: cmuShipWeapon
   id: CMUAirburstStrike
@@ -186,3 +199,168 @@
   blastRadius: 4
   slope: 25
   maxIntensity: 200
+
+- type: cmuShipWeapon
+  id: CMURailcannonStrike
+  name: cmu-ship-weapons-railcannon
+  railDamage:
+    types:
+      Piercing: 2000
+      Structural: 2000
+
+- type: entity
+  abstract: true
+  parent: RMCAntiAirPropFlipped
+  id: CMUShipWeaponGunBase
+  description: A ship-mounted orbital support battery. Load one matching mission round for an entire fire mission. Alt-click to unload.
+  components:
+  - type: InteractionOutline
+  - type: ItemSlots
+    slots:
+      mission-round:
+        name: cmu-ship-weapons-ammo-slot
+        whitelist:
+          components:
+          - CMUShipWeaponAmmo
+  - type: ContainerContainer
+    containers:
+      mission-round: !type:ContainerSlot {}
+
+- type: entity
+  parent: CMUShipWeaponGunBase
+  id: CMUShipWeaponGunHeavy
+  name: heavy orbital battery
+  suffix: 120mm, 380mm, Airburst
+  components:
+  - type: CMUShipWeaponGun
+    weapons:
+    - CMU120mmHEBarrage
+    - CMU380mmHEBarrage
+    - CMUAirburstStrike
+
+- type: entity
+  parent: CMUShipWeaponGunBase
+  id: CMUShipWeaponGunSupport
+  name: orbital support projector
+  suffix: Gas, EMS, Smoke
+  components:
+  - type: CMUShipWeaponGun
+    weapons:
+    - CMUGasStrike
+    - CMUEMSStrike
+    - CMUSmokeStrike
+
+- type: entity
+  parent: CMUShipWeaponGunBase
+  id: CMUShipWeaponGunRapid
+  name: rapid orbital battery
+  suffix: Gatling, Walking, Precision
+  components:
+  - type: CMUShipWeaponGun
+    weapons:
+    - CMUGatlingBarrage
+    - CMUWalkingBarrage
+    - CMUPrecisionStrike
+
+- type: entity
+  parent: CMUShipWeaponGunBase
+  id: CMUShipWeaponGunRailcannon
+  name: orbital railcannon
+  suffix: Railcannon
+  components:
+  - type: CMUShipWeaponGun
+    weapons:
+    - CMURailcannonStrike
+
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: CMUShipWeaponRoundBase
+  description: A complete orbital fire-mission payload. Load into a compatible ship battery. One round supplies the entire mission.
+  components:
+  - type: Item
+    size: Large
+    heldPrefix: he
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/mortar.rsi
+    state: mortar_ammo_he
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRound120mm
+  name: 120mm HE barrage mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMU120mmHEBarrage
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRound380mm
+  name: 380mm HE barrage mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMU380mmHEBarrage
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRoundAirburst
+  name: airburst strike mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMUAirburstStrike
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRoundGas
+  name: gas strike mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMUGasStrike
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRoundEMS
+  name: EMS strike mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMUEMSStrike
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRoundSmoke
+  name: smoke strike mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMUSmokeStrike
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRoundGatling
+  name: gatling barrage mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMUGatlingBarrage
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRoundWalking
+  name: walking barrage mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMUWalkingBarrage
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRoundPrecision
+  name: precision strike mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMUPrecisionStrike
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRoundRailcannon
+  name: railcannon strike mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMURailcannonStrike

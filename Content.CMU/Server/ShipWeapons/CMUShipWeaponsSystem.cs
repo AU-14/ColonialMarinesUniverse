@@ -8,7 +8,6 @@ using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Mortar;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.Rules;
-using Content.Shared._RMC14.Slow;
 using Content.Shared.Access.Systems;
 using Content.Shared.CMU14.ShipWeapons;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
@@ -17,9 +16,9 @@ using Content.Shared.Database;
 using Content.Shared.Maps;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
-using Content.Shared.Stunnable;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -33,6 +32,7 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private AreaSystem _area = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private Content.Server.Explosion.EntitySystems.ExplosionSystem _explosion = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedMapSystem _map = default!;
@@ -46,8 +46,6 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedRMCExplosionSystem _rmcExplosion = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
-    [Dependency] private RMCSlowSystem _slow = default!;
-    [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
@@ -58,6 +56,8 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
 
     public override void Initialize()
     {
+        InitializeGuns();
+        InitializeEffects();
         SubscribeLocalEvent<CMUShipWeaponsTerminalComponent, BoundUIOpenedEvent>(OnTerminalOpened);
         Subs.BuiEvents<CMUShipWeaponsTerminalComponent>(CMUShipWeaponsUiKey.Key,
             subs => subs.Event<CMUShipWeaponsArmBuiMsg>(OnArm));
@@ -104,8 +104,12 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
     private void UpdateTerminal(EntityUid terminal)
     {
         var available = TryGetShip(terminal, out var ship);
+        var weapons = available
+            ? (_requireGuns ? GetSupportedWeapons(ship).ToArray() :
+                _prototypes.EnumeratePrototypes<CMUShipWeaponPrototype>().Select(w => new ProtoId<CMUShipWeaponPrototype>(w.ID)).ToArray())
+            : [];
         _ui.SetUiState(terminal, CMUShipWeaponsUiKey.Key,
-            new CMUShipWeaponsBuiState(available, available ? GetWeapons(ship) : []));
+            new CMUShipWeaponsBuiState(available, available ? GetWeapons(ship) : [], weapons, _requireGuns));
     }
 
     private void UpdateOverwatch(Entity<OverwatchConsoleComponent> console)
@@ -166,6 +170,17 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
         {
             Reject(args.Actor, "cmu-ship-weapons-invalid-selection");
             return;
+        }
+
+        if (_requireGuns)
+        {
+            var supported = GetSupportedWeapons(ship);
+            if (!supported.Contains(args.First) || !supported.Contains(args.Second))
+            {
+                Reject(args.Actor, "cmu-ship-weapons-missing-gun");
+                UpdateTerminal(ent);
+                return;
+            }
         }
 
         var state = EnsureComp<CMUShipWeaponsComponent>(ship);
@@ -238,6 +253,13 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
         }
 
         var profile = _prototypes.Index(weapon);
+        EntityUid firingGun = default, round = default;
+        if (_requireGuns && !TryGetFiringGun(ship, weapon, out firingGun, out round))
+        {
+            Reject(args.User, "cmu-ship-weapons-no-loaded-gun");
+            return;
+        }
+
         var strike = Spawn("CMUShipWeaponStrike", _transform.ToCoordinates(selected));
         var firing = EnsureComp<CMUShipWeaponStrikeComponent>(strike);
         firing.Weapon = weapon;
@@ -245,6 +267,11 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
         firing.NextShot = _timing.CurTime + TimeSpan.FromSeconds(24);
         state.Weapons[weapon] = remaining - 1;
         state.NextLaunch = _timing.CurTime + state.Cooldown;
+        if (_requireGuns)
+        {
+            Del(round);
+            _audio.PlayPvs(new SoundPathSpecifier("/Audio/_RMC14/Weapons/Vehicles/smokelauncher_fire.ogg"), firingGun);
+        }
 
         Spawn("RMCLaserDropshipTarget", impactCoordinates);
         _audio.PlayPvs(new SoundPathSpecifier("/Audio/_RMC14/Effects/ob_alert.ogg"),
@@ -301,6 +328,12 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
 
     public override void Update(float frameTime)
     {
+        if (_requireGuns && _timing.CurTime >= _nextTerminalRefresh)
+        {
+            _nextTerminalRefresh = _timing.CurTime + TimeSpan.FromSeconds(1);
+            RefreshTerminals();
+        }
+
         var strikes = EntityQueryEnumerator<CMUShipWeaponStrikeComponent>();
         while (strikes.MoveNext(out var uid, out var strike))
         {
@@ -335,28 +368,14 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
                 QueueDel(uid);
         }
 
-        var fields = EntityQueryEnumerator<CMUShipWeaponEmsFieldComponent>();
-        while (fields.MoveNext(out var uid, out var field))
-        {
-            if (_timing.CurTime < field.NextPulse)
-                continue;
-
-            field.NextPulse = _timing.CurTime + TimeSpan.FromSeconds(1);
-            _mobs.Clear();
-            _lookup.GetEntitiesInRange(_transform.GetMapCoordinates(uid), field.Radius, _mobs);
-            foreach (var mob in _mobs)
-            {
-                if (!_area.CanOrbitalBombard(Transform(mob).Coordinates, out _))
-                    continue;
-
-                _slow.TrySuperSlowdown(mob, TimeSpan.FromSeconds(2));
-                _stun.TryStun(mob, TimeSpan.FromSeconds(1.5), true);
-            }
-        }
+        UpdateEmsFields();
     }
 
     private void Impact(EntityUid source, CMUShipWeaponPrototype profile, MapCoordinates impact)
     {
+        if (profile.RailDamage is { } damage)
+            RailImpact(source, damage, impact);
+
         if (profile.BlastRadius > 0)
         {
             var total = _explosion.RadiusToIntensity(profile.BlastRadius, profile.Slope, profile.MaxIntensity);
@@ -388,7 +407,10 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
         if (profile.Ems)
         {
             var field = Spawn("CMUShipWeaponEmsField", _transform.ToCoordinates(impact));
-            Comp<CMUShipWeaponEmsFieldComponent>(field).Radius = profile.CloudRadius;
+            var ems = Comp<CMUShipWeaponEmsFieldComponent>(field);
+            ems.Radius = profile.CloudRadius;
+            ems.EndsAt = _timing.CurTime + profile.FieldDuration;
+            ems.StunAfterField = profile.StunAfterField;
         }
     }
 }

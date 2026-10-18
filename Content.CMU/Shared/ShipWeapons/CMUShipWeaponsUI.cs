@@ -13,10 +13,16 @@ public enum CMUShipWeaponsUiKey : byte
 }
 
 [Serializable, NetSerializable]
-public sealed class CMUShipWeaponsBuiState(bool available, CMUShipWeaponStatus[] weapons) : BoundUserInterfaceState
+public sealed class CMUShipWeaponsBuiState(
+    bool available,
+    CMUShipWeaponStatus[] weapons,
+    ProtoId<CMUShipWeaponPrototype>[] availableWeapons,
+    bool requiresGuns) : BoundUserInterfaceState
 {
     public readonly bool Available = available;
     public readonly CMUShipWeaponStatus[] Weapons = weapons;
+    public readonly ProtoId<CMUShipWeaponPrototype>[] AvailableWeapons = availableWeapons;
+    public readonly bool RequiresGuns = requiresGuns;
 }
 
 [Serializable, NetSerializable]

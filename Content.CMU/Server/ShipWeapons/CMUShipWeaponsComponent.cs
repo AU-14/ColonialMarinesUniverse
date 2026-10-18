@@ -46,7 +46,13 @@ public sealed partial class CMUShipWeaponStrikeComponent : Component
 public sealed partial class CMUShipWeaponEmsFieldComponent : Component
 {
     [DataField]
-    public float Radius = 5;
+    public float Radius = 30;
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan EndsAt;
+
+    [DataField]
+    public TimeSpan StunAfterField = TimeSpan.FromSeconds(25);
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextPulse;

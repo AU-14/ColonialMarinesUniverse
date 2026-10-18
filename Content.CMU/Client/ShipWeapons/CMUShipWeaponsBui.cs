@@ -37,6 +37,7 @@ public sealed class CMUShipWeaponsWindow : DefaultWindow
     private readonly Dictionary<ProtoId<CMUShipWeaponPrototype>, CheckBox> _buttons = new();
     private bool _locked;
     private bool _available;
+    private HashSet<ProtoId<CMUShipWeaponPrototype>> _availableWeapons = new();
 
     public CMUShipWeaponsWindow()
     {
@@ -82,12 +83,20 @@ public sealed class CMUShipWeaponsWindow : DefaultWindow
     {
         _available = state.Available;
         _locked = state.Weapons.Length != 0;
+        _availableWeapons = state.AvailableWeapons.ToHashSet();
         _status.Text = Loc.GetString(!_available ? "cmu-ship-weapons-no-ship" :
             _locked ? "cmu-ship-weapons-locked" : "cmu-ship-weapons-unarmed");
         foreach (var (id, button) in _buttons)
         {
             if (!_locked)
+            {
+                if (!_availableWeapons.Contains(id))
+                    button.Pressed = false;
+                button.ToolTip = state.RequiresGuns && !_availableWeapons.Contains(id)
+                    ? Loc.GetString("cmu-ship-weapons-missing-gun")
+                    : null;
                 continue;
+            }
 
             var armed = state.Weapons.FirstOrDefault(w => w.Weapon == id);
             button.Pressed = state.Weapons.Any(w => w.Weapon == id);
@@ -102,8 +111,8 @@ public sealed class CMUShipWeaponsWindow : DefaultWindow
     private void UpdateChoices()
     {
         var count = _buttons.Values.Count(b => b.Pressed);
-        foreach (var button in _buttons.Values)
-            button.Disabled = !_available || _locked || count >= 2 && !button.Pressed;
+        foreach (var (id, button) in _buttons)
+            button.Disabled = !_available || _locked || !_availableWeapons.Contains(id) || count >= 2 && !button.Pressed;
         if (!_arm.IsConfirming || !_available || _locked || count != 2)
             _arm.Disabled = !_available || _locked || count != 2;
     }
