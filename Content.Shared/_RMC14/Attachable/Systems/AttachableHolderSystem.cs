@@ -139,6 +139,7 @@ public sealed partial class AttachableHolderSystem : EntitySystem
 
     private void OnHolderMapInit(Entity<AttachableHolderComponent> holder, ref MapInitEvent args)
     {
+        EnsureCMUSlingSlot(holder); // CMU14: slings can use an unlocked underbarrel mount.
         var xform = Transform(holder.Owner);
         var coords = new EntityCoordinates(holder.Owner, Vector2.Zero);
         var doRandom = _random.Prob(holder.Comp.RandomAttachmentChance);
@@ -544,11 +545,11 @@ public sealed partial class AttachableHolderSystem : EntitySystem
             return false;
 
         if (!string.IsNullOrWhiteSpace(slotId))
-            return _whitelist.IsWhitelistPass(holder.Comp.Slots[slotId].Whitelist, attachableUid);
+            return IsCMUSlotCompatible(holder, slotId, attachableUid); // CMU14: sling mounting mode.
 
         foreach (var key in holder.Comp.Slots.Keys)
         {
-            if (_whitelist.IsWhitelistPass(holder.Comp.Slots[key].Whitelist, attachableUid))
+            if (IsCMUSlotCompatible(holder, key, attachableUid)) // CMU14: sling mounting mode.
             {
                 slotId = key;
                 return true;
@@ -624,7 +625,7 @@ public sealed partial class AttachableHolderSystem : EntitySystem
 
         foreach (var slotId in holder.Comp.Slots.Keys)
         {
-            if (_whitelist.IsWhitelistPass(holder.Comp.Slots[slotId].Whitelist, attachableUid) && (!ignoreLock || !holder.Comp.Slots[slotId].Locked))
+            if (IsCMUSlotCompatible(holder, slotId, attachableUid) && (!ignoreLock || !holder.Comp.Slots[slotId].Locked)) // CMU14: sling mounting mode.
                 list.Add(slotId);
         }
 
