@@ -34,6 +34,11 @@ From left to right you have the attachments, armaments, and munitions vendor. Th
 - Munitions vendor: This vendor contains ammunition—everything from standard issue to AP and even ML66A drums. Give Marines anything within reason.
 - Surplus vendor: This vendor contains headset keys, uniform, armor, and helmets. Give Marines anything they ask from this vendor.
 
+<!-- CMU14: scope availability -->
+During Insurgency, night vision scopes are unavailable from requisitions vendors. Regular scopes remain available, and CLF vendors retain their night vision scopes.
+In every game mode, squad leaders may choose one 2x miniscope or night vision scope from their squad leader vendor.
+This is one scope total per person, even when using multiple squad leader racks.
+
 ##ASRS Terminal
 The ASRS terminal is one of your most critical tools in Requisitions. It enables you to order non-standard and specialized equipment that is rarely available aboard the Almayer. However, exercise caution — you are working within a limited budget. Do not allocate all your resources to a single request.
 

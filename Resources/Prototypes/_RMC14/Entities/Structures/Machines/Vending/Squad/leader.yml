@@ -15,6 +15,12 @@
     jobs:
     - CMSquadLeader
     sections:
+    # CMU14: shared allowance across all squad leader racks.
+    - name: cmu-vendor-section-sl-scopes
+      choices: { CMUSquadLeaderScope: 1 }
+      entries:
+      - id: RMCAttachmentS42xTelescopicMiniscope
+      - id: CMUAttachmentNightVisionScope
     - name: Squad Leader Kit
       takeAll: CMStandard
       entries:
@@ -232,6 +238,12 @@
     jobs:
     - CMSquadLeader
     sections:
+    # CMU14: shared allowance across all squad leader racks.
+    - name: cmu-vendor-section-sl-scopes
+      choices: { CMUSquadLeaderScope: 1 }
+      entries:
+      - id: RMCAttachmentS42xTelescopicMiniscope
+      - id: CMUAttachmentNightVisionScope
     - name: Standard Equipment
       takeAll: CMStandard
       entries:
