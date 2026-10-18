@@ -44,4 +44,4 @@ cmu-trait-mute-name = Mute
 cmu-trait-mute-desc = You can't speak. Only ordinary colonists can take this.
 cmu-mute-cant-speak = You can't speak.
 
-cmu-no-shake-when-resting = { CAPITALIZE(THE($target)) } doesn't want to get up.
+cmu-no-shake-when-resting = { CAPITALIZE(THE($target)) } doesn't seem to be getting up.
