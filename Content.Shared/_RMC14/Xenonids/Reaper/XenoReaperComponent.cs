@@ -87,7 +87,7 @@ public sealed partial class XenoReaperComponent : Component
     [DataField, AutoNetworkedField]
     public DamageSpecifier RedGasDamage = new()
     {
-        DamageDict = { ["Poison"] = 5 },
+        DamageDict = { ["Poison"] = 20 },
     };
 
     [DataField, AutoNetworkedField]
@@ -134,7 +134,7 @@ public sealed partial class XenoFleshBloomComponent : Component
     [DataField, AutoNetworkedField]
     public DamageSpecifier Damage = new()
     {
-        DamageDict = { ["Poison"] = 8 },
+        DamageDict = { ["Poison"] = 25 },
     };
 
     [DataField, AutoNetworkedField]
@@ -158,7 +158,7 @@ public sealed partial class XenoReaperRedGasComponent : Component
 
     public DamageSpecifier Damage = new()
     {
-        DamageDict = { ["Poison"] = 10 },
+        DamageDict = { ["Poison"] = 30 },
     };
 }
 
