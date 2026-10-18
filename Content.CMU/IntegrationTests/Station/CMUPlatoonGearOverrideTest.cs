@@ -20,6 +20,8 @@ public sealed class CMUPlatoonGearOverrideTest : GameTest
     [TestCase("LACN", "AU14JobGOVFOREngineeringTech", "head", "CMULACNHelmetEngineer")]
     [TestCase("LACN", "AU14JobGOVFOREngineeringTech", "outerClothing", "CMULACNLogisticsVest")]
     [TestCase("LACN", "AU14JobGOVFOROfficerLogistics", "head", "CMULACNHelmetRequisitions")]
+    [TestCase("LACN", "AU14JobGOVFORAuxTech", "head", "CMULACNHelmetRequisitions")]
+    [TestCase("LACN", "AU14JobGOVFORAuxTech", "jumpsuit", "CMULACNRequisitionsFieldUniform")]
     [TestCase("LACN", "AU14JobGOVFOROfficerLogistics", "jumpsuit", "CMULACNRequisitionsFieldUniform")]
     [TestCase("LACN", "AU14JobGOVFORNurse", "jumpsuit", "CMULACNMedicalScrubs")]
     [TestCase("LACN", "AU14JobGOVFORMilitaryDoctor", "jumpsuit", "CMULACNSurgicalScrubs")]

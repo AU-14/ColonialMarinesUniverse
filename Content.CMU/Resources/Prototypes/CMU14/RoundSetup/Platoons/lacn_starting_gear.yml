@@ -27,15 +27,15 @@
     gloves: AU14LACNGloves
     shoes: AU14LACNBootsFilled
 
-# Auxiliary technician
+# Auxiliary (logistics) technician: requisitions gear
 - type: startingGear
   id: CMUGearLACNGOVFORAuxTech
   equipment:
     id: AU14JobIDCardGOVFORAuxTech
     ears: AU14HeadsetGovforAuxiliary
     ears2: RMCM5CameraGear
-    jumpsuit: CMULACNEngineerJumpsuit
-    head: CMULACNHelmetEngineer
+    jumpsuit: CMULACNRequisitionsFieldUniform
+    head: CMULACNHelmetRequisitions
     outerClothing: CMULACNLogisticsVest
     gloves: AU14LACNGloves
     shoes: AU14LACNBootsFilled
@@ -50,8 +50,8 @@
     id: AU14JobIDCardOPFORAuxTech
     ears: AU14HeadsetOpforAuxiliary
     ears2: RMCM5CameraGear
-    jumpsuit: CMULACNEngineerJumpsuit
-    head: CMULACNHelmetEngineer
+    jumpsuit: CMULACNRequisitionsFieldUniform
+    head: CMULACNHelmetRequisitions
     outerClothing: CMULACNLogisticsVest
     gloves: AU14LACNGloves
     shoes: AU14LACNBootsFilled

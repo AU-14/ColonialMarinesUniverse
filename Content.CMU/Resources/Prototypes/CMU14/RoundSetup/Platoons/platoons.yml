@@ -56,7 +56,7 @@
   startingGearOverrides:
     CMSatchelMarine: CMULACNSatchel
     CMSatchelMarineTech: CMULACNSatchelEngineer
-    CMJumpsuitMaintTech: CMULACNEngineerJumpsuit
+    CMJumpsuitMaintTech: CMULACNRequisitionsFieldUniform # the aux (logistics) tech's loadout jumpsuit; engineers get theirs from their own set
     CMJumpsuitOrdnanceTech: CMULACNEngineerFieldUniform
     RMCScrubsOliveNurse: CMULACNMedicalScrubs
     RMCScrubsOlive: CMULACNSurgicalScrubs
