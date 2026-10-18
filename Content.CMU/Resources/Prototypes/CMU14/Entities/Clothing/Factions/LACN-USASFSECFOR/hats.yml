@@ -120,7 +120,7 @@
     sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Officers/LACNCOcap.rsi
 
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: CMULACNBoonie
   name: LACN boonie hat
   description: A wide-brimmed boonie hat issued to LACN landing forces.
@@ -138,7 +138,7 @@
       Urban: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/LACNboonie.rsi
 
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: CMULACNPatrolBoonie
   name: LACN patrol boonie hat
   description: A boonie hat issued to LACN landing forces on patrol duty.
@@ -156,7 +156,7 @@
       Urban: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/LACNpatrolboonie.rsi
 
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: CMULACNFieldCap
   name: LACN field cap
   description: A camouflaged field cap issued to LACN landing forces.
@@ -174,7 +174,7 @@
       Urban: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/LACNcamocap.rsi
 
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: CMULACNPatrolFieldCap
   name: LACN patrol field cap
   description: A camouflaged field cap issued to LACN landing forces on patrol duty.

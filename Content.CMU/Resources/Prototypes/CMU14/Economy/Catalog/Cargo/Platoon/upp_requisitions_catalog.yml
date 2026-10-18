@@ -267,6 +267,123 @@
         crate: RMCCrateVehicleAmmoRotaryCannon
         maxStock: 2
         stockReplenishDelay: 300
+
+    - name: Vehicle Armaments M
+      entries:
+      - cost: 1900
+        crate: CMUCrateVehiclePartMinigunUPP
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehiclePartRailgunUPP
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehiclePartHumveeCannon
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehiclePartHumveeLauncher
+        maxStock: 2
+        stockReplenishDelay: 300
+
+    - name: Vehicle Armaments A
+      entries:
+      - cost: 1900
+        crate: CMUCrateVehiclePartAuxHJ35T
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehiclePartAuxT60P3M
+        maxStock: 2
+        stockReplenishDelay: 300
+
+    - name: Vehicle Main Modules
+      entries:
+      - cost: 1900
+        crate: CMUCrateVehiclePartTreads
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 5000
+        crate: CMUCrateVehiclePartTreadsReinforced
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehiclePartWheelHumvee
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehiclePartWheelAPCUPP
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehiclePartArmorBallistic
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehiclePartArmorConcussive
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehiclePartArmorCaustic
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehiclePartArmorPaladin
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehiclePartArmorReactiveUPP
+        maxStock: 2
+        stockReplenishDelay: 300
+
+    - name: Vehicle Aux Modules
+      entries:
+      - cost: 2500
+        crate: CMUCrateVehiclePartSupportWarningArrayUPP
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 2500
+        crate: CMUCrateVehiclePartSupportOverdriveUPP
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 2500
+        crate: CMUCrateVehiclePartSupportSmokeUPP
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 2500
+        crate: CMUCrateVehiclePartSupportFlareUPP
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 2500
+        crate: CMUCrateVehiclePartSupportArtilleryUPP
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 2500
+        crate: CMUCrateVehiclePartSupportSnowPlow
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 2500
+        crate: CMUCrateVehiclePartSupportSnowPlowHumvee
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 2500
+        crate: CMUCrateVehiclePartSupportOverlightHumvee
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 2500
+        crate: CMUCrateVehiclePartSupportFlareAPC
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 2500
+        crate: CMUCrateVehiclePartSupportCommsRelayAPC
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 2500
+        crate: CMUCrateVehiclePartSupportFreightStorageAPC
+        maxStock: 2
+        stockReplenishDelay: 300
+
     - name: Weapons
       entries:
       - cost: 850

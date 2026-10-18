@@ -717,7 +717,6 @@
       effects:
       - !type:RemoveDamage
         group: Toxin
-      - !type:CureDrugAllergyReaction
       - !type:HealthChange
         conditions:
         - !type:ReagentCondition

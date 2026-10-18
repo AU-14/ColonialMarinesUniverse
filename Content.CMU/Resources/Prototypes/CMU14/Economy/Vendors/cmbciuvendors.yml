@@ -28,8 +28,6 @@
       entries:
       - id: AU14PVEHandsInsulatedBlackMarine
         amount: 40
-      - id: AU14PVEHandsFingerlessBlackGloves
-        amount: 20
     - name: Webbings
       entries:
       - id: RMCWebbingBlackSmall
@@ -195,6 +193,8 @@
         amount: 5
     - name: Tools
       entries:
+      - id: RMCAttachmentRailFlashlight
+        amount: 8
       - id: RMCM5Bayonet
         amount: 15
       - id: CMEntrenchingTool
@@ -291,6 +291,10 @@
         amount: 20
       - id: RMCZipties
         amount: 30
+      - id: CMUPepperSpray
+        amount: 10
+      - id: CMUPepperSprayAntidote
+        amount: 10
 
 - type: entity
   parent: ColMarTechBase
@@ -487,7 +491,6 @@
       choices: { CMUPlatoonAirCrewGloves: 1 }
       entries:
       - id: AU14PVEHandsInsulatedBlackMarine
-      - id: AU14PVEHandsFingerlessBlackGloves
     - name: Headgear
       choices: { CMUPlatoonAirCrewHeadgear: 1 }
       entries:
@@ -733,6 +736,13 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORSquadAutomaticRifleman
+    - AU14JobGOVFORSquadAutomaticRiflemanRMC
+    - AU14JobGOVFORSquadAutomaticRiflemanUPP
+    - AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+    - AU14JobOPFORSquadAutomaticRifleman
     sections:
     - name: Essential Equipment
       takeAll: CMUAREssentialEquipment
@@ -770,6 +780,14 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORSectionSergeant
+    - AU14JobGOVFORSectionSergeantCMBCIU
+    - AU14JobGOVFORSectionSergeantRMC
+    - AU14JobGOVFORSectionSergeantUPP
+    - AU14JobGOVFORSectionSergeantWYPMC
+    - AU14JobOPFORSectionSergeant
     sections:
     - name: Equipment
       takeAll: CMStandard
@@ -938,7 +956,6 @@
     - name: Attachments
       choices: { CMUAttachmentsVendor: 1 }
       entries:
-      - id: RMCAttachmentRailFlashlight
       - id: RMCAttachmentTwoPointSling
 
 - type: entity
@@ -957,6 +974,10 @@
   - type: Sprite
     sprite: CMU14/Structures/Vendors/genericweaponrack.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORWeaponsSpecialist
+    - AU14JobOPFORWeaponsSpecialist
     sections:
     - name: HG 37-12 Pump Shotgun
       entries:
@@ -1023,7 +1044,9 @@
       - id: RMCBoxZiptie
       - id: AU14GuidebookLawMarine
       - id: AU14GuidebookSOP
-      - id: AU14Scissors
+      - id: CMUScissorsRegulation
+      - id: CMUPepperSpray
+      - id: CMUPepperSprayAntidote
     - name: Uniform
       choices: { AU14Uniform: 1 }
       entries:

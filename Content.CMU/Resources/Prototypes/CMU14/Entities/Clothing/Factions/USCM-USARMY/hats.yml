@@ -10,7 +10,7 @@
     sprite: CMU14/Clothing/ussartemiscap.rsi
     
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: AU14DesertPatrolCap
   name: Desert Patrol Cap
   description: A simple patrol cap.
@@ -21,7 +21,7 @@
     sprite: CMU14/Clothing/DesertHats/cap.rsi
     
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: AU14DesertFlapCap
   name: Desert Patrol Flap-Cap
   description: A simple patrol cap with a sun flap.
@@ -32,7 +32,7 @@
     sprite: CMU14/Clothing/DesertHats/flapcap.rsi
   
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: AU14DesertBoonieHat
   name: Desert Boonie Hat
   description: A brimmed hat to protect your face from the sun.
@@ -43,7 +43,7 @@
     sprite: CMU14/Clothing/DesertHats/booniehat.rsi
   
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: AU14JunglePatrolCap
   name: Jungle Patrol Cap
   description: A simple patrol cap.
@@ -54,7 +54,7 @@
     sprite: CMU14/Clothing/JungleHats/cap.rsi
     
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: AU14JungleFlapCap
   name: Jungle Patrol Flap-Cap
   description: A simple patrol cap with a sun flap.
@@ -65,7 +65,7 @@
     sprite: CMU14/Clothing/JungleHats/flapcap.rsi
     
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: AU14JungleBoonieHat
   name: Jungle Boonie Hat
   description: A brimmed hat to protect your face from the sun.
@@ -76,7 +76,7 @@
     sprite: CMU14/Clothing/JungleHats/booniehat.rsi
 
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: AU14UACGPatrolCap
   name: UACG Patrol Cap
   description: A simple patrol cap.
@@ -127,7 +127,7 @@
 # Camo system (ItemCamouflage) conforming variants
 # No Snow/Classic/Urban sprites exist yet - all fall back to the Jungle sprite until dedicated art is made.
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: AU14CamoPatrolCap
   name: Patrol Cap
   description: A simple patrol cap.
@@ -145,7 +145,7 @@
       Urban: CMU14/Clothing/JungleHats/cap.rsi
 
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: AU14CamoFlapCap
   name: Patrol Flap-Cap
   description: A simple patrol cap with a sun flap.
@@ -163,7 +163,7 @@
       Urban: CMU14/Clothing/JungleHats/flapcap.rsi
 
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: AU14CamoBoonieHat
   name: Boonie Hat
   description: A brimmed hat to protect your face from the sun.

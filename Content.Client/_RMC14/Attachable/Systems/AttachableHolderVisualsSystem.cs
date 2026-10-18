@@ -2,6 +2,7 @@ using Content.Client._RMC14.Attachable.Components;
 using Content.Shared._RMC14.Attachable.Components;
 using Content.Shared._RMC14.Attachable.Events;
 using Content.Shared._RMC14.Attachable.Systems;
+using Content.Shared.CMU14.Attachable; // CMU14
 using Robust.Client.GameObjects;
 using Robust.Shared.Containers;
 
@@ -81,7 +82,7 @@ public sealed partial class AttachableHolderVisualsSystem : EntitySystem
 
     private void RemoveAttachableOverlay(Entity<AttachableHolderVisualsComponent> holder, string slotId)
     {
-        if (!holder.Comp.Offsets.ContainsKey(slotId) || !TryComp(holder, out SpriteComponent? spriteComponent))
+        if (!TryComp(holder, out SpriteComponent? spriteComponent)) // CMU14: dynamically added sling mounts also have overlays.
             return;
 
         if (!_sprite.LayerMapTryGet((holder.Owner, spriteComponent), slotId, out var index, false))
@@ -114,8 +115,15 @@ public sealed partial class AttachableHolderVisualsSystem : EntitySystem
 
     public void RefreshVisuals(Entity<AttachableHolderVisualsComponent> holder, Entity<AttachableVisualsComponent> attachable, string slotId, string suffix)
     {
-        if (!holder.Comp.Offsets.ContainsKey(slotId) ||
-            !TryComp(holder, out SpriteComponent? holderSprite))
+        // CMU14: slings keep their rail alignment on both alternate mounts.
+        var offsetSlot = HasComp<CMUSlingComponent>(attachable) &&
+                         slotId is "rmc-aslot-underbarrel" or AttachableHolderSystem.CMUSlingSlot
+            ? "rmc-aslot-rail"
+            : slotId;
+        if (!holder.Comp.Offsets.TryGetValue(offsetSlot, out var offset))
+            return;
+
+        if (!TryComp(holder, out SpriteComponent? holderSprite))
         {
             return;
         }
@@ -146,7 +154,7 @@ public sealed partial class AttachableHolderVisualsSystem : EntitySystem
         {
             RsiPath = rsi.ToString(),
             State = state,
-            Offset = holder.Comp.Offsets[slotId] + attachable.Comp.Offset,
+            Offset = offset + attachable.Comp.Offset, // CMU14: includes the sling's rail alignment.
             Visible = true,
         };
 

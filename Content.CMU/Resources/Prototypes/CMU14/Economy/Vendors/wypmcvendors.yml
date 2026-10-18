@@ -30,8 +30,6 @@
       entries:
       - id: AU14PVEHandsInsulatedBlackMarine
         amount: 40
-      - id: AU14PVEHandsFingerlessBlackGloves
-        amount: 20
     - name: Webbings
       entries:
       - id: RMCWebbingBlackSmall
@@ -219,6 +217,8 @@
         amount: 5
     - name: Tools
       entries:
+      - id: RMCAttachmentRailFlashlight
+        amount: 8
       - id: RMCM5Bayonet
         amount: 15
       - id: CMEntrenchingTool
@@ -499,7 +499,6 @@
       choices: { CMUPlatoonAirCrewGloves: 1 }
       entries:
       - id: AU14PVEHandsInsulatedBlackMarine
-      - id: AU14PVEHandsFingerlessBlackGloves
     - name: Headgear
       choices: { CMUPlatoonAirCrewHeadgear: 1 }
       entries:
@@ -756,6 +755,13 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORSquadAutomaticRifleman
+    - AU14JobGOVFORSquadAutomaticRiflemanRMC
+    - AU14JobGOVFORSquadAutomaticRiflemanUPP
+    - AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+    - AU14JobOPFORSquadAutomaticRifleman
     sections:
     - name: Essential Equipment
       takeAll: CMUAREssentialEquipment
@@ -963,7 +969,6 @@
       choices: { CMUAttachmentsVendor: 1 }
       entries:
       - id: RMCAttachmentTwoPointSling
-      - id: RMCAttachmentRailFlashlight
 
 - type: entity
   parent: AU14SpecVend

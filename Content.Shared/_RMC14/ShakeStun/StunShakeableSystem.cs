@@ -66,6 +66,18 @@ public sealed partial class StunShakeableSystem : EntitySystem
 
         args.Handled = true;
 
+        // cmu edit start: someone lying down on purpose can choose not to be shaken back up
+        if (!stunned &&
+            !knockedDown &&
+            !_statusEffects.HasStatusEffect(target, Unconscious) &&
+            !HasComp<TackledRecentlyByComponent>(target) &&
+            HasComp<Content.Shared.CMU14.Traits.Quirks.CMUNoShakeWhenRestingComponent>(target))
+        {
+            _popup.PopupClient(Loc.GetString("cmu-no-shake-when-resting", ("target", target)), target, user);
+            return;
+        }
+        // cmu edit end
+
         var time = _timing.CurTime;
         if (time < shakeableUser.LastShake + shakeableUser.Cooldown)
             return;

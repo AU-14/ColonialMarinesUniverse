@@ -62,3 +62,9 @@ ambassador-console-trade-pact-enabled = A trade pact has been activated by { $fa
 ambassador-console-trade-pact-disabled = The trade pact by { $faction } has ended.
 ambassador-console-comms-jam-enabled = Planeside communications have been jammed by { $faction }. All radio transmissions are blocked.
 ambassador-console-comms-jam-disabled = Communications jamming by { $faction } has been disabled. Radio transmissions are restored.
+ambassador-third-party-calls-left = Support requests authorized: { $left }
+ambassador-third-party-cooldown = Support requests authorized: { $left }. Command will hear another request in { $minutes } { $minutes ->
+    [one] minute
+   *[other] minutes
+}.
+ambassador-third-party-no-calls-left = Command has authorized all the support it will send for this operation.

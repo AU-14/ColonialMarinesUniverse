@@ -1,5 +1,5 @@
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: AU14UPPBoonie
   name: UPP boonie
   description: UPP headgear issued to soldiers when they're not expected to face combat, and may be requested by officers and above.
@@ -10,7 +10,7 @@
     sprite: CMU14/Clothing/UPP/hats/uppboonie.rsi
 
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: AU14UPPPatrolCap
   name: UPP UL2 patrol cap
   description: UPP headgear issued to soldiers when they're not expected to face combat, and may be requested by officers and above.

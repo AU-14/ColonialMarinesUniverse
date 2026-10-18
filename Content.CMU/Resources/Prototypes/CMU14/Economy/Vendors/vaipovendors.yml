@@ -54,10 +54,6 @@
         amount: 20
       - id: CMHandsBrown
         amount: 40
-      - id: AU14PVEHandsFingerlessBlackGloves
-        amount: 10
-      - id: AU14PVEHandsFingerlessBrownGloves
-        amount: 20
     - name: Webbings
       entries:
       - id: AU14WebbingMagazine
@@ -236,6 +232,8 @@
         amount: 5
     - name: Tools
       entries:
+      - id: RMCAttachmentRailFlashlight
+        amount: 8
       - id: RMCM5Bayonet
         amount: 30
       - id: CMM11Knife
@@ -524,7 +522,6 @@
       choices: { CMUPlatoonAirCrewGloves: 1 }
       entries:
       - id: AU14PVEHandsInsulatedBlackMarine
-      - id: AU14PVEHandsFingerlessBlackGloves
     - name: Headgear
       choices: { CMUPlatoonAirCrewHeadgear: 1 }
       entries:
@@ -750,6 +747,13 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORSquadAutomaticRifleman
+    - AU14JobGOVFORSquadAutomaticRiflemanRMC
+    - AU14JobGOVFORSquadAutomaticRiflemanUPP
+    - AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+    - AU14JobOPFORSquadAutomaticRifleman
     sections:
     - name: Essential Equipment
       takeAll: CMUAREssentialEquipment
@@ -779,6 +783,14 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORSectionSergeant
+    - AU14JobGOVFORSectionSergeantCMBCIU
+    - AU14JobGOVFORSectionSergeantRMC
+    - AU14JobGOVFORSectionSergeantUPP
+    - AU14JobGOVFORSectionSergeantWYPMC
+    - AU14JobOPFORSectionSergeant
     sections:
     - name: Equipment
       takeAll: CMStandard
@@ -940,7 +952,6 @@
     - name: Attachments
       choices: { CMUAttachmentsVendor: 3 }
       entries:
-      - id: RMCAttachmentRailFlashlight
       - id: AU14AttachmentTwoPointSling
       - id: RMCAttachmentExtendedBarrel
       - id: RMCAttachmentSuppressor
@@ -971,6 +982,10 @@
   - type: Sprite
     sprite: CMU14/Structures/Vendors/genericweaponrack.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORWeaponsSpecialist
+    - AU14JobOPFORWeaponsSpecialist
     sections:
     - name: MK221 Tactical Shotgun
       entries:

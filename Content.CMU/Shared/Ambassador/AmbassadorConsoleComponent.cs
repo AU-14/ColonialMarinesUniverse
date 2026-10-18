@@ -145,4 +145,21 @@ public sealed partial class AmbassadorConsoleComponent : Component
     /// Set of third party IDs that have already been called and cannot be called again.
     /// </summary>
     public HashSet<string> CalledParties = new();
+
+    /// <summary>
+    /// How many third parties a faction can call in per round.
+    /// </summary>
+    [DataField("maxCallIns")]
+    public int MaxCallIns = 3;
+
+    /// <summary>
+    /// How long a faction has to wait after one call-in before the next.
+    /// </summary>
+    [DataField("callInCooldown")]
+    public TimeSpan CallInCooldown = TimeSpan.FromMinutes(30);
+
+    /// <summary>
+    /// When the faction can next call in a third party.
+    /// </summary>
+    public TimeSpan NextCallInAt;
 }
