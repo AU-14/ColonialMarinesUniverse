@@ -9,7 +9,7 @@ public sealed partial class CMUSwarmControllerComponent : Component
     [DataField] public EntProtoId Lesser = "CMUSwarmLesser";
     [DataField] public EntProtoId MarkerPrototype = "CMUSwarmGuardMarker";
     [DataField] public int SpawnCount = 15;
-    [DataField] public TimeSpan Cooldown = TimeSpan.FromMinutes(6);
+    [DataField] public TimeSpan Cooldown = TimeSpan.FromMinutes(15);
     [DataField] public float SightRange = 8;
     [DataField] public float LeashRange = 12;
     [DataField] public float FormationRadius = 2;
@@ -17,6 +17,7 @@ public sealed partial class CMUSwarmControllerComponent : Component
     [DataField] public TimeSpan TargetMemory = TimeSpan.FromSeconds(3);
     public TimeSpan NextSummon;
     public TimeSpan NextThink;
+    public bool Passive;
     public EntityUid? Anchor;
     public EntityUid? Marker;
     public readonly List<EntityUid> Members = new();
