@@ -83,5 +83,5 @@ cmu-ui-options-popups-examine = Popups and examine
 cmu-ui-options-screen-shake = Screen shake
 cmu-ui-options-sound = Sound
 cmu-ui-options-visuals = Visuals
-cmu-ui-options-vault-on-bump = Vault by walking into ledges
-cmu-ui-options-vault-on-bump-tooltip = Walking into something you can vault over starts vaulting it. Keep pushing into it to finish, or step away to cancel.
+cmu-ui-options-vault-on-bump = Vault by walking into ledges and railings
+cmu-ui-options-vault-on-bump-tooltip = Walking into a ledge, barricade or railing you can vault over starts vaulting it. Tables are left out. Keep pushing into it to finish, or step away to cancel.
