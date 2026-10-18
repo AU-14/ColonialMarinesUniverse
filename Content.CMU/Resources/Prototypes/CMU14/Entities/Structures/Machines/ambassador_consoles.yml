@@ -85,9 +85,9 @@
     replenishAmount: 10
     replenishInterval: 60
     callableParties:
-      MarineSecurityGuard: 2000
-      VAISP: 4500
-      VAIPO: 6000
+      MarineSecurityGuard: 3000
+      VAISP: 7000
+      VAIPO: 9000
 
 # TWE Ambassador Console - Three World Empire
 - type: entity
@@ -106,9 +106,9 @@
     replenishAmount: 10
     replenishInterval: 60
     callableParties:
-      RMCRRT: 9000
-      SAS: 7000
-      NSPAInvestigationParty: 5000
+      RMCRRT: 11000
+      SAS: 9000
+      NSPAInvestigationParty: 7000
 
 # Independent Systems Ambassador Console
 - type: entity
@@ -127,5 +127,5 @@
     replenishAmount: 10
     replenishInterval: 60
     callableParties:
-      Freelancers: 4500
+      Freelancers: 7000
 
