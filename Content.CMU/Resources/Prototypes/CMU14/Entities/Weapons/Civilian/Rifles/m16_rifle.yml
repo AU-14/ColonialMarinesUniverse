@@ -185,6 +185,14 @@
         whitelist:
           tags:
           - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentMagneticHarness
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.83, 0.001
+      rmc-aslot-rail: -0.125, 0.12
   - type: GunDamageModifier
     multiplier: 1.4
   - type: ItemSlots
