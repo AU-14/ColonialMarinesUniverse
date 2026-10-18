@@ -22,7 +22,7 @@
     - VAIPO
     defaultgovfor: WEYU
     defaultopfor: ProdigySF
-    govforinship: false
+    govforinship: true
     opforinship: true
     daycycleenabled: false
     thirdpartyinterval: 1800
