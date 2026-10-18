@@ -1123,7 +1123,9 @@
         - ItemMask
         density: 1000
         hard: false
-  - type: Chasm
+  # cmu edit start: no chasm, so nothing falls into the lift
+  # - type: Chasm
+  # cmu edit end
   - type: StepTrigger
     requiredTriggeredSpeed: 0
     intersectRatio: 1
