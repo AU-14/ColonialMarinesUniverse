@@ -65,12 +65,6 @@ public sealed partial class RequisitionsElevatorComponent : Component
 
     public object? RaisingAnimation;
 
-    [DataField]
-    public TimeSpan ChasmCheckEvery = TimeSpan.FromSeconds(0.5);
-
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
-    public TimeSpan NextChasmCheck;
-
     [DataField("faction")]
     public string Faction = "none";
 

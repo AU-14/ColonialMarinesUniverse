@@ -138,6 +138,19 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
             });
         }
 
+        // cmu edit start: capped repurchases
+        if (option.MaxPurchases > 0)
+        {
+            hasStats = true;
+            _optionWindow.Statistics.AddChild(new Label
+            {
+                Text = Loc.GetString("cmu-ui-tech-purchases-left",
+                    ("left", Math.Max(0, option.MaxPurchases - option.TimesPurchased)),
+                    ("max", option.MaxPurchases)),
+            });
+        }
+        // cmu edit end
+
         if (option.Increase != 0)
         {
             hasStats = true;
@@ -152,6 +165,7 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
         var canPurchase = points >= option.CurrentCost &&
                           currentTier >= tier &&
                           (!option.Purchased || option.Repurchasable) &&
+                          (option.MaxPurchases <= 0 || option.TimesPurchased < option.MaxPurchases) && // cmu edit
                           option.TimeLock  < _ticker.RoundDuration();
 
         _optionWindow.PurchaseButton.Text = Loc.GetString("rmc-ui-tech-purchase-button");

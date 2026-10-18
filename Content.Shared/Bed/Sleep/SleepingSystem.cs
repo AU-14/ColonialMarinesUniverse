@@ -261,8 +261,12 @@ public sealed partial class SleepingSystem : EntitySystem
         if (!args.DamageIncreased || args.DamageDelta == null)
             return;
 
-        if (args.DamageDelta.GetTotal() >= ent.Comp.WakeThreshold)
+        // cmu edit start: heavy sleepers take a harder hit to wake
+        var cmuThreshold = ent.Comp.WakeThreshold *
+                           EntityManager.System<Content.Shared.CMU14.Traits.Quirks.CMUHeavySleeperSystem>().DamageToWakeMultiplier(ent);
+        if (args.DamageDelta.GetTotal() >= cmuThreshold)
             TryWaking((ent, ent.Comp));
+        // cmu edit end
     }
 
     /// <summary>
@@ -336,6 +340,15 @@ public sealed partial class SleepingSystem : EntitySystem
 
         ent.Comp.CooldownEnd = curTime + ent.Comp.Cooldown;
         Dirty(ent, ent.Comp);
+
+        // cmu edit start: heavy sleepers sleep through the first few shakes
+        if (user != null &&
+            EntityManager.System<Content.Shared.CMU14.Traits.Quirks.CMUHeavySleeperSystem>().SleepsThroughShake(ent, user.Value))
+        {
+            return false;
+        }
+        // cmu edit end
+
         return TryWaking(ent, user: user);
     }
 

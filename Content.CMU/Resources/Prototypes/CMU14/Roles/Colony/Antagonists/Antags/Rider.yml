@@ -37,6 +37,11 @@
     antagPrototype: RiderRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-rider
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/job_icons.rsi
+      state: threat_member
 
 - type: antag
   parent: CMUAntagColonyBase
