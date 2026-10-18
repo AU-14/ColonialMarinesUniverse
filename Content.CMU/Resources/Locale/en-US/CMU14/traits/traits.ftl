@@ -8,10 +8,10 @@ au14-trait-no-english-name = Forget English Language
 au14-trait-no-english-desc = Sho?
 
 au14-trait-no-language-learning-name = Language Impairment
-au14-trait-no-language-learning-desc = You are unable to learn new languages.
+au14-trait-no-language-learning-desc = You can't pick up new languages during a round. Gives you one more language point to spend on languages you already know.
 
 au14-trait-polyglot-name = Polyglot
-au14-trait-polyglot-desc = Languages just come to you naturally, last time you sneezed you discombobulated a verb in a dialect you've never even heard.
+au14-trait-polyglot-desc = Languages just come to you naturally. Gives you one more language point, so you can pick an extra language.
 
 au14-trait-sign-name = Sign Language
 au14-trait-sign-desc = You can speak and understand sign language.

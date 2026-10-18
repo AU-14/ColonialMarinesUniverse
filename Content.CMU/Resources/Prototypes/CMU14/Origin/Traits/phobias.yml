@@ -31,8 +31,7 @@
   id: CMUClumsy
   name: cmu-trait-clumsy-name
   description: cmu-trait-clumsy-desc
-  category: Disabilities
-  cost: 1
+  category: CMUQuirks
   components:
   - type: CMUClumsy
 
