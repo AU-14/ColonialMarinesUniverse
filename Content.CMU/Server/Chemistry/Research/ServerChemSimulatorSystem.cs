@@ -355,15 +355,16 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
         var reagents = _protoman.GetInstances<ReagentPrototype>();
         var reagent = reagents[ent.Comp.PickedRecipeChem];
         if (reagent is not null && reagent.Class >= ReagentClass.Rare)
-            credloss--;
+            credloss = Math.Max(1, credloss - 1); // never free: see SampleDataForSimulated
         var faction = _dat.GetFaction(ent.Owner);
-        if (_dat.GetCredits(faction) < credloss)
+        // Simulations spend sample data, never the research credits used for clearance.
+        if (_dat.GetSampleData(faction) < credloss)
         {
             ent.Comp.Stage = ChemSimulatorStage.Failure;
             UpdateAppearance(ent.Owner, ent.Comp);
             return;
         }
-        _dat.UpdateClearance(_dat.GetCredits(faction) - credloss, -1, faction);
+        _dat.UpdateSampleData(_dat.GetSampleData(faction) - credloss, faction);
         chem.Recipe = recipe.Recipe;
         _simulations.Add(chem.ID);
 

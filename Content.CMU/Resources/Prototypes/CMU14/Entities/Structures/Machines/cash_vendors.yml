@@ -754,6 +754,16 @@
     - id: CMUFireSuppressantGrenade
       name: Fire Suppression Grenade
       price: 20
+    # Custom chemical grenade parts (casing + two-beaker payload + timer)
+    - id: RMCCustomGrenade
+      name: Custom Grenade Casing
+      price: 15
+    - id: ChemicalPayload
+      name: Chemical Payload
+      price: 12
+    - id: RMCTimerTrigger
+      name: Timer Trigger
+      price: 8
 
 # circuitboard - mirrors CMVendorCircuits
 - type: entity
