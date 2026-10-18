@@ -176,7 +176,7 @@ public sealed partial class PopupSystem : SharedPopupSystem
     }
 
     /// <summary>
-    ///     Eating and drinking noises ("Nom.", "Slurp.", "Gulp.") aren't worth a line in chat.
+    ///     Eating, drinking and snoring noises ("Nom.", "Slurp.", "Gulp.", "Zzz...") aren't worth a line in chat.
     /// </summary>
     private bool CMUIsIngestionNoise(string message)
     {
@@ -189,7 +189,7 @@ public sealed partial class PopupSystem : SharedPopupSystem
         return false;
     }
 
-    private static readonly string[] CMUIngestionNoiseKeys = ["edible-nom-other", "edible-slurp-other", "edible-gulp-other"];
+    private static readonly string[] CMUIngestionNoiseKeys = ["edible-nom-other", "edible-slurp-other", "edible-gulp-other", "sleep-onomatopoeia"];
 
     private void CMUEchoPopupToChat(string message, PopupType type)
     {
