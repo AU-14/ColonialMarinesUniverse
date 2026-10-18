@@ -35,10 +35,6 @@
         amount: 40
       - id: CMHandsBrown
         amount: 20
-      - id: AU14PVEHandsFingerlessBlackGloves
-        amount: 20
-      - id: AU14PVEHandsFingerlessBrownGloves
-        amount: 10
     - name: Webbings
       entries:
       - id: AU14WebbingMagazine
@@ -409,7 +405,6 @@
       choices: { CMUPlatoonAirCrewGloves: 1 }
       entries:
       - id: AU14PVEHandsInsulatedBlackMarine
-      - id: AU14PVEHandsFingerlessBlackGloves
     - name: Headgear
       choices: { CMUPlatoonAirCrewHeadgear: 1 }
       entries:

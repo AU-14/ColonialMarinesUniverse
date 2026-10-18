@@ -28,8 +28,6 @@
       entries:
       - id: AU14PVEHandsInsulatedBlackMarine
         amount: 40
-      - id: AU14PVEHandsFingerlessBlackGloves
-        amount: 20
     - name: Webbings
       entries:
       - id: RMCWebbingBlackSmall
@@ -489,7 +487,6 @@
       choices: { CMUPlatoonAirCrewGloves: 1 }
       entries:
       - id: AU14PVEHandsInsulatedBlackMarine
-      - id: AU14PVEHandsFingerlessBlackGloves
     - name: Headgear
       choices: { CMUPlatoonAirCrewHeadgear: 1 }
       entries:

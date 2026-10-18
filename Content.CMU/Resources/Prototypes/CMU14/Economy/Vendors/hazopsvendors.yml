@@ -30,8 +30,6 @@
         amount: 40
       - id: CMHandsBrown
         amount: 20
-      - id: AU14PVEHandsFingerlessBlackGloves
-        amount: 10
       - id: RMCHandsVeteranCBRN
         amount: 25
     - name: Webbings
