@@ -89,16 +89,26 @@
     jumpsuit: AU14ArmyJumpsuitArmored
     gloves: AU14PVEHandsInsulatedBlackMarine
     shoes: AU14BootsUSArmyFilled
-    eyes: RMCWeldingGoggles
+    eyes: RMCGlassesMedicalHUDGlasses
     mask: RMCMaskKeffiyehBlue
     head: AU14HelmetUSArmy
     belt: AU14BeltMedicBagSupportSynthRMC
     pocket1: AU14PouchIFAKFill
     pocket2: RMCPouchMagazine
-    back: AU14CMDefibrillator
+    back: AU14MolleBackpack
     ears: AU14HeadsetUSArmyERT
     suitstorage: RMCWeaponRifleM54CFilled
   storage:
+    back:
+    - AU14CMDefibrillator
+    - CMPortableSurgicalBedSpawnFolded
+    - CMSurgicalCaseFilled
+    - CMMRE
+    - RMCFlashlight
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
     head:
     - RMCGogglesBallisticPolarizedBlue
     pocket2:
