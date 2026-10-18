@@ -21,7 +21,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      800: Critical
+      1500: Critical
       1600: Dead
   - type: Tag
     tags:
@@ -54,23 +54,23 @@
     maxPlasma: 1000
     plasmaRegenOnWeeds: 2
   - type: CMArmor
-    xenoArmor: 45
-    explosionArmor: 70
+    xenoArmor: 70
+    explosionArmor: 100
   - type: InnateCommandSpeech
   - type: XenoClaws
     clawType: VerySharp
   - type: MeleeWeapon
     damage:
       types:
-        Blunt: 16.66
-        Slash: 16.67
-        Piercing: 16.67
+        Blunt: 20
+        Slash: 20
+        Piercing: 20
   - type: XenoTailStab
     tailDamage:
       types:
-        Blunt: 22
-        Slash: 22
-        Piercing: 22
+        Blunt: 25
+        Slash: 25
+        Piercing: 25
   - type: Tackle
     stunMin: 6
     stunMax: 10
@@ -94,8 +94,8 @@
         layer:
         - BulletImpassable
   - type: MovementSpeedModifier
-    baseWalkSpeed: 1.66
-    baseSprintSpeed: 3
+    baseWalkSpeed: 3.2
+    baseSprintSpeed: 5
   - type: SlowOnPull
     slowdowns:
     - multiplier: 0.68
