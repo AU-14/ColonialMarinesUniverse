@@ -26,6 +26,9 @@
                 <CheckBox Name="ScreamOnHotbarCheckBox"
                           Text="{Loc 'cmu-ui-options-scream-on-hotbar'}"
                           ToolTip="{Loc 'cmu-ui-options-scream-on-hotbar-tooltip'}" />
+                <CheckBox Name="VaultOnBumpCheckBox"
+                          Text="{Loc 'cmu-ui-options-vault-on-bump'}"
+                          ToolTip="{Loc 'cmu-ui-options-vault-on-bump-tooltip'}" />
 
                 <Label Text="{Loc 'cmu-ui-options-medical'}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
                 <CheckBox Name="TargetedHealingCheckBox"
