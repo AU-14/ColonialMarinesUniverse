@@ -844,13 +844,14 @@ public sealed partial class ScalingViewport
         if (!_zLevels.TryMapOffset(mapUid, 1, out _, out var upperMapComp))
             return;
 
-        // Ceiling check: any non-empty tile on the upper map straight above the viewer means we're indoors.
+        // Ceiling check: a solid tile or roof on the upper map straight above the viewer means we're indoors.
+        // Grates can be seen up through.
         var viewerPos = _transform.GetWorldPosition(viewXform);
         var aboveCoords = new MapCoordinates(viewerPos, upperMapComp.MapId);
         if (_mapSystem.TryFindGridAt(aboveCoords, out var upperGridUid, out var upperGridComp))
         {
             var tileRef = _mapSystem.GetTileRef(upperGridUid, upperGridComp, aboveCoords);
-            if (!tileRef.Tile.IsEmpty)
+            if (!CMUZLevelOpeningCache.CanLookUpThrough(tileRef.Tile, _tile))
                 return;
         }
 

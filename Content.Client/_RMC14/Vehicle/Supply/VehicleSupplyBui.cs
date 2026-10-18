@@ -32,6 +32,7 @@ public sealed class VehicleSupplyBui : BoundUserInterface
     {
         base.Open();
         _window = this.CreateWindow<VehicleSupplyWindow>();
+        _window.SetSize = new Vector2(700, 450);
 
         if (_window == null)
             return;
@@ -382,7 +383,7 @@ public sealed class VehicleSupplyBui : BoundUserInterface
             VehicleSupplyLiftMode.Lowering => Loc.GetString("cmu-vehicle-supply-lift-lowering"),
             VehicleSupplyLiftMode.Raising => Loc.GetString("cmu-vehicle-supply-lift-raising"),
             VehicleSupplyLiftMode.Preparing => Loc.GetString("cmu-vehicle-supply-lift-preparing"),
-            _ => mode.Value.ToString(), 
+            _ => mode.Value.ToString(),
         };
     }
     // CMU14 End

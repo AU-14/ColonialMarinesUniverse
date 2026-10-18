@@ -62,6 +62,7 @@
     ears: AU14AmbassadorCCAHeadset
     ears2: AU14TranslatorDevice
     pocket1: AU14StampCCAA
+    pocket2: CMUPepperSpray
   inhand:
   - AU14PortableVendorCCA
   - CMUMobilePhone
@@ -160,6 +161,7 @@
     ears: AU14AmbassadorICSCHeadset
     ears2: AU14TranslatorDevice
     pocket1: AU14StampICSCA
+    pocket2: CMUPepperSpray
   inhand:
   - AU14PortableVendorICSC
   - CMUMobilePhone
@@ -258,6 +260,7 @@
     ears: AU14ColonyAmbassadorTWEHeadset
     ears2: AU14TranslatorDevice
     pocket1: AU14StampTWEA
+    pocket2: CMUPepperSpray
   inhand:
   - AU14PortableVendorTWE
   - CMUMobilePhone
@@ -355,6 +358,7 @@
     ears: AU14AmbassadorUAHeadset
     ears2: AU14TranslatorDevice
     pocket1: AU14StampUAA
+    pocket2: CMUPepperSpray
   inhand:
   - AU14PortableVendorUA
   - CMUMobilePhone
@@ -451,6 +455,7 @@
     ears: AU14AmbassadorUPPHeadset
     ears2: AU14TranslatorDevice
     pocket1: AU14StampUPPA
+    pocket2: CMUPepperSpray
   inhand:
   - AU14PortableVendorUPP
   - CMUMobilePhone

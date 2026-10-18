@@ -221,6 +221,8 @@
         amount: 20
     - name: Tools
       entries:
+      - id: RMCAttachmentRailFlashlight
+        amount: 8
       - id: CMEntrenchingTool
         recommended: true
         amount: 30
@@ -772,6 +774,13 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORSquadAutomaticRifleman
+    - AU14JobGOVFORSquadAutomaticRiflemanRMC
+    - AU14JobGOVFORSquadAutomaticRiflemanUPP
+    - AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+    - AU14JobOPFORSquadAutomaticRifleman
     sections:
     - name: Support Weapon
       choices: { CMULACNSupportWeapon: 1 }
@@ -804,6 +813,14 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORSectionSergeant
+    - AU14JobGOVFORSectionSergeantCMBCIU
+    - AU14JobGOVFORSectionSergeantRMC
+    - AU14JobGOVFORSectionSergeantUPP
+    - AU14JobGOVFORSectionSergeantWYPMC
+    - AU14JobOPFORSectionSergeant
     sections:
     - name: Headgear
       choices: { CMHat: 1 }
@@ -979,7 +996,6 @@
     - name: Attachments
       choices: { CMUAttachmentsVendor: 1 }
       entries:
-      - id: RMCAttachmentRailFlashlight
       - id: AU14AttachmentTwoPointSling
       - id: CMULACNAttachmentKramerSmartScope
       - id: CMULACNAttachmentUnderbarrelGrenadeLauncher
@@ -1062,7 +1078,9 @@
       - id: RMCBoxZiptie
       - id: AU14GuidebookLawMarine
       - id: AU14GuidebookSOP
-      - id: AU14Scissors
+      - id: CMUScissorsRegulation
+      - id: CMUPepperSpray
+      - id: CMUPepperSprayAntidote
     - name: Uniform
       choices: { AU14Uniform: 1 }
       entries:

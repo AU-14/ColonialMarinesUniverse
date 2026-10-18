@@ -32,6 +32,10 @@ public sealed partial class CMUStartingFundsSystem : EntitySystem
 
         idCard.Comp.AccountBalance += _random.Next(tier.Min, tier.Max + 1);
         Dirty(idCard);
+
+        // Anyone paid into an account gets their banking details in their character notes.
+        if (tier.Max > 0)
+            EnsureComp<CMUBankAccountHolderComponent>(args.Mob);
     }
 
     private CMUStartingFundsPrototype? GetTier(string jobId)

@@ -56,17 +56,31 @@ public sealed partial class PlatoonPrototype : IPrototype
     [DataField]
     public HashSet<EntProtoId> VehicleSupplyCatalog = new();
 
+    /// <summary>
+    ///     How many vehicles the side can pull up from its <see cref="VehicleSupplyCatalog"/> in a round: one tank,
+    ///     one VTOL, APC or armed light vehicle, one unarmed support vehicle and one fighter.
+    /// </summary>
     [DataField]
-    public int MaxSuppliedVehicles = 2;
+    public int MaxSuppliedVehicles = 4;
 
+    /// <summary>
+    ///     Equipment this platoon swaps for its own version when its members spawn, e.g. the standard satchel for
+    ///     the platoon's satchel. Applies to the job's starting gear and the player's loadout alike. A container is
+    ///     only swapped for one that holds at least as much, so nothing that goes in it is lost.
+    /// </summary>
     [DataField]
-    public int MaxSuppliedTanks = 1;
+    public Dictionary<EntProtoId, EntProtoId> StartingGearOverrides = new();
 
+    /// <summary>
+    ///     Jobs that spawn with a different set of starting gear in this platoon, e.g. the platoon's own uniform,
+    ///     helmet and vest for its engineers. The player's loadout is still equipped first and keeps its slots.
+    /// </summary>
     [DataField]
-    public int MaxSuppliedVtols = 1;
+    public Dictionary<ProtoId<JobPrototype>, ProtoId<StartingGearPrototype>> StartingGearJobOverrides = new();
 
+    /// <summary>How many vehicles from each of those four categories the side can pull up.</summary>
     [DataField]
-    public int MaxSuppliedFighters = 1;
+    public int MaxSuppliedPerCategory = 1;
 
     [DataField]
     public ProtoId<PlatoonVendorSetPrototype>? VendorSet { get; private set; }

@@ -61,6 +61,8 @@ public sealed class HealthScannerBuiState(
     public TimeSpan? CMUTimeUntilUnrevivable;
     public string? CMUBloodType;
     public float CMUSalinePercent;
+    /// <summary>Set during an allergic reaction: the allergen's name, or empty if unknown.</summary>
+    public string? CMUAllergicReaction;
     // cmu edit end
 }
 
@@ -129,7 +131,11 @@ public readonly record struct CMUBodyPartReadout(
     bool Cast,
     bool Tourniquet,
     // cmu edit start
-    ExternalBleedTier ExternalBleeding = ExternalBleedTier.None);
+    ExternalBleedTier ExternalBleeding = ExternalBleedTier.None,
+    FixedPoint2 Brute = default,
+    FixedPoint2 Burn = default,
+    bool UntreatedBrute = false,
+    bool UntreatedBurn = false);
     // cmu edit end
 
 // cmu edit start

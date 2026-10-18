@@ -154,6 +154,7 @@
     collection: FootstepPlating
   isSpace: true
   transparent: true
+  cmuBlocksLookUp: true # can't look up through a roof
   itemDrop: CMRodMetal1
   mass: 200
   weather: true

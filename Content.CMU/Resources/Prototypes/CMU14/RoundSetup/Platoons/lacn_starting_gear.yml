@@ -1,0 +1,179 @@
+# LACN versions of the support roles' starting gear, used in place of the standard sets when LACN is the platoon
+# (platoon startingGearJobOverrides). Clothing matches what the LACN engineering, requisitions and medical racks hand
+# out; everything else (ID, headset, stamps, medical kit) is the same as the standard set.
+
+# Engineering technician
+- type: startingGear
+  id: CMUGearLACNGOVFOREngineeringTech
+  equipment:
+    id: AU14IDCardGOVFOREngineeringTech
+    ears: CMUHeadsetGovforMarineAuxiliary
+    ears2: RMCM5CameraGear
+    jumpsuit: CMULACNEngineerJumpsuit
+    head: CMULACNHelmetEngineer
+    outerClothing: CMULACNLogisticsVest
+    gloves: AU14LACNGloves
+    shoes: AU14LACNBootsFilled
+
+- type: startingGear
+  id: CMUGearLACNOPFOREngineeringTech
+  equipment:
+    id: AU14IDCardOPFOREngineeringTech
+    ears: CMUHeadsetOpforMarineAuxiliary
+    ears2: RMCM5CameraGear
+    jumpsuit: CMULACNEngineerJumpsuit
+    head: CMULACNHelmetEngineer
+    outerClothing: CMULACNLogisticsVest
+    gloves: AU14LACNGloves
+    shoes: AU14LACNBootsFilled
+
+# Auxiliary (logistics) technician: requisitions gear
+- type: startingGear
+  id: CMUGearLACNGOVFORAuxTech
+  equipment:
+    id: AU14JobIDCardGOVFORAuxTech
+    ears: AU14HeadsetGovforAuxiliary
+    ears2: RMCM5CameraGear
+    jumpsuit: CMULACNRequisitionsFieldUniform
+    head: CMULACNHelmetRequisitions
+    outerClothing: CMULACNLogisticsVest
+    gloves: AU14LACNGloves
+    shoes: AU14LACNBootsFilled
+  storage:
+    back:
+    - CMStampApproved
+    - AU14StampAUX
+
+- type: startingGear
+  id: CMUGearLACNOPFORAuxTech
+  equipment:
+    id: AU14JobIDCardOPFORAuxTech
+    ears: AU14HeadsetOpforAuxiliary
+    ears2: RMCM5CameraGear
+    jumpsuit: CMULACNRequisitionsFieldUniform
+    head: CMULACNHelmetRequisitions
+    outerClothing: CMULACNLogisticsVest
+    gloves: AU14LACNGloves
+    shoes: AU14LACNBootsFilled
+  storage:
+    back:
+    - CMStampApproved
+    - AU14StampAUX
+
+# Engineering officer
+- type: startingGear
+  id: CMUGearLACNGOVFOROfficerEngi
+  equipment:
+    id: AU14IDCardGOVFOROfficerEngi
+    ears: AU14HeadsetGovforCommand
+    jumpsuit: CMULACNEngineerJumpsuit
+    head: CMULACNHelmetEngineer
+    outerClothing: CMULACNLogisticsVest
+    gloves: AU14LACNGloves
+    shoes: AU14LACNBootsFilled
+    back: CMULACNSatchel
+    pocket1: AU14StampEO
+
+- type: startingGear
+  id: CMUGearLACNOPFOROfficerEngi
+  equipment:
+    id: AU14IDCardOPFOROfficerEngi
+    ears: AU14HeadsetOpforCommand
+    jumpsuit: CMULACNEngineerJumpsuit
+    head: CMULACNHelmetEngineer
+    outerClothing: CMULACNLogisticsVest
+    gloves: AU14LACNGloves
+    shoes: AU14LACNBootsFilled
+    back: CMULACNSatchel
+    pocket1: AU14StampEO
+
+# Logistics officer (requisitions)
+- type: startingGear
+  id: CMUGearLACNGOVFOROfficerLogistics
+  equipment:
+    id: AU14IDCardGOVFOROfficerLogistics
+    ears: AU14HeadsetGovforCommand
+    jumpsuit: CMULACNRequisitionsFieldUniform
+    head: CMULACNHelmetRequisitions
+    outerClothing: CMULACNLogisticsVest
+    gloves: AU14LACNGloves
+    shoes: AU14LACNBootsFilled
+    back: CMULACNSatchel
+    pocket1: AU14StampLO
+    pocket2: CMStampApproved
+
+- type: startingGear
+  id: CMUGearLACNOPFOROfficerLogistics
+  equipment:
+    id: AU14IDCardOPFOROfficerLogistics
+    ears: AU14HeadsetOpforCommand
+    jumpsuit: CMULACNRequisitionsFieldUniform
+    head: CMULACNHelmetRequisitions
+    outerClothing: CMULACNLogisticsVest
+    gloves: AU14LACNGloves
+    shoes: AU14LACNBootsFilled
+    back: CMULACNSatchel
+    pocket1: AU14StampLO
+    pocket2: CMStampApproved
+
+# Nurse
+- type: startingGear
+  id: CMUGearLACNGOVFORNurse
+  equipment:
+    jumpsuit: CMULACNMedicalScrubs
+    head: AU14LACNNavyCap
+    shoes: CMULACNBootsWhiteFilled
+    belt: AU14BeltMedicBagSupportSynth
+    pocket1: AU14PouchFirstResponderFilledMilitaryDoctor
+    pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
+    back: AU14SatchelMilitaryDoctor
+    ears: AU14HeadsetGovforAuxiliary
+    ears2: RMCM5CameraGear
+    neck: ClothingNeckStethoscope
+
+- type: startingGear
+  id: CMUGearLACNOPFORNurse
+  equipment:
+    id: AU14IDCardOPFORNurse
+    jumpsuit: CMULACNMedicalScrubs
+    head: AU14LACNNavyCap
+    shoes: CMULACNBootsWhiteFilled
+    belt: AU14BeltMedicBagSupportSynth
+    pocket1: AU14PouchFirstResponderFilledMilitaryDoctor
+    pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
+    back: AU14SatchelMilitaryDoctor
+    ears: AU14HeadsetOpforAuxiliary
+    ears2: RMCM5CameraGear
+    neck: ClothingNeckStethoscope
+
+# Military doctor
+- type: startingGear
+  id: CMUGearLACNGOVFORMilitaryDoctor
+  equipment:
+    jumpsuit: CMULACNSurgicalScrubs
+    head: AU14LACNNavyCap
+    shoes: CMULACNBootsWhiteFilled
+    ears: AU14HeadsetGovforAuxiliary
+    ears2: RMCM5CameraGear
+  inhand:
+  - AU14StampMO
+
+- type: startingGear
+  id: CMUGearLACNOPFORMilitaryDoctor
+  equipment:
+    jumpsuit: CMULACNSurgicalScrubs
+    head: AU14LACNNavyCap
+    shoes: CMULACNBootsWhiteFilled
+    belt: AU14BeltMedicBagSupportSynth
+    pocket1: AU14PouchFirstResponderFilledMilitaryDoctor
+    pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
+    back: AU14SatchelMilitaryDoctor
+    outerClothing: RMCLabcoat
+    ears: AU14HeadsetOpforAuxiliary
+    ears2: RMCM5CameraGear
+    id: AU14IDCardOPFORDoctor
+    neck: ClothingNeckStethoscope
+    eyes: RMCGlassesMedicalHUDGlasses
+  inhand:
+  - AU14CMDefibrillator
+  - AU14TentBigFoldedSurgical
