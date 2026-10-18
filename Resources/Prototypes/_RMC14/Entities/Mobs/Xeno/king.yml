@@ -54,7 +54,7 @@
     maxPlasma: 1000
     plasmaRegenOnWeeds: 2
   - type: CMArmor
-    xenoArmor: 70
+    xenoArmor: 50
     explosionArmor: 100
   - type: InnateCommandSpeech
   - type: XenoClaws
