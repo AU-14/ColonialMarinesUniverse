@@ -107,11 +107,9 @@
   - type: XenoTailStab
     toggle: true
     inject:
-      RMCMolecularAcid: 6
+      RMCMolecularAcid: 9
     tailDamage:
       types:
-        Blunt: 10
-        Slash: 10
         Piercing: 10
   - type: XenoSprayAcid
     acid: XenoAcidSprayStrong
