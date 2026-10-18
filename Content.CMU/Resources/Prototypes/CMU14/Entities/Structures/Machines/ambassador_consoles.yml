@@ -58,14 +58,14 @@
     replenishAmount: 10
     replenishInterval: 60
     callableParties:
-      UPPGROM: 7500
-      UPPGROMAlt: 6000
-      UPPGROMAlt2: 4500
-      CHTORM_PMC_BEAR: 7500
-      GROZA_PMC_BEAR: 6000
-      SKALA_PMC_BEAR: 4500
-      Liquidators: 4500 #only flamethrowers
-      Migrant_UPP: 1000 #They don’t speak English.
+      UPPGROM: 11000
+      UPPGROMAlt: 9000
+      UPPGROMAlt2: 7000
+      CHTORM_PMC_BEAR: 11000
+      GROZA_PMC_BEAR: 9000
+      SKALA_PMC_BEAR: 7000
+      Liquidators: 7000 #only flamethrowers
+      Migrant_UPP: 1500 #They don’t speak English.
 
 
 # UA Ambassador Console - Can call in US Army
