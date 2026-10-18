@@ -13454,5 +13454,191 @@
   id: 807
   time: '2026-10-14T21:34:35.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2177
+- author: johnnny34y
+  changes:
+  - message: New sprites for a portion of HAZOPS' gear, along with new cosmetic PVS-71
+      night vision goggles and HAZOPS oxygen tank with 10 L of air.
+    type: Add
+  id: 808
+  time: '2026-10-15T01:30:46.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2169
+- author: troytroy400
+  changes:
+  - message: HAZOPS M250 squad support weapon.
+    type: Add
+  - message: HAZOPS Mark IV service pistol, the new standard HAZOPS sidearm
+    type: Add
+  - message: The HAZOPS PVS-71 night vision goggles now work, clip them into your
+      helmet and pull them down to see in the dark. HAZOPS squad leaders and shotgunner
+      specialists get them.
+    type: Add
+  - message: The HAZOPS powered warfighting armor's power-up sound only plays for
+      the wearer.
+    type: Fix
+  id: 809
+  time: '2026-10-15T02:35:13.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2180
+- author: rokudara-sen
+  changes:
+  - message: Thrown items and grenades no longer drop down the first hole they pass
+      over while your cursor is over the level below. They land where you threw them,
+      and fall if that spot is open.
+    type: Fix
+  - message: Shooting across a wide drop no longer sends every shot into the pit.
+      Empty floor below only pulls your shot down within 4 tiles of you, further than
+      that you have to point at someone down there.
+    type: Fix
+  - message: Aiming at someone on the level below now locks onto anyone within a tile
+      of your cursor, so moving targets are easier to hit.
+    type: Tweak
+  - message: Once you're aiming down at range, slipping off the target keeps you aiming
+      down for half a second, and for as long as you hold the trigger, so bursts don't
+      flip between levels.
+    type: Tweak
+  - message: Added a "Shoot where you look across Z-levels" option under Controls
+      -> CMU Z-Levels. Turn it off to bring back the old Ctrl+Shift+Space shoot down
+      toggle.
+    type: Add
+  id: 810
+  time: '2026-10-15T08:07:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2182
+- author: Ignies
+  changes:
+  - message: 'Added custom crayon symbols: draw your own in the crayon window and
+      stamp them with any crayon.'
+    type: Add
+  - message: Added lighter and darker tones of every box crayon for gradients in custom
+      symbols.
+    type: Add
+  - message: Added CMUCrayonDrawImageEvent so other systems can draw a player's custom
+      symbol on their surfaces.
+    type: Code
+  id: 811
+  time: '2026-10-15T13:10:06.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2179
+- author: TheHellFireo
+  changes:
+  - message: Reapers can spend 500 flesh to reanimate a recently dead hive sister
+      with a two-minute ritual and a ten-minute cooldown.
+    type: Add
+  - message: Reaper revival and flesh harvesting now use vascular animations with
+      visible interruption states.
+    type: Tweak
+  - message: Flesh Bloom slowly encloses its target before accelerating into a visible
+      inward poison spray.
+    type: Tweak
+  id: 812
+  time: '2026-10-15T15:40:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2183
+- author: TheHellFireo
+  changes:
+  - message: Queens can summon 15 AI lessers every six minutes and command them to
+      guard a marker or escort a hive member, in both body and eye mode.
+    type: Add
+  id: 813
+  time: '2026-10-15T16:33:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2184
+- author: Vixting
+  changes:
+  - message: Added new simulator UI
+    type: Add
+  id: 814
+  time: '2026-10-15T17:48:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2185
+- author: Vixting
+  changes:
+  - message: Fixed vehicle cupola 1 shotting resin
+    type: Fix
+  id: 815
+  time: '2026-10-16T16:57:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2191
+- author: Vencallium
+  changes:
+  - message: Updated the USS Bush across its lower, main, and upper decks.
+    type: Map
+  - message: Updated the USS Bush's upper hull tiles.
+    type: Map
+  - message: Replaced legacy USS Bush vending machines with cash-operated vendors.
+    type: Map
+  - message: Added revised lower, ground, and upper layers for Barkers Lament.
+    type: Map
+  - message: Updated LV-376 Ulixes to load the revised Barkers Lament maps.
+    type: Map
+  - message: Removed Barkers Lament from the shared planet pool.
+    type: Remove
+  - message: Added Weyland-Yutani access-controlled airlocks and double doors.
+    type: Add
+  - message: Added Weyland-Yutani access-controlled windoors and material doors.
+    type: Add
+  - message: Added Weyland-Yutani access-controlled shutters and pod doors.
+    type: Add
+  - message: Added Weyland-Yutani access-controlled firelocks.
+    type: Add
+  - message: Added an invisible airtight space seal for mapping that allows movement
+      and does not obstruct visibility.
+    type: Add
+  - message: Weyland-Yutani door variants accept corporate or corporate liaison access.
+    type: Tweak
+  - message: Weyland-Yutani shutters and pod doors can be opened by clicking with
+      the appropriate access.
+    type: Tweak
+  - message: CMU vent pipes are no longer selected for random hijack damage.
+    type: Tweak
+  - message: Manually opening a restricted firelock now checks its access requirements.
+    type: Fix
+  id: 816
+  time: '2026-10-16T16:59:17.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2189
+- author: TheHellFireo
+  changes:
+  - message: Queen swarms now summon 15 lessers on a 15-minute cooldown through a
+      single command menu.
+    type: Tweak
+  - message: Added passive swarm orders and hive alliance controls for eligible queens.
+    type: Add
+  - message: Lessers navigate doors and ignore friendly bodies when steering, and
+      stop targeting nested or devoured hosts.
+    type: Fix
+  - message: Swarm summon feedback is visible while using the queen's eye.
+    type: Fix
+  - message: Lessers spread attacks across nearby enemies and breach barricades blocking
+      pursuit.
+    type: Tweak
+  - message: AI lesser deaths no longer flood hive chat.
+    type: Fix
+  - message: Lessers spread out in open areas while squeezing through narrow passages.
+    type: Tweak
+  - message: Reduced redundant client physics contacts for AI lesser swarms.
+    type: Fix
+  - message: Queen swarms default to Distress Signal only, with a per-queen VV override.
+    type: Tweak
+  - message: Reduced Despoiler ability damage by 30%, and Acid Barrage damage by 40%.
+    type: Tweak
+  - message: Reaper Flesh Bloom activates about 30% faster.
+    type: Tweak
+  - message: Lesser swarms move 35% slower.
+    type: Tweak
+  - message: Lesser swarms follow orders up and down stairs between linked z-levels.
+    type: Fix
+  id: 817
+  time: '2026-10-17T00:04:03.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2199
+- author: johnnny34y
+  changes:
+  - message: HAZOPS now has a specialized equipment vendor with enhanced CBRN equipment.
+    type: Add
+  - message: Added a guidebook lore page for HAZOPS.
+    type: Add
+  id: 818
+  time: '2026-10-17T16:38:57.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2202
+- author: troytroy400
+  changes:
+  - message: Removes the pre-sprited undershirts on jacketless versions of the TWE
+      RMC uniform sprites so you can use your own undershirt.
+    type: Remove
+  id: 819
+  time: '2026-10-18T02:22:26.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2210
 Name: CMU
 Order: -1

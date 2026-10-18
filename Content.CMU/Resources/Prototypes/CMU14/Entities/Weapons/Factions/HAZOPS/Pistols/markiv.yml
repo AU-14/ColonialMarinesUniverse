@@ -1,0 +1,88 @@
+# The Mark IV: HAZOPS' standard issue sidearm, with the M4A4's handling and its own 18 round magazines.
+- type: entity
+  parent: AU14WeaponPistolM4A4
+  id: CMUWeaponPistolMarkIV
+  name: Mark IV service pistol
+  description: The standard issue sidearm of HAZOPS, built on the M4A4 with a longer grip that takes extended 18 round magazines. Fires 9mm pistol rounds.
+  components:
+  - type: Tag
+    tags:
+    - Sidearm
+    - CMUWeaponPistolMarkIV
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/HAZOPS/markiv.rsi
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/HAZOPS/markiv.rsi
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_m10_auto_pistol_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_m10_auto_pistol_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMUMagazinePistolMarkIV
+        startingItem: CMUMagazinePistolMarkIV
+
+- type: entity
+  parent: CMUWeaponPistolMarkIV
+  id: CMUWeaponPistolMarkIVEmpty
+  suffix: Empty
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_m10_auto_pistol_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_m10_auto_pistol_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMUMagazinePistolMarkIV
+
+- type: entity
+  parent: CMMagazinePistolM1984
+  id: CMUMagazinePistolMarkIV
+  name: Mark IV magazine (9mm)
+  description: An extended 9mm magazine for the Mark IV service pistol.
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - CMUMagazinePistolMarkIV
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgePistol9mm
+    proto: CMCartridgePistol9mm
+    capacity: 18
+
+- type: entity
+  parent: RMCKitBase
+  id: CMUKitWeaponMarkIV
+  name: Mark IV handgun case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: CMUWeaponPistolMarkIVEmpty
+        amount: 1
+      - id: CMUMagazinePistolMarkIV
+        amount: 8
+
+- type: Tag
+  id: CMUWeaponPistolMarkIV
+
+- type: Tag
+  id: CMUMagazinePistolMarkIV

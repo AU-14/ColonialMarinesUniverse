@@ -1,11 +1,11 @@
 meta:
   format: 7
   category: Map
-  engineVersion: 289.0.0
+  engineVersion: 290.0.0
   forkId: ""
   forkVersion: ""
-  time: 09/21/2026 08:30:36
-  entityCount: 2192
+  time: 10/15/2026 03:56:09
+  entityCount: 2210
 maps:
 - 1
 grids:
@@ -3121,6 +3121,42 @@ entities:
     - type: Transform
       parent: 1
       pos: 8.5,28.5
+- proto: AU14CashVendorCigarettes
+  entities:
+  - uid: 326
+    components:
+    - type: Transform
+      parent: 1
+      pos: -17.5,36.5
+- proto: AU14CashVendorHotDrinks
+  entities:
+  - uid: 327
+    components:
+    - type: Transform
+      parent: 1
+      pos: -17.5,35.5
+  - uid: 1984
+    components:
+    - type: Transform
+      parent: 1
+      pos: -16.5,42.5
+  - uid: 1985
+    components:
+    - type: Transform
+      parent: 1
+      pos: -16.5,43.5
+- proto: AU14CashVendorSnackMachine
+  entities:
+  - uid: 329
+    components:
+    - type: Transform
+      parent: 1
+      pos: -17.5,34.5
+  - uid: 688
+    components:
+    - type: Transform
+      parent: 1
+      pos: -11.5,32.5
 - proto: AU14CommsArrayShipGovfor
   entities:
   - uid: 2115
@@ -4706,32 +4742,32 @@ entities:
     - type: Transform
       parent: 1
       pos: -8.5,32.5
-- proto: CMDoubleDoorLogisticsGovforGlassLocked
+- proto: CMDoubleDoorEngineerGovforLocked
   entities:
   - uid: 1302
     components:
     - type: Transform
       parent: 1
       rot: -1.5707963267948966 rad
-      pos: 1.5,7.5
-  - uid: 1303
-    components:
-    - type: Transform
-      parent: 1
-      rot: -1.5707963267948966 rad
       pos: -1.5,7.5
-  - uid: 1304
-    components:
-    - type: Transform
-      parent: 1
-      rot: 1.5707963267948966 rad
-      pos: -2.5,7.5
-  - uid: 1305
+  - uid: 1303
     components:
     - type: Transform
       parent: 1
       rot: 1.5707963267948966 rad
       pos: 0.5,7.5
+  - uid: 1304
+    components:
+    - type: Transform
+      parent: 1
+      rot: -1.5707963267948966 rad
+      pos: 1.5,7.5
+  - uid: 1305
+    components:
+    - type: Transform
+      parent: 1
+      rot: 1.5707963267948966 rad
+      pos: -2.5,7.5
 - proto: CMDrinkCanBoda
   entities:
   - uid: 444
@@ -5343,6 +5379,15 @@ entities:
     - type: Transform
       parent: 1
       pos: -5.5,42.5
+- proto: CMUAirtightSeal
+  entities:
+  - uid: 1461
+    components:
+    - type: Transform
+      parent: 1
+      rot: 1.5707963267948966 rad
+      pos: -11.5,41.5
+      anchored: True
 - proto: CMUAtmosScanner
   entities:
   - uid: 81
@@ -5486,6 +5531,18 @@ entities:
     - type: Transform
       parent: 1
       pos: -2.5,-7.5
+- proto: CMUCashVendorCircuits
+  entities:
+  - uid: 1111
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,0.5
+  - uid: 1574
+    components:
+    - type: Transform
+      parent: 1
+      pos: 15.5,42.5
 - proto: CMUFitnessPunchingBag
   entities:
   - uid: 274
@@ -7940,52 +7997,22 @@ entities:
     - type: Transform
       parent: 1
       pos: 1.5,31.5
-- proto: CMVendorCigs
+- proto: CMUZLevelLadderThroughUp3
   entities:
-  - uid: 326
+  - uid: 1945
     components:
     - type: Transform
       parent: 1
-      pos: -17.5,36.5
-  - uid: 1947
-    components:
-    - type: Transform
-      parent: 1
-      pos: -17.5,10.5
-- proto: CMVendorCircuits
-  entities:
-  - uid: 1111
-    components:
-    - type: Transform
-      parent: 1
-      pos: 3.5,0.5
-  - uid: 1574
-    components:
-    - type: Transform
-      parent: 1
-      pos: 15.5,42.5
-- proto: CMVendorCoffee
-  entities:
-  - uid: 327
-    components:
-    - type: Transform
-      parent: 1
-      pos: -17.5,35.5
+      pos: -17.5,8.5
+    - type: Fixtures
+      fixtures: {}
   - uid: 1946
     components:
     - type: Transform
       parent: 1
-      pos: -17.5,9.5
-  - uid: 1984
-    components:
-    - type: Transform
-      parent: 1
-      pos: -16.5,42.5
-  - uid: 1985
-    components:
-    - type: Transform
-      parent: 1
-      pos: -16.5,43.5
+      pos: 16.5,8.5
+    - type: Fixtures
+      fixtures: {}
 - proto: CMVendorComponent
   entities:
   - uid: 1109
@@ -8015,23 +8042,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 15.5,40.5
-- proto: CMVendorSnack
-  entities:
-  - uid: 329
-    components:
-    - type: Transform
-      parent: 1
-      pos: -17.5,34.5
-  - uid: 688
-    components:
-    - type: Transform
-      parent: 1
-      pos: -11.5,32.5
-  - uid: 1945
-    components:
-    - type: Transform
-      parent: 1
-      pos: -17.5,8.5
 - proto: CMVendorSodaSoviet
   entities:
   - uid: 689
@@ -13425,8 +13435,9 @@ entities:
   - uid: 1428
     components:
     - type: Transform
-      parent: 1
-      pos: 15.66065,29.627748
+      parent: 2141
+    - type: Physics
+      canCollide: False
   - uid: 1429
     components:
     - type: Transform
@@ -15466,11 +15477,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -2.5,11.5
-  - uid: 1461
-    components:
-    - type: Transform
-      parent: 1
-      pos: -3.5,13.5
 - proto: RMCSecureCaseStrappedFlare
   entities:
   - uid: 1456
@@ -15490,6 +15496,11 @@ entities:
     - type: Transform
       parent: 1
       pos: -3.5,12.5
+  - uid: 2124
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,13.5
 - proto: RMCSecureCaseStrappedMRE
   entities:
   - uid: 1453
@@ -16009,6 +16020,116 @@ entities:
     - type: Transform
       parent: 1
       pos: 15.546492,44.53392
+- proto: RMCWeaponRifleM54C
+  entities:
+  - uid: 1947
+    components:
+    - type: Transform
+      parent: 1
+      pos: 16.66785,29.438992
+  - uid: 2125
+    components:
+    - type: Transform
+      parent: 1
+      pos: 16.943142,14.598519
+  - uid: 2126
+    components:
+    - type: Transform
+      parent: 1
+      pos: 16.771267,14.645394
+  - uid: 2127
+    components:
+    - type: Transform
+      parent: 1
+      pos: 16.771267,14.754769
+  - uid: 2128
+    components:
+    - type: Transform
+      parent: 1
+      pos: 16.880642,14.723519
+  - uid: 2129
+    components:
+    - type: Transform
+      parent: 1
+      pos: 16.911892,14.551644
+  - uid: 2130
+    components:
+    - type: Transform
+      parent: 1
+      pos: 16.771267,14.676644
+  - uid: 2131
+    components:
+    - type: Transform
+      parent: 1
+      pos: 17.005642,14.692269
+  - uid: 2132
+    components:
+    - type: Transform
+      parent: 1
+      pos: 16.990017,14.661019
+    - type: RMCWeaponAccuracy
+      modifiedAccuracyMultiplier: 0.5
+    - type: UseDelay
+      delays:
+        RMCWieldDelay:
+          startTime: 489.4328439
+          length: 0.4
+          endTime: 488.5897522
+  - uid: 2133
+    components:
+    - type: Transform
+      parent: 1
+      pos: 16.740017,14.536019
+  - uid: 2134
+    components:
+    - type: Transform
+      parent: 1
+      pos: 16.833672,14.785926
+  - uid: 2135
+    components:
+    - type: Transform
+      parent: 1
+      pos: 16.995975,29.563992
+  - uid: 2136
+    components:
+    - type: Transform
+      parent: 1
+      pos: 17.058475,29.563992
+  - uid: 2137
+    components:
+    - type: Transform
+      parent: 1
+      pos: 17.183475,29.517117
+  - uid: 2138
+    components:
+    - type: Transform
+      parent: 1
+      pos: 16.870975,29.485867
+  - uid: 2139
+    components:
+    - type: Transform
+      parent: 1
+      pos: 16.902225,29.657742
+  - uid: 2140
+    components:
+    - type: Transform
+      parent: 1
+      pos: 17.058475,29.532742
+  - uid: 2141
+    components:
+    - type: Transform
+      parent: 1
+      pos: 16.91785,29.610867
+    - type: ContainerContainer
+      containers:
+        gun_magazine: !type:ContainerSlot
+          ent: 1428
+          showEnts: False
+          occludes: True
+        gun_chamber: !type:ContainerSlot
+          ent: null
+          showEnts: False
+          occludes: True
 - proto: RMCWindoorSoro
   entities:
   - uid: 341

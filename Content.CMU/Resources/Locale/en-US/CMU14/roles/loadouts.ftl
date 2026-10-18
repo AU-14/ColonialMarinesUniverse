@@ -47,3 +47,4 @@ au14-vending-machine-jo-max = This officer kit was already taken!
 cmu-loadout-group-aegis-stamp = AEGIS Armaments stamp
 cmu-loadout-group-provost-stamp = Provost stamp
 cmu-loadout-group-corporate-skirts = Corporate skirts
+cmu-loadout-group-surgical-webbing = Surgical Webbing
