@@ -198,7 +198,7 @@ public sealed partial class PopupSystem : SharedPopupSystem
 
         // Keep the colour the popup is drawn in on screen.
         var escaped = FormattedMessage.EscapeText(message);
-        var wrapped = $"[color={PopupUIController.GetPopupColor(type).ToHex()}]{escaped}[/color]";
+        var wrapped = $"[italic][color={PopupUIController.GetPopupColor(type).ToHex()}]{escaped}[/color][/italic]";
         _uiManager.GetUIController<ChatUIController>().ProcessChatMessage(
             new ChatMessage(ChatChannel.Visual, escaped, wrapped, NetEntity.Invalid, null),
             speechBubble: false);
