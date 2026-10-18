@@ -87,9 +87,9 @@
     attackRate: 1.5
     damage:
       types:
-        Blunt: 11.66
-        Slash: 11.67
-        Piercing: 11.67
+        Blunt: 10.0
+        Slash: 10.0
+        Piercing: 10.0
   - type: Tackle
     min: 2
     max: 4
