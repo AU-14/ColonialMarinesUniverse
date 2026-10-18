@@ -90,6 +90,22 @@
   - Hammering
   - Hammering
 
+# A sheet of metal (the ordinary building sheet, CMSteel) is beaten out of an iron ingot the same way: the iron sheet is the sheet of metal now.
+- type: anvilRecipe
+  id: RUMCAnvilIronSheet
+  name: au14-anvil-recipe-metal-sheet
+  icon:
+    sprite: /Textures/_RMC14/Objects/Materials/Sheets/metal.rsi
+    state: metal
+  output: CMSheetMetal1
+  outputCount: 1
+  ingot: RUMCIronIngot
+  steps:
+  - Hammering
+  - Hammering
+  - Hammering
+  - Hammering
+
 # Everything of steel is forged at the anvil: a heated ingot, worked with the hammer and the chisel. (The steel is the iron ingot, as it is for the drill head.)
 - type: anvilRecipe
   id: RUMCAnvilSteelDrillHead

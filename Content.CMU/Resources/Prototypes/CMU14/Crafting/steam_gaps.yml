@@ -58,8 +58,8 @@
   tools:
   - Hammering
   consumables:
-  - stack: CMSteel
-    amount: 12
+  - stack: RUMCBrassIngot
+    amount: 5
   - stack: RUMCStone
     amount: 4
 
