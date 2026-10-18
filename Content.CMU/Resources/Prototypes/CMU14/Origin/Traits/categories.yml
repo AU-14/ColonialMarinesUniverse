@@ -9,5 +9,10 @@
   maxTraitPoints: 1
 
 - type: traitCategory
+  id: CMUDrugAllergies
+  name: cmu-trait-category-drug-allergy
+  maxTraitPoints: 1
+
+- type: traitCategory
   id: CMUQuirks
   name: trait-category-quirks

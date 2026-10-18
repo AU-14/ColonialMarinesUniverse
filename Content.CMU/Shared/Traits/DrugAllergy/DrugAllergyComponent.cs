@@ -19,6 +19,10 @@ public sealed partial class DrugAllergyComponent : Component
         "CMUOxycodone",
         "CMUTramadol",
         "CMUParacetamol",
+        "CMUFentanyl",
+        "CMImidazoline",
+        "CMLeporazine",
+        "CMEthylredoxrazine",
     };
 
     [DataField]

@@ -724,6 +724,9 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
     private const string DisabilitiesTraitCategory = "Disabilities";
     private const string DrugAllergyTraitId = "RandomDrugAllergy";
+    // cmu edit start
+    private const string DrugAllergiesTraitCategory = "CMUDrugAllergies";
+    // cmu edit end
 
     // CMU14: blood type from the profile, applied whether or not character descriptions are on
     private void ApplyProfileBloodType(EntityUid uid, HumanoidCharacterProfile profile)
@@ -759,8 +762,13 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             if (!_prototypeManager.TryIndex(traitId, out TraitPrototype? traitProto))
                 continue;
 
-            if (traitProto.Category is not { } category || category.Id != DisabilitiesTraitCategory)
+            // cmu edit start: drug allergies have their own section but still show as a disability
+            if (traitProto.Category is not { } category ||
+                category.Id != DisabilitiesTraitCategory && category.Id != DrugAllergiesTraitCategory)
+            {
                 continue;
+            }
+            // cmu edit end
 
             // cmu edit start
             if (EntityManager.System<Content.Shared.CMU14.Traits.AutoIgnore.CMUAutoIgnoreTraitsSystem>()
@@ -772,8 +780,10 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
             comp.DisabilityTraitNames.Add(Loc.GetString(traitProto.Name));
 
-            if (traitId.Id == DrugAllergyTraitId)
+            // cmu edit start: any drug allergy, random or picked
+            if (traitId.Id == DrugAllergyTraitId || category.Id == DrugAllergiesTraitCategory)
                 comp.HasDrugAllergyTrait = true;
+            // cmu edit end
         }
 
         Dirty(uid, comp);
