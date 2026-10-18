@@ -156472,6 +156472,7 @@ entities:
       parent: 1
       pos: 36.5,-65.5
     - type: YautjaRelayDestination
+      kind: Ground
       id: hopes-retreat.ground.relay
       displayName: Hope's Retreat Ground Relay
 - proto: CMUZLevelLadderThroughUp1
@@ -181293,7 +181294,6 @@ entities:
       rot: 4.71238898038469 rad
       pos: 112.5,-26.5
     - type: TacticalMapComputer
-      map: invalid
     - type: TacticalMapLines
       xenoLines: []
       weYuLines: []
@@ -181316,7 +181316,6 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -4.5,-42.5
     - type: TacticalMapComputer
-      map: invalid
 - proto: RMCPaperCup
   entities:
   - uid: 56024
