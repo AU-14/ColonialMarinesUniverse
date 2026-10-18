@@ -40,5 +40,5 @@
   consumables:
   - stack: RMCWood
     amount: 1
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 1

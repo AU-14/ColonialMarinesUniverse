@@ -18,7 +18,7 @@
   - type: Forge
     capacity: 40
     ingredients:
-    # Only copper and glass (sand) are melted in the crucible; the iron and the quartz are not.
+    # Copper, glass (sand), zinc and iron are melted in the crucible; the quartz is not. Iron melts at 1538: only the stone smeltery gets the crucible that hot.
     - input: RUMCCopperOre
       reagent: Copper
       reagentPerUnit: 10
@@ -28,6 +28,13 @@
     # Two of copper ore and two of zinc ore together are the melt of one brass ingot.
     - input: RUMCZincOre
       reagent: RUMCZincMelt
+      reagentPerUnit: 10
+    # Four of iron ore are the melt of one iron ingot. So are four sheets of metal (scrap melts down into iron).
+    - input: RUMCIronOre
+      reagent: RUMCIronMelt
+      reagentPerUnit: 10
+    - input: CMSteel
+      reagent: RUMCIronMelt
       reagentPerUnit: 10
   - type: Forgeable
     # The stone smeltery heats to 2000, and the silicon in the crucible melts at 1800.
@@ -70,7 +77,7 @@
   parent: BaseItem
   id: RUMCIngotMold
   name: ingot mold
-  description: A simple sand mold. Pour molten copper, zinc or glass from a crucible into it and give it a moment to cool, and it casts a copper ingot, a zinc ingot or a sheet of glass. Copper and zinc melted together, equal parts of each, cast a brass ingot.
+  description: A simple sand mold. Pour molten copper, zinc, iron or glass from a crucible into it and give it a moment to cool, and it casts a copper ingot, a zinc ingot, an iron ingot or a sheet of glass. Copper and zinc melted together, equal parts of each, cast a brass ingot. Iron is only hot enough in the crucible of a stone smeltery.
   components:
   - type: Sprite
     sprite: CMU14/Objects/Smelting/mold.rsi
@@ -114,6 +121,12 @@
       outputCount: 1
       coolTime: 6
       name: brass ingot
+    - ingredients:
+        RUMCIronMelt: 40
+      output: RUMCIronIngot
+      outputCount: 1
+      coolTime: 8
+      name: iron ingot
   - type: Solution
     id: cast
     solution:

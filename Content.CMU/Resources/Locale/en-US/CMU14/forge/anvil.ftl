@@ -23,6 +23,7 @@ au14-anvil-recipe-armour-plates = armour plates
 au14-anvil-recipe-empty-mold = empty mold
 au14-anvil-recipe-brass-empty-mold = brass mold
 au14-anvil-recipe-brass-parts = brass parts
+au14-anvil-recipe-brass-sheet = brass sheet
 au14-anvil-recipe-steel-drill-head = steel drill head
 au14-anvil-recipe-steel-pipe = steel pipe
 au14-anvil-recipe-steel-pipe-down = steel pipe going down

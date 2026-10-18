@@ -34,7 +34,7 @@
   inputs:
     RUMCIronIngot: 1
   outputs:
-    RUMCIronSheet: 1
+    CMSteel: 1
   duration: 3
 
 - type: cmuMachineRecipe
@@ -2176,16 +2176,6 @@
   duration: 3
 
 - type: cmuMachineRecipe
-  id: RUMCMRArcfurnaceSteel
-  machine: arcfurnace
-  inputs:
-    RUMCIronSheet: 2
-    RUMCCokeCoal: 1
-  outputs:
-    CMSteel: 2
-  duration: 8
-
-- type: cmuMachineRecipe
   id: RUMCMRArcfurnacePlasteel
   machine: arcfurnace
   inputs:
@@ -3704,7 +3694,7 @@
     amount: 1
   - stack: RUMCRubberSheet
     amount: 1
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 1
 
 - type: craftRecipe
@@ -3762,7 +3752,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 4
   - stack: RUMCRubberSheet
     amount: 1
@@ -3940,7 +3930,7 @@
   consumables:
   - stack: RUMCMotor
     amount: 1
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 2
   - stack: RUMCIronRod
     amount: 2
@@ -4004,7 +3994,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 8
 
 - type: craftRecipe
@@ -4016,7 +4006,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 3
 
 - type: craftRecipe
@@ -4028,7 +4018,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 3
 
 - type: craftRecipe
@@ -4040,7 +4030,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 3
 
 - type: craftRecipe
@@ -4052,7 +4042,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 3
 
 - type: craftRecipe
@@ -4064,7 +4054,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 3
 
 - type: craftRecipe

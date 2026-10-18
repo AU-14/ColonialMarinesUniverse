@@ -206,11 +206,6 @@
   - 300
   - 1500
   goods:
-  - stack: RUMCIronSheet
-    sell: 4
-    count: 10
-    buy: 500
-    level: 1
   - stack: RUMCCopperSheet
     sell: 4
     count: 10

@@ -2,47 +2,6 @@
 # They stack like the steel sheets do, up to fifty of them.
 
 - type: stack
-  id: RUMCIronSheet
-  name: iron sheet
-  icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: iron }
-  spawn: RUMCIronSheet
-  maxCount: 50
-
-- type: entity
-  parent: SheetMetalBase
-  id: RUMCIronSheet
-  name: iron sheet
-  description: A sheet of iron.
-  components:
-  - type: Sprite
-    sprite: CMU14/Objects/Materials/sheets.rsi
-    layers:
-    - state: iron_4
-      map: ["base"]
-  - type: Item
-    size: Normal
-    sprite: CMU14/Objects/Materials/sheets.rsi
-    inhandVisuals:
-      left:
-      - state: iron-inhand-left
-      right:
-      - state: iron-inhand-right
-  - type: Stack
-    stackType: RUMCIronSheet
-    count: 1
-    baseLayer: base
-    layerStates:
-    - iron
-    - iron_2
-    - iron_3
-    - iron_4
-  - type: Appearance
-  - type: Material
-  - type: PhysicalComposition
-    materialComposition:
-      RUMCIron: 100
-
-- type: stack
   id: RUMCAluminumSheet
   name: aluminum sheet
   icon: { sprite: CMU14/Objects/Materials/sheets.rsi, state: aluminum }

@@ -655,7 +655,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 3
   - stack: RUMCIronRod
     amount: 1
@@ -668,7 +668,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 2
   - stack: RMCWood
     amount: 1
@@ -681,7 +681,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 2
 
 - type: craftRecipe
@@ -703,7 +703,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 1
 
 - type: craftRecipe
@@ -725,7 +725,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 1
 
 - type: craftRecipe
@@ -738,7 +738,7 @@
   consumables:
   - stack: RMCWood
     amount: 6
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 2
   - stack: RUMCIronRod
     amount: 2
@@ -751,7 +751,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 8
   - stack: RUMCIronRod
     amount: 4

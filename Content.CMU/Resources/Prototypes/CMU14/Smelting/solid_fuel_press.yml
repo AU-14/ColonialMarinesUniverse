@@ -199,7 +199,7 @@
   shape: sheet
   inputs:
     RUMCIronIngot: 1
-  result: RUMCIronSheet
+  result: CMSteel
   resultAmount: 1
   duration: 6
 

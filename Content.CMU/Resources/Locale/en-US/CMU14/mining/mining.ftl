@@ -17,6 +17,8 @@ au14-deposit-examine-empty = There is nothing left in it.
 
 reagent-name-au14-zinc-melt = molten zinc
 reagent-desc-au14-zinc-melt = Zinc melted in a crucible. Two of copper and two of this make brass.
+reagent-name-au14-iron-melt = molten iron
+reagent-desc-au14-iron-melt = Iron melted in a crucible. It needs the heat of a stone smeltery, and it is cast into iron ingots.
 
 au14-pump-examine-water = It stands on water and draws it up.
 au14-pump-examine-dry = It does not stand on water, so it pumps nothing.

@@ -86,7 +86,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 2
   - stack: RUMCMagneticRod
     amount: 2
@@ -104,7 +104,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 2
   - stack: RUMCMagneticRod
     amount: 3
@@ -124,7 +124,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 1
   - stack: RUMCInductor
     amount: 2
@@ -190,7 +190,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 2
   - stack: RUMCBasicCircuit
     amount: 1

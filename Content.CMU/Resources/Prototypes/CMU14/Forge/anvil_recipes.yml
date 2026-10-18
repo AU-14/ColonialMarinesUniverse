@@ -74,6 +74,22 @@
   - Hammering
   - Hammering
 
+# A sheet of brass is beaten out of a brass ingot, so that the first sheets do not wait for a press (the press itself is built of brass sheets).
+- type: anvilRecipe
+  id: RUMCAnvilBrassSheet
+  name: au14-anvil-recipe-brass-sheet
+  icon:
+    sprite: CMU14/Objects/Materials/sheets.rsi
+    state: brass
+  output: RUMCBrassSheet
+  outputCount: 1
+  ingot: RUMCBrassIngot
+  steps:
+  - Hammering
+  - Hammering
+  - Hammering
+  - Hammering
+
 # Everything of steel is forged at the anvil: a heated ingot, worked with the hammer and the chisel. (The steel is the iron ingot, as it is for the drill head.)
 - type: anvilRecipe
   id: RUMCAnvilSteelDrillHead

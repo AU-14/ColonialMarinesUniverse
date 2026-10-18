@@ -290,7 +290,7 @@
     amount: 8
   - stack: CMGlass
     amount: 2
-  - stack: RUMCIronSheet
+  - stack: CMSteel
     amount: 2
   - stack: RUMCInsulatedCable
     amount: 2

@@ -1,0 +1,13 @@
+# Iron melted in a crucible. Iron melts at 1538, which a clay smeltery (1500) cannot reach: only the stone smeltery (2000) melts it. Four of iron ore make an ingot,
+# as they do in the steam smelter. Four sheets of metal melt down into one as well.
+
+- type: reagent
+  id: RUMCIronMelt
+  name: reagent-name-au14-iron-melt
+  group: Elements
+  desc: reagent-desc-au14-iron-melt
+  physicalDesc: reagent-physical-desc-crystalline
+  flavor: metallic
+  color: "#e8743a"
+  boilingPoint: 2862.0
+  meltingPoint: 1538.0
