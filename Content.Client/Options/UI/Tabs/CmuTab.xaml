@@ -20,6 +20,11 @@
                 <CheckBox Name="TileMovementCheckBox"
                           Text="{Loc 'cmu-ui-options-tile-movement'}"
                           ToolTip="{Loc 'cmu-ui-options-tile-movement-tooltip'}" />
+                <!-- cmu edit start: tile movement only while walking -->
+                <CheckBox Name="TileMovementWalkOnlyCheckBox"
+                          Text="{Loc 'cmu-ui-options-tile-movement-walk-only'}"
+                          ToolTip="{Loc 'cmu-ui-options-tile-movement-walk-only-tooltip'}" />
+                <!-- cmu edit end -->
                 <CheckBox Name="AutoIngestCheckBox"
                           Text="{Loc 'cmu-ui-options-auto-ingest'}"
                           ToolTip="{Loc 'cmu-ui-options-auto-ingest-tooltip'}" />

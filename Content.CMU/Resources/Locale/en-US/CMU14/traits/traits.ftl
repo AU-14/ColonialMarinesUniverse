@@ -140,6 +140,8 @@ trait-cmu-prosthetic-right-leg-desc = Your right leg has been replaced with a ro
 cmu-ui-options-movement = Movement
 cmu-ui-options-tile-movement = Tile movement
 cmu-ui-options-tile-movement-tooltip = Move from tile to tile instead of walking freely, just like the forebears who came before you.
+cmu-ui-options-tile-movement-walk-only = Tile movement while walking
+cmu-ui-options-tile-movement-walk-only-tooltip = Move from tile to tile while walking, and freely while running. Tile movement above overrides this.
 
 cmu-trait-category-drinking = Alcohol Tolerance
 cmu-trait-heavyweight-name = Heavyweight drunk

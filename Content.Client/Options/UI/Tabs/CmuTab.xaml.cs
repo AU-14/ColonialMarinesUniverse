@@ -34,6 +34,7 @@ public sealed partial class CmuTab : Control
         Control.AddOptionCheckBox(CCVars.CMUVoteUiLarge, VoteUiLargeCheckBox);
         // cmu edit start
         Control.AddOptionCheckBox(CCVars.CMUTileMovementPreferred, TileMovementCheckBox);
+        Control.AddOptionCheckBox(CCVars.CMUTileMovementWalkOnly, TileMovementWalkOnlyCheckBox);
         // cmu edit end
         // cmu edit start: hide username on the round-end screen
         Control.AddOptionCheckBox(Content.Shared.CMU14.CCVar.AU14CCVars.HideRoundEndUsername, HideRoundEndUsernameCheckBox);
