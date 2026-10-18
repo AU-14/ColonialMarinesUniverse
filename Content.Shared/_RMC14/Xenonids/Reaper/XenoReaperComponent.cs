@@ -19,10 +19,10 @@ public sealed partial class XenoReaperComponent : Component
     public int MaxFleshResin = 1000;
 
     [DataField, AutoNetworkedField]
-    public int MeleeGain = 5;
+    public int MeleeGain = 10;
 
     [DataField, AutoNetworkedField]
-    public int PassiveGain = 2;
+    public int PassiveGain = 0.5;
 
     [DataField, AutoNetworkedField]
     public TimeSpan PassiveGainEvery = TimeSpan.FromSeconds(1);
@@ -34,13 +34,13 @@ public sealed partial class XenoReaperComponent : Component
     public int PassiveGainMaxFleshResin = 300;
 
     [DataField, AutoNetworkedField]
-    public int FleshHarvestGain = 150;
+    public int FleshHarvestGain = 100;
 
     [DataField, AutoNetworkedField]
     public TimeSpan FleshHarvestDelay = TimeSpan.FromSeconds(4);
 
     [DataField, AutoNetworkedField]
-    public int RaptureGain = 60;
+    public int RaptureGain = 70;
 
     [DataField, AutoNetworkedField]
     public EntProtoId RaptureEffect = "RMCEffectExtraSlash";
@@ -87,7 +87,7 @@ public sealed partial class XenoReaperComponent : Component
     [DataField, AutoNetworkedField]
     public DamageSpecifier RedGasDamage = new()
     {
-        DamageDict = { ["Poison"] = 20 },
+        DamageDict = { ["Poison"] = 20 }, // CMU14
     };
 
     [DataField, AutoNetworkedField]
@@ -134,7 +134,7 @@ public sealed partial class XenoFleshBloomComponent : Component
     [DataField, AutoNetworkedField]
     public DamageSpecifier Damage = new()
     {
-        DamageDict = { ["Poison"] = 25 },
+        DamageDict = { ["Poison"] = 25 }, // CMU14
     };
 
     [DataField, AutoNetworkedField]
@@ -158,7 +158,7 @@ public sealed partial class XenoReaperRedGasComponent : Component
 
     public DamageSpecifier Damage = new()
     {
-        DamageDict = { ["Poison"] = 30 },
+        DamageDict = { ["Poison"] = 30 }, // CMU14
     };
 }
 
