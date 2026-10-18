@@ -128,4 +128,72 @@ public sealed class OctoberEighteenVehicleRegressionTest : GameTest
             }
         }
     }
+
+    // nests aren't hard so the turf check let ships land on them and gib the hosts, and other grids on the
+    // landing map (a landed mohawk, another dropship) were never looked at
+    [Test]
+    public async Task TacticalLandingIsBlockedByNestsAndOtherGrids()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid eye = default;
+        await Server.WaitAssertion(() =>
+        {
+            var maps = SEntMan.System<SharedMapSystem>();
+            var floor = new Tile(Server.ResolveDependency<ITileDefinitionManager>()["CMFloorSteel"].TileId);
+            for (var x = -2; x <= 3; x++)
+            for (var y = -2; y <= 2; y++)
+                maps.SetTile(map.Grid, new Vector2i(x, y), floor);
+
+            // two tile ship parked on its own map
+            maps.CreateMap(out var shipMap);
+            var ship = maps.CreateGridEntity(shipMap);
+            maps.SetTile(ship, Vector2i.Zero, floor);
+            maps.SetTile(ship, new Vector2i(1, 0), floor);
+            SEntMan.EnsureComponent<DropshipComponent>(ship);
+            var console = SEntMan.SpawnEntity("CMComputerDropshipNavigationERTThirdParty",
+                new EntityCoordinates(ship, 0.5f, 0.5f));
+
+            eye = SEntMan.SpawnEntity("CMUDropshipPilotEye", new EntityCoordinates(map.Grid, 0.5f, 0.5f));
+            var pilotEye = SEntMan.EnsureComponent<DropshipPilotEyeComponent>(eye);
+            typeof(DropshipPilotEyeComponent).GetField(nameof(DropshipPilotEyeComponent.Console))!
+                .SetValue(pilotEye, (EntityUid?) console);
+        });
+
+        await Pair.RunSeconds(0.5f);
+        await Server.WaitAssertion(() =>
+            Assert.That(SEntMan.GetComponent<DropshipPilotEyeComponent>(eye).ClearForLanding, Is.True));
+
+        EntityUid nest = default;
+        await Server.WaitAssertion(() =>
+            nest = SEntMan.SpawnEntity("XenoNest", new EntityCoordinates(map.Grid, 1.5f, 0.5f)));
+        await Pair.RunSeconds(0.5f);
+        await Server.WaitAssertion(() =>
+        {
+            var pilotEye = SEntMan.GetComponent<DropshipPilotEyeComponent>(eye);
+            Assert.That(pilotEye.ClearForLanding, Is.False);
+            Assert.That(pilotEye.BlockedTiles, Does.Contain(new Vector2i(1, 0)));
+            SEntMan.DeleteEntity(nest);
+        });
+
+        await Pair.RunSeconds(0.5f);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.GetComponent<DropshipPilotEyeComponent>(eye).ClearForLanding, Is.True);
+
+            var maps = SEntMan.System<SharedMapSystem>();
+            var floor = new Tile(Server.ResolveDependency<ITileDefinitionManager>()["CMFloorSteel"].TileId);
+            var parked = maps.CreateGridEntity(map.MapId);
+            SEntMan.System<SharedTransformSystem>().SetWorldPosition(parked,
+                SEntMan.System<SharedTransformSystem>().GetWorldPosition(map.Grid));
+            maps.SetTile(parked, Vector2i.Zero, floor);
+        });
+
+        await Pair.RunSeconds(0.5f);
+        await Server.WaitAssertion(() =>
+        {
+            var pilotEye = SEntMan.GetComponent<DropshipPilotEyeComponent>(eye);
+            Assert.That(pilotEye.ClearForLanding, Is.False);
+            Assert.That(pilotEye.BlockedTiles, Does.Contain(Vector2i.Zero));
+        });
+    }
 }
