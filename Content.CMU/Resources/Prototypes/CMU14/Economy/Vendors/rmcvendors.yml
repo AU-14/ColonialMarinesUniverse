@@ -17,10 +17,6 @@
     sprite: CMU14/Structures/Vendors/uscmgearrack.rsi
   - type: CMAutomatedVendor
     sections:
-    - name: Weapon Light
-      takeAll: CMURailFlashlight
-      entries:
-      - id: RMCAttachmentRailFlashlight
     - name: Fatigues
       entries:
       - id: CMUFatiguesRMC
@@ -289,6 +285,8 @@
         amount: 40
     - name: Tools
       entries:
+      - id: RMCAttachmentRailFlashlight
+        amount: 8
       - id: CMEntrenchingTool
         recommended: true
         amount: 30
