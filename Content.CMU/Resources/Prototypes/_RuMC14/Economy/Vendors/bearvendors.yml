@@ -786,6 +786,13 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORSquadAutomaticRifleman
+    - AU14JobGOVFORSquadAutomaticRiflemanRMC
+    - AU14JobGOVFORSquadAutomaticRiflemanUPP
+    - AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+    - AU14JobOPFORSquadAutomaticRifleman
     sections:
     - name: au14-vendor-section-essential-equipment
       takeAll: CMUAREssentialEquipment
@@ -824,6 +831,14 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORSectionSergeant
+    - AU14JobGOVFORSectionSergeantCMBCIU
+    - AU14JobGOVFORSectionSergeantRMC
+    - AU14JobGOVFORSectionSergeantUPP
+    - AU14JobGOVFORSectionSergeantWYPMC
+    - AU14JobOPFORSectionSergeant
     sections:
     - name: au14-vendor-section-apparel
       choices: { CMHat: 1 }
