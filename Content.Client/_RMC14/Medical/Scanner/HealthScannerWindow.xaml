@@ -55,7 +55,7 @@
                                 <Label Name="CMURiderLabel" Access="Public" StyleClasses="CMULabelBold"
                                        FontColorOverride="White" Margin="5 1" ClipText="True" />
                             </PanelContainer>
-                            <!-- this should probably be made a disease like the cm13 system-->>
+                            <!-- this should probably be made a disease like the cm13 system -->
                             <!-- CMU14: lab Wendigo procedure progress -->
                             <PanelContainer Name="CMUWendigoBanner" Access="Public" Visible="False">
                                 <PanelContainer.PanelOverride>
