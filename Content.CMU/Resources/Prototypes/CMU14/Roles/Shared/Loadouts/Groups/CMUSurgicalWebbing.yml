@@ -1,0 +1,11 @@
+- type: loadoutGroup
+  id: CMUSurgicalWebbing
+  name: cmu-loadout-group-surgical-webbing
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - WebbingSurgicalBlueAU14
+  - WebbingSurgicalGreenCMU14
+  - DropSurgicalGreenCMU14
+  - DropSurgicalBlueCMU14
+  - DropSurgicalBlackCMU14
