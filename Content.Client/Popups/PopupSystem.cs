@@ -29,6 +29,7 @@ public sealed partial class PopupSystem : SharedPopupSystem
     [Dependency] private IReplayRecordingManager _replayRecording = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IEyeManager _eyeManager = default!; // CMU14
 
     public IReadOnlyCollection<WorldPopupLabel> WorldLabels => _aliveWorldLabels.Values;
     public IReadOnlyCollection<CursorPopupLabel> CursorLabels => _aliveCursorLabels.Values;
@@ -105,7 +106,8 @@ public sealed partial class PopupSystem : SharedPopupSystem
         }
 
         // CMU14: popup chat/screen options
-        CMUEchoPopupToChat(message, type);
+        if (CMUCanSeePopup(coordinates, entity))
+            CMUEchoPopupToChat(message, type);
         if (_configManager.GetCVar(CCVars.HidePopupsOnScreen))
             return;
 
@@ -151,9 +153,47 @@ public sealed partial class PopupSystem : SharedPopupSystem
     }
 
     // CMU14 start: copy popups into the local chat log when the player opts in.
+    /// <summary>
+    ///     Only popups you could actually see on screen get copied to chat: inside your view and not behind a wall,
+    ///     the same check the popup overlay draws with.
+    /// </summary>
+    private bool CMUCanSeePopup(EntityCoordinates coordinates, EntityUid? entity)
+    {
+        if (_playerManager.LocalEntity is not { } local)
+            return true;
+
+        if (entity == local)
+            return true;
+
+        var popupPos = _transform.ToMapCoordinates(coordinates);
+        var ourPos = _eyeManager.CurrentEye.Position;
+        if (popupPos.MapId != ourPos.MapId || !_eyeManager.GetWorldViewbounds().Contains(popupPos.Position))
+            return false;
+
+        var distance = (popupPos.Position - ourPos.Position).Length();
+        return _examine.InRangeUnOccluded(ourPos, popupPos, distance,
+            e => e == coordinates.EntityId || e == entity || e == local);
+    }
+
+    /// <summary>
+    ///     Eating and drinking noises ("Nom.", "Slurp.", "Gulp.") aren't worth a line in chat.
+    /// </summary>
+    private bool CMUIsIngestionNoise(string message)
+    {
+        foreach (var key in CMUIngestionNoiseKeys)
+        {
+            if (message.StartsWith(Loc.GetString(key), StringComparison.Ordinal))
+                return true;
+        }
+
+        return false;
+    }
+
+    private static readonly string[] CMUIngestionNoiseKeys = ["edible-nom-other", "edible-slurp-other", "edible-gulp-other"];
+
     private void CMUEchoPopupToChat(string message, PopupType type)
     {
-        if (!_configManager.GetCVar(CCVars.PopupsInChat))
+        if (!_configManager.GetCVar(CCVars.PopupsInChat) || CMUIsIngestionNoise(message))
             return;
 
         // Keep the colour the popup is drawn in on screen.
