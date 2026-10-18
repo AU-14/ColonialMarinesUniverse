@@ -9,7 +9,7 @@
   - /Maps/CMU14/USSBushMultiZ/USSBushMultiZ1.yml
   - /Maps/CMU14/USSBushMultiZ/USSBushMultiZ2.yml
   - /Maps/CMU14/USSBushMultiZ/USSBushMultiZ3.yml
-  # A warship: nothing is dug in its decks, and no stairs are built between them.
+  # CMU14: a warship: nothing is dug in its decks, and no stairs are built between them.
   zLevelsComponentOverrides:
   - type: ZBuildableMap
     enabled: false

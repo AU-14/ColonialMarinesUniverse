@@ -25,6 +25,7 @@ public sealed class AdminConsoleBuiState : BoundUserInterfaceState
     /// <summary>Current income tax in percent (0–50).</summary>
     public float IncomeTaxPercent { get; }
 
+    // CMU14: the tax on the parcels sold through the trade platforms
     /// <summary>Current tax on the parcels sold through the trade platforms, in percent (0–50).</summary>
     public float TradeTaxPercent { get; }
 
@@ -33,11 +34,12 @@ public sealed class AdminConsoleBuiState : BoundUserInterfaceState
 
     public EconomyStatusState EconomyStatus { get; }
 
+    // CMU14: the constructor had no trade tax (kept): public AdminConsoleBuiState(float salesTaxPercent, float incomeTaxPercent, float colonyBudget, EconomyStatusState economyStatus)
     public AdminConsoleBuiState(float salesTaxPercent, float incomeTaxPercent, float colonyBudget, EconomyStatusState economyStatus, float tradeTaxPercent = 0f)
     {
         SalesTaxPercent = salesTaxPercent;
         IncomeTaxPercent = incomeTaxPercent;
-        TradeTaxPercent = tradeTaxPercent;
+        TradeTaxPercent = tradeTaxPercent; // CMU14
         ColonyBudget = colonyBudget;
         EconomyStatus = economyStatus;
     }
@@ -88,6 +90,7 @@ public sealed class AdminConsoleCallThirdPartyBuiMsg : BoundUserInterfaceMessage
     public AdminConsoleCallThirdPartyBuiMsg(string thirdPartyId) { ThirdPartyId = thirdPartyId; }
 }
 
+// CMU14 message: the console sets the tax on the parcels sold through the trade platforms
 [Serializable, NetSerializable]
 public sealed class AdminConsoleSetTradeTaxBuiMsg : BoundUserInterfaceMessage
 {

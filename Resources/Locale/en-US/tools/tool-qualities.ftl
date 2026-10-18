@@ -43,6 +43,7 @@ tool-quality-brushing-tool-name = Wire Brush
 tool-quality-vehicle-servicing-name = Vehicle Servicing
 tool-quality-vehicle-servicing-tool-name = Maintenance Jack
 
+# CMU14 Begin: the tool qualities of the smithing (a hammer, tongs, a chisel)
 tool-quality-hammering-name = Hammering
 tool-quality-hammering-tool-name = Hammer
 
@@ -51,3 +52,4 @@ tool-quality-tonging-tool-name = Tongs
 
 tool-quality-chiseling-name = Chiseling
 tool-quality-chiseling-tool-name = Chisel
+# CMU14 End

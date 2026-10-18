@@ -1191,9 +1191,12 @@ public sealed partial class SavedBuildSystem : EntitySystem
     private HashSet<string> GetZBuildableTileIds()
     {
         var allowed = new HashSet<string>(StringComparer.Ordinal);
-        // A tile is z-buildable if a recipe builds it through a tile applier, whatever list of the menu the recipe is in (the plating is in the main one).
+        // CMU14: a tile is z-buildable if a recipe builds it through a tile applier, whatever list of the menu the recipe is in (the plating is in the main one).
         foreach (var recipe in _prototype.EnumeratePrototypes<ConstructionPrototype>())
         {
+            // CMU14: the filter that was here (kept): only the recipes of the "Tiles" list counted, and the plating is no longer in it.
+            // CMU14: if (!string.Equals(recipe.Spawnlist, "Tiles", StringComparison.Ordinal))
+            // CMU14:     continue;
             if (TryGetRecipeTarget(recipe, out var target) &&
                 _prototype.TryIndex<EntityPrototype>(target, out var targetProto) &&
                 targetProto.TryComp<TileApplierComponent>(out var applier, _componentFactory))

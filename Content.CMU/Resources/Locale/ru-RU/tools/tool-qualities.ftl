@@ -48,6 +48,7 @@ tool-quality-shearing-name = Shearing
 
 tool-quality-shearing-tool-name = Wirecutter
 
+# CMU14 Begin: качества инструментов ковки (молот, щипцы, зубило)
 tool-quality-hammering-name = Ковка
 tool-quality-hammering-tool-name = Молот
 
@@ -56,3 +57,4 @@ tool-quality-tonging-tool-name = Щипцы
 
 tool-quality-chiseling-name = Резьба по металлу
 tool-quality-chiseling-tool-name = Зубило
+# CMU14 End

@@ -415,6 +415,10 @@ public sealed class StructuralLifecycleTest
             // It landed on open cave floor, not inside a rock: it keeps its collision (only what lands inside something solid loses it).
             foreach (var fixture in entities.GetComponent<FixturesComponent>(contents).Fixtures.Values)
             {
+                // CMU14: the asserts that were here (kept): the fixture is not hard and has no layer or mask.
+                // CMU14: Assert.That(fixture.Hard, Is.False);
+                // CMU14: Assert.That(fixture.CollisionLayer, Is.Zero);
+                // CMU14: Assert.That(fixture.CollisionMask, Is.Zero);
                 Assert.That(fixture.Hard, Is.True);
                 Assert.That(fixture.CollisionLayer, Is.Not.Zero);
                 Assert.That(fixture.CollisionMask, Is.Not.Zero);

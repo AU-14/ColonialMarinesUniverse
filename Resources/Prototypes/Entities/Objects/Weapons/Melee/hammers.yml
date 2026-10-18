@@ -23,7 +23,7 @@
         Structural: 6
   - type: Item
     size: Large
-  - type: Tool
+  - type: Tool # CMU14: the quality of the smithing, so that a hammer may be used at the anvil
     qualities:
     - Hammering
 

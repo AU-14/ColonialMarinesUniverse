@@ -52,7 +52,7 @@
         !type:DamageTrigger
         damage: 1250
       behaviors:
-        # The fibers of the bark and of the branches (the first threshold is the one that is run: it destroys the tree).
+        # CMU14: the fibers of the bark and of the branches (the first threshold is the one that is run: it destroys the tree).
         - !type:SpawnEntitiesBehavior
           spawn:
             RUMCPlantFiber1:
@@ -119,6 +119,7 @@
           RMCStump1:
             min: 1
             max: 1
+          # CMU14: the fibers of the bark and of the branches
           RUMCPlantFiber1:
             min: 5
             max: 6
@@ -127,9 +128,11 @@
         acts: [ "Destruction" ]
 - type: ore
   id: OreWood
+  # CMU14: oreEntity: Log
   oreEntity: RUMCWoodLog # CMU14: a heavy log, not the tower-cap one
   minOreYield: 1
-  maxOreYield: 3
+  # CMU14: maxOreYield: 6
+  maxOreYield: 3 # CMU14: a heavy log is worth more than a tower-cap one
 
 - type: entity
   parent: RMCBaseTree
@@ -189,6 +192,7 @@
           RMCStump2:
             min: 1
             max: 1
+          # CMU14: the fibers of the bark and of the branches
           RUMCPlantFiber1:
             min: 5
             max: 6
@@ -238,6 +242,7 @@
           RMCStump3:
             min: 1
             max: 1
+          # CMU14: the fibers of the bark and of the branches
           RUMCPlantFiber1:
             min: 5
             max: 6

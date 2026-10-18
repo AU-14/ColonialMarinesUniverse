@@ -31,6 +31,7 @@ public abstract partial class SharedStackSystem
 
         SetCount((entityUid, null), 1);
 
+        // CMU14: tell the original stack that one item was taken off it, so that the new item may be given what the original has (the handmade cartridges).
         var taken = new StackOneTakenEvent(entityUid);
         RaiseLocalEvent(stackEnt.Owner, ref taken);
         return entityUid;

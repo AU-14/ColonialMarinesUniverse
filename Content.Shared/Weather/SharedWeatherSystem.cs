@@ -27,7 +27,7 @@ public abstract partial class SharedWeatherSystem : EntitySystem
     [Dependency] private CMUSharedZLevelsSystem _zLevel = default!;
 
     [Dependency] private EntityQuery<BlockWeatherComponent> _blockQuery = default!;
-    [Dependency] private EntityQuery<Content.Shared.CMU14.ZLevelBuilding.ZGeneratedStoneComponent> _stoneQuery = default!;
+    [Dependency] private EntityQuery<Content.Shared.CMU14.ZLevelBuilding.ZGeneratedStoneComponent> _stoneQuery = default!; // CMU14: the generated stone levels are underground
     [Dependency] private EntityQuery<WeatherStatusEffectComponent> _weatherQuery = default!;
 
     public static readonly TimeSpan StartupTime = TimeSpan.FromSeconds(15);

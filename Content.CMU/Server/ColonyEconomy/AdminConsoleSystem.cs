@@ -31,7 +31,7 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         SubscribeLocalEvent<AdminConsoleComponent, BoundUIOpenedEvent>(OnUiOpened);
         SubscribeLocalEvent<AdminConsoleComponent, AdminConsoleSetTaxBuiMsg>(OnSetTax);
         SubscribeLocalEvent<AdminConsoleComponent, AdminConsoleSetIncomeTaxBuiMsg>(OnSetIncomeTax);
-        SubscribeLocalEvent<AdminConsoleComponent, AdminConsoleSetTradeTaxBuiMsg>(OnSetTradeTax);
+        SubscribeLocalEvent<AdminConsoleComponent, AdminConsoleSetTradeTaxBuiMsg>(OnSetTradeTax); // CMU14: the tax on the parcels sold through the trade platforms
         SubscribeLocalEvent<AdminConsoleComponent, AdminConsoleCallThirdPartyBuiMsg>(OnCallThirdParty);
         SubscribeLocalEvent<AdminConsoleComponent, AdminConsoleOpenThirdPartyBuiMsg>(OnOpenThirdParty);
     }
@@ -50,7 +50,7 @@ public sealed partial class AdminConsoleSystem : EntitySystem
 
             comp.SalesTaxPercent = other.SalesTaxPercent;
             comp.IncomeTaxPercent = other.IncomeTaxPercent;
-            comp.TradeTaxPercent = other.TradeTaxPercent;
+            comp.TradeTaxPercent = other.TradeTaxPercent; // CMU14: a new console takes the trade tax of the one that is already there
             return;
         }
     }
@@ -62,6 +62,7 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         return query.MoveNext(out _, out var comp) ? comp.SalesTaxPercent / 100f : 0f;
     }
 
+    // CMU14: the trade tax as a share (0 to 0.5), for the platforms that take it from a sale
     public float GetTradeTax()
     {
         var query = EntityQueryEnumerator<AdminConsoleComponent>();
@@ -143,6 +144,7 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         UpdateAllUi();
     }
 
+    // CMU14: sets the trade tax on every console, so that all show one value, and announces a change to the colony
     private void OnSetTradeTax(EntityUid uid, AdminConsoleComponent comp, AdminConsoleSetTradeTaxBuiMsg msg)
     {
         var clamped = Math.Clamp(msg.TaxPercent, 0f, 50f);
@@ -224,6 +226,7 @@ public sealed partial class AdminConsoleSystem : EntitySystem
     {
         var econ = BuildEconomyStatus();
         _ui.SetUiState(uid, AdminConsoleUi.Key,
+            // CMU14: the trade tax is given to the window too; the call that was here: new AdminConsoleBuiState(comp.SalesTaxPercent, comp.IncomeTaxPercent, _colonyBudget.GetBudget(), econ));
             new AdminConsoleBuiState(comp.SalesTaxPercent, comp.IncomeTaxPercent, _colonyBudget.GetBudget(), econ, comp.TradeTaxPercent));
 
         var thirdParties = new Dictionary<string, (string DisplayName, float Cost)>();

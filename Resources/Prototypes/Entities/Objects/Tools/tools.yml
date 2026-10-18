@@ -536,7 +536,7 @@
   - type: StaticPrice
     price: 25
   - type: Shovel
-  - type: PitDiggingTool
+  - type: PitDiggingTool # CMU14: a shovel digs the first layer of a pit
 
 - type: entity
   parent: BaseItem
