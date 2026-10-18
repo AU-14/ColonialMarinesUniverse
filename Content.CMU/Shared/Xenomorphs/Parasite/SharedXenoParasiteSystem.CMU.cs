@@ -29,13 +29,11 @@ public abstract partial class SharedXenoParasiteSystem
             ? TimeSpan.FromSeconds(_random.NextDouble(parasite.Comp.CMUMinHugTime.TotalSeconds, parasite.Comp.CMUMaxHugTime.TotalSeconds))
             : parasite.Comp.CMUMaxHugTime;
 
-        if (parasite.Comp.InfectedVictim is { } victim &&
-            TryComp<XenoNestedComponent>(victim, out var nested) &&
-            !nested.Detached)
-        {
-            hold = hold < parasite.Comp.FallOffDelay ? hold : parasite.Comp.FallOffDelay;
-        }
-
+        if (parasite.Comp.InfectedVictim is { } victim
+            && TryComp<XenoNestedComponent>(victim, out var nested)
+            && !nested.Detached)
+            hold = hold < parasite.Comp.FallOffDelay 
+                 ? hold : parasite.Comp.FallOffDelay;
         parasite.Comp.CMUAttachedAt = now;
         parasite.Comp.FallOffAt = now + hold;
     }
