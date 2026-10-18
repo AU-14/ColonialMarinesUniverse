@@ -48,4 +48,45 @@ public sealed class OctoberEighteenSurvivalRegressionTest : GameTest
             Assert.That(internals.FindBestGasTank(mob), Is.Not.Null);
         });
     }
+
+    // bug 976: ghost role call-ins only carry their loadout, which on bosenmori meant no mask and no air
+    [Test]
+    public async Task GhostRoleOnABreathingMapGetsAMaskAndAFullTankOnce()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid mob = default;
+        await Server.WaitPost(() =>
+        {
+            SEntMan.EnsureComponent<CMUBreathingRequiredMapComponent>(map.MapUid);
+            mob = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<GhostRoleComponent>(mob);
+        });
+
+        await Pair.RunSeconds(4f);
+
+        EntityUid tank = default;
+        await Server.WaitAssertion(() =>
+        {
+            var inventory = SEntMan.System<InventorySystem>();
+            Assert.That(inventory.TryGetSlotEntity(mob, "mask", out var mask), Is.True);
+            Assert.That(SEntMan.HasComponent<BreathToolComponent>(mask), Is.True);
+
+            var best = SEntMan.System<SharedInternalsSystem>().FindBestGasTank(mob);
+            Assert.That(best, Is.Not.Null);
+            Assert.That(SharedInternalsSystem.CMUHasAir(best!.Value), Is.True);
+            tank = best.Value.Owner;
+            Assert.That(SEntMan.HasComponent<CMUCallInBreathingKitGivenComponent>(mob), Is.True);
+        });
+
+        // topping up again shouldn't stack a second kit on them
+        await Server.WaitAssertion(() =>
+        {
+            var tanksBefore = SEntMan.EntityQuery<GasTankComponent>().Count();
+            SEntMan.System<CMUMapBreathingSystem>()
+                .GiveCallInKit(mob, SEntMan.GetComponent<CMUBreathingRequiredMapComponent>(map.MapUid));
+
+            Assert.That(SEntMan.EntityQuery<GasTankComponent>().Count(), Is.EqualTo(tanksBefore));
+            Assert.That(SEntMan.System<SharedInternalsSystem>().FindBestGasTank(mob)?.Owner, Is.EqualTo(tank));
+        });
+    }
 }
