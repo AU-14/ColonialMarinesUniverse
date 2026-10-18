@@ -96,3 +96,6 @@
 
 - type: Tag
   id: CMUEvidenceMarker
+
+- type: Tag
+  id: CMUCassettePouch
