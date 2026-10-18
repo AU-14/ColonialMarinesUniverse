@@ -14,10 +14,12 @@ cmu-fear-of-water-scared-3 = Your breathing quickens. You need to get out of the
 cmu-fear-of-water-calm = You step out of the water and your nerves start to settle.
 
 cmu-trait-cant-swim-name = Can't Swim
-cmu-trait-cant-swim-desc = You never learned to swim. You struggle through water, and water over your head will drown you in seconds.
+cmu-trait-cant-swim-desc = You never learned to swim. You struggle through water, and water over your head will drown you in seconds. Stay in it too long and you're too exhausted to move until someone pulls you out.
 cmu-cant-swim-shallow = You wade in carefully, keeping your footing.
 cmu-cant-swim-deep = The water's over your head! You can't swim!
 cmu-cant-swim-going-under = You're going under!
+cmu-cant-swim-stuck = You're too exhausted to fight the water. You can't move!
+cmu-cant-swim-limp = You go limp in the water. You can't keep yourself upright!
 cmu-cant-swim-out = You drag yourself out of the deep water, coughing and spluttering.
 cmu-cant-swim-drowning-self-1 = You thrash at the water, swallowing mouthfuls of it!
 cmu-cant-swim-drowning-self-2 = You can't keep your head above the water!

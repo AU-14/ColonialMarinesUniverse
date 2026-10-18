@@ -41,6 +41,12 @@ public sealed partial class CMUFearOfWaterComponent : Component
     public bool WasScared;
 }
 
+/// <summary>
+///     Water that only the swimming and water-fear traits treat as deep water, e.g. the overlay drawn over a river.
+/// </summary>
+[RegisterComponent]
+public sealed partial class CMUTraitDeepWaterComponent : Component;
+
 public enum CMUSwimWater : byte
 {
     None,
@@ -71,6 +77,26 @@ public sealed partial class CMUCantSwimComponent : Component
     /// <summary>How long in deep water before they go under.</summary>
     [DataField]
     public TimeSpan DrownAfter = TimeSpan.FromSeconds(4);
+
+    /// <summary>How long in deep water before they're too exhausted to move at all.</summary>
+    [DataField]
+    public TimeSpan StuckAfter = TimeSpan.FromSeconds(6);
+
+    /// <summary>Too exhausted fighting the water to move. Someone has to pull them out.</summary>
+    [DataField, AutoNetworkedField]
+    public bool Stuck;
+
+    /// <summary>How long in deep water before they go limp and can't stay upright.</summary>
+    [DataField]
+    public TimeSpan LieDownAfter = TimeSpan.FromSeconds(15);
+
+    /// <summary>Gone limp in the water: lying down and can't get up until they're out.</summary>
+    [DataField, AutoNetworkedField]
+    public bool ForcedDown;
+
+    /// <summary>Lung damage each second while drowning.</summary>
+    [DataField]
+    public float LungDamage = 0.2f;
 
     [DataField]
     public float DrownDamage = 4f;

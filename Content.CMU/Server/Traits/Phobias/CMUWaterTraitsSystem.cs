@@ -1,4 +1,8 @@
 using Content.Shared._RMC14.Emote;
+using Content.Shared._RMC14.Map;
+using Content.Shared.CMU14.Chemistry.Effects;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
 using Content.Shared._RMC14.Water;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.CMU14.Traits.Phobias;
@@ -6,7 +10,6 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.IdentityManagement;
-using Content.Shared.Jittering;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.StatusEffectNew;
@@ -30,10 +33,12 @@ public sealed class CMUWaterTraitsSystem : EntitySystem
     private static readonly TimeSpan DrownInterval = TimeSpan.FromSeconds(1);
     private const int FearMessages = 3;
     private const int FlailMessages = 3;
+    private const float TraitDeepWaterDepth = 18f;
 
     [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private CMUChemicalMedicalSystem _organs = default!;
     [Dependency] private SharedRMCEmoteSystem _emote = default!;
-    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -88,14 +93,21 @@ public sealed class CMUWaterTraitsSystem : EntitySystem
 
     private float WaterDepth(EntityUid uid)
     {
-        if (!_water.CanSubmerge(uid) ||
-            !_water.TryGetWaterSurface(uid, out _, out var depth, out var covered) ||
-            covered)
-        {
+        if (!_water.CanSubmerge(uid))
             return 0;
+
+        if (_water.TryGetWaterSurface(uid, out _, out var depth, out var covered) && !covered && depth > 0)
+            return depth;
+
+        // Water only these traits treat as deep, like the overlay drawn over a river.
+        var anchored = _rmcMap.GetAnchoredEntitiesEnumerator(uid);
+        while (anchored.MoveNext(out var anchoredUid))
+        {
+            if (HasComp<CMUTraitDeepWaterComponent>(anchoredUid))
+                return TraitDeepWaterDepth;
         }
 
-        return depth;
+        return 0;
     }
 
     private void UpdateWater(Entity<CMUCantSwimComponent> ent, TimeSpan now)
@@ -124,8 +136,23 @@ public sealed class CMUWaterTraitsSystem : EntitySystem
                 _popup.PopupEntity(Loc.GetString("cmu-cant-swim-going-under"), ent, ent, PopupType.LargeCaution);
             }
 
+            if (!ent.Comp.Stuck && now >= ent.Comp.DeepSince + ent.Comp.StuckAfter && !_mobState.IsDead(ent))
+            {
+                _swimSpeed.SetStuck(ent, true);
+                _popup.PopupEntity(Loc.GetString("cmu-cant-swim-stuck"), ent, ent, PopupType.LargeCaution);
+            }
+
+            if (!ent.Comp.ForcedDown && now >= ent.Comp.DeepSince + ent.Comp.LieDownAfter && !_mobState.IsDead(ent))
+            {
+                _swimSpeed.SetForcedDown(ent, true);
+                _popup.PopupEntity(Loc.GetString("cmu-cant-swim-limp"), ent, ent, PopupType.LargeCaution);
+            }
+
             return;
         }
+
+        _swimSpeed.SetStuck(ent, false);
+        _swimSpeed.SetForcedDown(ent, false);
 
         if (water == CMUSwimWater.Shallow && previous == CMUSwimWater.None)
             _popup.PopupEntity(Loc.GetString("cmu-cant-swim-shallow"), ent, ent, PopupType.SmallCaution);
@@ -145,8 +172,9 @@ public sealed class CMUWaterTraitsSystem : EntitySystem
 
         var damage = new DamageSpecifier();
         damage.DamageDict[Asphyxiation] = ent.Comp.DrownDamage;
+        // No shaking effect: it would leave the sprite stuck at its in-water offset after they get out.
         _damageable.TryChangeDamage(ent.Owner, damage, interruptsDoAfters: false);
-        _jitter.DoJitter(ent, DrownInterval * 2, true, 6, 4);
+        _organs.DamageOrgan<LungsComponent>(ent, ent.Comp.LungDamage, Asphyxiation, OrganDamageSource.Direct);
 
         if (now < ent.Comp.NextFlailMessage)
             return;
