@@ -180,7 +180,10 @@
   - type: RMCSize
     size: Big
   - type: RMCXenoDamageVisuals
-    prefix: despoiler
+    prefix: despoiler  
+  - type: AcidTrap 
+    trapLevel: 3
+    spray: XenoAcidSprayTrapStrong
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
