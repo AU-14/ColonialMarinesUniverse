@@ -111,3 +111,25 @@
       effects:
       - !type:Ciphering
         potency: 6 # delta hive
+
+- type: reagent
+  parent: CMReagent
+  id: CMUOleoresinCapsicum # pepper spray
+  name: reagent-name-oleoresin-capsicum
+  desc: reagent-desc-oleoresin-capsicum
+  physicalDesc: reagent-physical-desc-oily
+  flavor: spicy
+  color: "#c4401b"
+  flags: Scannable
+  class: Common
+
+- type: reagent
+  parent: CMReagent
+  id: CMUCapsicumNeutralizer # pepper spray antidote
+  name: reagent-name-capsicum-neutralizer
+  desc: reagent-desc-capsicum-neutralizer
+  physicalDesc: reagent-physical-desc-soothing
+  flavor: bitter
+  color: "#7fd3e8"
+  flags: Scannable
+  class: Common

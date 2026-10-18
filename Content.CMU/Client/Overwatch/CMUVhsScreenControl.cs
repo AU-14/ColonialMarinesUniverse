@@ -31,6 +31,9 @@ public sealed class CMUVhsScreenControl : Control
 
     public Control? Source { get; set; }
 
+    /// <summary>Show the feed in night-vision green.</summary>
+    public bool NightVision { get; set; }
+
     public CMUVhsScreenControl()
     {
         IoCManager.InjectDependencies(this);
@@ -79,6 +82,7 @@ public sealed class CMUVhsScreenControl : Control
         }
 
         _shader.SetParameter("aspect", size.X / (float) size.Y);
+        _shader.SetParameter("nightVision", NightVision ? 1f : 0f);
         handle.UseShader(_shader);
         handle.DrawTextureRect(_target.Texture, PixelSizeBox);
         handle.UseShader(null);

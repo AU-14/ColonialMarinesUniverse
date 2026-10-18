@@ -251,6 +251,8 @@
         amount: 40
     - name: au14-vendor-section-tools
       entries:
+      - id: RMCAttachmentRailFlashlight
+        amount: 8
       - id: CMEntrenchingTool
         recommended: true
         amount: 30
@@ -784,6 +786,13 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORSquadAutomaticRifleman
+    - AU14JobGOVFORSquadAutomaticRiflemanRMC
+    - AU14JobGOVFORSquadAutomaticRiflemanUPP
+    - AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+    - AU14JobOPFORSquadAutomaticRifleman
     sections:
     - name: au14-vendor-section-essential-equipment
       takeAll: CMUAREssentialEquipment
@@ -822,6 +831,14 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORSectionSergeant
+    - AU14JobGOVFORSectionSergeantCMBCIU
+    - AU14JobGOVFORSectionSergeantRMC
+    - AU14JobGOVFORSectionSergeantUPP
+    - AU14JobGOVFORSectionSergeantWYPMC
+    - AU14JobOPFORSectionSergeant
     sections:
     - name: au14-vendor-section-apparel
       choices: { CMHat: 1 }
@@ -901,7 +918,6 @@
     - name: au14-vendor-section-attachments
       choices: { CMUAttachmentsVendor: 3 }
       entries:
-      - id: RMCAttachmentRailFlashlight
       - id: AU14AttachmentTwoPointSling
       - id: RMCAttachmentExtendedBarrel
       - id: RMCAttachmentSuppressor
@@ -1132,7 +1148,9 @@
       - id: RMCBoxZiptie
       - id: AU14GuidebookLawMarine
       - id: AU14GuidebookSOP
-      - id: AU14Scissors
+      - id: CMUScissorsRegulation
+      - id: CMUPepperSpray
+      - id: CMUPepperSprayAntidote
     - name: au14-vendor-section-fatigues
       choices: { AU14Uniform: 1 }
       entries:

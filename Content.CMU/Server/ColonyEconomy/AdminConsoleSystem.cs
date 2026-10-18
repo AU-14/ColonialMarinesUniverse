@@ -23,6 +23,7 @@ public sealed partial class AdminConsoleSystem : EntitySystem
     [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private Robust.Shared.Timing.IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -165,6 +166,8 @@ public sealed partial class AdminConsoleSystem : EntitySystem
             return;
         if (comp.CalledParties.Contains(msg.ThirdPartyId))
             return;
+        if (comp.CalledParties.Count >= comp.MaxCallIns || _timing.CurTime < comp.NextCallInAt)
+            return;
         if (_colonyBudget.GetBudget() < cost)
             return;
         if (!_proto.TryIndex<ThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto))
@@ -179,9 +182,13 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         _colonyBudget.AddToBudget(-cost);
 
         // Mark as called on all admin consoles
+        var nextCallIn = _timing.CurTime + comp.CallInCooldown;
         var q = EntityQueryEnumerator<AdminConsoleComponent>();
         while (q.MoveNext(out _, out var c))
+        {
             c.CalledParties.Add(msg.ThirdPartyId);
+            c.NextCallInAt = nextCallIn;
+        }
 
         UpdateAllUi();
     }
@@ -202,7 +209,11 @@ public sealed partial class AdminConsoleSystem : EntitySystem
                 thirdParties[id] = (proto.DisplayName ?? proto.ID, cost);
         }
         _ui.SetUiState(uid, AdminConsoleThirdPartyUi.Key,
-            new AdminConsoleThirdPartyBuiState(_colonyBudget.GetBudget(), thirdParties, comp.CalledParties));
+            new AdminConsoleThirdPartyBuiState(_colonyBudget.GetBudget(), thirdParties, comp.CalledParties)
+            {
+                CallsLeft = Math.Max(0, comp.MaxCallIns - comp.CalledParties.Count),
+                NextCallInAt = comp.NextCallInAt,
+            });
     }
 
     public void UpdateAllUi()

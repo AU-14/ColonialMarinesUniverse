@@ -209,20 +209,25 @@ public sealed partial class CMUCombatHearingSystem : EntitySystem
         return _mobState.IsAlive(uid) && !HasComp<SynthComponent>(uid) && !IsProtected(uid);
     }
 
+    private static readonly string[] EarSlots = ["ears", "ears2"];
+
     private bool IsProtected(EntityUid uid)
     {
         if (_deafness.HasEarProtection(uid))
             return true;
 
-        // Pens, tools and cigarettes tucked behind an ear don't count, only real headsets.
-        if (_inventory.TryGetSlotEntity(uid, "ears", out var ears) && HasComp<HeadsetComponent>(ears))
-            return true;
+        // Pens, tools and cigarettes tucked behind an ear don't count, only real headsets, on either ear.
+        foreach (var earSlot in EarSlots)
+        {
+            if (_inventory.TryGetSlotEntity(uid, earSlot, out var ears) && HasComp<HeadsetComponent>(ears))
+                return true;
+        }
 
         if (_inventory.TryGetContainerSlotEnumerator(uid, out var slots))
         {
             while (slots.NextItem(out var item, out var slot))
             {
-                if (slot.Name is not ("ears" or "head"))
+                if (slot.Name is not ("ears" or "ears2" or "head"))
                     continue;
 
                 if (HasComp<CMUCombatEarProtectionComponent>(item))

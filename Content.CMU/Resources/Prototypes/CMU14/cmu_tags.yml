@@ -93,3 +93,9 @@
 
 - type: Tag
   id: MaintenanceJack
+
+- type: Tag
+  id: CMUEvidenceMarker
+
+- type: Tag
+  id: CMUCassettePouch

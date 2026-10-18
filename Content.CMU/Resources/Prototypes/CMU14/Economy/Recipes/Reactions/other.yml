@@ -111,3 +111,37 @@
   products:
     AU14Albuterol: 3
 
+
+- type: reaction
+  id: CMUOleoresinCapsicum
+  reactants:
+    RMCEthanol:
+      amount: 2
+    RMCSulfur:
+      amount: 1
+    RMCChlorine:
+      amount: 1
+  products:
+    CMUOleoresinCapsicum: 4
+
+- type: reaction
+  id: CMUOleoresinCapsicumFromPeppers
+  reactants:
+    CapsaicinOil:
+      amount: 2
+    RMCEthanol:
+      amount: 1
+  products:
+    CMUOleoresinCapsicum: 3
+
+- type: reaction
+  id: CMUCapsicumNeutralizer
+  reactants:
+    Water:
+      amount: 2
+    RMCSodium:
+      amount: 1
+    RMCSugar:
+      amount: 1
+  products:
+    CMUCapsicumNeutralizer: 4
