@@ -140,8 +140,8 @@
   - type: XenoLeap
     plasmaCost: 20
     delay: 0
-    moveDelayTime: 1.5
-    knockdownTime: 5
+    moveDelayTime: 0
+    knockdownTime: 4
     leapSound: /Audio/_RMC14/Xeno/alien_pounce.ogg
     knockdownRequiresInvisibility: true
     unrootOnMelee: true
