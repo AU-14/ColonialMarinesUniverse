@@ -89,4 +89,19 @@ public sealed class OctoberEighteenSurvivalRegressionTest : GameTest
             Assert.That(SEntMan.System<SharedInternalsSystem>().FindBestGasTank(mob)?.Owner, Is.EqualTo(tank));
         });
     }
+
+    // bug 969: every other platoon could vend the IMP ammo rack, lacn couldn't
+    [Test]
+    public async Task LacnClothingVendorStocksTheImpAmmoRack()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var proto = SProtoMan.Index<EntityPrototype>("AU14LACNclothingequipmentvendor");
+            Assert.That(proto.TryComp<CMAutomatedVendorComponent>(out var vendor,
+                SEntMan.ComponentFactory), Is.True);
+
+            var stocked = vendor!.Sections.SelectMany(s => s.Entries).Any(e => e.Id.Id == "RMCBackpackAmmo");
+            Assert.That(stocked, Is.True);
+        });
+    }
 }

@@ -86,6 +86,8 @@
         amount: 5
       - id: CMULACNSatchelEngineer
         amount: 5
+      - id: RMCBackpackAmmo
+        amount: 4
     - name: Belts
       entries:
       - id: CMULACNBeltStandard
