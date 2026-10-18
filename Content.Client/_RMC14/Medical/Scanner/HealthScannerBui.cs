@@ -358,21 +358,10 @@ public sealed partial class HealthScannerBui : BoundUserInterface
 
     private const int RichTextSize = 10;
 
-    private static void SetSizedMessage(RichTextLabel label, FormattedMessage message, int size = RichTextSize)
+    private static void SetSizedMarkup(CMUScaledRichTextLabel label, string markup)
     {
-        var sized = new FormattedMessage();
-        sized.PushTag(new MarkupNode("font", null, new Dictionary<string, MarkupParameter>
-        {
-            ["size"] = new MarkupParameter((long) size),
-        }));
-        sized.AddMessage(message);
-        sized.Pop();
-        label.SetMessage(sized);
-    }
-
-    private static void SetSizedMarkup(RichTextLabel label, string markup, int size = RichTextSize)
-    {
-        SetSizedMessage(label, FormattedMessage.FromMarkupPermissive(markup), size);
+        label.SetBaseFontSize(RichTextSize);
+        label.SetMarkupPermissive(markup);
     }
 
     private static Control BuildDamageChip(string name, Color color, FixedPoint2 damage, bool untreated)

@@ -28,6 +28,24 @@ public sealed class CMUScaledRichTextLabel : RichTextLabel
     }
 
     public override float UIScale => base.UIScale * _uniformScale;
+
+    private static readonly Dictionary<int, Stylesheet> BaseFontSheets = new();
+
+    public void SetBaseFontSize(int size)
+    {
+        if (!BaseFontSheets.TryGetValue(size, out var sheet))
+        {
+            var font = IoCManager.Resolve<IResourceCache>().NotoStack(size: size);
+            sheet = new Stylesheet(new[]
+            {
+                new StyleRule(new SelectorElement(typeof(RichTextLabel), null, null, null),
+                    new[] { new StyleProperty("font", font) }),
+            });
+            BaseFontSheets[size] = sheet;
+        }
+
+        Stylesheet = sheet;
+    }
 }
 
 internal sealed class CMUMedicalUniformScaler

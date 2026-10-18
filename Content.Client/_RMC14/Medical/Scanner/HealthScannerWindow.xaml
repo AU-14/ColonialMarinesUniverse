@@ -4,8 +4,8 @@
     xmlns:cmui="clr-namespace:Content.Client.CMU14.Medical.Presentation.Windows"
     xmlns:cooldown="clr-namespace:Content.Client.Cooldown"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
-    MinSize="340 260"
-    SetSize="480 600">
+    MinSize="340 120"
+    SetWidth="480">
     <PanelContainer Name="ScaleRoot" Access="Public">
         <PanelContainer.PanelOverride>
             <graphics:StyleBoxFlat BackgroundColor="#16181B" />
@@ -28,7 +28,8 @@
                 </BoxContainer>
             </PanelContainer>
 
-            <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False">
+            <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False"
+                             ReturnMeasure="True">
                 <BoxContainer Orientation="Vertical">
                     <!-- summary -->
                     <PanelContainer Margin="0 0 0 4">

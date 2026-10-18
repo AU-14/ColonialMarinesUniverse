@@ -13,9 +13,8 @@ namespace Content.Client._RMC14.Medical.Scanner;
 [GenerateTypedNameReferences]
 public sealed partial class HealthScannerWindow : DefaultWindow
 {
-    private const string RememberedSizeKey = "cmu-health-scanner";
-    private static readonly Vector2 PreferredWindowSize = new(480f, 600f);
-    private static readonly Vector2 MinimumWindowSize = new(340f, 260f);
+    private const float PreferredWidth = 480f;
+    private static readonly Vector2 ScreenMargin = new(64f, 80f);
     private static readonly TimeSpan ServerLoadingPulse = TimeSpan.FromSeconds(0.4);
 
     [Dependency] private IGameTiming _timing = default!;
@@ -30,9 +29,7 @@ public sealed partial class HealthScannerWindow : DefaultWindow
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
-        // CMU14: unit label follows the client's temperature preference
-        SetSize = CMUMedicalWindowSizing.GetInitialSize(RememberedSizeKey, PreferredWindowSize);
-        CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize);
+        UpdateMaxSize();
         ApplyUniformScale(true);
     }
 
@@ -48,9 +45,8 @@ public sealed partial class HealthScannerWindow : DefaultWindow
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
-        CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize);
+        UpdateMaxSize();
         ApplyUniformScale();
-        CMUMedicalWindowSizing.RememberSize(RememberedSizeKey, this);
 
         if (!LoadingPanel.Visible)
             return;
@@ -61,13 +57,21 @@ public sealed partial class HealthScannerWindow : DefaultWindow
             LoadingPanel.Visible = false;
     }
 
+    private void UpdateMaxSize()
+    {
+        var root = UserInterfaceManager.WindowRoot.Size;
+        if (root.X <= 0f || root.Y <= 0f)
+            return;
+
+        var max = Vector2.Max(MinSize, root - ScreenMargin);
+        if (MaxSize != max)
+            MaxSize = max;
+    }
+
     public void ApplyUniformScale(bool force = false)
     {
-        var size = Size.X > 0f && Size.Y > 0f ? Size : SetSize;
-        var scale = Math.Clamp(
-            Math.Min(size.X / PreferredWindowSize.X, size.Y / PreferredWindowSize.Y),
-            CMUMedicalUniformScaler.MinimumScale,
-            1f);
+        var width = Size.X > 0f ? Size.X : PreferredWidth;
+        var scale = Math.Clamp(width / PreferredWidth, CMUMedicalUniformScaler.MinimumScale, 1f);
 
         if (!force && Math.Abs(LayoutScale - scale) < 0.001f)
             return;
