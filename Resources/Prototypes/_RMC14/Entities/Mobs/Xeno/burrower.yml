@@ -61,6 +61,8 @@
     - ActionXenoAcidNormal
     - ActionXenoPheromones
     - ActionXenoOrderConstruction
+    - ActionXenoChooseStructure
+    - ActionXenoSecreteStructure
     - ActionXenoDigTunnel
     - ActionXenoPlantWeeds
     - ActionXenoResinHole
@@ -143,6 +145,13 @@
     trapLevel: 3
     spray: XenoAcidSprayTrapStrong
   - type: XenoConstruction
+    canBuild:
+    - WallXenoResin
+    - WallXenoMembrane
+    - DoorXenoResin
+    - XenoStickyResin
+    - XenoFastResin
+    - XenoResinSpikes
     canOrderConstruction:
     - HiveCoreXenoConstructionNode
     - HiveEggMorpherXenoConstructionNode
