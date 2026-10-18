@@ -16,6 +16,10 @@
     sprite: CMU14/Structures/Vendors/uscmgearrack.rsi
   - type: CMAutomatedVendor
     sections:
+    - name: Weapon Light
+      takeAll: CMURailFlashlight
+      entries:
+      - id: RMCAttachmentRailFlashlight
     - name: au14-vendor-section-fatigues
       entries:
       - id: RuMCUniformBEAR
@@ -901,7 +905,6 @@
     - name: au14-vendor-section-attachments
       choices: { CMUAttachmentsVendor: 3 }
       entries:
-      - id: RMCAttachmentRailFlashlight
       - id: AU14AttachmentTwoPointSling
       - id: RMCAttachmentExtendedBarrel
       - id: RMCAttachmentSuppressor

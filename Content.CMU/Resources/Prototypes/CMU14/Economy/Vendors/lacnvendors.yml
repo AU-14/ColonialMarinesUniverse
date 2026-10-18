@@ -16,6 +16,10 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
     sections:
+    - name: Weapon Light
+      takeAll: CMURailFlashlight
+      entries:
+      - id: RMCAttachmentRailFlashlight
     - name: Fatigues
       entries:
       - id: AU14LACNUniform
@@ -979,7 +983,6 @@
     - name: Attachments
       choices: { CMUAttachmentsVendor: 1 }
       entries:
-      - id: RMCAttachmentRailFlashlight
       - id: AU14AttachmentTwoPointSling
       - id: CMULACNAttachmentKramerSmartScope
       - id: CMULACNAttachmentUnderbarrelGrenadeLauncher
