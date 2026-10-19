@@ -370,9 +370,9 @@
   - Hammering
   consumables:
   - stack: RUMCBrassSheet
-    amount: 4
+    amount: 6
   - stack: RUMCBrassParts
-    amount: 3
+    amount: 4
 
 # The boiler has a firebox, so it takes wood as well.
 - type: craftRecipe
@@ -384,11 +384,11 @@
   - Hammering
   consumables:
   - stack: RUMCBrassSheet
-    amount: 5
+    amount: 6
   - stack: RUMCBrassParts
-    amount: 3
-  - stack: RMCWood
     amount: 4
+  - stack: RMCWood
+    amount: 2
 
 - type: craftRecipe
   id: RUMCCraftSteamGenerator
@@ -425,9 +425,9 @@
   - Hammering
   consumables:
   - stack: RUMCBrassSheet
-    amount: 7
+    amount: 6
   - stack: RUMCBrassParts
-    amount: 5
+    amount: 4
 
 - type: craftRecipe
   id: RUMCCraftSteamDrill

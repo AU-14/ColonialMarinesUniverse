@@ -773,4 +773,4 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 3
+    amount: 2

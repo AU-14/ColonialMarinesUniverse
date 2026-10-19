@@ -4307,7 +4307,7 @@
   - stack: RUMCBasicCircuit
     amount: 3
   - stack: RUMCInsulatedCable
-    amount: 4
+    amount: 2
 
 - type: craftRecipe
   id: RUMCCraftBuildOreWasher
@@ -4821,7 +4821,7 @@
   - Hammering
   consumables:
   - stack: RUMCBrassSheet
-    amount: 5
+    amount: 6
   - stack: RUMCBrassParts
     amount: 4
   - stack: RMCWood

@@ -72,9 +72,9 @@
   - Hammering
   consumables:
   - stack: RUMCBrassSheet
-    amount: 7
+    amount: 6
   - stack: RUMCBrassParts
-    amount: 5
+    amount: 4
   - stack: RMCWood
     amount: 2
 

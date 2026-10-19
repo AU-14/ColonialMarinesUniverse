@@ -51,7 +51,7 @@
   - stack: RUMCBasicCircuit
     amount: 2
   - stack: RUMCInsulatedCable
-    amount: 4
+    amount: 2
 
 - type: craftRecipe
   id: RUMCCraftBuildCondenser
