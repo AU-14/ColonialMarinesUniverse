@@ -29,7 +29,7 @@
       - id: RMCShoesLaceupBrown
       - id: RMCShoesLaceup
       - id: RMCShoesLeather
-      - id: RMCShoesWeYaStompers
+      - id: CMUBoxStompers
     - name: Work Wear
       choices: { CMUcivilianworkwear: 1 }
       entries:
@@ -284,7 +284,7 @@
       - id: RMCShoesLaceupBrown
       - id: RMCShoesLaceup
       - id: RMCShoesLeather
-      - id: RMCShoesWeYaStompers
+      - id: CMUBoxStompers
     - name: Work Wear
       choices: { CMUcivilianmedicalworkwear: 1 }
       entries:
