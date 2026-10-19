@@ -15,5 +15,9 @@ public readonly partial record struct TechOption(
     bool Purchased,
     List<object> Events,
     SpriteSpecifier.Rsi Icon,
-    TimeSpan TimeLock
+    TimeSpan TimeLock,
+    // cmu edit start: how many times a repurchasable option can be bought; 0 is no limit
+    int MaxPurchases = 0,
+    int TimesPurchased = 0
+    // cmu edit end
 );

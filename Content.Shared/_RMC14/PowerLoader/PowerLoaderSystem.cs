@@ -427,6 +427,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
     /// </summary>
     private bool IsAuthorizedPowerLoaderUser(EntityUid user)
     {
+        if (CMUIsLargeObjectGrabber(user)) return true; // CMU14
         return HasComp<PowerLoaderComponent>(user) || HasComp<ActivePowerLoaderPilotComponent>(user);
     }
 
@@ -456,6 +457,8 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
         if (HasComp<PowerLoaderComponent>(container.Owner))
             return;
+
+        if (CMUIsLargeObjectGrabber(container.Owner)) return; // CMU14
 
         args.Args.ModifySpeed(0.15f, 0.15f);
     }

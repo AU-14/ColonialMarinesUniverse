@@ -1,3 +1,4 @@
+using Content.Client.CMU14.Requisitions; // CMU14
 using System.Linq;
 using System.Numerics;
 using Content.Client.CMU14.Interface;
@@ -374,6 +375,7 @@ public sealed partial class RequisitionsItemizedView : Control
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
+        RequisitionsIconCache.NewFrame(); // CMU14: rows below fill their icons from this frame's budget
         if (_bootSequence > 0)
         {
             _bootSequence += args.DeltaSeconds;

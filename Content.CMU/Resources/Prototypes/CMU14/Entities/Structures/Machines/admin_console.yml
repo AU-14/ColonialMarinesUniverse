@@ -44,8 +44,8 @@
     state: terminal1_old
   - type: AdminConsole
     callableParties:
-      CMBInvestigationPartyAlt: 4500
-      ICRCReliefParty: 2800
-      NSPAInvestigationPartyArmored: 6000
-      PAPInvestigationParty: 4500
-      UNISCTeamParty: 7500
+      CMBInvestigationPartyAlt: 4950
+      ICRCReliefParty: 3080
+      NSPAInvestigationPartyArmored: 6600
+      PAPInvestigationParty: 4950
+      UNISCTeamParty: 8250

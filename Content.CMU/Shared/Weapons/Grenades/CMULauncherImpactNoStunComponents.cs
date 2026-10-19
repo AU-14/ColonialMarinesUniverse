@@ -4,7 +4,7 @@ using Robust.Shared.Map;
 namespace Content.Shared.CMU14.Weapons.Grenades;
 
 /// <summary>
-///     An impact grenade (M40 HEDP and HEFA) that doesn't stun the mob it hits when fired from a launcher. The blast
+///     A grenade (M40 HEDP and HEFA) that doesn't stun the mob it hits when fired from a launcher. The blast
 ///     still hurts them, and still stuns everyone else.
 /// </summary>
 [RegisterComponent, NetworkedComponent]

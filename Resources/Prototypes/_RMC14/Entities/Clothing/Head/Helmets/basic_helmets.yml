@@ -26,6 +26,9 @@
         - CassettePlayer
         - CassetteTape
         tags:
+        # cmu edit start
+        - CMUCassettePouch
+        # cmu edit end
         #       - TODO RMC14 cards
         - Slice
         #       - TODO RMC14 glasses (eyewear)

@@ -92,12 +92,16 @@
   id: RandomDrugAllergy
   name: au14-trait-drugallergy-name
   description: au14-trait-drugallergy-desc
-  category: Disabilities
+  # cmu edit start: in the allergies section, up to two allergies per character
+  category: CMUDrugAllergies
+  # cmu edit end
   # cmu edit start: disabilities are limited to four
   cost: 1
   # cmu edit end
-  components:
-    - type: DrugAllergy
+  # cmu edit start: added through a special so it stacks with a second allergy
+  specials:
+    - !type:CMUAddDrugAllergySpecial
+  # cmu edit end
   traitGear: CMUEpinephrineAutoInjector
 
 - type: trait

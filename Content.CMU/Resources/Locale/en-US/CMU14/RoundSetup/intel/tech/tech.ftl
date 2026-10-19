@@ -116,3 +116,8 @@ cmu-tech-ua-prodigy-yankee-desc = Summon a PMC team from PART, specifically Yank
 cmu-tech-ua-req-budget-announce = Additional supply budget has been authorised for this operation.
 cmu-tech-ua-us-army-armored-announce = A US Army 32nd Armored Division squad has been dispatched to aid with the operation.
 cmu-tech-ua-prodigy-yankee-announce = A Prodigy Armed Repair Team has been dispatched to aid with the operation.
+
+cmu-ui-tech-purchases-left = Can be bought { $left } more { $left ->
+    [one] time
+   *[other] times
+} (max { $max })

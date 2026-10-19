@@ -33,6 +33,13 @@ public sealed class ExpendableLightReplicationTest : GameTest
           components:
           - type: ExpendableLight
             glowDuration: 120
+            # cmu edit start: no burn phases (RMC-14#9465), so lit goes straight to fading
+            phaseOneDuration: 0
+            phaseTwoDuration: 0
+            phaseThreeDuration: 0
+            phaseFourDuration: 0
+            phaseFiveDuration: 0
+            # cmu edit end
             fadeOutDuration: 60
             refuelMaterialID: WoodPlank
             refuelMaterialTime: 15
@@ -75,13 +82,18 @@ public sealed class ExpendableLightReplicationTest : GameTest
         await Server.WaitAssertion(() =>
         {
             Server.System<SharedPhysicsSystem>().SetBodyType(flare.Owner, BodyType.Static);
-            Server.System<ExpendableLightSystem>().Update(flare.Comp.StateExpiryTime + 0.25f);
+            // cmu edit start: step through the empty burn phases (RMC-14#9465)
+            UpdateUntil(Server.System<ExpendableLightSystem>(), flare, flare.Comp.StateExpiryTime + 0.25f,
+                ExpendableLightState.Fading);
+            // cmu edit end
             Assert.That(flare.Comp.CurrentState, Is.EqualTo(ExpendableLightState.Fading));
             Assert.That(flare.Comp.StateExpiryTime, Is.EqualTo(60f),
                 "the existing transition starts the full fade interval without carrying excess frame time");
             Assert.That(flare.Comp.LastModifiedTick, Is.GreaterThan(litDirty));
             Assert.That(SEntMan.GetComponent<IgnitionSourceComponent>(flare.Owner).Ignited, Is.True);
-            Assert.That(SEntMan.GetComponent<ItemComponent>(flare.Owner).HeldPrefix, Is.EqualTo("lit"));
+            // cmu edit start: flares set their own held prefixes since lit flare inhands (RMC-14#10958)
+            Assert.That(SEntMan.GetComponent<ItemComponent>(flare.Owner).HeldPrefix, Is.EqualTo(flare.Comp.HeldPrefixLit));
+            // cmu edit end
         });
         await Pair.RunUntilSynced();
         await AssertClientState(net, ExpendableLightState.Fading, "fade_out");
@@ -182,7 +194,9 @@ public sealed class ExpendableLightReplicationTest : GameTest
             if (!alreadyActive)
                 Assert.That(system.TryActivate(flare), Is.True);
 
-            system.Update(40f);
+            // cmu edit start: step through the empty burn phases (RMC-14#9465)
+            UpdateUntil(system, flare, 40f, ExpendableLightState.Fading);
+            // cmu edit end
             Assert.That(flare.Comp.CurrentState, Is.EqualTo(ExpendableLightState.Fading));
             Assert.That(flare.Comp.StateExpiryTime, Is.EqualTo(20f));
             corrosion = new CorrodingEvent(flare.Owner, 0, 1, XenoAcidStrength.Normal);
@@ -208,7 +222,9 @@ public sealed class ExpendableLightReplicationTest : GameTest
             SEntMan.EnsureComponent<LightDoomedComponent>(flare.Owner);
             Assert.That(flare.Comp.CurrentState, Is.EqualTo(ExpendableLightState.Lit));
             Assert.That(flare.Comp.StateExpiryTime, Is.Zero);
-            system.Update(0f);
+            // cmu edit start: step through the burn phases doom zeroes (RMC-14#9465)
+            UpdateUntil(system, flare, 0f, ExpendableLightState.Fading);
+            // cmu edit end
             Assert.That(flare.Comp.CurrentState, Is.EqualTo(ExpendableLightState.Fading));
             Assert.That(flare.Comp.StateExpiryTime, Is.Zero);
             system.Update(0f);
@@ -250,6 +266,21 @@ public sealed class ExpendableLightReplicationTest : GameTest
         });
     }
 
+    // cmu edit start
+    /// <summary>
+    ///     Each update advances a flare one state, so empty burn phases (RMC-14#9465) take an extra update apiece.
+    /// </summary>
+    private static void UpdateUntil(ExpendableLightSystem system, Entity<ExpendableLightComponent> flare,
+        float frameTime, ExpendableLightState state)
+    {
+        system.Update(frameTime);
+        for (var i = 0; i < 6 && flare.Comp.CurrentState != state; i++)
+        {
+            system.Update(0f);
+        }
+    }
+    // cmu edit end
+
     private Entity<ExpendableLightComponent> SpawnFlare(EntityCoordinates coordinates)
     {
         var uid = SEntMan.SpawnEntity("CMUExpendableLightReplicationProbe", coordinates);
@@ -269,7 +300,9 @@ public sealed class ExpendableLightReplicationTest : GameTest
         Assert.That(flare.Comp.CurrentState, Is.EqualTo(ExpendableLightState.Dead));
         Assert.That(flare.Comp.Activated, Is.False);
         Assert.That(SEntMan.GetComponent<IgnitionSourceComponent>(flare.Owner).Ignited, Is.False);
-        Assert.That(SEntMan.GetComponent<ItemComponent>(flare.Owner).HeldPrefix, Is.EqualTo("unlit"));
+        // cmu edit start: flares set their own held prefixes since lit flare inhands (RMC-14#10958)
+        Assert.That(SEntMan.GetComponent<ItemComponent>(flare.Owner).HeldPrefix, Is.EqualTo(flare.Comp.HeldPrefixUnlit));
+        // cmu edit end
         Assert.That(Server.System<TagSystem>().HasTag(flare.Owner, TrashPrototype), Is.True);
         Assert.That(SEntMan.GetComponent<PhysicsComponent>(flare.Owner).BodyType, Is.EqualTo(BodyType.Dynamic));
     }

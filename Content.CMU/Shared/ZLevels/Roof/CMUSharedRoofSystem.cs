@@ -73,7 +73,8 @@ public abstract partial class CMUSharedRoofSystem : EntitySystem
             {
                 Roof.SetRoof((mapBelow, mapGridBelow, roofBelow), indices, rooved);
 
-                if (Map.TryGetTile(mapGridBelow, indices, out var tile) && !tile.IsEmpty)
+                if (Map.TryGetTile(mapGridBelow, indices, out var tile) &&
+                    !CMUZLevelOpeningCache.IsFallThroughTile(tile, TilDefMan))
                     coveredByThisLevel.Add(indices);
             }
 
