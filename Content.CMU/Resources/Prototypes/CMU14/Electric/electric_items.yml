@@ -1256,28 +1256,6 @@
     size: Small
 
 - type: stack
-  id: RUMCIronRing
-  name: steel ring
-  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: IronRing }
-  spawn: RUMCIronRingItem
-  maxCount: 50
-
-- type: entity
-  parent: BaseItem
-  id: RUMCIronRingItem
-  name: steel ring
-  description: "A cast steel ring."
-  components:
-  - type: Stack
-    stackType: RUMCIronRing
-    count: 1
-  - type: Sprite
-    sprite: CMU14/Objects/Electric/items.rsi
-    state: IronRing
-  - type: Item
-    size: Small
-
-- type: stack
   id: RUMCMoldRod
   name: rod mold
   icon: { sprite: CMU14/Objects/Electric/items.rsi, state: MoldRod }
@@ -1362,28 +1340,6 @@
   - type: Sprite
     sprite: CMU14/Objects/Electric/items.rsi
     state: MoldGear
-  - type: Item
-    size: Small
-
-- type: stack
-  id: RUMCMoldRing
-  name: ring mold
-  icon: { sprite: CMU14/Objects/Electric/items.rsi, state: MoldRing }
-  spawn: RUMCMoldRingItem
-  maxCount: 5
-
-- type: entity
-  parent: BaseItem
-  id: RUMCMoldRingItem
-  name: ring mold
-  description: "A steel mold for the extruder: it presses rings."
-  components:
-  - type: Stack
-    stackType: RUMCMoldRing
-    count: 1
-  - type: Sprite
-    sprite: CMU14/Objects/Electric/items.rsi
-    state: MoldRing
   - type: Item
     size: Small
 

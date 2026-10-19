@@ -84,7 +84,7 @@
     amount: 4
   - stack: RUMCConductorAlloy
     amount: 1
-  - stack: RUMCIronRing
+  - stack: CMSteel
     amount: 1
 
 - type: craftRecipe
@@ -97,7 +97,7 @@
   consumables:
   - stack: RUMCInsulatedCable
     amount: 3
-  - stack: RUMCIronRing
+  - stack: CMSteel
     amount: 1
 
 - type: craftRecipe

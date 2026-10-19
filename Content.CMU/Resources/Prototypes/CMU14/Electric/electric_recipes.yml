@@ -1566,17 +1566,6 @@
   duration: 4
 
 - type: cmuMachineRecipe
-  id: RUMCMRExtruderIronRing
-  machine: extruder
-  inputs:
-    CMSteel: 1
-  catalysts:
-    RUMCMoldRing: 1
-  outputs:
-    RUMCIronRing: 4
-  duration: 4
-
-- type: cmuMachineRecipe
   id: RUMCMRCutterGlassTube
   machine: cutter
   inputs:
@@ -4047,18 +4036,6 @@
   id: RUMCCraftElectricMoldGear
   name: au14-craft-recipe-electricmoldgear
   output: RUMCMoldGearItem
-  outputCount: 1
-  time: 12
-  tools:
-  - Hammering
-  consumables:
-  - stack: CMSteel
-    amount: 3
-
-- type: craftRecipe
-  id: RUMCCraftElectricMoldRing
-  name: au14-craft-recipe-electricmoldring
-  output: RUMCMoldRingItem
   outputCount: 1
   time: 12
   tools:
