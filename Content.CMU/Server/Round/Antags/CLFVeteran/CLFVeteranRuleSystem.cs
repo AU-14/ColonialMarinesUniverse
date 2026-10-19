@@ -41,7 +41,7 @@ public sealed partial class CLFVeteranRuleSystem : GameRuleSystem<CLFVeteranRule
             "paper_stamp-clf",
             new List<StampDisplayInfo>
             {
-                new() { StampedColor = Color.FromHex("#2e5a1e"), StampedName = "CLF" },
+                new() { StampedColor = Color.FromHex("#2e5a1e"), StampedName = "INSFOR" },
             }, ClfPaperPrototype);
     }
 
@@ -62,7 +62,7 @@ public sealed partial class CLFVeteranRuleSystem : GameRuleSystem<CLFVeteranRule
             "paper_stamp-clf",
             new List<StampDisplayInfo>
             {
-                new() { StampedColor = Color.FromHex("#2e5a1e"), StampedName = "CLF" },
+                new() { StampedColor = Color.FromHex("#2e5a1e"), StampedName = "INSFOR" },
             });
 
         _fax.Receive(uid, printout, null, faxComp);
@@ -73,13 +73,13 @@ public sealed partial class CLFVeteranRuleSystem : GameRuleSystem<CLFVeteranRule
         return "[head=3][color=#2e5a1e]Colony Liberation Front[/color][/head]\n\n" +
             "[color=#2e5a1e]▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[/color]\n\n" +
             "[bold]To:[/bold] [italic]Field Operatives[/italic]\n" +
-            "[bold]From:[/bold] [bold]CLF Regional Command[/bold]\n" +
+            "[bold]From:[/bold] [bold]INSFOR Regional Command[/bold]\n" +
             "[color=#2e5a1e]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]\n" +
             "Comrades,\n" +
             $"  A disavowed operative, [bold]{veteranName}[/bold], has been located in the colony. " +
             "Bring them back into the fold, or deal with them accordingly.\n\n" +
             "Freedom or death,\n" +
-            "[color=#2e5a1e][bolditalic]CLF Command[/bolditalic][/color]\n" +
+            "[color=#2e5a1e][bolditalic]INSFOR Command[/bolditalic][/color]\n" +
             "[color=#2e5a1e]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]";
     }
 }

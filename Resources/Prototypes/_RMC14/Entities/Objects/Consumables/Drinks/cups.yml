@@ -144,9 +144,9 @@
 
 - type: entity
   parent: RMCCoffeeCup
-  id: RMCColonyLiberationFrontCup
-  name: CLF mug
-  description: A tough, well-worn cup marked with the CLF sigil born from the defiance sparked by the Slaughter of Xibou.
+  id: RMCColonyLiberationFrontCup # CMU14: INSFOR display text
+  name: INSFOR mug
+  description: A tough, well-worn cup marked with the INSFOR sigil born from the defiance sparked by the Slaughter of Xibou.
   components:
   - type: Sprite
     layers:

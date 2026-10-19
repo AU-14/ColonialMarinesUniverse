@@ -39,7 +39,7 @@
 - type: entity
   parent: ANPRCFillCard
   id: ANPRCFillCardCLF
-  name: CLF COMSEC fill card
+  name: INSFOR COMSEC fill card
   description: >-
     A CLF KY-38 cryptographic fill card, scuffed and lovingly maintained.
     Harder to replace than the radio, and everyone knows it.

@@ -105,7 +105,7 @@
 - type: entity
   parent: AU14ItemLaptopCallsignGOVFOR
   id: AU14ItemLaptopCallsignCLF
-  suffix: CLF
+  suffix: INSFOR
   components:
   - type: AU14CallsignConsole
     faction: clf

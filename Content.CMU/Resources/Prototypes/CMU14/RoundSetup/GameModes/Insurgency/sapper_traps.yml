@@ -255,7 +255,7 @@
   id: AU14SapperTripwireEndPlacer
   name: tripwire spool
   description: The loose end of a tripline, trailing wire back to a planted charge. Use it where you want the line to end.
-  suffix: CLF, Sapper
+  suffix: INSFOR, Sapper
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Explosives/Mines/m20_mine.rsi
@@ -383,8 +383,8 @@
   parent: RMCPlankWood
   id: AU14SapperCraftingKit
   name: improvised trap materials
-  description: A bundle of scrap, wire, and scavenged explosives. Use it in hand to fabricate CLF traps wherever you stand.
-  suffix: CLF, Sapper
+  description: A bundle of scrap, wire, and scavenged explosives. Use it in hand to fabricate INSFOR traps wherever you stand.
+  suffix: INSFOR, Sapper
   components:
   - type: Item
     size: Small
@@ -462,7 +462,7 @@
 
 - type: rmcConstruction
   id: AU14SapperCraftMonitor
-  name: CLF camera monitor
+  name: INSFOR camera monitor
   prototype: AU14CLFCameraMonitor
   noRotate: true
   doAfterTime: 6
@@ -478,8 +478,8 @@
   parent: RMCToolboxSyndicate
   id: AU14SapperTrapToolbox
   name: sapper trap kit
-  description: A battered toolbox packed with improvised charges and triplines. Everything a CLF sapper needs to seed a killbox.
-  suffix: CLF, Sapper
+  description: A battered toolbox packed with improvised charges and triplines. Everything a INSFOR sapper needs to seed a killbox.
+  suffix: INSFOR, Sapper
   components:
   - type: StorageFill
     contents:

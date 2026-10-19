@@ -37,8 +37,8 @@
 # Standalones
 - type: entity
   parent: RMCMapInsertSorokyneBase
-  id: RMCMapInsertSorokyneMedbay
-  name: CLF Camp
+  id: RMCMapInsertSorokyneMedbay # CMU14: INSFOR display text
+  name: INSFOR Camp
   components:
   - type: MapInsert
     variations:

@@ -3,13 +3,13 @@ ent-RMCTechTreeConsoleGovfor = govfor tech tree console
     .desc = A GovFor tech console used to make tech purchases for GovFor.
 ent-RMCTechTreeConsoleOpfor = opfor tech tree console
     .desc = An OpFor tech console used to make tech purchases for OpFor.
-ent-RMCTechTreeConsoleCLF = CLF tech tree console
-    .desc = A CLF tech console used to make tech purchases for CLF.
+ent-RMCTechTreeConsoleCLF = INSFOR tech tree console
+    .desc = A INSFOR tech console used to make tech purchases for INSFOR.
 
 ## Intel tree Localization
 ent-CMUIntelTechTree_GOVFOR = intel tech tree (GovFor)
 ent-CMUIntelTechTree_OPFOR = intel tech tree (OpFor)
-ent-CMUIntelTechTree_CLF = intel tech tree (CLF)
+ent-CMUIntelTechTree_CLF = intel tech tree (INSFOR)
 ent-CMUIntelTechTree_UA = intel tech tree (UA)
 
 ## Tech tiers
@@ -95,11 +95,11 @@ cmu-tech-clf-reinforcements-desc = Summon reinforcements from a neighboring cell
 cmu-tech-clf-machine-gunner = Machine Gunner
 cmu-tech-clf-machine-gunner-desc = Summon a machine gunner from a neighboring cell.
 cmu-tech-clf-vaiso = Call VAISO read on WY
-cmu-tech-clf-vaiso-desc = Send intel on local WY facility to VAISO, summoning them for a raid. They are not hostile to CLF but not required to help directly!
-cmu-tech-clf-commandos = Call CLF Commandos
-cmu-tech-clf-commandos-desc = Sends intel to CLF High command, summoning a team of CLF commandos to aid the cell
+cmu-tech-clf-vaiso-desc = Send intel on local WY facility to VAISO, summoning them for a raid. They are not hostile to INSFOR but not required to help directly!
+cmu-tech-clf-commandos = Call INSFOR Commandos
+cmu-tech-clf-commandos-desc = Sends intel to INSFOR High command, summoning a team of INSFOR commandos to aid the cell
 cmu-tech-clf-prodigy-yankee = Call Prodigy Armed Repair Team Yankee
-cmu-tech-clf-prodigy-yankee-desc = Summon a PMC team from PART, specifically Yankee Squad, They are not hostile to CLF but not required to help directly!
+cmu-tech-clf-prodigy-yankee-desc = Summon a PMC team from PART, specifically Yankee Squad, They are not hostile to INSFOR but not required to help directly!
 
 ## CLF Announcements
 cmu-tech-clf-prodigy-yankee-announce = A Prodigy Armed Repair Team has been dispatched to aid with the operation.

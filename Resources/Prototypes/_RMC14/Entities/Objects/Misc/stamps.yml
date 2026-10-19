@@ -238,9 +238,9 @@
 
 - type: entity
   parent: CMStampBase
-  id: RMCStampCLF
+  id: RMCStampCLF # CMU14: INSFOR display text
   name: colony liberation front rubber stamp
-  suffix: RMC, Admin, CLF
+  suffix: RMC, Admin, INSFOR
   components:
   - type: Sprite
     state: stamp-clf

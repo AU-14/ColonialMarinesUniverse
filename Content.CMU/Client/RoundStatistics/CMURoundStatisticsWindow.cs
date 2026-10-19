@@ -835,7 +835,7 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
             "opfor" => "O",
             "indfor" => "I",
             "colonist" or "colonists" => "C",
-            "clf" => "CLF",
+            "clf" => "INSFOR",
             var other => other,
         };
     }
@@ -921,7 +921,7 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         {
             "govfor" => "Govfor",
             "opfor" => "Opfor",
-            "clf" => "CLF",
+            "clf" => "INSFOR",
             "colony" or "colonist" => "Colonists",
             "threat" => "Threat",
             "xeno" => "Xeno",
@@ -947,7 +947,7 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         {
             CMURoundStatisticsWinner.Xeno => "Xeno",
             CMURoundStatisticsWinner.Govfor => "Govfor",
-            CMURoundStatisticsWinner.Clf => "CLF",
+            CMURoundStatisticsWinner.Clf => "INSFOR",
             CMURoundStatisticsWinner.Colonists => "Colonists",
             CMURoundStatisticsWinner.Threat => "Threat",
             CMURoundStatisticsWinner.Draw => "Draw",
@@ -965,7 +965,7 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
             CMURoundStatisticsOutcome.MarineMinorHiveCollapse => "Marine minor - hive collapse",
             CMURoundStatisticsOutcome.MarineMajorXenoWipe => "Marine major - pre-hijack xeno wipe",
             CMURoundStatisticsOutcome.DrawAlmayerAutodestruct => "Draw - Warship selfdestruct",
-            CMURoundStatisticsOutcome.InsurgencyClfVictory => "CLF victory",
+            CMURoundStatisticsOutcome.InsurgencyClfVictory => "INSFOR victory",
             CMURoundStatisticsOutcome.InsurgencyGovforVictory => "Govfor victory",
             CMURoundStatisticsOutcome.ColonyFallThreatVictory => "Threat victory",
             CMURoundStatisticsOutcome.ColonyFallSurvivorVictory => "Colonist victory",

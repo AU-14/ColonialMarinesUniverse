@@ -52,7 +52,7 @@
   - Squad Leaders and Fireteam Leaders
   - Radio Traffic Operators
 
-  ### CLF trained roles
+  ### INSFOR trained roles
 
   - Cell Leader
   - Radio Operator
@@ -561,14 +561,14 @@
 
   An open mast can be dismantled to recover most construction materials and the antenna head.
 
-  ## CLF communications
+  ## INSFOR communications
 
-  The CLF use two relay-gated combat nets:
+  The INSFOR use two relay-gated combat nets:
 
-  - [bold]CLF[/bold] - the cell's standard net, available on CLF earpieces
-  - [bold]CLF Command[/bold] - available through AN/PRC radios
+  - [bold]INSFOR[/bold] - the cell's standard net, available on INSFOR earpieces
+  - [bold]INSFOR Command[/bold] - available through AN/PRC radios
 
-  The CLF do not have a permanent communications array.
+  The INSFOR do not have a permanent communications array.
 
   Their relay coverage is provided by deployable equipment, including:
 
@@ -576,7 +576,7 @@
   - the cell's [bold]clandestine base station[/bold]
   - additional deployed relay radios
 
-  The issued CLF manpack begins tuned to both CLF combat nets.
+  The issued INSFOR manpack begins tuned to both INSFOR combat nets.
 
   The clandestine base station:
 
@@ -586,7 +586,7 @@
 
   Both the Cell Leader and Radio Operator receive communications equipment capable of deploying relay coverage.
 
-  If the CLF lose access to both combat nets, the [bold]Colony[/bold] channel remains available.
+  If the INSFOR lose access to both combat nets, the [bold]Colony[/bold] channel remains available.
 
   Colony is not relay-gated and is unencrypted.
 </Document>

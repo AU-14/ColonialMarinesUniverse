@@ -25,8 +25,8 @@
 # For CLF
 - type: entity
   parent: [RMCHeadsetIconsCLF, CMHeadsetColony]
-  id: RMCHeadsetDistressCLF
-  name: CLF headset
+  id: RMCHeadsetDistressCLF # CMU14: INSFOR display text
+  name: INSFOR headset
   description: A special headset used by small groups of trained operatives. Or terrorists.
 
 # For Bureau Marshals

@@ -56,7 +56,7 @@
 - type: entity
   parent: BaseMindRoleAntag
   id: MindRoleCLFSleeperAgent
-  name: CLF Sleeper Agent Mind Role
+  name: INSFOR Sleeper Agent Mind Role
   components:
   - type: MindRole
     antagPrototype: CLFSleeperAgentRole

@@ -1,3 +1,4 @@
+# CMU14: INSFOR display text.
 camera-network-engineering = Engineering
 camera-network-security = Security
 camera-network-science = Science
@@ -7,7 +8,7 @@ camera-network-service = Service
 camera-network-medical = Medical
 camera-network-general = General
 camera-network-entertainment = Entertainment
-camera-network-clf = CLF spy cameras
+camera-network-clf = INSFOR spy cameras
 camera-network-cmu-colony-cmb = CMB colony cameras
 camera-network-cmu-colony-govfor = GOVFOR colony cameras
 camera-network-cmu-colony-weyu = We-Yu colony cameras

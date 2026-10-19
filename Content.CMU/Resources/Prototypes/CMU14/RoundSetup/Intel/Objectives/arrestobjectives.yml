@@ -24,7 +24,7 @@
     removeKillMark: true
 
 - type: entity
-  name: Arrest CLF Objective
+  name: Arrest INSFOR Objective
   parent: MarkerBase
   id: arrestclfobjective
   components:

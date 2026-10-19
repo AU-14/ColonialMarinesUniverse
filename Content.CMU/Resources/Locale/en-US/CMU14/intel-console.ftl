@@ -1,7 +1,7 @@
-cmu-intel-console-claim-start = You begin overriding the CLF intel console...
-cmu-intel-console-claim-examine = [color=red]Government Forces can seize this console to expose the remaining CLF cell.[/color]
-cmu-intel-console-claim-complete = You seize control of the CLF intel console. The remaining CLF cell's identities are being compromised.
-cmu-intel-console-fax-title = CLF Cell Compromised
+cmu-intel-console-claim-start = You begin overriding the INSFOR intel console...
+cmu-intel-console-claim-examine = [color=red]Government Forces can seize this console to expose the remaining INSFOR cell.[/color]
+cmu-intel-console-claim-complete = You seize control of the INSFOR intel console. The remaining INSFOR cell's identities are being compromised.
+cmu-intel-console-fax-title = INSFOR Cell Compromised
 cmu-intel-console-fax-stamp = HUMINT CLASSIFIED
 cmu-intel-console-fax-roster-entry = - {$name} — {$job}
 cmu-intel-console-fax-roster-none = No further operatives could be identified during the debrief.

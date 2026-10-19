@@ -1,3 +1,4 @@
+# CMU14: INSFOR display text.
 rmc-ghost-role-information-responder-description = Your job is to respond to faxes appropriately, based on your faction. You are acting on behalf of RMC staff.
 
 rmc-ghost-role-information-responder-rules = You are a [color=red][bold]Fax Responder[/bold][/color]. Your factional relations depend on your faction.
@@ -30,8 +31,8 @@ rmc-job-name-free-press-responder = Free Press
 rmc-job-description-free-press-responder = "You are a promiment regional editor, a member of the Free Press."
 
 #CLF fax responder
-rmc-job-name-clf-responder = CLF Information Correspondent
-rmc-job-description-clf-responder = "You are a member of a regional CLF cell. Inform and receive information from local cells."
+rmc-job-name-clf-responder = INSFOR Information Correspondent
+rmc-job-description-clf-responder = "You are a member of a regional INSFOR cell. Inform and receive information from local cells."
 rmc-job-prefix-clf-responder = INFO
 
 #SPP fax responder

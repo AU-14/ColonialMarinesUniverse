@@ -58,7 +58,7 @@ stamp-component-stamped-name-au14-nspa = NSPA Inspector
 stamp-component-stamped-name-au14-pvi = Provost Inspector
 stamp-component-stamped-name-au14-iccl = Interstellar Commerce Commission Liaison
 
-stamp-component-stamped-name-au14-clfcel = CLF Cell Leader
+stamp-component-stamped-name-au14-clfcel = INSFOR Cell Leader
 
 stamp-component-stamped-name-au14-approve = APPROVED
 stamp-component-stamped-name-au14-deny = DENIED

@@ -495,7 +495,7 @@
   parent: AU14StampBase
   id: AU14StampCLFCell
   name: cell lead's rubber stamp
-  suffix: CLF
+  suffix: INSFOR
   components:
   - type: Sprite
     state: stamp-clf
@@ -595,7 +595,7 @@
   parent: AU14StampBase
   id: AU14StampCLF
   name: colony liberation front rubber stamp
-  suffix: Admin, CLF
+  suffix: Admin, INSFOR
   components:
   - type: Sprite
     state: stamp-clf

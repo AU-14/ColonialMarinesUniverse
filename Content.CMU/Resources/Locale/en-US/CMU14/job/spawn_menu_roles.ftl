@@ -26,8 +26,8 @@ au14-spawn-role-name-wy-scientist = WY Scientist (CMU)
 au14-spawn-role-name-working-joe-colony = Working Joe (Colony)
 au14-spawn-role-name-wy-corporate-goon = WY Corporate Goon (CMU)
 
-cmu-spawn-role-clf-cell-leader-cmu = CLF Cell Leader (CMU)
-cmu-spawn-role-clf-radio-operator-cmu = CLF Radio Operator (CMU)
+cmu-spawn-role-clf-cell-leader-cmu = INSFOR Cell Leader (CMU)
+cmu-spawn-role-clf-radio-operator-cmu = INSFOR Radio Operator (CMU)
 cmu-spawn-role-colony-engineer-cmu = Engineer (CMU)
 cmu-spawn-role-colony-atmospheric-technician = Atmospheric Technician
 cmu-spawn-role-colonist-cmu = Colonist (CMU)
@@ -83,8 +83,8 @@ cmu-spawn-role-wy-pmc-combat-engineer-survivor = WY PMC Combat Engineer (Survivo
 cmu-spawn-role-missionary-3rd-party = Missionary (3rd party)
 cmu-spawn-role-colonist-3rd-party = Colonist (3rd party)
 cmu-spawn-role-phycisian-3rd-party = Phycisian (3rd party)
-cmu-spawn-role-clf-guerilla-fighter-reinforcements = CLF Guerilla Fighter (Reinforcements)
-cmu-spawn-role-clf-machinegunner-reinforcements = CLF Machinegunner (Reinforcements)
+cmu-spawn-role-clf-guerilla-fighter-reinforcements = INSFOR Guerilla Fighter (Reinforcements)
+cmu-spawn-role-clf-machinegunner-reinforcements = INSFOR Machinegunner (Reinforcements)
 
 cmu-job-name-pizza-delivery-boy = Pizza Delivery
 cmu-job-name-professor-von-bandolier = Professor Von Bandolier

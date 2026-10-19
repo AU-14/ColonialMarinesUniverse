@@ -45,7 +45,7 @@ public sealed partial class CLFSaboteurSystem : EntitySystem
                 saboteur.BountyPosted = true;
                 var bounty = EnsureComp<ColonyBountyComponent>(uid);
                 bounty.Bounty = 1200;
-                bounty.Reason = "CLF sabotage - infrastructure attack";
+                bounty.Reason = "INSFOR sabotage - infrastructure attack";
                 bounty.RecordName = "The Saboteur (Unknown)";
                 bounty.CapturedFaxPaper = "CMUPaperColonyAntagCaptured";
             }
@@ -60,11 +60,11 @@ public sealed partial class CLFSaboteurSystem : EntitySystem
                     "Comrades,\n" +
                     $"  Primary sabotage complete: {saboteur.Count} enemy infrastructure assets destroyed. " +
                     "The occupiers are blind and bleeding. Freedom or death.\n\n" +
-                    "[color=#2e5a1e][bolditalic]CLF Command[/bolditalic][/color]",
+                    "[color=#2e5a1e][bolditalic]INSFOR Command[/bolditalic][/color]",
                     "paper_stamp-clf",
                     new List<StampDisplayInfo>
                     {
-                        new() { StampedColor = Color.FromHex("#2e5a1e"), StampedName = "CLF" },
+                        new() { StampedColor = Color.FromHex("#2e5a1e"), StampedName = "INSFOR" },
                     }, ClfPaperPrototype);
             }
         }

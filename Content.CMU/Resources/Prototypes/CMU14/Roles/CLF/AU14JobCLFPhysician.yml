@@ -79,7 +79,7 @@
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointCLFPhysician
-  name: Spawn Point CLF Physician
+  name: Spawn Point INSFOR Physician
   components:
   - type: SpawnPoint
     job_id: AU14JobCLFPhysician

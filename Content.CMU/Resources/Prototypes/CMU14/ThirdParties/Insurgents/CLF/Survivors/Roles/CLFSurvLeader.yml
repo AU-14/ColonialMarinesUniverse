@@ -60,7 +60,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicCLF
   id: AU14CLFSurvLeader
-  name: CLF CellLeader (Survivor)
+  name: INSFOR CellLeader (Survivor)
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial

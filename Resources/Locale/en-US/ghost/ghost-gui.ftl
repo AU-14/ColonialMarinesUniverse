@@ -1,3 +1,4 @@
+# CMU14: INSFOR display text.
 ghost-gui-return-to-body-button = Return to body
 ghost-gui-ghost-warp-button = Ghost Warp
 ghost-gui-ghost-roles-button = Ghost Roles ({$count})
@@ -31,7 +32,7 @@ ghost-target-window-tab-third-party = Third Party
 # CMU14: survivors are shown as civilians.
 ghost-target-window-tab-survivors = Civilians
 ghost-target-window-tab-weya-pmc = WeYu/PMC
-ghost-target-window-tab-clf = CLF
+ghost-target-window-tab-clf = INSFOR
 ghost-target-window-tab-spp = SPP
 ghost-target-window-tab-tse-royal = TSE/Royal
 ghost-target-window-tab-cmb-provost = CMB/Provost

@@ -2,7 +2,7 @@
   parent: RemoteSignaller
   id: AU14RemoteSignallerAdvanced
   name: ProtonCall XL Portable Telephone
-  description: A Weyland-Yutani brickphone made by a subsidiary of their communications division. Probably pried from the dead hands of some corporate shmuck. This one’s being used for dialing CLF IEDs. Someone etched 'Fuck the United Americas' into the side.
+  description: A Weyland-Yutani brickphone made by a subsidiary of their communications division. Probably pried from the dead hands of some corporate shmuck. This one’s being used for dialing INSFOR IEDs. Someone etched 'Fuck the United Americas' into the side.
   components:
   - type: Sprite
     sprite: CMU14/Items/IEDs/signaller.rsi

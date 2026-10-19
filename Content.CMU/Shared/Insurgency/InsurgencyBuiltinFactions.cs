@@ -67,8 +67,8 @@ public static class InsurgencyBuiltinFactions
             Metadata = new FactionMetadata
             {
                 Title = "Colonial Liberation Front",
-                Description = "The standard CLF cell. No special doctrine, no custom arsenal.",
-                RoleplayText = "Play as a classic CLF insurgent cell.",
+                Description = "The standard INSFOR cell. No special doctrine, no custom arsenal.",
+                RoleplayText = "Play as a classic INSFOR insurgent cell.",
                 StatusIcon = "CLFFaction",
             },
         };
@@ -80,7 +80,7 @@ public static class InsurgencyBuiltinFactions
         // vendor, so keep its own sections, points mode, and access untouched.
         def.CellKit.VendorDefinitions.Add(new FactionVendorDefinition
         {
-            Name = "CLF Requisitions Rack",
+            Name = "INSFOR Requisitions Rack",
             BaseModel = "AU14CLFObjectiveWeaponsVendor",
             UseBaseModelSections = true,
         });
@@ -98,7 +98,7 @@ public static class InsurgencyBuiltinFactions
     // Each mirrors the contents of the crate it replaces. Free (points 0) since the crates were free.
     // Contents live here as data so the faction editor can add, change, or remove any of them.
 
-    private static FactionVendorDefinition MedicalVendor() => Vendor("CLF medical cache",
+    private static FactionVendorDefinition MedicalVendor() => Vendor("INSFOR medical cache",
         Section("First Aid",
             Entry("CMFirstAidKitFilled"),
             Entry("CMBurnAidKitFilled"),
@@ -106,7 +106,7 @@ public static class InsurgencyBuiltinFactions
             Entry("CMFirstAidO2KitFilled"),
             Entry("CMAdvFirstAidKitFilled")));
 
-    private static FactionVendorDefinition ToolVendor() => Vendor("CLF tool cache",
+    private static FactionVendorDefinition ToolVendor() => Vendor("INSFOR tool cache",
         Section("Field Tools",
             // keep in step with the Radio Operator Issue section in clfstuff.yml and the
             // AU14CrateCLFinitalTools crate. the CLF nets are anchorGated, so a cell that
@@ -125,7 +125,7 @@ public static class InsurgencyBuiltinFactions
             Entry("AU14BeltUtilityFilled"),
             Entry("RMCBoxFlashlights")));
 
-    private static FactionVendorDefinition RecruitmentVendor() => Vendor("CLF recruitment cache",
+    private static FactionVendorDefinition RecruitmentVendor() => Vendor("INSFOR recruitment cache",
         Section("Recruitment",
             Entry("AU14CLFHeadset", 5),
             Entry("RMCCLFArmband", 5),
@@ -133,7 +133,7 @@ public static class InsurgencyBuiltinFactions
             Entry("AU14TattooInkCartridge", 6),
             Entry("AU14TattooGun", 1)));
 
-    private static FactionVendorDefinition ClothingVendor() => Vendor("CLF civilian clothing rack",
+    private static FactionVendorDefinition ClothingVendor() => Vendor("INSFOR civilian clothing rack",
         Section("Footwear",
             Entry("RMCShoesBlack"), Entry("RMCShoesBlue"), Entry("RMCShoesBrown"),
             Entry("RMCShoesGreen"), Entry("RMCShoesOrange"), Entry("RMCShoesPurple"),

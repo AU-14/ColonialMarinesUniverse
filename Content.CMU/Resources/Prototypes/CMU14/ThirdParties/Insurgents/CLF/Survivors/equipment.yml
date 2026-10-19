@@ -88,7 +88,7 @@
 - type: entity
   parent: RMCBeltConstruction
   id: AU14BeltConstructionCLFSurv
-  suffix: CLF; Survivor
+  suffix: INSFOR; Survivor
   components:
   - type: StorageFill
     contents:
@@ -106,7 +106,7 @@
 - type: entity
   parent: AU14BeltUtilityGeneralBlack
   id: AU14BeltUtilityGeneralBlackCLFSurvMolly
-  suffix: CLF; Survivor; Molotov
+  suffix: INSFOR; Survivor; Molotov
   components:
   - type: StorageFill
     contents:
@@ -120,7 +120,7 @@
 - type: entity
   parent: AU14BeltUtilityGeneralBlack
   id: AU14BeltUtilityGeneralBlackCLFSurvGrenade
-  suffix: CLF; Survivor; Grenades
+  suffix: INSFOR; Survivor; Grenades
   components:
   - type: StorageFill
     contents:
@@ -137,7 +137,7 @@
 - type: entity
   parent: AU14BeltUtilityGeneralBlack
   id: AU14BeltUtilityGeneralBlackCLFSurvMedical
-  suffix: CLF; Survivor; Medical
+  suffix: INSFOR; Survivor; Medical
   components:
   - type: StorageFill
     contents:
@@ -153,7 +153,7 @@
 - type: entity
   parent: AU14BeltUtilityGeneralBlack
   id: AU14BeltUtilityGeneralBlackCLFSurvMetal
-  suffix: CLF; Survivor; Metal
+  suffix: INSFOR; Survivor; Metal
   components:
   - type: StorageFill
     contents:
@@ -167,7 +167,7 @@
 - type: entity
   parent: AU14BeltUtilityGeneralBlack
   id: AU14BeltUtilityGeneralBlackCLFSurvPipeBomb
-  suffix: CLF; Survivor; Pipebomb
+  suffix: INSFOR; Survivor; Pipebomb
   components:
   - type: StorageFill
     contents:
@@ -184,7 +184,7 @@
 - type: entity
   parent: CMJumpsuitTShirtGray
   id: CMJumpsuitTShirtGrayCLFArmband
-  suffix: CLF, Survivor, Armband
+  suffix: INSFOR, Survivor, Armband
   components:
   - type: UniformAccessoryHolder
     startingAccessories: 
@@ -193,7 +193,7 @@
 - type: entity
   parent: CMJumpsuitTShirtWhite
   id: CMJumpsuitTShirtWhiteCLFArmband
-  suffix: CLF, Survivor, Armband
+  suffix: INSFOR, Survivor, Armband
   components:
   - type: UniformAccessoryHolder
     startingAccessories: 
@@ -202,7 +202,7 @@
 - type: entity
   parent: RMCJumpsuitCivilian
   id: RMCJumpsuitCivilianCLFArmband
-  suffix: CLF, Survivor, Armband
+  suffix: INSFOR, Survivor, Armband
   components:
   - type: UniformAccessoryHolder
     startingAccessories: 
@@ -211,7 +211,7 @@
 - type: entity
   parent: CMJumpsuitColonist
   id: CMJumpsuitColonistCLFArmband
-  suffix: CLF, Survivor, Armband
+  suffix: INSFOR, Survivor, Armband
   components:
   - type: UniformAccessoryHolder
     startingAccessories: 

@@ -103,7 +103,7 @@
 - type: entity
   id: AddClf
   parent: BaseGameRule
-  name: Spawn CLF
+  name: Spawn INSFOR
   components:
   - type: AddJobsRule
     jobs:

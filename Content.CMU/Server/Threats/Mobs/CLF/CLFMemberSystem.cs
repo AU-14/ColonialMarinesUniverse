@@ -83,13 +83,13 @@ public sealed partial class CLFMemberSystem : EntitySystem
         {
             Verb clf = new()
             {
-                Text = "Make CLF Recruit",
+                Text = "Make INSFOR Recruit",
                 Category = VerbCategory.Antag,
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/_RMC14/Interface/cm_job_icons.rsi"),
                     "hudCLF"),
                 Act = () => { MakeCLF(args.Target); },
                 Impact = LogImpact.High,
-                Message = "Make CLF Recruit"
+                Message = "Make INSFOR Recruit"
             };
             args.Verbs.Add(clf);
         }

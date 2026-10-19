@@ -23,7 +23,7 @@
 - type: entity
   parent: ANPRCFreqCard
   id: ANPRCFreqCardCLF
-  suffix: CLF
+  suffix: INSFOR
   components:
   - type: ANPRCFreqCard
     faction: clf

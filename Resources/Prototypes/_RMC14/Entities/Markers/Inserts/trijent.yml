@@ -69,8 +69,8 @@
 
 - type: entity
   parent: RMCMapInsertTrijentBase
-  id: RMCMapInsertTrijentCLFPods
-  name: CLF Pods
+  id: RMCMapInsertTrijentCLFPods # CMU14: INSFOR display text
+  name: INSFOR Pods
   suffix: Insert Trijent
   components:
   - type: MapInsert

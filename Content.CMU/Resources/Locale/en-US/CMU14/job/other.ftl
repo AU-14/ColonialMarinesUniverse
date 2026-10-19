@@ -430,5 +430,5 @@ au14-job-greeting-IASFsurv = You have been stranded in this colony, dropship out
 
     You are a member of the Three World Empires Imperial Armed Space Forces, you are NEUTRAL to civilians and other countries and HOSTILE to the CLF.
 
-au14-job-rules-IASFsurv = You are a member of the TWEs IASF, you are NEUTRAL to civilians and other countries and HOSTILE to the CLF.
+au14-job-rules-IASFsurv = You are a member of the TWEs IASF, you are NEUTRAL to civilians and other countries and HOSTILE to the INSFOR.
     You are fully aware of the threat after having witnessed it for several days.

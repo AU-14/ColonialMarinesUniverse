@@ -50,7 +50,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicCLF
   id: CMUIntelThirdPartyCLFEngineerReinforcements
-  name: CLF Engineer Reinforcements
+  name: INSFOR Engineer Reinforcements
   components:
   - type: GhostRoleApplySpecial
   - type: GhostRole

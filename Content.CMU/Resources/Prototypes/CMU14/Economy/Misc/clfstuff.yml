@@ -6,9 +6,9 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14CLFObjectiveWeaponsVendor
-  name: CLF Requisitions Rack
-  description: A high-value weapons cache accessible only with CLF operational funds.
-  suffix: CLF, Objective Points
+  name: INSFOR Requisitions Rack
+  description: A high-value weapons cache accessible only with INSFOR operational funds.
+  suffix: INSFOR, Objective Points
   components:
   - type: Pullable
   - type: Sprite
@@ -460,8 +460,8 @@
 - type: entity
   parent: RMCBaseEquipmentCase
   id: AU14CLFCellKit
-  name: heavy CLF cell kit
-  description: A heavy, low-profile field case used to establish a CLF cell hideout.
+  name: heavy INSFOR cell kit
+  description: A heavy, low-profile field case used to establish a INSFOR cell hideout.
   components:
   - type: Sprite
     layers:
@@ -518,8 +518,8 @@
 - type: entity
   parent: RMCCrateBase
   id: AU14CrateCLFinitalTools
-  name: CLF tool cache
-  description: A field cache of weapons, utilities, and repair tools for a newly established CLF cell.
+  name: INSFOR tool cache
+  description: A field cache of weapons, utilities, and repair tools for a newly established INSFOR cell.
   components:
   - type: Sprite
     state: crate
@@ -555,8 +555,8 @@
 - type: entity
   parent: RMCCrateBase
   id: AU14CrateCLFRecruitmentKit
-  name: CLF recruitment cache
-  description: A compact cache for inducting new CLF members and handing out covert cell comms.
+  name: INSFOR recruitment cache
+  description: A compact cache for inducting new INSFOR members and handing out covert cell comms.
   components:
   - type: Sprite
     state: crate
@@ -580,7 +580,7 @@
   description: >-
     Cheap colony notepaper. Write down what the cell is for, pass the word, then get rid of
     it. Nobody can search a body for something everyone already knows.
-  suffix: CLF
+  suffix: INSFOR
   components:
   - type: Paper
     contentSize: 2000
@@ -589,7 +589,7 @@
 - type: entity
   parent: CMFax
   id: CMFaxCLF
-  suffix: CLF
+  suffix: INSFOR
   components:
   - type: FaxMachine
     name: "Colony Liberation Front"
@@ -602,7 +602,7 @@
   name: Tattoo Gun
   parent: BaseStorageItem
   id: AU14TattooGun
-  description: Used to induct people into the CLF.
+  description: Used to induct people into the INSFOR.
   components:
   - type: TattooGun
   - type: Sprite
@@ -656,7 +656,7 @@
   id: AU14CMJumpsuitColonistCLF
   name: colonist uniform
   description: A stylish gray-green jumpsuit - standard issue for colonists. This one has a small earpiece clipped to the collar.
-  suffix: CLF
+  suffix: INSFOR
   components:
   - type: UniformAccessoryHolder
     allowedCategories:
@@ -678,7 +678,7 @@
   id: AU14RMCJumpsuitCivilianCLF
   name: gray utility uniform
   description: A stylish gray jumpsuit, popularly issued to UN contract workers on the frontier. This one has a small earpiece clipped to the collar.
-  suffix: CLF
+  suffix: INSFOR
   components:
   - type: UniformAccessoryHolder
     allowedCategories:

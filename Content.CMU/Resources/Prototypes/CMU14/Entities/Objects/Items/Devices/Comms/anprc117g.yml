@@ -164,7 +164,7 @@
 - type: entity
   parent: ANPRC117GRadio
   id: ANPRC117GRadioCLF
-  suffix: CLF
+  suffix: INSFOR
   components:
   - type: AU14CallsignConsole
     faction: clf
@@ -246,7 +246,7 @@
 - type: entity
   parent: ANPRC117GRadioCLF
   id: ANPRC117GRadioCLFFilled
-  suffix: CLF, Filled
+  suffix: INSFOR, Filled
   components:
   - type: ANPRCRadio
     defaultSlots:
@@ -267,7 +267,7 @@
   parent: ANPRC117GRadioCLFFilled
   id: AU14CLFBaseStation
   name: clandestine base station
-  suffix: CLF, Base Station
+  suffix: INSFOR, Base Station
   description: >-
     A base station cannibalised from colony survey gear and a stolen military set,
     bolted into a crate that does not travel well. Too heavy to carry on your back,
@@ -321,7 +321,7 @@
   parent: BaseItem
   id: AU14CLFClandestineRelay
   name: clandestine relay set
-  suffix: CLF, Cache Relay
+  suffix: INSFOR, Cache Relay
   description: >-
     A stripped transceiver board and a power cell taped into a scavenged field set, with
     a reel of wire for an antenna. There are no controls on it worth the name - it

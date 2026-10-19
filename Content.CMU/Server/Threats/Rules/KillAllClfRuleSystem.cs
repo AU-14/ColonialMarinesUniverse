@@ -30,7 +30,7 @@ public sealed partial class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRule
     [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
     [Dependency] private CMURoundStatisticsSystem _roundStats = default!;
     [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
-    private const string DefaultWinMsg = "Govfor victory: Required percentage of CLF eliminated.";
+    private const string DefaultWinMsg = "Govfor victory: Required percentage of INSFOR eliminated.";
 
     public override void Initialize()
     {

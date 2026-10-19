@@ -1,9 +1,9 @@
 - type: entity
   parent: ColMarTechSurplus
-  id: RMCCLFSurplusPVE
-  name: CLF Clothing Rack
+  id: RMCCLFSurplusPVE # CMU14: INSFOR display text
+  name: INSFOR Clothing Rack
   description: A sturdy metal rack made by local friends of the front, filled to the brim with all the load-bearing gear and clothing a rebel could want, coincidentally also made by local friends of the front.
-  suffix: PVE, CLF
+  suffix: PVE, INSFOR
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clf_surplus.rsi
@@ -18,7 +18,7 @@
         name: Jackboots
         amount: 15
       - id: RMCJumpsuitCLFSoldier
-        name: CLF Jumpsuit
+        name: INSFOR Jumpsuit
         amount: 15
       - id: RMCHandsLeatherBlack
         name: Leather Gloves
@@ -141,10 +141,10 @@
 
 - type: entity
   parent: ColMarTechUtilities
-  id: RMCCLFUtilitiesPVE
-  name: CLF Utilities Rack
+  id: RMCCLFUtilitiesPVE # CMU14: INSFOR display text
+  name: INSFOR Utilities Rack
   description: A sturdy metal rack taken from a captured UN military shipment loaded with all the gear a rebel could ever want.
-  suffix: PVE, CLF
+  suffix: PVE, INSFOR
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/prep.rsi

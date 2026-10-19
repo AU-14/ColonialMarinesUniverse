@@ -11,8 +11,8 @@
 
 - type: entity
   parent: RMCMapInsertVaraderoBase
-  id: RMCMapInsertVaraderoCLFRaid
-  name: CLF Raid
+  id: RMCMapInsertVaraderoCLFRaid # CMU14: INSFOR display text
+  name: INSFOR Raid
   suffix: Insert Varadero
   components:
   - type: MapInsert

@@ -11,8 +11,8 @@
 
 - type: entity
   parent: RMCMapInsertHybrisaBase
-  id: RMCMapInsertHybrisaCLFSpaceport
-  name: CLF Spaceport
+  id: RMCMapInsertHybrisaCLFSpaceport # CMU14: INSFOR display text
+  name: INSFOR Spaceport
   suffix: Insert Hybrisa
   components:
   - type: MapInsert

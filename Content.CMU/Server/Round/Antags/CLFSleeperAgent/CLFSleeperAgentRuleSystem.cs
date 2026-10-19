@@ -34,7 +34,7 @@ public sealed partial class CLFSleeperAgentRuleSystem : GameRuleSystem<CLFSleepe
             "paper_stamp-clf",
             new List<StampDisplayInfo>
             {
-                new() { StampedColor = Color.FromHex("#2e5a1e"), StampedName = "CLF" }
+                new() { StampedColor = Color.FromHex("#2e5a1e"), StampedName = "INSFOR" }
             }, ClfPaperPrototype);
 
         // Platoon voting means govfor is not always USCM; the advisory must wear
@@ -55,8 +55,8 @@ public sealed partial class CLFSleeperAgentRuleSystem : GameRuleSystem<CLFSleepe
     {
         return "[head=3][color=#2e5a1e]Colony Liberation Front[/color][/head]\n\n" +
                "[color=#2e5a1e]▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[/color]\n\n" +
-               "[bold]To:[/bold] [italic]CLF Field Operatives[/italic]\n" +
-               "[bold]From:[/bold] [bold]CLF High Command[/bold]\n" +
+               "[bold]To:[/bold] [italic]INSFOR Field Operatives[/italic]\n" +
+               "[bold]From:[/bold] [bold]INSFOR High Command[/bold]\n" +
                "[color=#2e5a1e]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]\n" +
                "Comrades,\n" +
                "  Intelligence confirms a sleeper operative has been embedded within the Government Forces " +
@@ -64,7 +64,7 @@ public sealed partial class CLFSleeperAgentRuleSystem : GameRuleSystem<CLFSleepe
                "position. Do not attempt direct contact — support their efforts by maintaining pressure " +
                "on the occupiers, and do not compromise their identity.\n\n" +
                "Freedom or death,\n" +
-               "[color=#2e5a1e][bolditalic]CLF High Command[/bolditalic][/color]\n" +
+               "[color=#2e5a1e][bolditalic]INSFOR High Command[/bolditalic][/color]\n" +
                "[color=#2e5a1e]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]";
     }
 

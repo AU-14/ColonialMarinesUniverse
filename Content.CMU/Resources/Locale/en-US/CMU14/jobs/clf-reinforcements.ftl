@@ -1,5 +1,5 @@
-cmu-clf-name-engineer = CLF Engineer
-cmu-clf-name-specialist = CLF Specialist
+cmu-clf-name-engineer = INSFOR Engineer
+cmu-clf-name-specialist = INSFOR Specialist
 cmu-clf-description = A trained fighter of the Colonial Liberation Front, sent to aid the uprising with specialist skills.
 cmu-clf-description-reinforcement = You have been sent from a neighboring insurgent cell to aid the uprising in this area. Report to the local cell leader for orders.
 cmu-clf-prefix-engineer = ENG

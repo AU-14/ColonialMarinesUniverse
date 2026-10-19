@@ -16,7 +16,7 @@
 
   This is your personal radio and is sufficient for normal squad communications.
 
-  CLF characters instead use a concealable earpiece attached to their clothing. It works similarly to a headset but does not occupy the ears slot. See [textlink="Field Headsets" link="AU14CommsHeadsets"] for details.
+  INSFOR characters instead use a concealable earpiece attached to their clothing. It works similarly to a headset but does not occupy the ears slot. See [textlink="Field Headsets" link="AU14CommsHeadsets"] for details.
 
   Some roles also receive an [bold]AN/PRC-117G[/bold] manpack radio.
 
@@ -45,9 +45,9 @@
   - a powered shipboard communications array
   - a vehicle radio
   - an engineering field antenna mast
-  - a CLF clandestine base station
-  - a staked CLF relay set
-  - a mast or array carrying a CLF splice
+  - a INSFOR clandestine base station
+  - a staked INSFOR relay set
+  - a mast or array carrying a INSFOR splice
 
   Without a suitable relay in range, the combat net cannot transmit or receive through your headset.
 
@@ -146,7 +146,7 @@
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">[bold]CLF[/bold]</Box>
+      <Box Margin="4">[bold]INSFOR[/bold]</Box>
     </ColorBox>
     <ColorBox>
       <Box Margin="4">Cell Leader and Radio Operator.</Box>
@@ -318,13 +318,13 @@
 
   If you are wearing your own AN/PRC while holding another radio's handset, your own manpack takes priority.
 
-  ## CLF communications
+  ## INSFOR communications
 
-  The CLF do not have a permanent communications array.
+  The INSFOR do not have a permanent communications array.
 
   Their combat-net coverage comes from deployable equipment or from hostile communications infrastructure that has been tapped.
 
-  A CLF cell can begin with:
+  A INSFOR cell can begin with:
 
   - an AN/PRC manpack
   - a clandestine base station
@@ -344,7 +344,7 @@
     <GuideEntityEmbed Entity="AU14CLFClandestineRelay" Caption="Relay Set"/>
   </Box>
 
-  ### CLF relay equipment
+  ### INSFOR relay equipment
 
   A [bold]field antenna mast[/bold] provides:
 
@@ -384,10 +384,10 @@
 
   Field antenna masts carry only factions whose COMSEC keys are loaded into the mast.
 
-  To add the CLF key to an existing field mast:
+  To add the INSFOR key to an existing field mast:
 
   - open the feed using a screwdriver and wirecutters
-  - use a CLF fill card on the open feed
+  - use a INSFOR fill card on the open feed
   - close the feed with a screwdriver
   - seal it with a welder
 
@@ -397,13 +397,13 @@
 
   Using a multitool on an open feed removes all stored keys.
 
-  Adding a CLF key does not remove any existing faction keys.
+  Adding a INSFOR key does not remove any existing faction keys.
 
-  ## CLF net splicing
+  ## INSFOR net splicing
 
   Fixed communications masts and site arrays can be tapped with a [bold]net splice kit[/bold].
 
-  A successful splice adds CLF combat nets to the structure's existing relay coverage.
+  A successful splice adds INSFOR combat nets to the structure's existing relay coverage.
 
   It does not remove or disrupt the nets already carried by the structure.
 
@@ -450,9 +450,9 @@
 
   The junction produces visible sparks during the splice attempt and fault state.
 
-  ### Protecting CLF relay equipment
+  ### Protecting INSFOR relay equipment
 
-  CLF communications equipment is physically vulnerable.
+  INSFOR communications equipment is physically vulnerable.
 
   A completed [bold]splice[/bold] remains visible on the mast.
 
@@ -465,7 +465,7 @@
 
   Opening the feed of a spliced [bold]field antenna mast[/bold] also knocks the tap loose, and its keying module drops at the foot of the mast.
 
-  The recovered module can read CLF traffic until CLF leadership performs a recrypto.
+  The recovered module can read INSFOR traffic until INSFOR leadership performs a recrypto.
 
   A deployed [bold]relay set[/bold] can also be packed up by anyone.
 

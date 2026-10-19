@@ -485,7 +485,7 @@
       name: Cassette (Red Dirt)
       price: 5
     - id: AU14CassetteTapeCLF
-      name: Cassette (CLF)
+      name: Cassette (INSFOR)
       price: 5
     - id: RMCCassetteTapeCustom
       name: Cassette (Blank)

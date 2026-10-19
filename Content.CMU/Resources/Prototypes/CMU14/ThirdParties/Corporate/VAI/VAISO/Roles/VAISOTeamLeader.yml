@@ -60,7 +60,7 @@
     allowSpeech: true
     allowMovement: true
     name: VAISO Team Leader
-    description: You have received intel on Weyland-Yutani's facility from local CLF insurgent group. Your mission is to raid the facility, securing any valuable intel. Do it without excessive attention.
+    description: You have received intel on Weyland-Yutani's facility from local INSFOR insurgent group. Your mission is to raid the facility, securing any valuable intel. Do it without excessive attention.
     job: AU14VAISOTeamLeader
     raffle:
       settings: short

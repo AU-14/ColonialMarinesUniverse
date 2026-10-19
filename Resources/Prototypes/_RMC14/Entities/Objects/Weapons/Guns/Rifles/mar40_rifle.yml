@@ -1,8 +1,8 @@
 - type: entity
   parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
-  id: WeaponRifleMAR40
+  id: WeaponRifleMAR40 # CMU14: INSFOR display text
   name: MAR-40 battle rifle
-  description: A cheap, reliable assault rifle chambered in 7.62x39mm. Commonly found in the hands of criminals or mercenaries, or in the hands of the UPP or CLF.
+  description: A cheap, reliable assault rifle chambered in 7.62x39mm. Commonly found in the hands of criminals or mercenaries, or in the hands of the UPP or INSFOR.
   suffix: Filled
   components:
   - type: Sprite

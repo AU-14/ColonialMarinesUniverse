@@ -2,7 +2,7 @@
   parent: CMMobHuman
   id: AU14BaseMobSpeciesOrganicCLF
   abstract: true
-  suffix: AU14, CLF
+  suffix: AU14, INSFOR
   components:
   - type: GhostTakeoverAvailable
   - type: RandomHumanoidAppearance

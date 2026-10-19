@@ -18,28 +18,28 @@ roles-antag-cannibal-name = Cannibal
 roles-antag-cannibal-objective = Feed your hunger, don't get caught
 cannibal-role-greeting = You have an unnatural hunger that can only be sated by human flesh. Your butcher's knife opens every opportunity. Don't get caught; the Marshals escalate for every meal.
 
-roles-antag-clf-guerrilla-name = CLF Guerrilla
+roles-antag-clf-guerrilla-name = INSFOR Guerrilla
 roles-antag-clf-guerrilla-objective = Listen to your cell leader. Fight to free your home from the influence of governments and corporations.
 roles-antag-clf-guerrilla-greeting = You are a member of a sleeper cell. Wait until your leader contacts you and organizes the cell before you act.
 
-roles-antag-clf-leader-name = CLF Leader
+roles-antag-clf-leader-name = INSFOR Leader
 roles-antag-clf-leader-objective = Lead your cell to victory. Free your home from the influence of outside governments and corporations through whatever means necessary.
 roles-antag-clf-leader-greeting = You're the commander for this cell of the Colonial Liberation Front. Free your home through whatever means necessary.
 
-roles-antag-clf-physician-name = CLF Physician
+roles-antag-clf-physician-name = INSFOR Physician
 roles-antag-clf-doctor-objective = Listen to your cell leader. Ensure the health and well being of your cell, the colony, and any prisoners you have captured.
 roles-antag-clf-doctor-greeting = You are a member of a sleeper cell. Wait until your leader contacts you and organizes the cell before you act.
-roles-antag-clf-surgeon-name = CLF Surgeon
+roles-antag-clf-surgeon-name = INSFOR Surgeon
 
-cmu-antag-clf-saboteur-name = CLF Saboteur
+cmu-antag-clf-saboteur-name = INSFOR Saboteur
 cmu-antag-clf-saboteur-objective = Cripple the colony's infrastructure before the liberation begins.
 cmu-antag-clf-saboteur-greeting = The Colonial Liberation Front saved you, and now it is time to repay the debt. Destroy the colony's power and communications infrastructure with your charges. Every APC and comms console that dies brings the liberation closer.
 
-roles-antag-clf-sleeper-agent-name = CLF Sleeper Agent
-roles-antag-clf-sleeper-agent-objective = Aid the CLF insurgents from within. Undermine Government Forces operations without exposing your cover.
-clf-sleeper-agent-role-greeting = You are a CLF sleeper agent embedded within Government Forces. You have worked your way into a position of trust. Help the insurgents however you can — leak intel, sabotage operations, misdirect your unit. Do not reveal yourself unless you have no other choice.
+roles-antag-clf-sleeper-agent-name = INSFOR Sleeper Agent
+roles-antag-clf-sleeper-agent-objective = Aid the INSFOR insurgents from within. Undermine Government Forces operations without exposing your cover.
+clf-sleeper-agent-role-greeting = You are a INSFOR sleeper agent embedded within Government Forces. You have worked your way into a position of trust. Help the insurgents however you can — leak intel, sabotage operations, misdirect your unit. Do not reveal yourself unless you have no other choice.
 
-roles-antag-clfveteran-name = CLF Veteran
+roles-antag-clfveteran-name = INSFOR Veteran
 roles-antag-clfveteran-objective = Reignite the cause if you see fit or live your new life in peace.
 clfveteran-role-greeting = You left that life behind but sometimes the call of freedom rings back to you. Law enforcement know you're in the colony but don't know your name.
 

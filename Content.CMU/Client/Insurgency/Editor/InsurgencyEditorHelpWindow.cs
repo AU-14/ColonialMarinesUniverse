@@ -23,20 +23,20 @@ public sealed class InsurgencyEditorHelpWindow : DefaultWindow
         InsforUiStyle.Apply(this);
 
         Intro(body,
-            "An INSFOR faction is one insurgent cell the CLF leader can pick after spawning. You fill in who they are, " +
+            "An INSFOR faction is one insurgent cell the INSFOR leader can pick after spawning. You fill in who they are, " +
             "what money buys them points, what their leader's Heavy Cell Kit can drop, and what each role gets in their " +
             "\"A Package\". Nothing here needs a prototype id typed by hand: every entity, job, and icon is chosen from a " +
             "searchable picker. The server re-checks and clamps everything you save, so you cannot break the round with a bad value.");
 
         Section(body, "The faction list (left) and the  *  mark",
-            "The left column lists every saved faction plus the built-in vanilla CLF at the top. A faction shows a  *  next " +
+            "The left column lists every saved faction plus the built-in vanilla INSFOR at the top. A faction shows a  *  next " +
             "to its name when it is set to oppose the GOVFOR side the current round rolled, i.e. it is a valid pick this round. " +
             "No star just means it does not target this round's GOVFOR; it is still fine to edit. Click a faction to edit it, " +
             "or New faction to start blank.");
 
         Section(body, "Identity",
             "Title: the faction's name, shown in the pick list and the reveal popup.\n" +
-            "Recruited message: the briefing a freshly recruited member reads (for example via the tattoo gun). Blank uses the default CLF line.\n" +
+            "Recruited message: the briefing a freshly recruited member reads (for example via the tattoo gun). Blank uses the default INSFOR line.\n" +
             "Description / Roleplay style: shown in the antag briefing and the reveal popup so members know who they are and how they are meant to play.\n" +
             "Flag entity: an in-world flag prop, picked from the catalog (optional).\n" +
             "Status icon: the faction membership icon members show to each other, picked from the icon list.");
@@ -62,8 +62,8 @@ public sealed class InsurgencyEditorHelpWindow : DefaultWindow
             "Leave the list empty to keep the plain-dollars behavior. The value is always at least 1 so a submission can never mint free points.");
 
         Section(body, "Default cell-kit machines",
-            "Tick the well-known CLF machines (analyzer, intel computer, objectives console, tech tree console, fax) you want the leader's " +
-            "Heavy Cell Kit to be able to place. Their money-to-points wiring is the normal CLF behavior; no extra setup is needed.");
+            "Tick the well-known INSFOR machines (analyzer, intel computer, objectives console, tech tree console, fax) you want the leader's " +
+            "Heavy Cell Kit to be able to place. Their money-to-points wiring is the normal INSFOR behavior; no extra setup is needed.");
 
         Section(body, "Cell kit - other placeable entities",
             "Any additional single entities the leader can free-place from the Heavy Cell Kit (lamps, barricades, props, and so on). " +
@@ -78,7 +78,7 @@ public sealed class InsurgencyEditorHelpWindow : DefaultWindow
             "  - Uses cell intel points: items are paid from the cell's shared intel points (money at the intel computer stocks it) " +
             "instead of the buyer's own points.\n" +
             "  - Use base model's own arsenal: ignore the sections below and keep the base entity's built-in stock. Only for reusing a " +
-            "fully-made vendor (like the CLF requisitions rack); leave off for a normal custom vendor.");
+            "fully-made vendor (like the INSFOR requisitions rack); leave off for a normal custom vendor.");
 
         Section(body, "Vendor sections and items",
             "A vendor is split into sections (categories). Per section:\n" +
@@ -99,7 +99,7 @@ public sealed class InsurgencyEditorHelpWindow : DefaultWindow
             "Save (server / Default): writes it to the server database as a host faction.\n" +
             "Save as local Custom: writes it to your machine only, so it shows up in the leader's Custom list.\n" +
             "Apply for round: immediately applies this faction to the current round's cell.\n" +
-            "Delete: removes a saved faction (the built-in vanilla CLF cannot be deleted).");
+            "Delete: removes a saved faction (the built-in vanilla INSFOR cannot be deleted).");
     }
 
     private static void Intro(BoxContainer body, string text)

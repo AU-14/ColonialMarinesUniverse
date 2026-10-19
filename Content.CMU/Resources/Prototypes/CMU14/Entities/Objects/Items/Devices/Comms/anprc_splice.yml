@@ -2,7 +2,7 @@
   parent: BaseItem
   id: AU14CLFNetSpliceKit
   name: net splice kit
-  suffix: CLF, Sapper
+  suffix: INSFOR, Sapper
   description: >-
     A junction tap wound out of stolen feeder cable, a keying module, and a band scope
     built out of parts that did not start life together. Clamp it onto a mast's feeder
@@ -20,7 +20,7 @@
   parent: BaseStructure
   id: AU14CLFNetSpliceTap
   name: feeder tap
-  suffix: CLF
+  suffix: INSFOR
   description: >-
     A junction box wired into the mast's feeder, humming to itself. Nothing about it
     matches the rest of the hardware.

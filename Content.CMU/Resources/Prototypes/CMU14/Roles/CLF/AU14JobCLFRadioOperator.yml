@@ -79,7 +79,7 @@
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointCLFRadioOperator
-  name: Spawn Point CLF Radio Operator
+  name: Spawn Point INSFOR Radio Operator
   components:
   - type: SpawnPoint
     job_id: AU14JobCLFRadioOperator

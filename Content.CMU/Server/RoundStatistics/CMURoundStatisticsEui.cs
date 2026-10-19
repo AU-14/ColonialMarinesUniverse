@@ -89,7 +89,7 @@ public sealed partial class CMURoundStatisticsEui : BaseEui
                     CMURoundStatisticsPreset.Insurgency,
                     "Insurgency",
                     "Govfor",
-                    "CLF",
+                    "INSFOR",
                     0,
                     0,
                     0,

@@ -50,8 +50,8 @@
 - type: entity
   parent: RMCCommunicationsConsoleBase
   id: RMCTechTreeConsoleCLF
-  name: CLF tech tree console
-  description: A CLF tech console used to make tech purchases for CLF.
+  name: INSFOR tech tree console
+  description: A INSFOR tech console used to make tech purchases for INSFOR.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi

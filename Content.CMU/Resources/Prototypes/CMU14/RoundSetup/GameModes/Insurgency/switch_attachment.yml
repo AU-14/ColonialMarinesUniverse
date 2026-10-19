@@ -7,7 +7,7 @@
   parent: [ RMCUnderAttachmentBase, RMCAttachableToggleableBase ]
   id: AU14AttachmentSwitch
   name: switch
-  suffix: CLF, Sapper
+  suffix: INSFOR, Sapper
   description: A tiny inverted sear chip that drops into a trigger group. Flip it on and the gun simply stops asking when to stop firing. Utterly illegal, wildly inaccurate, and prone to jamming.
   components:
   - type: Sprite

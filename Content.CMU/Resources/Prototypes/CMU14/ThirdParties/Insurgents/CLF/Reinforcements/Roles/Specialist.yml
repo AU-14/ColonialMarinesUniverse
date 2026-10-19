@@ -48,7 +48,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicCLF
   id: CMUIntelThirdPartyCLFSpecialistReinforcements
-  name: CLF Specialist Reinforcements
+  name: INSFOR Specialist Reinforcements
   components:
   - type: GhostRoleApplySpecial
   - type: GhostRole

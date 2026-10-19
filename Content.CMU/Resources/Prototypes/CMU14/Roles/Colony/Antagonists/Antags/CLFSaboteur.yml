@@ -35,7 +35,7 @@
 - type: entity
   parent: BaseMindRoleAntag
   id: MindRoleCLFSaboteur
-  name: CLF Saboteur Mind Role
+  name: INSFOR Saboteur Mind Role
   components:
   - type: MindRole
     antagPrototype: CLFSaboteurRole
@@ -91,7 +91,7 @@
 - type: entity
   parent: CMSatchel
   id: CMUSatchelCLF
-  suffix: CLF Saboteur
+  suffix: INSFOR Saboteur
   components:
   - type: IgnoreContentsSize
     items:

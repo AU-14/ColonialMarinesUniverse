@@ -122,7 +122,7 @@
     specificJob: AU14JobGOVFORPlatCo
 
 - type: entity
-  name: Kill the CLF Cell Leader
+  name: Kill the INSFOR Cell Leader
   parent: MarkerBase
   id: killcelleaderobjective
   components:

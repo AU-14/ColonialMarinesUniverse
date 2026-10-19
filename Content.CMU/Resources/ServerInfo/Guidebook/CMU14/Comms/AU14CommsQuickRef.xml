@@ -49,7 +49,7 @@
   The AN/PRC control panel can be used by:
 
   - [bold]GOVFOR and OPFOR[/bold] - Commanding Officer, Adjutant, staff officers, engineering officers, intelligence officers, synthetics, Squad Leaders, Fireteam Leaders, and Radio Traffic Operators
-  - [bold]CLF[/bold] - Cell Leader and Radio Operator
+  - [bold]INSFOR[/bold] - Cell Leader and Radio Operator
   - anyone who has read a [bold]field radio operator's pamphlet[/bold]
 
   The handset can be used without radio-operator training.
@@ -110,7 +110,7 @@
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">CLF relay set</Box>
+      <Box Margin="4">INSFOR relay set</Box>
     </ColorBox>
     <ColorBox>
       <Box Margin="4">0-35 tiles</Box>
@@ -120,7 +120,7 @@
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">CLF base station</Box>
+      <Box Margin="4">INSFOR base station</Box>
     </ColorBox>
     <ColorBox>
       <Box Margin="4">0-55 tiles</Box>
@@ -140,13 +140,13 @@
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">CLF feeder tap</Box>
+      <Box Margin="4">INSFOR feeder tap</Box>
     </ColorBox>
     <ColorBox>
       <Box Margin="4">Same as host mast or array</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Adds CLF nets without changing existing coverage.</Box>
+      <Box Margin="4">Adds INSFOR nets without changing existing coverage.</Box>
     </ColorBox>
 
     <ColorBox>
@@ -172,14 +172,14 @@
   - powered communications array
   - vehicle radio
   - powered field antenna mast keyed to your faction
-  - CLF clandestine base station or relay set
-  - mast or array carrying a CLF feeder tap
+  - INSFOR clandestine base station or relay set
+  - mast or array carrying a INSFOR feeder tap
 
   Colony and civilian channels are not relay-gated.
 
   ## Net splicing
 
-  A CLF Radio Operator can use a [bold]net splice kit[/bold] to add CLF nets to compatible communications infrastructure.
+  A INSFOR Radio Operator can use a [bold]net splice kit[/bold] to add INSFOR nets to compatible communications infrastructure.
 
   Splicing does not remove or interfere with the host's existing nets.
 
@@ -247,8 +247,8 @@
   - a failed junction remains faulted for 90 seconds
   - junctions spark while being worked and while faulted
   - an installed tap can be removed in eight seconds
-  - removing a tap returns a CLF fill card
-  - opening a spliced field mast's feed knocks the tap off and drops its CLF fill card
+  - removing a tap returns a INSFOR fill card
+  - opening a spliced field mast's feed knocks the tap off and drops its INSFOR fill card
 
   ## Antennas
 
@@ -287,7 +287,7 @@
       <Box Margin="4">[bold]WIRE[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">CLF relay set</Box>
+      <Box Margin="4">INSFOR relay set</Box>
     </ColorBox>
     <ColorBox>
       <Box Margin="4">35 clear / 50 degraded while stationary; half standard while moving</Box>

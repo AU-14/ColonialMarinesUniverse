@@ -68,7 +68,7 @@
 - type: entity
   parent: AU14AnalyzerMachine
   id: AU14AnalyzerMachineCLF
-  name: Analyzer Machine (CLF)
+  name: Analyzer Machine (INSFOR)
   description: A Colonial Liberation Front intelligence terminal, wired together from salvaged parts and whatever the militias could liberate. It works, mostly. The first thing anyone does to one of these is take the screw out of the panel.
   components:
   - type: ContainerContainer

@@ -205,8 +205,8 @@
 
 - type: entity
   parent: RMCMapInsertSolarisBase
-  id: RMCMapInsertSolarisCLFMining
-  name: CLF Mining
+  id: RMCMapInsertSolarisCLFMining # CMU14: INSFOR display text
+  name: INSFOR Mining
   suffix: Insert Solaris
   components:
   - type: MapInsert

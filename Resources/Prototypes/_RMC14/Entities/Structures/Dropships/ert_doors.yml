@@ -59,8 +59,8 @@
 
 - type: entity
   parent: CMAlamoDoor
-  id: RMCCLFCrewHatch
-  name: CLF crew hatch
+  id: RMCCLFCrewHatch # CMU14: INSFOR display text
+  name: INSFOR crew hatch
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Dropships/Airlocks/clf_airlock.rsi

@@ -241,7 +241,7 @@ public sealed partial class ObjFetchAnalyzerSystem : EntitySystem
 
             QueueDel(inserted);
             _objCtrl.AwardRawPointsToFaction(ClfFaction, points);
-            msg = $"Analyzer credited {points} point(s) to CLF for {amount} {name}.";
+            msg = $"Analyzer credited {points} point(s) to INSFOR for {amount} {name}.";
         }
         else
         {
@@ -258,7 +258,7 @@ public sealed partial class ObjFetchAnalyzerSystem : EntitySystem
                 _objCtrl.AwardRawPointsToFaction(ClfFaction, points);
 
             msg = points > 0
-                ? $"Analyzer credited {points} point(s) to CLF. ({banked}/{perPoint} until next point)"
+                ? $"Analyzer credited {points} point(s) to INSFOR. ({banked}/{perPoint} until next point)"
                 : $"Analyzer banked {amount} {name}. ({banked}/{perPoint} until next point)";
         }
 
@@ -286,7 +286,7 @@ public sealed partial class ObjFetchAnalyzerSystem : EntitySystem
             : string.Empty;
 
         var msg = points > 0
-            ? $"Analyzer credited {points} point(s) to CLF.{banked}"
+            ? $"Analyzer credited {points} point(s) to INSFOR.{banked}"
             : $"Analyzer banked {credits} cr. ({component.CashStored}/{CashPerPoint} cr. until next point).";
 
         _popupSystem.PopupEntity(msg, uid);

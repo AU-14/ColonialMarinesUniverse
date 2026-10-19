@@ -52,7 +52,7 @@
 - type: entity
   parent: BaseMindRoleAntag
   id: MindRoleCLFVeteran
-  name: CLF Veteran Mind Role
+  name: INSFOR Veteran Mind Role
   components:
   - type: MindRole
     antagPrototype: CLFVeteranRole

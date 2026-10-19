@@ -6,7 +6,7 @@
   <Box>
     <GuideEntityEmbed Entity="AU14HeadsetGovforMarineFTL" Caption="Squad Headset"/>
     <GuideEntityEmbed Entity="AU14HeadsetGovforCommand" Caption="Command Headset"/>
-    <GuideEntityEmbed Entity="AU14CLFHeadset" Caption="CLF Earpiece"/>
+    <GuideEntityEmbed Entity="AU14CLFHeadset" Caption="INSFOR Earpiece"/>
   </Box>
 
   ## Talking on it
@@ -35,8 +35,8 @@
   - A command-post antenna mast.
   - A powered shipboard communications array.
   - A vehicle radio, covering little more than the hull it is bolted into.
-  - A CLF base station or relay set, staked down, for CLF nets.
-  - Any mast or array the CLF have spliced a tap into, again for CLF nets.
+  - A INSFOR base station or relay set, staked down, for INSFOR nets.
+  - Any mast or array the INSFOR have spliced a tap into, again for INSFOR nets.
 
   With none of those in reach your net is not weak. It is dead. You will speak and nothing at all will happen.
 
@@ -82,7 +82,7 @@
 
   ## Clipped earpieces
 
-  Some people are not issued a headset at all. The CLF wear a [bold]concealable earpiece[/bold] instead, and it works differently in ways worth knowing.
+  Some people are not issued a headset at all. The INSFOR wear a [bold]concealable earpiece[/bold] instead, and it works differently in ways worth knowing.
 
   An earpiece is a uniform accessory. Clip it to a garment you are wearing and it puts the net straight into your ears - there is no headset in your ears slot to examine, and nothing an enemy can see. Take the garment off, or pull the earpiece out of it, and you are off the net immediately.
 

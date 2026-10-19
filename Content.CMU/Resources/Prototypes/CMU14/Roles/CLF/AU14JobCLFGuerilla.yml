@@ -66,7 +66,7 @@
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointCLFGuerilla
-  name: Spawn Point CLF Guerilla
+  name: Spawn Point INSFOR Guerilla
   components:
   - type: SpawnPoint
     job_id: AU14JobCLFGuerilla

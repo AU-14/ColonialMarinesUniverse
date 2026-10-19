@@ -24,8 +24,8 @@
 
 - type: entity
   parent: RMCMapInsertFiorinaBase
-  id: RMCMapInsertFiorinaRocinanteCLF
-  name: Rocinante - CLF
+  id: RMCMapInsertFiorinaRocinanteCLF # CMU14: INSFOR display text
+  name: Rocinante - INSFOR
   suffix: Insert Fiorina
   components:
   - type: MapInsert

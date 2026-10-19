@@ -149,8 +149,8 @@
 # CLF
 - type: entity
   parent: RMCArmbandBase
-  id: RMCCLFArmband
-  name: CLF armband
+  id: RMCCLFArmband # CMU14: INSFOR display text
+  name: INSFOR armband
   description: A crudely sewn armband. It's dyed in the colors of the Colonial Liberation Front.
   components:
   - type: Sprite
@@ -166,8 +166,8 @@
 
 - type: entity
   parent: RMCArmbandBase
-  id: RMCCLFCellLeaderArmband
-  name: CLF cell leader armband
+  id: RMCCLFCellLeaderArmband # CMU14: INSFOR display text
+  name: INSFOR cell leader armband
   description: A crudely sewn armband. It's dyed in the colors of the Colonial Liberation Front.
   components:
   - type: Sprite

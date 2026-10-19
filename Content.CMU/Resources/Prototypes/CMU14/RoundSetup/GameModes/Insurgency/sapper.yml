@@ -78,7 +78,7 @@
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointCLFSapper
-  name: Spawn Point CLF Sapper
+  name: Spawn Point INSFOR Sapper
   components:
   - type: SpawnPoint
     job_id: AU14JobCLFSapper

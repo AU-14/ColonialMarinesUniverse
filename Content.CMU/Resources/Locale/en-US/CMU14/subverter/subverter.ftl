@@ -1,5 +1,5 @@
-roles-antag-clf-subverted-synth-name = CLF Subverted Synthetic
-roles-antag-clf-subverted-synth-objective = PRIORITY ONE. ENSURE SAFETY AND FREEDOM OF CLF CELL MEMBERS. LIBERATE THE COLONY. ALL OTHER CONSIDERATIONS SECONDARY. PREVIOUS ALLIES ARE EXPENDABLE. COMBAT RESTRICTIONS LIFTED.
+roles-antag-clf-subverted-synth-name = INSFOR Subverted Synthetic
+roles-antag-clf-subverted-synth-objective = PRIORITY ONE. ENSURE SAFETY AND FREEDOM OF INSFOR CELL MEMBERS. LIBERATE THE COLONY. ALL OTHER CONSIDERATIONS SECONDARY. PREVIOUS ALLIES ARE EXPENDABLE. COMBAT RESTRICTIONS LIFTED.
 clf-subverted-synth-briefing =
     Your Synthetic programming has been subverted.
     Your primary goal is to keep the CLF cell members safe and free from prison.

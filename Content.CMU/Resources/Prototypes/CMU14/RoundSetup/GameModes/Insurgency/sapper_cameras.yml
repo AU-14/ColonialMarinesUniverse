@@ -26,7 +26,7 @@
   parent: BaseItem
   id: AU14CLFCameraRelay
   name: spy camera relay
-  suffix: CLF, Sapper
+  suffix: INSFOR, Sapper
   description: A pocket relay that quietly ties the cell's spy cameras to their monitor. Keep it anywhere in range of both.
   components:
   - type: Sprite
@@ -51,8 +51,8 @@
 - type: entity
   parent: BaseItem
   id: AU14CLFCameraMonitor
-  name: CLF camera monitor
-  suffix: CLF, Sapper
+  name: INSFOR camera monitor
+  suffix: INSFOR, Sapper
   description: A patched-together handheld monitor wired into the cell's hidden spy cameras.
   components:
   - type: Sprite
@@ -83,7 +83,7 @@
   parent: BaseItem
   id: AU14CLFSpyCamera
   name: spy camera
-  suffix: CLF, Sapper
+  suffix: INSFOR, Sapper
   description: A tiny pinhole camera the cell can pocket, drop, or anchor to watch an approach and feed it back to their monitor.
   components:
   - type: Sprite

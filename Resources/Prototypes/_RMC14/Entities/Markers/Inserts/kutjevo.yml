@@ -57,8 +57,8 @@
 
 - type: entity
   parent: RMCMapInsertBase
-  id: RMCMapInsertKutjevoCLFSmugglers
-  name: CLF Smugglers
+  id: RMCMapInsertKutjevoCLFSmugglers # CMU14: INSFOR display text
+  name: INSFOR Smugglers
   suffix: Insert Kutjevo
   components:
   - type: MapInsert

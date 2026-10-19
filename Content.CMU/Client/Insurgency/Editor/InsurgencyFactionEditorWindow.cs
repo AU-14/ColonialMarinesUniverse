@@ -868,9 +868,9 @@ public sealed class InsurgencyFactionEditorWindow : DefaultWindow
     private static readonly (string Label, string Proto)[] DefaultMachines =
     {
         ("Analyzer machine", "AU14AnalyzerMachineCLF"),
-        ("CLF intel computer", "CMUComputerIntelCLFClaimable"),
-        ("CLF objectives console", "ComputerObjectivesCLF"),
-        ("CLF tech tree console", "RMCTechTreeConsoleCLF"),
+        ("INSFOR intel computer", "CMUComputerIntelCLFClaimable"),
+        ("INSFOR objectives console", "ComputerObjectivesCLF"),
+        ("INSFOR tech tree console", "RMCTechTreeConsoleCLF"),
         ("Fax machine", "CMFaxCLF"),
     };
 
