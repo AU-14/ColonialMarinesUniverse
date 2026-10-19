@@ -1,0 +1,126 @@
+# cmss13 PR 7895 rations without an RMC equivalent.
+
+- type: entity
+  parent: CMMRE
+  id: CMUMREFSR
+  name: FSR combat ration
+  description: First Strike Ration, produced by the same manufacturer that produces MREs for UA militaries, but oriented on civilian and private markets.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_fsr.rsi
+  - type: Item
+    sprite: CMU14/Objects/Consumable/MRE/mre_fsr.rsi
+  - type: StorageFill
+    contents:
+    - id: CMUMREPacketFSRMainBonelessPorkRibs
+      orGroup: main
+    - id: CMUMREPacketFSRMainGrilledChicken
+      orGroup: main
+    - id: CMUMREPacketFSRMainPizzaSquare
+      orGroup: main
+    - id: CMUMREPacketFSRMainChickenTender
+      orGroup: main
+    - id: CMUMREPacketFSRMainPepperoniPizzaSquare
+      orGroup: main
+    - id: CMUMREPacketFSRMainMeatSpaghetti
+      orGroup: main
+    - id: CMUMREPacketFSRMainGrilledChickenBreast
+      orGroup: main
+    - id: CMUMREPacketFSRSideCracker
+      orGroup: side
+    - id: CMUMREPacketFSRSideRisotto
+      orGroup: side
+    - id: CMUMREPacketFSRSideRiceOnigiri
+      orGroup: side
+    - id: CMUMREPacketFSRSideCornbread
+      orGroup: side
+    - id: CMUMREPacketFSRSideTortillas
+      orGroup: side
+    - id: CMUMREPacketFSRSideCinnamonAppleSlices
+      orGroup: side
+    - id: CMUMREPacketFSRSnackBiscuit
+      orGroup: snack
+    - id: CMUMREPacketFSRSnackMeatballs
+      orGroup: snack
+    - id: CMUMREPacketFSRSnackPretzels
+      orGroup: snack
+    - id: CMUMREPacketFSRSnackSushi
+      orGroup: snack
+    - id: CMUMREPacketFSRSnackPeanuts
+      orGroup: snack
+    - id: CMUMREPacketFSRDessertSpicedApples
+      orGroup: dessert
+    - id: CMUMREPacketFSRDessertChocolateBrownie
+      orGroup: dessert
+    - id: CMUMREPacketFSRDessertSugarCookie
+      orGroup: dessert
+    - id: CMUMREPacketFSRDessertCocoBar
+      orGroup: dessert
+    - id: CMUMREPacketFSRDessertFlan
+      orGroup: dessert
+    - id: CMUMREPacketFSRDessertHoneyFlan
+      orGroup: dessert
+    - id: CMUMREPacketFSRDessertCookie
+      orGroup: dessert
+    - id: CMUMREPacketFSRDessertLemonPie
+      orGroup: dessert
+    - id: CMUMREPacketFSRDessertKeyLimePie
+      orGroup: dessert
+    - id: CMUMRESpreadCheese
+      orGroup: spread
+    - id: CMUMRESpreadJalapeno
+      orGroup: spread
+    - id: CMUMRESpreadPeanutButter
+      orGroup: spread
+    - id: CMUMREBeverageGrape
+      orGroup: beverage
+    - id: CMUMREBeverageOrange
+      orGroup: beverage
+    - id: CMUMREBeverageLemonlime
+      orGroup: beverage
+    - id: CMUMREBeverageChocolate
+      orGroup: beverage
+    - id: CMUMREBeverageChocolateHazelnut
+      orGroup: beverage
+    - id: RMCMREInstantPowderOrange
+      orGroup: beverage
+    - id: RMCMREInstantPowderWatermelon
+      orGroup: beverage
+    - id: RMCMREInstantPowderApple
+      orGroup: beverage
+    - id: RMCMREInstantPowderPineapple
+      orGroup: beverage
+    - id: RMCMREInstantPowderGrape
+      orGroup: beverage
+    - id: CMUMRESporkFSR
+    - id: CMDrinkWEYAWaterBottle30
+    - id: CMFortuneCookie
+      prob: 0.333
+
+- type: entity
+  parent: RMCBoxMREEmpty
+  id: CMUBoxMREFSREmpty
+  name: box of FSRs (x12)
+
+- type: entity
+  parent: CMUBoxMREFSREmpty
+  id: CMUBoxMREFSR
+  name: box of FSRs (x12)
+  suffix: Filled
+  components:
+  - type: CMItemSlots
+    startingItem: CMUMREFSR
+
+- type: entity
+  parent: RMCBoxMREEmpty
+  id: CMUBoxMREWeYaPMCEmpty
+  name: box of PMC CFRs (x12)
+
+- type: entity
+  parent: CMUBoxMREWeYaPMCEmpty
+  id: CMUBoxMREWeYaPMC
+  name: box of PMC CFRs (x12)
+  suffix: Filled
+  components:
+  - type: CMItemSlots
+    startingItem: RMCMREWeYaPMC

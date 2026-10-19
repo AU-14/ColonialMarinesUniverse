@@ -36,6 +36,7 @@
           cost: 25
           increase: 6
           repurchasable: true
+          maxPurchases: 3
           events:
           - !type:TechPartySpawnEvent
             thirdPartyId: CLFCellReinforcementsIntel

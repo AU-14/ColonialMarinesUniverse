@@ -30,6 +30,7 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
     [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
     [Dependency] private TagSystem _tag = default!;
     [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private Robust.Shared.Timing.IGameTiming _timing = default!;
 
     private static readonly ProtoId<TagPrototype> CurrencyTag = "Currency";
 
@@ -131,6 +132,8 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
             return;
         if (comp.CalledParties.Contains(msg.ThirdPartyId))
             return;
+        if (comp.CalledParties.Count >= comp.MaxCallIns || _timing.CurTime < comp.NextCallInAt)
+            return;
         if (comp.CorporateBudget < cost)
             return;
         if (!_proto.TryIndex<ThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto))
@@ -143,11 +146,13 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
         _thirdParty.SpawnThirdParty(partyProto, spawnProto, false);
 
         // Deduct from ALL corporate consoles (they share one budget)
+        var nextCallIn = _timing.CurTime + comp.CallInCooldown;
         var q = EntityQueryEnumerator<CorporateConsoleComponent>();
         while (q.MoveNext(out _, out var c))
         {
             c.CorporateBudget -= cost;
             c.CalledParties.Add(msg.ThirdPartyId);
+            c.NextCallInAt = nextCallIn;
         }
 
         UpdateAllUi();
@@ -232,7 +237,11 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
                 thirdParties[id] = (proto.DisplayName ?? proto.ID, cost);
         }
         _ui.SetUiState(uid, CorporateConsoleThirdPartyUi.Key,
-            new CorporateConsoleThirdPartyBuiState(comp.CorporateBudget, thirdParties, comp.CalledParties));
+            new CorporateConsoleThirdPartyBuiState(comp.CorporateBudget, thirdParties, comp.CalledParties)
+            {
+                CallsLeft = Math.Max(0, comp.MaxCallIns - comp.CalledParties.Count),
+                NextCallInAt = comp.NextCallInAt,
+            });
     }
 
     private void UpdateAllUi()

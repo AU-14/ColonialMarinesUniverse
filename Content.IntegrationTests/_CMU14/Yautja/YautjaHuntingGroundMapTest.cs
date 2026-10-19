@@ -252,6 +252,44 @@ public sealed class YautjaHuntingGroundMapTest
         await pair.CleanReturnAsync();
     }
 
+    // prey used to shoot or dig through the preserve rock to the edge fog and walk out
+    [Test]
+    public async Task HuntingGroundWallsCannotBeBrokenOrMined()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var resources = server.ResolveDependency<IResourceManager>();
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var factory = server.EntMan.ComponentFactory;
+            var walls = 0;
+
+            Assert.Multiple(() =>
+            {
+                foreach (var path in new[] { JungleMoonPath, DesertMoonPath, DesertMoonCavesPath })
+                foreach (var id in CountMapPrototypes(resources, path).Keys)
+                {
+                    // anything that seals a tile off counts, rock included
+                    if (!prototypes.TryIndex<EntityPrototype>(id, out var proto) ||
+                        !proto.Components.ContainsKey(factory.GetComponentName<Content.Server.Atmos.Components.AirtightComponent>()))
+                    {
+                        continue;
+                    }
+
+                    walls++;
+                    Assert.That(proto.Components.ContainsKey(factory.GetComponentName<Content.Server.Destructible.DestructibleComponent>()), Is.False, $"{id} on {path} can be destroyed");
+                    Assert.That(proto.Components.ContainsKey(factory.GetComponentName<Content.Shared.Gatherable.Components.GatherableComponent>()), Is.False, $"{id} on {path} can be mined");
+                }
+            });
+
+            Assert.That(walls, Is.GreaterThan(0));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task HuntingGroundMapsKeepSourceGateGeometryAndYoungbloodDestinations()
     {

@@ -509,6 +509,8 @@
     thirdAmmoContainerSlotId: cmu_m90_squall_ammo
     thirdAmmoTypes:
     - m90_kinetic
+    # own location, inheriting PortFore made the chin gun share the port fore weapon's number
+    location: Chin
   - type: Sprite
     layers:
     - state: equip_base_front

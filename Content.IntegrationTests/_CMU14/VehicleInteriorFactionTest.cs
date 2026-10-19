@@ -13,6 +13,8 @@ using Content.Shared._RMC14.Vehicle.Supply;
 using Content.Shared.Access;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
+using Content.Shared.Vehicle.Components;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests._CMU14;
@@ -91,9 +93,16 @@ public sealed class VehicleInteriorFactionTest : GameTest
             await Pair.RunTicksSync(2);
             await Server.WaitAssertion(() =>
             {
-                var supply = SEntMan.GetComponent<VehicleSupplyLiftComponent>(lift);
-                Assert.That(supply.ActiveVehicle, Is.Not.Null, "Exercise the real supply spawn path.");
-                vehicle = supply.ActiveVehicle!.Value;
+                foreach (var entity in Server.System<EntityLookupSystem>().GetEntitiesIntersecting(lift))
+                {
+                    if (!SEntMan.HasComponent<VehicleComponent>(entity))
+                        continue;
+
+                    vehicle = entity;
+                    break;
+                }
+
+                Assert.That(vehicle.Valid, Is.True, "Exercise the real supply spawn path.");
                 AssertInterior(vehicle, "opfor");
             });
         }
