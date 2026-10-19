@@ -34,8 +34,10 @@ ghost-target-window-tab-third-party = Third Party
 ghost-target-window-tab-survivors = Civilians
 ghost-target-window-tab-weya-pmc = WeYu/PMC
 ghost-target-window-tab-clf = CLF
-ghost-target-window-tab-spp = SPP
-ghost-target-window-tab-tse-royal = TSE/Royal
+# cmu edit start: lore names
+ghost-target-window-tab-spp = UPP
+ghost-target-window-tab-tse-royal = TWE/Royal
+# cmu edit end
 ghost-target-window-tab-cmb-provost = CMB/Provost
 ghost-target-window-tab-threat = Threat
 ghost-target-window-tab-cursed = Cursed
