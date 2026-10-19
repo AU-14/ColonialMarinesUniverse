@@ -80,11 +80,13 @@
       RadioTrafficOperator: 1
       SquadCombatTech: 2
       PlatoonCorpsman: 1
-    # the squad leader, RTO and corpsman can help build the FOB; the combat technicians keep their own skills
+      SquadRifleman: 2
+    # the squad leader, RTO, corpsman and riflemen can help build the FOB; the combat technicians keep their own skills
     skillRoles:
     - SquadSergeant
     - RadioTrafficOperator
     - PlatoonCorpsman
+    - SquadRifleman
     skills:
       RMCSkillConstruction: 3
       RMCSkillEngineer: 3

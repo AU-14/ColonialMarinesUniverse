@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.CMU14.Threats.Mobs.Wendigo.Lab;
+using Content.Shared.CMU14.Threats.Mobs.Wendigo.Pack;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
@@ -86,8 +87,9 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
                 continue;
             }
 
-            if (_entMan.TryGetComponent(uid, out XenoComponent? xeno)
-                && xeno.Role != LesserDroneRole)
+            // Natural Wendigos are pack mobs, not xenos, but they are the threat this rule ends on.
+            if ((_entMan.TryGetComponent(uid, out XenoComponent? xeno) && xeno.Role != LesserDroneRole)
+                || _entMan.HasComponent<CMUWendigoPackComponent>(uid))
             {
                 totalXeno++;
                 if (mobState.CurrentState == MobState.Dead || _threatRuleHelper.IsEvacuated(uid))

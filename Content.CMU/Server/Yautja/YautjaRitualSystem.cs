@@ -195,7 +195,7 @@ public sealed partial class YautjaRitualSystem : EntitySystem
             HasComp<YautjaComponent>(target) ||
             !TryComp<MobStateComponent>(target, out var mob) ||
             !_mob.IsAlive(target, mob) ||
-            (!HasComp<HumanoidProfileComponent>(target) && !HasComp<XenoComponent>(target)))
+            (!HasComp<HumanoidProfileComponent>(target) && !_trophy.IsXenoTrophyTarget(target)))
         {
             return false;
         }

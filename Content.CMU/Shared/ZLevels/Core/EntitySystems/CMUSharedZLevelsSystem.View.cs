@@ -143,7 +143,8 @@ public abstract partial class CMUSharedZLevelsSystem
             !_map.TryFindGridAt(aboveMapCoordinates, out var gridUid, out var mapAboveGrid))
             return false;
 
-        return !CMUZLevelOpeningCache.IsOpeningTile(gridUid, mapAboveGrid, worldPosition, _map, TilDefMan);
+        return _map.TryGetTileRef(gridUid, mapAboveGrid, worldPosition, out var tileRef) &&
+               !CMUZLevelOpeningCache.CanLookUpThrough(tileRef.Tile, TilDefMan);
     }
 
     public bool HasZLevelEye(CMUZLevelViewerComponent viewer, EntityUid targetMap)

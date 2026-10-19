@@ -61,6 +61,8 @@ public sealed partial class CMUMapBreathingSystem : EntitySystem
                 RemComp<CMUMapGrantedRespiratorComponent>(uid);
             }
         }
+
+        UpdateCallInKits();
     }
 
     private bool IsBreathingFromEmptyTank(EntityUid uid)
