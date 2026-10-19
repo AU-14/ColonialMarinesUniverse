@@ -1,4 +1,3 @@
-#pragma warning disable RA0002
 using System.Collections.Generic;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
