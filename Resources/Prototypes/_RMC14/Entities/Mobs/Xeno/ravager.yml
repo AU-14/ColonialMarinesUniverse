@@ -165,6 +165,8 @@
   parent: RMCXenoRavagerBase
   id: CMXenoRavager
   components:
+  - type: CMArmorPiercing
+    amount: 30
   - type: XenoShield
   - type: XenoLeap
     delay: 0
