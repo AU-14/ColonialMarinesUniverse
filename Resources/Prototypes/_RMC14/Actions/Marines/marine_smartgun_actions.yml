@@ -40,14 +40,19 @@
   description: Redirect your shots to the nearest visible enemy within two tiles of your cursor. Redirected shots lose 25% accuracy on standard smart guns. Enabling this substantially increases battery drain.
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Actions/marine_smart_gun_actions.rsi
-      state: aimassist
-    iconOn:
-      sprite: _RMC14/Actions/marine_smart_gun_actions.rsi
-      state: aimassist_off
     useDelay: 0.25
     itemIconStyle: NoItem
+  # cmu edit start: our actions take their icons from sprite layers
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_smart_gun_actions.rsi
+      state: aimassist
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Actions/marine_smart_gun_actions.rsi
+      state: aimassist_off
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
+  # cmu edit end
   - type: InstantAction
     event: !type:GunToggleAimAssistActionEvent
 
