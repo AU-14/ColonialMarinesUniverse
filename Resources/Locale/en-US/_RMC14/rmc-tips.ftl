@@ -45,8 +45,10 @@ rmc-tips-44 = Use materials wisely. Metal and plasteel are expensive.
 rmc-tips-45 = If you want someone to move out of your way, point at them (shift + middle click) and ask them to move. Catch up if you fall behind and ask your allies to wait; wait if you went ahead.
 rmc-tips-46 = Watch others' positions and firing lanes, don't move into their firing lanes and stop shooting when others move into yours.
 rmc-tips-47 = Never get captured by Xenomorphs. If you get captured, you will be another larva for the Xenomorphs.
-rmc-tips-48 = Xenomorphs can consume unconscious humans to bring back to the hive by dragging them onto themselves.
-rmc-tips-49 = Don't get too close to a barricade. Xenomorphs can devour you over them if you are next to them.
+# cmu edit start: devour is now haul
+rmc-tips-48 = Xenomorphs can haul unconscious humans back to the hive by dragging them onto themselves.
+rmc-tips-49 = Don't get too close to a barricade. Xenomorphs can haul you over them if you are next to them.
+# cmu edit end
 rmc-tips-50 = A lone person is a dead person. Stick together!
 rmc-tips-51 = Always reinforce barricades with barbed wire.
 rmc-tips-52 = You can climb over fences.

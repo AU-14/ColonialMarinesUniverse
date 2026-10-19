@@ -104,8 +104,8 @@
 - type: entity
   id: CMU14ActionXenoPathogenRegurgitate
   parent: ActionXenoBase
-  name: Regurgitate
-  description: Eject any devoured marines.
+  name: Release
+  description: Release the host you are hauling.
   components:
   - type: Action
     itemIconStyle: NoItem

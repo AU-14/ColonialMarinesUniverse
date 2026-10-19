@@ -1,5 +1,7 @@
 rmc-vent-crawling-welded = It's welded shut!
-rmc-vent-crawling-devoured = We're too full carrying a host to vent crawl!
+# cmu edit start
+rmc-vent-crawling-devoured = We cannot ventcrawl while hauling a host!
+# cmu edit end
 rmc-vent-crawling-primed = We're going to explode!!
 
 rmc-vent-crawling-full = It's full!

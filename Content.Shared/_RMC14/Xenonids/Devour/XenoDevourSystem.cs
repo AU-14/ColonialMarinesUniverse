@@ -389,6 +389,10 @@ public sealed partial class XenoDevourSystem : EntitySystem
 
         var targetName = Identity.Entity(target, EntityManager, xeno);
         var container = _container.EnsureContainer<ContainerSlot>(xeno, xeno.Comp.DevourContainerId);
+        // cmu edit start: hauled, not swallowed - the host stays visible in the xeno's grasp (cmss13 PR 8442)
+        container.ShowContents = true;
+        container.OccludesLight = false;
+        // cmu edit end
         if (!_container.Insert(target, container))
         {
             _popup.PopupEntity(Loc.GetString("cm-xeno-devour-failed", ("target", targetName)), xeno, xeno, PopupType.SmallCaution);

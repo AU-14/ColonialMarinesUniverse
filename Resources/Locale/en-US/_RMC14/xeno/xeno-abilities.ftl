@@ -169,7 +169,9 @@ cm-xeno-pheromones-start = You start emitting {$pheromones} pheromones
 cm-xeno-pheromones-stop = You stop emitting pheromones
 
 # Regurgitate
-cm-xeno-none-devoured = You haven't devoured anyone!
+# cmu edit start
+cm-xeno-none-devoured = We are not hauling anyone.
+# cmu edit end
 
 # Rest
 rmc-xeno-rest-cant-headbutt = You can't headbutt while resting!
