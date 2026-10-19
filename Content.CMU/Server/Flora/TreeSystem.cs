@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
+using Content.Server.CMU14.Forge;
 using Content.Shared.CMU14.Flora;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -24,6 +25,7 @@ public sealed class TreeSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedStackSystem _stack = default!;
     [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private readonly ToolWearSystem _wear = default!;
 
     private static readonly SoundSpecifier SplitSound = new SoundPathSpecifier("/Audio/Effects/chop.ogg");
 
@@ -64,6 +66,11 @@ public sealed class TreeSystem : EntitySystem
             {
                 Spawn(tree.Firewood, coords.Offset(_random.NextVector2(0.35f)));
             }
+
+            // An axe of wood or of stone wears with the blows.
+            _wear.Use(weapon, args.User);
+            if (TerminatingOrDeleted(weapon))
+                return;
         }
     }
 
@@ -81,6 +88,7 @@ public sealed class TreeSystem : EntitySystem
         _audio.PlayPvs(SplitSound, coords);
         _popup.PopupEntity(Loc.GetString("au14-log-split", ("log", log.Owner), ("tool", args.Used)), log, args.User);
         QueueDel(log);
+        _wear.Use(args.Used, args.User);
     }
 
     private bool IsAxe(EntityUid weapon, List<Robust.Shared.Prototypes.ProtoId<TagPrototype>> axes)

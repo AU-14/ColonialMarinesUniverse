@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-4.0",
+  "copyright": "The flint and steel, used as it is. Taken from crystall-punk-14 (Tools/flint.rsi). Created by omsoyk (Discord)",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "inhand-right",
+      "directions": 4
+    }
+  ]
+}
