@@ -1215,9 +1215,16 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
         var stack = new Stack<ConstructionGraphNode>();
         stack.Push(targetNode);
+
+        // RUMC: the nodes already looked at. The graphs go back and forth (a thing built is taken down again to where it began), and a graph none of whose entities exists any more
+        // (the modular grenade, in this fork) had this walk go round in circles for ever: the tick that ticked "save the tiles" never ended and took the server down.
+        var seen = new HashSet<string>();
         while (stack.Count > 0)
         {
             var node = stack.Pop();
+            if (!seen.Add(node.Name))
+                continue;
+
             if (node.Entity.GetId(null, null, new(EntityManager)) is { } entityId &&
                 _prototype.HasIndex<EntityPrototype>(entityId))
             {
