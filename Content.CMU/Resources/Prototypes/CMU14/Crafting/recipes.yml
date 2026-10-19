@@ -442,7 +442,8 @@
   - stack: RUMCBrassParts
     amount: 4
 
-# The steel water pipes (the liquid pipes): the same as the brass ones, of an iron sheet and a ring for the joint.
+# The steel water pipes (the liquid pipes): the same as the brass ones, of sheets of metal. They were forged at the anvil, and crafted of a sheet and a steel
+# ring, which only the electric extruder makes; now they are crafted by hand of sheets alone, so that the pipes need no electricity.
 - type: craftRecipe
   id: RUMCCraftSteelWaterPipe
   name: au14-craft-recipe-steel-water-pipe
@@ -452,9 +453,7 @@
   - Hammering
   consumables:
   - stack: CMSteel
-    amount: 1
-  - stack: RUMCIronRing
-    amount: 1
+    amount: 2
 
 - type: craftRecipe
   id: RUMCCraftSteelWaterPipeDown
@@ -465,9 +464,7 @@
   - Hammering
   consumables:
   - stack: CMSteel
-    amount: 1
-  - stack: RUMCIronRing
-    amount: 2
+    amount: 3
 
 # The steel water pump is crafted by hand, of two machine hulls (it was forged at the anvil of an iron ingot).
 - type: craftRecipe

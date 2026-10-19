@@ -70,7 +70,4 @@ au14-anvil-recipe-brass-sheet = латунный лист
 
 au14-anvil-recipe-steel-drill-head = стальная буровая головка
 
-au14-anvil-recipe-steel-pipe = стальная труба
-
-au14-anvil-recipe-steel-pipe-down = стальная труба вниз
 
