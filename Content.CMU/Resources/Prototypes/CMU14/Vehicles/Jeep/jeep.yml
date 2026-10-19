@@ -1193,6 +1193,8 @@
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
       jeep-door-passenger: !type:ContainerSlot
+      vehicle-searchlight-left: !type:ContainerSlot
+      vehicle-searchlight-right: !type:ContainerSlot
   - type: ItemSlots
     slots:
       wheel-1:
@@ -1329,6 +1331,8 @@
       jeep-door-driver: !type:ContainerSlot
       jeep-door-passenger: !type:ContainerSlot
       jeep-tailgate: !type:ContainerSlot
+      vehicle-searchlight-left: !type:ContainerSlot
+      vehicle-searchlight-right: !type:ContainerSlot
   - type: ItemSlots
     slots:
       wheel-1:
@@ -1692,6 +1696,8 @@
       jeep-door-passenger: !type:ContainerSlot
       jeep-tailgate: !type:ContainerSlot
       turret: !type:ContainerSlot
+      vehicle-searchlight-left: !type:ContainerSlot
+      vehicle-searchlight-right: !type:ContainerSlot
   - type: ItemSlots
     slots:
       wheel-1:
@@ -1895,6 +1901,8 @@
       jeep-door-driver: !type:ContainerSlot
       jeep-door-passenger: !type:ContainerSlot
       jeep-tailgate: !type:ContainerSlot
+      vehicle-searchlight-left: !type:ContainerSlot
+      vehicle-searchlight-right: !type:ContainerSlot
   - type: ItemSlots
     slots:
       wheel-1:
