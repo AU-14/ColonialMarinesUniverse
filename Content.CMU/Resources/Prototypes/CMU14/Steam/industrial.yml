@@ -92,6 +92,40 @@
   - type: RecipeMachine
     speed: 2
 
+# The industrial solid-fuel press: the press that runs on planks, gray, and built of sheets of metal.
+- type: entity
+  parent: RUMCSolidFuelPress
+  id: RUMCIndustrialSolidFuelPress
+  name: industrial solid-fuel press
+  description: A heavy gray press that runs on wood instead of the grid, built of sheets of metal. Open it, put planks in for fuel, seat a mold and one or two ingots, and it presses them into a piece.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Industrial/fuel_press_industrial.rsi
+    state: press
+
+# The industrial steam grinder: the steam grinder, tinted gray, built of sheets of metal.
+- type: entity
+  parent: RUMCSteamGrinder
+  id: RUMCIndustrialSteamGrinder
+  name: industrial steam grinder
+  description: A gray shredder driven by steam, built of sheets of metal. Join a gas pipe with steam to it and it chews through every slot it can at once.
+  components:
+  - type: Sprite
+    color: "#a9b2bb"
+
+# The industrial condenser: the brass condenser in steel. It needs neither power nor steam, only a steady supply of the coolant.
+- type: entity
+  parent: RUMCBrassCondenser
+  id: RUMCIndustrialCondenser
+  name: industrial condenser
+  description: A steel condenser that needs no power, only a steady supply of the liquid that cools. A liquid comes in at one inlet and the coolant at the other, and with a material in its slot the liquid sets into solid pieces. Slag is cooled with water.
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Production/Steam/condenser_steel.rsi
+    state: condenser
+
 # The crate of the start of the industry. It is sealed and opens with a crowbar.
 - type: entity
   parent: RMCSecureCaseStrapped

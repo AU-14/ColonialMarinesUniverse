@@ -1,0 +1,94 @@
+# The industrial versions of the brass machines of the steam age: the same machines in steel, built of sheets of metal (CMSteel) with a smithing
+# hammer and no brass in them. The industrial steam extractor is with the other recipes of the extractor (Electric/electric_recipes.yml).
+
+- type: craftRecipe
+  id: RUMCCraftIndustrialSteelBoiler
+  name: au14-craft-recipe-industrial-boiler
+  output: RUMCSteelBoiler
+  time: 18
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 11
+  - stack: RMCWood
+    amount: 4
+
+- type: craftRecipe
+  id: RUMCCraftIndustrialIndustrialSteamGenerator
+  name: au14-craft-recipe-industrial-steam-generator
+  output: RUMCIndustrialSteamGenerator
+  time: 18
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 14
+
+- type: craftRecipe
+  id: RUMCCraftIndustrialIndustrialSteamSmelter
+  name: au14-craft-recipe-industrial-steam-smelter
+  output: RUMCIndustrialSteamSmelter
+  time: 18
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 14
+
+- type: craftRecipe
+  id: RUMCCraftIndustrialIndustrialSteamPress
+  name: au14-craft-recipe-industrial-steam-press
+  output: RUMCIndustrialSteamPress
+  time: 18
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 16
+
+- type: craftRecipe
+  id: RUMCCraftIndustrialIndustrialSteamDrill
+  name: au14-craft-recipe-industrial-steam-drill
+  output: RUMCIndustrialSteamDrill
+  time: 18
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 14
+
+- type: craftRecipe
+  id: RUMCCraftIndustrialIndustrialSolidFuelPress
+  name: au14-craft-recipe-industrial-solid-fuel-press
+  output: RUMCIndustrialSolidFuelPress
+  time: 18
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 16
+  - stack: RMCWood
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftIndustrialIndustrialSteamGrinder
+  name: au14-craft-recipe-industrial-steam-grinder
+  output: RUMCIndustrialSteamGrinder
+  time: 18
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 14
+
+- type: craftRecipe
+  id: RUMCCraftIndustrialIndustrialCondenser
+  name: au14-craft-recipe-industrial-condenser
+  output: RUMCIndustrialCondenser
+  time: 18
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 10
