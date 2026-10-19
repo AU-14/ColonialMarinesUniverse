@@ -12,6 +12,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodUSCMBonelessPorkRibs
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -25,6 +26,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodUSCMGrilledChicken
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -38,6 +40,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodUSCMPizzaSquare
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -51,6 +54,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodUSCMChickenTender
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -64,6 +68,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodUSCMPepperoniPizzaSquare
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -77,6 +82,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodUSCMMeatSpaghetti
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -90,6 +96,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodUSCMChiliConCarne
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -103,6 +110,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodUSCMNoodleSoup
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -116,6 +124,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodUSCMGrilledChickenBreast
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -129,6 +138,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodUSCMFeijoada
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase

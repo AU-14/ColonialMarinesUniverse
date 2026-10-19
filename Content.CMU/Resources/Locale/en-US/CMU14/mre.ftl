@@ -48,3 +48,5 @@ cmu-can-hiss-none = It doesn't make any hiss.
 cmu-can-hiss-small = It makes a small hiss.
 cmu-can-opened = You open the can.
 cmu-can-examine-sealed = It's sealed. Open it with a can opener or a knife.
+
+cmu-mre-name-with-entree = {$mre} ({$entree})

@@ -12,6 +12,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodWYBakedSalmon
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -25,6 +26,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodWYSmokyRibs
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -38,6 +40,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodWYBakedHam
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -51,6 +54,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodWYBeefsteak
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -233,6 +237,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodUSCMBonelessPorkRibs
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -246,6 +251,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodUSCMGrilledChicken
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -259,6 +265,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodUSCMChickenTender
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -272,6 +279,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodUSCMMeatSpaghetti
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -285,6 +293,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodUSCMGrilledChickenBreast
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase

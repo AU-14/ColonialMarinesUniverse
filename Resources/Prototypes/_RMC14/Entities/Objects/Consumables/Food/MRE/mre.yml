@@ -151,6 +151,9 @@
 #cmu edit end
   - type: FixedItemSizeStorage
   - type: RemoveOnlyStorage
+#cmu edit start: named after the main course it was packed with
+  - type: CMUMREEntreeName
+#cmu edit end
   - type: InteractedBlacklist
     blacklist:
       components:

@@ -12,6 +12,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodTWEBacon
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -25,6 +26,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodTWETomatoBeans
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -38,6 +40,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodTWEFishNRice
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -51,6 +54,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodTWERiceRamen
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase
@@ -64,6 +68,7 @@
   - type: SpawnItemsOnUse
     items:
     - id: CMUMREFoodTWEFishNChips
+  - type: CMUMREEntree
 
 - type: entity
   parent: CMMREComponentBase

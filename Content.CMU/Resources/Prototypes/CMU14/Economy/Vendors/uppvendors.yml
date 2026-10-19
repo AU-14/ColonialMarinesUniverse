@@ -228,6 +228,10 @@
         amount: 60
       - id: AU14BoxMREUPP
         amount: 10
+      - id: CMUCanOpenerCompact
+        amount: 30
+      - id: CMUCanOpener
+        amount: 10
     - name: Medical Supplies
       entries:
       - id: RuMCUPPPouchIFAKFill
