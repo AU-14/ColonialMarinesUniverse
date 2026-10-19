@@ -39,6 +39,7 @@ au14-craft-recipe-brass-water-pipe-down = Латунная водяная тру
 au14-craft-recipe-steel-water-pipe = Стальная водяная труба
 au14-craft-recipe-steel-water-pipe-down = Стальная водяная труба вниз
 au14-craft-recipe-brass-pump = Латунная водяная помпа
+au14-craft-recipe-steel-pump = Стальная водяная помпа
 au14-craft-recipe-fluid-barrel = Латунная бочка для жидкостей
 au14-craft-recipe-brass-condenser = Латунный конденсатор
 au14-craft-recipe-boiler = Бойлер

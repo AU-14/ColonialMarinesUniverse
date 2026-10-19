@@ -39,6 +39,7 @@ au14-craft-recipe-brass-water-pipe-down = Brass water pipe going down
 au14-craft-recipe-steel-water-pipe = Steel water pipe
 au14-craft-recipe-steel-water-pipe-down = Steel water pipe going down
 au14-craft-recipe-brass-pump = Brass water pump
+au14-craft-recipe-steel-pump = Steel water pump
 au14-craft-recipe-fluid-barrel = Brass fluid barrel
 au14-craft-recipe-brass-condenser = Brass condenser
 au14-craft-recipe-boiler = Boiler

@@ -469,6 +469,18 @@
   - stack: RUMCIronRing
     amount: 2
 
+# The steel water pump is crafted by hand, of two machine hulls (it was forged at the anvil of an iron ingot).
+- type: craftRecipe
+  id: RUMCCraftSteelPump
+  name: au14-craft-recipe-steel-pump
+  output: RUMCSteelPump
+  time: 12
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 2
+
 # Rope, twisted out of plant fiber cut from the bushes: the coil that is let down a pit.
 - type: craftRecipe
   id: RUMCCraftRope

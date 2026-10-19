@@ -27,4 +27,3 @@ au14-anvil-recipe-brass-sheet = brass sheet
 au14-anvil-recipe-steel-drill-head = steel drill head
 au14-anvil-recipe-steel-pipe = steel pipe
 au14-anvil-recipe-steel-pipe-down = steel pipe going down
-au14-anvil-recipe-steel-pump = steel water pump

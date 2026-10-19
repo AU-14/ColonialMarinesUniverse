@@ -74,4 +74,3 @@ au14-anvil-recipe-steel-pipe = стальная труба
 
 au14-anvil-recipe-steel-pipe-down = стальная труба вниз
 
-au14-anvil-recipe-steel-pump = стальной водяной насос
