@@ -339,7 +339,12 @@ namespace Content.Server.Light.EntitySystems
             UpdateVisualizer(ent);
 
             if (TryComp<ItemComponent>(ent, out var item))
-                _item.SetHeldPrefix(ent, "unlit", component: item);
+            {
+                // cmu edit start: same as burning out, so a doused flare also drops its lit inhand flame
+                _item.SetHeldPrefix(ent, component.HeldPrefixUnlit, component: item);
+                _appearance.SetData(ent, ToggleableVisuals.Enabled, false);
+                // cmu edit end
+            }
 
             if (HasComp<PhysicsComponent>(ent))
                 _physics.SetBodyType(ent, BodyType.Dynamic);
