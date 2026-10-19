@@ -534,7 +534,9 @@
   description: This isn't supposed to come off the gun. How did you get it?
   components:
   - type: Sprite
-    state: xm43e1_scope
+    # cmu edit start: old XM43E1 scope sprite
+    state: pmcscope
+    # cmu edit end
   - type: Tag
     tags:
     - RMCAttachmentRail
@@ -542,7 +544,9 @@
   - type: AttachableToggleable
     icon:
       sprite: _RMC14/Objects/Weapons/Guns/Attachments/rail.rsi
-      state: xm43e1_scope
+      # cmu edit start: old XM43E1 scope sprite
+      state: pmcscope
+      # cmu edit end
     actionName: Look through the XM43E1's Integrated Scope
     actionDesc: Lets you see further.
 

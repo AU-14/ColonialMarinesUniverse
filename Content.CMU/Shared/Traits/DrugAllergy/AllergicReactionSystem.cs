@@ -51,7 +51,7 @@ public sealed partial class AllergicReactionSystem : EntitySystem
             ("target", ent.Owner)), -1);
     }
 
-    public void TriggerReaction(EntityUid uid)
+    public void TriggerReaction(EntityUid uid, string? cause = null)
     {
         if (!TryComp<DrugAllergyComponent>(uid, out var comp) || comp.ReactionActive)
             return;
@@ -64,6 +64,7 @@ public sealed partial class AllergicReactionSystem : EntitySystem
             return;
 
         comp.ReactionActive = true;
+        comp.ReactionCause = cause;
         comp.ReactionStartTime = time;
         comp.NextTick = time;
         comp.NextStunCheck = time + comp.AsphyxiationDelay;
@@ -82,6 +83,11 @@ public sealed partial class AllergicReactionSystem : EntitySystem
 
         if (comp.Allergen is { } allergen)
             _rmcBloodstream.RemoveBloodstreamChemical(uid, allergen, FixedPoint2.MaxValue);
+
+        foreach (var extra in comp.ExtraAllergens)
+        {
+            _rmcBloodstream.RemoveBloodstreamChemical(uid, extra, FixedPoint2.MaxValue);
+        }
 
         if (!comp.ReactionActive)
             return;

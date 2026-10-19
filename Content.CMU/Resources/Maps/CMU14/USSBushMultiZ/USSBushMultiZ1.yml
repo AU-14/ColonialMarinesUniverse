@@ -10032,6 +10032,8 @@ entities:
   entities:
   - uid: 3561
     components:
+    - type: DropshipHijackDestination
+      defenseZone: Medbay
     - type: MetaData
       name: Random
     - type: Transform
@@ -10039,6 +10041,8 @@ entities:
       pos: -11.5,43.5
   - uid: 4002
     components:
+    - type: DropshipHijackDestination
+      defenseZone: Crew Quarters and Brig
     - type: MetaData
       name: Random
     - type: Transform
@@ -10046,6 +10050,8 @@ entities:
       pos: -0.5,-13.5
   - uid: 4003
     components:
+    - type: DropshipHijackDestination
+      defenseZone: Crew Quarters and Brig
     - type: MetaData
       name: Random
     - type: Transform
