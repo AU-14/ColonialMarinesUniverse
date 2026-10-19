@@ -91,6 +91,9 @@ entities:
     - type: SpreaderGrid
     - type: Shuttle
       dampingModifier: 0.25
+    - type: DropshipIntegrity
+      maxIntegrity: 4500
+      integrity: 4500
     - type: ImplicitRoof
     - type: GridPathfinding
     - type: Gravity
