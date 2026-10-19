@@ -1,7 +1,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateAttachmentNightVisionScope
-  name: night vision scope attachment crate (x5)
+  name: night vision scope attachment crate (x3)
   components:
   - type: StorageFill
     contents:
