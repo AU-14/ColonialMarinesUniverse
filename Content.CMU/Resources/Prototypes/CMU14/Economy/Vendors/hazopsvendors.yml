@@ -371,7 +371,7 @@
       - id: BedrollFolded
         amount: 20
 
-  
+
 - type: entity
   parent: ColMarTechBase
   id: AU14HAZOPSMGequipmentvendor
@@ -1068,3 +1068,84 @@
       entries:
       - id: CMSatchelMarine
         amount: 40
+
+- type: entity
+  parent: AU14VehicleCrewmanVendorUSCM
+  id: AU14VehicleCrewmanVendorHAZOPS
+  name: vehicle crewman vendor
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of support gear for vehicle crew.
+    Engineered to get vehicle crewmen fight-ready in seconds after cryogenic hypersleep or scramble orders.
+    The console shows many different options available, though they are all marked as temporarily out of stock.
+
+    Vehicle crew protocol: grab the essential maintenance jack.
+  components:
+  - type: AccessReader
+    access: [[ "AU14AccessGovforVehicleCrew" ], [ "AU14AccessOpforVehicleCrew" ]]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORVehicleCommander
+    - AU14JobOPFORVehicleCommander
+    - AU14JobGOVFORVehicleCrewman
+    - AU14JobOPFORVehicleCrewman
+    sections:
+    - name: Essential Equipment
+      takeAll: CMUAREssentialEquipment
+      entries:
+      - id: RMCLaserDesignator
+      - id: AU14MaintenanceJack
+      - id: RMCWelderPVE
+      - id: RMCPouchTools
+    - name: Tool Storage
+      choices: { CMUCTToolStorage: 1 }
+      entries:
+      - id: AU14BeltUtilityCombatFilled
+        name: M276 pattern combat toolbelt rig (filled)
+        recommended: true
+      - id: AU14BeltUtilityFilled
+        name: M276 pattern toolbelt rig (filled)
+      - id: RMCBeltConstruction
+        name: M277 pattern construction rig
+      - id: AU14PouchToolsFilledComtech
+        name: tactical tools pouch (filled)
+    - name: Engineering Storage Bag
+      choices: { CMUPouchesCTBag: 1 }
+      entries:
+      - id: CMBackpackWelder
+        recommended: true
+      - id: RMCSatchelWelderChestrig
+      - id: RMCSatchelWelder
+    - name: Engineering Storage Pouch
+      choices: { CMUPouchesCT: 2 }
+      entries:
+      - id: RMCPouchConstruction
+        recommended: true
+      - id: RMCPouchEngineerKit
+      - id: RMCPouchElectronics
+    - name: Engineering Supplies
+      entries:
+      - id: RMCCableCoil
+        points: 1
+      - id: AU14MaintenanceJack
+        points: 2
+      - id: RMCES11MobileFuelCanister
+        points: 4
+      - id: RMCEngineerKit
+        points: 2
+    - name: Explosives
+      entries:
+      - id: RMCExplosivePlastic
+        points: 4
+      - id: AU14Bangalore
+        points: 6
+        recommended: true
+      - id: RMCExplosiveBreachingCharge
+        points: 5
+    - name: Utilities
+      entries:
+      - id: RMCOuterClothingExternalWebbingBlack
+        points: 5
+      - id: RMCOuterClothingExternalWebbing
+        points: 5

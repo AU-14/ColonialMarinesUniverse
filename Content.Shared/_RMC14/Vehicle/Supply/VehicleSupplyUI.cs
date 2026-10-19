@@ -32,7 +32,6 @@ public sealed class VehicleSupplyBuiState : BoundUserInterfaceState
 {
     public VehicleSupplyLiftMode? LiftMode;
     public bool Busy;
-    public string? ActiveVehicleId;
     public string? SelectedVehicleId;
     public int SelectedCopyIndex;
     public VehicleSupplyPreviewState? Preview;
@@ -45,7 +44,6 @@ public sealed class VehicleSupplyBuiState : BoundUserInterfaceState
     public VehicleSupplyBuiState(
         VehicleSupplyLiftMode? liftMode,
         bool busy,
-        string? activeVehicleId,
         string? selectedVehicleId,
         int selectedCopyIndex,
         VehicleSupplyPreviewState? preview,
@@ -54,7 +52,6 @@ public sealed class VehicleSupplyBuiState : BoundUserInterfaceState
     {
         LiftMode = liftMode;
         Busy = busy;
-        ActiveVehicleId = activeVehicleId;
         SelectedVehicleId = selectedVehicleId;
         SelectedCopyIndex = selectedCopyIndex;
         Preview = preview;

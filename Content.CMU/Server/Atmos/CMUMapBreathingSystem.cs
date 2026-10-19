@@ -82,6 +82,8 @@ public sealed partial class CMUMapBreathingSystem : EntitySystem
                 RemComp<CMUMapGrantedBarotraumaComponent>(uid);
             }
         }
+
+        UpdateCallInKits();
     }
 
     private bool RequiresPressure(EntityUid map)
