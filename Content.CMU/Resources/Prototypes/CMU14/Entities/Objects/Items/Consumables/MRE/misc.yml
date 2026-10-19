@@ -107,6 +107,8 @@
           False: {state: "icon"}
   - type: UseDelay
     delay: 0.2
+  # Fits in an opened MRE, which only takes MRE contents.
+  - type: MREItem
 
 # Drinks
 
