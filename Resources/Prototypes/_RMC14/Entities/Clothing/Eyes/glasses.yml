@@ -130,10 +130,8 @@
         icon:
           True: { state: icon_on }
           False: { state: icon }
-#cmu edit start: gives everything the squad optic does, which can't be used alongside a smartgun
-  - type: GrantMarineIcons
-    slots: EYES
-  - type: CMUSquadVisorActive
+#cmu edit start: shows the squad optic's ammo HUD
+  - type: CMUAmmoHudSight
 #cmu edit end
 
 - type: entity

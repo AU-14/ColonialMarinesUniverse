@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Weapons.Ranged.Flamer;
 using Content.Shared._RMC14.Weapons.Ranged.SmartGun;
 using Content.Shared.CMU14.Visor;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Inventory;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Client.GameObjects;
@@ -19,7 +20,7 @@ namespace Content.Client.CMU14.Visor;
 
 /// <summary>
 /// Ported from TGMC's ammo HUD: while a squad optic is down, shows what the held gun is loaded with and how many rounds
-/// it has left, under the status alerts on the right of the screen.
+/// it has left, under the status alerts on the right of the screen. The smartgun's head mounted sight shows it too.
 /// </summary>
 public sealed class CMUAmmoHudOverlay : Overlay
 {
@@ -36,6 +37,7 @@ public sealed class CMUAmmoHudOverlay : Overlay
     [Dependency] private IUserInterfaceManager _ui = default!;
 
     private readonly SharedHandsSystem _hands;
+    private readonly InventorySystem _inventory;
     private readonly SpriteSystem _sprite;
 
     // Which icon a gun prototype gets never changes, so work it out once.
@@ -47,14 +49,20 @@ public sealed class CMUAmmoHudOverlay : Overlay
     {
         IoCManager.InjectDependencies(this);
         _hands = _entity.System<SharedHandsSystem>();
+        _inventory = _entity.System<InventorySystem>();
         _sprite = _entity.System<SpriteSystem>();
     }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
     {
-        return _player.LocalEntity is { } player &&
-               _entity.TryGetComponent(player, out CMUSquadVisorWearerComponent? wearer) &&
-               wearer.AmmoHudEnabled;
+        if (_player.LocalEntity is not { } player)
+            return false;
+
+        if (_entity.TryGetComponent(player, out CMUSquadVisorWearerComponent? wearer) && wearer.AmmoHudEnabled)
+            return true;
+
+        return _inventory.TryGetSlotEntity(player, "eyes", out var eyes) &&
+               _entity.HasComponent<CMUAmmoHudSightComponent>(eyes);
     }
 
     protected override void Draw(in OverlayDrawArgs args)

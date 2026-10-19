@@ -12,6 +12,13 @@ namespace Content.Shared.CMU14.Visor;
 public sealed partial class CMUSquadVisorActiveComponent : Component;
 
 /// <summary>
+/// Eyewear that shows the squad optic's ammo HUD while worn, without any of the optic's other effects. Used by the
+/// smartgun's head mounted sight, which can't be worn with a squad optic down.
+/// </summary>
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CMUAmmoHudSightComponent : Component;
+
+/// <summary>
 /// A squad optic. It can't be switched down while its wearer holds or wears a smartgun.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
