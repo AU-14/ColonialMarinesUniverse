@@ -32,61 +32,109 @@
         enum.OpenableVisuals.Layer:
           True: { state: "open" }
           False: { state: "closed" }
+#cmu edit start
   - type: StorageFill
     contents:
-    - id: CMMREComponentBonelessPorkRibs
+    - id: CMUMREPacketUSCMMainBonelessPorkRibs
       orGroup: main
-    - id: CMMREComponentGrilledChicken
+    - id: CMUMREPacketUSCMMainGrilledChicken
       orGroup: main
-    - id: CMMREComponentPizzaSquare
+    - id: CMUMREPacketUSCMMainPizzaSquare
       orGroup: main
-    - id: CMMREComponentSpaghettiChunks
+    - id: CMUMREPacketUSCMMainChickenTender
       orGroup: main
-    - id: CMMREComponentChickenTender
+    - id: CMUMREPacketUSCMMainPepperoniPizzaSquare
       orGroup: main
-    - id: CMMREComponentCracker
+    - id: CMUMREPacketUSCMMainMeatSpaghetti
+      orGroup: main
+    - id: CMUMREPacketUSCMMainChiliConCarne
+      orGroup: main
+    - id: CMUMREPacketUSCMMainNoodleSoup
+      orGroup: main
+    - id: CMUMREPacketUSCMMainGrilledChickenBreast
+      orGroup: main
+    - id: CMUMREPacketUSCMMainFeijoada
+      orGroup: main
+    - id: CMUMREPacketUSCMSideCracker
       orGroup: side
-    - id: CMMREComponentRiceOnigiri
+    - id: CMUMREPacketUSCMSideMashedPotatoes
       orGroup: side
-    - id: CMMREComponentMashedPotatoes
+    - id: CMUMREPacketUSCMSideRisotto
       orGroup: side
-    - id: CMMREComponentRisotto
+    - id: CMUMREPacketUSCMSideRiceOnigiri
       orGroup: side
-    - id: CMMREComponentBiscuit
+    - id: CMUMREPacketUSCMSideCornbread
+      orGroup: side
+    - id: CMUMREPacketUSCMSideMarinatedKale
+      orGroup: side
+    - id: CMUMREPacketUSCMSideTortillas
+      orGroup: side
+    - id: CMUMREPacketUSCMSideCinnamonAppleSlices
+      orGroup: side
+    - id: CMUMREPacketUSCMSideBoiledRice
+      orGroup: side
+    - id: CMUMREPacketUSCMSideBiscuits
+      orGroup: side
+    - id: CMUMREPacketUSCMSnackBiscuit
       orGroup: snack
-    - id: CMMREComponentMeatballs
+    - id: CMUMREPacketUSCMSnackMeatballs
       orGroup: snack
-    - id: RMCMREComponentMeatzels
+    - id: CMUMREPacketUSCMSnackPretzels
       orGroup: snack
-    - id: CMMREComponentPretzels
+    - id: CMUMREPacketUSCMSnackSushi
       orGroup: snack
-    - id: CMMREComponentPeanuts
+    - id: CMUMREPacketUSCMSnackPeanuts
       orGroup: snack
-    - id: CMMREComponentSushi
-      orGroup: snack
-    - id: CMMREComponentBiscuit
+    - id: CMUMREPacketUSCMDessertSpicedApples
       orGroup: dessert
-    - id: CMMREComponentChocolateBrownie
+    - id: CMUMREPacketUSCMDessertChocolateBrownie
       orGroup: dessert
-    - id: CMMREComponentSugarCookie
+    - id: CMUMREPacketUSCMDessertSugarCookie
       orGroup: dessert
-    - id: CMMREComponentCocoBar
+    - id: CMUMREPacketUSCMDessertCocoBar
       orGroup: dessert
-    - id: CMMREComponentFlan
+    - id: CMUMREPacketUSCMDessertFlan
       orGroup: dessert
-    - id: CMMREComponentHoneyFlan
+    - id: CMUMREPacketUSCMDessertHoneyFlan
       orGroup: dessert
-    - id: CMDrinkWEYAWaterBottle30
+    - id: CMUMREPacketUSCMDessertCookie
+      orGroup: dessert
+    - id: CMUMREPacketUSCMDessertLemonPie
+      orGroup: dessert
+    - id: CMUMREPacketUSCMDessertKeyLimePie
+      orGroup: dessert
+    - id: CMUMREPacketUSCMDessertBrigadeiroBalls
+      orGroup: dessert
+    - id: CMUMREPacketUSCMDessertStrawberryToasterPastry
+      orGroup: dessert
+    - id: CMUMRESpreadCheese
+      orGroup: spread
+    - id: CMUMRESpreadJalapeno
+      orGroup: spread
+    - id: CMUMRESpreadPeanutButter
+      orGroup: spread
+    - id: CMUMREBeverageGrape
+      orGroup: beverage
+    - id: CMUMREBeverageOrange
+      orGroup: beverage
+    - id: CMUMREBeverageLemonlime
+      orGroup: beverage
+    - id: CMUMREBeverageChocolate
+      orGroup: beverage
+    - id: CMUMREBeverageChocolateHazelnut
+      orGroup: beverage
     - id: RMCMREInstantPowderOrange
-      orGroup: drink
+      orGroup: beverage
     - id: RMCMREInstantPowderWatermelon
-      orGroup: drink
+      orGroup: beverage
     - id: RMCMREInstantPowderApple
-      orGroup: drink
+      orGroup: beverage
     - id: RMCMREInstantPowderPineapple
-      orGroup: drink
+      orGroup: beverage
     - id: RMCMREInstantPowderGrape
-      orGroup: drink
+      orGroup: beverage
+    - id: CMUMRESpork
+    - id: CMDrinkWEYAWaterBottle30
     - id: CMFortuneCookie
       prob: 0.333
     - id: CMCigarettePackLuckySlothsMini
@@ -100,6 +148,7 @@
       orGroup: matchbook
     - id: CMExecutiveWEYAMatchbook
       orGroup: matchbook
+#cmu edit end
   - type: FixedItemSizeStorage
   - type: RemoveOnlyStorage
   - type: InteractedBlacklist
@@ -188,6 +237,47 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/mre_spp.rsi
+#cmu edit start
+  - type: StorageFill
+    contents:
+    - id: CMUMRECanUPPBeef
+      orGroup: main
+    - id: CMUMRECanUPPStew
+      orGroup: main
+    - id: CMUMRECanUPPSoup
+      orGroup: main
+    - id: CMUMRECanUPPFatback
+      orGroup: main
+    - id: CMUMRECanUPPVegetables
+      orGroup: side
+    - id: CMUMRECanUPPNavyPasta
+      orGroup: side
+    - id: CMUMRECanUPPBuckwheatAndPork
+      orGroup: side
+    - id: CMUMRECanUPPRiceAndBeef
+      orGroup: side
+    - id: CMUMREPacketUPPSnackDriedCodSlice
+      orGroup: snack
+    - id: CMUMREPacketUPPSnackDriedTaran
+      orGroup: snack
+    - id: CMUMREPacketUPPSnackMashedPotatoes
+      orGroup: snack
+    - id: CMUMREPacketUPPSnackRiceBall
+      orGroup: snack
+    - id: CMUMREPacketUPPDessertBirdMilk
+      orGroup: dessert
+    - id: CMUMREPacketUPPDessertToffees
+      orGroup: dessert
+    - id: CMUMREPacketUPPDessertHematogenBar
+      orGroup: dessert
+    - id: CMUMREPacketUPPDessertDarkChocolateBar
+      orGroup: dessert
+    - id: CMUMREPacketUPPDessertChocolateRiceCandies
+      orGroup: dessert
+    - id: CMUMREFoodUPPIRPArmyBiscuits
+    - id: CMUMRESpoonPlastic
+    - id: CMUMREDrinkUPPWater
+#cmu edit end
 
 - type: entity
   parent: CMMRE
@@ -209,14 +299,18 @@
     whitelist: null
   - type: StorageFill
     contents:
-    - id: RMCMREComponentBonelessPorkRibsWeya
+#cmu edit start
+    - id: CMUMREPacketWYColonistMainBonelessPorkRibs
       orGroup: main
-    - id: RMCMREComponentGrilledChickenWeya
+    - id: CMUMREPacketWYColonistMainGrilledChicken
       orGroup: main
-    - id: RMCMREComponentChickenTenderWeya
+    - id: CMUMREPacketWYColonistMainChickenTender
       orGroup: main
-    - id: RMCMREComponentSpaghettiChunksWeya
+    - id: CMUMREPacketWYColonistMainMeatSpaghetti
       orGroup: main
+    - id: CMUMREPacketWYColonistMainGrilledChickenBreast
+      orGroup: main
+#cmu edit end
     - id: RMCFoodSnackCheeseburgerPackaged
       orGroup: side
     - id: RMCFoodSnackBurritoPackaged
@@ -249,6 +343,58 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/mre_weya_pmc.rsi
+#cmu edit start
+  - type: StorageFill
+    contents:
+    - id: CMUMREPacketWYMainBakedSalmon
+      orGroup: main
+    - id: CMUMREPacketWYMainSmokyRibs
+      orGroup: main
+    - id: CMUMREPacketWYMainBakedHam
+      orGroup: main
+    - id: CMUMREPacketWYMainBeefsteak
+      orGroup: main
+    - id: CMUMREPacketWYSideCracker
+      orGroup: side
+    - id: CMUMREPacketWYSideRisotto
+      orGroup: side
+    - id: CMUMREPacketWYSideRiceOnigiri
+      orGroup: side
+    - id: CMUMREPacketWYSideNigiriSushi
+      orGroup: side
+    - id: CMUMREPacketWYSideTomatoChips
+      orGroup: side
+    - id: CMUMREPacketWYSnackAlmonds
+      orGroup: snack
+    - id: CMUMREPacketWYSnackPeanuts
+      orGroup: snack
+    - id: CMUMREPacketWYSnackPretzels
+      orGroup: snack
+    - id: CMUMREPacketWYDessertEclair
+      orGroup: dessert
+    - id: CMUMREPacketWYDessertStrawberryCake
+      orGroup: dessert
+    - id: CMUMREPacketWYDessertCherryPie
+      orGroup: dessert
+    - id: CMUMREPacketWYDessertChocolateCroissant
+      orGroup: dessert
+    - id: CMUMREPacketWYDessertWhiteChocolateBar
+      orGroup: dessert
+    - id: RMCDrinkWEYASoylent
+      orGroup: drink
+    - id: RMCDrinkWEYACocoMilk
+      orGroup: drink
+    - id: CMFortuneCookie
+      prob: 0.333
+    - id: CMUCigarettePackWYGoldMini
+      orGroup: cigarettes
+    - id: CMUCigarettePackExecutiveSelectMini
+      orGroup: cigarettes
+    - id: CMExecutiveSelectMatchbook
+      orGroup: matchbook
+    - id: CMExecutiveWEYAMatchbook
+      orGroup: matchbook
+#cmu edit end
 
 - type: entity
   parent: CMMRE
@@ -258,6 +404,65 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/mre_tse.rsi
+#cmu edit start
+  - type: StorageFill
+    contents:
+    - id: CMUMREPacketTWEMainBacon
+      orGroup: main
+    - id: CMUMREPacketTWEMainTomatoBeans
+      orGroup: main
+    - id: CMUMREPacketTWEMainFishNRice
+      orGroup: main
+    - id: CMUMREPacketTWEMainRiceRamen
+      orGroup: main
+    - id: CMUMREPacketTWEMainFishNChips
+      orGroup: main
+    - id: CMUMREPacketTWESideChickpeasPatty
+      orGroup: side
+    - id: CMUMREPacketTWESideNigiriSushi
+      orGroup: side
+    - id: CMUMREPacketTWESideTomatoChips
+      orGroup: side
+    - id: CMUMREPacketTWESideBeansStew
+      orGroup: side
+    - id: CMUMREPacketTWESideMushroomSoup
+      orGroup: side
+    - id: CMUMREPacketTWESnackDehydratedCheeseChunk
+      orGroup: snack
+    - id: CMUMREPacketTWESnackAlmonds
+      orGroup: snack
+    - id: CMUMREPacketTWEDessertDarkChocolateBar
+      orGroup: dessert
+    - id: CMUMREPacketTWEDessertTinyApplepie
+      orGroup: dessert
+    - id: CMUMREPacketTWEDessertTinyCheesecake
+      orGroup: dessert
+    - id: CMUMREPacketTWEDessertTinyPancakes
+      orGroup: dessert
+    - id: CMUMREFoodTWEORPOatBisuit
+      orGroup: misc
+    - id: CMUBoxLemonDrops
+      orGroup: misc
+    - id: CMUMRETubeStrawberry
+      orGroup: spread
+    - id: CMUMRETubeVegemite
+      orGroup: spread
+    - id: CMUMRETubeBlackberry
+      orGroup: spread
+    - id: CMUMRETeabag
+    - id: CMUMREPaperCup
+    - id: CMDrinkWEYAWaterBottle30
+    - id: CMFortuneCookie
+      prob: 0.333
+    - id: CMUCigarettePackWYGoldMini
+      orGroup: cigarettes
+    - id: CMUCigarettePackBalajiImperialMini
+      orGroup: cigarettes
+    - id: CMUBalajiImperialMatchbook
+      orGroup: matchbook
+    - id: CMExecutiveWEYAMatchbook
+      orGroup: matchbook
+#cmu edit end
 
 - type: entity
   parent: BaseItem
@@ -272,14 +477,20 @@
     size: Small
   - type: SpawnItemsOnUse
     items:
-    - id: RMCMREFoodMeatSlab
+#cmu edit start
+    - id: CMUMREFoodCLFWrappedMeatPie
       orGroup: RMCMRECLFFood
-    - id: RMCMREFoodMeatSlabCheese
+    - id: CMUMREFoodCLFWrappedBananaPie
       orGroup: RMCMRECLFFood
-    - id: RMCMREFoodBread
+    - id: CMUMREFoodCLFWrappedCheesePizza
       orGroup: RMCMRECLFFood
-    - id: RMCMREFoodMargaritaPizza
+    - id: CMUMREFoodCLFWrappedMushroomPizza
       orGroup: RMCMRECLFFood
+    - id: CMUMREFoodCLFWrappedVegetablePizza
+      orGroup: RMCMRECLFFood
+    - id: CMUMREFoodCLFWrappedMeatPizza
+      orGroup: RMCMRECLFFood
+#cmu edit end
     sound:
       collection: CMFoodRip
   - type: Sprite

@@ -1,0 +1,208 @@
+# Generated from cmss13 PR 7895's DM code.
+
+- type: entity
+  parent: CMUMRESpreadBase
+  id: CMUMRESpreadCheese
+  name: "spread packet (cheese)"
+  description: "A creamy and cheesy spread, made out of a processed cheese, combines well with tortillas and other snacks."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    layers:
+    - state: spread
+      map: ["enum.OpenableVisuals.Layer"]
+    - state: cheese_spread
+  - type: Solution
+    solution:
+      maxVol: 6
+      reagents:
+      - ReagentId: CMUCheese
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMRESpreadBase
+  id: CMUMRESpreadJalapeno
+  name: "spread packet (jalapeno cheese)"
+  description: "A creamy and cheesy spread, made out of a processed cheese, combines well with tortillas and other snacks, this one has a spicy jalapeno flavor."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    layers:
+    - state: spread
+      map: ["enum.OpenableVisuals.Layer"]
+    - state: jalapeno_cheese_spread
+  - type: Solution
+    solution:
+      maxVol: 6
+      reagents:
+      - ReagentId: CMUCheese
+        Quantity: 4
+      - ReagentId: CapsaicinOil
+        Quantity: 2
+
+- type: entity
+  parent: CMUMRESpreadBase
+  id: CMUMRESpreadPeanutButter
+  name: "spread packet (peanut butter)"
+  description: "A creamy and nutty spread, made out of a processed peanuts, combines well with tortillas and other snacks."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    layers:
+    - state: spread
+      map: ["enum.OpenableVisuals.Layer"]
+    - state: peanut_butter
+  - type: Solution
+    solution:
+      maxVol: 6
+      reagents:
+      - ReagentId: CMUNuts
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMRETubeBase
+  id: CMUMRETubeStrawberry
+  name: "ORP spread tube (strawberry)"
+  description: "Contains strawberry food spread, good to combine with a sandwich."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    layers:
+    - state: paste1
+    - state: paste_strawberry
+    - state: paste_cap
+      map: ["enum.OpenableVisuals.Layer"]
+  - type: Solution
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: JuiceBerry
+        Quantity: 15
+      - ReagentId: Sugar
+        Quantity: 5
+
+- type: entity
+  parent: CMUMRETubeBase
+  id: CMUMRETubeVegemite
+  name: "ORP spread tube (vegemite)"
+  description: "Contains a very salty food spread, good to combine with a sandwich, however, not everyone is fond of the taste and looks of it."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    layers:
+    - state: paste1
+    - state: paste_vegemite
+    - state: paste_cap
+      map: ["enum.OpenableVisuals.Layer"]
+  - type: Solution
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: CMUVegemite
+        Quantity: 20
+
+- type: entity
+  parent: CMUMRETubeBase
+  id: CMUMRETubeBlackberry
+  name: "ORP spread tube (blackberry)"
+  description: "Contains blackberry food spread, good to combine with a sandwich."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    layers:
+    - state: paste1
+    - state: paste_blackberry
+    - state: paste_cap
+      map: ["enum.OpenableVisuals.Layer"]
+  - type: Solution
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: JuiceBerry
+        Quantity: 15
+      - ReagentId: Sugar
+        Quantity: 5
+
+- type: entity
+  parent: RMCMREInstantPowderBase
+  id: CMUMREBeverageGrape
+  name: "electrolyte beverage powder packet (grape)"
+  description: "A packet of an electrolyte beverage, to be mixed with water, makes a ready-in-a-field drink. Has a grape flavor."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: beverage
+  - type: Solution
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: CMUGrapeBeverage
+        Quantity: 4
+
+- type: entity
+  parent: RMCMREInstantPowderBase
+  id: CMUMREBeverageOrange
+  name: "electrolyte beverage powder packet (orange)"
+  description: "A packet of an electrolyte beverage, to be mixed with water, makes a ready-in-a-field drink. Has a citrusy orange flavor."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: beverage
+  - type: Solution
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: CMUOrangeBeverage
+        Quantity: 4
+
+- type: entity
+  parent: RMCMREInstantPowderBase
+  id: CMUMREBeverageLemonlime
+  name: "electrolyte beverage powder packet (lemon-lime)"
+  description: "A packet of an electrolyte beverage, to be mixed with water, makes a ready-in-a-field drink. Has a citrusy lemon-lime flavor."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: beverage
+  - type: Solution
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: CMULemonLimeBeverage
+        Quantity: 4
+
+- type: entity
+  parent: RMCMREInstantPowderBase
+  id: CMUMREBeverageChocolate
+  name: "protein drink beverage powder packet (milk chocolate)"
+  description: "A packet of a protein drink, to be mixed with water, makes a ready-in-a-field drink. Has a chocolate flavor."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: beverage
+  - type: Solution
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: CMUChocolateBeverage
+        Quantity: 4
+
+- type: entity
+  parent: RMCMREInstantPowderBase
+  id: CMUMREBeverageChocolateHazelnut
+  name: "protein drink beverage powder packet (chocolate hazelnut)"
+  description: "A packet of a protein drink, to be mixed with water, makes a ready-in-a-field drink. Has a chocolate hazelnut flavor."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: beverage
+  - type: Solution
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: CMUHazelnutBeverage
+        Quantity: 4

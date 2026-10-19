@@ -1,0 +1,209 @@
+# Generated from cmss13 PR 7895's DM code.
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketTWEMainBacon
+  name: "ORP main dish (bacon)"
+  description: "An Operation Ration Pack entree component. Contains a luxurious well prepared main course based on TWE cuisines, preserved using high-tech methods."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: twe_entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWEBacon
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketTWEMainTomatoBeans
+  name: "ORP main dish (tomato beans)"
+  description: "An Operation Ration Pack entree component. Contains a luxurious well prepared main course based on TWE cuisines, preserved using high-tech methods."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: twe_entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWETomatoBeans
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketTWEMainFishNRice
+  name: "ORP main dish (fish n rice)"
+  description: "An Operation Ration Pack entree component. Contains a luxurious well prepared main course based on TWE cuisines, preserved using high-tech methods."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: twe_entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWEFishNRice
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketTWEMainRiceRamen
+  name: "ORP main dish (rice ramen)"
+  description: "An Operation Ration Pack entree component. Contains a luxurious well prepared main course based on TWE cuisines, preserved using high-tech methods."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: twe_entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWERiceRamen
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketTWEMainFishNChips
+  name: "ORP main dish (fish n chips)"
+  description: "An Operation Ration Pack entree component. Contains a luxurious well prepared main course based on TWE cuisines, preserved using high-tech methods."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: twe_entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWEFishNChips
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketTWESideChickpeasPatty
+  name: "ORP side dish (chickpeas patty)"
+  description: "An Operation Ration Pack side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: twe_side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWEChickpeasPatty
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketTWESideNigiriSushi
+  name: "ORP side dish (nigiri sushi)"
+  description: "An Operation Ration Pack side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: twe_side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWENigiriSushi
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketTWESideTomatoChips
+  name: "ORP side dish (tomato chips)"
+  description: "An Operation Ration Pack side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: twe_side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWETomatoChips
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketTWESideBeansStew
+  name: "ORP side dish (beans stew)"
+  description: "An Operation Ration Pack side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: twe_side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWEBeansStew
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketTWESideMushroomSoup
+  name: "ORP side dish (mushroom soup)"
+  description: "An Operation Ration Pack side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: twe_side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWEMushroomSoup
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketTWESnackDehydratedCheeseChunk
+  name: "ORP snack (dehydrated cheese chunk)"
+  description: "An ORP snack component. Contains a light snack in case you weren't feeling terribly hungry."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: twe_snack
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWEDehydratedCheeseChunk
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketTWESnackAlmonds
+  name: "ORP snack (almonds)"
+  description: "An ORP snack component. Contains a light snack in case you weren't feeling terribly hungry."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: twe_snack
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWEAlmonds
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketTWEDessertDarkChocolateBar
+  name: "ORP dessert (dark chocolate bar)"
+  description: "An Operatipn Ration Pack side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: twe_dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWEDarkChocolateBar
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketTWEDessertTinyApplepie
+  name: "ORP dessert (tiny applepie)"
+  description: "An Operatipn Ration Pack side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: twe_dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWETinyApplepie
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketTWEDessertTinyCheesecake
+  name: "ORP dessert (tiny cheesecake)"
+  description: "An Operatipn Ration Pack side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: twe_dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWETinyCheesecake
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketTWEDessertTinyPancakes
+  name: "ORP dessert (tiny pancakes)"
+  description: "An Operatipn Ration Pack side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: twe_dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWETinyPancakes

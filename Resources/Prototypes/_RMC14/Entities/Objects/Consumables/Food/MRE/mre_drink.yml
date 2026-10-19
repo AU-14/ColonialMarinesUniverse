@@ -4,11 +4,12 @@
   parent: DrinkBase
   id: RMCMREInstantPowderBase
   components:
-  - type: Drink
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 5
+#cmu edit start
+# This build has no Drink component and uses Solution entities instead of SolutionContainerManager.
+  - type: Solution
+    solution:
+      maxVol: 5
+#cmu edit end
   - type: Item
     size: Tiny
   - type: Openable
@@ -27,13 +28,14 @@
   name: orange juice packet
   description: A small packet of orange flavored drink mix, sweetened with sugar alcohols. For best results, mix with water instead of consuming standalone.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 5
-        reagents:
-        - ReagentId: RMCInstantJuicePowderOrange
-          Quantity: 5
+#cmu edit start
+  - type: Solution
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: RMCInstantJuicePowderOrange
+        Quantity: 5
+#cmu edit end
   - type: Sprite
     state: ojpowder
 
@@ -43,13 +45,14 @@
   name: apple juice packet
   description: A small packet of apple flavored drink mix, sweetened with sugar alcohols. For best results, mix with water instead of consuming standalone.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 5
-        reagents:
-        - ReagentId: RMCInstantJuicePowderApple
-          Quantity: 5
+#cmu edit start
+  - type: Solution
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: RMCInstantJuicePowderApple
+        Quantity: 5
+#cmu edit end
   - type: Sprite
     state: ajpowder
 
@@ -59,13 +62,14 @@
   name: watermelon juice packet
   description: A small packet of watermelon flavored drink mix, sweetened with sugar alcohols. For best results, mix with water instead of consuming standalone.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 5
-        reagents:
-        - ReagentId: RMCInstantJuicePowderWatermelon
-          Quantity: 5
+#cmu edit start
+  - type: Solution
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: RMCInstantJuicePowderWatermelon
+        Quantity: 5
+#cmu edit end
   - type: Sprite
     state: wjpowder
 
@@ -75,13 +79,14 @@
   name: grape juice packet
   description: A small packet of grape flavored drink mix, sweetened with sugar alcohols. For best results, mix with water instead of consuming standalone.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 5
-        reagents:
-        - ReagentId: RMCInstantJuicePowderGrape
-          Quantity: 5
+#cmu edit start
+  - type: Solution
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: RMCInstantJuicePowderGrape
+        Quantity: 5
+#cmu edit end
   - type: Sprite
     state: gjpowder
 
@@ -91,12 +96,13 @@
   name: pineapple juice packet
   description: A small packet of pineapple flavored drink mix, sweetened with sugar alcohols. For best results, mix with water instead of consuming standalone.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 5
-        reagents:
-        - ReagentId: RMCInstantJuicePowderPineapple
-          Quantity: 5
+#cmu edit start
+  - type: Solution
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: RMCInstantJuicePowderPineapple
+        Quantity: 5
+#cmu edit end
   - type: Sprite
     state: pjpowder
