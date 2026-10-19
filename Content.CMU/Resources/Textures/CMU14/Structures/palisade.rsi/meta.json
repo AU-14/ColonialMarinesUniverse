@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "A palisade of sharpened stakes, drawn for the project and cut into two tiles.",
+  "size": {
+    "x": 32,
+    "y": 40
+  },
+  "states": [
+    {
+      "name": "palisade_a"
+    },
+    {
+      "name": "palisade_b"
+    }
+  ]
+}
