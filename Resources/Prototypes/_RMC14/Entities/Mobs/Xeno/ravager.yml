@@ -92,9 +92,7 @@
     attackRate: 1.05
     damage:
       types:
-        Blunt: 15
-        Slash: 15
-        Piercing: 15
+        Slash: 45
   - type: XenoTailStab
     tailDamage:
       types:
@@ -179,9 +177,7 @@
   - type: XenoEmpower
     damageIncreasePer:
       types:
-        Blunt: 0.66
-        Slash: 0.67
-        Piercing: 0.67
+        Slash: 2.0
     damageTailIncreasePer:
       types:
         Blunt: 0.8
@@ -248,6 +244,13 @@
     auraColor: "#522020"
     damageMult: 1
     speed: 1.2
+  - type: MeleeWeapon
+    attackRate: 1.05
+    damage:
+      types:
+        Blunt: 15
+        Slash: 15
+        Piercing: 15
   - type: XenoRage
   - type: XenoEviscerate
     damageAtRageLevels:
