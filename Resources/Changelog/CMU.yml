@@ -13927,5 +13927,129 @@
   id: 828
   time: '2026-10-19T06:43:04.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2223
+- author: deepdarkdepths
+  changes:
+  - message: Added new Warrior sprites.
+    type: Add
+  id: 829
+  time: '2026-10-19T09:33:42.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2225
+- author: PoltavskaPraca
+  changes:
+  - message: crewmen and vehicle commanders now have their vendor filled out with
+      engineering-adjacent supplies
+    type: Add
+  - message: changed the vehicle vendor UI
+    type: Tweak
+  - message: vehicle lift now correctly stores the vehicle
+    type: Fix
+  id: 830
+  time: '2026-10-19T14:42:47.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2219
+- author: rokudara-sen
+  changes:
+  - message: The client stutters less around Z-level openings
+    type: Fix
+  - message: Expedition NPC squads cost far less server time in firefights
+    type: Fix
+  - message: The game uses less memory at the main menu
+    type: Fix
+  id: 831
+  time: '2026-10-19T14:43:53.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2227
+- author: rokudara-sen
+  changes:
+  - message: Weeds can be expanded out of a closed resin door tile
+    type: Fix
+  - message: Hunting preserve walls can no longer be broken through
+    type: Fix
+  - message: Clan masks show xeno health and plasma
+    type: Fix
+  - message: Clan masks connect to internals and Yautja gear racks sell oxygen tanks
+    type: Add
+  - message: Hijacks clear pathogen blight cores left on the planet
+    type: Fix
+  - message: Lesser drones, swarm lessers, facehuggers and poppers no longer count
+      for the Kill Threats objective
+    type: Tweak
+  - message: Despoilers no longer gain fake hypertension from healing
+    type: Fix
+  - message: The adaptability boon no longer offers Pathogen castes
+    type: Fix
+  - message: Facehuggers and other xenos no longer drop a head when gibbed
+    type: Fix
+  - message: Charger lunges shake vehicles again instead of passing through them
+    type: Fix
+  - message: A revived queen keeps the hive from collapsing
+    type: Fix
+  - message: Hijack larva respawn on the queen instead of the planet
+    type: Fix
+  id: 832
+  time: '2026-10-19T14:44:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2228
+- author: rokudara-sen
+  changes:
+  - message: Coat racks no longer block interactions
+    type: Fix
+  - message: Defibrillators no longer fit in the medical pouch
+    type: Fix
+  - message: Internals switch to a tank that still has air
+    type: Fix
+  - message: Call-ins on maps without breathable air arrive with a gas mask and oxygen
+    type: Add
+  - message: Flare guns and underbarrel flares drop their flare at max range
+    type: Fix
+  - message: Launched grenades no longer vanish after bouncing off a wall
+    type: Fix
+  - message: Grenade launchers can fire up a level
+    type: Fix
+  - message: Unholster secondary no longer grabs flashlights and picks the next weapon
+    type: Fix
+  - message: The regulation tape box only holds tapes
+    type: Fix
+  - message: The cross-level shooting message tells you how close to an edge you need
+      to be
+    type: Tweak
+  - message: LACN can take the IMP ammo rack
+    type: Fix
+  id: 833
+  time: '2026-10-19T14:44:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2229
+- author: KeiKiyomi
+  changes:
+  - message: Facehuggers now complete infection and fall off within 15 seconds when
+      their host is nested.
+    type: Tweak
+  - message: Newly infected nested hosts correctly receive the nest's incubation speed
+      bonus.
+    type: Fix
+  - message: Facehugger oxygen supply now requires the parasite to remain attached.
+    type: Fix
+  - message: Living nested humans passively heal 1 HP per second, up to 50% of their
+      maximum health.
+    type: Add
+  id: 834
+  time: '2026-10-19T14:59:54.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2209
+- author: KeiKiyomi
+  changes:
+  - message: Added ship weapon arming terminals. Command can permanently select two
+      orbital support weapons per operation, each with three uses.
+    type: Add
+  - message: Added Gatling Barrage, Walking Barrage, 120mm HE Barrage, 380mm HE Barrage,
+      Gas Strike, EMS Strike, Smoke Strike, Airburst Strike, and Precision Strike.
+    type: Add
+  - message: Armed weapons can be selected and fired through the overwatch orbital
+      bombardment tab. Walking Barrage supports directional targeting.
+    type: Add
+  - message: Ship weapon loadouts, ammunition, and cooldowns are tracked per ship,
+      keeping duplicate GOVFOR and OPFOR warships independent.
+    type: Tweak
+  - message: New strikes have smaller footprints than standard orbital bombardments
+      and respect orbital targeting restrictions.
+    type: Tweak
+  id: 835
+  time: '2026-10-19T15:07:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2208
 Name: CMU
 Order: -1
