@@ -114,10 +114,8 @@
 - type: entity
   id: ActionXenoRegurgitate
   parent: ActionXenoBase
-  # cmu edit start: devour is now haul
-  name: Release
-  description: Release the host you are hauling.
-  # cmu edit end
+  name: Regurgitate
+  description: Eject any devoured marines.
   components:
   - type: Action
     itemIconStyle: NoItem

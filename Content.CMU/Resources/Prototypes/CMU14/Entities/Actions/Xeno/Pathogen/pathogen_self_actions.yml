@@ -1031,7 +1031,7 @@
   id: CMU14ActionXenoPathogenTurnInvisible
   parent: ActionXenoBase
   name: Turn Invisible (20)
-  description: Become partially invisible for 30 seconds, or until you either damage or attempt to haul an enemy. Can be toggled off to become visible again, with a refund of 90% remaining cloak time. Increases your movement speed by 15% until the ability expires.
+  description: Become partially invisible for 30 seconds, or until you either damage or attempt to devour an enemy. Can be toggled off to become visible again, with a refund of 90% remaining cloak time. Increases your movement speed by 15% until the ability expires.
   components:
   - type: Action
     itemIconStyle: NoItem
