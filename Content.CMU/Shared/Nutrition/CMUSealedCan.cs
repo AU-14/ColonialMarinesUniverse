@@ -22,10 +22,10 @@ namespace Content.Shared.CMU14.Nutrition;
 public sealed partial class CMUSealedCanComponent : Component
 {
     [DataField]
-    public EntityWhitelist Openers = new() { Tags = ["CMUCanOpener"] };
+    public EntityWhitelist Openers = new() { Tags = new() { "CMUCanOpener" } };
 
     [DataField]
-    public EntityWhitelist CrudeOpeners = new() { Tags = ["Knife"] };
+    public EntityWhitelist CrudeOpeners = new() { Tags = new() { "Knife" } };
 
     [DataField]
     public TimeSpan OpenTime = TimeSpan.FromSeconds(4);
