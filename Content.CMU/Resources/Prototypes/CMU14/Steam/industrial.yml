@@ -80,6 +80,18 @@
   - type: SteamSmelter
     producesSlag: false
 
+# The industrial steam extractor: the steam extractor, gray, and it works twice as fast on the same steam. It is built of sheets of metal (CMSteel).
+- type: entity
+  parent: RUMCSteamExtractor
+  id: RUMCIndustrialSteamExtractor
+  name: industrial steam extractor
+  description: A gray extractor driven by steam, built of sheets of metal. It presses resin out of wood and turns resin into raw rubber, twice as fast as the brass one on the same steam. Join a gas pipe with steam to it.
+  components:
+  - type: Sprite
+    sprite: CMU14/Production/Industrial/steam_extractor_industrial.rsi
+  - type: RecipeMachine
+    speed: 2
+
 # The crate of the start of the industry. It is sealed and opens with a crowbar.
 - type: entity
   parent: RMCSecureCaseStrapped

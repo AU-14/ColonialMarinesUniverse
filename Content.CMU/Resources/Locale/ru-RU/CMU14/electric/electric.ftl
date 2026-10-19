@@ -301,6 +301,7 @@ au14-craft-recipe-buildtannery = Кожевенный станок
 au14-craft-recipe-buildfabricator = Стенд сложной сборки
 au14-craft-recipe-buildcircuitassembler = Сборщик микросхем
 au14-craft-recipe-buildsteamextractor = Паровой экстрактор
+au14-craft-recipe-buildindustrialsteamextractor = Промышленный паровой экстрактор
 au14-fluid-port-hydrogen_in = вход водорода
 au14-fluid-port-chlorine_in = вход хлора
 au14-fluid-port-oxygen_in = вход кислорода

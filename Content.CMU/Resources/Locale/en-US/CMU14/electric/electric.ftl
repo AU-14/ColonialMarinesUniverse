@@ -301,6 +301,7 @@ au14-craft-recipe-buildtannery = Tannery
 au14-craft-recipe-buildfabricator = Complex assembly bench
 au14-craft-recipe-buildcircuitassembler = Circuit assembler
 au14-craft-recipe-buildsteamextractor = Steam extractor
+au14-craft-recipe-buildindustrialsteamextractor = Industrial steam extractor
 au14-fluid-port-hydrogen_in = hydrogen inlet
 au14-fluid-port-chlorine_in = chlorine inlet
 au14-fluid-port-oxygen_in = oxygen inlet

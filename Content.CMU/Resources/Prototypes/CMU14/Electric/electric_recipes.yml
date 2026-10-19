@@ -4816,3 +4816,18 @@
     amount: 4
   - stack: RMCWood
     amount: 2
+
+# The industrial steam extractor is built of sheets of metal (CMSteel) and wood, with no brass in it.
+- type: craftRecipe
+  id: RUMCCraftBuildIndustrialSteamExtractor
+  name: au14-craft-recipe-buildindustrialsteamextractor
+  output: RUMCIndustrialSteamExtractor
+  outputCount: 1
+  time: 18
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 12
+  - stack: RMCWood
+    amount: 2
