@@ -310,8 +310,8 @@
   inputs:
     RUMCMagneticRod: 1
     RUMCIronRod: 2
-    RUMCInsulatedCable: 2
-    RUMCCopperWire: 4
+    RUMCInsulatedCable: 1
+    RUMCCopperWire: 2
   outputs:
     RUMCMotor: 1
   duration: 8
@@ -364,7 +364,7 @@
   id: RUMCMRAssemblerMachineHull
   machine: assembler
   inputs:
-    CMSteel: 8
+    CMSteel: 6
   outputs:
     RUMCMachineHull: 1
   duration: 6
@@ -3965,9 +3965,9 @@
   - stack: RUMCIronRod
     amount: 2
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
   - stack: RUMCCopperWire
-    amount: 4
+    amount: 2
 
 - type: craftRecipe
   id: RUMCCraftElectricPiston
@@ -4043,7 +4043,7 @@
   - Hammering
   consumables:
   - stack: CMSteel
-    amount: 8
+    amount: 6
 
 - type: craftRecipe
   id: RUMCCraftElectricMoldRod
