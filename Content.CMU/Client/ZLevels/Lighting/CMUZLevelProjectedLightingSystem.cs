@@ -186,6 +186,12 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             return;
         }
 
+        // nothing projected last time and nothing alive to fade: the opening search found no usable light,
+        // so re-checking at full frame rate is wasted work. new lights still show up within IdleRecheck
+        var realNow = _timing.RealTime;
+        if (_projectedLights.Count == 0 && realNow < _idleUntil)
+            return;
+
         var projectLowerReceivers = _config.GetCVar(CMUZLevelsCVars.ProjectedLightingLowerReceivers);
         var projectLowerSources = _config.GetCVar(CMUZLevelsCVars.ProjectedLightingLowerSources);
         var visibilityGraceSeconds = Math.Max(0f, _config.GetCVar(CMUZLevelsCVars.ProjectedLightingVisibilityGrace));
@@ -396,6 +402,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         }
 
         ReconcileProjectedLights(_candidates, maxPerLevel, maxGlobal, currentFrame, visibilityGraceSeconds);
+        _idleUntil = _candidates.Count == 0 && _projectedLights.Count == 0 ? realNow + IdleRecheck : TimeSpan.Zero;
         if (_diagnosticsEnabled)
         {
             stats.CandidateMs = GetElapsedMilliseconds(candidateStart);
@@ -1027,6 +1034,15 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         return depthOffset > 0 ? sourceMap.Owner : receivingMap;
     }
 
+    // every source/opening pair got re-raycast every frame (100+ rays a frame on a normal ship, each one
+    // allocating inside the engine) and almost all of them come back blocked. lights and walls barely move,
+    // so hold each answer briefly. a door opening or a light moving shows up within RayCacheLifetime
+    private static readonly TimeSpan RayCacheLifetime = TimeSpan.FromSeconds(0.5);
+    private static readonly TimeSpan IdleRecheck = TimeSpan.FromSeconds(0.1);
+    private TimeSpan _idleUntil;
+    private const int RayCacheLimit = 8192;
+    private readonly Dictionary<(EntityUid Source, MapId Map, Vector2 From, Vector2 To), (bool Blocked, TimeSpan Until)> _rayCache = new();
+
     private bool IsSourceRayBlocked(SourceLight source, MapId mapId, Vector2 openingCenter)
     {
         var direction = openingCenter - source.WorldPosition;
@@ -1034,13 +1050,26 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         if (length <= 0.01f)
             return false;
 
+        var now = _timing.RealTime;
+        var key = (source.Entity, mapId, source.WorldPosition, openingCenter);
+        if (_rayCache.TryGetValue(key, out var cached) && cached.Until > now)
+            return cached.Blocked;
+
+        if (_rayCache.Count >= RayCacheLimit)
+            _rayCache.Clear();
+
         if (_diagnosticsEnabled)
             LastProjectedLightingDebugStats.Raycasts++;
         var ray = new CollisionRay(source.WorldPosition, direction / length, (int) CollisionGroup.Opaque);
+        var blocked = false;
         foreach (var _ in _physics.IntersectRay(mapId, ray, length, ignoredEnt: source.Entity, returnOnFirstHit: true))
-            return true;
+        {
+            blocked = true;
+            break;
+        }
 
-        return false;
+        _rayCache[key] = (blocked, now + RayCacheLifetime);
+        return blocked;
     }
 
     private void RebuildOpeningCandidateBuckets()
@@ -1405,6 +1434,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
     {
         base.Shutdown();
         CleanupAllProjectedLights();
+        _rayCache.Clear();
     }
 
     private readonly record struct OpeningCandidateBucketKey(

@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13-pve PR 1280 (https://github.com/cmss13-devs/cmss13-pve/pull/1280) at https://github.com/AndroBetel/PvE-CMSS13/blob/5744cf0915607c28505847a15da110a1362869bd/icons/obj/items/weapons/guns/attachments/under.dmi. Ported by troy.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "bipod"
+    },
+    {
+      "name": "bipod_a"
+    },
+    {
+      "name": "bipod_a-on"
+    }
+  ]
+}

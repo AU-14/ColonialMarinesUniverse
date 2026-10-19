@@ -129,6 +129,7 @@
     sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNboonie.rsi
   - type: Clothing
     sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNboonie.rsi
+  - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNboonie.rsi
@@ -147,6 +148,7 @@
     sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNpatrolboonie.rsi
   - type: Clothing
     sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNpatrolboonie.rsi
+  - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNpatrolboonie.rsi
@@ -165,6 +167,7 @@
     sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNcamocap.rsi
   - type: Clothing
     sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNcamocap.rsi
+  - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNcamocap.rsi
@@ -183,6 +186,7 @@
     sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNpatrolcamocap.rsi
   - type: Clothing
     sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNpatrolcamocap.rsi
+  - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNpatrolcamocap.rsi

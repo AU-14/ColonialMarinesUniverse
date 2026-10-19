@@ -29,8 +29,10 @@ rmc-hivemanagement-reward = Reward Jelly (500)
 rmc-hivemanagement-exchange-larva = Exchange larva for evolution
 rmc-hivemanagement-exchange-larva-not-enough = We need at least 1 burrowed larva to sacrifice one for evolution points.
 rmc-hivemanagement-exchange-larva-title = Give Evolution Points
-rmc-hivemanagement-exchange-larva-description = Choose a xenonid to give {$points} evolution
+# cmu edit start: lore names
+rmc-hivemanagement-exchange-larva-description = Choose a xenomorph to give {$points} evolution
   points for a burrowed larva
+# cmu edit end
 rmc-hivemanagement-exchange-larva-need-minutes = We must give some time for larva to spawn before sacrificing them. Please wait another {$minutes} minutes
 rmc-hivemanagement-exchange-larva-given-user = {$target} was given {$points} evolution points.
 rmc-hivemanagement-exchange-larva-given-target = {$user} has given us {$points} evolution points! Use them well.
@@ -46,6 +48,8 @@ rmc-hivemanagement-provide-reason = Provide a reason for deevolving { $name }
 rmc-hivemanagement-queen-deevolving = The queen is deevolving you for the following reason: { $reason }
 rmc-hivemanagement-must-overwatch = You must overwatch the xeno you want to de-evolve.
 rmc-hivemanagement-cant-be-devolved = { $name } can't be devolved!
-rmc-hivemanagement-cant-deevolve-larva = You cannot deevolve xenonids to larva.
+# cmu edit start: lore names
+rmc-hivemanagement-cant-deevolve-larva = You cannot deevolve xenomorphs to larva.
+# cmu edit end
 rmc-hivemanagement-cant-deevolve-other-hive = You cannot deevolve a member of another hive!
 

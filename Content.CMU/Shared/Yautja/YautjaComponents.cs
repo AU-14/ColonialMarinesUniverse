@@ -2631,6 +2631,13 @@ public sealed partial class YautjaBracerAttachmentSpeedBonusComponent : Componen
 [RegisterComponent]
 public sealed partial class YautjaTrophySourceComponent : Component
 {
+    /// <summary>
+    /// Yautja trophy handling (kill counts, butchering, trophies, rituals) treats this body as a xeno even though it
+    /// has no XenoComponent, e.g. Wendigos.
+    /// </summary>
+    [DataField]
+    public bool CountsAsXeno;
+
     [DataField]
     public TimeSpan HarvestDelay = TimeSpan.FromSeconds(5);
 

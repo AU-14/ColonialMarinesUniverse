@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Shared.Timing;
 using System.Numerics;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared._RMC14.AntiAir;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
@@ -71,6 +72,7 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private RMCShipAntiAirSystem _antiAir = default!;
 
     private EntityQuery<ActorComponent> _actor;
     private EntityQuery<MobStateComponent> _mobStateQuery;
@@ -109,6 +111,7 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
 
         SubscribeLocalEvent<OrbitalCannonChangedEvent>(OnOrbitalCannonChanged);
         SubscribeLocalEvent<OrbitalCannonLaunchEvent>(OnOrbitalCannonLaunch);
+        SubscribeLocalEvent<RMCShipAntiAirChangedEvent>(OnAntiAirChanged);
 
         SubscribeLocalEvent<OverwatchConsoleComponent, BoundUIOpenedEvent>(OnBUIOpened);
         SubscribeLocalEvent<OverwatchConsoleComponent, BoundUIClosedEvent>(OnBUIClosed);
@@ -195,10 +198,32 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
         }
     }
 
+    private void OnAntiAirChanged(ref RMCShipAntiAirChangedEvent ev)
+    {
+        if (_net.IsClient)
+            return;
+
+        var consoles = EntityQueryEnumerator<OverwatchConsoleComponent>();
+        while (consoles.MoveNext(out var uid, out var console))
+        {
+            if (!console.ShowAntiAirStatus)
+                continue;
+
+            if (!_ui.IsUiOpen(uid, OverwatchConsoleUI.Key))
+                continue;
+
+            _ui.SetUiState(uid, OverwatchConsoleUI.Key, GetOverwatchBuiState((uid, console)));
+        }
+    }
+
     private void OnBUIOpened(Entity<OverwatchConsoleComponent> ent, ref BoundUIOpenedEvent args)
     {
         if (_net.IsClient)
             return;
+
+        // CMU14: notify support batteries through the existing UI lifecycle owner.
+        var shipWeapons = new Content.Shared.CMU14.ShipWeapons.CMUShipWeaponsRefreshEvent();
+        RaiseLocalEvent(ent, ref shipWeapons);
 
         var state = GetOverwatchBuiState(ent);
         _ui.SetUiState(ent.Owner, OverwatchConsoleUI.Key, state);
@@ -633,6 +658,14 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
             return;
         }
 
+        // CMU14: armed ship weapons use the same coordinates and launch confirmation as the cannon.
+        if (ent.Comp.CMUSelectedShipWeapon != null)
+        {
+            var launch = new Content.Shared.CMU14.ShipWeapons.CMUShipWeaponLaunchEvent(args.Actor);
+            RaiseLocalEvent(ent, ref launch);
+            return;
+        }
+
         if (!_orbitalCannon.TryGetClosestCannon(ent, out var cannon, string.IsNullOrEmpty(ent.Comp.Group) ? null : ent.Comp.Group))
         {
             _popup.PopupCursor(Loc.GetString("rmc-overwatch-orbital-no-cannon"), args.Actor, PopupType.LargeCaution);
@@ -802,10 +835,10 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
 
     public OverwatchConsoleBuiState GetOverwatchBuiState(Entity<OverwatchConsoleComponent> console)
     {
-        return GetOverwatchBuiState(console.Comp);
+        return GetOverwatchBuiState(console.Owner, console.Comp);
     }
 
-    private OverwatchConsoleBuiState GetOverwatchBuiState(OverwatchConsoleComponent console)
+    private OverwatchConsoleBuiState GetOverwatchBuiState(EntityUid owner, OverwatchConsoleComponent console)
     {
         var squads = new List<OverwatchSquad>();
         var marines = new Dictionary<NetEntity, List<OverwatchMarine>>();
@@ -875,7 +908,11 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
                     location));
         }
 
-        return new OverwatchConsoleBuiState(squads, marines, fireteams, cameras);
+        var antiAir = console.ShowAntiAirStatus
+            ? _antiAir.GetStatus(owner)
+            : default;
+
+        return new OverwatchConsoleBuiState(squads, marines, fireteams, cameras, antiAir);
     }
 
     public bool IsHidden(Entity<OverwatchConsoleComponent> console, NetEntity marine)
@@ -1035,8 +1072,13 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
 
             if (!states.TryGetValue(console.Group, out var state))
             {
-                state = GetOverwatchBuiState(console);
+                state = GetOverwatchBuiState((uid, console));
                 states[console.Group] = state;
+            }
+            else if (console.ShowAntiAirStatus)
+            {
+                // The MGAD status depends on the console's own ship.
+                state = new OverwatchConsoleBuiState(state.Squads, state.Marines, state.Fireteams, state.Cameras, _antiAir.GetStatus(uid));
             }
 
             _ui.SetUiState(uid, OverwatchConsoleUI.Key, state);
@@ -1094,7 +1136,7 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
             if (!_ui.IsUiOpen(consoleId, OverwatchConsoleUI.Key))
                 continue;
 
-            var state = GetOverwatchBuiState(consoleComp);
+            var state = GetOverwatchBuiState((consoleId, consoleComp));
             _ui.SetUiState(consoleId, OverwatchConsoleUI.Key, state);
         }
     }

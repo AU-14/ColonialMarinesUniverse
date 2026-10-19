@@ -918,6 +918,8 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                 }
             }
 
+            EntityManager.System<Content.Server.CMU14.Dropship.CMUHijackExtrasSystem>().DestroyUnlimitedPlanetHiveCores(ev.Dropship); // CMU14: blight cores aren't build-limited
+
             var xenoLimitedStructures = EntityQueryEnumerator<XenoSecretionLimitedComponent, TransformComponent>();
             while (xenoLimitedStructures.MoveNext(out var id, out _, out var xform))
             {

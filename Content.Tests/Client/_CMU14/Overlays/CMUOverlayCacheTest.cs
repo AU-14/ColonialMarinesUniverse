@@ -78,11 +78,12 @@ public sealed class CMUOverlayCacheTest
             cache.TryGetValue(i, out _);
         }
 
-        // One-off runtime work (tiered JIT, OSR) can land inside a single window on CI;
-        // per-replacement allocation would show up in every round.
+        // The counter also sees one-time runtime work on this thread (tiered JIT, on-stack replacement), which can
+        // land inside a window depending on runner timing. Bookkeeping allocations would repeat in every window
+        // (10000 replacements is ~480 KB of nodes), so one allocation-free window out of three proves reuse.
         var allocated = long.MaxValue;
         var next = 5000;
-        for (var round = 0; round < 3 && allocated != 0; round++)
+        for (var window = 0; window < 3 && allocated != 0; window++)
         {
             var before = GC.GetAllocatedBytesForCurrentThread();
             for (var end = next + 10000; next < end; next++)
@@ -91,8 +92,9 @@ public sealed class CMUOverlayCacheTest
                 cache.TryGetValue(next, out _);
             }
             allocated = GC.GetAllocatedBytesForCurrentThread() - before;
-            TestContext.Progress.WriteLine($"CMU_OVERLAY_CACHE round={round} replacements=10000 allocated={allocated}");
+            TestContext.Progress.WriteLine($"CMU_OVERLAY_CACHE window={window} replacements=10000 allocated={allocated}");
         }
+
         Assert.That(allocated, Is.Zero);
         Assert.That(cache.Count, Is.EqualTo(32));
     }
