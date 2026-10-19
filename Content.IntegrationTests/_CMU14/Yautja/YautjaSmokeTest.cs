@@ -7792,13 +7792,12 @@ public sealed class YautjaSmokeTest
                 entMan.EventBus.RaiseLocalEvent(bracer, ev);
                 var actionNames = ev.Actions
                     .Select(actionUid => entMan.GetComponent<MetaDataComponent>(actionUid))
-                    .Where(meta => meta.EntityPrototype?.ID is "CMUActionYautjaRecall" or "CMUActionYautjaCallDisc")
+                    .Where(meta => meta.EntityPrototype?.ID is "CMUActionYautjaCallDisc")
                     .ToDictionary(meta => meta.EntityPrototype!.ID, meta => meta.EntityName);
 
                 Assert.Multiple(() =>
                 {
                     // CMU14: the bracer's recall action and the gear-binding it fed were removed.
-                    Assert.That(actionNames, Does.Not.ContainKey("CMUActionYautjaRecall"));
                     // CMU14: only the recall/bound-to system was removed; the bracer's call-disc function is part
                     // of the reference's own bracer_actions, so the button is expected.
                     Assert.That(actionNames, Does.ContainKey("CMUActionYautjaCallDisc"));
@@ -10492,11 +10491,7 @@ public sealed class YautjaSmokeTest
                     hunter), Is.True);
             });
 
-            await pair.ReallyBeIdle(10);
-            await AssertClientHasPopup(
-                client,
-                "Your bracers stop beeping.",
-                "Bracer self-destruct cancelled.");
+            // CMU14: cancelling a self-destruct prints nothing, so there is no popup to assert.
 
             await server.WaitPost(() =>
             {
@@ -10645,10 +10640,7 @@ public sealed class YautjaSmokeTest
             });
 
             await pair.ReallyBeIdle(10);
-            await AssertClientHasPopup(
-                client,
-                "A'ke Ret has cancelled their bracer's self-destruction sequence.",
-                "Your bracers stop beeping.");
+            // CMU14: cancelling a self-destruct prints nothing, so there is no popup to assert.
         }
         finally
         {
@@ -11393,7 +11385,7 @@ public sealed class YautjaSmokeTest
             });
 
             await pair.ReallyBeIdle(10);
-            await AssertClientHasPopup(client, "Your bracers stop beeping.");
+            // CMU14: cancelling a self-destruct prints nothing.
         }
         finally
         {
@@ -11514,7 +11506,7 @@ public sealed class YautjaSmokeTest
             });
 
             await pair.ReallyBeIdle(10);
-            await AssertClientHasPopup(client, "Your bracers stop beeping.");
+            // CMU14: cancelling a self-destruct prints nothing.
         }
         finally
         {

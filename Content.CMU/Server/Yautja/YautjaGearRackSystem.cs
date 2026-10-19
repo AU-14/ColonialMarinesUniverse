@@ -322,7 +322,7 @@ public sealed partial class YautjaGearRackSystem : EntitySystem
 
     private bool HasRackAccess(EntityUid user, YautjaRank rank)
     {
-        // CMU14 (pred2 #5): no ID card required - a Yautja of the rack's rank or above may open it, because the
+        // no ID card required - a Yautja of the rack's rank or above may open it, because the
         // rank is innate on YautjaComponent.ClanRank rather than carried on an ID. YautjaRank is ordered, so a
         // higher rank passes a lower rack's check; the access tags stay as the ID-carrying fallback.
         if (TryComp<YautjaComponent>(user, out var yautja) && yautja.ClanRank >= rank)

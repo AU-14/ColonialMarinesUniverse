@@ -69,11 +69,6 @@
     - CMUYautjaDistract
     - CMUYautjaDeathCry
     - CMUYautjaDeathLaugh
-  # CMU14: the scream EMOTE stays allowed - a Yautja screaming is intended (yaut_actions/species code and CM-SS13's
-  # species pick "pain"/"scream"). The hotbar Scream ACTION is a different thing: VocalComponent.EmoteAction
-  # defaults to ActionScream and VocalSystem grants it on map init, but the hotbar entry is only a shortcut, since
-  # the scream stays usable through the emote wheel regardless (cmu-ui-options-scream-on-hotbar-tooltip). Nulling
-  # it makes VocalSystem grant no action for this mob while leaving speech and sounds untouched.
   - type: Vocal
     emoteAction: null
   - type: MeleeWeapon
@@ -276,10 +271,6 @@
     defaultLanguage: Yautja
   - type: Yautja
   - type: YautjaYoungblood
-  # CMU14: the youngblood does not inherit CMUMobYautja (its parents are AppearanceYautja + CMMobHuman), so it has
-  # to declare the Yautja metabolism itself. These are the same satiation prototypes the base mob uses, whose
-  # baseChangeRate of -0.02 is 0.2x the human -0.1 (RMCHumanHunger/RMCHumanThirst) - the intended 0.2 hunger and
-  # thirst modifier - so youngbloods no longer drain at the human rate.
   - type: Satiation
     satiations:
       Hunger:

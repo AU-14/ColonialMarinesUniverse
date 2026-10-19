@@ -6,8 +6,6 @@
   - type: Corrodible
     isCorrodible: false
   - type: YautjaTechItem
-    # CMU14: CM-SS13 never restricted Yautja melee weapons to Yautja, so a stolen one can be picked
-    # up, wielded, swung and thrown by anyone (the recall binding that used to sit here is gone).
     blockPickup: false
     blockUse: false
     blockMelee: false
@@ -449,7 +447,6 @@
   - type: Tool
     qualities:
     - Slicing
-  # CMU14: tags the dagger so the greaves knife slots can whitelist it for reinsertion.
   - type: Tag
     tags:
     - CMUYautjaCeremonialDagger
@@ -463,10 +460,6 @@
       types:
         Slash: 25
     soundHit:
-      # CMU14: the dagger uses the same sound as the rest of the Yautja knives in this file,
-      # /Audio/Weapons/bladeslice.ogg. The reference's own dagger line reads hitsound = 'sound/weapons/slash.ogg'
-      # (yaut_weapons.dm:774, over the parent knife's bladeslice), but that path did not take effect in game here,
-      # so this follows the sibling knives and the sound the Yautja weapons actually use.
       path: /Audio/Weapons/bladeslice.ogg
   - type: DamageOtherOnHit
     damage:
@@ -724,8 +717,6 @@
     - state: cleaving_glaive
       map: [base]
   - type: Item
-    # CMU14: the in-hand states (cleaving_glaive-inhand-left/right) live in weapons.rsi, so the Item needs its own
-    # sprite rsi - without it the held-prefix lookup has no sheet to resolve against and neither pose renders.
     sprite: CMU14/Yautja/weapons.rsi
     heldPrefix: cleaving_glaive
   - type: Wieldable
@@ -952,9 +943,9 @@
     blockThrow: false
     blockShoot: false
   - type: Sprite
-    sprite: CMU14/Yautja/weapons.rsi
+    sprite: CMU14/Yautja/plasma_projectiles.rsi
     layers:
-    - state: spike
+    - state: MSpearFlight
   - type: Projectile
     impactEffect: BulletImpactEffect
     damage:
@@ -975,11 +966,11 @@
     - flags: Turf
       damage:
         types:
-          Piercing: 25
+          Piercing: 250
     - flags: Breaching
       damage:
         types:
-          Piercing: 25
+          Piercing: 250
 
 - type: entity
   parent: BaseItem
@@ -996,7 +987,7 @@
     - state: spike_launcher
       map: ["enum.GunVisualLayers.Base"]
   - type: Item
-    sprite: CMU14/Yautja/gun_inhands.rsi
+    sprite: CMU14/Yautja/pred_guns_inhands.rsi
     heldPrefix: spikelauncher
     size: Normal
   - type: AmmoCounter
@@ -1016,8 +1007,6 @@
     count: 12
   - type: Wieldable
     wieldedInhandPrefix: spikelauncher_w
-  # CMU14: pred2 #8 - the spike launcher fires without being wielded. Wielding stays possible (Wieldable
-  # above); only the requirement and the firing-preventing wield delay are gone.
   - type: WieldableSpeedModifiers
     base: 0.75
     light: 0.9
@@ -1030,6 +1019,7 @@
   - type: Appearance
 
   - type: YautjaSpikeLauncher
+    rechargeSound: null
   - type: Clothing
     sprite: CMU14/Yautja/pred_guns_back.rsi
     equippedPrefix: spearlauncher
@@ -1204,7 +1194,6 @@
   - type: UniqueAction
   - type: Wieldable
     wieldedInhandPrefix: plasmapistol_w
-  # CMU14: pred2 #8 - the plasma pistol fires without being wielded; wielding stays possible.
 - type: entity
   parent: BaseItem
   id: CMUYautjaPlasmaCarbine

@@ -76,19 +76,10 @@ cmu-yautja-tech-delimbs = The bracer overload tears your arms apart!
 cmu-yautja-mask-ornament-denied = You do not know how to fit this ornament.
 cmu-yautja-thwei-no-idea = You have no idea where to inject {$item}.
 cmu-yautja-idchip-denied = You have no idea how to use this...
-# CMU14: item 7 - the user asked for the unlock and show-ID-chip refusals to read identically.
-# This diverges from CM-SS13, where yaut_bracers.dm:1514 (Toggle ID Chip) says "You do not know how to use
-# this." and :1552 (Toggle Bracer Lock) says "You have no idea how to use this...". Only the ID-chip string
-# was changed so the bracer lock and the tracker refusals (which share cmu-yautja-lock-no-idea) keep their
-# existing wording.
 cmu-yautja-lock-no-idea = You have no idea how to use this...
-# CMU14: yaut_items.dm:526 - the yautja headset's talk_into refusal for a non-yautja, non-thrall speaker.
 cmu-yautja-comms-denied = You try to talk into the headset, but just get a horrible shrieking in your ears!
-# CMU14: yaut_bracers.dm:1158 remote_kill_internal - "if(user.faction != FACTION_YAUTJA)".
 cmu-yautja-button-not-for-you = This button is not for you.
-# CMU14: yaut_bracers.dm:1162 remote_kill_internal - an enthralled user is refused separately.
 cmu-yautja-thrall-feature-blocked = The device is preventing you access of this feature as it detects you being a thrall.
-# CMU14: yaut_bracers.dm:536 attackby - attaching an attachment while untrained.
 cmu-yautja-attach-no-idea = You do not know how to attach {$item} to {$bracer}.
 cmu-yautja-mask-ornament-occupied = The mask already has an ornament installed.
 cmu-yautja-mask-ornament-attached = You attach {$item} to the mask.
@@ -171,7 +162,6 @@ cmu-yautja-thrall-bracer-unlocked-now = You unlock the thrall bracer.
 cmu-yautja-thrall-self-destruct-armed = You set the timer. They have failed you.
 cmu-yautja-thrall-self-destruct-target = Your thrall bracer begins a fatal countdown!
 cmu-yautja-thrall-self-destruct-warning = Thrall bracer self-destruct: {$seconds} seconds.
-cmu-yautja-thrall-self-destruct-cancelled = You cancel {$target}'s thrall bracer self-destruct.
 
 cmu-yautja-bracer-menu-title = Hunting Bracer
 cmu-yautja-bracer-menu-header = // HUNTING BRACER //
@@ -810,7 +800,6 @@ cmu-yautja-scalp-non-yautja-examine = Scalp-collecting is supposed to be a <i>jo
 cmu-yautja-honor-worth-examine = {$target} is worth {$honor} honor.
 cmu-yautja-self-destruct-broadcast-armed = {$hunter} has triggered their bracer's self-destruction sequence.
 cmu-yautja-self-destruct-broadcast-remote-armed = {$hunter} has triggered {$victim}'s bracer's self-destruction sequence.
-cmu-yautja-self-destruct-broadcast-cancelled = {$hunter} has cancelled their bracer's self-destruction sequence.
 cmu-yautja-self-destruct-admin-alert-self = ALERT: {$hunter} triggered their predator self-destruct sequence in {$area}.
 cmu-yautja-self-destruct-admin-alert-remote = ALERT: {$hunter} triggered the predator self-destruct sequence of {$victim} in {$area}.
 cmu-yautja-self-destruct-admin-cancel-link = CLICK TO CANCEL THIS PRED SD (bracer={$bracer}; victim={$victim})
@@ -864,7 +853,7 @@ cmu-yautja-hivebreaker-evolution-blocked = We are no longer able to evolve, or t
 cmu-yautja-hivebreaker-dethralled-target = We are no longer enthralled by a Yautja Bad Blood!
 cmu-yautja-hivebreaker-hivemind-restored = Our connection to the hivemind has been restored!
 cmu-yautja-scythe-bonus-strike-others = An opening in combat presents itself!
-cmu-yautja-scythe-bonus-strike-self = An opening in combat presents itself!
+cmu-yautja-scythe-bonus-strike-self = You manage to strike at your foe once more!
 cmu-yautja-hunter-spear-fishing-start-others = {$user} starts aiming the {$spear} at the water...
 cmu-yautja-hunter-spear-fishing-start-self = You prepare to catch something in the water...
 cmu-yautja-hunter-spear-fishing-fail = You fail to catch anything!
@@ -1293,4 +1282,13 @@ cmu-yautja-clan-info-clan-deleted = Clan deactivated.
 cmu-yautja-medicomp-empty-gun = The healing gun is empty.
 cmu-yautja-medicomp-stabilized = You stabilize the wounds.
 
-# CMU14: CM-SS13 attack_alien.dm:144-145 mask knockoff combat messages.
+ent-CMUActionYautjaLeap = Leap
+    .desc = Leap quickly toward a nearby location.
+
+cmu-yautja-entry-1 = You are [bold]Yautja[/bold], a great and noble hunter!
+cmu-yautja-entry-2 = Follow the guidance of your elders and experienced hunters.
+cmu-yautja-entry-3 = Hunt at your discretion, yet be observant rather than violent.
+cmu-yautja-entry-4 = Most importantly, remember that dying in battle is the highest honor a Yautja could ask for.
+
+cmu-yautja-mask-knockoff-others = { $xeno } smashes off { $target }'s { $mask }!
+cmu-yautja-mask-knockoff-self = We smash off { $target }'s { $mask }!

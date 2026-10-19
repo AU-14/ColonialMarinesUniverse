@@ -365,8 +365,6 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
         StopSelfDestructAudio(bracer);
         Dirty(bracer);
 
-        BroadcastToYautja(Loc.GetString("cmu-yautja-self-destruct-broadcast-cancelled", ("hunter", Name(user))), except: user);
-        // Cancelling stays audible: StopSelfDestructAudio above only silences the arm and warning streams.
         _audio.PlayPvs(bracer.Comp.SelfDestructCancelSound, user);
         _adminLog.Add(LogType.Action, LogImpact.Medium,
             $"{ToPrettyString(user):hunter} has deactivated their Self-Destruct.");

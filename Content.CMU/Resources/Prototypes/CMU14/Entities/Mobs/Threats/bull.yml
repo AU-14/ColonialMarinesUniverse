@@ -10,6 +10,11 @@
   name: Bull
   description: A heavy charging xeno with a brutal forward rush.
   components:
+  - type: FiremanCarriable
+    canThrow: true
+    carrierWhitelist:
+      components:
+      - Yautja
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite

@@ -5,7 +5,7 @@
   id: CMUNamesYautjaFirst
   values:
     prefix: cmu-name-yautja-first-
-    count: 33
+    count: 34
 
 - type: localizedDataset
   id: CMUNamesYautjaLast

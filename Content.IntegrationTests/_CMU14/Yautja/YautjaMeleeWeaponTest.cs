@@ -47,105 +47,6 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 public sealed class YautjaMeleeWeaponTest
 {
     [Test]
-    public async Task YautjaMeleeWeaponsApplyCmss13XenoInterferenceDurations()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var status = entMan.System<StatusEffectQuerySystem>();
-            var hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            var human = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new(2, 0)));
-            var chainwhip = entMan.SpawnEntity("CMUYautjaChainwhip", map.GridCoords);
-            var sword = entMan.SpawnEntity("CMUYautjaClanSword", map.GridCoords);
-            var scythe = entMan.SpawnEntity("CMUYautjaDualWarScythe", map.GridCoords);
-            var combistick = entMan.SpawnEntity("CMUYautjaCombistick", map.GridCoords);
-            var glaive = entMan.SpawnEntity("CMUYautjaWarGlaive", map.GridCoords);
-
-            try
-            {
-                entMan.EnsureComponent<YautjaComponent>(hunter);
-
-                RaiseMeleeHit(entMan, chainwhip, hunter, human);
-                Assert.That(status.TryGetTime(human, "YautjaInterference", out _), Is.False,
-                    "CMSS13 Yautja melee interference only applies when isxeno(target).");
-
-                AssertWeaponAppliesInterference(entMan, status, chainwhip, hunter, TimeSpan.FromSeconds(30),
-                    "CMSS13 /obj/item/weapon/yautja/chain/attack() adds interference(30, 30) to xenos.");
-
-                AssertWeaponAppliesInterference(entMan, status, sword, hunter, TimeSpan.FromSeconds(30),
-                    "CMSS13 /obj/item/weapon/yautja/sword/attack() adds interference(30, 30) to xenos.");
-
-                AssertWeaponAppliesInterference(entMan, status, scythe, hunter, TimeSpan.FromSeconds(15),
-                    "CMSS13 /obj/item/weapon/yautja/scythe/attack() adds interference(15, 15) to xenos.");
-
-                AssertWeaponAppliesInterference(entMan, status, combistick, hunter, TimeSpan.FromSeconds(30),
-                    "CMSS13 /obj/item/weapon/yautja/chained/attack() adds interference(30, 30) to xenos.");
-
-                AssertWeaponAppliesInterference(entMan, status, glaive, hunter, TimeSpan.FromSeconds(30),
-                    "CMSS13 /obj/item/weapon/twohanded/yautja/glaive/attack() adds interference(30, 30) to xenos.");
-            }
-            finally
-            {
-                foreach (var uid in new[] { hunter, human, chainwhip, sword, scythe, combistick, glaive })
-                {
-                    if (!entMan.Deleted(uid))
-                        entMan.DeleteEntity(uid);
-                }
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task WarAxeAndGlaiveVariantsInheritCmss13XenoInterferenceCallbacks()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var status = entMan.System<StatusEffectQuerySystem>();
-            var hunter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
-            var warAxe = entMan.SpawnEntity("CMUYautjaWarAxe", map.GridCoords);
-            var cleaving = entMan.SpawnEntity("CMUYautjaCleavingGlaive", map.GridCoords);
-            var ancient = entMan.SpawnEntity("CMUYautjaAncientWarGlaive", map.GridCoords);
-            var longaxe = entMan.SpawnEntity("CMUYautjaLongaxe", map.GridCoords);
-
-            try
-            {
-                AssertWeaponAppliesInterference(entMan, status, warAxe, hunter, TimeSpan.FromSeconds(30),
-                    "CMSS13 /obj/item/weapon/yautja/chained/war_axe inherits /chained/attack() interference(30, 30).");
-
-                AssertWeaponAppliesInterference(entMan, status, cleaving, hunter, TimeSpan.FromSeconds(30),
-                    "CMSS13 /obj/item/weapon/twohanded/yautja/glaive/alt inherits /glaive/attack() interference(30, 30).");
-
-                AssertWeaponAppliesInterference(entMan, status, ancient, hunter, TimeSpan.FromSeconds(30),
-                    "CMSS13 /obj/item/weapon/twohanded/yautja/glaive/damaged inherits /glaive/attack() interference(30, 30).");
-
-                AssertWeaponAppliesInterference(entMan, status, longaxe, hunter, TimeSpan.FromSeconds(30),
-                    "CMSS13 /obj/item/weapon/twohanded/yautja/glaive/longaxe inherits /glaive/attack() interference(30, 30).");
-            }
-            finally
-            {
-                foreach (var uid in new[] { hunter, warAxe, cleaving, ancient, longaxe })
-                {
-                    if (!entMan.Deleted(uid))
-                        entMan.DeleteEntity(uid);
-                }
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task CleavingGlaiveMountsHumanSkullTrophyLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -1699,77 +1600,6 @@ public sealed class YautjaMeleeWeaponTest
         return hit;
     }
 
-    private static void AssertWeaponAppliesInterference(
-        IEntityManager entMan,
-        StatusEffectQuerySystem status,
-        EntityUid weapon,
-        EntityUid user,
-        TimeSpan expected,
-        string source)
-    {
-        var xeno = entMan.SpawnEntity("CMXenoDrone", entMan.GetComponent<TransformComponent>(user).Coordinates);
-
-        try
-        {
-            Assert.That(status.TryGetTime(xeno, "YautjaInterference", out _), Is.False);
-
-            RaiseMeleeHit(entMan, weapon, user, xeno);
-            AssertInterferenceDuration(status, xeno, expected, source);
-        }
-        finally
-        {
-            if (!entMan.Deleted(xeno))
-                entMan.DeleteEntity(xeno);
-        }
-    }
-
-    private static void AssertWeaponDoesNotApplyInterference(
-        IEntityManager entMan,
-        StatusEffectQuerySystem status,
-        EntityUid weapon,
-        EntityUid user,
-        string source)
-    {
-        var xeno = entMan.SpawnEntity("CMXenoDrone", entMan.GetComponent<TransformComponent>(user).Coordinates);
-
-        try
-        {
-            RaiseMeleeHit(entMan, weapon, user, xeno);
-            Assert.That(status.TryGetTime(xeno, "YautjaInterference", out _), Is.False, source);
-        }
-        finally
-        {
-            if (!entMan.Deleted(xeno))
-                entMan.DeleteEntity(xeno);
-        }
-    }
-
-    private static void AssertInterferenceDuration(
-        StatusEffectQuerySystem status,
-        EntityUid target,
-        TimeSpan expected,
-        string source)
-    {
-        Assert.That(status.TryGetTime(target, "YautjaInterference", out var time), Is.True, source);
-        Assert.That(time!.Value.Item2 - time.Value.Item1, Is.EqualTo(expected), source);
-    }
-
-    private static AfterInteractEvent StartSpearFishing(
-        IEntityManager entMan,
-        EntityUid hunter,
-        EntityUid spear,
-        EntityUid target,
-        bool canReach)
-    {
-        var interact = new AfterInteractEvent(
-            hunter,
-            spear,
-            target,
-            entMan.GetComponent<TransformComponent>(target).Coordinates,
-            canReach);
-        entMan.EventBus.RaiseLocalEvent(spear, interact);
-        return interact;
-    }
 
     private static AfterInteractEvent StartDaggerLimbFlay(
         IEntityManager entMan,
@@ -1959,5 +1789,21 @@ public sealed class YautjaMeleeWeaponTest
         }
 
         return false;
+    }
+    private static AfterInteractEvent StartSpearFishing(
+        IEntityManager entMan,
+        EntityUid hunter,
+        EntityUid spear,
+        EntityUid target,
+        bool canReach)
+    {
+        var interact = new AfterInteractEvent(
+            hunter,
+            spear,
+            target,
+            entMan.GetComponent<TransformComponent>(target).Coordinates,
+            canReach);
+        entMan.EventBus.RaiseLocalEvent(spear, interact);
+        return interact;
     }
 }

@@ -1367,8 +1367,12 @@ public sealed class YautjaPlasmaWeaponTest
                     "CMSS13 plasma immobilizer area stun uses stun_time = 6 for normal carbon targets.");
                 AssertCasterStun(entMan, xeno, TimeSpan.FromSeconds(6 * 0.667),
                     "The immobilizer's six-second area stun respects RMC's 0.667 xeno duration multiplier.");
-                AssertCasterStun(entMan, yautja, TimeSpan.FromSeconds(4) / 1.5,
-                    "CMSS13's immobilizer applies stun_time - 2 for hunters, cut by their 1.5x stun reduction.");
+                // CMSS13 life_helpers.dm:177-183 reduces a stun by "(1 - skill_resistance) / species.stun_reduction",
+                // and the skill term applies to hunters too. A Yautja's Endurance 3 gives skill_resistance
+                // (3 - 1) * 0.08 = 0.16, so the hunter's stun_time - 2 = 4s becomes 4 * 0.84 / 1.5 = 2.24s. The old
+                // expectation divided by 1.5 alone and ignored the skill term.
+                AssertCasterStun(entMan, yautja, TimeSpan.FromSeconds(4) * 0.84 / 1.5,
+                    "CMSS13's immobilizer applies stun_time - 2 for hunters, then the Endurance skill term and their 1.5x stun reduction.");
                 AssertNoCasterStun(entMan, predalien,
                     "CMSS13 plasma immobilizer skips predalien targets.");
                 AssertNoCasterStun(entMan, outsideRange,
@@ -1383,7 +1387,9 @@ public sealed class YautjaPlasmaWeaponTest
 
                 AssertCasterStun(entMan, human, TimeSpan.FromSeconds(6),
                     "CMSS13 plasma immobilizer do_at_max_range() runs the same area stun as direct impact.");
-                AssertCasterStun(entMan, yautja, TimeSpan.FromSeconds(4) / 1.5,
+                // Same derivation as above: stun_time - 2 = 4s, then the Endurance 3 skill term (0.84) and the 1.5x
+                // stun reduction -> 2.24s (CMSS13 life_helpers.dm:177-183).
+                AssertCasterStun(entMan, yautja, TimeSpan.FromSeconds(4) * 0.84 / 1.5,
                     "Max-range immobilizer stun hits hunters exactly like a direct hit.");
                 AssertNoCasterStun(entMan, predalien,
                     "CMSS13 max-range immobilizer area stun still skips predaliens.");

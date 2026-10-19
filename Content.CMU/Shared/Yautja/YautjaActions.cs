@@ -24,6 +24,8 @@ public sealed partial class YautjaCallCombiActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaButcherActionEvent : InstantActionEvent;
 
+public sealed partial class YautjaLeapActionEvent : WorldTargetActionEvent;
+
 [Serializable, NetSerializable]
 public sealed record YautjaButcherTargetSelectedEvent(NetEntity User, NetEntity Target);
 

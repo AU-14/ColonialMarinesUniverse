@@ -20,7 +20,7 @@ public sealed partial class MeleeWeaponComponent : Component
     [DataField]
     public bool WidePrimary;
 
-    //CMU, if false weapon cant wide swing
+    // CMU14: when false this weapon cannot perform a wide (arc) swing.
     [DataField]
     public bool WideAttackAllowed = true;
 

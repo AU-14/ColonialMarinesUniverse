@@ -26,7 +26,6 @@ public sealed partial class YautjaTechItemSystem : EntitySystem
     public override void Initialize()
     {
         // CMU14: the melee health-damage modifier is removed (pred2 #10); the handler is kept commented out below.
-        // SubscribeLocalEvent<DamageableComponent, DamageModifyAfterResistEvent>(OnDamageModifyAfterResist);
         SubscribeLocalEvent<YautjaTechItemComponent, StaminaMeleeHitEvent>(OnStaminaMeleeHit);
         SubscribeLocalEvent<YautjaTechItemComponent, ProjectileHitEvent>(OnProjectileHit);
         SubscribeLocalEvent<YautjaTechItemComponent, GettingPickedUpAttemptEvent>(OnPickupAttempt);
@@ -44,22 +43,9 @@ public sealed partial class YautjaTechItemSystem : EntitySystem
         SubscribeLocalEvent<YautjaTechItemComponent, AttemptShootEvent>(OnShootAttempt, before: [typeof(SharedRMCFlamerSystem)]);
     }
 
-    // CMU14: the old per-weapon YautjaTechItem melee modifier is removed (pred2 #10): it scaled melee *health*
-    // damage, which CM-SS13 does not do - a Yautja weapon gets no melee damage bonus - and melee scaling now
-    // belongs to the xeno melee configuration in CMArmorSystem. DamageMultiplier stays for the projectile and
-    // melee-stamina paths that still use it. Kept commented out for merge safety (AGENTS-CMU.md:62).
-    // private void OnDamageModifyAfterResist(Entity<DamageableComponent> ent, ref DamageModifyAfterResistEvent args)
-    // {
-    //     if (args.Tool is not { } tool ||
-    //         HasComp<ProjectileComponent>(tool) ||
-    //         !TryComp(tool, out YautjaTechItemComponent? tech) ||
-    //         tech.DamageMultiplier == 1f ||
-    //         !args.Damage.AnyPositive())
-    //     {
-    //         return;
-    //     }
-    //
-    //     args.Damage *= tech.DamageMultiplier;
+    // The old per-weapon YautjaTechItem melee modifier is gone: it scaled melee *health* damage, which CM-SS13 does
+    // not do - a Yautja weapon gets no melee damage bonus - and melee scaling now belongs to the xeno melee
+    // configuration in CMArmorSystem. DamageMultiplier stays for the projectile and melee-stamina paths.
     // }
 
     private void OnProjectileHit(Entity<YautjaTechItemComponent> ent, ref ProjectileHitEvent args)

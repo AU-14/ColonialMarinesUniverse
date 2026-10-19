@@ -83,7 +83,7 @@ public sealed partial class YautjaGearRackClientSystem : EntitySystem
         return _accessReader.FindAccessTags(user).Contains(access);
     }
 
-    /// CMU14 (pred2 #5): no ID card required - a Yautja of the rack's rank or above may open it. Mirrors the
+    /// no ID card required - a Yautja of the rack's rank or above may open it. Mirrors the
     /// server's rule so a Yautja carrying no ID is not denied locally before the server even sees the request.
     private bool HasRackRank(EntityUid user, YautjaRank rank)
     {

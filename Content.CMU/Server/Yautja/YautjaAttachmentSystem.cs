@@ -171,22 +171,11 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
             return;
         }
 
-        // CMU14: attachment insertion is no longer Yautja-only - anyone may fit a valid attachment to a bracer.
-        // Only this authorization requirement is relaxed: the compatibility, slot and hand checks below still run,
-        // and the other CanUseYautjaGear gates (menu, gear toggles, activation) are untouched. Kept commented out
-        // for merge safety (AGENTS-CMU.md:62).
-        // if (!CanUseYautjaGear(args.User))
-        // {
-        //     // yaut_bracers.dm:536-540 attackby refuses a non-tech attach outright with its own wording.
-        //     _popup.PopupEntity(
-        //         Loc.GetString("cmu-yautja-attach-no-idea", ("item", args.Used), ("bracer", ent.Owner)),
-        //         args.User,
-        //         args.User,
-        //         PopupType.SmallCaution);
-        //     args.Handled = true;
-        //     return;
-        // }
-
+        // Attachment insertion is not Yautja-only: anyone may fit a valid attachment to a bracer. Only this
+        // authorization requirement was dropped - the compatibility, slot and hand checks below still run, and the
+        // other CanUseYautjaGear gates (menu, gear toggles, activation) are untouched.
+        // CM-SS13 counterpart: yaut_bracers.dm:536-540 attackby only refuses a non-tech attach for its wording, and
+        // the feature itself is not gated.
         if (IsYoungbloodRestrictedGear(args.User, stored.Kind))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-tech-denied"), args.User, args.User, PopupType.SmallCaution);

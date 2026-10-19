@@ -34,6 +34,9 @@ using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Humanoid.Markings;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Content.Server.Chat.Managers;
+using Content.Shared.Chat;
+using Robust.Shared.Player;
 
 namespace Content.Server.CMU14.Yautja;
 
@@ -45,6 +48,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     [Dependency] private HumanoidProfileSystem _humanoidProfile = default!;
     [Dependency] private GunIFFSystem _iff = default!;
     [Dependency] private YautjaAbilitySystem _abilities = default!;
+    [Dependency] private IChatManager _chatManager = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
     [Dependency] private NamingSystem _naming = default!;
@@ -81,6 +85,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         SubscribeLocalEvent<YautjaComponent, MapInitEvent>(OnYautjaMapInit);
         SubscribeLocalEvent<YautjaComponent, IdentityChangedEvent>(OnIdentityChanged);
         SubscribeLocalEvent<YautjaComponent, RandomHumanoidSpawnedEvent>(OnRandomHumanoidSpawned);
+        SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);
     }
 
     private void OnYautjaInit(Entity<YautjaComponent> ent, ref ComponentInit args)
@@ -115,6 +120,35 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     {
         ApplyIntrinsicStats(ent);
         _honorboundAbilities.GrantActions(ent);
+    }
+
+    // CMU14: the entry message needs a live session. RandomHumanoidSpawnedEvent fires before the player is attached
+    // (and mid-round antag spawns never see PlayerSpawnCompleteEvent), so delivery hangs off PlayerAttachedEvent,
+    // which hands us the session directly.
+    private void OnPlayerAttached(PlayerAttachedEvent args)
+    {
+        if (!TryComp(args.Entity, out YautjaComponent? yautja) || yautja.EntryMessageSent)
+            return;
+
+        yautja.EntryMessageSent = true;
+        SendEntryMessage(args.Entity, args.Player);
+    }
+
+    // CMU14: mirrors CM-SS13's /datum/job/antag/predator/announce_entry_message (pred.dm:51-55). SPAN_NOTICE is
+    // the "notice" span class (code/span_macros.dm:70), which SS14 represents as ChatChannel.Server - the system
+    // message channel - not as an in-character line. Sent only to the spawning hunter's session.
+    private void SendEntryMessage(EntityUid hunter, ICommonSession session)
+    {
+        SendEntryLine(hunter, session, "cmu-yautja-entry-1");
+        SendEntryLine(hunter, session, "cmu-yautja-entry-2");
+        SendEntryLine(hunter, session, "cmu-yautja-entry-3");
+        SendEntryLine(hunter, session, "cmu-yautja-entry-4");
+    }
+
+    private void SendEntryLine(EntityUid hunter, ICommonSession session, string key)
+    {
+        var text = Loc.GetString(key);
+        _chatManager.ChatMessageToOne(ChatChannel.Server, text, text, hunter, false, session.Channel);
     }
 
     private void OnIdentityChanged(Entity<YautjaComponent> ent, ref IdentityChangedEvent args)

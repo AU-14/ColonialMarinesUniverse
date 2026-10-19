@@ -211,7 +211,7 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
     /// </summary>
     public void ClientHeavyAttack(EntityUid user, EntityCoordinates coordinates, EntityUid meleeUid, MeleeWeaponComponent component)
     {
-        //CMU no wide swing
+        // CMU14: no wide swing for weapons that forbid it.
         if (!component.WideAttackAllowed)
             return;
 

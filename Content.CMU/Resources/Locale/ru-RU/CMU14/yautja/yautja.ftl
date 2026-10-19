@@ -245,7 +245,6 @@ cmu-yautja-thrall-bracer-unlocked-now = Вы разблокируете нару
 cmu-yautja-thrall-self-destruct-armed = Вы запустили таймер. Он подвёл вас.
 cmu-yautja-thrall-self-destruct-target = Ваш наруч раба начинает смертельный отсчёт!
 cmu-yautja-thrall-self-destruct-warning = Самоуничтожение наруча раба: {$seconds} секунд.
-cmu-yautja-thrall-self-destruct-cancelled = Вы отменяете самоуничтожение наруча раба {$target}.
 
 cmu-yautja-bracer-menu-title = Охотничий наруч
 cmu-yautja-bracer-menu-header = // ОХОТНИЧИЙ НАРУЧ //
@@ -627,3 +626,6 @@ cmu-yautja-hunt-call-elite-mixed-larger = Элитные смешанные фр
 cmu-yautja-power-examine-charge = Текущий заряд: [bold]{$charge}/{$max}[/bold].
 cmu-yautja-spike-launcher-examine-spikes = Текущий боезапас: [bold]{$count}/{$capacity}[/bold] шипов.
 cmu-yautja-plasma-weapon-examine-charge = Текущий заряд: [bold]{$charge}/{$max}[/bold].
+
+ent-CMUActionYautjaLeap = прыжок
+    .desc = Быстро прыгнуть в ближайшее место.

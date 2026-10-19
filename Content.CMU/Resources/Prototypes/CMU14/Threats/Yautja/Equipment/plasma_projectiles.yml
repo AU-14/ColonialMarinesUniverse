@@ -115,10 +115,7 @@
     - HideContextMenu
 
 - type: entity
-  # CMU14: shockwave-free twin of CMUYautjaPlasmaImpactEffect, used by the plasma pistol bolt. The reference
-  # pistol bolt creates no explosion or shockwave, and the original proto must keep its RMCExplosionShockWave
-  # because the caster bolts share it.
-  id: CMUYautjaPlasmaPistolImpactEffect
+  id: CMUYautjaPlasmaEradicatorImpactEffect
   categories: [HideSpawnMenu]
   components:
   - type: TimedDespawn
@@ -131,56 +128,6 @@
       map: ["enum.EffectLayers.Unshaded"]
       sprite: CMU14/Yautja/plasma_projectiles.rsi
       state: muzzle_energy
-  - type: PointLight
-    enabled: true
-    color: "#4fdcff"
-    radius: 4.25
-    energy: 2.8
-  - type: EffectVisuals
-  - type: Tag
-    tags:
-    - HideContextMenu
-
-- type: entity
-  # CMU14: shockwave-free twin of CMUYautjaPlasmaHeavyImpactEffect, used by the plasma rifle bolt for the same
-  # reason - the reference rifle bolt has no explosion or shockwave, but the heavy proto is shared with casters.
-  id: CMUYautjaPlasmaRifleImpactEffect
-  categories: [HideSpawnMenu]
-  components:
-  - type: TimedDespawn
-    lifetime: 0.75
-  - type: Sprite
-    drawdepth: Effects
-    scale: 1.9, 1.9
-    layers:
-    - shader: unshaded
-      map: ["enum.EffectLayers.Unshaded"]
-      sprite: CMU14/Yautja/plasma_projectiles.rsi
-      state: muzzle_energy
-  - type: PointLight
-    enabled: true
-    color: "#55c7ff"
-    radius: 5.5
-    energy: 3.6
-  - type: EffectVisuals
-  - type: Tag
-    tags:
-    - HideContextMenu
-
-- type: entity
-  id: CMUYautjaPlasmaEradicatorImpactEffect
-  categories: [HideSpawnMenu]
-  components:
-  - type: TimedDespawn
-    lifetime: 1.15
-  - type: Sprite
-    drawdepth: Effects
-    scale: 2.35, 2.35
-    layers:
-    - shader: unshaded
-      map: ["enum.EffectLayers.Unshaded"]
-      sprite: CMU14/Yautja/plasma_projectiles.rsi
-      state: bluespace
   - type: PointLight
     enabled: true
     color: "#2da4ff"
@@ -258,10 +205,7 @@
   - type: Ammo
     muzzleFlash: CMUYautjaPlasmaMuzzleFlash
   - type: Projectile
-    impactEffect: CMUYautjaPlasmaImpactEffect
-    soundHit:
-      collection: WeakHit
-    forceSound: true
+    impactEffect: null
     damage:
       types:
         Heat: 0
@@ -286,17 +230,12 @@
   components:
   - type: Sprite
     layers:
-    # CMU14: the reference plasma pistol fires /datum/ammo/energy/yautja/pistol, whose icon_state is "ion"
-    # (code/datums/ammo/energy.dm:81-83). The pulse1 and bluespace cels belong to the caster bolts, not this one.
     - state: ion
       shader: unshaded
   - type: Ammo
     muzzleFlash: CMUYautjaPlasmaPistolMuzzleFlash
   - type: Projectile
-    # CMU14: the reference pistol bolt has no explosion, shockwave or area effect - the impact is the ammo's
-    # damage alone. This uses a shockwave-free effect so the shared CMUYautjaPlasmaImpactEffect keeps its
-    # RMCExplosionShockWave for the caster bolts that legitimately use it.
-    impactEffect: CMUYautjaPlasmaPistolImpactEffect
+    impactEffect: null
     damage:
       types:
         Heat: 40
@@ -311,17 +250,12 @@
   components:
   - type: Sprite
     layers:
-    # CMU14: the reference plasma rifle fires /datum/ammo/energy/yautja/rifle/bolt, icon_state "ion"
-    # (code/datums/ammo/energy.dm:296-298) - the same cel the pistol bolt uses, not a separate weapon sprite.
     - state: ion
       shader: unshaded
   - type: Ammo
     muzzleFlash: CMUYautjaPlasmaRifleMuzzleFlash
   - type: Projectile
-    # CMU14: the reference rifle bolt has no explosion or shockwave either. Its only special hit behaviour is
-    # the hivemind interference from on_hit_mob (energy.dm:306-310), which CMU already implements as the
-    # YautjaPlasmaRifleBolt component below.
-    impactEffect: CMUYautjaPlasmaRifleImpactEffect
+    impactEffect: null
     damage:
       types:
         Heat: 55
@@ -344,7 +278,7 @@
   components:
   - type: YautjaCasterStunProjectile
   - type: Projectile
-    impactEffect: CMUYautjaPlasmaImpactEffect
+    impactEffect: null
     damage:
       types:
         Heat: 0
@@ -359,10 +293,10 @@
   components:
   - type: Sprite
     layers:
-    - state: bluespace
+    - state: ion
       shader: unshaded
   - type: Projectile
-    impactEffect: CMUYautjaPlasmaEradicatorImpactEffect
+    impactEffect: null
     damage:
       types:
         Heat: 0
@@ -385,7 +319,7 @@
     - state: pulse1
       shader: unshaded
   - type: Projectile
-    impactEffect: CMUYautjaPlasmaHeavyImpactEffect
+    impactEffect: null
     damage:
       types:
         Heat: 75
@@ -477,7 +411,7 @@
     - state: bluespace
       shader: unshaded
   - type: Projectile
-    impactEffect: CMUYautjaPlasmaEradicatorImpactEffect
+    impactEffect: null
     damage:
       types:
         Heat: 55
@@ -487,11 +421,12 @@
   - type: TriggerOnCollide
     fixtureID: projectile
   - type: ExplodeOnTrigger
+  - type: DeleteOnTrigger
   - type: Explosive
     explosionType: RMC
-    maxIntensity: 170 # CMU14: CM-SS13 cell_explosion(projectile, 170, 50) for the plasma eradicator; was capped at 50
-    intensitySlope: 6
-    totalIntensity: 170
+    maxIntensity: 200
+    intensitySlope: 4.5
+    totalIntensity: 330
     maxTileBreak: 2
   - type: CMExplosionEffect
     explosion: CMUYautjaPlasmaEradicatorImpactEffect

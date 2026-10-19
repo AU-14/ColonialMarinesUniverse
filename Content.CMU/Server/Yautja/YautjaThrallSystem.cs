@@ -1844,7 +1844,6 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         bracer.Comp.NextSelfDestructWarning = TimeSpan.Zero;
         Dirty(bracer);
 
-        _popup.PopupEntity(Loc.GetString("cmu-yautja-thrall-self-destruct-cancelled", ("target", thrall)), master, master);
         _audio.PlayPvs(bracer.Comp.SelfDestructWarningSound, bracer.Owner);
 
         _adminLog.Add(LogType.Action, LogImpact.Medium,

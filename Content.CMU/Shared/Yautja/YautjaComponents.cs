@@ -158,6 +158,44 @@ public sealed partial class YautjaComponent : Component
     [DataField]
     public EntProtoId ButcherActionId = "CMUActionYautjaButcher";
 
+    [DataField]
+    public EntProtoId LeapActionId = "CMUActionYautjaLeap";
+
+    /// <summary>
+    /// CMU14: set once the spawn entry message has been delivered to the player's session.
+    /// </summary>
+    [ViewVariables]
+    public bool EntryMessageSent;
+
+    public EntityUid? LeapAction;
+
+    [DataField]
+    public float LeapThrowSpeed = 5f;
+
+    [DataField]
+    public float LeapMaxRange = 7f;
+
+    [DataField]
+    public TimeSpan LeapWindup = TimeSpan.FromSeconds(0.6);
+
+    /// <summary>
+    /// CMU14: CM-SS13 winds up twice as long when leaping upward (yaut_actions.dm:461: 2s up, 1s otherwise).
+    /// </summary>
+    [DataField]
+    public TimeSpan LeapUpWindup = TimeSpan.FromSeconds(2);
+
+    [DataField]
+    public TimeSpan LeapDownWindup = TimeSpan.FromSeconds(1);
+
+    [DataField]
+    public EntProtoId LeapWarningPrototype = "CMUYautjaLeapWarning";
+
+    /// <summary>
+    /// CMU14: played on launch. CM-SS13 picks one of pred_leap1/pred_leap2 (yaut_actions.dm:468).
+    /// </summary>
+    [DataField]
+    public SoundSpecifier LeapSound = new SoundCollectionSpecifier("CMUYautjaLeap");
+
     [ViewVariables]
     public EntityUid? ButcherAction;
 
@@ -3414,6 +3452,11 @@ public sealed partial class YautjaCasterImmobilizerProjectileComponent : Compone
 
     [DataField]
     public TimeSpan YautjaStunReduction = TimeSpan.FromSeconds(2);
+
+    [DataField]
+    public SoundSpecifier StunSound = new SoundPathSpecifier(
+        "/Audio/CMU14/Yautja/Effects/wave.ogg",
+        AudioParams.Default.WithVolume(3f).WithMaxDistance(25f));
 }
 
 [RegisterComponent]
@@ -3422,11 +3465,24 @@ public sealed partial class YautjaCasterSingleLethalProjectileComponent : Compon
 [RegisterComponent]
 public sealed partial class YautjaCasterEradicatorProjectileComponent : Component
 {
+    // CMU14: the eradicator's TriggerOnCollide fires once per colliding fixture, and ExplodeOnTriggerSystem
+    // explodes unconditionally on every trigger, so a wall impact could detonate several times in one tick (extra
+    // shockwaves, 10-16 shrapnel and 5 scorch decals each) This latch makes the bolt explode exactly once.
+    public bool Triggered;
+
+    // CMU14: CM-SS13 destroys doors through its explosion (door.dm ex_act qdels above EXPLOSION_THRESHOLD_LOW), not
+    // through the projectile. The bolt sweeps doors in this radius when its trigger fires, i.e. as the explosion
+    // goes off, so a shot landing next to a door still breaches it.
+    [DataField]
+    public float DoorBreachRadius = 1.5f;
+
     [DataField]
     public TimeSpan VehicleSlowdownTime = TimeSpan.FromSeconds(5);
 
+    // CMU14: CM-SS13's eradicator on_hit_obj calls ex_act(150, dir, cause_data, 100) on the multitile vehicle
+    // (code/datums/ammo/energy.dm), i.e. 150 damage at 100% probability. This was 100.
     [DataField]
-    public float VehicleHullDamage = 100f;
+    public float VehicleHullDamage = 150f;
 
     [DataField]
     public SoundSpecifier VehicleImpactSound = new SoundPathSpecifier("/Audio/_RMC14/Effects/meteorimpact.ogg");
