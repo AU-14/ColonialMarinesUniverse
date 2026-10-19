@@ -169,7 +169,6 @@ public sealed class CMUNestedHostTest
             }
         });
 
-        // Establish the periodic update's phase before measuring exactly three healing ticks.
         await pair.RunSeconds(0.1f);
         await server.WaitAssertion(() =>
         {
@@ -180,7 +179,18 @@ public sealed class CMUNestedHostTest
             entities.System<DamageableSystem>().TryChangeDamage(host, damage, ignoreResistances: true);
             Assert.That(entities.System<DamageableSystem>().GetTotalDamage(host), Is.EqualTo(FixedPoint2.New(initialDamage)));
         });
-        await pair.RunSeconds(3);
+        // the heal timer's phase leaks across pooled pairs and a "1s" period is 31 ticks (tick period rounds down),
+        // so sync to the first heal instead of counting heals in a fixed window
+        var initial = FixedPoint2.New(initialDamage);
+        var current = initial;
+        for (var i = 0; i < pair.SecondsToTicks(1.1f) && current == initial; i++)
+        {
+            await pair.RunTicksSync(1);
+            await server.WaitPost(() => current = entities.System<DamageableSystem>().GetTotalDamage(host));
+        }
+
+        // two more heals after the first, short of a third
+        await pair.RunSeconds(2.5f);
         await server.WaitAssertion(() =>
             Assert.That(entities.System<DamageableSystem>().GetTotalDamage(host), Is.EqualTo(FixedPoint2.New(expected))));
         await pair.CleanReturnAsync();
