@@ -1,0 +1,339 @@
+- type: entity
+  parent: CMBaseStructureCorrodible
+  id: CMUDropPod
+  name: drop pod
+  description: A single-trooper orbital insertion pod with racks for two weapons. Fired from a drop pod console.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/synth_charger.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - state: borgcharger0
+      map: [ "enum.CMUDropPodVisualLayers.Base" ]
+  - type: InteractionOutline
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        density: 200
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: CMUDropPod
+    group: default
+    occupantWhitelist:
+      components:
+      - HumanoidProfile
+    occupantBlacklist:
+      components:
+      - Xeno
+    weaponSlots:
+    - cmu_drop_pod_weapon_1
+    - cmu_drop_pod_weapon_2
+    insertDelay: 2
+    exitStun: 1
+    requireOccupant: true
+    phases:
+    - duration: 3
+      parallax: FastSpace
+      velocity: 0,40
+      message: cmu-drop-pod-phase-launch
+      sound:
+        path: /Audio/_RMC14/Machines/escape_pod_launch.ogg
+      shakes: 2
+      shakeStrength: 2
+    - duration: 4
+      parallax: Sky
+      velocity: 0,60
+      atmospheric: true
+      message: cmu-drop-pod-phase-atmosphere
+      sound:
+        path: /Audio/_RMC14/Weapons/dropship_sonic_boom.ogg
+      shakes: 6
+      shakeStrength: 4
+    - duration: 2
+      parallax: Sky
+      velocity: 0,25
+      message: cmu-drop-pod-phase-chutes
+      shakes: 2
+      shakeStrength: 1
+    skyFallDuration: 1.5
+    crashDuration: 0.75
+    crashSound:
+      path: /Audio/_RMC14/Machines/Techpod/techpod_hit.ogg
+    scatterRadius: 60
+    landingAttempts: 64
+    targetDepth: 0
+    landingBlockers:
+      tags:
+      - Wall
+    blockersMustBeIndestructible: true
+    respectParadropAreas: true
+    landingDamageRadius: 0.5
+    landingDamage:
+      types:
+        Blunt: 80
+    landingShakeRange: 8
+    landingShakes: 3
+    landingShakeStrength: 5
+    injuryChance: 0.15
+    injuryDamage:
+      types:
+        Blunt: 30
+    injuryStun: 2
+    treatmentDamage:
+      types:
+        Blunt: -4
+        Slash: -2
+        Piercing: -2
+    treatmentInterval: 2
+    treatmentTicks: 8
+    openDelay: 2
+    atmosphereBreakupChance: 0.02
+    impactBreakupChance: 0.03
+    breakupExtraScatter: 15
+    breakupDamage:
+      types:
+        Blunt: 50
+        Heat: 20
+    breakupStun: 4
+    breakupDebris: CMRodMetal1
+    breakupDebrisCount: 3
+    breakupSound:
+      path: /Audio/_RMC14/Effects/metal_crash.ogg
+  - type: ItemSlots
+    slots:
+      cmu_drop_pod_weapon_1:
+        name: cmu-drop-pod-weapon-slot
+        whitelist:
+          components:
+          - Gun
+      cmu_drop_pod_weapon_2:
+        name: cmu-drop-pod-weapon-slot
+        whitelist:
+          components:
+          - Gun
+  - type: ContainerContainer
+    containers:
+      cmu_drop_pod_occupant: !type:ContainerSlot {}
+      cmu_drop_pod_weapon_1: !type:ContainerSlot {}
+      cmu_drop_pod_weapon_2: !type:ContainerSlot {}
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUDropPodVisuals.Status:
+        enum.CMUDropPodVisualLayers.Base:
+          Empty: { state: borgcharger0 }
+          Occupied: { state: borgcharger1 }
+          Spent: { state: borgcharger2 }
+  - type: Damageable
+    damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+  - type: RMCMesonsNonviewable
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: CMUDropPodConsole
+  name: drop pod console
+  description: Selects an insertion point on the planet below and fires linked drop pods at it.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: security_cam
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.CMUDropPodConsoleUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUDropPodConsoleUiKey.Key:
+        type: CMUDropPodConsoleBui
+  - type: CMUDropPodConsole
+    group: default
+    cooldown: 30
+    launchStagger: 0.5
+    launchSound:
+      path: /Audio/_RMC14/Machines/Shuttle/dropship_launch_alarm.ogg
+  - type: TacticalMapComputer
+    allowCanvas: false
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+- type: entity
+  parent: CMBaseStructureCorrodible
+  id: CMUCustomDropUnitCore
+  name: drop unit core
+  description: Turns the room it stands in into a drop unit. Seal the room with walls and at least one door, then fire it from a drop pod console.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/telecomms.rsi
+    state: comm_server
+    noRot: true
+  - type: InteractionOutline
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 200
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Damageable
+    damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+  - type: Construction
+    graph: CMUCustomDropUnitCoreGraph
+    node: built
+  - type: CMUCustomDropUnit
+    group: default
+    wallWhitelist:
+      tags:
+      - Wall
+    doorWhitelist:
+      components:
+      - Door
+    requireDoor: true
+    maxTiles: 64
+    leftBehindTile: Plating
+    phases:
+    - duration: 3
+      message: cmu-drop-unit-phase-launch
+      sound:
+        path: /Audio/_RMC14/Machines/escape_pod_launch.ogg
+      shakes: 2
+      shakeStrength: 2
+    - duration: 4
+      atmospheric: true
+      message: cmu-drop-pod-phase-atmosphere
+      sound:
+        path: /Audio/_RMC14/Weapons/dropship_sonic_boom.ogg
+      shakes: 6
+      shakeStrength: 4
+    - duration: 2
+      message: cmu-drop-pod-phase-chutes
+      shakes: 2
+      shakeStrength: 1
+    launchSound:
+      path: /Audio/_RMC14/Machines/Shuttle/dropship_launch_alarm.ogg
+    landingSound:
+      path: /Audio/_RMC14/Machines/Techpod/techpod_hit.ogg
+    scatterRadius: 60
+    landingAttempts: 64
+    targetDepth: 0
+    landingBlockers:
+      tags:
+      - Wall
+    blockersMustBeIndestructible: true
+    respectParadropAreas: true
+    crushDamage:
+      types:
+        Blunt: 80
+    injuryChance: 0.15
+    injuryDamage:
+      types:
+        Blunt: 30
+    injuryStun: 2
+    atmosphereBreakupChance: 0.02
+    impactBreakupChance: 0.03
+    breakupExtraScatter: 15
+    breakupDamage:
+      types:
+        Blunt: 40
+        Heat: 15
+    breakupStun: 4
+    breakupDebris: CMRodMetal1
+    breakupSound:
+      path: /Audio/_RMC14/Effects/metal_crash.ogg
+    landingShakes: 3
+    landingShakeStrength: 5
+
+- type: constructionGraph
+  id: CMUCustomDropUnitCoreGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 10
+        doAfter: 4
+      - material: CMPlasteel
+        amount: 5
+        doAfter: 4
+  - node: built
+    entity: CMUCustomDropUnitCore
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 10
+      - !type:SpawnPrototype
+        prototype: CMSheetPlasteel1
+        amount: 5
+      - !type:DeleteEntity
+      steps:
+      - tool: Screwing
+        doAfter: 2
+      - tool: Prying
+        doAfter: 3
+
+- type: construction
+  id: CMUCustomDropUnitCoreRecipe
+  name: drop unit core
+  description: Turns the room it stands in into a drop unit. Seal the room with walls and at least one door.
+  graph: CMUCustomDropUnitCoreGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked

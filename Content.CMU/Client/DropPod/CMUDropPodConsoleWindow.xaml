@@ -1,0 +1,31 @@
+<dropPod:CMUDropPodConsoleWindow
+    xmlns="https://spacestation14.io"
+    xmlns:dropPod="clr-namespace:Content.Client.CMU14.DropPod"
+    xmlns:tacticalMap="clr-namespace:Content.Client._RMC14.TacticalMap"
+    Title="{Loc 'cmu-drop-pod-console-title'}"
+    MinSize="900 600">
+    <BoxContainer Orientation="Horizontal" Margin="6" SeparationOverride="8">
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
+            <Label Text="{Loc 'cmu-drop-pod-console-map-hint'}" />
+            <tacticalMap:TacticalMapControl Name="Map" Access="Public"
+                                            HorizontalExpand="True" VerticalExpand="True"
+                                            Stretch="KeepAspectCentered" />
+        </BoxContainer>
+        <BoxContainer Orientation="Vertical" MinWidth="280" SeparationOverride="6">
+            <Label Name="TargetLabel" Access="Public" StyleClasses="LabelHeading" />
+            <Label Name="CooldownLabel" Access="Public" />
+            <Label Text="{Loc 'cmu-drop-pod-console-pods'}" StyleClasses="LabelHeading" />
+            <ScrollContainer HScrollEnabled="False" VerticalExpand="True">
+                <BoxContainer Name="PodList" Access="Public" Orientation="Vertical" />
+            </ScrollContainer>
+            <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+                <Button Name="SelectAllButton" Access="Public" HorizontalExpand="True"
+                        Text="{Loc 'cmu-drop-pod-console-select-all'}" />
+                <Button Name="RefreshButton" Access="Public" HorizontalExpand="True"
+                        Text="{Loc 'cmu-drop-pod-console-refresh'}" />
+            </BoxContainer>
+            <Button Name="FireButton" Access="Public" StyleClasses="Caution"
+                    Text="{Loc 'cmu-drop-pod-console-fire'}" />
+        </BoxContainer>
+    </BoxContainer>
+</dropPod:CMUDropPodConsoleWindow>
