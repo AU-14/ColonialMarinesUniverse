@@ -89,6 +89,13 @@ public sealed class CMUJeepCoverTest : GameTest
 
             jeepComp.OpenPanels.Add("door_driver");
             Assert.That(Shoot(driver, east, BodyPartType.Leg), Is.True, "An open door stops nothing.");
+
+            jeepComp.OpenPanels.Remove("door_driver");
+            var door = SEntMan.System<Robust.Shared.Containers.SharedContainerSystem>()
+                .GetContainer(jeep, "jeep-door-driver").ContainedEntities.Single();
+            var integrity = SEntMan.GetComponent<CMUVehiclePartIntegrityComponent>(door);
+            integrity.Integrity = integrity.MaxIntegrity * integrity.BrokenFraction;
+            Assert.That(Shoot(driver, east, BodyPartType.Leg), Is.True, "A door worn to breaking stops nothing.");
         });
     }
 

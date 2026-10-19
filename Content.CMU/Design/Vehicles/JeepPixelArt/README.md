@@ -129,6 +129,29 @@ the overlay; where the front no longer reaches they are dark, as the shadow in t
 hood crumples with it: `hood_closed_dent1`-`3` (and `_overlay`) replace `hood_closed`. The preview
 `jeep_front_damage.png` shows the cargo jeep at each level.
 
+## Panel damage
+
+The hood, doors and tailgate show the damage that wore them, by type, at 25, 50 and 100 of the
+panel's integrity lost to it (`CMUVehicleDamageStates`, a stage per panel and type, reading the
+wear each panel item keeps by type): gunfire holes (Piercing) erased through the panel, burns (Heat)
+spreading from where they caught, and an impact with creases running diagonally out of it (Blunt;
+crashes wear the panel on the side they hit). The body takes gunfire holes too, by the hull's wear.
+
+These are drawn in the CMU Open Vehicles tool, not by this generator, in `Damage/`:
+
+- `jeep_damage.cmuov`: the tool's project, made from the generator's cargo jeep, a damage state on
+  each panel and the body at each level.
+- `draw_damage.py` draws every mark once at its worst, and each level shows the part of it the wear
+  has reached, so damage only grows in place.
+- `export_damage.py` renders the states with the tool and writes them into the four jeep RSIs as
+  `{part}_dmg_{kind}_{level}` and `_overlay_`, split under and over the riders as each RSI splits
+  the part. Where the overlay shows body the tool's views don't draw (its back and side walls), the
+  holes are placed on the overlay itself.
+
+This generator keeps the `_dmg_` states when it rewrites the RSIs (`KEPT_DAMAGE`). Redraw them with
+`python draw_damage.py jeep_damage.cmuov` on a fresh project, then
+`python export_damage.py jeep_damage.cmuov --write`.
+
 ## Turret
 
 The gunner swings the gun through a forward arc of about 90 degrees (45 either side of the

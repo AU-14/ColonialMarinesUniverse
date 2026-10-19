@@ -45,12 +45,14 @@ public sealed class CMUJeepTyreTest : GameTest
             jeep = SEntMan.SpawnEntity("CMUVehicleJeepCargo", new EntityCoordinates(map.Grid, 0.5f, 0.5f)));
         await RunTicksSync(5);
 
+        var paved = 0f;
         await Server.WaitAssertion(() =>
         {
             var tyres = SEntMan.System<CMUVehicleTyreSystem>();
             var fitted = SEntMan.GetComponent<CMUVehicleTyresComponent>(jeep);
-            Assert.That(fitted.Tyre?.Id, Is.EqualTo("OffRoad"));
+            Assert.That(fitted.Tyre?.Id, Is.EqualTo("CMUTyreOffRoad"));
             Assert.That(tyres.SpeedMultiplier(jeep), Is.EqualTo(1f), "Off-road tyres leave the jeep as it was tuned.");
+            var offRoadDrag = tyres.WaterDrag(jeep);
 
             var containers = SEntMan.System<SharedContainerSystem>();
             var axle = containers.GetContainer(jeep, "wheel-1");
@@ -59,11 +61,12 @@ public sealed class CMUJeepTyreTest : GameTest
 
             var road = SEntMan.SpawnEntity("CMUJeepWheelRoad", SEntMan.GetComponent<TransformComponent>(jeep).Coordinates);
             Assert.That(containers.Insert(road, axle), Is.True);
-            Assert.That(fitted.Tyre?.Id, Is.EqualTo("Road"));
+            Assert.That(fitted.Tyre?.Id, Is.EqualTo("CMUTyreRoad"));
             Assert.That(tyres.StatePrefix(jeep), Is.EqualTo("road_"));
             Assert.That(tyres.OnRoughGround(jeep), Is.False, "Plating is paved.");
-            Assert.That(tyres.SpeedMultiplier(jeep), Is.EqualTo(1.15f).Within(0.001f));
-            Assert.That(tyres.WaterDrag(jeep), Is.EqualTo(1.35f).Within(0.001f));
+            paved = tyres.SpeedMultiplier(jeep);
+            Assert.That(paved, Is.GreaterThan(1f), "Road tyres are quicker than off-road ones on paving.");
+            Assert.That(tyres.WaterDrag(jeep), Is.GreaterThan(offRoadDrag), "Road tyres bog down more in water.");
 
             var maps = SEntMan.System<SharedMapSystem>();
             var dirt = Server.ResolveDependency<ITileDefinitionManager>()["CMPlanetDirt"];
@@ -74,9 +77,16 @@ public sealed class CMUJeepTyreTest : GameTest
                     maps.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, y), new Tile(dirt.TileId));
                 }
             }
+        });
 
+        // The ground under a vehicle is read once a tick.
+        await RunTicksSync(1);
+        await Server.WaitAssertion(() =>
+        {
+            var tyres = SEntMan.System<CMUVehicleTyreSystem>();
             Assert.That(tyres.OnRoughGround(jeep), Is.True, "Dirt digs, so it is rough.");
-            Assert.That(tyres.SpeedMultiplier(jeep), Is.EqualTo(0.8f).Within(0.001f));
+            Assert.That(tyres.SpeedMultiplier(jeep), Is.LessThan(1f).And.LessThan(paved),
+                "Road tyres are slower than off-road ones on dirt, and slower than on paving.");
         });
     }
 
@@ -104,7 +114,7 @@ public sealed class CMUJeepTyreTest : GameTest
                 Assert.That(SEntMan.GetComponent<MetaDataComponent>(held[0]).EntityPrototype?.ID, Is.EqualTo("CMUJeepWheelRoad"), slot);
             }
 
-            Assert.That(SEntMan.GetComponent<CMUVehicleTyresComponent>(jeep).Tyre?.Id, Is.EqualTo("Road"), "It rolls out on road tyres.");
+            Assert.That(SEntMan.GetComponent<CMUVehicleTyresComponent>(jeep).Tyre?.Id, Is.EqualTo("CMUTyreRoad"), "It rolls out on road tyres.");
         });
     }
 

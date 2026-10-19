@@ -1,6 +1,8 @@
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Vehicle.Open;
@@ -20,6 +22,24 @@ public sealed partial class CMUVehiclePartIntegrityComponent : Component
 
     [DataField]
     public float BrokenFraction = 0.5f;
+
+    /// <summary>
+    /// Integrity a welder pass gives back; the vehicle's own amount when unset.
+    /// </summary>
+    [DataField]
+    public float? RepairAmount;
+
+    /// <summary>
+    /// Worn right down, it is wrecked: no welder can save it, and it has to be taken off and replaced.
+    /// </summary>
+    [DataField]
+    public bool Wreckable;
+
+    /// <summary>
+    /// The wear it has taken by damage type since it was last whole: which damage its stages show.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public Dictionary<ProtoId<DamageTypePrototype>, float> Wear = new();
 
     /// <summary>
     /// Played on the vehicle when wear breaks the part: a headlight's bulb shattering.

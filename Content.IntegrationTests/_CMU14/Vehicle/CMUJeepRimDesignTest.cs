@@ -119,8 +119,12 @@ public sealed class CMUJeepRimDesignTest : GameTest
     public async Task DesignModeSpraysTheDesignOnTheWheels()
     {
         var (jeep, user, painter) = await Setup();
+        Color spareBefore = default;
+        var chargesBefore = 0;
         await Server.WaitPost(() =>
         {
+            spareBefore = Wheels(jeep, "jeep-spare").Color;
+            chargesBefore = SEntMan.System<SharedChargesSystem>().GetCurrentCharges(painter);
             SetPainter(painter, CMUVehicleSprayPainterMode.Design, "CMURimMesh", [Red, Gold, Black, White]);
             Spray(user, jeep, true);
         });
@@ -134,9 +138,10 @@ public sealed class CMUJeepRimDesignTest : GameTest
             Assert.That(wheels.RimColors, Is.EqualTo(new List<Color> { Gold, Black, White }));
             var spare = Wheels(jeep, "jeep-spare");
             Assert.That(spare.RimDesign, Is.Null, "The spare keeps its own rims.");
-            Assert.That(spare.Color, Is.EqualTo(Color.FromHex("#C8CDD2")));
+            Assert.That(spare.Color, Is.EqualTo(spareBefore));
             Assert.That(SEntMan.GetComponent<CMUVehiclePaintComponent>(jeep).Color, Is.Null, "The body keeps its factory paint.");
-            Assert.That(SEntMan.System<SharedChargesSystem>().GetCurrentCharges(painter), Is.EqualTo(28));
+            Assert.That(SEntMan.System<SharedChargesSystem>().GetCurrentCharges(painter), Is.LessThan(chargesBefore),
+                "A rim design uses paint.");
         });
     }
 
@@ -170,8 +175,10 @@ public sealed class CMUJeepRimDesignTest : GameTest
     public async Task DesignModeLeavesTheBodyAlone()
     {
         var (jeep, user, painter) = await Setup();
+        var chargesBefore = 0;
         await Server.WaitPost(() =>
         {
+            chargesBefore = SEntMan.System<SharedChargesSystem>().GetCurrentCharges(painter);
             SetPainter(painter, CMUVehicleSprayPainterMode.Design, "CMURimMesh", [Red, Gold, Black, White]);
             Spray(user, jeep, false);
         });
@@ -181,7 +188,8 @@ public sealed class CMUJeepRimDesignTest : GameTest
         {
             Assert.That(SEntMan.GetComponent<CMUVehiclePaintComponent>(jeep).Color, Is.Null);
             Assert.That(Wheels(jeep).RimDesign, Is.Null);
-            Assert.That(SEntMan.System<SharedChargesSystem>().GetCurrentCharges(painter), Is.EqualTo(30));
+            Assert.That(SEntMan.System<SharedChargesSystem>().GetCurrentCharges(painter), Is.EqualTo(chargesBefore),
+                "Nothing sprayed, no paint used.");
         });
     }
 

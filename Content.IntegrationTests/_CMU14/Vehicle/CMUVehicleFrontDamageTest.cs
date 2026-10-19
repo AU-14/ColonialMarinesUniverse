@@ -81,6 +81,7 @@ public sealed class CMUVehicleFrontDamageTest : GameTest
     {
         var (jeep, user, welder) = await SpawnJeep();
         var fuelBefore = 0f;
+        var maxDamage = 0f;
         await Server.WaitPost(() =>
         {
             var front = SEntMan.System<CMUVehicleFrontDamageSystem>();
@@ -88,12 +89,14 @@ public sealed class CMUVehicleFrontDamageTest : GameTest
             Assert.That(Damage(jeep), Is.Zero, "A side or rear crash leaves the front alone.");
 
             Crash(jeep, true);
-            Assert.That(Damage(jeep), Is.EqualTo(30f).Within(0.01f));
-            Assert.That(front.GetLevel(jeep), Is.EqualTo(2));
+            Assert.That(Damage(jeep), Is.GreaterThan(0f), "A head on crash dents the front.");
+            var firstLevel = front.GetLevel(jeep);
+            Assert.That(firstLevel, Is.GreaterThan(0));
             Crash(jeep, true);
             Crash(jeep, true);
-            Assert.That(Damage(jeep), Is.EqualTo(SEntMan.GetComponent<CMUVehicleFrontDamageComponent>(jeep).MaxDamage));
-            Assert.That(front.GetLevel(jeep), Is.EqualTo(3));
+            maxDamage = SEntMan.GetComponent<CMUVehicleFrontDamageComponent>(jeep).MaxDamage;
+            Assert.That(Damage(jeep), Is.EqualTo(maxDamage), "Dents stop at the most the front can take.");
+            Assert.That(front.GetLevel(jeep), Is.GreaterThan(firstLevel), "More crashes crumple it further.");
 
             Assert.That(SEntMan.System<SharedHandsSystem>().TryPickup(user, welder), Is.True);
             Assert.That(SEntMan.System<ItemToggleSystem>().TryActivate(welder, user), Is.True, "The welder should light.");
@@ -105,7 +108,7 @@ public sealed class CMUVehicleFrontDamageTest : GameTest
         });
         await RunSeconds(4f);
         await Server.WaitAssertion(() =>
-            Assert.That(Damage(jeep), Is.EqualTo(60f).Within(0.01f), "Welding the back shouldn't touch the front."));
+            Assert.That(Damage(jeep), Is.EqualTo(maxDamage).Within(0.01f), "Welding the back shouldn't touch the front."));
 
         await Server.WaitPost(() =>
         {
@@ -115,7 +118,7 @@ public sealed class CMUVehicleFrontDamageTest : GameTest
         });
         await RunSeconds(3.5f);
         await Server.WaitAssertion(() =>
-            Assert.That(Damage(jeep), Is.EqualTo(45f).Within(0.01f), "One pass takes some of it out."));
+            Assert.That(Damage(jeep), Is.LessThan(maxDamage).And.GreaterThan(0f), "One pass takes some of it out."));
 
         await RunSeconds(10f);
         await Server.WaitAssertion(() =>

@@ -3,12 +3,12 @@
 
 # Knobbly all terrain tyres, the military's: as the vehicles were tuned on any ground.
 - type: cmuVehicleTyre
-  id: OffRoad
+  id: CMUTyreOffRoad
   examine: cmu-vehicle-tyre-offroad
 
 # Road tyres: quicker on paving, slower off it, and they bog down in water.
 - type: cmuVehicleTyre
-  id: Road
+  id: CMUTyreRoad
   pavedSpeed: 1.15
   roughSpeed: 0.8
   waterDrag: 1.35

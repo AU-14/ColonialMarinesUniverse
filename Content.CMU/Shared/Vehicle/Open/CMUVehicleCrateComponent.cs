@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared.DoAfter;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
@@ -8,7 +9,7 @@ namespace Content.Shared.CMU14.Vehicle.Open;
 
 /// <summary>
 /// A crate holding a whole vehicle. Unlatched by hand, its walls fall flat and the vehicle stands
-/// where the crate was, assembled with its key in, its axle bare: the wheel set rides in the rear hatch.
+/// where the crate was, assembled on its wheels with its key in, its field manual beside it.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
 public sealed partial class CMUVehicleCrateComponent : Component
@@ -33,6 +34,18 @@ public sealed partial class CMUVehicleCrateComponent : Component
     /// </summary>
     [DataField]
     public string? BareSlot;
+
+    /// <summary>
+    /// The vehicle's field manual, left beside it, if it comes with one.
+    /// </summary>
+    [DataField]
+    public EntProtoId? Manual;
+
+    /// <summary>
+    /// Where the manual is left, from the crate's middle, in tiles.
+    /// </summary>
+    [DataField]
+    public Vector2 ManualOffset = new(1.5f, 0f);
 
     [DataField]
     public EntProtoId Remains = "CMUJeepCrateRemains";

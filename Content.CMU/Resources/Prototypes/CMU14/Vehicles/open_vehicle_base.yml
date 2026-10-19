@@ -1,8 +1,8 @@
 # What every open vehicle shares: driving on the grid, fuel, crashes, damage, the lights switch, z levels
 # and how it goes up when wrecked. A vehicle adds its own key, sounds, parts, lamps, seats, art and slots.
 - type: entity
-  id: CMUOpenVehicleBase
   abstract: true
+  id: CMUOpenVehicleBase
   components:
   - type: RMCNightVisionVisible
     priority: -2

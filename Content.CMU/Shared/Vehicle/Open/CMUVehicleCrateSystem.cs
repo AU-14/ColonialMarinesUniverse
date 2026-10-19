@@ -109,6 +109,9 @@ public sealed class CMUVehicleCrateSystem : EntitySystem
             Dirty(vehicle, paint);
         }
 
+        if (ent.Comp.Manual is { } manual)
+            SpawnAttachedTo(manual, coordinates.Offset(ent.Comp.ManualOffset));
+
         // The floor stays under the vehicle; the walls falling over it go with the floor.
         var floor = SpawnAttachedTo(ent.Comp.Remains, coordinates);
         _transform.SetWorldRotation(floor, Angle.Zero);

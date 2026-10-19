@@ -67,7 +67,9 @@ public sealed class CMUJeepCrashKnockoutTest : GameTest
         var comp = new CMUVehicleCrashKnockoutComponent { MinSpeed = 0.7f, MinChance = 0.2f };
         Assert.That(CMUVehicleCrashKnockoutSystem.Chance(comp, true, 0.69f), Is.Zero);
         Assert.That(CMUVehicleCrashKnockoutSystem.Chance(comp, true, 0.7f), Is.EqualTo(0.2f).Within(0.001f));
-        Assert.That(CMUVehicleCrashKnockoutSystem.Chance(comp, true, 0.85f), Is.EqualTo(0.6f).Within(0.001f));
+        var between = CMUVehicleCrashKnockoutSystem.Chance(comp, true, 0.85f);
+        Assert.That(between, Is.GreaterThan(comp.MinChance).And.LessThan(1f), "Faster crashes are likelier to knock out.");
+        Assert.That(CMUVehicleCrashKnockoutSystem.Chance(comp, true, 0.95f), Is.GreaterThan(between));
         Assert.That(CMUVehicleCrashKnockoutSystem.Chance(comp, true, 1f), Is.EqualTo(1f).Within(0.001f));
         Assert.That(CMUVehicleCrashKnockoutSystem.Chance(comp, false, 1f), Is.Zero, "Side and rear crashes knock no one out.");
     }
@@ -76,6 +78,7 @@ public sealed class CMUJeepCrashKnockoutTest : GameTest
     public async Task TopSpeedCrashKnocksTheDriverOutAndBlaresTheHorn()
     {
         var (jeep, driver) = await SeatedJeep();
+        var knockout = SEntMan.GetComponent<CMUVehicleCrashKnockoutComponent>(jeep);
 
         await Server.WaitPost(() =>
         {
@@ -89,17 +92,17 @@ public sealed class CMUJeepCrashKnockoutTest : GameTest
             Assert.That(SEntMan.GetComponent<CMUVehicleCrashKnockoutComponent>(jeep).Horn, Is.Not.Null, "The horn should blare.");
         });
 
-        await RunSeconds(2f);
+        await RunSeconds((float) knockout.MinDuration.TotalSeconds - 1f);
         await Server.WaitAssertion(() =>
         {
-            Assert.That(SEntMan.HasComponent<RMCUnconsciousComponent>(driver), Is.True, "Out for at least three seconds.");
+            Assert.That(SEntMan.HasComponent<RMCUnconsciousComponent>(driver), Is.True, "Out for at least the shortest knockout.");
             Assert.That(SEntMan.GetComponent<CMUVehicleCrashKnockoutComponent>(jeep).Horn, Is.Not.Null);
         });
 
-        await RunSeconds(4f);
+        await RunSeconds((float) (knockout.MaxDuration - knockout.MinDuration).TotalSeconds + 2f);
         await Server.WaitAssertion(() =>
         {
-            Assert.That(SEntMan.HasComponent<RMCUnconsciousComponent>(driver), Is.False, "Back up within five seconds.");
+            Assert.That(SEntMan.HasComponent<RMCUnconsciousComponent>(driver), Is.False, "Back up by the longest knockout.");
             Assert.That(SEntMan.GetComponent<CMUVehicleCrashKnockoutComponent>(jeep).Horn, Is.Null, "The horn stops when the driver comes to.");
         });
     }

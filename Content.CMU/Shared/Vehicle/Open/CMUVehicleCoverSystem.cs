@@ -69,6 +69,7 @@ public sealed class CMUVehicleCoverSystem : EntitySystem
             Vector2.Dot(shot, side.ToVec()) <= reach &&
             !CMUOpenVehicleSystem.GetPanelFlag(jeep, door) &&
             _jeep.IsPanelFitted(vehicle, jeep, door) &&
+            !_jeep.IsPanelBroken(vehicle, jeep, door) &&
             !_jeep.IsHullWrecked(vehicle))
         {
             args.Cancelled = true;

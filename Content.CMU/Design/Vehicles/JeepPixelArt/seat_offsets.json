@@ -396,8 +396,8 @@
   "overlay_slide_px": {
     "S": 1,
     "N": 0,
-    "E": 16,
-    "W": 16
+    "E": 13,
+    "W": 12
   },
   "mgturret_slide_px": 0,
   "cargo_crate_offsets": {

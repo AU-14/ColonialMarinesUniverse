@@ -4,6 +4,7 @@ cmu-open-vehicle-engine-dead = The engine coughs and dies. It needs repairs unde
 cmu-open-vehicle-engine-examine = The engine is at {$percent}%.
 cmu-open-vehicle-engine-fine = The engine doesn't need any work.
 cmu-open-vehicle-part-fine = There's nothing to fix on the {$part}.
+cmu-open-vehicle-part-wrecked = The {$part} is wrecked past welding. Take it off and fit a new one.
 cmu-open-vehicle-wreck-warning = Flames burst from under {THE($vehicle)}'s hood! Get clear before it goes up!
 cmu-open-vehicle-fire-out = The fire under {THE($vehicle)}'s hood dies down with a hiss.
 cmu-open-vehicle-hull-wrecked = {CAPITALIZE(THE($vehicle))} buckles and sags on its wheels. It won't go any further until the hull is repaired.

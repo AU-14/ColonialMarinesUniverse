@@ -840,12 +840,12 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             !_collisionDamageContacts.TryStart(vehicle, target, vehicleBounds, targetBounds))
             return false;
 
-        CMUScaleCrash(vehicle, mover, ref wheelDamage, ref hullDamage);
+        CMUScaleCrash(vehicle, mover, ref wheelDamage, ref hullDamage); // CMU14: crash damage scales with impact speed
         if (wheelDamage > 0f)
             _wheels.DamageWheels(vehicle, wheelDamage);
         if (hullDamage > 0f)
-            CMUDamageCrashHull(vehicle, hullDamage);
-        CMUOnCrashed(vehicle, mover, target, hullDamage);
+            CMUDamageCrashHull(vehicle, hullDamage); // CMU14
+        CMUOnCrashed(vehicle, mover, target, hullDamage); // CMU14: crash dents, knockouts and lamps
         return true;
     }
 

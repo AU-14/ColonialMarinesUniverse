@@ -87,7 +87,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         ["Vehicle Main Modules"] = "rmc-requisitions-category-vehicle-main",
         ["Vehicle Aux Modules"] = "rmc-requisitions-category-vehicle-aux",
         ["Avionics Parts"] = "rmc-requisitions-category-vehicle-avionics",
-        ["Vehicles"] = "cmu-requisitions-category-vehicles",
+        ["Vehicles"] = "cmu-requisitions-category-vehicles", // CMU14: jeep kit crates
         ["Weapons"] = "rmc-requisitions-category-weapons",
         ["WEYSEC Ammo"] = "rmc-requisitions-category-weysec-ammo",
         ["WEYSEC Gear"] = "rmc-requisitions-category-weysec-gear",

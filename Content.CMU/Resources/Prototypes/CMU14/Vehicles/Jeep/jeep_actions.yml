@@ -1,6 +1,6 @@
 - type: entity
-  id: CMUActionJeepHazards
   parent: BaseAction
+  id: CMUActionJeepHazards
   name: Hazard lights
   description: Switch the jeep's hazard lights on or off. Both turn signals blink together.
   components:
@@ -20,8 +20,8 @@
       visible: false
 
 - type: entity
-  id: CMUActionJeepAutoSignals
   parent: BaseAction
+  id: CMUActionJeepAutoSignals
   name: Automatic turn signals
   description: Switch the turn signals blinking on their own as you steer on or off.
   components:
@@ -41,8 +41,8 @@
       visible: false
 
 - type: entity
-  id: CMUActionJeepHorn
   parent: BaseAction
+  id: CMUActionJeepHorn
   name: Horn
   description: Sound the jeep's horn.
   components:
@@ -58,8 +58,8 @@
 
 # Pulls the key from the ignition into the driver's hand, which stops the engine.
 - type: entity
-  id: CMUActionJeepEjectKey
   parent: BaseAction
+  id: CMUActionJeepEjectKey
   name: Take out the key
   description: Pull the key from the ignition into your hand. The engine stops without it.
   components:
@@ -75,8 +75,8 @@
       map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
-  id: CMUActionJeepEngine
   parent: BaseAction
+  id: CMUActionJeepEngine
   name: Engine
   description: Switch the engine on or off. It keeps running when you get out until you switch it off.
   components:
@@ -98,8 +98,8 @@
 # One switch for the headlights: off, low beam, high beam, off. The icon shows where it is; there
 # is no toggled icon layer, which would hide it.
 - type: entity
-  id: CMUActionJeepHeadlights
   parent: BaseAction
+  id: CMUActionJeepHeadlights
   name: Headlights
   description: Switch the jeep's headlights through off, low beam and high beam.
   components:

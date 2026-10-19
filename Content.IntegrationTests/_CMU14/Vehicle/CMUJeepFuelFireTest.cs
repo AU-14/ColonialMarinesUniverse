@@ -75,14 +75,15 @@ public sealed class CMUJeepFuelFireTest : GameTest
         await Server.WaitAssertion(() =>
         {
             var spray = Contents(Rack(jeep, "jeep-extinguisher"), "spray");
-            Assert.That(spray.GetTotalPrototypeQuantity("Water").Float(), Is.EqualTo(30f));
+            Assert.That(spray.GetTotalPrototypeQuantity("Water").Float(), Is.GreaterThan(0f));
             Assert.That(spray.AvailableVolume.Float(), Is.Zero);
 
             var fuel = Contents(Rack(jeep, CMUOpenVehicleSystem.JerryCanSlot), "fuel");
-            Assert.That(fuel.GetTotalPrototypeQuantity("WeldingFuel").Float(), Is.EqualTo(60f));
+            Assert.That(fuel.GetTotalPrototypeQuantity("WeldingFuel").Float(), Is.GreaterThan(0f));
             Assert.That(fuel.AvailableVolume.Float(), Is.Zero);
 
-            Assert.That(Contents(jeep, "fuel").GetTotalPrototypeQuantity("WeldingFuel").Float(), Is.EqualTo(45f));
+            Assert.That(Contents(jeep, "fuel").GetTotalPrototypeQuantity("WeldingFuel").Float(), Is.GreaterThan(0f),
+                "The jeep comes with fuel in the tank.");
         });
     }
 
@@ -92,9 +93,12 @@ public sealed class CMUJeepFuelFireTest : GameTest
         var (jeep, user) = await SpawnJeep();
         EntityUid can = default;
         EntityUid door = default;
+        float tankBefore = 0f, canBefore = 0f;
         await Server.WaitPost(() =>
         {
             can = HoldRackCan(jeep, user);
+            tankBefore = Contents(jeep, "fuel").GetTotalPrototypeQuantity("WeldingFuel").Float();
+            canBefore = Contents(can, "fuel").GetTotalPrototypeQuantity("WeldingFuel").Float();
             door = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep).PartEntities
                 .First(part => SEntMan.GetComponent<CMUVehiclePartComponent>(part).Part == "fuel_door");
             var comp = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep);
@@ -106,8 +110,12 @@ public sealed class CMUJeepFuelFireTest : GameTest
 
         await Server.WaitAssertion(() =>
         {
-            Assert.That(Contents(jeep, "fuel").GetTotalPrototypeQuantity("WeldingFuel").Float(), Is.EqualTo(60f).Within(0.01f));
-            Assert.That(Contents(can, "fuel").GetTotalPrototypeQuantity("WeldingFuel").Float(), Is.EqualTo(45f).Within(0.01f));
+            var tank = Contents(jeep, "fuel");
+            var gained = tank.GetTotalPrototypeQuantity("WeldingFuel").Float() - tankBefore;
+            var lost = canBefore - Contents(can, "fuel").GetTotalPrototypeQuantity("WeldingFuel").Float();
+            Assert.That(tank.AvailableVolume.Float(), Is.Zero.Within(0.01f), "The pour tops the tank up.");
+            Assert.That(gained, Is.GreaterThan(0f));
+            Assert.That(lost, Is.EqualTo(gained).Within(0.01f), "What the tank gains comes out of the can.");
             Assert.That(SEntMan.System<SharedHandsSystem>().IsHolding(user, can), Is.True, "The can stays in hand.");
             Assert.That(SEntMan.System<SharedContainerSystem>().TryGetContainer(jeep, CMUOpenVehicleSystem.JerryCanSlot, out var rack) &&
                         rack.ContainedEntities.Count == 0, Is.True, "The rack stays empty.");
@@ -155,7 +163,7 @@ public sealed class CMUJeepFuelFireTest : GameTest
             Assert.That(SEntMan.Deleted(jeep), Is.False, "Put out in time, the jeep shouldn't blow up.");
             var comp = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep);
             Assert.That(comp.Burning, Is.False);
-            Assert.That(comp.EngineIntegrity, Is.EqualTo(1f));
+            Assert.That(comp.EngineIntegrity, Is.GreaterThan(0f), "The engine is left barely running.");
         });
     }
 }

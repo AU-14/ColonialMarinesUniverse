@@ -1,5 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Numerics;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Actions;
 using Content.Shared.Chemistry.EntitySystems;
@@ -26,6 +28,8 @@ namespace Content.Shared.CMU14.Vehicle.Open;
 
 public sealed partial class CMUOpenVehicleSystem : EntitySystem
 {
+    private static readonly ProtoId<DamageTypePrototype> CrashDamageType = "Blunt";
+
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private DamageableSystem _damageable = default!;
@@ -134,6 +138,13 @@ public sealed partial class CMUOpenVehicleSystem : EntitySystem
             return;
 
         BreakLampsInCrash(ent, args);
+        if (args.Contact is { } contact && FacingPanel(ent.Comp, contact) is { } dented)
+        {
+            var blunt = new DamageSpecifier();
+            blunt.DamageDict[CrashDamageType] = args.HullDamage;
+            WearPart(ent, dented, args.HullDamage * ent.Comp.PanelCrashShare, blunt);
+        }
+
         if (!args.Frontal || ent.Comp.EngineIntegrity <= 0f)
             return;
 
@@ -230,6 +241,8 @@ public sealed partial class CMUOpenVehicleSystem : EntitySystem
             if (part.Kind == CMUVehiclePartKind.Windshield && part.Slot is { } windshield)
                 WearPart(ent, windshield, total * jeep.WindshieldDamageShare);
         }
+        if (hitPoint is { } landed && FacingPanel(jeep, landed) is { } panel)
+            WearPart(ent, panel, total * jeep.PanelDamageShare, args.Damage);
         WearLamps(ent, total);
 
         if (total >= jeep.PunctureMinDamage &&
@@ -276,7 +289,11 @@ public sealed partial class CMUOpenVehicleSystem : EntitySystem
         RefreshParts(ent, false);
     }
 
-    private void WearPart(EntityUid vehicle, string slotId, float damage)
+    /// <summary>
+    /// Wears a fitted part, noting the wear against the damage types that did it: those of the
+    /// damage given, shared as it was made up, or none.
+    /// </summary>
+    private void WearPart(EntityUid vehicle, string slotId, float damage, DamageSpecifier? kinds = null)
     {
         if (damage <= 0f ||
             !TryGetPartSlot(vehicle, slotId, out var slot) ||
@@ -287,7 +304,18 @@ public sealed partial class CMUOpenVehicleSystem : EntitySystem
 
         var broken = part.MaxIntegrity * part.BrokenFraction;
         var wasWhole = part.Integrity > broken;
+        var worn = MathF.Min(part.Integrity, damage);
         part.Integrity = MathF.Max(0f, part.Integrity - damage);
+        if (kinds != null && worn > 0f)
+        {
+            var total = DamageSpecifier.GetPositive(kinds).GetTotal().Float();
+            foreach (var (type, amount) in kinds.DamageDict)
+            {
+                if (total > 0f && amount > FixedPoint2.Zero)
+                    part.Wear[type] = part.Wear.GetValueOrDefault(type) + worn * amount.Float() / total;
+            }
+        }
+
         Dirty(slot.Item.Value, part);
         if (wasWhole && part.Integrity <= broken && _net.IsServer)
             _audio.PlayPvs(part.BreakSound, vehicle);
@@ -325,6 +353,42 @@ public sealed partial class CMUOpenVehicleSystem : EntitySystem
         slot = null;
         return Resolve(vehicle, ref vehicle.Comp, false) &&
                _itemSlots.TryGetSlot(vehicle, slotId, out slot);
+    }
+
+    /// <summary>
+    /// The slot of the panel facing the side of the hull a hit landed on: of the panels that wear,
+    /// the one whose facing points most nearly at it.
+    /// </summary>
+    private static string? FacingPanel(CMUOpenVehicleComponent jeep, Vector2 hitPoint)
+    {
+        if (hitPoint.LengthSquared() < 0.0001f)
+            return null;
+
+        var towards = Vector2.Normalize(hitPoint);
+        string? best = null;
+        var bestDot = 0f;
+        foreach (var part in jeep.Parts)
+        {
+            if (part.WearFacing is not { } facing || part.Slot is not { } slot)
+                continue;
+
+            var dot = Vector2.Dot(towards, Vector2.Normalize(facing));
+            if (dot <= bestDot)
+                continue;
+
+            best = slot;
+            bestDot = dot;
+        }
+
+        return best;
+    }
+
+    /// <summary>
+    /// Whether a fitted panel is worn past working: a door then stops no shots.
+    /// </summary>
+    public bool IsPanelBroken(EntityUid vehicle, CMUOpenVehicleComponent jeep, string part)
+    {
+        return jeep.Parts.Find(p => p.Id == part) is { Slot: { } slot } && IsBroken(vehicle, slot);
     }
 
     private bool IsBroken(Entity<ItemSlotsComponent?> vehicle, string slotId)
@@ -500,12 +564,16 @@ public sealed partial class CMUOpenVehicleSystem : EntitySystem
 
                 args.Handled = true;
                 return;
-            case var glass when (kind == CMUVehiclePartKind.Windshield || IsLamp(vehicle, glass)) &&
+            case var glass when (kind is CMUVehiclePartKind.Windshield or CMUVehiclePartKind.Panel || IsLamp(vehicle, glass)) &&
                                 ent.Comp.Slot is { } worn &&
                                 TryGetPartSlot(vehicle, worn, out var wornSlot) &&
                                 TryComp(wornSlot.Item, out CMUVehiclePartIntegrityComponent? integrity) &&
                                 _tool.HasQuality(used, jeep.PartRepairQuality):
-                if (integrity.Integrity >= integrity.MaxIntegrity)
+                if (integrity.Wreckable && integrity.Integrity <= 0f)
+                {
+                    _popup.PopupClient(Loc.GetString("cmu-open-vehicle-part-wrecked", ("part", Name(ent))), vehicle, user);
+                }
+                else if (integrity.Integrity >= integrity.MaxIntegrity)
                 {
                     _popup.PopupClient(Loc.GetString("cmu-open-vehicle-part-fine", ("part", Name(ent))), vehicle, user);
                 }
@@ -576,7 +644,17 @@ public sealed partial class CMUOpenVehicleSystem : EntitySystem
         }
 
         args.Handled = true;
-        part.Integrity = MathF.Min(part.MaxIntegrity, part.Integrity + ent.Comp.PartRepairAmount);
+        // Wrecked while the welder was at it: past saving now.
+        if (part.Wreckable && part.Integrity <= 0f)
+        {
+            args.Repeat = false;
+            args.Args.Event.Repeat = false;
+            return;
+        }
+
+        part.Integrity = MathF.Min(part.MaxIntegrity, part.Integrity + (part.RepairAmount ?? ent.Comp.PartRepairAmount));
+        if (part.Integrity >= part.MaxIntegrity)
+            part.Wear.Clear();
         Dirty(slot.Item.Value, part);
         args.Repeat = part.Integrity < part.MaxIntegrity;
         args.Args.Event.Repeat = args.Repeat;

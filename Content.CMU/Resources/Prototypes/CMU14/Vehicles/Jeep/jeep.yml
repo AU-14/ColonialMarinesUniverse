@@ -90,9 +90,9 @@
     outerWidth: 36
 
 - type: entity
+  abstract: true
   parent: BaseItem
   id: CMUJeepHardpointBase
-  abstract: true
   components:
   - type: Sprite
     sprite: CMU14/Structures/vehicles/jeep/hardpoints.rsi
@@ -120,7 +120,7 @@
     integrity: 250
   - type: VehicleWheelItem
   - type: CMUVehicleTyre
-    tyre: OffRoad
+    tyre: CMUTyreOffRoad
   # Its paint and rim design, which go wherever the set goes.
   - type: CMUVehicleWheelPaint
   - type: Tag
@@ -138,13 +138,13 @@
   - type: Sprite
     state: road_tires
   - type: CMUVehicleTyre
-    tyre: Road
+    tyre: CMUTyreRoad
 
 - type: entity
   parent: CMUJeepHardpointBase
   id: CMUJeepWindshield
   name: jeep windshield
-  description: A folding windshield frame with its glass. Fitted and taken off with a screwdriver.
+  description: A folding windshield frame with its glass. Comes off by its screws, then its bolts.
   components:
   - type: Sprite
     state: windshield
@@ -210,7 +210,7 @@
     tags:
     - CMUJeepTailLight
 
-# Any jeep's key fits any jeep. Without one in the ignition the engine won't start, and pulling it out
+# Each jeep's key fits it alone. Without one in the ignition the engine won't start, and pulling it out
 # stops it.
 - type: entity
   parent: BaseItem
@@ -238,6 +238,11 @@
     state: hood
   - type: Item
     size: Huge
+  - type: CMUVehiclePartIntegrity
+    integrity: 100
+    maxIntegrity: 100
+    repairAmount: 25
+    wreckable: true
   - type: Tag
     tags:
     - CMUJeepHood
@@ -250,6 +255,11 @@
   components:
   - type: Sprite
     state: door
+  - type: CMUVehiclePartIntegrity
+    integrity: 100
+    maxIntegrity: 100
+    repairAmount: 25
+    wreckable: true
   - type: Tag
     tags:
     - CMUJeepDoor
@@ -264,6 +274,11 @@
     state: tailgate
   - type: Item
     size: Huge
+  - type: CMUVehiclePartIntegrity
+    integrity: 100
+    maxIntegrity: 100
+    repairAmount: 25
+    wreckable: true
   - type: Tag
     tags:
     - CMUJeepTailgate
@@ -451,9 +466,9 @@
     barrel: 0.65625
 
 - type: entity
+  abstract: true
   parent: CMUOpenVehicleBase
   id: CMUVehicleJeepBase
-  abstract: true
   name: jeep
   description: A light, open four-by-four. Fast and nimble, but nothing stands between its crew and the bullets.
   components:
@@ -560,6 +575,7 @@
       name: cmu-jeep-part-hood
       slot: jeep-hood
       kind: Panel
+      wearFacing: 0,-1
       exposes: [ engine ]
       raisedLayer: hood_raised
       ajarWhenWrecked: true
@@ -582,6 +598,7 @@
       name: cmu-jeep-part-door-driver
       slot: jeep-door-driver
       kind: Panel
+      wearFacing: 1,0
       overRiders: [ West ]
       openSound:
         path: /Audio/CMU14/Jeep/jeep_hood_open.wav
@@ -597,6 +614,7 @@
       name: cmu-jeep-part-door-passenger
       slot: jeep-door-passenger
       kind: Panel
+      wearFacing: -1,0
       overRiders: [ East ]
       openSound:
         path: /Audio/CMU14/Jeep/jeep_hood_open.wav
@@ -614,6 +632,7 @@
       slot: jeep-tailgate
       offset: 0,0.9
       kind: Panel
+      wearFacing: 0,1
       blocksKitWhileOpen: true
       overRiders: [ North ]
       openSound:
@@ -796,9 +815,104 @@
   # A spray painter resprays the body, or the fitted wheel set on its own, in its chosen colour; see
   # paint.swsl. Switched to its rim designs it sprays one on the wheel set, drawn over the rims; see
   # rim.swsl. The spare keeps its own paint and rims.
+  # Damage drawn on the panels and the body, by type: gunfire holes, burns and dents, each at 25,
+  # 50 and 100 of the panel's integrity worn by that type. Drawn in the Open Vehicles tool
+  # (Design/Vehicles/JeepPixelArt/Damage).
+  - type: CMUVehicleDamageStates
+    stages:
+    - layer: hood_dmg_holes
+      part: hood
+      restStates: [ hood_closed ]
+      source: Slot
+      slot: jeep-hood
+      damageType: Piercing
+      levels: [ 25, 50, 100 ]
+    - layer: hood_dmg_burnt
+      part: hood
+      restStates: [ hood_closed ]
+      source: Slot
+      slot: jeep-hood
+      damageType: Heat
+      levels: [ 25, 50, 100 ]
+    - layer: hood_dmg_dented
+      part: hood
+      restStates: [ hood_closed ]
+      source: Slot
+      slot: jeep-hood
+      damageType: Blunt
+      levels: [ 25, 50, 100 ]
+    - layer: door_driver_dmg_holes
+      part: door_driver
+      restStates: [ door_driver_closed ]
+      source: Slot
+      slot: jeep-door-driver
+      damageType: Piercing
+      levels: [ 25, 50, 100 ]
+    - layer: door_driver_dmg_burnt
+      part: door_driver
+      restStates: [ door_driver_closed ]
+      source: Slot
+      slot: jeep-door-driver
+      damageType: Heat
+      levels: [ 25, 50, 100 ]
+    - layer: door_driver_dmg_dented
+      part: door_driver
+      restStates: [ door_driver_closed ]
+      source: Slot
+      slot: jeep-door-driver
+      damageType: Blunt
+      levels: [ 25, 50, 100 ]
+    - layer: door_passenger_dmg_holes
+      part: door_passenger
+      restStates: [ door_passenger_closed ]
+      source: Slot
+      slot: jeep-door-passenger
+      damageType: Piercing
+      levels: [ 25, 50, 100 ]
+    - layer: door_passenger_dmg_burnt
+      part: door_passenger
+      restStates: [ door_passenger_closed ]
+      source: Slot
+      slot: jeep-door-passenger
+      damageType: Heat
+      levels: [ 25, 50, 100 ]
+    - layer: door_passenger_dmg_dented
+      part: door_passenger
+      restStates: [ door_passenger_closed ]
+      source: Slot
+      slot: jeep-door-passenger
+      damageType: Blunt
+      levels: [ 25, 50, 100 ]
+    - layer: tailgate_dmg_holes
+      part: tailgate
+      restStates: [ tailgate_closed ]
+      source: Slot
+      slot: jeep-tailgate
+      damageType: Piercing
+      levels: [ 25, 50, 100 ]
+    - layer: tailgate_dmg_burnt
+      part: tailgate
+      restStates: [ tailgate_closed ]
+      source: Slot
+      slot: jeep-tailgate
+      damageType: Heat
+      levels: [ 25, 50, 100 ]
+    - layer: tailgate_dmg_dented
+      part: tailgate
+      restStates: [ tailgate_closed ]
+      source: Slot
+      slot: jeep-tailgate
+      damageType: Blunt
+      levels: [ 25, 50, 100 ]
+    - layer: body_dmg_holes
+      part: base
+      overlayPart: body
+      source: Hull
+      damageType: Piercing
+      levels: [ 25, 50, 100 ]
   - type: CMUVehiclePaint
-    layers: [ base, front_dent, damaged_frame, hood, door_driver, door_passenger, tailgate, fuel_door, headlight_left, headlight_right, turn_signal_left, turn_signal_right, taillight_left, taillight_right, extinguisher ]
-    overlayLayers: [ body, front_dent, damaged_frame, door_driver, door_passenger, tailgate, taillight_left, taillight_right, hood, hood_raised, fuel_door, headlight_left, headlight_right, turn_signal_left, turn_signal_right, extinguisher ]
+    layers: [ base, body_dmg_holes, front_dent, damaged_frame, hood, door_driver, door_passenger, tailgate, hood_dmg_holes, hood_dmg_burnt, hood_dmg_dented, door_driver_dmg_holes, door_driver_dmg_burnt, door_driver_dmg_dented, door_passenger_dmg_holes, door_passenger_dmg_burnt, door_passenger_dmg_dented, tailgate_dmg_holes, tailgate_dmg_burnt, tailgate_dmg_dented, fuel_door, headlight_left, headlight_right, turn_signal_left, turn_signal_right, taillight_left, taillight_right, extinguisher ]
+    overlayLayers: [ body, body_dmg_holes, front_dent, damaged_frame, door_driver, door_passenger, tailgate, hood_dmg_holes, hood_dmg_burnt, hood_dmg_dented, door_driver_dmg_holes, door_driver_dmg_burnt, door_driver_dmg_dented, door_passenger_dmg_holes, door_passenger_dmg_burnt, door_passenger_dmg_dented, tailgate_dmg_holes, tailgate_dmg_burnt, tailgate_dmg_dented, taillight_left, taillight_right, hood, hood_raised, fuel_door, headlight_left, headlight_right, turn_signal_left, turn_signal_right, extinguisher ]
     plainLayers: [ engine, windshield ]
     plainOverlayLayers: [ windshield ]
     wheelLayers:
@@ -861,6 +975,9 @@
     layers:
     - map: [ base ]
       state: jeep_base
+    - map: [ body_dmg_holes ]
+      state: body_dmg_holes_25
+      visible: false
     - map: [ front_dent ]
       state: front_dent_1
       visible: false
@@ -871,15 +988,51 @@
       state: engine_0
     - map: [ hood ]
       state: hood_closed
+    - map: [ hood_dmg_holes ]
+      state: hood_dmg_holes_25
+      visible: false
+    - map: [ hood_dmg_burnt ]
+      state: hood_dmg_burnt_25
+      visible: false
+    - map: [ hood_dmg_dented ]
+      state: hood_dmg_dented_25
+      visible: false
     # Under the doors: the passenger's swings open in front of it.
     - map: [ extinguisher ]
       state: extinguisher_0
     - map: [ door_driver ]
       state: door_driver_closed
+    - map: [ door_driver_dmg_holes ]
+      state: door_driver_dmg_holes_25
+      visible: false
+    - map: [ door_driver_dmg_burnt ]
+      state: door_driver_dmg_burnt_25
+      visible: false
+    - map: [ door_driver_dmg_dented ]
+      state: door_driver_dmg_dented_25
+      visible: false
     - map: [ door_passenger ]
       state: door_passenger_closed
+    - map: [ door_passenger_dmg_holes ]
+      state: door_passenger_dmg_holes_25
+      visible: false
+    - map: [ door_passenger_dmg_burnt ]
+      state: door_passenger_dmg_burnt_25
+      visible: false
+    - map: [ door_passenger_dmg_dented ]
+      state: door_passenger_dmg_dented_25
+      visible: false
     - map: [ tailgate ]
       state: tailgate_closed
+    - map: [ tailgate_dmg_holes ]
+      state: tailgate_dmg_holes_25
+      visible: false
+    - map: [ tailgate_dmg_burnt ]
+      state: tailgate_dmg_burnt_25
+      visible: false
+    - map: [ tailgate_dmg_dented ]
+      state: tailgate_dmg_dented_25
+      visible: false
     - map: [ fuel_door ]
       state: fuel_door_closed
     - map: [ headlight_left ]
@@ -1246,6 +1399,7 @@
       name: cmu-jeep-part-hood
       slot: jeep-hood
       kind: Panel
+      wearFacing: 0,-1
       exposes: [ engine ]
       raisedLayer: hood_raised
       ajarWhenWrecked: true
@@ -1268,6 +1422,7 @@
       name: cmu-jeep-part-door-driver
       slot: jeep-door-driver
       kind: Panel
+      wearFacing: 1,0
       overRiders: [ West ]
       openSound:
         path: /Audio/CMU14/Jeep/jeep_hood_open.wav
@@ -1283,6 +1438,7 @@
       name: cmu-jeep-part-door-passenger
       slot: jeep-door-passenger
       kind: Panel
+      wearFacing: -1,0
       overRiders: [ East ]
       openSound:
         path: /Audio/CMU14/Jeep/jeep_hood_open.wav
@@ -1734,6 +1890,9 @@
     layers:
     - map: [ body ]
       state: jeep_overlay
+    - map: [ body_dmg_holes ]
+      state: body_dmg_holes_overlay_25
+      visible: false
     - map: [ front_dent ]
       state: front_dent_overlay_1
       visible: false
@@ -1742,16 +1901,52 @@
       visible: false
     - map: [ door_driver ]
       state: door_driver_closed_overlay
+    - map: [ door_driver_dmg_holes ]
+      state: door_driver_dmg_holes_overlay_25
+      visible: false
+    - map: [ door_driver_dmg_burnt ]
+      state: door_driver_dmg_burnt_overlay_25
+      visible: false
+    - map: [ door_driver_dmg_dented ]
+      state: door_driver_dmg_dented_overlay_25
+      visible: false
     - map: [ door_passenger ]
       state: door_passenger_closed_overlay
+    - map: [ door_passenger_dmg_holes ]
+      state: door_passenger_dmg_holes_overlay_25
+      visible: false
+    - map: [ door_passenger_dmg_burnt ]
+      state: door_passenger_dmg_burnt_overlay_25
+      visible: false
+    - map: [ door_passenger_dmg_dented ]
+      state: door_passenger_dmg_dented_overlay_25
+      visible: false
     - map: [ tailgate ]
       state: tailgate_closed_overlay
+    - map: [ tailgate_dmg_holes ]
+      state: tailgate_dmg_holes_overlay_25
+      visible: false
+    - map: [ tailgate_dmg_burnt ]
+      state: tailgate_dmg_burnt_overlay_25
+      visible: false
+    - map: [ tailgate_dmg_dented ]
+      state: tailgate_dmg_dented_overlay_25
+      visible: false
     - map: [ taillight_left ]
       state: taillight_left_overlay_0
     - map: [ taillight_right ]
       state: taillight_right_overlay_0
     - map: [ hood ]
       state: hood_closed_overlay
+    - map: [ hood_dmg_holes ]
+      state: hood_dmg_holes_overlay_25
+      visible: false
+    - map: [ hood_dmg_burnt ]
+      state: hood_dmg_burnt_overlay_25
+      visible: false
+    - map: [ hood_dmg_dented ]
+      state: hood_dmg_dented_overlay_25
+      visible: false
     - map: [ headlight_left ]
       state: headlight_left_overlay_0
     - map: [ headlight_right ]
@@ -1886,6 +2081,9 @@
     layers:
     - map: [ body ]
       state: jeep_overlay
+    - map: [ body_dmg_holes ]
+      state: body_dmg_holes_overlay_25
+      visible: false
     - map: [ front_dent ]
       state: front_dent_overlay_1
       visible: false
@@ -1894,16 +2092,52 @@
       visible: false
     - map: [ door_driver ]
       state: door_driver_closed_overlay
+    - map: [ door_driver_dmg_holes ]
+      state: door_driver_dmg_holes_overlay_25
+      visible: false
+    - map: [ door_driver_dmg_burnt ]
+      state: door_driver_dmg_burnt_overlay_25
+      visible: false
+    - map: [ door_driver_dmg_dented ]
+      state: door_driver_dmg_dented_overlay_25
+      visible: false
     - map: [ door_passenger ]
       state: door_passenger_closed_overlay
+    - map: [ door_passenger_dmg_holes ]
+      state: door_passenger_dmg_holes_overlay_25
+      visible: false
+    - map: [ door_passenger_dmg_burnt ]
+      state: door_passenger_dmg_burnt_overlay_25
+      visible: false
+    - map: [ door_passenger_dmg_dented ]
+      state: door_passenger_dmg_dented_overlay_25
+      visible: false
     - map: [ tailgate ]
       state: tailgate_closed_overlay
+    - map: [ tailgate_dmg_holes ]
+      state: tailgate_dmg_holes_overlay_25
+      visible: false
+    - map: [ tailgate_dmg_burnt ]
+      state: tailgate_dmg_burnt_overlay_25
+      visible: false
+    - map: [ tailgate_dmg_dented ]
+      state: tailgate_dmg_dented_overlay_25
+      visible: false
     - map: [ taillight_left ]
       state: taillight_left_overlay_0
     - map: [ taillight_right ]
       state: taillight_right_overlay_0
     - map: [ hood ]
       state: hood_closed_overlay
+    - map: [ hood_dmg_holes ]
+      state: hood_dmg_holes_overlay_25
+      visible: false
+    - map: [ hood_dmg_burnt ]
+      state: hood_dmg_burnt_overlay_25
+      visible: false
+    - map: [ hood_dmg_dented ]
+      state: hood_dmg_dented_overlay_25
+      visible: false
     - map: [ headlight_left ]
       state: headlight_left_overlay_0
     - map: [ headlight_right ]
@@ -2292,10 +2526,44 @@
     CMSteel: 18750
     RMCPlastic: 10000
 
+# Replacement panels, for ones wrecked past welding. A sheet is 3750.
+- type: latheRecipe
+  id: CMUJeepHood
+  result: CMUJeepHood
+  completetime: 10
+  materials:
+    CMSteel: 18750
+
+- type: latheRecipe
+  id: CMUJeepDoor
+  result: CMUJeepDoor
+  completetime: 8
+  materials:
+    CMSteel: 15000
+
+- type: latheRecipe
+  id: CMUJeepTailgate
+  result: CMUJeepTailgate
+  completetime: 8
+  materials:
+    CMSteel: 15000
+
+- type: latheRecipe
+  id: CMUJeepWindshield
+  result: CMUJeepWindshield
+  completetime: 8
+  materials:
+    CMSteel: 3750
+    CMGlass: 11250
+
 - type: latheRecipePack
   id: CMUVehicleLatheRecipes
   recipes:
   - CMUVehicleSprayPainter
+  - CMUJeepHood
+  - CMUJeepDoor
+  - CMUJeepTailgate
+  - CMUJeepWindshield
 
 # Blood splashed on a jeep, tinted with the bleeder's blood colour. Not offered as crayon decals.
 

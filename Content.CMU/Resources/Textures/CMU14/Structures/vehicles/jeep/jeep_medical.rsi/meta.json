@@ -3885,6 +3885,318 @@
         },
         {
             "name": "WHEEL"
+        },
+        {
+            "name": "body_dmg_holes_25",
+            "directions": 4
+        },
+        {
+            "name": "body_dmg_holes_overlay_25",
+            "directions": 4
+        },
+        {
+            "name": "body_dmg_holes_50",
+            "directions": 4
+        },
+        {
+            "name": "body_dmg_holes_overlay_50",
+            "directions": 4
+        },
+        {
+            "name": "body_dmg_holes_100",
+            "directions": 4
+        },
+        {
+            "name": "body_dmg_holes_overlay_100",
+            "directions": 4
+        },
+        {
+            "name": "hood_dmg_holes_25",
+            "directions": 4
+        },
+        {
+            "name": "hood_dmg_holes_overlay_25",
+            "directions": 4
+        },
+        {
+            "name": "hood_dmg_holes_50",
+            "directions": 4
+        },
+        {
+            "name": "hood_dmg_holes_overlay_50",
+            "directions": 4
+        },
+        {
+            "name": "hood_dmg_holes_100",
+            "directions": 4
+        },
+        {
+            "name": "hood_dmg_holes_overlay_100",
+            "directions": 4
+        },
+        {
+            "name": "hood_dmg_burnt_25",
+            "directions": 4
+        },
+        {
+            "name": "hood_dmg_burnt_overlay_25",
+            "directions": 4
+        },
+        {
+            "name": "hood_dmg_burnt_50",
+            "directions": 4
+        },
+        {
+            "name": "hood_dmg_burnt_overlay_50",
+            "directions": 4
+        },
+        {
+            "name": "hood_dmg_burnt_100",
+            "directions": 4
+        },
+        {
+            "name": "hood_dmg_burnt_overlay_100",
+            "directions": 4
+        },
+        {
+            "name": "hood_dmg_dented_25",
+            "directions": 4
+        },
+        {
+            "name": "hood_dmg_dented_overlay_25",
+            "directions": 4
+        },
+        {
+            "name": "hood_dmg_dented_50",
+            "directions": 4
+        },
+        {
+            "name": "hood_dmg_dented_overlay_50",
+            "directions": 4
+        },
+        {
+            "name": "hood_dmg_dented_100",
+            "directions": 4
+        },
+        {
+            "name": "hood_dmg_dented_overlay_100",
+            "directions": 4
+        },
+        {
+            "name": "door_driver_dmg_holes_25",
+            "directions": 4
+        },
+        {
+            "name": "door_driver_dmg_holes_overlay_25",
+            "directions": 4
+        },
+        {
+            "name": "door_driver_dmg_holes_50",
+            "directions": 4
+        },
+        {
+            "name": "door_driver_dmg_holes_overlay_50",
+            "directions": 4
+        },
+        {
+            "name": "door_driver_dmg_holes_100",
+            "directions": 4
+        },
+        {
+            "name": "door_driver_dmg_holes_overlay_100",
+            "directions": 4
+        },
+        {
+            "name": "door_driver_dmg_burnt_25",
+            "directions": 4
+        },
+        {
+            "name": "door_driver_dmg_burnt_overlay_25",
+            "directions": 4
+        },
+        {
+            "name": "door_driver_dmg_burnt_50",
+            "directions": 4
+        },
+        {
+            "name": "door_driver_dmg_burnt_overlay_50",
+            "directions": 4
+        },
+        {
+            "name": "door_driver_dmg_burnt_100",
+            "directions": 4
+        },
+        {
+            "name": "door_driver_dmg_burnt_overlay_100",
+            "directions": 4
+        },
+        {
+            "name": "door_driver_dmg_dented_25",
+            "directions": 4
+        },
+        {
+            "name": "door_driver_dmg_dented_overlay_25",
+            "directions": 4
+        },
+        {
+            "name": "door_driver_dmg_dented_50",
+            "directions": 4
+        },
+        {
+            "name": "door_driver_dmg_dented_overlay_50",
+            "directions": 4
+        },
+        {
+            "name": "door_driver_dmg_dented_100",
+            "directions": 4
+        },
+        {
+            "name": "door_driver_dmg_dented_overlay_100",
+            "directions": 4
+        },
+        {
+            "name": "door_passenger_dmg_holes_25",
+            "directions": 4
+        },
+        {
+            "name": "door_passenger_dmg_holes_overlay_25",
+            "directions": 4
+        },
+        {
+            "name": "door_passenger_dmg_holes_50",
+            "directions": 4
+        },
+        {
+            "name": "door_passenger_dmg_holes_overlay_50",
+            "directions": 4
+        },
+        {
+            "name": "door_passenger_dmg_holes_100",
+            "directions": 4
+        },
+        {
+            "name": "door_passenger_dmg_holes_overlay_100",
+            "directions": 4
+        },
+        {
+            "name": "door_passenger_dmg_burnt_25",
+            "directions": 4
+        },
+        {
+            "name": "door_passenger_dmg_burnt_overlay_25",
+            "directions": 4
+        },
+        {
+            "name": "door_passenger_dmg_burnt_50",
+            "directions": 4
+        },
+        {
+            "name": "door_passenger_dmg_burnt_overlay_50",
+            "directions": 4
+        },
+        {
+            "name": "door_passenger_dmg_burnt_100",
+            "directions": 4
+        },
+        {
+            "name": "door_passenger_dmg_burnt_overlay_100",
+            "directions": 4
+        },
+        {
+            "name": "door_passenger_dmg_dented_25",
+            "directions": 4
+        },
+        {
+            "name": "door_passenger_dmg_dented_overlay_25",
+            "directions": 4
+        },
+        {
+            "name": "door_passenger_dmg_dented_50",
+            "directions": 4
+        },
+        {
+            "name": "door_passenger_dmg_dented_overlay_50",
+            "directions": 4
+        },
+        {
+            "name": "door_passenger_dmg_dented_100",
+            "directions": 4
+        },
+        {
+            "name": "door_passenger_dmg_dented_overlay_100",
+            "directions": 4
+        },
+        {
+            "name": "tailgate_dmg_holes_25",
+            "directions": 4
+        },
+        {
+            "name": "tailgate_dmg_holes_overlay_25",
+            "directions": 4
+        },
+        {
+            "name": "tailgate_dmg_holes_50",
+            "directions": 4
+        },
+        {
+            "name": "tailgate_dmg_holes_overlay_50",
+            "directions": 4
+        },
+        {
+            "name": "tailgate_dmg_holes_100",
+            "directions": 4
+        },
+        {
+            "name": "tailgate_dmg_holes_overlay_100",
+            "directions": 4
+        },
+        {
+            "name": "tailgate_dmg_burnt_25",
+            "directions": 4
+        },
+        {
+            "name": "tailgate_dmg_burnt_overlay_25",
+            "directions": 4
+        },
+        {
+            "name": "tailgate_dmg_burnt_50",
+            "directions": 4
+        },
+        {
+            "name": "tailgate_dmg_burnt_overlay_50",
+            "directions": 4
+        },
+        {
+            "name": "tailgate_dmg_burnt_100",
+            "directions": 4
+        },
+        {
+            "name": "tailgate_dmg_burnt_overlay_100",
+            "directions": 4
+        },
+        {
+            "name": "tailgate_dmg_dented_25",
+            "directions": 4
+        },
+        {
+            "name": "tailgate_dmg_dented_overlay_25",
+            "directions": 4
+        },
+        {
+            "name": "tailgate_dmg_dented_50",
+            "directions": 4
+        },
+        {
+            "name": "tailgate_dmg_dented_overlay_50",
+            "directions": 4
+        },
+        {
+            "name": "tailgate_dmg_dented_100",
+            "directions": 4
+        },
+        {
+            "name": "tailgate_dmg_dented_overlay_100",
+            "directions": 4
         }
     ]
 }

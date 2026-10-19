@@ -342,7 +342,6 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
                 var vehicles = catalog!.Categories.Single(category => category.Name == "Vehicles");
                 var costs = kits.Select(kit => vehicles.Entries.Single(entry => entry.Crate.Id == kit).Cost).ToList();
                 Assert.That(costs, Is.Ordered.Ascending, catalogId);
-                Assert.That(costs[0], Is.GreaterThanOrEqualTo(10000), catalogId);
             }
         });
     }

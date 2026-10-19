@@ -27,7 +27,12 @@ public sealed class CMUVehicleSprayPainterWindow : DefaultWindow
         Color.FromHex("#6E7072"), Color.FromHex("#2E2E2E"), Color.FromHex("#D8D8D0"), Color.FromHex("#8E2A22"),
     ];
 
-    private static readonly string[] Channels = ["R", "G", "B"];
+    private static readonly string[] Channels =
+    [
+        "cmu-vehicle-spray-painter-channel-r",
+        "cmu-vehicle-spray-painter-channel-g",
+        "cmu-vehicle-spray-painter-channel-b",
+    ];
     private static readonly string[] Regions = ["base", "accent", "lip", "cap"];
     private static readonly Color FactoryWheels = Color.FromHex("#C8CDD2");
     private const int PreviewScale = 3;
@@ -157,7 +162,7 @@ public sealed class CMUVehicleSprayPainterWindow : DefaultWindow
         for (var i = 0; i < 3; i++)
         {
             var row = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, SeparationOverride = 6 };
-            row.AddChild(new Label { Text = Channels[i], MinWidth = 14 });
+            row.AddChild(new Label { Text = Loc.GetString(Channels[i]), MinWidth = 14 });
             var slider = new Slider
             {
                 MinValue = 0,

@@ -114,6 +114,18 @@ public sealed partial class CMUOpenVehicleComponent : Component
     public float WindshieldDamageShare = 0.25f;
 
     /// <summary>
+    /// The share of a hit worn off the panel on the side of the hull it lands on.
+    /// </summary>
+    [DataField]
+    public float PanelDamageShare = 0.5f;
+
+    /// <summary>
+    /// The share of a crash's hull damage worn off the panel on the side it hit.
+    /// </summary>
+    [DataField]
+    public float PanelCrashShare = 1f;
+
+    /// <summary>
     /// Chance per hit of at least <see cref="PunctureMinDamage"/> to hole the hanging jerry can.
     /// </summary>
     [DataField]
@@ -210,6 +222,13 @@ public sealed partial class CMUVehiclePartData
     /// </summary>
     [DataField]
     public string? RaisedLayer;
+
+    /// <summary>
+    /// The way a panel faces, in vehicle space (facing south): hits landing on that side of the hull
+    /// wear it. Unset, hits don't wear it.
+    /// </summary>
+    [DataField]
+    public Vector2? WearFacing;
 
     /// <summary>
     /// A wrecked hull pops the shut panel ajar.

@@ -2936,7 +2936,13 @@ def write_click_maps(variant, dy):
         rsi_sheet(tiles).save(os.path.join(path, f"{RSI_NAMES[variant]}_{name}.png"))
 
 
+# Damage states drawn in the Open Vehicles tool (Damage/), kept by RSI folder while it is rewritten:
+# this generator doesn't draw them, and the parts they sit over stay where they were.
+KEPT_DAMAGE = {}
+
+
 def write_meta(path, size, states):
+    states = states + KEPT_DAMAGE.pop(os.path.normpath(path), [])
     meta = {"version": 1, "license": "CC-BY-SA-3.0", "copyright": COPYRIGHT,
             "size": {"x": size, "y": size}, "states": states}
     with open(os.path.join(path, "meta.json"), "w", newline="\n") as fh:
@@ -2946,8 +2952,14 @@ def write_meta(path, size, states):
 
 def fresh_dir(path):
     os.makedirs(path, exist_ok=True)
+    meta = os.path.join(path, "meta.json")
+    if os.path.exists(meta):
+        kept = [st for st in json.load(open(meta))["states"] if "_dmg_" in st["name"]]
+        if kept:
+            KEPT_DAMAGE[os.path.normpath(path)] = kept
     for old in os.listdir(path):
-        os.remove(os.path.join(path, old))
+        if "_dmg_" not in old:
+            os.remove(os.path.join(path, old))
 
 
 def write_rsi(variant, dy):
