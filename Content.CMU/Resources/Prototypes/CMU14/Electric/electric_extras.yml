@@ -150,7 +150,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildBatteryBuffer
@@ -167,4 +167,4 @@
   - stack: RUMCBasicCircuit
     amount: 2
   - stack: RUMCInsulatedCable
-    amount: 4
+    amount: 1

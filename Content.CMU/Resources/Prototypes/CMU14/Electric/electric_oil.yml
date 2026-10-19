@@ -530,7 +530,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildOilTank
@@ -588,7 +588,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 4
+    amount: 1
   - stack: RUMCGalvanizedSheet
     amount: 2
 
@@ -609,7 +609,7 @@
   - stack: RUMCBasicCircuit
     amount: 2
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
   - stack: RUMCChromedSheet
     amount: 4
 
@@ -630,7 +630,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildSteamCracker
@@ -649,7 +649,7 @@
   - stack: RUMCBasicCircuit
     amount: 2
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
   - stack: RUMCChromedSheet
     amount: 2
 
@@ -672,7 +672,7 @@
   - stack: RUMCBasicCircuit
     amount: 2
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildGasTurbine
@@ -693,6 +693,6 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 4
+    amount: 1
   - stack: RUMCChromedSheet
     amount: 2

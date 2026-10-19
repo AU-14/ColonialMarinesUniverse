@@ -296,7 +296,7 @@
   machine: assembler
   inputs:
     RUMCResinBoard: 1
-    RUMCVacuumTube: 2
+    RUMCVacuumTube: 1
     RUMCResistor: 2
   outputs:
     RUMCBasicCircuit: 1
@@ -320,9 +320,8 @@
   id: RUMCMRAssemblerPiston
   machine: assembler
   inputs:
-    RUMCMotor: 1
     CMSteel: 2
-    RUMCIronRod: 2
+    RUMCIronRod: 3
     RUMCIronScrew: 2
   outputs:
     RUMCPiston: 1
@@ -332,9 +331,9 @@
   id: RUMCMRAssemblerPump
   machine: assembler
   inputs:
-    RUMCMotor: 1
     RUMCRubberSheet: 1
-    RUMCIronRod: 1
+    CMSteel: 1
+    RUMCIronRod: 2
     RUMCIronScrew: 2
   outputs:
     RUMCPump: 1
@@ -344,8 +343,8 @@
   id: RUMCMRAssemblerConveyor
   machine: assembler
   inputs:
-    RUMCMotor: 1
     RUMCRubberSheet: 2
+    RUMCIronRod: 2
     RUMCInsulatedCable: 1
   outputs:
     RUMCConveyor: 1
@@ -395,7 +394,7 @@
   machine: circuitassembler
   inputs:
     RUMCResinBoard: 1
-    RUMCVacuumTube: 2
+    RUMCVacuumTube: 1
     RUMCResistor: 2
   outputs:
     RUMCBasicCircuit: 2
@@ -3792,6 +3791,58 @@
   - stack: RUMCIronBolt
     amount: 2
 
+# What a machine of the electric stage makes can be crafted by hand as well, for more of the same stuff: the chrome-plated sheet, the gear and the silver and
+# the gold wire. (The machines give more of them, and the plating bath needs water and power.)
+- type: craftRecipe
+  id: RUMCCraftElectricChromedSheet
+  name: au14-craft-recipe-electricchromedsheet
+  output: RUMCChromedSheetItem
+  outputCount: 1
+  time: 10
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 1
+  - stack: RUMCChromePowder
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftElectricIronGear
+  name: au14-craft-recipe-electricirongear
+  output: RUMCIronGearItem
+  outputCount: 1
+  time: 8
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftElectricSilverWire
+  name: au14-craft-recipe-electricsilverwire
+  output: RUMCSilverWireItem
+  outputCount: 1
+  time: 8
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCSilverIngot
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftElectricGoldWire
+  name: au14-craft-recipe-electricgoldwire
+  output: RUMCGoldWireItem
+  outputCount: 1
+  time: 8
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCGoldIngot
+    amount: 1
+
 - type: craftRecipe
   id: RUMCCraftElectricMagneticRod
   name: au14-craft-recipe-electricmagneticrod
@@ -3894,11 +3945,11 @@
   - stack: RUMCResinBoard
     amount: 1
   - stack: RUMCVacuumTube
-    amount: 3
+    amount: 1
   - stack: RUMCResistor
-    amount: 3
+    amount: 2
   - stack: RUMCCopperWire
-    amount: 4
+    amount: 2
 
 - type: craftRecipe
   id: RUMCCraftElectricMotor
@@ -3927,12 +3978,10 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCMotor
-    amount: 1
   - stack: CMSteel
     amount: 2
   - stack: RUMCIronRod
-    amount: 2
+    amount: 3
   - stack: RUMCIronScrew
     amount: 2
 
@@ -3945,12 +3994,12 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCMotor
-    amount: 1
   - stack: RUMCRubberSheet
     amount: 1
-  - stack: RUMCIronRod
+  - stack: CMSteel
     amount: 1
+  - stack: RUMCIronRod
+    amount: 2
   - stack: RUMCIronScrew
     amount: 2
 
@@ -3963,9 +4012,9 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCMotor
-    amount: 1
   - stack: RUMCRubberSheet
+    amount: 2
+  - stack: RUMCIronRod
     amount: 2
   - stack: RUMCInsulatedCable
     amount: 1
@@ -4106,7 +4155,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildBender
@@ -4126,7 +4175,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildLathe
@@ -4146,7 +4195,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildCutter
@@ -4166,7 +4215,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildPolarizer
@@ -4184,7 +4233,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildExtractor
@@ -4204,7 +4253,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildMixer
@@ -4224,7 +4273,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildChemicalReactor
@@ -4244,7 +4293,7 @@
   - stack: RUMCBasicCircuit
     amount: 2
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildElectricAssembler
@@ -4266,7 +4315,7 @@
   - stack: RUMCBasicCircuit
     amount: 2
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildElectricBlastFurnace
@@ -4284,7 +4333,7 @@
   - stack: RUMCBasicCircuit
     amount: 3
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildOreWasher
@@ -4304,7 +4353,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildThermalCentrifuge
@@ -4324,7 +4373,7 @@
   - stack: RUMCBasicCircuit
     amount: 2
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildMagneticSeparator
@@ -4344,7 +4393,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildSifter
@@ -4364,7 +4413,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildAutoclave
@@ -4384,7 +4433,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildPyrolysisOven
@@ -4404,7 +4453,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildGalvanicBath
@@ -4424,7 +4473,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildRecycler
@@ -4444,7 +4493,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildFertilizerMixer
@@ -4464,7 +4513,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildCannery
@@ -4486,7 +4535,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildJewelersBench
@@ -4506,7 +4555,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildLaserEngraver
@@ -4528,7 +4577,7 @@
   - stack: RUMCBasicCircuit
     amount: 2
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildElectrolyzer
@@ -4548,7 +4597,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildArcFurnace
@@ -4568,7 +4617,7 @@
   - stack: RUMCBasicCircuit
     amount: 2
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildChemicalBath
@@ -4588,7 +4637,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildCentrifuge
@@ -4606,7 +4655,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildCompressor
@@ -4624,7 +4673,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildFluidSolidifier
@@ -4644,7 +4693,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildExtruder
@@ -4664,7 +4713,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildPharmaMachine
@@ -4684,7 +4733,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildConcreteMixer
@@ -4704,7 +4753,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildSewingMachine
@@ -4724,7 +4773,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildTannery
@@ -4744,7 +4793,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildFabricator
@@ -4766,7 +4815,7 @@
   - stack: RUMCBasicCircuit
     amount: 3
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildCircuitAssembler
@@ -4786,7 +4835,7 @@
   - stack: RUMCBasicCircuit
     amount: 3
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildSteamExtractor

@@ -15,7 +15,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildElectricDrill
@@ -34,7 +34,7 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildElectricSmelter
@@ -51,7 +51,7 @@
   - stack: RUMCBasicCircuit
     amount: 2
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildCondenser
@@ -68,4 +68,4 @@
   - stack: RUMCBasicCircuit
     amount: 1
   - stack: RUMCInsulatedCable
-    amount: 2
+    amount: 1
