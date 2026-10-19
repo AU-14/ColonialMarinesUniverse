@@ -34,6 +34,12 @@
     # Z-level jump: peak height in z-levels above the starting floor. Must be above 1 to reach the level above.
     jumpHeight: 1.8
     landingFuelPerSecond: 0.0068379
+    # Crit explosion: chance the tank ruptures and detonates if the wearer goes critical while hovering, and the blast strength.
+    critExplosionChance: 0.1
+    critExplosionType: RMC
+    critExplosionTotalIntensity: 100
+    critExplosionIntensitySlope: 10
+    critExplosionMaxIntensity: 15
   - type: StaticPrice
     price: 150
 

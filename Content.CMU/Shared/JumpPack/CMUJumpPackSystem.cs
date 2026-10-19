@@ -1,3 +1,5 @@
+using Content.Shared._RMC14.Areas;
+using Content.Shared._RMC14.Explosion;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Atmos.Components;
@@ -19,6 +21,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.JumpPack;
@@ -28,7 +31,9 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
     [Dependency] private ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private ActionContainerSystem _actionContainer = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private AreaSystem _area = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedRMCExplosionSystem _explosion = default!;
     [Dependency] private SharedGasTankSystem _gasTank = default!;
     [Dependency] private SharedGravitySystem _gravity = default!;
     [Dependency] private InventorySystem _inventory = default!;
@@ -37,8 +42,10 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private static readonly TimeSpan FuelSyncInterval = TimeSpan.FromSeconds(1);
@@ -305,6 +312,12 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
         if (!CanUseInGravity(ent, user))
             return;
 
+        if (HasCeilingAbove(user))
+        {
+            _popup.PopupClient(Loc.GetString("cmu-jump-pack-ceiling"), user, user, PopupType.SmallCaution);
+            return;
+        }
+
         if (!HasOpenSkyAbove(user))
         {
             _popup.PopupClient(Loc.GetString("cmu-jump-pack-no-room"), user, user, PopupType.SmallCaution);
@@ -366,6 +379,12 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
 
         if (!CanUseInGravity(ent, user))
             return;
+
+        if (HasCeilingAbove(user))
+        {
+            _popup.PopupClient(Loc.GetString("cmu-jump-pack-ceiling"), user, user, PopupType.SmallCaution);
+            return;
+        }
 
         if (!_zLevels.CanStartZHover(user, out var targetMap))
         {
@@ -449,7 +468,11 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
             }
             else if (!_mobState.IsAlive(user))
             {
-                EndHover(ent, user);
+                // Going critical mid-hover can rupture the fuel tank.
+                if (_mobState.IsCritical(user) && _random.Prob(comp.CritExplosionChance))
+                    ExplodePack(ent, user);
+                else
+                    EndHover(ent, user);
             }
         }
     }
@@ -541,6 +564,34 @@ public sealed partial class CMUJumpPackSystem : EntitySystem
                TryComp(mapUid, out CMUZLevelMapComponent? zMap) &&
                _zLevels.TryMapUp((mapUid, zMap), out _) &&
                !_zLevels.HasTileAbove(user);
+    }
+
+    /// <summary>
+    /// A solid tile on the level above, or a ceiling-tiered area such as a cave or building interior.
+    /// </summary>
+    private bool HasCeilingAbove(EntityUid user)
+    {
+        if (_zLevels.HasTileAbove(user))
+            return true;
+
+        return _area.TryGetArea(user, out var area, out _) && !area.Value.Comp.Paradropping;
+    }
+
+    /// <summary>
+    /// The tank ruptures and the pack detonates on the wearer's back. Deleting the pack drops them out of the hover.
+    /// </summary>
+    private void ExplodePack(Entity<CMUJumpPackComponent> ent, EntityUid user)
+    {
+        var comp = ent.Comp;
+        _popup.PopupEntity(Loc.GetString("cmu-jump-pack-crit-explode", ("user", user)), user, PopupType.LargeCaution);
+        _explosion.QueueExplosion(_transform.GetMapCoordinates(user),
+            comp.CritExplosionType,
+            comp.CritExplosionTotalIntensity,
+            comp.CritExplosionIntensitySlope,
+            comp.CritExplosionMaxIntensity,
+            ent);
+
+        QueueDel(ent);
     }
 
     private bool CanUseInGravity(Entity<CMUJumpPackComponent> pack, EntityUid user)

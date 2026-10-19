@@ -1,3 +1,4 @@
+using Content.Shared.Explosion;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -122,6 +123,25 @@ public sealed partial class CMUJumpPackComponent : Component
 
     [DataField]
     public float FuelPerJump = 0.0478655f;
+
+    /// <summary>
+    /// Chance the pack's tank ruptures and detonates when the wearer goes critical while hovering.
+    /// Set on the prototype; zero disables it.
+    /// </summary>
+    [DataField]
+    public float CritExplosionChance;
+
+    [DataField]
+    public ProtoId<ExplosionPrototype> CritExplosionType = "RMC";
+
+    [DataField]
+    public float CritExplosionTotalIntensity;
+
+    [DataField]
+    public float CritExplosionIntensitySlope;
+
+    [DataField]
+    public float CritExplosionMaxIntensity;
 
     [DataField, AutoNetworkedField]
     public EntityUid? HoverUser;
