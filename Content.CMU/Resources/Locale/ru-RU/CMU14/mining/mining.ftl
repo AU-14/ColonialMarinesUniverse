@@ -67,7 +67,6 @@ ent-RUMCBrassMoldIngots = латунная форма на три слитка
     .desc = Латунная плита с углублениями под три слитка. Вставленная в паровую плавильню вместе с рудой на три слитка, отливает три слитка сразу.
 au14-anvil-recipe-brass-parts = латунные детали
 au14-anvil-recipe-brass-sheet = латунный лист
-au14-anvil-recipe-metal-sheet = металлический лист (из железа)
 
 au14-anvil-recipe-steel-drill-head = стальная буровая головка
 

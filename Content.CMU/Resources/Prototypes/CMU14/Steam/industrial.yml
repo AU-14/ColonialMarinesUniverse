@@ -80,36 +80,36 @@
   - type: SteamSmelter
     producesSlag: false
 
-# The industrial steam extractor: the steam extractor, gray, and it works twice as fast on the same steam. It is built of sheets of metal (CMSteel).
+# The industrial steam extractor: the steam extractor, gray, and it works twice as fast on the same steam. It is built of machine hulls.
 - type: entity
   parent: RUMCSteamExtractor
   id: RUMCIndustrialSteamExtractor
   name: industrial steam extractor
-  description: A gray extractor driven by steam, built of sheets of metal. It presses resin out of wood and turns resin into raw rubber, twice as fast as the brass one on the same steam. Join a gas pipe with steam to it.
+  description: A gray extractor driven by steam, built of machine hulls. It presses resin out of wood and turns resin into raw rubber, twice as fast as the brass one on the same steam. Join a gas pipe with steam to it.
   components:
   - type: Sprite
     sprite: CMU14/Production/Industrial/steam_extractor_industrial.rsi
   - type: RecipeMachine
     speed: 2
 
-# The industrial solid-fuel press: the press that runs on planks, gray, and built of sheets of metal.
+# The industrial solid-fuel press: the press that runs on planks, gray, and built of machine hulls.
 - type: entity
   parent: RUMCSolidFuelPress
   id: RUMCIndustrialSolidFuelPress
   name: industrial solid-fuel press
-  description: A heavy gray press that runs on wood instead of the grid, built of sheets of metal. Open it, put planks in for fuel, seat a mold and one or two ingots, and it presses them into a piece.
+  description: A heavy gray press that runs on wood instead of the grid, built of machine hulls. Open it, put planks in for fuel, seat a mold and one or two ingots, and it presses them into a piece.
   components:
   - type: Sprite
     noRot: true
     sprite: CMU14/Production/Industrial/fuel_press_industrial.rsi
     state: press
 
-# The industrial steam grinder: the steam grinder, tinted gray, built of sheets of metal.
+# The industrial steam grinder: the steam grinder, tinted gray, built of machine hulls.
 - type: entity
   parent: RUMCSteamGrinder
   id: RUMCIndustrialSteamGrinder
   name: industrial steam grinder
-  description: A gray shredder driven by steam, built of sheets of metal. Join a gas pipe with steam to it and it chews through every slot it can at once.
+  description: A gray shredder driven by steam, built of machine hulls. Join a gas pipe with steam to it and it chews through every slot it can at once.
   components:
   - type: Sprite
     color: "#a9b2bb"

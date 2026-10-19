@@ -3495,12 +3495,12 @@
     RUMCThermoAlloy: 1
   duration: 4
 
-# Rubber before the grid: the steam press vulcanizes raw rubber (from the steam extractor) with cinnabar.
+# Rubber before the grid: the steam press vulcanizes raw rubber (from the steam extractor) by itself, with no cinnabar. The mixer and the reactor still
+# make more sheets of the same rubber when cinnabar or sulfur is added.
 - type: cmuPressRecipe
   id: RUMCPressRubberSheet
   inputs:
     RUMCRawRubber: 2
-    RUMCCinnabarPowder: 1
   result: RUMCRubberSheet
   resultAmount: 2
   duration: 8
@@ -4827,7 +4827,7 @@
   - stack: RMCWood
     amount: 2
 
-# The industrial steam extractor is built of sheets of metal (CMSteel) and wood, with no brass in it.
+# The industrial steam extractor is built of two machine hulls and wood, with no brass in it.
 - type: craftRecipe
   id: RUMCCraftBuildIndustrialSteamExtractor
   name: au14-craft-recipe-buildindustrialsteamextractor
@@ -4837,7 +4837,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: CMSteel
-    amount: 12
+  - stack: RUMCMachineHull
+    amount: 2
   - stack: RMCWood
     amount: 2
