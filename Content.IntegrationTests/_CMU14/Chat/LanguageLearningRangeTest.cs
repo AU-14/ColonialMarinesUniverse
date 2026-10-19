@@ -22,20 +22,26 @@ public sealed class LanguageLearningRangeTest : GameTest
     public async Task OnlyLearnersInHearingRangeLearnFromSpeech()
     {
         var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
+        var speaker = EntityUid.Invalid;
+        var near = EntityUid.Invalid;
+        var far = EntityUid.Invalid;
+        await Server.WaitPost(() =>
         {
             var learning = Server.System<LanguageLearningSystem>();
-            var speaker = SEntMan.SpawnEntity(null, map.GridCoords);
-            var near = SEntMan.SpawnEntity(null, map.GridCoords.Offset(new Vector2(3, 0)));
-            var far = SEntMan.SpawnEntity(null, map.GridCoords.Offset(new Vector2(30, 0)));
+            speaker = SEntMan.SpawnEntity(null, map.GridCoords);
+            near = SEntMan.SpawnEntity(null, map.GridCoords.Offset(new Vector2(3, 0)));
+            far = SEntMan.SpawnEntity(null, map.GridCoords.Offset(new Vector2(30, 0)));
             learning.AddLearnableLanguage(near, Latin);
             learning.AddLearnableLanguage(far, Latin);
-            // a fresh test server's clock is younger than the learning cooldown
-            SEntMan.GetComponent<LanguageLearningComponent>(near).MinTimeBetweenLearning = TimeSpan.Zero;
-            SEntMan.GetComponent<LanguageLearningComponent>(far).MinTimeBetweenLearning = TimeSpan.Zero;
             for (var i = 0; i < 50; i++)
                 SEntMan.SpawnEntity(null, map.GridCoords.Offset(new Vector2(1, i % 5)));
+        });
 
+        // a fresh test server's clock is younger than the learning cooldown, so run it past that
+        await RunSeconds(3);
+
+        await Server.WaitAssertion(() =>
+        {
             SEntMan.EventBus.RaiseEvent(EventSource.Local,
                 new EntitySpokeEvent(speaker, "veni vidi vici", null, null, Latin));
 
