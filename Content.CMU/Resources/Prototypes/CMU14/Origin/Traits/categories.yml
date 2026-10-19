@@ -11,7 +11,7 @@
 - type: traitCategory
   id: CMUDrugAllergies
   name: cmu-trait-category-drug-allergy
-  maxTraitPoints: 1
+  maxTraitPoints: 2
 
 - type: traitCategory
   id: CMUQuirks
