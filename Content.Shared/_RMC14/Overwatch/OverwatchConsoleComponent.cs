@@ -58,6 +58,20 @@ public sealed partial class OverwatchConsoleComponent : Component
     [DataField, AutoNetworkedField]
     public bool HasOrbital;
 
+    // CMU14 Ship Weapons Begin
+    [DataField, AutoNetworkedField]
+    public Content.Shared.CMU14.ShipWeapons.CMUShipWeaponStatus[] CMUShipWeapons = [];
+
+    [DataField, AutoNetworkedField]
+    public Robust.Shared.Prototypes.ProtoId<Content.Shared.CMU14.ShipWeapons.CMUShipWeaponPrototype>? CMUSelectedShipWeapon;
+
+    [DataField, AutoNetworkedField]
+    public Content.Shared.CMU14.ShipWeapons.CMUShipWeaponBearing CMUShipWeaponBearing;
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    public TimeSpan CMUNextShipWeaponLaunch;
+    // CMU14 End
+
     [DataField, AutoNetworkedField]
     public Vector2i OrbitalCoordinates;
 
