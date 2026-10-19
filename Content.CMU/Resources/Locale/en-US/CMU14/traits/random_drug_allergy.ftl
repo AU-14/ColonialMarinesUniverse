@@ -1,4 +1,4 @@
-au14-trait-drugallergy-name = Random Drug Allergy
+au14-trait-drugallergy-name = Drug Allergy: Random
 au14-trait-drugallergy-desc = You are allergic to one of the medications in this section, picked at random. Ingesting it triggers a serious allergic reaction until treated with epinephrine. You spawn with an epinephrine injector and a tag noting your allergy.
 au14-drug-allergy-tag-name = medical alert tag
 au14-drug-allergy-tag-text = Allergic to { $reagent }

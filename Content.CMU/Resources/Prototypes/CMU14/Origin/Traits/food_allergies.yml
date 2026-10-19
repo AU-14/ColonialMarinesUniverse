@@ -131,3 +131,13 @@
   - !type:CMUAddFoodAllergySpecial
     allergen: CMUFoodAllergenEggs
   traitGear: CMUEpinephrineAutoInjector
+
+- type: trait
+  id: CMUFoodAllergyRandom
+  name: cmu-trait-food-allergy-random-name
+  description: cmu-trait-food-allergy-random-desc
+  category: CMUDrugAllergies
+  cost: 1
+  specials:
+  - !type:CMUAddFoodAllergySpecial
+  traitGear: CMUEpinephrineAutoInjector

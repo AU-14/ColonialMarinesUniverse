@@ -2,6 +2,7 @@ using Content.Shared.CMU14.Traits.DrugAllergy;
 using Content.Shared.Nutrition;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 
 namespace Content.Server.CMU14.Traits.DrugAllergy;
 
@@ -10,19 +11,38 @@ public sealed class CMUFoodAllergySystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private AllergicReactionSystem _allergicReaction = default!;
     [Dependency] private DrugAllergyTraitSystem _drugAllergy = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {
         SubscribeLocalEvent<CMUFoodAllergyComponent, IngestingEvent>(OnIngesting);
     }
 
-    public void AddAllergen(EntityUid uid, ProtoId<CMUFoodAllergenPrototype> allergen)
+    /// <summary>
+    ///     Adds a food allergy, or a random one the entity doesn't already have if <paramref name="allergen"/> is null.
+    /// </summary>
+    public void AddAllergen(EntityUid uid, ProtoId<CMUFoodAllergenPrototype>? allergen)
     {
         var comp = EnsureComp<CMUFoodAllergyComponent>(uid);
-        if (comp.Allergens.Contains(allergen) || !_prototypes.TryIndex(allergen, out var proto))
+        if (allergen == null)
+        {
+            var pool = new List<ProtoId<CMUFoodAllergenPrototype>>();
+            foreach (var option in _prototypes.EnumeratePrototypes<CMUFoodAllergenPrototype>())
+            {
+                if (!comp.Allergens.Contains(option.ID))
+                    pool.Add(option.ID);
+            }
+
+            if (pool.Count == 0)
+                return;
+
+            allergen = _random.Pick(pool);
+        }
+
+        if (comp.Allergens.Contains(allergen.Value) || !_prototypes.TryIndex(allergen.Value, out var proto))
             return;
 
-        comp.Allergens.Add(allergen);
+        comp.Allergens.Add(allergen.Value);
         Dirty(uid, comp);
         _drugAllergy.AddTagLine(uid, Loc.GetString(proto.Name));
     }
@@ -67,12 +87,13 @@ public sealed class CMUFoodAllergySystem : EntitySystem
 }
 
 /// <summary>
-///     Trait special that adds one food allergy, so several allergy traits stack on one component.
+///     Trait special that adds one food allergy, so several allergy traits stack on one component. Leave
+///     <see cref="Allergen"/> empty for a random one.
 /// </summary>
 public sealed partial class CMUAddFoodAllergySpecial : JobSpecial
 {
-    [DataField(required: true)]
-    public ProtoId<CMUFoodAllergenPrototype> Allergen;
+    [DataField]
+    public ProtoId<CMUFoodAllergenPrototype>? Allergen;
 
     public override void AfterEquip(EntityUid mob)
     {
