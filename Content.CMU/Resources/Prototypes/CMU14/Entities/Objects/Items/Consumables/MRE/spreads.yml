@@ -12,6 +12,8 @@
     - state: spread
       map: ["enum.OpenableVisuals.Layer"]
     - state: cheese_spread
+      map: ["flavor"]
+      visible: false
   - type: Solution
     solution:
       maxVol: 6
@@ -33,6 +35,8 @@
     - state: spread
       map: ["enum.OpenableVisuals.Layer"]
     - state: jalapeno_cheese_spread
+      map: ["flavor"]
+      visible: false
   - type: Solution
     solution:
       maxVol: 6
@@ -54,6 +58,8 @@
     - state: spread
       map: ["enum.OpenableVisuals.Layer"]
     - state: peanut_butter
+      map: ["flavor"]
+      visible: false
   - type: Solution
     solution:
       maxVol: 6

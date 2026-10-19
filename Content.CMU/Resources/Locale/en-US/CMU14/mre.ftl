@@ -50,3 +50,8 @@ cmu-can-opened = You open the can.
 cmu-can-examine-sealed = It's sealed. Open it with a can opener or a knife.
 
 cmu-mre-name-with-entree = {$mre} ({$entree})
+
+cmu-food-spread-examine = You can put this onto other food.
+cmu-food-spread-closed = Open { THE($spread) } first.
+cmu-food-spread-empty = { CAPITALIZE(THE($spread)) } is empty.
+cmu-food-spread-full = You can't put any more onto { THE($food) }.

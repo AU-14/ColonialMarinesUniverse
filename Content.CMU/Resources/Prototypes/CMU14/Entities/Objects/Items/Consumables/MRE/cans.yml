@@ -62,6 +62,9 @@
   - type: SolutionTransfer
     transferAmount: 5
     canReceive: false
+  - type: CMUSealedCan
+  - type: CMUFoodSpread
+    transferAmount: 5
 
 - type: entity
   parent: CMUMRECanBase
@@ -94,6 +97,9 @@
   - type: SolutionTransfer
     transferAmount: 5
     canReceive: false
+  - type: CMUSealedCan
+  - type: CMUFoodSpread
+    transferAmount: 5
 
 - type: entity
   parent: CMUMRECanBase
@@ -123,6 +129,7 @@
         Quantity: 14
       - ReagentId: TableSalt
         Quantity: 2
+  - type: CMUSealedCan
 
 - type: entity
   parent: CMUMRECanBase
@@ -220,6 +227,7 @@
         Quantity: 5
       - ReagentId: TableSalt
         Quantity: 2
+  - type: CMUSealedCan
 
 - type: entity
   parent: CMUMRECanBase
@@ -252,6 +260,9 @@
   - type: SolutionTransfer
     transferAmount: 5
     canReceive: false
+  - type: CMUSealedCan
+  - type: CMUFoodSpread
+    transferAmount: 5
 
 - type: entity
   parent: CMUMRECanBase
@@ -289,6 +300,7 @@
         Quantity: 5
       - ReagentId: TableSalt
         Quantity: 2
+  - type: CMUSealedCan
 
 - type: entity
   parent: CMUMRECanBase

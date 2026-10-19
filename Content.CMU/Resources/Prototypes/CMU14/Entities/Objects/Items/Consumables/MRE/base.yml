@@ -12,7 +12,8 @@
       components:
       - Xeno
 
-# UPP canned food: sealed until opened with a can opener (quick) or a knife (slow), then eaten with a spoon.
+# UPP canned food, eaten with a spoon. The meat, stew, soup, fatback and condensed milk cans are sealed (CMUSealedCan)
+# until opened with a can opener (quick) or a knife (slow); the side dishes open by hand.
 - type: entity
   abstract: true
   parent: DrinkBase
@@ -25,7 +26,6 @@
     utensil: Spoon
     transferAmount: 3
   - type: Openable
-  - type: CMUSealedCan
   - type: Appearance
   - type: Item
     size: Small
@@ -63,12 +63,17 @@
         enum.OpenableVisuals.Layer:
           True: {state: "spread_open"}
           False: {state: "spread"}
+        flavor:
+          True: {visible: true}
+          False: {visible: false}
   - type: Item
     size: Tiny
   - type: MREItem
   - type: SolutionTransfer
     transferAmount: 2
     canChangeTransferAmount: false
+  - type: CMUFoodSpread
+    transferAmount: 2
   - type: InteractedBlacklist
     blacklist:
       components:
@@ -100,6 +105,8 @@
   - type: SolutionTransfer
     transferAmount: 5
     canChangeTransferAmount: false
+  - type: CMUFoodSpread
+    transferAmount: 5
   - type: InteractedBlacklist
     blacklist:
       components:
