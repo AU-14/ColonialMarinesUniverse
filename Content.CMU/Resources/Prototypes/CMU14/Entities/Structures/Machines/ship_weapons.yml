@@ -1,0 +1,370 @@
+- type: entity
+  id: CMUShipWeaponsTerminal
+  name: ship weapons arming terminal
+  description: Selects orbital support weapons for this ship. The terminal displays the selection limit and shared fire missions. Confirmed selections cannot be changed during the operation.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: CMU14/Items/laptop.rsi
+    state: laptop_off
+    drawdepth: HighFloorObjects
+  - type: Clickable
+  - type: InteractionOutline
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: CMUShipWeaponsTerminal
+    maxSelections: 3
+    uses: 2
+  - type: GuideHelp
+    guides:
+    - CMUGuideShipWeapons
+  - type: ActivatableUI
+    key: enum.CMUShipWeaponsUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUShipWeaponsUiKey.Key:
+        type: CMUShipWeaponsBui
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["RMCAccessCommand"], ["AU14AccessGovforCommand"], ["AU14AccessOpforCommand"]]
+
+- type: entity
+  parent: CMUShipWeaponsTerminal
+  id: CMUShipWeaponsTerminalGovfor
+  suffix: GOVFOR
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovforCommand"]]
+
+- type: entity
+  parent: CMUShipWeaponsTerminal
+  id: CMUShipWeaponsTerminalOpfor
+  suffix: OPFOR
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpforCommand"]]
+
+- type: entity
+  id: CMUShipWeaponStrike
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+
+- type: entity
+  id: CMUShipWeaponSmoke
+  name: orbital smoke
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      cloud:
+        hard: false
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        mask:
+        - MobMask
+        layer:
+        - MidImpassable
+  - type: Occluder
+  - type: Sprite
+    sprite: _RMC14/Effects/smoke.rsi
+    state: smoke2
+    color: "#adadad"
+  - type: TimedDespawn
+    lifetime: 30
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: CMUShipWeaponSmoke
+  id: CMUShipWeaponGas
+  name: orbital toxic gas
+  components:
+  - type: Sprite
+    color: "#75963c"
+  - type: DamageOverTime
+    acidic: false
+    affectsDead: false
+    damage:
+      types:
+        Poison: 12
+    whitelist:
+      components:
+      - MobState
+    multipliers:
+    - multiplier: 0
+      whitelist:
+        components:
+        - Xeno
+  - type: GasMaskFilterDamage
+    damage: 5
+    neurotoxin: false
+
+- type: entity
+  parent: CMUShipWeaponSmoke
+  id: CMUShipWeaponEmsCloud
+  name: electromagnetic interference
+  components:
+  - type: Sprite
+    color: "#88cce8"
+  - type: TimedDespawn
+    lifetime: 15
+
+- type: entity
+  parent: StatusEffectStunned
+  id: CMUShipWeaponEmsStun
+  name: EMS paralysis
+  components:
+  - type: StatusEffect
+    blacklist: null
+
+- type: entity
+  id: CMUShipWeaponEmsField
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMUShipWeaponEmsField
+
+- type: cmuShipWeapon
+  id: CMUGatlingBarrage
+  name: cmu-ship-weapons-gatling
+  shots: 120
+  interval: 0.15
+  spread: 16
+  blastRadius: 1.5
+  slope: 8
+  maxIntensity: 25
+
+- type: cmuShipWeapon
+  id: CMUWalkingBarrage
+  name: cmu-ship-weapons-walking
+  shots: 9
+  interval: 1
+  walkingDistance: 16
+  blastRadius: 6
+
+- type: cmuShipWeapon
+  id: CMU120mmHEBarrage
+  name: cmu-ship-weapons-120mm
+  shots: 12
+  interval: 0.75
+  spread: 16
+  blastRadius: 12
+  maxIntensity: 70
+
+- type: cmuShipWeapon
+  id: CMU380mmHEBarrage
+  name: cmu-ship-weapons-380mm
+  shots: 6
+  interval: 1.8
+  spread: 6
+  blastRadius: 16
+
+- type: cmuShipWeapon
+  id: CMUGasStrike
+  name: cmu-ship-weapons-gas
+  cloud: CMUShipWeaponGas
+  cloudRadius: 30
+
+- type: cmuShipWeapon
+  id: CMUEMSStrike
+  name: cmu-ship-weapons-ems
+  cloud: CMUShipWeaponEmsCloud
+  cloudRadius: 30
+  ems: true
+  fieldDuration: 15
+  stunAfterField: 25
+
+- type: cmuShipWeapon
+  id: CMUSmokeStrike
+  name: cmu-ship-weapons-smoke
+  cloud: CMUShipWeaponSmoke
+  cloudRadius: 30
+
+- type: cmuShipWeapon
+  id: CMUAirburstStrike
+  name: cmu-ship-weapons-airburst
+  shots: 6
+  interval: 0.8
+  spread: 8
+  blastRadius: 12
+  maxIntensity: 50
+  airburst: true
+
+- type: cmuShipWeapon
+  id: CMUPrecisionStrike
+  name: cmu-ship-weapons-precision
+  blastRadius: 12
+  maxIntensity: 70
+
+- type: cmuShipWeapon
+  id: CMURailcannonStrike
+  name: cmu-ship-weapons-railcannon
+  railDamage:
+    types:
+      Piercing: 2000
+      Structural: 2000
+
+- type: entity
+  abstract: true
+  parent: RMCAntiAirPropFlipped
+  id: CMUShipWeaponGunBase
+  description: A ship-mounted orbital support battery. Load one matching mission round for an entire fire mission. Alt-click to unload.
+  components:
+  - type: InteractionOutline
+  - type: ItemSlots
+    slots:
+      mission-round:
+        name: cmu-ship-weapons-ammo-slot
+        whitelist:
+          components:
+          - CMUShipWeaponAmmo
+  - type: ContainerContainer
+    containers:
+      mission-round: !type:ContainerSlot {}
+
+- type: entity
+  parent: CMUShipWeaponGunBase
+  id: CMUShipWeaponGunHeavy
+  name: heavy orbital battery
+  suffix: 120mm, 380mm, Airburst
+  components:
+  - type: CMUShipWeaponGun
+    weapons:
+    - CMU120mmHEBarrage
+    - CMU380mmHEBarrage
+    - CMUAirburstStrike
+
+- type: entity
+  parent: CMUShipWeaponGunBase
+  id: CMUShipWeaponGunSupport
+  name: orbital support projector
+  suffix: Gas, EMS, Smoke
+  components:
+  - type: CMUShipWeaponGun
+    weapons:
+    - CMUGasStrike
+    - CMUEMSStrike
+    - CMUSmokeStrike
+
+- type: entity
+  parent: CMUShipWeaponGunBase
+  id: CMUShipWeaponGunRapid
+  name: rapid orbital battery
+  suffix: Gatling, Walking, Precision
+  components:
+  - type: CMUShipWeaponGun
+    weapons:
+    - CMUGatlingBarrage
+    - CMUWalkingBarrage
+    - CMUPrecisionStrike
+
+- type: entity
+  parent: CMUShipWeaponGunBase
+  id: CMUShipWeaponGunRailcannon
+  name: orbital railcannon
+  suffix: Railcannon
+  components:
+  - type: CMUShipWeaponGun
+    weapons:
+    - CMURailcannonStrike
+
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: CMUShipWeaponRoundBase
+  description: A complete orbital fire-mission payload. Load into a compatible ship battery. One round supplies the entire mission.
+  components:
+  - type: Item
+    size: Large
+    heldPrefix: he
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/mortar.rsi
+    state: mortar_ammo_he
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRound120mm
+  name: 120mm HE barrage mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMU120mmHEBarrage
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRound380mm
+  name: 380mm HE barrage mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMU380mmHEBarrage
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRoundAirburst
+  name: airburst strike mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMUAirburstStrike
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRoundGas
+  name: gas strike mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMUGasStrike
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRoundEMS
+  name: EMS strike mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMUEMSStrike
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRoundSmoke
+  name: smoke strike mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMUSmokeStrike
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRoundGatling
+  name: gatling barrage mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMUGatlingBarrage
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRoundWalking
+  name: walking barrage mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMUWalkingBarrage
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRoundPrecision
+  name: precision strike mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMUPrecisionStrike
+
+- type: entity
+  parent: CMUShipWeaponRoundBase
+  id: CMUShipWeaponRoundRailcannon
+  name: railcannon strike mission round
+  components:
+  - type: CMUShipWeaponAmmo
+    weapon: CMURailcannonStrike

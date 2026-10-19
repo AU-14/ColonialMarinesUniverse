@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Callsigns;
 using Content.Shared.CMU14.Callsigns;
+using Content.Shared._RMC14.Marines.Squads;
 
 namespace Content.IntegrationTests.CMU14.Callsigns;
 
@@ -60,6 +61,49 @@ public sealed class CMUCallsignAssignmentTest : GameTest
                 callsign.Category = category;
                 callsign.Suffix = suffix;
                 return uid;
+            }
+        });
+    }
+
+    // the logistics officer came up as HAVOC OPS, so supply calls on the auxiliary net
+    // went to a callsign nobody in req was listening for
+    [TestCase("govfor", "SquadGovforIntel", "LONGBOW")]
+    [TestCase("opfor", "SquadOpforIntel", "BLUE")]
+    public async Task LogisticsStaffTakeTheAuxiliarySquadWord(string faction, string auxSquad, string word)
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var entities = new List<EntityUid>();
+            try
+            {
+                var squad = SEntMan.SpawnEntity(auxSquad, MapCoordinates.Nullspace);
+                entities.Add(squad);
+                var officer = Staff("OPS");
+                var tech = Staff(string.Empty);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(SEntMan.GetComponent<AU14CallsignComponent>(officer).Callsign, Is.EqualTo($"{word} OPS"));
+                    Assert.That(SEntMan.GetComponent<AU14CallsignComponent>(tech).Callsign, Is.EqualTo($"{word} 1-1"));
+                });
+
+                EntityUid Staff(string suffix)
+                {
+                    var uid = SEntMan.SpawnEntity(null, MapCoordinates.Nullspace);
+                    entities.Add(uid);
+                    var role = SEntMan.AddComponent<AU14CallsignRoleComponent>(uid);
+                    role.Suffix = suffix;
+                    role.AuxiliaryElement = true;
+                    SEntMan.AddComponent<AU14CallsignComponent>(uid).Faction = faction;
+                    var ev = new SquadMemberAddedEvent((squad, SEntMan.GetComponent<SquadTeamComponent>(squad)), uid);
+                    SEntMan.EventBus.RaiseEvent(EventSource.Local, ref ev);
+                    return uid;
+                }
+            }
+            finally
+            {
+                foreach (var uid in entities)
+                    SEntMan.DeleteEntity(uid);
             }
         });
     }

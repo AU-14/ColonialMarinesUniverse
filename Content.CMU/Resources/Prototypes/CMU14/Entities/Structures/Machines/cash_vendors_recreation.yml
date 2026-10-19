@@ -504,6 +504,8 @@
       price: 25
     - id: RMCShoesLeather
       price: 30
+    - id: CMUBoxStompers
+      price: 45
     - id: AU14CivilianWorkwearYellow
       price: 20
     - id: RMCJumpsuitLiaisonGreyWorkwear

@@ -1,0 +1,46 @@
+<Document>
+  # Ship Orbital Support Weapons
+
+  <GuideEntityEmbed Entity="CMUShipWeaponsTerminal"/>
+
+  ## Command: Arming the Ship
+  Open the ship weapons arming terminal with command access. Choose [bold]at least one different weapon, up to the limit displayed by the terminal[/bold] and confirm. The default limit is three.
+  [color=red]Confirmation permanently locks the entire loadout for the operation. Picking fewer than the limit does not leave slots available for later.[/color]
+  All selected weapons share [bold]one pool of fire missions[/bold] shown by the terminal (two by default). Any armed weapon spends from that pool, and more terminals, batteries, or ammunition cannot reset it.
+  Each ship has its own loadout, fire-mission pool, and cooldown. Decks in one ship's Z-level network share them; identical ships do not.
+
+  ## Loading Physical Batteries
+  When the server requires physical guns, a compatible anchored battery must be installed on your ship before command can arm its weapons.
+  It need not be loaded during arming, but firing requires a matching loaded mission round.
+  - [bold]Heavy battery[/bold]: 120mm HE, 380mm HE, Airburst.
+  - [bold]Support projector[/bold]: Gas, EMS, Smoke.
+  - [bold]Rapid battery[/bold]: Gatling, Walking, Precision.
+  - [bold]Railcannon[/bold]: Railcannon Strike.
+  Use a compatible round on the gun to load it. Alt-click or use its eject verb to unload.
+  Each gun holds one round. [bold]One round supplies the entire mission[/bold], including every barrage shell.
+  A gun loaded with one supported weapon's round cannot fire another weapon's mission.
+  When physical guns are not required, arming and firing work without batteries or rounds. This is the default server setting.
+
+  ## Overwatch: Calling a Strike
+  Use the existing orbital bombardment tab, enter ground coordinates, select an armed weapon, and confirm fire.
+  Walking Barrage also lets you choose its travel direction.
+  The first impact arrives [bold]24 seconds after launch[/bold]. A shared [bold]60-second cooldown[/bold] starts when the ship accepts a launch.
+  Nearby troops receive the launch warning, then [bold]one directional warning three seconds later[/bold] pointing from their position toward the target. A final-approach warning precedes impact.
+  Rejected targets, missing rounds, cooldown failures, and an empty fire-mission pool consume nothing. Accepted launches spend one shared mission and, when required, one round immediately.
+  Protection changes can intercept later impacts without a refund. The standard orbital cannon remains separate, with its existing ammunition, fuel, and cooldown.
+
+  ## Strike Profiles
+  Scatter is the maximum distance between the requested target and an individual impact. Its blast radius extends beyond that point.
+  - [bold]Gatling Barrage[/bold]: 120 small explosions, 0.15 seconds apart, scattered within 16 tiles. Each has a 1.5-tile blast radius.
+  - [bold]Walking Barrage[/bold]: 9 HE explosions, one second apart, moving along a 16-tile line centered on the target. Each has a 6-tile blast radius.
+  - [bold]120mm HE Barrage[/bold]: 12 explosions, 0.75 seconds apart, scattered within 16 tiles. Each has a 12-tile blast radius.
+  - [bold]380mm HE Barrage[/bold]: 6 heavy explosions, 1.8 seconds apart, scattered within 6 tiles. Each has a 16-tile blast radius.
+  - [bold]Airburst Strike[/bold]: 6 anti-personnel explosions, 0.8 seconds apart, scattered within 8 tiles. Each has a 12-tile blast radius, without breaking terrain tiles.
+  - [bold]Precision Strike[/bold]: one 120mm-strength explosion at the exact target, with a 12-tile blast radius and no scatter.
+  - [bold]Railcannon Strike[/bold]: devastating whole-body and structural damage in an exact 5x5 tile square, projected through [bold]every Z-level in the target's network[/bold]. Each level retains orbital-protection checks; unrelated maps are not hit.
+  - [bold]Gas Strike[/bold]: a 30-tile-radius poison cloud lasting 30 seconds. Xenos take no gas damage. Suitable filters and sealed internals provide their normal protection.
+  - [bold]EMS Strike[/bold]: a 30-tile-radius field lasting 15 seconds. Everyone caught, including xenos and normally stun-immune targets, stays stunned until 25 seconds after the field disappears. Entering late or leaving early does not change that deadline.
+  - [bold]Smoke Strike[/bold]: a non-damaging, opaque 30-tile-radius screen lasting 30 seconds.
+
+  [color=red]These expanded barrages can reach beyond the standard OB footprint. Keep friendly forces clear of both the scatter area and each shell's blast radius.[/color]
+</Document>

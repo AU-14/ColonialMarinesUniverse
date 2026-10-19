@@ -13818,5 +13818,238 @@
   id: 826
   time: '2026-10-18T13:54:52.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2218
+- author: sunzu432
+  changes:
+  - message: 'Hope''s Retreat: Preliminary work for expanded Octanis Complex (2F)
+      and underground/basement areas.'
+    type: Add
+  - message: 'Hope''s Retreat: Payphones, increased number of ATMs and Jukeboxes.'
+    type: Add
+  - message: 'Hope''s Retreat: Placed vehicles around the Colony and Octanis Complex;
+      Hope''s Retreat should now have a single cargo truck and the Octanis Complex
+      access to both a small and large utility truck as well as an ambulance and police
+      cruiser.'
+    type: Add
+  - message: 'Hope''s Retreat: In a freak trans-dimensional teleportation accident,
+      Fort Beauregard has been lost with all hands. (GOVFOR will now spawn ship-side)'
+    type: Remove
+  - message: 'Hope''s Retreat: Old, easily-meta-able CLF cave bases have been removed,
+      pending expanded secondary areas that one can set up their cell in.'
+    type: Remove
+  - message: 'Hope''s Retreat: CLF spawns have been altered.'
+    type: Tweak
+  - message: 'Hope''s Retreat: Substantial alterations to all cave networks, including
+      multiple new bypasses and alternative routes.'
+    type: Tweak
+  - message: 'Hope''s Retreat: The improperly placed grate entities should be replaced
+      with tiles, meaning players should no longer fall down after climbing up ladders.'
+    type: Fix
+  - message: 'Hope''s Retreat: Fixed placement of some areas.'
+    type: Fix
+  id: 827
+  time: '2026-10-18T15:42:17.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2213
+- author: troytroy400
+  changes:
+  - message: Ghosts look like the character they died as, same as in CM13. The ghost
+      colour option has been removed as it will no-longer work with this system.
+    type: Add
+  - message: Toggle action to show or hide your own ghost.
+    type: Add
+  - message: SSD timer shows how long someone has been disconnected.
+    type: Add
+  - message: Squad optic ammo HUD. While your optic is down, your held gun's ammo
+      type and round count shows under your status alerts. Toggle it with the optic's
+      Ammo HUD action. The smartgun head mounted sight shows it too.
+    type: Add
+  - message: IX-50 MGAD anti-air cannon.
+    type: Add
+  - message: Added the XM43 carbine.
+    type: Add
+  - message: Dog War firearms. Added the M38 LMG, M20A2, XM24A and Type 40 rifles
+      with their magazines and attachments.
+    type: Add
+  - message: Smartgun aim assist toggle.
+    type: Add
+  - message: New smartgun firing sounds with a rattle when low on ammo.
+    type: Add
+  - message: Flanged pulse rifle sounds.
+    type: Add
+  - message: M19 anti-tank mine. It has no IFF and is set off by vehicles. Can be
+      found in requisitions and CT vendors.
+    type: Add
+  - message: Squad leaders points outline/highlight what they point at temporarily
+      for their squad.
+    type: Add
+  - message: Flare light rework and lit flare inhand sprites.
+    type: Add
+  - message: Pill canisters can be broken open.
+    type: Add
+  - message: Stompers boots (the Ripley shoes) can now be found in the paid civilian
+      clothing wardrobe.
+    type: Add
+  - message: USCM snow and urban camo USCM equipment.
+    type: Add
+  - message: MRE update from CM. Every faction's ration has new contents. USCM MREs,
+      PMC CFRs, TWE ORPs, UPP IRPs, We-Yu colony rations and CLF makeshift meals,
+      plus a new FSR ration. MREs are named after their main course. Adds sporks,
+      spread packets, spread tubes, tea bags, electrolyte and protein drink powders,
+      mini cigarette packs and new matchbooks. Instant drink mix packets in MREs,
+      to mix with water. Spreads, tubes and some cans can be put onto other food.
+    type: Add
+  - message: UPP main course cans are sealed and need a can opener, or a knife. UPP
+      platoon vendors have regular and folding can openers and the folding one fits
+      in an MRE.
+    type: Add
+  - message: Food allergies traits for nuts, fish, dairy and eggs.
+    type: Add
+  - message: UPP, CLF, LACN, WY and PMC platoon vendors stock their own faction's
+      rations.
+    type: Tweak
+  - message: Upstream names are automatically converted to their lore friendly versions.
+    type: Tweak
+  - message: The LACN Kramer rifle and Karbine take either stock and come without
+      one. The Kramer AR comes with the LACN grenade launcher.
+    type: Tweak
+  - message: The Kramer enforcer is now a DMR with a built-in 2x scope.
+    type: Tweak
+  - message: The civilian TPR is a loadout handgun option.
+    type: Tweak
+  - message: LACN shipside crew now have white gloves and boots. Pilots, the DCC,
+      the CMO and command spawn in their uniforms.
+    type: Tweak
+  - message: The XM43E1 uses its proper lore friendly sprites again.
+    type: Tweak
+  - message: LACN uniforms and gear use the map's camo.
+    type: Fix
+  - message: Left out CMU camo items now change with the map's camo.
+    type: Fix
+  id: 828
+  time: '2026-10-19T06:43:04.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2223
+- author: deepdarkdepths
+  changes:
+  - message: Added new Warrior sprites.
+    type: Add
+  id: 829
+  time: '2026-10-19T09:33:42.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2225
+- author: PoltavskaPraca
+  changes:
+  - message: crewmen and vehicle commanders now have their vendor filled out with
+      engineering-adjacent supplies
+    type: Add
+  - message: changed the vehicle vendor UI
+    type: Tweak
+  - message: vehicle lift now correctly stores the vehicle
+    type: Fix
+  id: 830
+  time: '2026-10-19T14:42:47.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2219
+- author: rokudara-sen
+  changes:
+  - message: The client stutters less around Z-level openings
+    type: Fix
+  - message: Expedition NPC squads cost far less server time in firefights
+    type: Fix
+  - message: The game uses less memory at the main menu
+    type: Fix
+  id: 831
+  time: '2026-10-19T14:43:53.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2227
+- author: rokudara-sen
+  changes:
+  - message: Weeds can be expanded out of a closed resin door tile
+    type: Fix
+  - message: Hunting preserve walls can no longer be broken through
+    type: Fix
+  - message: Clan masks show xeno health and plasma
+    type: Fix
+  - message: Clan masks connect to internals and Yautja gear racks sell oxygen tanks
+    type: Add
+  - message: Hijacks clear pathogen blight cores left on the planet
+    type: Fix
+  - message: Lesser drones, swarm lessers, facehuggers and poppers no longer count
+      for the Kill Threats objective
+    type: Tweak
+  - message: Despoilers no longer gain fake hypertension from healing
+    type: Fix
+  - message: The adaptability boon no longer offers Pathogen castes
+    type: Fix
+  - message: Facehuggers and other xenos no longer drop a head when gibbed
+    type: Fix
+  - message: Charger lunges shake vehicles again instead of passing through them
+    type: Fix
+  - message: A revived queen keeps the hive from collapsing
+    type: Fix
+  - message: Hijack larva respawn on the queen instead of the planet
+    type: Fix
+  id: 832
+  time: '2026-10-19T14:44:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2228
+- author: rokudara-sen
+  changes:
+  - message: Coat racks no longer block interactions
+    type: Fix
+  - message: Defibrillators no longer fit in the medical pouch
+    type: Fix
+  - message: Internals switch to a tank that still has air
+    type: Fix
+  - message: Call-ins on maps without breathable air arrive with a gas mask and oxygen
+    type: Add
+  - message: Flare guns and underbarrel flares drop their flare at max range
+    type: Fix
+  - message: Launched grenades no longer vanish after bouncing off a wall
+    type: Fix
+  - message: Grenade launchers can fire up a level
+    type: Fix
+  - message: Unholster secondary no longer grabs flashlights and picks the next weapon
+    type: Fix
+  - message: The regulation tape box only holds tapes
+    type: Fix
+  - message: The cross-level shooting message tells you how close to an edge you need
+      to be
+    type: Tweak
+  - message: LACN can take the IMP ammo rack
+    type: Fix
+  id: 833
+  time: '2026-10-19T14:44:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2229
+- author: KeiKiyomi
+  changes:
+  - message: Facehuggers now complete infection and fall off within 15 seconds when
+      their host is nested.
+    type: Tweak
+  - message: Newly infected nested hosts correctly receive the nest's incubation speed
+      bonus.
+    type: Fix
+  - message: Facehugger oxygen supply now requires the parasite to remain attached.
+    type: Fix
+  - message: Living nested humans passively heal 1 HP per second, up to 50% of their
+      maximum health.
+    type: Add
+  id: 834
+  time: '2026-10-19T14:59:54.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2209
+- author: KeiKiyomi
+  changes:
+  - message: Added ship weapon arming terminals. Command can permanently select two
+      orbital support weapons per operation, each with three uses.
+    type: Add
+  - message: Added Gatling Barrage, Walking Barrage, 120mm HE Barrage, 380mm HE Barrage,
+      Gas Strike, EMS Strike, Smoke Strike, Airburst Strike, and Precision Strike.
+    type: Add
+  - message: Armed weapons can be selected and fired through the overwatch orbital
+      bombardment tab. Walking Barrage supports directional targeting.
+    type: Add
+  - message: Ship weapon loadouts, ammunition, and cooldowns are tracked per ship,
+      keeping duplicate GOVFOR and OPFOR warships independent.
+    type: Tweak
+  - message: New strikes have smaller footprints than standard orbital bombardments
+      and respect orbital targeting restrictions.
+    type: Tweak
+  id: 835
+  time: '2026-10-19T15:07:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2208
 Name: CMU
 Order: -1

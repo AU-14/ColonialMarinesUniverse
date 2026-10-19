@@ -119,6 +119,8 @@ public sealed partial class CMUHijackExtrasSystem : EntitySystem
             _destruction.DestroyEntity(structure);
         }
 
+        DestroyUnlimitedPlanetHiveCores(ev.Dropship);
+
         // Return stranded xenos to the burrowed queue before removing their bodies.
         var xenoAmount = 0;
         var originalXenos = new List<(EntityUid Uid, XenoComponent Xeno, TransformComponent Transform)>();
@@ -302,6 +304,27 @@ public sealed partial class CMUHijackExtrasSystem : EntitySystem
     {
         _hijackSongPlayed = false;
         _surgeFired = false;
+    }
+
+    /// <summary>
+    ///     Hive cores that aren't build-limited (pathogen blight cores can be raised again and again)
+    ///     never matched the limited-structure sweep, so they outlived every hijack.
+    /// </summary>
+    public void DestroyUnlimitedPlanetHiveCores(EntityUid? dropship)
+    {
+        var cores = EntityQueryEnumerator<HiveCoreComponent, TransformComponent>();
+        while (cores.MoveNext(out var core, out _, out var xform))
+        {
+            if (HasComp<HiveConstructionLimitedComponent>(core) ||
+                (dropship != null && xform.GridUid == dropship) ||
+                !_rmcPlanet.IsOnPlanetLevel(xform))
+            {
+                continue;
+            }
+
+            EnsureComp<HiveConstructionSuppressAnnouncementsComponent>(core);
+            _destruction.DestroyEntity(core);
+        }
     }
 
     private bool HasActiveDistressRule()

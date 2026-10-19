@@ -15,4 +15,7 @@ public sealed partial class ActiveFlareSignalComponent : Component
 
     [DataField, AutoNetworkedField]
     public string? CreatorFaction;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan StartTrackingFrom;
 }

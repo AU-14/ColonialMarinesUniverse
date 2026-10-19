@@ -1,0 +1,427 @@
+# Generated from cmss13 PR 7895's DM code.
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodTWENigiriSushi
+  name: "nigiri sushi"
+  description: "A salmon slice on a ball of boiled rice, wrapped in a stripe of seaweed, melts in mouth."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: nigiri_sushi
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 12
+      reagents:
+      - ReagentId: CMUFishMeat
+        Quantity: 3
+      - ReagentId: Rice
+        Quantity: 2
+      - ReagentId: CMUPlantMatter
+        Quantity: 1
+      - ReagentId: RMCSoysauce
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodTWETomatoChips
+  name: "tomato chips"
+  description: "Very crisp, with a hint of basil, goes well with beer."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: tomato_chips
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 19
+      reagents:
+      - ReagentId: CMUVegetable
+        Quantity: 6
+      - ReagentId: JuiceTomato
+        Quantity: 4
+      - ReagentId: Blackpepper
+        Quantity: 2
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodTWEAlmonds
+  name: "almonds"
+  description: "Oven dried almonds, rich in vitamins, flavor, has a nice crunch, the luxury you needed all along."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: almond
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMUNuts
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodTWEBacon
+  name: "bacon"
+  description: "Yet another classic part of the British breakfast, bacon, fried to a crisp, goes well with a toast."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: bacon
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 21
+      reagents:
+      - ReagentId: CMUMeatProtein
+        Quantity: 14
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodTWETomatoBeans
+  name: "tomato beans"
+  description: "Classic part of the British breakfast, baked beans in tomato sauce, goes well with a toast."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: tomato_beans
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 29
+      reagents:
+      - ReagentId: CMUVegetable
+        Quantity: 14
+      - ReagentId: JuiceTomato
+        Quantity: 8
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodTWEFishNRice
+  name: "fish n rice"
+  description: "A dish born in Japan, initially made by the Commonwealth sailors suffering from lack of potatoes in Asian parts of the Empire, they figured out they could use rice for that instead."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: fish_n_rice
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 21
+      reagents:
+      - ReagentId: CMUFishMeat
+        Quantity: 6
+      - ReagentId: Rice
+        Quantity: 6
+      - ReagentId: RMCCornoil
+        Quantity: 2
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodTWERiceRamen
+  name: "rice ramen"
+  description: "A Japanese style rice noodle ramen, has a fair share of hot sauce to it, has some subtle bits of carrot and green onions."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: rice_noodles
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 27
+      reagents:
+      - ReagentId: CMUNoodles
+        Quantity: 6
+      - ReagentId: Rice
+        Quantity: 6
+      - ReagentId: CMUVegetable
+        Quantity: 2
+      - ReagentId: CapsaicinOil
+        Quantity: 4
+      - ReagentId: Hotsauce
+        Quantity: 4
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodTWEFishNChips
+  name: "fish n chips"
+  description: "A British classic, stripes of fish covered in bread crumbs and fried, has a bit of a crunch to it, hands are all greasy after it."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: fish_n_chips
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 24
+      reagents:
+      - ReagentId: CMUFishMeat
+        Quantity: 5
+      - ReagentId: CMUVegetable
+        Quantity: 5
+      - ReagentId: CMUPotato
+        Quantity: 3
+      - ReagentId: CMUBread
+        Quantity: 2
+      - ReagentId: RMCCornoil
+        Quantity: 2
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodTWEChickpeasPatty
+  name: "chickpeas patty"
+  description: "Vegeterian patte from from chickpeas, covered in bread crumbs and fried, reminds you of fish sticks for some reason."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: nut_patty
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 12
+      reagents:
+      - ReagentId: CMUVegetable
+        Quantity: 2
+      - ReagentId: CMUBread
+        Quantity: 2
+      - ReagentId: CMUPlantMatter
+        Quantity: 2
+      - ReagentId: TableSalt
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodTWEBeansStew
+  name: "beans stew"
+  description: "Very nourishing bean stew with a tomato sauce, will keep you warm for a long time if heated."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: bean_soup
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 18
+      reagents:
+      - ReagentId: CMUVegetable
+        Quantity: 6
+      - ReagentId: Water
+        Quantity: 2
+      - ReagentId: JuiceTomato
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodTWEMushroomSoup
+  name: "mushroom soup"
+  description: "Very nourishing soup with vegetables and a mushroom flavor, will keep you warm for a long time if heated."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: mushroom_soup
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 17
+      reagents:
+      - ReagentId: CMUMushroom
+        Quantity: 3
+      - ReagentId: CMUVegetable
+        Quantity: 3
+      - ReagentId: Water
+        Quantity: 5
+      - ReagentId: TableSalt
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodTWEDehydratedCheeseChunk
+  name: "dehydrated cheese chunk"
+  description: "Freeze dried chunk of cheddar, very dry but has a concentrated flavor, makes a good snack."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: cheese
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMUCheese
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodTWEDarkChocolateBar
+  name: "dark chocolate bar"
+  description: "56% coco true dark chocolate, rich in flavor, classic, combines well with hot drinks."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: tiny_chocolate_bar
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CocoaPowder
+        Quantity: 8
+      - ReagentId: Sugar
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodTWETinyApplepie
+  name: "tiny applepie"
+  description: "Has some juice apple slices with a cinnamon flavor."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: tiny_applepie
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 2
+      - ReagentId: CMUFruit
+        Quantity: 2
+      - ReagentId: Sugar
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodTWETinyCheesecake
+  name: "tiny cheesecake"
+  description: "Very airy and sugary cheesy, has a tasty vanilla cake base."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: tiny_cheesecake
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 11
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 2
+      - ReagentId: Cream
+        Quantity: 2
+      - ReagentId: Milk
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodTWETinyPancakes
+  name: "tiny pancakes"
+  description: "Buttery cupcakes with a honey topping."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: tiny_pancakes
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 2
+      - ReagentId: CMUHoney
+        Quantity: 2
+      - ReagentId: Sugar
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodTWEORPOatBisuit
+  name: "ORP oat bisuit"
+  description: "A bar of oat biscuit, has some bits of dried fruits in it. Goes well with a cup of tea."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: cookie_bar
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 3
+      - ReagentId: CMUFruit
+        Quantity: 1
+      - ReagentId: Sugar
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodTWELemonDropCandy
+  name: "Lemon Drop candy"
+  description: "A sugar coated, lemon flavored sweet and sour hard candy popular in TWE, with candy itself originating in England."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: lemondrop
+  - type: Edible
+    transferAmount: 1
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 9
+      reagents:
+      - ReagentId: JuiceLemon
+        Quantity: 3
+      - ReagentId: Sugar
+        Quantity: 1
