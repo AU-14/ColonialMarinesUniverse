@@ -87,10 +87,10 @@
           - RMCAttachmentS42xTelescopicMiniscope
           - RMCAttachmentB8SmartScope
       rmc-aslot-stock:
-        startingAttachable: CMULACNAttachmentKramerStock
         whitelist:
           tags:
           - CMULACNAttachmentKramerStock
+          - CMULACNAttachmentKarbineStock
       rmc-aslot-underbarrel:
         whitelist:
           tags:
@@ -247,9 +247,9 @@
           - RMCAttachmentS42xTelescopicMiniscope
           - RMCAttachmentB8SmartScope
       rmc-aslot-stock:
-        startingAttachable: CMULACNAttachmentKarbineStock
         whitelist:
           tags:
+          - CMULACNAttachmentKramerStock
           - CMULACNAttachmentKarbineStock
       rmc-aslot-underbarrel:
         whitelist:
@@ -257,7 +257,6 @@
           - RMCAttachmentAngledGrip
           - RMCAttachmentVerticalGrip
           - RMCAttachmentLaserSight
-          - RMCAttachmentU1GrenadeLauncher
           - RMCAttachmentU7UnderbarrelShotgun
   - type: AttachableHolderVisuals
     offsets:
@@ -314,7 +313,7 @@
   parent: AU14WeaponRifleKramerAR
   id: CMUWeaponRifleKramerEnforcer
   name: Kramer enforcer rifle
-  description: A law enforcement model of the Kramer assault rifle limited to semi-automatic and burst fire, issued to colonial police and security forces. Takes standard Kramer magazines and has a built in 2x sight.
+  description: A law enforcement model of the Kramer assault rifle reworked into a semi-automatic designated marksman rifle, issued to colonial police and security forces. Takes standard Kramer magazines and has a built in 2x sight.
   components:
   - type: Sprite
     sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/kramerenforcer/kramericon.rsi
@@ -328,29 +327,26 @@
   - type: Clothing
     sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/kramerenforcer/kramer32x32.rsi
   - type: Gun
-    selectedMode: Burst
+    shotsPerBurst: 0
+    selectedMode: SemiAuto
     availableModes:
     - SemiAuto
-    - Burst
     soundGunshot:
       collection: CMM54CShoot
-    shotsPerBurst: 3
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
-    - Burst
-    recoilUnwielded: 4
-    scatterWielded: 5
-    scatterUnwielded: 20
-    baseFireRate: 4
-    burstScatterMult: 1
-    modifiers:
-      Burst:
-        fireDelay: 0.1665
-        maxScatterModifier: 10
-        useBurstScatterMult: true
-        unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 6
+    recoilUnwielded: 2
+    scatterWielded: 3
+    scatterUnwielded: 16
+    baseFireRate: 2.86
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.3
+    accuracyMultiplierUnwielded: 0.6
+  - type: RMCWeaponDamageFalloff
+    falloffMultiplier: 0
+  - type: GunDamageModifier
+    multiplier: 1.4
   - type: AttachableHolder
     slots:
       rmc-aslot-barrel:
@@ -380,7 +376,7 @@
   parent: AU14WeaponRifleKramerAR
   id: CMUWeaponRifleKramerEnforcerNoScope
   name: Kramer enforcer rifle
-  description: A law enforcement model of the Kramer assault rifle limited to semi-automatic and burst fire, issued to colonial police and security forces. Takes standard Kramer magazines.
+  description: A law enforcement model of the Kramer assault rifle reworked into a semi-automatic designated marksman rifle, issued to colonial police and security forces. Takes standard Kramer magazines.
   components:
   - type: Sprite
     sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/kramerenforcer/kramericon.rsi
@@ -394,29 +390,26 @@
   - type: Clothing
     sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/kramerenforcer/kramer32x32.rsi
   - type: Gun
-    selectedMode: Burst
+    shotsPerBurst: 0
+    selectedMode: SemiAuto
     availableModes:
     - SemiAuto
-    - Burst
     soundGunshot:
       collection: CMM54CShoot
-    shotsPerBurst: 3
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
-    - Burst
-    recoilUnwielded: 4
-    scatterWielded: 5
-    scatterUnwielded: 20
-    baseFireRate: 4
-    burstScatterMult: 1
-    modifiers:
-      Burst:
-        fireDelay: 0.1665
-        maxScatterModifier: 10
-        useBurstScatterMult: true
-        unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 6
+    recoilUnwielded: 2
+    scatterWielded: 3
+    scatterUnwielded: 16
+    baseFireRate: 2.86
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.3
+    accuracyMultiplierUnwielded: 0.6
+  - type: RMCWeaponDamageFalloff
+    falloffMultiplier: 0
+  - type: GunDamageModifier
+    multiplier: 1.4
   - type: AttachableHolder
     slots:
       rmc-aslot-barrel:
