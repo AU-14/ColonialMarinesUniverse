@@ -180,6 +180,12 @@ public sealed partial class FiremanCarrySystem : EntitySystem
         if (!yautjaInstant && !_rmcPulling.IsPulling(user, ent.Owner))
             return;
 
+        // CMU14: a Yautja dragging a human themselves without an aggressive grab is stripping them, not
+        // carrying them. This handler runs before SharedStrippableSystem, so claiming the event there would swallow
+        // the strip and replace it with the "grab them aggressively" popup - leave it untouched instead.
+        if (yautjaInstant && !carrier.AggressiveGrab)
+            return;
+
         args.Handled = true;
 
         if (!CanCarryEntity(user, ent.Owner, carrier, ent.Comp))

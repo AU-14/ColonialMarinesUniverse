@@ -3256,6 +3256,9 @@ public sealed partial class YautjaScytheBonusStrikeComponent : Component
 {
     [DataField]
     public float Chance = 0.15f;
+
+    [DataField]
+    public TimeSpan FollowUpDelay = TimeSpan.FromMilliseconds(100);
 }
 
 [RegisterComponent]

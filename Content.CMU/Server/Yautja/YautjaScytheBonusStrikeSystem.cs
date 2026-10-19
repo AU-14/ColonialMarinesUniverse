@@ -1,10 +1,12 @@
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared.Popups;
+using Content.Shared.Effects;
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Yautja;
@@ -14,6 +16,9 @@ public sealed partial class YautjaScytheBonusStrikeSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedMeleeWeaponSystem _melee = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedColorFlashEffectSystem _colorFlash = default!;
 
     // CMU14: CM-SS13 (yaut_weapons.dm:473-480) lands the extra strike with a plain `..()` re-entry, which returns to
     // the PARENT attack proc and therefore cannot roll again. The SS14 follow-up is a real attack through the melee
@@ -30,13 +35,16 @@ public sealed partial class YautjaScytheBonusStrikeSystem : EntitySystem
 
     private void OnScytheMeleeHit(Entity<YautjaScytheBonusStrikeComponent> ent, ref MeleeHitEvent args)
     {
-        if (!args.IsHit ||
-            args.HitEntities.Count == 0 ||
-            ent.Comp.Chance <= 0f ||
-            !_random.Prob(ent.Comp.Chance))
-        {
-            return;
-        }
+    if (_landingFollowUp.Contains(args.User))
+        return;
+
+    if (!args.IsHit ||
+        args.HitEntities.Count == 0 ||
+        ent.Comp.Chance <= 0f ||
+        !_random.Prob(ent.Comp.Chance))
+    {
+        return;
+    }
 
         if (!_landingFollowUp.Add(args.User))
             return;
@@ -56,7 +64,8 @@ public sealed partial class YautjaScytheBonusStrikeSystem : EntitySystem
         var weapon = ent.Owner;
         var target = args.HitEntities[0];
 
-        Timer.Spawn(TimeSpan.Zero, () =>
+        var delay = ent.Comp.FollowUpDelay;
+        Timer.Spawn(delay, () =>
         {
             try
             {
@@ -68,9 +77,38 @@ public sealed partial class YautjaScytheBonusStrikeSystem : EntitySystem
                 if (!TryComp(weapon, out MeleeWeaponComponent? melee))
                     return;
 
-                // The original swing already passed the combat-mode gate, and CM-SS13 re-enters the parent attack
-                // without re-checking intent, so the follow-up must not require combat mode again.
-                _melee.AttemptLightAttack(user, weapon, melee, target, requireCombatMode: false);
+                // The swing that rolled this follow-up set BOTH melee cooldowns, and AttemptAttack refuses while
+                // either is in the future: the user's RMCMeleeUserCooldownComponent (its very first gate, via
+                // SyncUserMeleeCooldown) and the weapon's own MeleeWeaponComponent.NextAttack. Clearing only the
+                // weapon's left the user cooldown rejecting the strike, which is why it never landed. CM-SS13's ..()
+                // re-entry never consults a cooldown at all.
+                var now = _timing.CurTime;
+                if (melee.NextAttack > now)
+                {
+                    melee.NextAttack = now;
+                    Dirty(weapon, melee);
+                }
+
+                if (TryComp(user, out RMCMeleeUserCooldownComponent? userCooldown) &&
+                    userCooldown.NextAttack > now)
+                {
+                    userCooldown.NextAttack = now;
+                    Dirty(user, userCooldown);
+                }
+
+                // The follow-up is an ordinary light attack, not bonus damage folded into the first swing.
+                var landed = _melee.AttemptLightAttack(user, weapon, melee, target, requireCombatMode: false);
+
+                // Its hit sound and flash are played client-side from the predicted attack, which a server-scheduled
+                // strike never reaches, so raise both here: the weapon's own soundHit and the melee colour helper's
+                // default red.
+                if (landed)
+                {
+                    if (melee.HitSound is { } hitSound)
+                        _audio.PlayPvs(hitSound, target);
+
+                    _colorFlash.RaiseEffect(Color.Red, new List<EntityUid> { target }, Filter.Pvs(target));
+                }
             }
             finally
             {
