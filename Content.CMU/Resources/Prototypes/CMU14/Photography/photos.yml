@@ -1,0 +1,52 @@
+- type: entity
+  parent: BaseItem
+  id: CMUCameraFilm
+  name: camera film
+  description: A roll of instant print film for a photo camera. Use it on the camera to load it.
+  components:
+  - type: Sprite
+    sprite: CMU14/HunterShip/obj/items/paper.rsi
+    state: film
+  - type: Item
+    size: Tiny
+  - type: CMUCameraFilm
+  - type: StaticPrice
+    price: 10
+
+- type: entity
+  parent: BaseItem
+  id: CMUPhotoCamera
+  name: photo camera
+  description: A compact camera with a built in instant print roll. Click an area to photograph it; alt click to change the frame.
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/travel_camera.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Clothing
+    slots:
+    - NECK
+    sprite: Objects/Devices/travel_camera.rsi
+  - type: CMUPhotoCamera
+  - type: StaticPrice
+    price: 100
+
+- type: entity
+  parent: BaseItem
+  id: CMUPhoto
+  name: photograph
+  description: A glossy print, still warm from the camera.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/photograph.rsi
+    state: black
+  - type: Item
+    size: Tiny
+  - type: CMUPhoto
+  - type: ActivatableUI
+    key: enum.CMUPhotoUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUPhotoUiKey.Key:
+        type: CMUPhotoBui
