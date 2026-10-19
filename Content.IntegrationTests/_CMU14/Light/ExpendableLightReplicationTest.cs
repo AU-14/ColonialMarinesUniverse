@@ -222,7 +222,9 @@ public sealed class ExpendableLightReplicationTest : GameTest
             SEntMan.EnsureComponent<LightDoomedComponent>(flare.Owner);
             Assert.That(flare.Comp.CurrentState, Is.EqualTo(ExpendableLightState.Lit));
             Assert.That(flare.Comp.StateExpiryTime, Is.Zero);
-            system.Update(0f);
+            // cmu edit start: step through the burn phases doom zeroes (RMC-14#9465)
+            UpdateUntil(system, flare, 0f, ExpendableLightState.Fading);
+            // cmu edit end
             Assert.That(flare.Comp.CurrentState, Is.EqualTo(ExpendableLightState.Fading));
             Assert.That(flare.Comp.StateExpiryTime, Is.Zero);
             system.Update(0f);
