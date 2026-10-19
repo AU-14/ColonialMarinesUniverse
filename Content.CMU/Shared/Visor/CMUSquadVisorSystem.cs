@@ -31,6 +31,11 @@ public sealed partial class CMUSquadVisorSystem : EntitySystem
     [Dependency] private VisorSystem _visor = default!;
     [Dependency] private IGameTiming _timing = default!;
 
+    /// <summary>
+    ///     Helmets carry the squad optic visor; the smartgun's head mounted sight gives the same effects from the eyes slot.
+    /// </summary>
+    private const SlotFlags OpticSlots = SlotFlags.HEAD | SlotFlags.EYES;
+
     public override void Initialize()
     {
         SubscribeLocalEvent<CMUSquadVisorActiveComponent, ComponentStartup>(OnActiveStartup);
@@ -56,20 +61,20 @@ public sealed partial class CMUSquadVisorSystem : EntitySystem
 
     private void OnEquipped(Entity<CMUSquadVisorActiveComponent> helmet, ref GotEquippedEvent args)
     {
-        if ((args.SlotFlags & SlotFlags.HEAD) != 0)
+        if ((args.SlotFlags & OpticSlots) != 0)
             Apply(args.EquipTarget);
     }
 
     private void OnUnequipped(Entity<CMUSquadVisorActiveComponent> helmet, ref GotUnequippedEvent args)
     {
-        if ((args.SlotFlags & SlotFlags.HEAD) != 0)
+        if ((args.SlotFlags & OpticSlots) != 0)
             Remove(args.EquipTarget, helmet);
     }
 
     private bool TryGetWearer(EntityUid helmet, out EntityUid wearer)
     {
         wearer = default;
-        if (!_inventory.TryGetContainingSlot(helmet, out var slot) || (slot.SlotFlags & SlotFlags.HEAD) == 0)
+        if (!_inventory.TryGetContainingSlot(helmet, out var slot) || (slot.SlotFlags & OpticSlots) == 0)
             return false;
 
         wearer = Transform(helmet).ParentUid;
@@ -93,6 +98,16 @@ public sealed partial class CMUSquadVisorSystem : EntitySystem
     {
         if (_timing.ApplyingState || !TryComp<CMUSquadVisorWearerComponent>(wearer, out var marker))
             return;
+
+        // Still looking through another optic, e.g. a helmet optic and the smartgun sight at once.
+        if (_inventory.TryGetContainerSlotEnumerator(wearer, out var slots, OpticSlots))
+        {
+            while (slots.NextItem(out var item))
+            {
+                if (item != helmet && HasComp<CMUSquadVisorActiveComponent>(item))
+                    return;
+            }
+        }
 
         if (marker.GrantedTracker)
             _tracker.CMURemoveSquadVisorTracker(wearer);
