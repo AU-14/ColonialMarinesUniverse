@@ -289,6 +289,8 @@
   - type: Tag
     tags:
     - GasMask
+  # sealed mask, so it can draw from a tank like any gas mask
+  - type: BreathMask
   - type: Mask
     enabled: false
   - type: YautjaMask
@@ -1358,6 +1360,10 @@
         name: Arrow - Snare
         points: 15
         maxPerUser: 10
+      - id: CMUFieldOxygenTankFilled # thin and toxic air worlds, refill at the ship's oxygen canister
+        name: Oxygen Tank
+        points: 5
+        maxPerUser: 4
 - type: entity
   parent: CMUYautjaBracer
   id: CMUYautjaBracerRetro
@@ -2798,6 +2804,10 @@
         name: Arrow - Snare
         points: 15
         maxPerUser: 10
+      - id: CMUFieldOxygenTankFilled # thin and toxic air worlds, refill at the ship's oxygen canister
+        name: Oxygen Tank
+        points: 5
+        maxPerUser: 4
 - type: entity
   parent: CMUYautjaLoadoutVendor
   id: CMUYautjaYoungbloodLoadoutVendor
@@ -3269,6 +3279,10 @@
         name: Arrow - Snare
         points: 15
         maxPerUser: 10
+      - id: CMUFieldOxygenTankFilled # thin and toxic air worlds, refill at the ship's oxygen canister
+        name: Oxygen Tank
+        points: 5
+        maxPerUser: 4
 - type: entity
   parent: CMUYautjaLoadoutVendor
   id: CMUYautjaStrandedLoadoutVendor
@@ -3458,3 +3472,7 @@
         name: Arrow - Snare
         points: 20
         maxPerUser: 10
+      - id: CMUFieldOxygenTankFilled # thin and toxic air worlds, refill at the ship's oxygen canister
+        name: Oxygen Tank
+        points: 5
+        maxPerUser: 4

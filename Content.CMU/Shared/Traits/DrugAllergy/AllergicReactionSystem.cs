@@ -4,6 +4,7 @@ using Content.Shared.Alert;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.Jittering;
 using Content.Shared.Popups;
@@ -30,7 +31,27 @@ public sealed partial class AllergicReactionSystem : EntitySystem
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private SharedRMCBloodstreamSystem _rmcBloodstream = default!;
 
-    public void TriggerReaction(EntityUid uid)
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeLocalEvent<DrugAllergyComponent, ExaminedEvent>(OnExamined);
+    }
+
+    /// <summary>
+    ///     Anyone looking at someone in the middle of an allergic reaction can tell something's wrong, and that it gets
+    ///     worse once they can't breathe.
+    /// </summary>
+    private void OnExamined(Entity<DrugAllergyComponent> ent, ref ExaminedEvent args)
+    {
+        if (!ent.Comp.ReactionActive)
+            return;
+
+        var severe = _timing.CurTime >= ent.Comp.ReactionStartTime + ent.Comp.AsphyxiationDelay;
+        args.PushMarkup(Loc.GetString(severe ? "cmu-drugallergy-examine-severe" : "cmu-drugallergy-examine",
+            ("target", ent.Owner)), -1);
+    }
+
+    public void TriggerReaction(EntityUid uid, string? cause = null)
     {
         if (!TryComp<DrugAllergyComponent>(uid, out var comp) || comp.ReactionActive)
             return;
@@ -38,11 +59,12 @@ public sealed partial class AllergicReactionSystem : EntitySystem
         var time = _timing.CurTime;
 
         // Prevents an instant re-trigger loop if the allergen is still metabolizing
-        // shortly after the reaction was just cured with naloxone/epinephrine.
+        // shortly after the reaction was just cured with epinephrine.
         if (time < comp.NextTriggerAllowed)
             return;
 
         comp.ReactionActive = true;
+        comp.ReactionCause = cause;
         comp.ReactionStartTime = time;
         comp.NextTick = time;
         comp.NextStunCheck = time + comp.AsphyxiationDelay;
@@ -61,6 +83,11 @@ public sealed partial class AllergicReactionSystem : EntitySystem
 
         if (comp.Allergen is { } allergen)
             _rmcBloodstream.RemoveBloodstreamChemical(uid, allergen, FixedPoint2.MaxValue);
+
+        foreach (var extra in comp.ExtraAllergens)
+        {
+            _rmcBloodstream.RemoveBloodstreamChemical(uid, extra, FixedPoint2.MaxValue);
+        }
 
         if (!comp.ReactionActive)
             return;

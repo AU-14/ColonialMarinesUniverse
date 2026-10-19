@@ -81,6 +81,10 @@
     # - RMCDecalSpawnerGibsParasite # TODO
     - RMCGibEffectXenoSmall
   - type: XenoParasite
+    # CMU14: attachment timing is balance data, not a test or system constant.
+    fallOffDelay: 15
+    cmuMinHugTime: 120
+    cmuMaxHugTime: 300
   - type: InfectOnPullAttempt
   - type: Item
     size: Invalid

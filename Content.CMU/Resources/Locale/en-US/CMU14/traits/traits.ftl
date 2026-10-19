@@ -8,10 +8,10 @@ au14-trait-no-english-name = Forget English Language
 au14-trait-no-english-desc = Sho?
 
 au14-trait-no-language-learning-name = Language Impairment
-au14-trait-no-language-learning-desc = You are unable to learn new languages.
+au14-trait-no-language-learning-desc = You can't pick up new languages during a round. Gives you one more language point to spend on languages you already know.
 
 au14-trait-polyglot-name = Polyglot
-au14-trait-polyglot-desc = Languages just come to you naturally, last time you sneezed you discombobulated a verb in a dialect you've never even heard.
+au14-trait-polyglot-desc = Languages just come to you naturally. Gives you one more language point, so you can pick an extra language.
 
 au14-trait-sign-name = Sign Language
 au14-trait-sign-desc = You can speak and understand sign language.
@@ -140,6 +140,8 @@ trait-cmu-prosthetic-right-leg-desc = Your right leg has been replaced with a ro
 cmu-ui-options-movement = Movement
 cmu-ui-options-tile-movement = Tile movement
 cmu-ui-options-tile-movement-tooltip = Move from tile to tile instead of walking freely, just like the forebears who came before you.
+cmu-ui-options-tile-movement-walk-only = Tile movement while walking
+cmu-ui-options-tile-movement-walk-only-tooltip = Move from tile to tile while walking, and freely while running. Tile movement above overrides this.
 
 cmu-trait-category-drinking = Alcohol Tolerance
 cmu-trait-heavyweight-name = Heavyweight drunk
@@ -174,3 +176,6 @@ cmu-motion-sick-worse-1 = You can't hold it in any longer!
 cmu-motion-sick-worse-2 = Your stomach gives up on you!
 cmu-motion-sick-worse-3 = That's it, you're going to be sick!
 cmu-motion-sick-worse-4 = Your lunch comes back up, and your head spins worse than before.
+
+cmu-trait-auto-ignore-name = Auto ignore incompatible traits
+cmu-trait-auto-ignore-desc = When you join a job that doesn't allow some of your traits, those traits are left off for that round instead of keeping you out of the job.

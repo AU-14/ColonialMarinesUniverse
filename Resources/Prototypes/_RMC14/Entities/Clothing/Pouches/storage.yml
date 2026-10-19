@@ -676,6 +676,13 @@
     whitelist:
       components:
       - CassetteTape
+  # cmu edit start: a very small item that fits in a helmet. Not tagged Pouch, so helmets don't turn it away.
+  - type: Item
+    size: Tiny
+  - type: Tag
+    tags:
+    - CMUCassettePouch
+  # cmu edit end
 
 # Drum Pouch
 - type: entity

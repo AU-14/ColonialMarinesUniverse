@@ -1,0 +1,7 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Fixed the van interior's driver seat, doors and collision boundaries.
+  type: Map
+time: '2026-10-09T17:20:12.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2130

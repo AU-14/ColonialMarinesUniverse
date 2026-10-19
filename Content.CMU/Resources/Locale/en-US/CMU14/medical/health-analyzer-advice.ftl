@@ -9,3 +9,5 @@ cmu-health-analyzer-advice-hypothermia = [color=#7FC8FF][font="Emoji"]🌡[/font
 cmu-health-analyzer-advice-hyperthermia = [color=#FF8040][font="Emoji"]🌡[/font][/color] Patient is overheating. Cool them down.
 cmu-health-analyzer-advice-splint = [color=#5B88B0][font="Emoji"]🦴[/font][/color] Splint the fractured limbs.
 cmu-health-analyzer-advice-shrapnel = [color=#9A9A9A][font="Emoji"]🔩[/font][/color] Remove the embedded shrapnel.
+cmu-health-analyzer-advice-allergy = [color=#FF5050][font="Emoji"]⚠[/font][/color] Allergic reaction to { $reagent }! Give epinephrine.
+cmu-health-analyzer-advice-allergy-unknown = [color=#FF5050][font="Emoji"]⚠[/font][/color] Allergic reaction! Give epinephrine.

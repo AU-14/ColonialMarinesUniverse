@@ -21,6 +21,13 @@ public sealed partial class HealthScannerBui
         if (uiState.MobState == MobState.Dead)
             return;
 
+        if (uiState.CMUAllergicReaction is { } allergen)
+        {
+            AddAdviceCandidate(recommendations, 94, allergen.Length > 0
+                ? Loc.GetString("cmu-health-analyzer-advice-allergy", ("reagent", FormattedMessage.EscapeText(allergen)))
+                : Loc.GetString("cmu-health-analyzer-advice-allergy-unknown"));
+        }
+
         if (uiState.Advice.CMUShowInternals)
             AddAdviceCandidate(recommendations, 91, Loc.GetString("cmu-health-analyzer-advice-internals"));
 

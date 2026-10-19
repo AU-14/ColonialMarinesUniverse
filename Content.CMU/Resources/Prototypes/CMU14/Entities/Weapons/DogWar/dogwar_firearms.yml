@@ -1,0 +1,548 @@
+# Firearms ported from cmss13-pve PR 1280 ("Dog War").
+# Attachment positions follow cmss13: an attachment drawn from cmss13's own sprites sits at the gun's slot offset minus
+# the attachment's pixel shift, over 32. Slots shared with RMC's attachments use the same cmss13 slot offsets, corrected
+# for how RMC re-centred those attachment sprites (barrel +10,-1px; rail +1,-1px; underbarrel +7,-7px).
+
+# M38 GPMG
+
+- type: entity
+  parent: RMCWeaponLMGM60
+  id: CMUWeaponLMGM38
+  name: M38 general purpose machinegun
+  description: Once-standard USCM GPMG. Chambered in 12x30mm caseless, hard-hitting and extremely reliable.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/DogWar/m38.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - state: cover-closed
+    - state: barrel
+      offset: 0.625, 0.125 # muzzle 36,20 - shift 16,16
+    - state: stock
+      offset: -0.25, 0 # stock 8,16 - shift 16,16
+  - type: Item
+    sprite: CMU14/Weapons/Guns/DogWar/m38.rsi
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/DogWar/m38.rsi
+  - type: Tag
+    tags:
+    - CMUWeaponLMGM38
+  - type: Gun
+    shotsPerBurst: 5
+    selectedMode: FullAuto
+    availableModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    soundGunshot:
+      path: /Audio/CMU14/Weapons/DogWar/gun_hpr.ogg
+      params:
+        volume: -4
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/empty.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    recoilWielded: 1
+    recoilUnwielded: 1
+    scatterWielded: 2
+    scatterUnwielded: 2
+    baseFireRate: 2.86
+    burstScatterMult: 3
+    modifiers:
+      Burst:
+        fireDelay: 0.1
+        maxScatterModifier: 7
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 0
+        shotsToMaxScatter: 6
+      FullAuto:
+        fireDelay: 0.01
+        maxScatterModifier: 3.5
+        shotsToMaxScatter: 6
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineLMGM38
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMUMagazineLMGM38
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-underbarrel:
+        startingAttachable: CMUAttachmentBipodM38
+        whitelist:
+          tags:
+          - CMUAttachmentBipodM38
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-underbarrel: 0.4375, -0.0625 # under 30,14 - shift 16,16
+
+- type: entity
+  parent: RMCAttachmentBipod
+  id: CMUAttachmentBipodM38
+  name: M38 bipod
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/DogWar/m38_bipod.rsi
+    state: bipod
+  - type: Tag
+    tags:
+    - RMCAttachmentUnderbarrel
+    - RMCAttachmentBipod
+    - CMUAttachmentBipodM38
+
+- type: entity
+  parent: RMCMagazineLMGBase
+  id: CMUMagazineLMGM38
+  name: M38 belt box (12x30mm caseless)
+  description: Heavy high-capacity belt box for the M38 GPMG.
+  components:
+  - type: Tag
+    tags:
+    - RMCMagazineLMG
+    - CMUMagazineLMGM38
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMUCartridgeLMG12x30
+    proto: CMUCartridgeLMG12x30
+    capacity: 150
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m60.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Appearance
+
+- type: entity
+  parent: CMUMagazineLMGM38
+  id: CMUMagazineLMGM38HEAP
+  name: M38 HEAP belt box (12x30mm caseless)
+  description: Heavy high-capacity belt box for the M38 GPMG, filled with high-explosive armor-piercing rounds.
+  components:
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMUCartridgeLMG12x30
+    proto: CMUCartridgeLMG12x30HEAP
+
+- type: entity
+  parent: RMCCartridgeLMGM60
+  id: CMUCartridgeLMG12x30
+  name: cartridge (12x30mm)
+  description: A 12x30mm caseless cartridge for the M38 GPMG.
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - CMUCartridgeLMG12x30
+  - type: CartridgeAmmo
+    proto: CMUBulletLMG12x30
+    deleteOnSpawn: true
+
+- type: entity
+  parent: CMUCartridgeLMG12x30
+  id: CMUCartridgeLMG12x30HEAP
+  name: HEAP cartridge (12x30mm)
+  components:
+  - type: CartridgeAmmo
+    proto: CMUBulletLMG12x30HEAP
+    deleteOnSpawn: true
+
+- type: entity
+  parent: RMCBulletLMGM60
+  id: CMUBulletLMG12x30
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 65
+  - type: CMArmorPiercing
+    amount: 30
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 22
+      falloff: 9999
+      ignoreModifiers: true
+    - range: 10
+      falloff: 7
+  - type: RMCProjectileAccuracy
+    accuracy: 110
+    thresholds:
+    - range: 14
+      falloff: 10
+
+- type: entity
+  parent: CMUBulletLMG12x30
+  id: CMUBulletLMG12x30HEAP
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 80
+  - type: CMArmorPiercing
+    amount: 45
+
+# M20A2
+
+- type: entity
+  parent: AUWeaponRifleM20A
+  id: CMUWeaponRifleM20A2
+  name: M20A2 pulse rifle
+  suffix: Filled
+  description: A variant of the M20A pulse rifle, this model was intended for use with law enforcement agencies and during riot control operations, as it features a 16g shotgun instead of a grenade launcher. This one is painted in a tasteful metallic black color.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/DogWar/m20a2.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: stock
+      offset: -0.5625, 0.03125 # stock 22,15 - shift 40,14
+  - type: Item
+    sprite: CMU14/Weapons/Guns/DogWar/m20a2.rsi
+    size: Large
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/DogWar/m20a2.rsi
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.8125, 0.0625 # muzzle 32,19
+      rmc-aslot-rail: -0.09375, 0.09375 # rail 12,20
+      rmc-aslot-underbarrel: 0.15625, -0.21875 # under 18,15, for the masterkey shotgun's sprite (+3,-6px)
+
+# XM24A
+
+- type: entity
+  parent: RMCWeaponRifleL42A
+  id: CMUWeaponRifleXM24A
+  name: XM24A pulse rifle
+  description: The XM24A was developed by Lindenthal-Ehrenfeld Militärindustrie under the designation of L42. It is currently undergoing field-testing in the USCMC as a marksman rifle replacement.
+  components:
+  - type: Gun
+    shotsPerBurst: 1
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    - FullAuto
+    soundGunshot:
+      path: /Audio/CMU14/Weapons/DogWar/gun_carbine.ogg
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineRifleXM24AHEAP
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RMCMagazineRifleL42A
+          - RMCMagazineRifleL42AAP
+          - RMCMagazineRifleL42AExtended
+          - RMCMagazineRifleL42AWP
+          - RMCMagazineRifleL42AIncendiary
+          - CMUMagazineRifleXM24AHEAP
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: RMCAttachmentS42xTelescopicMiniscope
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentB8SmartScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentBipod
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentLaserSight
+          - RMCAttachmentVerticalGrip
+
+- type: entity
+  parent: RMCMagazineRifleL42AAP
+  id: CMUMagazineRifleXM24AHEAP
+  name: L42A HEAP magazine (10x24mm)
+  description: A 10x24mm battle rifle magazine loaded with high-explosive armor-piercing rounds.
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - CMUMagazineRifleXM24AHEAP
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RMCCartridgeRifle10x24mmHEAP
+    proto: RMCCartridgeRifle10x24mmHEAP
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/l42a.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#9C9A19"
+  - type: RefillableByBulletBox
+    bulletType: null
+
+# Type 40
+
+- type: entity
+  parent: RMCWeaponRifleABR40
+  id: CMUWeaponRifleType40
+  name: Type 40 marksman rifle
+  suffix: Filled
+  description: A CANC licensed and manufactured modification of the TWE's L42A rifle, chambered in the newest CANC 6x38mm caliber. Extremely common during the Dog War, but nowadays extremely rare due to the UPP destroying most of the remaining stockpiles, thus valued by collectors.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/DogWar/type40.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - state: stock
+      offset: -0.46875, 0.0625 # stock 22,10 - shift 37,8
+  - type: Item
+    sprite: CMU14/Weapons/Guns/DogWar/type40.rsi
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/DogWar/type40.rsi
+  - type: Gun
+    shotsPerBurst: 1
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_mar40.ogg
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineRifleType40
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMUMagazineRifleType40
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: CMUAttachmentType40Scope
+        whitelist:
+          tags:
+          - CMUAttachmentType40Scope
+          - RMCAttachmentRailFlashlight
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.875, 0.125 # muzzle 34,21
+      rmc-aslot-rail: -0.09375, 0.125 # rail 12,21
+
+- type: entity
+  parent: CMUWeaponRifleType40
+  id: CMUWeaponRifleType40Sniper
+  suffix: Filled, AP
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineRifleType40AP
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMUMagazineRifleType40
+
+- type: entity
+  parent: CMUWeaponRifleType40
+  id: CMUWeaponRifleType40Infantry
+  suffix: Filled, Infantry
+  components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        startingAttachable: RMCM5Bayonet
+        whitelist:
+          tags:
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: RMCAttachmentRailFlashlight
+        whitelist:
+          tags:
+          - CMUAttachmentType40Scope
+          - RMCAttachmentRailFlashlight
+
+- type: entity
+  parent: RMCAttachmentS42xTelescopicMiniscope
+  id: CMUAttachmentType40Scope
+  name: Type 40 hunting scope
+  description: A 2x magnification hunting scope made for the Type 40 marksman rifle.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/DogWar/type40_scope.rsi
+    state: scope
+  - type: AttachableVisuals
+    offset: -0.03125, 0.03125 # exact cmss13 placement (rail 12,21 - shift 16,16) minus the rail slot's RMC correction
+  - type: Tag
+    tags:
+    - RMCAttachmentRail
+    - CMUAttachmentType40Scope
+
+- type: entity
+  parent: RMCMagazineRifleABR40
+  id: CMUMagazineRifleType40
+  name: Type 40 magazine (6x38mm)
+  description: A battle rifle magazine for the Type 40.
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - CMUMagazineRifleType40
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMUCartridgeRifle6x38
+    proto: CMUCartridgeRifle6x38
+    capacity: 20
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/DogWar/type40_mag.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: RefillableByBulletBox
+    bulletType: null
+
+- type: entity
+  parent: CMUMagazineRifleType40
+  id: CMUMagazineRifleType40AP
+  name: Type 40 AP magazine (6x38mm)
+  description: A battle rifle magazine for the Type 40, loaded with armor-piercing rounds.
+  components:
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMUCartridgeRifle6x38
+    proto: CMUCartridgeRifle6x38AP
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/DogWar/type40_mag.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#1F951F"
+
+- type: entity
+  parent: CMCartridgeRifle10x24mm
+  id: CMUCartridgeRifle6x38
+  name: cartridge (6x38mm)
+  description: A 6x38mm cartridge for the Type 40.
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - CMUCartridgeRifle6x38
+  - type: CartridgeAmmo
+    proto: CMUBulletRifle6x38
+    deleteOnSpawn: true
+
+- type: entity
+  parent: CMUCartridgeRifle6x38
+  id: CMUCartridgeRifle6x38AP
+  name: AP cartridge (6x38mm)
+  components:
+  - type: CartridgeAmmo
+    proto: CMUBulletRifle6x38AP
+    deleteOnSpawn: true
+
+- type: entity
+  parent: BulletRifle10x24mm
+  id: CMUBulletRifle6x38
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 35
+  - type: CMArmorPiercing
+    amount: 5
+
+- type: entity
+  parent: CMUBulletRifle6x38
+  id: CMUBulletRifle6x38AP
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 30
+  - type: CMArmorPiercing
+    amount: 25
+
+# Tags
+
+- type: Tag
+  id: CMUWeaponLMGM38
+
+- type: Tag
+  id: CMUAttachmentBipodM38
+
+- type: Tag
+  id: CMUMagazineLMGM38
+
+- type: Tag
+  id: CMUCartridgeLMG12x30
+
+- type: Tag
+  id: CMUMagazineRifleXM24AHEAP
+
+- type: Tag
+  id: CMUAttachmentType40Scope
+
+- type: Tag
+  id: CMUMagazineRifleType40
+
+- type: Tag
+  id: CMUCartridgeRifle6x38
