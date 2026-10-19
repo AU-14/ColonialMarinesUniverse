@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared.CMU14.Ghost;
 using Robust.Client.GameObjects;
 
@@ -47,6 +48,24 @@ public sealed class CMUGhostAppearanceClientSystem : EntitySystem
             _sprite.SetVisible((uid, sprite), visible);
             _sprite.SetRotation((uid, sprite), Angle.Zero);
             _sprite.SetOffset((uid, sprite), Vector2.Zero);
+            ShowAlive((uid, sprite), (source, sourceSprite));
         }
+    }
+
+    /// <summary>
+    ///     A dead xeno's sprite is its corpse; its ghost looks like the living xeno instead. The copied layers keep the
+    ///     body's order, so the body's layer map finds the base layer.
+    /// </summary>
+    private void ShowAlive(Entity<SpriteComponent> ghost, Entity<SpriteComponent> source)
+    {
+        if (!_sprite.LayerMapTryGet(source.AsNullable(), XenoVisualLayers.Base, out var layer, false) ||
+            layer >= ghost.Comp.AllLayers.Count() ||
+            _sprite.LayerGetEffectiveRsi(ghost.AsNullable(), layer) is not { } rsi ||
+            !rsi.TryGetState("alive", out _))
+        {
+            return;
+        }
+
+        _sprite.LayerSetRsiState(ghost.AsNullable(), layer, "alive");
     }
 }
