@@ -980,7 +980,6 @@
       entries:
       - id: AU14AttachmentTwoPointSling
       - id: CMULACNAttachmentKramerSmartScope
-      - id: CMULACNAttachmentUnderbarrelGrenadeLauncher
 
 - type: entity
   parent: AU14SpecVend

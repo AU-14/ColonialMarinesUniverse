@@ -92,6 +92,7 @@
           - CMULACNAttachmentKramerStock
           - CMULACNAttachmentKarbineStock
       rmc-aslot-underbarrel:
+        startingAttachable: CMULACNAttachmentUnderbarrelGrenadeLauncher
         whitelist:
           tags:
           - RMCAttachmentAngledGrip
