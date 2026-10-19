@@ -27,7 +27,7 @@ public sealed class CMUAdriftSystem : EntitySystem
     /// </summary>
     public bool IsAdrift(EntityUid uid)
     {
-        return !_mobState.IsDead(uid) && _zeroG.IsOverZeroGSpace(uid);
+        return !_mobState.IsDead(uid) && _zeroG.IsOutsideZeroGShip(uid);
     }
 
     public override void Update(float frameTime)

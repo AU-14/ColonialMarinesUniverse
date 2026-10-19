@@ -22,8 +22,8 @@ public sealed partial class CMUZeroGSpaceSystem : EntitySystem
     private static readonly TimeSpan RefreshInterval = TimeSpan.FromSeconds(0.25);
 
     /// <summary>
-    ///     Bare space counts, and so do open-air tiles (see <see cref="IsOpenAt"/>). Grates and glass floors are
-    ///     see-through but still something to stand on.
+    ///     Bare space. Open-air tiles also let you float through (see <see cref="IsOpenAt"/>), but grates and glass
+    ///     floors are see-through and still something to stand on.
     /// </summary>
     private const string SpaceTile = "Space";
 
@@ -72,8 +72,9 @@ public sealed partial class CMUZeroGSpaceSystem : EntitySystem
         if (xform.MapUid is not { } map || !IsZeroGMap(map))
             return;
 
-        // Out over open space, or anywhere aboard once the ship's gravity is off.
-        if (!IsOpenAt(_transform.GetMapCoordinates(ent, xform)) &&
+        // Out over bare space outside the hull, or anywhere aboard once the ship's gravity is off. Open-air tiles inside
+        // the ship (the hangar ceilings) keep gravity while the generator runs.
+        if (!IsSpaceAt(_transform.GetMapCoordinates(ent, xform)) &&
             _gravity.EntityGridOrMapHaveGravity((ent, xform)))
         {
             return;
@@ -116,7 +117,9 @@ public sealed partial class CMUZeroGSpaceSystem : EntitySystem
     }
 
     /// <summary>
-    ///     True if the tile under this entity is open space on a zero-g ship.
+    ///     True if this entity is floating over open space on a zero-g ship: bare space at any time, or an open-air tile
+    ///     like the hangar ceilings while the ship's gravity is off. With gravity on, open-air tiles drop you to the deck
+    ///     below as usual.
     /// </summary>
     public bool IsOverZeroGSpace(EntityUid uid)
     {
@@ -124,24 +127,49 @@ public sealed partial class CMUZeroGSpaceSystem : EntitySystem
         if (xform.MapUid is not { } map || !IsZeroGMap(map))
             return false;
 
-        return IsOpenAt(_transform.GetMapCoordinates(uid, xform));
+        var coordinates = _transform.GetMapCoordinates(uid, xform);
+        if (IsSpaceAt(coordinates))
+            return true;
+
+        return IsOpenAt(coordinates) && _gravity.IsWeightless(uid);
     }
 
     /// <summary>
-    ///     True if there's no floor at these coordinates, so something can float through to the deck above or below:
-    ///     bare space, or an open-air tile like the hangar ceilings. Aboard a zero-g ship both count as open space.
+    ///     True if this entity is out over bare space on a zero-g ship, outside the hull rather than over an opening
+    ///     inside it.
+    /// </summary>
+    public bool IsOutsideZeroGShip(EntityUid uid)
+    {
+        var xform = Transform(uid);
+        return xform.MapUid is { } map && IsZeroGMap(map) && IsSpaceAt(_transform.GetMapCoordinates(uid, xform));
+    }
+
+    /// <summary>
+    ///     True if there's no floor at these coordinates, so something floating can pass through to the deck above or
+    ///     below: bare space, or an open-air tile like the hangar ceilings.
     /// </summary>
     public bool IsOpenAt(MapCoordinates coordinates)
     {
+        return GetTileAt(coordinates) is not { } definition || definition.ID == SpaceTile || definition.CMUFallThrough;
+    }
+
+    /// <summary>True if these coordinates are bare space, with no floor or open-air tile at all.</summary>
+    public bool IsSpaceAt(MapCoordinates coordinates)
+    {
+        return GetTileAt(coordinates) is not { } definition || definition.ID == SpaceTile;
+    }
+
+    /// <summary>The tile at these coordinates, or null if there's none there.</summary>
+    private ContentTileDefinition? GetTileAt(MapCoordinates coordinates)
+    {
         if (!_map.TryFindGridAt(coordinates, out var gridUid, out var grid))
-            return true;
+            return null;
 
         var tile = _map.WorldToTile(gridUid, grid, coordinates.Position);
         if (!_map.TryGetTileRef(gridUid, grid, tile, out var tileRef) || tileRef.Tile.IsEmpty)
-            return true;
+            return null;
 
-        var definition = (ContentTileDefinition) _tileDefinitions[tileRef.Tile.TypeId];
-        return definition.ID == SpaceTile || definition.CMUFallThrough;
+        return (ContentTileDefinition) _tileDefinitions[tileRef.Tile.TypeId];
     }
 
     /// <summary>True if this entity is anywhere aboard a zero-g ship, on any of its decks.</summary>
