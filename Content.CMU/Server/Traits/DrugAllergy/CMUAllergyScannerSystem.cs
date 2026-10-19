@@ -21,9 +21,9 @@ public sealed class CMUAllergyScannerSystem : EntitySystem
         if (!ent.Comp.ReactionActive)
             return;
 
-        args.State.CMUAllergicReaction = ent.Comp.Allergen is { } allergen &&
+        args.State.CMUAllergicReaction = ent.Comp.ReactionCause ?? (ent.Comp.Allergen is { } allergen &&
                                         _reagents.TryIndex(allergen, out var reagent)
             ? reagent.LocalizedName
-            : string.Empty;
+            : string.Empty);
     }
 }

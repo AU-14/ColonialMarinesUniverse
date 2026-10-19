@@ -484,9 +484,9 @@
     camouflageVariations:
       Jungle: CMU14/Clothing/JungleArmor/uscmarmorone.rsi
       Desert: CMU14/Clothing/DesertArmor/uscmarmorone.rsi
-      Snow: CMU14/Clothing/JungleArmor/uscmarmorone.rsi
+      Snow: CMU14/Clothing/SnowArmor/uscmarmorone.rsi
       Classic: CMU14/Clothing/JungleArmor/uscmarmorone.rsi
-      Urban: CMU14/Clothing/JungleArmor/uscmarmorone.rsi
+      Urban: CMU14/Clothing/UrbanArmor/uscmarmorone.rsi
 
 - type: entity
   parent: AU14BaseArmor
@@ -499,9 +499,9 @@
     camouflageVariations:
       Jungle: CMU14/Clothing/JungleArmor/uscmarmortwo.rsi
       Desert: CMU14/Clothing/DesertArmor/uscmarmortwo.rsi
-      Snow: CMU14/Clothing/JungleArmor/uscmarmortwo.rsi
+      Snow: CMU14/Clothing/SnowArmor/uscmarmortwo.rsi
       Classic: CMU14/Clothing/JungleArmor/uscmarmortwo.rsi
-      Urban: CMU14/Clothing/JungleArmor/uscmarmortwo.rsi
+      Urban: CMU14/Clothing/UrbanArmor/uscmarmortwo.rsi
 
 - type: entity
   parent: AU14BaseArmor
@@ -514,9 +514,9 @@
     camouflageVariations:
       Jungle: CMU14/Clothing/JungleArmor/uscmarmorthree.rsi
       Desert: CMU14/Clothing/DesertArmor/uscmarmorthree.rsi
-      Snow: CMU14/Clothing/JungleArmor/uscmarmorthree.rsi
+      Snow: CMU14/Clothing/SnowArmor/uscmarmorthree.rsi
       Classic: CMU14/Clothing/JungleArmor/uscmarmorthree.rsi
-      Urban: CMU14/Clothing/JungleArmor/uscmarmorthree.rsi
+      Urban: CMU14/Clothing/UrbanArmor/uscmarmorthree.rsi
 
 - type: entity
   parent: [ RMCAllowSuitStorageClothingSmartgunner, AU14BaseArmor ]
@@ -541,9 +541,9 @@
     camouflageVariations:
       Jungle: CMU14/Clothing/JungleArmor/uscmarmorsmartgunner.rsi
       Desert: CMU14/Clothing/DesertArmor/uscmarmorsmartgunner.rsi
-      Snow: CMU14/Clothing/JungleArmor/uscmarmorsmartgunner.rsi
+      Snow: CMU14/Clothing/SnowArmor/uscmarmorsmartgunner.rsi
       Classic: CMU14/Clothing/JungleArmor/uscmarmorsmartgunner.rsi
-      Urban: CMU14/Clothing/JungleArmor/uscmarmorsmartgunner.rsi
+      Urban: CMU14/Clothing/UrbanArmor/uscmarmorsmartgunner.rsi
 
 - type: entity
   parent: AU14BaseArmor

@@ -411,6 +411,9 @@
   - CustomM44RMC
   - HG45AguilaCaseRMC
   - HG45MarinaCaseRMC
+  # cmu edit start
+  - TPR9CivilianCaseCMU
+  # cmu edit end
 
 # SPP Weapons
 - type: loadoutGroup

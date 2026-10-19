@@ -1,0 +1,479 @@
+# Generated from cmss13 PR 7895's DM code.
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMMainBonelessPorkRibs
+  name: "MRE main dish (boneless pork ribs)"
+  description: "An MRE entree component. Contains the main course for nutrients."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMBonelessPorkRibs
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMMainGrilledChicken
+  name: "MRE main dish (grilled chicken)"
+  description: "An MRE entree component. Contains the main course for nutrients."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMGrilledChicken
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMMainPizzaSquare
+  name: "MRE main dish (pizza square)"
+  description: "An MRE entree component. Contains the main course for nutrients."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMPizzaSquare
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMMainChickenTender
+  name: "MRE main dish (chicken tender)"
+  description: "An MRE entree component. Contains the main course for nutrients."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMChickenTender
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMMainPepperoniPizzaSquare
+  name: "MRE main dish (pepperoni pizza square)"
+  description: "An MRE entree component. Contains the main course for nutrients."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMPepperoniPizzaSquare
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMMainMeatSpaghetti
+  name: "MRE main dish (meat spaghetti)"
+  description: "An MRE entree component. Contains the main course for nutrients."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMMeatSpaghetti
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMMainChiliConCarne
+  name: "MRE main dish (chili con carne)"
+  description: "An MRE entree component. Contains the main course for nutrients."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMChiliConCarne
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMMainNoodleSoup
+  name: "MRE main dish (noodle soup)"
+  description: "An MRE entree component. Contains the main course for nutrients."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMNoodleSoup
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMMainGrilledChickenBreast
+  name: "MRE main dish (grilled chicken breast)"
+  description: "An MRE entree component. Contains the main course for nutrients."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMGrilledChickenBreast
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMMainFeijoada
+  name: "MRE main dish (feijoada)"
+  description: "An MRE entree component. Contains the main course for nutrients."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMFeijoada
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMSideCracker
+  name: "MRE side dish (cracker)"
+  description: "An MRE side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMCracker
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMSideMashedPotatoes
+  name: "MRE side dish (mashed potatoes)"
+  description: "An MRE side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMMashedPotatoes
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMSideRisotto
+  name: "MRE side dish (risotto)"
+  description: "An MRE side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMRisotto
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMSideRiceOnigiri
+  name: "MRE side dish (rice onigiri)"
+  description: "An MRE side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMRiceOnigiri
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMSideCornbread
+  name: "MRE side dish (cornbread)"
+  description: "An MRE side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMCornbread
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMSideMarinatedKale
+  name: "MRE side dish (marinated kale)"
+  description: "An MRE side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMMarinatedKale
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMSideTortillas
+  name: "MRE side dish (tortillas)"
+  description: "An MRE side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMTortillas
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMSideCinnamonAppleSlices
+  name: "MRE side dish (cinnamon apple slices)"
+  description: "An MRE side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMCinnamonAppleSlices
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMSideBoiledRice
+  name: "MRE side dish (boiled rice)"
+  description: "An MRE side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMBoiledRice
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMSideBiscuits
+  name: "MRE side dish (biscuits)"
+  description: "An MRE side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMBiscuits
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMSnackBiscuit
+  name: "MRE snack (biscuit)"
+  description: "An MRE snack component. Contains a light snack in case you weren't feeling terribly hungry."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: snack
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMBiscuit
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMSnackMeatballs
+  name: "MRE snack (meatballs)"
+  description: "An MRE snack component. Contains a light snack in case you weren't feeling terribly hungry."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: snack
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMMeatballs
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMSnackPretzels
+  name: "MRE snack (pretzels)"
+  description: "An MRE snack component. Contains a light snack in case you weren't feeling terribly hungry."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: snack
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMPretzels
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMSnackSushi
+  name: "MRE snack (sushi)"
+  description: "An MRE snack component. Contains a light snack in case you weren't feeling terribly hungry."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: snack
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMSushi
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMSnackPeanuts
+  name: "MRE snack (peanuts)"
+  description: "An MRE snack component. Contains a light snack in case you weren't feeling terribly hungry."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: snack
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMPeanuts
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMDessertSpicedApples
+  name: "MRE dessert (spiced apples)"
+  description: "An MRE side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMSpicedApples
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMDessertChocolateBrownie
+  name: "MRE dessert (chocolate brownie)"
+  description: "An MRE side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMChocolateBrownie
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMDessertSugarCookie
+  name: "MRE dessert (sugar cookie)"
+  description: "An MRE side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMSugarCookie
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMDessertCocoBar
+  name: "MRE dessert (coco bar)"
+  description: "An MRE side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMCocoBar
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMDessertFlan
+  name: "MRE dessert (flan)"
+  description: "An MRE side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMFlan
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMDessertHoneyFlan
+  name: "MRE dessert (honey flan)"
+  description: "An MRE side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMHoneyFlan
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMDessertCookie
+  name: "MRE dessert (cookie)"
+  description: "An MRE side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: FoodBakedCookie
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMDessertLemonPie
+  name: "MRE dessert (lemon pie)"
+  description: "An MRE side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMLemonPie
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMDessertKeyLimePie
+  name: "MRE dessert (key lime pie)"
+  description: "An MRE side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMKeyLimePie
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMDessertBrigadeiroBalls
+  name: "MRE dessert (brigadeiro balls)"
+  description: "An MRE side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMBrigadeiroBalls
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUSCMDessertStrawberryToasterPastry
+  name: "MRE dessert (strawberry toaster pastry)"
+  description: "An MRE side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMStrawberryToasterPastry
