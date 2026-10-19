@@ -3,13 +3,13 @@ ent-RMCTechTreeConsoleGovfor = govfor tech tree console
     .desc = A GovFor tech console used to make tech purchases for GovFor.
 ent-RMCTechTreeConsoleOpfor = opfor tech tree console
     .desc = An OpFor tech console used to make tech purchases for OpFor.
-ent-RMCTechTreeConsoleCLF = CLF tech tree console
+ent-RMCTechTreeConsoleCLF = INSFOR tech tree console
     .desc = A CLF tech console used to make tech purchases for CLF.
 
 ## Intel tree Localization
 ent-CMUIntelTechTree_GOVFOR = intel tech tree (GovFor)
 ent-CMUIntelTechTree_OPFOR = intel tech tree (OpFor)
-ent-CMUIntelTechTree_CLF = intel tech tree (CLF)
+ent-CMUIntelTechTree_CLF = intel tech tree (INSFOR)
 ent-CMUIntelTechTree_UA = intel tech tree (UA)
 
 ## Tech tiers

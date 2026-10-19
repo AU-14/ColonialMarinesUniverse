@@ -22,8 +22,8 @@ chat-radio-colony = CLNY
 chat-radio-alert = ALRT
 chat-radio-WEYU = WEYU
 chat-radio-CMB = CMB
-chat-radio-CLF = CLF
-chat-radio-CLFCommand = CLF Command
+chat-radio-CLF = INSFOR
+chat-radio-CLFCommand = INSFOR Command
 
 chat-radio-hivemind = HIVE
 chat-radio-mycelium-link = MYCEL

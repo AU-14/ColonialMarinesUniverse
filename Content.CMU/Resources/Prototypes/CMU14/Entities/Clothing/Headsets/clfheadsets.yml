@@ -13,7 +13,7 @@
 - type: entity
   parent: RMCBaseUniformAccessory
   id: AU14CLFHeadset
-  name: CLF earpiece
+  name: INSFOR earpiece
   description: A small, concealable earpiece used by CLF operatives. Virtually invisible when worn, it clips discreetly onto a uniform.
   suffix: CLF, Colony
   components:

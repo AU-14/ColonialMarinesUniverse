@@ -27,7 +27,7 @@
 - type: entity
   parent: RMCCommunicationsConsoleBase
   id: RMCComputerIntelCLF
-  name: CLF intel computer
+  name: INSFOR intel computer
   suffix: RMC, Don't Use
   description: A CLF Intel Computer for data cataloguing and distribution.
   components:

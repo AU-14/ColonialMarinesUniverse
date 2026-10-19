@@ -200,7 +200,7 @@
 - type: entity
   parent: VehicleVanBase
   id: VehicleCLFVan
-  name: CLF van
+  name: INSFOR van
   description: A rugged transport van painted in CLF colors.
   components:
   - type: Damageable

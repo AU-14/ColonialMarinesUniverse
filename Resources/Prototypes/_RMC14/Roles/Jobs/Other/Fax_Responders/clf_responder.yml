@@ -58,7 +58,7 @@
 - type: entity
   parent: CMIDCardSilver
   id: RMCIDCardCLFResponder
-  name: CLF Information Correspondent ID card
+  name: INSFOR Information Correspondent ID card
   description: There is a jagged carving of the letters CLF, obscuring a faded corporate logo.
   components:
   - type: Sprite
