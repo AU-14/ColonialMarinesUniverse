@@ -497,29 +497,11 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
     sections:
-    - name: Fatigues
-      choices: { CMUPlatoonAirCrewFatigues: 1 }
-      entries:
-      - id: AU14LACNPilotJumpsuit
     - name: Body Armor
       choices: { CMUPlatoonAirCrewVest: 1 }
       entries:
       - id: AU14LACNICPS2
       - id: CMULACNFlightVest
-    - name: Footwear
-      choices: { CMUPlatoonAirCrewFootwear: 1 }
-      entries:
-      - id: AU14LACNBootsFilled
-    - name: Gloves
-      choices: { CMUPlatoonAirCrewGloves: 1 }
-      entries:
-      - id: AU14LACNGloves
-    - name: Headgear
-      choices: { CMUPlatoonAirCrewHeadgear: 1 }
-      entries:
-      - id: CMULACNHelmetDropshipCrew
-      - id: AU14LACNAirCrewHelmet
-      - id: CMULACNHelmetGunshipCrew
     - name: Helmet Garb
       choices: { CMUPlatoonAirCrewHelmetGarb: 1 }
       entries:
@@ -707,7 +689,7 @@
         amount: 5
     - name: Footwear
       entries:
-      - id: AU14LACNBootsFilled
+      - id: CMULACNBootsWhiteFilled
         amount: 5
     - name: Headgear
       entries:
@@ -1088,7 +1070,7 @@
     - name: Footwear
       choices: { AU14FootWear: 1 }
       entries:
-      - id: AU14LACNBootsFilled
+      - id: CMULACNBootsWhiteFilled
     - name: Hat
       choices: { CMHat: 1 }
       entries:
@@ -1521,12 +1503,10 @@
       choices: { CMULACNReqFootwear: 1 }
       entries:
       - id: CMULACNBootsWhiteFilled
-      - id: AU14LACNBootsFilled
     - name: Gloves
       choices: { CMULACNReqGloves: 1 }
       entries:
       - id: CMULACNGlovesWhite
-      - id: AU14LACNGloves
     - name: Backpack
       choices: { CMULACNReqBackpack: 1 }
       entries:
@@ -1581,7 +1561,7 @@
     - name: Gloves
       choices: { CMHands: 1 }
       entries:
-      - id: AU14LACNGloves
+      - id: CMULACNGlovesWhite
     - name: Uniform
       choices: { CMUEngiStaffUniform: 2 }
       entries:
