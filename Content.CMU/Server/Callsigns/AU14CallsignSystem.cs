@@ -8,6 +8,7 @@ using Content.Shared.CMU14.CCVar;
 using Content.Shared.CMU14.Callsigns;
 using Content.Shared.CMU14.Hearing;
 using Content.Shared.CMU14.Radio;
+using Content.Shared.CMU14.Squads;
 using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared._RMC14.Deafness;
 using Content.Shared._RMC14.Marines;
@@ -265,7 +266,11 @@ public sealed partial class AU14CallsignSystem : EntitySystem
 
         EntityUid? squad = null;
 
-        if (role is not { CommandElement: true } &&
+        if (role is { AuxiliaryElement: true })
+        {
+            squad = FindAuxiliarySquad(callsign.Faction);
+        }
+        else if (role is not { CommandElement: true } &&
             CompOrNull<SquadMemberComponent>(uid)?.Squad is { } memberSquad &&
             HasComp<SquadTeamComponent>(memberSquad))
         {
@@ -291,6 +296,18 @@ public sealed partial class AU14CallsignSystem : EntitySystem
         }
 
         UpdateFullCallsign(uid, callsign);
+    }
+
+    private EntityUid? FindAuxiliarySquad(string faction)
+    {
+        var query = EntityQueryEnumerator<CMUAuxiliarySquadComponent, SquadTeamComponent>();
+        while (query.MoveNext(out var uid, out _, out var team))
+        {
+            if (string.Equals(team.Group, faction, StringComparison.OrdinalIgnoreCase))
+                return uid;
+        }
+
+        return null;
     }
 
     // fireteam index becomes the first half of the numeric suffix: fireteam 2's
