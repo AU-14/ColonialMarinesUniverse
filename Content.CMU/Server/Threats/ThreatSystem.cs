@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.CMU14.Diagnostics.Performance;
 using Content.Server.CMU14.Round;
+using Content.Server.CMU14.Ship;
 using Content.Server.CMU14.Round.Objectives;
 using Content.Server.GameTicking;
 using Content.Server.Chat.Managers;
@@ -41,6 +42,7 @@ namespace Content.Server.CMU14.Threats;
 
 public sealed partial class ThreatSystem : EntitySystem
 {
+    [Dependency] private CMUAdriftSystem _adrift = default!;
     [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private IEntityManager _entityManager = default!;
@@ -1035,9 +1037,10 @@ public sealed partial class ThreatSystem : EntitySystem
         if (mobState.CurrentState == MobState.Dead)
             return false;
 
-        // Alive and nested or SSD
+        // Alive and nested or SSD, or adrift in space outside the ship
         return HasComp<XenoNestedComponent>(uid)
-            || (TryComp(uid, out SSDIndicatorComponent? ssd) && ssd.IsSSD);
+            || (TryComp(uid, out SSDIndicatorComponent? ssd) && ssd.IsSSD)
+            || _adrift.IsAdrift(uid);
     }
 
     internal sealed record PendingThreatSpawnDebugView(

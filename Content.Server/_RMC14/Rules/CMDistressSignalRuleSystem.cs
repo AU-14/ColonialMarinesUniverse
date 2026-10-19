@@ -116,6 +116,9 @@ namespace Content.Server._RMC14.Rules;
 
 public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignalRuleComponent>
 {
+    // cmu edit start
+    [Dependency] private Content.Server.CMU14.Ship.CMUAdriftSystem _cmuAdrift = default!;
+    // cmu edit end
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private ARESCoreSystem _aresCore = default!;
@@ -1252,6 +1255,11 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                     (_containers.IsEntityInContainer(xenoId) && !HasComp<XenoEvolutionGranterComponent>(xenoId))) //Queen counts as alive in tunnels/pipes
                     continue;
 
+                // cmu edit start: adrift in space outside the ship doesn't keep the round going
+                if (_cmuAdrift.IsAdrift(xenoId))
+                    continue;
+                // cmu edit end
+
                 if (_mobState.IsAlive(xenoId, mobState) &&
                     (distress.AbandonedAt == null ||
                      time < distress.AbandonedAt ||
@@ -1282,6 +1290,11 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
                 if (HasComp<ThunderdomeMapComponent>(xform.MapUid))
                     continue;
+
+                // cmu edit start: adrift in space outside the ship doesn't keep the round going
+                if (_cmuAdrift.IsAdrift(marineId))
+                    continue;
+                // cmu edit end
 
                 if (_mobState.IsAlive(marineId, mobState) &&
                     (distress.AbandonedAt == null ||

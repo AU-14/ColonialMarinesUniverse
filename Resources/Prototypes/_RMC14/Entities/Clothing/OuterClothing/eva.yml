@@ -14,9 +14,34 @@
     unequipDelay: 2
   - type: ToggleableClothing
     clothingPrototype: RMCHelmetEVAUNMC
+  # cmu edit start: every pressure suit carries its own air, as much as a field oxygen tank
   - type: Tag
     tags:
     - Hardsuit
+    - GasTank
+  - type: ActivatableUI
+    key: enum.SharedGasTankUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.SharedGasTankUiKey.Key:
+        type: GasTankBoundUserInterface
+  - type: GasTank
+    releasePressure: 21.3
+    air:
+      volume: 7
+      moles:
+      - 3.932493683 # oxygen
+      temperature: 293.15
+  - type: UseDelay
+    delays:
+      gasTank:
+        length: 1.0
+  # cmu edit end
+  # cmu edit start: suit and helmet together seal the wearer against vacuum and high pressure
+  - type: PressureProtection
+    highPressureMultiplier: 0.02
+    lowPressureMultiplier: 1000
+  # cmu edit end
   - type: CMArmor
     bio: 30 # RMC14 TODO: 30 rads aswell
     melee: 15
@@ -59,6 +84,11 @@
     melee: 15
     bullet: 20
     explosionArmor: 10
+  # cmu edit start: suit and helmet together seal the wearer against vacuum and high pressure
+  - type: PressureProtection
+    highPressureMultiplier: 0.02
+    lowPressureMultiplier: 1000
+  # cmu edit end
   - type: BreathMask
   - type: IdentityBlocker
   - type: IngestionBlocker
@@ -92,8 +122,10 @@
 - type: entity
   parent: RMCSuitEVABase
   id: RMCSuitEVAUNMC
-  name: UNMC MK.35 pressure suit
-  description: A heavy and bulky military-grade space suit utilized by the United Nations Marine Corps and a few other UN organizations.
+  # cmu edit start: generic, wearable over any uniform
+  name: MK.35 pressure suit
+  description: A heavy and bulky military-grade space suit.
+  # cmu edit end
   components:
   - type: ContainerContainer
     containers:
@@ -109,11 +141,7 @@
     unequipDelay: 2
   - type: ToggleableClothing
     clothingPrototype: RMCHelmetEVAUNMC
-  - type: ClothingRequireEquipped
-    denyReason: rmc-armor-not-marine-jumpsuit
-    whitelist:
-      tags:
-      - RMCUniformMarine
+  # cmu edit: removed the marine uniform requirement
   - type: ActivatableUI
     key: enum.SharedGasTankUiKey.Key
   - type: UserInterface
@@ -123,10 +151,11 @@
   - type: GasTank
     releasePressure: 21.3
     air:
-      # 31 minutes
-      volume: 5
+      # cmu edit start: as much as a field oxygen tank
+      volume: 7
       moles:
-      - 2.051379050 # oxygen
+      - 3.932493683 # oxygen
+      # cmu edit end
       temperature: 293.15
   - type: Tag
     tags:
@@ -158,8 +187,10 @@
   parent: RMCHelmetEVABase
   id: RMCHelmetEVAUNMC
   categories: [ HideSpawnMenu ]
-  name: UNMC MK.35 pressure helmet
-  description: A heavy space helmet, designed to be coupled with the MK.35 pressure suit utilized by the United Nations Marine Corps and a few other UN organizations.
+  # cmu edit start: generic, wearable over any uniform
+  name: MK.35 pressure helmet
+  description: A heavy space helmet, designed to be coupled with the MK.35 pressure suit.
+  # cmu edit end
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Head/Helmets/EVA/unmc.rsi
@@ -167,11 +198,7 @@
     sprite: _RMC14/Objects/Clothing/Head/Helmets/EVA/unmc.rsi
     equipSound: /Audio/Mecha/mechmove03.ogg
     unequipSound: /Audio/Mecha/mechmove03.ogg
-  - type: ClothingRequireEquipped
-    denyReason: rmc-armor-not-marine-jumpsuit
-    whitelist:
-      tags:
-      - RMCUniformMarine
+  # cmu edit: removed the marine uniform requirement
 
 # SPP
 - type: entity

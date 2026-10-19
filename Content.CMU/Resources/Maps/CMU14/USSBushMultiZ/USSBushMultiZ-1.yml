@@ -4,8 +4,8 @@ meta:
   engineVersion: 290.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/15/2026 03:56:09
-  entityCount: 2210
+  time: 10/19/2026 10:58:01
+  entityCount: 2219
 maps:
 - 1
 grids:
@@ -189,7 +189,7 @@ entities:
         colorHex: '#000000'
     - type: Roof
       data:
-        0,0: 18446480190918885375
+        0,0: 18446744073709551615
         -3,-3: 18446744073709551615
         -3,-4: 18446744073709551603
         -3,-5: 17862937359211880672
@@ -213,8 +213,8 @@ entities:
         1,4: 18446744073709551615
         -4,7: 14737408
         -3,7: 4136704
-        -1,3: 18446744073709288443
-        0,3: 18446744073708498927
+        -1,3: 18446744073709551615
+        0,3: 18446744073709551615
         -1,8: 17941493187667230462
         0,8: 542418837473005327
         0,7: 506381210001280783
@@ -255,7 +255,7 @@ entities:
         1,-1: 18446744073709551615
         1,-2: 18446744073709551615
         2,0: 18446744073709551615
-        1,0: 18446674804477001727
+        1,0: 18446744073709551615
         -3,0: 18446744073709551615
         1,-7: 18446744073709551615
         1,-6: 18446744073709551615
@@ -2807,6 +2807,7 @@ entities:
         -7,24: AU14AreaGarrisonOutofBounds
         -7,23: AU14AreaGarrisonOutofBounds
       areaEntities: {}
+    - type: CMUZeroGSpace
 - proto: ActionToggleLight
   entities:
   - uid: 92
@@ -3979,13 +3980,6 @@ entities:
             color: '#FFFFFFFF'
           decals:
             0: -17,38
-- proto: ClosetRadiationSuitFilled
-  entities:
-  - uid: 4245
-    components:
-    - type: Transform
-      parent: 1
-      pos: -2.5,2.5
 - proto: ClothingHandsGlovesBoxingBlue
   entities:
   - uid: 529
@@ -4721,13 +4715,13 @@ entities:
     - type: Transform
       parent: 1
       pos: -2.5,1.5
-- proto: CMClosetToolFilled
+- proto: CMClosetRadiationFilled
   entities:
-  - uid: 4246
+  - uid: 1461
     components:
     - type: Transform
       parent: 1
-      pos: -2.5,3.5
+      pos: -2.5,2.5
 - proto: CMCrowbar
   entities:
   - uid: 899
@@ -5381,7 +5375,7 @@ entities:
       pos: -5.5,42.5
 - proto: CMUAirtightSeal
   entities:
-  - uid: 1461
+  - uid: 2143
     components:
     - type: Transform
       parent: 1
@@ -5543,6 +5537,89 @@ entities:
     - type: Transform
       parent: 1
       pos: 15.5,42.5
+- proto: CMUFirelock
+  entities:
+  - uid: 2144
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,37.5
+    missingComponents:
+    - ApcPowerReceiver
+    - ExtensionCableReceiver
+    - DeviceNetworkRequiresPower
+  - uid: 2145
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,37.5
+    missingComponents:
+    - ApcPowerReceiver
+    - ExtensionCableReceiver
+    - DeviceNetworkRequiresPower
+  - uid: 2146
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,37.5
+    missingComponents:
+    - ApcPowerReceiver
+    - ExtensionCableReceiver
+    - DeviceNetworkRequiresPower
+  - uid: 2147
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,21.5
+    missingComponents:
+    - ApcPowerReceiver
+    - ExtensionCableReceiver
+    - DeviceNetworkRequiresPower
+  - uid: 2148
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,21.5
+    missingComponents:
+    - ApcPowerReceiver
+    - ExtensionCableReceiver
+    - DeviceNetworkRequiresPower
+  - uid: 2149
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,21.5
+    missingComponents:
+    - ApcPowerReceiver
+    - ExtensionCableReceiver
+    - DeviceNetworkRequiresPower
+  - uid: 2150
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,8.5
+    missingComponents:
+    - ApcPowerReceiver
+    - ExtensionCableReceiver
+    - DeviceNetworkRequiresPower
+  - uid: 2151
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,9.5
+    missingComponents:
+    - ApcPowerReceiver
+    - ExtensionCableReceiver
+    - DeviceNetworkRequiresPower
+  - uid: 2152
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,10.5
+    missingComponents:
+    - ApcPowerReceiver
+    - ExtensionCableReceiver
+    - DeviceNetworkRequiresPower
 - proto: CMUFitnessPunchingBag
   entities:
   - uid: 274
@@ -7955,6 +8032,13 @@ entities:
     - type: Transform
       parent: 1
       pos: 2.5,20.5
+- proto: CMUSuitStorageUnitCompressionUSCM
+  entities:
+  - uid: 2142
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,3.5
 - proto: CMUWindowUltraDirectionalBlue
   entities:
   - uid: 4234

@@ -210,4 +210,13 @@ entities:
     - type: Transform
       pos: -1.5,-0.5
       parent: 1
+# cmu edit start: keeps the craft's air breathable
+- proto: CMUAirFillerVent
+  entities:
+  - uid: 22
+    components:
+    - type: Transform
+      pos: -0.5,1.5
+      parent: 1
+# cmu edit end
 ...

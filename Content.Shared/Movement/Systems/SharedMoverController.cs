@@ -314,12 +314,27 @@ public abstract partial class SharedMoverController : VirtualController
             var walkSpeed = moveSpeedComponent?.WeightlessWalkSpeed ?? MovementSpeedModifierComponent.DefaultBaseWalkSpeed;
             var sprintSpeed = moveSpeedComponent?.WeightlessSprintSpeed ?? MovementSpeedModifierComponent.DefaultBaseSprintSpeed;
 
+            // cmu edit start: zero-g ships. Adrift over open space there's nothing to push off and no drag, and some
+            // mobs (xenos) keep their normal speed when weightless.
+            var cmuZeroG = new Content.Shared.CMU14.Ship.CMUZeroGMovementEvent();
+            RaiseLocalEvent(uid, ref cmuZeroG);
+            if (cmuZeroG.KeepSpeed)
+            {
+                walkSpeed = moveSpeedComponent?.CurrentWalkSpeed ?? walkSpeed;
+                sprintSpeed = moveSpeedComponent?.CurrentSprintSpeed ?? sprintSpeed;
+            }
+            // cmu edit end
+
             wishDir = AssertValidWish(mover, walkSpeed, sprintSpeed);
 
             var ev = new CanWeightlessMoveEvent(uid);
             RaiseLocalEvent(uid, ref ev, true);
 
             touching = ev.CanMove || xform.GridUid != null || MapGridQuery.HasComp(xform.GridUid);
+            // cmu edit start: the open space around a zero-g ship is still part of its grid, but there's nothing there
+            if (cmuZeroG.Adrift && !ev.CanMove)
+                touching = false;
+            // cmu edit end
 
             // If we're not on a grid, and not able to move in space check if we're close enough to a grid to touch.
             if (!touching && MobMoverQuery.TryComp(uid, out var mobMover))
@@ -338,9 +353,23 @@ public abstract partial class SharedMoverController : VirtualController
             else
             {
                 friction = moveSpeedComponent?.OffGridFriction ?? _offGridDamping;
+                // cmu edit start: drifting through open space never slows down by itself
+                if (cmuZeroG.Adrift)
+                    friction = 0f;
+                // cmu edit end
             }
 
             accel = moveSpeedComponent?.WeightlessAcceleration ?? MovementSpeedModifierComponent.DefaultWeightlessAcceleration;
+
+            // cmu edit start: mobs that keep their speed in zero-g also keep their footing while they have a surface
+            if (cmuZeroG.KeepSpeed && touching)
+            {
+                accel = moveSpeedComponent?.Acceleration ?? MovementSpeedModifierComponent.DefaultAcceleration;
+                friction = wishDir != Vector2.Zero
+                    ? moveSpeedComponent?.Friction ?? MovementSpeedModifierComponent.DefaultFriction * _frictionModifier
+                    : moveSpeedComponent?.FrictionNoInput ?? MovementSpeedModifierComponent.DefaultFrictionNoInput * _frictionModifier;
+            }
+            // cmu edit end
         }
         else
         {

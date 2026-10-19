@@ -1,3 +1,4 @@
+using Content.Server.CMU14.Ship;
 using Content.Server.CMU14.RoundStatistics;
 using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
@@ -34,6 +35,7 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
         base.Initialize();
 
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<CMUAdriftChangedEvent>(OnAdriftChanged);
         SubscribeLocalEvent<EvacuationLaunchedEvent>(OnEvacuationLaunched);
     }
 
@@ -58,6 +60,8 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
         CheckVictoryCondition();
     }
 
+    private void OnAdriftChanged(ref CMUAdriftChangedEvent ev) => CheckVictoryCondition();
+
     private void CheckVictoryCondition()
     {
         EntityQueryEnumerator<ActiveGameRuleComponent, KillAllXenoRuleComponent, GameRuleComponent> queryRule
@@ -76,6 +80,10 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
         {
             // Lab-made Wendigos contribute to no counter.
             if (_entMan.HasComponent<CMUWendigoLabMadeComponent>(uid))
+                continue;
+
+            // Adrift in space outside the ship: left out until they get back aboard.
+            if (_threatRuleHelper.IsAdrift(uid))
                 continue;
 
             // Planet-side survivors stop counting after the hijack lands; the endgame is ship-side.
