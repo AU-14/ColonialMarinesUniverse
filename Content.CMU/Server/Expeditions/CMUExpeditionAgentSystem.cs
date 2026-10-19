@@ -615,7 +615,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         var armed = _guns.TryGetGun(uid, out var rifle);
         var shotNeighbors = new HashSet<EntityUid>();
         if (armed)
-            _lookup.GetEntitiesInRange(uid, agent.FireRange + 3, shotNeighbors);
+            CollectShotNeighbors(uid, agent, shotNeighbors);
         var currentVisible = false;
         var currentUsable = false;
         EntityUid? flankTarget = null;
