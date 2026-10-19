@@ -121,7 +121,7 @@
   id: AU14GearGOVFOROfficerIntel
   equipment:
     id: AU14IDCardGOVFOROfficerIntel
-    ears: AU14HeadsetGovforCommand
+    ears: AU14GOVFORIOHeadset
   inhand:
     - AU14KitJOIntelligenceOfficer
 
@@ -129,7 +129,7 @@
   id: AU14GearOPFOROfficerIntel
   equipment:
     id: AU14IDCardOPFOROfficerIntel
-    ears: AU14HeadsetOpforCommand
+    ears: AU14OPFORIOHeadset
   inhand:
     - AU14KitJOIntelligenceOfficer
 
@@ -155,7 +155,7 @@
     shoes: CMBootsBlack
     head: CMHeadCapPeakedFormal
     jumpsuit: CMJumpsuitXOFormal
-    ears: AU14HeadsetGovforCommand
+    ears: AU14GOVFORIOHeadset
 
 - type: startingGear
   id: AU14GearOPFOROfficerIntelDummy
@@ -163,7 +163,7 @@
     shoes: CMBootsBlack
     head: CMHeadCapPeakedFormal
     jumpsuit: CMJumpsuitXOFormal
-    ears: AU14HeadsetOpforCommand
+    ears: AU14OPFORIOHeadset
 
 # ├──[ Spawnpoints ]─────────────────────────────────────────────────┤
 - type: entity

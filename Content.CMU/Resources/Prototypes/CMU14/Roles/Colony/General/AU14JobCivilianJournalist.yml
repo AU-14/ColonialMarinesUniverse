@@ -43,6 +43,7 @@
     outerClothing: AU14CivilianJacketTanPufferVest
   inhand:
   - CMUMobilePhone
+  - CMUPortableFax
 
 - type: entity
   parent: CMSpawnPointJobBase

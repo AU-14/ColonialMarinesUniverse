@@ -4,6 +4,8 @@ using Content.Client.Stylesheets;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.SupplyDrop;
 using Content.Shared.CMU14.Overwatch;
+using Content.Client.CMU14.ShipWeapons;
+using Content.Shared.CMU14.ShipWeapons;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
@@ -64,6 +66,12 @@ public sealed partial class OverwatchConsoleBui
 
     private void CMUSetupSquadView(OverwatchSquad squad, OverwatchSquadView monitor)
     {
+        var weapons = new CMUShipWeaponPicker();
+        weapons.OnSelected += (weapon, bearing) => SendMessage(new CMUShipWeaponSelectBuiMsg(weapon, bearing));
+        monitor.OrbitalBombardment.AddChild(weapons);
+        weapons.SetPositionFirst();
+        monitor.CMUWeaponPicker = weapons;
+
         // The roster replaces upstream's column table, which stays in the tree (hidden) so the
         // upstream code that fills it keeps working unchanged.
         if (monitor.Names.Parent?.Parent?.Parent is ScrollContainer table && table.Parent is { } tableParent)
@@ -189,6 +197,27 @@ public sealed partial class OverwatchConsoleBui
     private void CMUApplyTheme()
     {
         CMURememberViewSettings();
+
+        if (EntMan.TryGetComponent(Owner, out OverwatchConsoleComponent? console))
+        {
+            foreach (var view in _squadViews.Values)
+            {
+                view.CMUWeaponPicker?.Update(console);
+                view.CMUShipWeaponDepleted = false;
+                if (console.CMUSelectedShipWeapon is not { } selected)
+                    continue;
+
+                var remaining = 0;
+                foreach (var weapon in console.CMUShipWeapons)
+                {
+                    if (weapon.Weapon == selected)
+                        remaining = weapon.Remaining;
+                }
+                view.HasOrbital = remaining > 0;
+                view.CMUShipWeaponDepleted = remaining <= 0;
+                view.NextOrbitalAt = console.CMUNextShipWeaponLaunch;
+            }
+        }
 
         if (Window != null)
             CMUOverwatchCrt.Apply(Window);

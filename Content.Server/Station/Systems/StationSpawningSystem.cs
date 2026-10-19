@@ -271,6 +271,10 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         }
         // --- Platoon job override logic end ---
 
+        // cmu edit start: the platoon's own versions of starting gear and loadout equipment
+        using var cmuGearOverrides = CMUPushGearOverrides(originalSide);
+        // cmu edit end
+
         _prototypeManager.Resolve(job, out var prototype);
         // Get the original job prototype for access/faction/ID
         RoleLoadout? loadout = null;
@@ -318,7 +322,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
                 ApplyProfileBloodType(jobEntity, profile); // CMU14
 
                 if (_configurationManager.GetCVar(CCVars.CharacterDescription))
-                    BakeCharacterDescription(jobEntity, profile);
+                    BakeCharacterDescription(jobEntity, profile, prototype?.ID); // cmu edit
             }
 
             // Make sure custom names get handled, what is gameticker control flow whoopy.
@@ -378,7 +382,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             ApplyProfileBloodType(entity.Value, profile); // CMU14
 
             if (_configurationManager.GetCVar(CCVars.CharacterDescription))
-                BakeCharacterDescription(entity.Value, profile);
+                BakeCharacterDescription(entity.Value, profile, prototype?.ID); // cmu edit
         }
 
         if (loadout != null && loadoutProto != null)
@@ -386,7 +390,9 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
         if (prototype?.StartingGear != null)
         {
-            var startingGear = ProtoMan.Index<StartingGearPrototype>(prototype.StartingGear);
+            // cmu edit start: the platoon's own starting gear for this job, if it has one
+            var startingGear = ProtoMan.Index<StartingGearPrototype>(CMUPlatoonStartingGear(originalSide, prototype.ID, prototype.StartingGear.Value));
+            // cmu edit end
             EquipStartingGear(entity.Value, startingGear, raiseEvent: false);
         }
 
@@ -724,6 +730,9 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
     private const string DisabilitiesTraitCategory = "Disabilities";
     private const string DrugAllergyTraitId = "RandomDrugAllergy";
+    // cmu edit start
+    private const string DrugAllergiesTraitCategory = "CMUDrugAllergies";
+    // cmu edit end
 
     // CMU14: blood type from the profile, applied whether or not character descriptions are on
     private void ApplyProfileBloodType(EntityUid uid, HumanoidCharacterProfile profile)
@@ -733,7 +742,9 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         Dirty(uid, bloodType);
     }
 
-    private void BakeCharacterDescription(EntityUid uid, HumanoidCharacterProfile profile)
+    // cmu edit start: the job, so traits it leaves off aren't listed
+    private void BakeCharacterDescription(EntityUid uid, HumanoidCharacterProfile profile, string? job = null)
+    // cmu edit end
     {
         var comp = AddComp<CharacterDescriptionComponent>(uid);
         comp.ShortExamine = profile.ShortExamine;
@@ -757,13 +768,28 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             if (!_prototypeManager.TryIndex(traitId, out TraitPrototype? traitProto))
                 continue;
 
-            if (traitProto.Category is not { } category || category.Id != DisabilitiesTraitCategory)
+            // cmu edit start: drug allergies have their own section but still show as a disability
+            if (traitProto.Category is not { } category ||
+                category.Id != DisabilitiesTraitCategory && category.Id != DrugAllergiesTraitCategory)
+            {
                 continue;
+            }
+            // cmu edit end
+
+            // cmu edit start
+            if (EntityManager.System<Content.Shared.CMU14.Traits.AutoIgnore.CMUAutoIgnoreTraitsSystem>()
+                .IsIgnored(profile, job, traitId))
+            {
+                continue;
+            }
+            // cmu edit end
 
             comp.DisabilityTraitNames.Add(Loc.GetString(traitProto.Name));
 
-            if (traitId.Id == DrugAllergyTraitId)
+            // cmu edit start: any drug allergy, random or picked
+            if (traitId.Id == DrugAllergyTraitId || category.Id == DrugAllergiesTraitCategory)
                 comp.HasDrugAllergyTrait = true;
+            // cmu edit end
         }
 
         Dirty(uid, comp);

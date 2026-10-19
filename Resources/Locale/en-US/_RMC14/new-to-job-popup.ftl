@@ -4,11 +4,13 @@ rmc-new-to-job-additional = If you are ever confused on what to do, you can ask 
 rmc-new-to-job-popup-close-button = All ready!
 rmc-new-to-job-popup-close-button-wait = The close button will be enabled after {$time} seconds.
 
-rmc-new-to-job-req-tech = As a requisitions technician, your job is to dispense supplies to the UNMC marines through either working the main lines or helping the logistics officer with supply drops.
+# cmu edit start: lore names
+rmc-new-to-job-req-tech = As a requisitions technician, your job is to dispense supplies to the USCM marines through either working the main lines or helping the logistics officer with supply drops.
 
                                              You will find on the left of cargo, the main area you spawn at, two lines with 3 vendors between them. Marines will line up at those lines at the start of the round and ask for supplies. You can find most of them within those three vendors, with any other requests either found in the surplus uniform vendor south of you or by ordering them in the ARSR consoles near to your lines.
 
                                              After the initial rush of supplying marines, your job now becomes to assist the logistics officer with handling supply drops. They will task you with packing ammo, taking supplies from the squad prep rooms north or south of your department, or getting additional supplies from other departments – all in the name of getting marines armed.
+# cmu edit end
 
 rmc-new-to-job-nurse = As a nurse, your job is to assist doctors and learn the basics of medicine, so don't stress it if you're not constantly working. You can ask a doctor to show you the basics, and usually they will be more than happy to teach you how to treat patients.
 

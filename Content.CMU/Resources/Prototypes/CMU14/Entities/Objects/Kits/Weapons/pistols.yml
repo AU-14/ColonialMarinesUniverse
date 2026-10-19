@@ -458,3 +458,15 @@
     - type: StorageFill
       contents:
       - id: AU14WeaponPistolRXFM5
+
+- type: entity
+  parent: CMUGunCasePistolTPR9Civilian
+  id: CMUGunCasePistolTPR9CivilianLoadout
+  name: TPR9 civilian handgun case
+  description: A case containing a loaded TPR9 civilian handgun and two M4A3 magazines for it.
+  components:
+    - type: StorageFill
+      contents:
+      - id: CMUWeaponPistolTPR9Civilian
+      - id: CMMagazinePistolM1984
+        amount: 2

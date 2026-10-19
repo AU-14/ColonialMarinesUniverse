@@ -334,8 +334,15 @@
   parent: RMCHelmetGarbNightVision
   id: CMULACNHelmetGarbNightVision
   name: NV-2 aircrew night vision goggles
-  description: A flip-down night vision mount issued to LACN aircrew. This pair's optics are not powered.
+  description: A flip-down night vision mount issued to LACN aircrew. Clip it into a helmet and pull it down to see in the dark.
   components:
+  - type: CMUHelmetGarbNightVision
+  - type: NightVisionItem
+    actionId: null
+    toggleable: false
+    enableOnEquip: false
+    slotFlags: HEAD
+    green: true
   - type: Sprite
     sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Flightcrew/LACNnvgs.rsi
     state: icon

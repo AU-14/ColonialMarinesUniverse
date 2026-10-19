@@ -10,7 +10,8 @@ namespace Content.Server.CMU14.TileMovement;
 
 /// <summary>
 /// Gives tile movement to whatever a player controls when they have turned it on in their options
-/// (<see cref="CCVars.CMUTileMovementPreferred"/>), and takes it away when they turn it off or leave
+/// (<see cref="CCVars.CMUTileMovementPreferred"/>, or <see cref="CCVars.CMUTileMovementWalkOnly"/> for walking only),
+/// and takes it away when they turn it off or leave
 /// that body. Only removes tile movement it added itself, so the admin force-all toggle is untouched.
 /// </summary>
 public sealed class CMUTileMovementPreferenceSystem : EntitySystem
@@ -39,17 +40,28 @@ public sealed class CMUTileMovementPreferenceSystem : EntitySystem
         {
             if (session.Status != SessionStatus.InGame ||
                 session.AttachedEntity is not { } mob ||
-                !HasComp<InputMoverComponent>(mob) ||
-                !_netConfig.GetClientCVar(session.Channel, CCVars.CMUTileMovementPreferred))
+                !HasComp<InputMoverComponent>(mob))
             {
                 continue;
             }
 
+            var preferred = _netConfig.GetClientCVar(session.Channel, CCVars.CMUTileMovementPreferred);
+            var walkOnly = !preferred && _netConfig.GetClientCVar(session.Channel, CCVars.CMUTileMovementWalkOnly);
+            if (!preferred && !walkOnly)
+                continue;
+
             _wanted.Add(mob);
-            if (!HasComp<CMUTileMovementComponent>(mob))
+            if (!TryComp(mob, out CMUTileMovementComponent? tileMovement))
             {
-                AddComp<CMUTileMovementComponent>(mob);
+                tileMovement = AddComp<CMUTileMovementComponent>(mob);
                 _given.Add(mob);
+            }
+
+            // Leave the admin force-all toggle's tile movement as it is.
+            if (_given.Contains(mob) && tileMovement.WalkOnly != walkOnly)
+            {
+                tileMovement.WalkOnly = walkOnly;
+                Dirty(mob, tileMovement);
             }
         }
 

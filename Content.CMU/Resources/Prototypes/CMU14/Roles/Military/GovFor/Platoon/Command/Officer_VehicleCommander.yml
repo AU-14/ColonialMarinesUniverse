@@ -52,12 +52,18 @@
     icon:
       sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
       state: govfor_vcc
+  - type: CMVendorUser
+    id: AU14JobGOVFORVehicleCommander
+    points: 50
   roundForceComponents:
     OPFOR:
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/CMU14/Interface/au14opforjobicons.rsi
         state: vcc
+    - type: CMVendorUser
+      id: AU14JobOPFORVehicleCommander
+      points: 50
   requirements:
   - !type:TotalJobsTimeRequirement
     group: CMUJobsVehicleCrew

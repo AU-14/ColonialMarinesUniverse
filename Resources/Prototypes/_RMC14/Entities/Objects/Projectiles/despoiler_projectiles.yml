@@ -13,14 +13,14 @@
   - type: Projectile
     damage:
       types:
-        Heat: 10
+        Heat: 6 # CMU14: reduce Acid Barrage damage by 40%.
         Piercing: 0
     deleteOnCollide: true
   - type: XenoProjectile
   - type: XenoAcidProjectile
   - type: XenoDespoilerAcidBarrageProjectile
     lingeringAcidChance: 0.25
-    lingeringAcidProto: RMCEffectDespoilerLingeringAcid
+    lingeringAcidProto: CMUEffectDespoilerBarrageAcid # CMU14: barrage puddles use the same 40% reduction.
   - type: PointLight
     enabled: true
     radius: 1.2
@@ -49,7 +49,7 @@
   - type: XenoDespoilerLingeringAcid
     minLifetime: 15
     maxLifetime: 20
-    crossBurnDamage: 20
+    crossBurnDamage: 14 # CMU14: reduce other abilities' puddle damage by 30%.
   - type: Physics
     bodyType: Static
   - type: Fixtures
@@ -85,7 +85,7 @@
   - type: XenoDespoilerAcidSpray
     damage:
       types:
-        Heat: 30
+        Heat: 21 # CMU14: reduce Oozing Wounds damage by 30%.
   - type: TimedDespawn
     lifetime: 2
   - type: Physics
@@ -110,7 +110,7 @@
   - type: XenoDespoilerAcidSpray
     damage:
       types:
-        Heat: 30
+        Heat: 21 # CMU14: reduce empowered Oozing Wounds damage by 30%.
     stunsOnEmpowered: true
 
 - type: entity

@@ -333,4 +333,34 @@ public sealed class FighterGroundTest : GameTest
             CleanWorld();
         });
     }
+
+    // a hijacked dropship crashed onto the recovery site never moves off it, and the jet
+    // circled "waiting for a clear landing site" for the rest of the round
+    [Test]
+    public async Task PermanentlyBlockedRecoveryDivertsToTheNearestClearSpot()
+    {
+        await CreateWorld();
+        EntityUid blocker = default;
+        await Server.WaitAssertion(() => Assert.That(System.TryTakeoff(_pilot), Is.True));
+        await Advance(.9);
+        await Server.WaitAssertion(() =>
+        {
+            _ground.LandingDivertDelay = TimeSpan.FromSeconds(3);
+            blocker = SEntMan.SpawnEntity("MobHuman", _site);
+            Assert.That(System.TryReturnToGround(_pilot), Is.True);
+        });
+        await Advance(1);
+        await Server.WaitAssertion(() => Assert.That(_ground.State, Is.EqualTo(FighterGroundState.Returning)));
+        await Advance(10);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(_ground.State, Is.EqualTo(FighterGroundState.Grounded));
+            var landed = Transform.GetMapCoordinates(_hull).Position;
+            var site = Transform.ToMapCoordinates(_site).Position;
+            Assert.That((landed - site).Length(), Is.GreaterThan(.5f).And.LessThanOrEqualTo(_ground.LandingDivertRange * 1.5f));
+            Assert.That((Transform.GetMapCoordinates(blocker).Position - site).Length(), Is.LessThan(.05f), "The blocker was pushed off instead of the jet diverting.");
+            SEntMan.DeleteEntity(blocker);
+            CleanWorld();
+        });
+    }
 }
