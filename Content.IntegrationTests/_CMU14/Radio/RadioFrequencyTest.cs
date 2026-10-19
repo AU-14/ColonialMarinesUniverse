@@ -65,6 +65,7 @@ public sealed class RadioFrequencyTest : GameTest
         ["UNISOF"] = 176_500,
         ["Biomorph"] = 42_800, // CMU14
         ["BiomorphMimic"] = 42_700, // CMU14
+        ["CMUWendigoPack"] = 42_900, // CMU14
         ["CMUYautja"] = 154_100,
         ["CMUYautjaOverseer"] = 154_200,
         ["CMUYautjaBadBlood"] = 154_300,
@@ -146,7 +147,7 @@ public sealed class RadioFrequencyTest : GameTest
         await Server.WaitAssertion(() =>
         {
             // cmu edit start
-            Assert.That(CustomChannels, Has.Count.EqualTo(58));
+            Assert.That(CustomChannels, Has.Count.EqualTo(59)); // CMU14: includes CMUWendigoPack
             // cmu edit end
 
             foreach (var (id, expectedKilohertz) in CustomChannels)
@@ -163,11 +164,11 @@ public sealed class RadioFrequencyTest : GameTest
             Assert.Multiple(() =>
             {
                 // cmu edit start
-                Assert.That(positive, Has.Length.EqualTo(56));
+                Assert.That(positive, Has.Length.EqualTo(57));
                 // cmu edit end
                 Assert.That(CustomChannels.Values.Count(value => value == 0), Is.EqualTo(2));
                 // cmu edit start
-                Assert.That(positive.Distinct().Count(), Is.EqualTo(56),
+                Assert.That(positive.Distinct().Count(), Is.EqualTo(57),
                 // cmu edit end
                     "Every positive custom carrier must have one unambiguous reverse lookup.");
             });
@@ -205,6 +206,7 @@ public sealed class RadioFrequencyTest : GameTest
             AssertReverseLookup(plan, 42_500, "MyceliumLink");
             AssertReverseLookup(plan, 42_700, "BiomorphMimic"); // CMU14
             AssertReverseLookup(plan, 42_800, "Biomorph"); // CMU14
+            AssertReverseLookup(plan, 42_900, "CMUWendigoPack"); // CMU14
             Assert.That(
                 plan.TryGetChannelByFrequency(RadioFrequency.FromKilohertz(42_600), out _),
                 Is.False,

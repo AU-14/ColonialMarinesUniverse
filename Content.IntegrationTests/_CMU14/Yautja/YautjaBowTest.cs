@@ -7920,6 +7920,7 @@ public sealed class YautjaBowTest
                     ("CMUYautjaHuntingTrap", "Hunting Trap", (int?) 10, (int?) null),
                     ("CMUYautjaDynamicArrow", "Arrow - Dynamic Warhead", (int?) 10, (int?) null),
                     ("CMUYautjaSnareArrow", "Arrow - Snare", (int?) 15, (int?) null),
+                    ("CMUFieldOxygenTankFilled", "Oxygen Tank", (int?) 5, (int?) null),
                 }));
             }
             finally
@@ -7975,6 +7976,7 @@ public sealed class YautjaBowTest
                     ("CMUYautjaHuntingTrap", "Hunting Trap", (int?) 10, (int?) null),
                     ("CMUYautjaDynamicArrow", "Arrow - Dynamic Warhead", (int?) 10, (int?) null),
                     ("CMUYautjaSnareArrow", "Arrow - Snare", (int?) 15, (int?) null),
+                    ("CMUFieldOxygenTankFilled", "Oxygen Tank", (int?) 5, (int?) null),
                 }), "CMSS13 Bad Blood spare Falcon Drone uses /obj/item/falcon_drone/badblood.");
 
                 Assert.That(prototypes.HasIndex<EntityPrototype>(badBloodFalcon), Is.True,
@@ -8272,6 +8274,7 @@ public sealed class YautjaBowTest
                     ("CMUYautjaSmartDisc", "Smart-Disc", (int?) 20, (int?) null),
                     ("CMUYautjaArrow", "Arrow - Explosive", (int?) 10, (int?) null),
                     ("CMUYautjaSnareArrow", "Arrow - Snare", (int?) 15, (int?) null),
+                    ("CMUFieldOxygenTankFilled", "Oxygen Tank", (int?) 5, (int?) null),
                 }));
             }
             finally
@@ -8710,6 +8713,7 @@ public sealed class YautjaBowTest
                     ("CMUYautjaHuntingTrap", "Hunting Trap", (int?) 15, (int?) null),
                     ("CMUYautjaArrow", "Arrow - Explosive", (int?) 15, (int?) null),
                     ("CMUYautjaSnareArrow", "Arrow - Snare", (int?) 20, (int?) null),
+                    ("CMUFieldOxygenTankFilled", "Oxygen Tank", (int?) 5, (int?) null),
                 }));
             }
             finally
@@ -14778,6 +14782,7 @@ public sealed class YautjaBowTest
                     ("CMUYautjaHuntingTrap", "Hunting Trap", (int?) 10, (int?) null),
                     ("CMUYautjaArrow", "Arrow - Explosive", (int?) 10, (int?) null),
                     ("CMUYautjaSnareArrow", "Arrow - Snare", (int?) 15, (int?) null),
+                    ("CMUFieldOxygenTankFilled", "Oxygen Tank", (int?) 5, (int?) null),
                 }));
             }
             finally
@@ -18679,6 +18684,7 @@ public sealed class YautjaBowTest
                 ("CMUYautjaHuntingTrap", "Hunting Trap", 10, null),
                 ("CMUYautjaArrow", "Arrow - Explosive", 10, null),
                 ("CMUYautjaSnareArrow", "Arrow - Snare", 15, null),
+                ("CMUFieldOxygenTankFilled", "Oxygen Tank", 5, null),
             }).SetName("AdultRackSpareEquipmentRowsMatchCmss13SourceList");
 
         yield return new TestCaseData(
@@ -18690,6 +18696,7 @@ public sealed class YautjaBowTest
                 ("CMUYautjaSmartDisc", "Smart-Disc", 20, null),
                 ("CMUYautjaArrow", "Arrow - Explosive", 10, null),
                 ("CMUYautjaSnareArrow", "Arrow - Snare", 15, null),
+                ("CMUFieldOxygenTankFilled", "Oxygen Tank", 5, null),
             }).SetName("ElderRackSpareEquipmentRowsMatchCmss13SourceList");
 
         yield return new TestCaseData(
@@ -18700,6 +18707,7 @@ public sealed class YautjaBowTest
                 ("CMUYautjaHuntingTrap", "Hunting Trap", 15, null),
                 ("CMUYautjaArrow", "Arrow - Explosive", 15, null),
                 ("CMUYautjaSnareArrow", "Arrow - Snare", 20, null),
+                ("CMUFieldOxygenTankFilled", "Oxygen Tank", 5, null),
             }).SetName("StrandedRackSpareEquipmentRowsMatchCmss13SourceList");
 
         yield return new TestCaseData(
@@ -18710,6 +18718,7 @@ public sealed class YautjaBowTest
                 ("CMUYautjaHuntingTrap", "Hunting Trap", 10, null),
                 ("CMUYautjaDynamicArrow", "Arrow - Dynamic Warhead", 10, null),
                 ("CMUYautjaSnareArrow", "Arrow - Snare", 15, null),
+                ("CMUFieldOxygenTankFilled", "Oxygen Tank", 5, null),
             }).SetName("BadBloodRackSpareEquipmentRowsMatchCmss13SourceList");
     }
 
@@ -18953,6 +18962,7 @@ public sealed class YautjaBowTest
                         new RackExpectedRow("CMUYautjaHuntingTrap", "Hunting Trap"),
                         new RackExpectedRow("CMUYautjaArrow", "Arrow - Explosive"),
                         new RackExpectedRow("CMUYautjaSnareArrow", "Arrow - Snare"),
+                        new RackExpectedRow("CMUFieldOxygenTankFilled", "Oxygen Tank"),
                     }),
             },
             new[]
@@ -19006,6 +19016,7 @@ public sealed class YautjaBowTest
                         new RackExpectedRow("CMUYautjaHuntingTrap", "Hunting Trap"),
                         new RackExpectedRow("CMUYautjaDynamicArrow", "Arrow - Dynamic Warhead"),
                         new RackExpectedRow("CMUYautjaSnareArrow", "Arrow - Snare"),
+                        new RackExpectedRow("CMUFieldOxygenTankFilled", "Oxygen Tank"),
                     }),
             },
             new[]
