@@ -53,7 +53,8 @@ public sealed class CMUPressureSuitTest : GameTest
             Assert.That(SEntMan.System<SharedInternalsSystem>().FindBestGasTank(mob), Is.Not.Null, "no air supply found");
 
             var barotrauma = SEntMan.GetComponent<BarotraumaComponent>(mob);
-            var felt = SEntMan.System<BarotraumaSystem>().GetFeltLowPressure(mob, barotrauma, 0);
+            // Barotrauma never reads below 1 kPa, so that's what vacuum feels like through the suit.
+            var felt = SEntMan.System<BarotraumaSystem>().GetFeltLowPressure(mob, barotrauma, 1f);
             Assert.That(felt, Is.GreaterThan(Content.Shared.Atmos.Atmospherics.WarningLowPressure), "suit doesn't hold vacuum out");
         });
     }
