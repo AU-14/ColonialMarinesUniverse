@@ -11,6 +11,12 @@ public sealed partial class CMUQueenSwarmSystem
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
 
     private readonly List<CMUSwarmStairRoute> _stairRoutes = new();
+
+    /// <summary>
+    /// Distance from a stair entity beyond which a member on the destination floor has finished crossing.
+    /// Members still on the ramp or above its shaft (within this) keep steering to the exact exit.
+    /// </summary>
+    private const float StairClearance = 1.25f;
     private TimeSpan _nextStairScan;
 
     private bool TraverseToAnchor(EntityUid member, EntityUid anchor)
@@ -34,7 +40,11 @@ public sealed partial class CMUQueenSwarmSystem
         {
             if (TerminatingOrDeleted(active.Stair) || (from != active.FromMap && from != active.ToMap))
                 ClearTraversal(member, traversal);
-            else if (from == active.ToMap && Vector2.Distance(position, active.Exit) < 0.3f)
+            // Arrived: either at the exact exit, or anywhere on the destination floor that is clear of the
+            // stair itself. Requiring the exact exit stranded members that a crowd pushed just off it.
+            else if (from == active.ToMap &&
+                     (Vector2.Distance(position, active.Exit) < 0.3f ||
+                      Vector2.Distance(position, _transform.GetWorldPosition(active.Stair)) > StairClearance))
             {
                 ClearTraversal(member, traversal);
                 return from != to;
