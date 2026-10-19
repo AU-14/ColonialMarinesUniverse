@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 10/15/2026 03:56:06
-  entityCount: 7243
+  entityCount: 7244
 maps:
 - 1
 grids:
@@ -13334,6 +13334,8 @@ entities:
   entities:
   - uid: 691
     components:
+    - type: DropshipHijackDestination
+      defenseZone: Galley and Briefing
     - type: MetaData
       name: Random
     - type: Transform
@@ -13341,6 +13343,8 @@ entities:
       pos: -0.5,-40.5
   - uid: 692
     components:
+    - type: DropshipHijackDestination
+      defenseZone: Galley and Briefing
     - type: MetaData
       name: Random
     - type: Transform
@@ -13348,6 +13352,8 @@ entities:
       pos: -0.5,-26.5
   - uid: 5019
     components:
+    - type: DropshipHijackDestination
+      defenseZone: Galley and Briefing
     - type: MetaData
       name: Random
     - type: Transform
@@ -13355,6 +13361,8 @@ entities:
       pos: 3.5,-26.5
   - uid: 5071
     components:
+    - type: DropshipHijackDestination
+      defenseZone: Galley and Briefing
     - type: MetaData
       name: Random
     - type: Transform
@@ -13362,6 +13370,8 @@ entities:
       pos: -5.5,-26.5
   - uid: 5073
     components:
+    - type: DropshipHijackDestination
+      defenseZone: Galley and Briefing
     - type: MetaData
       name: Random
     - type: Transform
@@ -13369,6 +13379,8 @@ entities:
       pos: 4.5,-34.5
   - uid: 5074
     components:
+    - type: DropshipHijackDestination
+      defenseZone: Galley and Briefing
     - type: MetaData
       name: Random
     - type: Transform
@@ -50315,6 +50327,13 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
+- proto: RMCShipAntiAirConsole
+  entities:
+  - uid: 12350
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,65.5
 - proto: RMCShutterAlmayerOpen
   entities:
   - uid: 5776

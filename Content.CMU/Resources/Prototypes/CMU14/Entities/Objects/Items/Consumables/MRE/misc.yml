@@ -1,0 +1,244 @@
+# Non-food MRE contents from cmss13 PR 7895.
+
+# Utensils
+
+- type: entity
+  parent: RMCSpoonPlastic
+  id: CMUMRESpork
+  name: MRE spork
+  description: It's a plastic brown spork. Very robust for what it is, legends tell about stranded marines who dug trenches with those.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_spork.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Objects/Consumable/MRE/mre_spork.rsi
+    heldPrefix: null
+  - type: Utensil
+    types:
+    - Fork
+    - Spoon
+  - type: MREItem
+
+- type: entity
+  parent: CMUMRESpork
+  id: CMUMRESporkFSR
+  name: FSR spork
+
+- type: entity
+  parent: RMCSpoonPlastic
+  id: CMUMRESpoonPlastic
+  components:
+  - type: MREItem
+
+- type: entity
+  parent: DrinkWaterCup
+  id: CMUMREPaperCup
+  name: paper cup
+  description: A paper water cup.
+  components:
+  - type: MREItem
+
+- type: entity
+  parent: BaseItem
+  id: CMUCanOpener
+  name: can opener
+  description: A simple can opener, popular tool among UPP due to their doctrine of food preservation.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/can_opener.rsi
+    state: icon
+  - type: Item
+    size: Small
+    sprite: CMU14/Objects/Consumable/MRE/can_opener.rsi
+  - type: Tag
+    tags:
+    - CMUCanOpener
+  - type: MeleeWeapon
+    attackRate: 1
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
+    damage:
+      types:
+        Slash: 5
+
+- type: entity
+  parent: BaseItem
+  id: CMUCanOpenerCompact
+  name: folding can opener
+  description: A small compact can opener, can be folded into a safe and easy to store form, popular tool among UPP due to their doctrine of food preservation.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/can_opener_compact.rsi
+    layers:
+    - state: icon
+      map: ["base"]
+  - type: Item
+    size: Tiny
+    sprite: CMU14/Objects/Consumable/MRE/can_opener_compact.rsi
+  - type: Tag
+    tags:
+    - CMUCanOpener
+  - type: ItemToggle
+    soundActivate:
+      path: /Audio/Weapons/utilityknifeopen.ogg
+    soundDeactivate:
+      path: /Audio/Weapons/utilityknifeclose.ogg
+  - type: ItemToggleExaminableStatus
+    onText: item-toggle-examined-active
+    offText: item-toggle-examined-not-active
+  - type: ItemToggleMeleeWeapon
+    activatedSoundOnHit:
+      path: /Audio/Weapons/bladeslice.ogg
+    activatedDamage:
+      types:
+        Slash: 5
+  - type: MeleeWeapon
+    attackRate: 1
+    damage:
+      types:
+        Blunt: 0
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        base:
+          True: {state: "icon-on"}
+          False: {state: "icon"}
+  - type: UseDelay
+    delay: 0.2
+  # Fits in an opened MRE, which only takes MRE contents.
+  - type: MREItem
+
+# Drinks
+
+- type: entity
+  parent: CMDrinkWEYAWaterBottle30
+  id: CMUMREDrinkUPPWater
+  name: Gerolsteiner bottled sparkling water
+  description: German bottled, sparkling water popular among germanic population of UPP.
+  components:
+  - type: Solution
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: SodaWater
+        Quantity: 30
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/upp_water.rsi
+    layers:
+    - state: icon
+      map: ["enum.OpenableVisuals.Layer"]
+  - type: Item
+    sprite: CMU14/Objects/Consumable/MRE/upp_water.rsi
+
+- type: entity
+  parent: RMCMREInstantPowderBase
+  id: CMUMRETeabag
+  name: instant tea bag
+  description: A bag of instant black tea. Fully dilutable including the bag itself, bag is probably made out of tea as well. No heating required.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_twe.rsi
+    state: teabag
+  - type: Solution
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: TeaPowder
+        Quantity: 5
+
+- type: entity
+  parent: BaseStorageItem
+  id: CMUBoxTeabags
+  name: box of Earl Grey tea bags
+  description: A box of instant tea bags.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/teabag_box.rsi
+    state: icon
+  - type: Item
+    size: Small
+    sprite: CMU14/Objects/Consumable/MRE/teabag_box.rsi
+  - type: Storage
+    grid:
+    - 0,0,3,1
+    maxItemSize: Tiny
+    whitelist:
+      components:
+      - MREItem
+  - type: StorageFill
+    contents:
+    - id: CMUMRETeabag
+      amount: 8
+
+# Sweets
+
+- type: entity
+  parent: BaseStorageItem
+  id: CMUBoxLemonDrops
+  name: box of Lemon Drop candies
+  description: A box of lemon flavored hard candies.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/lemon_drop_box.rsi
+    state: icon
+  - type: Item
+    size: Small
+    sprite: CMU14/Objects/Consumable/MRE/lemon_drop_box.rsi
+  - type: Storage
+    grid:
+    - 0,0,3,1
+    maxItemSize: Small
+  - type: FixedItemSizeStorage
+  - type: StorageFill
+    contents:
+    - id: CMUMREFoodTWELemonDropCandy
+      amount: 8
+  - type: MREItem
+
+# Smoking
+
+- type: entity
+  parent: CMCigarettePackLuckySlothsMini
+  id: CMUCigarettePackWYGoldMini
+  name: We-Yu Gold mini packet
+  description: Building Better Worlds, and rolling better cigarettes. Compact and ready for your executive ventures, protecting corporate assets never felt cooler.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/wy_gold_mini.rsi
+  - type: Item
+    sprite: CMU14/Objects/Consumable/MRE/wy_gold_mini.rsi
+
+- type: entity
+  parent: CMCigarettePackLuckySlothsMini
+  id: CMUCigarettePackExecutiveSelectMini
+  name: Executive Select mini packet
+  description: Luxury right in your ration. You will have them just in time to use them while observing a nuclear blast and enjoying it.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/executive_select_mini.rsi
+  - type: Item
+    sprite: CMU14/Objects/Consumable/MRE/executive_select_mini.rsi
+
+- type: entity
+  parent: CMCigarettePackLuckySlothsMini
+  id: CMUCigarettePackBalajiImperialMini
+  name: Balaji Imperial mini packet
+  description: Smoke 'em if you gottem! Now a field, in the new compact package!
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/balaji_imperial_mini.rsi
+  - type: Item
+    sprite: CMU14/Objects/Consumable/MRE/balaji_imperial_mini.rsi
+
+- type: entity
+  parent: CMMatchBook
+  id: CMUBalajiImperialMatchbook
+  name: Balaji Imperial matchbook
+  description: A small book of expensive royal paper matches designed for refined smokers. These ones light almost every time!
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/balaji_imperial_matchbook.rsi
+  - type: Item
+    sprite: CMU14/Objects/Consumable/MRE/balaji_imperial_matchbook.rsi

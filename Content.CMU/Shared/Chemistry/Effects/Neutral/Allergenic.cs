@@ -22,11 +22,11 @@ public sealed partial class Allergenic : RMCChemicalEffect
     {
         var reagent = args.Reagent;
         if (!system.TryGetAllergy(args.TargetEntity, out var allergy) ||
-            allergy.Allergen != reagent.ID)
+            !allergy.IsAllergen(reagent.ID))
         {
             return;
         }
 
-        system.AllergicReaction.TriggerReaction(args.TargetEntity);
+        system.AllergicReaction.TriggerReaction(args.TargetEntity, reagent.LocalizedName);
     }
 }

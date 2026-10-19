@@ -58,6 +58,9 @@ namespace Content.Server.Ghost
     /// </summary>
     public sealed partial class GhostSystem : SharedGhostSystem
     {
+        // cmu edit start
+        [Dependency] private Content.Shared.CMU14.Ghost.CMUGhostAppearanceSystem _cmuGhostAppearance = default!;
+        // cmu edit end
         [Dependency] private SharedActionsSystem _actions = default!;
         [Dependency] private IAdminLogManager _adminLog = default!;
         [Dependency] private SharedEyeSystem _eye = default!;
@@ -670,6 +673,9 @@ namespace Content.Server.Ghost
 
             var ghost = SpawnAtPosition(GameTicker.ObserverPrototypeName, spawnPosition.Value);
             var ghostComponent = Comp<GhostComponent>(ghost);
+            // cmu edit start: the ghost looks like the body it left (RMC-14 PR 10355)
+            _cmuGhostAppearance.SetSource(ghost, mind.Comp.OwnedEntity);
+            // cmu edit end
 
             if (TryComp<GhostSpriteStateComponent>(ghost, out var state))  // If more TryComps are added this should be turned into an event
             {

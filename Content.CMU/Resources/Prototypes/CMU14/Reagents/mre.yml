@@ -1,0 +1,166 @@
+# Generated from cmss13 PR 7895's DM code.
+
+- type: reagent
+  parent: Nutriment
+  id: CMUMeatProtein
+  name: cmu-reagent-meat-protein-name
+  desc: cmu-reagent-meat-protein-desc
+  flavor: meaty
+  color: "#664330"
+
+- type: reagent
+  parent: Nutriment
+  id: CMUBread
+  name: cmu-reagent-bread-name
+  desc: cmu-reagent-bread-desc
+  flavor: bread
+  color: "#c8a26b"
+
+- type: reagent
+  parent: Nutriment
+  id: CMUVegetable
+  name: cmu-reagent-vegetable-name
+  desc: cmu-reagent-vegetable-desc
+  flavor: vegetables
+  color: "#5c8a2e"
+
+- type: reagent
+  parent: Nutriment
+  id: CMUCheese
+  name: cmu-reagent-cheese-name
+  desc: cmu-reagent-cheese-desc
+  flavor: cheesy
+  color: "#f2d64b"
+
+- type: reagent
+  parent: Nutriment
+  id: CMUPlantMatter
+  name: cmu-reagent-plant-matter-name
+  desc: cmu-reagent-plant-matter-desc
+  flavor: vegetables
+  color: "#3f7a2a"
+
+- type: reagent
+  parent: Nutriment
+  id: CMUFishMeat
+  name: cmu-reagent-fish-meat-name
+  desc: cmu-reagent-fish-meat-desc
+  flavor: fishy
+  color: "#e8a07a"
+
+- type: reagent
+  parent: Nutriment
+  id: CMUPotato
+  name: cmu-reagent-potato-name
+  desc: cmu-reagent-potato-desc
+  flavor: potatoes
+  color: "#d9c27a"
+
+- type: reagent
+  parent: Nutriment
+  id: CMUNuts
+  name: cmu-reagent-nuts-name
+  desc: cmu-reagent-nuts-desc
+  flavor: nutty
+  color: "#a0703a"
+
+- type: reagent
+  parent: Nutriment
+  id: CMUNoodles
+  name: cmu-reagent-noodles-name
+  desc: cmu-reagent-noodles-desc
+  flavor: cheapnoodles
+  color: "#e9d68a"
+
+- type: reagent
+  parent: Nutriment
+  id: CMUFruit
+  name: cmu-reagent-fruit-name
+  desc: cmu-reagent-fruit-desc
+  flavor: fruity
+  color: "#d0482c"
+
+- type: reagent
+  parent: Nutriment
+  id: CMUMushroom
+  name: cmu-reagent-mushroom-name
+  desc: cmu-reagent-mushroom-desc
+  flavor: mushroom
+  color: "#8a7360"
+
+- type: reagent
+  parent: Nutriment
+  id: CMUBuckwheat
+  name: cmu-reagent-buckwheat-name
+  desc: cmu-reagent-buckwheat-desc
+  flavor: savory
+  color: "#7a4e2a"
+
+- type: reagent
+  parent: Nutriment
+  id: CMUVegemite
+  name: cmu-reagent-vegemite-name
+  desc: cmu-reagent-vegemite-desc
+  flavor: salty
+  color: "#312007"
+
+- type: reagent
+  parent: Nutriment
+  id: CMUHoney
+  name: cmu-reagent-honey-name
+  desc: cmu-reagent-honey-desc
+  flavor: honey
+  color: "#e8b81a"
+
+- type: reagent
+  parent: CMReagent
+  id: CMUHazelnutBeverage
+  name: cmu-reagent-hazelnut-beverage-name
+  desc: cmu-reagent-hazelnut-beverage-desc
+  physicalDesc: reagent-physical-desc-powdery
+  flavor: nutty
+  color: "#ac4729"
+
+- type: reagent
+  parent: CMReagent
+  id: CMUChocolateBeverage
+  name: cmu-reagent-chocolate-beverage-name
+  desc: cmu-reagent-chocolate-beverage-desc
+  physicalDesc: reagent-physical-desc-powdery
+  flavor: chocolate
+  color: "#46271e"
+
+- type: reagent
+  parent: CMReagent
+  id: CMUOrangeBeverage
+  name: cmu-reagent-orange-beverage-name
+  desc: cmu-reagent-orange-beverage-desc
+  physicalDesc: reagent-physical-desc-powdery
+  flavor: fruity
+  color: "#ffa500"
+
+- type: reagent
+  parent: CMReagent
+  id: CMULemonLimeBeverage
+  name: cmu-reagent-lemon-lime-beverage-name
+  desc: cmu-reagent-lemon-lime-beverage-desc
+  physicalDesc: reagent-physical-desc-powdery
+  flavor: fruity
+  color: "#35b435"
+
+- type: reagent
+  parent: CMReagent
+  id: CMUGrapeBeverage
+  name: cmu-reagent-grape-beverage-name
+  desc: cmu-reagent-grape-beverage-desc
+  physicalDesc: reagent-physical-desc-powdery
+  flavor: fruity
+  color: "#74206f"
+
+- type: reagent
+  parent: RMCChocolateDrink
+  id: CMUHazelnutChocolateDrink
+  name: cmu-reagent-hazelnut-chocolate-drink-name
+  desc: cmu-reagent-hazelnut-chocolate-drink-desc
+  flavor: nutty
+  color: "#8a4a2c"
