@@ -768,7 +768,7 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public float CloakMovingOpacity = 0.10f;
 
     [DataField]
-    public bool CloakRestrictWeapons = true;
+    public bool CloakRestrictWeapons;
 
     [DataField]
     public bool CloakHideNightVision = true;

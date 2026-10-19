@@ -214,10 +214,12 @@ public sealed partial class YautjaCharacterProfile
         YautjaUniqueSet.Ronin,
     ];
 
+    // CM-SS13 PRED_SKIN_COLOR order (code/__DEFINES/pred.dm:11), so the picker lists the reference skins first.
+    // Gray and White are CMU-only extras and stay last.
     public static readonly YautjaSkinColor[] SkinColorOrder =
     [
-        YautjaSkinColor.Green,
         YautjaSkinColor.Tan,
+        YautjaSkinColor.Green,
         YautjaSkinColor.Purple,
         YautjaSkinColor.Blue,
         YautjaSkinColor.Red,

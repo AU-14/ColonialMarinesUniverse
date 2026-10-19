@@ -7,7 +7,11 @@ namespace Content.Client.Body;
 
 public sealed partial class VisualBodySystem
 {
-    // CMU14: achromatic choices also desaturate the colored source textures.
+    // CMU14: the yautja body textures are drawn in a tan tone (torso mean ~#726747), and the humanoid skin tint
+    // multiplies the layer colour. Tinting those directly darkened and shifted every palette entry - CM-SS13's
+    // tan #A69964 came out around #4A3D1B. Every skin-tinted yautja layer is therefore desaturated first, so the
+    // applied skin colour is the colour that shows; layers tinted with something else (markings, hair, eyes) keep
+    // their own colour.
     private void ApplyYautjaSkinShader(EntityUid body, int index, Color skin, Color color, bool eyes = false)
     {
         if (!TryComp<SpriteComponent>(body, out var sprite))
@@ -15,9 +19,7 @@ public sealed partial class VisualBodySystem
 
         var layer = (SpriteComponent.Layer) sprite[index];
         var enabled = TryComp<HumanoidProfileComponent>(body, out var profile) && profile.Species.Id == "Yautja" &&
-                      !eyes && color.WithAlpha(1) == skin.WithAlpha(1) &&
-                      (skin == YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Gray) ||
-                       skin == YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.White));
+                      !eyes && color.WithAlpha(1) == skin.WithAlpha(1);
         if (enabled)
             sprite.LayerSetShader(index, "Greyscale");
         else if (layer.ShaderPrototype?.Id == "Greyscale")

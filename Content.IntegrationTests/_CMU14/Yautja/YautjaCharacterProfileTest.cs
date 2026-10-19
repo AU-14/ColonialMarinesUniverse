@@ -193,8 +193,8 @@ public sealed class YautjaCharacterProfileTest
             Assert.That(YautjaCharacterProfile.SkinColorOrder,
                 Is.EqualTo(new[]
                 {
-                    YautjaSkinColor.Green,
                     YautjaSkinColor.Tan,
+                    YautjaSkinColor.Green,
                     YautjaSkinColor.Purple,
                     YautjaSkinColor.Blue,
                     YautjaSkinColor.Red,
@@ -1058,6 +1058,40 @@ public sealed class YautjaCharacterProfileTest
             25,
             10,
             100);
+    }
+
+    // CM-SS13 has six predator skins: code/__DEFINES/pred.dm:11 PRED_SKIN_COLOR = tan, green, purple, blue, red,
+    // black. The colours themselves are not constants - /datum/pred_picker samples the centre pixel of each
+    // "[colour]_torso_pred_m" state in the species icobase (icons/mob/humans/species/r_predator.dmi). These are
+    // those samples, so the picker has to offer the reference skins first, in reference order, with reference colour.
+    [Test]
+    public void YautjaSkinPaletteMatchesCmss13PredSkinColors()
+    {
+        var reference = new (YautjaSkinColor Kind, string Name, byte R, byte G, byte B)[]
+        {
+            (YautjaSkinColor.Tan, "tan", 166, 153, 100),
+            (YautjaSkinColor.Green, "green", 120, 125, 101),
+            (YautjaSkinColor.Purple, "purple", 136, 119, 144),
+            (YautjaSkinColor.Blue, "blue", 125, 139, 150),
+            (YautjaSkinColor.Red, "red", 105, 57, 59),
+            (YautjaSkinColor.Black, "black", 72, 69, 77),
+        };
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(YautjaCharacterProfile.SkinColorOrder.Take(reference.Length).Select(kind => kind),
+                Is.EqualTo(reference.Select(row => row.Kind)),
+                "the picker lists the CM-SS13 skins first, in PRED_SKIN_COLOR order");
+
+            foreach (var row in reference)
+            {
+                var color = YautjaCharacterProfile.GetSkinColorColor(row.Kind);
+                Assert.That(
+                    ((byte) MathF.Round(color.R * 255f), (byte) MathF.Round(color.G * 255f), (byte) MathF.Round(color.B * 255f)),
+                    Is.EqualTo((row.R, row.G, row.B)),
+                    $"{row.Name} must be the {row.Name}_torso_pred_m colour from r_predator.dmi");
+            }
+        });
     }
 
     private sealed record SpecialMaskRow(

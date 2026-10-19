@@ -1061,6 +1061,7 @@
   - type: Gun
     projectileSpeed: 30
     fireRate: 0.625
+    cameraRecoilScalar: 0
     minAngle: 10
     maxAngle: 10
     selectedMode: SemiAuto
