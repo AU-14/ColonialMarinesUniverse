@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared.Burial.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
@@ -111,9 +112,17 @@ public sealed class CMUBuryableMineSystem : EntitySystem
         Dirty(ent);
     }
 
+    /// <summary>
+    ///     Anything tagged as a shovel, or with a digging shovel component like the AU-14 shovel, which drops the tag.
+    /// </summary>
+    private bool IsShovel(CMUBuryableMineComponent comp, EntityUid used)
+    {
+        return _tag.HasTag(used, comp.ShovelTag) || HasComp<ShovelComponent>(used);
+    }
+
     private void OnInteractUsing(Entity<CMUBuryableMineComponent> ent, ref InteractUsingEvent args)
     {
-        if (args.Handled || ent.Comp.Buried || !Transform(ent).Anchored || !_tag.HasTag(args.Used, ent.Comp.ShovelTag))
+        if (args.Handled || ent.Comp.Buried || !Transform(ent).Anchored || !IsShovel(ent.Comp, args.Used))
             return;
 
         args.Handled = true;
