@@ -115,7 +115,7 @@
   id: AU14JumpsuitIASFL90
   suffix: Webbing, L90
   components:
-  - type: Appearance
+    - type: Appearance
     - type: WebbingClothing
       startingWebbing: AU14WebbingIASFL90
 
@@ -136,7 +136,7 @@
   id: AU14JumpsuitIASFL90A2
   suffix: Webbing, L90A2
   components:
-  - type: Appearance
+    - type: Appearance
     - type: WebbingClothing
       startingWebbing: AU14WebbingIASFL90A2
 
