@@ -2,6 +2,7 @@
 // Copyright (c) 2026 wray-git
 using System.Linq;
 using System.Numerics;
+using Content.Server.CMU14.Forge;
 using Content.Server.CMU14.ZLevelBuilding;
 using Content.Server.Destructible;
 using Content.Shared._RMC14.Areas;
@@ -42,6 +43,7 @@ public sealed class PitDiggingToolSystem : EntitySystem
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly ToolWearSystem _wear = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery;
     private EntityQuery<PhysicsComponent> _physicsQuery;
@@ -178,6 +180,9 @@ public sealed class PitDiggingToolSystem : EntitySystem
 
         Spawn("RUMCPit", target);
         ClearDugWalls(args.Up, target);
+
+        // A tool of wood or of stone gives out with the pits it digs.
+        _wear.Use(ent.Owner, args.User);
     }
 
     private EntityCoordinates GetTileInFront(EntityUid user)
