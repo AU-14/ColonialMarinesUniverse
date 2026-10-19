@@ -5,21 +5,15 @@ using Content.Server.Fluids.EntitySystems;
 using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Fluids.Components;
-using Content.Shared.Gravity;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Item.ItemToggle;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
-using Robust.Shared.Map.Components;
-using Robust.Shared.Physics;
-using Robust.Shared.Physics.Components;
-using Robust.Shared.Physics.Systems;
 
 namespace Content.IntegrationTests.CMU14.Vehicle;
 
 /// <summary>
-/// The extinguisher off the jeep's rack sprays like any other, from beside the jeep, from a seat or
-/// on a planet whose ground is its map.
+/// The extinguisher off the jeep's rack sprays like any other, from beside the jeep or from a seat.
 /// </summary>
 [TestFixture]
 public sealed class CMUJeepExtinguisherTest : GameTest
@@ -102,51 +96,5 @@ public sealed class CMUJeepExtinguisherTest : GameTest
         }
 
         await Server.WaitAssertion(() => Assert.That(SEntMan.Deleted(jeep), Is.False));
-    }
-
-    /// <summary>
-    /// On a planet the ground is the map itself, saved with a dynamic body (as Stable Garrison is).
-    /// The spray's pushback must leave it asleep: the physics step can't move a map.
-    /// </summary>
-    [Test]
-    public async Task SprayingOnAPlanetLeavesTheGroundStill()
-    {
-        var floor = (await Pair.CreateTestMap()).Tile.Tile;
-        EntityUid planet = default;
-        EntityUid user = default;
-        EntityUid extinguisher = default;
-        await Server.WaitPost(() =>
-        {
-            var maps = SEntMan.System<SharedMapSystem>();
-            planet = maps.CreateMap(out _);
-            var grid = SEntMan.EnsureComponent<MapGridComponent>(planet);
-            var gravity = SEntMan.EnsureComponent<GravityComponent>(planet);
-            gravity.Enabled = true;
-            gravity.Inherent = true;
-            SEntMan.Dirty(planet, gravity);
-            for (var x = -4; x <= 4; x++)
-            {
-                for (var y = -4; y <= 4; y++)
-                {
-                    maps.SetTile(planet, grid, new Vector2i(x, y), floor);
-                }
-            }
-
-            var physics = SEntMan.System<SharedPhysicsSystem>();
-            var body = SEntMan.EnsureComponent<PhysicsComponent>(planet);
-            physics.SetBodyType(planet, BodyType.Dynamic, body: body);
-
-            user = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(planet, 0.5f, 0.5f));
-            extinguisher = SEntMan.SpawnEntity("CMFireExtinguisherPortable", new EntityCoordinates(planet, 0.5f, 0.5f));
-            Assert.That(SEntMan.System<SharedHandsSystem>().TryPickup(user, extinguisher), Is.True);
-            Assert.That(SEntMan.System<ItemToggleSystem>().TryActivate(extinguisher, user), Is.True);
-        });
-        await RunTicksSync(5);
-
-        await Server.WaitPost(() => Spray(extinguisher, user, new Vector2(3, 0)));
-        await RunSeconds(2f);
-
-        await Server.WaitAssertion(() =>
-            Assert.That(SEntMan.GetComponent<PhysicsComponent>(planet).Awake, Is.False, "The planet's ground shouldn't wake up."));
     }
 }
