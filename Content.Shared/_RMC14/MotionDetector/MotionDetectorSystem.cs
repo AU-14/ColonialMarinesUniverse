@@ -400,6 +400,14 @@ public sealed partial class MotionDetectorSystem : EntitySystem
             UpdateAppearance((uid, detector));
             if (detector.Blips.Count == 0)
             {
+                // cmu edit start: movement on the level above or below pings without a blip
+                if (CMUDetectsOtherLevels(uid, range, time, detector.MoveTime, lastUser))
+                {
+                    _audio.PlayPvs(detector.ScanSound, uid);
+                    continue;
+                }
+                // cmu edit end
+
                 if (_rmcInventory.TryGetUserHoldingOrStoringItem(uid, out var user))
                     _audio.PlayEntity(detector.ScanEmptySound, user, uid);
 

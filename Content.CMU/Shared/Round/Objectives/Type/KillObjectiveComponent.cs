@@ -22,6 +22,9 @@ public sealed partial class KillObjectiveComponent : Robust.Shared.GameObjects.C
     /// </summary>
     [DataField] public bool RequireFactionKill;
 
+    // don't pay out for minions (lesser drones, huggers, poppers), see ObjKillSystem.IsMinion
+    [DataField] public bool IgnoreMinions;
+
     public bool HasSpawned;
     public Dictionary<string, int> AmountKilledPerFaction = new();
 }

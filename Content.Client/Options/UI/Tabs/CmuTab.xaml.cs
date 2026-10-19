@@ -34,6 +34,7 @@ public sealed partial class CmuTab : Control
         Control.AddOptionCheckBox(CCVars.CMUVoteUiLarge, VoteUiLargeCheckBox);
         // cmu edit start
         Control.AddOptionCheckBox(CCVars.CMUTileMovementPreferred, TileMovementCheckBox);
+        Control.AddOptionCheckBox(CCVars.CMUTileMovementWalkOnly, TileMovementWalkOnlyCheckBox);
         // cmu edit end
         // cmu edit start: hide username on the round-end screen
         Control.AddOptionCheckBox(Content.Shared.CMU14.CCVar.AU14CCVars.HideRoundEndUsername, HideRoundEndUsernameCheckBox);
@@ -70,6 +71,8 @@ public sealed partial class CmuTab : Control
         Control.AddOptionCheckBox(CMUMedicalCCVars.AutoReapplyKitsEnabled, AutoReapplyKitsCheckBox);
         Control.AddOptionCheckBox(CMUMedicalCCVars.UiLessSurgeryEnabled, UiLessSurgeryCheckBox);
         Control.AddOptionCheckBox(CCVars.CMUScreamOnHotbarEnabled, ScreamOnHotbarCheckBox);
+        Control.AddOptionCheckBox(CCVars.CMUVaultOnBump, VaultOnBumpCheckBox); // cmu edit
+        Control.AddOptionCheckBox(CCVars.CMUNoShakeWhenResting, NoShakeWhenRestingCheckBox); // cmu edit
         // cmu edit start: area echo options, moved from the Misc tab
         Control.AddOptionCheckBox(Content.Shared._Mono.CCVar.MonoCVars.AreaEchoEnabled, AreaEchoCheckBox);
         Control.AddOptionCheckBox(Content.Shared._Mono.CCVar.MonoCVars.AreaEchoHighResolution, AreaEchoHighResolutionCheckBox);

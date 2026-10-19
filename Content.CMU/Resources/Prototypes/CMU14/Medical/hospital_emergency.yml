@@ -2,7 +2,7 @@
   parent: RMCCommunicationsConsoleBase
   id: AU14HospitalEmergencyComputer
   name: emergency computer
-  description: Coordinates hospital evacuation shuttles, casualty releases, and treatment payouts.
+  description: Coordinates hospital evacuation shuttles, casualty releases, and treatment payouts. When an incident report comes in, press Approve Landing and a shuttle brings the casualties to the hospital landing pad. Unload them and press Release Shuttle, treat every injury, then press Request Pickup to send them home. Cash for each patient prints here, minus missed injuries and deaths.
   suffix: Hospital
   components:
   - type: Sprite

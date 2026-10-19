@@ -1,5 +1,6 @@
 using Content.Server.Chat.Systems;
 using Content.Shared.CMU14.Threats.Mobs.Wendigo;
+using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Chat;
 using Content.Shared.Chat.Prototypes;
@@ -17,6 +18,7 @@ namespace Content.Server.CMU14.Threats.Mobs.Wendigo;
 
 public sealed partial class WendigoVoiceSystem : EntitySystem
 {
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private ChatSystem _chat = default!;
@@ -77,7 +79,16 @@ public sealed partial class WendigoVoiceSystem : EntitySystem
 
     private void OnPlayLine(Entity<WendigoVoiceComponent> ent, ref WendigoPlayLineMessage args)
     {
-        if (!_proto.TryIndex(args.EmoteId, out EmotePrototype? emote))
+        // Only the mimicry lines: the line skips the speech blocker below, so no other emote may be sent.
+        if (!EmoteToSound.TryGetValue(args.EmoteId, out string? soundValue) ||
+            !_proto.TryIndex(args.EmoteId, out EmotePrototype? emote))
+        {
+            return;
+        }
+
+        // Mimicry is a sound the Wendigo makes, not its own speech: it is gated like an emote, so the natural
+        // Wendigo, which cannot speak, still mimics while it is able to emote.
+        if (!_actionBlocker.CanEmote(ent.Owner))
             return;
 
         if (emote.ChatMessages.Count > 0)
@@ -87,11 +98,9 @@ public sealed partial class WendigoVoiceSystem : EntitySystem
                 msg,
                 InGameICChatType.Speak,
                 ChatTransmitRange.Normal,
-                nameOverride: null);
+                nameOverride: null,
+                ignoreActionBlocker: true);
         }
-
-        if (!EmoteToSound.TryGetValue(args.EmoteId, out string? soundValue))
-            return;
 
         SoundSpecifier sound = soundValue.StartsWith('/')
             ? new SoundPathSpecifier(soundValue)

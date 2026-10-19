@@ -13,6 +13,7 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.CMU14.Threats.Mobs.Biomorph;
+using Content.Shared.CMU14.Threats.Mobs.Wendigo.Pack;
 using Content.Shared.CMU14.util;
 using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
@@ -1025,7 +1026,8 @@ public sealed partial class ThreatSystem : EntitySystem
             || HasComp<ApeComponent>(uid)
             || HasComp<TribalComponent>(uid)
             || HasComp<BiomorphComponent>(uid)
-            || HasComp<BiomorphMimicComponent>(uid))
+            || HasComp<BiomorphMimicComponent>(uid)
+            || HasComp<CMUWendigoPackComponent>(uid))
             return true;
 
         if (HasComp<SynthComponent>(uid))

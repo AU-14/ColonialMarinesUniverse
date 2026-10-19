@@ -18,7 +18,7 @@ public sealed class DropshipInteriorWeaponMenuTest : GameTest
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
     [Test]
-    public async Task InteriorWeaponsRemainSelectableBeyondFourExteriorWeapons()
+    public async Task InteriorWeaponsRemainSelectableBeyondFiveExteriorWeapons()
     {
         var map = await Pair.CreateTestMap();
         NetEntity ownerNet = default;
@@ -30,11 +30,25 @@ public sealed class DropshipInteriorWeaponMenuTest : GameTest
             SEntMan.EnsureComponent<DropshipTerminalWeaponsComponent>(owner);
             ownerNet = SEntMan.GetNetEntity(owner);
             var containers = SEntMan.System<SharedContainerSystem>();
-            for (var i = 0; i < 4; i++)
+            Assert.That(DropshipWeaponPointLocation.Chin, Is.Not.EqualTo(DropshipWeaponPointLocation.Internal));
+            var locations = new[]
+            {
+                DropshipWeaponPointLocation.PortWing,
+                DropshipWeaponPointLocation.StarboardWing,
+                DropshipWeaponPointLocation.PortFore,
+                DropshipWeaponPointLocation.StarboardFore,
+                DropshipWeaponPointLocation.Chin,
+            };
+            foreach (var location in locations)
             {
                 var point = SEntMan.SpawnEntity("CMAlamoWall61", map.GridCoords);
                 var weapon = SEntMan.SpawnEntity("RMCDropshipAttachmentGau21Cannon", map.GridCoords);
-                var slotId = SEntMan.GetComponent<DropshipWeaponPointComponent>(point).WeaponContainerSlotId;
+                var weaponPoint = SEntMan.GetComponent<DropshipWeaponPointComponent>(point);
+#pragma warning disable RA0002
+                weaponPoint.Location = location;
+#pragma warning restore RA0002
+                SEntMan.Dirty(point, weaponPoint);
+                var slotId = weaponPoint.WeaponContainerSlotId;
                 Assert.That(containers.Insert(weapon,
                     containers.EnsureContainer<ContainerSlot>(point, slotId)), Is.True);
                 expected.Add(SEntMan.GetNetEntity(weapon));

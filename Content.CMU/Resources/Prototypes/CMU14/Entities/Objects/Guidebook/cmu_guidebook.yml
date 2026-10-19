@@ -8,6 +8,7 @@
   - AU14Comms
   - CMUGuideCAS
   - CMUGuideOverwatch
+  - CMUGuideShipWeapons
   - CMUGuideFOBSecurity
   - CMUGuideSkills
   - CMUGuideMortar
@@ -28,6 +29,13 @@
   name: cmu-guide-entry-cas
   priority: 2
   text: "/ServerInfo/Guidebook/CMU14/Guides/CMUCAS.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideShipWeapons
+  name: cmu-guide-entry-ship-weapons
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUShipWeapons.xml"
 
 - type: guideEntry
   parent: RMC

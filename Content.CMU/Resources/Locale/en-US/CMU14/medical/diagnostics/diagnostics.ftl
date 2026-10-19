@@ -53,23 +53,19 @@ cmu-medical-scanner-pain-risk-imminent     = Imminent
 cmu-medical-scanner-pain-risk-active       = Active
 cmu-medical-scanner-pain-risk-suppressed-suffix =  (supp.)
 
-# V2-ε Stat-sheet redesign — dark cards + status banner + body chart
-cmu-medical-scanner-card-body              = Body
-cmu-medical-scanner-card-organs            = Organs
-cmu-medical-scanner-card-reagents          = Reagents in bloodstream
-cmu-medical-scanner-card-recommended       = Recommended
-cmu-medical-scanner-card-patient           = Patient
-cmu-medical-scanner-card-damage            = Damage profile
 cmu-medical-scanner-loading                = Receiving scan telemetry
 cmu-medical-scanner-loading-subtext        = resolving server state
-
-cmu-medical-scanner-stat-health            = HEALTH
-cmu-medical-scanner-stat-pulse             = PULSE BPM
-cmu-medical-scanner-stat-blood             = BLOOD
-cmu-medical-scanner-stat-temp              = TEMP °{$unit}
-cmu-medical-scanner-stat-shock-risk        = SHOCK RISK
-cmu-medical-scanner-stat-pulse-stopped     = 0
-cmu-medical-scanner-stat-deceased-short    = DEAD
+cmu-medical-scanner-label-health           = Health:
+cmu-medical-scanner-label-damage           = Damage:
+cmu-medical-scanner-label-holocard         = Holocard:
+cmu-medical-scanner-label-temperature      = Body Temperature:
+cmu-medical-scanner-label-pulse            = Pulse:
+cmu-medical-scanner-label-shock-risk       = Shock Risk:
+cmu-medical-scanner-section-limbs-damaged  = Limbs Damaged
+cmu-medical-scanner-section-organs-damaged = Organs Damaged
+cmu-medical-scanner-section-chemicals      = Chemical Contents
+cmu-medical-scanner-section-advice         = Medication Advice
+cmu-medical-scanner-organ-damage           = {$stage} [{$damage} damage]
 
 cmu-medical-scanner-status-stable          = STABLE
 cmu-medical-scanner-status-serious         = SERIOUS

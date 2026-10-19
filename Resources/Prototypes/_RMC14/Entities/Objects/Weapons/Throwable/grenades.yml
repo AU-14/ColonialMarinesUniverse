@@ -82,15 +82,12 @@
   - CMGrenadeBase
   - RMCM40DPTags
   id: CMGrenadeHighExplosive
-  # cmu edit start: M40 HEDP designation and impact fuse (cmss13-pve#517)
+  # cmu edit start: M40 HEDP designation (cmss13-pve#517)
   name: M40 HEDP grenade
-  description: High-Explosive Dual-Purpose. A small, but deceptively strong grenade that has been phasing out the M15 HE grenade. Explodes with a powerful blast. Can be fired from a grenade launcher for impact detonation, or primed in-hand and thrown to detonate after 4 seconds.
+  description: High-Explosive Dual-Purpose. A small, but deceptively strong grenade that has been phasing out the M15 HE grenade. Explodes with a powerful blast. Can be fired from a grenade launcher, or primed in-hand and thrown to detonate after 4 seconds.
   # cmu edit end
   components:
   - type: CMUSmartGrenade # CMU14
-  # cmu edit start: detonate on impact when fired from a launcher (cmss13-pve#517)
-  - type: TriggerOnFixedDistanceStop
-  # cmu edit end
   # cmu edit start: the mob it hits from a launcher isn't stunned
   - type: CMULauncherImpactNoStun
   # cmu edit end
@@ -272,10 +269,6 @@
   name: 30mm HEFA grenade
   description: High-Explosive Fragmenting-Antipersonnel. A small, but deceptively strong fragmentation grenade that has been phasing out the M15 fragmentation grenades alongside the 30mm HEDP. Capable of being loaded in grenade launchers, or thrown by hand.
   components:
-  # cmu edit start: not dual-purpose, so no impact fuse; the launcher's own fuse sets it off (cmss13-pve#517)
-  - type: TriggerOnFixedDistanceStop
-    delay: 10
-  # cmu edit end
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40hefa.rsi
   - type: Explosive
@@ -314,10 +307,6 @@
   components:
   - type: CMUSmartGrenade # CMU14
     enabled: false
-  # cmu edit start: not dual-purpose, so no impact fuse; the launcher's own fuse sets it off (cmss13-pve#517)
-  - type: TriggerOnFixedDistanceStop
-    delay: 10
-  # cmu edit end
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m15frag.rsi
   - type: Explosive

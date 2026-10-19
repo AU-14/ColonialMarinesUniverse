@@ -17,6 +17,16 @@
                     <BoxContainer Access="Public" Name="BwoinkArea" VerticalExpand="True" HorizontalExpand="True" />
                 </BoxContainer>
             </SplitContainer>
+            <!-- CMU14 Tickets Begin: wrapper so the ticket controls get their own row; SplitContainer takes two children -->
+            <BoxContainer Orientation="Vertical">
+            <!-- AHelp ticket status, acknowledge, claim and close. Not in the player actions row, which they overflowed. -->
+            <BoxContainer Visible="False" Name="CMUTicketRow" Orientation="Horizontal" SetHeight="30">
+                <Label Name="CMUTicketStatusLabel" ClipText="True" HorizontalExpand="True" MinWidth="120" Margin="4 0" VAlign="Center" />
+                <Button Name="CMUTicketAcknowledge" Text="{Loc 'cmu-ahelp-ticket-acknowledge'}" ToolTip="{Loc 'cmu-ahelp-ticket-acknowledge-tooltip'}" StyleClasses="OpenRight" />
+                <Button Name="CMUTicketClaim" Text="{Loc 'cmu-ahelp-ticket-claim'}" StyleClasses="OpenBoth" />
+                <Button Name="CMUTicketClose" Text="{Loc 'cmu-ahelp-ticket-close'}" StyleClasses="OpenLeft" />
+            </BoxContainer>
+            <!-- CMU14 End -->
             <BoxContainer Orientation="Horizontal" SetHeight="30" >
                 <CheckBox Name="AdminOnly" Access="Public" Text="{Loc 'admin-ahelp-admin-only'}" ToolTip="{Loc 'admin-ahelp-admin-only-tooltip'}" />
                 <Control HorizontalExpand="True" MinWidth="5" />
@@ -31,6 +41,9 @@
                 <controls:ConfirmButton Visible="False" Name="Respawn" Text="{Loc 'admin-player-actions-respawn'}" ConfirmationText="{Loc 'admin-player-actions-confirm'}" StyleClasses="OpenBoth" />
                 <Button Visible="False" Name="Follow" Text="{Loc 'admin-player-actions-follow'}" StyleClasses="OpenLeft" />
             </BoxContainer>
+            <!-- CMU14 Tickets Begin -->
+            </BoxContainer>
+            <!-- CMU14 End -->
         </SplitContainer>
     </PanelContainer>
 </Control>

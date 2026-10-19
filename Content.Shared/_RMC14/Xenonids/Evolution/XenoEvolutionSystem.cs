@@ -1,5 +1,9 @@
 using System.Linq;
 using Content.Shared.CMU14.Yautja;
+// CMU14 Devolution Refund Begin: import the CMU-owned refund state
+using Content.Shared.CMU14.Xenonids.Evolution;
+// CMU14 End
+using Content.Shared.CMU14.Xenomorphs.Pathogen; // CMU14: adaptability boon skips pathogen castes
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dropship; // CMU14
 using Content.Shared._RMC14.Roles;
@@ -87,6 +91,9 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
     private readonly HashSet<EntityUid> _intersecting = new();
 
     private static readonly TimeSpan CorruptedHiveQueenPlaytime = TimeSpan.FromHours(30);
+    // CMU14 Devolution Refund Begin: short window for reversing an evolution
+    private static readonly TimeSpan EvolutionRefundWindow = TimeSpan.FromSeconds(15);
+    // CMU14 End
 
     private EntityQuery<MobStateComponent> _mobStateQuery;
 
@@ -344,12 +351,29 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
     private void OnXenoEvolutionNewEvolved(Entity<XenoEvolutionComponent> xeno, ref NewXenoEvolvedEvent args)
     {
         TransferPoints((args.OldXeno, args.OldXeno), xeno, args.SubtractPoints);
+        // CMU14 Evolution Refund Begin: remember the caste and points for an immediate reversal
+        if (args.SubtractPoints && Prototype(args.OldXeno) is { } oldPrototype)
+        {
+            var refund = EnsureComp<CMUXenoEvolutionRefundComponent>(xeno);
+            refund.PreviousCaste = oldPrototype.ID;
+            refund.EvolvedAt = _timing.CurTime;
+            refund.Points = args.OldXeno.Comp.Max;
+        }
+        // CMU14 End
+
         _jitter.DoJitter(xeno, xeno.Comp.EvolutionJitterDuration, true, 80, 8, true);
     }
 
     private void OnXenoEvolutionDevolved(Entity<XenoEvolutionComponent> xeno, ref XenoDevolvedEvent args)
     {
         TransferPoints(args.OldXeno, (xeno, xeno), false);
+        // CMU14 Evolution Refund Begin: restore points supplied by an eligible devolution
+        if (args.PointsRefund > 0)
+        {
+            xeno.Comp.Points += args.PointsRefund;
+            Dirty(xeno);
+        }
+        // CMU14 End
     }
 
     private void TransferPoints(Entity<XenoEvolutionComponent?> old, Entity<XenoEvolutionComponent> xeno, bool subtract)
@@ -375,7 +399,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
 
     private void OnBoonAdaptability(HiveBoonActivateAdaptabilityEvent ev)
     {
-        var castes = new List<(EntProtoId Id, int Tier)>();
+        var castes = new List<(EntProtoId Id, int Tier, bool Pathogen)>(); // CMU14: track pathogen family
         foreach (var prototype in _prototypes.EnumeratePrototypes<EntityPrototype>())
         {
             if (!prototype.TryComp(out XenoEvolutionComponent? evolution, _compFactory))
@@ -386,7 +410,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
                 if (_prototypes.TryIndex(id, out var caste) &&
                     caste.TryComp(out XenoComponent? xeno, _compFactory))
                 {
-                    castes.Add((id, xeno.Tier));
+                    castes.Add((id, xeno.Tier, caste.HasComp<CMUPathogenHiveMemberComponent>(_compFactory))); // CMU14: track pathogen family
                 }
             }
         }
@@ -398,9 +422,12 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
                 continue;
 
             var self = Prototype(uid)?.ID;
-            foreach (var (id, tier) in castes)
+            // CMU14: pathogen castes (neomorph, blight...) sit in the same tiers, so a normal hive could swap into them
+            var selfPathogen = HasComp<CMUPathogenHiveMemberComponent>(uid);
+            foreach (var (id, tier, pathogen) in castes) // CMU14: pathogen flag
             {
                 if (tier != xenoComp.Tier ||
+                    pathogen != selfPathogen || // CMU14: stay in your own family
                     id.Id == self ||
                     comp.EvolvesToWithoutPoints.Contains(id))
                 {
@@ -934,8 +961,11 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
             return null;
         }
 
+        // CMU14 Devolution Refund Begin: calculate eligibility before transferring entities
+        var pointsRefund = GetEvolutionRefund(xeno, to);
         var newXeno = TransferXeno(xeno, to);
-        var ev = new XenoDevolvedEvent(xeno, newXeno);
+        var ev = new XenoDevolvedEvent(xeno, newXeno, pointsRefund);
+        // CMU14 End
         RaiseLocalEvent(newXeno, ref ev, true);
 
         _adminLog.Add(LogType.RMCDevolve, $"Xenonid {ToPrettyString(xeno)} devolved into {ToPrettyString(newXeno)}");
@@ -947,6 +977,28 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
 
         return newXeno;
     }
+
+    // CMU14 Devolution Refund Begin: refund only a healthy Xeno on weeds reverting promptly
+    private FixedPoint2 GetEvolutionRefund(Entity<XenoDevolveComponent> xeno, EntProtoId to)
+    {
+        if (!TryComp<CMUXenoEvolutionRefundComponent>(xeno, out var refund) ||
+            refund.PreviousCaste != to ||
+            refund.EvolvedAt + EvolutionRefundWindow <= _timing.CurTime ||
+            !TryComp(xeno, out TransformComponent? xform) ||
+            !_xenoWeeds.IsOnWeeds((xeno.Owner, xform)))
+        {
+            return 0;
+        }
+
+        if (!TryComp(xeno, out DamageableComponent? damageable) ||
+            _damageable.GetTotalDamage((xeno, damageable)) > 0)
+        {
+            return 0;
+        }
+
+        return refund.Points;
+    }
+    // CMU14 End
 
     public override void Update(float frameTime)
     {

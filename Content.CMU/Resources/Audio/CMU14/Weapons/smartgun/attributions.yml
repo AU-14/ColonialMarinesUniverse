@@ -1,0 +1,4 @@
+- files: ["gun_smartgun1.ogg", "gun_smartgun2.ogg", "gun_smartgun3.ogg", "gun_smartgun4.ogg", "gun_smartgun1_rattle.ogg", "gun_smartgun2_rattle.ogg", "gun_smartgun3_rattle.ogg", "gun_smartgun4_rattle.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13 (cmss13-devs/cmss13#13169)"
+  source: "https://github.com/cmss13-devs/cmss13/tree/1ff055cbc5965c97af747193036aca89291a5131/sound/weapons/heavy_weapon_firing_sounds"

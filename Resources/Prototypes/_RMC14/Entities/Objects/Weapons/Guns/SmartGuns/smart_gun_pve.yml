@@ -49,6 +49,11 @@
     damage:
       types:
         Blunt: 20
+  # cmu edit start: low ammo rattle (cmss13 PR 13169)
+  - type: CMULowAmmoFireSound
+    sound:
+      collection: AU14SmartgunRattleFireSound
+  # cmu edit end
   - type: Gun
     selectedMode: FullAuto
     availableModes:
@@ -60,8 +65,8 @@
   - type: RMCSelectiveFire
     baseFireModes:
     - FullAuto
-    recoilWielded: 3
-    scatterWielded: 10
+    recoilWielded: 0
+    scatterWielded: 2
     baseFireRate: 6
     burstScatterMult: 4
     modifiers:
@@ -71,7 +76,7 @@
         unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 80
   - type: RMCWeaponAccuracy
-    accuracyMultiplier: 1.05
+    accuracyMultiplier: 1.15
   - type: GunIFF
     enabled: true
     preventFriendlyFire: true
@@ -127,13 +132,15 @@
     skills:
       RMCSkillFirearms: 100
   - type: GunDrainBatteryOnShoot
+    baseDrain: 3.12
+    minDrainMultiplier: 0.5
   - type: GunRequireEquipped
     whitelist:
       components:
       - SmartGunArmor
-  - type: GunToggleableRecoil
-  - type: GunToggleableAutoFire
+  - type: GunAimAssist
   - type: ToggleableMotionDetector
+    batteryDrain: 0.6
   - type: MotionDetector
     handToggleable: false
     deactivateOnDrop: false
@@ -190,6 +197,10 @@
   description: The actual firearm in the Support Gun System, modified for We-Ya PMCs. Essentially a heavy, mobile machinegun.
   suffix: PVE, PMC
   components:
+  - type: GunAimAssist
+    active: true
+    batteryDrain: 3.32
+    accuracyPenalty: 0
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/SmartGuns/ml79a.rsi
     layers:

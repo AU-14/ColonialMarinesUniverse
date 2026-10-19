@@ -704,9 +704,9 @@ public abstract partial class SharedRoleSystem : EntitySystem
     public HashSet<JobRequirement>? GetRoleRequirements(JobPrototype job)
     {
         if (_requirementOverride != null && _requirementOverride.Jobs.TryGetValue(job.ID, out var req))
-            return req;
+            return CMUWithTraitJobLimits(job, req); // cmu edit: traits limited to certain jobs
 
-        return job.Requirements;
+        return CMUWithTraitJobLimits(job, job.Requirements); // cmu edit: traits limited to certain jobs
     }
 
     // TODO ROLES Change to readonly?
