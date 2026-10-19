@@ -201,7 +201,7 @@
   parent: VehicleVanBase
   id: VehicleCLFVan
   name: INSFOR van
-  description: A rugged transport van painted in CLF colors.
+  description: A rugged transport van painted in INSFOR colors.
   components:
   - type: Damageable
     damageModifierSet: VehicleFrameCLFVan

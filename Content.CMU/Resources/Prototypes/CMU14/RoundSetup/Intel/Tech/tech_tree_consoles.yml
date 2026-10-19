@@ -51,7 +51,7 @@
   parent: RMCCommunicationsConsoleBase
   id: RMCTechTreeConsoleCLF
   name: INSFOR tech tree console
-  description: A CLF tech console used to make tech purchases for CLF.
+  description: An INSFOR tech console used to make tech purchases for INSFOR.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi

@@ -97,7 +97,7 @@
   parent: RMCCommunicationsConsoleBase
   id: ComputerObjectivesCLF
   name: INSFOR Objectives Console
-  description: Used to check progress on CLF objectives
+  description: Used to check progress on INSFOR objectives
   components:
   # dynamic so the cell can drag it, same IED fling problem as the tech tree console
   - type: CMUExplosionImmovable

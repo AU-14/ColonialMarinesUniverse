@@ -2,7 +2,7 @@
   parent: AU14EncryptionKey
   id: AU14EncryptionKeyCLF
   name: modified colony encryption key
-  description: An encryption key used to communicate on colony and CLF radio channels.
+  description: An encryption key used to communicate on colony and INSFOR radio channels.
   components:
   - type: EncryptionKey
     channels:
@@ -14,8 +14,8 @@
   parent: RMCBaseUniformAccessory
   id: AU14CLFHeadset
   name: INSFOR earpiece
-  description: A small, concealable earpiece used by CLF operatives. Virtually invisible when worn, it clips discreetly onto a uniform.
-  suffix: CLF, Colony
+  description: A small, concealable earpiece used by INSFOR operatives. Virtually invisible when worn, it clips discreetly onto a uniform.
+  suffix: INSFOR, Colony
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/headsets.rsi
