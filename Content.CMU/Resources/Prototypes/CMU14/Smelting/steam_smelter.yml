@@ -1,95 +1,95 @@
 # What the steam smelter makes. It has no recipes of its own: ore for three ingots (four pieces of ore to an ingot, as in the crucible),
-# a mold for three ingots in the mold slot, and it makes three ingots and leaves fifteen of slag.
+# a mold for three ingots in the mold slot, and it makes three ingots and leaves four of slag.
 
 - type: cmuSteamSmeltRecipe
   id: RUMCSteamSmeltIron
   shape: ingots
   inputs:
-    RUMCIronOre: 12
+    RUMCIronOre: 3
   result: RUMCIronIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4
 
 - type: cmuSteamSmeltRecipe
   id: RUMCSteamSmeltAluminum
   shape: ingots
   inputs:
-    RUMCAluminumOre: 12
+    RUMCAluminumOre: 3
   result: RUMCAluminumIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4
 
 - type: cmuSteamSmeltRecipe
   id: RUMCSteamSmeltChrome
   shape: ingots
   inputs:
-    RUMCChromeOre: 12
+    RUMCChromeOre: 3
   result: RUMCChromeIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4
 
 - type: cmuSteamSmeltRecipe
   id: RUMCSteamSmeltCobalt
   shape: ingots
   inputs:
-    RUMCCobaltOre: 12
+    RUMCCobaltOre: 3
   result: RUMCCobaltIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4
 
 - type: cmuSteamSmeltRecipe
   id: RUMCSteamSmeltCopper
   shape: ingots
   inputs:
-    RUMCCopperOre: 12
+    RUMCCopperOre: 3
   result: RUMCCopperIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4
 
 - type: cmuSteamSmeltRecipe
   id: RUMCSteamSmeltGold
   shape: ingots
   inputs:
-    RUMCGoldOre: 12
+    RUMCGoldOre: 3
   result: RUMCGoldIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4
 
 - type: cmuSteamSmeltRecipe
   id: RUMCSteamSmeltSilver
   shape: ingots
   inputs:
-    RUMCSilverOre: 12
+    RUMCSilverOre: 3
   result: RUMCSilverIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4
 
 - type: cmuSteamSmeltRecipe
   id: RUMCSteamSmeltPlatinum
   shape: ingots
   inputs:
-    RUMCPlatinumOre: 12
+    RUMCPlatinumOre: 3
   result: RUMCPlatinumIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4
 
 - type: cmuSteamSmeltRecipe
   id: RUMCSteamSmeltZinc
   shape: ingots
   inputs:
-    RUMCZincOre: 12
+    RUMCZincOre: 3
   result: RUMCZincIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4
 
 # The powder of the grinder (and of the electric ore line) is smelted too: eight powders make an ingot, so one ore, which gives three
 # powders, comes to three eighths of an ingot where raw ore gives a quarter. The electric blast furnace does it in six.
@@ -98,88 +98,88 @@
   id: RUMCSteamSmeltPowderIron
   shape: ingots
   inputs:
-    RUMCIronPowder: 24
+    RUMCIronPowder: 9
   result: RUMCIronIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4
 
 - type: cmuSteamSmeltRecipe
   id: RUMCSteamSmeltPowderAluminum
   shape: ingots
   inputs:
-    RUMCAluminumPowder: 24
+    RUMCAluminumPowder: 9
   result: RUMCAluminumIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4
 
 - type: cmuSteamSmeltRecipe
   id: RUMCSteamSmeltPowderChrome
   shape: ingots
   inputs:
-    RUMCChromePowder: 24
+    RUMCChromePowder: 9
   result: RUMCChromeIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4
 
 - type: cmuSteamSmeltRecipe
   id: RUMCSteamSmeltPowderCobalt
   shape: ingots
   inputs:
-    RUMCCobaltPowder: 24
+    RUMCCobaltPowder: 9
   result: RUMCCobaltIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4
 
 - type: cmuSteamSmeltRecipe
   id: RUMCSteamSmeltPowderCopper
   shape: ingots
   inputs:
-    RUMCCopperPowder: 24
+    RUMCCopperPowder: 9
   result: RUMCCopperIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4
 
 - type: cmuSteamSmeltRecipe
   id: RUMCSteamSmeltPowderGold
   shape: ingots
   inputs:
-    RUMCGoldPowder: 24
+    RUMCGoldPowder: 9
   result: RUMCGoldIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4
 
 - type: cmuSteamSmeltRecipe
   id: RUMCSteamSmeltPowderSilver
   shape: ingots
   inputs:
-    RUMCSilverPowder: 24
+    RUMCSilverPowder: 9
   result: RUMCSilverIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4
 
 - type: cmuSteamSmeltRecipe
   id: RUMCSteamSmeltPowderPlatinum
   shape: ingots
   inputs:
-    RUMCPlatinumPowder: 24
+    RUMCPlatinumPowder: 9
   result: RUMCPlatinumIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4
 
 - type: cmuSteamSmeltRecipe
   id: RUMCSteamSmeltPowderZinc
   shape: ingots
   inputs:
-    RUMCZincPowder: 24
+    RUMCZincPowder: 9
   result: RUMCZincIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4

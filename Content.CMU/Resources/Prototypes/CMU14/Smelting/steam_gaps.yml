@@ -5,18 +5,18 @@
   id: RUMCSteamSmeltLead
   shape: ingots
   inputs:
-    RUMCLeadOre: 12
+    RUMCLeadOre: 3
   result: RUMCLeadIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4
 
 - type: cmuSteamSmeltRecipe
   id: RUMCSteamSmeltPowderLead
   shape: ingots
   inputs:
-    RUMCLeadPowder: 24
+    RUMCLeadPowder: 9
   result: RUMCLeadIngot
   resultAmount: 3
   duration: 12
-  slag: 15
+  slag: 4

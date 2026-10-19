@@ -336,7 +336,7 @@
   name: silicon ingot
   icon: { sprite: CMU14/Objects/Electric/items.rsi, state: SiliconIngot }
   spawn: RUMCSiliconIngotItem
-  maxCount: 30
+  maxCount: 50
 
 - type: entity
   parent: BaseItem

@@ -4,98 +4,98 @@
   name: iron ingot
   icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: ingot }
   spawn: RUMCIronIngot
-  maxCount: 10
+  maxCount: 50
 
 - type: stack
   id: RUMCAluminumIngot
   name: aluminum ingot
   icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: aluminum }
   spawn: RUMCAluminumIngot
-  maxCount: 10
+  maxCount: 50
 
 - type: stack
   id: RUMCChromeIngot
   name: chrome ingot
   icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: chrome }
   spawn: RUMCChromeIngot
-  maxCount: 10
+  maxCount: 50
 
 - type: stack
   id: RUMCCobaltIngot
   name: cobalt ingot
   icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: cobalt }
   spawn: RUMCCobaltIngot
-  maxCount: 10
+  maxCount: 50
 
 - type: stack
   id: RUMCCopperIngot
   name: copper ingot
   icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: cuprum }
   spawn: RUMCCopperIngot
-  maxCount: 10
+  maxCount: 50
 
 - type: stack
   id: RUMCGoldIngot
   name: gold ingot
   icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: gold }
   spawn: RUMCGoldIngot
-  maxCount: 10
+  maxCount: 50
 
 - type: stack
   id: RUMCLeadIngot
   name: lead ingot
   icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: lead }
   spawn: RUMCLeadIngot
-  maxCount: 10
+  maxCount: 50
 
 - type: stack
   id: RUMCPlastitanIngot
   name: plastitan ingot
   icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: plastitan }
   spawn: RUMCPlastitanIngot
-  maxCount: 10
+  maxCount: 50
 
 - type: stack
   id: RUMCSilverIngot
   name: silver ingot
   icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: silver }
   spawn: RUMCSilverIngot
-  maxCount: 10
+  maxCount: 50
 
 - type: stack
   id: RUMCTitaniumIngot
   name: titanium ingot
   icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: titanium }
   spawn: RUMCTitaniumIngot
-  maxCount: 10
+  maxCount: 50
 
 - type: stack
   id: RUMCTungstenIngot
   name: tungsten ingot
   icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: tungsten }
   spawn: RUMCTungstenIngot
-  maxCount: 10
+  maxCount: 50
 
 - type: stack
   id: RUMCWeaponSteelIngot
   name: weapon steel ingot
   icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: weapon_steel }
   spawn: RUMCWeaponSteelIngot
-  maxCount: 10
+  maxCount: 50
 
 - type: stack
   id: RUMCPlatinumIngot
   name: platinum ingot
   icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: platinum }
   spawn: RUMCPlatinumIngot
-  maxCount: 10
+  maxCount: 50
 
 - type: stack
   id: RUMCPlasteelIngot
   name: plasteel ingot
   icon: { sprite: CMU14/Objects/Materials/iron_ingot.rsi, state: plasteel }
   spawn: RUMCPlasteelIngot
-  maxCount: 10
+  maxCount: 50
 
 - type: material
   id: RUMCIron

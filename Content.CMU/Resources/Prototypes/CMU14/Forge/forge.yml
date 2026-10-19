@@ -25,11 +25,11 @@
     - input: RUMCSand
       reagent: RUMCSiliconMelt
       reagentPerUnit: 10
-    # Two of copper ore and two of zinc ore together are the melt of one brass ingot.
+    # One copper ore and one zinc ore together are the melt of two brass ingots.
     - input: RUMCZincOre
       reagent: RUMCZincMelt
       reagentPerUnit: 10
-    # Four of iron ore are the melt of one iron ingot. So are four sheets of metal (scrap melts down into iron).
+    # One iron ore is the melt of one iron ingot. So is one sheet of metal (scrap melts down into iron).
     - input: RUMCIronOre
       reagent: RUMCIronMelt
       reagentPerUnit: 10
@@ -97,7 +97,7 @@
     capacity: 60
     recipes:
     - ingredients:
-        Copper: 40
+        Copper: 10
       output: RUMCCopperIngot
       outputCount: 1
       coolTime: 6
@@ -109,20 +109,20 @@
       coolTime: 6
       name: glass sheet
     - ingredients:
-        RUMCZincMelt: 40
+        RUMCZincMelt: 10
       output: RUMCZincIngot
       outputCount: 1
       coolTime: 6
       name: zinc ingot
     - ingredients:
-        Copper: 20
-        RUMCZincMelt: 20
+        Copper: 5
+        RUMCZincMelt: 5
       output: RUMCBrassIngot
       outputCount: 1
       coolTime: 6
       name: brass ingot
     - ingredients:
-        RUMCIronMelt: 40
+        RUMCIronMelt: 10
       output: RUMCIronIngot
       outputCount: 1
       coolTime: 8

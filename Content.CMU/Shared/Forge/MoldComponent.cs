@@ -32,6 +32,10 @@ public sealed partial class MoldComponent : Component
 
     [ViewVariables]
     public MoldRecipe? CoolingRecipe;
+
+    // How many times the recipe is cast at once: as many as the melt in the mold allows.
+    [ViewVariables]
+    public int CoolingBatch = 1;
 }
 
 // A casting recipe: which molten reagents are needed, what comes out and how long it cools.

@@ -522,10 +522,17 @@ public sealed partial class ForgeSystem : EntitySystem
             return;
         }
 
+        // The melt that is in the mold makes as many castings as it has the ingredients for: ten of melt is an ingot, and a crucible of four ores makes four.
+        var batch = int.MaxValue;
         foreach (var (reagent, amount) in recipe.Ingredients)
-            _solutionContainer.RemoveReagent(moldSolnEnt, reagent, amount);
+            batch = Math.Min(batch, (solution.GetTotalPrototypeQuantity(reagent) / amount).Int());
+
+        batch = Math.Max(1, batch);
+        foreach (var (reagent, amount) in recipe.Ingredients)
+            _solutionContainer.RemoveReagent(moldSolnEnt, reagent, amount * batch);
 
         mold.Comp.Cooling = true;
+        mold.Comp.CoolingBatch = batch;
         mold.Comp.CoolingRecipe = recipe;
         mold.Comp.SolidifiesAt = _timing.CurTime + recipe.CoolTime;
         Dirty(mold);
@@ -673,9 +680,11 @@ public sealed partial class ForgeSystem : EntitySystem
             return;
 
         var recipe = mold.Comp.CoolingRecipe;
+        var batch = Math.Max(1, mold.Comp.CoolingBatch);
 
         mold.Comp.Ready = false;
         mold.Comp.CoolingRecipe = null;
+        mold.Comp.CoolingBatch = 1;
         Dirty(mold);
         _appearance.SetData(mold.Owner, MoldVisuals.State, MoldSpriteState.Empty);
 
@@ -683,7 +692,7 @@ public sealed partial class ForgeSystem : EntitySystem
             return;
 
         var coords = Transform(mold).Coordinates;
-        for (var i = 0; i < recipe.OutputCount; i++)
+        for (var i = 0; i < recipe.OutputCount * batch; i++)
         {
             var spawned = Spawn(recipe.Output, coords);
             if (i == 0)

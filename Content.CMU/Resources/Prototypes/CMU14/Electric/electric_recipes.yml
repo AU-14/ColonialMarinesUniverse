@@ -1075,7 +1075,7 @@
   id: RUMCMRBlastfurnaceSmeltIron
   machine: blastfurnace
   inputs:
-    RUMCIronPowder: 6
+    RUMCIronPowder: 3
     RUMCCokeCoal: 1
   outputs:
     RUMCIronIngot: 1
@@ -1085,7 +1085,7 @@
   id: RUMCMRBlastfurnaceSmeltAluminum
   machine: blastfurnace
   inputs:
-    RUMCAluminumPowder: 6
+    RUMCAluminumPowder: 3
   outputs:
     RUMCAluminumIngot: 1
   duration: 8
@@ -1094,7 +1094,7 @@
   id: RUMCMRBlastfurnaceSmeltChrome
   machine: blastfurnace
   inputs:
-    RUMCChromePowder: 6
+    RUMCChromePowder: 3
   outputs:
     RUMCChromeIngot: 1
   duration: 10
@@ -1103,7 +1103,7 @@
   id: RUMCMRBlastfurnaceSmeltCobalt
   machine: blastfurnace
   inputs:
-    RUMCCobaltPowder: 6
+    RUMCCobaltPowder: 3
   outputs:
     RUMCCobaltIngot: 1
   duration: 8
@@ -1112,7 +1112,7 @@
   id: RUMCMRBlastfurnaceSmeltCopper
   machine: blastfurnace
   inputs:
-    RUMCCopperPowder: 6
+    RUMCCopperPowder: 3
   outputs:
     RUMCCopperIngot: 1
   duration: 8
@@ -1121,7 +1121,7 @@
   id: RUMCMRBlastfurnaceSmeltGold
   machine: blastfurnace
   inputs:
-    RUMCGoldPowder: 6
+    RUMCGoldPowder: 3
   outputs:
     RUMCGoldIngot: 1
   duration: 8
@@ -1130,7 +1130,7 @@
   id: RUMCMRBlastfurnaceSmeltLead
   machine: blastfurnace
   inputs:
-    RUMCLeadPowder: 6
+    RUMCLeadPowder: 3
   outputs:
     RUMCLeadIngot: 1
   duration: 8
@@ -1139,7 +1139,7 @@
   id: RUMCMRBlastfurnaceSmeltSilver
   machine: blastfurnace
   inputs:
-    RUMCSilverPowder: 6
+    RUMCSilverPowder: 3
   outputs:
     RUMCSilverIngot: 1
   duration: 8
@@ -1148,7 +1148,7 @@
   id: RUMCMRBlastfurnaceSmeltTitanium
   machine: blastfurnace
   inputs:
-    RUMCTitaniumPowder: 6
+    RUMCTitaniumPowder: 3
   outputs:
     RUMCTitaniumIngot: 1
   duration: 10
@@ -1157,7 +1157,7 @@
   id: RUMCMRBlastfurnaceSmeltTungsten
   machine: blastfurnace
   inputs:
-    RUMCTungstenPowder: 6
+    RUMCTungstenPowder: 3
   outputs:
     RUMCTungstenIngot: 1
   duration: 10
@@ -1166,7 +1166,7 @@
   id: RUMCMRBlastfurnaceSmeltPlatinum
   machine: blastfurnace
   inputs:
-    RUMCPlatinumPowder: 6
+    RUMCPlatinumPowder: 3
   outputs:
     RUMCPlatinumIngot: 1
   duration: 10
@@ -1175,7 +1175,7 @@
   id: RUMCMRBlastfurnaceSmeltZinc
   machine: blastfurnace
   inputs:
-    RUMCZincPowder: 6
+    RUMCZincPowder: 3
   outputs:
     RUMCZincIngot: 1
   duration: 8
