@@ -110,3 +110,17 @@
   components:
   - type: CMItemSlots
     startingItem: CMUMREFSR
+
+- type: entity
+  parent: RMCBoxMREEmpty
+  id: CMUBoxMREWeYaPMCEmpty
+  name: box of PMC CFRs (x12)
+
+- type: entity
+  parent: CMUBoxMREWeYaPMCEmpty
+  id: CMUBoxMREWeYaPMC
+  name: box of PMC CFRs (x12)
+  suffix: Filled
+  components:
+  - type: CMItemSlots
+    startingItem: RMCMREWeYaPMC

@@ -210,10 +210,9 @@
     sections:
     - name: Food
       entries:
-      - id: RMCMREWeYa
-        name: MRE
+      - id: RMCMREWeYaPMC
         amount: 30
-      - id: RMCBoxMREWEYA
+      - id: CMUBoxMREWeYaPMC
         amount: 5
     - name: Tools
       entries:

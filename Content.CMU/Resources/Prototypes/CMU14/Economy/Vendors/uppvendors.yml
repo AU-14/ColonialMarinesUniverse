@@ -224,9 +224,9 @@
     sections:
     - name: Food
       entries:
-      - id: RuMCirpUPP
+      - id: AU14MREUPP
         amount: 60
-      - id: RuMCBoxIRPUPP
+      - id: AU14BoxMREUPP
         amount: 10
     - name: Medical Supplies
       entries:
