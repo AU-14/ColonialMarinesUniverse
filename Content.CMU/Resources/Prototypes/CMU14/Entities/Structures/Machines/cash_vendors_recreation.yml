@@ -504,6 +504,8 @@
       price: 25
     - id: RMCShoesLeather
       price: 30
+    - id: RMCShoesWeYaStompers
+      price: 45
     - id: AU14CivilianWorkwearYellow
       price: 20
     - id: RMCJumpsuitLiaisonGreyWorkwear
