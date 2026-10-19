@@ -101,6 +101,9 @@ public sealed class CMUJeepDamageStatesTest : GameTest
         int? level = null;
         await Server.WaitPost(() =>
         {
+            // A hit this far past the engine would blow the jeep up on the spot; here it should stay
+            // to show its burns.
+            SEntMan.GetComponent<CMUVehicleWreckComponent>(jeep).OverkillLimit = float.MaxValue;
             Hit(jeep, new EntityCoordinates(map.Grid, 0.5f, -2.5f), "Heat", 300);
             level = Level(jeep, "hood_dmg_burnt");
         });

@@ -37,6 +37,9 @@
   id: CMUJeepTailLight
 
 - type: Tag
+  id: CMUJeepSearchlight
+
+- type: Tag
   id: CMUJeepKey
 
 - type: Tag
@@ -88,6 +91,23 @@
   - direction: 0
     innerWidth: 20
     outerWidth: 36
+
+- type: entity
+  parent: CMUJeepBeamBase
+  id: CMUVehicleSearchlightBeam
+  name: searchlight beam
+  components:
+  - type: Sprite
+    layers:
+    - map: [ beam ]
+      state: beam_high
+      visible: false
+  - type: PointLight
+    lightMask: CMUVehicleHighBeamMask
+    radius: 13
+    energy: 3
+    softness: 1
+    falloff: 2
 
 - type: entity
   abstract: true
@@ -209,6 +229,28 @@
   - type: Tag
     tags:
     - CMUJeepTailLight
+
+# Military jeeps only: colony crates leave it out.
+- type: entity
+  parent: CMUJeepHardpointBase
+  id: CMUJeepSearchlight
+  name: jeep searchlight
+  description: A round searchlight on a hinged yoke, for the cowl by either windshield post. Take hold of it on the jeep to light it and swing it where you look; let go to put it out. A screwdriver takes it off, and it goes back on with a screwdriver in your other hand.
+  components:
+  - type: Sprite
+    state: searchlight
+  - type: Item
+    size: Normal
+  - type: CMUVehiclePartIntegrity
+    integrity: 30
+    maxIntegrity: 30
+    breakSound:
+      path: /Audio/CMU14/Jeep/jeep_headlight_shatter.wav
+      params:
+        volume: -2
+  - type: Tag
+    tags:
+    - CMUJeepSearchlight
 
 # Each jeep's key fits it alone. Without one in the ignition the engine won't start, and pulling it out
 # stops it.
@@ -804,6 +846,51 @@
         whitelist:
           tags:
           - CMUJeepTailLight
+    # The searchlight, on the cowl by the driver's windshield post as it comes, or moved across to
+    # the passenger's. Its anchors are the lens in each direction's art.
+    - id: searchlight_left
+      name: cmu-jeep-part-searchlight-left
+      overRiders: [ South ]
+      role: Searchlight
+      side: Left
+      offset: 0.55,-0.22
+      hitChance: 0.15
+      damageShare: 0.5
+      beamAnchors:
+        South: 18,-8
+        North: -18,22
+        East: 12,22
+        West: -12,-1
+      slot:
+        name: cmu-jeep-part-searchlight-left
+        startingItem: CMUJeepSearchlight
+        disableEject: true
+        insertOnInteract: false
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepSearchlight
+    - id: searchlight_right
+      name: cmu-jeep-part-searchlight-right
+      overRiders: [ South ]
+      role: Searchlight
+      side: Right
+      offset: -0.55,-0.22
+      hitChance: 0.15
+      damageShare: 0.5
+      beamAnchors:
+        South: -18,-8
+        North: 18,22
+        East: 12,-1
+        West: -12,22
+      slot:
+        name: cmu-jeep-part-searchlight-right
+        disableEject: true
+        insertOnInteract: false
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepSearchlight
   - type: Clickable
     bounds:
       south: -0.66,-1.38,0.66,1.25
@@ -929,6 +1016,14 @@
       spare_rims: spare
   - type: CMUVehicleFrontDamage
     closedHoodState: hood_closed_dent
+  # It swings like the gun mount: 45 degrees either side of the front, 220 degrees a second.
+  - type: CMUVehicleSearchlight
+    maxYawDegrees: 45
+    rotationSpeed: 220
+    switchSound:
+      path: /Audio/Machines/lightswitch.ogg
+      params:
+        volume: -4
   - type: CMUVehicleHeadlights
     driverLampAnchors:
       South: 14,-37
@@ -1045,6 +1140,11 @@
       state: turn_signal_right_0
     - map: [ windshield ]
       state: windshield_up_0
+    - map: [ searchlight_left ]
+      state: searchlight_left_0
+    - map: [ searchlight_right ]
+      state: searchlight_right_0
+      visible: false
     - map: [ spare ]
       state: spare_0
     - map: [ spare_rims ]
@@ -1959,6 +2059,11 @@
       state: extinguisher_overlay_0
     - map: [ windshield ]
       state: windshield_up_overlay_0
+    - map: [ searchlight_left ]
+      state: searchlight_left_overlay_0
+    - map: [ searchlight_right ]
+      state: searchlight_right_overlay_0
+      visible: false
     - map: [ spare ]
       state: spare_overlay_0
     - map: [ spare_rims ]
@@ -2150,6 +2255,11 @@
       state: extinguisher_overlay_0
     - map: [ windshield ]
       state: windshield_up_overlay_0
+    - map: [ searchlight_left ]
+      state: searchlight_left_overlay_0
+    - map: [ searchlight_right ]
+      state: searchlight_right_overlay_0
+      visible: false
     - map: [ spare ]
       state: spare_overlay_0
     - map: [ spare_rims ]
@@ -2378,6 +2488,8 @@
   - type: Corrodible
     isCorrodible: false
     structure: true
+  # Sliding on from where its jeep went up, its own blast mustn't fling it off in some random way.
+  - type: CMUExplosionImmovable
   - type: RMCRefinable
     amount: 1
     delay: 15

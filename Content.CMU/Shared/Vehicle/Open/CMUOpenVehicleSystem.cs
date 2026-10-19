@@ -42,6 +42,7 @@ public sealed partial class CMUOpenVehicleSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private CMUVehicleSeatSystem _seats = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private CMUVehicleSearchlightSystem _searchlights = default!;
     [Dependency] private SharedSolutionContainerSystem _solution = default!;
     [Dependency] private SharedToolSystem _tool = default!;
 
@@ -439,6 +440,7 @@ public sealed partial class CMUOpenVehicleSystem : EntitySystem
 
     private void OnPartInteractHand(Entity<CMUVehiclePartComponent> ent, ref InteractHandEvent args)
     {
+        _searchlights.PartInteractHand(ent, ref args);
         if (args.Handled ||
             ent.Comp.Vehicle is not { } vehicle ||
             !TryComp(vehicle, out CMUOpenVehicleComponent? jeep))
@@ -521,6 +523,7 @@ public sealed partial class CMUOpenVehicleSystem : EntitySystem
 
     private void OnPartInteractUsing(Entity<CMUVehiclePartComponent> ent, ref InteractUsingEvent args)
     {
+        _searchlights.PartInteractUsing(ent, ref args);
         if (args.Handled ||
             ent.Comp.Vehicle is not { } vehicle ||
             !TryComp(vehicle, out CMUOpenVehicleComponent? jeep))

@@ -69,15 +69,17 @@ public sealed class CMUVehicleHeadlightVisualSystem : EntitySystem
                 continue;
 
             // The jeep is drawn as its nearest cardinal frame turned by what is left of its heading;
-            // the beam turns with the full heading, so the frame's lamp position is turned back into
-            // the beam's own space. The light sits on the lens; the haze's cone starts there.
-            var direction = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(
-                _transform.GetWorldRotation(xform) + eyeRotation);
+            // the beam turns with the full heading, and a searchlight's further by its aim, so the
+            // frame's lamp position is turned back into the beam's own space. The light sits on the
+            // lens; the haze's cone starts there.
+            var heading = _transform.GetWorldRotation(beam.Vehicle.Value);
+            var direction = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(heading + eyeRotation);
             var anchors = TryComp(beam.Vehicle, out CMUVehicleLampsComponent? lamps) &&
                           lamps.Lamps.Find(l => l.Id == beam.Lamp) is { BeamAnchors.Count: > 0 } lampData
                 ? lampData.BeamAnchors
                 : beam.Driver ? lights.DriverLampAnchors : lights.PassengerLampAnchors;
-            var lamp = (-direction.ToAngle()).RotateVec(anchors.GetValueOrDefault(direction) / EyeManager.PixelsPerMeter);
+            var aim = _transform.GetWorldRotation(xform) - heading;
+            var lamp = (-(direction.ToAngle() + aim)).RotateVec(anchors.GetValueOrDefault(direction) / EyeManager.PixelsPerMeter);
             _sprite.LayerSetOffset((uid, sprite), layer, lamp + new Vector2(0f, -lights.BeamHalfLength));
             // Set on this client only: the offset follows this client's camera, and dirtying the
             // server's light from a frame update breaks prediction (debug clients assert on it).

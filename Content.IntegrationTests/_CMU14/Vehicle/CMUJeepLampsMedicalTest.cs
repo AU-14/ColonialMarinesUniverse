@@ -314,7 +314,9 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
             Assert.That(SEntMan.Deleted(crate), Is.True);
             Assert.That(SEntMan.GetComponent<MetaDataComponent>(medical).EntityPrototype?.ID, Is.EqualTo("CMUVehicleJeepMedical"));
             var lamps = SEntMan.GetComponent<CMUVehicleLampsComponent>(medical);
-            Assert.That(lamps.Lamps.All(lamp => lamp.Slot.HasItem), Is.True, "The jeep comes with its lamps on.");
+            // All but the passenger's searchlight mount, empty until the searchlight is moved across.
+            Assert.That(lamps.Lamps.Where(lamp => lamp.Id != "searchlight_right").All(lamp => lamp.Slot.HasItem), Is.True,
+                "The jeep comes with its lamps on.");
             Assert.That(SEntMan.GetComponent<CMUVehicleIgnitionComponent>(medical).KeySlot.HasItem, Is.True);
             var containers = SEntMan.System<SharedContainerSystem>();
             Assert.That(containers.GetContainer(medical, CMUOpenVehicleSystem.ExtinguisherSlot).ContainedEntities, Has.Count.EqualTo(1));

@@ -22,3 +22,9 @@ cmu-open-vehicle-headlights-broken = You flick the switch, but the headlights st
 cmu-vehicle-seat-guns-sidearms = You can only fire a sidearm while you drive.
 cmu-vehicle-seat-guns-none = Your hands are on the mounted gun.
 cmu-vehicle-seat-wield-driver = You can't take your hand off the steering wheel.
+
+cmu-vehicle-searchlight-in-use = {CAPITALIZE(THE($user))} already has hold of the searchlight.
+cmu-vehicle-searchlight-broken = The searchlight's lens is smashed. Weld it back together first.
+cmu-vehicle-searchlight-hand-full = Free your hand to take hold of the searchlight.
+cmu-vehicle-searchlight-needs-light = Hold the searchlight in your other hand to fit it.
+cmu-vehicle-searchlight-needs-screwdriver = You need a screwdriver in your other hand to fit the searchlight.

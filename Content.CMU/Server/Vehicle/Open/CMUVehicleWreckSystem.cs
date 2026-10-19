@@ -15,9 +15,13 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Throwing;
+using Content.Shared.Vehicle.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -37,6 +41,7 @@ public sealed class CMUVehicleWreckSystem : EntitySystem
     [Dependency] private CMUVehicleCargoSystem _cargo = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedExplosionSystem _explosion = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedRMCFlammableSystem _flammable = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -49,6 +54,7 @@ public sealed class CMUVehicleWreckSystem : EntitySystem
     private readonly List<(EntityUid Entity, Vector2 Throw, float Speed)> _thrown = new();
     private readonly List<(MapCoordinates Seat, MapCoordinates Exit)> _exits = new();
     private readonly List<EntityUid> _stragglers = new();
+    private readonly List<EntityUid> _stopped = new();
 
     public override void Initialize()
     {
@@ -99,6 +105,7 @@ public sealed class CMUVehicleWreckSystem : EntitySystem
 
     public override void Update(float frameTime)
     {
+        UpdateSlides(frameTime);
         var now = _timing.CurTime;
         _detonating.Clear();
 
@@ -109,15 +116,14 @@ public sealed class CMUVehicleWreckSystem : EntitySystem
             {
                 if (now >= detonateAt || Overkilled(uid, wreck))
                 {
+                    // Burning, it can't drive: it goes up however it is moving now.
+                    wreck.SlideVelocity = Velocity(uid);
                     _detonating.Add((uid, wreck));
                     continue;
                 }
 
                 if (now >= wreck.NextSpark)
                     Spark((uid, wreck), now);
-
-                if (now >= wreck.NextSpread)
-                    SpreadFire((uid, wreck), now);
 
                 continue;
             }
@@ -148,12 +154,21 @@ public sealed class CMUVehicleWreckSystem : EntitySystem
             var engineDied = wreck.LastEngine > 0f && jeep.EngineIntegrity <= 0f;
             wreck.LastEngine = jeep.EngineIntegrity;
             if (!engineDied)
+            {
+                if (jeep.EngineIntegrity > 0f)
+                    wreck.LastVelocity = Velocity(uid);
+
                 continue;
+            }
 
             Arm((uid, wreck));
-            // Killed far past what it had left: no fire first, it goes up there and then.
+            // Killed far past what it had left: no fire first, it goes up there and then, at the speed
+            // it was going when the engine died.
             if (Overkilled(uid, wreck))
+            {
+                wreck.SlideVelocity = wreck.LastVelocity;
                 _detonating.Add((uid, wreck));
+            }
         }
 
         foreach (var jeep in _detonating)
@@ -162,25 +177,19 @@ public sealed class CMUVehicleWreckSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// How a jeep is moving: along its heading (vehicle space has its front at -y) at its speed.
+    /// </summary>
+    private Vector2 Velocity(EntityUid uid)
+    {
+        return TryComp(uid, out GridVehicleMoverComponent? mover)
+            ? _transform.GetWorldRotation(uid).RotateVec(-Vector2.UnitY) * mover.CurrentSpeed
+            : Vector2.Zero;
+    }
+
     private bool Overkilled(EntityUid uid, CMUVehicleWreckComponent wreck)
     {
         return TryComp(uid, out CMUOpenVehicleComponent? jeep) && jeep.EngineOverkill >= wreck.OverkillLimit;
-    }
-
-    /// <summary>
-    /// The burning engine's fire spreads a ring further onto the ground round its engine bay.
-    /// </summary>
-    private void SpreadFire(Entity<CMUVehicleWreckComponent> ent, TimeSpan now)
-    {
-        var wreck = ent.Comp;
-        wreck.NextSpread = now + wreck.SpreadEvery;
-        if (wreck.Spread > wreck.SpreadRange)
-            return;
-
-        var bay = new EntityCoordinates(ent.Owner, wreck.EngineBay);
-        var center = _transform.WithEntityId(bay, Transform(ent.Owner).ParentUid).SnapToGrid(EntityManager);
-        _flammable.SpawnFireDiamond(wreck.FirePrototype, center, wreck.Spread, duration: wreck.FireDuration);
-        wreck.Spread++;
     }
 
     private void Arm(Entity<CMUVehicleWreckComponent> ent)
@@ -188,8 +197,6 @@ public sealed class CMUVehicleWreckSystem : EntitySystem
         var now = _timing.CurTime;
         ent.Comp.DetonateAt = now + ent.Comp.Delay;
         ent.Comp.NextSpark = now + ent.Comp.MinSparkDelay;
-        ent.Comp.NextSpread = now;
-        ent.Comp.Spread = 0;
 
         // The engine goes with the hull and catches fire: flames from under the hood over its heavy
         // smoke, a flickering glow and the fire's crackle, all gone with the jeep when it goes up.
@@ -201,6 +208,18 @@ public sealed class CMUVehicleWreckSystem : EntitySystem
         }
 
         ent.Comp.FireLight = SpawnAttachedTo(ent.Comp.FireLightPrototype, new EntityCoordinates(ent.Owner, ent.Comp.EngineBay));
+
+        // A tile of it catches on the ground under the engine bay and creeps out from there. A diamond
+        // of range 0 never stops spreading, so it is range 1 kept to the one tile.
+        var bay = new EntityCoordinates(ent.Owner, ent.Comp.EngineBay);
+        var ground = _transform.WithEntityId(bay, Transform(ent.Owner).ParentUid).SnapToGrid(EntityManager);
+        var groundMap = _transform.ToMapCoordinates(ground);
+        _flammable.SpawnFireDiamond(ent.Comp.FirePrototype, ground, 1, duration: ent.Comp.FireDuration,
+            canSpawn: target =>
+            {
+                var map = _transform.ToMapCoordinates(target);
+                return map.MapId == groundMap.MapId && (map.Position - groundMap.Position).LengthSquared() < 0.25f;
+            });
         if (ent.Comp.WarningSound is { } crackle)
             ent.Comp.Crackle = _audio.PlayPvs(crackle, ent.Owner, crackle.Params.WithLoop(true))?.Entity;
 
@@ -250,6 +269,9 @@ public sealed class CMUVehicleWreckSystem : EntitySystem
         var user = wreck.LastAttacker is { } attacker && !TerminatingOrDeleted(attacker)
             ? attacker
             : (EntityUid?) null;
+        // Going up on the move, the wreck carries on along the jeep's way.
+        var velocity = wreck.SlideVelocity;
+
         _explosion.TriggerExplosive(uid, delete: false, user: user);
 
         // The seats, clickable parts, overlay and every fitted part (wheels, spare, jerry can, tools,
@@ -258,6 +280,7 @@ public sealed class CMUVehicleWreckSystem : EntitySystem
 
         var hulk = Spawn(wreck.WreckPrototype, coordinates);
         _transform.SetLocalRotation(hulk, rotation);
+        Slide(hulk, velocity, wreck.SlideDeceleration);
 
         SpawnDebris(wreck, coordinates);
         SpawnFire(wreck, coordinates, rotation);
@@ -269,6 +292,56 @@ public sealed class CMUVehicleWreckSystem : EntitySystem
         }
 
         _thrown.Clear();
+    }
+
+    /// <summary>
+    /// Sets a wreck sliding on at the speed its jeep was going, still stopped by walls.
+    /// </summary>
+    private void Slide(EntityUid hulk, Vector2 velocity, float deceleration)
+    {
+        if (velocity.LengthSquared() < 0.25f || !TryComp(hulk, out PhysicsComponent? body))
+            return;
+
+        var slide = EnsureComp<CMUVehicleWreckSlideComponent>(hulk);
+        slide.Deceleration = deceleration;
+        slide.Speed = velocity.Length();
+        slide.Direction = velocity / slide.Speed;
+        _physics.SetBodyType(hulk, BodyType.Dynamic, body: body);
+        _physics.SetFixedRotation(hulk, true, body: body);
+        _physics.SetLinearVelocity(hulk, velocity, body: body);
+    }
+
+    /// <summary>
+    /// A sliding wreck slows at its own rate and, once stopped, stays put again.
+    /// </summary>
+    private void UpdateSlides(float frameTime)
+    {
+        _stopped.Clear();
+        var slides = EntityQueryEnumerator<CMUVehicleWreckSlideComponent, PhysicsComponent>();
+        while (slides.MoveNext(out var hulk, out var slide, out var body))
+        {
+            // Run into something, it stops there.
+            var blocked = Vector2.Dot(body.LinearVelocity, slide.Direction) < slide.Speed * 0.5f;
+            slide.Speed -= slide.Deceleration * frameTime;
+            if (blocked || slide.Speed <= 0.05f)
+            {
+                _stopped.Add(hulk);
+                continue;
+            }
+
+            _physics.SetLinearVelocity(hulk, slide.Direction * slide.Speed, body: body);
+        }
+
+        foreach (var hulk in _stopped)
+        {
+            if (TryComp(hulk, out PhysicsComponent? body))
+            {
+                _physics.SetLinearVelocity(hulk, Vector2.Zero, body: body);
+                _physics.SetBodyType(hulk, BodyType.Static, body: body);
+            }
+
+            RemComp<CMUVehicleWreckSlideComponent>(hulk);
+        }
     }
 
     /// <summary>

@@ -141,6 +141,14 @@ cmu-jeep-manual-extinguisher-about = Strapped to the cowl ahead of the passenger
 cmu-jeep-manual-headlights = Headlights
 cmu-jeep-manual-headlights-about = Light the way ahead, on low or high beam. Only whole headlights shine.
 cmu-jeep-manual-headlights-use = The driver works them from the headlights button, or the F key.
+cmu-jeep-manual-searchlight = Searchlight
+cmu-jeep-manual-searchlight-about = A round searchlight on a hinged yoke by the driver's windshield post, on military jeeps only. It throws a long, narrow beam wherever it points.
+cmu-jeep-manual-searchlight-use =
+    Click it with an empty hand to take hold of it: it lights up and swings after your cursor, up to 45° either side of the jeep's front like the gun mount, from a seat or standing beside the jeep.
+    Drop it from your hand (Q) to let go and put it out. Walking off or being knocked down lets go too.
+cmu-jeep-manual-searchlight-replace =
+    Take it off with a screwdriver (2 s); it comes into your hand.
+    To fit it on either side, hold it in one hand and a screwdriver in the other, then click the empty mount by that side's windshield post (2 s).
 cmu-jeep-manual-turn-signals = Turn signals
 cmu-jeep-manual-turn-signals-about = Amber lamps on the front fenders.
 cmu-jeep-manual-turn-signals-use = They blink as the jeep turns, with automatic signals on, or all together with the hazard lights.
@@ -181,7 +189,7 @@ cmu-jeep-manual-hull-repair =
     Every repair leaves it a little weaker than new.
 cmu-jeep-manual-fire = Engine fire
 cmu-jeep-manual-fire-about =
-    When the engine dies it bursts into flames, and the fire spreads onto the ground round the jeep. Twenty seconds later the jeep blows up, throwing its riders clear and leaving a burnt out wreck.
+    When the engine dies it bursts into flames, and fire catches on the ground under it and creeps out a tile at a time until it is put out. Twenty seconds later the jeep blows up, throwing its riders clear and leaving a burnt out wreck. Going up on the move, the wreck slides on before it stops.
     Killed by far more than it had left, like a rocket, or shot on while it burns, the engine goes up at once.
     Nothing destroys the wreck. A lit welder cuts it down in 15 s for 10 fuel, leaving ten metal sheets and ten rods.
 cmu-jeep-manual-fire-use =

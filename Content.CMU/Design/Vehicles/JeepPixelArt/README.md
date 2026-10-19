@@ -55,7 +55,7 @@ it, back at their own depth once clear.
 | `jeep_transport.rsi` | 4 seats |
 | `jeep_medical.rsi` | 2 seats, the passenger's turned to face a surgical bed across the back; red crosses on the hood and the passenger's door |
 | `jeep_wreck.rsi` | one burnt-out wreck per version, named like its RSI |
-| `hardpoints.rsi` | item icons for parts with no game item yet: `tires`, `road_tires`, `mgturret`, `windshield`, `wirecutter`, `searchlight`, `engine`, `headlight`, `turn_signal`, `taillight`, `hood`, `door`, `tailgate` |
+| `hardpoints.rsi` | item icons for parts with no game item yet: `tires`, `road_tires`, `mgturret`, `windshield`, `searchlight`, `engine`, `headlight`, `turn_signal`, `taillight`, `hood`, `door`, `tailgate` |
 | `cargo_straps.rsi` | `straps`, drawn over a standard crate once it is wrenched into the slot |
 | `jeep_beams.rsi` | `beam_low`, `beam_high`: the headlight haze, 320 px, one direction, the cone pointing down from the middle of the top edge |
 | `light_masks/` | `low_beam.png`, `high_beam.png`: the beams' light cones, pointing up (the game turns them to the jeep's front) |
@@ -196,8 +196,7 @@ so an empty slot still reads.
 | hood | `hood_*` | jeep hood |
 | doors | `door_driver_*`, `door_passenger_*` | jeep door (fits either side) |
 | tailgate (cargo, gunner) | `tailgate_*`; blank states on the transport | jeep tailgate |
-| front | `wirecutter_*` | wire cutter |
-| cowl | `searchlight_*` | searchlight |
+| cowl (military only) | `searchlight_left_*` as it comes, or `searchlight_right_*` moved across; a round lamp on a hinged yoke by a windshield post | jeep searchlight (fits either side, with a screwdriver) |
 | engine | `engine_*`, in the bay under the hood | jeep engine |
 | headlights | `headlight_left_*`, `headlight_right_*`, big round lamps beside the grille; removed leaves the brackets | jeep headlight (fits either side) |
 | turn signals | `turn_signal_left_*`, `turn_signal_right_*`, amber lenses on the front fenders; removed leaves the housing | jeep turn signal |
@@ -312,7 +311,7 @@ The driver also gets a "Horn" action, which plays the jeep's `VehicleSound` horn
 cooldown; RMC's own horn key (use item in hand) works too.
 
 Every lit lamp also casts a subtle wash of its colour over the nearby bodywork, stronger for the
-brakes. The searchlight hardpoint already scales the spotlight. `jeep_lights.png` shows night with the
+brakes. The searchlight, taken in hand, throws a long beam that follows its operator's cursor. `jeep_lights.png` shows night with the
 lights off, with hazards, and signalling left and right; `jeep_signals.gif` blinks them;
 `jeep_lamps_missing.png` has three lamps taken off, by day and lit at night.
 
@@ -360,8 +359,8 @@ lights off, with hazards, and signalling left and right; `jeep_signals.gif` blin
 
   | id | part | id | part | id | part |
   | --- | --- | --- | --- | --- | --- |
-  | 0 | body | 5 | windshield | 10 | wire cutter |
-  | 1 | hood | 6 | spare | 11 | searchlight |
+  | 0 | body | 5 | windshield | 10 | driver's searchlight |
+  | 1 | hood | 6 | spare | 11 | passenger's searchlight |
   | 2 | fuel door | 7 | jerry can | 12 | wheels |
   | 3 | engine | 8 | shovel | 18–20 | driver's door, passenger's door, tailgate |
   | 28 | extinguisher | 9 | axe | 13–17 | seats: driver, passenger, rear left, rear right, gunner |

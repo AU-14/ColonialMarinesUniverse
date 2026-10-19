@@ -96,7 +96,7 @@ OVER_BODY = ['wheels_overlay_0', 'hood_closed_overlay', 'fuel_door_closed_overla
              'shovel_overlay_0', 'axe_overlay_0', 'jack_overlay_0', 'extinguisher_overlay_0',
              'headlight_left_overlay_0', 'headlight_right_overlay_0', 'turn_signal_left_overlay_0',
              'turn_signal_right_overlay_0', 'taillight_left_overlay_0', 'taillight_right_overlay_0',
-             'windshield_up_overlay_0', 'wirecutter_overlay_0']
+             'windshield_up_overlay_0', 'searchlight_left_overlay_0']
 SHOWN = (0.3, 0.6, 1.0)
 
 

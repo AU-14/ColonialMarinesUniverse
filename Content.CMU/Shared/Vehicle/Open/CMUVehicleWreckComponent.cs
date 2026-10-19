@@ -94,10 +94,12 @@ public sealed partial class CMUVehicleWreckComponent : Component
     public int OilSplatters = 3;
 
     /// <summary>
-    /// Fire left burning under the wreck's middle and engine bay, clear of where the crew is thrown.
+    /// Fire lit on the engine bay when the engine catches, and left burning under the wreck's middle
+    /// and engine bay, clear of where the crew is thrown. It creeps out a tile at a time until it is
+    /// put out (CMUSpreadingFire).
     /// </summary>
     [DataField]
-    public EntProtoId FirePrototype = "RMCTileFire";
+    public EntProtoId FirePrototype = "CMUVehicleTileFire";
 
     [DataField]
     public int FireDuration = 15;
@@ -111,23 +113,21 @@ public sealed partial class CMUVehicleWreckComponent : Component
     public float OverkillLimit = 50f;
 
     /// <summary>
-    /// While the engine burns, its fire spreads onto the ground round the jeep: a ring further out
-    /// each time this passes, up to <see cref="SpreadRange"/> tiles from the engine bay.
+    /// How fast the wreck of a jeep that went up on the move slows to a stop, in tiles a second
+    /// each second: it carries on along the jeep's way instead of stopping dead.
     /// </summary>
     [DataField]
-    public TimeSpan SpreadEvery = TimeSpan.FromSeconds(6);
-
-    [DataField]
-    public int SpreadRange = 2;
+    public float SlideDeceleration = 6f;
 
     /// <summary>
-    /// When the burning engine's fire next spreads, and how far it has got.
+    /// How the jeep was moving the last tick its engine ran, and how its wreck slides on: a jeep
+    /// stops driving the moment its engine dies, before it goes up.
     /// </summary>
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
-    public TimeSpan NextSpread;
+    [ViewVariables]
+    public Vector2 LastVelocity;
 
     [ViewVariables]
-    public int Spread;
+    public Vector2 SlideVelocity;
 
     /// <summary>
     /// How far, in tiles, and how fast riders are thrown out from their seats' exits.

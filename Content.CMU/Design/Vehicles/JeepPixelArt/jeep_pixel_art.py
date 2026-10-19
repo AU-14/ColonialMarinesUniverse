@@ -13,12 +13,12 @@ into layers. Riders sit between the vehicle entity and an overlay entity:
     road_wheels_0, road_spare_*  the intact wheels and spare on road tyres
     rims_<state>                 where the rims show in each intact wheel and spare state, for the
                                  rim designs the client paints over them (rim.swsl)
-    <hardpoint>_0 / _1           intact / damaged look of windshield_up, windshield_down,
-                                 wirecutter and searchlight, in the directions they sit under riders
+    <hardpoint>_0 / _1           intact / damaged look of windshield_up, windshield_down and the
+                                 searchlight on either side, in the directions they sit under riders
   overlay entity (over riders)
     jeep_overlay, damaged_overlay, wheels_overlay_0 / _1, <hardpoint>_overlay_0 / _1
   turret visual (gunner)         mgturret_0 / mgturret_1, drawn around the pivot like humveeturret_0
-  hardpoints.rsi (32 px)         item icons: tires, road_tires, mgturret, windshield, wirecutter, searchlight
+  hardpoints.rsi (32 px)         item icons: tires, road_tires, mgturret, windshield, searchlight
   cargo_straps.rsi (32 px)       tie-downs drawn over a standard crate wrenched into the bed
 
 Empty PRIMARY / ATTACH / WHEEL states are the hidden placeholders hardpoint layers start from.
@@ -169,8 +169,8 @@ SEAT_BACK_PARTS = {"seat_back", "rear_bench_back", "gunner_seat"}
 ATTACHMENTS = {
     "windshield_up": "S",
     "windshield_down": "S",
-    "wirecutter": "S",
-    "searchlight": "S",
+    "searchlight_left": "S",
+    "searchlight_right": "S",
     "spare": "N",
     "jerrycan": "N",
     "shovel": "W",
@@ -189,6 +189,9 @@ ATTACHMENTS = {
 # the tail lights (with the rear turn signals) on the rear corners. Left is the driver's side, r < 0.
 LAMP_SIDES = {"left": 0, "right": 1}
 LAMPS = tuple(f"{kind}_{side}" for kind in ("headlight", "turn_signal", "taillight") for side in LAMP_SIDES)
+# The searchlight on the cowl by a windshield post: the driver's side as it comes, or moved across
+# to the passenger's.
+SEARCHLIGHTS = tuple(f"searchlight_{side}" for side in LAMP_SIDES)
 # What a jeep spawns with; the preview draws these unless told otherwise.
 FITTED = ("engine",) + LAMPS + ("windshield_up", "spare", "jerrycan", "shovel", "axe", "jack", "extinguisher")
 TAIL_LIGHTS = ("taillight_left", "taillight_right")
@@ -196,11 +199,11 @@ TAIL_LIGHTS = ("taillight_left", "taillight_right")
 # the doors (drawn before them), the passenger's swinging open in front of it, and the tail lights
 # over the spare beside the right one.
 BASE_KIT_ORDER = (("engine", "extinguisher") + tuple(n for n in LAMPS if n not in TAIL_LIGHTS)
-                  + ("windshield_up", "windshield_down", "wirecutter", "searchlight", "spare") + TAIL_LIGHTS
+                  + ("windshield_up", "windshield_down") + SEARCHLIGHTS + ("spare",) + TAIL_LIGHTS
                   + ("jerrycan", "shovel", "axe", "jack"))
 # The overlay entity's, over the riders.
 OVERLAY_KIT_ORDER = (TAIL_LIGHTS + tuple(n for n in LAMPS if n not in TAIL_LIGHTS)
-                     + ("extinguisher", "windshield_up", "windshield_down", "wirecutter", "searchlight", "spare",
+                     + ("extinguisher", "windshield_up", "windshield_down") + SEARCHLIGHTS + ("spare",
                         "jerrycan", "shovel", "axe", "jack"))
 # Centre r of each headlight, out beside the grille under the fender line.
 HEADLIGHTS = (-14, 13)
@@ -1117,54 +1120,48 @@ def windshield_frames():
             for i, a in enumerate(WINDSHIELD_FOLD)]
 
 
-def wirecutter(damaged=False):
-    """Angle-iron wire cutter clamped to the front bumper: a broad olive post with a sharpened,
-    toothed front edge, a forward hook over a notch at the top, and two braces to the bumper."""
-    m = Model()
-    top = 28
-    bend = 3 if damaged else 0
-
-    def lean(z):
-        return bend * max(0, z - 18) // 10
-
-    m.box(31, 34, -3, 2, 3, 7, "od", "wirecutter")
-    m.mirror_box(35, 35, 1, 2, 4, 5, "steel", "wirecutter")
-    for z in range(8, top + 1):
-        f = 33 + lean(z)
-        m.box(f, f + 1, -2, 1, z, z, "od", "wirecutter")
-        m.box(f, f + 1, -2, -2, z, z, "od_seam", "wirecutter")
-        if z <= top - 4:
-            m.box(f + 2, f + 2, -1, 0, z, z, "steel" if z % 2 else "hub", "wirecutter")
-    # Hook: an upper jaw reaching forward over a notch, with a sharpened tip.
-    for z in range(top - 3, top + 1):
-        f = 35 + lean(z)
-        m.box(f, f + 2, -1, 0, z, z, "od", "wirecutter")
-        m.box(f + 3, f + 3, -1, 0, z, z, "steel", "wirecutter")
-    m.box(35 + lean(top), 38 + lean(top), -1, 0, top, top, "od_seam", "wirecutter")
-    for a, b in (((33.5, -2.5, 16.0), (32.5, -7.5, 7.0)), ((33.5, 1.5, 16.0), (32.5, 6.5, 7.0))):
-        m.line(a, b, "od", "wirecutter")
-        m.line((a[0] - 1, a[1], a[2]), (b[0] - 1, b[1], b[2]), "od_seam", "wirecutter")
-    if damaged:
-        m.paint(lambda f, r, z: 14 <= z <= 22 and (f + z) % 3 == 0, "char")
-        m.remove(lambda f, r, z: z >= top - 1 and f >= 37 + lean(top))
-    return m
+def searchlight(side):
+    """Pivoting searchlight on the cowl by a windshield post: the driver's (left), or mirrored onto
+    the passenger's."""
+    def make(damaged=False):
+        m = searchlight_left(damaged)
+        if side == "left":
+            return m
+        return Model({(f, -1 - r, z): (mat, "searchlight_right") for (f, r, z), (mat, _) in m.vox.items()})
+    return make
 
 
-def searchlight(damaged=False):
-    """Pivoting searchlight on the cowl by the driver's windshield post."""
+def searchlight_left(damaged=False):
+    """The searchlight as it comes, on the driver's side: a round lamp head, a bowl with a flat lens
+    to the front, swung on a hinge in a U yoke whose pins sit level with the lens centre, the yoke
+    on a short post on the cowl, a grip behind."""
     m = Model()
     z0 = HOOD + 1
-    m.box(7, 8, -18, -17, z0, z0, "steel", "searchlight")
-    m.box(7, 7, -18, -17, z0 + 1, z0 + 1, "steel", "searchlight")
-    m.box(5, 9, -19, -16, z0 + 2, z0 + 4, "gun", "searchlight")
-    m.box(10, 10, -19, -16, z0 + 2, z0 + 4, "black", "searchlight")
-    m.box(10, 10, -18, -17, z0 + 3, z0 + 3, "char" if damaged else "lamp", "searchlight")
-    m.box(10, 10, -18, -18, z0 + 4, z0 + 4, "white" if not damaged else "black", "searchlight")
-    m.box(4, 4, -18, -17, z0 + 3, z0 + 3, "steel", "searchlight")
+    fc, rc, zc = 7, -18, z0 + 5
+    radius = 2.6
+    front = fc + 2
+    for f in range(fc - 3, front + 1):
+        for r in range(rc - 3, rc + 4):
+            for z in range(zc - 3, zc + 4):
+                if (f - fc) ** 2 + (r - rc) ** 2 + (z - zc) ** 2 > radius ** 2:
+                    continue
+                face = f == front or (f + 1 - fc) ** 2 + (r - rc) ** 2 + (z - zc) ** 2 > radius ** 2
+                lens = face and (r - rc) ** 2 + (z - zc) ** 2 <= 1.5 ** 2
+                mat = ("char" if damaged else "lamp") if lens else "black" if face else "gun"
+                m.put(f, r, z, mat, "searchlight_left")
+    m.put(front, rc - 1, zc + 1, "black" if damaged else "white", "searchlight_left")
+    # The yoke: a post on the cowl, a crossbar under the head and an arm up each side to its pin.
+    m.box(fc, fc, rc, rc, z0, z0 + 1, "steel", "searchlight_left")
+    m.box(fc, fc, rc - 3, rc + 3, z0 + 2, z0 + 2, "steel", "searchlight_left")
+    for arm in (rc - 3, rc + 3):
+        m.box(fc, fc, arm, arm, z0 + 3, zc, "steel", "searchlight_left")
+        m.put(fc, arm, zc, "black", "searchlight_left")
+    # The grip it is swung by.
+    m.box(fc - 5, fc - 3, rc, rc, zc, zc, "steel", "searchlight_left")
     if damaged:
-        m.put(10, -17, z0 + 2, "white", "searchlight")
-        m.put(10, -19, z0 + 4, "white", "searchlight")
-        m.paint(lambda f, r, z: f in (5, 6) and z == z0 + 4, "char")
+        m.put(front, rc + 1, zc, "white", "searchlight_left")
+        m.put(front, rc, zc - 1, "white", "searchlight_left")
+        m.paint(lambda f, r, z: f < fc and z >= zc + 1 and (f + r) % 2 == 0, "char")
     return m
 
 
@@ -1706,8 +1703,7 @@ def over(dst, src):
 HARDPOINTS = {
     "windshield_up": windshield_up,
     "windshield_down": windshield_down,
-    "wirecutter": wirecutter,
-    "searchlight": searchlight,
+    **{f"searchlight_{side}": searchlight(side) for side in LAMP_SIDES},
     "spare": spare,
     "jerrycan": jerrycan,
     "shovel": shovel,
@@ -2720,8 +2716,7 @@ def icon_images():
         "road_tires": centred(road_tyre, "E", ICON),
         "mgturret": centred(build_mg(), "E", ICON),
         "windshield": centred(small_shield, "S", ICON),
-        "wirecutter": centred(wirecutter(), "E", ICON),
-        "searchlight": centred(scaled(searchlight(), 2), "E", ICON),
+        "searchlight": centred(scaled(searchlight("left")(), 2), "E", ICON),
         "engine": centred(engine(), "S", ICON),
         # One lamp each, blown up and turned face on: a headlight, a turn signal in its housing, a
         # tail light on its bracket.
@@ -2798,7 +2793,7 @@ def write_crayon_map(variant, per_dir):
 
 # Part under the cursor, for click handling: written to the R channel of the click maps.
 CLICK_IDS = {"hood_lid": 1, "fuel_door": 2, "engine": 3, "windshield": 5, "spare": 6,
-             "jerrycan": 7, "shovel": 8, "axe": 9, "wirecutter": 10, "searchlight": 11, "wheel": 12,
+             "jerrycan": 7, "shovel": 8, "axe": 9, "searchlight_left": 10, "searchlight_right": 11, "wheel": 12,
              "door_driver": 18, "door_passenger": 19, "tailgate": 20,
              **{lamp: 21 + i for i, lamp in enumerate(LAMPS)}, "extinguisher": 28, "jack": 29}
 OUTLINE = (255, 255, 255)
@@ -2882,7 +2877,7 @@ def click_masks(variant, per_dir, dy):
             "wheels": ("shut", d["wheels"]),
             "engine": ("open", d["engine_0"]),
         }
-        for name in ("spare", "jerrycan", "shovel", "axe", "jack", "extinguisher") + LAMPS:
+        for name in ("spare", "jerrycan", "shovel", "axe", "jack", "extinguisher") + LAMPS + SEARCHLIGHTS:
             parts[name] = ("shut", d[f"{name}_0"])
         for p in ALL_PANELS:
             has = p in panels(variant)
@@ -2899,7 +2894,7 @@ def click_masks(variant, per_dir, dy):
             img = scenes[scene]
             mask = {}
             # The lamps are only a few pixels: their masks take in the ring of jeep around them.
-            if name in LAMPS:
+            if name in LAMPS or name in SEARCHLIGHTS:
                 pixels = set(pixels) | set(outline(set(pixels)))
             for px in pixels:
                 if not (0 <= px[0] < SIZE and 0 <= px[1] < SIZE):
@@ -4138,7 +4133,7 @@ def main():
     grid(road=True).save(os.path.join(PREVIEW_DIR, "jeep_road_tyres.png"))
     grid(riders=True, loaded=True).save(os.path.join(PREVIEW_DIR, "jeep_riders.png"))
     down = tuple("windshield_down" if n == "windshield_up" else n for n in FITTED)
-    everything = FITTED + ("wirecutter", "searchlight")
+    everything = FITTED + SEARCHLIGHTS[:1]
     grid(riders=True, loaded=True, fitted=down).save(os.path.join(PREVIEW_DIR, "jeep_riders_windshield_down.png"))
     grid(damaged=True).save(os.path.join(PREVIEW_DIR, "jeep_damaged.png"))
     sheet([[composite("cargo", v, per["cargo"], dy, front=level) for v in DIRS] for level in range(CRUMPLE_LEVELS + 1)],

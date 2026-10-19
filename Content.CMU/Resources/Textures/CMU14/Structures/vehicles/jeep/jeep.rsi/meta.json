@@ -2280,14 +2280,6 @@
             "directions": 4
         },
         {
-            "name": "wirecutter_outline",
-            "directions": 4
-        },
-        {
-            "name": "searchlight_outline",
-            "directions": 4
-        },
-        {
             "name": "spare_outline",
             "directions": 4
         },
@@ -3482,38 +3474,6 @@
             "directions": 4
         },
         {
-            "name": "wirecutter_0",
-            "directions": 4
-        },
-        {
-            "name": "wirecutter_overlay_0",
-            "directions": 4
-        },
-        {
-            "name": "wirecutter_1",
-            "directions": 4
-        },
-        {
-            "name": "wirecutter_overlay_1",
-            "directions": 4
-        },
-        {
-            "name": "searchlight_0",
-            "directions": 4
-        },
-        {
-            "name": "searchlight_overlay_0",
-            "directions": 4
-        },
-        {
-            "name": "searchlight_1",
-            "directions": 4
-        },
-        {
-            "name": "searchlight_overlay_1",
-            "directions": 4
-        },
-        {
             "name": "spare_0",
             "directions": 4
         },
@@ -4180,6 +4140,54 @@
         },
         {
             "name": "tailgate_dmg_dented_overlay_100",
+            "directions": 4
+        },
+        {
+            "name": "searchlight_left_outline",
+            "directions": 4
+        },
+        {
+            "name": "searchlight_right_outline",
+            "directions": 4
+        },
+        {
+            "name": "searchlight_left_0",
+            "directions": 4
+        },
+        {
+            "name": "searchlight_left_overlay_0",
+            "directions": 4
+        },
+        {
+            "name": "searchlight_left_1",
+            "directions": 4
+        },
+        {
+            "name": "searchlight_left_overlay_1",
+            "directions": 4
+        },
+        {
+            "name": "searchlight_right_0",
+            "directions": 4
+        },
+        {
+            "name": "searchlight_right_overlay_0",
+            "directions": 4
+        },
+        {
+            "name": "searchlight_right_1",
+            "directions": 4
+        },
+        {
+            "name": "searchlight_right_overlay_1",
+            "directions": 4
+        },
+        {
+            "name": "click_searchlight_left",
+            "directions": 4
+        },
+        {
+            "name": "click_searchlight_right",
             "directions": 4
         }
     ]

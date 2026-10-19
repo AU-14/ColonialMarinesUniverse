@@ -148,6 +148,11 @@ public enum CMUVehicleLampRole : byte
     /// Lit with the lights on and nothing more.
     /// </summary>
     Marker,
+
+    /// <summary>
+    /// A mount for the searchlight, lit and aimed by hand (<see cref="CMUVehicleSearchlightComponent"/>).
+    /// </summary>
+    Searchlight,
 }
 
 public enum CMUVehicleLampSide : byte

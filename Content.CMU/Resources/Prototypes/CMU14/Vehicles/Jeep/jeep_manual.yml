@@ -50,7 +50,7 @@
   - taillight_left_0
   - taillight_right_0
   - windshield_up_0
-  - wirecutter_0
+  - searchlight_left_0
   overlayLayers:
   - jeep_overlay
   - wheels_overlay_0
@@ -72,7 +72,7 @@
   - taillight_left_overlay_0
   - taillight_right_overlay_0
   - windshield_up_overlay_0
-  - wirecutter_overlay_0
+  - searchlight_left_overlay_0
   # As the jeep's overlay entity slides its frames (CMUVehicleOverlayVisuals directionOffsets).
   overlayLift:
     South: 1
@@ -225,6 +225,14 @@
     damage: cmu-jeep-manual-lamp-damage
     repair: cmu-jeep-manual-weld-repair
     replace: cmu-jeep-manual-lamp-replace
+  - id: searchlight
+    name: cmu-jeep-manual-searchlight
+    masks: [ click_searchlight_left ]
+    about: cmu-jeep-manual-searchlight-about
+    use: cmu-jeep-manual-searchlight-use
+    damage: cmu-jeep-manual-lamp-damage
+    repair: cmu-jeep-manual-weld-repair
+    replace: cmu-jeep-manual-searchlight-replace
   - id: turn_signals
     name: cmu-jeep-manual-turn-signals
     masks: [ click_turn_signal_left, click_turn_signal_right ]
