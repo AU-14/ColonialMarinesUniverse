@@ -293,6 +293,11 @@ public sealed partial class ChatMessageRow : PanelContainer
         if (message.Channel is ChatChannel.Local or ChatChannel.Whisper or ChatChannel.Emotes)
             return null;
 
+        // cmu edit start: popups echoed to chat read like emotes, without a channel tag
+        if (message.Channel == ChatChannel.Visual)
+            return null;
+        // cmu edit end
+
         if (IsUnlabeledRadioSystemMessage(message))
             return null;
 

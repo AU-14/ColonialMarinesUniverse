@@ -68,6 +68,10 @@
       - id: CMUKitWeaponMP5LEO
     - name: Restraining Gear
       entries:
+      - id: CMUPepperSpray
+        amount: 10
+      - id: CMUPepperSprayAntidote
+        amount: 10
       - id: RMCHandcuffs
         amount: 10
       - id: RMCZipties
@@ -151,6 +155,10 @@
       - id: RMCGunCasePistolM1984
     - name: Restraining Gear
       entries:
+      - id: CMUPepperSpray
+        amount: 10
+      - id: CMUPepperSprayAntidote
+        amount: 10
       - id: RMCHandcuffs
         amount: 10
       - id: RMCZipties
@@ -246,6 +254,10 @@
       - id: CMUKitWeaponMP5LEO
     - name: Restraining Gear
       entries:
+      - id: CMUPepperSpray
+        amount: 10
+      - id: CMUPepperSprayAntidote
+        amount: 10
       - id: RMCHandcuffs
         amount: 10
       - id: RMCZipties
@@ -325,6 +337,10 @@
       - id: RMCBeltHolsterPistolSPPT73
     - name: Restraining Gear
       entries:
+      - id: CMUPepperSpray
+        amount: 10
+      - id: CMUPepperSprayAntidote
+        amount: 10
       - id: RMCHandcuffs
         amount: 10
       - id: RMCZipties

@@ -39,7 +39,7 @@
       - Hypospray
       components:
       - Hypospray
-      - Defibrillator
+      # CMU14: no defibrillators, they're far too bulky for a pouch
   - type: FixedItemSizeStorage
 
 - type: entity

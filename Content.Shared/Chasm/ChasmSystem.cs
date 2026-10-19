@@ -1,5 +1,6 @@
 ﻿using Content.Shared.ActionBlocker;
 using Content.Shared.Chat;
+using Content.Shared._RMC14.Vehicle.Supply;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -113,6 +114,12 @@ public sealed partial class ChasmSystem : EntitySystem
     {
         // already doomed
         if (_chasmFallingQuery.HasComp(args.Tripper))
+            return;
+
+        // feels horrible to do it like this, i'd much rather somehow disable the chasm component altogether via another custom component
+        // instead of modifying the behaviour of chasm in any way since it's used not only in the lifts
+        // idk how to do it tho
+        if(TryComp<VehicleSupplyLiftComponent>(entity.Owner, out var lift) && (lift.Mode == VehicleSupplyLiftMode.Raised || (lift.Mode == VehicleSupplyLiftMode.Preparing && lift.NextMode == VehicleSupplyLiftMode.Lowering)))
             return;
 
         // Check the white-/blacklists and inform on rejection.

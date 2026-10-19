@@ -91,11 +91,12 @@
   - type: XenoDevour
   - type: XenoTailStab
     toggle: false
+    # CMU14: reduce ability damage by 30%.
     tailDamage:
       types:
-        Blunt: 6.66
-        Slash: 6.67
-        Piercing: 6.67
+        Blunt: 4.66
+        Slash: 4.67
+        Piercing: 4.67
   - type: MeleeWeapon
     damage:
       types:
@@ -104,16 +105,17 @@
         Piercing: 6
         Heat: 7
   - type: XenoDespoiler
+    # CMU14: reduce finishing-stab bonuses by 30%.
     finishingStabBonusByTier:
     - types:
-        Heat: 10
+        Heat: 7
     - types:
-        Heat: 20
+        Heat: 14
     - types:
-        Heat: 30
+        Heat: 21
     - types:
-        Heat: 40
-    # CMU14: complete tier effects, totaling 20 / 100 / 262 before armor.
+        Heat: 28
+    # CMU14: complete tier effects, totaling 14 / 70 / 183.6 before armor.
     # acidComponents:
     # - type: UserAcided
     #   armorPiercing: 40
@@ -126,22 +128,22 @@
     - duration: 20
       damage:
         types:
-          Heat: 1
+          Heat: 0.7
     - duration: 40
       damage:
         types:
-          Heat: 2.5
+          Heat: 1.75
     - duration: 40
       damage:
         types:
-          Heat: 6.55
+          Heat: 4.59
   - type: XenoDespoilerHypertension
     maxStacks: 4
     pointsPerStack: 200
     pointsPerSlash: 200
     decayDelay: 10
     decayPerSecond: 120
-    bonusBurnPerStack: 20
+    bonusBurnPerStack: 14 # CMU14: reduce empowered bonus damage by 30%.
   - type: XenoDespoilerSlashOnHit
     enhanceStacksThreshold: 3
   - type: Tackle
