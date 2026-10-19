@@ -93,17 +93,6 @@
         HorizontalExpand="True"
         AppendStyleClass="{x:Static style:StyleClass.ButtonSquare}"
         />
-    <!-- cmu edit start: squad optic ammo HUD toggle -->
-    <ui:MenuButton
-        Name="AmmoHudButton"
-        Access="Internal"
-        ToggleMode="True"
-        ToolTip="{Loc 'cmu-ammo-hud-button-tooltip'}"
-        MinSize="42 64"
-        HorizontalExpand="True"
-        AppendStyleClass="{x:Static style:StyleClass.ButtonSquare}"
-        />
-    <!-- cmu edit end -->
     <ui:MenuButton
         Name="AHelpButton"
         Access="Internal"

@@ -1,7 +1,7 @@
 using System.Numerics;
+using Content.Client.UserInterface.Systems.Alerts.Widgets;
 using Content.Shared._RMC14.Weapons.Ranged.Flamer;
 using Content.Shared._RMC14.Weapons.Ranged.SmartGun;
-using Content.Shared.CCVar;
 using Content.Shared.CMU14.Visor;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Weapons.Ranged.Components;
@@ -9,7 +9,7 @@ using Content.Shared.Weapons.Ranged.Events;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
-using Robust.Shared.Configuration;
+using Robust.Client.UserInterface;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -19,7 +19,7 @@ namespace Content.Client.CMU14.Visor;
 
 /// <summary>
 /// Ported from TGMC's ammo HUD: while a squad optic is down, shows what the held gun is loaded with and how many rounds
-/// it has left in the corner of the screen.
+/// it has left, under the status alerts on the right of the screen.
 /// </summary>
 public sealed class CMUAmmoHudOverlay : Overlay
 {
@@ -27,12 +27,13 @@ public sealed class CMUAmmoHudOverlay : Overlay
 
     private const int Scale = 2;
     private const int Margin = 12;
+    private const int AlertGap = 4;
 
-    [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IEntityManager _entity = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
 
     private readonly SharedHandsSystem _hands;
     private readonly SpriteSystem _sprite;
@@ -51,9 +52,9 @@ public sealed class CMUAmmoHudOverlay : Overlay
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
     {
-        return _config.GetCVar(CCVars.CMUAmmoHud) &&
-               _player.LocalEntity is { } player &&
-               _entity.HasComponent<CMUSquadVisorWearerComponent>(player);
+        return _player.LocalEntity is { } player &&
+               _entity.TryGetComponent(player, out CMUSquadVisorWearerComponent? wearer) &&
+               wearer.AmmoHudEnabled;
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -86,10 +87,7 @@ public sealed class CMUAmmoHudOverlay : Overlay
                 layers.Add("h" + (rounds / 100));
         }
 
-        const int size = 32 * Scale;
-        var bounds = args.ViewportBounds;
-        var topLeft = new Vector2(bounds.Right - size - Margin, bounds.Bottom - size - Margin);
-        var box = UIBox2.FromDimensions(topLeft, new Vector2(size, size));
+        var box = GetBox(args.ViewportBounds);
 
         var time = _timing.CurTime;
         foreach (var state in layers)
@@ -97,6 +95,30 @@ public sealed class CMUAmmoHudOverlay : Overlay
             var texture = _sprite.GetFrame(new SpriteSpecifier.Rsi(Rsi, state), time);
             args.ScreenHandle.DrawTextureRect(texture, box);
         }
+    }
+
+    /// <summary>
+    ///     Sits in the alerts column, right-aligned with the alert icons and just below the last one, at the same size.
+    ///     Falls back to the bottom right of the viewport if the alerts aren't on screen.
+    /// </summary>
+    private UIBox2 GetBox(UIBox2i viewport)
+    {
+        if (_ui.GetActiveUIWidgetOrNull<AlertsUI>() is { } alerts && alerts.VisibleInTree)
+        {
+            var uiScale = alerts.UIScale;
+            var size = 32 * Scale * uiScale;
+            var container = alerts.AlertContainer;
+            var right = container.GlobalPixelPosition.X + container.PixelSize.X;
+            if (container.PixelSize.X <= 0)
+                right = alerts.GlobalPixelPosition.X + alerts.PixelSize.X;
+
+            var top = container.GlobalPixelPosition.Y + container.PixelSize.Y + AlertGap * uiScale;
+            return UIBox2.FromDimensions(new Vector2(right - size, top), new Vector2(size, size));
+        }
+
+        const int fallbackSize = 32 * Scale;
+        var topLeft = new Vector2(viewport.Right - fallbackSize - Margin, viewport.Bottom - fallbackSize - Margin);
+        return UIBox2.FromDimensions(topLeft, new Vector2(fallbackSize, fallbackSize));
     }
 
     private static string EmptyState(string type)
