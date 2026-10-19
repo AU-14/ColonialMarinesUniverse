@@ -110,6 +110,14 @@ public sealed partial class CMUOpenVehicleComponent : Component
     [DataField]
     public float EngineDirectHitShare = 1f;
 
+    /// <summary>
+    /// The engine's share of hits taken past its last integrity: what kills it beyond killing it, and
+    /// any hit on it once dead. Enough of it and the burning engine goes up at once
+    /// (<see cref="CMUVehicleWreckComponent.OverkillLimit"/>). Cleared while the engine has integrity.
+    /// </summary>
+    [ViewVariables]
+    public float EngineOverkill;
+
     [DataField]
     public float WindshieldDamageShare = 0.25f;
 

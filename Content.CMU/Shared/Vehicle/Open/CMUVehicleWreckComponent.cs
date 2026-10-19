@@ -103,6 +103,33 @@ public sealed partial class CMUVehicleWreckComponent : Component
     public int FireDuration = 15;
 
     /// <summary>
+    /// Overkill on the engine (<see cref="CMUOpenVehicleComponent.EngineOverkill"/>) that sets it off
+    /// at once instead of after <see cref="Delay"/>: a hit far past what killed it, or more fire into
+    /// it while it burns.
+    /// </summary>
+    [DataField]
+    public float OverkillLimit = 50f;
+
+    /// <summary>
+    /// While the engine burns, its fire spreads onto the ground round the jeep: a ring further out
+    /// each time this passes, up to <see cref="SpreadRange"/> tiles from the engine bay.
+    /// </summary>
+    [DataField]
+    public TimeSpan SpreadEvery = TimeSpan.FromSeconds(6);
+
+    [DataField]
+    public int SpreadRange = 2;
+
+    /// <summary>
+    /// When the burning engine's fire next spreads, and how far it has got.
+    /// </summary>
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan NextSpread;
+
+    [ViewVariables]
+    public int Spread;
+
+    /// <summary>
     /// How far, in tiles, and how fast riders are thrown out from their seats' exits.
     /// </summary>
     [DataField]

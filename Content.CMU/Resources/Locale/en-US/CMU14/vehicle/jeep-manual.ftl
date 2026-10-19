@@ -180,7 +180,10 @@ cmu-jeep-manual-hull-repair =
     Use a lit welder on the jeep's body. Each pass mends a part of the hull and repeats until it's whole.
     Every repair leaves it a little weaker than new.
 cmu-jeep-manual-fire = Engine fire
-cmu-jeep-manual-fire-about = When the engine dies it bursts into flames. Twenty seconds later the jeep blows up, throwing its riders clear and leaving a burnt out wreck.
+cmu-jeep-manual-fire-about =
+    When the engine dies it bursts into flames, and the fire spreads onto the ground round the jeep. Twenty seconds later the jeep blows up, throwing its riders clear and leaving a burnt out wreck.
+    Killed by far more than it had left, like a rocket, or shot on while it burns, the engine goes up at once.
+    Nothing destroys the wreck. A lit welder cuts it down in 15 s for 10 fuel, leaving ten metal sheets and ten rods.
 cmu-jeep-manual-fire-use =
     Get out, or put it out: spray the jeep's fire extinguisher on it, or throw water over it.
     Put out in time, the engine is left barely running. Weld it back up before you rely on it.

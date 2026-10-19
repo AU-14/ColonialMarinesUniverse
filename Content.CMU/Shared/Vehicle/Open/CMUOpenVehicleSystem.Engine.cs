@@ -30,14 +30,21 @@ public sealed partial class CMUOpenVehicleSystem
 
     /// <summary>
     /// The engine soaks up its share of a hit, all of a direct one, while it has integrity left; the
-    /// rest goes on to the hull. Anti vehicle weapons hit it as hard as they hit the hull.
+    /// rest goes on to the hull. Anti vehicle weapons hit it as hard as they hit the hull. What its
+    /// share holds past its last integrity is overkill, as is its share of any hit once it is dead.
     /// </summary>
     private void AbsorbIntoEngine(Entity<CMUOpenVehicleComponent> ent, ref DamageModifyEvent args, float total, Vector2? hitPoint)
     {
         var jeep = ent.Comp;
         var share = hitPoint is { } at && jeep.EngineBay.Contains(at) ? jeep.EngineDirectHitShare : jeep.EngineDamageShare;
         var hit = total * _hardpoints.CMUIncomingDamageMultiplier(args.Origin, args.Tool);
+        if (jeep.EngineIntegrity > 0f)
+            jeep.EngineOverkill = 0f;
+
         var absorbed = MathF.Min(jeep.EngineIntegrity, hit * share);
+        if (jeep.EngineIntegrity - absorbed <= 0f)
+            jeep.EngineOverkill += hit * share - absorbed;
+
         if (absorbed <= 0f)
             return;
 

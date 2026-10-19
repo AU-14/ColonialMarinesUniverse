@@ -354,6 +354,8 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
         {
             var damage = new DamageSpecifier();
             damage.DamageDict["Blunt"] = 5000;
+            // A hit this far past the engine would set it off at once: here it should burn first.
+            SEntMan.GetComponent<CMUVehicleWreckComponent>(jeep).OverkillLimit = float.MaxValue;
             // Through the jeep's resistances: RMC routes a vehicle's damage into its hull from there.
             SEntMan.System<DamageableSystem>().TryChangeDamage(jeep, damage);
         });

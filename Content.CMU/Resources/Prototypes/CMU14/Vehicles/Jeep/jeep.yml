@@ -2340,24 +2340,11 @@
       isLooped: true
       enabled: true
 
-# A burnt-out wreck has nothing left to burn: the fire it leaves under itself doesn't eat it away.
-- type: damageModifierSet
-  id: CMUJeepWreck
-  coefficients:
-    Heat: 0
-    Shock: 1.2
-    Structural: 0.5
-  flatReductions:
-    Blunt: 10
-    Slash: 10
-    Piercing: 10
-    Structural: 10
-
 - type: entity
   abstract: true
   id: CMUJeepWreckBase
   name: burnt-out jeep
-  description: The blackened shell of a jeep. Nothing on it is worth saving.
+  description: The blackened shell of a jeep. Nothing on it is worth saving, but a welder can cut it down for scrap.
   components:
   - type: Transform
     anchored: false
@@ -2386,26 +2373,18 @@
         - LargeMobLayer
   # Like the live jeep, shots pass over it unless it is the target.
   - type: RequireProjectileTarget
-  - type: Damageable
-    damageModifierSet: CMUJeepWreck
-  - type: RMCImmuneToFireTileDamage
-  - type: Injurable
-    damageContainer: StructuralMarine
+  # It stays where it burnt out: nothing damages it, blasts and acid leave it, and only a welder cuts
+  # it down, into scrap.
   - type: Corrodible
-    isCorrodible: true
+    isCorrodible: false
     structure: true
-  - type: RMCWallExplosionDeletable
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 100
-      behaviors:
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
-  # It is spawned before its own jeep's blast goes off.
-  - type: ExplosionResistance
-    damageCoefficient: 0
+  - type: RMCRefinable
+    amount: 1
+    delay: 15
+    fuel: 10
+    spawn:
+    - id: CMSheetMetal10
+    - id: CMRodMetal10
 
 - type: entity
   parent: CMUJeepWreckBase

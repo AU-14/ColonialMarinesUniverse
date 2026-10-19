@@ -107,10 +107,17 @@ public sealed class CMUVehicleWreckSystem : EntitySystem
         {
             if (wreck.DetonateAt is { } detonateAt)
             {
-                if (now >= detonateAt)
+                if (now >= detonateAt || Overkilled(uid, wreck))
+                {
                     _detonating.Add((uid, wreck));
-                else if (now >= wreck.NextSpark)
+                    continue;
+                }
+
+                if (now >= wreck.NextSpark)
                     Spark((uid, wreck), now);
+
+                if (now >= wreck.NextSpread)
+                    SpreadFire((uid, wreck), now);
 
                 continue;
             }
@@ -140,8 +147,13 @@ public sealed class CMUVehicleWreckSystem : EntitySystem
 
             var engineDied = wreck.LastEngine > 0f && jeep.EngineIntegrity <= 0f;
             wreck.LastEngine = jeep.EngineIntegrity;
-            if (engineDied)
-                Arm((uid, wreck));
+            if (!engineDied)
+                continue;
+
+            Arm((uid, wreck));
+            // Killed far past what it had left: no fire first, it goes up there and then.
+            if (Overkilled(uid, wreck))
+                _detonating.Add((uid, wreck));
         }
 
         foreach (var jeep in _detonating)
@@ -150,11 +162,34 @@ public sealed class CMUVehicleWreckSystem : EntitySystem
         }
     }
 
+    private bool Overkilled(EntityUid uid, CMUVehicleWreckComponent wreck)
+    {
+        return TryComp(uid, out CMUOpenVehicleComponent? jeep) && jeep.EngineOverkill >= wreck.OverkillLimit;
+    }
+
+    /// <summary>
+    /// The burning engine's fire spreads a ring further onto the ground round its engine bay.
+    /// </summary>
+    private void SpreadFire(Entity<CMUVehicleWreckComponent> ent, TimeSpan now)
+    {
+        var wreck = ent.Comp;
+        wreck.NextSpread = now + wreck.SpreadEvery;
+        if (wreck.Spread > wreck.SpreadRange)
+            return;
+
+        var bay = new EntityCoordinates(ent.Owner, wreck.EngineBay);
+        var center = _transform.WithEntityId(bay, Transform(ent.Owner).ParentUid).SnapToGrid(EntityManager);
+        _flammable.SpawnFireDiamond(wreck.FirePrototype, center, wreck.Spread, duration: wreck.FireDuration);
+        wreck.Spread++;
+    }
+
     private void Arm(Entity<CMUVehicleWreckComponent> ent)
     {
         var now = _timing.CurTime;
         ent.Comp.DetonateAt = now + ent.Comp.Delay;
         ent.Comp.NextSpark = now + ent.Comp.MinSparkDelay;
+        ent.Comp.NextSpread = now;
+        ent.Comp.Spread = 0;
 
         // The engine goes with the hull and catches fire: flames from under the hood over its heavy
         // smoke, a flickering glow and the fire's crackle, all gone with the jeep when it goes up.
