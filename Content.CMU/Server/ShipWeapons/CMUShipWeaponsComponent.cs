@@ -14,6 +14,10 @@ public sealed partial class CMUShipWeaponsComponent : Component
     [DataField]
     public HashSet<ProtoId<CMUShipWeaponPrototype>> Weapons = new();
 
+    /// <summary>Whether an arming terminal has locked in this ship's loadout. Bonus disks don't lock it.</summary>
+    [DataField]
+    public bool Locked;
+
     /// <summary>
     /// Fire missions shared by every armed weapon, copied from the confirming terminal when the loadout locks.
     /// </summary>
@@ -45,6 +49,9 @@ public sealed partial class CMUShipWeaponStrikeComponent : Component
 
     [DataField]
     public bool Warned;
+
+    [DataField]
+    public bool TravelPlayed;
 
     [DataField]
     public bool DirectionalWarned;

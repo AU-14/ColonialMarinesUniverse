@@ -54,6 +54,11 @@
     RMCOverwatchConsoleGovforTOCShuttle: RMCOverwatchConsoleOpforTOCShuttle
     RMCOverwatchConsoleGovforTOCShuttleRotating: RMCOverwatchConsoleOpforTOCShuttleRotating
     RMCTechTreeConsoleGovfor: RMCTechTreeConsoleOpfor
+    CMUTechTreeConsoleShipGovfor: CMUTechTreeConsoleShipOpfor
+    CMUTacticalMapComputerGovfor: CMUTacticalMapComputerOpfor
+    CMUShipWeaponsTerminalGovfor: CMUShipWeaponsTerminalOpfor
+    CMUCallsignConsoleGovfor: CMUCallsignConsoleOpfor
+    CMUIDComputerGovfor: CMUIDComputerOpfor
     AU14AllianceConsoleGovfor: AU14AllianceConsoleOpfor
     AU14AnalyzerMachine: AU14AnalyzerMachineOpfor
     AU14WithdrawConsoleGovFor: AU14WithdrawConsoleOpFor

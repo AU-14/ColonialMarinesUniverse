@@ -5,15 +5,17 @@
   description: A carpentry tool, used to drive nails into tough surfaces. Cannot fire nails offensively due to a lack of a gas seal around the nail, meaning it cannot build up the pressure to fire.
   suffix: Filled
   components:
+#cmu edit start: pre-resprite sprites (reverts RMC-14#5979)
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/SMGs/nailgun_compact.rsi
+    sprite: CMU14/Weapons/SMGs/nailgun_compact_old.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
-    - state: mag-4
+    - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: _RMC14/Objects/Weapons/Guns/SMGs/nailgun_compact.rsi
+    sprite: CMU14/Weapons/SMGs/nailgun_compact_old.rsi
+#cmu edit end
     slots:
     - suitStorage
     - Back
@@ -40,10 +42,12 @@
   - type: MagazineAmmoProvider
     autoEject: true
   - type: RMCAmmoEject
+#cmu edit start: pre-resprite sprites (reverts RMC-14#5979)
   - type: MagazineVisuals
     magState: mag
-    steps: 5
+    steps: 1
     zeroVisible: true
+#cmu edit end
   - type: Appearance
   - type: AltFireMelee
   - type: MeleeWeapon
@@ -82,10 +86,12 @@
   description: A carpentry tool, used to drive nails into tough surfaces. This one is military grade, it's olive drab and tacticool. Cannot fire nails as a projectile.
   suffix: Filled
   components:
+#cmu edit start: pre-resprite sprites (reverts RMC-14#5979)
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/SMGs/nailgun_tactical.rsi
+    sprite: CMU14/Weapons/SMGs/nailgun_tactical_old.rsi
   - type: Clothing
-    sprite: _RMC14/Objects/Weapons/Guns/SMGs/nailgun_tactical.rsi
+    sprite: CMU14/Weapons/SMGs/nailgun_tactical_old.rsi
+#cmu edit end
   - type: Nailgun
     materialPerRepair: 2
   - type: Tag

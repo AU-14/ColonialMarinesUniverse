@@ -1,3 +1,4 @@
+using Content.Server.CMU14.Ship;
 using Content.Server.CMU14.RoundStatistics;
 using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
@@ -37,6 +38,7 @@ public sealed partial class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRule
         base.Initialize();
 
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<CMUAdriftChangedEvent>(OnAdriftChanged);
         SubscribeLocalEvent<EvacuationLaunchedEvent>(OnEvacuationLaunched);
         SubscribeLocalEvent<GotEquippedEvent>(OnGotEquipped);
         SubscribeLocalEvent<GotUnequippedEvent>(OnGotUnequipped);
@@ -83,6 +85,8 @@ public sealed partial class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRule
         => _gameTicker.IsGameRuleActive<KillAllClfRuleComponent>()
             && TryComp(uid, out NpcFactionMemberComponent? faction)
             && ThreatRuleHelper.HasFaction(faction, "clf");
+
+    private void OnAdriftChanged(ref CMUAdriftChangedEvent ev) => CheckVictoryCondition();
 
     private void CheckVictoryCondition()
     {

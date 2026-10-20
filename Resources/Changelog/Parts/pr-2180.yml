@@ -1,0 +1,16 @@
+author: troytroy400
+category: CMU
+changes:
+- message: HAZOPS M250 squad support weapon.
+  type: Add
+- message: HAZOPS Mark IV service pistol, the new standard HAZOPS sidearm
+  type: Add
+- message: The HAZOPS PVS-71 night vision goggles now work, clip them into your helmet
+    and pull them down to see in the dark. HAZOPS squad leaders and shotgunner specialists
+    get them.
+  type: Add
+- message: The HAZOPS powered warfighting armor's power-up sound only plays for the
+    wearer.
+  type: Fix
+time: '2026-10-15T02:35:13.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2180
