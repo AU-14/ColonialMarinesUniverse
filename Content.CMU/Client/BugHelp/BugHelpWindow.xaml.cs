@@ -28,7 +28,7 @@ public sealed partial class BugHelpWindow : DefaultWindow
         ItemQuery.OnTextChanged += args =>
         {
             if (args.Text.Length > ItemQueryCap)
-                ItemQuery.Text = args.Text[..ItemQueryCap];
+                ItemQuery.Text = args.Text[..RuneSafe(args.Text, ItemQueryCap)];
         };
 
         WhatHappened.OnTextChanged += _ => UpdateSubmit();
@@ -63,6 +63,10 @@ public sealed partial class BugHelpWindow : DefaultWindow
         SubmitButton.Disabled = Rope.Collapse(WhatHappened.TextRope).Trim().Length == 0;
     }
 
+    /// <summary>Cap that never splits a surrogate pair: an emoji at the boundary stays whole.</summary>
+    private static int RuneSafe(string text, int cap)
+        => cap > 0 && char.IsHighSurrogate(text[cap - 1]) ? cap - 1 : cap;
+
     /// <summary>Truncate past the cap in place; the server caps again as the trust boundary.</summary>
     private static void CapOnChange(TextEdit edit, int cap)
     {
@@ -70,7 +74,7 @@ public sealed partial class BugHelpWindow : DefaultWindow
         {
             var text = Rope.Collapse(args.TextRope);
             if (text.Length > cap)
-                edit.TextRope = new Rope.Leaf(text[..cap]);
+                edit.TextRope = new Rope.Leaf(text[..RuneSafe(text, cap)]);
         };
     }
 }

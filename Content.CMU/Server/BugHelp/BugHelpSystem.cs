@@ -100,7 +100,11 @@ public sealed class BugHelpSystem : EntitySystem
 
     private string? PrototypeId(EntityUid uid) => MetaData(uid).EntityPrototype?.ID;
     private string? OrNull(string value) => string.IsNullOrWhiteSpace(value) ? null : value;
-    private static string Cap(string value, int cap) => value.Length > cap ? value[..cap] : value;
+    private static string Cap(string value, int cap) => value.Length > cap ? value[..RuneSafe(value, cap)] : value;
+
+    /// <summary>Cap that never splits a surrogate pair, so report.json never carries half an emoji.</summary>
+    private static int RuneSafe(string text, int cap)
+        => cap > 0 && char.IsHighSurrogate(text[cap - 1]) ? cap - 1 : cap;
     private static string? Optional(string? value, int cap) =>
         string.IsNullOrWhiteSpace(value) ? null : Cap(value.Trim(), cap);
 
@@ -290,7 +294,7 @@ public sealed class BugHelpSystem : EntitySystem
                 .Replace('\n', ' ')
                 .Replace('\r', ' ');
             if (title.Length > TitleCap)
-                title = title[..TitleCap];
+                title = title[..RuneSafe(title, TitleCap)];
 
             var reporter = report.Reporter;
             var job = reporter.Job ?? "no job";
