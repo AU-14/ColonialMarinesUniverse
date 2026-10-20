@@ -43,3 +43,7 @@ research-sim-status-no-reference-picked = NO REFERENCE PROPERTY SELECTED
 research-sim-status-reference-unadjustable = REFERENCE PROPERTY CAN NOT BE ADJUSTED
 research-sim-status-already-in-target = REFERENCE PROPERTY ALREADY IN TARGET
 research-sim-status-inequal = TARGET AND REFERENCE PROPERTY LEVELS MUST BE EQUAL
+
+research-sim-status-conflict-cancel = WARNING: {$REFERENCE} CONFLICTS WITH {$TARGET} - BOTH WILL CANCEL OUT
+research-sim-status-conflict-target-survives = WARNING: {$REFERENCE} CONFLICTS WITH {$TARGET} - {$REFERENCE} WILL NOT BE ADDED, {$TARGET} DROPS TO LEVEL {$LEVEL}
+research-sim-status-conflict-reference-survives = WARNING: {$REFERENCE} CONFLICTS WITH {$TARGET} - {$TARGET} WILL BE REMOVED, {$REFERENCE} ADDED AT LEVEL {$LEVEL}
