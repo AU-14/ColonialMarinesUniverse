@@ -204,6 +204,9 @@ public sealed class ForceInterestTest : GameTest
         });
         await Server.WaitAssertion(() =>
         {
+            // Integration sessions are local and ConsoleLoginLocal auto-promotes them to host
+            // admin, so demote first to exercise the non-admin path.
+            admins.DeAdmin(ServerSession!);
             SEntMan.System<ForceInterestSystem>().CompleteForce(ServerSession!, id);
             Assert.That(spawned, Is.Zero, "a completion without the admin flag must not deploy");
             Assert.That(SEntMan.System<ForceInterestSystem>().IsPending(id), Is.True);

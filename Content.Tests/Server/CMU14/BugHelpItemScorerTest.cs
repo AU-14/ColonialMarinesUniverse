@@ -31,7 +31,7 @@ namespace Content.Tests.Server.CMU14
             // Contains beats word-prefix by construction: any word starting with the query makes the
             // surface contain it, so the 0.3 branch in the design spec is unreachable in practice.
             Assert.That(BugHelpSystem.ScoreItem("fla", "cmuweaponarsonistflamer", "arsonist flamer"), Is.EqualTo(0.6));
-            Assert.That(BugHelpSystem.ScoreItem("ince", "cmweaponm34", "m34 incinerator"), Is.EqualTo(0.55));
+            Assert.That(BugHelpSystem.ScoreItem("inci", "cmweaponm34", "m34 incinerator"), Is.EqualTo(0.55));
         }
 
         [Test]
