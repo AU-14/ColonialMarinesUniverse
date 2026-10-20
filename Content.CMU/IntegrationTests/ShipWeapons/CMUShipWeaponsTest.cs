@@ -225,6 +225,8 @@ public sealed class CMUShipWeaponsTest : GameTest
         {
             var actor = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             var terminal = Terminal(map.GridCoords);
+            // The YAML default is two missions; this checks any loadout up to the terminal's own limit locks in.
+            SComp<CMUShipWeaponsTerminalComponent>(terminal).MaxSelections = 3;
             ProtoId<CMUShipWeaponPrototype>[] weapons = ["CMUGasStrike", "CMUSmokeStrike", "CMUEMSStrike"];
             Send(terminal, actor, new CMUShipWeaponsArmBuiMsg(weapons.Take(count).ToArray()));
             var state = SComp<CMUShipWeaponsComponent>(map.Grid);

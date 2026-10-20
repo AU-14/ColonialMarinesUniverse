@@ -317,6 +317,9 @@
       enum.WiresUiKey.Key:
         type: WiresBoundUserInterface
   - type: ItemSlots
+  - type: ContainerContainer
+    containers:
+      autodrink_bay: !type:ContainerSlot
   - type: CMUAutoDrink
     bay:
       whitelistFailPopup: reagent-dispenser-component-cannot-put-entity-message
