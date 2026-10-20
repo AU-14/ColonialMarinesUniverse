@@ -142,10 +142,8 @@ research-sim-ui-add-tooltip = Use the property in the reference chemical to add 
 
 research-sim-ui-no-data = No data inserted!
 
-research-sim-ui-target-data = [head=3]Target Data[/head]
-research-sim-ui-reference-data = [head=3]Reference Data[/head]
 research-sim-ui-price = Price of the operation: {$COST}
-research-sim-ui-sim-cost = ESTIMATED SIMULATING COST: {$NUM}
+research-sim-ui-property = {$NAME} {$LEVEL}
 research-sim-ui-selected-ref-conflict = Conflicts with the selected reference property.
 research-sim-ui-selected-targ-conflict = Conflicts with the selected target property.
 
