@@ -1,0 +1,275 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+using Content.Server.CMU14.HelpRelay;
+using Content.Server.Players.RateLimiting;
+using Content.Shared.CCVar;
+using Content.Shared.GameTicking;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Inventory;
+using Content.Shared.Mind;
+using Content.Shared.Players.RateLimiting;
+using Content.Shared.Roles.Jobs;
+using Robust.Server.Player;
+using Robust.Shared.Configuration;
+using Robust.Shared.Network;
+using Robust.Shared.Utility;
+
+namespace Content.Server.CMU14.BugHelp;
+
+/// <summary>
+/// Turns a player's bughelp message into a machine-readable report and hands it to the help relay,
+/// which posts it to the bug report Discord forum channel as one thread per report. The AI fix bot
+/// and the status website consume the report.json attachment and key off the report id, so context
+/// fields are prototype IDs, never localized display names.
+/// </summary>
+public sealed class BugHelpSystem : EntitySystem
+{
+    private const string RateLimitKey = "BugHelp";
+    private const float NearbyRadius = 3f;
+    private const int NearbyCap = 5;
+    private const int ThreadNameCap = 100;
+
+    [Dependency] private readonly IConfigurationManager _config = default!;
+    [Dependency] private readonly HelpRelayManager _relay = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly SharedJobSystem _jobs = default!;
+    [Dependency] private readonly ILogManager _log = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly SharedMindSystem _mind = default!;
+    [Dependency] private readonly PlayerRateLimitManager _rateLimit = default!;
+
+    private int _sequence;
+    private ISawmill _sawmill = default!;
+
+    public override void Initialize()
+    {
+        // The sequence suffix restarts with the round so ids stay tied to their round.
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+        _rateLimit.Register(
+            RateLimitKey,
+            new RateLimitRegistration(
+                CCVars.BugHelpRateLimitPeriod,
+                CCVars.BugHelpRateLimitCount,
+                _ => { })
+        );
+        _sawmill = _log.GetSawmill("bughelp");
+    }
+
+    private void OnRoundRestart(RoundRestartCleanupEvent args)
+    {
+        _sequence = 0;
+    }
+
+    /// <summary>
+    /// Builds the report and hands it to the help relay. All entity state is read synchronously
+    /// here; only the Discord link lookup and the HTTP post run off-thread.
+    /// </summary>
+    public BugHelpOutcome TrySubmit(ICommonSession player, string message, out string? reportId)
+    {
+        reportId = null;
+        if (!_relay.IsEnabled(HelpSource.BugHelp))
+            return BugHelpOutcome.Disabled;
+
+        if (_rateLimit.CountAction(player, RateLimitKey) == RateLimitStatus.Blocked)
+            return BugHelpOutcome.RateLimited;
+
+        if (player.AttachedEntity is not { } attached || EntityManager.Deleted(attached))
+            return BugHelpOutcome.NoEntity;
+
+        var context = _relay.GetContext();
+        var report = new BugReport
+        {
+            Id = $"BUG-R{context.RoundId}-{++_sequence:D2}",
+            Server = context.Server,
+            Revision = OrNull(_config.GetCVar(CCVars.HelpRelayRevision)),
+            ReportedAt = DateTime.UtcNow.ToString("o"),
+            Round = new BugRound
+            {
+                Id = context.RoundId,
+                Elapsed = context.Elapsed.ToString(@"hh\:mm\:ss"),
+                Gamemode = context.Gamemode,
+                Map = context.Map,
+            },
+            Reporter = new BugReporter
+            {
+                Ckey = player.Name,
+                Character = MetaData(attached).EntityName,
+                Job = GetJobId(attached),
+            },
+            Report = new BugReportBody
+            {
+                WhatHappened = message,
+            },
+            Snapshot = GatherSnapshot(attached),
+        };
+
+        var userId = player.UserId;
+        Task.Run(async () => await PostReportAsync(report, userId, context));
+
+        reportId = report.Id;
+        return BugHelpOutcome.Sent;
+    }
+
+    private string? GetJobId(EntityUid player)
+    {
+        if (!_mind.TryGetMind(player, out var mindId, out _)
+            || !_jobs.MindTryGetJobId(mindId, out var job)
+            || job is not { } jobId)
+            return null;
+
+        return jobId;
+    }
+
+    private BugSnapshot GatherSnapshot(EntityUid player)
+    {
+        var xform = Transform(player);
+
+        string? activeHand = null;
+        if (_hands.GetActiveItem(player) is { } held)
+            activeHand = PrototypeId(held);
+
+        var clothing = new Dictionary<string, string?>();
+        if (_inventory.TryGetContainerSlotEnumerator(player, out var slots))
+        {
+            while (slots.NextItem(out var item, out var slot))
+                clothing[slot.Name] = PrototypeId(item);
+        }
+
+        var nearby = new List<string>();
+        foreach (var ent in _lookup.GetEntitiesInRange(xform.Coordinates, NearbyRadius))
+        {
+            if (ent == player)
+                continue;
+
+            var protoId = PrototypeId(ent);
+            if (protoId == null || nearby.Contains(protoId))
+                continue;
+
+            nearby.Add(protoId);
+            if (nearby.Count >= NearbyCap)
+                break;
+        }
+
+        return new BugSnapshot
+        {
+            ActiveHand = activeHand,
+            Clothing = clothing,
+            Position = new BugPosition
+            {
+                Grid = xform.GridUid?.ToString(),
+                X = (int) xform.Coordinates.X,
+                Y = (int) xform.Coordinates.Y,
+            },
+            Nearby = nearby,
+        };
+    }
+
+    private string? PrototypeId(EntityUid uid) => MetaData(uid).EntityPrototype?.ID;
+
+    private string? OrNull(string value) => string.IsNullOrWhiteSpace(value) ? null : value;
+
+    private async Task PostReportAsync(BugReport report, NetUserId userId, HelpContext context)
+    {
+        try
+        {
+            report.Reporter.DiscordId = await _relay.GetLinkedDiscordId(userId);
+
+            var threadName = $"{report.Id} · {report.Report.WhatHappened}"
+                .Replace('\n', ' ')
+                .Replace('\r', ' ');
+            if (threadName.Length > ThreadNameCap)
+                threadName = threadName[..ThreadNameCap];
+
+            var reporter = report.Reporter;
+            var job = reporter.Job ?? "no job";
+            _relay.Post(HelpSource.BugHelp, new HelpPost
+            {
+                Author = $"{reporter.Ckey} ({reporter.Character} · {job})",
+                Title = threadName,
+                ThreadName = threadName,
+                Description = report.Report.WhatHappened,
+                PingUserId = report.Reporter.DiscordId,
+                Context = context,
+                AttachmentJson = JsonSerializer.Serialize(report),
+            });
+        }
+        catch (Exception e)
+        {
+            _sawmill.Error($"BugHelp failed to prepare {report.Id}:\n{e}");
+        }
+    }
+}
+
+public enum BugHelpOutcome
+{
+    Sent,
+    Disabled,
+    RateLimited,
+    NoEntity,
+}
+
+// Report artifact schema "cmu-bugreport/1". Additive changes only inside v1; breaking changes bump
+// the schema string. Field order is declaration order and mirrors the design doc.
+sealed class BugReport
+{
+    [JsonPropertyName("schema")] public string Schema { get; set; } = "cmu-bugreport/1";
+    [JsonPropertyName("id")] public string Id { get; set; } = string.Empty;
+    [JsonPropertyName("server")] public string Server { get; set; } = string.Empty;
+    [JsonPropertyName("revision")] public string? Revision { get; set; }
+    [JsonPropertyName("reported_at")] public string ReportedAt { get; set; } = string.Empty;
+    [JsonPropertyName("round")] public BugRound Round { get; set; } = new();
+    [JsonPropertyName("reporter")] public BugReporter Reporter { get; set; } = new();
+    [JsonPropertyName("report")] public BugReportBody Report { get; set; } = new();
+    [JsonPropertyName("snapshot")] public BugSnapshot Snapshot { get; set; } = new();
+}
+
+sealed class BugRound
+{
+    [JsonPropertyName("id")] public int Id { get; set; }
+    [JsonPropertyName("elapsed")] public string Elapsed { get; set; } = "00:00:00";
+    [JsonPropertyName("gamemode")] public string? Gamemode { get; set; }
+    [JsonPropertyName("map")] public string? Map { get; set; }
+}
+
+sealed class BugReporter
+{
+    [JsonPropertyName("ckey")] public string Ckey { get; set; } = string.Empty;
+    [JsonPropertyName("character")] public string? Character { get; set; }
+    [JsonPropertyName("job")] public string? Job { get; set; }
+    [JsonPropertyName("discord_id")] public ulong? DiscordId { get; set; }
+}
+
+sealed class BugReportBody
+{
+    [JsonPropertyName("what_happened")] public string WhatHappened { get; set; } = string.Empty;
+
+    // Filled by the report window (P2); the pipeline treats null as absent.
+    [JsonPropertyName("expected")] public string? Expected { get; set; }
+    [JsonPropertyName("steps")] public string? Steps { get; set; }
+    [JsonPropertyName("item_query")] public string? ItemQuery { get; set; }
+    [JsonPropertyName("item_candidates")] public List<BugItemCandidate>? ItemCandidates { get; set; }
+    [JsonPropertyName("examine_text")] public string? ExamineText { get; set; }
+}
+
+sealed class BugItemCandidate
+{
+    [JsonPropertyName("id")] public string Id { get; set; } = string.Empty;
+    [JsonPropertyName("score")] public double Score { get; set; }
+}
+
+sealed class BugSnapshot
+{
+    [JsonPropertyName("active_hand")] public string? ActiveHand { get; set; }
+    [JsonPropertyName("clothing")] public Dictionary<string, string?> Clothing { get; set; } = new();
+    [JsonPropertyName("position")] public BugPosition Position { get; set; } = new();
+    [JsonPropertyName("nearby")] public List<string> Nearby { get; set; } = new();
+}
+
+sealed class BugPosition
+{
+    [JsonPropertyName("grid")] public string? Grid { get; set; }
+    [JsonPropertyName("x")] public int X { get; set; }
+    [JsonPropertyName("y")] public int Y { get; set; }
+}
