@@ -17,6 +17,44 @@ The roll maximizes balanced assignments, then prefers higher role priorities and
 
 ## Dropships
 
+RTO CAS uplinks can call **OWN POSITION** without a visible hostile or a flare.
+The operator may offset the call by up to 15 tiles east/west and north/south,
+including diagonally. The server adds up to 12 tiles of random radial deviation
+to the requested position; the resulting mark stays fixed when the RTO moves.
+Aircrew can accept, deny or complete requests on the weapons console and select
+AUTO or MANUAL carry-out. Undecided requests switch to AUTO after twelve seconds.
+Only AUTO requires the requesting RTO to transmit CLEARED HOT before firing;
+MANUAL does not lock the crew's weapons. AUTO uses matching weapons already
+mounted on the aircraft (for example the GAU-21 or rocket pod), not a preset
+loadout. A missing or unusable requested weapon cancels the automatic request.
+RTO laser designations tighten strike spread by 25%. Direct console strikes
+within five tiles of friendlies require a second fire command within five seconds,
+unless covered by a cleared-hot request.
+
+Ground GPS reports are optional. The RTO layer has no guidance dependency:
+server systems may subscribe to broadcast `CMUCasGroundReportsEvent(Actor,
+Reports)` and append display-only `CMUCasGroundReport(Id, Observer, Map, X, Y)`
+records. Resolving a selection raises `CMUCasResolveGroundReportEvent(Actor,
+ReportId)`; a provider must revalidate faction, expiry, surface and range before
+setting its nullable `EntityCoordinates` field `Coordinates`. With no provider,
+the report list is empty and report IDs are rejected. Both events and the
+serializable record are owned by `Content.Shared.CMU14.Dropship.Cas`.
+
+Xenos, or players holding a sharp tool such as a knife, can right-click an RTO
+radio pack or its wearer to **Rip out radio wires**.
+This takes seven seconds and is interrupted by movement, damage, or changing
+hands/dropping the required tool. The broken
+pack cannot operate its radio, relay, phone or CAS uplink. An RTO or someone with
+Engineer skill 1 can use five cable on the pack (or its wearer) to repair it,
+then power it back on.
+
+Focused RTO coverage is in `CMURtoRadioTest`, `CMUCasRequestTest` and
+`CMUCasAutoCarryTest`. These use master weapon prototypes and cover position
+deviation, JTAC relay, wire damage/repair, optional report providers, request
+lifecycle, AUTO-only clearance, mounted GAU ammunition consumption and danger-close
+confirmation. Run with `dotnet test Content.IntegrationTests\Content.IntegrationTests.csproj
+-c DebugOpt --filter "FullyQualifiedName~CMURtoRadioTest|FullyQualifiedName~CMUCasRequestTest|FullyQualifiedName~CMUCasAutoCarryTest"`.
+
 Dropship part fabricators share a budget within their carrier's faction, including linked decks. GOVFOR and OPFOR have separate accounts for purchases, refunds, passive income and faction tech rewards.
 
 In FoF, squad leaders, acting squad leaders, officers and command personnel can hack an opposing dropship's navigation console. The hack takes 60 seconds and breaks on movement, damage or resting. Existing launch and hijack timing limits apply. Authorization is tied to the user and console and expires after one minute.
