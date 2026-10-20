@@ -55,7 +55,7 @@ public sealed partial class CMUMapBreathingSystem : EntitySystem
             var required = xform.MapUid is { } map && RequiresBreathing(map) || IsBreathingFromEmptyTank(uid);
             var granted = HasComp<CMUMapGrantedRespiratorComponent>(uid);
 
-            if (required && !granted && !HasComp<RespiratorComponent>(uid))
+            if (required && !HasComp<RespiratorComponent>(uid))
             {
                 EntityManager.AddComponents(uid, _prototypes.Index(RespiratorTemplate), removeExisting: false);
                 EnsureComp<CMUMapGrantedRespiratorComponent>(uid);

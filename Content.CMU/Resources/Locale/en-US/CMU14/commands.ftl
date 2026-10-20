@@ -104,3 +104,12 @@ cmu-cmd-nuke-lights-hint-x = x
 cmu-cmd-nuke-lights-hint-y = y
 cmu-cmd-nuke-lights-hint-map-id = mapId
 cmu-cmd-nuke-lights-hint-color = color
+
+# Life support dev toggle
+cmu-cmd-lifesupport-desc = Toggles the life support set (breathing, pressure damage, heat damage, crit asphyxiation) on you or a target mob. Off by default until the atmos repair loop ships.
+cmu-cmd-lifesupport-help = cmulifesupport [NetEntity]
+cmu-cmd-lifesupport-player-only = Run it as a player or pass a NetEntity.
+cmu-cmd-lifesupport-bad-entity = Could not resolve '{ $entity }' to an entity.
+cmu-cmd-lifesupport-on = Life support on: { $target }
+cmu-cmd-lifesupport-off = Life support off: { $target }
+cmu-cmd-lifesupport-hint = NetEntity of the target mob, defaults to you
