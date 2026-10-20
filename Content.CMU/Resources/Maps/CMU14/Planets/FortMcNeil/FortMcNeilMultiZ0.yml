@@ -20505,6 +20505,7 @@ entities:
     - Vehicle
     - VehicleOperatorDamage
     - GridVehicleMover
+    - InputMover
     - VehicleOvercharge
     - VehicleSound
     - VehicleSpotlight
