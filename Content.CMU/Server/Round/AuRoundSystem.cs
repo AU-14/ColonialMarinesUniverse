@@ -979,17 +979,23 @@ namespace Content.Server.CMU14.Round
                 };
             }
 
-
-
-            if (presetProto.RequiresGovforVote && govforPlatoons.Count > 0)
+            List<(string text, object data)> BuildVoteOptions(List<ProtoId<PlatoonPrototype>> platoons)
             {
-                var optionsplatoons = new List<(string text, object data)>();
-                foreach (var platoonId in govforPlatoons)
+                var options = new List<(string text, object data)>();
+                foreach (var platoonId in platoons)
                 {
                     var platoon = _prototypeManager.Index<PlatoonPrototype>(platoonId);
-                    optionsplatoons.Add((Loc.GetString(platoon.Name), platoon));
+                    if (!platoon.ShowInVote)
+                        continue;
+                    options.Add((Loc.GetString(platoon.Name), platoon));
                 }
 
+                return options;
+            }
+
+            var optionsplatoons = BuildVoteOptions(govforPlatoons);
+            if (presetProto.RequiresGovforVote && optionsplatoons.Count > 0)
+            {
                 var voteopt = new VoteOptions
                 {
                     Title = Loc.GetString("au14-vote-title-govfor"),
@@ -1041,15 +1047,9 @@ namespace Content.Server.CMU14.Round
                 };
             }
 
-            if (presetProto.RequiresOpforVote && opforPlatoons.Count > 0)
+            optionsplatoons = BuildVoteOptions(opforPlatoons);
+            if (presetProto.RequiresOpforVote && optionsplatoons.Count > 0)
             {
-                var optionsplatoons = new List<(string text, object data)>();
-                foreach (var platoonId in opforPlatoons)
-                {
-                    var platoon = _prototypeManager.Index<PlatoonPrototype>(platoonId);
-                    optionsplatoons.Add((Loc.GetString(platoon.Name), platoon));
-                }
-
                 var voteopt = new VoteOptions
                 {
                     Title = Loc.GetString("au14-vote-title-opfor"),
