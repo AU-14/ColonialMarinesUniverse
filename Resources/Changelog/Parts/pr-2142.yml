@@ -1,0 +1,13 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Expedition squads use improved close-quarters movement, covering fire,
+    corner tactics and cooperative patrols.
+  type: Tweak
+- message: Expedition agents handle stored weapons, ammunition, healing, flares and
+    nearby fire more reliably.
+  type: Fix
+- message: Added live squad aim controls and expanded squad diagnostics.
+  type: Admin
+time: '2026-10-10T16:23:53.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2142

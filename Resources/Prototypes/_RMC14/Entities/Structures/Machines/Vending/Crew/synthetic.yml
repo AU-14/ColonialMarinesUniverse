@@ -405,9 +405,11 @@
   name: compact nailgun kit
   description: Contains a compact nailgun, two magazines and a nailgun holster.
   components:
+#cmu edit start: pre-resprite sprite (reverts RMC-14#5979)
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/SMGs/nailgun_compact.rsi
+    sprite: CMU14/Weapons/SMGs/nailgun_compact_old.rsi
     state: icon
+#cmu edit end
   - type: CMVendorBundle
     bundle:
     - RMCNailgunCompact
