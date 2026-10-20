@@ -1,0 +1,423 @@
+# Data for the GOVFOR, OPFOR and colony identification computers (Entities/Structures/Machines/ship_consoles.yml).
+# The console sorts accesses into tabs by their accessGroup, so each faction's accesses get one, and offers job
+# presets: copies of each role's access group with a name to show on the button.
+
+- type: accessLevel
+  id: CMUIdAccessCategoryGovfor
+  name: cmu-id-access-category-govfor
+  accessGroup: GOVFOR Access
+
+- type: accessGroup
+  id: CMUIdJobCategoryGovfor
+  accessGroup: GOVFOR Roles
+  tags: [] # a tab heading, not a role
+
+- type: accessGroup
+  id: CMUIdJobGovforRifleman
+  name: cmu-id-job-govfor-rifleman
+  accessGroup: GOVFOR Roles
+  faction: GOVFOR
+  tags:
+  - AU14AccessGovfor
+  - AU14AccessGovforSquad
+
+- type: accessGroup
+  id: CMUIdJobGovforSquad
+  name: cmu-id-job-govfor-squad
+  accessGroup: GOVFOR Roles
+  faction: GOVFOR
+  tags:
+  - AU14AccessGovfor
+  - AU14AccessGovforSquad
+
+- type: accessGroup
+  id: CMUIdJobGovforWeaponsSpecialist
+  name: cmu-id-job-govfor-weapons-specialist
+  accessGroup: GOVFOR Roles
+  faction: GOVFOR
+  tags:
+  - AU14AccessGovforSquadWeaponsSpecialist
+  - AU14AccessGovforSquad
+  - AU14AccessGovfor
+
+- type: accessGroup
+  id: CMUIdJobGovforFTL
+  name: cmu-id-job-govfor-f-t-l
+  accessGroup: GOVFOR Roles
+  faction: GOVFOR
+  tags:
+  - AU14AccessGovfor
+  - AU14AccessGovforSquad
+  - AU14AccessGovforFTL
+
+- type: accessGroup
+  id: CMUIdJobGovforCorpsman
+  name: cmu-id-job-govfor-corpsman
+  accessGroup: GOVFOR Roles
+  faction: GOVFOR
+  tags:
+  - AU14AccessGovfor
+  - AU14AccessGovforMedical
+
+- type: accessGroup
+  id: CMUIdJobGovforEngineer
+  name: cmu-id-job-govfor-engineer
+  accessGroup: GOVFOR Roles
+  faction: GOVFOR
+  tags:
+  - AU14AccessGovfor
+  - AU14AccessGovforSquad
+  - AU14AccessGovforEngineering
+
+- type: accessGroup
+  id: CMUIdJobGovforAuxTech
+  name: cmu-id-job-govfor-aux-tech
+  accessGroup: GOVFOR Roles
+  faction: GOVFOR
+  tags:
+  - AU14AccessGovfor
+  - AU14AccessGovforSquad
+  - AU14AccessGovforEngineering
+  - AU14AccessGovforReq
+
+- type: accessGroup
+  id: CMUIdJobGovforPilot
+  name: cmu-id-job-govfor-pilot
+  accessGroup: GOVFOR Roles
+  faction: GOVFOR
+  tags:
+  - AU14AccessGovfor
+  - AU14AccessGovforPilot
+
+- type: accessGroup
+  id: CMUIdJobGovforGunner
+  name: cmu-id-job-govfor-gunner
+  accessGroup: GOVFOR Roles
+  faction: GOVFOR
+  tags:
+  - AU14AccessGovfor
+  - AU14AccessGovforSquad
+  - AU14AccessGovforGunner
+
+- type: accessGroup
+  id: CMUIdJobGovforVehicleCrew
+  name: cmu-id-job-govfor-vehicle-crew
+  accessGroup: GOVFOR Roles
+  faction: GOVFOR
+  tags:
+  - AU14AccessGovfor
+  - AU14AccessGovforSquad
+  - AU14AccessGovforVehicleCrew
+  - CMAccessCrewman
+  - RMCAccessVehicleCrew
+
+- type: accessGroup
+  id: CMUIdJobGovforSecurity
+  name: cmu-id-job-govfor-security
+  accessGroup: GOVFOR Roles
+  faction: GOVFOR
+  tags:
+  - AU14AccessGovfor
+  - AU14AccessGovforSquad
+  - AU14AccessGovforCommand
+  - AU14AccessGovforSecurity
+  - AU14AccessGovforFTL
+  - AU14AccessGovforMedical
+  - AU14AccessGovforEngineering
+  - AU14AccessGovforGunner
+  - AU14AccessGovforPilot
+  - AU14AccessGovforReq
+  - AU14AccessGovforVehicleCrew
+
+- type: accessGroup
+  id: CMUIdJobGovforCommandNoLogistics
+  name: cmu-id-job-govfor-command-no-logistics
+  accessGroup: GOVFOR Roles
+  faction: GOVFOR
+  tags:
+  - AU14AccessGovfor
+  - AU14AccessGovforSquad
+  - AU14AccessGovforCommand
+  - AU14AccessGovforSecurity
+  - AU14AccessGovforFTL
+  - AU14AccessGovforMedical
+  - AU14AccessGovforEngineering
+  - AU14AccessGovforGunner
+  - AU14AccessGovforPilot
+  - AU14AccessGovforVehicleCrew
+
+- type: accessGroup
+  id: CMUIdJobGovforCommand
+  name: cmu-id-job-govfor-command
+  accessGroup: GOVFOR Roles
+  faction: GOVFOR
+  tags:
+  - AU14AccessGovfor
+  - AU14AccessGovforSquad
+  - AU14AccessGovforCommand
+  - AU14AccessGovforSecurity
+  - AU14AccessGovforFTL
+  - AU14AccessGovforMedical
+  - AU14AccessGovforEngineering
+  - AU14AccessGovforGunner
+  - AU14AccessGovforPilot
+  - AU14AccessGovforReq
+  - AU14AccessGovforVehicleCrew
+
+- type: accessLevel
+  id: CMUIdAccessCategoryOpfor
+  name: cmu-id-access-category-opfor
+  accessGroup: OPFOR Access
+
+- type: accessGroup
+  id: CMUIdJobCategoryOpfor
+  accessGroup: OPFOR Roles
+  tags: [] # a tab heading, not a role
+
+- type: accessGroup
+  id: CMUIdJobOpforRifleman
+  name: cmu-id-job-opfor-rifleman
+  accessGroup: OPFOR Roles
+  faction: OPFOR
+  tags:
+  - AU14AccessOpfor
+  - AU14AccessOpforSquad
+
+- type: accessGroup
+  id: CMUIdJobOpforSquad
+  name: cmu-id-job-opfor-squad
+  accessGroup: OPFOR Roles
+  faction: OPFOR
+  tags:
+  - AU14AccessOpfor
+  - AU14AccessOpforSquad
+
+- type: accessGroup
+  id: CMUIdJobOpforWeaponsSpecialist
+  name: cmu-id-job-opfor-weapons-specialist
+  accessGroup: OPFOR Roles
+  faction: OPFOR
+  tags:
+  - AU14AccessOpforSquadWeaponsSpecialist
+  - AU14AccessOpforSquad
+  - AU14AccessOpfor
+
+- type: accessGroup
+  id: CMUIdJobOpforFTL
+  name: cmu-id-job-opfor-f-t-l
+  accessGroup: OPFOR Roles
+  faction: OPFOR
+  tags:
+  - AU14AccessOpfor
+  - AU14AccessOpforSquad
+  - AU14AccessOpforFTL
+
+- type: accessGroup
+  id: CMUIdJobOpforCorpsman
+  name: cmu-id-job-opfor-corpsman
+  accessGroup: OPFOR Roles
+  faction: OPFOR
+  tags:
+  - AU14AccessOpfor
+  - AU14AccessOpforMedical
+
+- type: accessGroup
+  id: CMUIdJobOpforEngineer
+  name: cmu-id-job-opfor-engineer
+  accessGroup: OPFOR Roles
+  faction: OPFOR
+  tags:
+  - AU14AccessOpfor
+  - AU14AccessOpforSquad
+  - AU14AccessOpforEngineering
+
+- type: accessGroup
+  id: CMUIdJobOpforAuxTech
+  name: cmu-id-job-opfor-aux-tech
+  accessGroup: OPFOR Roles
+  faction: OPFOR
+  tags:
+  - AU14AccessOpfor
+  - AU14AccessOpforSquad
+  - AU14AccessOpforEngineering
+  - AU14AccessOpforReq
+
+- type: accessGroup
+  id: CMUIdJobOpforPilot
+  name: cmu-id-job-opfor-pilot
+  accessGroup: OPFOR Roles
+  faction: OPFOR
+  tags:
+  - AU14AccessOpfor
+  - AU14AccessOpforPilot
+
+- type: accessGroup
+  id: CMUIdJobOpforGunner
+  name: cmu-id-job-opfor-gunner
+  accessGroup: OPFOR Roles
+  faction: OPFOR
+  tags:
+  - AU14AccessOpfor
+  - AU14AccessOpforSquad
+  - AU14AccessOpforGunner
+
+- type: accessGroup
+  id: CMUIdJobOpforVehicleCrew
+  name: cmu-id-job-opfor-vehicle-crew
+  accessGroup: OPFOR Roles
+  faction: OPFOR
+  tags:
+  - AU14AccessOpfor
+  - AU14AccessOpforSquad
+  - AU14AccessOpforVehicleCrew
+  - CMAccessCrewman
+  - RMCAccessVehicleCrew
+
+- type: accessGroup
+  id: CMUIdJobOpforSecurity
+  name: cmu-id-job-opfor-security
+  accessGroup: OPFOR Roles
+  faction: OPFOR
+  tags:
+  - AU14AccessOpfor
+  - AU14AccessOpforSquad
+  - AU14AccessOpforCommand
+  - AU14AccessOpforSecurity
+  - AU14AccessOpforFTL
+  - AU14AccessOpforMedical
+  - AU14AccessOpforEngineering
+  - AU14AccessOpforGunner
+  - AU14AccessOpforPilot
+  - AU14AccessOpforReq
+  - AU14AccessOpforVehicleCrew
+
+- type: accessGroup
+  id: CMUIdJobOpforCommandNoLogistics
+  name: cmu-id-job-opfor-command-no-logistics
+  accessGroup: OPFOR Roles
+  faction: OPFOR
+  tags:
+  - AU14AccessOpfor
+  - AU14AccessOpforSquad
+  - AU14AccessOpforCommand
+  - AU14AccessOpforSecurity
+  - AU14AccessOpforFTL
+  - AU14AccessOpforMedical
+  - AU14AccessOpforEngineering
+  - AU14AccessOpforGunner
+  - AU14AccessOpforPilot
+  - AU14AccessOpforVehicleCrew
+
+- type: accessGroup
+  id: CMUIdJobOpforCommand
+  name: cmu-id-job-opfor-command
+  accessGroup: OPFOR Roles
+  faction: OPFOR
+  tags:
+  - AU14AccessOpfor
+  - AU14AccessOpforSquad
+  - AU14AccessOpforCommand
+  - AU14AccessOpforSecurity
+  - AU14AccessOpforFTL
+  - AU14AccessOpforMedical
+  - AU14AccessOpforEngineering
+  - AU14AccessOpforGunner
+  - AU14AccessOpforPilot
+  - AU14AccessOpforReq
+  - AU14AccessOpforVehicleCrew
+
+- type: accessLevel
+  id: CMUIdAccessCategoryColony
+  name: cmu-id-access-category-colony
+  accessGroup: Colony Access
+
+- type: accessLevel
+  id: CMUIdAccessCategoryColonyLeadership
+  name: cmu-id-access-category-colony-leadership
+  accessGroup: Colony Leadership
+
+- type: accessGroup
+  id: CMUIdJobCategoryColony
+  accessGroup: Colony Roles
+  tags: [] # a tab heading, not a role
+
+- type: accessGroup
+  id: CMUIdJobColonyAdmin
+  name: cmu-id-job-colony-admin
+  accessGroup: Colony Roles
+  tags:
+  - CMAccessResearch
+  - CMAccessMedical
+  - CMAccessColonyPublic
+  - CMAccessColonyResearch
+  - CMAccessColonyEngineering
+  - CMAccessColonyLogistics
+  - CMAccessColonyBrig
+  - CMAccessRequisitions
+  - CMAccessColonyMedbay
+  - CMAccessColonyArmory
+  - CMAccessColonyCommand
+
+- type: accessGroup
+  id: CMUIdJobColonyHeadsofcolony
+  name: cmu-id-job-colony-headsofcolony
+  accessGroup: Colony Roles
+  tags:
+  - AU14AccessColonyHeadPhysician
+  - AU14AccessColonyForeman
+  - AU14AccessColonyHeadEngineer
+  - AU14AccessColonyHeadOfService
+
+- type: accessGroup
+  id: CMUIdJobColonyEngi
+  name: cmu-id-job-colony-engi
+  accessGroup: Colony Roles
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyEngineering
+  - CMAccessColonyLogistics
+
+- type: accessGroup
+  id: CMUIdJobColonyCmb
+  name: cmu-id-job-colony-cmb
+  accessGroup: Colony Roles
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyBrig
+  - CMAccessColonyCommand
+  - CMAccessColonyEngineering
+  - CMAccessColonyMedbay
+  - CMAccessColonyArmory
+
+- type: accessGroup
+  id: CMUIdJobColonyMed
+  name: cmu-id-job-colony-med
+  accessGroup: Colony Roles
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyResearch
+  - CMAccessColonyMedbay
+  - CMAccessColonyChem
+  - CMAccessMedical
+
+- type: accessGroup
+  id: CMUIdJobColonyNews
+  name: cmu-id-job-colony-news
+  accessGroup: Colony Roles
+  tags:
+  - CMAccessColonyPublic
+
+- type: accessGroup
+  id: CMUIdJobColonyOrbitalmanagement
+  name: cmu-id-job-colony-orbitalmanagement
+  accessGroup: Colony Roles
+  tags:
+  - AU14AccessOrbitalManagement
+  - AU14AccessOrbitalLaw
+
+- type: accessGroup
+  id: CMUIdJobColonyOrbitallaw
+  name: cmu-id-job-colony-orbitallaw
+  accessGroup: Colony Roles
+  tags:
+  - AU14AccessOrbitalLaw

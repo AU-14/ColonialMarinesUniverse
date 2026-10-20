@@ -5,6 +5,7 @@
   components:
   - type: Sprite
     sprite: CMU14/Structures/Doors/Airlocks/govfor_door.rsi
+  - type: CMUAtmosBolt
 
 - type: entity
   parent: CMAirlockGovfor
@@ -21,6 +22,7 @@
   components:
   - type: Sprite
     sprite: CMU14/Structures/Doors/Airlocks/govfor_door_glass.rsi
+  - type: CMUAtmosBolt
 
 - type: entity
   parent: CMAirlockGovforGlass
@@ -38,6 +40,7 @@
   - type: Sprite
     sprite: CMU14/Structures/Doors/Airlocks/Double/govfor_solid.rsi
   - type: Occluder
+  - type: CMUAtmosBolt
 
 - type: entity
   parent: CMDoubleDoorGovfor
@@ -54,6 +57,7 @@
   components:
   - type: Sprite
     sprite: CMU14/Structures/Doors/Airlocks/Double/govfor_glass.rsi
+  - type: CMUAtmosBolt
 
 - type: entity
   parent: CMDoubleDoorGovforGlass
@@ -375,6 +379,7 @@
   components:
   - type: AccessReader
     access: [["AU14AccessGovfor"]]
+  - type: CMUAtmosBolt
 
 - type: entity
   parent: CMUAirlockUPPGrey
@@ -383,6 +388,7 @@
   components:
   - type: AccessReader
     access: [["AU14AccessGovfor"]]
+  - type: CMUAtmosBolt
 
 - type: entity
   parent: CMUAirlockUPPGreen
@@ -391,6 +397,7 @@
   components:
   - type: AccessReader
     access: [["AU14AccessGovfor"]]
+  - type: CMUAtmosBolt
 
 - type: entity
   parent: CMUAirlockGlassGreenUPP
@@ -399,6 +406,7 @@
   components:
   - type: AccessReader
     access: [["AU14AccessGovfor"]]
+  - type: CMUAtmosBolt
 
 - type: entity
   parent: CMUAirlockGlassGreyUPP
@@ -407,3 +415,4 @@
   components:
   - type: AccessReader
     access: [["AU14AccessGovfor"]]
+  - type: CMUAtmosBolt

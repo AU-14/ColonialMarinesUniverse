@@ -39,5 +39,8 @@ public sealed partial class IdModificationConsoleUISystem : EntitySystem
     private void RefreshUIs(Entity<IdModificationConsoleComponent> ent)
     {
         _rmcUI.RefreshUIs<IdModificationConsoleBui>(ent.Owner);
+        // cmu edit start
+        _rmcUI.RefreshUIs<Content.Client.CMU14.Access.CMUIdModificationConsoleBui>(ent.Owner);
+        // cmu edit end
     }
 }

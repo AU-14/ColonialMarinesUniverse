@@ -973,6 +973,8 @@
         amount: 60
       - id: RMCBoxMRE
         amount: 10
+      - id: CMCanteen
+        amount: 60
     - name: Medical Supplies
       entries:
       - id: AU14PouchIFAKFill
@@ -1595,6 +1597,8 @@
         amount: 1
       - id: RMCGunCasePistolSmart
         amount: 3
+      - id: RMCGunCasePistolM13
+        amount: 4
     - name: primary ammunition
       entries:
       - id: CMMagazineRifleM54CMK1
@@ -1651,6 +1655,16 @@
         amount: 10
       - id: RMCMagazinePistolSU6
         amount: 30
+      - id: RMCMagazinePistolM13
+        amount: 40
+      - id: RMCMagazinePistolM13AP
+        amount: 4
+      - id: RMCMagazinePistolM13Ext
+        amount: 4
+      - id: RMCMagazinePistolM13Drum
+        amount: 2
+      - id: RMCMagazinePistolM13DrumAP
+        amount: 1
     - name: Magazine Boxes
       entries:
       - id: CMUBoxMagazineRifleM54CMK1

@@ -6,11 +6,11 @@ using Robust.Shared.Prototypes;
 namespace Content.Client.CMU14.Overwatch;
 
 /// <summary>
-/// Draws <see cref="Source"/> through the VHS shader. Same technique as
+/// Draws <see cref="Source"/> through the camera feed shader: film grain, a little chroma bleed and
+/// a vignette, with no scanlines. Same technique as
 /// <see cref="Content.Client.CMU14.Interface.CrtScreenControl"/>: the source is rendered into a
-/// texture first so the shader can move pixels (wobble, tracking band, chroma bleed), which an
-/// overlay cannot. Unlike that control it does not follow the CRT UI theme: a camera feed is tape
-/// whatever the menus look like.
+/// texture first so the shader can sample it at an offset, which an overlay cannot. Unlike that
+/// control it does not follow the CRT UI theme: a camera feed looks the same whatever the menus do.
 /// </summary>
 /// <remarks>
 /// Must come after <see cref="Source"/> in the tree; the source draws normally first and the shaded,

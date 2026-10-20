@@ -15,6 +15,9 @@
   - type: InteractionOutline
   - type: Clickable
   - type: RotaryPhone
+    # cmu edit start: every desk and wall phone can go do-not-disturb
+    canDnd: true
+    # cmu edit end
   - type: ContainerContainer
     containers:
       rmc_rotary_phone_telephone: !type:ContainerSlot
@@ -23,7 +26,9 @@
   - type: UserInterface
     interfaces:
       enum.RMCTelephoneUiKey.Key:
-        type: RMCTelephoneBui
+        # cmu edit start: in-world phone screen
+        type: CMUTelephoneBui
+        # cmu edit end
   - type: ActivatableUIBlacklist
     blacklist:
       components:

@@ -3,7 +3,10 @@
   id: RMCCoffeeMachine
   name: coffee machine
   description: A coffee machine
-  components: #TODO: Make the coffee machine actually function
+  components:
+  # cmu edit start: brews coffee into a cup or mug used on it
+  - type: CMUCoffeeMachine
+  # cmu edit end
   - type: Transform
     noRot: true
   - type: Physics
