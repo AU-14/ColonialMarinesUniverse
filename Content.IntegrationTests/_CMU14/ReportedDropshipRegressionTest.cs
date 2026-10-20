@@ -3,6 +3,7 @@ using Content.IntegrationTests.Utility;
 using Content.Server.CMU14.Ops.ThirdParty;
 using Content.Server.CMU14.Threats;
 using Content.Shared._RMC14.Dropship;
+using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Xenonids.Projectile;
 using Content.Shared.CMU14.Dropship.Integrity;
 using Content.Shared.CMU14.Threats;
@@ -13,6 +14,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Projectiles;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
 
@@ -23,9 +25,9 @@ public sealed class ReportedDropshipRegressionTest
 {
     private static readonly Robust.Shared.Prototypes.ProtoId<DamageTypePrototype> PiercingPrototype = "Piercing";
 
-    [TestCase("BulletRifle10x24mm", 1f)]
-    [TestCase("XenoSpitProjectile", 4f)]
-    public async Task LiveProjectilesCollideWithLexingtonHull(string prototype, float multiplier)
+    [TestCase("BulletRifle10x24mm", 1f, 0.5f)]
+    [TestCase("XenoSpitProjectile", 4f, 1f)]
+    public async Task LiveProjectilesCollideWithLexingtonHull(string prototype, float multiplier, float bulletMultiplier)
     {
         await using var pair = await PoolManager.GetServerClient();
         var map = await pair.CreateTestMap();
@@ -35,13 +37,14 @@ public sealed class ReportedDropshipRegressionTest
         {
             var entities = pair.Server.EntMan;
             var integrity = entities.EnsureComponent<DropshipIntegrityComponent>(map.Grid);
+            integrity.BulletDamageMultiplier = bulletMultiplier;
             var hull = entities.SpawnEntity("CMNormandyWall1", map.GridCoords);
             entities.EnsureComponent<DropshipHullComponent>(hull);
             projectile = entities.SpawnEntity(prototype, map.GridCoords);
             var shot = entities.GetComponent<ProjectileComponent>(projectile);
             shot.OnlyCollideWhenShot = false;
             expected = integrity.Integrity - shot.Damage.GetTotal().Float() * multiplier *
-                entities.System<DamageableSystem>().UniversalProjectileDamageModifier;
+                entities.System<DamageableSystem>().UniversalProjectileDamageModifier * bulletMultiplier;
         });
         await pair.RunTicksSync(3);
         await pair.Server.WaitAssertion(() =>
@@ -50,6 +53,29 @@ public sealed class ReportedDropshipRegressionTest
             Assert.That(entities.GetComponent<DropshipIntegrityComponent>(map.Grid).Integrity,
                 Is.EqualTo(expected).Within(0.01f));
             Assert.That(entities.Deleted(projectile), Is.True, "The hull must consume a colliding shot.");
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ExplosionsApplyDropshipVulnerability()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var map = await pair.CreateTestMap();
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var integrity = entities.EnsureComponent<DropshipIntegrityComponent>(map.Grid);
+            integrity.ExplosiveDamageMultiplier = 1.5f;
+            var hull = entities.SpawnEntity("CMNormandyWall1", map.GridCoords);
+            entities.EnsureComponent<DropshipHullComponent>(hull);
+            var damage = new DamageSpecifier();
+            damage.DamageDict["Blunt"] = FixedPoint2.New(10);
+            var explosion = new ExplosionReceivedEvent("RMC", MapCoordinates.Nullspace, damage);
+
+            entities.EventBus.RaiseLocalEvent(hull, ref explosion);
+
+            Assert.That(integrity.Integrity, Is.EqualTo(integrity.MaxIntegrity - 15f).Within(0.01f));
         });
         await pair.CleanReturnAsync();
     }

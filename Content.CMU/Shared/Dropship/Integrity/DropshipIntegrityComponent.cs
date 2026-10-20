@@ -19,8 +19,20 @@ public sealed partial class DropshipIntegrityComponent : Component
     [DataField, AutoNetworkedField]
     public float MaxIntegrity = 2000f;
 
+    [DataField]
+    public float DefaultMaxIntegrity;
+
+    [DataField]
+    public float InsurgencyAndForceOnForceMaxIntegrity;
+
     [DataField, AutoNetworkedField]
     public float Integrity = 2000f;
+
+    [DataField]
+    public float BulletDamageMultiplier = 1f;
+
+    [DataField]
+    public float ExplosiveDamageMultiplier = 1f;
 
     [DataField, AutoNetworkedField]
     public bool Crashing;

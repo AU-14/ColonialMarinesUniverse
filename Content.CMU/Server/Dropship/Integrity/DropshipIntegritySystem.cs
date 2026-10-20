@@ -4,6 +4,7 @@ using Content.Server._RMC14.Explosion;
 using Content.Server.Explosion.Components;
 using Content.Server.Explosion.EntitySystems;
 using Content.Server.Destructible;
+using Content.Server.GameTicking;
 using Content.Server.Shuttles.Components;
 using Content.Server.Station.Components;
 using Content.Shared.CMU14.Destruction;
@@ -71,6 +72,7 @@ public sealed partial class DropshipIntegritySystem : EntitySystem
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private DestructionMomentumSystem _destructionMomentum = default!;
     [Dependency] private IConfigurationManager _configuration = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
 
     private static readonly ProtoId<ToolQualityPrototype> WeldingQuality = "Welding";
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";
@@ -104,6 +106,7 @@ public sealed partial class DropshipIntegritySystem : EntitySystem
         SubscribeLocalEvent<GunshipControlsComponent, ComponentStartup>(OnGunshipControlsStartup);
         SubscribeLocalEvent<GunshipPilotSeatComponent, ComponentStartup>(OnGunshipPilotSeatStartup);
         SubscribeLocalEvent<StationMemberComponent, ComponentStartup>(OnStationMemberStartup);
+        SubscribeLocalEvent<GameRunLevelChangedEvent>(OnGameRunLevelChanged);
         SubscribeLocalEvent<DropshipHullComponent, ProjectileHitTargetEvent>(OnProjectileHit);
         SubscribeLocalEvent<DropshipHullComponent, BeforeDamageChangedEvent>(OnBeforeHullDamageChanged);
         SubscribeLocalEvent<DropshipHullComponent, ExplosionReceivedEvent>(OnExplosionReceived);
@@ -156,6 +159,7 @@ public sealed partial class DropshipIntegritySystem : EntitySystem
     private void InitializeDropshipIntegrity(EntityUid grid)
     {
         var integrity = EnsureComp<DropshipIntegrityComponent>(grid);
+        ApplyGameModeIntegrity((grid, integrity));
         integrity.Integrity = Math.Clamp(integrity.Integrity, 0f, integrity.MaxIntegrity);
         if (TryComp(grid, out DropshipComponent? dropship))
             integrity.Wrecked |= dropship.Crashed;
@@ -165,6 +169,48 @@ public sealed partial class DropshipIntegritySystem : EntitySystem
         MarkInitialHull(grid);
         integrity.HullInitializationScansRemaining = HullInitializationFollowupScans;
         integrity.NextHullInitializationScan = _timing.CurTime + HullInitializationScanInterval;
+    }
+
+    private void OnGameRunLevelChanged(GameRunLevelChangedEvent ev)
+    {
+        if (ev.New != GameRunLevel.InRound)
+            return;
+
+        var query = EntityQueryEnumerator<DropshipIntegrityComponent>();
+        while (query.MoveNext(out var uid, out var integrity))
+        {
+            if (integrity.InsurgencyAndForceOnForceMaxIntegrity <= 0f)
+                continue;
+
+            ApplyGameModeIntegrity((uid, integrity));
+        }
+    }
+
+    private void ApplyGameModeIntegrity(Entity<DropshipIntegrityComponent> dropship)
+    {
+        if (dropship.Comp.InsurgencyAndForceOnForceMaxIntegrity <= 0f)
+            return;
+
+        var defaultMaxIntegrity = dropship.Comp.DefaultMaxIntegrity;
+        if (defaultMaxIntegrity <= 0f)
+        {
+            defaultMaxIntegrity = dropship.Comp.MaxIntegrity;
+            dropship.Comp.DefaultMaxIntegrity = defaultMaxIntegrity;
+        }
+
+        var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
+        var specialMode = string.Equals(presetId, "Insurgency", StringComparison.OrdinalIgnoreCase) ||
+                          string.Equals(presetId, "ForceOnForce", StringComparison.OrdinalIgnoreCase);
+        var maxIntegrity = specialMode
+            ? dropship.Comp.InsurgencyAndForceOnForceMaxIntegrity
+            : defaultMaxIntegrity;
+        var wasAtFullIntegrity = dropship.Comp.Integrity >= dropship.Comp.MaxIntegrity;
+
+        dropship.Comp.MaxIntegrity = maxIntegrity;
+        dropship.Comp.Integrity = wasAtFullIntegrity
+            ? maxIntegrity
+            : Math.Clamp(dropship.Comp.Integrity, 0f, maxIntegrity);
+        Dirty(dropship);
     }
 
     private bool HasGunshipControls(EntityUid grid)
@@ -222,11 +268,20 @@ public sealed partial class DropshipIntegritySystem : EntitySystem
 
     private void OnBeforeHullDamageChanged(Entity<DropshipHullComponent> ent, ref BeforeDamageChangedEvent args)
     {
-        if (args.Source is { } source &&
-            HasComp<XenoAcidProjectileComponent>(source) &&
-            TryGetDropship(ent.Owner, out var dropship))
-        {
+        if (!TryGetDropship(ent.Owner, out var dropship))
+            return;
+
+        if (args.Source is { } source && HasComp<XenoAcidProjectileComponent>(source))
             args.Damage *= dropship.Comp.XenoAcidProjectileDamageMultiplier;
+
+        switch (args.Impact.Delivery)
+        {
+            case DamageImpactDelivery.Projectile:
+                ApplyBulletResistance(args.Damage, dropship.Comp.BulletDamageMultiplier);
+                break;
+            case DamageImpactDelivery.Explosion:
+                args.Damage *= dropship.Comp.ExplosiveDamageMultiplier;
+                break;
         }
     }
 
@@ -259,10 +314,12 @@ public sealed partial class DropshipIntegritySystem : EntitySystem
         if (HasComp<DamageableComponent>(target))
             return;
 
-        var multiplier = HasComp<XenoAcidProjectileComponent>(args.Projectile)
-            ? dropship.Comp.XenoAcidProjectileDamageMultiplier
-            : 1f;
-        var amount = args.Damage.GetTotal().Float() * multiplier;
+        var damage = args.Damage.Clone();
+        if (HasComp<XenoAcidProjectileComponent>(args.Projectile))
+            damage *= dropship.Comp.XenoAcidProjectileDamageMultiplier;
+        ApplyBulletResistance(damage, dropship.Comp.BulletDamageMultiplier);
+
+        var amount = damage.GetTotal().Float();
         if (amount > 0f)
             DamageIntegrity(dropship, amount);
     }
@@ -282,7 +339,7 @@ public sealed partial class DropshipIntegritySystem : EntitySystem
             return;
         }
 
-        var amount = args.Damage.GetTotal().Float();
+        var amount = args.Damage.GetTotal().Float() * dropship.Comp.ExplosiveDamageMultiplier;
         if (amount <= 0f)
             return;
 
@@ -307,6 +364,12 @@ public sealed partial class DropshipIntegritySystem : EntitySystem
             args.Epicenter,
             amount);
         DamageIntegrity(dropship, amount);
+    }
+
+    private static void ApplyBulletResistance(DamageSpecifier damage, float multiplier)
+    {
+        if (damage.DamageDict.TryGetValue("Piercing", out var bulletDamage))
+            damage.DamageDict["Piercing"] = FixedPoint2.New(bulletDamage.Float() * multiplier);
     }
 
     /// <summary>
