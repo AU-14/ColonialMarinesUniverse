@@ -221,6 +221,10 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
         if (_net.IsClient)
             return;
 
+        // CMU14: notify support batteries through the existing UI lifecycle owner.
+        var shipWeapons = new Content.Shared.CMU14.ShipWeapons.CMUShipWeaponsRefreshEvent();
+        RaiseLocalEvent(ent, ref shipWeapons);
+
         var state = GetOverwatchBuiState(ent);
         _ui.SetUiState(ent.Owner, OverwatchConsoleUI.Key, state);
     }
@@ -651,6 +655,14 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
         if (!ent.Comp.CanOrbitalBombardment)
         {
             _popup.PopupCursor(Loc.GetString("rmc-overwatch-orbital-unavailable"), args.Actor, PopupType.LargeCaution);
+            return;
+        }
+
+        // CMU14: armed ship weapons use the same coordinates and launch confirmation as the cannon.
+        if (ent.Comp.CMUSelectedShipWeapon != null)
+        {
+            var launch = new Content.Shared.CMU14.ShipWeapons.CMUShipWeaponLaunchEvent(args.Actor);
+            RaiseLocalEvent(ent, ref launch);
             return;
         }
 

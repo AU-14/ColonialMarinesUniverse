@@ -1,0 +1,18 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Third-party dropships can launch at round start instead of waiting out
+    the fueling lockout
+  type: Fix
+- message: Breaking a flower vase no longer throws an error
+  type: Fix
+- message: Expedition NPCs throw grenades and finish flanks mid-fight, and stop holding
+    exposed angles while shaken
+  type: Fix
+- message: Expedition NPCs can reach and drag a downed squadmate again
+  type: Fix
+- message: Lifeboats crash land on small planets instead of falling back to a bad
+    spot
+  type: Fix
+time: '2026-10-11T10:10:38.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2150

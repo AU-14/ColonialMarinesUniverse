@@ -1,0 +1,20 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Improved vehicle acid damage, collisions, wreck demolition, sounds and
+    peeking.
+  type: Fix
+- message: Fixed tanks becoming stuck against obstacles after ramp unloading.
+  type: Fix
+- message: Fixed local law-enforcement jobs and accessories, and protected GOVFOR
+    and colony officials from antagonist rolls.
+  type: Fix
+- message: Fixed Despoiler lingering acid tiers and cash vendors resisting xeno attacks.
+  type: Fix
+- message: Fixed BEAR IFF, gun targeting through non-colliding props, evolution-menu
+    unlocking and incapacitated 3D presentation.
+  type: Fix
+- message: Stopped Yautja hunt teleporters warning ghosts.
+  type: Fix
+time: '2026-10-09T17:19:28.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2126

@@ -13079,12 +13079,50 @@
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2165
 - author: rokudara-sen
   changes:
+  - message: Ambassadors can no longer speak Yautja, Arcturian or tactical sign language
+    type: Fix
+  - message: Ambassadors no longer receive the CO's command tablet announcements
+    type: Fix
+  - message: The Liquidator commander can fire their incinerator, and the UPP MOPP
+      suit has bio protection
+    type: Fix
+  - message: Lighters and zippos show their flame when lit
+    type: Fix
+  - message: All Weyland-Yutani roles count as Weyland-Yutani, not just scientists
+    type: Fix
+  - message: The APOLLO maintenance terminal is credited to Seegson
+    type: Fix
+  - message: The CLF commando call-in spawns the commandos, and they get CLF comms
+    type: Fix
+  - message: The vehicle supply window warns that pulled vehicles are not refunded
+    type: Tweak
+  - message: Rifles no longer bounce off predators most of the time, and xeno slashes
+      on armoured predators do CM13 damage
+    type: Fix
+  - message: Only the predator hears their own mask zoom
+    type: Fix
+  - message: The flamer drone can't fire from deep water
+    type: Fix
+  - message: Vehicles no longer take damage running over crates and barricades
+    type: Fix
+  - message: Rockets and IEDs properly damage vehicles
+    type: Fix
+  - message: 3D mode defaults to a 12 tile view distance and streams less around the
+      player
+    type: Tweak
+  - message: The 3D mouse capture hotkey works while the intro window is open
+    type: Fix
+  id: 800
+  time: '2026-10-13T09:04:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2168
+- author: rokudara-sen
+  changes:
   - message: You now shoot where you look across z-levels. Point at something through
       a hole and you'll shoot down at it.
     type: Tweak
   - message: Removed the shoot down z-level hotkey.
     type: Remove
-  id: 800
+  id: 801
   time: '2026-10-13T12:29:50.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2172
 - author: KeiKiyomi
@@ -13102,7 +13140,7 @@
     type: Tweak
   - message: Default fab count raised to 17500 (previously 10000)
     type: Tweak
-  id: 801
+  id: 802
   time: '2026-10-13T14:37:25.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2145
 - author: troytroy400
@@ -13248,7 +13286,7 @@
   - message: GOVFOR/OPFOR vehicle crewmen can use the vehicle supply console and lift
       again.
     type: Fix
-  id: 802
+  id: 803
   time: '2026-10-13T15:24:13.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2164
 - author: Mary-Marilyn
@@ -13256,7 +13294,7 @@
   - message: Added skirts to the civilian clothing shops, wardrobes, and civilian
       and WY loadouts
     type: Add
-  id: 803
+  id: 804
   time: '2026-10-14T01:31:03.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2175
 - author: KeiKiyomi
@@ -13276,7 +13314,7 @@
     type: Tweak
   - message: Xenos / vehicles / weapons count as 1 weight
     type: Tweak
-  id: 804
+  id: 805
   time: '2026-10-14T02:44:38.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2113
 - author: Vencallium
@@ -13292,7 +13330,7 @@
   - message: Added cryogenic medicine, recipe, and precursor instructions to the medical
       guidebook.
     type: Add
-  id: 805
+  id: 806
   time: '2026-10-14T08:38:51.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2170
 - author: Mary-Marilyn
@@ -13300,7 +13338,7 @@
   - message: Added skirt loadout options for orbital lawyer, arbiter, manager, Head
       of Service, Laselle Liaison, and CCA, ICSC, TWE, UPP and UA ambassadors
     type: Add
-  id: 806
+  id: 807
   time: '2026-10-14T15:47:53.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2178
 - author: troytroy400
@@ -13451,7 +13489,7 @@
   - message: Reordered the CMU settings list/headers to make more sense and be easier
       to navigate.
     type: Fix
-  id: 807
+  id: 808
   time: '2026-10-14T21:34:35.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2177
 - author: johnnny34y
@@ -13459,7 +13497,7 @@
   - message: New sprites for a portion of HAZOPS' gear, along with new cosmetic PVS-71
       night vision goggles and HAZOPS oxygen tank with 10 L of air.
     type: Add
-  id: 808
+  id: 809
   time: '2026-10-15T01:30:46.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2169
 - author: troytroy400
@@ -13475,7 +13513,7 @@
   - message: The HAZOPS powered warfighting armor's power-up sound only plays for
       the wearer.
     type: Fix
-  id: 809
+  id: 810
   time: '2026-10-15T02:35:13.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2180
 - author: rokudara-sen
@@ -13499,9 +13537,16 @@
       -> CMU Z-Levels. Turn it off to bring back the old Ctrl+Shift+Space shoot down
       toggle.
     type: Add
-  id: 810
+  id: 811
   time: '2026-10-15T08:07:11.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2182
+- author: Dongo4
+  changes:
+  - message: LV-1413 Solaris Ridge to the map pool for distress signal
+    type: Add
+  id: 812
+  time: '2026-10-15T13:09:40.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2181
 - author: Ignies
   changes:
   - message: 'Added custom crayon symbols: draw your own in the crayon window and
@@ -13513,7 +13558,7 @@
   - message: Added CMUCrayonDrawImageEvent so other systems can draw a player's custom
       symbol on their surfaces.
     type: Code
-  id: 811
+  id: 813
   time: '2026-10-15T13:10:06.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2179
 - author: TheHellFireo
@@ -13527,7 +13572,7 @@
   - message: Flesh Bloom slowly encloses its target before accelerating into a visible
       inward poison spray.
     type: Tweak
-  id: 812
+  id: 814
   time: '2026-10-15T15:40:16.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2183
 - author: TheHellFireo
@@ -13535,21 +13580,21 @@
   - message: Queens can summon 15 AI lessers every six minutes and command them to
       guard a marker or escort a hive member, in both body and eye mode.
     type: Add
-  id: 813
+  id: 815
   time: '2026-10-15T16:33:48.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2184
 - author: Vixting
   changes:
   - message: Added new simulator UI
     type: Add
-  id: 814
+  id: 816
   time: '2026-10-15T17:48:34.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2185
 - author: Vixting
   changes:
   - message: Fixed vehicle cupola 1 shotting resin
     type: Fix
-  id: 815
+  id: 817
   time: '2026-10-16T16:57:14.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2191
 - author: Vencallium
@@ -13586,7 +13631,7 @@
     type: Tweak
   - message: Manually opening a restricted firelock now checks its access requirements.
     type: Fix
-  id: 816
+  id: 818
   time: '2026-10-16T16:59:17.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2189
 - author: TheHellFireo
@@ -13620,7 +13665,7 @@
     type: Tweak
   - message: Lesser swarms follow orders up and down stairs between linked z-levels.
     type: Fix
-  id: 817
+  id: 819
   time: '2026-10-17T00:04:03.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2199
 - author: johnnny34y
@@ -13629,7 +13674,7 @@
     type: Add
   - message: Added a guidebook lore page for HAZOPS.
     type: Add
-  id: 818
+  id: 820
   time: '2026-10-17T16:38:57.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2202
 - author: troytroy400
@@ -13637,7 +13682,7 @@
   - message: Removes the pre-sprited undershirts on jacketless versions of the TWE
       RMC uniform sprites so you can use your own undershirt.
     type: Remove
-  id: 819
+  id: 821
   time: '2026-10-18T02:22:26.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2210
 - author: KeiKiyomi
@@ -13645,7 +13690,7 @@
   - message: Xenos can devolve for a full point refund within 15 seconds of evolving
       if they are on weeds and at full health.
     type: Tweak
-  id: 820
+  id: 822
   time: '2026-10-18T03:36:05.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2203
 - author: CatoChristopherMrow
@@ -13653,14 +13698,14 @@
   - message: Both military and civilian doctors and nurses should now have relatively
       consistent skills between their counterpart.
     type: Tweak
-  id: 821
+  id: 823
   time: '2026-10-18T03:37:24.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2204
 - author: KeiKiyomi
   changes:
   - message: Added Camera Earpieces to IO's
     type: Add
-  id: 822
+  id: 824
   time: '2026-10-18T03:38:39.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2205
 - author: PoltavskaPraca
@@ -13682,21 +13727,21 @@
     type: Tweak
   - message: asrs pit now doesn't check for obj every 0.5 seconds when it's lowered
     type: Tweak
-  id: 823
+  id: 825
   time: '2026-10-18T10:04:19.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2173
 - author: KeiKiyomi
   changes:
   - message: Two Point Slings can now be alt-clicked to be put on underbarrels
     type: Tweak
-  id: 824
+  id: 826
   time: '2026-10-18T10:11:33.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2212
 - author: Vixting
   changes:
   - message: Added new compact health analyzer UI based of cm13s
     type: Add
-  id: 825
+  id: 827
   time: '2026-10-18T12:49:17.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2217
 - author: troytroy400
@@ -13815,7 +13860,7 @@
   - message: The vehicle lift is no longer a chasm that swallows vehicles the second
       they spawn.
     type: Fix
-  id: 826
+  id: 828
   time: '2026-10-18T13:54:52.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2218
 - author: sunzu432
@@ -13846,7 +13891,7 @@
     type: Fix
   - message: 'Hope''s Retreat: Fixed placement of some areas.'
     type: Fix
-  id: 827
+  id: 829
   time: '2026-10-18T15:42:17.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2213
 - author: troytroy400
@@ -13924,8 +13969,147 @@
     type: Fix
   - message: Left out CMU camo items now change with the map's camo.
     type: Fix
-  id: 828
+  id: 830
   time: '2026-10-19T06:43:04.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2223
+- author: deepdarkdepths
+  changes:
+  - message: Added new Warrior sprites.
+    type: Add
+  id: 831
+  time: '2026-10-19T09:33:42.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2225
+- author: PoltavskaPraca
+  changes:
+  - message: crewmen and vehicle commanders now have their vendor filled out with
+      engineering-adjacent supplies
+    type: Add
+  - message: changed the vehicle vendor UI
+    type: Tweak
+  - message: vehicle lift now correctly stores the vehicle
+    type: Fix
+  id: 832
+  time: '2026-10-19T14:42:47.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2219
+- author: rokudara-sen
+  changes:
+  - message: The client stutters less around Z-level openings
+    type: Fix
+  - message: Expedition NPC squads cost far less server time in firefights
+    type: Fix
+  - message: The game uses less memory at the main menu
+    type: Fix
+  id: 833
+  time: '2026-10-19T14:43:53.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2227
+- author: rokudara-sen
+  changes:
+  - message: Weeds can be expanded out of a closed resin door tile
+    type: Fix
+  - message: Hunting preserve walls can no longer be broken through
+    type: Fix
+  - message: Clan masks show xeno health and plasma
+    type: Fix
+  - message: Clan masks connect to internals and Yautja gear racks sell oxygen tanks
+    type: Add
+  - message: Hijacks clear pathogen blight cores left on the planet
+    type: Fix
+  - message: Lesser drones, swarm lessers, facehuggers and poppers no longer count
+      for the Kill Threats objective
+    type: Tweak
+  - message: Despoilers no longer gain fake hypertension from healing
+    type: Fix
+  - message: The adaptability boon no longer offers Pathogen castes
+    type: Fix
+  - message: Facehuggers and other xenos no longer drop a head when gibbed
+    type: Fix
+  - message: Charger lunges shake vehicles again instead of passing through them
+    type: Fix
+  - message: A revived queen keeps the hive from collapsing
+    type: Fix
+  - message: Hijack larva respawn on the queen instead of the planet
+    type: Fix
+  id: 834
+  time: '2026-10-19T14:44:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2228
+- author: rokudara-sen
+  changes:
+  - message: Coat racks no longer block interactions
+    type: Fix
+  - message: Defibrillators no longer fit in the medical pouch
+    type: Fix
+  - message: Internals switch to a tank that still has air
+    type: Fix
+  - message: Call-ins on maps without breathable air arrive with a gas mask and oxygen
+    type: Add
+  - message: Flare guns and underbarrel flares drop their flare at max range
+    type: Fix
+  - message: Launched grenades no longer vanish after bouncing off a wall
+    type: Fix
+  - message: Grenade launchers can fire up a level
+    type: Fix
+  - message: Unholster secondary no longer grabs flashlights and picks the next weapon
+    type: Fix
+  - message: The regulation tape box only holds tapes
+    type: Fix
+  - message: The cross-level shooting message tells you how close to an edge you need
+      to be
+    type: Tweak
+  - message: LACN can take the IMP ammo rack
+    type: Fix
+  id: 835
+  time: '2026-10-19T14:44:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2229
+- author: KeiKiyomi
+  changes:
+  - message: Facehuggers now complete infection and fall off within 15 seconds when
+      their host is nested.
+    type: Tweak
+  - message: Newly infected nested hosts correctly receive the nest's incubation speed
+      bonus.
+    type: Fix
+  - message: Facehugger oxygen supply now requires the parasite to remain attached.
+    type: Fix
+  - message: Living nested humans passively heal 1 HP per second, up to 50% of their
+      maximum health.
+    type: Add
+  id: 836
+  time: '2026-10-19T14:59:54.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2209
+- author: KeiKiyomi
+  changes:
+  - message: Added ship weapon arming terminals. Command can permanently select two
+      orbital support weapons per operation, each with three uses.
+    type: Add
+  - message: Added Gatling Barrage, Walking Barrage, 120mm HE Barrage, 380mm HE Barrage,
+      Gas Strike, EMS Strike, Smoke Strike, Airburst Strike, and Precision Strike.
+    type: Add
+  - message: Armed weapons can be selected and fired through the overwatch orbital
+      bombardment tab. Walking Barrage supports directional targeting.
+    type: Add
+  - message: Ship weapon loadouts, ammunition, and cooldowns are tracked per ship,
+      keeping duplicate GOVFOR and OPFOR warships independent.
+    type: Tweak
+  - message: New strikes have smaller footprints than standard orbital bombardments
+      and respect orbital targeting restrictions.
+    type: Tweak
+  id: 837
+  time: '2026-10-19T15:07:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2208
+- author: TheHellFireo
+  changes:
+  - message: Fixed client physics errors and missing occupants after Mohawk hijacks.
+    type: Fix
+  id: 838
+  time: '2026-10-19T21:12:03.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2232
+- author: TheHellFireo
+  changes:
+  - message: Reduced client memory usage from unused cassette music and leftover data
+      after disconnecting.
+    type: Fix
+  id: 839
+  time: '2026-10-19T21:12:53.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2233
 Name: CMU
 Order: -1

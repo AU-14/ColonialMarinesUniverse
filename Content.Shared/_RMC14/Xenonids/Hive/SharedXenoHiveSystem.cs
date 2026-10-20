@@ -668,6 +668,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
     {
         return member.Hive == hive.Owner &&
                !TerminatingOrDeleted(uid) &&
+               !EntityManager.IsQueuedForDeletion(uid) && // CMU14: hijack queues planet cores/xenos in the same tick it respawns their players
                !HasComp<BurrowedLarvaSpawnBlockedComponent>(uid) &&
                !_mobState.IsDead(uid);
     }

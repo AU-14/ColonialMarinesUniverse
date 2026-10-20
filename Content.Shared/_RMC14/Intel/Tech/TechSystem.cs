@@ -195,6 +195,13 @@ public sealed partial class TechSystem : EntitySystem
                 var newEv = logisticsEv with { Team = team };
                 RaiseLocalEvent(newEv);
             }
+            // cmu edit start: ship fire missions go to the buying team's ship
+            else if (ev is Content.Shared.CMU14.ShipWeapons.CMUTechShipWeaponMissionEvent shipWeaponEv)
+            {
+                var newEv = shipWeaponEv with { Team = team };
+                RaiseLocalEvent(newEv);
+            }
+            // cmu edit end
             else if (ev is TechPartySpawnEvent partySpawnEv)
             {
                 if (string.IsNullOrEmpty(partySpawnEv.ThirdPartyId))

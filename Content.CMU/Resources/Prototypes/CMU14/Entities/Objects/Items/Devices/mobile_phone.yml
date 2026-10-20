@@ -22,7 +22,7 @@
   - type: UserInterface
     interfaces:
       enum.RMCTelephoneUiKey.Key:
-        type: RMCTelephoneBui
+        type: CMUMobilePhoneBui
   - type: ActivatableUIBlacklist
     blacklist:
       components:

@@ -166,7 +166,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             killer == args.Target ||
             TerminatingOrDeleted(killer) ||
             !HasComp<MobStateComponent>(killer) ||
-            !HasComp<HumanoidProfileComponent>(args.Target) && !HasComp<XenoComponent>(args.Target))
+            !HasComp<HumanoidProfileComponent>(args.Target) && !IsXenoTrophyTarget(args.Target))
         {
             return;
         }
@@ -890,7 +890,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
     private bool IsPotentialButcherTarget(EntityUid target)
     {
-        return HasComp<XenoComponent>(target) ||
+        return IsXenoTrophyTarget(target) ||
                HasComp<HumanoidProfileComponent>(target) ||
                HasComp<XenoParasiteComponent>(target) ||
                _tags.HasTag(target, XenoLarvaTag);
@@ -1573,12 +1573,17 @@ public sealed partial class YautjaTrophySystem : EntitySystem
     private bool IsHumanTrophyTarget(EntityUid target)
     {
         return HasComp<HumanoidProfileComponent>(target) &&
-               !HasComp<XenoComponent>(target);
+               !IsXenoTrophyTarget(target);
     }
 
-    private bool IsXenoTrophyTarget(EntityUid target)
+    /// <summary>
+    /// True for xenos and for bodies whose <see cref="YautjaTrophySourceComponent.CountsAsXeno"/> is set, such as the
+    /// Wendigos, which are not xenos but are hunted and trophied like them.
+    /// </summary>
+    public bool IsXenoTrophyTarget(EntityUid target)
     {
-        return HasComp<XenoComponent>(target);
+        return HasComp<XenoComponent>(target) ||
+               TryComp(target, out YautjaTrophySourceComponent? source) && source.CountsAsXeno;
     }
 
     private bool IsAdjacent(EntityUid first, EntityUid second)
