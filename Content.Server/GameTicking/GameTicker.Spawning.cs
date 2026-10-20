@@ -695,7 +695,6 @@ namespace Content.Server.GameTicking
             if (jobBans != null)
                 restrictedRoles.UnionWith(jobBans);
 
-<<<<<<< Updated upstream
             /* CMU14: the joint FoF roll owns fallback choices; direct late joins keep the
              * selected job and use the capacity check below. Retain the old hooks here
              * for upstream merge context, but never silently replace that job or side.
@@ -704,14 +703,6 @@ namespace Content.Server.GameTicking
                 && _fof.TryOpenBalanceConfirm(player, station, jobId))
                 return;
 
-||||||| ancestor
-=======
-            // CMU14: confirm before the FoF balancer sends a joiner to the opposite side.
-            if (lateJoin
-                && _fof.TryOpenBalanceConfirm(player, station, jobId))
-                return;
-
->>>>>>> Stashed changes
             // CMU14: ForceOnForce faction lock and mid-round balance.
             if (lateJoin
                 && _fof.TryDecideSpawn(player, station, jobId, character, restrictedRoles, out var fofJob, out var fofStation))
