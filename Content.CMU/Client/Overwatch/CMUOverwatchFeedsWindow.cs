@@ -15,13 +15,16 @@ using static Robust.Client.UserInterface.Controls.BoxContainer;
 namespace Content.Client.CMU14.Overwatch;
 
 /// <summary>
-/// Up to four overwatch camera feeds in a 2x2 grid, beside the console.
+/// Up to four overwatch camera feeds in a 2x2 grid, beside the console. Any feed can be focused to fill the window on
+/// its own, at a higher resolution, and unfocused to bring the grid back.
 /// </summary>
 public sealed class CMUOverwatchFeedsWindow : DefaultWindow
 {
     public event Action<NetEntity>? OnCloseFeed;
 
     private readonly Tile[] _tiles = new Tile[CMUOverwatchFeedsComponent.MaxFeeds];
+    private readonly GridContainer _grid;
+    private int? _focused;
 
     public CMUOverwatchFeedsWindow()
     {
@@ -29,7 +32,7 @@ public sealed class CMUOverwatchFeedsWindow : DefaultWindow
         MinSize = new Vector2(520, 460);
         SetSize = new Vector2(820, 760);
 
-        var grid = new GridContainer
+        _grid = new GridContainer
         {
             Columns = 2,
             HorizontalExpand = true,
@@ -47,11 +50,14 @@ public sealed class CMUOverwatchFeedsWindow : DefaultWindow
                     OnCloseFeed?.Invoke(target);
             };
 
+            var index = i;
+            tile.Focus.OnToggled += args => SetFocus(args.Pressed ? index : null);
+
             _tiles[i] = tile;
-            grid.AddChild(tile);
+            _grid.AddChild(tile);
         }
 
-        Contents.AddChild(grid);
+        Contents.AddChild(_grid);
         CrtLobbyTheme.ApplyWindow(this, useCrtTypography: true);
     }
 
@@ -60,6 +66,23 @@ public sealed class CMUOverwatchFeedsWindow : DefaultWindow
         for (var i = 0; i < _tiles.Length; i++)
         {
             _tiles[i].SetFeed(i < feeds.Count ? feeds[i] : null);
+        }
+
+        // A focused feed that closed hands the window back to the grid.
+        if (_focused is { } focused && _tiles[focused].Target == null)
+            SetFocus(null);
+    }
+
+    /// <summary>Shows one feed on its own, filling the window, or all of them again for null.</summary>
+    private void SetFocus(int? index)
+    {
+        _focused = index;
+        _grid.Columns = index == null ? 2 : 1;
+        for (var i = 0; i < _tiles.Length; i++)
+        {
+            var focused = i == index;
+            _tiles[i].Visible = index == null || focused;
+            _tiles[i].SetFocused(focused);
         }
     }
 
@@ -76,12 +99,20 @@ public sealed class CMUOverwatchFeedsWindow : DefaultWindow
         [Dependency] private IEntityManager _entities = default!;
 
         public readonly Button Close;
+        public readonly Button Focus;
         private readonly Button _nightVision;
 
         /// <summary>
         ///     The feed's own eye with lighting turned off, for night vision. It copies the camera's eye every frame
         ///     rather than changing it, so other screens watching the same camera aren't affected.
         /// </summary>
+        /// <summary>
+        ///     Feeds are drawn closer in than the wearer sees, so the picture is easier to make out in a small tile.
+        ///     Below 1 zooms in: 0.7 shows about 10 tiles across instead of 15.
+        /// </summary>
+        private const float FeedZoom = 0.7f;
+
+        private readonly Robust.Shared.Graphics.Eye _feedEye = new();
         private readonly Robust.Shared.Graphics.Eye _nightVisionEye = new() { DrawLight = false };
         public NetEntity? Target { get; private set; }
 
@@ -106,6 +137,12 @@ public sealed class CMUOverwatchFeedsWindow : DefaultWindow
 
             _name = new Label { HorizontalExpand = true, ClipText = true, StyleClasses = { StyleNano.StyleClassCrtHeading } };
             Close = new Button { Text = "X", ToolTip = Loc.GetString("cmu-overwatch-feeds-close") };
+            Focus = new Button
+            {
+                Text = Loc.GetString("cmu-overwatch-feeds-focus"),
+                ToolTip = Loc.GetString("cmu-overwatch-feeds-focus-tooltip"),
+                ToggleMode = true,
+            };
             _nightVision = new Button
             {
                 Text = Loc.GetString("cmu-overwatch-feeds-night-vision"),
@@ -157,7 +194,7 @@ public sealed class CMUOverwatchFeedsWindow : DefaultWindow
                     new BoxContainer
                     {
                         Orientation = LayoutOrientation.Horizontal,
-                        Children = { _name, _nightVision, Close },
+                        Children = { _name, Focus, _nightVision, Close },
                     },
                     screen,
                 },
@@ -171,6 +208,7 @@ public sealed class CMUOverwatchFeedsWindow : DefaultWindow
             Target = feed?.Target;
             _name.Text = feed?.Name ?? Loc.GetString("cmu-overwatch-feeds-empty");
             Close.Visible = feed != null;
+            Focus.Visible = feed != null;
             _nightVision.Visible = feed != null;
 
             if (_eyeNet == feed?.Eye)
@@ -178,6 +216,15 @@ public sealed class CMUOverwatchFeedsWindow : DefaultWindow
 
             ReleaseEye();
             _eyeNet = feed?.Eye;
+        }
+
+        /// <summary>
+        ///     A focused feed fills the window, so it renders at twice the resolution to stay sharp.
+        /// </summary>
+        public void SetFocused(bool focused)
+        {
+            Focus.Pressed = focused;
+            _viewport.ViewportSize = focused ? new Vector2i(960, 960) : new Vector2i(480, 480);
         }
 
         private void ReleaseEye()
@@ -204,20 +251,15 @@ public sealed class CMUOverwatchFeedsWindow : DefaultWindow
             if (_eye is { } current && _entities.TryGetComponent(current, out EyeComponent? eyeComp) && eyeComp.Eye != null)
             {
                 _vhs.NightVision = _nightVision.Pressed;
-                if (_nightVision.Pressed)
-                {
-                    var source = eyeComp.Eye;
-                    _nightVisionEye.Position = source.Position;
-                    _nightVisionEye.Rotation = source.Rotation;
-                    _nightVisionEye.Zoom = source.Zoom;
-                    _nightVisionEye.Offset = source.Offset;
-                    _nightVisionEye.DrawFov = source.DrawFov;
-                    _viewport.Eye = _nightVisionEye;
-                }
-                else
-                {
-                    _viewport.Eye = eyeComp.Eye;
-                }
+                // A copy of the wearer's eye, zoomed in, and drawn without lighting for night vision.
+                var source = eyeComp.Eye;
+                var view = _nightVision.Pressed ? _nightVisionEye : _feedEye;
+                view.Position = source.Position;
+                view.Rotation = source.Rotation;
+                view.Zoom = source.Zoom * FeedZoom;
+                view.Offset = source.Offset;
+                view.DrawFov = source.DrawFov;
+                _viewport.Eye = view;
 
                 SetSignal(true);
             }

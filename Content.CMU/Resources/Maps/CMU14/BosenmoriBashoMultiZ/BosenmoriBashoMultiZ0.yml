@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 09/22/2026 09:27:06
-  entityCount: 28515
+  entityCount: 28513
 maps:
 - 1
 grids:
@@ -89030,13 +89030,6 @@ entities:
 - proto: AU14MagazineRifleL90M
   entities:
   - uid: 42267
-    components:
-    - type: Transform
-      parent: 1
-      pos: 36.5,13.5
-- proto: AU14MagazineRifleL90MHEAP
-  entities:
-  - uid: 42266
     components:
     - type: Transform
       parent: 1
@@ -218509,15 +218502,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 149.5,70.5
-- proto: RMCBoxMagazineSMGM63HEAP
-  entities:
-  - uid: 40478
-    components:
-    - type: MetaData
-      name: magazine box (HEAP v9 x 12)
-    - type: Transform
-      parent: 1
-      pos: 34.5,10.5
 - proto: RMCBoxMousetraps
   entities:
   - uid: 50276

@@ -1,26 +1,32 @@
 - type: accessLevel
   id: AU14AccessColonyHeadPhysician
   name: au14-job-name-civilianheadphysician
+  accessGroup: Colony Leadership
 
 - type: accessLevel
   id: AU14AccessColonyHeadEngineer
   name: au14-job-name-civilianheadofengineering
+  accessGroup: Colony Leadership
 
 - type: accessLevel
   id: AU14AccessColonyMarshall
   name: au14-job-name-leoleader
+  accessGroup: Colony Leadership
 
 - type: accessLevel
   id: AU14AccessColonyForeman
   name: au14-job-name-foreman
+  accessGroup: Colony Leadership
 
 - type: accessLevel
   id: AU14AccessColonyAdministrator
   name: au14-job-supervisors-colonycivilian
+  accessGroup: Colony Leadership
 
 - type: accessLevel
   id: AU14AccessColonyHeadOfService
   name: au14-job-name-civilianheadofservice
+  accessGroup: Colony Leadership
 
 - type: accessLevel
   id: AU14AccessCorporateWEYULiaison
