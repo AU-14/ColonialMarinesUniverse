@@ -10,6 +10,7 @@ public sealed class CMUShipWeaponPicker : BoxContainer
     public event Action<ProtoId<CMUShipWeaponPrototype>?, CMUShipWeaponBearing>? OnSelected;
     private readonly OptionButton _weapon = new();
     private readonly OptionButton _bearing = new();
+    private readonly Label _bearingLabel = new();
     private readonly Label _remaining = new();
     private readonly List<ProtoId<CMUShipWeaponPrototype>?> _ids = new();
 
@@ -19,7 +20,8 @@ public sealed class CMUShipWeaponPicker : BoxContainer
         AddChild(new Label { Text = Loc.GetString("cmu-ship-weapons-select") });
         AddChild(_weapon);
         AddChild(_remaining);
-        AddChild(new Label { Text = Loc.GetString("cmu-ship-weapons-bearing") });
+        _bearingLabel.Text = Loc.GetString("cmu-ship-weapons-bearing");
+        AddChild(_bearingLabel);
         AddChild(_bearing);
         foreach (var bearing in Enum.GetValues<CMUShipWeaponBearing>())
             _bearing.AddItem(Loc.GetString($"cmu-ship-weapons-bearing-{bearing.ToString().ToLowerInvariant()}"), (int) bearing);
@@ -37,21 +39,22 @@ public sealed class CMUShipWeaponPicker : BoxContainer
 
     private void Selected()
     {
+        if (_weapon.SelectedId < 0 || _weapon.SelectedId >= _ids.Count)
+            return;
+
         OnSelected?.Invoke(_ids[_weapon.SelectedId], (CMUShipWeaponBearing) _bearing.SelectedId);
     }
 
     public void Update(OverwatchConsoleComponent console)
     {
         Visible = console.CMUShipWeapons.Length > 0;
-        var rebuild = _ids.Count != console.CMUShipWeapons.Length + 1;
+        var rebuild = _ids.Count != console.CMUShipWeapons.Length;
         for (var i = 0; !rebuild && i < console.CMUShipWeapons.Length; i++)
-            rebuild = _ids[i + 1] != console.CMUShipWeapons[i].Weapon;
+            rebuild = _ids[i] != console.CMUShipWeapons[i].Weapon;
         if (rebuild)
         {
             _weapon.Clear();
             _ids.Clear();
-            _weapon.AddItem(Loc.GetString("cmu-ship-weapons-standard"), 0);
-            _ids.Add(null);
             foreach (var status in console.CMUShipWeapons)
             {
                 _weapon.AddItem(string.Empty, _ids.Count);
@@ -63,16 +66,21 @@ public sealed class CMUShipWeaponPicker : BoxContainer
         for (var i = 0; i < console.CMUShipWeapons.Length; i++)
         {
             var status = console.CMUShipWeapons[i];
-            var id = i + 1;
+            var id = i;
             _weapon.SetItemText(id, Loc.GetString("cmu-ship-weapons-remaining",
                 ("weapon", Loc.GetString(prototypes.Index(status.Weapon).Name)), ("uses", status.Remaining),
                 ("max", status.Max)));
             if (status.Weapon == console.CMUSelectedShipWeapon)
                 selectedId = id;
         }
-        _weapon.SelectId(selectedId);
+        if (_ids.Count > 0)
+            _weapon.SelectId(selectedId);
         _bearing.SelectId((int) console.CMUShipWeaponBearing);
-        _bearing.Disabled = console.CMUSelectedShipWeapon is not { } selected || prototypes.Index(selected).WalkingDistance <= 0;
-        _remaining.Text = Loc.GetString(selectedId == 0 ? "cmu-ship-weapons-standard-hint" : "cmu-ship-weapons-armed-hint");
+
+        // Only walking barrages have a direction, so the picker only shows while one is selected.
+        var walking = console.CMUSelectedShipWeapon is { } selected && prototypes.Index(selected).WalkingDistance > 0;
+        _bearing.Visible = walking;
+        _bearingLabel.Visible = walking;
+        _remaining.Text = Loc.GetString("cmu-ship-weapons-armed-hint");
     }
 }

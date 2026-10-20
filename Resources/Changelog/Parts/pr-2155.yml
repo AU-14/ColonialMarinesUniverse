@@ -1,0 +1,11 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Expedition squads make the same flank and cover calls no matter how long
+    the round has been going
+  type: Fix
+- message: CI test runners get swap, the 3D tests run in their own shard, and the
+    six-guard expedition test is back in the cmu shard
+  type: Code
+time: '2026-10-11T17:07:14.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2155

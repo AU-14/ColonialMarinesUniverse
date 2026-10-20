@@ -99,7 +99,9 @@
   - type: UserInterface
     interfaces:
       enum.IdModificationConsoleUIKey.Key:
-        type: IdModificationConsoleBui
+        # cmu edit start: CRT-styled identification computer
+        type: CMUIdModificationConsoleBui
+        # cmu edit end
   - type: ItemSlots
   - type: ContainerContainer
     containers:

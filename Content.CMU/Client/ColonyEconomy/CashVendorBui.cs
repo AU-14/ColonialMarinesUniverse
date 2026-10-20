@@ -13,7 +13,9 @@ public sealed class AU14CashVendorBui(EntityUid owner, Enum uiKey) : BoundUserIn
         base.Open();
         _window = this.CreateWindow<AU14CashVendorWindow>();
         _window.OnBuyPressed += idx => SendPredictedMessage(new AU14CashVendorBuyBuiMsg(idx));
-        _window.ReturnChangeBtn.OnPressed += _ => SendPredictedMessage(new AU14CashVendorReturnChangeBuiMsg());
+        _window.OnReturnChangePressed += () => SendPredictedMessage(new AU14CashVendorReturnChangeBuiMsg());
+        if (EntMan.TryGetComponent(Owner, out MetaDataComponent? meta))
+            _window.Title = meta.EntityName;
         _window.OnScanIdPressed += () => SendPredictedMessage(new AU14CashVendorScanIDBuiMsg());
     }
 

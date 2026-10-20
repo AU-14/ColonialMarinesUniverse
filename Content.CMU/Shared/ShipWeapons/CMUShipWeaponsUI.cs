@@ -7,7 +7,14 @@ namespace Content.Shared.CMU14.ShipWeapons;
 public sealed partial class CMUShipWeaponsTerminalComponent : Component
 {
     [DataField]
-    public int MaxSelections = 3;
+    public int MaxSelections = 2;
+
+    /// <summary>
+    ///     The team whose tech tree purchases add fire missions to this terminal's ship, matching the tech tree's
+    ///     team ids (govfor, opfor). Empty for a terminal no team buys for.
+    /// </summary>
+    [DataField]
+    public string Faction = string.Empty;
 
     /// <summary>
     /// Fire missions shared by all selected weapons. Only read when this terminal locks the ship's loadout.
@@ -29,8 +36,12 @@ public sealed class CMUShipWeaponsBuiState(
     ProtoId<CMUShipWeaponPrototype>[] availableWeapons,
     bool requiresGuns,
     int maxSelections,
-    int uses) : BoundUserInterfaceState
+    int uses,
+    bool locked = false) : BoundUserInterfaceState
 {
+    /// <summary>Whether an arming terminal has already locked in this ship's loadout.</summary>
+    public readonly bool Locked = locked;
+
     public readonly bool Available = available;
     public readonly CMUShipWeaponStatus[] Weapons = weapons;
     public readonly ProtoId<CMUShipWeaponPrototype>[] AvailableWeapons = availableWeapons;

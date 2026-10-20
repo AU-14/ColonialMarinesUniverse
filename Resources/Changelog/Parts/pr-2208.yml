@@ -1,0 +1,20 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Added ship weapon arming terminals. Command can permanently select two
+    orbital support weapons per operation, each with three uses.
+  type: Add
+- message: Added Gatling Barrage, Walking Barrage, 120mm HE Barrage, 380mm HE Barrage,
+    Gas Strike, EMS Strike, Smoke Strike, Airburst Strike, and Precision Strike.
+  type: Add
+- message: Armed weapons can be selected and fired through the overwatch orbital bombardment
+    tab. Walking Barrage supports directional targeting.
+  type: Add
+- message: Ship weapon loadouts, ammunition, and cooldowns are tracked per ship, keeping
+    duplicate GOVFOR and OPFOR warships independent.
+  type: Tweak
+- message: New strikes have smaller footprints than standard orbital bombardments
+    and respect orbital targeting restrictions.
+  type: Tweak
+time: '2026-10-19T15:07:21.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2208
