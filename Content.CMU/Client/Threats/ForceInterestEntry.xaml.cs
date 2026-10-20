@@ -9,6 +9,7 @@ namespace Content.Client.CMU14.Threats;
 public sealed partial class ForceInterestEntry : BoxContainer
 {
     public event Action<uint, bool>? OnInterestChanged;
+    public event Action<uint>? OnCompleted;
 
     public ForceInterestEntry(ForceInterestInfo force)
     {
@@ -21,5 +22,8 @@ public sealed partial class ForceInterestEntry : BoxContainer
         InterestButton.Disabled = !force.Interested && !force.CanJoin;
         InterestButton.ToolTip = Loc.GetString("cmu-force-interest-help");
         InterestButton.OnPressed += _ => OnInterestChanged?.Invoke(force.Identifier, !force.Interested);
+        CompleteButton.Visible = force.CanComplete;
+        CompleteButton.ToolTip = Loc.GetString("cmu-force-interest-complete-help");
+        CompleteButton.OnPressed += _ => OnCompleted?.Invoke(force.Identifier);
     }
 }

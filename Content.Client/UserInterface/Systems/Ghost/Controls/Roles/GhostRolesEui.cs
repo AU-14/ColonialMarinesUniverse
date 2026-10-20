@@ -20,6 +20,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
         {
             _window = new GhostRolesWindow();
             _window.OnForceInterestChanged += (id, interested) => SendMessage(new SetForceInterestMessage(id, interested));
+            _window.OnForceCompleted += id => SendMessage(new CompleteForceInterestMessage(id)); // CMU14
             _window.OnGhostCallPressed += () => SendMessage(new GhostThirdPartyCallMessage()); // CMU14
 
             _window.OnRoleRequestButtonClicked += info =>
