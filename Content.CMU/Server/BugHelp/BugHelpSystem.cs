@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Content.Server.CMU14.HelpRelay;
+using Content.Server._RMC14.Mentor;
 using Content.Server.Chat.Managers;
 using Content.Server.Players.RateLimiting;
 using Content.Shared.CCVar;
@@ -45,6 +46,7 @@ public sealed class BugHelpSystem : EntitySystem
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedJobSystem _jobs = default!;
     [Dependency] private readonly ILogManager _log = default!;
+    [Dependency] private readonly MentorManager _mentor = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly INetManager _net = default!;
@@ -68,6 +70,7 @@ public sealed class BugHelpSystem : EntitySystem
         _sawmill = _log.GetSawmill("bughelp");
         _net.RegisterNetMessage<BugHelpOpenMsg>();
         _net.RegisterNetMessage<BugHelpSubmitMsg>(OnBugHelpSubmit);
+        _net.RegisterNetMessage<BugHelpPromoteMsg>(OnBugHelpPromote);
     }
 
     private void OnBugHelpSubmit(BugHelpSubmitMsg message)
@@ -86,8 +89,16 @@ public sealed class BugHelpSystem : EntitySystem
         _chat.DispatchServerMessage(session, AckString(outcome, reportId));
     }
 
+    private void OnBugHelpPromote(BugHelpPromoteMsg message)
+    {
+        if (!_playerManager.TryGetSessionById(message.MsgChannel.UserId, out var promoter))
+            return;
+
+        Promote(new NetUserId(message.Destination), promoter);
+    }
+
     /// <summary>The same Fluent acks the command uses, delivered to window users in chat.</summary>
-    public static string AckString(BugHelpOutcome outcome, string? reportId) => outcome switch
+    public string AckString(BugHelpOutcome outcome, string? reportId) => outcome switch
     {
         BugHelpOutcome.Sent => Loc.GetString("cmu-cmd-bughelp-sent", ("id", reportId!)),
         BugHelpOutcome.Disabled => Loc.GetString("cmu-cmd-bughelp-disabled"),
@@ -97,7 +108,10 @@ public sealed class BugHelpSystem : EntitySystem
     };
 
     private void OnRoundRestart(RoundRestartCleanupEvent args)
-        => _sequence = 0;
+    {
+        _sequence = 0;
+        _mentor.ClearTranscripts();
+    }
 
     private string? PrototypeId(EntityUid uid) => MetaData(uid).EntityPrototype?.ID;
     private string? OrNull(string value) => string.IsNullOrWhiteSpace(value) ? null : value;
@@ -142,9 +156,91 @@ public sealed class BugHelpSystem : EntitySystem
             return BugHelpOutcome.NoEntity;
 
         var context = _relay.GetContext();
-        var report = new BugReport
+        var report = BuildReport(
+            player,
+            attached,
+            context,
+            whatHappened,
+            expected,
+            steps,
+            itemQuery,
+            examineText,
+            "filed");
+
+        var userId = player.UserId;
+        Task.Run(async () => await PostReportAsync(report, userId, context));
+
+        reportId = report.Id;
+        return BugHelpOutcome.Sent;
+    }
+
+    /// <summary>
+    /// Staff promotion of a mentor conversation into a report (§4.2). Reuses the filing artifact
+    /// build with the transcript as the body; bypasses the player rate limiter, declines
+    /// without a live session, and answers with a SERVER line in the conversation.
+    /// </summary>
+    public void Promote(NetUserId destination, ICommonSession promoter)
+    {
+        if (!_mentor.IsMentor(promoter.UserId))
+            return;
+
+        if (!_relay.IsEnabled(HelpSource.BugHelp))
+        {
+            _mentor.SendServerLine(destination, Loc.GetString("cmu-bughelp-promote-decline-disabled"));
+            return;
+        }
+
+        if (!_playerManager.TryGetSessionById(destination, out var session)
+            || session.AttachedEntity is not { } promoted
+            || EntityManager.Deleted(promoted))
+        {
+            _mentor.SendServerLine(destination, Loc.GetString("cmu-bughelp-promote-decline-offline"));
+            return;
+        }
+
+        var transcript = _mentor.GetTranscript(destination);
+        if (transcript.Count == 0)
+        {
+            _mentor.SendServerLine(destination, Loc.GetString("cmu-bughelp-promote-decline-empty"));
+            return;
+        }
+
+        var seed = string.Join("\n", transcript.Select(line => $"{line.Author}: {line.Text}"));
+        var context = _relay.GetContext();
+        var report = BuildReport(
+            session,
+            promoted,
+            context,
+            Cap(seed, WhatHappenedCap),
+            null,
+            null,
+            null,
+            null,
+            "promoted");
+
+        var userId = session.UserId;
+        Task.Run(async () => await PostReportAsync(report, userId, context));
+
+        _mentor.SendServerLine(
+            destination,
+            Loc.GetString("cmu-bughelp-promote-ack", ("id", report.Id)));
+    }
+
+    private BugReport BuildReport(
+        ICommonSession player,
+        EntityUid attached,
+        HelpContext context,
+        string whatHappened,
+        string? expected,
+        string? steps,
+        string? itemQuery,
+        string? examineText,
+        string origin)
+    {
+        return new BugReport
         {
             Id = $"BUG-R{context.RoundId}-{++_sequence:D2}",
+            Origin = origin,
             Server = context.Server,
             Revision = OrNull(_config.GetCVar(CCVars.HelpRelayRevision)),
             ReportedAt = DateTime.UtcNow.ToString("o"),
@@ -172,12 +268,6 @@ public sealed class BugHelpSystem : EntitySystem
             },
             Snapshot = GatherSnapshot(attached),
         };
-
-        var userId = player.UserId;
-        Task.Run(async () => await PostReportAsync(report, userId, context));
-
-        reportId = report.Id;
-        return BugHelpOutcome.Sent;
     }
 
     private string? GetJobId(EntityUid player)
@@ -325,6 +415,7 @@ sealed class BugReport
 {
     [JsonPropertyName("schema")] public string Schema { get; set; } = "cmu-bugreport/1";
     [JsonPropertyName("id")] public string Id { get; set; } = string.Empty;
+    [JsonPropertyName("origin")] public string Origin { get; set; } = "filed";
     [JsonPropertyName("server")] public string Server { get; set; } = string.Empty;
     [JsonPropertyName("revision")] public string? Revision { get; set; }
     [JsonPropertyName("reported_at")] public string ReportedAt { get; set; } = string.Empty;

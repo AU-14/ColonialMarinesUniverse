@@ -1,6 +1,6 @@
 using Content.Client.Lobby.UI;
+using Content.Client._RMC14.Mentor;
 using Content.Client.Stylesheets;
-using Content.Client.UserInterface.Systems.Bwoink;
 using Content.Shared.CMU14.BugHelp;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
@@ -17,7 +17,6 @@ namespace Content.Client.CMU14.BugHelp;
 public sealed class BugHelpUIController : UIController
 {
     [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly AHelpUIController _aHelp = default!;
 
     private BugHelpWindow? _window;
 
@@ -41,9 +40,11 @@ public sealed class BugHelpUIController : UIController
         _window.Stylesheet = IoCManager.Resolve<IStylesheetManager>().SheetNano;
         CrtLobbyTheme.ApplyWindow(_window, useCrtTypography: false);
         _window.OnClose += () => _window = null;
-        _window.TriageOpenButton.OnPressed += _ =>
+        _window.TalkToStaffButton.OnPressed += _ =>
         {
-            _aHelp.Open();
+            // StaffHelpUIController injects this controller, so resolve it lazily to avoid a
+            // constructor loop.
+            UIManager.GetUIController<StaffHelpUIController>().OpenMentorOrHelpWindow();
             _window.Close();
         };
         _window.OnSubmit += window =>
