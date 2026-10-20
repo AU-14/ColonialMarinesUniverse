@@ -777,12 +777,17 @@ public sealed class CMUProcgenChemistryTest : GameTest
             var allergic = SEntMan.SpawnEntity(null, map.GridCoords);
             SEntMan.AddComponent(allergic, new DrugAllergyComponent { Allergen = "CMUOxycodone" });
             var allergies = SEntMan.System<AllergicReactionSystem>();
+            // A second allergy (ExtraAllergens) cross-reacts the same way as the first.
+            var second = SEntMan.SpawnEntity(null, map.GridCoords);
+            SEntMan.AddComponent(second, new DrugAllergyComponent { Allergen = "CMInaprovaline", ExtraAllergens = { "CMUOxycodone" } });
             Assert.Multiple(() =>
             {
                 Assert.That(allergies.IsAllergen(allergic, SProtoMan.Index<ReagentPrototype>("CMUOxycodone")), Is.True, "the allergen itself");
                 Assert.That(allergies.IsAllergen(allergic, SProtoMan.Index<ReagentPrototype>(painkiller.ID)), Is.True, "a generated painkiller shares the Painkilling property");
                 Assert.That(allergies.IsAllergen(allergic, SProtoMan.Index<ReagentPrototype>(unrelated.ID)), Is.False, "an unrelated generated chemical");
                 Assert.That(allergies.IsAllergen(allergic, SProtoMan.Index<ReagentPrototype>("CMUParacetamol")), Is.False, "another hand-authored painkiller still needs its own allergy");
+                Assert.That(allergies.IsAllergen(second, SProtoMan.Index<ReagentPrototype>("CMUOxycodone")), Is.True, "the second allergen itself");
+                Assert.That(allergies.IsAllergen(second, SProtoMan.Index<ReagentPrototype>(painkiller.ID)), Is.True, "the second allergen's cross-reactive property");
             });
         });
     }

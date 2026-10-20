@@ -26,6 +26,6 @@ public sealed partial class Allergenic : RMCChemicalEffect
         if (!system.IsAllergen(args.TargetEntity, args.Reagent))
             return;
 
-        system.AllergicReaction.TriggerReaction(args.TargetEntity, reagent.LocalizedName);
+        system.AllergicReaction.TriggerReaction(args.TargetEntity, args.Reagent.LocalizedName);
     }
 }

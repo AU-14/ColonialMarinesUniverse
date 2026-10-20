@@ -45,26 +45,40 @@ public sealed partial class AllergicReactionSystem : EntitySystem
     }
 
     /// <summary>
-    ///     Whether <paramref name="reagent"/> sets off this entity's allergy: the allergen itself, a reagent of
-    ///     the allergen's class, or one carrying a property listed for the allergen in
+    ///     Whether <paramref name="reagent"/> sets off any of this entity's drug allergies: an allergen itself, a
+    ///     reagent of an allergen's class, or one carrying a property listed for an allergen in
     ///     <see cref="DrugAllergyComponent.CrossReactiveProperties"/>. The caller decides whether the reagent
     ///     is allergenic at all; this only resolves which allergy it maps onto.
     /// </summary>
     public bool IsAllergen(Entity<DrugAllergyComponent?> ent, ReagentPrototype reagent)
     {
-        if (!Resolve(ent, ref ent.Comp, false) || ent.Comp.Allergen is not { } allergen)
+        if (!Resolve(ent, ref ent.Comp, false))
             return false;
 
-        if (allergen == reagent.ID)
+        if (ent.Comp.IsAllergen(reagent.ID))
             return true;
 
+        if (ent.Comp.Allergen is { } allergen && MatchesAllergen(ent.Comp, allergen, reagent))
+            return true;
+
+        foreach (var extra in ent.Comp.ExtraAllergens)
+        {
+            if (MatchesAllergen(ent.Comp, extra, reagent))
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool MatchesAllergen(DrugAllergyComponent comp, ProtoId<ReagentPrototype> allergen, ReagentPrototype reagent)
+    {
         if (!_reagent.TryIndex(allergen, out var allergenProto))
             return false;
 
         if (reagent.Class != ReagentClass.None && reagent.Class == allergenProto.Class)
             return true;
 
-        if (!ent.Comp.CrossReactiveProperties.TryGetValue(allergen, out var properties) || properties.Count == 0)
+        if (!comp.CrossReactiveProperties.TryGetValue(allergen, out var properties) || properties.Count == 0)
             return false;
 
         var effectNames = new HashSet<string>();
