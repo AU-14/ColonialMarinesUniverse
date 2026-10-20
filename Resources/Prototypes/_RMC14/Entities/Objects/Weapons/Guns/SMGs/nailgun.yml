@@ -5,19 +5,21 @@
   description: A carpentry tool, used to drive nails into tough surfaces. Of course, if there isn't anything there, that's just a very sharp nail launching at high velocity...
   suffix: Filled
   components:
+#cmu edit start: pre-resprite sprites (reverts RMC-14#5979)
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/SMGs/nailgun.rsi
+    sprite: CMU14/Weapons/SMGs/nailgun_old.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
-    - state: mag-4
+    - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: MagazineVisuals
     magState: mag
-    steps: 5
+    steps: 1
     zeroVisible: true
   - type: Clothing
-    sprite: _RMC14/Objects/Weapons/Guns/SMGs/nailgun.rsi
+    sprite: CMU14/Weapons/SMGs/nailgun_old.rsi
+#cmu edit end
   - type: Item
     size: Normal
   - type: Gun
@@ -89,16 +91,18 @@
       - RMCCartridge7x45mm
     proto: RMCCartridge7x45mm
     capacity: 48
+#cmu edit start: pre-resprite sprites (reverts RMC-14#5979)
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/nailgun.rsi
+    sprite: CMU14/Weapons/Magazines/nailgun_old.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
-    - state: mag-6
+    - state: mag-1
       map: ["enum.GunVisualLayers.Mag"]
   - type: MagazineVisuals
     magState: mag
-    steps: 7
+    steps: 2
+#cmu edit end
     zeroVisible: false
     zeroOnlyOnEmpty: true
   - type: Appearance

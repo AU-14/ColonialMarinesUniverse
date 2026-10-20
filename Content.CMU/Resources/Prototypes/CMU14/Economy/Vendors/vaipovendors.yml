@@ -230,6 +230,8 @@
         amount: 30
       - id: RMCBoxMRE
         amount: 5
+      - id: CMCanteen
+        amount: 30
     - name: Tools
       entries:
       - id: RMCAttachmentRailFlashlight

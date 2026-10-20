@@ -1,0 +1,8 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Reduced client memory usage from unused cassette music and leftover data
+    after disconnecting.
+  type: Fix
+time: '2026-10-19T21:12:53.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2233

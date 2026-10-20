@@ -80,6 +80,7 @@ public sealed partial class CMUMedicalRejuvenateSystem : EntitySystem
         "StatusEffectCMUAnesthesia",
         "StatusEffectCMURecoveringSurgery",
         "StatusEffectCMUOxycodoneHaze",
+        "StatusEffectCMUSoporificHaze",
         "StatusEffectCMUFentanylHaze",
     };
 

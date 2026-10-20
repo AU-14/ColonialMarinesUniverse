@@ -240,6 +240,8 @@
       entries:
       - id: RMCMRECLF
         amount: 24
+      - id: CMCanteen
+        amount: 24
     - name: Tools
       entries:
       - id: RMCM5Bayonet

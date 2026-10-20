@@ -75,7 +75,7 @@
     - type: UserInterface
       interfaces:
         enum.RMCTelephoneUiKey.Key:
-          type: RMCTelephoneBui
+          type: CMUTelephoneBui
         enum.StorageUiKey.Key:
           type: StorageBoundUserInterface
     - type: ActivatableUIBlacklist

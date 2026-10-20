@@ -1,0 +1,14 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Reapers can spend 500 flesh to reanimate a recently dead hive sister with
+    a two-minute ritual and a ten-minute cooldown.
+  type: Add
+- message: Reaper revival and flesh harvesting now use vascular animations with visible
+    interruption states.
+  type: Tweak
+- message: Flesh Bloom slowly encloses its target before accelerating into a visible
+    inward poison spray.
+  type: Tweak
+time: '2026-10-15T15:40:16.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2183

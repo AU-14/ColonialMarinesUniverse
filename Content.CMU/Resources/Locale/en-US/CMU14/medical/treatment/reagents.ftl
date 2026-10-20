@@ -46,7 +46,7 @@ reagent-desc-cmu-fentanyl-precursor          = An unstable halogenated intermedi
 reagent-name-cmu-sleen                       = Sleen
 reagent-desc-cmu-sleen                       = A strong experimental painkiller. Masks severe pain, but overdoses become toxic and disorienting.
 reagent-name-cmu-soporific                   = Soporific
-reagent-desc-cmu-soporific                   = A powerful sedative painkiller. Causes drowsiness and can force sleep at surgical doses.
+reagent-desc-cmu-soporific                   = A powerful sedative painkiller. Leaves the patient heavily dazed, with blurred and darkened vision.
 
 reagent-name-cmu-meth-precursor              = Crude Amphetamine Oil
 reagent-desc-cmu-meth-precursor              = A foul-smelling reduction product. Needs further refinement before it's anything but toxic.
