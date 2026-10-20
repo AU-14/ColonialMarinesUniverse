@@ -40,14 +40,8 @@ humanoid-profile-editor-military-jobs-tab = Military Jobs
 humanoid-profile-editor-threat-jobs-tab = Threat Jobs
 humanoid-profile-editor-civilian-jobs-tab = Civilian Jobs
 humanoid-profile-editor-insurgency-tab = Insurgency
-<<<<<<< Updated upstream
 # CMU14: Force on Force reuses these role lists
 humanoid-profile-editor-fof-included-label = Insurgency and FoF
-||||||| ancestor
-=======
-# CMU14: strip annotation, Force on Force reuses these role lists
-humanoid-profile-editor-fof-included-label = Force-On-Force Included
->>>>>>> Stashed changes
 humanoid-profile-editor-colony-fall-tab = Colony Fall
 humanoid-profile-editor-distress-signal-tab = Distress Signal
 humanoid-profile-editor-government-jobs-tab = Government Jobs
