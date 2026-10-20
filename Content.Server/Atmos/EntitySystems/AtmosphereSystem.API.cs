@@ -100,6 +100,14 @@ public partial class AtmosphereSystem
     }
 
     /// <summary>
+    ///     Checks whether the grid atmosphere tracks a tile at the given indices.
+    /// </summary>
+    [PublicAPI] // CMU14 Method
+    public bool HasTileAtmosphere(Entity<GridAtmosphereComponent?> entity, Vector2i tile)
+        => _gridAtmosQuery.Resolve(entity.Owner, ref entity.Comp, false)
+            && entity.Comp.Tiles.ContainsKey(tile);
+
+    /// <summary>
     /// Gets the gas mixture for a specific tile that an entity is on.
     /// </summary>
     /// <param name="entity">The entity to get the tile mixture for.</param>
