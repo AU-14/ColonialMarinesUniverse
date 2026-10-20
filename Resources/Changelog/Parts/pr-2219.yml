@@ -1,0 +1,12 @@
+author: PoltavskaPraca
+category: CMU
+changes:
+- message: crewmen and vehicle commanders now have their vendor filled out with engineering-adjacent
+    supplies
+  type: Add
+- message: changed the vehicle vendor UI
+  type: Tweak
+- message: vehicle lift now correctly stores the vehicle
+  type: Fix
+time: '2026-10-19T14:42:47.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2219

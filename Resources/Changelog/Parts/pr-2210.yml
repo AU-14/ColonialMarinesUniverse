@@ -1,0 +1,8 @@
+author: troytroy400
+category: CMU
+changes:
+- message: Removes the pre-sprited undershirts on jacketless versions of the TWE RMC
+    uniform sprites so you can use your own undershirt.
+  type: Remove
+time: '2026-10-18T02:22:26.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2210

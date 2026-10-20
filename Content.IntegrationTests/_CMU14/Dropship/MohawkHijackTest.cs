@@ -29,6 +29,8 @@ public sealed class MohawkHijackTest
         EntityUid bystander = default;
         EntityUid[] secondaryDecks = [];
         NetEntity[] secondaryNets = [];
+        EntityUid[] originalDeckMaps = [];
+        NetEntity[] holdingMapNets = [];
         var targetPosition = new Vector2(25, -31);
         await pair.Server.WaitAssertion(() =>
         {
@@ -41,6 +43,8 @@ public sealed class MohawkHijackTest
             var assembly = entities.GetComponent<MultiDeckDropshipComponent>(ship);
             secondaryDecks = assembly.Decks.Values.ToArray();
             secondaryNets = secondaryDecks.Select(deck => entities.GetNetEntity(deck)).ToArray();
+            originalDeckMaps = secondaryDecks
+                .Select(deck => entities.GetComponent<TransformComponent>(deck).MapUid!.Value).ToArray();
             var lower = assembly.Decks[-1];
             lowerMap = entities.GetComponent<TransformComponent>(lower).MapUid!.Value;
             passenger = entities.SpawnEntity("CMMobHuman", new EntityCoordinates(ship, 0.5f, 0.5f));
@@ -66,7 +70,7 @@ public sealed class MohawkHijackTest
             var dropship = entities.GetComponent<DropshipComponent>(ship);
             // Exercise the accepted hijack flight without the unrelated orbital
             // explosion destroying the cabin's test passenger before assertion.
-#pragma warning disable RA0002 // Isolate flight/deck deletion from the orbital crash explosion in this fixture.
+#pragma warning disable RA0002 // Isolate flight/deck retirement from the orbital crash explosion in this fixture.
             dropship.AnnouncedCrash = true;
             dropship.DidIncomingSound = true;
             dropship.DidExplosion = true;
@@ -89,24 +93,35 @@ public sealed class MohawkHijackTest
             Assert.That(entities.System<SharedTransformSystem>().GetWorldPosition(ship), Is.EqualTo(targetPosition));
             Assert.That(entities.GetComponent<TransformComponent>(passenger).GridUid, Is.EqualTo(ship));
             Assert.That(entities.GetComponent<TransformComponent>(bystander).MapUid, Is.EqualTo(lowerMap),
-                "Deleting the underside must not delete a person standing underneath it.");
-            foreach (var deck in secondaryDecks)
-                Assert.That(entities.Deleted(deck), Is.True);
+                "Retiring the underside must leave a person at the departure site.");
+            var holdingMaps = secondaryDecks
+                .Select(deck => entities.GetComponent<TransformComponent>(deck).MapUid!.Value).ToArray();
+            holdingMapNets = holdingMaps.Select(map => entities.GetNetEntity(map)).ToArray();
+            for (var i = 0; i < secondaryDecks.Length; i++)
+            {
+                Assert.That(holdingMaps[i], Is.Not.EqualTo(originalDeckMaps[i]));
+                Assert.That(entities.System<SharedMapSystem>().IsPaused(holdingMaps[i]), Is.True);
+                Assert.That(entities.HasComponent<DropshipDeckComponent>(secondaryDecks[i]), Is.False);
+            }
             var mechanisms = entities.System<MohawkSystem>();
             Assert.That(entities.GetComponent<DropshipComponent>(ship).Crashed, Is.True);
             Assert.That(mechanisms.SetRampDeployed(ship, true), Is.False);
             Assert.That(mechanisms.SetRampDeployed(ship, true, true), Is.False);
             Assert.That(mechanisms.SetHatchDeployed(ship, true, true), Is.False);
             Assert.That(entities.HasComponent<MohawkRampMovingComponent>(ship), Is.False);
-            Assert.That(entities.QueryEntities<MohawkRampSegmentComponent>().Any(c => c.Comp.Lower), Is.False);
             foreach (var point in entities.GetComponent<DropshipComponent>(ship).AttachmentPoints)
                 Assert.That(entities.GetComponent<TransformComponent>(point).GridUid, Is.EqualTo(ship));
         });
         await pair.Client.WaitAssertion(() =>
         {
-            foreach (var deck in secondaryNets)
-                Assert.That(pair.Client.EntMan.TryGetEntity(deck, out _), Is.False,
-                    "Connected clients must also remove the discarded decks.");
+            var entities = pair.Client.EntMan;
+            for (var i = 0; i < secondaryNets.Length; i++)
+            {
+                var deck = entities.GetEntity(secondaryNets[i]);
+                Assert.That(entities.GetComponent<TransformComponent>(deck).MapUid,
+                    Is.EqualTo(entities.GetEntity(holdingMapNets[i])),
+                    "Connected clients must retain the old deck broadphase off the playable maps.");
+            }
         });
         await pair.Server.WaitAssertion(() => pair.Server.EntMan.DeleteEntity(ship));
         await pair.CleanReturnAsync();
