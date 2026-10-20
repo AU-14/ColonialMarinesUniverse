@@ -34,6 +34,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Robust.Shared.Player;
 
 namespace Content.Server.CMU14.Yautja;
 
@@ -260,7 +261,14 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
             StopDisc(ent);
 
         if (!TerminatingOrDeleted(ent.Owner) && !TerminatingOrDeleted(target))
+        {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-disc-catch-self", ("disc", ent.Owner)), target, target);
+            _popup.PopupEntity(
+                Loc.GetString("cmu-yautja-disc-catch-others", ("disc", ent.Owner), ("user", target)),
+                target,
+                Filter.PvsExcept(target),
+                true);
+        }
 
         if (TryComp(ent.Owner, out ThrownItemComponent? currentThrown))
             _thrown.StopThrow(ent.Owner, currentThrown);

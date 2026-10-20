@@ -771,6 +771,7 @@ cmu-yautja-badblood-no-honor = You have no honor. You cannot do this.
 
 cmu-yautja-disc-fiddle = You fiddle with the disc, but nothing happens. Try again maybe?
 cmu-yautja-disc-catch-self = You catch {$disc} easily.
+cmu-yautja-disc-catch-others = {$user} expertly catches {$disc} out of the air.
 cmu-yautja-shuttle-console-denied = You do not understand how to use this terminal.
 cmu-yautja-butcher-target-title = What do you wish to butcher?
 cmu-yautja-butcher-target-message = Choose a dead adjacent target.

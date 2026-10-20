@@ -513,10 +513,10 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public FixedPoint2 CallDiscPowerCost = 70;
 
     [DataField]
-    public float CallDiscRange = 10f;
+    public float CallDiscRange = 15f;
 
     [DataField]
-    public float CallDiscActiveRange = 7f;
+    public float CallDiscActiveRange = 15f; // CMU14: same screenwide reach while the disc is active (CM uses 7).
 
     [DataField]
     public TimeSpan CallDiscCooldown = TimeSpan.FromSeconds(10);
@@ -3258,7 +3258,7 @@ public sealed partial class YautjaScytheBonusStrikeComponent : Component
     public float Chance = 0.15f;
 
     [DataField]
-    public TimeSpan FollowUpDelay = TimeSpan.FromMilliseconds(100);
+    public TimeSpan FollowUpDelay = TimeSpan.FromMilliseconds(200);
 }
 
 [RegisterComponent]

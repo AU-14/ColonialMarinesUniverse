@@ -189,16 +189,15 @@ public sealed class YautjaLimbTrophyPipelineTest
                 entMan.System<MobStateSystem>().ChangeMobState(victim, MobState.Dead);
             });
 
-            // 4 skin stages, 7 / 6.5 / 7 / 9s
-            foreach (var seconds in new[] { 7f, 6.5f, 7f, 9f })
+            // Each completed skin stage starts the next one itself, so one start runs the whole pipeline:
+            // 4 stages of 7 / 6.5 / 7 / 9 seconds. Starting again mid-pipeline is refused (a do-after is already
+            // running), which is the behaviour being asserted here.
+            await server.WaitAssertion(() =>
             {
-                await server.WaitAssertion(() =>
-                {
-                    Assert.That(server.EntMan.System<YautjaTrophySystem>()
-                        .TryStartButcher(hunter, victim, YautjaButcherProcedure.Skin), Is.True);
-                });
-                await pair.RunTicksSync(pair.SecondsToTicks(seconds + 0.5f));
-            }
+                Assert.That(server.EntMan.System<YautjaTrophySystem>()
+                    .TryStartButcher(hunter, victim, YautjaButcherProcedure.Skin), Is.True);
+            });
+            await pair.RunTicksSync(pair.SecondsToTicks(7f + 6.5f + 7f + 9f + 2f));
 
             await server.WaitAssertion(() =>
             {
@@ -248,16 +247,15 @@ public sealed class YautjaLimbTrophyPipelineTest
                 entMan.System<MobStateSystem>().ChangeMobState(xeno, MobState.Dead);
             });
 
-            // 4 skin stages, 7 / 6.5 / 7 / 9s
-            foreach (var seconds in new[] { 7f, 6.5f, 7f, 9f })
+            // Each completed skin stage starts the next one itself, so one start runs the whole pipeline:
+            // 4 stages of 7 / 6.5 / 7 / 9 seconds. Starting again mid-pipeline is refused (a do-after is already
+            // running), which is the behaviour being asserted here.
+            await server.WaitAssertion(() =>
             {
-                await server.WaitAssertion(() =>
-                {
-                    Assert.That(server.EntMan.System<YautjaTrophySystem>()
-                        .TryStartButcher(hunter, xeno, YautjaButcherProcedure.Skin), Is.True);
-                });
-                await pair.RunTicksSync(pair.SecondsToTicks(seconds + 0.5f));
-            }
+                Assert.That(server.EntMan.System<YautjaTrophySystem>()
+                    .TryStartButcher(hunter, xeno, YautjaButcherProcedure.Skin), Is.True);
+            });
+            await pair.RunTicksSync(pair.SecondsToTicks(7f + 6.5f + 7f + 9f + 2f));
 
             await server.WaitAssertion(() =>
             {

@@ -53,7 +53,7 @@ public sealed class YautjaXenoGrabTest
     }
 
     [Test]
-    public async Task HunterCannotAggressivelyGrabOversizedXeno()
+    public async Task HunterCanAggressivelyGrabOversizedXeno()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -77,9 +77,11 @@ public sealed class YautjaXenoGrabTest
         });
         await pair.RunTicksSync(5);
 
+        // Grabbing is gated on FiremanCarriable plus the Yautja carrier whitelist, not on mob size, so a hunter can
+        // haul a Ravager just like any other caste.
         await server.WaitAssertion(() =>
-            Assert.That(server.EntMan.System<FiremanCarrySystem>().IsAggressivelyGrabbed(xeno), Is.False,
-                "A Ravager is MOB_SIZE_BIG and exceeds the Yautja grab limit."));
+            Assert.That(server.EntMan.System<FiremanCarrySystem>().IsAggressivelyGrabbed(xeno), Is.True,
+                "a Ravager is carriable by a Yautja even though it is MOB_SIZE_BIG."));
 
         await pair.CleanReturnAsync();
     }

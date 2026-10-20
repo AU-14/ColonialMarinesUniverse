@@ -104,13 +104,18 @@ public sealed class YautjaResistanceParityTest
                 Assert.That(server.EntMan.HasComponent<StaminaComponent>(yautja), Is.False);
                 Assert.That(server.EntMan.HasComponent<RMCStaminaComponent>(yautja), Is.False);
 
+                // CM-SS13 combines the species divisor with the skill term (life_helpers.dm:177-183):
+                // 3s / stun_reduction 1.5 = 2s, then x (1 - Endurance skill) = 0.84 -> 1.68s.
+                var expected = TimeSpan.FromSeconds(1.68);
+
                 var stun = new RMCStatusEffectTimeEvent("Stun", TimeSpan.FromSeconds(3));
                 server.EntMan.EventBus.RaiseLocalEvent(yautja, ref stun);
-                Assert.That(stun.Duration, Is.EqualTo(TimeSpan.FromSeconds(2)));
+                Assert.That(stun.Duration, Is.EqualTo(expected),
+                    "stun is divided by stun_reduction 1.5 and then reduced by the hunter's Endurance skill.");
 
                 var unconscious = new RMCStatusEffectTimeEvent("Unconscious", TimeSpan.FromSeconds(3));
                 server.EntMan.EventBus.RaiseLocalEvent(yautja, ref unconscious);
-                Assert.That(unconscious.Duration, Is.EqualTo(TimeSpan.FromSeconds(2)),
+                Assert.That(unconscious.Duration, Is.EqualTo(expected),
                     "CM-SS13 reduces a hunter's knockout with stun_reduction 1.5 instead of immunising them.");
             });
         }

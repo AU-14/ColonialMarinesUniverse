@@ -992,8 +992,13 @@ public sealed class YautjaMeleeWeaponTest
             },
         };
 
-        Assert.That(scytheBonus.Chance, Is.EqualTo(0.15f),
-            $"{source} uses prob(15) before the extra parent attack.");
+        Assert.Multiple(() =>
+        {
+            Assert.That(scytheBonus.Chance, Is.EqualTo(0.15f),
+                $"{source} uses prob(15) before the extra parent attack.");
+            Assert.That(scytheBonus.FollowUpDelay, Is.EqualTo(TimeSpan.FromMilliseconds(200)),
+                "the follow-up strike is scheduled just after the swing so it reads as a second hit");
+        });
 
         scytheBonus.Chance = 1f;
         var bonus = RaiseMeleeHit(entMan, scythe, user, target, baseDamage);
@@ -1006,8 +1011,10 @@ public sealed class YautjaMeleeWeaponTest
 
         Assert.Multiple(() =>
         {
-            Assert.That(bonus.BonusDamage.GetTotal(), Is.EqualTo(baseDamage.GetTotal()),
-                $"{source} calls ..() again when the source prob(15) succeeds.");
+            // CM-SS13 re-enters ..(), which is a whole extra attack. CMU schedules a real AttemptLightAttack
+            // instead of folding bonus damage into this swing, so this swing's damage must never be doubled.
+            Assert.That(bonus.BonusDamage.GetTotal(), Is.EqualTo(FixedPoint2.Zero),
+                $"{source} must not double this swing's damage; the extra strike is its own attack.");
             Assert.That(noBonus.BonusDamage.GetTotal(), Is.EqualTo(FixedPoint2.Zero),
                 $"{source} does not add the extra strike when the source prob(15) fails.");
             Assert.That(miss.BonusDamage.GetTotal(), Is.EqualTo(FixedPoint2.Zero),

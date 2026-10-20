@@ -6,6 +6,7 @@ using Content.Server.Humanoid;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Anatomy.Organs;
 using Content.Shared.Body;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Humanoid;
 using Content.Shared.Speech.Components;
 using Robust.Shared.GameObjects;
@@ -103,7 +104,10 @@ public sealed class YautjaNubodyTest : GameTest
                     Assert.Multiple(() =>
                     {
                         Assert.That(visual.Profile.Sex, Is.EqualTo(Sex.Male), category);
-                        Assert.That(visual.Profile.SkinColor, Is.EqualTo(Color.White), category);
+                        // CM-SS13's predator default is the "tan" skin (PRED_SKIN_COLOR), which the species
+                        // defaultSkinTone now uses; it used to be white.
+                        Assert.That(visual.Profile.SkinColor,
+                            Is.EqualTo(YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Tan)), category);
                     });
                 }
 

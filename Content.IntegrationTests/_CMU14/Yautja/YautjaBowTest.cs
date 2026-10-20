@@ -180,7 +180,7 @@ public sealed class YautjaBowTest
     [TestCase("CMUYautjaCasterStunBolt", "Heat", 0, null, 22f)]
     [TestCase("CMUYautjaCasterImmobilizerBolt", "Heat", 0, null, 20f)]
     [TestCase("CMUYautjaCasterLethalBolt", "Heat", 75, null, 22f)]
-    [TestCase("CMUYautjaCasterEradicatorBolt", "Heat", 55, null, 8f)]
+    [TestCase("CMUYautjaCasterEradicatorBolt", "Heat", 55, null, 20f)] // CMU14: range raised from CM's 8 to 20 on purpose
     public async Task ProjectileStatsMatchCmss13AmmoDatums(
         string prototype, string damageType, int damage, int? armorPiercing, float maxRange)
     {
@@ -229,12 +229,14 @@ public sealed class YautjaBowTest
 
                 Assert.Multiple(() =>
                 {
+                    // CM-SS13 boosts by +25; CMU buffs alloy spikes to +250 on purpose so they breach walls quickly,
+                    // which is why these expect 280 (30 base + 250) rather than 55.
                     Assert.That(turfDamage?.DamageDict["Piercing"],
-                        Is.EqualTo((FixedPoint2) 55),
-                        "CMSS13 alloy spikes add bullet_trait_damage_boost +25 against GLOB.damage_boost_turfs.");
+                        Is.EqualTo((FixedPoint2) 280),
+                        "CMU alloy spikes add a deliberate +250 against GLOB.damage_boost_turfs.");
                     Assert.That(breachingDamage?.DamageDict["Piercing"],
-                        Is.EqualTo((FixedPoint2) 55),
-                        "CMSS13 alloy spikes add bullet_trait_damage_boost +25 against GLOB.damage_boost_breaching.");
+                        Is.EqualTo((FixedPoint2) 280),
+                        "CMU alloy spikes add a deliberate +250 against GLOB.damage_boost_breaching.");
                     Assert.That(unflaggedDamage?.DamageDict["Piercing"],
                         Is.EqualTo((FixedPoint2) 30),
                         "CMSS13 alloy spike damage boost is target-category gated.");
@@ -294,11 +296,13 @@ public sealed class YautjaBowTest
                     50,
                     50,
                     "CMSS13 /datum/ammo/energy/yautja/caster/bolt/single_lethal calls cell_explosion(..., 50, 50, EXPLOSION_FALLOFF_SHAPE_LINEAR).");
+                // CM-SS13 uses cell_explosion(..., 170, 50); the eradicator is intentionally buffed to 330 / 200 so a
+                // direct blast critically injures, which is a documented CMU deviation rather than parity.
                 AssertExplosionPayload(entMan,
                     casterEradicator,
-                    170,
-                    50,
-                    "CMSS13 /datum/ammo/energy/yautja/caster/aoe_lethal calls cell_explosion(..., 170, 50, EXPLOSION_FALLOFF_SHAPE_LINEAR).");
+                    330,
+                    200,
+                    "CMU14 eradicator blast is deliberately stronger than cell_explosion(..., 170, 50).");
             }
             finally
             {
@@ -10004,7 +10008,7 @@ public sealed class YautjaBowTest
     }
 
     [Test]
-    public async Task CallDiscCooldownAndActiveRangeMatchCmss13SmartDiscRecall()
+    public async Task CallDiscRecallsScreenwideDiscsWithCmss13PowerAndCooldown()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -10019,9 +10023,11 @@ public sealed class YautjaBowTest
 
             var hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
             var bracer = entMan.SpawnEntity("CMUYautjaBracer", map.GridCoords);
-            var nearbyInactiveDisc = entMan.SpawnEntity("CMUYautjaSmartDisc", map.GridCoords.Offset(new Vector2(9, 0)));
-            var activeInRangeDisc = entMan.SpawnEntity("CMUYautjaSmartDisc", map.GridCoords.Offset(new Vector2(6, 0)));
-            var activeOutOfRangeDisc = entMan.SpawnEntity("CMUYautjaSmartDisc", map.GridCoords.Offset(new Vector2(8, 0)));
+            // CMU14: recall reaches about one screen (15 tiles) in every direction, and the active disc is no longer
+            // held to CM's stricter 7-tile range. Anything beyond the screen stays where it is.
+            var nearbyInactiveDisc = entMan.SpawnEntity("CMUYautjaSmartDisc", map.GridCoords.Offset(new Vector2(14, 0)));
+            var activeInRangeDisc = entMan.SpawnEntity("CMUYautjaSmartDisc", map.GridCoords.Offset(new Vector2(12, 6)));
+            var activeOutOfRangeDisc = entMan.SpawnEntity("CMUYautjaSmartDisc", map.GridCoords.Offset(new Vector2(20, 0)));
 
             try
             {
@@ -10048,13 +10054,13 @@ public sealed class YautjaBowTest
                     Assert.That(bracerComp.Charge, Is.EqualTo((FixedPoint2) 230),
                         "CMSS13 call_disc_internal() drains 70 power on successful use.");
                     Assert.That(hands.IsHolding(hunter, nearbyInactiveDisc), Is.True,
-                        "CMSS13 call_disc_internal() recalls inactive smart-discs within range 10.");
+                        "an inactive smart-disc 14 tiles away is inside the screenwide recall range.");
                     Assert.That(hands.IsHolding(hunter, activeInRangeDisc), Is.True,
-                        "CMSS13 active smart-disc local equivalent uses the stricter active recall range.");
+                        "an active smart-disc ~13 tiles away is also recalled - the active range is screenwide too.");
                     Assert.That(activeInRangeComp.Active, Is.False,
                         "Recalling a local active smart-disc returns it to the inactive held item state.");
                     Assert.That(hands.IsHolding(hunter, activeOutOfRangeDisc), Is.False,
-                        "Active smart-disc recall range is 7, so an active disc at 8 tiles remains in the field.");
+                        "a disc 20 tiles away is past the screenwide range and stays in the field.");
                     Assert.That(transform.GetMapCoordinates(activeOutOfRangeDisc).Position, Is.EqualTo(activeOutOfRangeStart.Position));
                 });
 
@@ -12254,7 +12260,7 @@ public sealed class YautjaBowTest
                     Assert.That(fireModes.FireModes[1].PopupText, Is.EqualTo("plasma carbine will now fire impact-explosive plasma bolts."));
                     Assert.That(entMan.HasComponent<WieldableComponent>(carbine), Is.True,
                         "CMSS13 plasma carbine sets flags_item = ITEM_PREDATOR|TWOHANDED.");
-                    Assert.That(wieldable.WieldedInhandPrefix, Is.EqualTo("plasmacarbine"),
+                    Assert.That(wieldable.WieldedInhandPrefix, Is.EqualTo("plasmacarbine_w"),
                         "CMSS13 plasma carbine does not swap item_state when wielded.");
                     Assert.That(entMan.HasComponent<GunRequiresWieldComponent>(carbine), Is.False,
                         "CMSS13 plasma carbine description/source says it can be fired with one hand.");
@@ -15847,7 +15853,7 @@ public sealed class YautjaBowTest
                 $"{id} CMSS13 description says the defoliator is lightweight enough to fire one-handed.");
             Assert.That(entMan.HasComponent<WieldableComponent>(weapon), Is.True,
                 $"{id} CMSS13 flags_item includes TWOHANDED even though firing does not require wield.");
-            Assert.That(wieldable.WieldedInhandPrefix, Is.EqualTo("defoliator"),
+            Assert.That(wieldable.WieldedInhandPrefix, Is.EqualTo("defoliator_w"),
                 $"{id} CMSS13 item_state stays \"defoliator\" when wielded.");
             Assert.That(gun.SelectedMode, Is.EqualTo(SelectiveFire.FullAuto),
                 $"{id} should preserve flamer continuous-fire behavior.");
@@ -18604,25 +18610,26 @@ public sealed class YautjaBowTest
             "CMUYautjaSpikeLauncher",
             "/obj/item/weapon/gun/launcher/spike",
             guns,
+            // CMU14: held prefixes follow pred_guns_inhands.rsi's state names, which is where the in-hand art lives.
             "spike_launcher",
-            "spike_launcher",
-            WieldedPrefix: "spike_launcher",
+            "spikelauncher",
+            WieldedPrefix: "spikelauncher_w",
             GunShotSoundPath: "/Audio/CMU14/Yautja/woodhit.ogg");
         yield return new Cmss13WeaponVisualSoundRow(
             "CMUYautjaPlasmaRifle",
             "/obj/item/weapon/gun/energy/yautja/plasmarifle",
             guns,
             "plasma_rifle",
-            "plasma_rifle",
-            WieldedPrefix: "plasma_rifle",
+            "plasmarifle",
+            WieldedPrefix: "plasmarifle_w",
             GunShotSoundPath: "/Audio/CMU14/Yautja/Weapons/Plasma/pred_plasma_shot.wav");
         yield return new Cmss13WeaponVisualSoundRow(
             "CMUYautjaPlasmaPistol",
             "/obj/item/weapon/gun/energy/yautja/plasmapistol",
             guns,
             "plasma_pistol",
-            "plasma_pistol",
-            WieldedPrefix: "plasma_pistol",
+            "plasmapistol",
+            WieldedPrefix: "plasmapistol_w",
             GunShotSoundPath: "/Audio/CMU14/Yautja/Weapons/Plasma/pulse3.wav");
     }
 

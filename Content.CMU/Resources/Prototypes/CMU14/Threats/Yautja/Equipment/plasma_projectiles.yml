@@ -1,3 +1,46 @@
+
+- type: explosion
+  id: CMUYautjaEradicatorExplosion
+  damagePerIntensity:
+    types:
+      Blunt: 5
+      Heat: 5
+  tileBreakChance: [0, 0.5, 1]
+  tileBreakIntensity: [0, 10, 30]
+  tileBreakRerollReduction: 20
+  lightColor: Transparent
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+
+- type: explosion
+  id: CMUYautjaCasterExplosion
+  damagePerIntensity:
+    types:
+      Blunt: 5
+      Heat: 5
+  tileBreakChance: [0, 0.5, 1]
+  tileBreakIntensity: [0, 10, 30]
+  tileBreakRerollReduction: 20
+  lightColor: Transparent
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+
 - type: entity
   parent: MuzzleFlashEffect
   id: CMUYautjaPlasmaMuzzleFlash
@@ -97,17 +140,21 @@
     lifetime: 0.75
   - type: Sprite
     drawdepth: Effects
-    scale: 1.9, 1.9
+    scale: 1.4, 1.4
     layers:
     - shader: unshaded
+      # CMU14: muzzle_energy is white art; tinting the unshaded layer is what makes the flash read as plasma.
+      color: "#55c7ff"
       map: ["enum.EffectLayers.Unshaded"]
       sprite: CMU14/Yautja/plasma_projectiles.rsi
       state: muzzle_energy
   - type: PointLight
     enabled: true
     color: "#55c7ff"
-    radius: 5.5
-    energy: 3.6
+    # CMU14: energy above ~1 clips every channel to white, which read as a bright white explosion. Kept low so the
+    # glow stays blue; radius trimmed to match.
+    radius: 3.5
+    energy: 1.2
   - type: RMCExplosionShockWave
     falloffPower: 34
     sharpness: 12
@@ -125,17 +172,18 @@
     lifetime: 0.55
   - type: Sprite
     drawdepth: Effects
-    scale: 1.45, 1.45
+    scale: 1.15, 1.15
     layers:
     - shader: unshaded
+      color: "#2da4ff"
       map: ["enum.EffectLayers.Unshaded"]
       sprite: CMU14/Yautja/plasma_projectiles.rsi
       state: muzzle_energy
   - type: PointLight
     enabled: true
     color: "#2da4ff"
-    radius: 7
-    energy: 4.5
+    radius: 4
+    energy: 1.5
   - type: RMCExplosionShockWave
     falloffPower: 24
     sharpness: 16
@@ -333,13 +381,13 @@
     fixtureID: projectile
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: RMC
+    explosionType: CMUYautjaCasterExplosion
     maxIntensity: 50
     intensitySlope: 6
     totalIntensity: 50
     maxTileBreak: 2
   - type: CMExplosionEffect
-    explosion: CMUYautjaPlasmaHeavyImpactEffect
+    # CMU14: no detonation animation - the blast, shockwave and scorch are all that shows.
     shockWave: CMUYautjaPlasmaHeavyShockWave
     minShrapnel: 7
     maxShrapnel: 12
@@ -362,7 +410,8 @@
   tileBreakChance: [0, 0.5, 1]
   tileBreakIntensity: [0, 10, 30]
   tileBreakRerollReduction: 20
-  lightColor: Orange
+  # CMU14: no explosion light here either - see CMUYautjaCasterExplosion; the blue glow is the impact effect's.
+  lightColor: Transparent
   texturePath: /Textures/Effects/fire.rsi
   fireColor: Transparent
   sound:
@@ -381,7 +430,7 @@
   categories: [HideSpawnMenu]
   components:
   - type: Projectile
-    impactEffect: CMUYautjaPlasmaHeavyImpactEffect
+    impactEffect: null # CMU14: no landing effect - the bolt simply disappears
     damage:
       types:
         Heat: 30
@@ -393,7 +442,7 @@
     totalIntensity: 70
     maxTileBreak: 1
   - type: CMExplosionEffect
-    explosion: CMUYautjaPlasmaHeavyImpactEffect
+    # CMU14: no detonation animation - the blast, shockwave and scorch are all that shows.
     shockWave: CMUYautjaPlasmaHeavyShockWave
     minShrapnel: 1
     maxShrapnel: 2
@@ -426,13 +475,13 @@
   - type: ExplodeOnTrigger
   - type: DeleteOnTrigger
   - type: Explosive
-    explosionType: RMC
+    explosionType: CMUYautjaEradicatorExplosion
     maxIntensity: 200
     intensitySlope: 4.5
     totalIntensity: 330
     maxTileBreak: 2
   - type: CMExplosionEffect
-    explosion: CMUYautjaPlasmaEradicatorImpactEffect
+    # CMU14: no detonation animation - the blast, shockwave and scorch are all that shows.
     shockWave: CMUYautjaPlasmaEradicatorShockWave
     minShrapnel: 10
     maxShrapnel: 16

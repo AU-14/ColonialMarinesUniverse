@@ -70,10 +70,12 @@ public sealed class YautjaCarryInstantTest
     }
 
     [Test]
-    public async Task ExcludedXenoCasteCannotBeCarried()
+    public async Task BigXenoCasteCanAlsoBeCarried()
     {
-        Assert.That(await DraggedOntoSelf("CMUMobYautja", "CMXenoRavager"), Is.False,
-            "a Ravager is MOB_SIZE_BIG and stays out of reach");
+        // Carrying is gated on FiremanCarriable + the Yautja carrier whitelist, not on mob size: a Yautja lifts a
+        // Ravager just like any other caste.
+        Assert.That(await DraggedOntoSelf("CMUMobYautja", "CMXenoRavager"), Is.True,
+            "a Ravager is carriable by a Yautja");
     }
 
     [Test]
