@@ -122,7 +122,7 @@
   - type: ShowAntagIcons
   - type: ShowContrabandDetails
   - type: Inventory
-    templateId: aghost
+    templateId: CMUAghost # CMU14
   - type: Loadout
     prototypes: [ MobAghostGear ]
   - type: BypassInteractionChecks
