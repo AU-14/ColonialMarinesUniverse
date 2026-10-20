@@ -5,8 +5,9 @@
 - type: entity
   id: CMUHotspotObjective
   name: Hotspot
-  parent: MarkerBase
   components:
+  - type: Clickable
+  - type: InteractionOutline
   - type: CMUObjective
     id: CMUHotspotObjective
     factionNeutral: true
@@ -15,7 +16,8 @@
     factions:
     - govfor
     - opfor
-    objectiveLevel: 1
+    objectiveLevel: 3
+    rollAnyway: true
     objectiveWeight: 2
     objectiveDescription: "Hold the hotspot. The strongest force inside it scores over time."
   - type: HotspotObjective
@@ -30,42 +32,7 @@
   - type: NavMapBeacon
     text: Hotspot
   - type: Sprite
-    sprite: _RMC14/Markers/gm_tacmap_marks.rsi
-    state: star
-  - type: WarpPoint
-    location: cmu-warp-location-hotspot
-
-# Endgame driver: activates for a faction once its win points reach the final threshold,
-# first side to accumulate ticksToWin scoring ticks in this zone wins the round outright.
-# Replaces the retired fetch finals as the Force on Force round-ending objective.
-- type: entity
-  id: CMUHotspotFinalObjective
-  name: Hotspot
-  parent: MarkerBase
-  components:
-  - type: CMUObjective
-    id: CMUHotspotFinalObjective
-    factionNeutral: true
-    allowedPresets:
-    - ForceOnForce
-    factions:
-    - govfor
-    - opfor
-    objectiveLevel: 3
-    objectiveDescription: "Hold the final hotspot. The first force to control it long enough wins the round."
-  - type: HotspotObjective
-    catalog: true
-    halfWidth: 9
-    tickSeconds: 10
-    pointsPerTick: 1
-    normalizeByTeamSize: true
-    feedWinPoints: false
-    relocateAfterTicks: 5
-    ticksToWin: 30
-    zoneColorHex: "#FF4319"
-  - type: NavMapBeacon
-    text: Final Hotspot
-  - type: Sprite
+    drawdepth: Overdoors
     sprite: _RMC14/Markers/gm_tacmap_marks.rsi
     state: star
   - type: WarpPoint
