@@ -62,6 +62,12 @@ public sealed partial class MentorManager : IPostInjectInit
     private readonly Dictionary<NetUserId, List<NetUserId>> _destinationClaims = new();
     private readonly Dictionary<NetUserId, HashSet<NetUserId>> _mentorClaims = new();
 
+    // CMU14 BugHelp Begin: per-destination transcript for bug report promotion (BUGHELP-DESIGN.md §4.2).
+    // Human lines only, so the promoted report reads as the conversation. SERVER notices stay out.
+    private readonly Dictionary<NetUserId, List<(string Author, string Text)>> _transcripts = new();
+    private const int TranscriptLineCap = 50;
+    // CMU14 End
+
     // CMU14 Help Relay Begin: webhook payload DTOs replaced by the shared relay's embed family.
     //private sealed class WebhookPayload
     //{
@@ -407,6 +413,16 @@ public sealed partial class MentorManager : IPostInjectInit
         if (string.IsNullOrWhiteSpace(message))
             return;
 
+        // CMU14 BugHelp: keep human lines only (author != null filters connect/disconnect notices)
+        // for bug report promotion; tail-capped to bound memory.
+        if (author != null)
+        {
+            var lines = _transcripts.GetOrNew(destination);
+            lines.Add((authorName ?? destinationName, message));
+            if (lines.Count > TranscriptLineCap)
+                lines.RemoveRange(0, lines.Count - TranscriptLineCap);
+        }
+
         var recipients = new HashSet<INetChannel>();
         if (destinationChannel is { IsConnected: true })
             recipients.Add(destinationChannel);
@@ -484,6 +500,62 @@ public sealed partial class MentorManager : IPostInjectInit
     {
         return _mentors.TryGetValue(player, out var mentor) && mentor;
     }
+
+    // CMU14 BugHelp Begin: transcript access + SERVER-line broadcast for bug report promotion.
+    // CMU14 BugHelp: promotion transcript access. Returns the live tail; callers read only.
+    public IReadOnlyList<(string Author, string Text)> GetTranscript(NetUserId destination)
+        => _transcripts.TryGetValue(destination, out var lines) ? lines : Array.Empty<(string, string)>();
+
+    // CMU14 BugHelp: called from BugHelpSystem's round-restart handler, same lifetime as the
+    // report sequence.
+    public void ClearTranscripts() => _transcripts.Clear();
+
+    /// <summary>
+    /// CMU14 BugHelp: SERVER line in a conversation, the claim/unclaim direct-broadcast shape.
+    /// Deliberately not SendMentorMessage: that path relays created lines to Discord.
+    /// </summary>
+    public void SendServerLine(NetUserId destination, string text)
+    {
+        var destinationName = _player.TryGetPlayerData(destination, out var data)
+            ? data.UserName
+            : destination.ToString();
+
+        var mentorMsg = new MentorMessage(
+            destination,
+            destinationName,
+            null,
+            null,
+            text,
+            DateTime.Now,
+            true,
+            false,
+            true);
+        var messages = new List<MentorMessage> { mentorMsg };
+        var receive = new MentorMessagesReceivedMsg { Messages = messages };
+
+        var recipients = new HashSet<INetChannel>();
+        if (_player.TryGetSessionById(destination, out var session) && session.Channel.IsConnected)
+            recipients.Add(session.Channel);
+
+        foreach (var mentor in _activeMentors)
+        {
+            if (mentor.Channel.IsConnected)
+                recipients.Add(mentor.Channel);
+        }
+
+        foreach (var recipient in recipients)
+        {
+            try
+            {
+                _net.ServerSendMessage(receive, recipient);
+            }
+            catch (Exception e)
+            {
+                _log.RootSawmill.Error($"Error sending mentor help server line:\n{e}");
+            }
+        }
+    }
+    // CMU14 End
 
     public IEnumerable<ICommonSession> GetActiveMentors()
     {
