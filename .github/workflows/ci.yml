@@ -23,6 +23,46 @@ env:
   CONFIGURATION: DebugOpt
 
 jobs:
+  source-guards:
+    name: Source Guards
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7.0.0
+        with:
+          python-version: "3.13"
+
+      - name: Check CRLF
+        run: python3 Tools/check_crlf.py
+
+      - name: Reject RobustToolbox submodule updates in PRs
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              per_page: 100,
+            });
+
+            if (files.some(file => file.filename === 'RobustToolbox')) {
+              core.setFailed('Do not update the RobustToolbox submodule in pull requests.');
+            }
+
+      # engine must sit on an upstream release tag, never a master commit
+      - name: Verify RobustToolbox submodule points at a release tag
+        run: |
+          SHA=$(git ls-tree HEAD RobustToolbox | awk '{print $3}')
+          if ! git ls-remote --tags https://github.com/space-wizards/RobustToolbox.git | awk '{print $1}' | grep -qx "$SHA"; then
+            echo "::error::RobustToolbox ${SHA} is not an upstream release tag. Pin a v* tag, not a master commit."
+            exit 1
+          fi
+
   build:
     name: Build
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
