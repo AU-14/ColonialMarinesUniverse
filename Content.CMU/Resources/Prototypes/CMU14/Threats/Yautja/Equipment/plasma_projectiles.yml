@@ -1,6 +1,6 @@
 
 - type: explosion
-  id: CMUYautjaEradicatorExplosion
+  id: CMUYautjaCasterExplosion
   damagePerIntensity:
     types:
       Blunt: 5
@@ -8,7 +8,7 @@
   tileBreakChance: [0, 0.5, 1]
   tileBreakIntensity: [0, 10, 30]
   tileBreakRerollReduction: 20
-  lightColor: Transparent
+  lightColor: "#0a2a6b"
   texturePath: /Textures/Effects/fire.rsi
   fireColor: Transparent
   sound:
@@ -21,7 +21,7 @@
       volume: 0
 
 - type: explosion
-  id: CMUYautjaCasterExplosion
+  id: CMUYautjaEradicatorExplosion
   damagePerIntensity:
     types:
       Blunt: 5
@@ -29,7 +29,7 @@
   tileBreakChance: [0, 0.5, 1]
   tileBreakIntensity: [0, 10, 30]
   tileBreakRerollReduction: 20
-  lightColor: Transparent
+  lightColor: "#0a2a6b"
   texturePath: /Textures/Effects/fire.rsi
   fireColor: Transparent
   sound:
@@ -387,8 +387,6 @@
     totalIntensity: 50
     maxTileBreak: 2
   - type: CMExplosionEffect
-    # CMU14: no detonation animation - the blast, shockwave and scorch are all that shows.
-    shockWave: CMUYautjaPlasmaHeavyShockWave
     minShrapnel: 7
     maxShrapnel: 12
     shrapnelSpeed: 6
@@ -400,29 +398,6 @@
     color: "#55b8ff"
     radius: 4.75
     energy: 3.2
-
-- type: explosion
-  id: CMUYautjaBadBloodPlasma
-  damagePerIntensity:
-    types:
-      Blunt: 2
-      Heat: 2
-  tileBreakChance: [0, 0.5, 1]
-  tileBreakIntensity: [0, 10, 30]
-  tileBreakRerollReduction: 20
-  # CMU14: no explosion light here either - see CMUYautjaCasterExplosion; the blue glow is the impact effect's.
-  lightColor: Transparent
-  texturePath: /Textures/Effects/fire.rsi
-  fireColor: Transparent
-  sound:
-    collection: CMExplosion
-    params:
-      volume: 385
-  smallSound:
-    collection: CMExplosion
-    params:
-      volume: 0
-
 - type: entity
   parent: CMUYautjaCasterLethalBolt
   id: CMUYautjaBadBloodCasterLethalBolt
@@ -436,14 +411,12 @@
         Heat: 30
         Structural: 8
   - type: Explosive
-    explosionType: CMUYautjaBadBloodPlasma
+    explosionType: CMUYautjaCasterExplosion
     maxIntensity: 18
     intensitySlope: 6
     totalIntensity: 70
     maxTileBreak: 1
   - type: CMExplosionEffect
-    # CMU14: no detonation animation - the blast, shockwave and scorch are all that shows.
-    shockWave: CMUYautjaPlasmaHeavyShockWave
     minShrapnel: 1
     maxShrapnel: 2
     shrapnelSpeed: 5
@@ -481,8 +454,6 @@
     totalIntensity: 330
     maxTileBreak: 2
   - type: CMExplosionEffect
-    # CMU14: no detonation animation - the blast, shockwave and scorch are all that shows.
-    shockWave: CMUYautjaPlasmaEradicatorShockWave
     minShrapnel: 10
     maxShrapnel: 16
     shrapnelSpeed: 7

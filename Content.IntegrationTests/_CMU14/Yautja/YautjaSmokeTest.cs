@@ -7832,7 +7832,7 @@ public sealed class YautjaSmokeTest
             var hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
             var bracer = entMan.SpawnEntity("CMUYautjaBracer", map.GridCoords);
             var nearbyDisc = entMan.SpawnEntity("CMUYautjaSmartDisc", map.GridCoords.Offset(new Vector2(9, 0)));
-            var outOfRangeDisc = entMan.SpawnEntity("CMUYautjaSmartDisc", map.GridCoords.Offset(new Vector2(11, 0)));
+            var outOfRangeDisc = entMan.SpawnEntity("CMUYautjaSmartDisc", map.GridCoords.Offset(new Vector2(20, 0)));
             var action = entMan.SpawnEntity("CMUActionYautjaCallDisc", MapCoordinates.Nullspace);
 
             try

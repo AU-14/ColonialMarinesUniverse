@@ -302,7 +302,8 @@ public sealed class YautjaBowTest
                     casterEradicator,
                     330,
                     200,
-                    "CMU14 eradicator blast is deliberately stronger than cell_explosion(..., 170, 50).");
+                    "CMU14 eradicator blast is deliberately stronger than cell_explosion(..., 170, 50).",
+                    "CMUYautjaEradicatorExplosion");
             }
             finally
             {
@@ -483,7 +484,9 @@ public sealed class YautjaBowTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(explosive.ExplosionType.Id, Is.EqualTo("RMC"),
+                    // CMU14: the caster bolts use CMUYautjaCasterExplosion (RMC with the light removed), and the
+                    // lance payload mirrors the caster-lethal explosion.
+                    Assert.That(explosive.ExplosionType.Id, Is.EqualTo("CMUYautjaCasterExplosion"),
                         "CMSS13 cell_explosion uses CM-style burn/blast fallout, not the generic station explosion profile.");
                     Assert.That(explosive.TotalIntensity, Is.EqualTo(150));
                     Assert.That(explosive.MaxIntensity, Is.EqualTo(50));
@@ -15688,6 +15691,7 @@ public sealed class YautjaBowTest
         int total,
         int max,
         string source,
+        string explosionType = "CMUYautjaCasterExplosion",
         int? maxTileBreak = null)
     {
         Assert.Multiple(() =>
@@ -15695,7 +15699,7 @@ public sealed class YautjaBowTest
             Assert.That(entMan.HasComponent<TriggerOnCollideComponent>(projectile), Is.True, source);
             Assert.That(entMan.HasComponent<ExplodeOnTriggerComponent>(projectile), Is.True, source);
             Assert.That(entMan.TryGetComponent(projectile, out ExplosiveComponent? explosive), Is.True, source);
-            Assert.That(explosive!.ExplosionType.Id, Is.EqualTo("RMC"), source);
+            Assert.That(explosive!.ExplosionType.Id, Is.EqualTo(explosionType), source);
             Assert.That(explosive.TotalIntensity, Is.EqualTo(total), source);
             Assert.That(explosive.MaxIntensity, Is.EqualTo(max), source);
             if (maxTileBreak is { } expectedMaxTileBreak)

@@ -103,6 +103,13 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
 
     private void OnCasterEradicatorHit(Entity<YautjaCasterEradicatorProjectileComponent> ent, ref ProjectileHitEvent args)
     {
+        if (!ent.Comp.Triggered && !TerminatingOrDeleted(ent.Owner))
+        {
+            ent.Comp.Triggered = true;
+            var trigger = new TriggerEvent(ent.Owner);
+            RaiseLocalEvent(ent.Owner, ref trigger);
+        }
+
         if (!_vehicleTopology.TryGetVehicle(args.Target, out var vehicle))
             return;
 

@@ -16,6 +16,7 @@ public sealed class YautjaActionSpriteTest
     [TestCase("CMUActionYautjaRaiseThrall", false, "bracer1")]
     [TestCase("CMUActionYautjaHellhoundGorge", false, "headbite")]
     [TestCase("CMUActionYautjaHellhoundSenseOwner", false, "mark_hosts")]
+    [TestCase("CMUActionYautjaToggleCloak", false, "cloak_framed")]
     public async Task ActionIconsUseCurrentSpriteLayers(string id, bool active, string state)
     {
         await using var pair = await PoolManager.GetServerClient();
