@@ -1,0 +1,136 @@
+# Platoon menus for the NutriCo AutoChef. The mess food vendor marker (CMUVMarkerShipMessFood) picks one of these, or
+# the default RMCNutriCoVendor, from the platoon's vendor set. Every menu adds the festive meals for all of December.
+
+# SPP meals, for UPP and BEAR platoons.
+- type: entity
+  parent: RMCNutriCoVendor
+  id: CMUNutriCoVendorSPP
+  suffix: SPP Meals
+  components:
+  - type: CMAutomatedVendor
+    hackable: true
+    sections:
+    - name: Holiday Meals
+      holidays:
+      - FestiveSeason
+      entries:
+      - id: RMCMarinePreparedMealCookies
+        amount: 25
+      - id: RMCMarinePreparedMealGingerbread
+        amount: 25
+      - id: RMCMarinePreparedMealFruitcake
+        amount: 25
+    - name: Prepared Meals
+      entries:
+      - id: RMCMarinePreparedMealSPPBanush
+        amount: 15
+      - id: RMCMarinePreparedMealSPPChowMein
+        amount: 15
+      - id: RMCMarinePreparedMealSPPCuban
+        amount: 15
+      - id: RMCMarinePreparedMealSPPFrankfurter
+        amount: 15
+      - id: RMCMarinePreparedMealSPPJiaozi
+        amount: 15
+      - id: RMCMarinePreparedMealSPPLuncheon
+        amount: 15
+      - id: RMCMarinePreparedMealSPPMeatballs
+        amount: 15
+      - id: RMCMarinePreparedMealSPPShrimp
+        amount: 15
+      - id: RMCMarinePreparedMealSPPWursts
+        amount: 15
+    - name: Utensils
+      entries:
+      - id: RMCForkPlastic
+        amount: 50
+      - id: RMCSpoonPlastic
+        amount: 50
+      - id: RMCKitchenKnifePlastic
+        amount: 50
+
+# RCM meals, for RMC platoons.
+- type: entity
+  parent: RMCNutriCoVendor
+  id: CMUNutriCoVendorRCM
+  suffix: RCM Meals
+  components:
+  - type: CMAutomatedVendor
+    hackable: true
+    sections:
+    - name: Holiday Meals
+      holidays:
+      - FestiveSeason
+      entries:
+      - id: RMCMarinePreparedMealCookies
+        amount: 25
+      - id: RMCMarinePreparedMealGingerbread
+        amount: 25
+      - id: RMCMarinePreparedMealFruitcake
+        amount: 25
+    - name: Prepared Meals
+      entries:
+      - id: RMCMarinePreparedMealRCMFish
+        amount: 15
+      - id: RMCMarinePreparedMealRCMKatsu
+        amount: 15
+      - id: RMCMarinePreparedMealRCMMeat
+        amount: 15
+      - id: RMCMarinePreparedMealRCMSausage
+        amount: 15
+      - id: RMCMarinePreparedMealRCMTikka
+        amount: 15
+    - name: Utensils
+      entries:
+      - id: RMCForkPlastic
+        amount: 50
+      - id: RMCSpoonPlastic
+        amount: 50
+      - id: RMCKitchenKnifePlastic
+        amount: 50
+      - id: PairedChopsticks
+        amount: 50
+
+# PMC meals, for WY PMC, Prodigy and VAIPO platoons.
+- type: entity
+  parent: RMCNutriCoVendor
+  id: CMUNutriCoVendorPMC
+  suffix: PMC Meals
+  components:
+  - type: CMAutomatedVendor
+    hackable: true
+    sections:
+    - name: Holiday Meals
+      holidays:
+      - FestiveSeason
+      entries:
+      - id: RMCMarinePreparedMealCookies
+        amount: 25
+      - id: RMCMarinePreparedMealGingerbread
+        amount: 25
+      - id: RMCMarinePreparedMealFruitcake
+        amount: 25
+    - name: Prepared Meals
+      entries:
+      - id: RMCMarinePreparedMealPMCAlooGobi
+        amount: 15
+      - id: RMCMarinePreparedMealPMCBirria
+        amount: 15
+      - id: RMCMarinePreparedMealPMCBobotie
+        amount: 15
+      - id: RMCMarinePreparedMealPMCButterChicken
+        amount: 15
+      - id: RMCMarinePreparedMealPMCFishAndChips
+        amount: 15
+      - id: RMCMarinePreparedMealPMCIkanBakar
+        amount: 15
+      - id: RMCMarinePreparedMealPMCSoba
+        amount: 15
+    - name: Utensils
+      entries:
+      - id: RMCForkPlastic
+        amount: 50
+      - id: RMCSpoonPlastic
+        amount: 50
+      - id: RMCKitchenKnifePlastic
+        amount: 50

@@ -180,7 +180,7 @@
   - type: Storage
     maxItemSize: Ginormous
     grid:
-    - 0,0,9,3
+    - 0,0,9,4
   - type: Sprite
     sprite: _RMC14/Objects/Storage/procase_mini.rsi
   - type: Icon
@@ -188,6 +188,10 @@
   - type: StorageFill
     contents:
       - id: AU14WeaponRifleKramerAR
+        amount: 1
+      - id: CMULACNAttachmentKramerStock
+        amount: 1
+      - id: CMULACNAttachmentKarbineStock
         amount: 1
       - id: AU14WeaponRifleKramerMagazineAP
         amount: 1

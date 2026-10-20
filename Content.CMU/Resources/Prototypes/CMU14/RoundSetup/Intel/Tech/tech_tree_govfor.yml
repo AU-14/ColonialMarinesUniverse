@@ -85,6 +85,21 @@
             state: upgrade
 # ├──[ Tier 2: Support & specialists ]───────────────────────────────┤
       -
+        - name: cmu-tech-govfor-disk-smoke
+          description: cmu-tech-govfor-disk-smoke-desc
+          cost: 8
+          increase: 4
+          repurchasable: true
+          maxPurchases: 3
+          events:
+          - !type:CMUTechShipWeaponMissionEvent
+            weapon: CMUSmokeStrike
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-disk-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: ob_cluster
         - name: cmu-tech-govfor-cmb-parolee
           description: cmu-tech-govfor-cmb-parolee-desc
           cost: 8
@@ -138,6 +153,18 @@
             state: upgrade
 # ├──[ Tier 3: Force multipliers ]───────────────────────────────────┤
       -
+        - name: cmu-tech-govfor-disk-ems
+          description: cmu-tech-govfor-disk-ems-desc
+          cost: 45
+          events:
+          - !type:CMUTechShipWeaponMissionEvent
+            weapon: CMUEMSStrike
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-disk-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: ob_incend
         - name: cmu-tech-govfor-us-army-infantry
           description: cmu-tech-govfor-us-army-infantry-desc
           cost: 25
@@ -201,16 +228,27 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
-        - name: cmu-tech-govfor-kraken
-          description: cmu-tech-govfor-kraken-desc
-          cost: 30
-          timeLock: 115m
+        - name: cmu-tech-govfor-disk-railcannon
+          description: cmu-tech-govfor-disk-railcannon-desc
+          cost: 60
           events:
-          - !type:TechLogisticsDeliveryEvent
-            object: CMUOrbitalCannonWarheadAegis
+          - !type:CMUTechShipWeaponMissionEvent
+            weapon: CMURailcannonStrike
           - !type:TechAnnounceEvent
-            author: cmu-tech-author-aegis-rnd
-            message: cmu-tech-govfor-kraken-announce
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-disk-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
-            state: nuke
+            state: railgun
+        - name: cmu-tech-govfor-disk-gatling
+          description: cmu-tech-govfor-disk-gatling-desc
+          cost: 50
+          events:
+          - !type:CMUTechShipWeaponMissionEvent
+            weapon: CMUGatlingBarrage
+          - !type:TechAnnounceEvent
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-govfor-disk-announce
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: ob_he

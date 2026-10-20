@@ -1,3 +1,4 @@
+using Content.Server.CMU14.Ship;
 using Content.Server.CMU14.RoundStatistics;
 using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
@@ -6,6 +7,7 @@ using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.CMU14.Threats.Mobs.Wendigo.Lab;
+using Content.Shared.CMU14.Threats.Mobs.Wendigo.Pack;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
@@ -34,6 +36,7 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
         base.Initialize();
 
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<CMUAdriftChangedEvent>(OnAdriftChanged);
         SubscribeLocalEvent<EvacuationLaunchedEvent>(OnEvacuationLaunched);
     }
 
@@ -58,6 +61,8 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
         CheckVictoryCondition();
     }
 
+    private void OnAdriftChanged(ref CMUAdriftChangedEvent ev) => CheckVictoryCondition();
+
     private void CheckVictoryCondition()
     {
         EntityQueryEnumerator<ActiveGameRuleComponent, KillAllXenoRuleComponent, GameRuleComponent> queryRule
@@ -78,6 +83,10 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
             if (_entMan.HasComponent<CMUWendigoLabMadeComponent>(uid))
                 continue;
 
+            // Adrift in space outside the ship: left out until they get back aboard.
+            if (_threatRuleHelper.IsAdrift(uid))
+                continue;
+
             // Planet-side survivors stop counting after the hijack lands; the endgame is ship-side.
             if (hijackLanded &&
                 mobState.CurrentState != MobState.Dead &&
@@ -86,8 +95,9 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
                 continue;
             }
 
-            if (_entMan.TryGetComponent(uid, out XenoComponent? xeno)
-                && xeno.Role != LesserDroneRole)
+            // Natural Wendigos are pack mobs, not xenos, but they are the threat this rule ends on.
+            if ((_entMan.TryGetComponent(uid, out XenoComponent? xeno) && xeno.Role != LesserDroneRole)
+                || _entMan.HasComponent<CMUWendigoPackComponent>(uid))
             {
                 totalXeno++;
                 if (mobState.CurrentState == MobState.Dead || _threatRuleHelper.IsEvacuated(uid))

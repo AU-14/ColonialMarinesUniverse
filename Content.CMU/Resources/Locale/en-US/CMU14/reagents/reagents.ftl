@@ -54,3 +54,8 @@ reagent-name-purple-plasma = Purple plasma
 reagent-desc-purple-plasma = A purplish plasma...
 reagent-name-royal-plasma = Royal plasma
 reagent-desc-royal-plasma = A dark purplish plasma...
+
+reagent-name-oleoresin-capsicum = Oleoresin capsicum
+reagent-desc-oleoresin-capsicum = A concentrated pepper extract used in pepper spray. Extremely painful in the eyes.
+reagent-name-capsicum-neutralizer = Capsicum neutralizer
+reagent-desc-capsicum-neutralizer = A soothing saline wash that neutralizes pepper spray.

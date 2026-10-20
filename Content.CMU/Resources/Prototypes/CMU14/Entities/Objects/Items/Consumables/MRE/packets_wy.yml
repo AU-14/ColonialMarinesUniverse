@@ -1,0 +1,309 @@
+# Generated from cmss13 PR 7895's DM code.
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYMainBakedSalmon
+  name: "CFR main dish (baked salmon)"
+  description: "An CFR entree component. Contains a luxurious well prepared main course, preserved using high-tech methods."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: pmc_entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodWYBakedSalmon
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYMainSmokyRibs
+  name: "CFR main dish (smoky ribs)"
+  description: "An CFR entree component. Contains a luxurious well prepared main course, preserved using high-tech methods."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: pmc_entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodWYSmokyRibs
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYMainBakedHam
+  name: "CFR main dish (baked ham)"
+  description: "An CFR entree component. Contains a luxurious well prepared main course, preserved using high-tech methods."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: pmc_entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodWYBakedHam
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYMainBeefsteak
+  name: "CFR main dish (beefsteak)"
+  description: "An CFR entree component. Contains a luxurious well prepared main course, preserved using high-tech methods."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: pmc_entree
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodWYBeefsteak
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYSideCracker
+  name: "CFR side dish (cracker)"
+  description: "An CFR side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: pmc_side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMCracker
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYSideRisotto
+  name: "CFR side dish (risotto)"
+  description: "An CFR side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: pmc_side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMRisotto
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYSideRiceOnigiri
+  name: "CFR side dish (rice onigiri)"
+  description: "An CFR side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: pmc_side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMRiceOnigiri
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYSideNigiriSushi
+  name: "CFR side dish (nigiri sushi)"
+  description: "An CFR side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: pmc_side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWENigiriSushi
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYSideTomatoChips
+  name: "CFR side dish (tomato chips)"
+  description: "An CFR side component. Contains a side, to be eaten alongside the main."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: pmc_side
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWETomatoChips
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYSnackAlmonds
+  name: "CFR snack (almonds)"
+  description: "An CFR side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: pmc_snack
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodTWEAlmonds
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYSnackPeanuts
+  name: "CFR snack (peanuts)"
+  description: "An CFR side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: pmc_snack
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMPeanuts
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYSnackPretzels
+  name: "CFR snack (pretzels)"
+  description: "An CFR side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: pmc_snack
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMPretzels
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYDessertEclair
+  name: "CFR dessert (eclair)"
+  description: "An CFR side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: pmc_dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodWYEclair
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYDessertStrawberryCake
+  name: "CFR dessert (strawberry cake)"
+  description: "An CFR side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: pmc_dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodWYStrawberryCake
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYDessertCherryPie
+  name: "CFR dessert (cherry pie)"
+  description: "An CFR side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: pmc_dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodWYCherryPie
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYDessertChocolateCroissant
+  name: "CFR dessert (chocolate croissant)"
+  description: "An CFR side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: pmc_dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodWYChocolateCroissant
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYDessertWhiteChocolateBar
+  name: "CFR dessert (white chocolate bar)"
+  description: "An CFR side component. Contains a sweet dessert, to be eaten after the main (or before, if you're rebellious)."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: pmc_dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodWYWhiteChocolateBar
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYColonistMainBonelessPorkRibs
+  name: "W-Y brand ration main dish (boneless pork ribs)"
+  description: "Probably the most edible component of it, contains main nutrition contents."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: wy_main
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMBonelessPorkRibs
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYColonistMainGrilledChicken
+  name: "W-Y brand ration main dish (grilled chicken)"
+  description: "Probably the most edible component of it, contains main nutrition contents."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: wy_main
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMGrilledChicken
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYColonistMainChickenTender
+  name: "W-Y brand ration main dish (chicken tender)"
+  description: "Probably the most edible component of it, contains main nutrition contents."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: wy_main
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMChickenTender
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYColonistMainMeatSpaghetti
+  name: "W-Y brand ration main dish (meat spaghetti)"
+  description: "Probably the most edible component of it, contains main nutrition contents."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: wy_main
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMMeatSpaghetti
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYColonistMainGrilledChickenBreast
+  name: "W-Y brand ration main dish (grilled chicken breast)"
+  description: "Probably the most edible component of it, contains main nutrition contents."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: wy_main
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUSCMGrilledChickenBreast
+  - type: CMUMREEntree
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketWYEmergencyWYBrandEmergencyNutritionBriquette
+  name: "emergency food packet (cookie briquette) (W-Y brand emergency nutrition briquette)"
+  description: "A brick of a cookie, designed to be stored for prolonged periods of time, in extreme conditions, but still tastes like a compressed buttery cookie."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_wy.rsi
+    state: cookie_brick
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodWYWYBrandEmergencyNutritionBriquette

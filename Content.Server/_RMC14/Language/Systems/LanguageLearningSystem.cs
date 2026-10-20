@@ -27,7 +27,7 @@ public sealed partial class LanguageLearningSystem : SharedLanguageLearningSyste
     private const float MaxHearingRange = 10.0f;
     private const float RadioLearningDistance = 0.0f;
     private const float LearningDurationMultiplier = 3.0f;
-    private readonly HashSet<EntityUid> _potentialLearners = [];
+    private readonly HashSet<Entity<LanguageLearningComponent>> _potentialLearners = []; // CMU14: only gather learners, not every entity in hearing range
 
     public override void Initialize()
     {
@@ -102,9 +102,11 @@ public sealed partial class LanguageLearningSystem : SharedLanguageLearningSyste
 
         var sourceCoordinates = Transform(args.Source).Coordinates;
         _potentialLearners.Clear();
+        // CMU14 Begin: every line spoken used to collect every wall, item and backpack content within 10 tiles
+        // and then throw away everything that wasn't a learner. the typed lookup skips non-learners up front
         _lookup.GetEntitiesInRange(sourceCoordinates, MaxHearingRange, _potentialLearners);
 
-        foreach (var potentialLearner in _potentialLearners)
+        foreach (var (potentialLearner, learnerComp) in _potentialLearners)
         {
             if (potentialLearner == args.Source)
                 continue;
@@ -112,9 +114,7 @@ public sealed partial class LanguageLearningSystem : SharedLanguageLearningSyste
             // trait blocks all language learning
             if (HasComp<NoLanguageLearningComponent>(potentialLearner))
                 continue;
-
-            if (!TryComp<LanguageLearningComponent>(potentialLearner, out var learnerComp))
-                continue;
+        // CMU14 End
 
             if (languageProto.NeedsLOS &&
                 !_examine.InRangeUnOccluded(args.Source, potentialLearner, MaxHearingRange))

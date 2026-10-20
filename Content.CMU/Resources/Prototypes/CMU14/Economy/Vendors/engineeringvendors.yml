@@ -13,7 +13,7 @@
       map: [ "enum.VendingMachineVisualLayers.BaseUnshaded" ]
       shader: unshaded
   - type: AccessReader
-    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"]]
+    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"], [ "AU14AccessGovforVehicleCrew" ], [ "AU14AccessOpforVehicleCrew" ]]
   - type: CMAutomatedVendor
     access:
     - "CMAccessCombatTechPrep"
@@ -21,6 +21,8 @@
     - "CMAccessColonyEngineering"
     - "AU14AccessGovforEngineering"
     - "AU14AccessOpforEngineering"
+    - "AU14AccessGovforVehicleCrew"
+    - "AU14AccessOpforVehicleCrew"
     hackable: true
     sections:
     - name: Equipment

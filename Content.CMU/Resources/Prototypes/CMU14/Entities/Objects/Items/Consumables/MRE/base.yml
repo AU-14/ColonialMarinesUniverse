@@ -1,0 +1,113 @@
+# Bases for the cmss13 PR 7895 MRE contents.
+
+- type: entity
+  abstract: true
+  parent: CMMREFoodBase
+  id: CMUMREFoodBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+# UPP canned food, eaten with a spoon. The meat, stew, soup, fatback and condensed milk cans are sealed (CMUSealedCan)
+# until opened with a can opener (quick) or a knife (slow); the side dishes open by hand.
+- type: entity
+  abstract: true
+  parent: DrinkBase
+  id: CMUMRECanBase
+  components:
+  - type: Edible
+    edible: Food
+    solution: drink
+    destroyOnEmpty: false
+    utensil: Spoon
+    transferAmount: 3
+  - type: Openable
+  - type: Appearance
+  - type: Item
+    size: Small
+  - type: MREItem
+  - type: SolutionTransfer
+    canChangeTransferAmount: true
+    maxTransferAmount: 10
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 25
+
+# USCM spread packets: squeezed onto food or eaten straight.
+- type: entity
+  abstract: true
+  parent: DrinkBase
+  id: CMUMRESpreadBase
+  components:
+  - type: Edible
+    edible: Food
+    solution: drink
+    destroyOnEmpty: false
+    utensil: None
+    transferAmount: 2
+  - type: Openable
+    sound:
+      collection: CMFoodRip
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.OpenableVisuals.Opened:
+        enum.OpenableVisuals.Layer:
+          True: {state: "spread_open"}
+          False: {state: "spread"}
+        flavor:
+          True: {visible: true}
+          False: {visible: false}
+  - type: Item
+    size: Tiny
+  - type: MREItem
+  - type: SolutionTransfer
+    transferAmount: 2
+    canChangeTransferAmount: false
+  - type: CMUFoodSpread
+    transferAmount: 2
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+# TWE spread tubes: the cap comes off when opened.
+- type: entity
+  abstract: true
+  parent: DrinkBase
+  id: CMUMRETubeBase
+  components:
+  - type: Edible
+    edible: Food
+    solution: drink
+    destroyOnEmpty: false
+    utensil: None
+    transferAmount: 5
+  - type: Openable
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.OpenableVisuals.Opened:
+        enum.OpenableVisuals.Layer:
+          True: {visible: false}
+          False: {visible: true}
+  - type: Item
+    size: Tiny
+  - type: MREItem
+  - type: SolutionTransfer
+    transferAmount: 5
+    canChangeTransferAmount: false
+  - type: CMUFoodSpread
+    transferAmount: 5
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno

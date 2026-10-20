@@ -116,3 +116,28 @@ cmu-tech-ua-prodigy-yankee-desc = Summon a PMC team from PART, specifically Yank
 cmu-tech-ua-req-budget-announce = Additional supply budget has been authorised for this operation.
 cmu-tech-ua-us-army-armored-announce = A US Army 32nd Armored Division squad has been dispatched to aid with the operation.
 cmu-tech-ua-prodigy-yankee-announce = A Prodigy Armed Repair Team has been dispatched to aid with the operation.
+
+cmu-ui-tech-purchases-left = Can be bought { $left } more { $left ->
+    [one] time
+   *[other] times
+} (max { $max })
+
+# Ship weapon fire missions
+cmu-tech-govfor-disk-smoke = Smoke Strike Fire Mission
+cmu-tech-govfor-disk-smoke-desc = Clears one extra Smoke Strike for your ship. The strike can be fired from overwatch even if it wasn't picked at the arming terminal.
+cmu-tech-govfor-disk-railcannon = Railcannon Strike Fire Mission
+cmu-tech-govfor-disk-railcannon-desc = Clears one extra Railcannon Strike for your ship. The strike can be fired from overwatch even if it wasn't picked at the arming terminal.
+cmu-tech-govfor-disk-ems = EMS Strike Fire Mission
+cmu-tech-govfor-disk-ems-desc = Clears one extra EMS Strike for your ship. The strike can be fired from overwatch even if it wasn't picked at the arming terminal.
+cmu-tech-govfor-disk-gatling = Gatling Barrage Fire Mission
+cmu-tech-govfor-disk-gatling-desc = Clears one extra Gatling Barrage for your ship. The strike can be fired from overwatch even if it wasn't picked at the arming terminal.
+cmu-tech-govfor-disk-announce = An additional orbital fire mission has been cleared for the ship's batteries.
+cmu-tech-opfor-disk-smoke = Smoke Strike Fire Mission
+cmu-tech-opfor-disk-smoke-desc = Clears one extra Smoke Strike for your ship. The strike can be fired from overwatch even if it wasn't picked at the arming terminal.
+cmu-tech-opfor-disk-railcannon = Railcannon Strike Fire Mission
+cmu-tech-opfor-disk-railcannon-desc = Clears one extra Railcannon Strike for your ship. The strike can be fired from overwatch even if it wasn't picked at the arming terminal.
+cmu-tech-opfor-disk-ems = EMS Strike Fire Mission
+cmu-tech-opfor-disk-ems-desc = Clears one extra EMS Strike for your ship. The strike can be fired from overwatch even if it wasn't picked at the arming terminal.
+cmu-tech-opfor-disk-gatling = Gatling Barrage Fire Mission
+cmu-tech-opfor-disk-gatling-desc = Clears one extra Gatling Barrage for your ship. The strike can be fired from overwatch even if it wasn't picked at the arming terminal.
+cmu-tech-opfor-disk-announce = An additional orbital fire mission has been cleared for the ship's batteries.

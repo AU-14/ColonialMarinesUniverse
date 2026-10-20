@@ -130,6 +130,9 @@
         icon:
           True: { state: icon_on }
           False: { state: icon }
+#cmu edit start: shows the squad optic's ammo HUD
+  - type: CMUAmmoHudSight
+#cmu edit end
 
 - type: entity
   parent: ClothingEyesBase

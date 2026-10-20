@@ -294,6 +294,8 @@
     factionToKill: THREAT
     killCount: 1
     requireFactionKill: true
+    # intel was paying out for every hugger and lesser drone the hive could pump out
+    ignoreMinions: true
 
 - type: entity
   name: Kill the Carp
