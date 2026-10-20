@@ -73,20 +73,22 @@ public sealed partial class CMUQueenSwarmSystem
             RefreshStairRoutes();
             if (!TryComp<CMUZLevelMapComponent>(from, out var start) || !TryComp<CMUZLevelMapComponent>(to, out var end))
                 return true;
-            var best = float.MaxValue;
+            // Recently failed stairs are only a last resort. A queue at the only stair to a floor trips steering's
+            // stuck detection, and skipping that stair outright left members idle until the failure expired.
+            var best = (Failed: true, Score: float.MaxValue);
             foreach (var route in _stairRoutes)
             {
                 if (route.FromMap != from || TerminatingOrDeleted(route.Stair) ||
-                    traversal.FailedStairs.GetValueOrDefault(route.Stair) > _timing.CurTime ||
                     !TryComp<CMUZLevelMapComponent>(route.ToMap, out var next) ||
                     !_zLevels.IsSameZNetwork(route.ToMap, to) ||
                     Math.Abs((long) next.Depth - end.Depth) >= Math.Abs((long) start.Depth - end.Depth))
                     continue;
+                var failed = traversal.FailedStairs.GetValueOrDefault(route.Stair) > _timing.CurTime;
                 var score = Vector2.Distance(position, route.Approach) + Vector2.Distance(route.Exit, _transform.GetWorldPosition(anchor));
-                if (score >= best)
+                if ((failed && !best.Failed) || (failed == best.Failed && score >= best.Score))
                     continue;
                 traversal.Route = route;
-                best = score;
+                best = (failed, score);
             }
             traversal.LastPosition = position;
             traversal.ProgressDeadline = _timing.CurTime + TimeSpan.FromSeconds(8);
