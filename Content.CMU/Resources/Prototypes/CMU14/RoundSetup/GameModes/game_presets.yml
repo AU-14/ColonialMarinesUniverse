@@ -102,6 +102,7 @@
   - AddGovforAuxiliaryStaff
   - AddOpfor
   - AddOpforAuxiliaryStaff
+  - FoFTimeLimitRule
 
 - type: gamePreset
   id: Jailbreak
