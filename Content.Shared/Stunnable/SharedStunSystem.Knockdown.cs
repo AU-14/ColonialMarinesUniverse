@@ -1,6 +1,9 @@
 using Content.Shared.Alert;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CCVar;
+// cmu edit start
+using Content.Shared.CMU14.Ship;
+// cmu edit end
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
@@ -30,6 +33,8 @@ namespace Content.Shared.Stunnable;
 /// </summary>
 public abstract partial class SharedStunSystem
 {
+    [Dependency] private CMUZeroGSpaceSystem _cmuZeroG = default!; // cmu edit
+
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -519,6 +524,11 @@ public abstract partial class SharedStunSystem
         if (!args.Weightless)
             return;
 
+        // cmu edit start: zero-g ships still knock you flat
+        if (_cmuZeroG.IsOnZeroGMap(entity))
+            return;
+        // cmu edit end
+
         // Targeted moth attack
         CancelKnockdownDoAfter((entity, entity.Comp));
         RemCompDeferred<KnockedDownComponent>(entity);
@@ -551,14 +561,14 @@ public abstract partial class SharedStunSystem
     private void OnKnockdownAttempt(Entity<GravityAffectedComponent> entity, ref KnockDownAttemptEvent args)
     {
         // Directed, targeted moth attack.
-        if (entity.Comp.Weightless)
+        if (entity.Comp.Weightless && !_cmuZeroG.IsOnZeroGMap(entity)) // cmu edit: zero-g ships still knock you flat
             args.Cancelled = true;
     }
 
     private void OnGetStandUpTime(Entity<GravityAffectedComponent> entity, ref GetStandUpTimeEvent args)
     {
         // Get up instantly if weightless
-        if (entity.Comp.Weightless)
+        if (entity.Comp.Weightless && !_cmuZeroG.IsOnZeroGMap(entity)) // cmu edit: zero-g ships still knock you flat
             args.DoAfterTime = TimeSpan.Zero;
     }
 

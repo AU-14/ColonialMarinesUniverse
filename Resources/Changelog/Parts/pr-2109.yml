@@ -1,0 +1,16 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Characters in 3D mode retain their normal clothing and held-item sprites.
+  type: Tweak
+- message: Dropped-item sprite fallbacks lie flat at their floor height and can be
+    targeted correctly.
+  type: Fix
+- message: Optional 3D model libraries load only when needed, reducing startup parsing
+    and memory use for 2D clients and the server.
+  type: Tweak
+- message: Closing the last 3D view releases its optional model library and scene
+    caches.
+  type: Fix
+time: '2026-10-08T21:58:16.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2109

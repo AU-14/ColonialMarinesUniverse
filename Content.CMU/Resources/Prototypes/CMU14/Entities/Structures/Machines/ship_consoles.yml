@@ -1,0 +1,228 @@
+# Ship-side consoles. Maps are built with the GOVFOR versions; OpforShipSwaps (faction_swaps.yml) turns them into the
+# OPFOR versions on an OPFOR ship.
+
+# ├──[ Tech tree consoles ]──────────────────────────────────────────┤
+- type: entity
+  parent: RMCTechTreeConsoleGovfor
+  id: CMUTechTreeConsoleShipGovfor
+  suffix: Ship, GovFor
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/hybrisa_computer_props.rsi
+    state: blackmapping_comp
+
+- type: entity
+  parent: RMCTechTreeConsoleOpfor
+  id: CMUTechTreeConsoleShipOpfor
+  suffix: Ship, OpFor
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/hybrisa_computer_props.rsi
+    state: blackmapping_comp
+
+# ├──[ Tactical map computers ]──────────────────────────────────────┤
+- type: entity
+  parent: CMUTacticalMapTableGovfor
+  id: CMUTacticalMapComputerGovfor
+  name: tactical map computer
+  description: A computer that displays a map of the current operation location.
+  suffix: Computer, GovFor
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: map
+
+- type: entity
+  parent: CMUTacticalMapTableOpfor
+  id: CMUTacticalMapComputerOpfor
+  name: tactical map computer
+  description: A computer that displays a map of the current operation location.
+  suffix: Computer, OpFor
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: map
+
+# ├──[ Station alert computer ]──────────────────────────────────────┤
+# Calls out every firelock on its ship that seals itself against escaping air, with the area it's in, and lists every
+# area aboard with a breach, a fire or bad air on its screen.
+- type: entity
+  parent: RMCStationAlertComputer
+  id: CMUStationAlertComputer
+  name: atmospherics alert computer
+  description: Monitors the ship's air on every deck. It lists any area with a breach, a fire or bad air, and calls out firelocks that seal themselves against escaping air.
+  suffix: CMU
+  components:
+  - type: CMUStationAlertComputer
+  - type: ActivatableUI
+    key: enum.CMUStationAlertUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUStationAlertUiKey.Key:
+        type: CMUStationAlertBui
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+# ├──[ Callsign consoles ]───────────────────────────────────────────┤
+# Desk versions of the callsign laptops (AU14ItemLaptopCallsign*).
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: CMUCallsignConsoleGovfor
+  name: callsign terminal
+  description: A terminal listing every station callsign on the faction net.
+  suffix: GovFor
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: engineering_terminal
+  - type: ActivatableUI
+    key: enum.AU14CallsignConsoleUI.Key
+  - type: UserInterface
+    interfaces:
+      enum.AU14CallsignConsoleUI.Key:
+        type: AU14CallsignConsoleBui
+  - type: AU14CallsignConsole
+    faction: govfor
+
+- type: entity
+  parent: CMUCallsignConsoleGovfor
+  id: CMUCallsignConsoleOpfor
+  suffix: OpFor
+  components:
+  - type: AU14CallsignConsole
+    faction: opfor
+
+# ├──[ Identification computers ]───────────────────────────────────┤
+# RMCIDComputer for each side, programming its own accesses and roles.
+
+- type: entity
+  parent: RMCIDComputer
+  id: CMUIDComputerGovfor
+  suffix: Govfor
+  description: Terminal for programming GOVFOR personnel ID card access.
+  components:
+  - type: IdModificationConsole
+    access: AU14AccessGovforCommand
+    faction: GOVFOR
+    squadGroup: GOVFOR
+    jobGroups:
+    - CMUIdJobCategoryGovfor
+    jobList:
+    - CMUIdJobGovforRifleman
+    - CMUIdJobGovforSquad
+    - CMUIdJobGovforWeaponsSpecialist
+    - CMUIdJobGovforFTL
+    - CMUIdJobGovforCorpsman
+    - CMUIdJobGovforEngineer
+    - CMUIdJobGovforAuxTech
+    - CMUIdJobGovforPilot
+    - CMUIdJobGovforGunner
+    - CMUIdJobGovforVehicleCrew
+    - CMUIdJobGovforSecurity
+    - CMUIdJobGovforCommandNoLogistics
+    - CMUIdJobGovforCommand
+    hiddenAccessList: []
+    accessGroups:
+    - CMUIdAccessCategoryGovfor
+    accessList:
+    - AU14AccessGovfor
+    - AU14AccessGovforSquad
+    - AU14AccessGovforSquadWeaponsSpecialist
+    - AU14AccessGovforCommand
+    - AU14AccessGovforSecurity
+    - AU14AccessGovforMedical
+    - AU14AccessGovforEngineering
+    - AU14AccessGovforFTL
+    - AU14AccessGovforGunner
+    - AU14AccessGovforPilot
+    - AU14AccessGovforJuniorOfficer
+    - AU14AccessGovforReq
+    - AU14AccessGovforVehicleCrew
+
+- type: entity
+  parent: RMCIDComputer
+  id: CMUIDComputerOpfor
+  suffix: Opfor
+  description: Terminal for programming OPFOR personnel ID card access.
+  components:
+  - type: IdModificationConsole
+    access: AU14AccessOpforCommand
+    faction: OPFOR
+    squadGroup: OPFOR
+    jobGroups:
+    - CMUIdJobCategoryOpfor
+    jobList:
+    - CMUIdJobOpforRifleman
+    - CMUIdJobOpforSquad
+    - CMUIdJobOpforWeaponsSpecialist
+    - CMUIdJobOpforFTL
+    - CMUIdJobOpforCorpsman
+    - CMUIdJobOpforEngineer
+    - CMUIdJobOpforAuxTech
+    - CMUIdJobOpforPilot
+    - CMUIdJobOpforGunner
+    - CMUIdJobOpforVehicleCrew
+    - CMUIdJobOpforSecurity
+    - CMUIdJobOpforCommandNoLogistics
+    - CMUIdJobOpforCommand
+    hiddenAccessList: []
+    accessGroups:
+    - CMUIdAccessCategoryOpfor
+    accessList:
+    - AU14AccessOpfor
+    - AU14AccessOpforSquad
+    - AU14AccessOpforSquadWeaponsSpecialist
+    - AU14AccessOpforCommand
+    - AU14AccessOpforSecurity
+    - AU14AccessOpforMedical
+    - AU14AccessOpforEngineering
+    - AU14AccessOpforFTL
+    - AU14AccessOpforGunner
+    - AU14AccessOpforPilot
+    - AU14AccessOpforJuniorOfficer
+    - AU14AccessOpforReq
+    - AU14AccessOpforVehicleCrew
+
+- type: entity
+  parent: RMCIDComputer
+  id: CMUIDComputerColony
+  suffix: Colony
+  description: Terminal for programming colony employee ID card access.
+  components:
+  - type: IdModificationConsole
+    access: AU14AccessColonyAdministrator
+    faction: FactionSurvivor
+    squadGroup: COLONY
+    enlistmentRequirement: null
+    jobGroups:
+    - CMUIdJobCategoryColony
+    jobList:
+    - CMUIdJobColonyAdmin
+    - CMUIdJobColonyHeadsofcolony
+    - CMUIdJobColonyEngi
+    - CMUIdJobColonyCmb
+    - CMUIdJobColonyMed
+    - CMUIdJobColonyNews
+    - CMUIdJobColonyOrbitalmanagement
+    - CMUIdJobColonyOrbitallaw
+    hiddenAccessList: []
+    accessGroups:
+    - CMUIdAccessCategoryColony
+    - CMUIdAccessCategoryColonyLeadership
+    accessList:
+    - CMAccessColonyPublic
+    - CMAccessColonyLogistics
+    - CMAccessColonyEngineering
+    - CMAccessColonyResearch
+    - CMAccessColonyBrig
+    - CMAccessColonyMedbay
+    - CMAccessColonyCommand
+    - CMAccessColonyArmory
+    - AU14AccessColonyHeadPhysician
+    - AU14AccessColonyHeadEngineer
+    - AU14AccessColonyMarshall
+    - AU14AccessColonyForeman
+    - AU14AccessColonyAdministrator
+    - AU14AccessColonyHeadOfService
