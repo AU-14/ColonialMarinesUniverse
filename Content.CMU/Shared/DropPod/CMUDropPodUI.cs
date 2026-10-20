@@ -12,17 +12,21 @@ public enum CMUDropPodConsoleUiKey : byte
 public sealed record CMUDropPodEntry(NetEntity Pod, string Name, string? Occupant, int Weapons, float Radius, bool Custom, bool Ready);
 
 [Serializable, NetSerializable]
-public sealed class CMUDropPodConsoleBuiState(List<CMUDropPodEntry> pods, Vector2i? target, TimeSpan nextLaunch) : BoundUserInterfaceState
+public sealed class CMUDropPodConsoleBuiState(List<CMUDropPodEntry> pods, Vector2i? target, TimeSpan nextLaunch, bool allowBlindDrop) : BoundUserInterfaceState
 {
     public readonly List<CMUDropPodEntry> Pods = pods;
     public readonly Vector2i? Target = target;
     public readonly TimeSpan NextLaunch = nextLaunch;
+    public readonly bool AllowBlindDrop = allowBlindDrop;
 }
 
+/// <summary>
+/// Sets the insertion point, or clears it when <see cref="Target"/> is null.
+/// </summary>
 [Serializable, NetSerializable]
-public sealed class CMUDropPodSelectTargetMsg(Vector2i target) : BoundUserInterfaceMessage
+public sealed class CMUDropPodSelectTargetMsg(Vector2i? target) : BoundUserInterfaceMessage
 {
-    public readonly Vector2i Target = target;
+    public readonly Vector2i? Target = target;
 }
 
 [Serializable, NetSerializable]

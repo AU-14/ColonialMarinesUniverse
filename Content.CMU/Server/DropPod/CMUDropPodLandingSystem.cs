@@ -66,6 +66,39 @@ public sealed partial class CMUDropPodLandingSystem : EntitySystem
         return false;
     }
 
+    /// <summary>
+    /// Picks a random tile from the planet's mapped areas that a paradrop may target, for blind drops.
+    /// </summary>
+    public bool TryPickBlindTarget(EntityUid planetMap, int attempts, out Vector2i target)
+    {
+        target = default;
+        if (!TryComp(planetMap, out AreaGridComponent? areaGrid) ||
+            areaGrid.Areas.Count == 0 ||
+            !TryComp(planetMap, out MapGridComponent? grid))
+        {
+            return false;
+        }
+
+        var tiles = new List<Vector2i>(areaGrid.Areas.Keys);
+        for (var i = 0; i < Math.Max(1, attempts); i++)
+        {
+            var tile = _random.Pick(tiles);
+            if (!_map.TryGetTileRef(planetMap, grid, tile, out var tileRef) ||
+                tileRef.Tile.IsEmpty ||
+                _turf.IsSpace(tileRef) ||
+                _turf.IsTileBlocked(tileRef, CollisionGroup.Impassable) ||
+                !_area.CanParadrop(_map.GridTileToLocal(planetMap, grid, tile)))
+            {
+                continue;
+            }
+
+            target = tile;
+            return true;
+        }
+
+        return false;
+    }
+
     private bool TryResolveColumn(
         EntityUid planetMap,
         Vector2 world,

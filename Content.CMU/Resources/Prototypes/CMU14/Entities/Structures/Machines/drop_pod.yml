@@ -173,6 +173,8 @@
     launchStagger: 0.5
     launchSound:
       path: /Audio/_RMC14/Machines/Shuttle/dropship_launch_alarm.ogg
+    allowBlindDrop: true
+    blindDropAttempts: 100
   - type: TacticalMapComputer
     allowCanvas: false
   - type: ActivatableUIBlacklist

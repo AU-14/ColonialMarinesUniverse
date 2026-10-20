@@ -18,6 +18,7 @@ public sealed partial class CMUDropPodConsoleSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private CMUCustomDropUnitSystem _customUnit = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private CMUDropPodLandingSystem _landing = default!;
     [Dependency] private CMUDropPodSystem _pod = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTacticalMapSystem _tacticalMap = default!;
@@ -63,9 +64,26 @@ public sealed partial class CMUDropPodConsoleSystem : EntitySystem
             return;
         }
 
-        if (ent.Comp.Target is not { } target || !_tacticalMap.TryGetTacticalMap(out var planet))
+        if (!_tacticalMap.TryGetTacticalMap(out var planet))
         {
             _popup.PopupCursor(Loc.GetString("cmu-drop-pod-console-no-target"), user, PopupType.SmallCaution);
+            return;
+        }
+
+        var blind = ent.Comp.Target == null;
+        Vector2i target;
+        if (ent.Comp.Target is { } selected)
+        {
+            target = selected;
+        }
+        else if (!ent.Comp.AllowBlindDrop)
+        {
+            _popup.PopupCursor(Loc.GetString("cmu-drop-pod-console-no-target"), user, PopupType.SmallCaution);
+            return;
+        }
+        else if (!_landing.TryPickBlindTarget(planet.Owner, ent.Comp.BlindDropAttempts, out target))
+        {
+            _popup.PopupCursor(Loc.GetString("cmu-drop-pod-console-no-blind-target"), user, PopupType.SmallCaution);
             return;
         }
 
@@ -91,7 +109,7 @@ public sealed partial class CMUDropPodConsoleSystem : EntitySystem
 
             launched++;
             delay += ent.Comp.LaunchStagger;
-            _adminLog.Add(LogType.Action, LogImpact.Medium, $"{ToPrettyString(user):user} launched drop unit {ToPrettyString(uid.Value):pod} toward tile {target} from {ToPrettyString(ent):console}");
+            _adminLog.Add(LogType.Action, LogImpact.Medium, $"{ToPrettyString(user):user} launched drop unit {ToPrettyString(uid.Value):pod} toward tile {target}{(blind ? " (blind drop)" : "")} from {ToPrettyString(ent):console}");
         }
 
         if (launched > 0)
@@ -99,7 +117,8 @@ public sealed partial class CMUDropPodConsoleSystem : EntitySystem
             ent.Comp.NextLaunch = _timing.CurTime + ent.Comp.Cooldown;
             Dirty(ent);
             _audio.PlayPvs(ent.Comp.LaunchSound, ent);
-            _popup.PopupCursor(Loc.GetString("cmu-drop-pod-console-launched", ("count", launched)), user);
+            var message = blind ? "cmu-drop-pod-console-launched-blind" : "cmu-drop-pod-console-launched";
+            _popup.PopupCursor(Loc.GetString(message, ("count", launched)), user);
         }
 
         UpdateUI(ent);
@@ -151,6 +170,6 @@ public sealed partial class CMUDropPodConsoleSystem : EntitySystem
             entries.Add(new CMUDropPodEntry(GetNetEntity(uid), Name(uid), null, 0, unit.ScatterRadius, true, ready));
         }
 
-        _ui.SetUiState(ent.Owner, CMUDropPodConsoleUiKey.Key, new CMUDropPodConsoleBuiState(entries, ent.Comp.Target, ent.Comp.NextLaunch));
+        _ui.SetUiState(ent.Owner, CMUDropPodConsoleUiKey.Key, new CMUDropPodConsoleBuiState(entries, ent.Comp.Target, ent.Comp.NextLaunch, ent.Comp.AllowBlindDrop));
     }
 }

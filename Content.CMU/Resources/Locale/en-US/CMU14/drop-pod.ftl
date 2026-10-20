@@ -33,11 +33,18 @@ cmu-drop-unit-breakup-atmosphere = The walls groan and plating shears away! The 
 cmu-drop-unit-breakup = The drop unit's walls buckle and break apart around you!
 
 cmu-drop-pod-console-title = Drop Pod Control
-cmu-drop-pod-console-map-hint = Click the map to set the insertion point.
+cmu-drop-pod-console-map-hint = Click the map to set the insertion point. Scroll to zoom, right-drag to pan.
+cmu-drop-pod-console-insertion = Insertion point
+cmu-drop-pod-console-target-hint = Drop units scatter around this point.
+cmu-drop-pod-console-blind-hint = No point selected: the salvo will blind drop together at a random location.
+cmu-drop-pod-console-no-blind-hint = Select an insertion point before firing.
+cmu-drop-pod-console-clear-target = Clear insertion point
+cmu-drop-pod-console-no-pods = No linked drop units.
 cmu-drop-pod-console-pods = Linked drop units
 cmu-drop-pod-console-select-all = Select all
 cmu-drop-pod-console-refresh = Refresh
 cmu-drop-pod-console-fire = Fire selected
+cmu-drop-pod-console-fire-blind = Blind drop selected
 cmu-drop-pod-console-target = Insertion point: {$x}, {$y}
 cmu-drop-pod-console-no-target-set = No insertion point selected
 cmu-drop-pod-console-cooldown-remaining = Recharging: {$seconds}s
@@ -50,6 +57,11 @@ cmu-drop-pod-console-entry = {$name} - {$occupant} - {$weapons} {$weapons ->
 cmu-drop-pod-console-entry-custom = {$name} (custom unit)
 cmu-drop-pod-console-cooldown = The launch systems are still recharging.
 cmu-drop-pod-console-no-target = Select an insertion point first.
+cmu-drop-pod-console-no-blind-target = No landable location found for a blind drop.
+cmu-drop-pod-console-launched-blind = Blind dropped {$count} drop {$count ->
+    [one] unit
+    *[other] units
+} at a random location.
 cmu-drop-pod-console-launched = Launched {$count} drop {$count ->
     [one] unit
     *[other] units

@@ -5,6 +5,12 @@ shows the planet's tactical map. An operator clicks an insertion point, ticks
 the drop units to fire, and launches them. Every unit lands at a random point
 within its `scatterRadius` (60 tiles by default) of the insertion point.
 
+If no insertion point is selected (or it was cleared), the salvo blind drops:
+the console picks one random paradrop-legal tile from the planet's mapped areas
+and fires every selected unit at it, so they land together. Set
+`allowBlindDrop: false` on the console to require a point instead, and
+`blindDropAttempts` to change how many random tiles it tries.
+
 All values below are datafields on the prototypes in
 `Resources/Prototypes/CMU14/Entities/Structures/Machines/drop_pod.yml`;
 change them there or on a child prototype.

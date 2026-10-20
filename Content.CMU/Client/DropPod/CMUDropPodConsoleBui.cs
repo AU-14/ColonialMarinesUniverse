@@ -1,3 +1,4 @@
+using Content.Client.Lobby.UI;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.TacticalMap;
 using Content.Shared.CMU14.DropPod;
@@ -17,8 +18,10 @@ public sealed partial class CMUDropPodConsoleBui(EntityUid owner, Enum uiKey) : 
         base.Open();
         _window = this.CreateWindow<CMUDropPodConsoleWindow>();
         _window.Map.OnQueenEyeMove += tile => SendMessage(new CMUDropPodSelectTargetMsg(tile));
+        _window.ClearTargetButton.OnPressed += _ => SendMessage(new CMUDropPodSelectTargetMsg(null));
         _window.FireButton.OnPressed += _ => SendMessage(new CMUDropPodLaunchMsg(_window.GetSelected()));
         _window.RefreshButton.OnPressed += _ => SendMessage(new CMUDropPodRefreshMsg());
+        CrtLobbyTheme.ApplyWindow(_window, useCrtTypography: true);
         RefreshMap();
     }
 
