@@ -1,5 +1,7 @@
 using System.Linq;
+using System.Text;
 using System.Text.Json.Serialization;
+using Content.Shared.GameTicking;
 
 namespace Content.Server.CMU14.HelpRelay;
 
@@ -42,13 +44,21 @@ public sealed record HelpPost
     /// <summary>Caller-gathered context; when null the manager gathers it on the calling thread.</summary>
     public HelpContext? Context { get; init; }
 
-    /// <summary>Optional file attachment (report.json); set with <see cref="AttachmentName"/>.</summary>
+    /// <summary>Optional report.json attachment body for bughelp posts.</summary>
     public string? AttachmentJson { get; init; }
 }
 
 public static class HelpRelayPayload
 {
     private const int DescriptionCap = 3000;
+
+    /// <summary>Transcript description limit for conversation relays; Discord caps embed descriptions at 4096.</summary>
+    public const int ConversationDescriptionMax = 4000;
+
+    /// <summary>Per-line cap inside a conversation transcript, mirroring the ahelp relay.</summary>
+    public const int ConversationLineCap = 3000;
+
+    private const string LineTooLongText = "... **(too long)**";
 
     public static HelpWebhookPayload Build(HelpSource source, HelpPost post, string? revision)
     {
@@ -74,15 +84,7 @@ public static class HelpRelayPayload
                         new() { Name = "Map", Value = context?.Map ?? "?" },
                         new() { Name = "Server", Value = context?.Server ?? "?" },
                     ],
-                    Footer = new()
-                    {
-                        Text = string.Join(" · ", new[]
-                        {
-                            revision is { Length: > 0 } ? $"rev {revision}" : null,
-                            context?.Server,
-                            "CMU help relay",
-                        }.Where(p => !string.IsNullOrEmpty(p))),
-                    },
+                    Footer = new() { Text = FooterText(revision, context?.Server) },
                 },
             ],
         };
@@ -96,6 +98,63 @@ public static class HelpRelayPayload
 
         return payload;
     }
+
+    /// <summary>
+    /// One transcript line in the ahelp relay format: direction icon, round time while in round, speaker, text.
+    /// </summary>
+    public static string BuildConversationLine(string speaker, bool fromStaff, string? roundTime, string text)
+    {
+        if (text.Length > ConversationLineCap)
+            text = text[..(ConversationLineCap - LineTooLongText.Length)] + LineTooLongText;
+
+        var line = new StringBuilder(fromStaff ? ":outbox_tray:" : ":inbox_tray:");
+        if (roundTime != null)
+            line.Append($" **[{roundTime}]**");
+        line.Append($" **{speaker}:** {text}");
+        return line.ToString();
+    }
+
+    /// <summary>A separator line when the round run level changed mid-conversation, as the ahelp relay does.</summary>
+    public static string BuildRunLevelSeparator(GameRunLevel runLevel) => runLevel switch
+    {
+        GameRunLevel.PreRoundLobby => "\n\n:arrow_forward: _**Pre-round lobby started**_\n",
+        GameRunLevel.InRound => "\n\n:arrow_forward: _**Round started**_\n",
+        GameRunLevel.PostRound => "\n\n:stop_button: _**Post-round started**_\n",
+        _ => string.Empty,
+    };
+
+    /// <summary>The edit-in-place conversation embed: webhook username carries who, description is the transcript.</summary>
+    public static HelpWebhookPayload BuildConversationPayload(
+        HelpSource source,
+        string username,
+        string description,
+        string? revision,
+        string? server)
+    {
+        return new HelpWebhookPayload
+        {
+            Username = $"{source.Label()} · {username}",
+            Embeds =
+            [
+                new HelpWebhookEmbed
+                {
+                    Description = description,
+                    Color = source.Color(),
+                    Footer = new() { Text = FooterText(revision, server) },
+                },
+            ],
+        };
+    }
+
+    private static string FooterText(string? revision, string? server)
+    {
+        return string.Join(" · ", new[]
+        {
+            revision is { Length: > 0 } ? $"rev {revision}" : null,
+            server,
+            "CMU help relay",
+        }.Where(p => !string.IsNullOrEmpty(p)));
+    }
 }
 
 // Discord webhook API shapes; self-contained so no upstream Discord DTOs need extending.
@@ -103,6 +162,7 @@ public sealed class HelpWebhookPayload
 {
     [JsonPropertyName("thread_name")] public string? ThreadName { get; set; }
     [JsonPropertyName("content")] public string? Content { get; set; }
+    [JsonPropertyName("username")] public string? Username { get; set; }
     [JsonPropertyName("allowed_mentions")] public HelpWebhookMentions? AllowedMentions { get; set; }
     [JsonPropertyName("embeds")] public List<HelpWebhookEmbed> Embeds { get; set; } = [];
 }
