@@ -82,6 +82,9 @@
     damage:
       types:
         Blunt: 40
+    soundHit:
+      collection: MetalSlam
+    animation: WeaponArcSmash
   - type: DrawableSolution
     solution: blood
   - type: Solution
@@ -220,6 +223,9 @@
     damage:
       types:
         Blunt: 30
+    soundHit:
+      collection: MetalSlam
+    animation: WeaponArcSmash
   - type: XenoTailStab
     tailDamage:
       types:
