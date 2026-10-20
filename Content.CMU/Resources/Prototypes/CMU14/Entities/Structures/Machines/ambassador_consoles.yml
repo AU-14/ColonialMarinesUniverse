@@ -58,13 +58,13 @@
     replenishAmount: 10
     replenishInterval: 60
     callableParties:
-      UPPGROM: 7500
-      UPPGROMAlt: 6000
-      UPPGROMAlt2: 4500
-      CHTORM_PMC_BEAR: 7500
-      GROZA_PMC_BEAR: 6000
-      SKALA_PMC_BEAR: 4500
-      Liquidators: 4500 #only flamethrowers
+      UPPGROM: 11000
+      UPPGROMAlt: 9000
+      UPPGROMAlt2: 7000
+      CHTORM_PMC_BEAR: 11000
+      GROZA_PMC_BEAR: 9000
+      SKALA_PMC_BEAR: 7000
+      Liquidators: 7000 #only flamethrowers
       Migrant_UPP: 1000 #They don’t speak English.
 
 
@@ -86,8 +86,8 @@
     replenishInterval: 60
     callableParties:
       MarineSecurityGuard: 2000
-      VAISP: 4500
-      VAIPO: 6000
+      VAISP: 7000
+      VAIPO: 9000
 
 # TWE Ambassador Console - Three World Empire
 - type: entity
@@ -106,9 +106,9 @@
     replenishAmount: 10
     replenishInterval: 60
     callableParties:
-      RMCRRT: 9000
-      SAS: 7000
-      NSPAInvestigationParty: 5000
+      RMCRRT: 11000
+      SAS: 9000
+      NSPAInvestigationParty: 7000
 
 # Independent Systems Ambassador Console
 - type: entity
@@ -127,5 +127,5 @@
     replenishAmount: 10
     replenishInterval: 60
     callableParties:
-      Freelancers: 4500
+      Freelancers: 7000
 

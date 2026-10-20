@@ -104,6 +104,10 @@ public abstract partial class SharedInternalsSystem : EntitySystem
             if (mode == ToggleMode.On)
                 return false;
 
+            // CMU14: a dry tank swaps to one with air instead of just turning internals off
+            if (mode == ToggleMode.Toggle && CMUTrySwapDryTank(target, user, (internals.GasTankEntity.Value, gas)))
+                return true;
+
             return _gasTank.DisconnectFromInternals((internals.GasTankEntity.Value, gas), user);
         }
 
@@ -273,6 +277,15 @@ public abstract partial class SharedInternalsSystem : EntitySystem
     public Entity<GasTankComponent>? FindBestGasTank(
         Entity<HandsComponent?, InventoryComponent?, ContainerManagerComponent?> user)
     {
+        // CMU14: anything with air beats a dry tank, otherwise an empty tank on the back keeps winning over a fresh one
+        return CMUFindBestGasTank(user, requireAir: true) ?? CMUFindBestGasTank(user, requireAir: false);
+    }
+
+    // CMU14: upstream FindBestGasTank body, plus the requireAir filter on every candidate
+    private Entity<GasTankComponent>? CMUFindBestGasTank(
+        Entity<HandsComponent?, InventoryComponent?, ContainerManagerComponent?> user,
+        bool requireAir)
+    {
         // TODO use _respirator.CanMetabolizeGas() to prioritize metabolizable gasses
         // Lookup order:
         // 1. Back
@@ -289,7 +302,7 @@ public abstract partial class SharedInternalsSystem : EntitySystem
 
         if (_inventory.TryGetSlotEntity(user, "back", out var backEntity, user.Comp2, user.Comp3) &&
             TryComp<GasTankComponent>(backEntity, out var backGasTank) &&
-            _gasTank.CanConnectToInternals((backEntity.Value, backGasTank)))
+            CMUCanUseTank((backEntity.Value, backGasTank), requireAir)) // CMU14
         {
             found = (backEntity.Value, backGasTank);
             if (!HasComp<JetpackComponent>(backEntity.Value))
@@ -300,7 +313,7 @@ public abstract partial class SharedInternalsSystem : EntitySystem
 
         if (_inventory.TryGetSlotEntity(user, "suitstorage", out var entity, user.Comp2, user.Comp3) &&
             TryComp<GasTankComponent>(entity, out var gasTank) &&
-            _gasTank.CanConnectToInternals((entity.Value, gasTank)))
+            CMUCanUseTank((entity.Value, gasTank), requireAir)) // CMU14
         {
             found ??= (entity.Value, gasTank);
             if (!HasComp<JetpackComponent>(entity.Value))
@@ -311,7 +324,7 @@ public abstract partial class SharedInternalsSystem : EntitySystem
 
         foreach (var item in _inventory.GetHandOrInventoryEntities((user.Owner, user.Comp1, user.Comp2)))
         {
-            if (TryComp(item, out gasTank) && _gasTank.CanConnectToInternals((item, gasTank)))
+            if (TryComp(item, out gasTank) && CMUCanUseTank((item, gasTank), requireAir)) // CMU14
             {
                 found ??= (item, gasTank);
                 if (!HasComp<JetpackComponent>(item))
@@ -322,7 +335,7 @@ public abstract partial class SharedInternalsSystem : EntitySystem
         }
 
         // cmu edit start: also check satchels, pouches and other worn storage
-        if (CMUFindStoredGasTank((user.Owner, user.Comp1, user.Comp2), out var storedJetpack) is { } stored)
+        if (CMUFindStoredGasTank((user.Owner, user.Comp1, user.Comp2), requireAir, out var storedJetpack) is { } stored)
             return stored;
 
         found ??= storedJetpack;

@@ -34,6 +34,10 @@ From left to right you have the attachments, armaments, and munitions vendor. Th
 - Munitions vendor: This vendor contains ammunition—everything from standard issue to AP and even ML66A drums. Give Marines anything within reason.
 - Surplus vendor: This vendor contains headset keys, uniform, armor, and helmets. Give Marines anything they ask from this vendor.
 
+<!-- CMU14: sling mounting modes -->
+Alt-click a detached two-point sling to switch between rail and underbarrel mounting, freeing the rail for an optic.
+Underbarrel mounting works on weapons that already accept the sling, but cannot replace locked built-in attachments.
+
 ##ASRS Terminal
 The ASRS terminal is one of your most critical tools in Requisitions. It enables you to order non-standard and specialized equipment that is rarely available aboard the Almayer. However, exercise caution — you are working within a limited budget. Do not allocate all your resources to a single request.
 

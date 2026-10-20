@@ -6,7 +6,7 @@ meta:
   forkId: ''
   forkVersion: ''
   time: '2026-09-18T00:00:00'
-  entityCount: 287
+  entityCount: 288
 maps: []
 grids:
 - 1
@@ -2249,3 +2249,10 @@ entities:
       parent: 1
       pos: 1.5,9.5
       rot: 3.141592653589793 rad
+- proto: AU14VehicleRadioSet
+  entities:
+  - uid: 900
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-4.5

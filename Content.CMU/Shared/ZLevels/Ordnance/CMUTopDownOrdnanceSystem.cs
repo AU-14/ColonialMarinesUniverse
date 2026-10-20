@@ -238,7 +238,13 @@ public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
             return false;
         }
 
-        var entityCoordinates = _transform.ToCoordinates(coordinates);
+        if (!_map.TryFindGridAt(coordinates, out var grid, out _))
+        {
+            blockReason = CMUTopDownOrdnanceBlockReason.NoSurface;
+            return false;
+        }
+
+        var entityCoordinates = _transform.ToCoordinates(grid, coordinates);
         switch (kind)
         {
             case CMUTopDownOrdnanceKind.Mortar:

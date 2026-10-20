@@ -36,7 +36,7 @@
       RMCSkillLeadership: 1
       RMCSkillIntel: 1
       RMCSkillMedical: 4
-      RMCSkillSurgery: 4
+      RMCSkillSurgery: 3
       RMCSkillPolice: 1
 
 - type: entity
