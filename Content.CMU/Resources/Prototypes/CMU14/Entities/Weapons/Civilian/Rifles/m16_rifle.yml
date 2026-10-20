@@ -144,6 +144,7 @@
 - type: entity
   parent: AU14WeaponRifleM16A1
   id: AU14WeaponRifleM16A1Tac
+  suffix: Filled, Tactical
   components:
   - type: AttachableHolder
     randomAttachmentChance: 0.25
