@@ -143,6 +143,53 @@
 
 - type: entity
   parent: AU14WeaponRifleM16A1
+  id: AU14WeaponRifleM16A1Tac
+  components:
+  - type: AttachableHolder
+    randomAttachmentChance: 0.25
+    slots:
+      rmc-aslot-barrel:
+        startingAttachable: RMCAttachmentSuppressor
+        whitelist:
+          tags:
+          - RMCM5Bayonet
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS5MicroRedDotSight
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentVerticalGrip
+        whitelist:
+          tags:
+          - RMCAttachmentLaserSight
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentExtinguisher
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineRifleM16Extended
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMUMagazineRifleM16APExt
+          - CMUMagazineRifleM16AP
+          - RMCMagazineRifleM16
+          - CMUMagazineRifleM16Extended
+
+
+- type: entity
+  parent: AU14WeaponRifleM16A1
   id: AU14WeaponRifleAR10
   name: AR10 rifle
   description: Predecessor of the M16. Chambered in 7.62x51mm, it lost the 1950s U.S. Army service rifle trials, largely due to Army preference for conventional construction.
@@ -207,25 +254,6 @@
           tags:
           - CMUMagazineRifleAR10
           - RMCMagazineRifleAR10
-
-- type: entity
-  parent: AU14WeaponRifleM16A1
-  id: AU14WeaponRifleM16A1Tac
-  components:
-  - type: ItemSlots
-    slots:
-      gun_magazine:
-        name: Magazine
-        startingItem: CMUMagazineRifleM16Extended
-        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
-        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
-        priority: 2
-        whitelist:
-          tags:
-          - CMUMagazineRifleM16APExt
-          - CMUMagazineRifleM16AP
-          - RMCMagazineRifleM16
-          - CMUMagazineRifleM16Extended
 
 - type: entity
   parent: CMMagazineRifleBase
