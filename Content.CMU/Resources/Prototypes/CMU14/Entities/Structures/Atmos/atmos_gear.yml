@@ -301,6 +301,12 @@
     coolingCoefficient: 0.3
   - type: RMCImmuneToIgnition
     immuneToDirectHits: false
+  - type: ClothingGrantComponents
+    components:
+    - type: RMCImmuneToFireTileDamage
+      bypassWhitelist:
+        components:
+        - RMCFireImmunityBypass
   - type: FireProtection
     reduction: 0.9
   - type: CMUFireCoverage
@@ -341,6 +347,12 @@
     coolingCoefficient: 0.3
   - type: RMCImmuneToIgnition
     immuneToDirectHits: false
+  - type: ClothingGrantComponents
+    components:
+    - type: RMCImmuneToFireTileDamage
+      bypassWhitelist:
+        components:
+        - RMCFireImmunityBypass
   - type: FireProtection
     reduction: 0.75
   - type: CMUFireCoverage
@@ -508,6 +520,12 @@
     coolingCoefficient: 0.3
   - type: RMCImmuneToIgnition
     immuneToDirectHits: false
+  - type: ClothingGrantComponents
+    components:
+    - type: RMCImmuneToFireTileDamage
+      bypassWhitelist:
+        components:
+        - RMCFireImmunityBypass
   - type: CMUFireCoverage
     uncoveredHeadPenalty: 0.6
 
