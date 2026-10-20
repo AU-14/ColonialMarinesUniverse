@@ -11,18 +11,6 @@ public sealed partial class CMUQueenSwarmSystem
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
 
     private readonly List<CMUSwarmStairRoute> _stairRoutes = new();
-
-    /// <summary>
-    /// Distance from a stair entity beyond which a member on the destination floor has finished crossing.
-    /// Members still on the ramp or above its shaft (within this) keep steering to the exact exit.
-    /// </summary>
-    private const float StairClearance = 1.25f;
-
-    /// <summary>
-    /// Distance from a stair entity within which swarm separation is suppressed. Wider than
-    /// <see cref="StairClearance"/> so a member that has just arrived is never steered back onto the stair tile.
-    /// </summary>
-    private const float StairShield = 1.75f;
     private TimeSpan _nextStairScan;
 
     private bool TraverseToAnchor(EntityUid member, EntityUid anchor)
@@ -30,7 +18,6 @@ public sealed partial class CMUQueenSwarmSystem
         var map = Transform(member).MapUid;
         var targetMap = Transform(anchor).MapUid;
         TryComp<CMUSwarmTraversalComponent>(member, out var traversal);
-        UpdateNearStair(member, map, ref traversal);
         if (map == targetMap && traversal?.Route == null)
             return false;
 
@@ -47,11 +34,7 @@ public sealed partial class CMUQueenSwarmSystem
         {
             if (TerminatingOrDeleted(active.Stair) || (from != active.FromMap && from != active.ToMap))
                 ClearTraversal(member, traversal);
-            // Arrived: either at the exact exit, or anywhere on the destination floor that is clear of the
-            // stair itself. Requiring the exact exit stranded members that a crowd pushed just off it.
-            else if (from == active.ToMap &&
-                     (Vector2.Distance(position, active.Exit) < 0.3f ||
-                      Vector2.Distance(position, _transform.GetWorldPosition(active.Stair)) > StairClearance))
+            else if (from == active.ToMap && Vector2.Distance(position, active.Exit) < 0.3f)
             {
                 ClearTraversal(member, traversal);
                 return from != to;
@@ -80,22 +63,20 @@ public sealed partial class CMUQueenSwarmSystem
             RefreshStairRoutes();
             if (!TryComp<CMUZLevelMapComponent>(from, out var start) || !TryComp<CMUZLevelMapComponent>(to, out var end))
                 return true;
-            // Recently failed stairs are only a last resort. A queue at the only stair to a floor trips steering's
-            // stuck detection, and skipping that stair outright left members idle until the failure expired.
-            var best = (Failed: true, Score: float.MaxValue);
+            var best = float.MaxValue;
             foreach (var route in _stairRoutes)
             {
                 if (route.FromMap != from || TerminatingOrDeleted(route.Stair) ||
+                    traversal.FailedStairs.GetValueOrDefault(route.Stair) > _timing.CurTime ||
                     !TryComp<CMUZLevelMapComponent>(route.ToMap, out var next) ||
                     !_zLevels.IsSameZNetwork(route.ToMap, to) ||
                     Math.Abs((long) next.Depth - end.Depth) >= Math.Abs((long) start.Depth - end.Depth))
                     continue;
-                var failed = traversal.FailedStairs.GetValueOrDefault(route.Stair) > _timing.CurTime;
                 var score = Vector2.Distance(position, route.Approach) + Vector2.Distance(route.Exit, _transform.GetWorldPosition(anchor));
-                if ((failed && !best.Failed) || (failed == best.Failed && score >= best.Score))
+                if (score >= best)
                     continue;
                 traversal.Route = route;
-                best = (failed, score);
+                best = score;
             }
             traversal.LastPosition = position;
             traversal.ProgressDeadline = _timing.CurTime + TimeSpan.FromSeconds(8);
