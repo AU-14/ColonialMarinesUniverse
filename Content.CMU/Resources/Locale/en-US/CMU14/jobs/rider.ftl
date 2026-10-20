@@ -34,7 +34,7 @@ rider-grip-desc = How tightly the grip. Abilities spend, resistance drains.
 
 rider-whisper-wrap = Something whispers: { $text }
 rider-whisper-echo = You whisper to your host: { $text }
-rider-whisper-ghost = {"["}color=#3cb371][font size=14][bold]Rider Whisper ({$rider} -> {$host}):[/bold] "{$message}"[/font][/color]
+rider-whisper-ghost = {"["}color=#3cb371][font size=10][bold]Rider Whisper ({$rider} -> {$host}):[/bold]"{$message}"[/font][/color]
 rider-speak-blocked = Their throat will not answer.
 
 rider-punish-host = Something burns behind your eyes!
