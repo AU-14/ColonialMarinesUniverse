@@ -2403,6 +2403,14 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
 
         }
 
+        // CMU14 method
+        public async Task<ulong?> GetLinkedDiscordId(Guid player, CancellationToken cancel)
+        {
+            await using var db = await GetDb(cancel);
+            var link = await db.DbContext.RMCLinkedAccounts.FirstOrDefaultAsync(l => l.PlayerId == player, cancel);
+            return link?.DiscordId;
+        }
+
         public async Task<RMCPatron?> GetPatron(Guid player, CancellationToken cancel)
         {
             await using var db = await GetDb(cancel);

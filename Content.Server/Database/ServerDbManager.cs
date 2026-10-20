@@ -373,6 +373,9 @@ namespace Content.Server.Database
 
         Task<bool> HasLinkedAccount(Guid player, CancellationToken cancel);
 
+        // CMU14 method
+        Task<ulong?> GetLinkedDiscordId(Guid player, CancellationToken cancel);
+
         Task<RMCPatron?> GetPatron(Guid player, CancellationToken cancel);
 
         Task<List<RMCPatron>> GetAllPatrons();
@@ -1410,6 +1413,13 @@ namespace Content.Server.Database
         {
             DbReadOpsMetric.Inc();
             return RunDbCommand(() => _db.HasLinkedAccount(player, cancel));
+        }
+
+        // CMU14 method
+        public Task<ulong?> GetLinkedDiscordId(Guid player, CancellationToken cancel)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetLinkedDiscordId(player, cancel));
         }
 
         public Task<RMCPatron?> GetPatron(Guid player, CancellationToken cancel)
