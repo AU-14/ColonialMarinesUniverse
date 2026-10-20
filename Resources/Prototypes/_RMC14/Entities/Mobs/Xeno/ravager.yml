@@ -250,32 +250,20 @@
     attackRate: 1.05
     damage:
       types:
-        Blunt: 15
-        Slash: 15
-        Piercing: 15
+        Slash: 45
   - type: XenoRage
   - type: XenoEviscerate
     damageAtRageLevels:
     - types:
-        Blunt: 1.66
-        Slash: 1.67
-        Piercing: 1.67
+        Slash: 5
     - types:
-        Blunt: 3.33
-        Slash: 3.33
-        Piercing: 3.34
+        Slash: 10
     - types:
-        Blunt: 8.33
-        Slash: 8.33
-        Piercing: 8.34
+        Slash: 25
     - types:
-        Blunt: 15
-        Slash: 15
-        Piercing: 15
+        Slash: 45
     - types: # CMU14 modified
-        Blunt: 28.33
-        Slash: 28.33
-        Piercing: 28.34
+        Slash: 85
     rangeAtRageLevels: [1.5, 1.5, 1.5, 2.5, 2.5]
     windupReductionAtRageLevels: [0, 0.2, 0.4, 0.6, 1]
   - type: XenoFling # TODO RMC14 target head
@@ -358,9 +346,7 @@
     attackRate: 0.9
     damage:
       types:
-        Blunt: 11.66
-        Slash: 11.67
-        Piercing: 11.67
+        Slash: 35
   - type: XenoTailStab
     tailDamage:
       types:
@@ -372,15 +358,11 @@
   - type: XenoSpikeShield
     spikeDamage:
       types:
-        Blunt: 5
-        Slash: 5
-        Piercing: 5
+        Piercing: 15
   - type: XenoSpikeShed
     shardDamage:
       types:
-        Blunt: 6.66
-        Slash: 6.67
-        Piercing: 6.67
+        Piercing: 20
   - type: XenoHidden
   - type: RMCActionOrder
     id: RMCXenoRavagerHedgehog
