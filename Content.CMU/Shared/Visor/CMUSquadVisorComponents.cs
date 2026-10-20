@@ -19,6 +19,16 @@ public sealed partial class CMUSquadVisorActiveComponent : Component;
 public sealed partial class CMUAmmoHudSightComponent : Component;
 
 /// <summary>
+/// A GOVFOR rifle, DMR, or specialist weapon whose ammunition can be read by an optic.
+/// </summary>
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CMUAmmoHudWeaponComponent : Component
+{
+    [DataField]
+    public bool Enabled = true;
+}
+
+/// <summary>
 /// A squad optic. It can't be switched down while its wearer holds or wears a smartgun.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
@@ -46,7 +56,7 @@ public sealed partial class CMUSquadVisorWearerComponent : Component
     [DataField, AutoNetworkedField]
     public bool MotionLinkEnabled = true;
 
-    /// <summary>Whether the optic shows the held gun's ammo count under the status alerts.</summary>
+    /// <summary>Whether the optic shows an eligible held or suit-stored gun's ammo count under the status alerts.</summary>
     [DataField, AutoNetworkedField]
     public bool AmmoHudEnabled = true;
 

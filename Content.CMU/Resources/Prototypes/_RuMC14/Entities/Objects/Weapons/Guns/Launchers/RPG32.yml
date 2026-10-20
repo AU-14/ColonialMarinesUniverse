@@ -4,6 +4,7 @@
   id: RuMCWeaponLauncherRPG32
   description: "The RPG-32 is an advanced rocket launcher designed for UPP assault units."
   components:
+  - type: CMUAmmoHudWeapon
   - type: Sprite
     sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/RPG32/RPG32_inhands.rsi
     layers:

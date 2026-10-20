@@ -4,6 +4,7 @@
   name: Type 88 designated marksman rifle
   description: The standard issue DMR of the UPP, the Type 88 is sought after by competitive shooters and terrorists alike for its high degree of accuracy. Typically loaded with armor-piercing 7.62x54mmR rounds in a 12 round magazine.
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Snipers/type88/type88_inhands.rsi
     layers:

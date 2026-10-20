@@ -3,6 +3,7 @@
   parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
   id: RMCBaseWeaponSniperRifle
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Gun
     selectedMode: SemiAuto
     availableModes:

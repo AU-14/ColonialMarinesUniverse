@@ -4,6 +4,7 @@
   id: WeaponLauncherM83
   description: A heavy, 6-shot grenade launcher used by the USCM for area denial and big explosions.
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: GuideHelp
     guides:
     - RMCGuideRoleSpecGrenadier

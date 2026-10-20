@@ -4,6 +4,7 @@
   name: L90 assault rifle # F9030A1 in CM13
   description: The L90 Rifle, a variant of the old standard-issue rifle of the royal marine.
   components:
+  - type: CMUAmmoHudWeapon
   - type: Sprite
     sprite: CMU14/Weapons/Guns/RMC/L90.rsi
     layers:
@@ -318,6 +319,7 @@
   name: L90/B 'Breacher' assault rifle
   description: a variant of the old standard-issue rifle of the royal marine with a heavily modified firing mechanism, giving it a burst-fire option. Comes with built-in underbarell shotgun.
   components:
+  - type: CMUAmmoHudWeapon
   - type: Sprite
     sprite: CMU14/Weapons/Guns/RMC/L90B.rsi
     layers:
@@ -545,6 +547,7 @@
   name: L90M Marksman rifle
   description: The L90M Marksman rifle, a variant of the old standard-issue rifle of the royal marine. This particular version of the weapon has been given a custom stock, a variable zoom scope and a longer barrel. Reliable and deadly.
   components:
+  - type: CMUAmmoHudWeapon
   - type: Sprite
     sprite: CMU14/Weapons/Guns/RMC/L90M.rsi
     layers:

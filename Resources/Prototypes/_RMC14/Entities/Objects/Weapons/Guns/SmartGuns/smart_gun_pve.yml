@@ -6,6 +6,7 @@
   description: The actual firearm in the Support Gun System. Essentially a heavy, mobile machinegun.
   suffix: PVE
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Wieldable
   - type: Item
     size: Huge

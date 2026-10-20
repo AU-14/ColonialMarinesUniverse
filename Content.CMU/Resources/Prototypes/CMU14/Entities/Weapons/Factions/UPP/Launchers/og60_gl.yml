@@ -4,6 +4,7 @@
   id: AU14WeaponLauncherOG60
   description: A heavy, 6-shot grenade launcher used by the UPP armed collective.
   components:
+  - type: CMUAmmoHudWeapon
   - type: Item
     size: Huge
   - type: Sprite

@@ -5,6 +5,7 @@
   suffix: USCM
   description: An experimental directed energy weapon system designed by Armat, the XM99A is a long-range prototype rifle that fires super-heated blasts of plasma. The XM99A will slowly recharge its lithium battery drum over time using static electricity.
   components:
+  - type: CMUAmmoHudWeapon
   - type: Sprite
     sprite: CMU14/Weapons/Guns/USCM/XM99A.rsi
     layers:

@@ -4,6 +4,7 @@
   id: RMCWeaponRifleM54C
   description: The standard issue rifle of the UA. Commonly carried by most combat personnel. Uses 10x24mm caseless ammunition.
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Sprite
     sprite: CMU14/Weapons/Guns/USCM/m41mk2.rsi
     layers:

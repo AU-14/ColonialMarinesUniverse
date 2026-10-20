@@ -4,6 +4,7 @@
   name: M240 incinerator unit
   description: M240 incinerator unit has proven to be one of the most effective weapons at clearing out soft-targets. This is a weapon to be feared and respected as it is quite deadly.
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Flamethrower/m34.rsi
     state: base

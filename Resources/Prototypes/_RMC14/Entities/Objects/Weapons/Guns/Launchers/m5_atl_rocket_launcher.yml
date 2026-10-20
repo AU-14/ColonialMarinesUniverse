@@ -3,6 +3,7 @@
   id: RMCBaseWeaponLauncher
   abstract: true
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: GuideHelp
     guides:
     - RMCGuideRoleSpecDemo

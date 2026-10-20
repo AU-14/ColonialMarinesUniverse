@@ -5,6 +5,7 @@
   name: M56B smart gun
   description: The actual firearm in the Smart Gun System. Essentially a heavy, mobile machinegun.
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Wieldable
   - type: Item
     size: Huge
@@ -324,6 +325,8 @@
   name: M56B 'freedom' smart gun
   description: The actual firearm in the 4-piece M56B Smartgun System. Essentially a heavy, mobile machinegun. This one has the CLF logo carved over the manufacturing stamp.
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
+    enabled: false
   - type: GunRequireEquipped
     whitelist: { }
 

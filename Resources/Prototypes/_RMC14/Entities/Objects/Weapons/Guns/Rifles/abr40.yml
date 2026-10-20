@@ -5,6 +5,7 @@
   description: The civilian version of the L42A battle rifle. Almost identical and even cross-compatible with L42 magazines, just don't take the stock off.
   suffix: Filled
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/abr40.rsi
     layers:
@@ -97,6 +98,7 @@
   description: The civilian version of the L42A battle rifle that is often wielded by Marines. Almost identical and even cross-compatible with L42 magazines, just don't take the stock off. This rifle seems to have unique tacticool blue-black furniture alongside some miscellaneous aftermarket modding.
   suffix: Filled
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/abr40tac.rsi
     layers:

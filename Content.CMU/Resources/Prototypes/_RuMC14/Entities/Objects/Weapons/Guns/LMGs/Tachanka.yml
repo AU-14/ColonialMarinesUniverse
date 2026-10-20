@@ -4,6 +4,7 @@
   id: RuMCMachineGunTachanka
   description: Soviet-era 7.62x54R heavy machine gun. With a pan magazine and a heavy barrel. Reliable, but heavy.
   components:
+  - type: CMUAmmoHudWeapon
   - type: Item
     size: Huge
 #  - type: Appearance

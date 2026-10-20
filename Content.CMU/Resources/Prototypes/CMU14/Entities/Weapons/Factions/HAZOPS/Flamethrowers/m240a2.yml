@@ -4,6 +4,7 @@
   name: M240A2 heavy incinerator unit
   description: The USCMC's answer to WY's Flammerwerfer 3. Much more effective than the standard M240, but inflicts a movement penality. Typically issued to HAZOPS.
   components:
+  - type: CMUAmmoHudWeapon
   - type: RMCMagneticItem
   - type: Sprite
     sprite: CMU14/Weapons/Guns/HAZOPS/M240A2.rsi

@@ -7,5 +7,5 @@ cmu-squad-visor-motion-link-off = Your optic stops showing your squad's motion t
 cmu-squad-visor-smartgun-blocked = {CAPITALIZE(THE($optic))} won't work while you're using a smartgun.
 cmu-squad-visor-smartgun-switched-up = Your squad optic switches up. It won't work alongside a smartgun.
 
-cmu-squad-visor-ammo-hud-on = Your optic shows your gun's ammo count.
+cmu-squad-visor-ammo-hud-on = Your optic shows the ammo count of compatible weapons in your hands or suit storage.
 cmu-squad-visor-ammo-hud-off = Your optic stops showing your gun's ammo count.

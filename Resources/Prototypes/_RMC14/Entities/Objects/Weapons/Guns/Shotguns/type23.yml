@@ -4,6 +4,7 @@
   id: RMCWeaponShotgunType23
   description: As UPP soldiers frequently reported being outmatched by enemy combatants, UPP High Command commissioned a large amount of Type 23 shotguns, originally used for quelling defector colony riots. This slow semi-automatic shotgun chambers 8 gauge, and packs a mean punch.
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Shotguns/type23.rsi
     layers:

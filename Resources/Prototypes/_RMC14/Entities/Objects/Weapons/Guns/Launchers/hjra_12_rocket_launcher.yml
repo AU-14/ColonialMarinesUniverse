@@ -4,6 +4,7 @@
   id: RMCWeaponLauncherHJRA12
   description: "The HJRA-12 Handheld Anti-Tank Grenade Launcher is the standard Anti-Armor weapon of the UPP. It is designed to be easy to use and to take out or disable armored vehicles."
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/RocketLaunchers/hjra12/hjra12_inhands.rsi
     layers:

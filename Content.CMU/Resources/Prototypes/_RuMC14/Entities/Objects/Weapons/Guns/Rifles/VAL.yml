@@ -4,6 +4,7 @@
   id: RuMCRifleVAL
   description: For those who prefer to solve problems without making a fuss. One shot, one problem gone. The silencer works so well that even your trench mate won't know it was you.
   components:
+  - type: CMUAmmoHudWeapon
   - type: Item
     size: Huge
   - type: Sprite

@@ -4,6 +4,7 @@
   name: L64A3 designated marksman rifle
   description: "A lightweight designated marksman rifle developed by Howatomo Precision Machining for the Royal Marines. Designed to provide commandos with responsive long range reach past what the old L90 could manage. A continuous-charge HESH payload removes the requirement for traditional armor piercing steel core ammunition, and improves damage retention at extended range. Faster cycle rate of the breech and a light trigger gives fast and precise followup shots even at thousand meter distances."
   components:
+  - type: CMUAmmoHudWeapon
   - type: Sprite
     sprite: CMU14/Weapons/Guns/RMC/L64A3.rsi
     layers:

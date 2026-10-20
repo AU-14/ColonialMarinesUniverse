@@ -73,6 +73,7 @@
   name: mk86 automatic grenade launcher
   description: The top half of a Mk86 AGL. However it ain't much use without a tripod.
   components:
+  - type: CMUAmmoHudWeapon
   - type: Item
     size: Huge
   - type: AmmoCounter

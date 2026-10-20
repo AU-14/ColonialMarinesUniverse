@@ -4,6 +4,7 @@
   name: P9 SHARP rifle
   description: An experimental harpoon launcher rifle, produced by AEGIS Armaments. It uses specialized 9X dart magazines and is designed to deny areas with embedded explosive and incendiary payloads.
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: GuideHelp
     guides:
     - RMCGuideRoleSpecGrenadier
