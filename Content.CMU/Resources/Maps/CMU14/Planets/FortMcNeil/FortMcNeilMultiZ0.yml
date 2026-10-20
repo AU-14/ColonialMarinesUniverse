@@ -163,7 +163,7 @@ tilemap:
   79: RMCPlanetSnow3
   8: RMCPlanetSnow4
 entities:
-- proto: ""
+- proto: ''
   entities:
   - uid: 1
     components:
@@ -20505,7 +20505,6 @@ entities:
     - Vehicle
     - VehicleOperatorDamage
     - GridVehicleMover
-    - InputMover
     - VehicleOvercharge
     - VehicleSound
     - VehicleSpotlight
@@ -20822,6 +20821,17 @@ entities:
     - type: YautjaRelayDestination
       kind: Ground
       id: fort-mcneil.ground.relay
+      displayName: Fort McNeil Ground Relay
+  - uid: 1000000002
+    components:
+    - type: MetaData
+      name: Fort McNeil ground relay
+    - type: Transform
+      parent: 1
+      pos: 147.5,21.5
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: fortmcneil.ground.relay
       displayName: Fort McNeil Ground Relay
 - proto: CableHV
   entities:
