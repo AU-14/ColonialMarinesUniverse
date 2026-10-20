@@ -3,8 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Mentor"
     xmlns:ui="clr-namespace:Content.Client.CMU14.Interface"
-    Title="Admin and Mentor Help"
+    Title="Help"
     MinWidth="{x:Static ui:CmuPanelMetrics.ChoiceWindowWidth}">
+    <!-- CMU14: third choice (bug report) added and the window retitled - three cards under "Admin and
+         Mentor Help" was false advertising. -->
     <!-- Just a ground and a slot. The two choices are CmuChoiceCards built in the code-behind, which
          is where their colours live - see CmuChoiceCard for why the look is not a style class.
 

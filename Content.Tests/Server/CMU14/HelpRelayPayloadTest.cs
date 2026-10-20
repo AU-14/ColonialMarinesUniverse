@@ -76,14 +76,8 @@ namespace Content.Tests.Server.CMU14
         }
 
         [Test]
-        public void PingOnlyFromVerifiedLink()
+        public void HelpPostsNeverPing()
         {
-            var pinged = HelpRelayPayload.Build(HelpSource.BugHelp,
-                new HelpPost { Description = "x", PingUserId = 42, Context = Context() },
-                revision: null);
-            Assert.That(pinged.Content, Is.EqualTo("<@42>"));
-            Assert.That(pinged.AllowedMentions!.Users, Is.EqualTo(new[] { "42" }));
-
             var quiet = HelpRelayPayload.Build(HelpSource.MHelp,
                 new HelpPost { Description = "x", Context = Context() },
                 revision: null);
@@ -99,13 +93,11 @@ namespace Content.Tests.Server.CMU14
                 {
                     Description = "x",
                     Title = "BUG-R1234-03 · fire doesn't spread",
-                    ThreadName = "BUG-R1234-03 · fire doesn't spread",
                     Context = Context(),
                 },
                 revision: null);
 
-            Assert.That(payload.ThreadName, Does.StartWith("BUG-R1234-03"));
-            Assert.That(payload.Embeds[0].Title, Is.EqualTo(payload.ThreadName));
+            Assert.That(payload.Embeds[0].Title, Is.EqualTo("BUG-R1234-03 · fire doesn't spread"));
         }
 
         [Test]

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using Content.Client.Administration.Managers;
 using Content.Client.Administration.Systems;
+using Content.Client.CMU14.BugHelp; // CMU14: bug report window, opened from the third choice card
 using Content.Client.Lobby.UI;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Bwoink;
@@ -31,6 +32,7 @@ namespace Content.Client._RMC14.Mentor;
 public sealed partial class StaffHelpUIController : UIController, IOnSystemChanged<BwoinkSystem>
 {
     [Dependency] private AHelpUIController _aHelp = default!;
+    [Dependency] private BugHelpUIController _bugHelp = default!; // CMU14
     [Dependency] private IClientAdminManager _adminManager = default!; // CMU14
     [Dependency] private IClyde _clyde = default!;
     [Dependency] private IConfigurationManager _config = default!;
@@ -296,6 +298,14 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         {
             OpenMentorOrHelpWindow();
             _staffHelpWindow.Close();
+        };
+
+        // CMU14: bug report choice.
+        _staffHelpWindow.BugHelpButton.OnPressed += _ =>
+        {
+            _bugHelp.OpenWindow();
+            _staffHelpWindow.Close();
+            SetAHelpButtonPressed(false);
         };
     }
 
