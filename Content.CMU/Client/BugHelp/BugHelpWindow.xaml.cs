@@ -21,8 +21,6 @@ public sealed partial class BugHelpWindow : DefaultWindow
     {
         RobustXamlLoader.Load(this);
 
-        AutoContext.SetMessage(Loc.GetString("cmu-bughelp-autocontext"));
-
         CapOnChange(WhatHappened, WhatHappenedCap);
         CapOnChange(Expected, OptionalTextCap);
         CapOnChange(Steps, OptionalTextCap);
@@ -72,7 +70,7 @@ public sealed partial class BugHelpWindow : DefaultWindow
         {
             var text = Rope.Collapse(args.TextRope);
             if (text.Length > cap)
-                edit.TextRope = Rope.Leaf(text[..cap]);
+                edit.TextRope = new Rope.Leaf(text[..cap]);
         };
     }
 }
