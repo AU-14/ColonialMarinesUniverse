@@ -98,6 +98,50 @@ public sealed class CMUPhotoTest : GameTest
     }
 
     [Test]
+    [Description("A ghost standing in the frame is recorded on the print, faintly, and kept out of its caption; ghosts outside the frame and admin ghosts are not.")]
+    public async Task GhostsInTheFrameAreCaught()
+    {
+        var map = await Pair.CreateTestMap();
+        var session = ServerSession!;
+
+        EntityUid user = default, inside = default;
+        await Server.WaitAssertion(() =>
+        {
+            user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            Server.PlayerMan.SetAttachedEntity(session, user);
+            inside = SEntMan.SpawnEntity("MobObserver", map.GridCoords.Offset(new System.Numerics.Vector2(1, 0)));
+            SEntMan.SpawnEntity("MobObserver", map.GridCoords.Offset(new System.Numerics.Vector2(6, 0)));
+            SEntMan.SpawnEntity("AdminObserver", map.GridCoords);
+        });
+
+        await Server.WaitRunTicks(5);
+
+        await Server.WaitAssertion(() =>
+        {
+            var photos = SEntMan.System<CMUPhotoSystem>();
+            var camera = SpawnCamera(map.GridCoords);
+            camera.Comp.PrintDelay = TimeSpan.Zero;
+            Assert.That(camera.Comp.Size, Is.EqualTo(3), "The test frames a 3x3 area.");
+
+            var request = photos.RequestCapture(session, user, camera, map.GridCoords);
+            Assert.That(photos.TryAcceptCapture(session, request, Png(camera.Comp.Size * CMUPhotoLimits.TilePixels), out var print));
+
+            var photo = SEntMan.GetComponent<CMUPhotoComponent>(print);
+            Assert.That(photo.Ghosts, Has.Count.EqualTo(1), "Only the player ghost inside the frame should be caught.");
+            var ghost = photo.Ghosts[0];
+            Assert.Multiple(() =>
+            {
+                Assert.That(ghost.Prototype.Id, Is.EqualTo("MobObserver"));
+                Assert.That(ghost.Opacity, Is.InRange(CMUPhotoLimits.GhostMinOpacity, CMUPhotoLimits.GhostMaxOpacity));
+                Assert.That(ghost.Offset.X, Is.EqualTo(1).Within(0.01f), "The ghost was recorded in the wrong place.");
+                Assert.That(ghost.Offset.Y, Is.EqualTo(0).Within(0.01f), "The ghost was recorded in the wrong place.");
+                Assert.That(photo.Contents, Does.Not.Contain(SEntMan.GetComponent<MetaDataComponent>(inside).EntityName),
+                    "A ghost was named in the caption.");
+            });
+        });
+    }
+
+    [Test]
     [Description("The print comes out of the camera a moment after the shutter, not in the same tick.")]
     public async Task PrintComesOutAfterTheShutter()
     {

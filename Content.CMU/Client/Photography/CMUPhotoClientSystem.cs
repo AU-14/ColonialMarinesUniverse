@@ -8,6 +8,8 @@ using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Client.State;
 using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -21,6 +23,8 @@ namespace Content.Client.CMU14.Photography;
 public sealed partial class CMUPhotoClientSystem : EntitySystem
 {
     [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IStateManager _state = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
@@ -35,6 +39,17 @@ public sealed partial class CMUPhotoClientSystem : EntitySystem
 
     private readonly Dictionary<int, Texture> _textures = new();
     private readonly Dictionary<int, Texture> _thumbnails = new();
+
+    /// <summary>A capture waiting for the camera's flash to light the view before it is taken.</summary>
+    private sealed class FlashWait(CMUPhotoCaptureRequestEvent request, TimeSpan giveUp)
+    {
+        public readonly CMUPhotoCaptureRequestEvent Request = request;
+        public readonly TimeSpan GiveUp = giveUp;
+        /// <summary>Frames drawn since the flash's light was first seen on.</summary>
+        public int LitFrames;
+    }
+
+    private readonly List<FlashWait> _flashWaits = new();
     private readonly HashSet<int> _requested = new();
     private CMUPhotoFrameOverlay _overlay = default!;
 
@@ -83,6 +98,44 @@ public sealed partial class CMUPhotoClientSystem : EntitySystem
         _sprite.LayerSetTexture((ent, sprite), layer, texture);
         _sprite.LayerSetOffset((ent, sprite), layer, ThumbnailOffset);
         _sprite.LayerSetVisible((ent, sprite), layer, texture != null);
+        UpdateThumbnailGhosts((ent, sprite), ent.Comp, texture != null);
+    }
+
+    /// <summary>
+    /// The print's ghosts, shrunk with the picture onto its thumbnail: at that size the blur is lost and each is
+    /// a faint smudge where it stood.
+    /// </summary>
+    private void UpdateThumbnailGhosts(Entity<SpriteComponent> sprite, CMUPhotoComponent photo, bool shown)
+    {
+        var size = Math.Max(1, photo.Size);
+        // Thumbnail pixels per tile of the picture, and the most a ghost's centre may move off the window's.
+        var perTile = CMUPhotoLimits.ThumbnailPixels / (float) size;
+        var limit = (CMUPhotoLimits.ThumbnailPixels - perTile) / 2f;
+        for (var i = 0; i < CMUPhotoLimits.Ghosts; i++)
+        {
+            var key = $"cmu-photo-ghost-{i}";
+            var ghost = shown && i < photo.Ghosts.Count ? photo.Ghosts[i] : null;
+            if (ghost == null || GhostTexture(ghost) is not { } texture)
+            {
+                if (_sprite.LayerMapTryGet(sprite.AsNullable(), key, out var unused, false))
+                    _sprite.LayerSetVisible(sprite.AsNullable(), unused, false);
+                continue;
+            }
+
+            var layer = _sprite.LayerMapReserve(sprite.AsNullable(), key);
+            var offset = Vector2.Clamp(ghost.Offset * perTile, new Vector2(-limit), new Vector2(limit));
+            _sprite.LayerSetTexture(sprite.AsNullable(), layer, texture);
+            _sprite.LayerSetScale(sprite.AsNullable(), layer, new Vector2(perTile / CMUPhotoLimits.TilePixels));
+            _sprite.LayerSetOffset(sprite.AsNullable(), layer, ThumbnailOffset + offset / CMUPhotoLimits.TilePixels);
+            _sprite.LayerSetColor(sprite.AsNullable(), layer, CMUPhotoGhostLayer.Tint.WithAlpha(ghost.Opacity));
+            _sprite.LayerSetVisible(sprite.AsNullable(), layer, true);
+        }
+    }
+
+    /// <summary>The first frame of a ghost's own sprite, or nothing if its prototype is gone.</summary>
+    public Texture? GhostTexture(CMUPhotoGhost ghost)
+    {
+        return _prototypes.TryIndex(ghost.Prototype, out var proto) ? _sprite.Frame0(proto) : null;
     }
 
     private Texture? Thumbnail(CMUPhotoComponent photo)
@@ -152,8 +205,51 @@ public sealed partial class CMUPhotoClientSystem : EntitySystem
 
     private void OnCaptureRequest(CMUPhotoCaptureRequestEvent ev)
     {
+        if (ev.Flash == null)
+        {
+            Capture(ev);
+            return;
+        }
+
+        // The flash comes in the game state, which can land a tick after this event: wait for it.
+        _flashWaits.Add(new FlashWait(ev, _timing.RealTime + CMUPhotoLimits.FlashWait));
+        _overlay.Hidden = true;
+    }
+
+    /// <summary>
+    /// Takes each waiting capture once its flash has been lit for a whole drawn frame, so the light is in the
+    /// picture. If the flash never arrives the picture is taken anyway, as it is.
+    /// </summary>
+    public override void FrameUpdate(float frameTime)
+    {
+        base.FrameUpdate(frameTime);
+        for (var i = _flashWaits.Count - 1; i >= 0; i--)
+        {
+            var wait = _flashWaits[i];
+            if (FlashLit(wait.Request.Flash))
+                wait.LitFrames++;
+
+            // Lit in two updates means a frame has been drawn with the light in it.
+            if (wait.LitFrames < 2 && _timing.RealTime < wait.GiveUp)
+                continue;
+
+            _flashWaits.RemoveAt(i);
+            Capture(wait.Request);
+        }
+    }
+
+    private bool FlashLit(NetEntity? flash)
+    {
+        return TryGetEntity(flash, out var uid)
+               && TryComp(uid, out PointLightComponent? light)
+               && light.Enabled;
+    }
+
+    private void Capture(CMUPhotoCaptureRequestEvent ev)
+    {
         if (_state.CurrentState is not IMainViewportState state)
         {
+            _overlay.Hidden = false;
             RaiseNetworkEvent(new CMUPhotoCaptureResultEvent(ev.Request, Array.Empty<byte>()));
             return;
         }
@@ -165,7 +261,7 @@ public sealed partial class CMUPhotoClientSystem : EntitySystem
         _overlay.Hidden = true;
         viewport.Screenshot(image =>
         {
-            _overlay.Hidden = false;
+            _overlay.Hidden = _flashWaits.Count > 0;
             var png = Crop(image, viewport, corners, ev.Size * CMUPhotoLimits.TilePixels);
             RaiseNetworkEvent(new CMUPhotoCaptureResultEvent(ev.Request, png));
         });

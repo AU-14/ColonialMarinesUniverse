@@ -83,10 +83,11 @@ public sealed class CMUPhotoWindow : BaseWindow
                 StyleBoxTexture.StretchMode.Stretch,
                 WindowSlice, WindowSlice, WindowSlice, WindowSlice, 0, 0, 0, 0),
         };
+        var view = new CMUPhotoView(photo.Id, scale);
         recess.AddChild(new Control
         {
             SetSize = new Vector2(width, width),
-            Children = { new CMUPhotoView(photo.Id, scale), shade },
+            Children = { view, new CMUPhotoGhostLayer(view, photo), shade },
         });
 
         var foot = new BoxContainer

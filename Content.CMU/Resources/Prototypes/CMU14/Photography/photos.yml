@@ -52,7 +52,8 @@
         type: CMUPhotoBui
 
 # The camera's flash: a short burst of cold white light at the photographer that fades out at once. Bright
-# enough to light up the room for a moment, too brief to dazzle anyone.
+# enough to light up the room for a moment, too brief to dazzle anyone. Its radius is set per shot to reach
+# the frame's far corner; like any light it casts shadows, so it never lights what is behind a wall.
 - type: entity
   id: CMUEffectCameraFlash
   categories: [ HideSpawnMenu ]
@@ -63,7 +64,6 @@
     energy: 10
     softness: 1
     color: "#F2F5FF"
-    castShadows: false
   - type: LightFade
     duration: 0.35
   - type: TimedDespawn

@@ -1,3 +1,4 @@
+using System.Numerics;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
@@ -63,6 +64,13 @@ public sealed partial class CMUPhotoCameraComponent : Component
     /// <summary>A brief light at the photographer as the shutter fires.</summary>
     [DataField]
     public EntProtoId? Flash = "CMUEffectCameraFlash";
+
+    /// <summary>The flash's reach, in tiles: set per shot to cover the whole frame.</summary>
+    [DataField]
+    public float FlashMinRadius = 5;
+
+    [DataField]
+    public float FlashMaxRadius = 16;
 }
 
 /// <summary>A roll of camera film. Using it on a photo camera reloads the camera to a full roll.</summary>
@@ -97,6 +105,30 @@ public sealed partial class CMUPhotoComponent : Component
     /// <summary>When the print came out; old prints look handled.</summary>
     [DataField, AutoNetworkedField, AutoPausedField]
     public TimeSpan Printed;
+
+    /// <summary>
+    /// Ghosts that were standing in the frame. The photographer could not see them, so they are not in the
+    /// picture itself; they are drawn over it, faint and blurred, wherever the print is looked at.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public List<CMUPhotoGhost> Ghosts = new();
+}
+
+/// <summary>A ghost caught on a print.</summary>
+[DataDefinition, Serializable, NetSerializable]
+public sealed partial class CMUPhotoGhost
+{
+    /// <summary>The ghost's entity prototype, whose sprite is drawn.</summary>
+    [DataField]
+    public EntProtoId Prototype;
+
+    /// <summary>Where it stood, in tiles from the frame's centre: x to the right, y up.</summary>
+    [DataField]
+    public Vector2 Offset;
+
+    /// <summary>How strongly it shows, rolled once when the photo is taken so every viewer sees the same.</summary>
+    [DataField]
+    public float Opacity;
 }
 
 /// <summary>The print's sprite layer that shows its thumbnail.</summary>
@@ -134,15 +166,29 @@ public static class CMUPhotoLimits
     /// <summary>People listed in a print's description, then grouped objects.</summary>
     public const int DescribedPeople = 8;
     public const int DescribedObjects = 8;
+
+    /// <summary>Ghosts recorded on one print, and how faintly each can show.</summary>
+    public const int Ghosts = 8;
+    public const float GhostMinOpacity = 0.10f;
+    public const float GhostMaxOpacity = 0.40f;
+
+    /// <summary>
+    /// How long the photographer's client waits for the flash to reach it before taking the picture anyway.
+    /// </summary>
+    public static readonly TimeSpan FlashWait = TimeSpan.FromSeconds(0.5);
 }
 
 /// <summary>Server to photographer: capture this square of your view and send it back as a PNG.</summary>
 [Serializable, NetSerializable]
-public sealed class CMUPhotoCaptureRequestEvent(int request, NetCoordinates centre, int size) : EntityEventArgs
+public sealed class CMUPhotoCaptureRequestEvent(int request, NetCoordinates centre, int size, NetEntity? flash = null)
+    : EntityEventArgs
 {
     public readonly int Request = request;
     public readonly NetCoordinates Centre = centre;
     public readonly int Size = size;
+
+    /// <summary>The camera's flash. The picture is taken once it is lighting the scene on the client.</summary>
+    public readonly NetEntity? Flash = flash;
 }
 
 /// <summary>Photographer to server: the captured picture, or an empty array when the area was not in view.</summary>

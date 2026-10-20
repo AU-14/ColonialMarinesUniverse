@@ -5,6 +5,7 @@ using Content.Shared.CMU14.Photography;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
 using Content.Shared.Examine;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
@@ -18,6 +19,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -39,9 +41,11 @@ public sealed partial class CMUPhotoSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedPointLightSystem _light = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private MapSystem _map = default!;
@@ -63,7 +67,8 @@ public sealed partial class CMUPhotoSystem : EntitySystem
         int Size,
         TimeSpan Expires,
         TimeSpan PrintAt,
-        List<string> Contents);
+        List<string> Contents,
+        List<CMUPhotoGhost> Ghosts);
 
     /// <summary>A picture that has been taken and is on its way out of the camera.</summary>
     private readonly record struct Print(
@@ -73,6 +78,7 @@ public sealed partial class CMUPhotoSystem : EntitySystem
         int Size,
         TimeSpan At,
         List<string> Contents,
+        List<CMUPhotoGhost> Ghosts,
         byte[] Thumbnail);
 
     /// <summary>Captures still waiting on the photographer's client.</summary>
@@ -149,19 +155,84 @@ public sealed partial class CMUPhotoSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("cmu-photo-camera-film-loaded", ("shots", ent.Comp.Shots)), args.User, args.User);
     }
 
-    /// <summary>Fires the shutter and flash and asks the photographer's client for the picture. Returns the request id.</summary>
+    /// <summary>
+    /// Fires the shutter and flash and asks the photographer's client for the picture. The client takes it once
+    /// the flash is lighting its view, so a dark room comes out lit as far as the photographer can see into it.
+    /// Returns the request id.
+    /// </summary>
     public int RequestCapture(ICommonSession session, EntityUid user, Entity<CMUPhotoCameraComponent> camera, EntityCoordinates centre)
     {
         var request = _nextRequest++;
         var now = _timing.CurTime;
-        _pending[request] = new Pending(session, user, camera, centre, camera.Comp.Size,
-            now + CMUPhotoLimits.CaptureTimeout, now + camera.Comp.PrintDelay, Describe(user, centre, camera.Comp.Size));
+        var size = camera.Comp.Size;
+        _pending[request] = new Pending(session, user, camera, centre, size,
+            now + CMUPhotoLimits.CaptureTimeout, now + camera.Comp.PrintDelay,
+            Describe(user, centre, size), FindGhosts(user, centre, size));
         _audio.PlayPvs(camera.Comp.ShutterSound, camera);
-        if (camera.Comp.Flash is { } flash)
-            SpawnAttachedTo(flash, new EntityCoordinates(user, default));
 
-        RaiseNetworkEvent(new CMUPhotoCaptureRequestEvent(request, GetNetCoordinates(centre), camera.Comp.Size), session.Channel);
+        NetEntity? flash = null;
+        if (camera.Comp.Flash is { } flashProto)
+        {
+            var light = SpawnAttachedTo(flashProto, new EntityCoordinates(user, default));
+            _light.SetRadius(light, FlashRadius(camera.Comp, user, centre, size));
+            flash = GetNetEntity(light);
+        }
+
+        RaiseNetworkEvent(new CMUPhotoCaptureRequestEvent(request, GetNetCoordinates(centre), size, flash), session.Channel);
         return request;
+    }
+
+    /// <summary>
+    /// The flash reaches past the frame's far corner, so the whole picture is lit, but no further than it must.
+    /// Walls still stop it: the light casts shadows like any other.
+    /// </summary>
+    private float FlashRadius(CMUPhotoCameraComponent camera, EntityUid user, EntityCoordinates centre, int size)
+    {
+        var from = _transform.GetMapCoordinates(user).Position;
+        var to = _transform.ToMapCoordinates(centre).Position;
+        // Half the frame's diagonal, plus a tile so the far edge is not lit at the very tail of the falloff.
+        var reach = (to - from).Length() + size * 0.71f + 1.5f;
+        return Math.Clamp(reach, camera.FlashMinRadius, camera.FlashMaxRadius);
+    }
+
+    /// <summary>
+    /// Ghosts in the frame that the photographer could have seen had they been visible, where they stood and how
+    /// strongly each shows. Admin ghosts, which can touch the world, are left out.
+    /// </summary>
+    public List<CMUPhotoGhost> FindGhosts(EntityUid user, EntityCoordinates centre, int size)
+    {
+        var ghosts = new List<CMUPhotoGhost>();
+        var centreMap = _transform.ToMapCoordinates(centre);
+        var half = size / 2f;
+        var query = EntityQueryEnumerator<GhostComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var ghost, out var xform))
+        {
+            if (ghosts.Count >= CMUPhotoLimits.Ghosts)
+                break;
+
+            if (ghost.CanGhostInteract || xform.MapID != centreMap.MapId)
+                continue;
+
+            if (MetaData(uid).EntityPrototype is not { } proto)
+                continue;
+
+            // In the frame's own axes, which are the grid's.
+            var local = _transform.WithEntityId(xform.Coordinates, centre.EntityId).Position - centre.Position;
+            if (Math.Abs(local.X) > half || Math.Abs(local.Y) > half)
+                continue;
+
+            if (!_examine.InRangeUnOccluded(user, uid, CMUPhotoLimits.DescribeRange))
+                continue;
+
+            ghosts.Add(new CMUPhotoGhost
+            {
+                Prototype = proto.ID,
+                Offset = local,
+                Opacity = _random.NextFloat(CMUPhotoLimits.GhostMinOpacity, CMUPhotoLimits.GhostMaxOpacity),
+            });
+        }
+
+        return ghosts;
     }
 
     private void OnCaptureResult(CMUPhotoCaptureResultEvent ev, EntitySessionEventArgs args)
@@ -210,7 +281,8 @@ public sealed partial class CMUPhotoSystem : EntitySystem
         while (_order.Count > CMUPhotoLimits.PhotosPerRound)
             _photos.Remove(_order.Dequeue());
 
-        var print = new Print(id, pending.User, pending.Camera, pending.Size, pending.PrintAt, pending.Contents, Thumbnail(png));
+        var print = new Print(id, pending.User, pending.Camera, pending.Size, pending.PrintAt, pending.Contents,
+            pending.Ghosts, Thumbnail(png));
         if (_timing.CurTime >= print.At)
             photo = PrintOut(print);
         else
@@ -248,6 +320,7 @@ public sealed partial class CMUPhotoSystem : EntitySystem
         comp.Size = print.Size;
         comp.Photographer = Exists(print.User) ? MetaData(print.User).EntityName : string.Empty;
         comp.Contents = print.Contents;
+        comp.Ghosts = print.Ghosts;
         comp.Thumbnail = print.Thumbnail;
         comp.Printed = _timing.CurTime;
         Dirty(photo, comp);
@@ -301,6 +374,10 @@ public sealed partial class CMUPhotoSystem : EntitySystem
         foreach (var uid in _lookup.GetEntitiesIntersecting(map.MapId, box, LookupFlags.Uncontained))
         {
             if (uid == HeldItem(user) || !_examine.InRangeUnOccluded(user, uid, CMUPhotoLimits.DescribeRange))
+                continue;
+
+            // Ghosts show on the print itself, never in what the photographer saw.
+            if (HasComp<GhostComponent>(uid))
                 continue;
 
             if (HasComp<MobStateComponent>(uid))
