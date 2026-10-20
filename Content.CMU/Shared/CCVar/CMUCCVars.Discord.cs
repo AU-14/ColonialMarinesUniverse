@@ -37,8 +37,7 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.help_relay_webhook_mhelp", string.Empty, CVar.SERVERONLY | CVar.CONFIDENTIAL);
 
     /// <summary>
-    ///     URL of the Discord webhook for bug reports. The target must be a forum channel: each report
-    ///     creates one post via thread_name, and the pipeline replies inside it. Empty falls through to
+    ///     URL of the Discord webhook for bug reports. Empty falls through to
     ///     the primary webhook; both empty disables the bughelp command.
     /// </summary>
     public static readonly CVarDef<string> HelpRelayWebhookBugHelp =

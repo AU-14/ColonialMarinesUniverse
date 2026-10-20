@@ -1,0 +1,26 @@
+<bugHelp:BugHelpWindow
+    xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:bugHelp="clr-namespace:Content.Client.CMU14.BugHelp"
+    Title="{Loc 'cmu-bughelp-window-title'}"
+    MinWidth="480" MinHeight="540">
+    <!-- One-shot report form. Player-typed context is minimal on purpose: the server snapshots
+         everything it can observe, so the only fields here are what the player alone knows. -->
+    <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="12" SeparationOverride="8">
+            <Label Text="{Loc 'cmu-bughelp-what-happened'}" />
+            <TextEdit Name="WhatHappened" MinHeight="110" HorizontalExpand="True" Access="Public" />
+            <Label Text="{Loc 'cmu-bughelp-expected'}" />
+            <TextEdit Name="Expected" MinHeight="55" HorizontalExpand="True" Access="Public" />
+            <Label Text="{Loc 'cmu-bughelp-steps'}" />
+            <TextEdit Name="Steps" MinHeight="55" HorizontalExpand="True" Access="Public" />
+            <Label Text="{Loc 'cmu-bughelp-item'}" />
+            <LineEdit Name="ItemQuery" PlaceHolder="{Loc 'cmu-bughelp-item-placeholder'}" HorizontalExpand="True" Access="Public" />
+            <Label Text="{Loc 'cmu-bughelp-examine'}" />
+            <TextEdit Name="ExamineText" MinHeight="55" HorizontalExpand="True" Access="Public" />
+            <RichTextLabel Name="AutoContext" Access="Public" />
+            <Button Name="SubmitButton" Text="{Loc 'cmu-bughelp-submit'}" Disabled="True"
+                    HorizontalExpand="True" Access="Public" />
+        </BoxContainer>
+    </ScrollContainer>
+</bugHelp:BugHelpWindow>

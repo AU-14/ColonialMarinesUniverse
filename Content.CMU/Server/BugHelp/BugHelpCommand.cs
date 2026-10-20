@@ -1,5 +1,8 @@
+using Content.Server.CMU14.BugHelp;
 using Content.Shared.Administration;
+using Content.Shared.CMU14.BugHelp;
 using Robust.Shared.Console;
+using Robust.Shared.Network;
 
 namespace Content.Server.CMU14.BugHelp;
 
@@ -21,12 +24,14 @@ public sealed class BugHelpCommand : IConsoleCommand
         var message = string.Join(' ', args).Trim();
         if (string.IsNullOrWhiteSpace(message))
         {
-            shell.WriteLine(Loc.GetString("cmu-cmd-bughelp-empty"));
+            // Bare bughelp opens the report window; the text is its fast path.
+            IoCManager.Resolve<INetManager>()
+                .ServerSendMessage(new BugHelpOpenMsg(), player.Channel);
             return;
         }
 
         var system = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<BugHelpSystem>();
-        switch (system.TrySubmit(player, message, out var reportId))
+        switch (system.TrySubmit(player, message, null, null, null, null, out var reportId))
         {
             case BugHelpOutcome.Sent:
                 shell.WriteLine(Loc.GetString("cmu-cmd-bughelp-sent", ("id", reportId!)));
