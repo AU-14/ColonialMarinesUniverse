@@ -33,10 +33,18 @@
     icon: # TODO: copy paste this for OPFOR but use their version of course
       sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
       state: govfor_vc
+  - type: CMVendorUser
+    id: AU14JobGOVFORVehicleCrewman
+    points: 50
+  roundForceComponents:
+    OPFOR:
+    - type: CMVendorUser
+      id: AU14JobOPFORVehicleCrewman
+      points: 50
   requirements:
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 43200 # 12 hours
+    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -48,6 +56,8 @@
     - Asthmatic
     - CMUAlcoholic
     - CMUDrugAddict
+    - CMUBadLeg
+    - CMUMotionSick
   ranks:
     RMCRankCivilian: []
   chevrons:

@@ -5,6 +5,12 @@
   name: Yautja Hunter
   suffix: Yautja, Event
   components:
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: CMUYautjaHunger
+      Thirst:
+        prototype: CMUYautjaThirst
   - type: Language
     spokenLanguages:
     - Yautja
@@ -37,6 +43,10 @@
       enum.TacticalMapUserUi.Key:
         type: TacticalMapUserBui
   - type: IgnoreXenoWeedsSlowdown
+  # human base slows the puller by the target's weight, preds drag anything at full speed
+  - type: SlowOnPull
+    multiplier: 1
+    slowdowns: []
   - type: Skills
     preset: CMUSkillPresetYautjaWarrior
   - type: Loadout
@@ -74,6 +84,11 @@
         Structural: 3
   - type: Damageable
     damageModifierSet: CMUYautja
+  # cmss13 armour deflection zeroes anything below armour*2, and the 0.28 species mod lands first,
+  # so most hits on armoured limbs did nothing. a big mult turns deflection into a sliver off the top
+  - type: RMCArmorModifier
+    meleeArmorModifier: 100
+    rangedArmorModifier: 100
   - type: Injurable
     damageContainer: Biological
     healthBarThreshold: 5
@@ -95,6 +110,10 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 3.7
     baseSprintSpeed: 7.1
+  # cmss13 /datum/pain/yautja: nothing until horrible, and horrible only gives the distressing slowdown
+  - type: PainShock
+    minimumFeltTier: Shock
+    maximumFeltTier: Severe
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -108,8 +127,6 @@
     emoteCooldown: 8
     hiddenFromChatWindow: true
   - type: MotionDetectorTracked
-  - type: DropshipHijacker
-    hijackDoAfterSeconds: 15
 
 - type: entity
   parent: CMUMobYautja
@@ -149,6 +166,8 @@
     - CMUYautjaBadBloodGruntGear19
     - CMUYautjaBadBloodGruntGear20
     - CMUYautjaBadBloodGruntGear21
+  - type: DropshipHijacker
+    hijackDoAfterSeconds: 15
 
 - type: entity
   parent: CMUMobYautja
@@ -183,6 +202,8 @@
     - CMUYautjaBadBloodLeaderGear14
     - CMUYautjaBadBloodLeaderGear15
     - CMUYautjaBadBloodLeaderGear16
+  - type: DropshipHijacker
+    hijackDoAfterSeconds: 15
 
 - type: entity
   parent: AppearanceYautja
@@ -220,6 +241,8 @@
   suffix: Yautja, Bad Blood, Event
   components:
   - type: YautjaBadBlood
+  - type: DropshipHijacker
+    hijackDoAfterSeconds: 15
   - type: Yautja
     npcFaction: CMUYautjaBadBlood
   - type: NpcFactionMember
@@ -238,9 +261,21 @@
   name: Yautja Youngblood
   suffix: Yautja, Youngblood, Event
   components:
+  - type: Language
+    spokenLanguages:
+    - Yautja
+    - Xeno
+    understoodLanguages:
+    - Yautja
+    - Xeno
+    currentLanguage: Yautja
+    defaultLanguage: Yautja
   - type: Yautja
   - type: YautjaYoungblood
   - type: IgnoreXenoWeedsSlowdown
+  - type: SlowOnPull
+    multiplier: 1
+    slowdowns: []
   - type: Skills
     preset: CMUSkillPresetYautjaWarrior
   - type: Icon
@@ -276,6 +311,11 @@
         Structural: 3
   - type: Damageable
     damageModifierSet: CMUYautja
+  # cmss13 armour deflection zeroes anything below armour*2, and the 0.28 species mod lands first,
+  # so most hits on armoured limbs did nothing. a big mult turns deflection into a sliver off the top
+  - type: RMCArmorModifier
+    meleeArmorModifier: 100
+    rangedArmorModifier: 100
   - type: Injurable
     damageContainer: Biological
     healthBarThreshold: 5
@@ -297,6 +337,9 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 4.4
     baseSprintSpeed: 8.4
+  - type: PainShock
+    minimumFeltTier: Shock
+    maximumFeltTier: Severe
   - type: MobThresholds
     thresholds:
       0: Alive

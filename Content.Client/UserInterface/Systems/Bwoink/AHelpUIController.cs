@@ -1,3 +1,4 @@
+using Robust.Shared.Audio;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
@@ -144,8 +145,8 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         }
         if (message.PlaySound && localPlayer.UserId != message.TrueSender)
         {
-            if (_aHelpSound != null && (_bwoinkSoundEnabled || !_adminManager.IsActive()))
-                _audio.PlayGlobal(_aHelpSound, Filter.Local(), false);
+            if (_aHelpSound != null && (_bwoinkSoundEnabled || !(_adminManager.IsActive() || CMUHasAhelp()))) // CMU14: in-game admins keep the sound setting
+                _audio.PlayGlobal(new ResolvedPathSpecifier(_aHelpSound), Filter.Local(), false);
             _clyde.RequestWindowAttention();
         }
 
@@ -157,6 +158,7 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         }
 
         UIHelper!.Receive(message);
+        CMURecordBwoink(message); // CMU14: mirror for AHelp ticket history replay
     }
 
     private void DiscordRelayUpdated(BwoinkDiscordRelayUpdated args, EntitySessionEventArgs session)
@@ -172,7 +174,7 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
 
     public void EnsureUIHelper()
     {
-        var isAdmin = _adminManager.HasFlag(AdminFlags.Adminhelp);
+        var isAdmin = CMUHasAhelp(); // CMU14: in-game admins keep the admin AHelp window
 
         if (UIHelper != null && UIHelper.IsAdmin == isAdmin)
             return;
@@ -187,6 +189,7 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         UIHelper.OnClose += () => { SetAHelpPressed(false); };
         UIHelper.OnOpen +=  () => { SetAHelpPressed(true); };
         SetAHelpPressed(UIHelper.IsOpen);
+        CMUOnUIHelperCreated(); // CMU14: refill a rebuilt admin handler from AHelp ticket history
     }
 
     public void Open()
@@ -228,7 +231,7 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         }
 
         helper.Control.Orphan();
-        helper.Window.Dispose();
+        helper.Window.Release();
         helper.Window = null;
         helper.EverOpened = false;
 
@@ -282,7 +285,7 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
     // RMC14
     private void UpdateUnreadState()
     {
-        var isAdmin = _adminManager.HasFlag(AdminFlags.Adminhelp);
+        var isAdmin = CMUHasAhelp(); // CMU14: in-game admins
         var isMentor = _staffHelp.IsMentor;
         var red = isAdmin && _hasUnreadAHelp || isMentor && _hasUnreadMHelp;
 
@@ -437,7 +440,7 @@ public sealed partial class AdminAHelpUIHandler : IAHelpUIHandler
                 {
                     panel.Orphan();
                 }
-                Control?.Dispose();
+                Control?.Release();
             }
             // window wont be closed here so we will invoke ourselves
             OnClose?.Invoke();
@@ -540,6 +543,7 @@ public sealed partial class AdminAHelpUIHandler : IAHelpUIHandler
     {
         Window?.Close();
         Window = null;
+        Control?.CMUShutdownTickets(); // CMU14: AHelp tickets
         Control = null;
         _activePanelMap.Clear();
         EverOpened = false;

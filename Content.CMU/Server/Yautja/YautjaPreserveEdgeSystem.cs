@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Server.Ghost;
+using Content.Server.Ghost.Roles.Components;
 using Content.Server.Mind;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Dialog;
@@ -12,7 +13,7 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Server.CMU14.Yautja;
 
-public sealed class YautjaPreserveEdgeSystem : EntitySystem
+public sealed partial class YautjaPreserveEdgeSystem : EntitySystem
 {
     [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
@@ -113,6 +114,11 @@ public sealed class YautjaPreserveEdgeSystem : EntitySystem
             return;
 
         _popup.PopupEntity(Loc.GetString("cmu-yautja-preserve-edge-escaped"), ent.Owner, args.User);
+
+        // hunt prey keep ReregisterOnGhost, so ghosting them below re-listed the
+        // nullspace body as a ghost role nobody could actually spawn into. drop it first
+        RemComp<GhostTakeoverAvailableComponent>(args.User);
+        RemComp<GhostRoleComponent>(args.User);
 
         if (_mind.TryGetMind(args.User, out var mindId, out var mind))
             _ghost.SpawnGhost((mindId, mind), args.User);

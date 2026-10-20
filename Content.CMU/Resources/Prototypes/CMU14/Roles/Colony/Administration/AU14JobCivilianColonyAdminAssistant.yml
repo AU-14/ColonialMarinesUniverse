@@ -79,6 +79,8 @@
     - RMCRadioHandheldColonyOff
     - CMPaperBin30
     - CMPaperBin30
+    - AU14StampDepAdmin  
+    - CMUPepperSpray
   inhand:
     - AU14BriefcaseLawBundle
     - CMUMobilePhone

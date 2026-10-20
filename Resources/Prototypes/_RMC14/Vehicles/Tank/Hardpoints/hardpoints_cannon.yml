@@ -1,7 +1,7 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankLTBCannon # CMU14
-  name: LTB cannon
+  name: 86mm LTB cannon
   description: A light tank cannon hardpoint.
   components:
   - type: ContainerContainer
@@ -73,8 +73,8 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankLTAAAPMinigun
-  name: LTAAAP minigun
-  description: A light anti-air minigun hardpoint.
+  name: 20mm LTAA AP rotary cannon
+  description: A light anti-air rotary cannon hardpoint.
   components:
   - type: ContainerContainer
     containers:
@@ -165,8 +165,8 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankAceAutocannon # CMU14
-  name: ACE autocannon
-  description: An ACE autocannon hardpoint.
+  name: 30mm AC3-E autocannon
+  description: A 30mm AC3-E autocannon hardpoint.
   components:
   - type: ContainerContainer
     containers:
@@ -239,11 +239,10 @@
     vehicleState: ace_autocannon_0
     damagedVehicleState: ace_autocannon_1
 
-
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankAutocannonTWE # CMU14
-  name: Improper L26A2 45mm Autocannon
+  name: Improper 45mm L26A2 autocannon
   description: Tosubishi Heavy Industrial Manufacturing main gun for the FV150. Its rapid fire rate and multipurpose ammunition offers stopping power against infantry, structures, and medium armor. Careful use can even disable tanks.
   components:
   - type: ContainerContainer
@@ -317,10 +316,11 @@
   - type: HardpointVisual
     vehicleState: heavy_autocannon_0
     damagedVehicleState: heavy_autocannon_1
+
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankHeavyElectrolaserTWE # CMU14
-  name: Improper L215A1 Heavy Electrolaser
+  name: Improper L215A1 heavy electrolaser
   description: An experimental prototype made by Tosubishi Heavy Industrial Manufacturing. An arcing electroshock laser assisted cannon, currently going through field testing. Theoretically it has limitless firing potential, as long as it is powered.
   components:
   - type: ContainerContainer
@@ -357,7 +357,7 @@
   - type: GunUseGunOrigin
   - type: GunIgnoreContainerOwnerCollision
   - type: Gun
-    fireRate: 0.3
+    fireRate: 0.6
     projectileSpeed: 60
     selectedMode: FullAuto
     availableModes:
@@ -396,8 +396,8 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankDragonFlamer # CMU14
-  name: DRGN flamer
-  description: A DRGN flamer hardpoint.
+  name: DRG-NF flamethrower
+  description: A DRG-NF flamethrower hardpoint.
   components:
   - type: ContainerContainer
     containers:

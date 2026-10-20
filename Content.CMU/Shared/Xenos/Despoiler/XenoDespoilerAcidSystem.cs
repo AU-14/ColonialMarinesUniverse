@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Marines;
+using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Stab;
 using Content.Shared._RMC14.Xenonids.Despoiler;
@@ -9,6 +9,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Weapons.Melee.Events;
+using Robust.Shared.Network;
 
 namespace Content.Server._RMC14.Xenonids.Despoiler;
 
@@ -18,6 +19,7 @@ public sealed partial class XenoDespoilerAcidSystem : SharedXenoDespoilerAcidSys
     [Dependency] private XenoSpitSystem _xenoSpit = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private XenoSystem _xeno = default!; // CMU14
+    [Dependency] private INetManager _net = default!;
 
     private EntityQuery<XenoComponent> _xenoQuery;
     private EntityQuery<XenoDespoilerComponent> _despoilerQuery;
@@ -39,6 +41,12 @@ public sealed partial class XenoDespoilerAcidSystem : SharedXenoDespoilerAcidSys
         SubscribeLocalEvent<XenoDespoilerSlashOnHitComponent, GetMeleeDamageEvent>(OnGetMeleeDamage);
         SubscribeLocalEvent<XenoDespoilerSlashOnHitComponent, RMCGetTailStabBonusDamageEvent>(OnGetTailStabBonusDamage);
         SubscribeLocalEvent<XenoDespoilerHypertensionComponent, DamageChangedEvent>(OnDamageTaken);
+        SubscribeLocalEvent<UserAcidedComponent, ComponentShutdown>(OnAcidShutdown);
+    }
+
+    private void OnAcidShutdown(Entity<UserAcidedComponent> ent, ref ComponentShutdown args)
+    {
+        RemComp<XenoDespoilerAcidTierComponent>(ent);
     }
 
     private void OnGetMeleeDamage(EntityUid uid, XenoDespoilerSlashOnHitComponent comp, ref GetMeleeDamageEvent args)
@@ -56,6 +64,12 @@ public sealed partial class XenoDespoilerAcidSystem : SharedXenoDespoilerAcidSys
     private void OnDamageTaken(EntityUid uid, XenoDespoilerHypertensionComponent comp, DamageChangedEvent args)
     {
         if (!args.DamageIncreased || args.DamageDelta is not { } delta)
+            return;
+
+        // this system lives in shared now, so the client saw a "damage increase" every time a server
+        // damage state landed on top of a predicted heal and handed itself stacks the server never had.
+        // Stacks is networked, the server's count is the only one that matters
+        if (_net.IsClient)
             return;
 
         _hyper.AddPoints(uid, comp, (float) delta.GetTotal() * comp.PointsPerDamageTaken);
@@ -100,38 +114,23 @@ public sealed partial class XenoDespoilerAcidSystem : SharedXenoDespoilerAcidSys
     }
 
     /// <summary>
-    /// Apply Despoiler's lingering acid to <paramref name="target"/> from
-    /// <paramref name="caster"/>. Uses the caster's <see cref="XenoDespoilerComponent.AcidComponents"/>
-    /// registry to spawn <see cref="UserAcidedComponent"/> on first hit; ticks/visuals
-    /// after that are owned by <see cref="XenoSpitSystem"/>. Increments the Despoiler
-    /// acid tier on the target; <paramref name="enhance"/> jumps tier to max and flips
-    /// the UserAcided combo flag.
+    /// Apply the ability's acid tier. XenoSpitSystem owns its damage, duration and visuals;
+    /// the separate Despoiler counter tracks the remaining finishing-stab bonus.
     /// </summary>
-    public void ApplyAcid(EntityUid target, EntityUid caster, bool enhance = false)
+    public void ApplyAcid(EntityUid target, EntityUid caster, int acidTier = 1)
     {
         if (!_despoilerQuery.TryComp(caster, out var despoilerComp))
             return;
 
-        if (_mobState.IsDead(target))
+        if (TerminatingOrDeleted(target) || _mobState.IsDead(target) ||
+            acidTier < 1 || acidTier > despoilerComp.AcidTiers.Count)
             return;
 
-        if (!_userAcidedQuery.HasComp(target) && despoilerComp.AcidComponents.Count > 0)
-            EntityManager.AddComponents(target, despoilerComp.AcidComponents, removeExisting: false);
+        _xenoSpit.ApplyAcidTier(target, acidTier, despoilerComp.AcidTiers[acidTier - 1]);
 
         var tier = EnsureComp<XenoDespoilerAcidTierComponent>(target);
-        if (enhance)
-        {
-            tier.Tier = tier.MaxTier;
-            if (_userAcidedQuery.TryComp(target, out var acid))
-            {
-                _xenoSpit.SetAcidCombo((target, acid),
-                    duration: default, damage: null, paralyze: default, resists: default);
-            }
-        }
-        else if (tier.Tier < tier.MaxTier)
-        {
-            tier.Tier++;
-        }
+        // The finishing-stab table includes its base bonus before tiers 1 through 3.
+        tier.Tier = Math.Max(tier.Tier, _userAcidedQuery.Comp(target).Tier + 1);
         Dirty(target, tier);
     }
 

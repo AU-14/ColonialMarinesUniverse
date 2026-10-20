@@ -1,4 +1,5 @@
 using Robust.Shared.GameStates;
+using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 
@@ -42,6 +43,16 @@ public sealed partial class CMUPathogenWalkerComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool PreReviveJitterPlayed;
+
+    /// <summary>
+    /// Skills a walker gets raised to if the body had less. Planetside corpses have no job skills,
+    /// and at firearms 0 every gun is unusable.
+    /// </summary>
+    [DataField]
+    public Dictionary<EntProtoId<SkillDefinitionComponent>, int> MinimumSkills = new()
+    {
+        ["RMCSkillFirearms"] = 1,
+    };
 
     [DataField, AutoNetworkedField]
     public EntProtoId MarkerPrototype = "CMU14ClothingHeadWalkerMarker";

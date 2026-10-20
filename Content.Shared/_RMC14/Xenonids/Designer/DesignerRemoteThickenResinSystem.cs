@@ -41,20 +41,20 @@ public sealed partial class DesignerRemoteThickenResinSystem : EntitySystem
             var targetCoords = Transform(target).Coordinates;
             if (!_transform.InRange(origin, targetCoords, args.Range))
             {
-                _popup.PopupClient(Loc.GetString("cm-xeno-cant-reach-there"), ent.Owner, ent.Owner, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("cm-xeno-cant-reach-there"), ent.Owner, ent.Owner, PopupType.SmallCaution);
                 return;
             }
         }
 
         if (HasComp<WeedboundWallComponent>(target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-designer-thicken-weedbound"), ent.Owner, ent.Owner, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-designer-thicken-weedbound"), ent.Owner, ent.Owner, PopupType.SmallCaution);
             return;
         }
 
         if (!TryComp(target, out XenoStructureUpgradeableComponent? upgradeable) || upgradeable.To is null)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-designer-thicken-none"), ent.Owner, ent.Owner, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-designer-thicken-none"), ent.Owner, ent.Owner, PopupType.SmallCaution);
             return;
         }
 
@@ -79,6 +79,6 @@ public sealed partial class DesignerRemoteThickenResinSystem : EntitySystem
         _transform.SetLocalRotation(thickened, rotation);
         _hive.SetSameHive(ent.Owner, thickened);
 
-        _popup.PopupClient(Loc.GetString("rmc-xeno-designer-thicken-success"), ent.Owner, ent.Owner);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-designer-thicken-success"), ent.Owner, ent.Owner);
     }
 }

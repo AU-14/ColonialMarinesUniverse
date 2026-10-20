@@ -52,6 +52,11 @@
     antagPrototype: DrugDealerRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-drug-dealer
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/au14colonyjobicons.rsi
+      state: mob_goon
 
 - type: antag
   parent: CMUAntagColonyBase
@@ -70,6 +75,8 @@
     back:
     - AUPaperDrugs
     - RMCLighter
+    - CMUDrugCookingKit
+    - PackPaperRolling
 
 - type: entity
   parent: RMCBoxCardboard

@@ -25,6 +25,10 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class HunterShipDockingTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipMarkerDockingPortPrototype = "CMUHunterShipMarkerDockingPort";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipYautjaLandingPadAPrototype = "CMUHunterShipYautjaLandingPadA";
+    private static readonly Robust.Shared.Prototypes.ProtoId<GameMapPrototype> CMUYautjaHunterShipPrototype = "CMUYautjaHunterShip";
+
     [Test]
     public async Task HunterShuttleUsesInvisibleLandingPadMarker()
     {
@@ -36,16 +40,16 @@ public sealed class HunterShipDockingTest
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var factory = server.EntMan.ComponentFactory;
-            var marker = prototypes.Index<EntityPrototype>("CMUHunterShipMarkerDockingPort");
-            var landingPad = prototypes.Index<EntityPrototype>("CMUHunterShipYautjaLandingPadA");
+            var marker = prototypes.Index<EntityPrototype>(CMUHunterShipMarkerDockingPortPrototype);
+            var landingPad = prototypes.Index<EntityPrototype>(CMUHunterShipYautjaLandingPadAPrototype);
 
             Assert.Multiple(() =>
             {
-                Assert.That(marker.TryGetComponent<DoorComponent>(out _, factory), Is.False,
+                Assert.That(marker.TryComp<DoorComponent>(out _, factory), Is.False,
                     "The landing-pad docking marker must not be a door.");
-                Assert.That(marker.TryGetComponent<AirlockComponent>(out _, factory), Is.False,
+                Assert.That(marker.TryComp<AirlockComponent>(out _, factory), Is.False,
                     "The landing-pad docking marker must not be an airlock.");
-                Assert.That(landingPad.TryGetComponent<GridSpawnerComponent>(out var spawner, factory), Is.True);
+                Assert.That(landingPad.TryComp<GridSpawnerComponent>(out var spawner, factory), Is.True);
                 Assert.That(spawner!.Spawn, Is.EqualTo(new ResPath("/Maps/CMU14/Shuttles/hunter_shuttle.yml")));
             });
         });
@@ -70,7 +74,7 @@ public sealed class HunterShipDockingTest
 
         await server.WaitAssertion(() =>
         {
-            var map = prototypes.Index<GameMapPrototype>("CMUYautjaHunterShip");
+            var map = prototypes.Index<GameMapPrototype>(CMUYautjaHunterShipPrototype);
             var options = DeserializationOptions.Default with { InitializeMaps = true };
             Assert.DoesNotThrow(() => ticker.LoadGameMap(map, out _, options));
         });

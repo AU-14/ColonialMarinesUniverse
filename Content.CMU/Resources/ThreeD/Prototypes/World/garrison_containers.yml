@@ -1,0 +1,4166 @@
+# Freight sections; see SOURCES_CONTAINERS.md.
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerBlueGraffitiLeft
+  label: BlueGraffitiLeft freight section
+  sourcePrototypes:
+  - AU14ContainerBlueGraffitiLeft
+  status: draft
+  description: Large freight container section with stepped vertical corrugations, source-painted roof, standing seams,
+    frame and lifting feet. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels
+    are split between physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden
+    end/rear construction and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerBlueGraffitiLeft
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: grafcontain_l
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.46875, -0.46000, 0.05500
+    max: 0.50000, 1.48000, 2.00200
+    color: '#314767'
+  - label: painted corrugation 1
+    min: -0.46875, -0.47800, 0.05500
+    max: -0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftFace0
+    surfaceAxis: XZ
+  - label: painted corrugation 2
+    min: -0.37500, -0.49900, 0.05500
+    max: -0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftFace1
+    surfaceAxis: XZ
+  - label: painted corrugation 3
+    min: -0.25000, -0.47800, 0.05500
+    max: -0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftFace2
+    surfaceAxis: XZ
+  - label: painted corrugation 4
+    min: -0.12500, -0.49900, 0.05500
+    max: 0.00000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftFace3
+    surfaceAxis: XZ
+  - label: painted corrugation 5
+    min: 0.00000, -0.47800, 0.05500
+    max: 0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftFace4
+    surfaceAxis: XZ
+  - label: painted corrugation 6
+    min: 0.12500, -0.49900, 0.05500
+    max: 0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftFace5
+    surfaceAxis: XZ
+  - label: painted corrugation 7
+    min: 0.25000, -0.47800, 0.05500
+    max: 0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftFace6
+    surfaceAxis: XZ
+  - label: painted corrugation 8
+    min: 0.37500, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftFace7
+    surfaceAxis: XZ
+  - label: source-painted corrugated roof
+    min: -0.46875, -0.47400, 2.00200
+    max: 0.50000, 1.48000, 2.02700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.46875, 1.44500, 0.04000
+    max: 0.50000, 1.49600, 0.07500
+    color: '#41556D'
+  - label: rear horizontal frame
+    min: -0.46875, 1.44500, 2.01500
+    max: 0.50000, 1.49600, 2.05000
+    color: '#41556D'
+  - label: rear wall corrugation
+    min: -0.34000, 1.47200, 0.12000
+    max: -0.30000, 1.49900, 1.92000
+    color: '#41556D'
+  - label: rear wall corrugation
+    min: -0.12000, 1.47200, 0.12000
+    max: -0.08000, 1.49900, 1.92000
+    color: '#41556D'
+  - label: rear wall corrugation
+    min: 0.10000, 1.47200, 0.12000
+    max: 0.14000, 1.49900, 1.92000
+    color: '#41556D'
+  - label: rear wall corrugation
+    min: 0.32000, 1.47200, 0.12000
+    max: 0.36000, 1.49900, 1.92000
+    color: '#41556D'
+  - label: outer end wall
+    min: -0.46875, -0.48000, 0.08000
+    max: -0.43675, 1.48000, 2.01400
+    color: '#2C405D'
+  - label: corner lifting foot
+    min: -0.46875, -0.43500, 0.00000
+    max: -0.43675, -0.30500, 0.12000
+    color: '#242F3C'
+  - label: corner frame upright
+    min: -0.46875, -0.40500, 0.08000
+    max: -0.43675, -0.33500, 2.04000
+    color: '#41556D'
+  - label: corner lifting foot
+    min: -0.46875, 1.30500, 0.00000
+    max: -0.43675, 1.43500, 0.12000
+    color: '#242F3C'
+  - label: corner frame upright
+    min: -0.46875, 1.33500, 0.08000
+    max: -0.43675, 1.40500, 2.04000
+    color: '#41556D'
+  - label: end wall rib
+    min: -0.47675, -0.11000, 0.15000
+    max: -0.43675, -0.07500, 1.90000
+    color: '#41556D'
+  - label: end wall rib
+    min: -0.47675, 0.24000, 0.15000
+    max: -0.43675, 0.27500, 1.90000
+    color: '#41556D'
+  - label: end wall rib
+    min: -0.47675, 0.59000, 0.15000
+    max: -0.43675, 0.62500, 1.90000
+    color: '#41556D'
+  - label: end wall rib
+    min: -0.47675, 0.94000, 0.15000
+    max: -0.43675, 0.97500, 1.90000
+    color: '#41556D'
+  - label: source-painted roof ridge 1
+    min: -0.43750, -0.31117, 2.02400
+    max: -0.34375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftRidge0
+    surfaceAxis: XY
+  - label: source-painted roof ridge 2
+    min: -0.18750, -0.31117, 2.02400
+    max: -0.09375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 3
+    min: 0.06250, -0.31117, 2.02400
+    max: 0.15625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 4
+    min: 0.31250, -0.31117, 2.02400
+    max: 0.40625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftRidge1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerBlueGraffitiMiddle
+  label: BlueGraffitiMiddle freight section
+  sourcePrototypes:
+  - AU14ContainerBlueGraffitiMiddle
+  status: draft
+  description: Large freight container section with stepped vertical corrugations, source-painted roof, standing seams,
+    frame and lifting feet. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels
+    are split between physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden
+    end/rear construction and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerBlueGraffitiMiddle
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: grafcontain_rm
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 1.48000, 2.00200
+    color: '#314767'
+  - label: painted corrugation 1
+    min: -0.50000, -0.47800, 0.05500
+    max: -0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiMiddleFace0
+    surfaceAxis: XZ
+  - label: painted corrugation 2
+    min: -0.37500, -0.49900, 0.05500
+    max: -0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiMiddleFace1
+    surfaceAxis: XZ
+  - label: painted corrugation 3
+    min: -0.25000, -0.47800, 0.05500
+    max: -0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiMiddleFace2
+    surfaceAxis: XZ
+  - label: painted corrugation 4
+    min: -0.12500, -0.49900, 0.05500
+    max: 0.00000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiMiddleFace3
+    surfaceAxis: XZ
+  - label: painted corrugation 5
+    min: 0.00000, -0.47800, 0.05500
+    max: 0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiMiddleFace4
+    surfaceAxis: XZ
+  - label: painted corrugation 6
+    min: 0.12500, -0.49900, 0.05500
+    max: 0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiMiddleFace5
+    surfaceAxis: XZ
+  - label: painted corrugation 7
+    min: 0.25000, -0.47800, 0.05500
+    max: 0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiMiddleFace6
+    surfaceAxis: XZ
+  - label: painted corrugation 8
+    min: 0.37500, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiMiddleFace7
+    surfaceAxis: XZ
+  - label: source-painted corrugated roof
+    min: -0.50000, -0.47400, 2.00200
+    max: 0.50000, 1.48000, 2.02700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiMiddleRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 0.04000
+    max: 0.50000, 1.49600, 0.07500
+    color: '#41556D'
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 2.01500
+    max: 0.50000, 1.49600, 2.05000
+    color: '#41556D'
+  - label: rear wall corrugation
+    min: -0.34000, 1.47200, 0.12000
+    max: -0.30000, 1.49900, 1.92000
+    color: '#41556D'
+  - label: rear wall corrugation
+    min: -0.12000, 1.47200, 0.12000
+    max: -0.08000, 1.49900, 1.92000
+    color: '#41556D'
+  - label: rear wall corrugation
+    min: 0.10000, 1.47200, 0.12000
+    max: 0.14000, 1.49900, 1.92000
+    color: '#41556D'
+  - label: rear wall corrugation
+    min: 0.32000, 1.47200, 0.12000
+    max: 0.36000, 1.49900, 1.92000
+    color: '#41556D'
+  - label: source-painted roof ridge 1
+    min: -0.43750, -0.31117, 2.02400
+    max: -0.34375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 2
+    min: -0.18750, -0.31117, 2.02400
+    max: -0.09375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 3
+    min: 0.06250, -0.31117, 2.02400
+    max: 0.15625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 4
+    min: 0.31250, -0.31117, 2.02400
+    max: 0.40625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftRidge1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerBlueGraffitiRight
+  label: BlueGraffitiRight freight section
+  sourcePrototypes:
+  - AU14ContainerBlueGraffitiRight
+  status: draft
+  description: Large freight container section with stepped vertical corrugations, source-painted roof, standing seams,
+    frame and lifting feet. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels
+    are split between physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden
+    end/rear construction and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerBlueGraffitiRight
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: grafcontain_r
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.43750, 1.48000, 2.00200
+    color: '#314767'
+  - label: painted corrugation 1
+    min: -0.50000, -0.47800, 0.05500
+    max: -0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiRightFace0
+    surfaceAxis: XZ
+  - label: painted corrugation 2
+    min: -0.37500, -0.49900, 0.05500
+    max: -0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiRightFace1
+    surfaceAxis: XZ
+  - label: painted corrugation 3
+    min: -0.25000, -0.47800, 0.05500
+    max: -0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiRightFace2
+    surfaceAxis: XZ
+  - label: painted corrugation 4
+    min: -0.12500, -0.49900, 0.05500
+    max: 0.00000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiRightFace3
+    surfaceAxis: XZ
+  - label: painted corrugation 5
+    min: 0.00000, -0.47800, 0.05500
+    max: 0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiRightFace4
+    surfaceAxis: XZ
+  - label: painted corrugation 6
+    min: 0.12500, -0.49900, 0.05500
+    max: 0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiRightFace5
+    surfaceAxis: XZ
+  - label: painted corrugation 7
+    min: 0.25000, -0.47800, 0.05500
+    max: 0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiRightFace6
+    surfaceAxis: XZ
+  - label: painted corrugation 8
+    min: 0.37500, -0.49900, 0.05500
+    max: 0.43750, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiRightFace7
+    surfaceAxis: XZ
+  - label: source-painted corrugated roof
+    min: -0.50000, -0.47400, 2.00200
+    max: 0.43750, 1.48000, 2.02700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiRightRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 0.04000
+    max: 0.43750, 1.49600, 0.07500
+    color: '#41556D'
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 2.01500
+    max: 0.43750, 1.49600, 2.05000
+    color: '#41556D'
+  - label: rear wall corrugation
+    min: -0.34000, 1.47200, 0.12000
+    max: -0.30000, 1.49900, 1.92000
+    color: '#41556D'
+  - label: rear wall corrugation
+    min: -0.12000, 1.47200, 0.12000
+    max: -0.08000, 1.49900, 1.92000
+    color: '#41556D'
+  - label: rear wall corrugation
+    min: 0.10000, 1.47200, 0.12000
+    max: 0.14000, 1.49900, 1.92000
+    color: '#41556D'
+  - label: rear wall corrugation
+    min: 0.32000, 1.47200, 0.12000
+    max: 0.36000, 1.49900, 1.92000
+    color: '#41556D'
+  - label: outer end wall
+    min: 0.40550, -0.48000, 0.08000
+    max: 0.43750, 1.48000, 2.01400
+    color: '#2C405D'
+  - label: corner lifting foot
+    min: 0.40550, -0.43500, 0.00000
+    max: 0.43750, -0.30500, 0.12000
+    color: '#242F3C'
+  - label: corner frame upright
+    min: 0.40550, -0.40500, 0.08000
+    max: 0.43750, -0.33500, 2.04000
+    color: '#41556D'
+  - label: corner lifting foot
+    min: 0.40550, 1.30500, 0.00000
+    max: 0.43750, 1.43500, 0.12000
+    color: '#242F3C'
+  - label: corner frame upright
+    min: 0.40550, 1.33500, 0.08000
+    max: 0.43750, 1.40500, 2.04000
+    color: '#41556D'
+  - label: end wall rib
+    min: 0.40550, -0.11000, 0.15000
+    max: 0.44550, -0.07500, 1.90000
+    color: '#41556D'
+  - label: end wall rib
+    min: 0.40550, 0.24000, 0.15000
+    max: 0.44550, 0.27500, 1.90000
+    color: '#41556D'
+  - label: end wall rib
+    min: 0.40550, 0.59000, 0.15000
+    max: 0.44550, 0.62500, 1.90000
+    color: '#41556D'
+  - label: end wall rib
+    min: 0.40550, 0.94000, 0.15000
+    max: 0.44550, 0.97500, 1.90000
+    color: '#41556D'
+  - label: source-painted roof ridge 1
+    min: -0.43750, -0.31117, 2.02400
+    max: -0.34375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 2
+    min: -0.18750, -0.31117, 2.02400
+    max: -0.09375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 3
+    min: 0.06250, -0.31117, 2.02400
+    max: 0.15625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiRightRidge2
+    surfaceAxis: XY
+  - label: source-painted roof ridge 4
+    min: 0.31250, -0.31117, 2.02400
+    max: 0.40625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerBlueGraffitiRightRidge3
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerSeegsonLeft
+  label: SeegsonLeft freight section
+  sourcePrototypes:
+  - AU14ContainerSeegsonLeft
+  status: draft
+  description: Large freight container section with stepped vertical corrugations, source-painted roof, standing seams,
+    frame and lifting feet. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels
+    are split between physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden
+    end/rear construction and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerSeegsonLeft
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: seegson_l
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.46875, -0.46000, 0.05500
+    max: 0.50000, 1.48000, 2.00200
+    color: '#847713'
+  - label: painted corrugation 1
+    min: -0.46875, -0.47800, 0.05500
+    max: -0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftFace0
+    surfaceAxis: XZ
+  - label: painted corrugation 2
+    min: -0.37500, -0.49900, 0.05500
+    max: -0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftFace1
+    surfaceAxis: XZ
+  - label: painted corrugation 3
+    min: -0.25000, -0.47800, 0.05500
+    max: -0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftFace2
+    surfaceAxis: XZ
+  - label: painted corrugation 4
+    min: -0.12500, -0.49900, 0.05500
+    max: 0.00000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftFace3
+    surfaceAxis: XZ
+  - label: painted corrugation 5
+    min: 0.00000, -0.47800, 0.05500
+    max: 0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftFace4
+    surfaceAxis: XZ
+  - label: painted corrugation 6
+    min: 0.12500, -0.49900, 0.05500
+    max: 0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftFace5
+    surfaceAxis: XZ
+  - label: painted corrugation 7
+    min: 0.25000, -0.47800, 0.05500
+    max: 0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftFace6
+    surfaceAxis: XZ
+  - label: painted corrugation 8
+    min: 0.37500, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftFace7
+    surfaceAxis: XZ
+  - label: source-painted corrugated roof
+    min: -0.46875, -0.47400, 2.00200
+    max: 0.50000, 1.48000, 2.02700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.46875, 1.44500, 0.04000
+    max: 0.50000, 1.49600, 0.07500
+    color: '#867528'
+  - label: rear horizontal frame
+    min: -0.46875, 1.44500, 2.01500
+    max: 0.50000, 1.49600, 2.05000
+    color: '#867528'
+  - label: rear wall corrugation
+    min: -0.34000, 1.47200, 0.12000
+    max: -0.30000, 1.49900, 1.92000
+    color: '#867528'
+  - label: rear wall corrugation
+    min: -0.12000, 1.47200, 0.12000
+    max: -0.08000, 1.49900, 1.92000
+    color: '#867528'
+  - label: rear wall corrugation
+    min: 0.10000, 1.47200, 0.12000
+    max: 0.14000, 1.49900, 1.92000
+    color: '#867528'
+  - label: rear wall corrugation
+    min: 0.32000, 1.47200, 0.12000
+    max: 0.36000, 1.49900, 1.92000
+    color: '#867528'
+  - label: outer end wall
+    min: -0.46875, -0.48000, 0.08000
+    max: -0.43675, 1.48000, 2.01400
+    color: '#776B11'
+  - label: corner lifting foot
+    min: -0.46875, -0.43500, 0.00000
+    max: -0.43675, -0.30500, 0.12000
+    color: '#4A4016'
+  - label: corner frame upright
+    min: -0.46875, -0.40500, 0.08000
+    max: -0.43675, -0.33500, 2.04000
+    color: '#867528'
+  - label: corner lifting foot
+    min: -0.46875, 1.30500, 0.00000
+    max: -0.43675, 1.43500, 0.12000
+    color: '#4A4016'
+  - label: corner frame upright
+    min: -0.46875, 1.33500, 0.08000
+    max: -0.43675, 1.40500, 2.04000
+    color: '#867528'
+  - label: end wall rib
+    min: -0.47675, -0.11000, 0.15000
+    max: -0.43675, -0.07500, 1.90000
+    color: '#867528'
+  - label: end wall rib
+    min: -0.47675, 0.24000, 0.15000
+    max: -0.43675, 0.27500, 1.90000
+    color: '#867528'
+  - label: end wall rib
+    min: -0.47675, 0.59000, 0.15000
+    max: -0.43675, 0.62500, 1.90000
+    color: '#867528'
+  - label: end wall rib
+    min: -0.47675, 0.94000, 0.15000
+    max: -0.43675, 0.97500, 1.90000
+    color: '#867528'
+  - label: source-painted roof ridge 1
+    min: -0.43750, -0.31117, 2.02400
+    max: -0.34375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftRidge0
+    surfaceAxis: XY
+  - label: source-painted roof ridge 2
+    min: -0.18750, -0.31117, 2.02400
+    max: -0.09375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 3
+    min: 0.06250, -0.31117, 2.02400
+    max: 0.15625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 4
+    min: 0.31250, -0.31117, 2.02400
+    max: 0.40625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftRidge1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerSeegsonMiddle
+  label: SeegsonMiddle freight section
+  sourcePrototypes:
+  - AU14ContainerSeegsonMiddle
+  status: draft
+  description: Large freight container section with stepped vertical corrugations, source-painted roof, standing seams,
+    frame and lifting feet. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels
+    are split between physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden
+    end/rear construction and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerSeegsonMiddle
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: seegson_m
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 1.48000, 2.00200
+    color: '#847713'
+  - label: painted corrugation 1
+    min: -0.50000, -0.47800, 0.05500
+    max: -0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonMiddleFace0
+    surfaceAxis: XZ
+  - label: painted corrugation 2
+    min: -0.37500, -0.49900, 0.05500
+    max: -0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonMiddleFace1
+    surfaceAxis: XZ
+  - label: painted corrugation 3
+    min: -0.25000, -0.47800, 0.05500
+    max: -0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonMiddleFace2
+    surfaceAxis: XZ
+  - label: painted corrugation 4
+    min: -0.12500, -0.49900, 0.05500
+    max: 0.00000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonMiddleFace3
+    surfaceAxis: XZ
+  - label: painted corrugation 5
+    min: 0.00000, -0.47800, 0.05500
+    max: 0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonMiddleFace4
+    surfaceAxis: XZ
+  - label: painted corrugation 6
+    min: 0.12500, -0.49900, 0.05500
+    max: 0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonMiddleFace5
+    surfaceAxis: XZ
+  - label: painted corrugation 7
+    min: 0.25000, -0.47800, 0.05500
+    max: 0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonMiddleFace6
+    surfaceAxis: XZ
+  - label: painted corrugation 8
+    min: 0.37500, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonMiddleFace7
+    surfaceAxis: XZ
+  - label: source-painted corrugated roof
+    min: -0.50000, -0.47400, 2.00200
+    max: 0.50000, 1.48000, 2.02700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonMiddleRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 0.04000
+    max: 0.50000, 1.49600, 0.07500
+    color: '#867528'
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 2.01500
+    max: 0.50000, 1.49600, 2.05000
+    color: '#867528'
+  - label: rear wall corrugation
+    min: -0.34000, 1.47200, 0.12000
+    max: -0.30000, 1.49900, 1.92000
+    color: '#867528'
+  - label: rear wall corrugation
+    min: -0.12000, 1.47200, 0.12000
+    max: -0.08000, 1.49900, 1.92000
+    color: '#867528'
+  - label: rear wall corrugation
+    min: 0.10000, 1.47200, 0.12000
+    max: 0.14000, 1.49900, 1.92000
+    color: '#867528'
+  - label: rear wall corrugation
+    min: 0.32000, 1.47200, 0.12000
+    max: 0.36000, 1.49900, 1.92000
+    color: '#867528'
+  - label: source-painted roof ridge 1
+    min: -0.43750, -0.31117, 2.02400
+    max: -0.34375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 2
+    min: -0.18750, -0.31117, 2.02400
+    max: -0.09375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 3
+    min: 0.06250, -0.31117, 2.02400
+    max: 0.15625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 4
+    min: 0.31250, -0.31117, 2.02400
+    max: 0.40625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftRidge1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerSeegsonRight
+  label: SeegsonRight freight section
+  sourcePrototypes:
+  - AU14ContainerSeegsonRight
+  status: draft
+  description: Large freight container section with stepped vertical corrugations, source-painted roof, standing seams,
+    frame and lifting feet. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels
+    are split between physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden
+    end/rear construction and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerSeegsonRight
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: seegson_r
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.43750, 1.48000, 2.00200
+    color: '#847713'
+  - label: painted corrugation 1
+    min: -0.50000, -0.47800, 0.05500
+    max: -0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonRightFace0
+    surfaceAxis: XZ
+  - label: painted corrugation 2
+    min: -0.37500, -0.49900, 0.05500
+    max: -0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonRightFace1
+    surfaceAxis: XZ
+  - label: painted corrugation 3
+    min: -0.25000, -0.47800, 0.05500
+    max: -0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonRightFace2
+    surfaceAxis: XZ
+  - label: painted corrugation 4
+    min: -0.12500, -0.49900, 0.05500
+    max: 0.00000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonRightFace3
+    surfaceAxis: XZ
+  - label: painted corrugation 5
+    min: 0.00000, -0.47800, 0.05500
+    max: 0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonRightFace4
+    surfaceAxis: XZ
+  - label: painted corrugation 6
+    min: 0.12500, -0.49900, 0.05500
+    max: 0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonRightFace5
+    surfaceAxis: XZ
+  - label: painted corrugation 7
+    min: 0.25000, -0.47800, 0.05500
+    max: 0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonRightFace6
+    surfaceAxis: XZ
+  - label: painted corrugation 8
+    min: 0.37500, -0.49900, 0.05500
+    max: 0.43750, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonRightFace7
+    surfaceAxis: XZ
+  - label: source-painted corrugated roof
+    min: -0.50000, -0.47400, 2.00200
+    max: 0.43750, 1.48000, 2.02700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonRightRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 0.04000
+    max: 0.43750, 1.49600, 0.07500
+    color: '#867528'
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 2.01500
+    max: 0.43750, 1.49600, 2.05000
+    color: '#867528'
+  - label: rear wall corrugation
+    min: -0.34000, 1.47200, 0.12000
+    max: -0.30000, 1.49900, 1.92000
+    color: '#867528'
+  - label: rear wall corrugation
+    min: -0.12000, 1.47200, 0.12000
+    max: -0.08000, 1.49900, 1.92000
+    color: '#867528'
+  - label: rear wall corrugation
+    min: 0.10000, 1.47200, 0.12000
+    max: 0.14000, 1.49900, 1.92000
+    color: '#867528'
+  - label: rear wall corrugation
+    min: 0.32000, 1.47200, 0.12000
+    max: 0.36000, 1.49900, 1.92000
+    color: '#867528'
+  - label: outer end wall
+    min: 0.40550, -0.48000, 0.08000
+    max: 0.43750, 1.48000, 2.01400
+    color: '#776B11'
+  - label: corner lifting foot
+    min: 0.40550, -0.43500, 0.00000
+    max: 0.43750, -0.30500, 0.12000
+    color: '#4A4016'
+  - label: corner frame upright
+    min: 0.40550, -0.40500, 0.08000
+    max: 0.43750, -0.33500, 2.04000
+    color: '#867528'
+  - label: corner lifting foot
+    min: 0.40550, 1.30500, 0.00000
+    max: 0.43750, 1.43500, 0.12000
+    color: '#4A4016'
+  - label: corner frame upright
+    min: 0.40550, 1.33500, 0.08000
+    max: 0.43750, 1.40500, 2.04000
+    color: '#867528'
+  - label: end wall rib
+    min: 0.40550, -0.11000, 0.15000
+    max: 0.44550, -0.07500, 1.90000
+    color: '#867528'
+  - label: end wall rib
+    min: 0.40550, 0.24000, 0.15000
+    max: 0.44550, 0.27500, 1.90000
+    color: '#867528'
+  - label: end wall rib
+    min: 0.40550, 0.59000, 0.15000
+    max: 0.44550, 0.62500, 1.90000
+    color: '#867528'
+  - label: end wall rib
+    min: 0.40550, 0.94000, 0.15000
+    max: 0.44550, 0.97500, 1.90000
+    color: '#867528'
+  - label: source-painted roof ridge 1
+    min: -0.43750, -0.31117, 2.02400
+    max: -0.34375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 2
+    min: -0.18750, -0.31117, 2.02400
+    max: -0.09375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 3
+    min: 0.06250, -0.31117, 2.02400
+    max: 0.15625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonRightRidge2
+    surfaceAxis: XY
+  - label: source-painted roof ridge 4
+    min: 0.31250, -0.31117, 2.02400
+    max: 0.40625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerSeegsonRightRidge3
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerTartarusLeftBlackWY
+  label: TartarusLeftBlackWY freight section
+  sourcePrototypes:
+  - AU14ContainerTartarusLeftBlackWY
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerTartarusLeftBlackWY
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: blackwyleft
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#212121'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftBlackWYFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftBlackWYRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#262626'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#262626'
+  - label: outer end wall
+    min: -0.50000, -0.48000, 0.08000
+    max: -0.46800, 0.48000, 0.95400
+    color: '#1E1E1E'
+  - label: corner lifting foot
+    min: -0.50000, -0.43500, 0.00000
+    max: -0.46800, -0.30500, 0.12000
+    color: '#151515'
+  - label: corner frame upright
+    min: -0.50000, -0.40500, 0.08000
+    max: -0.46800, -0.33500, 0.98000
+    color: '#262626'
+  - label: corner lifting foot
+    min: -0.50000, 0.30500, 0.00000
+    max: -0.46800, 0.43500, 0.12000
+    color: '#151515'
+  - label: corner frame upright
+    min: -0.50000, 0.33500, 0.08000
+    max: -0.46800, 0.40500, 0.98000
+    color: '#262626'
+  - label: outer lid strap
+    min: -0.50000, -0.43500, 0.96800
+    max: -0.28125, 0.44500, 1.02600
+    color: '#2F2F2F'
+  - label: rounded strap end
+    min: -0.50000, -0.49900, 0.79000
+    max: -0.28125, -0.41500, 0.99300
+    color: '#2B2B2B'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: -0.45500, -0.49900, 0.84000
+    max: -0.32625, -0.48000, 0.90000
+    color: '#161616'
+  - label: source-painted locking strap
+    min: -0.50000, -0.43500, 1.02600
+    max: -0.28125, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftBlackWYStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerTartarusLeftBlueWYWings
+  label: TartarusLeftBlueWYWings freight section
+  sourcePrototypes:
+  - AU14ContainerTartarusLeftBlueWYWings
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerTartarusLeftBlueWYWings
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: bluewywingsleft
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#4F596C'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftBlueWYWingsFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftBlueWYWingsRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#424B5C'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#424B5C'
+  - label: outer end wall
+    min: -0.50000, -0.48000, 0.08000
+    max: -0.46800, 0.48000, 0.95400
+    color: '#475061'
+  - label: corner lifting foot
+    min: -0.50000, -0.43500, 0.00000
+    max: -0.46800, -0.30500, 0.12000
+    color: '#242933'
+  - label: corner frame upright
+    min: -0.50000, -0.40500, 0.08000
+    max: -0.46800, -0.33500, 0.98000
+    color: '#424B5C'
+  - label: corner lifting foot
+    min: -0.50000, 0.30500, 0.00000
+    max: -0.46800, 0.43500, 0.12000
+    color: '#242933'
+  - label: corner frame upright
+    min: -0.50000, 0.33500, 0.08000
+    max: -0.46800, 0.40500, 0.98000
+    color: '#424B5C'
+  - label: outer lid strap
+    min: -0.50000, -0.43500, 0.96800
+    max: -0.28125, 0.44500, 1.02600
+    color: '#515C70'
+  - label: rounded strap end
+    min: -0.50000, -0.49900, 0.79000
+    max: -0.28125, -0.41500, 0.99300
+    color: '#4A5466'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: -0.45500, -0.49900, 0.84000
+    max: -0.32625, -0.48000, 0.90000
+    color: '#262B34'
+  - label: source-painted locking strap
+    min: -0.50000, -0.43500, 1.02600
+    max: -0.28125, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftBlueWYWingsStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerTartarusLeftGrayWY
+  label: TartarusLeftGrayWY freight section
+  sourcePrototypes:
+  - AU14ContainerTartarusLeftGrayWY
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerTartarusLeftGrayWY
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: greywyleft
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#4A4A4A'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftGrayWYFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftGrayWYRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#4A4A4A'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#4A4A4A'
+  - label: outer end wall
+    min: -0.50000, -0.48000, 0.08000
+    max: -0.46800, 0.48000, 0.95400
+    color: '#434343'
+  - label: corner lifting foot
+    min: -0.50000, -0.43500, 0.00000
+    max: -0.46800, -0.30500, 0.12000
+    color: '#292929'
+  - label: corner frame upright
+    min: -0.50000, -0.40500, 0.08000
+    max: -0.46800, -0.33500, 0.98000
+    color: '#4A4A4A'
+  - label: corner lifting foot
+    min: -0.50000, 0.30500, 0.00000
+    max: -0.46800, 0.43500, 0.12000
+    color: '#292929'
+  - label: corner frame upright
+    min: -0.50000, 0.33500, 0.08000
+    max: -0.46800, 0.40500, 0.98000
+    color: '#4A4A4A'
+  - label: outer lid strap
+    min: -0.50000, -0.43500, 0.96800
+    max: -0.28125, 0.44500, 1.02600
+    color: '#5A5A5A'
+  - label: rounded strap end
+    min: -0.50000, -0.49900, 0.79000
+    max: -0.28125, -0.41500, 0.99300
+    color: '#535353'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: -0.45500, -0.49900, 0.84000
+    max: -0.32625, -0.48000, 0.90000
+    color: '#2A2A2A'
+  - label: source-painted locking strap
+    min: -0.50000, -0.43500, 1.02600
+    max: -0.28125, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftGrayWYStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerTartarusLeftKelland
+  label: TartarusLeftKelland freight section
+  sourcePrototypes:
+  - AU14ContainerTartarusLeftKelland
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerTartarusLeftKelland
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: kelland_alt_l
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#895B0C'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftKellandFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftKellandRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#724D0D'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#724D0D'
+  - label: outer end wall
+    min: -0.50000, -0.48000, 0.08000
+    max: -0.46800, 0.48000, 0.95400
+    color: '#7B520B'
+  - label: corner lifting foot
+    min: -0.50000, -0.43500, 0.00000
+    max: -0.46800, -0.30500, 0.12000
+    color: '#3F2A07'
+  - label: corner frame upright
+    min: -0.50000, -0.40500, 0.08000
+    max: -0.46800, -0.33500, 0.98000
+    color: '#724D0D'
+  - label: corner lifting foot
+    min: -0.50000, 0.30500, 0.00000
+    max: -0.46800, 0.43500, 0.12000
+    color: '#3F2A07'
+  - label: corner frame upright
+    min: -0.50000, 0.33500, 0.08000
+    max: -0.46800, 0.40500, 0.98000
+    color: '#724D0D'
+  - label: outer lid strap
+    min: -0.50000, -0.43500, 0.96800
+    max: -0.28125, 0.44500, 1.02600
+    color: '#8B5E10'
+  - label: rounded strap end
+    min: -0.50000, -0.49900, 0.79000
+    max: -0.28125, -0.41500, 0.99300
+    color: '#7F560F'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: -0.45500, -0.49900, 0.84000
+    max: -0.32625, -0.48000, 0.90000
+    color: '#412C07'
+  - label: source-painted locking strap
+    min: -0.50000, -0.43500, 1.02600
+    max: -0.28125, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftKellandStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerTartarusLeftKellandAlt
+  label: TartarusLeftKellandAlt freight section
+  sourcePrototypes:
+  - AU14ContainerTartarusLeftKellandAlt
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerTartarusLeftKellandAlt
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: kelland_l
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#895B0C'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftKellandAltFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftKellandRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#724D0D'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#724D0D'
+  - label: outer end wall
+    min: -0.50000, -0.48000, 0.08000
+    max: -0.46800, 0.48000, 0.95400
+    color: '#7B520B'
+  - label: corner lifting foot
+    min: -0.50000, -0.43500, 0.00000
+    max: -0.46800, -0.30500, 0.12000
+    color: '#3F2A07'
+  - label: corner frame upright
+    min: -0.50000, -0.40500, 0.08000
+    max: -0.46800, -0.33500, 0.98000
+    color: '#724D0D'
+  - label: corner lifting foot
+    min: -0.50000, 0.30500, 0.00000
+    max: -0.46800, 0.43500, 0.12000
+    color: '#3F2A07'
+  - label: corner frame upright
+    min: -0.50000, 0.33500, 0.08000
+    max: -0.46800, 0.40500, 0.98000
+    color: '#724D0D'
+  - label: outer lid strap
+    min: -0.50000, -0.43500, 0.96800
+    max: -0.28125, 0.44500, 1.02600
+    color: '#8B5E10'
+  - label: rounded strap end
+    min: -0.50000, -0.49900, 0.79000
+    max: -0.28125, -0.41500, 0.99300
+    color: '#7F560F'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: -0.45500, -0.49900, 0.84000
+    max: -0.32625, -0.48000, 0.90000
+    color: '#412C07'
+  - label: source-painted locking strap
+    min: -0.50000, -0.43500, 1.02600
+    max: -0.28125, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftKellandStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerTartarusLeftLightGrayWY
+  label: TartarusLeftLightGrayWY freight section
+  sourcePrototypes:
+  - AU14ContainerTartarusLeftLightGrayWY
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerTartarusLeftLightGrayWY
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: lightgreywyleft
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#8A8A8A'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftLightGrayWYFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftLightGrayWYRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#787878'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#787878'
+  - label: outer end wall
+    min: -0.50000, -0.48000, 0.08000
+    max: -0.46800, 0.48000, 0.95400
+    color: '#7C7C7C'
+  - label: corner lifting foot
+    min: -0.50000, -0.43500, 0.00000
+    max: -0.46800, -0.30500, 0.12000
+    color: '#424242'
+  - label: corner frame upright
+    min: -0.50000, -0.40500, 0.08000
+    max: -0.46800, -0.33500, 0.98000
+    color: '#787878'
+  - label: corner lifting foot
+    min: -0.50000, 0.30500, 0.00000
+    max: -0.46800, 0.43500, 0.12000
+    color: '#424242'
+  - label: corner frame upright
+    min: -0.50000, 0.33500, 0.08000
+    max: -0.46800, 0.40500, 0.98000
+    color: '#787878'
+  - label: outer lid strap
+    min: -0.50000, -0.43500, 0.96800
+    max: -0.28125, 0.44500, 1.02600
+    color: '#939393'
+  - label: rounded strap end
+    min: -0.50000, -0.49900, 0.79000
+    max: -0.28125, -0.41500, 0.99300
+    color: '#868686'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: -0.45500, -0.49900, 0.84000
+    max: -0.32625, -0.48000, 0.90000
+    color: '#444444'
+  - label: source-painted locking strap
+    min: -0.50000, -0.43500, 1.02600
+    max: -0.28125, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftLightGrayWYStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerTartarusLeftOffBlueWY
+  label: TartarusLeftOffBlueWY freight section
+  sourcePrototypes:
+  - AU14ContainerTartarusLeftOffBlueWY
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerTartarusLeftOffBlueWY
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: whitewyleft
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#3D484F'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftOffBlueWYFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftOffBlueWYRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#353E45'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#353E45'
+  - label: outer end wall
+    min: -0.50000, -0.48000, 0.08000
+    max: -0.46800, 0.48000, 0.95400
+    color: '#374147'
+  - label: corner lifting foot
+    min: -0.50000, -0.43500, 0.00000
+    max: -0.46800, -0.30500, 0.12000
+    color: '#1D2226'
+  - label: corner frame upright
+    min: -0.50000, -0.40500, 0.08000
+    max: -0.46800, -0.33500, 0.98000
+    color: '#353E45'
+  - label: corner lifting foot
+    min: -0.50000, 0.30500, 0.00000
+    max: -0.46800, 0.43500, 0.12000
+    color: '#1D2226'
+  - label: corner frame upright
+    min: -0.50000, 0.33500, 0.08000
+    max: -0.46800, 0.40500, 0.98000
+    color: '#353E45'
+  - label: outer lid strap
+    min: -0.50000, -0.43500, 0.96800
+    max: -0.28125, 0.44500, 1.02600
+    color: '#414C54'
+  - label: rounded strap end
+    min: -0.50000, -0.49900, 0.79000
+    max: -0.28125, -0.41500, 0.99300
+    color: '#3B464D'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: -0.45500, -0.49900, 0.84000
+    max: -0.32625, -0.48000, 0.90000
+    color: '#1E2327'
+  - label: source-painted locking strap
+    min: -0.50000, -0.43500, 1.02600
+    max: -0.28125, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftOffBlueWYStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerTartarusLeftTanWYWings
+  label: TartarusLeftTanWYWings freight section
+  sourcePrototypes:
+  - AU14ContainerTartarusLeftTanWYWings
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerTartarusLeftTanWYWings
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: tanwywingsleft
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#665F55'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftTanWYWingsFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftTanWYWingsRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#555048'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#555048'
+  - label: outer end wall
+    min: -0.50000, -0.48000, 0.08000
+    max: -0.46800, 0.48000, 0.95400
+    color: '#5C564C'
+  - label: corner lifting foot
+    min: -0.50000, -0.43500, 0.00000
+    max: -0.46800, -0.30500, 0.12000
+    color: '#2F2C28'
+  - label: corner frame upright
+    min: -0.50000, -0.40500, 0.08000
+    max: -0.46800, -0.33500, 0.98000
+    color: '#555048'
+  - label: corner lifting foot
+    min: -0.50000, 0.30500, 0.00000
+    max: -0.46800, 0.43500, 0.12000
+    color: '#2F2C28'
+  - label: corner frame upright
+    min: -0.50000, 0.33500, 0.08000
+    max: -0.46800, 0.40500, 0.98000
+    color: '#555048'
+  - label: outer lid strap
+    min: -0.50000, -0.43500, 0.96800
+    max: -0.28125, 0.44500, 1.02600
+    color: '#686258'
+  - label: rounded strap end
+    min: -0.50000, -0.49900, 0.79000
+    max: -0.28125, -0.41500, 0.99300
+    color: '#5F5951'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: -0.45500, -0.49900, 0.84000
+    max: -0.32625, -0.48000, 0.90000
+    color: '#302E29'
+  - label: source-painted locking strap
+    min: -0.50000, -0.43500, 1.02600
+    max: -0.28125, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftTanWYWingsStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerTartarusRightBlackWY
+  label: TartarusRightBlackWY freight section
+  sourcePrototypes:
+  - AU14ContainerTartarusRightBlackWY
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerTartarusRightBlackWY
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: blackwyright
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#212121'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightBlackWYFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightBlackWYRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#262626'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#262626'
+  - label: outer end wall
+    min: 0.46800, -0.48000, 0.08000
+    max: 0.50000, 0.48000, 0.95400
+    color: '#1E1E1E'
+  - label: corner lifting foot
+    min: 0.46800, -0.43500, 0.00000
+    max: 0.50000, -0.30500, 0.12000
+    color: '#151515'
+  - label: corner frame upright
+    min: 0.46800, -0.40500, 0.08000
+    max: 0.50000, -0.33500, 0.98000
+    color: '#262626'
+  - label: corner lifting foot
+    min: 0.46800, 0.30500, 0.00000
+    max: 0.50000, 0.43500, 0.12000
+    color: '#151515'
+  - label: corner frame upright
+    min: 0.46800, 0.33500, 0.08000
+    max: 0.50000, 0.40500, 0.98000
+    color: '#262626'
+  - label: outer lid strap
+    min: 0.28125, -0.43500, 0.96800
+    max: 0.50000, 0.44500, 1.02600
+    color: '#2F2F2F'
+  - label: rounded strap end
+    min: 0.28125, -0.49900, 0.79000
+    max: 0.50000, -0.41500, 0.99300
+    color: '#2B2B2B'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: 0.32625, -0.49900, 0.84000
+    max: 0.45500, -0.48000, 0.90000
+    color: '#161616'
+  - label: source-painted locking strap
+    min: 0.28125, -0.43500, 1.02600
+    max: 0.50000, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightBlackWYStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerTartarusRightBlueWYWings
+  label: TartarusRightBlueWYWings freight section
+  sourcePrototypes:
+  - AU14ContainerTartarusRightBlueWYWings
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerTartarusRightBlueWYWings
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: bluewywingsright
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#4F596C'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightBlueWYWingsFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightBlueWYWingsRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#424B5C'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#424B5C'
+  - label: outer end wall
+    min: 0.46800, -0.48000, 0.08000
+    max: 0.50000, 0.48000, 0.95400
+    color: '#475061'
+  - label: corner lifting foot
+    min: 0.46800, -0.43500, 0.00000
+    max: 0.50000, -0.30500, 0.12000
+    color: '#242933'
+  - label: corner frame upright
+    min: 0.46800, -0.40500, 0.08000
+    max: 0.50000, -0.33500, 0.98000
+    color: '#424B5C'
+  - label: corner lifting foot
+    min: 0.46800, 0.30500, 0.00000
+    max: 0.50000, 0.43500, 0.12000
+    color: '#242933'
+  - label: corner frame upright
+    min: 0.46800, 0.33500, 0.08000
+    max: 0.50000, 0.40500, 0.98000
+    color: '#424B5C'
+  - label: outer lid strap
+    min: 0.28125, -0.43500, 0.96800
+    max: 0.50000, 0.44500, 1.02600
+    color: '#515C70'
+  - label: rounded strap end
+    min: 0.28125, -0.49900, 0.79000
+    max: 0.50000, -0.41500, 0.99300
+    color: '#4A5466'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: 0.32625, -0.49900, 0.84000
+    max: 0.45500, -0.48000, 0.90000
+    color: '#262B34'
+  - label: source-painted locking strap
+    min: 0.28125, -0.43500, 1.02600
+    max: 0.50000, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightBlueWYWingsStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerTartarusRightGrayWY
+  label: TartarusRightGrayWY freight section
+  sourcePrototypes:
+  - AU14ContainerTartarusRightGrayWY
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerTartarusRightGrayWY
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: greywyright
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#4A4A4A'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightGrayWYFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightGrayWYRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#4A4A4A'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#4A4A4A'
+  - label: outer end wall
+    min: 0.46800, -0.48000, 0.08000
+    max: 0.50000, 0.48000, 0.95400
+    color: '#434343'
+  - label: corner lifting foot
+    min: 0.46800, -0.43500, 0.00000
+    max: 0.50000, -0.30500, 0.12000
+    color: '#292929'
+  - label: corner frame upright
+    min: 0.46800, -0.40500, 0.08000
+    max: 0.50000, -0.33500, 0.98000
+    color: '#4A4A4A'
+  - label: corner lifting foot
+    min: 0.46800, 0.30500, 0.00000
+    max: 0.50000, 0.43500, 0.12000
+    color: '#292929'
+  - label: corner frame upright
+    min: 0.46800, 0.33500, 0.08000
+    max: 0.50000, 0.40500, 0.98000
+    color: '#4A4A4A'
+  - label: outer lid strap
+    min: 0.28125, -0.43500, 0.96800
+    max: 0.50000, 0.44500, 1.02600
+    color: '#5A5A5A'
+  - label: rounded strap end
+    min: 0.28125, -0.49900, 0.79000
+    max: 0.50000, -0.41500, 0.99300
+    color: '#535353'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: 0.32625, -0.49900, 0.84000
+    max: 0.45500, -0.48000, 0.90000
+    color: '#2A2A2A'
+  - label: source-painted locking strap
+    min: 0.28125, -0.43500, 1.02600
+    max: 0.50000, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightGrayWYStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerTartarusRightKelland
+  label: TartarusRightKelland freight section
+  sourcePrototypes:
+  - AU14ContainerTartarusRightKelland
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerTartarusRightKelland
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: kelland_alt_r
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#895B0C'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightKellandFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightKellandRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#724D0D'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#724D0D'
+  - label: outer end wall
+    min: 0.46800, -0.48000, 0.08000
+    max: 0.50000, 0.48000, 0.95400
+    color: '#7B520B'
+  - label: corner lifting foot
+    min: 0.46800, -0.43500, 0.00000
+    max: 0.50000, -0.30500, 0.12000
+    color: '#3F2A07'
+  - label: corner frame upright
+    min: 0.46800, -0.40500, 0.08000
+    max: 0.50000, -0.33500, 0.98000
+    color: '#724D0D'
+  - label: corner lifting foot
+    min: 0.46800, 0.30500, 0.00000
+    max: 0.50000, 0.43500, 0.12000
+    color: '#3F2A07'
+  - label: corner frame upright
+    min: 0.46800, 0.33500, 0.08000
+    max: 0.50000, 0.40500, 0.98000
+    color: '#724D0D'
+  - label: outer lid strap
+    min: 0.28125, -0.43500, 0.96800
+    max: 0.50000, 0.44500, 1.02600
+    color: '#8B5E10'
+  - label: rounded strap end
+    min: 0.28125, -0.49900, 0.79000
+    max: 0.50000, -0.41500, 0.99300
+    color: '#7F560F'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: 0.32625, -0.49900, 0.84000
+    max: 0.45500, -0.48000, 0.90000
+    color: '#412C07'
+  - label: source-painted locking strap
+    min: 0.28125, -0.43500, 1.02600
+    max: 0.50000, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightKellandStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerTartarusRightLightGrayWY
+  label: TartarusRightLightGrayWY freight section
+  sourcePrototypes:
+  - AU14ContainerTartarusRightLightGrayWY
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerTartarusRightLightGrayWY
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: lightgreywyright
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#8A8A8A'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightLightGrayWYFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightLightGrayWYRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#787878'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#787878'
+  - label: outer end wall
+    min: 0.46800, -0.48000, 0.08000
+    max: 0.50000, 0.48000, 0.95400
+    color: '#7C7C7C'
+  - label: corner lifting foot
+    min: 0.46800, -0.43500, 0.00000
+    max: 0.50000, -0.30500, 0.12000
+    color: '#424242'
+  - label: corner frame upright
+    min: 0.46800, -0.40500, 0.08000
+    max: 0.50000, -0.33500, 0.98000
+    color: '#787878'
+  - label: corner lifting foot
+    min: 0.46800, 0.30500, 0.00000
+    max: 0.50000, 0.43500, 0.12000
+    color: '#424242'
+  - label: corner frame upright
+    min: 0.46800, 0.33500, 0.08000
+    max: 0.50000, 0.40500, 0.98000
+    color: '#787878'
+  - label: outer lid strap
+    min: 0.28125, -0.43500, 0.96800
+    max: 0.50000, 0.44500, 1.02600
+    color: '#939393'
+  - label: rounded strap end
+    min: 0.28125, -0.49900, 0.79000
+    max: 0.50000, -0.41500, 0.99300
+    color: '#868686'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: 0.32625, -0.49900, 0.84000
+    max: 0.45500, -0.48000, 0.90000
+    color: '#444444'
+  - label: source-painted locking strap
+    min: 0.28125, -0.43500, 1.02600
+    max: 0.50000, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightLightGrayWYStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerTartarusRightOffBlueWY
+  label: TartarusRightOffBlueWY freight section
+  sourcePrototypes:
+  - AU14ContainerTartarusRightOffBlueWY
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerTartarusRightOffBlueWY
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: whitewyright
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#3D484F'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightOffBlueWYFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightOffBlueWYRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#353E45'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#353E45'
+  - label: outer end wall
+    min: 0.46800, -0.48000, 0.08000
+    max: 0.50000, 0.48000, 0.95400
+    color: '#374147'
+  - label: corner lifting foot
+    min: 0.46800, -0.43500, 0.00000
+    max: 0.50000, -0.30500, 0.12000
+    color: '#1D2226'
+  - label: corner frame upright
+    min: 0.46800, -0.40500, 0.08000
+    max: 0.50000, -0.33500, 0.98000
+    color: '#353E45'
+  - label: corner lifting foot
+    min: 0.46800, 0.30500, 0.00000
+    max: 0.50000, 0.43500, 0.12000
+    color: '#1D2226'
+  - label: corner frame upright
+    min: 0.46800, 0.33500, 0.08000
+    max: 0.50000, 0.40500, 0.98000
+    color: '#353E45'
+  - label: outer lid strap
+    min: 0.28125, -0.43500, 0.96800
+    max: 0.50000, 0.44500, 1.02600
+    color: '#414C54'
+  - label: rounded strap end
+    min: 0.28125, -0.49900, 0.79000
+    max: 0.50000, -0.41500, 0.99300
+    color: '#3B464D'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: 0.32625, -0.49900, 0.84000
+    max: 0.45500, -0.48000, 0.90000
+    color: '#1E2327'
+  - label: source-painted locking strap
+    min: 0.28125, -0.43500, 1.02600
+    max: 0.50000, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightOffBlueWYStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerTartarusRightTanWYWings
+  label: TartarusRightTanWYWings freight section
+  sourcePrototypes:
+  - AU14ContainerTartarusRightTanWYWings
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerTartarusRightTanWYWings
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: tanwywingsright
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#665F55'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightTanWYWingsFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightTanWYWingsRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#555048'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#555048'
+  - label: outer end wall
+    min: 0.46800, -0.48000, 0.08000
+    max: 0.50000, 0.48000, 0.95400
+    color: '#5C564C'
+  - label: corner lifting foot
+    min: 0.46800, -0.43500, 0.00000
+    max: 0.50000, -0.30500, 0.12000
+    color: '#2F2C28'
+  - label: corner frame upright
+    min: 0.46800, -0.40500, 0.08000
+    max: 0.50000, -0.33500, 0.98000
+    color: '#555048'
+  - label: corner lifting foot
+    min: 0.46800, 0.30500, 0.00000
+    max: 0.50000, 0.43500, 0.12000
+    color: '#2F2C28'
+  - label: corner frame upright
+    min: 0.46800, 0.33500, 0.08000
+    max: 0.50000, 0.40500, 0.98000
+    color: '#555048'
+  - label: outer lid strap
+    min: 0.28125, -0.43500, 0.96800
+    max: 0.50000, 0.44500, 1.02600
+    color: '#686258'
+  - label: rounded strap end
+    min: 0.28125, -0.49900, 0.79000
+    max: 0.50000, -0.41500, 0.99300
+    color: '#5F5951'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: 0.32625, -0.49900, 0.84000
+    max: 0.45500, -0.48000, 0.90000
+    color: '#302E29'
+  - label: source-painted locking strap
+    min: 0.28125, -0.43500, 1.02600
+    max: 0.50000, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightTanWYWingsStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerUSCMLeft
+  label: USCMLeft freight section
+  sourcePrototypes:
+  - AU14ContainerUSCMLeft
+  status: draft
+  description: Large freight container section with stepped vertical corrugations, source-painted roof, standing seams,
+    frame and lifting feet. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels
+    are split between physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden
+    end/rear construction and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerUSCMLeft
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: uscm4_l
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.46875, -0.46000, 0.05500
+    max: 0.50000, 1.48000, 2.00200
+    color: '#616060'
+  - label: painted corrugation 1
+    min: -0.46875, -0.47800, 0.05500
+    max: -0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftFace0
+    surfaceAxis: XZ
+  - label: painted corrugation 2
+    min: -0.37500, -0.49900, 0.05500
+    max: -0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftFace1
+    surfaceAxis: XZ
+  - label: painted corrugation 3
+    min: -0.25000, -0.47800, 0.05500
+    max: -0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftFace2
+    surfaceAxis: XZ
+  - label: painted corrugation 4
+    min: -0.12500, -0.49900, 0.05500
+    max: 0.00000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftFace3
+    surfaceAxis: XZ
+  - label: painted corrugation 5
+    min: 0.00000, -0.47800, 0.05500
+    max: 0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftFace4
+    surfaceAxis: XZ
+  - label: painted corrugation 6
+    min: 0.12500, -0.49900, 0.05500
+    max: 0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftFace5
+    surfaceAxis: XZ
+  - label: painted corrugation 7
+    min: 0.25000, -0.47800, 0.05500
+    max: 0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftFace6
+    surfaceAxis: XZ
+  - label: painted corrugation 8
+    min: 0.37500, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftFace7
+    surfaceAxis: XZ
+  - label: source-painted corrugated roof
+    min: -0.46875, -0.47400, 2.00200
+    max: 0.50000, 1.48000, 2.02700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.46875, 1.44500, 0.04000
+    max: 0.50000, 1.49600, 0.07500
+    color: '#676767'
+  - label: rear horizontal frame
+    min: -0.46875, 1.44500, 2.01500
+    max: 0.50000, 1.49600, 2.05000
+    color: '#676767'
+  - label: rear wall corrugation
+    min: -0.34000, 1.47200, 0.12000
+    max: -0.30000, 1.49900, 1.92000
+    color: '#676767'
+  - label: rear wall corrugation
+    min: -0.12000, 1.47200, 0.12000
+    max: -0.08000, 1.49900, 1.92000
+    color: '#676767'
+  - label: rear wall corrugation
+    min: 0.10000, 1.47200, 0.12000
+    max: 0.14000, 1.49900, 1.92000
+    color: '#676767'
+  - label: rear wall corrugation
+    min: 0.32000, 1.47200, 0.12000
+    max: 0.36000, 1.49900, 1.92000
+    color: '#676767'
+  - label: outer end wall
+    min: -0.46875, -0.48000, 0.08000
+    max: -0.43675, 1.48000, 2.01400
+    color: '#575656'
+  - label: corner lifting foot
+    min: -0.46875, -0.43500, 0.00000
+    max: -0.43675, -0.30500, 0.12000
+    color: '#393939'
+  - label: corner frame upright
+    min: -0.46875, -0.40500, 0.08000
+    max: -0.43675, -0.33500, 2.04000
+    color: '#676767'
+  - label: corner lifting foot
+    min: -0.46875, 1.30500, 0.00000
+    max: -0.43675, 1.43500, 0.12000
+    color: '#393939'
+  - label: corner frame upright
+    min: -0.46875, 1.33500, 0.08000
+    max: -0.43675, 1.40500, 2.04000
+    color: '#676767'
+  - label: end wall rib
+    min: -0.47675, -0.11000, 0.15000
+    max: -0.43675, -0.07500, 1.90000
+    color: '#676767'
+  - label: end wall rib
+    min: -0.47675, 0.24000, 0.15000
+    max: -0.43675, 0.27500, 1.90000
+    color: '#676767'
+  - label: end wall rib
+    min: -0.47675, 0.59000, 0.15000
+    max: -0.43675, 0.62500, 1.90000
+    color: '#676767'
+  - label: end wall rib
+    min: -0.47675, 0.94000, 0.15000
+    max: -0.43675, 0.97500, 1.90000
+    color: '#676767'
+  - label: source-painted roof ridge 1
+    min: -0.43750, -0.31117, 2.02400
+    max: -0.34375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftRidge0
+    surfaceAxis: XY
+  - label: source-painted roof ridge 2
+    min: -0.18750, -0.31117, 2.02400
+    max: -0.09375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 3
+    min: 0.06250, -0.31117, 2.02400
+    max: 0.15625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 4
+    min: 0.31250, -0.31117, 2.02400
+    max: 0.40625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftRidge1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerUSCMMiddle
+  label: USCMMiddle freight section
+  sourcePrototypes:
+  - AU14ContainerUSCMMiddle
+  status: draft
+  description: Large freight container section with stepped vertical corrugations, source-painted roof, standing seams,
+    frame and lifting feet. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels
+    are split between physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden
+    end/rear construction and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerUSCMMiddle
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: uscm4_m
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 1.48000, 2.00200
+    color: '#616060'
+  - label: painted corrugation 1
+    min: -0.50000, -0.47800, 0.05500
+    max: -0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMMiddleFace0
+    surfaceAxis: XZ
+  - label: painted corrugation 2
+    min: -0.37500, -0.49900, 0.05500
+    max: -0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMMiddleFace1
+    surfaceAxis: XZ
+  - label: painted corrugation 3
+    min: -0.25000, -0.47800, 0.05500
+    max: -0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMMiddleFace2
+    surfaceAxis: XZ
+  - label: painted corrugation 4
+    min: -0.12500, -0.49900, 0.05500
+    max: 0.00000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMMiddleFace1
+    surfaceAxis: XZ
+  - label: painted corrugation 5
+    min: 0.00000, -0.47800, 0.05500
+    max: 0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMMiddleFace2
+    surfaceAxis: XZ
+  - label: painted corrugation 6
+    min: 0.12500, -0.49900, 0.05500
+    max: 0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMMiddleFace1
+    surfaceAxis: XZ
+  - label: painted corrugation 7
+    min: 0.25000, -0.47800, 0.05500
+    max: 0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMMiddleFace2
+    surfaceAxis: XZ
+  - label: painted corrugation 8
+    min: 0.37500, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMMiddleFace7
+    surfaceAxis: XZ
+  - label: source-painted corrugated roof
+    min: -0.50000, -0.47400, 2.00200
+    max: 0.50000, 1.48000, 2.02700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMMiddleRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 0.04000
+    max: 0.50000, 1.49600, 0.07500
+    color: '#676767'
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 2.01500
+    max: 0.50000, 1.49600, 2.05000
+    color: '#676767'
+  - label: rear wall corrugation
+    min: -0.34000, 1.47200, 0.12000
+    max: -0.30000, 1.49900, 1.92000
+    color: '#676767'
+  - label: rear wall corrugation
+    min: -0.12000, 1.47200, 0.12000
+    max: -0.08000, 1.49900, 1.92000
+    color: '#676767'
+  - label: rear wall corrugation
+    min: 0.10000, 1.47200, 0.12000
+    max: 0.14000, 1.49900, 1.92000
+    color: '#676767'
+  - label: rear wall corrugation
+    min: 0.32000, 1.47200, 0.12000
+    max: 0.36000, 1.49900, 1.92000
+    color: '#676767'
+  - label: source-painted roof ridge 1
+    min: -0.43750, -0.31117, 2.02400
+    max: -0.34375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 2
+    min: -0.18750, -0.31117, 2.02400
+    max: -0.09375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 3
+    min: 0.06250, -0.31117, 2.02400
+    max: 0.15625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 4
+    min: 0.31250, -0.31117, 2.02400
+    max: 0.40625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftRidge1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerUSCMRight
+  label: USCMRight freight section
+  sourcePrototypes:
+  - AU14ContainerUSCMRight
+  status: draft
+  description: Large freight container section with stepped vertical corrugations, source-painted roof, standing seams,
+    frame and lifting feet. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels
+    are split between physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden
+    end/rear construction and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerUSCMRight
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: uscm_r
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.43750, 1.48000, 2.00200
+    color: '#616060'
+  - label: painted corrugation 1
+    min: -0.50000, -0.47800, 0.05500
+    max: -0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMRightFace0
+    surfaceAxis: XZ
+  - label: painted corrugation 2
+    min: -0.37500, -0.49900, 0.05500
+    max: -0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMMiddleFace1
+    surfaceAxis: XZ
+  - label: painted corrugation 3
+    min: -0.25000, -0.47800, 0.05500
+    max: -0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMMiddleFace2
+    surfaceAxis: XZ
+  - label: painted corrugation 4
+    min: -0.12500, -0.49900, 0.05500
+    max: 0.00000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMMiddleFace1
+    surfaceAxis: XZ
+  - label: painted corrugation 5
+    min: 0.00000, -0.47800, 0.05500
+    max: 0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMRightFace4
+    surfaceAxis: XZ
+  - label: painted corrugation 6
+    min: 0.12500, -0.49900, 0.05500
+    max: 0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMRightFace5
+    surfaceAxis: XZ
+  - label: painted corrugation 7
+    min: 0.25000, -0.47800, 0.05500
+    max: 0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMRightFace6
+    surfaceAxis: XZ
+  - label: painted corrugation 8
+    min: 0.37500, -0.49900, 0.05500
+    max: 0.43750, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMRightFace7
+    surfaceAxis: XZ
+  - label: source-painted corrugated roof
+    min: -0.50000, -0.47400, 2.00200
+    max: 0.43750, 1.48000, 2.02700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMRightRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 0.04000
+    max: 0.43750, 1.49600, 0.07500
+    color: '#676767'
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 2.01500
+    max: 0.43750, 1.49600, 2.05000
+    color: '#676767'
+  - label: rear wall corrugation
+    min: -0.34000, 1.47200, 0.12000
+    max: -0.30000, 1.49900, 1.92000
+    color: '#676767'
+  - label: rear wall corrugation
+    min: -0.12000, 1.47200, 0.12000
+    max: -0.08000, 1.49900, 1.92000
+    color: '#676767'
+  - label: rear wall corrugation
+    min: 0.10000, 1.47200, 0.12000
+    max: 0.14000, 1.49900, 1.92000
+    color: '#676767'
+  - label: rear wall corrugation
+    min: 0.32000, 1.47200, 0.12000
+    max: 0.36000, 1.49900, 1.92000
+    color: '#676767'
+  - label: outer end wall
+    min: 0.40550, -0.48000, 0.08000
+    max: 0.43750, 1.48000, 2.01400
+    color: '#575656'
+  - label: corner lifting foot
+    min: 0.40550, -0.43500, 0.00000
+    max: 0.43750, -0.30500, 0.12000
+    color: '#393939'
+  - label: corner frame upright
+    min: 0.40550, -0.40500, 0.08000
+    max: 0.43750, -0.33500, 2.04000
+    color: '#676767'
+  - label: corner lifting foot
+    min: 0.40550, 1.30500, 0.00000
+    max: 0.43750, 1.43500, 0.12000
+    color: '#393939'
+  - label: corner frame upright
+    min: 0.40550, 1.33500, 0.08000
+    max: 0.43750, 1.40500, 2.04000
+    color: '#676767'
+  - label: end wall rib
+    min: 0.40550, -0.11000, 0.15000
+    max: 0.44550, -0.07500, 1.90000
+    color: '#676767'
+  - label: end wall rib
+    min: 0.40550, 0.24000, 0.15000
+    max: 0.44550, 0.27500, 1.90000
+    color: '#676767'
+  - label: end wall rib
+    min: 0.40550, 0.59000, 0.15000
+    max: 0.44550, 0.62500, 1.90000
+    color: '#676767'
+  - label: end wall rib
+    min: 0.40550, 0.94000, 0.15000
+    max: 0.44550, 0.97500, 1.90000
+    color: '#676767'
+  - label: source-painted roof ridge 1
+    min: -0.43750, -0.31117, 2.02400
+    max: -0.34375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 2
+    min: -0.18750, -0.31117, 2.02400
+    max: -0.09375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 3
+    min: 0.06250, -0.31117, 2.02400
+    max: 0.15625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMRightRidge2
+    surfaceAxis: XY
+  - label: source-painted roof ridge 4
+    min: 0.31250, -0.31117, 2.02400
+    max: 0.40625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerUSCMRightRidge3
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerWYLeft
+  label: WYLeft freight section
+  sourcePrototypes:
+  - AU14ContainerWYLeft
+  status: draft
+  description: Large freight container section with stepped vertical corrugations, source-painted roof, standing seams,
+    frame and lifting feet. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels
+    are split between physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden
+    end/rear construction and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerWYLeft
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: wy_l
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.46875, -0.46000, 0.05500
+    max: 0.50000, 1.48000, 2.00200
+    color: '#252837'
+  - label: painted corrugation 1
+    min: -0.46875, -0.47800, 0.05500
+    max: -0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftFace0
+    surfaceAxis: XZ
+  - label: painted corrugation 2
+    min: -0.37500, -0.49900, 0.05500
+    max: -0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftFace1
+    surfaceAxis: XZ
+  - label: painted corrugation 3
+    min: -0.25000, -0.47800, 0.05500
+    max: -0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftFace2
+    surfaceAxis: XZ
+  - label: painted corrugation 4
+    min: -0.12500, -0.49900, 0.05500
+    max: 0.00000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftFace3
+    surfaceAxis: XZ
+  - label: painted corrugation 5
+    min: 0.00000, -0.47800, 0.05500
+    max: 0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftFace4
+    surfaceAxis: XZ
+  - label: painted corrugation 6
+    min: 0.12500, -0.49900, 0.05500
+    max: 0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftFace5
+    surfaceAxis: XZ
+  - label: painted corrugation 7
+    min: 0.25000, -0.47800, 0.05500
+    max: 0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftFace6
+    surfaceAxis: XZ
+  - label: painted corrugation 8
+    min: 0.37500, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftFace7
+    surfaceAxis: XZ
+  - label: source-painted corrugated roof
+    min: -0.46875, -0.47400, 2.00200
+    max: 0.50000, 1.48000, 2.02700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.46875, 1.44500, 0.04000
+    max: 0.50000, 1.49600, 0.07500
+    color: '#383D48'
+  - label: rear horizontal frame
+    min: -0.46875, 1.44500, 2.01500
+    max: 0.50000, 1.49600, 2.05000
+    color: '#383D48'
+  - label: rear wall corrugation
+    min: -0.34000, 1.47200, 0.12000
+    max: -0.30000, 1.49900, 1.92000
+    color: '#383D48'
+  - label: rear wall corrugation
+    min: -0.12000, 1.47200, 0.12000
+    max: -0.08000, 1.49900, 1.92000
+    color: '#383D48'
+  - label: rear wall corrugation
+    min: 0.10000, 1.47200, 0.12000
+    max: 0.14000, 1.49900, 1.92000
+    color: '#383D48'
+  - label: rear wall corrugation
+    min: 0.32000, 1.47200, 0.12000
+    max: 0.36000, 1.49900, 1.92000
+    color: '#383D48'
+  - label: outer end wall
+    min: -0.46875, -0.48000, 0.08000
+    max: -0.43675, 1.48000, 2.01400
+    color: '#212432'
+  - label: corner lifting foot
+    min: -0.46875, -0.43500, 0.00000
+    max: -0.43675, -0.30500, 0.12000
+    color: '#1F2228'
+  - label: corner frame upright
+    min: -0.46875, -0.40500, 0.08000
+    max: -0.43675, -0.33500, 2.04000
+    color: '#383D48'
+  - label: corner lifting foot
+    min: -0.46875, 1.30500, 0.00000
+    max: -0.43675, 1.43500, 0.12000
+    color: '#1F2228'
+  - label: corner frame upright
+    min: -0.46875, 1.33500, 0.08000
+    max: -0.43675, 1.40500, 2.04000
+    color: '#383D48'
+  - label: end wall rib
+    min: -0.47675, -0.11000, 0.15000
+    max: -0.43675, -0.07500, 1.90000
+    color: '#383D48'
+  - label: end wall rib
+    min: -0.47675, 0.24000, 0.15000
+    max: -0.43675, 0.27500, 1.90000
+    color: '#383D48'
+  - label: end wall rib
+    min: -0.47675, 0.59000, 0.15000
+    max: -0.43675, 0.62500, 1.90000
+    color: '#383D48'
+  - label: end wall rib
+    min: -0.47675, 0.94000, 0.15000
+    max: -0.43675, 0.97500, 1.90000
+    color: '#383D48'
+  - label: source-painted roof ridge 1
+    min: -0.43750, -0.31117, 2.02400
+    max: -0.34375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftRidge0
+    surfaceAxis: XY
+  - label: source-painted roof ridge 2
+    min: -0.18750, -0.31117, 2.02400
+    max: -0.09375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 3
+    min: 0.06250, -0.31117, 2.02400
+    max: 0.15625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 4
+    min: 0.31250, -0.31117, 2.02400
+    max: 0.40625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftRidge1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerWYMiddle
+  label: WYMiddle freight section
+  sourcePrototypes:
+  - AU14ContainerWYMiddle
+  status: draft
+  description: Large freight container section with stepped vertical corrugations, source-painted roof, standing seams,
+    frame and lifting feet. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels
+    are split between physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden
+    end/rear construction and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerWYMiddle
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: wy_m
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 1.48000, 2.00200
+    color: '#252837'
+  - label: painted corrugation 1
+    min: -0.50000, -0.47800, 0.05500
+    max: -0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYMiddleFace0
+    surfaceAxis: XZ
+  - label: painted corrugation 2
+    min: -0.37500, -0.49900, 0.05500
+    max: -0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYMiddleFace1
+    surfaceAxis: XZ
+  - label: painted corrugation 3
+    min: -0.25000, -0.47800, 0.05500
+    max: -0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYMiddleFace2
+    surfaceAxis: XZ
+  - label: painted corrugation 4
+    min: -0.12500, -0.49900, 0.05500
+    max: 0.00000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYMiddleFace3
+    surfaceAxis: XZ
+  - label: painted corrugation 5
+    min: 0.00000, -0.47800, 0.05500
+    max: 0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYMiddleFace4
+    surfaceAxis: XZ
+  - label: painted corrugation 6
+    min: 0.12500, -0.49900, 0.05500
+    max: 0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYMiddleFace5
+    surfaceAxis: XZ
+  - label: painted corrugation 7
+    min: 0.25000, -0.47800, 0.05500
+    max: 0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYMiddleFace6
+    surfaceAxis: XZ
+  - label: painted corrugation 8
+    min: 0.37500, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYMiddleFace7
+    surfaceAxis: XZ
+  - label: source-painted corrugated roof
+    min: -0.50000, -0.47400, 2.00200
+    max: 0.50000, 1.48000, 2.02700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYMiddleRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 0.04000
+    max: 0.50000, 1.49600, 0.07500
+    color: '#383D48'
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 2.01500
+    max: 0.50000, 1.49600, 2.05000
+    color: '#383D48'
+  - label: rear wall corrugation
+    min: -0.34000, 1.47200, 0.12000
+    max: -0.30000, 1.49900, 1.92000
+    color: '#383D48'
+  - label: rear wall corrugation
+    min: -0.12000, 1.47200, 0.12000
+    max: -0.08000, 1.49900, 1.92000
+    color: '#383D48'
+  - label: rear wall corrugation
+    min: 0.10000, 1.47200, 0.12000
+    max: 0.14000, 1.49900, 1.92000
+    color: '#383D48'
+  - label: rear wall corrugation
+    min: 0.32000, 1.47200, 0.12000
+    max: 0.36000, 1.49900, 1.92000
+    color: '#383D48'
+  - label: source-painted roof ridge 1
+    min: -0.43750, -0.31117, 2.02400
+    max: -0.34375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 2
+    min: -0.18750, -0.31117, 2.02400
+    max: -0.09375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 3
+    min: 0.06250, -0.31117, 2.02400
+    max: 0.15625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 4
+    min: 0.31250, -0.31117, 2.02400
+    max: 0.40625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftRidge1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightAU14ContainerWYRight
+  label: WYRight freight section
+  sourcePrototypes:
+  - AU14ContainerWYRight
+  status: draft
+  description: Large freight container section with stepped vertical corrugations, source-painted roof, standing seams,
+    frame and lifting feet. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels
+    are split between physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden
+    end/rear construction and height are inferred. No opening or damage states are implemented.
+  referencePrototype: AU14ContainerWYRight
+  referenceRsi: /Textures/CMU14/Structures/containers.rsi
+  referenceState: wy_r
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.43750, 1.48000, 2.00200
+    color: '#252837'
+  - label: painted corrugation 1
+    min: -0.50000, -0.47800, 0.05500
+    max: -0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYRightFace0
+    surfaceAxis: XZ
+  - label: painted corrugation 2
+    min: -0.37500, -0.49900, 0.05500
+    max: -0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYRightFace1
+    surfaceAxis: XZ
+  - label: painted corrugation 3
+    min: -0.25000, -0.47800, 0.05500
+    max: -0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYRightFace2
+    surfaceAxis: XZ
+  - label: painted corrugation 4
+    min: -0.12500, -0.49900, 0.05500
+    max: 0.00000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYRightFace3
+    surfaceAxis: XZ
+  - label: painted corrugation 5
+    min: 0.00000, -0.47800, 0.05500
+    max: 0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftFace2
+    surfaceAxis: XZ
+  - label: painted corrugation 6
+    min: 0.12500, -0.49900, 0.05500
+    max: 0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftFace3
+    surfaceAxis: XZ
+  - label: painted corrugation 7
+    min: 0.25000, -0.47800, 0.05500
+    max: 0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYRightFace6
+    surfaceAxis: XZ
+  - label: painted corrugation 8
+    min: 0.37500, -0.49900, 0.05500
+    max: 0.43750, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYRightFace7
+    surfaceAxis: XZ
+  - label: source-painted corrugated roof
+    min: -0.50000, -0.47400, 2.00200
+    max: 0.43750, 1.48000, 2.02700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYRightRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 0.04000
+    max: 0.43750, 1.49600, 0.07500
+    color: '#383D48'
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 2.01500
+    max: 0.43750, 1.49600, 2.05000
+    color: '#383D48'
+  - label: rear wall corrugation
+    min: -0.34000, 1.47200, 0.12000
+    max: -0.30000, 1.49900, 1.92000
+    color: '#383D48'
+  - label: rear wall corrugation
+    min: -0.12000, 1.47200, 0.12000
+    max: -0.08000, 1.49900, 1.92000
+    color: '#383D48'
+  - label: rear wall corrugation
+    min: 0.10000, 1.47200, 0.12000
+    max: 0.14000, 1.49900, 1.92000
+    color: '#383D48'
+  - label: rear wall corrugation
+    min: 0.32000, 1.47200, 0.12000
+    max: 0.36000, 1.49900, 1.92000
+    color: '#383D48'
+  - label: outer end wall
+    min: 0.40550, -0.48000, 0.08000
+    max: 0.43750, 1.48000, 2.01400
+    color: '#212432'
+  - label: corner lifting foot
+    min: 0.40550, -0.43500, 0.00000
+    max: 0.43750, -0.30500, 0.12000
+    color: '#1F2228'
+  - label: corner frame upright
+    min: 0.40550, -0.40500, 0.08000
+    max: 0.43750, -0.33500, 2.04000
+    color: '#383D48'
+  - label: corner lifting foot
+    min: 0.40550, 1.30500, 0.00000
+    max: 0.43750, 1.43500, 0.12000
+    color: '#1F2228'
+  - label: corner frame upright
+    min: 0.40550, 1.33500, 0.08000
+    max: 0.43750, 1.40500, 2.04000
+    color: '#383D48'
+  - label: end wall rib
+    min: 0.40550, -0.11000, 0.15000
+    max: 0.44550, -0.07500, 1.90000
+    color: '#383D48'
+  - label: end wall rib
+    min: 0.40550, 0.24000, 0.15000
+    max: 0.44550, 0.27500, 1.90000
+    color: '#383D48'
+  - label: end wall rib
+    min: 0.40550, 0.59000, 0.15000
+    max: 0.44550, 0.62500, 1.90000
+    color: '#383D48'
+  - label: end wall rib
+    min: 0.40550, 0.94000, 0.15000
+    max: 0.44550, 0.97500, 1.90000
+    color: '#383D48'
+  - label: source-painted roof ridge 1
+    min: -0.43750, -0.31117, 2.02400
+    max: -0.34375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 2
+    min: -0.18750, -0.31117, 2.02400
+    max: -0.09375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 3
+    min: 0.06250, -0.31117, 2.02400
+    max: 0.15625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYRightRidge2
+    surfaceAxis: XY
+  - label: source-painted roof ridge 4
+    min: 0.31250, -0.31117, 2.02400
+    max: 0.40625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerWYRightRidge3
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightRMCContainerBlueLeft
+  label: BlueLeft freight section
+  sourcePrototypes:
+  - RMCContainerBlueLeft
+  status: draft
+  description: Large freight container section with stepped vertical corrugations, source-painted roof, standing seams,
+    frame and lifting feet. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels
+    are split between physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden
+    end/rear construction and height are inferred. No opening or damage states are implemented.
+  referencePrototype: RMCContainerBlueLeft
+  referenceRsi: /Textures/_RMC14/Structures/containers.rsi
+  referenceState: bluecontainerleft
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.46875, -0.46000, 0.05500
+    max: 0.50000, 1.48000, 2.00200
+    color: '#303B68'
+  - label: painted corrugation 1
+    min: -0.46875, -0.47800, 0.05500
+    max: -0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftFace0
+    surfaceAxis: XZ
+  - label: painted corrugation 2
+    min: -0.37500, -0.49900, 0.05500
+    max: -0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftFace1
+    surfaceAxis: XZ
+  - label: painted corrugation 3
+    min: -0.25000, -0.47800, 0.05500
+    max: -0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftFace2
+    surfaceAxis: XZ
+  - label: painted corrugation 4
+    min: -0.12500, -0.49900, 0.05500
+    max: 0.00000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftFace3
+    surfaceAxis: XZ
+  - label: painted corrugation 5
+    min: 0.00000, -0.47800, 0.05500
+    max: 0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftFace4
+    surfaceAxis: XZ
+  - label: painted corrugation 6
+    min: 0.12500, -0.49900, 0.05500
+    max: 0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftFace5
+    surfaceAxis: XZ
+  - label: painted corrugation 7
+    min: 0.25000, -0.47800, 0.05500
+    max: 0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftFace4
+    surfaceAxis: XZ
+  - label: painted corrugation 8
+    min: 0.37500, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftFace7
+    surfaceAxis: XZ
+  - label: source-painted corrugated roof
+    min: -0.46875, -0.47400, 2.00200
+    max: 0.50000, 1.48000, 2.02700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.46875, 1.44500, 0.04000
+    max: 0.50000, 1.49600, 0.07500
+    color: '#404C6E'
+  - label: rear horizontal frame
+    min: -0.46875, 1.44500, 2.01500
+    max: 0.50000, 1.49600, 2.05000
+    color: '#404C6E'
+  - label: rear wall corrugation
+    min: -0.34000, 1.47200, 0.12000
+    max: -0.30000, 1.49900, 1.92000
+    color: '#404C6E'
+  - label: rear wall corrugation
+    min: -0.12000, 1.47200, 0.12000
+    max: -0.08000, 1.49900, 1.92000
+    color: '#404C6E'
+  - label: rear wall corrugation
+    min: 0.10000, 1.47200, 0.12000
+    max: 0.14000, 1.49900, 1.92000
+    color: '#404C6E'
+  - label: rear wall corrugation
+    min: 0.32000, 1.47200, 0.12000
+    max: 0.36000, 1.49900, 1.92000
+    color: '#404C6E'
+  - label: outer end wall
+    min: -0.46875, -0.48000, 0.08000
+    max: -0.43675, 1.48000, 2.01400
+    color: '#2B355E'
+  - label: corner lifting foot
+    min: -0.46875, -0.43500, 0.00000
+    max: -0.43675, -0.30500, 0.12000
+    color: '#232A3D'
+  - label: corner frame upright
+    min: -0.46875, -0.40500, 0.08000
+    max: -0.43675, -0.33500, 2.04000
+    color: '#404C6E'
+  - label: corner lifting foot
+    min: -0.46875, 1.30500, 0.00000
+    max: -0.43675, 1.43500, 0.12000
+    color: '#232A3D'
+  - label: corner frame upright
+    min: -0.46875, 1.33500, 0.08000
+    max: -0.43675, 1.40500, 2.04000
+    color: '#404C6E'
+  - label: end wall rib
+    min: -0.47675, -0.11000, 0.15000
+    max: -0.43675, -0.07500, 1.90000
+    color: '#404C6E'
+  - label: end wall rib
+    min: -0.47675, 0.24000, 0.15000
+    max: -0.43675, 0.27500, 1.90000
+    color: '#404C6E'
+  - label: end wall rib
+    min: -0.47675, 0.59000, 0.15000
+    max: -0.43675, 0.62500, 1.90000
+    color: '#404C6E'
+  - label: end wall rib
+    min: -0.47675, 0.94000, 0.15000
+    max: -0.43675, 0.97500, 1.90000
+    color: '#404C6E'
+  - label: source-painted roof ridge 1
+    min: -0.43750, -0.31117, 2.02400
+    max: -0.34375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftRidge0
+    surfaceAxis: XY
+  - label: source-painted roof ridge 2
+    min: -0.18750, -0.31117, 2.02400
+    max: -0.09375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 3
+    min: 0.06250, -0.31117, 2.02400
+    max: 0.15625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 4
+    min: 0.31250, -0.31117, 2.02400
+    max: 0.40625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftRidge1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightRMCContainerBlueMiddle
+  label: BlueMiddle freight section
+  sourcePrototypes:
+  - RMCContainerBlueMiddle
+  status: draft
+  description: Large freight container section with stepped vertical corrugations, source-painted roof, standing seams,
+    frame and lifting feet. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels
+    are split between physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden
+    end/rear construction and height are inferred. No opening or damage states are implemented.
+  referencePrototype: RMCContainerBlueMiddle
+  referenceRsi: /Textures/_RMC14/Structures/containers.rsi
+  referenceState: bluecontainermiddle
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 1.48000, 2.00200
+    color: '#303B68'
+  - label: painted corrugation 1
+    min: -0.50000, -0.47800, 0.05500
+    max: -0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueMiddleFace0
+    surfaceAxis: XZ
+  - label: painted corrugation 2
+    min: -0.37500, -0.49900, 0.05500
+    max: -0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftFace5
+    surfaceAxis: XZ
+  - label: painted corrugation 3
+    min: -0.25000, -0.47800, 0.05500
+    max: -0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftFace4
+    surfaceAxis: XZ
+  - label: painted corrugation 4
+    min: -0.12500, -0.49900, 0.05500
+    max: 0.00000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftFace5
+    surfaceAxis: XZ
+  - label: painted corrugation 5
+    min: 0.00000, -0.47800, 0.05500
+    max: 0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftFace4
+    surfaceAxis: XZ
+  - label: painted corrugation 6
+    min: 0.12500, -0.49900, 0.05500
+    max: 0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftFace5
+    surfaceAxis: XZ
+  - label: painted corrugation 7
+    min: 0.25000, -0.47800, 0.05500
+    max: 0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftFace4
+    surfaceAxis: XZ
+  - label: painted corrugation 8
+    min: 0.37500, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueMiddleFace7
+    surfaceAxis: XZ
+  - label: source-painted corrugated roof
+    min: -0.50000, -0.47400, 2.00200
+    max: 0.50000, 1.48000, 2.02700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueMiddleRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 0.04000
+    max: 0.50000, 1.49600, 0.07500
+    color: '#404C6E'
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 2.01500
+    max: 0.50000, 1.49600, 2.05000
+    color: '#404C6E'
+  - label: rear wall corrugation
+    min: -0.34000, 1.47200, 0.12000
+    max: -0.30000, 1.49900, 1.92000
+    color: '#404C6E'
+  - label: rear wall corrugation
+    min: -0.12000, 1.47200, 0.12000
+    max: -0.08000, 1.49900, 1.92000
+    color: '#404C6E'
+  - label: rear wall corrugation
+    min: 0.10000, 1.47200, 0.12000
+    max: 0.14000, 1.49900, 1.92000
+    color: '#404C6E'
+  - label: rear wall corrugation
+    min: 0.32000, 1.47200, 0.12000
+    max: 0.36000, 1.49900, 1.92000
+    color: '#404C6E'
+  - label: source-painted roof ridge 1
+    min: -0.43750, -0.31117, 2.02400
+    max: -0.34375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 2
+    min: -0.18750, -0.31117, 2.02400
+    max: -0.09375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 3
+    min: 0.06250, -0.31117, 2.02400
+    max: 0.15625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 4
+    min: 0.31250, -0.31117, 2.02400
+    max: 0.40625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftRidge1
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightRMCContainerBlueRight
+  label: BlueRight freight section
+  sourcePrototypes:
+  - RMCContainerBlueRight
+  status: draft
+  description: Large freight container section with stepped vertical corrugations, source-painted roof, standing seams,
+    frame and lifting feet. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels
+    are split between physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden
+    end/rear construction and height are inferred. No opening or damage states are implemented.
+  referencePrototype: RMCContainerBlueRight
+  referenceRsi: /Textures/_RMC14/Structures/containers.rsi
+  referenceState: bluecontainerright
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.43750, 1.48000, 2.00200
+    color: '#303B68'
+  - label: painted corrugation 1
+    min: -0.50000, -0.47800, 0.05500
+    max: -0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueRightFace0
+    surfaceAxis: XZ
+  - label: painted corrugation 2
+    min: -0.37500, -0.49900, 0.05500
+    max: -0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftFace5
+    surfaceAxis: XZ
+  - label: painted corrugation 3
+    min: -0.25000, -0.47800, 0.05500
+    max: -0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftFace4
+    surfaceAxis: XZ
+  - label: painted corrugation 4
+    min: -0.12500, -0.49900, 0.05500
+    max: 0.00000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftFace5
+    surfaceAxis: XZ
+  - label: painted corrugation 5
+    min: 0.00000, -0.47800, 0.05500
+    max: 0.12500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftFace2
+    surfaceAxis: XZ
+  - label: painted corrugation 6
+    min: 0.12500, -0.49900, 0.05500
+    max: 0.25000, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueRightFace5
+    surfaceAxis: XZ
+  - label: painted corrugation 7
+    min: 0.25000, -0.47800, 0.05500
+    max: 0.37500, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueRightFace6
+    surfaceAxis: XZ
+  - label: painted corrugation 8
+    min: 0.37500, -0.49900, 0.05500
+    max: 0.43750, -0.45700, 2.00200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueRightFace7
+    surfaceAxis: XZ
+  - label: source-painted corrugated roof
+    min: -0.50000, -0.47400, 2.00200
+    max: 0.43750, 1.48000, 2.02700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueRightRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 0.04000
+    max: 0.43750, 1.49600, 0.07500
+    color: '#404C6E'
+  - label: rear horizontal frame
+    min: -0.50000, 1.44500, 2.01500
+    max: 0.43750, 1.49600, 2.05000
+    color: '#404C6E'
+  - label: rear wall corrugation
+    min: -0.34000, 1.47200, 0.12000
+    max: -0.30000, 1.49900, 1.92000
+    color: '#404C6E'
+  - label: rear wall corrugation
+    min: -0.12000, 1.47200, 0.12000
+    max: -0.08000, 1.49900, 1.92000
+    color: '#404C6E'
+  - label: rear wall corrugation
+    min: 0.10000, 1.47200, 0.12000
+    max: 0.14000, 1.49900, 1.92000
+    color: '#404C6E'
+  - label: rear wall corrugation
+    min: 0.32000, 1.47200, 0.12000
+    max: 0.36000, 1.49900, 1.92000
+    color: '#404C6E'
+  - label: outer end wall
+    min: 0.40550, -0.48000, 0.08000
+    max: 0.43750, 1.48000, 2.01400
+    color: '#2B355E'
+  - label: corner lifting foot
+    min: 0.40550, -0.43500, 0.00000
+    max: 0.43750, -0.30500, 0.12000
+    color: '#232A3D'
+  - label: corner frame upright
+    min: 0.40550, -0.40500, 0.08000
+    max: 0.43750, -0.33500, 2.04000
+    color: '#404C6E'
+  - label: corner lifting foot
+    min: 0.40550, 1.30500, 0.00000
+    max: 0.43750, 1.43500, 0.12000
+    color: '#232A3D'
+  - label: corner frame upright
+    min: 0.40550, 1.33500, 0.08000
+    max: 0.43750, 1.40500, 2.04000
+    color: '#404C6E'
+  - label: end wall rib
+    min: 0.40550, -0.11000, 0.15000
+    max: 0.44550, -0.07500, 1.90000
+    color: '#404C6E'
+  - label: end wall rib
+    min: 0.40550, 0.24000, 0.15000
+    max: 0.44550, 0.27500, 1.90000
+    color: '#404C6E'
+  - label: end wall rib
+    min: 0.40550, 0.59000, 0.15000
+    max: 0.44550, 0.62500, 1.90000
+    color: '#404C6E'
+  - label: end wall rib
+    min: 0.40550, 0.94000, 0.15000
+    max: 0.44550, 0.97500, 1.90000
+    color: '#404C6E'
+  - label: source-painted roof ridge 1
+    min: -0.43750, -0.31117, 2.02400
+    max: -0.34375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 2
+    min: -0.18750, -0.31117, 2.02400
+    max: -0.09375, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueLeftRidge1
+    surfaceAxis: XY
+  - label: source-painted roof ridge 3
+    min: 0.06250, -0.31117, 2.02400
+    max: 0.15625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueRightRidge2
+    surfaceAxis: XY
+  - label: source-painted roof ridge 4
+    min: 0.31250, -0.31117, 2.02400
+    max: 0.40625, 1.31717, 2.04500
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerBlueRightRidge3
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightRMCContainerShortBlueLeft
+  label: ShortBlueLeft freight section
+  sourcePrototypes:
+  - RMCContainerShortBlueLeft
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: RMCContainerShortBlueLeft
+  referenceRsi: /Textures/_RMC14/Structures/containers.rsi
+  referenceState: blueleft
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#4F596C'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerShortBlueLeftFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftBlueWYWingsRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#424B5C'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#424B5C'
+  - label: outer end wall
+    min: -0.50000, -0.48000, 0.08000
+    max: -0.46800, 0.48000, 0.95400
+    color: '#475061'
+  - label: corner lifting foot
+    min: -0.50000, -0.43500, 0.00000
+    max: -0.46800, -0.30500, 0.12000
+    color: '#242933'
+  - label: corner frame upright
+    min: -0.50000, -0.40500, 0.08000
+    max: -0.46800, -0.33500, 0.98000
+    color: '#424B5C'
+  - label: corner lifting foot
+    min: -0.50000, 0.30500, 0.00000
+    max: -0.46800, 0.43500, 0.12000
+    color: '#242933'
+  - label: corner frame upright
+    min: -0.50000, 0.33500, 0.08000
+    max: -0.46800, 0.40500, 0.98000
+    color: '#424B5C'
+  - label: outer lid strap
+    min: -0.50000, -0.43500, 0.96800
+    max: -0.28125, 0.44500, 1.02600
+    color: '#515C70'
+  - label: rounded strap end
+    min: -0.50000, -0.49900, 0.79000
+    max: -0.28125, -0.41500, 0.99300
+    color: '#4A5466'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: -0.45500, -0.49900, 0.84000
+    max: -0.32625, -0.48000, 0.90000
+    color: '#262B34'
+  - label: source-painted locking strap
+    min: -0.50000, -0.43500, 1.02600
+    max: -0.28125, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftBlueWYWingsStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightRMCContainerShortBlueRight
+  label: ShortBlueRight freight section
+  sourcePrototypes:
+  - RMCContainerShortBlueRight
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: RMCContainerShortBlueRight
+  referenceRsi: /Textures/_RMC14/Structures/containers.rsi
+  referenceState: blueright
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#4F596C'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerShortBlueRightFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightBlueWYWingsRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#424B5C'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#424B5C'
+  - label: outer end wall
+    min: 0.46800, -0.48000, 0.08000
+    max: 0.50000, 0.48000, 0.95400
+    color: '#475061'
+  - label: corner lifting foot
+    min: 0.46800, -0.43500, 0.00000
+    max: 0.50000, -0.30500, 0.12000
+    color: '#242933'
+  - label: corner frame upright
+    min: 0.46800, -0.40500, 0.08000
+    max: 0.50000, -0.33500, 0.98000
+    color: '#424B5C'
+  - label: corner lifting foot
+    min: 0.46800, 0.30500, 0.00000
+    max: 0.50000, 0.43500, 0.12000
+    color: '#242933'
+  - label: corner frame upright
+    min: 0.46800, 0.33500, 0.08000
+    max: 0.50000, 0.40500, 0.98000
+    color: '#424B5C'
+  - label: outer lid strap
+    min: 0.28125, -0.43500, 0.96800
+    max: 0.50000, 0.44500, 1.02600
+    color: '#515C70'
+  - label: rounded strap end
+    min: 0.28125, -0.49900, 0.79000
+    max: 0.50000, -0.41500, 0.99300
+    color: '#4A5466'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: 0.32625, -0.49900, 0.84000
+    max: 0.45500, -0.48000, 0.90000
+    color: '#262B34'
+  - label: source-painted locking strap
+    min: 0.28125, -0.43500, 1.02600
+    max: 0.50000, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightBlueWYWingsStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightRMCContainerShortGreenLeft
+  label: ShortGreenLeft freight section
+  sourcePrototypes:
+  - RMCContainerShortGreenLeft
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: RMCContainerShortGreenLeft
+  referenceRsi: /Textures/_RMC14/Structures/containers.rsi
+  referenceState: greenleft
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#39403A'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerShortGreenLeftFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerShortGreenLeftRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#313631'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#313631'
+  - label: outer end wall
+    min: -0.50000, -0.48000, 0.08000
+    max: -0.46800, 0.48000, 0.95400
+    color: '#333A34'
+  - label: corner lifting foot
+    min: -0.50000, -0.43500, 0.00000
+    max: -0.46800, -0.30500, 0.12000
+    color: '#1B1E1B'
+  - label: corner frame upright
+    min: -0.50000, -0.40500, 0.08000
+    max: -0.46800, -0.33500, 0.98000
+    color: '#313631'
+  - label: corner lifting foot
+    min: -0.50000, 0.30500, 0.00000
+    max: -0.46800, 0.43500, 0.12000
+    color: '#1B1E1B'
+  - label: corner frame upright
+    min: -0.50000, 0.33500, 0.08000
+    max: -0.46800, 0.40500, 0.98000
+    color: '#313631'
+  - label: outer lid strap
+    min: -0.50000, -0.43500, 0.96800
+    max: -0.28125, 0.44500, 1.02600
+    color: '#3B423C'
+  - label: rounded strap end
+    min: -0.50000, -0.49900, 0.79000
+    max: -0.28125, -0.41500, 0.99300
+    color: '#363C37'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: -0.45500, -0.49900, 0.84000
+    max: -0.32625, -0.48000, 0.90000
+    color: '#1C1F1C'
+  - label: source-painted locking strap
+    min: -0.50000, -0.43500, 1.02600
+    max: -0.28125, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerShortGreenLeftStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightRMCContainerShortGreenRight
+  label: ShortGreenRight freight section
+  sourcePrototypes:
+  - RMCContainerShortGreenRight
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: RMCContainerShortGreenRight
+  referenceRsi: /Textures/_RMC14/Structures/containers.rsi
+  referenceState: greenright
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#39403A'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerShortGreenRightFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerShortGreenRightRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#313631'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#313631'
+  - label: outer end wall
+    min: 0.46800, -0.48000, 0.08000
+    max: 0.50000, 0.48000, 0.95400
+    color: '#333A34'
+  - label: corner lifting foot
+    min: 0.46800, -0.43500, 0.00000
+    max: 0.50000, -0.30500, 0.12000
+    color: '#1B1E1B'
+  - label: corner frame upright
+    min: 0.46800, -0.40500, 0.08000
+    max: 0.50000, -0.33500, 0.98000
+    color: '#313631'
+  - label: corner lifting foot
+    min: 0.46800, 0.30500, 0.00000
+    max: 0.50000, 0.43500, 0.12000
+    color: '#1B1E1B'
+  - label: corner frame upright
+    min: 0.46800, 0.33500, 0.08000
+    max: 0.50000, 0.40500, 0.98000
+    color: '#313631'
+  - label: outer lid strap
+    min: 0.28125, -0.43500, 0.96800
+    max: 0.50000, 0.44500, 1.02600
+    color: '#3B423C'
+  - label: rounded strap end
+    min: 0.28125, -0.49900, 0.79000
+    max: 0.50000, -0.41500, 0.99300
+    color: '#363C37'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: 0.32625, -0.49900, 0.84000
+    max: 0.45500, -0.48000, 0.90000
+    color: '#1C1F1C'
+  - label: source-painted locking strap
+    min: 0.28125, -0.43500, 1.02600
+    max: 0.50000, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerShortGreenRightStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightRMCContainerShortRedLeft
+  label: ShortRedLeft freight section
+  sourcePrototypes:
+  - RMCContainerShortRedLeft
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: RMCContainerShortRedLeft
+  referenceRsi: /Textures/_RMC14/Structures/containers.rsi
+  referenceState: redleft
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#624545'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerShortRedLeftFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerShortRedLeftRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#523B3B'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#523B3B'
+  - label: outer end wall
+    min: -0.50000, -0.48000, 0.08000
+    max: -0.46800, 0.48000, 0.95400
+    color: '#583E3E'
+  - label: corner lifting foot
+    min: -0.50000, -0.43500, 0.00000
+    max: -0.46800, -0.30500, 0.12000
+    color: '#2D2020'
+  - label: corner frame upright
+    min: -0.50000, -0.40500, 0.08000
+    max: -0.46800, -0.33500, 0.98000
+    color: '#523B3B'
+  - label: corner lifting foot
+    min: -0.50000, 0.30500, 0.00000
+    max: -0.46800, 0.43500, 0.12000
+    color: '#2D2020'
+  - label: corner frame upright
+    min: -0.50000, 0.33500, 0.08000
+    max: -0.46800, 0.40500, 0.98000
+    color: '#523B3B'
+  - label: outer lid strap
+    min: -0.50000, -0.43500, 0.96800
+    max: -0.28125, 0.44500, 1.02600
+    color: '#654747'
+  - label: rounded strap end
+    min: -0.50000, -0.49900, 0.79000
+    max: -0.28125, -0.41500, 0.99300
+    color: '#5C4141'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: -0.45500, -0.49900, 0.84000
+    max: -0.32625, -0.48000, 0.90000
+    color: '#2F2222'
+  - label: source-painted locking strap
+    min: -0.50000, -0.43500, 1.02600
+    max: -0.28125, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerShortRedLeftStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightRMCContainerShortRedRight
+  label: ShortRedRight freight section
+  sourcePrototypes:
+  - RMCContainerShortRedRight
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: RMCContainerShortRedRight
+  referenceRsi: /Textures/_RMC14/Structures/containers.rsi
+  referenceState: redright
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#624545'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerShortRedRightFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerShortRedRightRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#523B3B'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#523B3B'
+  - label: outer end wall
+    min: 0.46800, -0.48000, 0.08000
+    max: 0.50000, 0.48000, 0.95400
+    color: '#583E3E'
+  - label: corner lifting foot
+    min: 0.46800, -0.43500, 0.00000
+    max: 0.50000, -0.30500, 0.12000
+    color: '#2D2020'
+  - label: corner frame upright
+    min: 0.46800, -0.40500, 0.08000
+    max: 0.50000, -0.33500, 0.98000
+    color: '#523B3B'
+  - label: corner lifting foot
+    min: 0.46800, 0.30500, 0.00000
+    max: 0.50000, 0.43500, 0.12000
+    color: '#2D2020'
+  - label: corner frame upright
+    min: 0.46800, 0.33500, 0.08000
+    max: 0.50000, 0.40500, 0.98000
+    color: '#523B3B'
+  - label: outer lid strap
+    min: 0.28125, -0.43500, 0.96800
+    max: 0.50000, 0.44500, 1.02600
+    color: '#654747'
+  - label: rounded strap end
+    min: 0.28125, -0.49900, 0.79000
+    max: 0.50000, -0.41500, 0.99300
+    color: '#5C4141'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: 0.32625, -0.49900, 0.84000
+    max: 0.45500, -0.48000, 0.90000
+    color: '#2F2222'
+  - label: source-painted locking strap
+    min: 0.28125, -0.43500, 1.02600
+    max: 0.50000, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerShortRedRightStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightRMCContainerShortTanLeft
+  label: ShortTanLeft freight section
+  sourcePrototypes:
+  - RMCContainerShortTanLeft
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: RMCContainerShortTanLeft
+  referenceRsi: /Textures/_RMC14/Structures/containers.rsi
+  referenceState: tanleft
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#665F55'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerShortTanLeftFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftTanWYWingsRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#555048'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#555048'
+  - label: outer end wall
+    min: -0.50000, -0.48000, 0.08000
+    max: -0.46800, 0.48000, 0.95400
+    color: '#5C564C'
+  - label: corner lifting foot
+    min: -0.50000, -0.43500, 0.00000
+    max: -0.46800, -0.30500, 0.12000
+    color: '#2F2C28'
+  - label: corner frame upright
+    min: -0.50000, -0.40500, 0.08000
+    max: -0.46800, -0.33500, 0.98000
+    color: '#555048'
+  - label: corner lifting foot
+    min: -0.50000, 0.30500, 0.00000
+    max: -0.46800, 0.43500, 0.12000
+    color: '#2F2C28'
+  - label: corner frame upright
+    min: -0.50000, 0.33500, 0.08000
+    max: -0.46800, 0.40500, 0.98000
+    color: '#555048'
+  - label: outer lid strap
+    min: -0.50000, -0.43500, 0.96800
+    max: -0.28125, 0.44500, 1.02600
+    color: '#686258'
+  - label: rounded strap end
+    min: -0.50000, -0.49900, 0.79000
+    max: -0.28125, -0.41500, 0.99300
+    color: '#5F5951'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: -0.45500, -0.49900, 0.84000
+    max: -0.32625, -0.48000, 0.90000
+    color: '#302E29'
+  - label: source-painted locking strap
+    min: -0.50000, -0.43500, 1.02600
+    max: -0.28125, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftTanWYWingsStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightRMCContainerShortTanRight
+  label: ShortTanRight freight section
+  sourcePrototypes:
+  - RMCContainerShortTanRight
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: RMCContainerShortTanRight
+  referenceRsi: /Textures/_RMC14/Structures/containers.rsi
+  referenceState: tanright
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#665F55'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerShortTanRightFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightTanWYWingsRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#555048'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#555048'
+  - label: outer end wall
+    min: 0.46800, -0.48000, 0.08000
+    max: 0.50000, 0.48000, 0.95400
+    color: '#5C564C'
+  - label: corner lifting foot
+    min: 0.46800, -0.43500, 0.00000
+    max: 0.50000, -0.30500, 0.12000
+    color: '#2F2C28'
+  - label: corner frame upright
+    min: 0.46800, -0.40500, 0.08000
+    max: 0.50000, -0.33500, 0.98000
+    color: '#555048'
+  - label: corner lifting foot
+    min: 0.46800, 0.30500, 0.00000
+    max: 0.50000, 0.43500, 0.12000
+    color: '#2F2C28'
+  - label: corner frame upright
+    min: 0.46800, 0.33500, 0.08000
+    max: 0.50000, 0.40500, 0.98000
+    color: '#555048'
+  - label: outer lid strap
+    min: 0.28125, -0.43500, 0.96800
+    max: 0.50000, 0.44500, 1.02600
+    color: '#686258'
+  - label: rounded strap end
+    min: 0.28125, -0.49900, 0.79000
+    max: 0.50000, -0.41500, 0.99300
+    color: '#5F5951'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: 0.32625, -0.49900, 0.84000
+    max: 0.45500, -0.48000, 0.90000
+    color: '#302E29'
+  - label: source-painted locking strap
+    min: 0.28125, -0.43500, 1.02600
+    max: 0.50000, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightTanWYWingsStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightRMCContainerTartarusLeft
+  label: TartarusLeft freight section
+  sourcePrototypes:
+  - RMCContainerTartarusLeft
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: RMCContainerTartarusLeft
+  referenceRsi: /Textures/_RMC14/Structures/containers.rsi
+  referenceState: tartarus_l
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#895B0C'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftKellandAltFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftKellandRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#724D0D'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#724D0D'
+  - label: outer end wall
+    min: -0.50000, -0.48000, 0.08000
+    max: -0.46800, 0.48000, 0.95400
+    color: '#7B520B'
+  - label: corner lifting foot
+    min: -0.50000, -0.43500, 0.00000
+    max: -0.46800, -0.30500, 0.12000
+    color: '#3F2A07'
+  - label: corner frame upright
+    min: -0.50000, -0.40500, 0.08000
+    max: -0.46800, -0.33500, 0.98000
+    color: '#724D0D'
+  - label: corner lifting foot
+    min: -0.50000, 0.30500, 0.00000
+    max: -0.46800, 0.43500, 0.12000
+    color: '#3F2A07'
+  - label: corner frame upright
+    min: -0.50000, 0.33500, 0.08000
+    max: -0.46800, 0.40500, 0.98000
+    color: '#724D0D'
+  - label: outer lid strap
+    min: -0.50000, -0.43500, 0.96800
+    max: -0.28125, 0.44500, 1.02600
+    color: '#8B5E10'
+  - label: rounded strap end
+    min: -0.50000, -0.49900, 0.79000
+    max: -0.28125, -0.41500, 0.99300
+    color: '#7F560F'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: -0.45500, -0.49900, 0.84000
+    max: -0.32625, -0.48000, 0.90000
+    color: '#412C07'
+  - label: source-painted locking strap
+    min: -0.50000, -0.43500, 1.02600
+    max: -0.28125, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusLeftKellandStrap
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DFreightRMCContainerTartarusRight
+  label: TartarusRight freight section
+  sourcePrototypes:
+  - RMCContainerTartarusRight
+  status: draft
+  description: Compact two-section freight crate with an embossed lid, outer locking strap, low shell and source warning/brand
+    paint. The saved left/middle/right tiles join at their existing X boundaries. Original source pixels are split between
+    physical roof and front surfaces; projected roof art is not treated as a vertical sign. Hidden end/rear construction
+    and height are inferred. No opening or damage states are implemented.
+  referencePrototype: RMCContainerTartarusRight
+  referenceRsi: /Textures/_RMC14/Structures/containers.rsi
+  referenceState: tartarus_r
+  sourceDirections: 1
+  useEntityRotation: true
+  parts:
+  - label: closed cargo shell
+    min: -0.50000, -0.46000, 0.05500
+    max: 0.50000, 0.48000, 0.94200
+    color: '#895B0C'
+  - label: painted front panel
+    min: -0.50000, -0.49900, 0.05500
+    max: 0.50000, -0.45700, 0.94200
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerTartarusRightFace0
+    surfaceAxis: XZ
+  - label: source-painted lid
+    min: -0.50000, -0.47400, 0.94200
+    max: 0.50000, 0.48000, 0.96700
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtRMCContainerTartarusRightRoof
+    surfaceAxis: XY
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.04000
+    max: 0.50000, 0.49600, 0.07500
+    color: '#724D0D'
+  - label: rear horizontal frame
+    min: -0.50000, 0.44500, 0.95500
+    max: 0.50000, 0.49600, 0.99000
+    color: '#724D0D'
+  - label: outer end wall
+    min: 0.46800, -0.48000, 0.08000
+    max: 0.50000, 0.48000, 0.95400
+    color: '#7B520B'
+  - label: corner lifting foot
+    min: 0.46800, -0.43500, 0.00000
+    max: 0.50000, -0.30500, 0.12000
+    color: '#3F2A07'
+  - label: corner frame upright
+    min: 0.46800, -0.40500, 0.08000
+    max: 0.50000, -0.33500, 0.98000
+    color: '#724D0D'
+  - label: corner lifting foot
+    min: 0.46800, 0.30500, 0.00000
+    max: 0.50000, 0.43500, 0.12000
+    color: '#3F2A07'
+  - label: corner frame upright
+    min: 0.46800, 0.33500, 0.08000
+    max: 0.50000, 0.40500, 0.98000
+    color: '#724D0D'
+  - label: outer lid strap
+    min: 0.28125, -0.43500, 0.96800
+    max: 0.50000, 0.44500, 1.02600
+    color: '#8B5E10'
+  - label: rounded strap end
+    min: 0.28125, -0.49900, 0.79000
+    max: 0.50000, -0.41500, 0.99300
+    color: '#7F560F'
+    shape: Ellipsoid
+  - label: strap latch recess
+    min: 0.32625, -0.49900, 0.84000
+    max: 0.45500, -0.48000, 0.90000
+    color: '#412C07'
+  - label: source-painted locking strap
+    min: 0.28125, -0.43500, 1.02600
+    max: 0.50000, 0.44500, 1.02900
+    color: '#FFFFFF'
+    surface: CMU3DContainerArtAU14ContainerTartarusRightKellandStrap
+    surfaceAxis: XY

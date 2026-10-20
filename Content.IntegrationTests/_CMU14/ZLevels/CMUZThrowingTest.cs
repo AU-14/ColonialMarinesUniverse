@@ -118,4 +118,94 @@ public sealed class CMUZThrowingTest : GameTest
             });
         }
     }
+
+    // hovering a hole sets the aim-down flag, a throw past the hole still has to reach the far side
+    [Test]
+    public async Task ThrowOverHoleReachesTheFarSide()
+    {
+        var levels = new EntityUid[2];
+        Entity<CMUZLevelsNetworkComponent> network = default;
+        var satchel = EntityUid.Invalid;
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var maps = Server.System<SharedMapSystem>();
+                var zLevels = Server.System<CMUZLevelsSystem>();
+                var tiles = Server.ResolveDependency<ITileDefinitionManager>();
+                var floor = new Tile(tiles["Plating"].TileId);
+                network = zLevels.CreateZNetwork();
+                var depths = new Dictionary<EntityUid, int>();
+
+                for (var i = 0; i < levels.Length; i++)
+                {
+                    var map = maps.CreateMap(runMapInit: true);
+                    levels[i] = map;
+                    var grid = SEntMan.EnsureComponent<MapGridComponent>(map);
+                    var gravity = SEntMan.EnsureComponent<GravityComponent>(map);
+                    gravity.Enabled = true;
+                    gravity.Inherent = true;
+
+                    // lower level is solid floor, upper level has a hole from x 2 to 4
+                    for (var x = -1; x <= 9; x++)
+                    {
+                        if (i == 1 && x is >= 2 and <= 4)
+                            continue;
+
+                        for (var y = -1; y <= 1; y++)
+                            maps.SetTile(map, grid, new Vector2i(x, y), floor);
+                    }
+
+                    depths.Add(map, i);
+                }
+
+                Assert.That(zLevels.TryAddMapsIntoZNetwork(network, depths), Is.True);
+                var origin = new EntityCoordinates(levels[1], new Vector2(0.5f));
+                var thrower = SEntMan.SpawnEntity("MobHuman", origin);
+                satchel = SEntMan.SpawnEntity("CMSatchel", origin);
+                var hands = Server.System<HandsSystem>();
+                Assert.That(hands.TryPickupAnyHand(thrower, satchel), Is.True);
+                Server.System<CMUZLevelShootingSystem>().SetAimDown(thrower, true);
+
+                Assert.That(hands.ThrowHeldItem(thrower,
+                    new EntityCoordinates(levels[1], new Vector2(6.5f, 0.5f))), Is.True);
+                Assert.That(SEntMan.HasComponent<ThrownItemComponent>(satchel), Is.True,
+                    "The satchel must enter the actual throw lifecycle.");
+            });
+
+            for (var tick = 0; tick < 120; tick++)
+            {
+                await Server.WaitRunTicks(1);
+                await Server.WaitAssertion(() =>
+                {
+                    Assert.That(SEntMan.GetComponent<TransformComponent>(satchel).MapUid, Is.EqualTo(levels[1]),
+                        "A throw past the hole must not dive down it on the way.");
+                });
+            }
+
+            await Server.WaitAssertion(() =>
+            {
+                var xform = SEntMan.GetComponent<TransformComponent>(satchel);
+                Assert.That(Server.System<SharedTransformSystem>().GetWorldPosition(xform).X, Is.GreaterThan(5f),
+                    "The satchel must land on the far side of the hole.");
+                Assert.That(SEntMan.HasComponent<ThrownItemComponent>(satchel), Is.False,
+                    "The check must include the completed throw.");
+            });
+        }
+        finally
+        {
+            await Server.WaitPost(() =>
+            {
+                foreach (var level in levels)
+                {
+                    if (level.Valid && !SEntMan.Deleted(level))
+                        SEntMan.DeleteEntity(level);
+                }
+
+                if (network.Owner.Valid && !SEntMan.Deleted(network))
+                    SEntMan.DeleteEntity(network);
+            });
+        }
+    }
 }

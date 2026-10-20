@@ -16,6 +16,8 @@ namespace Content.IntegrationTests._RMC14;
 [TestOf(typeof(RadioDeviceSystem))]
 public sealed class RadioDeviceSystemTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<RadioChannelPrototype> CommonPrototype = "Common";
+
     [Test]
     public async Task MicrophonesFilterXenosWithoutDuplicateRelays()
     {
@@ -69,7 +71,7 @@ public sealed class RadioDeviceSystemTest : GameTest
             sourceProbe.TransformedName = "Transformed radio voice";
 
             var radioSource = SEntMan.SpawnEntity(null, map.GridCoords);
-            var channel = SProtoMan.Index<RadioChannelPrototype>("Common");
+            var channel = SProtoMan.Index<RadioChannelPrototype>(CommonPrototype);
             ProtoId<LanguagePrototype> language = "English";
             const string message = "One language-aware radio whisper";
 

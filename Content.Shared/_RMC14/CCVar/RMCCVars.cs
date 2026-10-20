@@ -18,7 +18,7 @@ public sealed partial class RMCCVars : CVars
         CVarDef.Create("rmc.xeno_speed_multiplier", 1f, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<bool> RMCAutoPunctuate =
-        CVarDef.Create("rmc.auto_punctuate", false, CVar.REPLICATED | CVar.CLIENT | CVar.ARCHIVE);
+        CVarDef.Create("rmc.auto_punctuate", true, CVar.REPLICATED | CVar.CLIENT | CVar.ARCHIVE); // CMU14: on by default, players opt out in settings
 
     public static readonly CVarDef<bool> RMCAutoEjectMagazines =
         CVarDef.Create("rmc.auto_eject_magazines", true, CVar.REPLICATED | CVar.CLIENT | CVar.ARCHIVE);
@@ -156,7 +156,9 @@ public sealed partial class RMCCVars : CVars
         CVarDef.Create("rmc.bioscan_variance", 2, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<int> RMCDropshipFabricatorStartingPoints =
-        CVarDef.Create("rmc.dropship_fabricator_starting_points", 10000, CVar.REPLICATED | CVar.SERVER);
+        // CMU14 Start: raised round-start fabricator budget (was 10000)
+        CVarDef.Create("rmc.dropship_fabricator_starting_points", 17500, CVar.REPLICATED | CVar.SERVER);
+        // CMU14 End
 
     public static readonly CVarDef<float> RMCDropshipFabricatorGainEverySeconds =
         CVarDef.Create("rmc.dropship_fabricator_gain_every_seconds", 0.5f, CVar.REPLICATED | CVar.SERVER); // CMU14: increase dropship fabricator point generation

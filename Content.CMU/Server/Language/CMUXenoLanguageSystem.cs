@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server._RMC14.Language.Systems;
+using Content.Shared.CMU14.Threats.Mobs.Wendigo.Lab;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Language;
 using Content.Shared._RMC14.Language.Components;

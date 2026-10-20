@@ -548,7 +548,7 @@ entities:
     - type: YautjaHuntSpawnPoint
       kind: Youngblood
       destinationId: desert_moon
-- proto: RMCWallSandstoneTemple
+- proto: CMUYautjaPreserveSandstoneTemple
   entities:
   - uid: 36
     components:
@@ -2665,7 +2665,7 @@ entities:
     - type: Transform
       pos: 93.5,52.5
       parent: 2
-- proto: WallRock
+- proto: CMUYautjaPreserveRock
   entities:
   - uid: 459
     components:

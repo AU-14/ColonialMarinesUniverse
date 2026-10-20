@@ -6,6 +6,7 @@ using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
 using Content.Shared.CMU14.Dropship.GunshipControls; // CMU14
 using Content.Shared.CMU14.Xenomorphs.Pathogen;
+using Content.Shared._RMC14.AntiAir; // CMU14: IX-50 MGAD
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
 using Content.Shared._RMC14.Areas;
@@ -224,14 +225,14 @@ public abstract partial class SharedDropshipSystem : EntitySystem
             string.Equals(wsComp.Faction, "thirdparty", StringComparison.OrdinalIgnoreCase))
         {
             args.Cancel();
-            _popup.PopupClient(Loc.GetString("rmc-dropship-hijack-thirdparty"), ent, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-dropship-hijack-thirdparty"), ent, args.User, PopupType.MediumCaution);
             return;
         }
 
         if (!isHijacker && !CanUseNavigation(ent, args.User))
         {
             args.Cancel();
-            _popup.PopupClient(Loc.GetString("cmu-dropship-navigation-access-denied"), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("cmu-dropship-navigation-access-denied"), ent, args.User);
             return;
         }
 
@@ -245,7 +246,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         if (lockedOutRemaining > TimeSpan.Zero && !isHijacker)
         {
             args.Cancel();
-            _popup.PopupClient(Loc.GetString("rmc-dropship-locked-out", ("minutes", (int)lockedOutRemaining.TotalMinutes)), ent, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-dropship-locked-out", ("minutes", (int)lockedOutRemaining.TotalMinutes)), ent, args.User, PopupType.MediumCaution);
 
             if (_skills.HasSkill(args.User, ent.Comp.Skill, ent.Comp.FlyBySkillLevel))
             {
@@ -462,11 +463,11 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         if (ent.Comp.LockedOutUntil < _timing.CurTime)
         {
             _ui.CloseUis(ent.Owner);
-            _popup.PopupClient(Loc.GetString("rmc-dropship-locked-out-bypass-complete"), ent, args.User, PopupType.Medium);
+            _popup.PopupEntity(Loc.GetString("rmc-dropship-locked-out-bypass-complete"), ent, args.User, PopupType.Medium);
             return;
         }
 
-        _popup.PopupClient(Loc.GetString("rmc-dropship-locked-out-bypass"), ent, args.User, PopupType.Medium);
+        _popup.PopupEntity(Loc.GetString("rmc-dropship-locked-out-bypass"), ent, args.User, PopupType.Medium);
     }
 
     private void OnHumanHijackDoAfter(Entity<DropshipNavigationComputerComponent> ent, ref DropshipHumanHijackDoAfterEvent args)
@@ -648,7 +649,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
 
             if (!string.Equals(terminal.Comp.Faction, userFaction, StringComparison.OrdinalIgnoreCase))
             {
-                _popup.PopupClient(Loc.GetString("rmc-dropship-terminal-wrong-faction"), terminal, args.User, PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-dropship-terminal-wrong-faction"), terminal, args.User, PopupType.MediumCaution);
                 args.Cancel();
                 return;
             }
@@ -991,10 +992,38 @@ public abstract partial class SharedDropshipSystem : EntitySystem
                 return;
             }
 
-            if (FlyTo(ent, destination.Value, args.Actor, true) &&
-                TryComp(ent, out TransformComponent? xform) &&
+            // cmu edit start: the target ship's IX-50 MGAD can divert the crash to another zone (RMC-14 PR 10167)
+            if (!TryComp(ent, out TransformComponent? xform) || !xform.ParentUid.Valid)
+                return;
+
+            var originalDestination = destination.Value;
+            var antiAirEv = new RMCGetHijackDestinationEvent(xform.ParentUid, originalDestination, args.Actor);
+            RaiseLocalEvent(ref antiAirEv);
+
+            if (!HasComp<DropshipHijackDestinationComponent>(antiAirEv.Destination))
+            {
+                Log.Warning($"{ToPrettyString(args.Actor)} tried to hijack to invalid redirected destination {ToPrettyString(antiAirEv.Destination)}");
+                return;
+            }
+
+            if (FlyTo(ent, antiAirEv.Destination, args.Actor, true) &&
                 xform.ParentUid.Valid)
             {
+                var resolvedEv = new RMCDropshipHijackAntiAirResolvedEvent(
+                    xform.ParentUid,
+                    args.Actor,
+                    originalDestination,
+                    antiAirEv.Destination,
+                    antiAirEv.AntiAirConsole,
+                    antiAirEv.OriginalZone,
+                    antiAirEv.DivertedZone,
+                    antiAirEv.Deterrence,
+                    antiAirEv.DeterrenceSound,
+                    antiAirEv.DeterrenceShakeIntensity,
+                    antiAirEv.DeterrenceShakeDuration);
+                RaiseLocalEvent(ref resolvedEv);
+            // cmu edit end
+
                 var dropship = EnsureComp<DropshipComponent>(xform.ParentUid);
                 dropship.Crashed = true;
                 Dirty(xform.ParentUid, dropship);
@@ -1174,13 +1203,13 @@ public abstract partial class SharedDropshipSystem : EntitySystem
     private bool TryDropshipLaunchPopup(EntityUid computer, EntityUid user, bool predicted)
     {
         var roundDuration = _gameTicker.RoundDuration();
-        if (roundDuration < _dropshipInitialDelay)
+        if (roundDuration < _dropshipInitialDelay && !IsExemptFromInitialDelay(computer)) // CMU14
         {
             var minutesLeft = Math.Max(1, (int)(_dropshipInitialDelay - roundDuration).TotalMinutes);
             var msg = Loc.GetString("rmc-dropship-pre-flight-fueling", ("minutes", minutesLeft));
 
             if (predicted)
-                _popup.PopupClient(msg, computer, user, PopupType.MediumCaution);
+                _popup.PopupEntity(msg, computer, user, PopupType.MediumCaution);
             else
                 _popup.PopupEntity(msg, computer, user, PopupType.MediumCaution);
 
@@ -1200,7 +1229,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
             var msg = Loc.GetString("rmc-dropship-pre-hijack", ("minutes", minutesLeft));
 
             if (predicted)
-                _popup.PopupClient(msg, computer, user, PopupType.MediumCaution);
+                _popup.PopupEntity(msg, computer, user, PopupType.MediumCaution);
             else
                 _popup.PopupEntity(msg, computer, user, PopupType.MediumCaution);
 
@@ -1237,7 +1266,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
             var msg = Loc.GetString("rmc-dropship-invalid-hijack");
 
             if (predicted)
-                _popup.PopupClient(msg, computer, user, PopupType.MediumCaution);
+                _popup.PopupEntity(msg, computer, user, PopupType.MediumCaution);
             else
                 _popup.PopupEntity(msg, computer, user, PopupType.MediumCaution);
 
@@ -1255,7 +1284,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
             var msg = Loc.GetString("rmc-dropship-invalid-hijack");
 
             if (predicted)
-                _popup.PopupClient(msg, computer, user, PopupType.MediumCaution);
+                _popup.PopupEntity(msg, computer, user, PopupType.MediumCaution);
             else
                 _popup.PopupEntity(msg, computer, user, PopupType.MediumCaution);
 

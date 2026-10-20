@@ -46,6 +46,7 @@
     RMC:
     - type: Skills
       skills:
+        CMUSkillAircrew: 1
         RMCSkillFirearms: 2
         RMCSkillFireman: 1
         RMCSkillIntel: 1
@@ -62,6 +63,7 @@
     UPP:
     - type: Skills
       skills:
+        CMUSkillAircrew: 1
         RMCSkillFirearms: 2
         RMCSkillFireman: 1
         RMCSkillIntel: 1
@@ -78,6 +80,7 @@
     WYPMC:
     - type: Skills
       skills:
+        CMUSkillAircrew: 1
         RMCSkillFirearms: 2
         RMCSkillFireman: 1
         RMCSkillIntel: 1
@@ -95,7 +98,7 @@
   requirements:
   - !type:TotalJobsTimeRequirement
     group: CMUJobsFlightCrew
-    time: 10800 # 3 hours
+    time: 7200 # 2 hours
   - !type:AgeRequirement
     requiredAge: 25
   - !type:TraitsRequirement
@@ -111,6 +114,9 @@
     - Asthmatic
     - CMUAlcoholic
     - CMUDrugAddict
+    - CMUBadLeg
+    - CMUMotionSick
+    - CMUFearOfHeights
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -295,6 +301,7 @@
 - type: job
   parent: AU14JobGOVFORDSPilot
   id: AU14JobGOVFORGunshipPilot
+  forceOnForcePreferenceRole: GunshipPilot
   name: au14-job-name-govforgunshippilot
   description: au14-job-description-govforgunshippilot
   spawnMenuRoleName: au14-spawn-role-name-govfor-gunship-pilot
@@ -314,6 +321,7 @@
 - type: job
   parent: AU14JobOPFORDSPilot
   id: AU14JobOPFORGunshipPilot
+  forceOnForcePreferenceRole: GunshipPilot
   name: au14-job-name-govforgunshippilot
   description: au14-job-description-govforgunshippilot
   spawnMenuRoleName: au14-spawn-role-name-opfor-gunship-pilot
@@ -332,6 +340,7 @@
 - type: job
   parent: AU14JobGOVFORDSPilot
   id: AU14JobGOVFORFighterPilot
+  forceOnForcePreferenceRole: FighterPilot
   name: au14-job-name-govforfighterpilot
   description: au14-job-description-govforfighterpilot
   spawnMenuRoleName: au14-spawn-role-name-govfor-fighter-pilot
@@ -355,6 +364,7 @@
 - type: job
   parent: AU14JobOPFORDSPilot
   id: AU14JobOPFORFighterPilot
+  forceOnForcePreferenceRole: FighterPilot
   name: au14-job-name-govforfighterpilot
   description: au14-job-description-govforfighterpilot
   spawnMenuRoleName: au14-spawn-role-name-opfor-fighter-pilot
@@ -377,6 +387,7 @@
 - type: job
   parent: AU14JobGOVFORDSPilot
   id: AU14JobGOVFORFighterSystemsOfficer
+  forceOnForcePreferenceRole: FighterSystemsOfficer
   name: au14-job-name-govforfightersystemsofficer
   description: au14-job-description-govforfightersystemsofficer
   spawnMenuRoleName: au14-spawn-role-name-govfor-fighter-systems-officer
@@ -396,6 +407,7 @@
 - type: job
   parent: AU14JobOPFORDSPilot
   id: AU14JobOPFORFighterSystemsOfficer
+  forceOnForcePreferenceRole: FighterSystemsOfficer
   name: au14-job-name-govforfightersystemsofficer
   description: au14-job-description-govforfightersystemsofficer
   spawnMenuRoleName: au14-spawn-role-name-opfor-fighter-systems-officer

@@ -211,7 +211,7 @@ public abstract partial class SharedCrashLandSystem : EntitySystem
         var physQuery = GetEntityQuery<PhysicsComponent>();
         var valid = true;
 
-        var anchored = _mapSystem.GetAnchoredEntitiesEnumerator(grid, grid.Comp, tile);
+        var anchored = _mapSystem.GetAnchoredEntities(grid, grid.Comp, tile);
         while (anchored.MoveNext(out var ent))
         {
             if (!physQuery.TryGetComponent(ent, out var body))

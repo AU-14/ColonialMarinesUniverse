@@ -53,8 +53,7 @@ public sealed partial class FootPrintsSystem : EntitySystem
     {
         if (component.PrintsColor.A <= 0f
             || !_transformQuery.TryComp(uid, out var transform)
-            || !_mobThresholdQuery.TryComp(uid, out var mobThreshHolds)
-            || !_map.TryFindGridAt(_transform.GetMapCoordinates((uid, transform)), out var gridUid, out _))
+            || !_mobThresholdQuery.TryComp(uid, out var mobThreshHolds)) // CMU14: defer the spatial lookup until a step is due.
             return;
 
         // CMU14: organ-driven incapacity can override the damage-threshold cache.
@@ -65,6 +64,10 @@ public sealed partial class FootPrintsSystem : EntitySystem
         var stepSize = dragging ? component.DragSize : component.StepSize;
 
         if (stepDelta.LengthSquared() <= stepSize * stepSize)
+            return;
+
+        // CMU14: short translations and rotation-only MoveEvents do not need a grid lookup.
+        if (!_map.TryFindGridAt(_transform.GetMapCoordinates((uid, transform)), out var gridUid, out _))
             return;
 
         if (dragging && component.DraggingDecals.Count == 0)

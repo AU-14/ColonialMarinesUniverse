@@ -58,6 +58,7 @@
   suffix: CMU, FIRES AN OB!!!
   components:
   - type: OrbitalCannonExplosion
+    multiZ: true
     steps:
     - type: RMCOBXenoTunnel
       total: 120000

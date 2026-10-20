@@ -1,0 +1,116 @@
+# Wolfpack hardpoints. Overlays rotate about their frame centre, so the tank_turret frames are
+# re-registered with the turret ring at the frame centre and placed back on the hull's ring by
+# per-direction offsets. The ltb_cannon frames stay hull-registered; the cannon's turret-relative
+# offsets cancel the turret's, so turret and barrel line up exactly as drawn at the cardinals.
+- type: entity
+  parent: RMCAPCHardpointBase
+  id: CMUVehicleAPCWolfpackTurret
+  name: Wolfpack Turret
+  components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      turret-cannon: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+  - type: Sprite
+    sprite: CMU14/Structures/vehicles/apc_wolfpack.rsi
+    state: tank_turret_0
+  - type: HardpointItem
+    hardpointType: Turret
+    vehicleFamily: APC
+    slotType: Turret
+    compatibilityId: CMUWolfpack
+    damageMultiplier: 0.2
+    repairRate: 0.008
+  # Turret + autocannon = the APC dual cannon's 500, so a fitted Wolfpack keeps APC hull capacity.
+  - type: HardpointIntegrity
+    maxIntegrity: 250
+    integrity: 250
+  - type: VehicleTurret
+    rotateToCursor: true
+    stabilizedRotation: false
+    rotationSpeed: 80
+    showOverlay: true
+    overlayRsi: CMU14/Structures/vehicles/apc_wolfpack.rsi
+    overlayState: tank_turret_0
+    overlayDamagedState: tank_turret_1
+    # Hull ring centre per hull direction, in pixels (x right, y up).
+    useDirectionalOffsets: true
+    pixelOffsetSouth: "0,14"
+    pixelOffsetNorth: "1,2"
+    pixelOffsetEast: "-9,17"
+    pixelOffsetWest: "3,17"
+  - type: ItemSlots
+    slots:
+      turret-cannon:
+        startingItem: CMUVehicleAPCWolfpackAutocannon
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+  - type: HardpointSlots
+    vehicleFamily: APC
+    slots:
+    - id: turret-cannon
+      hardpointType: Cannon
+      slotType: Cannon
+      compatibilityId: CMUWolfpackTurret
+      required: false
+      insertDelay: 2.0
+  - type: HardpointVisual
+    vehicleState: tank_turret_0
+    damagedVehicleState: tank_turret_1
+
+# Same gun, ammunition and fire arc as the ACE autocannon, refitted for the APC family.
+- type: entity
+  parent: VehicleTankAceAutocannon
+  id: CMUVehicleAPCWolfpackAutocannon
+  name: Wolfpack AC3-E Autocannon
+  components:
+  - type: HardpointItem
+    hardpointType: Cannon
+    vehicleFamily: APC
+    slotType: Cannon
+    compatibilityId: CMUWolfpackTurret
+    damageMultiplier: 0.2
+    repairRate: 0.01
+  - type: HardpointIntegrity
+    maxIntegrity: 250
+    integrity: 250
+  - type: VehicleTurret
+    overlayRsi: CMU14/Structures/vehicles/apc_wolfpack.rsi
+    overlayState: ltb_cannon_0
+    # Negated turret ring offsets: puts the hull-registered barrel art back on the turret pivot.
+    pixelOffsetNorth: "-1,-2"
+    pixelOffsetEast: "9,-17"
+    pixelOffsetSouth: "0,-14"
+    pixelOffsetWest: "-3,-17"
+  # Just behind the drawn ltb_cannon_0 barrel tip (-y is forward along the barrel).
+  - type: GunMuzzleOffset
+    offsetNorth: "0,-2.25"
+    offsetEast: "0.7,-2.3"
+    offsetSouth: "0,-2.05"
+    offsetWest: "-0.7,-2.3"
+  - type: HardpointVisual
+    vehicleState: ltb_cannon_0
+    damagedVehicleState: ltb_cannon_1
+
+- type: entity
+  parent: RMCAPCFrontCannon
+  id: CMUVehicleAPCWolfpackFrontCannon
+  components:
+  - type: HardpointItem
+    compatibilityId: CMUWolfpack
+  - type: HardpointVisual
+    damagedVehicleState: frontalcannon_1
+
+- type: entity
+  parent: RMCAPCFlareLauncher
+  id: CMUVehicleAPCWolfpackFlareLauncher
+  components:
+  - type: HardpointItem
+    compatibilityId: CMUWolfpack
+  - type: HardpointVisual
+    damagedVehicleState: flare_launcher_1

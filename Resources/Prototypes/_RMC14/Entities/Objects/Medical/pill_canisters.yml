@@ -85,6 +85,13 @@
   - type: PhysicalComposition
     materialComposition:
       RMCPlastic: 500
+  - type: RMCBreakablePillBottle
+    breakWhitelist:
+      tags:
+      - Knife
+    repairWhitelist:
+      tags:
+      - Wirecutter
 
 - type: entity
   parent: RMCPillCanisterNoSkill
@@ -462,7 +469,7 @@
   parent: RMCPillCanisterNoSkill
   id: RMCPillCanisterIronNoSkill
   name: iron pill bottle
-  description: It's an airtight container for storing medication. It's labeled "FN (Iron 10u, Nutriment 5u, No OD) Used to quickly restore blood."
+  description: It's an airtight container for storing medication. It's labeled "FN (Iron 10u, No OD) Used to quickly restore blood." # CMU14: no nutriment
   suffix: Iron, 16, No Skill
   components:
   - type: Item

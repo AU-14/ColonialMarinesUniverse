@@ -19,6 +19,10 @@ public sealed partial class DrugAllergyComponent : Component
         "CMUOxycodone",
         "CMUTramadol",
         "CMUParacetamol",
+        "CMUFentanyl",
+        "CMImidazoline",
+        "CMLeporazine",
+        "CMEthylredoxrazine",
     };
 
     [DataField]
@@ -26,7 +30,7 @@ public sealed partial class DrugAllergyComponent : Component
 
     /// <summary>
     ///     Whether the allergic reaction is currently active. Set when the allergen is
-    ///     ingested, cleared entirely when treated with naloxone.
+    ///     ingested, cleared entirely when treated with epinephrine.
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool ReactionActive;
@@ -91,4 +95,24 @@ public sealed partial class DrugAllergyComponent : Component
 
     [DataField, AutoNetworkedField]
     public TimeSpan NextTriggerAllowed;
+
+    /// <summary>
+    ///     Further drug allergens past <see cref="Allergen"/>, from taking a second allergy trait.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public List<ProtoId<ReagentPrototype>> ExtraAllergens = new();
+
+    /// <summary>
+    ///     What set off the current reaction, shown on health scanners. Null if unknown.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public string? ReactionCause;
+
+    /// <summary>
+    ///     True if this entity is allergic to the reagent.
+    /// </summary>
+    public bool IsAllergen(ProtoId<ReagentPrototype> reagent)
+    {
+        return Allergen == reagent || ExtraAllergens.Contains(reagent);
+    }
 }

@@ -85,9 +85,9 @@ public sealed class MohawkWeaponVisualsTest
         {
             var entities = pair.Server.EntMan;
             var containers = entities.System<SharedContainerSystem>();
-            foreach (var point in entities.EntityQuery<DropshipWeaponPointComponent>())
+            foreach (var point in entities.QueryEntities<DropshipWeaponPointComponent>())
             {
-                var slot = containers.EnsureContainer<ContainerSlot>(point.Owner, point.WeaponContainerSlotId);
+                var slot = containers.EnsureContainer<ContainerSlot>(point.Owner, point.Comp.WeaponContainerSlotId);
                 var weapon = slot.ContainedEntity;
                 if (weapon == null)
                 {

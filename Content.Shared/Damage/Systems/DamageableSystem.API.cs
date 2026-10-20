@@ -573,7 +573,8 @@ public sealed partial class DamageableSystem
     /// <summary>
     /// Gets the damages currently sustained by an entity.
     /// </summary>
-    [Obsolete("Do not rely on the ability to determine a numerically quantifiable amount of damage")]
+    // CMU14: aggregate damage remains part of the supported numeric injury and healing model.
+    // [Obsolete("Do not rely on the ability to determine a numerically quantifiable amount of damage")]
     public DamageSpecifier GetAllDamage(Entity<DamageableComponent?> ent)
     {
         if (!_damageableQuery.Resolve(ent, ref ent.Comp))
@@ -585,7 +586,8 @@ public sealed partial class DamageableSystem
     /// <summary>
     /// Gets the total amount of damage currently sustained by an entity.
     /// </summary>
-    [Obsolete("Do not rely on the ability to determine a numerically quantifiable amount of damage")]
+    // CMU14: thresholds and body-damage projection use this aggregate as part of the supported damage model.
+    // [Obsolete("Do not rely on the ability to determine a numerically quantifiable amount of damage")]
     public FixedPoint2 GetTotalDamage(Entity<DamageableComponent?> ent)
     {
         if (!_damageableQuery.Resolve(ent, ref ent.Comp, false))
@@ -597,7 +599,8 @@ public sealed partial class DamageableSystem
     /// <summary>
     /// Gets the total amount of damage currently sustained by an entity, indexed by damage group.
     /// </summary>
-    [Obsolete("Do not rely on the ability to determine a numerically quantifiable amount of damage")]
+    // CMU14: grouped damage remains part of the supported numeric injury and healing model.
+    // [Obsolete("Do not rely on the ability to determine a numerically quantifiable amount of damage")]
     public IReadOnlyDictionary<ProtoId<DamageGroupPrototype>, FixedPoint2> GetDamagePerGroup(Entity<DamageableComponent?> ent)
     {
         if (!_damageableQuery.Resolve(ent, ref ent.Comp))
@@ -609,7 +612,8 @@ public sealed partial class DamageableSystem
     /// <summary>
     /// Returns whether the entity can be damaged by the given type of damage
     /// </summary>
-    [Obsolete("Do not rely on the ability to determine if an entity will be able to be damaged by something")]
+    // CMU14: damage-container support is still a defined property of the current injury model.
+    // [Obsolete("Do not rely on the ability to determine if an entity will be able to be damaged by something")]
     public bool CanBeDamagedBy(Entity<InjurableComponent?> ent, ProtoId<DamageTypePrototype> type)
     {
         if (!_injurableQuery.Resolve(ent, ref ent.Comp, false))

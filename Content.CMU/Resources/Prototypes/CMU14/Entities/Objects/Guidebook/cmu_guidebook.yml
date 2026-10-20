@@ -6,6 +6,10 @@
   text: "/ServerInfo/Guidebook/CMU14/CMUGuidebook.xml"
   children:
   - AU14Comms
+  - CMUGuideOverwatch
+  - CMUGuideShipWeapons
+  - CMUGuideFOBSecurity
+  - CMUGuideSkills
   - CMUGuideMortar
   - CMUGuideExplosives
   - CMUGuideMedical
@@ -17,6 +21,13 @@
   - CMUChemicals
   - CMUGuideCooking
   - CMUGuideLore
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideShipWeapons
+  name: cmu-guide-entry-ship-weapons
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUShipWeapons.xml"
 
 - type: guideEntry
   parent: RMC
@@ -226,6 +237,7 @@
   - CMUGuideMedicalInfantry
   - CMUGuideMedicalDiagnosis
   - CMUGuideMedicalWounds
+  - CMUGuideMedicalBlood
   - CMUGuideMedicalFieldCare
   - CMUGuideMedicalBones
   - CMUGuideMedicalPain
@@ -256,6 +268,13 @@
   name: cmu-guide-entry-medical-wounds
   priority: 1
   text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalWounds.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalBlood
+  name: cmu-guide-entry-medical-blood
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalBlood.xml"
 
 - type: guideEntry
   parent: RMC
@@ -1058,3 +1077,24 @@
   name: cmu-guide-entry-lore-tribals
   priority: 6
   text: "/ServerInfo/Guidebook/CMU14/Lore/Organisms/CMULoreTribals.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideOverwatch
+  name: cmu-guide-entry-overwatch
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUOverwatch.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideFOBSecurity
+  name: cmu-guide-entry-fob-security
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUFOBSecurity.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideSkills
+  name: cmu-guide-entry-skills
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUSkills.xml"

@@ -77,6 +77,7 @@ namespace Content.Client.IoC
 
             // CMU14
             collection.Register<ServerLogsDownloadManager>();
+            collection.Register<Content.Client.CMU14.ThreeD.CMU3DModelLibrary>();
 
             // RMC14
             collection.Register<LinkAccountManager>();

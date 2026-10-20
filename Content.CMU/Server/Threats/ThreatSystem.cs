@@ -8,12 +8,12 @@ using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Yautja;
-using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.CMU14.Threats.Mobs.Biomorph;
+using Content.Shared.CMU14.Threats.Mobs.Wendigo.Pack;
 using Content.Shared.CMU14.util;
 using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
@@ -680,6 +680,15 @@ public sealed partial class ThreatSystem : EntitySystem
                 return spawned;
             }
 
+            // short on markers? share them out per body type, otherwise the first type listed eats
+            // all of them and you get a tribe of spearmen with no bows or shaman
+            int leaderMarkerBudget = leaderMarkers.Count;
+            if (leaderReq > leaderMarkerBudget)
+                ThreatVoteSelection.DistributeBodies(leaderBodies, ref leaderMarkerBudget);
+            int memberMarkerBudget = memberMarkers.Count;
+            if (memberReq > memberMarkerBudget)
+                ThreatVoteSelection.DistributeBodies(memberBodies, ref memberMarkerBudget);
+
             // Spawn leaders — each entity proto gets its own scaled count
             foreach ((string protoId, int count) in leaderBodies)
             {
@@ -1009,17 +1018,6 @@ public sealed partial class ThreatSystem : EntitySystem
         RaiseLocalEvent(new ObjectiveWatchedEntityStartupEvent(entity));
     }
 
-    internal bool HasCrashedDropship()
-    {
-        EntityQueryEnumerator<DropshipComponent> dropships = EntityQueryEnumerator<DropshipComponent>();
-        while (dropships.MoveNext(out _, out DropshipComponent? dropship))
-        {
-            return dropship.Crashed;
-        }
-
-        return false;
-    }
-
     internal bool IsExcludedFromVictory(EntityUid uid, MobStateComponent mobState)
     {
         // Exclude all threats, which use their own Victory Condition logic
@@ -1028,7 +1026,8 @@ public sealed partial class ThreatSystem : EntitySystem
             || HasComp<ApeComponent>(uid)
             || HasComp<TribalComponent>(uid)
             || HasComp<BiomorphComponent>(uid)
-            || HasComp<BiomorphMimicComponent>(uid))
+            || HasComp<BiomorphMimicComponent>(uid)
+            || HasComp<CMUWendigoPackComponent>(uid))
             return true;
 
         if (HasComp<SynthComponent>(uid))

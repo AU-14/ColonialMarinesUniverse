@@ -6,7 +6,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/hardpoints/tank.rsi
   - type: Item
-    size: Large
+    size: Ginormous
   - type: PowerLoaderGrabbable
   - type: RemoveComponents
     components:
@@ -238,6 +238,7 @@
   - type: RemoveComponents
     components:
     - type: PowerLoaderGrabbable
+
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankTreadsTWE # CMU14
@@ -261,6 +262,7 @@
   - type: RemoveComponents
     components:
     - type: PowerLoaderGrabbable
+
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankReinforcedTreads # CMU14

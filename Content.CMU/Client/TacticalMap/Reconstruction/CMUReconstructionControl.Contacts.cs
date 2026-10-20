@@ -29,12 +29,14 @@ public sealed partial class CMUReconstructionControl
     {
         if (!ShowContacts || Scene is not { } scene) return;
         var sprites = _entities.System<SpriteSystem>();
+        Vector2? operatorPoint = null;
         foreach (var contact in TrackedContacts)
         {
             if (contact.Depth != scene.MinDepth + _selectedLevel) continue;
             var blip = contact.Blip;
             var point = ContactPosition(contact, scene);
             if (!PixelSizeBox.Contains(new Vector2i((int) point.X, (int) point.Y))) continue;
+            if (contact.IsOperator) operatorPoint = point;
             var rect = UIBox2.FromDimensions(point - new Vector2(10 * UIScale), new Vector2(20 * UIScale));
             if (contact.CameraTarget != null || contact.XenoWatchTarget != null)
                 handle.DrawRect(UIBox2.FromDimensions(point - new Vector2(12 * UIScale), new Vector2(24 * UIScale)),
@@ -66,6 +68,19 @@ public sealed partial class CMUReconstructionControl
                 handle.DrawString(_font, label, name, UIScale, Color.White);
             }
         }
+
+        // Draw above the other contacts so overlapping icons cannot hide the operator's pulse.
+        if (operatorPoint is { } center)
+            DrawOperatorPing(handle, center);
+    }
+
+    private void DrawOperatorPing(DrawingHandleScreen handle, Vector2 center)
+    {
+        // Match the classic tacmap's two-second expanding, fading cyan ring.
+        const float duration = 2f;
+        var progress = (float) (_timing.CurTime.TotalSeconds % duration) / duration;
+        var radius = 10f * UIScale * (1f + 1.5f * progress);
+        handle.DrawCircle(center, radius, Color.Cyan.WithAlpha(0.65f * (1f - progress)), false);
     }
 
     private Vector2 ContactPosition(CMUReconContact contact, CMUReconSnapshotMessage scene) =>

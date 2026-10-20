@@ -29,6 +29,10 @@ namespace Content.IntegrationTests.Tests.Chemistry;
 [TestFixture]
 public sealed class ChemistryCompatibilityMergeRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId ChemistryMergeCollisionManagerPrototype = "ChemistryMergeCollisionManager";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMTricordrazineAutoInjectorPrototype = "CMTricordrazineAutoInjector";
+    private static readonly Robust.Shared.Prototypes.EntProtoId HyposprayPrototype = "Hypospray";
+
     private static readonly EntProtoId[] LegacyHyposprays =
     [
         "AU14NaloxoneAutoInjector",
@@ -289,7 +293,7 @@ public sealed class ChemistryCompatibilityMergeRegressionTest : GameTest
         await Server.WaitPost(() =>
         {
             var solutions = SEntMan.System<SharedSolutionContainerSystem>();
-            var collisionPrototype = SProtoMan.Index<EntityPrototype>("ChemistryMergeCollisionManager");
+            var collisionPrototype = SProtoMan.Index<EntityPrototype>(ChemistryMergeCollisionManagerPrototype);
             Assert.That(solutions.TryGetSolution(collisionPrototype, "collision", out var collisionSolution), Is.True);
             var enumerated = solutions.EnumerateSolutions(collisionPrototype).ToArray();
             Assert.Multiple(() =>
@@ -327,18 +331,24 @@ public sealed class ChemistryCompatibilityMergeRegressionTest : GameTest
             Assert.Multiple(() =>
             {
                 Assert.That(SEntMan.HasComponent<SolutionManagerComponent>(inline), Is.True);
+#pragma warning disable CS0612 // CMU14: Regression coverage intentionally inspects the legacy solution schema.
                 Assert.That(SEntMan.HasComponent<SolutionContainerManagerComponent>(inline), Is.False);
+#pragma warning restore CS0612
                 Assert.That(solutions.TryGetSolution(inline, "inline", out _, out var inlineSolution), Is.True);
                 Assert.That(inlineSolution!.Volume, Is.EqualTo(FixedPoint2.New(4)));
 
                 Assert.That(SEntMan.HasComponent<SolutionManagerComponent>(stored), Is.True);
+#pragma warning disable CS0612 // CMU14: Regression coverage intentionally inspects the legacy solution schema.
                 Assert.That(SEntMan.HasComponent<SolutionContainerManagerComponent>(stored), Is.False);
+#pragma warning restore CS0612
                 Assert.That(solutions.TryGetSolution(stored, "stored", out var migrated, out var storedState), Is.True);
                 Assert.That(migrated!.Value.Owner, Is.EqualTo(storedSolution));
                 Assert.That(storedState!.Volume, Is.EqualTo(FixedPoint2.New(6)));
 
                 Assert.That(SEntMan.HasComponent<SolutionManagerComponent>(collision), Is.True);
+#pragma warning disable CS0612 // CMU14: Regression coverage intentionally inspects the legacy solution schema.
                 Assert.That(SEntMan.HasComponent<SolutionContainerManagerComponent>(collision), Is.False);
+#pragma warning restore CS0612
                 Assert.That(solutions.TryGetSolution(collision, "collision", out _, out var collisionState), Is.True);
                 Assert.That(collisionState!.MaxVolume, Is.EqualTo(FixedPoint2.New(12)));
                 Assert.That(collisionState.Volume, Is.EqualTo(FixedPoint2.New(6)));
@@ -569,7 +579,7 @@ public sealed class ChemistryCompatibilityMergeRegressionTest : GameTest
                 });
             }
 
-            var legacyRepresentative = SProtoMan.Index<EntityPrototype>("CMTricordrazineAutoInjector");
+            var legacyRepresentative = SProtoMan.Index<EntityPrototype>(CMTricordrazineAutoInjectorPrototype);
             var legacyAncestry = SProtoMan.EnumerateAllParents<EntityPrototype>(legacyRepresentative.ID)
                 .Select(parent => parent.id)
                 .ToArray();
@@ -583,7 +593,9 @@ public sealed class ChemistryCompatibilityMergeRegressionTest : GameTest
                 Assert.That(legacyAncestry, Does.Not.Contain("ChemicalMedipen"));
                 Assert.That(legacyRepresentative.TryComp<SolutionComponent>(out _, factory), Is.False,
                     "The upstream inherited hypospray solution must not survive on the legacy pen family.");
+#pragma warning disable CS0612 // CMU14: Regression coverage intentionally inspects the legacy solution schema.
                 Assert.That(legacyRepresentative.TryComp<SolutionContainerManagerComponent>(out var legacySolutions, factory), Is.True);
+#pragma warning restore CS0612
                 Assert.That(legacySolutions!.Solutions!.Keys, Is.EquivalentTo(new[] { "pen" }));
                 Assert.That(legacyRepresentative.TryComp<ExaminableSolutionComponent>(out var examine, factory), Is.True);
                 Assert.That(examine!.Solution, Is.EqualTo("pen"));
@@ -602,7 +614,7 @@ public sealed class ChemistryCompatibilityMergeRegressionTest : GameTest
                 Assert.That(prototypeSolutions[0].Solution.MaxVolume, Is.EqualTo(FixedPoint2.New(45)));
             });
 
-            var upstream = SProtoMan.Index<EntityPrototype>("Hypospray");
+            var upstream = SProtoMan.Index<EntityPrototype>(HyposprayPrototype);
             Assert.Multiple(() =>
             {
                 Assert.That(upstream.TryComp<InjectorComponent>(out _, factory), Is.True);
@@ -668,7 +680,9 @@ public sealed class ChemistryCompatibilityMergeRegressionTest : GameTest
             {
                 Assert.That(solutions, Is.EquivalentTo(new[] { "pen" }));
                 Assert.That(SEntMan.HasComponent<SolutionManagerComponent>(legacyConcrete), Is.True);
+#pragma warning disable CS0612 // CMU14: Regression coverage intentionally inspects the legacy solution schema.
                 Assert.That(SEntMan.HasComponent<SolutionContainerManagerComponent>(legacyConcrete), Is.False);
+#pragma warning restore CS0612
                 Assert.That(SEntMan.HasComponent<InjectorComponent>(legacyConcrete), Is.False);
                 Assert.That(appearanceSystem.TryGetData<float>(legacyConcrete,
                     SolutionContainerVisuals.FillFraction,

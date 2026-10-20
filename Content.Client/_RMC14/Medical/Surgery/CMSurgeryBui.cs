@@ -103,9 +103,9 @@ public sealed partial class CMSurgeryBui : BoundUserInterface
             };
         }
 
-        _window.Surgeries.DisposeAllChildren();
-        _window.Steps.DisposeAllChildren();
-        _window.Parts.DisposeAllChildren();
+        _window.Surgeries.ReleaseChildren();
+        _window.Steps.ReleaseChildren();
+        _window.Parts.ReleaseChildren();
 
         View(ViewType.Parts);
 
@@ -205,7 +205,7 @@ public sealed partial class CMSurgeryBui : BoundUserInterface
         _part = _entities.GetEntity(netPart);
         _surgery = (surgery, surgeryId);
 
-        _window.Steps.DisposeAllChildren();
+        _window.Steps.ReleaseChildren();
 
         if (surgery.Comp.Requirement is { } requirementId && _system.GetSingleton(requirementId) is { } requirement)
         {
@@ -243,7 +243,7 @@ public sealed partial class CMSurgeryBui : BoundUserInterface
 
         _part = _entities.GetEntity(netPart);
 
-        _window.Surgeries.DisposeAllChildren();
+        _window.Surgeries.ReleaseChildren();
 
         var surgeries = new List<(Entity<CMSurgeryComponent> Ent, EntProtoId Id, string Name)>();
         foreach (var surgeryId in surgeryIds)

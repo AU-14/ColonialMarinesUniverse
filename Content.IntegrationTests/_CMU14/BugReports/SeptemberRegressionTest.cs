@@ -24,6 +24,8 @@ namespace Content.IntegrationTests.CMU14.BugReports;
 [TestFixture]
 public sealed class SeptemberRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<ReagentPrototype> WaterPrototype = "Water";
+
 #pragma warning disable RA0002 // Arrange overlapping bonuses and hijack state at the system boundary.
     [TestCase(false)]
     [TestCase(true)]
@@ -130,7 +132,7 @@ public sealed class SeptemberRegressionTest : GameTest
             var fire = SEntMan.System<AU14FireSpreadSystem>();
             Assert.That(fire.Ignite(item, flam), Is.True);
             var tile = SEntMan.System<TurfSystem>().GetTileRef(map.GridCoords)!.Value;
-            var water = Server.ResolveDependency<IPrototypeManager>().Index<ReagentPrototype>("Water");
+            var water = Server.ResolveDependency<IPrototypeManager>().Index<ReagentPrototype>(WaterPrototype);
             new ExtinguishTileReaction().TileReact(tile, water, FixedPoint2.New(1), SEntMan, null);
             Assert.That(flam.OnFire, Is.False);
             Assert.That(flam.FireVisualEntity, Is.Null);

@@ -13,8 +13,8 @@ using Timer = Robust.Shared.Timing.Timer;
 
 namespace Content.Client.CMU14.TacticalMap.Reconstruction;
 
-[UsedImplicitly]
-public class CMUReconstructionBui(EntityUid owner, Enum uiKey) : RMCPopOutBui<TacticalMapWindow>(owner, uiKey)
+[UsedImplicitly, Virtual]
+public partial class CMUReconstructionBui(EntityUid owner, Enum uiKey) : RMCPopOutBui<TacticalMapWindow>(owner, uiKey)
 {
     protected override TacticalMapWindow? Window { get; set; }
     protected bool UsingReconstruction { get; private set; }
@@ -208,7 +208,7 @@ public class CMUReconstructionBui(EntityUid owner, Enum uiKey) : RMCPopOutBui<Ta
         if (message is CMUReconFeedbackMessage { LocalizationKey: "cmu-recon-no-map" } &&
             UiKey is not CMUReconstructionUiKey && UsingReconstruction)
         {
-            _window?.Dispose();
+            _window?.Release();
             _window = null;
             UsingReconstruction = false;
             OpenClassicWindow();
@@ -229,7 +229,7 @@ public class CMUReconstructionBui(EntityUid owner, Enum uiKey) : RMCPopOutBui<Ta
 
     private void CloseCamera()
     {
-        _cameraWindow?.Dispose();
+        _cameraWindow?.Release();
         _cameraWindow = null;
     }
 

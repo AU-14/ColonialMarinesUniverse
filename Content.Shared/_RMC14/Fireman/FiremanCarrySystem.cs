@@ -25,6 +25,8 @@ using Content.Shared.Strip;
 using Content.Shared.Throwing;
 using Content.Shared.Whitelist;
 using Robust.Shared.Physics.Events;
+using Robust.Shared.Physics.Components; // CMU14
+using Robust.Shared.Physics.Systems; // CMU14
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
@@ -37,6 +39,7 @@ public sealed partial class FiremanCarrySystem : EntitySystem
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!; // CMU14
     [Dependency] private RMCPullingSystem _rmcPulling = default!;
     [Dependency] private SharedRMCSpriteSystem _rmcSprite = default!;
     [Dependency] private SkillsSystem _skills = default!;
@@ -134,19 +137,19 @@ public sealed partial class FiremanCarrySystem : EntitySystem
     {
         if (!carriable.BeingCarried)
         {
-            _popup.PopupClient(Loc.GetString("rmc-fireman-carry-need-carry-first"), carrier, carrier, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-fireman-carry-need-carry-first"), carrier, carrier, PopupType.SmallCaution);
             return false;
         }
 
         if (!carriable.CanThrow)
         {
-            _popup.PopupClient(Loc.GetString("rmc-fireman-carry-cant-throw"), carrier, carrier, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-fireman-carry-cant-throw"), carrier, carrier, PopupType.SmallCaution);
             return false;
         }
 
         if (!ValidateCarrierWhitelist(carrier, target, carriable))
         {
-            _popup.PopupClient(Loc.GetString("rmc-fireman-carry-cant-throw"), carrier, carrier, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-fireman-carry-cant-throw"), carrier, carrier, PopupType.SmallCaution);
             return false;
         }
 
@@ -169,7 +172,7 @@ public sealed partial class FiremanCarrySystem : EntitySystem
 
         if (!carrier.AggressiveGrab)
         {
-            _popup.PopupClient(Loc.GetString("rmc-fireman-carry-need-aggressive-grab"), ent, user, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-fireman-carry-need-aggressive-grab"), ent, user, PopupType.MediumCaution);
             return;
         }
 
@@ -186,7 +189,7 @@ public sealed partial class FiremanCarrySystem : EntitySystem
             return;
 
         var target = Identity.Name(ent, EntityManager, args.User);
-        _popup.PopupClient(Loc.GetString("rmc-fireman-carry-start-loading", ("targetName", target)), ent, user, PopupType.Medium);
+        _popup.PopupEntity(Loc.GetString("rmc-fireman-carry-start-loading", ("targetName", target)), ent, user, PopupType.Medium);
     }
 
     private bool CanCarryEntity(EntityUid user, EntityUid target, CanFiremanCarryComponent carrier, FiremanCarriableComponent carriable)
@@ -198,7 +201,7 @@ public sealed partial class FiremanCarrySystem : EntitySystem
             !HasComp<ChemicalMuscleStimulationComponent>(user) &&
             !_skills.HasSkill(user, carriable.Skill, 1))
         {
-            _popup.PopupClient(Loc.GetString("rmc-fireman-carry-not-trained"), target, user, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-fireman-carry-not-trained"), target, user, PopupType.MediumCaution);
             return false;
         }
 
@@ -243,6 +246,11 @@ public sealed partial class FiremanCarrySystem : EntitySystem
 
         _transform.SetParent(ent, user);
         _transform.SetLocalPosition(ent, Vector2.Zero);
+
+        // CMU14: parenting preserves world momentum, but a carried body must be stationary relative to its carrier.
+        if (TryComp(ent, out PhysicsComponent? physics))
+            _physics.ResetDynamics(ent, physics);
+
         _standing.Down(ent, changeCollision: true);
 
         _movementSpeed.RefreshMovementSpeedModifiers(user);
@@ -279,7 +287,7 @@ public sealed partial class FiremanCarrySystem : EntitySystem
             return;
 
         var selfMsg = Loc.GetString("rmc-pull-break-start-self", ("puller", puller));
-        _popup.PopupClient(selfMsg, ent, ent, PopupType.MediumCaution);
+        _popup.PopupEntity(selfMsg, ent, ent, PopupType.MediumCaution);
 
         var others = Filter.PvsExcept(ent, entityManager: EntityManager);
         foreach (var other in others.Recipients)
@@ -312,7 +320,7 @@ public sealed partial class FiremanCarrySystem : EntitySystem
 
         StopCarry(puller, (ent, ent));
         var selfMsg = Loc.GetString("rmc-pull-break-finish-self", ("puller", puller));
-        _popup.PopupClient(selfMsg, ent, ent, PopupType.MediumCaution);
+        _popup.PopupEntity(selfMsg, ent, ent, PopupType.MediumCaution);
 
         var others = Filter.PvsExcept(ent, entityManager: EntityManager);
         foreach (var other in others.Recipients)
@@ -415,7 +423,7 @@ public sealed partial class FiremanCarrySystem : EntitySystem
         _rmcPulling.PlayPullEffect(ent, pulling);
 
         var selfMsg = Loc.GetString("rmc-pull-aggressive-self", ("pulled", pulling));
-        _popup.PopupClient(selfMsg, pulling, ent, PopupType.SmallCaution);
+        _popup.PopupEntity(selfMsg, pulling, ent, PopupType.SmallCaution);
 
         var others = Filter.PvsExcept(ent, entityManager: EntityManager);
         foreach (var other in others.Recipients)
@@ -438,7 +446,7 @@ public sealed partial class FiremanCarrySystem : EntitySystem
                 carriable.CarrierWhitelist == null ||
                 !_whitelist.IsValid(carriable.CarrierWhitelist, carrier.Owner))
             {
-                _popup.PopupClient(Loc.GetString("rmc-fireman-carry-cant-grab-aggressively"), target, carrier, PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-fireman-carry-cant-grab-aggressively"), target, carrier, PopupType.MediumCaution);
                 return false;
             }
         }
@@ -446,13 +454,13 @@ public sealed partial class FiremanCarrySystem : EntitySystem
         {
             if (carriable.CarrierWhitelist != null && !_whitelist.IsValid(carriable.CarrierWhitelist, carrier.Owner))
             {
-                _popup.PopupClient(Loc.GetString("rmc-fireman-carry-cant-grab-aggressively"), target, carrier, PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-fireman-carry-cant-grab-aggressively"), target, carrier, PopupType.MediumCaution);
                 return false;
             }
 
             if (carriable.CarrierWhitelist == null && !_skills.HasSkill(carrier.Owner, carriable.Skill, 1))
             {
-                _popup.PopupClient(Loc.GetString("rmc-fireman-carry-not-trained-grab"), target, carrier, PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-fireman-carry-not-trained-grab"), target, carrier, PopupType.MediumCaution);
                 return false;
             }
         }
@@ -508,7 +516,13 @@ public sealed partial class FiremanCarrySystem : EntitySystem
             RemCompDeferred<BeingFiremanCarriedComponent>(target);
 
             if (carrying == target)
+            {
+                // CMU14: discard residual carry motion before detaching, without cancelling an intentional throw.
+                if (!HasComp<ThrownItemComponent>(target) && TryComp(target, out PhysicsComponent? physics))
+                    _physics.ResetDynamics(target, physics);
+
                 _toReparent.Add((target, user));
+            }
         }
 
         _standing.Stand(target);

@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._RMC14.CameraShake;
+using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -29,7 +30,17 @@ public sealed partial class TankCookOffSystem : EntitySystem
         SubscribeLocalEvent<TankCookOffComponent, HardpointIntegrityChangedEvent>(OnIntegrityChanged);
         SubscribeLocalEvent<TankCookOffComponent, VehicleFrameIntegrityChangedEvent>(OnFrameChanged);
         SubscribeLocalEvent<TankCookOffComponent, DamageChangedEvent>(OnDamageChanged);
+        SubscribeLocalEvent<TankCookOffComponent, ExplosionReceivedEvent>(OnExplosionReceived);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRestart);
+    }
+
+    // hull is just the sum of the modules and each one eats a tiny multiplier, so even an OB never got
+    // it to zero and the tank stayed weldable. a real OB hit goes straight to cook-off instead
+    private void OnExplosionReceived(Entity<TankCookOffComponent> ent, ref ExplosionReceivedEvent args)
+    {
+        if (ent.Comp.CatastrophicExplosions.Contains(args.Explosion) &&
+            args.Damage.GetTotal() >= ent.Comp.CatastrophicExplosionThreshold)
+            Start(ent);
     }
 
     private void OnRestart(RoundRestartCleanupEvent args) => _pending.Clear();
@@ -44,9 +55,9 @@ public sealed partial class TankCookOffSystem : EntitySystem
         _pending.Add(ent);
         // The actual projectile is the tool, not its shooter or an unrelated splash explosion.
         if (args.Impact.Delivery == DamageImpactDelivery.Projectile &&
-            args.Tool is { } tool && HasComp<TankCookOffProjectileComponent>(tool) &&
+            args.Tool is { } tool && TryComp(tool, out TankCookOffProjectileComponent? projectile) &&
             ent.Comp.Enabled && !HasComp<ActiveTankCookOffComponent>(ent) &&
-            _random.Prob(Math.Clamp(ent.Comp.CriticalChance, 0, 1)))
+            _random.Prob(Math.Clamp(projectile.CriticalChance ?? ent.Comp.CriticalChance, 0, 1)))
             Start(ent);
     }
 

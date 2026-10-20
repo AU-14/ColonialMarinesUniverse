@@ -40,8 +40,8 @@
       100: 0.85
       150: 0.7
   - type: Pullable
-  - type: Repairable
-    fuelCost: 5
+  # no Repairable here: it won the InteractUsing race and welded every damage type off in a second.
+  # Synth below gives the proper repair: welder for brute, cable coil for burn, with a doafter
   - type: Physics
   - type: MovementSpeedModifier
     baseWalkSpeed : 4
@@ -56,6 +56,7 @@
   - type: CombatMode
     canDisarm: false
   - type: MobState
+  - type: StandingState
   - type: GhostTakeoverAvailable
   - type: CrashLandable
   - type: StunShakeable

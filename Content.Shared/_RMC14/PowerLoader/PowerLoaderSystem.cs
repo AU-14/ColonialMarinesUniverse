@@ -201,7 +201,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         if (!_skills.HasSkills(buckle.Owner, ent.Comp.Skills))
         {
             if (args.Popup)
-                _popup.PopupClient(Loc.GetString("rmc-skills-cant-operate", ("target", ent)), buckle, args.User);
+                _popup.PopupEntity(Loc.GetString("rmc-skills-cant-operate", ("target", ent)), buckle, args.User);
 
             args.Cancelled = true;
             return;
@@ -210,7 +210,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         if (_hands.CountFreeHands(buckle.Owner) < 2)
         {
             if (args.Popup)
-                _popup.PopupClient(Loc.GetString("rmc-power-loader-hands-occupied", ("mech", ent)), buckle, args.User);
+                _popup.PopupEntity(Loc.GetString("rmc-power-loader-hands-occupied", ("mech", ent)), buckle, args.User);
 
             args.Cancelled = true;
         }
@@ -419,6 +419,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
     /// </summary>
     private bool IsAuthorizedPowerLoaderUser(EntityUid user)
     {
+        if (CMUIsLargeObjectGrabber(user)) return true; // CMU14
         return HasComp<PowerLoaderComponent>(user) || HasComp<ActivePowerLoaderPilotComponent>(user);
     }
 
@@ -448,6 +449,8 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
         if (HasComp<PowerLoaderComponent>(container.Owner))
             return;
+
+        if (CMUIsLargeObjectGrabber(container.Owner)) return; // CMU14
 
         args.Args.ModifySpeed(0.15f, 0.15f);
     }
@@ -562,7 +565,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
             var msg = Loc.GetString("rmc-power-loader-discard-empty", ("ammo", contained));
             foreach (var buckled in GetBuckled(user))
             {
-                _popup.PopupClient(msg, buckled, PopupType.Medium);
+                _popup.PopupSelf(msg, buckled, PopupType.Medium);
             }
         }
         else
@@ -590,7 +593,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
                 var msg = Loc.GetString("rmc-power-loader-discard-empty", ("ammo", contained));
                 foreach (var buckled in GetBuckled(user))
                 {
-                    _popup.PopupClient(msg, buckled, PopupType.Medium);
+                    _popup.PopupSelf(msg, buckled, PopupType.Medium);
                 }
             }
         }
@@ -778,7 +781,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
                 msg = Loc.GetString("rmc-power-loader-ammo-no-weapon");
                 foreach (var buckled in GetBuckled(user))
                 {
-                    _popup.PopupClient(msg, target, buckled, PopupType.SmallCaution);
+                    _popup.PopupEntity(msg, target, buckled, PopupType.SmallCaution);
                 }
 
                 return false;
@@ -800,7 +803,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
         foreach (var buckled in GetBuckled(user))
         {
-            _popup.PopupClient(msg, target, buckled, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, target, buckled, PopupType.SmallCaution);
         }
 
         slot = null;
@@ -842,7 +845,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
         foreach (var buckled in GetBuckled(user))
         {
-            _popup.PopupClient(msg, target, buckled, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, target, buckled, PopupType.SmallCaution);
         }
 
         slot = null;
@@ -902,7 +905,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
                 var msg = Loc.GetString("rmc-power-loader-cant-grab-full", ("mech", user.Owner));
                 foreach (var buckled in GetBuckled(user))
                 {
-                    _popup.PopupClient(msg, target, buckled, PopupType.SmallCaution);
+                    _popup.PopupEntity(msg, target, buckled, PopupType.SmallCaution);
                 }
             }
 
@@ -922,7 +925,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
                 foreach (var buckled in GetBuckled(user))
                 {
                     var msg = Loc.GetString("rmc-power-loader-nothing-attached");
-                    _popup.PopupClient(msg, user, buckled, PopupType.SmallCaution);
+                    _popup.PopupEntity(msg, user, buckled, PopupType.SmallCaution);
                 }
             }
 
@@ -1021,7 +1024,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
             var msg = Loc.GetString("rmc-power-loader-cant-grab-full", ("mech", loader));
             foreach (var buckled in GetBuckled(loader))
             {
-                _popup.PopupClient(msg, buckled, buckled, PopupType.SmallCaution);
+                _popup.PopupEntity(msg, buckled, buckled, PopupType.SmallCaution);
             }
         }
 
@@ -1479,7 +1482,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
             var msg = Loc.GetString("rmc-power-loader-too-close");
             foreach (var buckled in GetBuckled(loader))
             {
-                _popup.PopupClient(msg, loader, buckled, PopupType.SmallCaution);
+                _popup.PopupEntity(msg, loader, buckled, PopupType.SmallCaution);
             }
 
             return true;
@@ -1490,7 +1493,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
             var msg = Loc.GetString("rmc-power-loader-too-far");
             foreach (var buckled in GetBuckled(loader))
             {
-                _popup.PopupClient(msg, loader, buckled, PopupType.SmallCaution);
+                _popup.PopupEntity(msg, loader, buckled, PopupType.SmallCaution);
             }
 
             return true;
@@ -1503,7 +1506,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
             var msg = Loc.GetString("rmc-power-loader-cant-drop-occupied", ("drop", item));
             foreach (var buckled in GetBuckled(loader))
             {
-                _popup.PopupClient(msg, loader, buckled, PopupType.SmallCaution);
+                _popup.PopupEntity(msg, loader, buckled, PopupType.SmallCaution);
             }
 
             return true;

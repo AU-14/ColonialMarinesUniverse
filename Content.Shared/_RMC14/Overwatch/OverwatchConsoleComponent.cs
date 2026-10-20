@@ -32,6 +32,14 @@ public sealed partial class OverwatchConsoleComponent : Component
     [DataField, AutoNetworkedField]
     public int LastLocation;
 
+    // cmu edit start: orbital bombardment keeps its own saved coordinates (SharedOverwatchConsoleSystem.CMU)
+    [DataField, AutoNetworkedField]
+    public OverwatchSavedLocation?[] OrbitalSavedLocations = new OverwatchSavedLocation?[3];
+
+    [DataField, AutoNetworkedField]
+    public int LastOrbitalLocation;
+    // cmu edit end
+
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan LastMessage;
 
@@ -45,7 +53,24 @@ public sealed partial class OverwatchConsoleComponent : Component
     public bool CanMessageSquad = true;
 
     [DataField, AutoNetworkedField]
+    public bool ShowAntiAirStatus;
+
+    [DataField, AutoNetworkedField]
     public bool HasOrbital;
+
+    // CMU14 Ship Weapons Begin
+    [DataField, AutoNetworkedField]
+    public Content.Shared.CMU14.ShipWeapons.CMUShipWeaponStatus[] CMUShipWeapons = [];
+
+    [DataField, AutoNetworkedField]
+    public Robust.Shared.Prototypes.ProtoId<Content.Shared.CMU14.ShipWeapons.CMUShipWeaponPrototype>? CMUSelectedShipWeapon;
+
+    [DataField, AutoNetworkedField]
+    public Content.Shared.CMU14.ShipWeapons.CMUShipWeaponBearing CMUShipWeaponBearing;
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    public TimeSpan CMUNextShipWeaponLaunch;
+    // CMU14 End
 
     [DataField, AutoNetworkedField]
     public Vector2i OrbitalCoordinates;

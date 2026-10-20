@@ -1,4 +1,5 @@
 # Rules
+cmu-guide-entry-ship-weapons = Ship Orbital Support Weapons
 cmu-guide-entry-rules-overview = Rules Overview
 cmu-guide-entry-rules-zero-tolerance = Zero Tolerance Rules
 cmu-guide-entry-rules-general = General Rules
@@ -110,6 +111,7 @@ cmu-guide-entry-medical = Medical
 cmu-guide-entry-medical-infantry = Start Here: Infantry First Aid
 cmu-guide-entry-medical-diagnosis = Diagnosis
 cmu-guide-entry-medical-wounds = Wounds and Bleeding
+cmu-guide-entry-medical-blood = Blood and Transfusions
 cmu-guide-entry-medical-field-care = Field Treatment Mixing
 cmu-guide-entry-medical-bones = Fractures
 cmu-guide-entry-medical-pain = Pain
@@ -205,3 +207,6 @@ cmu-guide-entry-lore-ua-doves = The 'Doves'
 cmu-guide-entry-lore-ua-hawks = The 'Hawks'
 cmu-guide-entry-lore-ua-magpies = The 'Magpies'
 cmu-guide-entry-lore-ua-politics = Politics
+cmu-guide-entry-overwatch = Overwatch
+cmu-guide-entry-fob-security = FOB Security Squad
+cmu-guide-entry-skills = Skills

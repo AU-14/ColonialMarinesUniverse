@@ -54,6 +54,7 @@
   id: SquadOpforIntel
   name: Intel # this will cause confusion, but better than x2 Auxiliary
   components:
+  - type: CMUAuxiliarySquad
   - type: AU14SquadCallsign
     word: BLUE
   - type: SquadTeam
@@ -65,3 +66,40 @@
     minimapBackground:
      sprite: /Textures/_RMC14/Interface/map_blips.rsi
      state: background_intel
+
+# FOB security squad: opt-in (character menu, shared with GOVFOR's Foxtrot) with its own slots on top of the regular ones;
+# see CMUFoxtrotSquadSystem.
+- type: entity
+  parent: SquadOpfor
+  id: SquadOpforVictor
+  name: Victor
+  components:
+  - type: CMUFoxtrotSquad
+    slots:
+      SquadSergeant: 1
+      RadioTrafficOperator: 1
+      SquadCombatTech: 2
+      PlatoonCorpsman: 1
+      SquadRifleman: 2
+    # the squad leader, RTO, corpsman and riflemen can help build the FOB; the combat technicians keep their own skills
+    skillRoles:
+    - SquadSergeant
+    - RadioTrafficOperator
+    - PlatoonCorpsman
+    - SquadRifleman
+    skills:
+      RMCSkillConstruction: 3
+      RMCSkillEngineer: 3
+    extraVendorPoints:
+      SquadCombatTech: 15
+  - type: AU14SquadCallsign
+    word: SLATE
+  - type: SquadTeam
+    roundStart: true
+    color: "#7B8B6F"
+    group: OPFOR
+    radio: radioOpforVictor
+    supplyDropPadSquad: SquadDelta
+    minimapBackground:
+     sprite: /Textures/_RMC14/Interface/map_blips.rsi
+     state: background_echo

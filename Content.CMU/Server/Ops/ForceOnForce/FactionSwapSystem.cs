@@ -13,7 +13,7 @@ namespace Content.Server.CMU14.Ops.ForceOnForce;
 ///     components ends up faction-correct. Shared by the platoon ship loop, dropship
 ///     loading, and opfor vehicle interiors.
 /// </summary>
-public sealed class FactionSwapSystem : EntitySystem
+public sealed partial class FactionSwapSystem : EntitySystem
 {
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;

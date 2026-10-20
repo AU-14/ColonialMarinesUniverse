@@ -1,3 +1,4 @@
+using Content.Client.CMU14.Requisitions; // CMU14
 using System.Linq;
 using System.Diagnostics.CodeAnalysis;
 using Content.Client.Stylesheets;
@@ -51,6 +52,56 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
 
     private const string FavoritesCategory = "#favorites";
     private const string RecentCategory = "#recent";
+
+    // CMU14 Hardcode localization Begin: removing hardcode for easy localization in downstreams
+    internal static readonly Dictionary<string, string> CategoryLocKeys = new()
+    {
+        ["Air Defense"] = "rmc-requisitions-category-air-defense",
+        ["Ammo"] = "rmc-requisitions-category-ammo",
+        ["Ammunition"] = "rmc-requisitions-category-ammunition",
+        ["Anti-Armor"] = "rmc-requisitions-category-anti-armor",
+        ["AP Ammo"] = "rmc-requisitions-category-ap-ammo",
+        ["Atmospherics"] = "rmc-requisitions-category-atmospherics",
+        ["Botany"] = "rmc-requisitions-category-botany",
+        ["Civilian Goods"] = "rmc-requisitions-category-civilian-goods",
+        ["Corporate Equipment"] = "rmc-requisitions-category-corporate-equipment",
+        ["Dropship Munitions"] = "rmc-requisitions-category-dropship-munitions",
+        ["Dropship Parts"] = "rmc-requisitions-category-dropship-parts",
+        ["Engineering"] = "rmc-requisitions-category-engineering",
+        ["Explosives"] = "rmc-requisitions-category-explosives",
+        ["Food"] = "rmc-requisitions-category-food",
+        ["Food and Drinks"] = "rmc-requisitions-category-food-and-drinks",
+        ["Furniture"] = "rmc-requisitions-category-furniture",
+        ["Gear"] = "rmc-requisitions-category-gear",
+        ["Machines and Vendors (Wrench Required)"] = "rmc-requisitions-category-machines-and-vendors",
+        ["Materials"] = "rmc-requisitions-category-materials",
+        ["Medical"] = "rmc-requisitions-category-medical",
+        ["Mortar"] = "rmc-requisitions-category-mortar",
+        ["Pouches"] = "rmc-requisitions-category-pouches",
+        ["Refinery"] = "rmc-requisitions-category-refinery",
+        ["Research"] = "rmc-requisitions-category-research",
+        ["Specialist Ammo"] = "rmc-requisitions-category-specialist-ammo",
+        ["Supplies"] = "rmc-requisitions-category-supplies",
+        ["Vehicle Ammo"] = "rmc-requisitions-category-vehicle-ammo",
+        ["Vehicle Armaments M"] = "rmc-requisitions-category-vehicle-armaments-m",
+        ["Vehicle Armaments A"] = "rmc-requisitions-category-vehicle-armaments-a",
+        ["Vehicle Main Modules"] = "rmc-requisitions-category-vehicle-main",
+        ["Vehicle Aux Modules"] = "rmc-requisitions-category-vehicle-aux",
+        ["Avionics Parts"] = "rmc-requisitions-category-vehicle-avionics",
+        ["Weapons"] = "rmc-requisitions-category-weapons",
+        ["WEYSEC Ammo"] = "rmc-requisitions-category-weysec-ammo",
+        ["WEYSEC Gear"] = "rmc-requisitions-category-weysec-gear",
+        ["WEYSEC Weapons"] = "rmc-requisitions-category-weysec-weapons",
+        ["Weyland-Yutani Research"] = "rmc-requisitions-category-weyland-yutani-research",
+    };
+
+    private static string GetLocalizedCategoryName(string category)
+    {
+        // An unmapped category must not throw: an exception here escapes BUI state handling and
+        // forces the client into a full-state refresh loop while the console is open.
+        return CategoryLocKeys.TryGetValue(category, out var key) ? Loc.GetString(key) : category;
+    }
+    // CMU14 End
 
     protected override void Open()
     {
@@ -118,26 +169,26 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         {
             case Lowered or Raised when uiState.Busy:
                 platformLabel = $"Platform: {uiState.PlatformLowered}";
-                platformButtonLabel = "ASRS busy";
+                platformButtonLabel = Loc.GetString("cmu-asrs-button-busy"); // CMU14 Hardcode Localization
                 platformButtonDisabled = true;
                 break;
             case Lowered:
-                platformButtonLabel = "Raise";
+                platformButtonLabel = Loc.GetString("cmu-asrs-button-raise"); // CMU14 Hardcode Localization
                 platformLabel = "Platform: Lowered";
                 raise = true;
                 break;
             case Raised:
-                platformButtonLabel = "Lower";
+                platformButtonLabel = Loc.GetString("cmu-asrs-button-lower"); // CMU14 Hardcode Localization
                 platformLabel = "Platform: Raised";
                 raise = false;
                 break;
             case Lowering:
-                platformButtonLabel = "Please wait";
+                platformButtonLabel = Loc.GetString("cmu-asrs-button-wait"); // CMU14 Hardcode Localization
                 platformLabel = "Lowering...";
                 platformButtonDisabled = true;
                 break;
             case Raising:
-                platformButtonLabel = "Please wait";
+                platformButtonLabel = Loc.GetString("cmu-asrs-button-wait"); // CMU14 Hardcode Localization
                 platformLabel = "Raising...";
                 platformButtonDisabled = true;
                 break;
@@ -268,7 +319,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         AddItemCategoryButton(Loc.GetString("cmu-asrs-category-favorites"), FavoritesCategory);
         AddItemCategoryButton(Loc.GetString("cmu-asrs-category-recent"), RecentCategory);
         foreach (var category in allCategories)
-            AddItemCategoryButton(category, category);
+            AddItemCategoryButton(GetLocalizedCategoryName(category), category); // CMU14 Hardcode Localization
 
         view.ItemsContainer.RemoveAllChildren();
         _itemRows.Clear();
@@ -689,7 +740,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         var categoryHeader = new FormattedMessage();
         categoryHeader.AddMarkupOrThrow("[bold]CATEGORIES[/bold]");
         _window!.OrderCategoriesView.CategoryHeaderLabel.SetMessage(categoryHeader);
-        _window.OrderCategoriesView.CategoriesContainer.DisposeAllChildren();
+        _window.OrderCategoriesView.CategoriesContainer.ReleaseChildren();
 
         for (var categoryIndex = 0; categoryIndex < computer.Categories.Count; categoryIndex++)
         {
@@ -713,7 +764,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
 
     private void RebuildOrders(RequisitionsComputerComponent computer)
     {
-        _window!.OrderCategoriesView.OrdersContainer.DisposeAllChildren();
+        _window!.OrderCategoriesView.OrdersContainer.ReleaseChildren();
 
         var filter = _window.OrderCategoriesView.SearchBar.Text?.Trim();
         var searching = !string.IsNullOrWhiteSpace(filter);
@@ -987,9 +1038,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         if (!_prototypes.TryIndex<EntityPrototype>(entry.Crate, out var prototype))
             return;
 
-        texture.Textures = EntMan.System<SpriteSystem>().GetPrototypeTextures(prototype)
-            .Select(layer => layer.Default)
-            .ToList();
+        texture.Textures = RequisitionsIconCache.Get(EntMan.System<SpriteSystem>(), prototype); // CMU14
 
         if (prototype.TryComp<SpriteComponent>(CompName.Get<SpriteComponent>(EntMan.ComponentFactory), out var sprite) &&
             sprite.AllLayers.FirstOrDefault() is { } firstLayer)

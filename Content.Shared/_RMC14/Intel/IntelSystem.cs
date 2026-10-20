@@ -291,7 +291,7 @@ public sealed partial class IntelSystem : EntitySystem
 
         if (HasComp<IntelRescueSurvivorObjectiveComponent>(user))
         {
-            _popup.PopupClient(Loc.GetString("rmc-intel-survivor-read", ("thing", Name(ent))), ent, user);
+            _popup.PopupEntity(Loc.GetString("rmc-intel-survivor-read", ("thing", Name(ent))), ent, user);
             return;
         }
 
@@ -299,7 +299,7 @@ public sealed partial class IntelSystem : EntitySystem
         var ev = new IntelReadDoAfterEvent();
         var doAfter = new DoAfterArgs(EntityManager, user, delay, ev, ent) { BreakOnDropItem = true, NeedHand = true };
         if (_doAfter.TryStartDoAfter(doAfter))
-            _popup.PopupClient($"You start reading the {Name(ent)}", ent, user);
+            _popup.PopupEntity($"You start reading the {Name(ent)}", ent, user);
     }
 
     private void OnHandPickUp(EntityUid ent,
@@ -310,7 +310,7 @@ public sealed partial class IntelSystem : EntitySystem
         if (HasComp<IntelRescueSurvivorObjectiveComponent>(user))
         {
             args.Cancel();
-            _popup.PopupClient(Loc.GetString("rmc-intel-survivor-pickup", ("thing", Name(ent))), ent, user);
+            _popup.PopupEntity(Loc.GetString("rmc-intel-survivor-pickup", ("thing", Name(ent))), ent, user);
         }
     }
 
@@ -320,7 +320,7 @@ public sealed partial class IntelSystem : EntitySystem
         if (HasComp<IntelRescueSurvivorObjectiveComponent>(user))
         {
             args.Cancelled = true;
-            _popup.PopupClient(Loc.GetString("rmc-intel-survivor-pickup", ("thing", Name(ent))), ent, user);
+            _popup.PopupEntity(Loc.GetString("rmc-intel-survivor-pickup", ("thing", Name(ent))), ent, user);
         }
     }
 
@@ -335,7 +335,7 @@ public sealed partial class IntelSystem : EntitySystem
                 ? Loc.GetString("rmc-intel-survivor-xeno-pull", ("thing", Name(ent)))
                 : Loc.GetString("rmc-intel-survivor-corpse-pull", ("thing", Name(ent)));
 
-            _popup.PopupClient(msg, ent, user);
+            _popup.PopupEntity(msg, ent, user);
         }
     }
 
@@ -348,19 +348,19 @@ public sealed partial class IntelSystem : EntitySystem
         args.Handled = true;
         if (args.Cancelled)
         {
-            _popup.PopupClient("You get distracted and lose your train of thought, you'll have to start over reading this.", ent, user);
+            _popup.PopupEntity("You get distracted and lose your train of thought, you'll have to start over reading this.", ent, user);
             return;
         }
 
         if (ent.Comp.State == IntelObjectiveState.Inactive)
         {
-            _popup.PopupClient("You don't notice anything useful. You probably need to find its instructions on a paper scrap", ent, user);
+            _popup.PopupEntity("You don't notice anything useful. You probably need to find its instructions on a paper scrap", ent, user);
             return;
         }
 
         // TODO RMC14 clues
 
-        _popup.PopupClient($"You finish reading the {Name(ent)}", ent, user);
+        _popup.PopupEntity($"You finish reading the {Name(ent)}", ent, user);
         if (ent.Comp.State == IntelObjectiveState.Complete)
             return;
 
@@ -551,11 +551,11 @@ public sealed partial class IntelSystem : EntitySystem
             !knowledge.ReadIntel.TryFirstOrNull(out var read))
         {
             msg += " and you have nothing new to add...";
-            _popup.PopupClient(msg, ent, args.User, PopupType.Medium);
+            _popup.PopupEntity(msg, ent, args.User, PopupType.Medium);
             return;
         }
 
-        _popup.PopupClient(msg, ent, args.User, PopupType.Medium);
+        _popup.PopupEntity(msg, ent, args.User, PopupType.Medium);
 
         var delay = ent.Comp.Delay * _skills.GetSkillDelayMultiplier(args.User, ent.Comp.Skill);
         var ev = new IntelSubmitDoAfterEvent { Intel = GetNetEntity(read.Value) };

@@ -9,8 +9,8 @@
       options:
 # ├──[ Tier 0 ]──────────────────────────────────────────────────────┤
       -
-        - name: Unlock Tier 1
-          description: Transitions the tree to another tier.
+        - name: cmu-tech-tier-one
+          description: cmu-tech-tier-unlock-desc
           cost: 0
           events:
           - !type:TechUnlockTierEvent
@@ -20,8 +20,8 @@
             state: upgrade
 # ├──[ Tier 1: Budget ]──────────────────────────────────────────────┤
       -
-        - name: Requisition Budget Increase
-          description: Distributes resources to requisitions for spending.
+        - name: cmu-tech-ua-req-budget
+          description: cmu-tech-ua-req-budget-desc
           cost: 12
           increase: 3
           repurchasable: true
@@ -29,13 +29,13 @@
           - !type:TechRequisitionsBudgetEvent
             amount: 5000
           - !type:TechAnnounceEvent
-            author: SPECIAL ASSETS AUTHORIZED
-            message: Additional supply budget has been authorised for this operation.
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-ua-req-budget-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: budget_req
-        - name: Unlock Tier 2
-          description: Transitions the tree to another tier.
+        - name: cmu-tech-tier-two
+          description: cmu-tech-tier-unlock-desc
           cost: 3
           events:
           - !type:TechUnlockTierEvent
@@ -45,30 +45,30 @@
             state: upgrade
 # ├──[ Tier 2: Reinforcements ]──────────────────────────────────────┤
       -
-        - name: US Army 32nd ArmDiv reinforcements
-          description: Summon a squad from US Army 32nd Armored Division.
+        - name: cmu-tech-ua-us-army-armored
+          description: cmu-tech-ua-us-army-armored-desc
           cost: 55
           repurchasable: false
           events:
           - !type:TechPartySpawnEvent
             thirdPartyId: USArmyArmored
           - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: A US Army 32nd Armored Division squad has been dispatched to aid with the operation.
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-ua-us-army-armored-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
 
-        - name: Prodigy Armed Repair Team Yankee
-          description: Summon a PMC team from PART, specifically Yankee Squad
+        - name: cmu-tech-ua-prodigy-yankee
+          description: cmu-tech-ua-prodigy-yankee-desc
           cost: 45
           repurchasable: false
           events:
           - !type:TechPartySpawnEvent
             thirdPartyId: ProdigyPARTY
           - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: A Prodigy Armed Repair Team has been dispatched to aid with the operation.
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-ua-prodigy-yankee-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon

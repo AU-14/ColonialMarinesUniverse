@@ -49,6 +49,7 @@
     - NoEnglish
     - CMUAlcoholic
     - CMUDrugAddict
+    - CMUBadLeg
   ranks:
     RMCRankCivilian: []
   chevrons:

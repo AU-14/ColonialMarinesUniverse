@@ -18,7 +18,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.CMU14.Allegiance;
 using Content.Shared.CMU14.Origin;
 using Content.Shared.CMU14.RoundStatistics;
-using Content.Shared.Administration.Logs;
+
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Database;
 using Content.Shared.Humanoid;
@@ -423,6 +423,13 @@ namespace Content.Server.Database
             profile.Height = humanoid.Height;
             profile.Weight = humanoid.Weight;
             profile.Build = humanoid.Build.ToString();
+            profile.BloodType = humanoid.BloodType.ToString(); // CMU14
+            // cmu edit start
+            profile.FoxtrotSquadOptIn = humanoid.FoxtrotSquadOptIn;
+            profile.Religion = humanoid.Religion.Id;
+            profile.ArmorFlavorText = humanoid.ArmorFlavorText;
+            profile.HelmetFlavorText = humanoid.HelmetFlavorText;
+            // cmu edit end
             profile.HideMetaInformation = humanoid.HideMetaInformation;
             profile.ThreatPreference = humanoid.ThreatPreferences.Count == 0
                 ? null
@@ -1252,6 +1259,11 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             var result = Enum.TryParse(outcome.Outcome, out CMURoundStatisticsOutcome parsedOutcome)
                 ? parsedOutcome
                 : CMURoundStatisticsOutcome.Unknown;
+
+            // CMU14: rounds ended by the hive collapse rule used to record as marine major, reclassify by source
+            if (result == CMURoundStatisticsOutcome.MarineMajorXenoWipe
+                && outcome.Source == "HiveCollapseRule")
+                result = CMURoundStatisticsOutcome.MarineMinorHiveCollapse;
 
             return new CMURoundOutcomeRecord(
                 outcome.RoundId,

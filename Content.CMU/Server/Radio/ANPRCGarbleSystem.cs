@@ -36,6 +36,10 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
 
     private void OnRadioReceive(Entity<TunableHeadsetComponent> receiver, ref RadioReceiveEvent args)
     {
+        // automated clear transmissions are never garbled
+        if (HasComp<CMUClearRadioTransmissionComponent>(args.RadioSource))
+            return;
+
         if (!_comms.EnabledOn(args.Channel))
             return;
 

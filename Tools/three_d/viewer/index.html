@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Garrison — 3D scene review</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="masthead">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">G</span><div><h1>GARRISON <span>/ 3D STUDY</span></h1><p>COLONIAL MARINES UNIVERSE</p></div></div>
+    <div class="session"><a href="./button-animation.html">Door controls</a><a href="./shutter-animation.html">Shutter motion</a><a href="./barricade-acid.html">Barricade acid</a><a href="./light-states.html">Wall light states</a><a href="./sprite-animation.html">Machinery animation</a><span class="status-dot"></span><span>OFFLINE ART REVIEW</span><span class="session-divider"></span><span id="variant-label">Loading saved map</span></div>
+  </header>
+  <main id="workspace">
+    <canvas id="scene" tabindex="0" aria-label="Interactive 3D Garrison scene. Drag to orbit, right-drag or arrow keys to pan, Shift plus arrows moves faster, scroll or plus and minus keys to zoom, click to inspect an entity. H returns home and Escape clears selection."></canvas>
+    <aside class="panel scene-panel" aria-label="Scene controls">
+      <div class="panel-heading"><span class="eyebrow">01 / SCENE</span><span class="live-pill">STATIC SNAPSHOT</span></div>
+      <h2 id="map-title">Stable Garrison</h2>
+      <p class="muted intro" id="scene-description">The saved map, assembled in 3D.<br>Authored drafts and missing art shown separately.</p>
+      <div class="control-row"><label for="scope">Visible region</label><select id="scope"><option value="12">24 × 24 tiles</option><option value="24" selected>48 × 48 tiles</option><option value="40">80 × 80 tiles</option><option value="64">128 × 128 tiles</option></select></div>
+      <div class="control-row"><label for="floor">Focus floor</label><select id="floor"><option value="0">Ground level</option></select></div>
+      <div class="control-row"><label for="floor-mode">Floors shown</label><select id="floor-mode"><option value="all" selected>All floors</option><option value="below">Focus floor and below</option><option value="single">Focus floor only</option></select></div>
+      <div class="divider"></div>
+      <label class="toggle"><span><i class="legend-dot authored"></i>Authored draft models</span><input id="show-exact" type="checkbox" checked></label>
+      <label class="toggle"><span><i class="legend-dot inherited"></i>Inherited candidates</span><input id="show-inherited" type="checkbox"></label>
+      <label class="toggle"><span><i class="legend-dot missing"></i>Missing-art markers</span><input id="show-unmapped" type="checkbox" checked></label>
+      <label class="toggle"><span>Lower focus-floor walls &amp; doors</span><input id="cutaway" type="checkbox" checked></label>
+      <div class="range-row"><input id="wall-height" type="range" min="0.4" max="2.8" step="0.1" value="0.9" aria-label="Focus-floor wall cutaway height"><output id="wall-height-value" for="wall-height">0.9 tiles</output></div>
+      <div class="divider"></div>
+      <div class="map-heading"><span class="eyebrow">MAP NAVIGATOR</span><span>Click to travel</span></div>
+      <canvas id="minimap" width="460" height="300" role="img" aria-label="Map overview; click to move the visible region"></canvas>
+      <div class="coordinates"><span id="coordinates">X 0.0 / Y 0.0</span><button id="home" class="text-button" type="button">Return home ↗</button></div>
+      <div class="search-box"><label for="search">Find prototype or map entity</label><div><input id="search" type="search" placeholder="e.g. chair, CMTable…" autocomplete="off"><button id="find" type="button">Find</button></div><p id="search-status" aria-live="polite"></p></div>
+    </aside>
+    <div class="view-toolbar" role="group" aria-label="Camera controls"><button id="reset-camera" type="button">↺ Reset view</button><button id="top-view" type="button">⌖ Top view</button><button id="toggle-panels" type="button" aria-pressed="false">Hide panels</button></div>
+    <aside class="panel inspector-panel" id="inspector" aria-label="Entity inspector">
+      <div class="panel-heading"><span class="eyebrow">02 / INSPECT</span><button id="clear-selection" class="icon-button" type="button" aria-label="Clear selection">×</button></div>
+      <div id="empty-inspector"><div class="inspect-glyph" aria-hidden="true">⌖</div><h2>Look closer.</h2><p class="muted">Click an object to inspect its source sprite, model, and conversion status.</p><p class="note">Scroll brings you in.<br>Right-drag or arrow keys move through the map. Hold Shift for faster keyboard movement.</p></div>
+      <div id="selection" hidden>
+        <span id="selection-status" class="selection-badge">DRAFT</span>
+        <h2 id="selection-title"></h2>
+        <p id="selection-prototype" class="mono"></p>
+        <div id="reference-frame"><canvas id="reference-image" width="208" height="150" aria-label="Source sprite reference"></canvas><span id="reference-empty">No source frame</span></div>
+        <p class="reference-caption">SOURCE SPRITE <span id="reference-caption-detail">Map direction · uncomposited</span></p>
+        <dl class="entity-details"><dt>Map entity</dt><dd id="selection-id"></dd><dt>Position</dt><dd id="selection-position"></dd><dt>Model</dt><dd id="selection-model"></dd><dt>Parts</dt><dd id="selection-parts"></dd></dl>
+        <p id="selection-note" class="note"></p>
+        <p><a id="selection-animation" href="./sprite-animation.html" hidden>Compare animation frames ↗</a></p>
+        <button id="focus-selection" class="primary-button" type="button">Focus this object ↗</button>
+      </div>
+    </aside>
+    <div class="viewport-footer"><div><span class="eyebrow">VISIBLE REGION</span><strong id="region-stats">Preparing geometry…</strong><span id="region-note"></span></div><div class="controls-hint"><kbd>Drag</kbd> Orbit <span>·</span> <kbd>Arrows / right-drag</kbd> Pan <span>·</span> <kbd>Scroll</kbd> Zoom <span>·</span> <kbd>Click</kbd> Inspect</div></div>
+    <div id="loading" role="status"><span class="loader"></span><h2>Assembling Garrison</h2><p id="loading-detail">Reading map geometry and model drafts…</p></div>
+    <div id="error" role="alert" hidden><h2>Could not open the scene</h2><p id="error-message"></p><p>Generate the scene and models, then open this viewer through the local review server.</p><button id="retry" type="button">Retry</button></div>
+  </main>
+  <footer class="app-footer"><span><span id="placement-label">ACTUAL SAVED PLACEMENT</span> <b>·</b> DRAFT ASSETS <b>·</b> ORIGINAL FLOOR TEXTURES</span><span>Art review only. This is not a live game viewport.</span></footer>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

@@ -9,6 +9,7 @@ using Content.Server.Popups;
 using Content.Shared.Administration;
 using Content.Shared.Administration.Events;
 using Content.Shared.CCVar;
+using Content.Shared.CMU14.Administration; // CMU14
 using Content.Shared.Forensics.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Hands.Components;
@@ -32,6 +33,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
+using Robust.Shared.Utility; // CMU14
 
 namespace Content.Server.Administration.Systems;
 
@@ -113,6 +115,8 @@ public sealed partial class AdminSystem : EntitySystem
         {
             RaiseNetworkEvent(updateEv, admin.Channel);
         }
+
+        CMURelayToIngameAdmins(updateEv); // CMU14: in-game admins get the list without antag details
     }
 
     private void OnPlayerRenamed(Entity<ActorComponent> ent, ref EntityRenamedEvent args)
@@ -133,6 +137,8 @@ public sealed partial class AdminSystem : EntitySystem
         {
             RaiseNetworkEvent(playerInfoChangedEvent, admin.Channel);
         }
+
+        CMURelayToIngameAdmins(playerInfoChangedEvent); // CMU14: in-game admins get the update without antag details
     }
 
     public PlayerInfo? GetCachedPlayerInfo(NetUserId? netUserId)
@@ -232,9 +238,16 @@ public sealed partial class AdminSystem : EntitySystem
         RoleTypePrototype? roleType = null;
         var startingRole = string.Empty;
         LocId? subtype = null;
+        SpriteSpecifier? antagIcon = null; // CMU14
         if (_minds.TryGetMind(session, out var mindId, out var mindComp) && mindComp is not null)
         {
-            sortWeight = _role.GetRoleCompByTime(mindComp)?.Comp.SortWeight ?? 0;
+            // sortWeight = _role.GetRoleCompByTime(mindComp)?.Comp.SortWeight ?? 0; // CMU14: replaced below
+            // CMU14 Admin Role Icon Begin: reuse the active mind role for its admin icon
+            var activeRole = _role.GetRoleCompByTime(mindComp);
+            sortWeight = activeRole?.Comp.SortWeight ?? 0;
+            if (activeRole is { } activeRoleEnt && TryComp<CMUAdminRoleIconComponent>(activeRoleEnt, out var roleIcon))
+                antagIcon = roleIcon.Icon;
+            // CMU14 End
 
             if (ProtoMan.TryIndex(mindComp.RoleType, out var role))
             {
@@ -275,7 +288,8 @@ public sealed partial class AdminSystem : EntitySystem
             data.UserId,
             connected,
             _roundActivePlayers.Contains(data.UserId),
-            overallPlaytime);
+            overallPlaytime,
+            antagIcon); // CMU14
     }
 
     private void OnPanicBunkerChanged(bool enabled)
@@ -398,7 +412,7 @@ public sealed partial class AdminSystem : EntitySystem
                 _popup.PopupCoordinates(Loc.GetString("admin-erase-popup", ("user", name)), coordinates, PopupType.LargeCaution);
                 var filter = Filter.Pvs(coordinates, 1, EntityManager, _playerManager);
                 _audio.PlayStatic(
-                        "/Audio/Effects/pop_high.ogg",
+                        new ResolvedPathSpecifier("/Audio/Effects/pop_high.ogg"),
                         filter,
                         coordinates,
                         true,

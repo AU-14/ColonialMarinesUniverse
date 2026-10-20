@@ -1,0 +1,9 @@
+author: flex5hybrid
+category: CMU
+changes:
+- message: Reduced server stalls when large Scavenger squads fight or search for routes.
+  type: Fix
+- message: Added decision budgets and queue diagnostics for expedition AI.
+  type: Admin
+time: '2026-10-11T19:47:39.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2157

@@ -47,3 +47,19 @@
   id: smokeableGroundTobacco
   graph: smokeableGroundTobacco
   targetNode: ground
+
+- type: construction
+  parent: BaseItemMisc
+  id: smokeableJointLeaf
+  name: construction-smokeable-joint-leaf
+  graph: smokeableJointLeaf
+  targetNode: joint
+  isCM: true # CMU14: menu-visible; the presenter filters recipes on IsCM
+
+- type: construction
+  parent: BaseItemMisc
+  id: smokeableJointRainbowLeaf
+  name: construction-smokeable-joint-rainbow-leaf
+  graph: smokeableJointRainbowLeaf
+  targetNode: jointRainbow
+  isCM: true # CMU14: menu-visible; the presenter filters recipes on IsCM

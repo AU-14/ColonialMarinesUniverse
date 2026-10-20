@@ -32,6 +32,8 @@ namespace Content.IntegrationTests._RMC14;
 [TestOf(typeof(ClientHiddenAppearanceSystem))]
 public sealed class HiddenAppearanceTest : InteractionTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<MarkingsGroupPrototype> HumanPrototype = "Human";
+
     private static readonly Color HiddenEyeColor = Color.Cyan;
     private static readonly Color HiddenSkinColor = Color.Teal;
     private static readonly Color HiddenHairColor = Color.Magenta;
@@ -262,15 +264,17 @@ public sealed class HiddenAppearanceTest : InteractionTest
         await OverrideCVar(Side.Server, RMCCVars.HidePlayerIdentities, true);
         await Client.WaitAssertion(() =>
         {
-            var group = CProtoMan.Index<MarkingsGroupPrototype>("Human");
+            var group = CProtoMan.Index<MarkingsGroupPrototype>(HumanPrototype);
             Assert.Multiple(() =>
             {
+                // cmu edit start: humans default to the CMU olive undershirt and boxers
                 Assert.That(
                     group.Limits[HumanoidVisualLayers.UndergarmentTop].NudityDefault.Select(id => id.Id),
-                    Is.EqualTo(new[] { "UndergarmentTopTanktop" }));
+                    Is.EqualTo(new[] { "CMUUndershirtOlive" }));
                 Assert.That(
                     group.Limits[HumanoidVisualLayers.UndergarmentBottom].NudityDefault.Select(id => id.Id),
-                    Is.EqualTo(new[] { "UndergarmentBottomBoxers" }));
+                    Is.EqualTo(new[] { "CMUUnderwearBoxersOlive" }));
+                // cmu edit end
             });
         });
 

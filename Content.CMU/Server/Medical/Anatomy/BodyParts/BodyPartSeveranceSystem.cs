@@ -146,9 +146,16 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
         if (!args.Surgical)
         {
             FlingPartFromBody(args.Body, detachedBody);
-            ApplyStumpBleed(args.Body);
-            if (stumpParent is { } parent && !TerminatingOrDeleted(parent))
-                _stumps.AddStump(parent, args.Type, partComp.Symmetry);
+
+            // Losing a robotic part, or anything off a robotic limb, leaves no flesh to bleed from.
+            var roboticStump = HasComp<CMURoboticLimbComponent>(args.Part) ||
+                               stumpParent is { } stumpOwner && HasComp<CMURoboticLimbComponent>(stumpOwner);
+            if (!roboticStump)
+            {
+                ApplyStumpBleed(args.Body);
+                if (stumpParent is { } parent && !TerminatingOrDeleted(parent))
+                    _stumps.AddStump(parent, args.Type, partComp.Symmetry);
+            }
             _audio.PlayPvs(SeveranceSound, args.Body);
         }
 

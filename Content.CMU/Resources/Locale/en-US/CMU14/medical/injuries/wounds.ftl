@@ -17,6 +17,7 @@ cmu-medical-tourniquet-applied = The tourniquet is applied.
 cmu-medical-tourniquet-applied-stump = The tourniquet is clamped over the stump.
 cmu-medical-tourniquet-removed = The tourniquet is removed.
 cmu-medical-tourniquet-already-on = That limb already has a tourniquet.
+cmu-medical-tourniquet-no-selected-limb = There's no arm or leg to put a tourniquet on where you're aiming.
 cmu-medical-tourniquet-no-target = There is no limb to tourniquet.
 cmu-medical-tourniquet-verb-remove = Remove tourniquet
 cmu-medical-tourniquet-verb-remove-stump = Remove tourniquet from stump
@@ -26,9 +27,14 @@ cmu-medical-cast-needed = Apply a cast to keep the bone from setting wrong.
 cmu-medical-cast-verb-remove = Remove cast
 cmu-medical-cast-removing = Removing cast...
 cmu-medical-cast-removed = The cast is removed.
+cmu-medical-cast-removed-early = The cast comes off before the bone has finished setting.
 cmu-medical-cast-ready-remove = The cast is ready to come off.
 cmu-medical-cast-broke = The cast cracks apart as the bone breaks again.
 cmu-medical-cast-malunion = The bone has set wrong.
+
+cmu-medical-splint-verb-remove = Remove splint
+cmu-medical-splint-removing = Removing splint...
+cmu-medical-splint-removed = The splint is removed.
 
 # Body part picker used by bandaging.
 cmu-medical-body-part-picker-header = Pick a part to bandage
@@ -61,3 +67,29 @@ cmu-robotic-limb-repair-brute-finish-others = { THE($user) } repairs dents in { 
 cmu-robotic-limb-repair-burn-finish-self = You repair scorched wiring in your { $limb } with { THE($tool) }.
 cmu-robotic-limb-repair-burn-finish-user = You repair scorched wiring in { THE($target) }'s { $limb } with { THE($tool) }.
 cmu-robotic-limb-repair-burn-finish-others = { THE($user) } repairs scorched wiring in { THE($target) }'s { $limb } with { THE($tool) }.
+
+cmu-wound-arterial-spray = Blood squirts out of your { $part } in hot spurts!
+cmu-wound-arterial-spray-stump = Blood squirts out of the stump where your { $limb } used to be!
+cmu-wound-stump-limb = { $symmetry ->
+    [left] left{" "}
+    [right] right{" "}
+   *[other] {""}
+}{ $type ->
+    [arm] arm
+    [hand] hand
+    [leg] leg
+    [foot] foot
+   *[other] limb
+}
+
+# Internal bleeding and shrapnel reminders (CMUInternalBleedPainSystem, CMUShrapnelMovePainSystem)
+cmu-internal-bleed-pain = You feel a stabbing pain in your {$part}!
+cmu-shrapnel-move-pain = You feel shrapnel digging into your {$part} as you move.
+cmu-body-part-name = { $side ->
+        [left] left { $type }
+        [right] right { $type }
+       *[none] { $type ->
+            [torso] chest
+           *[other] { $type }
+        }
+    }

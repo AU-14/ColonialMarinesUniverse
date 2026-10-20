@@ -29,6 +29,9 @@ namespace Content.IntegrationTests._CMU14.ForceOnForce;
 [TestFixture]
 public sealed class DropshipNavigationAccessTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> DistressSignalPrototype = "DistressSignal";
+    private static readonly Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> ForceOnForcePrototype = "ForceOnForce";
+
     public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
 
     [TestCase("govfor", "opfor", "Govfor", "Opfor")]
@@ -93,7 +96,7 @@ public sealed class DropshipNavigationAccessTest : GameTest
             SEntMan.RemoveComponent<AccessReaderComponent>(console);
             Assert.That(dropships.CanUseNavigation(console, pilot), Is.False);
             typeof(GameTicker).GetProperty(nameof(GameTicker.CurrentPreset))!
-                .SetValue(Server.System<GameTicker>(), SProtoMan.Index<GamePresetPrototype>("DistressSignal"));
+                .SetValue(Server.System<GameTicker>(), SProtoMan.Index<GamePresetPrototype>(DistressSignalPrototype));
             Assert.That(dropships.CanUseNavigation(console, pilot), Is.True);
         });
     }
@@ -177,5 +180,5 @@ public sealed class DropshipNavigationAccessTest : GameTest
     }
 
     private void SetForceOnForce() => typeof(GameTicker).GetProperty(nameof(GameTicker.CurrentPreset))!
-        .SetValue(Server.System<GameTicker>(), SProtoMan.Index<GamePresetPrototype>("ForceOnForce"));
+        .SetValue(Server.System<GameTicker>(), SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype));
 }

@@ -249,7 +249,7 @@ public sealed partial class ChevronSystem : EntitySystem
         if (!TryComp<NpcFactionMemberComponent>(mob, out var factionMember))
             return null;
 
-        var platoonRule = EntitySystem.Get<PlatoonSpawnRuleSystem>();
+        var platoonRule = EntityManager.System<PlatoonSpawnRuleSystem>();
 
         foreach (var faction in factionMember.Factions)
         {

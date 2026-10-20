@@ -24,6 +24,8 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallsignRole
+    auxiliaryElement: true
   - type: Skills
     preset: AU14SkillPresetPlatoonAuxTech
   - type: JobPrefix
@@ -51,6 +53,7 @@
     - Anemic
     - CMUAlcoholic
     - CMUDrugAddict
+    - CMUBadLeg
   ranks:
     RMCRankCivilian: []
   chevrons:

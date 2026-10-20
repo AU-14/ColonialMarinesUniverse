@@ -98,5 +98,5 @@
   - After setting a bone, put a cast on within 5 minutes. See [textlink="Fractures" link="CMUGuideMedicalBones"].
 
   ## The Autodoc
-  The [bold]autodoc pod[/bold] operates by itself. A trained surgeon queues procedures from its console, and the pod carries them out on the patient inside. See [textlink="Medical Machines" link="CMUGuideMedicalMachines"], which also covers the body scanner that can make your surgery twice as fast.
+  The [bold]autodoc pod[/bold] operates by itself. Anyone, trained or not, queues procedures from its console, and the pod carries them out on the patient inside. See [textlink="Medical Machines" link="CMUGuideMedicalMachines"], which also covers the body scanner that can make your surgery twice as fast.
 </Document>

@@ -19,6 +19,8 @@ namespace Content.IntegrationTests.CMU14.ZLevels;
 [TestFixture]
 public sealed class CMUZLevelAmbientLightTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<GameMapPrototype> CMUZLightingTestMapPrototype = "CMUZLightingTestMap";
+
     [TestPrototypes]
     private const string Prototypes = """
 - type: gameMap
@@ -62,7 +64,7 @@ public sealed class CMUZLevelAmbientLightTest : GameTest
         await Server.WaitAssertion(() =>
         {
             var maps = Server.System<SharedMapSystem>();
-            Server.System<GameTicker>().LoadGameMap(SProtoMan.Index<GameMapPrototype>("CMUZLightingTestMap"),
+            Server.System<GameTicker>().LoadGameMap(SProtoMan.Index<GameMapPrototype>(CMUZLightingTestMapPrototype),
                 out var mapId, DeserializationOptions.Default with { InitializeMaps = false });
             maps.InitializeMap(mapId);
             ground = maps.GetMap(mapId);

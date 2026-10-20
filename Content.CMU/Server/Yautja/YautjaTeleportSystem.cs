@@ -5,7 +5,7 @@ using Robust.Shared.Map;
 
 namespace Content.Server.CMU14.Yautja;
 
-public sealed class YautjaTeleportSystem : EntitySystem
+public sealed partial class YautjaTeleportSystem : EntitySystem
 {
     [Dependency] private PullingSystem _pulling = default!;
     [Dependency] private SharedTransformSystem _transform = default!;

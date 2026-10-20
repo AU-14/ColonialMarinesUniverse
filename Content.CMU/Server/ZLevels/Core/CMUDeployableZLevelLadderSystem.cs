@@ -218,7 +218,7 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
         var worldPosition = _transform.GetWorldPosition(user);
         var tile = _map.WorldToTile(map, grid, worldPosition);
         if (!_map.TryGetTileRef(map, grid, tile, out var lowerTile) ||
-            lowerTile.Tile.IsEmpty)
+            CMUZLevelOpeningCache.IsFallThroughTile(lowerTile.Tile, _tile))
         {
             popup = Loc.GetString("cmu-zlevel-ladder-deploy-no-floor");
             return false;
@@ -275,7 +275,7 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
 
     private bool HasLadderAt(EntityUid map, MapGridComponent grid, Vector2i tile)
     {
-        var anchored = _map.GetAnchoredEntitiesEnumerator(map, grid, tile);
+        var anchored = _map.GetAnchoredEntities(map, grid, tile);
         while (anchored.MoveNext(out var uid))
         {
             if (HasComp<CMUZLevelLadderComponent>(uid) ||
@@ -319,7 +319,7 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
             var adjacent = tile.Offset(dir);
 
             if (!_map.TryGetTileRef(grid.Owner, grid.Comp, adjacent, out var tileRef) ||
-                tileRef.Tile.IsEmpty)
+                CMUZLevelOpeningCache.IsFallThroughTile(tileRef.Tile, _tile))
             {
                 continue;
             }
@@ -333,7 +333,7 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
 
     private bool HasSupportFixtureAt(Entity<MapGridComponent> grid, Vector2i tile, CollisionGroup mask)
     {
-        var anchored = _map.GetAnchoredEntitiesEnumerator(grid.Owner, grid.Comp, tile);
+        var anchored = _map.GetAnchoredEntities(grid.Owner, grid.Comp, tile);
         while (anchored.MoveNext(out var uid))
         {
             if (uid is not { } support ||

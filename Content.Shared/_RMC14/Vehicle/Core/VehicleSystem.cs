@@ -1,3 +1,13 @@
+using Robust.Shared.Timing;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Audio;
+using Content.Shared.Weapons.Melee;
+using Content.Shared.Throwing;
+using Content.Shared.Stunnable;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Systems; // CMU14: current damage event API.
+using Content.Shared._RMC14.Stun;
+using Content.Shared._RMC14.CameraShake;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Shared._RMC14.Areas;
@@ -39,6 +49,12 @@ public sealed partial class VehicleSystem : EntitySystem
 {
     private readonly HashSet<EntityUid> _exitDestinationIntersecting = new();
 
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private RMCSizeStunSystem _rmcSize = default!;
+    [Dependency] private RMCCameraShakeSystem _cameraShake = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private AreaSystem _area = default!;
     [Dependency] private SharedEyeSystem _eye = default!;
     [Dependency] private VehicleViewToggleSystem _viewToggle = default!;
@@ -59,8 +75,18 @@ public sealed partial class VehicleSystem : EntitySystem
     [Dependency] private RMCMapSystem _rmcMap = default!;
     [Dependency] private TurfSystem _turf = default!;
 
+    private const float CrashMinSpeedFraction = 0.15f;
+    private const float CrashThrowSpeed = 10f;
+    private static readonly SoundSpecifier XenoFrameBreachSound = new SoundCollectionSpecifier("XenoPry");
+    private EntityQuery<MeleeWeaponComponent> _meleeWeaponQuery;
+
     public override void Initialize()
     {
+        _meleeWeaponQuery = GetEntityQuery<MeleeWeaponComponent>();
+        SubscribeLocalEvent<VehicleXenoSizeComponent, DamageModifyEvent>(OnVehicleXenoSizeDamageModify,
+            before: new[] { typeof(HardpointSystem) }); // CMU14: reject claws before routing damage into mounts.
+        SubscribeLocalEvent<VehicleDemolitionComponent, InteractUsingEvent>(OnDemolitionInteractUsing);
+        SubscribeLocalEvent<VehicleDemolitionComponent, VehicleDemolitionDoAfterEvent>(OnDemolitionDoAfter);
         InitializeTankCookOff(); // CMU14: catastrophic tank destruction
         SubscribeLocalEvent<VehicleEnterComponent, ActivateInWorldEvent>(OnVehicleEnterActivate);
         SubscribeLocalEvent<VehicleEnterComponent, ComponentShutdown>(OnVehicleEnterShutdown);
@@ -81,6 +107,29 @@ public sealed partial class VehicleSystem : EntitySystem
         SubscribeLocalEvent<HardpointIntegrityComponent, VehicleCanRunEvent>(OnFrameVehicleCanRun);
         SubscribeLocalEvent<VehicleInteriorComponent, VehicleFrameIntegrityChangedEvent>(OnVehicleFrameIntegrityChanged);
         SubscribeLocalEvent<RMCConstructionAttemptEvent>(OnConstructionAttempt);
+    }
+
+    private void OnVehicleXenoSizeDamageModify(Entity<VehicleXenoSizeComponent> ent, ref DamageModifyEvent args)
+    {
+        if (args.Impact.Delivery != DamageImpactDelivery.Melee) // CMU14: ability damage is independent of claw size.
+            return;
+
+        if (args.Tool is not { } attacker ||
+            !HasComp<XenoComponent>(attacker) ||
+            !_meleeWeaponQuery.HasComp(attacker))
+        {
+            return;
+        }
+
+        if (!_rmcSize.TryGetSize(attacker, out var size) || size >= ent.Comp.MinimumSize)
+            return;
+
+        args.Damage = new DamageSpecifier();
+
+        if (_net.IsClient)
+            return;
+
+        _popup.PopupEntity(Loc.GetString("rmc-vehicle-too-small-to-damage"), ent, attacker, PopupType.MediumCaution);
     }
 
     private void OnVehicleEnterActivate(Entity<VehicleEnterComponent> ent, ref ActivateInWorldEvent args)
@@ -129,7 +178,7 @@ public sealed partial class VehicleSystem : EntitySystem
         var doAfter = new DoAfterArgs(EntityManager, args.User, ent.Comp.EnterDoAfter, new VehicleEnterDoAfterEvent { EntryIndex = entryIndex }, ent.Owner)
         {
             BreakOnMove = true,
-            BreakOnDamage = true,
+            BreakOnDamage = false,
             NeedHand = false,
         };
 
@@ -138,6 +187,9 @@ public sealed partial class VehicleSystem : EntitySystem
             interior.EntryLocks.Remove(entryIndex);
             return;
         }
+
+        if (CanBypassLockWithDestroyedFrame(ent.Owner, args.User))
+            _audio.PlayPvs(XenoFrameBreachSound, ent.Owner);
 
         args.Handled = true;
     }
@@ -595,6 +647,22 @@ public sealed partial class VehicleSystem : EntitySystem
         out EntityCoordinates exitCoords,
         out MapCoordinates exitMapCoords)
     {
+        Vector2 offset;
+        var entryIndex = ent.Comp.EntryIndex;
+        if (entryIndex >= 0 && entryIndex < enter.EntryPoints.Count)
+            offset = enter.EntryPoints[entryIndex].Offset;
+        else
+            offset = enter.ExitOffset;
+
+        return TryGetExitCoordinatesForOffset(vehicleUid, offset, out exitCoords, out exitMapCoords);
+    }
+
+    private bool TryGetExitCoordinatesForOffset(
+        EntityUid vehicleUid,
+        Vector2 offset,
+        out EntityCoordinates exitCoords,
+        out MapCoordinates exitMapCoords)
+    {
         exitCoords = default;
         exitMapCoords = default;
 
@@ -606,13 +674,6 @@ public sealed partial class VehicleSystem : EntitySystem
         if (parent == null || !parent.Value.IsValid())
             return false;
 
-        Vector2 offset;
-        var entryIndex = ent.Comp.EntryIndex;
-        if (entryIndex >= 0 && entryIndex < enter.EntryPoints.Count)
-            offset = enter.EntryPoints[entryIndex].Offset;
-        else
-            offset = enter.ExitOffset;
-
         var rotated = vehicleXform.LocalRotation.RotateVec(offset);
         var position = vehicleXform.LocalPosition + rotated;
 
@@ -623,12 +684,26 @@ public sealed partial class VehicleSystem : EntitySystem
 
     private bool IsExitDestinationBlocked(EntityCoordinates exitCoords, EntityUid vehicle, EntityUid user)
     {
-        if (!_turf.TryGetTileRef(exitCoords, out var tileRef))
-            return false;
+        ScanTileHardBlockers(exitCoords, vehicle, user, out var mobBlocked, out var structureBlocked);
+        return mobBlocked || structureBlocked;
+    }
+
+    private void ScanTileHardBlockers(
+        EntityCoordinates tileCoords,
+        EntityUid vehicle,
+        EntityUid user,
+        out bool mobBlocked,
+        out bool structureBlocked)
+    {
+        mobBlocked = false;
+        structureBlocked = false;
+
+        if (!_turf.TryGetTileRef(tileCoords, out var tileRef))
+            return;
 
         var gridUid = tileRef.Value.GridUid;
         if (!TryComp(gridUid, out MapGridComponent? gridComp))
-            return false;
+            return;
 
         var xformQuery = GetEntityQuery<TransformComponent>();
         var fixtureQuery = GetEntityQuery<FixturesComponent>();
@@ -660,6 +735,7 @@ public sealed partial class VehicleSystem : EntitySystem
 
             var fixtureTransform = new Transform(pos, (float) rot.Theta);
 
+            var overlaps = false;
             foreach (var fixture in fixtures.Fixtures.Values)
             {
                 if (!fixture.Hard)
@@ -672,12 +748,24 @@ public sealed partial class VehicleSystem : EntitySystem
                 {
                     var intersection = fixture.Shape.ComputeAABB(fixtureTransform, i).Intersect(tileAabb);
                     if (intersection.Width * intersection.Height > 0.1f)
-                        return true;
+                    {
+                        overlaps = true;
+                        break;
+                    }
                 }
-            }
-        }
 
-        return false;
+                if (overlaps)
+                    break;
+            }
+
+            if (!overlaps)
+                continue;
+
+            if (HasComp<MobStateComponent>(ent))
+                mobBlocked = true;
+            else
+                structureBlocked = true;
+        }
     }
 
     private void OnVehicleExitDoAfter(Entity<VehicleExitComponent> ent, ref VehicleExitDoAfterEvent args)
@@ -852,7 +940,7 @@ public sealed partial class VehicleSystem : EntitySystem
             return;
 
         if (args.Popup)
-            _popup.PopupClient(Loc.GetString("rmc-skills-cant-operate", ("target", ent)), args.Buckle, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-skills-cant-operate", ("target", ent)), args.Buckle, args.User);
 
         //args.Cancelled = true;
     }
@@ -1055,6 +1143,67 @@ public sealed partial class VehicleSystem : EntitySystem
             return false;
 
         return frameIntegrity.BypassEntryOnZero && frameIntegrity.Integrity <= 0f;
+    }
+
+    public void DoInteriorCrashEffect(EntityUid vehicle, float speed, float maxSpeed)
+    {
+        if (_net.IsClient)
+            return;
+
+        if (maxSpeed <= 0f)
+            return;
+
+        var ratio = MathF.Abs(speed) / maxSpeed;
+        if (ratio < CrashMinSpeedFraction)
+            return;
+
+        PlayCrashSound(vehicle);
+
+        if (!TryComp(vehicle, out VehicleInteriorComponent? interior))
+            return;
+
+        var shakeStrength = Math.Clamp((int) MathF.Ceiling(ratio * 3f), 1, 3);
+        var flingDistance = shakeStrength * 2;
+        if (flingDistance <= 0)
+            return;
+
+        var offset = new Vector2(speed >= 0f ? flingDistance : -flingDistance, 0f);
+
+        var occupants = new List<EntityUid>(interior.Passengers.Count + interior.Xenos.Count);
+        occupants.AddRange(interior.Passengers);
+        occupants.AddRange(interior.Xenos);
+
+        foreach (var occupant in occupants)
+        {
+            if (TerminatingOrDeleted(occupant))
+                continue;
+
+            _cameraShake.ShakeCamera(occupant, 2, shakeStrength);
+
+            var buckled = TryComp(occupant, out BuckleComponent? buckle) && buckle.BuckledTo != null;
+            if (buckled)
+                continue;
+
+            _stun.TryParalyze(occupant, TimeSpan.FromSeconds(1), true);
+            _stun.TryKnockdown(occupant, TimeSpan.FromSeconds(2), true);
+
+            var target = Transform(occupant).Coordinates.Offset(offset);
+            _throwing.TryThrow(occupant, target, CrashThrowSpeed, user: null, pushbackRatio: 0f, compensateFriction: false);
+        }
+    }
+
+    private void PlayCrashSound(EntityUid vehicle)
+    {
+        if (!TryComp(vehicle, out VehicleSoundComponent? sound) || sound.CrashSound == null)
+            return;
+
+        var now = _timing.CurTime;
+        if (sound.NextCrashSound > now)
+            return;
+
+        _audio.PlayPvs(sound.CrashSound, vehicle);
+        sound.NextCrashSound = now + TimeSpan.FromSeconds(sound.CrashSoundCooldown);
+        Dirty(vehicle, sound);
     }
 
     public bool TryGetVehicleFromInterior(EntityUid interiorEntity, out EntityUid? vehicle)

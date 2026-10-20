@@ -8,13 +8,17 @@
   roundComponents:
   - type: Skills
     skills:
-      RMCSkillFireman: 1
+      RMCSkillFireman: 2
       RMCSkillVehicles: 1
       RMCSkillDomestics: 1
-      RMCSkillMedical: 4
+      RMCSkillMedical: 5
       RMCSkillResearch: 2
-      RMCSkillSurgery: 3
-      RMCSkillFirearms: 2
+      RMCSkillSurgery: 4
+      RMCSkillFirearms: 1
+      RMCSkillLeadership: 1
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 1
+      RMCSkillConstruction: 1
   - type: JobPrefix
     prefix: au14-job-prefix-headphysician
   - type: TacticalMapIcon
@@ -28,13 +32,11 @@
   canBeAntag: false
   playTimeTracker: AU14JobCivilianHeadPhysician
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
   - !type:TotalJobsTimeRequirement
     group: CMUJobsMedical
-    time: 54000 # 15 hours
+    time: 10800 # 3 hours
   - !type:AgeRequirement
-    requiredAge: 25
+    requiredAge: 30
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -98,6 +100,7 @@
   - CivFootwearAU14
   - MedMaskAU14
   - MedBeltAU14
+  - CMUSurgicalWebbing
   - MedPouchAU14
   - MedPouchRightAU14
   - ForceMedEssentialAU14

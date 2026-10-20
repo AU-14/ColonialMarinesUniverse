@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Content.Shared.CMU14.Medical.Blood;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
@@ -13,7 +14,10 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Scanner;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Synth;
+using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
+using Content.Shared.Body.Systems;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
@@ -33,8 +37,12 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
     [Dependency] private SharedCMUOpenStumpSystem _stumps = default!;
     [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> MedicalSkill = "RMCSkillMedical";
+    private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
+    private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
 
     public override void Initialize()
     {
@@ -47,7 +55,11 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
     }
 
     private void OnBuildScanner(Entity<HealthScannerComponent> ent, ref HealthScannerBuildStateEvent args)
-        => HandleBuildState(ref args);
+    {
+        var reading = new CMUHealthScannerReadingEvent(args.State, args.Examiner);
+        RaiseLocalEvent(args.Patient, ref reading);
+        HandleBuildState(ref args);
+    }
 
     private void OnBuildPatient(Entity<CMUHumanMedicalComponent> ent, ref HealthScannerBuildStateEvent args)
         => HandleBuildState(ref args);
@@ -79,11 +91,27 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
         if (skill >= 1)
             FillFractures(args.Patient, state, exactSeverity: skill >= 3);
         if (skill >= 1)
-            FillInternalBleeds(args.Patient, state, exactLocation: skill >= 3);
+            // The patient already feels which limb is bleeding, so any trained scan points at it too.
+            FillInternalBleeds(args.Patient, state, exactLocation: true);
         FillHeart(args.Patient, state);
         if (skill >= 1)
             FillPainShockRisk(args.Patient, state);
         FillRiderReading(args.Patient, state);
+        FillBlood(args.Patient, state);
+    }
+
+    private void FillBlood(EntityUid patient, HealthScannerBuiState state)
+    {
+        if (TryComp<CMUBloodTypeComponent>(patient, out var bloodType))
+            state.CMUBloodType = CMUBloodTypes.Name(bloodType.Type);
+
+        if (TryComp<CMUSalineDilutionComponent>(patient, out var saline) &&
+            TryComp<BloodstreamComponent>(patient, out var bloodstream))
+        {
+            var reference = _bloodstream.GetReferenceVolume((patient, bloodstream));
+            if (reference > FixedPoint2.Zero)
+                state.CMUSalinePercent = saline.Saline.Float() / reference.Float() * 100f;
+        }
     }
 
     private void FillRiderReading(EntityUid patient, HealthScannerBuiState state)
@@ -141,6 +169,8 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
             var woundReadout = TryComp<BodyPartWoundComponent>(partUid, out var pw)
                 ? _woundLedger.GetWorstUntreatedWound(pw)
                 : null;
+            var groups = _partHealth.GetAttributedDamagePerGroup(partUid);
+            var (untreatedBrute, untreatedBurn) = UntreatedWoundTypes(pw);
             parts[dictKey] = new CMUBodyPartReadout(
                 partComp.PartType,
                 partComp.Symmetry,
@@ -155,7 +185,11 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
                 HasComp<CMUSplintedComponent>(partUid),
                 HasComp<CMUCastComponent>(partUid),
                 HasComp<CMUTourniquetComponent>(partUid),
-                showExternalBleeding ? pw?.ExternalBleeding ?? ExternalBleedTier.None : ExternalBleedTier.None);
+                showExternalBleeding ? pw?.ExternalBleeding ?? ExternalBleedTier.None : ExternalBleedTier.None,
+                groups.GetValueOrDefault(BruteGroup),
+                groups.GetValueOrDefault(BurnGroup),
+                untreatedBrute,
+                untreatedBurn);
         }
         state.CMUParts = parts;
 
@@ -174,6 +208,26 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
 
         if (stumps.Count > 0)
             state.CMUStumps = stumps;
+    }
+
+    private static (bool Brute, bool Burn) UntreatedWoundTypes(BodyPartWoundComponent? wounds)
+    {
+        if (wounds == null)
+            return (false, false);
+
+        bool brute = false, burn = false;
+        foreach (var entry in wounds.Entries)
+        {
+            if (entry.Wound.Treated)
+                continue;
+
+            if (entry.Wound.Type == WoundType.Brute)
+                brute = true;
+            else if (entry.Wound.Type == WoundType.Burn)
+                burn = true;
+        }
+
+        return (brute, burn);
     }
 
     /// <summary>The part's own external bleed, or arterial while it has an open stump that isn't clamped.</summary>

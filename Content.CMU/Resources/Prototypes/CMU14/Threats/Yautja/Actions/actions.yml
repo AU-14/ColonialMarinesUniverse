@@ -190,38 +190,6 @@
   description: Create a stabilising crystal.
 - type: entity
   parent: CMUYautjaActionBase
-  id: CMUActionYautjaCreateFieldRation
-  components:
-  - type: Action
-    useDelay: 1
-  - type: Sprite
-    layers:
-    - sprite: Objects/Consumable/Food/meat.rsi
-      state: plain
-      map: ["enum.ActionVisuals.Icon"]
-  - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaCreateFieldRationActionEvent
-  - type: YautjaPowerAction
-    cost: 0
-
-- type: entity
-  parent: CMUYautjaActionBase
-  id: CMUActionYautjaCreateHuntingCanteen
-  components:
-  - type: Action
-    useDelay: 1
-  - type: Sprite
-    layers:
-    - sprite: _RMC14/Objects/Consumable/Drinks/canteen.rsi
-      state: canteen
-      map: ["enum.ActionVisuals.Icon"]
-  - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaCreateHuntingCanteenActionEvent
-  - type: YautjaPowerAction
-    cost: 0
-
-- type: entity
-  parent: CMUYautjaActionBase
   id: CMUActionYautjaCreateHumanStabilisingCrystal
   components:
   - type: Action
@@ -605,6 +573,8 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaHonorRoar
+  name: Honor Roar
+  description: Roar, staggering and deafening nearby prey.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -620,6 +590,8 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaHuntingLeap
+  name: Hunting Leap
+  description: Leap at a target and strike it with your melee weapon.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -945,25 +917,6 @@
     layers:
     - sprite: CMU14/Yautja/actions.rsi
       state: wristblade_framed
-      map: [enum.ActionVisuals.Icon]
-
-- type: entity
-  parent: CMUYautjaActionBase
-  id: CMUActionYautjaLeap
-  name: Leap
-  description: Leap to a target location.
-  components:
-  - type: Action
-    useDelay: 15
-  - type: TargetAction
-    range: 7
-    checkCanAccess: false
-  - type: WorldTargetAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaLeapActionEvent
-  - type: Sprite
-    layers:
-    - sprite: CMU14/Yautja/actions.rsi
-      state: leap_framed
       map: [enum.ActionVisuals.Icon]
 
 - type: entity

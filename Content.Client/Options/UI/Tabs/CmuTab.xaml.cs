@@ -32,6 +32,10 @@ public sealed partial class CmuTab : Control
         Control.AddOptionCheckBox(CCVars.ChatEnableRunechatBubbles, RunechatSpeechBubblesCheckBox);
         Control.AddOptionPercentSlider(CCVars.ChatRunechatBubbleScale, RunechatSpeechBubbleScaleSlider, 0.5f, 2f);
         Control.AddOptionCheckBox(CCVars.CMUVoteUiLarge, VoteUiLargeCheckBox);
+        // cmu edit start
+        Control.AddOptionCheckBox(CCVars.CMUTileMovementPreferred, TileMovementCheckBox);
+        Control.AddOptionCheckBox(CCVars.CMUTileMovementWalkOnly, TileMovementWalkOnlyCheckBox);
+        // cmu edit end
         // cmu edit start: hide username on the round-end screen
         Control.AddOptionCheckBox(Content.Shared.CMU14.CCVar.AU14CCVars.HideRoundEndUsername, HideRoundEndUsernameCheckBox);
         // cmu edit end
@@ -42,6 +46,7 @@ public sealed partial class CmuTab : Control
         Control.AddOptionCheckBox(CCVars.CMUTacMapCenterOnOpen, CenterTacMapCheckBox);
         Control.AddOptionCheckBox(CCVars.ExamineLogInChat, ExamineLogInChatCheckBox);
         Control.AddOptionCheckBox(CCVars.ExamineFullTextInChat, ExamineFullTextInChatCheckBox);
+        Control.AddOptionCheckBox(CCVars.HideExamineTooltip, HideExamineTooltipCheckBox);
         // cmu edit start
         Control.AddOptionCheckBox(CCVars.ExamineWoundsInChat, ExamineWoundsInChatCheckBox);
         // cmu edit end
@@ -49,6 +54,8 @@ public sealed partial class CmuTab : Control
         Control.AddOptionCheckBox(CCVars.ChatSpeechSounds, ChatSpeechSoundsCheckBox);
         Control.AddOptionCheckBox(CCVars.ChatResetToLocal, ChatResetToLocalCheckBox);
         Control.AddOptionCheckBox(CCVars.ChatCenterInput, ChatCenterInputCheckBox);
+        Control.AddOptionCheckBox(CCVars.PopupsInChat, PopupsInChatCheckBox);
+        Control.AddOptionCheckBox(CCVars.HidePopupsOnScreen, HidePopupsOnScreenCheckBox);
         // cmu edit end
         Control.AddOptionCheckBox(CCVars.CMUAutoIngestEnabled, AutoIngestCheckBox);
         // CMU14: client temperature unit preference
@@ -57,10 +64,15 @@ public sealed partial class CmuTab : Control
         Control.AddOptionCheckBox(CCVars.ExplosionScreenShakeIgnoreFar, ExplosionScreenShakeIgnoreFarCheckBox);
         Control.AddOptionCheckBox(CCVars.FirearmScreenShakeEnabled, FirearmScreenShakeEnabledCheckBox);
         Control.AddOptionCheckBox(CCVars.MuteScriptedSounds, MuteScriptedSoundsCheckBox);
+        // cmu edit start
+        Control.AddOptionCheckBox(CCVars.CMUHideCassetteMusicNotes, HideCassetteMusicNotesCheckBox);
+        // cmu edit end
         Control.AddOptionCheckBox(CMUMedicalCCVars.TargetedHealingEnabled, TargetedHealingCheckBox);
         Control.AddOptionCheckBox(CMUMedicalCCVars.AutoReapplyKitsEnabled, AutoReapplyKitsCheckBox);
         Control.AddOptionCheckBox(CMUMedicalCCVars.UiLessSurgeryEnabled, UiLessSurgeryCheckBox);
         Control.AddOptionCheckBox(CCVars.CMUScreamOnHotbarEnabled, ScreamOnHotbarCheckBox);
+        Control.AddOptionCheckBox(CCVars.CMUVaultOnBump, VaultOnBumpCheckBox); // cmu edit
+        Control.AddOptionCheckBox(CCVars.CMUNoShakeWhenResting, NoShakeWhenRestingCheckBox); // cmu edit
         // cmu edit start: area echo options, moved from the Misc tab
         Control.AddOptionCheckBox(Content.Shared._Mono.CCVar.MonoCVars.AreaEchoEnabled, AreaEchoCheckBox);
         Control.AddOptionCheckBox(Content.Shared._Mono.CCVar.MonoCVars.AreaEchoHighResolution, AreaEchoHighResolutionCheckBox);

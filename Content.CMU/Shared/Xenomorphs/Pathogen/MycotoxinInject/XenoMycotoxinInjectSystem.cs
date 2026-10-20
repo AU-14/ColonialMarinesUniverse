@@ -13,12 +13,12 @@ namespace Content.Shared.CMU14.Xenomorphs.Pathogen.MycotoxinInject;
 
 public sealed partial class CMUXenoMycotoxinInjectSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
 
     public override void Initialize()
     {
@@ -35,7 +35,7 @@ public sealed partial class CMUXenoMycotoxinInjectSystem : EntitySystem
 
         if (TerminatingOrDeleted(target))
         {
-            _popup.PopupClient(Loc.GetString("cmu14-mycotoxin-inject-invalid"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu14-mycotoxin-inject-invalid"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
@@ -48,7 +48,7 @@ public sealed partial class CMUXenoMycotoxinInjectSystem : EntitySystem
         args.Handled = true;
 
         var selfMsg = Loc.GetString("cmu14-mycotoxin-inject-start-self", ("target", (object) target));
-        _popup.PopupClient(selfMsg, xeno.Owner, xeno.Owner, PopupType.MediumCaution);
+        _popup.PopupEntity(selfMsg, xeno.Owner, xeno.Owner, PopupType.MediumCaution);
 
         var targetMsg = Loc.GetString("cmu14-mycotoxin-inject-start-target", ("xeno", (object) xeno.Owner));
         _popup.PopupEntity(targetMsg, target, target, PopupType.MediumCaution);
@@ -83,7 +83,7 @@ public sealed partial class CMUXenoMycotoxinInjectSystem : EntitySystem
 
         args.Handled = true;
 
-        _popup.PopupPredicted(
+        _popup.PopupEntity(
             Loc.GetString("cmu14-mycotoxin-inject-self", ("target", (object) target)),
             Loc.GetString("cmu14-mycotoxin-inject-target", ("xeno", (object) xeno.Owner)),
             xeno, xeno, PopupType.MediumCaution);
@@ -100,19 +100,19 @@ public sealed partial class CMUXenoMycotoxinInjectSystem : EntitySystem
 
         if (!validState)
         {
-            _popup.PopupClient(Loc.GetString("cmu14-mycotoxin-inject-not-dead"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu14-mycotoxin-inject-not-dead"), xeno, xeno, PopupType.SmallCaution);
             return false;
         }
 
         if (HasComp<XenoComponent>(target))
         {
-            _popup.PopupClient(Loc.GetString("cmu14-mycotoxin-inject-invalid"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu14-mycotoxin-inject-invalid"), xeno, xeno, PopupType.SmallCaution);
             return false;
         }
 
         if (HasComp<VictimInfectedComponent>(target) || HasComp<CMUPathogenWalkerComponent>(target))
         {
-            _popup.PopupClient(Loc.GetString("cmu14-mycotoxin-inject-already-infected"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu14-mycotoxin-inject-already-infected"), xeno, xeno, PopupType.SmallCaution);
             return false;
         }
 

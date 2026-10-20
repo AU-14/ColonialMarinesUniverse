@@ -1,0 +1,2174 @@
+# UNBOUND topology physical studies. No sourcePrototypes mappings.
+- type: cmu3DModel
+  id: CMU3DTopologyStairsFlightStudyCloud
+  label: UNBOUND / four beveled flight treads
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMUMultiZStairsFlight
+  referenceRsi: /Textures/_RMC14/Structures/stairs.rsi
+  referenceState: rampbottom
+  referenceDirection: 0
+  sourceDirections: 4
+  description: UNBOUND standalone physical art study. Four 8-pixel tread groups in South RSI frame. Physical .16 tile
+    rise per tread and hidden stringers are inferred; the logical HighGround [1.05,1.05,.575,.1] curve is not a verified
+    metre rise. Flight source Sprite.Color is multiplied exactly once into paint and reference. No prototype binding,
+    runtime aperture/elevation integration, saved-map fit, native/gameplay or fidelity approval.
+  parts:
+  - label: tread 1 structural plate
+    min: -0.5, 0.25, 0.545
+    max: 0.5, 0.5, 0.64
+    color: '#1B1D1C'
+  - label: tread 2 structural plate
+    min: -0.5, 0.0, 0.385
+    max: 0.5, 0.25, 0.48
+    color: '#1B1D1C'
+  - label: tread 3 structural plate
+    min: -0.5, -0.25, 0.225
+    max: 0.5, 0.0, 0.32
+    color: '#1B1D1C'
+  - label: tread 4 structural plate
+    min: -0.5, -0.5, 0.065
+    max: 0.5, -0.25, 0.16
+    color: '#1B1D1C'
+  - label: left rising stringer
+    min: -0.435, -0.5, 0.0
+    max: -0.345, 0.5, 0.64
+    color: '#2E302F'
+    shape: WedgeY
+  - label: right rising stringer
+    min: 0.345, -0.5, 0.0
+    max: 0.435, 0.5, 0.64
+    color: '#2E302F'
+    shape: WedgeY
+  - label: lower bearing shoe
+    min: -0.45, -0.5, 0.0
+    max: 0.45, -0.42, 0.068
+    color: '#1B1D1C'
+  - label: upper bearing crossmember
+    min: -0.45, 0.41, 0.459
+    max: 0.45, 0.5, 0.541
+    color: '#1B1D1C'
+  - label: tread 1 original band row 0 pixels 1-1
+    min: -0.46875, 0.46875, 0.64
+    max: -0.4375, 0.5, 0.646
+    color: '#2E302F'
+  - label: tread 1 original band row 0 pixels 3-28
+    min: -0.40625, 0.46875, 0.64
+    max: 0.40625, 0.5, 0.646
+    color: '#2E302F'
+  - label: tread 1 original band row 0 pixels 30-30
+    min: 0.4375, 0.46875, 0.64
+    max: 0.46875, 0.5, 0.646
+    color: '#2E302F'
+  - label: tread 1 original band row 1 pixels 1-1 + contiguous matching rows
+    min: -0.46875, 0.375, 0.64
+    max: -0.4375, 0.46875, 0.646
+    color: '#3C3F3E'
+  - label: tread 1 original band row 1 pixels 2-2 + contiguous matching rows
+    min: -0.4375, 0.375, 0.64
+    max: -0.40625, 0.46875, 0.646
+    color: '#2E302F'
+  - label: tread 1 original band row 1 pixels 3-28 + contiguous matching rows
+    min: -0.40625, 0.375, 0.64
+    max: 0.40625, 0.46875, 0.646
+    color: '#515554'
+  - label: tread 1 original band row 1 pixels 29-29 + contiguous matching rows
+    min: 0.40625, 0.375, 0.64
+    max: 0.4375, 0.46875, 0.646
+    color: '#2E302F'
+  - label: tread 1 original band row 1 pixels 30-30 + contiguous matching rows
+    min: 0.4375, 0.375, 0.64
+    max: 0.46875, 0.46875, 0.646
+    color: '#3C3F3E'
+  - label: tread 1 original band row 4 pixels 1-1
+    min: -0.46875, 0.34375, 0.64
+    max: -0.4375, 0.375, 0.646
+    color: '#2E302F'
+  - label: tread 1 original band row 4 pixels 2-2
+    min: -0.4375, 0.34375, 0.64
+    max: -0.40625, 0.375, 0.646
+    color: '#3C3F3E'
+  - label: tread 1 original band row 4 pixels 3-28
+    min: -0.40625, 0.34375, 0.64
+    max: 0.40625, 0.375, 0.646
+    color: '#2E302F'
+  - label: tread 1 original band row 4 pixels 29-29
+    min: 0.40625, 0.34375, 0.64
+    max: 0.4375, 0.375, 0.646
+    color: '#3C3F3E'
+  - label: tread 1 original band row 4 pixels 30-30
+    min: 0.4375, 0.34375, 0.64
+    max: 0.46875, 0.375, 0.646
+    color: '#2E302F'
+  - label: tread 1 original band row 5 pixels 0-0
+    min: -0.5, 0.3125, 0.64
+    max: -0.46875, 0.34375, 0.646
+    color: '#2E302F'
+  - label: tread 1 original band row 5 pixels 2-2
+    min: -0.4375, 0.3125, 0.64
+    max: -0.40625, 0.34375, 0.646
+    color: '#2E302F'
+  - label: tread 1 original band row 5 pixels 3-28
+    min: -0.40625, 0.3125, 0.64
+    max: 0.40625, 0.34375, 0.646
+    color: '#3C3F3E'
+  - label: tread 1 original band row 5 pixels 29-29
+    min: 0.40625, 0.3125, 0.64
+    max: 0.4375, 0.34375, 0.646
+    color: '#2E302F'
+  - label: tread 1 original band row 5 pixels 31-31
+    min: 0.46875, 0.3125, 0.64
+    max: 0.5, 0.34375, 0.646
+    color: '#2E302F'
+  - label: tread 1 original band row 6 pixels 1-1
+    min: -0.46875, 0.28125, 0.64
+    max: -0.4375, 0.3125, 0.646
+    color: '#0E0F0F'
+  - label: tread 1 original band row 6 pixels 30-30
+    min: 0.4375, 0.28125, 0.64
+    max: 0.46875, 0.3125, 0.646
+    color: '#0E0F0F'
+  - label: tread 1 original band row 7 pixels 0-0
+    min: -0.5, 0.25, 0.64
+    max: -0.46875, 0.28125, 0.646
+    color: '#0E0F0F'
+  - label: tread 1 original band row 7 pixels 1-30
+    min: -0.46875, 0.25, 0.64
+    max: 0.46875, 0.28125, 0.646
+    color: '#080808'
+  - label: tread 1 original band row 7 pixels 31-31
+    min: 0.46875, 0.25, 0.64
+    max: 0.5, 0.28125, 0.646
+    color: '#0E0F0F'
+  - label: tread 2 original band row 0 pixels 1-1
+    min: -0.46875, 0.21875, 0.48
+    max: -0.4375, 0.25, 0.486
+    color: '#2E302F'
+  - label: tread 2 original band row 0 pixels 3-28
+    min: -0.40625, 0.21875, 0.48
+    max: 0.40625, 0.25, 0.486
+    color: '#2E302F'
+  - label: tread 2 original band row 0 pixels 30-30
+    min: 0.4375, 0.21875, 0.48
+    max: 0.46875, 0.25, 0.486
+    color: '#2E302F'
+  - label: tread 2 original band row 1 pixels 1-1 + contiguous matching rows
+    min: -0.46875, 0.125, 0.48
+    max: -0.4375, 0.21875, 0.486
+    color: '#3C3F3E'
+  - label: tread 2 original band row 1 pixels 2-2 + contiguous matching rows
+    min: -0.4375, 0.125, 0.48
+    max: -0.40625, 0.21875, 0.486
+    color: '#2E302F'
+  - label: tread 2 original band row 1 pixels 3-28 + contiguous matching rows
+    min: -0.40625, 0.125, 0.48
+    max: 0.40625, 0.21875, 0.486
+    color: '#515554'
+  - label: tread 2 original band row 1 pixels 29-29 + contiguous matching rows
+    min: 0.40625, 0.125, 0.48
+    max: 0.4375, 0.21875, 0.486
+    color: '#2E302F'
+  - label: tread 2 original band row 1 pixels 30-30 + contiguous matching rows
+    min: 0.4375, 0.125, 0.48
+    max: 0.46875, 0.21875, 0.486
+    color: '#3C3F3E'
+  - label: tread 2 original band row 4 pixels 1-1
+    min: -0.46875, 0.09375, 0.48
+    max: -0.4375, 0.125, 0.486
+    color: '#2E302F'
+  - label: tread 2 original band row 4 pixels 2-2
+    min: -0.4375, 0.09375, 0.48
+    max: -0.40625, 0.125, 0.486
+    color: '#3C3F3E'
+  - label: tread 2 original band row 4 pixels 3-28
+    min: -0.40625, 0.09375, 0.48
+    max: 0.40625, 0.125, 0.486
+    color: '#2E302F'
+  - label: tread 2 original band row 4 pixels 29-29
+    min: 0.40625, 0.09375, 0.48
+    max: 0.4375, 0.125, 0.486
+    color: '#3C3F3E'
+  - label: tread 2 original band row 4 pixels 30-30
+    min: 0.4375, 0.09375, 0.48
+    max: 0.46875, 0.125, 0.486
+    color: '#2E302F'
+  - label: tread 2 original band row 5 pixels 0-0
+    min: -0.5, 0.0625, 0.48
+    max: -0.46875, 0.09375, 0.486
+    color: '#2E302F'
+  - label: tread 2 original band row 5 pixels 2-2
+    min: -0.4375, 0.0625, 0.48
+    max: -0.40625, 0.09375, 0.486
+    color: '#2E302F'
+  - label: tread 2 original band row 5 pixels 3-28
+    min: -0.40625, 0.0625, 0.48
+    max: 0.40625, 0.09375, 0.486
+    color: '#3C3F3E'
+  - label: tread 2 original band row 5 pixels 29-29
+    min: 0.40625, 0.0625, 0.48
+    max: 0.4375, 0.09375, 0.486
+    color: '#2E302F'
+  - label: tread 2 original band row 5 pixels 31-31
+    min: 0.46875, 0.0625, 0.48
+    max: 0.5, 0.09375, 0.486
+    color: '#2E302F'
+  - label: tread 2 original band row 6 pixels 1-1
+    min: -0.46875, 0.03125, 0.48
+    max: -0.4375, 0.0625, 0.486
+    color: '#0E0F0F'
+  - label: tread 2 original band row 6 pixels 30-30
+    min: 0.4375, 0.03125, 0.48
+    max: 0.46875, 0.0625, 0.486
+    color: '#0E0F0F'
+  - label: tread 2 original band row 7 pixels 0-0
+    min: -0.5, 0.0, 0.48
+    max: -0.46875, 0.03125, 0.486
+    color: '#0E0F0F'
+  - label: tread 2 original band row 7 pixels 1-30
+    min: -0.46875, 0.0, 0.48
+    max: 0.46875, 0.03125, 0.486
+    color: '#080808'
+  - label: tread 2 original band row 7 pixels 31-31
+    min: 0.46875, 0.0, 0.48
+    max: 0.5, 0.03125, 0.486
+    color: '#0E0F0F'
+  - label: tread 3 original band row 0 pixels 1-1
+    min: -0.46875, -0.03125, 0.32
+    max: -0.4375, 0.0, 0.326
+    color: '#2E302F'
+  - label: tread 3 original band row 0 pixels 3-28
+    min: -0.40625, -0.03125, 0.32
+    max: 0.40625, 0.0, 0.326
+    color: '#2E302F'
+  - label: tread 3 original band row 0 pixels 30-30
+    min: 0.4375, -0.03125, 0.32
+    max: 0.46875, 0.0, 0.326
+    color: '#2E302F'
+  - label: tread 3 original band row 1 pixels 1-1 + contiguous matching rows
+    min: -0.46875, -0.125, 0.32
+    max: -0.4375, -0.03125, 0.326
+    color: '#3C3F3E'
+  - label: tread 3 original band row 1 pixels 2-2 + contiguous matching rows
+    min: -0.4375, -0.125, 0.32
+    max: -0.40625, -0.03125, 0.326
+    color: '#2E302F'
+  - label: tread 3 original band row 1 pixels 3-28 + contiguous matching rows
+    min: -0.40625, -0.125, 0.32
+    max: 0.40625, -0.03125, 0.326
+    color: '#515554'
+  - label: tread 3 original band row 1 pixels 29-29 + contiguous matching rows
+    min: 0.40625, -0.125, 0.32
+    max: 0.4375, -0.03125, 0.326
+    color: '#2E302F'
+  - label: tread 3 original band row 1 pixels 30-30 + contiguous matching rows
+    min: 0.4375, -0.125, 0.32
+    max: 0.46875, -0.03125, 0.326
+    color: '#3C3F3E'
+  - label: tread 3 original band row 4 pixels 1-1
+    min: -0.46875, -0.15625, 0.32
+    max: -0.4375, -0.125, 0.326
+    color: '#2E302F'
+  - label: tread 3 original band row 4 pixels 2-2
+    min: -0.4375, -0.15625, 0.32
+    max: -0.40625, -0.125, 0.326
+    color: '#3C3F3E'
+  - label: tread 3 original band row 4 pixels 3-28
+    min: -0.40625, -0.15625, 0.32
+    max: 0.40625, -0.125, 0.326
+    color: '#2E302F'
+  - label: tread 3 original band row 4 pixels 29-29
+    min: 0.40625, -0.15625, 0.32
+    max: 0.4375, -0.125, 0.326
+    color: '#3C3F3E'
+  - label: tread 3 original band row 4 pixels 30-30
+    min: 0.4375, -0.15625, 0.32
+    max: 0.46875, -0.125, 0.326
+    color: '#2E302F'
+  - label: tread 3 original band row 5 pixels 0-0
+    min: -0.5, -0.1875, 0.32
+    max: -0.46875, -0.15625, 0.326
+    color: '#2E302F'
+  - label: tread 3 original band row 5 pixels 2-2
+    min: -0.4375, -0.1875, 0.32
+    max: -0.40625, -0.15625, 0.326
+    color: '#2E302F'
+  - label: tread 3 original band row 5 pixels 3-28
+    min: -0.40625, -0.1875, 0.32
+    max: 0.40625, -0.15625, 0.326
+    color: '#3C3F3E'
+  - label: tread 3 original band row 5 pixels 29-29
+    min: 0.40625, -0.1875, 0.32
+    max: 0.4375, -0.15625, 0.326
+    color: '#2E302F'
+  - label: tread 3 original band row 5 pixels 31-31
+    min: 0.46875, -0.1875, 0.32
+    max: 0.5, -0.15625, 0.326
+    color: '#2E302F'
+  - label: tread 3 original band row 6 pixels 1-1
+    min: -0.46875, -0.21875, 0.32
+    max: -0.4375, -0.1875, 0.326
+    color: '#0E0F0F'
+  - label: tread 3 original band row 6 pixels 30-30
+    min: 0.4375, -0.21875, 0.32
+    max: 0.46875, -0.1875, 0.326
+    color: '#0E0F0F'
+  - label: tread 3 original band row 7 pixels 0-0
+    min: -0.5, -0.25, 0.32
+    max: -0.46875, -0.21875, 0.326
+    color: '#0E0F0F'
+  - label: tread 3 original band row 7 pixels 1-30
+    min: -0.46875, -0.25, 0.32
+    max: 0.46875, -0.21875, 0.326
+    color: '#080808'
+  - label: tread 3 original band row 7 pixels 31-31
+    min: 0.46875, -0.25, 0.32
+    max: 0.5, -0.21875, 0.326
+    color: '#0E0F0F'
+  - label: tread 4 original band row 0 pixels 1-1 + contiguous matching rows
+    min: -0.46875, -0.375, 0.16
+    max: -0.4375, -0.25, 0.166
+    color: '#3C3F3E'
+  - label: tread 4 original band row 0 pixels 3-28
+    min: -0.40625, -0.28125, 0.16
+    max: 0.40625, -0.25, 0.166
+    color: '#2E302F'
+  - label: tread 4 original band row 0 pixels 30-30 + contiguous matching rows
+    min: 0.4375, -0.375, 0.16
+    max: 0.46875, -0.25, 0.166
+    color: '#3C3F3E'
+  - label: tread 4 original band row 1 pixels 2-2 + contiguous matching rows
+    min: -0.4375, -0.375, 0.16
+    max: -0.40625, -0.28125, 0.166
+    color: '#2E302F'
+  - label: tread 4 original band row 1 pixels 3-28 + contiguous matching rows
+    min: -0.40625, -0.375, 0.16
+    max: 0.40625, -0.28125, 0.166
+    color: '#515554'
+  - label: tread 4 original band row 1 pixels 29-29 + contiguous matching rows
+    min: 0.40625, -0.375, 0.16
+    max: 0.4375, -0.28125, 0.166
+    color: '#2E302F'
+  - label: tread 4 original band row 4 pixels 1-1
+    min: -0.46875, -0.40625, 0.16
+    max: -0.4375, -0.375, 0.166
+    color: '#2E302F'
+  - label: tread 4 original band row 4 pixels 2-2
+    min: -0.4375, -0.40625, 0.16
+    max: -0.40625, -0.375, 0.166
+    color: '#3C3F3E'
+  - label: tread 4 original band row 4 pixels 3-28
+    min: -0.40625, -0.40625, 0.16
+    max: 0.40625, -0.375, 0.166
+    color: '#2E302F'
+  - label: tread 4 original band row 4 pixels 29-29
+    min: 0.40625, -0.40625, 0.16
+    max: 0.4375, -0.375, 0.166
+    color: '#3C3F3E'
+  - label: tread 4 original band row 4 pixels 30-30
+    min: 0.4375, -0.40625, 0.16
+    max: 0.46875, -0.375, 0.166
+    color: '#2E302F'
+  - label: tread 4 original band row 5 pixels 0-0
+    min: -0.5, -0.4375, 0.16
+    max: -0.46875, -0.40625, 0.166
+    color: '#2E302F'
+  - label: tread 4 original band row 5 pixels 2-2
+    min: -0.4375, -0.4375, 0.16
+    max: -0.40625, -0.40625, 0.166
+    color: '#2E302F'
+  - label: tread 4 original band row 5 pixels 3-28
+    min: -0.40625, -0.4375, 0.16
+    max: 0.40625, -0.40625, 0.166
+    color: '#3C3F3E'
+  - label: tread 4 original band row 5 pixels 29-29
+    min: 0.40625, -0.4375, 0.16
+    max: 0.4375, -0.40625, 0.166
+    color: '#2E302F'
+  - label: tread 4 original band row 5 pixels 31-31
+    min: 0.46875, -0.4375, 0.16
+    max: 0.5, -0.40625, 0.166
+    color: '#2E302F'
+  - label: tread 4 original band row 6 pixels 1-1
+    min: -0.46875, -0.46875, 0.16
+    max: -0.4375, -0.4375, 0.166
+    color: '#0E0F0F'
+  - label: tread 4 original band row 6 pixels 30-30
+    min: 0.4375, -0.46875, 0.16
+    max: 0.46875, -0.4375, 0.166
+    color: '#0E0F0F'
+  - label: tread 4 original band row 7 pixels 0-0
+    min: -0.5, -0.5, 0.16
+    max: -0.46875, -0.46875, 0.166
+    color: '#0E0F0F'
+  - label: tread 4 original band row 7 pixels 1-30
+    min: -0.46875, -0.5, 0.16
+    max: 0.46875, -0.46875, 0.166
+    color: '#080808'
+  - label: tread 4 original band row 7 pixels 31-31
+    min: 0.46875, -0.5, 0.16
+    max: 0.5, -0.46875, 0.166
+    color: '#0E0F0F'
+  referenceTint: '#A6AEAB'
+  bakedSpriteTint: '#A6AEAB'
+- type: cmu3DModel
+  id: CMU3DTopologyStairsNoPreviewStudyCloud
+  label: UNBOUND / four full-width pale treads
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMUMultiZStairsNoPreview
+  referenceRsi: /Textures/_RMC14/Structures/stairs.rsi
+  referenceState: p_stair_full
+  referenceDirection: 0
+  sourceDirections: 4
+  description: UNBOUND standalone physical art study. Four repeated 8-pixel South-frame bands become four thick separate
+    tread plates. Physical .16 tile rise and hidden stringers are inferred. The logical HighGround curve does not
+    establish world rise. No prototype binding, runtime aperture/elevation integration, saved-map fit, native/gameplay
+    or fidelity approval.
+  parts:
+  - label: tread 1 structural plate
+    min: -0.5, 0.25, 0.545
+    max: 0.5, 0.5, 0.64
+    color: '#393939'
+  - label: tread 2 structural plate
+    min: -0.5, 0.0, 0.385
+    max: 0.5, 0.25, 0.48
+    color: '#393939'
+  - label: tread 3 structural plate
+    min: -0.5, -0.25, 0.225
+    max: 0.5, 0.0, 0.32
+    color: '#393939'
+  - label: tread 4 structural plate
+    min: -0.5, -0.5, 0.065
+    max: 0.5, -0.25, 0.16
+    color: '#393939'
+  - label: left rising stringer
+    min: -0.435, -0.5, 0.0
+    max: -0.345, 0.5, 0.64
+    color: '#646464'
+    shape: WedgeY
+  - label: right rising stringer
+    min: 0.345, -0.5, 0.0
+    max: 0.435, 0.5, 0.64
+    color: '#646464'
+    shape: WedgeY
+  - label: lower bearing shoe
+    min: -0.45, -0.5, 0.0
+    max: 0.45, -0.42, 0.068
+    color: '#393939'
+  - label: upper bearing crossmember
+    min: -0.45, 0.41, 0.459
+    max: 0.45, 0.5, 0.541
+    color: '#393939'
+  - label: tread 1 original band row 0 pixels 0-31
+    min: -0.5, 0.46875, 0.64
+    max: 0.5, 0.5, 0.646
+    color: '#646464'
+  - label: tread 1 original band row 1 pixels 0-31 + contiguous matching rows
+    min: -0.5, 0.375, 0.64
+    max: 0.5, 0.46875, 0.646
+    color: '#A2A2A2'
+  - label: tread 1 original band row 4 pixels 0-31
+    min: -0.5, 0.34375, 0.64
+    max: 0.5, 0.375, 0.646
+    color: '#646464'
+  - label: tread 1 original band row 5 pixels 0-31
+    min: -0.5, 0.3125, 0.64
+    max: 0.5, 0.34375, 0.646
+    color: '#777777'
+  - label: tread 1 original band row 7 pixels 0-31
+    min: -0.5, 0.25, 0.64
+    max: 0.5, 0.28125, 0.646
+    color: '#161616'
+  - label: tread 2 original band row 0 pixels 0-31
+    min: -0.5, 0.21875, 0.48
+    max: 0.5, 0.25, 0.486
+    color: '#646464'
+  - label: tread 2 original band row 1 pixels 0-31 + contiguous matching rows
+    min: -0.5, 0.125, 0.48
+    max: 0.5, 0.21875, 0.486
+    color: '#A2A2A2'
+  - label: tread 2 original band row 4 pixels 0-31
+    min: -0.5, 0.09375, 0.48
+    max: 0.5, 0.125, 0.486
+    color: '#646464'
+  - label: tread 2 original band row 5 pixels 0-31
+    min: -0.5, 0.0625, 0.48
+    max: 0.5, 0.09375, 0.486
+    color: '#777777'
+  - label: tread 2 original band row 7 pixels 0-31
+    min: -0.5, 0.0, 0.48
+    max: 0.5, 0.03125, 0.486
+    color: '#161616'
+  - label: tread 3 original band row 0 pixels 0-31
+    min: -0.5, -0.03125, 0.32
+    max: 0.5, 0.0, 0.326
+    color: '#646464'
+  - label: tread 3 original band row 1 pixels 0-31 + contiguous matching rows
+    min: -0.5, -0.125, 0.32
+    max: 0.5, -0.03125, 0.326
+    color: '#A2A2A2'
+  - label: tread 3 original band row 4 pixels 0-31
+    min: -0.5, -0.15625, 0.32
+    max: 0.5, -0.125, 0.326
+    color: '#646464'
+  - label: tread 3 original band row 5 pixels 0-31
+    min: -0.5, -0.1875, 0.32
+    max: 0.5, -0.15625, 0.326
+    color: '#777777'
+  - label: tread 3 original band row 7 pixels 0-31
+    min: -0.5, -0.25, 0.32
+    max: 0.5, -0.21875, 0.326
+    color: '#161616'
+  - label: tread 4 original band row 0 pixels 0-31
+    min: -0.5, -0.28125, 0.16
+    max: 0.5, -0.25, 0.166
+    color: '#646464'
+  - label: tread 4 original band row 1 pixels 0-31 + contiguous matching rows
+    min: -0.5, -0.375, 0.16
+    max: 0.5, -0.28125, 0.166
+    color: '#A2A2A2'
+  - label: tread 4 original band row 4 pixels 0-31
+    min: -0.5, -0.40625, 0.16
+    max: 0.5, -0.375, 0.166
+    color: '#646464'
+  - label: tread 4 original band row 5 pixels 0-31
+    min: -0.5, -0.4375, 0.16
+    max: 0.5, -0.40625, 0.166
+    color: '#777777'
+  - label: tread 4 original band row 7 pixels 0-31
+    min: -0.5, -0.5, 0.16
+    max: 0.5, -0.46875, 0.166
+    color: '#161616'
+- type: cmu3DModel
+  id: CMU3DTopologyCargoLoweredStudyCloud
+  label: UNBOUND / 5 by 5 open cargo shaft
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMCargoElevator
+  referenceRsi: /Textures/_RMC14/Effects/elevator.rsi
+  referenceState: supply_elevator_lowered
+  referenceDirection: 0
+  sourceDirections: 1
+  description: UNBOUND standalone physical art study. Source lowered 160px art has walls, three ribbed dark bands,
+    machinery, grating and diagonal CARGO stencil. Physical square shaft with .20 tile walls and 2.4 tile depth are
+    inferred from the 5-tile sprite footprint. Source apparent diagonals are painted perspective; transfer onto vertical
+    walls is interpretive. Center and bottom stay genuinely open; no black floor plane. Shared art reference for CMCargoElevator,
+    CMCargoElevatorGovfor, AU14CorporateASRSElevator and VehicleLift, with no bindings. No prototype binding, runtime
+    aperture/elevation integration, saved-map fit, native/gameplay or fidelity approval.
+  parts:
+  - label: north descending shaft wall
+    min: -2.5, 2.3, -2.4
+    max: 2.5, 2.5, 0.0
+    color: '#1E2528'
+  - label: south descending shaft wall
+    min: -2.5, -2.5, -2.4
+    max: 2.5, -2.3, 0.0
+    color: '#1E2528'
+  - label: west descending shaft wall
+    min: -2.5, -2.3, -2.4
+    max: -2.3, 2.3, 0.0
+    color: '#1E2528'
+  - label: east descending shaft wall
+    min: 2.3, -2.3, -2.4
+    max: 2.5, 2.3, 0.0
+    color: '#1E2528'
+  - label: north exposed shaft rim
+    min: -2.5, 2.3, -0.07
+    max: 2.5, 2.5, 0.03
+    color: '#31383B'
+  - label: south exposed shaft rim
+    min: -2.5, -2.5, -0.07
+    max: 2.5, -2.3, 0.03
+    color: '#31383B'
+  - label: west exposed shaft rim
+    min: -2.5, -2.3, -0.07
+    max: -2.3, 2.3, 0.03
+    color: '#31383B'
+  - label: east exposed shaft rim
+    min: 2.3, -2.3, -0.07
+    max: 2.5, 2.3, 0.03
+    color: '#31383B'
+  - label: north inner continuous rib band 1
+    min: -2.3, 2.21, -0.45
+    max: 2.3, 2.3, -0.31
+    color: '#0F1315'
+  - label: south inner continuous rib band 1
+    min: -2.3, -2.3, -0.45
+    max: 2.3, -2.21, -0.31
+    color: '#0F1315'
+  - label: north rib band 1 corrugation 1
+    min: -2.063, 2.182, -0.4425
+    max: -2.037, 2.21, -0.3175
+    color: '#31383B'
+  - label: upper north machinery housing 1
+    min: -1.86, 1.81, -0.74
+    max: -1.24, 2.31, -0.02
+    color: '#31383B'
+  - label: north rib band 1 corrugation 3
+    min: -1.043, 2.182, -0.4425
+    max: -1.017, 2.21, -0.3175
+    color: '#31383B'
+  - label: upper north machinery housing 2
+    min: -0.77, 1.81, -0.74
+    max: -0.43, 2.31, -0.02
+    color: '#31383B'
+  - label: north rib band 1 corrugation 5
+    min: -0.023, 2.182, -0.4425
+    max: 0.003, 2.21, -0.3175
+    color: '#31383B'
+  - label: upper north machinery housing 3
+    min: 0.04, 1.81, -0.74
+    max: 0.66, 2.31, -0.02
+    color: '#31383B'
+  - label: north rib band 1 corrugation 7
+    min: 0.997, 2.182, -0.4425
+    max: 1.023, 2.21, -0.3175
+    color: '#31383B'
+  - label: upper north machinery housing 4
+    min: 1.12, 1.81, -0.74
+    max: 1.68, 2.31, -0.02
+    color: '#31383B'
+  - label: north rib band 1 corrugation 9
+    min: 2.017, 2.182, -0.4425
+    max: 2.043, 2.21, -0.3175
+    color: '#31383B'
+  - label: north inner continuous rib band 2
+    min: -2.3, 2.21, -1.19
+    max: 2.3, 2.3, -1.05
+    color: '#0F1315'
+  - label: south inner continuous rib band 2
+    min: -2.3, -2.3, -1.19
+    max: 2.3, -2.21, -1.05
+    color: '#0F1315'
+  - label: north rib band 2 corrugation 1
+    min: -2.063, 2.182, -1.1825
+    max: -2.037, 2.21, -1.0575
+    color: '#31383B'
+  - label: north rib band 2 corrugation 2
+    min: -1.553, 2.182, -1.1825
+    max: -1.527, 2.21, -1.0575
+    color: '#31383B'
+  - label: north rib band 2 corrugation 3
+    min: -1.043, 2.182, -1.1825
+    max: -1.017, 2.21, -1.0575
+    color: '#31383B'
+  - label: north rib band 2 corrugation 4
+    min: -0.533, 2.182, -1.1825
+    max: -0.507, 2.21, -1.0575
+    color: '#31383B'
+  - label: north rib band 2 corrugation 5
+    min: -0.023, 2.182, -1.1825
+    max: 0.003, 2.21, -1.0575
+    color: '#31383B'
+  - label: north rib band 2 corrugation 6
+    min: 0.487, 2.182, -1.1825
+    max: 0.513, 2.21, -1.0575
+    color: '#31383B'
+  - label: north rib band 2 corrugation 7
+    min: 0.997, 2.182, -1.1825
+    max: 1.023, 2.21, -1.0575
+    color: '#31383B'
+  - label: north rib band 2 corrugation 8
+    min: 1.507, 2.182, -1.1825
+    max: 1.533, 2.21, -1.0575
+    color: '#31383B'
+  - label: north rib band 2 corrugation 9
+    min: 2.017, 2.182, -1.1825
+    max: 2.043, 2.21, -1.0575
+    color: '#31383B'
+  - label: north inner continuous rib band 3
+    min: -2.3, 2.21, -2.01
+    max: 2.3, 2.3, -1.87
+    color: '#0F1315'
+  - label: south inner continuous rib band 3
+    min: -2.3, -2.3, -2.01
+    max: 2.3, -2.21, -1.87
+    color: '#0F1315'
+  - label: north rib band 3 corrugation 1
+    min: -2.063, 2.182, -2.0025
+    max: -2.037, 2.21, -1.8775
+    color: '#31383B'
+  - label: north rib band 3 corrugation 2
+    min: -1.553, 2.182, -2.0025
+    max: -1.527, 2.21, -1.8775
+    color: '#31383B'
+  - label: north rib band 3 corrugation 3
+    min: -1.043, 2.182, -2.0025
+    max: -1.017, 2.21, -1.8775
+    color: '#31383B'
+  - label: north rib band 3 corrugation 4
+    min: -0.533, 2.182, -2.0025
+    max: -0.507, 2.21, -1.8775
+    color: '#31383B'
+  - label: north rib band 3 corrugation 5
+    min: -0.023, 2.182, -2.0025
+    max: 0.003, 2.21, -1.8775
+    color: '#31383B'
+  - label: north rib band 3 corrugation 6
+    min: 0.487, 2.182, -2.0025
+    max: 0.513, 2.21, -1.8775
+    color: '#31383B'
+  - label: north rib band 3 corrugation 7
+    min: 0.997, 2.182, -2.0025
+    max: 1.023, 2.21, -1.8775
+    color: '#31383B'
+  - label: north rib band 3 corrugation 8
+    min: 1.507, 2.182, -2.0025
+    max: 1.533, 2.21, -1.8775
+    color: '#31383B'
+  - label: north rib band 3 corrugation 9
+    min: 2.017, 2.182, -2.0025
+    max: 2.043, 2.21, -1.8775
+    color: '#31383B'
+  - label: corner guide channel -2.12 -2.12
+    min: -2.18, -2.18, -2.38
+    max: -2.06, -2.06, 0.0
+    color: '#0F1315'
+  - label: corner guide rail -2.12 -2.12
+    min: -2.1395, -2.216, -2.38
+    max: -2.1005, -2.056, 0.0
+    color: '#383F40'
+  - label: corner guide channel -2.12 2.12
+    min: -2.18, 2.06, -2.38
+    max: -2.06, 2.18, 0.0
+    color: '#0F1315'
+  - label: corner guide rail -2.12 2.12
+    min: -2.1395, 2.024, -2.38
+    max: -2.1005, 2.184, 0.0
+    color: '#383F40'
+  - label: corner guide channel 2.12 -2.12
+    min: 2.06, -2.18, -2.38
+    max: 2.18, -2.06, 0.0
+    color: '#0F1315'
+  - label: corner guide rail 2.12 -2.12
+    min: 2.1005, -2.216, -2.38
+    max: 2.1395, -2.056, 0.0
+    color: '#383F40'
+  - label: corner guide channel 2.12 2.12
+    min: 2.06, 2.06, -2.38
+    max: 2.18, 2.18, 0.0
+    color: '#0F1315'
+  - label: corner guide rail 2.12 2.12
+    min: 2.1005, 2.024, -2.38
+    max: 2.1395, 2.184, 0.0
+    color: '#383F40'
+  - label: upper north machine recessed face 1
+    min: -1.8042, 1.795, -0.68
+    max: -1.2958, 1.835, -0.08
+    color: '#1A2123'
+  - label: upper north machine louvre 1.1
+    min: -1.7856, 1.7675, -0.211
+    max: -1.3144, 1.8025, -0.189
+    color: '#3E4545'
+  - label: upper north machine louvre 1.2
+    min: -1.7856, 1.7675, -0.331
+    max: -1.3144, 1.8025, -0.309
+    color: '#3E4545'
+  - label: upper north machine louvre 1.3
+    min: -1.7856, 1.7675, -0.451
+    max: -1.3144, 1.8025, -0.429
+    color: '#3E4545'
+  - label: upper north machine louvre 1.4
+    min: -1.7856, 1.7675, -0.571
+    max: -1.3144, 1.8025, -0.549
+    color: '#3E4545'
+  - label: upper north machine recessed face 2
+    min: -0.7394, 1.795, -0.68
+    max: -0.4606, 1.835, -0.08
+    color: '#1A2123'
+  - label: upper north machine louvre 2.1
+    min: -0.7292, 1.7675, -0.211
+    max: -0.4708, 1.8025, -0.189
+    color: '#3E4545'
+  - label: upper north machine louvre 2.2
+    min: -0.7292, 1.7675, -0.331
+    max: -0.4708, 1.8025, -0.309
+    color: '#3E4545'
+  - label: upper north machine louvre 2.3
+    min: -0.7292, 1.7675, -0.451
+    max: -0.4708, 1.8025, -0.429
+    color: '#3E4545'
+  - label: upper north machine louvre 2.4
+    min: -0.7292, 1.7675, -0.571
+    max: -0.4708, 1.8025, -0.549
+    color: '#3E4545'
+  - label: upper north machine recessed face 3
+    min: 0.0958, 1.795, -0.68
+    max: 0.6042, 1.835, -0.08
+    color: '#1A2123'
+  - label: upper north machine louvre 3.1
+    min: 0.1144, 1.7675, -0.211
+    max: 0.5856, 1.8025, -0.189
+    color: '#3E4545'
+  - label: upper north machine louvre 3.2
+    min: 0.1144, 1.7675, -0.331
+    max: 0.5856, 1.8025, -0.309
+    color: '#3E4545'
+  - label: upper north machine louvre 3.3
+    min: 0.1144, 1.7675, -0.451
+    max: 0.5856, 1.8025, -0.429
+    color: '#3E4545'
+  - label: upper north machine louvre 3.4
+    min: 0.1144, 1.7675, -0.571
+    max: 0.5856, 1.8025, -0.549
+    color: '#3E4545'
+  - label: upper north machine recessed face 4
+    min: 1.1704, 1.795, -0.68
+    max: 1.6296, 1.835, -0.08
+    color: '#1A2123'
+  - label: upper north machine louvre 4.1
+    min: 1.1872, 1.7675, -0.211
+    max: 1.6128, 1.8025, -0.189
+    color: '#3E4545'
+  - label: upper north machine louvre 4.2
+    min: 1.1872, 1.7675, -0.331
+    max: 1.6128, 1.8025, -0.309
+    color: '#3E4545'
+  - label: upper north machine louvre 4.3
+    min: 1.1872, 1.7675, -0.451
+    max: 1.6128, 1.8025, -0.429
+    color: '#3E4545'
+  - label: upper north machine louvre 4.4
+    min: 1.1872, 1.7675, -0.571
+    max: 1.6128, 1.8025, -0.549
+    color: '#3E4545'
+  - label: original small machine status labels
+    min: -1.753125, 1.765, -0.300625
+    max: -1.346875, 1.775, -0.019375
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt00
+    surfaceAxis: XZ
+  - label: original upper switch cluster
+    min: 0.021875, 1.765, -0.4275
+    max: 0.678125, 1.775, -0.0525
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt01
+    surfaceAxis: XZ
+  - label: original red service indicator
+    min: 1.275, 1.765, -0.573125
+    max: 1.525, 1.775, -0.166875
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt02
+    surfaceAxis: XZ
+  - label: original small serial stencil
+    min: 1.065625, 2.16, -0.9525
+    max: 1.534375, 2.17, -0.8275
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt03
+    surfaceAxis: XZ
+  - label: attached control label backing 1
+    min: -1.763125, 1.775, -0.310625
+    max: -1.336875, 1.825, -0.009375
+    color: '#31383B'
+  - label: attached control label backing 2
+    min: 0.011875, 1.775, -0.4375
+    max: 0.688125, 1.825, -0.0425
+    color: '#31383B'
+  - label: attached control label backing 3
+    min: 1.265, 1.775, -0.583125
+    max: 1.535, 1.825, -0.156875
+    color: '#31383B'
+  - label: serial stencil attached wall backing
+    min: 1.05, 2.17, -0.97
+    max: 1.55, 2.31, -0.81
+    color: '#31383B'
+  - label: guide wall mounting bracket -2.12 -2.12 0
+    min: -2.345, -2.18, -0.225
+    max: -2.085, -2.06, -0.135
+    color: '#31383B'
+  - label: guide wall mounting bracket -2.12 -2.12 1
+    min: -2.345, -2.18, -1.225
+    max: -2.085, -2.06, -1.135
+    color: '#31383B'
+  - label: guide wall mounting bracket -2.12 -2.12 2
+    min: -2.345, -2.18, -2.225
+    max: -2.085, -2.06, -2.135
+    color: '#31383B'
+  - label: guide wall mounting bracket -2.12 2.12 0
+    min: -2.345, 2.06, -0.225
+    max: -2.085, 2.18, -0.135
+    color: '#31383B'
+  - label: guide wall mounting bracket -2.12 2.12 1
+    min: -2.345, 2.06, -1.225
+    max: -2.085, 2.18, -1.135
+    color: '#31383B'
+  - label: guide wall mounting bracket -2.12 2.12 2
+    min: -2.345, 2.06, -2.225
+    max: -2.085, 2.18, -2.135
+    color: '#31383B'
+  - label: guide wall mounting bracket 2.12 -2.12 0
+    min: 2.085, -2.18, -0.225
+    max: 2.345, -2.06, -0.135
+    color: '#31383B'
+  - label: guide wall mounting bracket 2.12 -2.12 1
+    min: 2.085, -2.18, -1.225
+    max: 2.345, -2.06, -1.135
+    color: '#31383B'
+  - label: guide wall mounting bracket 2.12 -2.12 2
+    min: 2.085, -2.18, -2.225
+    max: 2.345, -2.06, -2.135
+    color: '#31383B'
+  - label: guide wall mounting bracket 2.12 2.12 0
+    min: 2.085, 2.06, -0.225
+    max: 2.345, 2.18, -0.135
+    color: '#31383B'
+  - label: guide wall mounting bracket 2.12 2.12 1
+    min: 2.085, 2.06, -1.225
+    max: 2.345, 2.18, -1.135
+    color: '#31383B'
+  - label: guide wall mounting bracket 2.12 2.12 2
+    min: 2.085, 2.06, -2.225
+    max: 2.345, 2.18, -2.135
+    color: '#31383B'
+  - label: upper rear service ledge 1
+    min: -1.93, 1.65, -0.93
+    max: -0.87, 2.33, -0.83
+    color: '#292F31'
+  - label: original local lattice detail 1
+    min: -1.85, 1.735, -0.83
+    max: -0.95, 2.195, -0.822
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt04
+    surfaceAxis: XY
+  - label: upper rear service ledge 2
+    min: 0.87, 1.65, -0.93
+    max: 1.93, 2.33, -0.83
+    color: '#292F31'
+  - label: original local lattice detail 2
+    min: 0.95, 1.735, -0.83
+    max: 1.85, 2.195, -0.822
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt04
+    surfaceAxis: XY
+  - label: cargo stencil wall backing
+    min: -1.25, 2.12, -1.825
+    max: 1.25, 2.32, -1.155
+    color: '#1D2326'
+  - label: original diagonal CARGO stencil
+    min: -1.015625, 2.108, -1.81
+    max: 1.015625, 2.12, -1.15
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt05
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DTopologyCargoRaisedStudyCloud
+  label: UNBOUND / 25-panel raised cargo platform
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMCargoElevator
+  referenceRsi: /Textures/_RMC14/Effects/elevator.rsi
+  referenceState: supply_elevator_raised
+  referenceDirection: 0
+  sourceDirections: 1
+  description: 'UNBOUND standalone physical art study. 21 individual grating cassettes plus four four-quadrant yellow-marked
+    service hatches on a 6-by-6 orthogonal support-beam grid. 32px and 16px local original crops retain each source
+    tile; there is no single 160px whole-sprite plane. Original grate pixels are fully opaque: this study does not
+    invent through-holes. Deck thickness, underside members and jack stems are inferred. A static art study only,
+    with no elevator state selection or transition animation. No prototype binding, runtime aperture/elevation integration,
+    saved-map fit, native/gameplay or fidelity approval.'
+  parts:
+  - label: longitudinal underside box beam 1
+    min: -2.5, -2.5, -0.32
+    max: -2.415, 2.5, -0.12
+    color: '#282C2C'
+  - label: transverse underside box beam 1
+    min: -2.5, -2.5, -0.47
+    max: 2.5, -2.415, -0.31
+    color: '#1C2021'
+  - label: longitudinal underside box beam 2
+    min: -1.5425, -2.5, -0.32
+    max: -1.4575, 2.5, -0.12
+    color: '#282C2C'
+  - label: transverse underside box beam 2
+    min: -2.5, -1.5425, -0.47
+    max: 2.5, -1.4575, -0.31
+    color: '#1C2021'
+  - label: longitudinal underside box beam 3
+    min: -0.5425, -2.5, -0.32
+    max: -0.4575, 2.5, -0.12
+    color: '#282C2C'
+  - label: transverse underside box beam 3
+    min: -2.5, -0.5425, -0.47
+    max: 2.5, -0.4575, -0.31
+    color: '#1C2021'
+  - label: longitudinal underside box beam 4
+    min: 0.4575, -2.5, -0.32
+    max: 0.5425, 2.5, -0.12
+    color: '#282C2C'
+  - label: transverse underside box beam 4
+    min: -2.5, 0.4575, -0.47
+    max: 2.5, 0.5425, -0.31
+    color: '#1C2021'
+  - label: longitudinal underside box beam 5
+    min: 1.4575, -2.5, -0.32
+    max: 1.5425, 2.5, -0.12
+    color: '#282C2C'
+  - label: transverse underside box beam 5
+    min: -2.5, 1.4575, -0.47
+    max: 2.5, 1.5425, -0.31
+    color: '#1C2021'
+  - label: longitudinal underside box beam 6
+    min: 2.415, -2.5, -0.32
+    max: 2.5, 2.5, -0.12
+    color: '#282C2C'
+  - label: transverse underside box beam 6
+    min: -2.5, 2.415, -0.47
+    max: 2.5, 2.5, -0.31
+    color: '#1C2021'
+  - label: deck panel 1.1 deep steel cassette
+    min: -2.4925, 1.5075, -0.13
+    max: -1.5075, 2.4925, 0.008
+    color: '#303433'
+  - label: deck panel 1.1 original recessed grate surface
+    min: -2.4925, 1.5075, 0.008
+    max: -1.5075, 2.4925, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt06
+    surfaceAxis: XY
+  - label: deck panel 1.2 deep steel cassette
+    min: -1.4925, 1.5075, -0.13
+    max: -0.5075, 2.4925, 0.008
+    color: '#303433'
+  - label: deck panel 1.2 original recessed grate surface
+    min: -1.4925, 1.5075, 0.008
+    max: -0.5075, 2.4925, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt07
+    surfaceAxis: XY
+  - label: deck panel 1.3 deep steel cassette
+    min: -0.4925, 1.5075, -0.13
+    max: 0.4925, 2.4925, 0.008
+    color: '#303433'
+  - label: deck panel 1.3 original recessed grate surface
+    min: -0.4925, 1.5075, 0.008
+    max: 0.4925, 2.4925, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt07
+    surfaceAxis: XY
+  - label: deck panel 1.4 deep steel cassette
+    min: 0.5075, 1.5075, -0.13
+    max: 1.4925, 2.4925, 0.008
+    color: '#303433'
+  - label: deck panel 1.4 original recessed grate surface
+    min: 0.5075, 1.5075, 0.008
+    max: 1.4925, 2.4925, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt07
+    surfaceAxis: XY
+  - label: deck panel 1.5 deep steel cassette
+    min: 1.5075, 1.5075, -0.13
+    max: 2.4925, 2.4925, 0.008
+    color: '#303433'
+  - label: deck panel 1.5 original recessed grate surface
+    min: 1.5075, 1.5075, 0.008
+    max: 2.4925, 2.4925, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt08
+    surfaceAxis: XY
+  - label: deck panel 2.1 deep steel cassette
+    min: -2.4925, 0.5075, -0.13
+    max: -1.5075, 1.4925, 0.008
+    color: '#303433'
+  - label: deck panel 2.1 original recessed grate surface
+    min: -2.4925, 0.5075, 0.008
+    max: -1.5075, 1.4925, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt06
+    surfaceAxis: XY
+  - label: hatch 2.2 quadrant 1.1
+    min: -1.4935, 1.0065, -0.13
+    max: -1.0065, 1.4935, 0.008
+    color: '#212628'
+  - label: hatch 2.2 original yellow corner 1.1
+    min: -1.4935, 1.0065, 0.008
+    max: -1.0065, 1.4935, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt09
+    surfaceAxis: XY
+  - label: hatch 2.2 quadrant 1.2
+    min: -0.9935, 1.0065, -0.13
+    max: -0.5065, 1.4935, 0.008
+    color: '#212628'
+  - label: hatch 2.2 original yellow corner 1.2
+    min: -0.9935, 1.0065, 0.008
+    max: -0.5065, 1.4935, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt10
+    surfaceAxis: XY
+  - label: hatch 2.2 quadrant 2.1
+    min: -1.4935, 0.5065, -0.13
+    max: -1.0065, 0.9935, 0.008
+    color: '#212628'
+  - label: hatch 2.2 original yellow corner 2.1
+    min: -1.4935, 0.5065, 0.008
+    max: -1.0065, 0.9935, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt11
+    surfaceAxis: XY
+  - label: hatch 2.2 quadrant 2.2
+    min: -0.9935, 0.5065, -0.13
+    max: -0.5065, 0.9935, 0.008
+    color: '#212628'
+  - label: hatch 2.2 original yellow corner 2.2
+    min: -0.9935, 0.5065, 0.008
+    max: -0.5065, 0.9935, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt12
+    surfaceAxis: XY
+  - label: deck panel 2.3 deep steel cassette
+    min: -0.4925, 0.5075, -0.13
+    max: 0.4925, 1.4925, 0.008
+    color: '#303433'
+  - label: deck panel 2.3 original recessed grate surface
+    min: -0.4925, 0.5075, 0.008
+    max: 0.4925, 1.4925, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt07
+    surfaceAxis: XY
+  - label: hatch 2.4 quadrant 1.1
+    min: 0.5065, 1.0065, -0.13
+    max: 0.9935, 1.4935, 0.008
+    color: '#212628'
+  - label: hatch 2.4 original yellow corner 1.1
+    min: 0.5065, 1.0065, 0.008
+    max: 0.9935, 1.4935, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt09
+    surfaceAxis: XY
+  - label: hatch 2.4 quadrant 1.2
+    min: 1.0065, 1.0065, -0.13
+    max: 1.4935, 1.4935, 0.008
+    color: '#212628'
+  - label: hatch 2.4 original yellow corner 1.2
+    min: 1.0065, 1.0065, 0.008
+    max: 1.4935, 1.4935, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt10
+    surfaceAxis: XY
+  - label: hatch 2.4 quadrant 2.1
+    min: 0.5065, 0.5065, -0.13
+    max: 0.9935, 0.9935, 0.008
+    color: '#212628'
+  - label: hatch 2.4 original yellow corner 2.1
+    min: 0.5065, 0.5065, 0.008
+    max: 0.9935, 0.9935, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt11
+    surfaceAxis: XY
+  - label: hatch 2.4 quadrant 2.2
+    min: 1.0065, 0.5065, -0.13
+    max: 1.4935, 0.9935, 0.008
+    color: '#212628'
+  - label: hatch 2.4 original yellow corner 2.2
+    min: 1.0065, 0.5065, 0.008
+    max: 1.4935, 0.9935, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt12
+    surfaceAxis: XY
+  - label: deck panel 2.5 deep steel cassette
+    min: 1.5075, 0.5075, -0.13
+    max: 2.4925, 1.4925, 0.008
+    color: '#303433'
+  - label: deck panel 2.5 original recessed grate surface
+    min: 1.5075, 0.5075, 0.008
+    max: 2.4925, 1.4925, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt08
+    surfaceAxis: XY
+  - label: deck panel 3.1 deep steel cassette
+    min: -2.4925, -0.4925, -0.13
+    max: -1.5075, 0.4925, 0.008
+    color: '#303433'
+  - label: deck panel 3.1 original recessed grate surface
+    min: -2.4925, -0.4925, 0.008
+    max: -1.5075, 0.4925, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt06
+    surfaceAxis: XY
+  - label: deck panel 3.2 deep steel cassette
+    min: -1.4925, -0.4925, -0.13
+    max: -0.5075, 0.4925, 0.008
+    color: '#303433'
+  - label: deck panel 3.2 original recessed grate surface
+    min: -1.4925, -0.4925, 0.008
+    max: -0.5075, 0.4925, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt07
+    surfaceAxis: XY
+  - label: deck panel 3.3 deep steel cassette
+    min: -0.4925, -0.4925, -0.13
+    max: 0.4925, 0.4925, 0.008
+    color: '#303433'
+  - label: deck panel 3.3 original recessed grate surface
+    min: -0.4925, -0.4925, 0.008
+    max: 0.4925, 0.4925, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt07
+    surfaceAxis: XY
+  - label: deck panel 3.4 deep steel cassette
+    min: 0.5075, -0.4925, -0.13
+    max: 1.4925, 0.4925, 0.008
+    color: '#303433'
+  - label: deck panel 3.4 original recessed grate surface
+    min: 0.5075, -0.4925, 0.008
+    max: 1.4925, 0.4925, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt07
+    surfaceAxis: XY
+  - label: deck panel 3.5 deep steel cassette
+    min: 1.5075, -0.4925, -0.13
+    max: 2.4925, 0.4925, 0.008
+    color: '#303433'
+  - label: deck panel 3.5 original recessed grate surface
+    min: 1.5075, -0.4925, 0.008
+    max: 2.4925, 0.4925, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt08
+    surfaceAxis: XY
+  - label: deck panel 4.1 deep steel cassette
+    min: -2.4925, -1.4925, -0.13
+    max: -1.5075, -0.5075, 0.008
+    color: '#303433'
+  - label: deck panel 4.1 original recessed grate surface
+    min: -2.4925, -1.4925, 0.008
+    max: -1.5075, -0.5075, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt06
+    surfaceAxis: XY
+  - label: hatch 4.2 quadrant 1.1
+    min: -1.4935, -0.9935, -0.13
+    max: -1.0065, -0.5065, 0.008
+    color: '#212628'
+  - label: hatch 4.2 original yellow corner 1.1
+    min: -1.4935, -0.9935, 0.008
+    max: -1.0065, -0.5065, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt09
+    surfaceAxis: XY
+  - label: hatch 4.2 quadrant 1.2
+    min: -0.9935, -0.9935, -0.13
+    max: -0.5065, -0.5065, 0.008
+    color: '#212628'
+  - label: hatch 4.2 original yellow corner 1.2
+    min: -0.9935, -0.9935, 0.008
+    max: -0.5065, -0.5065, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt10
+    surfaceAxis: XY
+  - label: hatch 4.2 quadrant 2.1
+    min: -1.4935, -1.4935, -0.13
+    max: -1.0065, -1.0065, 0.008
+    color: '#212628'
+  - label: hatch 4.2 original yellow corner 2.1
+    min: -1.4935, -1.4935, 0.008
+    max: -1.0065, -1.0065, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt11
+    surfaceAxis: XY
+  - label: hatch 4.2 quadrant 2.2
+    min: -0.9935, -1.4935, -0.13
+    max: -0.5065, -1.0065, 0.008
+    color: '#212628'
+  - label: hatch 4.2 original yellow corner 2.2
+    min: -0.9935, -1.4935, 0.008
+    max: -0.5065, -1.0065, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt12
+    surfaceAxis: XY
+  - label: deck panel 4.3 deep steel cassette
+    min: -0.4925, -1.4925, -0.13
+    max: 0.4925, -0.5075, 0.008
+    color: '#303433'
+  - label: deck panel 4.3 original recessed grate surface
+    min: -0.4925, -1.4925, 0.008
+    max: 0.4925, -0.5075, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt07
+    surfaceAxis: XY
+  - label: hatch 4.4 quadrant 1.1
+    min: 0.5065, -0.9935, -0.13
+    max: 0.9935, -0.5065, 0.008
+    color: '#212628'
+  - label: hatch 4.4 original yellow corner 1.1
+    min: 0.5065, -0.9935, 0.008
+    max: 0.9935, -0.5065, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt09
+    surfaceAxis: XY
+  - label: hatch 4.4 quadrant 1.2
+    min: 1.0065, -0.9935, -0.13
+    max: 1.4935, -0.5065, 0.008
+    color: '#212628'
+  - label: hatch 4.4 original yellow corner 1.2
+    min: 1.0065, -0.9935, 0.008
+    max: 1.4935, -0.5065, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt10
+    surfaceAxis: XY
+  - label: hatch 4.4 quadrant 2.1
+    min: 0.5065, -1.4935, -0.13
+    max: 0.9935, -1.0065, 0.008
+    color: '#212628'
+  - label: hatch 4.4 original yellow corner 2.1
+    min: 0.5065, -1.4935, 0.008
+    max: 0.9935, -1.0065, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt11
+    surfaceAxis: XY
+  - label: hatch 4.4 quadrant 2.2
+    min: 1.0065, -1.4935, -0.13
+    max: 1.4935, -1.0065, 0.008
+    color: '#212628'
+  - label: hatch 4.4 original yellow corner 2.2
+    min: 1.0065, -1.4935, 0.008
+    max: 1.4935, -1.0065, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt12
+    surfaceAxis: XY
+  - label: deck panel 4.5 deep steel cassette
+    min: 1.5075, -1.4925, -0.13
+    max: 2.4925, -0.5075, 0.008
+    color: '#303433'
+  - label: deck panel 4.5 original recessed grate surface
+    min: 1.5075, -1.4925, 0.008
+    max: 2.4925, -0.5075, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt08
+    surfaceAxis: XY
+  - label: deck panel 5.1 deep steel cassette
+    min: -2.4925, -2.4925, -0.13
+    max: -1.5075, -1.5075, 0.008
+    color: '#303433'
+  - label: deck panel 5.1 original recessed grate surface
+    min: -2.4925, -2.4925, 0.008
+    max: -1.5075, -1.5075, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt13
+    surfaceAxis: XY
+  - label: deck panel 5.2 deep steel cassette
+    min: -1.4925, -2.4925, -0.13
+    max: -0.5075, -1.5075, 0.008
+    color: '#303433'
+  - label: deck panel 5.2 original recessed grate surface
+    min: -1.4925, -2.4925, 0.008
+    max: -0.5075, -1.5075, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt13
+    surfaceAxis: XY
+  - label: deck panel 5.3 deep steel cassette
+    min: -0.4925, -2.4925, -0.13
+    max: 0.4925, -1.5075, 0.008
+    color: '#303433'
+  - label: deck panel 5.3 original recessed grate surface
+    min: -0.4925, -2.4925, 0.008
+    max: 0.4925, -1.5075, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt13
+    surfaceAxis: XY
+  - label: deck panel 5.4 deep steel cassette
+    min: 0.5075, -2.4925, -0.13
+    max: 1.4925, -1.5075, 0.008
+    color: '#303433'
+  - label: deck panel 5.4 original recessed grate surface
+    min: 0.5075, -2.4925, 0.008
+    max: 1.4925, -1.5075, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt13
+    surfaceAxis: XY
+  - label: deck panel 5.5 deep steel cassette
+    min: 1.5075, -2.4925, -0.13
+    max: 2.4925, -1.5075, 0.008
+    color: '#303433'
+  - label: deck panel 5.5 original recessed grate surface
+    min: 1.5075, -2.4925, 0.008
+    max: 2.4925, -1.5075, 0.014
+    color: '#FFFFFF'
+    surface: CMU3DTopologyStudiesCloudArt14
+    surfaceAxis: XY
+  - label: underside jack shoulder 1
+    min: -1.68, -1.68, -0.575
+    max: -1.32, -1.32, -0.425
+    color: '#393F3E'
+  - label: inferred structural jack stem 1
+    min: -1.585, -1.585, -1.06
+    max: -1.415, -1.415, -0.54
+    color: '#1F2325'
+    shape: CylinderZ
+  - label: inferred lower jack collar 1
+    min: -1.645, -1.645, -1.11
+    max: -1.355, -1.355, -1.01
+    color: '#282C2C'
+    shape: CylinderZ
+  - label: underside jack shoulder 2
+    min: 1.32, -1.68, -0.575
+    max: 1.68, -1.32, -0.425
+    color: '#393F3E'
+  - label: inferred structural jack stem 2
+    min: 1.415, -1.585, -1.06
+    max: 1.585, -1.415, -0.54
+    color: '#1F2325'
+    shape: CylinderZ
+  - label: inferred lower jack collar 2
+    min: 1.355, -1.645, -1.11
+    max: 1.645, -1.355, -1.01
+    color: '#282C2C'
+    shape: CylinderZ
+  - label: underside jack shoulder 3
+    min: -1.68, 1.32, -0.575
+    max: -1.32, 1.68, -0.425
+    color: '#393F3E'
+  - label: inferred structural jack stem 3
+    min: -1.585, 1.415, -1.06
+    max: -1.415, 1.585, -0.54
+    color: '#1F2325'
+    shape: CylinderZ
+  - label: inferred lower jack collar 3
+    min: -1.645, 1.355, -1.11
+    max: -1.355, 1.645, -1.01
+    color: '#282C2C'
+    shape: CylinderZ
+  - label: underside jack shoulder 4
+    min: 1.32, 1.32, -0.575
+    max: 1.68, 1.68, -0.425
+    color: '#393F3E'
+  - label: inferred structural jack stem 4
+    min: 1.415, 1.415, -1.06
+    max: 1.585, 1.585, -0.54
+    color: '#1F2325'
+    shape: CylinderZ
+  - label: inferred lower jack collar 4
+    min: 1.355, 1.355, -1.11
+    max: 1.645, 1.645, -1.01
+    color: '#282C2C'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DTopologyChasmIsolatedStudyCloud
+  label: UNBOUND / isolated chasm cliff rim and open pit
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: FloorChasmEntity
+  referenceRsi: /Textures/Tiles/TileEntities/chasm.rsi
+  referenceState: full
+  referenceDirection: 0
+  sourceDirections: 1
+  description: 'UNBOUND standalone physical art study. Resource full is an isolated reference icon, not the FloorChasmEntity
+    Icon (which points to liquid-phoron) and not a complete IconSmooth configuration. Twenty source-traced irregular
+    cliff segments enclose real empty space with open bottom. Original #070709 void is omitted; alpha-64/25 gray and
+    black fringe pixels are not converted to opaque stone. Hidden cliff depth, wall thickness and backside are inferred.
+    No prototype binding, runtime aperture/elevation integration, saved-map fit, native/gameplay or fidelity approval.'
+  parts:
+  - label: irregular cliff segment 1
+    min: -0.025161, 0.326375, -0.84
+    max: 0.087661, 0.392375, 0.0
+    color: '#17161B'
+    yaw: -18.43495
+  - label: jagged upper lip segment 1
+    min: -0.028161, 0.319875, -0.034
+    max: 0.090661, 0.398875, 0.026
+    color: '#302F33'
+    yaw: -18.43495
+  - label: continuous upper fractured rock face 1
+    min: -0.024661, 0.321875, -0.27
+    max: 0.087161, 0.396875, 0.0
+    color: '#242329'
+    yaw: -18.43495
+  - label: tapered descending rock tongue 1
+    min: -0.00875, 0.317376, -0.3456
+    max: 0.07125, 0.401374, -0.108
+    color: '#242329'
+    shape: WedgeYReverse
+    yaw: -108.43495
+  - label: irregular cliff segment 2
+    min: 0.063748, 0.2795, -0.84
+    max: 0.217502, 0.3455, 0.0
+    color: '#17161B'
+    yaw: -26.56505
+  - label: jagged upper lip segment 2
+    min: 0.060748, 0.273, -0.034
+    max: 0.220502, 0.352, 0.026
+    color: '#302F33'
+    yaw: -26.56505
+  - label: continuous upper fractured rock face 2
+    min: 0.064248, 0.275, -0.38
+    max: 0.217002, 0.35, 0.0
+    color: '#242329'
+    yaw: -26.56505
+  - label: tapered descending rock tongue 2
+    min: 0.100625, 0.253104, -0.4864
+    max: 0.180625, 0.371896, -0.152
+    color: '#302F33'
+    shape: WedgeY
+    yaw: -116.56505
+  - label: irregular cliff segment 3
+    min: 0.188748, 0.217, -0.84
+    max: 0.342502, 0.283, 0.0
+    color: '#17161B'
+    yaw: -26.56505
+  - label: jagged upper lip segment 3
+    min: 0.185748, 0.2105, -0.034
+    max: 0.345502, 0.2895, 0.026
+    color: '#302F33'
+    yaw: -26.56505
+  - label: continuous upper fractured rock face 3
+    min: 0.189248, 0.2125, -0.3
+    max: 0.342002, 0.2875, 0.0
+    color: '#242329'
+    yaw: -26.56505
+  - label: tapered descending rock tongue 3
+    min: 0.225625, 0.190604, -0.384
+    max: 0.305625, 0.309396, -0.12
+    color: '#302F33'
+    shape: WedgeYReverse
+    yaw: -116.56505
+  - label: irregular cliff segment 4
+    min: 0.311417, 0.162312, -0.84
+    max: 0.391708, 0.228313, 0.0
+    color: '#17161B'
+    yaw: -45.0
+  - label: jagged upper lip segment 4
+    min: 0.308417, 0.155812, -0.034
+    max: 0.394708, 0.234813, 0.026
+    color: '#302F33'
+    yaw: -45.0
+  - label: continuous upper fractured rock face 4
+    min: 0.311917, 0.157812, -0.47
+    max: 0.391208, 0.232813, 0.0
+    color: '#242329'
+    yaw: -45.0
+  - label: tapered descending rock tongue 4
+    min: 0.311563, 0.167139, -0.6016
+    max: 0.391562, 0.223486, -0.188
+    color: '#242329'
+    shape: WedgeY
+    yaw: -135.0
+  - label: irregular cliff segment 5
+    min: 0.288582, 0.045125, -0.84
+    max: 0.492668, 0.111125, 0.0
+    color: '#17161B'
+    yaw: -80.53768
+  - label: jagged upper lip segment 5
+    min: 0.285582, 0.038625, -0.034
+    max: 0.495668, 0.117625, 0.026
+    color: '#302F33'
+    yaw: -80.53768
+  - label: continuous upper fractured rock face 5
+    min: 0.289082, 0.040625, -0.33
+    max: 0.492168, 0.115625, 0.0
+    color: '#242329'
+    yaw: -80.53768
+  - label: tapered descending rock tongue 5
+    min: 0.350625, -0.002662, -0.4224
+    max: 0.430625, 0.158912, -0.132
+    color: '#302F33'
+    shape: WedgeYReverse
+    yaw: -170.53768
+  - label: irregular cliff segment 6
+    min: 0.366732, -0.062062, -0.74
+    max: 0.430143, -0.016063, 0.0
+    color: '#17161B'
+    yaw: -108.43495
+  - label: jagged upper lip segment 6
+    min: 0.363732, -0.068562, -0.034
+    max: 0.433143, -0.009563, 0.026
+    color: '#302F33'
+    yaw: -108.43495
+  - label: continuous upper fractured rock face 6
+    min: 0.367232, -0.066562, -0.1344
+    max: 0.429643, -0.011562, 0.0
+    color: '#242329'
+    yaw: -108.43495
+  - label: tapered descending rock tongue 6
+    min: 0.368437, -0.060062, -0.172032
+    max: 0.428438, -0.018063, -0.05376
+    color: '#302F33'
+    shape: WedgeY
+    yaw: 161.56505
+  - label: irregular cliff segment 7
+    min: 0.264128, -0.155812, -0.74
+    max: 0.438997, -0.109813, 0.0
+    color: '#17161B'
+    yaw: -119.0546
+  - label: jagged upper lip segment 7
+    min: 0.261128, -0.162312, -0.034
+    max: 0.441997, -0.103313, 0.026
+    color: '#302F33'
+    yaw: -119.0546
+  - label: continuous upper fractured rock face 7
+    min: 0.264628, -0.160312, -0.2408
+    max: 0.438497, -0.105313, 0.0
+    color: '#242329'
+    yaw: -119.0546
+  - label: tapered descending rock tongue 7
+    min: 0.321562, -0.201182, -0.308224
+    max: 0.381563, -0.064443, -0.09632
+    color: '#242329'
+    shape: WedgeYReverse
+    yaw: 150.9454
+  - label: irregular cliff segment 8
+    min: 0.192334, -0.273, -0.74
+    max: 0.338916, -0.227, 0.0
+    color: '#17161B'
+    yaw: -135.0
+  - label: jagged upper lip segment 8
+    min: 0.189334, -0.2795, -0.034
+    max: 0.341916, -0.2205, 0.026
+    color: '#302F33'
+    yaw: -135.0
+  - label: continuous upper fractured rock face 8
+    min: 0.192834, -0.2775, -0.1512
+    max: 0.338416, -0.2225, 0.0
+    color: '#242329'
+    yaw: -135.0
+  - label: tapered descending rock tongue 8
+    min: 0.235625, -0.306348, -0.193536
+    max: 0.295625, -0.193652, -0.06048
+    color: '#302F33'
+    shape: WedgeY
+    yaw: 135.0
+  - label: irregular cliff segment 9
+    min: 0.067322, -0.343313, -0.74
+    max: 0.229553, -0.297312, 0.0
+    color: '#17161B'
+    yaw: -161.56505
+  - label: jagged upper lip segment 9
+    min: 0.064322, -0.349812, -0.034
+    max: 0.232553, -0.290813, 0.026
+    color: '#302F33'
+    yaw: -161.56505
+  - label: continuous upper fractured rock face 9
+    min: 0.067822, -0.347813, -0.2128
+    max: 0.229053, -0.292812, 0.0
+    color: '#242329'
+    yaw: -161.56505
+  - label: tapered descending rock tongue 9
+    min: 0.118438, -0.383311, -0.272384
+    max: 0.178437, -0.257314, -0.08512
+    color: '#302F33'
+    shape: WedgeYReverse
+    yaw: 108.43495
+  - label: irregular cliff segment 10
+    min: -0.043061, -0.390188, -0.74
+    max: 0.089936, -0.344187, 0.0
+    color: '#17161B'
+    yaw: -156.80141
+  - label: jagged upper lip segment 10
+    min: -0.046061, -0.396687, -0.034
+    max: 0.092936, -0.337688, 0.026
+    color: '#302F33'
+    yaw: -156.80141
+  - label: continuous upper fractured rock face 10
+    min: -0.042561, -0.394688, -0.168
+    max: 0.089436, -0.339687, 0.0
+    color: '#242329'
+    yaw: -156.80141
+  - label: tapered descending rock tongue 10
+    min: -0.006562, -0.417761, -0.21504
+    max: 0.053437, -0.316614, -0.0672
+    color: '#242329'
+    shape: WedgeY
+    yaw: 113.19859
+  - label: irregular cliff segment 11
+    min: -0.196047, -0.398, -0.74
+    max: -0.022703, -0.352, 0.0
+    color: '#17161B'
+    yaw: 168.69007
+  - label: jagged upper lip segment 11
+    min: -0.199047, -0.4045, -0.034
+    max: -0.019703, -0.3455, 0.026
+    color: '#302F33'
+    yaw: 168.69007
+  - label: continuous upper fractured rock face 11
+    min: -0.195547, -0.4025, -0.2632
+    max: -0.023203, -0.3475, 0.0
+    color: '#242329'
+    yaw: 168.69007
+  - label: tapered descending rock tongue 11
+    min: -0.139375, -0.442721, -0.336896
+    max: -0.079375, -0.307279, -0.10528
+    color: '#302F33'
+    shape: WedgeYReverse
+    yaw: 78.69007
+  - label: irregular cliff segment 12
+    min: -0.279117, -0.358938, -0.74
+    max: -0.174008, -0.312937, 0.0
+    color: '#17161B'
+    yaw: 149.03624
+  - label: jagged upper lip segment 12
+    min: -0.282117, -0.365437, -0.034
+    max: -0.171008, -0.306438, 0.026
+    color: '#302F33'
+    yaw: 149.03624
+  - label: continuous upper fractured rock face 12
+    min: -0.278617, -0.363438, -0.1848
+    max: -0.174508, -0.308437, 0.0
+    color: '#242329'
+    yaw: 149.03624
+  - label: tapered descending rock tongue 12
+    min: -0.256563, -0.374659, -0.236544
+    max: -0.196563, -0.297216, -0.07392
+    color: '#302F33'
+    shape: WedgeY
+    yaw: 59.03624
+  - label: irregular cliff segment 13
+    min: -0.394518, -0.296438, -0.74
+    max: -0.246107, -0.250437, 0.0
+    color: '#17161B'
+    yaw: 144.46232
+  - label: jagged upper lip segment 13
+    min: -0.397518, -0.302937, -0.034
+    max: -0.243107, -0.243938, 0.026
+    color: '#302F33'
+    yaw: 144.46232
+  - label: continuous upper fractured rock face 13
+    min: -0.394018, -0.300938, -0.1344
+    max: -0.246607, -0.245938, 0.0
+    color: '#242329'
+    yaw: 144.46232
+  - label: tapered descending rock tongue 13
+    min: -0.350313, -0.330562, -0.172032
+    max: -0.290312, -0.216313, -0.05376
+    color: '#242329'
+    shape: WedgeYReverse
+    yaw: 54.46232
+  - label: irregular cliff segment 14
+    min: -0.483127, -0.194875, -0.74
+    max: -0.329373, -0.148875, 0.0
+    color: '#17161B'
+    yaw: 116.56505
+  - label: jagged upper lip segment 14
+    min: -0.486127, -0.201375, -0.034
+    max: -0.326373, -0.142375, 0.026
+    color: '#302F33'
+    yaw: 116.56505
+  - label: continuous upper fractured rock face 14
+    min: -0.482627, -0.199375, -0.2408
+    max: -0.329873, -0.144375, 0.0
+    color: '#242329'
+    yaw: 116.56505
+  - label: tapered descending rock tongue 14
+    min: -0.43625, -0.231271, -0.308224
+    max: -0.37625, -0.112479, -0.09632
+    color: '#302F33'
+    shape: WedgeY
+    yaw: 26.56505
+  - label: irregular cliff segment 15
+    min: -0.524549, -0.069875, -0.74
+    max: -0.381701, -0.023875, 0.0
+    color: '#17161B'
+    yaw: 104.03624
+  - label: jagged upper lip segment 15
+    min: -0.527549, -0.076375, -0.034
+    max: -0.378701, -0.017375, 0.026
+    color: '#302F33'
+    yaw: 104.03624
+  - label: continuous upper fractured rock face 15
+    min: -0.524049, -0.074375, -0.1512
+    max: -0.382201, -0.019375, 0.0
+    color: '#242329'
+    yaw: 104.03624
+  - label: tapered descending rock tongue 15
+    min: -0.483125, -0.101635, -0.193536
+    max: -0.423125, 0.007885, -0.06048
+    color: '#302F33'
+    shape: WedgeYReverse
+    yaw: 14.03624
+  - label: irregular cliff segment 16
+    min: -0.524549, 0.045125, -0.84
+    max: -0.381701, 0.111125, 0.0
+    color: '#17161B'
+    yaw: 75.96376
+  - label: jagged upper lip segment 16
+    min: -0.527549, 0.038625, -0.034
+    max: -0.378701, 0.117625, 0.026
+    color: '#302F33'
+    yaw: 75.96376
+  - label: continuous upper fractured rock face 16
+    min: -0.524049, 0.040625, -0.38
+    max: -0.382201, 0.115625, 0.0
+    color: '#242329'
+    yaw: 75.96376
+  - label: tapered descending rock tongue 16
+    min: -0.493125, 0.023365, -0.4864
+    max: -0.413125, 0.132885, -0.152
+    color: '#242329'
+    shape: WedgeY
+    yaw: -14.03624
+  - label: irregular cliff segment 17
+    min: -0.463916, 0.1545, -0.84
+    max: -0.317334, 0.2205, 0.0
+    color: '#17161B'
+    yaw: 45.0
+  - label: jagged upper lip segment 17
+    min: -0.466916, 0.148, -0.034
+    max: -0.314334, 0.227, 0.026
+    color: '#302F33'
+    yaw: 45.0
+  - label: continuous upper fractured rock face 17
+    min: -0.463416, 0.15, -0.3
+    max: -0.317834, 0.225, 0.0
+    color: '#242329'
+    yaw: 45.0
+  - label: tapered descending rock tongue 17
+    min: -0.430625, 0.131152, -0.384
+    max: -0.350625, 0.243848, -0.12
+    color: '#302F33'
+    shape: WedgeYReverse
+    yaw: -45.0
+  - label: irregular cliff segment 18
+    min: -0.356768, 0.232625, -0.84
+    max: -0.174482, 0.298625, 0.0
+    color: '#17161B'
+    yaw: 21.80141
+  - label: jagged upper lip segment 18
+    min: -0.359768, 0.226125, -0.034
+    max: -0.171482, 0.305125, 0.026
+    color: '#302F33'
+    yaw: 21.80141
+  - label: continuous upper fractured rock face 18
+    min: -0.356268, 0.228125, -0.47
+    max: -0.174982, 0.303125, 0.0
+    color: '#242329'
+    yaw: 21.80141
+  - label: tapered descending rock tongue 18
+    min: -0.305625, 0.194103, -0.6016
+    max: -0.225625, 0.337147, -0.188
+    color: '#302F33'
+    shape: WedgeY
+    yaw: -68.19859
+  - label: irregular cliff segment 19
+    min: -0.200992, 0.287312, -0.84
+    max: -0.095883, 0.353313, 0.0
+    color: '#17161B'
+    yaw: 30.96376
+  - label: jagged upper lip segment 19
+    min: -0.203992, 0.280813, -0.034
+    max: -0.092883, 0.359812, 0.026
+    color: '#302F33'
+    yaw: 30.96376
+  - label: continuous upper fractured rock face 19
+    min: -0.200492, 0.282813, -0.33
+    max: -0.096383, 0.357812, 0.0
+    color: '#242329'
+    yaw: 30.96376
+  - label: tapered descending rock tongue 19
+    min: -0.188438, 0.281591, -0.4224
+    max: -0.108437, 0.359034, -0.132
+    color: '#242329'
+    shape: WedgeYReverse
+    yaw: -59.03624
+  - label: irregular cliff segment 20
+    min: -0.118911, 0.326375, -0.84
+    max: -0.006089, 0.392375, 0.0
+    color: '#17161B'
+    yaw: 18.43495
+  - label: jagged upper lip segment 20
+    min: -0.121911, 0.319875, -0.034
+    max: -0.003089, 0.398875, 0.026
+    color: '#302F33'
+    yaw: 18.43495
+  - label: continuous upper fractured rock face 20
+    min: -0.118411, 0.321875, -0.24
+    max: -0.006589, 0.396875, 0.0
+    color: '#242329'
+    yaw: 18.43495
+  - label: tapered descending rock tongue 20
+    min: -0.1025, 0.317376, -0.3072
+    max: -0.0225, 0.401374, -0.096
+    color: '#302F33'
+    shape: WedgeY
+    yaw: -71.56505
+- type: cmu3DModel
+  id: CMU3DTopologyChasmStraightQuarterStudyCloud
+  label: UNBOUND / north straight chasm quarter edge
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: FloorChasmEntity
+  referenceRsi: /Textures/Tiles/TileEntities/chasm.rsi
+  referenceState: chasm_1
+  referenceDirection: 1
+  sourceDirections: 4
+  description: 'UNBOUND standalone physical art study. Single original IconSmooth quarter: RSI direction 1, source
+    x0..15/y0..15. A half-tile straight edge with the source raised center and real descending wall. Retains the quarter
+    footprint; does not expand it to a full tile, assemble neighboring quarters or claim all eight states. Other quarters
+    remain unmodeled; no black cap or floor. No prototype binding, runtime aperture/elevation integration, saved-map
+    fit, native/gameplay or fidelity approval.'
+  parts:
+  - label: irregular cliff segment 1
+    min: -0.507, 0.31075, -0.84
+    max: -0.368, 0.37675, 0.0
+    color: '#17161B'
+  - label: jagged upper lip segment 1
+    min: -0.51, 0.30425, -0.034
+    max: -0.365, 0.38325, 0.026
+    color: '#302F33'
+  - label: continuous upper fractured rock face 1
+    min: -0.5065, 0.30625, -0.27
+    max: -0.3685, 0.38125, 0.0
+    color: '#242329'
+  - label: tapered descending rock tongue 1
+    min: -0.4775, 0.290625, -0.3456
+    max: -0.3975, 0.396875, -0.108
+    color: '#242329'
+    shape: WedgeYReverse
+    yaw: -90.0
+  - label: irregular cliff segment 2
+    min: -0.388472, 0.326375, -0.84
+    max: -0.330278, 0.392375, 0.0
+    color: '#17161B'
+    yaw: 45.0
+  - label: jagged upper lip segment 2
+    min: -0.391472, 0.319875, -0.034
+    max: -0.327278, 0.398875, 0.026
+    color: '#302F33'
+    yaw: 45.0
+  - label: continuous upper fractured rock face 2
+    min: -0.387972, 0.321875, -0.38
+    max: -0.330778, 0.396875, 0.0
+    color: '#242329'
+    yaw: 45.0
+  - label: tapered descending rock tongue 2
+    min: -0.399375, 0.340592, -0.4864
+    max: -0.319375, 0.378158, -0.152
+    color: '#302F33'
+    shape: WedgeY
+    yaw: -45.0
+  - label: irregular cliff segment 3
+    min: -0.354439, 0.357625, -0.84
+    max: -0.270561, 0.423625, 0.0
+    color: '#17161B'
+    yaw: 26.56505
+  - label: jagged upper lip segment 3
+    min: -0.357439, 0.351125, -0.034
+    max: -0.267561, 0.430125, 0.026
+    color: '#302F33'
+    yaw: 26.56505
+  - label: continuous upper fractured rock face 3
+    min: -0.353939, 0.353125, -0.3
+    max: -0.271061, 0.428125, 0.0
+    color: '#242329'
+    yaw: 26.56505
+  - label: tapered descending rock tongue 3
+    min: -0.3525, 0.360927, -0.384
+    max: -0.2725, 0.420323, -0.12
+    color: '#302F33'
+    shape: WedgeYReverse
+    yaw: -63.43495
+  - label: irregular cliff segment 4
+    min: -0.28825, 0.37325, -0.84
+    max: -0.14925, 0.43925, 0.0
+    color: '#17161B'
+  - label: jagged upper lip segment 4
+    min: -0.29125, 0.36675, -0.034
+    max: -0.14625, 0.44575, 0.026
+    color: '#302F33'
+  - label: continuous upper fractured rock face 4
+    min: -0.28775, 0.36875, -0.47
+    max: -0.14975, 0.44375, 0.0
+    color: '#242329'
+  - label: tapered descending rock tongue 4
+    min: -0.25875, 0.353125, -0.6016
+    max: -0.17875, 0.459375, -0.188
+    color: '#242329'
+    shape: WedgeY
+    yaw: -90.0
+  - label: irregular cliff segment 5
+    min: -0.166939, 0.357625, -0.84
+    max: -0.083061, 0.423625, 0.0
+    color: '#17161B'
+    yaw: -26.56505
+  - label: jagged upper lip segment 5
+    min: -0.169939, 0.351125, -0.034
+    max: -0.080061, 0.430125, 0.026
+    color: '#302F33'
+    yaw: -26.56505
+  - label: continuous upper fractured rock face 5
+    min: -0.166439, 0.353125, -0.33
+    max: -0.083561, 0.428125, 0.0
+    color: '#242329'
+    yaw: -26.56505
+  - label: tapered descending rock tongue 5
+    min: -0.165, 0.360927, -0.4224
+    max: -0.085, 0.420323, -0.132
+    color: '#302F33'
+    shape: WedgeYReverse
+    yaw: -116.56505
+  - label: irregular cliff segment 6
+    min: -0.10075, 0.342, -0.84
+    max: 0.007, 0.408, 0.0
+    color: '#17161B'
+  - label: jagged upper lip segment 6
+    min: -0.10375, 0.3355, -0.034
+    max: 0.01, 0.4145, 0.026
+    color: '#302F33'
+  - label: continuous upper fractured rock face 6
+    min: -0.10025, 0.3375, -0.24
+    max: 0.0065, 0.4125, 0.0
+    color: '#242329'
+  - label: tapered descending rock tongue 6
+    min: -0.086875, 0.335156, -0.3072
+    max: -0.006875, 0.414844, -0.096
+    color: '#302F33'
+    shape: WedgeY
+    yaw: -90.0
+- type: cmu3DModel
+  id: CMU3DTopologyChasmCornerQuarterStudyCloud
+  label: UNBOUND / curved chasm corner quarter edge
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: FloorChasmEntity
+  referenceRsi: /Textures/Tiles/TileEntities/chasm.rsi
+  referenceState: chasm_0
+  referenceDirection: 1
+  sourceDirections: 4
+  description: 'UNBOUND standalone physical art study. Single original IconSmooth quarter: RSI direction 1, source
+    x0..15/y0..15. Seven source-traced segments turn through the curved outer corner, with real downward facets and
+    an open inward region. Actual IconSmooth has eight states times four source quarters; this isolated form is not
+    a neighbor-state implementation. No prototype binding, runtime aperture/elevation integration, saved-map fit,
+    native/gameplay or fidelity approval.'
+  parts:
+  - label: irregular cliff segment 1
+    min: -0.522625, 0.013875, -0.84
+    max: -0.414875, 0.079875, 0.0
+    color: '#17161B'
+    yaw: 90.0
+  - label: jagged upper lip segment 1
+    min: -0.525625, 0.007375, -0.034
+    max: -0.411875, 0.086375, 0.026
+    color: '#302F33'
+    yaw: 90.0
+  - label: continuous upper fractured rock face 1
+    min: -0.522125, 0.009375, -0.27
+    max: -0.415375, 0.084375, 0.0
+    color: '#242329'
+    yaw: 90.0
+  - label: tapered descending rock tongue 1
+    min: -0.50875, 0.007031, -0.3456
+    max: -0.42875, 0.086719, -0.108
+    color: '#242329'
+    shape: WedgeYReverse
+  - label: irregular cliff segment 2
+    min: -0.495064, 0.092, -0.84
+    max: -0.411186, 0.158, 0.0
+    color: '#17161B'
+    yaw: 63.43495
+  - label: jagged upper lip segment 2
+    min: -0.498064, 0.0855, -0.034
+    max: -0.408186, 0.1645, 0.026
+    color: '#302F33'
+    yaw: 63.43495
+  - label: continuous upper fractured rock face 2
+    min: -0.494564, 0.0875, -0.38
+    max: -0.411686, 0.1625, 0.0
+    color: '#242329'
+    yaw: 63.43495
+  - label: tapered descending rock tongue 2
+    min: -0.493125, 0.095302, -0.4864
+    max: -0.413125, 0.154698, -0.152
+    color: '#302F33'
+    shape: WedgeY
+    yaw: -26.56505
+  - label: irregular cliff segment 3
+    min: -0.457444, 0.1545, -0.84
+    max: -0.355056, 0.2205, 0.0
+    color: '#17161B'
+    yaw: 45.0
+  - label: jagged upper lip segment 3
+    min: -0.460444, 0.148, -0.034
+    max: -0.352056, 0.227, 0.026
+    color: '#302F33'
+    yaw: 45.0
+  - label: continuous upper fractured rock face 3
+    min: -0.456944, 0.15, -0.3
+    max: -0.355556, 0.225, 0.0
+    color: '#242329'
+    yaw: 45.0
+  - label: tapered descending rock tongue 3
+    min: -0.44625, 0.149935, -0.384
+    max: -0.36625, 0.225065, -0.12
+    color: '#302F33'
+    shape: WedgeYReverse
+    yaw: -45.0
+  - label: irregular cliff segment 4
+    min: -0.394944, 0.217, -0.84
+    max: -0.292556, 0.283, 0.0
+    color: '#17161B'
+    yaw: 45.0
+  - label: jagged upper lip segment 4
+    min: -0.397944, 0.2105, -0.034
+    max: -0.289556, 0.2895, 0.026
+    color: '#302F33'
+    yaw: 45.0
+  - label: continuous upper fractured rock face 4
+    min: -0.394444, 0.2125, -0.47
+    max: -0.293056, 0.2875, 0.0
+    color: '#242329'
+    yaw: 45.0
+  - label: tapered descending rock tongue 4
+    min: -0.38375, 0.212435, -0.6016
+    max: -0.30375, 0.287565, -0.188
+    color: '#242329'
+    shape: WedgeY
+    yaw: -45.0
+  - label: irregular cliff segment 5
+    min: -0.321424, 0.263875, -0.84
+    max: -0.178576, 0.329875, 0.0
+    color: '#17161B'
+    yaw: 14.03624
+  - label: jagged upper lip segment 5
+    min: -0.324424, 0.257375, -0.034
+    max: -0.175576, 0.336375, 0.026
+    color: '#302F33'
+    yaw: 14.03624
+  - label: continuous upper fractured rock face 5
+    min: -0.320924, 0.259375, -0.33
+    max: -0.179076, 0.334375, 0.0
+    color: '#242329'
+    yaw: 14.03624
+  - label: tapered descending rock tongue 5
+    min: -0.29, 0.242115, -0.4224
+    max: -0.21, 0.351635, -0.132
+    color: '#302F33'
+    shape: WedgeYReverse
+    yaw: -75.96376
+  - label: irregular cliff segment 6
+    min: -0.198189, 0.295125, -0.84
+    max: -0.114311, 0.361125, 0.0
+    color: '#17161B'
+    yaw: 26.56505
+  - label: jagged upper lip segment 6
+    min: -0.201189, 0.288625, -0.034
+    max: -0.111311, 0.367625, 0.026
+    color: '#302F33'
+    yaw: 26.56505
+  - label: continuous upper fractured rock face 6
+    min: -0.197689, 0.290625, -0.24
+    max: -0.114811, 0.365625, 0.0
+    color: '#242329'
+    yaw: 26.56505
+  - label: tapered descending rock tongue 6
+    min: -0.19625, 0.298427, -0.3072
+    max: -0.11625, 0.357823, -0.096
+    color: '#302F33'
+    shape: WedgeY
+    yaw: -63.43495
+  - label: irregular cliff segment 7
+    min: -0.133924, 0.326375, -0.84
+    max: 0.008924, 0.392375, 0.0
+    color: '#17161B'
+    yaw: 14.03624
+  - label: jagged upper lip segment 7
+    min: -0.136924, 0.319875, -0.034
+    max: 0.011924, 0.398875, 0.026
+    color: '#302F33'
+    yaw: 14.03624
+  - label: continuous upper fractured rock face 7
+    min: -0.133424, 0.321875, -0.43
+    max: 0.008424, 0.396875, 0.0
+    color: '#242329'
+    yaw: 14.03624
+  - label: tapered descending rock tongue 7
+    min: -0.1025, 0.304615, -0.5504
+    max: -0.0225, 0.414135, -0.172
+    color: '#242329'
+    shape: WedgeYReverse
+    yaw: -75.96376

@@ -27,7 +27,7 @@ namespace Content.Shared.CMU14.Weapons.CookOff;
 /// Mortar shells and ammo boxes left in a fire cook off and explode, ported from cmss13-devs/cmss13#6243.
 /// Grenade boxes handle their own cook-off in <see cref="CMUGrenadeBoxSystem"/>.
 /// </summary>
-public sealed class CMUCookOffSystem : EntitySystem
+public sealed partial class CMUCookOffSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedContainerSystem _container = default!;
@@ -70,7 +70,7 @@ public sealed class CMUCookOffSystem : EntitySystem
     private void OnPickupAttempt(Entity<CMUCookingOffComponent> ent, ref GettingPickedUpAttemptEvent args)
     {
         args.Cancel();
-        _popup.PopupClient(Loc.GetString("cmu-cook-off-touch", ("item", ent)), ent, args.User, PopupType.MediumCaution);
+        _popup.PopupEntity(Loc.GetString("cmu-cook-off-touch", ("item", ent)), ent, args.User, PopupType.MediumCaution);
     }
 
     private void OnEjectAttempt(Entity<CMUCookingOffComponent> ent, ref ItemSlotEjectAttemptEvent args)

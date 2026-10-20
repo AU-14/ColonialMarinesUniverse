@@ -42,7 +42,8 @@ public sealed partial class RespiratoryStrainComponent : Component
     [DataField]
     public TimeSpan TimeBetweenChecks = TimeSpan.FromSeconds(1);
 
-    [DataField, AutoNetworkedField]
+    // Only the server dispatches checks; clients do not consume this deadline.
+    [DataField]
     public TimeSpan NextCheck;
 
     [DataField]

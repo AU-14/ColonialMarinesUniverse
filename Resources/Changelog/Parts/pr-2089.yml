@@ -1,0 +1,8 @@
+author: deepdarkdepths
+category: CMU
+changes:
+- message: Mindless larva can now be returned to the hive core to gain a burrowed
+    larva.
+  type: Add
+time: '2026-10-07T10:20:28.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2089

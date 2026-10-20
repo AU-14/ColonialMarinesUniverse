@@ -56,10 +56,15 @@ ambassador-console-trade-pact-ended-no-funds = Trade pact by { $faction } has en
 ambassador-console-comms-jam-ended-no-funds = Communications jamming by { $faction } has ended due to insufficient funds.
 ambassador-console-embassy-sender = { $faction } Embassy
 ambassador-console-default-sender = Ambassador Console
-ambassador-console-support-unavailable = Unable to dispatch support at this time.
 ambassador-console-embargo-enabled = A trade embargo has been activated by { $faction }. Submission point payouts are reduced by 20%.
 ambassador-console-embargo-disabled = The trade embargo by { $faction } has been lifted.
 ambassador-console-trade-pact-enabled = A trade pact has been activated by { $faction }. Submission point payouts are increased by 20%.
 ambassador-console-trade-pact-disabled = The trade pact by { $faction } has ended.
 ambassador-console-comms-jam-enabled = Planeside communications have been jammed by { $faction }. All radio transmissions are blocked.
 ambassador-console-comms-jam-disabled = Communications jamming by { $faction } has been disabled. Radio transmissions are restored.
+ambassador-third-party-calls-left = Support requests authorized: { $left }
+ambassador-third-party-cooldown = Support requests authorized: { $left }. Command will hear another request in { $minutes } { $minutes ->
+    [one] minute
+   *[other] minutes
+}.
+ambassador-third-party-no-calls-left = Command has authorized all the support it will send for this operation.

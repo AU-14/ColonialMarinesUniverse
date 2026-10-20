@@ -1,0 +1,192 @@
+# Gear
+- type: startingGear
+  parent: AU14RMCGearIASFTeamLead
+  id: AU14RMCGearIASFTeamLeadBosenmori
+  equipment:
+    mask: AU14MaskGasRMC
+  storage:
+    outerClothing:
+    - RMCRangefinder
+    - RMCFlashlight
+    - CMUFieldOxygenTankFilled
+    back:
+    - CMUFieldOxygenTankFilled
+
+- type: startingGear
+  parent: AU14RMCGearIASFRifle
+  id: AU14RMCGearIASFRifleBosenmori
+  equipment:
+    mask: AU14MaskGasRMC
+  storage:
+    outerClothing:
+    - RMCFlashlight
+    - CMUFieldOxygenTankFilled
+    back:
+    - CMUFieldOxygenTankFilled
+
+- type: startingGear
+  parent: AU14RMCGearParaMedicalTechnician
+  id: AU14RMCGearParaMedicalTechnicianBosenmori
+  equipment:
+    mask: AU14MaskGasRMC
+  storage:
+    outerClothing:
+    - RMCRadioHandheldColony
+    - CMUFieldOxygenTankFilled
+    - CMUFieldOxygenTankFilled
+
+- type: startingGear
+  parent: AU14RMCGearParaAssaultEngineer
+  id: AU14RMCGearParaAssaultEngineerBosenmori
+  equipment:
+    mask: AU14MaskGasRMC
+  storage:
+    outerClothing:
+    - RMCFlashlight
+    - CMUFieldOxygenTankFilled
+    back:
+    - CMUFieldOxygenTankFilled
+
+# Jobs
+- type: job
+  parent: AU14IASFSurvTeamLead
+  id: AU14IASFSurvTeamLeadBosenmori
+  startingGear: AU14RMCGearIASFTeamLeadBosenmori
+  hidden: true
+
+- type: job
+  parent: AU14IASFSurvRifleman
+  id: AU14IASFSurvRiflemanBosenmori
+  startingGear: AU14RMCGearIASFRifleBosenmori
+  hidden: true
+
+- type: job
+  parent: AU14IASFsurvMedicalTechnician
+  id: AU14IASFSurvMedicalTechnicianBosenmori
+  startingGear: AU14RMCGearParaMedicalTechnicianBosenmori
+  hidden: true
+
+- type: job
+  parent: AU14IASFSurvCombatEngineer
+  id: AU14IASFSurvCombatEngineerBosenmori
+  startingGear: AU14RMCGearParaAssaultEngineerBosenmori
+  hidden: true
+
+# Mobs
+- type: entity
+  parent: AU14IASFSurvTeamLead
+  id: AU14IASFSurvTeamLeadBosenmori
+  suffix: Bosenmori
+  components:
+  - type: CMUSpawnWithInternals
+  - type: GhostRole
+    description: au14-job-description-IASFsurv-bosenmori
+    job: AU14IASFSurvTeamLeadBosenmori
+
+- type: entity
+  parent: AU14IASFSurvRifleman
+  id: AU14IASFSurvRiflemanBosenmori
+  suffix: Bosenmori
+  components:
+  - type: CMUSpawnWithInternals
+  - type: GhostRole
+    description: au14-job-description-IASFsurv-bosenmori
+    job: AU14IASFSurvRiflemanBosenmori
+
+- type: entity
+  parent: AU14IASFsurvMedicalTechnician
+  id: AU14IASFSurvMedicalTechnicianBosenmori
+  suffix: Bosenmori
+  components:
+  - type: CMUSpawnWithInternals
+  - type: GhostRole
+    description: au14-job-description-IASFsurv-bosenmori
+    job: AU14IASFSurvMedicalTechnicianBosenmori
+
+- type: entity
+  parent: AU14IASFSurvCombatEngineer
+  id: AU14IASFSurvCombatEngineerBosenmori
+  suffix: Bosenmori
+  components:
+  - type: CMUSpawnWithInternals
+  - type: GhostRole
+    description: au14-job-description-IASFsurv-bosenmori
+    job: AU14IASFSurvCombatEngineerBosenmori
+
+# Third party
+- type: partySpawn
+  id: IASFSurvSpawnBosenmori
+  leadersToSpawn:
+    AU14IASFSurvTeamLeadBosenmori: 1
+  gruntsToSpawn:
+    AU14IASFSurvRiflemanBosenmori: 2
+    AU14IASFSurvMedicalTechnicianBosenmori: 1
+    AU14IASFSurvCombatEngineerBosenmori: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: IASFSurvBosenmori
+  displayName: IASF Survivors (Bosenmori)
+  partyspawn: IASFSurvSpawnBosenmori
+  blacklistedGamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: ground
+  weight: 25
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 0
+  roundstart: true
+
+# Pilot-only variant
+- type: startingGear
+  parent: AU14RMCGearIASFPilot
+  id: AU14RMCGearIASFPilotBosenmori
+  equipment:
+    mask: AU14MaskGasRMC
+  storage:
+    outerClothing:
+    - RMCFlashlight
+    - CMUFieldOxygenTankFilled
+    back:
+    - CMUFieldOxygenTankFilled
+
+- type: job
+  parent: AU14IASFSurvPilot
+  id: AU14IASFSurvPilotBosenmori
+  startingGear: AU14RMCGearIASFPilotBosenmori
+  hidden: true
+
+- type: entity
+  parent: AU14IASFSurvPilot
+  id: AU14IASFSurvPilotBosenmori
+  suffix: Bosenmori
+  components:
+  - type: CMUSpawnWithInternals
+  - type: GhostRole
+    description: au14-job-description-IASFsurv-bosenmori
+    job: AU14IASFSurvPilotBosenmori
+
+- type: partySpawn
+  id: IASFSurvSpawnBosenmoriPilot
+  leadersToSpawn:
+    AU14IASFSurvPilotBosenmori: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: IASFSurvBosenmoriPilot
+  displayName: IASF Survivor Pilot (Bosenmori)
+  partyspawn: IASFSurvSpawnBosenmoriPilot
+  blacklistedGamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: ground
+  weight: 25
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 0
+  roundstart: true

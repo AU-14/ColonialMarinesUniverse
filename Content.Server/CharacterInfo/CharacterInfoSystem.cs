@@ -12,7 +12,7 @@ using Content.Shared._RMC14.Rules;
 using Content.Shared.CMU14.Util;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.util;
-using Content.Shared.CMU14.util;
+
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CharacterInfo;
 using Content.Shared.Inventory;
@@ -313,7 +313,7 @@ public sealed partial class CharacterInfoSystem : EntitySystem
         }
 
         if (!string.IsNullOrWhiteSpace(platoon.Name))
-            lines.Add(Loc.GetString("lore-primer-platoon-label", ("info", platoon.Name))); // RuMC edit
+            lines.Add(Loc.GetString("lore-primer-platoon-label", ("info", Loc.GetString(platoon.Name)))); // CMU14: Hardcode localization
     }
 
     // cmu edit start
@@ -348,14 +348,16 @@ public sealed partial class CharacterInfoSystem : EntitySystem
     // CMU14 method
     /// <summary>
     ///     Injects ATM account number and PIN into the character notes for
-    ///     ColonyFall and Insurgency gamemodes. Only ever shows this character's own card.
+    ///     ColonyFall and Insurgency gamemodes, and in any mode for characters whose job pays them or whose
+    ///     account has money in it. Only ever shows this character's own card.
     ///     Read-only: opening character info never assigns or changes a PIN.
     /// </summary>
     private void AddAtmCardLines(List<string> lines, EntityUid entity)
     {
         var presetId = (_ticker.CurrentPreset?.ID ?? _ticker.Preset?.ID ?? string.Empty).ToLowerInvariant();
-        if (presetId != "colonyfall" && presetId != "insurgency")
-            return;
+        // cmu edit start: anyone who gets paid sees their banking details in any game mode
+        var colonyMode = presetId == "colonyfall" || presetId == "insurgency";
+        // cmu edit end
 
         // The card bound to this character (OriginalOwner), wherever it is now, so losing the card
         // does not lose the details and holding someone else's card never shows theirs.
@@ -379,6 +381,15 @@ public sealed partial class CharacterInfoSystem : EntitySystem
         // Credentials are assigned when the card is created; this only reads them.
         if (owned is not { } found || found.card.AccountNumber == 0)
             return;
+
+        // cmu edit start: anyone who gets paid sees their banking details in any game mode
+        if (!colonyMode &&
+            !HasComp<Content.Server.CMU14.ColonyEconomy.CMUBankAccountHolderComponent>(entity) &&
+            found.card.AccountBalance <= 0)
+        {
+            return;
+        }
+        // cmu edit end
 
         lines.Add($"ATM Card: Account #{found.card.AccountNumber}  ·  PIN: {found.card.AtmPin}");
     }

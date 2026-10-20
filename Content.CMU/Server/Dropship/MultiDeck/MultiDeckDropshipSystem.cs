@@ -48,7 +48,7 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
 
     private void OnMapInit(Entity<MultiDeckDropshipComponent> ship, ref MapInitEvent args)
     {
-        if (ship.Comp.Initialized || Transform(ship).MapUid is not { } map)
+        if (ship.Comp.DecksInitialized || Transform(ship).MapUid is not { } map)
             return;
 
         if (ship.Comp.DeckPaths.ContainsKey(0))
@@ -91,7 +91,7 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
                 }
             }
 
-            ship.Comp.Initialized = true;
+            ship.Comp.DecksInitialized = true;
             Synchronize(ship);
         }
         catch (Exception exception)
@@ -105,7 +105,7 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
 
     private void OnMove(Entity<MultiDeckDropshipComponent> ship, ref MoveEvent args)
     {
-        if (!ship.Comp.Synchronizing && ship.Comp.Initialized)
+        if (!ship.Comp.Synchronizing && ship.Comp.DecksInitialized)
             _pending.Add(ship);
     }
 
@@ -141,7 +141,7 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
     /// <summary>Place every deck at the primary grid's world position and rotation.</summary>
     public bool Synchronize(Entity<MultiDeckDropshipComponent> ship)
     {
-        if (!ship.Comp.Initialized || ship.Comp.Synchronizing || Transform(ship).MapUid is not { } map)
+        if (!ship.Comp.DecksInitialized || ship.Comp.Synchronizing || Transform(ship).MapUid is not { } map)
             return false;
 
         var destinations = new List<(int Offset, EntityUid Grid, EntityUid Map)>();
@@ -220,7 +220,7 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
         coordinates = ground;
         if (!TryComp<MultiDeckDropshipComponent>(uid, out var ship))
             return true;
-        if (!ship.Initialized)
+        if (!ship.DecksInitialized)
             return false;
 
         var groundMap = _transform.ToMapCoordinates(ground);
@@ -296,7 +296,8 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
         if (!TryComp<MultiDeckDropshipComponent>(ship, out var assembly))
             return;
 
-        foreach (var grid in assembly.Decks.Values)
+        var retiredDecks = new List<int>();
+        foreach (var (offset, grid) in assembly.Decks)
         {
             _dropships.RemoveDeckAttachmentPoints(ship, grid);
             if (TerminatingOrDeleted(grid) || Transform(grid).MapUid is not { } map)
@@ -313,14 +314,26 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
 
             foreach (var occupant in occupants)
             {
+                _pulling.TryStopAllPullsFromAndOn(occupant);
                 var rotation = _transform.GetWorldRotation(occupant);
                 _transform.SetCoordinates(occupant, new EntityCoordinates(map, _transform.GetWorldPosition(occupant)));
                 _transform.SetWorldRotation(occupant, rotation);
             }
+
+            // PVS can withhold an occupant's relocation until after this tick. Keep the old
+            // broadphase alive so clients can remove its proxies when the occupant returns.
+            // A separate paused map takes each deck out of play without overlapping them;
+            // the normal round reset's entity flush owns their eventual deletion.
+            var holdingMap = _map.CreateMap(runMapInit: false);
+            _transform.SetCoordinates(grid, new EntityCoordinates(holdingMap, Vector2.Zero));
+            RemComp<DropshipDeckComponent>(grid);
+            retiredDecks.Add(offset);
         }
 
-        // Component shutdown owns deletion of the followers. Removing the
-        // assembly also removes the cabin's normal one-level landing offset.
+        // Transfer ownership before component shutdown, which still deletes any followers
+        // that could not be retired. Removing the assembly also clears the landing offset.
+        foreach (var offset in retiredDecks)
+            assembly.Decks.Remove(offset);
         RemComp<MultiDeckDropshipComponent>(ship);
         RemComp<DropshipDeckComponent>(ship);
     }
@@ -334,6 +347,6 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
                 QueueDel(grid);
         }
         ship.Comp.Decks.Clear();
-        ship.Comp.Initialized = false;
+        ship.Comp.DecksInitialized = false;
     }
 }

@@ -9,7 +9,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.DroneOperator;
 
-public sealed class CMUCombatDroneTurretSystem : EntitySystem
+public sealed partial class CMUCombatDroneTurretSystem : EntitySystem
 {
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private IInputManager _input = default!;

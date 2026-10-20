@@ -24,11 +24,14 @@ public sealed partial class RMCGunBatterySystem : EntitySystem
             return;
 
         args.Cancelled = true;
-        _popup.PopupClient(Loc.GetString("rmc-low-power"), args.User, args.User, PopupType.MediumCaution);
+        _popup.PopupEntity(Loc.GetString("rmc-low-power"), args.User, args.User, PopupType.MediumCaution);
     }
 
     public void SetPowered(Entity<GunDrainBatteryOnShootComponent> gun, bool powered)
     {
+        if (gun.Comp.Powered == powered)
+            return;
+
         gun.Comp.Powered = powered;
         Dirty(gun);
 
@@ -52,5 +55,8 @@ public sealed partial class RMCGunBatterySystem : EntitySystem
 
         gun.Comp.Drain = ev.Drain;
         Dirty(gun);
+
+        var changed = new GunBatteryDrainChangedEvent();
+        RaiseLocalEvent(gun, ref changed);
     }
 }

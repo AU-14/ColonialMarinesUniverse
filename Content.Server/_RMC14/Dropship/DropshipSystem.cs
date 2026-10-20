@@ -212,7 +212,9 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                     }
                 }
 
-                _alertLevelSystem.Set(RMCAlertLevels.Red, ent.Owner, false, false);
+                // CMU14: scope the alert to the destination ship, the dropship is mid-transit here
+                var destMap = ent.Comp.Destination is { } destination ? Transform(destination).MapUid : null; // CMU14
+                _alertLevelSystem.Set(RMCAlertLevels.Red, ent.Owner, false, false, destMap); // CMU14
 
                 // CMU14: (opt-in) only shuttles whose nav computer declares a faction announce
                 if (victimFaction != null)
@@ -852,9 +854,14 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
 
                 var generalQuartersText = Loc.GetString("rmc-announcement-general-quarters");
                 var gqFaction = victimFaction; // capture for closure
+                var gqMap = Transform(destination).MapUid; // CMU14: hijack victim's ship, the dropship is mid-transit
                 Timer.Spawn(TimeSpan.FromSeconds(10), () =>
                 {
-                    _alertLevelSystem.Set(RMCAlertLevels.Red, dropshipId.Value, false, false);
+                    // CMU14: timers outlive the round, a restart inside these 10s leaves a deleted ship and map here
+                    if (TerminatingOrDeleted(dropshipId.Value) || gqMap is { } gq && TerminatingOrDeleted(gq))
+                        return;
+
+                    _alertLevelSystem.Set(RMCAlertLevels.Red, dropshipId.Value, false, false, gqMap); // CMU14
                     _marineAnnounce.AnnounceARESStaging(dropshipId.Value, generalQuartersText, dropship.GeneralQuartersSound, null, gqFaction);
                 });
             }

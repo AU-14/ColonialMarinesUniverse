@@ -11,4 +11,8 @@ public sealed partial class HealthScannerComponent : Component
 
     [DataField]
     public EntityUid? Target;
+
+    // CMU14: yautja analyzers are tuned for alien physiology and scan xeno targets
+    [DataField]
+    public bool AllowXenoTargets;
 }

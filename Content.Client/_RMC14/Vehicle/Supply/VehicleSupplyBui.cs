@@ -5,6 +5,7 @@ using Robust.Client.Graphics;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Content.Client.Message;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
 
@@ -32,6 +33,7 @@ public sealed class VehicleSupplyBui : BoundUserInterface
     {
         base.Open();
         _window = this.CreateWindow<VehicleSupplyWindow>();
+        _window.SetSize = new Vector2(700, 650);
 
         if (_window == null)
             return;
@@ -61,17 +63,33 @@ public sealed class VehicleSupplyBui : BoundUserInterface
         if (_window == null)
             return;
 
-        // CMU14: show the shared round allowance, including lost hulls.
-        _window.AllowanceLabel.Text = state.PlatoonName == null
+        _window.Title = state.PlatoonName == null
             ? Loc.GetString("cmu-vehicle-supply-unassigned")
-            : Loc.GetString("cmu-vehicle-supply-allowance", ("platoon", state.PlatoonName),
-                ("used", state.IssuedVehicles.Count), ("limit", state.VehicleLimit));
-        _window.IssuedLabel.Text = string.Join(", ", state.IssuedVehicles);
-        var modeText = state.LiftMode?.ToString() ?? "No lift";
-        var activeText = string.IsNullOrWhiteSpace(state.ActiveVehicleId) ? "none" : state.ActiveVehicleId;
-        var busyText = state.Busy ? "busy" : "idle";
+            : Loc.GetString(
+                "cmu-vehicle-supply-platoon-name",
+                ("platoon", Loc.GetString(state.PlatoonName)));
 
-        _window.StatusLabel.Text = $"Lift: {modeText} | Status: {busyText} | Active: {activeText}";
+        // CMU14: show the shared round allowance, including lost hulls.
+        string OurVehicles = string.Join(", ", state.IssuedVehicles);
+        // CMU14 Hardcode Localization Begin: removing hardcode for easy localization in downstreams
+        var modeText = GetLiftModeLabel(state.LiftMode);
+        var activeText = state.IssuedVehicles.Count == 0
+            ? Loc.GetString("cmu-vehicle-supply-active-none")
+            : OurVehicles;
+        var busyText = Loc.GetString(state.Busy ? "cmu-vehicle-supply-status-busy" : "cmu-vehicle-supply-status-idle");
+
+        _window.StatusLabel.Text = Loc.GetString("cmu-vehicle-supply-status-line",
+            ("lift", modeText), ("status", busyText), ("active", activeText));
+            // CMU14 End
+
+        var limitText = state.IssuedVehicles.Count >= state.VehicleLimit
+            ? $"[color=#FF5555]{Loc.GetString("cmu-vehicle-supply-platoon-name-limit-bad")}[/color]"
+            : $"[color=#55DD88]{Loc.GetString("cmu-vehicle-supply-platoon-name-limit-good")}[/color]";
+        _window.AllowanceLabel.SetMarkup(Loc.GetString(
+            "cmu-vehicle-supply-platoon-name-args",
+            ("used", state.IssuedVehicles.Count),
+            ("limit", state.VehicleLimit),
+            ("tooMuch", limitText)));
 
         var raising = state.LiftMode == VehicleSupplyLiftMode.Raising;
         var lowering = state.LiftMode == VehicleSupplyLiftMode.Lowering;
@@ -87,7 +105,7 @@ public sealed class VehicleSupplyBui : BoundUserInterface
 
         _availableVehicleIds.Clear();
         _availableCounts.Clear();
-        _window.AvailableRows.DisposeAllChildren();
+        _window.AvailableRows.ReleaseChildren();
         _selectButtons.Clear();
         _copyToggleButtons.Clear();
         _copyContainers.Clear();
@@ -112,9 +130,6 @@ public sealed class VehicleSupplyBui : BoundUserInterface
                 }
             }
         }
-
-        if (!hasSelected && state.Available.Count > 0)
-            _selectedVehicleId = state.Available[0].Id;
 
         foreach (var entry in state.Available)
         {
@@ -153,7 +168,9 @@ public sealed class VehicleSupplyBui : BoundUserInterface
             {
                 var copyToggle = new HardpointButton
                 {
-                    LabelText = _copyExpanded.Contains(vehicleId) ? "Copies v" : "Copies >",
+                    LabelText = _copyExpanded.Contains(vehicleId) // CMU14 Hardcode Localization
+                        ? Loc.GetString("cmu-vehicle-supply-copies-expanded")
+                        : Loc.GetString("cmu-vehicle-supply-copies-collapsed"),
                     MinSize = new Vector2(110, 0)
                 };
 
@@ -248,7 +265,7 @@ public sealed class VehicleSupplyBui : BoundUserInterface
         if (_window == null)
             return;
 
-        _window.LoadoutColumns.DisposeAllChildren();
+        _window.LoadoutColumns.ReleaseChildren();
         _window.LoadoutPanel.Visible = state.Loadouts.Count > 0;
 
         if (state.Loadouts.Count == 0)
@@ -301,7 +318,9 @@ public sealed class VehicleSupplyBui : BoundUserInterface
     {
         if (_selectedVehicleId == vehicleId)
         {
-            SendMessage(new VehicleSupplySelectMsg(vehicleId, copyIndex));
+            _selectedVehicleId = null;
+            UpdateSelectionVisuals();
+            SendMessage(new VehicleSupplySelectMsg(string.Empty, 0));
             return;
         }
 
@@ -342,7 +361,11 @@ public sealed class VehicleSupplyBui : BoundUserInterface
 
         var expanded = _copyExpanded.Contains(vehicleId);
         container.Visible = expanded;
-        toggle.LabelText = expanded ? "Copies v" : "Copies >";
+        // CMU14 Hardcode Localization start
+        toggle.LabelText = expanded
+            ? Loc.GetString("cmu-vehicle-supply-copies-expanded")
+            : Loc.GetString("cmu-vehicle-supply-copies-collapsed");
+            // CMU14 Hardcode Localization end
     }
 
     private static void ApplySelectionStyle(HardpointButton button, bool selected)
@@ -359,4 +382,20 @@ public sealed class VehicleSupplyBui : BoundUserInterface
 
         button.RefreshStyle();
     }
+
+    // CMU14 Hardcode localization Begin: removing hardcode for easy localization in downstreams
+    private static string GetLiftModeLabel(VehicleSupplyLiftMode? mode)
+    {
+        return mode switch
+        {
+            null => Loc.GetString("cmu-vehicle-supply-lift-none"),
+            VehicleSupplyLiftMode.Lowered => Loc.GetString("cmu-vehicle-supply-lift-lowered"),
+            VehicleSupplyLiftMode.Raised => Loc.GetString("cmu-vehicle-supply-lift-raised"),
+            VehicleSupplyLiftMode.Lowering => Loc.GetString("cmu-vehicle-supply-lift-lowering"),
+            VehicleSupplyLiftMode.Raising => Loc.GetString("cmu-vehicle-supply-lift-raising"),
+            VehicleSupplyLiftMode.Preparing => Loc.GetString("cmu-vehicle-supply-lift-preparing"),
+            _ => mode.Value.ToString(),
+        };
+    }
+    // CMU14 End
 }

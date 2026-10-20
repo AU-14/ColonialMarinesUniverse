@@ -67,6 +67,7 @@ public abstract partial class SharedBrainSystem : EntitySystem
         if (TryComp<OrganHealthComponent>(ent.Owner, out var health))
             UpdateActionSpeed(ent, health.Stage);
         ReconcileSpeechImpairment(args.Body);
+        ClearPermadeath(args.Body);
     }
 
     private void OnBrainRemovedFromBody(Entity<CMUBrainComponent> ent, ref OrganRemovedFromBodyEvent args)
@@ -217,6 +218,10 @@ public abstract partial class SharedBrainSystem : EntitySystem
     }
 
     protected virtual void ApplyPermadeath(EntityUid body)
+    {
+    }
+
+    protected virtual void ClearPermadeath(EntityUid body)
     {
     }
 

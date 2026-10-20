@@ -17,7 +17,7 @@ public sealed partial class HumanoidProfileEditor
     /// </summary>
     public void RefreshTraits()
     {
-        TraitsList.DisposeAllChildren();
+        TraitsList.ReleaseChildren();
 
         var traits = _prototypeManager.EnumeratePrototypes<TraitPrototype>().OrderBy(t => Loc.GetString(t.Name)).ToList();
         TabContainer.SetTabTitle(TraitsTabIndex, Loc.GetString("humanoid-profile-editor-traits-tab"));

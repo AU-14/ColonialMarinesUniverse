@@ -286,14 +286,14 @@ public sealed class BuckleDoAfterMergeRegressionTest : GameTest
 
             await Server.WaitAssertion(() =>
             {
-                Assert.That(SEntMan.EntityQuery<BuckleDoAfterMergeTargetEffectComponent>().Count(), Is.EqualTo(2),
+                Assert.That(SEntMan.QueryEntities<BuckleDoAfterMergeTargetEffectComponent>().Count(), Is.EqualTo(2),
                     "the authoritative do-after spawns its target effect immediately and then once per second");
                 Server.System<SharedDoAfterSystem>().Cancel(cadenceId);
             });
             await Pair.RunTicksSync(2);
             await Client.WaitAssertion(() =>
             {
-                Assert.That(CEntMan.EntityQuery<BuckleDoAfterMergeTargetEffectComponent>().Count(), Is.EqualTo(2),
+                Assert.That(CEntMan.QueryEntities<BuckleDoAfterMergeTargetEffectComponent>().Count(), Is.EqualTo(2),
                     "client prediction must not create duplicate local target effects");
             });
 
@@ -318,7 +318,7 @@ public sealed class BuckleDoAfterMergeRegressionTest : GameTest
             await Pair.RunTicksSync(2);
             await Server.WaitAssertion(() =>
             {
-                Assert.That(SEntMan.EntityQuery<BuckleDoAfterMergeTargetEffectComponent>().Count(), Is.EqualTo(2),
+                Assert.That(SEntMan.QueryEntities<BuckleDoAfterMergeTargetEffectComponent>().Count(), Is.EqualTo(2),
                     "a missing target transform must not spawn the configured effect");
                 Server.System<SharedDoAfterSystem>().Cancel(missingTargetId);
             });
@@ -410,7 +410,7 @@ public sealed class BuckleDoAfterMergeRegressionTest : GameTest
             {
                 Server.PlayerMan.SetAttachedEntity(session, originalAttached);
                 cleanup.AddRange(
-                    SEntMan.EntityQuery<BuckleDoAfterMergeTargetEffectComponent>().Select(component => component.Owner));
+                    SEntMan.QueryEntities<BuckleDoAfterMergeTargetEffectComponent>().Select(component => component.Owner));
             });
             await Delete(cleanup.Distinct().ToArray());
         }

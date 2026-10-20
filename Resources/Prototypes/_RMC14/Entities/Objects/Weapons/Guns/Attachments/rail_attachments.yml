@@ -20,14 +20,17 @@
     spriteLayer: light
   - type: PointLight
     enabled: false
-    radius: 5
-    softness: 5
+    radius: 8
+    energy: 1.7 # CMU14
+    softness: 1 # CMU14
+    lightMask: ConeSingle # CMU14
     autoRot: true
     netsync: false
   - type: HandheldLight
     addPrefix: false
     blinkingBehaviourId: blinking
     radiatingBehaviourId: radiating
+  - type: CMUHelmetMountedLight # CMU14: toggleable while stored in a worn helmet
   - type: NoHandsInteractionBlocked
   - type: LightBehaviour
     behaviours:
@@ -112,6 +115,7 @@
   name: two-point sling
   description: A traditional strip of toughened nylon fabric with clips on either end for attaching to suitable mounting points on most longarms in the UN armed forces arsenals.
   components:
+  - type: CMUSling # CMU14: configurable rail/underbarrel mounting.
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Attachments/rifle_sling/classic-desert-jungle.rsi
     state: pve-sling
@@ -530,7 +534,9 @@
   description: This isn't supposed to come off the gun. How did you get it?
   components:
   - type: Sprite
-    state: xm43e1_scope
+    # cmu edit start: old XM43E1 scope sprite
+    state: pmcscope
+    # cmu edit end
   - type: Tag
     tags:
     - RMCAttachmentRail
@@ -538,7 +544,9 @@
   - type: AttachableToggleable
     icon:
       sprite: _RMC14/Objects/Weapons/Guns/Attachments/rail.rsi
-      state: xm43e1_scope
+      # cmu edit start: old XM43E1 scope sprite
+      state: pmcscope
+      # cmu edit end
     actionName: Look through the XM43E1's Integrated Scope
     actionDesc: Lets you see further.
 

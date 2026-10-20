@@ -185,7 +185,7 @@ public sealed partial class ContainerFillMergeProbeComponent : Component
     public readonly List<bool> WasContainedAtEvent = new();
 }
 
-public sealed class ContainerFillMergeProbeSystem : EntitySystem
+public sealed partial class ContainerFillMergeProbeSystem : EntitySystem
 {
     [Dependency] private SharedContainerSystem _containers = default!;
 

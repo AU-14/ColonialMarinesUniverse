@@ -1,0 +1,706 @@
+- type: cmu3DModel
+  id: CMU3DCashHotDrinksVendor
+  label: Cash hot-drinks vendor
+  status: draft
+  sourcePrototypes:
+  - AU14CashVendorHotDrinks
+  referencePrototype: AU14CashVendorHotDrinks
+  referenceRsi: /Textures/CMU14/ThreeD/VendorFamilyReferences.rsi
+  referenceState: coffee_cash
+  sourceDirections: 1
+  faceAwayFromWall: true
+  faceAwayFromWindows: true
+  description: Source red panel retains cup, steam, header marks, left status indicator, four right controls and
+    a hollow dispensing bay. Cash-specific off + normal-unshaded composition. Inferred depth/back construction and
+    physical dimensions remain draft. Static reference only; power, damage, emission and dispensing animation are
+    unsupported. Side walls sit .012 tiles inside the front rail ends, clearing the adjacent filing cabinet without
+    changing the source face or saved pivot. Horizontal sprite footprint uses the engine 32 pixels per tile; vertical
+    scale remains an inferred .038 tiles per source pixel. Source panel layout, depth, saved pivot and facing are
+    preserved. See SOURCES_RAIL_VENDOR_FOOTPRINTS.md.
+  parts:
+  - min: -0.34950658, -0.30000000, 0.00000000
+    max: -0.32812500, 0.30000000, 1.17800000
+    color: '#44494A'
+    label: left cabinet side
+  - min: 0.32812500, -0.30000000, 0.00000000
+    max: 0.34950658, 0.30000000, 1.17800000
+    color: '#44494A'
+    label: right cabinet side
+  - min: -0.32812500, 0.26500000, 0.00000000
+    max: 0.32812500, 0.30000000, 1.17800000
+    color: '#7E8386'
+    label: rear cabinet
+  - min: -0.32812500, -0.30000000, 1.14000000
+    max: 0.32812500, 0.26500000, 1.17800000
+    color: '#7E8386'
+    label: cabinet roof
+  - min: -0.32812500, -0.30000000, 0.00000000
+    max: 0.32812500, 0.26500000, 0.07600000
+    color: '#7E8386'
+    label: bottom chassis
+  - min: -0.35937500, -0.32200000, 0.00000000
+    max: -0.29687500, -0.30000000, 1.14000000
+    color: '#FFFFFF'
+    label: left silver face rail
+    surface: CMU3DVendorFamilySurface01
+    surfaceAxis: XZ
+  - min: 0.29687500, -0.32200000, 0.00000000
+    max: 0.35937500, -0.30000000, 1.14000000
+    color: '#FFFFFF'
+    label: right silver face rail
+    surface: CMU3DVendorFamilySurface02
+    surfaceAxis: XZ
+  - min: -0.29687500, -0.32200000, 0.87400000
+    max: 0.29687500, -0.25000000, 1.14000000
+    color: '#FFFFFF'
+    label: silver header
+    surface: CMU3DVendorFamilySurface03
+    surfaceAxis: XZ
+  - min: -0.29687500, -0.32400000, 0.00000000
+    max: 0.29687500, -0.25000000, 0.11400000
+    color: '#FFFFFF'
+    label: bottom plinth
+    surface: CMU3DVendorFamilySurface04
+    surfaceAxis: XZ
+  - min: -0.29687500, -0.28600000, 0.34200000
+    max: 0.29687500, -0.25000000, 0.87400000
+    color: '#2B2B2B'
+    label: outer dark door reveal upper
+  - min: -0.29687500, -0.28600000, 0.15200000
+    max: -0.14062500, -0.25000000, 0.34200000
+    color: '#2B2B2B'
+    label: outer dark door reveal left
+  - min: 0.07812500, -0.28600000, 0.15200000
+    max: 0.29687500, -0.25000000, 0.34200000
+    color: '#2B2B2B'
+    label: outer dark door reveal right
+  - min: -0.29687500, -0.28600000, 0.11400000
+    max: 0.29687500, -0.25000000, 0.15200000
+    color: '#2B2B2B'
+    label: outer dark door reveal lower
+  - min: -0.26562500, -0.32600000, 0.11400000
+    max: -0.20312500, -0.28000000, 0.87400000
+    color: '#FFFFFF'
+    label: left inset frame
+    surface: CMU3DVendorFamilySurface05
+    surfaceAxis: XZ
+  - min: 0.17187500, -0.32600000, 0.11400000
+    max: 0.23437500, -0.28000000, 0.87400000
+    color: '#FFFFFF'
+    label: right inset frame
+    surface: CMU3DVendorFamilySurface06
+    surfaceAxis: XZ
+  - min: -0.20312500, -0.32600000, 0.83600000
+    max: 0.17187500, -0.28000000, 0.87400000
+    color: '#FFFFFF'
+    label: top inset frame
+    surface: CMU3DVendorFamilySurface07
+    surfaceAxis: XZ
+  - min: -0.20312500, -0.32900000, 0.34200000
+    max: 0.17187500, -0.28000000, 0.83600000
+    color: '#FFFFFF'
+    label: red cup artwork and steam
+    surface: CMU3DVendorFamilySurface08
+    surfaceAxis: XZ
+  - min: -0.20312500, -0.32900000, 0.15200000
+    max: -0.14062500, -0.28000000, 0.34200000
+    color: '#FFFFFF'
+    label: left pickup red panel
+    surface: CMU3DVendorFamilySurface09
+    surfaceAxis: XZ
+  - min: 0.07812500, -0.32900000, 0.15200000
+    max: 0.17187500, -0.28000000, 0.34200000
+    color: '#FFFFFF'
+    label: right pickup red panel
+    surface: CMU3DVendorFamilySurface10
+    surfaceAxis: XZ
+  - min: -0.14062500, -0.19000000, 0.15200000
+    max: 0.07812500, -0.16000000, 0.34200000
+    color: '#44494A'
+    label: recessed pickup back
+  - min: -0.14062500, -0.33100000, 0.15200000
+    max: -0.10937500, -0.19000000, 0.34200000
+    color: '#FFFFFF'
+    label: pickup left jamb
+    surface: CMU3DVendorFamilySurface11
+    surfaceAxis: XZ
+  - min: 0.04687500, -0.33100000, 0.15200000
+    max: 0.07812500, -0.19000000, 0.34200000
+    color: '#FFFFFF'
+    label: pickup right jamb
+    surface: CMU3DVendorFamilySurface12
+    surfaceAxis: XZ
+  - min: -0.10937500, -0.33100000, 0.30400000
+    max: 0.04687500, -0.19000000, 0.34200000
+    color: '#FFFFFF'
+    label: pickup top rim
+    surface: CMU3DVendorFamilySurface13
+    surfaceAxis: XZ
+  - min: -0.10937500, -0.34700000, 0.15200000
+    max: 0.04687500, -0.16000000, 0.19000000
+    color: '#FFFFFF'
+    label: pickup bottom tray
+    surface: CMU3DVendorFamilySurface14
+    surfaceAxis: XZ
+  - min: -0.20312500, -0.32600000, 0.11400000
+    max: 0.17187500, -0.28000000, 0.15200000
+    color: '#FFFFFF'
+    label: bottom inset frame
+    surface: CMU3DVendorFamilySurface15
+    surfaceAxis: XZ
+  - min: 0.26562500, -0.29500000, 0.11400000
+    max: 0.32812500, -0.27000000, 0.87400000
+    color: '#4E4E4E'
+    label: right button strip
+  - min: 0.26562500, -0.33300000, 0.64600000
+    max: 0.32812500, -0.29500000, 0.72200000
+    color: '#FFFFFF'
+    label: right selection button 1
+    surface: CMU3DVendorFamilySurface21
+    surfaceAxis: XZ
+  - min: 0.26562500, -0.33300000, 0.49400000
+    max: 0.32812500, -0.29500000, 0.57000000
+    color: '#FFFFFF'
+    label: right selection button 2
+    surface: CMU3DVendorFamilySurface22
+    surfaceAxis: XZ
+  - min: 0.26562500, -0.33300000, 0.34200000
+    max: 0.32812500, -0.29500000, 0.41800000
+    color: '#FFFFFF'
+    label: right selection button 3
+    surface: CMU3DVendorFamilySurface23
+    surfaceAxis: XZ
+  - min: 0.26562500, -0.33300000, 0.19000000
+    max: 0.32812500, -0.29500000, 0.26600000
+    color: '#FFFFFF'
+    label: right selection button 4
+    surface: CMU3DVendorFamilySurface24
+    surfaceAxis: XZ
+  - min: -0.32812500, -0.33300000, 0.64600000
+    max: -0.26562500, -0.32100000, 0.72200000
+    color: '#FFFFFF'
+    label: left status indicator
+    surface: CMU3DVendorFamilySurface25
+    surfaceAxis: XZ
+  - min: -0.26562500, 0.30000000, 0.11400000
+    max: 0.26562500, 0.30600000, 0.91200000
+    color: '#7E8386'
+    label: inferred rear service hatch
+  - min: -0.20312500, 0.30600000, 0.33060000
+    max: 0.20312500, 0.30800000, 0.34200000
+    color: '#7E8386'
+    label: rear cooling slot 1
+  - min: -0.20312500, 0.30600000, 0.29260000
+    max: 0.20312500, 0.30800000, 0.30400000
+    color: '#7E8386'
+    label: rear cooling slot 2
+  - min: -0.20312500, 0.30600000, 0.25460000
+    max: 0.20312500, 0.30800000, 0.26600000
+    color: '#7E8386'
+    label: rear cooling slot 3
+  - min: -0.20312500, 0.30600000, 0.21660000
+    max: 0.20312500, 0.30800000, 0.22800000
+    color: '#7E8386'
+    label: rear cooling slot 4
+  - min: -0.35937500, -0.32200000, 1.14000000
+    max: 0.35937500, -0.25000000, 1.17800000
+    color: '#FFFFFF'
+    label: source top border
+    surface: CMU3DVendorFamilySurface76
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DKoorCigaretteVendor
+  label: Koor cigarette vendor
+  status: draft
+  sourcePrototypes:
+  - AU14VendorKoorCigs
+  referencePrototype: AU14VendorKoorCigs
+  referenceRsi: /Textures/CMU14/ThreeD/VendorFamilyReferences.rsi
+  referenceState: koor_off
+  sourceDirections: 1
+  faceAwayFromWall: true
+  faceAwayFromWindows: true
+  description: Distinct diagonal cream/teal brand art, colored selectors at left, coin slot at right, and a hollow
+    pickup. No substitution of the brown cigarette-machine artwork. Inferred depth/back construction and physical
+    dimensions remain draft. Static reference only; power, damage, emission and dispensing animation are unsupported.
+    Horizontal sprite footprint uses the engine 32 pixels per tile; vertical scale remains an inferred .038 tiles
+    per source pixel. Source panel layout, depth, saved pivot and facing are preserved. See SOURCES_RAIL_VENDOR_FOOTPRINTS.md.
+  parts:
+  - min: -0.35937500, -0.30000000, 0.00000000
+    max: -0.32812500, 0.30000000, 1.14000000
+    color: '#44494A'
+    label: left cabinet side
+  - min: 0.32812500, -0.30000000, 0.00000000
+    max: 0.35937500, 0.30000000, 1.14000000
+    color: '#44494A'
+    label: right cabinet side
+  - min: -0.32812500, 0.26500000, 0.00000000
+    max: 0.32812500, 0.30000000, 1.14000000
+    color: '#7E8386'
+    label: rear cabinet
+  - min: -0.32812500, -0.30000000, 1.10200000
+    max: 0.32812500, 0.26500000, 1.14000000
+    color: '#7E8386'
+    label: cabinet roof
+  - min: -0.32812500, -0.30000000, 0.00000000
+    max: 0.32812500, 0.26500000, 0.07600000
+    color: '#3A322C'
+    label: bottom chassis
+  - min: -0.35937500, -0.32200000, 0.00000000
+    max: -0.29687500, -0.30000000, 1.14000000
+    color: '#FFFFFF'
+    label: left silver face rail
+    surface: CMU3DVendorFamilySurface26
+    surfaceAxis: XZ
+  - min: 0.29687500, -0.32200000, 0.00000000
+    max: 0.35937500, -0.30000000, 1.14000000
+    color: '#FFFFFF'
+    label: right silver face rail
+    surface: CMU3DVendorFamilySurface27
+    surfaceAxis: XZ
+  - min: -0.29687500, -0.32200000, 0.87400000
+    max: 0.29687500, -0.25000000, 1.14000000
+    color: '#FFFFFF'
+    label: silver header
+    surface: CMU3DVendorFamilySurface28
+    surfaceAxis: XZ
+  - min: -0.29687500, -0.32400000, 0.00000000
+    max: 0.29687500, -0.25000000, 0.11400000
+    color: '#FFFFFF'
+    label: bottom plinth
+    surface: CMU3DVendorFamilySurface29
+    surfaceAxis: XZ
+  - min: -0.29687500, -0.32800000, 0.30400000
+    max: 0.29687500, -0.25000000, 0.87400000
+    color: '#FFFFFF'
+    label: teal branded door
+    surface: CMU3DVendorFamilySurface56
+    surfaceAxis: XZ
+  - min: -0.29687500, -0.31200000, 0.34200000
+    max: -0.14062500, -0.28000000, 0.68400000
+    color: '#A44144'
+    label: left selection recess
+  - min: -0.29687500, -0.34000000, 0.60800000
+    max: -0.23437500, -0.31200000, 0.68400000
+    color: '#FFFFFF'
+    label: colored selector 1
+    surface: CMU3DVendorFamilySurface57
+    surfaceAxis: XZ
+  - min: -0.29687500, -0.34000000, 0.53200000
+    max: -0.23437500, -0.31200000, 0.60800000
+    color: '#FFFFFF'
+    label: colored selector 2
+    surface: CMU3DVendorFamilySurface58
+    surfaceAxis: XZ
+  - min: -0.29687500, -0.34000000, 0.45600000
+    max: -0.23437500, -0.31200000, 0.53200000
+    color: '#FFFFFF'
+    label: colored selector 3
+    surface: CMU3DVendorFamilySurface59
+    surfaceAxis: XZ
+  - min: -0.29687500, -0.34000000, 0.38000000
+    max: -0.23437500, -0.31200000, 0.45600000
+    color: '#FFFFFF'
+    label: colored selector 4
+    surface: CMU3DVendorFamilySurface60
+    surfaceAxis: XZ
+  - min: -0.14062500, -0.33100000, 0.30400000
+    max: 0.29687500, -0.32800000, 0.87400000
+    color: '#FFFFFF'
+    label: stripe artwork
+    surface: CMU3DVendorFamilySurface61
+    surfaceAxis: XZ
+  - min: 0.14062500, -0.33800000, 0.45600000
+    max: 0.26562500, -0.33100000, 0.64600000
+    color: '#FFFFFF'
+    label: coin-slot housing
+    surface: CMU3DVendorFamilySurface62
+    surfaceAxis: XZ
+  - min: -0.29687500, -0.32700000, 0.26600000
+    max: 0.29687500, -0.25000000, 0.30400000
+    color: '#FFFFFF'
+    label: lower pickup surround upper
+    surface: CMU3DVendorFamilySurface77
+    surfaceAxis: XZ
+  - min: -0.29687500, -0.32700000, 0.15200000
+    max: -0.10937500, -0.25000000, 0.26600000
+    color: '#FFFFFF'
+    label: lower pickup surround left
+    surface: CMU3DVendorFamilySurface78
+    surfaceAxis: XZ
+  - min: 0.10937500, -0.32700000, 0.15200000
+    max: 0.29687500, -0.25000000, 0.26600000
+    color: '#FFFFFF'
+    label: lower pickup surround right
+    surface: CMU3DVendorFamilySurface79
+    surfaceAxis: XZ
+  - min: -0.10937500, -0.19000000, 0.15200000
+    max: 0.10937500, -0.16000000, 0.26600000
+    color: '#383838'
+    label: recessed pickup back
+  - min: -0.10937500, -0.33100000, 0.15200000
+    max: -0.07812500, -0.19000000, 0.26600000
+    color: '#FFFFFF'
+    label: pickup left jamb
+    surface: CMU3DVendorFamilySurface64
+    surfaceAxis: XZ
+  - min: 0.07812500, -0.33100000, 0.15200000
+    max: 0.10937500, -0.19000000, 0.26600000
+    color: '#FFFFFF'
+    label: pickup right jamb
+    surface: CMU3DVendorFamilySurface64
+    surfaceAxis: XZ
+  - min: -0.07812500, -0.33100000, 0.22800000
+    max: 0.07812500, -0.19000000, 0.26600000
+    color: '#FFFFFF'
+    label: pickup top rim
+    surface: CMU3DVendorFamilySurface65
+    surfaceAxis: XZ
+  - min: -0.07812500, -0.34700000, 0.15200000
+    max: 0.07812500, -0.16000000, 0.19000000
+    color: '#FFFFFF'
+    label: pickup bottom tray
+    surface: CMU3DVendorFamilySurface66
+    surfaceAxis: XZ
+  - min: -0.29687500, -0.32900000, 0.11400000
+    max: 0.29687500, -0.25000000, 0.15200000
+    color: '#FFFFFF'
+    label: bottom dark strip
+    surface: CMU3DVendorFamilySurface67
+    surfaceAxis: XZ
+  - min: -0.26562500, 0.30000000, 0.11400000
+    max: 0.26562500, 0.30600000, 0.91200000
+    color: '#7E8386'
+    label: inferred rear service hatch
+  - min: -0.20312500, 0.30600000, 0.33060000
+    max: 0.20312500, 0.30800000, 0.34200000
+    color: '#3A322C'
+    label: rear cooling slot 1
+  - min: -0.20312500, 0.30600000, 0.29260000
+    max: 0.20312500, 0.30800000, 0.30400000
+    color: '#3A322C'
+    label: rear cooling slot 2
+  - min: -0.20312500, 0.30600000, 0.25460000
+    max: 0.20312500, 0.30800000, 0.26600000
+    color: '#3A322C'
+    label: rear cooling slot 3
+  - min: -0.20312500, 0.30600000, 0.21660000
+    max: 0.20312500, 0.30800000, 0.22800000
+    color: '#3A322C'
+    label: rear cooling slot 4
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface01
+  atlasIndex: 569
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface01.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface02
+  atlasIndex: 570
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface02.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface03
+  atlasIndex: 571
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface03.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface04
+  atlasIndex: 572
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface04.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface05
+  atlasIndex: 573
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface05.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface06
+  atlasIndex: 574
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface06.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface07
+  atlasIndex: 575
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface07.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface08
+  atlasIndex: 576
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface08.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface09
+  atlasIndex: 577
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface09.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface10
+  atlasIndex: 578
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface10.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface11
+  atlasIndex: 579
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface11.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface12
+  atlasIndex: 580
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface12.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface13
+  atlasIndex: 581
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface13.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface14
+  atlasIndex: 582
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface14.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface15
+  atlasIndex: 583
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface15.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface16
+  atlasIndex: 584
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface16.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface17
+  atlasIndex: 585
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface17.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface18
+  atlasIndex: 586
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface18.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface19
+  atlasIndex: 587
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface19.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface20
+  atlasIndex: 588
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface20.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface21
+  atlasIndex: 589
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface21.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface22
+  atlasIndex: 590
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface22.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface23
+  atlasIndex: 591
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface23.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface24
+  atlasIndex: 592
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface24.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface25
+  atlasIndex: 593
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface25.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface26
+  atlasIndex: 594
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface26.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface27
+  atlasIndex: 595
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface27.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface28
+  atlasIndex: 596
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface28.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface29
+  atlasIndex: 597
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface29.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface30
+  atlasIndex: 598
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface30.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface31
+  atlasIndex: 599
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface31.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface32
+  atlasIndex: 600
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface32.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface33
+  atlasIndex: 601
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface33.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface34
+  atlasIndex: 602
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface34.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface35
+  atlasIndex: 603
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface35.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface36
+  atlasIndex: 604
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface36.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface37
+  atlasIndex: 605
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface37.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface38
+  atlasIndex: 606
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface38.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface39
+  atlasIndex: 607
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface39.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface40
+  atlasIndex: 608
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface40.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface41
+  atlasIndex: 609
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface41.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface42
+  atlasIndex: 610
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface42.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface43
+  atlasIndex: 611
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface43.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface44
+  atlasIndex: 612
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface44.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface45
+  atlasIndex: 613
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface45.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface46
+  atlasIndex: 614
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface46.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface47
+  atlasIndex: 615
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface47.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface48
+  atlasIndex: 616
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface48.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface49
+  atlasIndex: 617
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface49.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface50
+  atlasIndex: 618
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface50.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface51
+  atlasIndex: 619
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface51.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface52
+  atlasIndex: 620
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface52.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface53
+  atlasIndex: 621
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface53.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface54
+  atlasIndex: 622
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface54.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface55
+  atlasIndex: 623
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface55.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface56
+  atlasIndex: 624
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface56.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface57
+  atlasIndex: 625
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface57.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface58
+  atlasIndex: 626
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface58.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface59
+  atlasIndex: 627
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface59.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface60
+  atlasIndex: 628
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface60.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface61
+  atlasIndex: 629
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface61.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface62
+  atlasIndex: 630
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface62.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface63
+  atlasIndex: 631
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface63.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface64
+  atlasIndex: 632
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface64.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface65
+  atlasIndex: 633
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface65.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface66
+  atlasIndex: 634
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface66.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface67
+  atlasIndex: 635
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface67.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface68
+  atlasIndex: 636
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface68.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface69
+  atlasIndex: 637
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface69.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface70
+  atlasIndex: 638
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface70.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface71
+  atlasIndex: 639
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface71.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface72
+  atlasIndex: 640
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface72.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface73
+  atlasIndex: 641
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface73.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface74
+  atlasIndex: 642
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface74.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface75
+  atlasIndex: 643
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface75.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface76
+  atlasIndex: 644
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface76.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface77
+  atlasIndex: 645
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface77.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface78
+  atlasIndex: 646
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface78.png
+- type: cmu3DSurface
+  id: CMU3DVendorFamilySurface79
+  atlasIndex: 647
+  texture: /Textures/CMU14/ThreeD/VendorFamily/CMU3DVendorFamilySurface79.png
