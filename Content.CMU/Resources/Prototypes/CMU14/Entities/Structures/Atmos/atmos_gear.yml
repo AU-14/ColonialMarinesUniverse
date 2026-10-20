@@ -376,6 +376,8 @@
 - type: entity
   parent: RMCSuitEVABase
   id: CMUSuitEVA
+  name: '"Salamander" PS-2 pressure suit'
+  description: Salamander's heavy pressure suit for hard vacuum work. Toggle the helmet on before you need it, which only holds with the dome sealed.
   components:
   - type: ContainerContainer
     containers:
@@ -383,6 +385,27 @@
         ent: null
         showEnts: False
         occludes: True
+  - type: ToggleableClothing
+    clothingPrototype: CMUHelmetEVA
+    action: ActionToggleSuitPiece
+    verbText: toggle-clothing-verb-helmet
+  - type: PressureProtection
+    highPressureMultiplier: 0.6
+    lowPressureMultiplier: 1000
+  - type: TemperatureProtection
+    coefficient: 0.01
+
+- type: entity
+  parent: RMCHelmetEVABase
+  id: CMUHelmetEVA
+  name: '"Salamander" PH-2 pressure helmet'
+  description: The sealed dome that completes the PS-2 rating. The seal is honest, the lamp is bright, and the window is rated for debris coming the other way.
+  components:
+  - type: PressureProtection
+    highPressureMultiplier: 0.1
+    lowPressureMultiplier: 1000
+  - type: TemperatureProtection
+    coefficient: 0.01
 
 # ├──[ RADIATION PROTECTION ]────────────────────────────────────────┤
 - type: entity

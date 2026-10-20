@@ -69,7 +69,8 @@ namespace Content.Server.Atmos.EntitySystems
         /// Computes the pressure resistance for the entity coming from the equipment and any innate resistance.
         /// The ProtectionSlots field of the Barotrauma component specifies which parts must be protected for the protection to have any effet.
         /// </summary>
-        private void UpdateCachedResistances(EntityUid uid, BarotraumaComponent barotrauma)
+        // CMU14: made public so the life support grant can recache when gear is already worn.
+        public void UpdateCachedResistances(EntityUid uid, BarotraumaComponent barotrauma)
         {
 
             if (barotrauma.ProtectionSlots.Count != 0)

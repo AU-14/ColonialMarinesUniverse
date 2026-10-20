@@ -254,4 +254,4 @@ public sealed partial class CMUWarshipAlertLightsSystem : EntitySystem
             && _zLevels.TryGetMapAtDepth(network.Value, 0, out var primary)
             && HasComp<RMCAlertLevelComponent>(primary);
     }
-}
+
