@@ -1,0 +1,14 @@
+author: Ignies
+category: CMU
+changes:
+- message: 'Added custom crayon symbols: draw your own in the crayon window and stamp
+    them with any crayon.'
+  type: Add
+- message: Added lighter and darker tones of every box crayon for gradients in custom
+    symbols.
+  type: Add
+- message: Added CMUCrayonDrawImageEvent so other systems can draw a player's custom
+    symbol on their surfaces.
+  type: Code
+time: '2026-10-15T13:10:06.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2179

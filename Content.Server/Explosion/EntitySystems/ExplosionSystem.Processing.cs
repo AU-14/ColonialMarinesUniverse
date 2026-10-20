@@ -622,6 +622,11 @@ public sealed partial class ExplosionSystem
         TileHistoryComponent? history,
         ref (TileHistoryChunk? Chunk, Vector2i Indices)? chunk)
     {
+        // cmu edit start: a crashed ship coming apart loses any floor tile straight to space
+        if (CMUTryCollapseHullTile(tileRef, effectiveIntensity, maxTileBreak, damagedTiles, type))
+            return;
+        // cmu edit end
+
         if (_tileDefinitionManager[tileRef.Tile.TypeId] is not ContentTileDefinition tileDef || tileDef.Indestructible)
             return;
 

@@ -784,7 +784,9 @@
   - type: UserInterface
     interfaces:
       enum.RMCTelephoneUiKey.Key:
-        type: RMCTelephoneBui
+        # cmu edit start: in-world phone screen
+        type: CMUTelephoneBui
+        # cmu edit end
       enum.StorageUiKey.Key:
         type: StorageBoundUserInterface
   - type: ActivatableUIBlacklist

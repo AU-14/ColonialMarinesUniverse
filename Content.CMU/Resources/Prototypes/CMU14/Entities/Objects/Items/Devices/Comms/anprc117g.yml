@@ -104,7 +104,7 @@
       enum.AU14CallsignConsoleUI.Key:
         type: AU14CallsignConsoleBui
       enum.RMCTelephoneUiKey.Key:
-        type: RMCTelephoneBui
+        type: CMUTelephoneBui
       enum.StorageUiKey.Key:
         type: StorageBoundUserInterface
       enum.CMUCasCallUi.Key:
