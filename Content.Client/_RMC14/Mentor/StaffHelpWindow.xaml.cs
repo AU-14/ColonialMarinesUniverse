@@ -64,7 +64,7 @@ public sealed partial class StaffHelpWindow : DefaultWindow
         // CMU14: bug report card - for problems with the game itself, not players or rules.
         _bugCard = new CmuChoiceCard(
             "Bug Report",
-            "Report a bug to the developers. For problems with the game itself, not players or rules. The server attaches your position, gear and round context automatically.",
+            "Report a bug to the developers. For problems with the game itself, not players, rules, or being stuck right now.",
             BugReportPalette,
             buttonOnLeft: true);
 

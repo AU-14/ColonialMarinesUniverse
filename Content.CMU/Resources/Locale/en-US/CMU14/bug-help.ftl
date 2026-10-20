@@ -7,6 +7,8 @@ cmu-cmd-bughelp-rate-limited = You are filing bug reports too quickly. Try again
 cmu-cmd-bughelp-no-entity = You must be in the game to file a bug report.
 
 cmu-bughelp-window-title = Bug Report
+cmu-bughelp-triage = Stuck right now, or trouble with another player? Admin Help reaches staff during the round. Bug reports go to the developers and may take days.
+cmu-bughelp-triage-open = Open Admin Help
 cmu-bughelp-window-empty = Describe what happened before sending.
 cmu-bughelp-what-happened = What happened?
 cmu-bughelp-expected = What did you expect to happen? (optional)
@@ -16,3 +18,4 @@ cmu-bughelp-item-placeholder = flamer, M34, mortar shell...
 cmu-bughelp-examine = Examine text (optional)
 cmu-bughelp-submit = Send Report
 cmu-bughelp-autocontext = The server attaches your position, gear and round context automatically.
+cmu-bughelp-footer = Link your Discord from the lobby to follow your report's status.

@@ -1,4 +1,5 @@
 using Content.Client.Stylesheets;
+using Content.Client.UserInterface.Systems.Bwoink;
 using Content.Shared.CMU14.BugHelp;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
@@ -15,6 +16,7 @@ namespace Content.Client.CMU14.BugHelp;
 public sealed class BugHelpUIController : UIController
 {
     [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly AHelpUIController _aHelp = default!;
 
     private BugHelpWindow? _window;
 
@@ -38,6 +40,11 @@ public sealed class BugHelpUIController : UIController
         _window.Stylesheet = IoCManager.Resolve<IStylesheetManager>().SheetNano;
         CrtLobbyTheme.ApplyWindow(_window, useCrtTypography: false);
         _window.OnClose += () => _window = null;
+        _window.TriageOpenButton.OnPressed += _ =>
+        {
+            _aHelp.Open();
+            window.Close();
+        };
         _window.OnSubmit += window =>
         {
             var submission = window.Collect();
