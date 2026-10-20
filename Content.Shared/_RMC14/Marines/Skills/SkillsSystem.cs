@@ -99,6 +99,10 @@ public sealed partial class SkillsSystem : EntitySystem
 
     private void OnSkillsStartup(Entity<SkillsComponent> ent, ref ComponentStartup args)
     {
+        // CMU14: Allow server systems to react to inline skills as well as preset changes.
+        var initialized = new Content.Shared.CMU14.Skills.CMUSkillsInitializedEvent();
+        RaiseLocalEvent(ent.Owner, ref initialized);
+
         if (ent.Comp.Preset is not { } presetPrototype)
             return;
 
