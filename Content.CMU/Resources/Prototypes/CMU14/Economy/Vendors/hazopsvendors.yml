@@ -229,6 +229,8 @@
         amount: 60
       - id: RMCBoxMRE
         amount: 10
+      - id: CMCanteen
+        amount: 60
     - name: Medical Supplies
       entries:
       - id: AU14PouchIFAKFill

@@ -10,7 +10,8 @@ namespace Content.Server.CMU14.Doors;
 ///     Bolts a shut <see cref="CMUAtmosBoltComponent"/> airlock while the air beside it is unsafe, by the same test a
 ///     self-sealing firelock uses, and lifts the bolts once it's safe. If someone lifts them by hand in the meantime,
 ///     the door leaves them up until the air recovers. It only does this once a hijacked dropship has crashed into the
-///     ship (<see cref="CMUPressureRequiredMapComponent"/>), so doors next to space don't bolt themselves before then.
+///     ship (<see cref="CMUShipCrashedMapComponent"/>), so doors next to space don't bolt themselves before then.
+///     Examining a door bolted this way shows the same pressure warning a firelock does.
 /// </summary>
 public sealed partial class CMUAtmosBoltSystem : EntitySystem
 {
@@ -33,13 +34,16 @@ public sealed partial class CMUAtmosBoltSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUAtmosBoltComponent, DoorComponent, DoorBoltComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var atmosBolt, out var door, out var bolts, out var xform))
         {
-            if (xform.MapUid is not { } map || !HasComp<CMUPressureRequiredMapComponent>(map))
+            if (xform.MapUid is not { } map || !HasComp<CMUShipCrashedMapComponent>(map))
+            {
+                SetBoltedByAtmos((uid, atmosBolt), false);
                 continue;
+            }
 
             if (atmosBolt.BoltedByAtmos && !bolts.BoltsDown)
             {
                 // Someone lifted the bolts by hand.
-                atmosBolt.BoltedByAtmos = false;
+                SetBoltedByAtmos((uid, atmosBolt), false);
                 atmosBolt.Overridden = true;
             }
 
@@ -53,7 +57,7 @@ public sealed partial class CMUAtmosBoltSystem : EntitySystem
                 atmosBolt.Overridden = false;
                 if (atmosBolt.BoltedByAtmos)
                 {
-                    atmosBolt.BoltedByAtmos = false;
+                    SetBoltedByAtmos((uid, atmosBolt), false);
                     _door.SetBoltsDown((uid, bolts), false);
                 }
 
@@ -64,7 +68,16 @@ public sealed partial class CMUAtmosBoltSystem : EntitySystem
                 continue;
 
             if (_door.TrySetBoltDown((uid, bolts), true))
-                atmosBolt.BoltedByAtmos = true;
+                SetBoltedByAtmos((uid, atmosBolt), true);
         }
+    }
+
+    private void SetBoltedByAtmos(Entity<CMUAtmosBoltComponent> ent, bool bolted)
+    {
+        if (ent.Comp.BoltedByAtmos == bolted)
+            return;
+
+        ent.Comp.BoltedByAtmos = bolted;
+        Dirty(ent);
     }
 }

@@ -127,20 +127,18 @@
   description: A heavy and bulky military-grade space suit.
   # cmu edit end
   components:
-  - type: ContainerContainer
-    containers:
-      toggleable-clothing: !type:ContainerSlot
-        ent: null
-        showEnts: False
-        occludes: True
+  # cmu edit start: no built-in helmet; the MK.35 pressure helmet is worn separately
+  - type: RemoveComponents
+    components:
+    - type: ToggleableClothing
+      clothingPrototype: RMCHelmetEVAUNMC
+  # cmu edit end
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/EVA/unmc.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/EVA/unmc.rsi
     equipDelay: 2
     unequipDelay: 2
-  - type: ToggleableClothing
-    clothingPrototype: RMCHelmetEVAUNMC
   # cmu edit: removed the marine uniform requirement
   - type: ActivatableUI
     key: enum.SharedGasTankUiKey.Key
@@ -186,7 +184,7 @@
 - type: entity
   parent: RMCHelmetEVABase
   id: RMCHelmetEVAUNMC
-  categories: [ HideSpawnMenu ]
+  # cmu edit: worn on its own now, so it can be spawned (was HideSpawnMenu)
   # cmu edit start: generic, wearable over any uniform
   name: MK.35 pressure helmet
   description: A heavy space helmet, designed to be coupled with the MK.35 pressure suit.

@@ -228,6 +228,8 @@
         amount: 60
       - id: AU14BoxMREUPP
         amount: 10
+      - id: CMCanteen
+        amount: 60
       - id: CMUCanOpenerCompact
         amount: 30
       - id: CMUCanOpener

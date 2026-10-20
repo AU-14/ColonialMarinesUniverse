@@ -43,6 +43,12 @@ public sealed partial class CMUHijackCrashHullBreachComponent : Component
 }
 
 /// <summary>
+///     Put on every deck of a ship as soon as a hijacked dropship crashes into it.
+/// </summary>
+[RegisterComponent]
+public sealed partial class CMUShipCrashedMapComponent : Component;
+
+/// <summary>
 ///     Put on every deck of a crashed ship once the hijack's pipe explosions are allowed to break its hull windows.
 /// </summary>
 [RegisterComponent]
@@ -67,7 +73,18 @@ public sealed partial class CMUHullCollapsingMapComponent : Component
 ///     An indestructible hull piece that becomes breakable once a hijacked dropship crashes into its ship.
 /// </summary>
 [RegisterComponent]
-public sealed partial class CMUCrashBreakableHullComponent : Component;
+public sealed partial class CMUCrashBreakableHullComponent : Component
+{
+    /// <summary>
+    ///     Components it gets once the ship is hit, if not the ship's <see cref="CMUHijackCrashHullBreachComponent.HullTemplate"/>.
+    /// </summary>
+    [DataField]
+    public EntProtoId? Template;
+
+    /// <summary>Whether the template's components replace ones it already has, like an acid immunity.</summary>
+    [DataField]
+    public bool ReplaceExisting;
+}
 
 /// <summary>
 ///     Put on a map entity to make low and high pressure hurt humans while they're on it, or anywhere else in its
@@ -103,7 +120,16 @@ public record struct CMUZeroGMovementEvent
     /// <summary>Floating over open space: nothing to push off unless a solid object is right there, and no drag.</summary>
     public bool Adrift;
 
-    /// <summary>Moves at its normal walk and sprint speed instead of the generic weightless speed.</summary>
-    public bool KeepSpeed;
+    /// <summary>Multiplies the weightless walk and sprint speed, for things like crawling.</summary>
+    public float SpeedMultiplier;
+
+    /// <summary>Multiplies how quickly they get up to speed. Drag and drifting aren't affected.</summary>
+    public float AccelerationMultiplier;
+
+    public CMUZeroGMovementEvent()
+    {
+        SpeedMultiplier = 1f;
+        AccelerationMultiplier = 1f;
+    }
 }
 

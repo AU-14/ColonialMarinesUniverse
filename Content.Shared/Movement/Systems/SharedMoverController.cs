@@ -314,15 +314,13 @@ public abstract partial class SharedMoverController : VirtualController
             var walkSpeed = moveSpeedComponent?.WeightlessWalkSpeed ?? MovementSpeedModifierComponent.DefaultBaseWalkSpeed;
             var sprintSpeed = moveSpeedComponent?.WeightlessSprintSpeed ?? MovementSpeedModifierComponent.DefaultBaseSprintSpeed;
 
-            // cmu edit start: zero-g ships. Adrift over open space there's nothing to push off and no drag, and some
-            // mobs (xenos) keep their normal speed when weightless.
+            // cmu edit start: zero-g ships. Adrift over open space there's nothing to push off and no drag.
             var cmuZeroG = new Content.Shared.CMU14.Ship.CMUZeroGMovementEvent();
             RaiseLocalEvent(uid, ref cmuZeroG);
-            if (cmuZeroG.KeepSpeed)
-            {
-                walkSpeed = moveSpeedComponent?.CurrentWalkSpeed ?? walkSpeed;
-                sprintSpeed = moveSpeedComponent?.CurrentSprintSpeed ?? sprintSpeed;
-            }
+
+            // Crawling and the like still slow you down while weightless.
+            walkSpeed *= cmuZeroG.SpeedMultiplier;
+            sprintSpeed *= cmuZeroG.SpeedMultiplier;
             // cmu edit end
 
             wishDir = AssertValidWish(mover, walkSpeed, sprintSpeed);
@@ -360,16 +358,10 @@ public abstract partial class SharedMoverController : VirtualController
             }
 
             accel = moveSpeedComponent?.WeightlessAcceleration ?? MovementSpeedModifierComponent.DefaultWeightlessAcceleration;
-
-            // cmu edit start: mobs that keep their speed in zero-g also keep their footing while they have a surface
-            if (cmuZeroG.KeepSpeed && touching)
-            {
-                accel = moveSpeedComponent?.Acceleration ?? MovementSpeedModifierComponent.DefaultAcceleration;
-                friction = wishDir != Vector2.Zero
-                    ? moveSpeedComponent?.Friction ?? MovementSpeedModifierComponent.DefaultFriction * _frictionModifier
-                    : moveSpeedComponent?.FrictionNoInput ?? MovementSpeedModifierComponent.DefaultFrictionNoInput * _frictionModifier;
-            }
+            // cmu edit start
+            accel *= cmuZeroG.AccelerationMultiplier;
             // cmu edit end
+
         }
         else
         {

@@ -62,6 +62,8 @@ public sealed partial class CMUFirelockSealServerSystem : EntitySystem
                         seal.Sealed = true;
                         Dirty(uid, seal);
                         _audio.PlayPvs(seal.AlarmSound, uid);
+                        var sealedEv = new CMUFirelockSealedEvent(uid);
+                        RaiseLocalEvent(ref sealedEv);
                     }
 
                     _firelock.EmergencyPressureStop(uid, firelock, door);
@@ -74,8 +76,15 @@ public sealed partial class CMUFirelockSealServerSystem : EntitySystem
 
                     seal.Sealed = hazardous;
                     Dirty(uid, seal);
-                    if (!hazardous)
+                    if (hazardous)
+                    {
+                        var sealedEv = new CMUFirelockSealedEvent(uid);
+                        RaiseLocalEvent(ref sealedEv);
+                    }
+                    else
+                    {
                         _door.StartOpening(uid, door);
+                    }
                     break;
             }
         }

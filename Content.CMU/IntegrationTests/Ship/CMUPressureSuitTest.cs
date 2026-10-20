@@ -21,9 +21,9 @@ public sealed class CMUPressureSuitTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
 
-    [TestCase("RMCSuitEVAUNMC")]
-    [TestCase("RMCSuitEVACivilian")]
-    public async Task HelmetSealsTheSuit(string suitId)
+    [TestCase("RMCSuitEVAUNMC", "RMCHelmetEVAUNMC")]
+    [TestCase("RMCSuitEVACivilian", null)]
+    public async Task HelmetSealsTheSuit(string suitId, string? helmetId)
     {
         var map = await Pair.CreateTestMap();
         EntityUid mob = default;
@@ -36,6 +36,15 @@ public sealed class CMUPressureSuitTest : GameTest
             SEntMan.AddComponents(mob, SProtoMan.Index<EntityPrototype>("CMUMapBarotraumaTemplate"), removeExisting: false);
             suit = SEntMan.SpawnEntity(suitId, map.GridCoords);
             Assert.That(inventory.TryEquip(mob, suit, "outerClothing", silent: true, force: true), Is.True, "suit");
+
+            if (helmetId != null)
+            {
+                // A helmet worn on its own, not built into the suit.
+                Assert.That(SEntMan.HasComponent<ToggleableClothingComponent>(suit), Is.False);
+                var helmet = SEntMan.SpawnEntity(helmetId, map.GridCoords);
+                Assert.That(inventory.TryEquip(mob, helmet, "head", silent: true, force: true), Is.True, "helmet");
+                return;
+            }
 
             var toggle = SEntMan.GetComponent<ToggleableClothingComponent>(suit);
             var ev = new ToggleClothingEvent { Performer = mob };

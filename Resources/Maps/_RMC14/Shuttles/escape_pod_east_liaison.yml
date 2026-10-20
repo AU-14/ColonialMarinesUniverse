@@ -61,6 +61,7 @@ entities:
       chunkCollection:
         version: 2
         nodes: []
+# cmu edit start: atmosphere rebuilt so the craft starts with breathable air
     - type: GridAtmosphere
       version: 2
       data:
@@ -70,12 +71,20 @@ entities:
           moles:
             Oxygen: 21.824879
             Nitrogen: 82.10312
+        - temperature: 2.725
+          volume: 2500
+          moles: {}
+          immutable: True
+        - temperature: 293.15
+          volume: 2500
+          moles: {}
         tiles:
-          0,0:
-            0: 275
           -1,0:
             0: 2184
+          0,0:
+            0: 273
         chunkSize: 4
+# cmu edit end
     - type: GasTileOverlay
     - type: RadiationGridResistance
 - proto: CMHyperSleepChamber

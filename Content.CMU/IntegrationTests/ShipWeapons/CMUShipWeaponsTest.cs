@@ -40,6 +40,17 @@ namespace Content.IntegrationTests.CMU14.ShipWeapons;
 [TestOf(typeof(CMUShipWeaponsSystem))]
 public sealed class CMUShipWeaponsTest : GameTest
 {
+    /// <summary>
+    ///     Most of these tests cover arming and firing without physical batteries; the ones that need batteries turn
+    ///     them on themselves.
+    /// </summary>
+    [SetUp]
+    public async Task UseGunFreeShipWeapons()
+    {
+        await Server.WaitPost(() =>
+            Server.ResolveDependency<IConfigurationManager>().SetCVar(CCVars.ShipWeaponsRequireGuns, false));
+    }
+
     private void Send(EntityUid terminal, EntityUid actor, BoundUserInterfaceMessage message, bool overwatch = false)
     {
         message.Actor = actor;
@@ -143,10 +154,7 @@ public sealed class CMUShipWeaponsTest : GameTest
                 var same = Terminal(new EntityCoordinates(grids[1], new Vector2(.5f)));
                 var different = Terminal(new EntityCoordinates(grids[2], new Vector2(.5f)));
                 if (requireGuns)
-                {
-                    SEntMan.SpawnEntity("CMUShipWeaponGunHeavy", new EntityCoordinates(grids[1], new Vector2(.5f)));
-                    SEntMan.SpawnEntity("CMUShipWeaponGunRapid", new EntityCoordinates(grids[2], new Vector2(.5f)));
-                }
+                    SEntMan.SpawnEntity("CMUShipWeaponGun", new EntityCoordinates(grids[2], new Vector2(.5f)));
                 var actor = SEntMan.SpawnEntity("CMMobHuman", new MapCoordinates(Vector2.Zero, lowerId));
                 Assert.That(system.TryGetShip(first, out var ship), Is.True);
                 Assert.That(system.TryGetShip(same, out var sameShip), Is.True);
@@ -159,7 +167,8 @@ public sealed class CMUShipWeaponsTest : GameTest
                 {
                     Send(first, actor, new CMUShipWeaponsArmBuiMsg("CMUPrecisionStrike", "CMUWalkingBarrage"));
                     Assert.That(SEntMan.HasComponent<CMUShipWeaponsComponent>(ship), Is.False,
-                        "the other network's rapid battery cannot unlock this ship's weapons");
+                        "the other network's battery cannot unlock this ship's weapons");
+                    SEntMan.SpawnEntity("CMUShipWeaponGun", new EntityCoordinates(grids[1], new Vector2(.5f)));
                 }
                 Send(first, actor, new CMUShipWeaponsArmBuiMsg("CMU120mmHEBarrage", "CMU380mmHEBarrage"));
                 Send(same, actor, new CMUShipWeaponsArmBuiMsg("CMUGasStrike", "CMUSmokeStrike"));
@@ -238,7 +247,7 @@ public sealed class CMUShipWeaponsTest : GameTest
             var actor = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             var terminal = Terminal(map.GridCoords);
             var component = SComp<CMUShipWeaponsTerminalComponent>(terminal);
-            Assert.That(component.MaxSelections, Is.EqualTo(3), "the YAML default preserves the existing loadout size");
+            Assert.That(component.MaxSelections, Is.EqualTo(2), "the YAML default is a two-mission loadout");
             component.MaxSelections = limit;
             var weapons = SProtoMan.EnumeratePrototypes<CMUShipWeaponPrototype>()
                 .Select(p => new ProtoId<CMUShipWeaponPrototype>(p.ID)).Take(limit + 1).ToArray();
@@ -368,7 +377,8 @@ public sealed class CMUShipWeaponsTest : GameTest
             Send(terminal, actor, new CMUShipWeaponsArmBuiMsg("CMUSmokeStrike", "CMUEMSStrike"));
             var state = SComp<CMUShipWeaponsComponent>(map.Grid);
             Send(first, actor, new CMUShipWeaponSelectBuiMsg("CMUGasStrike", CMUShipWeaponBearing.North), true);
-            Assert.That(SComp<OverwatchConsoleComponent>(first).CMUSelectedShipWeapon, Is.Null);
+            Assert.That(SComp<OverwatchConsoleComponent>(first).CMUSelectedShipWeapon?.Id, Is.EqualTo("CMUSmokeStrike"),
+                "an armed ship always has a fire mission picked, and unarmed ones are rejected");
             foreach (var console in new[] { first, second })
                 Send(console, actor, new CMUShipWeaponSelectBuiMsg("CMUSmokeStrike", CMUShipWeaponBearing.North), true);
 
@@ -418,8 +428,8 @@ public sealed class CMUShipWeaponsTest : GameTest
                 "exhaustion never unlocks the loadout");
             Assert.That(state.RemainingUses, Is.Zero, "re-arming cannot refill the pool");
             Send(first, actor, new CMUShipWeaponSelectBuiMsg(null, CMUShipWeaponBearing.North), true);
-            Assert.That(SComp<OverwatchConsoleComponent>(first).CMUSelectedShipWeapon, Is.Null,
-                "the standard cannon remains independently selectable");
+            Assert.That(SComp<OverwatchConsoleComponent>(first).CMUSelectedShipWeapon, Is.Not.Null,
+                "the standard cannon can't be picked once the ship has fire missions");
             foreach (var strike in Strikes())
                 SEntMan.DeleteEntity(strike);
         });
@@ -542,49 +552,26 @@ public sealed class CMUShipWeaponsTest : GameTest
     }
 
     [Test]
-    public async Task BatteriesAcceptExactlyTheirConfiguredMissionRounds()
+    public async Task BatteriesFireEveryMissionAndTakeEightRepairStepsAfterEachShot()
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
         {
-            var slots = SEntMan.System<ItemSlotsSystem>();
-            var ammo = new[]
-            {
-                "CMUShipWeaponRound120mm", "CMUShipWeaponRound380mm", "CMUShipWeaponRoundAirburst",
-                "CMUShipWeaponRoundGas", "CMUShipWeaponRoundEMS", "CMUShipWeaponRoundSmoke",
-                "CMUShipWeaponRoundGatling", "CMUShipWeaponRoundWalking", "CMUShipWeaponRoundPrecision",
-                "CMUShipWeaponRoundRailcannon",
-            };
-            var supported = new List<ProtoId<CMUShipWeaponPrototype>>();
-            foreach (var prototype in new[]
-            {
-                "CMUShipWeaponGunHeavy", "CMUShipWeaponGunSupport",
-                "CMUShipWeaponGunRapid", "CMUShipWeaponGunRailcannon",
-            })
+            var weapons = SProtoMan.EnumeratePrototypes<CMUShipWeaponPrototype>().Select(w => w.ID).ToList();
+            foreach (var prototype in new[] { "CMUShipWeaponGun", "CMUShipWeaponGunFlipped" })
             {
                 var gun = SEntMan.SpawnEntity(prototype, map.GridCoords);
                 var component = SComp<CMUShipWeaponGunComponent>(gun);
-                supported.AddRange(component.Weapons);
-                foreach (var roundPrototype in ammo)
-                {
-                    var round = SEntMan.SpawnEntity(roundPrototype, map.GridCoords);
-                    var expected = component.Weapons.Contains(SComp<CMUShipWeaponAmmoComponent>(round).Weapon);
-                    Assert.That(slots.TryInsert(gun, "mission-round", round, null), Is.EqualTo(expected),
-                        $"{prototype} and {roundPrototype}");
-                    if (expected)
-                        Assert.That(slots.TryEject(gun, "mission-round", null, out _), Is.True);
-                    SEntMan.DeleteEntity(round);
-                }
+                Assert.That(component.Weapons.Select(w => w.Id), Is.EquivalentTo(weapons), $"{prototype} fires every mission");
+                Assert.That(component.Ready, Is.True, "a fresh battery is ready to fire");
+                Assert.That(component.RepairSteps, Has.Count.EqualTo(8));
                 SEntMan.DeleteEntity(gun);
             }
-            Assert.That(supported.Select(w => w.Id),
-                Is.EquivalentTo(SProtoMan.EnumeratePrototypes<CMUShipWeaponPrototype>().Select(p => p.ID)),
-                "every mission has exactly one default battery group");
         });
     }
 
     [Test]
-    public async Task RequiredBatteriesAreShipLocalAndOnlyConsumeMatchingRoundsOnAcceptedLaunches()
+    public async Task RequiredBatteriesAreShipLocalAndBurnOutOnAcceptedLaunches()
     {
         var map = await Pair.CreateTestMap();
         var config = Server.ResolveDependency<IConfigurationManager>();
@@ -598,33 +585,30 @@ public sealed class CMUShipWeaponsTest : GameTest
                 maps.SetTile(other, Vector2i.Zero, map.Tile.Tile);
                 SEntMan.System<SharedTransformSystem>().SetCoordinates(other,
                     new EntityCoordinates(map.MapUid, new Vector2(100, 0)));
-                var foreignGun = SEntMan.SpawnEntity("CMUShipWeaponGunSupport", new EntityCoordinates(other, new Vector2(.5f)));
+                var foreignGun = SEntMan.SpawnEntity("CMUShipWeaponGun", new EntityCoordinates(other, new Vector2(.5f)));
                 var actor = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
                 var terminal = Terminal(map.GridCoords);
                 var console = Console(map.GridCoords);
                 Send(terminal, actor, new CMUShipWeaponsArmBuiMsg("CMUGasStrike", "CMUSmokeStrike"));
                 Assert.That(SEntMan.HasComponent<CMUShipWeaponsComponent>(map.Grid), Is.False,
                     "an identical battery on another ship cannot unlock arming");
-                var gun = SEntMan.SpawnEntity("CMUShipWeaponGunSupport", map.GridCoords);
+                var gun = SEntMan.SpawnEntity("CMUShipWeaponGun", map.GridCoords);
+                var gunComp = SComp<CMUShipWeaponGunComponent>(gun);
                 var transform = SEntMan.System<SharedTransformSystem>();
                 transform.Unanchor(gun);
                 Send(terminal, actor, new CMUShipWeaponsArmBuiMsg("CMUGasStrike", "CMUSmokeStrike"));
                 Assert.That(SEntMan.HasComponent<CMUShipWeaponsComponent>(map.Grid), Is.False,
                     "an uninstalled battery cannot unlock arming");
                 Assert.That(transform.AnchorEntity(gun), Is.True);
-                Send(terminal, actor, new CMUShipWeaponsArmBuiMsg("CMU120mmHEBarrage", "CMUSmokeStrike"));
-                Assert.That(SEntMan.HasComponent<CMUShipWeaponsComponent>(map.Grid), Is.False);
                 Send(terminal, actor, new CMUShipWeaponsArmBuiMsg("CMUGasStrike", "CMUSmokeStrike"));
                 var state = SComp<CMUShipWeaponsComponent>(map.Grid);
-                Assert.That(state.RemainingUses, Is.EqualTo(2), "arming does not require loaded rounds");
+                Assert.That(state.RemainingUses, Is.EqualTo(2));
                 var ui = SEntMan.System<SharedUserInterfaceSystem>();
                 Assert.That(ui.TryGetUiState<CMUShipWeaponsBuiState>(terminal, CMUShipWeaponsUiKey.Key, out var choices), Is.True);
                 Assert.That(choices!.AvailableWeapons.Select(w => w.Id),
-                    Is.EquivalentTo(new[] { "CMUGasStrike", "CMUEMSStrike", "CMUSmokeStrike" }));
+                    Is.EquivalentTo(SProtoMan.EnumeratePrototypes<CMUShipWeaponPrototype>().Select(p => p.ID)),
+                    "an installed battery can fire every mission");
 
-                var slots = SEntMan.System<ItemSlotsSystem>();
-                var foreignRound = SEntMan.SpawnEntity("CMUShipWeaponRoundSmoke", new EntityCoordinates(other, new Vector2(.5f)));
-                Assert.That(slots.TryInsert(foreignGun, "mission-round", foreignRound, null), Is.True);
                 var planet = SEntMan.EnsureComponent<RMCPlanetComponent>(map.MapUid);
                 planet.Offset = Vector2i.Zero;
                 var areaGrid = SEntMan.EnsureComponent<AreaGridComponent>(map.Grid);
@@ -633,35 +617,25 @@ public sealed class CMUShipWeaponsTest : GameTest
                 area.OB = true;
                 SComp<OverwatchConsoleComponent>(console).OrbitalCoordinates = Vector2i.Zero;
                 Send(console, actor, new CMUShipWeaponSelectBuiMsg("CMUSmokeStrike", CMUShipWeaponBearing.North), true);
-                Send(console, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
-                Assert.That(state.RemainingUses, Is.EqualTo(2));
-                Assert.That(SEntMan.Deleted(foreignRound), Is.False, "cannot fire a loaded battery on the other ship");
 
-                var wrongRound = SEntMan.SpawnEntity("CMUShipWeaponRound120mm", map.GridCoords);
-                Assert.That(slots.TryInsert(gun, "mission-round", wrongRound, actor), Is.False);
-                var gasRound = SEntMan.SpawnEntity("CMUShipWeaponRoundGas", map.GridCoords);
-                Assert.That(SEntMan.System<SharedHandsSystem>().TryPickupAnyHand(actor, gasRound), Is.True);
-                Assert.That(slots.TryGetSlot(gun, "mission-round", out var slot), Is.True);
-                Assert.That(slots.TryInsertFromHand(gun, slot!, actor), Is.True, "players can manually load mission rounds");
+                gunComp.Ready = false;
                 Send(console, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
-                Assert.That(state.RemainingUses, Is.EqualTo(2), "loaded gas cannot fire smoke");
-                Assert.That(SEntMan.Deleted(gasRound), Is.False);
-                Assert.That(slots.TryEject(gun, "mission-round", null, out var ejected), Is.True);
-                Assert.That(ejected, Is.EqualTo(gasRound));
-                var smokeRound = SEntMan.SpawnEntity("CMUShipWeaponRoundSmoke", map.GridCoords);
-                Assert.That(slots.TryInsert(gun, "mission-round", smokeRound, actor), Is.True);
+                Assert.That(state.RemainingUses, Is.EqualTo(2), "a burnt-out battery cannot fire, and one on another ship doesn't count");
+                Assert.That(SComp<CMUShipWeaponGunComponent>(foreignGun).Ready, Is.True);
+
+                gunComp.Ready = true;
                 area.OB = false;
                 Send(console, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
-                Assert.That(SEntMan.Deleted(smokeRound), Is.False, "invalid targets never consume physical rounds");
+                Assert.That(gunComp.Ready, Is.True, "invalid targets never burn out a battery");
                 area.OB = true;
                 Send(console, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
-                Assert.That(SEntMan.Deleted(smokeRound), Is.True);
                 Assert.That(state.RemainingUses, Is.EqualTo(1));
-                Assert.That(SEntMan.System<SharedContainerSystem>().GetContainer(gun, "mission-round").ContainedEntities, Is.Empty);
-                var reload = SEntMan.SpawnEntity("CMUShipWeaponRoundSmoke", map.GridCoords);
-                Assert.That(slots.TryInsert(gun, "mission-round", reload, actor), Is.True);
+                Assert.That(gunComp.Ready, Is.False, "firing burns out the battery");
+                Assert.That(gunComp.RepairStep, Is.Zero);
+
+                gunComp.Ready = true;
                 Send(console, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
-                Assert.That(SEntMan.Deleted(reload), Is.False, "cooldown failures never consume loaded rounds");
+                Assert.That(gunComp.Ready, Is.True, "cooldown failures never burn out a battery");
                 SEntMan.DeleteEntity(gun);
                 state.NextLaunch = TimeSpan.Zero;
                 Send(console, actor, new OverwatchConsoleOrbitalLaunchBuiMsg(), true);
@@ -679,6 +653,26 @@ public sealed class CMUShipWeaponsTest : GameTest
         {
             await Server.WaitPost(() => config.SetCVar(CCVars.ShipWeaponsRequireGuns, false));
         }
+    }
+
+    [Test]
+    public async Task TechPurchasesAddAFireMissionToTheirTeamsShip()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var terminal = SEntMan.SpawnEntity("CMUShipWeaponsTerminalGovfor", map.GridCoords);
+            SEntMan.EventBus.RaiseEvent(EventSource.Local,
+                new CMUTechShipWeaponMissionEvent("CMURailcannonStrike") { Team = "opfor" });
+            Assert.That(SEntMan.HasComponent<CMUShipWeaponsComponent>(map.Grid), Is.False, "another team's purchase");
+            SEntMan.EventBus.RaiseEvent(EventSource.Local,
+                new CMUTechShipWeaponMissionEvent("CMURailcannonStrike") { Team = "govfor" });
+            var state = SComp<CMUShipWeaponsComponent>(map.Grid);
+            Assert.That(state.Weapons.Select(w => w.Id), Does.Contain("CMURailcannonStrike"));
+            Assert.That(state.RemainingUses, Is.EqualTo(1));
+            Assert.That(state.Locked, Is.False, "a purchase doesn't lock the terminal's own picks");
+            SEntMan.DeleteEntity(terminal);
+        });
     }
 
     [Test]

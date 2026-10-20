@@ -12,7 +12,8 @@ namespace Content.Server.CMU14.Ship;
 /// <summary>
 ///     When a hijacked dropship crashes into a ship with <see cref="CMUHijackCrashHullBreachComponent"/>, the hull
 ///     stops being invulnerable: hull windows become as tough as a reinforced window but breakable, breathing and
-///     pressure start to matter on every deck, and the impact knocks out every APC aboard. After that the ship keeps
+///     pressure matter on every deck (if the map didn't already turn them on), and the impact knocks out every APC
+///     aboard. After that the ship keeps
 ///     coming apart on a timer: first the hijack's pipe explosions can break hull windows, then explosions can blow out
 ///     any floor tile aboard.
 /// </summary>
@@ -54,27 +55,32 @@ public sealed partial class CMUHijackCrashHullBreachSystem : EntitySystem
 
         ship.Comp.CrashedAt ??= _timing.CurTime;
 
+        // A ship that already needs air (the Bush, so its batteries can be serviced by spacewalk) has call-in kits off
+        // while it's whole. Once it's breached, anyone who turns up aboard needs a mask and a tank.
+        var kitDefaults = new CMUBreathingRequiredMapComponent();
         foreach (var deck in decks)
         {
-            EnsureComp<CMUBreathingRequiredMapComponent>(deck);
+            var breathing = EnsureComp<CMUBreathingRequiredMapComponent>(deck);
+            breathing.CallInMask ??= kitDefaults.CallInMask;
+            breathing.CallInTank ??= kitDefaults.CallInTank;
             EnsureComp<CMUPressureRequiredMapComponent>(deck);
+            EnsureComp<CMUShipCrashedMapComponent>(deck);
         }
 
-        if (_prototypes.TryIndex(ship.Comp.HullTemplate, out var template))
+        var hulls = EntityQueryEnumerator<CMUCrashBreakableHullComponent, TransformComponent>();
+        var toBreach = new List<(EntityUid Uid, EntProtoId Template, bool Replace)>();
+        while (hulls.MoveNext(out var uid, out var hull, out var xform))
         {
-            var hulls = EntityQueryEnumerator<CMUCrashBreakableHullComponent, TransformComponent>();
-            var toBreach = new List<EntityUid>();
-            while (hulls.MoveNext(out var uid, out _, out var xform))
-            {
-                if (xform.MapUid is { } map && decks.Contains(map))
-                    toBreach.Add(uid);
-            }
+            if (xform.MapUid is { } map && decks.Contains(map))
+                toBreach.Add((uid, hull.Template ?? ship.Comp.HullTemplate, hull.ReplaceExisting));
+        }
 
-            foreach (var uid in toBreach)
-            {
-                EntityManager.AddComponents(uid, template, removeExisting: false);
-                RemComp<CMUCrashBreakableHullComponent>(uid);
-            }
+        foreach (var (uid, templateId, replace) in toBreach)
+        {
+            if (_prototypes.TryIndex(templateId, out var template))
+                EntityManager.AddComponents(uid, template, removeExisting: replace);
+
+            RemComp<CMUCrashBreakableHullComponent>(uid);
         }
 
         var apcs = EntityQueryEnumerator<RMCApcComponent, TransformComponent>();

@@ -4,8 +4,8 @@ meta:
   engineVersion: 290.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/19/2026 10:58:02
-  entityCount: 979
+  time: 10/20/2026 02:36:13
+  entityCount: 980
 maps:
 - 1
 grids:
@@ -254,7 +254,7 @@ entities:
           version: 7
         1,1:
           ind: 1,1
-          tiles: IQAAAAAAACEAAAAAAACBAAAAAAAAgQAAAAAAAIEAAAAAAAAhAAAAAAAAgQAAAAAAAIEAAAAAAACBAAAAAAAAgQAAAAAAAIAAAAAAAACAAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAAIkAAAAAAACJAAAAAAAAiQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAACGAAAAAAAAQgAAAAAAAIYAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAACGAAAAAAAAhwAAAAAAAEIAAAAAAACDAAAAAAAAhgAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAACGAAAAAAAAhAAAAAAAAIYAAAAAAABCAAAAAAAAhgAAAAAAAIcAAAAAAACGAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAjQAAAAAAABwAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAQgAAAAAAAEIAAAAAAABCAAAAAAAAQgAAAAAAAEIAAAAAAABCAAAAAAAAQgAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAAB8AAAAAAAAPAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAAIYAAAAAAACHAAAAAAAAhgAAAAAAAEIAAAAAAACGAAAAAAAAggAAAAAAAIYAAAAAAAAhAAAAAAAAIQAAAAAAAI0AAAAAAAAdAAAAAAAADwAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAhgAAAAAAAIgAAAAAAABCAAAAAAAAgwAAAAAAAIYAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAfAAAAAAAADwAAAAAAAA8AAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAAI0AAAAAAAAcAAAAAAAAHQAAAAAAAA8AAAAAAAAPAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAAI0AAAAAAAAdAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAAI0AAAAAAAAcAAAAAAAAHAAAAAAAABwAAAAAAAAdAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAfAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAHwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAAB8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAfAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAHwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA==
+          tiles: IQAAAAAAACEAAAAAAACBAAAAAAAAgQAAAAAAAIEAAAAAAAAhAAAAAAAAgQAAAAAAAIEAAAAAAACBAAAAAAAAgQAAAAAAAIAAAAAAAACAAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAAIkAAAAAAACJAAAAAAAAiQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAACGAAAAAAAAQgAAAAAAAIYAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAACGAAAAAAAAhwAAAAAAAEIAAAAAAACDAAAAAAAAhgAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAACGAAAAAAAAhAAAAAAAAIYAAAAAAABCAAAAAAAAhgAAAAAAAIcAAAAAAACGAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAjQAAAAAAABwAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAQgAAAAAAAEIAAAAAAABCAAAAAAAAQgAAAAAAAEIAAAAAAABCAAAAAAAAQgAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAAB8AAAAAAAAPAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAAIYAAAAAAACHAAAAAAAAhgAAAAAAAEIAAAAAAACGAAAAAAAAggAAAAAAAIYAAAAAAAAhAAAAAAAAIQAAAAAAAI0AAAAAAAAdAAAAAAAADwAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAhgAAAAAAAIgAAAAAAABCAAAAAAAAgwAAAAAAAIYAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAfAAAAAAAADwAAAAAAAA8AAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAACAAAAAAAAAgAAAAAAAAIAAAAAAAAhAAAAAAAAIQAAAAAAAI0AAAAAAAAcAAAAAAAAHQAAAAAAAA8AAAAAAAAPAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAAI0AAAAAAAAdAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAAI0AAAAAAAAcAAAAAAAAHAAAAAAAABwAAAAAAAAdAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAfAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAHwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAAB8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAfAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAIQAAAAAAACEAAAAAAAAhAAAAAAAAHwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA8AAAAAAAAPAAAAAAAADwAAAAAAAA==
           version: 7
         1,2:
           ind: 1,2
@@ -498,821 +498,218 @@ entities:
       version: 2
       data:
         uniqueMixes:
+        - temperature: 293.15
+          volume: 2500
+          moles:
+            Oxygen: 21.824879
+            Nitrogen: 82.10312
         - temperature: 2.725
           volume: 2500
           moles: {}
           immutable: True
         - temperature: 293.15
           volume: 2500
-          moles:
-            Oxygen: 21.824879
-            Nitrogen: 82.10312
+          moles: {}
         tiles:
-          -4,-4:
-            0: 65535
-          -4,-5:
-            0: 65535
-          -5,-4:
-            0: 65535
-          -4,-3:
-            0: 65535
-          -5,-3:
-            0: 65535
-          -4,-2:
-            0: 65535
-          -5,-2:
-            0: 65535
-          -4,-1:
-            0: 65535
-          -5,-1:
-            0: 65535
-          -4,0:
-            0: 65535
-          -3,-4:
-            0: 65535
-          -3,-3:
-            0: 65535
-          -3,-2:
-            0: 65535
-          -3,-1:
-            0: 65535
-          -3,-5:
-            0: 65535
-          -3,0:
-            0: 65535
-          -2,-4:
-            0: 65535
-          -2,-3:
-            0: 65535
-          -2,-2:
-            0: 65535
-          -2,-1:
-            0: 65535
-          -2,-5:
-            0: 65535
-          -2,0:
-            0: 65535
-          -1,-4:
-            0: 65535
-          -1,-3:
-            0: 65535
-          -1,-2:
-            0: 65535
-          -1,-1:
-            0: 65535
-          -1,-5:
-            0: 65535
-          -1,0:
-            0: 65535
-          0,-4:
-            0: 65535
-          0,-3:
-            0: 65535
-          0,-2:
-            0: 65535
-          0,-1:
-            0: 65535
-          0,-5:
-            0: 65535
-          0,0:
-            0: 65535
-          1,-4:
-            0: 65535
-          1,-3:
-            0: 65535
-          1,-2:
-            0: 65535
-          1,-1:
-            0: 65535
-          1,-5:
-            0: 65535
-          1,0:
-            0: 65535
-          2,-4:
-            0: 65535
-          2,-3:
-            0: 65535
-          2,-2:
-            0: 65535
-          2,-1:
-            0: 65535
-          2,-5:
-            0: 65535
-          2,0:
-            0: 65535
-          3,-4:
-            0: 65535
-          3,-3:
-            0: 65535
-          3,-2:
-            0: 65535
-          3,-1:
-            0: 65535
-          3,-5:
-            0: 65535
-          3,0:
-            0: 65535
-          4,-4:
-            0: 65535
-          4,-3:
-            0: 65535
-          4,-2:
-            0: 65535
-          4,-1:
-            0: 65535
-          -4,-8:
-            0: 65535
-          -4,-9:
-            0: 65535
-          -5,-8:
-            0: 65262
-          -4,-7:
-            0: 65535
-          -5,-7:
-            0: 65535
-          -4,-6:
-            0: 65535
-          -5,-6:
-            0: 65535
-          -5,-5:
-            0: 65535
-          -3,-8:
-            0: 65535
-          -3,-7:
-            0: 65535
-          -3,-6:
-            0: 65535
-          -3,-9:
-            0: 65535
-          -2,-8:
-            0: 65535
-          -2,-7:
-            0: 65535
-          -2,-6:
-            0: 65535
-          -2,-9:
-            0: 65535
-          -1,-8:
-            0: 65535
-          -1,-7:
-            0: 65535
-          -1,-6:
-            0: 65535
-          -1,-9:
-            0: 65535
-          0,-8:
-            0: 65535
-          0,-7:
-            0: 65535
-          0,-6:
-            0: 65535
-          0,-9:
-            0: 65535
-          1,-8:
-            0: 65535
-          1,-7:
-            0: 65535
-          1,-6:
-            0: 65535
-          1,-9:
-            0: 65535
-          2,-8:
-            0: 65535
-          2,-7:
-            0: 65535
-          2,-6:
-            0: 65535
-          2,-9:
-            0: 65535
-          3,-8:
-            0: 65535
-          3,-7:
-            0: 65535
-          3,-6:
-            0: 65535
-          3,-9:
-            0: 65535
-          4,-8:
-            0: 29491
-          4,-7:
-            0: 65399
-            1: 128
-          4,-6:
-            0: 65535
-          4,-5:
-            0: 65535
-          4,0:
-            0: 65535
-          5,-4:
-            0: 30583
-          5,-3:
-            0: 63351
-          5,-2:
-            0: 30719
-            1: 2048
-          5,-1:
-            0: 30583
-            1: 32768
-          5,-5:
-            0: 30583
-          5,0:
-            0: 65535
-          6,-2:
-            1: 3856
-            0: 32
-          6,-1:
-            1: 61440
-          6,0:
-            0: 65535
-          7,-2:
-            0: 4352
-          7,-1:
-            1: 4096
-            0: 8465
-          7,0:
-            0: 45875
-            1: 16384
-          4,-9:
-            0: 13107
-          5,-7:
-            0: 29968
-            1: 512
-          5,-6:
-            0: 30583
-          -8,-1:
-            0: 9284
-            1: 49152
-          -8,0:
-            0: 61166
-            1: 4096
-          -8,-2:
-            0: 17408
-            1: 2048
-          -7,-2:
-            1: 3904
-            0: 168
-          -7,-1:
-            1: 61440
-          -7,0:
-            0: 65535
-          -7,-3:
-            0: 32768
-          -6,-3:
-            0: 65535
-          -6,-2:
-            0: 65535
-          -6,-1:
-            0: 65535
-          -6,-4:
-            0: 65535
-          -6,-5:
-            0: 65535
-          -6,0:
-            0: 65535
-          -5,0:
-            0: 65535
-          -6,-7:
-            0: 64832
-            1: 640
-          -6,-6:
-            0: 65535
-          -5,-9:
-            0: 61166
-          -5,-12:
-            0: 61166
-          -5,-13:
-            0: 61166
-          -5,-11:
-            0: 61166
-          -5,-10:
-            0: 61166
-          -4,-12:
-            0: 65535
-          -4,-11:
-            0: 65535
-          -4,-10:
-            0: 65535
-          -4,-13:
-            0: 65535
-          -3,-12:
-            0: 65535
-          -3,-11:
-            0: 65535
-          -3,-10:
-            0: 65535
-          -3,-13:
-            0: 65535
-          -2,-12:
-            0: 65535
-          -2,-11:
-            0: 65535
-          -2,-10:
-            0: 65535
-          -2,-13:
-            0: 65535
-          -1,-12:
-            0: 65535
-          -1,-11:
-            0: 65535
-          -1,-10:
-            0: 65535
-          -1,-13:
-            0: 65535
-          0,-12:
-            0: 65535
-          0,-11:
-            0: 65535
-          0,-10:
-            0: 65535
-          0,-13:
-            0: 65535
-          1,-12:
-            0: 65535
-          1,-11:
-            0: 65535
-          1,-10:
-            0: 65535
-          1,-13:
-            0: 65535
-          2,-12:
-            0: 65535
-          2,-11:
-            0: 65535
-          2,-10:
-            0: 65535
-          2,-13:
-            0: 65535
-          3,-12:
-            0: 65535
-          3,-11:
-            0: 65535
-          3,-10:
-            0: 65535
-          3,-13:
-            0: 65535
-          4,-12:
-            0: 13107
-          4,-11:
-            0: 13107
-          4,-10:
-            0: 13107
-          4,-13:
-            0: 13107
-          -8,4:
-            0: 65535
-          -8,3:
-            0: 65535
-          -9,4:
-            0: 61166
-          -8,5:
-            0: 61167
-          -9,5:
-            0: 14
-          -8,6:
-            0: 142
-          -7,4:
-            0: 65535
-          -7,5:
-            0: 65535
-          -7,6:
-            0: 4095
-          -7,3:
-            0: 65535
-          -6,4:
-            0: 65535
-          -6,5:
-            0: 65535
-          -6,6:
-            0: 65535
-          -6,3:
-            0: 65535
-          -6,7:
-            0: 65535
-          -6,8:
-            0: 65535
-          -5,4:
-            0: 65535
-          -5,5:
-            0: 65535
-          -5,6:
-            0: 65535
-          -5,7:
-            0: 65535
-          -5,3:
-            0: 65535
-          -5,8:
-            0: 65535
-          -4,4:
-            0: 4369
-          -4,5:
-            0: 4369
-          -4,6:
-            0: 4369
-            1: 57344
-          -4,7:
-            0: 65535
-          -8,1:
-            0: 65535
           -9,0:
-            1: 49152
-            0: 8192
+            1: 11264
+            2: 49152
           -9,1:
-            0: 61166
-          -8,2:
-            0: 65535
-          -9,2:
-            0: 61166
-          -9,3:
-            0: 61166
-          -7,1:
-            0: 65535
-          -7,2:
-            0: 65535
-          -6,1:
-            0: 65535
-          -6,2:
-            0: 65535
-          -5,1:
-            0: 65535
-          -5,2:
-            0: 65535
-          -4,1:
-            0: 4369
-          -4,2:
-            0: 4369
-          -4,3:
-            0: 4369
-          -6,9:
-            0: 65535
-          -6,10:
-            0: 65535
-          -6,11:
-            0: 65535
-          -6,12:
-            0: 65535
-          -5,9:
-            0: 65535
-          -5,10:
-            0: 65535
-          -5,11:
-            0: 65535
-          -5,12:
-            0: 65535
-          -4,8:
-            0: 65535
-          -4,9:
-            0: 65535
-          -4,10:
-            0: 65535
-          -4,11:
-            0: 65535
-          -3,6:
-            1: 61440
-          -3,7:
-            0: 65535
-          -3,8:
-            0: 65535
-          -2,6:
-            1: 61440
-          -2,7:
-            0: 65535
-          -2,8:
-            0: 65535
-          -1,6:
-            1: 12288
-            0: 52428
-          -1,7:
-            0: 65535
-          -1,8:
-            0: 65535
-          -1,4:
-            0: 52428
-          -1,3:
-            0: 52428
-          -1,5:
-            0: 52428
-          0,4:
-            0: 4369
-          0,5:
-            0: 4369
-          0,6:
-            0: 4369
-            1: 57344
-          0,7:
-            0: 65535
-          -4,12:
-            0: 65535
-          -3,9:
-            0: 65535
-          -3,10:
-            0: 65535
-          -3,11:
-            0: 65535
-          -3,12:
-            0: 65535
-          -2,9:
-            0: 65535
-          -2,10:
-            0: 65535
-          -2,11:
-            0: 65535
-          -2,12:
-            0: 65535
-          -1,9:
-            0: 65535
-          -1,10:
-            0: 65535
-          -1,11:
-            0: 65535
-          -1,12:
-            0: 65535
-          0,8:
-            0: 65535
-          0,9:
-            0: 65535
-          0,10:
-            0: 65535
-          0,11:
-            0: 65535
-          0,1:
-            0: 4369
-          -1,1:
-            0: 52428
-          0,2:
-            0: 4369
-          -1,2:
-            0: 52428
-          0,3:
-            0: 4369
-          3,1:
-            0: 34952
-          4,1:
-            0: 65535
-          3,2:
-            0: 34952
-          4,2:
-            0: 13183
-            1: 52352
-          3,3:
-            0: 34952
-          4,3:
-            0: 13171
-            1: 52364
-          3,4:
-            0: 34952
-          1,6:
-            1: 61440
-          1,7:
-            0: 65535
-          1,8:
-            0: 65535
-          2,6:
-            1: 61440
-          2,7:
-            0: 65535
-          2,8:
-            0: 65535
-          3,6:
-            1: 28672
-            0: 34952
-          3,7:
-            0: 65535
-          3,8:
-            0: 65535
-          4,4:
-            0: 65523
             1: 12
-          3,5:
-            0: 34952
-          4,5:
-            0: 65535
-          4,6:
-            0: 65535
-          4,7:
-            0: 65535
-          0,12:
-            0: 65535
-          1,9:
-            0: 65535
-          1,10:
-            0: 65535
-          1,11:
-            0: 65535
-          1,12:
-            0: 65535
-          2,9:
-            0: 65535
-          2,10:
-            0: 65535
-          2,11:
-            0: 65535
-          2,12:
-            0: 65535
-          3,9:
-            0: 65535
-          3,10:
-            0: 65535
-          3,11:
-            0: 65535
-          3,12:
-            0: 65535
-          4,8:
-            0: 65535
-          4,9:
-            0: 65535
-          4,10:
-            0: 65535
-          4,11:
-            0: 65535
-          5,1:
-            0: 65535
-          5,2:
-            0: 47
-            1: 65488
-          5,3:
-            1: 65535
-          5,4:
-            1: 60429
-            0: 4914
-          6,1:
-            0: 65535
-          6,2:
-            0: 47
-            1: 65488
-          6,3:
-            1: 65535
-          6,4:
-            1: 12557
-            0: 52960
-          7,1:
-            0: 65535
-          7,2:
-            0: 255
-            1: 65280
-          7,3:
-            1: 4365
-            0: 57906
-          7,4:
-            0: 65535
-          8,2:
+          -8,-2:
+            1: 33920
+            2: 2048
+          -8,0:
+            1: 8448
+            2: 4096
+          -8,1:
             1: 1
-            0: 13106
-          8,3:
-            0: 13107
-          5,5:
-            1: 61439
-            0: 4096
-          5,6:
-            0: 32767
-          5,7:
-            0: 30583
-          5,8:
-            0: 30583
-          6,5:
-            1: 14199
-            0: 51336
-          6,6:
-            0: 2047
-          7,5:
-            0: 14207
-          7,6:
-            0: 3
-          8,4:
-            0: 13107
-          8,5:
-            0: 3
-          4,12:
-            0: 65535
-          5,9:
-            0: 30583
-          5,10:
-            0: 30583
-          5,11:
-            0: 30583
-          5,12:
-            0: 30583
-          -4,13:
-            0: 4095
-          -5,13:
-            0: 4095
-          -3,13:
-            0: 4095
-          -2,13:
-            0: 4095
-          -1,13:
-            0: 4095
-          0,13:
-            0: 4095
-          1,13:
-            0: 4095
-          2,13:
-            0: 4095
-          3,13:
-            0: 4095
-          4,13:
-            0: 4095
-          -6,13:
-            0: 4095
-          5,13:
-            0: 1911
-          4,-16:
-            1: 48
-            0: 17472
-          3,-16:
-            1: 224
-            0: 4368
-          4,-15:
-            1: 256
-            0: 13892
-          3,-15:
-            1: 3584
-            0: 61713
-          4,-14:
-            0: 13107
-          3,-14:
-            0: 65535
-          0,-16:
-            0: 65535
-          0,-17:
-            0: 65535
-          -1,-16:
-            0: 65535
-          0,-15:
-            0: 65535
-          -1,-15:
-            0: 65535
-          0,-14:
-            0: 65535
-          -1,-14:
-            0: 65535
-          1,-16:
-            0: 65535
-          1,-15:
-            0: 65535
-          1,-14:
-            0: 65535
-          1,-17:
-            0: 65535
-          2,-16:
-            0: 65535
-          2,-15:
-            0: 65535
-          2,-14:
-            0: 65535
-          2,-17:
-            0: 63351
-          -4,-16:
-            1: 112
-            0: 52360
+          -7,-2:
+            1: 5812
+            2: 320
+          -6,-7:
+            1: 11624
+            2: 640
           -5,-16:
-            1: 224
-            0: 4368
-          -4,-15:
-            0: 65484
-          -5,-15:
-            0: 61201
-          -4,-14:
-            0: 65535
-          -5,-14:
-            0: 61166
-          -4,-17:
-            0: 32768
-          -3,-16:
-            0: 65535
-          -3,-15:
-            0: 65535
-          -3,-14:
-            0: 65535
-          -3,-17:
-            0: 65535
-          -2,-16:
-            0: 65535
-          -2,-15:
-            0: 65535
-          -2,-14:
-            0: 65535
-          -2,-17:
-            0: 65535
-          -1,-17:
-            0: 65535
+            1: 3614
+            2: 224
+          -5,-7:
+            1: 16
+          -5,0:
+            1: 32768
+          -5,6:
+            1: 32768
+          -4,-16:
+            1: 1927
+            2: 112
+          -4,0:
+            1: 8192
+            2: 4096
+          -4,1:
+            1: 1
+          -4,6:
+            1: 3840
+            2: 61440
           -3,-18:
-            0: 61696
-            1: 3584
+            1: 57824
+            2: 3584
+          -3,6:
+            1: 3840
+            2: 61440
           -2,-18:
+            1: 61680
+            2: 3840
+          -2,6:
             1: 3840
-            0: 61440
+            2: 61440
+          -2,13:
+            1: 19008
+            2: 1024
+          -2,14:
+            1: 33920
+            2: 2048
+          -2,16:
+            1: 128
           -1,-18:
-            1: 3840
-            0: 61440
+            1: 61680
+            2: 3840
+          -1,0:
+            1: 32768
+          -1,6:
+            1: 49920
+            2: 12288
+          -1,14:
+            1: 256
+          -1,16:
+            1: 417
+            2: 16
           0,-18:
+            1: 61680
+            2: 3840
+          0,0:
+            1: 8192
+            2: 4096
+          0,1:
+            1: 1
+          0,6:
             1: 3840
-            0: 61440
+            2: 61440
+          0,13:
+            1: 19008
+            2: 1024
+          0,14:
+            1: 9504
+            2: 512
+          0,16:
+            1: 289
+            2: 16
           1,-18:
+            1: 61680
+            2: 3840
+          1,6:
             1: 3840
-            0: 61440
+            2: 61440
           2,-18:
-            1: 768
-            0: 29696
+            1: 13360
+            2: 768
+          2,-17:
+            1: 41984
+            2: 16384
+          2,-16:
+            1: 2124
+            2: 128
+          2,6:
+            1: 3840
+            2: 61440
+          3,-16:
+            1: 3855
+            2: 240
+          3,6:
+            1: 34560
+            2: 28672
+          4,-16:
+            1: 835
+            2: 48
+          4,-15:
+            1: 9504
+            2: 512
+          4,-8:
+            1: 20992
+            2: 8192
+          4,-7:
+            1: 3118
+            2: 192
+          4,2:
+            0: 52352
+          4,3:
+            0: 52364
+          4,4:
+            0: 12
+          5,-7:
+            1: 13360
+            2: 768
+          5,-3:
+            1: 41984
+            2: 16384
+          5,-2:
+            1: 2124
+            2: 128
+          5,2:
+            0: 65488
+          5,3:
+            0: 65535
+          5,4:
+            0: 60429
+          5,5:
+            0: 61439
+          5,6:
+            0: 12
+            1: 18944
+            2: 1024
+          6,-2:
+            1: 57825
+            2: 3600
+          6,-1:
+            1: 32768
+          6,2:
+            0: 65488
+          6,3:
+            0: 65535
+          6,4:
+            0: 12557
+          6,5:
+            0: 14199
+          6,6:
+            0: 1
+            1: 1152
+            2: 72
+          7,-2:
+            1: 256
+          7,-1:
+            1: 8448
+            2: 4096
+          7,0:
+            1: 38401
+            2: 24576
+          7,1:
+            1: 32774
+          7,2:
+            0: 56576
+            2: 8
+          7,3:
+            0: 4353
+          7,4:
+            1: 16384
+          7,5:
+            1: 9578
+            2: 516
+          7,6:
+            1: 1
+          8,1:
+            1: 4096
+          8,2:
+            1: 2
+            2: 1
         chunkSize: 4
     - type: MapAtmosphere
       mixture:
@@ -5168,6 +4565,14 @@ entities:
       parent: 1
       pos: 31.5,12.5
       anchored: True
+- proto: CMUCallsignConsoleGovfor
+  entities:
+  - uid: 139
+    components:
+    - type: Transform
+      parent: 1
+      rot: 1.5707963267948966 rad
+      pos: 18.567142,15.474687
 - proto: CMUGasPipeBend
   entities:
   - uid: 238
@@ -5366,12 +4771,36 @@ entities:
       color: '#990000FF'
 - proto: CMUGovforRosterConsole
   entities:
-  - uid: 139
+  - uid: 350
     components:
     - type: Transform
       parent: 1
       rot: 1.5707963267948966 rad
-      pos: 18.5,14.5
+      pos: 18.563845,14.62052
+- proto: CMUIDComputerGovfor
+  entities:
+  - uid: 82
+    components:
+    - type: Transform
+      parent: 1
+      rot: 1.5707963267948966 rad
+      pos: 18.567142,15.047604
+    - type: IdModificationConsole
+      jobList:
+      - CMUIdJobGovforCommandNoLogistics
+      - CMUIdJobGovforSquad
+      - CMUIdJobGovforEngineer
+      - CMUIdJobGovforGunner
+      - CMUIdJobGovforSecurity
+      - CMUIdJobGovforPilot
+      - CMUIdJobGovforCorpsman
+      - CMUIdJobGovforVehicleCrew
+      - CMUIdJobGovforAuxTech
+      - CMUIdJobGovforWeaponsSpecialist
+      - CMUIdJobGovforFTL
+      - CMUIdJobGovforCommand
+      - CMUIdJobGovforRifleman
+      jobGroups: []
 - proto: CMUPipeRiserDown
   entities:
   - uid: 68
@@ -5388,6 +4817,14 @@ entities:
       pos: 25.5,10.5
     - type: AtmosPipeColor
       color: '#990000FF'
+- proto: CMUStationAlertComputer
+  entities:
+  - uid: 145
+    components:
+    - type: Transform
+      parent: 1
+      rot: 1.5707963267948966 rad
+      pos: 18.556726,15.912187
 - proto: CMVentPump
   entities:
   - uid: 143
@@ -6655,14 +6092,6 @@ entities:
       pos: 22,16.5
     - type: Fixtures
       fixtures: {}
-- proto: RMCPropCommunicationsConsole
-  entities:
-  - uid: 145
-    components:
-    - type: Transform
-      parent: 1
-      rot: 1.5707963267948966 rad
-      pos: 18.5,15.5
 - proto: RMCRecharger
   entities:
   - uid: 164
@@ -6674,9 +6103,13 @@ entities:
   entities:
   - uid: 166
     components:
+    - type: MetaData
+      name: AI Core Upper
     - type: Transform
       parent: 1
       pos: 18.365824,12.006805
+    - type: RotaryPhone
+      category: USS George W. Bush
     - type: Fixtures
       fixtures: {}
   - uid: 211
@@ -6687,7 +6120,7 @@ entities:
       parent: 1
       pos: 22.557177,22.556877
     - type: RotaryPhone
-      category: AI Core
+      category: USS George W. Bush
     - type: Fixtures
       fixtures: {}
 - proto: RMCSprayBottleSpaceCleaner
@@ -6714,14 +6147,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 25.5,24.5
-- proto: RMCSystemsComputer
-  entities:
-  - uid: 82
-    components:
-    - type: Transform
-      parent: 1
-      rot: 1.5707963267948966 rad
-      pos: 18.498964,15.944345
 - proto: RMCTelecomBlackBox
   entities:
   - uid: 239

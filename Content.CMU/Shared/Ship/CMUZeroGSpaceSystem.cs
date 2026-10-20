@@ -5,7 +5,9 @@ using Content.Shared.Gravity;
 using Content.Shared.Inventory;
 using Content.Shared.Maps;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Stunnable;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
@@ -94,12 +96,31 @@ public sealed partial class CMUZeroGSpaceSystem : EntitySystem
         args.Handled = true;
     }
 
+    /// <summary>
+    ///     Xenos are built for climbing and clinging, so in zero-g they claw along at nearly their normal speed and get
+    ///     going quicker than people do. They still slide and drift with no friction, like anyone else.
+    /// </summary>
+    private const float XenoZeroGSpeed = 0.9f / MovementSpeedModifierComponent.DefaultWeightlessModifier;
+
+    private const float XenoZeroGAcceleration = 3f;
+
     private void OnZeroGMovement(Entity<MobStateComponent> ent, ref CMUZeroGMovementEvent args)
     {
         args.Adrift |= IsOverZeroGSpace(ent);
 
-        // Xenos are built for scrambling over any surface; zero-g doesn't slow them down.
-        args.KeepSpeed |= HasComp<XenoComponent>(ent);
+        if (HasComp<XenoComponent>(ent) && Transform(ent).MapUid is { } xenoMap && IsZeroGMap(xenoMap))
+        {
+            args.SpeedMultiplier *= XenoZeroGSpeed;
+            args.AccelerationMultiplier *= XenoZeroGAcceleration;
+        }
+
+        // Pulling yourself along on the floor is slower than pushing off it, the same as crawling with gravity.
+        if (HasComp<KnockedDownComponent>(ent) &&
+            TryComp(ent, out MovementSpeedModifierComponent? speed) &&
+            Transform(ent).MapUid is { } map && IsZeroGMap(map))
+        {
+            args.SpeedMultiplier *= Math.Min(1f, speed.WalkSpeedModifier);
+        }
     }
 
     private void OnXenoProofDamage(Entity<CMUXenoProofComponent> ent, ref BeforeDamageChangedEvent args)
