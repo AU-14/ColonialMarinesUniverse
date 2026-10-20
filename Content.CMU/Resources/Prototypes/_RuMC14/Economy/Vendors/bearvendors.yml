@@ -224,9 +224,15 @@
     sections:
     - name: au14-vendor-section-food
       entries:
-      - id: RuMCirpUPP
+      - id: AU14MREUPP
         amount: 60
-      - id: RuMCBoxIRPUPP
+      - id: AU14BoxMREUPP
+        amount: 10
+      - id: CMCanteen
+        amount: 60
+      - id: CMUCanOpenerCompact
+        amount: 30
+      - id: CMUCanOpener
         amount: 10
     - name: au14-vendor-section-medical-supplies
       entries:

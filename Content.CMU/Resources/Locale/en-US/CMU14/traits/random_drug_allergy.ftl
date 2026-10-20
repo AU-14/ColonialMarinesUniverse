@@ -1,4 +1,4 @@
-au14-trait-drugallergy-name = Random Drug Allergy
+au14-trait-drugallergy-name = Drug Allergy: Random
 au14-trait-drugallergy-desc = You are allergic to one of the medications in this section, picked at random. Ingesting it triggers a serious allergic reaction until treated with epinephrine. You spawn with an epinephrine injector and a tag noting your allergy.
 au14-drug-allergy-tag-name = medical alert tag
 au14-drug-allergy-tag-text = Allergic to { $reagent }
@@ -19,6 +19,6 @@ cmu-trait-drug-allergy-imidazoline-name = Drug Allergy: Imidazoline
 cmu-trait-drug-allergy-leporazine-name = Drug Allergy: Leporazine
 cmu-trait-drug-allergy-ethylredoxrazine-name = Drug Allergy: Ethylredoxrazine
 cmu-trait-drug-allergy-desc = You are allergic to this medication. Taking it triggers a serious allergic reaction until treated with epinephrine. You spawn with an epinephrine injector and a tag noting your allergy.
-cmu-trait-category-drug-allergy = Drug Allergy
+cmu-trait-category-drug-allergy = Allergies
 cmu-drugallergy-examine = [color=#d77a3d]{ CAPITALIZE(POSS-ADJ($target)) } skin is blotchy and swollen, and { SUBJECT($target) } { CONJUGATE-BE($target) } wheezing for breath.[/color]
 cmu-drugallergy-examine-severe = [color=#c33a3a]{ CAPITALIZE(POSS-ADJ($target)) } throat seems to be closing up and { SUBJECT($target) } can't breathe![/color]

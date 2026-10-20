@@ -13,8 +13,8 @@ cmu-zlevel-shoot-down-no-gun = You need a gun in hand to aim down a Z-level.
 cmu-zlevel-shoot-down-requires-wield = You need to wield your gun before aiming down a Z-level.
 cmu-zlevel-shoot-down-no-level = There is no Z-level below to shoot into.
 cmu-zlevel-shoot-up-no-level = There is no Z-level above to shoot into.
-cmu-zlevel-shoot-down-blocked-floor = There is no opening nearby to shoot down through.
-cmu-zlevel-shoot-up-blocked-floor = There is no opening nearby to shoot up through.
+cmu-zlevel-shoot-down-blocked-floor = You need to be within 2 tiles of an edge or opening to shoot down.
+cmu-zlevel-shoot-up-blocked-floor = You need to be within 2 tiles of an edge or opening to shoot up.
 
 cmu-zlevel-voice-from-up = {$name} (from above)
 cmu-zlevel-voice-from-down = {$name} (from below)

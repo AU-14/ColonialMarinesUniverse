@@ -832,8 +832,9 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
                 Dirty(uid, firing);
 
                 var groundFilter = Filter
-                    .BroadcastMap(terminalCoordinates.MapId)
-                    .RemoveWhereAttachedEntity(e => !HasComp<SquadMemberComponent>(e) && !HasComp<GhostComponent>(e));
+                    .Broadcast() // CMU14: every level of the column, not just the deepest floor
+                    .RemoveWhereAttachedEntity(e => !_zLevels.IsSameZNetwork(Transform(e).MapID, terminalCoordinates.MapId) || // CMU14
+                                                    !HasComp<SquadMemberComponent>(e) && !HasComp<GhostComponent>(e));
 
                 _audio.PlayGlobal(cannon.GroundAlertSound, groundFilter, true);
 
@@ -873,21 +874,21 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
                 var planetEntCoordinates = _transform.ToCoordinates(terminalCoordinates);
                 _audio.PlayPvs(cannon.TravelSound, planetEntCoordinates, AudioParams.Default.WithMaxDistance(75));
 
-                _mortar.PopupWarning(terminalCoordinates, firing.FirstWarningRange, "rmc-ob-warning-one", "rmc-ob-warning-above-one", true);
+                CMUPopupColumnWarning(impactColumn, firing.FirstWarningRange, "rmc-ob-warning-one", "rmc-ob-warning-above-one"); // CMU14
             }
 
             if (!firing.WarnedOne && time > firing.StartedAt + firing.WarnOneDelay)
             {
                 firing.WarnedOne = true;
                 Dirty(uid, firing);
-                _mortar.PopupWarning(terminalCoordinates, firing.SecondWarningRange, "rmc-ob-warning-two", "rmc-ob-warning-above-two", true);
+                CMUPopupColumnWarning(impactColumn, firing.SecondWarningRange, "rmc-ob-warning-two", "rmc-ob-warning-above-two"); // CMU14
             }
 
             if (!firing.WarnedTwo && time > firing.StartedAt + firing.WarnTwoDelay)
             {
                 firing.WarnedTwo = true;
                 Dirty(uid, firing);
-                _mortar.PopupWarning(terminalCoordinates, firing.ThirdWarningRange, "rmc-ob-warning-three", "rmc-ob-warning-above-three", true);
+                CMUPopupColumnWarning(impactColumn, firing.ThirdWarningRange, "rmc-ob-warning-three", "rmc-ob-warning-above-three"); // CMU14
             }
 
             if (!firing.AegisBoomed && time > firing.StartedAt + firing.AegisBoomDelay)

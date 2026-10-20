@@ -22,6 +22,7 @@ using Content.Shared._RMC14.Power;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Water;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Charge.CursorCharge; // CMU14
 using Content.Shared._RMC14.Xenonids.Fortify;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Popups;
@@ -367,7 +368,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         }
 
         if (HasComp<MobStateComponent>(args.OtherEntity) &&
-            (_mobState.IsDead(args.OtherEntity) || _standing.IsDown(args.OtherEntity)))
+            (_mobState.IsDead(args.OtherEntity) || _standing.IsDown(args.OtherEntity)) &&
+            !IsChargingIntoVehicle(args.OtherEntity)) // CMU14: lunge paralyzes the charger, it still has to hit the hull
         {
             args.Cancelled = true;
             return;
@@ -390,6 +392,17 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
         args.Cancelled = true;
     }
+
+    // CMU14 Begin
+    // StartLunge paralyzes the charger, so the downed-mob pass-through let lunges slide right through
+    // tanks and the shake-the-crew branch in XenoChargerCollisionSystem never ran
+    private bool IsChargingIntoVehicle(EntityUid uid)
+    {
+        return TryComp(uid, out XenoChargerStateComponent? charge) &&
+               charge.MoveState != XenoChargerMoveState.Idle &&
+               !_mobState.IsDead(uid);
+    }
+    // CMU14 End
 
     public override void Update(float frameTime)
     {

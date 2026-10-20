@@ -93,6 +93,7 @@ public sealed partial class GunSystem : SharedGunSystem
         {
             if (throwItems && ent != null)
             {
+                MoveToShotLevel(ent.Value); // CMU14
                 ShootOrThrow(ent.Value, mapDirection, gunVelocity, gun, user);
                 continue;
             }
@@ -132,7 +133,10 @@ public sealed partial class GunSystem : SharedGunSystem
                     break;
                 case AmmoComponent newAmmo:
                     if (ent != null)
+                    {
+                        MoveToShotLevel(ent.Value); // CMU14
                         CreateAndFireProjectiles(ent.Value, newAmmo);
+                    }
                     break;
                 case HitscanAmmoComponent:
                     if (ent == null)
@@ -173,6 +177,16 @@ public sealed partial class GunSystem : SharedGunSystem
             $"{ToPrettyString(user)} shot {ToPrettyString(gun)} with {shotProjectiles.Count} projectiles aiming at {TransformSystem.ToMapCoordinates(toCoordinates)}.");
 
         return shotProjectiles;
+
+        // CMU14 Begin
+        // grenades come out of the gun's container on the shooter's level, but a cross-z shot starts at the
+        // opening on the other level. thrown from where they were, launchers just lobbed on your own floor
+        void MoveToShotLevel(EntityUid ammoEnt)
+        {
+            if (Transform(ammoEnt).MapID != fromMap.MapId)
+                TransformSystem.SetCoordinates(ammoEnt, fromEnt);
+        }
+        // CMU14 End
 
         void CreateAndFireProjectiles(EntityUid ammoEnt, AmmoComponent ammoComp)
         {

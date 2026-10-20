@@ -676,6 +676,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
     {
         return explosion == "Default"
             || explosion == "RMC"
+            || explosion == "CMUHijackPipe"
             || explosion == "RMCMortar"
             || explosion == "RMCOB"
             || explosion == "RMCOBXenoTunnel"

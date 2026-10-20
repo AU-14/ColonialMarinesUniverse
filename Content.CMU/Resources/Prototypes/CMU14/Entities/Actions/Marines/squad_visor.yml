@@ -57,3 +57,23 @@
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:CMUToggleSquadVisorMotionLinkActionEvent
+
+- type: entity
+  parent: ActionMarineBase
+  id: CMUActionSquadVisorAmmoHud
+  name: Toggle Ammo HUD
+  description: Toggles your squad optic showing your held gun's ammo count under your status alerts.
+  components:
+  - type: Action
+    checkCanInteract: false
+    itemIconStyle: NoItem
+    backgroundOn:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: template_on_big
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Interface/ammo_hud.rsi
+      state: rifle
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUToggleSquadVisorAmmoHudActionEvent

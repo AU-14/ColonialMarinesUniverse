@@ -234,8 +234,10 @@
         amount: 10
     - name: Food
       entries:
-      - id: RMCBoxMRE
-        amount: 2
+      - id: RMCMRECLF
+        amount: 24
+      - id: CMCanteen
+        amount: 24
     - name: Tools
       entries:
       - id: RMCM5Bayonet
