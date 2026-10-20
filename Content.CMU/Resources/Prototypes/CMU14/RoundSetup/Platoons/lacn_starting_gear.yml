@@ -12,8 +12,8 @@
     jumpsuit: CMULACNEngineerJumpsuit
     head: CMULACNHelmetEngineer
     outerClothing: CMULACNLogisticsVest
-    gloves: AU14LACNGloves
-    shoes: AU14LACNBootsFilled
+    gloves: CMULACNGlovesWhite
+    shoes: CMULACNBootsWhiteFilled
 
 - type: startingGear
   id: CMUGearLACNOPFOREngineeringTech
@@ -24,8 +24,8 @@
     jumpsuit: CMULACNEngineerJumpsuit
     head: CMULACNHelmetEngineer
     outerClothing: CMULACNLogisticsVest
-    gloves: AU14LACNGloves
-    shoes: AU14LACNBootsFilled
+    gloves: CMULACNGlovesWhite
+    shoes: CMULACNBootsWhiteFilled
 
 # Auxiliary (logistics) technician: requisitions gear
 - type: startingGear
@@ -37,8 +37,8 @@
     jumpsuit: CMULACNRequisitionsFieldUniform
     head: CMULACNHelmetRequisitions
     outerClothing: CMULACNLogisticsVest
-    gloves: AU14LACNGloves
-    shoes: AU14LACNBootsFilled
+    gloves: CMULACNGlovesWhite
+    shoes: CMULACNBootsWhiteFilled
   storage:
     back:
     - CMStampApproved
@@ -53,8 +53,8 @@
     jumpsuit: CMULACNRequisitionsFieldUniform
     head: CMULACNHelmetRequisitions
     outerClothing: CMULACNLogisticsVest
-    gloves: AU14LACNGloves
-    shoes: AU14LACNBootsFilled
+    gloves: CMULACNGlovesWhite
+    shoes: CMULACNBootsWhiteFilled
   storage:
     back:
     - CMStampApproved
@@ -69,8 +69,8 @@
     jumpsuit: CMULACNEngineerJumpsuit
     head: CMULACNHelmetEngineer
     outerClothing: CMULACNLogisticsVest
-    gloves: AU14LACNGloves
-    shoes: AU14LACNBootsFilled
+    gloves: CMULACNGlovesWhite
+    shoes: CMULACNBootsWhiteFilled
     back: CMULACNSatchel
     pocket1: AU14StampEO
 
@@ -82,8 +82,8 @@
     jumpsuit: CMULACNEngineerJumpsuit
     head: CMULACNHelmetEngineer
     outerClothing: CMULACNLogisticsVest
-    gloves: AU14LACNGloves
-    shoes: AU14LACNBootsFilled
+    gloves: CMULACNGlovesWhite
+    shoes: CMULACNBootsWhiteFilled
     back: CMULACNSatchel
     pocket1: AU14StampEO
 
@@ -96,8 +96,8 @@
     jumpsuit: CMULACNRequisitionsFieldUniform
     head: CMULACNHelmetRequisitions
     outerClothing: CMULACNLogisticsVest
-    gloves: AU14LACNGloves
-    shoes: AU14LACNBootsFilled
+    gloves: CMULACNGlovesWhite
+    shoes: CMULACNBootsWhiteFilled
     back: CMULACNSatchel
     pocket1: AU14StampLO
     pocket2: CMStampApproved
@@ -110,8 +110,8 @@
     jumpsuit: CMULACNRequisitionsFieldUniform
     head: CMULACNHelmetRequisitions
     outerClothing: CMULACNLogisticsVest
-    gloves: AU14LACNGloves
-    shoes: AU14LACNBootsFilled
+    gloves: CMULACNGlovesWhite
+    shoes: CMULACNBootsWhiteFilled
     back: CMULACNSatchel
     pocket1: AU14StampLO
     pocket2: CMStampApproved
@@ -177,3 +177,240 @@
   inhand:
   - AU14CMDefibrillator
   - AU14TentBigFoldedSurgical
+
+# Aircrew, command and the CMO spawn in their LACN uniforms instead of picking them from a vendor.
+- type: startingGear
+  id: CMUGearLACNGOVFORDSPilot
+  equipment:
+    id: AU14IDCardGOVFORDSPilot
+    ears: AU14HeadsetGovforCommand
+    jumpsuit: AU14LACNPilotJumpsuit
+    head: CMULACNHelmetDropshipCrew
+    gloves: CMULACNGlovesWhite
+    shoes: CMULACNBootsWhiteFilled
+
+- type: startingGear
+  id: CMUGearLACNGOVFORDCC
+  equipment:
+    id: AU14IDCardGOVFORDCC
+    ears: AU14HeadsetGovforCommand
+    jumpsuit: AU14LACNPilotJumpsuit
+    head: AU14LACNAirCrewHelmet
+    gloves: CMULACNGlovesWhite
+    shoes: CMULACNBootsWhiteFilled
+
+- type: startingGear
+  id: CMUGearLACNGOVFORGunshipPilot
+  equipment:
+    id: AU14IDCardGOVFORGunshipPilot
+    ears: AU14HeadsetGovforCommand
+    jumpsuit: AU14LACNPilotJumpsuit
+    head: CMULACNHelmetGunshipCrew
+    gloves: CMULACNGlovesWhite
+    shoes: CMULACNBootsWhiteFilled
+
+- type: startingGear
+  id: CMUGearLACNGOVFOROfficerMedical
+  equipment:
+    id: AU14IDCardGOVFOROfficerMedical
+    ears: AU14HeadsetGovforCommand
+    jumpsuit: CMULACNSurgicalScrubs
+    head: AU14LACNNavyCap
+    outerClothing: RMCLabcoat
+    neck: ClothingNeckStethoscope
+    eyes: RMCGlassesMedicalHUDGlasses
+    shoes: CMULACNBootsWhiteFilled
+  inhand:
+  - AU14KitJOMedicalOfficerKit
+  - AU14StampMO
+
+- type: startingGear
+  id: CMUGearLACNGOVFORPlatCo
+  equipment:
+    id: AU14IDCardGOVFORPlatCo
+    ears: AU14HeadsetGovforCommand
+    pocket1: AU14StampCO
+    jumpsuit: CMULACNServiceUniform
+    head: CMULACNCommandingOfficerCap
+    outerClothing: CMULACNCoatCommandingOfficer
+    gloves: CMULACNGlovesService
+    shoes: CMULACNBootsWhiteFilled
+  inhand:
+  - AU14TabletGovfor
+  storage:
+    back:
+    - ANPRCFillCardGOVFOR
+
+- type: startingGear
+  id: CMUGearLACNGOVFORAdjutant
+  equipment:
+    id: AU14IDCardGOVFORAdjutant
+    ears: AU14HeadsetGovforCommand
+    pocket2: AU14TabletGovfor
+    jumpsuit: CMULACNServiceUniform
+    head: CMULACNOfficerCap
+    outerClothing: CMULACNCoatOfficer
+    gloves: CMULACNGlovesService
+    shoes: CMULACNBootsWhiteFilled
+  inhand:
+  - AU14KitJOAdjutantKit
+  storage:
+    back:
+    - ANPRCFillCardGOVFOR
+
+- type: startingGear
+  id: CMUGearLACNGOVFORadvisor
+  equipment:
+    id: AU14IDCardSquadAdvisor
+    ears: AU14HeadsetGovforCommand
+    belt: AU14BeltPostelPistolM48A5NoSuper
+    back: AU14SatchelMarineAdvisorMilitary
+    jumpsuit: CMULACNServiceUniform
+    head: AU14LACNNavyCap
+    gloves: CMULACNGlovesService
+    shoes: CMULACNBootsWhiteFilled
+  storage:
+    back:
+    - ANPRCFillCardGOVFOR
+
+- type: startingGear
+  id: CMUGearLACNGOVFOROfficerIntel
+  equipment:
+    id: AU14IDCardGOVFOROfficerIntel
+    ears: AU14GOVFORIOHeadset
+    jumpsuit: CMULACNServiceUniform
+    head: CMULACNOfficerCap
+    gloves: CMULACNGlovesService
+    shoes: CMULACNBootsWhiteFilled
+  inhand:
+  - AU14KitJOIntelligenceOfficer
+
+- type: startingGear
+  id: CMUGearLACNGOVFOROfficerMP
+  equipment:
+    id: AU14IDCardGOVFOROfficerMP
+    ears: AU14HeadsetGovforCommand
+    jumpsuit: CMULACNMPUniform
+    head: CMULACNOfficerCap
+    gloves: CMULACNGlovesWhite
+    shoes: CMULACNBootsWhiteFilled
+  inhand:
+  - AU14KitJOCMPKit
+
+- type: startingGear
+  id: CMUGearLACNOPFORDSPilot
+  equipment:
+    id: AU14IDCardOPFORDSPilot
+    ears: AU14HeadsetOpforCommand
+    jumpsuit: AU14LACNPilotJumpsuit
+    head: CMULACNHelmetDropshipCrew
+    gloves: CMULACNGlovesWhite
+    shoes: CMULACNBootsWhiteFilled
+
+- type: startingGear
+  id: CMUGearLACNOPFORDCC
+  equipment:
+    id: AU14IDCardOPFORDCC
+    ears: AU14HeadsetOpforCommand
+    jumpsuit: AU14LACNPilotJumpsuit
+    head: AU14LACNAirCrewHelmet
+    gloves: CMULACNGlovesWhite
+    shoes: CMULACNBootsWhiteFilled
+
+- type: startingGear
+  id: CMUGearLACNOPFORGunshipPilot
+  equipment:
+    id: AU14IDCardOPFORGunshipPilot
+    ears: AU14HeadsetOpforCommand
+    jumpsuit: AU14LACNPilotJumpsuit
+    head: CMULACNHelmetGunshipCrew
+    gloves: CMULACNGlovesWhite
+    shoes: CMULACNBootsWhiteFilled
+
+- type: startingGear
+  id: CMUGearLACNOPFOROfficerMedical
+  equipment:
+    id: AU14IDCardOPFOROfficerMedical
+    ears: AU14HeadsetOpforCommand
+    jumpsuit: CMULACNSurgicalScrubs
+    head: AU14LACNNavyCap
+    outerClothing: RMCLabcoat
+    neck: ClothingNeckStethoscope
+    eyes: RMCGlassesMedicalHUDGlasses
+    shoes: CMULACNBootsWhiteFilled
+  inhand:
+  - AU14KitJOMedicalOfficerKit
+  - AU14StampMO
+
+- type: startingGear
+  id: CMUGearLACNOPFORPlatCo
+  equipment:
+    id: AU14IDCardOPFORPlatCo
+    ears: AU14HeadsetOpforCommand
+    pocket1: AU14StampCO
+    jumpsuit: CMULACNServiceUniform
+    head: CMULACNCommandingOfficerCap
+    outerClothing: CMULACNCoatCommandingOfficer
+    gloves: CMULACNGlovesService
+    shoes: CMULACNBootsWhiteFilled
+  inhand:
+  - AU14TabletOpfor
+  storage:
+    back:
+    - ANPRCFillCardOPFOR
+
+- type: startingGear
+  id: CMUGearLACNOPFORAdjutant
+  equipment:
+    id: AU14IDCardOPFORAdjutant
+    ears: AU14HeadsetOpforCommand
+    pocket2: AU14TabletOpfor
+    jumpsuit: CMULACNServiceUniform
+    head: CMULACNOfficerCap
+    outerClothing: CMULACNCoatOfficer
+    gloves: CMULACNGlovesService
+    shoes: CMULACNBootsWhiteFilled
+  inhand:
+  - AU14KitJOAdjutantKit
+  storage:
+    back:
+    - ANPRCFillCardOPFOR
+
+- type: startingGear
+  id: CMUGearLACNOPFORadvisor
+  equipment:
+    id: AU14IDCardOPFORAdvisor
+    ears: AU14HeadsetOpforCommand
+    belt: AU14BeltPostelPistolM48A5NoSuper
+    back: AU14SatchelMarineAdvisorMilitary
+    jumpsuit: CMULACNServiceUniform
+    head: AU14LACNNavyCap
+    gloves: CMULACNGlovesService
+    shoes: CMULACNBootsWhiteFilled
+  storage:
+    back:
+    - ANPRCFillCardOPFOR
+
+- type: startingGear
+  id: CMUGearLACNOPFOROfficerIntel
+  equipment:
+    id: AU14IDCardOPFOROfficerIntel
+    ears: AU14OPFORIOHeadset
+    jumpsuit: CMULACNServiceUniform
+    head: CMULACNOfficerCap
+    gloves: CMULACNGlovesService
+    shoes: CMULACNBootsWhiteFilled
+  inhand:
+  - AU14KitJOIntelligenceOfficer
+
+- type: startingGear
+  id: CMUGearLACNOPFOROfficerMP
+  equipment:
+    id: AU14IDCardOPFOROfficerMP
+    ears: AU14HeadsetOpforCommand
+    jumpsuit: CMULACNMPUniform
+    head: CMULACNOfficerCap
+    gloves: CMULACNGlovesWhite
+    shoes: CMULACNBootsWhiteFilled
+  inhand:
+  - AU14KitJOCMPKit

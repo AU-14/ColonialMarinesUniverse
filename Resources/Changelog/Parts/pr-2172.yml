@@ -1,0 +1,10 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: You now shoot where you look across z-levels. Point at something through
+    a hole and you'll shoot down at it.
+  type: Tweak
+- message: Removed the shoot down z-level hotkey.
+  type: Remove
+time: '2026-10-13T12:29:50.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2172

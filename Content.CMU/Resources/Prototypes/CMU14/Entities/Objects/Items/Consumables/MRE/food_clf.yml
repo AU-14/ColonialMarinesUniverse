@@ -1,0 +1,151 @@
+# Generated from cmss13 PR 7895's DM code.
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodCLFWrappedMeatPie
+  name: "wrapped meat pie"
+  description: "A wrapped homemade minced meat pie, made with love."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_clf.rsi
+    state: clf_meatpie
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 35
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 6
+      - ReagentId: CMUMeatProtein
+        Quantity: 20
+      - ReagentId: TableSalt
+        Quantity: 4
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodCLFWrappedBananaPie
+  name: "wrapped banana pie"
+  description: "A wrapped homemade banana pie, sweet and creamy, made by someone with a sense of humor."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_clf.rsi
+    state: clf_pie
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 40
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 10
+      - ReagentId: JuiceBanana
+        Quantity: 16
+      - ReagentId: Cream
+        Quantity: 5
+      - ReagentId: Sugar
+        Quantity: 4
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodCLFWrappedCheesePizza
+  name: "wrapped cheese pizza"
+  description: "A smaller size wrapped pizza, has multiple different kinds of cheese on it."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_clf.rsi
+    state: clf_cheesepizza
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 35
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 10
+      - ReagentId: CMUCheese
+        Quantity: 16
+      - ReagentId: TableSalt
+        Quantity: 4
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodCLFWrappedMushroomPizza
+  name: "wrapped mushroom pizza"
+  description: "A smaller size wrapped pizza, made with creamy sauce and some mushroom slices."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_clf.rsi
+    state: clf_mushroompizza
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 35
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 8
+      - ReagentId: CMUMushroom
+        Quantity: 14
+      - ReagentId: CMUCheese
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 4
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodCLFWrappedVegetablePizza
+  name: "wrapped vegetable pizza"
+  description: "A smaller size wrapped pizza, vegeterian friendly, has some cheese on it tho."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_clf.rsi
+    state: clf_vegetablepizza
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 41
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 8
+      - ReagentId: CMUVegetable
+        Quantity: 14
+      - ReagentId: CMUCheese
+        Quantity: 4
+      - ReagentId: JuiceTomato
+        Quantity: 6
+      - ReagentId: TableSalt
+        Quantity: 4
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodCLFWrappedMeatPizza
+  name: "wrapped meat pizza"
+  description: "A smaller size wrapped pizza, has some slices of beef and bacon on it."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_clf.rsi
+    state: clf_meatpizza
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 41
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 8
+      - ReagentId: CMUMeatProtein
+        Quantity: 14
+      - ReagentId: CMUCheese
+        Quantity: 4
+      - ReagentId: JuiceTomato
+        Quantity: 6
+      - ReagentId: TableSalt
+        Quantity: 4

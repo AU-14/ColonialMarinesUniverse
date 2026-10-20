@@ -75,6 +75,24 @@
     AU14JobOPFORNurse: CMUGearLACNOPFORNurse
     AU14JobGOVFORMilitaryDoctor: CMUGearLACNGOVFORMilitaryDoctor
     AU14JobOPFORMilitaryDoctor: CMUGearLACNOPFORMilitaryDoctor
+    AU14JobGOVFORDSPilot: CMUGearLACNGOVFORDSPilot
+    AU14JobGOVFORDCC: CMUGearLACNGOVFORDCC
+    AU14JobGOVFORGunshipPilot: CMUGearLACNGOVFORGunshipPilot
+    AU14JobGOVFOROfficerMedical: CMUGearLACNGOVFOROfficerMedical
+    AU14JobGOVFORPlatCo: CMUGearLACNGOVFORPlatCo
+    AU14JobGOVFORAdjutant: CMUGearLACNGOVFORAdjutant
+    AU14JobGOVFORadvisor: CMUGearLACNGOVFORadvisor
+    AU14JobGOVFOROfficerIntel: CMUGearLACNGOVFOROfficerIntel
+    AU14JobGOVFOROfficerMP: CMUGearLACNGOVFOROfficerMP
+    AU14JobOPFORDSPilot: CMUGearLACNOPFORDSPilot
+    AU14JobOPFORDCC: CMUGearLACNOPFORDCC
+    AU14JobOPFORGunshipPilot: CMUGearLACNOPFORGunshipPilot
+    AU14JobOPFOROfficerMedical: CMUGearLACNOPFOROfficerMedical
+    AU14JobOPFORPlatCo: CMUGearLACNOPFORPlatCo
+    AU14JobOPFORAdjutant: CMUGearLACNOPFORAdjutant
+    AU14JobOPFORadvisor: CMUGearLACNOPFORadvisor
+    AU14JobOPFOROfficerIntel: CMUGearLACNOPFOROfficerIntel
+    AU14JobOPFOROfficerMP: CMUGearLACNOPFOROfficerMP
   platoonPatch: /Textures/CMU14/Clothing/Patches/brazilunit_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:

@@ -3,6 +3,7 @@ using Content.Server._RMC14.Xenonids.Hive;
 using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
+using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.GameTicking;
@@ -17,6 +18,7 @@ public sealed partial class HiveCollapseRuleSystem : GameRuleSystem<HiveCollapse
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
     [Dependency] private CMURoundStatisticsSystem _roundStats = default!;
+    [Dependency] private XenoEvolutionSystem _xenoEvolution = default!;
 
     private const string DefaultWinMsg = "The hive has collapsed!";
     private TimeSpan? _hiveCollapseTime;
@@ -47,7 +49,9 @@ public sealed partial class HiveCollapseRuleSystem : GameRuleSystem<HiveCollapse
                 return true;
         }
 
-        return false;
+        // CurrentQueen is just a pointer the hive system keeps, and it's been out of sync with reality
+        // before (revived queens). a living queen body is what the distress rule checks too
+        return _xenoEvolution.HasLiving<XenoEvolutionGranterComponent>(1);
     }
 
     private void OnQueenChanged(XenoHiveQueenChangedEvent ev)

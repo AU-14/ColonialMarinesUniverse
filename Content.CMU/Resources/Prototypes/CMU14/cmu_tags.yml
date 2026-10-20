@@ -99,3 +99,6 @@
 
 - type: Tag
   id: CMUCassettePouch
+
+- type: Tag
+  id: CMUCanOpener
