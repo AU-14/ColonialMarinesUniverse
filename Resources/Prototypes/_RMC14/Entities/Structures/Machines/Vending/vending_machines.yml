@@ -303,6 +303,56 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/NutriCo/drink.rsi
     offset: 0, 0.5
+  # cmu edit start: pours mess drinks into a cup or other container, like a soda fountain
+  - type: VendingMachine
+    pack: CMUNutriCoAutoDrinkEmpty
+  - type: ActivatableUI
+    key: enum.CMUAutoDrinkUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUAutoDrinkUiKey.Key:
+        type: CMUAutoDrinkBui
+      enum.VendingMachineUiKey.Key:
+        type: VendingMachineBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: ItemSlots
+  - type: ContainerContainer
+    containers:
+      autodrink_bay: !type:ContainerSlot
+  - type: CMUAutoDrink
+    bay:
+      whitelistFailPopup: reagent-dispenser-component-cannot-put-entity-message
+      whitelist:
+        components:
+        - FitsInDispenser
+    drinks:
+    - reagent: Water
+      note: cmu-autodrink-note-chilled
+    - reagent: RMCCoffee
+      name: cmu-autodrink-coffee
+      note: cmu-autodrink-note-hot
+    - reagent: RMCTea
+      name: cmu-autodrink-tea
+      note: cmu-autodrink-note-hot
+    - reagent: Milk
+      note: cmu-autodrink-note-chilled
+    - reagent: RMCChocolateDrink
+      name: cmu-autodrink-chocolate-milk
+      note: cmu-autodrink-note-chilled
+    - reagent: JuiceOrange
+      name: cmu-autodrink-electrolyte-orange
+      note: cmu-autodrink-note-chilled
+    - reagent: LemonLime
+      name: cmu-autodrink-electrolyte-lemon-lime
+      note: cmu-autodrink-note-chilled
+    - reagent: JuiceGrape
+      name: cmu-autodrink-electrolyte-grape
+      note: cmu-autodrink-note-chilled
+    - reagent: Ice
+      name: cmu-autodrink-ice
+      extra: true
+  # cmu edit end
 
 - type: entity
   parent: CMVendorCola

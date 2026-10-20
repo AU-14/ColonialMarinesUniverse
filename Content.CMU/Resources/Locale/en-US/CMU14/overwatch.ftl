@@ -53,3 +53,5 @@ cmu-overwatch-fireteams-auto-off = AUTO LEADERS: OFF
 cmu-overwatch-fireteams-auto-on-desc = A missing squad or fireteam leader is filled automatically.
 cmu-overwatch-fireteams-auto-off-desc = Leaders for this squad are only chosen by hand.
 cmu-overwatch-fireteams-auto-tooltip = Whether this squad gets a squad leader and fireteam leaders automatically. Off, nobody is promoted unless you or the squad leader choose them.
+cmu-overwatch-feeds-focus = FOCUS
+cmu-overwatch-feeds-focus-tooltip = Show only this camera, filling the window. Press again to see all feeds.

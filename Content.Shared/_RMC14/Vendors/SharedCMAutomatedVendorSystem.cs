@@ -851,6 +851,15 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         mount.Arc = Angle.FromDegrees(360);
         Dirty(spawn, mount);
 
+        // cmu edit start: some vendors drop what they vend on top of themselves, with a sound, like a tray
+        if (TryComp(vendor, out Content.Shared.CMU14.Vendors.CMUVendOntoMachineComponent? ontoMachine))
+        {
+            vended = true;
+            if (ontoMachine.Sound != null)
+                _audio.PlayPredicted(ontoMachine.Sound, vendor, player);
+        }
+        // cmu edit end
+
         if (!vended)
         {
             var grabbed = Grab(player, spawn, replaceSlot);

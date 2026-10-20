@@ -79,6 +79,9 @@
   name: hull window
   description: A glass window with a special rod matrix inside a wall frame. This one was made out of exotic materials to prevent hull breaches. No way to get through here.
   components:
+#cmu edit start: breakable once a hijacked dropship crashes into the ship
+  - type: CMUCrashBreakableHull
+#cmu edit end
   - type: Corrodible
     isCorrodible: false
   - type: Sprite
@@ -100,6 +103,9 @@
   name: hull window
   description: A glass window with a special rod matrix inside a wall frame. This one was made out of exotic materials to prevent hull breaches. No way to get through here.
   components:
+#cmu edit start: breakable once a hijacked dropship crashes into the ship
+  - type: CMUCrashBreakableHull
+#cmu edit end
   - type: Corrodible
     isCorrodible: false
   - type: Sprite
@@ -119,6 +125,9 @@
   name: hull window
   description: A glass window with a special rod matrix inside a wall frame. This one was made out of exotic materials to prevent hull breaches. No way to get through here.
   components:
+#cmu edit start: breakable once a hijacked dropship crashes into the ship
+  - type: CMUCrashBreakableHull
+#cmu edit end
   - type: Corrodible
     isCorrodible: false
   - type: Sprite
