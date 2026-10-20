@@ -1,3 +1,4 @@
+using Content.Client.Lobby.UI;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Bwoink;
 using Content.Shared.CMU14.BugHelp;
@@ -43,7 +44,7 @@ public sealed class BugHelpUIController : UIController
         _window.TriageOpenButton.OnPressed += _ =>
         {
             _aHelp.Open();
-            window.Close();
+            _window.Close();
         };
         _window.OnSubmit += window =>
         {
