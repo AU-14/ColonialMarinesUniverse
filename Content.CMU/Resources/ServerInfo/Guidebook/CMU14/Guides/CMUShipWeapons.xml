@@ -4,30 +4,42 @@
   <GuideEntityEmbed Entity="CMUShipWeaponsTerminal"/>
 
   ## Command: Arming the Ship
-  Open the ship weapons arming terminal with command access. Choose [bold]at least one different weapon, up to the limit displayed by the terminal[/bold] and confirm. The default limit is three.
+  Open the ship weapons arming terminal with command access. Choose [bold]at least one different weapon, up to the limit displayed by the terminal[/bold] and confirm. The default limit is two.
   [color=red]Confirmation permanently locks the entire loadout for the operation. Picking fewer than the limit does not leave slots available for later.[/color]
-  All selected weapons share [bold]one pool of fire missions[/bold] shown by the terminal (two by default). Any armed weapon spends from that pool, and more terminals, batteries, or ammunition cannot reset it.
+  All selected weapons share [bold]one pool of fire missions[/bold] shown by the terminal (two by default). Any armed weapon spends from that pool, and more terminals or batteries cannot reset it.
   Each ship has its own loadout, fire-mission pool, and cooldown. Decks in one ship's Z-level network share them; identical ships do not.
 
-  ## Loading Physical Batteries
-  When the server requires physical guns, a compatible anchored battery must be installed on your ship before command can arm its weapons.
-  It need not be loaded during arming, but firing requires a matching loaded mission round.
-  - [bold]Heavy battery[/bold]: 120mm HE, 380mm HE, Airburst.
-  - [bold]Support projector[/bold]: Gas, EMS, Smoke.
-  - [bold]Rapid battery[/bold]: Gatling, Walking, Precision.
-  - [bold]Railcannon[/bold]: Railcannon Strike.
-  Use a compatible round on the gun to load it. Alt-click or use its eject verb to unload.
-  Each gun holds one round. [bold]One round supplies the entire mission[/bold], including every barrage shell.
-  A gun loaded with one supported weapon's round cannot fire another weapon's mission.
-  When physical guns are not required, arming and firing work without batteries or rounds. This is the default server setting.
+  ## Repairing the Batteries
+  <GuideEntityEmbed Entity="CMUShipWeaponGun"/>
+  The ship has orbital batteries, and either one can fire any mission. An anchored battery must be installed on your ship before command can arm weapons.
+  [bold]Every shot burns out the battery that fires it.[/bold] Before it can fire again, work through its eight repair steps in order:
+  - Crowbar: pry open the breech hatch.
+  - Screwdriver: unscrew the coil housing.
+  - Wrench: unbolt the burnt-out coil assembly.
+  - Wirecutters: cut away the fused wiring.
+  - Welder: weld the replacement rail seams.
+  - Wrench: bolt the coil assembly back in.
+  - Multitool: recalibrate the targeting relay.
+  - Screwdriver: screw the housing shut.
+  Examine a battery to see which step is next. With both batteries burnt out, nothing can fire until one is repaired.
+  Tech tree purchases can clear extra fire missions for strikes the terminal didn't pick.
 
   ## Overwatch: Calling a Strike
   Use the existing orbital bombardment tab, enter ground coordinates, select an armed weapon, and confirm fire.
-  Walking Barrage also lets you choose its travel direction.
+  With Walking Barrage selected, a direction picker also appears for its travel direction.
   The first impact arrives [bold]24 seconds after launch[/bold]. A shared [bold]60-second cooldown[/bold] starts when the ship accepts a launch.
   Nearby troops receive the launch warning, then [bold]one directional warning three seconds later[/bold] pointing from their position toward the target. A final-approach warning precedes impact.
-  Rejected targets, missing rounds, cooldown failures, and an empty fire-mission pool consume nothing. Accepted launches spend one shared mission and, when required, one round immediately.
-  Protection changes can intercept later impacts without a refund. The standard orbital cannon remains separate, with its existing ammunition, fuel, and cooldown.
+  Rejected targets, burnt-out batteries, cooldown failures, and an empty fire-mission pool consume nothing. Accepted launches spend one shared mission and burn out the battery that fired.
+  Protection changes can intercept later impacts without a refund. Once the ship has armed weapons, overwatch picks from its fire missions instead of the standard orbital cannon.
+
+  ## Anti-Air Defense: IX-50 MGAD
+  <GuideEntityEmbed Entity="RMCShipAntiAirCannon"/>
+  <GuideEntityEmbed Entity="RMCShipAntiAirConsole"/>
+  The ship's IX-50 MGAD cannon is controlled from its system console, which needs command or engineering access and engineering training. Pick a [bold]defense zone[/bold] on the ship to protect, or clear targeting to leave every zone open.
+  When a hijacked dropship heads for the protected zone, the MGAD fires on it and forces it to divert to a different zone. Everyone aboard the dropship feels the ship jostle and turn, and the defending faction is told which zone was saved partway through the flight.
+  [bold]The MGAD only works once.[/bold] Any hijacked dropship heading for the ship knocks the system out, whether or not it was diverted. After that the console is disabled for the rest of the operation.
+  The overwatch console shows the MGAD's status, its current zone, and whether it has engaged.
+  Pick the zone you can least afford to lose, such as the hangar or engineering, and change it as the threat moves.
 
   ## Strike Profiles
   Scatter is the maximum distance between the requested target and an individual impact. Its blast radius extends beyond that point.

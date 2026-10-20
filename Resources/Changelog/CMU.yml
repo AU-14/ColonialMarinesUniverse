@@ -14111,5 +14111,157 @@
   id: 839
   time: '2026-10-19T21:12:53.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2233
+- author: Mary-Marilyn
+  changes:
+  - message: Added surgical vests to the civilian medical vendors.
+    type: Add
+  id: 840
+  time: '2026-10-20T06:46:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2241
+- author: troytroy400
+  changes:
+  - message: The USS Bush now has a gravity generator in the reactor ring and if it
+      looses power the entire ship will now loose gravity.
+    type: Add
+  - message: Open space around and inside the USS Bush is now zero-g. You float instead
+      of falling.
+    type: Add
+  - message: If you are in zero-g you can now float up or down through open gaps.
+    type: Add
+  - message: Characters now bob up and down while floating in zero-g.
+    type: Add
+  - message: Air and pressure now matter on the USS Bush from round start, so stepping
+      outside an airlock without a suit is deadly. Spacewalks are needed to service
+      the ship's guns now.
+    type: Add
+  - message: When a hijacked dropship crashes into the ship, the hull windows become
+      breakable and every APC aboard is knocked out.
+    type: Add
+  - message: After the crash the ship keeps coming apart. From 1 minute in, the hijack
+      pipe explosions can break hull windows and from 8 minutes in, explosions can
+      destroy any floor tile.
+    type: Add
+  - message: Low and high pressure now hurt.
+    type: Add
+  - message: Added suit storage to the Bush each holding 7 pressure suits, 7 helmets
+      and 7 emergency gas masks.
+    type: Add
+  - message: Firelocks. They slam shut with an alarm when air starts escaping or an
+      area is spaced, run without power and once sealed only GOVFOR/OPFOR engineers
+      or a crowbar can open them.
+    type: Add
+  - message: After a hijack crash, GOVFOR/OPFOR airlocks and double doors will bolt
+      themselves while shut against unsafe air and unbolt once it's safe, assuming
+      the doors have power.
+    type: Add
+  - message: Added airlocks to the USS Bush
+    type: Add
+  - message: A self-filling air vent that tops a room up to one atmosphere of breathable
+      air and stops when it reaches pressure. Lifeboats and escape pods now have one.
+    type: Add
+  - message: The atmospherics alert computer now has a screen listing every area aboard
+      with a breach, fire, toxic gas, low oxygen, bad pressure, freezing air or a
+      sealed firelock.
+    type: Add
+  - message: The ship weapons arming terminal has a new fire-control screen, and extra
+      fire missions can be bought from the tech tree.
+    type: Add
+  - message: Admin strike spawners for every ship weapon fire mission, with and without
+      the travel time.
+    type: Add
+  - message: Guidebook entries for the ship's orbital weapons and the MGAD anti-air.
+    type: Add
+  - message: Overwatch camera feeds can be focused into one big view.
+    type: Add
+  - message: GOVFOR, OPFOR and Colony identification computers, plus ship versions
+      of the tech tree console, tactical map, callsign terminal and station alert
+      computer.
+    type: Add
+  - message: Payphones now charge $2 a call from cash in hand or your ID card account.
+      Calls to the comms relay cost $25 and 911 is free.
+    type: Add
+  - message: Every phone now has their own UI.
+    type: Add
+  - message: Televisions now have their own UI TV set screen with channels.
+    type: Add
+  - message: The NutriCo AutoDrink now pours drinks into a cup or container in its
+      bay like a soda fountain and can dispense disposable cups.
+    type: Add
+  - message: The NutriCo AutoChef has its own menu screen, drops meals on top of the
+      machine and stocks plastic forks, spoons and knives.
+    type: Add
+  - message: Whats inside NutriCo machines on ships now change with the platoon.
+    type: Add
+  - message: Holiday meals show up in every NutriCo AutoChef during December.
+    type: Add
+  - message: The coffee machine now brews coffee into a cup or mug used on it.
+    type: Add
+  - message: Faction equipment vendors now stock canteens next to their MREs.
+    type: Add
+  - message: The motion sickness trait now also kicks in after floating in zero-g
+      for too long.
+    type: Add
+  - message: The USCM requisitions vendor now stocks 4 M13 pistol kits, plus 40 standard,
+      4 AP, 4 extended, 2 drum and 1 AP drum M13 magazines.
+    type: Add
+  - message: Reworked the alliance, withdraw, identification, criminal records, personnel
+      roster, department, budget, corporate affairs, diplomatic and third-party support
+      screens to the new terminal style.
+    type: Tweak
+  - message: Cash vendors have a new storefront screen with product cards, grouped
+      into sections.
+    type: Tweak
+  - message: Every pressure suit now carries its own oxygen supply and protects against
+      vacuum and high pressure when worn.
+    type: Tweak
+  - message: The MK.35 pressure suit and helmet no longer need a marine uniform.
+    type: Tweak
+  - message: The breath mask now works with internals.
+    type: Tweak
+  - message: Xenos move at close to their normal speed in zero-g but still drift with
+      no friction.
+    type: Tweak
+  - message: Survivors floating in space outside the ship don't count toward round-end
+      conditions until they get back aboard, so nobody can stall a round by fucking
+      off into space.
+    type: Tweak
+  - message: Lifeboat hatches on the ship now bolt closed when their lifeboat launches,
+      so the ship doesn't vent into the empty dock.
+    type: Tweak
+  - message: The AEG-538 has been removed from the tech tree for now.
+    type: Tweak
+  - message: Overwatch camera feeds now have a light film grain instead of scanlines
+      and helmet cameras are zoomed in a bit.
+    type: Tweak
+  - message: The overwatch orbital picker no longer shows the old standard orbital
+      cannon and only shows the barrage direction for walking barrages.
+    type: Tweak
+  - message: Wielding and unwielding popups are now only shown to the person doing
+      it.
+    type: Tweak
+  - message: Eating with a fork or spoon in hand is now instant and skips the eating
+      do-after.
+    type: Tweak
+  - message: Do Not Disturb now works on every desk and wall phone.
+    type: Tweak
+  - message: All phones on the USS Bush are now listed under USS George W. Bush.
+    type: Tweak
+  - message: Mortars can be worn on the back and in suit storage.
+    type: Tweak
+  - message: Soporific no longer puts you to sleep and instead gives the oxycodone
+      high effect but on steroids.
+    type: Tweak
+  - message: The nailgun, M83 grenade launcher, M13 pistol and MP27 are back to their
+      CM13 sprites.
+    type: Tweak
+  - message: The USS Bush hangar and every stairwell aboard no longer vent all the
+      ship's air to space at round start.
+    type: Fix
+  - message: The new M41 sounds and other weapon sounds were stereo and now play properly
+      from where they're fired.
+    type: Fix
+  id: 841
+  time: '2026-10-20T08:24:02.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2230
 Name: CMU
 Order: -1

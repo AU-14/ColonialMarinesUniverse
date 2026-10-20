@@ -7,7 +7,7 @@
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
-    state: terminal1_old
+    state: terminal
   - type: InteractionOutline
   - type: ApcPowerReceiver
     powerLoad: 0

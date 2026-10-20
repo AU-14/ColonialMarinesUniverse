@@ -1,0 +1,67 @@
+# Drinks the platoon mess dispensers pour (CMUNutriCoDrinkLACN, CMUNutriCoDrinkRMC, CMUNutriCoDrinkSPP).
+
+- type: reagent
+  id: CMUHorchata
+  parent: BaseDrink
+  name: cmu-reagent-horchata-name
+  desc: cmu-reagent-horchata-desc
+  physicalDesc: reagent-physical-desc-creamy
+  flavor: sweet
+  color: "#efe6d2"
+  recognizable: true
+
+- type: reagent
+  id: CMUCafeDeOlla
+  parent: RMCCoffee
+  name: cmu-reagent-cafe-de-olla-name
+  desc: cmu-reagent-cafe-de-olla-desc
+  flavor: coffee
+  color: "#5a3420"
+
+- type: reagent
+  id: CMUAguaFresca
+  parent: BaseJuice
+  name: cmu-reagent-agua-fresca-name
+  desc: cmu-reagent-agua-fresca-desc
+  physicalDesc: reagent-physical-desc-refreshing
+  flavor: fruity
+  color: "#b3263a"
+  recognizable: true
+
+- type: reagent
+  id: CMUChaiTea
+  parent: RMCTea
+  name: cmu-reagent-chai-tea-name
+  desc: cmu-reagent-chai-tea-desc
+  flavor: spicy
+  color: "#a87a4e"
+
+- type: reagent
+  id: CMUMangoLassi
+  parent: BaseDrink
+  name: cmu-reagent-mango-lassi-name
+  desc: cmu-reagent-mango-lassi-desc
+  physicalDesc: reagent-physical-desc-creamy
+  flavor: creamy
+  color: "#f2b13c"
+  recognizable: true
+
+- type: reagent
+  id: CMUKvass
+  parent: BaseDrink
+  name: cmu-reagent-kvass-name
+  desc: cmu-reagent-kvass-desc
+  physicalDesc: reagent-physical-desc-fizzy
+  flavor: bread
+  color: "#6b3d1c"
+  recognizable: true
+
+- type: reagent
+  id: CMUSbiten
+  parent: BaseDrink
+  name: cmu-reagent-sbiten-name
+  desc: cmu-reagent-sbiten-desc
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: spicy
+  color: "#a5621f"
+  recognizable: true
