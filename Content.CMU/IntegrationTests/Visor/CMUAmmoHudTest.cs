@@ -2,6 +2,7 @@ using Content.IntegrationTests.Fixtures;
 using Content.Shared.CMU14.Visor;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
+using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Wieldable;
 using Robust.Shared.GameObjects;
@@ -17,7 +18,7 @@ public sealed class CMUAmmoHudTest : GameTest
     private static PoolSettings ConnectedSettings => new() { Connected = true, Dirty = true };
 
     [Test]
-    public async Task OnlyMilitaryRiflesAndSpecialistWeaponsAreCompatible()
+    public async Task RedDotModelsAndAllSmartWeaponsAreCompatible()
     {
         await Server.WaitAssertion(() =>
         {
@@ -28,22 +29,33 @@ public sealed class CMUAmmoHudTest : GameTest
                 "RMCWeaponRifleSSG45NoLockStripped", "AUWeaponRifleXM20A2HAZOPS",
                 "AU14WeaponRifleKramerAR", "CMUWeaponRifleKramerKarbine", "AU14WeaponRifleKramerLSW",
                 "AU14WeaponRifleprodigyrifleAR", "AUWeaponRifleM20A", "AU14WeaponRifleM16A2",
-                "RMCWeaponRifleMAR30", "RMCWeaponRifleABR40Tactical", "AU14WeaponRifleAG80",
+                "RMCWeaponRifleABR40Tactical", "AU14WeaponRifleAG80",
                 "RMCWeaponRifleType71C", "RuMCWeaponRifleAK13", "RMCWeaponRifleL24",
-                "RMCWeaponRifleL90A2", "AU14WeaponRifleL90M", "CMM96SSniperRifle",
+                "RMCWeaponRifleL90A2", "AU14WeaponRifleL90M", "RMCL112SniperRifle",
                 "AU14L64A3SniperRifle", "RMCType88SniperRifle", "RuMcSniperRifleSVAROG",
                 "WeaponLauncherM83", "RMCWeaponLauncherM5ATL", "CMUWeaponLauncherEMBLR",
-                "AU14WeaponLauncherL164A3", "RMCWeaponFlamer", "AU14WeaponFlamerM240A2HAZOPS",
+                "AU14WeaponLauncherL164A3", "RMCWeaponSniperM707Vulture", "RMCXM43E1AntiMaterielRifle",
                 "RMCSmartGun", "AU14SmartGunUPP", "AU14SmartGunMinigunHAZOPS",
-                "RMCWeaponShotgunMK481", "RMCWeaponShotgunType23", "AU14WeaponShotgunSPAS12HAZOPS",
-                "RuMCRifleAH12", "RuMCMachineGunTachanka", "CMUWeaponRifleM250", "AU14WeaponXM99A",
+                "RMCWeaponShotgunMK481", "RMCWeaponShotgunType23",
+                "RuMCRifleAH12", "RuMCMachineGunPKP_MS", "CMUWeaponRifleM250", "AU14WeaponXM99A",
+                "RMCWeaponPistolSU6", "RMCSmartGunCLF", "RMCSmartGunRoyal", "RMCSmartGunRCMPVE",
+                "RMCWeaponLauncherDisposable", "RuMCWeaponLauncherDisposableTermobaric",
             };
             var incompatible = new[]
             {
                 "CMWeaponPistolM1984", "WeaponSMGM63", "RMCWeaponSMGType64",
                 "AU14WeaponSMGL90A2", "WeaponShotgunM42A1", "RMCWeaponTaser",
                 "CMUWeaponRifleKramerCivilian", "CMUWeaponRifleKramerEnforcer",
-                "AU14WeaponRifleTwoBore", "RMCWeaponFlamerColony", "RMCSmartGunCLF",
+                "AU14WeaponRifleTwoBore", "RMCWeaponFlamerColony", "CMM96SSniperRifle",
+                "RMCM96SBSniperRifle", "CMUSniperRifleTWE", "RMCWeaponFlamer", "RMCWeaponFlamerSpec",
+                "AU14WeaponFlamerM240A2HAZOPS", "RMCWeaponFL3Flamer", "RMCWeaponLauncherM81",
+                "CMUWeaponLauncherM81", "RMCWeaponLauncherHJRA12", "RMCWeaponLMGM60",
+                "RMCWeaponLMGQYJ72", "RMCWeaponMar50LMG", "CMUGPMGTWE", "RuMCMachineGunTachanka",
+                "RMCWeaponRifleMAR30", "WeaponRifleMAR40", "AU14WeaponRifleMAR40Tactical",
+                "AU14WeaponRifleAR10", "WeaponRifleM5SPR2", "CMUWeaponShotgunType23Tactical",
+                "WeaponShotgunM890", "RMCWeaponShotgunXM38", "AU14WeaponShotgunSPAS12HAZOPS",
+                "RuMCWeaponLauncherDisposableIncen", "RuMCWeaponSMGsPP13M",
+                "CMUWeaponShotgunLACNBreacher", "CMUWeaponShotgunLACNPenta",
             };
 
             foreach (var id in compatible)
@@ -59,7 +71,47 @@ public sealed class CMUAmmoHudTest : GameTest
                 Assert.That(prototype.TryComp<CMUAmmoHudWeaponComponent>(out var hud, SEntMan.ComponentFactory)
                             && hud.Enabled, Is.False, id);
             }
+
+            foreach (var prototype in SProtoMan.EnumeratePrototypes<EntityPrototype>())
+            {
+                if (prototype.Abstract ||
+                    !prototype.Name.Contains("smart", StringComparison.OrdinalIgnoreCase) ||
+                    !prototype.TryComp<GunComponent>(out _, SEntMan.ComponentFactory))
+                {
+                    continue;
+                }
+
+                Assert.That(prototype.TryComp<CMUAmmoHudWeaponComponent>(out var hud, SEntMan.ComponentFactory)
+                            && hud.Enabled, Is.True, $"{prototype.ID}: every smart weapon must support the HUD.");
+            }
         });
+    }
+
+    [Test]
+    public async Task IndicatorFreeWeaponIsRejectedButSmartPistolUsesTheOptic()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var hands = Server.System<SharedHandsSystem>();
+            var inventory = Server.System<InventorySystem>();
+            var hud = Server.System<CMUAmmoHudSystem>();
+            var marine = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var sniper = SEntMan.SpawnEntity("CMM96SSniperRifle", map.GridCoords);
+            SEntMan.EnsureComponent<CMUSquadVisorWearerComponent>(marine);
+            Assert.That(inventory.TryEquip(marine, sniper, "suitstorage", force: true), Is.True);
+            Assert.That(hud.TryGetWeapon(marine, out _), Is.False);
+            Assert.That(hands.TryPickupAnyHand(marine, sniper, checkActionBlocker: false), Is.True);
+            Assert.That(hud.TryGetWeapon(marine, out _), Is.False);
+
+            var smartPistol = SEntMan.SpawnEntity("RMCWeaponPistolSU6", map.GridCoords);
+            Assert.That(hands.TryPickupAnyHand(marine, smartPistol, checkActionBlocker: false), Is.True);
+            Assert.That(hud.TryGetWeapon(marine, out var selected), Is.True);
+            Assert.That(selected, Is.EqualTo(smartPistol));
+            SEntMan.RemoveComponent<CMUSquadVisorWearerComponent>(marine);
+            Assert.That(hud.TryGetWeapon(marine, out _), Is.False, "Smart weapons still require a visor or sight.");
+        });
+        await Server.WaitPost(() => Server.System<SharedMapSystem>().DeleteMap(map.MapId));
     }
 
     [Test]
@@ -118,7 +170,7 @@ public sealed class CMUAmmoHudTest : GameTest
 
     [Test]
     [PairConfig(nameof(ConnectedSettings))]
-    public async Task ClientReadsSuitStoredAmmoAndWieldedWeapon()
+    public async Task ClientReadsSuitStoredAmmoAndWieldedWeaponWithoutAStandaloneCounter()
     {
         var map = await Pair.CreateTestMap();
         var session = ServerSession!;
@@ -135,6 +187,7 @@ public sealed class CMUAmmoHudTest : GameTest
             {
                 marine = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
                 rifle = SEntMan.SpawnEntity("WeaponRifleM4SPRFilled", map.GridCoords);
+                SEntMan.RemoveComponent<Content.Server.Weapons.Ranged.Components.AmmoCounterComponent>(rifle);
                 SEntMan.EnsureComponent<CMUSquadVisorWearerComponent>(marine);
                 Assert.That(Server.System<InventorySystem>().TryEquip(marine, rifle, "suitstorage", force: true), Is.True);
                 Server.PlayerMan.SetAttachedEntity(session, marine);
@@ -151,6 +204,8 @@ public sealed class CMUAmmoHudTest : GameTest
             {
                 Assert.That(Client.System<CMUAmmoHudSystem>().TryGetWeapon(CEntMan.GetEntity(marineNet), out var selected), Is.True);
                 Assert.That(CEntMan.GetNetEntity(selected), Is.EqualTo(rifleNet));
+                Assert.That(CEntMan.HasComponent<Content.Client.Weapons.Ranged.Components.AmmoCounterComponent>(selected),
+                    Is.False, "The visor HUD must not grant or require a standalone gun counter.");
                 var ammo = new GetAmmoCountEvent();
                 CEntMan.EventBus.RaiseLocalEvent(selected, ref ammo);
                 Assert.That(ammo.Count, Is.EqualTo(expectedAmmo), "Suit-stored magazine contents must reach the HUD client.");

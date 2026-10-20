@@ -87,6 +87,8 @@
   id: CMUWeaponShotgunType23Tactical
   description: A Refurbished type 23 in all black. This one seems to fit 18.5 Gauge ammunition too.
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
+    enabled: false
   - type: Sprite
     sprite: CMU14/Weapons/Guns/UPP/type23_tac.rsi
     layers:

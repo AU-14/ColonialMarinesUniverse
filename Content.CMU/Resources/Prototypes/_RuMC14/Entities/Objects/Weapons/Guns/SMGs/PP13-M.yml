@@ -4,6 +4,8 @@
   id: RuMCWeaponSMGsPP13M
   description: The UPP assault SMG was designed for advanced assault units. The M in the name stands for "many," as there were many of them produced.
   components:
+  - type: CMUAmmoHudWeapon
+    enabled: false
   - type: Sprite
     sprite: _RuMC14/Objects/Weapons/Guns/SMGs/PP13M.rsi
     layers:

@@ -3,7 +3,6 @@
   parent: [ CMBaseWeaponGun, BaseItem, RMCBaseAttachableHolder, RMCBaseWeaponGunMagazineProvider ]
   id: RMCBaseWeaponLMG
   components:
-  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Gun
     baseFireRate: 3.3
     shotsPerBurst: 5

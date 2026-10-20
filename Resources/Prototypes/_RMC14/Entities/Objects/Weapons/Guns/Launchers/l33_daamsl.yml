@@ -5,6 +5,7 @@
   suffix: PVE, RCM, AT
   description: "The L33 Disposable Anti-Armour Missile Launcher, standard-issue anti-tank system of the TWE's Royal Marines; a single-use, shoulder-fired weapon capable of disabling or outright destroying moving vehicles even out to 1,250m.\n\nThe optic appears to be damaged. Guess you'll have to eyeball it."
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/RocketLaunchers/l33/icon.rsi
     layers:

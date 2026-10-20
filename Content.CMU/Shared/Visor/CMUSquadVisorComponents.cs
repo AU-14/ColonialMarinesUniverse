@@ -19,7 +19,8 @@ public sealed partial class CMUSquadVisorActiveComponent : Component;
 public sealed partial class CMUAmmoHudSightComponent : Component;
 
 /// <summary>
-/// A GOVFOR rifle, DMR, or specialist weapon whose ammunition can be read by an optic.
+/// HUD-only compatibility for GOVFOR weapons with a loaded red-dot indicator, and for all smart weapons.
+/// Does not grant the separate in-hand AmmoCounter display.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
 public sealed partial class CMUAmmoHudWeaponComponent : Component

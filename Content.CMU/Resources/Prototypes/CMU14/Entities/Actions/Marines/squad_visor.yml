@@ -62,7 +62,7 @@
   parent: ActionMarineBase
   id: CMUActionSquadVisorAmmoHud
   name: Toggle Ammo HUD
-  description: Toggles your squad optic showing the ammo count of a GOVFOR rifle, DMR, or specialist weapon in your hands or suit storage under your status alerts.
+  description: Toggles your squad optic showing ammo under your status alerts for compatible GOVFOR weapons with a red-dot indicator and all smart weapons, held or in suit storage.
   components:
   - type: Action
     checkCanInteract: false

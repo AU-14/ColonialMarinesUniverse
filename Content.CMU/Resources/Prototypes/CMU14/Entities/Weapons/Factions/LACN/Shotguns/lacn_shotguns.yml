@@ -4,6 +4,8 @@
   name: LACN breacher shotgun
   description: A compact pump-action shotgun issued to LACN landing forces for door breaching and close quarters work. Accepts breaching shells.
   components:
+  - type: CMUAmmoHudWeapon
+    enabled: false
   - type: Sprite
     sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/breachershotgun.rsi
     layers:

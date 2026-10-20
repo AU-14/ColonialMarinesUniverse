@@ -147,6 +147,8 @@
   name: AR10 rifle
   description: An old, reliable design. Something like this belongs in a museum of war history. It is chambered in 5.56x45mm.
   components:
+  - type: CMUAmmoHudWeapon
+    enabled: false
   - type: Sprite
     sprite: CMU14/Weapons/Guns/Civilian/auar1064x32.rsi
     layers:
