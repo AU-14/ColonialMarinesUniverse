@@ -12,6 +12,8 @@ using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Audio.Jukebox;
 using Content.Shared.Body.Systems;
+using Content.Shared.Chasm;
+using Content.Shared.StepTrigger.Systems;
 using Content.Shared.CMU14.Marines.Roles.Ranks;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
 using Content.Shared.CMU14.Medical.Core;
@@ -46,6 +48,27 @@ public sealed class OctoberTwentyRegressionTest : GameTest
             var proto = SProtoMan.Index<EntityPrototype>("RMCMRETSE");
             Assert.That(proto.Name, Is.EqualTo("TWE ORP ration"));
             Assert.That(proto.Description, Does.Not.Contain("UNMC").And.Not.Contain("TSE"));
+        });
+    }
+
+    // the lowered vehicle lift should swallow thrown things like the ASRS lift, but never a vehicle
+    [Test]
+    public async Task LoweredVehicleLiftTakesItemsButNotVehicles()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var lift = SEntMan.SpawnEntity("VehicleLift", map.GridCoords);
+            var item = SEntMan.SpawnEntity("CMCrowbar", map.GridCoords);
+            var tank = SEntMan.SpawnEntity("VehicleTank", map.GridCoords.Offset(new Vector2(20, 20)));
+
+            var itemStep = new StepTriggeredOffEvent(lift, item);
+            SEntMan.EventBus.RaiseLocalEvent(lift, ref itemStep);
+            var tankStep = new StepTriggeredOffEvent(lift, tank);
+            SEntMan.EventBus.RaiseLocalEvent(lift, ref tankStep);
+
+            Assert.That(SEntMan.HasComponent<ChasmFallingComponent>(item), Is.True, "items fall in");
+            Assert.That(SEntMan.HasComponent<ChasmFallingComponent>(tank), Is.False, "vehicles stay up");
         });
     }
 
