@@ -132,6 +132,7 @@ cmu-guide-entry-meds-suffocation = Suffocation Medications
 cmu-guide-entry-meds-pain = Painkillers
 cmu-guide-entry-meds-organs = Organ and Bone Medications
 cmu-guide-entry-meds-other = Other Medications
+cmu-guide-entry-meds-cryogenic = Cryogenic Medicines and Recipes
 
 cmu-guide-entry-cooking = Cooking
 cmu-guide-entry-lore = Lore

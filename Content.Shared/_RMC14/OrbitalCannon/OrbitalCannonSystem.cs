@@ -919,7 +919,13 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
                 if (CannonHasWarhead(cannonEnt, out var warhead))
                 {
                     if (TryComp(warhead, out OrbitalCannonWarheadComponent? warheadComp))
-                        SpawnOrbitalTransitBlasts((warhead, warheadComp), impactColumn);
+                    {
+                        // CMU14: full multi-Z blast steps replace the smaller transit blasts on upper levels.
+                        var explosionProto = _protoMan.Index(warheadComp.Explosion);
+                        if (!explosionProto.TryComp(out OrbitalCannonExplosionComponent? explosion, _compFactory)
+                            || !explosion.MultiZ)
+                            SpawnOrbitalTransitBlasts((warhead, warheadComp), impactColumn);
+                    }
 
                     var ev = new OrbitalBombardmentFireEvent(cannonEnt, warhead, fuel, terminalCoordinates);
                     RaiseLocalEvent(warhead, ref ev);
@@ -953,7 +959,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
             if (!explosion.Laser)
             {
                 explosion.Laser = true;
-                Spawn(OrbitalTargetMarker, _transform.GetMapCoordinates(uid));
+                CMUSpawnOrbitalTargetMarkers(uid, explosion.MultiZ); // CMU14: mark every impacted level
             }
 
             if (explosion.Current == default && explosion.LastAt == default)
@@ -996,56 +1002,25 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
                 for (var i = 0; i < step.TimesPer; i++)
                 {
                     var mapCoordinates = _transform.GetMapCoordinates(uid);
-                    var coordinates = _transform.GetMoverCoordinates(uid);
                     if (step.Spread > 0)
                     {
                         var spread = _random.NextVector2(-step.Spread, step.Spread);
                         mapCoordinates = mapCoordinates.Offset(spread);
-                        coordinates = coordinates.Offset(spread);
                     }
 
-                    if (step.CheckProtectionPer && !_area.CanOrbitalBombard(coordinates, out _))
-                        continue;
-
-                    if (step.ExplosionEffect != null)
-                    {
-                        var effect = Spawn(step.ExplosionEffect.Value, mapCoordinates);
-                        _rmcExplosion.TryDoEffect(effect);
-                    }
-
-                    if (step.Type is { } type)
-                        _rmcExplosion.QueueExplosion(mapCoordinates, type, step.Total, step.Slope, step.Max, uid, canCreateVacuum: false);
-
-                    if (step.Fire is { } fire && step.FireRange > 0)
-                        _rmcFlammable.SpawnFireDiamond(fire, coordinates, step.FireRange);
+                    CMUFireOrbitalExplosionStep(uid, explosion.MultiZ, step, mapCoordinates); // CMU14: share the same spread across Z-levels
                 }
             }
         }
     }
 
-    public void SpawnExplosion(EntProtoId prototype, EntityCoordinates coordinates, CMUTopDownOrdnanceKind kind = CMUTopDownOrdnanceKind.OrbitalBombardment)
+    // CMU14 Multi-Z Orbital Impacts Begin: one spawner shares each rolled strike position with every level.
+    public void SpawnExplosion(EntProtoId prototype, EntityCoordinates coordinates)
     {
         if (_net.IsClient)
             return;
 
-        var proto = _protoMan.Index(prototype);
-        if (!proto.TryComp(out OrbitalCannonExplosionComponent? explosion, _compFactory)
-            || !explosion.MultiZ)
-        {
-            Spawn(prototype, coordinates);
-            return;
-        }
-
-        if (!_topDownOrdnance.TryResolveImpactColumn(
-                _transform.ToMapCoordinates(coordinates),
-                kind, // CMU14: kind selects permission gate, Scuttle bypasses OB area checks (shipside)
-                out var layers))
-        {
-            Spawn(prototype, coordinates);
-            return;
-        }
-
-        foreach (var surface in layers.Surfaces)
-            Spawn(prototype, _transform.ToCoordinates(surface.Coordinates));
+        Spawn(prototype, coordinates);
     }
+    // CMU14 End
 }

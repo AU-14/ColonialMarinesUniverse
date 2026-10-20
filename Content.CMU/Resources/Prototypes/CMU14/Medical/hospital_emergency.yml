@@ -34,6 +34,8 @@
   id: CMUHospitalEmergencyComputerGovfor
   suffix: Hospital, GOVFOR
   components:
+  - type: HospitalEmergencyComputer
+    requisitionsFaction: govfor
   - type: AccessReader
     access: [["AU14AccessGovforMedical"], ["AU14AccessGovforCommand"]]
 
@@ -42,6 +44,8 @@
   id: CMUHospitalEmergencyComputerOpfor
   suffix: Hospital, OPFOR
   components:
+  - type: HospitalEmergencyComputer
+    requisitionsFaction: opfor
   - type: AccessReader
     access: [["AU14AccessOpforMedical"], ["AU14AccessOpforCommand"]]
 

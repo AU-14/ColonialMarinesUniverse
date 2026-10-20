@@ -107916,7 +107916,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 80.5,92.5
-- proto: CMUBosenmoriExact011bb973d1897052
+- proto: RMCFlashlight
   entities:
   - uid: 48884
     components:
@@ -107928,14 +107928,14 @@ entities:
     - type: Transform
       parent: 1
       pos: 128.5,73.5
-- proto: CMUBosenmoriExact0205f38238095685
+- proto: CMUBosenmoriFunctional0205f38238095685
   entities:
   - uid: 47970
     components:
     - type: Transform
       parent: 1
       pos: 92.5,17.5
-- proto: CMUBosenmoriExact024f32536b8651be
+- proto: CMUBosenmoriFunctional024f32536b8651be
   entities:
   - uid: 44127
     components:
@@ -107965,21 +107965,21 @@ entities:
     - type: Transform
       parent: 1
       pos: 76.5,64.5
-- proto: CMUBosenmoriExact03494948b3921f7a
+- proto: CMUBosenmoriFunctional03494948b3921f7a
   entities:
   - uid: 48917
     components:
     - type: Transform
       parent: 1
       pos: 126.5,74.5
-- proto: CMUBosenmoriExact034baa67bb03efec
+- proto: RMCFoodSnackBarcaridine
   entities:
   - uid: 45878
     components:
     - type: Transform
       parent: 1
       pos: 72.5,137.5
-- proto: CMUBosenmoriExact037c2a562f8ac86f
+- proto: CMUBosenmoriFunctional037c2a562f8ac86f
   entities:
   - uid: 48872
     components:
@@ -108010,7 +108010,7 @@ entities:
       pos: 46.5,129.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact05e3053b6ba1a7f4
+- proto: CMUBosenmoriFunctional05e3053b6ba1a7f4
   entities:
   - uid: 50038
     components:
@@ -108142,14 +108142,14 @@ entities:
     - type: Transform
       parent: 1
       pos: 141.5,205.5
-- proto: CMUBosenmoriExact092fb8e6a88548e0
+- proto: CMUBosenmoriFunctional092fb8e6a88548e0
   entities:
   - uid: 48760
     components:
     - type: Transform
       parent: 1
       pos: 116.5,167.5
-- proto: CMUBosenmoriExact09cdfc6cd9571f26
+- proto: RMCArmorMercenaryMiner
   entities:
   - uid: 44154
     components:
@@ -108219,7 +108219,7 @@ entities:
       pos: 121.5,73.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact0a3e8ea8f2860d09
+- proto: CMUBosenmoriFunctional0a3e8ea8f2860d09
   entities:
   - uid: 43957
     components:
@@ -108265,7 +108265,7 @@ entities:
       pos: 53.5,62.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact0bc0e9dab3933c46
+- proto: RMCBoxPizzaVegetable
   entities:
   - uid: 48911
     components:
@@ -108365,7 +108365,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 58.5,63.5
-- proto: CMUBosenmoriExact0d7af27d653334af
+- proto: RMCCondimentSmallSalt
   entities:
   - uid: 48753
     components:
@@ -108459,7 +108459,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 99.5,201.5
-- proto: CMUBosenmoriExact10520c2010647326
+- proto: RMCBoxPizzaMeat
   entities:
   - uid: 43967
     components:
@@ -108976,14 +108976,14 @@ entities:
     - type: Transform
       parent: 1
       pos: 170.5,138.5
-- proto: CMUBosenmoriExact12333d750cb66a9c
+- proto: CMUBosenmoriFunctional12333d750cb66a9c
   entities:
   - uid: 50035
     components:
     - type: Transform
       parent: 1
       pos: 135.5,5.5
-- proto: CMUBosenmoriExact1242c8c30ad41e07
+- proto: CMHeadBandRed
   entities:
   - uid: 48110
     components:
@@ -109020,7 +109020,7 @@ entities:
       pos: 79.5,96.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact135d10d356759835
+- proto: CMUBosenmoriFunctional135d10d356759835
   entities:
   - uid: 50015
     components:
@@ -109034,15 +109034,13 @@ entities:
     - type: Transform
       parent: 1
       pos: 85.5,51.5
-- proto: CMUBosenmoriExact1415a3199a4b9651
+- proto: CMRollerBed
   entities:
   - uid: 45886
     components:
     - type: Transform
       parent: 1
       pos: 72.5,90.5
-    - type: Fixtures
-      fixtures: {}
 - proto: CMUBosenmoriExact142120fb069897e1
   entities:
   - uid: 36922
@@ -109156,14 +109154,14 @@ entities:
       pos: 60.5,29.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact185f1b7da481765b
+- proto: CMUBosenmoriFunctional185f1b7da481765b
   entities:
   - uid: 49941
     components:
     - type: Transform
       parent: 1
       pos: 133.5,56.5
-- proto: CMUBosenmoriExact1885d92183c7be23
+- proto: CMUBosenmoriFunctional1885d92183c7be23
   entities:
   - uid: 46086
     components:
@@ -109216,7 +109214,7 @@ entities:
       pos: 83.5,65.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact1ba045b5fcaa1c60
+- proto: RMCSuitRadiation
   entities:
   - uid: 44120
     components:
@@ -109716,14 +109714,14 @@ entities:
     - type: Transform
       parent: 1
       pos: 85.5,55.5
-- proto: CMUBosenmoriExact1de99e5b84c998ec
+- proto: CMUBosenmoriFunctional1de99e5b84c998ec
   entities:
   - uid: 39968
     components:
     - type: Transform
       parent: 1
       pos: 24.5,70.5
-- proto: CMUBosenmoriExact1df8f5a4d9edf0f0
+- proto: CMUBosenmoriFunctional1df8f5a4d9edf0f0
   entities:
   - uid: 43671
     components:
@@ -109739,14 +109737,14 @@ entities:
       pos: 137.5,23.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact1e98e9912db920c6
+- proto: CMUBosenmoriFunctional1e98e9912db920c6
   entities:
   - uid: 47975
     components:
     - type: Transform
       parent: 1
       pos: 92.5,15.5
-- proto: CMUBosenmoriExact1ecad3d63ec2d013
+- proto: RMCCigarCase
   entities:
   - uid: 43712
     components:
@@ -109788,7 +109786,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 135.5,13.5
-- proto: CMUBosenmoriExact200e219a748781ec
+- proto: CMUBosenmoriFunctional200e219a748781ec
   entities:
   - uid: 49028
     components:
@@ -109802,7 +109800,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 130.5,48.5
-- proto: CMUBosenmoriExact2099bd5259c88ec6
+- proto: CMUBosenmoriFunctional2099bd5259c88ec6
   entities:
   - uid: 50115
     components:
@@ -109811,7 +109809,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 139.5,53.5
-- proto: CMUBosenmoriExact20b564d81b18d8a5
+- proto: CMUBosenmoriFunctional20b564d81b18d8a5
   entities:
   - uid: 44014
     components:
@@ -109841,7 +109839,7 @@ entities:
       pos: 111.5,106.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact2189fa63539170aa
+- proto: CMUBosenmoriFunctional2189fa63539170aa
   entities:
   - uid: 48743
     components:
@@ -109879,7 +109877,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 57.5,29.5
-- proto: CMUBosenmoriExact2207e4f5f14edcc4
+- proto: CMUBosenmoriFunctional2207e4f5f14edcc4
   entities:
   - uid: 43672
     components:
@@ -109911,7 +109909,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 152.5,72.5
-- proto: CMUBosenmoriExact22d12a66687eb7b2
+- proto: CMBackpack
   entities:
   - uid: 48763
     components:
@@ -109959,7 +109957,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 52.5,53.5
-- proto: CMUBosenmoriExact25109753f183a5b1
+- proto: CMUBosenmoriFunctional25109753f183a5b1
   entities:
   - uid: 47374
     components:
@@ -110036,7 +110034,7 @@ entities:
       pos: 27.5,210.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact2737a1a5d8c78b0b
+- proto: CMUBosenmoriFunctional2737a1a5d8c78b0b
   entities:
   - uid: 49946
     components:
@@ -110416,7 +110414,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 83.5,16.5
-- proto: CMUBosenmoriExact2a58d42021b490a7
+- proto: CMUBosenmoriFunctional2a58d42021b490a7
   entities:
   - uid: 43745
     components:
@@ -110666,7 +110664,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 78.5,7.5
-- proto: CMUBosenmoriExact2da09fa58cb9e3ee
+- proto: CMUBosenmoriFunctional2da09fa58cb9e3ee
   entities:
   - uid: 50034
     components:
@@ -110939,14 +110937,14 @@ entities:
       pos: 76.5,64.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact2fa46a938e34d5c0
+- proto: CMUBosenmoriFunctional2fa46a938e34d5c0
   entities:
   - uid: 49940
     components:
     - type: Transform
       parent: 1
       pos: 133.5,56.5
-- proto: CMUBosenmoriExact2fae64074bbc6f71
+- proto: CMUBosenmoriFunctional2fae64074bbc6f71
   entities:
   - uid: 48759
     components:
@@ -111032,7 +111030,7 @@ entities:
       pos: 113.5,122.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact3006a16a4eb56311
+- proto: CMUBosenmoriFunctional3006a16a4eb56311
   entities:
   - uid: 49023
     components:
@@ -111133,7 +111131,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 116.5,167.5
-- proto: CMUBosenmoriExact31b36b7104f11e83
+- proto: CMUBosenmoriFunctional31b36b7104f11e83
   entities:
   - uid: 47707
     components:
@@ -111624,7 +111622,7 @@ entities:
       pos: 115.5,53.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact36477f0c91360beb
+- proto: RMCPouchRadio
   entities:
   - uid: 49948
     components:
@@ -111645,7 +111643,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 127.5,50.5
-- proto: CMUBosenmoriExact36728298c6569c8f
+- proto: CMBedsheetBrown
   entities:
   - uid: 43675
     components:
@@ -111748,14 +111746,14 @@ entities:
       pos: 73.5,86.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact3706baa83bc952b6
+- proto: RMCSheetPlastic1
   entities:
   - uid: 50188
     components:
     - type: Transform
       parent: 1
       pos: 148.5,73.5
-- proto: CMUBosenmoriExact370d07041a01cff6
+- proto: CMUBosenmoriFunctional370d07041a01cff6
   entities:
   - uid: 47531
     components:
@@ -111969,7 +111967,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 77.5,205.5
-- proto: CMUBosenmoriExact3938306fc97a9db2
+- proto: CMUBosenmoriFunctional3938306fc97a9db2
   entities:
   - uid: 36788
     components:
@@ -111985,7 +111983,7 @@ entities:
       pos: 86.5,6.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact3994a86c3e7facdc
+- proto: CMUBosenmoriFunctional3994a86c3e7facdc
   entities:
   - uid: 47406
     components:
@@ -112097,7 +112095,7 @@ entities:
       pos: 125.5,42.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact3b75a6f4687b1a65
+- proto: RMCBinocularsCiv
   entities:
   - uid: 43592
     components:
@@ -112241,7 +112239,7 @@ entities:
       pos: 71.5,139.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact3df061cf4d462155
+- proto: RMCMaintenanceJack
   entities:
   - uid: 43521
     components:
@@ -112260,64 +112258,48 @@ entities:
     - type: Transform
       parent: 1
       pos: 76.5,205.5
-- proto: CMUBosenmoriExact3e70cfd102cce574
+- proto: CMUInflatableWall
   entities:
   - uid: 42661
     components:
     - type: Transform
       parent: 1
       pos: 40.5,119.5
-    - type: Fixtures
-      fixtures: {}
   - uid: 42662
     components:
     - type: Transform
       parent: 1
       pos: 40.5,117.5
-    - type: Fixtures
-      fixtures: {}
   - uid: 42663
     components:
     - type: Transform
       parent: 1
       pos: 40.5,116.5
-    - type: Fixtures
-      fixtures: {}
   - uid: 42664
     components:
     - type: Transform
       parent: 1
       pos: 40.5,115.5
-    - type: Fixtures
-      fixtures: {}
   - uid: 42665
     components:
     - type: Transform
       parent: 1
       pos: 44.5,119.5
-    - type: Fixtures
-      fixtures: {}
   - uid: 42666
     components:
     - type: Transform
       parent: 1
       pos: 44.5,117.5
-    - type: Fixtures
-      fixtures: {}
   - uid: 42667
     components:
     - type: Transform
       parent: 1
       pos: 44.5,116.5
-    - type: Fixtures
-      fixtures: {}
   - uid: 42668
     components:
     - type: Transform
       parent: 1
       pos: 44.5,115.5
-    - type: Fixtures
-      fixtures: {}
 - proto: CMUBosenmoriExact3e89c9dc574feb28
   entities:
   - uid: 47988
@@ -112351,21 +112333,21 @@ entities:
     - type: Transform
       parent: 1
       pos: 61.5,124.5
-- proto: CMUBosenmoriExact3ee9c8f2b0c2ee06
+- proto: CMUBosenmoriFunctional3ee9c8f2b0c2ee06
   entities:
   - uid: 50018
     components:
     - type: Transform
       parent: 1
       pos: 135.5,11.5
-- proto: CMUBosenmoriExact3eef10fe80d6bb26
+- proto: CMUBosenmoriFunctional3eef10fe80d6bb26
   entities:
   - uid: 48718
     components:
     - type: Transform
       parent: 1
       pos: 114.5,164.5
-- proto: CMUBosenmoriExact3f1e9ff3be981c19
+- proto: CMUBosenmoriFunctional3f1e9ff3be981c19
   entities:
   - uid: 44213
     components:
@@ -112399,7 +112381,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 87.5,56.5
-- proto: CMUBosenmoriExact3f5be120ec7a4cfb
+- proto: CMUBosenmoriFunctional3f5be120ec7a4cfb
   entities:
   - uid: 48918
     components:
@@ -112429,14 +112411,14 @@ entities:
       pos: 127.5,25.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact4101567b9ce36b9b
+- proto: CMUBosenmoriFunctional4101567b9ce36b9b
   entities:
   - uid: 33164
     components:
     - type: Transform
       parent: 1
       pos: 4.5,140.5
-- proto: CMUBosenmoriExact4137ca1392b72ae1
+- proto: CMUBosenmoriFunctional4137ca1392b72ae1
   entities:
   - uid: 43650
     components:
@@ -112498,7 +112480,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 62.5,65.5
-- proto: CMUBosenmoriExact413ea3bd94be39b4
+- proto: CMUBosenmoriFunctional413ea3bd94be39b4
   entities:
   - uid: 48219
     components:
@@ -112521,7 +112503,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 152.5,70.5
-- proto: CMUBosenmoriExact41c5cb4206368f3d
+- proto: RMCPouchTools
   entities:
   - uid: 47416
     components:
@@ -112533,7 +112515,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 77.5,7.5
-- proto: CMUBosenmoriExact41df9582cd30be36
+- proto: CMBedsheetMedical
   entities:
   - uid: 45965
     components:
@@ -112545,7 +112527,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 75.5,91.5
-- proto: CMUBosenmoriExact42db4e2785b4c7fc
+- proto: CMUBosenmoriFunctional42db4e2785b4c7fc
   entities:
   - uid: 48994
     components:
@@ -112559,7 +112541,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 87.5,54.5
-- proto: CMUBosenmoriExact442af91df3529ead
+- proto: CMUBosenmoriFunctional442af91df3529ead
   entities:
   - uid: 47971
     components:
@@ -112895,7 +112877,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 92.5,10.5
-- proto: CMUBosenmoriExact47393a415aaea812
+- proto: CMUBosenmoriFunctional47393a415aaea812
   entities:
   - uid: 50044
     components:
@@ -112911,7 +112893,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 123.5,18.5
-- proto: CMUBosenmoriExact4788de4b73ba02bc
+- proto: CMUBosenmoriFunctional4788de4b73ba02bc
   entities:
   - uid: 49982
     components:
@@ -112950,7 +112932,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 134.5,51.5
-- proto: CMUBosenmoriExact4977b879b59b77d4
+- proto: CMUBosenmoriFunctional4977b879b59b77d4
   entities:
   - uid: 50418
     components:
@@ -112979,7 +112961,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 89.5,8.5
-- proto: CMUBosenmoriExact49d6ec39f96ec2fd
+- proto: CMUBosenmoriFunctional49d6ec39f96ec2fd
   entities:
   - uid: 48814
     components:
@@ -113180,7 +113162,7 @@ entities:
       pos: 167.5,42.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact4e054f4831ed31c0
+- proto: CMUBosenmoriFunctional4e054f4831ed31c0
   entities:
   - uid: 48659
     components:
@@ -113196,7 +113178,7 @@ entities:
       pos: 54.5,41.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact4e9051191b646c13
+- proto: CMUBosenmoriFunctional4e9051191b646c13
   entities:
   - uid: 47373
     components:
@@ -113401,7 +113383,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 133.5,11.5
-- proto: CMUBosenmoriExact526a6954254abd06
+- proto: CMCoatMessTech
   entities:
   - uid: 48988
     components:
@@ -113420,7 +113402,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 57.5,123.5
-- proto: CMUBosenmoriExact527e16d2a3032624
+- proto: CMRodMetal
   entities:
   - uid: 50190
     components:
@@ -113473,7 +113455,7 @@ entities:
       pos: 20.5,210.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact530216aa3da07e56
+- proto: RMCPickaxe
   entities:
   - uid: 49967
     components:
@@ -113513,7 +113495,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 130.5,11.5
-- proto: CMUBosenmoriExact547dc8575afcf3d0
+- proto: CMUBosenmoriFunctional547dc8575afcf3d0
   entities:
   - uid: 48014
     components:
@@ -113569,7 +113551,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 72.5,133.5
-- proto: CMUBosenmoriExact56b91fcb8d361e6b
+- proto: RMCGlassesJensen
   entities:
   - uid: 43966
     components:
@@ -113613,7 +113595,7 @@ entities:
       pos: 139.5,40.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact57bbcd52fa35bd40
+- proto: CMUBosenmoriFunctional57bbcd52fa35bd40
   entities:
   - uid: 50149
     components:
@@ -113679,7 +113661,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 169.5,137.5
-- proto: CMUBosenmoriExact588e904827b8f117
+- proto: CMUBosenmoriFunctional588e904827b8f117
   entities:
   - uid: 48996
     components:
@@ -113709,7 +113691,7 @@ entities:
       pos: 129.5,48.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact592c43296d0ba608
+- proto: CMUBosenmoriFunctional592c43296d0ba608
   entities:
   - uid: 47936
     components:
@@ -113725,7 +113707,7 @@ entities:
       pos: 71.5,139.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact595ca1994c28d5bd
+- proto: RMCHelmetWelding
   entities:
   - uid: 47634
     components:
@@ -113749,7 +113731,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 122.5,73.5
-- proto: CMUBosenmoriExact59c8c1df0cd831df
+- proto: CMUBosenmoriFunctional59c8c1df0cd831df
   entities:
   - uid: 47976
     components:
@@ -113838,7 +113820,7 @@ entities:
       anchored: False
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact5bbe0fdd9f94d801
+- proto: CMUBosenmoriFunctional5bbe0fdd9f94d801
   entities:
   - uid: 44039
     components:
@@ -113854,7 +113836,7 @@ entities:
       pos: 75.5,147.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact5c4ca846dcea6684
+- proto: RMCWeldingGoggles
   entities:
   - uid: 45896
     components:
@@ -113866,7 +113848,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 92.5,15.5
-- proto: CMUBosenmoriExact5c677c59b7d2aa3c
+- proto: CMUBosenmoriFunctional5c677c59b7d2aa3c
   entities:
   - uid: 49974
     components:
@@ -116514,7 +116496,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 168.5,120.5
-- proto: CMUBosenmoriExact6118e2277effb156
+- proto: CMUBosenmoriFunctional6118e2277effb156
   entities:
   - uid: 50019
     components:
@@ -116736,7 +116718,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 113.5,52.5
-- proto: CMUBosenmoriExact63a077739d0519d9
+- proto: CMUBosenmoriFunctional63a077739d0519d9
   entities:
   - uid: 46068
     components:
@@ -116757,7 +116739,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 70.5,202.5
-- proto: CMUBosenmoriExact6407861352a5a1b2
+- proto: CMUBosenmoriFunctional6407861352a5a1b2
   entities:
   - uid: 49954
     components:
@@ -116771,14 +116753,14 @@ entities:
     - type: Transform
       parent: 1
       pos: 81.5,83.5
-- proto: CMUBosenmoriExact6438e1811a80e0a0
+- proto: CMUBosenmoriFunctional6438e1811a80e0a0
   entities:
   - uid: 48218
     components:
     - type: Transform
       parent: 1
       pos: 108.5,120.5
-- proto: CMUBosenmoriExact645c57a6dec81118
+- proto: CMUBosenmoriFunctional645c57a6dec81118
   entities:
   - uid: 43713
     components:
@@ -116792,7 +116774,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 33.5,11.5
-- proto: CMUBosenmoriExact64d7784956dac32b
+- proto: CMUBosenmoriFunctional64d7784956dac32b
   entities:
   - uid: 44126
     components:
@@ -116908,7 +116890,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 149.5,67.5
-- proto: CMUBosenmoriExact66d2e0f3ed391fa0
+- proto: CMUBosenmoriFunctional66d2e0f3ed391fa0
   entities:
   - uid: 49949
     components:
@@ -117108,7 +117090,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 89.5,8.5
-- proto: CMUBosenmoriExact68a88a28f987ef7a
+- proto: CMUBosenmoriFunctional68a88a28f987ef7a
   entities:
   - uid: 44098
     components:
@@ -117183,22 +117165,20 @@ entities:
       pos: 31.5,25.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact6aa19aef51df2018
+- proto: CMUBosenmoriFunctional6aa19aef51df2018
   entities:
   - uid: 43744
     components:
     - type: Transform
       parent: 1
       pos: 57.5,68.5
-- proto: CMUBosenmoriExact6aa6da6cad9bbb09
+- proto: RMCOrbitalCannonCableConnector
   entities:
   - uid: 40207
     components:
     - type: Transform
       parent: 1
       pos: 32.5,97.5
-    - type: Fixtures
-      fixtures: {}
 - proto: CMUBosenmoriExact6b9e637cfb749677
   entities:
   - uid: 50382
@@ -117277,7 +117257,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 156.5,138.5
-- proto: CMUBosenmoriExact6ca8a3afe42c9aad
+- proto: CMCrowbarRed
   entities:
   - uid: 43376
     components:
@@ -117495,14 +117475,14 @@ entities:
       parent: 1
       rot: 3.9269908169872414 rad
       pos: 163.5,90.5
-- proto: CMUBosenmoriExact6d144be1871b0193
+- proto: CMUBosenmoriFunctional6d144be1871b0193
   entities:
   - uid: 48874
     components:
     - type: Transform
       parent: 1
       pos: 123.5,50.5
-- proto: CMUBosenmoriExact6dfdefd24eb31e63
+- proto: CMUBosenmoriFunctional6dfdefd24eb31e63
   entities:
   - uid: 49939
     components:
@@ -117591,7 +117571,7 @@ entities:
       anchored: False
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact6e3beff95b900248
+- proto: CMUBosenmoriFunctional6e3beff95b900248
   entities:
   - uid: 49975
     components:
@@ -117628,7 +117608,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 65.5,67.5
-- proto: CMUBosenmoriExact70e7832866873300
+- proto: CMUBosenmoriFunctional70e7832866873300
   entities:
   - uid: 33161
     components:
@@ -117642,7 +117622,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 89.5,8.5
-- proto: CMUBosenmoriExact71f557075dc62699
+- proto: CMUBosenmoriFunctional71f557075dc62699
   entities:
   - uid: 48742
     components:
@@ -117862,7 +117842,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 149.5,65.5
-- proto: CMUBosenmoriExact74e73071ae286664
+- proto: CMUBosenmoriFunctional74e73071ae286664
   entities:
   - uid: 48758
     components:
@@ -117895,7 +117875,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 83.5,7.5
-- proto: CMUBosenmoriExact7677742180789811
+- proto: CMUBosenmoriFunctional7677742180789811
   entities:
   - uid: 48697
     components:
@@ -117988,14 +117968,14 @@ entities:
       pos: 112.5,36.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact77743cddeb9e6054
+- proto: CMUBosenmoriFunctional77743cddeb9e6054
   entities:
   - uid: 49972
     components:
     - type: Transform
       parent: 1
       pos: 134.5,58.5
-- proto: CMUBosenmoriExact7776b4f06f313871
+- proto: CMUBosenmoriFunctional7776b4f06f313871
   entities:
   - uid: 50020
     components:
@@ -118053,7 +118033,7 @@ entities:
       pos: 102.5,119.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact7929ab9ecc9e3281
+- proto: CMUBosenmoriFunctional7929ab9ecc9e3281
   entities:
   - uid: 48857
     components:
@@ -118083,7 +118063,7 @@ entities:
       pos: 104.5,63.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact7ad78a81b739ff00
+- proto: CMUBosenmoriFunctional7ad78a81b739ff00
   entities:
   - uid: 50042
     components:
@@ -118752,7 +118732,7 @@ entities:
       pos: 106.5,42.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact7bd47c6ecbbb6e54
+- proto: CMUBosenmoriFunctional7bd47c6ecbbb6e54
   entities:
   - uid: 50272
     components:
@@ -118789,7 +118769,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 109.5,119.5
-- proto: CMUBosenmoriExact7cceed2c6008c0af
+- proto: CMUBosenmoriFunctional7cceed2c6008c0af
   entities:
   - uid: 47709
     components:
@@ -118815,7 +118795,7 @@ entities:
       pos: 119.5,159.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact7d98b5f4faedc228
+- proto: CMUBosenmoriFunctional7d98b5f4faedc228
   entities:
   - uid: 43969
     components:
@@ -118866,7 +118846,7 @@ entities:
       pos: 173.5,60.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact7e131f3cb775f8a4
+- proto: RMCGogglesKutjevo
   entities:
   - uid: 43956
     components:
@@ -118899,7 +118879,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 31.5,140.5
-- proto: CMUBosenmoriExact7fbf1c9e14d07514
+- proto: CMUBosenmoriFunctional7fbf1c9e14d07514
   entities:
   - uid: 48700
     components:
@@ -119374,7 +119354,7 @@ entities:
       parent: 1
       rot: 1.5707963267948966 rad
       pos: 166.5,89.5
-- proto: CMUBosenmoriExact83f7f6f454d5171d
+- proto: RMCPouchElectronics
   entities:
   - uid: 47418
     components:
@@ -120036,7 +120016,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 6.5,131.5
-- proto: CMUBosenmoriExact897c5bc3724b505d
+- proto: CMUBosenmoriFunctional897c5bc3724b505d
   entities:
   - uid: 44012
     components:
@@ -120048,35 +120028,35 @@ entities:
     - type: Transform
       parent: 1
       pos: 91.5,56.5
-- proto: CMUBosenmoriExact898c4af5bcecd98e
+- proto: CMUBosenmoriFunctional898c4af5bcecd98e
   entities:
   - uid: 49989
     components:
     - type: Transform
       parent: 1
       pos: 134.5,5.5
-- proto: CMUBosenmoriExact898e84572d5eb149
+- proto: CMUBosenmoriFunctional898e84572d5eb149
   entities:
   - uid: 48741
     components:
     - type: Transform
       parent: 1
       pos: 115.5,162.5
-- proto: CMUBosenmoriExact899247a64605fd5f
+- proto: CMUBosenmoriFunctional899247a64605fd5f
   entities:
   - uid: 49955
     components:
     - type: Transform
       parent: 1
       pos: 133.5,44.5
-- proto: CMUBosenmoriExact8999c32fe1a45d6f
+- proto: CMHeadBandGray
   entities:
   - uid: 48055
     components:
     - type: Transform
       parent: 1
       pos: 96.5,66.5
-- proto: CMUBosenmoriExact89a88079cb84125c
+- proto: CMUBosenmoriFunctional89a88079cb84125c
   entities:
   - uid: 48333
     components:
@@ -120124,14 +120104,14 @@ entities:
       pos: 125.5,13.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact89f10e3f621a8c08
+- proto: CMUBosenmoriFunctional89f10e3f621a8c08
   entities:
   - uid: 50045
     components:
     - type: Transform
       parent: 1
       pos: 137.5,206.5
-- proto: CMUBosenmoriExact8a2b54bd20cb480d
+- proto: RMCPouchFlare
   entities:
   - uid: 47414
     components:
@@ -120143,14 +120123,14 @@ entities:
     - type: Transform
       parent: 1
       pos: 118.5,166.5
-- proto: CMUBosenmoriExact8a5cbf77377c9734
+- proto: CMUBosenmoriFunctional8a5cbf77377c9734
   entities:
   - uid: 48861
     components:
     - type: Transform
       parent: 1
       pos: 122.5,26.5
-- proto: CMUBosenmoriExact8abab2c53e0cda29
+- proto: CMUBosenmoriFunctional8abab2c53e0cda29
   entities:
   - uid: 50116
     components:
@@ -121643,7 +121623,7 @@ entities:
       pos: 91.5,91.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact9303ed6ea26ce87b
+- proto: CMUBosenmoriFunctional9303ed6ea26ce87b
   entities:
   - uid: 48127
     components:
@@ -121695,7 +121675,7 @@ entities:
       pos: 130.5,8.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact9456e9b0205acc4a
+- proto: CMUBosenmoriFunctional9456e9b0205acc4a
   entities:
   - uid: 45771
     components:
@@ -121779,7 +121759,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 108.5,28.5
-- proto: CMUBosenmoriExact97c4242b5fe07450
+- proto: CMUBosenmoriFunctional97c4242b5fe07450
   entities:
   - uid: 44010
     components:
@@ -121791,14 +121771,14 @@ entities:
     - type: Transform
       parent: 1
       pos: 91.5,56.5
-- proto: CMUBosenmoriExact97e57fd4f4586dd2
+- proto: CMUBosenmoriFunctional97e57fd4f4586dd2
   entities:
   - uid: 49929
     components:
     - type: Transform
       parent: 1
       pos: 132.5,54.5
-- proto: CMUBosenmoriExact981b5bb4781b0ce7
+- proto: CMUBosenmoriFunctional981b5bb4781b0ce7
   entities:
   - uid: 43673
     components:
@@ -122308,21 +122288,21 @@ entities:
       pos: 116.5,113.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExact99866a51588a4361
+- proto: CMUBosenmoriFunctional99866a51588a4361
   entities:
   - uid: 45772
     components:
     - type: Transform
       parent: 1
       pos: 70.5,144.5
-- proto: CMUBosenmoriExact99a59f0ceaa130e3
+- proto: RMCCoatCorrespondent
   entities:
   - uid: 47660
     components:
     - type: Transform
       parent: 1
       pos: 86.5,56.5
-- proto: CMUBosenmoriExact99d919da85135fd9
+- proto: CMSatchelMarineIntel
   entities:
   - uid: 48812
     components:
@@ -122338,7 +122318,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 135.5,128.5
-- proto: CMUBosenmoriExact9a383f4ef1eb4377
+- proto: CMPaperBin5
   entities:
   - uid: 48142
     components:
@@ -122361,7 +122341,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 87.5,94.5
-- proto: CMUBosenmoriExact9bcce548b05c523d
+- proto: RMCHeadRadiationHood
   entities:
   - uid: 44123
     components:
@@ -123181,7 +123161,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 57.5,123.5
-- proto: CMUBosenmoriExact9ed866fe744d1178
+- proto: CMUBosenmoriFunctional9ed866fe744d1178
   entities:
   - uid: 48856
     components:
@@ -123394,7 +123374,7 @@ entities:
       parent: 1
       rot: 0.7853981633974483 rad
       pos: 166.5,88.5
-- proto: CMUBosenmoriExacta0b7d3d445c401f4
+- proto: CMUBosenmoriFunctionala0b7d3d445c401f4
   entities:
   - uid: 49956
     components:
@@ -123450,7 +123430,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 92.5,86.5
-- proto: CMUBosenmoriExacta37f8b281272171b
+- proto: CMUBosenmoriFunctionala37f8b281272171b
   entities:
   - uid: 48338
     components:
@@ -123592,7 +123572,7 @@ entities:
       pos: 125.5,15.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExacta4932e61a8ec1e1b
+- proto: CMUBosenmoriFunctionala4932e61a8ec1e1b
   entities:
   - uid: 42739
     components:
@@ -123679,7 +123659,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 118.5,24.5
-- proto: CMUBosenmoriExacta856457598c6b75a
+- proto: RMCVialBox
   entities:
   - uid: 47585
     components:
@@ -123795,7 +123775,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 95.5,90.5
-- proto: CMUBosenmoriExactaaf41708439cc15e
+- proto: CMUBosenmoriFunctionalaaf41708439cc15e
   entities:
   - uid: 48278
     components:
@@ -123973,7 +123953,7 @@ entities:
       pos: 168.5,138.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExactae8f12b7d5a4cbcb
+- proto: CMUBosenmoriFunctionalae8f12b7d5a4cbcb
   entities:
   - uid: 48013
     components:
@@ -124028,7 +124008,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 83.5,17.5
-- proto: CMUBosenmoriExactaf8908b1d760bcb2
+- proto: CMUBosenmoriFunctionalaf8908b1d760bcb2
   entities:
   - uid: 43591
     components:
@@ -128663,7 +128643,7 @@ entities:
       pos: 105.5,67.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExactb603812e90e81911
+- proto: CMUBosenmoriFunctionalb603812e90e81911
   entities:
   - uid: 49927
     components:
@@ -129167,7 +129147,7 @@ entities:
       pos: 112.5,60.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExactb664178172941bd4
+- proto: CMUBosenmoriFunctionalb664178172941bd4
   entities:
   - uid: 47405
     components:
@@ -129250,7 +129230,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 75.5,9.5
-- proto: CMUBosenmoriExactb8fa23fc7f56f691
+- proto: CMUBosenmoriFunctionalb8fa23fc7f56f691
   entities:
   - uid: 47467
     components:
@@ -129542,14 +129522,14 @@ entities:
       pos: 132.5,6.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExactbd9624fddbafca84
+- proto: CMUBosenmoriFunctionalbd9624fddbafca84
   entities:
   - uid: 49978
     components:
     - type: Transform
       parent: 1
       pos: 134.5,54.5
-- proto: CMUBosenmoriExactbe6b1f26d7175c05
+- proto: CMUBosenmoriFunctionalbe6b1f26d7175c05
   entities:
   - uid: 49991
     components:
@@ -129646,7 +129626,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 122.5,115.5
-- proto: CMUBosenmoriExactbef39825dd5a00aa
+- proto: RMCPouchFlareFilled
   entities:
   - uid: 48804
     components:
@@ -129667,7 +129647,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 35.5,10.5
-- proto: CMUBosenmoriExactbf4dc3e6c5e27969
+- proto: CMUBosenmoriFunctionalbf4dc3e6c5e27969
   entities:
   - uid: 48761
     components:
@@ -129695,7 +129675,7 @@ entities:
       pos: 8.5,137.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExactc02332fd8a6c8a50
+- proto: CMUBosenmoriFunctionalc02332fd8a6c8a50
   entities:
   - uid: 48126
     components:
@@ -129732,7 +129712,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 72.5,133.5
-- proto: CMUBosenmoriExactc270afd88f038175
+- proto: RMCPouchConstruction
   entities:
   - uid: 47421
     components:
@@ -129744,7 +129724,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 77.5,7.5
-- proto: CMUBosenmoriExactc2e387b65784f08f
+- proto: CMUBosenmoriFunctionalc2e387b65784f08f
   entities:
   - uid: 48220
     components:
@@ -130354,7 +130334,7 @@ entities:
       parent: 1
       rot: 3.141592653589793 rad
       pos: 173.5,102.5
-- proto: CMUBosenmoriExactc4be97238617141a
+- proto: CMUBosenmoriFunctionalc4be97238617141a
   entities:
   - uid: 44148
     components:
@@ -130371,14 +130351,14 @@ entities:
       pos: 113.5,59.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExactc52642b8d60ac239
+- proto: CMUBosenmoriFunctionalc52642b8d60ac239
   entities:
   - uid: 43739
     components:
     - type: Transform
       parent: 1
       pos: 57.5,124.5
-- proto: CMUBosenmoriExactc5694ab4535253ff
+- proto: CMUBosenmoriFunctionalc5694ab4535253ff
   entities:
   - uid: 49947
     components:
@@ -130451,7 +130431,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 65.5,67.5
-- proto: CMUBosenmoriExactc599a0bcea03a1d8
+- proto: RMCShovel
   entities:
   - uid: 49007
     components:
@@ -130519,7 +130499,7 @@ entities:
       pos: 66.5,49.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExactc668c690036f91b7
+- proto: CMUBosenmoriFunctionalc668c690036f91b7
   entities:
   - uid: 43629
     components:
@@ -131531,7 +131511,7 @@ entities:
       pos: 100.5,103.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExactc7571c4060c7fcdb
+- proto: RMCArmorHelmetMercenaryMiner
   entities:
   - uid: 44156
     components:
@@ -131606,7 +131586,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 112.5,121.5
-- proto: CMUBosenmoriExactc8d44c2aff7a097a
+- proto: CMUBosenmoriFunctionalc8d44c2aff7a097a
   entities:
   - uid: 43993
     components:
@@ -131625,7 +131605,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 95.5,88.5
-- proto: CMUBosenmoriExactc9422826fe99abf7
+- proto: CMUBosenmoriFunctionalc9422826fe99abf7
   entities:
   - uid: 47510
     components:
@@ -131687,7 +131667,7 @@ entities:
       pos: 63.5,17.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExactca9c6c838192cd58
+- proto: CMUBosenmoriFunctionalca9c6c838192cd58
   entities:
   - uid: 49011
     components:
@@ -132107,7 +132087,7 @@ entities:
       pos: 147.5,64.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExactcb21f4af4f117183
+- proto: RMCEngineerKit
   entities:
   - uid: 49022
     components:
@@ -132123,7 +132103,7 @@ entities:
       pos: 59.5,212.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExactcc08fe8333a140fd
+- proto: CMArmorRiotOld
   entities:
   - uid: 48134
     components:
@@ -132240,7 +132220,7 @@ entities:
       pos: 94.5,70.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExactcd69d4960cb68878
+- proto: RMCTablePartGambling
   entities:
   - uid: 48344
     components:
@@ -132458,7 +132438,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 82.5,7.5
-- proto: CMUBosenmoriExactcf92ac8c95a5af4d
+- proto: ArmorHelmetRiotOld
   entities:
   - uid: 48137
     components:
@@ -132475,7 +132455,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 104.5,28.5
-- proto: CMUBosenmoriExactcfaa811879174f72
+- proto: CMRollerBed
   entities:
   - uid: 50271
     components:
@@ -132514,7 +132494,7 @@ entities:
       pos: 157.5,19.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExactd1df1e014d75c178
+- proto: CMUBosenmoriFunctionald1df1e014d75c178
   entities:
   - uid: 47402
     components:
@@ -132562,7 +132542,7 @@ entities:
       pos: 78.5,64.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExactd3642af98aefccad
+- proto: RMCSuitBioGeneral
   entities:
   - uid: 46048
     components:
@@ -132592,7 +132572,7 @@ entities:
       pos: 111.5,109.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExactd423cae9875577f5
+- proto: RMCPouchChem
   entities:
   - uid: 47653
     components:
@@ -132655,7 +132635,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 54.5,27.5
-- proto: CMUBosenmoriExactd514731abd1f840b
+- proto: CMUBosenmoriFunctionald514731abd1f840b
   entities:
   - uid: 49924
     components:
@@ -132671,7 +132651,7 @@ entities:
       pos: 57.5,69.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExactd7577983756b61e3
+- proto: RMCVestTan
   entities:
   - uid: 48805
     components:
@@ -132706,7 +132686,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 73.5,15.5
-- proto: CMUBosenmoriExactd827a1df2a290681
+- proto: CMUBosenmoriFunctionald827a1df2a290681
   entities:
   - uid: 48815
     components:
@@ -132766,7 +132746,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 33.5,140.5
-- proto: CMUBosenmoriExactd95b005a87d7b9e4
+- proto: CMUBosenmoriFunctionald95b005a87d7b9e4
   entities:
   - uid: 48906
     components:
@@ -132812,7 +132792,7 @@ entities:
       pos: 155.5,63.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExactdbb61766dd88fd59
+- proto: RMCArmorVest
   entities:
   - uid: 43578
     components:
@@ -132835,7 +132815,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 95.5,90.5
-- proto: CMUBosenmoriExactdd211dac3882b7a2
+- proto: CMUBosenmoriFunctionaldd211dac3882b7a2
   entities:
   - uid: 50373
     components:
@@ -132851,7 +132831,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 83.5,88.5
-- proto: CMUBosenmoriExactdd97fdc15d14f219
+- proto: CMWelder
   entities:
   - uid: 43600
     components:
@@ -132920,7 +132900,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 154.5,63.5
-- proto: CMUBosenmoriExactdf24ec1ff7d1b7bb
+- proto: CMUBosenmoriFunctionaldf24ec1ff7d1b7bb
   entities:
   - uid: 48754
     components:
@@ -132955,7 +132935,7 @@ entities:
       pos: 82.5,95.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExacte03a5067efdf88c2
+- proto: CMUBosenmoriFunctionale03a5067efdf88c2
   entities:
   - uid: 48862
     components:
@@ -133113,7 +133093,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 64.5,198.5
-- proto: CMUBosenmoriExacte12905ae45d97c99
+- proto: CMUBosenmoriFunctionale12905ae45d97c99
   entities:
   - uid: 49938
     components:
@@ -133251,7 +133231,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 75.5,7.5
-- proto: CMUBosenmoriExacte28b8d7874613cee
+- proto: CMUBosenmoriFunctionale28b8d7874613cee
   entities:
   - uid: 49981
     components:
@@ -133281,7 +133261,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 55.5,61.5
-- proto: CMUBosenmoriExacte46f9a524054b069
+- proto: RMCToolSpade
   entities:
   - uid: 50039
     components:
@@ -133386,7 +133366,7 @@ entities:
       pos: 83.5,72.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExacte7a5e2672daffc89
+- proto: RMCStethoscope
   entities:
   - uid: 45921
     components:
@@ -133410,7 +133390,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 20.5,208.5
-- proto: CMUBosenmoriExacte7fc419955d7f7c7
+- proto: CMUBosenmoriFunctionale7fc419955d7f7c7
   entities:
   - uid: 48875
     components:
@@ -133436,7 +133416,7 @@ entities:
       pos: 79.5,11.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExacte8e6b0ab75e8c72f
+- proto: RMCHoodBioGeneral
   entities:
   - uid: 46049
     components:
@@ -133471,14 +133451,14 @@ entities:
     - type: Transform
       parent: 1
       pos: 95.5,90.5
-- proto: CMUBosenmoriExactea51da4b86a7431a
+- proto: CMUBosenmoriFunctionalea51da4b86a7431a
   entities:
   - uid: 43617
     components:
     - type: Transform
       parent: 1
       pos: 54.5,65.5
-- proto: CMUBosenmoriExactea69facbacaa5918
+- proto: CMUBosenmoriFunctionalea69facbacaa5918
   entities:
   - uid: 48860
     components:
@@ -133508,7 +133488,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 122.5,27.5
-- proto: CMUBosenmoriExacteb4b60842b041ed0
+- proto: CMUBosenmoriFunctionaleb4b60842b041ed0
   entities:
   - uid: 49979
     components:
@@ -133522,7 +133502,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 141.5,32.5
-- proto: CMUBosenmoriExactebcdfd6e029168ca
+- proto: RMCLightReplacer
   entities:
   - uid: 49959
     components:
@@ -133562,7 +133542,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 108.5,28.5
-- proto: CMUBosenmoriExacted0459404e5663ba
+- proto: CMUBosenmoriFunctionaled0459404e5663ba
   entities:
   - uid: 50112
     components:
@@ -133576,7 +133556,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 62.5,124.5
-- proto: CMUBosenmoriExactedcae71c222b1c83
+- proto: CMBedsheetBlue
   entities:
   - uid: 44101
     components:
@@ -133624,7 +133604,7 @@ entities:
       id: nexus_ladd1
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExacteebdac86100fdaac
+- proto: CMHeadFlapCap
   entities:
   - uid: 48808
     components:
@@ -133661,15 +133641,13 @@ entities:
     - type: Transform
       parent: 1
       pos: 127.5,74.5
-- proto: CMUBosenmoriExactef794bae74f7265c
+- proto: RMCOrbitalCannonCable
   entities:
   - uid: 40204
     components:
     - type: Transform
       parent: 1
       pos: 32.5,98.5
-    - type: Fixtures
-      fixtures: {}
 - proto: CMUBosenmoriExactef9b0b0115406d56
   entities:
   - uid: 47729
@@ -133822,7 +133800,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 134.5,5.5
-- proto: CMUBosenmoriExactf1f289344389d166
+- proto: CMUBosenmoriFunctionalf1f289344389d166
   entities:
   - uid: 47596
     components:
@@ -133836,7 +133814,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 148.5,72.5
-- proto: CMUBosenmoriExactf243524c62605484
+- proto: RMCTablePartReinforced
   entities:
   - uid: 49936
     components:
@@ -133848,7 +133826,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 133.5,67.5
-- proto: CMUBosenmoriExactf252aa3abdfa3472
+- proto: CMUBosenmoriFunctionalf252aa3abdfa3472
   entities:
   - uid: 49988
     components:
@@ -133871,7 +133849,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 63.5,16.5
-- proto: CMUBosenmoriExactf30f012c21de382d
+- proto: CMUBosenmoriFunctionalf30f012c21de382d
   entities:
   - uid: 33162
     components:
@@ -134138,7 +134116,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 52.5,29.5
-- proto: CMUBosenmoriExactf47bbc2a2e0c27b5
+- proto: CMUBosenmoriFunctionalf47bbc2a2e0c27b5
   entities:
   - uid: 48660
     components:
@@ -134200,7 +134178,7 @@ entities:
       pos: 55.5,59.5
     - type: Fixtures
       fixtures: {}
-- proto: CMUBosenmoriExactf60e729303952223
+- proto: CMPen
   entities:
   - uid: 43991
     components:
@@ -134221,14 +134199,14 @@ entities:
     - type: Transform
       parent: 1
       pos: 38.5,11.5
-- proto: CMUBosenmoriExactf6d7b87a82e70107
+- proto: CMUBosenmoriFunctionalf6d7b87a82e70107
   entities:
   - uid: 48865
     components:
     - type: Transform
       parent: 1
       pos: 123.5,52.5
-- proto: CMUBosenmoriExactf6eb9879236de73b
+- proto: CMUBosenmoriFunctionalf6eb9879236de73b
   entities:
   - uid: 48866
     components:
@@ -134280,7 +134258,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 133.5,46.5
-- proto: CMUBosenmoriExactf87e809a299309fb
+- proto: CMUBosenmoriFunctionalf87e809a299309fb
   entities:
   - uid: 48738
     components:
@@ -134647,29 +134625,23 @@ entities:
     - type: Transform
       parent: 1
       pos: 74.5,67.5
-- proto: CMUBosenmoriExactfbec1ba58d163dec
+- proto: CMIV
   entities:
   - uid: 45887
     components:
     - type: Transform
       parent: 1
       pos: 72.5,90.5
-    - type: Fixtures
-      fixtures: {}
   - uid: 45888
     components:
     - type: Transform
       parent: 1
       pos: 73.5,95.5
-    - type: Fixtures
-      fixtures: {}
   - uid: 45889
     components:
     - type: Transform
       parent: 1
       pos: 80.5,93.5
-    - type: Fixtures
-      fixtures: {}
 - proto: CMUBosenmoriExactfc4bd6c0857d0a40
   entities:
   - uid: 48117
@@ -135605,7 +135577,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 115.5,23.5
-- proto: CMUBosenmoriExactfcba2c65e3f6b0c0
+- proto: CMUBosenmoriFunctionalfcba2c65e3f6b0c0
   entities:
   - uid: 50114
     components:
@@ -135621,7 +135593,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 86.5,56.5
-- proto: CMUBosenmoriExactfce5bad32e9a591c
+- proto: RMCTablePartAlmayer
   entities:
   - uid: 36939
     components:
@@ -135658,7 +135630,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 25.5,208.5
-- proto: CMUBosenmoriExactfd24a0346a94e6b0
+- proto: CMUBosenmoriFunctionalfd24a0346a94e6b0
   entities:
   - uid: 42741
     components:
@@ -136024,7 +135996,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 67.5,63.5
-- proto: CMUBosenmoriExactfdc6964175ad138c
+- proto: CMUBosenmoriFunctionalfdc6964175ad138c
   entities:
   - uid: 48744
     components:

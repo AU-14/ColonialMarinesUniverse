@@ -322,6 +322,10 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
   - type: CMAutomatedVendor
     sections:
+    - name: cmu-vendor-section-pressurized-canisters
+      entries:
+      - id: RMCPouchReagentCanister
+        amount: 1
     - name: Medical Pouches
       entries:
       - id: RMCPouchAutoinjector

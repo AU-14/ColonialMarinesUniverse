@@ -2,7 +2,6 @@ using System.Linq;
 using System.Numerics;
 using Content.Shared.CMU14.Ops.Sfx;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
-using Content.Shared.CMU14.ZLevels.Ordnance;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.AlertLevel;
 using Content.Shared.CMU14.Marines;
@@ -98,7 +97,7 @@ public sealed partial class EvacuationSequenceSystem : EntitySystem
         if (TryGetShipWorldTiles(ev.Map, out var tiles))
         {
             foreach (var pos in PickSpread(tiles, MainWarheadSplits))
-                _orbitalCannon.SpawnExplosion(SelfDestructWarhead, new EntityCoordinates(ev.Map, pos), CMUTopDownOrdnanceKind.Scuttle);
+                _orbitalCannon.SpawnExplosion(SelfDestructWarhead, new EntityCoordinates(ev.Map, pos));
         }
 
         for (var i = 0; i < VolleyDelays.Length; i++)
@@ -190,7 +189,7 @@ public sealed partial class EvacuationSequenceSystem : EntitySystem
             return;
 
         foreach (var pos in PickSpread(tiles, WarheadsPerVolley))
-            _orbitalCannon.SpawnExplosion(ScatterWarhead, new EntityCoordinates(map, pos), CMUTopDownOrdnanceKind.Scuttle);
+            _orbitalCannon.SpawnExplosion(ScatterWarhead, new EntityCoordinates(map, pos));
     }
 
     private void OnCVarChanged(bool enabled)

@@ -174,7 +174,7 @@ public sealed class HospitalTransportRecoveryTest
             var total = 0;
             var query = entities.EntityQueryEnumerator<StackComponent, MetaDataComponent, TransformComponent>();
             while (query.MoveNext(out _, out var stack, out var metadata, out var transform))
-                if (metadata.EntityPrototype?.ID == hospital.CashPrototype.Id && transform.MapUid == map.MapUid)
+                if (metadata.EntityPrototype?.ID == "RMCSpaceCash" && transform.MapUid == map.MapUid)
                     total += stack.Count;
             return total;
         }

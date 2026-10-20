@@ -1,10 +1,12 @@
 #pragma warning disable RA0002 // The fixture controls phase durations and inspects committed transport state.
 using Content.Server.CMU14.Hospital;
+using Content.Server.CMU14.ColonyEconomy;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Medical.Stasis;
+using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.CCVar;
 using Content.Shared.CMU14.Hospital;
 using Content.Shared.CMU14.Round;
@@ -18,8 +20,15 @@ namespace Content.IntegrationTests.CMU14.Medical.Hospital;
 [TestFixture]
 public sealed class HospitalFtlRoundTripTest
 {
-    [TestCase(false, false), TestCase(true, false), TestCase(false, true), Category("HospitalTransport"), CancelAfter(180000)]
-    public async Task RealDeliveryAndPickupRetryCooldownAndSettleOnceAfterReturning(bool staleReservation, bool differentDeck)
+    // CMU14: exercise each payment destination through the real settlement lifecycle.
+    [TestCase(false, false, "AU14HospitalEmergencyComputer", null)]
+    [TestCase(true, false, "CMUHospitalEmergencyComputerColony", null)]
+    [TestCase(false, true, "CMUHospitalEmergencyComputerColony", null)]
+    [TestCase(false, false, "CMUHospitalEmergencyComputerGovfor", "govfor")]
+    [TestCase(false, false, "CMUHospitalEmergencyComputerOpfor", "opfor")]
+    [Category("HospitalTransport"), CancelAfter(180000)]
+    public async Task RealDeliveryAndPickupRetryCooldownAndSettleOnceAfterReturning(bool staleReservation, bool differentDeck,
+        string computerPrototype, string? payoutFaction)
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -41,6 +50,9 @@ public sealed class HospitalFtlRoundTripTest
         var initialMaps = 0;
         var initialGrids = 0;
         var expectedReward = 0;
+        var colonyBudget = server.System<ColonyBudgetSystem>();
+        var originalBudget = 0f;
+        var accounts = new Dictionary<string, EntityUid>();
 
         try
         {
@@ -58,13 +70,24 @@ public sealed class HospitalFtlRoundTripTest
                     Assert.That(zLevels.TryAddMapsIntoZNetwork(network,
                         new Dictionary<EntityUid, int> { [map.MapUid] = 0, [computerDeck.MapUid] = 1 }), Is.True);
                 }
-                computer = entities.SpawnEntity("AU14HospitalEmergencyComputer", computerDeck.GridCoords);
+                originalBudget = colonyBudget.GetBudget();
+                foreach (var faction in new[] { "govfor", "opfor", "unassigned" })
+                {
+                    var account = entities.SpawnEntity(null, MapCoordinates.Nullspace);
+                    var accountComp = entities.AddComponent<RequisitionsAccountComponent>(account);
+                    accountComp.Faction = faction;
+                    accountComp.Balance = 100;
+                    accountComp.Started = true;
+                    accounts.Add(faction, account);
+                }
+                computer = entities.SpawnEntity(computerPrototype, computerDeck.GridCoords);
                 actor = entities.SpawnEntity("CMMobHuman", map.GridCoords);
                 entities.EnsureComponent<CMInStasisComponent>(actor);
                 // Keep the landing shuttle away from the hospital and its patient.
                 landing = entities.SpawnEntity("AU14HospitalDropshipLandingZone",
                     new EntityCoordinates(map.MapUid, new Vector2(50, 0)));
                 hospital = entities.GetComponent<HospitalEmergencyComputerComponent>(computer);
+                Assert.That(hospital.RequisitionsFaction, Is.EqualTo(payoutFaction));
                 hospital.MinCasualties = hospital.MaxCasualties = 1;
                 hospital.ShuttleStartupTime = 0.1f;
                 // Retain an observable departure phase between one-second polls.
@@ -109,6 +132,7 @@ public sealed class HospitalFtlRoundTripTest
                 Assert.That(hospital.Patients, Does.Contain(patient));
                 Assert.That(hospital.LastPayout, Is.Zero);
                 Assert.That(CashTotal(), Is.Zero);
+                AssertBudgets(0);
                 Assert.That(server.System<HospitalEmergencySystem>().AssessDischarge(patient).Cleared, Is.True);
                 entities.EventBus.RaiseLocalEvent(computer, new HospitalEmergencyRequestPickupMsg { Actor = actor });
                 Assert.That(hospital.Status, Is.EqualTo(HospitalEmergencyStatus.PickupInbound), hospital.TransportFailure);
@@ -140,6 +164,7 @@ public sealed class HospitalFtlRoundTripTest
                 Assert.That(hospital.Status, Is.EqualTo(HospitalEmergencyStatus.ShuttleDeparting));
                 Assert.That(hospital.LastPayout, Is.Zero);
                 Assert.That(CashTotal(), Is.Zero);
+                AssertBudgets(0);
                 Assert.That(entities.IsQueuedForDeletion(patient), Is.False);
             });
             await WaitForPhase(HospitalEmergencyStatus.RewardReady, 10);
@@ -151,14 +176,16 @@ public sealed class HospitalFtlRoundTripTest
                 Assert.That(hospital.Patients, Is.Empty);
                 Assert.That(hospital.LastMissedInjuries, Is.Zero);
                 Assert.That(hospital.LastPayout, Is.EqualTo(expectedReward));
-                Assert.That(CashTotal(), Is.EqualTo(expectedReward));
+                Assert.That(CashTotal(), Is.Zero, "Hospital payments go directly to the budget.");
+                AssertBudgets(expectedReward);
 
                 var duplicate = new FTLCompletedEvent(pickup, pickupReturnMap);
                 entities.EventBus.RaiseEvent(EventSource.Local, ref duplicate);
                 entities.EventBus.RaiseLocalEvent(computer, new HospitalEmergencyReleaseShuttleMsg { Actor = actor });
                 Assert.That(hospital.Status, Is.EqualTo(HospitalEmergencyStatus.RewardReady));
                 Assert.That(hospital.LastPayout, Is.EqualTo(expectedReward));
-                Assert.That(CashTotal(), Is.EqualTo(expectedReward), "Repeated completion/release cannot issue a second payment.");
+                Assert.That(CashTotal(), Is.Zero);
+                AssertBudgets(expectedReward); // Repeated completion/release cannot issue a second payment.
             });
 
             // The next incident is the third shuttle call, using the same landing pad.
@@ -185,6 +212,9 @@ public sealed class HospitalFtlRoundTripTest
             await server.WaitPost(() =>
             {
                 server.CfgMan.SetCVar(CCVars.FTLArrivalTime, originalArrivalTime);
+                colonyBudget.SetBudget(originalBudget);
+                foreach (var account in accounts.Values)
+                    entities.DeleteEntity(account);
                 foreach (var uid in transportEntities.Append(patient).Append(computer).Append(actor).Append(landing))
                 {
                     if (entities.EntityExists(uid))
@@ -198,13 +228,21 @@ public sealed class HospitalFtlRoundTripTest
 
         int NonTransitMapCount() => entities.Count<MapComponent>() - entities.Count<FTLMapComponent>();
 
+        void AssertBudgets(int payout)
+        {
+            Assert.That(colonyBudget.GetBudget(), Is.EqualTo(originalBudget + (payoutFaction == null ? payout : 0)));
+            foreach (var (faction, account) in accounts)
+                Assert.That(entities.GetComponent<RequisitionsAccountComponent>(account).Balance,
+                    Is.EqualTo(100 + (faction == payoutFaction ? payout : 0)), $"Unexpected payment to {faction}.");
+        }
+
         int CashTotal()
         {
             var total = 0;
             var query = entities.EntityQueryEnumerator<StackComponent, MetaDataComponent, TransformComponent>();
             while (query.MoveNext(out _, out var stack, out var metadata, out var transform))
             {
-                if (metadata.EntityPrototype?.ID == hospital.CashPrototype.Id && transform.MapUid == computerDeck.MapUid)
+                if (metadata.EntityPrototype?.ID == "RMCSpaceCash" && transform.MapUid == computerDeck.MapUid)
                     total += stack.Count;
             }
             return total;

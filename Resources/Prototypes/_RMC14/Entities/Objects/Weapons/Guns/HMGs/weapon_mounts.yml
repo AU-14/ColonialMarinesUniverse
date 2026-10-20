@@ -293,7 +293,9 @@
     canRotateWithoutTool: true
     mountOnDeploy: false
     mountExclusionAreaSize: 0
-    barricadeExclusionAreaSize: 2
+    # CMU14: allow emplacements beside barricades.
+    # barricadeExclusionAreaSize: 2
+    barricadeExclusionAreaSize: 0
     assembleDelay: 3
     undeploySound: null
     acidableWhileUndeployed: true

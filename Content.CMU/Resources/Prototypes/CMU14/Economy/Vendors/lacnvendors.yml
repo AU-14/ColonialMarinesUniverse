@@ -357,6 +357,10 @@
     - AU14JobOPFOROfficerMedical
     - AU14JobOPFORAuxSupportSynth
     sections:
+    - name: cmu-vendor-section-pressurized-canisters
+      entries:
+      - id: RMCPouchReagentCanister
+        amount: 1
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment
       entries:
@@ -1412,6 +1416,10 @@
   components:
   - type: CMAutomatedVendor
     sections:
+    - name: cmu-vendor-section-pressurized-canisters
+      entries:
+      - id: RMCPouchReagentCanister
+        amount: 1
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment
       entries:
