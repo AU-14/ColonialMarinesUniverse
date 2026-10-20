@@ -8,6 +8,12 @@ public sealed partial class CMUSwarmTraversalComponent : Component
 {
     public CMUSwarmStairRoute? Route;
     public bool Crossing;
+
+    /// <summary>
+    /// Within <c>StairShield</c> of a stair or ramp shaft on its floor. Swarm separation is suppressed here so
+    /// a crowd at the landing cannot push the member back down the stair it just climbed.
+    /// </summary>
+    public bool NearStair;
     public TimeSpan ProgressDeadline;
     public Vector2 LastPosition;
     public readonly Dictionary<EntityUid, TimeSpan> FailedStairs = new();

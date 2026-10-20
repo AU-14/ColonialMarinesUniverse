@@ -14,7 +14,7 @@ public sealed partial class NPCSteeringSystem
         if (uid == other || !IsSwarmLesser(uid) || !IsSwarmLesser(other))
             return false;
 
-        if (TryComp<CMUSwarmTraversalComponent>(uid, out var traversal) && traversal.Crossing)
+        if (TryComp<CMUSwarmTraversalComponent>(uid, out var traversal) && (traversal.Crossing || traversal.NearStair))
             return true;
 
         const float spacing = 0.9f;

@@ -259,6 +259,8 @@ public sealed partial class CMUQueenSwarmSystem : EntitySystem
                 {
                     if (traversal?.Route != null)
                         ClearTraversal(member, traversal);
+                    if (traversal != null)
+                        traversal.NearStair = false;
                     if (TryComp<NPCSteeringComponent>(member, out var failedPursuit) && failedPursuit.Status == SteeringStatus.NoPath)
                         _steering.Unregister(member);
                     assignedTargets[enemy] = assignedTargets.GetValueOrDefault(enemy) + 1;

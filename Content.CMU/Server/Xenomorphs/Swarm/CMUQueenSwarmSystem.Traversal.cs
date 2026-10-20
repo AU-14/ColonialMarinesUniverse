@@ -17,6 +17,12 @@ public sealed partial class CMUQueenSwarmSystem
     /// Members still on the ramp or above its shaft (within this) keep steering to the exact exit.
     /// </summary>
     private const float StairClearance = 1.25f;
+
+    /// <summary>
+    /// Distance from a stair entity within which swarm separation is suppressed. Wider than
+    /// <see cref="StairClearance"/> so a member that has just arrived is never steered back onto the stair tile.
+    /// </summary>
+    private const float StairShield = 1.75f;
     private TimeSpan _nextStairScan;
 
     private bool TraverseToAnchor(EntityUid member, EntityUid anchor)
@@ -24,6 +30,7 @@ public sealed partial class CMUQueenSwarmSystem
         var map = Transform(member).MapUid;
         var targetMap = Transform(anchor).MapUid;
         TryComp<CMUSwarmTraversalComponent>(member, out var traversal);
+        UpdateNearStair(member, map, ref traversal);
         if (map == targetMap && traversal?.Route == null)
             return false;
 
@@ -127,6 +134,31 @@ public sealed partial class CMUQueenSwarmSystem
             steering.RepathRange = Vector2.Distance(position, destination) + 1;
         }
         return true;
+    }
+
+    private void UpdateNearStair(EntityUid member, EntityUid? map, ref CMUSwarmTraversalComponent? traversal)
+    {
+        var near = false;
+        if (map != null)
+        {
+            RefreshStairRoutes();
+            var position = _transform.GetWorldPosition(member);
+            foreach (var route in _stairRoutes)
+            {
+                if (route.FromMap != map || TerminatingOrDeleted(route.Stair))
+                    continue;
+                if (Vector2.Distance(position, _transform.GetWorldPosition(route.Stair)) < StairShield)
+                {
+                    near = true;
+                    break;
+                }
+            }
+        }
+
+        if (near)
+            traversal ??= EnsureComp<CMUSwarmTraversalComponent>(member);
+        if (traversal != null)
+            traversal.NearStair = near;
     }
 
     private void ClearTraversal(EntityUid member, CMUSwarmTraversalComponent traversal)
