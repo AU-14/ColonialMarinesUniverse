@@ -1,6 +1,10 @@
 using System.Linq;
+using Content.Server.Administration.Logs;
+using Content.Server.Administration.Managers;
 using Content.Server.CMU14.Diagnostics.Performance;
 using Content.Server.GameTicking;
+using Content.Shared.Administration;
+using Content.Shared.Database;
 using Content.Shared.GameTicking;
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
@@ -21,6 +25,8 @@ namespace Content.Server.CMU14.Threats;
 /// <summary>Holds force deployments until enough eligible observers volunteer.</summary>
 public sealed partial class ForceInterestSystem : EntitySystem
 {
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private IAdminManager _admins = default!;
     [Dependency] private IComponentFactory _factory = default!;
     [Dependency] private GhostRoleSystem _ghostRole = default!;
     [Dependency] private ICMUServerPerformanceDiagnostics _performance = default!;
@@ -121,9 +127,10 @@ public sealed partial class ForceInterestSystem : EntitySystem
 
     public ForceInterestInfo[] GetForces(ICommonSession player)
     {
+        var canComplete = _admins.HasAdminFlag(player, AdminFlags.Admin);
         return _forces.Where(pair => pair.Value.Ready).Select(pair => new ForceInterestInfo(pair.Key, pair.Value.Name,
             pair.Value.TotalRoles, pair.Value.Interested.Count, ForceInterest.RequiredPlayers(pair.Value.TotalRoles),
-            pair.Value.Ready, pair.Value.Interested.Contains(player.UserId), CanJoin(pair.Value, player.UserId))).ToArray();
+            pair.Value.Ready, pair.Value.Interested.Contains(player.UserId), CanJoin(pair.Value, player.UserId), canComplete)).ToArray();
     }
 
     public void SetInterest(ICommonSession player, uint id, bool interested)
@@ -136,6 +143,18 @@ public sealed partial class ForceInterestSystem : EntitySystem
         else if (force.Ready && CanJoin(force, player.UserId))
             force.Interested.Add(player.UserId);
 
+        _ghostRole.UpdateAllEui();
+    }
+
+    /// <summary>Admin override: deploys now with whoever is interested, skipping the interest wait.</summary>
+    public void CompleteForce(ICommonSession player, uint id)
+    {
+        if (!_admins.HasAdminFlag(player, AdminFlags.Admin) || !_forces.TryGetValue(id, out var force))
+            return;
+
+        _adminLog.Add(LogType.AdminCommands, LogImpact.Medium,
+            $"{player.Name} force-completed '{force.Name}' skipping the interest wait");
+        Deploy(id, force);
         _ghostRole.UpdateAllEui();
     }
 
@@ -166,23 +185,7 @@ public sealed partial class ForceInterestSystem : EntitySystem
                 && _timing.CurTime < force.ReadyAt + FallbackDeployDelay)
                 continue;
 
-            // Remove before invoking game code, which can queue additional forces.
-            _forces.Remove(id);
-            try
-            {
-                using var cost = _performance.MeasureOperation("force-deployment");
-                if (!force.Spawn(force.Interested))
-                {
-                    force.RetryAt = _timing.CurTime + RetryInterval;
-                    _forces.Add(id, force);
-                }
-            }
-            catch (Exception ex)
-            {
-                // Do not retry an exception: a partially completed deployment must not be duplicated.
-                _sawmill.Error($"Force deployment '{force.Name}' failed: {ex}");
-            }
-
+            Deploy(id, force);
             changed = true;
         }
 
@@ -203,6 +206,26 @@ public sealed partial class ForceInterestSystem : EntitySystem
 
         if (changed)
             _ghostRole.UpdateAllEui();
+    }
+
+    private void Deploy(uint id, PendingForce force)
+    {
+        // Remove before invoking game code, which can queue additional forces.
+        _forces.Remove(id);
+        try
+        {
+            using var cost = _performance.MeasureOperation("force-deployment");
+            if (!force.Spawn(force.Interested))
+            {
+                force.RetryAt = _timing.CurTime + RetryInterval;
+                _forces.Add(id, force);
+            }
+        }
+        catch (Exception ex)
+        {
+            // Do not retry an exception: a partially completed deployment must not be duplicated.
+            _sawmill.Error($"Force deployment '{force.Name}' failed: {ex}");
+        }
     }
 
     /// <summary>Starts the claim window only for a newly deployed, unoccupied ghost role.</summary>

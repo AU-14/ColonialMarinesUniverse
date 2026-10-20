@@ -36,6 +36,9 @@ namespace Content.Server.Ghost.Roles.UI
                 case SetForceInterestMessage interest:
                     _forceInterest.SetInterest(Player, interest.Identifier, interest.Interested);
                     break;
+                case CompleteForceInterestMessage complete: // CMU14
+                    _forceInterest.CompleteForce(Player, complete.Identifier);
+                    break;
                 case GhostThirdPartyCallMessage call: // CMU14
                     _ghostThirdPartyCall.RequestCall(Player);
                     break;
