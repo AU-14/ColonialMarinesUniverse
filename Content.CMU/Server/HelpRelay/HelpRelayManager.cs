@@ -2,15 +2,18 @@ using System.Collections.Concurrent;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.CMU14.Round;
 using Content.Server.Database;
 using Content.Server.GameTicking;
 using Content.Shared.CCVar;
+using Content.Shared.GameTicking;
 using Robust.Shared.Configuration;
 using Robust.Shared.Log;
 using Robust.Shared.Network;
+using Robust.Shared.Utility;
 
 namespace Content.Server.CMU14.HelpRelay;
 
@@ -32,6 +35,24 @@ public sealed class HelpRelayManager : IPostInjectInit
     private int _queueRunning;
     private ISawmill _sawmill = default!;
 
+    // One Discord message per conversation, edited in place as lines arrive (the ahelp relay model).
+    // Main-thread only: created and cleared there; only the owning processor task mutates the rest.
+    private readonly Dictionary<NetUserId, HelpConversation> _conversations = new();
+
+    private sealed class HelpConversation
+    {
+        public string? Url;
+        public HelpSource Source;
+        public string Username = string.Empty;
+        public string? Revision;
+        public string? Server;
+        public string? MessageId;
+        public string Description = string.Empty;
+        public GameRunLevel LastRunLevel;
+        public readonly ConcurrentQueue<string> Pending = new();
+        public int Processing;
+    }
+
     private string _webhook = string.Empty;
     private string _webhookAHelp = string.Empty;
     private string _webhookMHelp = string.Empty;
@@ -51,9 +72,7 @@ public sealed class HelpRelayManager : IPostInjectInit
     }
 
     public bool IsEnabled(HelpSource source)
-    {
-        return !string.IsNullOrWhiteSpace(UrlFor(source));
-    }
+        => !string.IsNullOrWhiteSpace(UrlFor(source));
 
     /// <summary>
     /// Queues one message for Discord delivery and returns; the spaced background task posts it.
@@ -108,6 +127,134 @@ public sealed class HelpRelayManager : IPostInjectInit
         };
     }
 
+    /// <summary>
+    /// Queues one line into the conversation's Discord message: created on first line, then edited in
+    /// place per line (the ahelp relay model). Main thread only — reads round state from entity systems.
+    /// </summary>
+    public void RelayConversationLine(
+        HelpSource source,
+        NetUserId conversationId,
+        string username,
+        bool fromStaff,
+        string speaker,
+        string text)
+    {
+        var url = UrlFor(source);
+        if (string.IsNullOrWhiteSpace(url))
+            return;
+
+        var conversation = _conversations.GetOrNew(conversationId);
+        if (conversation.Url == null)
+        {
+            conversation.Source = source;
+            conversation.Url = url;
+            conversation.Username = username;
+            conversation.Revision = NullIfEmpty(_revision);
+            conversation.Server = NullIfEmpty(_serverName);
+            conversation.LastRunLevel = CurrentRunLevel();
+        }
+
+        var runLevel = CurrentRunLevel();
+        if (runLevel != conversation.LastRunLevel)
+        {
+            conversation.Pending.Enqueue(HelpRelayPayload.BuildRunLevelSeparator(runLevel));
+            conversation.LastRunLevel = runLevel;
+        }
+
+        var roundTime = runLevel == GameRunLevel.InRound
+            ? _entMan.System<GameTicker>().RoundDuration().ToString(@"hh\:mm\:ss")
+            : null;
+        conversation.Pending.Enqueue(HelpRelayPayload.BuildConversationLine(speaker, fromStaff, roundTime, text));
+        ProcessConversation(conversation);
+    }
+
+    /// <summary>Round restart ends conversations; the next line starts a fresh message.</summary>
+    public void ClearConversations()
+        => _conversations.Clear();
+
+    private GameRunLevel CurrentRunLevel() => _entMan.System<GameTicker>().RunLevel;
+
+    private void ProcessConversation(HelpConversation conversation)
+    {
+        if (Interlocked.Exchange(ref conversation.Processing, 1) == 1)
+            return;
+
+        Task.Run(async () =>
+        {
+            while (true)
+            {
+                while (conversation.Pending.TryDequeue(out var line))
+                    await AppendConversationLine(conversation, line);
+
+                conversation.Processing = 0;
+
+                if (conversation.Pending.IsEmpty || Interlocked.Exchange(ref conversation.Processing, 1) == 1)
+                    return;
+            }
+        });
+    }
+
+    private async Task AppendConversationLine(HelpConversation conversation, string line)
+    {
+        if (conversation.Description.Length + line.Length + 1 > HelpRelayPayload.ConversationDescriptionMax)
+        {
+            // No link to the previous message without webhook guild/channel ids; adjacent in-channel marker instead.
+            conversation.Description = "_(transcript continued)_\n";
+            conversation.MessageId = null;
+        }
+        else
+        {
+            conversation.Description += $"\n{line}";
+        }
+
+        var payload = HelpRelayPayload.BuildConversationPayload(
+            conversation.Source,
+            conversation.Username,
+            conversation.Description,
+            conversation.Revision,
+            conversation.Server);
+        var json = JsonSerializer.Serialize(payload);
+
+        try
+        {
+            if (conversation.MessageId == null)
+            {
+                using var response = await _http.PostAsync(
+                    $"{conversation.Url}?wait=true",
+                    new StringContent(json, Encoding.UTF8, "application/json"));
+                var content = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
+                {
+                    _sawmill.Error($"Help relay conversation post failed: {(int) response.StatusCode} {response.StatusCode}\n{content}");
+                    return;
+                }
+
+                var id = JsonNode.Parse(content)?["id"]?.ToString();
+                if (id == null)
+                {
+                    _sawmill.Error($"Help relay could not find message id in webhook response: {content}");
+                    return;
+                }
+
+                conversation.MessageId = id;
+            }
+            else
+            {
+                using var response = await _http.PatchAsync(
+                    $"{conversation.Url}/messages/{conversation.MessageId}",
+                    new StringContent(json, Encoding.UTF8, "application/json"));
+                if (!response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    _sawmill.Error($"Help relay conversation edit failed: {(int) response.StatusCode} {response.StatusCode}\n{content}");
+                    // The message may have been deleted; fall back to posting a fresh one next line.
+                    conversation.MessageId = null;
+                }
+            }
+        }
+        catch (Exception e) { _sawmill.Error($"Help relay conversation error: {e}"); }
+    }
+
     private string? UrlFor(HelpSource source) => source switch
     {
         HelpSource.AHelp => NullIfEmpty(_webhookAHelp) ?? NullIfEmpty(_webhook),
@@ -158,10 +305,7 @@ public sealed class HelpRelayManager : IPostInjectInit
                 _sawmill.Error($"Help relay webhook failed: {(int) response.StatusCode} {response.StatusCode}\n{body}");
             }
         }
-        catch (Exception e)
-        {
-            _sawmill.Error($"Help relay webhook error: {e}");
-        }
+        catch (Exception e) { _sawmill.Error($"Help relay webhook error: {e}"); }
     }
 
     private static MultipartFormDataContent Multipart(string payloadJson, string attachmentJson)

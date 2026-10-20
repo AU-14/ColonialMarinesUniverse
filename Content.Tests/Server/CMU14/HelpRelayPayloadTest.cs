@@ -1,5 +1,6 @@
 using System;
 using Content.Server.CMU14.HelpRelay;
+using Content.Shared.GameTicking;
 using NUnit.Framework;
 
 namespace Content.Tests.Server.CMU14
@@ -105,6 +106,48 @@ namespace Content.Tests.Server.CMU14
 
             Assert.That(payload.ThreadName, Does.StartWith("BUG-R1234-03"));
             Assert.That(payload.Embeds[0].Title, Is.EqualTo(payload.ThreadName));
+        }
+
+        [Test]
+        public void ConversationLineMarksDirectionSpeakerAndRoundTime()
+        {
+            var player = HelpRelayPayload.BuildConversationLine("PFC Jane Doe", fromStaff: false, "00:12:34", "how do I reload?");
+            Assert.That(player, Is.EqualTo(":inbox_tray: **[00:12:34]** **PFC Jane Doe:** how do I reload?"));
+
+            var staff = HelpRelayPayload.BuildConversationLine("dev", fromStaff: true, roundTime: null, "alt+<F4>");
+            Assert.That(staff, Is.EqualTo(":outbox_tray: **dev:** alt+<F4>"));
+        }
+
+        [Test]
+        public void ConversationLineCapsLongText()
+        {
+            var line = HelpRelayPayload.BuildConversationLine("a", false, null, new string('x', 5000));
+
+            Assert.That(line, Does.EndWith("... **(too long)**"));
+        }
+
+        [Test]
+        public void ConversationPayloadCarriesTranscript()
+        {
+            var payload = HelpRelayPayload.BuildConversationPayload(
+                HelpSource.MHelp,
+                "dev",
+                "\n:inbox_tray: **PFC Jane Doe:** hi",
+                revision: "20a11caad6",
+                server: "CMU Main");
+
+            Assert.That(payload.Username, Is.EqualTo("MHelp · dev"));
+            var embed = payload.Embeds[0];
+            Assert.That(embed.Description, Does.Contain("PFC Jane Doe"));
+            Assert.That(embed.Color, Is.EqualTo(0xE67E22));
+            Assert.That(embed.Footer!.Text, Is.EqualTo("rev 20a11caad6 · CMU Main · CMU help relay"));
+        }
+
+        [Test]
+        public void RunLevelSeparatorsAreMarkdown()
+        {
+            Assert.That(HelpRelayPayload.BuildRunLevelSeparator(GameRunLevel.InRound), Does.Contain("Round started"));
+            Assert.That(HelpRelayPayload.BuildRunLevelSeparator(GameRunLevel.PostRound), Does.Contain("Post-round started"));
         }
     }
 }

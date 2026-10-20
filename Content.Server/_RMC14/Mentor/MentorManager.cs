@@ -450,13 +450,16 @@ public sealed partial class MentorManager : IPostInjectInit
         if (author != null)
             SendTypingUpdate(author.Channel, destination, false);
 
-        // CMU14 Help Relay: delivery via the shared relay; it caps the text and owns the queue.
+        // CMU14 Help Relay: conversation relay — one Discord message per player, edited in place as
+        // lines arrive (the ahelp relay model), not one message per line.
         if (!create) return;
-        _helpRelay.Post(HelpSource.MHelp, new HelpPost
-        {
-            Author = authorName != null ? $"{authorName} → {destinationName}" : null,
-            Description = message,
-        });
+        _helpRelay.RelayConversationLine(
+            HelpSource.MHelp,
+            destination,
+            destinationName,
+            isMentor,
+            authorName ?? destinationName,
+            message);
     }
 
     private void SendTypingUpdate(INetChannel author, Guid destination, bool typing)
