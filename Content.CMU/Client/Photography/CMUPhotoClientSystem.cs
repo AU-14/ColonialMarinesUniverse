@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Client.Viewport;
 using Content.Shared.CMU14.Photography;
 using Content.Shared.Hands.EntitySystems;
+using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Client.State;
@@ -14,8 +15,8 @@ using SixLabors.ImageSharp.Processing;
 namespace Content.Client.CMU14.Photography;
 
 /// <summary>
-/// Captures photos for the server from the local game view, caches prints' pictures, and draws the camera's
-/// framing outline.
+/// Captures photos for the server from the local game view, caches prints' pictures, draws the camera's
+/// framing outline and puts each print's thumbnail in the window of its sprite.
 /// </summary>
 public sealed partial class CMUPhotoClientSystem : EntitySystem
 {
@@ -23,9 +24,17 @@ public sealed partial class CMUPhotoClientSystem : EntitySystem
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IStateManager _state = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
+    /// <summary>
+    /// Where the thumbnail sits on the print's 32x32 sprite: centred across, its middle two pixels above the
+    /// sprite's (photo.rsi's window, drawn by polaroid_pixel_art.py's ITEM_WINDOW).
+    /// </summary>
+    private static readonly Vector2 ThumbnailOffset = new(0, 2f / 32f);
+
     private readonly Dictionary<int, Texture> _textures = new();
+    private readonly Dictionary<int, Texture> _thumbnails = new();
     private readonly HashSet<int> _requested = new();
     private CMUPhotoFrameOverlay _overlay = default!;
 
@@ -37,6 +46,8 @@ public sealed partial class CMUPhotoClientSystem : EntitySystem
         base.Initialize();
         SubscribeNetworkEvent<CMUPhotoCaptureRequestEvent>(OnCaptureRequest);
         SubscribeNetworkEvent<CMUPhotoImageEvent>(OnImage);
+        SubscribeLocalEvent<CMUPhotoComponent, ComponentStartup>(OnPhotoStartup);
+        SubscribeLocalEvent<CMUPhotoComponent, AfterAutoHandleStateEvent>(OnPhotoState);
 
         _overlay = new CMUPhotoFrameOverlay(EntityManager);
         _overlays.AddOverlay(_overlay);
@@ -46,6 +57,54 @@ public sealed partial class CMUPhotoClientSystem : EntitySystem
     {
         base.Shutdown();
         _overlays.RemoveOverlay(_overlay);
+    }
+
+    private void OnPhotoStartup(Entity<CMUPhotoComponent> ent, ref ComponentStartup args)
+    {
+        UpdateThumbnail(ent);
+    }
+
+    private void OnPhotoState(Entity<CMUPhotoComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        UpdateThumbnail(ent);
+    }
+
+    /// <summary>Shows the picture, shrunk, in the print sprite's window; an unprinted one stays dark.</summary>
+    private void UpdateThumbnail(Entity<CMUPhotoComponent> ent)
+    {
+        if (!TryComp(ent, out SpriteComponent? sprite))
+            return;
+
+        var texture = Thumbnail(ent.Comp);
+        if (texture == null && !_sprite.LayerExists((ent, sprite), CMUPhotoVisualLayers.Thumbnail))
+            return;
+
+        var layer = _sprite.LayerMapReserve((ent, sprite), CMUPhotoVisualLayers.Thumbnail);
+        _sprite.LayerSetTexture((ent, sprite), layer, texture);
+        _sprite.LayerSetOffset((ent, sprite), layer, ThumbnailOffset);
+        _sprite.LayerSetVisible((ent, sprite), layer, texture != null);
+    }
+
+    private Texture? Thumbnail(CMUPhotoComponent photo)
+    {
+        if (photo.Thumbnail.Length == 0)
+            return null;
+
+        if (_thumbnails.TryGetValue(photo.Id, out var texture))
+            return texture;
+
+        try
+        {
+            texture = Texture.LoadFromPNGStream(new MemoryStream(photo.Thumbnail), $"CMU photo thumbnail {photo.Id}");
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Could not load the thumbnail of photo {photo.Id}: {e.Message}");
+            return null;
+        }
+
+        _thumbnails[photo.Id] = texture;
+        return texture;
     }
 
     /// <summary>The camera in the local player's active hand, if any.</summary>

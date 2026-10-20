@@ -1,4 +1,6 @@
+using System.IO;
 using Content.Server.Administration.Logs;
+using Content.Shared._RMC14.Areas;
 using Content.Shared.CMU14.Photography;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
@@ -18,13 +20,15 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace Content.Server.CMU14.Photography;
 
 /// <summary>
-/// Photo cameras: a click asks the photographer's client to capture that square of its own view, and the PNG it
-/// sends back becomes a print in the photographer's hand. Pictures stay on the server for the round and are sent to
-/// clients that ask for them by id.
+/// Photo cameras: a click fires the shutter and flash and asks the photographer's client to capture that square of
+/// its own view; the PNG it sends back becomes a print that comes out into the photographer's hand a moment later.
+/// Pictures stay on the server for the round and are sent to clients that ask for them by id.
 /// </summary>
 /// <remarks>
 /// The picture comes from the photographer's client, so a modified client could send any image of the right
@@ -33,8 +37,6 @@ namespace Content.Server.CMU14.Photography;
 /// </remarks>
 public sealed partial class CMUPhotoSystem : EntitySystem
 {
-    private static readonly SoundSpecifier SnapSound = new SoundPathSpecifier("/Audio/Misc/camera_snap.ogg");
-
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private AudioSystem _audio = default!;
@@ -49,6 +51,7 @@ public sealed partial class CMUPhotoSystem : EntitySystem
     private readonly Dictionary<int, Pending> _pending = new();
     private readonly Dictionary<int, byte[]> _photos = new();
     private readonly Queue<int> _order = new();
+    private readonly List<Print> _printing = new();
     private int _nextRequest = 1;
     private int _nextPhoto = 1;
 
@@ -59,7 +62,21 @@ public sealed partial class CMUPhotoSystem : EntitySystem
         EntityCoordinates Centre,
         int Size,
         TimeSpan Expires,
+        TimeSpan PrintAt,
         List<string> Contents);
+
+    /// <summary>A picture that has been taken and is on its way out of the camera.</summary>
+    private readonly record struct Print(
+        int Id,
+        EntityUid User,
+        EntityUid Camera,
+        int Size,
+        TimeSpan At,
+        List<string> Contents,
+        byte[] Thumbnail);
+
+    /// <summary>Captures still waiting on the photographer's client.</summary>
+    public int PendingCaptures => _pending.Count;
 
     public override void Initialize()
     {
@@ -74,6 +91,7 @@ public sealed partial class CMUPhotoSystem : EntitySystem
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
     {
         _pending.Clear();
+        _printing.Clear();
         _photos.Clear();
         _order.Clear();
         // Photo ids keep counting across rounds: clients cache pictures by id, and a reused id would show
@@ -89,18 +107,20 @@ public sealed partial class CMUPhotoSystem : EntitySystem
         if (_timing.CurTime < ent.Comp.NextPhoto)
             return;
 
+        if (ent.Comp.Shots <= 0)
+        {
+            ent.Comp.NextPhoto = _timing.CurTime + ent.Comp.EmptyCooldown;
+            _audio.PlayPvs(ent.Comp.EmptySound, ent);
+            _popup.PopupEntity(Loc.GetString("cmu-photo-camera-no-film"), args.User, args.User);
+            return;
+        }
+
         var centre = SnapToTile(args.ClickLocation);
         var userPos = _transform.GetMapCoordinates(args.User);
         var target = _transform.ToMapCoordinates(centre);
         if (userPos.MapId != target.MapId || (userPos.Position - target.Position).Length() > ent.Comp.Range)
         {
             _popup.PopupEntity(Loc.GetString("cmu-photo-camera-too-far"), args.User, args.User);
-            return;
-        }
-
-        if (ent.Comp.Shots <= 0)
-        {
-            _popup.PopupEntity(Loc.GetString("cmu-photo-camera-no-film"), args.User, args.User);
             return;
         }
 
@@ -129,13 +149,17 @@ public sealed partial class CMUPhotoSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("cmu-photo-camera-film-loaded", ("shots", ent.Comp.Shots)), args.User, args.User);
     }
 
-    /// <summary>Asks the photographer's client for the picture. Returns the request id.</summary>
+    /// <summary>Fires the shutter and flash and asks the photographer's client for the picture. Returns the request id.</summary>
     public int RequestCapture(ICommonSession session, EntityUid user, Entity<CMUPhotoCameraComponent> camera, EntityCoordinates centre)
     {
         var request = _nextRequest++;
+        var now = _timing.CurTime;
         _pending[request] = new Pending(session, user, camera, centre, camera.Comp.Size,
-            _timing.CurTime + CMUPhotoLimits.CaptureTimeout, Describe(user, centre, camera.Comp.Size));
-        _audio.PlayPvs(SnapSound, camera);
+            now + CMUPhotoLimits.CaptureTimeout, now + camera.Comp.PrintDelay, Describe(user, centre, camera.Comp.Size));
+        _audio.PlayPvs(camera.Comp.ShutterSound, camera);
+        if (camera.Comp.Flash is { } flash)
+            SpawnAttachedTo(flash, new EntityCoordinates(user, default));
+
         RaiseNetworkEvent(new CMUPhotoCaptureRequestEvent(request, GetNetCoordinates(centre), camera.Comp.Size), session.Channel);
         return request;
     }
@@ -146,20 +170,29 @@ public sealed partial class CMUPhotoSystem : EntitySystem
     }
 
     /// <summary>
-    /// Turns a capture into a print at the photographed tile. Rejects captures nobody asked this session for,
-    /// late ones, oversized ones and ones that are not a PNG of exactly the frame's size.
+    /// Keeps a capture and sends the print on its way out of the camera. Rejects captures nobody asked this
+    /// session for, late ones, oversized ones and ones that are not a PNG of exactly the frame's size.
     /// </summary>
+    /// <param name="photo">The print, when it came out straight away; otherwise it is printed in a later tick.</param>
     public bool TryAcceptCapture(ICommonSession session, int request, byte[] png, out EntityUid photo)
     {
         photo = default;
-        if (!_pending.Remove(request, out var pending) || pending.Session != session)
+        if (!_pending.TryGetValue(request, out var pending) || pending.Session != session)
             return false;
 
+        _pending.Remove(request);
         if (_timing.CurTime > pending.Expires || Deleted(pending.User))
             return false;
 
         if (png.Length == 0)
         {
+            // Nothing was captured, so no film was used.
+            if (TryComp(pending.Camera, out CMUPhotoCameraComponent? camera) && camera.Shots < camera.MaxShots)
+            {
+                camera.Shots++;
+                Dirty(pending.Camera, camera);
+            }
+
             _popup.PopupEntity(Loc.GetString("cmu-photo-camera-not-in-view"), pending.User, pending.User);
             return false;
         }
@@ -177,19 +210,81 @@ public sealed partial class CMUPhotoSystem : EntitySystem
         while (_order.Count > CMUPhotoLimits.PhotosPerRound)
             _photos.Remove(_order.Dequeue());
 
-        // The print comes out of the camera: into the photographer's hand, or at their feet.
-        photo = Spawn("CMUPhoto", Transform(pending.User).Coordinates);
+        var print = new Print(id, pending.User, pending.Camera, pending.Size, pending.PrintAt, pending.Contents, Thumbnail(png));
+        if (_timing.CurTime >= print.At)
+            photo = PrintOut(print);
+        else
+            _printing.Add(print);
+
+        return true;
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        var now = _timing.CurTime;
+        for (var i = _printing.Count - 1; i >= 0; i--)
+        {
+            if (now < _printing[i].At)
+                continue;
+
+            var print = _printing[i];
+            _printing.RemoveAt(i);
+            PrintOut(print);
+        }
+    }
+
+    /// <summary>The print comes out of the camera: into the photographer's hand, or at their feet.</summary>
+    private EntityUid PrintOut(Print print)
+    {
+        // With the photographer gone, the print drops out of the camera wherever it is.
+        var holder = Exists(print.User) ? print.User : print.Camera;
+        if (!Exists(holder))
+            return default;
+
+        var photo = Spawn("CMUPhoto", Transform(holder).Coordinates);
         var comp = EnsureComp<CMUPhotoComponent>(photo);
-        comp.Id = id;
-        comp.Size = pending.Size;
-        comp.Photographer = MetaData(pending.User).EntityName;
-        comp.Contents = pending.Contents;
+        comp.Id = print.Id;
+        comp.Size = print.Size;
+        comp.Photographer = Exists(print.User) ? MetaData(print.User).EntityName : string.Empty;
+        comp.Contents = print.Contents;
+        comp.Thumbnail = print.Thumbnail;
+        comp.Printed = _timing.CurTime;
         Dirty(photo, comp);
-        _hands.PickupOrDrop(pending.User, photo);
+
+        if (TryComp(print.Camera, out CMUPhotoCameraComponent? camera))
+            _audio.PlayPvs(camera.PrintSound, print.Camera);
+
+        if (holder == print.User)
+            _hands.PickupOrDrop(print.User, photo);
 
         _adminLog.Add(LogType.Action, LogImpact.Low,
-            $"{ToPrettyString(pending.User):player} took photo {id} ({pending.Size}x{pending.Size}) printed as {ToPrettyString(photo)}");
-        return true;
+            $"{ToPrettyString(print.User):player} took photo {print.Id} ({print.Size}x{print.Size}) printed as {ToPrettyString(photo)}");
+        return photo;
+    }
+
+    /// <summary>The picture shrunk for the print's sprite; empty if it cannot be read, which leaves the window dark.</summary>
+    private byte[] Thumbnail(byte[] png)
+    {
+        try
+        {
+            using var image = Image.Load<Rgba32>(png);
+            image.Mutate(context => context.Resize(new ResizeOptions
+            {
+                Size = new Size(CMUPhotoLimits.ThumbnailPixels, CMUPhotoLimits.ThumbnailPixels),
+                Sampler = KnownResamplers.Box,
+                Mode = ResizeMode.Stretch,
+            }));
+
+            using var stream = new MemoryStream();
+            image.SaveAsPng(stream);
+            return stream.ToArray();
+        }
+        catch (Exception e)
+        {
+            Log.Warning($"Could not shrink a photo for its thumbnail: {e.Message}");
+            return Array.Empty<byte>();
+        }
     }
 
     /// <summary>
@@ -223,8 +318,11 @@ public sealed partial class CMUPhotoSystem : EntitySystem
                 continue;
             }
 
-            // Walls, windows and floors frame every picture; listing them says nothing.
-            if (HasComp<OccluderComponent>(uid) || (!HasComp<ItemComponent>(uid) && !Transform(uid).Anchored))
+            // Walls, windows and floors frame every picture; listing them says nothing. Area markers fill every
+            // tile but are never seen.
+            if (HasComp<OccluderComponent>(uid)
+                || HasComp<AreaComponent>(uid)
+                || (!HasComp<ItemComponent>(uid) && !Transform(uid).Anchored))
                 continue;
 
             var thing = MetaData(uid).EntityName;

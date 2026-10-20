@@ -1,18 +1,24 @@
 using System.Numerics;
 using Content.Shared.CMU14.Photography;
 using Robust.Client.Graphics;
+using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
-using Robust.Client.UserInterface.CustomControls;
-using Robust.Shared.Utility;
+using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.Photography;
 
-/// <summary>A print's picture, shown at a whole number scale once the server has sent it.</summary>
+/// <summary>
+/// A print's picture, shown at a whole number scale once the server has sent it. A picture that arrives while
+/// it is being looked at develops in, the way an instant print does.
+/// </summary>
 public sealed class CMUPhotoView : TextureRect
 {
+    private const float DevelopSeconds = 1.2f;
+
     private readonly CMUPhotoClientSystem _photos;
     private readonly int _id;
+    private float _developed = 1;
 
     public CMUPhotoView(int id, int scale)
     {
@@ -38,15 +44,34 @@ public sealed class CMUPhotoView : TextureRect
 
     private void OnLoaded(int id)
     {
-        if (id == _id)
-            Texture = _photos.GetPhoto(id);
+        if (id != _id)
+            return;
+
+        Texture = _photos.GetPhoto(id);
+        _developed = 0;
+        ModulateSelfOverride = Color.White.WithAlpha(0f);
+    }
+
+    protected override void FrameUpdate(FrameEventArgs args)
+    {
+        base.FrameUpdate(args);
+        if (_developed >= 1)
+            return;
+
+        _developed = MathF.Min(1, _developed + args.DeltaSeconds / DevelopSeconds);
+        // Eased: the image comes up quickly out of the dark, then settles.
+        var shown = 1 - (1 - _developed) * (1 - _developed);
+        ModulateSelfOverride = Color.White.WithAlpha(shown);
     }
 }
 
-/// <summary>Opens a print full size when it is used.</summary>
-public sealed class CMUPhotoBui : BoundUserInterface
+/// <summary>Opens a print in its polaroid frame when it is used.</summary>
+public sealed partial class CMUPhotoBui : BoundUserInterface
 {
-    private DefaultWindow? _window;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IResourceCache _cache = default!;
+
+    private CMUPhotoWindow? _window;
 
     public CMUPhotoBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
@@ -61,30 +86,10 @@ public sealed class CMUPhotoBui : BoundUserInterface
             return;
         }
 
-        _window = this.CreateWindow<DefaultWindow>();
-        _window.Title = Loc.GetString("cmu-photo-window-title", ("photographer", photo.Photographer));
-        // Small frames are blown up more so every print opens at a similar size.
-        var scale = Math.Max(1, 448 / Math.Max(1, photo.Size * CMUPhotoLimits.TilePixels));
-        _window.Contents.AddChild(new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 6,
-            Children =
-            {
-                new CMUPhotoView(photo.Id, scale),
-                Caption(photo),
-            },
-        });
-    }
-
-    /// <summary>What the print shows, as plain text: names are never parsed as markup.</summary>
-    private static RichTextLabel Caption(CMUPhotoComponent photo)
-    {
-        var contents = photo.Contents.Count == 0
-            ? Loc.GetString("cmu-photo-window-caption-nothing")
-            : string.Join(", ", photo.Contents);
-        var label = new RichTextLabel { MaxWidth = 448 };
-        label.SetMessage(FormattedMessage.FromUnformatted(Loc.GetString("cmu-photo-window-caption", ("contents", contents))));
-        return label;
+        // Laid out before it opens, so it opens centred on its full size.
+        _window = this.CreateDisposableControl<CMUPhotoWindow>();
+        _window.OnClose += Close;
+        _window.SetPhoto(photo, _cache, _timing);
+        _window.OpenCentered();
     }
 }
