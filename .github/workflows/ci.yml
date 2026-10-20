@@ -13,10 +13,10 @@ permissions:
   pull-requests: read
 
 concurrency:
-  # CMU14: only PR pushes supersede each other. every branch push and merge-queue run
-  # finishes, otherwise the next merge cancels it and nobody knows which merge broke master
-  group: ${{ github.event_name == 'pull_request' && format('ci-{0}', github.ref) || format('ci-{0}-{1}', github.ref, github.run_id) }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  # CMU14: PR and master runs supersede their predecessors. Runners are too few to let each
+  # queued run finish. staging/stable pushes and merge queue runs still finish
+  group: ${{ (github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master')) && format('ci-{0}', github.ref) || format('ci-{0}-{1}', github.ref, github.run_id) }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master') }}
 
 env:
   DOTNET_VERSION: 10.0.x
