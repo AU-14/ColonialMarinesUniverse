@@ -1,8 +1,18 @@
 cmu-cmd-bughelp-desc = Send a bug report to the developers. The server attaches your location, gear and round context automatically.
-cmu-cmd-bughelp-help = bughelp <what happened>
+cmu-cmd-bughelp-help = bughelp opens the report window; bughelp <what happened> sends directly.
 cmu-cmd-bughelp-player-only = This command can only be run by a player.
-cmu-cmd-bughelp-empty = Describe what happened: bughelp <what you did, what you expected, what happened instead>
-cmu-cmd-bughelp-sent = Report { $id } sent. Reply in your report thread on Discord with a screenshot if you can.
+cmu-cmd-bughelp-sent = Report { $id } sent to the developers. Add a screenshot in the bug report channel on Discord if you can.
 cmu-cmd-bughelp-disabled = Bug reporting is not configured on this server.
 cmu-cmd-bughelp-rate-limited = You are filing bug reports too quickly. Try again later.
 cmu-cmd-bughelp-no-entity = You must be in the game to file a bug report.
+
+cmu-bughelp-window-title = Bug Report
+cmu-bughelp-window-empty = Describe what happened before sending.
+cmu-bughelp-what-happened = What happened?
+cmu-bughelp-expected = What did you expect to happen? (optional)
+cmu-bughelp-steps = Steps to reproduce (optional)
+cmu-bughelp-item = Item involved (optional)
+cmu-bughelp-item-placeholder = flamer, M34, mortar shell...
+cmu-bughelp-examine = Examine text (optional)
+cmu-bughelp-submit = Send Report
+cmu-bughelp-autocontext = The server attaches your position, gear and round context automatically.
