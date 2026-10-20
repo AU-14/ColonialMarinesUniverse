@@ -1,3 +1,3 @@
 @echo off
-dotnet run --project Content.Server --configuration Release
+dotnet run --project Content.Server --configuration Tools
 pause
