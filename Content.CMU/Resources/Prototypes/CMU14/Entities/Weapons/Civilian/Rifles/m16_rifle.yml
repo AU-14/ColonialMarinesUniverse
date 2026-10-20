@@ -206,6 +206,7 @@
         whitelist:
           tags:
           - CMUMagazineRifleAR10
+          - RMCMagazineRifleAR10
 
 - type: entity
   parent: AU14WeaponRifleM16A1
@@ -324,8 +325,8 @@
     mayTransfer: True
     whitelist:
       tags:
-      - RMCCartridgeRifleAR10
-    proto: RMCCartridgeRifleAR10
+      - CMUCartridgeRifleAR10
+    proto: CMUCartridgeRifleAR10
     capacity: 20
   - type: Sprite
     sprite: CMU14/Weapons/Guns/Ammo/Magazines/Civilian/ar10.rsi
@@ -373,6 +374,49 @@
     - range: 11
       falloff: 10
 
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: CMUCartridgeRifleAR10
+  name: cartridge (7.62x51mm)
+  description: A 7.62x51mm cartridge for the AR10 rifle.
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - CMUCartridgeRifleAR10
+  - type: CartridgeAmmo
+    proto: CMUBulletRifleAR10
+
+- type: entity
+  parent: RMCBaseBullet
+  id: CMUBulletRifleAR10
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Medium
+      energy: Medium
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 35
+  - type: CMArmorPiercing
+    amount: 35
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 24
+      falloff: 9999
+      ignoreModifiers: true
+    - range: 6
+      falloff: 3
+  - type: RMCProjectileAccuracy
+    accuracy: 105
+    thresholds:
+    - range: 9
+      falloff: 6
+
+
 - type: Tag
   id: CMUMagazineRifleM16Extended
 
@@ -387,3 +431,6 @@
 
 - type: Tag
   id: CMUMagazineRifleAR10
+
+- type: Tag
+  id: CMUCartridgeRifleAR10
