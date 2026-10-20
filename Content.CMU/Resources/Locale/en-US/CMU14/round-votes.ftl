@@ -5,6 +5,7 @@ au14-vote-name-govfor = Govfor
 au14-vote-name-opfor = Opfor
 au14-vote-name-govfor-ship = Govfor ship
 au14-vote-name-opfor-ship = Opfor ship
+<<<<<<< Updated upstream
 au14-vote-title-govfor = Govfor Vote
 au14-vote-title-opfor = Opfor Vote
 au14-vote-title-govfor-ship = Govfor Ship Vote
@@ -19,3 +20,14 @@ cmu-fof-balance-confirm-join = Join {$target}
 cmu-fof-balance-confirm-join-desc = Joining now places you with {$target} to even the sides. If the gap falls back under {$max} before you spawn, your original choice is respected.
 cmu-fof-balance-confirm-stay = Stay in lobby
 cmu-fof-balance-confirm-stay-desc = Keep your current pick and wait for the teams to even out.
+||||||| ancestor
+cmu-fof-faction-lock-forced = You cannot join that side this round; you were placed on your assigned faction to keep teams balanced.
+=======
+cmu-fof-faction-lock-forced = You agreed to be placed on the other side to keep teams balanced.
+fof-balance-confirm-title = Teams are unbalanced
+fof-balance-confirm-prompt = GOVFOR {$govfor} vs OPFOR {$opfor}
+fof-balance-confirm-join = Join {$target}
+fof-balance-confirm-join-desc = Joining now places you with {$target} to even the sides. If the gap falls back under {$max} before you spawn, your original choice is respected.
+fof-balance-confirm-stay = Stay in lobby
+fof-balance-confirm-stay-desc = Keep your current pick and wait for the teams to even out.
+>>>>>>> Stashed changes

@@ -362,6 +362,7 @@
                         </BoxContainer>
                     </ScrollContainer>
                 </BoxContainer>
+<<<<<<< Updated upstream
                 <!-- cmu edit start: traits and markings sit between regulation appearance and insurgency -->
                 <BoxContainer Orientation="Vertical" Margin="10">
                     <!-- Traits -->
@@ -378,6 +379,12 @@
                 <!-- cmu edit end -->
                 <!-- CMU14: strip-level FoF annotation, overlaid on the tab header row -->
                 <Control VerticalExpand="True">
+||||||| ancestor
+                <BoxContainer Orientation="Vertical">
+=======
+                <!-- CMU14: strip-level FoF annotation, overlaid on the tab header row -->
+                <Control VerticalExpand="True">
+>>>>>>> Stashed changes
                     <TabContainer Name="InsurgencyTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
                         <BoxContainer Orientation="Vertical">
                             <ScrollContainer VerticalExpand="True">

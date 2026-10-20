@@ -366,8 +366,14 @@ namespace Content.Shared.Preferences
                 "insurgency" => "Insurgency",
                 "colonyfall" => "ColonyFall",
                 "distresssignal" => "DistressSignal",
+<<<<<<< Updated upstream
                 // CMU14: Force on Force roles, hijacking, announcements and identification.
                 "forceonforce" => "ForceOnForce",
+||||||| ancestor
+                "forceonforce" => "DistressSignal", // FoF uses DS prefs
+=======
+                "forceonforce" => "DistressSignal", // CMU14: FoF uses DS prefs
+>>>>>>> Stashed changes
                 _ => gamemode.Trim()
             };
         }
