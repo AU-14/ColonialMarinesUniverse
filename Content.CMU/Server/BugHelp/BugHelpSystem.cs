@@ -22,10 +22,8 @@ using Robust.Shared.Utility;
 namespace Content.Server.CMU14.BugHelp;
 
 /// <summary>
-/// Turns a player's bughelp message into a machine-readable report and hands it to the help relay,
-/// which posts it to the bug report Discord channel. The AI fix bot and the status website consume
-/// the report.json attachment and key off the report id, so context fields are prototype IDs, never
-/// localized display names.
+/// Turns a player's bughelp message into a report and hands it to the help relay,
+/// which posts it to the bug report Discord forum channel as one thread per report.
 /// </summary>
 public sealed class BugHelpSystem : EntitySystem
 {
@@ -58,7 +56,6 @@ public sealed class BugHelpSystem : EntitySystem
 
     public override void Initialize()
     {
-        // The sequence suffix restarts with the round so ids stay tied to their round.
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
         _rateLimit.Register(
             RateLimitKey,
@@ -99,9 +96,13 @@ public sealed class BugHelpSystem : EntitySystem
     };
 
     private void OnRoundRestart(RoundRestartCleanupEvent args)
-    {
-        _sequence = 0;
-    }
+        => _sequence = 0;
+
+    private string? PrototypeId(EntityUid uid) => MetaData(uid).EntityPrototype?.ID;
+    private string? OrNull(string value) => string.IsNullOrWhiteSpace(value) ? null : value;
+    private static string Cap(string value, int cap) => value.Length > cap ? value[..cap] : value;
+    private static string? Optional(string? value, int cap) =>
+        string.IsNullOrWhiteSpace(value) ? null : Cap(value.Trim(), cap);
 
     /// <summary>
     /// Builds the report and hands it to the help relay. All entity state is read synchronously
@@ -220,7 +221,7 @@ public sealed class BugHelpSystem : EntitySystem
             Clothing = clothing,
             Position = new BugPosition
             {
-                Grid = xform.GridUid?.ToString(),
+                Grid = xform.GridUid is { } grid ? MetaData(grid).EntityName : null,
                 X = (int) xform.Coordinates.X,
                 Y = (int) xform.Coordinates.Y,
             },
@@ -228,20 +229,6 @@ public sealed class BugHelpSystem : EntitySystem
         };
     }
 
-    private string? PrototypeId(EntityUid uid) => MetaData(uid).EntityPrototype?.ID;
-
-    private string? OrNull(string value) => string.IsNullOrWhiteSpace(value) ? null : value;
-
-    private static string Cap(string value, int cap) => value.Length > cap ? value[..cap] : value;
-
-    private static string? Optional(string? value, int cap) =>
-        string.IsNullOrWhiteSpace(value) ? null : Cap(value.Trim(), cap);
-
-    /// <summary>
-    /// Player words → ranked prototype IDs. Deterministic substring scoring over every non-abstract
-    /// entity prototype; the AI bot cross-checks candidates against the snapshot, so weak matches are
-    /// attached on purpose — a wrong top-1 is recoverable, a missing candidate is not.
-    /// </summary>
     private List<BugItemCandidate> ResolveItemCandidates(string query)
     {
         var normalized = query.ToLowerInvariant();
@@ -284,11 +271,9 @@ public sealed class BugHelpSystem : EntitySystem
         if (name.Contains(query))
             return 0.55 + (name.StartsWith(query) ? 0.1 : 0);
 
-        if (Words(id).Any(word => word.StartsWith(query)) ||
-            Words(name).Any(word => word.StartsWith(query)))
-        {
+        if (Words(id).Any(word => word.StartsWith(query))
+            || Words(name).Any(word => word.StartsWith(query)))
             return 0.3;
-        }
 
         return 0;
 
@@ -318,10 +303,7 @@ public sealed class BugHelpSystem : EntitySystem
                 AttachmentJson = JsonSerializer.Serialize(report),
             });
         }
-        catch (Exception e)
-        {
-            _sawmill.Error($"BugHelp failed to prepare {report.Id}:\n{e}");
-        }
+        catch (Exception e) { _sawmill.Error($"BugHelp failed to prepare {report.Id}:\n{e}"); }
     }
 }
 
@@ -334,8 +316,6 @@ public enum BugHelpOutcome
     Empty,
 }
 
-// Report artifact schema "cmu-bugreport/1". Additive changes only inside v1; breaking changes bump
-// the schema string. Field order is declaration order and mirrors the design doc.
 sealed class BugReport
 {
     [JsonPropertyName("schema")] public string Schema { get; set; } = "cmu-bugreport/1";
@@ -369,7 +349,6 @@ sealed class BugReportBody
 {
     [JsonPropertyName("what_happened")] public string WhatHappened { get; set; } = string.Empty;
 
-    // Filled by the report window (P2); the pipeline treats null as absent.
     [JsonPropertyName("expected")] public string? Expected { get; set; }
     [JsonPropertyName("steps")] public string? Steps { get; set; }
     [JsonPropertyName("item_query")] public string? ItemQuery { get; set; }
