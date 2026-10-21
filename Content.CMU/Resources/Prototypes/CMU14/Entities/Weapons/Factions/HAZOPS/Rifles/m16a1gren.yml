@@ -23,7 +23,6 @@
       rmc-aslot-barrel:
         whitelist:
           tags:
-          - RMCM5Bayonet
           - RMCAttachmentExtendedBarrel
           - RMCAttachmentSuppressor
       rmc-aslot-rail:
