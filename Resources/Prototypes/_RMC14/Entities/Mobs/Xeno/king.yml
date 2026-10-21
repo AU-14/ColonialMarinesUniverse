@@ -59,6 +59,7 @@
   - type: InnateCommandSpeech
   - type: XenoClaws
     clawType: VerySharp
+    armorPiercing: 100
   - type: MeleeWeapon
     damage:
       types:
