@@ -4,8 +4,8 @@ meta:
   engineVersion: 290.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/17/2026 07:42:19
-  entityCount: 61939
+  time: 10/21/2026 17:31:41
+  entityCount: 61940
 maps:
 - 1
 grids:
@@ -118353,40 +118353,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 33.5,19.5
-- proto: CMIDCardDCC
-  entities:
-  - uid: 12684
-    mapInit: true
-    paused: true
-    components:
-    - type: MetaData
-      name: Пропуск техники VTOL.
-      desc: Пропуск предназначеный для выбора VTOL техники оператором вооружения VTOL.
-    - type: Transform
-      parent: 1
-      pos: 75.65122,-34.54049
-    - type: Access
-      tags:
-      - CMAccessCrewman
-      - RMCAccessCommand
-      - CMAccessDropship
-      - CMAccessPilot
-      - CMAccessMedical
-    - type: IdCard
-      _jobTitle: Старшина дропшипа
-      originalOwner: invalid
-      jobIcon: CMJobIconDCC
-      jobDepartments:
-      - CMAuxiliarySupport
-    - type: EmitSoundOnCollide
-      nextSound: -5112.0486725
-    - type: Forensics
-      residues: []
-      fingerprints:
-      - A56DBDDD2B1B04364C09511CE1349F6B
-      fibers: []
-      dNAs:
-      - GTGCTAATTTATCTAC
 - proto: CMIV
   entities:
   - uid: 4059
@@ -122768,16 +122734,16 @@ entities:
   - uid: 12652
     components:
     - type: MetaData
-      name: Знак «Каюта состава авиа техники - VTOL»
-      desc: Пиктографический стандарт колонии, обозначающий каюту персонала.
+      name: '"VTOL Aircraft Compartment" sign'
+      desc: Colony pictographic standard denoting a staff cabin.
     - type: Transform
       parent: 1
       pos: 74.5,-33.5
   - uid: 12680
     components:
     - type: MetaData
-      name: Знак «Каюта состава боевых бортов»
-      desc: Пиктографический стандарт колонии, обозначающий каюту персонала.
+      name: '"Combat Ship Compartment" Badge'
+      desc: Colony pictographic standard denoting a staff cabin.
     - type: Transform
       parent: 1
       rot: -1.5707963267948966 rad
@@ -122785,8 +122751,8 @@ entities:
   - uid: 12681
     components:
     - type: MetaData
-      name: Знак «Каюта состава транспортных бортов»
-      desc: Пиктографический стандарт колонии, обозначающий каюту персонала.
+      name: '"Transport Vessel Cabin" sign'
+      desc: Colony pictographic standard denoting a staff cabin.
     - type: Transform
       parent: 1
       rot: -1.5707963267948966 rad
@@ -127069,13 +127035,13 @@ entities:
       pos: 44.5,-39.5
 - proto: CMUAirtightSeal
   entities:
-  - uid: 12695
+  - uid: 12696
     components:
     - type: Transform
       parent: 1
       pos: 245.5,-155.5
       anchored: True
-  - uid: 12696
+  - uid: 13102
     components:
     - type: Transform
       parent: 1
@@ -159046,7 +159012,7 @@ entities:
         DoorStatus: True
     - type: Door
       state: Opening
-      secondsUntilStateChange: -633530.9
+      secondsUntilStateChange: -633951.9
   - uid: 13075
     components:
     - type: Transform
@@ -167939,7 +167905,7 @@ entities:
       pos: 179.5,-120.5
     - type: Door
       state: Closing
-      secondsUntilStateChange: -479713.22
+      secondsUntilStateChange: -480134.2
   - uid: 15264
     components:
     - type: Transform
@@ -197274,6 +197240,16 @@ entities:
       fixtures: {}
 - proto: RMCPodDoorButtonBigRed
   entities:
+  - uid: 12695
+    components:
+    - type: MetaData
+      name: Takeoff gates
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: 86.47305,-40.093906
+    - type: Fixtures
+      fixtures: {}
   - uid: 21290
     components:
     - type: Transform
@@ -197310,6 +197286,16 @@ entities:
       fixtures: {}
 - proto: RMCPodDoorButtonBigRedShip
   entities:
+  - uid: 12684
+    components:
+    - type: MetaData
+      name: Takeoff gates
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: 74.5,-34.5
+    - type: Fixtures
+      fixtures: {}
   - uid: 14138
     components:
     - type: MetaData
