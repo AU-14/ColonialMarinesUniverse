@@ -153,8 +153,8 @@ entities:
       exteriorDecks:
       - -1
       deckPaths:
-        -1: /Maps/CMU14/ShuttlesDropships/Mohawk/midway_navy_lower.yml
-        1: /Maps/CMU14/ShuttlesDropships/Mohawk/midway_navy_upper.yml
+        -1: /Maps/CMU14/Dropships/Mohawk/midway_navy_lower.yml
+        1: /Maps/CMU14/Dropships/Mohawk/midway_navy_upper.yml
     - type: ShipFaction
       faction: govfor
     - type: MohawkMechanisms

@@ -234,6 +234,8 @@
     pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
     back: RMCBackpackRCMMedic
   storage:
+    # The autoinjector pouch replaces the base magazine pouch, so it doesn't get the base's magazines.
+    pocket2: []
     outerClothing:
     - AU14MagazineRifleL90
     - AU14MagazineRifleL90

@@ -154,8 +154,8 @@ entities:
       exteriorDecks:
       - -1
       deckPaths:
-        -1: /Maps/CMU14/ShuttlesDropships/Mohawk/omaha_lower.yml
-        1: /Maps/CMU14/ShuttlesDropships/Mohawk/omaha_upper.yml
+        -1: /Maps/CMU14/Dropships/Mohawk/omaha_lower.yml
+        1: /Maps/CMU14/Dropships/Mohawk/omaha_upper.yml
     - type: ShipFaction
       faction: govfor
     - type: MohawkMechanisms

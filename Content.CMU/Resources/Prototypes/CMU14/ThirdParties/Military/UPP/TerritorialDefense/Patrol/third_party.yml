@@ -117,6 +117,8 @@
     head: AU14UPPPatrolCap
     pocket1: AU14PouchSlingBinocs
   storage:
+    # The sling pouch holds the laser designator, not the base's magazines.
+    pocket1: []
     back:
     - RMCMaskGasSPP
     - RMCMRESPP
