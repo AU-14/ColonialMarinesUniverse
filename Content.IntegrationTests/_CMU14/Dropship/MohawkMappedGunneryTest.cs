@@ -53,6 +53,7 @@ public sealed class MohawkMappedGunneryTest : GameTest
             Server.System<Content.Shared._RMC14.Sentry.SharedSentryTargetingSystem>().SetFriendlyFactions(
                 (point.Owner, SEntMan.GetComponent<Content.Shared._RMC14.Sentry.SentryTargetingComponent>(point)), ["GOVFOR"]);
             Assert.That(Server.System<SharedDropshipSystem>().TryGetGridDropship(point, out var canonicalShip), Is.True);
+            SEntMan.EnsureComponent<DropshipFireControlBootComponent>(canonicalShip).Complete = true;
             var mount = SEntMan.GetComponent<DropshipWeaponPointComponent>(point);
             var containers = Server.System<SharedContainerSystem>();
             foreach (var slotId in mount.GetAmmoSlots())

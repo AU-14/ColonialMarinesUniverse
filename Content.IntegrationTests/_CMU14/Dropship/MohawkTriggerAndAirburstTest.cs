@@ -38,6 +38,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
 
     private Mount Create(EntityUid grid, bool airborne, string? cratePrototype = null)
     {
+        Server.ResolveDependency<IConfigurationManager>().SetCVar(Content.Shared.CCVar.CCVars.DropshipJamChance, 0f);
         if (!airborne)
             SEntMan.EnsureComponent<RMCPlanetComponent>(SEntMan.GetComponent<TransformComponent>(grid).MapUid!.Value);
         var coords = new EntityCoordinates(grid, Vector2.Zero);
@@ -50,6 +51,7 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
                 maps.SetTile(gridEnt, new Vector2i(x, y), new Tile(tiles["FloorSteel"].TileId));
         }
         var ship = SEntMan.EnsureComponent<DropshipComponent>(grid);
+        SEntMan.EnsureComponent<DropshipFireControlBootComponent>(grid).Complete = true;
         ship.AttachmentPoints.Clear();
         SEntMan.EnsureComponent<ShipFactionComponent>(grid).Faction = "GOVFOR";
         var point = SEntMan.SpawnEntity("CMUMohawkM90Point", coords);
