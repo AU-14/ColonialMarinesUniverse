@@ -50,8 +50,8 @@
   - [bold]Airburst Strike[/bold]: 6 anti-personnel explosions, 0.8 seconds apart, scattered within 8 tiles. Each has a 12-tile blast radius, without breaking terrain tiles.
   - [bold]Precision Strike[/bold]: one 120mm-strength explosion at the exact target, with a 12-tile blast radius and no scatter.
   - [bold]Railcannon Strike[/bold]: devastating whole-body and structural damage in an exact 5x5 tile square, projected through [bold]every Z-level in the target's network[/bold]. Each level retains orbital-protection checks; unrelated maps are not hit.
-  - [bold]Gas Strike[/bold]: a 30-tile-radius poison cloud lasting 30 seconds. Xenos take no gas damage. Suitable filters and sealed internals provide their normal protection.
-  - [bold]EMS Strike[/bold]: a 30-tile-radius field lasting 15 seconds. Everyone caught, including xenos and normally stun-immune targets, stays stunned until 25 seconds after the field disappears. Entering late or leaving early does not change that deadline.
+  - [bold]Gas Strike[/bold]: a 30-tile-radius poison cloud lasting 30 seconds. Unprotected lungs and brains take 1 organ damage every 3 seconds, even after death. Xenos take no gas damage, but are slowed and their vision becomes hazy. Standard filters last 5 seconds of exposure; CBRN and WY filters last 15 seconds. Sealed internals also protect against the gas.
+  - [bold]EMS Strike[/bold]: a 30-tile-radius field lasting 15 seconds. Everyone caught, including xenos and normally stun-immune targets, stays stunned until 25 seconds after the field disappears. Entering late or leaving early does not change that deadline. While inside, humans take 5 burn damage per second, up to 50 added damage per strike; xenos take the same damage without a cap.
   - [bold]Smoke Strike[/bold]: a non-damaging, opaque 30-tile-radius screen lasting 30 seconds.
 
   [color=red]These expanded barrages can reach beyond the standard OB footprint. Keep friendly forces clear of both the scatter area and each shell's blast radius.[/color]
