@@ -328,7 +328,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
                 .Where(property => !property.Abstract && !string.IsNullOrWhiteSpace(property.EffectName))
                 .ToArray();
 
-            Assert.That(properties, Has.Length.EqualTo(102));
+            Assert.That(properties, Has.Length.EqualTo(103)); // +Irritating (procgen repair)
             Assert.That(properties.Select(property => property.ID), Is.Unique);
             Assert.That(properties.Select(property => property.EffectName), Is.Unique);
             Assert.Multiple(() =>
@@ -414,7 +414,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
 
             try
             {
-                Assert.That(properties, Has.Length.EqualTo(102));
+                Assert.That(properties, Has.Length.EqualTo(103)); // +Irritating (procgen repair)
                 var data = new GeneratedReagentData
                 {
                     ID = generatedId,
