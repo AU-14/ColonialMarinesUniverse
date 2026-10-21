@@ -53,6 +53,11 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
 
     private readonly HashSet<Entity<MobStateComponent>> _mobs = new();
 
+    private static readonly SoundSpecifier TravelSound = new SoundPathSpecifier("/Audio/_RMC14/Weapons/gun_orbital_travel.ogg");
+
+    /// <summary>How long <see cref="TravelSound"/> runs, so it can start that long before the first impact.</summary>
+    private static readonly TimeSpan TravelSoundLength = TimeSpan.FromSeconds(12);
+
     public override void Initialize()
     {
         InitializeGuns();
@@ -64,6 +69,41 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
         Subs.BuiEvents<OverwatchConsoleComponent>(OverwatchConsoleUI.Key,
             subs => subs.Event<CMUShipWeaponSelectBuiMsg>(OnSelect));
         SubscribeLocalEvent<OverwatchConsoleComponent, CMUShipWeaponLaunchEvent>(OnLaunch);
+        SubscribeLocalEvent<CMUTechShipWeaponMissionEvent>(OnTechMission);
+        SubscribeLocalEvent<CMUShipWeaponStrikeSpawnerComponent, MapInitEvent>(OnStrikeSpawnerMapInit);
+    }
+
+    private void OnStrikeSpawnerMapInit(Entity<CMUShipWeaponStrikeSpawnerComponent> ent, ref MapInitEvent args)
+    {
+        if (!StartStrike(_transform.GetMapCoordinates(ent), ent.Comp.Weapon, ent.Comp.Bearing, ent.Comp.Instant))
+            Log.Warning($"{ToPrettyString(ent)} couldn't start its strike there: out of bounds, underground or protected.");
+
+        QueueDel(ent);
+    }
+
+    private void OnTechMission(CMUTechShipWeaponMissionEvent ev)
+    {
+        // The team's ship is whichever one has that team's arming terminal.
+        var terminals = EntityQueryEnumerator<CMUShipWeaponsTerminalComponent>();
+        while (terminals.MoveNext(out var uid, out var terminal))
+        {
+            if (!string.Equals(terminal.Faction, ev.Team, StringComparison.OrdinalIgnoreCase) ||
+                !TryGetShip(uid, out var ship))
+            {
+                continue;
+            }
+
+            var state = EnsureComp<CMUShipWeaponsComponent>(ship);
+            state.Weapons.Add(ev.Weapon);
+            state.MaxUses++;
+            state.RemainingUses++;
+            _adminLog.Add(LogType.Action, LogImpact.Medium,
+                $"Tech purchase added a {ev.Weapon} fire mission to ship {ToPrettyString(ship)} for {ev.Team}");
+            UpdateShip(ship);
+            return;
+        }
+
+        Log.Warning($"No {ev.Team} ship weapons terminal to give a {ev.Weapon} fire mission to.");
     }
 
     /// <summary>
@@ -110,15 +150,17 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
         var terminalComp = Comp<CMUShipWeaponsTerminalComponent>(terminal);
         _ui.SetUiState(terminal, CMUShipWeaponsUiKey.Key,
             new CMUShipWeaponsBuiState(available, available ? GetWeapons(ship) : [], weapons, _requireGuns,
-                terminalComp.MaxSelections, Math.Max(0, terminalComp.Uses)));
+                terminalComp.MaxSelections, Math.Max(0, terminalComp.Uses),
+                available && TryComp(ship, out CMUShipWeaponsComponent? state) && state.Locked));
     }
 
     private void UpdateOverwatch(Entity<OverwatchConsoleComponent> console)
     {
         var weapons = TryGetShip(console, out var ship) ? GetWeapons(ship) : [];
         var selected = console.Comp.CMUSelectedShipWeapon;
-        if (selected != null && !weapons.Any(w => w.Weapon == selected))
-            selected = null;
+        // Once the ship has fire missions they replace the standard cannon, so the console always has one picked.
+        if (selected == null || !weapons.Any(w => w.Weapon == selected))
+            selected = weapons.Length > 0 ? weapons[0].Weapon : (ProtoId<CMUShipWeaponPrototype>?) null;
 
         var next = TryComp(ship, out CMUShipWeaponsComponent? state) ? state.NextLaunch : TimeSpan.Zero;
         _overwatch.CMUSetShipWeapons(console, weapons, selected, console.Comp.CMUShipWeaponBearing, next);
@@ -160,7 +202,7 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
             return;
         }
 
-        if (TryComp(ship, out CMUShipWeaponsComponent? existing) && existing.Weapons.Count != 0)
+        if (TryComp(ship, out CMUShipWeaponsComponent? existing) && existing.Locked)
         {
             Reject(args.Actor, "cmu-ship-weapons-locked");
             UpdateTerminal(ent);
@@ -188,11 +230,15 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
         }
 
         var state = EnsureComp<CMUShipWeaponsComponent>(ship);
+        state.Locked = true;
         state.Weapons.UnionWith(args.Weapons);
-        state.MaxUses = Math.Max(0, ent.Comp.Uses);
-        state.RemainingUses = state.MaxUses;
+        // Added on top of any missions bonus disks have already brought in.
+        var uses = Math.Max(0, ent.Comp.Uses);
+        state.MaxUses += uses;
+        state.RemainingUses += uses;
         _adminLog.Add(LogType.Action, LogImpact.High,
             $"{ToPrettyString(args.Actor)} permanently armed {string.Join(", ", args.Weapons)} on ship {ToPrettyString(ship)} with {state.MaxUses} shared uses");
+
         UpdateShip(ship);
     }
 
@@ -258,31 +304,22 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
         }
 
         var profile = _prototypes.Index(weapon);
-        EntityUid firingGun = default, round = default;
-        if (_requireGuns && !TryGetFiringGun(ship, weapon, out firingGun, out round))
+        Entity<CMUShipWeaponGunComponent> firingGun = default;
+        if (_requireGuns && !TryGetFiringGun(ship, weapon, out firingGun))
         {
             Reject(args.User, "cmu-ship-weapons-no-loaded-gun");
             return;
         }
 
-        var strike = Spawn("CMUShipWeaponStrike", _transform.ToCoordinates(selected));
-        var firing = EnsureComp<CMUShipWeaponStrikeComponent>(strike);
-        firing.Weapon = weapon;
-        firing.Bearing = ent.Comp.CMUShipWeaponBearing;
-        firing.NextShot = _timing.CurTime + TimeSpan.FromSeconds(24);
-        firing.DirectionalWarningAt = _timing.CurTime + TimeSpan.FromSeconds(3);
+        StartStrike(selected, weapon, ent.Comp.CMUShipWeaponBearing, false);
         state.RemainingUses--;
         state.NextLaunch = _timing.CurTime + state.Cooldown;
         if (_requireGuns)
         {
-            Del(round);
+            _guns.Spend(firingGun);
             _audio.PlayPvs(new SoundPathSpecifier("/Audio/_RMC14/Weapons/Vehicles/smokelauncher_fire.ogg"), firingGun);
         }
 
-        Spawn("RMCLaserDropshipTarget", impactCoordinates);
-        _audio.PlayPvs(new SoundPathSpecifier("/Audio/_RMC14/Effects/ob_alert.ogg"),
-            impactCoordinates);
-        _mortar.PopupWarning(impact, 30, "cmu-ship-weapons-incoming", "cmu-ship-weapons-incoming", true);
         if (ent.Comp.Squad is { } squad)
             _marineAnnounce.AnnounceSquad(Loc.GetString("cmu-ship-weapons-squad-warning",
                 ("weapon", Loc.GetString(profile.Name))), GetEntity(squad));
@@ -292,6 +329,35 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
         _adminLog.Add(LogType.RMCOrbitalBombardment, LogImpact.High,
             $"{ToPrettyString(args.User)} launched {weapon} from ship {ToPrettyString(ship)} at {ent.Comp.OrbitalCoordinates}; {state.RemainingUses} shared uses remain");
         UpdateShip(ship);
+    }
+
+    /// <summary>
+    ///     Puts a strike in the air over <paramref name="target"/>: the laser, the alert and the launch warning, then
+    ///     the first impact 24 seconds later. <paramref name="instant"/> skips the flight and the warnings, for testing.
+    /// </summary>
+    public bool StartStrike(MapCoordinates target, ProtoId<CMUShipWeaponPrototype> weapon, CMUShipWeaponBearing bearing,
+        bool instant)
+    {
+        if (!TryResolveImpact(target, out var impact) || !TryGetGroundCoordinates(impact, out var impactCoordinates))
+            return false;
+
+        var strike = Spawn("CMUShipWeaponStrike", _transform.ToCoordinates(target));
+        var firing = EnsureComp<CMUShipWeaponStrikeComponent>(strike);
+        firing.Weapon = weapon;
+        firing.Bearing = bearing;
+        if (instant)
+        {
+            firing.NextShot = _timing.CurTime;
+            firing.DirectionalWarned = firing.Warned = firing.TravelPlayed = true;
+            return true;
+        }
+
+        firing.NextShot = _timing.CurTime + TimeSpan.FromSeconds(24);
+        firing.DirectionalWarningAt = _timing.CurTime + TimeSpan.FromSeconds(3);
+        Spawn("RMCLaserDropshipTarget", impactCoordinates);
+        _audio.PlayPvs(new SoundPathSpecifier("/Audio/_RMC14/Effects/ob_alert.ogg"), impactCoordinates);
+        _mortar.PopupWarning(impact, 30, "cmu-ship-weapons-incoming", "cmu-ship-weapons-incoming", true);
+        return true;
     }
 
     private bool TryResolveImpact(MapCoordinates selected, out MapCoordinates impact)
@@ -353,15 +419,21 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
                 }
             }
 
+            // The incoming whistle runs right up to the first impact, the way the standard orbital cannon times it.
+            if (!strike.TravelPlayed && strike.Shot == 0 && _timing.CurTime >= strike.NextShot - TravelSoundLength)
+            {
+                strike.TravelPlayed = true;
+                if (TryResolveImpact(_transform.GetMapCoordinates(uid), out var travel))
+                {
+                    _audio.PlayPvs(TravelSound, _transform.ToCoordinates(travel), AudioParams.Default.WithMaxDistance(75));
+                }
+            }
+
             if (!strike.Warned && _timing.CurTime >= strike.NextShot - TimeSpan.FromSeconds(4))
             {
                 strike.Warned = true;
                 if (TryResolveImpact(_transform.GetMapCoordinates(uid), out var warning))
-                {
-                    _audio.PlayPvs(new SoundPathSpecifier("/Audio/_RMC14/Weapons/gun_orbital_travel.ogg"),
-                        _transform.ToCoordinates(warning), AudioParams.Default.WithMaxDistance(75));
                     _mortar.PopupWarning(warning, 20, "rmc-ob-warning-three", "rmc-ob-warning-above-three", true);
-                }
             }
 
             if (_timing.CurTime < strike.NextShot)

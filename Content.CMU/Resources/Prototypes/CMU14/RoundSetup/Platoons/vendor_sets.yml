@@ -11,6 +11,8 @@
     VehicleCrew: AU14VehicleCrewmanVendorUSCM
     SentryDeployer: RMCDeployerSentry
     EngiEquipment: AU14EngineeringStaffVendor
+    MessFood: RMCNutriCoVendor
+    MessDrink: RMCVendorNutriCoDrink
 
 - type: platoonVendorSet
   id: USCM
@@ -35,6 +37,7 @@
   id: LACN
   parent: AU14BasePlatoonVendorSet
   vendors:
+    MessDrink: CMUNutriCoDrinkLACN
     Rifleman: AU14LACNequipmentvendor
     Clothing: AU14LACNclothingequipmentvendor
     ShipsideUniform: AU14LACNShipsideUniformVendor
@@ -59,6 +62,8 @@
   id: UPP
   parent: AU14BasePlatoonVendorSet
   vendors:
+    MessDrink: CMUNutriCoDrinkSPP
+    MessFood: CMUNutriCoVendorSPP
     Rifleman: AU14UPPequipmentvendor
     Clothing: AU14UPPclothingapparelvendor
     ShipsideUniform: AU14UPPShipsideUniformVendor
@@ -80,6 +85,8 @@
   id: BEAR
   parent: AU14BasePlatoonVendorSet
   vendors:
+    MessDrink: CMUNutriCoDrinkSPP
+    MessFood: CMUNutriCoVendorSPP
     Rifleman: RuMCBEARequipmentvendor
     Clothing: RuMCBEARclothingapparelvendor
     ShipsideUniform: RuMCBEARShipsideUniformVendor
@@ -100,6 +107,7 @@
   id: WYPMC
   parent: AU14BasePlatoonVendorSet
   vendors:
+    MessFood: CMUNutriCoVendorPMC
     Clothing: AU14WYclothingequipmentvendor
     ShipsideUniform: AU14WYShipsideUniformVendor
     Weapons: AU14WYWeaponsVendor
@@ -160,6 +168,7 @@
   id: ProdigySF
   parent: AU14BasePlatoonVendorSet
   vendors:
+    MessFood: CMUNutriCoVendorPMC
     Clothing: AU14prodigyclothingequipmentvendor
     ShipsideUniform: AU14ProdigyShipsideUniformVendor
     Weapons: AU14prodigyWeaponsVendor
@@ -179,6 +188,7 @@
   id: VAIPO
   parent: AU14BasePlatoonVendorSet
   vendors:
+    MessFood: CMUNutriCoVendorPMC
     Clothing: AU14VAIPOclothingequipmentvendor
     ShipsideUniform: AU14VAIPOShipsideUniformVendor
     Weapons: AU14VAIPOWeaponsVendor
@@ -198,6 +208,8 @@
   id: RMC
   parent: AU14BasePlatoonVendorSet
   vendors:
+    MessDrink: CMUNutriCoDrinkRMC
+    MessFood: CMUNutriCoVendorRCM
     Rifleman: AU14RMCequipmentvendor
     Clothing: AU14RMCclothingequipmentvendor
     ShipsideUniform: AU14RMCShipsideUniformVendor
