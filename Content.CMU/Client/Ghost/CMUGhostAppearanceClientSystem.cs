@@ -20,6 +20,14 @@ public sealed class CMUGhostAppearanceClientSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<CMUGhostAppearanceComponent, ComponentShutdown>(OnShutdown);
+        SubscribeLocalEvent<CMUGhostAppearanceStandInComponent, ComponentStartup>(OnStandInStartup);
+    }
+
+    // The stand-in body only exists to be copied; the ghost carrying it is what you see.
+    private void OnStandInStartup(Entity<CMUGhostAppearanceStandInComponent> ent, ref ComponentStartup args)
+    {
+        if (TryComp(ent, out SpriteComponent? sprite))
+            _sprite.SetVisible((ent, sprite), false);
     }
 
     private void OnShutdown(Entity<CMUGhostAppearanceComponent> ent, ref ComponentShutdown args)
@@ -46,9 +54,12 @@ public sealed class CMUGhostAppearanceClientSystem : EntitySystem
             var drawDepth = sprite.DrawDepth;
             var visible = sprite.Visible;
             var color = sprite.Color;
+            var noRotation = sprite.NoRotation;
             _sprite.CopySprite((source, sourceSprite), (uid, sprite));
             _sprite.SetDrawDepth((uid, sprite), drawDepth);
             _sprite.SetVisible((uid, sprite), visible);
+            // a ghost stays upright however it's turned, even when the body it copies doesn't (e.g. a lobby stand-in)
+            sprite.NoRotation = noRotation;
             // the body is opaque, keep the ghost see-through
             _sprite.SetColor((uid, sprite), color);
             _sprite.SetRotation((uid, sprite), Angle.Zero);
