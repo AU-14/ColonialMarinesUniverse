@@ -30,10 +30,6 @@ public sealed partial class GhostGui : UIWidget
         GhostRolesButton.OnPressed += _ => GhostRolesPressed?.Invoke();
         GhostRolesButton.OnPressed += _ => GhostRolesButton.StyleClasses.Remove(StyleClass.Negative);
         LateJoinButton.OnPressed += _ => LateJoinPressed?.Invoke();
-        // cmu edit start
-        CMUGhostColorButton.OnPressed += _ =>
-            IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<Content.Client.CMU14.Ghost.CMUGhostColorSystem>().OpenWindow();
-        // cmu edit end
     }
 
     public void Hide()

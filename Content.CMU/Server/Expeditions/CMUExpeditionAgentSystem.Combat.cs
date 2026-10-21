@@ -1,7 +1,11 @@
 using System.Numerics;
 using Content.Server.NPC.Components;
+using Content.Shared._RMC14.Vehicle;
 using Content.Shared.CombatMode;
+using Content.Shared.Mobs.Components;
 using Content.Shared.NPC;
+using Content.Shared.NPC.Components;
+using Content.Shared.Vehicle.Components;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -371,7 +375,7 @@ public sealed partial class CMUExpeditionAgentSystem
             nearby = _nearbyPool.Get();
             try
             {
-                _lookup.GetEntitiesInRange(uid, agent.FireRange + 3, nearby);
+                CollectShotNeighbors(uid, agent, nearby);
                 return FriendlyShotConeClear(uid, agent, gun, from, distance, spread, direction, nearby, out reason);
             }
             finally
@@ -380,6 +384,37 @@ public sealed partial class CMUExpeditionAgentSystem
             }
         }
         return FriendlyShotConeClear(uid, agent, gun, from, distance, spread, direction, nearby, out reason);
+    }
+
+    private readonly HashSet<Entity<MobStateComponent>> _shotMobs = new();
+    private readonly HashSet<Entity<NpcFactionMemberComponent>> _shotFactionMembers = new();
+    private readonly HashSet<Entity<VehicleEnterComponent>> _shotVehicles = new();
+    private readonly HashSet<Entity<GridVehicleMoverComponent>> _shotGridVehicles = new();
+
+    // only mobs, faction members (sentries etc) and vehicles can ever count as friendly in the cone.
+    // the untyped lookup also grabbed every wall, item and pipe within fire range, per agent per shot check
+    private void CollectShotNeighbors(EntityUid uid, CMUExpeditionAgentComponent agent, HashSet<EntityUid> nearby)
+    {
+        var map = _transform.GetMapCoordinates(uid);
+        if (map.MapId == MapId.Nullspace)
+            return;
+        var range = agent.FireRange + 3;
+        CollectShotNeighbors(map, range, _shotMobs, nearby);
+        CollectShotNeighbors(map, range, _shotFactionMembers, nearby);
+        CollectShotNeighbors(map, range, _shotVehicles, nearby);
+        CollectShotNeighbors(map, range, _shotGridVehicles, nearby);
+        nearby.Remove(uid);
+    }
+
+    private void CollectShotNeighbors<T>(MapCoordinates map, float range, HashSet<Entity<T>> found, HashSet<EntityUid> nearby)
+        where T : IComponent
+    {
+        // typed lookups append, they don't clear
+        found.Clear();
+        _lookup.GetEntitiesInRange(map, range, found);
+        foreach (var ent in found)
+            nearby.Add(ent);
+        found.Clear();
     }
 
     private bool FriendlyShotConeClear(EntityUid uid, CMUExpeditionAgentComponent agent, Entity<GunComponent> gun,

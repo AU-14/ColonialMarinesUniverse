@@ -95,4 +95,24 @@ public sealed partial class DrugAllergyComponent : Component
 
     [DataField, AutoNetworkedField]
     public TimeSpan NextTriggerAllowed;
+
+    /// <summary>
+    ///     Further drug allergens past <see cref="Allergen"/>, from taking a second allergy trait.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public List<ProtoId<ReagentPrototype>> ExtraAllergens = new();
+
+    /// <summary>
+    ///     What set off the current reaction, shown on health scanners. Null if unknown.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public string? ReactionCause;
+
+    /// <summary>
+    ///     True if this entity is allergic to the reagent.
+    /// </summary>
+    public bool IsAllergen(ProtoId<ReagentPrototype> reagent)
+    {
+        return Allergen == reagent || ExtraAllergens.Contains(reagent);
+    }
 }

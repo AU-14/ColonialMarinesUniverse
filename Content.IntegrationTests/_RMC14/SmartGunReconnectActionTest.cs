@@ -1,8 +1,9 @@
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.MotionDetector;
 using Content.Shared._RMC14.Weapons.Ranged.Ammo;
-using Content.Shared._RMC14.Weapons.Ranged.Auto;
-using Content.Shared._RMC14.Weapons.Ranged.Recoil;
+// cmu edit start: aim assist (RMC-14#10984) replaced toggleable recoil and auto-fire
+using Content.Shared._RMC14.Weapons.Ranged.SmartGun;
+// cmu edit end
 using Content.Shared.Actions;
 using Serilog.Events;
 
@@ -72,8 +73,9 @@ public sealed class SmartGunReconnectActionTest : GameTest
     {
         return
         [
-            CEntMan.GetComponent<GunToggleableRecoilComponent>(smartGun).Action!.Value,
-            CEntMan.GetComponent<GunToggleableAutoFireComponent>(smartGun).Action!.Value,
+            // cmu edit start: aim assist (RMC-14#10984) replaced toggleable recoil and auto-fire
+            CEntMan.GetComponent<GunAimAssistComponent>(smartGun).Action!.Value,
+            // cmu edit end
             CEntMan.GetComponent<GunToggleableAmmoComponent>(smartGun).Action!.Value,
             CEntMan.GetComponent<ToggleableMotionDetectorComponent>(smartGun).Action!.Value,
         ];

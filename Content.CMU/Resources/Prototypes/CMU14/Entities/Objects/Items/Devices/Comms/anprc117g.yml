@@ -102,7 +102,7 @@
       enum.AU14CallsignConsoleUI.Key:
         type: AU14CallsignConsoleBui
       enum.RMCTelephoneUiKey.Key:
-        type: RMCTelephoneBui
+        type: CMUTelephoneBui
       enum.StorageUiKey.Key:
         type: StorageBoundUserInterface
   # the set is a phone on the RMC exchange, on the same handset it uses for the net. its

@@ -28,7 +28,9 @@
     baseFireModes:
     - FullAuto
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Pistols/m13.rsi
+#cmu edit start: pre-resprite sprites (reverts RMC-14#7249)
+    sprite: CMU14/Weapons/Pistols/m13_old.rsi
+#cmu edit end
     layers:
     - state: base
     - state: camo
@@ -43,7 +45,9 @@
       Classic: "#c7e7d9"
       Urban: "#acb8c7"
   - type: Clothing
-    sprite: _RMC14/Objects/Weapons/Guns/Pistols/m13.rsi
+#cmu edit start: pre-resprite sprites (reverts RMC-14#7249)
+    sprite: CMU14/Weapons/Pistols/m13_old.rsi
+#cmu edit end
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1
   - type: GunDamageModifier
@@ -94,9 +98,11 @@
           - RMCAttachmentM13StockSolid
   - type: AttachableHolderVisuals
     offsets:
-      rmc-aslot-barrel: 0.65, 0.13
-      rmc-aslot-rail: 0.05, 0.16
-      rmc-aslot-underbarrel: 0.4, -0.162
+#cmu edit start: pre-resprite sprites (reverts RMC-14#7249)
+      rmc-aslot-barrel: 0.75, 0.13
+      rmc-aslot-rail: 0.05, 0.2
+      rmc-aslot-underbarrel: 0.35, -0.15
+#cmu edit end
       rmc-aslot-stock: -0.5, 0.16
 
 - type: entity
@@ -137,7 +143,9 @@
     proto: RMCCartridgeAutoPistol
     capacity: 40
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m13.rsi
+#cmu edit start: pre-resprite sprites (reverts RMC-14#7249)
+    sprite: CMU14/Weapons/Magazines/m13_old.rsi
+#cmu edit end
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -163,7 +171,9 @@
     proto: RMCCartridgeAutoPistolAP
     capacity: 40
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m13.rsi
+#cmu edit start: pre-resprite sprites (reverts RMC-14#7249)
+    sprite: CMU14/Weapons/Magazines/m13_old.rsi
+#cmu edit end
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -192,7 +202,9 @@
     proto: RMCCartridgeAutoPistol
     capacity: 62
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m13ext.rsi
+#cmu edit start: pre-resprite sprites (reverts RMC-14#7249)
+    sprite: CMU14/Weapons/Magazines/m13ext_old.rsi
+#cmu edit end
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -218,7 +230,9 @@
     proto: RMCCartridgeAutoPistolAP
     capacity: 62
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m13ext.rsi
+#cmu edit start: pre-resprite sprites (reverts RMC-14#7249)
+    sprite: CMU14/Weapons/Magazines/m13ext_old.rsi
+#cmu edit end
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -247,7 +261,9 @@
     proto: RMCCartridgeAutoPistol
     capacity: 84
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m13drum.rsi
+#cmu edit start: pre-resprite sprites (reverts RMC-14#7249)
+    sprite: CMU14/Weapons/Magazines/m13drum_old.rsi
+#cmu edit end
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -273,7 +289,9 @@
     proto: RMCCartridgeAutoPistolAP
     capacity: 84
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m13drum.rsi
+#cmu edit start: pre-resprite sprites (reverts RMC-14#7249)
+    sprite: CMU14/Weapons/Magazines/m13drum_old.rsi
+#cmu edit end
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
