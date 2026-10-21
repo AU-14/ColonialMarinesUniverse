@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 05/06/2026 01:50:47
-  entityCount: 120
+  entityCount: 121
 maps:
 - 1
 grids:
@@ -772,6 +772,13 @@ entities:
       rot: 3.141592653589793 rad
       pos: 0.6791694,5.497508
       parent: 2
+- proto: CMUAirFillerVent
+  entities:
+  - uid: 201
+    components:
+    - type: Transform
+      parent: 2
+      pos: 0.5,6.5
 - proto: RMCEngineAttachmentPoint
   entities:
   - uid: 98

@@ -1180,7 +1180,8 @@ public abstract partial class CMUSharedZLevelsSystem
         {
             if (_dropshipDeckQuery.HasComp(candidate.Owner) &&
                 _map.TryGetTileRef(candidate.Owner, candidate.Comp,
-                    _map.WorldToTile(candidate.Owner, candidate.Comp, worldPosition), out var deckTile) && !deckTile.Tile.IsEmpty)
+                    _map.WorldToTile(candidate.Owner, candidate.Comp, worldPosition), out var deckTile) &&
+                !CMUZLevelOpeningCache.IsFallThroughTile(deckTile.Tile, TilDefMan))
             {
                 gridUid = candidate.Owner;
                 grid = candidate.Comp;
