@@ -44,6 +44,34 @@
       rmc-aslot-underbarrel: 0.1875, -0.095
 
 - type: entity
+  parent: CMUWeaponRifleM16A1UGL
+  id: CMUWeaponRifleM16A1UGLTactical
+  suffix: Tactical
+  components:
+  - type: AttachableHolder
+    randomAttachmentChance: 0
+    slots:
+      rmc-aslot-barrel:
+        startingAttachable: RMCAttachmentSuppressor
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS5MicroRedDotSight
+      rmc-aslot-underbarrel:
+        startingAttachable: CMUM203GL
+        whitelist:
+          tags:
+          - CMUM203GL
+          
+- type: entity
   parent: AU14AttachmentM203A4GrenadeLauncher
   id: CMUM203GL
   name: M203 grenade launcher

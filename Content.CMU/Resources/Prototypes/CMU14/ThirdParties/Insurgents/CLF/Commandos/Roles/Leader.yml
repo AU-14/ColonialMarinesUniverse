@@ -72,19 +72,21 @@
     id: AU14IDCardColonyColonist
     belt: RMCBeltHolsterRevolverZHNK72Fill
     back: RMCSatchelLightpackWelder
-    pocket1: AU14PouchMagazineLargeFilledM16
+    pocket1: CMUPouchExplosivesLargeFilledM433
     pocket2: AU14PouchIFAKFill
   inhand:
-  - AU14WeaponRifleM16A1Tac
+  - CMUWeaponRifleM16A1UGLTactical
   - RMCScabbardKatanaFilled
   storage:
     back:
-    - CMUMagazineRifleM16Extended
-    - RMCGrenadeIED
-    - RMCGrenadeIED
     - RMCMRECLF
     - CMUMagazineRifleM16APExt
     - CMUMagazineRifleM16APExt
+    - CMUMagazineRifleM16Extended
+    - CMU40mmM433HEDP
+    - CMU40mmM433HEDP
+    - CMU40mmM433HEDP
+    - CMU40mmM433HEDP
     outerClothing:
     - CMUMagazineRifleM16APExt
     - CMUMagazineRifleM16APExt
