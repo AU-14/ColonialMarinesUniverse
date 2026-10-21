@@ -9,6 +9,7 @@
   - CMUGuideCAS
   - CMUGuideOverwatch
   - CMUGuideShipWeapons
+  - CMUGuideMohawkM90
   - CMUGuideFOBSecurity
   - CMUGuideSkills
   - CMUGuideMortar
@@ -29,6 +30,12 @@
   name: cmu-guide-entry-cas
   priority: 2
   text: "/ServerInfo/Guidebook/CMU14/Guides/CMUCAS.xml"
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMohawkM90
+  name: cmu-guide-entry-mohawk-m90
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUMohawkM90.xml"
 
 - type: guideEntry
   parent: RMC

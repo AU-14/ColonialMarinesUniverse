@@ -15,6 +15,9 @@ public sealed partial class DropshipWeaponSystem : SharedDropshipWeaponSystem
         if (terminal.Comp.CameraTarget is { } camera && Resolve(actor, ref actor.Comp, false) &&
             TryGetTargetEye(terminal, camera, out var cameraEye) && cameraEye != camera)
             _viewSubscriber.AddViewSubscriber(cameraEye, actor.Comp.PlayerSession);
+        // CMU14: the gunner camera is independent of the flare target.
+        if (terminal.Comp.ChinGunEye is { } gunEye && Resolve(actor, ref actor.Comp, false))
+            _viewSubscriber.AddViewSubscriber(gunEye, actor.Comp.PlayerSession);
 
         if (terminal.Comp.Target is not { } target)
             return;
@@ -47,6 +50,9 @@ public sealed partial class DropshipWeaponSystem : SharedDropshipWeaponSystem
         if (terminal.Comp.CameraTarget is { } camera && Resolve(actor, ref actor.Comp, false) &&
             TryGetTargetEye(terminal, camera, out var cameraEye) && cameraEye != camera)
             _viewSubscriber.RemoveViewSubscriber(cameraEye, actor.Comp.PlayerSession);
+        // CMU14
+        if (terminal.Comp.ChinGunEye is { } gunEye && Resolve(actor, ref actor.Comp, false))
+            _viewSubscriber.RemoveViewSubscriber(gunEye, actor.Comp.PlayerSession);
 
         if (terminal.Comp.Target is not { } target)
             return;

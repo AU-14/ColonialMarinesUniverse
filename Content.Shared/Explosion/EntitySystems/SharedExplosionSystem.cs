@@ -21,6 +21,7 @@ public abstract class SharedExplosionSystem : EntitySystem
     /// </remarks>
     public static readonly ProtoId<ExplosionPrototype> DefaultExplosionPrototypeId = "Default";
 
+    // CMU14 Begin: shared unobstructed blast envelope for targeting safety.
     public static float CalculateBlastRadius(float totalIntensity, float slope, float maxIntensity)
     {
         var r0 = maxIntensity / slope;
@@ -29,6 +30,7 @@ public abstract class SharedExplosionSystem : EntitySystem
             return MathF.Cbrt(3 * totalIntensity / (slope * MathF.PI));
         return r0 * (MathF.Sqrt(12 * totalIntensity / v0 - 3) / 6 + 0.5f);
     }
+    // CMU14 End
 
     public override void Initialize()
     {

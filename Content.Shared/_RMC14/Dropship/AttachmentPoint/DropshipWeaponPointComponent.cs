@@ -14,6 +14,47 @@ public sealed partial class DropshipWeaponPointComponent : Component
     [DataField, AutoNetworkedField]
     public string AmmoContainerSlotId = "rmc_dropship_weapon_point_ammo_container_slot";
 
+    // CMU14 Begin: optional extra ammunition feeds.
+    [DataField, AutoNetworkedField]
+    public string? SecondAmmoContainerSlotId;
+
+    // CMU14: restricted extra feed, for example the M90's Squall-only third feed.
+    [DataField, AutoNetworkedField]
+    public string? ThirdAmmoContainerSlotId;
+
+    /// <summary>Ammo types accepted by <see cref="ThirdAmmoContainerSlotId"/>. Empty accepts any ammo.</summary>
+    [DataField, AutoNetworkedField, Access(Other = AccessPermissions.ReadExecute)]
+    public List<string> ThirdAmmoTypes = new();
+
+    [Access(Other = AccessPermissions.ReadExecute)]
+    public IEnumerable<string> GetAmmoSlots()
+    {
+        yield return AmmoContainerSlotId;
+        if (SecondAmmoContainerSlotId is { } second)
+            yield return second;
+        if (ThirdAmmoContainerSlotId is { } third)
+            yield return third;
+    }
+
+    [Access(Other = AccessPermissions.ReadExecute)]
+    public string? GetFeedSlot(int feed)
+    {
+        return feed switch
+        {
+            0 => AmmoContainerSlotId,
+            1 => SecondAmmoContainerSlotId,
+            2 => ThirdAmmoContainerSlotId,
+            _ => null,
+        };
+    }
+
+    [Access(Other = AccessPermissions.ReadExecute)]
+    public bool ThirdSlotAccepts(string? ammoType)
+    {
+        return ThirdAmmoTypes.Count == 0 || ammoType != null && ThirdAmmoTypes.Contains(ammoType);
+    }
+    // CMU14 End
+
     // CMU14: fixed weapons can still have their ammunition serviced.
     [DataField, AutoNetworkedField, Access(Other = AccessPermissions.ReadExecute)]
     public bool FixedWeapon;

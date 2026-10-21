@@ -338,7 +338,10 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         var target = args.Target;
         ContainerSlot container;
 
-        if (CanDetachPopup(ref user, ent, ent.Comp.AmmoContainerSlotId, false, out var ammoSlot) &&
+        var detachableAmmoSlot = ent.Comp.GetAmmoSlots().FirstOrDefault(id =>
+            _container.TryGetContainer(ent, id, out var candidate) && candidate.ContainedEntities.Count > 0);
+        if (detachableAmmoSlot != null &&
+            CanDetachPopup(ref user, ent, detachableAmmoSlot, false, out var ammoSlot) &&
             ammoSlot.ContainedEntity != null)
         {
             container = ammoSlot;
@@ -473,7 +476,9 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         }
         else
         {
-            args.CanUse = CanDetachPopup(ref user, ent, ent.Comp.AmmoContainerSlotId, false, out slot) ||
+            var ammoSlotId = ent.Comp.GetAmmoSlots().FirstOrDefault(id =>
+                _container.TryGetContainer(ent, id, out var candidate) && candidate.Contains(used.Value));
+            args.CanUse = CanDetachPopup(ref user, ent, ammoSlotId ?? ent.Comp.AmmoContainerSlotId, false, out slot) ||
                           CanDetachPopup(ref user, ent, ent.Comp.WeaponContainerSlotId, false, out slot);
         }
 
@@ -779,7 +784,29 @@ public sealed partial class PowerLoaderSystem : EntitySystem
             }
 
             slotId = target.Comp.AmmoContainerSlotId;
+            // CMU14: restricted third feeds take their ammo first, leaving the open feeds free.
+            var ammoType = Comp<DropshipAmmoComponent>(used).AmmoType;
+            var candidates = new List<string>();
+            if (target.Comp.ThirdAmmoContainerSlotId is { } restricted && target.Comp.ThirdAmmoTypes.Count > 0 &&
+                target.Comp.ThirdSlotAccepts(ammoType))
+                candidates.Add(restricted);
+            candidates.Add(target.Comp.AmmoContainerSlotId);
+            if (target.Comp.SecondAmmoContainerSlotId is { } secondSlot)
+                candidates.Add(secondSlot);
+            if (target.Comp.ThirdAmmoContainerSlotId is { } thirdSlot && !candidates.Contains(thirdSlot) &&
+                target.Comp.ThirdSlotAccepts(ammoType))
+                candidates.Add(thirdSlot);
+            foreach (var candidate in candidates)
+            {
+                if (_container.TryGetContainer(target, candidate, out var feed) && feed.ContainedEntities.Count > 0)
+                    continue;
+                slotId = candidate;
+                break;
+            }
             msg = Loc.GetString("rmc-power-loader-occupied-ammo");
+            if (target.Comp.ThirdAmmoContainerSlotId != null && target.Comp.ThirdAmmoTypes.Count > 0 &&
+                !target.Comp.ThirdSlotAccepts(ammoType))
+                msg = Loc.GetString("cmu-power-loader-restricted-feed");
 
             if (!_container.TryGetContainer(target, target.Comp.WeaponContainerSlotId, out var weaponContainer) ||
                 weaponContainer.ContainedEntities.Count == 0)
@@ -1267,14 +1294,16 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         var hasRounds = false;
         var maxRounds = 0;
         var rounds = 0;
-        if (_container.TryGetContainer(point, point.Comp.AmmoContainerSlotId, out var ammoContainer))
+        foreach (var ammoSlotId in point.Comp.GetAmmoSlots())
         {
+            if (!_container.TryGetContainer(point, ammoSlotId, out var ammoContainer))
+                continue;
             foreach (var contained in ammoContainer.ContainedEntities)
             {
                 if (TryComp(contained, out DropshipAmmoComponent? ammo))
                 {
-                    rounds = ammo.Rounds;
-                    maxRounds = ammo.MaxRounds;
+                    rounds += ammo.Rounds;
+                    maxRounds += ammo.MaxRounds;
 
                     // TODO RMC14 partial reloads? or hide it anyways if below the threshold
                     if (ammo.Rounds >= ammo.RoundsPerShot)
@@ -1395,6 +1424,10 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
     private void InsertPoint(Entity<PowerLoaderComponent> user, EntityUid contained, BaseContainer slot)
     {
+        // Feed selection depends on authoritative occupancy; do not predict a transfer into a stale feed.
+        if (_net.IsClient && TryComp(slot.Owner, out DropshipWeaponPointComponent? point) &&
+            (point.SecondAmmoContainerSlotId != null || point.ThirdAmmoContainerSlotId != null))
+            return;
         if (slot.ContainedEntities.Count > 0)
             return;
 

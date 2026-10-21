@@ -823,8 +823,10 @@ public abstract partial class SharedDropshipSystem : EntitySystem
             if (TryGetAttachmentContained(ent, ent.Comp.WeaponContainerSlotId, out var weapon))
                 args.PushText(Loc.GetString("rmc-dropship-attached", ("attachment", weapon)));
 
-            if (TryGetAttachmentContained(ent, ent.Comp.AmmoContainerSlotId, out var ammo))
+            foreach (var slotId in ent.Comp.GetAmmoSlots())
             {
+                if (!TryGetAttachmentContained(ent, slotId, out var ammo))
+                    continue;
                 args.PushText(Loc.GetString("rmc-dropship-weapons-point-ammo", ("ammo", ammo)));
 
                 if (TryComp(ammo, out DropshipAmmoComponent? ammoComp))

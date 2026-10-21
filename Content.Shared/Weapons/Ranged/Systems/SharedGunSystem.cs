@@ -151,6 +151,14 @@ public abstract partial class SharedGunSystem : EntitySystem
         Subs.CVar(_config, RMCCVars.RMCGunPrediction, v => GunPrediction = v, true);
     }
 
+    // CMU14 Begin
+    public void SetNextFire(Entity<GunComponent> gun, TimeSpan nextFire)
+    {
+        gun.Comp.NextFire = nextFire;
+        DirtyField(gun.AsNullable(), nameof(GunComponent.NextFire));
+    }
+    // CMU14 End
+
     private void OnMapInit(Entity<GunComponent> gun, ref MapInitEvent args)
     {
 #if DEBUG
