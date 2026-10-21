@@ -58,6 +58,9 @@ public sealed partial class DropshipAmmoComponent : Component
     public int RoundsPerShot = 40;
 
     [DataField, AutoNetworkedField]
+    public int? RoundsPerSprite;
+
+    [DataField, AutoNetworkedField]
     public int ShotsPerVolley = 1;
 
     [DataField, AutoNetworkedField]
@@ -95,6 +98,9 @@ public sealed partial class DropshipAmmoComponent : Component
 
     [DataField, AutoNetworkedField]
     public string? AmmoType;
+
+    [DataField, AutoNetworkedField]
+    public string? AmmoSpriteType;
 
     [DataField, AutoNetworkedField]
     public RMCExplosion? Explosion;
