@@ -17,6 +17,11 @@ The roll maximizes balanced assignments, then prefers higher role priorities and
 
 ## Dropships
 
+The CIP foundation exposes shared console-faction lookup and target selection
+for independently merged aircraft features. It adds no weapons or automated
+strike behavior. Console-local faction whitelists take priority over the ship's
+faction; otherwise consoles inherit their grid's faction.
+
 ### Aircraft laser codes and ground GPS reports
 
 Laser designators default to `1111-1`. Use Guidance programming on a designator,

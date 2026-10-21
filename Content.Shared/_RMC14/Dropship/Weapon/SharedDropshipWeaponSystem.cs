@@ -1663,19 +1663,6 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         return abbreviation;
     }
 
-    // CMU14 Begin
-    public string? GetConsoleFaction(EntityUid console)
-    {
-        if (TryComp(console, out WhitelistedShuttleComponent? whitelist) &&
-            !string.IsNullOrWhiteSpace(whitelist.Faction))
-        {
-            return whitelist.Faction;
-        }
-
-        return _dropship.TryGetGridFaction(console, out var faction) ? faction : null;
-    }
-    // CMU14 End
-
     public string? GetUserFaction(EntityUid user)
     {
         if (TryComp(user, out MarineComponent? marine) &&
