@@ -98,7 +98,7 @@ its ammunition.
 | Walking Barrage | 9 HE shells, one second apart, progress along a 16-tile line centered on the target in the selected direction. Each has a 6-tile blast radius. |
 | 120mm HE Barrage | 12 HE impacts, 0.75 seconds apart, with 16-tile scatter and a 12-tile blast radius. |
 | 380mm HE Barrage | 6 heavy impacts, 1.8 seconds apart, with 6-tile scatter and a 16-tile blast radius. |
-| Gas Strike | A 30-tile-radius toxic cloud inflicts poison damage for 30 seconds, but never damages xenos; filters and sealed internals provide their normal protection. |
+| Gas Strike | A 30-tile-radius toxic cloud inflicts poison damage for 30 seconds on everyone, including xenos; filters and sealed internals provide their normal protection. |
 | EMS Strike | A 30-tile-radius field lasts 15 seconds and forcibly stuns everyone, including xenos and ordinarily stun-immune targets. Initial and late entrants remain stunned until 25 seconds after the field ends; leaving early does not shorten the stun. |
 | Smoke Strike | A non-damaging, opaque 30-tile-radius screen lasts 30 seconds. |
 | Airburst Strike | 6 anti-personnel bursts, 0.8 seconds apart, with 8-tile scatter and a 12-tile blast radius, without terrain breaking. |
@@ -125,7 +125,7 @@ checks ship-instance and deck isolation, command access, malformed selections,
 permanent locking after terminal replacement, shared ammunition and cooldown,
 rejected targeting, shared-pool exhaustion across weapons, standard-cannon selection, ten
 profiles, walking direction, bounded support clouds, battery compatibility,
-manual loading, CVar modes, Railcannon boundaries, xeno gas immunity, and EMS
+manual loading, CVar modes, Railcannon boundaries, xeno gas damage, and EMS
 entry and recovery timing. It also verifies one-to-three permanent selections,
 YAML-configured selection limits and shared-use pools,
 empty/oversized loadout rejection, the terminal's guidebook link and document
