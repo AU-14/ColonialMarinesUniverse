@@ -146,6 +146,10 @@ public sealed partial class RMCChemicalEffectSystem
     internal bool TryGetAllergy(EntityUid uid, [NotNullWhen(true)] out DrugAllergyComponent? component)
         => TryComp(uid, out component);
 
+    // CMU14 start - Allergenic cross-reactivity by class/property
+    internal bool IsAllergen(EntityUid uid, ReagentPrototype reagent) => _allergicReaction.IsAllergen(uid, reagent);
+    // CMU14 end
+
     internal bool TryGetBloodstream(EntityUid uid, [NotNullWhen(true)] out BloodstreamComponent? component)
         => TryComp(uid, out component);
 
@@ -197,6 +201,23 @@ public sealed partial class RMCChemicalEffectSystem
         var ev = new RMCVomitEvent(target);
         RaiseLocalEvent(ref ev);
     }
+
+    // CMU14 start - Irritating property hook
+    internal void ApplyChemicalIrritant(EntityUid target, float amount, Content.Shared.CMU14.ChemicalIrritants.ChemicalIrritantProfile profile)
+    {
+        if (_net.IsClient)
+            return;
+        EntityManager.System<SharedChemicalIrritantSystem>().ApplyIrritantDirect(target, amount, profile);
+    }
+    // CMU14 end
+
+    // CMU14 start - Disrupting property hook
+    internal void DeactivatePheromones(EntityUid target)
+    {
+        if (HasComp<Content.Shared._RMC14.Xenonids.Pheromones.XenoPheromonesComponent>(target))
+            EntityManager.System<Content.Shared._RMC14.Xenonids.Pheromones.SharedXenoPheromonesSystem>().DeactivatePheromones(target);
+    }
+    // CMU14 end
 
     internal void ApplyCiphering(EntityUid target, int potency)
     {

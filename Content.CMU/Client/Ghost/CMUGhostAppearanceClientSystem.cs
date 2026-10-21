@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.CMU14.Ghost;
+using Content.Shared.Humanoid;
 using Robust.Client.GameObjects;
 
 namespace Content.Client.CMU14.Ghost;
@@ -34,7 +35,8 @@ public sealed class CMUGhostAppearanceClientSystem : EntitySystem
             if (_applied.Contains(uid) ||
                 ghost.Source is not { } source ||
                 !TryComp(source, out SpriteComponent? sourceSprite) ||
-                !sourceSprite.AllLayers.Any())
+                !sourceSprite.AllLayers.Any() ||
+                !BodyLayersReady((source, sourceSprite)))
             {
                 continue;
             }
@@ -43,13 +45,28 @@ public sealed class CMUGhostAppearanceClientSystem : EntitySystem
 
             var drawDepth = sprite.DrawDepth;
             var visible = sprite.Visible;
+            var color = sprite.Color;
             _sprite.CopySprite((source, sourceSprite), (uid, sprite));
             _sprite.SetDrawDepth((uid, sprite), drawDepth);
             _sprite.SetVisible((uid, sprite), visible);
+            // the body is opaque, keep the ghost see-through
+            _sprite.SetColor((uid, sprite), color);
             _sprite.SetRotation((uid, sprite), Angle.Zero);
             _sprite.SetOffset((uid, sprite), Vector2.Zero);
             ShowAlive((uid, sprite), (source, sourceSprite));
         }
+    }
+
+    /// <summary>
+    ///     A humanoid's body layers are filled in by its organs, which can land on this client after the body does.
+    ///     Copying before that leaves a ghost made of nothing but burns, bandages and blood.
+    /// </summary>
+    private bool BodyLayersReady(Entity<SpriteComponent> source)
+    {
+        if (!_sprite.LayerMapTryGet(source.AsNullable(), HumanoidVisualLayers.Chest, out var chest, false))
+            return true;
+
+        return _sprite.LayerGetRsiState(source.AsNullable(), chest).IsValid;
     }
 
     /// <summary>

@@ -27,4 +27,16 @@
   <GuideReagentEmbed Reagent="RMCSulphuricAcid"/>
   <GuideReagentEmbed Reagent="RMCNapalm"/>
 
+  # Custom Chemical Grenades
+
+  Engineering vendors stock an empty [bold]custom grenade[/bold] casing and a [bold]chemical payload[/bold]. Fit a timer trigger and the payload into the casing, then load two beakers into the payload. When the grenade triggers, the beakers are mixed together and whatever reaction their contents make happens on the spot.
+
+  Smoke and foam reactions carry every other chemical in the payload with them and apply it to anyone they touch or who breathes them in, so a research chemical in the second beaker rides the cloud. Gas masks and internals block inhalation.
+
+  - [bold]Smoke:[/bold] phosphorus, potassium and sugar.
+  - [bold]Tear gas:[/bold] smoke plus tear gas (chlorine, carbon and oxygen), or any chemical with the Irritating property.
+  - [bold]Foam:[/bold] fluorosurfactant (carbon, fluorine, sulphuric acid) and water.
+  - [bold]Metal foam:[/bold] foaming agent (lithium and hydrogen) with aluminium, or with iron and polytrinic acid.
+  - [bold]Incendiary:[/bold] any reaction whose product is a fuel. Research chemicals with Fueling or Oxidizing burn; those with Explosive detonate on synthesis.
+
 </Document>
