@@ -66,6 +66,17 @@ for independently merged aircraft features. It adds no weapons or automated
 strike behavior. Console-local faction whitelists take priority over the ship's
 faction; otherwise consoles inherit their grid's faction.
 
+`CIP-Foundation` is the only common prerequisite for the standalone CAS Weapons,
+Mohawk 90mm, RTO and GPS/Laser branches. None requires another feature branch.
+`CIP-Standalone-Combined` includes all four plus their optional integration
+adapters. The original stacked CIP branches are preserved.
+
+Independent functionality does not imply conflict-free Git merges: the features
+share console UI and weapon-system edit locations. When combining them, preserve
+each feature's handlers and controls; the combined branch records those
+resolutions. The RTO/GPS report provider, CAS AUTO readiness adapter and Mohawk
+readiness/ammo/visibility adapter belong to the combined integration layer.
+
 ### Aircraft laser codes and ground GPS reports
 
 Laser designators default to `1111-1`. Use Guidance programming on a designator,
