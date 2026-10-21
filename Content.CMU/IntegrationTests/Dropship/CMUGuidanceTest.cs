@@ -59,6 +59,9 @@ public sealed class CMUGuidanceTest : GameTest
             var guidance = Server.System<CMUGuidanceSystem>();
             weapons.MakeDropshipTarget(marker, "CODE", "govfor");
             var console = SEntMan.GetComponent<DropshipTerminalWeaponsComponent>(terminal);
+#pragma warning disable RA0002 // Exercise the ordinary console path, not the M90 airborne-only gunnery controls.
+            console.Gunnery = false;
+#pragma warning restore RA0002
             Assert.That(guidance.CanDetect(terminal, marker), Is.True);
             SEntMan.EventBus.RaiseLocalEvent(terminal,
                 new DropshipTerminalWeaponsTargetsSelectMsg(SEntMan.GetNetEntity(marker))
