@@ -484,9 +484,7 @@ public sealed class YautjaBowTest
 
                 Assert.Multiple(() =>
                 {
-                    // CMU14: the caster bolts use CMUYautjaCasterExplosion (RMC with the light removed), and the
-                    // lance payload mirrors the caster-lethal explosion.
-                    Assert.That(explosive.ExplosionType.Id, Is.EqualTo("CMUYautjaCasterExplosion"),
+                    Assert.That(explosive.ExplosionType.Id, Is.EqualTo("RMC"),
                         "CMSS13 cell_explosion uses CM-style burn/blast fallout, not the generic station explosion profile.");
                     Assert.That(explosive.TotalIntensity, Is.EqualTo(150));
                     Assert.That(explosive.MaxIntensity, Is.EqualTo(50));
