@@ -1,3 +1,5 @@
+using Robust.Shared.GameStates;
+
 namespace Content.Shared.CMU14.Round.Objectives.Type;
 
 public enum HotspotVisuals : byte

@@ -25,12 +25,14 @@ public sealed partial class AddColonistRuleSystem : GameRuleSystem<AddColonistRu
         if (stationJobs == null)
             return;
 
+        var setupJobs = stationJobs.SetupAvailableJobs;
+
         if (component.Jobs != null)
             foreach (var jobId in component.Jobs)
-                if (!stationJobs.SetupAvailableJobs.ContainsKey(jobId))
+                if (!setupJobs.ContainsKey(jobId))
                     Logger.GetSawmill("content").Warning($"[AddColonistRuleSystem] {jobId} is not declared by this planet's map, skipping");
 
-        foreach (var (jobId, slots) in stationJobs.SetupAvailableJobs)
+        foreach (var (jobId, slots) in setupJobs)
         {
             if (component.Jobs != null && !component.Jobs.Contains(jobId))
                 continue;

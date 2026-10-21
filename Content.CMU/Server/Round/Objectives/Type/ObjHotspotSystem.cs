@@ -2,7 +2,6 @@ using System.Linq;
 using Content.Server._RMC14.Marines;
 using Content.Server._RMC14.TacticalMap;
 using Content.Shared._RMC14.Areas;
-using Content.Shared._RMC14.TacticalMap;
 using Content.Shared.CMU14.Round.Objectives.Components;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.Round.Objectives.Type;
@@ -20,7 +19,6 @@ namespace Content.Server.CMU14.Round.Objectives.Type;
 public sealed partial class ObjHotspotSystem : ObjectiveSystem
 {
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private SharedTacticalMapSystem _tacMap = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private TacticalMapSystem _tacMap = default!;
     [Dependency] private MarineAnnounceSystem _marineAnnounce = default!;
