@@ -71,6 +71,7 @@
                     </BoxContainer>
                     <fighter:FighterCockpitReadout Name="FireStatus" MinHeight="24" MaxHeight="24" />
                     <BoxContainer Name="FireControls" MinHeight="32" MaxHeight="32" SeparationOverride="4">
+                        <fighter:FighterCockpitButton Name="Guidance" Text="{Loc 'cmu-guidance-title'}" MinWidth="110" />
                         <fighter:FighterCockpitButton Name="Gau" Text="{Loc 'cmu-fighter-kind-gau'}" MinWidth="52" />
                         <fighter:FighterCockpitButton Name="Fire" Text="{Loc 'cmu-fighter-fire-button'}" Disabled="True" HorizontalExpand="True" />
                     </BoxContainer>

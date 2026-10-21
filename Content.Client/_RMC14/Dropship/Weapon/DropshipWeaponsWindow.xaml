@@ -9,6 +9,7 @@
             <graphics:StyleBoxFlat BackgroundColor="#040404" />
         </PanelContainer.PanelOverride>
         <BoxContainer Orientation="Horizontal">
+            <Button Name="GuidanceButton" Access="Public" Text="{Loc 'cmu-guidance-title'}" /> <!-- CMU14 -->
             <controls:DropshipWeaponsScreen Name="ScreenOne" Access="Public"
                                             HorizontalExpand="True" VerticalExpand="True" />
             <BoxContainer Orientation="Vertical" Margin="0 10">
