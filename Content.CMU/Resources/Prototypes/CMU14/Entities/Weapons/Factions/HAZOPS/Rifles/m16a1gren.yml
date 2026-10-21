@@ -1,0 +1,201 @@
+- type: entity
+  parent: AU14WeaponRifleM16A1
+  id: CMUWeaponRifleM16A1UGL
+  name: M16A1 rifle
+  suffix: UGL
+  description: An old, reliable design with a unique handguard. An M203 underbarrel grenade launcher is mounted on the handguard. It is chambered in 5.56x45mm and uses 40mm grenades.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/HAZOPS/M16A1UGL48x32.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Item
+    sprite: CMU14/Weapons/Guns/HAZOPS/M16A1UGL64x64.rsi
+    size: Large
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/HAZOPS/M16A1UGL64x64.rsi
+  - type: AttachableHolder
+    randomAttachmentChance: 0
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCM5Bayonet
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS5MicroRedDotSight
+      rmc-aslot-underbarrel:
+        startingAttachable: CMUM203GL
+        whitelist:
+          tags:
+          - CMUM203GL
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.83, 0.001
+      rmc-aslot-rail: -0.1, 0.12
+      rmc-aslot-underbarrel: 0.1875, -0.095
+
+- type: entity
+  parent: AU14AttachmentM203A4GrenadeLauncher
+  id: CMUM203GL
+  name: M203 grenade launcher
+  description: A weapon-mounted, reloadable grenade launcher.
+  components:
+  - type: GunIFF
+    enabled: false
+  - type: BallisticAmmoProvider
+    cycleable: false
+    whitelist:
+      tags:
+      - RMCAirburstGrenade
+    capacity: 1
+    soundInsert:
+      path: /Audio/_RMC14/Weapons/Guns/Reload/grenade_insert.ogg
+      params:
+        volume: -2
+
+- type: entity
+  parent: RMCBaseAirBurstGrenade
+  id: CMU40mmM433HEDP
+  name: M433 HEDP 40mm grenade
+  description: M433 - High Explosive Dual Purpose. This grenade must be launched with a grenade launcher, and detonates once it reaches its destination. The shaped charge penetrates light armor, while the fragmenting body dispersed serves as anti-personnel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Guns/Ammunition/40mmgrenades.rsi
+    layers:
+    - state: grenade_M433HEDP
+  - type: Tag
+    tags:
+    - Grenade
+    - LauncherCompatibleGrenade
+    - RMCAirburstGrenade
+    - CMU40mmGrenadeHEDP
+  - type: CartridgeAmmo
+    deleteOnSpawn: true
+    proto: CMUAirBurstHEDP
+
+- type: entity
+  parent: RMCBaseAirBurstProjectile
+  id: CMUAirBurstHEDP
+  name: M433 HEDP 40mm grenade
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileGrenade
+    evenSpread: true
+    spreadAngle: 360
+    directionAngle: 64.29
+    minVelocity: 0.5
+    maxVelocity: 1
+    rebounds: false
+    fillPrototype: CMUMoltenJet
+    capacity: 1              # 1 jet + 9 shrapnel in the container
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+  - type: ContainerFill
+    containers:
+      cluster-payload:
+      - CMUShrapnel
+      - CMUShrapnel
+      - CMUShrapnel
+      - CMUShrapnel
+      - CMUShrapnel
+      - CMUShrapnel
+      - CMUShrapnel
+      - CMUShrapnel
+      - CMUShrapnel
+  - type: ClusterLimitHits
+    limit: 2
+
+- type: entity
+  parent: RMCBaseAirburstRound
+  id: CMUShrapnel
+  name: fragment shrapnel
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/shotgun_projectiles.rsi
+    layers:
+    - state: buckshot
+      shader: unshaded
+  - type: Projectile
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Piercing: 30
+    soundHit:
+      path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
+  - type: CMArmorPiercing
+    amount: 3
+  - type: RMCStunOnHit
+    stuns:
+    - whitelist:
+        minMobSize: VerySmallXeno
+      maxRange: 10
+      stunTime: 0
+      slowTime: 0.8
+  - type: RMCProjectileAccuracy
+    accuracy: 100
+    thresholds:
+    - range: 7
+      falloff: 33
+
+- type: entity
+  parent: RMCBaseAirburstRound
+  id: CMUMoltenJet
+  name: molten jet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/shotgun_projectiles.rsi
+    layers:
+    - state: autocannon
+      shader: unshaded
+  - type: Projectile
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Piercing: 80
+        Heat: 40
+    soundHit:
+      path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
+  - type: CMArmorPiercing
+    amount: 20
+  - type: RMCStunOnHit
+    stuns:
+    - whitelist:
+        minMobSize: VerySmallXeno
+      maxRange: 10
+      stunTime: 0
+      slowTime: 0.8
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 0
+      falloff: 60
+      ignoreModifiers: true
+  - type: RMCProjectileAccuracy
+    accuracy: 100
+    thresholds:
+    - range: 2
+      falloff: 9999
+  - type: VehicleDamageMultiplier
+    multiplier: 7                   
+    # just enough so that the nades will do decent damage against vics like the humvee but not enough to destroy it. 
+    # 3-4 good hits with the nade will, at most during testing, chunk out 60-75% of one module 
+    # (managed to break turret traverse on one, gun on second, and took 6-7 hits to cause tire blowout 312/500 hp)
+    # tested against cheetah and longstreet, it does miniscule/barely any damage
+    
+- type: Tag
+  id: CMUM203GL
+
+- type: Tag
+  id: CMU40mmGrenadeHEDP
