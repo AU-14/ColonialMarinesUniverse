@@ -57,6 +57,12 @@ public sealed partial class AmmoInFlightComponent : Component
     public int BulletSpread = 3;
 
     [DataField, AutoNetworkedField]
+    public EntityUid? ChinGunSource;
+
+    [DataField, AutoNetworkedField]
+    public float FriendlyImpactRadius = 2f;
+
+    [DataField, AutoNetworkedField]
     public int ZLevelPenetration = 0;
 
     [DataField, AutoNetworkedField]

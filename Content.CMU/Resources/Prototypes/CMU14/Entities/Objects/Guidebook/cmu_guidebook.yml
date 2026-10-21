@@ -8,6 +8,7 @@
   - AU14Comms
   - CMUGuideOverwatch
   - CMUGuideShipWeapons
+  - CMUGuideMohawkM90
   - CMUGuideFOBSecurity
   - CMUGuideSkills
   - CMUGuideMortar
@@ -21,6 +22,13 @@
   - CMUChemicals
   - CMUGuideCooking
   - CMUGuideLore
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMohawkM90
+  name: cmu-guide-entry-mohawk-m90
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUMohawkM90.xml"
 
 - type: guideEntry
   parent: RMC

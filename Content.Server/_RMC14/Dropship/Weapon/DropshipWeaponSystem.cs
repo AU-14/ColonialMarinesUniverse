@@ -12,6 +12,9 @@ public sealed partial class DropshipWeaponSystem : SharedDropshipWeaponSystem
     protected override void AddPvs(Entity<DropshipTerminalWeaponsComponent> terminal, Entity<ActorComponent?> actor)
     {
         base.AddPvs(terminal, actor);
+        // CMU14: the gunner camera is independent of the flare target.
+        if (terminal.Comp.ChinGunEye is { } gunEye && Resolve(actor, ref actor.Comp, false))
+            _viewSubscriber.AddViewSubscriber(gunEye, actor.Comp.PlayerSession);
 
         if (terminal.Comp.Target is not { } target)
             return;
@@ -20,9 +23,7 @@ public sealed partial class DropshipWeaponSystem : SharedDropshipWeaponSystem
             return;
 
         // Faction gating: if both console and target creator have faction and they differ, skip adding the view subscriber
-        string? consoleFaction = null;
-        if (TryComp(terminal.Owner, out WhitelistedShuttleComponent? whitelist))
-            consoleFaction = string.IsNullOrWhiteSpace(whitelist.Faction) ? null : whitelist.Faction;
+        var consoleFaction = GetConsoleFaction(terminal.Owner); // CMU14
 
         string? creatorFaction = null;
         if (TryComp(target, out DropshipTargetComponent? targetComp))
@@ -40,6 +41,9 @@ public sealed partial class DropshipWeaponSystem : SharedDropshipWeaponSystem
     protected override void RemovePvs(Entity<DropshipTerminalWeaponsComponent> terminal, Entity<ActorComponent?> actor)
     {
         base.RemovePvs(terminal, actor);
+        // CMU14
+        if (terminal.Comp.ChinGunEye is { } gunEye && Resolve(actor, ref actor.Comp, false))
+            _viewSubscriber.RemoveViewSubscriber(gunEye, actor.Comp.PlayerSession);
 
         if (terminal.Comp.Target is not { } target)
             return;

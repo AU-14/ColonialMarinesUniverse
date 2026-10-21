@@ -1,17 +1,65 @@
-﻿<controls:DropshipWeaponsWindow
+<controls:DropshipWeaponsWindow
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Dropship.Weapon"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     Title="{Loc 'rmc-dropship-weapons-title'}"
     MinSize="1420 700">
-    <PanelContainer Name="Panel" Access="Public">
-        <PanelContainer.PanelOverride>
-            <graphics:StyleBoxFlat BackgroundColor="#040404" />
-        </PanelContainer.PanelOverride>
-        <BoxContainer Orientation="Horizontal">
+    <PanelContainer Name="Panel" Access="Public" StyleClasses="CrtPanel" Margin="4">
+      <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
+        <PanelContainer StyleClasses="CrtHeaderPanel" Margin="0 0 0 6">
+            <BoxContainer Orientation="Horizontal">
+                <Label StyleClasses="CrtHeading" Text="{Loc 'rmc-dropship-weapons-title'}" Margin="8 4" HorizontalExpand="True" />
+                <Button Name="TurretPanelButton" Access="Public" Text="{Loc 'cmu-mohawk-gunnery-panel-title'}" />
+            </BoxContainer>
+        </PanelContainer>
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
             <controls:DropshipWeaponsScreen Name="ScreenOne" Access="Public"
                                             HorizontalExpand="True" VerticalExpand="True" />
-            <BoxContainer Orientation="Vertical" Margin="0 10">
+            <PanelContainer Name="TurretPanel" Access="Public" StyleClasses="CrtInsetPanel" Margin="0 6" MinWidth="260" VerticalExpand="True">
+              <ScrollContainer HScrollEnabled="False" VerticalExpand="True">
+               <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="4">
+                <Label StyleClasses="CrtHeading" Text="{Loc 'cmu-mohawk-gunnery-panel-title'}" />
+                <Button Name="ChinGunControlButton" Access="Public" Visible="False"
+                        Text="{Loc 'cmu-mohawk-gunnery-manual'}"
+                        ToolTip="{Loc 'cmu-mohawk-gunnery-control-help'}" />
+                <Button Name="ArButton" Access="Public" Visible="False" Text="{Loc 'cmu-mohawk-gunnery-ar'}" />
+                <Button Name="FreeFireButton" Access="Public" Visible="False"
+                        ToolTip="{Loc 'cmu-mohawk-free-fire-help'}" />
+                <Label Name="ChinGunHealthLabel" Access="Public" Visible="False" />
+                <Label Name="HeatLabel" Access="Public" Visible="False" MaxWidth="260" ClipText="True" />
+                <ProgressBar Name="HeatBar" Access="Public" Visible="False" MinValue="0" MaxValue="100"
+                             MinHeight="8" HorizontalExpand="True" />
+                <Label Name="LowAmmoLabel" Access="Public" Visible="False" MaxWidth="260" ClipText="True"
+                       FontColorOverride="#FF8C00" />
+                <Button Name="IffButton" Access="Public" Visible="False" />
+                <Button Name="VisionButton" Access="Public" Visible="False"
+                        ToolTip="{Loc 'cmu-mohawk-vision-help'}" />
+                <Label Name="SharedFlareLabel" Access="Public" MaxWidth="260" ClipText="True" />
+                <Label Name="AiTargetLabel" Access="Public" Visible="False" MaxWidth="260" ClipText="True" />
+                <Button Name="ApproveAiButton" Access="Public" Visible="False" />
+                <Button Name="TrackTargetButton" Access="Public" Visible="False"
+                        ToggleMode="True" Text="{Loc 'cmu-mohawk-gunnery-mark'}"
+                        ToolTip="{Loc 'cmu-mohawk-gunnery-mark-help'}" />
+                <Button Name="AcquireTargetButton" Access="Public" Visible="False"
+                        Text="{Loc 'cmu-mohawk-gunnery-acquire'}"
+                        ToolTip="{Loc 'cmu-mohawk-gunnery-acquire-help'}" />
+                <Button Name="ConfirmTrackingButton" Access="Public" Visible="False"
+                        Text="{Loc 'cmu-mohawk-gunnery-authorize'}"
+                        ToolTip="{Loc 'cmu-mohawk-gunnery-authorize-help'}" />
+                <Button Name="ClearTrackingButton" Access="Public" Visible="False"
+                        Text="{Loc 'cmu-dropship-track-clear'}" />
+                <Button Name="PriorityButton" Access="Public" Visible="False" />
+                <Button Name="FeedModeButton" Access="Public" Visible="False" />
+                <Button Name="FeedOneButton" Access="Public" Visible="False" />
+                <Button Name="FeedTwoButton" Access="Public" Visible="False" />
+                <Button Name="FeedThreeButton" Access="Public" Visible="False"
+                        ToolTip="{Loc 'cmu-mohawk-gunnery-feed-three-help'}" />
+                <Label Name="FeedStatusLabel" Access="Public" Visible="False" MaxWidth="260" ClipText="True" />
+                <Button Name="ClearFlareButton" Access="Public" Visible="False"
+                        Text="{Loc 'cmu-mohawk-gunnery-clear-flare'}" />
+                <Label Name="TrackingStatusLabel" Access="Public" MaxWidth="260" ClipText="True" />
+                <Label Name="ChinGunHelpLabel" Access="Public" Visible="False"
+                       Text="{Loc 'cmu-mohawk-gunnery-short-help'}" />
                 <BoxContainer Orientation="Horizontal">
                     <Control HorizontalExpand="True" />
                     <Button Name="OffsetUpButton" Access="Public" StyleClasses="OpenBoth"
@@ -32,17 +80,16 @@
                             SetSize="28 29" />
                     <Control HorizontalExpand="True" />
                 </BoxContainer>
-                <PanelContainer Margin="0 10 0 0" MouseFilter="Pass"
+                <PanelContainer Margin="0 10 0 0" MouseFilter="Pass" StyleClasses="CrtQuietPanel"
                                 ToolTip="{Loc 'rmc-dropship-weapons-offset-calibration-does-not-affect-direct-bombardment'}">
-                    <PanelContainer.PanelOverride>
-                        <graphics:StyleBoxFlat BackgroundColor="#606060" BorderColor="#FFFFFF"
-                                               BorderThickness="1" />
-                    </PanelContainer.PanelOverride>
                     <Label Align="Center" Text="{Loc 'rmc-dropship-weapons-offset-calibration'}" />
                 </PanelContainer>
-            </BoxContainer>
+               </BoxContainer>
+              </ScrollContainer>
+            </PanelContainer>
             <controls:DropshipWeaponsScreen Name="ScreenTwo" Access="Public"
                                             HorizontalExpand="True" VerticalExpand="True" />
         </BoxContainer>
+      </BoxContainer>
     </PanelContainer>
 </controls:DropshipWeaponsWindow>

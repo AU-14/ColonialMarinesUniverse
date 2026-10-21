@@ -20,6 +20,34 @@ public sealed partial class DropshipAmmoComponent : Component
     [DataField, AutoNetworkedField]
     public int BulletSpread = 3;
 
+    [DataField, AutoNetworkedField]
+    public EntProtoId? DirectFireProjectile;
+
+    [DataField, AutoNetworkedField]
+    public float DirectFireSpreadDegrees;
+
+    [DataField, AutoNetworkedField]
+    public float? DirectFireRate;
+
+    [DataField, AutoNetworkedField]
+    public bool GroundCompatible;
+
+    /// <summary>Heat added to an M90 mount per shell fired from this crate.</summary>
+    [DataField, AutoNetworkedField]
+    public float DirectFireHeat;
+
+    [DataField, AutoNetworkedField]
+    public bool AirborneCompatible = true;
+
+    [DataField, AutoNetworkedField]
+    public bool LivingTargetsOnly;
+
+    [DataField, AutoNetworkedField]
+    public bool EjectCasing = true;
+
+    [DataField, AutoNetworkedField]
+    public float FriendlyImpactRadius = 2f;
+
     [DataField(required: true), AutoNetworkedField]
     public int Rounds = 400;
 

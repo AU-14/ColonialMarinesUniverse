@@ -1,15 +1,91 @@
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
+using Content.Shared.CMU14.Dropship.DirectFire;
 using Robust.Shared.GameStates;
+using Robust.Shared.Map;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Dropship.Weapon;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
-[Access(typeof(SharedDropshipWeaponSystem))]
+[Access(typeof(SharedDropshipWeaponSystem), typeof(MohawkChinGunSystem))]
 public sealed partial class DropshipTerminalWeaponsComponent : Component
 {
     [DataField, AutoNetworkedField]
     public bool Gunnery; // CMU14: dedicated chin-gun console
+
+    // CMU14 Begin: dedicated M90 gunnery state.
+    [DataField, AutoNetworkedField]
+    public EntityUid? ChinGunOperator;
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? ChinGunEye;
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? TrackedTarget;
+
+    [DataField, AutoNetworkedField]
+    public bool TrackingFireConfirmed;
+
+    [DataField, AutoNetworkedField]
+    public MohawkTargetPriority ChinGunPriority;
+
+    [DataField, AutoNetworkedField]
+    public bool ChinGunAirborne;
+
+    [DataField, AutoNetworkedField]
+    public float ChinGunFlareRadius = 10f;
+
+    [DataField, AutoNetworkedField]
+    public int ChinGunFreeFireCooldown;
+
+    [DataField, AutoNetworkedField]
+    public bool ChinGunDisabled;
+
+    [DataField, AutoNetworkedField]
+    public int ChinGunHealth = 2000;
+
+    [DataField, AutoNetworkedField]
+    public bool ChinGunAr;
+
+    [DataField, AutoNetworkedField] public bool ChinGunIff = true;
+    [DataField, AutoNetworkedField] public MohawkIffOverride ChinGunIffOverride;
+    [DataField, AutoNetworkedField] public bool ChinGunSetupReady;
+    [DataField, AutoNetworkedField] public bool ChinGunAiEnabled;
+    [DataField, AutoNetworkedField] public EntityUid? ChinGunAiTarget;
+    [DataField, AutoNetworkedField] public bool ChinGunAiApproved;
+    [DataField, AutoNetworkedField] public MohawkChinGunVisionMode ChinGunVision;
+
+    /// <summary>The ship is in flight, so AI-selected chin gun targets need gunner approval.</summary>
+    [DataField, AutoNetworkedField] public bool ChinGunInFlight;
+    [DataField, AutoNetworkedField] public int ChinGunHeat;
+    [DataField, AutoNetworkedField] public int ChinGunMaxHeat = 100;
+    [DataField, AutoNetworkedField] public bool ChinGunOverheated;
+
+    /// <summary>Flare the gunner has locked with the chin gun, shared with every console on the ship.</summary>
+    [DataField, AutoNetworkedField] public EntityUid? GunnerFlare;
+
+    /// <summary>Flare the pilot has selected for CAS, shared with every console on the ship.</summary>
+    [DataField, AutoNetworkedField] public EntityUid? PilotFlare;
+
+    [DataField, AutoNetworkedField]
+    public int ChinGunFeed;
+
+    [DataField, AutoNetworkedField]
+    public bool ChinGunAlternateFeeds;
+
+    [DataField, AutoNetworkedField]
+    public string ChinGunFeedOne = "";
+
+    [DataField, AutoNetworkedField]
+    public string ChinGunFeedTwo = "";
+
+    [DataField, AutoNetworkedField]
+    public string ChinGunFeedThree = "";
+
+    /// <summary>Feeds under a quarter of a full crate, shown as a warning to the gunner.</summary>
+    [DataField, AutoNetworkedField]
+    public string ChinGunLowAmmo = "";
+    // CMU14 End
 
     [DataField, AutoNetworkedField]
     public Screen ScreenOne;
