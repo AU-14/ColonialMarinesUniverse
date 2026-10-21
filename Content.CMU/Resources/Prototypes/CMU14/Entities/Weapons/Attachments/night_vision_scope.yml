@@ -32,6 +32,8 @@
   - type: PowerCellDraw
     enabled: false
     drawRate: 66.666667
+  - type: DestroyOnPreset
+    preset: Insurgency
 
 - type: Tag
   id: CMUAttachmentNightVisionScope

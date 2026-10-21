@@ -4,7 +4,6 @@
   parent: ColMarTechBase
   id: ColMarTechCargo
   components:
-  - type: CMUInsurgencyRequisitions # CMU14: hide night-vision scopes during Insurgency.
   - type: AccessReader
     access:
     - [ "CMAccessRequisitions" ]
