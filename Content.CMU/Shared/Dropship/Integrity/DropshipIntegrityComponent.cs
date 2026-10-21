@@ -17,22 +17,22 @@ namespace Content.Shared.CMU14.Dropship.Integrity;
 public sealed partial class DropshipIntegrityComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public float MaxIntegrity = 2000f;
+    public float MaxIntegrity = 2500f;
 
     [DataField]
     public float DefaultMaxIntegrity;
 
     [DataField]
-    public float InsurgencyAndForceOnForceMaxIntegrity;
+    public float InsurgencyAndForceOnForceMaxIntegrity = 4500f;
 
     [DataField, AutoNetworkedField]
-    public float Integrity = 2000f;
+    public float Integrity = 2500f;
 
     [DataField]
-    public float BulletDamageMultiplier = 1f;
+    public float BulletDamageMultiplier = 0.5f;
 
     [DataField]
-    public float ExplosiveDamageMultiplier = 1f;
+    public float ExplosiveDamageMultiplier = 1.5f;
 
     [DataField, AutoNetworkedField]
     public bool Crashing;
