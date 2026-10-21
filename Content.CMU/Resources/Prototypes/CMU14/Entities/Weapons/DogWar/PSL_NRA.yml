@@ -1,0 +1,181 @@
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  name: PSL-4047A
+  id: AU14WeaponRiflePSL4047A
+  description: The PSL-4047A is a modified AK-4047 designed for use with the NRA's marksmen. This variant takes M4RA magazines.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/DogWar/PSL4047A.rsi
+    layers:
+    - state: bolt-open
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Item
+    sprite: CMU14/Weapons/Guns/DogWar/PSL4047A.rsi
+    size: Large
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/DogWar/PSL4047A.rsi
+  - type: Gun
+    shotsPerBurst: 3
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    - Burst
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_m4spr.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    recoilUnwielded: 2
+    scatterWielded: 6
+    baseFireRate: 2.86
+    burstFireRateMultiplier: 2
+    modifiers:
+      Burst:
+        fireDelay: 0.1
+        maxScatterModifier: 2
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 1
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.25
+    accuracyMultiplierUnwielded: 0.6
+  - type: RMCWeaponDamageFalloff
+    falloffMultiplier: 0
+  - type: WieldDelay
+    baseDelay: 0.1
+  - type: WieldableSpeedModifiers
+    base: 0.725
+    light: 0.9
+    medium: 0.9
+    heavy: 0.9
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazineRifleM4SPR
+          - CMMagazineRifleM4SPRAP
+          - CMMagazineRifleM4SPRExt
+          - RMCMagazineRifleM4SPRWP
+          - RMCMagazineRifleM4SPRIncendiary
+          - RMCMagazineRifleM4SPRHEAP
+  - type: GunDamageModifier
+    multiplier: 1.1
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentB8SmartScope
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentU1GrenadeLauncher
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentBipod
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentLaserSight
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentExtinguisher
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 1, 0.0
+      rmc-aslot-rail: 0.15, 0.225
+      rmc-aslot-underbarrel: 0.4, -0.31
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: Tag
+    tags:
+    - AU14WeaponRiflePSL4047A
+
+- type: entity
+  parent: AU14WeaponRiflePSL4047A
+  id: AU14WeaponRiflePSL4047ATwoPointSling
+  components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentB8SmartScope
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentU1GrenadeLauncher
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentBipod
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentLaserSight
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentExtinguisher
+
+- type: entity
+  parent: AU14WeaponRiflePSL4047A
+  name: "PSL-4047B 'Bravo'"
+  id: AU14WeaponRiflePSL4047B
+  description: The PSL-4047B "Bravo" is the standard issue rifle for the NRA's 88th Infantry Division. It sports a 2x scope and a heavy scope for long range use. Down with the Unionists.
+  components:
+  - type: Gun
+    shotsPerBurst: 3
+    selectedMode: FullAuto
+    availableModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_m4spr.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    recoilUnwielded: 2
+    scatterWielded: 6
+    baseFireRate: 2.86
+    burstFireRateMultiplier: 2
+    modifiers:
+      Burst:
+        fireDelay: 0.1
+        maxScatterModifier: 2
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 1
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: Tag
+    tags:
+    - AU14WeaponRiflePSL4047B
