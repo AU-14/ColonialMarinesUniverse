@@ -19,6 +19,10 @@
               <ScrollContainer HScrollEnabled="False" VerticalExpand="True">
                <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="4">
                 <Label Name="BootStatusLabel" Access="Public" MaxWidth="260" ClipText="True" />
+                <Label Text="{Loc 'cmu-cas-requests-title'}" />
+                <ScrollContainer MaxHeight="300" MinWidth="280" HScrollEnabled="False">
+                    <BoxContainer Name="CasRequestsBox" Access="Public" Orientation="Vertical" />
+                </ScrollContainer>
                 <BoxContainer Orientation="Horizontal">
                     <Control HorizontalExpand="True" />
                     <Button Name="OffsetUpButton" Access="Public" StyleClasses="OpenBoth"

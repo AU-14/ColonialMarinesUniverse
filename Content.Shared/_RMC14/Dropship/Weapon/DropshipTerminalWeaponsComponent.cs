@@ -1,12 +1,14 @@
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared.CMU14.Dropship.DirectFire;
+using Content.Shared.CMU14.Dropship.Cas;
 using Robust.Shared.GameStates;
+using Robust.Shared.Map;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Dropship.Weapon;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
-[Access(typeof(SharedDropshipWeaponSystem), typeof(DropshipFireControlBootSystem))]
+[Access(typeof(SharedDropshipWeaponSystem), typeof(DropshipFireControlBootSystem), typeof(CMUCasRequestSystem))]
 public sealed partial class DropshipTerminalWeaponsComponent : Component
 {
     [DataField, AutoNetworkedField]
@@ -15,6 +17,12 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
     // CMU14: fire control boot status, shown on the weapons console.
     [DataField, AutoNetworkedField] public bool FireControlBooting;
     [DataField, AutoNetworkedField] public string FireControlStatus = "";
+
+    [DataField, AutoNetworkedField]
+    public List<CMUCasRequest> CasRequests = new();
+
+    public EntityCoordinates? DangerCloseTarget;
+    public TimeSpan DangerCloseExpires;
 
     [DataField, AutoNetworkedField]
     public Screen ScreenOne;

@@ -7,6 +7,7 @@ using Content.Client.Eye;
 using Content.Client.UserInterface.ControlExtensions;
 using Content.Shared._RMC14.Areas;
 using Content.Shared.CMU14.Dropship.DirectFire;
+using Content.Shared.CMU14.Dropship.Cas;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.ElectronicSystem;
 using Content.Shared._RMC14.Dropship.Utility.Components;
@@ -129,6 +130,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             Window.BootStatusLabel.Text = terminal.FireControlStatus;
             Window.BootStatusLabel.ToolTip = terminal.FireControlStatus;
             RefreshLoadout(terminal);
+            RefreshCasRequests(terminal);
             SetScreen(true, terminal.ScreenOne);
             SetScreen(false, terminal.ScreenTwo);
         }
@@ -278,6 +280,61 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             ("ammo", EntMan.GetComponent<MetaDataComponent>(ammo).EntityName),
             ("bursts", _weaponSystem.GetAvailableBursts(ammo)),
             ("impacts", ammo.Comp.ImpactsPerVolley));
+    }
+
+    private void RefreshCasRequests(DropshipTerminalWeaponsComponent terminal)
+    {
+        if (Window == null)
+            return;
+        var box = Window.CasRequestsBox;
+        box.RemoveAllChildren();
+        if (terminal.CasRequests.Count == 0)
+            box.AddChild(new Label { Text = Loc.GetString("cmu-cas-requests-none") });
+        foreach (var request in terminal.CasRequests)
+        {
+            var id = request.Id;
+            var text = Loc.GetString("cmu-cas-request-card", ("id", id), ("callsign", request.Callsign),
+                ("status", Loc.GetString($"cmu-cas-status-{request.Status.ToString().ToLowerInvariant()}")),
+                ("target", request.TargetName), ("location", request.Location),
+                ("description", request.TargetDescription), ("friendlies", request.Friendlies),
+                ("munition", CMUCasRequestSystem.MunitionName(request.Munition)),
+                ("danger", request.DangerClose ? Loc.GetString("cmu-cas-request-card-danger") : ""));
+            if (request.StatusDetail.Length > 0)
+                text += "\n" + request.StatusDetail;
+            if (request.Effect != CMUCasEffect.Any)
+                text += "\n" + Loc.GetString("cmu-cas-request-card-effect",
+                    ("effect", CMUCasRequestSystem.EffectName(request.Effect)));
+            if (request.Remarks.Length > 0)
+                text += "\n" + Loc.GetString("cmu-cas-request-card-remarks", ("remarks", request.Remarks));
+            if (request.Designated)
+                text += "\n" + Loc.GetString("cmu-cas-request-card-laser");
+            if (request.RadioMark)
+                text += "\n" + Loc.GetString("cmu-cas-request-card-radio-mark");
+            var active = request.Status is CMUCasRequestStatus.Accepted or CMUCasRequestStatus.ClearedHot;
+            if (active)
+                text += "\n" + Loc.GetString($"cmu-cas-carry-{request.CarryMode.ToString().ToLowerInvariant()}",
+                    ("seconds", request.CarryCountdown), ("volleys", request.CarryVolleys));
+            box.AddChild(new Label { Text = text, MaxWidth = 360,
+                FontColorOverride = request.DangerClose ? Color.OrangeRed : null });
+            void AddAction(string loc, CMUCasRequestStatus status, bool enabled)
+            {
+                var button = new Button { Text = Loc.GetString(loc), Disabled = !enabled };
+                button.OnPressed += _ => SendMessage(new CMUCasRequestActionMsg(id, status));
+                box.AddChild(button);
+            }
+            AddAction("cmu-cas-request-accept", CMUCasRequestStatus.Accepted,
+                request.Status == CMUCasRequestStatus.Pending);
+            AddAction("cmu-cas-request-deny", CMUCasRequestStatus.Denied,
+                request.Status is CMUCasRequestStatus.Pending or CMUCasRequestStatus.Accepted);
+            AddAction("cmu-cas-request-complete", CMUCasRequestStatus.Complete, active);
+            foreach (var mode in new[] { CMUCasCarryMode.Auto, CMUCasCarryMode.Manual })
+            {
+                var button = new Button { Text = Loc.GetString(mode == CMUCasCarryMode.Auto
+                    ? "cmu-cas-carry-auto-button" : "cmu-cas-carry-manual-button"), Disabled = !active };
+                button.OnPressed += _ => SendMessage(new CMUCasCarryModeMsg(id, mode));
+                box.AddChild(button);
+            }
+        }
     }
 
     private void SetScreen(bool first, Screen compScreen)

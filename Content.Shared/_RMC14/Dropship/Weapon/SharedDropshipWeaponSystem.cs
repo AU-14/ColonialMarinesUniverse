@@ -2747,6 +2747,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
     /// <returns>True if a fire mission was successfully started</returns>
     public bool TryStartFireMission(Entity<DropshipComponent> dropship, EntityUid target, Direction strikeVector, int maxSteps, Vector2 offset, EntityUid user, FireMissionData missionData, EntityUid? watchingTerminal = null)
     {
+        if (!EntityManager.System<Content.Shared.CMU14.Dropship.Cas.CMUCasRequestSystem>()
+            .CheckClearance(watchingTerminal ?? dropship.Owner, Transform(target).Coordinates, user, target))
+            return false;
         if (HasComp<ActiveFireMissionComponent>(dropship))
         {
             var cooldownMsg = Loc.GetString("rmc-dropship-firemission-cooldown");
@@ -2878,6 +2881,10 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return false;
 
         // CMU14 Begin: fixed chin weapons require their dedicated gunnery station.
+        if (!EntityManager.System<Content.Shared.CMU14.Dropship.Cas.CMUCasRequestSystem>()
+            .CheckClearance(terminalComp?.Owner ?? dropship.Owner, targetCoordinates, actor, terminalComp?.Target))
+            return false;
+
         if (weaponComp.GunneryOnly && terminalComp?.Gunnery != true)
         {
             if (actor is { } operatorUid)
@@ -2904,6 +2911,11 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         {
             return false;
         }
+
+        if (strikeType == DropshipWeaponStrikeType.Direct && actor is { } shooter && terminalComp != null &&
+            !EntityManager.System<Content.Shared.CMU14.Dropship.Cas.CMUCasRequestSystem>()
+                .CheckDangerClose((terminalComp.Owner, terminalComp), targetCoordinates, shooter, weapon))
+            return false;
 
         FireWeapon(weapon, targetCoordinates, strikeType,dropship, actor, terminalComp, weaponComp);
         return true;
@@ -3073,6 +3085,14 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             ammo.Comp.SoundEveryShots
         );
         RaiseLocalEvent(dropship, ref ev);
+
+        if (EntityManager.System<Content.Shared.CMU14.Dropship.Cas.CMUCasRequestSystem>()
+            .IsRtoDesignated(targetCoordinates, terminalComp?.Target))
+        {
+            ev.Spread *= Content.Shared.CMU14.Dropship.Cas.CMUCasRequestSystem.DesignationSpreadMultiplier;
+            ev.BulletSpread = (int) MathF.Round(ev.BulletSpread *
+                Content.Shared.CMU14.Dropship.Cas.CMUCasRequestSystem.DesignationSpreadMultiplier);
+        }
 
         ammo.Comp.Rounds -= mixed ? 1 : ammo.Comp.RoundsPerShot;
         _appearance.SetData(ammo, DropshipAmmoVisuals.Fill, ammo.Comp.Rounds);
