@@ -27,6 +27,7 @@ public sealed partial class XenoClawsSystem : EntitySystem
 
         SubscribeLocalEvent<ReceiverXenoClawsComponent, DamageModifyEvent>(OnReceiverDamageModify);
         SubscribeLocalEvent<AirlockReceiverXenoClawsComponent, DamageModifyEvent>(OnAirlockReceiverDamageModify);
+        SubscribeLocalEvent<XenoClawsComponent, CMGetArmorPiercingEvent>(OnGetArmorPiercing); // CMU14 system for Xeno AP
     }
 
     /*
