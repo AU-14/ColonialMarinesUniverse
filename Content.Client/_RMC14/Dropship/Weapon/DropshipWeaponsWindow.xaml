@@ -9,6 +9,7 @@
         <PanelContainer StyleClasses="CrtHeaderPanel" Margin="0 0 0 6">
             <BoxContainer Orientation="Horizontal">
                 <Label StyleClasses="CrtHeading" Text="{Loc 'rmc-dropship-weapons-title'}" Margin="8 4" HorizontalExpand="True" />
+                <Button Name="GuidanceButton" Access="Public" Text="{Loc 'cmu-guidance-title'}" />
             </BoxContainer>
         </PanelContainer>
         <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">

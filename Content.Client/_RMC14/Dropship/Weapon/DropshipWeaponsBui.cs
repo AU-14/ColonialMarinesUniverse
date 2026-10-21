@@ -61,6 +61,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
     {
         base.Open();
         Window = this.CreatePopOutableWindow<DropshipWeaponsWindow>();
+        Window.GuidanceButton.OnPressed += _ => SendMessage(new Content.Shared.CMU14.Guidance.CMUOpenGuidanceMessage()); // CMU14
 
         foreach (var first in new[] { true, false })
         {

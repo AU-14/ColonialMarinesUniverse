@@ -22,6 +22,19 @@ for independently merged aircraft features. It adds no weapons or automated
 strike behavior. Console-local faction whitelists take priority over the ship's
 faction; otherwise consoles inherit their grid's faction.
 
+### Aircraft laser codes and ground GPS reports
+
+Laser designators default to `1111-1`. Use Guidance programming on a designator,
+dropship weapons console or fighter cockpit to change its code. Aircraft reject
+laser targets that do not match their receiver code.
+
+Guided missiles can be individually programmed from friendly ground rangefinder
+reports instead of a continuing laser mark. Reports use planet coordinate
+offsets, expire after five minutes, and carry fixed deviation of up to fifteen
+tiles per axis. Reusing a report does not reroll its error. Pilots cannot enter
+arbitrary coordinates; normal flight, range and protected-area checks still apply.
+The GPS Howitzer shell is a separate integration follow-up requiring CAS Weapons.
+
 Dropship part fabricators share a budget within their carrier's faction, including linked decks. GOVFOR and OPFOR have separate accounts for purchases, refunds, passive income and faction tech rewards.
 
 In FoF, squad leaders, acting squad leaders, officers and command personnel can hack an opposing dropship's navigation console. The hack takes 60 seconds and breaks on movement, damage or resting. Existing launch and hijack timing limits apply. Authorization is tied to the user and console and expires after one minute.
