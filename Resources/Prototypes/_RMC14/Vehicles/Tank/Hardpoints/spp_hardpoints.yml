@@ -49,13 +49,13 @@
   - type: ItemSlots
     slots:
       turret-cannon:
-        startingItem: VehicleSPPTankP17702
+        startingItem: VehicleUPPTankP17702
         disableEject: true
         whitelist:
           components:
           - HardpointItem
       turret-launcher:
-        startingItem: VehicleSPPTankCupola
+        startingItem: VehicleUPPTankCupola
         disableEject: true
         whitelist:
           components:
@@ -78,9 +78,9 @@
 
 - type: entity
   parent: VehicleTankLTAAAPMinigun
-  id: VehicleSPPTankP17702
-  name: P-17702 rotary cannon
-  description: An SPP rotary cannon tank hardpoint.
+  id: VehicleUPPTankP17702
+  name: 20mm P-17702 rotary cannon
+  description: A 20mm UPP rotary cannon tank hardpoint.
   components:
   - type: ContainerContainer
     containers:
@@ -127,9 +127,9 @@
 
 - type: entity
   parent: VehicleTankLTBCannon
-  id: VehicleSPPTankRailgun
-  name: SPP railgun
-  description: A railgun hardpoint for SPP tank turrets.
+  id: VehicleUPPTankRailgun
+  name: 91mm D-64TM-RGm "Tunguska" Railgun
+  description: A railgun hardpoint for UPP tank turrets.
   components:
   - type: ContainerContainer
     containers:
@@ -170,9 +170,9 @@
 
 - type: entity
   parent: VehicleTankTowLauncher
-  id: VehicleSPPTankHJ35TLauncher
-  name: HJ35T launcher
-  description: An SPP anti-armor launcher for tank turrets.
+  id: VehicleUPPTankHJ35TLauncher
+  name: 84mm HJ35T launcher
+  description: A UPP anti-armor launcher for tank turrets.
   components:
   - type: ContainerContainer
     containers:
@@ -214,9 +214,9 @@
 
 - type: entity
   parent: VehicleTankM56Cupola
-  id: VehicleSPPTankCupola
-  name: T60P3M cupola
-  description: A cupola-mounted weapon fitted to SPP armor.
+  id: VehicleUPPTankCupola
+  name: 12.7mm caseless T60P3M cupola
+  description: A cupola-mounted weapon fitted to UPP armor.
   components:
   - type: ContainerContainer
     containers:
@@ -261,9 +261,9 @@
 
 - type: entity
   parent: VehicleTankArmorBallistic
-  id: VehicleSPPTankReactiveArmor
-  name: reactive armor plating
-  description: Reactive armor plating for an SPP tank.
+  id: VehicleUPPTankReactiveArmor
+  name: "Huanji" reactive armor plating
+  description: Reactive armor plating for a UPP tank.
   components:
   - type: HardpointIntegrity
     integrity: 1000
@@ -278,9 +278,9 @@
 
 - type: entity
   parent: VehicleTankRocketLauncher
-  id: VehicleSPPTankRocketLauncher
-  name: SPP smoke launcher
-  description: A smoke launcher support attachment for an SPP tank.
+  id: VehicleUPPTankRocketLauncher
+  name: Type-43 "Pokrov" smoke launcher
+  description: A smoke launcher support attachment for an UPP tank.
   components:
   - type: ContainerContainer
     containers:
@@ -301,9 +301,9 @@
 
 - type: entity
   parent: VehicleTankFlareModule
-  id: VehicleSPPTankFlareModule
-  name: SPP flare module
-  description: A flare launcher support attachment for an SPP tank.
+  id: VehicleUPPTankFlareModule
+  name: Type-43 "Pokrov" smoke launcher
+  description: A flare launcher support attachment for an UPP tank.
   components:
   - type: ContainerContainer
     containers:
@@ -324,9 +324,9 @@
 
 - type: entity
   parent: VehicleTankWarningArray
-  id: VehicleSPPTankWarningArray
-  name: SPP warning array
-  description: An integrated weapons sensor array for SPP tank support slots.
+  id: VehicleUPPTankWarningArray
+  name: UPP warning array
+  description: An integrated weapons sensor array for UPP tank support slots.
   components:
   - type: HardpointIntegrity
     integrity: 250
@@ -341,9 +341,9 @@
 
 - type: entity
   parent: VehicleTankOverdriveEnhancer
-  id: VehicleSPPTankOverdriveEnhancer
-  name: SPP overdrive enhancer
-  description: An overdrive enhancer support attachment for an SPP tank.
+  id: VehicleUPPTankOverdriveEnhancer
+  name: UPP overdrive enhancer
+  description: An overdrive enhancer support attachment for an UPP tank.
   components:
   - type: HardpointIntegrity
     integrity: 250
@@ -358,9 +358,9 @@
 
 - type: entity
   parent: VehicleTankArtilleryModule
-  id: VehicleSPPTankArtilleryModule
-  name: SPP artillery module
-  description: An artillery support module for an SPP tank.
+  id: VehicleUPPTankArtilleryModule
+  name: UPP artillery module
+  description: An artillery support module for an UPP tank.
   components:
   - type: HardpointIntegrity
     integrity: 250

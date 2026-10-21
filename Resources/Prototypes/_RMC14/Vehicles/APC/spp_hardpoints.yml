@@ -11,7 +11,7 @@
 
 - type: entity
   parent: VehicleSPPAPCHardpointBase
-  id: VehicleSPPAPCWheel # CMU14
+  id: VehicleUPPAPCWheel # CMU14
   name: UPP APC wheel
   description: A reinforced APC wheel produced for UPP vehicles.
   components:

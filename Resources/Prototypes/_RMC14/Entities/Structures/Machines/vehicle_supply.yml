@@ -174,7 +174,7 @@
       vehicle: VehicleSPPAPC
       group: vehicle-apc
       hardpoints:
-      - VehicleSPPAPCWheel
+      - VehicleUPPAPCWheel
       - VehicleSPPAPCTurret
       - VehicleSPPAPCMinigun
       - VehicleSPPAPCAutocannon
@@ -253,15 +253,15 @@
       - VehicleTankTreads
       - VehicleTankReinforcedTreads
       - VehicleSPPTankP17702
-      - VehicleSPPTankRailgun
-      - VehicleSPPTankHJ35TLauncher
-      - VehicleSPPTankCupola
-      - VehicleSPPTankReactiveArmor
-      - VehicleSPPTankRocketLauncher
-      - VehicleSPPTankFlareModule
-      - VehicleSPPTankWarningArray
-      - VehicleSPPTankOverdriveEnhancer
-      - VehicleSPPTankArtilleryModule
+      - VehicleUPPTankRailgun
+      - VehicleUPPTankHJ35TLauncher
+      - VehicleUPPTankCupola
+      - VehicleUPPTankReactiveArmor
+      - VehicleUPPTankRocketLauncher
+      - VehicleUPPTankFlareModule
+      - VehicleUPPTankWarningArray
+      - VehicleUPPTankOverdriveEnhancer
+      - VehicleUPPTankArtilleryModule
 
     - name: FV150 Hobelar LCT (TWE)
       vehicle: VehicleTankTWE

@@ -42905,8 +42905,8 @@
       color: '#37463A'
       shape: CylinderZ
 - type: cmu3DModel
-  id: CMU3DReduxVehicleSPPTankHJ35TLauncherMounted
-  label: VehicleSPPTankHJ35TLauncherMounted
+  id: CMU3DReduxVehicleUPPTankHJ35TLauncherMounted
+  label: VehicleUPPTankHJ35TLauncherMounted
   status: draft
   sourcePrototypes: []
   parts:
@@ -42943,12 +42943,12 @@
   placement: floor
   groundOffset: 0, 0
   description: Source-referenced solid draft; inferred depth and hidden surfaces. See SOURCES_REDUX_COVERAGE.md.
-  referencePrototype: VehicleSPPTankHJ35TLauncher
+  referencePrototype: VehicleUPPTankHJ35TLauncher
   referenceRsi: _RMC14/Structures/Vehicles/spptank.rsi
   referenceState: hj35t_0
   useEntityRotation: true
   vehicleTurretPrototypes:
-  - VehicleSPPTankHJ35TLauncher
+  - VehicleUPPTankHJ35TLauncher
   vehicleLayers:
   - rsi: _RMC14/Structures/Vehicles/spptank.rsi
     state: hj35t_0
@@ -42984,8 +42984,8 @@
       color: '#132019'
       shape: CylinderY
 - type: cmu3DModel
-  id: CMU3DReduxVehicleSPPTankP17702Mounted
-  label: VehicleSPPTankP17702Mounted
+  id: CMU3DReduxVehicleUPPTankP17702Mounted
+  label: VehicleUPPTankP17702Mounted
   status: draft
   sourcePrototypes: []
   parts:
@@ -43017,12 +43017,12 @@
   placement: floor
   groundOffset: 0, 0
   description: Source-referenced solid draft; inferred depth and hidden surfaces. See SOURCES_REDUX_COVERAGE.md.
-  referencePrototype: VehicleSPPTankP17702
+  referencePrototype: VehicleUPPTankP17702
   referenceRsi: _RMC14/Structures/Vehicles/spptank.rsi
   referenceState: p17702_0
   useEntityRotation: true
   vehicleTurretPrototypes:
-  - VehicleSPPTankP17702
+  - VehicleUPPTankP17702
   vehicleLayers:
   - rsi: _RMC14/Structures/Vehicles/spptank.rsi
     state: p17702_0
@@ -43053,8 +43053,8 @@
       color: '#101B14'
       shape: CylinderY
 - type: cmu3DModel
-  id: CMU3DReduxVehicleSPPTankRailgunMounted
-  label: VehicleSPPTankRailgunMounted
+  id: CMU3DReduxVehicleUPPTankRailgunMounted
+  label: VehicleUPPTankRailgunMounted
   status: draft
   sourcePrototypes: []
   parts:
@@ -43086,12 +43086,12 @@
   placement: floor
   groundOffset: 0, 0
   description: Source-referenced solid draft; inferred depth and hidden surfaces. See SOURCES_REDUX_COVERAGE.md.
-  referencePrototype: VehicleSPPTankRailgun
+  referencePrototype: VehicleUPPTankRailgun
   referenceRsi: _RMC14/Structures/Vehicles/spptank.rsi
   referenceState: railgun_0
   useEntityRotation: true
   vehicleTurretPrototypes:
-  - VehicleSPPTankRailgun
+  - VehicleUPPTankRailgun
   vehicleLayers:
   - rsi: _RMC14/Structures/Vehicles/spptank.rsi
     state: railgun_0
@@ -43122,8 +43122,8 @@
       color: '#101B14'
       shape: CylinderY
 - type: cmu3DModel
-  id: CMU3DReduxVehicleSPPTankCupolaMounted
-  label: VehicleSPPTankCupolaMounted
+  id: CMU3DReduxVehicleUPPTankCupolaMounted
+  label: VehicleUPPTankCupolaMounted
   status: draft
   sourcePrototypes: []
   parts:
@@ -43155,12 +43155,12 @@
   placement: floor
   groundOffset: 0, 0
   description: Source-referenced solid draft; inferred depth and hidden surfaces. See SOURCES_REDUX_COVERAGE.md.
-  referencePrototype: VehicleSPPTankCupola
+  referencePrototype: VehicleUPPTankCupola
   referenceRsi: _RMC14/Structures/Vehicles/spptank.rsi
   referenceState: t60p3m_0
   useEntityRotation: true
   vehicleTurretPrototypes:
-  - VehicleSPPTankCupola
+  - VehicleUPPTankCupola
   vehicleLayers:
   - rsi: _RMC14/Structures/Vehicles/spptank.rsi
     state: t60p3m_0
