@@ -73,6 +73,9 @@ namespace Content.Server.GameTicking.Presets
         // CMU14 End
 
         [DataField]
+        public float? GunshipMaxIntegrity; // CMU14
+
+        [DataField]
         public IReadOnlyList<EntProtoId> Rules { get; private set; } = Array.Empty<EntProtoId>();
 
         /// <summary>

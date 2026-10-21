@@ -91,13 +91,6 @@ entities:
     - type: SpreaderGrid
     - type: Shuttle
       dampingModifier: 0.25
-    - type: DropshipIntegrity
-      maxIntegrity: 2500
-      defaultMaxIntegrity: 2500
-      insurgencyAndForceOnForceMaxIntegrity: 4500
-      integrity: 2500
-      bulletDamageMultiplier: 0.5
-      explosiveDamageMultiplier: 1.5
     - type: ImplicitRoof
     - type: GridPathfinding
     - type: Gravity

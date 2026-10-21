@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Numerics;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Audio;
@@ -22,14 +23,14 @@ public sealed partial class DropshipIntegrityComponent : Component
     [DataField]
     public float DefaultMaxIntegrity;
 
-    [DataField]
-    public float InsurgencyAndForceOnForceMaxIntegrity = 4500f;
-
     [DataField, AutoNetworkedField]
     public float Integrity = 2500f;
 
     [DataField]
-    public float BulletDamageMultiplier = 0.5f;
+    public ProtoId<DamageModifierSetPrototype>? BulletDamageModifierSet = "CMUGunshipBullet";
+
+    [DataField]
+    public int BulletResistanceBypassArmorPiercing = 30;
 
     [DataField]
     public float ExplosiveDamageMultiplier = 1.5f;

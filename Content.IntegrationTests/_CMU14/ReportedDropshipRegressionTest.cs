@@ -26,6 +26,8 @@ public sealed class ReportedDropshipRegressionTest
     private static readonly Robust.Shared.Prototypes.ProtoId<DamageTypePrototype> PiercingPrototype = "Piercing";
 
     [TestCase("BulletRifle10x24mm", 1f, 0.5f)]
+    [TestCase("BulletRifle10x24mmAP", 1f, 1f)]
+    [TestCase("CMBulletSniper10x28mm", 1f, 1f)]
     [TestCase("XenoSpitProjectile", 4f, 1f)]
     public async Task LiveProjectilesCollideWithLexingtonHull(string prototype, float multiplier, float bulletMultiplier)
     {
@@ -37,7 +39,6 @@ public sealed class ReportedDropshipRegressionTest
         {
             var entities = pair.Server.EntMan;
             var integrity = entities.EnsureComponent<DropshipIntegrityComponent>(map.Grid);
-            integrity.BulletDamageMultiplier = bulletMultiplier;
             var hull = entities.SpawnEntity("CMNormandyWall1", map.GridCoords);
             entities.EnsureComponent<DropshipHullComponent>(hull);
             projectile = entities.SpawnEntity(prototype, map.GridCoords);
@@ -66,7 +67,6 @@ public sealed class ReportedDropshipRegressionTest
         {
             var entities = pair.Server.EntMan;
             var integrity = entities.EnsureComponent<DropshipIntegrityComponent>(map.Grid);
-            integrity.ExplosiveDamageMultiplier = 1.5f;
             var hull = entities.SpawnEntity("CMNormandyWall1", map.GridCoords);
             entities.EnsureComponent<DropshipHullComponent>(hull);
             var damage = new DamageSpecifier();
@@ -92,6 +92,7 @@ public sealed class ReportedDropshipRegressionTest
         {
             var entities = pair.Server.EntMan;
             var integrity = entities.EnsureComponent<DropshipIntegrityComponent>(map.Grid);
+            integrity.BulletDamageModifierSet = null; // CMU14: isolate acid scaling and single-hit routing.
             var hull = entities.SpawnEntity("CMNormandyWall1", map.GridCoords);
             entities.EnsureComponent<DropshipHullComponent>(hull);
             if (damageableHull)

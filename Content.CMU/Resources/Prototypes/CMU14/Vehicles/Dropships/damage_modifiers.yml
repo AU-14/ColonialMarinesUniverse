@@ -1,0 +1,4 @@
+- type: damageModifierSet
+  id: CMUGunshipBullet
+  coefficients:
+    Piercing: 0.5

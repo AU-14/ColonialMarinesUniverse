@@ -10,10 +10,12 @@ using Content.Server.Station.Components;
 using Content.Shared.CMU14.Destruction;
 using Content.Shared.CMU14.Dropship.Integrity;
 using Content.Server.CMU14.Destruction;
+using Content.Server.CMU14.Round;
 using Content.Shared.CMU14.Dropship.GunshipControls;
 using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Dropship;
+using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Repairable;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Xenonids.Projectile;
@@ -73,6 +75,8 @@ public sealed partial class DropshipIntegritySystem : EntitySystem
     [Dependency] private DestructionMomentumSystem _destructionMomentum = default!;
     [Dependency] private IConfigurationManager _configuration = default!;
     [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private AuRoundSystem _auRound = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     private static readonly ProtoId<ToolQualityPrototype> WeldingQuality = "Welding";
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";
@@ -178,19 +182,11 @@ public sealed partial class DropshipIntegritySystem : EntitySystem
 
         var query = EntityQueryEnumerator<DropshipIntegrityComponent>();
         while (query.MoveNext(out var uid, out var integrity))
-        {
-            if (integrity.InsurgencyAndForceOnForceMaxIntegrity <= 0f)
-                continue;
-
             ApplyGameModeIntegrity((uid, integrity));
-        }
     }
 
     private void ApplyGameModeIntegrity(Entity<DropshipIntegrityComponent> dropship)
     {
-        if (dropship.Comp.InsurgencyAndForceOnForceMaxIntegrity <= 0f)
-            return;
-
         var defaultMaxIntegrity = dropship.Comp.DefaultMaxIntegrity;
         if (defaultMaxIntegrity <= 0f)
         {
@@ -198,12 +194,8 @@ public sealed partial class DropshipIntegritySystem : EntitySystem
             dropship.Comp.DefaultMaxIntegrity = defaultMaxIntegrity;
         }
 
-        var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
-        var specialMode = string.Equals(presetId, "Insurgency", StringComparison.OrdinalIgnoreCase) ||
-                          string.Equals(presetId, "ForceOnForce", StringComparison.OrdinalIgnoreCase);
-        var maxIntegrity = specialMode
-            ? dropship.Comp.InsurgencyAndForceOnForceMaxIntegrity
-            : defaultMaxIntegrity;
+        var preset = _auRound.SelectedPreset ?? _gameTicker.CurrentPreset ?? _gameTicker.Preset;
+        var maxIntegrity = preset?.GunshipMaxIntegrity ?? defaultMaxIntegrity;
         var wasAtFullIntegrity = dropship.Comp.Integrity >= dropship.Comp.MaxIntegrity;
 
         dropship.Comp.MaxIntegrity = maxIntegrity;
@@ -277,7 +269,7 @@ public sealed partial class DropshipIntegritySystem : EntitySystem
         switch (args.Impact.Delivery)
         {
             case DamageImpactDelivery.Projectile:
-                ApplyBulletResistance(args.Damage, dropship.Comp.BulletDamageMultiplier);
+                args.Damage = ApplyBulletResistance(ent.Owner, args.Source, args.Damage, dropship.Comp);
                 break;
             case DamageImpactDelivery.Explosion:
                 args.Damage *= dropship.Comp.ExplosiveDamageMultiplier;
@@ -317,7 +309,7 @@ public sealed partial class DropshipIntegritySystem : EntitySystem
         var damage = args.Damage.Clone();
         if (HasComp<XenoAcidProjectileComponent>(args.Projectile))
             damage *= dropship.Comp.XenoAcidProjectileDamageMultiplier;
-        ApplyBulletResistance(damage, dropship.Comp.BulletDamageMultiplier);
+        damage = ApplyBulletResistance(target.Owner, args.Projectile, damage, dropship.Comp);
 
         var amount = damage.GetTotal().Float();
         if (amount > 0f)
@@ -366,10 +358,24 @@ public sealed partial class DropshipIntegritySystem : EntitySystem
         DamageIntegrity(dropship, amount);
     }
 
-    private static void ApplyBulletResistance(DamageSpecifier damage, float multiplier)
+    private DamageSpecifier ApplyBulletResistance(
+        EntityUid target,
+        EntityUid? projectile,
+        DamageSpecifier damage,
+        DropshipIntegrityComponent integrity)
     {
-        if (damage.DamageDict.TryGetValue("Piercing", out var bulletDamage))
-            damage.DamageDict["Piercing"] = FixedPoint2.New(bulletDamage.Float() * multiplier);
+        if (integrity.BulletDamageModifierSet is not { } modifierSet)
+            return damage;
+
+        if (projectile is { } source)
+        {
+            var piercing = new CMGetArmorPiercingEvent(target);
+            RaiseLocalEvent(source, ref piercing);
+            if (piercing.Piercing >= integrity.BulletResistanceBypassArmorPiercing)
+                return damage;
+        }
+
+        return DamageSpecifier.ApplyModifierSet(damage, _prototypes.Index(modifierSet));
     }
 
     /// <summary>

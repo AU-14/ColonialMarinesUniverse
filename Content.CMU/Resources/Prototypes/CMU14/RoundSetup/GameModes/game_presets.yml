@@ -66,6 +66,7 @@
   thirdPartyRatio: 0.15
   maxThirdParties: 3
   dropshipFabricatorStartingPoints: 7500
+  gunshipMaxIntegrity: 4500
   supportedPlanets:
   - SharedPlanetPool
 # - AUPlanetLV624 # Green Hell # map lacks medical, dropships - govfor spawns outside base
@@ -94,6 +95,7 @@
   thirdPartyRatio: 0.10
   maxThirdParties: 4
   dropshipFabricatorStartingPoints: 25000
+  gunshipMaxIntegrity: 4500
   supportedPlanets:
   - ForceOnForcePlanetPool
   rules:
