@@ -49,6 +49,7 @@
   name: au14-craft-recipe-rake
   output: RUMCRake
   time: 8
+  minigames: [Rhythm]
   tools:
   - Hammering
   consumables:

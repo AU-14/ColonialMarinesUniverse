@@ -14,13 +14,16 @@ using Content.Shared.Stacks;
 using Content.Shared.Tools;
 using Content.Shared.Tools.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Crafting;
 
-// Crafting from the menu: checks the recipe (skill, tools, ingredients), runs the do-after, then takes the ingredients and gives the result.
 public sealed class CraftingSystem : SharedCraftingSystem
 {
+    private static readonly EntProtoId<SkillDefinitionComponent> EngineerSkill = "RMCSkillEngineer";
+
     [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
@@ -31,9 +34,18 @@ public sealed class CraftingSystem : SharedCraftingSystem
     [Dependency] private readonly SkillsSystem _skills = default!;
     [Dependency] private readonly SharedStackSystem _stack = default!;
     [Dependency] private readonly SharedToolSystem _tool = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     // Who is crafting right now, and the do-after that can be cancelled.
     private readonly Dictionary<EntityUid, DoAfterId> _active = new();
+
+    // Who is playing the game of a recipe: nothing has been used up yet, the result of the game says how the craft turns out.
+    private readonly Dictionary<EntityUid, Playing> _playing = new();
+
+    private TimeSpan _nextCleanup;
+
+    // Stage is which of the games of the recipe is being played, Scores what the games before it gave.
+    private readonly record struct Playing(string Recipe, int Stage, float Scores, TimeSpan Started, TimeSpan Shortest, TimeSpan Deadline);
 
     public override void Initialize()
     {
@@ -42,10 +54,35 @@ public sealed class CraftingSystem : SharedCraftingSystem
         SubscribeNetworkEvent<CraftingMenuRequestEvent>(OnMenuRequest);
         SubscribeNetworkEvent<CraftingSelectEvent>(OnSelect);
         SubscribeNetworkEvent<CraftingCancelEvent>(OnCancel);
+        SubscribeNetworkEvent<CraftingMinigameResultEvent>(OnMinigameResult);
         SubscribeLocalEvent<DoAfterComponent, CraftDoAfterEvent>(OnCraftDoAfter);
     }
 
-    public bool IsCrafting(EntityUid user) => _active.ContainsKey(user);
+    public bool IsCrafting(EntityUid user) => _active.ContainsKey(user) || _playing.ContainsKey(user);
+
+    // The games of those who walked away from them without a word are dropped after a while.
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        if (_playing.Count == 0 || _timing.CurTime < _nextCleanup)
+            return;
+
+        _nextCleanup = _timing.CurTime + TimeSpan.FromSeconds(5);
+
+        List<EntityUid>? stale = null;
+        foreach (var (user, playing) in _playing)
+        {
+            if (_timing.CurTime > playing.Deadline || Deleted(user))
+                (stale ??= new List<EntityUid>()).Add(user);
+        }
+
+        if (stale != null)
+        {
+            foreach (var user in stale)
+                _playing.Remove(user);
+        }
+    }
 
     #region Menu
 
@@ -136,6 +173,10 @@ public sealed class CraftingSystem : SharedCraftingSystem
             return false;
         }
 
+        // A recipe with a game is played instead of waited for; whoever cannot be asked to play (nobody is at the controls) only waits.
+        if (recipe.Minigames.Count > 0 && TryStartMinigame(user, recipe))
+            return true;
+
         var args = new DoAfterArgs(EntityManager, user, recipe.Time, new CraftDoAfterEvent(recipe.ID), user)
         {
             BreakOnMove = true,
@@ -154,6 +195,12 @@ public sealed class CraftingSystem : SharedCraftingSystem
     // Stops the craft that is in progress; nothing has been used up yet, so nothing is lost.
     public bool TryCancelCraft(EntityUid user)
     {
+        if (_playing.Remove(user))
+        {
+            _popup.PopupEntity(Loc.GetString("au14-craft-cancelled"), user, user, PopupType.SmallCaution);
+            return true;
+        }
+
         if (!_active.TryGetValue(user, out var id))
             return false;
 
@@ -180,14 +227,137 @@ public sealed class CraftingSystem : SharedCraftingSystem
         if (!_proto.TryIndex<CraftingRecipePrototype>(args.Recipe, out var recipe))
             return;
 
+        Complete(user, recipe, CraftOutcome.Normal);
+    }
+
+    #endregion
+
+    #region Games
+
+    // Asks the player to play: nothing is used up now, and the craft is made when the result comes back. False when nobody can be asked.
+    private bool TryStartMinigame(EntityUid user, CraftingRecipePrototype recipe)
+    {
+        if (!TryComp<ActorComponent>(user, out var actor))
+            return false;
+
+        SendGame(user, actor, recipe, 0, 0f);
+        return true;
+    }
+
+    // Asks for one of the games of the recipe: the first, or the next after one that was played.
+    private void SendGame(EntityUid user, ActorComponent actor, CraftingRecipePrototype recipe, int stage, float scores)
+    {
+        var kind = recipe.Minigames[stage];
+        var stages = recipe.Minigames.Count;
+
+        var engineer = _skills.GetSkill(user, EngineerSkill);
+        var ease = Math.Clamp(1f + 0.12f * engineer, 1f, 1.5f);
+        var seconds = (float) recipe.Time.TotalSeconds;
+
+        // Several games one after another are a little shorter each.
+        var shorter = stages > 1 ? 0.75f : 1f;
+
+        // The rhythm is a few presses (one for each kind of ingredient and one more); the other games run for a time that follows the time of the recipe.
+        var steps = Math.Clamp(recipe.Consumables.Count + 1, 3, 6);
+        var duration = kind switch
+        {
+            CraftMinigameKind.Hold => Math.Clamp(seconds * 0.7f * shorter, 4.5f, 8f),
+            CraftMinigameKind.Trace => Math.Clamp(seconds * 0.8f * shorter, 5f, 10f),
+            CraftMinigameKind.Polish => Math.Clamp(seconds * 0.8f * shorter, 5f, 10f),
+            CraftMinigameKind.Drill => Math.Clamp(seconds * 0.7f * shorter, 5f, 9f),
+            _ => 0f,
+        };
+
+        // The shortest a game can take: a result that comes sooner was not played.
+        var (shortest, longest) = kind switch
+        {
+            CraftMinigameKind.Rhythm => (steps * 0.7f, steps * 6f + 4f),
+            CraftMinigameKind.Center => (steps * 0.8f, steps * 8f + 4f),
+            // The needle runs the seam in a time of its own, a few seconds whatever the recipe.
+            CraftMinigameKind.Stitch => (3f, 14f),
+            _ => (duration * 0.8f, duration + 4f),
+        };
+
+        var now = _timing.CurTime;
+        _playing[user] = new Playing(recipe.ID, stage, scores, now, TimeSpan.FromSeconds(shortest), now + TimeSpan.FromSeconds(longest + 20));
+
+        // Every game of a recipe has a track of its own, and always the same one.
+        var seed = CraftMinigames.StableHash(recipe.ID) + stage * 7919;
+        RaiseNetworkEvent(new CraftingMinigameStartEvent(recipe.ID, kind, seed, steps, duration, ease, stage, stages), actor.PlayerSession);
+    }
+    private void OnMinigameResult(CraftingMinigameResultEvent msg, EntitySessionEventArgs args)
+    {
+        if (args.SenderSession.AttachedEntity is { } user)
+            TryFinishMinigame(user, msg.Recipe, msg.Score);
+    }
+
+    // The game is over: the craft turns out as well as the game went. A game that was not played (it came back too soon) counts for nothing.
+    public bool TryFinishMinigame(EntityUid user, string recipeId, float score)
+    {
+        if (!_playing.TryGetValue(user, out var playing) || playing.Recipe != recipeId)
+            return false;
+
+        _playing.Remove(user);
+
+        if (!_proto.TryIndex<CraftingRecipePrototype>(recipeId, out var recipe) || !_actionBlocker.CanInteract(user, null))
+            return false;
+
+        if (float.IsNaN(score) || _timing.CurTime - playing.Started < playing.Shortest)
+            score = 0f;
+
+        var total = playing.Scores + Math.Clamp(score, 0f, 1f);
+
+        // Another game of the recipe is next; the craft is made after the last one, as well as the games went on the average.
+        if (playing.Stage + 1 < recipe.Minigames.Count && TryComp<ActorComponent>(user, out var actor))
+        {
+            SendGame(user, actor, recipe, playing.Stage + 1, total);
+            return true;
+        }
+
+        Complete(user, recipe, CraftMinigames.OutcomeOf(total / Math.Min(playing.Stage + 1, recipe.Minigames.Count)));
+        return true;
+    }
+
+    #endregion
+
+    #region Making
+
+    // Uses up what the recipe asks for and makes what it makes. A craft that went badly uses up half and makes nothing; one that went well makes a little more, or spares
+    // a little of the materials.
+    private void Complete(EntityUid user, CraftingRecipePrototype recipe, CraftOutcome outcome)
+    {
         // Things may have been put away while the craft was going on, so look again before using anything up.
         var available = GetAvailable(user);
         if (!_skills.HasAllSkills(user, recipe.Skills) ||
             !HasTools(available, recipe, out _) ||
-            !TryClaim(available, recipe, out var claims, out var missing))
+            !TryClaim(available, recipe, out var claims, out _))
         {
             _popup.PopupEntity(Loc.GetString("au14-craft-failed"), user, user, PopupType.SmallCaution);
             return;
+        }
+
+        var name =Loc.GetString(recipe.Name);
+
+        if (outcome == CraftOutcome.Failed)
+        {
+            // Half of each is lost, the rest stays where it was.
+            for (var i = 0; i < claims.Count; i++)
+                claims[i] = (claims[i].Entity, (claims[i].Amount + 1) / 2);
+        }
+
+        var spared = false;
+        if (outcome == CraftOutcome.Good && recipe.OutputCount <= 1)
+        {
+            // A single thing cannot come out larger, so one of the materials is spared instead (only where there is more than one of it).
+            for (var i = 0; i < claims.Count; i++)
+            {
+                if (claims[i].Amount < 2)
+                    continue;
+
+                claims[i] = (claims[i].Entity, claims[i].Amount - 1);
+                spared = true;
+                break;
+            }
         }
 
         foreach (var (entity, amount) in claims)
@@ -208,15 +378,24 @@ public sealed class CraftingSystem : SharedCraftingSystem
                 _hands.TryDrop(user, entity, checkActionBlocker: false, doDropInteraction: false);
         }
 
+        if (outcome == CraftOutcome.Failed)
+        {
+            _popup.PopupEntity(Loc.GetString("au14-craft-minigame-failed", ("name", name)), user, user, PopupType.MediumCaution);
+            return;
+        }
+
+        // One more of the product when the craft makes several of it.
+        var count = outcome == CraftOutcome.Good && recipe.OutputCount > 1 ? recipe.OutputCount + 1 : recipe.OutputCount;
+
         var coords = Transform(user).Coordinates;
         var result = Spawn(recipe.Output, coords);
         if (TryComp<StackComponent>(result, out var resultStack))
         {
-            _stack.SetCount((result, resultStack), recipe.OutputCount);
+            _stack.SetCount((result, resultStack), count);
         }
         else
         {
-            for (var i = 1; i < recipe.OutputCount; i++)
+            for (var i = 1; i < count; i++)
                 _hands.TryPickupAnyHand(user, Spawn(recipe.Output, coords));
         }
 
@@ -226,7 +405,10 @@ public sealed class CraftingSystem : SharedCraftingSystem
         else
             _hands.TryPickupAnyHand(user, result);
 
-        _popup.PopupEntity(Loc.GetString("au14-craft-done", ("name", Loc.GetString(recipe.Name))), user, user, PopupType.Medium);
+        if (outcome == CraftOutcome.Good && (count > recipe.OutputCount || spared))
+            _popup.PopupEntity(Loc.GetString("au14-craft-minigame-good", ("name", name)), user, user, PopupType.Medium);
+        else
+            _popup.PopupEntity(Loc.GetString("au14-craft-done", ("name", name)), user, user, PopupType.Medium);
     }
 
     #endregion

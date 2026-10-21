@@ -291,33 +291,33 @@
   name: au14-craft-recipe-buildelectricscrewdriver
   output: RUMCElectricScrewdriver
   time: 12
+  minigames: [Center, Trace]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
   - stack: RUMCIronRod
     amount: 1
-  - stack: RUMCConductorAlloy
-    amount: 1
-  - stack: RUMCInsulatedCable
-    amount: 1
+  - stack: RUMCKitWiring
+    amount: 2
 
 - type: craftRecipe
   id: RUMCCraftBuildElectricWrench
   name: au14-craft-recipe-buildelectricwrench
   output: RUMCElectricWrench
   time: 12
+  minigames: [Center, Polish]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
   - stack: RUMCChromedSheet
     amount: 1
-  - stack: RUMCIronBolt
+  - stack: RUMCKitFasteners
     amount: 2
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -325,16 +325,17 @@
   name: au14-craft-recipe-buildelectricwirecutters
   output: RUMCElectricWirecutters
   time: 12
+  minigames: [Center, Polish]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
   - stack: RUMCChromedSheet
     amount: 1
   - stack: RUMCIronRod
     amount: 2
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -342,16 +343,17 @@
   name: au14-craft-recipe-buildelectriccrowbar
   output: RUMCElectricCrowbar
   time: 14
+  minigames: [Rhythm, Center]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
   - stack: RUMCIronRod
     amount: 3
-  - stack: RUMCIronGear
+  - stack: RUMCKitFasteners
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -359,16 +361,17 @@
   name: au14-craft-recipe-buildelectrichammer
   output: RUMCElectricHammer
   time: 14
+  minigames: [Rhythm, Center]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCPiston
+  - stack: RUMCKitHydraulics
     amount: 1
   - stack: RUMCIronRod
     amount: 2
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -376,18 +379,19 @@
   name: au14-craft-recipe-buildpowerdrill
   output: RUMCPowerDrill
   time: 18
+  minigames: [Center, Drill]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 2
   - stack: RUMCChromedSheet
     amount: 1
-  - stack: RUMCIronGear
+  - stack: RUMCKitFasteners
     amount: 1
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 2
 
 - type: craftRecipe
@@ -395,18 +399,19 @@
   name: au14-craft-recipe-buildelectricshovel
   output: RUMCElectricShovel
   time: 16
+  minigames: [Rhythm, Center, Polish]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
   - stack: RUMCChromedSheet
     amount: 2
   - stack: RUMCIronRod
     amount: 2
-  - stack: RUMCIronGear
+  - stack: RUMCKitFasteners
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -414,18 +419,19 @@
   name: au14-craft-recipe-buildelectricpickaxe
   output: RUMCElectricPickaxe
   time: 18
+  minigames: [Rhythm, Center, Drill]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
-  - stack: RUMCPiston
+  - stack: RUMCKitHydraulics
     amount: 1
   - stack: RUMCChromedSheet
     amount: 2
   - stack: RUMCIronRod
     amount: 3
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -433,18 +439,17 @@
   name: au14-craft-recipe-buildprospector
   output: RUMCProspector
   time: 20
+  minigames: [Trace, Polish]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 2
   - stack: RUMCLensEmerald
     amount: 1
-  - stack: RUMCInsulatedCable
-    amount: 2
+  - stack: RUMCKitWiring
+    amount: 3
   - stack: RUMCChromedSheet
-    amount: 1
-  - stack: RUMCConductorAlloy
     amount: 1
 
 - type: craftRecipe
@@ -452,20 +457,21 @@
   name: au14-craft-recipe-buildjackhammer
   output: RUMCJackhammer
   time: 24
+  minigames: [Rhythm, Center, Drill]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 2
-  - stack: RUMCPiston
+  - stack: RUMCKitHydraulics
     amount: 2
   - stack: RUMCChromedSheet
     amount: 2
   - stack: RUMCIronRod
     amount: 3
-  - stack: RUMCIronGear
+  - stack: RUMCKitFasteners
     amount: 2
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 2

@@ -1,0 +1,37 @@
+ent-RUMCKitFastenersItem = fasteners kit
+    .desc = A box of bolts, screws and gears.
+ent-RUMCKitWiringItem = wiring kit
+    .desc = A box of wire, insulated cable and inductors.
+ent-RUMCKitElectronicsItem = electronics kit
+    .desc = A box of boards, tubes, resistors, diodes, transistors and capacitors.
+ent-RUMCKitSimpleCircuitsItem = simple circuits set
+    .desc = A set of simple circuits. Every machine of the electric age asks for one: it stands in for the first circuit board.
+ent-RUMCKitDriveItem = drive kit
+    .desc = A box of motors and conveyor modules.
+ent-RUMCKitHydraulicsItem = hydraulics kit
+    .desc = A box of pistons and pumps.
+ent-RUMCKitHeatingItem = heating kit
+    .desc = A box of heating coils.
+
+au14-craft-recipe-kitfasteners = Fasteners kit
+au14-craft-recipe-kitwiring = Wiring kit
+au14-craft-recipe-kitelectronics = Electronics kit
+au14-craft-recipe-kitsimplecircuits = Simple circuits set
+au14-craft-recipe-kitdrive = Drive kit
+au14-craft-recipe-kithydraulics = Hydraulics kit
+au14-craft-recipe-kitheating = Heating kit
+ent-RUMCKitChipICItem = logic chips kit
+    .desc = A box of simple logic chips, engraved on silicon with a ruby lens.
+ent-RUMCKitChipULPICItem = low-power chips kit
+    .desc = A box of ultra-low-power chips, engraved on silicon with an alexandrite lens.
+ent-RUMCKitChipRAMItem = memory chips kit
+    .desc = A box of memory chips, engraved on silicon with an emerald lens.
+ent-RUMCKitChipCPUItem = processor chips kit
+    .desc = A box of processor chips, engraved on silicon with a diamond lens.
+ent-RUMCKitQualityBoardsItem = quality boards kit
+    .desc = A box of boards of the second tier: phenolic and plastic ones, and the good circuit boards.
+ent-RUMCKitQualityPartsItem = quality structure parts kit
+    .desc = A box of the parts of the second tier machines: aluminium hulls and silver-wound motors.
+
+au14-craft-recipe-kitqualityparts-hull = Quality parts: hull
+au14-craft-recipe-kitqualityparts-motor = Quality parts: motor

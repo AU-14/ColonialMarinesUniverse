@@ -35,8 +35,6 @@ ent-RUMCSteamDrill = паровой бур
 
 ent-RUMCZincOre = цинковая руда
     .desc = Кусок необработанной цинковой руды, ярко-серой.
-    .suffix = Полный
-
 ent-RUMCZincPowderItem = цинковый порошок
     .desc = Мелко растёртая цинковая пыль.
 ent-RUMCZincIngot = цинковый слиток
@@ -67,7 +65,4 @@ ent-RUMCBrassMoldIngots = латунная форма на три слитка
     .desc = Латунная плита с углублениями под три слитка. Вставленная в паровую плавильню вместе с рудой на три слитка, отливает три слитка сразу.
 au14-anvil-recipe-brass-parts = латунные детали
 au14-anvil-recipe-brass-sheet = латунный лист
-
 au14-anvil-recipe-steel-drill-head = стальная буровая головка
-
-

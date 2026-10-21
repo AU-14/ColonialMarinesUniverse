@@ -176,7 +176,7 @@
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
   id: RUMCBender
   name: bending machine
-  description: "Presses ingots into sheets. On circuit 2 it presses steel into floor tiles, on circuit 3 into armour plates."
+  description: "Presses ingots into sheets. On circuit 2 it presses steel into floor tiles."
   components:
   - type: Sprite
     sprite: CMU14/Production/Electric/bender.rsi
@@ -200,7 +200,7 @@
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
   id: RUMCLathe
   name: lathe
-  description: "Turns a sheet of steel into rods (circuit 1), straight into bolts (circuit 2), into metal rods for building (circuit 3) or forged parts (circuit 4), and bolts into screws."
+  description: "Turns a sheet of steel into rods (circuit 1), straight into fasteners (circuit 2), into metal rods for building (circuit 3)."
   components:
   - type: Sprite
     sprite: CMU14/Production/Electric/lathe.rsi
@@ -224,7 +224,7 @@
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
   id: RUMCCutter
   name: cutting machine
-  description: "Cuts rods into bolts and nails, glass into tubes and silicon into wafers."
+  description: "Cuts rods into fasteners, glass into tubes and silicon into wafers."
   components:
   - type: Sprite
     sprite: CMU14/Production/Electric/cutter.rsi
@@ -955,7 +955,7 @@
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
   id: RUMCExtruder
   name: extruder
-  description: "Presses a sheet of steel through the mold in its slot: rods, bolts, screws, gears or rings. The mold is not used up."
+  description: "Presses a sheet of steel into rods (circuit 1) or into a box of fasteners (circuit 2)."
   components:
   - type: Sprite
     sprite: CMU14/Production/Electric/extruder.rsi
@@ -1130,7 +1130,7 @@
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
   id: RUMCCircuitAssembler
   name: circuit assembler
-  description: "The machine that makes circuits properly: cheaper basic circuits and the good ones."
+  description: "The machine that makes circuits properly: cheaper sets of simple circuits and the good circuits."
   components:
   - type: Sprite
     sprite: CMU14/Production/Electric/circuitassembler.rsi

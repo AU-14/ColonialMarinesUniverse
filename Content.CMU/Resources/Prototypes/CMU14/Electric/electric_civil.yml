@@ -283,6 +283,7 @@
   name: au14-craft-recipe-buildsolarpanel
   output: RUMCSolarPanel
   time: 20
+  minigames: [Polish, Trace]
   tools:
   - Hammering
   consumables:
@@ -292,7 +293,7 @@
     amount: 2
   - stack: CMSteel
     amount: 2
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 2
 
 - type: craftRecipe
@@ -300,6 +301,7 @@
   name: au14-craft-recipe-buildsolarpanelsilver
   output: RUMCSolarPanelSilver
   time: 25
+  minigames: [Polish, Trace]
   tools:
   - Hammering
   consumables:
@@ -311,7 +313,7 @@
     amount: 2
   - stack: RUMCSilverWire
     amount: 4
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 2
 
 # ---------------------------------------------------------------- leather

@@ -62,16 +62,17 @@
   name: au14-craft-recipe-buildautohydroponicstray
   output: RUMCAutoHydroponicsTray
   time: 20
+  minigames: [Rhythm, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCGalvanizedSheet
     amount: 4
-  - stack: RUMCPump
+  - stack: RUMCKitHydraulics
     amount: 1
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 2
 
 - type: craftRecipe
@@ -79,17 +80,16 @@
   name: au14-craft-recipe-buildelectricwelder
   output: RUMCElectricWelder
   time: 15
+  minigames: [Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCChromedSheet
     amount: 1
-  - stack: RUMCHeatingCoil
+  - stack: RUMCKitHeating
     amount: 1
-  - stack: RUMCConductorAlloy
-    amount: 2
-  - stack: RUMCInsulatedCable
-    amount: 2
+  - stack: RUMCKitWiring
+    amount: 4
 
 # ---------------------------------------------------------------- the charger and the battery buffer
 # The charger is the recharger of the power cells with a better rate, and it needs the power it is given. The look is the ordinary one, tinted.
@@ -140,16 +140,15 @@
   name: au14-craft-recipe-buildcharger
   output: RUMCCharger
   time: 15
+  minigames: [Rhythm, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCConductorAlloy
-    amount: 2
-  - stack: RUMCBasicCircuit
-    amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
+    amount: 3
+  - stack: RUMCKitSimpleCircuits
     amount: 1
 
 - type: craftRecipe
@@ -157,6 +156,7 @@
   name: au14-craft-recipe-buildbatterybuffer
   output: RUMCBatteryBuffer
   time: 25
+  minigames: [Hold, Trace]
   tools:
   - Hammering
   consumables:
@@ -164,7 +164,7 @@
     amount: 1
   - item: PowerCellMedium
     amount: 4
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 2
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1

@@ -17,9 +17,6 @@ au14-anvil-examine-forging = Being forged - { $remaining ->
 }
 
 au14-anvil-recipe-metal-sheet = metal sheet
-au14-anvil-recipe-forged-parts = forged parts
-au14-anvil-recipe-forged-nails = forged nails
-au14-anvil-recipe-armour-plates = armour plates
 au14-anvil-recipe-empty-mold = empty mold
 au14-anvil-recipe-brass-empty-mold = brass mold
 au14-anvil-recipe-brass-parts = brass parts

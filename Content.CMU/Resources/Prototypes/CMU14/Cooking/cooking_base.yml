@@ -652,6 +652,7 @@
   name: au14-craft-recipe-cooking-pot
   output: RUMCCookingPot
   time: 8
+  minigames: [Rhythm]
   tools:
   - Hammering
   consumables:
@@ -665,6 +666,7 @@
   name: au14-craft-recipe-frying-pan
   output: RUMCFryingPan
   time: 8
+  minigames: [Rhythm, Polish]
   tools:
   - Hammering
   consumables:
@@ -733,6 +735,7 @@
   name: au14-craft-recipe-stove-barrel
   output: RUMCStoveBarrel
   time: 14
+  minigames: [Rhythm, Hold]
   tools:
   - Hammering
   consumables:
@@ -748,6 +751,7 @@
   name: au14-craft-recipe-stove-wood
   output: RUMCStoveWood
   time: 20
+  minigames: [Rhythm, Hold]
   tools:
   - Hammering
   consumables:
@@ -755,7 +759,7 @@
     amount: 8
   - stack: RUMCIronRod
     amount: 4
-  - stack: RUMCIronBolt
+  - stack: RUMCKitFasteners
     amount: 4
 
 - type: craftRecipe
@@ -763,14 +767,15 @@
   name: au14-craft-recipe-stove-oven
   output: RUMCStoveOven
   time: 25
+  minigames: [Rhythm, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCHeatingCoil
+  - stack: RUMCKitHeating
     amount: 2
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1

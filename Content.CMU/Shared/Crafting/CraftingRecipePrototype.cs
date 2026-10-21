@@ -32,6 +32,13 @@ public sealed partial class CraftingRecipePrototype : IPrototype
     [DataField]
     public TimeSpan Time { get; private set; } = TimeSpan.FromSeconds(3);
 
+    // The games that are played one after another instead of waiting out the time. How well they go (the average of them) decides how well the craft turns out.
+    [DataField("minigames")]
+    public List<CraftMinigameKind> Minigames { get; private set; } = new();
+
+    // The first of the games, or None when the craft is only waited for.
+    public CraftMinigameKind Minigame => Minigames.Count > 0 ? Minigames[0] : CraftMinigameKind.None;
+
     // Skills the crafter needs, with the level of each.
     [DataField]
     public Dictionary<EntProtoId<SkillDefinitionComponent>, int> Skills { get; private set; } = new();

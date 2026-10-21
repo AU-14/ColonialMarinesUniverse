@@ -4,6 +4,7 @@
   name: au14-craft-recipe-anvil-iron
   output: RUMCAnvil
   time: 20
+  minigames: [Rhythm, Polish]
   tools:
   - Hammering
   consumables:

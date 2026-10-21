@@ -48,6 +48,7 @@
   name: au14-craft-recipe-clay-smeltery
   output: RUMCSmeltery
   time: 10
+  minigames: [Hold]
   consumables:
   - stack: RUMCClay
     amount: 30
@@ -57,6 +58,7 @@
   name: au14-craft-recipe-stone-smeltery
   output: RUMCStoneSmeltery
   time: 10
+  minigames: [Rhythm]
   consumables:
   - stack: RUMCStone
     amount: 30
@@ -67,6 +69,7 @@
   name: au14-craft-recipe-sheet-mold
   output: RUMCMoldSheet
   time: 8
+  minigames: [Trace]
   tools:
   - Chiseling
   - Hammering
@@ -79,6 +82,7 @@
   name: au14-craft-recipe-ingots-mold
   output: RUMCMoldIngots
   time: 8
+  minigames: [Trace]
   tools:
   - Chiseling
   - Hammering
@@ -119,6 +123,7 @@
   name: au14-craft-recipe-crucible
   output: RUMCCrucible
   time: 8
+  minigames: [Hold]
   consumables:
   - stack: RUMCClay
     amount: 10
@@ -129,6 +134,7 @@
   name: au14-craft-recipe-brass-pickaxe
   output: RUMCBrassPickaxe
   time: 10
+  minigames: [Rhythm, Drill]
   tools:
   - Hammering
   consumables:
@@ -142,6 +148,7 @@
   name: au14-craft-recipe-brass-shovel
   output: RUMCBrassShovel
   time: 8
+  minigames: [Rhythm]
   tools:
   - Hammering
   consumables:
@@ -155,6 +162,7 @@
   name: au14-craft-recipe-brass-sword
   output: RUMCBrassSword
   time: 10
+  minigames: [Rhythm, Polish]
   tools:
   - Hammering
   consumables:
@@ -170,6 +178,7 @@
   name: au14-craft-recipe-steel-pickaxe
   output: AU14ToolPickaxe
   time: 10
+  minigames: [Rhythm, Drill]
   tools:
   - Hammering
   consumables:
@@ -183,6 +192,7 @@
   name: au14-craft-recipe-steel-shovel
   output: AU14ToolShovel
   time: 8
+  minigames: [Rhythm]
   tools:
   - Hammering
   consumables:
@@ -197,6 +207,7 @@
   name: au14-craft-recipe-brass-sheet-mold
   output: RUMCBrassMoldSheet
   time: 8
+  minigames: [Trace]
   tools:
   - Chiseling
   - Hammering
@@ -208,6 +219,7 @@
   name: au14-craft-recipe-brass-ingots-mold
   output: RUMCBrassMoldIngots
   time: 8
+  minigames: [Trace]
   tools:
   - Chiseling
   - Hammering
@@ -220,6 +232,7 @@
   name: au14-craft-recipe-brass-drill-head
   output: RUMCBrassDrillHead
   time: 12
+  minigames: [Rhythm, Drill]
   tools:
   - Chiseling
   - Tonging
@@ -234,6 +247,7 @@
   output: MaterialCloth1
   outputCount: 1
   time: 4
+  minigames: [Stitch]
   consumables:
   - stack: Cotton
     amount: 3
@@ -286,6 +300,7 @@
   name: au14-craft-recipe-brass-gas-pipe-tjunction
   output: RUMCBrassGasPipeTJunction
   time: 6
+  minigames: [Rhythm]
   tools:
   - Hammering
   consumables:
@@ -299,6 +314,7 @@
   name: au14-craft-recipe-brass-gas-pipe-fourway
   output: RUMCBrassGasPipeFourway
   time: 7
+  minigames: [Rhythm]
   tools:
   - Hammering
   consumables:
@@ -326,6 +342,7 @@
   name: au14-craft-recipe-brass-water-pipe-down
   output: RUMCBrassPipeDown
   time: 6
+  minigames: [Rhythm]
   tools:
   - Hammering
   consumables:
@@ -340,6 +357,7 @@
   name: au14-craft-recipe-brass-pump
   output: RUMCBrassPump
   time: 12
+  minigames: [Rhythm, Center]
   tools:
   - Hammering
   consumables:
@@ -353,6 +371,7 @@
   name: au14-craft-recipe-fluid-barrel
   output: RUMCFluidBarrel
   time: 12
+  minigames: [Rhythm, Trace]
   tools:
   - Hammering
   consumables:
@@ -366,6 +385,7 @@
   name: au14-craft-recipe-brass-condenser
   output: RUMCBrassCondenser
   time: 15
+  minigames: [Rhythm, Hold]
   tools:
   - Hammering
   consumables:
@@ -380,6 +400,7 @@
   name: au14-craft-recipe-boiler
   output: RUMCBoiler
   time: 15
+  minigames: [Rhythm, Hold]
   tools:
   - Hammering
   consumables:
@@ -395,6 +416,7 @@
   name: au14-craft-recipe-steam-generator
   output: RUMCSteamGenerator
   time: 18
+  minigames: [Rhythm, Hold, Center]
   tools:
   - Hammering
   consumables:
@@ -408,6 +430,7 @@
   name: au14-craft-recipe-steam-smelter
   output: RUMCSteamSmelter
   time: 18
+  minigames: [Rhythm, Hold]
   tools:
   - Hammering
   consumables:
@@ -421,6 +444,7 @@
   name: au14-craft-recipe-steam-press
   output: RUMCSteamPress
   time: 20
+  minigames: [Rhythm, Center]
   tools:
   - Hammering
   consumables:
@@ -434,6 +458,7 @@
   name: au14-craft-recipe-steam-drill
   output: RUMCSteamDrill
   time: 18
+  minigames: [Rhythm, Drill, Center]
   tools:
   - Hammering
   consumables:
@@ -460,6 +485,7 @@
   name: au14-craft-recipe-steel-water-pipe-down
   output: RUMCSteelPipeDown
   time: 6
+  minigames: [Rhythm]
   tools:
   - Hammering
   consumables:
@@ -472,6 +498,7 @@
   name: au14-craft-recipe-steel-pump
   output: RUMCSteelPump
   time: 12
+  minigames: [Rhythm, Center]
   tools:
   - Hammering
   consumables:
@@ -484,6 +511,7 @@
   name: au14-craft-recipe-rope
   output: RUMCRopeCoil
   time: 8
+  minigames: [Stitch]
   consumables:
   - stack: RUMCPlantFiber
     amount: 6

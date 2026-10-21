@@ -60,8 +60,8 @@
   id: RUMCMRAssemblerLightTube
   machine: assembler
   inputs:
-    RUMCGlassTube: 1
-    RUMCCopperWire: 1
+    RUMCKitElectronics: 1
+    RUMCKitWiring: 1
   itemOutputs:
     LightTube: 2
   duration: 4
@@ -70,8 +70,8 @@
   id: RUMCMRAssemblerLightBulb
   machine: assembler
   inputs:
-    RUMCGlassTube: 1
-    RUMCCopperWire: 1
+    RUMCKitElectronics: 1
+    RUMCKitWiring: 1
   itemOutputs:
     LightBulb: 2
   duration: 4
@@ -81,8 +81,8 @@
   machine: assembler
   inputs:
     CMSteel: 1
-    RUMCGlassTube: 1
-    RUMCCopperWire: 2
+    RUMCKitElectronics: 1
+    RUMCKitWiring: 2
   itemOutputs:
     RMCFlashlight: 1
   duration: 6
@@ -92,7 +92,7 @@
   machine: assembler
   inputs:
     RUMCLeadIngot: 1
-    RUMCCopperWire: 2
+    RUMCKitWiring: 2
   itemOutputs:
     PowerCellSmall: 1
   fluidInputs:
@@ -104,7 +104,7 @@
   machine: assembler
   inputs:
     RUMCLeadIngot: 2
-    RUMCCopperWire: 3
+    RUMCKitWiring: 3
     CMSteel: 1
   itemOutputs:
     PowerCellMedium: 1
@@ -117,9 +117,9 @@
   machine: assembler
   inputs:
     RUMCLeadIngot: 3
-    RUMCCopperWire: 4
+    RUMCKitWiring: 4
     CMSteel: 1
-    RUMCBasicCircuit: 1
+    RUMCKitSimpleCircuits: 1
   itemOutputs:
     PowerCellHigh: 1
   fluidInputs:
@@ -130,7 +130,7 @@
   id: RUMCMRWiremillCableCoil10
   machine: wiremill
   inputs:
-    RUMCCopperWire: 10
+    RUMCKitWiring: 10
     RUMCRubberSheet: 1
   itemOutputs:
     RMCCableCoil10: 1
@@ -140,7 +140,7 @@
   id: RUMCMRWiremillCableCoil20
   machine: wiremill
   inputs:
-    RUMCCopperWire: 20
+    RUMCKitWiring: 20
     RUMCRubberSheet: 2
   itemOutputs:
     RMCCableCoil20: 1
@@ -150,7 +150,7 @@
   id: RUMCMRWiremillCableCoil30
   machine: wiremill
   inputs:
-    RUMCCopperWire: 30
+    RUMCKitWiring: 30
     RUMCRubberSheet: 3
   itemOutputs:
     RMCCableCoil30: 1
@@ -525,7 +525,7 @@
   id: RUMCMRFabricatorBinoculars
   machine: fabricator
   inputs:
-    RUMCGlassTube: 2
+    RUMCKitElectronics: 2
     CMSteel: 2
     RUMCIronRod: 2
   itemOutputs:
@@ -536,10 +536,10 @@
   id: RUMCMRAssemblerMotionDetector
   machine: assembler
   inputs:
-    RUMCBasicCircuit: 1
-    RUMCGlassTube: 1
+    RUMCKitSimpleCircuits: 1
+    RUMCKitElectronics: 1
     CMSteel: 1
-    RUMCCopperWire: 2
+    RUMCKitWiring: 2
   itemOutputs:
     RMCMotionDetectorCompact: 1
   duration: 8

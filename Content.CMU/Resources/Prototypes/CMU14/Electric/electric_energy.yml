@@ -101,20 +101,19 @@
   name: au14-craft-recipe-buildgeothermalgenerator
   output: RUMCGeothermalGenerator
   time: 30
+  minigames: [Rhythm, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 2
-  - stack: RUMCPump
+  - stack: RUMCKitHydraulics
     amount: 2
-  - stack: RUMCHeatingCoil
-    amount: 4
-  - stack: RUMCThermoAlloy
-    amount: 4
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitHeating
+    amount: 8
+  - stack: RUMCKitSimpleCircuits
     amount: 2
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 4
 
 - type: craftRecipe
@@ -122,20 +121,21 @@
   name: au14-craft-recipe-builddieselgeneratorheavy
   output: RUMCDieselGeneratorHeavy
   time: 30
+  minigames: [Center, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 2
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 4
-  - stack: RUMCPiston
+  - stack: RUMCKitHydraulics
     amount: 4
-  - stack: RUMCIronGear
+  - stack: RUMCKitFasteners
     amount: 4
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 2
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 4
 
 - type: craftRecipe
@@ -143,6 +143,7 @@
   name: au14-craft-recipe-buildbatterybank
   output: RUMCBatteryBank
   time: 35
+  minigames: [Hold, Trace, Rhythm]
   tools:
   - Hammering
   consumables:
@@ -150,7 +151,7 @@
     amount: 2
   - item: RUMCCellLeadAcid
     amount: 8
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 3
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 6

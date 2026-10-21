@@ -77,13 +77,12 @@
   name: au14-craft-recipe-cableshafthv
   output: RUMCCableShaftHV
   time: 8
+  minigames: [Rhythm]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCInsulatedCable
-    amount: 4
-  - stack: RUMCConductorAlloy
-    amount: 1
+  - stack: RUMCKitWiring
+    amount: 5
   - stack: CMSteel
     amount: 1
 
@@ -92,10 +91,11 @@
   name: au14-craft-recipe-cableshaftmv
   output: RUMCCableShaftMV
   time: 7
+  minigames: [Rhythm]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 3
   - stack: CMSteel
     amount: 1
@@ -108,7 +108,7 @@
   tools:
   - Hammering
   consumables:
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 2
-  - stack: RUMCIronBolt
+  - stack: RUMCKitFasteners
     amount: 1

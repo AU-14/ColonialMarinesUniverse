@@ -7,7 +7,7 @@
   inputs:
     RUMCCopperIngot: 1
   outputs:
-    RUMCCopperWire: 2
+    RUMCKitWiring: 2
   duration: 4
 
 - type: cmuMachineRecipe
@@ -107,17 +107,8 @@
   inputs:
     CMSteel: 1
   outputs:
-    RUMCIronBolt: 2
+    RUMCKitFasteners: 2
   circuit: 2
-  duration: 3
-
-- type: cmuMachineRecipe
-  id: RUMCMRLatheIronScrew
-  machine: lathe
-  inputs:
-    RUMCIronBolt: 2
-  outputs:
-    RUMCIronScrew: 1
   duration: 3
 
 - type: cmuMachineRecipe
@@ -126,7 +117,7 @@
   inputs:
     RUMCIronRod: 1
   outputs:
-    RUMCIronBolt: 4
+    RUMCKitFasteners: 4
   duration: 3
 
 - type: cmuMachineRecipe
@@ -186,16 +177,6 @@
   duration: 4
 
 - type: cmuMachineRecipe
-  id: RUMCMRMixerConductorAlloy
-  machine: mixer
-  inputs:
-    RUMCCopperIngot: 2
-    RUMCSilverIngot: 1
-  outputs:
-    RUMCConductorAlloy: 3
-  duration: 5
-
-- type: cmuMachineRecipe
   id: RUMCMRMixerRubberSheet
   machine: mixer
   inputs:
@@ -226,35 +207,14 @@
   duration: 8
 
 - type: cmuMachineRecipe
-  id: RUMCMRAssemblerInsulatedCable
-  machine: assembler
-  inputs:
-    RUMCCopperWire: 1
-    RUMCRubberSheet: 1
-  outputs:
-    RUMCInsulatedCable: 1
-  duration: 3
-
-- type: cmuMachineRecipe
   id: RUMCMRAssemblerResistor
   machine: assembler
   inputs:
     RUMCCokeCoal: 1
-    RUMCCopperWire: 2
+    RUMCKitWiring: 2
     RUMCRubberSheet: 1
   outputs:
-    RUMCResistor: 4
-  duration: 4
-
-- type: cmuMachineRecipe
-  id: RUMCMRAssemblerVacuumTube
-  machine: assembler
-  inputs:
-    RUMCGlassTube: 1
-    RUMCCopperWire: 2
-    RUMCConductorAlloy: 1
-  outputs:
-    RUMCVacuumTube: 1
+    RUMCKitElectronics: 4
   duration: 4
 
 - type: cmuMachineRecipe
@@ -263,9 +223,9 @@
   inputs:
     RMCWood: 1
     RUMCRubberSheet: 1
-    RUMCCopperWire: 2
+    RUMCKitWiring: 2
   outputs:
-    RUMCResinBoard: 1
+    RUMCKitElectronics: 1
   duration: 5
 
 - type: cmuMachineRecipe
@@ -275,7 +235,7 @@
     RMCWood: 2
     RUMCSilverWire: 2
   outputs:
-    RUMCPhenolicBoard: 1
+    RUMCKitQualityBoards: 1
   fluidInputs:
     RUMCGlue: 20
   duration: 6
@@ -285,21 +245,19 @@
   machine: assembler
   inputs:
     RUMCSiliconWafer: 1
-    RUMCCopperWire: 2
+    RUMCKitWiring: 2
     RUMCRubberSheet: 1
   outputs:
-    RUMCDiode: 2
+    RUMCKitElectronics: 2
   duration: 5
 
 - type: cmuMachineRecipe
   id: RUMCMRAssemblerBasicCircuit
   machine: assembler
   inputs:
-    RUMCResinBoard: 1
-    RUMCVacuumTube: 1
-    RUMCResistor: 2
+    RUMCKitElectronics: 4
   outputs:
-    RUMCBasicCircuit: 1
+    RUMCKitSimpleCircuits: 1
   fluidInputs:
     RUMCSolderMelt: 10
   duration: 10
@@ -310,10 +268,9 @@
   inputs:
     RUMCMagneticRod: 1
     RUMCIronRod: 2
-    RUMCInsulatedCable: 1
-    RUMCCopperWire: 2
+    RUMCKitWiring: 3
   outputs:
-    RUMCMotor: 1
+    RUMCKitDrive: 1
   duration: 8
 
 - type: cmuMachineRecipe
@@ -322,9 +279,9 @@
   inputs:
     CMSteel: 2
     RUMCIronRod: 3
-    RUMCIronScrew: 2
+    RUMCKitFasteners: 2
   outputs:
-    RUMCPiston: 1
+    RUMCKitHydraulics: 1
   duration: 8
 
 - type: cmuMachineRecipe
@@ -334,9 +291,9 @@
     RUMCRubberSheet: 1
     CMSteel: 1
     RUMCIronRod: 2
-    RUMCIronScrew: 2
+    RUMCKitFasteners: 2
   outputs:
-    RUMCPump: 1
+    RUMCKitHydraulics: 1
   duration: 8
 
 - type: cmuMachineRecipe
@@ -345,19 +302,19 @@
   inputs:
     RUMCRubberSheet: 2
     RUMCIronRod: 2
-    RUMCInsulatedCable: 1
+    RUMCKitWiring: 1
   outputs:
-    RUMCConveyor: 1
+    RUMCKitDrive: 1
   duration: 8
 
 - type: cmuMachineRecipe
   id: RUMCMRAssemblerHeatingCoil
   machine: assembler
   inputs:
-    RUMCCopperWire: 8
+    RUMCKitWiring: 8
     RUMCIronRod: 1
   outputs:
-    RUMCHeatingCoil: 1
+    RUMCKitHeating: 1
   duration: 6
 
 - type: cmuMachineRecipe
@@ -393,28 +350,12 @@
   id: RUMCMRCircuitassemblerBasicCircuit
   machine: circuitassembler
   inputs:
-    RUMCResinBoard: 1
-    RUMCVacuumTube: 1
-    RUMCResistor: 2
+    RUMCKitElectronics: 4
   outputs:
-    RUMCBasicCircuit: 2
+    RUMCKitSimpleCircuits: 2
   fluidInputs:
     RUMCSolderMelt: 10
   duration: 8
-
-- type: cmuMachineRecipe
-  id: RUMCMRCircuitassemblerGoodCircuit
-  machine: circuitassembler
-  inputs:
-    RUMCPhenolicBoard: 1
-    RUMCBasicCircuit: 2
-    RUMCDiode: 2
-    RUMCSilverWire: 4
-  outputs:
-    RUMCGoodCircuit: 1
-  fluidInputs:
-    RUMCSolderMelt: 20
-  duration: 12
 
 - type: cmuMachineRecipe
   id: RUMCMRBenderSheetAluminum
@@ -429,7 +370,7 @@
   id: RUMCMRAssemblerColonyCableLV
   machine: assembler
   inputs:
-    RUMCInsulatedCable: 5
+    RUMCKitWiring: 5
   outputs:
     RMCCable: 10
   duration: 6
@@ -438,7 +379,7 @@
   id: RUMCMRAssemblerColonyCableMV
   machine: assembler
   inputs:
-    RUMCInsulatedCable: 5
+    RUMCKitWiring: 5
     RUMCRubberSheet: 2
   outputs:
     CableMV: 10
@@ -448,7 +389,7 @@
   id: RUMCMRAssemblerColonyCableHV
   machine: assembler
   inputs:
-    RUMCInsulatedCable: 5
+    RUMCKitWiring: 5
     RUMCRubberSheet: 4
     RUMCSilverWire: 2
   outputs:
@@ -459,8 +400,8 @@
   id: RUMCMRAssemblerColonyLightBulb
   machine: assembler
   inputs:
-    RUMCGlassTube: 1
-    RUMCCopperWire: 1
+    RUMCKitElectronics: 1
+    RUMCKitWiring: 1
   itemOutputs:
     LightBulb: 1
   duration: 4
@@ -469,8 +410,8 @@
   id: RUMCMRAssemblerColonyLightTube
   machine: assembler
   inputs:
-    RUMCGlassTube: 2
-    RUMCCopperWire: 1
+    RUMCKitElectronics: 2
+    RUMCKitWiring: 1
   itemOutputs:
     LightTube: 1
   duration: 4
@@ -493,7 +434,7 @@
     RUMCLeadSheet: 2
     RUMCZincSheet: 2
     RUMCRubberSheet: 1
-    RUMCCopperWire: 2
+    RUMCKitWiring: 2
   itemOutputs:
     PowerCellMedium: 1
   duration: 8
@@ -526,9 +467,9 @@
   id: RUMCMRAssemblerColonyApcModule
   machine: assembler
   inputs:
-    RUMCBasicCircuit: 1
-    RUMCInsulatedCable: 2
-    RUMCResinBoard: 1
+    RUMCKitSimpleCircuits: 1
+    RUMCKitWiring: 2
+    RUMCKitElectronics: 1
   itemOutputs:
     CMAPCElectronics: 1
   duration: 8
@@ -537,7 +478,7 @@
   id: RUMCMRAssemblerColonyCapacitor
   machine: assembler
   inputs:
-    RUMCConductorAlloy: 1
+    RUMCKitWiring: 1
     RUMCRubberSheet: 1
     CMSteel: 1
   itemOutputs:
@@ -548,7 +489,7 @@
   id: RUMCMRAssemblerColonyManipulator
   machine: assembler
   inputs:
-    RUMCMotor: 1
+    RUMCKitDrive: 1
     RUMCIronRod: 2
   itemOutputs:
     CMStockPartManipulatorMicro: 1
@@ -558,8 +499,7 @@
   id: RUMCMRAssemblerColonyMicroLaser
   machine: assembler
   inputs:
-    RUMCGlassTube: 1
-    RUMCDiode: 2
+    RUMCKitElectronics: 3
     RUMCLensRuby: 1
   itemOutputs:
     CMStockPartMicroLaser: 1
@@ -570,8 +510,8 @@
   machine: assembler
   inputs:
     RUMCSiliconWafer: 2
-    RUMCGlassTube: 1
-    RUMCCopperWire: 2
+    RUMCKitElectronics: 1
+    RUMCKitWiring: 2
   itemOutputs:
     CMStockPartScanningModule: 1
   duration: 8
@@ -1418,7 +1358,7 @@
     RMCWood: 1
     RUMCSilverWire: 1
   outputs:
-    RUMCPhenolicBoard: 1
+    RUMCKitQualityBoards: 1
   fluidInputs:
     RUMCGlue: 10
     SulfuricAcid: 5
@@ -1525,43 +1465,19 @@
   machine: extruder
   inputs:
     CMSteel: 1
-  catalysts:
-    RUMCMoldRod: 1
   outputs:
     RUMCIronRod: 2
+  circuit: 1
   duration: 4
 
 - type: cmuMachineRecipe
-  id: RUMCMRExtruderIronBolt
+  id: RUMCMRExtruderFasteners
   machine: extruder
   inputs:
     CMSteel: 1
-  catalysts:
-    RUMCMoldBolt: 1
   outputs:
-    RUMCIronBolt: 8
-  duration: 4
-
-- type: cmuMachineRecipe
-  id: RUMCMRExtruderIronScrew
-  machine: extruder
-  inputs:
-    CMSteel: 1
-  catalysts:
-    RUMCMoldScrew: 1
-  outputs:
-    RUMCIronScrew: 4
-  duration: 4
-
-- type: cmuMachineRecipe
-  id: RUMCMRExtruderIronGear
-  machine: extruder
-  inputs:
-    CMSteel: 1
-  catalysts:
-    RUMCMoldGear: 1
-  outputs:
-    RUMCIronGear: 1
+    RUMCKitFasteners: 6
+  circuit: 2
   duration: 4
 
 - type: cmuMachineRecipe
@@ -1570,7 +1486,7 @@
   inputs:
     CMGlass: 1
   outputs:
-    RUMCGlassTube: 2
+    RUMCKitElectronics: 2
   duration: 3
 
 - type: cmuMachineRecipe
@@ -1581,17 +1497,8 @@
   catalysts:
     RUMCLensRuby: 1
   outputs:
-    RUMCWaferIC: 1
+    RUMCKitChipIC: 2
   duration: 10
-
-- type: cmuMachineRecipe
-  id: RUMCMRCutterChipsIC
-  machine: cutter
-  inputs:
-    RUMCWaferIC: 1
-  outputs:
-    RUMCChipIC: 2
-  duration: 6
 
 - type: cmuMachineRecipe
   id: RUMCMREngraverEngraveULPIC
@@ -1601,17 +1508,8 @@
   catalysts:
     RUMCLensAlexandrite: 1
   outputs:
-    RUMCWaferULPIC: 1
+    RUMCKitChipULPIC: 2
   duration: 10
-
-- type: cmuMachineRecipe
-  id: RUMCMRCutterChipsULPIC
-  machine: cutter
-  inputs:
-    RUMCWaferULPIC: 1
-  outputs:
-    RUMCChipULPIC: 2
-  duration: 6
 
 - type: cmuMachineRecipe
   id: RUMCMREngraverEngraveRAM
@@ -1621,17 +1519,8 @@
   catalysts:
     RUMCLensEmerald: 1
   outputs:
-    RUMCWaferRAM: 1
+    RUMCKitChipRAM: 2
   duration: 10
-
-- type: cmuMachineRecipe
-  id: RUMCMRCutterChipsRAM
-  machine: cutter
-  inputs:
-    RUMCWaferRAM: 1
-  outputs:
-    RUMCChipRAM: 2
-  duration: 6
 
 - type: cmuMachineRecipe
   id: RUMCMREngraverEngraveCPU
@@ -1641,17 +1530,8 @@
   catalysts:
     RUMCLensDiamond: 1
   outputs:
-    RUMCWaferCPU: 1
+    RUMCKitChipCPU: 2
   duration: 10
-
-- type: cmuMachineRecipe
-  id: RUMCMRCutterChipsCPU
-  machine: cutter
-  inputs:
-    RUMCWaferCPU: 1
-  outputs:
-    RUMCChipCPU: 2
-  duration: 6
 
 - type: cmuMachineRecipe
   id: RUMCMRAssemblerTransistor
@@ -1661,7 +1541,7 @@
     RUMCGoldWire: 1
     RUMCRubberSheet: 1
   outputs:
-    RUMCTransistor: 4
+    RUMCKitElectronics: 4
   duration: 6
 
 - type: cmuMachineRecipe
@@ -1671,96 +1551,30 @@
     RMCAluminum: 1
     RUMCRubberSheet: 1
   outputs:
-    RUMCCapacitor: 2
+    RUMCKitElectronics: 2
   duration: 5
-
-- type: cmuMachineRecipe
-  id: RUMCMRAssemblerInductor
-  machine: assembler
-  inputs:
-    RUMCMagneticRod: 1
-    RUMCCopperWire: 4
-  outputs:
-    RUMCInductor: 2
-  duration: 5
-
-- type: cmuMachineRecipe
-  id: RUMCMRAssemblerIntegratedCircuit
-  machine: assembler
-  inputs:
-    RUMCResinBoard: 1
-    RUMCChipIC: 1
-    RUMCResistor: 2
-    RUMCDiode: 2
-  outputs:
-    RUMCIntegratedCircuit: 1
-  fluidInputs:
-    RUMCSolderMelt: 10
-  duration: 10
 
 - type: cmuMachineRecipe
   id: RUMCMRAssemblerMachineHullMV
   machine: assembler
   inputs:
     RMCAluminum: 8
-    RUMCChipULPIC: 1
+    RUMCKitChipULPIC: 1
   outputs:
-    RUMCMachineHullMV: 1
+    RUMCKitQualityParts: 1
   duration: 8
 
 - type: cmuMachineRecipe
   id: RUMCMRAssemblerMotorMV
   machine: assembler
   inputs:
-    RUMCMotor: 1
-    RUMCInductor: 2
+    RUMCKitDrive: 1
+    RUMCKitWiring: 2
     RMCAluminum: 2
     RUMCSilverWire: 2
   outputs:
-    RUMCMotorMV: 1
+    RUMCKitQualityParts: 1
   duration: 10
-
-- type: cmuMachineRecipe
-  id: RUMCMRCircuitassemblerIntegratedCircuit
-  machine: circuitassembler
-  inputs:
-    RUMCResinBoard: 1
-    RUMCChipIC: 1
-    RUMCResistor: 2
-    RUMCDiode: 2
-  outputs:
-    RUMCIntegratedCircuit: 2
-  fluidInputs:
-    RUMCSolderMelt: 10
-  duration: 8
-
-- type: cmuMachineRecipe
-  id: RUMCMRCircuitassemblerGoodIntegratedCircuit
-  machine: circuitassembler
-  inputs:
-    RUMCPhenolicBoard: 1
-    RUMCChipIC: 2
-    RUMCChipRAM: 1
-    RUMCTransistor: 2
-  outputs:
-    RUMCGoodIntegratedCircuit: 2
-  fluidInputs:
-    RUMCSolderMelt: 20
-  duration: 12
-
-- type: cmuMachineRecipe
-  id: RUMCMRCircuitassemblerMicroprocessor
-  machine: circuitassembler
-  inputs:
-    RUMCPhenolicBoard: 1
-    RUMCChipCPU: 1
-    RUMCTransistor: 4
-    RUMCCapacitor: 4
-  outputs:
-    RUMCMicroprocessor: 1
-  fluidInputs:
-    RUMCSolderMelt: 20
-  duration: 14
 
 - type: cmuMachineRecipe
   id: RUMCMRDistillationOil
@@ -1873,7 +1687,7 @@
     RMCPlastic: 1
     RUMCCopperSheet: 1
   outputs:
-    RUMCPlasticBoard: 2
+    RUMCKitQualityBoards: 2
   duration: 6
 
 - type: cmuMachineRecipe
@@ -1883,38 +1697,10 @@
     RMCPlastic: 1
     RUMCCopperSheet: 1
   outputs:
-    RUMCPlasticBoard: 4
+    RUMCKitQualityBoards: 4
   fluidInputs:
     RUMCHydrochloricAcid: 10
   duration: 8
-
-- type: cmuMachineRecipe
-  id: RUMCMRCircuitassemblerGoodIntegratedCircuitOfPlastic
-  machine: circuitassembler
-  inputs:
-    RUMCPlasticBoard: 1
-    RUMCChipIC: 2
-    RUMCChipRAM: 1
-    RUMCTransistor: 2
-  outputs:
-    RUMCGoodIntegratedCircuit: 3
-  fluidInputs:
-    RUMCSolderMelt: 20
-  duration: 12
-
-- type: cmuMachineRecipe
-  id: RUMCMRCircuitassemblerMicroprocessorOfPlastic
-  machine: circuitassembler
-  inputs:
-    RUMCPlasticBoard: 1
-    RUMCChipCPU: 1
-    RUMCTransistor: 4
-    RUMCCapacitor: 4
-  outputs:
-    RUMCMicroprocessor: 2
-  fluidInputs:
-    RUMCSolderMelt: 20
-  duration: 14
 
 - type: cmuMachineRecipe
   id: RUMCMRPyrolysisCokeFromWood
@@ -2135,16 +1921,6 @@
   duration: 3
 
 - type: cmuMachineRecipe
-  id: RUMCMRBenderArmourPlates
-  machine: bender
-  inputs:
-    CMSteel: 2
-  outputs:
-    RUMCArmourPlates: 1
-  circuit: 3
-  duration: 5
-
-- type: cmuMachineRecipe
   id: RUMCMRLatheMetalRods
   machine: lathe
   inputs:
@@ -2152,25 +1928,6 @@
   outputs:
     CMRodMetal: 2
   circuit: 3
-  duration: 3
-
-- type: cmuMachineRecipe
-  id: RUMCMRLatheForgedParts
-  machine: lathe
-  inputs:
-    CMSteel: 1
-  outputs:
-    RUMCForgedParts: 2
-  circuit: 4
-  duration: 4
-
-- type: cmuMachineRecipe
-  id: RUMCMRCutterForgedNails
-  machine: cutter
-  inputs:
-    RUMCIronRod: 1
-  outputs:
-    RUMCForgedNails: 6
   duration: 3
 
 - type: cmuMachineRecipe
@@ -2197,9 +1954,9 @@
   id: RUMCMRAssemblerColonyHeadset
   machine: assembler
   inputs:
-    RUMCBasicCircuit: 1
+    RUMCKitSimpleCircuits: 1
     CMSteel: 1
-    RUMCCopperWire: 2
+    RUMCKitWiring: 2
   itemOutputs:
     CMHeadsetColony: 1
   duration: 6
@@ -2208,10 +1965,10 @@
   id: RUMCMRAssemblerHandheldRadio
   machine: assembler
   inputs:
-    RUMCBasicCircuit: 1
+    RUMCKitSimpleCircuits: 1
     CMSteel: 2
-    RUMCCopperWire: 4
-    RUMCVacuumTube: 1
+    RUMCKitWiring: 4
+    RUMCKitElectronics: 1
   itemOutputs:
     CMRadioHandheld: 1
   duration: 8
@@ -2220,9 +1977,9 @@
   id: RUMCMRAssemblerMultitool
   machine: assembler
   inputs:
-    RUMCBasicCircuit: 1
+    RUMCKitSimpleCircuits: 1
     RUMCChromedSheet: 1
-    RUMCInsulatedCable: 2
+    RUMCKitWiring: 2
   itemOutputs:
     CMMultitool: 1
   duration: 8
@@ -2232,8 +1989,8 @@
   machine: assembler
   inputs:
     CMSteel: 1
-    RUMCGlassTube: 1
-    RUMCCopperWire: 2
+    RUMCKitElectronics: 1
+    RUMCKitWiring: 2
   itemOutputs:
     FlashlightLantern: 1
   duration: 5
@@ -2242,9 +1999,9 @@
   id: RUMCMRAssemblerDefibrillator
   machine: assembler
   inputs:
-    RUMCGoodCircuit: 1
-    RUMCCapacitor: 4
-    RUMCInsulatedCable: 2
+    RUMCKitQualityBoards: 1
+    RUMCKitElectronics: 4
+    RUMCKitWiring: 2
     CMSteel: 2
   itemOutputs:
     CMDefibrillatorEmpty: 1
@@ -2279,7 +2036,7 @@
     RUMCLeadSheet: 1
     RUMCUraniumPowder: 1
     RUMCRubberSheet: 1
-    RUMCBasicCircuit: 1
+    RUMCKitSimpleCircuits: 1
   itemOutputs:
     PowerCellSmallNuclear: 1
   duration: 10
@@ -2291,7 +2048,7 @@
     RUMCLeadSheet: 3
     RUMCUraniumPowder: 2
     RUMCRubberSheet: 2
-    RUMCBasicCircuit: 1
+    RUMCKitSimpleCircuits: 1
   itemOutputs:
     PowerCellMicroreactor: 1
   duration: 14
@@ -2328,7 +2085,7 @@
     RUMCCobaltIngot: 2
     RUMCSilverWire: 2
     RMCPlastic: 1
-    RUMCBasicCircuit: 1
+    RUMCKitSimpleCircuits: 1
   itemOutputs:
     RUMCCellCobalt: 1
   fluidInputs:
@@ -2833,10 +2590,9 @@
   id: RUMCMRFabricatorElectricScrewdriver
   machine: fabricator
   inputs:
-    RUMCMotor: 1
+    RUMCKitDrive: 1
     RUMCIronRod: 1
-    RUMCConductorAlloy: 1
-    RUMCInsulatedCable: 1
+    RUMCKitWiring: 2
   itemOutputs:
     RUMCElectricScrewdriver: 1
   duration: 8
@@ -2845,10 +2601,10 @@
   id: RUMCMRFabricatorElectricWrench
   machine: fabricator
   inputs:
-    RUMCMotor: 1
+    RUMCKitDrive: 1
     RUMCChromedSheet: 1
-    RUMCIronBolt: 2
-    RUMCInsulatedCable: 1
+    RUMCKitFasteners: 2
+    RUMCKitWiring: 1
   itemOutputs:
     RUMCElectricWrench: 1
   duration: 8
@@ -2857,10 +2613,10 @@
   id: RUMCMRFabricatorElectricWirecutters
   machine: fabricator
   inputs:
-    RUMCMotor: 1
+    RUMCKitDrive: 1
     RUMCChromedSheet: 1
     RUMCIronRod: 2
-    RUMCInsulatedCable: 1
+    RUMCKitWiring: 1
   itemOutputs:
     RUMCElectricWirecutters: 1
   duration: 8
@@ -2869,10 +2625,10 @@
   id: RUMCMRFabricatorElectricCrowbar
   machine: fabricator
   inputs:
-    RUMCMotor: 1
+    RUMCKitDrive: 1
     RUMCIronRod: 3
-    RUMCIronGear: 1
-    RUMCInsulatedCable: 1
+    RUMCKitFasteners: 1
+    RUMCKitWiring: 1
   itemOutputs:
     RUMCElectricCrowbar: 1
   duration: 9
@@ -2881,10 +2637,10 @@
   id: RUMCMRFabricatorElectricHammer
   machine: fabricator
   inputs:
-    RUMCPiston: 1
+    RUMCKitHydraulics: 1
     RUMCIronRod: 2
-    RUMCMotor: 1
-    RUMCInsulatedCable: 1
+    RUMCKitDrive: 1
+    RUMCKitWiring: 1
   itemOutputs:
     RUMCElectricHammer: 1
   duration: 9
@@ -2893,11 +2649,11 @@
   id: RUMCMRFabricatorPowerDrill
   machine: fabricator
   inputs:
-    RUMCMotor: 2
+    RUMCKitDrive: 2
     RUMCChromedSheet: 1
-    RUMCIronGear: 1
-    RUMCBasicCircuit: 1
-    RUMCInsulatedCable: 2
+    RUMCKitFasteners: 1
+    RUMCKitSimpleCircuits: 1
+    RUMCKitWiring: 2
   itemOutputs:
     RUMCPowerDrill: 1
   duration: 12
@@ -2906,11 +2662,11 @@
   id: RUMCMRFabricatorElectricShovel
   machine: fabricator
   inputs:
-    RUMCMotor: 1
+    RUMCKitDrive: 1
     RUMCChromedSheet: 2
     RUMCIronRod: 2
-    RUMCIronGear: 1
-    RUMCInsulatedCable: 1
+    RUMCKitFasteners: 1
+    RUMCKitWiring: 1
   itemOutputs:
     RUMCElectricShovel: 1
   duration: 10
@@ -2919,11 +2675,11 @@
   id: RUMCMRFabricatorElectricPickaxe
   machine: fabricator
   inputs:
-    RUMCMotor: 1
-    RUMCPiston: 1
+    RUMCKitDrive: 1
+    RUMCKitHydraulics: 1
     RUMCChromedSheet: 2
     RUMCIronRod: 3
-    RUMCInsulatedCable: 1
+    RUMCKitWiring: 1
   itemOutputs:
     RUMCElectricPickaxe: 1
   duration: 12
@@ -2932,11 +2688,10 @@
   id: RUMCMRFabricatorProspector
   machine: fabricator
   inputs:
-    RUMCBasicCircuit: 2
+    RUMCKitSimpleCircuits: 2
     RUMCLensEmerald: 1
-    RUMCInsulatedCable: 2
+    RUMCKitWiring: 3
     RUMCChromedSheet: 1
-    RUMCConductorAlloy: 1
   itemOutputs:
     RUMCProspector: 1
   duration: 14
@@ -2945,13 +2700,13 @@
   id: RUMCMRFabricatorJackhammer
   machine: fabricator
   inputs:
-    RUMCMotor: 2
-    RUMCPiston: 2
+    RUMCKitDrive: 2
+    RUMCKitHydraulics: 2
     RUMCChromedSheet: 2
     RUMCIronRod: 3
-    RUMCIronGear: 2
-    RUMCBasicCircuit: 1
-    RUMCInsulatedCable: 2
+    RUMCKitFasteners: 2
+    RUMCKitSimpleCircuits: 1
+    RUMCKitWiring: 2
   itemOutputs:
     RUMCJackhammer: 1
   duration: 16
@@ -2961,9 +2716,8 @@
   machine: fabricator
   inputs:
     RUMCChromedSheet: 1
-    RUMCHeatingCoil: 1
-    RUMCConductorAlloy: 2
-    RUMCInsulatedCable: 2
+    RUMCKitHeating: 1
+    RUMCKitWiring: 4
   itemOutputs:
     RUMCElectricWelder: 1
   duration: 10
@@ -2972,9 +2726,9 @@
   id: RUMCMRFabricatorDefibrillator
   machine: fabricator
   inputs:
-    RUMCGoodCircuit: 1
-    RUMCCapacitor: 4
-    RUMCInsulatedCable: 2
+    RUMCKitQualityBoards: 1
+    RUMCKitElectronics: 4
+    RUMCKitWiring: 2
     CMSteel: 2
   itemOutputs:
     CMDefibrillatorEmpty: 1
@@ -2984,10 +2738,10 @@
   id: RUMCMRFabricatorHandheldRadio
   machine: fabricator
   inputs:
-    RUMCBasicCircuit: 1
+    RUMCKitSimpleCircuits: 1
     CMSteel: 2
-    RUMCCopperWire: 4
-    RUMCVacuumTube: 1
+    RUMCKitWiring: 4
+    RUMCKitElectronics: 1
   itemOutputs:
     CMRadioHandheld: 1
   duration: 8
@@ -2996,9 +2750,9 @@
   id: RUMCMRFabricatorColonyHeadset
   machine: fabricator
   inputs:
-    RUMCBasicCircuit: 1
+    RUMCKitSimpleCircuits: 1
     CMSteel: 1
-    RUMCCopperWire: 2
+    RUMCKitWiring: 2
   itemOutputs:
     CMHeadsetColony: 1
   duration: 6
@@ -3007,9 +2761,9 @@
   id: RUMCMRFabricatorMultitool
   machine: fabricator
   inputs:
-    RUMCBasicCircuit: 1
+    RUMCKitSimpleCircuits: 1
     RUMCChromedSheet: 1
-    RUMCInsulatedCable: 2
+    RUMCKitWiring: 2
   itemOutputs:
     CMMultitool: 1
   duration: 8
@@ -3029,7 +2783,7 @@
   machine: fabricator
   inputs:
     RUMCIronRod: 2
-    RUMCIronBolt: 1
+    RUMCKitFasteners: 1
   itemOutputs:
     CMWrench: 1
   duration: 4
@@ -3048,7 +2802,7 @@
   machine: fabricator
   inputs:
     RUMCIronRod: 1
-    RUMCIronBolt: 1
+    RUMCKitFasteners: 1
     RUMCRubberSheet: 1
   itemOutputs:
     CMWirecutter: 1
@@ -3071,7 +2825,7 @@
   inputs:
     RUMCChromedSheet: 1
     RUMCIronRod: 1
-    RUMCIronBolt: 2
+    RUMCKitFasteners: 2
     RMCWood: 1
   itemOutputs:
     RUMCHandSaw: 1
@@ -3122,16 +2876,6 @@
   duration: 6
 
 - type: cmuMachineRecipe
-  id: RUMCMRArcfurnaceThermoAlloy
-  machine: arcfurnace
-  inputs:
-    RUMCChromeIngot: 2
-    CMSteel: 1
-  outputs:
-    RUMCThermoAlloy: 3
-  duration: 8
-
-- type: cmuMachineRecipe
   id: RUMCMRArcfurnacePlasteelIngot
   machine: arcfurnace
   inputs:
@@ -3163,98 +2907,61 @@
   duration: 14
 
 - type: cmuMachineRecipe
-  id: RUMCMRAssemblerHeatingCoilOfAlloy
-  machine: assembler
-  inputs:
-    RUMCThermoAlloy: 2
-    RUMCIronRod: 1
-  outputs:
-    RUMCHeatingCoil: 2
-  duration: 5
-
-- type: cmuMachineRecipe
   id: RUMCMRRecyclerRecycleResistor
   machine: recycler
   inputs:
-    RUMCResistor: 4
+    RUMCKitElectronics: 4
   outputs:
-    RUMCCopperWire: 1
+    RUMCKitWiring: 1
   duration: 4
 
 - type: cmuMachineRecipe
   id: RUMCMRRecyclerRecycleVacuumTube
   machine: recycler
   inputs:
-    RUMCVacuumTube: 1
+    RUMCKitElectronics: 1
   outputs:
-    RUMCCopperWire: 1
-  duration: 4
-
-- type: cmuMachineRecipe
-  id: RUMCMRRecyclerRecycleResinBoard
-  machine: recycler
-  inputs:
-    RUMCResinBoard: 1
-  outputs:
-    RUMCCopperWire: 1
+    RUMCKitWiring: 1
   duration: 4
 
 - type: cmuMachineRecipe
   id: RUMCMRRecyclerRecycleDiode
   machine: recycler
   inputs:
-    RUMCDiode: 2
+    RUMCKitElectronics: 2
   outputs:
-    RUMCCopperWire: 1
+    RUMCKitWiring: 1
   duration: 4
 
 - type: cmuMachineRecipe
   id: RUMCMRRecyclerRecycleMotor
   machine: recycler
   inputs:
-    RUMCMotor: 1
+    RUMCKitDrive: 1
   outputs:
     RUMCIronRod: 1
-    RUMCInsulatedCable: 1
-    RUMCCopperWire: 2
+    RUMCKitWiring: 3
+    RUMCRubberSheet: 1
   duration: 4
 
 - type: cmuMachineRecipe
   id: RUMCMRRecyclerRecyclePiston
   machine: recycler
   inputs:
-    RUMCPiston: 1
+    RUMCKitHydraulics: 1
   outputs:
     CMSteel: 1
     RUMCIronRod: 1
-    RUMCIronScrew: 1
-  duration: 4
-
-- type: cmuMachineRecipe
-  id: RUMCMRRecyclerRecyclePump
-  machine: recycler
-  inputs:
-    RUMCPump: 1
-  outputs:
-    RUMCIronScrew: 1
-  duration: 4
-
-- type: cmuMachineRecipe
-  id: RUMCMRRecyclerRecycleConveyor
-  machine: recycler
-  inputs:
-    RUMCConveyor: 1
-  outputs:
-    RUMCRubberSheet: 1
+    RUMCKitFasteners: 2
   duration: 4
 
 - type: cmuMachineRecipe
   id: RUMCMRRecyclerRecycleHeatingCoil
   machine: recycler
   inputs:
-    RUMCHeatingCoil: 1
+    RUMCKitHeating: 1
   outputs:
-    RUMCCopperWire: 4
+    RUMCKitWiring: 4
   duration: 4
 
 - type: cmuMachineRecipe
@@ -3272,7 +2979,7 @@
   inputs:
     RMCCable: 10
   outputs:
-    RUMCInsulatedCable: 2
+    RUMCKitWiring: 2
   duration: 4
 
 - type: cmuMachineRecipe
@@ -3281,7 +2988,7 @@
   inputs:
     CableMV: 10
   outputs:
-    RUMCInsulatedCable: 2
+    RUMCKitWiring: 2
     RUMCRubberSheet: 1
   duration: 4
 
@@ -3291,7 +2998,7 @@
   inputs:
     CableHV: 10
   outputs:
-    RUMCInsulatedCable: 2
+    RUMCKitWiring: 2
     RUMCRubberSheet: 2
     RUMCSilverWire: 1
   duration: 4
@@ -3302,7 +3009,7 @@
   itemInputs:
     LightTube: 1
   outputs:
-    RUMCGlassTube: 1
+    RUMCKitElectronics: 1
   duration: 4
 
 - type: cmuMachineRecipe
@@ -3313,7 +3020,7 @@
   outputs:
     RUMCLeadSheet: 1
     RUMCZincSheet: 1
-    RUMCCopperWire: 1
+    RUMCKitWiring: 1
   duration: 4
 
 - type: cmuMachineRecipe
@@ -3346,7 +3053,7 @@
   itemInputs:
     CMAPCElectronics: 1
   outputs:
-    RUMCInsulatedCable: 1
+    RUMCKitWiring: 1
   duration: 4
 
 - type: cmuMachineRecipe
@@ -3364,7 +3071,7 @@
   itemInputs:
     CMStockPartMicroLaser: 1
   outputs:
-    RUMCDiode: 1
+    RUMCKitElectronics: 1
   duration: 4
 
 - type: cmuMachineRecipe
@@ -3374,7 +3081,7 @@
     CMStockPartScanningModule: 1
   outputs:
     RUMCSiliconWafer: 1
-    RUMCCopperWire: 1
+    RUMCKitWiring: 1
   duration: 4
 
 - type: cmuMachineRecipe
@@ -3387,31 +3094,13 @@
   duration: 4
 
 - type: cmuMachineRecipe
-  id: RUMCMRRecyclerRecycleInductor
-  machine: recycler
-  inputs:
-    RUMCInductor: 2
-  outputs:
-    RUMCCopperWire: 2
-  duration: 4
-
-- type: cmuMachineRecipe
   id: RUMCMRRecyclerRecycleMachineHullMV
   machine: recycler
   inputs:
-    RUMCMachineHullMV: 1
+    RUMCKitQualityParts: 1
   outputs:
-    RMCAluminum: 4
-  duration: 4
-
-- type: cmuMachineRecipe
-  id: RUMCMRRecyclerRecycleMotorMV
-  machine: recycler
-  inputs:
-    RUMCMotorMV: 1
-  outputs:
-    RUMCInductor: 1
-    RMCAluminum: 1
+    RMCAluminum: 3
+    RUMCKitWiring: 1
     RUMCSilverWire: 1
   duration: 4
 
@@ -3421,7 +3110,7 @@
   itemInputs:
     CMHeadsetColony: 1
   outputs:
-    RUMCCopperWire: 1
+    RUMCKitWiring: 1
   duration: 4
 
 - type: cmuMachineRecipe
@@ -3431,7 +3120,7 @@
     CMRadioHandheld: 1
   outputs:
     CMSteel: 1
-    RUMCCopperWire: 2
+    RUMCKitWiring: 2
   duration: 4
 
 - type: cmuMachineRecipe
@@ -3440,7 +3129,7 @@
   itemInputs:
     CMMultitool: 1
   outputs:
-    RUMCInsulatedCable: 1
+    RUMCKitWiring: 1
   duration: 4
 
 - type: cmuMachineRecipe
@@ -3449,7 +3138,7 @@
   itemInputs:
     FlashlightLantern: 1
   outputs:
-    RUMCCopperWire: 1
+    RUMCKitWiring: 1
   duration: 4
 
 - type: cmuMachineRecipe
@@ -3458,8 +3147,8 @@
   itemInputs:
     CMDefibrillatorEmpty: 1
   outputs:
-    RUMCCapacitor: 2
-    RUMCInsulatedCable: 1
+    RUMCKitElectronics: 2
+    RUMCKitWiring: 1
     CMSteel: 1
   duration: 4
 
@@ -3472,15 +3161,6 @@
     RUMCLeadSheet: 1
     RUMCUraniumPowder: 1
     RUMCRubberSheet: 1
-  duration: 4
-
-- type: cmuMachineRecipe
-  id: RUMCMRRecyclerRecycleHeatingCoilOfAlloy
-  machine: recycler
-  inputs:
-    RUMCHeatingCoil: 2
-  outputs:
-    RUMCThermoAlloy: 1
   duration: 4
 
 # Rubber before the grid: the steam press vulcanizes raw rubber (from the steam extractor) by itself, with no cinnabar. The mixer and the reactor still
@@ -3529,10 +3209,11 @@
   output: RMCCableCoil
   outputCount: 10
   time: 12
+  minigames: [Trace]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 5
 
 - type: craftRecipe
@@ -3541,10 +3222,11 @@
   output: CableMVStack1
   outputCount: 10
   time: 12
+  minigames: [Trace]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 5
   - stack: RUMCRubberSheet
     amount: 2
@@ -3555,10 +3237,11 @@
   output: CableHVStack1
   outputCount: 10
   time: 16
+  minigames: [Trace, Hold]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 5
   - stack: RUMCRubberSheet
     amount: 4
@@ -3571,12 +3254,13 @@
   output: LightBulb
   outputCount: 1
   time: 8
+  minigames: [Trace]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCGlassTube
+  - stack: RUMCKitElectronics
     amount: 1
-  - stack: RUMCCopperWire
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -3585,12 +3269,13 @@
   output: LightTube
   outputCount: 1
   time: 8
+  minigames: [Trace]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCGlassTube
+  - stack: RUMCKitElectronics
     amount: 2
-  - stack: RUMCCopperWire
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -3599,6 +3284,7 @@
   output: PowerCellSmall
   outputCount: 1
   time: 12
+  minigames: [Hold]
   tools:
   - Hammering
   consumables:
@@ -3615,6 +3301,7 @@
   output: PowerCellMedium
   outputCount: 1
   time: 16
+  minigames: [Hold, Trace]
   tools:
   - Hammering
   consumables:
@@ -3624,7 +3311,7 @@
     amount: 2
   - stack: RUMCRubberSheet
     amount: 1
-  - stack: RUMCCopperWire
+  - stack: RUMCKitWiring
     amount: 2
 
 - type: craftRecipe
@@ -3633,6 +3320,7 @@
   output: PowerCellHigh
   outputCount: 1
   time: 20
+  minigames: [Hold, Trace]
   tools:
   - Hammering
   consumables:
@@ -3651,6 +3339,7 @@
   output: PowerCellHyper
   outputCount: 1
   time: 24
+  minigames: [Hold, Trace, Polish]
   tools:
   - Hammering
   consumables:
@@ -3669,14 +3358,15 @@
   output: CMAPCElectronics
   outputCount: 1
   time: 16
+  minigames: [Trace, Center]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 2
-  - stack: RUMCResinBoard
+  - stack: RUMCKitElectronics
     amount: 1
 
 - type: craftRecipe
@@ -3685,10 +3375,11 @@
   output: CMStockPartCapacitor
   outputCount: 1
   time: 12
+  minigames: [Trace]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCConductorAlloy
+  - stack: RUMCKitWiring
     amount: 1
   - stack: RUMCRubberSheet
     amount: 1
@@ -3701,10 +3392,11 @@
   output: CMStockPartManipulatorMicro
   outputCount: 1
   time: 16
+  minigames: [Center, Trace]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
   - stack: RUMCIronRod
     amount: 2
@@ -3715,13 +3407,12 @@
   output: CMStockPartMicroLaser
   outputCount: 1
   time: 16
+  minigames: [Polish, Center]
   tools:
   - Hammering
   consumables:
-  - stack: RUMCGlassTube
-    amount: 1
-  - stack: RUMCDiode
-    amount: 2
+  - stack: RUMCKitElectronics
+    amount: 3
   - stack: RUMCLensRuby
     amount: 1
 
@@ -3731,14 +3422,15 @@
   output: CMStockPartScanningModule
   outputCount: 1
   time: 16
+  minigames: [Trace, Center]
   tools:
   - Hammering
   consumables:
   - stack: RUMCSiliconWafer
     amount: 2
-  - stack: RUMCGlassTube
+  - stack: RUMCKitElectronics
     amount: 1
-  - stack: RUMCCopperWire
+  - stack: RUMCKitWiring
     amount: 2
 
 - type: craftRecipe
@@ -3747,6 +3439,7 @@
   output: CMStockPartMatterBin
   outputCount: 1
   time: 16
+  minigames: [Rhythm, Center]
   tools:
   - Hammering
   consumables:
@@ -3754,42 +3447,6 @@
     amount: 4
   - stack: RUMCRubberSheet
     amount: 1
-
-- type: craftRecipe
-  id: RUMCCraftElectricCopperWire
-  name: au14-craft-recipe-electriccopperwire
-  output: RUMCCopperWireItem
-  outputCount: 1
-  time: 8
-  tools:
-  - Hammering
-  consumables:
-  - stack: RUMCCopperIngot
-    amount: 1
-
-- type: craftRecipe
-  id: RUMCCraftElectricIronBolt
-  name: au14-craft-recipe-electricironbolt
-  output: RUMCIronBoltItem
-  outputCount: 2
-  time: 6
-  tools:
-  - Hammering
-  consumables:
-  - stack: RUMCIronRod
-    amount: 1
-
-- type: craftRecipe
-  id: RUMCCraftElectricIronScrew
-  name: au14-craft-recipe-electricironscrew
-  output: RUMCIronScrewItem
-  outputCount: 1
-  time: 6
-  tools:
-  - Hammering
-  consumables:
-  - stack: RUMCIronBolt
-    amount: 2
 
 # What a machine of the electric stage makes can be crafted by hand as well, for more of the same stuff: the chrome-plated sheet, the gear and the silver and
 # the gold wire. (The machines give more of them, and the plating bath needs water and power.)
@@ -3799,6 +3456,7 @@
   output: RUMCChromedSheetItem
   outputCount: 1
   time: 10
+  minigames: [Hold, Polish]
   tools:
   - Hammering
   consumables:
@@ -3808,23 +3466,12 @@
     amount: 2
 
 - type: craftRecipe
-  id: RUMCCraftElectricIronGear
-  name: au14-craft-recipe-electricirongear
-  output: RUMCIronGearItem
-  outputCount: 1
-  time: 8
-  tools:
-  - Hammering
-  consumables:
-  - stack: CMSteel
-    amount: 2
-
-- type: craftRecipe
   id: RUMCCraftElectricSilverWire
   name: au14-craft-recipe-electricsilverwire
   output: RUMCSilverWireItem
   outputCount: 1
   time: 8
+  minigames: [Hold]
   tools:
   - Hammering
   consumables:
@@ -3837,6 +3484,7 @@
   output: RUMCGoldWireItem
   outputCount: 1
   time: 8
+  minigames: [Hold]
   tools:
   - Hammering
   consumables:
@@ -3858,187 +3506,12 @@
     amount: 1
 
 - type: craftRecipe
-  id: RUMCCraftElectricConductorAlloy
-  name: au14-craft-recipe-electricconductoralloy
-  output: RUMCConductorAlloyItem
-  outputCount: 2
-  time: 8
-  tools:
-  - Hammering
-  consumables:
-  - stack: RUMCCopperIngot
-    amount: 2
-  - stack: RUMCSilverIngot
-    amount: 1
-
-- type: craftRecipe
-  id: RUMCCraftElectricInsulatedCable
-  name: au14-craft-recipe-electricinsulatedcable
-  output: RUMCInsulatedCableItem
-  outputCount: 1
-  time: 6
-  tools:
-  - Hammering
-  consumables:
-  - stack: RUMCCopperWire
-    amount: 1
-  - stack: RUMCRubberSheet
-    amount: 1
-
-- type: craftRecipe
-  id: RUMCCraftElectricVacuumTube
-  name: au14-craft-recipe-electricvacuumtube
-  output: RUMCVacuumTubeItem
-  outputCount: 1
-  time: 10
-  tools:
-  - Hammering
-  consumables:
-  - stack: RUMCGlassTube
-    amount: 1
-  - stack: RUMCCopperWire
-    amount: 2
-  - stack: RUMCConductorAlloy
-    amount: 1
-
-- type: craftRecipe
-  id: RUMCCraftElectricResistor
-  name: au14-craft-recipe-electricresistor
-  output: RUMCResistorItem
-  outputCount: 1
-  time: 8
-  tools:
-  - Hammering
-  consumables:
-  - stack: RUMCCokeCoal
-    amount: 1
-  - stack: RUMCCopperWire
-    amount: 2
-  - stack: RUMCRubberSheet
-    amount: 1
-
-- type: craftRecipe
-  id: RUMCCraftElectricResinBoard
-  name: au14-craft-recipe-electricresinboard
-  output: RUMCResinBoardItem
-  outputCount: 1
-  time: 10
-  tools:
-  - Hammering
-  consumables:
-  - stack: RMCWood
-    amount: 1
-  - stack: RUMCRubberSheet
-    amount: 1
-  - stack: RUMCCopperWire
-    amount: 2
-
-- type: craftRecipe
-  id: RUMCCraftElectricBasicCircuit
-  name: au14-craft-recipe-electricbasiccircuit
-  output: RUMCBasicCircuitItem
-  outputCount: 1
-  time: 20
-  tools:
-  - Hammering
-  consumables:
-  - stack: RUMCResinBoard
-    amount: 1
-  - stack: RUMCVacuumTube
-    amount: 1
-  - stack: RUMCResistor
-    amount: 2
-  - stack: RUMCCopperWire
-    amount: 2
-
-- type: craftRecipe
-  id: RUMCCraftElectricMotor
-  name: au14-craft-recipe-electricmotor
-  output: RUMCMotorItem
-  outputCount: 1
-  time: 15
-  tools:
-  - Hammering
-  consumables:
-  - stack: RUMCMagneticRod
-    amount: 1
-  - stack: RUMCIronRod
-    amount: 2
-  - stack: RUMCInsulatedCable
-    amount: 1
-  - stack: RUMCCopperWire
-    amount: 2
-
-- type: craftRecipe
-  id: RUMCCraftElectricPiston
-  name: au14-craft-recipe-electricpiston
-  output: RUMCPistonItem
-  outputCount: 1
-  time: 15
-  tools:
-  - Hammering
-  consumables:
-  - stack: CMSteel
-    amount: 2
-  - stack: RUMCIronRod
-    amount: 3
-  - stack: RUMCIronScrew
-    amount: 2
-
-- type: craftRecipe
-  id: RUMCCraftElectricPump
-  name: au14-craft-recipe-electricpump
-  output: RUMCPumpItem
-  outputCount: 1
-  time: 15
-  tools:
-  - Hammering
-  consumables:
-  - stack: RUMCRubberSheet
-    amount: 1
-  - stack: CMSteel
-    amount: 1
-  - stack: RUMCIronRod
-    amount: 2
-  - stack: RUMCIronScrew
-    amount: 2
-
-- type: craftRecipe
-  id: RUMCCraftElectricConveyor
-  name: au14-craft-recipe-electricconveyor
-  output: RUMCConveyorItem
-  outputCount: 1
-  time: 15
-  tools:
-  - Hammering
-  consumables:
-  - stack: RUMCRubberSheet
-    amount: 2
-  - stack: RUMCIronRod
-    amount: 2
-  - stack: RUMCInsulatedCable
-    amount: 1
-
-- type: craftRecipe
-  id: RUMCCraftElectricHeatingCoil
-  name: au14-craft-recipe-electricheatingcoil
-  output: RUMCHeatingCoilItem
-  outputCount: 1
-  time: 12
-  tools:
-  - Hammering
-  consumables:
-  - stack: RUMCCopperWire
-    amount: 8
-  - stack: RUMCIronRod
-    amount: 1
-
-- type: craftRecipe
   id: RUMCCraftElectricMachineHull
   name: au14-craft-recipe-electricmachinehull
   output: RUMCMachineHullItem
   outputCount: 1
   time: 12
+  minigames: [Rhythm, Center]
   tools:
   - Hammering
   consumables:
@@ -4046,115 +3519,22 @@
     amount: 6
 
 - type: craftRecipe
-  id: RUMCCraftElectricMoldRod
-  name: au14-craft-recipe-electricmoldrod
-  output: RUMCMoldRodItem
-  outputCount: 1
-  time: 12
-  tools:
-  - Hammering
-  consumables:
-  - stack: CMSteel
-    amount: 3
-
-- type: craftRecipe
-  id: RUMCCraftElectricMoldBolt
-  name: au14-craft-recipe-electricmoldbolt
-  output: RUMCMoldBoltItem
-  outputCount: 1
-  time: 12
-  tools:
-  - Hammering
-  consumables:
-  - stack: CMSteel
-    amount: 3
-
-- type: craftRecipe
-  id: RUMCCraftElectricMoldScrew
-  name: au14-craft-recipe-electricmoldscrew
-  output: RUMCMoldScrewItem
-  outputCount: 1
-  time: 12
-  tools:
-  - Hammering
-  consumables:
-  - stack: CMSteel
-    amount: 3
-
-- type: craftRecipe
-  id: RUMCCraftElectricMoldGear
-  name: au14-craft-recipe-electricmoldgear
-  output: RUMCMoldGearItem
-  outputCount: 1
-  time: 12
-  tools:
-  - Hammering
-  consumables:
-  - stack: CMSteel
-    amount: 3
-
-- type: craftRecipe
-  id: RUMCCraftElectricGlassTube
-  name: au14-craft-recipe-electricglasstube
-  output: RUMCGlassTubeItem
-  outputCount: 1
-  time: 8
-  tools:
-  - Hammering
-  consumables:
-  - stack: CMGlass
-    amount: 1
-
-- type: craftRecipe
-  id: RUMCCraftElectricMachineHullMV
-  name: au14-craft-recipe-electricmachinehullmv
-  output: RUMCMachineHullMVItem
-  outputCount: 1
-  time: 16
-  tools:
-  - Hammering
-  consumables:
-  - stack: RMCAluminum
-    amount: 8
-  - stack: RUMCChipULPIC
-    amount: 1
-
-- type: craftRecipe
-  id: RUMCCraftElectricMotorMV
-  name: au14-craft-recipe-electricmotormv
-  output: RUMCMotorMVItem
-  outputCount: 1
-  time: 20
-  tools:
-  - Hammering
-  consumables:
-  - stack: RUMCMotor
-    amount: 1
-  - stack: RUMCInductor
-    amount: 2
-  - stack: RMCAluminum
-    amount: 2
-  - stack: RUMCSilverWire
-    amount: 2
-
-# ---------------------------------------------------------------- the machines
-
-- type: craftRecipe
   id: RUMCCraftBuildWiremill
   name: au14-craft-recipe-buildwiremill
   output: RUMCWiremill
   outputCount: 1
   time: 20
+  minigames: [Rhythm, Center, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 2
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4163,18 +3543,19 @@
   output: RUMCBender
   outputCount: 1
   time: 20
+  minigames: [Center, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
-  - stack: RUMCPiston
+  - stack: RUMCKitHydraulics
     amount: 1
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4183,18 +3564,19 @@
   output: RUMCLathe
   outputCount: 1
   time: 20
+  minigames: [Center, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
-  - stack: RUMCPiston
+  - stack: RUMCKitHydraulics
     amount: 1
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4203,18 +3585,17 @@
   output: RUMCCutter
   outputCount: 1
   time: 20
+  minigames: [Rhythm, Center, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCConveyor
-    amount: 1
-  - stack: RUMCBasicCircuit
-    amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4223,16 +3604,17 @@
   output: RUMCPolarizer
   outputCount: 1
   time: 20
+  minigames: [Rhythm, Center, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4241,18 +3623,17 @@
   output: RUMCExtractor
   outputCount: 1
   time: 20
+  minigames: [Rhythm, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCPiston
+  - stack: RUMCKitHydraulics
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCPump
-    amount: 1
-  - stack: RUMCBasicCircuit
-    amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4261,18 +3642,19 @@
   output: RUMCMixer
   outputCount: 1
   time: 20
+  minigames: [Center, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
-  - stack: RUMCPump
+  - stack: RUMCKitHydraulics
     amount: 1
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4281,18 +3663,19 @@
   output: RUMCChemicalReactor
   outputCount: 1
   time: 20
+  minigames: [Center, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
-  - stack: RUMCPump
+  - stack: RUMCKitHydraulics
     amount: 2
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 2
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4301,20 +3684,19 @@
   output: RUMCElectricAssembler
   outputCount: 1
   time: 20
+  minigames: [Center, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
-    amount: 2
-  - stack: RUMCPiston
+  - stack: RUMCKitDrive
+    amount: 4
+  - stack: RUMCKitHydraulics
     amount: 1
-  - stack: RUMCConveyor
+  - stack: RUMCKitSimpleCircuits
     amount: 2
-  - stack: RUMCBasicCircuit
-    amount: 2
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4323,16 +3705,17 @@
   output: RUMCElectricBlastFurnace
   outputCount: 1
   time: 20
+  minigames: [Rhythm, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCHeatingCoil
+  - stack: RUMCKitHeating
     amount: 4
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 3
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4341,18 +3724,19 @@
   output: RUMCOreWasher
   outputCount: 1
   time: 20
+  minigames: [Center, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
-  - stack: RUMCPump
+  - stack: RUMCKitHydraulics
     amount: 1
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4361,18 +3745,19 @@
   output: RUMCThermalCentrifuge
   outputCount: 1
   time: 20
+  minigames: [Center, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 2
-  - stack: RUMCHeatingCoil
+  - stack: RUMCKitHeating
     amount: 2
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 2
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4381,18 +3766,19 @@
   output: RUMCMagneticSeparator
   outputCount: 1
   time: 20
+  minigames: [Rhythm, Center, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
   - stack: RUMCMagneticRod
     amount: 2
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4401,18 +3787,17 @@
   output: RUMCSifter
   outputCount: 1
   time: 20
+  minigames: [Rhythm, Center, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCConveyor
-    amount: 1
-  - stack: RUMCBasicCircuit
-    amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4421,18 +3806,17 @@
   output: RUMCAutoclave
   outputCount: 1
   time: 20
+  minigames: [Rhythm, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCPump
+  - stack: RUMCKitHydraulics
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCPiston
-    amount: 1
-  - stack: RUMCBasicCircuit
-    amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4441,18 +3825,19 @@
   output: RUMCPyrolysisOven
   outputCount: 1
   time: 20
+  minigames: [Rhythm, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCHeatingCoil
+  - stack: RUMCKitHeating
     amount: 2
-  - stack: RUMCPump
+  - stack: RUMCKitHydraulics
     amount: 1
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4461,18 +3846,19 @@
   output: RUMCGalvanicBath
   outputCount: 1
   time: 20
+  minigames: [Rhythm, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCPump
+  - stack: RUMCKitHydraulics
     amount: 1
-  - stack: RUMCHeatingCoil
+  - stack: RUMCKitHeating
     amount: 1
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4481,18 +3867,19 @@
   output: RUMCRecycler
   outputCount: 1
   time: 20
+  minigames: [Center, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 2
-  - stack: RUMCPiston
+  - stack: RUMCKitHydraulics
     amount: 1
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4501,18 +3888,19 @@
   output: RUMCFertilizerMixer
   outputCount: 1
   time: 20
+  minigames: [Center, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
-  - stack: RUMCPump
+  - stack: RUMCKitHydraulics
     amount: 1
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4521,20 +3909,19 @@
   output: RUMCCannery
   outputCount: 1
   time: 20
+  minigames: [Center, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
+    amount: 2
+  - stack: RUMCKitHydraulics
     amount: 1
-  - stack: RUMCPiston
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCConveyor
-    amount: 1
-  - stack: RUMCBasicCircuit
-    amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4543,18 +3930,19 @@
   output: RUMCJewelersBench
   outputCount: 1
   time: 20
+  minigames: [Rhythm, Center, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
   - stack: RUMCGoldWire
     amount: 2
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4563,20 +3951,21 @@
   output: RUMCLaserEngraver
   outputCount: 1
   time: 20
+  minigames: [Polish, Center, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
-  - stack: RUMCPiston
+  - stack: RUMCKitHydraulics
     amount: 1
   - stack: RUMCLensRuby
     amount: 1
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 2
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4585,18 +3974,17 @@
   output: RUMCElectrolyzer
   outputCount: 1
   time: 20
+  minigames: [Rhythm, Center, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
-  - stack: RUMCConductorAlloy
-    amount: 2
-  - stack: RUMCBasicCircuit
-    amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
+    amount: 3
+  - stack: RUMCKitSimpleCircuits
     amount: 1
 
 - type: craftRecipe
@@ -4605,19 +3993,18 @@
   output: RUMCArcFurnace
   outputCount: 1
   time: 20
+  minigames: [Rhythm, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCHeatingCoil
+  - stack: RUMCKitHeating
     amount: 3
-  - stack: RUMCConductorAlloy
+  - stack: RUMCKitWiring
+    amount: 3
+  - stack: RUMCKitSimpleCircuits
     amount: 2
-  - stack: RUMCBasicCircuit
-    amount: 2
-  - stack: RUMCInsulatedCable
-    amount: 1
 
 - type: craftRecipe
   id: RUMCCraftBuildChemicalBath
@@ -4625,18 +4012,19 @@
   output: RUMCChemicalBath
   outputCount: 1
   time: 20
+  minigames: [Rhythm, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCPump
+  - stack: RUMCKitHydraulics
     amount: 1
   - stack: RUMCGalvanizedSheet
     amount: 2
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4645,16 +4033,17 @@
   output: RUMCCentrifuge
   outputCount: 1
   time: 20
+  minigames: [Rhythm, Center, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 2
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4663,16 +4052,17 @@
   output: RUMCCompressor
   outputCount: 1
   time: 20
+  minigames: [Rhythm, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCPiston
+  - stack: RUMCKitHydraulics
     amount: 2
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4681,18 +4071,19 @@
   output: RUMCFluidSolidifier
   outputCount: 1
   time: 20
+  minigames: [Rhythm, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCPump
+  - stack: RUMCKitHydraulics
     amount: 1
-  - stack: RUMCHeatingCoil
+  - stack: RUMCKitHeating
     amount: 1
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4701,18 +4092,19 @@
   output: RUMCExtruder
   outputCount: 1
   time: 20
+  minigames: [Center, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
-  - stack: RUMCPiston
+  - stack: RUMCKitHydraulics
     amount: 2
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4721,18 +4113,19 @@
   output: RUMCPharmaMachine
   outputCount: 1
   time: 20
+  minigames: [Center, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
-  - stack: RUMCPump
+  - stack: RUMCKitHydraulics
     amount: 1
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4741,18 +4134,19 @@
   output: RUMCConcreteMixer
   outputCount: 1
   time: 20
+  minigames: [Center, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 2
-  - stack: RUMCPump
+  - stack: RUMCKitHydraulics
     amount: 1
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4761,18 +4155,19 @@
   output: RUMCSewingMachine
   outputCount: 1
   time: 20
+  minigames: [Center, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
-  - stack: RUMCPiston
+  - stack: RUMCKitHydraulics
     amount: 1
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4781,18 +4176,19 @@
   output: RUMCTannery
   outputCount: 1
   time: 20
+  minigames: [Center, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
     amount: 1
-  - stack: RUMCPump
+  - stack: RUMCKitHydraulics
     amount: 2
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4801,20 +4197,19 @@
   output: RUMCFabricator
   outputCount: 1
   time: 20
+  minigames: [Center, Hold, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
+  - stack: RUMCKitDrive
+    amount: 4
+  - stack: RUMCKitHydraulics
     amount: 2
-  - stack: RUMCPiston
-    amount: 2
-  - stack: RUMCConveyor
-    amount: 2
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 3
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4823,18 +4218,17 @@
   output: RUMCCircuitAssembler
   outputCount: 1
   time: 20
+  minigames: [Rhythm, Center, Trace]
   tools:
   - Hammering
   consumables:
   - stack: RUMCMachineHull
     amount: 1
-  - stack: RUMCMotor
-    amount: 1
-  - stack: RUMCConveyor
-    amount: 2
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitDrive
     amount: 3
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitSimpleCircuits
+    amount: 3
+  - stack: RUMCKitWiring
     amount: 1
 
 - type: craftRecipe
@@ -4843,6 +4237,7 @@
   output: RUMCSteamExtractor
   outputCount: 1
   time: 18
+  minigames: [Rhythm, Hold]
   tools:
   - Hammering
   consumables:
@@ -4860,6 +4255,7 @@
   output: RUMCIndustrialSteamExtractor
   outputCount: 1
   time: 18
+  minigames: [Rhythm, Hold]
   tools:
   - Hammering
   consumables:

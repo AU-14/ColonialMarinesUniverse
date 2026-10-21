@@ -170,6 +170,7 @@
   name: au14-craft-recipe-stone-shovel
   output: RUMCStoneShovel
   time: 8
+  minigames: [Rhythm]
   consumables:
   - stack: RUMCStone
     amount: 4
@@ -181,6 +182,7 @@
   name: au14-craft-recipe-stone-pickaxe
   output: RUMCStonePickaxe
   time: 8
+  minigames: [Rhythm]
   consumables:
   - stack: RUMCStone
     amount: 5

@@ -1,3 +1,4 @@
+
 - type: anvilRecipe
   id: RUMCAnvilEmptyMold
   name: au14-anvil-recipe-empty-mold
@@ -11,51 +12,6 @@
   - Hammering
   - Hammering
   - Hammering
-
-- type: anvilRecipe
-  id: RUMCAnvilForgedParts
-  name: au14-anvil-recipe-forged-parts
-  icon:
-    sprite: CMU14/Objects/Materials/forged_parts.rsi
-    state: forged_parts
-  output: RUMCForgedPartsItem
-  outputCount: 1
-  steps:
-  - Hammering
-  - Hammering
-  - Hammering
-  - Hammering
-  - Hammering
-
-- type: anvilRecipe
-  id: RUMCAnvilForgedNails
-  name: au14-anvil-recipe-forged-nails
-  icon:
-    sprite: CMU14/Objects/Materials/forged_nails.rsi
-    state: forged_nails
-  output: RUMCForgedNailsItem
-  outputCount: 5
-  steps:
-  - Hammering
-  - Hammering
-  - Hammering
-  - Hammering
-  - Hammering
-
-- type: anvilRecipe
-  id: RUMCAnvilArmourPlates
-  name: au14-anvil-recipe-armour-plates
-  icon:
-    sprite: CMU14/Objects/Materials/armour_plates.rsi
-    state: armour_plates
-  output: RUMCArmourPlatesItem
-  outputCount: 1
-  steps:
-  - Hammering
-  - Hammering
-  - Hammering
-  - Chiseling
-  - Chiseling
 
 # The parts of every brass mechanism are forged of a brass ingot.
 - type: anvilRecipe

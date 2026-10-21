@@ -16,6 +16,7 @@
   name: au14-craft-recipe-forge-hammer
   output: RUMCForgeHammer
   time: 8
+  minigames: [Rhythm]
   tools:
   - Hammering
   consumables:
@@ -29,6 +30,7 @@
   name: au14-craft-recipe-forge-tongs
   output: RUMCForgeTongs
   time: 8
+  minigames: [Rhythm]
   tools:
   - Hammering
   consumables:
@@ -55,6 +57,7 @@
   name: au14-craft-recipe-anvil
   output: RUMCAnvil
   time: 20
+  minigames: [Rhythm, Polish]
   tools:
   - Hammering
   consumables:
@@ -68,6 +71,7 @@
   name: au14-craft-recipe-solid-fuel-press
   output: RUMCSolidFuelPress
   time: 20
+  minigames: [Rhythm, Center]
   tools:
   - Hammering
   consumables:
@@ -83,6 +87,7 @@
   name: au14-craft-recipe-steam-grinder
   output: RUMCSteamGrinder
   time: 20
+  minigames: [Rhythm, Center]
   tools:
   - Hammering
   consumables:

@@ -95,6 +95,7 @@
   name: au14-craft-recipe-tradepacker
   output: RUMCTradePacker
   time: 20
+  minigames: [Rhythm, Center]
   tools:
   - Hammering
   consumables:
@@ -108,14 +109,15 @@
   name: au14-craft-recipe-tradeplatform
   output: RUMCTradePlatform
   time: 20
+  minigames: [Rhythm, Trace]
   tools:
   - Hammering
   consumables:
   - stack: CMSteel
     amount: 8
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 2
 
 # Paper is pressed of plant fiber: three of it make two sheets.

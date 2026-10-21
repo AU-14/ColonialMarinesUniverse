@@ -83,6 +83,7 @@
   name: au14-craft-recipe-buildtransformerdown
   output: RUMCTransformerDown
   time: 25
+  minigames: [Rhythm, Trace]
   tools:
   - Hammering
   consumables:
@@ -90,10 +91,8 @@
     amount: 2
   - stack: RUMCMagneticRod
     amount: 2
-  - stack: RUMCCopperWire
-    amount: 6
-  - stack: RUMCInsulatedCable
-    amount: 3
+  - stack: RUMCKitWiring
+    amount: 9
 
 # The step-up one winds its high voltage side of the conductor alloy, and its core is heavier.
 - type: craftRecipe
@@ -101,6 +100,7 @@
   name: au14-craft-recipe-buildtransformerup
   output: RUMCTransformerUp
   time: 25
+  minigames: [Rhythm, Trace]
   tools:
   - Hammering
   consumables:
@@ -108,12 +108,8 @@
     amount: 2
   - stack: RUMCMagneticRod
     amount: 3
-  - stack: RUMCCopperWire
-    amount: 4
-  - stack: RUMCConductorAlloy
-    amount: 2
-  - stack: RUMCInsulatedCable
-    amount: 3
+  - stack: RUMCKitWiring
+    amount: 9
 
 # The panel of the grid (the medium voltage line to the low one) has a way to be built too, of the same parts.
 - type: craftRecipe
@@ -121,17 +117,16 @@
   name: au14-craft-recipe-buildpowerpanel
   output: PowerPanel
   time: 20
+  minigames: [Rhythm, Trace]
   tools:
   - Hammering
   consumables:
   - stack: CMSteel
     amount: 1
-  - stack: RUMCInductor
-    amount: 2
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitWiring
+    amount: 5
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCInsulatedCable
-    amount: 3
 
 # ---------------------------------------------------------------- the colony APC
 # The APC of the stage: a cabinet with a door of its own. Shut, its screen works and the wiring is out of reach; open, the panel can be unscrewed,
@@ -187,14 +182,15 @@
   name: au14-craft-recipe-buildcolonyapc
   output: RUMCColonyApc
   time: 20
+  minigames: [Rhythm, Trace]
   tools:
   - Hammering
   consumables:
   - stack: CMSteel
     amount: 2
-  - stack: RUMCBasicCircuit
+  - stack: RUMCKitSimpleCircuits
     amount: 1
-  - stack: RUMCCapacitor
+  - stack: RUMCKitElectronics
     amount: 2
-  - stack: RUMCInsulatedCable
+  - stack: RUMCKitWiring
     amount: 3

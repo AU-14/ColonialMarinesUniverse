@@ -104,6 +104,7 @@
   name: au14-craft-recipe-stone-axe
   output: RUMCStoneAxe
   time: 8
+  minigames: [Rhythm]
   consumables:
   - stack: RUMCStone
     amount: 3

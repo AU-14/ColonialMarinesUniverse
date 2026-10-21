@@ -429,6 +429,7 @@
   name: au14-craft-recipe-planter-plot
   output: RUMCPlanterPlot
   time: 8
+  minigames: [Rhythm]
   tools:
   - Hammering
   consumables:
@@ -440,6 +441,7 @@
   name: au14-craft-recipe-planter-tub
   output: RUMCPlanterTub
   time: 8
+  minigames: [Rhythm]
   tools:
   - Hammering
   consumables:
@@ -451,6 +453,7 @@
   name: au14-craft-recipe-planter-bin
   output: RUMCPlanterBin
   time: 8
+  minigames: [Rhythm]
   tools:
   - Hammering
   consumables:
