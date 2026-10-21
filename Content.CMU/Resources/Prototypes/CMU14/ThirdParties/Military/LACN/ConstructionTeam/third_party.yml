@@ -1,0 +1,273 @@
+# LACN engineering construction team, called in through the UA intel list: a foreman and two construction
+# engineers in LACN engineering gear, carrying building materials and armed with TPR-23B sidearms.
+
+- type: entity
+  parent: SquadBase
+  id: CMUSquadLACNConstruction
+  name: LACN Construction
+  components:
+  - type: SquadTeam
+    color: "#c98a1b"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UASOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_forecon
+    canSupplyDrop: false
+    group: CMULACNConstruction
+  - type: Tag
+    tags:
+    - CMUSquadLACNConstruction
+
+- type: Tag
+  id: CMUSquadLACNConstruction
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobLACNConstructionForeman
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: LACN
+  roundRole: CMUJobLACNConstructionForeman
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: engi
+  - type: Skills
+    skills:
+      RMCSkillEngineer: 3
+      RMCSkillConstruction: 3
+      RMCSkillFirearms: 1
+      RMCSkillEndurance: 1
+      RMCSkillCqc: 1
+      RMCSkillMedical: 1
+      RMCSkillFireman: 1
+  - type: Language
+    spokenLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    understoodLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    currentLanguage: Portuguese
+    defaultLanguage: Portuguese
+  name: cmu-job-title-lacn-construction-foreman
+  description: cmu-job-description-lacn-construction
+  playTimeTracker: CMUJobLACNConstructionForeman
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    CMU14RankLACNSecondClassSergeant:
+      entity: CMU14ChevronLACNSecondClassSergeant
+      requirements: []
+  spawnMenuRoleName: LACN Construction Foreman (Construction Team)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearLACNConstructionForeman
+  greeting: cmu-job-greeting-lacn-construction
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-uscm-plasma
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicLACN
+  suffix: CMU, LACN, Construction Team
+  id: CMUJobLACNConstructionForeman
+  name: LACN Construction Foreman (Construction Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadLACNConstruction
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-lacn-construction-foreman
+    description: cmu-job-description-lacn-construction
+    reregister: false
+    job: CMUJobLACNConstructionForeman
+    raffle:
+      settings: short
+    rules: cmu-job-rules-lacn-construction
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardLACNConstructionForeman
+  name: LACN construction foreman ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobLACNConstructionForeman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: playTimeTracker
+  id: CMUJobLACNConstructionForeman
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobLACNConstructionEngineer
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: LACN
+  roundRole: CMUJobLACNConstructionEngineer
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: engi
+  - type: Skills
+    skills:
+      RMCSkillEngineer: 3
+      RMCSkillConstruction: 3
+      RMCSkillFirearms: 1
+      RMCSkillEndurance: 1
+      RMCSkillCqc: 1
+      RMCSkillMedical: 1
+      RMCSkillFireman: 1
+  - type: Language
+    spokenLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    understoodLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    currentLanguage: Portuguese
+    defaultLanguage: Portuguese
+  name: cmu-job-title-lacn-construction-engineer
+  description: cmu-job-description-lacn-construction
+  playTimeTracker: CMUJobLACNConstructionEngineer
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    CMU14RankLACNThirdClassCorporal:
+      entity: CMU14ChevronLACNThirdClassCorporal
+      requirements: []
+  spawnMenuRoleName: LACN Construction Engineer (Construction Team)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearLACNConstructionEngineer
+  greeting: cmu-job-greeting-lacn-construction
+  joinNotifyCrew: false
+  supervisors: cmu-job-title-lacn-construction-foreman
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicLACN
+  suffix: CMU, LACN, Construction Team
+  id: CMUJobLACNConstructionEngineer
+  name: LACN Construction Engineer (Construction Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadLACNConstruction
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-lacn-construction-engineer
+    description: cmu-job-description-lacn-construction
+    reregister: false
+    job: CMUJobLACNConstructionEngineer
+    raffle:
+      settings: short
+    rules: cmu-job-rules-lacn-construction
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardLACNConstructionEngineer
+  name: LACN construction engineer ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobLACNConstructionEngineer
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: playTimeTracker
+  id: CMUJobLACNConstructionEngineer
+
+- type: startingGear
+  id: CMUGearLACNConstructionBase
+  equipment:
+    jumpsuit: CMULACNEngineerFieldUniform
+    outerClothing: CMULACNLogisticsVest
+    head: CMULACNHelmetEngineer
+    eyes: RMCWeldingGoggles
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    shoes: AU14LACNBootsFilled
+    ears: AU14HeadsetGovforMarine
+    belt: CMULACNBeltToolbeltFilled
+    pocket1: RMCPouchPistol
+    pocket2: AU14PouchIFAKFill
+    back: CMULACNBackpackEngineer
+  storage:
+    pocket1:
+    - AU14WeaponPistolTPR23B
+    back:
+    - CMMagazinePistolM1984
+    - CMMagazinePistolM1984
+    - CMMagazinePistolM1984
+    - CMSheetMetal50
+    - CMSheetMetal50
+    - CMSheetPlasteel10
+    - CMSheetGlass30
+
+- type: startingGear
+  parent: CMUGearLACNConstructionBase
+  id: CMUGearLACNConstructionForeman
+  equipment:
+    id: CMUIDCardLACNConstructionForeman
+  storage:
+    back:
+    - CMMagazinePistolM1984
+    - CMMagazinePistolM1984
+    - CMMagazinePistolM1984
+    - CMSheetMetal50
+    - CMSheetMetal50
+    - CMSheetPlasteel10
+    - CMSheetGlass30
+    - CMSandbagEmpty25
+    - RMCBinoculars
+
+- type: startingGear
+  parent: CMUGearLACNConstructionBase
+  id: CMUGearLACNConstructionEngineer
+  equipment:
+    id: CMUIDCardLACNConstructionEngineer
+
+- type: partySpawn
+  id: CMULACNConstructionTeamSpawn
+  leadersToSpawn:
+    CMUJobLACNConstructionForeman: 1
+  gruntsToSpawn:
+    CMUJobLACNConstructionEngineer: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMULACNConstructionTeam
+  displayName: LACN Engineering Construction Team
+  partyspawn: CMULACNConstructionTeamSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 3
+  roundstart: false

@@ -29,7 +29,9 @@ public sealed partial class CMUShowAdminsCommand : LocalizedCommands
         var entries = new List<CMUShowAdminsEntry>();
         foreach (var admin in _adminManager.AllAdmins)
         {
-            if (_adminManager.GetAdminData(admin, includeDeAdmin: true) is not { } data)
+            // Only staff are listed; ranks without it (mentors, say) are on the admin list but aren't on duty.
+            if (_adminManager.GetAdminData(admin, includeDeAdmin: true) is not { } data ||
+                !data.HasFlag(AdminFlags.Staff, includeDeAdmin: true))
                 continue;
 
             entries.Add(new CMUShowAdminsEntry(

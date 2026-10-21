@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: CMUJobUPPLineCommandoMedic
+  chevrons:
+    UPP_Corporal:
+      entity: AU14ChevronUPPNICorporal
+      requirements: []
   roundSide: ThirdParty
   roundForce: UPPLine
   roundRole: UPPLineCommandoMedic
@@ -28,7 +32,7 @@
     - Mandarin
     currentLanguage: Russian
     defaultLanguage: Russian
-  name: cmu-uppline-name-commando-medic
+  name: cmu-job-title-uppline-commando-medic
   description: cmu-uppline-description-commando
   playTimeTracker: CMUJobUPPLineCommandoMedic
   ranks:
@@ -83,7 +87,7 @@
     - CMHealthAnalyzer
     - CMSurgicalLine
     - CMSynthGraft
-    - CMDefibrillator
+    - AU14CMDefibrillator
     - CMAdvFirstAidKit
     - CMCrowbar
     - RMCMRESPP

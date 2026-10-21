@@ -138,12 +138,28 @@
   parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
   id: AU14USASFSECFORChestrig
   name: USASF Security Forces Chestrig
-  description: An exterior chestrig used by USASF SECFOR.
+  description: An exterior chestrig used by USASF SECFOR. Its pouches hold three magazines, and a rifle can be slung on it.
   components:
   - type: Sprite
     sprite: CMU14/Clothing/USASFSecurityForces/chestrig.rsi
   - type: Clothing
     sprite: CMU14/Clothing/USASFSecurityForces/chestrig.rsi
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,5,1 # 3 slots
+    whitelist:
+      components:
+      - BallisticAmmoProvider
+  # The jacket base empties the suit slot for anyone who isn't a marine; keep guns allowed for everyone.
+  - type: RMCAllowSuitStorageUserWhitelist
+    defaultWhitelist:
+      components:
+      - Gun
+    allowedWhitelist: RMCAllowSuitStorageClothingHazardVest
+    user:
+      components:
+      - RMCAllowSuitStorage
 
 - type: entity
   parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]

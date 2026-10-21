@@ -1,0 +1,256 @@
+# USCM combat engineer team, called in through the UA intel list: a team leader with a sentry and two combat
+# engineers, all carrying metal, plasteel, sandbags and explosives to fortify a position fast.
+
+# Camo-matching USCM fatigues with the USCM Engineers patch already on them.
+- type: entity
+  parent: AU14CamoUSCMFatigues
+  id: CMUCamoUSCMFatiguesEngineer
+  suffix: CMU, USCM Engineers
+  components:
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUAFlag
+    - AU14PatchUSCM
+    - AU14PatchUSCMEngineers
+
+- type: entity
+  parent: SquadBase
+  id: CMUSquadUSCMEngineers
+  name: USCM Engineers
+  components:
+  - type: SquadTeam
+    color: "#d9a400"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UASOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_forecon
+    canSupplyDrop: false
+    group: CMUUSCMEngineers
+  - type: Tag
+    tags:
+    - CMUSquadUSCMEngineers
+
+- type: Tag
+  id: CMUSquadUSCMEngineers
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobUSCMEngineerTeamLeader
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: USCM
+  roundRole: CMUJobUSCMEngineerTeamLeader
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: engi
+  - type: Skills
+    skills:
+      RMCSkillEngineer: 3
+      RMCSkillConstruction: 3
+      RMCSkillFirearms: 2
+      RMCSkillEndurance: 1
+      RMCSkillCqc: 1
+      RMCSkillMedical: 1
+      RMCSkillFireman: 1
+  name: cmu-job-title-uscm-engineer-team-leader
+  description: cmu-job-description-uscm-engineer
+  playTimeTracker: CMUJobUSCMEngineerTeamLeader
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankSergeant:
+      entity: AU14ChevronUSCMSergeant
+      requirements: []
+  spawnMenuRoleName: USCM Combat Engineer Team Leader (Engineer Team)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearUSCMEngineerTeamLeader
+  greeting: cmu-job-greeting-uscm-engineer
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-uscm-plasma
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobUSCMEngineerTeamLeader
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  suffix: CMU, USCM, Engineer Team
+  id: CMUJobUSCMEngineerTeamLeader
+  name: USCM Combat Engineer Team Leader (Engineer Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUSCMEngineers
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-uscm-engineer-team-leader
+    description: cmu-job-description-uscm-engineer
+    reregister: false
+    job: CMUJobUSCMEngineerTeamLeader
+    raffle:
+      settings: short
+    rules: cmu-job-rules-uscm-engineer
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobUSCMCombatEngineer
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: USCM
+  roundRole: CMUJobUSCMCombatEngineer
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: engi
+  - type: Skills
+    skills:
+      RMCSkillEngineer: 3
+      RMCSkillConstruction: 3
+      RMCSkillFirearms: 2
+      RMCSkillEndurance: 1
+      RMCSkillCqc: 1
+      RMCSkillMedical: 1
+      RMCSkillFireman: 1
+  name: cmu-job-title-uscm-combat-engineer
+  description: cmu-job-description-uscm-engineer
+  playTimeTracker: CMUJobUSCMCombatEngineer
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankLanceCorporal:
+      entity: AU14ChevronUSCMLanceCorporal
+      requirements: []
+  spawnMenuRoleName: USCM Combat Engineer (Engineer Team)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearUSCMCombatEngineer
+  greeting: cmu-job-greeting-uscm-engineer
+  joinNotifyCrew: false
+  supervisors: cmu-job-title-uscm-engineer-team-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobUSCMCombatEngineer
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  suffix: CMU, USCM, Engineer Team
+  id: CMUJobUSCMCombatEngineer
+  name: USCM Combat Engineer (Engineer Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUSCMEngineers
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-uscm-combat-engineer
+    description: cmu-job-description-uscm-engineer
+    reregister: false
+    job: CMUJobUSCMCombatEngineer
+    raffle:
+      settings: short
+    rules: cmu-job-rules-uscm-engineer
+
+- type: startingGear
+  id: CMUGearUSCMEngineerBase
+  equipment:
+    jumpsuit: CMUCamoUSCMFatiguesEngineer
+    outerClothing: AU14CamoArmorM3Smooth
+    head: AU14CamoM10Helmet
+    eyes: RMCWeldingGoggles
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    shoes: CMBootsBlackFilled
+    ears: AU14HeadsetGovforMarine
+    belt: CMBeltUtilityFilled
+    pocket1: RMCPouchMagazineLarge
+    pocket2: AU14PouchIFAKFill
+    back: AU14TechBackpackMarine
+    suitstorage: RMCWeaponRifleM54CFilled
+  storage:
+    pocket1:
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    back:
+    - CMSheetMetal50
+    - CMSheetPlasteel10
+    - CMSandbagEmpty25
+    - CMEntrenchingTool
+    - RMCExplosivePlastic
+    - RMCExplosivePlastic
+
+- type: startingGear
+  parent: CMUGearUSCMEngineerBase
+  id: CMUGearUSCMEngineerTeamLeader
+  equipment:
+    id: CMUIDCardUSCMEngineerTeamLeader
+  inhand:
+  - AU14CaseSentry
+
+- type: startingGear
+  parent: CMUGearUSCMEngineerBase
+  id: CMUGearUSCMCombatEngineer
+  equipment:
+    id: CMUIDCardUSCMCombatEngineer
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardUSCMEngineerTeamLeader
+  name: USCM combat engineer team leader ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobUSCMEngineerTeamLeader
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardUSCMCombatEngineer
+  name: USCM combat engineer ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobUSCMCombatEngineer
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: partySpawn
+  id: CMUUSCMEngineerTeamSpawn
+  leadersToSpawn:
+    CMUJobUSCMEngineerTeamLeader: 1
+  gruntsToSpawn:
+    CMUJobUSCMCombatEngineer: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUUSCMEngineerTeam
+  displayName: USCM Combat Engineer Team
+  partyspawn: CMUUSCMEngineerTeamSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 3
+  roundstart: false

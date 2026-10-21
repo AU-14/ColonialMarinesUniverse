@@ -1,0 +1,141 @@
+# UPP Naval Infantry RPG team, called in through the UPP intel list: a gunner with the HJRA-12 and a loader
+# carrying most of the rockets. The gunner has the NPZ-92 for self defence; the loader keeps a Type 73.
+
+- type: job
+  parent: CMUJobUPPLineCommando
+  id: CMUJobUPPLineRPGGunner
+  name: cmu-job-title-uppline-rpg-gunner
+  description: cmu-uppline-description-rpg
+  startingGear: CMUGearUPPLineRPGGunner
+  spawnMenuRoleName: UPP Naval Infantry RPG Gunner (RPG Team)
+  chevrons:
+    UPP_Corporal:
+      entity: AU14ChevronUPPNICorporal
+      requirements: []
+  hidden: true
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPLineRPGGunner
+  name: UPP Naval Infantry RPG Gunner (RPG Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPLine
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-uppline-name-rpg-gunner
+    description: cmu-uppline-description-rpg
+    reregister: false
+    job: CMUJobUPPLineRPGGunner
+    raffle:
+      settings: short
+    rules: cmu-uppline-rules
+
+- type: job
+  parent: CMUJobUPPLineCommando
+  id: CMUJobUPPLineRPGLoader
+  name: cmu-job-title-uppline-rpg-loader
+  description: cmu-uppline-description-rpg
+  startingGear: CMUGearUPPLineRPGLoader
+  spawnMenuRoleName: UPP Naval Infantry RPG Loader (RPG Team)
+  chevrons:
+    UPP_Corporal:
+      entity: AU14ChevronUPPNIGefreiter
+      requirements: []
+  hidden: true
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPLineRPGLoader
+  name: UPP Naval Infantry RPG Loader (RPG Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPLine
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-uppline-name-rpg-loader
+    description: cmu-uppline-description-rpg
+    reregister: false
+    job: CMUJobUPPLineRPGLoader
+    raffle:
+      settings: short
+    rules: cmu-uppline-rules
+
+- type: startingGear
+  id: CMUGearUPPLineRPGBase
+  equipment:
+    head: CMHeadCapSPPBeret
+    jumpsuit: CMJumpsuitSPP
+    outerClothing: RMCArmorSPPCommando
+    gloves: RMCHandsVeteranSPP
+    shoes: RMCBootsSPPFilled
+    mask: RMCMaskBalaclavaSPPCommando
+    id: CMUIDCardUPPLineCommando
+    belt: RMCBeltHolsterPistolSPPNPZ92
+    back: AU14SatchelDemoSpecUPP
+    pocket2: RMCPouchFirstAidERTFill
+
+- type: startingGear
+  parent: CMUGearUPPLineRPGBase
+  id: CMUGearUPPLineRPGGunner
+  equipment:
+    suitstorage: RMCWeaponLauncherHJRA12
+    pocket1: RMCPouchMagazinePistol
+  storage:
+    pocket1:
+    - RMCMagazinePistolNP92
+    - RMCMagazinePistolNP92
+    - RMCMagazinePistolNP92
+    back:
+    - RMCRocketHJRA12AT
+    - RMCRocketHJRA12AT
+    - RMCRocketHJRA12HE
+    - RMCRocketHJRA12HE
+
+- type: startingGear
+  parent: CMUGearUPPLineRPGBase
+  id: CMUGearUPPLineRPGLoader
+  equipment:
+    suitstorage: RMCWeaponRifleType73Filled
+    pocket1: RMCPouchMagazineLarge
+  storage:
+    pocket1:
+    - RMCMagazineRifleType71AP
+    - RMCMagazineRifleType71AP
+    - RMCMagazineRifleType71AP
+    - RMCMagazineRifleType71AP
+    back:
+    - RMCRocketHJRA12AT
+    - RMCRocketHJRA12AT
+    - RMCRocketHJRA12AT
+    - RMCRocketHJRA12HE
+    - RMCRocketHJRA12HE
+    - RMCRocketHJRA12HE
+    - RMCRocketHJRA12Incen
+
+- type: partySpawn
+  id: CMUUPPLineRPGTeamSpawn
+  leadersToSpawn:
+    CMUJobUPPLineRPGGunner: 1
+  gruntsToSpawn:
+    CMUJobUPPLineRPGLoader: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUUPPLineRPGTeam
+  displayName: UPP Naval Infantry RPG Team
+  partyspawn: CMUUPPLineRPGTeamSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_spp_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 2
+  roundstart: false

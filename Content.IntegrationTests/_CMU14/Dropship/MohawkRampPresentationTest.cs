@@ -36,7 +36,7 @@ public sealed class MohawkRampPresentationTest
             var entities = pair.Server.EntMan;
             entities.System<SharedMapSystem>().CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
             var maps = entities.System<SharedMapSystem>();
             var cabin = entities.GetComponent<MapGridComponent>(ship);

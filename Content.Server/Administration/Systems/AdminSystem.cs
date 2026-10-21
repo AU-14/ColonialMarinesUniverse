@@ -111,7 +111,7 @@ public sealed partial class AdminSystem : EntitySystem
 
         var updateEv = new FullPlayerListEvent() { PlayersInfo = _playerList.Values.ToList() };
 
-        foreach (var admin in _adminManager.ActiveAdmins)
+        foreach (var admin in _adminManager.ActiveAdminsWithFlag(AdminFlags.PlayerList)) // cmu edit
         {
             RaiseNetworkEvent(updateEv, admin.Channel);
         }
@@ -133,7 +133,7 @@ public sealed partial class AdminSystem : EntitySystem
             PlayerInfo = _playerList[player.UserId]
         };
 
-        foreach (var admin in _adminManager.ActiveAdmins)
+        foreach (var admin in _adminManager.ActiveAdminsWithFlag(AdminFlags.PlayerList)) // cmu edit
         {
             RaiseNetworkEvent(playerInfoChangedEvent, admin.Channel);
         }
@@ -167,7 +167,7 @@ public sealed partial class AdminSystem : EntitySystem
     {
         UpdatePanicBunker();
 
-        if (!obj.IsAdmin)
+        if (!obj.IsAdmin || obj.Flags is not { } flags || (flags & AdminFlags.PlayerList) == 0) // cmu edit: needs the player list flag
         {
             RaiseNetworkEvent(new FullPlayerListEvent(), obj.Player.Channel);
             return;

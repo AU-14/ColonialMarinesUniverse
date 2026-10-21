@@ -12,8 +12,8 @@
   announceAsSurvivors: true
   partyspawn: RaidersSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_response_shuttle.yml
-  weight: 10
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 3 # rare
   minplayers: 0
   maxplayers: 400
   ghostsNeeded: 2
@@ -26,7 +26,7 @@
   id: FreeCompanyRaidersSurv
   displayName: Free Company Raiders (Survivors)
   entrymethod: ground
-  weight: 5
+  weight: 2 # rare
   ghostsNeeded: 0
   roundstart: true
   announcearrival: ''
