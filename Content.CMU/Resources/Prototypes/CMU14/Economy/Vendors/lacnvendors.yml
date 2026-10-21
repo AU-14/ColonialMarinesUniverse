@@ -1154,6 +1154,8 @@
         amount: 200
       - id: AU14WeaponRifleKramerMagazineAP
         amount: 15
+      - id: CMUWeaponRifleKramerMagazineHP
+        amount: 5
       - id: RMCBoxShotgunBuckshot
         amount: 20
       - id: RMCBoxShotgunFlechette

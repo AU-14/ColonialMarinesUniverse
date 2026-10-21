@@ -65,3 +65,25 @@
         amount: 1
       - id: CMMagazineSMGMP5
         amount: 3
+
+- type: entity
+  parent: RMCKitBase
+  id: CMUKitWeaponM20A2LEO
+  name: M20A2 pulse rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: CMUWeaponRifleM20A2
+        amount: 1
+      - id: AU14MagazineRifleM20A
+        amount: 3

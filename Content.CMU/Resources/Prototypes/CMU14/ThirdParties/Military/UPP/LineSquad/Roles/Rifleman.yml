@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: CMUJobUPPLineRifleman
+  chevrons:
+    UPP_Gefreiter:
+      entity: AU14ChevronUPPNIGefreiter
+      requirements: []
   roundSide: ThirdParty
   roundForce: UPPLine
   roundRole: UPPLineRifleman
@@ -26,7 +30,7 @@
     - Mandarin
     currentLanguage: Russian
     defaultLanguage: Russian
-  name: cmu-uppline-name-rifleman
+  name: cmu-uppline-name-rifleman-title
   description: cmu-uppline-description
   playTimeTracker: CMUJobUPPLineRifleman
   ranks:

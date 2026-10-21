@@ -55,7 +55,7 @@
             state: beacon
         - name: cmu-tech-clf-vaiso
           description: cmu-tech-clf-vaiso-desc
-          cost: 50
+          cost: 40
           repurchasable: false
           events:
           - !type:TechPartySpawnEvent
@@ -65,7 +65,7 @@
             state: beacon
         - name: cmu-tech-clf-commandos
           description: cmu-tech-clf-commandos-desc
-          cost: 50
+          cost: 45
           repurchasable: false
           events:
           - !type:TechPartySpawnEvent

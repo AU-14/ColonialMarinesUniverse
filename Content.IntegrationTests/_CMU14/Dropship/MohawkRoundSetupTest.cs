@@ -43,11 +43,11 @@ public sealed class MohawkRoundSetupTest
             opforfighters: 0
         """;
 
-    // cmu edit start: USCM flies the Midway and the dynamic gunship
+    // cmu edit start: USCM flies the Omaha and the dynamic gunship
     [TestCase("USCM", "govfor", "/Maps/_RMC14/Shuttles/dynamic_gunship.yml")]
     // cmu edit end
-    [TestCase("HAZOPS", "opfor", "/Maps/CMU14/Shuttles/osprey.yml")]
-    public async Task MidwayReplacesGunshipAndDeploysAllDecksToBush(string platoonId, string faction, string transport)
+    [TestCase("HAZOPS", "opfor", "/Maps/CMU14/Dropships/osprey.yml")]
+    public async Task OmahaReplacesGunshipAndDeploysAllDecksToBush(string platoonId, string faction, string transport)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         var server = pair.Server;
@@ -66,7 +66,7 @@ public sealed class MohawkRoundSetupTest
             Assert.That(platoon.CompatibleDropships.Select(path => path.ToString()), Is.EquivalentTo(new[]
             {
                 transport,
-                "/Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml",
+                "/Maps/CMU14/Dropships/Mohawk/omaha_deployment.yml",
             }));
             if (faction == "govfor")
                 platoons.SelectedGovforPlatoon = platoon;
@@ -85,10 +85,10 @@ public sealed class MohawkRoundSetupTest
             Assert.That(ticker.StartGameRule(PlatoonSpawnPrototype), Is.True);
             var assembly = entities.QueryEntities<MultiDeckDropshipComponent>().Single();
             ship = assembly.Owner;
-            Assert.That(entities.GetComponent<MetaDataComponent>(ship).EntityName, Is.EqualTo("Midway"));
+            Assert.That(entities.GetComponent<MetaDataComponent>(ship).EntityName, Is.EqualTo("Omaha"));
             Assert.That(entities.QueryEntities<DropshipComponent>().Count(), Is.EqualTo(2));
             foreach (var dropship in entities.QueryEntities<DropshipComponent>())
-                Assert.That(dropship.Comp.Destination, Is.Not.Null, "Both the transport and Midway need a hangar pad.");
+                Assert.That(dropship.Comp.Destination, Is.Not.Null, "Both the transport and the Omaha need a hangar pad.");
             Assert.That(entities.GetComponent<DropshipComponent>(ship).Destination, Is.Not.Null,
                 "Round setup must reserve a Bush landing pad for the replacement gunship.");
             destination = entities.GetComponent<DropshipComponent>(ship).Destination!.Value;

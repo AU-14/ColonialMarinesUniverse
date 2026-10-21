@@ -4,7 +4,7 @@
   displayName: US Army Infantry Reinforcements
   partyspawn: USArmySpawn
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_response_shuttle.yml
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
   weight: 0
   minplayers: 0
   maxplayers: 400

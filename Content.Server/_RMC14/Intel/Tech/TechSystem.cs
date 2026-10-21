@@ -76,7 +76,7 @@ public sealed partial class ServerTechSystem : EntitySystem
             }
 
             // Call the server system to spawn the third party using resolved spawnProto.
-            _thirdParty.SpawnThirdParty(proto, spawnProto, false);
+            _thirdParty.SpawnThirdParty(proto, spawnProto, false, summoningFaction: ev.Team); // cmu edit: held to the buying faction's ship pad
         });
     }
 
