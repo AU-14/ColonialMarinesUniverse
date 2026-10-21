@@ -15689,7 +15689,7 @@ public sealed class YautjaBowTest
         int total,
         int max,
         string source,
-        string explosionType = "CMUYautjaCasterExplosion",
+        string explosionType = "RMC",
         int? maxTileBreak = null)
     {
         Assert.Multiple(() =>
