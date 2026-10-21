@@ -55,6 +55,11 @@ lifecycle, AUTO-only clearance, mounted GAU ammunition consumption and danger-cl
 confirmation. Run with `dotnet test Content.IntegrationTests\Content.IntegrationTests.csproj
 -c DebugOpt --filter "FullyQualifiedName~CMURtoRadioTest|FullyQualifiedName~CMUCasRequestTest|FullyQualifiedName~CMUCasAutoCarryTest"`.
 
+The CIP foundation exposes shared console-faction lookup and target selection
+for independently merged aircraft features. It adds no weapons or automated
+strike behavior. Console-local faction whitelists take priority over the ship's
+faction; otherwise consoles inherit their grid's faction.
+
 Dropship part fabricators share a budget within their carrier's faction, including linked decks. GOVFOR and OPFOR have separate accounts for purchases, refunds, passive income and faction tech rewards.
 
 In FoF, squad leaders, acting squad leaders, officers and command personnel can hack an opposing dropship's navigation console. The hack takes 60 seconds and breaks on movement, damage or resting. Existing launch and hijack timing limits apply. Authorization is tied to the user and console and expires after one minute.

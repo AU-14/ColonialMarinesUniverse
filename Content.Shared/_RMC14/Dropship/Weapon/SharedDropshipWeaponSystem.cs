@@ -206,11 +206,6 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         Subs.CVar(_config, RMCCVars.RMCDropshipCASDebug, v => CasDebug = v, true);
     }
 
-    public void SetTerminalTarget(Entity<DropshipTerminalWeaponsComponent> terminal, EntityUid? target)
-    {
-        SetTarget(terminal, target);
-    }
-
     private void SetTarget(Entity<DropshipTerminalWeaponsComponent> dropshipWeaponsTerminal, EntityUid? newTarget)
     {
         if (newTarget == dropshipWeaponsTerminal.Comp.Target)
@@ -1642,14 +1637,6 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         }
 
         return abbreviation;
-    }
-
-    public string? GetConsoleFaction(EntityUid console)
-    {
-        if (TryComp(console, out WhitelistedShuttleComponent? whitelist) &&
-            !string.IsNullOrWhiteSpace(whitelist.Faction))
-            return whitelist.Faction;
-        return _dropship.TryGetGridFaction(console, out var faction) ? faction : null;
     }
 
     public string? GetUserFaction(EntityUid user)
