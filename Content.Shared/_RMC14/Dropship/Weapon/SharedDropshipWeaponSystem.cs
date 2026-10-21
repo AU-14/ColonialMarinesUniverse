@@ -1705,19 +1705,6 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         return abbreviation;
     }
 
-    // CMU14: weapons consoles without their own faction (Mohawk gunnery, generic weapons controls)
-    // inherit the faction of the dropship they are installed on.
-    public string? GetConsoleFaction(EntityUid console)
-    {
-        if (TryComp(console, out WhitelistedShuttleComponent? whitelist) &&
-            !string.IsNullOrWhiteSpace(whitelist.Faction))
-        {
-            return whitelist.Faction;
-        }
-
-        return _dropship.TryGetGridFaction(console, out var faction) ? faction : null;
-    }
-
     public string? GetUserFaction(EntityUid user)
     {
         if (TryComp(user, out MarineComponent? marine) &&
