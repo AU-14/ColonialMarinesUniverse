@@ -5,6 +5,8 @@ namespace Content.Client.CMU14.Round.Objectives;
 
 public sealed partial class ClientObjectiveHotspotSystem : EntitySystem
 {
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -17,11 +19,11 @@ public sealed partial class ClientObjectiveHotspotSystem : EntitySystem
 
     private void OnHotspotAppearance(EntityUid uid, HotspotObjectiveComponent comp, ref AppearanceChangeEvent args)
     {
-        if (args.Component.TryGetData(HotspotVisuals.Controller, out string? controller))
+        if (_appearance.TryGetData(uid, HotspotVisuals.Controller, out string? controller, args.Component))
             UpdateZoneColor(uid, controller);
     }
 
-    private static void UpdateZoneColor(EntityUid uid, string? controller)
+    private void UpdateZoneColor(EntityUid uid, string? controller)
     {
         if (!TryComp<SpriteComponent>(uid, out var sprite))
             return;

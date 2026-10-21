@@ -366,7 +366,8 @@ namespace Content.Shared.Preferences
                 "insurgency" => "Insurgency",
                 "colonyfall" => "ColonyFall",
                 "distresssignal" => "DistressSignal",
-                // CMU14: FoF runs the Insurgency preset, so colony roles and prefs carry over.
+                // CMU14: FoF edits write the isolated Insurgency store; reads overlay the
+                // military DistressSignal prefs so the DS tab's own entries stay untouched.
                 "forceonforce" => "Insurgency",
                 _ => gamemode.Trim()
             };
@@ -1002,11 +1003,32 @@ namespace Content.Shared.Preferences
         public IReadOnlyDictionary<ProtoId<JobPrototype>, JobPriority> GetJobPrioritiesForGamemode(string? gamemode)
         {
             var key = NormalizePreferenceGamemode(gamemode);
-            if (string.IsNullOrEmpty(key) ||
-                !_gamemodeJobPriorities.TryGetValue(key, out var priorities))
-            {
+            if (string.IsNullOrEmpty(key))
                 return _jobPriorities;
+
+            // CMU14: the FoF view overlays the military DistressSignal store so the editor's
+            // DS-tab entries price FoF roles, while FoF edits keep writing the isolated
+            // Insurgency store and never clobber the DS tab's own entries.
+            if (key == "Insurgency" && string.Equals(gamemode, "ForceOnForce", StringComparison.OrdinalIgnoreCase))
+            {
+                var merged = new Dictionary<ProtoId<JobPrototype>, JobPriority>();
+                if (_gamemodeJobPriorities.TryGetValue("DistressSignal", out var military))
+                {
+                    foreach (var (id, priority) in military)
+                        merged[id] = priority;
+                }
+
+                if (_gamemodeJobPriorities.TryGetValue(key, out var fof))
+                {
+                    foreach (var (id, priority) in fof)
+                        merged[id] = priority;
+                }
+
+                return merged.Count > 0 ? NormalizeJobPriorities(merged) : _jobPriorities;
             }
+
+            if (!_gamemodeJobPriorities.TryGetValue(key, out var priorities))
+                return _jobPriorities;
 
             return NormalizeJobPriorities(priorities);
         }

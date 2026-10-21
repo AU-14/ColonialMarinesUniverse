@@ -170,13 +170,12 @@ public sealed partial class ChatSystem
         !_mobStateSystem.IsDead(source)
         && (_mobStateSystem.IsCritical(source) || HasComp<SleepingComponent>(source) || HasComp<RMCUnconsciousComponent>(source))
             && TryComp<SpeechComponent>(source, out var speech) && speech.Enabled
-            && !TryComp<AdminFrozenComponent>(source, out var frozen) || !frozen.Muted;
+            && (!TryComp<AdminFrozenComponent>(source, out var frozen) || !frozen.Muted);
 
     private bool CanWhisperInCrit(EntityUid source) =>
         _critWhisperEnabled
         && IsUnconsciousForWhisper(source)
-        && !HasMuteOtherThanKnockout(source)
-
+        && !HasMuteOtherThanKnockout(source); // CMU14: fix missing semicolon
     // Knockouts mute normal speech; any other mute still blocks whispering.
     private bool HasMuteOtherThanKnockout(EntityUid source)
     {
