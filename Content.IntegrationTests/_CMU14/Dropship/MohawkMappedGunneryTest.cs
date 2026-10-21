@@ -1,4 +1,5 @@
 using Content.IntegrationTests.Fixtures;
+using Content.Client.CMU14.Dropship.DirectFire;
 using Content.Client._RMC14.Dropship.Weapon;
 using Content.Client.UserInterface.ControlExtensions;
 using Robust.Client.UserInterface;
@@ -114,8 +115,8 @@ public sealed class MohawkMappedGunneryTest : GameTest
                 "The screen controls must use digital stylesheet states, not hard-coded legacy green borders.");
             var bui = (DropshipWeaponsBui) CEntMan.GetComponent<UserInterfaceComponent>(CEntMan.GetEntity(consoleNet))
                 .ClientOpenInterfaces[DropshipTerminalWeaponsUi.Key];
-            var preview = window.ScreenOne.Viewport.Children.OfType<DropshipTargetingPreview>().Single();
-            var elapsed = typeof(DropshipTargetingPreview).GetField("_aimElapsed", BindingFlags.Instance | BindingFlags.NonPublic)!;
+            var preview = window.ScreenOne.Viewport.Children.OfType<MohawkGunnerPreview>().Single();
+            var elapsed = typeof(MohawkGunnerPreview).GetField("_aimElapsed", BindingFlags.Instance | BindingFlags.NonPublic)!;
             elapsed.SetValue(preview, 0.08f);
             var input = Client.ResolveDependency<IInputManager>();
             var enabled = input.Enabled;
@@ -134,7 +135,7 @@ public sealed class MohawkMappedGunneryTest : GameTest
                 {
                     bui.Refresh();
                     Assert.That(viewport.Visible, Is.True);
-                    Assert.That(viewport.Children.OfType<DropshipTargetingPreview>().Single(), Is.SameAs(preview));
+                    Assert.That(viewport.Children.OfType<MohawkGunnerPreview>().Single(), Is.SameAs(preview));
                     Assert.That(elapsed.GetValue(preview), Is.EqualTo(0.08f),
                         "Ammo/aim refreshes must not starve the 100ms held-trigger heartbeat.");
                     Assert.That(held.GetValue(bui), Is.True);

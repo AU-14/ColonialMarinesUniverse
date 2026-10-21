@@ -230,15 +230,6 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         }
     }
 
-    // CMU14: generic consoles inherit the faction of their installed dropship.
-    public string? GetConsoleFaction(EntityUid console)
-    {
-        if (TryComp(console, out WhitelistedShuttleComponent? whitelist) &&
-            !string.IsNullOrWhiteSpace(whitelist.Faction))
-            return whitelist.Faction;
-        return _dropship.TryGetGridFaction(console, out var faction) ? faction : null;
-    }
-
     // CMU14: pilot and gunner retain independent flare selections on the same ship.
     public void ShareFlare(EntityUid console, EntityUid? flare, bool gunner)
     {
