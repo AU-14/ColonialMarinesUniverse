@@ -2804,6 +2804,10 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         return CasDebug || CanFireAtCoordinate(coordinates, penetration);
     }
 
+    // CMU14: unobstructed energy envelope; actual coverage also depends on walls and resistance.
+    public static float EstimateBlastRadius(RMCExplosion explosion) =>
+        0.5f + SharedExplosionSystem.CalculateBlastRadius(explosion.Total, explosion.Slope, explosion.Max);
+
     public bool TryFireChinGunAirburst(Entity<MohawkChinGunComponent> point, EntityUid weapon,
         EntityUid actor, EntityCoordinates coordinates, DropshipTerminalWeaponsComponent terminal)
     {

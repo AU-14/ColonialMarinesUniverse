@@ -203,7 +203,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
     private static string LocationTag(DropshipWeaponPointLocation location)
     {
-        return location == DropshipWeaponPointLocation.Internal ? "INT" : ((int) location).ToString();
+        return ((int) location).ToString();
     }
 
     public void Refresh()
@@ -734,12 +734,11 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 {
                     if (_weaponSystem.TryGetWeaponAmmo(selectedWeapon.Value, out var ammo))
                     {
-                        var summary = _weaponSystem.GetLoadedAmmoSummary(ammo);
                         screen.ScreenLabel.Text = Loc.GetString("rmc-dropship-weapons-weapon-selected-ammo",
                             ("weapon", selectedWeapon.Value),
                             ("ammo", ammo),
-                            ("rounds", summary.Comp.Rounds),
-                            ("maxRounds", summary.Comp.MaxRounds));
+                            ("rounds", ammo.Comp.Rounds),
+                            ("maxRounds", ammo.Comp.MaxRounds));
                     }
                     else
                     {
@@ -1063,9 +1062,8 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
                         if (_weaponSystem.TryGetWeaponAmmo(weaponEntity, out var weaponAmmo))
                         {
-                            var summary = _weaponSystem.GetLoadedAmmoSummary(weaponAmmo);
-                            info.MaxAmmo = summary.Comp.MaxRounds;
-                            info.Ammo = summary.Comp.Rounds;
+                            info.MaxAmmo = weaponAmmo.Comp.MaxRounds;
+                            info.Ammo = weaponAmmo.Comp.Rounds;
                             info.AmmoConsumption = weaponAmmo.Comp.RoundsPerShot * setOffsetCount;
                         }
 
@@ -1136,9 +1134,8 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
                     if (_weaponSystem.TryGetWeaponAmmo(weaponEntity, out var weaponAmmo))
                     {
-                        var summary = _weaponSystem.GetLoadedAmmoSummary(weaponAmmo);
-                        weaponInfo.MaxAmmo = summary.Comp.MaxRounds;
-                        weaponInfo.Ammo = summary.Comp.Rounds;
+                        weaponInfo.MaxAmmo = weaponAmmo.Comp.MaxRounds;
+                        weaponInfo.Ammo = weaponAmmo.Comp.Rounds;
                         weaponInfo.AmmoConsumption = weaponAmmo.Comp.RoundsPerShot;
 
                         if (weaponAmmo.Comp.FireMissionDelay != null)
