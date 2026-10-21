@@ -36,6 +36,7 @@
     - CLF
   - type: FactionLanguageMember
     factionTag: CLF
+  - type: MarineOrders
 
   name: au14-job-name-clfguerilla
   description: au14-job-description-clfguerilla-alt

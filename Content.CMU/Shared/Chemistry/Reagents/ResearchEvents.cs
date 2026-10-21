@@ -62,11 +62,13 @@ public sealed class UpdateResearchConsoleEvent(List<GeneratedReagentData> reagen
     public TimeSpan NextUpdate = nextUpdate;
 }
 [Serializable, NetSerializable]
-public sealed class UpdateDataTerminalClearanceEvent(int clearance, int credits, string faction = "corporate") : EntityEventArgs
+public sealed class UpdateDataTerminalClearanceEvent(int clearance, int credits, string faction = "corporate", int sampleData = -1) : EntityEventArgs
 {
     public int Clearance = clearance;
     public int Credits = credits;
     public string Faction = faction;
+    /// <summary>Simulator currency; -1 leaves the current value unchanged.</summary>
+    public int SampleData = sampleData;
 }
 
 [Serializable, NetSerializable]
