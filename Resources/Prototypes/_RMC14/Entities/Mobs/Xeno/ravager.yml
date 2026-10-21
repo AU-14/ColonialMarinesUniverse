@@ -165,9 +165,10 @@
   parent: RMCXenoRavagerBase
   id: CMXenoRavager
   components:
-  - type: CMArmorPiercing
-    amount: 30
   - type: XenoShield
+  - type: XenoClaws
+    clawType: VerySharp
+    armorPiercing: 25
   - type: XenoLeap
     delay: 0
     knockdownTime: 0
