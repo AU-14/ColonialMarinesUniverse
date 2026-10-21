@@ -88,7 +88,13 @@ public sealed partial class XenoClawsSystem : EntitySystem
         return _xenoClawsQuery.TryComp(uid, out var claws) &&
                claws.ClawType.CompareTo(minimum) >= 0;
     }
-
+   
+    private void OnGetArmorPiercing(Entity<XenoClawsComponent> ent, ref CMGetArmorPiercingEvent args)  // CMU14
+    {
+        args.Piercing += ent.Comp.ArmorPiercing;  
+    }
+    
+    
     private void OnAirlockReceiverDamageModify(Entity<AirlockReceiverXenoClawsComponent> ent, ref DamageModifyEvent args)
     {
         var xeno = args.Tool;
