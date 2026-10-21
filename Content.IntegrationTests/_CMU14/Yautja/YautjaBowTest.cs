@@ -295,7 +295,8 @@ public sealed class YautjaBowTest
                     casterLethal,
                     50,
                     50,
-                    "CMSS13 /datum/ammo/energy/yautja/caster/bolt/single_lethal calls cell_explosion(..., 50, 50, EXPLOSION_FALLOFF_SHAPE_LINEAR).");
+                    "CMSS13 /datum/ammo/energy/yautja/caster/bolt/single_lethal calls cell_explosion(..., 50, 50, EXPLOSION_FALLOFF_SHAPE_LINEAR).",
+                    explosionType: "CMUYautjaCasterExplosion");
                 // CM-SS13 uses cell_explosion(..., 170, 50); the eradicator is intentionally buffed to 330 / 200 so a
                 // direct blast critically injures, which is a documented CMU deviation rather than parity.
                 AssertExplosionPayload(entMan,
@@ -303,7 +304,7 @@ public sealed class YautjaBowTest
                     330,
                     200,
                     "CMU14 eradicator blast is deliberately stronger than cell_explosion(..., 170, 50).",
-                    "CMUYautjaEradicatorExplosion");
+                    explosionType: "CMUYautjaEradicatorExplosion");
             }
             finally
             {
@@ -4268,7 +4269,8 @@ public sealed class YautjaBowTest
                         projectile,
                         50,
                         50,
-                        "Until the exact source lance datum is located, the local lance-equivalent keeps the closest located caster-lethal payload.");
+                        "Until the exact source lance datum is located, the local lance-equivalent keeps the closest located caster-lethal payload.",
+                        explosionType: "CMUYautjaCasterExplosion");
                     Assert.That(entMan.HasComponent<RMCScorchEffectComponent>(projectile), Is.True,
                         "The current local lance-equivalent keeps the caster-lethal scorch payload for live-fire parity coverage.");
                 });
@@ -12688,7 +12690,8 @@ public sealed class YautjaBowTest
                         explosiveProjectile.Value,
                         50,
                         50,
-                        "CMSS13 carbine impact-explosive mode keeps the caster single-lethal cell_explosion payload.");
+                        "CMSS13 carbine impact-explosive mode keeps the caster single-lethal cell_explosion payload.",
+                        explosionType: "CMUYautjaCasterExplosion");
                 });
             }
             finally
