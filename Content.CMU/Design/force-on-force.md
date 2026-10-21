@@ -40,6 +40,12 @@ setting its nullable `EntityCoordinates` field `Coordinates`. With no provider,
 the report list is empty and report IDs are rejected. Both events and the
 serializable record are owned by `Content.Shared.CMU14.Dropship.Cas`.
 
+The combined integration layer supplies this provider using the guidance report
+store. RTO calls and aircraft programming share the same validated, fixed-deviation
+solution. It also adds the GPS-guided 105mm Howitzer shell when CAS Weapons and
+Guidance are installed: 1400 points, twice standard HE, with the same HE payload.
+Neither addition is required by the standalone feature branches.
+
 Xenos, or players holding a sharp tool such as a knife, can right-click an RTO
 radio pack or its wearer to **Rip out radio wires**.
 This takes seven seconds and is interrupted by movement, damage, or changing
