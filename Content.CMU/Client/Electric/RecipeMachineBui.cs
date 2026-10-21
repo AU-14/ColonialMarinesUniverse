@@ -6,7 +6,6 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client.CMU14.Electric;
 
-// Client side of a machine that makes things by recipe: opens its window.
 public sealed class RecipeMachineBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     [ViewVariables]
@@ -21,5 +20,6 @@ public sealed class RecipeMachineBui(EntityUid owner, Enum uiKey) : BoundUserInt
         _window.OnSlotPressed += slotId => SendPredictedMessage(new ItemSlotButtonPressedEvent(slotId));
         _window.OnCircuitChosen += circuit => SendMessage(new RecipeMachineCircuitMessage(circuit));
         _window.OnAutoChosen += (output, value) => SendMessage(new RecipeMachineAutoMessage(output, value));
+        _window.OnFilterChosen += (output, id, value) => SendMessage(new RecipeMachineFilterMessage(output, id, value));
     }
 }

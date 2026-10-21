@@ -20,8 +20,8 @@ public sealed class FluidLinkSystem : EntitySystem
     [Dependency] private readonly ISharedPlayerManager _player = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
 
-    // The farthest a link reaches: a pipe and a machine further apart than this cannot be joined.
-    private const float MaxDistance = 25f;
+    // The farthest a link reaches: a pipe and a machine further apart than this cannot be joined (and a link that is stretched past it is cut).
+    private const float MaxDistance = FluidSystem.MaxLinkDistance;
 
     // The pipe each user has picked.
     private readonly Dictionary<EntityUid, EntityUid> _picked = new();

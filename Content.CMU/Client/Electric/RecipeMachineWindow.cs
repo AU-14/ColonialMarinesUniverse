@@ -49,10 +49,20 @@ public sealed class RecipeMachineWindow : DefaultWindow
     public event Action<string>? OnSlotPressed;
     public event Action<int>? OnCircuitChosen;
     public event Action<bool, bool>? OnAutoChosen;
+    public event Action<bool, string, bool>? OnFilterChosen;
 
     private readonly CheckBox _autoOutput;
     private readonly CheckBox _autoInput;
     private bool _settingAuto;
+
+    // The filters of the ports: a list of everything the machine takes in and of everything it gives out, each with a tick. Nothing ticked means everything.
+    private readonly BoxContainer _filterRow;
+    private readonly BoxContainer _inputFilterList;
+    private readonly BoxContainer _outputFilterList;
+    private readonly ScrollContainer _inputFilterScroll;
+    private readonly ScrollContainer _outputFilterScroll;
+    private readonly Dictionary<string, CheckBox> _inputChecks = new();
+    private readonly Dictionary<string, CheckBox> _outputChecks = new();
 
     public RecipeMachineWindow()
     {
@@ -104,6 +114,24 @@ public sealed class RecipeMachineWindow : DefaultWindow
         _autoInput.OnToggled += args => { if (!_settingAuto) OnAutoChosen?.Invoke(false, args.Pressed); };
         autoRow.AddChild(_autoInput);
         root.AddChild(autoRow);
+
+        _filterRow = MachineWindowKit.Row(12);
+        var inputFilterButton = new Button { Text = Loc.GetString("au14-machine-filter-input"), ToggleMode = true };
+        var outputFilterButton = new Button { Text = Loc.GetString("au14-machine-filter-output"), ToggleMode = true };
+        _filterRow.AddChild(inputFilterButton);
+        _filterRow.AddChild(outputFilterButton);
+        root.AddChild(_filterRow);
+
+        _inputFilterList = MachineWindowKit.Column(0);
+        _outputFilterList = MachineWindowKit.Column(0);
+        _inputFilterScroll = new ScrollContainer { MinSize = new Vector2(480, 110), MaxHeight = 110, HScrollEnabled = false, Visible = false };
+        _outputFilterScroll = new ScrollContainer { MinSize = new Vector2(480, 110), MaxHeight = 110, HScrollEnabled = false, Visible = false };
+        _inputFilterScroll.AddChild(_inputFilterList);
+        _outputFilterScroll.AddChild(_outputFilterList);
+        root.AddChild(_inputFilterScroll);
+        root.AddChild(_outputFilterScroll);
+        inputFilterButton.OnToggled += args => _inputFilterScroll.Visible = args.Pressed;
+        outputFilterButton.OnToggled += args => _outputFilterScroll.Visible = args.Pressed;
 
         _progressBar = MachineWindowKit.Bar(400);
         root.AddChild(_progressBar);
@@ -182,11 +210,54 @@ public sealed class RecipeMachineWindow : DefaultWindow
 
         _circuitRow.Visible = recipes.Any(recipe => recipe.Circuit != null);
 
+        FillFilters(recipes);
+
         foreach (var recipe in recipes)
         {
             var text = new RichTextLabel { HorizontalExpand = true };
             text.SetMessage(FormattedMessage.FromUnformatted(Describe(recipe)));
             _recipeList.AddChild(text);
+        }
+    }
+
+    // The lists of what the machine can take in and give out, from its recipes, each thing once with a tick to put it in the filter.
+    private void FillFilters(List<MachineRecipePrototype> recipes)
+    {
+        var inputs = new Dictionary<string, string>();
+        var outputs = new Dictionary<string, string>();
+
+        foreach (var recipe in recipes)
+        {
+            foreach (var id in recipe.Inputs.Keys.Concat(recipe.Catalysts.Keys))
+                inputs[id] = StackName(id);
+
+            foreach (var proto in recipe.ItemInputs.Keys)
+                inputs[proto] = _proto.TryIndex<EntityPrototype>(proto, out var entity) ? entity.Name : proto.Id;
+
+            foreach (var id in recipe.Outputs.Keys)
+                outputs[id] = StackName(id);
+
+            foreach (var proto in recipe.ItemOutputs.Keys)
+                outputs[proto] = _proto.TryIndex<EntityPrototype>(proto, out var entity) ? entity.Name : proto.Id;
+        }
+
+        AddChecks(inputs, _inputFilterList, _inputChecks, output: false);
+        AddChecks(outputs, _outputFilterList, _outputChecks, output: true);
+    }
+
+    private void AddChecks(Dictionary<string, string> things, BoxContainer holder, Dictionary<string, CheckBox> checks, bool output)
+    {
+        foreach (var (id, name) in things.OrderBy(pair => pair.Value, StringComparer.CurrentCultureIgnoreCase))
+        {
+            var check = new CheckBox { Text = name };
+            var thing = id;
+            check.OnToggled += args =>
+            {
+                if (!_settingAuto)
+                    OnFilterChosen?.Invoke(output, thing, args.Pressed);
+            };
+            checks[id] = check;
+            holder.AddChild(check);
         }
     }
 
@@ -244,7 +315,17 @@ public sealed class RecipeMachineWindow : DefaultWindow
             _settingAuto = true;
             _autoOutput.Pressed = auto.AutoOutput;
             _autoInput.Pressed = auto.AutoInput;
+            foreach (var (id, check) in _inputChecks)
+                check.Pressed = auto.InputFilter.Contains(id);
+            foreach (var (id, check) in _outputChecks)
+                check.Pressed = auto.OutputFilter.Contains(id);
             _settingAuto = false;
+        }
+        _filterRow.Visible = auto != null;
+        if (auto == null)
+        {
+            _inputFilterScroll.Visible = false;
+            _outputFilterScroll.Visible = false;
         }
         _tankLabel.Text = _entMan.TryGetComponent<FluidTankComponent>(_owner, out var tank)
             ? MachineWindowKit.TankText(_entMan, tank)

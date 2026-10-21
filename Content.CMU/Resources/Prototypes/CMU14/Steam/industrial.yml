@@ -18,6 +18,8 @@
     - state: boiler_on
       map: [ "hot" ]
       visible: false
+  - type: AutoPorts
+    inputSlots: [ fuel ]
 
 # The industrial steam generator: gives twice the power of the brass one, from the same steam.
 - type: entity
@@ -53,6 +55,8 @@
       shader: unshaded
       map: [ "light" ]
       visible: false
+  - type: AutoPorts
+    outputSlots: [ output1, output2, output3, output4, output5, output6 ]
 
 # The industrial steam press: the steam press, gray.
 - type: entity
@@ -65,6 +69,9 @@
     noRot: true
     sprite: CMU14/Production/Industrial/steam_press_industrial.rsi
     state: press
+  - type: AutoPorts
+    inputSlots: [ input1, input2 ]
+    outputSlots: [ output1, output2, output3, output4 ]
 
 # The industrial steam smelter: the steam smelter, gray, and it melts the ore clean: no slag.
 - type: entity
@@ -79,6 +86,9 @@
     state: smelter
   - type: SteamSmelter
     producesSlag: false
+  - type: AutoPorts
+    inputSlots: [ material1, material2, material3, material4 ]
+    outputSlots: [ output ]
 
 # The industrial steam extractor: the steam extractor, gray, and it works twice as fast on the same steam. It is built of machine hulls.
 - type: entity
@@ -103,8 +113,11 @@
     noRot: true
     sprite: CMU14/Production/Industrial/fuel_press_industrial.rsi
     state: press
+  - type: AutoPorts
+    inputSlots: [ input1, input2, fuel ]
+    outputSlots: [ output1, output2, output3, output4 ]
 
-# The industrial steam grinder: the steam grinder, tinted gray, built of machine hulls.
+# The industrial steam grinder: the steam grinder in steel, built of machine hulls.
 - type: entity
   parent: RUMCSteamGrinder
   id: RUMCIndustrialSteamGrinder
@@ -112,7 +125,12 @@
   description: A gray shredder driven by steam, built of machine hulls. Join a gas pipe with steam to it and it chews through every slot it can at once.
   components:
   - type: Sprite
-    color: "#a9b2bb"
+    sprite: CMU14/Production/Grinding/grinder_steel.rsi
+    state: grinder
+    noRot: true
+  - type: AutoPorts
+    inputSlots: [ material1, material2, material3, material4, material5, material6, material7, material8, material9 ]
+    outputSlots: [ output1, output2, output3, output4, output5, output6, output7, output8, output9, output10, output11, output12, output13, output14, output15, output16, output17, output18 ]
 
 # The industrial condenser: the brass condenser in steel. It needs neither power nor steam, only a steady supply of the coolant.
 - type: entity
@@ -125,6 +143,8 @@
     noRot: true
     sprite: CMU14/Production/Steam/condenser_steel.rsi
     state: condenser
+  - type: AutoPorts
+    outputSlots: [ output ]
 
 # The crate of the start of the industry. It is sealed and opens with a crowbar.
 - type: entity

@@ -34,6 +34,10 @@ public sealed class FluidSystem : EntitySystem
     // The longest step a pipe is levelled in: a stalled tick must not move more than a second's worth.
     private const float MaxStep = 0.5f;
 
+    // The farthest a link made with a screwdriver reaches, in tiles, between two pipes or between a pipe and a machine. A link is a long pipe that is not drawn: the farther it
+    // reaches the less goes through it (see Conductance), and one that is stretched past this is cut.
+    public const float MaxLinkDistance = 12f;
+
     private EntityQuery<FluidPipeComponent> _pipeQuery;
     private EntityQuery<FluidTankComponent> _tankQuery;
 
@@ -139,6 +143,64 @@ public sealed class FluidSystem : EntitySystem
         _pipesChanged = true;
     }
 
+    // How much of its flow a link lets through: all of it between neighbours, and the less of it the longer the link, as a long pipe would, so that a liquid does not
+    // arrive as fast from the far end of a link as from the next tile.
+    public static float Conductance(float distance) => 1f / Math.Max(1f, distance);
+
+    // How far apart two things stand, in tiles; two things on different maps are as far as can be.
+    public float DistanceBetween(EntityUid a, EntityUid b)
+    {
+        var first = _transform.GetMapCoordinates(a);
+        var second = _transform.GetMapCoordinates(b);
+        return first.MapId == second.MapId ? (first.Position - second.Position).Length() : float.MaxValue;
+    }
+
+    // Cuts a pipe off from everything: its links to pipes and machines go, and it is no longer joined to the pipes next to it either. Taking it back joins it again.
+    public void SetIsolated(EntityUid uid, bool isolated)
+    {
+        if (!_pipeQuery.TryComp(uid, out var pipe) || pipe.Isolated == isolated)
+            return;
+
+        pipe.Isolated = isolated;
+        if (isolated)
+            CutLinks(uid, pipe);
+
+        _pipesChanged = true;
+    }
+
+    // Every link of a pipe goes: the links it has to pipes, and the ones machines have to it.
+    public void CutLinks(EntityUid uid, FluidPipeComponent pipe)
+    {
+        foreach (var other in pipe.Links)
+        {
+            if (_pipeQuery.TryComp(other, out var otherPipe))
+                otherPipe.Links.Remove(uid);
+        }
+
+        pipe.Links.Clear();
+
+        var machines = EntityQueryEnumerator<FluidPortsComponent>();
+        while (machines.MoveNext(out _, out var ports))
+        {
+            foreach (var port in ports.Ports)
+                port.Links.Remove(uid);
+        }
+
+        _pipesChanged = true;
+    }
+
+    // Every pipe a machine is joined to lets go of it.
+    public void CutPorts(EntityUid machine)
+    {
+        if (!TryComp<FluidPortsComponent>(machine, out var ports))
+            return;
+
+        foreach (var port in ports.Ports)
+            port.Links.Clear();
+
+        _pipesChanged = true;
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -197,7 +259,7 @@ public sealed class FluidSystem : EntitySystem
             pipe.Neighbours.Clear();
             var mask = toMachine.GetValueOrDefault(uid);
 
-            if (xform.Anchored && xform.GridUid is { } gridUid && TryComp<MapGridComponent>(gridUid, out var grid))
+            if (!pipe.Isolated && xform.Anchored && xform.GridUid is { } gridUid && TryComp<MapGridComponent>(gridUid, out var grid))
             {
                 var tile = _map.TileIndicesFor(gridUid, grid, xform.Coordinates);
 
@@ -205,7 +267,7 @@ public sealed class FluidSystem : EntitySystem
                 var here = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
                 while (here.MoveNext(out var other))
                 {
-                    if (other.Value != uid && _pipeQuery.HasComp(other.Value))
+                    if (other.Value != uid && _pipeQuery.TryComp(other.Value, out var sameTile) && !sameTile.Isolated)
                         pipe.Neighbours.Add(other.Value);
                 }
 
@@ -214,7 +276,7 @@ public sealed class FluidSystem : EntitySystem
                     var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile + offset);
                     while (anchored.MoveNext(out var other))
                     {
-                        if (other.Value == uid || !_pipeQuery.HasComp(other.Value))
+                        if (other.Value == uid || !_pipeQuery.TryComp(other.Value, out var next) || next.Isolated)
                             continue;
 
                         pipe.Neighbours.Add(other.Value);
@@ -224,7 +286,7 @@ public sealed class FluidSystem : EntitySystem
             }
 
             // The links made with a screwdriver reach as far as they were made to, and are kept only while both ends are there.
-            pipe.Links.RemoveAll(other => TerminatingOrDeleted(other) || !_pipeQuery.HasComp(other));
+            pipe.Links.RemoveAll(other => TerminatingOrDeleted(other) || !_pipeQuery.HasComp(other) || DistanceBetween(uid, other) > MaxLinkDistance);
             foreach (var link in pipe.Links)
             {
                 mask |= SideOf(uid, link);
@@ -307,19 +369,30 @@ public sealed class FluidSystem : EntitySystem
         {
             foreach (var other in pipe.Neighbours)
             {
-                Level(uid, pipe, other, step);
+                Level(uid, pipe, other, step, 1f);
             }
 
             foreach (var other in pipe.Links)
             {
-                Level(uid, pipe, other, step);
+                // A link stretched past its reach carries nothing (it is cut when the pipes are next counted).
+                if (other.Id <= uid.Id)
+                    continue;
+
+                var distance = DistanceBetween(uid, other);
+                if (distance > MaxLinkDistance)
+                {
+                    _pipesChanged = true;
+                    continue;
+                }
+
+                Level(uid, pipe, other, step, Conductance(distance));
             }
         }
     }
 
     // Moves liquid between two pipes so that they fill the same share of themselves; each pair is done once, from the lower id.
     // Two pipes with different liquids in them do not mix; an empty one takes whatever the other has.
-    private void Level(EntityUid uid, FluidPipeComponent pipe, EntityUid other, float step)
+    private void Level(EntityUid uid, FluidPipeComponent pipe, EntityUid other, float step, float conductance)
     {
         if (other.Id < uid.Id || !_pipeQuery.TryComp(other, out var otherPipe))
             return;
@@ -334,7 +407,7 @@ public sealed class FluidSystem : EntitySystem
 
         // The amounts the two would have if they were levelled out, and the part of the way there that this step covers.
         var target = (pipe.Amount + otherPipe.Amount) * pipe.Capacity / total;
-        var move = (pipe.Amount - target) * Math.Min(1f, pipe.Rate * step);
+        var move = (pipe.Amount - target) * Math.Min(1f, pipe.Rate * step * conductance);
 
         pipe.Amount = Math.Clamp(pipe.Amount - move, 0f, pipe.Capacity);
         otherPipe.Amount = Math.Clamp(otherPipe.Amount + move, 0f, otherPipe.Capacity);
@@ -367,14 +440,15 @@ public sealed class FluidSystem : EntitySystem
                 if (port.Links.Count == 0)
                     continue;
 
-                port.Links.RemoveAll(link => TerminatingOrDeleted(link) || !_pipeQuery.HasComp(link));
+                port.Links.RemoveAll(link => TerminatingOrDeleted(link) || !_pipeQuery.HasComp(link) || DistanceBetween(uid, link) > MaxLinkDistance);
 
                 foreach (var link in port.Links)
                 {
-                    if (!_pipeQuery.TryComp(link, out var pipe))
+                    if (!_pipeQuery.TryComp(link, out var pipe) || pipe.Isolated)
                         continue;
 
-                    var rate = port.Rate * port.Scale * step;
+                    // A pipe far from the machine gives and takes less, the way the link between two pipes does.
+                    var rate = port.Rate * port.Scale * step * Conductance(DistanceBetween(uid, link));
                     if (rate <= 0f)
                         continue;
 
