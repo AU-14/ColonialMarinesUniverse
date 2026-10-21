@@ -31,7 +31,7 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     public string? EntryMethod { get; private set; }
 
     [DataField]
-    public ResPath dropshippath { get; private set; } = new("/Maps/CMU14/Shuttles/black_ert.yml");
+    public ResPath dropshippath { get; private set; } = new("/Maps/CMU14/Dropships/black_ert.yml");
 
     [DataField]
     public List<string> BlacklistedGamemodes { get; private set; } = new();

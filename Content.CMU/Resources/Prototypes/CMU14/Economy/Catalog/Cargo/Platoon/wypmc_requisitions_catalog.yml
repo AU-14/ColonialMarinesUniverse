@@ -102,7 +102,7 @@
     - name: Food
       entries:
       - cost: 100
-        crate: RMCCrateFoodMRE
+        crate: CMUCrateFoodMREWeYaPMC
       - cost: 100
         crate: RMCCrateFoodIngredients
     - name: Gear

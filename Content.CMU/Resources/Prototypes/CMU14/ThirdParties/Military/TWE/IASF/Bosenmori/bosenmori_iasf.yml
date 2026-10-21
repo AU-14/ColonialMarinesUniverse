@@ -127,6 +127,7 @@
 
 - type: thirdParty
   id: IASFSurvBosenmori
+  announceAsSurvivors: true
   displayName: IASF Survivors (Bosenmori)
   partyspawn: IASFSurvSpawnBosenmori
   blacklistedGamemodes:
@@ -178,6 +179,7 @@
 
 - type: thirdParty
   id: IASFSurvBosenmoriPilot
+  announceAsSurvivors: true
   displayName: IASF Survivor Pilot (Bosenmori)
   partyspawn: IASFSurvSpawnBosenmoriPilot
   blacklistedGamemodes:

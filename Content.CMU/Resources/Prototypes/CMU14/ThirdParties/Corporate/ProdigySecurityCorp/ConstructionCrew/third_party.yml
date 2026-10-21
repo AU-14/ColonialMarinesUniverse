@@ -1,0 +1,215 @@
+# Prodigy construction crew, called in through the Other intel list: a foreman and two builders with tools,
+# building materials and sidearms.
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobProdigyForeman
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: PSC
+  roundRole: CMUJobProdigyForeman
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: ce
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillFirearms: 1
+      RMCSkillConstruction: 3
+      RMCSkillEngineer: 3
+      RMCSkillPowerLoader: 1
+  name: cmu-job-title-prodigy-foreman
+  description: cmu-prodigy-construction-description
+  playTimeTracker: CMUJobProdigyForeman
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    AU14RankPrDSeniorOperator:
+      entity: AU14ChevronPrDSeniorOperator
+      requirements: []
+  spawnMenuRoleName: Prodigy Foreman (Construction Crew)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearProdigyForeman
+  greeting: cmu-prodigy-callin-greeting
+  joinNotifyCrew: false
+  supervisors: cmu-prodigy-callin-supervisors
+  accessGroups:
+  - auprodigy
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobProdigyForeman
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: CMUJobProdigyForeman
+  name: Prodigy Foreman (Construction Crew)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMU14SquadProdigy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-prodigy-foreman-name
+    description: cmu-prodigy-construction-description
+    reregister: false
+    job: CMUJobProdigyForeman
+    raffle:
+      settings: short
+    rules: cmu-prodigy-callin-rules
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobProdigyBuilder
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: PSC
+  roundRole: CMUJobProdigyBuilder
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: engi
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillFirearms: 1
+      RMCSkillConstruction: 3
+      RMCSkillEngineer: 3
+      RMCSkillPowerLoader: 1
+  name: cmu-job-title-prodigy-builder
+  description: cmu-prodigy-construction-description
+  playTimeTracker: CMUJobProdigyBuilder
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    AU14RankPrDAssociate:
+      entity: AU14ChevronPrDAssociate
+      requirements: []
+  spawnMenuRoleName: Prodigy Builder (Construction Crew)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearProdigyBuilder
+  greeting: cmu-prodigy-callin-greeting
+  joinNotifyCrew: false
+  supervisors: cmu-prodigy-callin-supervisors
+  accessGroups:
+  - auprodigy
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobProdigyBuilder
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: CMUJobProdigyBuilder
+  name: Prodigy Builder (Construction Crew)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMU14SquadProdigy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-prodigy-builder-name
+    description: cmu-prodigy-construction-description
+    reregister: false
+    job: CMUJobProdigyBuilder
+    raffle:
+      settings: short
+    rules: cmu-prodigy-callin-rules
+
+- type: startingGear
+  id: CMUGearProdigyConstructionBase
+  equipment:
+    jumpsuit: CMU14ProdigyJumpsuitGrey
+    outerClothing: CMUArmorProdigyFlakVestAlt
+    head: CMU14ProdigyCapGrey
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    shoes: RMCBootsSPPBlackFilled
+    ears: AU14HeadsetPART
+    eyes: RMCWeldingGoggles
+    belt: CMBeltUtilityFilled
+    back: CMBackpackWelder
+    pocket1: RMCPouchConstructionFillFull
+    pocket2: AU14PouchIFAKFill
+    suitstorage: AU14BeltHolsterPistolBlack
+  storage:
+    suitstorage:
+    - CMU14WeaponPistolGlock75
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+    back:
+    - CMSheetPlasteel10
+    - CMSandbagEmpty25
+    - CMEntrenchingTool
+    - CMMRE
+
+- type: startingGear
+  parent: CMUGearProdigyConstructionBase
+  id: CMUGearProdigyForeman
+  equipment:
+    id: CMUIDCardProdigyForeman
+  inhand:
+  - CMSheetMetal50
+  - CMSheetPlasteel10
+
+- type: startingGear
+  parent: CMUGearProdigyConstructionBase
+  id: CMUGearProdigyBuilder
+  equipment:
+    id: CMUIDCardProdigyBuilder
+  inhand:
+  - CMSheetMetal50
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardProdigyForeman
+  name: Prodigy foreman ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobProdigyForeman
+  - type: ItemIFF
+    factions:
+    - FactionProdigy
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardProdigyBuilder
+  name: Prodigy builder ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobProdigyBuilder
+  - type: ItemIFF
+    factions:
+    - FactionProdigy
+
+- type: partySpawn
+  id: CMUProdigyConstructionCrewSpawn
+  leadersToSpawn:
+    CMUJobProdigyForeman: 1
+  gruntsToSpawn:
+    CMUJobProdigyBuilder: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUProdigyConstructionCrew
+  displayName: Prodigy Construction Crew
+  partyspawn: CMUProdigyConstructionCrewSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_pmc_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 3
+  roundstart: false

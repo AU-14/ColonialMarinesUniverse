@@ -1,4 +1,4 @@
-# Suit storage units from cm13, stocked with pressure suits, spare helmets and emergency gas masks. The suits carry their own air.
+# Suit storage units from cm13, stocked with pressure suits and helmets. The suits carry their own air.
 - type: entity
   parent: SuitStorageBase
   id: CMUSuitStorageUnitBase
@@ -38,11 +38,9 @@
   - type: StorageFill
     contents:
     - id: RMCSuitEVACivilian
-      amount: 7
+      amount: 10
     - id: RMCHelmetEVACivilian
-      amount: 7
-    - id: CMUMaskGasEmergency
-      amount: 7
+      amount: 10
 
 - type: entity
   parent: CMUSuitStorageUnitBase
@@ -54,8 +52,6 @@
   - type: StorageFill
     contents:
     - id: RMCSuitEVAUNMC
-      amount: 7
+      amount: 10
     - id: RMCHelmetEVAUNMC
-      amount: 7
-    - id: CMUMaskGasEmergency
-      amount: 7
+      amount: 10

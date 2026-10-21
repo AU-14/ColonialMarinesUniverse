@@ -46,7 +46,7 @@ public sealed class MohawkRoundSetupTest
     // cmu edit start: USCM flies the Midway and the dynamic gunship
     [TestCase("USCM", "govfor", "/Maps/_RMC14/Shuttles/dynamic_gunship.yml")]
     // cmu edit end
-    [TestCase("HAZOPS", "opfor", "/Maps/CMU14/Shuttles/osprey.yml")]
+    [TestCase("HAZOPS", "opfor", "/Maps/CMU14/Dropships/osprey.yml")]
     public async Task MidwayReplacesGunshipAndDeploysAllDecksToBush(string platoonId, string faction, string transport)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
@@ -66,7 +66,7 @@ public sealed class MohawkRoundSetupTest
             Assert.That(platoon.CompatibleDropships.Select(path => path.ToString()), Is.EquivalentTo(new[]
             {
                 transport,
-                "/Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml",
+                "/Maps/CMU14/Dropships/Mohawk/omaha_deployment.yml",
             }));
             if (faction == "govfor")
                 platoons.SelectedGovforPlatoon = platoon;

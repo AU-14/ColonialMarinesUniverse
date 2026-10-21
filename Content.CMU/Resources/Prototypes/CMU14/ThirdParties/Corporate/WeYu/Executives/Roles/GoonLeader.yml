@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: CMUJobWeYuGoonLeader
+  chevrons:
+    AU14RankWYSecurityOfficerMaster:
+      entity: AU14ChevronWYSecurityOfficerMaster
+      requirements: []
   roundSide: ThirdParty
   roundForce: WY
   roundRole: WeYuGoonLeader
@@ -27,7 +31,7 @@
       RMCSkillVehicles: 1
   - type: JobPrefix
     prefix: cmu-weyuexec-prefix-goonleader
-  name: cmu-weyuexec-name-goonleader
+  name: cmu-job-title-weyu-security-lead
   description: cmu-weyuexec-description-goonleader
   playTimeTracker: CMUJobWeYuGoonLeader
   ranks:

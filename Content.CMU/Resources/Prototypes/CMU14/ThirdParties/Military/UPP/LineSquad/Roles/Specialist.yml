@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: CMUJobUPPLineSpecialist
+  chevrons:
+    UPP_Corporal:
+      entity: AU14ChevronUPPNICorporal
+      requirements: []
   roundSide: ThirdParty
   roundForce: UPPLine
   roundRole: UPPLineSpecialist
@@ -27,7 +31,7 @@
     - Mandarin
     currentLanguage: Russian
     defaultLanguage: Russian
-  name: cmu-uppline-name-specialist
+  name: cmu-uppline-name-specialist-title
   description: cmu-uppline-description
   playTimeTracker: CMUJobUPPLineSpecialist
   ranks:

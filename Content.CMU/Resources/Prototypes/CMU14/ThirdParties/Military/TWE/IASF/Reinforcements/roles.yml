@@ -1,0 +1,273 @@
+# IASF paratroopers called in through intel. Unlike the stranded survivors, they arrive fresh by shuttle with full combat loads.
+
+- type: job
+  parent: AU14IASFTeamLeadBase
+  id: CMUIASFReinforcementTeamLead
+  startingGear: CMUGearIASFReinforcementTeamLead
+  spawnMenuRoleName: IASF Team Leader (Reinforcements)
+  playTimeTracker: AU14IASFTeamLead
+  greeting: cmu-job-greeting-iasf-reinforcements
+  basePlaytimeTracker: true
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicTWEIASF
+  id: CMUIASFReinforcementTeamLead
+  name: IASF Team Leader (Reinforcements)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadIASF
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tweiasf-tl
+    description: cmu-job-description-iasf-reinforcements
+    job: CMUIASFReinforcementTeamLead
+    rules: au14-job-rules-IASFsurv
+    raffle:
+      settings: short
+
+- type: job
+  parent: AU14IASFRiflemanBase
+  id: CMUIASFReinforcementRifleman
+  startingGear: CMUGearIASFReinforcementRifleman
+  spawnMenuRoleName: IASF Rifleman (Reinforcements)
+  playTimeTracker: AU14IASFRifleman
+  greeting: cmu-job-greeting-iasf-reinforcements
+  basePlaytimeTracker: true
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicTWEIASF
+  id: CMUIASFReinforcementRifleman
+  name: IASF Rifleman (Reinforcements)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadIASF
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tweiasf-paratrooper
+    description: cmu-job-description-iasf-reinforcements
+    job: CMUIASFReinforcementRifleman
+    rules: au14-job-rules-IASFsurv
+    raffle:
+      settings: short
+
+- type: job
+  parent: AU14IASFRiflemanBase
+  id: CMUIASFReinforcementRiflemanAmmo
+  startingGear: CMUGearIASFReinforcementAmmo
+  spawnMenuRoleName: IASF Ammocarrier (Reinforcements)
+  playTimeTracker: AU14IASFRifleman
+  greeting: cmu-job-greeting-iasf-reinforcements
+  basePlaytimeTracker: true
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicTWEIASF
+  id: CMUIASFReinforcementRiflemanAmmo
+  name: IASF Ammocarrier (Reinforcements)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadIASF
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tweiasf-paratrooper
+    description: cmu-job-description-iasf-reinforcements
+    job: CMUIASFReinforcementRiflemanAmmo
+    rules: au14-job-rules-IASFsurv
+    raffle:
+      settings: short
+
+- type: job
+  parent: AU14IASFMedicalTechnicianBase
+  id: CMUIASFReinforcementMedicalTechnician
+  startingGear: CMUGearIASFReinforcementMedic
+  spawnMenuRoleName: IASF Medical Technician (Reinforcements)
+  playTimeTracker: AU14IASFCombatMedicalTechnician
+  greeting: cmu-job-greeting-iasf-reinforcements
+  basePlaytimeTracker: true
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicTWEIASF
+  id: CMUIASFReinforcementMedicalTechnician
+  name: IASF Medical Technician (Reinforcements)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadIASF
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tweiasf-paratrooper
+    description: cmu-job-description-iasf-reinforcements
+    job: CMUIASFReinforcementMedicalTechnician
+    rules: au14-job-rules-IASFsurv
+    raffle:
+      settings: short
+
+- type: job
+  parent: AU14IASFCombatEngineerBase
+  id: CMUIASFReinforcementCombatEngineer
+  startingGear: CMUGearIASFReinforcementEngineer
+  spawnMenuRoleName: IASF Combat Engineer (Reinforcements)
+  playTimeTracker: AU14IASFCombatEngineer
+  greeting: cmu-job-greeting-iasf-reinforcements
+  basePlaytimeTracker: true
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicTWEIASF
+  id: CMUIASFReinforcementCombatEngineer
+  name: IASF Combat Engineer (Reinforcements)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadIASF
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tweiasf-paratrooper
+    description: cmu-job-description-iasf-reinforcements
+    job: CMUIASFReinforcementCombatEngineer
+    rules: au14-job-rules-IASFsurv
+    raffle:
+      settings: short
+
+# Loadouts: helmets, a full L70 ammo rig and spare magazines, instead of the survivors' scraps.
+
+- type: startingGear
+  id: CMUGearIASFReinforcementBase
+  equipment:
+    head: RMCHeadRoyalHelmetBallistic
+    jumpsuit: AU14JumpsuitIASFL90
+    gloves: RMCHandsVeteranRoyalMarine
+    shoes: RMCBootsRoyalFilled
+    outerClothing: RMCArmorParaVest
+    ears: RMCHeadsetPara
+    belt: AU14BeltMarineRMCFullL90
+    pocket1: AU14PouchIFAKFill
+    pocket2: RMCPouchMagazineLarge
+    suitstorage: AU14WeaponRifleL90Full
+    back: RMCSatchelLightpackFilledPara
+  storage:
+    outerClothing:
+    - RMCFlashlight
+    pocket2:
+    - AU14MagazineRifleL90
+    - AU14MagazineRifleL90
+    - AU14MagazineRifleL90
+
+- type: startingGear
+  parent: CMUGearIASFReinforcementBase
+  id: CMUGearIASFReinforcementRifleman
+  equipment:
+    id: AU14IDCardIASF
+  storage:
+    back:
+    - AU14GrenadeHighExplosiveRMC
+    - AU14GrenadeHighExplosiveRMC
+
+- type: startingGear
+  parent: CMUGearIASFReinforcementBase
+  id: CMUGearIASFReinforcementTeamLead
+  equipment:
+    id: AU14IDCardIASFTL
+    ears: RMCHeadsetParaTeamLead
+    back: RMCSatchelLightpackFilledParaSL
+  storage:
+    outerClothing:
+    - RMCRangefinder
+    - RMCFlashlight
+    back:
+    - AU14GrenadeHighExplosiveRMC
+    - AU14GrenadeHighExplosiveRMC
+
+- type: startingGear
+  parent: CMUGearIASFReinforcementBase
+  id: CMUGearIASFReinforcementAmmo
+  equipment:
+    id: AU14IDCardIASF
+    back: RMCBackpackRCMLarge
+  storage:
+    back:
+    - AU14MagazineRifleL90extended
+    - AU14MagazineRifleL90extended
+    - AU14MagazineRifleL90
+    - AU14MagazineRifleL90
+    - AU14MagazineRifleL90
+    - AU14MagazineRifleL90
+    - AU14MagazineRifleL90
+    - AU14MagazineRifleL90
+    - AU14MagazineRifleL90
+    - AU14MagazineRifleL90
+
+- type: startingGear
+  parent: CMUGearIASFReinforcementBase
+  id: CMUGearIASFReinforcementMedic
+  equipment:
+    id: AU14IDCardIASFMedic
+    eyes: RMCGlassesMedicalHUDGlasses
+    belt: RMCBeltMedicBagRoyal
+    pocket1: RMCSurgicalCaseRCMFilled
+    pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
+    back: RMCBackpackRCMMedic
+  storage:
+    outerClothing:
+    - AU14MagazineRifleL90
+    - AU14MagazineRifleL90
+    back:
+    - AU14CMDefibrillator
+    - CMHealthAnalyzer
+    - CMTraumaKit10
+    - CMTraumaKit10
+    - CMBurnKit10
+    - CMBurnKit10
+    - CMPillCanisterBicaridine
+    - CMPillCanisterKelotane
+    - CMPillCanisterTricordrazine
+    - CMPillCanisterInaprovaline
+    - CMPillCanisterDexalin
+    - CMPillCanisterDylovene
+    - CMEpinephrineAutoInjector
+    - CMEpinephrineAutoInjector
+    - AU14IVFoldableFolded
+
+- type: startingGear
+  parent: CMUGearIASFReinforcementBase
+  id: CMUGearIASFReinforcementEngineer
+  equipment:
+    id: AU14IDCardIASFEngineer
+    eyes: RMCWeldingGoggles
+    belt: CMBeltUtilityFilled
+    back: RMCBackpackRCMLarge
+  storage:
+    back:
+    - RMCExplosivePlastic
+    - RMCExplosivePlastic
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+    - AU14MagazineRifleL90
+    - AU14MagazineRifleL90
+    - AU14MagazineRifleL90

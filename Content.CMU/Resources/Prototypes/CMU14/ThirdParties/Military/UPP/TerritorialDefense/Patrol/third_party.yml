@@ -1,0 +1,172 @@
+# UPP Territorial Defense patrol, bought through intel. Same squad as the lost team with AK-4047 ammunition only;
+# the loader carries spare magazines instead of rockets for a launcher the team does not have.
+
+- type: job
+  parent: AU14UPPTerritorialDefenseSquadLeader
+  id: CMUJobUPPTDPatrolSquadLeader
+  startingGear: CMUGearUPPTDPatrolSquadLeader
+  description: cmu-upptd-patrol-description
+  spawnMenuRoleName: Territorial Defense Squad Leader (Patrol)
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicTDThirdparty
+  id: CMUJobUPPTDPatrolSquadLeader
+  name: Territorial Defense Squad Leader (Patrol)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadTD
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-upptd-patrol-squadleader
+    description: cmu-upptd-patrol-description
+    reregister: false
+    job: CMUJobUPPTDPatrolSquadLeader
+    raffle:
+      settings: short
+    rules: cmu-upptd-patrol-rules
+
+- type: job
+  parent: AU14UPPTerritorialDefenseRifleman
+  id: CMUJobUPPTDPatrolRifleman
+  startingGear: CMUGearUPPTDPatrolRifleman
+  description: cmu-upptd-patrol-description
+  spawnMenuRoleName: Territorial Defense Rifleman (Patrol)
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicTDThirdparty
+  id: CMUJobUPPTDPatrolRifleman
+  name: Territorial Defense Rifleman (Patrol)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadTD
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-upptd-patrol-rifleman
+    description: cmu-upptd-patrol-description
+    reregister: false
+    job: CMUJobUPPTDPatrolRifleman
+    raffle:
+      settings: short
+    rules: cmu-upptd-patrol-rules
+
+- type: job
+  parent: AU14UPPTerritorialDefenseLoader
+  id: CMUJobUPPTDPatrolLoader
+  startingGear: CMUGearUPPTDPatrolLoader
+  description: cmu-upptd-patrol-description
+  spawnMenuRoleName: Territorial Defense Loader (Patrol)
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicTDThirdparty
+  id: CMUJobUPPTDPatrolLoader
+  name: Territorial Defense Loader (Patrol)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadTD
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-upptd-patrol-loader
+    description: cmu-upptd-patrol-description
+    reregister: false
+    job: CMUJobUPPTDPatrolLoader
+    raffle:
+      settings: short
+    rules: cmu-upptd-patrol-rules
+
+- type: startingGear
+  id: CMUGearUPPTDPatrolBase
+  equipment:
+    outerClothing: AU14ArmorArmyUPP
+    jumpsuit: AU14JumpsuitArmyUPP
+    shoes: RMCBootsSPPBlackFilled
+    head: AU14ArmorHelmetArmyUPP
+    belt: AU14BeltMarineArmyUPPTDFilled
+    pocket1: RMCPouchMagazine
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelSPP
+    suitstorage: RMCWeaponRifleAK4047
+  storage:
+    pocket1:
+    - RMCMagazineRifleAK4047
+    - RMCMagazineRifleAK4047
+    - RMCMagazineRifleAK4047
+    back:
+    - RMCMaskGasSPP
+    - RMCMRESPP
+    - CMCanteen
+    - CMFlare
+    - CMFlare
+
+- type: startingGear
+  parent: CMUGearUPPTDPatrolBase
+  id: CMUGearUPPTDPatrolSquadLeader
+  equipment:
+    id: AU14IDCardUPPTDSquadLeader
+    head: AU14UPPPatrolCap
+    pocket1: AU14PouchSlingBinocs
+  storage:
+    back:
+    - RMCMaskGasSPP
+    - RMCMRESPP
+    - CMCanteen
+    - RMCMagazineRifleAK4047
+    - RMCMagazineRifleAK4047
+
+- type: startingGear
+  parent: CMUGearUPPTDPatrolBase
+  id: CMUGearUPPTDPatrolRifleman
+  equipment:
+    id: AU14IDCardUPPTDRifleman
+
+- type: startingGear
+  parent: CMUGearUPPTDPatrolBase
+  id: CMUGearUPPTDPatrolLoader
+  equipment:
+    id: AU14IDCardUPPTDLoader
+    head: AU14UPPBoonie
+    back: AU14SatchelDemoSpecUPP
+  storage:
+    back:
+    - RMCMaskGasSPP
+    - RMCMRESPP
+    - CMCanteen
+    - RMCMagazineRifleAK4047
+    - RMCMagazineRifleAK4047
+    - RMCMagazineRifleAK4047
+    - RMCMagazineRifleAK4047
+    - RMCMagazineRifleAK4047
+    - RMCMagazineRifleAK4047
+
+- type: partySpawn
+  id: CMUUPPTDPatrolSpawn
+  leadersToSpawn:
+    CMUJobUPPTDPatrolSquadLeader: 1
+  gruntsToSpawn:
+    CMUJobUPPTDPatrolRifleman: 1
+    CMUJobUPPTDPatrolLoader: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUUPPTDPatrol
+  displayName: UPP Territorial Defense Patrol
+  partyspawn: CMUUPPTDPatrolSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_spp_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 3
+  roundstart: false

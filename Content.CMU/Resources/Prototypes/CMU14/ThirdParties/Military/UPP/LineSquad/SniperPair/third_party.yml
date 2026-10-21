@@ -1,0 +1,241 @@
+# UPP Naval Infantry sniper pair, called in through the UPP intel list: a sniper with the Type 88 and a spotter.
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobUPPLineSniper
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: UPPLine
+  roundRole: CMUJobUPPLineSniper
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spec_sniper
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillCqc: 1
+      RMCSkillPolice: 1
+  - type: SniperWhitelist
+  - type: SpotterWhitelist
+  - type: Language
+    spokenLanguages:
+    - Russian
+    - English
+    - Mandarin
+    understoodLanguages:
+    - Russian
+    - English
+    - Mandarin
+    currentLanguage: Russian
+    defaultLanguage: Russian
+  name: cmu-job-title-uppline-sniper
+  description: cmu-uppline-description-sniper
+  playTimeTracker: CMUJobUPPLineSniper
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UPP_Sergeant:
+      entity: AU14ChevronUPPNISergeant
+      requirements: []
+  spawnMenuRoleName: UPP Naval Infantry Sniper (Sniper Pair)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearUPPLineSniper
+  greeting: cmu-uppline-greeting
+  joinNotifyCrew: false
+  supervisors: cmu-uppline-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobUPPLineSniper
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPLineSniper
+  name: UPP Naval Infantry Sniper (Sniper Pair)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPLine
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-uppline-name-sniper
+    description: cmu-uppline-description-sniper
+    reregister: false
+    job: CMUJobUPPLineSniper
+    raffle:
+      settings: short
+    rules: cmu-uppline-rules
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobUPPLineSpotter
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: UPPLine
+  roundRole: CMUJobUPPLineSpotter
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spotter
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillCqc: 1
+      RMCSkillPolice: 1
+  - type: SpotterWhitelist
+  - type: Language
+    spokenLanguages:
+    - Russian
+    - English
+    - Mandarin
+    understoodLanguages:
+    - Russian
+    - English
+    - Mandarin
+    currentLanguage: Russian
+    defaultLanguage: Russian
+  name: cmu-job-title-uppline-spotter
+  description: cmu-uppline-description-sniper
+  playTimeTracker: CMUJobUPPLineSpotter
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UPP_Corporal:
+      entity: AU14ChevronUPPNICorporal
+      requirements: []
+  spawnMenuRoleName: UPP Naval Infantry Spotter (Sniper Pair)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearUPPLineSpotter
+  greeting: cmu-uppline-greeting
+  joinNotifyCrew: false
+  supervisors: cmu-uppline-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobUPPLineSpotter
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPLineSpotter
+  name: UPP Naval Infantry Spotter (Sniper Pair)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPLine
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-uppline-name-spotter
+    description: cmu-uppline-description-sniper
+    reregister: false
+    job: CMUJobUPPLineSpotter
+    raffle:
+      settings: short
+    rules: cmu-uppline-rules
+
+- type: startingGear
+  id: CMUGearUPPLineSniperBase
+  equipment:
+    head: CMHeadCapSPPBeret
+    jumpsuit: CMJumpsuitSPP
+    outerClothing: RMCArmorSPPCommando
+    gloves: RMCHandsVeteranSPP
+    shoes: RMCBootsSPPFilled
+    mask: RMCMaskBalaclavaSPPCommando
+    belt: RMCBeltHolsterPistolSPPNPZ92
+    back: RMCBackpackSPPCommando
+    pocket2: RMCPouchFirstAidERTFill
+
+- type: startingGear
+  parent: CMUGearUPPLineSniperBase
+  id: CMUGearUPPLineSniper
+  equipment:
+    id: CMUIDCardUPPLineSniper
+    suitstorage: RMCType88SniperRifle
+    pocket1: RMCPouchMagazineLarge
+  storage:
+    pocket1:
+    - RMCMagazineSniperType88
+    - RMCMagazineSniperType88
+    - RMCMagazineSniperType88
+    back:
+    - RMCMagazineSniperType88
+    - RMCMagazineSniperType88
+    - RMCMRESPP
+
+- type: startingGear
+  parent: CMUGearUPPLineSniperBase
+  id: CMUGearUPPLineSpotter
+  equipment:
+    id: CMUIDCardUPPLineSpotter
+    suitstorage: RMCWeaponRifleType73Filled
+    pocket1: AU14PouchSlingBinocs
+  storage:
+    outerClothing:
+    - RMCMagazineRifleType71AP
+    - RMCMagazineRifleType71AP
+    back:
+    - RMCMagazineRifleType71AP
+    - RMCMagazineRifleType71AP
+    - RMCMagazineRifleType71AP
+    - RMCRangefinder
+    - RMCMRESPP
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardUPPLineSniper
+  name: UPP naval infantry sniper ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPLineSniper
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardUPPLineSpotter
+  name: UPP naval infantry spotter ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPLineSpotter
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+
+- type: partySpawn
+  id: CMUUPPLineSniperPairSpawn
+  leadersToSpawn:
+    CMUJobUPPLineSniper: 1
+  gruntsToSpawn:
+    CMUJobUPPLineSpotter: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUUPPLineSniperPair
+  displayName: UPP Naval Infantry Sniper Pair
+  partyspawn: CMUUPPLineSniperPairSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_spp_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 2
+  roundstart: false

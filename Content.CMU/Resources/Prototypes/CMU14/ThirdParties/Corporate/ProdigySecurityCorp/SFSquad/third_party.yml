@@ -1,0 +1,436 @@
+# Prodigy Security Forces squad, called in through the Other intel list. Kitted out of the Prodigy platoon vendors:
+# a squad leader, two riflemen, a corpsman and a smartgunner.
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobProdigySFLeader
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: PSC
+  roundRole: CMUJobProdigySFLeader
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pmc_ld
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 1
+      RMCSkillPolice: 1
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+      RMCSkillMedical: 1
+      RMCSkillLeadership: 2
+      RMCSkillJtac: 2
+      RMCSkillOverwatch: 1
+  - type: MarineOrders
+  name: cmu-job-title-prodigy-sf-leader
+  description: cmu-prodigy-sf-description
+  playTimeTracker: CMUJobProdigySFLeader
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    AU14RankPrDEnforcerLead:
+      entity: AU14ChevronPrDEnforcerLead
+      requirements: []
+  spawnMenuRoleName: Prodigy SF Squad Leader (SF Squad)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearProdigySFLeader
+  greeting: cmu-prodigy-callin-greeting
+  joinNotifyCrew: false
+  supervisors: cmu-prodigy-callin-supervisors
+  accessGroups:
+  - auprodigy
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobProdigySFLeader
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: CMUJobProdigySFLeader
+  name: Prodigy SF Squad Leader (SF Squad)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMU14SquadProdigy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-prodigy-sf-leader-name
+    description: cmu-prodigy-sf-description
+    reregister: false
+    job: CMUJobProdigySFLeader
+    raffle:
+      settings: short
+    rules: cmu-prodigy-callin-rules
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobProdigySFRifleman
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: PSC
+  roundRole: CMUJobProdigySFRifleman
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pmc_gun
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 1
+      RMCSkillPolice: 1
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+      RMCSkillMedical: 1
+  name: cmu-job-title-prodigy-sf-rifleman
+  description: cmu-prodigy-sf-description
+  playTimeTracker: CMUJobProdigySFRifleman
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    AU14RankPrDOperator:
+      entity: AU14ChevronPrDOperator
+      requirements: []
+  spawnMenuRoleName: Prodigy SF Rifleman (SF Squad)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearProdigySFRifleman
+  greeting: cmu-prodigy-callin-greeting
+  joinNotifyCrew: false
+  supervisors: cmu-prodigy-callin-supervisors
+  accessGroups:
+  - auprodigy
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobProdigySFRifleman
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: CMUJobProdigySFRifleman
+  name: Prodigy SF Rifleman (SF Squad)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMU14SquadProdigy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-prodigy-sf-rifleman-name
+    description: cmu-prodigy-sf-description
+    reregister: false
+    job: CMUJobProdigySFRifleman
+    raffle:
+      settings: short
+    rules: cmu-prodigy-callin-rules
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobProdigySFCorpsman
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: PSC
+  roundRole: CMUJobProdigySFCorpsman
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pmc_md
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 1
+      RMCSkillPolice: 1
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 1
+  name: cmu-job-title-prodigy-sf-corpsman
+  description: cmu-prodigy-sf-description
+  playTimeTracker: CMUJobProdigySFCorpsman
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    AU14RankPrDSeniorOperator:
+      entity: AU14ChevronPrDSeniorOperator
+      requirements: []
+  spawnMenuRoleName: Prodigy SF Corpsman (SF Squad)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearProdigySFCorpsman
+  greeting: cmu-prodigy-callin-greeting
+  joinNotifyCrew: false
+  supervisors: cmu-prodigy-callin-supervisors
+  accessGroups:
+  - auprodigy
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobProdigySFCorpsman
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: CMUJobProdigySFCorpsman
+  name: Prodigy SF Corpsman (SF Squad)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMU14SquadProdigy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-prodigy-sf-corpsman-name
+    description: cmu-prodigy-sf-description
+    reregister: false
+    job: CMUJobProdigySFCorpsman
+    raffle:
+      settings: short
+    rules: cmu-prodigy-callin-rules
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobProdigySFSmartgunner
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: PSC
+  roundRole: CMUJobProdigySFSmartgunner
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pmc_sg
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 1
+      RMCSkillPolice: 1
+      RMCSkillConstruction: 1
+      RMCSkillEngineer: 1
+      RMCSkillMedical: 1
+      RMCSkillSmartGun: 1
+  name: cmu-job-title-prodigy-sf-smartgunner
+  description: cmu-prodigy-sf-description
+  playTimeTracker: CMUJobProdigySFSmartgunner
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    AU14RankPrDSeniorOperator:
+      entity: AU14ChevronPrDSeniorOperator
+      requirements: []
+  spawnMenuRoleName: Prodigy SF Smartgunner (SF Squad)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearProdigySFSmartgunner
+  greeting: cmu-prodigy-callin-greeting
+  joinNotifyCrew: false
+  supervisors: cmu-prodigy-callin-supervisors
+  accessGroups:
+  - auprodigy
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobProdigySFSmartgunner
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: CMUJobProdigySFSmartgunner
+  name: Prodigy SF Smartgunner (SF Squad)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMU14SquadProdigy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-prodigy-sf-smartgunner-name
+    description: cmu-prodigy-sf-description
+    reregister: false
+    job: CMUJobProdigySFSmartgunner
+    raffle:
+      settings: short
+    rules: cmu-prodigy-callin-rules
+
+- type: startingGear
+  id: CMUGearProdigySFBase
+  equipment:
+    jumpsuit: AU14ProdigyFatigues
+    outerClothing: CMUArmorProdigyFlakVest
+    head: AU14ProdigyBallisticHelmet
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    shoes: RMCBootsSPPBlackFilled
+    ears: AU14HeadsetPART
+    pocket2: AU14PouchIFAKFill
+    belt: AU14BeltMarineBlack
+    back: RMCSatchelLightpackBlack
+    suitstorage: AU14WeaponRifleprodigyrifleAR
+    pocket1: RMCPouchMagazineLarge
+  storage:
+    belt:
+    - AU14WeaponRifleprodigyrifleMagazineStandard
+    - AU14WeaponRifleprodigyrifleMagazineStandard
+    - AU14WeaponRifleprodigyrifleMagazineStandard
+    - AU14WeaponRifleprodigyrifleMagazineStandard
+    - AU14WeaponRifleprodigyrifleMagazineStandard
+    pocket1:
+    - AU14WeaponRifleprodigyrifleMagazineStandard
+    - AU14WeaponRifleprodigyrifleMagazineStandard
+    - AU14WeaponRifleprodigyrifleMagazineStandard
+    back:
+    - CMMRE
+    - CMCanteen
+    - CMPacketGrenadeFragFilled
+    - RMCFlashlight
+    outerClothing:
+    - CMU14WeaponPistolGlock75
+    - CMU14MagazinePistolGlock75
+
+- type: startingGear
+  parent: CMUGearProdigySFBase
+  id: CMUGearProdigySFLeader
+  equipment:
+    id: CMUIDCardProdigySFLeader
+    head: AU14ProdigyBeret
+  inhand:
+  - RMCLaserDesignator
+
+- type: startingGear
+  parent: CMUGearProdigySFBase
+  id: CMUGearProdigySFRifleman
+  equipment:
+    id: CMUIDCardProdigySFRifleman
+
+- type: startingGear
+  id: CMUGearProdigySFCorpsman
+  equipment:
+    jumpsuit: AU14ProdigyFatigues
+    head: AU14ProdigyBallisticHelmet
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    shoes: RMCBootsSPPBlackFilled
+    ears: AU14HeadsetPART
+    pocket2: AU14PouchIFAKFill
+    id: CMUIDCardProdigySFCorpsman
+    outerClothing: CMUArmorProdigyFlakVestMedical
+    eyes: RMCGlassesMedicalHUDGlasses
+    belt: AU14BeltMedicBagProdigy
+    back: RMCSatchelLightpackBlack
+    pocket1: RMCPouchFirstResponder
+    suitstorage: CMU14WeaponPistolGlock77
+  storage:
+    back:
+    - CMU14MagazinePistolGlock77
+    - CMU14MagazinePistolGlock77
+    - CMU14MagazinePistolGlock77
+    - AU14CMDefibrillator
+    - CMHealthAnalyzer
+    - CMRollerBedSpawnFolded
+    - CMUSalineBag
+    - CMMRE
+
+- type: startingGear
+  id: CMUGearProdigySFSmartgunner
+  equipment:
+    jumpsuit: AU14ProdigyFatigues
+    head: AU14ProdigyBallisticHelmet
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    shoes: RMCBootsSPPBlackFilled
+    ears: AU14HeadsetPART
+    pocket2: AU14PouchIFAKFill
+    id: CMUIDCardProdigySFSmartgunner
+    outerClothing: AU14ArmorSmartGunJungleCombatHarness
+    eyes: RMCGlassesSmartGunSight
+    belt: RMCBeltSmartGunOperatorPistolFilled
+    back: RMCSatchelLightpackBlack
+    pocket1: RMCPouchGeneralLarge
+    suitstorage: RMCSmartGun
+  storage:
+    back:
+    - RMCMagazineSmartGun
+    - RMCMagazineSmartGun
+    - RMCPowerCellSmartgun
+    - CMMRE
+    pocket1:
+    - RMCMagazineSmartGun
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardProdigySFLeader
+  name: Prodigy SF squad leader ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobProdigySFLeader
+  - type: ItemIFF
+    factions:
+    - FactionProdigy
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardProdigySFRifleman
+  name: Prodigy SF rifleman ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobProdigySFRifleman
+  - type: ItemIFF
+    factions:
+    - FactionProdigy
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardProdigySFCorpsman
+  name: Prodigy SF corpsman ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobProdigySFCorpsman
+  - type: ItemIFF
+    factions:
+    - FactionProdigy
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardProdigySFSmartgunner
+  name: Prodigy SF smartgunner ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobProdigySFSmartgunner
+  - type: ItemIFF
+    factions:
+    - FactionProdigy
+
+- type: partySpawn
+  id: CMUProdigySFSquadSpawn
+  leadersToSpawn:
+    CMUJobProdigySFLeader: 1
+  gruntsToSpawn:
+    CMUJobProdigySFRifleman: 2
+    CMUJobProdigySFCorpsman: 1
+    CMUJobProdigySFSmartgunner: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUProdigySFSquad
+  displayName: Prodigy Security Forces Squad
+  partyspawn: CMUProdigySFSquadSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_pmc_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 5
+  roundstart: false

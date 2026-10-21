@@ -1,0 +1,166 @@
+# UA Colonial Guard patrol, bought through intel. Same squad as the lost patrol, kitted out for the job:
+# full M20A loads instead of M60 belts nobody in the squad can fire.
+
+- type: job
+  parent: AU14UACGSquadleader
+  id: CMUJobUACGPatrolSquadLeader
+  startingGear: CMUGearUACGPatrolSquadLeader
+  description: cmu-uacg-patrol-description
+  spawnMenuRoleName: Colonial Guard Squad Leader (Patrol)
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUACG
+  id: CMUJobUACGPatrolSquadLeader
+  name: Colonial Guard Squad Leader (Patrol)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUACG
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-uacg-patrol-squadleader
+    description: cmu-uacg-patrol-description
+    reregister: false
+    job: CMUJobUACGPatrolSquadLeader
+    raffle:
+      settings: short
+    rules: au14-uacg-rules
+
+- type: job
+  parent: AU14UACGRifleman
+  id: CMUJobUACGPatrolRifleman
+  startingGear: CMUGearUACGPatrolRifleman
+  description: cmu-uacg-patrol-description
+  spawnMenuRoleName: Colonial Guard Rifleman (Patrol)
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUACG
+  id: CMUJobUACGPatrolRifleman
+  name: Colonial Guard Rifleman (Patrol)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUACG
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-uacg-patrol-rifleman
+    description: cmu-uacg-patrol-description
+    reregister: false
+    job: CMUJobUACGPatrolRifleman
+    raffle:
+      settings: short
+    rules: au14-uacg-rules
+
+- type: job
+  parent: AU14UACGAmmobearer
+  id: CMUJobUACGPatrolAmmobearer
+  startingGear: CMUGearUACGPatrolAmmobearer
+  description: cmu-uacg-patrol-description
+  spawnMenuRoleName: Colonial Guard Ammo Bearer (Patrol)
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUACG
+  id: CMUJobUACGPatrolAmmobearer
+  name: Colonial Guard Ammo Bearer (Patrol)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUACG
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-uacg-patrol-ammobearer
+    description: cmu-uacg-patrol-description
+    reregister: false
+    job: CMUJobUACGPatrolAmmobearer
+    raffle:
+      settings: short
+    rules: au14-uacg-rules
+
+- type: startingGear
+  id: CMUGearUACGPatrolBase
+  equipment:
+    outerClothing: RMCOuterClothingExternalWebbing
+    jumpsuit: AU14UACGFatigues
+    shoes: CMBootsBrownFilled
+    mask: RMCMaskScarfTanDown
+    head: AU14UACGPatrolCap
+    belt: AU14UACGBeltFilledM20a
+    pocket1: AU14UACGCigPouch
+    pocket2: AU14PouchIFAKFill
+    back: AU14UACGPatrolRucksack
+  storage:
+    outerClothing:
+    - AU14MagazineRifleM20A
+    - AU14MagazineRifleM20A
+    back:
+    - AU14MagazineRifleM20A
+    - AU14MagazineRifleM20A
+    - AU14MagazineRifleM20A
+  inhand:
+  - AUWeaponRifleM20A
+
+- type: startingGear
+  parent: CMUGearUACGPatrolBase
+  id: CMUGearUACGPatrolSquadLeader
+  equipment:
+    id: AU14IDCardUACGSquadleader
+  # The rifle comes from the base gear; in-hand lists add to the parent's rather than replacing it.
+  inhand:
+  - RMCBinocularsPVE
+
+- type: startingGear
+  parent: CMUGearUACGPatrolBase
+  id: CMUGearUACGPatrolRifleman
+  equipment:
+    id: AU14IDCardUACGRifleman
+
+- type: startingGear
+  parent: CMUGearUACGPatrolBase
+  id: CMUGearUACGPatrolAmmobearer
+  equipment:
+    id: AU14IDCardUACGAmmobearer
+    back: AU14UACGPatrolRucksackAmmobearerPatrol
+
+# The lost ammo bearer's rucksack carries M60 belts nobody in the squad can fire; this one carries M20A magazines.
+- type: entity
+  parent: AU14UACGPatrolRucksack
+  id: AU14UACGPatrolRucksackAmmobearerPatrol
+  suffix: UACG, Ammo Bearer, M20a
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineRifleM20A
+      amount: 8
+    - id: CMMRE
+    - id: CMCanteen
+
+- type: partySpawn
+  id: CMUUACGPatrolSpawn
+  leadersToSpawn:
+    CMUJobUACGPatrolSquadLeader: 1
+  gruntsToSpawn:
+    CMUJobUACGPatrolRifleman: 1
+    CMUJobUACGPatrolAmmobearer: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUUACGPatrol
+  displayName: UA Colonial Guard Patrol
+  partyspawn: CMUUACGPatrolSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 3
+  roundstart: false

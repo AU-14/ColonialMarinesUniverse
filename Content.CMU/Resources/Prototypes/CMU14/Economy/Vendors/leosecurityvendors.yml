@@ -66,6 +66,7 @@
       - id: CMUKitWeaponHG3712LEO
       - id: CMUKitWeaponKramerEnforcerLEO
       - id: CMUKitWeaponMP5LEO
+      - id: CMUKitWeaponM20A2LEO
     - name: Restraining Gear
       entries:
       - id: CMUPepperSpray

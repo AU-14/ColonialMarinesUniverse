@@ -174,23 +174,25 @@
     - name: Weapons
       entries:
       - cost: 1000
-        crate: RMCWeaponShotgunM37A1
+        crate: CMUWeaponShotgunM37A1Colony
       - cost: 2000
-        crate: AU14CrateBoxAR10
+        crate: CMUCrateBoxAR10Colony
       - cost: 1800
-        crate: CMUCrateBoxKramerCivilian
+        crate: CMUCrateBoxKramerColony
       - cost: 1300
-        crate: AU14CrateBoxMod88
+        crate: CMUCrateBoxMod88Colony
       - cost: 1250
         crate: AU14CrateBoxRevolverM2019
       - cost: 1400
         crate: AU14CrateBoxRSH9
       - cost: 1200
-        crate: AU14CrateBoxHuntingRifleCrate
+        crate: CMUCrateBoxHuntingRifleColony
       - cost: 950
-        crate: CMUCrateBoxTPR9Civilian
+        crate: CMUCrateBoxTPR9Colony
       - cost: 950
-        crate: AU14CrateBoxM4A3
+        crate: CMUCrateBoxM4A3Colony
+      - cost: 1000
+        crate: CMUCrateBoxGlock75Colony
       - cost: 1000
         crate: AU14CrateBoxSkeetShootingCrate
       - cost: 1500
@@ -198,11 +200,13 @@
       - cost: 800
         crate: AU14CrateBoxM44
       - cost: 1300
-        crate: AU14CrateBoxHuntingRifleABRCrate
+        crate: CMUCrateBoxABR40Colony
       - cost: 353
         crate: AU14CrateBoxD18
       - cost: 330
         crate: AU14CrateAssortedKnives
+      - cost: 750
+        crate: CMUCrateBoxNailgun
       - cost: 3000
         crate: CMUCrateFlamerColony
         maxStock: 1
@@ -210,23 +214,25 @@
     - name: Ammunition
       entries:
       - cost: 533
-        crate: AU14CrateBoxAR10Magazines
+        crate: CMUCrateBoxM16ColonyMagazines
       - cost: 533
-        crate: CMUCrateBoxKramerMagazines
+        crate: CMUCrateBoxKramerColonyMagazines
       - cost: 483
         crate: AU14CrateBox357HP
       - cost: 400
         crate: AU14CrateBox357
       - cost: 400
-        crate: AU14CrateBoxMod88Mags
+        crate: CMUCrateBoxMod88ColonyMagazines
       - cost: 400
         crate: AU14CrateBoxRSH9SL
       - cost: 400
-        crate: AU14CrateBoxBasiraMagazines
+        crate: CMUCrateBoxBasiraColonyMagazines
       - cost: 433
         crate: AU14CrateBoxShotgunShells
       - cost: 333
-        crate: AU14CrateBoxTPR23BMag
+        crate: CMUCrateBoxM4A3ColonyMagazines
+      - cost: 333
+        crate: CMUCrateBoxGlock75ColonyMagazines
       - cost: 350
         crate: AU14CrateBoxM44SL
       - cost: 350
@@ -234,7 +240,9 @@
       - cost: 350
         crate: AU14CrateBoxD18Magazines
       - cost: 355
-        crate: AU14CrateBoxABR40Magazines
+        crate: CMUCrateBoxABR40ColonyMagazines
+      - cost: 300
+        crate: CMUCrateBoxNailgunMagazines
     - name: Vehicle Ammo
       entries:
       - cost: 1900
