@@ -57,7 +57,7 @@ public sealed class ChemSimulatorBuiState(
     string statusBar,
     string? targprop,
     string? refprop,
-    int credits,
+    int sampleData,
     int? overdose,
     string? recipePicked,
     List<(string,int, bool, bool)> recipeOptions,
@@ -74,7 +74,8 @@ public sealed class ChemSimulatorBuiState(
     public readonly string StatusBar = statusBar;
     public readonly string? TargetProp = targprop;
     public readonly string? ReferenceProp = refprop;
-    public readonly int Credits = credits;
+    /// <summary>Simulator currency (sample data), not research credits.</summary>
+    public readonly int SampleData = sampleData;
     public readonly int? Overdose = overdose;
     public readonly string? RecipePicked = recipePicked;
     public readonly List<(string,int, bool, bool)> RecipeOptions = recipeOptions;
