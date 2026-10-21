@@ -53,7 +53,8 @@ Focused RTO coverage is in `CMURtoRadioTest`, `CMUCasRequestTest` and
 deviation, JTAC relay, wire damage/repair, optional report providers, request
 lifecycle, AUTO-only clearance, mounted GAU ammunition consumption and danger-close
 confirmation. Run with `dotnet test Content.IntegrationTests\Content.IntegrationTests.csproj
--c DebugOpt --filter "FullyQualifiedName~CMURtoRadioTest|FullyQualifiedName~CMUCasRequestTest|FullyQualifiedName~CMUCasAutoCarryTest"`.
+-c DebugOpt --filter "FullyQualifiedName~CMURtoRadioTest|FullyQualifiedName~CMUCasRequestTest|FullyQualifiedName~CMUCasAutoCarryTest"
+-- NUnit.NumberOfTestWorkers=1 NUnit.DefaultTimeout=180000`.
 
 The CIP foundation exposes shared console-faction lookup and target selection
 for independently merged aircraft features. It adds no weapons or automated
