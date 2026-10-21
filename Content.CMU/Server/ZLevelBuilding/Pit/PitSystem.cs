@@ -3,6 +3,7 @@
 using Content.Shared.Ghost.Components;
 using System.Numerics;
 using Content.Server.CMU14.ZLevelBuilding;
+using Content.Shared.CMU14.Insurgency.Sapper;
 using Content.Shared.CMU14.ZLevelBuilding.Pit;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
@@ -15,7 +16,6 @@ using Robust.Shared.Map.Components;
 
 namespace Content.Server.CMU14.ZLevelBuilding.Pit;
 
-// Server side of pits: builds in a pit what the player chose (steps, rope, hatch...) from stacks, with a do-after.
 public sealed class PitSystem : SharedPitSystem
 {
     [Dependency] private readonly ZLevelBuildingSystem _building = default!;
@@ -27,6 +27,7 @@ public sealed class PitSystem : SharedPitSystem
     [Dependency] private readonly SharedStackSystem _stack = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private readonly MinePlateSystem _plates = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery;
 
@@ -66,8 +67,18 @@ public sealed class PitSystem : SharedPitSystem
         if (args.SenderSession.AttachedEntity is not { } user || HasComp<GhostComponent>(user))
             return;
 
-        var pit = GetEntity(msg.Pit);
-        if (!HasComp<PitComponent>(pit) || TerminatingOrDeleted(pit))
+        TryStartBuild(GetEntity(msg.Pit), user, msg.Option);
+    }
+
+    protected override void BuildMinePlate(Entity<PitComponent> pit, EntityUid user)
+    {
+        TryStartBuild(pit.Owner, user, PitBuildOption.MinePlate);
+    }
+
+    // The build of an option over a pit begins, if it can: the pit is in reach, and the one who builds has what it costs (and the skill, for the plate).
+    private void TryStartBuild(EntityUid pit, EntityUid user, PitBuildOption option)
+    {
+        if (HasComp<GhostComponent>(user) || !HasComp<PitComponent>(pit) || TerminatingOrDeleted(pit))
             return;
 
         var xform = Transform(pit);
@@ -77,10 +88,10 @@ public sealed class PitSystem : SharedPitSystem
         if (!_interaction.InRangeUnobstructed(user, xform.Coordinates))
             return;
 
-        if (!TryValidateCost(msg.Option, user, pit, mapUid, popupFail: true, out var used))
+        if (!TryValidateCost(option, user, pit, mapUid, popupFail: true, out var used))
             return;
 
-        var doAfter = new DoAfterArgs(EntityManager, user, BuildDelay, new PitBuildDoAfterEvent(msg.Option), pit, pit, used)
+        var doAfter = new DoAfterArgs(EntityManager, user, BuildDelay, new PitBuildDoAfterEvent(option), pit, pit, used)
         {
             NeedHand = used != null,
             BreakOnHandChange = true,
@@ -142,6 +153,9 @@ public sealed class PitSystem : SharedPitSystem
             case PitBuildOption.Steps:
                 BuildStairs(pit, gridUid, worldPos);
                 break;
+            case PitBuildOption.MinePlate:
+                BuildMinePlate(pit, user);
+                break;
         }
     }
 
@@ -150,12 +164,21 @@ public sealed class PitSystem : SharedPitSystem
         PitBuildOption.Ladder => 25,
         PitBuildOption.Hatch => 35,
         PitBuildOption.Steps => 50,
+        PitBuildOption.MinePlate => 10,
         _ => 0,
     };
 
     private bool TryValidateCost(PitBuildOption option, EntityUid user, EntityUid pit, EntityUid mapUid, bool popupFail, out EntityUid? used)
     {
         used = null;
+
+        // The plate with the code of a mine is a sapper's work, whoever asks for it and however.
+        if (option == PitBuildOption.MinePlate && !HasComp<SapperComponent>(user))
+        {
+            if (popupFail)
+                _popup.PopupEntity(Loc.GetString("au14-pit-build-sapper-only"), pit, user, PopupType.SmallCaution);
+            return false;
+        }
 
         if (option == PitBuildOption.Expand)
         {
@@ -306,6 +329,15 @@ public sealed class PitSystem : SharedPitSystem
         var down = SpawnAtWorld(gridUid, worldPos, downProto);
         var up = SpawnAtWorld(belowGrid, worldPos, upProto);
         return (down, up);
+    }
+
+    // The pit is covered with a plate that has the code of a mine in it: it is floor now, and gives way under whoever is not of the faction of the one who built it.
+    private void BuildMinePlate(EntityUid pit, EntityUid user)
+    {
+        var coordinates = Transform(pit).Coordinates;
+        QueueDel(pit);
+        _plates.Lay("RUMCMinePlateLaid", coordinates, user);
+        _popup.PopupEntity(Loc.GetString("au14-mine-plate-laid"), user, user);
     }
 
     private void BuildStairs(EntityUid pit, EntityUid gridUid, Vector2 worldPos)

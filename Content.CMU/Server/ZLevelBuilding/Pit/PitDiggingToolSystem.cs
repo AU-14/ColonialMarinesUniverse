@@ -6,6 +6,7 @@ using Content.Server.CMU14.Forge;
 using Content.Server.CMU14.ZLevelBuilding;
 using Content.Server.Destructible;
 using Content.Shared._RMC14.Areas;
+using Content.Shared._RMC14.Deploy;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.CMU14.Electric;
 using Content.Shared.CMU14.ZLevelBuilding;
@@ -14,7 +15,9 @@ using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Construction.Conditions;
 using Content.Shared.DoAfter;
 using Content.Shared.Gatherable.Components;
+using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Item;
 using Content.Shared.Maps;
 using Content.Shared.Mobs.Components;
@@ -25,15 +28,17 @@ using Content.Shared.Verbs;
 using Content.Shared.Whitelist;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Player;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.ZLevelBuilding.Pit;
 
-// Digging a pit down with a tool (shovel, pickaxe, jackhammer): checks the tool fits the layer, runs the do-after, and breaks the ground or rock.
 public sealed class PitDiggingToolSystem : EntitySystem
 {
     [Dependency] private readonly ZLevelBuildingSystem _building = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
@@ -52,7 +57,8 @@ public sealed class PitDiggingToolSystem : EntitySystem
     private static readonly TileNotBlocked StairTileRule = new();
     private static readonly ZBuildAllowed StairMapRule = new();
 
-    private static readonly TimeSpan DigDelay = TimeSpan.FromSeconds(30);
+    // How long a dig takes with an ordinary tool; climbing out of a pit takes as long (see PitClimbSystem).
+    public static readonly TimeSpan DigDelay = TimeSpan.FromSeconds(30);
 
     // What a pit opens into, on the level it leads to (the one below for a pit dug down, the one above for a pit dug up), ordered from the harmless to the forbidden.
     private enum Destination : byte
@@ -80,7 +86,7 @@ public sealed class PitDiggingToolSystem : EntitySystem
         base.Initialize();
         _gridQuery = GetEntityQuery<MapGridComponent>();
         _physicsQuery = GetEntityQuery<PhysicsComponent>();
-        SubscribeLocalEvent<PitDiggingToolComponent, UseInHandEvent>(OnUseInHand);
+        SubscribeNetworkEvent<PitDigRequestEvent>(OnDigRequest);
         SubscribeLocalEvent<PitDiggingToolComponent, PitDigDoAfterEvent>(OnDig);
         SubscribeLocalEvent<PitDiggingToolComponent, GetVerbsEvent<AlternativeVerb>>(OnGetVerbs);
     }
@@ -107,44 +113,68 @@ public sealed class PitDiggingToolSystem : EntitySystem
         });
     }
 
-    private void OnUseInHand(Entity<PitDiggingToolComponent> ent, ref UseInHandEvent args)
+    // Z with a digging tool in the hand digs the tile under the cursor (the square that follows the cursor on the client shows which one it is).
+    private void OnDigRequest(PitDigRequestEvent msg, EntitySessionEventArgs args)
     {
-        if (args.Handled)
-            return;
-
-        if (_transform.GetMap(Transform(args.User).Coordinates) is { } userMap && HasComp<VehicleInteriorLinkComponent>(userMap))
+        if (args.SenderSession.AttachedEntity is not { } user ||
+            !_hands.TryGetActiveItem(user, out var active) ||
+            active is not { } held ||
+            !HasComp<PitDiggingToolComponent>(held))
         {
-            _popup.PopupEntity(Loc.GetString("au14-pit-tool-in-vehicle"), ent, args.User, PopupType.SmallCaution);
             return;
         }
 
-        var front = GetTileInFront(args.User);
-        var digUp = ent.Comp.DigUp;
+        // One dig at a time.
+        if (TryComp<DoAfterComponent>(user, out var doing) && doing.DoAfters.Count > 0)
+            return;
+
+        var click = GetCoordinates(msg.Location);
+        if (!_interaction.InRangeUnobstructed(user, click))
+        {
+            _popup.PopupEntity(Loc.GetString("au14-pit-tool-too-far"), held, user, PopupType.SmallCaution);
+            return;
+        }
+
+        TryStartDig(held, user, click);
+    }
+
+    // Begins the dig of the tile at the place with the tool; says whether it began.
+    public bool TryStartDig(EntityUid tool, EntityUid user, EntityCoordinates click)
+    {
+        if (!TryComp<PitDiggingToolComponent>(tool, out var comp))
+            return false;
+
+        var ent = new Entity<PitDiggingToolComponent>(tool, comp);
+
+        if (_transform.GetMap(Transform(user).Coordinates) is { } userMap && HasComp<VehicleInteriorLinkComponent>(userMap))
+        {
+            _popup.PopupEntity(Loc.GetString("au14-pit-tool-in-vehicle"), ent, user, PopupType.SmallCaution);
+            return false;
+        }
+
+        var digUp = comp.DigUp;
 
         var ok = digUp
-            ? TryGetDigUpTarget(args.User, front, out var target, out var toolOverride, out var failReason)
-            : TryGetDigTarget(args.User, front, out target, out toolOverride, out failReason);
+            ? TryGetDigUpTarget(user, click, out var target, out var toolOverride, out var failReason)
+            : TryGetDigTarget(user, click, out target, out toolOverride, out failReason);
 
         if (!ok)
         {
-            _popup.PopupEntity(Loc.GetString(failReason), ent, args.User, PopupType.SmallCaution);
-            return;
+            _popup.PopupEntity(Loc.GetString(failReason), ent, user, PopupType.SmallCaution);
+            return false;
         }
 
-        if (!TryValidateDigTool(ent, args.User, target, toolOverride))
-            return;
+        if (!TryValidateDigTool(ent, user, target, toolOverride))
+            return false;
 
         // A digging tool on a power cell pays three charges for the dig before it begins; with a flat cell it does not begin.
-        if (TryComp<ElectricToolComponent>(ent, out var electric) && !_cell.TryUseCharge(ent.Owner, electric.ChargePerUse * 3f, args.User))
+        if (TryComp<ElectricToolComponent>(ent, out var electric) && !_cell.TryUseCharge(ent.Owner, electric.ChargePerUse * 3f, user))
         {
-            _popup.PopupEntity(Loc.GetString("au14-tool-no-charge"), ent, args.User, PopupType.SmallCaution);
-            args.Handled = true;
-            return;
+            _popup.PopupEntity(Loc.GetString("au14-tool-no-charge"), ent, user, PopupType.SmallCaution);
+            return false;
         }
 
-        args.Handled = true;
-
-        var doAfter = new DoAfterArgs(EntityManager, args.User, DigDelay * ent.Comp.DigTimeMultiplier, new PitDigDoAfterEvent(GetNetCoordinates(target), digUp), ent, used: ent.Owner)
+        var doAfter = new DoAfterArgs(EntityManager, user, DigDelay * comp.DigTimeMultiplier, new PitDigDoAfterEvent(GetNetCoordinates(target), digUp), ent, used: ent.Owner)
         {
             NeedHand = true,
             BreakOnHandChange = true,
@@ -152,12 +182,29 @@ public sealed class PitDiggingToolSystem : EntitySystem
             BreakOnMove = true,
         };
 
-        if (_doAfter.TryStartDoAfter(doAfter))
-            _popup.PopupEntity(Loc.GetString("au14-pit-tool-dig-started"), ent, args.User);
+        if (!_doAfter.TryStartDoAfter(doAfter))
+            return false;
+
+        _popup.PopupEntity(Loc.GetString("au14-pit-tool-dig-started"), ent, user);
+
+        // The tile that is being dug is outlined while the dig goes on, the way the ground of a tent is while it is pitched.
+        var center = _transform.ToMapCoordinates(target).Position;
+        SendToPlayer(user, new RMCShowDeployAreaEvent(Box2.CenteredAround(center, Vector2.One), Color.Blue));
+        return true;
+    }
+
+    // Only a player has a screen to draw the outline on.
+    private void SendToPlayer(EntityUid user, EntityEventArgs message)
+    {
+        if (TryComp<ActorComponent>(user, out var actor))
+            RaiseNetworkEvent(message, actor.PlayerSession);
     }
 
     private void OnDig(Entity<PitDiggingToolComponent> ent, ref PitDigDoAfterEvent args)
     {
+        // The dig is over, done or given up: the outline goes.
+        SendToPlayer(args.User, new RMCHideDeployAreaEvent());
+
         if (args.Cancelled || args.Handled)
             return;
 
@@ -183,13 +230,6 @@ public sealed class PitDiggingToolSystem : EntitySystem
 
         // A tool of wood or of stone gives out with the pits it digs.
         _wear.Use(ent.Owner, args.User);
-    }
-
-    private EntityCoordinates GetTileInFront(EntityUid user)
-    {
-        var xform = Transform(user);
-        var offset = xform.LocalRotation.GetDir().ToVec();
-        return xform.Coordinates.Offset(offset);
     }
 
     private bool TryGetDigTarget(EntityUid user, EntityCoordinates coords, out EntityCoordinates target, out EntityWhitelist? toolOverride, out string failReason)

@@ -1,0 +1,29 @@
+# The plate of the floor with the code of a mine in it. It is built over a pit (the "build on" menu of the pit, for ten sheets of metal) and the pit becomes floor: the
+# plate has no picture, so that nothing on the tile shows it. It remembers the factions of the one who built it and gives way under anyone else (see MinePlateSystem): it
+# turns back into a pit and whoever stepped on it falls in.
+
+- type: entity
+  id: RUMCMinePlateLaid
+  name: floor
+  description: "The floor."
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      plate:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        hard: false
+        layer:
+        - SlipLayer
+  - type: StepTrigger
+    requiredTriggeredSpeed: 0
+    intersectRatio: 0.3
+    stepOn: true
+  - type: MinePlate

@@ -6,7 +6,6 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.CMU14.ZLevelBuilding;
 
-// Client side of pits: shows a radial menu of what can be built in a pit and tells the server the chosen option.
 public sealed class PitSystem : SharedPitSystem
 {
     private SimpleRadialMenu? _menu;
