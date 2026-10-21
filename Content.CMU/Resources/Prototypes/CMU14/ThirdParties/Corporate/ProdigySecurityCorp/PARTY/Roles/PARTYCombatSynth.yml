@@ -1,6 +1,10 @@
 - type: job
   parent: AU14JobPARTYPartyContractorBase
   id: AU14JobProdigyPARTCombatSynth
+  chevrons:
+    AU14RankPrDSynth1:
+      entity: AU14ChevronPrDSynth1
+      requirements: []
   isSynthetic: true
   roundSide: ThirdParty
   roundProfiles:
@@ -53,7 +57,7 @@
         Blunt: 35
   - type: Synth
 
-  name: Prodigy Yankee Combat Synthetic
+  name: Combat Synthetic
   description: au14-prodigyparty-description
   playTimeTracker: AU14JobProdigyPARTCombatSynth
   whitelisted: true

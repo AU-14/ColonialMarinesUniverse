@@ -4,6 +4,9 @@
   abstract: true
   suffix: AU14, UA, CMB
   components:
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
   - type: GhostTakeoverAvailable
   - type: RandomHumanoidAppearance
   - type: RandomHumanoidAppearanceWhitelisted

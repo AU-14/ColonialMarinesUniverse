@@ -1,6 +1,10 @@
 - type: job
   parent: CMU14JobCivilianProdigyGuardBase
   id: CMU14JobCivilianProdigyGuardLeaderSurv
+  chevrons:
+    AU14RankPrDEnforcerLead:
+      entity: AU14ChevronPrDEnforcerLead
+      requirements: []
   roundSide: Civilian
   roundForce: PSC
   roundRole: CivilianProdigyGuardLeaderSurv
@@ -76,7 +80,7 @@
     eyes: AU14ProdigyWeldingGoggles
   storage:
     back:
-    - CMMRE #TODO prodigy one
+    - CMUMREFSR
     - CMCanteen
     - RMCRadioHandheldColony
     - CMSheetPlasteel40

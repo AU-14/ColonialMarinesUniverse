@@ -509,6 +509,42 @@ public sealed class AuJobSelectionTest : ContentUnitTest
         return planet;
     }
 
+    // cmu edit start
+    [Test]
+    public void DistressSignalOnlyAllowsMultipleSurvivorGroupsAboveThePopulationThreshold()
+    {
+        Assert.That(AuRoundSystem.GetDistressSignalSurvivorGroupLimit(100, 4), Is.EqualTo(1));
+        Assert.That(AuRoundSystem.GetDistressSignalSurvivorGroupLimit(101, 4), Is.EqualTo(4));
+        Assert.That(AuRoundSystem.GetDistressSignalSurvivorGroupLimit(30, 0), Is.EqualTo(0));
+    }
+
+    [Test]
+    public void DistressSignalRandomFillOnlyUsesItsShareOfTheLeftoverCapacity()
+    {
+        var locked = CreateThirdPartyPrototype("Locked");
+        var candidates = Enumerable.Range(0, 6).Select(i => CreateThirdPartyPrototype($"Random{i}")).ToList();
+
+        var additional = AuRoundSystem.SelectAdditionalDistressSignalThirdParties(
+            candidates,
+            [locked],
+            maxThirdParties: 5,
+            bodyBudget: 20,
+            PickFirst,
+            _ => 1,
+            out _,
+            out var additionalBodies,
+            AuRoundSystem.DistressSignalRandomThirdPartyShare);
+
+        // Four slots are left after the locked party; Distress Signal only fills half of them.
+        Assert.That(additional, Has.Count.EqualTo(2));
+        Assert.That(additionalBodies, Is.EqualTo(2));
+        return;
+
+        static ThirdPartyPrototype PickFirst(IReadOnlyList<ThirdPartyPrototype> candidates)
+            => candidates[0];
+    }
+    // cmu edit end
+
     private static ThirdPartyPrototype CreateThirdPartyPrototype(
         string id = "TestThirdParty",
         bool roundStart = false,

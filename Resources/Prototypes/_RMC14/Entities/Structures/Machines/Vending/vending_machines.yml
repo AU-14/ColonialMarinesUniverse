@@ -554,9 +554,13 @@
     # Pepper spray 4
     # InvestigationPepperSpray: 4
     CMStunbaton: 4
-    RMCGunCasePistolM77: 4
-    CMMagazinePistolM77AP: 16
-    CMMagazinePistolM88Rubber: 40
+    # cmu edit start: no Mod 88 in SecTech; pepper spray instead
+    # RMCGunCasePistolM77: 4
+    # CMMagazinePistolM77AP: 16
+    # CMMagazinePistolM88Rubber: 40
+    CMUPepperSpray: 4
+    CMUPepperSprayAntidote: 2
+    # cmu edit end
     # CMBeltSecurityMP: 10
     CMFlash: 5
     RMCGrenadeFlashBang: 6

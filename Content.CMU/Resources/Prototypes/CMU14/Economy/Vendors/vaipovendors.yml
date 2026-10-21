@@ -225,10 +225,10 @@
     sections:
     - name: Food
       entries:
-      - id: CMMRE
-        name: MRE
+      - id: CMUMREFSR
+        name: FSR
         amount: 30
-      - id: RMCBoxMRE
+      - id: CMUBoxMREFSR
         amount: 5
       - id: CMCanteen
         amount: 30

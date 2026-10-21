@@ -20,7 +20,7 @@
       RMCSkillVehicles: 1
   - type: JobPrefix
     prefix: cmu-weyuexec-prefix-lawyer
-  name: cmu-weyuexec-name-lawyer
+  name: cmu-job-title-weyu-lawyer
   description: cmu-weyuexec-description-lawyer
   playTimeTracker: CMUJobWeYuLawyer
   ranks:

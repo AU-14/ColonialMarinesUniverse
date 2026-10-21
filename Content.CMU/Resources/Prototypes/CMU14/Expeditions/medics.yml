@@ -7,7 +7,7 @@
     - 0,0,20,1
 
 - type: entity
-  parent: CMDefibrillator
+  parent: AU14CMDefibrillator
   id: CMUExpeditionDefibrillator
   components:
   - type: CMUExpeditionMedicalTool
