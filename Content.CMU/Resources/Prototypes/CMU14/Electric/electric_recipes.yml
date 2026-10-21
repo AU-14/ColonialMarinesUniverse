@@ -1985,17 +1985,6 @@
   duration: 8
 
 - type: cmuMachineRecipe
-  id: RUMCMRAssemblerFlashlight
-  machine: assembler
-  inputs:
-    CMSteel: 1
-    RUMCKitElectronics: 1
-    RUMCKitWiring: 2
-  itemOutputs:
-    FlashlightLantern: 1
-  duration: 5
-
-- type: cmuMachineRecipe
   id: RUMCMRAssemblerDefibrillator
   machine: assembler
   inputs:
@@ -2820,18 +2809,6 @@
   duration: 6
 
 - type: cmuMachineRecipe
-  id: RUMCMRFabricatorHandSaw
-  machine: fabricator
-  inputs:
-    RUMCChromedSheet: 1
-    RUMCIronRod: 1
-    RUMCKitFasteners: 2
-    RMCWood: 1
-  itemOutputs:
-    RUMCHandSaw: 1
-  duration: 6
-
-- type: cmuMachineRecipe
   id: RUMCMRFabricatorShovel
   machine: fabricator
   inputs:
@@ -2840,17 +2817,6 @@
     RMCWood: 1
   itemOutputs:
     RMCShovel: 1
-  duration: 6
-
-- type: cmuMachineRecipe
-  id: RUMCMRFabricatorHatchet
-  machine: fabricator
-  inputs:
-    CMSteel: 1
-    RUMCIronRod: 1
-    RMCWood: 1
-  itemOutputs:
-    HydroponicsToolHatchet: 1
   duration: 6
 
 - type: cmuMachineRecipe
