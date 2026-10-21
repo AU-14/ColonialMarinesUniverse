@@ -63,11 +63,11 @@
     - CMMagazinePistolM1984
     - CMMagazinePistolM1984
     - CMMagazinePistolM1984
-    outerClothing:
-    - RMCMagazineRifleL42A
-    - RMCMagazineRifleL42A
-    - RMCMagazineRifleL42A
     back:
+    # The chest rig only takes small items, so the rifle magazines ride in the pack.
+    - RMCMagazineRifleL42A
+    - RMCMagazineRifleL42A
+    - RMCMagazineRifleL42A
     - RMCGlassesMedicalHUDGlasses
     - CMBurnKit10
     - CMBurnKit10

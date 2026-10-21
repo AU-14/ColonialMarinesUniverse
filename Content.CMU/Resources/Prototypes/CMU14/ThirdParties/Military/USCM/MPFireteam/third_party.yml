@@ -293,7 +293,10 @@
     pocket1: AU14PouchShotgunLargeBuckshot
   storage:
     back:
-    - RMCBoxShellsBuckshot
+    # A full shell box won't fit in the satchel; spare handfuls do.
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
     - RMCHandcuffs
     - RMCHandcuffs
 

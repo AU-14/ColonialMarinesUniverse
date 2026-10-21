@@ -289,11 +289,11 @@
     - AU14WeaponRifleprodigyrifleMagazineStandard
     - AU14WeaponRifleprodigyrifleMagazineStandard
     back:
-    - CMMRE
+    - CMUMREFSR
     - CMCanteen
     - CMPacketGrenadeFragFilled
     - RMCFlashlight
-    outerClothing:
+    # The flak vest only takes tiny items, so the sidearm rides in the pack.
     - CMU14WeaponPistolGlock75
     - CMU14MagazinePistolGlock75
 
@@ -337,7 +337,7 @@
     - CMHealthAnalyzer
     - CMRollerBedSpawnFolded
     - CMUSalineBag
-    - CMMRE
+    - CMUMREFSR
 
 - type: startingGear
   id: CMUGearProdigySFSmartgunner
@@ -360,7 +360,7 @@
     - RMCMagazineSmartGun
     - RMCMagazineSmartGun
     - RMCPowerCellSmartgun
-    - CMMRE
+    - CMUMREFSR
     pocket1:
     - RMCMagazineSmartGun
 

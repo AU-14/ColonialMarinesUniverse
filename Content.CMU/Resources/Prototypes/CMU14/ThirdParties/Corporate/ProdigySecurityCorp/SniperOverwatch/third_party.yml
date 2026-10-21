@@ -168,7 +168,7 @@
     back:
     - CMMagazineSniperM96S
     - CMMagazineSniperM96S
-    - CMMRE
+    - CMUMREFSR
     - CMCanteen
 
 - type: startingGear
@@ -185,7 +185,7 @@
     - AU14WeaponRifleprodigyrifleMagazineStandard
     - AU14WeaponRifleprodigyrifleMagazineStandard
     - RMCRangefinder
-    - CMMRE
+    - CMUMREFSR
     - CMCanteen
 
 - type: entity
