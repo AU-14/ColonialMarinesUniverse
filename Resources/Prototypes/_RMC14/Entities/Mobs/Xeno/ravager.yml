@@ -168,7 +168,7 @@
   - type: XenoShield
   - type: XenoClaws
     clawType: VerySharp
-    armorPiercing: 25
+    armorPiercing: 0
   - type: XenoLeap
     delay: 0
     knockdownTime: 0
