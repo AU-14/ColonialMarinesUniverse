@@ -711,6 +711,7 @@
   desc: reagent-desc-cmnaloxone
   color: "#a3adbf"
   overdose: 200
+  worksOnTheDead: true
   metabolisms:
     Bloodstream:
       metabolismRate: 0.02

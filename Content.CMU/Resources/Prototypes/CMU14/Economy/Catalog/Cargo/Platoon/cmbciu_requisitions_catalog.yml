@@ -446,10 +446,8 @@
       entries:
       - cost: 250
         crate: RMCCrateBoxMagazineSmartPistol
-      - cost: 500
-        crate: CMUCrateBoxMagazineRifleM16APExt
       - cost: 300
-        crate: CMUCrateBoxMagazineRifleM16AP
+        crate: CMUCrateBoxMagazineRifleM20AAP
       - cost: 400
         crate: RMCCrateBoxShellsShotgunBreaching
       - cost: 650

@@ -110,12 +110,12 @@ public sealed class YautjaHuntingGroundMapTest
     private static readonly ResPath JungleMoonPath = new("/Maps/CMU14/HuntingGrounds/jungle_moon.yml");
     private static readonly ResPath DesertMoonPath = new("/Maps/CMU14/HuntingGrounds/desert_moon.yml");
     private static readonly ResPath DesertMoonCavesPath = new("/Maps/CMU14/HuntingGrounds/desert_moon_caves.yml");
-    private static readonly ResPath HunterShipPath = new("/Maps/CMU14/huntership.yml");
+    private static readonly ResPath HunterShipPath = new("/Maps/CMU14/Ships/HunterShip/huntership.yml");
     private static readonly ResPath[] HunterShipZLevelPaths =
     [
-        new("/Maps/CMU14/huntership.yml"),
-        new("/Maps/CMU14/huntership_upper.yml"),
-        new("/Maps/CMU14/huntership_lower.yml"),
+        new("/Maps/CMU14/Ships/HunterShip/huntership.yml"),
+        new("/Maps/CMU14/Ships/HunterShip/huntership_upper.yml"),
+        new("/Maps/CMU14/Ships/HunterShip/huntership_lower.yml"),
     ];
 
     private static readonly string[] HunterShipHuntConsolePrototypes =

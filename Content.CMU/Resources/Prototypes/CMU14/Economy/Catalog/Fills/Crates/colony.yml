@@ -551,3 +551,25 @@
     contents:
     - id: AU14CMDefibrillator
       amount: 1
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxNailgun
+  name: Nailgun Crate (x1 nailgun, x3 nailgun magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: WeaponNailgun
+      amount: 1
+    - id: RMCMagazineSMGNailgun
+      amount: 3
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxNailgunMagazines
+  name: Nailgun Magazine Crate (x6 nailgun magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSMGNailgun
+      amount: 6

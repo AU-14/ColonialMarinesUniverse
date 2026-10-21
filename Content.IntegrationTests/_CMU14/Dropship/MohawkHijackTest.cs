@@ -38,7 +38,7 @@ public sealed class MohawkHijackTest
             var maps = entities.System<SharedMapSystem>();
             maps.CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
             var assembly = entities.GetComponent<MultiDeckDropshipComponent>(ship);
             secondaryDecks = assembly.Decks.Values.ToArray();
