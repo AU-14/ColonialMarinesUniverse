@@ -135,7 +135,7 @@
   - type: Sprite
     color: "#88cce8"
   - type: TimedDespawn
-    lifetime: 15
+    lifetime: 30
 
 - type: entity
   parent: StatusEffectStunned
@@ -200,8 +200,8 @@
   cloud: CMUShipWeaponEmsCloud
   cloudRadius: 30
   ems: true
-  fieldDuration: 15
-  stunAfterField: 25
+  fieldDuration: 30
+  stunAfterField: 35
 
 - type: cmuShipWeapon
   id: CMUSmokeStrike
