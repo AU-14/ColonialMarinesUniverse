@@ -23,6 +23,7 @@ public sealed partial class DropshipAmmoVisualizerSystem : VisualizerSystem<Drop
         if (component.AmmoType == null)
             return;
 
+        // CMU14: M90 crates fire individual shells but retain their ten-stage fill sprites.
         var step = component.RoundsPerSprite ?? component.RoundsPerShot;
         var fillNum = component.RoundsPerSprite != null
             ? Math.Clamp((int) MathF.Ceiling((float) fill / step), 0,
