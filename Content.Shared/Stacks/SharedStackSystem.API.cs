@@ -31,9 +31,6 @@ public abstract partial class SharedStackSystem
 
         SetCount((entityUid, null), 1);
 
-        // RUMC: tell the original stack that one item was taken off it, so that the new item may be given what the original has (the handmade cartridges).
-        var taken = new StackOneTakenEvent(entityUid);
-        RaiseLocalEvent(stackEnt.Owner, ref taken);
         return entityUid;
     }
 
@@ -140,12 +137,6 @@ public abstract partial class SharedStackSystem
 
         // RMC: Stacks covered in acid cannot be merged.
         if (IsAcidicStack(donor.Owner) || IsAcidicStack(recipient.Owner))
-            return false;
-
-        // RUMC: some stacks (handmade cartridges) merge only with the ones that are made the same.
-        var attempt = new StackMergeAttemptEvent(donor.Owner, recipient.Owner);
-        RaiseLocalEvent(recipient.Owner, ref attempt);
-        if (attempt.Cancelled)
             return false;
 
         // The most we can transfer
