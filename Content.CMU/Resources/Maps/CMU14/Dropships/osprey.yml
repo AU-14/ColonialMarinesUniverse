@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 04/19/2026 15:16:44
-  entityCount: 133
+  entityCount: 134
 maps:
 - 1
 grids:
@@ -176,6 +176,13 @@ entities:
       arrivalSound: !type:SoundPathSpecifier
         path: /Audio/_RMC14/Machines/Shuttle/engine_landing.ogg
     - type: ImplicitRoof
+- proto: CMUAirFillerVent
+  entities:
+  - uid: 201
+    components:
+    - type: Transform
+      parent: 2
+      pos: 0.5,3.5
 - proto: RMCTinyFan
   entities:
   - uid: 14
