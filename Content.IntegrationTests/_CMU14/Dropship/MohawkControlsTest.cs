@@ -36,7 +36,7 @@ public sealed class MohawkControlsTest
             var loader = entities.System<MapLoaderSystem>();
             if (deployment)
             {
-                Assert.That(loader.TryLoadMap(new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}_deployment.yml"),
+                Assert.That(loader.TryLoadMap(new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}_deployment.yml"),
                     out _, out var grids, DeserializationOptions.Default with { InitializeMaps = true }), Is.True);
                 ship = grids!.Single().Owner;
             }
@@ -44,7 +44,7 @@ public sealed class MohawkControlsTest
             {
                 entities.System<SharedMapSystem>().CreateMap(out var mapId);
                 Assert.That(loader.TryLoadGrid(mapId,
-                    new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                    new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
                 ship = loaded!.Value.Owner;
             }
             var doors = entities.QueryEntities<DoorComponent>()
