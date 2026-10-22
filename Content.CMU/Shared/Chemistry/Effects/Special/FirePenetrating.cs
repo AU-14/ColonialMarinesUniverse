@@ -8,10 +8,13 @@ namespace Content.Shared.CMU14.Chemistry.Effects.Special;
 
 public sealed partial class Firepenetrating : RMCChemicalEffect
 {
+    /// <summary>
+    /// Marker property: the generator emits <c>firePenetrating: true</c> on the reagent and the flamer chain
+    /// marks its tile fires so that <c>SharedRMCFlammableSystem.DamageFromFire</c> ignores every resistance.
+    /// </summary>
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
     {
-        return $"" +
-               $"Overdoses\n" +
-               $"Critical overdoses";
+        return "Fires fed by this chemical burn through heat-resistant materials: synthetic and Yautja fire " +
+               "resistance is ignored. A flamer tank needs at least one tenth of this chemical for its blend to penetrate.";
     }
 }

@@ -1,0 +1,11 @@
+# Ammo Pouches for Random Gear
+# rifles
+- type: entity
+  parent: RuMCUPPPouchExplosive
+  id: CMUPouchExplosivesLargeFilledM433
+  suffix: Filled, M433
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMU40mmM433HEDP
+      amount: 6

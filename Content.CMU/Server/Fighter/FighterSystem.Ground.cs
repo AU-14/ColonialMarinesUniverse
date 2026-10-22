@@ -246,6 +246,11 @@ public sealed partial class FighterSystem
     {
         FinishVtolEffects(ground, FighterVtolOutcome.Aborted);
         if (ground.Comp.Aircraft is not { } uid || TerminatingOrDeleted(uid)) return;
+        if (TryComp(uid, out FighterAircraftComponent? survivingAircraft))
+        {
+            survivingAircraft.GroundEntity = null;
+            Dirty(uid, survivingAircraft);
+        }
         var cockpitMap = Transform(uid).MapUid;
         var recovery = Transform(ground).MapUid != null ? Transform(ground).Coordinates : ground.Comp.LaunchCoordinates;
         if (recovery is { } destination && !TerminatingOrDeleted(destination.EntityId) && _transform.GetMap(destination) != null)
@@ -349,6 +354,7 @@ public sealed partial class FighterSystem
         if (!TryComp(aircraft, out FighterWeaponsComponent? weapons)) return;
         for (var i = 0; i < weapons.Hardpoints.Count; i++)
         {
+            if (TerminatingOrDeleted(weapons.Hardpoints[i])) continue;
             var cannon = i == FighterWeaponsComponent.GauSlot;
             var x = cannon ? .5f : .5f + (i < 3 ? -1 : 1) * (2.5f + i % 3 * 1.8f);
             var position = new Vector2(x, cannon ? 5.5f : -1.5f - i % 3 * .7f);

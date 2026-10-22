@@ -220,6 +220,30 @@ public sealed class CrtConsoleKit
         return label;
     }
 
+    /// <summary>A bold heading that wraps onto more lines instead of running past the edge of its panel.</summary>
+    public static RichTextLabel BoldWrapping(string text, Color color)
+    {
+        var message = new FormattedMessage();
+        message.PushColor(color);
+        message.AddMarkupOrThrow($"[bold]{FormattedMessage.EscapeText(text)}[/bold]");
+        message.Pop();
+        var label = new RichTextLabel { HorizontalExpand = true };
+        label.SetMessage(message);
+        return label;
+    }
+
+    /// <summary>Wrapping text that keeps any markup it was written with, falling back to plain text if it's broken.</summary>
+    public static RichTextLabel WrappingMarkup(string markup, Color color)
+    {
+        var message = new FormattedMessage();
+        message.PushColor(color);
+        message.AddMarkupPermissive(markup);
+        message.Pop();
+        var label = new RichTextLabel { HorizontalExpand = true };
+        label.SetMessage(message);
+        return label;
+    }
+
     /// <summary>
     ///     Fills <paramref name="column"/> with the colony's economy at a glance: the three rates as readouts, then
     ///     any embargoes and trade pacts.

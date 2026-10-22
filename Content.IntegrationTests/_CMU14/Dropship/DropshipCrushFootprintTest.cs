@@ -28,7 +28,7 @@ public sealed class DropshipCrushFootprintTest : GameTest
         await Server.WaitAssertion(() =>
         {
             Assert.That(Server.System<MapLoaderSystem>().TryLoadMap(
-                new ResPath("/Maps/CMU14/Shuttles/alamo.yml"), out _, out var loaded,
+                new ResPath("/Maps/CMU14/Dropships/alamo.yml"), out _, out var loaded,
                 DeserializationOptions.Default with { InitializeMaps = true }), Is.True);
             ship = loaded!.Single().Owner;
             var transforms = Server.System<SharedTransformSystem>();

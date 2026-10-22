@@ -18,7 +18,11 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     ///     If not set, falls back to ID.
     /// </summary>
     [DataField("displayName")]
-    public string? DisplayName { get; private set; }
+    private string? _displayName;
+
+    public string? DisplayName => _displayName != null && Loc.TryGetString(_displayName, out var localized)
+        ? localized
+        : _displayName;
 
     [DataField("blacklistedThreats")]
     public List<string> BlacklistedThreats { get; private set; } = new();
@@ -31,7 +35,7 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     public string? EntryMethod { get; private set; }
 
     [DataField]
-    public ResPath dropshippath { get; private set; } = new("/Maps/CMU14/Shuttles/black_ert.yml");
+    public ResPath dropshippath { get; private set; } = new("/Maps/CMU14/Dropships/black_ert.yml");
 
     [DataField]
     public List<string> BlacklistedGamemodes { get; private set; } = new();

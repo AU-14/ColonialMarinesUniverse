@@ -960,7 +960,7 @@
     offset: 0,0.5
     noRot: false
 - type: entity
-  parent: ColMarTechGuns
+  parent: CMUMohawkWeaponsRack
   id: CMUMohawkOmahaDropshipd87acb8c7a
   name: dropship weapons rack
   suffix: Mohawk, Omaha
@@ -4617,7 +4617,7 @@
     offset: 0,0.5
     noRot: false
 - type: entity
-  parent: ColMarTechGuns
+  parent: CMUMohawkWeaponsRack
   id: CMUMohawkOmahaNavyDropshipd87acb8c7a
   name: dropship weapons rack
   suffix: Mohawk, Omaha, Navy

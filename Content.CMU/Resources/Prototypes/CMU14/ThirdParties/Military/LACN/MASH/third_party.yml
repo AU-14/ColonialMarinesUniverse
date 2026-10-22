@@ -1,0 +1,470 @@
+# LACN MASH team, called in through the UA intel list: a chief medical officer, a doctor and two nurses with the
+# LACN medical department kit (the doctor brings a LifePak and a surgical tent), and a rifleman to guard them.
+
+- type: entity
+  parent: SquadBase
+  id: CMUSquadLACNMASH
+  name: LACN MASH
+  components:
+  - type: SquadTeam
+    color: "#2e8b57"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UASOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_medical
+    canSupplyDrop: false
+    group: CMULACNMASH
+  - type: Tag
+    tags:
+    - CMUSquadLACNMASH
+
+- type: Tag
+  id: CMUSquadLACNMASH
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobLACNMASHCMO
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: LACN
+  roundRole: CMUJobLACNMASHCMO
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: cmo_wo
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_medical
+  - type: Skills
+    preset: AU14SkillPresetOfficerMedical
+  - type: Language
+    spokenLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    understoodLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    currentLanguage: Portuguese
+    defaultLanguage: Portuguese
+  name: cmu-job-title-lacn-mash-cmo
+  description: cmu-job-description-lacn-mash
+  playTimeTracker: CMUJobLACNMASHCMO
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    CMU14RankLACNCorvetteCaptain:
+      entity: CMU14ChevronLACNCorvetteCaptain
+      requirements: []
+  spawnMenuRoleName: LACN MASH Chief Medical Officer
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearLACNMASHCMO
+  greeting: cmu-job-greeting-lacn-mash
+  joinNotifyCrew: false
+  supervisors: cmu-job-title-lacn-mash-cmo
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicLACN
+  suffix: CMU, LACN, MASH
+  id: CMUJobLACNMASHCMO
+  name: LACN MASH Chief Medical Officer
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadLACNMASH
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-lacn-mash-cmo
+    description: cmu-job-description-lacn-mash
+    reregister: false
+    job: CMUJobLACNMASHCMO
+    raffle:
+      settings: short
+    rules: cmu-job-rules-lacn-mash
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardLACNMASHCMO
+  name: LACN MASH chief medical officer ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobLACNMASHCMO
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: playTimeTracker
+  id: CMUJobLACNMASHCMO
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobLACNMASHDoctor
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: LACN
+  roundRole: CMUJobLACNMASHDoctor
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: doctor
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_medical
+  - type: Skills
+    preset: AU14SkillPresetMilitaryDoctor
+  - type: Language
+    spokenLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    understoodLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    currentLanguage: Portuguese
+    defaultLanguage: Portuguese
+  name: cmu-job-title-lacn-mash-doctor
+  description: cmu-job-description-lacn-mash
+  playTimeTracker: CMUJobLACNMASHDoctor
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    CMU14RankLACNShipLineLieutenant:
+      entity: CMU14ChevronLACNShipLineLieutenant
+      requirements: []
+  spawnMenuRoleName: LACN MASH Doctor
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearLACNMASHDoctor
+  greeting: cmu-job-greeting-lacn-mash
+  joinNotifyCrew: false
+  supervisors: cmu-job-title-lacn-mash-cmo
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicLACN
+  suffix: CMU, LACN, MASH
+  id: CMUJobLACNMASHDoctor
+  name: LACN MASH Doctor
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadLACNMASH
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-lacn-mash-doctor
+    description: cmu-job-description-lacn-mash
+    reregister: false
+    job: CMUJobLACNMASHDoctor
+    raffle:
+      settings: short
+    rules: cmu-job-rules-lacn-mash
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardLACNMASHDoctor
+  name: LACN MASH doctor ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobLACNMASHDoctor
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: playTimeTracker
+  id: CMUJobLACNMASHDoctor
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobLACNMASHNurse
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: LACN
+  roundRole: CMUJobLACNMASHNurse
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: nurse
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_medical
+  - type: Skills
+    preset: AU14SkillPresetMilitaryNurse
+  - type: Language
+    spokenLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    understoodLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    currentLanguage: Portuguese
+    defaultLanguage: Portuguese
+  name: cmu-job-title-lacn-mash-nurse
+  description: cmu-job-description-lacn-mash
+  playTimeTracker: CMUJobLACNMASHNurse
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    CMU14RankLACNThirdClassSergeant:
+      entity: CMU14ChevronLACNThirdClassSergeant
+      requirements: []
+  spawnMenuRoleName: LACN MASH Nurse
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearLACNMASHNurse
+  greeting: cmu-job-greeting-lacn-mash
+  joinNotifyCrew: false
+  supervisors: cmu-job-title-lacn-mash-cmo
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicLACN
+  suffix: CMU, LACN, MASH
+  id: CMUJobLACNMASHNurse
+  name: LACN MASH Nurse
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadLACNMASH
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-lacn-mash-nurse
+    description: cmu-job-description-lacn-mash
+    reregister: false
+    job: CMUJobLACNMASHNurse
+    raffle:
+      settings: short
+    rules: cmu-job-rules-lacn-mash
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardLACNMASHNurse
+  name: LACN MASH nurse ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobLACNMASHNurse
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: playTimeTracker
+  id: CMUJobLACNMASHNurse
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobLACNMASHRifleman
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: LACN
+  roundRole: CMUJobLACNMASHRifleman
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_rifleman
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_medical
+  - type: Skills
+    preset: AU14SkillPresetPlatoonRifleman
+  - type: Language
+    spokenLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    understoodLanguages:
+    - English
+    - Portuguese
+    - Spanish
+    currentLanguage: Portuguese
+    defaultLanguage: Portuguese
+  name: cmu-job-title-lacn-mash-rifleman
+  description: cmu-job-description-lacn-mash
+  playTimeTracker: CMUJobLACNMASHRifleman
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    CMU14RankLACNSailorFirstClass:
+      entity: CMU14ChevronLACNSailorFirstClass
+      requirements: []
+  spawnMenuRoleName: LACN MASH Rifleman
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearLACNMASHRifleman
+  greeting: cmu-job-greeting-lacn-mash
+  joinNotifyCrew: false
+  supervisors: cmu-job-title-lacn-mash-cmo
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicLACN
+  suffix: CMU, LACN, MASH
+  id: CMUJobLACNMASHRifleman
+  name: LACN MASH Rifleman
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadLACNMASH
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-lacn-mash-rifleman
+    description: cmu-job-description-lacn-mash
+    reregister: false
+    job: CMUJobLACNMASHRifleman
+    raffle:
+      settings: short
+    rules: cmu-job-rules-lacn-mash
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardLACNMASHRifleman
+  name: LACN MASH rifleman ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobLACNMASHRifleman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: playTimeTracker
+  id: CMUJobLACNMASHRifleman
+
+# Loadouts, from the LACN platoon medical department gear.
+- type: startingGear
+  id: CMUGearLACNMASHCMO
+  equipment:
+    id: CMUIDCardLACNMASHCMO
+    ears: AU14HeadsetGovforCommand
+    jumpsuit: CMULACNMedicalFieldUniform
+    head: CMULACNHelmetMedical
+    outerClothing: CMULACNLogisticsVest
+    neck: ClothingNeckStethoscope
+    eyes: RMCGlassesMedicalHUDGlasses
+    shoes: CMULACNBootsWhiteFilled
+    belt: AU14BeltMedicBagSupportSynth
+    pocket1: AU14PouchFirstResponderFilledMilitaryDoctor
+    pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
+    back: AU14SatchelMilitaryDoctor
+  inhand:
+  - AU14StampMO
+
+- type: startingGear
+  id: CMUGearLACNMASHDoctor
+  equipment:
+    id: CMUIDCardLACNMASHDoctor
+    jumpsuit: CMULACNMedicalFieldUniform
+    head: CMULACNHelmetMedical
+    shoes: CMULACNBootsWhiteFilled
+    belt: AU14BeltMedicBagSupportSynth
+    pocket1: AU14PouchFirstResponderFilledMilitaryDoctor
+    pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
+    back: AU14SatchelMilitaryDoctor
+    outerClothing: CMULACNLogisticsVest
+    ears: AU14HeadsetGovforAuxiliary
+    ears2: RMCM5CameraGear
+    neck: ClothingNeckStethoscope
+    eyes: RMCGlassesMedicalHUDGlasses
+  inhand:
+  - AU14CMDefibrillator
+  - AU14TentBigFoldedSurgical
+
+- type: startingGear
+  id: CMUGearLACNMASHNurse
+  equipment:
+    id: CMUIDCardLACNMASHNurse
+    jumpsuit: CMULACNMedicalFieldUniform
+    head: CMULACNHelmetMedical
+    outerClothing: CMULACNLogisticsVest
+    shoes: CMULACNBootsWhiteFilled
+    belt: AU14BeltMedicBagSupportSynth
+    pocket1: AU14PouchFirstResponderFilledMilitaryDoctor
+    pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
+    back: AU14SatchelMilitaryDoctor
+    ears: AU14HeadsetGovforAuxiliary
+    neck: ClothingNeckStethoscope
+
+- type: startingGear
+  id: CMUGearLACNMASHRifleman
+  equipment:
+    id: CMUIDCardLACNMASHRifleman
+    jumpsuit: AU14LACNUniform
+    outerClothing: AU14LACNArmorStandard
+    head: AU14LACNHelmetStandard
+    gloves: AU14LACNGloves
+    shoes: AU14LACNBootsFilled
+    ears: AU14HeadsetGovforMarine
+    belt: CMULACNBeltMagazine
+    pocket1: RMCPouchMagazineLarge
+    pocket2: AU14PouchIFAKFill
+    back: AU14LACNBackpack
+    suitstorage: AU14WeaponRifleKramerAR
+  storage:
+    belt:
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    pocket1:
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    back:
+    - CMMRE
+    - CMCanteen
+
+- type: partySpawn
+  id: CMULACNMASHSpawn
+  leadersToSpawn:
+    CMUJobLACNMASHCMO: 1
+  gruntsToSpawn:
+    CMUJobLACNMASHDoctor: 1
+    CMUJobLACNMASHNurse: 2
+    CMUJobLACNMASHRifleman: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMULACNMASH
+  displayName: LACN MASH Team
+  partyspawn: CMULACNMASHSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 5
+  roundstart: false
