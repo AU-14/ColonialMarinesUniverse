@@ -74804,6 +74804,8 @@ entities:
   entities:
   - uid: 24260
     components:
+    - type: MetaData
+      name: Solaris Ridge ground relay
     - type: Transform
       parent: 1
       pos: 89.5,-74.5
