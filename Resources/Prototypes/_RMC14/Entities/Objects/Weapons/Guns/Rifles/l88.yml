@@ -76,6 +76,7 @@
           - RMCAttachmentMagneticHarness
           - RMCAttachmentS5RedDotSight
           - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS42xTelescopicMiniscope # CMU14: standard GOVFOR scope compatibility.
       rmc-aslot-underbarrel:
         locked: true
         startingAttachable: RMCAttachmentL88Grip
@@ -127,6 +128,7 @@
           - RMCAttachmentMagneticHarness
           - RMCAttachmentS5RedDotSight
           - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS42xTelescopicMiniscope # CMU14: standard GOVFOR scope compatibility.
       rmc-aslot-underbarrel:
         whitelist:
           tags:
@@ -183,6 +185,7 @@
           - RMCAttachmentRailFlashlight
           - RMCAttachmentS5RedDotSight
           - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS42xTelescopicMiniscope # CMU14: standard GOVFOR scope compatibility.
       rmc-aslot-underbarrel:
         locked: true
         startingAttachable: RMCAttachmentL88Grip
@@ -225,6 +228,7 @@
           - RMCAttachmentMagneticHarness
           - RMCAttachmentS5RedDotSight
           - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS42xTelescopicMiniscope # CMU14: standard GOVFOR scope compatibility.
       rmc-aslot-underbarrel:
         whitelist:
           tags:

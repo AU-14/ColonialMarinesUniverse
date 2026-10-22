@@ -447,7 +447,20 @@
   code: VIS
   rarity: common
   category: reactant, combustible
+  rangePerLevel: -1
+  radiusModPerLevel: -0.03
   effectName: Viscous
+
+- type: reagentProperty
+  parent: Negative
+  id: Irritating
+  name: cmu-reagent-property-name-irritating
+  description: cmu-reagent-property-desc-irritating
+  code: IRR
+  rarity: uncommon
+  value: 2
+  category: irritant
+  effectName: Irritating
 
 - type: reagentProperty
   parent: Neutral
@@ -833,7 +846,7 @@
   effectName: Explosive
 
 - type: reagentProperty
-  parent: Positive
+  parent: Negative # harms the patient: burn damage per tick, flashes on overdose
   id: Photosensitive
   name: cmu-reagent-property-name-photosensitive
   description: cmu-reagent-property-desc-photosensitive
@@ -844,7 +857,7 @@
   effectName: Photosensitive
 
 - type: reagentProperty
-  parent: Positive
+  parent: Negative # harms the patient: brute damage per tick, shrapnel on overdose
   id: Crystallization
   name: cmu-reagent-property-name-crystallization
   description: cmu-reagent-property-desc-crystallization
@@ -1119,6 +1132,7 @@
   rarity: admin
   value: 666
   category: reactant, unadjustable
+  rangePerLevel: 1
   effectName: Radius
 
 - type: reagentProperty
@@ -1130,6 +1144,7 @@
   rarity: admin
   value: 666
   category: reactant, unadjustable
+  intensityPerLevel: 5
   effectName: CMUIntensity
 
 - type: reagentProperty
@@ -1141,6 +1156,7 @@
   rarity: admin
   value: 666
   category: reactant, unadjustable
+  durationPerLevel: 5
   effectName: Duration
 
 - type: reagentProperty

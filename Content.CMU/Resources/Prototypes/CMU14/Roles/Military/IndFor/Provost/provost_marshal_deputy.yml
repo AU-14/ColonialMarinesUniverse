@@ -1,7 +1,7 @@
 - type: job
   parent: CMUJobMilitaryBaseProvost
   id: CMUJobINDFORProvostMarshalDeputy
-  name: cmu-job-name-corp-provost-deputy-marshal
+  name: cmu-job-name-corp-provost-deputy-marshal-title
   description: cmu-ghost-role-information-provost-description
   icon: CMUJobIconProvostMarshal
   startingGear: CMUGearProvostDeputyMarshal

@@ -1,0 +1,75 @@
+- type: entity
+  parent: BaseItem
+  id: CMUCameraFilm
+  name: camera film
+  description: A cartridge of instant print film, good for ten photos. Use it on a photo camera to load it.
+  components:
+  - type: Sprite
+    sprite: CMU14/HunterShip/obj/items/paper.rsi
+    state: film
+  - type: Item
+    size: Tiny
+  - type: CMUCameraFilm
+  - type: StaticPrice
+    price: 10
+
+- type: entity
+  parent: BaseItem
+  id: CMUPhotoCamera
+  name: photo camera
+  description: A compact instant camera. It takes cartridges of film, ten photos each. Click an area to photograph it; alt click to change the frame.
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/travel_camera.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Clothing
+    slots:
+    - NECK
+    sprite: Objects/Devices/travel_camera.rsi
+  - type: CMUPhotoCamera
+  - type: StaticPrice
+    price: 100
+
+- type: entity
+  parent: BaseItem
+  id: CMUPhoto
+  name: photograph
+  description: A glossy print, still warm from the camera.
+  components:
+  - type: Sprite
+    sprite: CMU14/Photography/photo.rsi
+    state: icon
+  - type: Item
+    size: Tiny
+  - type: CMUPhoto
+  - type: ActivatableUI
+    key: enum.CMUPhotoUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUPhotoUiKey.Key:
+        type: CMUPhotoBui
+
+# The camera's flash: a short burst of cold white light at the photographer that fades out at once. Bright
+# enough to light up the room for a moment, too brief to dazzle anyone. Its radius is set per shot to reach
+# the frame's far corner; like any light it casts shadows, so it never lights what is behind a wall.
+- type: entity
+  id: CMUEffectCameraFlash
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    enabled: true
+    radius: 6
+    energy: 10
+    softness: 1
+    color: "#F2F5FF"
+  - type: LightFade
+    duration: 0.35
+  - type: TimedDespawn
+    lifetime: 0.4
+
+# Marker on a print's caption strip.
+- type: font
+  id: CMUPhotoCaption
+  path: /Fonts/ComicNeue/ComicNeue-Bold.ttf

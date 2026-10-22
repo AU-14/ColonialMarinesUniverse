@@ -102,6 +102,7 @@ public sealed partial class GunSystem : SharedGunSystem
             {
                 case CartridgeAmmoComponent cartridge:
                     var cartridgeUid = ent!.Value;
+                    var caseless = cartridge.DeleteOnSpawn || HasComp<Content.Shared.CMU14.Weapons.Caseless.CMUCaselessGunComponent>(gun); // cmu edit
                     if (!cartridge.Spent)
                     {
                         var projectile = Spawn(cartridge.Prototype, fromEnt);
@@ -114,7 +115,7 @@ public sealed partial class GunSystem : SharedGunSystem
 
                         SetCartridgeSpent(cartridgeUid, cartridge, true);
 
-                        if (cartridge.DeleteOnSpawn)
+                        if (caseless) // cmu edit
                             Del(cartridgeUid);
                     }
                     else
@@ -123,7 +124,7 @@ public sealed partial class GunSystem : SharedGunSystem
                         Audio.PlayPredicted(gun.Comp.SoundEmpty, gun, user);
                     }
 
-                    if (!cartridge.DeleteOnSpawn &&
+                    if (!caseless && // cmu edit
                         !Containers.IsEntityInContainer(cartridgeUid))
                     {
                         EjectCartridge(cartridgeUid, angle, ejectCoordinates: Transform(gun).Coordinates); // CMU14

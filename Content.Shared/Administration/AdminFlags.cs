@@ -155,5 +155,36 @@ namespace Content.Shared.Administration
         ///     Yautja clan administration.
         /// </summary>
         Clans = 1ul << 34,
+
+        // cmu edit start: things being on the admin list used to grant by itself, split out so each rank only gets
+        // what it's given. Holding a rank with none of these (a mentor, say) gives nothing beyond its other flags.
+
+        /// <summary>
+        ///     Receive admin alerts, admin announcements and admin notification sounds.
+        /// </summary>
+        AdminAlerts = 1ul << 40,
+
+        /// <summary>
+        ///     Receive the admin player list, which shows antagonists.
+        /// </summary>
+        PlayerList = 1ul << 41,
+
+        /// <summary>
+        ///     As a ghost: hear everything regardless of range, see through Yautja masks, and use dead chat even while
+        ///     it's disabled.
+        /// </summary>
+        GhostSenses = 1ul << 42,
+
+        /// <summary>
+        ///     Move and zoom the camera freely while not a ghost.
+        /// </summary>
+        FreeZoom = 1ul << 43,
+
+        /// <summary>
+        ///     On-duty staff: listed in adminwho and showadmins, counts as an admin online for votes, and exempt from the
+        ///     player cap, AFK kicks, votekicks and multi-server kicks. Tracks admin playtime.
+        /// </summary>
+        Staff = 1ul << 44,
+        // cmu edit end
     }
 }

@@ -6,12 +6,19 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Chemistry.Effects.Neutral;
 
+/// <summary>
+/// Passive above 170 K; below it, boosts every sibling property like <c>Boosting</c> does.
+/// </summary>
 public sealed partial class Cryometabolizing : RMCChemicalEffect
 {
+    public const float ActivationKelvin = 170f;
+
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
+        => $"No effect above [color=yellow]{ActivationKelvin}[/color] K. Below that body temperature, boosts every other property in this chemical by [color=yellow]{Potency * 0.5f}[/color].";
+
+    protected override void ReagentBoost(RMCChemicalEffectSystem system, RMCReagentEffectArgs args, ref float boost)
     {
-        return $"" +
-               $"Overdoses\n" +
-               $"Critical overdoses";
+        if (system.Temperature.GetTemperature(args.TargetEntity) < ActivationKelvin)
+            boost += Potency * 0.5f;
     }
 }
