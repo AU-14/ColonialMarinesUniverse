@@ -1,0 +1,39 @@
+- type: entity
+  parent: [ RMCAttachmentS42xTelescopicMiniscope, RMCPowerCellSlotUnremovableSuper ]
+  id: CMUAttachmentNightVisionScope
+  name: 1.5x night vision scope
+  description: A rail-mounted night vision optic with fixed 1.5x zoom and five minutes of battery life while scoped in. Recharge its internal battery in a recharger. The optical zoom remains usable without power.
+  components:
+  - type: Sprite
+    state: iffbarrel
+  - type: Tag
+    tags:
+    - RMCAttachmentRail
+    - RMCAttachmentS42xTelescopicMiniscope
+    - CMUAttachmentNightVisionScope
+  - type: AttachableToggleable
+    icon:
+      sprite: _RMC14/Objects/Weapons/Guns/Attachments/rail.rsi
+      state: iffbarrel
+    actionName: Look through the Night Vision Scope
+    actionDesc: Look through the 1.5x optic with a night vision filter.
+  - type: Scope
+    zoomLevels:
+    - zoom: 1.5
+      offset: 13
+      allowMovement: true
+      doAfter: 0
+  - type: NightVisionItem
+    actionId: null
+    toggleable: false
+    enableOnEquip: false
+    green: true
+    restorePreviousState: true
+  - type: PowerCellDraw
+    enabled: false
+    drawRate: 66.666667
+  - type: DestroyOnPreset
+    preset: Insurgency
+
+- type: Tag
+  id: CMUAttachmentNightVisionScope

@@ -740,7 +740,7 @@
 - type: entity
   parent: CMPaper
   id: CMUPaperCLF
-  name: CLF paper
+  name: INSFOR paper
   description: A sheet of paper bearing the Colonial Liberation Front letterhead.
   components:
   - type: Sprite

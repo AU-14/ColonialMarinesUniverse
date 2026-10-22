@@ -1,0 +1,304 @@
+# Colony-legal firearms for the colony ASRS: semi-automatic only, and no magazine holds more than 9 rounds.
+# The magazines keep the originals' tags, so they also fit the standard guns; the guns start loaded with them.
+# Reorganized crates to live in colony.yml, requisitions entries in colony_requisitions_catalog.yml.
+
+# ---- Magazines ----
+
+- type: entity
+  parent: RMCMagazineRifleM16
+  id: CMUMagazineRifleM16Colony
+  name: AR15 Sporter Magazine (5.56x45mm)
+  description: "A 5-round 5.56x45mm magazine for the AR15 Sporter, sold for colony use."
+  suffix: Colony
+  components:
+  - type: BallisticAmmoProvider
+    capacity: 5
+
+- type: entity
+  parent: CMUMagazineRifleAR10
+  id: CMUMagazineRifleAR10Colony
+  name: AR10 colony magazine (7.62x51mm)
+  suffix: Colony
+  description: "A 9-round 7.62x51mm magazine for the AR10, sold for colony use."
+  components:
+  - type: BallisticAmmoProvider
+    capacity: 9
+
+- type: entity
+  parent: AU14WeaponRifleKramerMagazineStandard
+  id: CMUMagazineRifleKramerColony
+  name: Kramer colony magazine (10x24mm)
+  description: "A colony law-compliant 9-round 10x24mm  magazine for the Kramer, sold for colony use."
+  suffix: Colony
+  components:
+  - type: BallisticAmmoProvider
+    capacity: 9
+
+- type: entity
+  parent: CMMagazinePistolM77AP
+  id: CMUMagazinePistolM77Colony
+  name: Mod 88 colony AP magazine (9mm)
+  suffix: Colony
+  components:
+  - type: BallisticAmmoProvider
+    capacity: 9
+
+- type: entity
+  parent: RMCMagazineRifleHunting
+  id: CMUMagazineRifleHuntingColony
+  name: Basira-Armstrong colony magazine (6.5mm)
+  suffix: Colony
+  components:
+  - type: BallisticAmmoProvider
+    capacity: 9
+
+- type: entity
+  parent: CMMagazinePistolM1984
+  id: CMUMagazinePistolM1984Colony
+  name: M4A3 colony magazine (9mm)
+  suffix: Colony
+  components:
+  - type: BallisticAmmoProvider
+    capacity: 9
+
+- type: entity
+  parent: RMCMagazineRifleABR40
+  id: CMUMagazineRifleABR40Colony
+  name: ABR-40 colony magazine (10x24mm)
+  suffix: Colony
+  components:
+  - type: BallisticAmmoProvider
+    capacity: 9
+
+- type: entity
+  parent: CMU14MagazinePistolGlock75
+  id: CMUMagazinePistolGlock75Colony
+  name: Glock 75 colony magazine (9mm)
+  suffix: Colony
+  components:
+  - type: BallisticAmmoProvider
+    capacity: 9
+
+# ---- Guns ----
+
+- type: entity
+  parent: AU14WeaponRifleAR10
+  id: CMUWeaponRifleAR10Colony
+  name: AR10 colony rifle
+  suffix: Colony
+  components:
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineRifleAR10Colony
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMUMagazineRifleAR10
+          - RMCMagazineRifleAR10
+
+- type: entity
+  parent: AU14WeaponRifleM16A1
+  id: CMUWeaponRifleM16A1Colony
+  name: AR15 Sporter rifle
+  description: A semi-automatic, civilian version of the M16, with a 5-round magazine chambered in 5.56x45mm. Marketed as a modern sporting rifle of its era, it's become a common sight in the colony, where it is used for hunting wildlife and defending against pirates.
+  suffix: Colony
+  components:
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineRifleM16Colony
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMUMagazineRifleM16APExt
+          - CMUMagazineRifleM16AP
+          - RMCMagazineRifleM16
+          - CMUMagazineRifleM16Extended
+
+- type: entity
+  parent: CMUWeaponRifleKramerCivilian
+  id: CMUWeaponRifleKramerColony
+  name: Kramer colony rifle
+  suffix: Colony
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+            - AU14WeaponRifleKramerMagazineStandard
+            - AU14WeaponRifleKramerMagazineAP
+        startingItem: CMUMagazineRifleKramerColony
+
+- type: entity
+  parent: RMCWeaponPistolM77
+  id: CMUWeaponPistolM77Colony
+  name: Mod 88 colony pistol
+  suffix: Colony
+  components:
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_88m4_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_88m4_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+            - RMCMagazinePistolM77Rubber
+            - CMMagazinePistolM77AP
+        startingItem: CMUMagazinePistolM77Colony
+
+- type: entity
+  parent: RMCWeaponBoltActionRifle
+  id: CMUWeaponRifleHuntingColony
+  name: Basira-Armstrong colony hunting rifle
+  suffix: Colony
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineRifleHuntingColony
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+            - RMCMagazineRifleHunting
+
+- type: entity
+  parent: CMUWeaponPistolTPR9Civilian
+  id: CMUWeaponPistolTPR9Colony
+  name: TPR9 colony handgun
+  suffix: Colony
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mk80_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_88m4_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+            - CMMagazinePistolM1984
+            - RMCMagazinePistolM1984AP
+            - RMCMagazinePistolM1984Rubber
+        startingItem: CMUMagazinePistolM1984Colony
+
+- type: entity
+  parent: CMWeaponPistolM1984
+  id: CMUWeaponPistolM1984Colony
+  name: M4A3 colony pistol
+  suffix: Colony
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mk80_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_88m4_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+            - CMMagazinePistolM1984
+            - RMCMagazinePistolM1984AP
+            - RMCMagazinePistolM1984Rubber
+        startingItem: CMUMagazinePistolM1984Colony
+
+- type: entity
+  parent: RMCWeaponRifleABR40
+  id: CMUWeaponRifleABR40Colony
+  name: ABR-40 colony hunting rifle
+  suffix: Colony
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineRifleABR40Colony
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+            - RMCMagazineRifleABR40
+            - RMCMagazineRifleL42A
+            - RMCMagazineRifleL42AExtended
+            - RMCMagazineRifleL42AAP
+
+- type: entity
+  parent: CMU14WeaponPistolGlock75
+  id: CMUWeaponPistolGlock75Colony
+  name: Glock 75 colony pistol
+  suffix: Colony
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mk80_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_88m4_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+            - CMU14MagazinePistolGlock75
+            - CMU14MagazinePistolGlock77
+        startingItem: CMUMagazinePistolGlock75Colony
+
+- type: entity
+  parent: RMCWeaponShotgunM37A1
+  id: CMUWeaponShotgunM37A1Colony
+  name: M37A1 colony pump shotgun
+  suffix: Colony
+  description: A civilian M37A1 with a plugged tube that holds no more than 9 shells.
+  components:
+  - type: BallisticAmmoProvider
+    capacity: 9
+
+# ---- Gun case (holds colony-legal gun + mags, so it stays with the guns) ----
+
+- type: entity
+  parent: RMCGunCasePistolM77
+  id: CMUGunCasePistolM77Colony
+  name: Mod 88 colony pistol case
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCAttachmentRailFlashlight
+    - id: CMUWeaponPistolM77Colony
+    - id: CMUMagazinePistolM77Colony
+      amount: 6

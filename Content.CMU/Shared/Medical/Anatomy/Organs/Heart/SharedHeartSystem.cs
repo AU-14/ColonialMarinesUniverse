@@ -185,6 +185,10 @@ public abstract partial class SharedHeartSystem : EntitySystem
         ReconcileRhythmStatus(args.Body);
         if (!IsCurrentHeartAttachment(attachment))
             return;
+        // a fresh or donor heart going into a corpse keeps beating forever, since dead bodies never advance,
+        // and the defib then refuses the shock. a corpse's heart is stopped
+        if (!ent.Comp.Stopped && TryComp<MobStateComponent>(args.Body, out var mob) && mob.CurrentState == MobState.Dead)
+            StopHeart(ent, args.Body, now);
         if (ent.Comp.Stopped)
         {
             // Collapse belongs to the recipient's circulation history, never the

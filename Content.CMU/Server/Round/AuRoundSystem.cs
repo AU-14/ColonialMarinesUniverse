@@ -34,6 +34,15 @@ namespace Content.Server.CMU14.Round
     {
         private const string DistressSignalPresetId = "DistressSignal";
 
+        /// <summary>Distress Signal only schedules more than one survivor group above this many players.</summary>
+        internal const int DistressSignalMultipleSurvivorGroupsMinPlayers = 100;
+
+        /// <summary>
+        ///     Share of the leftover third-party slots and bodies Distress Signal spends on random (non-survivor)
+        ///     parties, so they turn up less often there than in other modes.
+        /// </summary>
+        internal const float DistressSignalRandomThirdPartyShare = 0.5f;
+
         private static readonly HashSet<string> NoThreatPresets = new(StringComparer.OrdinalIgnoreCase)
         {
             "ForceOnForce",
@@ -648,7 +657,8 @@ namespace Content.Server.CMU14.Round
                 PickWeightedThirdParty,
                 GetThirdPartyBodyCount,
                 out var lockedBodyCount,
-                out var additionalBodyCount);
+                out var additionalBodyCount,
+                DistressSignalRandomThirdPartyShare);
 
             var lockedPartyCount = _selectedThirdParties.Count;
             if (lockedPartyCount > maxThirdParties || lockedBodyCount > bodyBudget)
@@ -681,7 +691,8 @@ namespace Content.Server.CMU14.Round
             Func<IReadOnlyList<ThirdPartyPrototype>, ThirdPartyPrototype?> pickThirdParty,
             Func<ThirdPartyPrototype, int> getBodyCount,
             out int lockedBodyCount,
-            out int additionalBodyCount)
+            out int additionalBodyCount,
+            float randomShare = 1f)
         {
             lockedBodyCount = lockedParties.Sum(party => Math.Max(0, getBodyCount(party)));
             var lockedIds = lockedParties
@@ -693,10 +704,19 @@ namespace Content.Server.CMU14.Round
                     !(party.RoundStart && party.AnnounceAsSurvivors))
                 .ToList();
 
+            var remainingSlots = Math.Max(0, maxThirdParties - lockedParties.Count);
+            var remainingBodies = Math.Max(0, bodyBudget - lockedBodyCount);
+            if (randomShare < 1f)
+            {
+                var share = Math.Max(0f, randomShare);
+                remainingSlots = (int) Math.Floor(remainingSlots * share);
+                remainingBodies = (int) Math.Floor(remainingBodies * share);
+            }
+
             return SelectThirdPartiesWithinBodyBudget(
                 fillCandidates,
-                Math.Max(0, maxThirdParties - lockedParties.Count),
-                Math.Max(0, bodyBudget - lockedBodyCount),
+                remainingSlots,
+                remainingBodies,
                 pickThirdParty,
                 getBodyCount,
                 out additionalBodyCount);
@@ -789,7 +809,7 @@ namespace Content.Server.CMU14.Round
             // whatever capacity is left with the planet's other third parties.
             List<ThirdPartyPrototype> selected = SelectThirdPartiesWithinBodyBudget(
                 candidates.Where(party => party.RoundStart && party.AnnounceAsSurvivors).ToList(),
-                maxThirdParties,
+                GetDistressSignalSurvivorGroupLimit(playerCount, maxThirdParties),
                 bodyBudget,
                 PickWeightedThirdParty,
                 party => bodyCounts[party],
@@ -803,7 +823,8 @@ namespace Content.Server.CMU14.Round
                 PickWeightedThirdParty,
                 party => bodyCounts[party],
                 out _,
-                out var additionalBodyCount));
+                out var additionalBodyCount,
+                DistressSignalRandomThirdPartyShare));
 
             SetSelectedThirdPartiesInSpawnOrder(selected);
             survivorCount = CalculateAnnouncedSurvivorCount(selected, party => bodyCounts[party]);
@@ -817,6 +838,14 @@ namespace Content.Server.CMU14.Round
                         string.Join(", ", eligibleThreatIds)}].");
 
             return true;
+        }
+
+        /// <summary>One survivor group at most, unless the server is above the population threshold.</summary>
+        internal static int GetDistressSignalSurvivorGroupLimit(int playerCount, int maxThirdParties)
+        {
+            return playerCount > DistressSignalMultipleSurvivorGroupsMinPlayers
+                ? maxThirdParties
+                : Math.Min(1, maxThirdParties);
         }
 
         internal static (int MaxThirdParties, int BodyBudget) GetConservativeThirdPartyLimits(

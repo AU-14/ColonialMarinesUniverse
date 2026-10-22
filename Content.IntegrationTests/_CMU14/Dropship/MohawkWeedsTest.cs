@@ -54,7 +54,7 @@ public sealed class MohawkWeedsTest
             var weeds = entities.System<SharedXenoWeedsSystem>();
             maps.CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
             transform.SetWorldPosition(ship, new Vector2(16, -8));
             transform.SetWorldRotation(ship, Angle.FromDegrees(degrees));
