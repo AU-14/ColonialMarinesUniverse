@@ -31,6 +31,7 @@ public sealed class CMUAmmoHudOverlay : Overlay
     private const int AlertGap = 4;
 
     [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private IEyeManager _eye = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -55,6 +56,10 @@ public sealed class CMUAmmoHudOverlay : Overlay
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
     {
+        // screen overlays run once per viewport, so camera feeds like the TV would get a copy drawn on top
+        if (args.ViewportControl != _eye.MainViewport)
+            return false;
+
         if (_player.LocalEntity is not { } player)
             return false;
 
