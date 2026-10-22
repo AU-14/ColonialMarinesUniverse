@@ -106,7 +106,7 @@
     mayTransfer: True
     whitelist:
       tags:
-      - AU14MagazineRifleM75AMAS
+      - AU14CartridgeRifleM75AMAS
     proto: AU14CartridgeRifleM75AMAS
     capacity: 20
   - type: Sprite

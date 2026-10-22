@@ -1,6 +1,6 @@
 namespace Content.Shared.CMU14.Expeditions;
 
-// Structural samples: Content.CMU/Resources/Maps/CMU14/Shuttles/alamo.yml and Resources/Maps/_RMC14/Shuttles/dynamic_gunship.yml.
+// Structural samples: Content.CMU/Resources/Maps/CMU14/Dropships/alamo.yml and Resources/Maps/_RMC14/Shuttles/dynamic_gunship.yml.
 // Only inert hull artwork and floors are retained. Original licenses remain with the referenced RSIs.
 internal static class CMUExpeditionWreckBlueprints
 {

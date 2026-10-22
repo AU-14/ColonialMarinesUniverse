@@ -158,6 +158,10 @@ public sealed partial class TechSystem : EntitySystem
             CurrentCost = option.CurrentCost + option.Increase,
             Purchased = true,
             TimesPurchased = option.TimesPurchased + 1, // cmu edit
+            // CMU14: reuse the round-relative lock so all consoles display and enforce the same cooldown.
+            TimeLock = option.PurchaseCooldown > TimeSpan.Zero
+                ? _ticker.RoundDuration() + option.PurchaseCooldown
+                : option.TimeLock,
         };
         Dirty(ent);
 

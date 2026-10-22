@@ -68,12 +68,12 @@
         name: Fedora
     - name: Refills
       entries:
-      #- id: /obj/item/device/camera
-      #  name: Camera
-      #  points: 10
-      #- id: /obj/item/device/camera_film
-      #  name: Camera Film
-      #  points: 5
+      - id: CMUPhotoCamera # CMU14
+        name: Camera
+        points: 10
+      - id: CMUCameraFilm # CMU14
+        name: Camera Film
+        points: 5
       #- id: /obj/item/device/toner
       #  name: Toner
       # points: 5
