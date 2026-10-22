@@ -1,0 +1,21 @@
+# Sync it by clicking a broadcasting camera with it. Held within 20 tiles of that camera, it picks up speech and
+# emotes 10 tiles around it and the TVs watching the camera repeat them.
+- type: entity
+  parent: BaseItem
+  id: CMUBoomMic
+  name: boom mic
+  description: A microphone on a long telescoping pole. Sync it to a broadcasting camera to send what it hears to the TVs watching. Takes both hands to hold steady.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Devices/boom_mic.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: CMU14/Objects/Devices/boom_mic_inhands_64x.rsi
+  - type: MultiHandedItem
+  - type: CMUBoomMic
+    cameraWhitelist:
+      requireAll: true
+      components:
+      - RMCCamera
+      - Item

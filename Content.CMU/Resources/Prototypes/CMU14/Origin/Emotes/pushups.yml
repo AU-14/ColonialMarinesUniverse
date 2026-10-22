@@ -8,7 +8,7 @@
     components:
     - Hands
     - HumanoidProfile
-  chatMessages: ["cmu-emote-msg-pushups"]
+  # No chat message: the pushups popup sends one once a style is picked.
   chatTriggers:
   - pushups
   - push ups
@@ -17,19 +17,7 @@
   - does push ups
   - starts doing pushups
   - drops and does pushups
-
-- type: emote
-  id: CMUKneePushups
-  name: cmu-emote-name-knee-pushups
-  category: Hands
-  icon: Interface/Emotes/salute.png
-  whitelist:
-    requireAll: true
-    components:
-    - Hands
-    - HumanoidProfile
-  chatMessages: ["cmu-emote-msg-knee-pushups"]
-  chatTriggers:
+  # Knee pushups are picked in the popup pushups opens.
   - knee pushups
   - knee push ups
   - pushups on knees

@@ -193,12 +193,20 @@
   parent: CMUKitAuxiliaryStaffBase
   id: CMUKitAuxiliaryStaffCombatCorrespondent
   name: combat correspondent kit
-  description: A case holding a combat correspondent's broadcasting camera and microphone.
+  description: A case holding a combat correspondent's broadcasting camera, microphone, boom mic and photo camera.
   components:
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,6,1
   - type: StorageFill
     contents:
     - id: RMCCameraBroadcasting
     - id: RMCCorrespondentMicrophone
+    - id: CMUBoomMic
+    - id: CMUPhotoCamera
+    - id: CMUCameraFilm
+      amount: 2
 
 - type: entity
   parent: CMUKitAuxiliaryStaffBase

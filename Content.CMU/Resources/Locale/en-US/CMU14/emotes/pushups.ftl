@@ -1,7 +1,4 @@
 cmu-emote-name-pushups = Pushups
-cmu-emote-msg-pushups = drops down and starts doing pushups.
-cmu-emote-name-knee-pushups = Knee Pushups
-cmu-emote-msg-knee-pushups = gets down on hands and knees and starts doing pushups.
 cmu-emote-name-situps = Situps
 cmu-emote-msg-situps = lies back and starts doing situps.
 
@@ -19,7 +16,16 @@ cmu-pushups-fail = Your arms give out! You managed {$count} {$count ->
     [one] pushup
    *[other] pushups
 }.
-cmu-pushups-offer-knees = You can drop to your knees and keep going. Do knee pushups now, or you'll get back up.
+cmu-pushups-dialog-title = Pushups
+cmu-pushups-dialog-style = How do you do them?
+cmu-pushups-dialog-regular = Regular pushups
+cmu-pushups-dialog-knees = On your knees
+cmu-pushups-dialog-keep-going = Your arms give out. Keep going on your knees, or finish?
+cmu-pushups-dialog-keep-going-knees = Keep going on your knees
+cmu-pushups-dialog-finish = Finish
+cmu-pushups-start = drops down and starts doing pushups.
+cmu-pushups-start-knees = gets down on hands and knees and starts doing pushups.
+cmu-pushups-carry-on-knees = drops to {POSS-ADJ($entity)} knees and starts doing knee pushups, unable to do normal ones anymore.
 cmu-pushups-stop = You stop doing pushups after {$count} {$count ->
     [one] rep
    *[other] reps

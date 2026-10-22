@@ -142,6 +142,7 @@
     anchored: true
   - type: Physics
     bodyType: Static
+    canCollide: false # no fixtures, people walk on it
   - type: Appearance
   - type: Damageable
   - type: Injurable

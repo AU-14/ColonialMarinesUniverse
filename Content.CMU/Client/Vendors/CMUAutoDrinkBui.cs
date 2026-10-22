@@ -11,6 +11,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 using static Content.Client.CMU14.Vendors.CMUNutriCoStyle;
 
 namespace Content.Client.CMU14.Vendors;
@@ -72,7 +73,7 @@ public sealed class CMUAutoDrinkWindow : DefaultWindow
     private readonly BoxContainer _contents;
     private readonly Button _cup;
     private readonly Button _eject;
-    private readonly Label _foodline;
+    private readonly RichTextLabel _foodline;
     private readonly List<BaseButton> _pourKeys = new();
     private readonly List<PanelContainer> _leds;
     private bool _foodlineOpen;
@@ -108,9 +109,8 @@ public sealed class CMUAutoDrinkWindow : DefaultWindow
         display.VerticalExpand = true;
         var menu = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, SeparationOverride = 6 };
         menu.AddChild(CMUPhoneStyle.Text(Loc.GetString("cmu-autodrink-select"), _bold, Phosphor));
-        _foodline = CMUPhoneStyle.Text(string.Empty, _bold, Warning);
-        _foodline.HorizontalAlignment = HAlignment.Center;
-        _foodline.Visible = false;
+        // Wraps, so a long notice stays inside the display instead of stretching the window.
+        _foodline = new RichTextLabel { HorizontalExpand = true, Visible = false };
         menu.AddChild(_foodline);
         var scroll = new ScrollContainer { VerticalExpand = true, HScrollEnabled = false };
         var menuBody = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, SeparationOverride = 6, HorizontalExpand = true };
@@ -185,7 +185,11 @@ public sealed class CMUAutoDrinkWindow : DefaultWindow
     public void SetFoodline(string? message)
     {
         _foodlineOpen = message != null;
-        _foodline.Text = message?.ToUpperInvariant() ?? string.Empty;
+        var notice = new FormattedMessage();
+        notice.PushTag(new MarkupNode("bold", null, null));
+        notice.AddText(message?.ToUpperInvariant() ?? string.Empty);
+        notice.Pop();
+        _foodline.SetMessage(notice, Warning);
         _foodline.Visible = _foodlineOpen;
         foreach (var key in _pourKeys)
         {

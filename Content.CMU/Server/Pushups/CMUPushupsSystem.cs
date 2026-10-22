@@ -1,5 +1,6 @@
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
+using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Standing;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.ActionBlocker;
@@ -32,6 +33,7 @@ public sealed partial class CMUPushupsSystem : EntitySystem
     [Dependency] private SharedBuckleSystem _buckle = default!;
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -43,7 +45,6 @@ public sealed partial class CMUPushupsSystem : EntitySystem
 
     private const string PushupsEmote = "CMUPushups";
     private const string SitupsEmote = "CMUSitups";
-    private const string KneePushupsEmote = "CMUKneePushups";
     private const int RunAnnounceEvery = 30;
     private const int SynthLimit = 1000;
 
@@ -57,18 +58,63 @@ public sealed partial class CMUPushupsSystem : EntitySystem
         if (args.Handled)
             return;
 
-        CMUExercise exercise;
         if (args.Emote.ID == PushupsEmote)
-            exercise = CMUExercise.Pushups;
-        else if (args.Emote.ID == SitupsEmote)
-            exercise = CMUExercise.Situps;
-        else if (args.Emote.ID == KneePushupsEmote)
-            exercise = CMUExercise.KneePushups;
-        else
+        {
+            args.Handled = true;
+            if (!(TryComp<CMUPushupsComponent>(ent, out var pushups) && pushups.Active))
+                OpenPushupsDialog(ent);
+
+            return;
+        }
+
+        if (args.Emote.ID != SitupsEmote)
             return;
 
         args.Handled = true;
-        TryStart(ent, exercise);
+        TryStart(ent, CMUExercise.Situps);
+    }
+
+    /// <summary>
+    ///     Asks how they do their pushups, regular or on the knees.
+    /// </summary>
+    private void OpenPushupsDialog(EntityUid uid)
+    {
+        var options = new List<DialogOption>
+        {
+            new(Loc.GetString("cmu-pushups-dialog-regular"), new CMUPushupsStyleChosenEvent(false)),
+            new(Loc.GetString("cmu-pushups-dialog-knees"), new CMUPushupsStyleChosenEvent(true)),
+        };
+
+        _dialog.OpenOptions(uid,
+            Loc.GetString("cmu-pushups-dialog-title"),
+            options,
+            Loc.GetString("cmu-pushups-dialog-style"));
+    }
+
+    private void OnPushupsStyleChosen(Entity<HumanoidProfileComponent> ent, ref CMUPushupsStyleChosenEvent args)
+    {
+        // The emote itself says nothing, so the chat line only shows once they actually start.
+        if (!TryStart(ent, args.Knees ? CMUExercise.KneePushups : CMUExercise.Pushups))
+            return;
+
+        var message = args.CarryOn ? "cmu-pushups-carry-on-knees"
+            : args.Knees ? "cmu-pushups-start-knees"
+            : "cmu-pushups-start";
+        _chat.TrySendInGameICMessage(ent,
+            Loc.GetString(message, ("entity", ent.Owner)),
+            InGameICChatType.Emote,
+            ChatTransmitRange.Normal,
+            hideLog: true,
+            ignoreActionBlocker: true);
+    }
+
+    private void OnPushupsFinish(Entity<CMUPushupsComponent> ent, ref CMUPushupsFinishEvent args)
+    {
+        if (ent.Comp.Active || ent.Comp.KneesOfferedUntil == null)
+            return;
+
+        ent.Comp.KneesOfferedUntil = null;
+        StandUp(ent);
     }
 
     /// <summary>
@@ -266,7 +312,16 @@ public sealed partial class CMUPushupsSystem : EntitySystem
             case CMUExercise.Pushups:
                 // They can drop to their knees and keep going.
                 ent.Comp.KneesOfferedUntil = _timing.CurTime + ent.Comp.KneesOfferTime;
-                _popup.PopupEntity(Loc.GetString("cmu-pushups-offer-knees"), ent, ent, PopupType.Medium);
+                _dialog.OpenOptions(ent,
+                    Loc.GetString("cmu-pushups-dialog-title"),
+                    [
+                        new DialogOption(Loc.GetString("cmu-pushups-dialog-keep-going-knees"),
+                            new CMUPushupsStyleChosenEvent(true, CarryOn: true)),
+                        new DialogOption(Loc.GetString("cmu-pushups-dialog-finish"), new CMUPushupsFinishEvent()),
+                    ],
+                    Loc.GetString("cmu-pushups-dialog-keep-going"),
+                    cancelEvent: new CMUPushupsFinishEvent(),
+                    timeout: ent.Comp.KneesOfferTime);
                 break;
             case CMUExercise.Running:
                 _standing.Down(ent, dropHeldItems: false);

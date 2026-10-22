@@ -519,7 +519,7 @@ public sealed class AuJobSelectionTest : ContentUnitTest
     }
 
     [Test]
-    public void DistressSignalRandomFillOnlyUsesItsShareOfTheLeftoverCapacity()
+    public void DistressSignalLeavesItsLeftoverCapacityToCallIns()
     {
         var locked = CreateThirdPartyPrototype("Locked");
         var candidates = Enumerable.Range(0, 6).Select(i => CreateThirdPartyPrototype($"Random{i}")).ToList();
@@ -535,9 +535,9 @@ public sealed class AuJobSelectionTest : ContentUnitTest
             out var additionalBodies,
             AuRoundSystem.DistressSignalRandomThirdPartyShare);
 
-        // Four slots are left after the locked party; Distress Signal only fills half of them.
-        Assert.That(additional, Has.Count.EqualTo(2));
-        Assert.That(additionalBodies, Is.EqualTo(2));
+        // Four slots are left after the locked party; Distress Signal leaves them for call-ins.
+        Assert.That(additional, Is.Empty);
+        Assert.That(additionalBodies, Is.EqualTo(0));
         return;
 
         static ThirdPartyPrototype PickFirst(IReadOnlyList<ThirdPartyPrototype> candidates)

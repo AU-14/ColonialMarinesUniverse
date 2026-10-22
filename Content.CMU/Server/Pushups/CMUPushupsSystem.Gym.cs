@@ -27,6 +27,8 @@ public sealed partial class CMUPushupsSystem
     {
         SubscribeLocalEvent<HumanoidProfileComponent, EmoteEvent>(OnEmote);
         SubscribeLocalEvent<CMUPushupsComponent, MoveInputEvent>(OnMoveInput);
+        SubscribeLocalEvent<HumanoidProfileComponent, CMUPushupsStyleChosenEvent>(OnPushupsStyleChosen);
+        SubscribeLocalEvent<CMUPushupsComponent, CMUPushupsFinishEvent>(OnPushupsFinish);
 
         SubscribeLocalEvent<CMUExerciseMachineComponent, StrappedEvent>(OnMachineStrapped);
         SubscribeLocalEvent<CMUExerciseMachineComponent, UnstrappedEvent>(OnMachineUnstrapped);

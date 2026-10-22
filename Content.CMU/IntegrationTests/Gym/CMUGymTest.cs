@@ -1,5 +1,6 @@
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Pushups;
+using Content.Shared._RMC14.Dialog;
 using Content.Shared.Buckle;
 using Content.Shared.CMU14.Gym;
 using Content.Shared.CMU14.Pushups;
@@ -114,6 +115,7 @@ public sealed class CMUGymTest : GameTest
             var exercise = SEntMan.GetComponent<CMUPushupsComponent>(user);
             Assert.That(exercise.Active, Is.False, "Their arms gave out.");
             Assert.That(exercise.KneesOfferedUntil, Is.Not.Null, "They're offered the chance to keep going on their knees.");
+            Assert.That(SEntMan.HasComponent<DialogComponent>(user), Is.True, "The offer comes up as a popup.");
             Assert.That(SEntMan.System<StandingStateSystem>().IsDown(user), Is.True, "They stay down for it.");
 
             Assert.That(SEntMan.System<CMUPushupsSystem>().TryStart(user, CMUExercise.KneePushups), Is.True);

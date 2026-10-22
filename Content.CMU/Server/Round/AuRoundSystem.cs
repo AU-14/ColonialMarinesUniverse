@@ -39,9 +39,9 @@ namespace Content.Server.CMU14.Round
 
         /// <summary>
         ///     Share of the leftover third-party slots and bodies Distress Signal spends on random (non-survivor)
-        ///     parties, so they turn up less often there than in other modes.
+        ///     parties. None: in Distress Signal other third parties only arrive when someone calls them in.
         /// </summary>
-        internal const float DistressSignalRandomThirdPartyShare = 0.5f;
+        internal const float DistressSignalRandomThirdPartyShare = 0f;
 
         private static readonly HashSet<string> NoThreatPresets = new(StringComparer.OrdinalIgnoreCase)
         {
@@ -460,6 +460,11 @@ namespace Content.Server.CMU14.Round
                 // third parties from silently becoming natural Insurgency spawns.
                 if (usesPresetSchedule &&
                     !AuRoundSelectionRules.IsExplicitlyWhitelistedForGamemode(proto, _selectedPreset.ID))
+                    continue;
+
+                // Distress Signal only schedules its round-start survivors; anyone else has to be called in.
+                if (_selectedPreset.ID.Equals(DistressSignalPresetId, StringComparison.OrdinalIgnoreCase) &&
+                    !(proto.RoundStart && proto.AnnounceAsSurvivors))
                     continue;
 
                 candidates.Add(proto);

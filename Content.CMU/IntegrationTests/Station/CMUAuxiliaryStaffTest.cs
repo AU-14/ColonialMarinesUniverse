@@ -64,7 +64,7 @@ public sealed class CMUAuxiliaryStaffTest : GameTest
         });
     }
 
-    [TestCase("CMUKitAuxiliaryStaffCombatCorrespondent", "RMCCameraBroadcasting", "RMCCorrespondentMicrophone")]
+    [TestCase("CMUKitAuxiliaryStaffCombatCorrespondent", "RMCCameraBroadcasting", "RMCCorrespondentMicrophone", "CMUBoomMic", "CMUPhotoCamera", "CMUCameraFilm", "CMUCameraFilm")]
     [TestCase("CMUKitAuxiliaryStaffChaplain", "RMCHelmetGarbChaplainPatch")]
     [TestCase("CMUKitAuxiliaryStaffMessTechnician", "RMCChefApron", "ClothingHeadHatChef")]
     public async Task KitsHoldTheirGear(string kit, params string[] items)
