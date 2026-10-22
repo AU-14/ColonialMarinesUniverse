@@ -33,7 +33,8 @@
     enabled: false
     drawRate: 66.666667
   - type: DestroyOnPreset
-    preset: Insurgency
-
+    preset: 
+    - Insurgency
+    - ForceOnForce
 - type: Tag
   id: CMUAttachmentNightVisionScope
