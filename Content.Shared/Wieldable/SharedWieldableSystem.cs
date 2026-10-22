@@ -338,8 +338,9 @@ public abstract partial class SharedWieldableSystem : EntitySystem
         }
 
         var selfMessage = Loc.GetString("wieldable-component-successful-wield", ("item", wieldable.Owner));
-        var othersMessage = Loc.GetString("wieldable-component-successful-wield-other", ("user", Identity.Entity(user, EntityManager)), ("item", wieldable.Owner));
-        _popup.PopupEntity(selfMessage, othersMessage, user, user);
+        // cmu edit start: only the wielder sees it, so nobody else can read someone's readiness off the popup
+        _popup.PopupEntity(selfMessage, user, user);
+        // cmu edit end
 
         var ev = new ItemWieldedEvent(user);
         RaiseLocalEvent(wieldable.Owner, ref ev);
@@ -415,8 +416,9 @@ public abstract partial class SharedWieldableSystem : EntitySystem
                 _audio.PlayPredicted(component.UnwieldSound, uid, user);
 
             var selfMessage = Loc.GetString("wieldable-component-failed-wield", ("item", uid));
-            var othersMessage = Loc.GetString("wieldable-component-failed-wield-other", ("user", Identity.Entity(args.User, EntityManager)), ("item", uid));
-            _popup.PopupEntity(selfMessage, othersMessage, user, user);
+            // cmu edit start: only the wielder sees it
+            _popup.PopupEntity(selfMessage, user, user);
+            // cmu edit end
         }
     }
 

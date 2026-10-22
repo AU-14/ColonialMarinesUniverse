@@ -23,7 +23,8 @@ public sealed partial class SapperWorkbenchComponent : Component
     /// <summary>
     ///     Recipes shown in the custom workbench crafting tab. Sheet costs are display counts;
     ///     item ingredients are consumed from loose items placed on or next to the bench.
-    ///     Every craftable also demands one electronics item (any circuit board whatsoever).
+    ///     Most craftables also demand one electronics item (any circuit board whatsoever); the plain
+    ///     grenade casing and chemical payload do not.
     /// </summary>
     [DataField]
     public List<SapperWorkbenchRecipe> Recipes = new()
@@ -52,6 +53,12 @@ public sealed partial class SapperWorkbenchComponent : Component
             new() { Cable(30), AnyElectronics(), AnyElectronics() }),
         new("AU14CLFClandestineRelay", "Clandestine relay set", 6f, new() { { "CMSteel", 9 }, { "RMCPlastic", 6 } },
             new() { Cable(20), AnyElectronics(), PowerCell() }),
+        // Custom chemical grenade parts: casing + two-beaker payload + timer. Load the payload with two
+        // beakers whose contents react when mixed (smoke, foam, tear gas).
+        new("RMCCustomGrenade", "Custom grenade casing", 3f, new() { { "CMSteel", 3 } }),
+        new("ChemicalPayload", "Chemical payload", 3f, new() { { "CMSteel", 2 }, { "RMCPlastic", 2 } }),
+        new("RMCTimerTrigger", "Timer trigger", 3f, new() { { "CMSteel", 2 }, { "RMCPlastic", 1 } },
+            new() { AnyElectronics() }),
         // The "Switch" illegal fire-selector chip. Deliberately plasteel-hungry: it turns any rifle
         // into a bullet hose, so the cost is the whole balance lever.
         new("AU14AttachmentSwitch", "Switch (auto-sear chip)", 8f, new() { { "CMPlasteel", 40 } },

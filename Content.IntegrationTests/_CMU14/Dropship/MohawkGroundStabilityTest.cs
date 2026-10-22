@@ -32,14 +32,14 @@ public sealed class MohawkGroundStabilityTest
             var maps = entities.System<SharedMapSystem>();
             maps.CreateMap(out var cabinMapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(cabinMapId,
-                new ResPath("/Maps/CMU14/ShuttlesDropships/Mohawk/midway.yml"), out var loaded), Is.True);
+                new ResPath("/Maps/CMU14/Dropships/Mohawk/midway.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
             lower = entities.GetComponent<MultiDeckDropshipComponent>(ship).Decks[-1];
             var ground = entities.GetComponent<TransformComponent>(lower).MapUid!.Value;
             var offset = Vector2.Zero;
             if (shepherds)
             {
-                Assert.That(entities.System<MapLoaderSystem>().TryLoadMap(new ResPath("/Maps/CMU14/SheperdsMultiZ/SheperdsMultiZ0.yml"),
+                Assert.That(entities.System<MapLoaderSystem>().TryLoadMap(new ResPath("/Maps/CMU14/Planets/ShepherdsPride/SheperdsMultiZ0.yml"),
                     out var planet, out _, DeserializationOptions.Default with { InitializeMaps = true }), Is.True);
                 ground = planet!.Value.Owner;
                 offset = new Vector2(71.5f, 61.5f);

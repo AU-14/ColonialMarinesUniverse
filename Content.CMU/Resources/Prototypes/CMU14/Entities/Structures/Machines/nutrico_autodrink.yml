@@ -1,0 +1,17 @@
+# The disposable cup the NutriCo AutoDrink drops into its bay.
+- type: entity
+  parent: RMCPaperCup
+  id: CMUNutriCoCup
+  name: disposable cup
+  description: A thin NutriCo-branded disposable cup from a mess drink dispenser. Holds about a mess hall serving.
+  suffix: CMU
+  components:
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 30
+
+# The AutoDrink makes its drinks from water and concentrate, so it keeps no stock of its own.
+- type: vendingMachineInventory
+  id: CMUNutriCoAutoDrinkEmpty
+  startingInventory: {}

@@ -1,6 +1,10 @@
 - type: job
   parent: AU14JobPARTSPartyContractorBase
   id: AU14JobPARTExtractionContractor
+  chevrons:
+    AU14RankPrDOperator:
+      entity: AU14ChevronPrDOperator
+      requirements: []
   roundSide: ThirdParty
   roundForce: PSC
   roundRole: PARTExtractionContractor
@@ -23,7 +27,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
 
-  name: PART Extraction Response Unit (M41A/2)
+  name: Response Unit
   description: au14-prodigyextract-description
   playTimeTracker: AU14JobPARTPartyContractorTracker
   ranks:
@@ -82,7 +86,7 @@
     - AU14WeaponRifleprodigyrifleMagazineAP
     - AU14WeaponRifleprodigyrifleMagazineAP
     back:
-    - CMMRE
+    - CMUMREFSR
     - RMCBinocularsPVE
     - AU14PacketGrenadeFragM12Filled
     - CMPortableSurgicalBedSpawnFolded

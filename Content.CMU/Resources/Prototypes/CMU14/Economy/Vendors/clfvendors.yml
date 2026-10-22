@@ -12,6 +12,10 @@
       map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]
   - type: CMAutomatedVendor
     sections:
+    - name: Rail Attachments
+      entries:
+      - id: CMUAttachmentNightVisionScope
+        amount: 3
     - name: Rifles
       entries:
       - id: AU14WeaponRifleM16A1
@@ -235,6 +239,8 @@
     - name: Food
       entries:
       - id: RMCMRECLF
+        amount: 24
+      - id: CMCanteen
         amount: 24
     - name: Tools
       entries:

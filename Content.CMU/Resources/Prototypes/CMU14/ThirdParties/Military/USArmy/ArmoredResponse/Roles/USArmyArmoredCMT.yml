@@ -31,7 +31,7 @@
   - type: JobPrefix
     prefix: au14-job-prefix-usarmy-cmt
 
-  name: au14-job-name-usarmy-cmt
+  name: cmu-job-title-usarmy-cmt
   description: au14-job-description-usarmy
   ranks:
     RMCRankCivilian: []

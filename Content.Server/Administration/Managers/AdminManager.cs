@@ -42,6 +42,7 @@ namespace Content.Server.Administration.Managers
 
         public IEnumerable<ICommonSession> ActiveAdmins => _admins
             .Where(p => p.Value.Data.Active)
+            .Where(p => p.Value.Data.HasFlag(AdminFlags.Staff)) // cmu edit: only on-duty staff, not everyone on the admin list
             .Select(p => p.Key);
 
         public IEnumerable<ICommonSession> AllAdmins => _admins.Select(p => p.Key);
@@ -53,7 +54,9 @@ namespace Content.Server.Administration.Managers
 
         public bool IsAdmin(ICommonSession session, bool includeDeAdmin = false)
         {
-            return GetAdminData(session, includeDeAdmin) != null;
+            // cmu edit start: being on the admin list isn't enough; "admin" means holding the Admin flag
+            return GetAdminData(session, includeDeAdmin) is { } data && data.HasFlag(AdminFlags.Admin, includeDeAdmin);
+            // cmu edit end
         }
 
         public AdminData? GetAdminData(ICommonSession session, bool includeDeAdmin = false)

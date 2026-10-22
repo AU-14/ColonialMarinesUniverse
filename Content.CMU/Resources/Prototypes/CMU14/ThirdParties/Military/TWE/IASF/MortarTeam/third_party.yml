@@ -1,0 +1,135 @@
+# IASF mortar team, called in through the TWE intel list: a gunner carrying the L53A1 light mortar and a loader.
+# The shells are carried on them: a filled mortar pack each, plus L79 mortar rigs with more shells (two WP on the
+# gunner) and an L14 sidearm. Their L90s keep the two magazines on their webbing.
+- type: job
+  parent: AU14IASFRiflemanBase
+  id: CMUIASFMortarGunner
+  name: cmu-job-name-iasf-mortar-gunner
+  spawnMenuRoleName: IASF Mortar Gunner (Mortar Team)
+  playTimeTracker: AU14IASFRifleman
+  greeting: cmu-job-greeting-iasf-mortar
+  startingGear: CMUGearIASFMortarGunner
+  basePlaytimeTracker: true
+  chevrons:
+    IASF_PrivateFirstClass:
+      entity: AU14ChevronIASFCorporalFirstClass
+      requirements: []
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicTWEIASF
+  id: CMUIASFMortarGunner
+  name: IASF Mortar Gunner (Mortar Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadIASF
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-iasf-mortar-gunner
+    description: cmu-job-description-iasf-mortar
+    job: CMUIASFMortarGunner
+    rules: au14-job-rules-IASFsurv
+    raffle:
+      settings: short
+
+- type: job
+  parent: AU14IASFRiflemanBase
+  id: CMUIASFMortarLoader
+  name: cmu-job-name-iasf-mortar-loader
+  spawnMenuRoleName: IASF Mortar Loader (Mortar Team)
+  playTimeTracker: AU14IASFRifleman
+  greeting: cmu-job-greeting-iasf-mortar
+  startingGear: CMUGearIASFMortarLoader
+  basePlaytimeTracker: true
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicTWEIASF
+  id: CMUIASFMortarLoader
+  name: IASF Mortar Loader (Mortar Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadIASF
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-iasf-mortar-loader
+    description: cmu-job-description-iasf-mortar
+    job: CMUIASFMortarLoader
+    rules: au14-job-rules-IASFsurv
+    raffle:
+      settings: short
+
+- type: startingGear
+  parent: CMUGearIASFReinforcementBase
+  id: CMUGearIASFMortarGunner
+  equipment:
+    id: AU14IDCardIASF
+    belt: RMCBeltRoyalMortar
+    pocket2: RMCRangefinder
+    back: AU14BackpackMortarFilled
+  storage:
+    pocket2: []
+    belt:
+    - RMCWeaponPistolL14
+    - RMCMagazinePistolL14
+    - RMCMortarShellHE
+    - RMCMortarShellHE
+    - RMCMortarShellHE
+    - RMCMortarShellHE
+    - CMUMortarShellWP
+    - CMUMortarShellWP
+    - RMCMortarShellFlare
+  inhand:
+  - AU14MortarKitRMC
+
+- type: startingGear
+  parent: CMUGearIASFReinforcementBase
+  id: CMUGearIASFMortarLoader
+  equipment:
+    id: AU14IDCardIASF
+    belt: RMCBeltRoyalMortar
+    pocket2: CMWrench
+    back: AU14BackpackMortarFilled
+  storage:
+    pocket2: []
+    belt:
+    - RMCWeaponPistolL14
+    - RMCMagazinePistolL14
+    - RMCMortarShellHE
+    - RMCMortarShellHE
+    - RMCMortarShellHE
+    - RMCMortarShellHE
+    - RMCMortarShellIncendiary
+    - RMCMortarShellIncendiary
+    - AU14MortarShellHEATMP
+
+- type: partySpawn
+  id: CMUIASFMortarTeamSpawn
+  leadersToSpawn:
+    CMUIASFMortarGunner: 1
+  gruntsToSpawn:
+    CMUIASFMortarLoader: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUIASFMortarTeam
+  displayName: IASF Mortar Team
+  partyspawn: CMUIASFMortarTeamSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 2
+  roundstart: false

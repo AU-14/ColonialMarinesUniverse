@@ -102,7 +102,7 @@
     - name: Food
       entries:
       - cost: 100
-        crate: RMCCrateFoodMRE
+        crate: CMUCrateFoodMREWeYaPMC
       - cost: 100
         crate: RMCCrateFoodIngredients
     - name: Gear
@@ -129,6 +129,8 @@
         crate: RMCCrateGearParachute
       - cost: 800
         crate: RMCCrateAttachmentSmartScope
+      - cost: 2500
+        crate: CMUCrateAttachmentNightVisionScope
     - name: Pouches
       entries:
       - cost: 150
