@@ -29,6 +29,14 @@ public sealed partial class CMUUniversalRecordsSystem : EntitySystem
     }
 
     /// <summary>
+    /// The holder if something already made it this round, without spawning one. For lookups that only read.
+    /// </summary>
+    public EntityUid? GetExistingRecords()
+    {
+        return _records is { } existing && !TerminatingOrDeleted(existing) ? existing : null;
+    }
+
+    /// <summary>
     /// The universal records holder. Always null on the client.
     /// </summary>
     public EntityUid? GetRecords()
