@@ -393,6 +393,9 @@
         points: 0
     - name: Special Equipment
       entries:
+      - id: CMUFlareJeepDropCLF
+        amount: 1
+        points: 200
       - id: CMUDeployableZLevelLadder
         amount: 2
         points: 10

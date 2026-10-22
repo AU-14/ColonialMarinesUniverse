@@ -10,14 +10,14 @@ namespace Content.IntegrationTests.CMU14.Intel;
 /// <summary>
 ///     Each intel list may sell a given reinforcement team once: no option that calls in a third party can be bought
 ///     again, and no list offers the same third party through two different options. The CLF's insurgent
-///     reinforcements are the one exception, capped at a few purchases.
+///     reinforcements and jeep crews are exceptions, capped at a few purchases.
 /// </summary>
 [TestFixture]
 public sealed class CMUIntelReinforcementsOnceTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = false };
 
-    private static readonly HashSet<string> RepeatableReinforcements = new() { "cmu-tech-clf-reinforcements" };
+    private static readonly HashSet<string> RepeatableReinforcements = new() { "cmu-tech-clf-reinforcements", "cmu-tech-clf-jeep" };
 
     [Test]
     public async Task ReinforcementsCanOnlyBeOrderedOnce()
