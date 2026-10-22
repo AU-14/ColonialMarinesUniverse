@@ -620,7 +620,7 @@ namespace Content.Server.Voting.Managers
                 presets[preset.ID] = Loc.GetString(preset.ModeTitle); // CMU14: Hardcode localization
             }
 
-            _entityManager.System<CMUPresetVoteSystem>().RemoveLastPlayedPreset(presets); // CMU14
+            _entityManager.System<CMUPresetVoteSystem>().FilterVotePresets(presets); // CMU14: admin gamemode lock, then last-played exclusion
             return presets;
         }
     }

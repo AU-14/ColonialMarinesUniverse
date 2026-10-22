@@ -24,11 +24,20 @@
   - type: GunIFF
     enabled: true
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/HMGs/ML66D/ml66d.rsi
+    sprite: CMU14/Objects/Weapons/Guns/HMGs/M56D/m56d.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/HMGs/ML66D/ml66d.rsi
     layers:
     - state: ml66d_gun_e
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
+  # cmu edit start: cmss13 PR 12283 camo set
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Objects/Weapons/Guns/HMGs/M56D/m56d.rsi
+      Desert: CMU14/Objects/Weapons/Guns/HMGs/M56D/m56d_desert.rsi
+      Snow: CMU14/Objects/Weapons/Guns/HMGs/M56D/m56d_snow.rsi
+      Classic: CMU14/Objects/Weapons/Guns/HMGs/M56D/m56d_classic.rsi
+      Urban: CMU14/Objects/Weapons/Guns/HMGs/M56D/m56d_urban.rsi
+  # cmu edit end
   - type: Clothing
     slots:
     - suitStorage

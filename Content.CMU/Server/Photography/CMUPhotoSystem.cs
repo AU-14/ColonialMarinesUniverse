@@ -2,6 +2,7 @@ using System.IO;
 using Content.Server.Administration.Logs;
 using Content.Shared._RMC14.Areas;
 using Content.Shared.CMU14.Photography;
+using Content.Shared.CMU14.Traits.Epilepsy;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
 using Content.Shared.Examine;
@@ -13,6 +14,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Item;
 using Content.Shared.Popups;
+using Content.Shared.Wieldable.Components;
 using Robust.Server.Audio;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
@@ -43,6 +45,7 @@ public sealed partial class CMUPhotoSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private EpilepsySystem _epilepsy = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedPointLightSystem _light = default!;
@@ -109,7 +112,16 @@ public sealed partial class CMUPhotoSystem : EntitySystem
         if (args.Handled || !TryComp(args.User, out ActorComponent? actor))
             return;
 
+        if (ent.Comp.RequiresPhotoMode && !ent.Comp.PhotoMode)
+            return;
+
         args.Handled = true;
+        if (ent.Comp.RequiresWielded && !(TryComp(ent, out WieldableComponent? wieldable) && wieldable.Wielded))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-photo-camera-not-wielded", ("camera", ent.Owner)), args.User, args.User);
+            return;
+        }
+
         if (_timing.CurTime < ent.Comp.NextPhoto)
             return;
 
@@ -174,8 +186,16 @@ public sealed partial class CMUPhotoSystem : EntitySystem
         if (camera.Comp.Flash is { } flashProto)
         {
             var light = SpawnAttachedTo(flashProto, new EntityCoordinates(user, default));
-            _light.SetRadius(light, FlashRadius(camera.Comp, user, centre, size));
+            var radius = FlashRadius(camera.Comp, user, centre, size);
+            _light.SetRadius(light, radius);
             flash = GetNetEntity(light);
+
+            // Anyone with epilepsy who sees the flash might seize. The photographer is behind it.
+            foreach (var witness in _lookup.GetEntitiesInRange<EpilepsyComponent>(Transform(user).Coordinates, radius))
+            {
+                if (witness.Owner != user && _examine.InRangeUnOccluded(user, witness.Owner, radius))
+                    _epilepsy.TryFlashSeizure((witness.Owner, witness.Comp));
+            }
         }
 
         RaiseNetworkEvent(new CMUPhotoCaptureRequestEvent(request, GetNetCoordinates(centre), size, flash), session.Channel);

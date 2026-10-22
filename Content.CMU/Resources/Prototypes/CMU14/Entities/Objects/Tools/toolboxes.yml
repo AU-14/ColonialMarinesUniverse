@@ -8,7 +8,7 @@
       storagebase: !type:AllSelector
         children:
         - id: CMCrowbar
-        - id: CMRadioHandheld
+        - id: RMCRadioHandheldColonyOff
         - id: CMUSurvivalKnife
         - id: RMCFlashlight
           amount: 4

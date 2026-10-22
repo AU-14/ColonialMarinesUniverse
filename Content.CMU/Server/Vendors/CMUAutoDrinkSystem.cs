@@ -3,6 +3,7 @@ using Content.Server.Popups;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
+using Content.Shared.CMU14.Kitchen;
 using Content.Shared.CMU14.Vendors;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.FixedPoint;
@@ -21,6 +22,7 @@ namespace Content.Server.CMU14.Vendors;
 public sealed class CMUAutoDrinkSystem : EntitySystem
 {
     [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private CMUFoodlineSystem _foodline = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private RMCReagentSystem _reagents = default!;
@@ -56,6 +58,9 @@ public sealed class CMUAutoDrinkSystem : EntitySystem
 
     private void OnPour(Entity<CMUAutoDrinkComponent> ent, ref CMUAutoDrinkPourBuiMsg args)
     {
+        if (_foodline.IsClosedForFoodline(ent, args.Actor))
+            return;
+
         var wanted = args.Drink;
         var drink = ent.Comp.Drinks.FirstOrDefault(d => d.Reagent == wanted);
         if (drink == null || !ent.Comp.PourAmounts.Contains(args.Amount))
@@ -80,6 +85,9 @@ public sealed class CMUAutoDrinkSystem : EntitySystem
 
     private void OnCup(Entity<CMUAutoDrinkComponent> ent, ref CMUAutoDrinkCupBuiMsg args)
     {
+        if (_foodline.IsClosedForFoodline(ent, args.Actor))
+            return;
+
         if (ent.Comp.Bay.HasItem)
         {
             _popup.PopupEntity(Loc.GetString("cmu-autodrink-bay-occupied"), ent, args.Actor);

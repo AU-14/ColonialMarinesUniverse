@@ -21,3 +21,10 @@ cmu-photo-camera-shots = { $shots ->
 cmu-photo-camera-no-film = *click* The camera is out of film. Load a fresh roll.
 cmu-photo-camera-film-full = The roll in the camera is still full.
 cmu-photo-camera-film-loaded = You load a fresh roll: {$shots} shots.
+cmu-photo-camera-verb-photo-mode = Switch to photo mode
+cmu-photo-camera-verb-video-mode = Switch to video mode
+cmu-photo-camera-photo-mode-on = Photo mode. Wield it and click a tile to take a photo; it keeps broadcasting.
+cmu-photo-camera-photo-mode-off = Video mode.
+cmu-photo-camera-examine-photo-mode = It's in [color=yellow]photo mode[/color].
+cmu-photo-camera-examine-video-mode = It's in [color=yellow]video mode[/color]. Switch to photo mode from the right click menu to take photos.
+cmu-photo-camera-not-wielded = You need to hold {THE($camera)} in both hands to take a photo.

@@ -11,7 +11,10 @@
     sprite: _RMC14/Structures/hybrisa_computer_props.rsi
     state: blacksensor_comp2
   - type: EmitSoundOnUIOpen
-    sound: null
+    sound:
+      collection: RMCKeyboardTyping
+      params:
+        volume: -1
   - type: InteractedBlacklist
     blacklist:
       components:

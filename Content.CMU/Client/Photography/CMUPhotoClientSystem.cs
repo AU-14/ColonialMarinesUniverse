@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Client.Viewport;
 using Content.Shared.CMU14.Photography;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Wieldable.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
@@ -160,12 +161,14 @@ public sealed partial class CMUPhotoClientSystem : EntitySystem
         return texture;
     }
 
-    /// <summary>The camera in the local player's active hand, if any.</summary>
+    /// <summary>The camera in the local player's active hand, if any, and ready to take photos.</summary>
     public Entity<CMUPhotoCameraComponent>? HeldCamera()
     {
         if (_player.LocalEntity is not { } local
             || !_hands.TryGetActiveItem(local, out var item)
-            || !TryComp(item, out CMUPhotoCameraComponent? camera))
+            || !TryComp(item, out CMUPhotoCameraComponent? camera)
+            || camera.RequiresPhotoMode && !camera.PhotoMode
+            || camera.RequiresWielded && !(TryComp(item, out WieldableComponent? wieldable) && wieldable.Wielded))
             return null;
 
         return (item.Value, camera);
