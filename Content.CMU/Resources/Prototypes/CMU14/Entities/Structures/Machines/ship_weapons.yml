@@ -99,10 +99,10 @@
     color: "#75963c"
   - type: DamageOverTime
     acidic: false
-    affectsDead: false
+    affectsDead: true
     damage:
       types:
-        Poison: 12
+        Poison: 15
     whitelist:
       components:
       - MobState
@@ -114,6 +114,18 @@
   - type: GasMaskFilterDamage
     damage: 5
     neurotoxin: false
+    orbitalGas: true
+  - type: CMUOrbitalGas
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: CMUShipWeaponGasHaze
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RMCDazed
+    visionReduction: 0 # 0.15
+    alpha: 0 #0.3
+    color: "#75963c"
 
 - type: entity
   parent: CMUShipWeaponSmoke
@@ -123,7 +135,7 @@
   - type: Sprite
     color: "#88cce8"
   - type: TimedDespawn
-    lifetime: 15
+    lifetime: 30
 
 - type: entity
   parent: StatusEffectStunned
@@ -138,6 +150,8 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: CMUShipWeaponEmsField
+    burnDamagePerSecond: 5
+    humanDamageCap: 50
 
 - type: cmuShipWeapon
   id: CMUGatlingBarrage
@@ -186,8 +200,8 @@
   cloud: CMUShipWeaponEmsCloud
   cloudRadius: 30
   ems: true
-  fieldDuration: 15
-  stunAfterField: 25
+  fieldDuration: 30
+  stunAfterField: 35
 
 - type: cmuShipWeapon
   id: CMUSmokeStrike
