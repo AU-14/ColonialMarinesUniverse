@@ -66,6 +66,7 @@
           - CMUMagazineRifleM16AP
           - RMCMagazineRifleM16
           - CMUMagazineRifleM16Extended
+          - CMUMagazineRifleM16Colony
   - type: GunDamageModifier
     multiplier: 1.3
   - type: AttachableHolder
@@ -255,7 +256,8 @@
           tags:
           - CMUMagazineRifleAR10
           - RMCMagazineRifleAR10
-
+          - CMUMagazineRifleAR10Colony
+          
 - type: entity
   parent: CMMagazineRifleBase
   id: CMUMagazineRifleM16Extended
@@ -365,6 +367,7 @@
     - state: mag-1
       map: ["enum.GunVisualLayers.Mag"]
   - type: Appearance
+
 
 - type: entity
   parent: CMBaseCartridgeRifle

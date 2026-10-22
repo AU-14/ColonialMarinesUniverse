@@ -103,37 +103,211 @@
 
 - type: entity
   parent: RMCCrateBase
-  id: AU14CrateBoxHuntingRifleABRCrate
-  name: Hunting Rifle Crate (1x ABR-40 hunting rifle, x4 ABR-40 Magazine)
+  id: CMUCrateBoxAR10Colony
+  name: AR10 colony rifle crate (x1 AR10 colony rifle)
   components:
   - type: StorageFill
     contents:
-    - id: RMCWeaponRifleABR40
+    - id: CMUWeaponRifleAR10Colony
       amount: 1
-    - id: RMCMagazineRifleABR40
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxM16Colony
+  name: AR15 Sporter rifle crate (x1 AR15 Sporter rifle, x4 AR15 Sporter magazines)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUWeaponRifleM16A1Colony
+      amount: 1
+    - id: CMUMagazineRifleM16Colony
       amount: 4
 
 - type: entity
   parent: RMCCrateBase
-  id: AU14CrateBoxABR40Magazines
-  name: ABR-40 Magazine Crate (x6 ABR-40 Magazine)
+  id: CMUCrateBoxKramerColony
+  name: Kramer colony rifle crate (x1 Kramer colony rifle, x4 Kramer colony magazine)
   components:
   - type: StorageFill
     contents:
-    - id: RMCMagazineRifleABR40
+    - id: CMUWeaponRifleKramerColony
+      amount: 1
+    - id: CMUMagazineRifleKramerColony
+      amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxMod88Colony
+  name: Mod 88 colony pistol crate (x1 Mod 88 colony pistol, x6 Mod 88 colony AP magazine, x1 rail flashlight)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUGunCasePistolM77Colony
+      amount: 1
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxHuntingRifleColony
+  name: Scoped hunting rifle crate (x1 Basira colony hunting rifle, x4 Basira colony magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUWeaponRifleHuntingColony
+      amount: 1
+    - id: CMUMagazineRifleHuntingColony
+      amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxTPR9Colony
+  name: TPR9 colony handgun crate (x1 TPR9 colony handgun, x4 M4A3 colony magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUWeaponPistolTPR9Colony
+      amount: 1
+    - id: CMUMagazinePistolM1984Colony
+      amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxM4A3Colony
+  name: M4A3 colony pistol crate (x1 M4A3 colony pistol, x4 M4A3 colony magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUWeaponPistolM1984Colony
+      amount: 1
+    - id: CMUMagazinePistolM1984Colony
+      amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxABR40Colony
+  name: Hunting rifle crate (x1 ABR-40 colony hunting rifle, x4 ABR-40 colony magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUWeaponRifleABR40Colony
+      amount: 1
+    - id: CMUMagazineRifleABR40Colony
+      amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxGlock75Colony
+  name: Glock 75 colony pistol crate (x1 Glock 75 colony pistol, x4 Glock 75 colony magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUWeaponPistolGlock75Colony
+      amount: 1
+    - id: CMUMagazinePistolGlock75Colony
+      amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxM16ColonyMagazines
+  name: M16 colony magazine crate (x6 M16 colony magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazineRifleM16Colony
       amount: 6
 
 - type: entity
   parent: RMCCrateBase
-  id: AU14CrateBoxHuntingRifleCrate
-  name: Scoped Hunting Rifle Crate (1x Basira Hunting Rifle, x4 Basira Magazine)
+  id: CMUCrateBoxAR10ColonyMagazines
+  name: AR10 colony magazine crate (x4 AR10 colony magazine)
   components:
   - type: StorageFill
     contents:
-    - id: RMCWeaponBoltActionRifle
-      amount: 1
-    - id: RMCMagazineRifleHunting
+    - id: CMUMagazineRifleAR10Colony
       amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxKramerColonyMagazines
+  name: Kramer colony magazine crate (x6 Kramer colony magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazineRifleKramerColony
+      amount: 6
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxMod88ColonyMagazines
+  name: Mod 88 colony AP magazine crate (x7 Mod 88 colony AP magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazinePistolM77Colony
+      amount: 7
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxBasiraColonyMagazines
+  name: Basira colony magazine crate (x6 Basira colony magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazineRifleHuntingColony
+      amount: 6
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxM4A3ColonyMagazines
+  name: TPR9/M4A3 colony magazine crate (x7 M4A3 colony magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazinePistolM1984Colony
+      amount: 7
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxABR40ColonyMagazines
+  name: ABR-40 colony magazine crate (x6 ABR-40 colony magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazineRifleABR40Colony
+      amount: 6
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxGlock75ColonyMagazines
+  name: Glock 75 colony magazine crate (x7 Glock 75 colony magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazinePistolGlock75Colony
+      amount: 7
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxNailgun
+  name: Nailgun Crate (x1 nailgun, x3 nailgun magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: WeaponNailgun
+      amount: 1
+    - id: RMCMagazineSMGNailgun
+      amount: 3
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxNailgunMagazines
+  name: Nailgun Magazine Crate (x6 nailgun magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSMGNailgun
+      amount: 6
+
+#guns and ammo (non-magazine-fed / no colony variant needed)
 
 - type: entity
   parent: RMCCrateBase
@@ -161,16 +335,6 @@
 
 - type: entity
   parent: RMCCrateBase
-  id: AU14CrateBoxBasiraMagazines
-  name: Basira Magazine Crate (x6 Basira Magazine)
-  components:
-  - type: StorageFill
-    contents:
-    - id: RMCMagazineRifleHunting
-      amount: 6
-
-- type: entity
-  parent: RMCCrateBase
   id: AU14CrateBoxShotgunShells
   name: Assorted Shotgun Shell Crate (x1 box of slug shells, x1 box of flechette shells, x1 box of buckshot shells)
   components:
@@ -192,26 +356,6 @@
     contents:
     - id: RMCMagazinePistolD18
       amount: 8
-
-- type: entity
-  parent: RMCCrateBase
-  id: AU14CrateBoxAR10
-  name: AR10 assault rifle crate (x1 AR10 assault rifle)
-  components:
-  - type: StorageFill
-    contents:
-    - id: AU14WeaponRifleAR10
-      amount: 1
-
-- type: entity
-  parent: RMCCrateBase
-  id: AU14CrateBoxAR10Magazines
-  name: AR10 Magazine Crate (x4 AR10 Magazine)
-  components:
-  - type: StorageFill
-    contents:
-    - id: CMUMagazineRifleAR10
-      amount: 4
 
 - type: entity
   parent: RMCCrateBase
@@ -295,18 +439,6 @@
 
 - type: entity
   parent: RMCCrateBase
-  id: AU14CrateBoxM4A3
-  name: M4A3 service pistol crate (x1 M4A3 service pistol, x4 M4A3 magazine )
-  components:
-  - type: StorageFill
-    contents:
-    - id: CMWeaponPistolM1984
-      amount: 1
-    - id: CMMagazinePistolM1984
-      amount: 4
-
-- type: entity
-  parent: RMCCrateBase
   id: AU14CrateBoxRevolverM2019
   name: "M2019 autorevolver crate (1x M2019 autorevolver, 4x Speed loader (.357)"
   components:
@@ -335,26 +467,6 @@
   - type: StorageFill
     contents:
     - id: RMCSpeedLoader357
-      amount: 7
-
-- type: entity
-  parent: RMCCrateBase
-  id: AU14CrateBoxMod88
-  name: "Mod 88 Combat Pistol crate (x6 Mod 88 AP magazine, x1 Mod 88 combat pistol, x1 rail flashlight)"
-  components:
-  - type: StorageFill
-    contents:
-    - id: RMCGunCasePistolM77
-      amount: 1
-
-- type: entity
-  parent: RMCCrateBase
-  id: AU14CrateBoxMod88Mags
-  name: "Mod 88 AP magazine crate (x7 Mod 88 AP magazine)"
-  components:
-  - type: StorageFill
-    contents:
-    - id: CMMagazinePistolM77AP
       amount: 7
 
 #Power
@@ -437,40 +549,6 @@
 
 - type: entity
   parent: RMCCrateBase
-  id: CMUCrateBoxTPR9Civilian
-  name: TPR9 civilian handgun crate (x1 TPR9 civilian handgun, x4 M4A3 magazine)
-  components:
-  - type: StorageFill
-    contents:
-    - id: CMUWeaponPistolTPR9Civilian
-      amount: 1
-    - id: CMMagazinePistolM1984
-      amount: 4
-
-- type: entity
-  parent: RMCCrateBase
-  id: CMUCrateBoxKramerCivilian
-  name: Kramer civilian rifle crate (x1 Kramer civilian rifle, x4 Kramer magazine)
-  components:
-  - type: StorageFill
-    contents:
-    - id: CMUWeaponRifleKramerCivilian
-      amount: 1
-    - id: AU14WeaponRifleKramerMagazineStandard
-      amount: 4
-
-- type: entity
-  parent: RMCCrateBase
-  id: CMUCrateBoxKramerMagazines
-  name: Kramer magazine crate (x6 Kramer magazine)
-  components:
-  - type: StorageFill
-    contents:
-    - id: AU14WeaponRifleKramerMagazineStandard
-      amount: 6
-
-- type: entity
-  parent: RMCCrateBase
   id: AU14CrateBoxCivBinocs
   name: Binoculars Crate (3x binoculars)
   components:
@@ -530,6 +608,7 @@
       amount: 30
 
 #medical
+
 - type: entity
   parent: RMCCrateBase
   id: AU14CrateBoxHospitalBeds
@@ -549,25 +628,3 @@
     contents:
     - id: AU14CMDefibrillator
       amount: 1
-
-- type: entity
-  parent: RMCCrateBase
-  id: CMUCrateBoxNailgun
-  name: Nailgun Crate (x1 nailgun, x3 nailgun magazine)
-  components:
-  - type: StorageFill
-    contents:
-    - id: WeaponNailgun
-      amount: 1
-    - id: RMCMagazineSMGNailgun
-      amount: 3
-
-- type: entity
-  parent: RMCCrateBase
-  id: CMUCrateBoxNailgunMagazines
-  name: Nailgun Magazine Crate (x6 nailgun magazine)
-  components:
-  - type: StorageFill
-    contents:
-    - id: RMCMagazineSMGNailgun
-      amount: 6
