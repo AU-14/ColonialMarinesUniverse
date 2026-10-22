@@ -40,3 +40,8 @@
   - type: Storage
     grid:
     - 0,0,7,3 # 32
+  # Press armor is bigger than a backpack normally takes.
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - CMUPressArmor
