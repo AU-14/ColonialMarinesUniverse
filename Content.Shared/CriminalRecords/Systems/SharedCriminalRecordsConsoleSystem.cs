@@ -23,7 +23,7 @@ public abstract partial class SharedCriminalRecordsConsoleSystem : EntitySystem
         var xform = Transform(uid);
 
         // cmu edit start
-        var station = EntityManager.System<Content.Shared.CMU14.CriminalRecords.CMUUniversalRecordsSystem>().GetRecords();
+        var station = EntityManager.System<Content.Shared.CMU14.CriminalRecords.CMUUniversalRecordsSystem>().GetExistingRecords();
         if (station == null)
             return;
         // cmu edit end
