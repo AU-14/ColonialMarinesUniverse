@@ -17,6 +17,7 @@
     canCollide: false
     bodyType: Static
   - type: Damageable
+  - type: Injurable
     damageContainer: Biological
   - type: Destructible
     thresholds:
@@ -444,8 +445,9 @@
         layer:
         - TableLayer
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Wood
+  - type: Injurable
+    damageContainer: Inorganic
   - type: MeleeSound
     soundGroups:
       Brute:

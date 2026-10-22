@@ -57,6 +57,8 @@
       material4: !type:ContainerSlot
       output: !type:ContainerSlot
   - type: ElectricSmelter
+    maxTemperature: 5000
+    heatRatePerSecond: 150
   - type: PortableStructure
   - type: WindowMachine
     stackSlots:
@@ -66,8 +68,6 @@
     - material4
     outputSlots:
     - output
-    maxTemperature: 5000
-    heatRatePerSecond: 150
   - type: UserInterface
     interfaces:
       enum.ElectricSmelterUiKey.Key:

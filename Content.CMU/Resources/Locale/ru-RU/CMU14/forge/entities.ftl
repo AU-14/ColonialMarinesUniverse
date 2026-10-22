@@ -120,39 +120,51 @@ ent-RUMCArmourPlatesItem = бронепластины
 
 ent-RUMCIronOre1 =
     .suffix = Один
+    .desc = { ent-RUMCIronOre.desc }
 
 ent-RUMCAluminumOre1 =
     .suffix = Один
+    .desc = { ent-RUMCAluminumOre.desc }
 
 ent-RUMCChromeOre1 =
     .suffix = Один
+    .desc = { ent-RUMCChromeOre.desc }
 
 ent-RUMCCobaltOre1 =
     .suffix = Один
+    .desc = { ent-RUMCCobaltOre.desc }
 
 ent-RUMCCopperOre1 =
     .suffix = Один
+    .desc = { ent-RUMCCopperOre.desc }
 
 ent-RUMCGoldOre1 =
     .suffix = Один
+    .desc = { ent-RUMCGoldOre.desc }
 
 ent-RUMCLeadOre1 =
     .suffix = Один
+    .desc = { ent-RUMCLeadOre.desc }
 
 ent-RUMCSilverOre1 =
     .suffix = Один
+    .desc = { ent-RUMCSilverOre.desc }
 
 ent-RUMCTitaniumOre1 =
     .suffix = Один
+    .desc = { ent-RUMCTitaniumOre.desc }
 
 ent-RUMCTungstenOre1 =
     .suffix = Один
+    .desc = { ent-RUMCTungstenOre.desc }
 
 ent-RUMCPlatinumOre1 =
     .suffix = Один
+    .desc = { ent-RUMCPlatinumOre.desc }
 
 ent-RUMCUraniumOre1 =
     .suffix = Один
+    .desc = { ent-RUMCUraniumOre.desc }
 
 ent-RUMCIronPowderItem = порошок железа
     .desc = Мелкоизмельчённый порошок железа.
@@ -282,3 +294,4 @@ ent-RUMCPlasteelIngot = слиток пластали
 
 ent-RUMCZincOre1 =
     .suffix = Один
+    .desc = { ent-RUMCZincOre.desc }
