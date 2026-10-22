@@ -92,7 +92,7 @@
     jumpsuit: CMJumpsuitLiaisonCorporateFormal
     ears: CMHeadsetColony
     pocket1: RMCFlashlight
-    back: AU14SlingSatchelBlue
+    back: CMUPressBackpack
   storage:
     back:
     - CMArmorPress
@@ -111,7 +111,7 @@
     jumpsuit: CMJumpsuitTShirtGray
     ears: CMHeadsetColony
     pocket1: RMCFlashlight
-    back: AU14SlingSatchelBlue
+    back: CMUPressBackpack
   storage:
     back:
     - CMArmorPress
@@ -128,7 +128,7 @@
     jumpsuit: CMJumpsuitTShirtWhite
     ears: CMHeadsetColony
     pocket1: RMCFlashlight
-    back: AU14SlingSatchelBlue
+    back: CMUPressBackpack
   storage:
     back:
     - CMArmorPress

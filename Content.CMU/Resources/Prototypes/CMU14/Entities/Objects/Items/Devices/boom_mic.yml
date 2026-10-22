@@ -13,6 +13,8 @@
     size: Normal
     sprite: CMU14/Objects/Devices/boom_mic_inhands_64x.rsi
   - type: MultiHandedItem
+  - type: ActiveListener
+    range: 10
   - type: CMUBoomMic
     cameraWhitelist:
       requireAll: true
