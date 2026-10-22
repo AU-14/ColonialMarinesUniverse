@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Client.CMU14.Telephone;
 using Content.Shared._RMC14.Holiday;
 using Content.Shared._RMC14.Vendors;
+using Content.Shared.CMU14.Kitchen;
 using Content.Shared.Nutrition.Components;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
@@ -28,10 +29,15 @@ public sealed class CMUNutriCoFoodBui(EntityUid owner, Enum uiKey) : BoundUserIn
         Refresh();
     }
 
-    /// <summary>Called when the vendor's stock changes.</summary>
+    /// <summary>Called when the vendor's stock changes, or the foodline opens or closes.</summary>
     public void Refresh()
     {
-        if (_window != null && EntMan.TryGetComponent(Owner, out CMAutomatedVendorComponent? vendor))
+        if (_window == null)
+            return;
+
+        EntMan.TryGetComponent(Owner, out CMUFoodlineVendorComponent? foodline);
+        _window.SetFoodline(foodline is { FoodlineOpen: true } ? Loc.GetString(foodline.Message) : null);
+        if (EntMan.TryGetComponent(Owner, out CMAutomatedVendorComponent? vendor))
             _window.UpdateStock(vendor);
     }
 }
@@ -52,7 +58,9 @@ public sealed class CMUNutriCoFoodWindow : DefaultWindow
     private readonly LineEdit _search;
     private readonly BoxContainer _menu;
     private readonly Label _readout;
+    private readonly Label _foodline;
     private readonly List<PanelContainer> _leds;
+    private bool _foodlineOpen;
 
     private CMAutomatedVendorComponent? _vendor;
 
@@ -87,6 +95,10 @@ public sealed class CMUNutriCoFoodWindow : DefaultWindow
         _search.OnTextChanged += _ => Rebuild();
         top.AddChild(_search);
         displayColumn.AddChild(top);
+        _foodline = CMUPhoneStyle.Text(string.Empty, _bold, Warning);
+        _foodline.HorizontalAlignment = HAlignment.Center;
+        _foodline.Visible = false;
+        displayColumn.AddChild(_foodline);
         var scroll = new ScrollContainer { VerticalExpand = true, HScrollEnabled = false };
         _menu = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, SeparationOverride = 3, HorizontalExpand = true };
         scroll.AddChild(_menu);
@@ -103,6 +115,14 @@ public sealed class CMUNutriCoFoodWindow : DefaultWindow
 
         column.AddChild(Footer());
         Contents.AddChild(cabinet);
+    }
+
+    /// <summary>Shows why it won't dispense while the DEFAC foodline is open, or null once it's closed again.</summary>
+    public void SetFoodline(string? message)
+    {
+        _foodlineOpen = message != null;
+        _foodline.Text = message?.ToUpperInvariant() ?? string.Empty;
+        _foodline.Visible = _foodlineOpen;
     }
 
     public void UpdateStock(CMAutomatedVendorComponent vendor)
@@ -206,7 +226,7 @@ public sealed class CMUNutriCoFoodWindow : DefaultWindow
         row.AddChild(stock);
 
         var dispense = Key(Loc.GetString("cmu-autochef-dispense"), 90);
-        dispense.Disabled = soldOut;
+        dispense.Disabled = soldOut || _foodlineOpen;
         dispense.VerticalAlignment = VAlignment.Center;
         dispense.OnPressed += _ => OnVend?.Invoke(section, entry);
         row.AddChild(dispense);

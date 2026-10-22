@@ -11,8 +11,10 @@
     CMAirlockEngineerGovforLocked: CMAirlockEngineerOpforLocked
     CMAirlockGovforGlassLocked: CMAirlockOpforGlassLocked
     CMAirlockGovforGlassLockedFTL: CMAirlockOpforGlassLockedFTL
+    CMAirlockGovforGlassLockedKitchen: CMAirlockOpforGlassLockedKitchen
     CMAirlockGovforLocked: CMAirlockOpforLocked
     CMAirlockGovforLockedFTL: CMAirlockOpforLockedFTL
+    CMAirlockGovforLockedKitchen: CMAirlockOpforLockedKitchen
     CMAirlockLogisticsGovforGlassLocked: CMAirlockLogisticsOpforGlassLocked
     CMAirlockLogisticsGovforLocked: CMAirlockLogisticsOpforLocked
     CMAirlockMedicalGovforGlassLocked: CMAirlockMedicalOpforGlassLocked
@@ -24,7 +26,9 @@
     CMDoubleDoorEngineerGovforGlassLocked: CMDoubleDoorEngineerOpforGlassLocked
     CMDoubleDoorEngineerGovforLocked: CMDoubleDoorEngineerOpforLocked
     CMDoubleDoorGovforGlassLocked: CMDoubleDoorOpforGlassLocked
+    CMDoubleDoorGovforGlassLockedKitchen: CMDoubleDoorOpforGlassLockedKitchen
     CMDoubleDoorGovforLocked: CMDoubleDoorOpforLocked
+    CMDoubleDoorGovforLockedKitchen: CMDoubleDoorOpforLockedKitchen
     CMDoubleDoorLogisticsGovforGlassLocked: CMDoubleDoorLogisticsOpforGlassLocked
     CMDoubleDoorLogisticsGovforLocked: CMDoubleDoorLogisticsOpforLocked
     CMDoubleDoorMedicalGovforGlassLocked: CMDoubleDoorMedicalOpforGlassLocked

@@ -1,8 +1,10 @@
+# Gym equipment ported from cmss13 (cmss13-devs/cmss13 PR 11493, from PR 7753). How many reps, punches or seconds of
+# running someone manages comes from their build, height, weight and age, the same as pushups and situps.
+
 - type: entity
+  abstract: true
   parent: SeatBase
-  id: CMUFitnessWeightsBench
-  name: weights bench
-  description: A bench for pumping iron.
+  id: CMUFitnessMachineBase
   components:
   - type: Transform
     anchored: true
@@ -10,30 +12,319 @@
     bodyType: Static
   - type: Anchorable
   - type: Rotatable
+  - type: Pullable
+  - type: Strap
+    position: Stand
+    buckleOffset: "0,0"
+  - type: Appearance
+  - type: Damageable
+    damageContainer: StructuralInorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: CMUFitnessMachineBase
+  id: CMUFitnessWeightsBench
+  name: weight machine
+  description: Just looking at this thing makes you feel tired.
+  components:
   - type: Sprite
-    sprite: CMU14/N14content/fitness.rsi
-    state: fitnessweight
+    sprite: CMU14/Structures/Gym/fitness.rsi
+    noRot: true
+    layers:
+    - state: fitnessweight
+      map: [ "enum.CMUExerciseMachineVisuals.InUse" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUExerciseMachineVisuals.InUse:
+        enum.CMUExerciseMachineVisuals.InUse:
+          True: { state: fitnessweight-c }
+          False: { state: fitnessweight }
+  - type: Strap
+    position: Stand
+    buckleOffset: "0,0.15"
+  - type: CMUExerciseMachine
+    exercise: BenchPress
+    userOverlayState: fitnessweight-w
 
 - type: entity
   parent: CMUFitnessWeightsBench
+  id: CMUFitnessWeightsBenchUnanchored
+  suffix: Unanchored
+  components:
+  - type: Transform
+    anchored: false
+
+- type: entity
+  parent: CMUFitnessMachineBase
   id: CMUFitnessWeightLifter
-  name: weight lifter
+  name: weight machine
+  description: Just looking at this thing makes you feel tired.
   components:
   - type: Sprite
-    state: fitnesslifter
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.1"
+    sprite: CMU14/Structures/Gym/fitness.rsi
+    noRot: true
+    layers:
+    - state: fitnesslifter
+      map: [ "enum.CMUExerciseMachineVisuals.InUse" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUExerciseMachineVisuals.InUse:
+        enum.CMUExerciseMachineVisuals.InUse:
+          True: { state: fitnesslifter2 }
+          False: { state: fitnesslifter }
+  - type: CMUExerciseMachine
+    exercise: StackLifter
+
+- type: entity
+  parent: CMUFitnessWeightLifter
+  id: CMUFitnessWeightLifterUnanchored
+  suffix: Unanchored
+  components:
+  - type: Transform
+    anchored: false
 
 - type: entity
   parent: BaseStructure
   id: CMUFitnessPunchingBag
   name: punching bag
-  description: A punching bag. Let's get big!
+  description: A punching bag. Can you get to speed level 4??? Punch it to work out.
   components:
   - type: Sprite
-    sprite: CMU14/N14content/fitness.rsi
-    state: punchingbag
+    sprite: CMU14/Structures/Gym/fitness.rsi
+    drawdepth: WallMountedItems
+    layers:
+    - state: punchingbag
+      map: [ "enum.CMUPunchingBagVisuals.Swinging" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUPunchingBagVisuals.Swinging:
+        enum.CMUPunchingBagVisuals.Swinging:
+          True: { state: punchingbag2 }
+          False: { state: punchingbag }
+  - type: InteractionOutline
+  - type: CMUPunchingBag
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: CMUPunchingBag
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  abstract: true
+  id: CMUTreadmillBase
+  name: treadmill
+  description: A treadmill used for cardio related exercise.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Appearance
+  - type: Damageable
+    damageContainer: StructuralInorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: CMUTreadmillBase
+  id: CMUTreadmill
+  suffix: East
+  components:
+  - type: Transform
+    anchored: true
+    rot: 1.5707963267948966 rad
+  - type: Sprite
+    sprite: CMU14/Structures/Gym/treadmill.rsi
+    drawdepth: HighFloorObjects
+    layers:
+    - state: console_off
+      map: [ "enum.CMUTreadmillVisuals.Running" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUTreadmillVisuals.Running:
+        enum.CMUTreadmillVisuals.Running:
+          True: { state: console_on }
+          False: { state: console_off }
+  - type: CMUTreadmill
+    backHalf: CMUTreadmillBack
+    handles: CMUTreadmillHandles
+
+- type: entity
+  parent: CMUTreadmill
+  id: CMUTreadmillInverted
+  suffix: West
+  components:
+  - type: Transform
+    anchored: true
+    rot: -1.5707963267948966 rad
+
+- type: entity
+  parent: CMUTreadmillBase
+  id: CMUTreadmillBack
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/Gym/treadmill.rsi
+    drawdepth: HighFloorObjects
+    layers:
+    - state: back_off
+      map: [ "enum.CMUTreadmillVisuals.Running" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUTreadmillVisuals.Running:
+        enum.CMUTreadmillVisuals.Running:
+          True: { state: back_on }
+          False: { state: back_off }
+  - type: CMUTreadmill
+
+- type: entity
+  id: CMUTreadmillHandles
+  categories: [ HideSpawnMenu ]
+  name: treadmill handles
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/Gym/treadmill.rsi
+    state: treadmill_overlay
+    drawdepth: OverMobs
+    noRot: true
+
+- type: entity
+  parent: BaseItem
+  id: CMUDumbbell
+  name: heavy dumbbell
+  description: Lift it for strength, or drop it on your toe for instant enlightenment, either way this dumbbell delivers results.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/dumbbell.rsi
+    state: icon
+  - type: Item
+    size: Small
+    sprite: CMU14/Objects/Tools/dumbbell.rsi
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 12
+    soundHit:
+      collection: MetalThud
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Blunt: 12
+  - type: CMUDumbbell
+
+- type: entity
+  parent: CMUDumbbell
+  id: CMUDumbbellAlt
+  name: light dumbbell
+  description: A lighter dumbbell, for higher reps. Still hurts if you drop it on your toe.
+  components:
+  - type: Sprite
+    state: icon-alt
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 6
+    soundHit:
+      collection: MetalThud
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Blunt: 6
+  - type: CMUDumbbell
+    repMultiplier: 1.8
+
+- type: entity
+  parent: RMCBarricadeHandrail
+  id: CMURingRopes
+  name: ring ropes
+  description: The ropes of a boxing ring. Mind your head on the way in.
+  components:
+  - type: Sprite
+    drawdepth: WallTops
+    sprite: CMU14/Structures/Gym/ring_ropes.rsi
+    layers:
+    - state: handrail_boxing
+    - map: [ "acided" ]
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: RMCPlatformCornerSmall
+  id: CMUMetalPost
+  name: metal post
+  description: A simple metal post.
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/Gym/posts.rsi
+    state: post_deco
+
+- type: entity
+  parent: CMUMetalPost
+  id: CMUMetalPostSmall
+  components:
+  - type: Sprite
+    state: post_small_deco
+
+- type: entity
+  parent: CMPosterBase
+  id: CMUPosterUSCMFaded
+  name: USCM poster
+  description: The symbol of the United States Colonial Marines corps, it's faded over time.
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/Wallmounts/uscm_posters.rsi
+    state: prop1_alt
+
+- type: entity
+  parent: CMUPosterUSCMFaded
+  id: CMUPosterUSCMWorn
+  name: worn USCM poster
+  description: The symbol of the United States Colonial Marines corps, very worn and faded over time.
+  components:
+  - type: Sprite
+    state: prop1_alt2
+
+# Made for punching: fists don't hurt it, anything else still can.
+- type: damageModifierSet
+  id: CMUPunchingBag
+  coefficients:
+    Blunt: 0

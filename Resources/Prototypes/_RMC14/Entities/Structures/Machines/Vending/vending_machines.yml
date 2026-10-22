@@ -320,6 +320,7 @@
   - type: ContainerContainer
     containers:
       autodrink_bay: !type:ContainerSlot
+  - type: CMUFoodlineVendor
   - type: CMUAutoDrink
     bay:
       whitelistFailPopup: reagent-dispenser-component-cannot-put-entity-message
@@ -372,6 +373,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/NutriCo/drink.rsi
     offset: 0, 0.5
+  - type: CMUFoodlineVendor # cmu edit: shut off while the DEFAC foodline is open
 
 - type: entity
   parent: CMVendor

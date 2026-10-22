@@ -1,0 +1,56 @@
+# The HPR's own folding stock and camo bipod, from cmss13 (cmss13-devs/cmss13 PR 10425).
+
+- type: entity
+  parent: RMCAttachmentM54CStockCollapsible
+  id: CMUAttachmentM41AE2Stock
+  name: M41AE2 folding stock
+  description: A standard M41AE2 integrated folding stock. Unfolded, it steadies the rifle at the cost of handling and agility.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Guns/Attachments/m41ae2_stock.rsi
+    state: m41ae2_folding
+  - type: Tag
+    tags:
+    - RMCAttachmentStock
+    - CMUAttachmentM41AE2Stock
+  - type: AttachableToggleable
+    doAfterBreakOnMove: false
+    doAfter: 0.5
+    icon:
+      sprite: CMU14/Objects/Weapons/Guns/Attachments/m41ae2_stock.rsi
+      state: m41ae2_folding
+    iconActive:
+      sprite: CMU14/Objects/Weapons/Guns/Attachments/m41ae2_stock.rsi
+      state: m41ae2_folding-on
+    actionName: Toggle M41AE2 Folding Stock
+  - type: AttachableWieldDelayMods
+    modifiers:
+    - conditions:
+        activeOnly: true
+      delay: 0.4
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: RMCAttachmentBipod
+  id: CMUAttachmentBipodM41AE2
+  name: machinegun bipod
+  description: A set of rugged telescopic poles to keep a weapon stabilized during firing.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Guns/Attachments/m41ae2_bipod/jungle.rsi
+    state: bipod_m41ae2
+  - type: AttachableToggleable
+    icon:
+      sprite: CMU14/Objects/Weapons/Guns/Attachments/m41ae2_bipod/jungle.rsi
+      state: bipod_m41ae2
+    iconActive:
+      sprite: CMU14/Objects/Weapons/Guns/Attachments/m41ae2_bipod/jungle.rsi
+      state: bipod_m41ae2-on
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Objects/Weapons/Guns/Attachments/m41ae2_bipod/jungle.rsi
+      Desert: CMU14/Objects/Weapons/Guns/Attachments/m41ae2_bipod/desert.rsi
+      Snow: CMU14/Objects/Weapons/Guns/Attachments/m41ae2_bipod/snow.rsi
+      Classic: CMU14/Objects/Weapons/Guns/Attachments/m41ae2_bipod/classic.rsi
+      Urban: CMU14/Objects/Weapons/Guns/Attachments/m41ae2_bipod/urban.rsi

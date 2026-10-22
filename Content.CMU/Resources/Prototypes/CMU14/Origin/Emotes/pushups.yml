@@ -19,6 +19,24 @@
   - drops and does pushups
 
 - type: emote
+  id: CMUKneePushups
+  name: cmu-emote-name-knee-pushups
+  category: Hands
+  icon: Interface/Emotes/salute.png
+  whitelist:
+    requireAll: true
+    components:
+    - Hands
+    - HumanoidProfile
+  chatMessages: ["cmu-emote-msg-knee-pushups"]
+  chatTriggers:
+  - knee pushups
+  - knee push ups
+  - pushups on knees
+  - does knee pushups
+  - does pushups on their knees
+
+- type: emote
   id: CMUSitups
   name: cmu-emote-name-situps
   category: Hands

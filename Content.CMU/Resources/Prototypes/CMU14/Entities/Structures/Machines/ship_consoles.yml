@@ -53,6 +53,11 @@
   description: Monitors the ship's air on every deck. It lists any area with a breach, a fire or bad air, and calls out firelocks that seal themselves against escaping air.
   suffix: CMU
   components:
+  - type: EmitSoundOnUIOpen
+    sound:
+      collection: RMCKeyboardTyping
+      params:
+        volume: -1
   - type: CMUStationAlertComputer
   - type: ActivatableUI
     key: enum.CMUStationAlertUiKey.Key
@@ -103,6 +108,11 @@
   suffix: Govfor
   description: Terminal for programming GOVFOR personnel ID card access.
   components:
+  - type: EmitSoundOnUIOpen
+    sound:
+      collection: RMCKeyboardTyping
+      params:
+        volume: -1
   - type: IdModificationConsole
     access: AU14AccessGovforCommand
     faction: GOVFOR
@@ -147,6 +157,11 @@
   suffix: Opfor
   description: Terminal for programming OPFOR personnel ID card access.
   components:
+  - type: EmitSoundOnUIOpen
+    sound:
+      collection: RMCKeyboardTyping
+      params:
+        volume: -1
   - type: IdModificationConsole
     access: AU14AccessOpforCommand
     faction: OPFOR
@@ -191,6 +206,11 @@
   suffix: Colony
   description: Terminal for programming colony employee ID card access.
   components:
+  - type: EmitSoundOnUIOpen
+    sound:
+      collection: RMCKeyboardTyping
+      params:
+        volume: -1
   - type: IdModificationConsole
     access: AU14AccessColonyAdministrator
     faction: FactionSurvivor

@@ -1,0 +1,38 @@
+# Ported from CM-SS13 (cmss13-devs/cmss13 PR 12389): a rack that hands out mugs and takes them back.
+- type: entity
+  parent: BaseStructure
+  id: CMUMugRack
+  name: mug rack
+  description: A rack, for mugs.
+  components:
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: CMU14/Structures/Furniture/mug_rack.rsi
+    drawdepth: SmallObjects
+    layers:
+    - state: mug-rack
+    - state: mugs-1
+      map: [ "enum.CMUMugRackVisuals.Fill" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUMugRackVisuals.Fill:
+        enum.CMUMugRackVisuals.Fill:
+          Empty: { visible: false }
+          Low: { state: mugs-3, visible: true }
+          Half: { state: mugs-2, visible: true }
+          Full: { state: mugs-1, visible: true }
+  - type: CMUMugRack
+  - type: Damageable
+    damageContainer: StructuralInorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]

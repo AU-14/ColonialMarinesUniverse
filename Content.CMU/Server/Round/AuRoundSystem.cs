@@ -1100,6 +1100,44 @@ namespace Content.Server.CMU14.Round
             return _selectedOpforShip;
         }
 
+        /// <summary>
+        ///     The ship GOVFOR spawns on this round. If no ship vote ran, like when the round was force-started or the
+        ///     planet was set by an admin, it falls back to the first ship of the GOVFOR platoon, so a mode that keeps
+        ///     GOVFOR shipside never spawns them on the planet just because the vote didn't happen.
+        /// </summary>
+        public string? ResolveGovforShip(GamePresetPrototype? preset)
+        {
+            if (!string.IsNullOrEmpty(_selectedGovforShip))
+                return _selectedGovforShip;
+
+            preset ??= _selectedPreset;
+            if (preset is not { RequiresGovforVote: true } || _selectedPlanet is not { GovforInShip: true } planet)
+                return null;
+
+            var platoon = _entityManager.System<PlatoonSpawnRuleSystem>().SelectedGovforPlatoon;
+            if (platoon == null && planet.DefaultGovforPlatoon is { } fallback)
+                _prototypeManager.TryIndex(fallback, out platoon);
+
+            return platoon?.PossibleShips.FirstOrDefault();
+        }
+
+        /// <summary>The ship OPFOR spawns on this round, falling back the same way as <see cref="ResolveGovforShip"/>.</summary>
+        public string? ResolveOpforShip(GamePresetPrototype? preset)
+        {
+            if (!string.IsNullOrEmpty(_selectedOpforShip))
+                return _selectedOpforShip;
+
+            preset ??= _selectedPreset;
+            if (preset is not { RequiresOpforVote: true } || _selectedPlanet is not { OpforInShip: true } planet)
+                return null;
+
+            var platoon = _entityManager.System<PlatoonSpawnRuleSystem>().SelectedOpforPlatoon;
+            if (platoon == null && planet.DefaultOpforPlatoon is { } fallback)
+                _prototypeManager.TryIndex(fallback, out platoon);
+
+            return platoon?.PossibleShips.FirstOrDefault();
+        }
+
         public bool IsVoteSequenceRunning()
         {
             return _voteSequenceRunning;
