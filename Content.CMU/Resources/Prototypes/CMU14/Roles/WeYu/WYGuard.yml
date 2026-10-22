@@ -118,6 +118,7 @@
   id: JobAU14JobWYGuard
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - PaperworkRMC
   - WYGuardJumpsuitAU14
   - WYGuardLeftPouchAU14

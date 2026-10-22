@@ -2,6 +2,7 @@
 - type: roleLoadout
   id: JobCaptain
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - CaptainHead
   - CaptainNeck
   - CaptainJumpsuit
@@ -16,6 +17,7 @@
 - type: roleLoadout
   id: JobHeadOfPersonnel
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - HoPHead
   - HoPNeck
@@ -32,11 +34,15 @@
 # Silicons
 - type: roleLoadout
   id: JobBorg
+  groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   nameDataset: NamesBorg
   canCustomizeName: true
 
 - type: roleLoadout
   id: JobStationAi
+  groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   nameDataset: NamesAI
   canCustomizeName: true
 
@@ -44,6 +50,7 @@
 - type: roleLoadout
   id: JobPassenger
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - PassengerJumpsuit
   - CommonBackpack
@@ -62,6 +69,7 @@
 - type: roleLoadout
   id: JobBartender
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - BartenderHead
   - BartenderJumpsuit
@@ -77,6 +85,7 @@
 - type: roleLoadout
   id: JobServiceWorker
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - BartenderJumpsuit
   - CommonBackpack
@@ -90,6 +99,7 @@
 - type: roleLoadout
   id: JobChef
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - ChefHead
   - ChefMask
@@ -106,6 +116,7 @@
 - type: roleLoadout
   id: JobLibrarian
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - LibrarianJumpsuit
   - CommonBackpack
@@ -119,6 +130,7 @@
 - type: roleLoadout
   id: JobLawyer
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - LawyerNeck
   - LawyerJumpsuit
@@ -134,6 +146,7 @@
   id: JobChaplain
   canCustomizeName: true
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - ChaplainHead
   - ChaplainMask
@@ -152,6 +165,7 @@
 - type: roleLoadout
   id: JobJanitor
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - JanitorHead
   - JanitorJumpsuit
@@ -168,6 +182,7 @@
 - type: roleLoadout
   id: JobBotanist
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - BotanistHead
   - BotanistJumpsuit
@@ -184,6 +199,7 @@
   id: JobClown
   canCustomizeName: true
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - ClownHead
   - ClownJumpsuit
@@ -200,6 +216,7 @@
   id: JobMime
   canCustomizeName: true
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - MimeHead
   - MimeMask
@@ -217,6 +234,7 @@
   id: JobMusician
   canCustomizeName: true
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - MusicianJumpsuit
   - CommonBackpack
@@ -233,6 +251,7 @@
 - type: roleLoadout
   id: JobQuartermaster
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - QuartermasterHead
   - QuartermasterNeck
@@ -250,6 +269,7 @@
 - type: roleLoadout
   id: JobCargoTechnician
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - CargoTechnicianHead
   - CargoTechnicianJumpsuit
@@ -267,6 +287,7 @@
 - type: roleLoadout
   id: JobSalvageSpecialist
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - SalvageSpecialistBackpack
   - SalvageSpecialistOuterClothing
@@ -282,6 +303,7 @@
 - type: roleLoadout
   id: JobChiefEngineer
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - ChiefEngineerHead
   - ChiefEngineerJumpsuit
@@ -298,6 +320,7 @@
 - type: roleLoadout
   id: JobTechnicalAssistant
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - TechnicalAssistantJumpsuit
   - StationEngineerBackpack
@@ -310,6 +333,7 @@
 - type: roleLoadout
   id: JobStationEngineer
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - StationEngineerHead
   - StationEngineerJumpsuit
@@ -326,6 +350,7 @@
 - type: roleLoadout
   id: JobAtmosphericTechnician
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - AtmosphericTechnicianJumpsuit
   - AtmosphericTechnicianBackpack
@@ -341,6 +366,7 @@
 - type: roleLoadout
   id: JobResearchDirector
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - ResearchDirectorHead
   - ResearchDirectorNeck
@@ -359,6 +385,7 @@
 - type: roleLoadout
   id: JobScientist
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - ScientistHead
   - ScientistNeck
@@ -378,6 +405,7 @@
 - type: roleLoadout
   id: JobResearchAssistant
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - ResearchAssistantJumpsuit
   - ScientistBackpack
@@ -392,6 +420,7 @@
 - type: roleLoadout
   id: JobHeadOfSecurity
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - HeadofSecurityHead
   - HeadofSecurityNeck
   - HeadofSecurityJumpsuit
@@ -408,6 +437,7 @@
 - type: roleLoadout
   id: JobWarden
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - WardenHead
   - WardenJumpsuit
   - SecurityBackpack
@@ -423,6 +453,7 @@
 - type: roleLoadout
   id: JobSecurityOfficer
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - SecurityHead
   - SecurityJumpsuit
   - SecurityBackpack
@@ -439,6 +470,7 @@
 - type: roleLoadout
   id: JobDetective
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - DetectiveHead
   - DetectiveNeck
   - DetectiveJumpsuit
@@ -454,6 +486,7 @@
 - type: roleLoadout
   id: JobSecurityCadet
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - SecurityCadetJumpsuit
   - SecurityBackpack
   - AssistiveItems
@@ -466,6 +499,7 @@
 - type: roleLoadout
   id: JobReporter
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - ReporterJumpsuit
   - ReporterHead
@@ -481,6 +515,7 @@
 - type: roleLoadout
   id: JobPsychologist
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - PsychologistJumpsuit
   - MedicalBackpack
@@ -494,6 +529,7 @@
 - type: roleLoadout
   id: JobTramDriver
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupTankHarness
   - CommonBackpack
   - TramDriverJumpsuit
@@ -514,6 +550,7 @@
 - type: roleLoadout
   id: RoleSurvivalVoxSupport
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupSpeciesBreathTool
   - GroupTankHarness
 
@@ -522,11 +559,13 @@
 - type: roleLoadout
   id: RoleSurvivalVoxTank
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupEVATankVox
 
 - type: roleLoadout
   id: RoleSurvivalStandard
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - Survival
   - GroupSpeciesBreathTool
   - GroupTankHarness
@@ -534,12 +573,14 @@
 - type: roleLoadout
   id: RoleSurvivalClown
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - SurvivalClown
   - GroupTankHarness
 
 - type: roleLoadout
   id: RoleSurvivalExtended
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - SurvivalExtended
   - GroupSpeciesBreathTool
   - GroupTankHarness
@@ -547,6 +588,7 @@
 - type: roleLoadout
   id: RoleSurvivalExtendedAntag # Used by antagonists that spawn off-station (e.g wizards)
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - SurvivalExtendedAntag
   - GroupSpeciesBreathTool
   - GroupTankHarness
@@ -554,6 +596,7 @@
 - type: roleLoadout
   id: RoleSurvivalMedical
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - SurvivalMedical
   - GroupSpeciesBreathToolMedical
   - GroupTankHarness
@@ -561,6 +604,7 @@
 - type: roleLoadout
   id: RoleSurvivalSecurity
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - SurvivalSecurity
   - GroupSpeciesBreathToolSecurity
   - GroupTankHarness
@@ -568,6 +612,7 @@
 - type: roleLoadout
   id: RoleSurvivalSyndicate
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - SurvivalSyndicate
   - GroupSpeciesBreathTool
   - GroupTankHarness
@@ -575,11 +620,13 @@
 - type: roleLoadout
   id: RoleSurvivalMilitaryDouble
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - SurvivalMilitaryDouble
 
 - type: roleLoadout
   id: RoleSurvivalNukie
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - SurvivalSyndicate
   - GroupSpeciesBreathTool
   - GroupPocketTankDouble
@@ -587,16 +634,19 @@
 - type: roleLoadout
   id: RoleSurvivalEVA
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupEVATank
   - SurvivalExtended
 
 - type: roleLoadout
   id: RoleSurvivalEVAAntag # Used by antagonists that spawn off-station AND in space (e.g ninjas)
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupEVATank
   - SurvivalExtendedAntag
 
 - type: roleLoadout
   id: RoleSurvivalSpaceNinja
   groups:
+  - RMCLoadoutGroupPins # CMU14: make pride pins available to all roles
   - GroupEVATank

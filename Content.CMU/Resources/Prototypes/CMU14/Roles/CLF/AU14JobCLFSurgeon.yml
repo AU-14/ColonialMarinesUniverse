@@ -99,6 +99,7 @@
   id: JobAU14JobCLFSurgeon
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - MedBackpackAU14
   - MedJumpsuitAU14
   - MedHatsAU14

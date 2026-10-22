@@ -112,6 +112,7 @@
   id: JobAU14JobCivilianColonySynthetic
   points: 45
   groups:
+  - RMCLoadoutGroupPins
   - ColonySynthSpecializationAU14
   - SynthBackpackAU14
   - ColonySynthUniformAU14

@@ -118,6 +118,7 @@
   id: JobCMUJobGOVFORDroneOperator
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - CMUDroneOperatorBackpack
   - EyewearRMCPVE
   - MasksRMCPVE

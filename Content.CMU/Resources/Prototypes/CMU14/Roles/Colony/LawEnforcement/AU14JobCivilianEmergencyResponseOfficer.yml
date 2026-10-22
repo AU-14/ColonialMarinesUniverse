@@ -72,6 +72,7 @@
   id: JobAU14JobCivilianEmergencyResponseOfficer
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - EROSpecializationAU14
   - CivSatchelAU14
   - EROJumpsuitAU14

@@ -55,6 +55,9 @@ namespace Content.Shared.Preferences
 
         public const int MinWeight = 90;
         public const int MaxWeight = 300;
+        public const int MinSyntheticGeneration = 1; // CMU14
+        public const int MaxSyntheticGeneration = 3; // CMU14
+        public const int SyntheticModelSuffixMaxLength = 12; // CMU14
 
         /// <summary>
         /// Job preferences for initial spawn.
@@ -244,6 +247,12 @@ namespace Content.Shared.Preferences
         public bool Synthetic { get; private set; } = false;
 
         [DataField]
+        public int SyntheticGeneration { get; private set; } = MinSyntheticGeneration; // CMU14
+
+        [DataField]
+        public string SyntheticModelSuffix { get; private set; } = string.Empty; // CMU14
+
+        [DataField]
         public string ShortExamine { get; private set; } = string.Empty;
 
         [DataField]
@@ -312,7 +321,9 @@ namespace Content.Shared.Preferences
             int weight = 160,
             BuildType build = BuildType.Average,
             bool hideMetaInformation = false,
-            YautjaCharacterProfile? yautjaProfile = null)
+            YautjaCharacterProfile? yautjaProfile = null,
+            int syntheticGeneration = MinSyntheticGeneration, // CMU14
+            string syntheticModelSuffix = "") // CMU14
         {
             Name = name;
             FlavorText = flavortext;
@@ -339,6 +350,8 @@ namespace Content.Shared.Preferences
             Origin = origin;
             Platoon = platoon;
             Synthetic = synthetic;
+            SyntheticGeneration = Math.Clamp(syntheticGeneration, MinSyntheticGeneration, MaxSyntheticGeneration); // CMU14
+            SyntheticModelSuffix = ClampSyntheticModelSuffix(syntheticModelSuffix); // CMU14
             _threatPreferences = threatPreferences ?? new();
             _gamemodeJobPriorities = NormalizeGamemodeJobPriorities(gamemodeJobPriorities);
             _gamemodeAntagPreferences = NormalizeGamemodeSetPreferences(gamemodeAntagPreferences);
@@ -496,7 +509,9 @@ namespace Content.Shared.Preferences
                 other.Weight,
                 other.Build,
                 other.HideMetaInformation,
-                other.YautjaProfile)
+                other.YautjaProfile,
+                other.SyntheticGeneration, // CMU14
+                other.SyntheticModelSuffix) // CMU14
         {
             // CMU14: Force on Force roles, hijacking, announcements and identification.
             FoFSide = other.FoFSide;
@@ -860,6 +875,32 @@ namespace Content.Shared.Preferences
             {
                 Synthetic = synthetic
             };
+        }
+
+        // CMU14 method
+        public HumanoidCharacterProfile WithSyntheticGeneration(int generation)
+        {
+            return new(this)
+            {
+                SyntheticGeneration = Math.Clamp(generation, MinSyntheticGeneration, MaxSyntheticGeneration)
+            };
+        }
+
+        // CMU14 method
+        public HumanoidCharacterProfile WithSyntheticModelSuffix(string suffix)
+        {
+            return new(this)
+            {
+                SyntheticModelSuffix = ClampSyntheticModelSuffix(suffix)
+            };
+        }
+
+        // CMU14 method
+        private static string ClampSyntheticModelSuffix(string suffix)
+        {
+            return suffix.Length > SyntheticModelSuffixMaxLength
+                ? suffix[..SyntheticModelSuffixMaxLength]
+                : suffix;
         }
 
         public HumanoidCharacterProfile WithShortExamine(string shortExamine)
@@ -1281,6 +1322,8 @@ namespace Content.Shared.Preferences
                 YautjaProfile.FlavorText != other.YautjaProfile.FlavorText)
                 return false;
             if (Synthetic != other.Synthetic) return false;
+            if (SyntheticGeneration != other.SyntheticGeneration) return false; // CMU14
+            if (SyntheticModelSuffix != other.SyntheticModelSuffix) return false; // CMU14
             if (ShortExamine != other.ShortExamine) return false;
             if (FullDescription != other.FullDescription) return false;
             if (MedicalRecord != other.MedicalRecord) return false;
@@ -1592,6 +1635,8 @@ namespace Content.Shared.Preferences
             if (!Enum.IsDefined(FoFSide)) FoFSide = ForceOnForceSide.Either;
             if (!Enum.IsDefined(FoFFallback)) FoFFallback = ForceOnForceFallback.StayInLobby;
             if (!Enum.IsDefined(BloodType)) BloodType = CMUBloodTypes.DefaultTypes[0]; // CMU14
+            SyntheticGeneration = Math.Clamp(SyntheticGeneration, MinSyntheticGeneration, MaxSyntheticGeneration); // CMU14
+            SyntheticModelSuffix = ClampSyntheticModelSuffix(SyntheticModelSuffix); // CMU14
             // cmu edit start
             if (!prototypeManager.HasIndex(Religion)) Religion = Content.Shared.CMU14.Religion.CMUReligionPrototype.Atheist;
             ArmorFlavorText = Content.Shared.CMU14.GearFlavor.CMUGearFlavorText.Clamp(ArmorFlavorText);
@@ -1810,6 +1855,8 @@ namespace Content.Shared.Preferences
             hashCode.Add(Origin);
             hashCode.Add(Platoon);
             hashCode.Add(Synthetic);
+            hashCode.Add(SyntheticGeneration); // CMU14
+            hashCode.Add(SyntheticModelSuffix); // CMU14
             hashCode.Add(ShortExamine);
             hashCode.Add(FullDescription);
             hashCode.Add(MedicalRecord);

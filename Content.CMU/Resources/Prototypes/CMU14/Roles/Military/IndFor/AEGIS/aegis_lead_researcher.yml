@@ -76,4 +76,5 @@
   id: JobCMUJobAegisLeadResearcher
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - AegisStampGroupCMU

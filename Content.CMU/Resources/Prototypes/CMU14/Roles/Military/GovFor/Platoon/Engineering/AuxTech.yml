@@ -124,6 +124,7 @@
   id: JobAU14JobGOVFORAuxTech
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - GOVFORAuxTechClothingAU14
   - MarineBackpack
   - EyewearRMCPVE

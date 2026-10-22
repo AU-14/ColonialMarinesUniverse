@@ -91,6 +91,7 @@
   id: JobAU14JobCivilianHeadPhysician
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - CivilianHeadPhysicianSpecializationAU14
   - MedBackpackAU14
   - MedJumpsuitAU14

@@ -70,6 +70,7 @@
   id: JobAU14JobCivilianUSASFRecruiter
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - CivSatchelAU14
   - RecruiterSpecializationAU14
   - RecruiterHatsAU14

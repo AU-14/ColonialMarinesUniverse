@@ -183,6 +183,7 @@
   id: JobAU14JobGOVFORDSPilot
   points: 7
   groups:
+  - RMCLoadoutGroupPins
   - MarineBackpack
   - EyewearRMCPVE
   - MasksRMCPVE
