@@ -14,6 +14,7 @@ using Content.Shared.CMU14.Chemistry.Fuel;
 using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared.CMU14.Chemistry.Reagents;
 using Content.Shared.CMU14.Traits.DrugAllergy;
+using Content.Shared.CMU14.Vendors;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reaction;
@@ -98,6 +99,44 @@ public sealed class CMUProcgenChemistryTest : GameTest
                         Assert.That(amount, Is.LessThanOrEqualTo(max), $"Hard contract asked for {amount} parts of {reagent}");
                 }
             }
+        });
+    }
+
+    /// <summary>
+    /// Contract reactants must be obtainable. Drinks only a platoon's mess AutoDrink pours (anything on a
+    /// <see cref="CMUAutoDrinkComponent"/> menu but not the default NutriCo menu) inherit coffee/tea classes,
+    /// and nutrient plasma has no source at all; none of them may sit in a generation pool.
+    /// </summary>
+    [Test]
+    public async Task ContractPoolsExcludeUnobtainableReagents()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var gen = SEntMan.System<ServerReagentGeneratorSystem>();
+            var seed = NewOffer(1, 1);
+            gen.GenerateStats(ref seed); // forces Setup()
+            var pooled = gen.ChemicalGenClassesList.Values.SelectMany(pool => pool).ToHashSet();
+
+            var factory = Server.ResolveDependency<IComponentFactory>();
+            Assert.That(SProtoMan.Index<EntityPrototype>("RMCVendorNutriCoDrink")
+                .TryGetComponent(out CMUAutoDrinkComponent? standard, factory), Is.True);
+            var standardMenu = standard!.Drinks.Select(drink => drink.Reagent.Id).ToHashSet();
+
+            var platoonOnly = new HashSet<string>();
+            foreach (var proto in SProtoMan.EnumeratePrototypes<EntityPrototype>())
+            {
+                if (!proto.Abstract && proto.TryGetComponent(out CMUAutoDrinkComponent? menu, factory))
+                    platoonOnly.UnionWith(menu.Drinks.Select(drink => drink.Reagent.Id).Where(id => !standardMenu.Contains(id)));
+            }
+
+            Assert.That(platoonOnly, Does.Contain("CMUCafeDeOlla"), "the platoon menus were not found");
+            Assert.Multiple(() =>
+            {
+                foreach (var reagent in platoonOnly)
+                    Assert.That(pooled, Does.Not.Contain(reagent), $"{reagent} is only poured by a platoon mess AutoDrink");
+                Assert.That(pooled, Does.Not.Contain("CMUXenoPlasmaNutrient"), "nothing produces nutrient plasma");
+                Assert.That(gen.ChemicalGenClassesList["C3"], Does.Contain("RMCCoffee"), "standard-menu coffee stays obtainable");
+            });
         });
     }
 
