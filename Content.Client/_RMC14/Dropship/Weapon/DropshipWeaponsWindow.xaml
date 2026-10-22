@@ -12,6 +12,10 @@
             <controls:DropshipWeaponsScreen Name="ScreenOne" Access="Public"
                                             HorizontalExpand="True" VerticalExpand="True" />
             <BoxContainer Orientation="Vertical" Margin="0 10">
+                <Label Text="{Loc 'cmu-cas-requests-title'}" />
+                <ScrollContainer MaxHeight="300" MinWidth="280" HScrollEnabled="False">
+                    <BoxContainer Name="CasRequestsBox" Access="Public" Orientation="Vertical" />
+                </ScrollContainer>
                 <BoxContainer Orientation="Horizontal">
                     <Control HorizontalExpand="True" />
                     <Button Name="OffsetUpButton" Access="Public" StyleClasses="OpenBoth"

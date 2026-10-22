@@ -1,15 +1,23 @@
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
+using Content.Shared.CMU14.Dropship.Cas;
 using Robust.Shared.GameStates;
+using Robust.Shared.Map;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Dropship.Weapon;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
-[Access(typeof(SharedDropshipWeaponSystem))]
+[Access(typeof(SharedDropshipWeaponSystem), typeof(CMUCasRequestSystem))]
 public sealed partial class DropshipTerminalWeaponsComponent : Component
 {
     [DataField, AutoNetworkedField]
     public bool Gunnery; // CMU14: dedicated chin-gun console
+
+    [DataField, AutoNetworkedField]
+    public List<CMUCasRequest> CasRequests = new();
+
+    public EntityCoordinates? DangerCloseTarget;
+    public TimeSpan DangerCloseExpires;
 
     [DataField, AutoNetworkedField]
     public Screen ScreenOne;
