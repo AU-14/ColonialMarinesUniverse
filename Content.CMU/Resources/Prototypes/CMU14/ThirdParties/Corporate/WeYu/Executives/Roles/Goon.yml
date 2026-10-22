@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: CMUJobWeYuGoon
+  chevrons:
+    AU14RankWYSecurityOfficer:
+      entity: AU14ChevronWYSecurityOfficer
+      requirements: []
   roundSide: ThirdParty
   roundForce: WY
   roundRole: WeYuGoon
@@ -23,7 +27,7 @@
       RMCSkillVehicles: 1
   - type: JobPrefix
     prefix: cmu-weyuexec-prefix-goon
-  name: cmu-weyuexec-name-goon
+  name: cmu-job-title-weyu-security
   description: cmu-weyuexec-description-goon
   playTimeTracker: CMUJobWeYuGoon
   requirements:
@@ -73,7 +77,7 @@
     shoes: RMCBootsPMCFilled
     back: RMCSatchelLightpack
     belt: RMCM77BeltPMCFilled
-    suitstorage: RMCWeaponRifleM54C
+    suitstorage: RMCWeaponRifleM54CFilled
     pocket1: RMCPouchMagazine
     pocket2: RMCPouchFirstAidPMCFill
   storage:

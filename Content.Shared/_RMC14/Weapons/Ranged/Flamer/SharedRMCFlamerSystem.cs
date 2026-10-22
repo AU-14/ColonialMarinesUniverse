@@ -11,6 +11,7 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Actions;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Chemistry.Events; // CMU14
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
@@ -53,6 +54,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
     [Dependency] private RMCReagentSystem _reagent = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private Content.Shared.CMU14.Chemistry.Fuel.CMUFuelProfileSystem _fuelProfile = default!; // CMU14
 
     public override void Initialize()
     {
@@ -65,6 +67,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
 
         SubscribeLocalEvent<RMCFlamerTankComponent, BeforeRangedInteractEvent>(OnFlamerTankBeforeRangedInteract);
         SubscribeLocalEvent<RMCFlamerTankComponent, GetVerbsEvent<ExamineVerb>>(OnFlamerTankVerbExamine);
+        SubscribeLocalEvent<RMCFlamerTankComponent, TargetBeforeInjectEvent>(OnFlamerTankBeforeInject); // CMU14
 
         SubscribeLocalEvent<RMCSprayAmmoProviderComponent, TakeAmmoEvent>(OnSprayTakeAmmo);
         SubscribeLocalEvent<RMCSprayAmmoProviderComponent, GetAmmoCountEvent>(OnSprayGetAmmoCount);
@@ -204,6 +207,10 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
             return;
 
         var msg = new FormattedMessage();
+        // CMU14 start - tanks hold blends, so show what the loaded fuel will actually fire before the tank caps
+        AddLoadedFuelExamine(tank, msg);
+        msg.PushNewline();
+        // CMU14 end
         List<int> values = new([tank.Comp.MaxIntensity, tank.Comp.MaxDuration, tank.Comp.MaxRange]);
         for (var i = 0; i < values.Count; i++)
         {
@@ -221,6 +228,70 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
             Loc.GetString("rmc-flamer-tank-examine")
         );
     }
+
+    // CMU14 start
+    /// <summary>
+    /// What the tank's current contents will fire: the blended <paramref name="raw"/> profile and the
+    /// <paramref name="effective"/> values after this tank's intensity, duration and range caps, using the same
+    /// rules as <see cref="CanShootFlamer"/> and the chain update. False when the tank is empty or will not burn.
+    /// </summary>
+    public bool TryGetEffectiveFuel(Entity<RMCFlamerTankComponent> tank,
+        out Content.Shared.CMU14.Chemistry.Fuel.CMUFuelProfile raw,
+        out Content.Shared.CMU14.Chemistry.Fuel.CMUFuelProfile effective)
+    {
+        raw = default;
+        effective = default;
+        if (!_solution.TryGetSolution(tank.Owner, tank.Comp.SolutionId, out _, out var solution) ||
+            !_fuelProfile.TryCompute(solution, out raw))
+        {
+            return false;
+        }
+
+        effective = raw with
+        {
+            Intensity = Math.Min(tank.Comp.MaxIntensity, raw.Intensity),
+            Duration = Math.Min(tank.Comp.MaxDuration, raw.Duration),
+            Radius = tank.Comp.IgnoreReagentRange ? tank.Comp.MaxRange : Math.Min(tank.Comp.MaxRange, raw.Radius),
+        };
+        return true;
+    }
+
+    private void AddLoadedFuelExamine(Entity<RMCFlamerTankComponent> tank, FormattedMessage msg)
+    {
+        msg.AddMarkupPermissive(Loc.GetString("cmu-flamer-tank-examine-fuel-header"));
+        msg.PushNewline();
+        if (!TryGetEffectiveFuel(tank, out var raw, out var effective))
+        {
+            var empty = !_solution.TryGetSolution(tank.Owner, tank.Comp.SolutionId, out _, out var solution) ||
+                        solution.Volume <= FixedPoint2.Zero;
+            msg.AddMarkupPermissive(Loc.GetString(empty ? "cmu-flamer-tank-examine-fuel-empty" : "cmu-flamer-tank-examine-fuel-inert"));
+            msg.PushNewline();
+            return;
+        }
+
+        AddFuelLine("cmu-flamer-tank-examine-fuel-intensity", effective.Intensity, raw.Intensity);
+        AddFuelLine("cmu-flamer-tank-examine-fuel-duration", effective.Duration, raw.Duration);
+        AddFuelLine("cmu-flamer-tank-examine-fuel-range", effective.Radius, tank.Comp.IgnoreReagentRange ? effective.Radius : raw.Radius);
+        if (effective.FireSpread)
+        {
+            msg.AddMarkupPermissive(Loc.GetString("cmu-flamer-tank-examine-fuel-spread"));
+            msg.PushNewline();
+        }
+        if (effective.FirePenetrating)
+        {
+            msg.AddMarkupPermissive(Loc.GetString("cmu-flamer-tank-examine-fuel-penetrating"));
+            msg.PushNewline();
+        }
+
+        void AddFuelLine(string key, int value, int blend)
+        {
+            msg.AddMarkupPermissive(Loc.GetString(key, ("value", value)));
+            if (blend > value)
+                msg.AddMarkupPermissive(Loc.GetString("cmu-flamer-tank-examine-fuel-capped", ("blend", blend)));
+            msg.PushNewline();
+        }
+    }
+    // CMU14 end
 
     private void OnSprayTakeAmmo(Entity<RMCSprayAmmoProviderComponent> ent, ref TakeAmmoEvent args)
     {
@@ -316,7 +387,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         EntityCoordinates fromCoordinates,
         EntityCoordinates toCoordinates)
     {
-        if (!CanShootFlamer(flamer, fromCoordinates, toCoordinates, out var tiles, out var solution, out var reagent, out var tank))
+        if (!CanShootFlamer(flamer, fromCoordinates, toCoordinates, out var tiles, out var solution, out var fuel, out var tank)) // CMU14
             return;
 
         if (!_zLevels.PlayPredictedDirectlyAcrossZ(gun.Comp.SoundGunshotModified, gun, user))
@@ -326,7 +397,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         // 1233456
         //  333456
         var cost = tiles.Count;
-        if (reagent.FireSpread && cost > 2)
+        if (fuel.FireSpread && cost > 2) // CMU14
             cost = (int)Math.Ceiling(cost / 3.0f);
 
         solution.Value.Comp.Solution.RemoveSolution(flamer.Comp.CostPer * cost);
@@ -337,10 +408,15 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
 
         var chain = Spawn();
         var chainComp = EnsureComp<RMCFlamerChainComponent>(chain);
-        chainComp.Spawn = reagent.FireEntity;
+        // CMU14 start - size the fire from the blended tank profile
+        chainComp.Spawn = fuel.FireEntity;
         chainComp.Tiles = tiles;
-        chainComp.Origin = fromCoordinates; // CMU14
-        chainComp.Reagent = reagent.ID;
+        chainComp.Origin = fromCoordinates;
+        chainComp.Reagent = fuel.PrimaryReagent;
+        chainComp.Intensity = fuel.Intensity;
+        chainComp.Duration = fuel.Duration;
+        chainComp.FirePenetrating = fuel.FirePenetrating;
+        // CMU14 end
         chainComp.MaxIntensity = tank.Value.Comp.MaxIntensity;
         chainComp.MaxDuration = tank.Value.Comp.MaxDuration;
 
@@ -372,11 +448,11 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         EntityCoordinates toCoordinates,
         [NotNullWhen(true)] out List<LineTile>? tiles,
         [NotNullWhen(true)] out Entity<SolutionComponent>? solution,
-        [NotNullWhen(true)] out ReagentPrototype? reagent,
+        out Content.Shared.CMU14.Chemistry.Fuel.CMUFuelProfile fuel, // CMU14
         [NotNullWhen(true)] out Entity<RMCFlamerTankComponent>? tank)
     {
         tiles = null;
-        reagent = null;
+        fuel = default; // CMU14
         if (!TryGetTankSolution(flamer, out solution, out tank))
             return false;
 
@@ -395,19 +471,19 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         // to prevent hitting yourself
         fromCoordinates = fromCoordinates.Offset(normalized * 0.23f);
 
-        if (!solution.Value.Comp.Solution.TryFirstOrNull(out var firstReagent))
+        // CMU14 start - the whole tank solution decides range, spread and fire type, not the first reagent
+        if (!_fuelProfile.TryCompute(solution.Value.Comp.Solution, out fuel))
             return false;
-
-        reagent = _reagent.Index(firstReagent.Value.Reagent.Prototype);
 
         var maxRange = tank.Value.Comp.IgnoreReagentRange
             ? tank.Value.Comp.MaxRange
-            : Math.Min(tank.Value.Comp.MaxRange, reagent.Radius);
+            : Math.Min(tank.Value.Comp.MaxRange, fuel.Radius);
         var range = Math.Min((volume / flamer.Comp.CostPer).Int(), maxRange);
         if (delta.Length() > maxRange)
             toCoordinates = fromCoordinates.Offset(normalized * range);
 
-        tiles = _line.DrawLine(fromCoordinates, toCoordinates, flamer.Comp.DelayPer, maxRange, out _, true, reagent.FireSpread);
+        tiles = _line.DrawLine(fromCoordinates, toCoordinates, flamer.Comp.DelayPer, maxRange, out _, true, fuel.FireSpread);
+        // CMU14 end
         if (tiles.Count == 0)
         {
             tiles = null;
@@ -497,20 +573,13 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
     {
         var tankSolution = targetSolutionEnt.Comp.Solution;
         var targetSolution = sourceSolutionEnt.Comp.Solution;
-        foreach (var content in targetSolution.Contents)
+        // CMU14 start - one gate shared with beaker-on-tank pours (SharedRMCChemistrySystem)
+        if (!CanAcceptPour(target, tankSolution, targetSolution, out var reason))
         {
-            if (target.Comp.ReagentWhitelist is { } whitelist && !whitelist.Contains(content.Reagent.Prototype))
-            {
-                _popup.PopupEntity(Loc.GetString("rmc-flamer-tank-not-whitelisted", ("tank", target)), source, user);
-                return;
-            }
-            if (_reagent.TryIndex(content.Reagent.Prototype, out var reagent) &&
-                (reagent.Intensity <= 0 || reagent.Duration <= 0 || reagent.Radius <= 0))
-            {
-                _popup.PopupEntity(Loc.GetString("rmc-flamer-tank-not-potent-enough"), source, user);
-                return;
-            }
+            _popup.PopupEntity(reason, source, user);
+            return;
         }
+        // CMU14 end
 
         var transfer = _solutionTransfer.Transfer(
             user,
@@ -524,6 +593,66 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         if (transfer > FixedPoint2.Zero)
             _popup.PopupEntity(Loc.GetString("rmc-flamer-refill", ("refilled", target)), source, user);
     }
+
+    // CMU14 start
+    /// <summary>
+    /// Syringes inject into any refillable solution without raising a transfer attempt, so they get the same
+    /// whitelist and fuel-profile gate as every other way of filling a tank.
+    /// </summary>
+    private void OnFlamerTankBeforeInject(Entity<RMCFlamerTankComponent> ent, ref TargetBeforeInjectEvent args)
+    {
+        if (args.Cancelled ||
+            !TryComp<InjectorComponent>(args.UsedInjector, out var injector) ||
+            !_solution.TryGetSolution(args.UsedInjector, injector.SolutionName, out _, out var injectorSolution) ||
+            !_solution.TryGetSolution(ent.Owner, ent.Comp.SolutionId, out _, out var tankSolution))
+        {
+            return;
+        }
+
+        var amount = FixedPoint2.Min(injector.CurrentTransferAmount ?? injectorSolution.Volume, injectorSolution.Volume);
+        var portion = injectorSolution.Clone();
+        if (portion.Volume > amount)
+            portion = portion.SplitSolution(amount);
+
+        if (!CanAcceptPour(ent, tankSolution, portion, out var reason))
+        {
+            args.OverrideMessage = reason;
+            args.Cancel();
+        }
+    }
+
+    /// <summary>
+    /// Whether pouring <paramref name="incoming"/> into a flamer tank is allowed: every reagent must pass the
+    /// tank's reagent whitelist, and the blend formed by the portion that actually fits must still burn.
+    /// Used by both pour directions (tank used on a container, and a container poured into the tank).
+    /// </summary>
+    public bool CanAcceptPour(Entity<RMCFlamerTankComponent> tank, Solution tankSolution, Solution incoming, out string reason)
+    {
+        reason = string.Empty;
+        foreach (var content in incoming.Contents)
+        {
+            if (tank.Comp.ReagentWhitelist is { } whitelist && !whitelist.Contains(content.Reagent.Prototype))
+            {
+                reason = Loc.GetString("rmc-flamer-tank-not-whitelisted", ("tank", tank));
+                return false;
+            }
+        }
+
+        var moved = FixedPoint2.Min(incoming.Volume, tankSolution.AvailableVolume);
+        if (moved <= FixedPoint2.Zero)
+            return true; // nothing will move; let the transfer report a full tank
+
+        var portion = incoming.Clone();
+        if (portion.Volume > moved)
+            portion = portion.SplitSolution(moved);
+
+        if (_fuelProfile.TryComputeMixed(tankSolution, portion, out _))
+            return true;
+
+        reason = Loc.GetString("rmc-flamer-tank-not-potent-enough");
+        return false;
+    }
+    // CMU14 end
 
     private void RefillTank(Entity<RMCFlamerTankComponent> tank, ref BeforeRangedInteractEvent args)
     {
@@ -539,6 +668,14 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         {
             targetSolutionEnt = reagentTankSolutionEnt.Value;
         }
+        // CMU14 start - lab glassware (beakers, jugs) may top up a tank directly; Transfer still applies the
+        // mixed-profile potency gate, so only pours whose resulting blend burns are accepted.
+        else if (HasComp<FitsInDispenserComponent>(target) &&
+                 _solution.TryGetDrainableSolution(target, out var beakerSolutionEnt, out _))
+        {
+            targetSolutionEnt = beakerSolutionEnt.Value;
+        }
+        // CMU14 end
         else
         {
             return;
@@ -654,7 +791,22 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
                         && oldTileFire.Owner.Id != fire.Id)
                     QueueDel(oldTileFire);
 
-                if (_reagent.TryIndex(comp.Reagent, out var reagent))
+                // CMU14 start - prefer the blended profile stored on the chain
+                if (comp.Intensity > 0 && comp.Duration > 0)
+                {
+                    var blendDuration = Math.Min(comp.MaxDuration, comp.Duration);
+                    _rmcFlammable.SetIntensityDuration(fire,
+                        Math.Min(comp.MaxIntensity, comp.Intensity),
+                        blendDuration);
+                    // The fire prototype's lifetime is balanced around napalm UT; longer-burning blends keep
+                    // the tile alight proportionally longer, weaker ones shorter.
+                    _rmcFlammable.ScaleTileFireDuration(fire,
+                        Content.Shared.CMU14.Chemistry.Fuel.CMUFuelProfileSystem.TileLifetimeMultiplier(blendDuration));
+                    if (comp.FirePenetrating)
+                        _rmcFlammable.SetFirePenetrating(fire, true);
+                }
+                else if (_reagent.TryIndex(comp.Reagent, out var reagent))
+                // CMU14 end
                 {
                     var intensity = Math.Min(comp.MaxIntensity, reagent.Intensity);
                     var duration = Math.Min(comp.MaxDuration, reagent.Duration);

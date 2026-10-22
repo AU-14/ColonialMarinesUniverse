@@ -131,9 +131,9 @@
     id: AU14IDCardCLFCellLeader
     shoes: RMCShoesJackboots
     belt: AU14BeltConstructionCLFSurv
-    suitstorage: RMCFlashlight
+    ears: AU14CLFHeadset
+  # Two hands: the flag and a flashlight. There's no outer clothing to hang a flashlight on.
   inhand:
-  - AU14CLFHeadset
   - AU14FlagCarriableCLF
   - RMCFlashlight
 - type: playTimeTracker

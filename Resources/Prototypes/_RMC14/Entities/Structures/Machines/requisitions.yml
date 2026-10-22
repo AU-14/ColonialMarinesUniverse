@@ -312,7 +312,7 @@
     faction: opfor
 
 - type: entity
-  parent: [ CMASRSConsole ]
+  parent: [ CMASRSConsole, CMUASRSColonyJeepKits ] # CMU14: colony jeep kits
   id: CMASRSConsoleColony
   name: ASRS console (Colony)
   components:

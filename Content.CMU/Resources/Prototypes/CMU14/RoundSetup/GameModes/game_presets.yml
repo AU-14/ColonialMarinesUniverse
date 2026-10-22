@@ -13,7 +13,6 @@
   maxThirdParties: 2
   supportedPlanets:
   - SharedPlanetPool
-# - AUPlanetLV624 # Green Hell # missing threat spawns, scenario fails
   rules:
   - AuVoteRule
   - ColonyAntags
@@ -33,7 +32,6 @@
 # - AUPlanetShepherdsPride # lot of forests/chokes
 # - CMUPlanetHopesRetreat # govfor spawns planetside
   - AUPlanetBosenmoriBasho
-# - AUPlanetLV747 # Solaris Gulch
 # - AUPlanetLV759 # Hybrisa Metro # missing threat spawns, scenario fails
   - AUPlanetLV327 # Port Nereid
   - AUPlanetSorokyne
@@ -68,7 +66,6 @@
   dropshipFabricatorStartingPoints: 7500
   supportedPlanets:
   - SharedPlanetPool
-# - AUPlanetLV624 # Green Hell # map lacks medical, dropships - govfor spawns outside base
   rules:
   - AuVoteRule
   - PlatoonSpawn

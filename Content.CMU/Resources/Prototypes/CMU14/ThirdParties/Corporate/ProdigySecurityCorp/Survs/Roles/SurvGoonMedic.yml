@@ -1,6 +1,10 @@
 - type: job
   parent: CMU14JobCivilianProdigyGuardBase
   id: CMU14JobCivilianProdigyGuardMedicSurv
+  chevrons:
+    AU14RankPrDEnforcer:
+      entity: AU14ChevronPrDEnforcer
+      requirements: []
   roundSide: Civilian
   roundForce: PSC
   roundRole: CivilianProdigyGuardMedicSurv
@@ -100,7 +104,7 @@
     - CMU14StandardAidKitFilledBurn
     - CMU14StandardAidKitFilledBrute
     back:
-    - CMMRE #TODO prodigy one
+    - CMUMREFSR
     - CMCanteen
     - RMCRadioHandheldColony
     - CMSurgicalCaseFilled

@@ -8,6 +8,7 @@ using Content.Shared.CMU14.Marines.Roles.Chevrons;
 using Content.Shared.CMU14.Roles.Ranks;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Prototypes;
+using Content.Shared._RMC14.Rules; // CMU14
 using Content.Shared.CMU14.util;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
@@ -698,8 +699,20 @@ public sealed partial class HumanoidProfileEditor
     private PlatoonRankPreferenceJobEntry? BuildRankPreferenceJobEntry(JobPrototype job)
     {
         var platoonOptions = new List<PlatoonRankOptions>();
+
+        // CMU14: only platoons a planet can actually vote in, shelved ones like BEAR stay hidden
+        var playable = new HashSet<ProtoId<PlatoonPrototype>>();
+        foreach (var planet in _entManager.System<RMCPlanetSystem>().GetAllPlanets())
+        {
+            playable.UnionWith(planet.Comp.PlatoonsGovfor);
+            playable.UnionWith(planet.Comp.PlatoonsOpfor);
+        }
+
         foreach (var platoon in _prototypeManager.EnumeratePrototypes<PlatoonPrototype>())
         {
+            if (!playable.Contains(platoon.ID))
+                continue;
+
             var chevronMap = ResolveChevronMapForPlatoon(job, platoon);
             if (chevronMap == null || chevronMap.Count == 0)
                 continue;

@@ -32,7 +32,7 @@
       tags:
       - SquadPMC
 
-  name: au14-job-name-civiliancorporateadministrator
+  name: cmu-job-title-corporate-administrator
   description: au14-job-description-civiliancorporateadministrator
   setPreference: false
   playTimeTracker: AU14JobCivilianCorporateAdministrator

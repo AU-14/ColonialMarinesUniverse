@@ -28,3 +28,10 @@ public sealed class CMUGhostAppearanceSystem : EntitySystem
         Dirty(ghost, comp);
     }
 }
+
+/// <summary>
+///     A hidden body built from a lobby observer's selected character, carried by their ghost so it has something to
+///     look like. Clients never draw it; the ghost copies its sprite.
+/// </summary>
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CMUGhostAppearanceStandInComponent : Component;

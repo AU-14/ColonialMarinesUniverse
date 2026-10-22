@@ -55,7 +55,7 @@ public sealed partial class ChatSystem
         if (HasComp<YautjaComponent>(source)
             && TryComp<GhostComponent>(listener.Value, out var listenerGhost)
             && listenerGhost.CanGhostInteract
-            && _adminManager.IsAdmin(listener.Value))
+            && _adminManager.HasAdminFlag(listener.Value, Content.Shared.Administration.AdminFlags.GhostSenses)) // cmu edit
             return MetaData(source).EntityName;
 
         if (TryComp<FixedIdentityComponent>(source, out var fixedIdentity) &&

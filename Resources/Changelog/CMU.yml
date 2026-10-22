@@ -14263,5 +14263,374 @@
   id: 841
   time: '2026-10-20T08:24:02.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2230
+- author: rokudara-sen
+  changes:
+  - message: Queen swarm lessers no longer get stuck crowding the bottom of a staircase
+      when following across floors.
+    type: Fix
+  id: 842
+  time: '2026-10-20T15:11:07.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2242
+- author: KeiKiyomi
+  changes:
+  - message: Added the jump pack, a back-slot thruster pack that refuels from gas
+      canisters like an oxygen tank. A full tank gives about 5 minutes of use.
+    type: Add
+  - message: Jump pack Boost launches you 6 tiles in your chosen direction. Change
+      direction with the Direction action, and alt-click the pack to switch between
+      4 and 8 directions.
+    type: Add
+  - message: Jump pack Jump launches you up one level through open sky. It shares
+      Boost's 7 second cooldown.
+    type: Add
+  - message: Jump pack Hover lifts you one level up for up to 20 seconds, with no
+      Boost cooldown while hovering. End it early and you float safely back down.
+      Hover has a 35 second cooldown.
+    type: Add
+  - message: Added Z-level hover support (StartZHover/StopZHover) to the Z-levels
+      system.
+    type: Code
+  id: 843
+  time: '2026-10-21T00:08:46.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2207
+- author: Operator-Exi
+  changes:
+  - message: New blueprints including custom grenade components have been shipped
+      to WY Tools & Engi component vends, And autolathes.
+    type: Add
+  - message: Management has updated Weyland Yutanis chemical synthesizers and analyzers
+      to give you over 30 new properties that now function as intended.
+    type: Add
+  - message: Management has also updated your chemical synthesizers and analyzers
+      to give you several new Napalm related properies that function as intended.
+    type: Add
+  - message: New smoke based and foam based chemicals and reactions have been discovered
+      and disseminated amongst the scientific community.
+    type: Add
+  - message: Everyone has updated their safety standards to allow the mixing of chemical
+      napalms within their respective tanks. Tanks now have safety limits for the
+      stats of the fuels they carry.
+    type: Tweak
+  id: 844
+  time: '2026-10-21T10:21:02.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2214
+- author: rokudara-sen
+  changes:
+  - message: The ASRS standby screen no longer covers the catalogue while you're reading
+      it
+    type: Fix
+  - message: Defibrillators work on a corpse that got a new heart
+    type: Fix
+  - message: TWE rations no longer say TSE and UNMC
+    type: Fix
+  - message: The queen can heal xenos on other floors
+    type: Fix
+  - message: The new pulse rifle sounds are no longer louder than every other gun
+    type: Fix
+  - message: A revived queen can be tracked again
+    type: Fix
+  - message: Xenos can't use the jukebox
+    type: Fix
+  - message: Your cigarette smoke keeps animating while you're buckled
+    type: Fix
+  - message: Ghosts are see-through again and no longer show up as just burns and
+      bandages
+    type: Fix
+  - message: Taking off a chevron removes its rank
+    type: Fix
+  - message: Replicants take on their target's rank and faction
+    type: Fix
+  - message: BEAR no longer shows up in the rank menu
+    type: Fix
+  - message: The CLF commando leader can give orders
+    type: Fix
+  - message: Things thrown onto the lowered vehicle lift fall in again, vehicles don't
+    type: Fix
+  id: 845
+  time: '2026-10-21T10:29:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2244
+- author: troytroy400
+  changes:
+  - message: Intel tech trees are now split by faction. UA, TWE/WY, UPP and Other
+      each have their own call-ins.
+    type: Tweak
+  - message: Rebalanced intel call-in costs to match what each team brings.
+    type: Tweak
+  - message: Reinforcement call-ins can only be bought once per round, except CLF
+      insurgent reinforcements (up to 3).
+    type: Tweak
+  - message: 'New UA call ins: USCM MP Fireteam, USCM Combat Engineer Team, USCM Plasma
+      Weapons Team, US Army Intelligence Pair, UA Colonial Guard Patrol, UA Colonial
+      Guard Platoon, CMB Tactical Team, CCAF Fire Team, LACN Commando Fireteam, LACN
+      Construction Team, LACN MASH Team and USASF SECFOR K9 Team.'
+    type: Add
+  - message: 'New TWE call ins: SAS Assault Squad, IASF Paratrooper Reinforcements,
+      IASF Mortar Team, Royal Marines Combat Engineers, NSPA Tactical Team, WY Corporate
+      Security Team and WY PMC Team.'
+    type: Add
+  - message: 'New UPP call ins: UPP Militsiya, Militsiya K9 Team, Territorial Defense
+      Patrol, Territorial Defense Platoon, Kommissar Detail, Sapper Team, Naval Infantry
+      RPG Team and Naval Infantry Sniper Pair.'
+    type: Add
+  - message: 'New Prodigy call ins: Prodigy Security Forces Squad, Security Guard
+      Detail, Sniper Overwatch and Construction Crew.'
+    type: Add
+  - message: The CMB investigation call-in is now the CMB Patrol, the Royal Paramarines
+      are now the IASF Parachute Regiment.
+    type: Tweak
+  - message: Removed the KRAKEN and CMB parolee transport from the UA list.
+    type: Remove
+  - message: Third parties called in by a faction aboard its ship land at that ship's
+      summoned third party pad and their shuttle leaves 60 seconds after landing.
+    type: Add
+  - message: Ration crates aboard a faction's ship open full of that platoon's own
+      rations.
+    type: Add
+  - message: VAI and Prodigy now have FSR rations and WY PMCs carry PMC CFRs.
+    type: Tweak
+  - message: Naloxone works on the dead.
+    type: Tweak
+  - message: The colony ASRS only sells colony-legal firearms. Added a colony Glock
+      75.
+    type: Tweak
+  - message: The XM43 uses its updated sprite.
+    type: Tweak
+  - message: The M39 and M39B/2 are caseless.
+    type: Tweak
+  - message: The requisitions stock console, objectives console and objective intel
+      window use the CRT console style.
+    type: Tweak
+  - message: Added new intel tech console and fax interfaces.
+    type: Add
+  - message: Added M20A AP magazines and Kramer hollow point magazines.
+    type: Add
+  - message: CMB CIU uses the M20A2 instead of the M20A. CIU no-longer has M16s. CIU
+      now has kramer DMRs available alongside AP/HP mags for the M20A.
+    type: Tweak
+  - message: The CMB/CIU M81 riot launcher no longer needs police training.
+    type: Tweak
+  - message: The Kramer Enforcer's built in scope no longer draws a separate attachment
+      over the rifle.
+    type: Fix
+  - message: Platoons deploy with the Omaha dropship instead of the Midway. The Omaha's
+      weapons rack starts empty and holds 40 weapons or ammo items.
+    type: Tweak
+  - message: Day/night cycles follow each planet's day cycle setting and apply to
+      every floor of a map. Distress signal maps have no day/night cycle.
+    type: Fix
+  - message: Fixed ghost roles sometimes spawning without ranks.
+    type: Fix
+  - message: Fixed ghost roles frequently have duplicate names due to squads being
+      named the same as their role.
+    type: Fix
+  - message: Fixed ghost roles sometimes spawning with absurd hair.
+    type: Fix
+  - message: The USS Bush outer hull is zero gravity again and all its secondary requisition
+      shutters work now.
+    type: Fix
+  - message: USS Bush red alert gun cabinets are now locked to MP/Command.
+    type: Tweak
+  - message: SecTech vendors sell pepper spray now. SecTechs no-longer stock AP sidearms.
+    type: Tweak
+  - message: Ghost role call ins spawn with their gear in hand and on them, not on
+      the floor anymore.
+    type: Fix
+  - message: Admin permissions are split into separate flags with hover descriptions
+      and mentor no longer grants sandbox or other admin powers.
+    type: Admin
+  - message: spawnthirdparty takes a faction and a "now" option.
+    type: Admin
+  - message: Added the attachmentoffsets command which helps get the offsets for attachments
+      without having to guess.
+    type: Admin
+  - message: Map files have been reorganized.
+    type: Code
+  id: 846
+  time: '2026-10-21T18:16:46.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2252
+- author: troytroy400
+  changes:
+  - message: The Mohawk's cabin no longer vents when its ramp is lowered.
+    type: Fix
+  - message: The Mohawk's lowered ramp, undercarriage and roof share the air of whatever
+      they're parked over instead of reading as vacuum.
+    type: Fix
+  - message: Dropship hatches and doors have tiny fans so opening them doesn't vent
+      the cabin. Covers the Omaha, Midway and the dynamic gunship.
+    type: Fix
+  - message: Every dropship has an air vent that keeps the cabin topped up with breathable
+      air.
+    type: Add
+  - message: Observing from the lobby gives you a ghost that looks like your selected
+      character, dressed in your selected job's clothes.
+    type: Tweak
+  - message: The server name no longer gets "| gamemode day Playtest" appended each
+      round. Set cmu.game.hostname_round_suffix to bring it back.
+    type: Admin
+  - message: Dropship grids without air of their own can borrow the air of the grid
+      beneath them (CMUBorrowedAtmosphereComponent).
+    type: Code
+  id: 847
+  time: '2026-10-21T23:31:49.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2256
+- author: HotdogMan52
+  changes:
+  - message: added an M16A1 M203 variant
+    type: Add
+  - message: added the M433 40mm HEDP grenade that sends fragments in a circle and
+      a shaped charge jet that deals 80 piercing and 40 burn with very severe falloff
+    type: Add
+  - message: CLF Commando Leader now spawns with the M16A1 M203 and gets 10 M433 40mm
+      HEDP grenades in exchange for two IED grenades and four 20-round magazines
+    type: Tweak
+  id: 848
+  time: '2026-10-21T23:37:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2253
+- author: Ignies
+  changes:
+  - message: Added a photo camera. Click an area to take a picture with a flash; the
+      print comes out in your hand and opens as a polaroid with a caption of who and
+      what is in it.
+    type: Add
+  - message: Added film rolls with 10 shots each. Reload an empty camera with a new
+      roll. Cameras and film are in SecTech vendors, the journalist loadout and the
+      combat correspondent rack.
+    type: Add
+  id: 849
+  time: '2026-10-21T23:38:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2243
+- author: KeiKiyomi
+  changes:
+  - message: Changed all front facing CLF text to INSFOR
+    type: Tweak
+  id: 850
+  time: '2026-10-22T00:08:38.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2226
+- author: CatoChristopherMrow
+  changes:
+  - message: Colony synth now has construction 4 instead of 3
+    type: Tweak
+  - message: Synthetic points have been raised to 45, and alot more options have been
+      added to what you can actually buy with them.
+    type: Tweak
+  - message: Synthetics can now actually buy the compact nailgun, instead of a broken
+      version.
+    type: Fix
+  id: 851
+  time: '2026-10-22T00:19:26.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2198
+- author: KeiKiyomi
+  changes:
+  - message: Added Night vision scopes with a 5 minute battery life and 1.5x zoom
+    type: Add
+  - message: Added Night Vision to integrated sniper scopes (infinite battery life
+      since they cant be removed)
+    type: Add
+  - message: Added crates of 3 Night Vision scopes to ASRS for 2500
+    type: Add
+  - message: 3 Added Night Vision Scopes to all factions
+    type: Add
+  - message: SLs can pick 1.5x NVG scope or 2x scopes from the vendors
+    type: Add
+  - message: NVG scopes are hidden for GOVFOR on Insurgency, still available to CLF
+      freely.
+    type: Tweak
+  id: 852
+  time: '2026-10-22T00:26:02.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2206
+- author: Dongo4
+  changes:
+  - message: Added WY Executive survivor party
+    type: Add
+  - message: Removed wall between LZ2 and mining
+    type: Remove
+  - message: Various poorly offset APC's have been re-oriented
+    type: Fix
+  - message: Third party shuttles can now land at LZ1 and LZ2
+    type: Tweak
+  - message: Added more individual threat spawners to the existing threat spawn points
+    type: Tweak
+  id: 853
+  time: '2026-10-22T13:17:18.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2259
+- author: KeiKiyomi
+  changes:
+  - message: Fixed US Army equipment on spawn, now actually getting equipment
+    type: Fix
+  id: 854
+  time: '2026-10-22T13:22:57.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2221
+- author: ILoveDespoiler
+  changes:
+  - message: Removed Brute Neomorph Tailstab. It doesn't have a tail.
+    type: Remove
+  - message: Brute Neomorph no longer has fast attacks. It's attacks are slower, do
+      more damage, and do only brute damage. Hit VFX and SFX also changed.
+    type: Tweak
+  - message: Brute Neomorph ground slam launches you farther and makes your screen
+      shake more.
+    type: Tweak
+  - message: Reduced Brute Neomorph armor.
+    type: Tweak
+  id: 855
+  time: '2026-10-22T13:39:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2236
+- author: HotdogMan52
+  changes:
+  - message: new AR10 sprites by nzzy
+    type: Add
+  - message: new 7.62x51 bullet which deals 35 piercing and has 25 armor piercing
+    type: Add
+  - message: AR15 Sporter added to colony ASRS, a civilian semi-automatic M16 pattern-rifle
+      with 5-round mags
+    type: Add
+  - message: AR10 now feeds 7.62x51mm, using both CMU and RMC AR10 mags
+    type: Tweak
+  - message: AR10 rate of fire lowered to 3.0 rounds per second in exchange for using
+      a bigger, beefier bullet
+    type: Tweak
+  - message: AR10 is now 1850 per rifle in ASRS and costs 185 per mag
+    type: Tweak
+  - message: AR15 Sporter is now 1445 per rifle and costs 65 per mag
+    type: Tweak
+  - message: 5.56 Green Tip damage adjusted from 28 to 31
+    type: Tweak
+  - message: 5.56 Green Tip AP value lowered from 50 to 25
+    type: Tweak
+  - message: fixed CLF Commando M16 not feeding AP magazines
+    type: Fix
+  id: 856
+  time: '2026-10-22T13:47:26.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2220
+- author: Ignies
+  changes:
+  - message: Added military and colony jeeps, ordered as kit crates or dropped by
+      flare, each with a field manual.
+    type: Add
+  - message: Jeeps have doors, lamps, a key, fuel, paint and dirt; military jeeps
+      have a hand aimed searchlight.
+    type: Add
+  - message: Jeep panels show bullet holes, burns and dents, and can be welded or
+      replaced from the autolathe.
+    type: Add
+  - message: A dead jeep engine catches fire that creeps out slowly; a heavy hit blows
+      the jeep up at once.
+    type: Add
+  - message: Jeep wrecks slide on from where they blew up and can only be welded down
+      to scrap.
+    type: Add
+  - message: The gun jeep has a .50 cal, the medical jeep a surgical bed.
+    type: Add
+  - message: Added a CLF HMG jeep and civilian crew call-in, available twice with
+      a ten-minute cooldown.
+    type: Add
+  - message: Medical departments can buy throwable medical jeep beacons with a blue
+      delivery laser and crate impact effects.
+    type: Add
+  - message: Added the jeepkit command.
+    type: Admin
+  id: 857
+  time: '2026-10-22T14:13:05.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2234
 Name: CMU
 Order: -1

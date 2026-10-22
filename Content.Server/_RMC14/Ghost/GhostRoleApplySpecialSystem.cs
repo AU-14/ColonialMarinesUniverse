@@ -10,6 +10,17 @@ using Content.Shared.Access.Systems;
 using Content.Shared.Clothing;
 using Content.Shared.Inventory;
 using Robust.Shared.Prototypes;
+// cmu edit start
+using Content.Server.Body;
+using Content.Server.Humanoid.Systems;
+using Content.Shared.Body;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Item;
+using Content.Shared.Storage;
+using Content.Shared.Storage.EntitySystems;
+using Robust.Shared.Containers;
+using Robust.Shared.Timing;
+// cmu edit end
 
 namespace Content.Server._RMC14.Ghost;
 
@@ -24,14 +35,25 @@ public sealed partial class GhostRoleApplySpecialSystem : EntitySystem
     [Dependency] private MarineSystem _marine = default!;
     [Dependency] private RoundJobProfileSystem _roundJobProfiles = default!;
     [Dependency] private SharedIdCardSystem _idCard = default!;
+    // cmu edit start
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedStorageSystem _storage = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    // cmu edit end
 
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<GhostRoleApplySpecialComponent, ComponentStartup>(OnStartup);
+        // cmu edit start: hands come from the hand organs the body spawns at map init, so equipping on startup (or
+        // before the body is built) dropped every in-hand item on the floor. Equip once the body and its looks are set.
+        SubscribeLocalEvent<GhostRoleApplySpecialComponent, MapInitEvent>(OnStartup,
+            after: [typeof(SharedHandsSystem), typeof(InitialBodySystem), typeof(VisualBodySystem), typeof(RandomHumanoidAppearanceSystem)]);
+        // cmu edit end
     }
 
-    private void OnStartup(Entity<GhostRoleApplySpecialComponent> ent, ref ComponentStartup args)
+    private void OnStartup(Entity<GhostRoleApplySpecialComponent> ent, ref MapInitEvent args) // cmu edit
     {
         if (!TryComp<GhostRoleComponent>(ent, out var ghostRole) ||
             !TryComp(ent, out MetaDataComponent? metaData))
@@ -44,7 +66,10 @@ public sealed partial class GhostRoleApplySpecialSystem : EntitySystem
             return;
 
         if (job.StartingGear is { } gear)
+        {
             _loadout.Equip(ent, [gear], null);
+            CMUPickUpDroppedGear(ent); // cmu edit
+        }
 
         if (_inventory.TryGetSlotContainer(ent, "id", out var container, out _))
         {
@@ -91,4 +116,47 @@ public sealed partial class GhostRoleApplySpecialSystem : EntitySystem
 
         RemComp<GhostRoleApplySpecialComponent>(ent);
     }
+
+    // cmu edit start
+    /// <summary>
+    ///     Anything the loadout couldn't place lands at the mob's feet. Put it in a free hand or a worn bag instead, so
+    ///     nobody spawns standing on their own gear.
+    /// </summary>
+    private void CMUPickUpDroppedGear(EntityUid mob)
+    {
+        var tick = _timing.CurTick;
+        var coords = Transform(mob).Coordinates;
+        foreach (var item in _lookup.GetEntitiesInRange<ItemComponent>(coords, 0.5f, LookupFlags.Uncontained))
+        {
+            if (MetaData(item).CreationTick != tick || _container.IsEntityInContainer(item))
+                continue;
+
+            if (CMUTryWear(mob, item) || _hands.TryPickupAnyHand(mob, item, checkActionBlocker: false))
+                continue;
+
+            var slots = _inventory.GetSlotEnumerator(mob);
+            while (slots.MoveNext(out var slot))
+            {
+                if (slot.ContainedEntity is { } worn &&
+                    TryComp(worn, out StorageComponent? storage) &&
+                    _storage.Insert(worn, item, out _, storageComp: storage, playSound: false))
+                {
+                    break;
+                }
+            }
+        }
+    }
+
+    private bool CMUTryWear(EntityUid mob, EntityUid item)
+    {
+        var slots = _inventory.GetSlotEnumerator(mob);
+        while (slots.MoveNext(out var slot))
+        {
+            if (slot.ContainedEntity == null && _inventory.TryEquip(mob, item, slot.ID, silent: true))
+                return true;
+        }
+
+        return false;
+    }
+    // cmu edit end
 }
