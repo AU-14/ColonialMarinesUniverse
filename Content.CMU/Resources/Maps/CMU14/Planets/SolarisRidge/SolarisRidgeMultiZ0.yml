@@ -4,8 +4,8 @@ meta:
   engineVersion: 290.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/20/2026 03:08:15
-  entityCount: 29390
+  time: 10/22/2026 06:46:59
+  entityCount: 29391
 maps:
 - 1
 grids:
@@ -57752,7 +57752,7 @@ entities:
         DoorStatus: True
     - type: Door
       state: Opening
-      secondsUntilStateChange: -103221.38
+      secondsUntilStateChange: -103630.766
   - uid: 133
     components:
     - type: MetaData
@@ -58248,7 +58248,7 @@ entities:
         DoorStatus: True
     - type: Door
       state: Opening
-      secondsUntilStateChange: -105300.81
+      secondsUntilStateChange: -105710.195
   - uid: 200
     components:
     - type: Transform
@@ -58260,7 +58260,7 @@ entities:
         DoorStatus: True
     - type: Door
       state: Opening
-      secondsUntilStateChange: -105301.84
+      secondsUntilStateChange: -105711.23
   - uid: 201
     components:
     - type: Transform
@@ -58293,7 +58293,7 @@ entities:
       pos: 127.5,-79.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -107744.484
+      secondsUntilStateChange: -108153.87
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -58365,7 +58365,7 @@ entities:
       pos: 77.5,-75.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -104305.84
+      secondsUntilStateChange: -104715.23
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -58386,7 +58386,7 @@ entities:
       pos: 80.5,-75.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -104305.55
+      secondsUntilStateChange: -104714.93
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -58491,7 +58491,7 @@ entities:
       pos: 63.5,-64.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -104601.516
+      secondsUntilStateChange: -105010.9
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -58888,7 +58888,7 @@ entities:
       pos: 68.5,-33.5
     - type: Door
       state: Opening
-      secondsUntilStateChange: -105783.98
+      secondsUntilStateChange: -106193.36
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64157,7 +64157,7 @@ entities:
       lastOpeningAt: 865.2991347
     - type: Door
       state: Opening
-      secondsUntilStateChange: -105834.08
+      secondsUntilStateChange: -106243.46
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64172,7 +64172,7 @@ entities:
       lastOpeningAt: 865.2991347
     - type: Door
       state: Opening
-      secondsUntilStateChange: -105834.08
+      secondsUntilStateChange: -106243.46
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64705,7 +64705,7 @@ entities:
       lastOpeningAt: 2393.0309403
     - type: Door
       state: Opening
-      secondsUntilStateChange: -104306.34
+      secondsUntilStateChange: -104715.73
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64721,7 +64721,7 @@ entities:
       lastOpeningAt: 2393.0309403
     - type: Door
       state: Opening
-      secondsUntilStateChange: -104306.34
+      secondsUntilStateChange: -104715.73
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64737,7 +64737,7 @@ entities:
       lastOpeningAt: 2078.4979215
     - type: Door
       state: Opening
-      secondsUntilStateChange: -104620.88
+      secondsUntilStateChange: -105030.266
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -64753,7 +64753,7 @@ entities:
       lastOpeningAt: 2078.4979215
     - type: Door
       state: Opening
-      secondsUntilStateChange: -104620.88
+      secondsUntilStateChange: -105030.266
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
@@ -74818,6 +74818,11 @@ entities:
     - type: YautjaRelayDestination
       id: cmu.solaris-ridge.ground.north
       displayName: Solaris Ridge North Ground Relay
+  - uid: 25055
+    components:
+    - type: Transform
+      parent: 1
+      pos: 80.5,-52.5
 - proto: CMVendorBooze
   entities:
   - uid: 2981
