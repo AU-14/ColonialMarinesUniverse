@@ -569,8 +569,8 @@
     #RegulationTape: 5
     #TapeRecorder: 3
     #ClueScanner: 3
-    #Camera: 8
-    #CameraFilm: 8
+    CMUPhotoCamera: 8 # CMU14
+    CMUCameraFilm: 8 # CMU14
     CMU14TearGasGrenade: 4
     RMCWhistle: 5
     RMCFoodDonut: 12

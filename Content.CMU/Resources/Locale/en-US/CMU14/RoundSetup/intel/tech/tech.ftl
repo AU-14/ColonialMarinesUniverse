@@ -3,13 +3,13 @@ ent-RMCTechTreeConsoleGovfor = govfor tech tree console
     .desc = A GovFor tech console used to make tech purchases for GovFor.
 ent-RMCTechTreeConsoleOpfor = opfor tech tree console
     .desc = An OpFor tech console used to make tech purchases for OpFor.
-ent-RMCTechTreeConsoleCLF = CLF tech tree console
-    .desc = A CLF tech console used to make tech purchases for CLF.
+ent-RMCTechTreeConsoleCLF = INSFOR tech tree console
+    .desc = An INSFOR tech console used to make tech purchases for INSFOR.
 
 ## Intel tree Localization
 ent-CMUIntelTechTree_GOVFOR = intel tech tree (GovFor)
 ent-CMUIntelTechTree_OPFOR = intel tech tree (OpFor)
-ent-CMUIntelTechTree_CLF = intel tech tree (CLF)
+ent-CMUIntelTechTree_CLF = intel tech tree (INSFOR)
 ent-CMUIntelTechTree_UA = intel tech tree (UA)
 
 ## Tech tiers
@@ -88,6 +88,8 @@ cmu-tech-clf-reinforcements = Insurgent Reinforcements
 cmu-tech-clf-reinforcements-desc = Summon reinforcements from a neighboring cell.
 cmu-tech-clf-machine-gunner = Machine Gunner
 cmu-tech-clf-machine-gunner-desc = Summon a machine gunner from a neighboring cell.
+cmu-tech-clf-jeep = Call HMG Jeep Crew
+cmu-tech-clf-jeep-desc = Summon two civilian CLF fighters and an HMG jeep aboard a dropship. Available twice, with ten minutes between call-ins.
 cmu-tech-clf-vaiso = Call VAISO read on WY
 cmu-tech-clf-vaiso-desc = Send intel on local WY facility to VAISO, summoning them for a raid. They are not hostile to CLF but not required to help directly!
 cmu-tech-clf-commandos = Call CLF Commandos

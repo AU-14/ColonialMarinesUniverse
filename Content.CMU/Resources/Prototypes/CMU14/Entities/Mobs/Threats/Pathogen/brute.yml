@@ -29,7 +29,6 @@
     - CMU14ActionXenoPathogenRest
     - CMU14ActionXenoPathogenWatch
     - CMU14ActionXenoPathogenPheromones
-    - CMU14ActionXenoPathogenTailStab
     - CMU14ActionXenoPathogenStomp
     - CMU14ActionXenoPathogenDefensiveShield
     - CMU14ActionXenoPathogenDislocate
@@ -43,8 +42,8 @@
     directionalAngle: 90
     paralyzeTime: 1
     slowTime: 2.5
-    knockBackDistance: 2
-    screenShakeStrength: 4
+    knockBackDistance: 4
+    screenShakeStrength: 7
     directionalTileEffect: RMCEffectXenoTelegraphRed
     damage:
       types:
@@ -88,21 +87,16 @@
     baseWalkSpeed: 2.5
     baseSprintSpeed: 4
   - type: MeleeWeapon
-    attackRate: 1.75 # fast attackrate, no delay
+    attackRate: 0.5 # slow attacks
     damage:
       types:
-        Blunt: 14
-        Slash: 14
-        Piercing: 14
-  - type: XenoTailStab
-    tailDamage:
-      types:
-        Blunt: 18
-        Slash: 18
-        Piercing: 18
+        Blunt: 75
+    soundHit:
+      collection: MetalThud 
+    animation: WeaponArcSmash
   - type: CMArmor
     explosionArmor: 50
-    xenoArmor: 27
+    xenoArmor: 20
   - type: XenoClaws
     clawType: VerySharp
   - type: Tackle

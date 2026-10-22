@@ -1,0 +1,124 @@
+# What every open vehicle shares: driving on the grid, fuel, crashes, damage, the lights switch, z levels
+# and how it goes up when wrecked. A vehicle adds its own key, sounds, parts, lamps, seats, art and slots.
+- type: entity
+  abstract: true
+  id: CMUOpenVehicleBase
+  components:
+  - type: RMCNightVisionVisible
+    priority: -2
+  - type: Vehicle
+    movementKind: Grid
+    transferDamage: false
+  - type: VehicleOperatorDamage
+  # The fuel tank, filled through the fuel door.
+  - type: CMUVehicleFuel
+  - type: Solution
+    id: fuel
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: WeldingFuel
+        Quantity: 45
+  # Dirt from driving, blood from wounded riders and anyone run down; space cleaner, soap or a wet
+  # mop takes it off, with the crayon. Reactive lets splashes reach it too.
+  - type: CMUVehicleGrime
+  - type: Reactive
+  - type: RMCIgnoreGhostInteractionLimits
+  - type: RequireProjectileTarget
+    alwaysHitWhitelist:
+      components: [XenoAcidProjectile, VehicleDamageMultiplier]
+  - type: GridVehicleMover
+    maxSpeed: 8
+    acceleration: 5
+    deceleration: 12
+    maxRotationSpeedDegrees: 120
+    alignmentAssistDegrees: 8
+    ignoreLightObstacleDamage: true
+    rotationAccelerationDegrees: 240
+    rotationDecelerationDegrees: 300
+    turnDelay: 0.25
+    pushCooldown: 2
+    xenoBlockMinimumSize: Xeno
+    xenoPushMinimumSize: Immobile
+    # Crashes as hard as RMC's van, a little gentler on the hull: CMUVehicleCrash below scales the
+    # hull damage with impact speed, from a third of it at wallSmashMinSpeed to all of it at maxSpeed.
+    canSmashWalls: true
+    wallSmashMinSpeed: 5
+    wallSmashWheelDamage: 0.8
+    wallSmashHullDamage: 30
+    wallSmashSlowdownMultiplier: 0.75
+    wallSmashSlowdownDuration: 0.25
+    mobCollisionHullDamage: 8
+    speedAtZeroIntegrity: 0.35
+    crashImmobileDuration: 8
+    crashImmobileMinSpeed: 7.25
+    mobCrashImmobileDuration: 4
+    mobCrashImmobileMinSpeed: 5
+    xenoMobCrashImmobileDuration: 8
+    xenoMobCrashImmobileMinSpeed: 5
+  - type: CMUVehicleCrash
+  - type: CMUVehicleTyres
+  - type: CMUVehicleCover
+  - type: VehicleOvercharge
+    speedMultiplier: 1.55
+    duration: 3
+    cooldown: 14
+    overchargeSound: /Audio/_RMC14/Vehicle/overdrive_activate.ogg
+  # The headlight switch. RMC's spotlight flag (F) follows it and lights the tail and marker lamps;
+  # the jeep itself has no light of its own, each beam is a child with a cone-shaped one.
+  - type: VehicleSpotlight
+    radius: 6
+    energy: 2.5
+    softness: 2
+  - type: Physics
+    bodyType: Dynamic
+  - type: CMUZPhysics
+  - type: CMUVehicleZTraversal
+  - type: CMUZLevelViewer
+  - type: Damageable
+    damageModifierSet: VehicleFrameHumvee
+  - type: Injurable
+    damageContainer: StructuralMarine
+  - type: InteractionOutline
+  - type: Corrodible
+    isCorrodible: false
+  - type: DoAfter
+  - type: UserInterface
+    interfaces:
+      enum.HardpointUiKey.Key:
+        type: HardpointBoundUserInterface
+      enum.VehicleWeaponsUiKey.Key:
+        type: VehicleWeaponsBoundUserInterface
+  - type: VehicleWeapons
+  - type: InputMover
+  - type: HardpointIntegrity
+    maxIntegrity: 400
+    integrity: 400
+  - type: HardpointState
+  - type: Appearance
+  # A tile round the jeep at most: what burns on after is its fire, creeping out slowly.
+  - type: Explosive
+    explosionType: RMC
+    totalIntensity: 20
+    intensitySlope: 4
+    maxIntensity: 8
+    maxTileBreak: 0
+    canCreateVacuum: false
+  - type: CMExplosionEffect
+  - type: RMCScorchEffect
+    radius: 2
+    centerRadius: 1
+
+# A burning vehicle's fire: lit on a tile or two under it, each tile catches the next one over every
+# 8 seconds, three tiles out at most, until it is put out.
+- type: entity
+  parent: RMCTileFire
+  id: CMUVehicleTileFire
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMUAllowFireSpread
+  - type: CMUSpreadingFire
+    depth: 3
+    spreadEvery: 8
+  - type: TileFire
+    id: CMUVehicleTileFire

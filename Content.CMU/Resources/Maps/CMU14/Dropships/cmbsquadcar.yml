@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 08/19/2025 04:45:58
-  entityCount: 52
+  entityCount: 57
 maps:
 - 1
 grids:
@@ -165,6 +165,35 @@ entities:
       parent: 1
     - type: Physics
       bodyType: Dynamic
+- proto: CMUAirFillerVent
+  entities:
+  - uid: 205
+    components:
+    - type: Transform
+      parent: 3
+      pos: 0.5,2.5
+- proto: RMCTinyFan
+  entities:
+  - uid: 201
+    components:
+    - type: Transform
+      parent: 3
+      pos: 2.5,-0.5
+  - uid: 202
+    components:
+    - type: Transform
+      parent: 3
+      pos: 2.5,0.5
+  - uid: 203
+    components:
+    - type: Transform
+      parent: 3
+      pos: -1.5,-0.5
+  - uid: 204
+    components:
+    - type: Transform
+      parent: 3
+      pos: -1.5,0.5
 - proto: dropshipshuttlevmarker
   entities:
   - uid: 41

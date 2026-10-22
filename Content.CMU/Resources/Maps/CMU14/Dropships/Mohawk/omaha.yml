@@ -6,7 +6,7 @@ meta:
   forkId: ''
   forkVersion: ''
   time: '2026-09-18T00:00:00'
-  entityCount: 333
+  entityCount: 343
 maps: []
 grids:
 - 1
@@ -159,6 +159,60 @@ entities:
     - type: ShipFaction
       faction: govfor
     - type: MohawkMechanisms
+- proto: CMUAirFillerVent
+  entities:
+  - uid: 910
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-4.5
+- proto: RMCTinyFan
+  entities:
+  - uid: 901
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,0.5
+  - uid: 902
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,1.5
+  - uid: 903
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,6.5
+  - uid: 904
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,1.5
+  - uid: 905
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,0.5
+  - uid: 906
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,0.5
+  - uid: 907
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,1.5
+  - uid: 908
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,0.5
+  - uid: 909
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,1.5
 - proto: WarpPoint
   entities:
   - uid: 2

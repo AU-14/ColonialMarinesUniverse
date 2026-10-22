@@ -24,6 +24,7 @@
     daycycleenabled: false
     thirdpartyinterval: 1800
     thirdparties:
+    - WYExecutivesSurv
     - DiplomaticAttachesSurv
     - ProdigySurvLarge
     - ProdigySurvMedium
