@@ -7,7 +7,7 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
-using Content.Shared.Gibbing;
+using Content.Shared.Gibbing; // CMU14
 using Content.Shared.Mobs.Systems;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Popups;
@@ -16,7 +16,7 @@ using Content.Shared.Whitelist;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
-using Robust.Shared.Prototypes;
+using Robust.Shared.Prototypes; // CMU14
 using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Projectiles;
@@ -271,6 +271,7 @@ public sealed partial class RMCProjectileSystem : EntitySystem
             }
         }
 
+        // CMU14 Begin: preserve non-gibbing damage on entities spawned by projectiles.
         ComponentRegistry? overrides = null;
         if (HasComp<NonGibbingDamageComponent>(ent))
         {
@@ -280,6 +281,7 @@ public sealed partial class RMCProjectileSystem : EntitySystem
             };
         }
         var spawn = SpawnAtPosition(ent.Comp.Spawn, coordinates, overrides);
+        // CMU14 End
         _hive.SetSameHive(ent.Owner, spawn);
 
         if (ent.Comp.Popup is { } popup)

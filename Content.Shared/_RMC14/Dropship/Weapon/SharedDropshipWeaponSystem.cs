@@ -1967,6 +1967,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
                     if (flight.Damage != null)
                     {
+                        // CMU14: CAS projectile payloads retain projectile damage attribution.
                         _damageables.Clear();
                         _entityLookup.GetEntitiesInRange(targetMap, 0.49f, _damageables, LookupFlags.Uncontained);
 
@@ -1991,6 +1992,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
                     if (flight.Fire != null)
                     {
                         var chain = _onCollide.SpawnChain();
+                        // CMU14: CAS fire damage must not gib impact targets.
                         EnsureComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(chain);
                         if (flight.Fire.Total is { } total)
                         {

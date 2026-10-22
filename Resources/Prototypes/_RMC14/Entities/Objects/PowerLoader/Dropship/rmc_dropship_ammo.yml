@@ -374,7 +374,7 @@
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoMiniRocket
-  id: RMCDropshipAttachmentAmmoRocketMiniMike
+  id: RMCDropshipAttachmentAmmoRocketMiniMike # CMU14
   name: AGR-59 'Mini-Mike'
   description: The AGR-59 'Mini-Mike' minirocket is a cheap and efficient means of putting hate down range. Though rockets lack a guidance package, it makes up for it in ammunition count. Can be loaded into the LAU-229 Rocket Pod.
   components:
@@ -394,7 +394,7 @@
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocketMiniMike
-  id: RMCDropshipAttachmentAmmoRocketMiniMikeIncendiary
+  id: RMCDropshipAttachmentAmmoRocketMiniMikeIncendiary # CMU14
   name: AGR-59-I 'Mini-Mike'
   description: The AGR-59-I 'Mini-Mike' incendiary minirocket is a cheap and efficient means of putting hate down range AND setting them on fire! Though rockets lack a guidance package, it makes up for it in ammunition count. Can be loaded into the LAU-229 Rocket Pod.
   components:
@@ -414,7 +414,7 @@
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocketMiniMike
-  id: RMCDropshipAttachmentAmmoRocketMiniMikeHEAT
+  id: RMCDropshipAttachmentAmmoRocketMiniMikeHEAT # CMU14
   name: AGR-59-H 'Mini-Mike'
   description: The AGR-59-H 'Mini-Mike' HEAT minirocket is a cheap and efficient means of putting hate down range AND piercing through hard objects! Though rockets lack a guidance package, it makes up for it in ammunition count. Can be loaded into the LAU-229 Rocket Pod.
   components:
@@ -441,7 +441,7 @@
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocketMiniMike
-  id: RMCDropshipAttachmentAmmoRocketMiniMikeThermobaric
+  id: RMCDropshipAttachmentAmmoRocketMiniMikeThermobaric # CMU14
   name: AGR-59-P 'Mini-Mike'
   description: The AGR-59-P 'Mini-Mike' pressure minirocket is a cheap and efficient means of putting hate down range AND pulling in enemies! Though rockets lack a guidance package, it makes up for it in ammunition count. Can be loaded into the LAU-229 Rocket Pod.
   components:
@@ -463,7 +463,7 @@
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocketMiniMike
-  id: RMCDropshipAttachmentAmmoRocketMiniMikeFlare
+  id: RMCDropshipAttachmentAmmoRocketMiniMikeFlare # CMU14
   name: AGR-59-F 'Mini-Mike'
   description: The AGR-59-F 'Mini-Mike' flare minirocket is a cheap and efficient means of lighting up an area! Though rockets lack a guidance package, it makes up for it in ammunition count. Can be loaded into the LAU-229 Rocket Pod.
   components:
@@ -486,7 +486,7 @@
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocketMiniMike
-  id: RMCDropshipAttachmentAmmoRocketMiniMikeSmoke
+  id: RMCDropshipAttachmentAmmoRocketMiniMikeSmoke # CMU14
   name: AGR-59-WP 'Mini-Mike'
   description: The AGR-59-WP 'Mini-Mike' white-phosphorus smoke minirocket is a cheap and efficient means of creating smoke screens, although it burns as a side effect! Though rockets lack a guidance package, it makes up for it in ammunition count. Can be loaded into the LAU-229 Rocket Pod.
   components:
@@ -496,7 +496,7 @@
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
   - type: DropshipAmmo
     ammoType: minirocket_smk
-    travelTime: 2
+    travelTime: 4
     explosion:
       total: 1
       slope: 1
@@ -514,7 +514,7 @@
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocketMiniMike
-  id: RMCDropshipAttachmentAmmoRocketMiniMikeClusterIncendiary
+  id: RMCDropshipAttachmentAmmoRocketMiniMikeClusterIncendiary # CMU14
   name: AGR-59-CI 'Mini-Mike'
   description: The AGR-59-CI 'Mini-Mike' cluster incendiary minirocket is a cheap and efficient means of putting hate down range multiple times AND setting them on fire! It releases 6 mini-rockets per shot. Though rockets lack a guidance package, it makes up for it in ammunition count. Can be loaded into the LAU-229 Rocket Pod.
   components:
@@ -545,7 +545,7 @@
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocketMiniMike
-  id: RMCDropshipAttachmentAmmoRocketMiniMikeWeedKiller
+  id: RMCDropshipAttachmentAmmoRocketMiniMikeWeedKiller # CMU14
   name: AGR-59-WK 'Mini-Mike'
   description: The AGR-59-WK 'Mini-Mike' weed killer minirocket is a cheap and efficient means of deploying weed killer over an overgrown area! Though rockets lack a guidance package, it makes up for it in ammunition count. Can be loaded into the LAU-229 Rocket Pod.
   components:

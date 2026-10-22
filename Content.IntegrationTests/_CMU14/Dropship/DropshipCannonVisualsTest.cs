@@ -274,8 +274,9 @@ public sealed class DropshipCannonVisualsTest : GameTest
     [TestCase(FTLState.Starting, false)]
     [TestCase(FTLState.Travelling, false)]
     [TestCase(FTLState.Arriving, false)]
+    [TestCase(FTLState.Available, false)]
     [TestCase(FTLState.Available, true)]
-    public async Task HandLoadingRejectsFlightAndRechecksAtCompletion(FTLState state, bool takeOffDuringLoad)
+    public async Task HandLoadingAllowsInteriorWeaponPointsInFlightAndRechecksAtCompletion(FTLState state, bool takeoffDuringLoad)
     {
         var map = await Pair.CreateTestMap();
         ContainerSlot slot = default!;
@@ -297,11 +298,16 @@ public sealed class DropshipCannonVisualsTest : GameTest
             SEntMan.EventBus.RaiseLocalEvent(point, interaction);
             Assert.That(interaction.Handled, Is.True);
             Assert.That(slot.ContainedEntity, Is.Null);
-            if (takeOffDuringLoad)
-                ship.State = FTLState.Travelling;
+            if (takeoffDuringLoad)
+                ship.State = FTLState.Starting;
         });
         await Pair.RunSeconds(4);
-        await Server.WaitAssertion(() => Assert.That(slot.ContainedEntity, Is.Null));
+        await Server.WaitAssertion(() =>
+        {
+            var expectedToLoad = state is FTLState.Travelling or FTLState.Arriving ||
+                                 state == FTLState.Available && !takeoffDuringLoad;
+            Assert.That(slot.ContainedEntity != null, Is.EqualTo(expectedToLoad));
+        });
     }
 
     [Test]
