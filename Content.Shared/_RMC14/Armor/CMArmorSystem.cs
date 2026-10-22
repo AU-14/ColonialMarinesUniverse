@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Medical.Surgery.Steps;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Slowing;
+using Content.Shared._RMC14.Xenonids.ClawSharpness; // cmu14 
 using Content.Shared.Alert;
 using Content.Shared.Armor;
 using Content.Shared.Body.Part;
