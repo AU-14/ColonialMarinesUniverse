@@ -184,17 +184,17 @@
       - cost: 1800
         crate: CMUCrateBoxKramerColony
       - cost: 1300
-        crate: CMUCrateBoxMod88Colony
+        crate: AU14CrateBoxMod88
       - cost: 1250
         crate: AU14CrateBoxRevolverM2019
       - cost: 1400
         crate: AU14CrateBoxRSH9
       - cost: 1200
-        crate: CMUCrateBoxHuntingRifleColony
+        crate: AU14CrateBoxHuntingRifleCrate
       - cost: 950
         crate: CMUCrateBoxTPR9Colony
       - cost: 950
-        crate: CMUCrateBoxM4A3Colony
+        crate: AU14CrateBoxM4A3
       - cost: 1000
         crate: CMUCrateBoxGlock75Colony
       - cost: 1000
@@ -204,7 +204,7 @@
       - cost: 800
         crate: AU14CrateBoxM44
       - cost: 1300
-        crate: CMUCrateBoxABR40Colony
+        crate: AU14CrateBoxHuntingRifleABRCrate
       - cost: 353
         crate: AU14CrateBoxD18
       - cost: 330
@@ -230,15 +230,15 @@
       - cost: 400
         crate: AU14CrateBox357
       - cost: 400
-        crate: CMUCrateBoxMod88ColonyMagazines
+        crate: AU14CrateBoxMod88Mags
       - cost: 400
         crate: AU14CrateBoxRSH9SL
       - cost: 400
-        crate: CMUCrateBoxBasiraColonyMagazines
+        crate: AU14CrateBoxBasiraMagazines
       - cost: 433
         crate: AU14CrateBoxShotgunShells
       - cost: 333
-        crate: CMUCrateBoxM4A3ColonyMagazines
+        crate: AU14CrateBoxTPR23BMag
       - cost: 333
         crate: CMUCrateBoxGlock75ColonyMagazines
       - cost: 350
@@ -248,7 +248,7 @@
       - cost: 350
         crate: AU14CrateBoxD18Magazines
       - cost: 355
-        crate: CMUCrateBoxABR40ColonyMagazines
+        crate: AU14CrateBoxABR40Magazines
       - cost: 300
         crate: CMUCrateBoxNailgunMagazines
     - name: Vehicle Ammo
