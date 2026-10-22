@@ -240,13 +240,16 @@ public sealed partial class CMArmorSystem : EntitySystem
 
         using (args.PushGroup(nameof(CMArmorSystem), -10))
         {
+            TryComp<XenoClawsComponent>(ent, out var claws); // CMU14 test
+
+            
             var armorRatings = new[]
             {
                 ("rmc-examine-armor-xeno", ent.Comp.XenoArmor),
                 ("rmc-examine-armor-xeno-frontal", ent.Comp.FrontalArmor),
                 ("rmc-examine-armor-xeno-side", ent.Comp.SideArmor),
                 ("rmc-examine-armor-xeno-explosion", ent.Comp.ExplosionArmor),
-                ("rmc-examine-armor-xeno-peircing", ent.Comp.ArmorPiercing), // CMU14 AP displayed on examine, test
+                ("rmc-examine-armor-xeno-peircing", claws?ArmorPiercing ?? 0), // CMU14 AP displayed on examine, test
             };
 
             var examine = new StringBuilder();
