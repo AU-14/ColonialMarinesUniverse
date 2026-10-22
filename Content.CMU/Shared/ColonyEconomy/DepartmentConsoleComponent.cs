@@ -43,6 +43,10 @@ public sealed partial class DepartmentConsoleComponent : Component
     [DataField("asrsFaction")]
     public string AsrsFaction = "colony";
 
+    /// <summary>Small supplies dispensed at this console and paid from the department budget.</summary>
+    [DataField]
+    public List<DepartmentSupplyEntry> Supplies = new();
+
     /// <summary>
     ///     Budget for this department, filled via budget console transfers or cash insertion.
     /// </summary>

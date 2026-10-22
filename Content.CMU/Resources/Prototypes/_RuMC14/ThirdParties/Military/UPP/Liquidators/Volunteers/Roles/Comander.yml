@@ -125,13 +125,12 @@
     head: RMCHardhatOrange
     belt: AU14BeltUtilityFilled
     pocket1: AU14PouchIFAKFill
-    pocket2: AU14PouchIFAKFill
+    # Two hands carry the spare tanks, so the CBRN kit rides in a pocket.
+    pocket2: AU14CBRNKitUPP
     back: RMCBackpackBroilerUPP
     ears: RuMCHeadsetLiquidator
     suitstorage: RMCWeaponFlamerSpecUPP
   inhand:
-    - AU14CBRNKitUPP
-    - RuMCTankFlamerRLargeUPP
     - RuMCTankFlamerRLargeUPP
 
 - type: jobIcon

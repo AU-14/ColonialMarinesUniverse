@@ -153,8 +153,11 @@ public sealed partial class CMUZLevelsSystem
         {
             var uid = _pendingProbeViewers.Dequeue();
             _queuedProbeViewers.Remove(uid);
+            // Paused viewers are skipped, except ones someone is looking through: a mapper's ghost sits on a paused
+            // map, and still needs the floors below sent to see them.
             if (TerminatingOrDeleted(uid) || !TryComp(uid, out CMUZLevelViewerComponent? viewer) ||
-                !TryComp(uid, out TransformComponent? xform) || MetaData(uid).EntityPaused) continue;
+                !TryComp(uid, out TransformComponent? xform) ||
+                MetaData(uid).EntityPaused && !HasViewerProbeSubscribers(uid)) continue;
             viewers++;
             SyncViewerProbes((uid, viewer), xform);
             probeEyes += UpdateProbeEyes(uid, viewer, _transform.GetWorldPosition(xform), GetViewerProbeOffset(uid));

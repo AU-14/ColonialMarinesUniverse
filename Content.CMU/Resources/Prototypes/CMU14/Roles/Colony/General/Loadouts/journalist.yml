@@ -27,5 +27,7 @@
   storage:
     back:
     - RMCCorrespondentMicrophone
+    - CMUPhotoCamera
+    - CMUCameraFilm
   inhand:
   - RMCCameraBroadcasting

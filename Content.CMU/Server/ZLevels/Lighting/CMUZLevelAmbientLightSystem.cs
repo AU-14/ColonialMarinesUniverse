@@ -1,6 +1,9 @@
+using System.Linq;
 using Content.Shared._NC14.DayNightCycle;
 using Content.Shared._RMC14.Light;
+using Content.Shared._RMC14.Rules;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.ZLevels.Lighting;
 
@@ -8,13 +11,65 @@ namespace Content.Server.CMU14.ZLevels.Lighting;
 /// Keeps loaded game-map floors on one sky instead of allowing serialized
 /// per-floor day/night cycles to diverge from the ground map.
 /// </summary>
-public sealed class CMUZLevelAmbientLightSystem : EntitySystem
+public sealed partial class CMUZLevelAmbientLightSystem : EntitySystem
 {
+    [Dependency] private IPrototypeManager _prototypes = default!;
+
     public override void Initialize()
     {
         base.Initialize();
         UpdatesAfter.Add(typeof(DayNightCycleSystem));
         UpdatesAfter.Add(typeof(RMCAmbientLightSystem));
+    }
+
+    /// <summary>
+    ///     Sets the ground map's sky from its planet's <c>daycycleenabled</c> flag, so every floor that follows it cycles
+    ///     (or doesn't) together. Map saves often keep the cycle on an upper or lower floor instead of the ground; its
+    ///     timings are moved to the ground. Maps that aren't a planet keep whatever lighting they were saved with.
+    /// </summary>
+    public void ApplyPlanetDayCycle(EntityUid ground, string gameMapId, IEnumerable<EntityUid> floors)
+    {
+        if (GetPlanet(gameMapId) is not { } planet)
+            return;
+
+        if (!planet.DaycycleEnabled)
+        {
+            RemComp<DayNightCycleComponent>(ground);
+            return;
+        }
+
+        EnsureComp<MapLightComponent>(ground);
+        if (HasComp<DayNightCycleComponent>(ground))
+            return;
+
+        var saved = floors
+            .Where(floor => floor != ground)
+            .Select(floor => CompOrNull<DayNightCycleComponent>(floor))
+            .FirstOrDefault(cycle => cycle != null);
+
+        var cycle = new DayNightCycleComponent();
+        if (saved != null)
+        {
+            cycle.CycleDurationMinutes = saved.CycleDurationMinutes;
+            cycle.TimeEntries = saved.TimeEntries.ToList();
+        }
+
+        AddComp(ground, cycle);
+    }
+
+    private RMCPlanetMapPrototypeComponent? GetPlanet(string gameMapId)
+    {
+        foreach (var proto in _prototypes.EnumeratePrototypes<EntityPrototype>())
+        {
+            if (!proto.Abstract &&
+                proto.TryComp(out RMCPlanetMapPrototypeComponent? planet, EntityManager.ComponentFactory) &&
+                planet.MapId == gameMapId)
+            {
+                return planet;
+            }
+        }
+
+        return null;
     }
 
     public void FollowMap(EntityUid map, EntityUid source)

@@ -558,3 +558,52 @@
   id: CMUMohawkMidway
   name: cmu-mohawk-camera-midway
   configurable: true
+
+# The Omaha's weapons rack. It starts empty; click it with a weapon or ammo to rack it, or empty-handed to open it.
+# Every item takes one slot, whatever its size.
+- type: entity
+  abstract: true
+  parent: RMCGunRackBase
+  id: CMUMohawkWeaponsRack
+  name: dropship weapons rack
+  description: A rack bolted into the dropship's hull for stowing weapons and ammunition.
+  components:
+  - type: Transform
+    anchored: true
+  # The gun rack's fixed slots would catch the clicks before the storage does; this rack is bolted down.
+  - type: RemoveComponents
+    components:
+    - type: ItemSlots
+    - type: CMItemSlots
+    - type: Pullable
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,19,7 # 40 slots
+    whitelist:
+      components:
+      - Gun
+      - BallisticAmmoProvider
+      - CartridgeAmmo
+      - BulletBox
+      tags:
+      - RMCAmmoBox
+      - RMCBoxShotgunShells
+  - type: FixedItemSizeStorage
+  - type: IgnoreContentsSize
+    items:
+      components:
+      - Gun
+      - BallisticAmmoProvider
+      - CartridgeAmmo
+      - BulletBox
+      tags:
+      - RMCAmmoBox
+      - RMCBoxShotgunShells

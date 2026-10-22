@@ -264,7 +264,7 @@ public sealed partial class ChatSystem
 
     private void SendDeadChat(EntityUid source, ICommonSession player, string message, bool hideChat)
     {
-        if (!_adminManager.IsAdmin(player) && !_deadChatEnabled)
+        if (!_adminManager.HasAdminFlag(player, Content.Shared.Administration.AdminFlags.GhostSenses) && !_deadChatEnabled) // cmu edit
             return;
 
         if (_rmcChatBans.IsChatBanned(player.UserId, ChatType.Dead))

@@ -33,7 +33,7 @@
     - TacticalSignLanguage
     currentLanguage: Russian
     defaultLanguage: Russian
-  name: cmu-uppline-name-synthetic
+  name: cmu-job-title-uppline-synthetic
   description: cmu-uppline-description-synthetic
   playTimeTracker: CMUJobUPPLineSynthetic
   ranks:
