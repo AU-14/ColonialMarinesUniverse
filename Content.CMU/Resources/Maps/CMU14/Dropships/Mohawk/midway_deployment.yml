@@ -6,7 +6,7 @@ meta:
   forkId: ''
   forkVersion: ''
   time: '2026-09-18T00:00:00'
-  entityCount: 289
+  entityCount: 297
 maps:
 - 288
 grids:
@@ -160,6 +160,50 @@ entities:
     - type: MohawkMechanisms
       rampPreviewFullDeck: true
       keepRampThreshold: true
+- proto: CMUAirFillerVent
+  entities:
+  - uid: 908
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-4.5
+- proto: RMCTinyFan
+  entities:
+  - uid: 901
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,0.5
+  - uid: 902
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,6.5
+  - uid: 903
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,0.5
+  - uid: 904
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,0.5
+  - uid: 905
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,1.5
+  - uid: 906
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,0.5
+  - uid: 907
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,1.5
 - proto: WarpPoint
   entities:
   - uid: 2

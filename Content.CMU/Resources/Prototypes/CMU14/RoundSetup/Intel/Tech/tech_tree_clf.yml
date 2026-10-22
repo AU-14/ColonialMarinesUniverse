@@ -1,7 +1,7 @@
 - type: entity
   parent: RMCIntelTechTree
   id: CMUIntelTechTree_CLF
-  name: intel tech tree (CLF)
+  name: intel tech tree (INSFOR)
   categories: [ HideSpawnMenu ]
   components:
   - type: IntelTechTree
@@ -53,6 +53,18 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
+        - name: cmu-tech-clf-jeep
+          description: cmu-tech-clf-jeep-desc
+          cost: 35
+          repurchasable: true
+          maxPurchases: 2
+          purchaseCooldown: 600
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMUCLFJeepReinforcements
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: humvee
         - name: cmu-tech-clf-vaiso
           description: cmu-tech-clf-vaiso-desc
           cost: 40

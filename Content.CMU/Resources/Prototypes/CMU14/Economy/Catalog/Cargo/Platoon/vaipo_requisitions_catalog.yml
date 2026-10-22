@@ -1,7 +1,7 @@
 - type: entity
   abstract: false
   id: VAIPOCargoCatalog
-  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies, CMUASRSManpad, CMUASRSAntiArmor ]
+  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies, CMUASRSManpad, CMUASRSAntiArmor, CMUASRSJeepKits ]
   components:
   - type: RequisitionsComputer
     categories:
@@ -161,6 +161,8 @@
         crate: RMCCrateGearParachute
       - cost: 800
         crate: RMCCrateAttachmentSmartScope
+      - cost: 2500
+        crate: CMUCrateAttachmentNightVisionScope
     - name: Pouches
       entries:
       - cost: 150

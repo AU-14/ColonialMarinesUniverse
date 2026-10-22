@@ -228,6 +228,10 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 if (TryComp(other, out VehicleRideSurfaceRiderComponent? rider) && rider.Vehicle == uid)
                     continue;
 
+                // CMU14: crew strapped into an open vehicle hang off it and sit inside its hull.
+                if (CMUIsAboard(other, uid))
+                    continue;
+
                 if (ignoredEntities != null && ignoredEntities.Contains(other))
                     continue;
 
@@ -790,7 +794,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         var selfDamageMult = HasPlowInstalled(vehicle) ? mover.WallSmashPlowDamageMultiplier : 1f;
         var hull = mover.MobCollisionHullDamage * selfDamageMult;
         if (hull > 0f)
-            _hardpoints.DamageVehicleHull(vehicle, hull);
+            CMUDamageCrashHull(vehicle, hull); // CMU14
     }
 
     /// <summary>
@@ -836,10 +840,12 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             !_collisionDamageContacts.TryStart(vehicle, target, vehicleBounds, targetBounds))
             return false;
 
+        CMUScaleCrash(vehicle, mover, ref wheelDamage, ref hullDamage); // CMU14: crash damage scales with impact speed
         if (wheelDamage > 0f)
             _wheels.DamageWheels(vehicle, wheelDamage);
         if (hullDamage > 0f)
-            _hardpoints.DamageVehicleHull(vehicle, hullDamage);
+            CMUDamageCrashHull(vehicle, hullDamage); // CMU14
+        CMUOnCrashed(vehicle, mover, target, hullDamage); // CMU14: crash dents, knockouts and lamps
         return true;
     }
 

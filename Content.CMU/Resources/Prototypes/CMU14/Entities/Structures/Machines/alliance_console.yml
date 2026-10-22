@@ -52,9 +52,9 @@
 - type: entity
   parent: AU14AllianceConsoleBase
   id: AU14AllianceConsoleCLF
-  name: alliance console (CLF)
-  suffix: CLF
-  description: A CLF command terminal for managing diplomatic standing with third-party factions.
+  name: alliance console (INSFOR)
+  suffix: INSFOR
+  description: An INSFOR command terminal for managing diplomatic standing with third-party factions.
   components:
   - type: AllianceConsole
     faction: clf
