@@ -23,6 +23,7 @@ public sealed partial class RMCPlanetSystem : EntitySystem
 {
     [Dependency] private IComponentFactory _compFactory = default!;
     [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private SharedMapSystem _maps = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private ISharedPlayerManager _player = default!;
@@ -146,7 +147,11 @@ public sealed partial class RMCPlanetSystem : EntitySystem
 
     public bool IsOnPlanet(MapCoordinates coordinates)
     {
-        return IsOnPlanet(_transform.ToCoordinates(coordinates));
+        // CMU14 Begin
+        return IsOnPlanet(_maps.TryFindGridAt(coordinates, out var grid, out _)
+            ? _transform.ToCoordinates(grid, coordinates)
+            : _transform.ToCoordinates(coordinates));
+        // CMU14 End
     }
 
     // CMU14: endgame cleanup includes underground and elevated planet levels.
@@ -183,7 +188,11 @@ public sealed partial class RMCPlanetSystem : EntitySystem
         if (TryGetPlanetSurfaceCoordinates(coordinates, out var surfaceCoordinates))
             coordinates = surfaceCoordinates;
 
-        var entCoords = _transform.ToCoordinates(coordinates);
+        // CMU14 Begin
+        var entCoords = _maps.TryFindGridAt(coordinates, out var grid, out _)
+            ? _transform.ToCoordinates(grid, coordinates)
+            : _transform.ToCoordinates(coordinates);
+        // CMU14 End
         if (_transform.GetGrid(entCoords) is { } gridId &&
             TryComp(gridId, out RMCPlanetComponent? gridPlanet))
         {
@@ -202,12 +211,17 @@ public sealed partial class RMCPlanetSystem : EntitySystem
         return false;
     }
 
-    public bool TryPlanetToCoordinates(Vector2i coordinates, out MapCoordinates mapCoordinates)
+    // CMU14: allow aircraft reports to resolve the offset on their specific target map.
+    public bool TryPlanetToCoordinates(Vector2i coordinates, out MapCoordinates mapCoordinates, MapId? targetMap = null)
     {
         var planets = EntityQueryEnumerator<RMCPlanetComponent>();
         while (planets.MoveNext(out var uid, out var comp))
         {
             var mapId = _transform.GetMapId(uid);
+            // CMU14 Begin
+            if (targetMap != null && mapId != targetMap)
+                continue;
+            // CMU14 End
             mapCoordinates = new MapCoordinates(coordinates - comp.Offset, mapId);
             return true;
         }

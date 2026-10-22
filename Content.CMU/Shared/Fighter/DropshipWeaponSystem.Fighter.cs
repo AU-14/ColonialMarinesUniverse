@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared.CMU14.Fighter;
+using Content.Shared.CMU14.Guidance;
 using Content.Shared.Database;
 using Robust.Shared.Spawners;
 using Robust.Shared.Map;
@@ -14,6 +15,15 @@ public abstract partial class SharedDropshipWeaponSystem
         EntityCoordinates coordinates, EntityUid actor, TimeSpan? strikeTravelTime = null,
         FighterWeaponKind kind = FighterWeaponKind.Missile, Vector2 aircraftPosition = default)
     {
+        var guidance = EntityManager.System<CMUGuidanceSystem>();
+        if (guidance.UsesGps(ammo))
+        {
+            if (!guidance.TryGetGps(ammo, out coordinates))
+                return false;
+        }
+        else if (point.Comp.Aircraft is { } aircraft && !guidance.CanDetect(aircraft, coordinates.EntityId))
+            return false;
+
         if (_net.IsClient || !coordinates.IsValid(EntityManager) || !_area.CanCAS(coordinates) ||
             point.Comp.Ammo != ammo.Owner || ammo.Comp.RoundsPerShot <= 0 || ammo.Comp.Rounds < ammo.Comp.RoundsPerShot)
             return false;

@@ -3,6 +3,7 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using Content.Shared.CMU14.Dropship.AttachmentPoint;
 using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
+using Content.Shared.CMU14.Guidance; // CMU14
 using Content.Shared.Buckle.Components; // CMU14
 using Content.Shared.CMU14.ZLevels.Ordnance;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
@@ -208,6 +209,11 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
     private void SetTarget(Entity<DropshipTerminalWeaponsComponent> dropshipWeaponsTerminal, EntityUid? newTarget)
     {
+        // CMU14: mismatched laser signals cannot be selected through any targeting path.
+        if (newTarget is { } candidate &&
+            !EntityManager.System<CMUGuidanceSystem>().CanDetect(dropshipWeaponsTerminal, candidate))
+            return;
+
         if (newTarget == dropshipWeaponsTerminal.Comp.Target)
             return;
 
@@ -344,6 +350,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
         while (targetsQuery.MoveNext(out var uid, out var target))
         {
+            if (!EntityManager.System<CMUGuidanceSystem>().CanDetect(ent, uid)) // CMU14
+                continue;
             // If the target was created by a faction-specific laser, only add it for consoles of the same faction
             var creatorFaction = string.IsNullOrWhiteSpace(target.CreatorFaction) ? null : target.CreatorFaction;
             if (!string.IsNullOrEmpty(creatorFaction) && !string.IsNullOrEmpty(consoleFaction) &&
@@ -383,6 +391,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         var terminals = EntityQueryEnumerator<DropshipTerminalWeaponsComponent>();
         while (terminals.MoveNext(out var uid, out var terminal))
         {
+            if (!EntityManager.System<CMUGuidanceSystem>().CanDetect(uid, ent)) // CMU14
+                continue;
             // Per-terminal faction check
             string? consoleFaction = null;
             if (TryComp(uid, out WhitelistedShuttleComponent? whitelist))
@@ -709,6 +719,15 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return;
         }
 
+        // CMU14: GPS rounds use their own programmed target, not the console's mark.
+        if (TryGetWeaponAmmo((weapon.Value, weaponComp), out var programmedAmmo) &&
+            EntityManager.System<CMUGuidanceSystem>().UsesGps(programmedAmmo))
+        {
+            TryFireWeapon(weapon.Value, default, DropshipWeaponStrikeType.Direct, actor,
+                terminalComp: ent.Comp, weaponComp: weaponComp);
+            return;
+        }
+
         if (ent.Comp.Target is not { } target)
             return;
 
@@ -878,7 +897,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
     private void OnWeaponsTargetsSelect(Entity<DropshipTerminalWeaponsComponent> ent, ref DropshipTerminalWeaponsTargetsSelectMsg args)
     {
         if (!TryGetEntity(args.Target, out var target) ||
-            !HasComp<DropshipTargetComponent>(target))
+            !HasComp<DropshipTargetComponent>(target) ||
+            !EntityManager.System<CMUGuidanceSystem>().CanDetect(ent, target.Value)) // CMU14
         {
             RefreshWeaponsUI(ent);
             return;
@@ -1389,6 +1409,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
     private void UpdateTarget(Entity<DropshipTerminalWeaponsComponent> ent, EntityUid target)
     {
+        if (!EntityManager.System<CMUGuidanceSystem>().CanDetect(ent, target)) // CMU14
+            return;
         if (ent.Comp.Target == target)
         {
             if (EnsureTargetEye(ent, ent.Comp.Target) is { } currentTargetEye)
@@ -1412,6 +1434,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
     public bool TryUpdateCameraTarget(EntityUid terminal, EntityUid target, bool force = false, DropshipTerminalWeaponsComponent? terminalComp = null)
     {
+        if (!EntityManager.System<CMUGuidanceSystem>().CanDetect(terminal, target)) // CMU14
+            return false;
         if (!Resolve(terminal, ref terminalComp, false))
             return false;
 
@@ -2698,6 +2722,28 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         if (!Resolve(weapon, ref weaponComp, false))
             return false;
 
+        // CMU14: resolve guidance before clearance, safety checks or ammunition consumption.
+        var guidance = EntityManager.System<CMUGuidanceSystem>();
+        var gpsGuided = TryGetWeaponAmmo((weapon, weaponComp), out var guidedAmmo) && guidance.UsesGps(guidedAmmo);
+        if (gpsGuided)
+        {
+            if (!guidance.TryGetGps(guidedAmmo, out targetCoordinates))
+            {
+                if (actor is { } operatorUid)
+                    _popup.PopupEntity(Loc.GetString("cmu-guidance-no-gps"), weapon, operatorUid);
+                return false;
+            }
+        }
+        else if ((terminalComp?.Target is { } laserTarget && !guidance.CanDetect(dropship, laserTarget)) ||
+                 !guidance.CanDetect(dropship, targetCoordinates.EntityId))
+        {
+            if (actor is { } operatorUid)
+                _popup.PopupEntity(Loc.GetString("cmu-guidance-code-mismatch"), weapon, operatorUid);
+            return false;
+        }
+        if (gpsGuided && !CasDebug && !CanFireAtCoordinate(targetCoordinates, guidedAmmo.Comp.ZLevelPenetration))
+            return false;
+
         // CMU14 Begin: fixed chin weapons require their dedicated gunnery station.
         if (weaponComp.GunneryOnly && terminalComp?.Gunnery != true)
         {
@@ -2807,6 +2853,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
     public bool TrySetCameraTarget(EntityUid terminal, EntityUid? newTarget, DropshipTerminalWeaponsComponent? terminalComp = null)
     {
+        if (newTarget is { } candidate && !EntityManager.System<CMUGuidanceSystem>().CanDetect(terminal, candidate)) // CMU14
+            return false;
         if (!Resolve(terminal, ref terminalComp, false))
             return false;
 
