@@ -45,7 +45,7 @@
         maxScatterModifier: 13
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 4
+        shotsToMaxScatter: 6
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.35
     accuracyMultiplierUnwielded: 0.65
@@ -66,6 +66,7 @@
           - CMUMagazineRifleM16AP
           - RMCMagazineRifleM16
           - CMUMagazineRifleM16Extended
+
   - type: GunDamageModifier
     multiplier: 1.3
   - type: AttachableHolder
@@ -143,31 +144,119 @@
 
 - type: entity
   parent: AU14WeaponRifleM16A1
+  id: AU14WeaponRifleM16A1Tac
+  suffix: Filled, Tactical
+  components:
+  - type: AttachableHolder
+    randomAttachmentChance: 0.25
+    slots:
+      rmc-aslot-barrel:
+        startingAttachable: RMCAttachmentSuppressor
+        whitelist:
+          tags:
+          - RMCM5Bayonet
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS5MicroRedDotSight
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentVerticalGrip
+        whitelist:
+          tags:
+          - RMCAttachmentLaserSight
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentExtinguisher
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineRifleM16Extended
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMUMagazineRifleM16APExt
+          - CMUMagazineRifleM16AP
+          - RMCMagazineRifleM16
+          - CMUMagazineRifleM16Extended
+
+
+- type: entity
+  parent: AU14WeaponRifleM16A1
   id: AU14WeaponRifleAR10
   name: AR10 rifle
-  description: An old, reliable design. Something like this belongs in a museum of war history. It is chambered in 5.56x45mm.
+  description: Predecessor of the M16. Chambered in 7.62x51mm, it lost the 1950s U.S. Army service rifle trials, largely due to Army preference for conventional construction.
   components:
   - type: Sprite
-    sprite: CMU14/Weapons/Guns/Civilian/auar1064x32.rsi
+    sprite: CMU14/Weapons/Guns/Civilian/auar1048x32.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
-    - state: mag-2
+    - state: mag-0
       map: ["enum.GunVisualLayers.Mag"]
   - type: Item
     sprite: CMU14/Weapons/Guns/Civilian/auar1032x32.rsi
     size: Large
   - type: Clothing
     sprite: CMU14/Weapons/Guns/Civilian/auar1032x32.rsi
-  - type: Gun
-    selectedMode: SemiAuto
-    availableModes:
-    - SemiAuto
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
-
-
+    - FullAuto
+    recoilUnwielded: 5
+    scatterWielded: 6
+    scatterUnwielded: 20
+    baseFireRate: 3
+    burstScatterMult: 2
+    modifiers:
+      FullAuto:
+        fireDelay: 0
+        maxScatterModifier: 15
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 4
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.35
+    accuracyMultiplierUnwielded: 0.65
+  - type: AttachableHolder
+    randomAttachmentChance: 0.25
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentMagneticHarness
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.83, 0.001
+      rmc-aslot-rail: -0.125, 0.12
+  - type: GunDamageModifier
+    multiplier: 1.4
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineRifleAR10
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMUMagazineRifleAR10
+          - RMCMagazineRifleAR10
+          
 - type: entity
   parent: CMMagazineRifleBase
   id: CMUMagazineRifleM16Extended
@@ -197,112 +286,10 @@
     bulletType: CMUBoxBulletsRifle556x45MM
 
 - type: entity
-  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
-  id: AU14WeaponRifleM16A1Tac # TODO: Make the M16 grenadier rifle when impact nades exist
-  name: M16A1 rifle
-  description: An old, reliable design first adopted by the U.S. military in the 1960s. Something like this belongs in a museum of war history. It is chambered in 5.56x45mm.
-  suffix: Filled
-  components:
-  - type: Sprite
-    sprite: CMU14/Weapons/Guns/Civilian/aum1648x32.rsi
-    layers:
-    - state: base
-      map: ["enum.GunVisualLayers.Base"]
-    - state: mag-0
-      map: ["enum.GunVisualLayers.Mag"]
-  - type: Item
-    sprite: CMU14/Weapons/Guns/Civilian/aum1632x32.rsi
-    size: Large
-  - type: Clothing
-    sprite: CMU14/Weapons/Guns/Civilian/aum1632x32.rsi
-  - type: Gun
-    selectedMode: SemiAuto
-    availableModes:
-    - SemiAuto
-    - FullAuto
-    soundGunshot:
-      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_m16.ogg
-  - type: RMCSelectiveFire
-    baseFireModes:
-    - SemiAuto
-    - FullAuto
-    recoilUnwielded: 3
-    scatterWielded: 2
-    scatterUnwielded: 20
-    baseFireRate: 4
-    burstScatterMult: 2
-    modifiers:
-      Burst:
-        fireDelay: 0.1665
-        maxScatterModifier: 10
-        useBurstScatterMult: true
-        unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 6
-      FullAuto:
-        fireDelay: 0
-        maxScatterModifier: 13
-        useBurstScatterMult: true
-        unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 4
-  - type: RMCWeaponAccuracy
-    accuracyMultiplier: 1.35
-    accuracyMultiplierUnwielded: 0.65
-  - type: MagazineAmmoProvider
-    autoEject: false
-    soundAutoEject: null
-  - type: ItemSlots
-    slots:
-      gun_magazine:
-        name: Magazine
-        startingItem: CMUMagazineRifleM16Extended
-        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
-        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
-        priority: 2
-        whitelist:
-          tags:
-          - RMCMagazineRifleM16
-          - CMUMagazineRifleM16Extended
-  - type: GunDamageModifier
-    multiplier: 1.3
-  - type: AttachableHolder
-    randomAttachmentChance: 0.25
-    slots:
-      rmc-aslot-barrel:
-        startingAttachable: RMCAttachmentSuppressor
-        whitelist:
-          tags:
-          - RMCM5Bayonet
-          - RMCAttachmentExtendedBarrel
-          - RMCAttachmentSuppressor
-      rmc-aslot-rail:
-        startingAttachable: AU14AttachmentTwoPointSling
-        whitelist:
-          tags:
-          - RMCAttachmentMagneticHarness
-          - RMCAttachmentS5RedDotSight
-          - RMCAttachmentS6ReflexSight
-          - RMCAttachmentS5MicroRedDotSight
-      rmc-aslot-underbarrel:
-        startingAttachable: RMCAttachmentVerticalGrip
-        whitelist:
-          tags:
-          - RMCAttachmentLaserSight
-          - RMCAttachmentFlashlightGrip
-          - RMCAttachmentVerticalGrip
-          - RMCAttachmentAngledGrip
-          - RMCAttachmentExtinguisher
-  - type: AttachableHolderVisuals
-    offsets:
-      rmc-aslot-barrel: 0.83, 0.001
-      rmc-aslot-rail: -0.1, 0.12
-      rmc-aslot-underbarrel: 0.31, -0.283
-
-
-- type: entity
   parent: CMMagazineRifleBase
   id: CMUMagazineRifleM16AP
-  name: M16 'Green-Tip' 20 Round Magazine (5.56x45mm)
-  description: "A 20-round 5.56x45mm magazine developed in the early 1970s for the M16 series rifles."
+  name: M16 'Green-Tip' Magazine (5.56x45mm)
+  description: "A 20-round 5.56x45mm magazine developed in the early 1970s for the M16 series rifles loaded with AP bullets."
   components:
   - type: Tag
     tags:
@@ -329,8 +316,8 @@
 - type: entity
   parent: CMMagazineRifleBase
   id: CMUMagazineRifleM16APExt
-  name: M16 'Green-Tip' 30 Round Magazine (5.56x45mm)
-  description: "A 30-round 5.56x45mm magazine developed in the early 1970s for the M16 series rifles."
+  name: M16 'Green-Tip' Extended Magazine (5.56x45mm)
+  description: "A 30-round 5.56x45mm magazine developed in the early 1970s for the M16 series rifles loaded with AP bullets."
   components:
   - type: Tag
     tags:
@@ -355,6 +342,33 @@
     bulletType: BulletRifle556x45mmM16AP
 
 - type: entity
+  parent: CMMagazineRifleBase
+  id: CMUMagazineRifleAR10
+  name: AR10 Magazine (7.62x51mm)
+  description: "A 20-round 7.62x51mm magazine developed in the early 1950s for the AR10."
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - CMUMagazineRifleAR10
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMUCartridgeRifleAR10
+    proto: CMUCartridgeRifleAR10
+    capacity: 20
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/Ammo/Magazines/Civilian/ar10.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Appearance
+
+
+- type: entity
   parent: CMBaseCartridgeRifle
   id: CMUCartridgeRifleM16AP
   name: AP Cartridge (5.56x45)
@@ -375,9 +389,64 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 28
+        Piercing: 31
   - type: CMArmorPiercing
-    amount: 50
+    amount: 25
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 24
+      falloff: 9999
+      ignoreModifiers: true
+    - range: 5
+      falloff: 3
+  - type: RMCProjectileAccuracy
+    accuracy: 105
+    thresholds:
+    - range: 11
+      falloff: 10
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: CMUCartridgeRifleAR10
+  name: cartridge (7.62x51mm)
+  description: A 7.62x51mm cartridge for the AR10 rifle.
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - CMUCartridgeRifleAR10
+  - type: CartridgeAmmo
+    proto: CMUBulletRifleAR10
+
+- type: entity
+  parent: RMCBaseBullet
+  id: CMUBulletRifleAR10
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Medium
+      energy: Medium
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 35
+  - type: CMArmorPiercing
+    amount: 25
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 24
+      falloff: 9999
+      ignoreModifiers: true
+    - range: 6
+      falloff: 3
+  - type: RMCProjectileAccuracy
+    accuracy: 105
+    thresholds:
+    - range: 9
+      falloff: 6
+
 
 - type: Tag
   id: CMUMagazineRifleM16Extended
@@ -390,3 +459,9 @@
 
 - type: Tag
   id: CMUCartridgeRifleM16AP
+
+- type: Tag
+  id: CMUMagazineRifleAR10
+
+- type: Tag
+  id: CMUCartridgeRifleAR10

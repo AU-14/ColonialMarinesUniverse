@@ -60,6 +60,8 @@
       entries:
       - id: RMCMagazineRifleM16
         amount: 85
+      - id: CMUMagazineRifleAR10
+        amount: 20
       - id: RMCMagazineRifleHunting
         amount: 25
       - id: RMCMagazineRifleMAR40

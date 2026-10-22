@@ -27,7 +27,7 @@
         points: 2
       - id: AU14WeaponRifleAR10
         amount: 3
-        points: 4
+        points: 6
       - id: AU14WeaponRifleM16A2
         amount: 3
         points: 4
@@ -176,6 +176,9 @@
       - id: CMUMagazineRifleM16Extended
         amount: 8
         points: 2
+      - id: CMUMagazineRifleAR10
+        amount: 20
+        points: 3
       - id: RMCMagazineRifleL42A
         amount: 45
         points: 1
@@ -390,6 +393,9 @@
         points: 0
     - name: Special Equipment
       entries:
+      - id: CMUFlareJeepDropCLF
+        amount: 1
+        points: 200
       - id: CMUDeployableZLevelLadder
         amount: 2
         points: 10
