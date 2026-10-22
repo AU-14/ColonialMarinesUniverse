@@ -162,7 +162,7 @@
 
 - type: roleLoadout
   id: JobAU14JobGOVFORAuxSupportSynth
-  points: 30
+  points: 45
   groups:
   - GOVFORSynthSpecializationAU14
   - SynthBackpackAU14

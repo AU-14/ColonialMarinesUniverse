@@ -196,6 +196,7 @@
 # Glasses
 - type: loadout
   id: GlassesSecurityRMC
+  cost: 3
   storage:
     back:
     - CMGlassesSecurity
