@@ -76,6 +76,7 @@
           tags:
           - RMCAttachmentRailFlashlight
           - RMCAttachmentMagneticHarness
+          - RMCAttachmentS42xTelescopicMiniscope
       rmc-aslot-underbarrel:
         locked: true
         startingAttachable: AU14AttachmentM20AUnderbarrelShotgun
