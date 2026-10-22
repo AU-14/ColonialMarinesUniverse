@@ -97,7 +97,7 @@
     pocket2: RMCPouchMagazine
     back: AU14MolleBackpack
     ears: AU14HeadsetUSArmyERT
-    suitstorage: RMCWeaponRifleM54C
+    suitstorage: RMCWeaponRifleM54CFilled
   storage:
     belt:
     - RMCMK80
@@ -109,6 +109,17 @@
     - CMMagazineRifleM54C
     - CMMagazineRifleM54C
     - CMMagazineRifleM54C
+    - CMMRE
+    - RMCBinocularsPVE
+    - RMCFlashlight
+    - CMPacketGrenadeFragFilled
+    - CMSheetMetal50
+    - CMSheetMetal50
+    - CMSheetMetal50
+    - CMSheetMetal50
+    - CMSheetPlasteel50
+    - BarbedWire15
+    - BarbedWire15
     pocket2:
     - CMMagazineRifleM54C
     - CMMagazineRifleM54C

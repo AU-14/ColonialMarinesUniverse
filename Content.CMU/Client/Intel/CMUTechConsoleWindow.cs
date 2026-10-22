@@ -10,6 +10,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.Utility;
+using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.Intel;
 
@@ -24,6 +25,7 @@ public sealed class CMUTechConsoleWindow : DefaultWindow
     public event Action<int, int>? OnPurchase;
 
     [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private readonly CrtConsoleKit _kit = new();
     private readonly SpriteSystem _sprite;
@@ -39,6 +41,8 @@ public sealed class CMUTechConsoleWindow : DefaultWindow
     private TechState? _state;
     private int _selectedTier = -1;
     private int _selectedOption = -1;
+    private TimeSpan _updatedAt;
+    private TimeSpan _nextTimeRefresh;
 
     private sealed record TechState(List<List<TechOption>> Options, int CurrentTier, FixedPoint2 Points, TimeSpan RoundTime);
 
@@ -110,6 +114,7 @@ public sealed class CMUTechConsoleWindow : DefaultWindow
     public void UpdateState(List<List<TechOption>> options, int currentTier, FixedPoint2 points, TimeSpan roundTime)
     {
         _state = new TechState(options, currentTier, points, roundTime);
+        _updatedAt = _timing.CurTime;
 
         if (_selectedTier < 0 || _selectedTier >= options.Count)
             _selectedTier = Math.Clamp(currentTier, 0, Math.Max(0, options.Count - 1));
@@ -118,6 +123,27 @@ public sealed class CMUTechConsoleWindow : DefaultWindow
             _selectedOption = -1;
 
         Rebuild();
+    }
+
+    protected override void FrameUpdate(FrameEventArgs args)
+    {
+        base.FrameUpdate(args);
+        if (_state is not { } previous || _timing.CurTime < _nextTimeRefresh)
+            return;
+
+        _nextTimeRefresh = _timing.CurTime + TimeSpan.FromSeconds(1);
+        var current = previous with { RoundTime = previous.RoundTime + _timing.CurTime - _updatedAt };
+        _updatedAt = _timing.CurTime;
+        _state = current;
+
+        // Refresh when a displayed minute or availability changes, without interrupting confirmation every frame.
+        var changed = previous.Options.SelectMany((tier, i) => tier.Select(option => (option, tier: i)))
+            .Any(entry => GetStatus(entry.option, entry.tier, previous) != GetStatus(entry.option, entry.tier, current) ||
+                GetStatus(entry.option, entry.tier, current) == Status.TimeLocked &&
+                Math.Ceiling((entry.option.TimeLock - previous.RoundTime).TotalMinutes) !=
+                Math.Ceiling((entry.option.TimeLock - current.RoundTime).TotalMinutes));
+        if (changed)
+            Rebuild();
     }
 
     private List<TechOption> TierOptions(int tier)

@@ -76,6 +76,29 @@ public sealed class FighterGroundTest : GameTest
     }
 
     [Test]
+    public async Task DeletedFighterPartsDoNotLeaveStaleNetworkReferences()
+    {
+        await CreateWorld();
+        await Server.WaitAssertion(() =>
+        {
+            var weapons = SEntMan.GetComponent<FighterWeaponsComponent>(_aircraft);
+            var nextPoint = weapons.Hardpoints[1];
+            SEntMan.DeleteEntity(weapons.Hardpoints[0]);
+            SEntMan.DeleteEntity(_aircraft.Comp.Canopy!.Value);
+            SEntMan.DeleteEntity(_aircraft.Comp.FrontSeat!.Value);
+            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, weapons, null, GameTick.Zero));
+            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, _aircraft.Comp, null, GameTick.Zero));
+            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, _ground, null, GameTick.Zero));
+            Assert.That(weapons.Hardpoints[1], Is.EqualTo(nextPoint), "Deleting a pylon must not renumber weapon slots.");
+            CleanWorld();
+            // The cockpit's deletion is queued, so it can still be replicated after its airframe is gone.
+            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, weapons, null, GameTick.Zero));
+            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, _aircraft.Comp, null, GameTick.Zero));
+        });
+        await Pair.RunTicksSync(2);
+    }
+
+    [Test]
     public async Task DeletedCrewCamerasAreClearedBeforeReplicationAndRecreatedForTheSeatedOperator()
     {
         await CreateWorld();
