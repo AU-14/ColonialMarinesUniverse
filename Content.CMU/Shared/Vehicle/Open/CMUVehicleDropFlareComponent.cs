@@ -4,7 +4,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared.CMU14.Vehicle.Open;
 
 /// <summary>
-/// A signal flare that, burning at rest under open sky, calls a vehicle crate down by parachute
+/// A signal flare that, burning at rest under open sky, calls a vehicle crate down
 /// onto the spot. It calls once.
 /// </summary>
 [RegisterComponent]
@@ -20,11 +20,19 @@ public sealed partial class CMUVehicleDropFlareComponent : Component
     public TimeSpan Settle = TimeSpan.FromSeconds(2);
 
     /// <summary>
-    /// Seconds the crate spends on its way before it shows over the flare; how long it falls under
-    /// its chute is the crate's own.
+    /// Seconds the crate spends on its way before it shows over the flare; its fall duration is set on the crate.
     /// </summary>
     [DataField]
     public float SkyFall = 8f;
+
+    [DataField]
+    public bool UseParachute = true;
+
+    [DataField]
+    public EntProtoId LandingEffect = "RMCEffectAlert";
+
+    [DataField]
+    public LocId CalledMessage = "cmu-vehicle-drop-flare-called";
 
     public bool Called;
 

@@ -4,6 +4,7 @@ department-console-salary-announcement-title = Colony Payroll
 department-console-title = Department Console
 department-console-management-tab = Management
 department-console-orders-tab = Orders
+cmu-department-console-supplies = Field supplies (dispensed here)
 department-console-department = Department
 department-console-department-budget = Department Budget: ${ $amount }
 department-console-withdraw-label = Withdraw: $

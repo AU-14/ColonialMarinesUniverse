@@ -1,30 +1,43 @@
 using Content.Shared._RMC14.Areas;
+using Content.Shared._RMC14.CrashLand;
 using Content.Shared._RMC14.SupplyDrop;
+using Content.Shared.CMU14.Fighter;
 using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Light.Components;
 using Content.Shared.Popups;
 using Content.Shared.Throwing;
-using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
-using Robust.Shared.Prototypes;
+using Robust.Shared.Spawners;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Vehicle.Open;
 
 /// <summary>
-/// Calls a vehicle drop flare's crate down by parachute once the lit flare has come to rest on
+/// Calls a vehicle drop flare's crate down once the lit flare has come to rest on
 /// ground open to the sky.
 /// </summary>
-public sealed class CMUVehicleDropFlareSystem : EntitySystem
+public sealed partial class CMUVehicleDropFlareSystem : EntitySystem
 {
     [Dependency] private AreaSystem _areas = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedSupplyDropSystem _supplyDrop = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
-    private static readonly EntProtoId LandingMarker = "RMCEffectAlert";
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<CMUVehicleDropImpactComponent, CrashLandedEvent>(OnLanded);
+    }
+
+    private void OnLanded(Entity<CMUVehicleDropImpactComponent> ent, ref CrashLandedEvent args)
+    {
+        ent.Comp.ImpactAt = _timing.CurTime;
+        Dirty(ent);
+        _audio.PlayPvs(ent.Comp.Sound, ent);
+    }
 
     public override void Update(float frameTime)
     {
@@ -66,7 +79,7 @@ public sealed class CMUVehicleDropFlareSystem : EntitySystem
 
             flare.Called = true;
             var crate = Spawn(flare.Crate, target);
-            // The crate falls the way it does off a drop pad.
+            // Reuse the supply-drop landing sequence and its marker cleanup.
             var drop = CompOrNull<CanBeSupplyDroppedComponent>(crate);
             var fall = (float) (drop?.DropDuration ?? TimeSpan.FromSeconds(3)).TotalSeconds;
             _supplyDrop.LaunchSupplyDrop(crate,
@@ -74,9 +87,24 @@ public sealed class CMUVehicleDropFlareSystem : EntitySystem
                 flare.SkyFall,
                 fall,
                 TimeSpan.FromSeconds(flare.SkyFall + fall + 1f),
-                landingEffect: LandingMarker,
-                arrivingSound: drop?.ArrivingSound);
-            _popup.PopupEntity(Loc.GetString("cmu-vehicle-drop-flare-called"), uid, PopupType.Medium);
+                landingEffect: flare.LandingEffect,
+                arrivingSound: drop?.ArrivingSound,
+                useParachute: flare.UseParachute);
+
+            // The supply drop owns the marker and removes it on landing, including aborted drops.
+            var marker = Comp<BeingSupplyDroppedComponent>(crate).LandingEffect;
+            if (TryComp(marker, out FighterLaserComponent? laser))
+            {
+                laser.StartedAt = now;
+                laser.Incoming = true;
+                laser.IncomingAt = now;
+                laser.ExpiresAt = now + TimeSpan.FromSeconds(flare.SkyFall + fall + 1);
+                EnsureComp<TimedDespawnComponent>(marker.Value).Lifetime = flare.SkyFall + fall + 1;
+                Dirty(marker.Value, laser);
+                _audio.PlayPvs(laser.IncomingSound, marker.Value);
+            }
+
+            _popup.PopupEntity(Loc.GetString(flare.CalledMessage), uid, PopupType.Medium);
         }
     }
 }
