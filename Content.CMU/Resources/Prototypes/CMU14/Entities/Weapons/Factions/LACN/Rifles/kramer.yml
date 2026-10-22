@@ -105,10 +105,11 @@
           - RMCAttachmentU7UnderbarrelShotgun
   - type: AttachableHolderVisuals
     offsets:
-      rmc-aslot-rail: -0.0625, -0.0625
+      cmu-aslot-sling: 0, 0.1875
       rmc-aslot-barrel: 0.755, 0.031
-      rmc-aslot-stock: -0.44, 0
-      rmc-aslot-underbarrel: -1.40625, -0.84375
+      rmc-aslot-rail: 0, 0.1875
+      rmc-aslot-stock: -0.6275, 0
+      rmc-aslot-underbarrel: 0.15625, -0.40625
 
 - type: entity
   parent: AU14WeaponRifleKramerAR
@@ -262,10 +263,11 @@
           - RMCAttachmentU7UnderbarrelShotgun
   - type: AttachableHolderVisuals
     offsets:
-      rmc-aslot-rail: -0.0625, -0.0625
+      cmu-aslot-sling: 0, 0.1875
       rmc-aslot-barrel: 0.755, 0.031
-      rmc-aslot-stock: -0.44, 0
-      rmc-aslot-underbarrel: -1.40625, -0.84375
+      rmc-aslot-rail: 0, 0.1875
+      rmc-aslot-stock: -0.6275, 0
+      rmc-aslot-underbarrel: 0.15625, -0.40625
 
 - type: entity
   parent: AU14WeaponRifleKramerAR
@@ -372,9 +374,9 @@
           - RMCAttachmentAngledGrip
           - RMCAttachmentVerticalGrip
           - RMCAttachmentLaserSight
+  # The built-in 2x sight is part of the rifle's sprite, so the rail has no offset and its scope isn't drawn.
   - type: AttachableHolderVisuals
     offsets:
-      rmc-aslot-rail: -0.22, 0.21
       rmc-aslot-barrel: 0.97, 0.031
       rmc-aslot-underbarrel: 0.56, -0.31
 
@@ -452,3 +454,64 @@
 
 - type: Tag
   id: AU14WeaponRifleKramerMagazineAP
+
+# Hollow point 10x24mm for the Kramer family: hits hard, but does nothing against armor.
+- type: entity
+  parent: AU14WeaponRifleKramerMagazineStandard
+  id: CMUWeaponRifleKramerMagazineHP
+  name: "Kramer HP magazine (10x24mm)"
+  suffix: HP
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14WeaponRifleKramerMagazineStandard # fits every Kramer that takes standard magazines
+    - CMUWeaponRifleKramerMagazineHP
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMUCartridgeRifle10x24mmHP
+    proto: CMUCartridgeRifle10x24mmHP
+    capacity: 40
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/Ammo/Magazines/kramermag.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#B5651D"
+  - type: RefillableByBulletBox
+    bulletType: null
+
+- type: entity
+  parent: CMCartridgeRifle10x24mm
+  id: CMUCartridgeRifle10x24mmHP
+  name: HP cartridge (10x24mm)
+  description: A hollow point 10x24mm cartridge. Fits in 10x24mm HP magazines.
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - CMUCartridgeRifle10x24mmHP
+  - type: CartridgeAmmo
+    proto: CMUBulletRifle10x24mmHP
+
+- type: entity
+  parent: BulletRifle10x24mm
+  id: CMUBulletRifle10x24mmHP
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 55
+  - type: CMArmorPiercing
+    amount: 0
+
+- type: Tag
+  id: CMUWeaponRifleKramerMagazineHP
+
+- type: Tag
+  id: CMUCartridgeRifle10x24mmHP

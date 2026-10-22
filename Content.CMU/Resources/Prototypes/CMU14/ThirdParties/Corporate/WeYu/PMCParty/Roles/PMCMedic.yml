@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: AU14JobWYPMCPartyMedic #m41a/2
+  chevrons:
+    AU14RankWeYuEnforcer:
+      entity: AU14ChevronWeYuEnforcer
+      requirements: []
   roundSide: ThirdParty
   roundForce: WY
   roundRole: WYPMCPartyMedic
@@ -87,7 +91,7 @@
     - CMMagazineRifleM54CAP
     - CMMagazineRifleM54CAP
     back:
-    - RMCMREWeYa
+    - RMCMREWeYaPMC
     - CMCanteen
     - AU14CMDefibrillator
     - CMMagazineRifleM54CAP

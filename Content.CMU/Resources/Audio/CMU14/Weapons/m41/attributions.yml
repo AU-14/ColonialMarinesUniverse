@@ -1,4 +1,4 @@
 - files: ["gun_m41a_1f.ogg", "gun_m41a_2f.ogg", "gun_m41a_3f.ogg", "gun_m41a_4f.ogg", "gun_m41a_5f.ogg", "gun_m41a_6f.ogg"]
   license: "CC-BY-SA-3.0"
-  copyright: "Taken from cmss13-pve (cmss13-devs/cmss13-pve#675)"
+  copyright: "Taken from cmss13-pve (cmss13-devs/cmss13-pve#675), volume lowered 6 dB to sit with the other rifles"
   source: "https://github.com/cmss13-devs/cmss13-pve/tree/80997092e5a7e3f59b5ee776ffd8432607b4e1a7/sound/weapons"

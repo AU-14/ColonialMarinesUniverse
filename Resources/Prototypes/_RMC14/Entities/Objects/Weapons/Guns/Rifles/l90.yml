@@ -85,6 +85,7 @@
           tags:
           - RMCAttachmentRailFlashlight
           - RMCAttachmentMagneticHarness
+          - RMCAttachmentS42xTelescopicMiniscope # CMU14: standard GOVFOR scope compatibility.
       rmc-aslot-underbarrel:
         startingAttachable: RMCAttachmentL90GL
         whitelist:
@@ -333,6 +334,7 @@
           tags:
           - RMCAttachmentRailFlashlight
           - RMCAttachmentMagneticHarness
+          - RMCAttachmentS42xTelescopicMiniscope # CMU14: standard GOVFOR scope compatibility.
       rmc-aslot-underbarrel:
         startingAttachable: RMCAttachmentL90GL
         whitelist:
@@ -362,6 +364,7 @@
           tags:
           - RMCAttachmentRailFlashlight
           - RMCAttachmentMagneticHarness
+          - RMCAttachmentS42xTelescopicMiniscope # CMU14: standard GOVFOR scope compatibility.
       rmc-aslot-underbarrel:
         whitelist:
           tags:

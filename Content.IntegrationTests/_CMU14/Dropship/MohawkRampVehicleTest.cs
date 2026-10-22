@@ -38,7 +38,7 @@ public sealed class MohawkRampVehicleTest
             var maps = entities.System<SharedMapSystem>();
             maps.CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath("/Maps/CMU14/ShuttlesDropships/Mohawk/midway.yml"), out var loaded), Is.True);
+                new ResPath("/Maps/CMU14/Dropships/Mohawk/midway.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
             var lower = entities.GetComponent<MultiDeckDropshipComponent>(ship).Decks[-1];
             ground = entities.GetComponent<TransformComponent>(lower).MapUid!.Value;
@@ -126,7 +126,7 @@ public sealed class MohawkRampVehicleTest
             var maps = entities.System<SharedMapSystem>();
             maps.CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
             var lower = entities.GetComponent<MultiDeckDropshipComponent>(ship).Decks[-1];
             lowerMap = entities.GetComponent<TransformComponent>(lower).MapUid!.Value;
@@ -182,7 +182,7 @@ public sealed class MohawkRampVehicleTest
             var maps = entities.System<SharedMapSystem>();
             maps.CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             var ship = loaded!.Value.Owner;
             var assembly = entities.GetComponent<MultiDeckDropshipComponent>(ship);
             var lower = assembly.Decks[-1];

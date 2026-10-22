@@ -33,7 +33,7 @@
   - type: Marine
     Faction: govfor
 
-  name: au14-job-name-ipie-ppo
+  name: cmu-job-title-ipie-ppo
   description: au14-ipie-ppo-description
   playTimeTracker: AU14JobIPIEPPO
   ranks:

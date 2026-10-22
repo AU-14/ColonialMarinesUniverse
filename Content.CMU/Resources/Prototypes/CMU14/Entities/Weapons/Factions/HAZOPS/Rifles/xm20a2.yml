@@ -2,7 +2,7 @@
   parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
   name: XM20A2 Pulse Rifle
   id: AUWeaponRifleXM20A2HAZOPS
-  description: Devolped as a possible successor to the M20A Harrington rifle, the XM20A2 never entered full service in the USCM and was succeeded by the M41. This heavily modified variant is issued to HAZOPS to bolster their mid-long range capablites. Big magazine, and big firerate, but the drum magazines can't load anything other than standard 10x24mm, and the rails can't mount modern attachments.
+  description: Devolped as a possible successor to the M20A Harrington rifle, the XM20A2 never entered full service in the USCM and was succeeded by the M41. This heavily modified variant is issued to HAZOPS to bolster their mid-long range capablites. Big magazine, and big firerate, but the drum magazines can't load anything other than standard 10x24mm, and the rail only supports compact scopes.
   components:
   - type: CMUAmmoHudWeapon
   - type: Sprite
@@ -62,6 +62,15 @@
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 0.95
     accuracyMultiplierUnwielded: 0.65
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentS42xTelescopicMiniscope
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-rail: -0.21, 0.13
 
 - type: entity
   parent: CMMagazineRifleBase

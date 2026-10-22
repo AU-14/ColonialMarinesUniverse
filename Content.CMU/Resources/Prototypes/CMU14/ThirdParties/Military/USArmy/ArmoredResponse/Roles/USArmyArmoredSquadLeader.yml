@@ -96,15 +96,24 @@
     mask: RMCMaskScarfTan
     head: AU14HelmetUSArmy
     belt: AU14BeltHolsterPistolUSArmyFull
-    pocket1: AU14PouchSlingBinocs
+    pocket1: RMCPouchMagazineLarge
     pocket2: AU14PouchIFAKFill
     back: AU14MolleSatchel
     ears: AU14HeadsetUSArmyERT
-    suitstorage: RMCWeaponRifleM54C
+    suitstorage: RMCWeaponRifleM54CFilled
   storage:
+    pocket1:
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
     head:
       - AU14GogglesM1A1DarkBallistic
     back:
+    - CMMRE
+    - RMCLaserDesignatorPVE
+    - RMCFlashlight
+    - CMPacketGrenadeFragFilled
     - CMMagazineRifleM54C
     - CMMagazineRifleM54C
     - CMMagazineRifleM54C

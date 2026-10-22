@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: CMUJobUPPLineCommandoLeader
+  chevrons:
+    UPP_SeniorSergeant:
+      entity: AU14ChevronUPPNISeniorSergeant
+      requirements: []
   roundSide: ThirdParty
   roundForce: UPPLine
   roundRole: UPPLineCommandoLeader
@@ -28,7 +32,7 @@
     - Mandarin
     currentLanguage: Russian
     defaultLanguage: Russian
-  name: cmu-uppline-name-commando-leader
+  name: cmu-job-title-uppline-commando-leader
   description: cmu-uppline-description-commando
   playTimeTracker: CMUJobUPPLineCommandoLeader
   ranks:

@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: AU14JobWYPMCPartySmartgunner
+  chevrons:
+    AU14RankWeYuSeniorOperator:
+      entity: AU14ChevronWeYuSeniorOperator
+      requirements: []
   roundSide: ThirdParty
   roundForce: WY
   roundRole: WYPMCPartySmartgunner
@@ -26,7 +30,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: smartgunner
 
-  name: au14-job-name-wypmc-smartgun-operator
+  name: cmu-job-title-smartgun-operator
   description: au14-pmcparty-description
   playTimeTracker: AU14JobWYPMCPartySmartgunner
   ranks:

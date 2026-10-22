@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: CMUJobUPPKommissar
+  chevrons:
+    UPP_Commissar:
+      entity: AU14ChevronUPPNICommisar
+      requirements: []
   roundSide: ThirdParty
   roundForce: UPPLine
   roundRole: UPPKommissar
@@ -31,7 +35,7 @@
     - Mandarin
     currentLanguage: Russian
     defaultLanguage: Russian
-  name: cmu-upp-kommissar-name
+  name: cmu-job-title-upp-kommissar
   description: cmu-upp-kommissar-description
   playTimeTracker: CMUJobUPPKommissar
   ranks:

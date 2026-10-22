@@ -103,6 +103,9 @@ public sealed partial class ClientReagentGeneratorSystem : SharedReagentGenerato
             }
             DebugTools.Assert(_generatedReagents.Count == 0);
         }
+        // STATE-01: the YAML sources are only needed to unload this round's prototypes.
+        ChemYamls.Clear();
+        RecipeYamls.Clear();
         IdentifiedChemicals.Clear();
         KnownProperties.Clear();
         _lockedDownChems.Clear();
