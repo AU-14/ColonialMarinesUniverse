@@ -1,8 +1,23 @@
 # Tech call-ins arrive aboard a shuttle; the USArmy variants remain round-start survivors.
+- type: partySpawn
+  id: CMUUSArmyReinforcementsSpawn
+  leadersToSpawn:
+    CMUUSArmyCommanderReinforcements: 1
+    AU14JobUSArmySquadLeaderArmored: 1
+  gruntsToSpawn:
+    AU14JobUSArmySynthArmored: 1
+    AU14JobUSArmyCETArmored: 1
+    AU14JobUSArmyCMTArmored: 1
+    AU14JobUSArmyHeavyGunnerArmored: 1
+    AU14JobUSArmyMarksmanArmored: 1
+    AU14JobUSArmyTrooperArmored: 1
+  scalewithpop: false
+  spawnTogether: true
+
 - type: thirdParty
   id: CMUUSArmyReinforcements
   displayName: US Army Infantry Reinforcements
-  partyspawn: USArmySpawn
+  partyspawn: CMUUSArmyReinforcementsSpawn
   entrymethod: shuttle
   dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
   weight: 0
@@ -10,3 +25,31 @@
   maxplayers: 400
   ghostsNeeded: 8
   roundstart: false
+
+- type: job
+  parent: AU14USArmyCommander
+  id: CMUUSArmyCommanderReinforcements
+  roundRole: CMUUSArmyCommanderReinforcements
+  spawnMenuRoleName: US Army Commander (AU14, ERT)
+  startingGear: CMUUSArmyCommanderReinforcementsGear
+  greeting: au14-usarmy-armored-greeting
+  hidden: true
+
+- type: entity
+  parent: AU14JobUSArmyCommander
+  id: CMUUSArmyCommanderReinforcements
+  name: US Army Commander (ERT)
+  components:
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUSArmy32nd
+  - type: GhostRole
+    job: CMUUSArmyCommanderReinforcements
+
+- type: startingGear
+  parent: AU14GearUSArmySquadleaderArmored
+  id: CMUUSArmyCommanderReinforcementsGear
+  equipment:
+    id: AU14IDCardUSArmyCommander
+    pocket1: RMCPouchCommand
+  storage:
+    pocket1: []
