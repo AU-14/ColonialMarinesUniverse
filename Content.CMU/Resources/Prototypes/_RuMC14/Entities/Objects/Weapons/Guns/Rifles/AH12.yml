@@ -4,6 +4,7 @@
   id: RuMCRifleAH12
   description: This is not just a machine gun. It is a tool for those who are used to ending conversations before they begin. Massive, rough, designed for the unique 12.7×55 cartridge, it does not require a queue. One shot breaks through a door. A second shot demolishes a wall.
   components:
+  - type: CMUAmmoHudWeapon
   - type: Item
     size: Huge
   - type: Sprite

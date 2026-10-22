@@ -68,6 +68,7 @@
   id: RMCWeaponLauncherM5ATL
   description: "The M7 Shoulder Launched Multipurpose Assault Weapon is a powerful anti-armor infantry weapon. Used to take out light-tanks and enemy structures, it is a dangerous weapon with a variety of combat uses, depending on the loaded ammunition, and is capable of firing both shells and rocket-propelled grenades."
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/RocketLaunchers/m5atl/m5atl_inhands.rsi
     layers:
@@ -104,6 +105,7 @@
   id: CMUWeaponLauncherEMBLR
   description: "A German designed MANPAD system designed to replace the aging Russian-made 'spear' missile launchers. It offers reasonable air defence capabilities at the platoon-level for members of the UPPAC. This ones electronic systems seems to be taken off, rendering it as a 'Anti-Tank Weapon'"
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Sprite
     sprite: CMU14/Weapons/Guns/UPP/emblr/emblr_inhands.rsi
     layers:

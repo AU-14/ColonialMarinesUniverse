@@ -6,6 +6,7 @@
   id: RMCWeaponRifleAK4047
   description: A UPP assault rifle, designed to mimic the performance of the American M41A. The 4047 is built with a more utilitarian approach, and can survive use in harsh environments, as long as its user maintains it regularly. Many civilian enthusiasts claim the weapon is nigh invincible, but anyone who has ever served with it will tell you nothing could be further from the truth.
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/ak4047.rsi
     layers:

@@ -5,6 +5,7 @@
   description: An old, reliable design first adopted by the U.S. military in the 1960s. Something like this belongs in a museum of war history. It is chambered in 5.56x45mm.
   suffix: Filled
   components:
+  - type: CMUAmmoHudWeapon
   - type: Sprite
     sprite: CMU14/Weapons/Guns/Civilian/aum1648x32.rsi
     layers:
@@ -147,6 +148,8 @@
   id: AU14WeaponRifleM16A1Tac
   suffix: Filled, Tactical
   components:
+  - type: CMUAmmoHudWeapon
+    enabled: false
   - type: AttachableHolder
     randomAttachmentChance: 0.25
     slots:
@@ -196,6 +199,7 @@
   name: AR10 rifle
   description: Predecessor of the M16. Chambered in 7.62x51mm, it lost the 1950s U.S. Army service rifle trials, largely due to Army preference for conventional construction.
   components:
+  - type: CMUAmmoHudWeapon
   - type: Sprite
     sprite: CMU14/Weapons/Guns/Civilian/auar1048x32.rsi
     layers:

@@ -4,6 +4,7 @@
   id: WeaponRifleM4SPR
   description: The M4RA battle rifle is a designated marksman rifle in service with the Marine. Sporting a bullpup configuration, the M4RA battle rifle is perfect for reconnaissance and fire support teams.
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/m4spr/desert.rsi
     layers:
@@ -186,6 +187,8 @@
   name: M5RA/2 battle rifle
   description: The M5RA/2 battle rifle is a modified version of the M5RA, designed for PMC Operatives to take out targets at longer ranges.
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
+    enabled: false
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/m5spr2.rsi
     layers:

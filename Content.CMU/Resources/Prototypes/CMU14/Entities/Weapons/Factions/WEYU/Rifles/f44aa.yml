@@ -4,6 +4,7 @@
   id: AU14WeaponRifleF44AA
   description: F44AA is an electronic pulse-action assault rifle. Manufactured by the Weyland-Yutani, the rifle is equipped with an amining assist computer and safety.
   components:
+  - type: CMUAmmoHudWeapon
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/m54c/snow.rsi
     layers:

@@ -5,6 +5,7 @@
   suffix: PVE
   description: The L112A2 DMR, a more modular variation on the A1 model. This one foregoes the integral suppressor in favor of a threaded barrel, and features an attachment rail to install foregrips.
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Snipers/l112.rsi
     layers:

@@ -4,6 +4,7 @@
   id: RMCWeaponRifleM54CMK1
   description: An older design of the Pulse Rifle commonly used by the Marine Corps. Uses 10x24mm caseless ammunition.
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/m54cmk1.rsi
     layers:

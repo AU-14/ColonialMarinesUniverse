@@ -4,6 +4,7 @@
   id: RuMCMachineGunPKP_MS
   description: Effective at all distances, but requires the right stance.
   components:
+  - type: CMUAmmoHudWeapon
   - type: Item
     size: Huge
   - type: Appearance

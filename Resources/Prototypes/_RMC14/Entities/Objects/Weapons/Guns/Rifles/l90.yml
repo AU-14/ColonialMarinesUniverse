@@ -6,6 +6,7 @@
   name: SLRA1 infantry carbine
   description: The SLRA1 infantry carbine. While lacking in modularity and noticeably less ergonomic than later models, it still packs a punch. Chambered in 7x43mm.
   components:
+  - type: CMUAmmoHudWeapon # CMU14: optic ammo HUD compatibility
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/l90a1.rsi
     layers:

@@ -4,6 +4,7 @@
   name: "'SVAROG' sniper rifle"
   description: The SWAROG sniper rifle. This model is renowned for its suitability for medium‑range shooting, where it has no equal. It is used by SKALA specialists.
   components:
+  - type: CMUAmmoHudWeapon
   - type: Item
     size: Huge
   - type: Sprite
