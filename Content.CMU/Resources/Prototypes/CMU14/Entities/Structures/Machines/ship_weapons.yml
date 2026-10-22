@@ -123,8 +123,8 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: RMCDazed
-    visionReduction: 0.15
-    alpha: 0.3
+    visionReduction: 0 # 0.15
+    alpha: 0 #0.3
     color: "#75963c"
 
 - type: entity
