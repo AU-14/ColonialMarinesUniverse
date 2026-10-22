@@ -179,7 +179,7 @@
         maxStock: 2
         stockReplenishDelay: 600
         crate: CMUCrateBoxAR10Colony
-      - cost: 1800
+      - cost: 1705
         crate: CMUCrateBoxM16Colony
       - cost: 1800
         crate: CMUCrateBoxKramerColony
@@ -217,7 +217,7 @@
         stockReplenishDelay: 1800
     - name: Ammunition
       entries:
-      - cost: 533
+      - cost: 390
         crate: CMUCrateBoxM16ColonyMagazines
       - cost: 740
         maxStock: 4
