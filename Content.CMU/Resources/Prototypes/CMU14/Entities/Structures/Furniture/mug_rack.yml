@@ -27,6 +27,7 @@
           Full: { state: mugs-1, visible: true }
   - type: CMUMugRack
   - type: Damageable
+  - type: Injurable
     damageContainer: StructuralInorganic
   - type: Destructible
     thresholds:

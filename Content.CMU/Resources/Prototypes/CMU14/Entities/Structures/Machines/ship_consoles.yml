@@ -10,6 +10,10 @@
   - type: Sprite
     sprite: _RMC14/Structures/hybrisa_computer_props.rsi
     state: blackmapping_comp
+  # Only their command can spend the tech points.
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["AU14AccessGovforCommand"]]
 
 - type: entity
   parent: RMCTechTreeConsoleOpfor
@@ -19,6 +23,10 @@
   - type: Sprite
     sprite: _RMC14/Structures/hybrisa_computer_props.rsi
     state: blackmapping_comp
+  # Only their command can spend the tech points.
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["AU14AccessOpforCommand"]]
 
 # ├──[ Tactical map computers ]──────────────────────────────────────┤
 - type: entity

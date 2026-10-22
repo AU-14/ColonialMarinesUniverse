@@ -54,3 +54,6 @@
       Snow: CMU14/Objects/Weapons/Guns/Attachments/m41ae2_bipod/snow.rsi
       Classic: CMU14/Objects/Weapons/Guns/Attachments/m41ae2_bipod/classic.rsi
       Urban: CMU14/Objects/Weapons/Guns/Attachments/m41ae2_bipod/urban.rsi
+
+- type: Tag
+  id: CMUAttachmentM41AE2Stock
