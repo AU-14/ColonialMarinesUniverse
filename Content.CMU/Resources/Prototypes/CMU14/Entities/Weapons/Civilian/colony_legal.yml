@@ -106,7 +106,6 @@
           tags:
           - CMUMagazineRifleAR10
           - RMCMagazineRifleAR10
-          - CMUMagazineRifleAR10Colony
 
 - type: entity
   parent: AU14WeaponRifleM16A1
@@ -136,7 +135,6 @@
           - CMUMagazineRifleM16AP
           - RMCMagazineRifleM16
           - CMUMagazineRifleM16Extended
-          - CMUMagazineRifleM16Colony
 
 - type: entity
   parent: CMUWeaponRifleKramerCivilian
@@ -261,7 +259,6 @@
             - RMCMagazineRifleL42A
             - RMCMagazineRifleL42AExtended
             - RMCMagazineRifleL42AAP
-            - CMUMagazineRifleABR40Colony
 
 - type: entity
   parent: CMU14WeaponPistolGlock75
