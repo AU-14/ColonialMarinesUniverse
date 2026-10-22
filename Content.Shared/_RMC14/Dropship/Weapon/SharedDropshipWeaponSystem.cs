@@ -1992,7 +1992,6 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
                     {
                         var chain = _onCollide.SpawnChain();
                         EnsureComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(chain);
-                        EnsureComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(chain);
                         if (flight.Fire.Total is { } total)
                         {
                             var tiles = new List<Vector2i>();
