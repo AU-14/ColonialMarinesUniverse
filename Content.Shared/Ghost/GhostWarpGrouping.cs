@@ -242,12 +242,14 @@ public static class GhostWarpGrouping
 
     private static string GetOpforSection(string? jobId, int realDisplayWeight)
     {
-        return GetMilitaryRoleSection(jobId) ?? GetHumanSection(TabOpfor, realDisplayWeight);
+        return GetMilitarySection(jobId, realDisplayWeight);
     }
 
     private static string GetMilitarySection(string? jobId, int realDisplayWeight)
     {
-        return GetMilitaryRoleSection(jobId) ?? GetHumanSection(TabMilitary, realDisplayWeight);
+        var section = GetMilitaryRoleSection(jobId) ?? GetHumanSection(TabMilitary, realDisplayWeight);
+        // CMU14: military tabs already have a Line section, don't split it into a second one
+        return section == SectionLinePersonnel ? SectionLine : section;
     }
 
     private static string? GetMilitaryRoleSection(string? jobId)
