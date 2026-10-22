@@ -1,19 +1,4 @@
 - type: entity
-  parent: BaseItem
-  id: RUMCShredderBlade
-  name: crushing attachment
-  description: A heavy-duty crushing attachment for the grinder. It takes two of these, seated together, for the machine to run at all.
-  components:
-  - type: Sprite
-    sprite: CMU14/Objects/Materials/iron_ingot.rsi
-    state: drilling_attachment
-  - type: Item
-    size: Small
-  - type: GrinderBlade
-    durability: 100
-    maxDurability: 100
-
-- type: entity
   abstract: true
   id: RUMCGrinderBase
   components:
@@ -33,16 +18,6 @@
       material7: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
       material8: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
       material9: { whitelist: { components: [ Stack ] }, insertOnInteract: false }
-      blade1:
-        whitelist:
-          components:
-          - GrinderBlade
-        insertOnInteract: false
-      blade2:
-        whitelist:
-          components:
-          - GrinderBlade
-        insertOnInteract: false
       output1: { insertOnInteract: false }
       output2: { insertOnInteract: false }
       output3: { insertOnInteract: false }
@@ -72,8 +47,6 @@
       material7: !type:ContainerSlot
       material8: !type:ContainerSlot
       material9: !type:ContainerSlot
-      blade1: !type:ContainerSlot
-      blade2: !type:ContainerSlot
       output1: !type:ContainerSlot
       output2: !type:ContainerSlot
       output3: !type:ContainerSlot
@@ -134,7 +107,7 @@
   parent: [ RUMCGrinderBase, BaseMachinePowered, BaseMachineDestructible ]
   id: RUMCGrinder
   name: grinder
-  description: An automated shredder wired into the grid - needs a pair of blades seated to run, and chews through every slot it can at once.
+  description: An automated shredder wired into the grid. It chews through every slot it can at once.
   components:
   - type: ApcPowerReceiver
     powerLoad: 50
@@ -143,7 +116,7 @@
     workingPowerDraw: 300
   - type: ActivatableUIRequiresPower
 
-# The grinder that runs on steam instead of the grid: the same slots, blades and rules, fed by a steam pipe.
+# The grinder that runs on steam instead of the grid: the same slots and rules, fed by a steam pipe.
 - type: entity
   parent: [ RUMCGrinderBase, RUMCSteamMachineBase ]
   id: RUMCSteamGrinder

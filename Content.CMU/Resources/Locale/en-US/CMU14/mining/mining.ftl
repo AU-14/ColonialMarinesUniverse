@@ -1,13 +1,7 @@
 au14-drill-title = Drill
-au14-drill-head = Head
-au14-drill-head-left = { $left }/{ $max }
-au14-drill-head-none = No head
 au14-drill-status-working = Drilling: { $percent }%
 au14-drill-status-no-deposit = No deposit of ore or rock floor under it
-au14-drill-status-no-head = Put a head in
-au14-drill-status-idle = Idle: it needs steam or power, a head and room for the ore
-au14-drill-head-broke = The drill head breaks.
-au14-drill-head-examine = Enough of it is left for { $left } of { $max } turns.
+au14-drill-status-idle = Idle: it needs steam or power and room for the ore
 au14-drill-examine-deposit = There is a deposit of ore or the bare rock of a cave under it.
 au14-drill-examine-no-deposit = There is no deposit of ore and no rock floor under it.
 au14-drill-examine-working = It is drilling.

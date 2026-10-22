@@ -27,7 +27,6 @@ au14-craft-recipe-steel-shovel = Стальная лопата
 au14-craft-recipe-brass-sword = Латунный меч
 au14-craft-recipe-brass-sheet-mold = Латунная форма листа
 au14-craft-recipe-brass-ingots-mold = Латунная форма на три слитка
-au14-craft-recipe-brass-drill-head = Латунная буровая головка
 au14-craft-recipe-cloth = Ткань
 au14-craft-recipe-brass-gas-pipe-half = Латунная газовая труба, торцевая
 au14-craft-recipe-brass-gas-pipe-straight = Латунная газовая труба, прямая

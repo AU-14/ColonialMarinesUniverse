@@ -5,7 +5,6 @@ au14-craft-recipe-forge-chisel = Зубило
 au14-craft-recipe-anvil = Наковальня
 au14-craft-recipe-solid-fuel-press = Пресс на твёрдом топливе
 au14-craft-recipe-steam-grinder = Паровая дробилка
-au14-anvil-recipe-shredder-blade = дробящая насадка
 au14-craft-recipe-industrial-boiler = Стальной бойлер
 au14-craft-recipe-industrial-steam-generator = Промышленный паровой генератор
 au14-craft-recipe-industrial-steam-smelter = Промышленная паровая плавильня

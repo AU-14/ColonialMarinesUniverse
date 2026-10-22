@@ -8,11 +8,8 @@ using Content.Shared.CMU14.Portable;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Examine;
 using Content.Shared.Maps;
-using Content.Shared.Popups;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.Stacks;
-using Robust.Shared.Audio;
-using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
@@ -20,9 +17,8 @@ using Robust.Shared.Random;
 
 namespace Content.Server.CMU14.Mining;
 
-// The drills. A drill needs steam (or power), a head with something left of it, a deposit of ore on its own tile and room for what
-// it takes. Every turn it takes from one to ten pieces of ore out of the deposit, picked among the kinds the deposit holds, and
-// wears the head down by one. The deposit is gone when it is empty, and the head when it is worn out.
+// The drills. A drill needs steam (or power), a deposit of ore on its own tile and room for what it takes. Every turn it takes
+// from one to ten pieces of ore out of the deposit, picked among the kinds the deposit holds. The deposit is gone when it is empty.
 // Where there is no deposit but the tile is the rock floor of a cave (the stone, the black stone), it bores fragments of that rock
 // out of the floor itself: one to ten a turn too, and the floor does not run out.
 public sealed class OreDrillSystem : EntitySystem
@@ -32,16 +28,12 @@ public sealed class OreDrillSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedPowerStateSystem _powerState = default!;
     [Dependency] private readonly SharedStackSystem _stack = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDefs = default!;
-
-    private static readonly SoundSpecifier BreakSound = new SoundCollectionSpecifier("MetalBreak");
 
     private const float DirtyInterval = 0.2f;
 
@@ -53,7 +45,6 @@ public sealed class OreDrillSystem : EntitySystem
 
         SubscribeLocalEvent<OreDrillComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<OreDrillComponent, PortablePlaceableOverEvent>(OnPlaceableOver);
-        SubscribeLocalEvent<DrillHeadComponent, ExaminedEvent>(OnHeadExamined);
     }
 
     public override void Update(float frameTime)
@@ -88,8 +79,7 @@ public sealed class OreDrillSystem : EntitySystem
             Dirty(drill);
         }
 
-        var head = GetHead(drill);
-        var ready = onDeposit && head != null && HasRoom(drill);
+        var ready = onDeposit && HasRoom(drill);
 
         // Without steam or power, or with nothing to do, the drill stands.
         if (!ready || !HasEnergy(drill, steamMode, frameTime))
@@ -110,9 +100,9 @@ public sealed class OreDrillSystem : EntitySystem
         {
             comp.Progress = 0f;
             if (deposit != null)
-                Complete(drill, deposit.Value, head!.Value);
+                Complete(drill, deposit.Value);
             else
-                CompleteRock(drill, rock!.Value, head!.Value);
+                CompleteRock(drill, rock!.Value);
 
             return;
         }
@@ -143,7 +133,7 @@ public sealed class OreDrillSystem : EntitySystem
         _appearance.SetData(drill.Owner, DrillVisuals.Working, active);
     }
 
-    // The turn in progress is kept while the drill only lacks steam or power, and lost when the deposit or the head is gone.
+    // The turn in progress is kept while the drill only lacks steam or power, and lost when the deposit is gone.
     private void Stop(Entity<OreDrillComponent> drill, bool forget)
     {
         var comp = drill.Comp;
@@ -155,17 +145,6 @@ public sealed class OreDrillSystem : EntitySystem
 
         SetActive(drill, false);
         Dirty(drill);
-    }
-
-    private Entity<DrillHeadComponent>? GetHead(Entity<OreDrillComponent> drill)
-    {
-        if (_itemSlots.GetItemOrNull(drill.Owner, OreDrillComponent.HeadSlotId) is not { } head ||
-            !TryComp<DrillHeadComponent>(head, out var comp) || comp.Durability <= 0)
-        {
-            return null;
-        }
-
-        return (head, comp);
     }
 
     // Some output slot is empty, or holds a stack that has room for more.
@@ -215,16 +194,15 @@ public sealed class OreDrillSystem : EntitySystem
         return drill.Comp.RockTiles.TryGetValue(definition.ID, out var fragments) ? (ProtoId<StackPrototype>?) fragments : null;
     }
 
-    // A turn on the rock of the floor: one to ten fragments, whatever the floor is, and the head wears down.
-    private void CompleteRock(Entity<OreDrillComponent> drill, ProtoId<StackPrototype> fragments, Entity<DrillHeadComponent> head)
+    // A turn on the rock of the floor: one to ten fragments, whatever the floor is.
+    private void CompleteRock(Entity<OreDrillComponent> drill, ProtoId<StackPrototype> fragments)
     {
         var comp = drill.Comp;
         Output(drill, fragments, _random.Next(comp.MinPerCycle, comp.MaxPerCycle + 1));
-        WearHead(drill, head);
         Dirty(drill);
     }
 
-    private void Complete(Entity<OreDrillComponent> drill, Entity<OreDepositComponent> deposit, Entity<DrillHeadComponent> head)
+    private void Complete(Entity<OreDrillComponent> drill, Entity<OreDepositComponent> deposit)
     {
         var comp = drill.Comp;
         var left = 0;
@@ -264,7 +242,6 @@ public sealed class OreDrillSystem : EntitySystem
         if (deposit.Comp.Ores.Count == 0)
             QueueDel(deposit);
 
-        WearHead(drill, head);
         Dirty(drill);
     }
 
@@ -308,19 +285,6 @@ public sealed class OreDrillSystem : EntitySystem
         // No slot took it: it lies in front of the drill, which is no loss.
     }
 
-    private void WearHead(Entity<OreDrillComponent> drill, Entity<DrillHeadComponent> head)
-    {
-        head.Comp.Durability--;
-        Dirty(head);
-
-        if (head.Comp.Durability > 0)
-            return;
-
-        _popup.PopupEntity(Loc.GetString("au14-drill-head-broke"), drill);
-        _audio.PlayPvs(BreakSound, drill);
-        PredictedQueueDel(head);
-    }
-
     private void OnExamined(Entity<OreDrillComponent> drill, ref ExaminedEvent args)
     {
         if (!args.IsInDetailsRange)
@@ -329,13 +293,5 @@ public sealed class OreDrillSystem : EntitySystem
         using var block = args.PushGroup(nameof(OreDrillComponent));
         args.PushMarkup(Loc.GetString(drill.Comp.OnDeposit ? "au14-drill-examine-deposit" : "au14-drill-examine-no-deposit"));
         args.PushMarkup(Loc.GetString(drill.Comp.Active ? "au14-drill-examine-working" : "au14-drill-examine-idle"));
-    }
-
-    private void OnHeadExamined(Entity<DrillHeadComponent> head, ref ExaminedEvent args)
-    {
-        if (!args.IsInDetailsRange)
-            return;
-
-        args.PushMarkup(Loc.GetString("au14-drill-head-examine", ("left", head.Comp.Durability), ("max", head.Comp.MaxDurability)));
     }
 }

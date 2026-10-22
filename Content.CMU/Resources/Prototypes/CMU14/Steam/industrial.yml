@@ -39,7 +39,7 @@
   parent: RUMCSteamDrill
   id: RUMCIndustrialSteamDrill
   name: industrial steam drill
-  description: A gray drilling rig that runs on steam. Join a gas pipe with steam to it, set it on a deposit of ore, put a head in it and it takes ore out of the deposit.
+  description: A gray drilling rig that runs on steam. Join a gas pipe with steam to it, set it on a deposit of ore and it takes ore out of the deposit.
   components:
   - type: Sprite
     noRot: true
@@ -151,7 +151,7 @@
   parent: RMCSecureCaseStrapped
   id: RUMCCrateIndustryStart
   name: industry start crate
-  description: A sealed crate with what is needed to begin the industry, a steel pump and pipes, a steel boiler, an industrial steam generator, drill and press and smelter, drill heads and two molds. Open it with a crowbar.
+  description: A sealed crate with what is needed to begin the industry, a steel pump and pipes, a steel boiler, an industrial steam generator, drill and press and smelter and two molds. Open it with a crowbar.
   components:
   - type: CrateOpenable
     spawn:
@@ -161,8 +161,6 @@
     - id: RUMCSteelBoiler
     - id: RUMCIndustrialSteamGenerator
     - id: RUMCIndustrialSteamDrill
-    - id: RUMCSteelDrillHead
-      amount: 10
     - id: RUMCIndustrialSteamPress
     - id: RUMCMoldIngots
     - id: RUMCMoldSheet

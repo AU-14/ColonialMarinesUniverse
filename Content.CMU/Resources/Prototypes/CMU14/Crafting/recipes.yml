@@ -226,20 +226,6 @@
   consumables:
   - item: RUMCBrassMoldEmpty
 
-# The heads of the drill: ingots, worked with the chisel and the tongs.
-- type: craftRecipe
-  id: RUMCCraftBrassDrillHead
-  name: au14-craft-recipe-brass-drill-head
-  output: RUMCBrassDrillHead
-  time: 12
-  minigames: [Rhythm, Drill]
-  tools:
-  - Chiseling
-  - Tonging
-  consumables:
-  - stack: RUMCBrassIngot
-    amount: 3
-
 # Cloth is woven by hand of cotton.
 - type: craftRecipe
   id: RUMCCraftCloth

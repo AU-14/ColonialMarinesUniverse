@@ -18,7 +18,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.Grinding;
 
-// The window of the grinder, and of the steam grinder: the materials and the crushing attachments on the left, what comes
+// The window of the grinder, and of the steam grinder: the materials on the left, what comes
 // out on the right, a progress bar underneath.
 public sealed class GrinderWindow : DefaultWindow
 {
@@ -60,11 +60,6 @@ public sealed class GrinderWindow : DefaultWindow
         foreach (var id in GrinderComponent.MaterialSlotIds)
             materials.AddChild(Add(id, MachineWindowKit.InputBorder));
         _left.AddChild(MachineWindowKit.Section(Loc.GetString("au14-window-materials"), materials));
-
-        var attachments = MachineWindowKit.Row();
-        foreach (var id in GrinderComponent.BladeSlotIds)
-            attachments.AddChild(Add(id, MachineWindowKit.ToolBorder));
-        _left.AddChild(MachineWindowKit.Section(Loc.GetString("au14-window-attachments"), attachments));
 
         main.AddChild(_left);
 

@@ -21,4 +21,3 @@ au14-anvil-recipe-empty-mold = empty mold
 au14-anvil-recipe-brass-empty-mold = brass mold
 au14-anvil-recipe-brass-parts = brass parts
 au14-anvil-recipe-brass-sheet = brass sheet
-au14-anvil-recipe-steel-drill-head = steel drill head

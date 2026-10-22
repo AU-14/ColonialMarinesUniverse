@@ -1,5 +1,4 @@
 au14-window-materials = Материалы
-au14-window-attachments = Насадки
 au14-window-output = Выход
 au14-window-temperature = Температура
 au14-window-blueprint = Чертёж

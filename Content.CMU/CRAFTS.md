@@ -90,7 +90,6 @@
 | Комплект электроники (`RUMCCraftKitElectronics`) | Дорожка → Удержание |
 | Конвейерная лента ×4 (`RUMCCraftConveyorBelt`) | Игла и нить → Дорожка |
 | Латунная бочка для жидкостей (`RUMCCraftFluidBarrel`) | Ритм → Дорожка |
-| Латунная буровая головка (`RUMCCraftBrassDrillHead`) | Ритм → Сверление |
 | Латунная водяная помпа (`RUMCCraftBrassPump`) | Ритм → Центровка |
 | Латунная кирка (`RUMCCraftBrassPickaxe`) | Ритм → Сверление |
 | Латунный конденсатор (`RUMCCraftBrassCondenser`) | Ритм → Удержание |
@@ -251,7 +250,6 @@
 | латунный меч (`RUMCBrassSword`) | латунный слиток ×3; ветка ×1 | Hammering | 10 |
 | латунная форма листа (`RUMCBrassMoldSheet`) | латунная форма ×1 | Chiseling, Hammering | 8 |
 | латунная форма на три слитка (`RUMCBrassMoldIngots`) | латунная форма ×1 | Chiseling, Hammering | 8 |
-| латунная буровая головка (`RUMCBrassDrillHead`) | латунный слиток ×3 | Chiseling, Tonging | 12 |
 | MaterialCloth1 (`MaterialCloth1`) | Cotton ×3 | — | 4 |
 | латунная газовая труба (`RUMCBrassGasPipeHalf`) | латунный лист ×1; латунные детали ×1 | Hammering | 5 |
 | латунная газовая труба (`RUMCBrassGasPipeStraight`) | латунный лист ×1; латунные детали ×1 | Hammering | 5 |

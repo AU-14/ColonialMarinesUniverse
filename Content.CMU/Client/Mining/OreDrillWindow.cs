@@ -16,8 +16,8 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.Mining;
 
-// The window of a drill, laid out like the others: the head on the left with what is left of it, the ore that came out on the
-// right, what the drill is doing on top and a bar of the turn below.
+// The window of a drill, laid out like the others: the ore that came out in the middle, what the drill is doing on top and a bar
+// of the turn below.
 public sealed class OreDrillWindow : DefaultWindow
 {
     [Dependency] private readonly IEntityManager _entMan = default!;
@@ -28,8 +28,6 @@ public sealed class OreDrillWindow : DefaultWindow
     private EntityUid _owner;
 
     private readonly List<SlotView> _slots = new();
-    private readonly SlotView _head;
-    private readonly Label _headLabel = new() { HorizontalAlignment = Control.HAlignment.Center };
     private readonly Label _statusLabel;
     private readonly ProgressBar _progressBar;
     private readonly BoxContainer _main;
@@ -53,13 +51,6 @@ public sealed class OreDrillWindow : DefaultWindow
 
         _main = MachineWindowKit.Row(20);
         var main = _main;
-
-        var headBox = MachineWindowKit.Column(4);
-        _head = MachineWindowKit.MakeSlot(_entMan, OreDrillComponent.HeadSlotId, MachineWindowKit.ToolBorder, id => OnSlotPressed?.Invoke(id));
-        _slots.Add(_head);
-        headBox.AddChild(_head.Button);
-        headBox.AddChild(_headLabel);
-        main.AddChild(MachineWindowKit.Section(Loc.GetString("au14-drill-head"), headBox));
 
         var outputs = MachineWindowKit.Grid(3);
         foreach (var id in OreDrillComponent.OutputSlotIds)
@@ -100,12 +91,6 @@ public sealed class OreDrillWindow : DefaultWindow
         foreach (var slot in _slots)
             MachineWindowKit.Refresh(_entMan, _itemSlots, _stacks, _owner, slot);
 
-        // What is left of the head.
-        var headItem = _itemSlots.GetItemOrNull(_owner, OreDrillComponent.HeadSlotId);
-        _headLabel.Text = headItem != null && _entMan.TryGetComponent<DrillHeadComponent>(headItem, out var head)
-            ? Loc.GetString("au14-drill-head-left", ("left", head.Durability), ("max", head.MaxDurability))
-            : Loc.GetString("au14-drill-head-none");
-
         _progressBar.Value = Math.Clamp(comp.Progress, 0f, 1f);
 
         if (_steam != null && _entMan.TryGetComponent<SteamPortComponent>(_owner, out var steamPort))
@@ -115,8 +100,6 @@ public sealed class OreDrillWindow : DefaultWindow
             _statusLabel.Text = Loc.GetString("au14-drill-status-working", ("percent", (int) (comp.Progress * 100)));
         else if (!comp.OnDeposit)
             _statusLabel.Text = Loc.GetString("au14-drill-status-no-deposit");
-        else if (headItem == null)
-            _statusLabel.Text = Loc.GetString("au14-drill-status-no-head");
         else
             _statusLabel.Text = Loc.GetString("au14-drill-status-idle");
     }

@@ -6,7 +6,6 @@ using Content.Shared.CMU14.Fluids;
 using Content.Shared.CMU14.Grinding;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Examine;
-using Content.Shared.Popups;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.Stacks;
 using Robust.Shared.Audio;
@@ -25,7 +24,6 @@ public sealed class GrinderSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
     [Dependency] private readonly SharedStackSystem _stack = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedPowerStateSystem _powerState = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -70,9 +68,6 @@ public sealed class GrinderSystem : EntitySystem
                 continue;
             }
 
-            if (comp.GrindEndsAt != null && !HasWorkingBlades(grinder))
-                CancelBatch(grinder);
-
             if (comp.GrindEndsAt == null)
                 TryStartBatch(grinder);
 
@@ -86,9 +81,6 @@ public sealed class GrinderSystem : EntitySystem
 
     private void TryStartBatch(Entity<GrinderComponent> grinder)
     {
-        if (!HasWorkingBlades(grinder))
-            return;
-
         if (!HasProcessableMaterial(grinder))
             return;
 
@@ -114,16 +106,6 @@ public sealed class GrinderSystem : EntitySystem
         var left = endsAt - _timing.CurTime;
         comp.GrindRemaining = left > TimeSpan.Zero ? left : TimeSpan.Zero;
         comp.GrindEndsAt = null;
-        Dirty(grinder);
-    }
-
-    private void CancelBatch(Entity<GrinderComponent> grinder)
-    {
-        var comp = grinder.Comp;
-        comp.GrindEndsAt = null;
-        comp.GrindDuration = null;
-        comp.GrindRemaining = null;
-        comp.Active = false;
         Dirty(grinder);
     }
 
@@ -163,24 +145,6 @@ public sealed class GrinderSystem : EntitySystem
 
         if (processed > 0)
         {
-            foreach (var slotId in GrinderComponent.BladeSlotIds)
-            {
-                if (_itemSlots.GetItemOrNull(grinder.Owner, slotId) is not { } blade ||
-                    !TryComp<GrinderBladeComponent>(blade, out var bladeComp))
-                {
-                    continue;
-                }
-
-                bladeComp.Durability -= comp.BladeWearPerCycle;
-                Dirty(blade, bladeComp);
-
-                if (bladeComp.Durability <= 0)
-                {
-                    _popup.PopupEntity(Loc.GetString("au14-grinder-blade-broken"), grinder, PopupType.SmallCaution);
-                    PredictedQueueDel(blade);
-                }
-            }
-
             _audio.PlayPvs(GrindDoneSound, grinder);
         }
 
@@ -327,20 +291,6 @@ public sealed class GrinderSystem : EntitySystem
         }
 
         return null;
-    }
-
-    private bool HasWorkingBlades(Entity<GrinderComponent> grinder)
-    {
-        foreach (var slotId in GrinderComponent.BladeSlotIds)
-        {
-            if (_itemSlots.GetItemOrNull(grinder.Owner, slotId) is not { } blade ||
-                !TryComp<GrinderBladeComponent>(blade, out var bladeComp) || bladeComp.Durability <= 0)
-            {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     private void OnExamined(Entity<GrinderComponent> ent, ref ExaminedEvent args)

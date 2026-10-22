@@ -1,5 +1,5 @@
 # Drilling. A deposit of ore lies on the floor of the stone layer or of the dark stone layer, with up to five kinds of ore in it, made
-# when it appears. A drill set on it, with a head in its slot, takes from one to ten pieces of ore a turn and wears the head down.
+# when it appears. A drill set on it takes from one to ten pieces of ore a turn.
 
 # The ores a deposit can hold, by weight. Copper, iron and zinc are the most of it in the stone, then the other metals of the stone
 # layer, and gold and titanium rarely. The dark stone is the same, but gold and titanium are thirty percent likelier (1.5 to 1.95),
@@ -132,40 +132,7 @@
         dark9: ""
         dark10: ""
 
-# The heads of the drill. They are the crushing attachment of the grinder, wearing down with every turn of drilling.
-- type: entity
-  parent: BaseItem
-  id: RUMCSteelDrillHead
-  name: steel drill head
-  description: A drill head of steel. It wears down with every turn of drilling and breaks when it is gone.
-  components:
-  - type: Sprite
-    noRot: true
-    sprite: CMU14/Objects/Mining/drill_head.rsi
-    state: steel
-  - type: Item
-    size: Small
-  - type: DrillHead
-    maxDurability: 100
-    durability: 100
-
-- type: entity
-  parent: BaseItem
-  id: RUMCBrassDrillHead
-  name: brass drill head
-  description: A drill head of brass. It wears down faster than the steel one and breaks when it is gone.
-  components:
-  - type: Sprite
-    noRot: true
-    sprite: CMU14/Objects/Mining/drill_head.rsi
-    state: brass
-  - type: Item
-    size: Small
-  - type: DrillHead
-    maxDurability: 60
-    durability: 60
-
-# The drills: a head slot, six slots for what they take, and the rules of the window machines.
+# The drills: six slots for what they take, and the rules of the window machines.
 - type: entity
   abstract: true
   parent: RUMCSteamMachineBase
@@ -187,11 +154,6 @@
     - output6
   - type: ItemSlots
     slots:
-      head:
-        whitelist:
-          components:
-          - DrillHead
-        insertOnInteract: false
       output1: { insertOnInteract: false }
       output2: { insertOnInteract: false }
       output3: { insertOnInteract: false }
@@ -200,7 +162,6 @@
       output6: { insertOnInteract: false }
   - type: ContainerContainer
     containers:
-      head: !type:ContainerSlot
       output1: !type:ContainerSlot
       output2: !type:ContainerSlot
       output3: !type:ContainerSlot
@@ -218,7 +179,7 @@
   parent: [ RUMCDrillBase, BaseMachinePowered ]
   id: RUMCElectricDrill
   name: electric drill
-  description: A drilling rig on the grid. Set it on a deposit of ore, put a head in it and it takes ore out of the deposit, up to ten pieces a turn.
+  description: A drilling rig on the grid. Set it on a deposit of ore and it takes ore out of the deposit, up to ten pieces a turn.
   components:
   - type: Sprite
     noRot: true
@@ -256,7 +217,7 @@
   parent: RUMCDrillBase
   id: RUMCSteamDrill
   name: steam drill
-  description: A brass drilling rig that runs on steam. Join a gas pipe with steam to it, set it on a deposit of ore, put a head in it and it takes ore out of the deposit, up to ten pieces a turn.
+  description: A brass drilling rig that runs on steam. Join a gas pipe with steam to it, set it on a deposit of ore and it takes ore out of the deposit, up to ten pieces a turn.
   components:
   - type: Sprite
     noRot: true

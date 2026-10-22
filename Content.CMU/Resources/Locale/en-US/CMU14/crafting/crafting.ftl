@@ -27,7 +27,6 @@ au14-craft-recipe-steel-shovel = Steel shovel
 au14-craft-recipe-brass-sword = Brass sword
 au14-craft-recipe-brass-sheet-mold = Brass sheet mold
 au14-craft-recipe-brass-ingots-mold = Brass ingot mold for three
-au14-craft-recipe-brass-drill-head = Brass drill head
 au14-craft-recipe-cloth = Cloth
 au14-craft-recipe-brass-gas-pipe-half = Brass gas pipe, half
 au14-craft-recipe-brass-gas-pipe-straight = Brass gas pipe, straight

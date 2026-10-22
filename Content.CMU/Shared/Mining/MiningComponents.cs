@@ -46,24 +46,11 @@ public sealed partial class OreDepositTablePrototype : IPrototype
     public Dictionary<ProtoId<StackPrototype>, float> Ores = new();
 }
 
-// The head of a drill: it wears out with every piece of ore the drill takes and breaks when it is gone.
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class DrillHeadComponent : Component
-{
-    // How many turns of drilling the head lasts, new.
-    [DataField]
-    public int MaxDurability = 100;
-
-    [DataField, AutoNetworkedField]
-    public int Durability = 100;
-}
-
-// A drill: set on a deposit of ore, with a head in its head slot, it takes ore out of the deposit and puts it in its output
+// A drill: set on a deposit of ore, it takes ore out of the deposit and puts it in its output
 // slots. The steam drill runs on steam like the other steam machines, the electric one on power like the electric smelter.
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class OreDrillComponent : Component
 {
-    public const string HeadSlotId = "head";
     public static readonly string[] OutputSlotIds = { "output1", "output2", "output3", "output4", "output5", "output6" };
 
     // Seconds of drilling for one turn, and the most ore one turn gives.

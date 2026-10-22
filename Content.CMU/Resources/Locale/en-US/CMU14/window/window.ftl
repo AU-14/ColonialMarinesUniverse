@@ -1,5 +1,4 @@
 au14-window-materials = Materials
-au14-window-attachments = Attachments
 au14-window-output = Output
 au14-window-temperature = Temperature
 au14-window-blueprint = Blueprint

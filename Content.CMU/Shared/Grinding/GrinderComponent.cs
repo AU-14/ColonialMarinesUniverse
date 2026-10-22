@@ -4,7 +4,7 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared.CMU14.Grinding;
 
-// A grinder: names of its slots (materials, blades, outputs) and the state of the grind that is under way.
+// A grinder: names of its slots (materials, outputs) and the state of the grind that is under way.
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class GrinderComponent : Component
 {
@@ -14,8 +14,6 @@ public sealed partial class GrinderComponent : Component
         "material4", "material5", "material6",
         "material7", "material8", "material9",
     };
-
-    public static readonly string[] BladeSlotIds = { "blade1", "blade2" };
 
     public static readonly string[] OutputSlotIds =
     {
@@ -38,9 +36,6 @@ public sealed partial class GrinderComponent : Component
 
     [DataField]
     public TimeSpan GrindTime = TimeSpan.FromSeconds(3);
-
-    [DataField]
-    public int BladeWearPerCycle = 1;
 
     // A steam grinder has no power: it runs on this many moles of water vapor every second of grinding.
     [DataField]
