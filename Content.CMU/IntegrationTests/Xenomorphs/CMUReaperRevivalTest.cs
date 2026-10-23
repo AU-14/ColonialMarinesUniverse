@@ -151,47 +151,22 @@ public sealed class CMUReaperRevivalTest : GameTest
         });
     }
 
+    // BUG-1067: a dead queen stays dead, no flesh or cooldown spent on the refusal
     [Test]
-    [TestCase("none")]
-    [TestCase("before")]
-    [TestCase("during")]
-    public async Task QueenRevivalCannotCreateASecondLivingQueen(string replacementTiming)
+    public async Task QueenCannotBeReanimated()
     {
-        await Prepare(2, "CMXenoQueen");
-        EntityUid? replacement = null;
+        await Prepare(0.5f, "CMXenoQueen");
         await Server.WaitAssertion(() =>
         {
-            void SpawnReplacement()
-            {
-                replacement = SEntMan.SpawnEntity("CMXenoQueen",
-                    SEntMan.GetComponent<TransformComponent>(_caster).Coordinates.Offset(new Vector2(3, 0)));
-                Server.System<SharedXenoHiveSystem>().SetHive(replacement.Value, _hive);
-            }
-
-            if (replacementTiming == "before")
-                SpawnReplacement();
-
-            Assert.That(Cast(_caster).Handled, Is.EqualTo(replacementTiming != "before"));
-            if (replacementTiming == "before")
-            {
-                var action = Server.System<SharedRMCActionsSystem>().GetActionsWithEvent<CMUReaperReviveActionEvent>(_caster).Single();
-                Assert.That(action.Comp.Cooldown, Is.Null);
-                Assert.That(SEntMan.GetComponent<XenoReaperComponent>(_caster).FleshResin, Is.EqualTo(600));
-            }
-
-            if (replacementTiming == "during")
-                SpawnReplacement();
-        });
-        await Pair.RunTicksSync(90);
-        await Server.WaitAssertion(() =>
-        {
-            Assert.That(Server.System<MobStateSystem>().IsAlive(_corpse), Is.EqualTo(replacementTiming == "none"));
-            Assert.That(SEntMan.GetComponent<HiveComponent>(_hive).CurrentQueen,
-                Is.EqualTo(replacement ?? _corpse));
+            Assert.That(Cast(_caster).Handled, Is.False);
+            var action = Server.System<SharedRMCActionsSystem>().GetActionsWithEvent<CMUReaperReviveActionEvent>(_caster).Single();
+            Assert.That(action.Comp.Cooldown, Is.Null);
+            Assert.That(SEntMan.GetComponent<XenoReaperComponent>(_caster).FleshResin, Is.EqualTo(600));
             Assert.That(SEntMan.HasComponent<CMUReaperRevivingComponent>(_corpse), Is.False);
-            if (replacementTiming == "during")
-                Assert.That(SEntMan.GetComponent<XenoReaperComponent>(_caster).FleshResin, Is.EqualTo(100));
         });
+        await Pair.RunTicksSync(60);
+        await Server.WaitAssertion(() =>
+            Assert.That(Server.System<MobStateSystem>().IsDead(_corpse), Is.True));
     }
 
     [Test]
