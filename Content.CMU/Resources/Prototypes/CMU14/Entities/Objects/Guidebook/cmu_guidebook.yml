@@ -21,6 +21,7 @@
   - CMUChemicals
   - CMUGuideCooking
   - CMUGuideLore
+  - CMUGuideRankEquivalencies
 
 - type: guideEntry
   parent: RMC
@@ -1098,3 +1099,10 @@
   name: cmu-guide-entry-skills
   priority: 2
   text: "/ServerInfo/Guidebook/CMU14/Guides/CMUSkills.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideRankEquivalencies
+  name: cmu-guide-entry-rank-equivalencies
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Guides/RankEquivalencies.xml"

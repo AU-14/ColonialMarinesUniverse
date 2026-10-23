@@ -1,0 +1,440 @@
+<Document>
+  # Rank Equivalencies Guide
+
+  This guide shows equivalent ranks across different factions based on paygrade. Ranks with the same paygrade are considered equivalent in authority.
+
+  ## Military Factions
+
+  ### Officer Ranks (O-Grade)
+
+  <Table Columns="7" MinForcedColumnWidth="150">
+    <ColorBox Color="#263238"><Box Margin="4">[bold]  Grade  [/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4"><GuideEntityEmbed Entity="AU14RMCPatch"/></Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4"><GuideEntityEmbed Entity="AU14PatchUPP"/></Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4"><GuideEntityEmbed Entity="AU14PatchUSArmy"/></Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Imperial Armed \n   Space Forces[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Latin American \n  Colonial Navy[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Provost[/bold]</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">O10</Box></ColorBox>
+    <ColorBox><Box Margin="4">General</Box></ColorBox>
+    <ColorBox><Box Margin="4">Marshal|Chairman</Box></ColorBox>
+    <ColorBox><Box Margin="4">General</Box></ColorBox>
+    <ColorBox><Box Margin="4">General of the Army</Box></ColorBox>
+    <ColorBox><Box Margin="4">Captain General of the Navy</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">O9</Box></ColorBox>
+    <ColorBox><Box Margin="4">Lt-Gen</Box></ColorBox>
+    <ColorBox><Box Margin="4">General of the Branch</Box></ColorBox>
+    <ColorBox><Box Margin="4">Lt-Gen</Box></ColorBox>
+    <ColorBox><Box Margin="4">General</Box></ColorBox>
+    <ColorBox><Box Margin="4">Admiral General</Box></ColorBox>
+    <ColorBox><Box Margin="4">Sector Marshal</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">O8</Box></ColorBox>
+    <ColorBox><Box Margin="4">Maj-Gen</Box></ColorBox>
+    <ColorBox><Box Margin="4">Divisional General</Box></ColorBox>
+    <ColorBox><Box Margin="4">Maj-Gen/Brig-Gen</Box></ColorBox>
+    <ColorBox><Box Margin="4">Lt-Gen</Box></ColorBox>
+    <ColorBox><Box Margin="4">Admiral</Box></ColorBox>
+    <ColorBox><Box Margin="4">Senior Marshal</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">O7</Box></ColorBox>
+    <ColorBox><Box Margin="4">Brigadier</Box></ColorBox>
+    <ColorBox><Box Margin="4">Brig-Gen</Box></ColorBox>
+    <ColorBox><Box Margin="4">Brig-Gen/Maj-Gen</Box></ColorBox>
+    <ColorBox><Box Margin="4">Maj-Gen</Box></ColorBox>
+    <ColorBox><Box Margin="4">Vice Admiral</Box></ColorBox>
+    <ColorBox><Box Margin="4">Marshal</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">O6</Box></ColorBox>
+    <ColorBox><Box Margin="4">Colonel</Box></ColorBox>
+    <ColorBox><Box Margin="4">Colonel</Box></ColorBox>
+    <ColorBox><Box Margin="4">Colonel</Box></ColorBox>
+    <ColorBox><Box Margin="4">Brigadier General</Box></ColorBox>
+    <ColorBox><Box Margin="4">Counter Admiral</Box></ColorBox>
+    <ColorBox><Box Margin="4">Deputy Marshal</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">O5</Box></ColorBox>
+    <ColorBox><Box Margin="4">Lt Colonel</Box></ColorBox>
+    <ColorBox><Box Margin="4">Junior Colonel</Box></ColorBox>
+    <ColorBox><Box Margin="4">Lt Colonel</Box></ColorBox>
+    <ColorBox><Box Margin="4">Colonel</Box></ColorBox>
+    <ColorBox><Box Margin="4">Captain</Box></ColorBox>
+    <ColorBox><Box Margin="4">Chief Inspector</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">O4</Box></ColorBox>
+    <ColorBox><Box Margin="4">Major</Box></ColorBox>
+    <ColorBox><Box Margin="4">Major</Box></ColorBox>
+    <ColorBox><Box Margin="4">Major</Box></ColorBox>
+    <ColorBox><Box Margin="4">Lt Colonel</Box></ColorBox>
+    <ColorBox><Box Margin="4">Frigate Captain</Box></ColorBox>
+    <ColorBox><Box Margin="4">Inspector</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">O3</Box></ColorBox>
+    <ColorBox><Box Margin="4">Captain</Box></ColorBox>
+    <ColorBox><Box Margin="4">Captain</Box></ColorBox>
+    <ColorBox><Box Margin="4">Captain</Box></ColorBox>
+    <ColorBox><Box Margin="4">Major</Box></ColorBox>
+    <ColorBox><Box Margin="4">Corvette Captain</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">O2</Box></ColorBox>
+    <ColorBox><Box Margin="4">Lieutenant</Box></ColorBox>
+    <ColorBox><Box Margin="4">Senior Lt</Box></ColorBox>
+    <ColorBox><Box Margin="4">First Lt</Box></ColorBox>
+    <ColorBox><Box Margin="4">Captain</Box></ColorBox>
+    <ColorBox><Box Margin="4">Ship of the Line Lt</Box></ColorBox>
+    <ColorBox><Box Margin="4">Comm Officer</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">O1</Box></ColorBox>
+    <ColorBox><Box Margin="4">2nd Lt</Box></ColorBox>
+    <ColorBox><Box Margin="4">Junior Lt/Lt</Box></ColorBox>
+    <ColorBox><Box Margin="4">2nd Lt</Box></ColorBox>
+    <ColorBox><Box Margin="4">1st/2nd Lt</Box></ColorBox>
+    <ColorBox><Box Margin="4">Ensign</Box></ColorBox>
+    <ColorBox><Box Margin="4">Specialist/Fax</Box></ColorBox>
+  </Table>
+  \n
+  \n
+  ### Warrant Officers (W-Grade)
+
+  <Table Columns="5" MinForcedColumnWidth="100">
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Grade[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]RMC[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]UPP[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]US Army[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]IASF[/bold]</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">W5</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+    <ColorBox><Box Margin="4">Chief WO 5</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">W4</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+    <ColorBox><Box Margin="4">Chief WO 4</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">W3</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+    <ColorBox><Box Margin="4">Chief WO 3</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">W2</Box></ColorBox>
+    <ColorBox><Box Margin="4">WO Class 1</Box></ColorBox>
+    <ColorBox><Box Margin="4">Senior WO</Box></ColorBox>
+    <ColorBox><Box Margin="4">Chief WO 2</Box></ColorBox>
+    <ColorBox><Box Margin="4">First WO</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">W1</Box></ColorBox>
+    <ColorBox><Box Margin="4">WO Class 2</Box></ColorBox>
+    <ColorBox><Box Margin="4">WO</Box></ColorBox>
+    <ColorBox><Box Margin="4">WO 1</Box></ColorBox>
+    <ColorBox><Box Margin="4">Second WO</Box></ColorBox>
+  </Table>
+  \n
+  \n
+  ### Enlisted Ranks (EN/AGrade)
+
+  <Table Columns="7" MinForcedColumnWidth="100">
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Grade[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]RMC[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]UPP[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]US Army[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]IASF[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]LACN[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Provost[/bold]</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">E9E</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+    <ColorBox><Box Margin="4">SEA/SMA</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+    <ColorBox><Box Margin="4">Master Sgt</Box></ColorBox>
+    <ColorBox><Box Margin="4">Sgt Major</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">E9</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+    <ColorBox><Box Margin="4">Command/First Sgt/Sgt Major</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">E8</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+    <ColorBox><Box Margin="4">Master Sgt/First Sgt</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+    <ColorBox><Box Margin="4">First Class Sgt</Box></ColorBox>
+    <ColorBox><Box Margin="4">Master Sgt</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">E7</Box></ColorBox>
+    <ColorBox><Box Margin="4">Colour Sgt</Box></ColorBox>
+    <ColorBox><Box Margin="4">First Sgt/Sgt Major</Box></ColorBox>
+    <ColorBox><Box Margin="4">Sgt First Class</Box></ColorBox>
+    <ColorBox><Box Margin="4">Sgt Major</Box></ColorBox>
+    <ColorBox><Box Margin="4">Second Class Sgt</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">E6</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+    <ColorBox><Box Margin="4">Senior Sgt</Box></ColorBox>
+    <ColorBox><Box Margin="4">Staff Sgt</Box></ColorBox>
+    <ColorBox><Box Margin="4">Chief Sgt</Box></ColorBox>
+    <ColorBox><Box Margin="4">Third Class Sgt</Box></ColorBox>
+    <ColorBox><Box Margin="4">Staff Sgt</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">E5</Box></ColorBox>
+    <ColorBox><Box Margin="4">Sergeant</Box></ColorBox>
+    <ColorBox><Box Margin="4">Sergeant</Box></ColorBox>
+    <ColorBox><Box Margin="4">Sergeant</Box></ColorBox>
+    <ColorBox><Box Margin="4">First Sgt</Box></ColorBox>
+    <ColorBox><Box Margin="4">First Class Cpl</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">E4</Box></ColorBox>
+    <ColorBox><Box Margin="4">Corporal</Box></ColorBox>
+    <ColorBox><Box Margin="4">Cpl/Plutonowy</Box></ColorBox>
+    <ColorBox><Box Margin="4">Cpl/Specialist</Box></ColorBox>
+    <ColorBox><Box Margin="4">Chief Cpl/2nd Sgt</Box></ColorBox>
+    <ColorBox><Box Margin="4">Second Class Cpl</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">E3</Box></ColorBox>
+    <ColorBox><Box Margin="4">Lance Cpl</Box></ColorBox>
+    <ColorBox><Box Margin="4">Senior Gefreiter</Box></ColorBox>
+    <ColorBox><Box Margin="4">PFC</Box></ColorBox>
+    <ColorBox><Box Margin="4">Cpl 1st/2nd Class</Box></ColorBox>
+    <ColorBox><Box Margin="4">Third Class Cpl</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">E2</Box></ColorBox>
+    <ColorBox><Box Margin="4">Marine</Box></ColorBox>
+    <ColorBox><Box Margin="4">Gefreiter</Box></ColorBox>
+    <ColorBox><Box Margin="4">Private</Box></ColorBox>
+    <ColorBox><Box Margin="4">Chief Private</Box></ColorBox>
+    <ColorBox><Box Margin="4">First Class Sailor</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">E1</Box></ColorBox>
+    <ColorBox><Box Margin="4">Recruit</Box></ColorBox>
+    <ColorBox><Box Margin="4">Private</Box></ColorBox>
+    <ColorBox><Box Margin="4">Private</Box></ColorBox>
+    <ColorBox><Box Margin="4">PFC/PSC</Box></ColorBox>
+    <ColorBox><Box Margin="4">Sailor</Box></ColorBox>
+    <ColorBox><Box Margin="4">N/A</Box></ColorBox>
+  </Table>
+  \n
+  \n
+  ## Corporate Factions
+
+  ### Weyland-Yutani PMC
+
+  <Table Columns="2" MinForcedColumnWidth="100">
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Grade[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Rank[/bold]</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PMC-C13</Box></ColorBox>
+    <ColorBox><Box Margin="4">Regional PMC Director</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PMC-C12</Box></ColorBox>
+    <ColorBox><Box Margin="4">PMC Branch Manager</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PMC-C11</Box></ColorBox>
+    <ColorBox><Box Margin="4">PMC Site Director</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PMC-C10</Box></ColorBox>
+    <ColorBox><Box Margin="4">Deputy Site Director</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PMC-S3</Box></ColorBox>
+    <ColorBox><Box Margin="4">Senior Commander</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PMC-S2</Box></ColorBox>
+    <ColorBox><Box Margin="4">Commander</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PMC-S1</Box></ColorBox>
+    <ColorBox><Box Margin="4">Adjutant</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PMC-F6</Box></ColorBox>
+    <ColorBox><Box Margin="4">Lead Enforcer</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PMC-F5</Box></ColorBox>
+    <ColorBox><Box Margin="4">Senior Enforcer</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PMC-F4</Box></ColorBox>
+    <ColorBox><Box Margin="4">Enforcer</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PMC-F3</Box></ColorBox>
+    <ColorBox><Box Margin="4">Senior Operator</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PMC-F2</Box></ColorBox>
+    <ColorBox><Box Margin="4">Operator</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PMC-F1</Box></ColorBox>
+    <ColorBox><Box Margin="4">Associate Operator</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PMC-AVC4</Box></ColorBox>
+    <ColorBox><Box Margin="4">Senior Crew Chief</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PMC-AVC3</Box></ColorBox>
+    <ColorBox><Box Margin="4">Crew Chief</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PMC-AVO2</Box></ColorBox>
+    <ColorBox><Box Margin="4">Senior Pilot</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PMC-AVO1</Box></ColorBox>
+    <ColorBox><Box Margin="4">Pilot</Box></ColorBox>
+  </Table>
+  \n
+  ### Prodigy Security and Consulting (PSC)
+
+  <Table Columns="2" MinForcedColumnWidth="100">
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Grade[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Rank[/bold]</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PSC-C12</Box></ColorBox>
+    <ColorBox><Box Margin="4">PSC Regional Director</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PSC-C11</Box></ColorBox>
+    <ColorBox><Box Margin="4">PSC Director of Operations</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PSC-C10</Box></ColorBox>
+    <ColorBox><Box Margin="4">Deputy Director of Operations</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PSC-S3</Box></ColorBox>
+    <ColorBox><Box Margin="4">Senior Response Unit Commander</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PSC-S2</Box></ColorBox>
+    <ColorBox><Box Margin="4">Response Unit Commander</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PSC-S1</Box></ColorBox>
+    <ColorBox><Box Margin="4">Response Unit Adjutant</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PSC-R6</Box></ColorBox>
+    <ColorBox><Box Margin="4">Lead Response Unit Enforcer</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PSC-R5</Box></ColorBox>
+    <ColorBox><Box Margin="4">Senior Response Unit Enforcer</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PSC-R4</Box></ColorBox>
+    <ColorBox><Box Margin="4">Response Unit Enforcer</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PSC-R3</Box></ColorBox>
+    <ColorBox><Box Margin="4">Senior Operator</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PSC-R2</Box></ColorBox>
+    <ColorBox><Box Margin="4">Response Unit Operator</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PSC-R1</Box></ColorBox>
+    <ColorBox><Box Margin="4">Associate Response Unit</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PSC-R0</Box></ColorBox>
+    <ColorBox><Box Margin="4">Response Unit in Training</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PSC-AVC2</Box></ColorBox>
+    <ColorBox><Box Margin="4">Senior Response Unit Crew Chief</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PSC-AVC1</Box></ColorBox>
+    <ColorBox><Box Margin="4">Response Unit Crew Chief</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PSC-AVO2</Box></ColorBox>
+    <ColorBox><Box Margin="4">Senior Response Unit Pilot</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PSC-AVO1</Box></ColorBox>
+    <ColorBox><Box Margin="4">Response Unit Pilot</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">PSC-RUSYN1-5</Box></ColorBox>
+    <ColorBox><Box Margin="4">Response Unit Synthetic Grade 1-5</Box></ColorBox>
+  </Table>
+  \n
+  ### Vanguard's Arrow Incorporated (VAI)
+
+  <Table Columns="2" MinForcedColumnWidth="100">
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Grade[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Rank[/bold]</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">VASGC</Box></ColorBox>
+    <ColorBox><Box Margin="4">VASC Group Commander</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">VASGA</Box></ColorBox>
+    <ColorBox><Box Margin="4">VASC Group Advisor</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">VASGCA</Box></ColorBox>
+    <ColorBox><Box Margin="4">VASC Group Commander Assistant</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">VADPTLDR</Box></ColorBox>
+    <ColorBox><Box Margin="4">VASC Departament Leader</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">VASPC</Box></ColorBox>
+    <ColorBox><Box Margin="4">VASC Specialist</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">VASCTL</Box></ColorBox>
+    <ColorBox><Box Margin="4">VASC Team Leader</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">VASCE</Box></ColorBox>
+    <ColorBox><Box Margin="4">VASC Engineering Specialist</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">VASCMG</Box></ColorBox>
+    <ColorBox><Box Margin="4">VASC Machinegunner</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">VASCM</Box></ColorBox>
+    <ColorBox><Box Margin="4">VASC Medical Specialist</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">VASC</Box></ColorBox>
+    <ColorBox><Box Margin="4">VASC Mercenary</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">VASCS</Box></ColorBox>
+    <ColorBox><Box Margin="4">VASC Synthetic</Box></ColorBox>
+  </Table>
+  \n
+  ### Lazarus Biosciences (LB)
+
+  <Table Columns="2" MinForcedColumnWidth="100">
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Grade[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238"><Box Margin="4">[bold]Rank[/bold]</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">LBC7</Box></ColorBox>
+    <ColorBox><Box Margin="4">Assistant Manager</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">LBC6</Box></ColorBox>
+    <ColorBox><Box Margin="4">Executive Supervisor</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">LBC5</Box></ColorBox>
+    <ColorBox><Box Margin="4">Executive Specialist</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">LBC4</Box></ColorBox>
+    <ColorBox><Box Margin="4">Senior Executive</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">LBC3</Box></ColorBox>
+    <ColorBox><Box Margin="4">Executive</Box></ColorBox>
+
+    <ColorBox><Box Margin="4">LBC2</Box></ColorBox>
+    <ColorBox><Box Margin="4">Junior Executive</Box></ColorBox>
+  </Table>
+  \n
+  ## Notes
+
+  [bold]Paygrade equivalence[/bold]: Ranks with the same paygrade are considered equivalent in authority for MP purposes
+  [bold]Special ranks[/bold]: Some factions have special ranks (Commissars, Specialists) that may not have direct equivalents
+  [bold]Aviation ranks[/bold]: Some factions have separate aviation tracks (WeYu, PSC)
+  [bold]Administrative ranks[/bold]: Corporate factions may have administrative ranks without military equivalents
+  [bold]Unique paygrades[/bold]: Corporate factions (PSC, VAI, LB) use unique paygrade systems that don't directly map to military O/W/E grades
+  [bold]Synthetic ranks[/bold]: Some factions have dedicated synthetic rank tracks (PSC, VAI)
+
+  ## Usage for Military Police
+
+  When dealing with personnel from different factions:
+  1. Identify their rank and paygrade
+  2. Use this table to find the equivalent rank in your faction
+  3. Apply appropriate protocols based on the equivalent authority level
+
+  Example: A UPP Marshal (O10) has equivalent authority to an RMC General (O10) or US Army General (O10).
+
+  For corporate factions with unique paygrade systems, use judgment based on the role description (e.g., "Director" typically has high authority, "Associate" is entry-level).
+</Document>

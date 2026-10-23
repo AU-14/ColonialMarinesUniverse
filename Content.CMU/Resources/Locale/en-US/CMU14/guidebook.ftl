@@ -210,3 +210,4 @@ cmu-guide-entry-lore-ua-politics = Politics
 cmu-guide-entry-overwatch = Overwatch
 cmu-guide-entry-fob-security = FOB Security Squad
 cmu-guide-entry-skills = Skills
+cmu-guide-entry-rank-equivalencies = Rank Equivalencies
