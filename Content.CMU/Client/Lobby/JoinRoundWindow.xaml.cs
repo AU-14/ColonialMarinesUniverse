@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Content.Client.Lobby.UI;
 using Content.Client.CMU14.Interface;
 using Content.Client.Resources;
@@ -28,19 +29,6 @@ public sealed partial class JoinRoundWindow : DefaultWindow
 {
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IStylesheetManager _stylesheetManager = default!;
-    [Dependency] private IResourceCache _resourceCache = default!;
-
-    private const float ColumnWidth = 560f;
-
-    private const int ColumnsPerRow = 2;
-
-    private const int RowGap = 16;
-
-    private const int TitleSize = 8;
-
-    private const int ButtonTextSize = 8;
-
-    private const float ScanlineDepth = 0.9f;
 
     /// <summary>
     ///     Colonists. The plain one on purpose - they are the default, least exotic choice, so it
@@ -73,11 +61,14 @@ public sealed partial class JoinRoundWindow : DefaultWindow
 
     public Button JoinOtherButton { get; private set; } = default!;
 
-    // TODO: FIXME:
-    // public Button JoinHuntButton => _hunt.Button;
-    // public void SetHuntVisible(bool visible) => _hunt.Visible = visible;
+    public Button JoinHuntButton { get; private set; } = default!;
+
+    private PanelContainer _huntColumn = default!;
+
     private readonly List<(PanelContainer Column, Button Button, CmuChoiceCard.Palette Palette)> _columns = new();
+
     private CrtScreenControl _shaderPass = default!;
+
     private Control _cornerTicks = default!;
 
     public JoinRoundWindow()
@@ -88,11 +79,6 @@ public sealed partial class JoinRoundWindow : DefaultWindow
 
         Choices.SeparationOverride = RowGap;
 
-        // TODO: FIXME:
-        // _hunt = AddCard("rmc-lobby-join-hunt", "cmu-lobby-join-hunt-desc", GovforPalette, buttonOnLeft: true);
-        // _hunt.Visible = false;
-        // ApplyCrtPalette();
-
         var row1 = ChoiceRow();
         var row2 = ChoiceRow();
         Choices.AddChild(row1);
@@ -102,6 +88,14 @@ public sealed partial class JoinRoundWindow : DefaultWindow
         JoinGovforButton = BuildColumn(row1, "rmc-lobby-join-govfor", "cmu-lobby-join-govfor-desc", GovforPalette);
         JoinOpforButton = BuildColumn(row2, "rmc-lobby-join-opfor", "cmu-lobby-join-opfor-desc", OpforPalette);
         JoinOtherButton = BuildColumn(row2, "rmc-lobby-join-other", "cmu-lobby-join-other-desc", OtherPalette);
+
+        // The hunt rides below the grid, full width, and only for whitelisted players.
+        var row3 = ChoiceRow();
+        Choices.AddChild(row3);
+        JoinHuntButton = BuildColumn(row3, "rmc-lobby-join-hunt", "cmu-lobby-join-hunt-desc", GovforPalette);
+        _huntColumn = _columns[^1].Column;
+        _huntColumn.HorizontalExpand = true;
+        _huntColumn.Visible = false;
 
         MinWidth = ColumnWidth * ColumnsPerRow
                    + CmuPanelMetrics.RowSeparation * (ColumnsPerRow - 1)
@@ -131,6 +125,8 @@ public sealed partial class JoinRoundWindow : DefaultWindow
         _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
         _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
     }
+
+    public void SetHuntVisible(bool visible) => _huntColumn.Visible = visible;
 
     private static BoxContainer ChoiceRow() => new()
     {
@@ -236,8 +232,6 @@ public sealed partial class JoinRoundWindow : DefaultWindow
     {
         Stylesheet = _stylesheetManager.SheetNano;
 
-        // TODO: FIXME:
-        // _hunt.ApplyPalette();
         var crt = StyleNano.CrtUiEnabled;
         var header = FindControl<PanelContainer>("WindowHeader");
         var titleLabel = FindControl<Label>("TitleLabel");
