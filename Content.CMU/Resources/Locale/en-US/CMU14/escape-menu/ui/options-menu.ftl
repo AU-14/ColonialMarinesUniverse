@@ -1,10 +1,21 @@
 cmu-ui-options-examine-log-in-chat = Show detailed examine breakdown of characters in chat
 cmu-ui-options-examine-full-text-in-chat = Echo everything you examine to chat like in SS13
 cmu-ui-options-examine-wounds-in-chat = Echo people's wounds to chat when you examine them like in CM13
+cmu-ui-options-examine-log-in-chat-tooltip = Shows a detailed breakdown of characters you examine in chat.
+cmu-ui-options-examine-full-text-in-chat-tooltip = Echoes everything you examine to chat, like in SS13.
+cmu-ui-options-chat-follow-button = Ghost follow button
+cmu-ui-options-chat-follow-button-tooltip = As a ghost, shows a follow button next to chat messages. When off, double-click a message instead to follow its sender.
+cmu-ui-options-squad-color-names = Color names by squad
+cmu-ui-options-squad-color-names-tooltip = Colors the speaker's name in chat by their squad.
+cmu-ui-options-show-looc-on-head = Show LOOC above heads
+cmu-ui-options-auto-fill-highlights = Auto-fill highlights
+cmu-ui-options-auto-fill-highlights-tooltip = Fills your chat highlights with your character's information.
+cmu-ui-options-highlights-color = Highlight color
+cmu-ui-options-group-chat-text = Text
+cmu-ui-options-group-chat-bubbles = Speech bubbles
+cmu-ui-options-group-chat-messages = Messages
 
 cmu-ui-options-identification = Identification
-cmu-ui-options-fof-unidentified-marker = Show question marks for unfamiliar enemy uniforms in FoF
-cmu-ui-options-fof-unidentified-marker-tooltip = Shows a question mark above living enemies whose uniform is not issued or sold by your platoon. Works without HUD gear and never marks teammates or dead bodies.
 
 cmu-ui-options-accessibility = Accessibility
 cmu-ui-options-chat-crt-haze = CRT haze over chat
