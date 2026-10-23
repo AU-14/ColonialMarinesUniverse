@@ -3,7 +3,7 @@ using Content.Client.Options.UI;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 
-namespace Content.Client._CMU14.UserInterface.Options;
+namespace Content.Client.CMU14.UserInterface.Options;
 
 /// <summary>
 ///     Narrows every tab of the options menu to the settings matching a typed query, and puts it

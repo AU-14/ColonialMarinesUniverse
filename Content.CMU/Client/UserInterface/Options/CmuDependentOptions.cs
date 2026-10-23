@@ -3,7 +3,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
 using Robust.Shared.Timing;
 
-namespace Content.Client._CMU14.UserInterface.Options;
+namespace Content.Client.CMU14.UserInterface.Options;
 
 /// <summary>
 ///     Settings that only do something while another one is on. Indented under it, and greyed out

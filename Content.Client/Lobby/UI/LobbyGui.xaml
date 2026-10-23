@@ -99,39 +99,13 @@
                      cannot sit in the captured subtree or the roll bar would shear it. -->
                 <BoxContainer Name="LobbyPlate" Orientation="Horizontal" HorizontalExpand="True"
                               Margin="4 0 4 4" SeparationOverride="8">
-                    <Label Name="ServerName" Access="Public" StyleClasses="CrtHeadingSmall"
+                    <Label StyleClasses="CrtHeadingSmall"
                            Text="{Loc 'cmu-lobby-plate-name'}"
                            VAlign="Center" HorizontalExpand="True" ClipText="True" />
                     <Label Name="PlateSerial" Access="Public" Text="{Loc 'cmu-lobby-plate-serial'}"
                            VAlign="Center" Visible="False" />
                 </BoxContainer>
-                <!-- The command row, on the case with the plate rather than on the screen. -->
-                <PanelContainer Name="CommandBand" Access="Public" StyleClasses="CrtCommandBand"
-                                MinHeight="{x:Static cmu:CmuPanelMetrics.RowCompact}">
-                    <BoxContainer Orientation="Horizontal" Name="HeaderContainer" Access="Public"
-                                  SeparationOverride="1" HorizontalExpand="True">
-                        <Button Name="AHelpButton" Access="Public" Text="{Loc 'ui-lobby-ahelp-button'}"
-                                StyleClasses="CrtCommandCell" HorizontalExpand="True" VerticalExpand="True" />
-                        <vote:VoteCallMenuButton Name="CallVoteButton" Access="Public" StyleClasses="CrtCommandCell"
-                                                 HorizontalExpand="True" VerticalExpand="True" />
-                        <Button Name="OptionsButton" Access="Public" StyleClasses="CrtCommandCell"
-                                Text="{Loc 'ui-lobby-options-button'}" HorizontalExpand="True" VerticalExpand="True" />
-                        <Button Name="LeaveButton" Access="Public" StyleClasses="CrtCommandCell"
-                                Text="{Loc 'ui-lobby-leave-button'}" HorizontalExpand="True" VerticalExpand="True" />
-                        <!-- The arrow keeps its natural width: it is an affordance on the panel, not a
-                             fifth command, and stretching it to a fifth of the row would say otherwise. -->
-                        <PanelContainer Name="CollapseCell" Access="Public"
-                                        StyleClasses="CrtCommandCellPanel" VerticalExpand="True">
-                            <TextureButton Name="CollapseButton"
-                                           TexturePath="filled_right_arrow.svg.192dpi"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center"
-                                           Margin="4 0 4 0"
-                                           Scale="0.5 0.5" />
-                        </PanelContainer>
-                    </BoxContainer>
-                </PanelContainer>
-                <controls:HSpacer Spacing="4" />
+
                 <!-- The server/character switch: a two-position detent toggle on the case rather than a
                      tab on the glass. Housing only; with it off both blocks stay stacked. -->
                 <PanelContainer Name="PanelSwitch" Access="Public" HorizontalExpand="True"
@@ -194,7 +168,7 @@
                             <!-- RowCompact, not Header. The old row's buttons were centred inside a
                                  40px line at their own natural height; these fill the band, so the
                                  same 40 made every command twice as tall as its label needs. -->
-                            <PanelContainer StyleClasses="CrtCommandBand"
+                            <PanelContainer Name="CommandBand" Access="Public" StyleClasses="CrtCommandBand"
                                             MinHeight="{x:Static cmu:CmuPanelMetrics.RowCompact}">
                                 <BoxContainer Orientation="Horizontal" Name="HeaderContainer" Access="Public"
                                               SeparationOverride="1" HorizontalExpand="True">
@@ -205,7 +179,7 @@
                                             StyleClasses="CrtCommandCell" HorizontalExpand="True" VerticalExpand="True"
                                             Visible="False" />
                                     <!-- CMU14 End -->
-                                    <vote:VoteCallMenuButton Name="CallVoteButton" StyleClasses="CrtCommandCell"
+                                    <vote:VoteCallMenuButton Name="CallVoteButton" Access="Public" StyleClasses="CrtCommandCell"
                                                              HorizontalExpand="True" VerticalExpand="True" />
                                     <Button Name="OptionsButton" Access="Public" StyleClasses="CrtCommandCell"
                                             Text="{Loc 'ui-lobby-options-button'}" HorizontalExpand="True" VerticalExpand="True" />
@@ -215,7 +189,8 @@
                                          panel, not a fifth command, and stretching it to a fifth of
                                          the row would say otherwise. Wrapped because a TextureButton
                                          has no stylebox of its own to carry the cell fill. -->
-                                    <PanelContainer StyleClasses="CrtCommandCellPanel" VerticalExpand="True">
+                                    <PanelContainer Name="CollapseCell" Access="Public"
+                                                    StyleClasses="CrtCommandCellPanel" VerticalExpand="True">
                                         <TextureButton Name="CollapseButton"
                                                        TexturePath="filled_right_arrow.svg.192dpi"
                                                        VerticalAlignment="Center"

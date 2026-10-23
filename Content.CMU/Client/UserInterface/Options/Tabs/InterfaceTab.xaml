@@ -1,7 +1,7 @@
 <tabs:InterfaceTab xmlns="https://spacestation14.io"
-                   xmlns:tabs="clr-namespace:Content.Client._CMU14.UserInterface.Options.Tabs"
+                   xmlns:tabs="clr-namespace:Content.Client.CMU14.UserInterface.Options.Tabs"
                    xmlns:ui="clr-namespace:Content.Client.Options.UI"
-                   xmlns:cmu="clr-namespace:Content.Client._CMU14.UserInterface.Options">
+                   xmlns:cmu="clr-namespace:Content.Client.CMU14.UserInterface.Options">
     <BoxContainer Orientation="Vertical">
         <ScrollContainer VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False">
             <BoxContainer Orientation="Vertical" Margin="10 8 10 8" SeparationOverride="2" VerticalExpand="True">
@@ -58,6 +58,7 @@
                             <CheckBox Name="DiscordRich" Text="{Loc 'cmu-ui-options-discord-rich'}" />
                         </BoxContainer>
                     </BoxContainer>
+                    <Button Name="OpenUiSetupButton" Text="{Loc 'cmu-ui-setup-open'}" HorizontalExpand="True" />
                 </cmu:CmuOptionSection>
 
             </BoxContainer>

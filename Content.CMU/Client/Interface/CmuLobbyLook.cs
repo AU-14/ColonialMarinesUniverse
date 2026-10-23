@@ -9,7 +9,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.IoC;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.Interface;
+namespace Content.Client.CMU14.Interface;
 
 /// <summary>
 ///     Dresses the lobby's right column as the molded terminal the chat and guidebook wear, following
@@ -20,7 +20,7 @@ public static class CmuLobbyLook
     // Panels go through PanelOverride, not style classes: CrtLobbyTheme walks this same tree and a
     // class here would tie with it at equal specificity.
 
-    private const string HousingPath = "/Textures/_CMU14/Interface/ChatHousing";
+    private const string HousingPath = "/Textures/CMU14/Interface/ChatHousing";
 
     public static void Apply(LobbyGui lobby)
     {
