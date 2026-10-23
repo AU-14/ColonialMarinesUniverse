@@ -176,6 +176,7 @@ public sealed partial class ChatSystem
         _critWhisperEnabled
         && IsUnconsciousForWhisper(source)
         && !HasMuteOtherThanKnockout(source);
+
     // Knockouts mute normal speech; any other mute still blocks whispering.
     private bool HasMuteOtherThanKnockout(EntityUid source)
     {
