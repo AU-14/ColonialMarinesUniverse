@@ -1649,10 +1649,10 @@
     - name: Tool Storage
       choices: { CMUCTToolStorage: 1 }
       entries:
-      - id: AU14BeltUtilityCombatFilled
+      - id: CMULACNBeltUtilityCombatFilled
         name: LACN utility tools rig (filled)
         recommended: true
-      - id: RMCBeltConstruction
+      - id: CMULACNBeltConstruction
         name: LACN construction rig
       - id: AU14PouchToolsFilledComtech
         name: tactical tools pouch (filled)

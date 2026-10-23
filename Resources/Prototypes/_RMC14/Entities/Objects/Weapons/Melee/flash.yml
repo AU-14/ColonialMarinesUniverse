@@ -27,6 +27,9 @@
         enum.FlashVisualLayers.LightLayer:
           True: { visible: true }
           False: { visible: false }
+  # cmu edit start: can set off epilepsy
+  - type: CMUEpilepsyTrigger
+  # cmu edit end
   - type: MeleeRequiresSkill
     skills:
       RMCSkillPolice: 1

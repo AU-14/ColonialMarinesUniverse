@@ -10,10 +10,10 @@ namespace Content.Shared.CMU14.Threats.Mobs.Wendigo.Rest;
 public sealed partial class CMUWendigoRestComponent : Component
 {
     /// <summary>
-    /// Sprite state shown while resting. The Wendigo has no resting art; the curled "dead" pose stands in.
+    /// Sprite state shown while resting.
     /// </summary>
     [DataField]
-    public string RestingState = "dead";
+    public string RestingState = "resting";
 
     [DataField]
     public string StandingState = "alive";

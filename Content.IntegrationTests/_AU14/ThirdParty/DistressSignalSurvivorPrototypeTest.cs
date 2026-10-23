@@ -81,6 +81,7 @@ public sealed class DistressSignalSurvivorPrototypeTest
         // cmu edit start
         "CMUBosenmoriColonists",
         "CMUCCAFFireTeam",
+        "CMUCLFJeepReinforcements", // inherits survivor announcing from CLFCellReinforcementsIntel
         "IASFSurvBosenmori",
         "IASFSurvBosenmoriPilot",
         // cmu edit end
