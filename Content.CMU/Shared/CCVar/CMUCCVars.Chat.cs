@@ -7,6 +7,12 @@ namespace Content.Shared.CCVar;
 public sealed partial class CCVars
 {
     /// <summary>
+    /// If true, ghosts see a command link next to supported chat messages that follows the sender.
+    /// </summary>
+    public static readonly CVarDef<bool> ChatGhostFollowButton =
+        CVarDef.Create("chat.ghost_follow_button", true, CVar.CLIENT | CVar.REPLICATED | CVar.ARCHIVE);
+
+    /// <summary>
     /// Whether the detailed "you can see" character examine breakdown is also echoed to the examiner's chat log.
     /// </summary>
     public static readonly CVarDef<bool> ExamineLogInChat =
@@ -26,15 +32,15 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.examine_wounds_in_chat", false, CVar.CLIENT | CVar.REPLICATED | CVar.ARCHIVE);
 
     /// <summary>
-    /// After sending a message on any channel other than Local, switch the chat input back to Local.
-    /// Does nothing if Local can't be selected, e.g. as a ghost.
-    /// </summary>
-    /// <summary>
     /// Whether this player hears the talking blips when people speak nearby.
     /// </summary>
     public static readonly CVarDef<bool> ChatSpeechSounds =
         CVarDef.Create("cmu.chat_speech_sounds", true, CVar.CLIENT | CVar.REPLICATED | CVar.ARCHIVE);
 
+    /// <summary>
+    /// After sending a message on any channel other than Local, switch the chat input back to Local.
+    /// Does nothing if Local can't be selected, e.g. as a ghost.
+    /// </summary>
     public static readonly CVarDef<bool> ChatResetToLocal =
         CVarDef.Create("cmu.chat_reset_to_local", false, CVar.CLIENTONLY | CVar.ARCHIVE);
 
