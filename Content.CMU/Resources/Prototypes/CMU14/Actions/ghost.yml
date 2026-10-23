@@ -1,0 +1,15 @@
+# Ported from funky-station PR 906.
+- type: entity
+  parent: BaseMentalAction
+  id: CMUActionToggleSelfGhost
+  name: Toggle Your Ghost
+  description: Toggle the visibility of your own ghost.
+  components:
+  - type: Action
+    clientExclusive: true
+  - type: Sprite
+    sprite: Mobs/Ghosts/ghost_human.rsi
+    layers:
+    - state: icon
+  - type: InstantAction
+    event: !type:CMUToggleSelfGhostActionEvent

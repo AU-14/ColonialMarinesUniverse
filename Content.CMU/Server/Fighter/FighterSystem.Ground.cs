@@ -6,6 +6,7 @@ using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Physics;
+using Content.Shared.Popups;
 using Content.Shared._RMC14.Vehicle.Supply;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -55,6 +56,8 @@ public sealed partial class FighterSystem
 
     private void OnGroundInit(Entity<FighterGroundComponent> ground, ref MapInitEvent args)
     {
+        // a bare hull (component sweep tests) has no body to taxi or fold wings on
+        if (!HasComp<PhysicsComponent>(ground) || !HasComp<FixturesComponent>(ground)) return;
         if (ground.Comp.Aircraft != null || Transform(ground).MapUid is not { } terrain) return;
         // Ship-side delivery still flies over the active battlefield, not the carrier map.
         if (_objectives.GetPlanetMapId() is { } planet && planet != MapId.Nullspace && _map.MapExists(planet))
@@ -245,6 +248,11 @@ public sealed partial class FighterSystem
     {
         FinishVtolEffects(ground, FighterVtolOutcome.Aborted);
         if (ground.Comp.Aircraft is not { } uid || TerminatingOrDeleted(uid)) return;
+        if (TryComp(uid, out FighterAircraftComponent? survivingAircraft))
+        {
+            survivingAircraft.GroundEntity = null;
+            Dirty(uid, survivingAircraft);
+        }
         var cockpitMap = Transform(uid).MapUid;
         var recovery = Transform(ground).MapUid != null ? Transform(ground).Coordinates : ground.Comp.LaunchCoordinates;
         if (recovery is { } destination && !TerminatingOrDeleted(destination.EntityId) && _transform.GetMap(destination) != null)
@@ -303,6 +311,7 @@ public sealed partial class FighterSystem
     {
         if (aircraft.Comp.GroundEntity is not { } hull || !TryComp(hull, out FighterGroundComponent? ground)) return;
         FighterFlight.Abort(aircraft.Comp);
+        ground.LandingBlockedSince = null;
         SetGroundState((hull, ground), aircraft, FighterGroundState.Returning);
         foreach (var seatUid in new[] { aircraft.Comp.FrontSeat, aircraft.Comp.RearSeat })
             if (seatUid is { } uid && TryComp(uid, out FighterSeatComponent? seat))
@@ -347,6 +356,7 @@ public sealed partial class FighterSystem
         if (!TryComp(aircraft, out FighterWeaponsComponent? weapons)) return;
         for (var i = 0; i < weapons.Hardpoints.Count; i++)
         {
+            if (TerminatingOrDeleted(weapons.Hardpoints[i])) continue;
             var cannon = i == FighterWeaponsComponent.GauSlot;
             var x = cannon ? .5f : .5f + (i < 3 ? -1 : 1) * (2.5f + i % 3 * 1.8f);
             var position = new Vector2(x, cannon ? 5.5f : -1.5f - i % 3 * .7f);
@@ -388,9 +398,25 @@ public sealed partial class FighterSystem
             if (component.LaunchCoordinates is not { } launchCoordinates || !GroundSiteClear(hull, launchCoordinates))
             {
                 if (a.ForcedRetreat && TryComp(aircraft, out FighterAirCombatComponent? combat)) BeginCrash(aircraft, combat);
-                else { a.RecoveryHandoff = false; component.EndsAt = now + TimeSpan.FromSeconds(2); }
+                else
+                {
+                    a.RecoveryHandoff = false;
+                    component.EndsAt = now + TimeSpan.FromSeconds(2);
+                    // a crewman on the spot moves off, a hijacked dropship crashed onto it never does
+                    component.LandingBlockedSince ??= now;
+                    if (component.LaunchCoordinates is { } blocked &&
+                        now >= component.LandingBlockedSince + component.LandingDivertDelay &&
+                        TryFindDivertSite(hull, blocked, component.LandingDivertRange, out var divert))
+                    {
+                        component.LaunchCoordinates = divert;
+                        component.LandingBlockedSince = null;
+                        component.EndsAt = now;
+                        PopupCrew(a, Loc.GetString("cmu-fighter-landing-diverted"));
+                    }
+                }
                 return;
             }
+            component.LandingBlockedSince = null;
             if (!a.RecoveryHandoff)
             {
                 SetGroundState(ground, aircraft, FighterGroundState.Returning, TimeSpan.FromSeconds(1.2));
@@ -452,6 +478,35 @@ public sealed partial class FighterSystem
             SetGroundState(ground, aircraft, FighterGroundState.Returning, TimeSpan.FromSeconds(2));
             if (a.ForcedRetreat && TryComp(aircraft, out FighterAirCombatComponent? combat)) BeginCrash(aircraft, combat);
         }
+    }
+
+    // nearest clear spot around a blocked recovery site, ring by ring, in whole tiles so it stays on the grid
+    private bool TryFindDivertSite(EntityUid hull, EntityCoordinates blocked, int range, out EntityCoordinates site)
+    {
+        for (var ring = 1; ring <= range; ring++)
+        for (var x = -ring; x <= ring; x++)
+        for (var y = -ring; y <= ring; y++)
+        {
+            if (Math.Max(Math.Abs(x), Math.Abs(y)) != ring)
+                continue;
+
+            var candidate = blocked.Offset(new Vector2(x, y));
+            if (!GroundSiteClear(hull, candidate))
+                continue;
+
+            site = candidate;
+            return true;
+        }
+
+        site = default;
+        return false;
+    }
+
+    private void PopupCrew(FighterAircraftComponent aircraft, string message)
+    {
+        foreach (var seatUid in new[] { aircraft.FrontSeat, aircraft.RearSeat })
+            if (CompOrNull<FighterSeatComponent>(seatUid)?.Occupant is { } crew)
+                _popup.PopupEntity(message, crew, crew, PopupType.Medium);
     }
 
     /// <summary>Rechecked at both ends of the transition; occupants and obstructions never get crushed by landing.</summary>

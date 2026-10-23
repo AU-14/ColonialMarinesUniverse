@@ -224,6 +224,9 @@ public sealed partial class MindSystem : SharedMindSystem
             component = EnsureComp<MindContainerComponent>(entity.Value);
             var ghostComponent = Comp<GhostComponent>(entity.Value);
             _ghosts.SetCanReturnToBody((entity.Value, ghostComponent), false);
+            // cmu edit start: the ghost looks like the body it left (RMC-14 PR 10355)
+            EntityManager.System<Content.Shared.CMU14.Ghost.CMUGhostAppearanceSystem>().SetSource(entity.Value, mind.OwnedEntity);
+            // cmu edit end
         }
 
         var oldEntity = mind.OwnedEntity;

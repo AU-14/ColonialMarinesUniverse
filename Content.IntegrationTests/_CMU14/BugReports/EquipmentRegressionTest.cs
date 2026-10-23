@@ -173,7 +173,11 @@ public sealed class EquipmentRegressionTest : GameTest
             foreach (var (light, _) in flares)
             {
                 Assert.That(light.Comp.Activated, Is.True);
-                Assert.That(SEntMan.HasComponent<DropshipTargetComponent>(light.Owner), Is.True);
+                // The flare rework (RMC-14#9465) tracks a fired signal flare first and only makes it a CAS target
+                // once its activation delay has passed and it has settled.
+                Assert.That(SEntMan.TryGetComponent(light.Owner, out ActiveFlareSignalComponent? active), Is.True);
+                Assert.That(active!.Abbreviation, Is.Not.Null);
+                Assert.That(SEntMan.HasComponent<DropshipTargetComponent>(light.Owner), Is.False);
                 SEntMan.DeleteEntity(light.Owner);
             }
         });

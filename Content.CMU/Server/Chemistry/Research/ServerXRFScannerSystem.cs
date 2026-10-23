@@ -72,7 +72,10 @@ public sealed partial class ServerXRFScannerSystem : XRFScannerSystem
         }
         if (chem.Class < ReagentClass.Special || (chem.Class >= ReagentClass.Special && dat.Value.Completed))
             _generator.SaveNewProperties(chemprops);
-        if (chem.Class >= ReagentClass.Special && !_rdat.GetResearch(faction).CompletedChemicals.Contains(chem.ID))
+        // Contract and xeno chemicals pay credits plus sample data; simulator output (Generated, Class Rare)
+        // pays sample data only, so the simulator loop feeds itself without touching clearance.
+        if ((chem.Class >= ReagentClass.Special || chem.Generated) &&
+            !_rdat.GetResearch(faction).CompletedChemicals.Contains(chem.ID))
         {
             //todo: statistics
             //todo: do something when DNA Disintegrating is discovered

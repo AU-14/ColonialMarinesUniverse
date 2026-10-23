@@ -1,0 +1,19 @@
+author: Ignies
+category: CMU
+changes:
+- message: The colony ATM has new pixel art, a screen that boots up and sounds for
+    everything it does.
+  type: Tweak
+- message: The ATM keeps your card while you use it. Leave it behind and someone else
+    can pull it out, or use it if you left it signed in.
+  type: Add
+- message: The ATM shows your own card's PIN at the top of its window and can pop
+    out into its own window.
+  type: Add
+- message: Cash visibly comes out of and goes into the ATM, more notes for more money.
+    Click the notes to take them in hand.
+  type: Tweak
+- message: A siphoned ATM shows the CLF's mark and sparks from its broken card reader.
+  type: Tweak
+time: '2026-10-07T03:13:34.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2086

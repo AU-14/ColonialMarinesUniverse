@@ -1,19 +1,5 @@
-- type: construction
-  parent: RMC
-  name: HESCO Barrier
-  id: AU14HESCOBarrier
-  graph: AU14HESCOGraph
-  startNode: start
-  targetNode: nodeFilled
-  category: construction-category-cm-structures
-  description: A modular, sand-filled defensive barrier used to protect against explosives and small arms fire.
-  objectType: Structure
-  placementMode: SnapgridCenter
-  canBuildInImpassable: false
-  conditions:
-    - !type:TileNotBlocked
-    - !type:TileBarricadeClear
-
+# No construction menu recipe: HESCOs are only built from HESCO kits. The graph stays for taking a finished wall
+# (and the submerged barricades that share it) apart.
 - type: constructionGraph
   parent: RMC
   id: AU14HESCOGraph

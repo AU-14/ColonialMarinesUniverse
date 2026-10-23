@@ -32,7 +32,7 @@ public sealed partial class RMCDiscordSystem : EntitySystem
         if (messages.Count == 0)
             return;
 
-        var admins = _admin.ActiveAdmins.Select(p => p.Channel).ToArray();
+        var admins = _admin.ActiveAdminsWithFlag(Content.Shared.Administration.AdminFlags.Adminchat).Select(p => p.Channel).ToArray(); // cmu edit
         var mentors = _mentor.GetActiveMentors().Select(p => p.Channel).ToArray();
         var i = 0;
         while (messages.TryDequeue(out var msg))

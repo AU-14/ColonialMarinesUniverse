@@ -95,6 +95,11 @@
     - AU14AccessColonyHeadOfService
     - AU14AccessCorporateWEYULiaison
     - AU14AccessColonyAmbassador
+    - AU14AccessAmbassadorUA
+    - AU14AccessAmbassadorTWE
+    - AU14AccessAmbassadorUPP
+    - AU14AccessAmbassadorICSC
+    - AU14AccessAmbassadorCCA
     - AU14AccessOrbitalManagement
     - AU14AccessOrbitalLaw
 

@@ -13,7 +13,7 @@
       map: [ "enum.VendingMachineVisualLayers.BaseUnshaded" ]
       shader: unshaded
   - type: AccessReader
-    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"]]
+    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"], [ "AU14AccessGovforVehicleCrew" ], [ "AU14AccessOpforVehicleCrew" ]]
   - type: CMAutomatedVendor
     access:
     - "CMAccessCombatTechPrep"
@@ -21,6 +21,8 @@
     - "CMAccessColonyEngineering"
     - "AU14AccessGovforEngineering"
     - "AU14AccessOpforEngineering"
+    - "AU14AccessGovforVehicleCrew"
+    - "AU14AccessOpforVehicleCrew"
     hackable: true
     sections:
     - name: Equipment
@@ -239,6 +241,10 @@
         amount: 8
       - id: RMCTimerTrigger
         amount: 4
+      - id: RMCCustomGrenade # CMU14: base custom chemical grenade casing
+        amount: 4
+      - id: ChemicalPayload # CMU14: two-beaker chemical payload
+        amount: 4
       - id: ProximitySensor
         amount: 4
       - id: RemoteSignaller
@@ -299,6 +305,10 @@
       # Tank transfer valve
       - id: RMCTimerTrigger
         amount: 6
+      - id: RMCCustomGrenade # CMU14: base custom chemical grenade casing
+        amount: 4
+      - id: ChemicalPayload # CMU14: two-beaker chemical payload
+        amount: 4
 
 - type: entity
   parent: CMVendorScience

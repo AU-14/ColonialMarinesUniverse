@@ -1,0 +1,75 @@
+# Cycling airlocks: only one door in a cycle opens at a time, and the rest bolt shut until it closes (see
+# CMUCycleAirlockSystem). Doors with the same CMUCycleAirlock group on a grid cycle together; ungrouped doors cycle
+# with any other ungrouped cycling door within 3 tiles. They can't be damaged until a hijacked dropship crashes into
+# the ship, then they break like a normal airlock.
+- type: entity
+  parent: RMCBaseDoorInvincible
+  id: CMUAirlockCycling
+  name: airlock
+  description: One end of a cycling airlock. It won't open while the door at the other end is open.
+  suffix: CMU, Cycling
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/escape_pod_door_black.rsi
+    layers:
+    - state: closed
+      map: [ "enum.DoorVisualLayers.Base" ]
+    - state: unlit
+      map: ["enum.DoorVisualLayers.BaseUnlit"]
+    - state: welded
+      map: [ "enum.WeldableLayers.BaseWelded" ]
+      visible: false
+    - state: locked
+      shader: unshaded
+      map: ["enum.DoorVisualLayers.BaseBolted"]
+    - state: spark
+      shader: unshaded
+      map: ["enum.DoorVisualLayers.BaseEmergencyAccess"]
+    - state: panel_open
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+      visible: false
+  # Runs without power, like the evacuation airlocks it's built from, so its bolts always work.
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: Airlock
+    powered: true
+  - type: CMUCycleAirlock
+  # Spacewalk access is for either side's engineers and command.
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforEngineering" ], [ "AU14AccessGovforCommand" ], [ "AU14AccessOpforEngineering" ], [ "AU14AccessOpforCommand" ] ]
+  - type: CMUCrashBreakableHull
+    template: CMUCrashBreakableDoorTemplate
+    replaceExisting: true # so acid can melt it
+
+# Added to cycling airlocks once a hijacked dropship crashes into the ship: from then on they take damage and break
+# like a normal airlock.
+- type: entity
+  id: CMUCrashBreakableDoorTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        path:
+          "/Audio/Weapons/smash.ogg"
+  - type: AirlockReceiverXenoClaws
+  - type: Damageable
+    damageModifierSet: CMU14StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 500
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: RMCWallExplosionDeletable
+  - type: DestroyedByExplosionType
+  - type: DamageMultiplierFlags
+    flags: Breaching
+  - type: Corrodible
+    isCorrodible: true
+    timeToApply: 4

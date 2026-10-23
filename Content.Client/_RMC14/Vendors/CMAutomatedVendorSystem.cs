@@ -29,6 +29,10 @@ public sealed partial class CMAutomatedVendorSystem : SharedCMAutomatedVendorSys
         {
             if (bui is CMAutomatedVendorBui vendorUi)
                 vendorUi.Refresh();
+            // cmu edit start
+            else if (bui is Content.Client.CMU14.Vendors.CMUNutriCoFoodBui nutriCo)
+                nutriCo.Refresh();
+            // cmu edit end
         }
     }
 

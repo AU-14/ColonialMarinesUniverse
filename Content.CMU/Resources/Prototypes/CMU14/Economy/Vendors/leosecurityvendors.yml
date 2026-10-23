@@ -11,6 +11,10 @@
   - type: CMAutomatedVendor
     jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector ]
     sections:
+    - name: Rail Attachments
+      entries:
+      - id: CMUAttachmentNightVisionScope
+        amount: 3
     - name: Clothes
       takeAll: CMUCMBEssentialEquipmentClothes
       entries:
@@ -66,8 +70,13 @@
       - id: CMUKitWeaponHG3712LEO
       - id: CMUKitWeaponKramerEnforcerLEO
       - id: CMUKitWeaponMP5LEO
+      - id: CMUKitWeaponM20A2LEO
     - name: Restraining Gear
       entries:
+      - id: CMUPepperSpray
+        amount: 10
+      - id: CMUPepperSprayAntidote
+        amount: 10
       - id: RMCHandcuffs
         amount: 10
       - id: RMCZipties
@@ -100,6 +109,10 @@
   - type: CMAutomatedVendor
     jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector ]
     sections:
+    - name: Rail Attachments
+      entries:
+      - id: CMUAttachmentNightVisionScope
+        amount: 3
     - name: Clothes
       takeAll: CMUCMBEssentialEquipmentClothes
       entries:
@@ -151,6 +164,10 @@
       - id: RMCGunCasePistolM1984
     - name: Restraining Gear
       entries:
+      - id: CMUPepperSpray
+        amount: 10
+      - id: CMUPepperSprayAntidote
+        amount: 10
       - id: RMCHandcuffs
         amount: 10
       - id: RMCZipties
@@ -175,6 +192,10 @@
   - type: CMAutomatedVendor
     jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector ]
     sections:
+    - name: Rail Attachments
+      entries:
+      - id: CMUAttachmentNightVisionScope
+        amount: 3
     - name: Clothes
       takeAll: CMUCMBEssentialEquipmentClothes
       entries:
@@ -246,6 +267,10 @@
       - id: CMUKitWeaponMP5LEO
     - name: Restraining Gear
       entries:
+      - id: CMUPepperSpray
+        amount: 10
+      - id: CMUPepperSprayAntidote
+        amount: 10
       - id: RMCHandcuffs
         amount: 10
       - id: RMCZipties
@@ -276,6 +301,10 @@
   - type: CMAutomatedVendor
     jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector, AU14JobCivilianPaPOfficer ]
     sections:
+    - name: Rail Attachments
+      entries:
+      - id: CMUAttachmentNightVisionScope
+        amount: 3
     - name: Clothes
       takeAll: CMUCMBEssentialEquipmentClothes
       entries:
@@ -325,6 +354,10 @@
       - id: RMCBeltHolsterPistolSPPT73
     - name: Restraining Gear
       entries:
+      - id: CMUPepperSpray
+        amount: 10
+      - id: CMUPepperSprayAntidote
+        amount: 10
       - id: RMCHandcuffs
         amount: 10
       - id: RMCZipties

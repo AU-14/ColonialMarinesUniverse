@@ -38,6 +38,9 @@
     - replay_load
     - saveconfig
     - chatwindow
+    # cmu edit start
+    - toggleselfghost
+    # cmu edit end
 
 - Flags: DEBUG
   Commands:

@@ -52,8 +52,9 @@
   id: CMUYautjaGroundRelayDestination
   name: Yautja ground relay destination
   description: Invisible destination marker for Yautja relay beacons on a ground map.
-  categories: [ HideSpawnMenu ]
   components:
+  - type: Sprite
+    state: green
   - type: YautjaRelayDestination
     kind: Ground
 
@@ -81,8 +82,7 @@
   parent: MarkerBase
   id: CMUYautjaYoungbloodSpawn
   name: Yautja youngblood spawn
-  description: Invisible spawn marker for youngblood blooding calls.
+  description: Old landing marker for youngblood blooding calls, kept so the maps still load.
   categories: [ HideSpawnMenu ]
-  components:
-  - type: YautjaHuntSpawnPoint
-    kind: Youngblood
+  # blooding arrives on the hunter ship's marker. with a spawn point here too, the console picked whichever it
+  # found first, so youngbloods landed in the preserve half the time

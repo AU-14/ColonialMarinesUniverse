@@ -4,7 +4,6 @@
   id: SharedPlanetPool
   planets:
   - AUPlanetShepherdsPride
-  - CMUPlanetLament # Barkers
   - CMUPlanetHopesRetreat
   - CMUPlanetStableGarrisonRedux
 
@@ -18,8 +17,6 @@
   - AUPlanetBosenmoriBasho
   - AuPlanetChances
   - AUPlanetCorsatStation
-  - AUPlanetLV624
   - AUPlanetShepherdsPride
-  - AUPlanetLV747
 # - CMUPlanetStableGarrisonRedux # govfor spawns planetside
   - AUPlanetSorokyne

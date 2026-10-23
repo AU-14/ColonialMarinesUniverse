@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: CMUJobUPPLineCommandoLeader
+  chevrons:
+    UPP_SeniorSergeant:
+      entity: AU14ChevronUPPNISeniorSergeant
+      requirements: []
   roundSide: ThirdParty
   roundForce: UPPLine
   roundRole: UPPLineCommandoLeader
@@ -9,6 +13,7 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: spp_pvt
+  - type: ScoutWhitelist # V86 cloak checks this, without it the cloak says unskilled
   - type: Skills
     skills:
       RMCSkillEndurance: 2
@@ -28,7 +33,7 @@
     - Mandarin
     currentLanguage: Russian
     defaultLanguage: Russian
-  name: cmu-uppline-name-commando-leader
+  name: cmu-job-title-uppline-commando-leader
   description: cmu-uppline-description-commando
   playTimeTracker: CMUJobUPPLineCommandoLeader
   ranks:

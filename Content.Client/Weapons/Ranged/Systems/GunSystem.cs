@@ -358,6 +358,7 @@ public sealed partial class GunSystem : SharedGunSystem
             switch (shootable)
             {
                 case CartridgeAmmoComponent cartridge:
+                    var caseless = cartridge.DeleteOnSpawn || HasComp<Content.Shared.CMU14.Weapons.Caseless.CMUCaselessGunComponent>(gun); // cmu edit
                     if (!cartridge.Spent)
                     {
                         if (predictProjectiles)
@@ -372,7 +373,7 @@ public sealed partial class GunSystem : SharedGunSystem
 
                             SetCartridgeSpent(ent.Value, cartridge, true);
 
-                            if (cartridge.DeleteOnSpawn && IsClientSide(ent.Value))
+                            if (caseless && IsClientSide(ent.Value)) // cmu edit
                                 Del(ent.Value);
                         }
                         else
@@ -389,7 +390,7 @@ public sealed partial class GunSystem : SharedGunSystem
 
                     Recoil(user, mapDirection, gun.Comp.CameraRecoilScalarModified);
 
-                    if (!cartridge.DeleteOnSpawn &&
+                    if (!caseless && // cmu edit
                         !Containers.IsEntityInContainer(ent!.Value))
                     {
                         EjectCartridge(ent.Value, angle, ejectCoordinates: Transform(gun).Coordinates); // CMU14

@@ -13,7 +13,6 @@
   maxThirdParties: 2
   supportedPlanets:
   - SharedPlanetPool
-# - AUPlanetLV624 # Green Hell # missing threat spawns, scenario fails
   rules:
   - AuVoteRule
   - ColonyAntags
@@ -31,13 +30,14 @@
 # - CMUPlanetStableGarrisonRedux # Govfor can hunker-down in Garrison; can be rushed by threats
 # - CMUPlanetStableGarrisonDistress # govfor spawns planetside
 # - AUPlanetShepherdsPride # lot of forests/chokes
-# - CMUPlanetHopesRetreat # govfor spawns planetside
+  - CMUPlanetHopesRetreat
   - AUPlanetBosenmoriBasho
-# - AUPlanetLV747 # Solaris Gulch
 # - AUPlanetLV759 # Hybrisa Metro # missing threat spawns, scenario fails
   - AUPlanetLV327 # Port Nereid
   - AUPlanetSorokyne
   - AUPlanetCorsatStation
+  - CMUPlanetSolarisRidge
+  - CMUPlanetFortMcNeil
   - AUPlanetTrijent
   - AuPlanetKutjevo
   - AuPlanetShivasSnowball
@@ -47,7 +47,7 @@
   - PlatoonSpawn
   - RemoveAllJobs
   - AddGovfor
-  - AddGovforCorrespondent
+  - AddGovforAuxiliaryStaffDistress
 
 - type: gamePreset
   id: Insurgency
@@ -66,12 +66,11 @@
   dropshipFabricatorStartingPoints: 7500
   supportedPlanets:
   - SharedPlanetPool
-# - AUPlanetLV624 # Green Hell # map lacks medical, dropships - govfor spawns outside base
   rules:
   - AuVoteRule
   - PlatoonSpawn
   - AddGovfor
-  - AddGovforCorrespondent
+  - AddGovforAuxiliaryStaff
   - AddClf
   - ColonyAntags
   - InsWinConditionsRule
@@ -83,7 +82,7 @@
   name: cmu-gamemode-forceonforce-name
   showInVote: true
   description: cmu-gamemode-forceonforce-desc
-  minPlayers: 80
+  minPlayers: 100
   burrowedLarvaEnabled: false
   requiresOpforVote: true
   requiresGovforVote: true
@@ -99,7 +98,9 @@
   - PlatoonSpawn
   - RemoveAllJobs
   - AddGovfor
+  - AddGovforAuxiliaryStaff
   - AddOpfor
+  - AddOpforAuxiliaryStaff
 
 - type: gamePreset
   id: Jailbreak

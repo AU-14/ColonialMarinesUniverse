@@ -199,7 +199,7 @@ namespace Content.Server.GameTicking
             // After planet map is loaded, spawn selected ships for govfor and opfor
             if (_auRoundSystem != null)
             {
-                var govforShipId = _auRoundSystem.GetSelectedGovforShip();
+                var govforShipId = _auRoundSystem.ResolveGovforShip(CurrentPreset ?? Preset); // cmu edit: falls back to the platoon's ship if no vote ran
                 if (!string.IsNullOrEmpty(govforShipId) && _prototypeManager.TryIndex<GameMapPrototype>(govforShipId, out var govforShipProto))
                 {
                     var govforGrids = LoadGameMap(govforShipProto, out var _, new DeserializationOptions { InitializeMaps = true });
@@ -216,7 +216,7 @@ namespace Content.Server.GameTicking
                         }
                     }
                 }
-                var opforShipId = _auRoundSystem.GetSelectedOpforShip();
+                var opforShipId = _auRoundSystem.ResolveOpforShip(CurrentPreset ?? Preset); // cmu edit: falls back to the platoon's ship if no vote ran
                 if (!string.IsNullOrEmpty(opforShipId) && _prototypeManager.TryIndex<GameMapPrototype>(opforShipId, out var opforShipProto))
                 {
                     var opforGrids = LoadGameMap(opforShipProto, out var _, new DeserializationOptions { InitializeMaps = true });

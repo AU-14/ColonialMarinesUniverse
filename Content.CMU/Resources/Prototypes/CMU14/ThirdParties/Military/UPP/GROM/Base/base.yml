@@ -93,7 +93,7 @@
     - RMCHumanFacialHairSoulfulSelleck
     - HumanFacialHairGt
 
-# Equipment
+# Equipment ----------------------------------------------------------------------------
 
 - type: entity
   parent: [AU14FatiguesUPP, RMCAlternateFoldableUniformBase]
@@ -109,16 +109,7 @@
     - AU14PatchUPP
     - AU14GROMPatch
 
-- type: entity
-  parent: AU14BeltHolsterPistolUPP
-  id: AU14BeltHolsterPistolUPPFull
-  suffix: Full, T74, GROM
-  components:
-  - type: StorageFill
-    contents:
-    - id: RMCWeaponPistolNP92
-    - id: RMCMagazinePistolNP92
-      amount: 6
+# Armor ----------------------------------------------------------------------------
 
 - type: entity
   parent: RMCOuterClothingExternalWebbing
@@ -129,16 +120,6 @@
   - type: StorageFill
     contents:
     - id: RMCTacticalPrybar
-
-- type: entity
-  parent: AU14WebbingDropPouchUPP
-  id: AU14WebbingDropPouchUPPFull
-  suffix: Full, GROM
-  components:
-  - type: StorageFill
-    contents:
-    - id: RuMCirpUPP
-    - id: CMCanteen
 
 - type: entity
   parent: AU14UPPArmor
@@ -198,6 +179,39 @@
     - id: RMCMagazineLMGQYJ72
       amount: 4
 
+# Pouch ----------------------------------------------------------------------------
+
+- type: entity
+  parent: RuMCUPPPouchMagazine
+  id: CMUUPPPouchMagazineUPPFullMarksman
+  suffix: Full, GROM, AK4047
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleAK4047
+      amount: 3
+
+- type: entity
+  parent: RuMCUPPPouchMagazine
+  id: CMUUPPPouchMagazineUPPFull
+  suffix: Full, GROM, AG80
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineRifleAG80
+      amount: 3
+
+
+- type: entity
+  parent: AU14WebbingDropPouchUPP
+  id: AU14WebbingDropPouchUPPFull
+  suffix: Full, GROM
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCirpUPP
+    - id: CMCanteen
+
 - type: entity
   parent: RMCPouchCommand
   id: RMCPouchCommandFull
@@ -206,6 +220,29 @@
   - type: StorageFill
     contents:
     - id: RMCWeaponRevolverZHNK72
+
+- type: entity
+  parent: AU14PouchPistolAlt
+  id: AU14PouchPistolAltFull
+  suffix: Full, GROM, T74
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponPistolT74
+      amount: 1
+
+# Belt ----------------------------------------------------------------------------
+
+- type: entity
+  parent: AU14BeltHolsterPistolUPP
+  id: AU14BeltHolsterPistolUPPFull
+  suffix: Full, T74, GROM
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponPistolNP92
+    - id: RMCMagazinePistolNP92
+      amount: 6
 
 - type: entity
   parent: AU14ShotgunShellLoadingRigUPP
@@ -250,16 +287,6 @@
     - id: CMPillCanisterKelotane
 
 - type: entity
-  parent: AU14PouchPistolAlt
-  id: AU14PouchPistolAltFull
-  suffix: Full, GROM, T74
-  components:
-  - type: StorageFill
-    contents:
-    - id: RMCWeaponPistolT74
-      amount: 1
-
-- type: entity
   parent: RuMCUPPNavalInfantryBeltMachinegunner
   id: AU14BeltSmartGunOperatorPistolUPPFull
   suffix: Full, GROM, T74
@@ -289,25 +316,7 @@
     - id: RMCMagazineLMGQYJ72
       amount: 2
 
-- type: entity
-  parent: RuMCUPPPouchMagazine
-  id: CMUUPPPouchMagazineUPPFullMarksman
-  suffix: Full, GROM, AK4047
-  components:
-  - type: StorageFill
-    contents:
-    - id: RMCMagazineRifleAK4047
-      amount: 3
-
-- type: entity
-  parent: RuMCUPPPouchMagazine
-  id: CMUUPPPouchMagazineUPPFull
-  suffix: Full, GROM, AG80
-  components:
-  - type: StorageFill
-    contents:
-    - id: AU14MagazineRifleAG80
-      amount: 3
+# Headset ----------------------------------------------------------------------------
 
 - type: entity
   parent: RMCHeadsetMarine

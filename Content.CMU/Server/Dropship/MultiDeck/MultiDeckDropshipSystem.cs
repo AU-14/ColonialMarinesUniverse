@@ -1,4 +1,6 @@
+using System.Linq;
 using System.Numerics;
+using Content.Server.CMU14.Atmos;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.Shuttles.Events;
 using Content.Server.Shuttles.Components;
@@ -10,6 +12,7 @@ using Content.Shared._RMC14.PowerLoader;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared.Parallax;
 using Content.Shared.Shuttles.Components;
+using Content.Shared.Atmos.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
@@ -75,6 +78,14 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
                 // Content automatically gives every new grid a shuttle controller.
                 // Followers are moved only by this assembly, never by FTL/thrusters.
                 RemComp<ShuttleComponent>(grid.Value);
+                // Decks saved without air of their own (the roof, the undercarriage and the lowered ramp) breathe
+                // whatever they're over. Loading them adds an empty atmosphere automatically; drop it.
+                if (!TryComp<GridAtmosphereComponent>(grid.Value, out var deckAtmosphere) ||
+                    deckAtmosphere.Tiles.Values.All(tile => tile.Air is not { TotalMoles: > 0f }))
+                {
+                    RemComp<GridAtmosphereComponent>(grid.Value);
+                    EnsureComp<CMUBorrowedAtmosphereComponent>(grid.Value);
+                }
                 _physics.SetBodyType(grid.Value, BodyType.Kinematic);
                 _physics.SetFixedRotation(grid.Value, true);
                 var deck = EnsureComp<DropshipDeckComponent>(grid.Value);
@@ -296,7 +307,8 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
         if (!TryComp<MultiDeckDropshipComponent>(ship, out var assembly))
             return;
 
-        foreach (var grid in assembly.Decks.Values)
+        var retiredDecks = new List<int>();
+        foreach (var (offset, grid) in assembly.Decks)
         {
             _dropships.RemoveDeckAttachmentPoints(ship, grid);
             if (TerminatingOrDeleted(grid) || Transform(grid).MapUid is not { } map)
@@ -313,14 +325,26 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
 
             foreach (var occupant in occupants)
             {
+                _pulling.TryStopAllPullsFromAndOn(occupant);
                 var rotation = _transform.GetWorldRotation(occupant);
                 _transform.SetCoordinates(occupant, new EntityCoordinates(map, _transform.GetWorldPosition(occupant)));
                 _transform.SetWorldRotation(occupant, rotation);
             }
+
+            // PVS can withhold an occupant's relocation until after this tick. Keep the old
+            // broadphase alive so clients can remove its proxies when the occupant returns.
+            // A separate paused map takes each deck out of play without overlapping them;
+            // the normal round reset's entity flush owns their eventual deletion.
+            var holdingMap = _map.CreateMap(runMapInit: false);
+            _transform.SetCoordinates(grid, new EntityCoordinates(holdingMap, Vector2.Zero));
+            RemComp<DropshipDeckComponent>(grid);
+            retiredDecks.Add(offset);
         }
 
-        // Component shutdown owns deletion of the followers. Removing the
-        // assembly also removes the cabin's normal one-level landing offset.
+        // Transfer ownership before component shutdown, which still deletes any followers
+        // that could not be retired. Removing the assembly also clears the landing offset.
+        foreach (var offset in retiredDecks)
+            assembly.Decks.Remove(offset);
         RemComp<MultiDeckDropshipComponent>(ship);
         RemComp<DropshipDeckComponent>(ship);
     }

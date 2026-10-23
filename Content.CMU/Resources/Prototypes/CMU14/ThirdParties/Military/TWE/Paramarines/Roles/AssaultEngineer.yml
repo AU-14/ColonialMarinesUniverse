@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: CMUJobParamarineAssaultEngineer
+  chevrons:
+    IASF_ChiefPrivate:
+      entity: AU14ChevronIASFChiefPrivate
+      requirements: []
   roundSide: ThirdParty
   roundForce: CMUParamarines
   roundRole: ParamarineAssaultEngineer
@@ -25,13 +29,13 @@
     - English
     currentLanguage: English
     defaultLanguage: English
-  name: cmu-paramarines-name-engineer
+  name: cmu-paramarines-name-engineer-title
   description: cmu-paramarines-description
   playTimeTracker: CMUJobParamarineAssaultEngineer
   ranks:
     RMCRankCivilian: []
   startingGear: CMUGearParamarineAssaultEngineer
-  spawnMenuRoleName: TWE Royal Paramarine Assault Engineer (3rd party)
+  spawnMenuRoleName: IASF Parachute Regiment Assault Engineer (3rd party)
   greeting: cmu-paramarines-greeting
   icon: RMCJobIconParaAssaultEngineer
   joinNotifyCrew: false
@@ -43,7 +47,7 @@
 - type: entity
   parent: CMUBaseMobSpeciesParamarines
   id: CMUJobParamarineAssaultEngineer
-  name: TWE Royal Paramarine Assault Engineer
+  name: IASF Parachute Regiment Assault Engineer
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial

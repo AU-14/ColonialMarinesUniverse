@@ -1,2 +1,4 @@
-﻿cm-access-xeno = Xenonid
-cm-access-xeno-queen = Xenonid Queen
+﻿# cmu edit start: lore names
+cm-access-xeno = Xenomorph
+cm-access-xeno-queen = Xenomorph Queen
+# cmu edit end

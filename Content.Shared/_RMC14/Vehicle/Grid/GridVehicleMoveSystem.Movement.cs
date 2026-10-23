@@ -250,7 +250,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             waterTile.Comp.SpeedFactors.TryGetValue(mover.WeightClass, out var waterFactor) &&
             waterFactor < 1f)
         {
-            mover.CurrentSpeed *= MathF.Pow(waterFactor, frameTime);
+            mover.CurrentSpeed *= MathF.Pow(waterFactor, frameTime * CMUTyreWaterDrag(uid)); // CMU14: tyres drag more or less in water
         }
     }
 
@@ -1357,6 +1357,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return 0f;
 
         var maxSpeed = mover.MaxSpeed * GetSmashSlowdownMultiplier(mover) * GetDamageSpeedMultiplier(uid, mover, false);
+        maxSpeed *= CMUTyreSpeed(uid); // CMU14: tyres on the ground under the vehicle
 
         if (TryComp<VehicleOverchargeComponent>(uid, out var overcharge) && _timing.CurTime < overcharge.ActiveUntil)
             maxSpeed *= overcharge.SpeedMultiplier;
@@ -1379,6 +1380,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return 0f;
 
         var maxSpeed = mover.MaxReverseSpeed * GetSmashSlowdownMultiplier(mover) * GetDamageSpeedMultiplier(uid, mover, true);
+        maxSpeed *= CMUTyreSpeed(uid); // CMU14: tyres on the ground under the vehicle
 
         if (TryComp<VehicleOverchargeComponent>(uid, out var overcharge) && _timing.CurTime < overcharge.ActiveUntil)
             maxSpeed *= overcharge.SpeedMultiplier;
@@ -1473,6 +1475,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
         if (HasXenoOccupant(uid))
             multiplier *= XenoOnboardAccelerationMultiplier;
+        multiplier *= CMUTyreSpeed(uid); // CMU14: tyres on the ground under the vehicle
 
         return multiplier;
     }

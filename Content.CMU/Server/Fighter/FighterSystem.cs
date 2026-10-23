@@ -43,6 +43,7 @@ public sealed partial class FighterSystem : EntitySystem
         SubscribeLocalEvent<FighterSeatComponent, UnstrappedEvent>(OnUnstrapped);
         SubscribeLocalEvent<FighterSeatComponent, ComponentShutdown>(OnSeatShutdown);
         SubscribeLocalEvent<CMUFighterCameraOwnerComponent, EntityTerminatingEvent>(OnCameraTerminating);
+        SubscribeLocalEvent<CMUFighterPartOwnerComponent, EntityTerminatingEvent>(OnPartTerminating);
         SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<PlayerDetachedEvent>(OnPlayerDetached);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnFighterRoundCleanup);
@@ -103,6 +104,8 @@ public sealed partial class FighterSystem : EntitySystem
         // without changing the players' own sprite scale.
         aircraft.FrontSeat = SpawnAttachedTo("CMUFighterPilotSeat", new EntityCoordinates(grid, new Vector2(.5f, 4.2f)), rotation: forward);
         aircraft.RearSeat = SpawnAttachedTo("CMUFighterObserverSeat", new EntityCoordinates(grid, new Vector2(.5f, 2.1f)), rotation: forward);
+        foreach (var part in new[] { aircraft.Hull.Value, aircraft.Canopy.Value, aircraft.FrontSeat.Value, aircraft.RearSeat.Value })
+            AddComp<CMUFighterPartOwnerComponent>(part).Aircraft = grid;
         foreach (var seat in new[] { aircraft.FrontSeat.Value, aircraft.RearSeat.Value })
         {
             var component = Comp<FighterSeatComponent>(seat);

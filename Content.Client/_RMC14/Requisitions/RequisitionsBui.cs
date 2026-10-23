@@ -1,3 +1,4 @@
+using Content.Client.CMU14.Requisitions; // CMU14
 using System.Linq;
 using System.Diagnostics.CodeAnalysis;
 using Content.Client.Stylesheets;
@@ -82,6 +83,12 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         ["Specialist Ammo"] = "rmc-requisitions-category-specialist-ammo",
         ["Supplies"] = "rmc-requisitions-category-supplies",
         ["Vehicle Ammo"] = "rmc-requisitions-category-vehicle-ammo",
+        ["Vehicle Armaments M"] = "rmc-requisitions-category-vehicle-armaments-m",
+        ["Vehicle Armaments A"] = "rmc-requisitions-category-vehicle-armaments-a",
+        ["Vehicle Main Modules"] = "rmc-requisitions-category-vehicle-main",
+        ["Vehicle Aux Modules"] = "rmc-requisitions-category-vehicle-aux",
+        ["Avionics Parts"] = "rmc-requisitions-category-vehicle-avionics",
+        ["Vehicles"] = "cmu-requisitions-category-vehicles", // CMU14: jeep kit crates
         ["Weapons"] = "rmc-requisitions-category-weapons",
         ["WEYSEC Ammo"] = "rmc-requisitions-category-weysec-ammo",
         ["WEYSEC Gear"] = "rmc-requisitions-category-weysec-gear",
@@ -1032,9 +1039,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         if (!_prototypes.TryIndex<EntityPrototype>(entry.Crate, out var prototype))
             return;
 
-        texture.Textures = EntMan.System<SpriteSystem>().GetPrototypeTextures(prototype)
-            .Select(layer => layer.Default)
-            .ToList();
+        texture.Textures = RequisitionsIconCache.Get(EntMan.System<SpriteSystem>(), prototype); // CMU14
 
         if (prototype.TryComp<SpriteComponent>(CompName.Get<SpriteComponent>(EntMan.ComponentFactory), out var sprite) &&
             sprite.AllLayers.FirstOrDefault() is { } firstLayer)

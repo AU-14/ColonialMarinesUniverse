@@ -34,6 +34,15 @@ namespace Content.Server.CMU14.Round
     {
         private const string DistressSignalPresetId = "DistressSignal";
 
+        /// <summary>Distress Signal only schedules more than one survivor group above this many players.</summary>
+        internal const int DistressSignalMultipleSurvivorGroupsMinPlayers = 100;
+
+        /// <summary>
+        ///     Share of the leftover third-party slots and bodies Distress Signal spends on random (non-survivor)
+        ///     parties. None: in Distress Signal other third parties only arrive when someone calls them in.
+        /// </summary>
+        internal const float DistressSignalRandomThirdPartyShare = 0f;
+
         private static readonly HashSet<string> NoThreatPresets = new(StringComparer.OrdinalIgnoreCase)
         {
             "ForceOnForce",
@@ -453,6 +462,11 @@ namespace Content.Server.CMU14.Round
                     !AuRoundSelectionRules.IsExplicitlyWhitelistedForGamemode(proto, _selectedPreset.ID))
                     continue;
 
+                // Distress Signal only schedules its round-start survivors; anyone else has to be called in.
+                if (_selectedPreset.ID.Equals(DistressSignalPresetId, StringComparison.OrdinalIgnoreCase) &&
+                    !(proto.RoundStart && proto.AnnounceAsSurvivors))
+                    continue;
+
                 candidates.Add(proto);
             }
 
@@ -648,7 +662,8 @@ namespace Content.Server.CMU14.Round
                 PickWeightedThirdParty,
                 GetThirdPartyBodyCount,
                 out var lockedBodyCount,
-                out var additionalBodyCount);
+                out var additionalBodyCount,
+                DistressSignalRandomThirdPartyShare);
 
             var lockedPartyCount = _selectedThirdParties.Count;
             if (lockedPartyCount > maxThirdParties || lockedBodyCount > bodyBudget)
@@ -681,7 +696,8 @@ namespace Content.Server.CMU14.Round
             Func<IReadOnlyList<ThirdPartyPrototype>, ThirdPartyPrototype?> pickThirdParty,
             Func<ThirdPartyPrototype, int> getBodyCount,
             out int lockedBodyCount,
-            out int additionalBodyCount)
+            out int additionalBodyCount,
+            float randomShare = 1f)
         {
             lockedBodyCount = lockedParties.Sum(party => Math.Max(0, getBodyCount(party)));
             var lockedIds = lockedParties
@@ -693,10 +709,19 @@ namespace Content.Server.CMU14.Round
                     !(party.RoundStart && party.AnnounceAsSurvivors))
                 .ToList();
 
+            var remainingSlots = Math.Max(0, maxThirdParties - lockedParties.Count);
+            var remainingBodies = Math.Max(0, bodyBudget - lockedBodyCount);
+            if (randomShare < 1f)
+            {
+                var share = Math.Max(0f, randomShare);
+                remainingSlots = (int) Math.Floor(remainingSlots * share);
+                remainingBodies = (int) Math.Floor(remainingBodies * share);
+            }
+
             return SelectThirdPartiesWithinBodyBudget(
                 fillCandidates,
-                Math.Max(0, maxThirdParties - lockedParties.Count),
-                Math.Max(0, bodyBudget - lockedBodyCount),
+                remainingSlots,
+                remainingBodies,
                 pickThirdParty,
                 getBodyCount,
                 out additionalBodyCount);
@@ -789,7 +814,7 @@ namespace Content.Server.CMU14.Round
             // whatever capacity is left with the planet's other third parties.
             List<ThirdPartyPrototype> selected = SelectThirdPartiesWithinBodyBudget(
                 candidates.Where(party => party.RoundStart && party.AnnounceAsSurvivors).ToList(),
-                maxThirdParties,
+                GetDistressSignalSurvivorGroupLimit(playerCount, maxThirdParties),
                 bodyBudget,
                 PickWeightedThirdParty,
                 party => bodyCounts[party],
@@ -803,7 +828,8 @@ namespace Content.Server.CMU14.Round
                 PickWeightedThirdParty,
                 party => bodyCounts[party],
                 out _,
-                out var additionalBodyCount));
+                out var additionalBodyCount,
+                DistressSignalRandomThirdPartyShare));
 
             SetSelectedThirdPartiesInSpawnOrder(selected);
             survivorCount = CalculateAnnouncedSurvivorCount(selected, party => bodyCounts[party]);
@@ -817,6 +843,14 @@ namespace Content.Server.CMU14.Round
                         string.Join(", ", eligibleThreatIds)}].");
 
             return true;
+        }
+
+        /// <summary>One survivor group at most, unless the server is above the population threshold.</summary>
+        internal static int GetDistressSignalSurvivorGroupLimit(int playerCount, int maxThirdParties)
+        {
+            return playerCount > DistressSignalMultipleSurvivorGroupsMinPlayers
+                ? maxThirdParties
+                : Math.Min(1, maxThirdParties);
         }
 
         internal static (int MaxThirdParties, int BodyBudget) GetConservativeThirdPartyLimits(
@@ -1069,6 +1103,44 @@ namespace Content.Server.CMU14.Round
         public string? GetSelectedOpforShip()
         {
             return _selectedOpforShip;
+        }
+
+        /// <summary>
+        ///     The ship GOVFOR spawns on this round. If no ship vote ran, like when the round was force-started or the
+        ///     planet was set by an admin, it falls back to the first ship of the GOVFOR platoon, so a mode that keeps
+        ///     GOVFOR shipside never spawns them on the planet just because the vote didn't happen.
+        /// </summary>
+        public string? ResolveGovforShip(GamePresetPrototype? preset)
+        {
+            if (!string.IsNullOrEmpty(_selectedGovforShip))
+                return _selectedGovforShip;
+
+            preset ??= _selectedPreset;
+            if (preset is not { RequiresGovforVote: true } || _selectedPlanet is not { GovforInShip: true } planet)
+                return null;
+
+            var platoon = _entityManager.System<PlatoonSpawnRuleSystem>().SelectedGovforPlatoon;
+            if (platoon == null && planet.DefaultGovforPlatoon is { } fallback)
+                _prototypeManager.TryIndex(fallback, out platoon);
+
+            return platoon?.PossibleShips.FirstOrDefault();
+        }
+
+        /// <summary>The ship OPFOR spawns on this round, falling back the same way as <see cref="ResolveGovforShip"/>.</summary>
+        public string? ResolveOpforShip(GamePresetPrototype? preset)
+        {
+            if (!string.IsNullOrEmpty(_selectedOpforShip))
+                return _selectedOpforShip;
+
+            preset ??= _selectedPreset;
+            if (preset is not { RequiresOpforVote: true } || _selectedPlanet is not { OpforInShip: true } planet)
+                return null;
+
+            var platoon = _entityManager.System<PlatoonSpawnRuleSystem>().SelectedOpforPlatoon;
+            if (platoon == null && planet.DefaultOpforPlatoon is { } fallback)
+                _prototypeManager.TryIndex(fallback, out platoon);
+
+            return platoon?.PossibleShips.FirstOrDefault();
         }
 
         public bool IsVoteSequenceRunning()

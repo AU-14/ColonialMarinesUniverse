@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Client._RMC14.UserInterface;
+using Content.Client.CMU14.Intel; // cmu edit
 using Content.Shared._RMC14.Intel.Tech;
 using Content.Shared.FixedPoint;
 using Content.Shared.GameTicking;
@@ -18,6 +19,7 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
     [Dependency] private IEntityManager _entities = default!;
 
     private TechControlConsoleWindow? _window;
+    private CMUTechConsoleWindow? _cmuWindow; // cmu edit
     private TechControlConsoleOptionWindow? _optionWindow;
 
     private readonly SharedGameTicker _ticker;
@@ -31,12 +33,36 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
     protected override void Open()
     {
         base.Open();
-        _window = this.CreateWindow<TechControlConsoleWindow>();
+        // cmu edit start: the CRT console replaces the icon grid and the option popup
+        // _window = this.CreateWindow<TechControlConsoleWindow>();
+        _cmuWindow = this.CreateWindow<CMUTechConsoleWindow>();
+        _cmuWindow.OnPurchase += (tier, optionIndex) =>
+        {
+            var msg = new TechPurchaseOptionBuiMsg(tier, optionIndex);
+            if (EntMan.TryGetComponent(Owner, out TechControlConsoleComponent? console))
+                msg.Team = console.Team;
+
+            SendPredictedMessage(msg);
+        };
+        // cmu edit end
         Refresh();
     }
 
     public void Refresh()
     {
+        // cmu edit start
+        if (_cmuWindow is { IsOpen: true })
+        {
+            if (EntMan.TryGetComponent(Owner, out TechControlConsoleComponent? cmuConsole))
+            {
+                _cmuWindow.UpdateState(cmuConsole.Tree.Options, cmuConsole.Tree.Tier, cmuConsole.Tree.Points,
+                    _ticker.RoundDuration());
+            }
+
+            return;
+        }
+        // cmu edit end
+
         if (_window is not { IsOpen: true })
             return;
 
@@ -138,6 +164,19 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
             });
         }
 
+        // cmu edit start: capped repurchases
+        if (option.MaxPurchases > 0)
+        {
+            hasStats = true;
+            _optionWindow.Statistics.AddChild(new Label
+            {
+                Text = Loc.GetString("cmu-ui-tech-purchases-left",
+                    ("left", Math.Max(0, option.MaxPurchases - option.TimesPurchased)),
+                    ("max", option.MaxPurchases)),
+            });
+        }
+        // cmu edit end
+
         if (option.Increase != 0)
         {
             hasStats = true;
@@ -152,6 +191,7 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
         var canPurchase = points >= option.CurrentCost &&
                           currentTier >= tier &&
                           (!option.Purchased || option.Repurchasable) &&
+                          (option.MaxPurchases <= 0 || option.TimesPurchased < option.MaxPurchases) && // cmu edit
                           option.TimeLock  < _ticker.RoundDuration();
 
         _optionWindow.PurchaseButton.Text = Loc.GetString("rmc-ui-tech-purchase-button");

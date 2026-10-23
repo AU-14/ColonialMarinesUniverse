@@ -152,7 +152,8 @@ public sealed partial class CMUCargoVehicleSystem : EntitySystem
 
     private void OnVehicleGetVerbs(Entity<CMUCargoVehicleComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
     {
-        if (!args.CanInteract || !args.CanAccess || args.Using != null)
+        // no hands = ghosts and the like, they shouldn't get to work the bay
+        if (!args.CanInteract || !args.CanAccess || args.Hands == null || args.Using != null)
             return;
 
         if (ent.Comp.ArmingMode != CMUCargoVehicleArmingMode.None)

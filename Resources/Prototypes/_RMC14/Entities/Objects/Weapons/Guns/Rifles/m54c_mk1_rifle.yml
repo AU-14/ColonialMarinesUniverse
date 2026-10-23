@@ -84,6 +84,7 @@
           - RMCAttachmentMagneticHarness
           - RMCAttachmentS5RedDotSight
           - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS42xTelescopicMiniscope # CMU14: standard GOVFOR scope compatibility.
       rmc-aslot-stock:
         startingAttachable: RMCAttachmentM54CMK1StockCollapsible
         whitelist:

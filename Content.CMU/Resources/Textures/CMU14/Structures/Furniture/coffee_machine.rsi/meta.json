@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/icons/obj/structures/machinery/coffee_machine.dmi. Ported by troy.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "coffee"
+    },
+    {
+      "name": "coffee_empty_off"
+    },
+    {
+      "name": "coffee_empty_on"
+    },
+    {
+      "name": "coffee_cup"
+    },
+    {
+      "name": "coffee_cup_generic"
+    },
+    {
+      "name": "coffee_mug"
+    },
+    {
+      "name": "coffee_mug_wy"
+    },
+    {
+      "name": "coffee_mug_uscm"
+    },
+    {
+      "name": "coffee_cup_overlay"
+    },
+    {
+      "name": "coffee_cup_generic_overlay"
+    },
+    {
+      "name": "coffee_mug_overlay"
+    },
+    {
+      "name": "coffee_mug_wy_overlay"
+    },
+    {
+      "name": "coffee_mug_uscm_overlay"
+    }
+  ]
+}

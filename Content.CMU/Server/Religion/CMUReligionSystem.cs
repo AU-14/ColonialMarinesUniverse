@@ -4,6 +4,9 @@ using Content.Server.Chat.Managers;
 using Content.Server.CMU14.CriminalRecords;
 using Content.Shared.CMU14.Religion;
 using Content.Shared.Database;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Storage;
+using Content.Shared.Storage.EntitySystems;
 using Content.Shared.GameTicking;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
@@ -12,6 +15,7 @@ using Content.Shared.StationRecords.Systems;
 using Content.Shared.CMU14.CriminalRecords;
 using Content.Shared.Verbs;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -24,6 +28,9 @@ namespace Content.Server.CMU14.Religion;
 public sealed class CMUReligionSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private SharedStorageSystem _storage = default!;
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -46,6 +53,9 @@ public sealed class CMUReligionSystem : EntitySystem
         if (religion != CMUReligionPrototype.Atheist)
             EnsureComp<CMUReligiousComponent>(args.Mob).Religion = religion;
 
+        if (TryComp<CMUChaplainComponent>(args.Mob, out var chaplain))
+            GiveHolyBook((args.Mob, chaplain), religion);
+
         // Hide Meta Information keeps it off the records consoles too.
         if (args.Profile.HideMetaInformation)
             return;
@@ -66,6 +76,28 @@ public sealed class CMUReligionSystem : EntitySystem
 
         record.Religion = religion;
         _records.Synchronize(key);
+    }
+
+    /// <summary>
+    ///     Gives a chaplain their religion's holy book, in the kit they're holding if they have one.
+    /// </summary>
+    public void GiveHolyBook(Entity<CMUChaplainComponent> chaplain, ProtoId<CMUReligionPrototype> religion)
+    {
+        if (!_prototypes.TryIndex(religion, out var faith))
+            return;
+
+        var book = Spawn(faith.HolyBook, Transform(chaplain).Coordinates);
+        foreach (var held in _hands.EnumerateHeld(chaplain.Owner))
+        {
+            if (MetaData(held).EntityPrototype?.ID is { } heldId && heldId == chaplain.Comp.Kit.Id &&
+                TryComp<StorageComponent>(held, out var kit) &&
+                _storage.Insert(held, book, out _, storageComp: kit, playSound: false))
+            {
+                return;
+            }
+        }
+
+        _hands.PickupOrDrop(chaplain, book);
     }
 
     private void OnGetVerbs(Entity<CMUReligiousComponent> ent, ref GetVerbsEvent<Verb> args)

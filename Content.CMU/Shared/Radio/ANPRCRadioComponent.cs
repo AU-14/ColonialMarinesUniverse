@@ -1,4 +1,3 @@
-using System.Numerics;
 using Content.Shared.Radio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -97,12 +96,9 @@ public sealed partial class ANPRCRadioComponent : Component
     // everything in this region is worked from the faceplate only. the guided panel shows what
     // is set and offers one button to put the lot back to AUTO, never the controls themselves
 
-    // BURST: each sentence goes out compressed. harder to direction-find and cheaper to send
+    // BURST: each sentence goes out compressed. too short to take a bearing on and cheaper to send
     [DataField, AutoNetworkedField]
     public bool Burst;
-
-    [DataField]
-    public float BurstDFMultiplier = 0.5f;
 
     [DataField]
     public float BurstChargeMultiplier = 0.7f;
@@ -171,39 +167,6 @@ public sealed partial class ANPRCRadioComponent : Component
     public TimeSpan JammerFixDuration = TimeSpan.FromMinutes(2);
 
     #endregion
-
-    [DataField("dfReportFactions")]
-    public List<string> DFReportFactions = new();
-
-    [DataField("dfPingDuration")]
-    public TimeSpan DFPingDuration = TimeSpan.FromSeconds(20);
-
-    [DataField("dfChancePlainText")]
-    public float DFChancePlainText = 0.08f;
-
-    [DataField("dfChanceUnsecured")]
-    public float DFChanceUnsecured = 0.05f;
-
-    [DataField("dfChanceSecuredFH")]
-    public float DFChanceSecuredFH = 0.03f;
-
-    [DataField("dfChanceJamBonus")]
-    public float DFChanceJamBonus = 0.12f;
-
-    [DataField("dfAccumBonus")]
-    public float DFAccumBonus = 0.04f;
-
-    [DataField("dfAccumDecay")]
-    public TimeSpan DFAccumDecay = TimeSpan.FromSeconds(60);
-
-    [DataField("dfAccumResetDistance")]
-    public float DFAccumResetDistance = 10f;
-
-    public float DFAccumulation;
-
-    public TimeSpan DFLastTransmitTime;
-
-    public Vector2 DFLastTransmitPos;
 
     public Queue<ANPRCNetLogEntry> NetLog = new();
 
@@ -306,17 +269,19 @@ public sealed partial class ANPRCRadioComponent : Component
     // contact -> when it last gained ground, for the decay grace
     public Dictionary<RadioFrequency, TimeSpan> SweepContactLastHit = new();
 
-    // DF on a fixed net: every line on it gives a bearing and a rough range, at most this often
-    // per net, so a chatty net cannot flood the operator
+    // DF on a fixed net: a manpack line on it gives a compass point and a range band, at most this
+    // often per net. chat only, never the tacmap - finding the guy means crossing bearings yourself
     [DataField("fixedNetDFInterval")]
-    public TimeSpan FixedNetDFInterval = TimeSpan.FromSeconds(10);
+    public TimeSpan FixedNetDFInterval = TimeSpan.FromSeconds(30);
+
+    // range bands for a fixed-net bearing, in tiles. past the last one it's just "far"
+    [DataField("fixedNetDFNearRange")]
+    public float FixedNetDFNearRange = 40f;
+
+    [DataField("fixedNetDFMidRange")]
+    public float FixedNetDFMidRange = 80f;
 
     public Dictionary<RadioFrequency, TimeSpan> FixedNetDFLast = new();
-
-    // how long a fixed-net bearing stays on the side's tacmap: long enough to glance at, short
-    // enough that it marks where somebody was, not where they are
-    [DataField("fixedNetDFBlipDuration")]
-    public TimeSpan FixedNetDFBlipDuration = TimeSpan.FromSeconds(8);
 
     // confidence gates for each step of the fix. the head gives the number up a digit
     // at a time - band half, hundreds, tens, then the exact frequency and the net's

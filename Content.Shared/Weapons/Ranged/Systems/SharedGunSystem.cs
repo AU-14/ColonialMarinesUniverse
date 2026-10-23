@@ -542,6 +542,7 @@ public abstract partial class SharedGunSystem : EntitySystem
                 predictedProjectiles,
                 userSession);
             _zLevelShooting.ApplyProjectileVisualOffset(projectiles, projectileVisualOffset);
+            _zLevelShooting.ApplyCrossZShotOrigin(projectiles, sourceFromCoordinates, fromCoordinates); // CMU14
         }
 
         var shotEv = new GunShotEvent(user, ev.Ammo, fromCoordinates, toCoordinates.Value);
