@@ -40,8 +40,8 @@ public sealed class OptionsThemeRegressionTest : GameTest
         {
             using var menu = new OptionsMenu();
             menu.OpenCentered();
-            menu.Tabs.CurrentTab = 2;
             var keybinds = menu.FindControl<KeyRebindTab>("KeyRebindTab");
+            menu.Tabs.CurrentTab = menu.Tabs.Children.ToList().IndexOf(keybinds);
             var sections = Descendants(keybinds).OfType<CmuOptionSection>().ToArray();
             var emotes = sections.Single(section => section.Title == Loc.GetString("ui-options-header-cmu-emotes"));
             var general = sections.Single(section => section.Title == Loc.GetString("ui-options-header-general"));

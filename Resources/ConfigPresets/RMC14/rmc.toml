@@ -39,8 +39,9 @@ round_end_pvs_overrides = false
 round_restart_time = 180
 lobbyduration = 180
 
-[gateway]
-generator_enabled = false
+# CMU14: gateway.generator_enabled is not a registered cvar on this engine, breaks TestLoadAll
+# [gateway]
+# generator_enabled = false
 
 [ghost]
 kill_crit = false
