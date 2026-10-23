@@ -1,4 +1,4 @@
-lobby-character-preview-panel-header = Character
+﻿lobby-character-preview-panel-header = Character
 lobby-character-preview-panel-character-setup-button = Customize
 lobby-character-preview-panel-unloaded-preferences-label = Your character preferences have not yet loaded, please stand by.
 lobby-character-preview-prev-char-tooltip = Previous character
@@ -15,14 +15,16 @@ lobby-character-preview-ignore-allegiance-tooltip = When enabled, spawns your cu
 lobby-character-preview-ignore-allegiance-off = Ignore Allegiance: Off
 lobby-character-preview-ignore-allegiance-on = /// Ignore Allegiance: On ///
 
-# Two-line character summary shown beside the preview sprite. The pronoun and its verb have to stay
-# inside one selector ("He is" vs "They are"), so the colour wraps the whole phrase.
-# Both hues sit well under the terminal text's own brightness so they read as secondary rather than
-# as two alarm colours on a green screen: saturation 0.22, luminance 0.62. See docs/cmu/09-theming.md.
-lobby-character-summary-name = This is [color=#FFFFFF]{$name}[/color]
+# The tag beside the character's name, in the slot the gamemode takes on the round-info page. Short
+# on purpose: it sits at the end of a row whose other end is the name at heading size, so a sentence
+# there would compete with the thing it is meant to annotate. The name itself is no longer a locale
+# string - it is passed in plain, because it is the page's heading rather than a line of prose.
+# The pronoun keeps its own colour from the age; both hues sit well under the terminal text's own
+# brightness so they read as secondary rather than as two alarm colours on a green screen:
+# saturation 0.22, luminance 0.62. See docs/cmu/09-theming.md.
 lobby-character-summary-age = [color=#88A3AF]{$gender ->
-    [male] He is
-    [female] She is
-    [epicene] They are
-    *[other] It is
-}[/color] [color=#BF9595]{$age}[/color] years old
+    [male] He
+    [female] She
+    [epicene] They
+    *[other] It
+}[/color] · [color=#BF9595]{$age}[/color]

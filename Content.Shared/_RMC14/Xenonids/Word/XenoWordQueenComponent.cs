@@ -17,6 +17,10 @@ public sealed partial class XenoWordQueenComponent : Component
     [DataField, AutoNetworkedField]
     public string Header = "rmc-xeno-words-of-the-queen-header";
 
+    /// <summary>
+    ///     The body of a Queen's message. Neutral, not red: the heading above it carries the xeno
+    ///     violet, and a whole announcement set in pure red measured 3.6:1 on its own band.
+    /// </summary>
     [DataField, AutoNetworkedField]
-    public Color MessageColor = Color.Red;
+    public Color MessageColor = Color.FromHex("#D6DCE0");
 }

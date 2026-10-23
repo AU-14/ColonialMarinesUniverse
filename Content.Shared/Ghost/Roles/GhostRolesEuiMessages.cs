@@ -41,6 +41,24 @@ namespace Content.Shared.Ghost.Roles
         /// </summary>
         public TimeSpan RaffleEndTime { get; set; }
 
+        /// <summary>
+        /// if <see cref="Kind"/> is <see cref="GhostRoleKind.RaffleInProgress"/>, how long the raffle runs in
+        /// total - which is not fixed, since joining extends it. Without this the window can show how long is
+        /// left but not how far along it is.
+        /// </summary>
+        public TimeSpan RaffleDuration { get; set; }
+
+        /// <summary>
+        /// Id of the <see cref="Content.Shared._CMU14.Ghost.Roles.GhostRoleCategoryPrototype"/> this role is
+        /// listed under. Set from the role's own component where it says, worked out from the entity where it
+        /// does not - see CMUGhostRoleCategorySystem.
+        /// </summary>
+        public string? Category { get; set; }
+
+        /// <summary>
+        /// Where this particular entity is, for the window to print under its role's banner.
+        /// </summary>
+        public string? Location { get; set; }
     }
 
     [NetSerializable, Serializable]

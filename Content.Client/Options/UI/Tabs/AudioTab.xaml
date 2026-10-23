@@ -4,40 +4,76 @@
          xmlns:s="clr-namespace:Content.Client.Stylesheets"
          xmlns:cmu="clr-namespace:Content.Client.CMU14.UserInterface.Options">
     <BoxContainer Orientation="Vertical">
-        <!-- This tab had no ScrollContainer, so its content sat against the top with dead space
-             underneath and nowhere to go if it grew. Same structure as the other tabs now. -->
-        <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
-            <BoxContainer Orientation="Vertical" Margin="10 8 10 8" SeparationOverride="2">
-                <cmu:CmuOptionSection Title="{Loc 'cm-ui-rmc14'}">
-                    <ui:OptionSlider Name="SliderVolumeCassettes" Title="{Loc 'rmc-ui-options-cassettes-volume'}" />
-                    <ui:OptionSlider Name="SliderVolumeHijackSong" Title="{Loc 'rmc-ui-options-hijack-song-volume'}" />
-                </cmu:CmuOptionSection>
+        <ScrollContainer VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False">
+            <BoxContainer Orientation="Vertical" Margin="10 8 10 8" SeparationOverride="2" VerticalExpand="True">
 
+                <!-- Master first. These used to be ordered by contributing fork, which put the two niche
+                     RMC volumes above the control every player reaches for. -->
                 <cmu:CmuOptionSection Title="{Loc 'ui-options-volume-label'}">
                     <ui:OptionDropDown Name="DropDownAudioDevice" Title="{Loc 'ui-options-audio-device'}" />
-                    <ui:OptionSlider Name="SliderVolumeMaster" Title="{Loc 'ui-options-master-volume'}" />
-                    <ui:OptionSlider Name="SliderVolumeMidi" Title="{Loc 'ui-options-midi-volume'}" />
-                    <ui:OptionSlider Name="SliderVolumeAmbientMusic" Title="{Loc 'ui-options-ambient-music-volume'}" />
-                    <ui:OptionSlider Name="SliderVolumeAmbience" Title="{Loc 'ui-options-ambience-volume'}" />
-                    <ui:OptionSlider Name="SliderVolumeLobby" Title="{Loc 'ui-options-lobby-volume'}" />
-                    <ui:OptionSlider Name="SliderVolumeInterface" Title="{Loc 'ui-options-interface-volume'}" />
+                    <ui:OptionSlider Name="SliderVolumeMaster" Title="{Loc 'cmu-ui-options-master-volume'}" />
+                    <ui:OptionSlider Name="SliderVolumeMidi" Title="{Loc 'cmu-ui-options-midi-volume'}" />
+                    <ui:OptionSlider Name="SliderVolumeAmbientMusic" Title="{Loc 'cmu-ui-options-ambient-music-volume'}" />
+                    <ui:OptionSlider Name="SliderVolumeAmbience" Title="{Loc 'cmu-ui-options-ambience-volume'}" />
+                    <ui:OptionSlider Name="SliderVolumeLobby" Title="{Loc 'cmu-ui-options-lobby-volume'}" />
+                    <ui:OptionSlider Name="SliderVolumeInterface" Title="{Loc 'cmu-ui-options-interface-volume'}" />
                     <!-- cmu edit start: jukebox volume -->
                     <ui:OptionSlider Name="SliderVolumeJukebox" Title="{Loc 'cmu-ui-options-jukebox-volume'}" />
                     <!-- cmu edit end -->
-                    <ui:OptionSlider Name="SliderMaxAmbienceSounds" Title="{Loc 'ui-options-ambience-max-sounds'}" />
+                    <ui:OptionSlider Name="SliderVolumeCassettes" Title="{Loc 'cmu-ui-options-cassettes-volume'}" />
+                    <ui:OptionSlider Name="SliderVolumeHijackSong" Title="{Loc 'cmu-ui-options-hijack-song-volume'}" />
                 </cmu:CmuOptionSection>
 
-                <!-- The toggles get their own heading rather than trailing off the end of the slider
-                     list; four of them are on by default and ran together as one block. -->
                 <cmu:CmuOptionSection Title="{Loc 'ui-options-audio-toggles'}">
-                    <CheckBox Name="LobbyMusicCheckBox" Text="{Loc 'ui-options-lobby-music'}" />
-                    <CheckBox Name="RestartSoundsCheckBox" Text="{Loc 'ui-options-restart-sounds'}" />
-                    <CheckBox Name="EventMusicCheckBox" Text="{Loc 'ui-options-event-music'}" />
-                    <CheckBox Name="AdminSoundsCheckBox" Text="{Loc 'ui-options-admin-sounds'}" />
-                    <CheckBox Name="BwoinkSoundCheckBox" Text="{Loc 'ui-options-bwoink-sound'}" />
-                    <CheckBox Name="AudioHrtfCheckBox" Text="{Loc 'ui-options-audio-hrtf'}" />
-                    <CheckBox Name="MuteUnfocusedCheckBox" Text="{Loc 'ui-options-mute-unfocused'}" />
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="LobbyMusicCheckBox" Text="{Loc 'cmu-ui-options-lobby-music'}" />
+                            <CheckBox Name="RestartSoundsCheckBox" Text="{Loc 'cmu-ui-options-restart-sounds'}" />
+                            <CheckBox Name="EventMusicCheckBox" Text="{Loc 'cmu-ui-options-event-music'}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="MuteScriptedSoundsCheckBox" Text="{Loc 'ui-options-mute-scripted-sounds'}" />
+                            <CheckBox Name="AdminSoundsCheckBox" Text="{Loc 'cmu-ui-options-admin-sounds'}" />
+                            <CheckBox Name="BwoinkSoundCheckBox" Text="{Loc 'cmu-ui-options-bwoink-sound'}" />
+                        </BoxContainer>
+                    </BoxContainer>
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="AudioHrtfCheckBox" Text="{Loc 'ui-options-audio-hrtf'}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="MuteUnfocusedCheckBox" Text="{Loc 'ui-options-mute-unfocused'}" />
+                        </BoxContainer>
+                    </BoxContainer>
+                    <!-- A count, not a volume, so it sits here rather than with the volume sliders. -->
+                    <ui:OptionSlider Name="SliderMaxAmbienceSounds" Title="{Loc 'cmu-ui-options-ambience-max-sounds'}" ToolTip="{Loc 'cmu-ui-options-ambience-max-sounds-tooltip'}" />
                 </cmu:CmuOptionSection>
+
+                <!-- Mono's audio propagation. -->
+                <cmu:CmuOptionSection Title="{Loc 'ui-options-general-area-echo'}">
+                    <CheckBox Name="AreaEchoCheckBox" Text="{Loc 'cmu-ui-options-area-echo'}" ToolTip="{Loc 'cmu-ui-options-area-echo-tooltip'}" />
+                    <cmu:CmuDependentOptions Name="AreaEchoOptions">
+                        <CheckBox Name="AreaEchoHighResolutionCheckBox" Text="{Loc 'cmu-ui-options-area-echo-highres'}" ToolTip="{Loc 'cmu-ui-options-area-echo-highres-tooltip'}" />
+                    </cmu:CmuDependentOptions>
+                </cmu:CmuOptionSection>
+
+                <cmu:CmuOptionSection Title="{Loc 'rmc-ui-audio-voicelines-self-header'}">
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="RMCVoicelinesYourself" Text="{Loc 'rmc-ui-audio-voicelines-yourself'}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="RMCEmotesYourself" Text="{Loc 'rmc-ui-audio-emotes-yourself'}" />
+                        </BoxContainer>
+                    </BoxContainer>
+                </cmu:CmuOptionSection>
+
+                <!-- Thirteen species by two sound kinds, filled in code - see CmuSpeciesSoundMatrix.
+                     Collapsed by default: it is the one genuinely long group left in the menu. -->
+                <cmu:CmuOptionSection Name="SpeciesSection" Title="{Loc 'cmu-ui-options-group-species-sounds'}">
+                    <cmu:CmuSpeciesSoundMatrix Name="SpeciesMatrix" />
+                </cmu:CmuOptionSection>
+
             </BoxContainer>
         </ScrollContainer>
         <ui:OptionsTabControlRow Name="Control" Access="Public" />

@@ -3,11 +3,19 @@
           xmlns:ui="clr-namespace:Content.Client.Options.UI"
           xmlns:cmu="clr-namespace:Content.Client.CMU14.UserInterface.Options">
     <BoxContainer Orientation="Vertical">
-        <ScrollContainer VerticalExpand="True">
-            <BoxContainer Orientation="Vertical" Margin="10 8 10 8" SeparationOverride="2">
+        <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+            <BoxContainer Orientation="Vertical" Margin="10 8 10 8" SeparationOverride="2" VerticalExpand="True">
+
                 <cmu:CmuOptionSection Title="{Loc 'ui-options-display-label'}">
-                    <CheckBox Name="VSyncCheckBox" Text="{Loc 'ui-options-vsync'}" />
-                    <CheckBox Name="FullscreenCheckBox" Text="{Loc 'ui-options-fullscreen'}" />
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="FullscreenCheckBox" Text="{Loc 'ui-options-fullscreen'}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="VSyncCheckBox" Text="{Loc 'ui-options-vsync'}" />
+                        </BoxContainer>
+                    </BoxContainer>
+                    <ui:OptionDropDown Name="DropDownUIScale" Title="{Loc 'cmu-ui-options-ui-scale'}" />
                     <BoxContainer Name="MaxFpsContainer" Orientation="Horizontal"
                                   ToolTip="{Loc 'ui-options-max-fps-tooltip'}">
                         <Label Text="{Loc 'ui-options-max-fps'}" MinWidth="400" />
@@ -18,31 +26,33 @@
                     </BoxContainer>
                 </cmu:CmuOptionSection>
 
-                <cmu:CmuOptionSection Title="{Loc 'ui-options-quality-label'}">
-                    <ui:OptionDropDown Name="DropDownLightingQuality" Title="{Loc 'ui-options-lighting-label'}" />
-                    <CheckBox Name="ViewportLowResCheckBox" Text="{Loc 'ui-options-vp-low-res'}" />
-                    <CheckBox Name="ParallaxLowQualityCheckBox" Text="{Loc 'ui-options-parallax-low-quality'}" />
-                    <CheckBox Name="AmbientOcclusionCheckBox" Text="{Loc 'ui-options-ambient-occlusion'}" />
+                <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-group-performance'}">
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="ViewportLowResCheckBox" Text="{Loc 'ui-options-vp-low-res'}" />
+                            <CheckBox Name="ParallaxLowQualityCheckBox" Text="{Loc 'cmu-ui-options-parallax-low-quality'}" ToolTip="{Loc 'cmu-ui-options-parallax-low-quality-tooltip'}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="AmbientOcclusionCheckBox" Text="{Loc 'cmu-ui-options-ambient-occlusion'}" />
+                            <CheckBox Name="FpsCounterCheckBox" Text="{Loc 'ui-options-fps-counter'}" />
+                        </BoxContainer>
+                    </BoxContainer>
+                    <ui:OptionDropDown Name="DropDownLightingQuality" Title="{Loc 'cmu-ui-options-lighting-quality'}" />
                     <ui:OptionSlider Name="SharpnessSlider" Title="{Loc 'ui-options-sharpness'}" />
                 </cmu:CmuOptionSection>
 
-                <cmu:CmuOptionSection Title="{Loc 'ui-options-interface-label'}">
-                    <ui:OptionDropDown Name="DropDownUIScale" Title="{Loc 'ui-options-scale-label'}" />
+                <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-group-viewport'}">
                     <CheckBox Name="ViewportStretchCheckBox" Text="{Loc 'ui-options-vp-stretch'}" />
-                    <ui:OptionSlider Name="ViewportScaleSlider" Title="{Loc ui-options-vp-scale}" />
-                    <ui:OptionSlider Name="ViewportWidthSlider" Title="{Loc ui-options-vp-width}" />
-                    <CheckBox Name="IntegerScalingCheckBox"
-                              Text="{Loc 'ui-options-vp-integer-scaling'}"
-                              ToolTip="{Loc 'ui-options-vp-integer-scaling-tooltip'}" />
-                    <CheckBox Name="ViewportVerticalFitCheckBox"
-                              Text="{Loc 'ui-options-vp-vertical-fit'}"
-                              ToolTip="{Loc 'ui-options-vp-vertical-fit-tooltip'}" />
+                    <!-- Only shown while stretching; GraphicsTab toggles them. -->
+                    <cmu:CmuDependentOptions Name="StretchOptions">
+                        <CheckBox Name="ViewportVerticalFitCheckBox" Text="{Loc 'ui-options-vp-vertical-fit'}" ToolTip="{Loc 'ui-options-vp-vertical-fit-tooltip'}" />
+                        <CheckBox Name="IntegerScalingCheckBox" Text="{Loc 'cmu-ui-options-vp-integer-scaling'}" ToolTip="{Loc 'ui-options-vp-integer-scaling-tooltip'}" />
+                    </cmu:CmuDependentOptions>
+                    <ui:OptionSlider Name="ViewportScaleSlider" Title="{Loc 'cmu-ui-options-vp-scale'}" />
+                    <ui:OptionSlider Name="ViewportWidthSlider" Title="{Loc 'cmu-ui-options-vp-width'}" />
                     <ui:OptionDropDown Name="DropDownFilterMode" Title="{Loc 'ui-options-filter-label'}" />
                 </cmu:CmuOptionSection>
 
-                <cmu:CmuOptionSection Title="{Loc 'ui-options-misc-label'}">
-                    <CheckBox Name="FpsCounterCheckBox" Text="{Loc 'ui-options-fps-counter'}" />
-                </cmu:CmuOptionSection>
             </BoxContainer>
         </ScrollContainer>
         <ui:OptionsTabControlRow Name="Control" Access="Public" />

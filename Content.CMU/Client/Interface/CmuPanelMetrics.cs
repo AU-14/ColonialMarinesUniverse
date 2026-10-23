@@ -6,28 +6,6 @@ namespace Content.Client.CMU14.Interface;
 ///     The measurements the CRT panels share: how tall a control is, how far things sit from a
 ///     border, and how much air goes between them.
 /// </summary>
-/// <remarks>
-///     <para>
-///     Written because the vote popup, the lobby action column, the join-round window and the staff
-///     help window each arrived at their own answer. Between them they used six control heights
-///     (26, 34, 36, 40, 46, 48) and three paddings, and almost none of the differences meant
-///     anything - 34 and 36 are the same intent typed twice, a fortnight apart. Panels that share a
-///     screen should be built out of the same parts.
-///     </para>
-///     <para>
-///     This is a scale, not a single value. The differences that *are* deliberate stay: a primary
-///     action is meant to be taller than a secondary one, and flattening the lobby column to one
-///     height would throw away the ranking that column exists to express. What changes is that a
-///     panel now picks a step by name instead of inventing a number, so the next panel has
-///     somewhere to look.
-///     </para>
-///     <para>
-///     Sizes are <c>float</c> and separations <c>int</c> to match the properties they feed
-///     (<see cref="Robust.Client.UserInterface.Control.MinHeight"/> and
-///     <c>SeparationOverride</c>), which lets XAML bind them directly with <c>{x:Static}</c> rather
-///     than restating the number.
-///     </para>
-/// </remarks>
 public static class CmuPanelMetrics
 {
     /// <summary>
@@ -90,6 +68,12 @@ public static class CmuPanelMetrics
     ///     reads as being in the way even when nothing is behind it.
     /// </summary>
     public const float LobbyClockTopMargin = 24;
+
+    /// <summary>
+    ///     Height of the lobby housing's switchable zone, so the server block and the character block
+    ///     occupy the same box.
+    /// </summary>
+    public const float LobbyPanelHeight = 212;
 
     /// <summary>Between things that are separate objects: cards, popups, stacked panels.</summary>
     public const int RowSeparation = 8;

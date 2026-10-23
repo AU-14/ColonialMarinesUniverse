@@ -14,16 +14,12 @@ public sealed partial class LobbyCharacterPreviewPanel : Control
     [Dependency] private IResourceCache _resourceCache = default!;
 
     public Button CharacterSetupButton => CharacterSetup;
+
+    /// <summary>The dotted run between the name and its tag; CmuLobbyLook gives it its stylebox.</summary>
+    public PanelContainer HeadLeaderPanel => HeadLeader;
     public Button PrevCharacterButton => PrevCharButton;
     public Button NextCharacterButton => NextCharButton;
     public Button IgnoreAllegianceToggle => IgnoreAllegianceButton;
-
-    /// <summary>
-    ///     Must match the size the CrtCharacterSummary style rule uses, or the one-line clamp on the
-    ///     name is measured against the wrong font.
-    /// </summary>
-    private const int CharacterSummaryFontSize = 9;
-
 
     public LobbyCharacterPreviewPanel()
     {
@@ -66,42 +62,20 @@ public sealed partial class LobbyCharacterPreviewPanel : Control
     {
         Loaded.Visible = value;
         Unloaded.Visible = !value;
+
+        HeadRow.Visible = value;
+        HeadRule.Visible = value;
     }
 
     /// <summary>
-    ///     Sets the two-line character summary. Both lines are markup so the name, pronoun and age
-    ///     can be coloured; see the lobby-character-summary-* locale keys.
+    ///     Sets the page's head: the character's name as the big fact, and their pronoun and age as
+    ///     the tag beside it. The name is plain text because it is one value at heading size; the tag
+    ///     stays markup so the pronoun and the age keep their own colours.
     /// </summary>
-    public void SetSummaryText(string nameMarkup, string ageMarkup)
+    public void SetSummaryText(string name, string ageMarkup)
     {
-        ClampNameToOneLine();
-        SetSummaryLine(SummaryName, nameMarkup);
+        SummaryName.Text = name;
         SetSummaryLine(SummaryAge, ageMarkup);
-    }
-
-    /// <summary>
-    ///     The summary column is a fixed share of the panel, so an over-long name wraps instead of
-    ///     shoving the sprite sideways. Cap it at a single line and let the rest clip: names are
-    ///     bounded in length anyway, and a second line would push the age, job line and toggle down.
-    /// </summary>
-    private void ClampNameToOneLine()
-    {
-        // Only meaningful for the CRT font, which is the one the CrtCharacterSummary rule applies.
-        // Without CRT the label keeps NanoUI's font and is left to wrap as before.
-        if (!StyleNano.CrtUiEnabled)
-            return;
-
-        // Read the scale off the control rather than repeating the stylesheet's value - this runs
-        // when a profile loads, long after styles have resolved.
-        var lineHeight = StyleNano.GetCrtFont(_resourceCache, CharacterSummaryFontSize)
-            .GetLineHeight(1f);
-
-        // Height is capped to one line so a long name cannot push the rest of the block down. The
-        // width cap that used to sit beside this is gone: it made the name *wrap*, and this cap then
-        // hid the wrapped line - so "Zachary Thompson" rendered as "Zachary". The stats column that
-        // cap was protecting no longer exists, so there is nothing left to protect.
-        SummaryName.MaxHeight = lineHeight * SummaryName.LineHeightScale;
-
     }
 
     private static void SetSummaryLine(RichTextLabel label, string markup)

@@ -4,23 +4,9 @@ using Robust.Client.UserInterface.Controls;
 namespace Content.Client.CMU14.Interface;
 
 /// <summary>
-///     The lobby ready toggle's two looks, in one place.
+///     The lobby ready toggle's two looks, in one place. Three redundant channels carry the state:
+///     the fill inverts, the leading edge changes colour, and the label gains slashes.
 /// </summary>
-/// <remarks>
-///     <para>
-///     Shared because it has to be. The real control only exists before a round starts, so it is
-///     normally looked at through the <c>cmu.panel_preview=ready</c> harness - and a harness that
-///     styles the button by its own copy of the rules is not showing you the control, it is showing
-///     you the copy. That is exactly what happened: the preview kept putting the off class on both
-///     buttons and rendering the lit state as a hover, which measured Surface2 where the real thing
-///     would have been lit.
-///     </para>
-///     <para>
-///     Three channels carry the state, and they are meant to be redundant: the fill inverts, the
-///     leading edge changes colour, and the label gains slashes. Any one of them alone would be a
-///     detail someone could miss on a lobby they are not looking directly at.
-///     </para>
-/// </remarks>
 public static class CmuReadyToggle
 {
     /// <summary>

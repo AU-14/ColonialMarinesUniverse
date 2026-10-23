@@ -655,8 +655,7 @@ public sealed partial class UserAHelpUIHandler : IAHelpUIHandler
     }
 
     // One message, not five: a header coloured in code rather than baked into the loc string, then
-    // the bullet body. Stays a normal log line so it scrolls away with the conversation. Internal so
-    // CmuPanelPreviewSystem can show the same text without faking EnsureInit's setup.
+    // the bullet body. Stays a normal log line so it scrolls away with the conversation.
     internal static string BuildIntroText()
     {
         var introHeader = Loc.GetString("bwoink-system-introductory-header");

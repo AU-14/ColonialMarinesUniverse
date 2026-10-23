@@ -126,6 +126,9 @@ public sealed partial class GuidebookUIController : UIController, IOnStateEntere
         ToggleGuidebook();
     }
 
+    /// <summary>CMU: for <c>cmuguidesearch</c>, which drives the window's search box from the console.</summary>
+    public GuidebookWindow? Window => _guideWindow;
+
     public void ToggleGuidebook()
     {
         if (_guideWindow == null)
@@ -231,12 +234,7 @@ public sealed partial class GuidebookUIController : UIController, IOnStateEntere
         }
         var changed = _guideWindow.UpdateGuides(guides, rootEntries, forceRoot, selected);
 
-        // Expand up to depth-2.
-        if (changed)
-        {
-            _guideWindow.Tree.SetAllExpanded(false);
-            _guideWindow.Tree.SetAllExpanded(true, 1);
-        }
+        // CMU: the book stays folded up; UpdateGuides opens only the branch holding the selected entry.
 
         _guideWindow.OpenCenteredRight();
     }

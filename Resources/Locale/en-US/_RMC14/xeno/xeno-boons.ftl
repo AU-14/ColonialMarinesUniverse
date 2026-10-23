@@ -11,8 +11,7 @@ rmc-boon-on-cooldown = Our hive has already used {$boon} recently! Wait {$minute
 rmc-boon-duplicate-active = We already have a boon of {$boon} active!
 rmc-boon-not-reusable = Our hive has already used {$boon} and cannot use it again!
 
-# cmu edit start: lore names
-rmc-boon-pylon-announcement-marine = [color=#CECECE][font size=16][bold]APOLLO MK.II - Biological Scanner[/bold][/font][/color][color=red][font size=16]
+rmc-boon-pylon-announcement-marine = [color=#CECECE][font size=16][bold]APOLLO MK.II - Biological Scanner[/bold][/font][/color][color=#FFB454][font size=16]
 
     ALERT.
 
@@ -21,14 +20,13 @@ rmc-boon-pylon-announcement-marine = [color=#CECECE][font size=16][bold]APOLLO M
     DANGER: Hazard is strengthening xenomorphs, advise urgent termination of hazard by ground forces.[/font][/color]
 # cmu edit end
 
-rmc-boon-pylon-destroyed-announcement-marine = [color=#CECECE][font size=16][bold]APOLLO MK.II - Biological Scanner[/bold][/font][/color][color=red][font size=16]
+rmc-boon-pylon-destroyed-announcement-marine = [color=#CECECE][font size=16][bold]APOLLO MK.II - Biological Scanner[/bold][/font][/color][color=#FFB454][font size=16]
 
     ALERT.
 
     Energy build up around communication relay at {$area} halted.[/font][/color]
 
-# cmu edit start: lore names
-rmc-boon-king-announcement-marine = [color=#CECECE][font size=16][bold]APOLLO MK.II - Biological Scanner[/bold][/font][/color][color=red][font size=16]
+rmc-boon-king-announcement-marine = [color=#CECECE][font size=16][bold]APOLLO MK.II - Biological Scanner[/bold][/font][/color][color=#FFB454][font size=16]
 
     ALERT.
 
@@ -38,29 +36,28 @@ rmc-boon-king-announcement-marine = [color=#CECECE][font size=16][bold]APOLLO MK
 # cmu edit end
 rmc-boon-king-announcement-xenos = The King is growing at {$area}. Protect it, as well as our pylons at their communications relays, at all costs!
 
-rmc-boon-king-announcement-paused-marine = [color=#CECECE][font size=16][bold]APOLLO MK.II - Biological Scanner[/bold][/font][/color][color=red][font size=16]
+rmc-boon-king-announcement-paused-marine = [color=#CECECE][font size=16][bold]APOLLO MK.II - Biological Scanner[/bold][/font][/color][color=#FFB454][font size=16]
 
     ALERT.
 
     UNUSUAL ENERGY BUILDUP IN {$area} HAS BEEN PAUSED.[/font][/color]
 rmc-boon-king-announcement-paused-xeno = One of our pylons was destroyed, the hatchery has paused its progress!
 
-rmc-boon-king-announcement-resumed-marine = [color=#CECECE][font size=16][bold]APOLLO MK.II - Biological Scanner[/bold][/font][/color][color=red][font size=16]
+rmc-boon-king-announcement-resumed-marine = [color=#CECECE][font size=16][bold]APOLLO MK.II - Biological Scanner[/bold][/font][/color][color=#FFB454][font size=16]
 
     ALERT.
 
     UNUSUAL ENERGY BUILDUP IN {$area} HAS BEEN RESUMED.[/font][/color]
 rmc-boon-king-announcement-resumed-xeno = The hatchery's progress has resumed!
 
-rmc-boon-king-announcement-stopped-marine = [color=#CECECE][font size=16][bold]APOLLO MK.II - Biological Scanner[/bold][/font][/color][color=red][font size=16]
+rmc-boon-king-announcement-stopped-marine = [color=#CECECE][font size=16][bold]APOLLO MK.II - Biological Scanner[/bold][/font][/color][color=#FFB454][font size=16]
 
     ALERT.
 
     UNUSUAL ENERGY BUILDUP IN {$area} HAS BEEN STOPPED.[/font][/color]
 rmc-boon-king-announcement-stopped-xeno = THE HATCHERY WAS DESTROYED! VENGEANCE!
 
-# cmu edit start: lore names
-rmc-boon-king-announcement-minutes-marine = [color=#CECECE][font size=16][bold]APOLLO MK.II - Biological Scanner[/bold][/font][/color][color=red][font size=16]
+rmc-boon-king-announcement-minutes-marine = [color=#CECECE][font size=16][bold]APOLLO MK.II - Biological Scanner[/bold][/font][/color][color=#FFB454][font size=16]
 
     ALERT.
 
@@ -70,8 +67,7 @@ rmc-boon-king-announcement-minutes-marine = [color=#CECECE][font size=16][bold]A
 # cmu edit end
 rmc-boon-king-announcement-minutes-xeno = The King will hatch in approximately {$minutes} minutes.
 
-# cmu edit start: lore names
-rmc-boon-king-announcement-seconds-marine = [color=#CECECE][font size=16][bold]APOLLO MK.II - Biological Scanner[/bold][/font][/color][color=red][font size=16]
+rmc-boon-king-announcement-seconds-marine = [color=#CECECE][font size=16][bold]APOLLO MK.II - Biological Scanner[/bold][/font][/color][color=#FFB454][font size=16]
 
     ALERT.
 
@@ -81,7 +77,7 @@ rmc-boon-king-announcement-seconds-marine = [color=#CECECE][font size=16][bold]A
 # cmu edit end
 rmc-boon-king-announcement-seconds-xeno = The King will hatch in approximately {$seconds} seconds.
 
-rmc-boon-king-announcement-hatch-marine = [color=#CECECE][font size=16][bold]APOLLO MK.II - Biological Scanner[/bold][/font][/color][color=red][font size=16]
+rmc-boon-king-announcement-hatch-marine = [color=#CECECE][font size=16][bold]APOLLO MK.II - Biological Scanner[/bold][/font][/color][color=#FFB454][font size=16]
 
     ALERT.
 

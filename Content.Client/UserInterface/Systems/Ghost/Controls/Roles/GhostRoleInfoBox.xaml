@@ -1,31 +1,27 @@
-<BoxContainer xmlns="https://spacestation14.io"
-              Orientation="Vertical"
-              HorizontalExpand="True">
-    <PanelContainer StyleClasses="CrtInsetPanel" HorizontalExpand="True">
+<PanelContainer xmlns="https://spacestation14.io"
+                HorizontalExpand="True">
+    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="0">
+        <PanelContainer Name="AccentEdge" MinWidth="2" VerticalExpand="True" />
         <BoxContainer Orientation="Horizontal"
                       HorizontalExpand="True"
-                      SeparationOverride="10"
-                      Margin="8 6">
-            <PanelContainer Name="PreviewFrame"
-                            StyleClasses="CrtPanel"
-                            MinSize="64 64"
-                            VerticalAlignment="Top">
-            </PanelContainer>
+                      SeparationOverride="12"
+                      Margin="12 10 14 9">
+            <PanelContainer Name="PreviewFrame" MinSize="56 56" VerticalAlignment="Center" />
             <BoxContainer Orientation="Vertical"
                           HorizontalExpand="True"
-                          SeparationOverride="4">
-                <Label Name="Title"
-                       StyleClasses="CrtHeading"
-                       ClipText="True"
-                       HorizontalExpand="True" />
-                <RichTextLabel Name="Description"
-                               Margin="0 0 0 4"
-                               HorizontalExpand="True" />
-                <BoxContainer Name="ButtonHost"
-                              Orientation="Vertical"
-                              SeparationOverride="5"
-                              HorizontalExpand="True" />
+                          VerticalAlignment="Center"
+                          SeparationOverride="3">
+                <Label Name="Title" ClipText="True" HorizontalExpand="True" />
+                <!-- The right margin is load-bearing, and it has to be here rather than a minimum width
+                     on the count beside it. -->
+                <RichTextLabel Name="Description" HorizontalExpand="True" Margin="0 0 12 0" />
+            </BoxContainer>
+            <BoxContainer Orientation="Vertical"
+                          VerticalAlignment="Center"
+                          SeparationOverride="1">
+                <Label Name="CountLabel" Align="Right" />
+                <Label Name="KindLabel" Align="Right" />
             </BoxContainer>
         </BoxContainer>
-    </PanelContainer>
-</BoxContainer>
+    </BoxContainer>
+</PanelContainer>

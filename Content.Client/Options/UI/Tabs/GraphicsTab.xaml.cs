@@ -114,6 +114,7 @@ public sealed partial class GraphicsTab : Control
         ViewportScaleSlider.Visible = !ViewportStretchCheckBox.Pressed;
         IntegerScalingCheckBox.Visible = ViewportStretchCheckBox.Pressed;
         ViewportVerticalFitCheckBox.Visible = ViewportStretchCheckBox.Pressed;
+        StretchOptions.Visible = ViewportStretchCheckBox.Pressed; // CMU
         ViewportWidthSlider.Visible = !ViewportStretchCheckBox.Pressed || !ViewportVerticalFitCheckBox.Pressed;
         DropDownFilterMode.Visible = !IntegerScalingCheckBox.Pressed && ViewportStretchCheckBox.Pressed;
     }

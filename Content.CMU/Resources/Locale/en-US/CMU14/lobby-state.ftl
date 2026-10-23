@@ -40,3 +40,13 @@ cmu-lobby-clock-docked-paused = Round start paused
 cmu-lobby-clock-docked-soon = Round starts soon
 cmu-lobby-clock-docked-now = Round starting now
 cmu-lobby-clock-loading-map = Loading map…
+
+# The nameplate on the lobby housing, matching the in-round one on the chat (cmu-hud-housing-plate-*).
+# A plate is stamped into the case at the factory, so it names the game rather than whatever the
+# operator has called this particular server.
+cmu-lobby-plate-name = COLONIAL MARINES UNIVERSE
+cmu-lobby-plate-serial = MOD. LB-1 · 12
+
+# The two positions of the housing's panel switch.
+cmu-lobby-panel-server = Server
+cmu-lobby-panel-character = Character

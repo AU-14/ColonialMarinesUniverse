@@ -9,38 +9,6 @@ namespace Content.Client.CMU14.Interface;
 ///     The surface ladder and text tones the CRT theme is built from - and the neutral ladder that
 ///     stands in for it when the theme is switched off.
 /// </summary>
-/// <remarks>
-///     <para>
-///     The shipped palette derived all eighteen of its colours from one hue and packed every surface
-///     between <c>#000906</c> and <c>#032314</c> - about five percent of the luminance range, all of
-///     it near-black. Three problems followed from that one fact, and all three showed up in
-///     practice: surfaces could not be told apart by fill, so every boundary had to be a border,
-///     which is what produces the box-in-box look; nothing could signal danger, because a fill could
-///     only ever be the theme colour brighter; and a scanline had no luminance to modulate, so it was
-///     either invisible or a colour cast.
-///     </para>
-///     <para>
-///     This ladder fixes the cause rather than the symptoms. Four surface steps, each visibly lighter
-///     than the last, so a panel can sit inside a panel and be read as separate without a rule
-///     between them. Text is genuinely bright - an Aliens terminal is high contrast, dim green on
-///     black is a different look entirely. Caution and alert are off-hue on purpose.
-///     </para>
-///     <para>
-///     <b>Every member is a property, not a field, and every one of them is mode-aware.</b> That is
-///     the whole reason this file reads the way it does. These used to be plain constants, so a
-///     control wearing a <c>Crt*</c> style class kept its green fill after the theme was switched
-///     off - and since the XAML names those classes directly, that was most of the lobby. Turning
-///     the theme off left a green UI in a proportional font, which is nobody's design.
-///     <see cref="StyleNano"/>'s own colours had always fallen back; this file was the one that did
-///     not.
-///     </para>
-///     <para>
-///     The off values are the stock NanoUI greys, keyed to what each step is used *for* rather than
-///     to its green's luminance: the panel steps land on the existing neutral panel colours, and the
-///     interactive steps land on NanoUI's own button colours, so a button in base mode is the slate
-///     it always was.
-///     </para>
-/// </remarks>
 public static class CrtTerminalPalette
 {
     // Ladder note (2026-08-19): Surface2 and Surface3 were widened from #142519 and #1C3323. The
@@ -121,61 +89,118 @@ public static class CrtTerminalPalette
     public static Color Alert => Crt ? Color.FromHex("#FF4E5E") : StyleNano.DangerousRedFore;
 
     /// <summary>
-    ///     Saturation of a chat row tint at full strength: <see cref="Surface2"/>'s own, so a green
-    ///     channel lands exactly on that rung and every other hue is that same rung rotated.
+    ///     Saturation of a chat row tint at full strength.
     /// </summary>
-    public const float ChatTintSaturationFull = 0.553f;
+    public const float ChatTintSaturationFull = 0.16f;
 
     /// <summary>Saturation of a muted chat row tint. Same rung, same hues, less of them.</summary>
-    public const float ChatTintSaturationMuted = 0.30f;
+    public const float ChatTintSaturationMuted = 0.10f;
 
     /// <summary>
-    ///     A chat row fill carrying <paramref name="hue"/> at the luminance of <see cref="Surface2"/>,
-    ///     the rung announcements already sit on. Pinning luminance rather than HSV value is the
-    ///     whole point: at equal value a blue row sinks into the ground while a green one floats.
+    ///     Saturation of a coloured control fill - a button face, not a chat row.
     /// </summary>
-    public static Color ChatRowTint(Color hue, float saturation)
+    public const float ControlTintSaturation = 0.30f;
+
+    /// <summary>
+    ///     A chat row fill carrying <paramref name="hue"/> at the luminance of <see cref="Surface1"/>.
+    /// </summary>
+    public static Color ChatRowTint(Color hue, float saturation) =>
+        TintedFill(hue, saturation, Luminance(Surface1));
+
+    /// <summary>
+    ///     A coloured control fill carrying <paramref name="hue"/>, on the rung buttons already sit
+    ///     on.
+    /// </summary>
+    public static Color ControlTint(Color hue) =>
+        TintedFill(hue, ControlTintSaturation, Luminance(Surface2));
+
+    /// <summary>
+    ///     <paramref name="hue"/> at <paramref name="saturation"/>, scaled to sit at
+    ///     <paramref name="luminance"/>. Pinning luminance rather than HSV value is the whole point:
+    ///     at equal value a blue fill sinks into the ground while a green one floats.
+    /// </summary>
+    public static Color TintedFill(Color hue, float saturation, float luminance)
     {
         // HSV -> RGB is linear in value, so luminance is too. Build the hue at value 1 and scale
         // once rather than searching for the value that lands on the rung.
         var h = Color.ToHsv(hue).X;
         var full = Color.FromHsv(new Vector4(h, saturation, 1f, 1f));
-        var value = Luminance(Surface2) / Luminance(full);
-        return Color.FromHsv(new Vector4(h, saturation, Math.Clamp(value, 0f, 1f), 1f));
+        return Color.FromHsv(new Vector4(h, saturation, Math.Clamp(luminance / Luminance(full), 0f, 1f), 1f));
     }
 
     /// <summary>
-    ///     Luminance every channel tone is pinned to. Below <see cref="Text"/>'s own (~0.82) because
-    ///     blue and violet cannot reach that - a strict pin would clamp them at full value and hand
-    ///     back the neon primaries this palette exists to avoid. Every hue is reachable here.
+    ///     Brightness ceiling for a channel tone. Below <see cref="Text"/>'s own (~0.82) because blue and
+    ///     violet cannot reach that - a strict pin would clamp them at full value and hand back the neon
+    ///     primaries this palette exists to avoid.
     /// </summary>
-    public const float ChannelToneLuminance = 0.66f;
+    public const float ChannelToneLuminance = 0.64f;
 
     /// <summary>
-    ///     Saturation of a channel tone. Enough to tell nine channels apart at a glance, low enough
-    ///     that they still read as tinted phosphor rather than as arbitrary UI colours.
+    ///     Contrast a channel tone must clear against the row it is drawn on. Above the usual 4.5
+    ///     for body text, because the scanline pass darkens everything on top of these and a ratio
+    ///     measured here is the best case.
     /// </summary>
-    public const float ChannelToneSaturation = 0.42f;
+    public const float ChannelToneMinContrast = 5.5f;
 
     /// <summary>
-    ///     <paramref name="hue"/> rebuilt at the channel band's fixed luminance and saturation.
+    ///     <paramref name="hue"/> made readable on the chat row it will be drawn on, giving up as
+    ///     little of itself as that takes.
     /// </summary>
-    /// <remarks>
-    ///     The same trick as <see cref="ChatRowTint"/>, aimed at text rather than fills: take the hue
-    ///     only, and rebuild it at a known luminance. Picking channel colours by eye is what produced
-    ///     the shipped set - <c>LightSkyBlue</c>, <c>HotPink</c>, <c>MediumPurple</c> - where the pink
-    ///     burns and the purple is nearly unreadable on a dark ground, because equal HSV *value* is
-    ///     nothing like equal brightness across hues.
-    /// </remarks>
     public static Color ChannelTone(Color hue)
     {
         if (!Crt)
             return hue;
 
-        var h = Color.ToHsv(hue).X;
-        var full = Color.FromHsv(new Vector4(h, ChannelToneSaturation, 1f, 1f));
-        var value = ChannelToneLuminance / Luminance(full);
-        return Color.FromHsv(new Vector4(h, ChannelToneSaturation, Math.Clamp(value, 0f, 1f), 1f));
+        var hsv = Color.ToHsv(hue);
+
+        // The full-strength tint, whichever the player has set: muted is the same hue at lower saturation.
+        var ground = ChatRowTint(hue, ChatTintSaturationFull);
+
+        if (Contrast(AtSaturation(hsv.X, hsv.Y), ground) >= ChannelToneMinContrast)
+            return AtSaturation(hsv.X, hsv.Y);
+
+        var low = 0f;
+        var high = hsv.Y;
+        for (var i = 0; i < 24; i++)
+        {
+            var mid = (low + high) / 2f;
+            if (Contrast(AtSaturation(hsv.X, mid), ground) >= ChannelToneMinContrast)
+                low = mid;
+            else
+                high = mid;
+        }
+
+        return AtSaturation(hsv.X, low);
+    }
+
+    /// <summary>
+    ///     <paramref name="hue"/> at <paramref name="saturation"/>, as bright as that pair allows up
+    ///     to <see cref="ChannelToneLuminance"/>.
+    /// </summary>
+    private static Color AtSaturation(float hue, float saturation)
+    {
+        var full = Color.FromHsv(new Vector4(hue, saturation, 1f, 1f));
+        var value = MathF.Min(1f, ChannelToneLuminance / Luminance(full));
+        return Color.FromHsv(new Vector4(hue, saturation, value, 1f));
+    }
+
+    private static float Contrast(Color a, Color b)
+    {
+        var la = RelativeLuminance(a);
+        var lb = RelativeLuminance(b);
+        return (MathF.Max(la, lb) + 0.05f) / (MathF.Min(la, lb) + 0.05f);
+    }
+
+    private static float RelativeLuminance(Color color)
+    {
+        return 0.2126f * Linear(color.R) + 0.7152f * Linear(color.G) + 0.0722f * Linear(color.B);
+    }
+
+    private static float Linear(float channel)
+    {
+        return channel <= 0.04045f
+            ? channel / 12.92f
+            : MathF.Pow((channel + 0.055f) / 1.055f, 2.4f);
     }
 
     /// <summary>

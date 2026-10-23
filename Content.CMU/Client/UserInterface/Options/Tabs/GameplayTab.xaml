@@ -1,0 +1,53 @@
+<tabs:GameplayTab xmlns="https://spacestation14.io"
+                  xmlns:tabs="clr-namespace:Content.Client._CMU14.UserInterface.Options.Tabs"
+                  xmlns:ui="clr-namespace:Content.Client.Options.UI"
+                  xmlns:cmu="clr-namespace:Content.Client._CMU14.UserInterface.Options">
+    <BoxContainer Orientation="Vertical">
+        <ScrollContainer VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False">
+            <BoxContainer Orientation="Vertical" Margin="10 8 10 8" SeparationOverride="2" VerticalExpand="True">
+
+                <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-group-combat'}">
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="RMCAutoEjectMagazines" Text="{Loc 'cmu-ui-options-auto-eject-magazines'}" ToolTip="{Loc 'cmu-ui-options-auto-eject-magazines-tooltip'}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="RMCDamageYourself" Text="{Loc 'cmu-ui-options-damage-yourself'}" ToolTip="{Loc 'cmu-ui-options-damage-yourself-tooltip'}" />
+                        </BoxContainer>
+                    </BoxContainer>
+                </cmu:CmuOptionSection>
+
+                <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-medical'}">
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="TargetedHealingCheckBox" Text="{Loc 'cmu-ui-options-targeted-healing'}" ToolTip="{Loc 'cmu-ui-options-targeted-healing-tooltip'}" />
+                            <CheckBox Name="UiLessSurgeryCheckBox" Text="{Loc 'cmu-ui-options-ui-less-surgery'}" ToolTip="{Loc 'cmu-ui-options-ui-less-surgery-tooltip'}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="AutoReapplyKitsCheckBox" Text="{Loc 'cmu-ui-options-auto-reapply-kits'}" ToolTip="{Loc 'cmu-ui-options-auto-reapply-kits-tooltip'}" />
+                        </BoxContainer>
+                    </BoxContainer>
+                </cmu:CmuOptionSection>
+
+                <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-group-xeno'}">
+                    <CheckBox Name="XenoAbilityPreviewsCheckBox" Text="{Loc 'rmc-ui-options-xeno-ability-previews'}" />
+                    <ui:OptionDropDown Name="RMCXenoNightVisionDefault" Title="{Loc 'rmc-ui-xeno-night-vision-default'}" />
+                </cmu:CmuOptionSection>
+
+                <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-group-general'}">
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="ScreamOnHotbarCheckBox" Text="{Loc 'cmu-ui-options-scream-on-hotbar'}" ToolTip="{Loc 'cmu-ui-options-scream-on-hotbar-tooltip'}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="RMCAutoPunctuate" Text="{Loc 'cmu-ui-options-auto-punctuate'}" ToolTip="{Loc 'cmu-ui-options-auto-punctuate-tooltip'}" />
+                        </BoxContainer>
+                    </BoxContainer>
+                    <ui:OptionDropDown Name="DropDownConstructionMode" Title="{Loc 'cmu-ui-options-construction-mode'}" />
+                </cmu:CmuOptionSection>
+
+            </BoxContainer>
+        </ScrollContainer>
+        <ui:OptionsTabControlRow Name="Control" Access="Public" />
+    </BoxContainer>
+</tabs:GameplayTab>

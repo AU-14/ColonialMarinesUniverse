@@ -246,10 +246,8 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         var entry = GetCurrentLobbyPreviewJob(humanoid);
         var dummy = LoadProfileEntity(humanoid, entry?.Job, true);
         PreviewPanel.SetSprite(dummy);
-        // Built here rather than using humanoid.Summary so the name, pronoun and age can be
-        // coloured individually; Summary is a single plain string shared with other UI.
         PreviewPanel.SetSummaryText(
-            Loc.GetString("lobby-character-summary-name", ("name", humanoid.Name)),
+            humanoid.Name,
             Loc.GetString(
                 "lobby-character-summary-age",
                 ("gender", humanoid.Gender.ToString().ToLowerInvariant()),

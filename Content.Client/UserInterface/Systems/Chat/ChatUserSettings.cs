@@ -77,10 +77,6 @@ public static class ChatUserSettings
     ///     Default per-channel colours. Returns the CRT set under the terminal theme, where sixteen
     ///     unrelated hues would undo the palette that everything else now obeys.
     /// </summary>
-    /// <remarks>
-    ///     Only ever the <em>defaults</em>. A user who has customised their styles has them saved in
-    ///     <c>CCVars.ChatChannelStyles</c> and keeps them; nothing here overwrites that.
-    /// </remarks>
     public static ChatStyleTarget[] BaseStyleTargets =>
         StyleNano.CrtUiEnabled ? CrtStyleTargets : NanoStyleTargets;
 
@@ -108,28 +104,6 @@ public static class ChatUserSettings
     ///     The CRT set. Sixteen distinct colours, because channels have to be told apart at a glance -
     ///     deadchat, whisper, LOOC and OOC are different conversations and must not share a tone.
     /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///     An earlier revision collapsed these to six steps of the green ladder on the theory that the
-    ///     prefix column already names each channel. It does, but reading a prefix is not the same as
-    ///     recognising a colour, and a log where five channels are the same green is slower to scan
-    ///     even though nothing is ambiguous. Variety is the point of these; the palette discipline
-    ///     belongs to the surfaces.
-    ///     </para>
-    ///     <para>
-    ///     <b>Conversation colours are readable, not loud.</b> These land on the whole message body
-    ///     whenever <c>chat.color_whole_message</c> is on, which is its default - so a channel people
-    ///     actually talk on cannot be a saturated alarm colour. Admin is the case that proved it: the
-    ///     effective colour was <c>ChatChannelExtensions.TextColor</c>'s pure <c>Color.Red</c>, and a
-    ///     conversation rendered in it is exhausting to read. It is a light red here - still
-    ///     recognisably admin, comfortable at length.
-    ///     </para>
-    ///     <para>
-    ///     Strong red stays with the things that are genuinely brief and genuinely urgent: admin
-    ///     alerts and damage. That is the distinction - red is for errors and warnings, not for text
-    ///     someone is going to keep writing.
-    ///     </para>
-    /// </remarks>
     private static readonly ChatStyleTarget[] CrtStyleTargets =
     {
         new(ChannelKey(ChatChannel.Local), "Local / Say", "#D6DCE0"),
@@ -159,14 +133,6 @@ public static class ChatUserSettings
     /// <summary>
     ///     The CRT colour for a channel, or null when the terminal theme is off.
     /// </summary>
-    /// <remarks>
-    ///     Reads <see cref="CrtStyleTargets"/> rather than repeating it. The table above is what the
-    ///     settings window offers as each channel's default swatch; this is what actually paints a
-    ///     message when the user has not overridden it. Those started out as two separate lists and
-    ///     changing only the first one did nothing visible at all - the settings UI showed the new
-    ///     colours while the log kept drawing <c>ChatChannelExtensions.TextColor</c>'s
-    ///     <c>LightSkyBlue</c>.
-    /// </remarks>
     public static Color? CrtChannelColor(ChatChannel channel)
     {
         if (!StyleNano.CrtUiEnabled)
@@ -201,10 +167,12 @@ public static class ChatUserSettings
                 continue;
 
             keys.Add(key);
+
+            // The swatch has to be the colour the log actually draws, which under CRT is the toned one.
             targets.Add(new ChatStyleTarget(
                 key,
                 $"Radio: {label}",
-                channel.Color.ToHex()));
+                CrtTerminalPalette.ChannelTone(channel.Color).ToHex()));
         }
 
         return targets;
@@ -471,14 +439,21 @@ public static class ChatUserSettings
     public static string ApplyStyleMarkup(string markup, ChatStyleSettings? style, int? fallbackFontSize = null)
     {
         if (ResolveColor(style) is { } color)
-        {
-            var colorTag = $"[color={color.ToHex()}]";
-            markup = FirstColorTag.IsMatch(markup)
-                ? FirstColorTag.Replace(markup, colorTag, 1)
-                : $"{colorTag}{markup}[/color]";
-        }
+            markup = ApplyColorMarkup(markup, color);
 
         return ApplyFontMarkup(markup, style, fallbackFontSize);
+    }
+
+    /// <summary>
+    ///     Repaint <paramref name="markup"/> by rewriting the colour tag it already carries, or
+    ///     wrapping it in one if it carries none.
+    /// </summary>
+    public static string ApplyColorMarkup(string markup, Color color)
+    {
+        var colorTag = $"[color={color.ToHex()}]";
+        return FirstColorTag.IsMatch(markup)
+            ? FirstColorTag.Replace(markup, colorTag, 1)
+            : $"{colorTag}{markup}[/color]";
     }
 
     public static string ChannelKey(ChatChannel channel)

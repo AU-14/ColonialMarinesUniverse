@@ -1,0 +1,419 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"></head><body>
+<title>Lobby Housing Sketch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Share+Tech+Mono&family=Allerta+Stencil&display=swap">
+<style>
+  :root {
+    color-scheme: dark;
+    --page: #0e100e;
+    --void: #040705; --s0: #071009; --s1: #0D1A12; --s2: #152F20; --s3: #204833; --s4: #2E6241;
+    --line: #2A5238; --dim: #4E9C6B; --text: #8FE9AE; --bright: #C9FFDC;
+    --accent: #46FF8E; --caution: #FFB454; --alert: #FF4E5E;
+    --prose: #bcc6bd; --prose-dim: #849085;
+    --osd: "Share Tech Mono", "Cascadia Mono", Consolas, monospace;
+    --stencil: "Allerta Stencil", "Share Tech Mono", Impact, sans-serif;
+    --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --code: "IBM Plex Mono", Consolas, monospace;
+  }
+  body { margin: 0; background: var(--page); color: var(--prose); font: 15px/1.6 var(--sans); }
+  .wrap { max-width: 1280px; margin: 0 auto; padding-inline: 20px; padding-block: 36px 80px; }
+
+  header { display: grid; gap: 8px; margin-bottom: 22px; max-width: 82ch; }
+  .eyebrow { font: 13px var(--osd); letter-spacing: .16em; color: #8a8f82; text-transform: uppercase; }
+  h1 { margin: 0; font: 400 34px/1.1 var(--stencil); color: #e3dfd2; letter-spacing: .02em; text-wrap: balance; }
+  header p { margin: 0; color: var(--prose-dim); }
+  h2 { font: 20px var(--stencil); letter-spacing: .06em; text-transform: uppercase; color: #d9d3c1; margin: 0 0 6px; }
+  section { padding-block: 34px; border-top: 1px solid #242722; }
+  .sub { margin: 0 0 20px; color: var(--prose-dim); max-width: 78ch; }
+
+  .toolbar { display: flex; flex-wrap: wrap; gap: 18px 28px; align-items: center; margin-bottom: 20px; }
+  .ctl-label { font: 12px var(--osd); letter-spacing: .14em; text-transform: uppercase; color: #8a8f82; margin-right: 10px; }
+  .chips { display: inline-flex; flex-wrap: wrap; gap: 6px; vertical-align: middle; }
+  .chip {
+    all: unset; cursor: pointer; padding: 6px 12px; font: 13px var(--osd); letter-spacing: .08em; text-transform: uppercase;
+    color: #cfcabb; background: linear-gradient(#34372f, #282a25); border-radius: 3px;
+    box-shadow: inset 0 1px 0 #50544a, inset 0 -2px 0 #141512;
+  }
+  .chip:hover { background: linear-gradient(#3d4037, #2f322b); }
+  .chip[aria-pressed="true"] { background: linear-gradient(#1b1d19, #23261f); color: var(--accent); box-shadow: inset 0 2px 0 #0c0d0b, inset 0 -1px 0 #3b3f36; }
+
+  /* ---------- the stage: a slice of the lobby, action column dimmed for context ---------- */
+  .stage { overflow-x: auto; padding-bottom: 6px; }
+  .scene { display: grid; grid-template-columns: 300px 480px; gap: 14px; width: max-content; }
+
+  .action-col { display: grid; gap: 10px; align-content: start; opacity: .45; }
+  .action-col .panel { background: var(--s0); border: 1px solid var(--line); padding: 12px; display: grid; gap: 8px; }
+  .action-col .ready { background: var(--s2); color: var(--bright); text-align: center; padding: 10px; font: 12px var(--osd); letter-spacing: .08em; }
+  .action-col .obs { text-align: center; padding: 8px; font: 11px var(--osd); color: var(--dim); border-top: 1px solid var(--line); }
+  .action-col .link { text-align: center; padding: 8px; font: 11px var(--osd); color: var(--text); border-top: 1px solid var(--line); }
+  .action-col .note { font: 12px var(--osd); color: var(--prose-dim); padding: 6px 2px 0; text-align: center; }
+
+  /* ---------- flat reference (today, tone = off) ---------- */
+  .flat { display: grid; gap: 3px; }
+  .flat .block { background: var(--s0); border: 1px solid var(--line); }
+  .flat .name { padding: 8px 10px 4px; font: 13px var(--osd); color: var(--bright); letter-spacing: .04em; }
+  .flat .band { display: flex; background: var(--void); }
+  .flat .band button { all: unset; flex: 1; text-align: center; padding: 8px 4px; font: 11px var(--osd); letter-spacing: .06em; color: var(--dim); border-right: 1px solid var(--line); cursor: pointer; }
+  .flat .band button:last-child { border-right: none; }
+  .flat .chat { height: 240px; display: flex; flex-direction: column; }
+  .flat .tabs { display: flex; font: 11px var(--osd); letter-spacing: .05em; padding: 6px 10px 0; }
+  .flat .tab { padding: 4px 8px; color: var(--dim); }
+  .flat .tab.sel { color: var(--bright); box-shadow: inset 0 -2px 0 var(--accent); }
+  .flat .tab.grow { flex: 1; }
+  .flat .log { flex: 1; padding: 6px 10px; display: flex; flex-direction: column; justify-content: flex-end; gap: 3px; }
+  .flat .msg { font: 11.5px/1.4 var(--osd); }
+  .flat .msg .p { color: var(--caution); margin-right: 6px; }
+  .flat .cmdline { padding: 6px 10px 8px; border: 1px solid var(--line); margin: 0 10px 10px; font: 11px var(--osd); color: var(--dim); }
+
+  /* ---------- the housing (shared with the chat panel + guidebook mocks) ---------- */
+  .housing {
+    --h-top: #2b2e28; --h-bot: #1a1c18; --h-hi: #454940; --h-lo: #0b0c0a; --ink: #b9b6a8; --ink-dim: #7c7c70;
+    --k-top: #4a4d45; --k-bot: #36392f; --k-hi: #6c7065; --k-lo: #191a16; --k-ink: #dcd8c9;
+    box-sizing: border-box; padding: 12px 12px 14px; display: grid; gap: 9px; position: relative;
+    background: linear-gradient(180deg, var(--h-top), var(--h-bot));
+    box-shadow: inset 0 1px 0 var(--h-hi), inset 1px 0 0 var(--h-hi), inset 0 -2px 0 var(--h-lo), inset -1px 0 0 var(--h-lo);
+  }
+  .housing.olive { --h-top: #30331f; --h-bot: #1f2115; --h-hi: #4d5234; --ink: #c2bf9e; --ink-dim: #858263;
+    --k-top: #4f533a; --k-bot: #3b3e2a; --k-hi: #6f7452; --k-ink: #e2dec2; }
+  .housing.beige { --h-top: #b7ae96; --h-bot: #968d76; --h-hi: #d8d0b8; --h-lo: #5f5848; --ink: #2d2a22; --ink-dim: #5a5545;
+    --k-top: #e0d9c4; --k-bot: #c7bfa7; --k-hi: #f5efdc; --k-lo: #7a7260; --k-ink: #2a2720; }
+  .housing::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5; border-radius: inherit;
+    background: repeating-linear-gradient(0deg, rgba(255,255,255,.012) 0 1px, transparent 1px 4px); }
+  .screw { position: absolute; width: 8px; height: 8px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #9a9d93, #4a4c45 60%, #25261f);
+    box-shadow: 0 1px 0 rgba(255,255,255,.08), inset 0 0 0 1px rgba(0,0,0,.4); }
+  .screw::after { content: ""; position: absolute; left: 1px; right: 1px; top: 3.5px; height: 1px; background: #1a1b17; transform: rotate(var(--r, 25deg)); }
+  .screw.tl { top: 5px; left: 5px; } .screw.tr { top: 5px; right: 5px; --r: -18deg; }
+  .screw.bl { bottom: 5px; left: 5px; --r: 62deg; } .screw.br { bottom: 5px; right: 5px; --r: 8deg; }
+
+  .plate { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-inline: 6px; }
+  .plate .name { font: 15px var(--stencil); letter-spacing: .1em; color: var(--ink); text-transform: uppercase; text-shadow: 0 1px 0 rgba(0,0,0,.35); }
+  .plate .serial { font: 10px var(--osd); letter-spacing: .1em; color: var(--ink-dim); text-transform: uppercase; }
+
+  .keys { display: flex; gap: 4px; }
+  .key { display: grid; place-items: center; gap: 2px; flex: 1; padding: 7px 4px; border-radius: 3px;
+    font: 10px var(--osd); letter-spacing: .05em; text-transform: uppercase; color: var(--k-ink); cursor: pointer;
+    background: linear-gradient(180deg, var(--k-top), var(--k-bot));
+    box-shadow: inset 0 1px 0 var(--k-hi), inset 0 -3px 0 var(--k-lo), 0 1px 0 rgba(0,0,0,.6); }
+  .key:hover { filter: brightness(1.1); }
+
+  /* A detent slide switch, not a pair of keycaps: two flat buttons side by side read as a modern
+     segmented control no matter how they're shaded. A recessed track with one paddle that snaps
+     between two stops is the older idiom - the kind of toggle you'd find on real 1970s-80s
+     equipment, not a UI component. The paddle moves in whole steps (no eased eases), the two
+     labels are cast into the plastic rather than printed on it, and a centre notch shows there
+     are exactly two positions, not a continuous slider. */
+  .mode-switch { position: relative; height: 30px; border-radius: 3px; padding: 3px; display: flex;
+    background: var(--h-lo);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,.65), inset 0 -1px 0 rgba(255,255,255,.05); }
+  .mode-switch::before { content: ""; position: absolute; top: 5px; bottom: 5px; left: 50%; width: 1px;
+    background: rgba(0,0,0,.55); box-shadow: 1px 0 0 rgba(255,255,255,.05); }
+  .mode-thumb { position: absolute; top: 3px; left: 3px; width: calc(50% - 4px); height: calc(100% - 6px);
+    border-radius: 2px; background: linear-gradient(180deg, var(--k-top), var(--k-bot));
+    background-image: repeating-linear-gradient(90deg, rgba(0,0,0,.16) 0 2px, transparent 2px 6px),
+      linear-gradient(180deg, var(--k-top), var(--k-bot));
+    box-shadow: inset 0 1px 0 var(--k-hi), inset 0 -3px 0 var(--k-lo), 0 1px 1px rgba(0,0,0,.55);
+    transition: transform .1s steps(4, end); }
+  .mode-switch[data-active="character"] .mode-thumb { transform: translateX(calc(100% + 2px)); }
+  .mode-switch button { all: unset; position: relative; z-index: 1; flex: 1; text-align: center; cursor: pointer;
+    padding: 6px 4px; font: 10px var(--osd); letter-spacing: .05em; text-transform: uppercase; color: var(--ink-dim);
+    text-shadow: 0 -1px 0 rgba(0,0,0,.5), 0 1px 0 rgba(255,255,255,.06); }
+  .mode-switch[data-active="server"] button[data-panel="server"],
+  .mode-switch[data-active="character"] button[data-panel="character"] { color: var(--k-ink); }
+
+  /* screens: told apart by fill, not a drawn frame */
+  .screen { position: relative; border-radius: 10px; overflow: hidden;
+    background: radial-gradient(ellipse 90% 80% at 50% 40%, #0c1b11, #06100a 60%, #030704);
+    box-shadow: 0 0 0 3px var(--h-lo), 0 0 0 4px var(--h-hi), inset 0 0 22px rgba(0,0,0,.85); }
+  .screen::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+    background: repeating-linear-gradient(180deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px); }
+  .screen::before { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; z-index: 1;
+    background: radial-gradient(ellipse 70% 30% at 30% 6%, rgba(255,255,255,.045), transparent 70%); }
+
+  /* the server/character slot's own content, independent of whether it sits in a flat block or a
+     housed screen - both just wrap this. */
+  .info-body { padding: 10px 12px 12px; display: grid; gap: 8px; }
+  .info-head { display: flex; align-items: baseline; gap: 8px; }
+  .info-head .heading { font: 12px var(--osd); letter-spacing: .12em; color: var(--dim); text-transform: uppercase; }
+  .info-head .rule { flex: 1; height: 0; border-top: 1px solid var(--line); }
+  .info-head .stats { font: 11px var(--osd); color: var(--dim); letter-spacing: .03em; white-space: nowrap; }
+  .info-head .stats b { color: var(--text); font-weight: 400; }
+
+  /* The real table: three rows of two boxed cells, govfor left / opfor right, each a heading over
+     its value. 6 cells by default - the mock's first pass only had 4 loose rows. */
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .info-grid .cell { background: var(--s1); padding: 4px 8px 5px; }
+  .info-grid .cell .k { font: 10px var(--osd); letter-spacing: .06em; color: var(--dim); text-transform: uppercase; }
+  .info-grid .cell .v { font: 12px var(--osd); letter-spacing: .02em; }
+  .info-grid .cell.lead .v { color: var(--bright); }
+  .info-grid .cell.govfor .v { color: #6fb8ff; }
+  .info-grid .cell.opfor .v { color: #ff8a7a; }
+
+  .rule-dashed { height: 0; border-top: 1px dashed var(--line); }
+  .char-row { display: flex; gap: 10px; align-items: center; }
+  .char-row .dot { width: 30px; height: 30px; border-radius: 50%; background: var(--s2); flex: none; }
+  .char-row .who { font: 13px/1.4 var(--sans); color: var(--prose); }
+  .char-row .who b { color: var(--bright); }
+  .char-row .role { color: var(--dim); font: 11px var(--osd); letter-spacing: .04em; }
+  .cust-row { display: flex; justify-content: space-between; align-items: center; font: 11px var(--osd); color: var(--dim); padding-top: 4px; border-top: 1px dashed var(--line); margin-top: 2px; }
+  .cust-row button { all: unset; color: var(--accent); cursor: pointer; }
+
+  /* The server/character switch itself - a tab pair standing in for both blocks, the same idiom as
+     the chat's own channel tabs. Sits above info-body, never inside it. */
+  .panel-tabs { display: flex; gap: 2px; padding: 8px 12px 0; }
+  .panel-tabs button { all: unset; cursor: pointer; padding: 4px 10px; font: 11px var(--osd); letter-spacing: .06em; text-transform: uppercase; color: var(--dim); }
+  .panel-tabs button.sel { color: var(--bright); box-shadow: inset 0 -2px 0 var(--accent); }
+
+  .chat-screen { height: 220px; display: flex; flex-direction: column; }
+
+  /* The seam between the info/character zone and the chat zone, once both share one screen. Two
+     screens with a plastic gap between them read as two thin rings sitting close together, not one
+     deliberate line - this is the same "heavy rule" the in-round top bar already settled on
+     (CmuMenuBarRule, Surface4, 3px), reused rather than reinvented. Margin either side is real
+     breathing room, not a hairline pretending to be one - the switch freed up enough height for it. */
+  .panel-rule { flex: none; height: 3px; margin: 6px 10px; background: var(--s4); box-shadow: 0 0 5px var(--s4); }
+
+  /* The alternative: not a glowing UI rule at all, but a strip of the housing's own case plastic -
+     the way real equipment joins two tubes with a piece of casing between their bezels, not a
+     coloured line drawn on the glass. Unlit on purpose: everything either side of it is an active
+     display, so the one thing that reads as "not a display" is what says these are two of them.
+     The tile is generated (make_seam.py), same bevel and palette as the outer housing's corners,
+     with a rivet every 64px so it reads as machined casing once it repeats, not a bar with an
+     ornament stuck in the middle. */
+  .seam-tile { flex: none; height: 16px; width: 100%; background-repeat: repeat-x; background-position: center; }
+  .seam-gunmetal { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAQCAYAAACm53kpAAABVklEQVR4nOWXzU7DMBCEZ13bAUGatOVXSAhxQUI8AxcOvP8BCQk4cAGqEkIR5N9ZZLcqvAAOar5L4pN31jMrm66uLxk9Rk5fZugzsmka9BnJnQWAQUSLv1URi7VP5M/mvrD7EYQgGGPALUMq6b6M1nsTpP8GAESMNJkjy3LnAq0V4lEEIQRsG9a4AexEztMPVFWN84szDOQAtzd3eJ0l2NvfBbNfF0jfDmgagyzLMNkZI0lS5FkOHSh8fdbIiwJBEPyaCX+PtNnziT1hq68oSsSbGzg8OgCB8XD/CNMYQLObB2sbARICSiuX/SgeOrM/P01RVzWiKIQxNgL+oJPTY78WILgTTt/eQYIwEAJVXSOOh1BKLe3vdQa08IprN2E8GaEsSyc4HIawVwLTtkvpXiOADmAnXGvthLf2DrCsw3c50rQGndHdBXAFbYdb/X4NcnePgX/BN3nKpb+BtUNqAAAAAElFTkSuQmCC); }
+  .seam-olive { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAQCAYAAACm53kpAAABSUlEQVR4nOVWy07DMBCctR31kRboCxAIOCHOwGdw4c8RFySuFFHUqD20aUjTxIu8pfAHNmrmYks+7Ox6Znfp4fGOUWOYj/c56gxTllW46DvtUTgKhgMagH4SD8nBcKDoWis49VnLiCINxyMEFeM7qHw6Ack0RbpcgxSh0TAYDmMoRb+u2E8FMKA0YTbLsM5L3N5fwUQKz09jfE4WODs/FCXstQU2G5afH50cIJkusFoVooDlIkeWFWi1IliPnAxbb7FE+i45V/T8q0Acd3Bx2QcT8PoyQVVa6QM+ORnfFtB663kiwlGvLef4bY6iKDEYtFFZ+zcePYCub079eoBIOv8sSUUSbhq45PuDthQmQA+AXzDLJBgdd5HnGylGr9+SnaCy27da7AHMjGbTyN0VYUfD+xisqnBrWMjYO1CnG4dnERAmlAX+C74By3Wiut30Am4AAAAASUVORK5CYII=); }
+  .seam-beige { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAQCAYAAACm53kpAAABgUlEQVR4nOWWMU8CQRCF3x57EKQAj6MyNAYTNFEKIzbGX2HF79NKKgtiYW9M5NQoJmiDEtEgmBATYJfdPbN7Gv/BXsK95sq5nfnemyGPQStEgkVfej0kWZRzjiSLhmE8DtB1HccBIQRSSvONQ1QpFUvhdNrFbDY3j8/lViCENE1JRAMIcRDcdtB/HRgKPC+P2s4WXJdCqRA2YaBS2muAnnAmk8ZD5wmD9yEajSNksxkcnzRxeRXg8KAOpSI72IKBhqFNAgim0xle+2/YqKyj233G52iMQiGPweADw+EIvu9BCGEtE6hNAhyHmMdp308m3yiVfOzXdyGFROv8AnPGNSaIbEmWjwAhIgsUvYKxQ7m8ZjKg3b4DYwx+cRWMc4M/IeHyEaDF+QKb1QqCmw5Om2dwXReMzVHbrv6uRGFt+rFsgb/9X9+rYTT+Muuv5HtIpRzooyzyfrjch5BSyqS9Rl5PW+fCYhEFn+3/oUwHT0z6rx3PFahFr4N7JFlUo5dk/QBz7MhHnr+zqQAAAABJRU5ErkJggg==); }
+  .tabs { display: flex; font: 11px var(--osd); letter-spacing: .05em; padding: 8px 12px 0; }
+  .tab { padding: 4px 8px; color: var(--dim); }
+  .tab.sel { color: var(--bright); box-shadow: inset 0 -2px 0 var(--accent); }
+  .tab.grow { flex: 1; }
+  .log { flex: 1; padding: 6px 12px; display: flex; flex-direction: column; justify-content: flex-end; gap: 3px; }
+  .msg { font: 11.5px/1.4 var(--osd); }
+  .msg .p { color: var(--caution); margin-right: 6px; }
+  .cmdline { display: flex; align-items: center; gap: 8px; padding: 8px 12px 10px; font: 11px var(--osd); color: var(--dim);
+    border-top: 1px dashed var(--line); margin-top: 2px; }
+  .cmdline .caret { width: 6px; height: 12px; background: var(--accent); opacity: .85; }
+
+  /* ---------- notes ---------- */
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 14px; }
+  th, td { text-align: left; vertical-align: top; padding: 11px 16px 11px 0; border-bottom: 1px solid #242722; }
+  th { font: 12px var(--osd); letter-spacing: .14em; text-transform: uppercase; color: #8a8f82; font-weight: 400; }
+  td:first-child { color: #e3dfd2; font-weight: 600; white-space: nowrap; }
+  .cost { font: 12px var(--osd); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+  .cost.low { color: var(--text); } .cost.mid { color: #d8b04a; } .cost.high { color: #d9786f; }
+  .aside { margin-top: 24px; display: grid; gap: 12px; max-width: 88ch; }
+  .aside div { padding-left: 14px; box-shadow: inset 2px 0 0 #c9a227; }
+  .aside b { color: #e3dfd2; font-weight: 600; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">CMU · lobby · housing sketch, second pass</div>
+    <h1>The lobby as the same terminal</h1>
+    <p>The in-round chat already sits in a molded housing on a CRT screen. This tries the same
+      language on the lobby's right column - server info, character, chat - as one piece of
+      equipment instead of three flat CRT panels stacked on top of each other. The server info
+      block is corrected to what a server actually sends by default: six round-info lines in a
+      GOVFOR/OPFOR pair table, plus players and round time on their own line above it - not the
+      four loose rows the first pass showed. That extra height is also why this pass adds a
+      second idea: switching between server info and character instead of always stacking both.
+      Nothing here is built; the shipped scope today is chat only, shown for comparison.</p>
+  </header>
+
+  <div class="toolbar">
+    <div><span class="ctl-label" id="scope-label">Housing scope</span><span class="chips" role="group" aria-labelledby="scope-label" id="scopes"></span></div>
+    <div><span class="ctl-label" id="panel-label">Top panel</span><span class="chips" role="group" aria-labelledby="panel-label" id="panels"></span></div>
+    <div><span class="ctl-label" id="seam-label">Seam</span><span class="chips" role="group" aria-labelledby="seam-label" id="seams"></span></div>
+    <div><span class="ctl-label" id="tone-label">Housing</span><span class="chips" role="group" aria-labelledby="tone-label" id="tones"></span></div>
+  </div>
+
+  <div class="stage">
+    <div class="scene">
+      <div class="action-col">
+        <div class="panel">
+          <div class="ready">NOT READY</div>
+          <div class="obs">OBSERVE</div>
+        </div>
+        <div class="panel" style="grid-template-columns:1fr 1fr;display:grid;gap:0">
+          <div class="link">RULES</div>
+          <div class="link">GUIDEBOOK</div>
+        </div>
+        <div class="note">left column, dimmed for context</div>
+      </div>
+
+      <div id="stage-right"></div>
+    </div>
+  </div>
+
+  <section>
+    <h2>What each part would take</h2>
+    <p class="sub">Assuming the housing look, since that texture and palette already exist.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Part</th><th>Work</th><th>Detail</th></tr></thead>
+        <tbody>
+          <tr><td>Chat, housed</td><td><span class="cost low">Done</span></td><td>Shipped. <code>CmuGuidebookLook</code>-style panel overrides already exist for the in-round <code>SeparatedChatGameScreen</code>; the lobby's <code>ChatBox</code> is the same control.</td></tr>
+          <tr><td>Command band as keycaps</td><td><span class="cost low">Small</span></td><td>AHelp/Call Vote/Options/Leave already sit in one <code>CrtCommandBand</code> of four cells. Recolouring those cells with the top-menu-bar's keycap boxes is the same styling move already made for <code>CmuTopMenuBarUIController</code>, applied to four buttons instead of ten.</td></tr>
+          <tr><td>Server info + character, one screen</td><td><span class="cost mid">Medium</span></td><td>Both already render through <code>LobbyCrtScreen</code>'s shader pass onto one backing panel - so they are already one visual unit. Swapping that backing for the housing's screen texture is a StyleBoxTexture swap, not a new capture path.</td></tr>
+          <tr><td>Server / character switch</td><td><span class="cost mid">Medium</span></td><td>New behaviour, not just a re-skin: today <code>ServerInfo</code> and <code>LobbyCharacterPreviewPanel</code> are always both visible, stacked. A tab pair means one of the two is hidden at a time and something has to own that state - closer to how the chat's own tab strip already picks one channel to show.</td></tr>
+          <tr><td>Outer housing + plate + screws</td><td><span class="cost mid">Medium</span></td><td>New: today <code>RightSide</code> is a flat <code>CrtScreenPanel</code>, not a housing. Needs the same <code>ModulateSelfOverride</code> fix the guidebook window needed - <code>RightSide</code> likely carries an <code>AngleRect</code>-style class that would darken the texture the same way.</td></tr>
+          <tr><td>Nameplate reads the server name</td><td><span class="cost low">Small</span></td><td>The plate can print the actual <code>ServerName</code> label instead of a fixed word like the in-round plate's "Comms" - the lobby already has that string.</td></tr>
+          <tr><td>Scanline shear over live text</td><td><span class="cost low">Small</span></td><td>Already solved: the shipped lobby uses the roll/grain pass only on the static blocks and a non-capturing scanline overlay on the chat, for exactly the reason noted in <code>LobbyGui.xaml</code> - a shear mid-scroll is obstructive. The housing screens would keep that split.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="aside">
+      <div><b>Read this as "would the pieces fit," not "is it built."</b> Every texture and style rule this needs already exists from the chat and top-bar work; this is about whether stitching them across the lobby's other two blocks is worth doing.</div>
+      <div><b>The switch is its own idea, independent of housing.</b> It's worth trying flat too - "Top panel: Switchable" works with housing Off, since a taller info block is a real problem for today's shipped look as well, not only for a housed one.</div>
+      <div><b>Off keeps the flat panel</b>, the same as the in-round chat: the housing is opt-in via <code>cmu.chat_housing</code>, and this sketch assumes the lobby would follow the same cvar.</div>
+      <div><b>One screen, not two.</b> The first pass gave info/character and chat their own glass each, with plastic between them - two thin rings sitting close together, not a deliberate line. This pass merges them into one screen.</div>
+      <div><b>The switch is a toggle, not a tab, once it's housed.</b> The tab pair (an underline drawn on the glass) is still what you get with the flat panel and the chat-only housing scope, since the switcher there is genuinely part of the display. Once the whole panel is housed, "Server" and "Character" become a two-position detent switch on the plastic between the command keys and the screen - a recessed track with one paddle that snaps to whichever side is active, rather than two separate keycaps sat next to each other. A pair of flat buttons still reads as a segmented control no matter how they're shaded; a single sliding paddle with a centre notch reads as a physical switch, which is closer to what would actually sit on a terminal like this one rather than something borrowed from a phone UI.</div>
+      <div><b>The seam is now a strip of casing, not a glowing rule.</b> The rule (Surface4, the in-round top bar's own "heavy rule") reads as a UI element - a tab underline, essentially - which says "these are two sections of one screen," not "these are two screens." The case-seam tile is unlit, textured like the housing's own plastic, and carries a rivet every 64px, the same bevel and screw language as the housing's corners. Everything either side of it is an active display; the one strip that plainly is not a display is what actually tells you it is a seam, generated once as a small tileable PNG (<code>make_seam.py</code>, alongside the existing <code>make_housing.py</code>) rather than drawn as a CSS rule.</div>
+      <div><b>What this can't show:</b> the in-game scanline grain, and a server whose operator has written a longer intro blurb than the fixed one line the default sends - <code>ServerInfo.SetInfoBlob</code> can render several more lines of that below the grid, which either view here would need room for.</div>
+    </div>
+  </section>
+</div>
+
+<script>
+const TONES = [["gunmetal", "Gunmetal"], ["olive", "Olive drab"], ["beige", "Beige"]];
+const SCOPES = [["chat", "Chat only (shipped)"], ["panel", "Whole panel (sketch)"]];
+const PANEL_MODES = [["stacked", "Both stacked (today)"], ["switch", "Switchable"]];
+
+// GameTicker.GetRoundInfoFields sends 6 fields by default - three rows of a govfor/opfor pair,
+// planet and gamemode leading - plus a 7th, the player count, which the lobby pulls out of the
+// grid and shows inline next to the round timer instead of as a seventh row. The colours are the
+// real ones the server sends (govforColor/opforColor in GameTicker.Lobby.cs), lightened here to
+// stay legible on this dark a ground rather than the saturated hex values themselves.
+const ROUND_FIELDS = [
+  { k: "PLANET", v: "SHEPHERDS' PRIDE", cls: "lead" },
+  { k: "GAMEMODE", v: "COLONY FALL", cls: "lead" },
+  { k: "GOVFOR SHIP", v: "USS BUSH REDUX", cls: "govfor" },
+  { k: "OPFOR SHIP", v: "USS BUSH REDUX", cls: "opfor" },
+  { k: "GOVFOR PLATOON", v: "LACN LANDING FORCES", cls: "govfor" },
+  { k: "OPFOR PLATOON", v: "UPP NAVAL INFANTRY", cls: "opfor" },
+];
+
+let tone = "gunmetal", scope = "panel", panelMode = "switch", activePanel = "server", seam = "tile";
+
+const $ = id => document.getElementById(id);
+
+function infoHead() {
+  return `<div class="info-head"><span class="heading">Server info</span><span class="rule"></span>
+    <span class="stats">Players <b>2 (0 ready)</b> | Round time <b>Not started</b></span></div>`;
+}
+function infoGrid() {
+  return `<div class="info-grid">${ROUND_FIELDS.map(f =>
+    `<div class="cell ${f.cls}"><div class="k">${f.k}</div><div class="v">${f.v}</div></div>`).join("")}</div>`;
+}
+function serverInner() { return infoHead() + infoGrid(); }
+function characterInner() {
+  return `<div class="char-row"><div class="dot"></div><div><div class="who"><b>Melvyn Martins</b></div><div class="role">He is 40 years old</div></div></div>
+    <div class="cust-row">Ignore allegiance: OFF <button>Customize</button></div>`;
+}
+function panelTabs() {
+  return `<div class="panel-tabs">
+    <button type="button" data-panel="server" class="${activePanel === "server" ? "sel" : ""}">Server</button>
+    <button type="button" data-panel="character" class="${activePanel === "character" ? "sel" : ""}">Character</button>
+  </div>`;
+}
+// The same switch, once the whole panel is housed: a physical detent toggle on the plastic
+// instead of a tab drawn on the glass. Labels stay in place; the paddle underneath moves to
+// whichever one is active, the way a real two-position switch on old equipment reads its state.
+function modeSwitchRow() {
+  return `<div class="mode-switch" data-active="${activePanel}">
+    <div class="mode-thumb"></div>
+    <button type="button" data-panel="server">Server</button>
+    <button type="button" data-panel="character">Character</button>
+  </div>`;
+}
+
+// The one function that decides what fills the server/character slot, whatever frame it ends up
+// in (a flat block or a housed screen): both blocks stacked one after another as today, or
+// whichever one is active. `physical` means a key row elsewhere already owns the switch, so this
+// skips drawing the on-glass tab pair too - the housed scene wires that key row in separately.
+function topInner(physical) {
+  if (panelMode === "stacked")
+    return `<div class="info-body">${serverInner()}<div class="rule-dashed"></div>${characterInner()}</div>`;
+
+  return (physical ? "" : panelTabs()) + `<div class="info-body">${activePanel === "server" ? serverInner() : characterInner()}</div>`;
+}
+
+function chatInner(dashed) {
+  return `
+    <div class="tabs"><span class="tab sel">All</span><span class="tab">Radio</span><span class="tab">Dead chat (2)</span><span class="tab grow"></span></div>
+    <div class="log">
+      <div class="msg"><span class="p">ADM</span>Admin login: localhost@JoeGenero</div>
+      <div class="msg"><span class="p">SYS</span>Welcome to CMU! Read the rules and don't be afraid to ask in LOOC.</div>
+    </div>
+    <div class="cmdline"${dashed ? "" : ' style="border-top:1px solid var(--line);margin:0 10px 10px;padding:6px 10px 8px"'}><span class="caret"></span>T to talk, Tab to cycle channels.</div>`;
+}
+
+function keysRow() {
+  return `<div class="keys">${["AHelp", "Call Vote", "Options", "Leave"].map(t => `<div class="key">${t}</div>`).join("")}</div>`;
+}
+function bandRow() {
+  return `<div class="band">${["AHelp", "Call Vote", "Options", "Leave"].map(t => `<button>${t}</button>`).join("")}</div>`;
+}
+
+// Three renderers, one per housing state. Each just wraps topInner()/chatInner() in that state's
+// own frame - the content itself never has to know which frame it is sitting in.
+function flatScene() {
+  return `
+  <div class="flat" style="width:480px">
+    <div class="block"><div class="name">MyServer</div>${bandRow()}</div>
+    <div class="block">${topInner()}</div>
+    <div class="block chat">${chatInner(false)}</div>
+  </div>`;
+}
+function housedChatOnly() {
+  return `
+  <div style="width:480px;display:grid;gap:3px">
+    <div class="flat" style="display:contents">
+      <div class="block"><div class="name">MyServer</div>${bandRow()}</div>
+      <div class="block">${topInner()}</div>
+    </div>
+    <div class="housing ${tone}" style="padding:8px">
+      <div class="screen chat-screen">${chatInner(true)}</div>
+    </div>
+  </div>`;
+}
+function housedPanel() {
+  // One screen, not two: the earlier pass put info/character and chat in separate glass recesses
+  // with a gap of plastic between them, which read as two thin rings rather than one seam. Now it's
+  // one screen with a real rule between its two zones - the same treatment already proven in-round.
+  return `
+  <div class="housing ${tone}" style="width:480px">
+    <span class="screw tl"></span><span class="screw tr"></span><span class="screw bl"></span><span class="screw br"></span>
+    <div class="plate"><span class="name">MyServer</span><span class="serial">Term. LB-1 · 12</span></div>
+    ${keysRow()}
+    ${panelMode === "switch" ? modeSwitchRow() : ""}
+    <div class="screen" style="display:flex;flex-direction:column">
+      ${topInner(true)}
+      ${seam === "tile" ? `<div class="seam-tile seam-${tone}"></div>` : `<div class="panel-rule"></div>`}
+      <div class="chat-screen" style="flex:1;height:auto">${chatInner(true)}</div>
+    </div>
+  </div>`;
+}
+
+function render() {
+  $("stage-right").innerHTML =
+    scope === "chat" ? (tone === "off" ? flatScene() : housedChatOnly()) : housedPanel();
+
+  $("stage-right").querySelectorAll("[data-panel]").forEach(b =>
+    b.addEventListener("click", () => { activePanel = b.dataset.panel; render(); }));
+}
+
+function chips(el, items, get, set) {
+  const draw = () => el.innerHTML = items.map(([v, l]) => `<button type="button" class="chip" data-v="${v}" aria-pressed="${get() === v}">${l}</button>`).join("");
+  el.addEventListener("click", e => { const b = e.target.closest("button[data-v]"); if (!b) return; set(b.dataset.v); draw(); render(); });
+  draw();
+}
+chips($("tones"), [["off", "Off"], ...TONES], () => tone, v => tone = v);
+chips($("scopes"), SCOPES, () => scope, v => scope = v);
+chips($("panels"), PANEL_MODES, () => panelMode, v => panelMode = v);
+chips($("seams"), [["tile", "Case seam (new)"], ["rule", "Rule (previous)"]], () => seam, v => seam = v);
+render();
+</script>
+</body></html>

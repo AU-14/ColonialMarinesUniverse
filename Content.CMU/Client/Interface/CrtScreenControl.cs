@@ -60,6 +60,13 @@ public sealed partial class CrtScreenControl : Control
     public float? Vignette { get; set; }
 
     /// <summary>
+    ///     Scanline depth; null falls through to the cvar. Overridable because the shipped 0.5 is tuned for
+    ///     surfaces that carry chrome and mid-tones, and on a near-black ground it moves a channel by about
+    ///     six of 255 - measurably a raster, and invisible to look at.
+    /// </summary>
+    public float? Intensity { get; set; }
+
+    /// <summary>
     ///     Seconds between roll bars; null falls through to the cvar. Overridable for the same reason
     ///     as the two above: the shipped 19s is right for a surface being used and far too slow for
     ///     one being reviewed side by side with the other artifacts.
@@ -161,9 +168,10 @@ public sealed partial class CrtScreenControl : Control
         if (_shader == null || Source == null || !StyleNano.CrtUiEnabled)
             return;
 
-        var intensity = _cfg.GetCVar(CCVars.CMUCrtEffectIntensity);
-        if (intensity <= 0f)
+        if (_cfg.GetCVar(CCVars.CMUCrtEffectIntensity) <= 0f)
             return;
+
+        var intensity = Intensity ?? _cfg.GetCVar(CCVars.CMUCrtEffectIntensity);
 
         var size = PixelSize;
         if (size.X <= 0 || size.Y <= 0)
@@ -233,13 +241,6 @@ public sealed partial class CrtScreenControl : Control
     /// <summary>
     ///     Converts an sRGB colour to linear for use as a shader uniform.
     /// </summary>
-    /// <remarks>
-    ///     <see cref="Color"/> components are sRGB. The render target is <c>Rgba8Srgb</c>, so the GPU
-    ///     encodes linear to sRGB on write - handing sRGB components straight to the shader means
-    ///     they get encoded a second time and publish far brighter than the colour chosen. Near
-    ///     blacks suffer worst: 7/255 arriving as roughly 48/255 is the difference between invisible
-    ///     and a pale band around the picture.
-    /// </remarks>
     private static Vector3 Linear(Color srgb)
     {
         var linear = Color.FromSrgb(srgb);

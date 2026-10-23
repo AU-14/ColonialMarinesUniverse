@@ -9,27 +9,6 @@ namespace Content.Client.CMU14.Interface;
 ///     The semantic button set: one padding and one height across all of them, differing only in
 ///     fill and text tone.
 /// </summary>
-/// <remarks>
-///     <para>
-///     Written because the Observe window needed a coloured button and there was nowhere to get one.
-///     The stylesheet offers <c>CrtButton</c> and <c>CrtAttentionButton</c> - two steps of the same
-///     green - so anything that had to say "this one is dangerous" hand-rolled a
-///     <see cref="Button.StyleBoxOverride"/> at the call site. That is how the Observe window ended up
-///     with its own copy, and it is how the next window would have too.
-///     </para>
-///     <para>
-///     It also fixes a real bug rather than only adding colour. <c>CrtAttentionButton</c> and a plain
-///     unstyled <see cref="Button"/> carry <em>different content margins</em>, so a row mixing the two
-///     had one label sitting closer to its edge than its neighbours - which read as a clipped button.
-///     Every variant here uses the same margins, so a mixed row lines up.
-///     </para>
-///     <para>
-///     Fills come from <see cref="CrtTerminalPalette.ChatRowTint"/>, which pins a hue to
-///     <see cref="CrtTerminalPalette.Surface2"/>'s luminance rather than its HSV value. At equal value
-///     a red fill reads far heavier than a green one against a dark ground; pinning luminance is what
-///     lets a row of differently-coloured buttons weigh the same.
-///     </para>
-/// </remarks>
 public static class CmuButtonStyles
 {
     public enum Variant
@@ -88,7 +67,7 @@ public static class CmuButtonStyles
         // their own hue, so nothing in a row is heavier than anything else.
         var fill = variant == Variant.Neutral
             ? CrtTerminalPalette.Surface2
-            : CrtTerminalPalette.ChatRowTint(hue, CrtTerminalPalette.ChatTintSaturationFull);
+            : CrtTerminalPalette.ControlTint(hue);
 
         return new CrtStyleBox
         {

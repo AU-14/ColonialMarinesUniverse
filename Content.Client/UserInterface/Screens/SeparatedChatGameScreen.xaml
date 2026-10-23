@@ -26,14 +26,17 @@
             </BoxContainer>
             <alerts:AlertsUI Name="Alerts" Access="Protected" />
         </LayoutContainer>
-        <PanelContainer Name="SeparatedChatPanel" MinWidth="160">
-            <PanelContainer.PanelOverride>
-                <graphics:StyleBoxFlat BackgroundColor="#202020" />
-            </PanelContainer.PanelOverride>
-
-            <BoxContainer Name="SeparatedChatContent" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="10" Margin="10">
-                <menuBar:GameTopMenuBar Name="TopBar" HorizontalExpand="True" Access="Public" />
-                <chat:ChatBox StyleClasses="ChatOutput" VerticalExpand="True" HorizontalExpand="True" Name="Chat" Access="Protected" MinSize="0 0"/>
+        <!-- CMU: one ground for the whole panel, the menu bar on its own band, a heavy rule under it. -->
+        <PanelContainer Name="SeparatedChatPanel" MinWidth="160" StyleClasses="CmuChatSidePanel">
+            <BoxContainer Name="SeparatedChatContent" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="0">
+                <PanelContainer StyleClasses="CmuMenuBarBand" HorizontalExpand="True">
+                    <menuBar:GameTopMenuBar Name="TopBar" HorizontalExpand="True" Access="Public" />
+                </PanelContainer>
+                <PanelContainer StyleClasses="CmuMenuBarRule" MinHeight="3" HorizontalExpand="True" Margin="0 0 0 5" />
+                <!-- Draws nothing unless cmu.chat_housing is on, when it becomes the tube screen. -->
+                <PanelContainer StyleClasses="CmuChatScreen" VerticalExpand="True" HorizontalExpand="True">
+                    <chat:ChatBox StyleClasses="ChatOutput" VerticalExpand="True" HorizontalExpand="True" Name="Chat" Access="Protected" MinSize="0 0"/>
+                </PanelContainer>
             </BoxContainer>
         </PanelContainer>
     </SplitContainer>

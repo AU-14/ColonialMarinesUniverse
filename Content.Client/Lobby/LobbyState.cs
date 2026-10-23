@@ -87,12 +87,14 @@ namespace Content.Client.Lobby
             _voteManager.SetPopupContainer(Lobby.VoteContainer);
             LayoutContainer.SetAnchorPreset(Lobby, LayoutContainer.LayoutPreset.Wide);
 
-            var lobbyNameCvar = _cfg.GetCVar(CCVars.ServerLobbyName);
-            var serverName = _baseClient.GameInfo?.ServerName ?? string.Empty;
-
-            Lobby.ServerName.Text = string.IsNullOrEmpty(lobbyNameCvar)
-                ? Loc.GetString("ui-lobby-title", ("serverName", serverName))
-                : lobbyNameCvar;
+            // The plate is stamped into the case, so it names the game rather than the server. Kept
+            // rather than deleted: the server name goes back on the moment the plate stops being fixed.
+            // var lobbyNameCvar = _cfg.GetCVar(CCVars.ServerLobbyName);
+            // var serverName = _baseClient.GameInfo?.ServerName ?? string.Empty;
+            //
+            // Lobby.ServerName.Text = string.IsNullOrEmpty(lobbyNameCvar)
+            //     ? Loc.GetString("ui-lobby-title", ("serverName", serverName))
+            //     : lobbyNameCvar;
 
             var width = _cfg.GetCVar(CCVars.ServerLobbyRightPanelWidth);
             Lobby.RightSide.SetWidth = width;
@@ -205,23 +207,8 @@ namespace Content.Client.Lobby
         /// <summary>
         ///     Put the ready toggle into the state it is actually in.
         /// </summary>
-        /// <remarks>
-        ///     <para>
-        ///     The box comes from <see cref="StyleNano.StyleClassCrtReadyToggle"/>, which keys off the
-        ///     Pressed pseudo-class. The mark and the label colour are set here because neither can
-        ///     come from a rule: the text is content, and a per-state font colour would need a rule
-        ///     selecting a label by its parent's pseudo-class.
-        ///     </para>
-        ///     <para>
-        ///     Three channels, deliberately - fill, edge colour, and a mark that reads with no colour
-        ///     at all. The old version moved one step up the surface ladder and changed nothing else,
-        ///     which is why it was easy to miss whether you had readied up.
-        ///     </para>
-        /// </remarks>
         private void UpdateReadyAppearance()
         {
-            // Shared with the cmu.panel_preview=ready harness, so what that shows is what this
-            // does. They drifted apart once already and the harness quietly showed the wrong state.
             CmuReadyToggle.Apply(Lobby!.ReadyButton, Lobby!.ReadyButton.Pressed);
         }
 
@@ -331,12 +318,6 @@ namespace Content.Client.Lobby
         /// <summary>
         ///     Put the clock where the player left it, or in its default place the first time.
         /// </summary>
-        /// <remarks>
-        ///     Runs every frame but does its work once: a control has no size until the first layout
-        ///     pass, and a fraction of the free space cannot be resolved before then. Retrying until
-        ///     it takes is simpler than hooking whichever pass happens to be the one that gives the
-        ///     panel a size.
-        /// </remarks>
         private void PlaceRoundClock()
         {
             var clock = Lobby!.RoundClock;

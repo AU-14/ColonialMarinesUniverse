@@ -1,63 +1,40 @@
-<!-- One ground (CrtScreenPanel), not three nested boxes: the window's own title bar already carries
-     "Warning" via CrtLobbyTheme.ApplyWindow, so a second CrtHeaderPanel repeating it and a third
-     CrtInsetPanel boxing the body text were both pure box-in-a-box. SetSize pins the window narrow
-     so the body sentence wraps instead of stretching the window wide to fit it on one line - plain
-     Label only breaks on a literal \n (see Label.Draw/MeasureOverride, no word-wrap at all), so the
-     body uses RichTextLabel instead, which does wrap. RichTextLabel has no horizontal text-align of
-     its own, so it reads left rather than centred - the short question above it still centres fine
-     with Label's Align="Center" since it never wraps. Buttons sit in a row, not stacked; each gets
-     its own coloured StyleBoxOverride in code-behind (ObserveWarningWindow.xaml.cs) rather than the
-     shared CrtAttentionButton class, both for the colour and because that class's content margins
-     didn't match plain Button's - which is what made Nevermind's label sit closer to its left edge
-     than the other two.
-
-     CrtContent/CrtOverlay is the sibling pair CrtScreenControl needs (see OptionsMenu.xaml for the
-     same pattern): CrtOverlay draws after CrtContent and covers it with the shaded, scanlined copy.
-     Unlike a chat log or anything else that scrolls, this window's content never changes after it
-     opens, so the render-target capture the shader relies on can never go stale - the trap that
-     rules out CrtScreenControl for live content doesn't apply here. -->
+<!-- Chrome is hand-set in the code-behind, the same way JoinRoundWindow and LateJoinGui set theirs - see
+     ApplyTheme there and here. -->
 <DefaultWindow
     xmlns="https://spacestation14.io"
     xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
-    xmlns:cmu="clr-namespace:Content.Client.CMU14.Interface"
-    SetSize="504 248">
-    <Control>
-        <Control Name="CrtContent" HorizontalExpand="True" VerticalExpand="True">
-            <PanelContainer StyleClasses="CrtScreenPanel" HorizontalExpand="True" VerticalExpand="True">
-                <BoxContainer Orientation="Vertical" Margin="16 18 16 14" SeparationOverride="8">
-                    <Label Text="{Loc 'observe-warning-1'}"
-                           StyleClasses="CrtHeading"
-                           HorizontalExpand="True"
-                           Align="Center"/>
-                    <RichTextLabel Text="{Loc 'observe-warning-2'}"
-                                    HorizontalExpand="True"/>
-                    <Control MinHeight="4"/>
-                    <BoxContainer Orientation="Horizontal" SeparationOverride="6">
-                        <cc:CommandButton Command="observe"
-                                          Name="ObserveButton"
-                                          Text="{Loc 'observe-confirm'}"
-                                          TextAlign="Center"
-                                          ClipText="True"
-                                          HorizontalExpand="True"
-                                          MinHeight="40"/>
-                        <cc:CommandButton Command="observe admin"
-                                          Name="ObserveAsAdminButton"
-                                          Text="{Loc 'observe-as-admin'}"
-                                          TextAlign="Center"
-                                          ClipText="True"
-                                          HorizontalExpand="True"
-                                          MinHeight="40"
-                                          Visible="False"/>
-                        <Button Name="NevermindButton"
-                                Text="{Loc 'observe-nevermind'}"
-                                TextAlign="Center"
-                                ClipText="True"
-                                HorizontalExpand="True"
-                                MinHeight="40"/>
-                    </BoxContainer>
-                </BoxContainer>
-            </PanelContainer>
-        </Control>
-        <cmu:CrtScreenControl Name="CrtOverlay" HorizontalExpand="True" VerticalExpand="True"/>
-    </Control>
+    SetSize="504 232">
+    <PanelContainer Name="Ground" HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Orientation="Vertical" Margin="14 14 14 12" SeparationOverride="8">
+            <Label Name="Question"
+                   Text="{Loc 'observe-warning-1'}"
+                   HorizontalExpand="True"
+                   Align="Center"/>
+            <RichTextLabel Name="Body" Text="{Loc 'observe-warning-2'}" HorizontalExpand="True"/>
+            <Control MinHeight="4"/>
+            <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                <cc:CommandButton Command="observe"
+                                  Name="ObserveButton"
+                                  Text="{Loc 'observe-confirm'}"
+                                  TextAlign="Center"
+                                  ClipText="True"
+                                  HorizontalExpand="True"
+                                  MinHeight="36"/>
+                <cc:CommandButton Command="observe admin"
+                                  Name="ObserveAsAdminButton"
+                                  Text="{Loc 'observe-as-admin'}"
+                                  TextAlign="Center"
+                                  ClipText="True"
+                                  HorizontalExpand="True"
+                                  MinHeight="36"
+                                  Visible="False"/>
+                <Button Name="NevermindButton"
+                        Text="{Loc 'observe-nevermind'}"
+                        TextAlign="Center"
+                        ClipText="True"
+                        HorizontalExpand="True"
+                        MinHeight="36"/>
+            </BoxContainer>
+        </BoxContainer>
+    </PanelContainer>
 </DefaultWindow>

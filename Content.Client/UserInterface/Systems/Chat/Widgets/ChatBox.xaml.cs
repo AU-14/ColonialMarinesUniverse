@@ -171,6 +171,8 @@ public partial class ChatBox : UIWidget
         _stylesheetManager.ChatFontChanged += RemakeForChatFontChange;
         _config.OnValueChanged(CCVars.CMUChatRowTint, OnChatRowTintCvarChanged);
         _stylesheetManager.CrtThemeChanged += OnCrtThemeChanged;
+        _config.OnValueChanged(CCVars.ChatGhostFollowButton, OnChatGhostFollowButtonCvarChanged);
+        _config.OnValueChanged(CCVars.CMUChatHousing, OnChatHousingCvarChanged);
 
         _tabs = ChatUserSettings.LoadTabs(_config.GetCVar(CCVars.ChatTabs));
         _styles = ChatUserSettings.LoadStyles(_config.GetCVar(CCVars.ChatChannelStyles));
@@ -1266,6 +1268,11 @@ public partial class ChatBox : UIWidget
         Repopulate();
     }
 
+    private void OnChatGhostFollowButtonCvarChanged(bool enabled)
+    {
+        Repopulate();
+    }
+
     // The whitelist depends on the theme, so it has to be rebuilt here - the already-rendered rows
     // were filtered against the old one and only Repopulate puts them back through the new one.
     private void OnCrtThemeChanged()
@@ -1277,26 +1284,79 @@ public partial class ChatBox : UIWidget
         ChatWindowPanel.PanelOverride = null;
         ChatWindowPanel.InvalidateStyleSheet();
         ChatWindowPanel.ForceRunStyleUpdate();
-        ChatUIController.SetChatWindowOpacity(ChatWindowPanel, _config.GetCVar(CCVars.ChatWindowOpacity));
+        ChatUIController.SetChatWindowOpacity(this, _config.GetCVar(CCVars.ChatWindowOpacity));
         RemakeForChatFontChange();
     }
 
     /// <summary>
     ///     The seam, when this chat is the lobby sidebar's lower zone.
     /// </summary>
-    /// <remarks>
-    ///     The strip names which conversation is showing, so it belongs to the zone above the log and
-    ///     carries that zone's <c>Surface1</c>; the step down to <c>Surface0</c> and the 1px rule land
-    ///     on its bottom edge, one boundary rather than two. Tabs sit on that rule with no bottom
-    ///     margin, which lets a selected tab's accent underline replace its segment of it.
-    /// </remarks>
+    /// <summary>
+    ///     CMU: this chat sits on the chat housing's tube screen (<c>cmu.chat_housing</c>), where the
+    ///     log, tab strip and input are see-through so the glass shows.
+    /// </summary>
+    public bool OnHousingScreen =>
+        CmuHousingPalette.TryGet(_config.GetCVar(CCVars.CMUChatHousing), out _) &&
+        (_onLobbyHousingScreen ||
+         (Parent is PanelContainer screen && screen.HasStyleClass(StyleNano.StyleClassCmuChatScreen)));
+
+    private bool _onLobbyHousingScreen;
+
+    /// <summary>
+    ///     CMU: the lobby's chat shares the lobby housing's screen rather than sitting in a
+    ///     <c>CmuChatScreen</c> panel of its own, so it cannot be recognised by its parent the way the
+    ///     in-round chat is. <c>CmuLobbyLook</c> sets this instead; the treatment is the same.
+    /// </summary>
+    public bool OnLobbyHousingScreen
+    {
+        get => _onLobbyHousingScreen;
+        set
+        {
+            if (_onLobbyHousingScreen == value)
+                return;
+
+            _onLobbyHousingScreen = value;
+            ApplyScreenBackgrounds();
+        }
+    }
+
+    protected override void EnteredTree()
+    {
+        base.EnteredTree();
+        ApplyScreenBackgrounds();
+    }
+
+    private void OnChatHousingCvarChanged(string tone)
+    {
+        ApplyScreenBackgrounds();
+    }
+
+    private void ApplyScreenBackgrounds()
+    {
+        ApplyTabHeaderBackground(StyleNano.CrtUiEnabled);
+
+        // A dashed rule over the input instead of a boxed field.
+        ChatInput.PanelOverride = OnHousingScreen
+            ? new CmuDashedRuleStyleBox
+            {
+                Color = CrtTerminalPalette.Line,
+                ContentMarginLeftOverride = 8,
+                ContentMarginRightOverride = 14,
+                ContentMarginTopOverride = 9,
+                ContentMarginBottomOverride = 8,
+            }
+            : null;
+    }
+
     private void ApplyTabHeaderBackground(bool crtEnabled)
     {
         TabHeaderPanel.PanelOverride = new StyleBoxFlat
         {
-            BackgroundColor = crtEnabled
-                ? CrtTerminalPalette.Surface1
-                : Color.FromHex("#0C0F12"),
+            BackgroundColor = OnHousingScreen
+                ? Color.Transparent
+                : crtEnabled
+                    ? CrtTerminalPalette.Surface1
+                    : Color.FromHex("#0C0F12"),
             BorderColor = CrtTerminalPalette.Line,
             BorderThickness = crtEnabled ? new Thickness(0, 0, 0, 1) : new Thickness(0),
         };
@@ -1426,10 +1486,25 @@ public partial class ChatBox : UIWidget
         // to no palette. So the fixed channels come onto the ladder while a squad radio keeps the
         // colour its prototype gives it.
         var crtColor = ChatUserSettings.CrtChannelColor(msg.Channel);
-        var accentColor = styleColor ?? msg.Display?.AccentColor ?? crtColor;
-        var messageColor = styleColor ?? msg.MessageColorOverride ?? msg.Display?.AccentColor ?? crtColor ?? msg.Channel.TextColor();
+
+        // Radio never passes through the curated CrtStyleTargets table; RadioSystem bakes its hex into the markup.
+        var displayAccent = msg.Display?.AccentColor;
+        var retoned = false;
+        if (displayAccent is { } rawAccent
+            && msg.Channel == ChatChannel.Radio
+            && msg.Display?.BackgroundColorOverride == null)
+        {
+            displayAccent = CrtTerminalPalette.ChannelTone(rawAccent);
+            retoned = displayAccent != rawAccent;
+        }
+
+        var accentColor = styleColor ?? displayAccent ?? crtColor;
+        var messageColor = styleColor ?? msg.MessageColorOverride ?? displayAccent ?? crtColor ?? msg.Channel.TextColor();
         var bodyColor = _colorWholeMessage ? messageColor : StructuredMessageTextColor;
-        var entry = contents.AddMessage(msg, () => CreateFormattedMessage(msg, messageColor, style), bodyColor, accentColor, fontSize);
+        // A markup colour tag beats the colour pushed around it, so a retone has to rewrite the tag
+        // RadioSystem baked into WrappedMessage rather than just wrap the message in a new colour.
+        var recolor = retoned && styleColor == null ? messageColor : (Color?) null;
+        var entry = contents.AddMessage(msg, () => CreateFormattedMessage(msg, messageColor, style, recolor), bodyColor, accentColor, fontSize);
         cmChat?.TrackRepetition(repeatQueue, entry, msg.SenderEntity, msg.Message, msg.Channel, msg.LanguageIcon);
     }
 
@@ -1461,13 +1536,21 @@ public partial class ChatBox : UIWidget
         AddLine(msg);
     }
 
-    private FormattedMessage CreateFormattedMessage(ChatMessage message, Color color, ChatStyleSettings? style = null)
+    private FormattedMessage CreateFormattedMessage(
+        ChatMessage message,
+        Color color,
+        ChatStyleSettings? style = null,
+        Color? recolor = null)
     {
         // TrimEnd, because a wrapper that ends in a line break renders as blank rows at the foot of
         // the message - invisible until announcements gained a background. RMC14's WrapHive is the
         // one that does it today.
         var markup = StripChatActionCommandLink(message.WrappedMessage.TrimEnd(), message);
         markup = StripDuplicateChannelPrefix(markup, message);
+
+        if (recolor is { } bodyColor)
+            markup = ChatUserSettings.ApplyColorMarkup(markup, bodyColor);
+
         markup = _colorWholeMessage
             ? ChatUserSettings.ApplyStyleMarkup(markup, style, ChatUserSettings.DefaultFontSize)
             : ChatUserSettings.ApplyFontMarkup(RemoveOuterColorMarkup(markup), style, ChatUserSettings.DefaultFontSize);
@@ -1667,27 +1750,6 @@ public partial class ChatBox : UIWidget
     ///     Markup tags chat is allowed to render. Anything not listed is dropped by
     ///     <see cref="FilterProblematicTags"/> and its text renders in the control's own font.
     /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///     <c>bold</c> and <c>bolditalic</c> are dropped under CRT, and that is a fix rather than a
-    ///     restriction. <c>BoldTag</c> resolves the <b>global</b> <c>DefaultBold</c> font prototype,
-    ///     so a bold span ignores the control's font entirely - which meant sender names, which are
-    ///     bold, rendered in proportional NotoSans while the message beside them was the mono OSD
-    ///     face. At the shared size of 8 the proportional face reads noticeably smaller and thinner,
-    ///     which is what made the names hard to read.
-    ///     </para>
-    ///     <para>
-    ///     Dropping the tag here is deliberately narrower than the engine's supported alternative,
-    ///     <c>FontTagHijackHolder.Hijack</c>: that intercepts prototype resolution globally and would
-    ///     change bold text in the guidebook and everywhere else, to fix a problem that only exists
-    ///     in chat. A terminal has no bold anyway.
-    ///     </para>
-    ///     <para>
-    ///     <c>italic</c> has the same flaw (<c>DefaultItalic</c>) and is deliberately left in - it is
-    ///     not currently causing a visible problem, and dropping it would take emote formatting with
-    ///     it. Revisit if italic text starts looking out of place.
-    ///     </para>
-    /// </remarks>
     // Takes the flag rather than reading StyleNano.CrtUiEnabled: StylesheetManager subscribes to the
     // same cvar and is what sets that static, and the cvar system does not order subscribers, so
     // reading it from our own handler can see the pre-toggle value.
@@ -1831,6 +1893,8 @@ public partial class ChatBox : UIWidget
         _stylesheetManager.ChatFontChanged -= RemakeForChatFontChange;
         _config.UnsubValueChanged(CCVars.CMUChatRowTint, OnChatRowTintCvarChanged);
         _stylesheetManager.CrtThemeChanged -= OnCrtThemeChanged;
+        _config.UnsubValueChanged(CCVars.ChatGhostFollowButton, OnChatGhostFollowButtonCvarChanged);
+        _config.UnsubValueChanged(CCVars.CMUChatHousing, OnChatHousingCvarChanged);
         ChatInput.Input.OnTextEntered -= OnTextEntered;
         ChatInput.Input.OnKeyBindDown -= OnInputKeyBindDown;
         ChatInput.Input.OnTextChanged -= OnTextChanged;

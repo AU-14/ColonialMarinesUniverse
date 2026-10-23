@@ -119,9 +119,9 @@ namespace Content.Shared.GameTicking
     }
 
     /// <summary>
-    ///     One column of the lobby's round-info table: a heading with its value shown underneath.
-    ///     Rendered as a grid rather than pre-formatted text so columns stay aligned at any panel
-    ///     width and however long the value is.
+    ///     One line of the lobby's round-info panel: a label and its value, optionally belonging to a
+    ///     named group. Sent as structured fields rather than pre-formatted text so the client can lay
+    ///     them out however it likes and keep them aligned at any panel width.
     /// </summary>
     [Serializable, NetSerializable]
     public sealed class LobbyRoundInfoField
@@ -134,11 +134,19 @@ namespace Content.Shared.GameTicking
         /// </summary>
         public string? Color { get; }
 
-        public LobbyRoundInfoField(string label, string value, string? color = null)
+        /// <summary>
+        ///     Heading for the run of fields this one belongs to, e.g. "GOVFOR". Consecutive fields
+        ///     sharing a group are drawn under one heading, which is what lets the two sides be named
+        ///     once each instead of every label repeating the side it belongs to. Null stands alone.
+        /// </summary>
+        public string? Group { get; }
+
+        public LobbyRoundInfoField(string label, string value, string? color = null, string? group = null)
         {
             Label = label;
             Value = value;
             Color = color;
+            Group = group;
         }
     }
 

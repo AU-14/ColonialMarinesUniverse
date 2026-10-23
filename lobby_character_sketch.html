@@ -1,0 +1,370 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1">
+<title>Lobby Character Sketch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Share+Tech+Mono&family=Allerta+Stencil&display=swap">
+<style>
+  :root {
+    color-scheme: dark;
+    --page: #0e100e;
+    --s0: #071009; --s1: #0D1A12; --s2: #152F20;
+    --line: #2A5238; --dim: #4E9C6B; --text: #8FE9AE; --bright: #C9FFDC;
+    --accent: #46FF8E; --caution: #FFB454;
+    --gov: #6fb8ff; --opf: #ff8a7a;
+    --prose: #bcc6bd; --prose-dim: #849085;
+    --osd: "Share Tech Mono", "Cascadia Mono", Consolas, monospace;
+    --stencil: "Allerta Stencil", "Share Tech Mono", Impact, sans-serif;
+    --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  }
+  body { margin: 0; background: var(--page); color: var(--prose); font: 15px/1.6 var(--sans); }
+  .wrap { max-width: 2000px; margin: 0 auto; padding-inline: 20px; padding-block: 34px 80px; }
+  header { display: grid; gap: 8px; margin-bottom: 18px; max-width: 86ch; }
+  .eyebrow { font: 13px var(--osd); letter-spacing: .16em; color: #8a8f82; text-transform: uppercase; }
+  h1 { margin: 0; font: 400 31px/1.1 var(--stencil); color: #e3dfd2; letter-spacing: .02em; }
+  header p { margin: 0; color: var(--prose-dim); }
+  h2 { font: 19px var(--stencil); letter-spacing: .06em; text-transform: uppercase; color: #d9d3c1; margin: 0 0 6px; }
+  section { padding-block: 30px; border-top: 1px solid #242722; }
+
+  .toolbar { display: flex; gap: 26px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
+  .ctl-label { font: 12px var(--osd); letter-spacing: .14em; text-transform: uppercase; color: #8a8f82; margin-right: 10px; }
+  .chips { display: inline-flex; gap: 6px; }
+  .chip { all: unset; cursor: pointer; padding: 6px 12px; font: 13px var(--osd); letter-spacing: .08em; text-transform: uppercase;
+    color: #cfcabb; background: linear-gradient(#34372f, #282a25); border-radius: 3px;
+    box-shadow: inset 0 1px 0 #50544a, inset 0 -2px 0 #141512; }
+  .chip[aria-pressed="true"] { background: linear-gradient(#1b1d19, #23261f); color: var(--accent); box-shadow: inset 0 2px 0 #0c0d0b, inset 0 -1px 0 #3b3f36; }
+
+  .stage { display: flex; gap: 18px; align-items: flex-start; flex-wrap: wrap; }
+  .col { display: grid; gap: 8px; }
+  .caption { font: 12px var(--osd); letter-spacing: .1em; text-transform: uppercase; color: #8a8f82; }
+  .caption b { color: #e3dfd2; font-weight: 400; }
+
+  /* ---------- housing, as built ---------- */
+  .housing {
+    --h-top: #30331f; --h-bot: #1f2115; --h-hi: #4d5234; --h-lo: #0b0c0a; --ink: #c2bf9e; --ink-dim: #858263;
+    --k-top: #4f533a; --k-bot: #3b3e2a; --k-hi: #6f7452; --k-lo: #191a16; --k-ink: #e2dec2;
+    box-sizing: border-box; width: 462px; padding: 9px 12px 12px; display: grid; gap: 4px; position: relative;
+    background: linear-gradient(180deg, var(--h-top), var(--h-bot));
+    box-shadow: inset 0 1px 0 var(--h-hi), inset 1px 0 0 var(--h-hi), inset 0 -2px 0 var(--h-lo), inset -1px 0 0 var(--h-lo); }
+  .housing.gunmetal { --h-top: #2b2e28; --h-bot: #1a1c18; --h-hi: #454940; --ink: #b9b6a8; --ink-dim: #7c7c70;
+    --k-top: #4a4d45; --k-bot: #36392f; --k-hi: #6c7065; --k-ink: #dcd8c9; }
+  .housing.beige { --h-top: #b7ae96; --h-bot: #968d76; --h-hi: #d8d0b8; --h-lo: #5f5848; --ink: #2d2a22; --ink-dim: #5a5545;
+    --k-top: #e0d9c4; --k-bot: #c7bfa7; --k-hi: #f5efdc; --k-lo: #7a7260; --k-ink: #2a2720; }
+  .screw { position: absolute; width: 7px; height: 7px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #9a9d93, #4a4c45 60%, #25261f);
+    box-shadow: 0 1px 0 rgba(255,255,255,.08), inset 0 0 0 1px rgba(0,0,0,.4); }
+  .screw.tl { top: 4px; left: 4px; } .screw.tr { top: 4px; right: 4px; }
+  .screw.bl { bottom: 4px; left: 4px; } .screw.br { bottom: 4px; right: 4px; }
+  .plate { display: flex; align-items: baseline; padding-inline: 4px; padding-bottom: 4px; }
+  .plate .name { font: 14px var(--stencil); letter-spacing: .09em; color: var(--ink); text-transform: uppercase; }
+  .plate .spacer { flex: 1; }
+  .plate .serial { font: 10px var(--osd); letter-spacing: .1em; color: var(--ink-dim); text-transform: uppercase; }
+  .keys { display: flex; gap: 1px; }
+  .key { flex: 1; text-align: center; padding: 6px 3px; border-radius: 2px; white-space: nowrap;
+    font: 10px var(--osd); letter-spacing: .04em; text-transform: uppercase; color: var(--k-ink);
+    background: linear-gradient(180deg, var(--k-top), var(--k-bot));
+    box-shadow: inset 0 1px 0 var(--k-hi), inset 0 -3px 0 var(--k-lo); }
+  .key.narrow { flex: 0 0 24px; }
+  .mode { display: flex; gap: 2px; padding: 3px; background: var(--k-lo);
+    box-shadow: inset 0 2px 0 var(--k-lo), inset 0 -1px 0 var(--k-hi); }
+  .mode span { flex: 1; text-align: center; padding: 4px; font: 10px var(--osd); letter-spacing: .06em;
+    text-transform: uppercase; color: var(--ink-dim); }
+  .mode span.on { color: var(--k-ink); background: linear-gradient(180deg, var(--k-top), var(--k-bot));
+    box-shadow: inset 0 1px 0 var(--k-hi), inset 0 -3px 0 var(--k-lo); }
+
+  .screen { position: relative; border-radius: 9px; overflow: hidden; margin-top: 4px;
+    background: radial-gradient(ellipse 90% 80% at 50% 40%, #0c1b11, #06100a 60%, #030704);
+    box-shadow: 0 0 0 3px var(--h-lo), 0 0 0 4px var(--h-hi), inset 0 0 22px rgba(0,0,0,.85);
+    display: flex; flex-direction: column; }
+  .screen::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; z-index: 3;
+    background: repeating-linear-gradient(180deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px); }
+  .seam { flex: none; height: 16px; margin-inline: -11px; width: calc(100% + 22px); background-repeat: repeat-x; }
+  .seam-gunmetal { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAQCAYAAACm53kpAAABVklEQVR4nOWXzU7DMBCEZ13bAUGatOVXSAhxQUI8AxcOvP8BCQk4cAGqEkIR5N9ZZLcqvAAOar5L4pN31jMrm66uLxk9Rk5fZugzsmka9BnJnQWAQUSLv1URi7VP5M/mvrD7EYQgGGPALUMq6b6M1nsTpP8GAESMNJkjy3LnAq0V4lEEIQRsG9a4AexEztMPVFWN84szDOQAtzd3eJ0l2NvfBbNfF0jfDmgagyzLMNkZI0lS5FkOHSh8fdbIiwJBEPyaCX+PtNnziT1hq68oSsSbGzg8OgCB8XD/CNMYQLObB2sbARICSiuX/SgeOrM/P01RVzWiKIQxNgL+oJPTY78WILgTTt/eQYIwEAJVXSOOh1BKLe3vdQa08IprN2E8GaEsSyc4HIawVwLTtkvpXiOADmAnXGvthLf2DrCsw3c50rQGndHdBXAFbYdb/X4NcnePgX/BN3nKpb+BtUNqAAAAAElFTkSuQmCC); }
+  .seam-olive { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAQCAYAAACm53kpAAABSUlEQVR4nOVWy07DMBCctR31kRboCxAIOCHOwGdw4c8RFySuFFHUqD20aUjTxIu8pfAHNmrmYks+7Ox6Znfp4fGOUWOYj/c56gxTllW46DvtUTgKhgMagH4SD8nBcKDoWis49VnLiCINxyMEFeM7qHw6Ack0RbpcgxSh0TAYDmMoRb+u2E8FMKA0YTbLsM5L3N5fwUQKz09jfE4WODs/FCXstQU2G5afH50cIJkusFoVooDlIkeWFWi1IliPnAxbb7FE+i45V/T8q0Acd3Bx2QcT8PoyQVVa6QM+ORnfFtB663kiwlGvLef4bY6iKDEYtFFZ+zcePYCub079eoBIOv8sSUUSbhq45PuDthQmQA+AXzDLJBgdd5HnGylGr9+SnaCy27da7AHMjGbTyN0VYUfD+xisqnBrWMjYO1CnG4dnERAmlAX+C74By3Wiut30Am4AAAAASUVORK5CYII=); }
+  .seam-beige { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAQCAYAAACm53kpAAABgUlEQVR4nOWWMU8CQRCF3x57EKQAj6MyNAYTNFEKIzbGX2HF79NKKgtiYW9M5NQoJmiDEtEgmBATYJfdPbN7Gv/BXsK95sq5nfnemyGPQStEgkVfej0kWZRzjiSLhmE8DtB1HccBIQRSSvONQ1QpFUvhdNrFbDY3j8/lViCENE1JRAMIcRDcdtB/HRgKPC+P2s4WXJdCqRA2YaBS2muAnnAmk8ZD5wmD9yEajSNksxkcnzRxeRXg8KAOpSI72IKBhqFNAgim0xle+2/YqKyj233G52iMQiGPweADw+EIvu9BCGEtE6hNAhyHmMdp308m3yiVfOzXdyGFROv8AnPGNSaIbEmWjwAhIgsUvYKxQ7m8ZjKg3b4DYwx+cRWMc4M/IeHyEaDF+QKb1QqCmw5Om2dwXReMzVHbrv6uRGFt+rFsgb/9X9+rYTT+Muuv5HtIpRzooyzyfrjch5BSyqS9Rl5PW+fCYhEFn+3/oUwHT0z6rx3PFahFr4N7JFlUo5dk/QBz7MhHnr+zqQAAAABJRU5ErkJggg==); }
+  .chat { flex: 1; display: flex; flex-direction: column; min-height: 110px; }
+  .tabs { display: flex; font: 10px var(--osd); padding: 7px 11px 0; gap: 4px; }
+  .tab { padding: 3px 7px; color: var(--dim); }
+  .tab.sel { color: var(--bright); box-shadow: inset 0 -2px 0 var(--accent); }
+  .log { flex: 1; padding: 6px 11px; display: flex; flex-direction: column; justify-content: flex-end; gap: 3px; }
+  .msg { font: 11px/1.35 var(--osd); }
+  .msg .p { color: var(--caution); margin-right: 6px; }
+  .cmdline { display: flex; align-items: center; gap: 8px; padding: 7px 11px 9px; font: 10px var(--osd); color: var(--dim);
+    border-top: 1px dashed var(--line); margin: 0 11px; }
+  .cmdline .caret { width: 5px; height: 11px; background: var(--accent); opacity: .85; }
+
+  /* ================= the 212px zone ================= */
+  .zone { height: 212px; box-sizing: border-box; padding: 12px 14px; display: flex; flex-direction: column; }
+  .rule { height: 0; border-top: 1px solid var(--line); }
+  .rule.soft { border-top-color: #17301f; }
+  .grow { flex: 1; }
+  .lbl { font: 9px var(--osd); letter-spacing: .15em; color: var(--dim); text-transform: uppercase; }
+  .dots { flex: 1; border-bottom: 1px dotted #1d3a26; margin-bottom: 5px; min-width: 10px; }
+
+  /* the head: one big fact and a tag, exactly as the server page has it */
+  .head { display: flex; align-items: baseline; gap: 10px; }
+  .big { font: 19px var(--stencil); letter-spacing: .07em; color: var(--bright); text-transform: uppercase;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tag { font: 11px var(--osd); letter-spacing: .16em; text-transform: uppercase; white-space: nowrap; }
+  .tag.mode { color: var(--caution); }
+  .tag.person { color: var(--dim); }
+  .tag.person b { color: var(--text); font-weight: 400; }
+
+  /* the foot band: cells told apart by fill and a hairline of void - the command band's own idiom,
+     so an action reads as pressable without being boxed. */
+  .actions { display: flex; gap: 1px; }
+  .act { flex: 1; text-align: center; padding: 7px 6px; font: 10px var(--osd); letter-spacing: .05em;
+    text-transform: uppercase; color: var(--text); background: var(--s1); cursor: pointer; }
+  .act:hover { background: var(--s2); color: var(--bright); }
+  .act.wide { flex: 1.6; }
+  .act b { color: var(--bright); font-weight: 400; }
+
+  .sprite { image-rendering: pixelated; flex: none; display: block; }
+  .arrow { flex: none; width: 18px; text-align: center; font: 12px var(--osd); color: var(--dim);
+    background: var(--s1); padding: 10px 0; cursor: pointer; }
+  .arrow:hover { background: var(--s2); color: var(--text); }
+  .role { font: 13px var(--osd); letter-spacing: .05em; color: var(--accent); }
+  .role-dim { font: 9px var(--osd); letter-spacing: .15em; color: var(--dim); text-transform: uppercase; }
+
+  .bodyrow { display: flex; align-items: center; gap: 12px; }
+  .bodycol { display: grid; gap: 5px; min-width: 0; flex: 1; }
+  .centrebody { display: grid; justify-items: center; gap: 8px; }
+  .leaderrow { display: flex; align-items: baseline; gap: 8px; }
+  .leaderrow .v { font: 12px var(--osd); color: var(--text); white-space: nowrap; }
+  .leaderrow .v.role { color: var(--accent); }
+
+  .oldbtns { display: flex; gap: 2px; margin-top: 10px; }
+  .oldbtn { flex: 1; text-align: center; padding: 5px 6px; font: 10px var(--osd); letter-spacing: .04em;
+    text-transform: uppercase; color: var(--text); background: var(--s1); border: 1px solid var(--line); }
+  .oldbtn.grow2 { flex: 2; }
+
+  .c-row { display: flex; align-items: baseline; gap: 8px; }
+  .c-row .k { font: 9px var(--osd); letter-spacing: .14em; color: var(--dim); text-transform: uppercase; flex: 0 0 92px; }
+  .c-row .k.indent { padding-left: 12px; box-sizing: border-box; }
+  .c-row .v { font: 12px var(--osd); white-space: nowrap; }
+  .c-group { font: 10px var(--osd); letter-spacing: .18em; text-transform: uppercase; }
+  .a-foot { display: flex; align-items: baseline; gap: 8px; font: 11px var(--osd); }
+  .a-foot .v { color: var(--bright); }
+
+  .aside { margin-top: 20px; display: grid; gap: 12px; max-width: 94ch; }
+  .aside div { padding-left: 14px; box-shadow: inset 2px 0 0 #c9a227; }
+  .aside b { color: #e3dfd2; font-weight: 600; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">CMU · lobby · the character page</div>
+    <h1>Give it the same bones as the other page</h1>
+    <p>The character page has no structure today — it is one row floating in a box, which is why it
+      reads as empty however the parts are arranged. The server page works because it has a skeleton:
+      one big fact with a tag, a rule, the body, a rule, a foot. Borrowing that exact skeleton does
+      two things at once. The switch starts reading as one machine showing two pages rather than two
+      unrelated screens, and the buttons get an obvious home — the foot, where the server page
+      already puts players and round time. Sprite stays at 3&times;. The three options differ only in
+      the middle band.</p>
+  </header>
+
+  <div class="toolbar">
+    <div><span class="ctl-label" id="show-label">Show</span><span class="chips" role="group" aria-labelledby="show-label" id="shows"></span></div>
+    <div><span class="ctl-label" id="tone-label">Housing</span><span class="chips" role="group" aria-labelledby="tone-label" id="tones"></span></div>
+  </div>
+
+  <div class="stage" id="stage"></div>
+
+  <section>
+    <h2>Notes</h2>
+    <div class="aside">
+      <div><b>Why the buttons belong on the page after all.</b> There is a rule hiding in what we already built: the keys on the case are <em>terminal</em> commands — AHelp, Options, Leave — available whatever the screen shows. Customize and Ignore Allegiance belong to the character, which is one of two things the screen happens to be showing. Putting them on the case broke that rule, which is why they looked wrong there and why Customize made no sense on the server page. In the page's foot they are exactly as scoped as the thing they act on.</div>
+      <div><b>They still have to read as pressable</b>, so the foot is cells told apart by fill and a hairline of void — the command band's own idiom. A fill says pressable without a frame, which keeps them clear of the nested-box trap the old round-info cells fell into.</div>
+      <div><b>A — Portrait.</b> Sprite and role together on the left, arrows either side of the sprite. Closest to today, just given a head and a foot. Safest and least interesting.</div>
+      <div><b>B — Centred.</b> The sprite is the page's subject, so it sits in the middle with the role beneath. Reads most like a dossier photo, and it is the only one where the sprite is unambiguously the point rather than an illustration beside some text.</div>
+      <div><b>C — Filed.</b> Sprite left, role and modes as leader rows on the server page's own dotted rhythm. The most consistent of the three — flip the switch and the two pages are visibly the same instrument — and the easiest to add a row to later without a redesign. It also splits "INS+DS / Platoon Commander" into the two facts it actually is.</div>
+      <div><b>The head is the real move.</b> On the server page the big fact is the planet and the tag is the gamemode. Here the big fact is the name and the tag is the pronoun and age. Same position, same weight, same rule under it — that is what makes the two pages feel like one device rather than two things sharing a box.</div>
+      <div><b>Still open:</b> whether the arrows stay as those small side buttons. They are the one part I have not rethought, because changing how you move between characters is a behaviour change rather than a layout one.</div>
+    </div>
+  </section>
+</div>
+
+<script>
+const TONES = [["olive", "Olive drab"], ["gunmetal", "Gunmetal"], ["beige", "Beige"]];
+const SHOWS = [["all", "Today + all three"], ["cmp", "C beside the server page"]];
+const SPRITE_SRC = "data:image/png;base64,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";
+const SW = 45, SH = 81;
+
+let tone = "olive", show = "all";
+const $ = id => document.getElementById(id);
+
+function head() {
+  return `<div class="head">
+    <span class="big">Isiah Riggle</span><span class="dots"></span>
+    <span class="tag person">He &middot; <b>58</b></span>
+  </div>
+  <div style="height:6px"></div><div class="rule"></div>`;
+}
+
+function foot() {
+  return `<div class="rule soft"></div>
+  <div style="height:7px"></div>
+  <div class="actions">
+    <div class="act wide">Ignore allegiance: <b>Off</b></div>
+    <div class="act">Customize</div>
+  </div>`;
+}
+
+function img() {
+  return `<img class="sprite" src="${SPRITE_SRC}" width="${SW}" height="${SH}" alt="">`;
+}
+
+function zoneA() {
+  return `<div class="zone">
+    ${head()}
+    <div class="grow"></div>
+    <div class="bodyrow">
+      <span class="arrow">&lt;</span>
+      ${img()}
+      <span class="arrow">&gt;</span>
+      <div class="bodycol">
+        <div class="role-dim">Highest role</div>
+        <div class="role">INS+DS / Platoon Commander</div>
+      </div>
+    </div>
+    <div class="grow"></div>
+    ${foot()}
+  </div>`;
+}
+
+function zoneB() {
+  return `<div class="zone">
+    ${head()}
+    <div class="grow"></div>
+    <div class="centrebody">
+      <div class="bodyrow" style="gap:16px">
+        <span class="arrow">&lt;</span>
+        ${img()}
+        <span class="arrow">&gt;</span>
+      </div>
+      <div class="role">INS+DS / Platoon Commander</div>
+    </div>
+    <div class="grow"></div>
+    ${foot()}
+  </div>`;
+}
+
+function zoneC() {
+  return `<div class="zone">
+    ${head()}
+    <div class="grow"></div>
+    <div class="bodyrow">
+      <span class="arrow">&lt;</span>
+      ${img()}
+      <span class="arrow">&gt;</span>
+      <div class="bodycol">
+        <div class="leaderrow">
+          <span class="lbl">Role</span><span class="dots"></span>
+          <span class="v role">Platoon Commander</span>
+        </div>
+        <div class="leaderrow">
+          <span class="lbl">Modes</span><span class="dots"></span>
+          <span class="v">INS + DS</span>
+        </div>
+      </div>
+    </div>
+    <div class="grow"></div>
+    ${foot()}
+  </div>`;
+}
+
+function zoneToday() {
+  return `<div class="zone">
+    <div style="display:flex;align-items:baseline;gap:8px">
+      <span class="lbl">Character</span>
+      <span class="grow" style="border-bottom:1px solid var(--line);margin-bottom:4px"></span>
+    </div>
+    <div style="height:10px"></div>
+    <div class="grow"></div>
+    <div class="bodyrow">
+      <span class="arrow">&lt;</span>
+      ${img()}
+      <div class="bodycol">
+        <div style="font:15px var(--osd);color:var(--bright)">Isiah Riggle</div>
+        <div style="font:11px var(--osd);color:var(--dim)">He is <b style="color:var(--text);font-weight:400">58</b> years old</div>
+        <div class="role" style="text-align:center">INS+DS / Platoon Commander</div>
+      </div>
+      <span class="arrow">&gt;</span>
+    </div>
+    <div class="grow"></div>
+    <div class="oldbtns">
+      <div class="oldbtn grow2">Ignore allegiance: Off</div>
+      <div class="oldbtn">Customize</div>
+    </div>
+  </div>`;
+}
+
+function zoneServer() {
+  const row = (k, v, cls) =>
+    `<div class="c-row"><span class="k indent">${k}</span><span class="dots"></span><span class="v" style="color:var(--${cls})">${v}</span></div>`;
+  return `<div class="zone" style="gap:3px">
+    <div class="head"><span class="big">Shepherds' Pride</span><span class="dots"></span><span class="tag mode">Colony Fall</span></div>
+    <div style="height:6px"></div>
+    <div class="rule"></div>
+    <div class="grow"></div>
+    <div class="c-group" style="color:var(--gov)">GOVFOR</div>
+    ${row("Ship", "USS BUSH REDUX", "gov")}
+    ${row("Platoon", "LACN LANDING FORCES", "gov")}
+    <div style="height:3px"></div>
+    <div class="c-group" style="color:var(--opf)">OPFOR</div>
+    ${row("Ship", "USS BUSH REDUX", "opf")}
+    ${row("Platoon", "UPP NAVAL INFANTRY", "opf")}
+    <div class="grow"></div>
+    <div class="rule soft"></div>
+    <div style="height:3px"></div>
+    <div class="a-foot">
+      <span class="lbl">Players</span><span class="v">12 (4 READY)</span>
+      <span class="dots"></span><span class="lbl">Round</span><span class="v">NOT STARTED</span>
+    </div>
+  </div>`;
+}
+
+function column(zone, onServer) {
+  return `<div class="housing ${tone}">
+    <span class="screw tl"></span><span class="screw tr"></span><span class="screw bl"></span><span class="screw br"></span>
+    <div class="plate"><span class="name">Colonial Marines Universe</span><span class="spacer"></span><span class="serial">Mod. LB-1 &middot; 12</span></div>
+    <div class="keys">${["AHelp","Call Vote","Options","Leave"].map(t=>`<div class="key">${t}</div>`).join("")}<div class="key narrow">&#9654;</div></div>
+    <div class="mode"><span class="${onServer ? "on" : ""}">Server</span><span class="${onServer ? "" : "on"}">Character</span></div>
+    <div class="screen">
+      ${zone}
+      <div class="seam seam-${tone}"></div>
+      <div class="chat">
+        <div class="tabs"><span class="tab sel">All</span><span class="tab">Radio</span><span class="tab">Dead chat (2)</span></div>
+        <div class="log">
+          <div class="msg"><span class="p">ADM</span>Admin login: localhost@JoeGenero</div>
+          <div class="msg"><span class="p">SYS</span>Welcome to CMU! Read the rules.</div>
+        </div>
+        <div class="cmdline"><span class="caret"></span>T to talk, Tab to cycle channels.</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function render() {
+  const cols = show === "all"
+    ? [["Today &middot; <b>as built</b>", zoneToday(), false],
+       ["A &middot; <b>Portrait</b>", zoneA(), false],
+       ["B &middot; <b>Centred</b>", zoneB(), false],
+       ["C &middot; <b>Filed</b>", zoneC(), false]]
+    : [["C &middot; <b>Filed</b>", zoneC(), false],
+       ["The server page &middot; <b>same bones</b>", zoneServer(), true]];
+
+  $("stage").innerHTML = cols.map(([cap, zone, onServer]) =>
+    `<div class="col"><div class="caption">${cap}</div>${column(zone, onServer)}</div>`).join("");
+}
+
+function chips(el, items, get, set) {
+  const draw = () => el.innerHTML = items.map(([v, l]) =>
+    `<button type="button" class="chip" data-v="${v}" aria-pressed="${get() === v}">${l}</button>`).join("");
+  el.addEventListener("click", e => { const b = e.target.closest("button[data-v]"); if (!b) return; set(b.dataset.v); draw(); render(); });
+  draw();
+}
+chips($("shows"), SHOWS, () => show, v => show = v);
+chips($("tones"), TONES, () => tone, v => tone = v);
+render();
+</script>
+</body></html>
