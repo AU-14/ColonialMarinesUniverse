@@ -464,11 +464,11 @@ ent-CMUActionYautjaVoicePain = Voice: Pain
 ent-CMUActionYautjaVoiceDeathCry = Voice: Death Cry
     .desc = Play a Yautja death cry.
 ent-CMUActionYautjaVoiceDeathLaugh = Voice: Death Laugh
+    .desc = Play the Yautja death laugh.
 
 ent-CMUActionYautjaHonorRoar = Honor Roar
 
 ent-CMUActionYautjaHuntingLeap = Hunting Leap
-    .desc = Play the Yautja death laugh.
 
 ent-CMUActionYautjaAbominationRush = Feral Rush
     .desc = Briefly rush forward with predalien speed.

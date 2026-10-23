@@ -62,8 +62,8 @@ public sealed partial class InterfaceTab : Control
         Control.AddOptionDropDown(CCVars.UILayout, DropDownHudLayout, layoutEntries);
 
         // AU14: viewport centering for the Separated layout (chat panel otherwise pushes the view left).
-        Control.AddOptionCheckBox(Content.Shared._AU14.CCVar.AU14CCVars.CenterSeparatedViewport, CenterSeparatedViewportCheckBox);
-        Control.AddOptionDropDown(Content.Shared._AU14.CCVar.AU14CCVars.SeparatedHudStatusSide, SeparatedHudStatusSideDropdown, separatedHudStatusSideEntries);
+        Control.AddOptionCheckBox(Content.Shared.CMU14.CCVar.AU14CCVars.CenterSeparatedViewport, CenterSeparatedViewportCheckBox);
+        Control.AddOptionDropDown(Content.Shared.CMU14.CCVar.AU14CCVars.SeparatedHudStatusSide, SeparatedHudStatusSideDropdown, separatedHudStatusSideEntries);
         SeparatedLayoutOptions.DependOn(() =>
             DropDownHudLayout.Button.SelectedMetadata is string layout && layout == nameof(ScreenType.Separated));
 
@@ -89,6 +89,7 @@ public sealed partial class InterfaceTab : Control
         var crtUiEnabled = Control.AddOption(new OptionCrtUiEnabled(Control, _cfg, CrtUiEnabledCheckBox));
         crtUiEnabled.PreviewValueChanged += UpdateCrtUiOptionsPreview;
         Control.AddOptionCheckBox(CCVars.CMUVoteUiLarge, VoteUiLargeCheckBox);
+        Control.AddOptionCheckBox(CCVars.ForceOnForceUnidentifiedMarkerEnabled, FoFUnidentifiedMarkerCheckBox);
 
         Control.AddOptionCheckBox(CVars.DiscordEnabled, DiscordRich);
 

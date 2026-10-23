@@ -15,6 +15,7 @@
                         <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
                             <CheckBox Name="ShowCombatModeIndicatorsCheckBox" Text="{Loc 'cmu-ui-options-combat-mode-cursor'}" ToolTip="{Loc 'cmu-ui-options-combat-mode-cursor-tooltip'}" />
                             <CheckBox Name="VoteUiLargeCheckBox" Text="{Loc 'cmu-ui-options-vote-ui-large'}" ToolTip="{Loc 'cmu-ui-options-vote-ui-large-tooltip'}" />
+                            <CheckBox Name="FoFUnidentifiedMarkerCheckBox" Text="{Loc 'cmu-ui-options-fof-unidentified-marker'}" ToolTip="{Loc 'cmu-ui-options-fof-unidentified-marker-tooltip'}" />
                         </BoxContainer>
                     </BoxContainer>
                     <ui:OptionDropDown Name="DropDownHudTheme" Title="{Loc 'cmu-ui-options-hud-theme'}" />

@@ -16,7 +16,7 @@ public sealed partial class GhostRolesWindow
         entry.OnCompleted += id => OnForceCompleted?.Invoke(id);
         CrtLobbyTheme.Apply(entry);
         EntryContainer.AddChild(entry);
-        _entries.Add(new EntryState(entry, force.Name));
+        _entries.Add(new EntryState(entry, null!, null!, force.Name, string.Empty));
         if (!_updatingEntries)
             UpdateVisibleEntries();
     }

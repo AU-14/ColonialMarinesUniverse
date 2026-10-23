@@ -2527,16 +2527,16 @@ namespace Content.Client.Stylesheets
                     .Prop(Control.StylePropertyModulateSelf, Color.White),
 
                 // Unread AHelp. Its class string is shared with the key label, hence the element type.
-                Element<MenuButton>().Class(StyleClassCmuMenuKeyOutlined).Class(MenuButton.StyleClassRedTopButton).Pseudo(ContainerButton.StylePseudoClassNormal)
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyOutlined).Class(MenuButton.StyleClassLabelTopButton).Pseudo(ContainerButton.StylePseudoClassNormal)
                     .Prop(ContainerButton.StylePropertyStyleBox, menuKeyOutlinedAlert)
                     .Prop(Control.StylePropertyModulateSelf, Color.White),
-                Element<MenuButton>().Class(StyleClassCmuMenuKeyOutlined).Class(MenuButton.StyleClassRedTopButton).Pseudo(ContainerButton.StylePseudoClassHover)
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyOutlined).Class(MenuButton.StyleClassLabelTopButton).Pseudo(ContainerButton.StylePseudoClassHover)
                     .Prop(ContainerButton.StylePropertyStyleBox, menuKeyOutlinedAlert)
                     .Prop(Control.StylePropertyModulateSelf, Color.White),
-                Element<MenuButton>().Class(StyleClassCmuMenuKeyRaised).Class(MenuButton.StyleClassRedTopButton).Pseudo(ContainerButton.StylePseudoClassNormal)
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyRaised).Class(MenuButton.StyleClassLabelTopButton).Pseudo(ContainerButton.StylePseudoClassNormal)
                     .Prop(ContainerButton.StylePropertyStyleBox, menuKeyRaisedAlert)
                     .Prop(Control.StylePropertyModulateSelf, Color.White),
-                Element<MenuButton>().Class(StyleClassCmuMenuKeyRaised).Class(MenuButton.StyleClassRedTopButton).Pseudo(ContainerButton.StylePseudoClassHover)
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyRaised).Class(MenuButton.StyleClassLabelTopButton).Pseudo(ContainerButton.StylePseudoClassHover)
                     .Prop(ContainerButton.StylePropertyStyleBox, menuKeyRaisedAlert)
                     .Prop(Control.StylePropertyModulateSelf, Color.White),
 
@@ -2558,10 +2558,10 @@ namespace Content.Client.Stylesheets
                 Element<MenuButton>().Class(StyleClassCmuMenuKeyCap).Pseudo(ContainerButton.StylePseudoClassPressed)
                     .Prop(ContainerButton.StylePropertyStyleBox, keyCapPressed)
                     .Prop(Control.StylePropertyModulateSelf, Color.White),
-                Element<MenuButton>().Class(StyleClassCmuMenuKeyCap).Class(MenuButton.StyleClassRedTopButton).Pseudo(ContainerButton.StylePseudoClassNormal)
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyCap).Class(MenuButton.StyleClassLabelTopButton).Pseudo(ContainerButton.StylePseudoClassNormal)
                     .Prop(ContainerButton.StylePropertyStyleBox, keyCapAlert)
                     .Prop(Control.StylePropertyModulateSelf, Color.White),
-                Element<MenuButton>().Class(StyleClassCmuMenuKeyCap).Class(MenuButton.StyleClassRedTopButton).Pseudo(ContainerButton.StylePseudoClassHover)
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyCap).Class(MenuButton.StyleClassLabelTopButton).Pseudo(ContainerButton.StylePseudoClassHover)
                     .Prop(ContainerButton.StylePropertyStyleBox, keyCapAlert)
                     .Prop(Control.StylePropertyModulateSelf, Color.White),
 

@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Client._CMU14.Interface;
+using Content.Client.CMU14.Interface;
 using Content.Client.Resources;
 using Content.Client.Stylesheets;
 using Robust.Client.Graphics;
@@ -9,7 +9,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.IoC;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.UserInterface.Guidebook;
+namespace Content.Client.CMU14.UserInterface.Guidebook;
 
 /// <summary>
 ///     Dresses the guidebook as a reference terminal when the chat housing is on: the window body becomes
@@ -18,7 +18,7 @@ namespace Content.Client._CMU14.UserInterface.Guidebook;
 /// </summary>
 public static class CmuGuidebookLook
 {
-    private const string HousingPath = "/Textures/_CMU14/Interface/ChatHousing";
+    private const string HousingPath = "/Textures/CMU14/Interface/ChatHousing";
 
     /// <summary>Colour for text drawn straight onto the housing, or null when there is no housing.</summary>
     public static Color? Ink =>

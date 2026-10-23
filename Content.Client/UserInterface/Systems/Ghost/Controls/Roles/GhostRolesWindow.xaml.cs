@@ -177,8 +177,8 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
             foreach (var entry in _entries)
             {
                 var accent = AccentOf(entry.Category);
-                entry.Banner.ApplyTheme(accent);
-                entry.Instances.ApplyTheme(accent);
+                entry.Banner?.ApplyTheme(accent);
+                entry.Instances?.ApplyTheme(accent);
             }
 
             foreach (var rail in _rail)

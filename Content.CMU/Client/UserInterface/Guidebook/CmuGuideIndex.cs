@@ -5,7 +5,7 @@ using Content.Shared.Guidebook;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._CMU14.UserInterface.Guidebook;
+namespace Content.Client.CMU14.UserInterface.Guidebook;
 
 /// <summary>
 ///     Plain-text copy of every guide page, so the guidebook can search inside pages and not just titles.

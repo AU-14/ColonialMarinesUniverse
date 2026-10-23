@@ -209,14 +209,28 @@ public sealed class TickerLateJoinMergeRegressionTest : GameTest
             var empty = new LateJoinGui("govfor");
             try
             {
-                var lists = GetPrivate<IEnumerable<ScrollContainer>>(empty, "_jobLists").ToArray();
+                // CMU14: pre-port pin, kept for the next downmerge:
+                // var lists = GetPrivate<IEnumerable<ScrollContainer>>(empty, "_jobLists").ToArray();
+                // Assert.Multiple(() =>
+                // {
+                //     Assert.That(lists, Has.Length.EqualTo(1));
+                //     Assert.That(lists[0].VerticalExpand, Is.False,
+                //         "an empty faction section must collapse instead of splitting the window height");
+                //     Assert.That(Descendants(lists[0]).OfType<Label>().Any(label =>
+                //             label.Text == Loc.GetString("late-join-gui-no-departments-available")), Is.True);
+                // });
+                // CMU14: the CRT layout collapses an empty faction by hiding the rail/pane split
+                // and surfacing the no-departments note, so the pin follows the split's visibility.
+                var descendants = Descendants(GetPrivate<Control>(empty, "_base")).ToArray();
+                var notes = descendants.OfType<Label>().Where(label =>
+                    label.Text == Loc.GetString("late-join-gui-no-departments-available")).ToArray();
                 Assert.Multiple(() =>
                 {
-                    Assert.That(lists, Has.Length.EqualTo(1));
-                    Assert.That(lists[0].VerticalExpand, Is.False,
+                    Assert.That(notes, Has.Length.EqualTo(1));
+                    Assert.That(notes[0].Visible, Is.True,
                         "an empty faction section must collapse instead of splitting the window height");
-                    Assert.That(Descendants(lists[0]).OfType<Label>().Any(label =>
-                            label.Text == Loc.GetString("late-join-gui-no-departments-available")), Is.True);
+                    Assert.That(descendants.OfType<ScrollContainer>().All(scroll => !scroll.VisibleInTree),
+                        Is.True);
                 });
             }
             finally

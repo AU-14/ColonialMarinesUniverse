@@ -116,7 +116,6 @@ namespace Content.Client.Options.UI
             StyleFilterBar();
             SetUpCrtScreen();
         }
-        }
 
         private void StyleFilterBar()
         {

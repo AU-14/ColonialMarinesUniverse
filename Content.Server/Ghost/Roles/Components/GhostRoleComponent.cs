@@ -1,6 +1,6 @@
 using Content.Server.Ghost.Roles.Raffles;
 using Content.Server.Mind.Commands;
-using Content.Shared._CMU14.Ghost.Roles;
+using Content.Shared.CMU14.Ghost.Roles;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 

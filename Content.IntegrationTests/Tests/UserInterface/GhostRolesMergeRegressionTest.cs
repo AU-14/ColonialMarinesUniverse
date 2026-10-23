@@ -39,7 +39,6 @@ public sealed class GhostRolesMergeRegressionTest : GameTest
         BoxContainer? entryContainer = null;
         Label? countLabel = null;
         ScrollContainer? roleScroll = null;
-        PanelContainer? contentPanel = null;
         Label? noRolesMessage = null;
         bool originalTimers = default;
         bool originalEnabled = default;
@@ -83,15 +82,23 @@ public sealed class GhostRolesMergeRegressionTest : GameTest
                 entryContainer = window.FindControl<BoxContainer>("EntryContainer");
                 countLabel = window.FindControl<Label>("CountLabel");
                 roleScroll = window.FindControl<ScrollContainer>("RoleScroll");
-                contentPanel = window.FindControl<PanelContainer>("ContentPanel");
                 noRolesMessage = window.FindControl<Label>("NoRolesMessage");
                 var roles = Roles(source);
 
                 eui.HandleState(new GhostRolesEuiState(roles));
 
-                var entries = entryContainer.Children.OfType<GhostRoleInfoBox>().ToArray();
+                // CMU14: the CRT layout wraps each role in a group box - a GhostRoleInfoBox banner
+                // above its GhostRoleButtonsBox instances - and moves preview dummies into the
+                // banner, so the pins reach both through the group. Pre-port pin, kept for the
+                // next downmerge:
+                // var entries = entryContainer.Children.OfType<GhostRoleInfoBox>().ToArray();
+                // var sharedEntries = entries
+                //     .Where(entry => entry.FindControl<Label>("Title").Text == "Shared role")
+                //     .ToArray();
+                var entries = entryContainer.Children.ToArray();
                 var sharedEntries = entries
-                    .Where(entry => entry.FindControl<Label>("Title").Text == "Shared role")
+                    .Where(group => Descendants(group).OfType<GhostRoleInfoBox>()
+                        .Single().FindControl<Label>("Title").Text == "Shared role")
                     .ToArray();
                 Assert.Multiple(() =>
                 {
@@ -100,13 +107,15 @@ public sealed class GhostRolesMergeRegressionTest : GameTest
                     Assert.That(sharedEntries, Has.Length.EqualTo(2));
                     Assert.That(GetPrivate<int>(window, "_availableRoleCount"), Is.EqualTo(roles.Length));
                     Assert.That(countLabel.Text, Does.Contain(roles.Length.ToString()));
-                    Assert.That(sharedEntries.Select(entry =>
-                            Descendants(entry).OfType<GhostRoleEntryButtons>().Single().RequestButton.Disabled),
+                    Assert.That(sharedEntries.Select(group =>
+                            Descendants(group).OfType<GhostRoleEntryButtons>().Single().RequestButton.Disabled),
                         Is.EquivalentTo(new[] { false, true }),
                         "the ineligible group stays visible but exposes a locked request action");
                 });
 
-                var firstDummies = GetPrivate<List<EntityUid>>(window, "_previewDummies");
+                // CMU14: pre-port pin, kept for the next downmerge:
+                // var firstDummies = GetPrivate<List<EntityUid>>(window, "_previewDummies");
+                var firstDummies = PreviewDummies(entryContainer);
                 Assert.That(firstDummies, Has.Count.EqualTo(1),
                     "the remote mapped source with no EntityPrototype must use the valid Captain job-preview route");
                 Assert.That(CEntMan.EntityExists(firstDummies.Single()), Is.True);
@@ -121,10 +130,14 @@ public sealed class GhostRolesMergeRegressionTest : GameTest
                 var beforeScroll = roleScroll.GetScrollValue(ignoreVisible: true);
                 Assert.That(beforeScroll.Y, Is.GreaterThan(0),
                     "the overflowing role list supplies a nonzero scroll restoration discriminator");
-                var firstDummy = GetPrivate<List<EntityUid>>(window, "_previewDummies").Single();
+                // CMU14: pre-port pin, kept for the next downmerge:
+                // var firstDummy = GetPrivate<List<EntityUid>>(window, "_previewDummies").Single();
+                var firstDummy = PreviewDummies(entryContainer!).Single();
 
                 eui!.HandleState(new GhostRolesEuiState(roles));
-                var replacement = GetPrivate<List<EntityUid>>(window, "_previewDummies").Single();
+                // CMU14: pre-port pin, kept for the next downmerge:
+                // var replacement = GetPrivate<List<EntityUid>>(window, "_previewDummies").Single();
+                var replacement = PreviewDummies(entryContainer!).Single();
                 Assert.Multiple(() =>
                 {
                     Assert.That(CEntMan.EntityExists(firstDummy), Is.False,
@@ -143,7 +156,7 @@ public sealed class GhostRolesMergeRegressionTest : GameTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(entryContainer.Children.Count(child => child.Visible), Is.EqualTo(1));
-                    Assert.That(contentPanel!.Visible, Is.True);
+                    Assert.That(roleScroll!.Visible, Is.True);
                     Assert.That(noRolesMessage!.Visible, Is.False);
                     Assert.That(GetPrivate<int>(window, "_availableRoleCount"), Is.EqualTo(roles.Length),
                         "search filtering must not rewrite the total available count");
@@ -154,7 +167,7 @@ public sealed class GhostRolesMergeRegressionTest : GameTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(entryContainer.Children, Has.All.Matches<Control>(child => !child.Visible));
-                    Assert.That(contentPanel!.Visible, Is.False);
+                    Assert.That(roleScroll!.Visible, Is.False);
                     Assert.That(noRolesMessage!.Visible, Is.True);
                     Assert.That(noRolesMessage.Text,
                         Is.EqualTo(Loc.GetString("ghost-roles-window-no-results-label")));
@@ -319,6 +332,17 @@ public sealed class GhostRolesMergeRegressionTest : GameTest
     {
         instance.GetType().GetMethod(method, BindingFlags.Instance | BindingFlags.NonPublic)!
             .Invoke(instance, null);
+    }
+
+    // CMU14: preview dummies live on each GhostRoleInfoBox banner in the CRT layout.
+    private static List<EntityUid> PreviewDummies(Control entryContainer)
+    {
+        return entryContainer.Children
+            .Select(group => Descendants(group).OfType<GhostRoleInfoBox>().Single())
+            .Select(banner => GetPrivate<EntityUid?>(banner, "_previewDummy"))
+            .OfType<EntityUid>()
+            .Where(uid => uid != EntityUid.Invalid)
+            .ToList();
     }
 
     [Robust.Shared.Analyzers.Virtual] // CMU14: DispatchProxy generates a derived implementation.

@@ -22,7 +22,7 @@ from PIL import Image
 
 OUT = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    'Resources', 'Textures', '_CMU14', 'Interface', 'ChatHousing')
+    'Content.CMU', 'Resources', 'Textures', 'CMU14', 'Interface', 'ChatHousing')
 
 TONES = ('gunmetal', 'olive', 'beige')
 

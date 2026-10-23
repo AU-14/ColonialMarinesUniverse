@@ -26,15 +26,6 @@
                         HorizontalAlignment="Center"
                         MinWidth="200" />
             </PanelContainer>
-            <Button Name="RequestButton"
-                    Text="{Loc 'ghost-roles-window-request-role-button'}"
-                    Disabled="False"
-                    TextAlign="Center"
-                    ClipText="True"
-                    HorizontalAlignment="Center"
-                    MinWidth="180"
-                    MinHeight="34"
-                    SetHeight="34" />
         </BoxContainer>
     </PanelContainer>
 </DefaultWindow>

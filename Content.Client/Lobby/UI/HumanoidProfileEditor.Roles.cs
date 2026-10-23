@@ -500,7 +500,8 @@ public sealed partial class HumanoidProfileEditor
             "AU14JobThirdPartyMember";
     }
 
-    private static (string Key, string Title) GetMilitaryJobSegment(JobPrototype job)
+    // CMU14: internal, not private, so LateJoinGui reuses this classification instead of re-deriving it.
+    internal static (string Key, string Title) GetMilitaryJobSegment(JobPrototype job)
     {
         var id = job.ID;
         var name = job.LocalizedName;
@@ -542,7 +543,8 @@ public sealed partial class HumanoidProfileEditor
         return ("line", Loc.GetString("humanoid-profile-editor-segment-line"));
     }
 
-    private static int GetJobSortGroup(DepartmentPrototype department, JobPrototype job)
+    // CMU14: internal, not private, so LateJoinGui reuses this classification instead of re-deriving it.
+    internal static int GetJobSortGroup(DepartmentPrototype department, JobPrototype job)
     {
         if (department.Faction != "govfor" && department.Faction != "opfor")
             return 0;
