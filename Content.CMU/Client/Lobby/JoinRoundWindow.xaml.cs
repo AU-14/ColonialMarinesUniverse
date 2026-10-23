@@ -2,7 +2,6 @@ using System;
 using Content.Client.Lobby.UI;
 using Content.Client.CMU14.Interface;
 using Content.Client._CMU14.Interface;
-using Content.Client._CMU14.Interface;
 using Content.Client.Resources;
 using Content.Client.Stylesheets;
 using Content.Shared.CCVar;
@@ -30,8 +29,6 @@ public sealed partial class JoinRoundWindow : DefaultWindow
 {
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IStylesheetManager _stylesheetManager = default!;
-    [Dependency] private IConfigurationManager _cfg = default!;
-    [Dependency] private IStylesheetManager _stylesheetManager = default!;
     [Dependency] private IResourceCache _resourceCache = default!;
 
     private const float ColumnWidth = 560f;
@@ -45,7 +42,6 @@ public sealed partial class JoinRoundWindow : DefaultWindow
     private const int ButtonTextSize = 8;
 
     private const float ScanlineDepth = 0.9f;
->>>>>>> 7ae57790c (test):Content.Client/_CMU14/Lobby/JoinRoundWindow.xaml.cs
 
     /// <summary>
     ///     Colonists. The plain one on purpose - they are the default, least exotic choice, so it
@@ -251,5 +247,45 @@ public sealed partial class JoinRoundWindow : DefaultWindow
         if (crt)
         {
             AddStyleClass(StyleNano.StyleClassCrtWindow);
+
+            header.PanelOverride = new StyleBoxFlat
+            {
+                BackgroundColor = CrtTerminalPalette.Surface2,
+                BorderColor = CrtTerminalPalette.Line,
+                BorderThickness = new Thickness(1),
+                ContentMarginLeftOverride = 5,
+                ContentMarginRightOverride = 6,
+            };
+
+            titleLabel.FontOverride = StyleNano.GetCrtFont(_resourceCache, TitleSize);
+            titleLabel.FontColorOverride = CrtTerminalPalette.TextBright;
+            closeButton.Modulate = CrtTerminalPalette.TextDim;
+
+            // Full bleed: the header's rule and Ground's own run edge to edge.
+            Contents.Margin = new Thickness(0);
+
+            Ground.PanelOverride = new StyleBoxFlat
+            {
+                BackgroundColor = CrtTerminalPalette.Surface0,
+                BorderColor = CrtTerminalPalette.Line,
+                BorderThickness = new Thickness(1, 0, 1, 1),
+            };
+        }
+        else
+        {
+            RemoveStyleClass(StyleNano.StyleClassCrtWindow);
+            header.PanelOverride = null;
+            titleLabel.FontOverride = null;
+            titleLabel.FontColorOverride = null;
+            closeButton.Modulate = Color.White;
+            Contents.Margin = new Thickness(10);
+            Ground.PanelOverride = null;
+        }
+
+        _shaderPass.Visible = crt;
+        _cornerTicks.Visible = crt;
+
+        foreach (var (column, button, palette) in _columns)
+            StyleColumn(column, button, palette);
     }
 }
