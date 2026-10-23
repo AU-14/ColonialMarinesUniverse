@@ -21,22 +21,12 @@
                 <Control Name="DefaultState" VerticalExpand="True">
                     <BoxContainer Name="TopLeft" Orientation="Vertical">
                         <!-- Left Top Panel -->
-                        <!-- Ticked panel so this reads as the same piece of equipment as a VotePopup.
-                             It no longer matches the popup's 620 width: with the factions behind
-                             JoinRoundWindow there are only four buttons left, and stretching them to
-                             a vote popup's width would put back the empty space that move removed. -->
+                        <!-- Ticked panel so this reads as the same piece of equipment as a VotePopup. -->
                         <PanelContainer StyleClasses="CrtPanelTicked" HorizontalAlignment="Left" Name="LeftSideTop"
                                         VerticalAlignment="Top">
                             <BoxContainer Orientation="Vertical" SeparationOverride="5" MaxWidth="1040"
                                           MinWidth="{x:Static cmu:CmuPanelMetrics.LobbyActionColumnWidth}">
-                                <!-- Ranked, not a grid of equals. Only one of Ready/Join is ever
-                                     visible - whichever it is, it is the thing you came here to do,
-                                     so it gets the full width and the taller box. Observe sits under
-                                     it at a smaller height: a real action, but not the one being
-                                     offered. Side by side at identical size they read as a choice
-                                     between two equivalent things, which they are not.
-                                     The four faction choices moved into JoinRoundWindow - they are
-                                     one decision taken once, not four permanent slots. -->
+                                <!-- Ranked, not a grid of equals. -->
                                 <BoxContainer Name="ActionButtons" Orientation="Vertical" HorizontalExpand="True"
                                               SeparationOverride="{x:Static cmu:CmuPanelMetrics.GroupSeparation}">
                                     <!-- The clock, folded. The countdown is the button's own label so
@@ -45,10 +35,9 @@
                                             ToolTip="{Loc 'cmu-lobby-clock-restore-tooltip'}"
                                             HorizontalExpand="True" Visible="False"
                                             MinHeight="{x:Static cmu:CmuPanelMetrics.Row}" />
-                                    <!-- CrtReadyToggle, not ButtonBig: this control's job is to say
-                                         which of two states you are in, and the shared button box
-                                         says only that it is pressable. CrtLobbyTheme withholds the
-                                         standard CRT button class from anything wearing this. -->
+                                    <!-- CrtReadyToggle, not ButtonBig: this control says which of two
+                                         states you are in, where a button box says only that it is
+                                         pressable. CrtLobbyTheme withholds its own class from this. -->
                                     <Button Name="ReadyButton" Access="Public" ToggleMode="True"
                                             Text="{Loc 'ui-lobby-ready-up-button'}"
                                             StyleClasses="CrtReadyToggle" HorizontalExpand="True"
@@ -59,10 +48,7 @@
                                             StyleClasses="ButtonBig" HorizontalExpand="True"
                                             MinHeight="{x:Static cmu:CmuPanelMetrics.Row}"
                                             Visible="False" />
-                                    <!-- A rule, not just a gap. Ready/Join and Observe are ranked
-                                         rather than equal, and off-theme two stacked buttons of the
-                                         same fill read as one control without something between
-                                         them. -->
+                                    <!-- A rule, not just a gap. -->
                                     <PanelContainer StyleClasses="CrtDivider" />
                                     <cc:UICommandButton Command="observe" Name="ObserveButton" Access="Public"
                                                         Text="{Loc 'ui-lobby-observe-button'}"
@@ -71,8 +57,8 @@
                                                         WindowType="{x:Type lobbyUi:ObserveWarningWindow}" />
                                 </BoxContainer>
 
-                                <!-- Reference links share the action grid's metrics but sit under a
-                                     rule, so Rules doesn't read as another faction choice. -->
+                                <!-- Reference links share the action grid's metrics but sit under a rule,
+                                     so Rules doesn't read as another faction choice. -->
                                 <PanelContainer StyleClasses="CrtDivider" />
                                 <info:LinkBanner Name="LinkBanner" VerticalExpand="false" HorizontalExpand="True" />
                                 <RichTextLabel Name="PlaytimeComment" Visible="False" Access="Public" HorizontalAlignment="Center" />
@@ -109,29 +95,64 @@
             <PanelContainer Name="RightSide" Access="Public" StyleClasses="CrtScreenPanel" HorizontalAlignment="Right" VerticalExpand="True"
                             VerticalAlignment="Stretch">
                 <BoxContainer Orientation="Vertical" HorizontalExpand="True">
-                <!-- Everything above the chat is one CRT screen: the header row, the server
-                     info block and the character block. The effect needs a surface with real
-                     size before it reads as a tube - shading only the server-info table left it
-                     too small to make out. Chat stays outside deliberately: it is read
-                     continuously and updates live, and a roll bar shearing text mid-sentence is
-                     obstructive rather than characterful.
-
-                     LobbyCrtBacking is the opaque base. The shader writes opaque, so any
-                     transparent region inside the captured subtree comes back as black; the
-                     backing both prevents that and is the screen plane the rows sit on.
-
-                     LobbyCrtContent must keep matching LobbyCrt's rect exactly - the render
-                     target captures the subtree at its origin, so any offset between the two
-                     shows up as the shaded copy sitting a few pixels off its original. Padding
-                     therefore goes on the rows inside, never on Content itself. -->
-                <Control Name="LobbyCrtScreen" HorizontalExpand="True">
+                <!-- The nameplate, on the plastic above the screen rather than printed inside it. It
+                     cannot sit in the captured subtree or the roll bar would shear it. -->
+                <BoxContainer Name="LobbyPlate" Orientation="Horizontal" HorizontalExpand="True"
+                              Margin="4 0 4 4" SeparationOverride="8">
+                    <Label Name="ServerName" Access="Public" StyleClasses="CrtHeadingSmall"
+                           Text="{Loc 'cmu-lobby-plate-name'}"
+                           VAlign="Center" HorizontalExpand="True" ClipText="True" />
+                    <Label Name="PlateSerial" Access="Public" Text="{Loc 'cmu-lobby-plate-serial'}"
+                           VAlign="Center" Visible="False" />
+                </BoxContainer>
+                <!-- The command row, on the case with the plate rather than on the screen. -->
+                <PanelContainer Name="CommandBand" Access="Public" StyleClasses="CrtCommandBand"
+                                MinHeight="{x:Static cmu:CmuPanelMetrics.RowCompact}">
+                    <BoxContainer Orientation="Horizontal" Name="HeaderContainer" Access="Public"
+                                  SeparationOverride="1" HorizontalExpand="True">
+                        <Button Name="AHelpButton" Access="Public" Text="{Loc 'ui-lobby-ahelp-button'}"
+                                StyleClasses="CrtCommandCell" HorizontalExpand="True" VerticalExpand="True" />
+                        <vote:VoteCallMenuButton Name="CallVoteButton" Access="Public" StyleClasses="CrtCommandCell"
+                                                 HorizontalExpand="True" VerticalExpand="True" />
+                        <Button Name="OptionsButton" Access="Public" StyleClasses="CrtCommandCell"
+                                Text="{Loc 'ui-lobby-options-button'}" HorizontalExpand="True" VerticalExpand="True" />
+                        <Button Name="LeaveButton" Access="Public" StyleClasses="CrtCommandCell"
+                                Text="{Loc 'ui-lobby-leave-button'}" HorizontalExpand="True" VerticalExpand="True" />
+                        <!-- The arrow keeps its natural width: it is an affordance on the panel, not a
+                             fifth command, and stretching it to a fifth of the row would say otherwise. -->
+                        <PanelContainer Name="CollapseCell" Access="Public"
+                                        StyleClasses="CrtCommandCellPanel" VerticalExpand="True">
+                            <TextureButton Name="CollapseButton"
+                                           TexturePath="filled_right_arrow.svg.192dpi"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           Margin="4 0 4 0"
+                                           Scale="0.5 0.5" />
+                        </PanelContainer>
+                    </BoxContainer>
+                </PanelContainer>
+                <controls:HSpacer Spacing="4" />
+                <!-- The server/character switch: a two-position detent toggle on the case rather than a
+                     tab on the glass. Housing only; with it off both blocks stay stacked. -->
+                <PanelContainer Name="PanelSwitch" Access="Public" HorizontalExpand="True"
+                                Visible="False" Margin="0 0 0 4">
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="2">
+                        <Button Name="ServerPanelButton" Access="Public" HorizontalExpand="True"
+                                Text="{Loc 'cmu-lobby-panel-server'}" />
+                        <Button Name="CharacterPanelButton" Access="Public" HorizontalExpand="True"
+                                Text="{Loc 'cmu-lobby-panel-character'}" />
+                    </BoxContainer>
+                </PanelContainer>
+                <!-- One glass for the whole column. -->
+                <PanelContainer Name="LobbyScreen" Access="Public" HorizontalExpand="True">
+                <!-- Everything above the chat is one CRT screen: the header row, the server info block
+                     and the character block. -->
+                <Control Name="LobbyCrtScreen" HorizontalExpand="True"
+                         MinHeight="{x:Static cmu:CmuPanelMetrics.LobbyPanelHeight}">
                     <Control Name="LobbyCrtContent" HorizontalExpand="True">
                         <PanelContainer Name="LobbyCrtBacking" HorizontalExpand="True"
                                         VerticalExpand="True" />
-                        <!-- The inset lives here, not on RightSide. Padding on the panel leaves the
-                             panel's own fill showing as a ring around this content, which reads as a
-                             border; padding here moves only the rows, and LobbyCrtBacking still runs
-                             edge to edge behind them as the screen plane. -->
+                        <!-- The inset lives here, not on RightSide. -->
                         <BoxContainer Orientation="Vertical" HorizontalExpand="True"
                                       Margin="10 8 10 8">
                             <!-- The server name gets its own line. It is operator-configured text of no
@@ -214,54 +235,44 @@
                                  background: the shader writes opaque, so without something solid underneath
                                  it the transparent gaps between cells would come back as black. It is the
                                  panel colour, so it is invisible against the CrtPanel behind it. -->
-                            <Control Name="ServerInfoScreen" HorizontalExpand="True" Margin="0 0 0 3">
-                                <Control Name="ServerInfoContent" HorizontalExpand="True">
+                            <Control Name="ServerInfoScreen" Access="Public" HorizontalExpand="True" VerticalExpand="True" Margin="0 0 0 3">
+                                <Control Name="ServerInfoContent" HorizontalExpand="True" VerticalExpand="True">
                                     <PanelContainer Name="ServerInfoBacking" HorizontalExpand="True"
                                                     VerticalExpand="True" />
-                                    <!-- Inset, not flush. ServerInfoBacking fills the whole screen plane and
-                                         the rows float inside it, so the backdrop is visible as air on all
-                                         four sides - that gap is what reads as a screen showing a UI rather
-                                         than as cells sitting on the lobby. The margin goes here rather than
-                                         on the wrapper: the shaded subtree is now the whole column, so
-                                         padding here only moves the rows, never the captured rect. -->
-                                    <info:ServerInfo Name="ServerInfo" Access="Public" VerticalExpand="false"
-                                           Title="{Loc 'ui-lobby-server-info-block'}"
+                                    <!-- Inset, not flush. -->
+                                    <info:ServerInfo Name="ServerInfo" Access="Public" VerticalExpand="True"
                                            HorizontalExpand="True" />
                                 </Control>
                             </Control>
                             <controls:HSpacer Spacing="5" />
-                            <lobbyUi:LobbyCharacterPreviewPanel Name="CharacterPreview" Access="Public" />
+                            <!-- Expands so its own head/body/foot spacers have slack: at natural height
+                                 the foot sits under the body rather than on the bottom edge. -->
+                            <lobbyUi:LobbyCharacterPreviewPanel Name="CharacterPreview" Access="Public"
+                                                                VerticalExpand="True" />
                         </BoxContainer>
                     </Control>
                     <cmu:CrtScreenControl Name="LobbyCrt" HorizontalExpand="True"
                                           VerticalExpand="True" />
                 </Control>
-                    <!-- Scanlines over the chat, as an overlay rather than a shader pass. The full
-                         pass has to capture its source to a texture, and capturing a live scrolling
-                         subtree means its clipping and scroll offsets have to survive a re-entrant
-                         render - it fails by drawing stale text over the real thing. Scanlines only
-                         darken, so they need no copy. The roll bar and the grain stay upstairs, where
-                         there is no live text to shear.
-
-                         No margin on the chat: the bands - tab strip, seam, input row - run to the
-                         sidebar's edges like the block above them, and only their contents are inset.
-                         With a margin here the input bar sat in from the panel edge on three sides,
-                         which is the ring of ground that reads as a border round it. -->
+                </PanelContainer>
+                <!-- The join - and a sibling of the two screens, not something drawn inside one of them. -->
+                <PanelContainer Name="LobbySeam" Access="Public" HorizontalExpand="True"
+                                MinHeight="16" Visible="False" />
+                <PanelContainer Name="ChatScreen" Access="Public" HorizontalExpand="True"
+                                VerticalExpand="True">
+                    <!-- Scanlines over the chat, as an overlay rather than a shader pass. -->
                     <Control Name="ChatCrtScreen" HorizontalExpand="True" VerticalExpand="True">
                         <widgets:ChatBox Name="Chat" Access="Public" VerticalExpand="True"
                                          Margin="0 0 0 0" MinHeight="50" />
                         <cmu:CrtScanlineOverlay Name="ChatScanlines" HorizontalExpand="True"
                                                 VerticalExpand="True" />
                     </Control>
+                </PanelContainer>
                 </BoxContainer>
             </PanelContainer>
         </SplitContainer>
-        <!-- Takes the collapse arrow's place, so it has to land on the same pixel or the arrow jumps
-             as the panel opens and closes. Both are CrtPanels, so their 10/10/8/8 content margins
-             cancel; what has to match is the rest. Vertically: no top margin (RightSide starts flush
-             with MainContainer) and a 40px row mirroring HeaderContainer, which is what centres the
-             arrow at the same height. Horizontally: this panel's 2px right margin stands in for the
-             2px right margin the collapse arrow carries inside its own row. -->
+        <!-- Takes the collapse arrow's place, so it has to land on the same pixel or the arrow jumps as
+             the panel opens and closes. -->
         <PanelContainer Name="ExpandPanel"
                         StyleClasses="CrtPanel"
                         HorizontalAlignment="Right"
@@ -277,22 +288,7 @@
             </BoxContainer>
         </PanelContainer>
     </BoxContainer>
-    <!-- The round clock. It used to be the action panel's heading, which put the one thing here
-         you are meant to notice without looking at it in the corner of the screen, at heading
-         size, next to the buttons.
-
-         At the root rather than inside DefaultState, for two reasons. It has to survive the switch
-         into character customization - SwitchState hides whichever state is not showing, and the
-         clock going with it meant losing the countdown exactly when a player is busy and most
-         likely to lose track of it. And the drag has to range over the whole window, which it
-         cannot do from inside a container that is only as big as one column.
-
-         MouseFilter is Ignore so this full-window layer does not swallow clicks meant for the
-         lobby underneath; the clock itself sets Stop, because it is the part you grab.
-
-         LobbyState places it - by default clear of the action column and near the top, or wherever
-         it was last dropped - and hides it once the round is running, since a clock counting down
-         to something that already happened is just another thing on the screen. -->
+    <!-- The round clock. -->
     <LayoutContainer Name="ClockLayer" Access="Public" MouseFilter="Ignore"
                      HorizontalExpand="True" VerticalExpand="True">
         <cmu:CmuDraggablePanel Name="RoundClock" Access="Public" StyleClasses="CrtPanelTicked">
@@ -302,8 +298,8 @@
                 <BoxContainer Orientation="Horizontal" SeparationOverride="4">
                     <Label Name="ClockCaption" Access="Public" Align="Center"
                            StyleClasses="CrtDimText" HorizontalExpand="True" />
-                    <!-- CrtLobbyTheme never reaches this subtree (it runs on MainContainer only),
-                         so CmuIconButton colours itself. Arrow points at where the clock folds to. -->
+                    <!-- CrtLobbyTheme never reaches this subtree (it runs on MainContainer only), so
+                         CmuIconButton colours itself. -->
                     <cmu:CmuIconButton Name="ClockMinimizeButton" Access="Public"
                                        TexturePath="/Textures/Interface/Default/filled_left_arrow.svg.192dpi.png"
                                        ToolTip="{Loc 'cmu-lobby-clock-minimize-tooltip'}" />

@@ -1,5 +1,6 @@
 using Content.Server.Ghost.Roles.Raffles;
 using Content.Server.Mind.Commands;
+using Content.Shared._CMU14.Ghost.Roles;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 
@@ -112,4 +113,11 @@ public sealed partial class GhostRoleComponent : Component
     [DataField("job")]
     [Access(typeof(GhostRoleSystem), Other = AccessPermissions.ReadWriteExecute)] // also FIXME Friends
     public ProtoId<JobPrototype>? JobProto = null;
+
+    /// <summary>
+    /// Which rail entry the ghost roles window lists this role under.
+    /// </summary>
+    [DataField]
+    [Access(typeof(GhostRoleSystem), Other = AccessPermissions.ReadWriteExecute)]
+    public ProtoId<GhostRoleCategoryPrototype>? Category;
 }

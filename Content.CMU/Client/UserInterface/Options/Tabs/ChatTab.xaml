@@ -1,0 +1,65 @@
+<tabs:ChatTab xmlns="https://spacestation14.io"
+              xmlns:tabs="clr-namespace:Content.Client._CMU14.UserInterface.Options.Tabs"
+              xmlns:ui="clr-namespace:Content.Client.Options.UI"
+              xmlns:cmu="clr-namespace:Content.Client._CMU14.UserInterface.Options">
+    <BoxContainer Orientation="Vertical">
+        <ScrollContainer VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False">
+            <BoxContainer Orientation="Vertical" Margin="10 8 10 8" SeparationOverride="2" VerticalExpand="True">
+
+                <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-group-chat-text'}">
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="EnableColorNameCheckBox" Text="{Loc 'ui-options-enable-color-name'}" />
+                            <CheckBox Name="ChatReadableFontCheckBox" Text="{Loc 'ui-options-crt-chat-readable-font'}" ToolTip="{Loc 'ui-options-crt-chat-readable-font-tooltip'}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="RMCChatSquadColorModeCheckBox" Text="{Loc 'cmu-ui-options-squad-color-names'}" ToolTip="{Loc 'cmu-ui-options-squad-color-names-tooltip'}" />
+                            <CheckBox Name="ShowOocPatronColor" Text="{Loc 'ui-options-show-ooc-patron-color'}" />
+                        </BoxContainer>
+                    </BoxContainer>
+                    <ui:OptionDropDown Name="ChatBigFontDropDown" Title="{Loc 'ui-options-crt-chat-big-font'}" ToolTip="{Loc 'ui-options-crt-chat-big-font-tooltip'}" />
+                    <ui:OptionDropDown Name="ChatRowTintDropDown" Title="{Loc 'ui-options-crt-chat-row-tint'}" ToolTip="{Loc 'ui-options-crt-chat-row-tint-tooltip'}" />
+                    <ui:OptionSlider Name="ChatWindowOpacitySlider" Title="{Loc 'ui-options-chat-window-opacity'}" />
+                </cmu:CmuOptionSection>
+
+                <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-group-chat-bubbles'}">
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="RunechatSpeechBubblesCheckBox" Text="{Loc 'ui-options-runechat-speech'}" />
+                            <CheckBox Name="ShowLoocAboveHeadCheckBox" Text="{Loc 'cmu-ui-options-show-looc-on-head'}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="FancySpeechBubblesCheckBox" Text="{Loc 'ui-options-fancy-speech'}" />
+                            <CheckBox Name="FancyNameBackgroundsCheckBox" Text="{Loc 'ui-options-fancy-name-background'}" />
+                        </BoxContainer>
+                    </BoxContainer>
+                    <ui:OptionSlider Name="RunechatSpeechBubbleScaleSlider" Title="{Loc 'ui-options-runechat-speech-scale'}" />
+                    <ui:OptionSlider Name="SpeechBubbleTextOpacitySlider" Title="{Loc 'ui-options-speech-bubble-text-opacity'}" />
+                    <ui:OptionSlider Name="SpeechBubbleSpeakerOpacitySlider" Title="{Loc 'ui-options-speech-bubble-speaker-opacity'}" />
+                    <ui:OptionSlider Name="SpeechBubbleBackgroundOpacitySlider" Title="{Loc 'ui-options-speech-bubble-background-opacity'}" />
+                </cmu:CmuOptionSection>
+
+                <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-group-chat-messages'}">
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="ExamineLogInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-log-in-chat'}" ToolTip="{Loc 'cmu-ui-options-examine-log-in-chat-tooltip'}" />
+                            <CheckBox Name="ChatGhostFollowButton" Text="{Loc 'cmu-ui-options-chat-follow-button'}" ToolTip="{Loc 'cmu-ui-options-chat-follow-button-tooltip'}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="ExamineFullTextInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-full-text-in-chat'}" ToolTip="{Loc 'cmu-ui-options-examine-full-text-in-chat-tooltip'}" />
+                        </BoxContainer>
+                    </BoxContainer>
+                </cmu:CmuOptionSection>
+
+                <cmu:CmuOptionSection Title="{Loc 'ui-options-accessability-header-highlights'}">
+                    <CheckBox Name="AutoFillHighlightsCheckBox" Text="{Loc 'cmu-ui-options-auto-fill-highlights'}" ToolTip="{Loc 'cmu-ui-options-auto-fill-highlights-tooltip'}" />
+                    <ui:OptionColorSlider Name="HighlightsColorSlider"
+                                          Title="{Loc 'cmu-ui-options-highlights-color'}"
+                                          Palette="CMUHighlightColors" />
+                </cmu:CmuOptionSection>
+
+            </BoxContainer>
+        </ScrollContainer>
+        <ui:OptionsTabControlRow Name="Control" Access="Public" />
+    </BoxContainer>
+</tabs:ChatTab>

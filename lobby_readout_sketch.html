@@ -1,0 +1,315 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1">
+<title>Lobby Readout Sketch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Share+Tech+Mono&family=Allerta+Stencil&display=swap">
+<style>
+  :root {
+    color-scheme: dark;
+    --page: #0e100e;
+    --void: #040705; --s0: #071009; --s1: #0D1A12; --s2: #152F20; --s3: #204833; --s4: #2E6241;
+    --line: #2A5238; --dim: #4E9C6B; --text: #8FE9AE; --bright: #C9FFDC;
+    --accent: #46FF8E; --caution: #FFB454; --alert: #FF4E5E;
+    --prose: #bcc6bd; --prose-dim: #849085;
+    --osd: "Share Tech Mono", "Cascadia Mono", Consolas, monospace;
+    --stencil: "Allerta Stencil", "Share Tech Mono", Impact, sans-serif;
+    --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  }
+  body { margin: 0; background: var(--page); color: var(--prose); font: 15px/1.6 var(--sans); }
+  .wrap { max-width: 1200px; margin: 0 auto; padding-inline: 20px; padding-block: 36px 80px; }
+
+  header { display: grid; gap: 8px; margin-bottom: 22px; max-width: 80ch; }
+  .eyebrow { font: 13px var(--osd); letter-spacing: .16em; color: #8a8f82; text-transform: uppercase; }
+  h1 { margin: 0; font: 400 32px/1.1 var(--stencil); color: #e3dfd2; letter-spacing: .02em; }
+  header p { margin: 0; color: var(--prose-dim); }
+  h2 { font: 19px var(--stencil); letter-spacing: .06em; text-transform: uppercase; color: #d9d3c1; margin: 0 0 6px; }
+  section { padding-block: 32px; border-top: 1px solid #242722; }
+
+  .toolbar { display: flex; flex-wrap: wrap; gap: 18px 28px; align-items: center; margin-bottom: 22px; }
+  .ctl-label { font: 12px var(--osd); letter-spacing: .14em; text-transform: uppercase; color: #8a8f82; margin-right: 10px; }
+  .chips { display: inline-flex; flex-wrap: wrap; gap: 6px; vertical-align: middle; }
+  .chip { all: unset; cursor: pointer; padding: 6px 12px; font: 13px var(--osd); letter-spacing: .08em; text-transform: uppercase;
+    color: #cfcabb; background: linear-gradient(#34372f, #282a25); border-radius: 3px;
+    box-shadow: inset 0 1px 0 #50544a, inset 0 -2px 0 #141512; }
+  .chip:hover { background: linear-gradient(#3d4037, #2f322b); }
+  .chip[aria-pressed="true"] { background: linear-gradient(#1b1d19, #23261f); color: var(--accent); box-shadow: inset 0 2px 0 #0c0d0b, inset 0 -1px 0 #3b3f36; }
+
+  .stage { display: flex; gap: 26px; align-items: flex-start; flex-wrap: wrap; }
+
+  /* ---------- the housing, as built ---------- */
+  .housing {
+    --h-top: #2b2e28; --h-bot: #1a1c18; --h-hi: #454940; --h-lo: #0b0c0a; --ink: #b9b6a8; --ink-dim: #7c7c70;
+    --k-top: #4a4d45; --k-bot: #36392f; --k-hi: #6c7065; --k-lo: #191a16; --k-ink: #dcd8c9;
+    box-sizing: border-box; width: 460px; padding: 9px 12px 12px; display: grid; gap: 4px; position: relative;
+    background: linear-gradient(180deg, var(--h-top), var(--h-bot));
+    box-shadow: inset 0 1px 0 var(--h-hi), inset 1px 0 0 var(--h-hi), inset 0 -2px 0 var(--h-lo), inset -1px 0 0 var(--h-lo); }
+  .housing.olive { --h-top: #30331f; --h-bot: #1f2115; --h-hi: #4d5234; --ink: #c2bf9e; --ink-dim: #858263;
+    --k-top: #4f533a; --k-bot: #3b3e2a; --k-hi: #6f7452; --k-ink: #e2dec2; }
+  .housing.beige { --h-top: #b7ae96; --h-bot: #968d76; --h-hi: #d8d0b8; --h-lo: #5f5848; --ink: #2d2a22; --ink-dim: #5a5545;
+    --k-top: #e0d9c4; --k-bot: #c7bfa7; --k-hi: #f5efdc; --k-lo: #7a7260; --k-ink: #2a2720; }
+  .screw { position: absolute; width: 7px; height: 7px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #9a9d93, #4a4c45 60%, #25261f);
+    box-shadow: 0 1px 0 rgba(255,255,255,.08), inset 0 0 0 1px rgba(0,0,0,.4); }
+  .screw.tl { top: 4px; left: 4px; } .screw.tr { top: 4px; right: 4px; }
+  .screw.bl { bottom: 4px; left: 4px; } .screw.br { bottom: 4px; right: 4px; }
+
+  .plate { display: flex; align-items: baseline; gap: 10px; padding-inline: 4px; padding-bottom: 4px; }
+  .plate .name { font: 14px var(--stencil); letter-spacing: .09em; color: var(--ink); text-transform: uppercase; }
+  .plate .spacer { flex: 1; }
+  .plate .serial { font: 10px var(--osd); letter-spacing: .1em; color: var(--ink-dim); text-transform: uppercase; }
+
+  .keys { display: flex; gap: 1px; }
+  .key { flex: 1; text-align: center; padding: 6px 4px; border-radius: 2px;
+    font: 10px var(--osd); letter-spacing: .05em; text-transform: uppercase; color: var(--k-ink); cursor: pointer;
+    background: linear-gradient(180deg, var(--k-top), var(--k-bot));
+    box-shadow: inset 0 1px 0 var(--k-hi), inset 0 -3px 0 var(--k-lo); }
+  .key.narrow { flex: 0 0 26px; }
+
+  /* the two-position detent switch, as built */
+  .mode { display: flex; gap: 2px; padding: 3px; background: var(--k-lo);
+    box-shadow: inset 0 2px 0 var(--k-lo), inset 0 -1px 0 var(--k-hi); }
+  .mode button { all: unset; flex: 1; text-align: center; cursor: pointer; padding: 4px 4px;
+    font: 10px var(--osd); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-dim); }
+  .mode button.on { color: var(--k-ink); background: linear-gradient(180deg, var(--k-top), var(--k-bot));
+    box-shadow: inset 0 1px 0 var(--k-hi), inset 0 -3px 0 var(--k-lo); }
+
+  /* ---------- the readout: the thing being designed ---------- */
+  /* Lit: a second, much smaller tube set into the case. Honest about what it is - it IS a display,
+     just a separate instrument from the big one, which is also why it gets its own recess. */
+  .readout { display: flex; gap: 1px; }
+  .readout .cell { flex: 1; display: flex; align-items: baseline; gap: 6px; padding: 5px 8px; min-width: 0; }
+  .readout .k { font: 9px var(--osd); letter-spacing: .12em; text-transform: uppercase; white-space: nowrap; }
+  .readout .v { font: 12px var(--osd); letter-spacing: .04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .readout .v em { font-style: normal; }
+
+  .readout.lit { padding: 2px; background: var(--h-lo); box-shadow: inset 0 2px 3px rgba(0,0,0,.6), inset 0 -1px 0 rgba(255,255,255,.05); }
+  .readout.lit .cell { position: relative; background: radial-gradient(ellipse 90% 140% at 50% 40%, #0c1b11, #06100a 70%);
+    box-shadow: inset 0 0 8px rgba(0,0,0,.7); overflow: hidden; }
+  .readout.lit .cell::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: repeating-linear-gradient(180deg, rgba(0,0,0,.22) 0 1px, transparent 1px 3px); }
+  .readout.lit .k { color: var(--dim); }
+  .readout.lit .v { color: var(--bright); }
+  .readout.lit .v em { color: var(--dim); }
+
+  /* Printed: no glass at all, the numbers are stamped on the case like the plate is. Quietest
+     option, and the only one that costs nothing to build. */
+  .readout.printed { padding: 0; }
+  .readout.printed .cell { padding-inline: 4px; }
+  .readout.printed .k { color: var(--ink-dim); text-shadow: 0 1px 0 rgba(255,255,255,.05); }
+  .readout.printed .v { color: var(--ink); text-shadow: 0 1px 0 rgba(255,255,255,.05); }
+  .readout.printed .v em { color: var(--ink-dim); }
+
+  /* when it shares the switch's row */
+  .switchrow { display: flex; gap: 6px; align-items: stretch; }
+  .switchrow .mode { flex: 0 0 190px; }
+  .switchrow .readout { flex: 1; min-width: 0; }
+
+  /* plate placement: sits where the serial was */
+  .plate .readout { flex: 0 0 auto; }
+  .plate .readout .cell { padding: 0 0 0 12px; }
+
+  /* ---------- screen ---------- */
+  .screen { position: relative; border-radius: 9px; overflow: hidden; margin-top: 4px;
+    background: radial-gradient(ellipse 90% 80% at 50% 40%, #0c1b11, #06100a 60%, #030704);
+    box-shadow: 0 0 0 3px var(--h-lo), 0 0 0 4px var(--h-hi), inset 0 0 22px rgba(0,0,0,.85);
+    display: flex; flex-direction: column; }
+  .screen::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+    background: repeating-linear-gradient(180deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px); }
+
+  .info-body { padding: 9px 11px 11px; display: grid; gap: 7px; height: 150px; box-sizing: border-box; align-content: start; }
+  .info-head { display: flex; align-items: baseline; gap: 8px; }
+  .info-head .heading { font: 11px var(--osd); letter-spacing: .12em; color: var(--dim); text-transform: uppercase; }
+  .info-head .rule { flex: 1; height: 0; border-top: 1px solid var(--line); }
+  .info-head .stats { font: 10px var(--osd); color: var(--dim); white-space: nowrap; }
+  .info-head .stats b { color: var(--text); font-weight: 400; }
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .info-grid .cell { background: var(--s1); padding: 3px 7px 4px; }
+  .info-grid .cell .k { font: 9px var(--osd); letter-spacing: .06em; color: var(--dim); text-transform: uppercase; }
+  .info-grid .cell .v { font: 11px var(--osd); }
+  .info-grid .cell.lead .v { color: var(--bright); }
+  .info-grid .cell.govfor .v { color: #6fb8ff; }
+  .info-grid .cell.opfor .v { color: #ff8a7a; }
+
+  .seam { flex: none; height: 16px; width: 100%; background-repeat: repeat-x; background-position: center;
+    margin-inline: -11px; width: calc(100% + 22px); }
+  .seam-gunmetal { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAQCAYAAACm53kpAAABVklEQVR4nOWXzU7DMBCEZ13bAUGatOVXSAhxQUI8AxcOvP8BCQk4cAGqEkIR5N9ZZLcqvAAOar5L4pN31jMrm66uLxk9Rk5fZugzsmka9BnJnQWAQUSLv1URi7VP5M/mvrD7EYQgGGPALUMq6b6M1nsTpP8GAESMNJkjy3LnAq0V4lEEIQRsG9a4AexEztMPVFWN84szDOQAtzd3eJ0l2NvfBbNfF0jfDmgagyzLMNkZI0lS5FkOHSh8fdbIiwJBEPyaCX+PtNnziT1hq68oSsSbGzg8OgCB8XD/CNMYQLObB2sbARICSiuX/SgeOrM/P01RVzWiKIQxNgL+oJPTY78WILgTTt/eQYIwEAJVXSOOh1BKLe3vdQa08IprN2E8GaEsSyc4HIawVwLTtkvpXiOADmAnXGvthLf2DrCsw3c50rQGndHdBXAFbYdb/X4NcnePgX/BN3nKpb+BtUNqAAAAAElFTkSuQmCC); }
+  .seam-olive { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAQCAYAAACm53kpAAABSUlEQVR4nOVWy07DMBCctR31kRboCxAIOCHOwGdw4c8RFySuFFHUqD20aUjTxIu8pfAHNmrmYks+7Ox6Znfp4fGOUWOYj/c56gxTllW46DvtUTgKhgMagH4SD8nBcKDoWis49VnLiCINxyMEFeM7qHw6Ack0RbpcgxSh0TAYDmMoRb+u2E8FMKA0YTbLsM5L3N5fwUQKz09jfE4WODs/FCXstQU2G5afH50cIJkusFoVooDlIkeWFWi1IliPnAxbb7FE+i45V/T8q0Acd3Bx2QcT8PoyQVVa6QM+ORnfFtB663kiwlGvLef4bY6iKDEYtFFZ+zcePYCub079eoBIOv8sSUUSbhq45PuDthQmQA+AXzDLJBgdd5HnGylGr9+SnaCy27da7AHMjGbTyN0VYUfD+xisqnBrWMjYO1CnG4dnERAmlAX+C74By3Wiut30Am4AAAAASUVORK5CYII=); }
+  .seam-beige { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAQCAYAAACm53kpAAABgUlEQVR4nOWWMU8CQRCF3x57EKQAj6MyNAYTNFEKIzbGX2HF79NKKgtiYW9M5NQoJmiDEtEgmBATYJfdPbN7Gv/BXsK95sq5nfnemyGPQStEgkVfej0kWZRzjiSLhmE8DtB1HccBIQRSSvONQ1QpFUvhdNrFbDY3j8/lViCENE1JRAMIcRDcdtB/HRgKPC+P2s4WXJdCqRA2YaBS2muAnnAmk8ZD5wmD9yEajSNksxkcnzRxeRXg8KAOpSI72IKBhqFNAgim0xle+2/YqKyj233G52iMQiGPweADw+EIvu9BCGEtE6hNAhyHmMdp308m3yiVfOzXdyGFROv8AnPGNSaIbEmWjwAhIgsUvYKxQ7m8ZjKg3b4DYwx+cRWMc4M/IeHyEaDF+QKb1QqCmw5Om2dwXReMzVHbrv6uRGFt+rFsgb/9X9+rYTT+Muuv5HtIpRzooyzyfrjch5BSyqS9Rl5PW+fCYhEFn+3/oUwHT0z6rx3PFahFr4N7JFlUo5dk/QBz7MhHnr+zqQAAAABJRU5ErkJggg==); }
+
+  .chat { flex: 1; display: flex; flex-direction: column; min-height: 150px; }
+  .tabs { display: flex; font: 10px var(--osd); padding: 7px 11px 0; gap: 4px; }
+  .tab { padding: 3px 7px; color: var(--dim); }
+  .tab.sel { color: var(--bright); box-shadow: inset 0 -2px 0 var(--accent); }
+  .log { flex: 1; padding: 6px 11px; display: flex; flex-direction: column; justify-content: flex-end; gap: 3px; }
+  .msg { font: 11px/1.35 var(--osd); }
+  .msg .p { color: var(--caution); margin-right: 6px; }
+  .cmdline { display: flex; align-items: center; gap: 8px; padding: 7px 11px 9px; font: 10px var(--osd); color: var(--dim);
+    border-top: 1px dashed var(--line); margin: 0 11px; }
+  .cmdline .caret { width: 5px; height: 11px; background: var(--accent); opacity: .85; }
+
+  .caption { font: 12px var(--osd); letter-spacing: .06em; text-transform: uppercase; color: #8a8f82; margin-bottom: 8px; }
+
+  /* ---------- notes ---------- */
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 16px 10px 0; border-bottom: 1px solid #242722; }
+  th { font: 12px var(--osd); letter-spacing: .14em; text-transform: uppercase; color: #8a8f82; font-weight: 400; }
+  td:first-child { color: #e3dfd2; font-weight: 600; white-space: nowrap; }
+  .cost { font: 12px var(--osd); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+  .cost.low { color: var(--text); } .cost.mid { color: #d8b04a; } .cost.high { color: #d9786f; }
+  .aside { margin-top: 22px; display: grid; gap: 12px; max-width: 86ch; }
+  .aside div { padding-left: 14px; box-shadow: inset 2px 0 0 #c9a227; }
+  .aside b { color: #e3dfd2; font-weight: 600; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">CMU · lobby · players + round time</div>
+    <h1>The readout, not a tab</h1>
+    <p>Players and round time currently share the SERVER INFO heading line, competing with the title
+      for a row that was never wide enough for three things. Rather than give each of them a position
+      on the switch — where they would be a room with one line in it, and where you would only see
+      them when that position happened to be selected — this puts them on the case, where they are
+      readable whichever panel the screen is showing. Everything else here is the column as it is
+      actually built now.</p>
+  </header>
+
+  <div class="toolbar">
+    <div><span class="ctl-label" id="place-label">Placement</span><span class="chips" role="group" aria-labelledby="place-label" id="places"></span></div>
+    <div><span class="ctl-label" id="style-label">Readout</span><span class="chips" role="group" aria-labelledby="style-label" id="styles"></span></div>
+    <div><span class="ctl-label" id="tone-label">Housing</span><span class="chips" role="group" aria-labelledby="tone-label" id="tones"></span></div>
+  </div>
+
+  <div class="stage" id="stage"></div>
+
+  <section>
+    <h2>What each part would take</h2>
+    <table>
+      <thead><tr><th>Part</th><th>Work</th><th>Detail</th></tr></thead>
+      <tbody>
+        <tr><td>Move the two fields out of the heading</td><td><span class="cost low">Small</span></td><td><code>ServerInfo</code> already builds them as <code>StatsColumn</code>, a standalone control it exposes precisely so the lobby can place it elsewhere. Reparenting it is the whole change.</td></tr>
+        <tr><td>Printed on the case</td><td><span class="cost low">Small</span></td><td>Two labels in the tone's ink, same treatment <code>CmuLobbyLook</code> already gives the plate. No new texture, no new control.</td></tr>
+        <tr><td>Lit instrument recess</td><td><span class="cost mid">Medium</span></td><td>Needs a small recess box — a <code>CmuBevelStyleBox</code> inverted like the switch track, with the screen's glass fill inside it. No new texture either, but it is a new panel with its own metrics.</td></tr>
+        <tr><td>Players as a real roster</td><td><span class="cost high">Large</span></td><td>Not in this sketch. There is no client-side lobby player list at all — <code>PlayersLabel</code> is one string from the round-info payload. A roster means new networking, and that is a feature rather than a restyle.</td></tr>
+      </tbody>
+    </table>
+    <div class="aside">
+      <div><b>Why not tabs.</b> A tab is a place you go. Round time and player count are things you want in the corner of your eye while doing something else — picking a character, reading the round info, typing in chat. Putting them behind a selector means they are invisible exactly when they matter, and the round clock already has a large dedicated panel elsewhere in the lobby, so a Time tab would be the same fact in a worse place.</div>
+      <div><b>Lit vs printed is a real choice, not a detail.</b> Printed says these are labels on a box: quiet, always there, never competing with the screen. Lit says they are live instruments, which is truer — the numbers do change — and it suits the equipment, but it puts a second glowing thing next to the main screen, and this panel has spent a lot of effort establishing that lit means screen and unlit means case.</div>
+      <div><b>Placement changes what it reads as</b> — but two of the three do not survive the real column width, which is what this sketch is set to. On the plate it would be nameplate furniture like the serial, except the fixed name is long enough that the readout wraps it onto two lines <em>and</em> still clips the round time. Beside the switch is the most compact, but the same clipping happens: "NOT STARTED" is about the longest round-time string and there is not room for it next to a two-position switch. Its own row is the only one that fits both fields whole, and it is also the one that reads as an instrument rather than as decoration.</div>
+      <div><b>What this can't show:</b> the in-game scanline grain over the readout glass, and what a long value does to it — "NOT STARTED" is about the longest round-time string, but a player count on a full server is wider than the "1 (0 ready)" here.</div>
+    </div>
+  </section>
+</div>
+
+<script>
+const TONES = [["gunmetal", "Gunmetal"], ["olive", "Olive drab"], ["beige", "Beige"]];
+const PLACES = [["window", "Own row (instrument)"], ["switch", "Beside the switch"], ["plate", "On the nameplate"]];
+const STYLES = [["lit", "Lit instrument"], ["printed", "Printed on case"]];
+
+const ROUND_FIELDS = [
+  { k: "PLANET", v: "SHEPHERDS' PRIDE", cls: "lead" },
+  { k: "GAMEMODE", v: "COLONY FALL", cls: "lead" },
+  { k: "GOVFOR SHIP", v: "USS BUSH REDUX", cls: "govfor" },
+  { k: "OPFOR SHIP", v: "USS BUSH REDUX", cls: "opfor" },
+  { k: "GOVFOR PLATOON", v: "LACN LANDING FORCES", cls: "govfor" },
+  { k: "OPFOR PLATOON", v: "UPP NAVAL INFANTRY", cls: "opfor" },
+];
+
+let tone = "olive", place = "window", style = "lit", panel = "server";
+const $ = id => document.getElementById(id);
+
+function readout(compact) {
+  return `<div class="readout ${style}">
+    <div class="cell"><span class="k">Players</span><span class="v">1 <em>(0 rdy)</em></span></div>
+    <div class="cell"><span class="k">Round</span><span class="v">${compact ? "NOT STARTED" : "NOT STARTED"}</span></div>
+  </div>`;
+}
+
+function plateRow() {
+  return `<div class="plate">
+    <span class="name">Colonial Marines Universe</span>
+    ${place === "plate" ? `<span class="spacer"></span>${readout(true)}` : `<span class="spacer"></span><span class="serial">Mod. LB-1 · 12</span>`}
+  </div>`;
+}
+
+function keysRow() {
+  return `<div class="keys">${["AHelp", "Call Vote", "Options", "Leave"].map(t => `<div class="key">${t}</div>`).join("")}<div class="key narrow">&#9654;</div></div>`;
+}
+
+function modeSwitch() {
+  return `<div class="mode">
+    <button type="button" data-panel="server" class="${panel === "server" ? "on" : ""}">Server</button>
+    <button type="button" data-panel="character" class="${panel === "character" ? "on" : ""}">Character</button>
+  </div>`;
+}
+
+function controlRows() {
+  if (place === "switch")
+    return `<div class="switchrow">${modeSwitch()}${readout(true)}</div>`;
+  if (place === "window")
+    return `${readout(false)}${modeSwitch()}`;
+  return modeSwitch();
+}
+
+function serverInner() {
+  // The heading keeps only the heading now - which is the point of the whole move.
+  return `<div class="info-body">
+    <div class="info-head"><span class="heading">Server info</span><span class="rule"></span></div>
+    <div class="info-grid">${ROUND_FIELDS.map(f =>
+      `<div class="cell ${f.cls}"><div class="k">${f.k}</div><div class="v">${f.v}</div></div>`).join("")}</div>
+  </div>`;
+}
+
+function characterInner() {
+  return `<div class="info-body">
+    <div class="info-head"><span class="heading">Character</span><span class="rule"></span></div>
+    <div style="display:flex;gap:10px;align-items:center;padding-top:6px">
+      <div style="width:34px;height:34px;border-radius:50%;background:var(--s2);flex:none"></div>
+      <div><div style="font:12px var(--osd);color:var(--bright)">Isiah Riggle</div>
+      <div style="font:10px var(--osd);color:var(--dim)">He is 58 years old</div></div>
+    </div>
+  </div>`;
+}
+
+function chatInner() {
+  return `<div class="chat">
+    <div class="tabs"><span class="tab sel">All</span><span class="tab">Radio</span><span class="tab">Dead chat (2)</span></div>
+    <div class="log">
+      <div class="msg"><span class="p">ADM</span>Admin login: localhost@JoeGenero</div>
+      <div class="msg"><span class="p">SYS</span>Welcome to CMU! Read the rules.</div>
+    </div>
+    <div class="cmdline"><span class="caret"></span>T to talk, Tab to cycle channels.</div>
+  </div>`;
+}
+
+function column() {
+  return `<div class="housing ${tone}">
+    <span class="screw tl"></span><span class="screw tr"></span><span class="screw bl"></span><span class="screw br"></span>
+    ${plateRow()}
+    ${keysRow()}
+    ${controlRows()}
+    <div class="screen">
+      ${panel === "server" ? serverInner() : characterInner()}
+      <div class="seam seam-${tone}"></div>
+      ${chatInner()}
+    </div>
+  </div>`;
+}
+
+function render() {
+  $("stage").innerHTML = `<div><div class="caption">${PLACES.find(p => p[0] === place)[1]} &middot; ${STYLES.find(s => s[0] === style)[1]}</div>${column()}</div>`;
+  $("stage").querySelectorAll("[data-panel]").forEach(b =>
+    b.addEventListener("click", () => { panel = b.dataset.panel; render(); }));
+}
+
+function chips(el, items, get, set) {
+  const draw = () => el.innerHTML = items.map(([v, l]) =>
+    `<button type="button" class="chip" data-v="${v}" aria-pressed="${get() === v}">${l}</button>`).join("");
+  el.addEventListener("click", e => { const b = e.target.closest("button[data-v]"); if (!b) return; set(b.dataset.v); draw(); render(); });
+  draw();
+}
+chips($("places"), PLACES, () => place, v => place = v);
+chips($("styles"), STYLES, () => style, v => style = v);
+chips($("tones"), TONES, () => tone, v => tone = v);
+render();
+</script>
+</body></html>

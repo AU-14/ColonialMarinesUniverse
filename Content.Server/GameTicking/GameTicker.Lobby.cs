@@ -159,11 +159,16 @@ namespace Content.Server.GameTicking
 
             string Display(string? value) => !string.IsNullOrWhiteSpace(value) ? value : Loc.GetString("lobby-info-none"); // CMU14: Hardcode localization
 
+            var govfor = Loc.GetString("lobby-info-govfor");
+            var opfor = Loc.GetString("lobby-info-opfor");
+
             // Order is the display order - the lobby renders these in sequence, so this list is
             // where the panel's reading order is decided. Planet and gamemode lead because they are
-            // what a player checks first to decide whether to ready up; the GOVFOR/OPFOR pairs are
-            // reference detail read afterwards, and each pair is kept adjacent so the two sides sit
-            // side by side in the two-column grid rather than stacking.
+            // what a player checks first to decide whether to ready up. Each side's fields are then
+            // kept together under its own group heading rather than the two sides being interleaved
+            // row by row: that is what lets SHIP and PLATOON be named once per side instead of every
+            // label carrying the side it belongs to. The player count stays last - the lobby pulls it
+            // out of the run and shows it with the round timer.
             return new List<LobbyRoundInfoField>
             {
                 new(Loc.GetString("lobby-info-planet"), Display(GetPlanetMapName())),

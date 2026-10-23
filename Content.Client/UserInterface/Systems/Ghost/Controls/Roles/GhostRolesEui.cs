@@ -101,7 +101,10 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
                 foreach (var force in ghostState.Forces)
                     _window.AddForceEntry(force);
 
-                // Grouping roles
+                // TODO: role.Requirements value doesn't work at all as an equality key, this must be fixed
+                // Grouping roles. Category joins the key so a role offered by two factions - a working
+                // joe on the colony and one aboard a corporate vessel - does not end up under one
+                // banner filed in whichever of the two the first entity happened to belong to.
                 var groupedRoles = ghostState.GhostRoles.GroupBy(
                     role => (
                         role.Name,
@@ -112,7 +115,8 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
                             role.Requirements,
                             null,
                             out var reason),
-                        reason));
+                        reason,
+                        role.Category));
 
                 // Add a new entry for each role group
                 foreach (var group in groupedRoles)
@@ -123,7 +127,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
                     var prototypesAllowed = group.Key.Item3;
 
                     // Adding a new role
-                    _window.AddEntry(name, description, prototypesAllowed, reason, group, spriteSystem);
+                    _window.AddEntry(name, description, group.Key.Category, prototypesAllowed, reason, group, spriteSystem);
                 }
             }
             finally

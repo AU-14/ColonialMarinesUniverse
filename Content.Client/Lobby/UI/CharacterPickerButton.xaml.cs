@@ -37,7 +37,6 @@ public sealed partial class CharacterPickerButton : ContainerButton
     {
         RobustXamlLoader.Load(this);
         AddStyleClass(StyleClassButton);
-        AddStyleClass(StyleNano.StyleClassCrtButton);
         ToggleMode = true;
         Group = group;
 
@@ -63,6 +62,12 @@ public sealed partial class CharacterPickerButton : ContainerButton
         };
 
         CrtLobbyTheme.Apply(this);
+
+        // After the theme walk, which would otherwise hand this row the shared button class.
+        RemoveStyleClass(StyleNano.StyleClassCrtButton);
+        AddStyleClass(StyleNano.StyleClassCmuCharacterSlot);
+        NameLabel.FontColorOverride = CrtTerminalPalette.TextBright;
+        JobLabel.FontColorOverride = CrtTerminalPalette.Text;
     }
 
     protected override void FrameUpdate(FrameEventArgs args)

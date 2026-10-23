@@ -352,13 +352,14 @@ public sealed partial class RadioSystem : SharedRadioSystem
         var ghostWrappedMessage = _chatManager.PrependFollowButtonIfAppropriate(
             chatMsg.Message.WrappedMessage,
             messageSource,
-            recipient);
+            recipient,
+            out var followEntity);
         var wrappedMessage = _chatManager.AddXenoWatchButton(
             ghostWrappedMessage,
             messageSource,
             recipient);
 
-        if (wrappedMessage == chatMsg.Message.WrappedMessage)
+        if (wrappedMessage == chatMsg.Message.WrappedMessage && !followEntity.Valid)
             return chatMsg;
 
         return new MsgChatMessage
@@ -366,9 +367,7 @@ public sealed partial class RadioSystem : SharedRadioSystem
             Message = new ChatMessage(chatMsg.Message)
             {
                 WrappedMessage = wrappedMessage,
-                GhostFollowEntity = ghostWrappedMessage != chatMsg.Message.WrappedMessage
-                    ? GetNetEntity(messageSource)
-                    : NetEntity.Invalid,
+                GhostFollowEntity = followEntity,
                 XenoWatchEntity = wrappedMessage != ghostWrappedMessage
                     ? GetNetEntity(messageSource)
                     : NetEntity.Invalid,

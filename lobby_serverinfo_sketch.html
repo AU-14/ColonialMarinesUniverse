@@ -1,0 +1,384 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1">
+<title>Lobby Server Info Sketch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Share+Tech+Mono&family=Allerta+Stencil&display=swap">
+<style>
+  :root {
+    color-scheme: dark;
+    --page: #0e100e;
+    --void: #040705; --s0: #071009; --s1: #0D1A12; --s2: #152F20; --s3: #204833; --s4: #2E6241;
+    --line: #2A5238; --dim: #4E9C6B; --text: #8FE9AE; --bright: #C9FFDC;
+    --accent: #46FF8E; --caution: #FFB454;
+    --gov: #6fb8ff; --gov-dim: #3d6f9e; --opf: #ff8a7a; --opf-dim: #9e5148;
+    --prose: #bcc6bd; --prose-dim: #849085;
+    --osd: "Share Tech Mono", "Cascadia Mono", Consolas, monospace;
+    --stencil: "Allerta Stencil", "Share Tech Mono", Impact, sans-serif;
+    --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  }
+  body { margin: 0; background: var(--page); color: var(--prose); font: 15px/1.6 var(--sans); }
+  .wrap { max-width: 1560px; margin: 0 auto; padding-inline: 20px; padding-block: 36px 80px; }
+  header { display: grid; gap: 8px; margin-bottom: 20px; max-width: 82ch; }
+  .eyebrow { font: 13px var(--osd); letter-spacing: .16em; color: #8a8f82; text-transform: uppercase; }
+  h1 { margin: 0; font: 400 32px/1.1 var(--stencil); color: #e3dfd2; letter-spacing: .02em; }
+  header p { margin: 0; color: var(--prose-dim); }
+  h2 { font: 19px var(--stencil); letter-spacing: .06em; text-transform: uppercase; color: #d9d3c1; margin: 0 0 6px; }
+  section { padding-block: 30px; border-top: 1px solid #242722; }
+
+  .toolbar { display: flex; gap: 28px; align-items: center; margin-bottom: 20px; }
+  .ctl-label { font: 12px var(--osd); letter-spacing: .14em; text-transform: uppercase; color: #8a8f82; margin-right: 10px; }
+  .chips { display: inline-flex; gap: 6px; }
+  .chip { all: unset; cursor: pointer; padding: 6px 12px; font: 13px var(--osd); letter-spacing: .08em; text-transform: uppercase;
+    color: #cfcabb; background: linear-gradient(#34372f, #282a25); border-radius: 3px;
+    box-shadow: inset 0 1px 0 #50544a, inset 0 -2px 0 #141512; }
+  .chip[aria-pressed="true"] { background: linear-gradient(#1b1d19, #23261f); color: var(--accent); box-shadow: inset 0 2px 0 #0c0d0b, inset 0 -1px 0 #3b3f36; }
+
+  .stage { display: flex; gap: 22px; align-items: flex-start; flex-wrap: wrap; }
+  .col { display: grid; gap: 8px; }
+  .caption { font: 12px var(--osd); letter-spacing: .1em; text-transform: uppercase; color: #8a8f82; }
+  .caption b { color: #e3dfd2; font-weight: 400; }
+
+  /* ---------- housing, as built ---------- */
+  .housing {
+    --h-top: #2b2e28; --h-bot: #1a1c18; --h-hi: #454940; --h-lo: #0b0c0a; --ink: #b9b6a8; --ink-dim: #7c7c70;
+    --k-top: #4a4d45; --k-bot: #36392f; --k-hi: #6c7065; --k-lo: #191a16; --k-ink: #dcd8c9;
+    box-sizing: border-box; width: 462px; padding: 9px 12px 12px; display: grid; gap: 4px; position: relative;
+    background: linear-gradient(180deg, var(--h-top), var(--h-bot));
+    box-shadow: inset 0 1px 0 var(--h-hi), inset 1px 0 0 var(--h-hi), inset 0 -2px 0 var(--h-lo), inset -1px 0 0 var(--h-lo); }
+  .housing.olive { --h-top: #30331f; --h-bot: #1f2115; --h-hi: #4d5234; --ink: #c2bf9e; --ink-dim: #858263;
+    --k-top: #4f533a; --k-bot: #3b3e2a; --k-hi: #6f7452; --k-ink: #e2dec2; }
+  .housing.beige { --h-top: #b7ae96; --h-bot: #968d76; --h-hi: #d8d0b8; --h-lo: #5f5848; --ink: #2d2a22; --ink-dim: #5a5545;
+    --k-top: #e0d9c4; --k-bot: #c7bfa7; --k-hi: #f5efdc; --k-lo: #7a7260; --k-ink: #2a2720; }
+  .screw { position: absolute; width: 7px; height: 7px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #9a9d93, #4a4c45 60%, #25261f);
+    box-shadow: 0 1px 0 rgba(255,255,255,.08), inset 0 0 0 1px rgba(0,0,0,.4); }
+  .screw.tl { top: 4px; left: 4px; } .screw.tr { top: 4px; right: 4px; }
+  .screw.bl { bottom: 4px; left: 4px; } .screw.br { bottom: 4px; right: 4px; }
+  .plate { display: flex; align-items: baseline; padding-inline: 4px; padding-bottom: 4px; }
+  .plate .name { font: 14px var(--stencil); letter-spacing: .09em; color: var(--ink); text-transform: uppercase; }
+  .plate .spacer { flex: 1; }
+  .plate .serial { font: 10px var(--osd); letter-spacing: .1em; color: var(--ink-dim); text-transform: uppercase; }
+  .keys { display: flex; gap: 1px; }
+  .key { flex: 1; text-align: center; padding: 6px 4px; border-radius: 2px;
+    font: 10px var(--osd); letter-spacing: .05em; text-transform: uppercase; color: var(--k-ink);
+    background: linear-gradient(180deg, var(--k-top), var(--k-bot));
+    box-shadow: inset 0 1px 0 var(--k-hi), inset 0 -3px 0 var(--k-lo); }
+  .key.narrow { flex: 0 0 26px; }
+  .mode { display: flex; gap: 2px; padding: 3px; background: var(--k-lo);
+    box-shadow: inset 0 2px 0 var(--k-lo), inset 0 -1px 0 var(--k-hi); }
+  .mode span { flex: 1; text-align: center; padding: 4px; font: 10px var(--osd); letter-spacing: .06em;
+    text-transform: uppercase; color: var(--ink-dim); }
+  .mode span.on { color: var(--k-ink); background: linear-gradient(180deg, var(--k-top), var(--k-bot));
+    box-shadow: inset 0 1px 0 var(--k-hi), inset 0 -3px 0 var(--k-lo); }
+
+  .screen { position: relative; border-radius: 9px; overflow: hidden; margin-top: 4px;
+    background: radial-gradient(ellipse 90% 80% at 50% 40%, #0c1b11, #06100a 60%, #030704);
+    box-shadow: 0 0 0 3px var(--h-lo), 0 0 0 4px var(--h-hi), inset 0 0 22px rgba(0,0,0,.85);
+    display: flex; flex-direction: column; }
+  .screen::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; z-index: 3;
+    background: repeating-linear-gradient(180deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px); }
+  .seam { flex: none; height: 16px; margin-inline: -11px; width: calc(100% + 22px); background-repeat: repeat-x; }
+  .seam-gunmetal { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAQCAYAAACm53kpAAABVklEQVR4nOWXzU7DMBCEZ13bAUGatOVXSAhxQUI8AxcOvP8BCQk4cAGqEkIR5N9ZZLcqvAAOar5L4pN31jMrm66uLxk9Rk5fZugzsmka9BnJnQWAQUSLv1URi7VP5M/mvrD7EYQgGGPALUMq6b6M1nsTpP8GAESMNJkjy3LnAq0V4lEEIQRsG9a4AexEztMPVFWN84szDOQAtzd3eJ0l2NvfBbNfF0jfDmgagyzLMNkZI0lS5FkOHSh8fdbIiwJBEPyaCX+PtNnziT1hq68oSsSbGzg8OgCB8XD/CNMYQLObB2sbARICSiuX/SgeOrM/P01RVzWiKIQxNgL+oJPTY78WILgTTt/eQYIwEAJVXSOOh1BKLe3vdQa08IprN2E8GaEsSyc4HIawVwLTtkvpXiOADmAnXGvthLf2DrCsw3c50rQGndHdBXAFbYdb/X4NcnePgX/BN3nKpb+BtUNqAAAAAElFTkSuQmCC); }
+  .seam-olive { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAQCAYAAACm53kpAAABSUlEQVR4nOVWy07DMBCctR31kRboCxAIOCHOwGdw4c8RFySuFFHUqD20aUjTxIu8pfAHNmrmYks+7Ox6Znfp4fGOUWOYj/c56gxTllW46DvtUTgKhgMagH4SD8nBcKDoWis49VnLiCINxyMEFeM7qHw6Ack0RbpcgxSh0TAYDmMoRb+u2E8FMKA0YTbLsM5L3N5fwUQKz09jfE4WODs/FCXstQU2G5afH50cIJkusFoVooDlIkeWFWi1IliPnAxbb7FE+i45V/T8q0Acd3Bx2QcT8PoyQVVa6QM+ORnfFtB663kiwlGvLef4bY6iKDEYtFFZ+zcePYCub079eoBIOv8sSUUSbhq45PuDthQmQA+AXzDLJBgdd5HnGylGr9+SnaCy27da7AHMjGbTyN0VYUfD+xisqnBrWMjYO1CnG4dnERAmlAX+C74By3Wiut30Am4AAAAASUVORK5CYII=); }
+  .seam-beige { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAQCAYAAACm53kpAAABgUlEQVR4nOWWMU8CQRCF3x57EKQAj6MyNAYTNFEKIzbGX2HF79NKKgtiYW9M5NQoJmiDEtEgmBATYJfdPbN7Gv/BXsK95sq5nfnemyGPQStEgkVfej0kWZRzjiSLhmE8DtB1HccBIQRSSvONQ1QpFUvhdNrFbDY3j8/lViCENE1JRAMIcRDcdtB/HRgKPC+P2s4WXJdCqRA2YaBS2muAnnAmk8ZD5wmD9yEajSNksxkcnzRxeRXg8KAOpSI72IKBhqFNAgim0xle+2/YqKyj233G52iMQiGPweADw+EIvu9BCGEtE6hNAhyHmMdp308m3yiVfOzXdyGFROv8AnPGNSaIbEmWjwAhIgsUvYKxQ7m8ZjKg3b4DYwx+cRWMc4M/IeHyEaDF+QKb1QqCmw5Om2dwXReMzVHbrv6uRGFt+rFsgb/9X9+rYTT+Muuv5HtIpRzooyzyfrjch5BSyqS9Rl5PW+fCYhEFn+3/oUwHT0z6rx3PFahFr4N7JFlUo5dk/QBz7MhHnr+zqQAAAABJRU5ErkJggg==); }
+  .chat { flex: 1; display: flex; flex-direction: column; min-height: 120px; }
+  .tabs { display: flex; font: 10px var(--osd); padding: 7px 11px 0; gap: 4px; }
+  .tab { padding: 3px 7px; color: var(--dim); }
+  .tab.sel { color: var(--bright); box-shadow: inset 0 -2px 0 var(--accent); }
+  .log { flex: 1; padding: 6px 11px; display: flex; flex-direction: column; justify-content: flex-end; gap: 3px; }
+  .msg { font: 11px/1.35 var(--osd); }
+  .msg .p { color: var(--caution); margin-right: 6px; }
+  .cmdline { display: flex; align-items: center; gap: 8px; padding: 7px 11px 9px; font: 10px var(--osd); color: var(--dim);
+    border-top: 1px dashed var(--line); margin: 0 11px; }
+  .cmdline .caret { width: 5px; height: 11px; background: var(--accent); opacity: .85; }
+
+  /* ================= THE ZONE BEING DESIGNED =================
+     212px tall, the height the switch fixed it at. No cell fills anywhere: the glass is the
+     field, and regions are told apart by rules and space instead of by boxes. */
+  .zone { height: 212px; box-sizing: border-box; padding: 12px 14px; display: flex; flex-direction: column; }
+  .rule { height: 0; border-top: 1px solid var(--line); }
+  .rule.soft { border-top-color: #17301f; }
+  .grow { flex: 1; }
+
+  /* --- shared type --- */
+  .planet { font: 19px var(--stencil); letter-spacing: .07em; color: var(--bright); text-transform: uppercase; line-height: 1.1; }
+  .mode-tag { font: 11px var(--osd); letter-spacing: .16em; color: var(--caution); text-transform: uppercase; }
+  .lbl { font: 9px var(--osd); letter-spacing: .15em; color: var(--dim); text-transform: uppercase; }
+  .val { font: 12px var(--osd); letter-spacing: .02em; color: var(--text); }
+  .gov { color: var(--gov); } .opf { color: var(--opf); }
+  .gov-l { color: var(--gov-dim); } .opf-l { color: var(--opf-dim); }
+
+  /* --- A: briefing --- */
+  .a-head { display: flex; align-items: baseline; gap: 10px; }
+  .a-head .grow { border-bottom: 1px dotted #1d3a26; margin-bottom: 5px; }
+  .a-forces { display: grid; grid-template-columns: 58px 1fr 1fr; align-items: center; column-gap: 10px; row-gap: 5px; }
+  .a-forces .side { font: 10px var(--osd); letter-spacing: .18em; text-transform: uppercase; padding-bottom: 3px; }
+  .a-forces .bar { height: 2px; }
+  .a-foot { display: flex; align-items: baseline; gap: 8px; font: 11px var(--osd); }
+  .a-foot .v { color: var(--bright); }
+  .a-foot .dots { flex: 1; border-bottom: 1px dotted #1d3a26; margin-bottom: 4px; }
+
+  /* --- B: mirrored --- */
+  .b-head { text-align: center; }
+  .b-row { display: grid; grid-template-columns: 1fr 70px 1fr; align-items: center; column-gap: 6px; }
+  .b-row .l { text-align: right; } .b-row .r { text-align: left; }
+  .b-row .spine { text-align: center; font: 9px var(--osd); letter-spacing: .14em; color: var(--dim); text-transform: uppercase; }
+  .b-sides { display: grid; grid-template-columns: 1fr 70px 1fr; column-gap: 6px; }
+  .b-sides .l { text-align: right; } .b-sides .r { text-align: left; }
+  .b-foot { display: flex; justify-content: center; gap: 26px; font: 11px var(--osd); }
+  .b-foot .v { color: var(--bright); }
+
+  /* --- C: manifest --- */
+  .c-row { display: flex; align-items: baseline; gap: 8px; }
+  .c-row .k { font: 9px var(--osd); letter-spacing: .14em; color: var(--dim); text-transform: uppercase;
+    flex: 0 0 96px; }
+  .c-row .k.indent { padding-left: 14px; flex-basis: 96px; box-sizing: border-box; }
+  .c-row .dots { flex: 1; border-bottom: 1px dotted #1d3a26; margin-bottom: 4px; min-width: 10px; }
+  .c-row .v { font: 12px var(--osd); color: var(--text); white-space: nowrap; }
+  .c-group { font: 10px var(--osd); letter-spacing: .18em; text-transform: uppercase; }
+
+  /* ---------- notes ---------- */
+  .aside { margin-top: 20px; display: grid; gap: 12px; max-width: 92ch; }
+  .aside div { padding-left: 14px; box-shadow: inset 2px 0 0 #c9a227; }
+  .aside b { color: #e3dfd2; font-weight: 600; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">CMU · lobby · the server-info screen</div>
+    <h1>Eight facts, one screen</h1>
+    <p>The "SERVER INFO" title and its rule are gone — the screen is only ever showing this, so a
+      heading saying so is a row spent on nothing. Players and round time join the other six as
+      equals. Three takes on the same two rules: no cell fills, because eight filled boxes inside
+      the screen box is the nested-box problem at its worst; and the repeated labels factored out,
+      because GOVFOR SHIP / OPFOR SHIP / GOVFOR PLATOON / OPFOR PLATOON says SHIP twice and PLATOON
+      twice when the two forces could be named once each. D is the mix of A and C that came out of
+      comparing them, and is the one worth building.</p>
+  </header>
+
+  <div class="toolbar">
+    <div><span class="ctl-label" id="tone-label">Housing</span><span class="chips" role="group" aria-labelledby="tone-label" id="tones"></span></div>
+    <div><span class="ctl-label" id="len-label">Values</span><span class="chips" role="group" aria-labelledby="len-label" id="lens"></span></div>
+  </div>
+
+  <div class="stage" id="stage"></div>
+
+  <section>
+    <h2>Notes</h2>
+    <div class="aside">
+      <div><b>D — Hybrid, and the one to build.</b> A's head and foot with C's forces block between them. It turned out to be more than the sum: because C's rows right-align their values and A's head and foot already put their values on the right, every value in the panel now lands on one right margin — COLONY FALL, all four force names, and NOT STARTED share an edge. Neither parent does that on its own. It keeps the planet at full stencil size, which was A's whole argument, and inherits C's indifference to value length, which was C's — the lopsided case puts NONE on the right margin with a long leader and nothing else moves.</div>
+      <div><b>A — Briefing.</b> Reads top-down as a deployment order: where you are, then who is facing whom, then the state of the room. The two forces are columns under their own name, with a colour bar instead of a coloured box, and the row labels sit in a right-aligned gutter so SHIP and PLATOON are said once. The planet gets stencil at full size because it is the one fact you actually read from across the desk.</div>
+      <div><b>B — Mirrored.</b> The confrontation is the layout: the two forces read outward from a centre spine that carries the row labels, so GOVFOR and OPFOR are physically opposed rather than merely adjacent. Strongest character of the three. I expected it to be the fragile one and it is not — because the values align inward against the spine, the lopsided case (one side with no ship at all) just leaves a short word hugging the middle, which is fine. What it actually costs is a ragged outer edge: the block's silhouette changes with the data, where A's columns stay where they are whatever is in them.</div>
+      <div><b>C — Manifest.</b> A printout: every fact on its own left-labelled line with leader dots to its value. Least designed, most authentic to the period, and by far the most robust — it does not care how long any value is, and adding a ninth field later costs one line. The forces become an indented group under a coloured heading, which is what removes the repetition here.</div>
+      <div><b>No motion anywhere.</b> Round time and player count are the two values that actually change, and the temptation is to mark them as live with a blink or a pulse. Deliberately not done: continuous modulation on a screen someone sits in front of is the thing this UI has been avoiding everywhere else.</div>
+      <div><b>Try the other two value sets.</b> "Longest realistic" swaps in the longest strings these fields carry; "Lopsided" is real data copied off a running server — no map picked yet, GOVFOR with no ship, OPFOR with no platoon. All three layouts survive both, which was not a given and is the reason the toggle is here rather than a note claiming they would. The differences that remain are aesthetic: A keeps its columns fixed whatever the data, B's outer edge goes ragged, C does not move at all.</div>
+    </div>
+  </section>
+</div>
+
+<script>
+const TONES = [["gunmetal", "Gunmetal"], ["olive", "Olive drab"], ["beige", "Beige"]];
+const LENS = [["real", "Typical"], ["long", "Longest realistic"], ["lop", "Lopsided (seen in game)"]];
+
+const DATA = {
+  real: {
+    planet: "Shepherds' Pride", gamemode: "Colony Fall",
+    govShip: "USS Bush Redux", opfShip: "USS Bush Redux",
+    govPlat: "LACN Landing Forces", opfPlat: "UPP Naval Infantry",
+    players: "12 (4 ready)", time: "Not started",
+  },
+  long: {
+    planet: "Hybrisa Metropolitan", gamemode: "Force on Force",
+    govShip: "USS Bush Redux", opfShip: "USS Bush Redux",
+    govPlat: "US Colonial Marines", opfPlat: "UPP Naval Infantry",
+    players: "104 (61 ready)", time: "3h 05m",
+  },
+  // Straight off a running server: one side has no ship at all, and the map is unpicked. This is
+  // the case that tests whether a mirrored layout survives, since it is as unbalanced as the real
+  // data ever gets.
+  lop: {
+    planet: "Map not yet selected!", gamemode: "Insurgency",
+    govShip: "None", opfShip: "USSBushRedux",
+    govPlat: "US Colonial Marines", opfPlat: "None",
+    players: "3 (0 ready)", time: "Not started",
+  },
+};
+
+let tone = "olive", len = "real";
+const $ = id => document.getElementById(id);
+const up = s => s.toUpperCase();
+
+/* A — briefing: situation, then forces, then the room. */
+function zoneA(d) {
+  return `<div class="zone">
+    <div class="a-head">
+      <span class="planet">${up(d.planet)}</span>
+      <span class="grow"></span>
+      <span class="mode-tag">${up(d.gamemode)}</span>
+    </div>
+    <div style="height:10px"></div>
+    <div class="rule"></div>
+    <div class="grow"></div>
+    <div class="a-forces">
+      <span></span>
+      <span class="side gov">GOVFOR</span>
+      <span class="side opf">OPFOR</span>
+      <span></span>
+      <span class="bar" style="background:var(--gov-dim)"></span>
+      <span class="bar" style="background:var(--opf-dim)"></span>
+      <span class="lbl" style="text-align:right">Ship</span>
+      <span class="val gov">${up(d.govShip)}</span>
+      <span class="val opf">${up(d.opfShip)}</span>
+      <span class="lbl" style="text-align:right">Platoon</span>
+      <span class="val gov">${up(d.govPlat)}</span>
+      <span class="val opf">${up(d.opfPlat)}</span>
+    </div>
+    <div class="grow"></div>
+    <div class="rule soft"></div>
+    <div style="height:7px"></div>
+    <div class="a-foot">
+      <span class="lbl">Players</span><span class="v">${up(d.players)}</span>
+      <span class="dots"></span>
+      <span class="lbl">Round</span><span class="v">${up(d.time)}</span>
+    </div>
+  </div>`;
+}
+
+/* B — mirrored: the two forces read outward from a centre spine. */
+function zoneB(d) {
+  return `<div class="zone">
+    <div class="b-head">
+      <div class="planet">${up(d.planet)}</div>
+      <div class="mode-tag" style="margin-top:3px">${up(d.gamemode)}</div>
+    </div>
+    <div style="height:11px"></div>
+    <div class="rule"></div>
+    <div class="grow"></div>
+    <div class="b-sides">
+      <span class="side gov l" style="font:10px var(--osd);letter-spacing:.18em">GOVFOR</span>
+      <span></span>
+      <span class="side opf r" style="font:10px var(--osd);letter-spacing:.18em">OPFOR</span>
+    </div>
+    <div style="height:6px"></div>
+    <div class="b-row">
+      <span class="val gov l">${up(d.govShip)}</span>
+      <span class="spine">Ship</span>
+      <span class="val opf r">${up(d.opfShip)}</span>
+    </div>
+    <div style="height:5px"></div>
+    <div class="b-row">
+      <span class="val gov l">${up(d.govPlat)}</span>
+      <span class="spine">Platoon</span>
+      <span class="val opf r">${up(d.opfPlat)}</span>
+    </div>
+    <div class="grow"></div>
+    <div class="rule soft"></div>
+    <div style="height:7px"></div>
+    <div class="b-foot">
+      <span><span class="lbl">Players</span> <span class="v">${up(d.players)}</span></span>
+      <span><span class="lbl">Round</span> <span class="v">${up(d.time)}</span></span>
+    </div>
+  </div>`;
+}
+
+/* C — manifest: every fact on its own labelled line, leader dots to the value. */
+function zoneC(d) {
+  const row = (k, v, cls = "", indent = false) =>
+    `<div class="c-row"><span class="k ${indent ? "indent" : ""}">${k}</span><span class="dots"></span><span class="val ${cls}">${up(v)}</span></div>`;
+  return `<div class="zone" style="gap:3px">
+    ${row("Planet", d.planet)}
+    ${row("Gamemode", d.gamemode)}
+    <div style="height:4px"></div>
+    <div class="rule soft"></div>
+    <div style="height:4px"></div>
+    <div class="c-group gov">GOVFOR</div>
+    ${row("Ship", d.govShip, "gov", true)}
+    ${row("Platoon", d.govPlat, "gov", true)}
+    <div style="height:3px"></div>
+    <div class="c-group opf">OPFOR</div>
+    ${row("Ship", d.opfShip, "opf", true)}
+    ${row("Platoon", d.opfPlat, "opf", true)}
+    <div class="grow"></div>
+    <div class="rule soft"></div>
+    <div style="height:4px"></div>
+    ${row("Players", d.players)}
+    ${row("Round time", d.time)}
+  </div>`;
+}
+
+/* D — A's head and foot with C's forces block between them. The one thing the mix buys that
+   neither parent has on its own: label-left / value-right runs unbroken through all three bands,
+   so the planet, the four force values and the two counts all land on the same right margin. */
+function zoneD(d) {
+  const row = (k, v, cls) =>
+    `<div class="c-row"><span class="k indent">${k}</span><span class="dots"></span><span class="val ${cls}">${up(v)}</span></div>`;
+  return `<div class="zone" style="gap:3px">
+    <div class="a-head">
+      <span class="planet">${up(d.planet)}</span>
+      <span class="grow"></span>
+      <span class="mode-tag">${up(d.gamemode)}</span>
+    </div>
+    <div style="height:6px"></div>
+    <div class="rule"></div>
+    <div class="grow"></div>
+    <div class="c-group gov">GOVFOR</div>
+    ${row("Ship", d.govShip, "gov")}
+    ${row("Platoon", d.govPlat, "gov")}
+    <div style="height:3px"></div>
+    <div class="c-group opf">OPFOR</div>
+    ${row("Ship", d.opfShip, "opf")}
+    ${row("Platoon", d.opfPlat, "opf")}
+    <div class="grow"></div>
+    <div class="rule soft"></div>
+    <div style="height:3px"></div>
+    <div class="a-foot">
+      <span class="lbl">Players</span><span class="v">${up(d.players)}</span>
+      <span class="dots"></span>
+      <span class="lbl">Round</span><span class="v">${up(d.time)}</span>
+    </div>
+  </div>`;
+}
+
+function column(zone) {
+  return `<div class="housing ${tone}">
+    <span class="screw tl"></span><span class="screw tr"></span><span class="screw bl"></span><span class="screw br"></span>
+    <div class="plate"><span class="name">Colonial Marines Universe</span><span class="spacer"></span><span class="serial">Mod. LB-1 · 12</span></div>
+    <div class="keys">${["AHelp", "Call Vote", "Options", "Leave"].map(t => `<div class="key">${t}</div>`).join("")}<div class="key narrow">&#9654;</div></div>
+    <div class="mode"><span class="on">Server</span><span>Character</span></div>
+    <div class="screen">
+      ${zone}
+      <div class="seam seam-${tone}"></div>
+      <div class="chat">
+        <div class="tabs"><span class="tab sel">All</span><span class="tab">Radio</span><span class="tab">Dead chat (2)</span></div>
+        <div class="log">
+          <div class="msg"><span class="p">ADM</span>Admin login: localhost@JoeGenero</div>
+          <div class="msg"><span class="p">SYS</span>Welcome to CMU! Read the rules.</div>
+        </div>
+        <div class="cmdline"><span class="caret"></span>T to talk, Tab to cycle channels.</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function render() {
+  const d = DATA[len];
+  const takes = [
+    ["D", "Hybrid &mdash; A's head and foot, C's middle", zoneD(d)],
+    ["A", "Briefing", zoneA(d)],
+    ["B", "Mirrored", zoneB(d)],
+    ["C", "Manifest", zoneC(d)],
+  ];
+  $("stage").innerHTML = takes.map(([k, name, zone]) =>
+    `<div class="col"><div class="caption">${k} &middot; <b>${name}</b></div>${column(zone)}</div>`).join("");
+}
+
+function chips(el, items, get, set) {
+  const draw = () => el.innerHTML = items.map(([v, l]) =>
+    `<button type="button" class="chip" data-v="${v}" aria-pressed="${get() === v}">${l}</button>`).join("");
+  el.addEventListener("click", e => { const b = e.target.closest("button[data-v]"); if (!b) return; set(b.dataset.v); draw(); render(); });
+  draw();
+}
+chips($("tones"), TONES, () => tone, v => tone = v);
+chips($("lens"), LENS, () => len, v => len = v);
+render();
+</script>
+</body></html>

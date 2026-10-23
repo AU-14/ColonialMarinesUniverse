@@ -1,0 +1,39 @@
+# Rail entries for the ghost roles window. A role picks one with `category:` on its GhostRole
+# component; anything that does not gets sorted by CMUGhostRoleCategorySystem, and lands in Other
+# if that cannot place it either.
+
+- type: ghostRoleCategory
+  id: Xenomorph
+  name: cmu-ghost-role-category-xenomorph
+  color: "#B366FF"
+  weight: 0
+
+- type: ghostRoleCategory
+  id: GovernmentForces
+  name: cmu-ghost-role-category-govfor
+  color: "#46FF8E"
+  weight: 10
+
+- type: ghostRoleCategory
+  id: OpposingForces
+  name: cmu-ghost-role-category-opfor
+  color: "#FF6B6B"
+  weight: 20
+
+- type: ghostRoleCategory
+  id: Corporate
+  name: cmu-ghost-role-category-corporate
+  color: "#FFB454"
+  weight: 30
+
+- type: ghostRoleCategory
+  id: Survivor
+  name: cmu-ghost-role-category-survivor
+  color: "#9AA6A0"
+  weight: 40
+
+- type: ghostRoleCategory
+  id: Other
+  name: cmu-ghost-role-category-other
+  color: "#8A8A99"
+  weight: 100

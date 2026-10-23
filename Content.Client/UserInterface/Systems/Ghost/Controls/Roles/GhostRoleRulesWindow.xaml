@@ -1,21 +1,30 @@
 <DefaultWindow xmlns="https://spacestation14.io"
                Title="{Loc 'ghost-roles-window-title'}"
                MinSize="560 340"
-               SetSize="560 340">
-    <PanelContainer StyleClasses="CrtPanel" HorizontalExpand="True" VerticalExpand="True">
+               SetSize="600 380">
+    <PanelContainer Name="Ground" HorizontalExpand="True" VerticalExpand="True">
         <BoxContainer Orientation="Vertical"
                       HorizontalExpand="True"
                       VerticalExpand="True"
-                      SeparationOverride="10"
-                      Margin="10">
-            <PanelContainer StyleClasses="CrtInsetPanel" HorizontalExpand="True" VerticalExpand="True">
-                <ScrollContainer HorizontalExpand="True"
-                                 VerticalExpand="True"
-                                 HScrollEnabled="False">
-                    <RichTextLabel Name="TopBanner"
-                                   HorizontalExpand="True"
-                                   Margin="10 8" />
-                </ScrollContainer>
+                      Margin="1"
+                      SeparationOverride="0">
+            <ScrollContainer Name="RulesScroll"
+                             HorizontalExpand="True"
+                             VerticalExpand="True"
+                             HScrollEnabled="False">
+                <RichTextLabel Name="TopBanner"
+                               HorizontalExpand="True"
+                               VerticalAlignment="Top"
+                               Margin="14 12" />
+            </ScrollContainer>
+            <PanelContainer Name="ActionBar" HorizontalExpand="True">
+                <Button Name="RequestButton"
+                        Text="{Loc 'ghost-roles-window-request-role-button'}"
+                        Disabled="True"
+                        TextAlign="Center"
+                        ClipText="True"
+                        HorizontalAlignment="Center"
+                        MinWidth="200" />
             </PanelContainer>
             <Button Name="RequestButton"
                     Text="{Loc 'ghost-roles-window-request-role-button'}"

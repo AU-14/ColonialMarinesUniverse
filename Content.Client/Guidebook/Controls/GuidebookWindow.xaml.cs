@@ -1,4 +1,7 @@
 using System.Linq;
+using System.Numerics;
+using Content.Client.CMU14.Interface;
+using Content.Client.CMU14.UserInterface.Guidebook;
 using Content.Client.Guidebook.RichText;
 using Content.Client.Lobby.UI;
 using Content.Client.Stylesheets;
@@ -16,6 +19,7 @@ using Robust.Shared.ContentPack;
 using Robust.Shared.Configuration;
 using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Client.Guidebook.Controls;
 
@@ -36,11 +40,22 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
     public ProtoId<GuideEntryPrototype>? Selected { get; private set; }
 
 
+    // CMU: search, history and the section list.
+    private readonly CmuGuideIndex _index;
+    private readonly Dictionary<ProtoId<GuideEntryPrototype>, ProtoId<GuideEntryPrototype>> _parents = new();
+    private readonly Stack<ProtoId<GuideEntryPrototype>> _back = new();
+    private readonly Stack<ProtoId<GuideEntryPrototype>> _forward = new();
+    private readonly List<Control> _sections = new();
+    private bool _recordHistory = true;
+    private int _pendingSection = -1;
+    private bool _showingGuide;
+
     public GuidebookWindow()
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
         _sawmill = Logger.GetSawmill("guidebook");
+        _index = new CmuGuideIndex(_resourceManager);
         ApplyCrtPalette();
 
         Tree.OnSelectedItemChanged += OnSelectionChanged;
@@ -49,7 +64,12 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         SearchBar.OnTextChanged += _ =>
         {
             HandleFilter();
+            UpdateResults();
         };
+
+        BackButton.OnPressed += _ => GoBack();
+        ForwardButton.OnPressed += _ => GoForward();
+        HomeButton.OnPressed += _ => GoHome();
 
         _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
         _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
@@ -92,6 +112,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
     {
         ((Control) this).Stylesheet = _stylesheetManager.SheetNano;
         CrtLobbyTheme.Apply(this, useCrtTypography: false);
+        CmuGuidebookLook.Apply(this);
     }
 
     public void HandleClick(string link)
@@ -99,13 +120,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         if (!_entries.TryGetValue(link, out var entry))
             return;
 
-        if (Tree.TryGetIndexFromMetadata(entry, out var index))
-        {
-            Tree.ExpandParentEntries(index.Value);
-            Tree.SetSelectedIndex(index);
-        }
-        else
-            ShowGuide(entry);
+        NavigateTo(entry.Id);
     }
 
     public void HandleAnchor(IPrototypeLinkControl prototypeLinkControl)
@@ -127,14 +142,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
             if (!control.Visible)
                 control.Visible = true;
 
-            UserInterfaceManager.DeferAction(() =>
-            {
-                if (control.GetControlScrollPosition() is not { } position)
-                    return;
-
-                Scroll.HScrollTarget = position.X;
-                Scroll.VScrollTarget = position.Y;
-            });
+            UserInterfaceManager.DeferAction(() => ScrollTo(control));
 
             break;
         }
@@ -148,12 +156,8 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
             if (entry.Id == Selected)
                 return;
 
-            ShowGuide(entry);
 
-            var isRulesEntry = entry.RuleEntry;
-            ReturnContainer.Visible = isRulesEntry;
-            HomeButton.OnPressed += _ => ShowGuide(entry);
-        }
+            ShowGuide(entry);
         else
             ClearSelectedGuide();
     }
@@ -177,22 +181,28 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
     {
         Placeholder.Visible = true;
         EntryContainer.Visible = false;
-        SearchContainer.Visible = false;
         EntryContainer.RemoveAllChildren();
 
         Selected = null;
+        Breadcrumb.Text = string.Empty;
+        _sections.Clear();
+
     }
 
     private void ShowGuide(GuideEntry entry)
     {
+        if (_recordHistory && LastEntry != default && LastEntry != entry.Id && _showingGuide)
+        {
+            _back.Push(LastEntry);
+            _forward.Clear();
+        }
+
+        _showingGuide = true;
         Scroll.SetScrollValue(default);
         Placeholder.Visible = false;
         EntryContainer.Visible = true;
-        SearchBar.Text = "";
         EntryContainer.RemoveAllChildren();
         using var file = _resourceManager.ContentFileReadText(entry.Text);
-
-        SearchContainer.Visible = entry.FilterEnabled;
 
         if (!_parsingMan.TryAddMarkup(EntryContainer, file.ReadToEnd()))
         {
@@ -204,6 +214,13 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         CrtLobbyTheme.Apply(EntryContainer, useCrtTypography: false);
 
         Selected = entry.Id;
+        LastEntry = entry.Id;
+        ReturnContainer.Visible = entry.RuleEntry;
+
+        CollectSections();
+        UpdateBreadcrumb(entry);
+        UpdateHistoryButtons();
+        HandleFilter();
 
         var (linkableControls, linkControls) = GetLinkableControlsAndLinks(EntryContainer);
 
@@ -222,7 +239,135 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
                 linkControl.EnablePrototypeLink();
         }
 
+
+        if (_pendingSection >= 0)
+        {
+            var section = _pendingSection;
+            UserInterfaceManager.DeferAction(() => ScrollToSection(section));
+        }
+
+        _pendingSection = -1;
+
         RepopulateTableOfContents();
+    }
+
+    /// <summary>
+    ///     CMU: moves to another entry, optionally to one of its headings, keeping the tree and history in step.
+    /// </summary>
+    private void NavigateTo(ProtoId<GuideEntryPrototype> id, int section = -1, bool record = true)
+    {
+        if (!_entries.TryGetValue(id, out var entry))
+            return;
+
+        _pendingSection = section;
+        _recordHistory = record;
+
+        try
+        {
+            if (Tree.TryGetIndexFromMetadata(entry, out var index) && Tree.SelectedIndex != index)
+            {
+                Tree.ExpandParentEntries(index.Value);
+                Tree.SetSelectedIndex(index);
+            }
+            else
+            {
+                ShowGuide(entry);
+            }
+        }
+        finally
+        {
+            _recordHistory = true;
+        }
+    }
+
+    private void GoBack()
+    {
+        if (!_back.TryPop(out var previous))
+            return;
+
+        _forward.Push(LastEntry);
+        NavigateTo(previous, record: false);
+    }
+
+    private void GoForward()
+    {
+        if (!_forward.TryPop(out var next))
+            return;
+
+        _back.Push(LastEntry);
+        NavigateTo(next, record: false);
+    }
+
+    private void GoHome()
+    {
+        var rules = UserInterfaceManager.GetUIController<InfoUIController>().GetCoreRuleEntry();
+        NavigateTo(rules.Id);
+    }
+
+    private void UpdateHistoryButtons()
+    {
+        BackButton.Disabled = _back.Count == 0;
+        ForwardButton.Disabled = _forward.Count == 0;
+    }
+
+    private void UpdateBreadcrumb(GuideEntry entry)
+    {
+        var path = new List<string>();
+        var id = entry.Id;
+
+        for (var i = 0; i < 8; i++)
+        {
+            if (!_entries.TryGetValue(id, out var step))
+                break;
+
+            path.Insert(0, GetDisplayName(step));
+
+            if (!_parents.TryGetValue(id, out var parent))
+                break;
+
+            id = parent;
+        }
+
+        Breadcrumb.Text = string.Join(" > ", path);
+    }
+
+    private void CollectSections()
+    {
+        _sections.Clear();
+        CollectHeadings(EntryContainer);
+    }
+
+    private void CollectHeadings(Control parent)
+    {
+        foreach (var child in parent.Children)
+        {
+            if (child is Label label &&
+                (label.HasStyleClass("LabelHeadingBigger") ||
+                 label.HasStyleClass("LabelHeading") ||
+                 label.HasStyleClass("LabelKeyText")))
+            {
+                _sections.Add(label);
+            }
+
+            if (child.ChildCount > 0)
+                CollectHeadings(child);
+        }
+    }
+
+    private void ScrollToSection(int section)
+    {
+        if (section >= 0 && section < _sections.Count)
+            ScrollTo(_sections[section]);
+    }
+
+    private void ScrollTo(Control control)
+    {
+        if (control.GetControlScrollPosition() is not { } position)
+            return;
+
+        Scroll.HScrollTarget = position.X;
+        Scroll.VScrollTarget = position.Y;
+>>>>>>> crt-terminal-shader
     }
 
     private int? HeadingDepth(Label control)
@@ -287,7 +432,26 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         if (sameAsLastUpdate)
         {
             _entries = entries;
+            _index.SetEntries(entries);
+
+            _parents.Clear();
+            foreach (var entry in entries.Values)
+            {
+                foreach (var child in entry.Children)
+                {
+                    _parents[child] = entry.Id;
+                }
+            }
+
+            _back.Clear();
+            _forward.Clear();
+            _showingGuide = false;
+            SearchBar.Text = string.Empty;
+            UpdateResults();
+
             RepopulateTree(rootEntries, forceRoot);
+            ClearSelectedGuide();
+
             Split.State = SplitContainer.SplitState.Auto;
             if (entries.Count == 1)
             {
@@ -302,13 +466,20 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
             }
         }
 
-        if (selected == null)
-            ClearSelectedGuide();
-        else
+        var item = selected == null
+            ? null
+            : Tree.Items.FirstOrDefault(x => x.Metadata is GuideEntry entry && entry.Id == selected);
+
+        // CMU: the book always opens on a page. The first root is the rules overview, which is priority 0.
+        item ??= Tree.Items.FirstOrDefault();
+
+        if (item != null)
         {
-            var item = Tree.Items.FirstOrDefault(x => x.Metadata is GuideEntry entry && entry.Id == selected);
-            Tree.SetSelectedIndex(item?.Index);
+            Tree.ExpandParentEntries(item.Index);
+            Tree.SetSelectedIndex(item.Index);
         }
+
+        UpdateHistoryButtons();
 
         return sameAsLastUpdate;
     }
@@ -355,8 +526,16 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
             AddEntry(entry.Id, parent, addedEntries);
         }
 
-        Tree.SetAllExpanded(true);
+        // CMU: the book is over a hundred entries, so it opens folded up; the open page's branch is expanded for it.
+        Tree.SetAllExpanded(false);
         CrtLobbyTheme.Apply(Tree, useCrtTypography: false);
+
+        foreach (var item in Tree.Items)
+        {
+            item.Button.RemoveStyleClass(StyleNano.StyleClassCrtButton);
+            item.Button.AddStyleClass(StyleNano.StyleClassCmuGuideResult);
+            item.Label.FontColorOverride = CmuGuidebookLook.Ink;
+        }
     }
 
     private TreeItem? AddEntry(ProtoId<GuideEntryPrototype> id,
@@ -390,6 +569,14 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         return item;
     }
 
+    /// <summary>CMU: runs a search as though it had been typed into the box.</summary>
+    public void Search(string query)
+    {
+        SearchBar.Text = query;
+        HandleFilter();
+        UpdateResults();
+    }
+
     private void HandleFilter()
     {
         if (Tree.SelectedItem != null && Tree.SelectedItem.Metadata is GuideEntry entry && entry.FilterEnabled)
@@ -401,6 +588,65 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
                 element.SetHiddenState(true, SearchBar.Text.Trim());
             }
         }
+    }
+
+    private void UpdateResults()
+    {
+        var query = SearchBar.Text.Trim();
+        Results.RemoveAllChildren();
+
+        if (query.Length < 2)
+        {
+            Results.Visible = false;
+            Tree.Visible = true;
+            return;
+        }
+
+        Results.Visible = true;
+        Tree.Visible = false;
+
+        var hits = _index.Search(query, GetDisplayName);
+        if (hits.Count == 0)
+        {
+            Results.AddChild(new Label
+            {
+                Text = Loc.GetString("cmu-guidebook-search-none"),
+                StyleClasses = { "LabelSubText" },
+                Margin = new Thickness(4, 6, 0, 0),
+            });
+            return;
+        }
+
+        var titles = hits.Where(hit => hit.IsTitle).ToList();
+        var pages = hits.Where(hit => !hit.IsTitle).ToList();
+
+        if (titles.Count > 0)
+        {
+            Results.AddChild(Group("cmu-guidebook-search-titles"));
+            foreach (var hit in titles)
+            {
+                Results.AddChild(new CmuGuideResult(hit, () => NavigateTo(hit.Entry.Id, hit.Section)));
+            }
+        }
+
+        if (pages.Count > 0)
+        {
+            Results.AddChild(Group("cmu-guidebook-search-pages"));
+            foreach (var hit in pages)
+            {
+                Results.AddChild(new CmuGuideResult(hit, () => NavigateTo(hit.Entry.Id, hit.Section)));
+            }
+        }
+    }
+
+    private static Label Group(string key)
+    {
+        return new Label
+        {
+            Text = Loc.GetString(key),
+            StyleClasses = { "LabelSubText" },
+            Margin = new Thickness(4, 8, 0, 2),
+        };
     }
 
     private static (List<IPrototypeRepresentationControl>, List<IPrototypeLinkControl>) GetLinkableControlsAndLinks(Control parent)

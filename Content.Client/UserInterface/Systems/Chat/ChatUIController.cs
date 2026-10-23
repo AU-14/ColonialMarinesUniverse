@@ -268,6 +268,7 @@ public sealed partial class ChatUIController : UIController
         }
 
         _config.OnValueChanged(CCVars.ChatWindowOpacity, OnChatWindowOpacityChanged);
+        _config.OnValueChanged(CCVars.CMUChatHousing, _ => SetChatWindowOpacity(_config.GetCVar(CCVars.ChatWindowOpacity)));
         _config.OnValueChanged(CCVars.AccessibilityColorblindFriendly, v => _colorBlindMode = v, true);
 
         InitializeHighlights();
@@ -305,16 +306,23 @@ public sealed partial class ChatUIController : UIController
     private void SetChatWindowOpacity(float opacity)
     {
         var chatBox = UIManager.ActiveScreen?.GetWidget<ChatBox>() ?? UIManager.ActiveScreen?.GetWidget<ResizableChatBox>();
-
-        var panel = chatBox?.ChatWindowPanel;
-        if (panel is null)
+        if (chatBox?.ChatWindowPanel is null)
             return;
 
-        SetChatWindowOpacity(panel, opacity);
+        SetChatWindowOpacity(chatBox, opacity);
     }
 
-    internal static void SetChatWindowOpacity(PanelContainer panel, float opacity)
+    internal static void SetChatWindowOpacity(ChatBox chatBox, float opacity)
     {
+        var panel = chatBox.ChatWindowPanel;
+
+        // CMU: on the chat housing's tube screen the log is see-through so the glass shows.
+        if (chatBox.OnHousingScreen)
+        {
+            panel.PanelOverride = new StyleBoxFlat { BackgroundColor = Color.Transparent };
+            return;
+        }
+
         // Read the base colour from the stylesheet, never from the panel's own current override.
         // This used to check PanelOverride first, which meant each call re-read the result of the
         // last one and multiplied alpha into it again - the log got darker every time the opacity

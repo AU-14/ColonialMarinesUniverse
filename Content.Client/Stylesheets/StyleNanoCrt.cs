@@ -20,19 +20,6 @@ namespace Content.Client.Stylesheets
     ///     base-mode fallbacks that only exist because the theme can be switched off
     ///     (<see cref="StyleClassNanoSliderValue"/>, <see cref="StyleClassButtonToggleRed"/>).
     /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///     The rules built here are spliced into <see cref="StyleNano"/>'s rule list at the exact
-    ///     position they used to occupy. Order is not cosmetic: <see cref="Stylesheet"/> records an
-    ///     insertion index per rule and uses it to break specificity ties, so moving the block
-    ///     would silently change which rule wins for any pair of equal-specificity selectors.
-    ///     </para>
-    ///     <para>
-    ///     Fonts are rebuilt from the resource cache rather than passed in from the constructor.
-    ///     The cache hands back the same font object for the same stack and size, so this costs
-    ///     nothing and keeps the two files from sharing locals.
-    ///     </para>
-    /// </remarks>
     public sealed partial class StyleNano
     {
         public const string StyleClassCrtWindow = "CrtWindow";
@@ -88,6 +75,9 @@ namespace Content.Client.Stylesheets
         public const string StyleClassCrtCommandCellPanel = "CrtCommandCellPanel";
 
         public const string StyleClassCrtButton = "CrtButton";
+
+        /// <summary>A row in a long selectable list - the late-join roster.</summary>
+        public const string StyleClassCrtListRow = "CrtListRow";
         public const string StyleClassCrtAttentionButton = "CrtAttentionButton";
         public const string StyleClassCrtButtonLabel = "CrtButtonLabel";
         public const string StyleClassCrtNativeButtonLabel = "CrtNativeButtonLabel";
@@ -139,6 +129,12 @@ namespace Content.Client.Stylesheets
         public const string StyleClassCrtReadyToggleOn = "CrtReadyToggleOn";
         public const string StyleClassCrtHeadingBigDanger = "CrtHeadingBigDanger";
         public const string StyleClassCrtRichText = "CrtRichText";
+
+        /// <summary>
+        ///     A mixed-case body face for prose meant to be read at length rather than scanned - the
+        ///     join-round faction blurbs.
+        /// </summary>
+        public const string StyleClassCrtProseText = "CrtProseText";
         public const string StyleClassCrtServerInfoText = "CrtServerInfoText";
         public const string StyleClassCrtTableCell = "CrtTableCell";
         public const string StyleClassCrtUnderlineRow = "CrtUnderlineRow";
@@ -219,6 +215,44 @@ namespace Content.Client.Stylesheets
         public const string StyleClassCrtOptionRow = "CrtOptionRow";
 
         /// <summary>
+        ///     Options menu only: underlined text tabs over an unbordered panel, and checkboxes drawn
+        ///     from the monotone texture in the theme colour. Added by <c>CmuOptionsLook</c> on top of
+        ///     the shared CRT classes, which the rest of the game keeps.
+        /// </summary>
+        public const string StyleClassCmuOptionsTabs = "CmuOptionsTabs";
+        public const string StyleClassCmuOptionCheck = "CmuOptionCheck";
+
+        /// <summary>
+        ///     The in-round top menu bar, restyled by <c>CmuTopMenuBarUIController</c>. Every key carries
+        ///     one of the two looks.
+        /// </summary>
+        public const string StyleClassCmuMenuKeyOutlined = "CmuMenuKeyOutlined";
+        public const string StyleClassCmuMenuKeyRaised = "CmuMenuKeyRaised";
+        public const string StyleClassCmuMenuBarBand = "CmuMenuBarBand";
+        public const string StyleClassCmuMenuBarRule = "CmuMenuBarRule";
+        public const string StyleClassCmuChatSidePanel = "CmuChatSidePanel";
+        public const string StyleClassCmuChatScreen = "CmuChatScreen";
+        public const string StyleClassCmuMenuKeyCap = "CmuMenuKeyCap";
+
+        /// <summary>
+        ///     A keycap on a molded housing, worn by any control that sits on the plastic rather than on
+        ///     the screen: the guidebook's nav keys and the lobby's command row. Applied imperatively by
+        ///     <c>CmuGuidebookLook</c> / <c>CmuLobbyLook</c> while the chat housing is on.
+        /// </summary>
+        public const string StyleClassCmuHousingKey = "CmuHousingKey";
+
+        /// <summary>
+        ///     A character slot in the lobby's character list. The standard button's pale pressed fill
+        ///     left the job line unreadable, so the selected slot is marked by an accent edge instead.
+        /// </summary>
+        public const string StyleClassCmuCharacterSlot = "CmuCharacterSlot";
+
+        /// <summary>Rows in the search results and the section list. Flat until hovered, in both looks.</summary>
+        public const string StyleClassCmuGuideResult = "CmuGuideResult";
+        public const string StyleClassCmuGuideSection = "CmuGuideSection";
+        public const string StyleClassCmuGuideSnippet = "CmuGuideSnippet";
+
+        /// <summary>
         ///     Base/NanoUI variant of <see cref="StyleClassCrtSliderValue"/> - see the stylebox
         ///     comment where it is built for why the two cannot share one class.
         /// </summary>
@@ -294,20 +328,6 @@ namespace Content.Client.Stylesheets
         ///     Chat's face under the CRT theme, and the one place the OSD font is deliberately not
         ///     used.
         /// </summary>
-        /// <remarks>
-        ///     <para>
-        ///     UAV-OSD is an all-caps face, which suits labels, headings and readouts - short, fixed
-        ///     strings. Chat is prose written by players: in caps it loses the case out of names, reads
-        ///     as shouting, and gives up the ascenders and descenders that make a wall of text
-        ///     scannable.
-        ///     </para>
-        ///     <para>
-        ///     RobotoMono rather than NotoSans, because monospace keeps the terminal character the
-        ///     theme is built on - this should read as a different terminal face, not as an escape from
-        ///     the theme. The readable-chat option already exists for that, and this is not it. The
-        ///     Noto entries are the same glyph fallbacks <see cref="UavOsdFontStack"/> carries.
-        ///     </para>
-        /// </remarks>
         public static readonly string[] CrtChatFontStack =
         {
             "/Fonts/RobotoMono/RobotoMono-Regular.ttf",
@@ -330,6 +350,10 @@ namespace Content.Client.Stylesheets
         public const string StyleClassCrtIconButton = "CrtIconButton";
         public const string StyleClassCrtItemList = "CrtItemList";
         public const string StyleClassCrtScrollBar = "CrtScrollBar";
+
+        // The ghost roles window is the one themed window that is not a green terminal - see HivePalette.
+        public const string StyleClassHiveLineEdit = "HiveLineEdit";
+        public const string StyleClassHiveScrollBar = "HiveScrollBar";
 
         private static CrtPalette _crtPalette = CrtPalette.Green;
         private static bool _crtUiEnabled = true;
@@ -402,6 +426,16 @@ namespace Content.Client.Stylesheets
             _crtUiEnabled = enabled;
         }
 
+        private static string _chatHousing = CmuHousingPalette.Off;
+
+        /// <summary>The <c>cmu.chat_housing</c> tone, or <see cref="CmuHousingPalette.Off"/>.</summary>
+        public static string ChatHousing => _chatHousing;
+
+        public static void SetChatHousing(string tone)
+        {
+            _chatHousing = CmuHousingPalette.TryGet(tone, out _) ? tone : CmuHousingPalette.Off;
+        }
+
         /// <summary>
         ///     Chat is drawn in a plain proportional face rather than the terminal one. Accessibility
         ///     option; see <see cref="CCVars.CMUChatReadableFont"/> for why it exists.
@@ -440,11 +474,6 @@ namespace Content.Client.Stylesheets
         /// <summary>
         ///     Base point size chat uses in terminal mode. Must match <c>crtChatFont</c>.
         /// </summary>
-        /// <remarks>
-        ///     Larger than the 8 the OSD face used here. That face is all-caps, so every glyph filled
-        ///     the full cap height; a face with lowercase spends roughly half its point size on the
-        ///     x-height, so the same number reads smaller and 8 came out under what it replaced.
-        /// </remarks>
         public const int ChatCrtFontSizeBase = 11;
 
         /// <summary>
@@ -735,6 +764,8 @@ namespace Content.Client.Stylesheets
         private static StyleRule[] BuildCrtRules(IResourceCache resCache, out CrtShared shared)
         {
             var notoSans10 = resCache.NotoStack(size: 10);
+            var monotoneCheckChecked = resCache.GetTexture("/Textures/Interface/Nano/Monotone/monotone_checkbox_checked.svg.96dpi.png");
+            var monotoneCheckUnchecked = resCache.GetTexture("/Textures/Interface/Nano/Monotone/monotone_checkbox_unchecked.svg.96dpi.png");
             var notoSans12 = resCache.NotoStack(size: 12);
             var notoSansBold12 = resCache.NotoStack(variation: "Bold", size: 12);
             var notoSansBold16 = resCache.NotoStack(variation: "Bold", size: 16);
@@ -793,6 +824,9 @@ namespace Content.Client.Stylesheets
             // above: uavOsdBold18 is really size 12), so this is picked by eye, not by ratio.
             var crtClockFont = useCrtUi ? GetCrtFont(resCache, 22) : notoSansBold28;
             var crtRichTextFont = useCrtUi ? uavOsd14 : notoSans12;
+
+            // Mixed-case and smaller than crtChatAnnouncementFont: prose in a wide column, not a narrow one.
+            var crtProseFont = useCrtUi ? GetCrtChatFont(resCache, 10) : notoSans10;
 
             // Chat's own font, kept separate from crtRichTextFont on purpose. That one is shared with
             // the guidebook, the lobby's server info and every other rich-text block, and the
@@ -1092,11 +1126,19 @@ namespace Content.Client.Stylesheets
             // The bottom rule is what separates back-to-back toggles: a run of them reads as a list
             // of rows instead of one undifferentiated block, which matters most where several are
             // checked at once and their fills would otherwise merge.
+            // No rule under the row. There are 84 checkboxes in the options menu and a line under
+            // every one of them is what made it read as busy - the same fault CrtTerminalPalette was
+            // written to fix everywhere else, where surfaces are told apart by fill rather than by
+            // bordering each one. Group separation is the section heading's job now.
+            //
+            // The margins stay exactly as they were: GetContentMargin treats a ContentMargin
+            // override as a *replacement* for the border thickness rather than an addition, so
+            // dropping the border costs no height and nothing below it shifts.
             var crtCheckBox = new StyleBoxFlat
             {
                 BackgroundColor = Color.Transparent,
-                BorderColor = CrtGreenDim.WithAlpha(0.35f),
-                BorderThickness = new Thickness(0, 0, 0, 1),
+                BorderColor = Color.Transparent,
+                BorderThickness = new Thickness(0),
                 ContentMarginLeftOverride = 2,
                 ContentMarginRightOverride = 6,
                 ContentMarginTopOverride = 5,
@@ -1115,14 +1157,12 @@ namespace Content.Client.Stylesheets
             // "on"; that is what the control is for.
             var crtCheckBoxPressed = new StyleBoxFlat(crtCheckBox);
 
-            // Bottom rule across a whole option row, label included. Checkboxes already carry one via
-            // crtCheckBox; without this the sliders and dropdowns were the only rows in a section
-            // with no divider, so the rule appeared to stop partway along the list.
+            // Spacing for a slider or dropdown row, and nothing else.
             var crtOptionRow = new StyleBoxFlat
             {
                 BackgroundColor = Color.Transparent,
-                BorderColor = CrtGreenDim.WithAlpha(0.35f),
-                BorderThickness = new Thickness(0, 0, 0, 1),
+                BorderColor = Color.Transparent,
+                BorderThickness = new Thickness(0),
                 ContentMarginLeftOverride = 2,
                 ContentMarginRightOverride = 0,
                 ContentMarginTopOverride = 2,
@@ -1369,6 +1409,29 @@ namespace Content.Client.Stylesheets
                 BackgroundColor = CrtTerminalPalette.Surface1,
             };
 
+            // List rows.
+            var crtListRow = new CrtStyleBox
+            {
+                BackgroundColor = Color.Transparent,
+                BorderColor = CrtTerminalPalette.Surface1,
+                BorderThickness = new Thickness(0, 0, 0, 1),
+                DrawCornerTicks = false,
+                ContentMarginLeftOverride = 6,
+                ContentMarginRightOverride = 6,
+                ContentMarginTopOverride = 3,
+                ContentMarginBottomOverride = 2,
+            };
+
+            var crtListRowHover = new CrtStyleBox(crtListRow)
+            {
+                BackgroundColor = CrtTerminalPalette.Surface2,
+            };
+
+            var crtListRowPressed = new CrtStyleBox(crtListRow)
+            {
+                BackgroundColor = CrtTerminalPalette.Surface3,
+            };
+
             var crtAttentionButton = new CrtStyleBox(crtButton)
             {
                 BackgroundColor = CrtTerminalPalette.Surface3,
@@ -1468,6 +1531,164 @@ namespace Content.Client.Stylesheets
                 ContentMarginRightOverride = 8,
                 ContentMarginTopOverride = 2,
                 ContentMarginBottomOverride = 2
+            };
+
+            // The options menu's tabs: text only, the active one underlined in the accent.
+            var cmuOptionsTabActive = new StyleBoxFlat
+            {
+                BackgroundColor = Color.Transparent,
+                BorderColor = CrtGreen,
+                BorderThickness = new Thickness(0, 0, 0, 2),
+                ContentMarginLeftOverride = 10,
+                ContentMarginRightOverride = 10,
+                ContentMarginTopOverride = 3,
+                ContentMarginBottomOverride = 3,
+            };
+
+            var cmuOptionsTabInactive = new StyleBoxFlat(cmuOptionsTabActive)
+            {
+                BorderColor = Color.Transparent,
+            };
+
+            // Top menu bar keys. Same content margins for both looks so switching doesn't move anything.
+            static StyleBoxFlat MenuKeyOutlined(Color fill, Color border, float bottom = 1) => new()
+            {
+                BackgroundColor = fill,
+                BorderColor = border,
+                BorderThickness = new Thickness(1, 1, 1, bottom),
+                ContentMarginLeftOverride = 6,
+                ContentMarginRightOverride = 6,
+                ContentMarginTopOverride = 5,
+                ContentMarginBottomOverride = 3,
+            };
+
+            static CmuBevelStyleBox MenuKeyRaised(Color fill, Color top, Color bottom, float topThickness = 1) => new()
+            {
+                BackgroundColor = fill,
+                TopColor = top,
+                BottomColor = bottom,
+                TopThickness = topThickness,
+                BottomThickness = 2,
+                ContentMarginLeftOverride = 6,
+                ContentMarginRightOverride = 6,
+                ContentMarginTopOverride = 5,
+                ContentMarginBottomOverride = 3,
+            };
+
+            var menuKeyOutlined = MenuKeyOutlined(Color.Transparent, CrtTerminalPalette.Line);
+            var menuKeyOutlinedHover = MenuKeyOutlined(CrtTerminalPalette.Surface2, CrtTerminalPalette.TextDim);
+            var menuKeyOutlinedOpen = MenuKeyOutlined(CrtTerminalPalette.Surface2, CrtTerminalPalette.Accent, 2);
+            var menuKeyOutlinedAlert = MenuKeyOutlined(CrtTerminalPalette.Alert.WithAlpha(0.10f), CrtTerminalPalette.Alert);
+
+            var menuKeyRaised = MenuKeyRaised(CrtTerminalPalette.Surface2, CrtTerminalPalette.Surface4, CrtTerminalPalette.Void);
+            var menuKeyRaisedHover = MenuKeyRaised(CrtTerminalPalette.Surface3, CrtTerminalPalette.Surface4, CrtTerminalPalette.Void);
+            // Pushed in: the dark edge moves to the top.
+            var menuKeyRaisedOpen = MenuKeyRaised(CrtTerminalPalette.Surface1, CrtTerminalPalette.Void, CrtTerminalPalette.Accent, 2);
+            var menuKeyRaisedAlert = MenuKeyRaised(CrtTerminalPalette.Alert.WithAlpha(0.18f), CrtTerminalPalette.Alert.WithAlpha(0.45f), CrtTerminalPalette.Alert);
+
+            var menuBarBand = new StyleBoxFlat
+            {
+                BackgroundColor = CrtTerminalPalette.Surface1,
+                ContentMarginLeftOverride = 6,
+                ContentMarginRightOverride = 6,
+                ContentMarginTopOverride = 6,
+                ContentMarginBottomOverride = 6,
+            };
+            var menuBarRule = new StyleBoxFlat { BackgroundColor = CrtTerminalPalette.Surface4 };
+            StyleBox chatSidePanel = new StyleBoxFlat { BackgroundColor = CrtTerminalPalette.Surface0 };
+            StyleBox chatScreen = new StyleBoxFlat { BackgroundColor = Color.Transparent };
+
+            // cmu.chat_housing: the panel becomes a molded housing and the chat sits on a tube screen.
+            var housingOn = CmuHousingPalette.TryGet(_chatHousing, out var housing);
+            if (!housingOn)
+                CmuHousingPalette.TryGet("gunmetal", out housing);
+
+            if (housingOn)
+            {
+                var housingBox = new StyleBoxTexture
+                {
+                    Texture = resCache.GetTexture($"/Textures/CMU14/Interface/ChatHousing/housing_{_chatHousing}.png"),
+                };
+                housingBox.SetPatchMargin(StyleBox.Margin.All, 10);
+                housingBox.SetContentMarginOverride(StyleBox.Margin.Horizontal, 12);
+                housingBox.SetContentMarginOverride(StyleBox.Margin.Top, 9);
+                housingBox.SetContentMarginOverride(StyleBox.Margin.Bottom, 12);
+                chatSidePanel = housingBox;
+
+                // The corner radius is baked into the texture; the padding keeps text off the curve.
+                var screenBox = new StyleBoxTexture
+                {
+                    Texture = resCache.GetTexture($"/Textures/CMU14/Interface/ChatHousing/screen_{_chatHousing}.png"),
+                };
+                screenBox.SetPatchMargin(StyleBox.Margin.All, 28);
+                screenBox.SetContentMarginOverride(StyleBox.Margin.All, 11);
+                chatScreen = screenBox;
+
+                menuBarBand.BackgroundColor = Color.Transparent;
+                menuBarBand.ContentMarginLeftOverride = 0;
+                menuBarBand.ContentMarginRightOverride = 0;
+                menuBarBand.ContentMarginTopOverride = 2;
+                menuBarBand.ContentMarginBottomOverride = 2;
+                menuBarRule.BackgroundColor = Color.Transparent;
+            }
+
+            static CmuBevelStyleBox KeyCap(Color fill, Color top, Color bottom, float topThickness = 1) => new()
+            {
+                BackgroundColor = fill,
+                TopColor = top,
+                BottomColor = bottom,
+                TopThickness = topThickness,
+                BottomThickness = 3,
+                ContentMarginLeftOverride = 6,
+                ContentMarginRightOverride = 6,
+                ContentMarginTopOverride = 5,
+                ContentMarginBottomOverride = 4,
+            };
+
+            var keyCap = KeyCap(housing.KeyFill, housing.KeyHighlight, housing.KeyShadow);
+            var keyCapHover = KeyCap(housing.KeyHover, housing.KeyHighlight, housing.KeyShadow);
+            // Pushed in: the shadow moves to the top and a lamp-green edge shows at the bottom.
+            var keyCapPressed = KeyCap(housing.KeyPressed, housing.KeyShadow, CrtTerminalPalette.Accent, 2);
+            var keyCapAlert = KeyCap(Color.FromHex("#5a2228"), Color.FromHex("#8a3a42"), CrtTerminalPalette.Alert);
+
+            // Each slot is its own box, so one character reads as one card.
+            static StyleBoxFlat CharacterSlot(Color fill, Color border, float left) => new()
+            {
+                BackgroundColor = fill,
+                BorderColor = border,
+                BorderThickness = new Thickness(left, 1, 1, 1),
+                ContentMarginLeftOverride = 6,
+                ContentMarginRightOverride = 6,
+                ContentMarginTopOverride = 3,
+                ContentMarginBottomOverride = 3,
+            };
+            var slotNormal = CharacterSlot(CrtTerminalPalette.Surface1, CrtTerminalPalette.Line, 1);
+            var slotHover = CharacterSlot(CrtTerminalPalette.Surface2, CrtTerminalPalette.TextDim, 1);
+            var slotSelected = CharacterSlot(CrtTerminalPalette.Surface2, CrtTerminalPalette.Accent, 3);
+
+            // Rows in the search results and the section list: flat until hovered.
+            static StyleBoxFlat GuideRow(Color fill) => new()
+            {
+                BackgroundColor = fill,
+                ContentMarginLeftOverride = 4,
+                ContentMarginRightOverride = 4,
+                ContentMarginTopOverride = 2,
+                ContentMarginBottomOverride = 2,
+            };
+            var guideRow = GuideRow(Color.Transparent);
+            var guideRowHover = GuideRow(CrtTerminalPalette.Surface2.WithAlpha(0.5f));
+            var guideRowPressed = GuideRow(CrtTerminalPalette.Surface2);
+
+            // No frame of its own - the window already draws one.
+            var cmuOptionsTabPanel = new StyleBoxFlat
+            {
+                BackgroundColor = CrtInsetBackground,
+                BorderColor = CrtGreenDim.WithAlpha(0.6f),
+                BorderThickness = new Thickness(0, 1, 0, 0),
+                ContentMarginLeftOverride = 8,
+                ContentMarginRightOverride = 8,
+                ContentMarginTopOverride = 6,
+                ContentMarginBottomOverride = 6,
             };
 
             // 2px, not 1: this frame is only really seen along the unfilled part of the track, and a
@@ -1610,6 +1831,37 @@ namespace Content.Client.Stylesheets
             {
                 BackgroundColor = CrtGreen.WithAlpha(0.72f),
                 BorderColor = CrtGreenSoft.WithAlpha(0.8f)
+            };
+
+            var hiveLineEdit = new CrtStyleBox
+            {
+                BackgroundColor = HivePalette.Surface0,
+                BorderColor = HivePalette.Line,
+                BorderThickness = new Thickness(1),
+                DrawCornerTicks = false,
+                ContentMarginLeftOverride = 5,
+                ContentMarginRightOverride = 5,
+                ContentMarginTopOverride = 2,
+                ContentMarginBottomOverride = 2
+            };
+
+            var hiveScrollGrabber = new StyleBoxFlat
+            {
+                BackgroundColor = HivePalette.Surface3,
+                ContentMarginLeftOverride = 8,
+                ContentMarginRightOverride = 8,
+                ContentMarginTopOverride = 8,
+                ContentMarginBottomOverride = 8
+            };
+
+            var hiveScrollGrabberHover = new StyleBoxFlat(hiveScrollGrabber)
+            {
+                BackgroundColor = HivePalette.TextFaint
+            };
+
+            var hiveScrollGrabberPressed = new StyleBoxFlat(hiveScrollGrabber)
+            {
+                BackgroundColor = HivePalette.Accent.WithAlpha(0.7f)
             };
 
             shared = new CrtShared(crtWindowPanel, crtWindowHeader, crtInsetPanel, crtTextColor);
@@ -1851,6 +2103,14 @@ namespace Content.Client.Stylesheets
                     .Prop(ContainerButton.StylePropertyStyleBox, crtCheckBoxPressed)
                     .Prop(Control.StylePropertyModulateSelf, Color.White),
 
+                Element<TextureRect>().Class(CheckBox.StyleClassCheckBox).Class(StyleClassCmuOptionCheck)
+                    .Prop(TextureRect.StylePropertyTexture, monotoneCheckUnchecked)
+                    .Prop(Control.StylePropertyModulateSelf, CrtGreen.WithAlpha(0.6f)),
+
+                Element<TextureRect>().Class(CheckBox.StyleClassCheckBox).Class(CheckBox.StyleClassCheckBoxChecked).Class(StyleClassCmuOptionCheck)
+                    .Prop(TextureRect.StylePropertyTexture, monotoneCheckChecked)
+                    .Prop(Control.StylePropertyModulateSelf, CrtGreen),
+
                 Element<PanelContainer>().Class(StyleClassCrtCommandBand)
                     .Prop(PanelContainer.StylePropertyPanel, crtCommandBand)
                     .Prop(Control.StylePropertyModulateSelf, Color.White),
@@ -1909,6 +2169,31 @@ namespace Content.Client.Stylesheets
                 Element<ContainerButton>().Class(StyleClassCrtButton)
                     .Pseudo(ContainerButton.StylePseudoClassDisabled)
                     .Prop(ContainerButton.StylePropertyStyleBox, crtButtonDisabled)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<ContainerButton>().Class(StyleClassCrtListRow)
+                    .Prop(ContainerButton.StylePropertyStyleBox, crtListRow)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<ContainerButton>().Class(StyleClassCrtListRow)
+                    .Pseudo(ContainerButton.StylePseudoClassNormal)
+                    .Prop(ContainerButton.StylePropertyStyleBox, crtListRow)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<ContainerButton>().Class(StyleClassCrtListRow)
+                    .Pseudo(ContainerButton.StylePseudoClassHover)
+                    .Prop(ContainerButton.StylePropertyStyleBox, crtListRowHover)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<ContainerButton>().Class(StyleClassCrtListRow)
+                    .Pseudo(ContainerButton.StylePseudoClassPressed)
+                    .Prop(ContainerButton.StylePropertyStyleBox, crtListRowPressed)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                // Disabled keeps the resting box, not a dimmer fill: full and locked rows are told apart.
+                Element<ContainerButton>().Class(StyleClassCrtListRow)
+                    .Pseudo(ContainerButton.StylePseudoClassDisabled)
+                    .Prop(ContainerButton.StylePropertyStyleBox, crtListRow)
                     .Prop(Control.StylePropertyModulateSelf, Color.White),
 
                 Element<ContainerButton>().Class(StyleClassCrtAttentionButton)
@@ -2092,6 +2377,10 @@ namespace Content.Client.Stylesheets
                     // gap between lines. Tune this if CRT body text looks cramped or too airy.
                     .Prop(nameof(RichTextLabel.LineHeightScale), 1.25f),
 
+                Element<RichTextLabel>().Class(StyleClassCrtProseText)
+                    .Prop("font", crtProseFont)
+                    .Prop(nameof(RichTextLabel.LineHeightScale), 1.2f),
+
                 // The lobby's character name/age lines, sized up so they carry the block.
                 Element<RichTextLabel>().Class(StyleClassCrtCharacterSummary)
                     .Prop("font", crtCharacterSummaryFont)
@@ -2164,6 +2453,35 @@ namespace Content.Client.Stylesheets
                     .Prop(LineEdit.StylePropertyCursorColor, crtHeadingColor)
                     .Prop(LineEdit.StylePropertySelectionColor, crtSelectionColor),
 
+                Element<LineEdit>().Class(StyleClassHiveLineEdit)
+                    .Prop(LineEdit.StylePropertyStyleBox, hiveLineEdit)
+                    .Prop("font", crtLineEditFont)
+                    .Prop("font-color", HivePalette.Text)
+                    .Prop(LineEdit.StylePropertyCursorColor, HivePalette.Accent)
+                    .Prop(LineEdit.StylePropertySelectionColor, HivePalette.Accent.WithAlpha(0.33f)),
+
+                Element<VScrollBar>().Class(StyleClassHiveScrollBar)
+                    .Prop(ScrollBar.StylePropertyGrabber, hiveScrollGrabber),
+
+                Element<VScrollBar>().Class(StyleClassHiveScrollBar)
+                    .Pseudo(ScrollBar.StylePseudoClassHover)
+                    .Prop(ScrollBar.StylePropertyGrabber, hiveScrollGrabberHover),
+
+                Element<VScrollBar>().Class(StyleClassHiveScrollBar)
+                    .Pseudo(ScrollBar.StylePseudoClassGrabbed)
+                    .Prop(ScrollBar.StylePropertyGrabber, hiveScrollGrabberPressed),
+
+                Element<HScrollBar>().Class(StyleClassHiveScrollBar)
+                    .Prop(ScrollBar.StylePropertyGrabber, hiveScrollGrabber),
+
+                Element<HScrollBar>().Class(StyleClassHiveScrollBar)
+                    .Pseudo(ScrollBar.StylePseudoClassHover)
+                    .Prop(ScrollBar.StylePropertyGrabber, hiveScrollGrabberHover),
+
+                Element<HScrollBar>().Class(StyleClassHiveScrollBar)
+                    .Pseudo(ScrollBar.StylePseudoClassGrabbed)
+                    .Prop(ScrollBar.StylePropertyGrabber, hiveScrollGrabberPressed),
+
                 // The colour picker's gradient fields. No class: every one of them wants the frame,
                 // and without it a gradient sits on the background with no edge at all.
                 Element<ColorFieldControl>()
@@ -2185,6 +2503,114 @@ namespace Content.Client.Stylesheets
                     .Prop(TabContainer.StylePropertyPanelStyleBox, crtInsetPanel)
                     .Prop(TabContainer.StylePropertyTabStyleBox, crtTabActive)
                     .Prop(TabContainer.StylePropertyTabStyleBoxInactive, crtTabInactive)
+                    .Prop(TabContainer.stylePropertyTabFontColor, crtHeadingColor)
+                    .Prop(TabContainer.StylePropertyTabFontColorInactive, crtDimTextColor),
+
+                // Class + pseudo outranks StyleNano's MenuButton rules; ModulateSelf undoes their slate tint.
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyOutlined).Pseudo(ContainerButton.StylePseudoClassNormal)
+                    .Prop(ContainerButton.StylePropertyStyleBox, menuKeyOutlined)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyOutlined).Pseudo(ContainerButton.StylePseudoClassHover)
+                    .Prop(ContainerButton.StylePropertyStyleBox, menuKeyOutlinedHover)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyOutlined).Pseudo(ContainerButton.StylePseudoClassPressed)
+                    .Prop(ContainerButton.StylePropertyStyleBox, menuKeyOutlinedOpen)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyRaised).Pseudo(ContainerButton.StylePseudoClassNormal)
+                    .Prop(ContainerButton.StylePropertyStyleBox, menuKeyRaised)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyRaised).Pseudo(ContainerButton.StylePseudoClassHover)
+                    .Prop(ContainerButton.StylePropertyStyleBox, menuKeyRaisedHover)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyRaised).Pseudo(ContainerButton.StylePseudoClassPressed)
+                    .Prop(ContainerButton.StylePropertyStyleBox, menuKeyRaisedOpen)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                // Unread AHelp. Its class string is shared with the key label, hence the element type.
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyOutlined).Class(MenuButton.StyleClassRedTopButton).Pseudo(ContainerButton.StylePseudoClassNormal)
+                    .Prop(ContainerButton.StylePropertyStyleBox, menuKeyOutlinedAlert)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyOutlined).Class(MenuButton.StyleClassRedTopButton).Pseudo(ContainerButton.StylePseudoClassHover)
+                    .Prop(ContainerButton.StylePropertyStyleBox, menuKeyOutlinedAlert)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyRaised).Class(MenuButton.StyleClassRedTopButton).Pseudo(ContainerButton.StylePseudoClassNormal)
+                    .Prop(ContainerButton.StylePropertyStyleBox, menuKeyRaisedAlert)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyRaised).Class(MenuButton.StyleClassRedTopButton).Pseudo(ContainerButton.StylePseudoClassHover)
+                    .Prop(ContainerButton.StylePropertyStyleBox, menuKeyRaisedAlert)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<PanelContainer>().Class(StyleClassCmuMenuBarBand)
+                    .Prop(PanelContainer.StylePropertyPanel, menuBarBand),
+                Element<PanelContainer>().Class(StyleClassCmuMenuBarRule)
+                    .Prop(PanelContainer.StylePropertyPanel, menuBarRule),
+                Element<PanelContainer>().Class(StyleClassCmuChatSidePanel)
+                    .Prop(PanelContainer.StylePropertyPanel, chatSidePanel),
+                Element<PanelContainer>().Class(StyleClassCmuChatScreen)
+                    .Prop(PanelContainer.StylePropertyPanel, chatScreen),
+
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyCap).Pseudo(ContainerButton.StylePseudoClassNormal)
+                    .Prop(ContainerButton.StylePropertyStyleBox, keyCap)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyCap).Pseudo(ContainerButton.StylePseudoClassHover)
+                    .Prop(ContainerButton.StylePropertyStyleBox, keyCapHover)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyCap).Pseudo(ContainerButton.StylePseudoClassPressed)
+                    .Prop(ContainerButton.StylePropertyStyleBox, keyCapPressed)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyCap).Class(MenuButton.StyleClassRedTopButton).Pseudo(ContainerButton.StylePseudoClassNormal)
+                    .Prop(ContainerButton.StylePropertyStyleBox, keyCapAlert)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+                Element<MenuButton>().Class(StyleClassCmuMenuKeyCap).Class(MenuButton.StyleClassRedTopButton).Pseudo(ContainerButton.StylePseudoClassHover)
+                    .Prop(ContainerButton.StylePropertyStyleBox, keyCapAlert)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<ContainerButton>().Class(StyleClassCmuCharacterSlot).Pseudo(ContainerButton.StylePseudoClassNormal)
+                    .Prop(ContainerButton.StylePropertyStyleBox, slotNormal),
+                Element<ContainerButton>().Class(StyleClassCmuCharacterSlot).Pseudo(ContainerButton.StylePseudoClassHover)
+                    .Prop(ContainerButton.StylePropertyStyleBox, slotHover),
+                Element<ContainerButton>().Class(StyleClassCmuCharacterSlot).Pseudo(ContainerButton.StylePseudoClassPressed)
+                    .Prop(ContainerButton.StylePropertyStyleBox, slotSelected),
+
+                Element<Button>().Class(StyleClassCmuHousingKey).Pseudo(ContainerButton.StylePseudoClassNormal)
+                    .Prop(ContainerButton.StylePropertyStyleBox, keyCap)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+                Element<Button>().Class(StyleClassCmuHousingKey).Pseudo(ContainerButton.StylePseudoClassHover)
+                    .Prop(ContainerButton.StylePropertyStyleBox, keyCapHover)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+                Element<Button>().Class(StyleClassCmuHousingKey).Pseudo(ContainerButton.StylePseudoClassPressed)
+                    .Prop(ContainerButton.StylePropertyStyleBox, keyCapPressed)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+                Element<Button>().Class(StyleClassCmuHousingKey).Pseudo(ContainerButton.StylePseudoClassDisabled)
+                    .Prop(ContainerButton.StylePropertyStyleBox, keyCap)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White.WithAlpha(0.45f)),
+
+                Element<ContainerButton>().Class(StyleClassCmuGuideResult).Pseudo(ContainerButton.StylePseudoClassNormal)
+                    .Prop(ContainerButton.StylePropertyStyleBox, guideRow),
+                Element<ContainerButton>().Class(StyleClassCmuGuideResult).Pseudo(ContainerButton.StylePseudoClassHover)
+                    .Prop(ContainerButton.StylePropertyStyleBox, guideRowHover),
+                Element<ContainerButton>().Class(StyleClassCmuGuideResult).Pseudo(ContainerButton.StylePseudoClassPressed)
+                    .Prop(ContainerButton.StylePropertyStyleBox, guideRowPressed),
+
+                Element<Button>().Class(StyleClassCmuGuideSection).Pseudo(ContainerButton.StylePseudoClassNormal)
+                    .Prop(ContainerButton.StylePropertyStyleBox, guideRow),
+                Element<Button>().Class(StyleClassCmuGuideSection).Pseudo(ContainerButton.StylePseudoClassHover)
+                    .Prop(ContainerButton.StylePropertyStyleBox, guideRowHover),
+                Element<Button>().Class(StyleClassCmuGuideSection).Pseudo(ContainerButton.StylePseudoClassPressed)
+                    .Prop(ContainerButton.StylePropertyStyleBox, guideRowPressed),
+                Element<Label>().Class(StyleClassCmuGuideSection)
+                    .Prop(Label.StylePropertyAlignMode, Label.AlignMode.Left)
+                    .Prop(Label.StylePropertyFontColor, CrtTerminalPalette.TextDim),
+
+                Element<RichTextLabel>().Class(StyleClassCmuGuideResult)
+                    .Prop(Label.StylePropertyFont, notoSans12),
+                Element<RichTextLabel>().Class(StyleClassCmuGuideSnippet)
+                    .Prop(Label.StylePropertyFont, notoSans10),
+
+                Element<TabContainer>().Class(StyleClassCrtTabContainer).Class(StyleClassCmuOptionsTabs)
+                    .Prop(TabContainer.StylePropertyPanelStyleBox, cmuOptionsTabPanel)
+                    .Prop(TabContainer.StylePropertyTabStyleBox, cmuOptionsTabActive)
+                    .Prop(TabContainer.StylePropertyTabStyleBoxInactive, cmuOptionsTabInactive)
                     .Prop(TabContainer.stylePropertyTabFontColor, crtHeadingColor)
                     .Prop(TabContainer.StylePropertyTabFontColorInactive, crtDimTextColor),
 

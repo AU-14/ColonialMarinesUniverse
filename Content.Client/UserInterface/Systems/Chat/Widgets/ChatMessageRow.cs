@@ -12,10 +12,15 @@ using Content.Shared.Chat;
 using Robust.Client.Console;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
+using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.RichText;
+using Robust.Shared;
 using Robust.Shared.Configuration;
+using Robust.Shared.Input;
 using Robust.Shared.IoC;
+using Robust.Shared.Maths;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Client.UserInterface.Systems.Chat.Widgets;
@@ -40,22 +45,22 @@ public sealed partial class ChatMessageRow : PanelContainer
     [Dependency] private IClientConsoleHost _consoleHost = default!;
     [Dependency] private IResourceCache _resourceCache = default!;
     [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     /// <summary>
     ///     Line spacing for CRT message bodies. The uavOsd face has very tight vertical metrics, so
     ///     the ~1.06 the base theme uses leaves wrapped messages with almost no gap between lines.
     ///     The readable font does not have that problem and looks gappy at 1.25.
     /// </summary>
-    /// <remarks>
-    ///     Has to be set on the control even though <c>CrtChatText</c> carries the same value: a
-    ///     direct set of <see cref="RichTextLabel.LineHeightScale"/> beats the stylesheet, so leaving
-    ///     it to the rule would mean whatever the base theme's metrics happened to be. Keep the two
-    ///     in step.
-    /// </remarks>
     private static float CrtLineHeightScale => StyleNano.ChatReadableFont ? 1.0f : 1.25f;
 
     private readonly Label _repeatBadge;
     private readonly RichTextLabel _messageLabel;
+
+    // Set only for a row whose follow is double-click rather than button - see CCVars.ChatGhostFollowButton.
+    private NetEntity _doubleClickFollowEntity;
+    private TimeSpan? _lastClickTime;
+    private Vector2? _lastClickPosition;
 
     public ChatMessageRow(ChatMessage message, FormattedMessage formatted, Color textColor, Color? accentOverride = null, int? fontSize = null)
     {
@@ -131,10 +136,18 @@ public sealed partial class ChatMessageRow : PanelContainer
 
         if (message.GhostFollowEntity.Valid)
         {
-            var followButton = CreateFollowButton(message, metrics, textColor);
-            row.AddChild(followButton);
+            if (_config.GetCVar(CCVars.ChatGhostFollowButton))
+            {
+                row.AddChild(CreateFollowButton(message, metrics, textColor));
+            }
+            else
+            {
+                // Only the rows that need it opt into hit-testing; the default MouseFilter is Ignore.
+                _doubleClickFollowEntity = message.GhostFollowEntity;
+                MouseFilter = MouseFilterMode.Pass;
+            }
         }
-
+>>>>>>> crt-terminal-shader
         if (message.XenoWatchEntity.Valid)
         {
             var watchButton = CreateXenoWatchButton(message, metrics, textColor);
@@ -247,6 +260,28 @@ public sealed partial class ChatMessageRow : PanelContainer
         }
 
         return output;
+    }
+
+    protected override void KeyBindDown(GUIBoundKeyEventArgs args)
+    {
+        base.KeyBindDown(args);
+
+        if (!_doubleClickFollowEntity.Valid || args.Function != EngineKeyFunctions.UIClick)
+            return;
+
+        if (_lastClickPosition != null && _lastClickTime != null
+            && _timing.RealTime - _lastClickTime <= TimeSpan.FromMilliseconds(_config.GetCVar(CVars.DoubleClickDelay))
+            && (_lastClickPosition.Value - args.PointerLocation.Position).IsShorterThan(_config.GetCVar(CVars.DoubleClickRange)))
+        {
+            _lastClickTime = null;
+            _lastClickPosition = null;
+            _consoleHost.ExecuteCommand($"{CMUGhostFollowCommand.CommandName} {_doubleClickFollowEntity}");
+            args.Handle();
+            return;
+        }
+
+        _lastClickTime = _timing.RealTime;
+        _lastClickPosition = args.PointerLocation.Position;
     }
 
     public void RefreshLayout()

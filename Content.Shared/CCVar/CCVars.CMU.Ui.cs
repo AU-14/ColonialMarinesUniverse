@@ -12,6 +12,24 @@ public sealed partial class CCVars
     public static readonly CVarDef<bool> CMUVoteUiLarge =
         CVarDef.Create("cmu.vote_ui_large", false, CVar.CLIENTONLY | CVar.ARCHIVE);
 
+    public const string CMUMenuBarStyleOutlined = "outlined";
+    public const string CMUMenuBarStyleRaised = "raised";
+
+    /// <summary>
+    ///     How the in-round top menu bar draws its keys - <see cref="CMUMenuBarStyleOutlined"/> or
+    ///     <see cref="CMUMenuBarStyleRaised"/>.
+    /// </summary>
+    public static readonly CVarDef<string> CMUMenuBarStyle =
+        CVarDef.Create("cmu.menu_bar_style", CMUMenuBarStyleOutlined, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    ///     Test look for the Separated layout's chat panel: <c>off</c>, or a housing colour -
+    ///     <c>gunmetal</c>, <c>olive</c> or <c>beige</c>. Draws the panel as a molded housing with the
+    ///     chat on a tube screen and the menu bar as keycaps.
+    /// </summary>
+    public static readonly CVarDef<string> CMUChatHousing =
+        CVarDef.Create("cmu.chat_housing", "off", CVar.CLIENTONLY | CVar.ARCHIVE);
+
     /// <summary>
     ///     Playtime in minutes below which the guidebook opens itself in the lobby.
     ///     Disabled by default (0); players can open the guidebook manually.
@@ -20,63 +38,10 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.guidebook_auto_open_minutes", 0, CVar.CLIENTONLY);
 
     /// <summary>
-    ///     Opens one or more of the small CRT panels on startup so they can be looked at without
-    ///     anyone clicking through the lobby to reach them. Comma-separated, any of <c>join</c>,
-    ///     <c>staffhelp</c>, <c>vote</c>, <c>ready</c>, <c>atm</c> - for example
-    ///     <c>--cvar cmu.panel_preview=join,staffhelp</c>.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///     These three are the panels that share
-    ///     <c>CmuPanelMetrics</c>, and until now two of them could only be reached by clicking a
-    ///     lobby button and the third needed an actual vote to be running - so a change to their
-    ///     shared measurements could not be checked without a person driving the client.
-    ///     </para>
-    ///     <para>
-    ///     The vote preview is a fabricated vote with votes already cast, which is the state the real
-    ///     popup is hardest to see: the option bars only draw once something has been voted for. The
-    ///     ready preview shows both states of the lobby's ready toggle together - that control only
-    ///     exists before a round starts, so on a mid-round server there is otherwise no way to look
-    ///     at it, and the thing worth judging is the contrast between the two states rather than
-    ///     either one alone.
-    ///     </para>
-    /// </remarks>
-    public static readonly CVarDef<string> CMUPanelPreview =
-        CVarDef.Create("cmu.panel_preview", "", CVar.CLIENTONLY);
-
-    /// <summary>
-    ///     Console command(s) to run once, a few seconds after connecting. Semicolon-separated.
-    ///     For example <c>--cvar cmu.startup_command=golobby</c>.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///     A development aid, alongside <see cref="CMUPanelPreview"/>. The client's
-    ///     console is drawn in-game and cannot be written to from outside the process, so anything
-    ///     reachable only by a console command was unreachable when nobody was at the keyboard.
-    ///     </para>
-    ///     <para>
-    ///     The case that prompted it: the dev config boots straight into a running round, so the
-    ///     pre-round lobby - and everything that only exists there, like the ready toggle and the
-    ///     countdown - could not be looked at. <c>golobby</c> has always existed on the server side.
-    ///     </para>
-    ///     <para>
-    ///     Not ARCHIVE, deliberately: a stored value would run a command at every launch forever.
-    ///     </para>
-    /// </remarks>
-    public static readonly CVarDef<string> CMUStartupCommand =
-        CVarDef.Create("cmu.startup_command", "", CVar.CLIENTONLY);
-
-    /// <summary>
     ///     Where the player has dragged the lobby's round clock, as a fraction of the free space
     ///     around it - 0.5, 0.5 being centred. Negative means untouched, so the clock takes its
     ///     default place in the gap between the action panel and the server-info screen.
     /// </summary>
-    /// <remarks>
-    ///     A fraction rather than pixels so it survives a resolution change or the right-hand panel
-    ///     being collapsed, either of which would otherwise leave the clock off-screen or on top of
-    ///     something. ARCHIVE: having to re-place it every session would defeat the point of moving
-    ///     it at all.
-    /// </remarks>
     public static readonly CVarDef<float> CMULobbyClockX =
         CVarDef.Create("cmu.lobby_clock_x", -1f, CVar.CLIENTONLY | CVar.ARCHIVE);
 
@@ -94,19 +59,6 @@ public sealed partial class CCVars
     ///     Draw chat in a plain proportional face instead of the terminal one, leaving the rest of
     ///     the CRT theme alone. An accessibility option, not a cosmetic one.
     /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///     The uavOsd face the CRT theme uses is all-caps by design - it has no lowercase glyphs at
-    ///     all - so every message in the log renders shouting whatever the sender typed. That is
-    ///     fine for the handful of words on a piece of chrome and hard work for a conversation,
-    ///     especially at the 8px the terminal look wants. This swaps the chat's font only.
-    ///     </para>
-    ///     <para>
-    ///     ARCHIVE, because someone who needs it needs it every session. Deliberately independent of
-    ///     <see cref="CrtUiEnabled"/>: turning the whole theme off to make chat readable is exactly
-    ///     the trade this exists to avoid.
-    ///     </para>
-    /// </remarks>
     public static readonly CVarDef<bool> CMUChatReadableFont =
         CVarDef.Create("cmu.chat_readable_font", false, CVar.CLIENTONLY | CVar.ARCHIVE);
 
@@ -133,10 +85,6 @@ public sealed partial class CCVars
     ///     <see cref="CMUChatBigFontOff"/>, <see cref="CMUChatBigFontOne"/> or
     ///     <see cref="CMUChatBigFontTwo"/>. Chat only; nothing else in the UI moves.
     /// </summary>
-    /// <remarks>
-    ///     Two steps because the useful amount differs by monitor. Composes with
-    ///     <see cref="CMUChatReadableFont"/>: the step applies to whichever face chat is using.
-    /// </remarks>
     public static readonly CVarDef<string> CMUChatBigFont =
         CVarDef.Create("cmu.chat_big_font", CMUChatBigFontOff, CVar.CLIENTONLY | CVar.ARCHIVE);
 
@@ -185,11 +133,6 @@ public sealed partial class CCVars
     ///     bar is on screen for under two percent of the time and is genuinely a thing you catch
     ///     rather than a thing you watch.
     /// </summary>
-    /// <remarks>
-    ///     Was 19 seconds, which is often enough that the eye starts waiting for it - and an effect
-    ///     you are waiting for has stopped being scenery and become a distraction on a screen people
-    ///     read. Rare is the whole point of it.
-    /// </remarks>
     public static readonly CVarDef<float> CMUCrtEffectRollPeriod =
         CVarDef.Create("cmu.crt_effect_roll_period", 120f, CVar.CLIENTONLY | CVar.ARCHIVE);
 

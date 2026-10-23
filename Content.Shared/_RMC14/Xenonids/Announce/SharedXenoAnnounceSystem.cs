@@ -39,9 +39,14 @@ public abstract partial class SharedXenoAnnounceSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    ///     Wraps a hive announcement's heading. The fallback is the shared xeno announcement violet,
+    ///     not the old #921992: that magenta measured 1.9:1 against the announcement band, the worst
+    ///     text contrast in the chat, and it is what a hive with no colour of its own still gets.
+    /// </summary>
     public string WrapHive(string message, Color? color = null, EntityUid? hive = null)
     {
-        color ??= Color.FromHex("#921992");
+        color ??= Color.FromHex("#C9A7EA");
         return $"[color={color.Value.ToHex()}][font size=16][bold]{message}[/bold][/font][/color]\n\n";
     }
 

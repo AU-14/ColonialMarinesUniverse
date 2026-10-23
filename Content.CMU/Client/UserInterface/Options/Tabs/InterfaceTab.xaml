@@ -1,0 +1,66 @@
+<tabs:InterfaceTab xmlns="https://spacestation14.io"
+                   xmlns:tabs="clr-namespace:Content.Client._CMU14.UserInterface.Options.Tabs"
+                   xmlns:ui="clr-namespace:Content.Client.Options.UI"
+                   xmlns:cmu="clr-namespace:Content.Client._CMU14.UserInterface.Options">
+    <BoxContainer Orientation="Vertical">
+        <ScrollContainer VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False">
+            <BoxContainer Orientation="Vertical" Margin="10 8 10 8" SeparationOverride="2" VerticalExpand="True">
+
+                <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-group-hud'}">
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="ShowHeldItemCheckBox" Text="{Loc 'ui-options-show-held-item'}" />
+                            <CheckBox Name="RMCShowNewPlayerIcons" Text="{Loc 'cmu-ui-options-new-player-icons'}" ToolTip="{Loc 'cmu-ui-options-new-player-icons-tooltip'}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="ShowCombatModeIndicatorsCheckBox" Text="{Loc 'cmu-ui-options-combat-mode-cursor'}" ToolTip="{Loc 'cmu-ui-options-combat-mode-cursor-tooltip'}" />
+                            <CheckBox Name="VoteUiLargeCheckBox" Text="{Loc 'cmu-ui-options-vote-ui-large'}" ToolTip="{Loc 'cmu-ui-options-vote-ui-large-tooltip'}" />
+                        </BoxContainer>
+                    </BoxContainer>
+                    <ui:OptionDropDown Name="DropDownHudTheme" Title="{Loc 'cmu-ui-options-hud-theme'}" />
+                    <ui:OptionDropDown Name="DropDownHudLayout" Title="{Loc 'cmu-ui-options-hud-layout'}" />
+                    <cmu:CmuDependentOptions Name="SeparatedLayoutOptions">
+                        <CheckBox Name="CenterSeparatedViewportCheckBox" Text="{Loc 'cmu-ui-options-center-separated-viewport'}" ToolTip="{Loc 'cmu-ui-options-center-separated-viewport-tooltip'}" />
+                        <ui:OptionDropDown Name="SeparatedHudStatusSideDropdown" Title="{Loc 'cmu-ui-options-separated-hud-status-side'}" ToolTip="{Loc 'cmu-ui-options-separated-hud-status-side-tooltip'}" />
+                    </cmu:CmuDependentOptions>
+                </cmu:CmuOptionSection>
+
+                <!-- Separated layout only: the right-hand panel that holds the menu bar and chat. -->
+                <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-group-chat-panel'}">
+                    <ui:OptionDropDown Name="ChatHousingDropDown"
+                                       Title="{Loc 'cmu-ui-options-chat-housing'}"
+                                       ToolTip="{Loc 'cmu-ui-options-chat-housing-tooltip'}" />
+                    <cmu:CmuDependentOptions Name="MenuBarStyleOptions">
+                        <ui:OptionDropDown Name="MenuBarStyleDropDown"
+                                           Title="{Loc 'cmu-ui-options-menu-bar-style'}"
+                                           ToolTip="{Loc 'cmu-ui-options-menu-bar-style-tooltip'}" />
+                    </cmu:CmuDependentOptions>
+                </cmu:CmuOptionSection>
+
+                <cmu:CmuOptionSection Title="{Loc 'ui-options-general-storage'}">
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="OpaqueStorageWindowCheckBox" Text="{Loc 'ui-options-opaque-storage-window'}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="StaticStorageUI" Text="{Loc 'ui-options-static-storage-ui'}" />
+                        </BoxContainer>
+                    </BoxContainer>
+                </cmu:CmuOptionSection>
+
+                <cmu:CmuOptionSection Title="{Loc 'cmu-ui-options-group-other'}">
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="18">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="CrtUiEnabledCheckBox" Text="{Loc 'ui-options-crt-ui-enabled'}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="5">
+                            <CheckBox Name="DiscordRich" Text="{Loc 'cmu-ui-options-discord-rich'}" />
+                        </BoxContainer>
+                    </BoxContainer>
+                </cmu:CmuOptionSection>
+
+            </BoxContainer>
+        </ScrollContainer>
+        <ui:OptionsTabControlRow Name="Control" Access="Public" />
+    </BoxContainer>
+</tabs:InterfaceTab>

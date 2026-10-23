@@ -2,6 +2,8 @@ using System.Linq;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Chat.Widgets;
+using Robust.Shared.Maths;
+using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
@@ -24,6 +26,27 @@ internal static class CrtLobbyTheme
         {
             Apply(child, includeChat, useCrtTypography);
         }
+    }
+
+    /// <summary>
+    ///     The four corner brackets a CRT window wears, as an overlay to lay over its ground.
+    ///     <paramref name="corner"/> overrides <see cref="CrtStyleBox"/>'s terminal-green default.
+    /// </summary>
+    public static Control CornerTicks(Color? corner = null)
+    {
+        var box = new CrtStyleBox
+        {
+            BackgroundColor = Color.Transparent,
+            BorderColor = Color.Transparent,
+            BorderThickness = new Thickness(0),
+            DrawCornerTicks = true,
+            CornerLength = 14f,
+        };
+
+        if (corner is { } tint)
+            box.CornerColor = tint;
+
+        return new PanelContainer { MouseFilter = Control.MouseFilterMode.Ignore, PanelOverride = box };
     }
 
     public static void ApplyWindow(DefaultWindow window, bool includeChat = false, bool useCrtTypography = false)
@@ -131,7 +154,8 @@ internal static class CrtLobbyTheme
             case RichTextLabel richText when useCrtTypography:
                 // Controls that already carry a more specific CRT rich-text class style themselves.
                 if (!richText.HasStyleClass(StyleNano.StyleClassCrtServerInfoText) &&
-                    !richText.HasStyleClass(StyleNano.StyleClassCrtCharacterSummary))
+                    !richText.HasStyleClass(StyleNano.StyleClassCrtCharacterSummary) &&
+                    !richText.HasStyleClass(StyleNano.StyleClassCrtProseText))
                     AddClass(richText, StyleNano.StyleClassCrtRichText);
                 break;
             case LineEdit lineEdit:

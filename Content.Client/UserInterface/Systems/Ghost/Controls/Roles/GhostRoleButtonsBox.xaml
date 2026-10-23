@@ -1,10 +1,6 @@
 <BoxContainer xmlns="https://spacestation14.io"
               Orientation="Vertical"
-              HorizontalExpand="True">
-    <BoxContainer Name="Buttons"
-                  Orientation="Vertical"
-                  HorizontalExpand="True"
-                  SeparationOverride="5">
-        <!-- Buttons are added here by code -->
-    </BoxContainer>
+              HorizontalExpand="True"
+              SeparationOverride="0">
+    <!-- One GhostRoleEntryButtons per entity is added here by code. -->
 </BoxContainer>

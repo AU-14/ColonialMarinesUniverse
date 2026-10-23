@@ -95,6 +95,7 @@ namespace Content.Client.Stylesheets
 
             StyleNano.SetCrtUiEnabled(_configurationManager.GetCVar(CCVars.CrtUiEnabled));
             StyleNano.SetCrtPalette(_configurationManager.GetCVar(CCVars.CrtUiColor));
+            StyleNano.SetChatHousing(_configurationManager.GetCVar(CCVars.CMUChatHousing));
             StyleNano.SetChatReadableFont(_configurationManager.GetCVar(CCVars.CMUChatReadableFont));
             StyleNano.SetChatFontStep(
                 StyleNano.ParseChatFontStep(_configurationManager.GetCVar(CCVars.CMUChatBigFont)));
@@ -117,6 +118,7 @@ namespace Content.Client.Stylesheets
             sawmill.Debug($"Initialized {_styleRuleCount} style rules in {sw.Elapsed}");
             _configurationManager.OnValueChanged(CCVars.CMUChatReadableFont, OnChatReadableFontChanged);
             _configurationManager.OnValueChanged(CCVars.CMUChatBigFont, OnChatBigFontChanged);
+            _configurationManager.OnValueChanged(CCVars.CMUChatHousing, OnChatHousingChanged);
         }
 
         public void PreviewCrtUi(bool enabled, string color)
@@ -137,6 +139,13 @@ namespace Content.Client.Stylesheets
         {
             StyleNano.SetCrtUiEnabled(enabled);
             RefreshCrtTheme();
+        }
+
+        private void OnChatHousingChanged(string tone)
+        {
+            StyleNano.SetChatHousing(tone);
+            RefreshNanoSheet();
+            RefreshOpenUi();
         }
 
         private void OnCrtUiColorChanged(string color)
@@ -173,11 +182,6 @@ namespace Content.Client.Stylesheets
         /// <summary>
         ///     The shared tail of both chat font options.
         /// </summary>
-        /// <remarks>
-        ///     Order is the point: statics, then sheet, then restyle, and only then chat. Listening to
-        ///     the cvars directly let chat rebuild first, which left the controls that bake a
-        ///     FontOverride at the old size while the message bodies moved with the sheet.
-        /// </remarks>
         private void ApplyChatFontChange()
         {
             RefreshNanoSheet();

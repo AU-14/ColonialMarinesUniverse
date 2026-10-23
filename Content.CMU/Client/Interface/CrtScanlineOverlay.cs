@@ -11,7 +11,10 @@ using Robust.Shared.Maths;
 namespace Content.Client.CMU14.Interface;
 
 /// <summary>
-///     Scanlines drawn straight over whatever is beneath, with no render target involved.
+///     Scanlines drawn straight over whatever is beneath, with no render target involved - the half of
+///     <see cref="CrtScreenControl"/> that works on live scrolling text, which the capturing pass does
+///     not: it fails there by drawing a stale copy rather than by throwing. No roll bar, since an
+///     overlay can only add pixels, never move them.
 /// </summary>
 /// <remarks>
 ///     <para>
@@ -38,6 +41,9 @@ public sealed partial class CrtScanlineOverlay : Control
 
     [Dependency] private IConfigurationManager _cfg = default!;
 
+    /// <summary>Scanline depth; null falls through to the cvar.</summary>
+    public float? Intensity { get; set; }
+
     public CrtScanlineOverlay()
     {
         IoCManager.InjectDependencies(this);
@@ -53,9 +59,10 @@ public sealed partial class CrtScanlineOverlay : Control
         if (!StyleNano.CrtUiEnabled)
             return;
 
-        var intensity = _cfg.GetCVar(CCVars.CMUCrtEffectIntensity);
-        if (intensity <= 0f)
+        if (_cfg.GetCVar(CCVars.CMUCrtEffectIntensity) <= 0f)
             return;
+
+        var intensity = Intensity ?? _cfg.GetCVar(CCVars.CMUCrtEffectIntensity);
 
         var size = PixelSize;
         if (size.X <= 0 || size.Y <= 0)

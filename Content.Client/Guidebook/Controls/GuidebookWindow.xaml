@@ -2,47 +2,60 @@
                 xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
                 xmlns:fancyTree="clr-namespace:Content.Client.UserInterface.Controls.FancyTree"
                 xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-                SetSize="900 700"
+                SetSize="1060 740"
                 MinSize="100 200"
                 Resizable="True"
                 Title="{Loc 'guidebook-window-title'}">
-    <PanelContainer StyleClasses="CrtPanel" HorizontalExpand="True" VerticalExpand="True">
-        <SplitContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" Name="Split" Margin="6">
-            <!-- Guide select -->
-            <BoxContainer Orientation="Horizontal" Name="TreeBox">
-                <PanelContainer StyleClasses="CrtInsetPanel" HorizontalExpand="True" VerticalExpand="True">
-                    <fancyTree:FancyTree Name="Tree" VerticalExpand="True" HorizontalExpand="True" Access="Public" Margin="4"/>
-                </PanelContainer>
-                <cc:VSeparator StyleClasses="LowDivider" Margin="4 0"/>
-            </BoxContainer>
-            <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="4">
-                <PanelContainer StyleClasses="CrtInsetPanel" HorizontalExpand="True">
-                    <fancyTree:FancyTree Name="TableOfContents" HorizontalExpand="True" Margin="4"/>
-                </PanelContainer>
-                <PanelContainer Name="SearchContainer" StyleClasses="CrtInsetPanel" Visible="False" HorizontalExpand="True">
-                    <LineEdit
-                        Name="SearchBar"
-                        PlaceHolder="{Loc 'guidebook-filter-placeholder-text'}"
-                        HorizontalExpand="True"
-                        Margin="4">
-                    </LineEdit>
-                </PanelContainer>
-                <BoxContainer Access="Internal" Name="ReturnContainer" Orientation="Horizontal" HorizontalAlignment="Right" Visible="False">
-                    <Button Name="HomeButton" Text="{Loc 'ui-rules-button-home'}" Margin="0 0 4 0"/>
+    <PanelContainer Name="Housing" StyleClasses="CrtPanel" HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Orientation="Vertical" Margin="6" SeparationOverride="6">
+            <!-- CMU: history keys and the path to the open page, on the housing above the screen. -->
+            <BoxContainer Name="Strip" Orientation="Horizontal" SeparationOverride="4">
+                <Button Name="BackButton" Text="&lt;" MinWidth="34" ToolTip="{Loc 'cmu-guidebook-back'}"/>
+                <Button Name="ForwardButton" Text="&gt;" MinWidth="34" ToolTip="{Loc 'cmu-guidebook-forward'}"/>
+                <Label Name="Breadcrumb" Margin="10 0 0 0" VAlign="Center" HorizontalExpand="True" ClipText="True"/>
+                <BoxContainer Access="Internal" Name="ReturnContainer" Orientation="Horizontal" Visible="False">
+                    <Button Name="HomeButton" Text="{Loc 'ui-rules-button-home'}"/>
                 </BoxContainer>
-                <PanelContainer StyleClasses="CrtInsetPanel" HorizontalExpand="True" VerticalExpand="True">
-                    <ScrollContainer Name="Scroll" HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
-                        <Control>
-                            <BoxContainer Orientation="Vertical" Name="EntryContainer" Margin="8" Visible="False">
-                            </BoxContainer>
-                            <BoxContainer Orientation="Vertical" Name="Placeholder" Margin="8">
-                                <Label HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Loc 'guidebook-placeholder-text'}"/>
-                                <Label HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Loc 'guidebook-placeholder-text-2'}"/>
-                            </BoxContainer>
-                        </Control>
-                    </ScrollContainer>
-                </PanelContainer>
             </BoxContainer>
-        </SplitContainer>
+            <SplitContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" Name="Split">
+                <!-- Contents: no frame of its own, it sits on the window ground. -->
+                <BoxContainer Name="TreeBox" Orientation="Vertical" MinWidth="250" SeparationOverride="4" Margin="2 0 8 0">
+                    <Label Name="ContentsLabel" Text="{Loc 'cmu-guidebook-contents'}" StyleClasses="LabelSubText"/>
+                    <PanelContainer Name="SearchSlot" StyleClasses="CrtInsetPanel" HorizontalExpand="True">
+                        <LineEdit
+                            Name="SearchBar"
+                            PlaceHolder="{Loc 'cmu-guidebook-search-placeholder'}"
+                            HorizontalExpand="True"
+                            Margin="4"/>
+                    </PanelContainer>
+                    <PanelContainer Name="Groove" MinHeight="2" Margin="0 2"/>
+                    <ScrollContainer Name="SideScroll" HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
+                        <BoxContainer Orientation="Vertical">
+                            <fancyTree:FancyTree Name="Tree" HorizontalExpand="True" Access="Public"/>
+                            <BoxContainer Name="Results" Orientation="Vertical" Visible="False" SeparationOverride="2"/>
+                        </BoxContainer>
+                    </ScrollContainer>
+                </BoxContainer>
+                <!-- One screen, holding the page. -->
+                <PanelContainer Name="Screen" StyleClasses="CrtInsetPanel" HorizontalExpand="True" VerticalExpand="True">
+                    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
+                        <PanelContainer StyleClasses="CrtInsetPanel" HorizontalExpand="True">
+                            <fancyTree:FancyTree Name="TableOfContents" HorizontalExpand="True" Margin="4"/>
+                        </PanelContainer>
+
+                        <ScrollContainer Name="Scroll" HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
+                            <Control>
+                                <BoxContainer Orientation="Vertical" Name="EntryContainer" Margin="10 8" Visible="False">
+                                </BoxContainer>
+                                <BoxContainer Orientation="Vertical" Name="Placeholder" Margin="8">
+                                    <Label HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Loc 'guidebook-placeholder-text'}"/>
+                                    <Label HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Loc 'guidebook-placeholder-text-2'}"/>
+                                </BoxContainer>
+                            </Control>
+                        </ScrollContainer>
+                    </BoxContainer>
+                </PanelContainer>
+            </SplitContainer>
+        </BoxContainer>
     </PanelContainer>
 </controls:FancyWindow>

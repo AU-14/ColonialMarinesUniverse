@@ -1,22 +1,40 @@
-<BoxContainer xmlns="https://spacestation14.io"
-              Orientation="Horizontal"
-              HorizontalAlignment="Stretch"
-              HorizontalExpand="True"
-              MinHeight="32"
-              SeparationOverride="6">
-    <Button Name="RequestButton"
-            Access="Public"
-            Text="{Loc 'ghost-roles-window-request-role-button'}"
-            TextAlign="Center"
-            ClipText="False"
-            HorizontalExpand="True"
-            MinHeight="32"
-            SizeFlagsStretchRatio="3"/>
-    <Button Name="FollowButton"
-            Access="Public"
-            Text="{Loc 'ghost-roles-window-follow-role-button'}"
-            TextAlign="Center"
-            ClipText="False"
-            HorizontalExpand="True"
-            MinHeight="32"/>
-</BoxContainer>
+<PanelContainer xmlns="https://spacestation14.io"
+                HorizontalExpand="True">
+    <BoxContainer Orientation="Horizontal"
+                  HorizontalExpand="True"
+                  SeparationOverride="6"
+                  Margin="26 6 14 5">
+        <PanelContainer Name="Pip" MinSize="4 4" VerticalAlignment="Center" />
+        <!-- Takes the slack rather than a spacer Control doing it: a ClipText label has no minimum
+             width of its own, so beside something that expands it collapses to nothing. -->
+        <Label Name="LocationLabel"
+               ClipText="True"
+               HorizontalExpand="True"
+               VerticalAlignment="Center" />
+        <Label Name="EntrantsLabel" VerticalAlignment="Center" Visible="False" />
+        <BoxContainer Name="RaffleBar"
+                      Orientation="Horizontal"
+                      MinSize="90 3"
+                      SetHeight="3"
+                      VerticalAlignment="Center"
+                      SeparationOverride="0"
+                      Visible="False">
+            <PanelContainer Name="RaffleBarFill" HorizontalExpand="True" />
+            <PanelContainer Name="RaffleBarTrack" HorizontalExpand="True" />
+        </BoxContainer>
+        <Label Name="ClockLabel" VerticalAlignment="Center" Visible="False" />
+        <Button Name="FollowButton"
+                Access="Public"
+                Text="{Loc 'ghost-roles-window-follow-role-button'}"
+                TextAlign="Center"
+                ClipText="False"
+                VerticalAlignment="Center" />
+        <Button Name="RequestButton"
+                Access="Public"
+                Text="{Loc 'ghost-roles-window-request-role-button'}"
+                TextAlign="Center"
+                ClipText="False"
+                VerticalAlignment="Center"
+                MinWidth="100" />
+    </BoxContainer>
+</PanelContainer>

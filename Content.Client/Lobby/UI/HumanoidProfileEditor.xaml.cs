@@ -459,7 +459,1265 @@ namespace Content.Client.Lobby.UI
             SetDirty();
         }
 
+<<<<<<< HEAD
         [Obsolete("Retained for CMUControlLifetime.Release cleanup.")]
+||||||| parent of 7ae57790c (test)
+        private void OnSpeciesInfoButtonPressed(BaseButton.ButtonEventArgs args)
+        {
+            // TODO GUIDEBOOK
+            // make the species guide book a field on the species prototype.
+            // I.e., do what jobs/antags do.
+
+            var guidebookController = UserInterfaceManager.GetUIController<GuidebookUIController>();
+            var species = Profile?.Species ?? SharedHumanoidAppearanceSystem.DefaultSpecies;
+            var page = DefaultSpeciesGuidebook;
+            if (_prototypeManager.HasIndex<GuideEntryPrototype>(species))
+                page = new ProtoId<GuideEntryPrototype>(species.Id); // Gross. See above todo comment.
+
+            if (_prototypeManager.TryIndex(DefaultSpeciesGuidebook, out var guideRoot))
+            {
+                var dict = new Dictionary<ProtoId<GuideEntryPrototype>, GuideEntry>();
+                dict.Add(DefaultSpeciesGuidebook, guideRoot);
+                //TODO: Don't close the guidebook if its already open, just go to the correct page
+                guidebookController.OpenGuidebook(dict, includeChildren: true, selected: page);
+            }
+        }
+
+        /// <summary>
+        /// Refreshes all job selectors.
+        /// </summary>
+        public void RefreshJobs()
+        {
+            InsurgencyGovernmentJobList.DisposeAllChildren();
+            InsurgencyInsurgentJobList.DisposeAllChildren();
+            InsurgencyCivilianJobList.DisposeAllChildren();
+            ColonyCivilianJobList.DisposeAllChildren();
+            ColonyThreatJobList.DisposeAllChildren();
+            DistressGovernmentJobList.DisposeAllChildren();
+            DistressThreatJobList.DisposeAllChildren();
+            _jobCategories.Clear();
+            _jobPriorities.Clear();
+
+            // Get all displayed departments
+            var departments = new List<DepartmentPrototype>();
+            foreach (var department in _prototypeManager.EnumeratePrototypes<DepartmentPrototype>())
+            {
+                if (department.EditorHidden)
+                    continue;
+
+                departments.Add(department);
+            }
+
+            departments.Sort(CompareDepartmentsForCharacterSetup);
+
+            var items = new[]
+            {
+                ("humanoid-profile-editor-job-priority-never-button", (int) JobPriority.Never),
+                ("humanoid-profile-editor-job-priority-low-button", (int) JobPriority.Low),
+                ("humanoid-profile-editor-job-priority-medium-button", (int) JobPriority.Medium),
+                ("humanoid-profile-editor-job-priority-high-button", (int) JobPriority.High),
+            };
+
+            foreach (var department in departments)
+            {
+                var departmentName = Loc.GetString(department.Name);
+
+                var jobs = department.Roles.Select(jobId => _prototypeManager.Index(jobId))
+                    .Where(job => job.SetPreference)
+                    .Where(job => !job.Hidden)
+                    .ToArray();
+
+                Array.Sort(jobs, (a, b) =>
+                {
+                    var group = GetJobSortGroup(department, a).CompareTo(GetJobSortGroup(department, b));
+                    return group != 0 ? group : JobUIComparer.Instance.Compare(a, b);
+                });
+
+                foreach (var job in jobs)
+                {
+                    foreach (var (targetList, gamemode, sectionKey, sectionTitle) in GetJobSections(department, job, departmentName))
+                    {
+                        AddJobSelector(
+                            targetList,
+                            gamemode,
+                            sectionKey,
+                            sectionTitle,
+                            department.IsCM && !department.Hidden,
+                            departmentName,
+                            items,
+                            job);
+                    }
+                }
+            }
+
+            foreach (var list in GetGamemodeJobLists())
+            {
+                CrtLobbyTheme.Apply(list);
+            }
+
+            UpdateJobPriorities();
+        }
+
+        private void AddJobSelector(
+            BoxContainer targetList,
+            string gamemode,
+            string sectionKey,
+            string sectionTitle,
+            bool visible,
+            string departmentName,
+            (string, int)[] items,
+            JobPrototype job)
+        {
+            var category = GetOrCreateJobCategory(
+                sectionKey,
+                targetList,
+                sectionTitle,
+                visible,
+                departmentName);
+
+            var jobContainer = new BoxContainer()
+            {
+                Orientation = LayoutOrientation.Horizontal,
+                HorizontalExpand = true,
+            };
+
+            var selector = new RequirementsSelector()
+            {
+                Margin = new Thickness(3f, 3f, 3f, 0f),
+                HorizontalExpand = true,
+            };
+            selector.OnOpenGuidebook += OnOpenGuidebook;
+
+            var icon = new TextureRect
+            {
+                TextureScale = new Vector2(2, 2),
+                VerticalAlignment = VAlignment.Center
+            };
+            var jobIcon = _prototypeManager.Index(job.Icon);
+            icon.Texture = _sprite.Frame0(jobIcon.Icon);
+            selector.Setup(items, GetJobDisplayName(job), 220, job.LocalizedDescription, icon, job.Guides);
+
+            if (!_requirements.IsAllowed(job, (HumanoidCharacterProfile?)_preferencesManager.Preferences?.SelectedCharacter, out var reason))
+            {
+                selector.LockRequirements(reason);
+            }
+            else if (Profile != null && job.IsSynthetic != Profile.Synthetic)
+            {
+                selector.LockRequirements(FormattedMessage.FromUnformatted(
+                    Loc.GetString(job.IsSynthetic
+                        ? "humanoid-profile-editor-synthetic-locked-job"
+                        : "humanoid-profile-editor-synthetic-locked-job-non-synthetic")));
+            }
+            else
+            {
+                selector.UnlockRequirements();
+            }
+
+            selector.OnSelected += selectedPrio =>
+            {
+                var selectedJobPrio = (JobPriority)selectedPrio;
+                Profile = Profile?.WithGamemodeJobPriority(gamemode, job.ID, selectedJobPrio);
+
+                foreach (var (otherGamemode, jobId, other) in _jobPriorities)
+                {
+                    if (otherGamemode != gamemode)
+                        continue;
+
+                    // Sync other selectors with the same job in case of multiple department jobs
+                    if (jobId == job.ID)
+                    {
+                        other.Select(selectedPrio);
+                        continue;
+                    }
+
+                    if (selectedJobPrio != JobPriority.High || (JobPriority)other.Selected != JobPriority.High)
+                        continue;
+
+                    // Lower any other high priorities to medium.
+                    other.Select((int)JobPriority.Medium);
+                    Profile = Profile?.WithGamemodeJobPriority(gamemode, jobId, JobPriority.Medium);
+                }
+
+                // TODO: Only reload on high change (either to or from).
+                ReloadPreview();
+
+                UpdateJobPriorities();
+                SetDirty();
+            };
+
+            var loadoutWindowBtn = new Button()
+            {
+                Text = Loc.GetString("loadout-window"),
+                HorizontalAlignment = HAlignment.Right,
+                VerticalAlignment = VAlignment.Center,
+                Margin = new Thickness(3f, 3f, 0f, 0f),
+                MinWidth = 110,
+                StyleClasses = { StyleNano.StyleClassCrtButton }
+            };
+
+            var collection = IoCManager.Instance!;
+            var protoManager = collection.Resolve<IPrototypeManager>();
+
+            // If no loadout found then disabled button
+            var (key, proto) = LoadoutSystem.GetJobLoadoutInfo(job.ID, protoManager);
+            if (proto == null)
+            {
+                loadoutWindowBtn.Disabled = true;
+            }
+            else
+            {
+                loadoutWindowBtn.OnPressed += args =>
+               {
+                   RoleLoadout? loadout = null;
+                   // Clone so we don't modify the underlying loadout.
+                   if (Profile?.Loadouts.TryGetValue(key, out var existing) == true)
+                       loadout = existing.Clone();
+
+                   if (loadout == null)
+                   {
+                       loadout = new RoleLoadout(proto.ID);
+                       loadout.SetDefault(Profile, _playerManager.LocalSession, _prototypeManager);
+                   }
+                   OpenLoadout(job, loadout, proto);
+               };
+            }
+
+            var rankEntry = BuildRankPreferenceJobEntry(job);
+
+            var rankButton = new Button()
+            {
+                Text = Loc.GetString("cmu14-rank-preference-button"),
+                HorizontalAlignment = HAlignment.Right,
+                VerticalAlignment = VAlignment.Center,
+                Margin = new Thickness(3f, 3f, 0f, 0f),
+                MinWidth = 90,
+                StyleClasses = { StyleNano.StyleClassCrtButton },
+                Disabled = rankEntry == null,
+            };
+
+            rankButton.OnPressed += args => OpenRankPreferenceWindowForJob(job, rankEntry);
+
+            _jobPriorities.Add((gamemode, job.ID, selector));
+            jobContainer.AddChild(selector);
+            jobContainer.AddChild(loadoutWindowBtn);
+            jobContainer.AddChild(rankButton);
+            CrtLobbyTheme.Apply(jobContainer);
+            category.AddChild(jobContainer);
+        }
+
+        private IEnumerable<BoxContainer> GetGamemodeJobLists()
+        {
+            yield return InsurgencyGovernmentJobList;
+            yield return InsurgencyInsurgentJobList;
+            yield return InsurgencyCivilianJobList;
+            yield return ColonyCivilianJobList;
+            yield return ColonyThreatJobList;
+            yield return DistressGovernmentJobList;
+            yield return DistressThreatJobList;
+        }
+
+        private BoxContainer GetOrCreateJobCategory(
+            string key,
+            BoxContainer targetList,
+            string title,
+            bool visible,
+            string departmentName)
+        {
+            if (_jobCategories.TryGetValue(key, out var category))
+                return category;
+
+            category = new BoxContainer
+            {
+                Orientation = LayoutOrientation.Vertical,
+                Name = key,
+                ToolTip = Loc.GetString("humanoid-profile-editor-jobs-amount-in-department-tooltip",
+                    ("departmentName", departmentName)),
+                Visible = visible,
+            };
+
+            if (targetList.Children.Any(child => child.Visible) && visible)
+            {
+                category.AddChild(new Control
+                {
+                    MinSize = new Vector2(0, 14),
+                });
+            }
+
+            category.AddChild(new PanelContainer
+            {
+                PanelOverride = new StyleBoxFlat
+                {
+                    BackgroundColor = StyleNano.CrtPanelBackgroundAlt,
+                    BorderColor = StyleNano.CrtGreenDim,
+                    BorderThickness = new Thickness(0, 0, 0, 1),
+                    ContentMarginTopOverride = 3,
+                    ContentMarginBottomOverride = 3
+                },
+                Children =
+                {
+                    new Label
+                    {
+                        Text = title,
+                        Margin = new Thickness(6f, 0, 0, 0),
+                        StyleClasses = { StyleNano.StyleClassCrtHeading }
+                    }
+                }
+            });
+
+            _jobCategories[key] = category;
+            targetList.AddChild(category);
+            return category;
+        }
+
+        private IEnumerable<(BoxContainer Target, string Gamemode, string Key, string Title)> GetJobSections(
+            DepartmentPrototype department,
+            JobPrototype job,
+            string departmentName)
+        {
+            if (department.Faction == "govfor")
+            {
+                var (segmentKey, segmentTitle) = GetMilitaryJobSegment(job);
+                yield return (InsurgencyGovernmentJobList,
+                    GamemodeInsurgency,
+                    $"insurgency-govfor-{segmentKey}",
+                    Loc.GetString("humanoid-profile-editor-government-forces-label", ("segmentTitle", segmentTitle)));
+                yield return (DistressGovernmentJobList,
+                    GamemodeDistressSignal,
+                    $"distress-govfor-{segmentKey}",
+                    Loc.GetString("humanoid-profile-editor-government-forces-label", ("segmentTitle", segmentTitle)));
+                yield break;
+            }
+
+            if (department.Faction == "opfor")
+            {
+                yield break;
+            }
+
+            if (IsInsurgencyDepartment(department))
+            {
+                yield return (InsurgencyInsurgentJobList,
+                    GamemodeInsurgency,
+                    $"insurgency-jobs-{department.ID}",
+                    department.CustomName ?? Loc.GetString("humanoid-profile-editor-department-jobs-label", ("departmentName", departmentName)));
+                yield break;
+            }
+
+            if (department.Faction == "colonist")
+            {
+                var title = department.CustomName ?? Loc.GetString("humanoid-profile-editor-department-jobs-label", ("departmentName", departmentName));
+                yield return (InsurgencyCivilianJobList,
+                    GamemodeInsurgency,
+                    $"insurgency-civilian-{department.ID}",
+                    title);
+                yield return (ColonyCivilianJobList,
+                    GamemodeColonyFall,
+                    $"colony-civilian-{department.ID}",
+                    title);
+                yield break;
+            }
+
+            if (!IsRoundStartThreatAssignmentJob(job))
+                yield break;
+
+            yield return (ColonyThreatJobList,
+                GamemodeColonyFall,
+                "colony-threat",
+                "Threat Jobs");
+            yield return (DistressThreatJobList,
+                GamemodeDistressSignal,
+                "distress-threat",
+                "Threat Jobs");
+        }
+
+        private static int CompareDepartmentsForCharacterSetup(DepartmentPrototype? x, DepartmentPrototype? y)
+        {
+            if (ReferenceEquals(x, y))
+                return 0;
+
+            if (ReferenceEquals(null, y))
+                return 1;
+
+            if (ReferenceEquals(null, x))
+                return -1;
+
+            var colonyGroup = GetColonyDepartmentSortGroup(x).CompareTo(GetColonyDepartmentSortGroup(y));
+            return colonyGroup != 0 ? colonyGroup : DepartmentUIComparer.Instance.Compare(x, y);
+        }
+
+        private static int GetColonyDepartmentSortGroup(DepartmentPrototype department)
+        {
+            return department.ID switch
+            {
+                "AU14DepartmentColonyCommand" => 0,
+                "AU14DepartmentColonySecurity" => 1,
+                "AU14DepartmentColonyMedical" => 2,
+                "AU14DepartmentEngineering" => 3,
+                "AU14DepartmentCivilian" => 4,
+                "AU14DepartmentCriminal" => 5,
+                "AU14DepartmentCorporate" => 6,
+                "AU14DepartmentAmbassadors" => 7,
+                "AU14DepartmentOrbital" => 8,
+                _ => 100,
+            };
+        }
+
+        private static bool IsInsurgencyDepartment(DepartmentPrototype department)
+        {
+            return department.ID == InsurgencyDepartmentId;
+        }
+
+        private static bool IsRoundStartThreatAssignmentJob(JobPrototype job)
+        {
+            return job.ID is
+                "AU14JobThreatLeader" or
+                "AU14JobThreatMember" or
+                "AU14JobThirdPartyLeader" or
+                "AU14JobThirdPartyMember";
+        }
+
+        private static (string Key, string Title) GetMilitaryJobSegment(JobPrototype job)
+        {
+            var id = job.ID;
+            var name = job.LocalizedName;
+
+            if (id is "AU14JobGOVFORVehicleCommander")
+                return ("flight", Loc.GetString("humanoid-profile-editor-segment-flight"));
+
+            if (ContainsAny(id, name, "MilitaryDoctor"))
+                return ("support", Loc.GetString("humanoid-profile-editor-segment-support"));
+
+            if (job.MarineAuthorityLevel > 0
+                    || ContainsAny(id, name, "PlatCo", "Adjutant", "PlatOp", "Commander", "Command", "Advisor"))
+                return ("command", Loc.GetString("humanoid-profile-editor-segment-command"));
+
+            if (ContainsAny(id, name, "Pilot", "Dropship", "Crew Chief", "DCC", "VehicleCrewman"))
+                return ("flight", Loc.GetString("humanoid-profile-editor-segment-flight"));
+
+            if (ContainsAny(id, name, "Officer", "Chief")) // after Crew Chief
+                return ("officer", Loc.GetString("humanoid-profile-editor-segment-officer"));
+
+            if (ContainsAny(id, name, "Doctor", "AuxTech", "Police", "Synth", "Working Joe", "Auxiliary", "DroneOperator", "Nurse", "EngineeringTech", "Correspondent"))
+                return ("support", Loc.GetString("humanoid-profile-editor-segment-support"));
+
+            if (ContainsAny(id, name, "Leader", "Sergeant", "RadioTelephone"))
+                return ("leader", Loc.GetString("humanoid-profile-editor-segment-leader"));
+
+            return ("line", Loc.GetString("humanoid-profile-editor-segment-line"));
+        }
+
+        private static int GetJobSortGroup(DepartmentPrototype department, JobPrototype job)
+        {
+            if (department.Faction != "govfor" && department.Faction != "opfor")
+                return 0;
+
+            return GetMilitaryJobSegment(job).Key switch
+            {
+                "command" => 0,
+                "officer" => 1,
+                "flight" => 2,
+                "support" => 3,
+                "leader" => 4,
+                _ => 5,
+            };
+        }
+
+        private static string GetJobDisplayName(JobPrototype job)
+        {
+            return LobbyHighJobPreview.GetDisplayJobName(job);
+        }
+
+        private static bool ContainsAny(string id, string name, params string[] needles)
+        {
+            foreach (var needle in needles)
+            {
+                if (id.Contains(needle, StringComparison.OrdinalIgnoreCase) ||
+                    name.Contains(needle, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void OpenLoadout(JobPrototype? jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto)
+        {
+            _loadoutWindow?.Close();
+            _loadoutWindow = null;
+            var collection = IoCManager.Instance;
+
+            if (collection == null || _playerManager.LocalSession == null || Profile == null || jobProto == null)
+                return;
+
+            JobOverride = jobProto;
+            var session = _playerManager.LocalSession;
+
+            _loadoutWindow = new LoadoutWindow(Profile, roleLoadout, roleLoadoutProto, _playerManager.LocalSession, collection)
+            {
+                Title = jobProto.ID + "-loadout",
+            };
+
+            // Refresh the buttons etc.
+            _loadoutWindow.RefreshLoadouts(roleLoadout, session, collection);
+            _loadoutWindow.OpenCenteredLeft();
+
+            var concreteKey = LoadoutSystem.GetJobPrototype(jobProto.ID);
+            _loadoutWindow.OnNameChanged += name =>
+            {
+                roleLoadout.EntityName = name;
+                Profile = Profile.WithLoadout(concreteKey, roleLoadout);
+                SetDirty();
+            };
+
+            _loadoutWindow.OnLoadoutPressed += (loadoutGroup, loadoutProto) =>
+            {
+                roleLoadout.AddLoadout(loadoutGroup, loadoutProto, _prototypeManager);
+                _loadoutWindow.RefreshLoadouts(roleLoadout, session, collection);
+                Profile = Profile?.WithLoadout(concreteKey, roleLoadout);
+                ReloadPreview();
+            };
+
+            _loadoutWindow.OnLoadoutUnpressed += (loadoutGroup, loadoutProto) =>
+            {
+                roleLoadout.RemoveLoadout(loadoutGroup, loadoutProto, _prototypeManager);
+                _loadoutWindow.RefreshLoadouts(roleLoadout, session, collection);
+                Profile = Profile?.WithLoadout(concreteKey, roleLoadout);
+                ReloadPreview();
+            };
+
+            JobOverride = jobProto;
+            ReloadPreview();
+
+            _loadoutWindow.OnClose += () =>
+            {
+                JobOverride = null;
+                ReloadPreview();
+            };
+
+            if (Profile is null)
+                return;
+
+            UpdateJobPriorities();
+        }
+
+        private void OnFlavorTextChange(string content)
+        {
+            if (Profile is null)
+                return;
+
+            Profile = Profile.WithFlavorText(content);
+            SetDirty();
+        }
+
+        private void OnMarkingChange(MarkingSet markings)
+        {
+            if (Profile is null)
+                return;
+
+            Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithMarkings(markings.GetForwardEnumerator().ToList()));
+            ReloadProfilePreview();
+        }
+
+        private void OnSkinColorOnValueChanged()
+        {
+            if (Profile is null) return;
+
+            var skin = _prototypeManager.Index<SpeciesPrototype>(Profile.Species).SkinColoration;
+
+            switch (skin)
+            {
+                case HumanoidSkinColor.HumanToned:
+                    {
+                        if (!Skin.Visible)
+                        {
+                            Skin.Visible = true;
+                            RgbSkinColorContainer.Visible = false;
+                        }
+
+                        var color = SkinColor.HumanSkinTone((int)Skin.Value);
+
+                        Markings.CurrentSkinColor = color;
+                        Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithSkinColor(color));//
+                        break;
+                    }
+                case HumanoidSkinColor.Hues:
+                    {
+                        if (!RgbSkinColorContainer.Visible)
+                        {
+                            Skin.Visible = false;
+                            RgbSkinColorContainer.Visible = true;
+                        }
+
+                        Markings.CurrentSkinColor = _rgbSkinColorSelector.Color;
+                        Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithSkinColor(_rgbSkinColorSelector.Color));
+                        break;
+                    }
+                case HumanoidSkinColor.TintedHues:
+                    {
+                        if (!RgbSkinColorContainer.Visible)
+                        {
+                            Skin.Visible = false;
+                            RgbSkinColorContainer.Visible = true;
+                        }
+
+                        var color = SkinColor.TintedHues(_rgbSkinColorSelector.Color);
+
+                        Markings.CurrentSkinColor = color;
+                        Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithSkinColor(color));
+                        break;
+                    }
+                case HumanoidSkinColor.VoxFeathers:
+                    {
+                        if (!RgbSkinColorContainer.Visible)
+                        {
+                            Skin.Visible = false;
+                            RgbSkinColorContainer.Visible = true;
+                        }
+
+                        var color = SkinColor.ClosestVoxColor(_rgbSkinColorSelector.Color);
+
+                        Markings.CurrentSkinColor = color;
+                        Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithSkinColor(color));
+                        break;
+                    }
+            }
+
+            SkinToneNameLabel.Text = NamedColorHelper.NearestColorName(Profile.Appearance.SkinColor);
+            ReloadProfilePreview();
+        }
+
+        [System.Obsolete]
+=======
+        private void OnSpeciesInfoButtonPressed(BaseButton.ButtonEventArgs args)
+        {
+            // TODO GUIDEBOOK
+            // make the species guide book a field on the species prototype.
+            // I.e., do what jobs/antags do.
+
+            var guidebookController = UserInterfaceManager.GetUIController<GuidebookUIController>();
+            var species = Profile?.Species ?? SharedHumanoidAppearanceSystem.DefaultSpecies;
+            var page = DefaultSpeciesGuidebook;
+            if (_prototypeManager.HasIndex<GuideEntryPrototype>(species))
+                page = new ProtoId<GuideEntryPrototype>(species.Id); // Gross. See above todo comment.
+
+            if (_prototypeManager.TryIndex(DefaultSpeciesGuidebook, out var guideRoot))
+            {
+                var dict = new Dictionary<ProtoId<GuideEntryPrototype>, GuideEntry>();
+                dict.Add(DefaultSpeciesGuidebook, guideRoot);
+                //TODO: Don't close the guidebook if its already open, just go to the correct page
+                guidebookController.OpenGuidebook(dict, includeChildren: true, selected: page);
+            }
+        }
+
+        /// <summary>
+        /// Refreshes all job selectors.
+        /// </summary>
+        public void RefreshJobs()
+        {
+            InsurgencyGovernmentJobList.DisposeAllChildren();
+            InsurgencyInsurgentJobList.DisposeAllChildren();
+            InsurgencyCivilianJobList.DisposeAllChildren();
+            ColonyCivilianJobList.DisposeAllChildren();
+            ColonyThreatJobList.DisposeAllChildren();
+            DistressGovernmentJobList.DisposeAllChildren();
+            DistressThreatJobList.DisposeAllChildren();
+            _jobCategories.Clear();
+            _jobPriorities.Clear();
+
+            // Get all displayed departments
+            var departments = new List<DepartmentPrototype>();
+            foreach (var department in _prototypeManager.EnumeratePrototypes<DepartmentPrototype>())
+            {
+                if (department.EditorHidden)
+                    continue;
+
+                departments.Add(department);
+            }
+
+            departments.Sort(CompareDepartmentsForCharacterSetup);
+
+            var items = new[]
+            {
+                ("humanoid-profile-editor-job-priority-never-button", (int) JobPriority.Never),
+                ("humanoid-profile-editor-job-priority-low-button", (int) JobPriority.Low),
+                ("humanoid-profile-editor-job-priority-medium-button", (int) JobPriority.Medium),
+                ("humanoid-profile-editor-job-priority-high-button", (int) JobPriority.High),
+            };
+
+            foreach (var department in departments)
+            {
+                var departmentName = Loc.GetString(department.Name);
+
+                var jobs = department.Roles.Select(jobId => _prototypeManager.Index(jobId))
+                    .Where(job => job.SetPreference)
+                    .Where(job => !job.Hidden)
+                    .ToArray();
+
+                Array.Sort(jobs, (a, b) =>
+                {
+                    var group = GetJobSortGroup(department, a).CompareTo(GetJobSortGroup(department, b));
+                    return group != 0 ? group : JobUIComparer.Instance.Compare(a, b);
+                });
+
+                foreach (var job in jobs)
+                {
+                    foreach (var (targetList, gamemode, sectionKey, sectionTitle) in GetJobSections(department, job, departmentName))
+                    {
+                        AddJobSelector(
+                            targetList,
+                            gamemode,
+                            sectionKey,
+                            sectionTitle,
+                            department.IsCM && !department.Hidden,
+                            departmentName,
+                            items,
+                            job);
+                    }
+                }
+            }
+
+            foreach (var list in GetGamemodeJobLists())
+            {
+                CrtLobbyTheme.Apply(list);
+            }
+
+            UpdateJobPriorities();
+        }
+
+        private void AddJobSelector(
+            BoxContainer targetList,
+            string gamemode,
+            string sectionKey,
+            string sectionTitle,
+            bool visible,
+            string departmentName,
+            (string, int)[] items,
+            JobPrototype job)
+        {
+            var category = GetOrCreateJobCategory(
+                sectionKey,
+                targetList,
+                sectionTitle,
+                visible,
+                departmentName);
+
+            var jobContainer = new BoxContainer()
+            {
+                Orientation = LayoutOrientation.Horizontal,
+                HorizontalExpand = true,
+            };
+
+            var selector = new RequirementsSelector()
+            {
+                Margin = new Thickness(3f, 3f, 3f, 0f),
+                HorizontalExpand = true,
+            };
+            selector.OnOpenGuidebook += OnOpenGuidebook;
+
+            var icon = new TextureRect
+            {
+                TextureScale = new Vector2(2, 2),
+                VerticalAlignment = VAlignment.Center
+            };
+            var jobIcon = _prototypeManager.Index(job.Icon);
+            icon.Texture = _sprite.Frame0(jobIcon.Icon);
+            selector.Setup(items, GetJobDisplayName(job), 220, job.LocalizedDescription, icon, job.Guides);
+
+            if (!_requirements.IsAllowed(job, (HumanoidCharacterProfile?)_preferencesManager.Preferences?.SelectedCharacter, out var reason))
+            {
+                selector.LockRequirements(reason);
+            }
+            else if (Profile != null && job.IsSynthetic != Profile.Synthetic)
+            {
+                selector.LockRequirements(FormattedMessage.FromUnformatted(
+                    Loc.GetString(job.IsSynthetic
+                        ? "humanoid-profile-editor-synthetic-locked-job"
+                        : "humanoid-profile-editor-synthetic-locked-job-non-synthetic")));
+            }
+            else
+            {
+                selector.UnlockRequirements();
+            }
+
+            selector.OnSelected += selectedPrio =>
+            {
+                var selectedJobPrio = (JobPriority)selectedPrio;
+                Profile = Profile?.WithGamemodeJobPriority(gamemode, job.ID, selectedJobPrio);
+
+                foreach (var (otherGamemode, jobId, other) in _jobPriorities)
+                {
+                    if (otherGamemode != gamemode)
+                        continue;
+
+                    // Sync other selectors with the same job in case of multiple department jobs
+                    if (jobId == job.ID)
+                    {
+                        other.Select(selectedPrio);
+                        continue;
+                    }
+
+                    if (selectedJobPrio != JobPriority.High || (JobPriority)other.Selected != JobPriority.High)
+                        continue;
+
+                    // Lower any other high priorities to medium.
+                    other.Select((int)JobPriority.Medium);
+                    Profile = Profile?.WithGamemodeJobPriority(gamemode, jobId, JobPriority.Medium);
+                }
+
+                // TODO: Only reload on high change (either to or from).
+                ReloadPreview();
+
+                UpdateJobPriorities();
+                SetDirty();
+            };
+
+            var loadoutWindowBtn = new Button()
+            {
+                Text = Loc.GetString("loadout-window"),
+                HorizontalAlignment = HAlignment.Right,
+                VerticalAlignment = VAlignment.Center,
+                Margin = new Thickness(3f, 3f, 0f, 0f),
+                MinWidth = 110,
+                StyleClasses = { StyleNano.StyleClassCrtButton }
+            };
+
+            var collection = IoCManager.Instance!;
+            var protoManager = collection.Resolve<IPrototypeManager>();
+
+            // If no loadout found then disabled button
+            var (key, proto) = LoadoutSystem.GetJobLoadoutInfo(job.ID, protoManager);
+            if (proto == null)
+            {
+                loadoutWindowBtn.Disabled = true;
+            }
+            else
+            {
+                loadoutWindowBtn.OnPressed += args =>
+               {
+                   RoleLoadout? loadout = null;
+                   // Clone so we don't modify the underlying loadout.
+                   if (Profile?.Loadouts.TryGetValue(key, out var existing) == true)
+                       loadout = existing.Clone();
+
+                   if (loadout == null)
+                   {
+                       loadout = new RoleLoadout(proto.ID);
+                       loadout.SetDefault(Profile, _playerManager.LocalSession, _prototypeManager);
+                   }
+                   OpenLoadout(job, loadout, proto);
+               };
+            }
+
+            var rankEntry = BuildRankPreferenceJobEntry(job);
+
+            var rankButton = new Button()
+            {
+                Text = Loc.GetString("cmu14-rank-preference-button"),
+                HorizontalAlignment = HAlignment.Right,
+                VerticalAlignment = VAlignment.Center,
+                Margin = new Thickness(3f, 3f, 0f, 0f),
+                MinWidth = 90,
+                StyleClasses = { StyleNano.StyleClassCrtButton },
+                Disabled = rankEntry == null,
+            };
+
+            rankButton.OnPressed += args => OpenRankPreferenceWindowForJob(job, rankEntry);
+
+            _jobPriorities.Add((gamemode, job.ID, selector));
+            jobContainer.AddChild(selector);
+            jobContainer.AddChild(loadoutWindowBtn);
+            jobContainer.AddChild(rankButton);
+            CrtLobbyTheme.Apply(jobContainer);
+            category.AddChild(jobContainer);
+        }
+
+        private IEnumerable<BoxContainer> GetGamemodeJobLists()
+        {
+            yield return InsurgencyGovernmentJobList;
+            yield return InsurgencyInsurgentJobList;
+            yield return InsurgencyCivilianJobList;
+            yield return ColonyCivilianJobList;
+            yield return ColonyThreatJobList;
+            yield return DistressGovernmentJobList;
+            yield return DistressThreatJobList;
+        }
+
+        private BoxContainer GetOrCreateJobCategory(
+            string key,
+            BoxContainer targetList,
+            string title,
+            bool visible,
+            string departmentName)
+        {
+            if (_jobCategories.TryGetValue(key, out var category))
+                return category;
+
+            category = new BoxContainer
+            {
+                Orientation = LayoutOrientation.Vertical,
+                Name = key,
+                ToolTip = Loc.GetString("humanoid-profile-editor-jobs-amount-in-department-tooltip",
+                    ("departmentName", departmentName)),
+                Visible = visible,
+            };
+
+            if (targetList.Children.Any(child => child.Visible) && visible)
+            {
+                category.AddChild(new Control
+                {
+                    MinSize = new Vector2(0, 14),
+                });
+            }
+
+            category.AddChild(new PanelContainer
+            {
+                PanelOverride = new StyleBoxFlat
+                {
+                    BackgroundColor = StyleNano.CrtPanelBackgroundAlt,
+                    BorderColor = StyleNano.CrtGreenDim,
+                    BorderThickness = new Thickness(0, 0, 0, 1),
+                    ContentMarginTopOverride = 3,
+                    ContentMarginBottomOverride = 3
+                },
+                Children =
+                {
+                    new Label
+                    {
+                        Text = title,
+                        Margin = new Thickness(6f, 0, 0, 0),
+                        StyleClasses = { StyleNano.StyleClassCrtHeading }
+                    }
+                }
+            });
+
+            _jobCategories[key] = category;
+            targetList.AddChild(category);
+            return category;
+        }
+
+        private IEnumerable<(BoxContainer Target, string Gamemode, string Key, string Title)> GetJobSections(
+            DepartmentPrototype department,
+            JobPrototype job,
+            string departmentName)
+        {
+            if (department.Faction == "govfor")
+            {
+                var (segmentKey, segmentTitle) = GetMilitaryJobSegment(job);
+                yield return (InsurgencyGovernmentJobList,
+                    GamemodeInsurgency,
+                    $"insurgency-govfor-{segmentKey}",
+                    Loc.GetString("humanoid-profile-editor-government-forces-label", ("segmentTitle", segmentTitle)));
+                yield return (DistressGovernmentJobList,
+                    GamemodeDistressSignal,
+                    $"distress-govfor-{segmentKey}",
+                    Loc.GetString("humanoid-profile-editor-government-forces-label", ("segmentTitle", segmentTitle)));
+                yield break;
+            }
+
+            if (department.Faction == "opfor")
+            {
+                yield break;
+            }
+
+            if (IsInsurgencyDepartment(department))
+            {
+                yield return (InsurgencyInsurgentJobList,
+                    GamemodeInsurgency,
+                    $"insurgency-jobs-{department.ID}",
+                    department.CustomName ?? Loc.GetString("humanoid-profile-editor-department-jobs-label", ("departmentName", departmentName)));
+                yield break;
+            }
+
+            if (department.Faction == "colonist")
+            {
+                var title = department.CustomName ?? Loc.GetString("humanoid-profile-editor-department-jobs-label", ("departmentName", departmentName));
+                yield return (InsurgencyCivilianJobList,
+                    GamemodeInsurgency,
+                    $"insurgency-civilian-{department.ID}",
+                    title);
+                yield return (ColonyCivilianJobList,
+                    GamemodeColonyFall,
+                    $"colony-civilian-{department.ID}",
+                    title);
+                yield break;
+            }
+
+            if (!IsRoundStartThreatAssignmentJob(job))
+                yield break;
+
+            yield return (ColonyThreatJobList,
+                GamemodeColonyFall,
+                "colony-threat",
+                "Threat Jobs");
+            yield return (DistressThreatJobList,
+                GamemodeDistressSignal,
+                "distress-threat",
+                "Threat Jobs");
+        }
+
+        private static int CompareDepartmentsForCharacterSetup(DepartmentPrototype? x, DepartmentPrototype? y)
+        {
+            if (ReferenceEquals(x, y))
+                return 0;
+
+            if (ReferenceEquals(null, y))
+                return 1;
+
+            if (ReferenceEquals(null, x))
+                return -1;
+
+            var colonyGroup = GetColonyDepartmentSortGroup(x).CompareTo(GetColonyDepartmentSortGroup(y));
+            return colonyGroup != 0 ? colonyGroup : DepartmentUIComparer.Instance.Compare(x, y);
+        }
+
+        private static int GetColonyDepartmentSortGroup(DepartmentPrototype department)
+        {
+            return department.ID switch
+            {
+                "AU14DepartmentColonyCommand" => 0,
+                "AU14DepartmentColonySecurity" => 1,
+                "AU14DepartmentColonyMedical" => 2,
+                "AU14DepartmentEngineering" => 3,
+                "AU14DepartmentCivilian" => 4,
+                "AU14DepartmentCriminal" => 5,
+                "AU14DepartmentCorporate" => 6,
+                "AU14DepartmentAmbassadors" => 7,
+                "AU14DepartmentOrbital" => 8,
+                _ => 100,
+            };
+        }
+
+        private static bool IsInsurgencyDepartment(DepartmentPrototype department)
+        {
+            return department.ID == InsurgencyDepartmentId;
+        }
+
+        private static bool IsRoundStartThreatAssignmentJob(JobPrototype job)
+        {
+            return job.ID is
+                "AU14JobThreatLeader" or
+                "AU14JobThreatMember" or
+                "AU14JobThirdPartyLeader" or
+                "AU14JobThirdPartyMember";
+        }
+
+        /// <summary>Internal, not private: <see cref="Content.Client.LateJoin.LateJoinGui"/> reuses this
+        /// same classification so a department's rail-side view groups jobs the same way character
+        /// setup does, instead of re-deriving (and risking drifting from) the same heuristic.</summary>
+        internal static (string Key, string Title) GetMilitaryJobSegment(JobPrototype job)
+        {
+            var id = job.ID;
+            var name = job.LocalizedName;
+
+            if (id is "AU14JobGOVFORVehicleCommander")
+                return ("flight", Loc.GetString("humanoid-profile-editor-segment-flight"));
+
+            if (ContainsAny(id, name, "MilitaryDoctor"))
+                return ("support", Loc.GetString("humanoid-profile-editor-segment-support"));
+
+            if (job.MarineAuthorityLevel > 0
+                    || ContainsAny(id, name, "PlatCo", "Adjutant", "PlatOp", "Commander", "Command", "Advisor"))
+                return ("command", Loc.GetString("humanoid-profile-editor-segment-command"));
+
+            if (ContainsAny(id, name, "Pilot", "Dropship", "Crew Chief", "DCC", "VehicleCrewman"))
+                return ("flight", Loc.GetString("humanoid-profile-editor-segment-flight"));
+
+            if (ContainsAny(id, name, "Officer", "Chief")) // after Crew Chief
+                return ("officer", Loc.GetString("humanoid-profile-editor-segment-officer"));
+
+            if (ContainsAny(id, name, "Doctor", "AuxTech", "Police", "Synth", "Working Joe", "Auxiliary", "DroneOperator", "Nurse", "EngineeringTech", "Correspondent"))
+                return ("support", Loc.GetString("humanoid-profile-editor-segment-support"));
+
+            if (ContainsAny(id, name, "Leader", "Sergeant", "RadioTelephone"))
+                return ("leader", Loc.GetString("humanoid-profile-editor-segment-leader"));
+
+            return ("line", Loc.GetString("humanoid-profile-editor-segment-line"));
+        }
+
+        /// <summary>Internal, not private: see the remarks on <see cref="GetMilitaryJobSegment"/>.</summary>
+        internal static int GetJobSortGroup(DepartmentPrototype department, JobPrototype job)
+        {
+            if (department.Faction != "govfor" && department.Faction != "opfor")
+                return 0;
+
+            return GetMilitaryJobSegment(job).Key switch
+            {
+                "command" => 0,
+                "officer" => 1,
+                "flight" => 2,
+                "support" => 3,
+                "leader" => 4,
+                _ => 5,
+            };
+        }
+
+        private static string GetJobDisplayName(JobPrototype job)
+        {
+            return LobbyHighJobPreview.GetDisplayJobName(job);
+        }
+
+        private static bool ContainsAny(string id, string name, params string[] needles)
+        {
+            foreach (var needle in needles)
+            {
+                if (id.Contains(needle, StringComparison.OrdinalIgnoreCase) ||
+                    name.Contains(needle, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void OpenLoadout(JobPrototype? jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto)
+        {
+            _loadoutWindow?.Close();
+            _loadoutWindow = null;
+            var collection = IoCManager.Instance;
+
+            if (collection == null || _playerManager.LocalSession == null || Profile == null || jobProto == null)
+                return;
+
+            JobOverride = jobProto;
+            var session = _playerManager.LocalSession;
+
+            _loadoutWindow = new LoadoutWindow(Profile, roleLoadout, roleLoadoutProto, _playerManager.LocalSession, collection)
+            {
+                Title = jobProto.ID + "-loadout",
+            };
+
+            // Refresh the buttons etc.
+            _loadoutWindow.RefreshLoadouts(roleLoadout, session, collection);
+            _loadoutWindow.OpenCenteredLeft();
+
+            var concreteKey = LoadoutSystem.GetJobPrototype(jobProto.ID);
+            _loadoutWindow.OnNameChanged += name =>
+            {
+                roleLoadout.EntityName = name;
+                Profile = Profile.WithLoadout(concreteKey, roleLoadout);
+                SetDirty();
+            };
+
+            _loadoutWindow.OnLoadoutPressed += (loadoutGroup, loadoutProto) =>
+            {
+                roleLoadout.AddLoadout(loadoutGroup, loadoutProto, _prototypeManager);
+                _loadoutWindow.RefreshLoadouts(roleLoadout, session, collection);
+                Profile = Profile?.WithLoadout(concreteKey, roleLoadout);
+                ReloadPreview();
+            };
+
+            _loadoutWindow.OnLoadoutUnpressed += (loadoutGroup, loadoutProto) =>
+            {
+                roleLoadout.RemoveLoadout(loadoutGroup, loadoutProto, _prototypeManager);
+                _loadoutWindow.RefreshLoadouts(roleLoadout, session, collection);
+                Profile = Profile?.WithLoadout(concreteKey, roleLoadout);
+                ReloadPreview();
+            };
+
+            JobOverride = jobProto;
+            ReloadPreview();
+
+            _loadoutWindow.OnClose += () =>
+            {
+                JobOverride = null;
+                ReloadPreview();
+            };
+
+            if (Profile is null)
+                return;
+
+            UpdateJobPriorities();
+        }
+
+        private void OnFlavorTextChange(string content)
+        {
+            if (Profile is null)
+                return;
+
+            Profile = Profile.WithFlavorText(content);
+            SetDirty();
+        }
+
+        private void OnMarkingChange(MarkingSet markings)
+        {
+            if (Profile is null)
+                return;
+
+            Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithMarkings(markings.GetForwardEnumerator().ToList()));
+            ReloadProfilePreview();
+        }
+
+        private void OnSkinColorOnValueChanged()
+        {
+            if (Profile is null) return;
+
+            var skin = _prototypeManager.Index<SpeciesPrototype>(Profile.Species).SkinColoration;
+
+            switch (skin)
+            {
+                case HumanoidSkinColor.HumanToned:
+                    {
+                        if (!Skin.Visible)
+                        {
+                            Skin.Visible = true;
+                            RgbSkinColorContainer.Visible = false;
+                        }
+
+                        var color = SkinColor.HumanSkinTone((int)Skin.Value);
+
+                        Markings.CurrentSkinColor = color;
+                        Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithSkinColor(color));//
+                        break;
+                    }
+                case HumanoidSkinColor.Hues:
+                    {
+                        if (!RgbSkinColorContainer.Visible)
+                        {
+                            Skin.Visible = false;
+                            RgbSkinColorContainer.Visible = true;
+                        }
+
+                        Markings.CurrentSkinColor = _rgbSkinColorSelector.Color;
+                        Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithSkinColor(_rgbSkinColorSelector.Color));
+                        break;
+                    }
+                case HumanoidSkinColor.TintedHues:
+                    {
+                        if (!RgbSkinColorContainer.Visible)
+                        {
+                            Skin.Visible = false;
+                            RgbSkinColorContainer.Visible = true;
+                        }
+
+                        var color = SkinColor.TintedHues(_rgbSkinColorSelector.Color);
+
+                        Markings.CurrentSkinColor = color;
+                        Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithSkinColor(color));
+                        break;
+                    }
+                case HumanoidSkinColor.VoxFeathers:
+                    {
+                        if (!RgbSkinColorContainer.Visible)
+                        {
+                            Skin.Visible = false;
+                            RgbSkinColorContainer.Visible = true;
+                        }
+
+                        var color = SkinColor.ClosestVoxColor(_rgbSkinColorSelector.Color);
+
+                        Markings.CurrentSkinColor = color;
+                        Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithSkinColor(color));
+                        break;
+                    }
+            }
+
+            SkinToneNameLabel.Text = NamedColorHelper.NearestColorName(Profile.Appearance.SkinColor);
+            ReloadProfilePreview();
+        }
+
+        [System.Obsolete]
+>>>>>>> 7ae57790c (test)
         protected override void Dispose(bool disposing)
         {
             _requirements.Updated -= RefreshYautjaTab;
@@ -480,6 +1738,1817 @@ namespace Content.Client.Lobby.UI
             ReloadPreview();
         }
 
+<<<<<<< HEAD
+||||||| parent of 7ae57790c (test)
+        protected override void ExitedTree()
+        {
+            base.ExitedTree();
+            _entManager.DeleteEntity(PreviewDummy);
+            PreviewDummy = EntityUid.Invalid;
+        }
+
+        private void SetAge(int newAge)
+        {
+            Profile = Profile?.WithAge(newAge);
+            ReloadPreview();
+        }
+
+        private void SetSex(Sex newSex)
+        {
+            Profile = Profile?.WithSex(newSex);
+            // for convenience, default to most common gender when new sex is selected
+            switch (newSex)
+            {
+                case Sex.Male:
+                    Profile = Profile?.WithGender(Gender.Male);
+                    break;
+                case Sex.Female:
+                    Profile = Profile?.WithGender(Gender.Female);
+                    break;
+                default:
+                    Profile = Profile?.WithGender(Gender.Epicene);
+                    break;
+            }
+
+            UpdateGenderControls();
+            Markings.SetSex(newSex);
+            ReloadPreview();
+        }
+
+        private void SetGender(Gender newGender)
+        {
+            Profile = Profile?.WithGender(newGender);
+            ReloadPreview();
+        }
+
+        private void SetSpecies(string newSpecies)
+        {
+            Profile = Profile?.WithSpecies(newSpecies);
+            OnSkinColorOnValueChanged(); // Species may have special color prefs, make sure to update it.
+            Markings.SetSpecies(newSpecies); // Repopulate the markings tab as well.
+            // In case there's job restrictions for the species
+            RefreshJobs();
+            // In case there's species restrictions for loadouts
+            RefreshLoadouts();
+            UpdateSexControls(); // update sex for new species
+            UpdateSpeciesGuidebookIcon();
+            ReloadPreview();
+        }
+
+        private void SetName(string newName)
+        {
+            Profile = Profile?.WithName(newName);
+            SetDirty();
+
+            if (!IsDirty)
+                return;
+
+            _entManager.System<MetaDataSystem>().SetEntityName(PreviewDummy, newName);
+        }
+
+        private void SetSpawnPriority(SpawnPriorityPreference newSpawnPriority)
+        {
+            Profile = Profile?.WithSpawnPriorityPreference(newSpawnPriority);
+            SetDirty();
+        }
+
+        private void SetArmorPreference(ArmorPreference newArmorPreference)
+        {
+            Profile = Profile?.WithArmorPreference(newArmorPreference);
+            SetDirty();
+        }
+
+        private void SetSquadPreference(EntProtoId<SquadTeamComponent>? newSquadPreference)
+        {
+            Profile = Profile?.WithSquadPreference(newSquadPreference);
+            SetDirty();
+        }
+
+        private void SetPlaytimePerks(bool playtimePerks)
+        {
+            Profile = Profile?.WithPlaytimePerks(playtimePerks);
+            SetDirty();
+        }
+
+        private void SetXenoPrefix(string prefix)
+        {
+            Profile = Profile?.WithXenoPrefix(prefix);
+            SetDirty();
+        }
+
+        private void SetXenoPostfix(string postfix)
+        {
+            Profile = Profile?.WithXenoPostfix(postfix);
+            SetDirty();
+        }
+
+        private void SetAllegiance(string? allegiance)
+        {
+            Profile = Profile?.WithAllegiance(allegiance != null ? new Robust.Shared.Prototypes.ProtoId<AllegiancePrototype>(allegiance) : (ProtoId<AllegiancePrototype>?)null);
+            SetDirty();
+        }
+
+        private void SetOrigin(string? origin)
+        {
+            Profile = Profile?.WithOrigin(origin != null ? new Robust.Shared.Prototypes.ProtoId<OriginPrototype>(origin) : (ProtoId<OriginPrototype>?)null);
+            SetDirty();
+        }
+
+        private void SetShortExamine(string text)
+        {
+            Profile = Profile?.WithShortExamine(text);
+            SetDirty();
+        }
+
+        private void SetFullDescription(string text)
+        {
+            Profile = Profile?.WithFullDescription(text);
+            SetDirty();
+        }
+
+        private void SetMedicalRecord(string text)
+        {
+            Profile = Profile?.WithMedicalRecord(text);
+            SetDirty();
+        }
+
+        private void SetCriminalRecord(string text)
+        {
+            Profile = Profile?.WithCriminalRecord(text);
+            SetDirty();
+        }
+
+        private void SetGeneralRecord(string text)
+        {
+            Profile = Profile?.WithGeneralRecord(text);
+            SetDirty();
+        }
+
+        private void SetCharacterHeight(string text)
+        {
+            Profile = Profile?.WithHeight(text);
+            SetDirty();
+        }
+
+        private void UpdateHeightFromEdits()
+        {
+            if (_loadingHeightControls)
+                return;
+
+            var feet = HeightFeetEdit.Text;
+            var inches = HeightInchesEdit.Text;
+            SetCharacterHeight(feet.Length == 1 && inches.Length is 1 or 2 ? $"{feet}'{inches}" : string.Empty);
+        }
+
+        private void SetWeight(int weight)
+        {
+            Profile = Profile?.WithWeight(weight);
+            SetDirty();
+        }
+
+        private void SetBuild(BuildType build)
+        {
+            Profile = Profile?.WithBuild(build);
+            SetDirty();
+        }
+
+        private void SetHideMetaInformation(bool hideMetaInformation)
+        {
+            Profile = Profile?.WithHideMetaInformation(hideMetaInformation);
+            SetDirty();
+        }
+
+        private void SetThreatPreference(string gamemode, string threat, bool pref)
+        {
+            Profile = Profile?.WithGamemodeThreatPreference(gamemode, new ProtoId<ThreatPrototype>(threat), pref);
+            SetDirty();
+        }
+
+        /// <summary>
+        /// Refreshes the synthetic toggle. Locked (and forced to No) unless the player
+        /// holds the synthetic job whitelist.
+        /// </summary>
+        public void RefreshSynthetic()
+        {
+            SyntheticContainer.DisposeAllChildren();
+
+            var items = new[]
+            {
+                ("humanoid-profile-editor-synthetic-yes-button", 0),
+                ("humanoid-profile-editor-synthetic-no-button", 1)
+            };
+
+            var selector = new RequirementsSelector()
+            {
+                Margin = new Thickness(3f, 3f, 3f, 0f),
+            };
+
+            selector.Setup(
+                items,
+                Loc.GetString("humanoid-profile-editor-synthetic-title"),
+                250,
+                Loc.GetString("humanoid-profile-editor-synthetic-description"));
+            selector.Select(Profile?.Synthetic == true ? 0 : 1);
+
+            var whitelisted = _prototypeManager.TryIndex<JobPrototype>(CMUSyntheticRoles.SyntheticWhitelistJob, out var marker)
+                && _requirements.CheckWhitelist(marker, out _);
+
+            if (!whitelisted)
+            {
+                selector.LockRequirements(FormattedMessage.FromUnformatted(
+                    Loc.GetString("humanoid-profile-editor-synthetic-locked")));
+
+                if (Profile?.Synthetic == true)
+                {
+                    Profile = Profile?.WithSynthetic(false);
+                    SetDirty();
+                }
+            }
+            else
+            {
+                selector.UnlockRequirements();
+            }
+
+            selector.OnSelected += preference =>
+            {
+                Profile = Profile?.WithSynthetic(preference == 0);
+                SetDirty();
+                RefreshJobs();
+            };
+
+            SyntheticContainer.AddChild(selector);
+        }
+
+        /// <summary>
+        /// Refreshes the allegiance selector.
+        /// </summary>
+        public void RefreshAllegiances()
+        {
+            AllegianceButton.Clear();
+            _allegiances.Clear();
+
+            AllegianceButton.AddItem(Loc.GetString("humanoid-profile-editor-allegiance-none"), 0);
+            _allegiances.AddRange(_prototypeManager.EnumeratePrototypes<AllegiancePrototype>()
+                    .Where(o => o.RoundStart)
+                    .OrderBy(o => Loc.GetString(o.Name)));
+
+            for (var i = 0; i < _allegiances.Count; i++)
+            {
+                var name = Loc.GetString(_allegiances[i].Name);
+                AllegianceButton.AddItem(name, i + 1);
+
+                if (Profile?.Allegiance?.Id == _allegiances[i].ID)
+                {
+                    AllegianceButton.SelectId(i + 1);
+                }
+            }
+
+            if (Profile?.Allegiance == null)
+            {
+                AllegianceButton.SelectId(0);
+            }
+        }
+
+        /// <summary>
+        /// Refreshes the origin selector.
+        /// </summary>
+        public void RefreshOrigins()
+        {
+            OriginButton.Clear();
+            _origins.Clear();
+
+            OriginButton.AddItem(Loc.GetString("humanoid-profile-editor-origin-none"), 0);
+            _origins.AddRange(_prototypeManager.EnumeratePrototypes<OriginPrototype>()
+                .Where(o => o.RoundStart)
+                .OrderBy(o => Loc.GetString(o.Name)));
+
+            for (var i = 0; i < _origins.Count; i++)
+            {
+                var name = Loc.GetString(_origins[i].Name);
+                OriginButton.AddItem(name, i + 1);
+
+                if (Profile?.Origin?.Id == _origins[i].ID)
+                {
+                    OriginButton.SelectId(i + 1);
+                }
+            }
+
+            if (Profile?.Origin == null)
+            {
+                OriginButton.SelectId(0);
+            }
+        }
+
+        private void UpdateAllegianceControls()
+        {
+            if (Profile?.Allegiance == null)
+            {
+                AllegianceButton.SelectId(0);
+                return;
+            }
+
+            for (var i = 0; i < _allegiances.Count; i++)
+            {
+                if (_allegiances[i].ID == Profile.Allegiance.Value.Id)
+                {
+                    AllegianceButton.SelectId(i + 1);
+                    return;
+                }
+            }
+
+            AllegianceButton.SelectId(0);
+        }
+
+        private void UpdateOriginControls()
+        {
+            if (Profile?.Origin == null)
+            {
+                OriginButton.SelectId(0);
+                return;
+            }
+
+            for (var i = 0; i < _origins.Count; i++)
+            {
+                if (_origins[i].ID == Profile.Origin.Value.Id)
+                {
+                    OriginButton.SelectId(i + 1);
+                    return;
+                }
+            }
+
+            OriginButton.SelectId(0);
+        }
+
+        public void RefreshThreatPreferences()
+        {
+            ColonyThreatPreferenceList.DisposeAllChildren();
+            DistressThreatPreferenceList.DisposeAllChildren();
+            _threatPreferenceButtons.Clear();
+
+            PopulateThreatPreferenceList(ColonyThreatPreferenceList, GamemodeColonyFall);
+            PopulateThreatPreferenceList(DistressThreatPreferenceList, GamemodeDistressSignal);
+            SyncThreatPreferenceButtons();
+            CrtLobbyTheme.Apply(ColonyThreatPreferenceList);
+            CrtLobbyTheme.Apply(DistressThreatPreferenceList);
+        }
+
+        private void PopulateThreatPreferenceList(BoxContainer targetList, string gamemode)
+        {
+            targetList.AddChild(new Label
+            {
+                Text = "THREATS",
+                Margin = new Thickness(6f, 4f, 0f, 6f),
+                StyleClasses = { StyleNano.StyleClassCrtHeading }
+            });
+
+            foreach (var threat in _prototypeManager.EnumeratePrototypes<ThreatPrototype>()
+                         .Where(threat => IsThreatVisibleForGamemode(threat, gamemode))
+                         .OrderBy(GetThreatDisplayName))
+            {
+                var row = new BoxContainer
+                {
+                    Orientation = LayoutOrientation.Horizontal,
+                    HorizontalExpand = true,
+                    Margin = new Thickness(6f, 0f, 6f, 4f),
+                    SeparationOverride = 4
+                };
+
+                row.AddChild(new Label
+                {
+                    Text = GetThreatDisplayName(threat),
+                    HorizontalExpand = true,
+                    ClipText = true,
+                    VerticalAlignment = VAlignment.Center,
+                    ToolTip = threat.ID,
+                    StyleClasses = { StyleNano.StyleClassCrtText }
+                });
+
+                var yes = MakeThreatPreferenceButton(Loc.GetString("humanoid-profile-editor-antag-preference-yes-button"));
+                var no = MakeThreatPreferenceButton(Loc.GetString("humanoid-profile-editor-antag-preference-no-button"));
+                var threatId = threat.ID;
+
+                yes.OnPressed += _ =>
+                {
+                    SetThreatPreference(gamemode, threatId, true);
+                    SyncThreatPreferenceButtons();
+                };
+                no.OnPressed += _ =>
+                {
+                    SetThreatPreference(gamemode, threatId, false);
+                    SyncThreatPreferenceButtons();
+                };
+
+                _threatPreferenceButtons.Add((gamemode, threatId, yes, no));
+                row.AddChild(yes);
+                row.AddChild(no);
+                targetList.AddChild(row);
+            }
+        }
+
+        private Button MakeThreatPreferenceButton(string text)
+        {
+            return new Button
+            {
+                Text = text,
+                ToggleMode = true,
+                MinWidth = 54,
+                StyleClasses = { StyleNano.StyleClassCrtButton }
+            };
+        }
+
+        private void SyncThreatPreferenceButtons()
+        {
+            foreach (var (gamemode, threatId, yes, no) in _threatPreferenceButtons)
+            {
+                var selected = Profile?.GetThreatPreferencesForGamemode(gamemode).Any(id => id.Id == threatId) == true;
+                yes.Pressed = selected;
+                no.Pressed = !selected;
+            }
+        }
+
+        private static string GetThreatDisplayName(ThreatPrototype threat)
+        {
+            var id = threat.ID;
+            var markerSuffix = "";
+
+            if (id.EndsWith("OnMarker", StringComparison.OrdinalIgnoreCase))
+            {
+                id = id.Substring(0, id.Length - "OnMarker".Length);
+                markerSuffix = " (Marker)";
+            }
+
+            if (id.EndsWith("CF", StringComparison.OrdinalIgnoreCase))
+                id = id.Substring(0, id.Length - 2);
+
+            if (id.EndsWith("Threat", StringComparison.OrdinalIgnoreCase))
+                id = id.Substring(0, id.Length - "Threat".Length);
+
+            if (id.Equals("xeno", StringComparison.OrdinalIgnoreCase))
+                return "Xenomorph" + markerSuffix;
+
+            if (id.Equals("ape", StringComparison.OrdinalIgnoreCase))
+                return "Apes" + markerSuffix;
+
+            if (id.Equals("cultist", StringComparison.OrdinalIgnoreCase))
+                return "Cultists" + markerSuffix;
+
+            if (id.Equals("wendigo", StringComparison.OrdinalIgnoreCase))
+                return "Wendigo" + markerSuffix;
+
+            return HumanizePrototypeId(id) + markerSuffix;
+        }
+
+        private static bool IsThreatVisibleForGamemode(ThreatPrototype threat, string gamemode)
+        {
+            if (threat.BlacklistedGamemodes.Any(mode => mode.Equals(gamemode, StringComparison.OrdinalIgnoreCase)))
+                return false;
+
+            return threat.whitelistedgamemodes.Count == 0 ||
+                   threat.whitelistedgamemodes.Any(mode => mode.Equals(gamemode, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private static string HumanizePrototypeId(string id)
+        {
+            var builder = new System.Text.StringBuilder(id.Length + 8);
+
+            for (var i = 0; i < id.Length; i++)
+            {
+                var current = id[i];
+                if (i > 0)
+                {
+                    var previous = id[i - 1];
+                    var nextIsLower = i + 1 < id.Length && char.IsLower(id[i + 1]);
+                    if ((char.IsUpper(current) && (char.IsLower(previous) || nextIsLower)) ||
+                        (char.IsDigit(current) && !char.IsDigit(previous)))
+                    {
+                        builder.Append(' ');
+                    }
+                }
+
+                builder.Append(current);
+            }
+
+            var text = builder.ToString().Trim();
+            return text.Length == 0
+                ? id
+                : text;
+        }
+
+        public bool IsDirty
+        {
+            get => _isDirty;
+            set
+            {
+                if (_isDirty == value)
+                    return;
+
+                _isDirty = value;
+                UpdateSaveButton();
+            }
+        }
+
+        private void UpdateNameEdit()
+        {
+            NameEdit.Text = Profile?.Name ?? "";
+        }
+
+        private void UpdateFlavorTextEdit()
+        {
+            if (_flavorTextEdit != null)
+            {
+                _flavorTextEdit.TextRope = new Rope.Leaf(Profile?.FlavorText ?? "");
+            }
+        }
+
+        private void UpdateAgeEdit()
+        {
+            AgeEdit.Text = Profile?.Age.ToString() ?? "";
+        }
+
+        /// <summary>
+        /// Updates selected job priorities to the profile's.
+        /// </summary>
+        private void UpdateJobPriorities()
+        {
+            foreach (var (gamemode, jobId, prioritySelector) in _jobPriorities)
+            {
+                var priority = Profile?.GetJobPriorityForGamemode(gamemode, jobId) ?? JobPriority.Never;
+                prioritySelector.Select((int)priority);
+            }
+        }
+
+        private void UpdateSexControls()
+        {
+            if (Profile == null)
+                return;
+
+            SexButton.Clear();
+
+            var sexes = new List<Sex>();
+
+            // add species sex options, default to just none if we are in bizzaro world and have no species
+            if (_prototypeManager.TryIndex<SpeciesPrototype>(Profile.Species, out var speciesProto))
+            {
+                foreach (var sex in speciesProto.Sexes)
+                {
+                    sexes.Add(sex);
+                }
+            }
+            else
+            {
+                sexes.Add(Sex.Unsexed);
+            }
+
+            // add button for each sex
+            foreach (var sex in sexes)
+            {
+                SexButton.AddItem(Loc.GetString($"humanoid-profile-editor-sex-{sex.ToString().ToLower()}-text"), (int)sex);
+            }
+
+            if (sexes.Contains(Profile.Sex))
+                SexButton.SelectId((int)Profile.Sex);
+            else
+                SexButton.SelectId((int)sexes[0]);
+        }
+
+        private void UpdateSkinColor()
+        {
+            if (Profile == null)
+                return;
+
+            var skin = _prototypeManager.Index<SpeciesPrototype>(Profile.Species).SkinColoration;
+
+            switch (skin)
+            {
+                case HumanoidSkinColor.HumanToned:
+                    {
+                        if (!Skin.Visible)
+                        {
+                            Skin.Visible = true;
+                            RgbSkinColorContainer.Visible = false;
+                        }
+
+                        Skin.Value = SkinColor.HumanSkinToneFromColor(Profile.Appearance.SkinColor);
+
+                        break;
+                    }
+                case HumanoidSkinColor.Hues:
+                    {
+                        if (!RgbSkinColorContainer.Visible)
+                        {
+                            Skin.Visible = false;
+                            RgbSkinColorContainer.Visible = true;
+                        }
+
+                        // set the RGB values to the direct values otherwise
+                        _rgbSkinColorSelector.Color = Profile.Appearance.SkinColor;
+                        break;
+                    }
+                case HumanoidSkinColor.TintedHues:
+                    {
+                        if (!RgbSkinColorContainer.Visible)
+                        {
+                            Skin.Visible = false;
+                            RgbSkinColorContainer.Visible = true;
+                        }
+
+                        // set the RGB values to the direct values otherwise
+                        _rgbSkinColorSelector.Color = Profile.Appearance.SkinColor;
+                        break;
+                    }
+                case HumanoidSkinColor.VoxFeathers:
+                    {
+                        if (!RgbSkinColorContainer.Visible)
+                        {
+                            Skin.Visible = false;
+                            RgbSkinColorContainer.Visible = true;
+                        }
+
+                        _rgbSkinColorSelector.Color = SkinColor.ClosestVoxColor(Profile.Appearance.SkinColor);
+
+                        break;
+                    }
+            }
+
+        }
+
+        public void UpdateSpeciesGuidebookIcon()
+        {
+            if (!_cfgManager.GetCVar(RMCCVars.GuidebookShowEditorSpeciesButton))
+                return;
+
+            SpeciesInfoButton.StyleClasses.Clear();
+
+            var species = Profile?.Species;
+            if (species is null)
+                return;
+
+            if (!_prototypeManager.TryIndex<SpeciesPrototype>(species, out var speciesProto))
+                return;
+
+            // Don't display the info button if no guide entry is found
+            if (!_prototypeManager.HasIndex<GuideEntryPrototype>(species))
+                return;
+
+            const string style = "SpeciesInfoDefault";
+            SpeciesInfoButton.StyleClasses.Add(style);
+        }
+
+        private void UpdateMarkings()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            Markings.SetData(Profile.Appearance.Markings, Profile.Species,
+                Profile.Sex, Profile.Appearance.SkinColor, Profile.Appearance.EyeColor
+            );
+        }
+
+        private void UpdateGenderControls()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            PronounsButton.SelectId((int)Profile.Gender);
+        }
+
+        private void UpdateSpawnPriorityControls()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            SpawnPriorityButton.SelectId((int)Profile.SpawnPriority);
+        }
+
+        private void UpdateArmorPreferenceControls()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            ArmorPreferenceButton.SelectId((int)Profile.ArmorPreference);
+        }
+
+        private void UpdateSquadPreferenceControls()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            var index = 0;
+            if (Profile.SquadPreference is { } preference)
+            {
+                var squads = new List<EntityPrototype>(_entManager.System<SquadSystem>().SquadPrototypes)
+                    .Select(s => s.ID)
+                    .ToList();
+                index = squads.IndexOf(preference.Id) + 1;
+            }
+
+            SquadPreferenceButton.SelectId(index);
+        }
+
+        private void UpdateHairPickers()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+            var hairMarking = Profile.Appearance.HairStyleId == HairStyles.DefaultHairStyle
+                ? new List<Marking>()
+                : new() { new(Profile.Appearance.HairStyleId, new List<Color>() { Profile.Appearance.HairColor }) };
+
+            var facialHairMarking = Profile.Appearance.FacialHairStyleId == HairStyles.DefaultFacialHairStyle
+                ? new List<Marking>()
+                : new() { new(Profile.Appearance.FacialHairStyleId, new List<Color>() { Profile.Appearance.FacialHairColor }) };
+
+            HairStylePicker.UpdateData(
+                hairMarking,
+                Profile.Species,
+                1);
+            FacialHairPicker.UpdateData(
+                facialHairMarking,
+                Profile.Species,
+                1);
+        }
+
+        private void UpdateRegulationHairPickers()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+            var hairMarking = Profile.Appearance.RegulationHairStyleId == HairStyles.DefaultHairStyle
+                ? new List<Marking>()
+                : new() { new(Profile.Appearance.RegulationHairStyleId, new List<Color>() { Profile.Appearance.RegulationHairColor }) };
+
+            var facialHairMarking = Profile.Appearance.RegulationFacialHairStyleId == HairStyles.DefaultFacialHairStyle
+                ? new List<Marking>()
+                : new() { new(Profile.Appearance.RegulationFacialHairStyleId, new List<Color>() { Profile.Appearance.RegulationFacialHairColor }) };
+
+            RegulationHairStylePicker.UpdateData(
+                hairMarking,
+                Profile.Species,
+                1);
+            RegulationFacialHairPicker.UpdateData(
+                facialHairMarking,
+                Profile.Species,
+                1);
+        }
+
+        private void UpdateCMarkingsHair()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            // hair color
+            Color? hairColor = null;
+            if (Profile.Appearance.HairStyleId != HairStyles.DefaultHairStyle &&
+                _markingManager.Markings.TryGetValue(Profile.Appearance.HairStyleId, out var hairProto)
+            )
+            {
+                if (_markingManager.CanBeApplied(Profile.Species, Profile.Sex, hairProto, _prototypeManager))
+                {
+                    if (_markingManager.MustMatchSkin(Profile.Species, HumanoidVisualLayers.Hair, out var _, _prototypeManager))
+                    {
+                        hairColor = Profile.Appearance.SkinColor;
+                    }
+                    else
+                    {
+                        hairColor = Profile.Appearance.HairColor;
+                    }
+                }
+            }
+            if (hairColor != null)
+            {
+                Markings.HairMarking = new(Profile.Appearance.HairStyleId, new List<Color>() { hairColor.Value });
+            }
+            else
+            {
+                Markings.HairMarking = null;
+            }
+        }
+
+        private void UpdateCMarkingsFacialHair()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            // facial hair color
+            Color? facialHairColor = null;
+            if (Profile.Appearance.FacialHairStyleId != HairStyles.DefaultFacialHairStyle &&
+                _markingManager.Markings.TryGetValue(Profile.Appearance.FacialHairStyleId, out var facialHairProto))
+            {
+                if (_markingManager.CanBeApplied(Profile.Species, Profile.Sex, facialHairProto, _prototypeManager))
+                {
+                    if (_markingManager.MustMatchSkin(Profile.Species, HumanoidVisualLayers.Hair, out var _, _prototypeManager))
+                    {
+                        facialHairColor = Profile.Appearance.SkinColor;
+                    }
+                    else
+                    {
+                        facialHairColor = Profile.Appearance.FacialHairColor;
+                    }
+                }
+            }
+            if (facialHairColor != null)
+            {
+                Markings.FacialHairMarking = new(Profile.Appearance.FacialHairStyleId, new List<Color>() { facialHairColor.Value });
+            }
+            else
+            {
+                Markings.FacialHairMarking = null;
+            }
+        }
+
+        private void UpdateEyePickers()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            Markings.CurrentEyeColor = Profile.Appearance.EyeColor;
+            EyeColorPicker.SetData(Profile.Appearance.EyeColor);
+        }
+
+        private void UpdateNamedItems()
+        {
+            NamedItems.PrimaryGun.Text = Profile?.NamedItems.PrimaryGunName ?? string.Empty;
+            NamedItems.Sidearm.Text = Profile?.NamedItems.SidearmName ?? string.Empty;
+            NamedItems.Helmet.Text = Profile?.NamedItems.HelmetName ?? string.Empty;
+            NamedItems.Armor.Text = Profile?.NamedItems.ArmorName ?? string.Empty;
+            NamedItems.Sentry.Text = Profile?.NamedItems.SentryName ?? string.Empty;
+        }
+
+        private void UpdatePlaytimePerks()
+        {
+            PlaytimePerksButton.Pressed = Profile?.PlaytimePerks ?? true;
+        }
+
+        private void UpdateCharacterDescriptionControls()
+        {
+            ShortExamineEdit.Text = Profile?.ShortExamine ?? string.Empty;
+
+            var height = Profile?.Height ?? string.Empty;
+            var heightParts = height.Split('\'');
+            _loadingHeightControls = true;
+            HeightFeetEdit.Text = heightParts.Length == 2 ? heightParts[0] : string.Empty;
+            HeightInchesEdit.Text = heightParts.Length == 2 ? heightParts[1] : string.Empty;
+            _loadingHeightControls = false;
+
+            WeightEdit.Text = (Profile?.Weight ?? 160).ToString();
+            FullDescriptionEdit.TextRope = new Rope.Leaf(Profile?.FullDescription ?? string.Empty);
+            MedicalRecordEdit.TextRope = new Rope.Leaf(Profile?.MedicalRecord ?? string.Empty);
+            CriminalRecordEdit.TextRope = new Rope.Leaf(Profile?.CriminalRecord ?? string.Empty);
+            GeneralRecordEdit.TextRope = new Rope.Leaf(Profile?.GeneralRecord ?? string.Empty);
+            BuildButton.SelectId((int)(Profile?.Build ?? BuildType.Average));
+            HideMetaInformationButton.Pressed = Profile?.HideMetaInformation ?? false;
+            UpdateHideMetaInformationButtonText();
+
+            if (Profile != null)
+            {
+                SkinToneNameLabel.Text = NamedColorHelper.NearestColorName(Profile.Appearance.SkinColor);
+                HairColorNameLabel.Text = NamedColorHelper.NearestColorName(Profile.Appearance.HairColor);
+                EyeColorNameLabel.Text = NamedColorHelper.NearestColorName(Profile.Appearance.EyeColor);
+            }
+        }
+
+        private void UpdateHideMetaInformationButtonText()
+        {
+            HideMetaInformationButton.Text = Loc.GetString(HideMetaInformationButton.Pressed
+                ? "humanoid-profile-editor-hide-meta-true"
+                : "humanoid-profile-editor-hide-meta-false");
+        }
+
+        private void UpdateXenoPrefix()
+        {
+            XenoPrefix.Text = Profile?.XenoPrefix ?? string.Empty;
+        }
+
+        private void UpdateXenoPostfix()
+        {
+            XenoPostfix.Text = Profile?.XenoPostfix ?? string.Empty;
+        }
+
+=======
+        protected override void ExitedTree()
+        {
+            base.ExitedTree();
+            _entManager.DeleteEntity(PreviewDummy);
+            PreviewDummy = EntityUid.Invalid;
+        }
+
+        private void SetAge(int newAge)
+        {
+            Profile = Profile?.WithAge(newAge);
+            ReloadPreview();
+        }
+
+        private void SetSex(Sex newSex)
+        {
+            Profile = Profile?.WithSex(newSex);
+            // for convenience, default to most common gender when new sex is selected
+            switch (newSex)
+            {
+                case Sex.Male:
+                    Profile = Profile?.WithGender(Gender.Male);
+                    break;
+                case Sex.Female:
+                    Profile = Profile?.WithGender(Gender.Female);
+                    break;
+                default:
+                    Profile = Profile?.WithGender(Gender.Epicene);
+                    break;
+            }
+
+            UpdateGenderControls();
+            Markings.SetSex(newSex);
+            ReloadPreview();
+        }
+
+        private void SetGender(Gender newGender)
+        {
+            Profile = Profile?.WithGender(newGender);
+            ReloadPreview();
+        }
+
+        private void SetSpecies(string newSpecies)
+        {
+            Profile = Profile?.WithSpecies(newSpecies);
+            OnSkinColorOnValueChanged(); // Species may have special color prefs, make sure to update it.
+            Markings.SetSpecies(newSpecies); // Repopulate the markings tab as well.
+            // In case there's job restrictions for the species
+            RefreshJobs();
+            // In case there's species restrictions for loadouts
+            RefreshLoadouts();
+            UpdateSexControls(); // update sex for new species
+            UpdateSpeciesGuidebookIcon();
+            ReloadPreview();
+        }
+
+        private void SetName(string newName)
+        {
+            Profile = Profile?.WithName(newName);
+            SetDirty();
+
+            if (!IsDirty)
+                return;
+
+            _entManager.System<MetaDataSystem>().SetEntityName(PreviewDummy, newName);
+        }
+
+        private void SetSpawnPriority(SpawnPriorityPreference newSpawnPriority)
+        {
+            Profile = Profile?.WithSpawnPriorityPreference(newSpawnPriority);
+            SetDirty();
+        }
+
+        private void SetArmorPreference(ArmorPreference newArmorPreference)
+        {
+            Profile = Profile?.WithArmorPreference(newArmorPreference);
+            SetDirty();
+        }
+
+        private void SetSquadPreference(EntProtoId<SquadTeamComponent>? newSquadPreference)
+        {
+            Profile = Profile?.WithSquadPreference(newSquadPreference);
+            SetDirty();
+        }
+
+        private void SetPlaytimePerks(bool playtimePerks)
+        {
+            Profile = Profile?.WithPlaytimePerks(playtimePerks);
+            SetDirty();
+        }
+
+        private void SetXenoPrefix(string prefix)
+        {
+            Profile = Profile?.WithXenoPrefix(prefix);
+            SetDirty();
+        }
+
+        private void SetXenoPostfix(string postfix)
+        {
+            Profile = Profile?.WithXenoPostfix(postfix);
+            SetDirty();
+        }
+
+        private void SetAllegiance(string? allegiance)
+        {
+            Profile = Profile?.WithAllegiance(allegiance != null ? new Robust.Shared.Prototypes.ProtoId<AllegiancePrototype>(allegiance) : (ProtoId<AllegiancePrototype>?)null);
+            SetDirty();
+        }
+
+        private void SetOrigin(string? origin)
+        {
+            Profile = Profile?.WithOrigin(origin != null ? new Robust.Shared.Prototypes.ProtoId<OriginPrototype>(origin) : (ProtoId<OriginPrototype>?)null);
+            SetDirty();
+        }
+
+        private void SetShortExamine(string text)
+        {
+            Profile = Profile?.WithShortExamine(text);
+            SetDirty();
+        }
+
+        private void SetFullDescription(string text)
+        {
+            Profile = Profile?.WithFullDescription(text);
+            SetDirty();
+        }
+
+        private void SetMedicalRecord(string text)
+        {
+            Profile = Profile?.WithMedicalRecord(text);
+            SetDirty();
+        }
+
+        private void SetCriminalRecord(string text)
+        {
+            Profile = Profile?.WithCriminalRecord(text);
+            SetDirty();
+        }
+
+        private void SetGeneralRecord(string text)
+        {
+            Profile = Profile?.WithGeneralRecord(text);
+            SetDirty();
+        }
+
+        private void SetCharacterHeight(string text)
+        {
+            Profile = Profile?.WithHeight(text);
+            SetDirty();
+        }
+
+        private void UpdateHeightFromEdits()
+        {
+            if (_loadingHeightControls)
+                return;
+
+            var feet = HeightFeetEdit.Text;
+            var inches = HeightInchesEdit.Text;
+            SetCharacterHeight(feet.Length == 1 && inches.Length is 1 or 2 ? $"{feet}'{inches}" : string.Empty);
+        }
+
+        private void SetWeight(int weight)
+        {
+            Profile = Profile?.WithWeight(weight);
+            SetDirty();
+        }
+
+        private void SetBuild(BuildType build)
+        {
+            Profile = Profile?.WithBuild(build);
+            SetDirty();
+        }
+
+        private void SetHideMetaInformation(bool hideMetaInformation)
+        {
+            Profile = Profile?.WithHideMetaInformation(hideMetaInformation);
+            SetDirty();
+        }
+
+        private void SetThreatPreference(string gamemode, string threat, bool pref)
+        {
+            Profile = Profile?.WithGamemodeThreatPreference(gamemode, new ProtoId<ThreatPrototype>(threat), pref);
+            SetDirty();
+        }
+
+        /// <summary>
+        /// Refreshes the synthetic toggle. Locked (and forced to No) unless the player
+        /// holds the synthetic job whitelist.
+        /// </summary>
+        public void RefreshSynthetic()
+        {
+            SyntheticContainer.DisposeAllChildren();
+
+            var items = new[]
+            {
+                ("humanoid-profile-editor-synthetic-yes-button", 0),
+                ("humanoid-profile-editor-synthetic-no-button", 1)
+            };
+
+            var selector = new RequirementsSelector()
+            {
+                Margin = new Thickness(3f, 3f, 3f, 0f),
+                HorizontalExpand = false,
+                HorizontalAlignment = HAlignment.Left,
+                MaxWidth = 620,
+            };
+
+            selector.Setup(
+                items,
+                Loc.GetString("humanoid-profile-editor-synthetic-title"),
+                250,
+                Loc.GetString("humanoid-profile-editor-synthetic-description"));
+            selector.Select(Profile?.Synthetic == true ? 0 : 1);
+
+            var whitelisted = _prototypeManager.TryIndex<JobPrototype>(CMUSyntheticRoles.SyntheticWhitelistJob, out var marker)
+                && _requirements.CheckWhitelist(marker, out _);
+
+            if (!whitelisted)
+            {
+                selector.LockRequirements(FormattedMessage.FromUnformatted(
+                    Loc.GetString("humanoid-profile-editor-synthetic-locked")));
+
+                if (Profile?.Synthetic == true)
+                {
+                    Profile = Profile?.WithSynthetic(false);
+                    SetDirty();
+                }
+            }
+            else
+            {
+                selector.UnlockRequirements();
+            }
+
+            selector.OnSelected += preference =>
+            {
+                Profile = Profile?.WithSynthetic(preference == 0);
+                SetDirty();
+                RefreshJobs();
+            };
+
+            SyntheticContainer.AddChild(selector);
+        }
+
+        /// <summary>
+        /// Refreshes the allegiance selector.
+        /// </summary>
+        public void RefreshAllegiances()
+        {
+            AllegianceButton.Clear();
+            _allegiances.Clear();
+
+            AllegianceButton.AddItem(Loc.GetString("humanoid-profile-editor-allegiance-none"), 0);
+            _allegiances.AddRange(_prototypeManager.EnumeratePrototypes<AllegiancePrototype>()
+                    .Where(o => o.RoundStart)
+                    .OrderBy(o => Loc.GetString(o.Name)));
+
+            for (var i = 0; i < _allegiances.Count; i++)
+            {
+                var name = Loc.GetString(_allegiances[i].Name);
+                AllegianceButton.AddItem(name, i + 1);
+
+                if (Profile?.Allegiance?.Id == _allegiances[i].ID)
+                {
+                    AllegianceButton.SelectId(i + 1);
+                }
+            }
+
+            if (Profile?.Allegiance == null)
+            {
+                AllegianceButton.SelectId(0);
+            }
+        }
+
+        /// <summary>
+        /// Refreshes the origin selector.
+        /// </summary>
+        public void RefreshOrigins()
+        {
+            OriginButton.Clear();
+            _origins.Clear();
+
+            OriginButton.AddItem(Loc.GetString("humanoid-profile-editor-origin-none"), 0);
+            _origins.AddRange(_prototypeManager.EnumeratePrototypes<OriginPrototype>()
+                .Where(o => o.RoundStart)
+                .OrderBy(o => Loc.GetString(o.Name)));
+
+            for (var i = 0; i < _origins.Count; i++)
+            {
+                var name = Loc.GetString(_origins[i].Name);
+                OriginButton.AddItem(name, i + 1);
+
+                if (Profile?.Origin?.Id == _origins[i].ID)
+                {
+                    OriginButton.SelectId(i + 1);
+                }
+            }
+
+            if (Profile?.Origin == null)
+            {
+                OriginButton.SelectId(0);
+            }
+        }
+
+        private void UpdateAllegianceControls()
+        {
+            if (Profile?.Allegiance == null)
+            {
+                AllegianceButton.SelectId(0);
+                return;
+            }
+
+            for (var i = 0; i < _allegiances.Count; i++)
+            {
+                if (_allegiances[i].ID == Profile.Allegiance.Value.Id)
+                {
+                    AllegianceButton.SelectId(i + 1);
+                    return;
+                }
+            }
+
+            AllegianceButton.SelectId(0);
+        }
+
+        private void UpdateOriginControls()
+        {
+            if (Profile?.Origin == null)
+            {
+                OriginButton.SelectId(0);
+                return;
+            }
+
+            for (var i = 0; i < _origins.Count; i++)
+            {
+                if (_origins[i].ID == Profile.Origin.Value.Id)
+                {
+                    OriginButton.SelectId(i + 1);
+                    return;
+                }
+            }
+
+            OriginButton.SelectId(0);
+        }
+
+        public void RefreshThreatPreferences()
+        {
+            ColonyThreatPreferenceList.DisposeAllChildren();
+            DistressThreatPreferenceList.DisposeAllChildren();
+            _threatPreferenceButtons.Clear();
+
+            PopulateThreatPreferenceList(ColonyThreatPreferenceList, GamemodeColonyFall);
+            PopulateThreatPreferenceList(DistressThreatPreferenceList, GamemodeDistressSignal);
+            SyncThreatPreferenceButtons();
+            CrtLobbyTheme.Apply(ColonyThreatPreferenceList);
+            CrtLobbyTheme.Apply(DistressThreatPreferenceList);
+        }
+
+        private void PopulateThreatPreferenceList(BoxContainer targetList, string gamemode)
+        {
+            targetList.AddChild(new Label
+            {
+                Text = "THREATS",
+                Margin = new Thickness(6f, 4f, 0f, 6f),
+                StyleClasses = { StyleNano.StyleClassCrtHeading }
+            });
+
+            foreach (var threat in _prototypeManager.EnumeratePrototypes<ThreatPrototype>()
+                         .Where(threat => IsThreatVisibleForGamemode(threat, gamemode))
+                         .OrderBy(GetThreatDisplayName))
+            {
+                var row = new BoxContainer
+                {
+                    Orientation = LayoutOrientation.Horizontal,
+                    HorizontalExpand = true,
+                    Margin = new Thickness(6f, 0f, 6f, 4f),
+                    SeparationOverride = 4
+                };
+
+                row.AddChild(new Label
+                {
+                    Text = GetThreatDisplayName(threat),
+                    HorizontalExpand = true,
+                    ClipText = true,
+                    VerticalAlignment = VAlignment.Center,
+                    ToolTip = threat.ID,
+                    StyleClasses = { StyleNano.StyleClassCrtText }
+                });
+
+                var yes = MakeThreatPreferenceButton(Loc.GetString("humanoid-profile-editor-antag-preference-yes-button"));
+                var no = MakeThreatPreferenceButton(Loc.GetString("humanoid-profile-editor-antag-preference-no-button"));
+                var threatId = threat.ID;
+
+                yes.OnPressed += _ =>
+                {
+                    SetThreatPreference(gamemode, threatId, true);
+                    SyncThreatPreferenceButtons();
+                };
+                no.OnPressed += _ =>
+                {
+                    SetThreatPreference(gamemode, threatId, false);
+                    SyncThreatPreferenceButtons();
+                };
+
+                _threatPreferenceButtons.Add((gamemode, threatId, yes, no));
+                row.AddChild(yes);
+                row.AddChild(no);
+                targetList.AddChild(row);
+            }
+        }
+
+        private Button MakeThreatPreferenceButton(string text)
+        {
+            return new Button
+            {
+                Text = text,
+                ToggleMode = true,
+                MinWidth = 54,
+                StyleClasses = { StyleNano.StyleClassCrtButton }
+            };
+        }
+
+        private void SyncThreatPreferenceButtons()
+        {
+            foreach (var (gamemode, threatId, yes, no) in _threatPreferenceButtons)
+            {
+                var selected = Profile?.GetThreatPreferencesForGamemode(gamemode).Any(id => id.Id == threatId) == true;
+                yes.Pressed = selected;
+                no.Pressed = !selected;
+            }
+        }
+
+        private static string GetThreatDisplayName(ThreatPrototype threat)
+        {
+            var id = threat.ID;
+            var markerSuffix = "";
+
+            if (id.EndsWith("OnMarker", StringComparison.OrdinalIgnoreCase))
+            {
+                id = id.Substring(0, id.Length - "OnMarker".Length);
+                markerSuffix = " (Marker)";
+            }
+
+            if (id.EndsWith("CF", StringComparison.OrdinalIgnoreCase))
+                id = id.Substring(0, id.Length - 2);
+
+            if (id.EndsWith("Threat", StringComparison.OrdinalIgnoreCase))
+                id = id.Substring(0, id.Length - "Threat".Length);
+
+            if (id.Equals("xeno", StringComparison.OrdinalIgnoreCase))
+                return "Xenomorph" + markerSuffix;
+
+            if (id.Equals("ape", StringComparison.OrdinalIgnoreCase))
+                return "Apes" + markerSuffix;
+
+            if (id.Equals("cultist", StringComparison.OrdinalIgnoreCase))
+                return "Cultists" + markerSuffix;
+
+            if (id.Equals("wendigo", StringComparison.OrdinalIgnoreCase))
+                return "Wendigo" + markerSuffix;
+
+            return HumanizePrototypeId(id) + markerSuffix;
+        }
+
+        private static bool IsThreatVisibleForGamemode(ThreatPrototype threat, string gamemode)
+        {
+            if (threat.BlacklistedGamemodes.Any(mode => mode.Equals(gamemode, StringComparison.OrdinalIgnoreCase)))
+                return false;
+
+            return threat.whitelistedgamemodes.Count == 0 ||
+                   threat.whitelistedgamemodes.Any(mode => mode.Equals(gamemode, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private static string HumanizePrototypeId(string id)
+        {
+            var builder = new System.Text.StringBuilder(id.Length + 8);
+
+            for (var i = 0; i < id.Length; i++)
+            {
+                var current = id[i];
+                if (i > 0)
+                {
+                    var previous = id[i - 1];
+                    var nextIsLower = i + 1 < id.Length && char.IsLower(id[i + 1]);
+                    if ((char.IsUpper(current) && (char.IsLower(previous) || nextIsLower)) ||
+                        (char.IsDigit(current) && !char.IsDigit(previous)))
+                    {
+                        builder.Append(' ');
+                    }
+                }
+
+                builder.Append(current);
+            }
+
+            var text = builder.ToString().Trim();
+            return text.Length == 0
+                ? id
+                : text;
+        }
+
+        public bool IsDirty
+        {
+            get => _isDirty;
+            set
+            {
+                if (_isDirty == value)
+                    return;
+
+                _isDirty = value;
+                UpdateSaveButton();
+            }
+        }
+
+        private void UpdateNameEdit()
+        {
+            NameEdit.Text = Profile?.Name ?? "";
+        }
+
+        private void UpdateFlavorTextEdit()
+        {
+            if (_flavorTextEdit != null)
+            {
+                _flavorTextEdit.TextRope = new Rope.Leaf(Profile?.FlavorText ?? "");
+            }
+        }
+
+        private void UpdateAgeEdit()
+        {
+            AgeEdit.Text = Profile?.Age.ToString() ?? "";
+        }
+
+        /// <summary>
+        /// Updates selected job priorities to the profile's.
+        /// </summary>
+        private void UpdateJobPriorities()
+        {
+            foreach (var (gamemode, jobId, prioritySelector) in _jobPriorities)
+            {
+                var priority = Profile?.GetJobPriorityForGamemode(gamemode, jobId) ?? JobPriority.Never;
+                prioritySelector.Select((int)priority);
+            }
+        }
+
+        private void UpdateSexControls()
+        {
+            if (Profile == null)
+                return;
+
+            SexButton.Clear();
+
+            var sexes = new List<Sex>();
+
+            // add species sex options, default to just none if we are in bizzaro world and have no species
+            if (_prototypeManager.TryIndex<SpeciesPrototype>(Profile.Species, out var speciesProto))
+            {
+                foreach (var sex in speciesProto.Sexes)
+                {
+                    sexes.Add(sex);
+                }
+            }
+            else
+            {
+                sexes.Add(Sex.Unsexed);
+            }
+
+            // add button for each sex
+            foreach (var sex in sexes)
+            {
+                SexButton.AddItem(Loc.GetString($"humanoid-profile-editor-sex-{sex.ToString().ToLower()}-text"), (int)sex);
+            }
+
+            if (sexes.Contains(Profile.Sex))
+                SexButton.SelectId((int)Profile.Sex);
+            else
+                SexButton.SelectId((int)sexes[0]);
+        }
+
+        private void UpdateSkinColor()
+        {
+            if (Profile == null)
+                return;
+
+            var skin = _prototypeManager.Index<SpeciesPrototype>(Profile.Species).SkinColoration;
+
+            switch (skin)
+            {
+                case HumanoidSkinColor.HumanToned:
+                    {
+                        if (!Skin.Visible)
+                        {
+                            Skin.Visible = true;
+                            RgbSkinColorContainer.Visible = false;
+                        }
+
+                        Skin.Value = SkinColor.HumanSkinToneFromColor(Profile.Appearance.SkinColor);
+
+                        break;
+                    }
+                case HumanoidSkinColor.Hues:
+                    {
+                        if (!RgbSkinColorContainer.Visible)
+                        {
+                            Skin.Visible = false;
+                            RgbSkinColorContainer.Visible = true;
+                        }
+
+                        // set the RGB values to the direct values otherwise
+                        _rgbSkinColorSelector.Color = Profile.Appearance.SkinColor;
+                        break;
+                    }
+                case HumanoidSkinColor.TintedHues:
+                    {
+                        if (!RgbSkinColorContainer.Visible)
+                        {
+                            Skin.Visible = false;
+                            RgbSkinColorContainer.Visible = true;
+                        }
+
+                        // set the RGB values to the direct values otherwise
+                        _rgbSkinColorSelector.Color = Profile.Appearance.SkinColor;
+                        break;
+                    }
+                case HumanoidSkinColor.VoxFeathers:
+                    {
+                        if (!RgbSkinColorContainer.Visible)
+                        {
+                            Skin.Visible = false;
+                            RgbSkinColorContainer.Visible = true;
+                        }
+
+                        _rgbSkinColorSelector.Color = SkinColor.ClosestVoxColor(Profile.Appearance.SkinColor);
+
+                        break;
+                    }
+            }
+
+        }
+
+        public void UpdateSpeciesGuidebookIcon()
+        {
+            if (!_cfgManager.GetCVar(RMCCVars.GuidebookShowEditorSpeciesButton))
+                return;
+
+            SpeciesInfoButton.StyleClasses.Clear();
+
+            var species = Profile?.Species;
+            if (species is null)
+                return;
+
+            if (!_prototypeManager.TryIndex<SpeciesPrototype>(species, out var speciesProto))
+                return;
+
+            // Don't display the info button if no guide entry is found
+            if (!_prototypeManager.HasIndex<GuideEntryPrototype>(species))
+                return;
+
+            const string style = "SpeciesInfoDefault";
+            SpeciesInfoButton.StyleClasses.Add(style);
+        }
+
+        private void UpdateMarkings()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            Markings.SetData(Profile.Appearance.Markings, Profile.Species,
+                Profile.Sex, Profile.Appearance.SkinColor, Profile.Appearance.EyeColor
+            );
+        }
+
+        private void UpdateGenderControls()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            PronounsButton.SelectId((int)Profile.Gender);
+        }
+
+        private void UpdateSpawnPriorityControls()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            SpawnPriorityButton.SelectId((int)Profile.SpawnPriority);
+        }
+
+        private void UpdateArmorPreferenceControls()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            ArmorPreferenceButton.SelectId((int)Profile.ArmorPreference);
+        }
+
+        private void UpdateSquadPreferenceControls()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            var index = 0;
+            if (Profile.SquadPreference is { } preference)
+            {
+                var squads = new List<EntityPrototype>(_entManager.System<SquadSystem>().SquadPrototypes)
+                    .Select(s => s.ID)
+                    .ToList();
+                index = squads.IndexOf(preference.Id) + 1;
+            }
+
+            SquadPreferenceButton.SelectId(index);
+        }
+
+        private void UpdateHairPickers()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+            var hairMarking = Profile.Appearance.HairStyleId == HairStyles.DefaultHairStyle
+                ? new List<Marking>()
+                : new() { new(Profile.Appearance.HairStyleId, new List<Color>() { Profile.Appearance.HairColor }) };
+
+            var facialHairMarking = Profile.Appearance.FacialHairStyleId == HairStyles.DefaultFacialHairStyle
+                ? new List<Marking>()
+                : new() { new(Profile.Appearance.FacialHairStyleId, new List<Color>() { Profile.Appearance.FacialHairColor }) };
+
+            HairStylePicker.UpdateData(
+                hairMarking,
+                Profile.Species,
+                1);
+            FacialHairPicker.UpdateData(
+                facialHairMarking,
+                Profile.Species,
+                1);
+        }
+
+        private void UpdateRegulationHairPickers()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+            var hairMarking = Profile.Appearance.RegulationHairStyleId == HairStyles.DefaultHairStyle
+                ? new List<Marking>()
+                : new() { new(Profile.Appearance.RegulationHairStyleId, new List<Color>() { Profile.Appearance.RegulationHairColor }) };
+
+            var facialHairMarking = Profile.Appearance.RegulationFacialHairStyleId == HairStyles.DefaultFacialHairStyle
+                ? new List<Marking>()
+                : new() { new(Profile.Appearance.RegulationFacialHairStyleId, new List<Color>() { Profile.Appearance.RegulationFacialHairColor }) };
+
+            RegulationHairStylePicker.UpdateData(
+                hairMarking,
+                Profile.Species,
+                1);
+            RegulationFacialHairPicker.UpdateData(
+                facialHairMarking,
+                Profile.Species,
+                1);
+        }
+
+        private void UpdateCMarkingsHair()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            // hair color
+            Color? hairColor = null;
+            if (Profile.Appearance.HairStyleId != HairStyles.DefaultHairStyle &&
+                _markingManager.Markings.TryGetValue(Profile.Appearance.HairStyleId, out var hairProto)
+            )
+            {
+                if (_markingManager.CanBeApplied(Profile.Species, Profile.Sex, hairProto, _prototypeManager))
+                {
+                    if (_markingManager.MustMatchSkin(Profile.Species, HumanoidVisualLayers.Hair, out var _, _prototypeManager))
+                    {
+                        hairColor = Profile.Appearance.SkinColor;
+                    }
+                    else
+                    {
+                        hairColor = Profile.Appearance.HairColor;
+                    }
+                }
+            }
+            if (hairColor != null)
+            {
+                Markings.HairMarking = new(Profile.Appearance.HairStyleId, new List<Color>() { hairColor.Value });
+            }
+            else
+            {
+                Markings.HairMarking = null;
+            }
+        }
+
+        private void UpdateCMarkingsFacialHair()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            // facial hair color
+            Color? facialHairColor = null;
+            if (Profile.Appearance.FacialHairStyleId != HairStyles.DefaultFacialHairStyle &&
+                _markingManager.Markings.TryGetValue(Profile.Appearance.FacialHairStyleId, out var facialHairProto))
+            {
+                if (_markingManager.CanBeApplied(Profile.Species, Profile.Sex, facialHairProto, _prototypeManager))
+                {
+                    if (_markingManager.MustMatchSkin(Profile.Species, HumanoidVisualLayers.Hair, out var _, _prototypeManager))
+                    {
+                        facialHairColor = Profile.Appearance.SkinColor;
+                    }
+                    else
+                    {
+                        facialHairColor = Profile.Appearance.FacialHairColor;
+                    }
+                }
+            }
+            if (facialHairColor != null)
+            {
+                Markings.FacialHairMarking = new(Profile.Appearance.FacialHairStyleId, new List<Color>() { facialHairColor.Value });
+            }
+            else
+            {
+                Markings.FacialHairMarking = null;
+            }
+        }
+
+        private void UpdateEyePickers()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            Markings.CurrentEyeColor = Profile.Appearance.EyeColor;
+            EyeColorPicker.SetData(Profile.Appearance.EyeColor);
+        }
+
+        private void UpdateNamedItems()
+        {
+            NamedItems.PrimaryGun.Text = Profile?.NamedItems.PrimaryGunName ?? string.Empty;
+            NamedItems.Sidearm.Text = Profile?.NamedItems.SidearmName ?? string.Empty;
+            NamedItems.Helmet.Text = Profile?.NamedItems.HelmetName ?? string.Empty;
+            NamedItems.Armor.Text = Profile?.NamedItems.ArmorName ?? string.Empty;
+            NamedItems.Sentry.Text = Profile?.NamedItems.SentryName ?? string.Empty;
+        }
+
+        private void UpdatePlaytimePerks()
+        {
+            PlaytimePerksButton.Pressed = Profile?.PlaytimePerks ?? true;
+        }
+
+        private void UpdateCharacterDescriptionControls()
+        {
+            ShortExamineEdit.Text = Profile?.ShortExamine ?? string.Empty;
+
+            var height = Profile?.Height ?? string.Empty;
+            var heightParts = height.Split('\'');
+            _loadingHeightControls = true;
+            HeightFeetEdit.Text = heightParts.Length == 2 ? heightParts[0] : string.Empty;
+            HeightInchesEdit.Text = heightParts.Length == 2 ? heightParts[1] : string.Empty;
+            _loadingHeightControls = false;
+
+            WeightEdit.Text = (Profile?.Weight ?? 160).ToString();
+            FullDescriptionEdit.TextRope = new Rope.Leaf(Profile?.FullDescription ?? string.Empty);
+            MedicalRecordEdit.TextRope = new Rope.Leaf(Profile?.MedicalRecord ?? string.Empty);
+            CriminalRecordEdit.TextRope = new Rope.Leaf(Profile?.CriminalRecord ?? string.Empty);
+            GeneralRecordEdit.TextRope = new Rope.Leaf(Profile?.GeneralRecord ?? string.Empty);
+            BuildButton.SelectId((int)(Profile?.Build ?? BuildType.Average));
+            HideMetaInformationButton.Pressed = Profile?.HideMetaInformation ?? false;
+            UpdateHideMetaInformationButtonText();
+
+            if (Profile != null)
+            {
+                SkinToneNameLabel.Text = NamedColorHelper.NearestColorName(Profile.Appearance.SkinColor);
+                HairColorNameLabel.Text = NamedColorHelper.NearestColorName(Profile.Appearance.HairColor);
+                EyeColorNameLabel.Text = NamedColorHelper.NearestColorName(Profile.Appearance.EyeColor);
+            }
+        }
+
+        private void UpdateHideMetaInformationButtonText()
+        {
+            HideMetaInformationButton.Text = Loc.GetString(HideMetaInformationButton.Pressed
+                ? "humanoid-profile-editor-hide-meta-true"
+                : "humanoid-profile-editor-hide-meta-false");
+        }
+
+        private void UpdateXenoPrefix()
+        {
+            XenoPrefix.Text = Profile?.XenoPrefix ?? string.Empty;
+        }
+
+        private void UpdateXenoPostfix()
+        {
+            XenoPostfix.Text = Profile?.XenoPostfix ?? string.Empty;
+        }
+
+>>>>>>> 7ae57790c (test)
         private void UpdateSaveButton()
         {
             SaveButton.Disabled = Profile is null || !IsDirty;
