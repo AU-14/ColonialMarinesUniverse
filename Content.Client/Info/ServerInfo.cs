@@ -1,9 +1,4 @@
-<<<<<<< HEAD
 using System;
-||||||| parent of 7ae57790c (test)
-﻿using System;
-=======
->>>>>>> 7ae57790c (test)
 using System.Collections.Generic;
 using Content.Client._CMU14.Interface;
 using Content.Client.Stylesheets;
@@ -147,13 +142,7 @@ namespace Content.Client.Info
         /// <summary>Rebuilds the panel from the server's fields.</summary>
         public void SetRoundInfo(IReadOnlyList<LobbyRoundInfoField> fields)
         {
-<<<<<<< HEAD
-            _roundInfoGrid.ReleaseChildren();
-||||||| parent of 7ae57790c (test)
-            _roundInfoGrid.DisposeAllChildren();
-=======
             _groups.DisposeAllChildren();
->>>>>>> 7ae57790c (test)
 
             if (fields.Count > 0)
                 _planet.Text = fields[0].Value;
