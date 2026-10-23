@@ -73,7 +73,7 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
         // Set(RMCAlertLevels.Red);
     }
 
-    // CMU14 Per-warship alert levels Begin
+    // CMU14 Begin: Per-warship alert levels
     private bool TryGetAlertLevel(EntityUid? context, out Entity<RMCAlertLevelComponent> alert)
     {
         // A context entity resolves to its own ship's map first
