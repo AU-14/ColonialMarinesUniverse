@@ -2,7 +2,7 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared._RMC14.Xenonids.Despoiler;
 
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class XenoDespoilerLingeringAcidComponent : Component
 {
     [DataField]
@@ -17,4 +17,7 @@ public sealed partial class XenoDespoilerLingeringAcidComponent : Component
     // Damage attribution is only used on the server; clients do not need the caster entity.
     [DataField]
     public EntityUid? Caster;
+
+    [DataField]
+    public HashSet<EntityUid> Damaged = new(); // CMU14
 }
