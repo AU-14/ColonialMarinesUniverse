@@ -29,6 +29,19 @@ public sealed partial class JoinRoundWindow : DefaultWindow
 {
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IStylesheetManager _stylesheetManager = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
+
+    private const float ColumnWidth = 560f;
+
+    private const int ColumnsPerRow = 2;
+
+    private const int RowGap = 16;
+
+    private const int TitleSize = 8;
+
+    private const int ButtonTextSize = 8;
+
+    private const float ScanlineDepth = 0.9f;
 
     /// <summary>
     ///     Colonists. The plain one on purpose - they are the default, least exotic choice, so it
