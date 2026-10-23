@@ -225,12 +225,6 @@
                                 <Label Name="HairColorNameLabel" VAlign="Center" />
                                 <Control HorizontalExpand="True" />
                             </BoxContainer>
-                            <BoxContainer HorizontalExpand="True">
-                                <Label MinWidth="240" VAlign="Center" Text="{Loc 'humanoid-profile-editor-eye-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-eye-color-tooltip'}" />
-                                <Label Name="EyeColorNameLabel" VAlign="Center" />
-                                <Control HorizontalExpand="True" />
-
-
                             <!-- cmu edit start -->
                             <!-- Character appearance -->
                             <BoxContainer Margin="10" Orientation="Vertical" SeparationOverride="12" HorizontalExpand="True">
@@ -238,7 +232,6 @@
                                 <BoxContainer HorizontalExpand="True">
                                     <Control HorizontalExpand="True"/>
                                     <Label Text="{Loc 'humanoid-profile-editor-skin-tone-label'}" ToolTip="{Loc 'humanoid-profile-editor-skin-tone-tooltip'}" />
-                                    <Label MinWidth="240" VAlign="Center" Text="{Loc 'humanoid-profile-editor-skin-tone-label'}" ToolTip="{Loc 'humanoid-profile-editor-skin-tone-tooltip'}" />
                                     <Label Name="SkinToneNameLabel" VAlign="Center" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
                                 </BoxContainer>
                                 <Slider Name="CharacterSkinSlider" HorizontalExpand="True" MinValue="0" MaxValue="100" />
@@ -253,7 +246,6 @@
                                 <ColorSelectorSliders Name="CharacterEyeColorPicker" HorizontalExpand="True" />
                             </BoxContainer>
                             <!-- cmu edit end -->
-                        </BoxContainer>
                     </ScrollContainer>
                 </BoxContainer>
                 <BoxContainer Orientation="Vertical">
