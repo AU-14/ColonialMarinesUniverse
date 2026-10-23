@@ -625,7 +625,8 @@ public sealed class LarvaQueueJoinXenoUiTest
     [TestCase(false)]
     [TestCase(true)]
     [TestCase(null)]
-    public async Task BurstLarvaRespectsInfectorPriority(bool? wantsLarva) // CMU14: queue must not offer a reserved larva
+    [TestCase(null, false, TestName = "BurstLarvaGoesToQueueWhenInfectorClosedPrompt")] // CMU14: BUG-1059
+    public async Task BurstLarvaRespectsInfectorPriority(bool? wantsLarva, bool promptOpen = true) // CMU14: queue must not offer a reserved larva
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -647,6 +648,7 @@ public sealed class LarvaQueueJoinXenoUiTest
         EntityUid hive = default;
         EntityUid victim = default; // CMU14
         EntityUid larva = default;
+        EntityUid infectorGhost = default; // CMU14
         NetEntity ghostNet = default;
         await server.WaitAssertion(() =>
         {
@@ -661,7 +663,7 @@ public sealed class LarvaQueueJoinXenoUiTest
             mind.TransferTo(mindId, ghost);
             mind.SetUserId(mindId, player.UserId);
 
-            var infectorGhost = entMan.SpawnEntity(GameTicker.ObserverPrototypeName, map.GridCoords);
+            infectorGhost = entMan.SpawnEntity(GameTicker.ObserverPrototypeName, map.GridCoords);
             var infectorMind = mind.CreateMind(infector.UserId, "Infector");
             mind.TransferTo(infectorMind, infectorGhost);
             mind.SetUserId(infectorMind, infector.UserId);
@@ -689,15 +691,27 @@ public sealed class LarvaQueueJoinXenoUiTest
 #pragma warning restore RA0002
             entMan.Dirty(victim, infected);
 
+            // CMU14: an unanswered claim only reserves the larva while the infector still has the prompt up
+            if (wantsLarva == null && promptOpen)
+            {
+                var victimNet = entMan.GetNetEntity(victim);
+                var infectorGhostNet = entMan.GetNetEntity(infectorGhost);
+                entMan.System<DialogSystem>().OpenOptions(infectorGhost, "claim",
+                [
+                    new DialogOption("yes", new XenoParasiteLarvaClaimChoiceEvent(infectorGhostNet, NetEntity.Invalid, victimNet, true)),
+                    new DialogOption("no", new XenoParasiteLarvaClaimChoiceEvent(infectorGhostNet, NetEntity.Invalid, victimNet, false)),
+                ]);
+            }
+
             entMan.System<SharedXenoParasiteSystem>().SpawnLarva((victim, infected), out larva);
-            if (wantsLarva != false)
+            if (wantsLarva != false && promptOpen)
             {
                 Assert.That(entMan.HasComponent<DialogComponent>(ghost), Is.False,
                     "Spawning a reserved larva must not offer it to the general queue before linking its infector.");
             }
         });
 
-        if (wantsLarva == false)
+        if (wantsLarva == false || !promptOpen)
         {
             await pair.RunTicksSync(5);
             await server.WaitAssertion(() =>

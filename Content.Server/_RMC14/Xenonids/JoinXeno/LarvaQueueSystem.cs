@@ -47,6 +47,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
     private static readonly ProtoId<JobPrototype> BloodbursterRole = "CMUJobPathogenBloodburster";
     private static readonly ProtoId<JobPrototype> PopperRole = "CMU14JobPathogenPopper";
     private static readonly TimeSpan ClaimConfirmDuration = TimeSpan.FromSeconds(30);
+    private static readonly TimeSpan ClaimRetryInterval = TimeSpan.FromSeconds(5); // CMU14
 
     private readonly Dictionary<EntityUid, LarvaQueueState> _queues = [];
     private readonly Dictionary<NetUserId, PendingLarvaQueueClaim> _pendingClaims = [];
@@ -54,7 +55,9 @@ public sealed partial class LarvaQueueSystem : EntitySystem
     private readonly Dictionary<EntityUid, int> _pendingBurrowedLarvaClaims = [];
     private readonly List<EntityUid> _emptyQueues = [];
     private readonly List<NetUserId> _expiredClaims = [];
+    private readonly List<EntityUid> _retryHives = []; // CMU14
     private int _nextClaimId;
+    private TimeSpan _nextClaimRetry; // CMU14
 
     private EntityQuery<GhostComponent> _ghostQuery;
     private EntityQuery<HiveComponent> _hiveQuery;
@@ -257,6 +260,24 @@ public sealed partial class LarvaQueueSystem : EntitySystem
         {
             _queues.Remove(hiveId);
         }
+
+        // CMU14: a larva that stops being reserved (infector closed the prompt, a dialog got replaced) wakes
+        // nothing up, so it sat catatonic until someone else joined the queue
+        if (time < _nextClaimRetry)
+            return;
+
+        _nextClaimRetry = time + ClaimRetryInterval;
+        _retryHives.Clear();
+        foreach (var (hiveId, queue) in _queues)
+        {
+            if (queue.ReadyCount > 0)
+                _retryHives.Add(hiveId);
+        }
+
+        foreach (var hiveId in _retryHives)
+        {
+            TryClaimNextForHive(hiveId);
+        }
     }
 
     private LarvaQueueState QueueFor(EntityUid hive)
@@ -325,12 +346,12 @@ public sealed partial class LarvaQueueSystem : EntitySystem
         return false;
     }
 
-    private bool CanQueueLarva(EntityUid uid, HiveMemberComponent member, Entity<HiveComponent> hive)
+    private bool CanQueueLarva(EntityUid uid, HiveMemberComponent member, Entity<HiveComponent> hive, bool ignoreReservation = false) // CMU14
     {
         if (!CanQueueBodyCommon(uid, member, hive, out var xeno))
             return false;
 
-        if (IsReservedForParasiteClaim(uid))
+        if (!ignoreReservation && IsReservedForParasiteClaim(uid)) // CMU14
             return false;
 
         if (xeno.Role == LarvaRole)
@@ -352,10 +373,35 @@ public sealed partial class LarvaQueueSystem : EntitySystem
             return false;
         }
 
+        // CMU14: an unanswered prompt only holds the larva while the infector can still answer it. closing it
+        // (or another dialog replacing it) left the larva reserved for nobody
         return _player.TryGetSessionById(userId, out var session) &&
                session.AttachedEntity is { } attached &&
                _ghostQuery.HasComp(attached) &&
-               _mind.TryGetMind(session, out _, out _);
+               _mind.TryGetMind(session, out _, out _) &&
+               (infected.InfectorWantsLarva || HasLarvaClaimPrompt(attached, burster.BurstFrom));
+    }
+
+    // CMU14
+    private bool HasLarvaClaimPrompt(EntityUid ghost, EntityUid victim)
+    {
+        if (!TryComp(ghost, out DialogComponent? dialog))
+            return false;
+
+        var victimNet = GetNetEntity(victim);
+        foreach (var option in dialog.Options)
+        {
+            if (option.Event is XenoParasiteLarvaClaimChoiceEvent ev && ev.Victim == victimNet)
+                return true;
+        }
+
+        return false;
+    }
+
+    // CMU14: the infector's retry must not pull a larva out from under a queue offer that's already open
+    public bool IsOfferedToQueue(EntityUid larva)
+    {
+        return _pendingEntityClaims.ContainsKey(larva);
     }
 
     private bool TryOfferAbandonedXeno(Entity<HiveComponent> hive, LarvaQueueState queue)
@@ -530,7 +576,8 @@ public sealed partial class LarvaQueueSystem : EntitySystem
         {
             if (_hiveQuery.TryComp(pending.Hive, out var hive) &&
                 TryComp(target, out HiveMemberComponent? member) &&
-                (CanQueueLarva(target, member, (pending.Hive, hive)) ||
+                // CMU14: the offer already won the larva, an infector who ghosted since doesn't take it back
+                (CanQueueLarva(target, member, (pending.Hive, hive), ignoreReservation: true) ||
                  CanQueueAbandonedXeno(target, member, (pending.Hive, hive))))
             {
                 claimed = ClaimQueueableXeno(target, session);

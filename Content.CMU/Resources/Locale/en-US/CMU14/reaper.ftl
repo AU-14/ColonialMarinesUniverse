@@ -1,7 +1,7 @@
 ent-CMUActionReaperRevive = Reanimate Xeno
     .desc = Spend 500 flesh to revive a hive sister, excluding Queens. Begin within three minutes of death, then channel for two minutes. An accepted reanimation can finish after the freshness window expires. Flesh and the ten-minute cooldown shared by all Reapers are consumed when charging begins, even if interrupted.
 cmu-reaper-revive-too-old = This sister has been dead too long. Begin reanimation within three minutes of death.
-cmu-reaper-revive-queen = Queens cannot be reanimated.
+cmu-reaper-revive-queen = A fallen Queen cannot be reanimated.
 cmu-reaper-revive-invalid = You need an unclaimed dead xeno from your hive.
 cmu-reaper-revive-start = You bind the fallen sister. Stay still for two minutes.
 cmu-reaper-revive-complete = The sister stirs as your vessels withdraw.

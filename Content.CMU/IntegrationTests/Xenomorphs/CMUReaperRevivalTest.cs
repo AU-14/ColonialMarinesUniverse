@@ -154,25 +154,22 @@ public sealed class CMUReaperRevivalTest : GameTest
         });
     }
 
+    // BUG-1067: a dead queen stays dead, no flesh or cooldown spent on the refusal
     [Test]
-    public async Task QueenRevivalIsRejectedWithoutASuccessor()
+    public async Task QueenCannotBeReanimated()
     {
         await Prepare(0.5f, "CMXenoQueen");
         await Server.WaitAssertion(() =>
         {
-            Assert.That(SEntMan.GetComponent<HiveComponent>(_hive).CurrentQueen, Is.Null);
             Assert.That(Cast(_caster).Handled, Is.False);
             var action = Server.System<SharedRMCActionsSystem>().GetActionsWithEvent<CMUReaperReviveActionEvent>(_caster).Single();
             Assert.That(action.Comp.Cooldown, Is.Null);
             Assert.That(SEntMan.GetComponent<XenoReaperComponent>(_caster).FleshResin, Is.EqualTo(600));
             Assert.That(SEntMan.HasComponent<CMUReaperRevivingComponent>(_corpse), Is.False);
         });
-        await Pair.RunTicksSync(50);
+        await Pair.RunTicksSync(60);
         await Server.WaitAssertion(() =>
-        {
-            Assert.That(Server.System<MobStateSystem>().IsDead(_corpse), Is.True);
-            Assert.That(SEntMan.GetComponent<HiveComponent>(_hive).CurrentQueen, Is.Null);
-        });
+            Assert.That(Server.System<MobStateSystem>().IsDead(_corpse), Is.True));
     }
 
     [Test]

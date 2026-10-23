@@ -35,12 +35,15 @@
       cell_slot:
         name: power-cell-slot-component-slot-name-default
         startingItem: RMCPowerCell
+  # the jammer only switches through ItemToggle now. without these it could never turn on and jammed nothing
+  - type: ItemToggle
+  - type: ToggleCellDraw
   - type: Appearance
   - type: GenericVisualizer
     visuals:
-      enum.RadioJammerVisuals.LEDOn:
-        RadioJammerLayers.LED:
-          True: { visible: True }
-          False: { visible: False }
+      enum.ToggleableVisuals.Enabled:
+        enum.RadioJammerLayers.LED:
+          True: { visible: true }
+          False: { visible: false }
   - type: StaticPrice
     price: 1500

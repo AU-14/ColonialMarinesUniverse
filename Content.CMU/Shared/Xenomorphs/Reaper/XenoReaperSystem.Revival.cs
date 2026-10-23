@@ -75,6 +75,7 @@ public sealed partial class XenoReaperSystem
             return;
         }
 
+        // a dead queen stays dead, the hive has to raise a new one
         if (HasComp<XenoEvolutionGranterComponent>(args.Target))
         {
             _popup.PopupEntity(Loc.GetString("cmu-reaper-revive-queen"), xeno, xeno);
