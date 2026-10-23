@@ -1,10 +1,10 @@
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.Interface;
+namespace Content.Client.CMU14.Interface;
 
 /// <summary>
 ///     One plastic colour for the chat housing: its label ink and its keycaps. The housing and screen
-///     themselves are textures in <c>Textures/_CMU14/Interface/ChatHousing/</c>, generated to match.
+///     themselves are textures in <c>Textures/CMU14/Interface/ChatHousing/</c>, generated to match.
 /// </summary>
 public readonly record struct CmuHousingTone(
     string Id,

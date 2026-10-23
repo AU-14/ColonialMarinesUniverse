@@ -1,7 +1,7 @@
 using Robust.Client.Graphics;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.Interface;
+namespace Content.Client.CMU14.Interface;
 
 /// <summary>
 ///     No fill, no frame - just a dashed line along the top edge, like a printed tear-off rule.

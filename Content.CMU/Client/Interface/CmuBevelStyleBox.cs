@@ -1,7 +1,7 @@
 using Robust.Client.Graphics;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.Interface;
+namespace Content.Client.CMU14.Interface;
 
 /// <summary>
 ///     A filled key with a separately coloured top and bottom edge. <see cref="StyleBoxFlat"/> has one

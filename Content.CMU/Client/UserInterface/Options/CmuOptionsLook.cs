@@ -3,7 +3,7 @@ using Content.Client.Stylesheets;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 
-namespace Content.Client._CMU14.UserInterface.Options;
+namespace Content.Client.CMU14.UserInterface.Options;
 
 /// <summary>
 ///     The parts of the options menu's look that differ from the shared CRT theme: underlined tabs,
