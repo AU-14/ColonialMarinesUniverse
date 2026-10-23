@@ -16,7 +16,7 @@
   maxplayers: 100
   roundstart: false
   ghostsNeeded: 2
-  ghostsCallable: true
+  ghostsCallable: false
   whitelistedGamemodes:
     - insurgency
     - colonyfall
