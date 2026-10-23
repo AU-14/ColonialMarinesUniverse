@@ -1,20 +1,9 @@
-<<<<<<< HEAD:Content.CMU/Client/Lobby/JoinRoundWindow.xaml.cs
 using System;
-||||||| parent of 7ae57790c (test):Content.Client/_CMU14/Lobby/JoinRoundWindow.xaml.cs
-﻿using System;
-=======
-﻿using System;
-using System.Linq;
->>>>>>> 7ae57790c (test):Content.Client/_CMU14/Lobby/JoinRoundWindow.xaml.cs
 using Content.Client.Lobby.UI;
-<<<<<<< HEAD:Content.CMU/Client/Lobby/JoinRoundWindow.xaml.cs
 using Content.Client.CMU14.Interface;
-||||||| parent of 7ae57790c (test):Content.Client/_CMU14/Lobby/JoinRoundWindow.xaml.cs
 using Content.Client._CMU14.Interface;
-=======
 using Content.Client._CMU14.Interface;
 using Content.Client.Resources;
->>>>>>> 7ae57790c (test):Content.Client/_CMU14/Lobby/JoinRoundWindow.xaml.cs
 using Content.Client.Stylesheets;
 using Content.Shared.CCVar;
 using JetBrains.Annotations;
@@ -39,16 +28,11 @@ namespace Content.Client.CMU14.Lobby;
 [UsedImplicitly]
 public sealed partial class JoinRoundWindow : DefaultWindow
 {
-<<<<<<< HEAD:Content.CMU/Client/Lobby/JoinRoundWindow.xaml.cs
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IStylesheetManager _stylesheetManager = default!;
-||||||| parent of 7ae57790c (test):Content.Client/_CMU14/Lobby/JoinRoundWindow.xaml.cs
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
-=======
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IStylesheetManager _stylesheetManager = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     private const float ColumnWidth = 560f;
 
@@ -94,26 +78,12 @@ public sealed partial class JoinRoundWindow : DefaultWindow
 
     public Button JoinOtherButton { get; private set; } = default!;
 
-<<<<<<< HEAD:Content.CMU/Client/Lobby/JoinRoundWindow.xaml.cs
-    private readonly CmuChoiceCard _colonists;
-    private readonly CmuChoiceCard _govfor;
-    private readonly CmuChoiceCard _opfor;
-    private readonly CmuChoiceCard _other;
-    private readonly CmuChoiceCard _hunt;
-    public Button JoinHuntButton => _hunt.Button;
-    public void SetHuntVisible(bool visible) => _hunt.Visible = visible;
-||||||| parent of 7ae57790c (test):Content.Client/_CMU14/Lobby/JoinRoundWindow.xaml.cs
-    private readonly CmuChoiceCard _colonists;
-    private readonly CmuChoiceCard _govfor;
-    private readonly CmuChoiceCard _opfor;
-    private readonly CmuChoiceCard _other;
-=======
+    // TODO: FIXME:
+    // public Button JoinHuntButton => _hunt.Button;
+    // public void SetHuntVisible(bool visible) => _hunt.Visible = visible;
     private readonly List<(PanelContainer Column, Button Button, CmuChoiceCard.Palette Palette)> _columns = new();
-
     private CrtScreenControl _shaderPass = default!;
-
     private Control _cornerTicks = default!;
->>>>>>> 7ae57790c (test):Content.Client/_CMU14/Lobby/JoinRoundWindow.xaml.cs
 
     public JoinRoundWindow()
     {
@@ -123,14 +93,11 @@ public sealed partial class JoinRoundWindow : DefaultWindow
 
         Choices.SeparationOverride = RowGap;
 
-<<<<<<< HEAD:Content.CMU/Client/Lobby/JoinRoundWindow.xaml.cs
-        _hunt = AddCard("rmc-lobby-join-hunt", "cmu-lobby-join-hunt-desc", GovforPalette, buttonOnLeft: true);
-        _hunt.Visible = false;
+        // TODO: FIXME:
+        // _hunt = AddCard("rmc-lobby-join-hunt", "cmu-lobby-join-hunt-desc", GovforPalette, buttonOnLeft: true);
+        // _hunt.Visible = false;
+        // ApplyCrtPalette();
 
-        ApplyCrtPalette();
-||||||| parent of 7ae57790c (test):Content.Client/_CMU14/Lobby/JoinRoundWindow.xaml.cs
-        ApplyCrtPalette();
-=======
         var row1 = ChoiceRow();
         var row2 = ChoiceRow();
         Choices.AddChild(row1);
@@ -165,7 +132,6 @@ public sealed partial class JoinRoundWindow : DefaultWindow
         AddChild(_shaderPass);
 
         ApplyTheme();
->>>>>>> 7ae57790c (test):Content.Client/_CMU14/Lobby/JoinRoundWindow.xaml.cs
 
         _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
         _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
@@ -275,22 +241,8 @@ public sealed partial class JoinRoundWindow : DefaultWindow
     {
         Stylesheet = _stylesheetManager.SheetNano;
 
-<<<<<<< HEAD:Content.CMU/Client/Lobby/JoinRoundWindow.xaml.cs
-        // After the theme walk, never before. ApplyWindow re-tags every control in the tree and hands
-        // the buttons the shared CrtButton box; anything set earlier would simply be replaced.
-        _colonists.ApplyPalette();
-        _govfor.ApplyPalette();
-        _opfor.ApplyPalette();
-        _other.ApplyPalette();
-        _hunt.ApplyPalette();
-||||||| parent of 7ae57790c (test):Content.Client/_CMU14/Lobby/JoinRoundWindow.xaml.cs
-        // After the theme walk, never before. ApplyWindow re-tags every control in the tree and hands
-        // the buttons the shared CrtButton box; anything set earlier would simply be replaced.
-        _colonists.ApplyPalette();
-        _govfor.ApplyPalette();
-        _opfor.ApplyPalette();
-        _other.ApplyPalette();
-=======
+        // TODO: FIXME:
+        // _hunt.ApplyPalette();
         var crt = StyleNano.CrtUiEnabled;
         var header = FindControl<PanelContainer>("WindowHeader");
         var titleLabel = FindControl<Label>("TitleLabel");
@@ -299,46 +251,5 @@ public sealed partial class JoinRoundWindow : DefaultWindow
         if (crt)
         {
             AddStyleClass(StyleNano.StyleClassCrtWindow);
-
-            header.PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = CrtTerminalPalette.Surface2,
-                BorderColor = CrtTerminalPalette.Line,
-                BorderThickness = new Thickness(1),
-                ContentMarginLeftOverride = 5,
-                ContentMarginRightOverride = 6,
-            };
-
-            titleLabel.FontOverride = StyleNano.GetCrtFont(_resourceCache, TitleSize);
-            titleLabel.FontColorOverride = CrtTerminalPalette.TextBright;
-            closeButton.Modulate = CrtTerminalPalette.TextDim;
-
-            // Full bleed: the header's rule and Ground's own run edge to edge.
-            Contents.Margin = new Thickness(0);
-
-            Ground.PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = CrtTerminalPalette.Surface0,
-                BorderColor = CrtTerminalPalette.Line,
-                BorderThickness = new Thickness(1, 0, 1, 1),
-            };
-        }
-        else
-        {
-            RemoveStyleClass(StyleNano.StyleClassCrtWindow);
-            header.PanelOverride = null;
-            titleLabel.FontOverride = null;
-            titleLabel.FontColorOverride = null;
-            closeButton.Modulate = Color.White;
-            Contents.Margin = new Thickness(10);
-            Ground.PanelOverride = null;
-        }
-
-        _shaderPass.Visible = crt;
-        _cornerTicks.Visible = crt;
-
-        foreach (var (column, button, palette) in _columns)
-            StyleColumn(column, button, palette);
->>>>>>> 7ae57790c (test):Content.Client/_CMU14/Lobby/JoinRoundWindow.xaml.cs
     }
 }

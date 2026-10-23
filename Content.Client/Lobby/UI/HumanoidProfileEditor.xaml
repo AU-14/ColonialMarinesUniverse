@@ -86,40 +86,20 @@
                         <!-- appearanceList -->
                         <BoxContainer Orientation="Vertical">
                             <BoxContainer Margin="10" Orientation="Vertical" HorizontalExpand="True">
-<<<<<<< HEAD
                                 <!-- cmu edit start -->
                                 <BoxContainer HorizontalExpand="True" Visible="False">
                                 <!-- cmu edit end -->
                                     <Label Text="{Loc 'humanoid-profile-editor-preferred-squad-label'}" />
-||||||| parent of 7ae57790c (test)
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-preferred-squad-label'}" />
-=======
-                                <BoxContainer HorizontalExpand="True">
                                     <Label MinWidth="240" VAlign="Center" Text="{Loc 'humanoid-profile-editor-preferred-squad-label'}" />
                                     <OptionButton MinWidth="220" Name="SquadPreferenceButton" />
->>>>>>> 7ae57790c (test)
                                     <Control HorizontalExpand="True" />
                                 </BoxContainer>
                                 <!-- Armor Preference -->
-<<<<<<< HEAD
-                                <!-- cmu edit start -->
-                                <BoxContainer HorizontalExpand="True" Visible="False">
-                                <!-- cmu edit end -->
-                                    <Label Text="{Loc 'humanoid-profile-editor-preferred-armor-label'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <OptionButton Name="ArmorPreferenceButton" HorizontalAlignment="Right" />
-||||||| parent of 7ae57790c (test)
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-preferred-armor-label'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <OptionButton Name="ArmorPreferenceButton" HorizontalAlignment="Right" />
-=======
                                 <BoxContainer HorizontalExpand="True">
                                     <Label MinWidth="240" VAlign="Center" Text="{Loc 'humanoid-profile-editor-preferred-armor-label'}" />
                                     <OptionButton MinWidth="220" Name="ArmorPreferenceButton" />
                                     <Control HorizontalExpand="True" />
->>>>>>> 7ae57790c (test)
+                                <!-- cmu edit end -->
                                 </BoxContainer>
                                 <!-- Playtime Perks -->
                                 <BoxContainer HorizontalExpand="True">
@@ -149,49 +129,24 @@
                                 </BoxContainer>
                                 <cc:HSeparator Color="#16823E" Margin="0 5" />
                                 <!-- Species -->
-<<<<<<< HEAD
                                 <!-- cmu edit start -->
-                                <BoxContainer HorizontalExpand="True" Visible="False">
-                                <!-- cmu edit end -->
-                                    <Label Text="{Loc 'humanoid-profile-editor-species-label'}" />
-                                    <Control HorizontalExpand="True"/>
-||||||| parent of 7ae57790c (test)
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-species-label'}" />
-                                    <Control HorizontalExpand="True"/>
-=======
                                 <BoxContainer HorizontalExpand="True">
                                     <Label MinWidth="240" VAlign="Center" Text="{Loc 'humanoid-profile-editor-species-label'}" />
                                     <OptionButton MinWidth="220" Name="SpeciesButton" />
->>>>>>> 7ae57790c (test)
+                                <!-- cmu edit end -->
                                     <TextureButton Name="SpeciesInfoButton" Scale="0.3 0.3"
                                                    VerticalAlignment="Center"
                                                    ToolTip="{Loc 'humanoid-profile-editor-guidebook-button-tooltip'}"/>
                                     <Control HorizontalExpand="True" />
                                 </BoxContainer>
-<<<<<<< HEAD
                                 <!-- cmu edit start: sex moved to the Character Records tab -->
-                                <!-- cmu edit end -->
                                 <!-- Voice -->
-                                <!-- cmu edit start -->
                                 <BoxContainer HorizontalExpand="True" Visible="False">
                                 <!-- cmu edit end -->
                                     <Label Text="{Loc 'humanoid-profile-editor-voice-label'}" />
                                     <Control HorizontalExpand="True" />
                                     <OptionButton Name="VoiceButton" HorizontalAlignment="Right" />
-||||||| parent of 7ae57790c (test)
-                                <!-- Sex -->
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-sex-label'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <OptionButton Name="SexButton" HorizontalAlignment="Right" />
-=======
-                                <!-- Sex -->
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label MinWidth="240" VAlign="Center" Text="{Loc 'humanoid-profile-editor-sex-label'}" />
-                                    <OptionButton MinWidth="220" Name="SexButton" />
-                                    <Control HorizontalExpand="True" />
->>>>>>> 7ae57790c (test)
+                                <!-- cmu edit end -->
                                 </BoxContainer>
                                 <!-- cmu edit start: pronouns moved to the Character Records tab -->
                                 <!-- cmu edit end -->
@@ -202,24 +157,12 @@
                                     <Control HorizontalExpand="True" />
                                 </BoxContainer>
                                 <!-- Spawn Priority -->
-<<<<<<< HEAD
                                 <!-- cmu edit start -->
-                                <BoxContainer HorizontalExpand="True" Visible="False">
-                                <!-- cmu edit end -->
-                                    <Label Text="{Loc 'humanoid-profile-editor-spawn-priority-label'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <OptionButton Name="SpawnPriorityButton" HorizontalAlignment="Right" />
-||||||| parent of 7ae57790c (test)
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-spawn-priority-label'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <OptionButton Name="SpawnPriorityButton" HorizontalAlignment="Right" />
-=======
                                 <BoxContainer HorizontalExpand="True">
                                     <Label MinWidth="240" VAlign="Center" Text="{Loc 'humanoid-profile-editor-spawn-priority-label'}" />
                                     <OptionButton MinWidth="220" Name="SpawnPriorityButton" />
                                     <Control HorizontalExpand="True" />
->>>>>>> 7ae57790c (test)
+                                <!-- cmu edit end -->
                                 </BoxContainer>
                                 <!-- cmu edit start -->
                                 <!-- FOB security squad opt-in. Its own card so it reads as a choice with
@@ -273,14 +216,30 @@
                                 <Label Text="{Loc 'humanoid-profile-editor-eyes-label'}" />
                                 <humanoid:EyeColorPicker Name="EyeColorPicker" />
                             </BoxContainer>
+
+
+
+                            </BoxContainer>
+                            <BoxContainer HorizontalExpand="True">
+                                <Label MinWidth="240" VAlign="Center" Text="{Loc 'humanoid-profile-editor-hair-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-hair-color-tooltip'}" />
+                                <Label Name="HairColorNameLabel" VAlign="Center" />
+                                <Control HorizontalExpand="True" />
+                            </BoxContainer>
+                            <BoxContainer HorizontalExpand="True">
+                                <Label MinWidth="240" VAlign="Center" Text="{Loc 'humanoid-profile-editor-eye-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-eye-color-tooltip'}" />
+                                <Label Name="EyeColorNameLabel" VAlign="Center" />
+                                <Control HorizontalExpand="True" />
+
+
                             <!-- cmu edit start -->
                             <!-- Character appearance -->
                             <BoxContainer Margin="10" Orientation="Vertical" SeparationOverride="12" HorizontalExpand="True">
                                 <cc:HSeparator Color="#16823E" Margin="0 5" />
                                 <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-skin-tone-label'}" ToolTip="{Loc 'humanoid-profile-editor-skin-tone-tooltip'}" />
                                     <Control HorizontalExpand="True"/>
-                                    <Label Name="SkinToneNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
+                                    <Label Text="{Loc 'humanoid-profile-editor-skin-tone-label'}" ToolTip="{Loc 'humanoid-profile-editor-skin-tone-tooltip'}" />
+                                    <Label MinWidth="240" VAlign="Center" Text="{Loc 'humanoid-profile-editor-skin-tone-label'}" ToolTip="{Loc 'humanoid-profile-editor-skin-tone-tooltip'}" />
+                                    <Label Name="SkinToneNameLabel" VAlign="Center" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
                                 </BoxContainer>
                                 <Slider Name="CharacterSkinSlider" HorizontalExpand="True" MinValue="0" MaxValue="100" />
                                 <ColorSelectorSliders Name="CharacterSkinColorPicker" HorizontalExpand="True" />
@@ -336,18 +295,9 @@
                                 <OptionButton Name="SexButton" HorizontalAlignment="Right" />
                             </BoxContainer>
                             <BoxContainer HorizontalExpand="True">
-                                <Label Text="{Loc 'humanoid-profile-editor-pronouns-label'}" />
-                                <Control HorizontalExpand="True"/>
-                                <OptionButton Name="PronounsButton" HorizontalAlignment="Right" />
-||||||| parent of 7ae57790c (test)
-                                <Label Text="{Loc 'humanoid-profile-editor-pronouns-label'}" ToolTip="{Loc 'humanoid-profile-editor-pronouns-tooltip'}" />
-                                <Control HorizontalExpand="True"/>
-                                <OptionButton Name="PronounsButton" HorizontalAlignment="Right" />
-=======
                                 <Label MinWidth="240" VAlign="Center" Text="{Loc 'humanoid-profile-editor-pronouns-label'}" ToolTip="{Loc 'humanoid-profile-editor-pronouns-tooltip'}" />
                                 <OptionButton MinWidth="220" Name="PronounsButton" />
                                 <Control HorizontalExpand="True" />
->>>>>>> 7ae57790c (test)
                             </BoxContainer>
                             <!-- cmu edit end -->
                             <BoxContainer HorizontalExpand="True">
@@ -369,39 +319,9 @@
                             </BoxContainer>
                             <!-- cmu edit start -->
                             <BoxContainer HorizontalExpand="True">
-<<<<<<< HEAD
                                 <Label Text="{Loc 'cmu-humanoid-profile-editor-blood-type-label'}" ToolTip="{Loc 'cmu-humanoid-profile-editor-blood-type-tooltip'}" />
                                 <Control HorizontalExpand="True"/>
                                 <OptionButton Name="BloodTypeButton" HorizontalAlignment="Right" />
-||||||| parent of 7ae57790c (test)
-                                <Label Text="{Loc 'humanoid-profile-editor-skin-tone-label'}" ToolTip="{Loc 'humanoid-profile-editor-skin-tone-tooltip'}" />
-                                <Control HorizontalExpand="True"/>
-                                <Label Name="SkinToneNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
-                            </BoxContainer>
-                            <BoxContainer HorizontalExpand="True">
-                                <Label Text="{Loc 'humanoid-profile-editor-hair-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-hair-color-tooltip'}" />
-                                <Control HorizontalExpand="True"/>
-                                <Label Name="HairColorNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
-                            </BoxContainer>
-                            <BoxContainer HorizontalExpand="True">
-                                <Label Text="{Loc 'humanoid-profile-editor-eye-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-eye-color-tooltip'}" />
-                                <Control HorizontalExpand="True"/>
-                                <Label Name="EyeColorNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
-=======
-                                <Label MinWidth="240" VAlign="Center" Text="{Loc 'humanoid-profile-editor-skin-tone-label'}" ToolTip="{Loc 'humanoid-profile-editor-skin-tone-tooltip'}" />
-                                <Label Name="SkinToneNameLabel" VAlign="Center" />
-                                <Control HorizontalExpand="True" />
-                            </BoxContainer>
-                            <BoxContainer HorizontalExpand="True">
-                                <Label MinWidth="240" VAlign="Center" Text="{Loc 'humanoid-profile-editor-hair-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-hair-color-tooltip'}" />
-                                <Label Name="HairColorNameLabel" VAlign="Center" />
-                                <Control HorizontalExpand="True" />
-                            </BoxContainer>
-                            <BoxContainer HorizontalExpand="True">
-                                <Label MinWidth="240" VAlign="Center" Text="{Loc 'humanoid-profile-editor-eye-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-eye-color-tooltip'}" />
-                                <Label Name="EyeColorNameLabel" VAlign="Center" />
-                                <Control HorizontalExpand="True" />
->>>>>>> 7ae57790c (test)
                             </BoxContainer>
                             <!-- cmu edit end -->
                             <!-- cmu edit start -->
