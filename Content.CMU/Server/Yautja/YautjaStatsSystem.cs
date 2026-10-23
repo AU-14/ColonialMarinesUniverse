@@ -142,14 +142,12 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         _pendingSkinRandomization.Add(ent);
         _abilities.GrantActions(ent);
         _voice.GrantAudioPanelAction(ent);
-        _voice.GrantVoiceActions(ent);
     }
 
     private void OnYautjaShutdown(Entity<YautjaComponent> ent, ref ComponentShutdown args)
     {
         _abilities.RemoveActions(ent);
         _voice.RemoveAudioPanelAction(ent);
-        _voice.RemoveVoiceActions(ent);
     }
 
     private void OnYautjaMapInit(Entity<YautjaComponent> ent, ref MapInitEvent args)
