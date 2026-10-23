@@ -14796,5 +14796,116 @@
   id: 861
   time: '2026-10-22T22:25:33.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2258
+- author: rokudara-sen
+  changes:
+  - message: The radio jammer can be switched on and off and actually jams
+    type: Fix
+  - message: Expedition faction squads wear their own boots and packs, UACG no longer
+      carry USCM rifles and vests
+    type: Fix
+  - message: Auxiliary Staff can take disability traits
+    type: Fix
+  - message: Clusters already on a comms tower turn into a pylon once the takeover
+      time passes
+    type: Fix
+  - message: Larvae no longer get stuck catatonic when the infecting hugger skips
+      the claim prompt
+    type: Fix
+  - message: UPP commandos and snipers can use their thermal cloaks
+    type: Fix
+  - message: Welders repair barricades again
+    type: Fix
+  - message: Distress Signal threats spawn again when the queen volunteer doesn't
+      have the playtime for her
+    type: Fix
+  - message: IASF enlisted speak the same languages as their leaders
+    type: Fix
+  - message: The Reaper can no longer revive a dead Queen
+    type: Fix
+  - message: Shots fired through a floor lose damage over the height they cover, buckshot
+      no longer point blanks through holes
+    type: Fix
+  - message: Distress Signal ends when the last xeno is gibbed or deleted instead
+      of hanging
+    type: Fix
+  - message: Youngbloods always arrive on the hunter ship
+    type: Fix
+  - message: Blooding console party sizes match what spawns, and dialog windows can
+      be resized
+    type: Fix
+  - message: The fighter VTOL pad can be packed back up
+    type: Fix
+  id: 862
+  time: '2026-10-23T20:15:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2266
+- author: johnnny34y
+  changes:
+  - message: HAZOPS armor has been buffed with a speed increase and a bullet resistance
+      of 15.
+    type: Tweak
+  id: 863
+  time: '2026-10-23T20:16:10.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2263
+- author: rokudara-sen
+  changes:
+  - message: Radio direction finding no longer marks anyone on the tactical map. Talking
+      on the radio doesn't reveal you on its own anymore
+    type: Tweak
+  - message: A fixed enemy net only gives a rough compass bearing in chat, from manpacks
+      only, at most every 30 seconds. BURST traffic gives no bearing
+    type: Tweak
+  id: 864
+  time: '2026-10-23T20:16:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2267
+- author: Vixting
+  changes:
+  - message: APC & rotary using incorrect ammo type & 1 shotting reisn
+    type: Fix
+  id: 865
+  time: '2026-10-23T20:18:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2264
+- author: RomiGur
+  changes:
+  - message: Vision effects (welding blindness, flash, drunkenness, drowsiness, drugs,
+      hunger, blur) now show on Z-level maps.|
+    type: Fix
+  - message: Blind players no longer see the level above via faint glance or stair
+      preview.
+    type: Fix
+  - message: Added IsPlayerView helper for player-only overlays on Z-level maps.
+    type: Code
+  id: 866
+  time: '2026-10-23T20:18:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2268
+- author: TheHellFireo
+  changes:
+  - message: Reanimation now has one ten-minute cooldown shared by all Reapers, including
+      newly spawned Reapers.
+    type: Tweak
+  id: 867
+  time: '2026-10-23T20:18:40.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2270
+- author: Vixting
+  changes:
+  - message: Added generatereagent command for spawning in custom reagents
+    type: Add
+  id: 868
+  time: '2026-10-23T20:18:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2269
+- author: ILoveDespoiler
+  changes:
+  - message: Saved Despoiler Society
+    type: Fix
+  id: 869
+  time: '2026-10-23T21:34:51.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2272
+- author: TheHellFireo
+  changes:
+  - message: Fixed threats failing to spawn when a waiting player has no preferred
+      job, and the same error when joining as an observer.
+    type: Fix
+  id: 870
+  time: '2026-10-23T21:55:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2273
 Name: CMU
 Order: -1

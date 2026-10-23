@@ -1,0 +1,104 @@
+author: troytroy400
+category: CMU
+changes:
+- message: Auxiliary Staff now replaces the Combat Correspondent role. Pick Combat
+    Correspondent, Chaplain or Mess Technician in your loadout. Distress Signal has
+    3 Auxiliary Staff slots, Insurgency and Force on Force have 1 per side.
+  type: Add
+- message: The DEFAC kitchen on the bush now has an open for business button. While
+    the kitchen shutters are up, the NutriCo AutoChef and AutoDrink stop dispensing
+    and say the foodline is open to make people interact.
+  type: Add
+- message: USS Bush kitchen doors are now locked to mess technicians.
+  type: Add
+- message: The coffee machines work now.
+  type: Add
+- message: Mug rack ported from CM-SS13.
+  type: Add
+- message: Gym equipment works now. Added weight machines, punching bag, treadmill,
+    light and heavy dumbbells, ring ropes, posts, posters, arena floors and USCM logo
+    decals. How many reps or minutes of running you can manage depends on your build,
+    height, weight and age.
+  type: Add
+- message: Knee pushups. If your arms give out on normal pushups, you can drop to
+    your knees and keep going or be a pussy and do only knee pushups.
+  type: Add
+- message: Caffeine Addict trait.
+  type: Add
+- message: M2C and M56D resprite from CM-SS13.
+  type: Add
+- message: HPR and M7-SMAW resprite from CM-SS13.
+  type: Add
+- message: The USS Bush now has proper evacuation airlocks on the pods.
+  type: Add
+- message: Added admin command lockgamemode which makes the gamemode vote offer only
+    one gamemode, for a set number of rounds or until cleared.
+  type: Add
+- message: Force on Force now requires 100 players.
+  type: Tweak
+- message: Hope's Retreat is in the Distress Signal rotation.
+  type: Tweak
+- message: The generic guidebook item now opens the CMU guidebook.
+  type: Tweak
+- message: Upstream defibrillators are properly fully replaced with the CMU defibrillator.
+  type: Tweak
+- message: Diplomatic consoles only work for their own faction's ambassador now.
+  type: Tweak
+- message: Hijack floor tiles can be blown out 4 minutes after the crash, down from
+    8.
+  type: Tweak
+- message: All ship consoles make keyboard sounds when you use them.
+  type: Tweak
+- message: GOVFOR and OPFOR spawn on their ship even when the platoon or ship vote
+    was skipped.
+  type: Fix
+- message: Electronic hearing protection no longer sells for more than it costs.
+  type: Fix
+- message: The AI Core Outter button opens the outer AI core podlocks on the USS Bush.
+  type: Fix
+- message: Boom mic. Takes both hands, click a broadcasting camera with it to sync
+    it, and while you hold it within 20 tiles of that camera, everything said and
+    emoted within 10 tiles is repeated by the TVs watching it.
+  type: Add
+- message: The broadcasting camera has its own microphone that picks up speech and
+    emotes within 5 tiles.
+  type: Add
+- message: The broadcasting camera has a photo mode. Right click to switch, wield
+    it and click to take photos.
+  type: Add
+- message: TV News Crew third party. Has a reporter, a camera operator and a sound
+    technician with press armor and helmets and their own gear. They show up on Shepherd's
+    Pride and Stable Garrison.
+  type: Add
+- message: The Wendigo has a resting sprite, made by mushroomracc.
+  type: Add
+- message: Flashes and camera flashes have a 25% chance to set off a seizure in someone
+    with epilepsy.
+  type: Add
+- message: TVs keep their channel for everyone until someone changes it and keep playing
+    with nobody watching. You can watch one from anywhere you can see it, but you
+    have to be next to it to change the channel.
+  type: Tweak
+- message: The Combat Correspondent kit has a boom mic, a photo camera and 2 film.
+    Journalists get a boom mic, a second film and press armor and helmet.
+  type: Tweak
+- message: Insurgency has 2 journalist slots.
+  type: Tweak
+- message: Synths don't take pressure damage.
+  type: Tweak
+- message: Distress Signal no longer gets random third party arrivals. Other than
+    the survivors, third parties only come when called in.
+  type: Tweak
+- message: HESCOs can no-longer be built from sandbags.
+  type: Tweak
+- message: The LACN utility tools rig, construction rig and medical storage rig use
+    LACN sprites.
+  type: Tweak
+- message: The emergency toolbox has a colony radio instead of a USCM one.
+  type: Tweak
+- message: WeYu Security Officers are now uniformed.
+  type: Tweak
+- message: BEAR third parties no longer randomly show up on Stable Garrison.
+  type: Remove
+time: '2026-10-22T22:25:33.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2258
