@@ -27,14 +27,7 @@ public sealed partial class XenoReaperSystem
             && _mobState.IsAlive(caster) && _mobState.IsDead(target)
             && HasComp<XenoComponent>(target) && HasComp<DamageableComponent>(target)
             && HasComp<MobThresholdsComponent>(target) && _hive.FromSameHive(caster, target)
-            && !HasOtherLivingQueen(target);
-    }
-
-    private bool HasOtherLivingQueen(EntityUid target)
-    {
-        return HasComp<XenoEvolutionGranterComponent>(target)
-            && _hive.GetHive(target) is { } hive && hive.Comp.CurrentQueen is { } queen
-            && queen != target && !TerminatingOrDeleted(queen) && !_mobState.IsDead(queen);
+            && !HasComp<XenoEvolutionGranterComponent>(target);
     }
 
     private void OnReviveAction(Entity<XenoReaperComponent> xeno, ref CMUReaperReviveActionEvent args)
@@ -42,9 +35,10 @@ public sealed partial class XenoReaperSystem
         if (args.Handled || _net.IsClient || !TryComp<CMUReaperRevivalComponent>(xeno, out var revival))
             return;
 
-        if (HasOtherLivingQueen(args.Target))
+        // a dead queen stays dead, the hive has to raise a new one
+        if (HasComp<XenoEvolutionGranterComponent>(args.Target))
         {
-            _popup.PopupEntity(Loc.GetString("cmu-reaper-revive-queen-exists"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cmu-reaper-revive-queen"), xeno, xeno);
             return;
         }
 

@@ -41,21 +41,11 @@
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
     time: 18000 # 5 hours
+  # chaplain, cook and correspondent don't fight, so the rifleman disability list doesn't apply
   - !type:TraitsRequirement
     inverted: true
     traits:
-    - Epilepsy
     - NoEnglish
-    - CMUProstheticLeftArm
-    - CMUProstheticRightArm
-    - CMUProstheticLeftLeg
-    - CMUProstheticRightLeg
-    - SlowRunner
-    - Anemic
-    - Asthmatic
-    - CMUAlcoholic
-    - CMUDrugAddict
-    - CMUBadLeg
   ranks:
     RMCRankCivilian: []
   chevrons:
