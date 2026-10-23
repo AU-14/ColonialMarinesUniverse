@@ -950,7 +950,6 @@ public sealed partial class YautjaItemSystem : EntitySystem
             if (Deleted(uid) || component.Kind != YautjaRelayDestinationKind.Ground)
                 continue;
 
-            // A relay without an id cannot be targeted; map data always sets one
             var id = component.Id.Trim();
             if (id.Length == 0)
                 continue;

@@ -1203,7 +1203,6 @@
   - type: UniqueAction
   - type: Wieldable
     wieldedInhandPrefix: plasma_pistol
-  - type: GunRequiresWield
 - type: entity
   parent: BaseItem
   id: CMUYautjaPlasmaCarbine

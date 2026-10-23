@@ -637,9 +637,6 @@ namespace Content.Client.Options.UI.Tabs
             {
                 foreach (var control in _allControls)
                     control.Visible = true;
-                foreach (var (section, expanded) in _unfilteredExpansion)
-                    section.Expanded = expanded;
-                _unfilteredExpansion.Clear();
                 return;
             }
 
@@ -686,8 +683,6 @@ namespace Content.Client.Options.UI.Tabs
             ApplySearchResults(matchingControls);
         }
 
-        private readonly Dictionary<CmuOptionSection, bool> _unfilteredExpansion = new();
-
         private void ApplySearchResults(IReadOnlySet<Control> matchingControls)
         {
             CmuOptionSection? section = null;
@@ -696,7 +691,6 @@ namespace Content.Client.Options.UI.Tabs
                 if (control is CmuOptionSection nextSection)
                 {
                     section = nextSection;
-                    _unfilteredExpansion.TryAdd(section, section.Expanded);
                     section.Visible = false;
                     section.Expanded = true;
                     continue;
