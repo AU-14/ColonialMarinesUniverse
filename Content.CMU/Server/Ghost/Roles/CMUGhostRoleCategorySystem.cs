@@ -1,12 +1,12 @@
 using System.Linq;
-using Content.Shared._CMU14.Ghost.Roles;
+using Content.Shared.CMU14.Ghost.Roles;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Survivor;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Ghost.Roles;
+namespace Content.Server.CMU14.Ghost.Roles;
 
 /// <summary>
 ///     Works out which rail entry a ghost role belongs under, and where the entity offering it

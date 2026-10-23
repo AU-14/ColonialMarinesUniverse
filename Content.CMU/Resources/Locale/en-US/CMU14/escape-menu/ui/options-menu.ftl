@@ -16,6 +16,8 @@ cmu-ui-options-temperature-fahrenheit-tooltip = Switches medical scanners, patie
 cmu-ui-options-voting = Voting
 cmu-ui-options-vote-ui-large = Larger vote popup
 cmu-ui-options-vote-ui-large-tooltip = Draws votes with wider options and taller rows. Easier to read on high resolutions and ultrawide displays.
+cmu-ui-options-fof-unidentified-marker = Unidentified force markers
+cmu-ui-options-fof-unidentified-marker-tooltip = Show a question mark instead of the name for players whose uniform your faction does not recognize.
 
 cmu-ui-options-general-construction = Construction
 cmu-ui-options-construction-mode = Construction Mode
@@ -83,6 +85,28 @@ cmu-ui-options-popups-examine = Popups and examine
 cmu-ui-options-screen-shake = Screen shake
 cmu-ui-options-sound = Sound
 cmu-ui-options-visuals = Visuals
+
+cmu-ui-options-group-hud = HUD
+cmu-ui-options-new-player-icons = New player icons
+cmu-ui-options-new-player-icons-tooltip = Shows new player icons, including on mentor and department head roles.
+cmu-ui-options-combat-mode-cursor = Combat mode on cursor
+cmu-ui-options-combat-mode-cursor-tooltip = Shows combat mode indicators next to your cursor.
+cmu-ui-options-hud-theme = HUD theme
+cmu-ui-options-hud-layout = HUD layout
+cmu-ui-options-center-separated-viewport = Center the game view
+cmu-ui-options-center-separated-viewport-tooltip = Separated layout only. The chat panel pushes the game view left of center; this pads it back to the middle of the window, at the cost of a slightly narrower view.
+cmu-ui-options-separated-hud-status-side = Status alerts side
+cmu-ui-options-separated-hud-status-side-tooltip = Separated layout only. Which side of the game view your status alerts sit on.
+
+cmu-ui-options-group-chat-panel = Chat panel
+cmu-ui-options-chat-housing = Chat housing
+cmu-ui-options-chat-housing-tooltip = Separated layout only. Draws the chat panel as a terminal: a molded housing, the chat on a rounded screen, and the menu bar as keycaps. Off keeps the flat panel.
+cmu-ui-options-menu-bar-style = Menu bar keys
+cmu-ui-options-menu-bar-style-tooltip = How the buttons above the chat are drawn. The chat housing uses its own keycaps, so this only applies while the housing is off.
+
+cmu-ui-options-group-other = Other
+cmu-ui-options-discord-rich = Discord Rich Presence
+
 cmu-ui-options-vault-on-bump = Vault by walking into ledges and railings
 cmu-ui-options-vault-on-bump-tooltip = Walking into a ledge or railing you can vault over starts vaulting it. Tables and barricades are left out. Keep pushing into it to finish, or step away to cancel.
 cmu-ui-options-no-shake-when-resting = Stay down when resting

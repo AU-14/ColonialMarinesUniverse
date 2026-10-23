@@ -1,6 +1,7 @@
 #pragma warning disable RA0002 // Arrange faction ownership explicitly for authorization regressions.
 
 using System.Reflection;
+using Content.Client.CMU14.UserInterface.Options.Tabs;
 using Content.Client.Options.UI.Tabs;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.ForceOnForce;
@@ -345,7 +346,7 @@ public sealed class ForceOnForceGameplayTest : GameTest
         {
             var configuration = Client.ResolveDependency<IConfigurationManager>();
             Assert.That(configuration.GetCVar(CCVars.ForceOnForceUnidentifiedMarkerEnabled), Is.True);
-            using var tab = new CmuTab();
+            using var tab = new InterfaceTab();
             var checkbox = tab.FindControl<CheckBox>("FoFUnidentifiedMarkerCheckBox");
             Assert.That(checkbox.Pressed, Is.True);
             checkbox.Pressed = false;

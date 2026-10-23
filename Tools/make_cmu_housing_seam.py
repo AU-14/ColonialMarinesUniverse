@@ -10,7 +10,7 @@ Same palette and bevel language as the housing's corner screws: a highlight alon
 shadow along the bottom, and one rivet per tile so it reads as machined casing once it repeats
 rather than a bar with an ornament stuck in the middle.
 
-Writes Resources/Textures/_CMU14/Interface/ChatHousing/seam_<tone>.png. Regenerate rather than
+Writes Content.CMU/Resources/Textures/CMU14/Interface/ChatHousing/seam_<tone>.png. Regenerate rather than
 hand-edit. Drawn at 4x and downsampled so the rivet gets an anti-aliased edge.
 """
 import os
@@ -19,7 +19,7 @@ from PIL import Image, ImageDraw
 
 OUT = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    'Resources', 'Textures', '_CMU14', 'Interface', 'ChatHousing')
+    'Content.CMU', 'Resources', 'Textures', 'CMU14', 'Interface', 'ChatHousing')
 
 # top, bottom, highlight, shadow - the plastic of each housing tone.
 TONES = {

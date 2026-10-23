@@ -198,6 +198,7 @@ public partial class ChatBox : UIWidget
     protected override void EnteredTree()
     {
         base.EnteredTree();
+        ApplyScreenBackgrounds(); // CMU14: reapply chat housing overrides on entry
 
         // Cached screens receive messages while detached. The engine discards their queued layout
         // updates, and our explicit stylesheet prevents reparenting from restyling this subtree.
@@ -1318,12 +1319,6 @@ public partial class ChatBox : UIWidget
             _onLobbyHousingScreen = value;
             ApplyScreenBackgrounds();
         }
-    }
-
-    protected override void EnteredTree()
-    {
-        base.EnteredTree();
-        ApplyScreenBackgrounds();
     }
 
     private void OnChatHousingCvarChanged(string tone)

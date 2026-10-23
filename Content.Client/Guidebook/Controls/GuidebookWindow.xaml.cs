@@ -39,6 +39,8 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
 
     public ProtoId<GuideEntryPrototype>? Selected { get; private set; }
 
+    public ProtoId<GuideEntryPrototype> LastEntry;
+
 
     // CMU: search, history and the section list.
     private readonly CmuGuideIndex _index;
@@ -158,6 +160,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
 
 
             ShowGuide(entry);
+        }
         else
             ClearSelectedGuide();
     }
@@ -367,7 +370,6 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
 
         Scroll.HScrollTarget = position.X;
         Scroll.VScrollTarget = position.Y;
->>>>>>> crt-terminal-shader
     }
 
     private int? HeadingDepth(Label control)

@@ -1,6 +1,6 @@
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Ghost.Roles;
+namespace Content.Shared.CMU14.Ghost.Roles;
 
 /// <summary>
 ///     One rail entry in the ghost roles window: a faction, or the catch-all every uncategorised

@@ -7,6 +7,7 @@ using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Content.Client.CMU14.Interface;
 using Content.Client.CMU14.UserInterface.Options;
+using Content.Client.CMU14.UserInterface.Options.Tabs;
 using Content.Client.Lobby;
 using Content.Client.Options.UI;
 using Content.Client.Options.UI.Tabs;
@@ -49,8 +50,8 @@ public sealed class OptionsThemeRegressionTest : GameTest
             {
                 Assert.That(Descendants(emotes).OfType<OptionButton>().Count(), Is.EqualTo(8));
                 Assert.That(Descendants(general).OfType<CheckBox>().Count(), Is.EqualTo(3));
-                Assert.That(emotes.Expanded, Is.False);
-                Assert.That(general.Expanded, Is.False);
+                Assert.That(emotes.Expanded, Is.True);
+                Assert.That(general.Expanded, Is.True);
             });
 
             var emotePicker = Descendants(emotes).OfType<OptionButton>().First();
@@ -66,23 +67,23 @@ public sealed class OptionsThemeRegressionTest : GameTest
             Assert.That(general.Visible, Is.False);
             search.SelectionStart = 0;
             search.InsertAtCursor(string.Empty);
-            Assert.That(emotes.Expanded, Is.False);
+            Assert.That(emotes.Expanded, Is.True);
             Assert.That(general.Visible, Is.True);
 
-            var cmu = menu.FindControl<CmuTab>("CmuTab");
+            var cmu = menu.FindControl<InterfaceTab>("InterfaceTab");
             var accessibility = menu.FindControl<AccessibilityTab>("AccessibilityTab");
-            foreach (var name in new[]
+            var audio = menu.FindControl<AudioTab>("AudioTab");
+            foreach (var (name, home) in new (string Name, Control Home)[]
                      {
-                         "ExplosionScreenShakeEnabledCheckBox", "ExplosionScreenShakeIgnoreFarCheckBox",
-                         "FirearmScreenShakeEnabledCheckBox", "MuteScriptedSoundsCheckBox",
+                         ("ExplosionScreenShakeEnabledCheckBox", accessibility),
+                         ("ExplosionScreenShakeIgnoreFarCheckBox", accessibility),
+                         ("FirearmScreenShakeEnabledCheckBox", accessibility),
+                         ("MuteScriptedSoundsCheckBox", audio),
                      })
             {
-                Assert.That(Descendants(cmu).Count(control => control.Name == name), Is.EqualTo(1), name);
-                Assert.That(Descendants(accessibility).Any(control => control.Name == name), Is.False, name);
+                Assert.That(Descendants(home).Count(control => control.Name == name), Is.EqualTo(1), name);
+                Assert.That(Descendants(cmu).Any(control => control.Name == name), Is.False, name);
             }
-
-            Assert.That(Descendants(cmu).OfType<CheckBox>().Single(control => control.Name == "ChatCrtHazeCheckBox"), Is.Not.Null);
-            Assert.That(Descendants(cmu).OfType<OptionColorSlider>().Single(control => control.Name == "CrtUiColorSlider"), Is.Not.Null);
         });
     }
 
@@ -119,8 +120,10 @@ public sealed class OptionsThemeRegressionTest : GameTest
                 Assert.That(haze.Visible, Is.True);
 
                 styles.PreviewCrtUi(false, "#58CCFF");
-                var neutral = ((StyleBoxFlat) backing.PanelOverride!).BackgroundColor;
-                Assert.That(neutral.R, Is.EqualTo(neutral.G));
+                // CMU14: preview-off clears the override and hands the panel to the neutral
+                // stylesheet rule (LobbyGui re-style contract), so neutrality is the null override.
+                Assert.That(backing.PanelOverride, Is.Null,
+                    "preview-off must clear the backing override instead of leaving a preview tint");
                 Assert.That(haze.Visible, Is.False);
                 Assert.That(screen.Visible, Is.False);
                 Assert.That(lobby.CharacterPreview.IgnoreAllegianceToggle.Label.FontOverride, Is.Null);
@@ -193,6 +196,8 @@ public sealed class OptionsThemeRegressionTest : GameTest
             var appearance = Descendants(setup).OfType<CmuAppearanceOptions>().Single();
             Assert.That(Descendants(appearance).OfType<OptionDropDown>()
                 .Single(control => control.Name == "UiFontDropDown").Button.ItemCount, Is.EqualTo(6));
+            Assert.That(Descendants(appearance).OfType<CheckBox>().Single(control => control.Name == "ChatCrtHazeCheckBox"), Is.Not.Null);
+            Assert.That(Descendants(appearance).OfType<OptionColorSlider>().Single(control => control.Name == "CrtUiColorSlider"), Is.Not.Null);
             Descendants(appearance).OfType<CheckBox>()
                 .Single(control => control.Name == "CrtUiEnabledCheckBox").Pressed = false;
             setup.SaveAndContinue();

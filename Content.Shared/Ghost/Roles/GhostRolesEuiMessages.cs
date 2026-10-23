@@ -49,7 +49,7 @@ namespace Content.Shared.Ghost.Roles
         public TimeSpan RaffleDuration { get; set; }
 
         /// <summary>
-        /// Id of the <see cref="Content.Shared._CMU14.Ghost.Roles.GhostRoleCategoryPrototype"/> this role is
+        /// Id of the <see cref="Content.Shared.CMU14.Ghost.Roles.GhostRoleCategoryPrototype"/> this role is
         /// listed under. Set from the role's own component where it says, worked out from the entity where it
         /// does not - see CMUGhostRoleCategorySystem.
         /// </summary>

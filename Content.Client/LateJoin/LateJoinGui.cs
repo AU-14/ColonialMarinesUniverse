@@ -399,6 +399,16 @@ namespace Content.Client.LateJoin
             _base.AddChild(banner);
             _base.AddChild(body);
 
+            if (_configManager.GetCVar(CCVars.CrewManifestWithoutEntity))
+            {
+                var crewManifestButton = new Button
+                {
+                    Text = Loc.GetString("crew-manifest-button-label")
+                };
+                crewManifestButton.OnPressed += _ => _crewManifest.RequestCrewManifest(id);
+                body.AddChild(crewManifestButton);
+            }
+
             var section = new StationSection(bannerName, bannerCount, noneLabel);
             _jobButtons[id] = new Dictionary<string, List<JobButton>>();
 

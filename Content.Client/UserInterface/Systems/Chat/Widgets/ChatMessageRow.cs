@@ -147,7 +147,6 @@ public sealed partial class ChatMessageRow : PanelContainer
                 MouseFilter = MouseFilterMode.Pass;
             }
         }
->>>>>>> crt-terminal-shader
         if (message.XenoWatchEntity.Valid)
         {
             var watchButton = CreateXenoWatchButton(message, metrics, textColor);

@@ -288,7 +288,7 @@ public sealed class ForceInterestTest : GameTest
             window.BeginEntryUpdate();
             window.AddForceEntry(new ForceInterestInfo(1, "Called marines", 10, 4, 7, true, true, true, true));
             window.EndEntryUpdate();
-            Assert.That(window.FindControl<PanelContainer>("ContentPanel").Visible, Is.True);
+            Assert.That(window.FindControl<ScrollContainer>("RoleScroll").Visible, Is.True);
             Assert.That(window.FindControl<Label>("NoRolesMessage").Visible, Is.False);
             var entry = window.FindControl<BoxContainer>("EntryContainer").Children.Single();
             Assert.That(entry.FindControl<Label>("Counts").Text, Does.Contain("10").And.Contain("4").And.Contain("7"));

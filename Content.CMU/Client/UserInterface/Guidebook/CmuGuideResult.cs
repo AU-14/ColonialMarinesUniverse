@@ -1,10 +1,10 @@
-using Content.Client._CMU14.Interface;
+using Content.Client.CMU14.Interface;
 using Content.Client.Stylesheets;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Utility;
 
-namespace Content.Client._CMU14.UserInterface.Guidebook;
+namespace Content.Client.CMU14.UserInterface.Guidebook;
 
 /// <summary>
 ///     One line in the guidebook's search results: where the match is, and the sentence it sits in.

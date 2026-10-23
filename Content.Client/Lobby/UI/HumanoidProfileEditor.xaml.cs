@@ -494,5 +494,6 @@ namespace Content.Client.Lobby.UI
         {
             SpriteView.OverrideDirection = (Direction)((int)direction % 4 * 2);
         }
+
     }
 }
