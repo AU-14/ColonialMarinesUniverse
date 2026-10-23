@@ -232,6 +232,9 @@ public sealed partial class BlackfootSupportDeploySystem : EntitySystem
         var packed = Spawn(ent.Comp.PackedPrototype, xform.Coordinates);
         _transform.SetLocalRotation(packed, xform.LocalRotation);
 
+        var packedEvent = new BlackfootSupportPackedEvent(packed, args.User);
+        RaiseLocalEvent(ent, ref packedEvent);
+
         QueueDel(ent.Owner);
 
         _popup.PopupEntity(Loc.GetString(ent.Comp.PackedPopup), packed, args.User);

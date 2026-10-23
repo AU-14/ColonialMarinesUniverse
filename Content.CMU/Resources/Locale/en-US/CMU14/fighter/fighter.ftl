@@ -294,3 +294,6 @@ cmu-fighter-exit-blocked = There is no clear footing beside the cockpit to climb
 
 cmu-fighter-pad-unfold-hint = Use a wrench to unfold the fighter VTOL pad.
 cmu-fighter-pad-unfolded = The fighter VTOL pad unfolds and its guide lights come on.
+cmu-fighter-pad-anchors-loosened = The VTOL pad anchor bolts are loosened.
+cmu-fighter-pad-panel-opened = The VTOL pad guide light panel is opened.
+cmu-fighter-pad-packed = The fighter VTOL pad is folded and packed.
