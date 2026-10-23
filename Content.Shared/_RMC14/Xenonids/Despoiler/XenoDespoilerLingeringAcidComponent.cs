@@ -15,9 +15,9 @@ public sealed partial class XenoDespoilerLingeringAcidComponent : Component
     public float CrossBurnDamage = 20f;
 
     // Damage attribution is only used on the server; clients do not need the caster entity.
-    [DataField]
+    [DataField, AutoNetworkedField]
     public EntityUid? Caster;
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public HashSet<EntityUid> Damaged = new(); // CMU14
 }
