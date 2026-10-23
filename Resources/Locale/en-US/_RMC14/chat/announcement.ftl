@@ -29,13 +29,7 @@ rmc-announcement-ares-online = [color=#CECECE][font size=16][bold]APOLLO Central
 
     {$message}[/bold][/font][/color]
 
-<<<<<<< HEAD
-rmc-announcement-ares-map = [color=#CECECE][font size=16][bold]{$ship}[/bold][/font][/color][color=red][font size=16][bold]
-||||||| parent of 7ae57790c (test)
-rmc-announcement-ares-map = [color=#CECECE][font size=16][bold]UNS Almayer[/bold][/font][/color][color=red][font size=16][bold]
-=======
-rmc-announcement-ares-map = [color=#CECECE][font size=16][bold]UNS Almayer[/bold][/font][/color][color=#FFB454][font size=16][bold]
->>>>>>> 7ae57790c (test)
+rmc-announcement-ares-map = [color=#CECECE][font size=16][bold]{$ship}[/bold][/font][/color][color=#FFB454][font size=16][bold]
 
     {$message}[/bold][/font][/color]
 
@@ -45,17 +39,11 @@ rmc-announcement-dropship-message = [color=#CECECE][font size=16][bold]Dropship 
 
     {$message}[/bold][/font][/color]
 
-<<<<<<< HEAD
 rmc-announcement-anti-air = [color=#CECECE][font size=16][bold]IX-50 MGAD System[/bold][/font][/color][color=red][font size=16][bold]
 
     {$message}[/bold][/font][/color]
 
-rmc-announcement-emergency-dropship-crash = [font size=14][bold][color=#CECECE]EMERGENCY[/color][/bold][/font][font size=16][color=red]
-||||||| parent of 7ae57790c (test)
-rmc-announcement-emergency-dropship-crash = [font size=14][bold][color=#CECECE]EMERGENCY[/color][/bold][/font][font size=16][color=red]
-=======
 rmc-announcement-emergency-dropship-crash = [font size=14][bold][color=#CECECE]EMERGENCY[/color][/bold][/font][font size=16][color=#FFB454]
->>>>>>> 7ae57790c (test)
   DROPSHIP ON COLLISION COURSE. CRASH IMMINENT.[/color][/font]
 
 rmc-announcement-delta = [color=#CECECE][font size=16][bold]SELF-DESTRUCT SYSTEMS ACTIVE[/bold][/font][/color]\n[color=#FFB454][font size=16][bold]DANGER, THE EMERGENCY DESTRUCT SYSTEM IS NOW ACTIVATED.[/bold][/font][/color]\n[color=#FFB454][font size=16][bold]PROCEED TO THE SELF-DESTRUCT CHAMBER FOR CONTROL ROD INSERTION.[/bold][/font][/color]
