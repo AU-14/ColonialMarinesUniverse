@@ -39,6 +39,10 @@ public sealed partial class GasCanisterPricingSystem : EntitySystem
 {
     private const float ResaleMargin = 0.5f;
 
+    // Scales all three per-mol price sources uniformly. Shell prices and catalog costs are
+    // untouched, so a catalog canister still resells below cost for any multiplier value.
+    private const float MolPriceMultiplier = 1.75f;
+
     private static readonly Dictionary<Gas, float> WasteGasPrices = new()
     {
         [Gas.Oxygen] = 0.01f,
@@ -78,7 +82,7 @@ public sealed partial class GasCanisterPricingSystem : EntitySystem
                 && !derived.TryGetValue(gas, out rate))
                 continue;
 
-            args.Price += moles * rate;
+            args.Price += moles * rate * MolPriceMultiplier;
         }
     }
 
