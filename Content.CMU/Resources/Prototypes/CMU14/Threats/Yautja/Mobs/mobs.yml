@@ -186,8 +186,6 @@
     - CMUYautjaBadBloodGruntGear19
     - CMUYautjaBadBloodGruntGear20
     - CMUYautjaBadBloodGruntGear21
-  - type: DropshipHijacker
-    hijackDoAfterSeconds: 15
 
 - type: entity
   parent: CMUMobYautja
@@ -222,8 +220,6 @@
     - CMUYautjaBadBloodLeaderGear14
     - CMUYautjaBadBloodLeaderGear15
     - CMUYautjaBadBloodLeaderGear16
-  - type: DropshipHijacker
-    hijackDoAfterSeconds: 15
 
 - type: entity
   parent: AppearanceYautja
