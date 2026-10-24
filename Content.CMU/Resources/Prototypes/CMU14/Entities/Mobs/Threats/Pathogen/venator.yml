@@ -32,12 +32,13 @@
     - CMU14ActionXenoPathogenAbduct
     - CMU14ActionXenoPathogenParalyzingSlash
     - CMU14ActionXenoPathogenScissorCut
+    - CMU14ActionXenoPathogenEvolve
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenRegurgitate
   - type: XenoScissorCut
     damage:
       types:
-        Slash: 40
+        Slash: 75
   - type: XenoHook
   - type: XenoHeavy
   - type: XenoDevour
@@ -98,6 +99,9 @@
     chance: 0.45
     stunMin: 3
     stunMax: 4
+  - type: XenoEvolution  
+    strains:  
+    - RMCXenoVenatorBloodletter
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/CMU14/Interface/neo_blips.rsi
@@ -116,6 +120,7 @@
     name: cmu-job-name-pathogen-venator
   - type: Speech
     speechSounds: Pathogen
+
  
 - type: entity
   parent: CMU14XenoVenatorBase
@@ -127,3 +132,55 @@
   - type: RMCSpawnEntitiesOnGib
     entities:
     - CMU14GibEffectPathogenVenator
+
+
+- type: entity 
+  parent: CMU14XenoVenatorBase
+  id: CMU14XenoVenatorBloodletter
+  suffix: Bloodletter
+  components:
+  - type: Sprite
+    sprite: CMU14/Mobs/Xenonids/Pathogen/venator.rsi
+  - type: Xeno
+    actionIds:
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenImpale
+    - CMU14ActionXenoPathogenScissorCut
+    - CMU14ActionXenoPathogenDevolve
+    - CMU14ActionXenoPathogenRegurgitate
+  - type: XenoScissorCut
+    damage:
+      types:
+        Slash: 35
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      750: Critical
+      850: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.5
+    baseSprintSpeed: 7.0
+  - type: MeleeWeapon
+    attackRate: 2.0
+    damage:
+      types:
+        Slash: 20
+  - type: CMArmor
+    explosionArmor: 20
+    xenoArmor: 30
+  - type: MeleeAttack
+  - type: XenoStrain
+    name: rmc-xeno-bloodletter-name
+    description: rmc-xeno-bloodletter-description
+    popup: rmc-xeno-bloodletter-popup
+  - type: XenoHidden
+    id: CMU14XenoVenatorBloodletter
+  
+    
