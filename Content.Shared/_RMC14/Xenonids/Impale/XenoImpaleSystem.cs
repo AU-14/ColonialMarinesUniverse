@@ -35,7 +35,7 @@ public sealed partial class XenoImpaleSystem : EntitySystem
     [Dependency] private SharedRMCMeleeWeaponSystem _rmcMelee = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private XenoSystem _xeno = default!
+    [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
 
     private EntityQuery<RMCCooldownOnMissComponent> _missCooldownQuery;
