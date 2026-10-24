@@ -174,7 +174,7 @@ jobs:
         with:
           submodules: recursive
 
-      - uses: actions/setup-python@v7.0.0
+      - uses: actions/setup-python@v7.1.0
         if: steps.changes.outputs.any == 'true'
         with:
           python-version: "3.13"
