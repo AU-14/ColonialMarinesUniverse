@@ -17,6 +17,8 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Content.Shared.Body.Systems;
+using Content.Shared.Body.Components;
 
 namespace Content.Shared._RMC14.Xenonids.Impale;
 
@@ -33,7 +35,8 @@ public sealed partial class XenoImpaleSystem : EntitySystem
     [Dependency] private SharedRMCMeleeWeaponSystem _rmcMelee = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private XenoSystem _xeno = default!;
+    [Dependency] private XenoSystem _xeno = default!
+    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
 
     private EntityQuery<RMCCooldownOnMissComponent> _missCooldownQuery;
 
@@ -75,6 +78,7 @@ public sealed partial class XenoImpaleSystem : EntitySystem
             secondHit.AP = xeno.Comp.AP;
             secondHit.Animation = xeno.Comp.Animation;
             secondHit.Damage = xeno.Comp.Damage;
+            secondHit.Bloodloss = xeno.Comp.Bloodloss; 
             secondHit.ImpaleAt = _timing.CurTime + xeno.Comp.SecondImpaleTime;
             secondHit.Origin = xeno;
             secondHit.Sound = xeno.Comp.Sound;
@@ -139,6 +143,9 @@ public sealed partial class XenoImpaleSystem : EntitySystem
             _flash.RaiseEffect(Color.Red, new List<EntityUid> { target }, filter);
         }
 
+        if (bloodloss > FixedPoint2.Zero && TryComp<BloodstreamComponent>(target, out var bloodstream))  
+            _bloodstream.TryModifyBloodLevel((target, bloodstream), -bloodloss);  
+
         _rmcMelee.DoLunge(xeno, target);
 
         if (_net.IsClient)
@@ -162,7 +169,7 @@ public sealed partial class XenoImpaleSystem : EntitySystem
             if (impale.ImpaleAt > time)
                 continue;
 
-            Impale(impale.Damage, impale.AP, impale.Animation, impale.Sound, uid, impale.Origin);
+            Impale(impale.Damage, impale.AP, impale.Bloodloss, impale.Animation, impale.Sound, uid, impale.Origin);
             RemCompDeferred<XenoSecondImpaleComponent>(uid);
         }
     }
