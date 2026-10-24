@@ -8,7 +8,7 @@
   - type: GhostRole
     name: cmu-job-name-pathogen-venator
   - type: Sprite
-    sprite: CMU14/Mobs/Xenonids/Pathogen/venator.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/Venator/venator.rsi
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -128,7 +128,7 @@
   name: Venator
   components:
   - type: Sprite
-    sprite: CMU14/Mobs/Xenonids/Pathogen/venator.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/Venator/venator.rsi
   - type: RMCGibOnDeath
     gibChance: 0.1
   - type: RMCSpawnEntitiesOnGib
@@ -142,7 +142,7 @@
   suffix: Bloodletter
   components:
   - type: Sprite
-    sprite: CMU14/Mobs/Xenonids/Pathogen/venatorbloodletter.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/Venator/venatorbloodletter.rsi
   - type: Xeno
     actionIds:
     - CMU14ActionXenoPathogenRest
