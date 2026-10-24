@@ -90,6 +90,7 @@ public sealed partial class CMUHygieneSystem
             !TryComp<StorageComponent>(uid, out var storage) || storage.Container.ContainedEntities.Count == 0)
             return false;
         EnsureComp<CMUActiveLaundryComponent>(uid);
+        laundry.CycleId++;
         laundry.FinishAt = _timing.CurTime + TimeSpan.FromSeconds(Math.Max(0.1f, laundry.CycleSeconds));
         laundry.AmmoCookoffAt = _timing.CurTime + TimeSpan.FromSeconds(Math.Max(0f, laundry.AmmoCookoffSeconds));
         laundry.CookoffAt = _timing.CurTime + TimeSpan.FromSeconds(Math.Max(0f, laundry.CookoffSeconds));

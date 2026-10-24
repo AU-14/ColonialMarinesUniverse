@@ -12,16 +12,14 @@ using Content.Shared.Trigger.Components;
 using Content.Shared.Trigger.Systems;
 using Content.Shared.Trigger;
 using Content.Shared.Weapons.Ranged.Components;
-using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared._RMC14.Explosion;
 using Robust.Shared.Audio;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
+using Robust.Shared.Prototypes;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using System;
 
 namespace Content.Server.CMU14.Hygiene;
@@ -29,6 +27,8 @@ namespace Content.Server.CMU14.Hygiene;
 public sealed partial class CMUHygieneSystem
 {
     [Dependency] private SharedExplosionSystem _laundryExplosion = default!;
+
+    [Dependency] private IComponentFactory _laundryFactory = default!;
 
     [Dependency] private TagSystem _laundryTags = default!;
 
@@ -41,6 +41,7 @@ public sealed partial class CMUHygieneSystem
     [Dependency] private SharedTransformSystem _laundryTransform = default!;
 
     private readonly HashSet<EntityUid> _washerPriming = new();
+    private static readonly ProtoId<TagPrototype>[] GrenadeTags = ["Grenade", "HandGrenade", "LauncherCompatibleGrenade"];
 
     private void OnLaundryVocalize(Entity<CMULaundryHeatedGrenadeComponent> ent, ref ActiveTimerTriggerEvent args)
     {
@@ -51,109 +52,38 @@ public sealed partial class CMUHygieneSystem
 
     private bool IsLaundryGrenade(EntityUid uid)
     {
-        return _laundryTags.HasTag(uid, "Grenade") ||
-               _laundryTags.HasTag(uid, "HandGrenade") ||
-               _laundryTags.HasTag(uid, "LauncherCompatibleGrenade") ||
-               HasComp<ProjectileGrenadeComponent>(uid) ||
+        foreach (var tag in GrenadeTags)
+        {
+            if (_laundryTags.HasTag(uid, tag))
+                return true;
+        }
+        return HasComp<ProjectileGrenadeComponent>(uid) ||
                HasComp<ScatteringGrenadeComponent>(uid) ||
                HasComp<PayloadCaseComponent>(uid);
     }
 
+    private bool IsLaundryGrenadePrototype(EntProtoId id)
+    {
+        var prototype = ProtoMan.Index(id);
+        if (prototype.HasComp<ProjectileGrenadeComponent>(_laundryFactory)
+            || prototype.HasComp<ScatteringGrenadeComponent>(_laundryFactory)
+            || prototype.HasComp<PayloadCaseComponent>(_laundryFactory))
+            return true;
+        if (!prototype.TryComp<TagComponent>(out var tags, _laundryFactory))
+            return false;
+        foreach (var tag in GrenadeTags)
+        {
+            if (_laundryTags.HasTag(tags, tag))
+                return true;
+        }
+        return false;
+    }
+
     private void CookOffLaundry(Entity<CMULaundryComponent> washer, StorageComponent storage, bool ammunition)
     {
-        var hazards = new List<EntityUid>();
-        var visited = new HashSet<EntityUid>();
-        var pending = new Stack<EntityUid>(storage.Container.ContainedEntities);
-        while (pending.TryPop(out var item))
-        {
-            if (!visited.Add(item) || TerminatingOrDeleted(item))
-                continue;
-            // Stop at a grenade or magazine: its own payload is handled as a unit below.
-            if (IsLaundryGrenade(item) || HasComp<BallisticAmmoProviderComponent>(item) ||
-                HasComp<CartridgeAmmoComponent>(item))
-            {
-                hazards.Add(item);
-                continue;
-            }
-            // Includes clothing storage, attached webbing, pouches, and further nested containers.
-            if (!TryComp<ContainerManagerComponent>(item, out var manager))
-                continue;
-            foreach (var container in manager.Containers.Values)
-            foreach (var contained in container.ContainedEntities)
-                pending.Push(contained);
-        }
-
-        var user = washer.Comp.CycleUser;
-        if (user is { } actor && TerminatingOrDeleted(actor))
-            user = null;
-        var totalRounds = 0;
-        foreach (var item in hazards)
-        {
-            if (TerminatingOrDeleted(washer.Owner))
-                break;
-            if (TerminatingOrDeleted(item))
-                continue;
-            if (IsLaundryGrenade(item))
-            {
-                if (!ammunition)
-                    PrimeLaundryGrenade(washer, item, user, ref totalRounds);
-                continue;
-            }
-            if (TryComp<BallisticAmmoProviderComponent>(item, out var magazine))
-            {
-                if (!ammunition)
-                {
-                    foreach (var contained in magazine.Container.ContainedEntities.ToArray())
-                    {
-                        if (IsLaundryGrenade(contained))
-                            PrimeLaundryGrenade(washer, contained, user, ref totalRounds);
-                    }
-                    continue;
-                }
-                var count = new GetAmmoCountEvent();
-                RaiseLocalEvent(item, ref count);
-                if (count.Count <= 0)
-                    continue;
-                // Materialize lazy ammo through the gun API, including launcher rounds in magazines.
-                var take = new TakeAmmoEvent(count.Count, new(), Transform(washer.Owner).Coordinates, user);
-                RaiseLocalEvent(item, take);
-                var rounds = 0;
-                var containsGrenades = false;
-                foreach (var (ammo, _) in take.Ammo)
-                {
-                    if (ammo is not { } round || TerminatingOrDeleted(round))
-                        continue;
-                    if (IsLaundryGrenade(round))
-                    {
-                        // Leave launcher rounds in their magazine for the separate seven-second grenade stage.
-                        containsGrenades = true;
-                        _laundryGun.TryBallisticInsert((item, magazine), round, user, suppressInsertionSound: true);
-                    }
-                    else if (TryComp<CartridgeAmmoComponent>(round, out var cartridge) && !cartridge.Spent)
-                    {
-                        rounds++;
-                        QueueDel(round);
-                    }
-                }
-                if (rounds > 0)
-                {
-                    totalRounds += rounds;
-                    if (!containsGrenades)
-                        QueueDel(item);
-                }
-                continue;
-            }
-            if (ammunition && TryComp<CartridgeAmmoComponent>(item, out var loose) && !loose.Spent)
-            {
-                QueueDel(item);
-                totalRounds++;
-            }
-        }
-        if (totalRounds > 0 && !TerminatingOrDeleted(washer.Owner))
-        {
-            StartLaundryPopcorn(washer, totalRounds, user);
-            _popup.PopupEntity(Loc.GetString("cmu-laundry-cookoff"), washer);
-        }
+        if (washer.Comp.FinishAt != null)
+            _cookoffJobs.Enqueue(new LaundryCookoffJob(washer.Owner, washer.Comp.CycleId, ammunition,
+                storage.Container));
     }
 
     private bool PrimeLaundryGrenade(Entity<CMULaundryComponent> washer, EntityUid grenade,
@@ -165,17 +95,27 @@ public sealed partial class CMUHygieneSystem
             if (cartridge.Spent)
                 return false;
             var payload = Spawn(cartridge.Prototype, Transform(washer.Owner).Coordinates);
-            QueueDel(grenade);
-            _popup.PopupEntity(message, washer);
             EnsureComp<CMULaundryHeatedGrenadeComponent>(payload);
             if (_laundryTrigger.Trigger(payload, user, key: null))
+            {
+                QueueDel(grenade);
+                if (!TerminatingOrDeleted(washer.Owner))
+                    _popup.PopupEntity(message, washer);
                 return true;
+            }
             if (HasComp<ExplosiveComponent>(payload))
             {
                 _laundryExplosion.TriggerExplosive(payload, user: user);
+                QueueDel(grenade);
+                if (!TerminatingOrDeleted(washer.Owner))
+                    _popup.PopupEntity(message, washer);
                 return true;
             }
             QueueDel(payload);
+            if (GetPopcornCapacity(washer.Owner) == 0)
+                return false;
+            QueueDel(grenade);
+            _popup.PopupEntity(message, washer);
             totalRounds++;
             return true;
         }
@@ -216,7 +156,14 @@ public sealed partial class CMUHygieneSystem
     {
         var half = "CMULaundryHalf" + args.ExplosionType.Id;
         if (ProtoMan.HasIndex<ExplosionPrototype>(half))
+        {
             args.ExplosionType = half;
+            return;
+        }
+
+        args.Cancelled = true;
+        Log.Error($"Missing washer explosion profile {half} for {ToPrettyString(ent)}.");
+        _popup.PopupEntity(Loc.GetString("cmu-laundry-unsupported-explosive"), ent);
     }
 
     private void OnLaundryFragments(Entity<CMULaundryHeatedGrenadeComponent> ent, ref CMClusterSpawnedEvent args)

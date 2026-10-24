@@ -7,6 +7,7 @@ using Content.Shared.Coordinates;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeviceLinking.Events;
 using Content.Shared.Examine;
+using Content.Shared.GameTicking;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Popups;
@@ -59,6 +60,9 @@ public sealed partial class CMUHygieneSystem : EntitySystem
             before: new[] { typeof(RMCExplosionSystem) });
         SubscribeLocalEvent<CMULaundryHeatedGrenadeComponent, CMUExplosionPreparingEvent>(OnLaundryExplosion);
         SubscribeLocalEvent<CMULaundryHeatedGrenadeComponent, CMClusterSpawnedEvent>(OnLaundryFragments);
+        SubscribeLocalEvent<CMULaundryPopcornComponent, ComponentShutdown>(OnPopcornShutdown);
+        SubscribeLocalEvent<CMULaundryPopcornComponent, MapInitEvent>(OnPopcornMapInit);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
         SubscribeLocalEvent<CMULaundryComponent, MapInitEvent>(OnLaundryInit);
         SubscribeLocalEvent<CMULaundryComponent, PowerChangedEvent>(OnLaundryPower);
         SubscribeLocalEvent<CMULaundryComponent, SignalReceivedEvent>(OnLaundrySignal);
@@ -93,5 +97,6 @@ public sealed partial class CMUHygieneSystem : EntitySystem
         UpdateLaundryPopcorn();
         UpdateShowers(frameTime);
         UpdateLaundry();
+        UpdateLaundryCookoff();
     }
 }

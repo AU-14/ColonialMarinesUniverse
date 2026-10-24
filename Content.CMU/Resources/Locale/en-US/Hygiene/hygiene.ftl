@@ -49,6 +49,8 @@ cmu-laundry-breakdown = The washer/dryer breaks down! Its cycle stops without cl
 cmu-laundry-repaired = The washer/dryer is repaired and can wash again once powered.
 
 cmu-laundry-cookoff = Ammunition cracks inside the washer/dryer, spraying fragments through the front!
+cmu-laundry-ammo-limit = The ammunition keeps popping. The rest of the rounds remain in the load.
+cmu-laundry-unsupported-explosive = The heated explosive fails to detonate.
 
 cmu-soap-floor-cleaned = You scrub the floor with the soap.
 cmu-soap-floor-instructions = Click a floor spill or blood mark to scrub it away without water. Each successful pass uses one wash.

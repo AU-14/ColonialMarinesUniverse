@@ -172,6 +172,11 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
         // CMU14: source-specific profiles change damage without altering the blast's intensity/radius.
         var preparing = new CMUExplosionPreparingEvent(explosive.ExplosionType);
         RaiseLocalEvent(uid, ref preparing);
+        if (preparing.Cancelled) // CMU14: unsupported washer payloads must not fall back to full damage.
+        {
+            explosive.Exploded = false;
+            return;
+        }
 
         // cmu edit start
         _cmuGrenadeBodyBlock.TrySeverHoldingHand(uid);

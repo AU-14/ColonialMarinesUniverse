@@ -31,6 +31,8 @@ public sealed partial class CMUShowerComponent : Component
 [RegisterComponent, AutoGenerateComponentPause]
 public sealed partial class CMULaundryComponent : Component
 {
+    public uint CycleId;
+
     [DataField]
     public float CycleSeconds = 12f;
 

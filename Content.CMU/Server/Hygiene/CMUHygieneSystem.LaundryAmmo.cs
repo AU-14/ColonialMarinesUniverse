@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using Robust.Shared.Map;
 
@@ -6,13 +7,40 @@ namespace Content.Server.CMU14.Hygiene;
 
 public sealed partial class CMUHygieneSystem
 {
+    private const int MaximumPopcornRounds = 600;
+    private const int PopcornUpdateBudget = 16;
+    private readonly Dictionary<EntityUid, EntityUid> _popcornSources = new();
+    private readonly Queue<EntityUid> _popcornQueue = new();
+
+    private void OnPopcornMapInit(Entity<CMULaundryPopcornComponent> ent, ref MapInitEvent args)
+    {
+        if (ent.Comp.Washer is not { } washer)
+            return;
+        _popcornSources[washer] = ent.Owner;
+        _popcornQueue.Enqueue(ent.Owner);
+    }
+
+    private int GetPopcornCapacity(EntityUid washer)
+    {
+        if (_popcornSources.TryGetValue(washer, out var source)
+            && !TerminatingOrDeleted(source) && !EntityManager.IsQueuedForDeletion(source)
+            && TryComp<CMULaundryPopcornComponent>(source, out var popcorn))
+            return Math.Max(0, MaximumPopcornRounds - popcorn.RoundsRemaining);
+        return MaximumPopcornRounds;
+    }
+
+    private void OnPopcornShutdown(Entity<CMULaundryPopcornComponent> ent, ref ComponentShutdown args)
+    {
+        if (ent.Comp.Washer is { } washer && _popcornSources.TryGetValue(washer, out var source) && source == ent.Owner)
+            _popcornSources.Remove(washer);
+    }
+
     private void StartLaundryPopcorn(Entity<CMULaundryComponent> washer, int rounds, EntityUid? user)
     {
-        var existing = EntityQueryEnumerator<CMULaundryPopcornComponent>();
-        while (existing.MoveNext(out var sourceUid, out var active))
+        if (_popcornSources.TryGetValue(washer.Owner, out var sourceUid)
+            && !TerminatingOrDeleted(sourceUid) && !EntityManager.IsQueuedForDeletion(sourceUid)
+            && TryComp<CMULaundryPopcornComponent>(sourceUid, out var active))
         {
-            if (active.Washer != washer.Owner || active.RoundsRemaining <= 0 || TerminatingOrDeleted(sourceUid))
-                continue;
             active.RoundsRemaining += rounds;
             return;
         }
@@ -31,20 +59,27 @@ public sealed partial class CMUHygieneSystem
         popcorn.Washer = washer.Owner;
         popcorn.NextPopAt = _timing.CurTime;
         popcorn.NextFragmentAt = _timing.CurTime;
+        _popcornSources[washer.Owner] = source;
+        _popcornQueue.Enqueue(source);
     }
 
     private void UpdateLaundryPopcorn()
     {
-        var query = EntityQueryEnumerator<CMULaundryPopcornComponent>();
-        while (query.MoveNext(out var uid, out var popcorn))
+        var count = Math.Min(PopcornUpdateBudget, _popcornQueue.Count);
+        while (count-- > 0)
         {
-            if (_timing.CurTime < popcorn.NextPopAt)
+            var uid = _popcornQueue.Dequeue();
+            if (TerminatingOrDeleted(uid) || EntityManager.IsQueuedForDeletion(uid)
+                || !TryComp<CMULaundryPopcornComponent>(uid, out var popcorn))
                 continue;
             if (popcorn.RoundsRemaining <= 0)
             {
                 QueueDel(uid);
                 continue;
             }
+            _popcornQueue.Enqueue(uid);
+            if (Paused(uid) || _timing.CurTime < popcorn.NextPopAt)
+                continue;
             // Follow a moving/rotated washer while it exists. After destruction the independent
             // emitter retains its last grid-relative position and facing until all rounds pop.
             var washer = popcorn.Washer is { } machine && !TerminatingOrDeleted(machine) ? machine : uid;

@@ -1,5 +1,15 @@
 using System.Linq;
 using Content.Server.CMU14.Hygiene;
+using Content.Server.Power.Components;
+using Content.Server.Power.EntitySystems;
+using Content.Shared.Power;
+using Content.Shared.Explosion;
+using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared.Weapons.Ranged.Events;
+using Content.Shared.Weapons.Ranged.Systems;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.Manager;
+using Robust.Shared.Serialization.Markdown.Mapping;
 using Content.Shared.Verbs;
 using Content.Shared.CMU14.Hygiene;
 using Content.Shared.CMU14.Item.Stain;
@@ -65,6 +75,7 @@ public sealed class CMUHygieneTest
         {
             var em = server.EntMan;
             machine = em.SpawnEntity("CMWashingMachine", map.GridCoords);
+            SetTestPower(em, machine, true);
             boots = em.SpawnEntity("CMBootsBlack", map.GridCoords);
             spare = em.SpawnEntity("CMBootsBlack", map.GridCoords);
             var hygiene = em.System<CMUHygieneSystem>();
@@ -240,6 +251,7 @@ public sealed class CMUHygieneTest
             var em = server.EntMan;
             human = em.SpawnEntity("CMMobHuman", map.GridCoords);
             machine = em.SpawnEntity(prototype, map.GridCoords);
+            SetTestPower(em, machine, true);
             shower = em.SpawnEntity("CMShower", map.GridCoords);
             var boots = em.SpawnEntity("CMBootsBlack", map.GridCoords);
             Assert.That(em.System<SharedStorageSystem>().Insert(machine, boots, out _, playSound: false), Is.True);
@@ -292,6 +304,154 @@ public sealed class CMUHygieneTest
             Assert.That(showerSprite.LayerMapTryGet(CMUHygieneVisuals.Water, out var water), Is.True);
             Assert.That(showerSprite[water].Visible, Is.EqualTo(running));
         }
+    }
+
+    [Test]
+    public async Task LaundryPowerLossCancelsWithoutCleaning()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var map = await pair.CreateTestMap();
+        var server = pair.Server;
+        await server.WaitAssertion(() =>
+        {
+            var em = server.EntMan;
+            var machine = em.SpawnEntity("CMWashingMachine", map.GridCoords);
+            var boots = em.SpawnEntity("CMBootsBlack", map.GridCoords);
+            Assert.That(em.System<SharedStorageSystem>().Insert(machine, boots, out _, playSound: false), Is.True);
+            em.System<CMUItemStainSystem>().TryStain(boots, CMUItemStainKind.Blood, Color.Red);
+            var hygiene = em.System<CMUHygieneSystem>();
+            SetTestPower(em, machine, false);
+            Assert.That(hygiene.TryStartLaundry(machine), Is.False);
+            SetTestPower(em, machine, true);
+            Assert.That(hygiene.TryStartLaundry(machine), Is.True);
+            SetTestPower(em, machine, false);
+            Assert.Multiple(() =>
+            {
+                Assert.That(em.GetComponent<CMULaundryComponent>(machine).FinishAt, Is.Null);
+                Assert.That(em.HasComponent<CMUActiveLaundryComponent>(machine), Is.False);
+                Assert.That(em.GetComponent<CMUItemStainComponent>(boots).Color, Is.Not.Null);
+                Assert.That(hygiene.TryStartLaundry(machine), Is.False);
+            });
+            em.DeleteEntity(machine);
+            em.DeleteEntity(boots);
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task WasherExplosionProfilesPreserveEffectsAndHalveDamage()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        await pair.Server.WaitAssertion(() =>
+        {
+            var prototypes = pair.Server.ResolveDependency<IPrototypeManager>();
+            var serialization = pair.Server.ResolveDependency<ISerializationManager>();
+            foreach (var original in prototypes.EnumeratePrototypes<ExplosionPrototype>())
+            {
+                if (original.ID.StartsWith("CMULaundryHalf", System.StringComparison.Ordinal))
+                    continue;
+                Assert.That(prototypes.TryIndex<ExplosionPrototype>("CMULaundryHalf" + original.ID, out var half),
+                    Is.True, $"Missing washer profile for {original.ID}; regenerate laundry_explosions.yml.");
+                Assert.That(half!.DamagePerIntensity.DamageDict, Is.EqualTo((original.DamagePerIntensity * 0.5f).DamageDict),
+                    $"Incorrect washer damage for {original.ID}.");
+                var sourceData = (MappingDataNode) serialization.WriteValue(original, alwaysWrite: true);
+                var washerData = (MappingDataNode) serialization.WriteValue(half, alwaysWrite: true);
+                sourceData.Remove("id");
+                sourceData.Remove("damagePerIntensity");
+                washerData.Remove("id");
+                washerData.Remove("damagePerIntensity");
+                Assert.That(washerData, Is.EqualTo(sourceData), $"Washer effects differ for {original.ID}.");
+            }
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task LaundryBatchesAmmunitionAndPreservesOverflow()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var map = await pair.CreateTestMap();
+        await pair.Server.WaitAssertion(() =>
+        {
+            var em = pair.Server.EntMan;
+            var machine = em.SpawnEntity("CMWashingMachine", map.GridCoords);
+            var clothing = em.SpawnEntity("CMBootsBlack", map.GridCoords);
+            var magazine = em.SpawnEntity("CMMagazineRifleM54C", map.GridCoords);
+            var containers = em.System<SharedContainerSystem>();
+            var pocket = containers.EnsureContainer<Container>(clothing, "hygiene-test");
+            Assert.That(containers.Insert(magazine, pocket), Is.True);
+            Assert.That(em.System<SharedStorageSystem>().Insert(machine, clothing, out _, playSound: false), Is.True);
+            SetTestPower(em, machine, true);
+            var ammunition = em.GetComponent<BallisticAmmoProviderComponent>(magazine);
+            ammunition.Capacity = 2000;
+            ammunition.UnspawnedCount = ammunition.Capacity;
+            em.System<SharedGunSystem>().UpdateBallisticAppearance((magazine, ammunition));
+            var laundry = em.GetComponent<CMULaundryComponent>(machine);
+            laundry.AmmoCookoffSeconds = 0;
+            laundry.CookoffSeconds = 100;
+            var hygiene = em.System<CMUHygieneSystem>();
+            Assert.That(hygiene.TryStartLaundry(machine), Is.True);
+            var initial = CountRounds();
+            hygiene.Update(0);
+            Assert.That(CountRounds(), Is.InRange(1, initial - 1), "One update must not extract the whole load.");
+            var emitters = em.EntityQueryEnumerator<CMULaundryPopcornComponent>();
+            Assert.That(emitters.MoveNext(out var source, out var popcorn), Is.True);
+            Assert.That(CountRounds() + popcorn.RoundsRemaining, Is.EqualTo(initial),
+                "Extracted ammunition must be accounted for before popping begins.");
+
+            var retiring = source;
+            popcorn.RoundsRemaining = 1;
+            var beforeRetirement = CountRounds();
+            hygiene.Update(0);
+            Assert.That(em.IsQueuedForDeletion(retiring), Is.True);
+            emitters = em.EntityQueryEnumerator<CMULaundryPopcornComponent>();
+            while (emitters.MoveNext(out var nextSource, out var nextPopcorn))
+            {
+                if (nextSource == retiring || nextPopcorn.Washer != machine || em.IsQueuedForDeletion(nextSource))
+                    continue;
+                source = nextSource;
+                popcorn = nextPopcorn;
+                break;
+            }
+            Assert.That(source, Is.Not.EqualTo(retiring), "New rounds need an emitter that is not retiring.");
+            Assert.That(popcorn.RoundsRemaining, Is.EqualTo(beforeRetirement - CountRounds()),
+                "A retiring emitter must not discard the next batch of ammunition.");
+            for (var update = 0; update < initial; update++)
+                hygiene.Update(0);
+            var remaining = CountRounds();
+            Assert.That(remaining, Is.GreaterThan(0), "Overflow ammunition must remain in its magazine.");
+            Assert.That(popcorn.RoundsRemaining, Is.GreaterThan(0));
+            for (var update = 0; update < 10; update++)
+                hygiene.Update(0);
+            Assert.That(CountRounds(), Is.EqualTo(remaining));
+            Assert.That(pocket.Contains(magazine), Is.True);
+            em.DeleteEntity(source);
+            em.DeleteEntity(machine);
+            if (!em.Deleted(clothing))
+                em.DeleteEntity(clothing);
+            if (!em.Deleted(magazine))
+                em.DeleteEntity(magazine);
+            hygiene.Update(0);
+
+            int CountRounds()
+            {
+                var count = new GetAmmoCountEvent();
+                em.EventBus.RaiseLocalEvent(magazine, ref count);
+                return count.Count;
+            }
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    private static void SetTestPower(IEntityManager em, EntityUid machine, bool powered)
+    {
+        // These fixtures isolate laundry behavior from APC network construction.
+        var receiver = em.GetComponent<ApcPowerReceiverComponent>(machine);
+        em.System<PowerReceiverSystem>().SetNeedsPower(machine, !powered, receiver);
+        receiver.Powered = powered;
+        em.Dirty(machine, receiver);
+        var changed = new PowerChangedEvent(powered, powered ? receiver.Load : 0);
+        em.EventBus.RaiseLocalEvent(machine, ref changed);
     }
 
 }
