@@ -1,5 +1,5 @@
 using Content.Shared.FixedPoint;
-using Robust.Shared.Gamestates;
+using Robust.Shared.GameStates;
 
 namespace Content.Shared._RMC14.Xenonids.ClawBloodloss;
 
