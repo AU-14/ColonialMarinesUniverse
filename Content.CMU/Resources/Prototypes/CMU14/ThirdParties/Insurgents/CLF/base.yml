@@ -4,6 +4,9 @@
   abstract: true
   suffix: AU14, CLF
   components:
+  - type: NpcFactionMember
+    factions:
+    - CLF
   - type: GhostTakeoverAvailable
   - type: RandomHumanoidAppearance
   - type: RandomHumanoidAppearanceWhitelisted

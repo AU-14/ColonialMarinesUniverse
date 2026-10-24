@@ -1,0 +1,263 @@
+# UPP militsiya patrol, called in through the UPP intel list: a senior militsioner and two militsioners in the
+# military police kit from the UPP MP vendor, with SMGs, batons and restraints.
+
+- type: entity
+  parent: SquadBase
+  id: CMUSquadUPPMilitsiya
+  name: Militsiya
+  components:
+  - type: SquadTeam
+    color: "#7a1d1d"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: Colony
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_spp
+    canSupplyDrop: false
+    group: UPPLine
+  - type: Tag
+    tags:
+    - CMUSquadUPPMilitsiya
+
+- type: Tag
+  id: CMUSquadUPPMilitsiya
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobUPPMilitsiyaLead
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: UPPLine
+  roundRole: CMUJobUPPMilitsiyaLead
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_mp
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillPolice: 3
+      RMCSkillMedical: 1
+      RMCSkillLeadership: 1
+  - type: Language
+    spokenLanguages:
+    - Russian
+    - English
+    - Mandarin
+    understoodLanguages:
+    - Russian
+    - English
+    - Mandarin
+    currentLanguage: Russian
+    defaultLanguage: Russian
+  name: cmu-job-title-upp-militsiya-lead
+  description: cmu-upp-militsiya-description
+  playTimeTracker: CMUJobUPPMilitsiyaLead
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankSPPSMlts:
+      entity: AU14ChevronPAPStarshiyMilitsioner
+      requirements: []
+  spawnMenuRoleName: UPP Senior Militsioner (Militsiya)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearUPPMilitsiyaLead
+  greeting: cmu-upp-militsiya-greeting
+  joinNotifyCrew: false
+  supervisors: cmu-uppline-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobUPPMilitsiyaLead
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPMilitsiyaLead
+  name: UPP Senior Militsioner (Militsiya)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPMilitsiya
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-upp-militsiya-lead-name
+    description: cmu-upp-militsiya-description
+    reregister: false
+    job: CMUJobUPPMilitsiyaLead
+    raffle:
+      settings: short
+    rules: cmu-uppline-rules
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobUPPMilitsioner
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: UPPLine
+  roundRole: CMUJobUPPMilitsioner
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_mp
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillPolice: 3
+      RMCSkillMedical: 1
+  - type: Language
+    spokenLanguages:
+    - Russian
+    - English
+    - Mandarin
+    understoodLanguages:
+    - Russian
+    - English
+    - Mandarin
+    currentLanguage: Russian
+    defaultLanguage: Russian
+  name: cmu-job-title-upp-militsioner
+  description: cmu-upp-militsiya-description
+  playTimeTracker: CMUJobUPPMilitsioner
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankSPPMlts:
+      entity: AU14ChevronPAPMilitsioner
+      requirements: []
+  spawnMenuRoleName: UPP Militsioner (Militsiya)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearUPPMilitsioner
+  greeting: cmu-upp-militsiya-greeting
+  joinNotifyCrew: false
+  supervisors: cmu-uppline-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobUPPMilitsioner
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPMilitsioner
+  name: UPP Militsioner (Militsiya)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPMilitsiya
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-upp-militsioner-name
+    description: cmu-upp-militsiya-description
+    reregister: false
+    job: CMUJobUPPMilitsioner
+    raffle:
+      settings: short
+    rules: cmu-uppline-rules
+
+- type: startingGear
+  id: CMUGearUPPMilitsiyaBase
+  equipment:
+    jumpsuit: AU14JumpsuitMPUPP
+    outerClothing: AU14CoatUPPMP
+    head: RuMCHeadKomisarCap
+    eyes: CMGlassesSecurity
+    shoes: RMCBootsSPPFilled
+    gloves: RMCHandsVeteranSPP
+    belt: CMBeltSecurityMPFilled
+    back: RMCSatchelSPP # BUG-1060: the commando cloak needs scout armor and a skill the patrol doesn't have
+    pocket1: RMCPouchMagazineLarge
+    pocket2: RMCPouchFirstAidERTFill
+  storage:
+    back:
+    - RMCBoxZiptie
+    - CMUPepperSpray
+    - RMCMRESPP
+    - CMCanteen
+
+- type: startingGear
+  parent: CMUGearUPPMilitsiyaBase
+  id: CMUGearUPPMilitsiyaLead
+  equipment:
+    id: CMUIDCardUPPMilitsiyaLead
+    suitstorage: RMCWeaponSMGType19
+  storage:
+    pocket1:
+    - RMCMagazineSMGType19
+    - RMCMagazineSMGType19
+    - RMCMagazineSMGType19
+
+- type: startingGear
+  parent: CMUGearUPPMilitsiyaBase
+  id: CMUGearUPPMilitsioner
+  equipment:
+    id: CMUIDCardUPPMilitsioner
+    suitstorage: RMCWeaponSMGType64
+  storage:
+    pocket1:
+    - RMCMagazineSMGType64
+    - RMCMagazineSMGType64
+    - RMCMagazineSMGType64
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardUPPMilitsiyaLead
+  name: UPP senior militsioner ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPMilitsiyaLead
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardUPPMilitsioner
+  name: UPP militsioner ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPMilitsioner
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+
+- type: partySpawn
+  id: CMUUPPMilitsiyaSpawn
+  leadersToSpawn:
+    CMUJobUPPMilitsiyaLead: 1
+  gruntsToSpawn:
+    CMUJobUPPMilitsioner: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUUPPMilitsiya
+  displayName: UPP Militsiya
+  partyspawn: CMUUPPMilitsiyaSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_spp_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 3
+  roundstart: false

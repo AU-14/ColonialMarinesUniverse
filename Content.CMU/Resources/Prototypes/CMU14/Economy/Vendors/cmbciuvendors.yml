@@ -191,6 +191,8 @@
         amount: 30
       - id: RMCBoxMRE
         amount: 5
+      - id: CMCanteen
+        amount: 30
     - name: Tools
       entries:
       - id: RMCAttachmentRailFlashlight
@@ -815,6 +817,11 @@
     - AU14JobGOVFORSquadSergeantUPP
     - AU14JobGOVFORSquadSergeantWYPMC
     sections:
+    - name: cmu-vendor-section-sl-scopes
+      choices: { CMUSquadLeaderScope: 1 }
+      entries:
+      - id: RMCAttachmentS42xTelescopicMiniscope
+      - id: CMUAttachmentNightVisionScope
     - name: Headgear
       choices: { CMHat: 1 }
       entries:
@@ -919,9 +926,7 @@
     - name: Weapons
       choices: { CMUPrimaryWeapon: 1 }
       entries:
-      - id: AU14KitWeaponM20A
-      - id: AU14KitWeaponM16A1
-      - id: AU14KitWeaponM16A2
+      - id: CMUKitWeaponM20A2
       - id: AU14KitWeaponMar40
       - id: AU14KitWeaponMP5
       - id: AU14KitWeaponP90
@@ -934,8 +939,6 @@
       - id: RMCMagazineSMGPDW90
         amount: 60
       - id: RMCMagazineRifleMAR40
-        amount: 60
-      - id: RMCMagazineRifleM16
         amount: 60
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
@@ -1112,11 +1115,7 @@
     sections:
     - name: Standard issue primaries
       entries:
-      - id: AUWeaponRifleM20A
-        amount: 30
-      - id: AU14WeaponRifleM16A1
-        amount: 30
-      - id: AU14WeaponRifleM16A2
+      - id: CMUWeaponRifleM20A2
         amount: 30
       - id: WeaponSMGMP5
         amount: 30
@@ -1144,26 +1143,26 @@
         amount: 1
       - id: CMUWeaponLauncherM81
         amount: 3
+      - id: CMUWeaponRifleKramerEnforcer
+        amount: 5
       - id: RMCGunCasePistolSmart
         amount: 3
     - name: primary ammunition
       entries:
       - id: AU14MagazineRifleM20A
         amount: 200
-      - id: CMUMagazineRifleM16Extended
-        amount: 50
-      - id: CMUMagazineRifleM16AP
-        amount: 35
-      - id: CMUMagazineRifleM16APExt
-        amount: 20
+      - id: CMUMagazineRifleM20AAP
+        amount: 15
+      - id: AU14WeaponRifleKramerMagazineStandard
+        amount: 40
+      - id: AU14WeaponRifleKramerMagazineAP
+        amount: 15
+      - id: CMUWeaponRifleKramerMagazineHP
+        amount: 5
       - id: CMMagazineSMGMP5
         amount: 200
       - id: RMCMagazineSMGPDW90
         amount: 200
-      - id: RMCMagazineRifleM16
-        amount: 200
-      - id: CMUMagazineRifleM16Extended
-        amount: 50
       - id: RMCMagazineSMGPDW90AP
         amount: 25
       - id: RMCBoxShotgunBuckshot
@@ -1203,8 +1202,6 @@
     - name: Magazine Boxes
       entries:
       - id: RMCBoxBulletsRifle
-        amount: 2
-      - id: RMCBoxMagazineRifleM16
         amount: 2
       - id: CMUBoxMagazineSMGMP5
         amount: 2
@@ -1286,6 +1283,8 @@
         amount: 5
     - name: Rail Attachments
       entries:
+      - id: CMUAttachmentNightVisionScope
+        amount: 3
       - id: RMCAttachmentTwoPointSling
         amount: 50
       - id: RMCAttachmentRailFlashlight

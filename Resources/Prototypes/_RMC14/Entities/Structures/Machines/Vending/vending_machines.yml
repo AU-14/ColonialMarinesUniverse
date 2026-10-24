@@ -303,6 +303,57 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/NutriCo/drink.rsi
     offset: 0, 0.5
+  # cmu edit start: pours mess drinks into a cup or other container, like a soda fountain
+  - type: VendingMachine
+    pack: CMUNutriCoAutoDrinkEmpty
+  - type: ActivatableUI
+    key: enum.CMUAutoDrinkUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUAutoDrinkUiKey.Key:
+        type: CMUAutoDrinkBui
+      enum.VendingMachineUiKey.Key:
+        type: VendingMachineBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: ItemSlots
+  - type: ContainerContainer
+    containers:
+      autodrink_bay: !type:ContainerSlot
+  - type: CMUFoodlineVendor
+  - type: CMUAutoDrink
+    bay:
+      whitelistFailPopup: reagent-dispenser-component-cannot-put-entity-message
+      whitelist:
+        components:
+        - FitsInDispenser
+    drinks:
+    - reagent: Water
+      note: cmu-autodrink-note-chilled
+    - reagent: RMCCoffee
+      name: cmu-autodrink-coffee
+      note: cmu-autodrink-note-hot
+    - reagent: RMCTea
+      name: cmu-autodrink-tea
+      note: cmu-autodrink-note-hot
+    - reagent: Milk
+      note: cmu-autodrink-note-chilled
+    - reagent: RMCChocolateDrink
+      name: cmu-autodrink-chocolate-milk
+      note: cmu-autodrink-note-chilled
+    - reagent: JuiceOrange
+      name: cmu-autodrink-electrolyte-orange
+      note: cmu-autodrink-note-chilled
+    - reagent: LemonLime
+      name: cmu-autodrink-electrolyte-lemon-lime
+      note: cmu-autodrink-note-chilled
+    - reagent: JuiceGrape
+      name: cmu-autodrink-electrolyte-grape
+      note: cmu-autodrink-note-chilled
+    - reagent: Ice
+      name: cmu-autodrink-ice
+      extra: true
+  # cmu edit end
 
 - type: entity
   parent: CMVendorCola
@@ -322,6 +373,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/NutriCo/drink.rsi
     offset: 0, 0.5
+  - type: CMUFoodlineVendor # cmu edit: shut off while the DEFAC foodline is open
 
 - type: entity
   parent: CMVendor
@@ -504,9 +556,13 @@
     # Pepper spray 4
     # InvestigationPepperSpray: 4
     CMStunbaton: 4
-    RMCGunCasePistolM77: 4
-    CMMagazinePistolM77AP: 16
-    CMMagazinePistolM88Rubber: 40
+    # cmu edit start: no Mod 88 in SecTech; pepper spray instead
+    # RMCGunCasePistolM77: 4
+    # CMMagazinePistolM77AP: 16
+    # CMMagazinePistolM88Rubber: 40
+    CMUPepperSpray: 4
+    CMUPepperSprayAntidote: 2
+    # cmu edit end
     # CMBeltSecurityMP: 10
     CMFlash: 5
     RMCGrenadeFlashBang: 6
@@ -515,8 +571,8 @@
     #RegulationTape: 5
     #TapeRecorder: 3
     #ClueScanner: 3
-    #Camera: 8
-    #CameraFilm: 8
+    CMUPhotoCamera: 8 # CMU14
+    CMUCameraFilm: 8 # CMU14
     CMU14TearGasGrenade: 4
     RMCWhistle: 5
     RMCFoodDonut: 12

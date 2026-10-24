@@ -7,6 +7,23 @@
     - type: Sprite
       sprite: _RMC14/Objects/Misc/fuel_can.rsi
       state: can_1
+    - type: Tag # CMU14: fits the jeep's jerry can rack.
+      tags:
+      - CMUJerryCan
+    # CMU14 Begin: holds the jeep's fuel.
+    - type: Solution
+      id: fuel
+      solution:
+        maxVol: 60
+        reagents:
+        - ReagentId: WeldingFuel
+          Quantity: 60
+    - type: RefillableSolution
+      solution: fuel
+    - type: DrainableSolution
+      solution: fuel
+    - type: SolutionTransfer
+    # CMU14 End
 
 - type: entity
   parent: RMCFuelCan

@@ -45,7 +45,7 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
-  name: au14-job-name-colonysecurityleader
+  name: cmu-job-title-colony-security-leader
   description: au14-job-description-colonysecurityleader
   setPreference: false
   canBeAntag: false

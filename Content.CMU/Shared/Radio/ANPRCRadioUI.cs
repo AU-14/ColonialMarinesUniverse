@@ -55,13 +55,6 @@ public static class RadioTxPowerExtensions
         _ => 1f,
     };
 
-    public static float DFMultiplier(this RadioTxPower power) => power switch
-    {
-        RadioTxPower.Low => 0.5f,
-        RadioTxPower.High => 2f,
-        _ => 1f,
-    };
-
     public static string Short(this RadioTxPower power) => power switch
     {
         RadioTxPower.Low => "LO",

@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/29769f5e914274469f8a170062f21a6b1f3525fa/icons/obj/structures/doors/Doorfire.dmi. Lock and deny overlays cut from it, opening and closing re-timed to SS14's door speed. Ported by troy.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "assembly"
+    },
+    {
+      "name": "closed"
+    },
+    {
+      "name": "open"
+    },
+    {
+      "name": "opening",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "closing",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "welded"
+    },
+    {
+      "name": "welded_open"
+    },
+    {
+      "name": "bolted_unlit"
+    },
+    {
+      "name": "deny_unlit",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "closed_unlit"
+    },
+    {
+      "name": "open_unlit"
+    },
+    {
+      "name": "opening_unlit"
+    },
+    {
+      "name": "closing_unlit"
+    },
+    {
+      "name": "emergency_unlit"
+    }
+  ]
+}

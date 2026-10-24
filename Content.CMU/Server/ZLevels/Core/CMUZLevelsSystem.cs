@@ -143,6 +143,7 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
         if (!TryAddMapsIntoZNetwork(stationNetwork, dict))
             return;
 
+        _ambientLight.ApplyPlanetDayCycle(mainMap, ev.GameMap.ID, dict.Keys);
         foreach (var (map, mapDepth) in dict)
         {
             if (mapDepth != 0)

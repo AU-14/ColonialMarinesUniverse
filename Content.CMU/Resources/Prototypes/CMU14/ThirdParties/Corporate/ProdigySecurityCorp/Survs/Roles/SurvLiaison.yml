@@ -87,7 +87,7 @@
   - CMU14PortableVendorProdigy
   storage:
     back:
-    - CMMRE
+    - CMUMREFSR
     - CMU14StampProdigyLiaison
     - RMCRadioHandheldColony
     - RMCFlashlight

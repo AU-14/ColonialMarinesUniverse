@@ -1,0 +1,18 @@
+# Riot-control agents for custom chemical grenades, see Reactions/grenades.yml
+
+- type: reagent
+  parent: CMReagent
+  id: CMUTearGas
+  name: reagent-name-cmu-tear-gas
+  desc: reagent-desc-cmu-tear-gas
+  physicalDesc: reagent-physical-desc-pungent
+  flavor: bitter
+  color: "#C9D8A0"
+  flags: Scannable
+  class: Common
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.5
+      effects:
+        - !type:Irritating
+          potency: 4

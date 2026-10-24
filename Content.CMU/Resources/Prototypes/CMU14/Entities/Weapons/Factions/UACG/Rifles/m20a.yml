@@ -76,6 +76,7 @@
           tags:
           - RMCAttachmentRailFlashlight
           - RMCAttachmentMagneticHarness
+          - RMCAttachmentS42xTelescopicMiniscope
       rmc-aslot-underbarrel:
         locked: true
         startingAttachable: AU14AttachmentM20AUnderbarrelShotgun
@@ -116,6 +117,31 @@
   - type: Appearance
   - type: RefillableByBulletBox
     bulletType: RMCBoxBulletsRifle
+
+- type: entity
+  parent: AU14MagazineRifleM20A
+  id: CMUMagazineRifleM20AAP
+  name: "M20a AP Magazine (10x24mm)"
+  description: A 40-round M20a magazine loaded with armor-piercing 10x24mm caseless.
+  components:
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgeRifle10x24mmAP
+    proto: CMCartridgeRifle10x24mmAP
+    capacity: 40
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/Ammo/Magazines/m20amag.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifleAP
 
 - type: entity
   parent: CMBaseCartridgeRifle

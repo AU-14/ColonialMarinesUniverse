@@ -48,9 +48,9 @@
   - type: BlackfootFuelPump
   - type: BlackfootPackableSupport
     packedPrototype: CMUBlackfootFuelPumpCrate
-    initialPopup: The fuel pump anchor bolts are loosened.
-    panelPopup: The fuel pump service panel is opened.
-    packedPopup: The Blackfoot fuel pump is packed into its case.
+    initialPopup: cmu-blackfoot-fuel-pump-anchors-loosened
+    panelPopup: cmu-blackfoot-fuel-pump-panel-opened
+    packedPopup: cmu-blackfoot-fuel-pump-packed
 
 - type: entity
   parent: BaseStructureDynamic
@@ -65,8 +65,8 @@
   - type: InteractionOutline
   - type: BlackfootDeployableSupport
     prototype: CMUBlackfootLandingPad
-    toolPopup: Use a wrench to unfold the Blackfoot landing pad.
-    deployPopup: The folded Blackfoot landing pad is set in place.
+    toolPopup: cmu-blackfoot-landing-pad-unfold-hint
+    deployPopup: cmu-blackfoot-landing-pad-unfolded
     requireClearFootprint: true
     clearFootprint: 3,3
     useFixedDeployRotation: true
@@ -122,8 +122,8 @@
   - type: InteractionOutline
   - type: BlackfootDeployableSupport
     prototype: CMUBlackfootFuelPump
-    toolPopup: Place this case on a deployed Blackfoot landing pad, then wrench it into the fuel pump mount.
-    deployPopup: The Blackfoot fuel pump is mounted to the landing pad.
+    toolPopup: cmu-blackfoot-fuel-pump-mount-hint
+    deployPopup: cmu-blackfoot-fuel-pump-mounted
     requireClearFootprint: true
     clearFootprint: 1,1
     requireLandingPad: true
@@ -145,8 +145,8 @@
   - type: InteractionOutline
   - type: BlackfootDeployableSupport
     prototype: CMUBlackfootFlightComputer
-    toolPopup: Place this case on a deployed Blackfoot landing pad, then wrench it into the flight computer mount.
-    deployPopup: The Blackfoot flight computer is mounted to the landing pad.
+    toolPopup: cmu-blackfoot-flight-computer-mount-hint
+    deployPopup: cmu-blackfoot-flight-computer-mounted
     requireClearFootprint: true
     clearFootprint: 1,1
     requireLandingPad: true

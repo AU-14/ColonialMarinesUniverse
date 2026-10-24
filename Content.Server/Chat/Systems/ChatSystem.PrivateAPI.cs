@@ -216,6 +216,10 @@ public sealed partial class ChatSystem
             range,
             author,
             speechStyleClass);
+        // cmu edit start: let boom mics hear emotes
+        var cmuEmoted = new Content.Server.CMU14.Chat.CMUEntityEmotedEvent(source, action);
+        RaiseLocalEvent(ref cmuEmoted);
+        // cmu edit end
         if (!hideLog)
             if (name != Name(source))
                 _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Emote from {ToPrettyString(source):user} as {name}: {action}");
@@ -264,7 +268,7 @@ public sealed partial class ChatSystem
 
     private void SendDeadChat(EntityUid source, ICommonSession player, string message, bool hideChat)
     {
-        if (!_adminManager.IsAdmin(player) && !_deadChatEnabled)
+        if (!_adminManager.HasAdminFlag(player, Content.Shared.Administration.AdminFlags.GhostSenses) && !_deadChatEnabled) // cmu edit
             return;
 
         if (_rmcChatBans.IsChatBanned(player.UserId, ChatType.Dead))

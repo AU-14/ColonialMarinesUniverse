@@ -1,4 +1,4 @@
-﻿- type: job
+- type: job
   parent: CMJobBase
   id: AU14JobUNISCSquadleader
   icon: AU14JobIconSquadSgt
@@ -32,7 +32,7 @@
     currentLanguage: English
     defaultLanguage: English
 
-  name: United Nations Interstellar Space Corps Squad Leader
+  name: Squad Leader
   description: au14-unisc-description
   playTimeTracker: AU14JobUNISCSquadleader
   ranks:

@@ -19774,7 +19774,7 @@
         friction: 0.2
 
 - type: entity
-  parent: CMUYautjaPlasmaPistol
+  parent: CMUHunterShipPlacedCMUYautjaPlasmaPistolPlasmapistolTemplate
   id: CMUHunterShipPlacedCMUYautjaPlasmaPistolPlasmapistolSouthOffset16x0
   components:
   - type: Sprite
@@ -19782,7 +19782,7 @@
     overrideDir: South
 
 - type: entity
-  parent: CMUYautjaPlasmaPistol
+  parent: CMUHunterShipPlacedCMUYautjaPlasmaPistolPlasmapistolTemplate
   id: CMUHunterShipPlacedCMUYautjaPlasmaPistolPlasmapistolSouthOffset16x8
   components:
   - type: Sprite
@@ -19790,7 +19790,7 @@
     overrideDir: South
 
 - type: entity
-  parent: CMUYautjaPlasmaPistol
+  parent: CMUHunterShipPlacedCMUYautjaPlasmaPistolPlasmapistolTemplate
   id: CMUHunterShipPlacedCMUYautjaPlasmaPistolPlasmapistolSouthOffset16xNeg8
   components:
   - type: Sprite
@@ -19841,7 +19841,7 @@
         friction: 0.2
 
 - type: entity
-  parent: CMUYautjaPlasmaRifle
+  parent: CMUHunterShipPlacedCMUYautjaPlasmaRiflePlasmarifleTemplate
   id: CMUHunterShipPlacedCMUYautjaPlasmaRiflePlasmarifleSouthOffset14x0
   components:
   - type: Sprite
@@ -19849,7 +19849,7 @@
     overrideDir: South
 
 - type: entity
-  parent: CMUYautjaPlasmaRifle
+  parent: CMUHunterShipPlacedCMUYautjaPlasmaRiflePlasmarifleTemplate
   id: CMUHunterShipPlacedCMUYautjaPlasmaRiflePlasmarifleSouthOffset14x8
   components:
   - type: Sprite
@@ -19857,7 +19857,7 @@
     overrideDir: South
 
 - type: entity
-  parent: CMUYautjaPlasmaRifle
+  parent: CMUHunterShipPlacedCMUYautjaPlasmaRiflePlasmarifleTemplate
   id: CMUHunterShipPlacedCMUYautjaPlasmaRiflePlasmarifleSouthOffset14xNeg8
   components:
   - type: Sprite

@@ -14,6 +14,10 @@ public sealed partial class CMUShipWeaponsComponent : Component
     [DataField]
     public HashSet<ProtoId<CMUShipWeaponPrototype>> Weapons = new();
 
+    /// <summary>Whether an arming terminal has locked in this ship's loadout. Bonus disks don't lock it.</summary>
+    [DataField]
+    public bool Locked;
+
     /// <summary>
     /// Fire missions shared by every armed weapon, copied from the confirming terminal when the loadout locks.
     /// </summary>
@@ -47,6 +51,9 @@ public sealed partial class CMUShipWeaponStrikeComponent : Component
     public bool Warned;
 
     [DataField]
+    public bool TravelPlayed;
+
+    [DataField]
     public bool DirectionalWarned;
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
@@ -60,8 +67,16 @@ public sealed partial class CMUShipWeaponStrikeComponent : Component
 [Access(typeof(CMUShipWeaponsSystem))]
 public sealed partial class CMUShipWeaponEmsFieldComponent : Component
 {
+    public readonly Dictionary<EntityUid, (TimeSpan NextDamage, TimeSpan LastExposure, float Damage)> Exposures = new();
+
     [DataField]
     public float Radius = 30;
+
+    [DataField(required: true)]
+    public float BurnDamagePerSecond;
+
+    [DataField(required: true)]
+    public float HumanDamageCap;
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan EndsAt;
@@ -71,4 +86,14 @@ public sealed partial class CMUShipWeaponEmsFieldComponent : Component
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextPulse;
+}
+
+[RegisterComponent, AutoGenerateComponentPause]
+public sealed partial class CMUOrbitalGasVictimComponent : Component
+{
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan NextOrganDamage;
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan LastExposure;
 }

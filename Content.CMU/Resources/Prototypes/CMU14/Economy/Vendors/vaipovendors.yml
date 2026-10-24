@@ -225,11 +225,13 @@
     sections:
     - name: Food
       entries:
-      - id: CMMRE
-        name: MRE
+      - id: CMUMREFSR
+        name: FSR
         amount: 30
-      - id: RMCBoxMRE
+      - id: CMUBoxMREFSR
         amount: 5
+      - id: CMCanteen
+        amount: 30
     - name: Tools
       entries:
       - id: RMCAttachmentRailFlashlight
@@ -818,6 +820,11 @@
     - AU14JobGOVFORSquadSergeantUPP
     - AU14JobGOVFORSquadSergeantWYPMC
     sections:
+    - name: cmu-vendor-section-sl-scopes
+      choices: { CMUSquadLeaderScope: 1 }
+      entries:
+      - id: RMCAttachmentS42xTelescopicMiniscope
+      - id: CMUAttachmentNightVisionScope
     - name: Headgear
       choices: { CMHat: 1 }
       entries:
@@ -1208,6 +1215,8 @@
         amount: 3
     - name: Rail Attachments
       entries:
+      - id: CMUAttachmentNightVisionScope
+        amount: 3
       - id: RMCAttachmentTwoPointSling
         amount: 50
       - id: RMCAttachmentRailFlashlight
