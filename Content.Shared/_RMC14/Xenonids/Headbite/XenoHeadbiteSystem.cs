@@ -107,7 +107,7 @@ public sealed partial class XenoHeadbiteSystem : EntitySystem
         }
 
         if (xeno.Comp.Bloodloss > FixedPoint2.Zero && TryComp<BloodstreamComponent>(target, out var bloodstream))
-            _bloodstream.TryModifyBloodlevel((target, bloodstream), -xeno.Comp.Bloodloss);
+            _bloodstream.TryModifyBloodLevel((target, bloodstream), -xeno.Comp.Bloodloss);
 
         if (_mobThresholds.TryGetDeadThreshold(target, out var mobThreshold) && TryComp<DamageableComponent>(target, out var damageable))
         {
