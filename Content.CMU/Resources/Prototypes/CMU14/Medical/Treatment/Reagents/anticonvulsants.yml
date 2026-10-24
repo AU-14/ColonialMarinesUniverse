@@ -1,0 +1,17 @@
+# Ends a seizure that's underway and holds off epileptic seizures for 25 minutes from the moment it hits the blood.
+- type: reagent
+  parent: CMReagentMedicine
+  id: CMUPhenytoin
+  name: reagent-name-cmu-phenytoin
+  desc: reagent-desc-cmu-phenytoin
+  flavor: bitter
+  physicalDesc: reagent-physical-desc-powdery
+  color: "#f2efe4"
+  overdose: 30
+  criticalOverdose: 60
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.5
+      effects:
+      - !type:CMUSuppressSeizuresEffect
+        duration: 1500

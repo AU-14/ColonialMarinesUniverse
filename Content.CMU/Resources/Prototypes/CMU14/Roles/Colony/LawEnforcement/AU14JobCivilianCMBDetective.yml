@@ -1,0 +1,85 @@
+# The CMB's investigator: works crime scenes with the forensic scanner, the records console and a camera rather than
+# walking a beat. Spawns at the deputy spawn points, which take detectives too.
+- type: job
+  parent: AU14JobLEOBase
+  displayWeight: 14
+  id: AU14JobCivilianCMBDetective
+  roundSide: Civilian
+  roundForce: CMB
+  roundRole: CivilianCMBDeputy
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 1
+      RMCSkillIntel: 2
+      RMCSkillMedical: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillOverwatch: 1
+      RMCSkillPolice: 2
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-cmbdetective
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: cmb_dep
+
+  name: au14-job-name-civiliancmbdetective
+  description: au14-job-description-civiliancmbdetective
+  setPreference: true
+  canBeAntag: false
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 14400 # 4 hours
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentColonySecurity
+    time: 3600 # 1 hour in law enforcement
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
+    - CMUBadLeg
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCivilianCMBDetective
+  icon: "RMCJobIconBureauDeputy"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: CMB Detective (CMU)
+  accessGroups:
+  - aucmb
+  - Colonist
+  - AUPrisonStaff
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianCMBDetective
+  equipment:
+    head: ClothingHeadHatFedoraBrown
+    jumpsuit: AU14CMBUniform
+    back: CMSatchelSecurity
+    belt: CMBeltSecurityMarshalFilled
+    shoes: RMCBootsPMCFilled
+    id: AU14IDCardColonyCMBDetective
+    ears: AU14CMBHeadset
+    outerClothing: RMCCoatBureauTrenchCoatBrown
+    suitstorage: AU14BeltHolsterPistolBlack
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchGeneralLargeLEOFilled
+  storage:
+    back:
+    - AU14GuidebookLawColonial
+    - ForensicScanner
+    - CMURecordsTablet
+    - CMUPhotoCamera
+    - CMUCameraFilm
+    - CMUCameraFilm

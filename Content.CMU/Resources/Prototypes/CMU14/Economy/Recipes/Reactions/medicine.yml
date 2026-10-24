@@ -23,3 +23,16 @@
       amount: 1
   products:
     CMUTranexamicAcid: 3
+
+# Phenytoin sodium, the anticonvulsant.
+- type: reaction
+  id: CMUPhenytoin
+  reactants:
+    CMUAmmonia:
+      amount: 1
+    RMCCarbon:
+      amount: 1
+    RMCSodium:
+      amount: 1
+  products:
+    CMUPhenytoin: 3

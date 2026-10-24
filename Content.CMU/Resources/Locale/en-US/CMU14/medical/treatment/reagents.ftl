@@ -57,3 +57,6 @@ reagent-desc-cmu-methamphetamine             = A potent synthetic stimulant. Pro
 
 reagent-name-cmu-blood-plasma = blood plasma
 reagent-desc-cmu-blood-plasma = The liquid part of blood. Given from a plasma pack of a matching type it restores blood volume quickly and slows bleeding for a while.
+reagent-name-cmu-phenytoin                   = Phenytoin
+reagent-desc-cmu-phenytoin                   = An anticonvulsant. It stops a seizure in its tracks, and a single dose keeps epileptic seizures away for about 25 minutes.
+cmu-medical-suppress-seizures-guidebook      = Stops an ongoing seizure and prevents epileptic seizures for { $minutes } minutes.

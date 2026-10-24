@@ -7,6 +7,7 @@ using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.CMU14.Chemistry.Effects;
 using Content.Shared.Jittering;
+using Content.Shared.Nutrition;
 using Content.Shared.Popups;
 using Robust.Shared.Network;
 using Robust.Shared.Random;
@@ -31,6 +32,22 @@ public sealed partial class CMUSubstanceAddictionSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<CMUSubstanceAddictionComponent, ComponentStartup>(OnStartup);
         SubscribeLocalEvent<CMUSubstanceAddictionComponent, CureChemicalAddictionEvent>(OnCure);
+        SubscribeLocalEvent<CMUSubstanceAddictionComponent, IngestingEvent>(OnIngesting);
+    }
+
+    /// <summary>
+    ///     Drinking or eating the substance satisfies the craving straight away. Drinks are digested in the stomach,
+    ///     so many never show up in the bloodstream for the regular check to find.
+    /// </summary>
+    private void OnIngesting(Entity<CMUSubstanceAddictionComponent> ent, ref IngestingEvent args)
+    {
+        if (!Contains(ent.Comp, args.Split))
+            return;
+
+        var wasCraving = ent.Comp.Craving;
+        ResetCraving(ent);
+        if (wasCraving && !_net.IsClient)
+            _popup.PopupEntity(Loc.GetString(ent.Comp.SatisfiedMessage), ent, ent, PopupType.Medium);
     }
 
     private void OnStartup(Entity<CMUSubstanceAddictionComponent> ent, ref ComponentStartup args)
