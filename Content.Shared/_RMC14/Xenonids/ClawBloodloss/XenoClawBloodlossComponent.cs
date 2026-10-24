@@ -4,7 +4,7 @@ using Robust.Shared.GameStates;
 namespace Content.Shared._RMC14.Xenonids.ClawBloodloss;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(ClawXenoBloodlossSystem))]
+[Access(typeof(XenoClawBloodlossSystem))]
 public sealed partial class XenoClawBloodlossComponent : Component
 {
     [DataField, AutoNetworkedField]
