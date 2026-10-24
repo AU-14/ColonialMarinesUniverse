@@ -305,6 +305,7 @@
 
 # ---- Nailgun ----
 # The nails themselves are pricey, so the colony ASRS sells a version with cheap construction nails.
+# Priced so the colony crates can't be sold back for more than they cost (CMURequisitionsSellPriceTest).
 
 - type: entity
   parent: RMCCartridge7x45mm
@@ -313,7 +314,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: StaticPrice
-    price: 1
+    price: 0.25
 
 - type: entity
   parent: RMCMagazineSMGNailgun
@@ -330,6 +331,8 @@
   id: CMUWeaponNailgunColony
   suffix: Colony, Filled
   components:
+  - type: StaticPrice
+    price: 250
   - type: ItemSlots
     slots:
       gun_magazine:
