@@ -148,6 +148,7 @@
     - CMU14ActionXenoPathogenTailStab
     - CMU14ActionXenoPathogenImpale
     - CMU14ActionXenoPathogenScissorCut
+    - CMU14ActionXenoHeadbite
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenRegurgitate
   - type: MobThresholds
@@ -189,6 +190,13 @@
         Blunt: 11.66
         Piercing: 11.67
     bloodloss: 25
+  - type: XenoHeadbite
+    damage:
+      types:
+        Slash: 20
+        Blunt: 20
+        Pierce: 20
+    bloodloss: 100
   - type: CMArmor
     explosionArmor: 20
     xenoArmor: 25
