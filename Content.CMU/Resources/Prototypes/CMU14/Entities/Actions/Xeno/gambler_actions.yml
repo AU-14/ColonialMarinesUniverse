@@ -1,0 +1,130 @@
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionXenoGamble
+  name: Just one more spin
+  description: I LOST IT ALL. ITS OVER
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/Xeno/gambler.rsi
+      state: gamble
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUXenoGambleActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionXenoGambleReel
+  name: Spinning...
+  description: Round and round it goes.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: blank
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: CMU14/Actions/Xeno/gambler.rsi
+      state: template_won
+      map: ["cmu-gamble-won"]
+      visible: false
+  - type: InstantAction
+    event: !type:CMUXenoGambleReelActionEvent
+
+# the gambler does not concern themselves with fury cost
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionXenoGambleRetrieve
+  name: Retrieve (180)
+  description: Pulls a xenonid to you if they are still, with a 0.6 second doafter. You can't pull very big xenonids unless they are downed.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: retrieve
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 7
+  - type: EntityTargetAction
+    event: !type:XenoRetrieveActionEvent
+  - type: XenoActionPlasma
+    cost: 180
+  - type: ActionCooldown
+    cooldown: 10
+  - type: ActionBlockIfResting
+
+- type: entity
+  abstract: true
+  parent: ActionXenoBase
+  id: CMUActionXenoGambleMysteryBase
+  name: Mystery Ability
+  description: Who knows what this does?
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: gardener_plant
+      map: ["enum.ActionVisuals.Icon"]
+
+- type: entity
+  parent: CMUActionXenoGambleMysteryBase
+  id: CMUActionXenoGambleCarp
+  components:
+  - type: InstantAction
+    event: !type:CMUXenoGambleSpawnActionEvent
+      spawn: MobCarp
+      spawnSound: /Audio/Machines/phasein.ogg
+
+- type: entity
+  parent: CMUActionXenoGambleMysteryBase
+  id: CMUActionXenoGambleLizards
+  components:
+  - type: InstantAction
+    event: !type:CMUXenoGambleSpawnActionEvent
+      spawn: MobLizard
+      spawnSound: /Audio/Machines/phasein.ogg
+
+- type: entity
+  parent: CMUActionXenoGambleMysteryBase
+  id: CMUActionXenoGambleExplode
+  components:
+  - type: InstantAction
+    event: !type:CMUXenoGambleExplodeActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionXenoGambleFruitRain
+  name: Fruit Rain
+  description: Make it rain ripe resin fruit around you.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Structures/Xenos/xeno_fruit.rsi
+      state: fruit_greater_item
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUXenoGambleFruitRainActionEvent
+      amount: 30
+      radius: 5
+      interval: 0.1
+      fruits:
+      - XenoFruitLesser
+      - XenoFruitGreater
+      - XenoFruitUnstable
+      - XenoFruitSpore
+      - XenoFruitSpeed
+      - XenoFruitPlasma
+      dropSound:
+        collection: XenoResinBreak
+        params:
+          volume: -8
