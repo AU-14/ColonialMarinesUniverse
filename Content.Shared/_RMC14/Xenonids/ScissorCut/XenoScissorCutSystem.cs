@@ -37,6 +37,7 @@ public sealed partial class XenoScissorCutSystem : EntitySystem
     [Dependency] private SharedRMCMeleeWeaponSystem _rmcMelee = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
 
     private readonly HashSet<EntityUid> _areaHits = new();
     private readonly List<EntityUid> _destructibles = new();
