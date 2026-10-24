@@ -146,9 +146,9 @@
     - CMU14ActionXenoPathogenRest
     - CMU14ActionXenoPathogenWatch
     - CMU14ActionXenoPathogenTailStab
-    - CMU14ActionXenoPathogenImpale
-    - CMU14ActionXenoPathogenScissorCut
-    - CMU14ActionXenoHeadbite
+    - CMU14ActionXenoPathogenImpaleBloodletter
+    - CMU14ActionXenoPathogenScissorCutBloodletter
+    - CMU14ActionXenoHeadbiteBloodletter
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenRegurgitate
   - type: MobThresholds
