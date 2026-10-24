@@ -101,7 +101,7 @@
     stunMax: 4
   - type: XenoEvolution  
     strains:  
-    - RMCXenoVenatorBloodletter
+    - CMU14XenoVenatorBloodletter
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/CMU14/Interface/neo_blips.rsi
