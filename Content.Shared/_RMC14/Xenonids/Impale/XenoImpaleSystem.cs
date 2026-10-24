@@ -124,7 +124,7 @@ public sealed partial class XenoImpaleSystem : EntitySystem
         _melee.DoLunge(xeno, xeno, Angle.Zero, localPos, null);
     }
 
-    private void Impale(DamageSpecifier damage, int aP, EntProtoId animation, SoundSpecifier sound, EntityUid target, EntityUid xeno)
+    private void Impale(DamageSpecifier damage, int aP, FixedPoint2 bloodloss, EntProtoId animation, SoundSpecifier sound, EntityUid target, EntityUid xeno)
     {
         //TODO RMC14 targets chest
         var finalDamage = _xeno.TryApplyXenoSlashDamageMultiplier(target, damage);
