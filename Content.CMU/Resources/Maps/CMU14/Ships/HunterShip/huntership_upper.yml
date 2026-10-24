@@ -21014,14 +21014,14 @@ entities:
   - uid: 304510
     components:
     - type: Transform
-      pos: 62,53
+      pos: 62.5,53.5
       parent: 300002
 - proto: CMUHunterShipYautjaLandingPadBFTLBeacon
   entities:
   - uid: 304511
     components:
     - type: Transform
-      pos: 62,38
+      pos: 62.5,38.5
       parent: 300002
 - proto: WallInvisible
   entities:
