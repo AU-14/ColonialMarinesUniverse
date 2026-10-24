@@ -186,6 +186,12 @@ namespace Content.Server.Database
         Task<bool> DeleteYautjaClanMemberAsync(Guid userId);
         Task<int> GetYautjaWhitelistFlagsAsync(Guid userId);
         Task SetYautjaWhitelistFlagsAsync(Guid userId, int flags);
+        // CMU14: yautja clan hall
+        Task<List<YautjaHunterBoardRecord>> GetYautjaHunterBoardAsync();
+        Task<bool> UpdateYautjaClanExtrasAsync(int clanId, string sigil, string notice, string eliteNotes);
+        Task<bool> AddYautjaHonorAsync(Guid userId, int honor);
+        Task<List<YautjaClanPetitionRecord>> GetYautjaClanPetitionsAsync(int? clanId = null);
+        Task<bool> SetYautjaClanPetitionAsync(Guid userId, int? clanId);
         #endregion
 
         #region Connection Logs
@@ -881,6 +887,37 @@ namespace Content.Server.Database
         {
             DbWriteOpsMetric.Inc();
             return RunDbCommand(() => _db.SetYautjaWhitelistFlagsAsync(userId, flags));
+        }
+
+        // CMU14: yautja clan hall
+        public Task<List<YautjaHunterBoardRecord>> GetYautjaHunterBoardAsync()
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetYautjaHunterBoardAsync());
+        }
+
+        public Task<bool> UpdateYautjaClanExtrasAsync(int clanId, string sigil, string notice, string eliteNotes)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.UpdateYautjaClanExtrasAsync(clanId, sigil, notice, eliteNotes));
+        }
+
+        public Task<bool> AddYautjaHonorAsync(Guid userId, int honor)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.AddYautjaHonorAsync(userId, honor));
+        }
+
+        public Task<List<YautjaClanPetitionRecord>> GetYautjaClanPetitionsAsync(int? clanId = null)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetYautjaClanPetitionsAsync(clanId));
+        }
+
+        public Task<bool> SetYautjaClanPetitionAsync(Guid userId, int? clanId)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SetYautjaClanPetitionAsync(userId, clanId));
         }
 
         public Task<int> AddConnectionLogAsync(
