@@ -1,3 +1,8 @@
+using Content.Shared.Damage; 
+using Content.Shared.Popups; 
+
+namespace Content.Shared._RMC14.Guardian;  
+
 public sealed class GuardianAbsorbSystem : EntitySystem  
 {  
     [Dependency] private readonly DamageableSystem _damageable = default!;  
