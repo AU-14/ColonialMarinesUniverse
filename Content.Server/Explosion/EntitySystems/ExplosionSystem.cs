@@ -16,6 +16,7 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Explosion;
+using Content.Shared.CMU14.Hygiene; // CMU14: source-local explosion profile hook
 using Content.Shared.Explosion.Components;
 using Content.Shared.Explosion.EntitySystems;
 using Content.Shared.GameTicking;
@@ -168,10 +169,14 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             totalIntensity ??= RadiusToIntensity((float)radius, explosive.IntensitySlope, explosive.MaxIntensity);
         totalIntensity ??= explosive.TotalIntensity;
 
+        // CMU14: source-specific profiles change damage without altering the blast's intensity/radius.
+        var preparing = new CMUExplosionPreparingEvent(explosive.ExplosionType);
+        RaiseLocalEvent(uid, ref preparing);
+
         // cmu edit start
         _cmuGrenadeBodyBlock.TrySeverHoldingHand(uid);
         if (_cmuGrenadeBodyBlock.TryAbsorbBlast(uid,
-                explosive.ExplosionType,
+                preparing.ExplosionType, // CMU14
                 (float) totalIntensity,
                 explosive.IntensitySlope,
                 explosive.MaxIntensity))
@@ -183,7 +188,7 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
         // cmu edit end
 
         QueueExplosion(uid,
-            explosive.ExplosionType,
+            preparing.ExplosionType, // CMU14
             (float)totalIntensity,
             explosive.IntensitySlope,
             explosive.MaxIntensity,

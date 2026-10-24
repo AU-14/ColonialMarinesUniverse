@@ -1,15 +1,15 @@
-- type: entity
+- type: entity # CMU14: functional hygiene appliance
   id: CMWashingMachine
   parent: BaseStructure
-  name: washing machine
-  description: The WM-321 is a rugged, cylindrical powerhouse, equipped with a transparent window. This one is not operational.
+  name: washer/dryer
+  description: The WM-321 combines a rugged washing drum with a high-temperature drying cycle behind a transparent window.
   placement:
     mode: SnapgridCenter
   components:
   - type: Physics
     bodyType: Static
   - type: Transform
-    anchored: false
+    anchored: true
   - type: Fixtures
     fixtures:
       fix1:
@@ -26,6 +26,9 @@
   - type: Damageable
   - type: Injurable
     damageContainer: Inorganic
+  - type: RMCRepairable # CMU14: restore damaged washers with the standard blowtorch interaction
+    heal: 50
+    delay: 4
   - type: Destructible
     thresholds:
     - trigger:
@@ -35,6 +38,11 @@
       - !type:PlaySoundBehavior
         sound:
           collection: MetalBreak
+      - !type:PlaySoundBehavior # CMU14: brief electrical static on final destruction
+        sound:
+          path: /Audio/_RMC14/Effects/radiostatic.ogg
+          params:
+            volume: -3
       - !type:ChangeConstructionNodeBehavior
         node: start
       - !type:SpawnEntitiesBehavior
@@ -45,21 +53,81 @@
       - !type:DoActsBehavior
         acts: ["Destruction"]
   - type: Sprite
-    sprite: _RMC14/Structures/Furniture/washing_machine.rsi
+    sprite: CMU14/Structures/washing_machine.rsi
     layers:
     - state: washing_machine_closed
       map: [ "enum.OpenableVisuals.Layer" ]
-    snapCardinals: true
-  - type: Openable
-    openOnActivate: true
-    closeable: true
+    - state: washing_machine_damaged
+      visible: false
+      map: [ "enum.CMUHygieneVisuals.DamageLayer" ]
+    - sprite: CMU14/Effects/laundry_drum.rsi
+      state: single
+      visible: false
+      map: [ "enum.CMUHygieneVisuals.Drum" ]
+    - sprite: CMU14/Effects/laundry_indicator.rsi
+      state: single
+      color: "#ff3030"
+      visible: false
+      shader: unshaded
+      map: [ "enum.CMUHygieneVisuals.Indicator" ]
+    snapCardinals: false # CMU14: four-direction RSI supplies the facing view.
+  - type: Anchorable
+  - type: Rotatable # CMU14: player-facing cardinal rotation
+    rotateWhileAnchored: false
+    rotateWhilePulling: true
+  - type: ApcPowerReceiver
+    powerLoad: 500
+  - type: ExtensionCableReceiver
+  - type: AmbientSound
+    enabled: false
+    range: 5
+    volume: -16
     sound:
-      path: /Audio/Effects/closetopen.ogg
-    closeSound:
-      path: /Audio/Effects/closetclose.ogg
+      path: /Audio/CMU14/Hygiene/wash_loop.ogg
+  - type: CMULaundry
+    cycleSeconds: 12
+    cookoffSeconds: 7
+    ammoCookoffSeconds: 3
+    breakdownDamage: 100
+  - type: CMULaundryTransferTarget
+  - type: DeviceLinkSink # CMU14: standard signaller input starts the normal laundry cycle
+    ports:
+    - Timer
+  - type: Storage
+    grid:
+    - 0,0,7,3
+    maxItemSize: Huge
+    whitelist:
+      components:
+      - Clothing
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
   - type: Appearance
   - type: GenericVisualizer
     visuals:
+      enum.CMUHygieneVisuals.Broken:
+        enum.OpenableVisuals.Layer:
+          True: { visible: false }
+          False: { visible: true }
+        enum.CMUHygieneVisuals.DamageLayer:
+          True: { visible: true }
+          False: { visible: false }
+      enum.CMUHygieneVisuals.Powered:
+        enum.CMUHygieneVisuals.Indicator:
+          True: { visible: true }
+          False: { visible: false }
+      enum.CMUHygieneVisuals.Running:
+        enum.CMUHygieneVisuals.Drum:
+          True: { visible: true }
+          False: { visible: false }
+        enum.CMUHygieneVisuals.Indicator:
+          True: { color: "#45ff69" }
+          False: { color: "#ff3030" }
       enum.OpenableVisuals.Opened:
         enum.OpenableVisuals.Layer:
           True: { state: washing_machine_open }
@@ -69,17 +137,54 @@
 - type: entity
   parent: CMWashingMachine
   id: CMWashingMachineDouble
-  name: washing machine (double)
+  name: stacked washer/dryer
+  description: Two rugged washing drums with high-temperature drying cycles, stacked together to handle larger loads.
   components:
+  - type: Storage
+    grid:
+    - 0,0,7,7
+  - type: ApcPowerReceiver
+    powerLoad: 1000
   - type: Sprite
-    sprite: _RMC14/Structures/Furniture/washing_machine.rsi
+    sprite: CMU14/Structures/washing_machine.rsi
     offset: "0.0,0.09"
     layers:
     - state: washing_machine_double_closed
       map: [ "enum.OpenableVisuals.Layer" ]
-    snapCardinals: true
+    - state: washing_machine_double_damaged
+      visible: false
+      map: [ "enum.CMUHygieneVisuals.DamageLayer" ]
+    - sprite: CMU14/Effects/laundry_drum.rsi
+      state: double
+      visible: false
+      map: [ "enum.CMUHygieneVisuals.Drum" ]
+    - sprite: CMU14/Effects/laundry_indicator.rsi
+      state: double
+      color: "#ff3030"
+      visible: false
+      shader: unshaded
+      map: [ "enum.CMUHygieneVisuals.Indicator" ]
+    snapCardinals: false # CMU14: four-direction RSI supplies the facing view.
   - type: GenericVisualizer
     visuals:
+      enum.CMUHygieneVisuals.Broken:
+        enum.OpenableVisuals.Layer:
+          True: { visible: false }
+          False: { visible: true }
+        enum.CMUHygieneVisuals.DamageLayer:
+          True: { visible: true }
+          False: { visible: false }
+      enum.CMUHygieneVisuals.Powered:
+        enum.CMUHygieneVisuals.Indicator:
+          True: { visible: true }
+          False: { visible: false }
+      enum.CMUHygieneVisuals.Running:
+        enum.CMUHygieneVisuals.Drum:
+          True: { visible: true }
+          False: { visible: false }
+        enum.CMUHygieneVisuals.Indicator:
+          True: { color: "#45ff69" }
+          False: { color: "#ff3030" }
       enum.OpenableVisuals.Opened:
         enum.OpenableVisuals.Layer:
           True: { state: washing_machine_double_open }

@@ -1,0 +1,39 @@
+- type: entity
+  parent: RMCBaseBullet
+  id: CMULaundryAmmoFragment
+  name: ammunition fragment
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/shotgun_projectiles.rsi
+    layers:
+    - state: buckshot
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 3
+    maxFixedRange: 3
+    delayToAcknowledgeShooter: 0
+    impactEffect: BulletImpactEffect
+  - type: TimedDespawn
+    lifetime: 0.2
+
+# A tiny propellant spit using the existing low-caliber muzzle flash.
+- type: entity
+  id: CMULaundryAmmoPop
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+    state: muzzle_bullet_low_RMC
+    scale: 0.7, 0.7
+    offset: 0.25, 0
+    noRot: true
+    drawdepth: Effects
+    shader: unshaded
+  - type: TimedDespawn
+    lifetime: 0.12
+  - type: Tag
+    tags:
+    - HideContextMenu

@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/5a2359bab582e18b3b432539733be04204148a5e/icons/obj/items/items.dmi CMU14 use-stage variants retain original pixels and remove quarters of the bar.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "soap4"
+        },
+        {
+            "name": "soap3"
+        },
+        {
+            "name": "soap2"
+        },
+        {
+            "name": "soap1"
+        },
+        {
+            "name": "soap"
+        },
+        {
+            "name": "soap_deluxe"
+        },
+        {
+            "name": "soap_syndie"
+        },
+        {
+            "name": "soap_nt"
+        }
+    ]
+}

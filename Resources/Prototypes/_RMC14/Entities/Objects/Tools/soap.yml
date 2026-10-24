@@ -7,9 +7,21 @@
   - type: Tag
     tags:
     - Soap
+  # CMU14: four visual stages while retaining the existing forensic cleaning action.
+  - type: CMUFourUseSoap
+  - type: Appearance
   - type: Sprite
-    sprite: _RMC14/Objects/Misc/Janitorial/soap.rsi
-    state: soap
+    sprite: CMU14/Items/soap_uses.rsi
+    layers:
+    - state: soap4
+      map: [ "enum.CMUSoapVisuals.Layer" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUSoapVisuals.Uses:
+        enum.CMUSoapVisuals.Layer:
+          3: { state: soap3 }
+          2: { state: soap2 }
+          1: { state: soap1 }
   - type: Item
     sprite: Objects/Specific/Janitorial/soap.rsi
     size: Tiny  
@@ -36,7 +48,8 @@
     flavors:
       - clean
   - type: Edible
-    solution: soap
+    transferAmount: 4.16 # CMU14: roughly three bites per quarter of a fresh 50u bar.
+    solution: soap # CMU14: eating consumes the same remaining soap as cleaning.
   - type: BadFood
   - type: CleansForensics
   - type: Residue

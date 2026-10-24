@@ -1,0 +1,586 @@
+# Washer-only damage profiles. Blast size and effects match the source; damage per intensity is halved.
+- type: explosion
+  id: CMULaundryHalfCMUYautjaBadBloodPlasma
+  damagePerIntensity:
+    types:
+      Blunt: 1.0
+      Heat: 1.0
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 10
+  - 30
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+- type: explosion
+  id: CMULaundryHalfCMUBangalore
+  damagePerIntensity:
+    types:
+      Blunt: 1.5
+      Heat: 1.5
+      Structural: 250.0
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 10
+  - 30
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+- type: explosion
+  id: CMULaundryHalfCMUATGM
+  damagePerIntensity:
+    types:
+      Blunt: 2.5
+      Heat: 2.5
+      Structural: 20.0
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 10
+  - 30
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+- type: explosion
+  id: CMULaundryHalfCMUAntiVehicleHE
+  damagePerIntensity:
+    types:
+      Blunt: 2.5
+      Heat: 2.5
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 10
+  - 30
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+- type: explosion
+  id: CMULaundryHalfCMUHEAP
+  damagePerIntensity:
+    types:
+      Blunt: 2.5
+      Heat: 2.5
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 10
+  - 30
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+- type: explosion
+  id: CMULaundryHalfCMUIED
+  damagePerIntensity:
+    types:
+      Blunt: 2.5
+      Heat: 2.5
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 10
+  - 30
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+- type: explosion
+  id: CMULaundryHalfCMUCASMunition
+  damagePerIntensity:
+    types:
+      Blunt: 2.5
+      Heat: 2.5
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 10
+  - 30
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+- type: explosion
+  id: CMULaundryHalfCMUPlasticExplosive
+  damagePerIntensity:
+    types:
+      Blunt: 2.5
+      Heat: 2.5
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 10
+  - 30
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+- type: explosion
+  id: CMULaundryHalfCMUMortarHEATMP
+  damagePerIntensity:
+    types:
+      Blunt: 3.125
+      Heat: 3.125
+      Structural: 45.0
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 10
+  - 30
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: AU14MortarExplosion
+    params:
+      volume: -3
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: -3
+- type: explosion
+  id: CMULaundryHalfDefault
+  damagePerIntensity:
+    types:
+      Heat: 2.5
+      Blunt: 2.5
+      Piercing: 2.5
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 50
+  - 75
+  tileBreakRerollReduction: 25
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireStates: 3
+  temperature: 800
+- type: explosion
+  id: CMULaundryHalfDemolitionCharge
+  damagePerIntensity:
+    types:
+      Heat: 2.5
+      Blunt: 2.5
+      Piercing: 2.5
+      Structural: 25.0
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 50
+  - 75
+  tileBreakRerollReduction: 25
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireStates: 3
+  temperature: 800
+- type: explosion
+  id: CMULaundryHalfMicroBomb
+  damagePerIntensity:
+    types:
+      Heat: 3.0
+      Blunt: 3.0
+      Piercing: 3.0
+      Structural: 10.0
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 1
+  - 10
+  - 15
+  tileBreakRerollReduction: 30
+  intensityPerState: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireStates: 3
+  temperature: 800
+- type: explosion
+  id: CMULaundryHalfRadioactive
+  damagePerIntensity:
+    types:
+      Radiation: 2.5
+      Heat: 2.0
+      Blunt: 1.5
+      Piercing: 1.5
+  lightColor: Green
+  fireColor: Green
+  texturePath: /Textures/Effects/fire_greyscale.rsi
+  fireStates: 3
+- type: explosion
+  id: CMULaundryHalfCryo
+  damagePerIntensity:
+    types:
+      Cold: 2.5
+      Blunt: 2.5
+      Structural: 25.0
+  tileBreakChance:
+  - 0
+  tileBreakIntensity:
+  - 0
+  lightColor: Blue
+  fireColor: Blue
+  texturePath: /Textures/Effects/fire_greyscale.rsi
+  fireStates: 3
+- type: explosion
+  id: CMULaundryHalfMinibomb
+  damagePerIntensity:
+    types:
+      Heat: 2.0
+      Blunt: 3.5
+      Piercing: 2.0
+      Structural: 5.0
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 50
+  - 75
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireStates: 3
+  temperature: 800
+- type: explosion
+  id: CMULaundryHalfPowerSink
+  damagePerIntensity:
+    types:
+      Heat: 6.0
+      Blunt: 6.0
+      Piercing: 6.0
+      Structural: 15.0
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 1
+  - 5
+  - 10
+  tileBreakRerollReduction: 3
+  intensityPerState: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireStates: 3
+  temperature: 800
+- type: explosion
+  id: CMULaundryHalfHardBomb
+  damagePerIntensity:
+    types:
+      Heat: 7.5
+      Blunt: 7.5
+      Piercing: 3.0
+      Structural: 20.0
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 10
+  - 30
+  tileBreakRerollReduction: 10
+  intensityPerState: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireStates: 3
+  temperature: 800
+- type: explosion
+  id: CMULaundryHalfFireBomb
+  damagePerIntensity:
+    types:
+      Heat: 0.5
+      Blunt: 1.0
+      Piercing: 1.5
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireStates: 3
+  fireStacks: 2
+  temperature: 1500
+- type: explosion
+  id: CMULaundryHalfXenoborgAntiStructureExplosion
+  damagePerIntensity:
+    types:
+      Heat: 2.0
+      Blunt: 1.0
+      Piercing: 1.5
+      Structural: 25.0
+  lightColor: Blue
+  fireColor: Blue
+  texturePath: /Textures/Effects/fire_greyscale.rsi
+  fireStates: 3
+  temperature: 800
+- type: explosion
+  id: CMULaundryHalfCMUHijackPipe
+  damagePerIntensity:
+    types:
+      Blunt: 2.5
+      Heat: 2.5
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 10
+  - 30
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+- type: explosion
+  id: CMULaundryHalfRMC
+  damagePerIntensity:
+    types:
+      Blunt: 2.5
+      Heat: 2.5
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 10
+  - 30
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+- type: explosion
+  id: CMULaundryHalfRMCLTBCannon
+  damagePerIntensity:
+    types:
+      Blunt: 4.0
+      Heat: 4.0
+      Structural: 150.0
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 8
+  - 20
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 0
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+  soundFar:
+    collection: RMCCannonDistant
+    params:
+      maxDistance: 60
+  smallSoundFar:
+    collection: RMCCannonDistant
+    params:
+      maxDistance: 60
+- type: explosion
+  id: CMULaundryHalfRMCMortar
+  damagePerIntensity:
+    types:
+      Blunt: 3.125
+      Heat: 3.125
+      Structural: 45.0
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 10
+  - 30
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: AU14MortarExplosion
+    params:
+      volume: -3
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: -3
+- type: explosion
+  id: CMULaundryHalfRMCOB
+  damagePerIntensity:
+    types:
+      Blunt: 2.5
+      Heat: 2.5
+      Structural: 45.0
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 10
+  - 30
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: RMCExplosionBig
+    params:
+      maxDistance: 50
+  smallSound:
+    collection: RMCExplosionBig
+    params:
+      maxDistance: 50
+- type: explosion
+  id: CMULaundryHalfRMCOBXenoTunnel
+  damagePerIntensity:
+    types:
+      Blunt: 2.5
+      Heat: 2.5
+      Structural: 45.0
+  tileBreakChance:
+  - 0
+  - 0.5
+  - 1
+  tileBreakIntensity:
+  - 0
+  - 10
+  - 30
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: RMCExplosionBig
+    params:
+      maxDistance: 50
+  smallSound:
+    collection: RMCExplosionBig
+    params:
+      maxDistance: 50

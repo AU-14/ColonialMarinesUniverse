@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Client.CMU14.Hygiene;
 using Content.Client.Clothing;
 using Content.Client.Items.Systems;
 using Content.Shared.CMU14.Item.Stain;
@@ -77,7 +78,8 @@ public sealed partial class CMUItemStainVisualizerSystem : EntitySystem
         {
             RsiPath = ItemStainsRsi.ToString(),
             State = state,
-            Color = color,
+            Color = ent.Comp.Kind == CMUItemStainKind.Blood ? CMUStainColors.Brighten(color) : color,
+            Shader = ent.Comp.Kind == CMUItemStainKind.Blood ? "CMUResidueContrast" : null,
             MapKeys = [key],
         };
         args.Layers.Add((key, layer));
@@ -118,7 +120,9 @@ public sealed partial class CMUItemStainVisualizerSystem : EntitySystem
             visuals.LayerKeys.Add(overlayKey);
 
             var shader = shaderPrototype.InstanceUnique();
-            shader.SetParameter("stainColor", color.RGBA);
+            var blood = ent.Comp.Kind == CMUItemStainKind.Blood;
+            shader.SetParameter("stainColor", (blood ? CMUStainColors.Brighten(color) : color).RGBA);
+            shader.SetParameter("opacityBoost", blood ? 2.2f : 1f);
             sprite.LayerSetShader(overlayIndex, shader, ItemStainShader.Id);
 
             // Shader-input layers must precede their target so their texture and UVs are populated before it draws.
