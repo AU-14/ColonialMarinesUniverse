@@ -3,7 +3,7 @@
   id: AU14JobLEOBase
   name: au14-job-name-leo
   description: au14-job-description-leo
-  setPreference: true
+  setPreference: false # picked as a CMB role; maps without the CMB turn those into their own force
   playTimeTracker: AU14JobCivilianCMBDeputy
   basePlaytimeTracker: true
   icon: "RMCJobIconBureauDeputy"

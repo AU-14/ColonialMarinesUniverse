@@ -93,7 +93,8 @@
 
             # Security/LEO
             AU14JobCivilianCMBMarshal: [1, 1]
-            AU14JobCivilianCMBDeputy: [2, 2]
+            AU14JobCivilianCMBDeputy: [1, 1]
+            AU14JobCivilianCMBDetective: [1, 1]
 
             # Engineering/Logi
             AU14JobCivilianForeman: [1, 1]
