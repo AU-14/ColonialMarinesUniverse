@@ -34,6 +34,7 @@ cmu-name-yautja-first-30 = Ahn'tha
 cmu-name-yautja-first-31 = Tocha
 cmu-name-yautja-first-32 = Ba-A'ytall
 cmu-name-yautja-first-33 = Mihn'tha
+cmu-name-yautja-first-34 = Le'pro
 
 cmu-name-yautja-last-1 = Tha'jo
 cmu-name-yautja-last-2 = Ba'ytui

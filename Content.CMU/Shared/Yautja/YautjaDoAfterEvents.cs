@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared.Alert;
 using Content.Shared.DoAfter;
 using Robust.Shared.Map;
@@ -133,6 +134,14 @@ public enum YautjaBracerMisuseAction : byte
     CreateHealingCapsule,
     CreateHuntingTrap,
     SelfDestruct,
+
+    // CMU14: gear-toggle and cloak misuse entries used by the bracer misuse roll
+    Cloak,
+    ToggleWristBlades,
+    ToggleScimitar,
+    ToggleChainGauntlet,
+    ToggleShield,
+    ToggleCaster,
 }
 
 [Serializable, NetSerializable]
@@ -224,5 +233,49 @@ public sealed partial class YautjaTrapArmDoAfterEvent : SimpleDoAfterEvent;
 
 public sealed partial class YautjaTrapBreakFreeAlertEvent : BaseAlertEvent;
 
+public sealed partial class YautjaSelfDestructAlertEvent : BaseAlertEvent;
+
 [Serializable, NetSerializable]
 public sealed partial class YautjaTrapBreakFreeDoAfterEvent : SimpleDoAfterEvent;
+
+[Serializable, NetSerializable]
+public sealed partial class YautjaLeapDoAfterEvent : SimpleDoAfterEvent
+{
+    [DataField]
+    public NetCoordinates Coordinates;
+
+    [DataField]
+    public NetEntity? Warning;
+
+    /// <summary>
+    /// CMU14: non-zero when the leap crosses Z-levels; the completion moves the hunter with
+    /// CMUZLevelsSystem.TryMove instead of throwing them across a single map.
+    /// </summary>
+    [DataField]
+    public int ZOffset;
+
+    /// <summary>
+    /// CMU14: when the leap was aimed at a tile on a grid, keep the grid's identity and the grid-local tile. A deck
+    /// that moves during the wind-up (a gunship overhead) must be resolved against its current transform, so world
+    /// coordinates alone would land the hunter on the map floor instead of the deck.
+    /// </summary>
+    [DataField]
+    public NetEntity? DestinationGrid;
+
+    [DataField]
+    public Vector2? GridLocalPosition;
+
+    public YautjaLeapDoAfterEvent(
+        NetCoordinates coordinates,
+        NetEntity? warning = null,
+        int zOffset = 0,
+        NetEntity? destinationGrid = null,
+        Vector2? gridLocalPosition = null)
+    {
+        Coordinates = coordinates;
+        Warning = warning;
+        ZOffset = zOffset;
+        DestinationGrid = destinationGrid;
+        GridLocalPosition = gridLocalPosition;
+    }
+}

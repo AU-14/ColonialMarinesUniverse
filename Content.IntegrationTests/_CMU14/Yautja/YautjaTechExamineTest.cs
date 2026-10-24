@@ -14,7 +14,7 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 public sealed class YautjaTechExamineTest : GameTest
 {
     [Test]
-    public async Task LookingIsFreeButGrabbingStillHurts()
+    public async Task LookingAndGrabbingAreFreeLikeCmss13ItemPredator()
     {
         var map = await Pair.CreateTestMap();
 
@@ -23,16 +23,18 @@ public sealed class YautjaTechExamineTest : GameTest
             var human = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             var hivebreaker = SEntMan.SpawnEntity("CMUYautjaHivebreaker", map.GridCoords);
 
-            // everything examine and the right-click menu do behind the scenes
+            // CM-SS13's flags_item = ITEM_PREDATOR only tracks the item (code/game/objects/items.dm:183), so
+            // neither examining nor taking Yautja gear costs the user anything: the shock/delimb punishment
+            // lives on misuse (yaut_bracers.dm:112/175/398 and the bracer's random-function roll).
             SEntMan.System<SharedVerbSystem>().GetLocalVerbs(hivebreaker, human, Verb.VerbTypes);
-            Assert.That(SEntMan.System<SharedHandsSystem>().CanPickupAnyHand(human, hivebreaker), Is.False,
-                "humans still can't pick it up");
+            Assert.That(SEntMan.System<SharedHandsSystem>().CanPickupAnyHand(human, hivebreaker), Is.True,
+                "CM-SS13 lets anyone carry Yautja gear it finds");
             Assert.That(SEntMan.System<DamageableSystem>().GetTotalDamage(human).Float(), Is.Zero,
                 "looking at yautja gear shouldn't hurt");
 
             SEntMan.System<SharedInteractionSystem>().InteractHand(human, hivebreaker);
-            Assert.That(SEntMan.System<DamageableSystem>().GetTotalDamage(human).Float(), Is.GreaterThan(0f),
-                "actually grabbing it should still get you shocked");
+            Assert.That(SEntMan.System<DamageableSystem>().GetTotalDamage(human).Float(), Is.Zero,
+                "taking it off the floor shouldn't hurt either");
         });
     }
 }

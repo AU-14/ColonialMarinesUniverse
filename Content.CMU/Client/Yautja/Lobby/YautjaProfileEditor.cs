@@ -434,7 +434,14 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
         _skinGrid.RemoveAllChildren();
         var group = new ButtonGroup();
 
-        foreach (var skinColor in YautjaCharacterProfile.SkinColorOrder)
+        // CMU14: only the six CM-SS13 PRED_SKIN_COLOR tones are offered; the CMU-only Gray/White extras are not valid
+        // choices for the pre-coloured variants and should not appear in the lobby. A profile already saved with one of
+        // them keeps that option so the current selection stays representable.
+        var choices = YautjaCharacterProfile.SkinColorOrder[..6].ToList();
+        if (!choices.Contains(yautja.SkinColor))
+            choices.Add(yautja.SkinColor);
+
+        foreach (var skinColor in choices)
         {
             var button = BuildSelectorButton(
                 Loc.GetString(YautjaCharacterProfile.GetSkinColorDisplayName(skinColor)),

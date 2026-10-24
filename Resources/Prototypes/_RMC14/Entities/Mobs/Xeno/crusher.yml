@@ -11,6 +11,11 @@
   name: Crusher
   description: A huge alien with an enormous armored crest.
   components:
+  - type: FiremanCarriable # CMU14: Yautja can aggressively grab, carry and throw this caste
+    canThrow: true
+    carrierWhitelist:
+      components:
+      - Yautja
   - type: GuideHelp
     guides:
     - RMCGuideRoleCrusher

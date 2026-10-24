@@ -43,6 +43,7 @@
     carrierWhitelist:
       components:
       - Synth
+      - Yautja # CMU14: Yautja may carry this caste too - CM-SS13's grab gate reaches MOB_SIZE_XENO (mob_grab.dm:82-89).
   - type: MobState
     allowedStates:
     - Alive

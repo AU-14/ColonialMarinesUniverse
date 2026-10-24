@@ -2,3 +2,12 @@
   parent: XenoAcidStrong
   id: CMUYautjaCleanserAcid
   categories: [ HideSpawnMenu ]
+
+- type: entity
+  id: CMUYautjaLeapWarning
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 1.2
+  - type: Sprite
+    color: "#0B5226"

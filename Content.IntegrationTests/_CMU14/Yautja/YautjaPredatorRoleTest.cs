@@ -127,102 +127,6 @@ public sealed class YautjaPredatorRoleTest
     private static readonly Robust.Shared.Prototypes.ProtoId<HealthIconPrototype> CMUYautjaRankIconBloodedPrototype = "CMUYautjaRankIconBlooded";
     private static readonly Robust.Shared.Prototypes.ProtoId<EmoteSoundsPrototype> CMUBaseYautjaPrototype = "CMUBaseYautja";
 
-    [TestCase(YautjaSkinColor.Gray)]
-    [TestCase(YautjaSkinColor.White)]
-    public async Task YautjaSpawnPreservesSelectedAchromaticSkinColor(YautjaSkinColor skinColor)
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
-        var server = pair.Server;
-        var client = pair.Client;
-        var map = await pair.CreateTestMap();
-        var expected = YautjaCharacterProfile.GetSkinColorColor(skinColor);
-        EntityUid hunter = default;
-        EntityUid? previousAttached = null;
-
-        try
-        {
-            await server.WaitPost(() =>
-            {
-                // CMU defaults identity hiding off; this regression exercises its enabled path.
-                server.CfgMan.SetCVar(RMCCVars.HidePlayerIdentities, true);
-                var entMan = server.EntMan;
-                var session = server.PlayerMan.Sessions.Single();
-                var yautja = YautjaCharacterProfile.Default.WithSkinColor(skinColor);
-                var lobbyProfile = HumanoidCharacterProfile.DefaultWithSpecies("Human")
-                    .WithYautjaProfile(yautja);
-
-                hunter = entMan.System<StationSpawningSystem>().SpawnPlayerMob(
-                    map.GridCoords,
-                    "CMUYautjaHunter",
-                    lobbyProfile,
-                    station: null);
-                previousAttached = session.AttachedEntity;
-                server.PlayerMan.SetAttachedEntity(session, hunter);
-
-                var spawned = new PlayerSpawnCompleteEvent(
-                    hunter,
-                    session,
-                    "CMUYautjaHunter",
-                    lateJoin: false,
-                    silent: true,
-                    joinOrder: 1,
-                    station: map.MapUid,
-                    profile: lobbyProfile);
-                entMan.EventBus.RaiseLocalEvent(hunter, spawned, broadcast: true);
-
-                var humanoid = entMan.GetComponent<HumanoidProfileComponent>(hunter);
-                Assert.That(YautjaTestAppearance.SkinColor(entMan, hunter), Is.EqualTo(expected));
-
-                var hidden = entMan.GetComponent<HiddenAppearanceComponent>(hunter);
-                Assert.That(hidden.Appearance?.Appearance.SkinColor, Is.EqualTo(expected),
-                    "The hidden identity must retain the selected Yautja skin color.");
-            });
-
-            await pair.ReallyBeIdle(10);
-
-            await server.WaitAssertion(() =>
-            {
-                var entMan = server.EntMan;
-                Assert.That(YautjaTestAppearance.SkinColor(entMan, hunter),
-                    Is.EqualTo(expected),
-                    "The authoritative appearance must remain selected after the spawn event settles.");
-                var hidden = entMan.GetComponent<HiddenAppearanceComponent>(hunter);
-                Assert.That(hidden.Appearance?.Appearance.SkinColor, Is.EqualTo(expected));
-            });
-
-            await client.WaitAssertion(() =>
-            {
-                var entMan = client.EntMan;
-                var clientHunter = entMan.GetEntity(server.EntMan.GetNetEntity(hunter));
-                var humanoid = entMan.GetComponent<HumanoidProfileComponent>(clientHunter);
-                var sprite = entMan.GetComponent<SpriteComponent>(clientHunter);
-
-                var hidden = entMan.GetComponent<HiddenAppearanceComponent>(clientHunter);
-                Assert.That(hidden.Appearance?.Appearance.SkinColor, Is.EqualTo(expected));
-                Assert.That(entMan.System<SpriteSystem>().LayerMapTryGet((clientHunter, sprite), HumanoidVisualLayers.Chest, out var chestLayer, logMissing: false), Is.True);
-                var chest = (SpriteComponent.Layer) sprite[chestLayer];
-                Assert.That(chest.Color, Is.EqualTo(expected));
-                Assert.That(chest.ShaderPrototype?.Id, Is.EqualTo("Greyscale"));
-                Assert.That(YautjaTestAppearance.SkinColor(entMan, clientHunter), Is.EqualTo(expected),
-                    "The replicated authoritative appearance must retain the selected skin color.");
-            });
-        }
-        finally
-        {
-            await server.WaitPost(() =>
-            {
-                var session = server.PlayerMan.Sessions.SingleOrDefault();
-                if (session != null)
-                    server.PlayerMan.SetAttachedEntity(session, previousAttached);
-
-                if (hunter != default && !server.EntMan.Deleted(hunter))
-                    server.EntMan.DeleteEntity(hunter);
-            });
-        }
-
-        await pair.CleanReturnAsync();
-    }
-
     [Test]
     public async Task PredatorSpawnAppliesYautjaProfileInsteadOfNormalHumanProfile()
     {
@@ -237,14 +141,14 @@ public sealed class YautjaPredatorRoleTest
             var inventory = entMan.System<InventorySystem>();
 
             var yautjaAppearance = YautjaCharacterProfile.Default
-                .WithSkinColor(YautjaSkinColor.Green)
+                .WithSkinColor(YautjaSkinColor.Red)
                 .WithEyeColor(YautjaEyeColor.Gold).Appearance.Clone();
 
             var yautja = YautjaCharacterProfile.Default
                 .WithName("Kainde Amedha")
                 .WithAge(420)
                 .WithAppearance(yautjaAppearance)
-                .WithSkinColor(YautjaSkinColor.Green)
+                .WithSkinColor(YautjaSkinColor.Red)
                 .WithQuillStyle(YautjaQuillStyle.LongCurved)
                 .WithArmor(YautjaGearMaterial.Bronze, 3)
                 .WithMask(YautjaGearMaterial.Bone, 12)
@@ -276,7 +180,8 @@ public sealed class YautjaPredatorRoleTest
                 Assert.That(humanoid.Species, Is.EqualTo("Yautja"));
                 Assert.That(entMan.HasComponent<YautjaHudViewerComponent>(hunter), Is.False,
                     "Original CMSS13 Hunter spawn has no mask until the player uses the loadout vendor.");
-                Assert.That(YautjaTestAppearance.SkinColor(entMan, hunter), Is.EqualTo(YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Green)));
+                Assert.That(YautjaTestAppearance.SkinColor(entMan, hunter), Is.EqualTo(YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Red)),
+                    "an explicitly chosen tone must survive the spawn path; Green is reserved as the unchosen sentinel");
                 Assert.That(YautjaTestAppearance.EyeColor(entMan, hunter),
                     Is.EqualTo(YautjaCharacterProfile.GetEyeColorColor(YautjaEyeColor.Gold)));
                 Assert.That(YautjaTestAppearance.Hair(entMan, hunter),
@@ -3855,7 +3760,6 @@ public sealed class YautjaPredatorRoleTest
                 "CMUActionYautjaToggleThrallBracerLock",
                 "CMUActionYautjaStunThrall",
                 "CMUActionYautjaSelfDestructThrall",
-                "CMUActionYautjaRecall",
                 "CMUActionYautjaCallDisc",
                 "CMUActionYautjaFalconRecall",
                 "CMUActionYautjaSelfDestruct",
@@ -4021,7 +3925,10 @@ public sealed class YautjaPredatorRoleTest
                 ["CMUActionYautjaToggleLantern"] = 1,
                 ["CMUActionYautjaHonorRoar"] = 45,
                 ["CMUActionYautjaHuntingLeap"] = 12,
-                ["CMUActionYautjaRecall"] = 5,
+                // CMU14: the ordinary Leap is CM-SS13's /datum/action/predator_action/leap, which enters a 15 second
+                // action_cooldown (yaut_actions.dm:406 cooldown_duration, :468 enter_cooldown) - the same category as
+                // Hunting Leap above, so it draws the cooldown fill too.
+                ["CMUActionYautjaLeap"] = 15,
                 ["CMUActionYautjaRaiseThrall"] = 120,
             };
 

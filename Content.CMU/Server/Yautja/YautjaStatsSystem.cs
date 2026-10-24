@@ -1,6 +1,5 @@
 using System.Numerics;
 using Content.Server.Humanoid;
-using Content.Server.Hands.Systems;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Medical.Injuries;
 using Content.Shared._RMC14.Commendations;
@@ -17,9 +16,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
-using Content.Shared.Actions.Events;
 using Content.Shared.Body;
-using Content.Shared.CombatMode;
 using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
 using Content.Shared.IdentityManagement.Components;
@@ -31,33 +28,37 @@ using Content.Shared.NPC.Systems;
 using Content.Shared.Speech;
 using Content.Shared.Speech.Components;
 using Content.Shared.StatusIcon.Components;
-using Content.Shared.StatusEffect;
-using Content.Shared.Stunnable;
-using Content.Shared.Tag;
 using Content.Shared.Whitelist;
 using Content.Shared.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Humanoid.Markings;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Content.Server.Chat.Managers;
+using Content.Shared.Chat;
+using Robust.Shared.Player;
 
 namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaStatsSystem : EntitySystem
 {
+    private const float YautjaFemaleChance = 0.2f;
+
     [Dependency] private NpcFactionSystem _faction = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
+
+    [Dependency] private YautjaProfileApplySystem _profileApply = default!;
     [Dependency] private HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
     [Dependency] private HumanoidProfileSystem _humanoidProfile = default!;
     [Dependency] private GunIFFSystem _iff = default!;
     [Dependency] private YautjaAbilitySystem _abilities = default!;
+    [Dependency] private IChatManager _chatManager = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
     [Dependency] private NamingSystem _naming = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RMCStatusEffectSystem _rmcStatusEffects = default!;
     [Dependency] private SkillsSystem _skills = default!;
-    [Dependency] private TagSystem _tags = default!;
     [Dependency] private YautjaHonorboundAbilitiesSystem _honorboundAbilities = default!;
     [Dependency] private SharedCMAutomatedVendorSystem _vendors = default!;
     [Dependency] private YautjaVoiceSystem _voice = default!;
@@ -65,9 +66,6 @@ public sealed partial class YautjaStatsSystem : EntitySystem
 
     private const string YautjaSpecies = "Yautja";
     private const string DreadlocksMarking = "CMUYautjaDreadlocksStandard";
-    private static readonly ProtoId<TagPrototype> StunImmuneTag = "StunImmune";
-    private static readonly ProtoId<TagPrototype> SlowImmuneTag = "SlowImmune";
-    private static readonly ProtoId<StatusEffectPrototype> UnconsciousStatus = "Unconscious";
     private const int Cmss13TotalBuyPoints = 50;
     private static readonly Color DreadlocksColor = Color.FromHex("#1a1512");
     private static readonly Dictionary<string, int> Cmss13YautjaBuyCategoryUses = new()
@@ -87,46 +85,16 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     {
         SubscribeLocalEvent<YautjaComponent, ComponentInit>(OnYautjaInit);
         SubscribeLocalEvent<YautjaComponent, ComponentStartup>(OnYautjaStartup);
+        SubscribeLocalEvent<YautjaYoungbloodComponent, MapInitEvent>(OnYoungbloodMapInit);
+        // CMU14: a role spawn adds this component after map init, so MapInit alone never fires for youngbloods - their
+        // profile was never applied and every one of them rendered with the species default. ComponentStartup fires
+        // whenever the component is added, which covers both spawn paths.
+        SubscribeLocalEvent<YautjaYoungbloodComponent, ComponentStartup>(OnYoungbloodStartup);
         SubscribeLocalEvent<YautjaComponent, ComponentShutdown>(OnYautjaShutdown);
         SubscribeLocalEvent<YautjaComponent, MapInitEvent>(OnYautjaMapInit);
         SubscribeLocalEvent<YautjaComponent, IdentityChangedEvent>(OnIdentityChanged);
         SubscribeLocalEvent<YautjaComponent, RandomHumanoidSpawnedEvent>(OnRandomHumanoidSpawned);
-        SubscribeLocalEvent<YautjaComponent, RMCStatusEffectTimeEvent>(OnStatusEffectTime);
-
-        SubscribeLocalEvent<YautjaComponent, KnockDownAttemptEvent>(OnKnockDownAttempt);
-        SubscribeLocalEvent<YautjaComponent, DisarmAttemptEvent>(OnDisarmAttempt);
-        SubscribeLocalEvent<YautjaComponent, DisarmedEvent>(OnDisarmed, before: [typeof(HandsSystem)]);
-    }
-
-    private bool IsRegularYautja(EntityUid uid)
-        => !HasComp<YautjaBadBloodComponent>(uid);
-
-    private void OnStatusEffectTime(Entity<YautjaComponent> ent, ref RMCStatusEffectTimeEvent args)
-    {
-        if (IsRegularYautja(ent) && args.Key == UnconsciousStatus)
-            args.Duration = TimeSpan.Zero;
-    }
-
-
-    private void OnKnockDownAttempt(Entity<YautjaComponent> ent, ref KnockDownAttemptEvent args)
-    {
-        if (!IsRegularYautja(ent))
-            return;
-
-        args.Drop = false;
-        args.Cancelled = true;
-    }
-
-    private void OnDisarmAttempt(Entity<YautjaComponent> ent, ref DisarmAttemptEvent args)
-    {
-        if (IsRegularYautja(ent))
-            args.Cancelled = true;
-    }
-
-    private void OnDisarmed(Entity<YautjaComponent> ent, ref DisarmedEvent args)
-    {
-        if (IsRegularYautja(ent))
-            args.Handled = true;
+        SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);
     }
 
     private void OnYautjaInit(Entity<YautjaComponent> ent, ref ComponentInit args)
@@ -138,6 +106,12 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     private void OnYautjaStartup(Entity<YautjaComponent> ent, ref ComponentStartup args)
     {
         ApplyIntrinsicStats(ent);
+
+        // CMU14: a youngblood's own component can arrive before the Yautja/humanoid components exist, in which case its
+        // handler bails and nothing retries - leaving the species default tone for every youngblood. Re-run the shared
+        // profile application here, where all three components are guaranteed present.
+        if (HasComp<YautjaYoungbloodComponent>(ent.Owner))
+            ApplyYoungbloodProfile(ent.Owner);
         ent.Comp.SkinColorRandomized = false;
         _pendingSkinRandomization.Add(ent);
         _abilities.GrantActions(ent);
@@ -161,6 +135,35 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     {
         ApplyIntrinsicStats(ent);
         _honorboundAbilities.GrantActions(ent);
+    }
+
+    // CMU14: the entry message needs a live session. RandomHumanoidSpawnedEvent fires before the player is attached
+    // (and mid-round antag spawns never see PlayerSpawnCompleteEvent), so delivery hangs off PlayerAttachedEvent,
+    // which hands us the session directly.
+    private void OnPlayerAttached(PlayerAttachedEvent args)
+    {
+        if (!TryComp(args.Entity, out YautjaComponent? yautja) || yautja.EntryMessageSent)
+            return;
+
+        yautja.EntryMessageSent = true;
+        SendEntryMessage(args.Entity, args.Player);
+    }
+
+    // CMU14: mirrors CM-SS13's /datum/job/antag/predator/announce_entry_message (pred.dm:51-55). SPAN_NOTICE is
+    // the "notice" span class (code/span_macros.dm:70), which SS14 represents as ChatChannel.Server - the system
+    // message channel - not as an in-character line. Sent only to the spawning hunter's session.
+    private void SendEntryMessage(EntityUid hunter, ICommonSession session)
+    {
+        SendEntryLine(hunter, session, "cmu-yautja-entry-1");
+        SendEntryLine(hunter, session, "cmu-yautja-entry-2");
+        SendEntryLine(hunter, session, "cmu-yautja-entry-3");
+        SendEntryLine(hunter, session, "cmu-yautja-entry-4");
+    }
+
+    private void SendEntryLine(EntityUid hunter, ICommonSession session, string key)
+    {
+        var text = Loc.GetString(key);
+        _chatManager.ChatMessageToOne(ChatChannel.Server, text, text, hunter, false, session.Channel);
     }
 
     private void OnIdentityChanged(Entity<YautjaComponent> ent, ref IdentityChangedEvent args)
@@ -191,8 +194,6 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         var badBlood = HasComp<YautjaBadBloodComponent>(ent);
         if (badBlood)
         {
-            _tags.RemoveTag(ent, StunImmuneTag);
-            _tags.RemoveTag(ent, SlowImmuneTag);
             var slowOnDamage = EnsureComp<SlowOnDamageComponent>(ent);
             slowOnDamage.SpeedModifierThresholds = new(ent.Comp.SlowOnDamageThresholds);
             Dirty(ent, slowOnDamage);
@@ -200,8 +201,6 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         }
         else
         {
-            _tags.AddTag(ent, StunImmuneTag);
-            _tags.AddTag(ent, SlowImmuneTag);
             RemComp<SlowOnDamageComponent>(ent);
             var resilience = EnsureComp<CMUMedicalResilienceComponent>(ent);
             resilience.PainAccumulationMultiplier = ent.Comp.PainAccumulationMultiplier;
@@ -316,6 +315,69 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         _humanoidAppearance.SetMarkings(ent, organ, HumanoidVisualLayers.Hair, [dreadlocks]);
     }
 
+
+    /// <summary>
+    /// CMU14: a spawned youngblood is randomised like any hunter - CM-SS13's load_name picks gender with an 80/20
+    /// male/female weight ("female hunters are rare"). Colour, name and gear all go through the same ApplyProfile path
+    /// hunters use; there is deliberately no youngblood-specific colour code.
+    /// </summary>
+    private void OnYoungbloodStartup(Entity<YautjaYoungbloodComponent> ent, ref ComponentStartup args)
+    {
+        ApplyYoungbloodProfile(ent.Owner);
+    }
+
+    private void OnYoungbloodMapInit(Entity<YautjaYoungbloodComponent> ent, ref MapInitEvent args)
+    {
+        ApplyYoungbloodProfile(ent.Owner);
+    }
+
+    /// <summary>
+    /// Replaces an existing youngblood profile's tone with a rolled CM-SS13 palette colour and re-applies it, so the
+    /// renderer picks the matching pre-coloured variant. Uses the same palette as the Hunter randomiser.
+    /// </summary>
+    private void RollYoungbloodTone(EntityUid uid)
+    {
+        if (!TryComp<YautjaAppliedProfileComponent>(uid, out var applied))
+            return;
+
+        var tone = _random.Pick(YautjaCharacterProfile.SkinColorOrder[..6]);
+        applied.Profile = applied.Profile.WithSkinColor(tone);
+        _profileApply.ApplyProfile(uid, applied.Profile, equipProfileGear: false);
+    }
+
+    /// <summary>
+    /// CMU14: rolls a CM-SS13 palette tone onto a youngblood that already has a profile (console spawns build one from the
+    /// species default). Same palette call the hunter randomiser uses.
+    /// </summary>
+    public void EnsureYoungbloodTone(EntityUid uid)
+    {
+        ApplyYoungbloodProfile(uid);
+    }
+
+    private void ApplyYoungbloodProfile(EntityUid uid)
+    {
+        // No YautjaComponent requirement: CMUMobYautjaYoungblood's prototype does not carry one (it parents
+        // AppearanceYautja + CMMobHuman), which is why this never ran and every youngblood kept the tan species default.
+        if (!HasComp<HumanoidProfileComponent>(uid))
+            return;
+
+        // A console-spawned youngblood already carries a profile built from the species default tone (tan), so reusing it
+        // unchanged gave every youngblood the same colour. Roll the shared palette onto whatever profile is there.
+        if (HasComp<YautjaAppliedProfileComponent>(uid))
+        {
+            RollYoungbloodTone(uid);
+            return;
+        }
+
+        // Reuse the same palette roll normal Hunters use: CM-SS13's load_name picks gender 80/20 and load_race picks the
+        // tone from PRED_SKIN_COLOR. Choosing it here rather than relying on ApplyProfile's "unchosen" fallback means a
+        // spawn-menu youngblood always gets a rolled tone instead of the profile default.
+        var profile = new YautjaCharacterProfile()
+            .WithSex(_random.Prob(YautjaFemaleChance) ? Sex.Female : Sex.Male)
+            .WithSkinColor(_random.Pick(YautjaCharacterProfile.SkinColorOrder[..6]));
+        _profileApply.ApplyProfile(uid, profile, equipProfileGear: false);
+    }
+
     private void RandomizeSkinColor(Entity<YautjaComponent> ent, HumanoidProfileComponent humanoid)
     {
         if (ent.Comp.SkinColorRandomized ||
@@ -328,11 +390,11 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         if (!ent.Comp.RandomizeSkinColor)
             return;
 
-        var hue = _random.NextFloat(ent.Comp.SkinHueMin, ent.Comp.SkinHueMax);
-        var sat = _random.NextFloat(ent.Comp.SkinSaturationMin, ent.Comp.SkinSaturationMax);
-        var val = _random.NextFloat(ent.Comp.SkinValueMin, ent.Comp.SkinValueMax);
-        var skinColor = Color.FromHsv(new Vector4(hue, sat, val, 1f));
-        _humanoidAppearance.TrySetSkinColor(ent, skinColor);
+        // CMU14: same rule for hunters and youngbloods - CM-SS13 picks the tone from PRED_SKIN_COLOR (load_race),
+        // so the HSV band that produced colours the reference does not offer is gone.
+        _humanoidAppearance.TrySetSkinColor(
+            ent,
+            YautjaCharacterProfile.GetSkinColorColor(_random.Pick(YautjaCharacterProfile.SkinColorOrder[..6])));
     }
 
     private void GrantAllSkills(Entity<YautjaComponent> ent)

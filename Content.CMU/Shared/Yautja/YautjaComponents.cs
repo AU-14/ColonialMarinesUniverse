@@ -64,18 +64,6 @@ public sealed partial class YautjaComponent : Component
     public float StunResistance = 1.5f;
 
     [DataField]
-    public float ShoveChanceBonus = 0.2f;
-
-    [DataField]
-    public float XenoTackleSuccessChance = 0.75f;
-
-    [DataField]
-    public int XenoTackleSuccessesRequired = 2;
-
-    [DataField]
-    public TimeSpan XenoTackleExpireAfter = TimeSpan.FromSeconds(4);
-
-    [DataField]
     public Dictionary<FixedPoint2, float> SlowOnDamageThresholds = new()
     {
         { 160, 0.9f },
@@ -169,6 +157,52 @@ public sealed partial class YautjaComponent : Component
 
     [DataField]
     public EntProtoId ButcherActionId = "CMUActionYautjaButcher";
+
+    [DataField]
+    public EntProtoId LeapActionId = "CMUActionYautjaLeap";
+
+    /// <summary>
+    /// CMU14: set once the spawn entry message has been delivered to the player's session.
+    /// </summary>
+    [ViewVariables]
+    public bool EntryMessageSent;
+
+    public EntityUid? LeapAction;
+
+    /// <summary>
+    /// CMU14: multiplier on the BASE throw speed of objects this Yautja throws. HandsSystem hands this value to
+    /// ThrowingSystem as baseThrowSpeed, which feeds its compensateFriction formula, so the object covers the same
+    /// distance faster rather than overshooting - the compensation still solves for the cursor distance.
+    /// </summary>
+    [DataField]
+    public float ThrowSpeedMultiplier = 1.8f;
+
+    [DataField]
+    public float LeapThrowSpeed = 5f;
+
+    [DataField]
+    public float LeapMaxRange = 7f;
+
+    [DataField]
+    public TimeSpan LeapWindup = TimeSpan.FromSeconds(0.6);
+
+    /// <summary>
+    /// CMU14: CM-SS13 winds up twice as long when leaping upward (yaut_actions.dm:461: 2s up, 1s otherwise).
+    /// </summary>
+    [DataField]
+    public TimeSpan LeapUpWindup = TimeSpan.FromSeconds(2);
+
+    [DataField]
+    public TimeSpan LeapDownWindup = TimeSpan.FromSeconds(1);
+
+    [DataField]
+    public EntProtoId LeapWarningPrototype = "CMUYautjaLeapWarning";
+
+    /// <summary>
+    /// CMU14: played on launch. CM-SS13 picks one of pred_leap1/pred_leap2 (yaut_actions.dm:468).
+    /// </summary>
+    [DataField]
+    public SoundSpecifier LeapSound = new SoundCollectionSpecifier("CMUYautjaLeap");
 
     [ViewVariables]
     public EntityUid? ButcherAction;
@@ -405,7 +439,7 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public FixedPoint2 Charge = 3000;
 
     [DataField]
-    public FixedPoint2 Regen = 60;
+    public FixedPoint2 Regen = 100;
 
     [DataField]
     public FixedPoint2 EmpPowerDrain = 1000;
@@ -478,15 +512,6 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public EntityUid? OpenMarkPanelAction;
 
     [DataField]
-    public bool EnableRecall = true;
-
-    [DataField]
-    public EntProtoId RecallActionId = "CMUActionYautjaRecall";
-
-    [ViewVariables]
-    public EntityUid? RecallAction;
-
-    [DataField]
     public EntProtoId CallDiscActionId = "CMUActionYautjaCallDisc";
 
     [ViewVariables]
@@ -496,10 +521,10 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public FixedPoint2 CallDiscPowerCost = 70;
 
     [DataField]
-    public float CallDiscRange = 10f;
+    public float CallDiscRange = 15f;
 
     [DataField]
-    public float CallDiscActiveRange = 7f;
+    public float CallDiscActiveRange = 15f; // CMU14: same screenwide reach while the disc is active (CM uses 7).
 
     [DataField]
     public TimeSpan CallDiscCooldown = TimeSpan.FromSeconds(10);
@@ -751,7 +776,7 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public float CloakMovingOpacity = 0.10f;
 
     [DataField]
-    public bool CloakRestrictWeapons = true;
+    public bool CloakRestrictWeapons;
 
     [DataField]
     public bool CloakHideNightVision = true;
@@ -830,6 +855,9 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public EntityUid? SelfDestructArmStream;
 
     [ViewVariables]
+    public EntityUid? SelfDestructWarningStream;
+
+    [ViewVariables]
     public EntityUid? SelfDestructLaughStream;
 
     [DataField]
@@ -895,11 +923,20 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     [DataField]
     public TimeSpan NonYautjaCloakShockEvery = TimeSpan.FromSeconds(2);
 
+    // CMU14: yaut_bracers.dm:107-114 (base bracer) shocks a non-tech wearer with prob(2) while cloaked.
     [DataField]
-    public float NonYautjaCloakShockChance = 0.04f;
+    public float NonYautjaCloakShockChance = 0.02f;
 
     [DataField]
     public TimeSpan NextNonYautjaCloakShock;
+
+    // CMU14: yaut_bracers.dm:392-400 (hunter bracer) shocks a non-tech wearer with prob(4) every tick
+    // whether or not they are cloaked; the hunter also inherits the cloak-gated prob(2) above.
+    [DataField]
+    public float NonYautjaShockChance;
+
+    [DataField]
+    public TimeSpan NextNonYautjaShock;
 
     [DataField]
     public float BulletDecloakChance = 0.20f;
@@ -1384,13 +1421,6 @@ public sealed partial class YautjaAbominationRoarBuffComponent : Component
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class YautjaRecallableComponent : Component
-{
-    [DataField, AutoNetworkedField]
-    public EntityUid? YautjaOwner;
-}
-
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class YautjaChainedWeaponComponent : Component
 {
     [DataField]
@@ -1436,6 +1466,13 @@ public sealed partial class YautjaSmartDiscComponent : Component
 
     [DataField]
     public float SpinVelocity = 24f;
+
+    // CMU14: where the disc was when a throw was last attempted while it had no ThrownItemComponent. The
+    // steering helpers run every tick and re-throw in that state, so a disc stopped by a wall used to be
+    // re-thrown - and announced by the engine's throwing chat line ("smart-disc throws smart-disc") - on every
+    // tick. While the disc has not moved since this position the throw is skipped instead.
+    [DataField]
+    public Vector2? LastThrowAttemptPosition;
 
     [DataField]
     public int MaxHits = 3;
@@ -1571,8 +1608,13 @@ public sealed partial class YautjaTechItemComponent : Component
     [DataField]
     public float DamageMultiplier = 1.5f;
 
+    // CMU14: CM-SS13's flags_item = ITEM_PREDATOR only attaches /datum/element/yautja_tracked_item
+    // (code/game/objects/items.dm); carrying, swinging and throwing Yautja gear is unrestricted for
+    // everyone there, and the item's own pickup()/equipped() overrides only add flavour text. The two
+    // flags that stay on by default mirror the functions CM-SS13 really does gate behind
+    // TRAIT_YAUTJA_TECH: in-hand activation and firing.
     [DataField]
-    public bool BlockPickup = true;
+    public bool BlockPickup;
 
     [DataField]
     public bool BlockUse = true;
@@ -1581,10 +1623,10 @@ public sealed partial class YautjaTechItemComponent : Component
     public bool AllowNonYautjaActiveHandUse;
 
     [DataField]
-    public bool BlockMelee = true;
+    public bool BlockMelee;
 
     [DataField]
-    public bool BlockThrow = true;
+    public bool BlockThrow;
 
     [DataField]
     public bool BlockShoot = true;
@@ -2851,9 +2893,6 @@ public sealed partial class YautjaTrapComponent : Component
 
     [DataField]
     public bool ForceHumanPainEmote;
-
-    [DataField]
-    public TimeSpan XenoInterferenceDuration;
 }
 
 [Serializable, NetSerializable]
@@ -3023,6 +3062,9 @@ public sealed partial class YautjaShieldHeldPrefixComponent : Component
 [RegisterComponent]
 public sealed partial class YautjaCombistickComponent : Component
 {
+    [NonSerialized]
+    public bool AllowToggle;
+
     [DataField]
     public EntProtoId FoldActionId = "CMUActionYautjaFoldCombistick";
 
@@ -3228,17 +3270,13 @@ public sealed partial class YautjaChainGauntletPullComponent : Component
 public sealed partial class YautjaChainWrapperComponent : Component;
 
 [RegisterComponent]
-public sealed partial class YautjaMeleeXenoInterferenceComponent : Component
-{
-    [DataField]
-    public TimeSpan Duration = TimeSpan.FromSeconds(30);
-}
-
-[RegisterComponent]
 public sealed partial class YautjaScytheBonusStrikeComponent : Component
 {
     [DataField]
     public float Chance = 0.15f;
+
+    [DataField]
+    public TimeSpan FollowUpDelay = TimeSpan.FromMilliseconds(200);
 }
 
 [RegisterComponent]
@@ -3399,9 +3437,6 @@ public sealed partial class YautjaPlasmaRifleBoltComponent : Component
 
     [DataField]
     public float XenoExtraDamageMultiplier = 0.75f;
-
-    [DataField]
-    public TimeSpan XenoInterferenceDuration = TimeSpan.FromSeconds(30);
 }
 
 [RegisterComponent]
@@ -3438,6 +3473,11 @@ public sealed partial class YautjaCasterImmobilizerProjectileComponent : Compone
 
     [DataField]
     public TimeSpan YautjaStunReduction = TimeSpan.FromSeconds(2);
+
+    [DataField]
+    public SoundSpecifier StunSound = new SoundPathSpecifier(
+        "/Audio/CMU14/Yautja/Effects/wave.ogg",
+        AudioParams.Default.WithVolume(3f).WithMaxDistance(25f));
 }
 
 [RegisterComponent]
@@ -3446,11 +3486,24 @@ public sealed partial class YautjaCasterSingleLethalProjectileComponent : Compon
 [RegisterComponent]
 public sealed partial class YautjaCasterEradicatorProjectileComponent : Component
 {
+    // CMU14: the eradicator's TriggerOnCollide fires once per colliding fixture, and ExplodeOnTriggerSystem
+    // explodes unconditionally on every trigger, so a wall impact could detonate several times in one tick (extra
+    // shockwaves, 10-16 shrapnel and 5 scorch decals each) This latch makes the bolt explode exactly once.
+    public bool Triggered;
+
+    // CMU14: CM-SS13 destroys doors through its explosion (door.dm ex_act qdels above EXPLOSION_THRESHOLD_LOW), not
+    // through the projectile. The bolt sweeps doors in this radius when its trigger fires, i.e. as the explosion
+    // goes off, so a shot landing next to a door still breaches it.
+    [DataField]
+    public float DoorBreachRadius = 1.5f;
+
     [DataField]
     public TimeSpan VehicleSlowdownTime = TimeSpan.FromSeconds(5);
 
+    // CMU14: CM-SS13's eradicator on_hit_obj calls ex_act(150, dir, cause_data, 100) on the multitile vehicle
+    // (code/datums/ammo/energy.dm), i.e. 150 damage at 100% probability. This was 100.
     [DataField]
-    public float VehicleHullDamage = 100f;
+    public float VehicleHullDamage = 150f;
 
     [DataField]
     public SoundSpecifier VehicleImpactSound = new SoundPathSpecifier("/Audio/_RMC14/Effects/meteorimpact.ogg");

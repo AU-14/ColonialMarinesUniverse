@@ -193,14 +193,12 @@ public sealed class YautjaCharacterProfileTest
             Assert.That(YautjaCharacterProfile.SkinColorOrder,
                 Is.EqualTo(new[]
                 {
-                    YautjaSkinColor.Green,
                     YautjaSkinColor.Tan,
+                    YautjaSkinColor.Green,
                     YautjaSkinColor.Purple,
                     YautjaSkinColor.Blue,
                     YautjaSkinColor.Red,
                     YautjaSkinColor.Black,
-                    Enum.Parse<YautjaSkinColor>("Gray"),
-                    Enum.Parse<YautjaSkinColor>("White"),
                 }));
             Assert.That(YautjaCharacterProfile.EyeColorOrder,
                 Is.EqualTo(new[]
@@ -223,8 +221,6 @@ public sealed class YautjaCharacterProfileTest
         });
     }
 
-    [TestCase("Gray", 128, 128, 128, "cmu-yautja-profile-skin-color-gray")]
-    [TestCase("White", 255, 255, 255, "cmu-yautja-profile-skin-color-white")]
     public void NewSkinPresetRoundTripsThroughAppearance(
         string enumName,
         byte red,
@@ -250,60 +246,33 @@ public sealed class YautjaCharacterProfileTest
     }
 
     [Test]
-    public async Task AchromaticSkinPresetsDesaturateWarmBodySprites()
+    public void LegacyAchromaticSkinColorsSanitiseToABakedTone()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
-        var client = pair.Client;
-
-        await client.WaitPost(() =>
+        // Gray and White were cut from the CM-SS13 PRED_SKIN_COLOR set: only six pre-coloured body variants ship, and the
+        // picker/randomizers only ever offered those six. A profile saved before the cut can still carry the raw RGB
+        // value, so the sanitiser has to land it on the nearest baked tone instead of leaving an untextured body.
+        Assert.Multiple(() =>
         {
-            var entMan = client.EntMan;
-            foreach (var skinColor in new[] { YautjaSkinColor.Gray, YautjaSkinColor.White })
+            Assert.That(YautjaCharacterProfile.SkinColorOrder, Has.Length.EqualTo(YautjaCharacterProfile.SkinToneColors.Length),
+                "the selectable palette and the baked tone colours must stay one-to-one");
+
+            foreach (var legacy in new[]
+                     {
+                         new Color((byte) 128, (byte) 128, (byte) 128),
+                         new Color((byte) 255, (byte) 255, (byte) 255),
+                     })
             {
-                var dummy = entMan.Spawn("CMUMobYautjaDummy");
-                try
-                {
-                    var profile = HumanoidCharacterProfile.DefaultWithSpecies("Yautja");
-                    profile.Appearance = profile.Appearance.WithSkinColor(
-                        YautjaCharacterProfile.GetSkinColorColor(skinColor));
-                    YautjaTestAppearance.Apply(entMan, dummy, profile);
+                var stored = YautjaCharacterProfile.Default
+                    .WithAppearance(YautjaCharacterProfile.Default.Appearance.WithSkinColor(legacy));
+                var sanitized = stored.Clone();
 
-                    var sprite = entMan.GetComponent<SpriteComponent>(dummy);
-                    Assert.That(entMan.System<SpriteSystem>().LayerMapTryGet((dummy, sprite), HumanoidVisualLayers.Chest, out var chestLayer, logMissing: false), Is.True);
-                    var chest = (SpriteComponent.Layer) sprite[chestLayer];
-                    Assert.That(chest.ShaderPrototype?.Id, Is.EqualTo("Greyscale"),
-                        $"{skinColor} must neutralize the warm source texture instead of inheriting its yellow cast.");
-
-                    YautjaTestAppearance.Apply(entMan,
-                        dummy,
-                        HumanoidCharacterProfile.DefaultWithSpecies("Human"));
-
-                    Assert.That(chest.ShaderPrototype, Is.Null,
-                        "The Yautja skin shader must not leak when a preview dummy is reused for another species.");
-
-                    YautjaTestAppearance.Apply(entMan,
-                        dummy,
-                        HumanoidCharacterProfile.DefaultWithSpecies("Yautja"));
-                    YautjaTestAppearance.Apply(entMan, dummy,
-                        HumanoidCharacterProfile.DefaultWithSpecies("Yautja").WithCharacterAppearance(
-                            profile.Appearance.WithSkinColor(YautjaCharacterProfile.GetSkinColorColor(skinColor))));
-                    Assert.That(chest.ShaderPrototype?.Id, Is.EqualTo("Greyscale"));
-
-                    YautjaTestAppearance.Apply(entMan,
-                        dummy,
-                        HumanoidCharacterProfile.DefaultWithSpecies("WorkingJoe"));
-
-                    Assert.That(chest.ShaderPrototype, Is.Null,
-                        "The Yautja skin shader must also be cleared for species whose body sprites do not match skin color.");
-                }
-                finally
-                {
-                    entMan.DeleteEntity(dummy);
-                }
+                Assert.That(YautjaCharacterProfile.SkinColorOrder, Does.Contain(sanitized.SkinColor),
+                    $"legacy skin {legacy} must snap to one of the six baked tones");
+                Assert.That(sanitized.Appearance.SkinColor,
+                    Is.EqualTo(YautjaCharacterProfile.GetSkinColorColor(sanitized.SkinColor)),
+                    $"legacy skin {legacy} must be replaced by the baked tone, not kept as a raw colour");
             }
         });
-
-        await pair.CleanReturnAsync();
     }
 
     [Test]
@@ -1058,6 +1027,40 @@ public sealed class YautjaCharacterProfileTest
             25,
             10,
             100);
+    }
+
+    // CM-SS13 has six predator skins: code/__DEFINES/pred.dm:11 PRED_SKIN_COLOR = tan, green, purple, blue, red,
+    // black. The colours themselves are not constants - /datum/pred_picker samples the centre pixel of each
+    // "[colour]_torso_pred_m" state in the species icobase (icons/mob/humans/species/r_predator.dmi). These are
+    // those samples, so the picker has to offer the reference skins first, in reference order, with reference colour.
+    [Test]
+    public void YautjaSkinPaletteMatchesCmss13PredSkinColors()
+    {
+        var reference = new (YautjaSkinColor Kind, string Name, byte R, byte G, byte B)[]
+        {
+            (YautjaSkinColor.Tan, "tan", 166, 153, 100),
+            (YautjaSkinColor.Green, "green", 120, 125, 101),
+            (YautjaSkinColor.Purple, "purple", 136, 119, 144),
+            (YautjaSkinColor.Blue, "blue", 125, 139, 150),
+            (YautjaSkinColor.Red, "red", 105, 57, 59),
+            (YautjaSkinColor.Black, "black", 72, 69, 77),
+        };
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(YautjaCharacterProfile.SkinColorOrder.Take(reference.Length).Select(kind => kind),
+                Is.EqualTo(reference.Select(row => row.Kind)),
+                "the picker lists the CM-SS13 skins first, in PRED_SKIN_COLOR order");
+
+            foreach (var row in reference)
+            {
+                var color = YautjaCharacterProfile.GetSkinColorColor(row.Kind);
+                Assert.That(
+                    ((byte) MathF.Round(color.R * 255f), (byte) MathF.Round(color.G * 255f), (byte) MathF.Round(color.B * 255f)),
+                    Is.EqualTo((row.R, row.G, row.B)),
+                    $"{row.Name} must be the {row.Name}_torso_pred_m colour from r_predator.dmi");
+            }
+        });
     }
 
     private sealed record SpecialMaskRow(

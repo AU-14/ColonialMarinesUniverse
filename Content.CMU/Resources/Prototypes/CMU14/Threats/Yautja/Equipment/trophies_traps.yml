@@ -701,7 +701,6 @@
     blocksXenoHeal: true
     forceXenoHelpEmote: true
     forceHumanPainEmote: true
-    xenoInterferenceDuration: 100
     preyTrackingDuration: 300
   - type: StepTrigger
     active: false

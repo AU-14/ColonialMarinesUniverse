@@ -126,7 +126,17 @@ public sealed class YautjaLanguageRegressionTest
             entMan.EventBus.RaiseLocalEvent(bracer, new UseInHandEvent(human));
             AssertLanguagesUnchanged(entMan, human, spokenBefore, understoodBefore);
 
-            Assert.That(inventory.TryEquip(human, bracer, "gloves", silent: true, force: true), Is.True);
+            // Bracers are usable, so using one in hand wears it. Equip only if the use left it in hand, either way
+            // it ends up on the gloves slot.
+            if (inventory.TryGetSlotEntity(human, "gloves", out var worn))
+            {
+                Assert.That(worn, Is.EqualTo(bracer), "using the bracer in hand wears that same bracer");
+            }
+            else
+            {
+                Assert.That(inventory.TryEquip(human, bracer, "gloves", silent: true, force: true), Is.True);
+            }
+
             AssertLanguagesUnchanged(entMan, human, spokenBefore, understoodBefore);
 
             Assert.That(inventory.TryUnequip(human, "gloves", silent: true, force: true), Is.True);

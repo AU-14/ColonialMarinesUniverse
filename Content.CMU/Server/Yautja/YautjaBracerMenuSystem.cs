@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared.CMU14.Xenonids.Hive;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Actions;
@@ -7,6 +8,7 @@ using Content.Shared.Actions;
 using Content.Shared.Item;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Station;
 using Content.Shared.UserInterface;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
@@ -30,6 +32,7 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
     [Dependency] private YautjaMarkSystem _marks = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedStationSystem _station = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -236,7 +239,9 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
         var yautja = EntityQueryEnumerator<YautjaComponent, TransformComponent>();
         while (yautja.MoveNext(out var uid, out _, out var xform))
         {
-            if (uid == bracer || !_mobState.IsDead(uid))
+            // CMU14: yaut_bracers.dm:738 applies the same AREA_YAUTJA_GROUNDS skip to dead Yautja, so bodies
+            // resting aboard the Yautja ship are not announced as bio signatures that need recovering.
+            if (uid == bracer || !_mobState.IsDead(uid) || IsAboardYautjaShip(uid))
                 continue;
 
             var coords = _transform.GetMapCoordinates(uid, xform);
@@ -376,7 +381,22 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
 
     private bool ShouldHideFromTracker(EntityUid uid)
     {
-        return IsStoredInsideYautjaGearContainer(uid) || IsOnYautja(uid);
+        return IsStoredInsideYautjaGearContainer(uid) || IsOnYautja(uid) || IsAboardYautjaShip(uid);
+    }
+
+    /// <summary>
+    /// CMU14: yaut_bracers.dm:719 skips any signature whose area carries AREA_YAUTJA_GROUNDS, which
+    /// game/area/Yautja.dm:12 and :162 set on the Yautja ship decks, so gear and bodies aboard the Yautja ship
+    /// are never reported as loose gear needing recovery. CMU has no DM area flags; the equivalent marker for
+    /// those decks is the station-side CMUHunterShipHiveBootstrap that the CMUYautjaHunterShip game map
+    /// declares (Prototypes/CMU14/Maps/huntership.yml). Resolving it through the entity's owning station makes
+    /// this work for gear on the floor, gear inside a container, and gear carried by someone aboard, and it
+    /// stops applying as soon as the gear is off the ship's grids.
+    /// </summary>
+    private bool IsAboardYautjaShip(EntityUid uid)
+    {
+        return _station.GetOwningStation(uid) is { } station &&
+               HasComp<CMUHunterShipHiveBootstrapComponent>(station);
     }
 
     private bool IsStoredInsideYautjaGearContainer(EntityUid uid)
@@ -419,6 +439,12 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             {
                 return true;
             }
+
+            // CMU14: yautja_tracked_item.dm/proc/is_honorable_carrier also counts an honored or thralled
+            // human synth that is still alive, so gear in such a carrier's hands is not "loose" gear and must
+            // not show up as gear that needs recovering.
+            if (HasComp<YautjaTechAuthorizedComponent>(current) && !_mobState.IsDead(current))
+                return true;
 
             if (_containers.TryGetContainingContainer((current, null, null), out var containing))
             {

@@ -77,6 +77,14 @@ public sealed class YautjaWallVisionOverlay : Overlay
 
     private bool HasActiveThermalVisor(EntityUid viewer)
     {
+        // CMU14: the clan mask itself grants the wall vision, so a Yautja is not limited to the thermal visor attachment.
+        if (_inventory.TryGetSlotEntity(viewer, "mask", out var maskSlot) &&
+            maskSlot is { } wornMask &&
+            _entity.HasComponent<YautjaMaskComponent>(wornMask))
+        {
+            return true;
+        }
+
         if (!_inventory.TryGetSlotEntity(viewer, "eyes", out var glasses) ||
             glasses is not { } glassesUid ||
             !_entity.TryGetComponent(glassesUid, out YautjaMaskVisorGlassesComponent? visor) ||

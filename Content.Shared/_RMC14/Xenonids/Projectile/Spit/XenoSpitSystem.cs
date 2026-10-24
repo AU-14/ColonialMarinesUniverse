@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared._RMC14.Explosion;
+using Content.Shared._RMC14.Marines.Skills; // CMU14: Endurance shrugs a weak neurotoxin off
 using Content.Shared._RMC14.OnCollide;
 using Content.Shared._RMC14.Shields;
 using Content.Shared._RMC14.Slow;
@@ -74,10 +75,12 @@ public sealed partial class XenoSpitSystem : EntitySystem
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private XenoInsightSystem _insight = default!;
-    [Dependency] private YautjaAcidResponseSystem _yautjaAcid = default!;
+    [Dependency] private SkillsSystem _skills = default!; // CMU14: Endurance shrugs weak neurotoxin off
 
     private static readonly ProtoId<AlertPrototype> FireAlert = "Fire";
     private static readonly ProtoId<ReagentPrototype> AcidRemovedBy = "Water";
+    private static readonly EntProtoId<SkillDefinitionComponent> EnduranceSkill = "RMCSkillEndurance"; // CMU14: CM-SS13 SKILL_ENDURANCE
+    private const int MaxEndurance = 5; // CMU14: CM-SS13 SKILL_ENDURANCE_MAX, the top of the Endurance scale
 
     private EntityQuery<ProjectileComponent> _projectileQuery;
 
@@ -336,14 +339,32 @@ public sealed partial class XenoSpitSystem : EntitySystem
             return;
         }
 
-        // CMU Related Change
-        // Yautja are immune to acid-imposed slows and paralysis, but damage still applies
-        if (HasComp<XenoAcidProjectileComponent>(spit.Owner) &&
-            _yautjaAcid.ShouldSkipAcidMoveEffects(target))
+        // CMU14 Begin: CM-SS13 /proc/apply_neuro resolves neurotoxin resistance before any slow or
+        // knockdown lands. Max Endurance shrugs a non-insta neurotoxin off first (the Queen's neuro
+        // passes insta_neuro), then NO_NEURO species shrug it off; both gates cover the slow as well.
+        if (spit.Comp.Neurotoxin)
         {
-            PredictedQueueDel(spit.Owner);
-            return;
+            // CMU14: species/chemical immunity is resolved first so a Yautja only ever sees "shrugs off" and never
+            // "withstands" as well (CM-SS13 checks endurance first, which would mask the immunity message for a
+            // max-endurance Yautja). The gates stay mutually exclusive - both return. A scattered spit that
+            // deliberately knocks an immune target down prints nothing, so the knockdown is never implied resisted.
+            if (!spit.Comp.KnocksDownNeuroImmune && ShrugsOffNeurotoxin(target))
+            {
+                var shrugMsg = Loc.GetString("cmu-neurotoxin-shrugs-off", ("target", target));
+                // CMU14: CM-SS13 uses visible_message here, so the target and nearby observers both see it.
+                _popup.PopupEntity(shrugMsg, target, Filter.Pvs(target), true, PopupType.SmallCaution);
+                return;
+            }
+
+            if (!spit.Comp.InstaNeuro && HasMaxEndurance(target))
+            {
+                var withstandMsg = Loc.GetString("cmu-neurotoxin-withstands", ("target", target));
+                // CMU14: CM-SS13 uses visible_message here, so the target and nearby observers both see it.
+                _popup.PopupEntity(withstandMsg, target, Filter.Pvs(target), true, PopupType.SmallCaution);
+                return;
+            }
         }
+        // CMU14 End
 
         var filter = Filter.Pvs(target);
         if (TryComp(spit, out XenoProjectileShotComponent? shot) &&
@@ -373,8 +394,32 @@ public sealed partial class XenoSpitSystem : EntitySystem
             resisted = ev.Cancelled;
         }
 
-        if (!resisted)
+        if (!resisted) // CMU14: upstream line; neurotoxin immunity is resolved earlier in this method
             _stun.TryParalyze(target, spit.Comp.Paralyze, true);
+    }
+
+    // CMU14 method
+    /// <summary>
+    /// CM-SS13 parity: /proc/apply_neuro bails out for species flagged NO_NEURO. In CMU that is the
+    /// Yautja, the same species flag that the neurotoxin guards elsewhere use; synths get their own
+    /// immunity check above.
+    /// </summary>
+    private bool ShrugsOffNeurotoxin(EntityUid target)
+    {
+        // CMU14: CM-SS13 parity - yautja/_species.dm:9 has NO_NEURO and /proc/apply_neuro returns early for it.
+        // The one deliberate exception is the Sentinel neurospit, which opts in via
+        // XenoSlowingSpitProjectileComponent.KnocksDownNeuroImmune so only its knockdown gets through.
+        return HasComp<YautjaComponent>(target);
+    }
+
+    // CMU14 method
+    /// <summary>
+    /// CM-SS13 parity: skillcheck(M, SKILL_ENDURANCE, SKILL_ENDURANCE_MAX) — a target at the top of
+    /// the Endurance scale shrugs a non-insta neurotoxin off entirely.
+    /// </summary>
+    private bool HasMaxEndurance(EntityUid target)
+    {
+        return _skills.GetSkill(target, EnduranceSkill) >= MaxEndurance;
     }
 
     private void OnXenoAcidBallAction(Entity<XenoAcidBallComponent> ent, ref XenoAcidBallActionEvent args)
@@ -545,12 +590,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
 
         if (paralyze != default)
         {
-            // CMU Related Change
-            // Yautja are immune to acid-imposed paralysis
-            if (!_yautjaAcid.ShouldSkipAcidMoveEffects(acided.Owner))
-            {
-                _stun.TryParalyze(acided.Owner, paralyze, true);
-            }
+            _stun.TryParalyze(acided.Owner, paralyze, true); // CMU14: yautja acid paralysis exemption removed (CM-SS13 parity)
             acided.Comp.ResistsNeeded = resists;
         }
 

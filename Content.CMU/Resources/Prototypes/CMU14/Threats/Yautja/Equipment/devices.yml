@@ -12,12 +12,16 @@
   - type: Clothing
     sprite: CMU14/Yautja/bracer.rsi
   - type: YautjaTechItem
+    blockUse: false
   - type: YautjaBracer
     cloakOpacity: 0
     cloakMovingOpacity: 0.035
     charge: 3000
     maxCharge: 3000
-    regen: 60
+    regen: 100
+    # CMU14: CM-SS13 hunter bracers shock a non-Yautja wearer with prob(4) per process tick whether or
+    # not they are cloaked (yaut_bracers.dm:392-400); the thrall bracer keeps only the cloak-gated 2%.
+    nonYautjaShockChance: 0.04
     stabilisingCrystalPrototype: CMUYautjaAutoInjector
     humanStabilisingCrystalPrototype: CMUYautjaThrallAutoInjector
     healingCapsulePrototype: CMUYautjaHealingGel
@@ -29,6 +33,12 @@
     huntingTrapCost: 200
     huntingTrapCooldown: 60
   - type: YautjaGearContainer
+    actionWhitelist:
+    - WristBlades
+    - Caster
+    - Scimitar
+    - Shield
+    - ChainGauntlet
   - type: UserInterface
     interfaces:
       enum.YautjaBracerUIKey.Key:
@@ -146,7 +156,6 @@
   components:
   - type: YautjaBadBloodGearChoice
   - type: YautjaBracer
-    enableRecall: false
     enableRaiseThrall: true
     maxRaiseThrall: 3
     cloakDuration: 20
@@ -480,7 +489,7 @@
     sprite: CMU14/Yautja/smart_disc.rsi
     size: Tiny
   - type: ItemThrowRange
-    range: 12
+    range: 14
   - type: YautjaTechItem
     damageMultiplier: 1
     blockPickup: false
@@ -535,9 +544,9 @@
     damage: 25
   - type: StaminaDamageOnEmbed
     damage: 0
-  - type: YautjaRecallable
 
   - type: MeleeWeapon
+    wideAttackAllowed: false
     damage:
       types:
         Slash: 15
@@ -637,6 +646,7 @@
     speedModifier: 1.5
     pryPowered: true
   - type: MeleeWeapon
+    wideAttackAllowed: false
     wideAnimationRotation: -135
     attackRate: 2
     damage:
@@ -648,13 +658,6 @@
       collection: CMUYautjaWristBladesMiss
     soundHitNonLiving:
       collection: CMUYautjaWristBladesHitDirt
-  - type: MeleeDamageMultiplier
-    multiplier: 0
-    whitelist:
-      components:
-      - Xeno
-  - type: CMArmorPiercing
-    amount: 0
   - type: DamageOtherOnHit
     damage:
       types:
@@ -691,6 +694,7 @@
     speedModifier: 1.5
     pryPowered: true
   - type: MeleeWeapon
+    wideAttackAllowed: false
     wideAnimationRotation: -135
     attackRate: 1
     damage:
@@ -702,13 +706,6 @@
       collection: CMUYautjaSwordMiss
     soundHitNonLiving:
       collection: CMUYautjaSwordHitDirt
-  - type: MeleeDamageMultiplier
-    multiplier: 0
-    whitelist:
-      components:
-      - Xeno
-  - type: CMArmorPiercing
-    amount: 0
   - type: DamageOtherOnHit
     damage:
       types:
@@ -744,19 +741,13 @@
   - type: YautjaTechItem
   - type: YautjaChainGauntlet
   - type: MeleeWeapon
+    wideAttackAllowed: false
     attackRate: 1
     damage:
       types:
         Blunt: 20
     soundHit:
       collection: CMUYautjaChainGauntletHit
-  - type: MeleeDamageMultiplier
-    multiplier: 0
-    whitelist:
-      components:
-      - Xeno
-  - type: CMArmorPiercing
-    amount: 0
   - type: StaminaDamageOnHit
     damage: 15
   - type: DamageImpactProfile
@@ -955,7 +946,6 @@
   description: A compact alien applicator for rapid emergency treatment.
   suffix: Yautja
   components:
-  - type: YautjaRecallable
   - type: Sprite
     sprite: CMU14/Yautja/medical.rsi
     state: healing_gun
@@ -1138,7 +1128,13 @@
     sprite: CMU14/Yautja/yautja_items.rsi
   - type: YautjaTechItem
   - type: Storage
-    maxItemSize: Normal
+    # CMU14: the medicomp is itself a storage, and SharedStorageSystem refuses to insert a storage whose own
+    # maxItemSize is >= the receiving storage's, reporting comp-storage-too-big ("Too big!"). With Normal
+    # here it could never go into the hunting pouch, which is also Normal - the item's own `size: Small` is
+    # irrelevant to that check. CM-SS13 has no nested-storage rule at all: it compares only the item's weight
+    # class (medicomp w_class = SIZE_MEDIUM) against the pouch's max_w_class = SIZE_MEDIUM, so the medicomp is
+    # meant to fit. Small keeps the guard from firing and still covers everything the whitelist below admits.
+    maxItemSize: Small
     grid:
     - 0,0,23,3
     whitelist:

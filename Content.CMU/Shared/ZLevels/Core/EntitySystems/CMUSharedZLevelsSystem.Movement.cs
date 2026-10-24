@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Yautja;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Shared.CMU14.Dropship.MultiDeck;
@@ -190,6 +191,12 @@ public abstract partial class CMUSharedZLevelsSystem
 
     private void OnFallDamage(Entity<DamageableComponent> ent, ref CMUZLevelHitEvent args)
     {
+        // CMU14: a Yautja descent is a controlled landing - CM-SS13 gives the species no fall damage from dropping a
+        // level, so this returns before both the knockdown and the Blunt damage. YautjaComponent is the species marker
+        // (CMUMobYautja, and a youngblood gains it when the role is taken); plain humans keep normal fall damage.
+        if (HasComp<YautjaComponent>(ent.Owner))
+            return;
+
         var knockdownTime = MathF.Min(args.ImpactPower * 0.25f, 5f);
         _stun.TryKnockdown(ent.Owner, TimeSpan.FromSeconds(knockdownTime), true);
 

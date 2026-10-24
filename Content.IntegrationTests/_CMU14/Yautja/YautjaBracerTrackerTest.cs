@@ -41,6 +41,8 @@ public sealed class YautjaBracerTrackerTest
                 Assert.That(inventory.TryEquip(hunter, bracer, "gloves", silent: true, force: true), Is.True);
                 entMan.EnsureComponent<YautjaTrackedItemComponent>(dropped);
                 entMan.EnsureComponent<YautjaTrackedItemComponent>(carried);
+                // Yautja tech self-registers on map init; "never tracked" means having no tracker entry at all.
+                entMan.RemoveComponent<YautjaTrackedItemComponent>(untracked);
                 Assert.That(hands.TryPickupAnyHand(hunter, carried), Is.True);
 
                 var ev = new YautjaTrackGearActionEvent

@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Yautja; // CMU14
 using Content.Shared.Trigger.Components.Triggers;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
@@ -127,6 +128,11 @@ public sealed partial class TriggerSystem
                     continue;
 
                 if (colliding.LinearVelocity.Length() < trigger.TriggerSpeed)
+                    continue;
+
+                // CMU14: a Yautja does not set off traps. Step-triggered traps (resin traps, M20 claymores, tripwires)
+                // are gated in StepTriggerSystem.CanTrigger; proximity-triggered mines land here instead.
+                if (HasComp<YautjaComponent>(collidingUid))
                     continue;
 
                 // Trigger!
