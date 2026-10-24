@@ -1,26 +1,32 @@
 - type: accessLevel
   id: AU14AccessColonyHeadPhysician
   name: au14-job-name-civilianheadphysician
+  accessGroup: Colony Leadership
 
 - type: accessLevel
   id: AU14AccessColonyHeadEngineer
   name: au14-job-name-civilianheadofengineering
+  accessGroup: Colony Leadership
 
 - type: accessLevel
   id: AU14AccessColonyMarshall
   name: au14-job-name-leoleader
+  accessGroup: Colony Leadership
 
 - type: accessLevel
   id: AU14AccessColonyForeman
   name: au14-job-name-foreman
+  accessGroup: Colony Leadership
 
 - type: accessLevel
   id: AU14AccessColonyAdministrator
   name: au14-job-supervisors-colonycivilian
+  accessGroup: Colony Leadership
 
 - type: accessLevel
   id: AU14AccessColonyHeadOfService
   name: au14-job-name-civilianheadofservice
+  accessGroup: Colony Leadership
 
 - type: accessLevel
   id: AU14AccessCorporateWEYULiaison
@@ -37,6 +43,31 @@
 - type: accessLevel
   id: AU14AccessColonyAmbassador
   name: au14-job-name-civilianambassador
+
+# Opens only the UA diplomatic console.
+- type: accessLevel
+  id: AU14AccessAmbassadorUA
+  name: au14-job-name-civilianambassadorua
+
+# Opens only the TWE diplomatic console.
+- type: accessLevel
+  id: AU14AccessAmbassadorTWE
+  name: au14-job-name-civilianambassadortwe
+
+# Opens only the UPP diplomatic console.
+- type: accessLevel
+  id: AU14AccessAmbassadorUPP
+  name: au14-job-name-civilianambassadorupp
+
+# Opens only the ICSC diplomatic console.
+- type: accessLevel
+  id: AU14AccessAmbassadorICSC
+  name: au14-job-name-civilianambassadoricsc
+
+# Opens only the CCA diplomatic console.
+- type: accessLevel
+  id: AU14AccessAmbassadorCCA
+  name: au14-job-name-civilianambassadorcca
 
 - type: accessLevel
   id: AU14AccessOrbitalManagement

@@ -3763,9 +3763,9 @@ public sealed class YautjaPredatorRoleTest
             AssertHuntDestination(prototypes, componentFactory, "CMUYautjaYoungbloodDestinationJungleMoon", YautjaHuntTeleporterKind.Young, "jungle_moon", "Jungle Moon");
             AssertHuntDestination(prototypes, componentFactory, "CMUYautjaYoungbloodDestinationDesertMoon", YautjaHuntTeleporterKind.Young, "desert_moon", "Desert Moon");
 
-            AssertPlacedMapPrototypeEntityCount(server, "/Maps/CMU14/huntership.yml", "CMUHunterShipTeleporterYautjaShip", 2);
-            AssertPlacedMapPrototypeEntityCount(server, "/Maps/CMU14/huntership_upper.yml", "CMUHunterShipTeleporterYautjaShip", 2);
-            AssertPlacedMapPrototypeEntityCount(server, "/Maps/CMU14/huntership_lower.yml", "CMUHunterShipTeleporterYautjaYoung", 4);
+            AssertPlacedMapPrototypeEntityCount(server, "/Maps/CMU14/Ships/HunterShip/huntership.yml", "CMUHunterShipTeleporterYautjaShip", 2);
+            AssertPlacedMapPrototypeEntityCount(server, "/Maps/CMU14/Ships/HunterShip/huntership_upper.yml", "CMUHunterShipTeleporterYautjaShip", 2);
+            AssertPlacedMapPrototypeEntityCount(server, "/Maps/CMU14/Ships/HunterShip/huntership_lower.yml", "CMUHunterShipTeleporterYautjaYoung", 4);
 
             var placedRelays = prototypes.EnumeratePrototypes<EntityPrototype>()
                 .Where(proto => proto.ID.StartsWith("CMUHunterShipPlacedCMUYautjaRelayBeacon", StringComparison.Ordinal))

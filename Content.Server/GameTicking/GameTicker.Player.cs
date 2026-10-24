@@ -1,3 +1,4 @@
+using Content.Server.Administration.Managers; // cmu edit
 using System.Threading.Tasks;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
@@ -87,7 +88,7 @@ namespace Content.Server.GameTicking
 
                     if (firstConnection && _cfg.GetCVar(CCVars.AdminNewPlayerJoinSound))
                         _audio.PlayGlobal(new SoundPathSpecifier("/Audio/Effects/newplayerping.ogg"),
-                            Filter.Empty().AddPlayers(_adminManager.ActiveAdmins), false,
+                            Filter.Empty().AddPlayers(_adminManager.ActiveAdminsWithFlag(AdminFlags.AdminAlerts)), false, // cmu edit
                             audioParams: new AudioParams { Volume = -5f });
 
                     break;

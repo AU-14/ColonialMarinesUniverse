@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: AU14JobPARTSPartyMedic
+  chevrons:
+    AU14RankPrDEnforcer:
+      entity: AU14ChevronPrDEnforcer
+      requirements: []
   roundSide: ThirdParty
   roundProfiles:
   - AU14RoundJobProfileThirdParty
@@ -25,7 +29,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
 
-  name: Prodigy Sierra Combat Lifesaver
+  name: Combat Lifesaver
   description: au14-prodigyparty-description
   playTimeTracker: AU14JobPARTSPartyMedicTracker
   ranks:

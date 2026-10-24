@@ -53,6 +53,11 @@ public sealed partial class MohawkSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
     [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private ITileDefinitionManager _tileDefinitions = default!;
+
+    private const string OpenRampTileId = "CMUFloorOpenAirSealed";
+
+    private Tile OpenRampTile => new(_tileDefinitions[OpenRampTileId].TileId);
 
     private static readonly SoundSpecifier RampSound = new SoundPathSpecifier("/Audio/CMU14/Dropships/Mohawk/omaha_ramp.ogg");
     private static readonly SoundSpecifier HatchSound = new SoundPathSpecifier("/Audio/CMU14/Dropships/Mohawk/nightcustard_motor_whirring.ogg");
@@ -413,7 +418,9 @@ public sealed partial class MohawkSystem : EntitySystem
             }
             var indices = _map.TileIndicesFor(ship, cabin, coordinates);
             segment.ClosedTile ??= _map.GetTileRef(ship, cabin, indices).Tile;
-            _map.SetTile(ship, cabin, indices, deployed ? Tile.Empty : segment.ClosedTile.Value);
+            // The open ramp is sealed open air, not space: you still walk down through it, but the cabin keeps
+            // its air instead of venting through the hole.
+            _map.SetTile(ship, cabin, indices, deployed ? OpenRampTile : segment.ClosedTile.Value);
             _transform.SetCoordinates((marker, Transform(marker), MetaData(marker)), coordinates);
             segment.Deployed = deployed;
         }

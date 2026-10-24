@@ -229,6 +229,8 @@
         amount: 60
       - id: RMCBoxMRE
         amount: 10
+      - id: CMCanteen
+        amount: 60
     - name: Medical Supplies
       entries:
       - id: AU14PouchIFAKFill
@@ -641,6 +643,11 @@
     - AU14JobGOVFORSquadSergeantUPP
     - AU14JobGOVFORSquadSergeantWYPMC
     sections:
+    - name: cmu-vendor-section-sl-scopes
+      choices: { CMUSquadLeaderScope: 1 }
+      entries:
+      - id: RMCAttachmentS42xTelescopicMiniscope
+      - id: CMUAttachmentNightVisionScope
     - name: Helmets and Hats
       choices: { CMHat: 2 }
       entries:
@@ -901,6 +908,8 @@
         amount: 3
     - name: Rail Attachments
       entries:
+      - id: CMUAttachmentNightVisionScope
+        amount: 3
       - id: RMCAttachmentTwoPointSling
         amount: 50
       - id: RMCAttachmentRailFlashlight

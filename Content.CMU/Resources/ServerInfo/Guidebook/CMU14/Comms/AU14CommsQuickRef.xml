@@ -320,7 +320,7 @@
       <Box Margin="4">Reduces jamming by one tier.</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">1.5x battery use and a small DF signature.</Box>
+      <Box Margin="4">1.5x battery use. Gives a bearing to an enemy that has found the net.</Box>
     </ColorBox>
 
     <ColorBox>
@@ -330,7 +330,7 @@
       <Box Margin="4">Single-channel secured traffic</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">0.75x battery use and no DF signature while secured.</Box>
+      <Box Margin="4">0.75x battery use and no bearing while secured.</Box>
     </ColorBox>
     <ColorBox>
       <Box Margin="4">No jamming resistance.</Box>
@@ -343,7 +343,7 @@
       <Box Margin="4">Cipher traffic between AN/PRCs</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Hidden without the matching fill; no DF signature.</Box>
+      <Box Margin="4">Hidden without the matching fill; no bearing.</Box>
     </ColorBox>
     <ColorBox>
       <Box Margin="4">Requires fill-loaded AN/PRCs and has no jamming resistance.</Box>
@@ -359,7 +359,7 @@
       <Box Margin="4">0.5x battery use.</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Unencrypted, increases jamming by one tier, and produces the largest DF signature.</Box>
+      <Box Margin="4">Unencrypted, increases jamming by one tier, and gives a bearing to an enemy that has found the net.</Box>
     </ColorBox>
   </Table>
 
@@ -380,7 +380,7 @@
       <Box Margin="4">[bold]Battery[/bold]</Box>
     </ColorBox>
     <ColorBox Color="#263238">
-      <Box Margin="4">[bold]DF signature[/bold]</Box>
+      <Box Margin="4">[bold]Heard by enemy search[/bold]</Box>
     </ColorBox>
 
     <ColorBox>
@@ -393,7 +393,7 @@
       <Box Margin="4">0.5x</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">0.5x</Box>
+      <Box Margin="4">0.6x</Box>
     </ColorBox>
 
     <ColorBox>
@@ -419,7 +419,7 @@
       <Box Margin="4">2x</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">2x</Box>
+      <Box Margin="4">1.5x</Box>
     </ColorBox>
   </Table>
 
@@ -525,17 +525,15 @@
 
   ## Direction finding
 
-  Direction-finding signatures, from highest to lowest risk:
+  Nobody is located just for talking. The enemy has to search the band and resolve your net first.
+
+  Once they have, manpack traffic on that net gives them a rough compass bearing in chat, nothing on the tactical map:
 
   - PT traffic
   - faction-net traffic without a matching fill
   - secured FH traffic
 
-  Secured SC and CT traffic produce no DF signature.
-
-  Repeated detectable transmissions from the same location increase detection chance.
-
-  DF risk begins decreasing after roughly one minute without another qualifying transmission.
+  Secured SC and CT traffic, BURST traffic and ordinary headsets give no bearing.
 
   [bold]RADIO CHECK[/bold] reports which stations receive the current net and whether reception is clear or degraded.
 
@@ -614,14 +612,7 @@
       <Box Margin="4">Bearing</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Compass bearing and distance rounded to 10 tiles, at most once every 10 seconds per net. Secured SC and CT do not provide bearings.</Box>
-    </ColorBox>
-
-    <ColorBox>
-      <Box Margin="4">Tactical map</Box>
-    </ColorBox>
-    <ColorBox>
-      <Box Margin="4">Marks the transmitter for 8 seconds for your faction.</Box>
+      <Box Margin="4">Eight-point compass bearing and a rough range (close, some way off, a long way off), at most once every 30 seconds per net. Manpacks only. Secured SC/CT and BURST give none. Cross two bearings from different spots to find the speaker.</Box>
     </ColorBox>
 
     <ColorBox>
@@ -733,7 +724,7 @@
       <Box Margin="4">OPT</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">30% lower transmission cost and half DF chance.</Box>
+      <Box Margin="4">30% lower transmission cost and no bearing for enemy DF.</Box>
     </ColorBox>
 
     <ColorBox>
@@ -763,7 +754,7 @@
       <Box Margin="4">OPT</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">No transmissions, relay, or phone traffic. No DF signature. 75% lower idle draw.</Box>
+      <Box Margin="4">No transmissions, relay, or phone traffic. Nothing to take a bearing on. 75% lower idle draw.</Box>
     </ColorBox>
 
     <ColorBox>

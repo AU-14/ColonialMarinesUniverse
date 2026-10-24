@@ -1,6 +1,8 @@
 using System.Numerics;
 using Content.Shared.CMU14.Input;
 using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared._RMC14.Projectiles;
+using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Components;
@@ -10,6 +12,7 @@ using Content.Shared.Wieldable.Components;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 
@@ -20,9 +23,13 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
     private const float CrossZShotRange = 4f;
     private const float CrossZOpeningSourceEdgeRangeTiles = 2f;
     private const float CrossZOpeningSourceNudge = 0.30f;
+    // how far one floor counts for falloff/range, keeps buckshot from point blanking through a hole
+    private const float CrossZLevelShotDistance = 3f;
 
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private RMCProjectileSystem _projectile = default!;
+    [Dependency] private RMCSizeStunSystem _sizeStun = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -475,6 +482,44 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
         visual.Offset = visualOffset;
         Dirty(projectile, visual);
+    }
+
+    // the bullet spawns at the opening (or right under you over open air), so falloff, range and
+    // point blank stuns all thought the target was next to you. buckshot through a floor deleted
+    // xenos. move those origins back by the distance the shot already covered
+    public void ApplyCrossZShotOrigin(List<EntityUid>? projectiles, EntityCoordinates sourceFrom, EntityCoordinates projectileFrom)
+    {
+        if (projectiles == null)
+            return;
+
+        var source = _transform.ToMapCoordinates(sourceFrom);
+        var spawn = _transform.ToMapCoordinates(projectileFrom);
+        if (source.MapId == spawn.MapId ||
+            spawn.MapId == MapId.Nullspace)
+        {
+            return;
+        }
+
+        var horizontal = spawn.Position - source.Position;
+        var travelled = MathF.Sqrt(horizontal.LengthSquared() + CrossZLevelShotDistance * CrossZLevelShotDistance);
+
+        foreach (var projectile in projectiles)
+        {
+            // same as the visual offset, server state brings it over for server-owned shots
+            if (_timing.InPrediction && !IsClientSide(projectile))
+                continue;
+
+            var direction = TryComp<PhysicsComponent>(projectile, out var physics) ? physics.LinearVelocity : Vector2.Zero;
+            if (direction.LengthSquared() <= 0.001f)
+                direction = horizontal;
+            if (direction.LengthSquared() <= 0.001f)
+                direction = Vector2.UnitY;
+
+            var origin = new MapCoordinates(spawn.Position - Vector2.Normalize(direction) * travelled, spawn.MapId);
+            var parent = _transform.GetMoverCoordinates(projectile).EntityId;
+            _projectile.SetShotOrigin(projectile, _transform.ToCoordinates(parent, origin));
+            _sizeStun.SetShotOrigin(projectile, origin);
+        }
     }
 
     private static void GetCrossZProjectilePath(

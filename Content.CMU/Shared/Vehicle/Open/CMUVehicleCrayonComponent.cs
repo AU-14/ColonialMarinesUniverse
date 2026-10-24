@@ -1,0 +1,94 @@
+using System.Numerics;
+using Robust.Shared.GameStates;
+using Robust.Shared.Serialization;
+using Robust.Shared.Utility;
+
+namespace Content.Shared.CMU14.Vehicle.Open;
+
+/// <summary>
+/// Crayon drawings stored on a vehicle's body: each is anchored to a point on a panel, so it stays on
+/// the same spot as the vehicle turns and only shows where that panel faces the camera.
+/// </summary>
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true, fieldDeltas: true)]
+public sealed partial class CMUVehicleCrayonComponent : Component
+{
+    /// <summary>
+    /// Surface lookup written by the jeep generator: per pixel and direction, the body voxel and face shown.
+    /// </summary>
+    [DataField(required: true)]
+    public ResPath Map;
+
+    /// <summary>
+    /// The hinged panels the map's pixels can be on, by the number the map gives them (0 is the body,
+    /// 1 the first panel here). The map has them shut, so paint on one hides while it is open.
+    /// </summary>
+    [DataField]
+    public List<string> Panels = new() { "hood", "fuel_door", "door_driver", "door_passenger", "tailgate" };
+
+    [DataField]
+    public int MaxDrawings = 50;
+
+    /// <summary>
+    /// Custom images kept among the drawings, the oldest going first: each is sent whole with them.
+    /// </summary>
+    [DataField]
+    public int MaxImages = 8;
+
+    [DataField, AutoNetworkedField]
+    public List<CMUCrayonDrawing> Drawings = new();
+
+    /// <summary>
+    /// Blood splashed on the body, stored like the drawings and drawn under them.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public List<CMUCrayonDrawing> Blood = new();
+
+    [DataField]
+    public int MaxBlood = 40;
+}
+
+[DataDefinition, Serializable, NetSerializable]
+public sealed partial class CMUCrayonDrawing
+{
+    [DataField]
+    public string Decal = string.Empty;
+
+    [DataField]
+    public Color Color = Color.White;
+
+    /// <summary>
+    /// Width of the decal or image in voxels, centred on the anchor.
+    /// </summary>
+    [DataField]
+    public int Size = 32;
+
+    /// <summary>
+    /// A custom image drawn instead of the decal: a square of palette indices, 0 empty.
+    /// </summary>
+    [DataField]
+    public byte[]? Pixels;
+
+    [DataField]
+    public List<Color>? Palette;
+
+    /// <summary>
+    /// Anchor voxel (forward, right, up) in vehicle space.
+    /// </summary>
+    [DataField]
+    public Vector3 Anchor;
+
+    /// <summary>
+    /// Panel the drawing is on: up, +f, -f, +r or -r.
+    /// </summary>
+    [DataField]
+    public string Normal = "up";
+
+    /// <summary>
+    /// The decal's right and down axes in vehicle space, from the direction it was drawn in.
+    /// </summary>
+    [DataField]
+    public Vector3 Right;
+
+    [DataField]
+    public Vector3 Down;
+}

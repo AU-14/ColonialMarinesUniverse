@@ -1,7 +1,7 @@
 - type: entity
   parent: RMCFlagCarriableBase
   id: AU14FlagCarriableCLF
-  name: CLF flag
+  name: INSFOR flag
   description: "The flag of the Colonial Liberation Front. You can smell freedom." # This one looks ready to be planted into the ground."
   components:
   - type: Sprite

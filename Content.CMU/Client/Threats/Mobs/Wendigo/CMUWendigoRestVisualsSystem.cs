@@ -8,9 +8,8 @@ using Robust.Client.GameObjects;
 namespace Content.Client.CMU14.Threats.Mobs.Wendigo;
 
 /// <summary>
-/// Shows a resting Wendigo in its curled pose, the "dead" sprite standing in until resting art exists, with the
-/// glow mask hidden because it is drawn for the standing pose. Runs after the damage-state visualizer so the mob
-/// state does not overwrite it.
+/// Shows a resting Wendigo in its resting pose, with the glow mask hidden because it is drawn for the standing
+/// pose. Runs after the damage-state visualizer so the mob state does not overwrite it.
 /// </summary>
 public sealed partial class CMUWendigoRestVisualsSystem : EntitySystem
 {

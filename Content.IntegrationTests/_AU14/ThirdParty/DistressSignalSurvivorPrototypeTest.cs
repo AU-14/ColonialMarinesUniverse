@@ -78,6 +78,13 @@ public sealed class DistressSignalSurvivorPrototypeTest
         "WYPMCParty",
         "WYPMCPartyAlt",
         "WYPMCWhiteout",
+        // cmu edit start
+        "CMUBosenmoriColonists",
+        "CMUCCAFFireTeam",
+        "CMUCLFJeepReinforcements", // inherits survivor announcing from CLFCellReinforcementsIntel
+        "IASFSurvBosenmori",
+        "IASFSurvBosenmoriPilot",
+        // cmu edit end
     };
 
     [Test]

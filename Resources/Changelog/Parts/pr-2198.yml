@@ -1,0 +1,13 @@
+author: CatoChristopherMrow
+category: CMU
+changes:
+- message: Colony synth now has construction 4 instead of 3
+  type: Tweak
+- message: Synthetic points have been raised to 45, and alot more options have been
+    added to what you can actually buy with them.
+  type: Tweak
+- message: Synthetics can now actually buy the compact nailgun, instead of a broken
+    version.
+  type: Fix
+time: '2026-10-22T00:19:26.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2198

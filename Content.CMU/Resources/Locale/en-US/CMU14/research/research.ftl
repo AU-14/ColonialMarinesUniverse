@@ -63,7 +63,7 @@ cmu-paper-ciph-hint-footer = - [italic]Weyland-Yutani[/italic]
 research-chem-terminal-update = Chemical contracts have been updated!
 
 research-data-ui-clearance = [color=#ffbf00][head=2]Clearance Level {$NUM}[/head][/color]
-research-data-ui-credits = [color=#ffbf00][head=2]Credits available: {$NUM}[/head][/color]
+research-data-ui-credits = [color=#ffbf00][head=2]Credits available: {$NUM}  ·  Sample data: {$DATA}[/head][/color]
 
 research-data-ui-manage = Manage Research
 research-data-ui-view = View Chemicals
@@ -118,7 +118,7 @@ research-sim-ui-header-target = Target
 research-sim-ui-header-reference = Reference
 research-sim-ui-header-pick-recipe = Pick a recipe
 
-research-sim-ui-credits = RESEARCH CREDITS: {$NUM}
+research-sim-ui-credits = SAMPLE DATA: {$NUM}
 research-sim-ui-status-not-ready = NOT READY
 research-sim-ui-cost-null = ESTIMATED SIMULATING COST: NULL
 research-sim-ui-cost = ESTIMATED SIMULATING COST: {$NUM}
@@ -174,7 +174,7 @@ research-sim-status-target-cannot-alter = ERROR: TARGET CANNOT BE ALTERED
 research-sim-status-target-no-complexity = ERROR: TARGET NOT COMPLEX ENOUGH
 research-sim-status-unknown-catalysts = ERROR: TARGET HAS UNKNOWN CATALYSTS
 research-sim-status-unknown-components = ERROR: TARGET HAS UNKNOWN COMPONENTS
-research-sim-status-insufficient-funds = ERROR: INSUFFICIENT RESEARCH CREDITS
+research-sim-status-insufficient-funds = ERROR: INSUFFICIENT SAMPLE DATA
 research-sim-status-insufficient-clearance-amplify = ERROR: INSUFFICIENT CLEARANCE TO AMPLIFY FURTHER
 research-sim-status-unable-amplify-further = ERROR: PROPERTY CANNOT BE AMPLIFIED FURTHER
 research-sim-status-unadjustable = ERROR: TARGET PROPERTY CANNOT BE ADJUSTED

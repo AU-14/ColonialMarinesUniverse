@@ -29,7 +29,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
 
-  name: Prodigy TARS Contractor (M41A/2)
+  name: Contractor
   description: au14-prodigyrescue-description
   ranks:
     AU14RankPrDAssociate: []
@@ -84,7 +84,7 @@
     #pocket1:
     #comes filled with rifle mags, no need to fill it here
     back:
-    - CMMRE
+    - CMUMREFSR
     - RMCBinocularsPVE
     - AU14PacketGrenadeFragM12Filled
 

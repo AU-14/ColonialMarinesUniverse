@@ -1,51 +1,70 @@
 - type: accessLevel
   id: AU14AccessGovfor
   name: cmu-access-govfor
+  accessGroup: GOVFOR Access
 
 - type: accessLevel
   id: AU14AccessGovforSquad
   name: cmu-access-govfor-squad
+  accessGroup: GOVFOR Access
 
 - type: accessLevel
   id: AU14AccessGovforSquadWeaponsSpecialist
   name: cmu-access-govfor-squad-weapons-specialist
+  accessGroup: GOVFOR Access
 
 - type: accessLevel
   id: AU14AccessGovforCommand
   name: cmu-access-govfor-command
+  accessGroup: GOVFOR Access
 
 - type: accessLevel
   id: AU14AccessGovforSecurity
   name: cmu-access-govfor-security
+  accessGroup: GOVFOR Access
 
 - type: accessLevel
   id: AU14AccessGovforMedical
   name: cmu-access-govfor-medical
+  accessGroup: GOVFOR Access
 
 - type: accessLevel
   id: AU14AccessGovforEngineering
   name: cmu-access-govfor-engineering
+  accessGroup: GOVFOR Access
 
 - type: accessLevel
   id: AU14AccessGovforFTL
   name: cmu-access-govfor-squad-leader
+  accessGroup: GOVFOR Access
 
 - type: accessLevel
   id: AU14AccessGovforGunner
   name: cmu-access-govfor-gunner
+  accessGroup: GOVFOR Access
 
 - type: accessLevel
   id: AU14AccessGovforPilot
   name: cmu-access-govfor-pilot
+  accessGroup: GOVFOR Access
 
 - type: accessLevel
   id: AU14AccessGovforJuniorOfficer
   name: cmu-access-staff-officer
+  accessGroup: GOVFOR Access
 
 - type: accessLevel
   id: AU14AccessGovforReq
   name: cmu-access-govfor-requisitions
+  accessGroup: GOVFOR Access
 
 - type: accessLevel
   id: AU14AccessGovforVehicleCrew
   name: cmu-access-govfor-vehicle-crew
+  accessGroup: GOVFOR Access
+
+# The DEFAC kitchen's open-for-business button. Mess technicians get it.
+- type: accessLevel
+  id: CMUAccessKitchen
+  name: cmu-access-kitchen
+  accessGroup: GOVFOR Access

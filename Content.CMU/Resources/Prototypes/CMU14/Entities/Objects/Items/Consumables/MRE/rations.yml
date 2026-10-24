@@ -124,3 +124,24 @@
   components:
   - type: CMItemSlots
     startingItem: RMCMREWeYaPMC
+
+# FSR rations for the private military companies (Prodigy and VAI), in place of the UA's MREs.
+- type: entity
+  parent: RMCCrateFoodMRE
+  id: CMUCrateFoodMREFSR
+  name: FSR crate
+  components:
+  - type: StorageFill
+    contents:
+      - id: CMUMREFSR
+        amount: 2
+
+- type: entity
+  parent: RMCCrateFoodMRE
+  id: CMUCrateFoodMREWeYaPMC
+  name: PMC CFR crate
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCMREWeYaPMC
+        amount: 2

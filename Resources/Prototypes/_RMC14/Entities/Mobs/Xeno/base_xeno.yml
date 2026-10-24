@@ -216,6 +216,9 @@
     relationships:
       Head: [ Heart ]
   - type: Xeno
+  # cmu edit start: bob in zero-g like everyone else
+  - type: FloatingVisuals
+  # cmu edit end
   - type: VehicleDamageMultiplier
   - type: XenoRegen
   - type: XenoStateVisuals
@@ -354,6 +357,7 @@
     - enum.VendingMachineUiKey.Key
     - enum.PaperUiKey.Key
     - enum.RMCCameraUiKey.Key
+    - enum.JukeboxUiKey.Key # CMU14
   - type: RMCActiveInputMover
   - type: HiveTracker
     trackerModes:

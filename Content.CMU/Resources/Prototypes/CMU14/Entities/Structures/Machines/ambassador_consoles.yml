@@ -52,6 +52,9 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
     state: terminal1_old
+  # Only the UPP ambassador can use it.
+  - type: AccessReader
+    access: [["AU14AccessAmbassadorUPP"]]
   - type: AmbassadorConsole
     factionName: UPP
     budget: 500
@@ -79,6 +82,9 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
     state: terminal1_old
+  # Only the UA ambassador can use it.
+  - type: AccessReader
+    access: [["AU14AccessAmbassadorUA"]]
   - type: AmbassadorConsole
     factionName: United Americas
     budget: 500
@@ -100,6 +106,9 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
     state: terminal1_old
+  # Only the TWE ambassador can use it.
+  - type: AccessReader
+    access: [["AU14AccessAmbassadorTWE"]]
   - type: AmbassadorConsole
     factionName: Three World Empire
     budget: 500
@@ -121,6 +130,9 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
     state: terminal1_old
+  # Only the ICSC ambassador can use it.
+  - type: AccessReader
+    access: [["AU14AccessAmbassadorICSC"]]
   - type: AmbassadorConsole
     factionName: Independent Core System Colonies
     budget: 500

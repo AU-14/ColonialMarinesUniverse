@@ -71,6 +71,8 @@
     sprite: _RMC14/Objects/Clothing/Head/PMC/officer.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Head/PMC/officer.rsi
+  - type: HelmetAccessoryHolder # CMU14: a beret takes the hat-sized accessory overlays, the helmet ones cover it
+    isHat: true
 
 - type: entity
   parent: ArmorHelmetPMC
@@ -82,6 +84,8 @@
     sprite: _RMC14/Objects/Clothing/Head/PMC/field_officer.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Head/PMC/field_officer.rsi
+  - type: HelmetAccessoryHolder # CMU14: a beret takes the hat-sized accessory overlays, the helmet ones cover it
+    isHat: true
   - type: CMArmor
     bullet: 25
     bio: 15

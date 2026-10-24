@@ -80,6 +80,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
     [Dependency] private SharedWebbingSystem _webbing = default!;
     [Dependency] private ThrowingSystem _throwingSystem = default!;
     [Dependency] private SharedRankSystem _rank = default!;
+    [Dependency] private Content.Shared.CMU14.Kitchen.CMUFoodlineSystem _cmuFoodline = default!; // cmu edit
 
     // TODO RMC14 make this a prototype
     public const string SpecialistPoints = "Specialist";
@@ -418,6 +419,11 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
 
     protected virtual void OnVendBui(Entity<CMAutomatedVendorComponent> vendor, ref CMVendorVendBuiMsg args)
     {
+        // cmu edit start: NutriCo machines stop dispensing while the DEFAC foodline is open
+        if (_cmuFoodline.IsClosedForFoodline(vendor, args.Actor))
+            return;
+        // cmu edit end
+
         _audio.PlayPredicted(vendor.Comp.Sound, vendor, args.Actor);
         _rmcAnimation.TryFlick(vendor.Owner, vendor.Comp.AnimationSprite, vendor.Comp.BaseSprite);
 
@@ -850,6 +856,15 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         var mount = EnsureComp<WallMountComponent>(spawn);
         mount.Arc = Angle.FromDegrees(360);
         Dirty(spawn, mount);
+
+        // cmu edit start: some vendors drop what they vend on top of themselves, with a sound, like a tray
+        if (TryComp(vendor, out Content.Shared.CMU14.Vendors.CMUVendOntoMachineComponent? ontoMachine))
+        {
+            vended = true;
+            if (ontoMachine.Sound != null)
+                _audio.PlayPredicted(ontoMachine.Sound, vendor, player);
+        }
+        // cmu edit end
 
         if (!vended)
         {

@@ -298,6 +298,7 @@ jobs:
               & FullyQualifiedName!~CMU14.Camera.
               & FullyQualifiedName!~CMU14.Yautja.
               & FullyQualifiedName!~CMU14.Diagnostics.
+              & FullyQualifiedName!~CMU14.Research.
               & FullyQualifiedName!~CMU14.Round.CMUPresetVoteTest.
               & FullyQualifiedName!~CMU14.Chat.ChatLogLayoutTest.
               & FullyQualifiedName!~CMU14.Lobby.OptionsThemeRegressionTest.
@@ -319,9 +320,12 @@ jobs:
               | FullyQualifiedName~CMU14.Minds.
               | FullyQualifiedName~CMU14.Construction.
               | FullyQualifiedName~CMU14.Light.
+          # CMU14: research builds a fresh pair per procgen test, about half of the old cmu shard.
+          # four workers here build them side by side instead of two in cmu
           - name: cmu_chemistry
             filter: >-
               FullyQualifiedName~CMU14.Chemistry.
+              | FullyQualifiedName~CMU14.Research.
           # CMU14: PostMapInitTest loads every map, two thirds of the old root_1. split by method so
           # neither half is the slowest shard; post_map_init is the catch-all for new methods
           - name: post_map_init
@@ -377,9 +381,18 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Tiles.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Chasm.
               | FullyQualifiedName~Content.IntegrationTests.Tests.EntityTable.
+          # CMU14: old atmos_fluids_physics folded in, see items_storage_crafting
           - name: gameplay_core
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Actions.
+              FullyQualifiedName~Content.IntegrationTests.Tests.Atmos.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Explosion.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Fluids.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Gravity.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Physics.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Decals.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.FootPrint.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Weather.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Actions.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Body.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Buckle.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Chameleon.
@@ -423,7 +436,13 @@ jobs:
             filter: >-
               FullyQualifiedName~CMU14.Medical.
               & FullyQualifiedName!~CMU14.Medical.Anatomy.
-          - name: storage_misc_au14
+          # CMU14: the 3D tests build fresh client/server pairs and load the 3D libraries, ~10 GB by the
+          # end. they were most of cmu_systems' memory, on their own they can't push the others over
+          - name: cmu_threed
+            filter: FullyQualifiedName~CMU14.ThreeD.
+          # CMU14: every shard pays ~1.5 min of checkout and ~2 min building its first pairs before a
+          # test runs, so the small shards are merged in pairs. old storage_misc_au14 is folded in here
+          - name: items_storage_crafting
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.Storage.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Strip.
@@ -432,13 +451,7 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Vending.
               | FullyQualifiedName~Content.IntegrationTests.Tests.IconSmoothing.
               | FullyQualifiedName~Content.IntegrationTests._AU14
-          # CMU14: the 3D tests build fresh client/server pairs and load the 3D libraries, ~10 GB by the
-          # end. they were most of cmu_systems' memory, on their own they can't push the others over
-          - name: cmu_threed
-            filter: FullyQualifiedName~CMU14.ThreeD.
-          - name: items_storage_crafting
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Chemistry.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Chemistry.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Construction.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Hands.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Lathe.
@@ -481,9 +494,23 @@ jobs:
               | FullyQualifiedName~CMU14.Chat.ChatLogLayoutTest.
               | FullyQualifiedName~CMU14.Lobby.OptionsThemeRegressionTest.
               | FullyQualifiedName~CMU14.Overwatch.SupportLaunchButtonTest.
-          - name: cleanup_entities_world
+          # CMU14: old admin_access_ui folded in, see items_storage_crafting
+          - name: admin_cleanup_world
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Cleanup.
+              FullyQualifiedName~Content.IntegrationTests.Tests.Administration.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Access.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Commands.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.EncryptionKeys.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Lobby.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Roles.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Toolshed.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.UserInterface.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Afk.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Alerts.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.ClientSession.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.GameTestTests.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Helpers.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Cleanup.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Damageable.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Destructible.
               | FullyQualifiedName~Content.IntegrationTests.Tests.DeviceLinking.
@@ -499,32 +526,7 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Containers.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Forensics.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Mobs.
-          - name: atmos_fluids_physics
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Atmos.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Explosion.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Fluids.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Gravity.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Physics.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Decals.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.FootPrint.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Weather.
-          # Bulk entity/component sweeps remain in the manual Build & Test Debug workflow.
-          - name: admin_access_ui
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Administration.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Access.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Commands.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.EncryptionKeys.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Lobby.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Roles.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Toolshed.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.UserInterface.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Afk.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Alerts.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.ClientSession.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.GameTestTests.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Helpers.
+          # Bulk entity/component sweeps remain in the nightly Build & Test Debug workflow.
           - name: cmu_yautja_weapons
             filter: FullyQualifiedName~CMU14.Yautja.YautjaBowTest.
           - name: cmu_yautja_roles
@@ -609,6 +611,8 @@ jobs:
             # CMU14: four linter pairs at once went past the runner's RAM into swap and the GC crawled
             # until the hang watchdog killed it. two keep it in memory
             proto_lint_serial) workers=2 ;;
+            # CMU14: every procgen research test builds its own pair, four at once ran out of memory and hung
+            cmu_chemistry) workers=2 ;;
           esac
 
           if [[ "$shard" == root ]]; then
