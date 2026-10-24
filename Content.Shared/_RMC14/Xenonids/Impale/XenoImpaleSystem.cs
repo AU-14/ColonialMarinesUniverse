@@ -88,7 +88,7 @@ public sealed partial class XenoImpaleSystem : EntitySystem
             RemCompDeferred<XenoMarkedComponent>(targetId);
         }
 
-        Impale(xeno.Comp.Damage, xeno.Comp.AP, xeno.Comp.Animation, xeno.Comp.Sound, targetId, xeno);
+        Impale(xeno.Comp.Damage, xeno.Comp.AP, xeno.Comp.Bloodloss, xeno.Comp.Animation, xeno.Comp.Sound, targetId, xeno);
 
     }
 
