@@ -104,7 +104,8 @@ public sealed partial class VisualBodySystem : SharedVisualBodySystem
         }
 
         _sprite.LayerSetData(target, index, ent.Comp.Data);
-        ApplyYautjaSkinShader(target, index, ent.Comp.Profile.SkinColor, ent.Comp.Data.Color ?? Color.White, ent.Comp.Layer.Equals(HumanoidVisualLayers.Eyes));
+        ApplyYautjaSkinShader(target, index, ent.Comp.Profile.SkinColor, ent.Comp.Data.Color ?? Color.White,
+            ent.Comp.Layer.Equals(HumanoidVisualLayers.Eyes), organRsi: ent.Comp.Data.RsiPath);
 
         var displacement = ent.Comp.Displacement;
         if (displacement != null && ProtoMan.Resolve(displacement, out var displacementProto))

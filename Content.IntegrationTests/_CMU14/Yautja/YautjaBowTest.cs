@@ -18626,7 +18626,7 @@ public sealed class YautjaBowTest
             // CMU14: held prefixes follow pred_guns_inhands.rsi's state names, which is where the in-hand art lives.
             "spike_launcher",
             "spikelauncher",
-            WieldedPrefix: "spikelauncher_w",
+            WieldedPrefix: "spikelauncher",
             GunShotSoundPath: "/Audio/CMU14/Yautja/woodhit.ogg");
         yield return new Cmss13WeaponVisualSoundRow(
             "CMUYautjaPlasmaRifle",
@@ -18634,7 +18634,7 @@ public sealed class YautjaBowTest
             guns,
             "plasma_rifle",
             "plasmarifle",
-            WieldedPrefix: "plasmarifle_w",
+            WieldedPrefix: "plasmarifle",
             GunShotSoundPath: "/Audio/CMU14/Yautja/Weapons/Plasma/pred_plasma_shot.wav");
         yield return new Cmss13WeaponVisualSoundRow(
             "CMUYautjaPlasmaPistol",
@@ -18642,7 +18642,7 @@ public sealed class YautjaBowTest
             guns,
             "plasma_pistol",
             "plasmapistol",
-            WieldedPrefix: "plasmapistol_w",
+            WieldedPrefix: "plasmapistol",
             GunShotSoundPath: "/Audio/CMU14/Yautja/Weapons/Plasma/pulse3.wav");
     }
 

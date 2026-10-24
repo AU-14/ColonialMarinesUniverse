@@ -77,8 +77,6 @@ public enum YautjaSkinColor : byte
     Blue,
     Red,
     Black,
-    Gray,
-    White,
 }
 
 [Serializable, NetSerializable]
@@ -224,8 +222,6 @@ public sealed partial class YautjaCharacterProfile
         YautjaSkinColor.Blue,
         YautjaSkinColor.Red,
         YautjaSkinColor.Black,
-        YautjaSkinColor.Gray,
-        YautjaSkinColor.White,
     ];
 
     public static readonly YautjaQuillStyle[] QuillStyleOrder =
@@ -282,8 +278,6 @@ public sealed partial class YautjaCharacterProfile
         C(125, 139, 150),
         C(105, 57, 59),
         C(72, 69, 77),
-        C(128, 128, 128),
-        C(255, 255, 255),
     ];
 
     public static readonly Color[] EyeColors =
@@ -845,8 +839,6 @@ public sealed partial class YautjaCharacterProfile
             YautjaSkinColor.Blue => "blue",
             YautjaSkinColor.Red => "red",
             YautjaSkinColor.Black => "black",
-            YautjaSkinColor.Gray => "gray",
-            YautjaSkinColor.White => "white",
             _ => "tan",
         };
         return $"cmu-yautja-profile-skin-color-{suffix}";
@@ -923,8 +915,6 @@ public sealed partial class YautjaCharacterProfile
             YautjaSkinColor.Blue => SkinToneColors[3],
             YautjaSkinColor.Red => SkinToneColors[4],
             YautjaSkinColor.Black => SkinToneColors[5],
-            YautjaSkinColor.Gray => SkinToneColors[6],
-            YautjaSkinColor.White => SkinToneColors[7],
             _ => SkinToneColors[0],
         };
     }

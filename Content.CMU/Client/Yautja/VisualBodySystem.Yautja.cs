@@ -1,7 +1,9 @@
 using Content.Shared.Body;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Humanoid;
+using Content.Shared.Humanoid.Prototypes;
 using Robust.Client.GameObjects;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client.Body;
 
@@ -31,6 +33,8 @@ public sealed partial class VisualBodySystem
         "l_leg", "r_leg", "l_foot", "r_foot",
     ];
 
+    private static readonly ProtoId<SpeciesPrototype> YautjaSpecies = "Yautja";
+
     private bool IsYautjaBodyRsi(string? organRsi, EntityUid body)
     {
         if (YautjaBodyVariants.IsBodyRsi(organRsi))
@@ -40,20 +44,17 @@ public sealed partial class VisualBodySystem
                YautjaBodyVariants.IsBodyRsi(sprite.BaseRSI?.Path.ToString());
     }
 
-    private static bool YautjaHasExactVariant(Color skin)
+    /// <summary>
+    /// Whether this layer should carry the Yautja skin treatment: the body is a Yautja and the layer draws the Yautja
+    /// body sheet. Both halves matter - the sheet alone is not enough, because a preview dummy keeps its organs when it
+    /// is reused for another species, and the tint must not leak onto that body.
+    /// </summary>
+    private bool IsYautjaSkinLayer(EntityUid body, string? organSheet)
     {
-        foreach (var (colour, _) in YautjaSkinVariants)
-        {
-            var candidate = YautjaCharacterProfile.GetSkinColorColor(colour);
-            if (MathF.Abs(candidate.R - skin.R) < 0.004f &&
-                MathF.Abs(candidate.G - skin.G) < 0.004f &&
-                MathF.Abs(candidate.B - skin.B) < 0.004f)
-            {
-                return true;
-            }
-        }
+        if (!TryComp<HumanoidProfileComponent>(body, out var humanoid) || humanoid.Species != YautjaSpecies)
+            return false;
 
-        return false;
+        return IsYautjaBodyRsi(organSheet, body);
     }
 
     private static string YautjaSkinSuffix(Color skin)
@@ -150,20 +151,16 @@ public sealed partial class VisualBodySystem
     }
 
     private void ApplyYautjaSkinShader(EntityUid body, int index, Color skin, Color color, bool eyes = false,
-        Color? organSkin = null)
+        string? organRsi = null)
     {
         if (!TryComp<SpriteComponent>(body, out var sprite) || YautjaLayer(sprite, index) is not { } layer)
         {
             return;
         }
-        // Require the actual Yautja component: some mobs carry the Yautja species on a human body sheet, which has no
-        // "<part>_<colour>" states and would log a missing-state error.
-        // Deliberately not matching on layer colour: each organ layer is tinted with its own colour, so requiring the
-        // layer colour to equal the skin colour rejected real body parts (torso vs limbs). The part-name and RSI guards
-        // below are what identify a Yautja body layer.
-        // Decide from the sheet the organ draws from, not from YautjaComponent: the lobby preview dummy is the species
-        // doll (AppearanceYautja) and has no YautjaComponent, which is why the preview kept the greyscale-tint look.
-        var isSkin = !eyes && IsYautjaBodyRsi(organRsi: null, body);
+        // Identify a Yautja skin layer from the sheet the organ draws from plus the body's species - not from
+        // YautjaComponent (the lobby preview doll has none) and not from the layer colour (each organ is tinted with its
+        // own). The part-name and sheet guards below do the rest.
+        var isSkin = !eyes && IsYautjaSkinLayer(body, organRsi);
 
         if (!isSkin)
         {
@@ -172,10 +169,10 @@ public sealed partial class VisualBodySystem
             return;
         }
 
-        // Pre-coloured CM art: pick the variant and let its own pixels show.
-        // The organ carries the skin colour the appearance pipeline actually applied; the profile appearance is not
-        // updated at runtime, so prefer the organ value when it is one of the six tones.
-        var selection = organSkin ?? skin;
+        // Pre-coloured CM art: pick the nearest baked variant and let its own pixels show.
+        // The profile skin colour drives the choice: ApplyVisual forces the organ layer colour to white so the imported
+        // art is not tinted, which makes the organ value useless as a selector.
+        var selection = skin;
         var baseState = YautjaStripSuffix(layer.RsiState.Name ?? string.Empty);
         if (!YautjaBodyParts.Contains(baseState))
         {
@@ -184,20 +181,9 @@ public sealed partial class VisualBodySystem
 
         // The variants live in the yautja body sheet only; some mobs carry the Yautja components while rendering from the
         // human part sheet, which has no "<part>_<colour>" states.
-        var rsiPath = sprite.BaseRSI?.Path.ToString() ?? string.Empty;
-        if (!rsiPath.Contains("CMU14/Yautja/body.rsi", StringComparison.OrdinalIgnoreCase))
+        var sheet = organRsi ?? sprite.BaseRSI?.Path.ToString();
+        if (!YautjaBodyVariants.IsBodyRsi(sheet))
         {
-            return;
-        }
-
-        // Only the six CM tones have baked art. Gray/White (and any colour outside the palette) have no variant state,
-        // so they keep the greyscale shader plus a tint - that is what the achromatic presets expect.
-        if (!YautjaHasExactVariant(selection))
-        {
-            if ((layer.RsiState.Name ?? string.Empty) != baseState)
-                sprite.LayerSetState(index, baseState);
-            sprite.LayerSetShader(index, "Greyscale");
-            sprite.LayerSetColor(index, selection);
             return;
         }
 
