@@ -2,8 +2,11 @@ using System.Numerics;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Weapons.Melee;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Finesse;
 using Content.Shared.Actions;
+using Content.Shared.Body.Systems;
+using Content.Shared.Body.Components;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -17,6 +20,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+
 
 namespace Content.Shared._RMC14.Xenonids.Impale;
 
@@ -34,6 +38,7 @@ public sealed partial class XenoImpaleSystem : EntitySystem
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private XenoSystem _xeno = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
 
     private EntityQuery<RMCCooldownOnMissComponent> _missCooldownQuery;
 
@@ -75,6 +80,7 @@ public sealed partial class XenoImpaleSystem : EntitySystem
             secondHit.AP = xeno.Comp.AP;
             secondHit.Animation = xeno.Comp.Animation;
             secondHit.Damage = xeno.Comp.Damage;
+            secondHit.Bloodloss = xeno.Comp.Bloodloss; 
             secondHit.ImpaleAt = _timing.CurTime + xeno.Comp.SecondImpaleTime;
             secondHit.Origin = xeno;
             secondHit.Sound = xeno.Comp.Sound;
@@ -82,7 +88,7 @@ public sealed partial class XenoImpaleSystem : EntitySystem
             RemCompDeferred<XenoMarkedComponent>(targetId);
         }
 
-        Impale(xeno.Comp.Damage, xeno.Comp.AP, xeno.Comp.Animation, xeno.Comp.Sound, targetId, xeno);
+        Impale(xeno.Comp.Damage, xeno.Comp.AP, xeno.Comp.Bloodloss, xeno.Comp.Animation, xeno.Comp.Sound, targetId, xeno);
 
     }
 
@@ -118,7 +124,7 @@ public sealed partial class XenoImpaleSystem : EntitySystem
         _melee.DoLunge(xeno, xeno, Angle.Zero, localPos, null);
     }
 
-    private void Impale(DamageSpecifier damage, int aP, EntProtoId animation, SoundSpecifier sound, EntityUid target, EntityUid xeno)
+    private void Impale(DamageSpecifier damage, int aP, FixedPoint2 bloodloss, EntProtoId animation, SoundSpecifier sound, EntityUid target, EntityUid xeno)
     {
         //TODO RMC14 targets chest
         var finalDamage = _xeno.TryApplyXenoSlashDamageMultiplier(target, damage);
@@ -138,6 +144,9 @@ public sealed partial class XenoImpaleSystem : EntitySystem
             var filter = Filter.Pvs(target, entityManager: EntityManager).RemoveWhereAttachedEntity(o => o == xeno);
             _flash.RaiseEffect(Color.Red, new List<EntityUid> { target }, filter);
         }
+
+        if (bloodloss > FixedPoint2.Zero && TryComp<BloodstreamComponent>(target, out var bloodstream))  
+            _bloodstream.TryModifyBloodLevel((target, bloodstream), -bloodloss);  
 
         _rmcMelee.DoLunge(xeno, target);
 
@@ -162,7 +171,7 @@ public sealed partial class XenoImpaleSystem : EntitySystem
             if (impale.ImpaleAt > time)
                 continue;
 
-            Impale(impale.Damage, impale.AP, impale.Animation, impale.Sound, uid, impale.Origin);
+            Impale(impale.Damage, impale.AP, impale.Bloodloss, impale.Animation, impale.Sound, uid, impale.Origin);
             RemCompDeferred<XenoSecondImpaleComponent>(uid);
         }
     }

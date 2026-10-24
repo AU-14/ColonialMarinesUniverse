@@ -229,6 +229,18 @@ rmc-xeno-bulwark-description = You trade punch, lunge, and fling for plate-based
   - Plate Bash, Tail Swing, and a directional Reflective Shield.
 rmc-xeno-bulwark-popup = This one becomes the wall before the wall breaks.
 
+rmc-xeno-bloodletter-name = Bloodletter
+rmc-xeno-bloodletter-description = You trade your Abduct and most of your damage for abilities that drain your targets blood.
+    You gain:
+    - Scissor Cut, Impale, Tailstab and your Melee Attacks cause the target to lose blood.
+    - An Execute ability that kills downed targets, drains large amounts of blood and heals you.
+    You Lose:
+    - Some armor.
+    - Some attack speed.
+    - Your Blight Strike ability and Abduct ability.
+    - Most of the raw damage of your attacks and abilities.
+rmc-xeno-bloodletter-popup = Open their veins. Bleed them dry. The Mycelium will run red.
+
 cm-xeno-heatshield-vomit-bile-extinguish = You smother the flames with bile.
 cm-xeno-heatshield-vomit-bile-hostile = You coat the target in volatile bile.
 cm-xeno-heatshield-vomit-bile-tile = You smother the burning ground with bile.
