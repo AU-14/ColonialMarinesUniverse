@@ -955,7 +955,7 @@
   parent: CMU14ActionXenoPathogenImpale
   id: CMU14ActionXenoPathogenImpaleBloodletter  
   name: Open Vein
-  Description: Strike directly at a vulnerable vein, causing major blood loss. Penetrates armor.
+  description: Strike directly at a vulnerable vein, causing major blood loss. Penetrates armor.
 
 - type: entity
   parent: ActionXenoBase
