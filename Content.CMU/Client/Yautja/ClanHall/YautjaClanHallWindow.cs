@@ -2,174 +2,124 @@ using System.Linq;
 using System.Numerics;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Eui;
+using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Network;
-using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.Client.CMU14.Yautja.ClanHall;
 
-// one window for everything clan related. tabs swap on the client instantly, anything that
-// changes the selection or the data goes to the server, and the state that comes back is the truth
+// one window for clan info, leaderboard, hunter records and the staff pages, drawn as a predator hud.
+// tabs switch on the client, anything that changes data goes to the server and its reply is the truth
 public sealed partial class YautjaClanHallWindow : BaseWindow
 {
-    private const float ResizeGrip = 14;
+    private const float ResizeGrip = 16;
+    private static readonly ResPath RankIcons = new("/Textures/CMU14/Yautja/rank_icons.rsi");
+    private static readonly ResPath Masks = new("/Textures/CMU14/Yautja/masks");
 
     private readonly Font _title;
-    private readonly Font _heading;
-    private readonly Font _readout;
+    private readonly Font _label;
     private readonly Font _small;
+    private readonly Font _number;
+    private readonly Font _big;
     private readonly Font _body;
     private readonly Font _bodyBold;
-    private readonly Font _big;
 
-    private readonly YautjaClanHallHolo _holo;
-    private readonly Label _viewerName;
-    private readonly Label _viewerLine;
-    private readonly Label _viewerHonor;
-    private readonly TextureRect _viewerIcon;
-    private readonly Label _status;
-    private readonly BoxContainer _rail;
-    private readonly Dictionary<YautjaClanHallPage, HallButton> _tabs = new();
+    private readonly Dictionary<YautjaClanHallPage, HudButton> _tabButtons = new();
     private readonly Dictionary<YautjaClanHallPage, Control> _pages = new();
-    private readonly Control _staffDivider;
+    private readonly Label _status;
 
     private YautjaClanHallEuiState? _state;
     private YautjaClanHallPage _page = YautjaClanHallPage.Clan;
-    private YautjaClanHallPage _backPage = YautjaClanHallPage.Leaderboard;
-    private int _pendingAfter = -1;
-    private float _pendingDots;
+    private NetUserId? _selectedHunter;
 
     public event Action<EuiMessageBase>? Send;
 
     public YautjaClanHallWindow()
     {
-        _title = YautjaClanHallStyle.Font(YautjaClanHallStyle.Osd, 13);
-        _heading = YautjaClanHallStyle.Font(YautjaClanHallStyle.Osd, 11);
-        _readout = YautjaClanHallStyle.Font(YautjaClanHallStyle.Osd, 10);
-        _small = YautjaClanHallStyle.Font(YautjaClanHallStyle.Osd, 8);
-        _big = YautjaClanHallStyle.Font(YautjaClanHallStyle.Osd, 18);
-        _body = YautjaClanHallStyle.Font(YautjaClanHallStyle.Sans, 12);
-        _bodyBold = YautjaClanHallStyle.Font(YautjaClanHallStyle.SansBold, 12);
+        _title = Hud.Font(Hud.Osd, 14);
+        _label = Hud.Font(Hud.Osd, 10);
+        _small = Hud.Font(Hud.Osd, 8);
+        _number = Hud.Font(Hud.Osd, 22);
+        _big = Hud.Font(Hud.Osd, 18);
+        _body = Hud.Font(Hud.Sans, 12);
+        _bodyBold = Hud.Font(Hud.SansBold, 12);
 
         Resizable = true;
-        // the frame itself drags, so it has to catch clicks on empty bezel
+        // the black field drags the window, buttons take their own clicks first
         MouseFilter = MouseFilterMode.Stop;
-        MinSize = new Vector2(880, 560);
-        SetSize = new Vector2(1020, 660);
+        MinSize = new Vector2(820, 560);
+        SetSize = new Vector2(960, 660);
 
-        var bezel = new YautjaClanHallBezel();
-        AddChild(bezel);
+        var background = new HudBackground { HorizontalExpand = true, VerticalExpand = true };
+        AddChild(background);
+        var root = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, SeparationOverride = 10, Margin = new Thickness(18, 14) };
+        background.AddChild(root);
 
-        // top band: title glyphs + close
-        var band = YautjaClanHallStyle.HBox(8);
-        band.AddChild(new GlyphStrip(3, 4, YautjaClanHallStyle.HotRed) { VerticalAlignment = VAlignment.Center });
-        var title = YautjaClanHallStyle.Label(Loc.GetString("cmu-yautja-hall-title"), _title, YautjaClanHallStyle.HotRed);
+        var header = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, SeparationOverride = 6 };
+        var title = Hud.Write(Loc.GetString("cmu-yautja-hall-title").ToUpperInvariant(), _title, Hud.Bright);
         title.VerticalAlignment = VAlignment.Center;
-        band.AddChild(title);
-        band.AddChild(new GlyphStrip(11, 14, YautjaClanHallStyle.Border) { VerticalAlignment = VAlignment.Center, HorizontalExpand = true });
-        var close = new HallButton("✕", _heading, YautjaClanHallStyle.HotRed, 8, 1) { VerticalAlignment = VAlignment.Center };
-        close.OnPressed += _ => Close();
-        band.AddChild(close);
-        bezel.AddChild(band);
+        title.Margin = new Thickness(0, 0, 18, 0);
+        header.AddChild(title);
+        AddTab(header, YautjaClanHallPage.Clan, "cmu-yautja-hall-tab-clan", BuildClanPage());
+        AddTab(header, YautjaClanHallPage.Leaderboard, "cmu-yautja-hall-tab-boards", BuildBoardsPage());
+        AddTab(header, YautjaClanHallPage.Hunter, "cmu-yautja-hall-tab-hunter", BuildHunterPage());
+        AddTab(header, YautjaClanHallPage.Whitelists, "cmu-yautja-hall-tab-whitelists", BuildWhitelistPage());
+        AddTab(header, YautjaClanHallPage.Round, "cmu-yautja-hall-tab-round", BuildRoundPage());
+        header.AddChild(new Control { HorizontalExpand = true });
+        var close = new HudButton("X", _label);
+        close.Activated += Close;
+        header.AddChild(close);
+        root.AddChild(header);
 
-        var screen = YautjaClanHallStyle.VBox(0);
-        screen.HorizontalExpand = screen.VerticalExpand = true;
-        bezel.AddChild(screen);
-
-        // header: who's looking
-        var header = YautjaClanHallStyle.Panel(YautjaClanHallStyle.Surface, YautjaClanHallStyle.MutedBorder, 10, 6);
-        var headerRow = YautjaClanHallStyle.HBox(10);
-        _viewerIcon = YautjaClanHallStyle.Icon(null, 36);
-        headerRow.AddChild(_viewerIcon);
-        var who = YautjaClanHallStyle.VBox(0);
-        who.HorizontalExpand = true;
-        _viewerName = YautjaClanHallStyle.Label(string.Empty, _heading, YautjaClanHallStyle.Text);
-        _viewerLine = YautjaClanHallStyle.Label(string.Empty, _small, YautjaClanHallStyle.Muted);
-        who.AddChild(_viewerName);
-        who.AddChild(_viewerLine);
-        headerRow.AddChild(who);
-        var honorBox = YautjaClanHallStyle.VBox(0);
-        var honorLabel = YautjaClanHallStyle.Label(Loc.GetString("cmu-yautja-hall-honor"), _small, YautjaClanHallStyle.HonorDim);
-        honorLabel.HorizontalAlignment = HAlignment.Right;
-        honorBox.AddChild(honorLabel);
-        _viewerHonor = YautjaClanHallStyle.Label("0", _big, YautjaClanHallStyle.Honor);
-        _viewerHonor.HorizontalAlignment = HAlignment.Right;
-        honorBox.AddChild(_viewerHonor);
-        headerRow.AddChild(honorBox);
-        header.AddChild(headerRow);
-        screen.AddChild(header);
-
-        var body = YautjaClanHallStyle.HBox(0);
-        body.VerticalExpand = true;
-        screen.AddChild(body);
-
-        _rail = YautjaClanHallStyle.VBox(4);
-        _rail.MinWidth = 150;
-        _rail.Margin = new Thickness(8, 10, 8, 8);
-        body.AddChild(_rail);
-        body.AddChild(new PanelContainer { MinWidth = 1, PanelOverride = YautjaClanHallStyle.Box(YautjaClanHallStyle.MutedBorder) });
-
-        var pageArea = new Control { HorizontalExpand = true, VerticalExpand = true, Margin = new Thickness(12, 10, 12, 8) };
-        body.AddChild(pageArea);
-
-        AddTab(YautjaClanHallPage.Clan, "cmu-yautja-hall-tab-clan", 101, BuildClanPage());
-        AddTab(YautjaClanHallPage.Leaderboard, "cmu-yautja-hall-tab-boards", 202, BuildBoardsPage());
-        AddTab(YautjaClanHallPage.Hunter, "cmu-yautja-hall-tab-hunter", 303, BuildHunterPage());
-        _staffDivider = YautjaClanHallStyle.Label(Loc.GetString("cmu-yautja-hall-staff"), _small, YautjaClanHallStyle.Staff);
-        _staffDivider.Margin = new Thickness(2, 12, 0, 2);
-        _rail.AddChild(_staffDivider);
-        AddTab(YautjaClanHallPage.Whitelists, "cmu-yautja-hall-tab-whitelists", 404, BuildWhitelistPage(), staff: true);
-        AddTab(YautjaClanHallPage.Round, "cmu-yautja-hall-tab-round", 505, BuildRoundPage(), staff: true);
+        var area = new Control { VerticalExpand = true, HorizontalExpand = true };
         foreach (var page in _pages.Values)
-            pageArea.AddChild(page);
+            area.AddChild(page);
+        root.AddChild(area);
 
-        // status line
-        var statusBar = YautjaClanHallStyle.Panel(YautjaClanHallStyle.Surface, YautjaClanHallStyle.MutedBorder, 10, 3);
-        _status = YautjaClanHallStyle.Label(string.Empty, _small, YautjaClanHallStyle.Dim);
-        statusBar.AddChild(_status);
-        screen.AddChild(statusBar);
+        _status = Hud.Write(string.Empty, _small, Hud.Muted, clip: true);
+        _status.HorizontalExpand = true;
+        root.AddChild(_status);
 
-        _holo = new YautjaClanHallHolo();
-        bezel.AddChild(_holo);
-
-        ShowPage(YautjaClanHallPage.Clan, flicker: false);
+        ShowPage(YautjaClanHallPage.Clan);
     }
 
-    private void AddTab(YautjaClanHallPage page, string loc, int seed, Control content, bool staff = false)
+    private void AddTab(BoxContainer header, YautjaClanHallPage page, string loc, Control content)
     {
-        var accent = staff ? YautjaClanHallStyle.Staff : YautjaClanHallStyle.HotRed;
-        var button = new TabButton(Loc.GetString(loc), _heading, accent, seed);
-        button.OnPressed += _ => ShowPage(page);
-        _rail.AddChild(button);
-        _tabs[page] = button;
-        content.Visible = false;
-        _pages[page] = content;
+        var button = new HudButton(Loc.GetString(loc).ToUpperInvariant(), _label);
+        button.Activated += () => ShowPage(page);
+        header.AddChild(button);
+        _tabButtons[page] = button;
+
+        var scroll = new ScrollContainer { HScrollEnabled = false, VerticalExpand = true, HorizontalExpand = true, Visible = false };
+        content.HorizontalExpand = true;
+        scroll.AddChild(content);
+        _pages[page] = scroll;
     }
 
-    private void ShowPage(YautjaClanHallPage page, bool flicker = true)
+    private void ShowPage(YautjaClanHallPage page)
     {
-        if (page != YautjaClanHallPage.Hunter)
-            _backPage = page;
-
-        if (flicker && page != _page)
-            _holo.Flicker();
-
         _page = page;
-        foreach (var (key, content) in _pages)
-            content.Visible = key == page;
-        foreach (var (key, tab) in _tabs)
-            tab.Selected = key == page;
+        foreach (var (key, control) in _pages)
+            control.Visible = key == page;
+        foreach (var (key, button) in _tabButtons)
+            button.Selected = key == page;
     }
 
-    // every request: mark the window as waiting until a newer state comes back
+    protected override DragMode GetDragModeFor(Vector2 relativeMousePos)
+    {
+        if (relativeMousePos.X >= Size.X - ResizeGrip && relativeMousePos.Y >= Size.Y - ResizeGrip)
+            return DragMode.Bottom | DragMode.Right;
+
+        return DragMode.Move;
+    }
+
     private void Request(EuiMessageBase message)
     {
-        _pendingAfter = _state?.Revision ?? 0;
         Send?.Invoke(message);
-        UpdateStatus();
     }
 
     private void OpenClan(int clanId)
@@ -181,6 +131,7 @@ public sealed partial class YautjaClanHallWindow : BaseWindow
 
     private void OpenHunter(NetUserId hunter)
     {
+        _selectedHunter = hunter;
         ShowPage(YautjaClanHallPage.Hunter);
         if (_state?.Hunter?.PlayerId != hunter)
             Request(new YautjaClanHallShowMessage(YautjaClanHallPage.Hunter, hunter: hunter));
@@ -190,23 +141,9 @@ public sealed partial class YautjaClanHallWindow : BaseWindow
     {
         var first = _state == null;
         _state = state;
-        if (_pendingAfter >= 0 && state.Revision > _pendingAfter)
-            _pendingAfter = -1;
 
-        var viewer = state.Viewer;
-        _viewerIcon.Texture = YautjaClanHallStyle.RankIcon(viewer.Rank);
-        _viewerName.Text = viewer.Name.ToUpperInvariant();
-        var clan = viewer.ClanId is { } clanId ? state.Clans.FirstOrDefault(c => c.Id == clanId) : null;
-        _viewerLine.Text = Loc.GetString("cmu-yautja-hall-viewer-line",
-            ("rank", YautjaClanHallStyle.RankName(viewer.Rank)),
-            ("clan", clan?.Name ?? Loc.GetString("cmu-yautja-hall-clanless")));
-        if (viewer.Staff)
-            _viewerLine.Text += "  ·  " + Loc.GetString(viewer.Host ? "cmu-yautja-hall-viewer-host" : "cmu-yautja-hall-viewer-staff");
-        _viewerHonor.Text = YautjaClanHallStyle.Number(viewer.Honor);
-
-        _staffDivider.Visible = viewer.Staff || viewer.Host;
-        _tabs[YautjaClanHallPage.Whitelists].Visible = state.Whitelist != null;
-        _tabs[YautjaClanHallPage.Round].Visible = state.Round != null;
+        _tabButtons[YautjaClanHallPage.Whitelists].Visible = state.Whitelist != null;
+        _tabButtons[YautjaClanHallPage.Round].Visible = state.Round != null;
 
         UpdateClanPage(state);
         UpdateBoardsPage(state);
@@ -223,55 +160,67 @@ public sealed partial class YautjaClanHallWindow : BaseWindow
                 page = YautjaClanHallPage.Clan;
             }
 
-            // nothing to show on the clan tab, start somewhere useful
             if (page == YautjaClanHallPage.Clan && state.Clan == null)
                 page = YautjaClanHallPage.Leaderboard;
 
-            ShowPage(page, flicker: !first);
+            ShowPage(page);
         }
 
-        UpdateStatus();
-    }
-
-    private void UpdateStatus()
-    {
-        if (_pendingAfter >= 0)
-        {
-            _status.FontColorOverride = YautjaClanHallStyle.Muted;
-            _status.Text = "▸ " + Loc.GetString("cmu-yautja-hall-transmitting") + new string('.', 1 + (int) _pendingDots % 3);
-            return;
-        }
-
-        if (_state is not { } state || string.IsNullOrEmpty(state.Status))
-        {
-            _status.FontColorOverride = YautjaClanHallStyle.Dim;
-            _status.Text = "▸ " + Loc.GetString("cmu-yautja-hall-ready");
-            return;
-        }
-
-        _status.FontColorOverride = state.StatusIsError ? YautjaClanHallStyle.HotRed : YautjaClanHallStyle.Honor;
-        _status.Text = "▸ " + state.Status;
-    }
-
-    protected override void FrameUpdate(FrameEventArgs args)
-    {
-        base.FrameUpdate(args);
-        if (_pendingAfter < 0)
-            return;
-
-        _pendingDots += args.DeltaSeconds * 3;
-        UpdateStatus();
-    }
-
-    protected override DragMode GetDragModeFor(Vector2 relativeMousePos)
-    {
-        if (relativeMousePos.X >= Size.X - ResizeGrip && relativeMousePos.Y >= Size.Y - ResizeGrip)
-            return DragMode.Bottom | DragMode.Right;
-
-        return DragMode.Move;
+        _status.Text = state.Status;
+        _status.FontColorOverride = state.StatusIsError ? Hud.Hot : Hud.Muted;
     }
 
     // shared bits the pages use
+
+    private static Texture? Frame0(SpriteSpecifier specifier)
+    {
+        try
+        {
+            return IoCManager.Resolve<IEntityManager>().System<SpriteSystem>().Frame0(specifier);
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    private static TextureRect RankIcon(YautjaRank rank, float size = 22)
+    {
+        var state = rank switch
+        {
+            YautjaRank.Unblooded => "unblooded",
+            YautjaRank.YoungBlood => "youngblood",
+            YautjaRank.Elite => "elite",
+            YautjaRank.Elder => "elder",
+            YautjaRank.Leader => "leader",
+            YautjaRank.Ancient => "ancient",
+            _ => "blooded",
+        };
+
+        return Icon(Frame0(new SpriteSpecifier.Rsi(RankIcons, state)), size);
+    }
+
+    private static Texture? SigilTexture(string sigil)
+    {
+        return Frame0(new SpriteSpecifier.Rsi(Masks / $"{YautjaClanSigils.OrDefault(sigil)}.rsi", "icon"));
+    }
+
+    private static TextureRect Icon(Texture? texture, float size)
+    {
+        return new TextureRect
+        {
+            Texture = texture,
+            Stretch = TextureRect.StretchMode.KeepAspectCentered,
+            SetSize = new Vector2(size, size),
+            TextureScale = new Vector2(size / 32f, size / 32f),
+            VerticalAlignment = VAlignment.Center,
+        };
+    }
+
+    private static string RankName(YautjaRank rank)
+    {
+        return Loc.GetString(YautjaRankMetadata.For(rank).LocalizedName);
+    }
 
     private string ClanName(int? clanId)
     {
@@ -281,142 +230,113 @@ public sealed partial class YautjaClanHallWindow : BaseWindow
         return _state?.Clans.FirstOrDefault(c => c.Id == clanId)?.Name ?? Loc.GetString("cmu-yautja-hall-clan-unknown");
     }
 
-    private Color ClanInk(int? clanId)
+    private static BoxContainer HBox(int separation = 6)
     {
-        var clan = clanId == null ? null : _state?.Clans.FirstOrDefault(c => c.Id == clanId);
-        return clan == null ? YautjaClanHallStyle.Dim : YautjaClanHallStyle.Readable(YautjaClanHallStyle.ClanColor(clan.Color));
+        return new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, SeparationOverride = separation };
     }
 
-    private Control SectionTitle(string text, Color? color = null)
+    private static BoxContainer VBox(int separation = 6)
     {
-        var row = YautjaClanHallStyle.HBox(6);
-        row.AddChild(new GlyphStrip(text.Length, 2, (color ?? YautjaClanHallStyle.HotRed).WithAlpha(0.6f)) { VerticalAlignment = VAlignment.Center });
-        row.AddChild(YautjaClanHallStyle.Label(text.ToUpperInvariant(), _heading, color ?? YautjaClanHallStyle.HotRed));
-        return row;
+        return new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, SeparationOverride = separation };
     }
 
-    // a hunter on a list: rank icon, name, honor, a lit pip when they're online. click opens the dossier
-    private Control HunterLine(YautjaClanHallHunterRow hunter, string? prefix = null, bool showClan = false, bool highlight = false)
+    private static Control Gap()
     {
-        var button = new HallButton(string.Empty, _body, YautjaClanHallStyle.HotRed, 0, 0) { HorizontalExpand = true };
-        button.Label.Visible = false;
-        if (highlight)
-            button.Selected = true;
+        return new Control { HorizontalExpand = true };
+    }
 
-        var row = YautjaClanHallStyle.HBox(8);
-        row.Margin = new Thickness(6, 2);
-        if (prefix != null)
-        {
-            var number = YautjaClanHallStyle.Label(prefix, _readout, YautjaClanHallStyle.Dim);
-            number.MinWidth = 34;
-            number.VerticalAlignment = VAlignment.Center;
-            row.AddChild(number);
-        }
-
-        row.AddChild(YautjaClanHallStyle.Icon(YautjaClanHallStyle.RankIcon(hunter.Rank), 22));
-        var name = YautjaClanHallStyle.Label(hunter.Name, _bodyBold, YautjaClanHallStyle.Text, clip: true);
-        name.HorizontalExpand = true;
-        name.VerticalAlignment = VAlignment.Center;
-        row.AddChild(name);
-        if (showClan)
-        {
-            var clan = YautjaClanHallStyle.Label(ClanName(hunter.ClanId), _small, ClanInk(hunter.ClanId), clip: true);
-            clan.MinWidth = 150;
-            clan.VerticalAlignment = VAlignment.Center;
-            row.AddChild(clan);
-        }
-
-        var honor = YautjaClanHallStyle.Label(YautjaClanHallStyle.Number(hunter.Honor), _readout, YautjaClanHallStyle.Honor);
-        honor.MinWidth = 64;
-        honor.Align = Label.AlignMode.Right;
-        honor.VerticalAlignment = VAlignment.Center;
-        row.AddChild(honor);
-        row.AddChild(new Pip(hunter.Online) { VerticalAlignment = VAlignment.Center });
-
-        button.AddChild(row);
-        var id = hunter.PlayerId;
-        button.OnPressed += _ => OpenHunter(id);
+    private HudButton Button(string loc, Action onPressed, bool confirm = false)
+    {
+        var button = new HudButton(Loc.GetString(loc), _small, confirm);
+        button.Activated += onPressed;
         return button;
     }
 
-    private static Control Scroll(Control content)
+    private HudFrame Frame(string? titleLoc)
     {
-        var scroll = new ScrollContainer { HScrollEnabled = false, VerticalExpand = true, HorizontalExpand = true };
-        content.HorizontalExpand = true;
-        scroll.AddChild(content);
-        return scroll;
+        return new HudFrame(titleLoc == null ? null : Loc.GetString(titleLoc), _small);
     }
 
-    private Control Empty(string text)
+    private Label Caption(string text)
     {
-        var label = YautjaClanHallStyle.Label(text, _readout, YautjaClanHallStyle.Dim);
-        label.Margin = new Thickness(4, 6);
+        var label = Hud.Write(text.ToUpperInvariant(), _small, Hud.Muted);
+        label.VerticalAlignment = VAlignment.Center;
         return label;
     }
 
-    private sealed class TabButton : HallButton
+    private Control Empty(string loc)
     {
-        public TabButton(string text, Font font, Color accent, int seed) : base(string.Empty, font, accent, 0, 0)
-        {
-            Label.Visible = false;
-            MinHeight = 34;
-            var row = YautjaClanHallStyle.HBox(8);
-            row.Margin = new Thickness(8, 4);
-            row.AddChild(new GlyphStrip(seed, 2, accent) { VerticalAlignment = VAlignment.Center });
-            var label = YautjaClanHallStyle.Label(text.ToUpperInvariant(), font, YautjaClanHallStyle.Text);
-            label.VerticalAlignment = VAlignment.Center;
-            row.AddChild(label);
-            AddChild(row);
-        }
+        return Hud.Write(Loc.GetString(loc), _body, Hud.Muted);
     }
 
-    // a short run of glyphs as a control, for headings and the tab rail
-    private sealed class GlyphStrip : Control
+    // a hunter on a list: rank icon, name, clan if asked, honor, lit dot when online. click opens them
+    private Control HunterRow(YautjaClanHallHunterRow hunter, string? prefix = null, bool showClan = false, bool compact = false)
     {
-        private readonly int _seed;
-        private readonly int _count;
-        private readonly Color _color;
-
-        public GlyphStrip(int seed, int count, Color color)
+        var row = new HudRow { Selected = hunter.PlayerId == _selectedHunter };
+        var line = HBox(8);
+        line.Margin = new Thickness(8, 3, 4, 3);
+        if (prefix != null)
         {
-            _seed = seed;
-            _count = count;
-            _color = color;
-            MinSize = new Vector2(count * 7 + 2, 9);
-            MouseFilter = MouseFilterMode.Ignore;
+            var number = Hud.Write(prefix, _label, Hud.Muted);
+            number.MinWidth = 28;
+            number.VerticalAlignment = VAlignment.Center;
+            line.AddChild(number);
         }
 
-        protected override void Draw(DrawingHandleScreen handle)
+        line.AddChild(RankIcon(hunter.Rank));
+        var name = Hud.Write(hunter.Name, _bodyBold, hunter.PlayerId == _state?.Viewer.PlayerId ? Hud.Hot : Hud.Text, clip: true);
+        name.HorizontalExpand = true;
+        name.VerticalAlignment = VAlignment.Center;
+        line.AddChild(name);
+        if (showClan)
         {
-            base.Draw(handle);
-            YautjaClanHallStyle.DrawGlyphs(handle, new Vector2(0, (PixelSize.Y - 7 * UIScale) / 2), _seed, _count, UIScale, _color);
+            var clan = Hud.Write(ClanName(hunter.ClanId), _body, Hud.Muted, clip: true);
+            clan.MinWidth = 150;
+            clan.VerticalAlignment = VAlignment.Center;
+            line.AddChild(clan);
         }
+
+        // compact rows (join requests) give the room to the name and the buttons beside it
+        if (!compact)
+        {
+            var honor = Hud.Write(hunter.Honor.ToString(), _label, Hud.Label);
+            honor.MinWidth = 56;
+            honor.Align = Label.AlignMode.Right;
+            honor.VerticalAlignment = VAlignment.Center;
+            line.AddChild(honor);
+            line.AddChild(new OnlineDot(hunter.Online));
+        }
+        row.AddChild(line);
+
+        var id = hunter.PlayerId;
+        row.OnPressed += _ => OpenHunter(id);
+        return row;
     }
 
-    private sealed class Pip : Control
+    private sealed class OnlineDot : Control
     {
-        private readonly bool _on;
+        private readonly bool _online;
 
-        public Pip(bool on)
+        public OnlineDot(bool online)
         {
-            _on = on;
+            _online = online;
             MinSize = new Vector2(10, 10);
-            MouseFilter = MouseFilterMode.Ignore;
-            ToolTip = Loc.GetString(on ? "cmu-yautja-hall-online" : "cmu-yautja-hall-offline");
+            VerticalAlignment = VAlignment.Center;
+            MouseFilter = MouseFilterMode.Pass;
+            ToolTip = Loc.GetString(online ? "cmu-yautja-hall-online" : "cmu-yautja-hall-offline");
         }
 
         protected override void Draw(DrawingHandleScreen handle)
         {
-            base.Draw(handle);
             var c = PixelSize / 2;
-            if (_on)
+            if (_online)
             {
-                handle.DrawCircle(c, 4.5f * UIScale, YautjaClanHallStyle.Online.WithAlpha(0.25f));
-                handle.DrawCircle(c, 2.5f * UIScale, YautjaClanHallStyle.Online);
+                handle.DrawCircle(c, 4 * UIScale, Hud.Bright.WithAlpha(0.25f));
+                handle.DrawCircle(c, 2.2f * UIScale, Hud.Bright);
             }
             else
             {
-                handle.DrawCircle(c, 2.5f * UIScale, YautjaClanHallStyle.MutedBorder);
+                handle.DrawCircle(c, 2.2f * UIScale, Hud.Dim, filled: false);
             }
         }
     }

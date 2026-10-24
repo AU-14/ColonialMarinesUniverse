@@ -4,8 +4,7 @@ using Robust.Client.UserInterface.Controls;
 
 namespace Content.Client.CMU14.Yautja.ClanHall;
 
-// staff only pages. the server leaves Whitelist/Round null for everyone else, so these tabs
-// never even get data to show
+// staff tabs. the server leaves Whitelist/Round null for everyone else, so these never get data
 public sealed partial class YautjaClanHallWindow
 {
     private static readonly YautjaWhitelistFlags[] FlagOrder =
@@ -19,12 +18,12 @@ public sealed partial class YautjaClanHallWindow
 
     private BoxContainer _whitelistRows = default!;
     private LineEdit _grantName = default!;
-    private LineEdit _whitelistFilter = default!;
+    private LineEdit _whitelistSearch = default!;
 
+    private HudTag _roundTag = default!;
     private Label _roundInfo = default!;
-    private Label _roundSlots = default!;
-    private LineEdit _slotsEdit = default!;
-    private HallButton _randomToggle = default!;
+    private LineEdit _slots = default!;
+    private HudButton _randomToggle = default!;
     private LineEdit _randomMin = default!;
     private LineEdit _randomMax = default!;
     private Label _randomInfo = default!;
@@ -33,44 +32,40 @@ public sealed partial class YautjaClanHallWindow
 
     private Control BuildWhitelistPage()
     {
-        var page = YautjaClanHallStyle.VBox(8);
-        page.HorizontalExpand = page.VerticalExpand = true;
-        page.AddChild(SectionTitle(Loc.GetString("cmu-yautja-hall-tab-whitelists"), YautjaClanHallStyle.Staff));
+        var page = VBox(10);
 
-        var grant = YautjaClanHallStyle.Panel(YautjaClanHallStyle.Card, YautjaClanHallStyle.Staff, 10, 6);
-        var grantRow = YautjaClanHallStyle.HBox(6);
-        _grantName = new LineEdit { HorizontalExpand = true, PlaceHolder = Loc.GetString("cmu-yautja-hall-grant-placeholder") };
-        var grantButton = new HallButton(Loc.GetString("cmu-yautja-hall-grant"), _readout, YautjaClanHallStyle.Staff);
-        grantButton.OnPressed += _ =>
+        var grant = Frame("cmu-yautja-hall-grant-title");
+        var row = HBox(6);
+        _grantName = Hud.LineEdit(Loc.GetString("cmu-yautja-hall-player"));
+        _grantName.HorizontalExpand = true;
+        row.AddChild(_grantName);
+        row.AddChild(Button("cmu-yautja-hall-grant", () =>
         {
             if (string.IsNullOrWhiteSpace(_grantName.Text))
                 return;
 
             Request(new YautjaClanHallSetWhitelistMessage(_grantName.Text.Trim(), YautjaWhitelistFlags.Yautja));
             _grantName.Text = string.Empty;
-        };
-        var openButton = new HallButton(Loc.GetString("cmu-yautja-hall-open-record"), _readout, YautjaClanHallStyle.Staff);
-        openButton.OnPressed += _ =>
+        }));
+        row.AddChild(Button("cmu-yautja-hall-open", () =>
         {
             if (!string.IsNullOrWhiteSpace(_grantName.Text))
                 Request(new YautjaClanHallFindMessage(_grantName.Text.Trim()));
-        };
-        grantRow.AddChild(_grantName);
-        grantRow.AddChild(grantButton);
-        grantRow.AddChild(openButton);
-        grant.AddChild(grantRow);
+        }));
+        grant.Body.AddChild(row);
         page.AddChild(grant);
 
-        _whitelistFilter = new LineEdit { HorizontalExpand = true, PlaceHolder = Loc.GetString("cmu-yautja-hall-search") };
-        _whitelistFilter.OnTextChanged += _ =>
+        var list = Frame("cmu-yautja-hall-tab-whitelists");
+        _whitelistSearch = Hud.LineEdit(Loc.GetString("cmu-yautja-hall-search"));
+        _whitelistSearch.OnTextChanged += _ =>
         {
             if (_state != null)
                 UpdateWhitelistPage(_state);
         };
-        page.AddChild(_whitelistFilter);
-
-        _whitelistRows = YautjaClanHallStyle.VBox(3);
-        page.AddChild(Scroll(_whitelistRows));
+        list.Body.AddChild(_whitelistSearch);
+        _whitelistRows = VBox(2);
+        list.Body.AddChild(_whitelistRows);
+        page.AddChild(list);
         return page;
     }
 
@@ -80,137 +75,119 @@ public sealed partial class YautjaClanHallWindow
         if (state.Whitelist is not { } rows)
             return;
 
-        var filter = _whitelistFilter.Text.Trim();
+        var search = _whitelistSearch.Text.Trim();
         foreach (var entry in rows)
         {
-            if (filter.Length > 0 && !entry.Name.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            if (search.Length > 0 && !entry.Name.Contains(search, StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            var row = YautjaClanHallStyle.HBox(8);
-            var name = new HallButton(entry.Name, _bodyBold, YautjaClanHallStyle.Staff, 8, 2) { MinWidth = 160 };
-            name.Label.HorizontalAlignment = HAlignment.Left;
+            var line = HBox(8);
+            var name = new HudRow();
+            name.MinWidth = 170;
+            name.HorizontalExpand = false;
+            var label = Hud.Write(entry.Name, _bodyBold, Hud.Text, clip: true);
+            label.Margin = new Thickness(8, 3);
+            name.AddChild(label);
             var id = entry.PlayerId;
             name.OnPressed += _ => OpenHunter(id);
-            row.AddChild(name);
-            row.AddChild(new Pip(entry.Online) { VerticalAlignment = VAlignment.Center });
-            row.AddChild(WhitelistToggles(entry.PlayerId.ToString(), entry.Flags));
-            _whitelistRows.AddChild(row);
+            line.AddChild(name);
+            line.AddChild(WhitelistToggles(entry.PlayerId.ToString(), entry.Flags));
+            _whitelistRows.AddChild(line);
         }
 
         if (_whitelistRows.ChildCount == 0)
-            _whitelistRows.AddChild(Empty(Loc.GetString("cmu-yautja-hall-no-whitelist")));
+            _whitelistRows.AddChild(Empty("cmu-yautja-hall-no-whitelist"));
     }
 
-    // one chip per flag, each press flips just that flag. revoke wipes the lot (and the clan profile with it)
+    // one lit toggle per flag, each press flips just that flag. remove clears all of them, and the
+    // server wipes the clan profile with it
     private Control WhitelistToggles(string player, YautjaWhitelistFlags flags)
     {
-        var row = YautjaClanHallStyle.HBox(4);
+        var row = HBox(4);
         row.HorizontalExpand = true;
         foreach (var flag in FlagOrder)
         {
-            var chip = new HallButton(Loc.GetString($"cmu-yautja-hall-flag-{flag.ToString().ToLowerInvariant()}"), _small, YautjaClanHallStyle.Staff, 6, 2)
+            var toggle = new HudButton(Loc.GetString($"cmu-yautja-hall-flag-{flag.ToString().ToLowerInvariant()}"), _small)
             {
                 Selected = flags.HasFlag(flag),
             };
             var toggled = flags ^ flag;
-            chip.OnPressed += _ => Request(new YautjaClanHallSetWhitelistMessage(player, toggled));
-            row.AddChild(chip);
+            toggle.Activated += () => Request(new YautjaClanHallSetWhitelistMessage(player, toggled));
+            row.AddChild(toggle);
         }
 
-        row.AddChild(YautjaClanHallStyle.Gap());
+        row.AddChild(Gap());
         if (flags != YautjaWhitelistFlags.None)
-        {
-            var revoke = new ConfirmButton(Loc.GetString("cmu-yautja-hall-revoke"), Loc.GetString("cmu-yautja-hall-revoke-confirm"), _small);
-            revoke.Confirmed += () => Request(new YautjaClanHallSetWhitelistMessage(player, YautjaWhitelistFlags.None));
-            row.AddChild(revoke);
-        }
+            row.AddChild(Button("cmu-yautja-hall-revoke", () => Request(new YautjaClanHallSetWhitelistMessage(player, YautjaWhitelistFlags.None)), confirm: true));
 
         return row;
     }
 
     private Control BuildRoundPage()
     {
-        var page = YautjaClanHallStyle.VBox(10);
-        page.HorizontalExpand = page.VerticalExpand = true;
-        page.AddChild(SectionTitle(Loc.GetString("cmu-yautja-hall-tab-round"), YautjaClanHallStyle.Staff));
+        var page = VBox(10);
 
-        var info = YautjaClanHallStyle.Panel(YautjaClanHallStyle.Card, YautjaClanHallStyle.MutedBorder, 12, 8);
-        var infoBox = YautjaClanHallStyle.VBox(4);
-        _roundInfo = YautjaClanHallStyle.Label(string.Empty, _readout, YautjaClanHallStyle.Text);
-        _roundSlots = YautjaClanHallStyle.Label(string.Empty, _readout, YautjaClanHallStyle.Muted);
-        infoBox.AddChild(_roundInfo);
-        infoBox.AddChild(_roundSlots);
-        info.AddChild(infoBox);
-        page.AddChild(info);
-
-        var hunt = YautjaClanHallStyle.HBox(6);
-        var initialize = new ConfirmButton(Loc.GetString("cmu-yautja-hall-round-init"), Loc.GetString("cmu-yautja-hall-are-you-sure"), _readout)
-        {
-            Accent = YautjaClanHallStyle.Staff,
-        };
-        initialize.Confirmed += () => Request(new YautjaClanHallRoundInitializeMessage());
-        hunt.AddChild(initialize);
+        var hunt = Frame("cmu-yautja-hall-hunt");
+        var status = HBox(8);
+        _roundTag = new HudTag(string.Empty, _small);
+        status.AddChild(_roundTag);
+        _roundInfo = Hud.Write(string.Empty, _body, Hud.Text);
+        _roundInfo.VerticalAlignment = VAlignment.Center;
+        status.AddChild(_roundInfo);
+        status.AddChild(Gap());
+        status.AddChild(Button("cmu-yautja-hall-round-init", () => Request(new YautjaClanHallRoundInitializeMessage()), confirm: true));
+        hunt.Body.AddChild(status);
         page.AddChild(hunt);
 
-        page.AddChild(SectionTitle(Loc.GetString("cmu-yautja-hall-round-slots"), YautjaClanHallStyle.Staff));
-        var slots = YautjaClanHallStyle.HBox(6);
-        var minus = new HallButton("−", _heading, YautjaClanHallStyle.Staff, 10, 2);
-        _slotsEdit = new LineEdit { MinWidth = 60 };
-        var plus = new HallButton("+", _heading, YautjaClanHallStyle.Staff, 10, 2);
-        minus.OnPressed += _ => BumpSlots(-1);
-        plus.OnPressed += _ => BumpSlots(1);
-        var applySlots = new HallButton(Loc.GetString("cmu-yautja-hall-apply"), _readout, YautjaClanHallStyle.Staff);
-        applySlots.OnPressed += _ =>
+        var settings = Frame("cmu-yautja-hall-settings");
+        var slots = HBox(6);
+        slots.AddChild(Caption(Loc.GetString("cmu-yautja-hall-round-slots")));
+        slots.AddChild(Button("cmu-yautja-hall-minus", () => BumpSlots(-1)));
+        _slots = Hud.LineEdit();
+        _slots.MinWidth = 60;
+        slots.AddChild(_slots);
+        slots.AddChild(Button("cmu-yautja-hall-plus", () => BumpSlots(1)));
+        slots.AddChild(Button("cmu-yautja-hall-set", () =>
         {
-            if (int.TryParse(_slotsEdit.Text.Trim(), out var value))
+            if (int.TryParse(_slots.Text.Trim(), out var value))
                 Request(new YautjaClanHallRoundSlotsMessage(value));
-        };
-        slots.AddChild(minus);
-        slots.AddChild(_slotsEdit);
-        slots.AddChild(plus);
-        slots.AddChild(applySlots);
-        page.AddChild(slots);
+        }));
+        settings.Body.AddChild(slots);
 
-        page.AddChild(SectionTitle(Loc.GetString("cmu-yautja-hall-round-random"), YautjaClanHallStyle.Staff));
-        var random = YautjaClanHallStyle.HBox(6);
-        _randomToggle = new HallButton(string.Empty, _readout, YautjaClanHallStyle.Staff);
-        _randomToggle.OnPressed += _ =>
+        var random = HBox(6);
+        _randomToggle = new HudButton(Loc.GetString("cmu-yautja-hall-round-random"), _small);
+        _randomToggle.Activated += () =>
         {
             _randomEnabled = !_randomEnabled;
-            RefreshRandomToggle();
+            _randomToggle.Selected = _randomEnabled;
         };
         random.AddChild(_randomToggle);
-        random.AddChild(YautjaClanHallStyle.Label(Loc.GetString("cmu-yautja-hall-round-every"), _readout, YautjaClanHallStyle.Muted));
-        _randomMin = new LineEdit { MinWidth = 50 };
-        _randomMax = new LineEdit { MinWidth = 50 };
+        random.AddChild(Caption(Loc.GetString("cmu-yautja-hall-round-every")));
+        _randomMin = Hud.LineEdit();
+        _randomMin.MinWidth = 50;
         random.AddChild(_randomMin);
-        random.AddChild(YautjaClanHallStyle.Label("–", _readout, YautjaClanHallStyle.Muted));
+        random.AddChild(Caption("-"));
+        _randomMax = Hud.LineEdit();
+        _randomMax.MinWidth = 50;
         random.AddChild(_randomMax);
-        random.AddChild(YautjaClanHallStyle.Label(Loc.GetString("cmu-yautja-hall-round-rounds"), _readout, YautjaClanHallStyle.Muted));
-        var applyRandom = new HallButton(Loc.GetString("cmu-yautja-hall-apply"), _readout, YautjaClanHallStyle.Staff);
-        applyRandom.OnPressed += _ =>
+        random.AddChild(Caption(Loc.GetString("cmu-yautja-hall-round-rounds")));
+        random.AddChild(Button("cmu-yautja-hall-set", () =>
         {
             if (int.TryParse(_randomMin.Text.Trim(), out var min) && int.TryParse(_randomMax.Text.Trim(), out var max))
                 Request(new YautjaClanHallRoundRandomMessage(_randomEnabled, min, max));
-        };
-        random.AddChild(applyRandom);
-        page.AddChild(random);
-        _randomInfo = YautjaClanHallStyle.Label(string.Empty, _small, YautjaClanHallStyle.Dim);
-        page.AddChild(_randomInfo);
+        }));
+        settings.Body.AddChild(random);
+        _randomInfo = Hud.Write(string.Empty, _body, Hud.Muted);
+        settings.Body.AddChild(_randomInfo);
+        page.AddChild(settings);
         return page;
     }
 
     private void BumpSlots(int by)
     {
-        if (!int.TryParse(_slotsEdit.Text.Trim(), out var value))
+        if (!int.TryParse(_slots.Text.Trim(), out var value))
             value = 0;
-        _slotsEdit.Text = Math.Max(0, value + by).ToString();
-    }
-
-    private void RefreshRandomToggle()
-    {
-        _randomToggle.Selected = _randomEnabled;
-        _randomToggle.Text = Loc.GetString(_randomEnabled ? "cmu-yautja-hall-round-random-on" : "cmu-yautja-hall-round-random-off");
+        _slots.Text = Math.Max(0, value + by).ToString();
     }
 
     private void UpdateRoundPage(YautjaClanHallEuiState state)
@@ -218,26 +195,27 @@ public sealed partial class YautjaClanHallWindow
         if (state.Round is not { } round)
             return;
 
+        _roundTag.Text = Loc.GetString(round.Initialized ? "cmu-yautja-hall-hunt-on" : "cmu-yautja-hall-hunt-off");
+        _roundTag.Fill = round.Initialized ? Hud.Hot : Hud.Muted;
+        _roundTag.Outline = !round.Initialized;
         _roundInfo.Text = Loc.GetString("cmu-yautja-hall-round-info",
             ("round", round.RoundId),
             ("active", round.RoundActive ? "true" : "false"),
-            ("initialized", round.Initialized ? "true" : "false"));
-        _roundSlots.Text = Loc.GetString("cmu-yautja-hall-round-slot-info",
-            ("active", round.ActiveHunterSlots),
-            ("configured", round.HunterSlots));
+            ("initialized", round.Initialized ? "true" : "false"),
+            ("slots", round.ActiveHunterSlots));
         _randomInfo.Text = round.RandomEnabled
             ? Loc.GetString("cmu-yautja-hall-round-random-left", ("rounds", round.RandomRoundsRemaining))
-            : Loc.GetString("cmu-yautja-hall-round-random-idle");
+            : string.Empty;
 
-        // fill the inputs once and after an apply lands, not on every refresh someone else causes
-        if (!_roundFilled || _pendingAfter < 0 && !_slotsEdit.HasKeyboardFocus() && !_randomMin.HasKeyboardFocus() && !_randomMax.HasKeyboardFocus())
-        {
-            _roundFilled = true;
-            _slotsEdit.Text = round.HunterSlots.ToString();
-            _randomMin.Text = round.RandomMinimumRounds.ToString();
-            _randomMax.Text = round.RandomMaximumRounds.ToString();
-            _randomEnabled = round.RandomEnabled;
-            RefreshRandomToggle();
-        }
+        // fill the inputs once, not on every refresh someone else causes
+        if (_roundFilled)
+            return;
+
+        _roundFilled = true;
+        _slots.Text = round.HunterSlots.ToString();
+        _randomMin.Text = round.RandomMinimumRounds.ToString();
+        _randomMax.Text = round.RandomMaximumRounds.ToString();
+        _randomEnabled = round.RandomEnabled;
+        _randomToggle.Selected = _randomEnabled;
     }
 }

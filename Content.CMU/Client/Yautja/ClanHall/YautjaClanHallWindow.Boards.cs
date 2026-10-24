@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Numerics;
 using Content.Shared.CMU14.Yautja;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
@@ -7,214 +6,186 @@ using Robust.Client.UserInterface.Controls;
 
 namespace Content.Client.CMU14.Yautja.ClanHall;
 
-// the boards: every clan ranked by honor, every hunter ranked by honor
+// leaderboard tab: every clan by honor, every hunter by honor
 public sealed partial class YautjaClanHallWindow
 {
-    private const int NoClanFilter = -1;
-    private const int ClanlessFilter = -2;
+    private const int AllClans = -1;
+    private const int NoClan = -2;
 
-    private HallButton _clansMode = default!;
-    private HallButton _huntersMode = default!;
-    private Control _clanBoard = default!;
-    private Control _hunterBoard = default!;
-    private BoxContainer _clanRows = default!;
-    private BoxContainer _hunterRows = default!;
-    private Control _foundRow = default!;
+    private HudButton _clansButton = default!;
+    private HudButton _huntersButton = default!;
+    private HudButton _foundButton = default!;
+    private HudFrame _foundForm = default!;
     private LineEdit _foundName = default!;
     private LineEdit _foundColor = default!;
+    private HudFrame _clanBoard = default!;
+    private HudFrame _hunterBoard = default!;
+    private BoxContainer _hunterRows = default!;
     private LineEdit _hunterSearch = default!;
-    private OptionButton _hunterClanFilter = default!;
-    private readonly List<int> _hunterFilterIds = new();
-    private int _hunterFilter = NoClanFilter;
+    private OptionButton _hunterFilter = default!;
+    private readonly List<int> _filterIds = new();
+    private int _filter = AllClans;
     private bool _showHunters;
 
     private Control BuildBoardsPage()
     {
-        var page = YautjaClanHallStyle.VBox(8);
-        page.HorizontalExpand = page.VerticalExpand = true;
+        var page = VBox(10);
 
-        var modes = YautjaClanHallStyle.HBox(4);
-        _clansMode = new HallButton(Loc.GetString("cmu-yautja-hall-board-clans"), _heading, YautjaClanHallStyle.HotRed, 14, 4);
-        _huntersMode = new HallButton(Loc.GetString("cmu-yautja-hall-board-hunters"), _heading, YautjaClanHallStyle.HotRed, 14, 4);
-        _clansMode.OnPressed += _ => SetBoardMode(false);
-        _huntersMode.OnPressed += _ => SetBoardMode(true);
-        modes.AddChild(_clansMode);
-        modes.AddChild(_huntersMode);
+        var modes = HBox(6);
+        _clansButton = Button("cmu-yautja-hall-board-clans", () => ShowBoard(false));
+        _huntersButton = Button("cmu-yautja-hall-board-hunters", () => ShowBoard(true));
+        modes.AddChild(_clansButton);
+        modes.AddChild(_huntersButton);
+        modes.AddChild(Gap());
+        _foundButton = Button("cmu-yautja-hall-found", () =>
+        {
+            _foundForm.Visible = !_foundForm.Visible;
+            _foundButton.Selected = _foundForm.Visible;
+        });
+        modes.AddChild(_foundButton);
         page.AddChild(modes);
 
-        // clans
-        var clans = YautjaClanHallStyle.VBox(6);
-        clans.VerticalExpand = true;
-        clans.AddChild(BoardHeader(
-            ("#", 40, false),
-            (Loc.GetString("cmu-yautja-hall-col-clan"), 0, false),
-            (Loc.GetString("cmu-yautja-hall-col-leader"), 150, false),
-            (Loc.GetString("cmu-yautja-hall-col-hunters"), 90, true),
-            (Loc.GetString("cmu-yautja-hall-col-honor"), 240, true)));
-        _clanRows = YautjaClanHallStyle.VBox(3);
-        clans.AddChild(Scroll(_clanRows));
-
-        var found = YautjaClanHallStyle.Panel(YautjaClanHallStyle.Card, YautjaClanHallStyle.MutedBorder, 10, 6);
-        var foundRow = YautjaClanHallStyle.HBox(6);
-        foundRow.AddChild(YautjaClanHallStyle.Label(Loc.GetString("cmu-yautja-hall-found"), _readout, YautjaClanHallStyle.HotRed));
-        _foundName = new LineEdit { HorizontalExpand = true, PlaceHolder = Loc.GetString("cmu-yautja-hall-found-name") };
-        _foundColor = new LineEdit { MinWidth = 84, Text = "#c62d2d" };
-        var foundButton = new HallButton(Loc.GetString("cmu-yautja-hall-found-button"), _readout, YautjaClanHallStyle.HotRed);
-        foundButton.OnPressed += _ =>
+        _foundForm = Frame("cmu-yautja-hall-found");
+        _foundForm.Visible = false;
+        var form = HBox(6);
+        form.AddChild(Caption(Loc.GetString("cmu-yautja-hall-name")));
+        _foundName = Hud.LineEdit();
+        _foundName.HorizontalExpand = true;
+        form.AddChild(_foundName);
+        form.AddChild(Caption(Loc.GetString("cmu-yautja-hall-color")));
+        _foundColor = Hud.LineEdit();
+        _foundColor.MinWidth = 90;
+        _foundColor.Text = "#c62d2d";
+        form.AddChild(_foundColor);
+        form.AddChild(Button("cmu-yautja-hall-create", () =>
         {
             if (string.IsNullOrWhiteSpace(_foundName.Text))
                 return;
 
             Request(new YautjaClanHallFoundClanMessage(_foundName.Text, _foundColor.Text.Trim()));
             _foundName.Text = string.Empty;
-        };
-        foundRow.AddChild(_foundName);
-        foundRow.AddChild(_foundColor);
-        foundRow.AddChild(foundButton);
-        found.AddChild(foundRow);
-        _foundRow = found;
-        clans.AddChild(found);
-        _clanBoard = clans;
-        page.AddChild(clans);
+            _foundForm.Visible = false;
+            _foundButton.Selected = false;
+        }));
+        _foundForm.Body.AddChild(form);
+        page.AddChild(_foundForm);
 
-        // hunters
-        var hunters = YautjaClanHallStyle.VBox(6);
-        hunters.VerticalExpand = true;
-        var filters = YautjaClanHallStyle.HBox(6);
-        _hunterSearch = new LineEdit { HorizontalExpand = true, PlaceHolder = Loc.GetString("cmu-yautja-hall-search") };
+        _clanBoard = Frame("cmu-yautja-hall-board-clans");
+        page.AddChild(_clanBoard);
+
+        _hunterBoard = Frame("cmu-yautja-hall-board-hunters");
+        var filters = HBox(6);
+        _hunterSearch = Hud.LineEdit(Loc.GetString("cmu-yautja-hall-search"));
+        _hunterSearch.HorizontalExpand = true;
         _hunterSearch.OnTextChanged += _ => RebuildHunterBoard();
-        // enter asks the server, so staff can open someone who isn't on the board yet
+        // enter asks the server, so staff can open someone who isn't listed yet
         _hunterSearch.OnTextEntered += args =>
         {
             if (!string.IsNullOrWhiteSpace(args.Text))
                 Request(new YautjaClanHallFindMessage(args.Text));
         };
         filters.AddChild(_hunterSearch);
-        _hunterClanFilter = new OptionButton { MinWidth = 180 };
-        _hunterClanFilter.OnItemSelected += args =>
+        _hunterFilter = new OptionButton { MinWidth = 180, StyleBoxOverride = Hud.Field() };
+        _hunterFilter.OnItemSelected += args =>
         {
-            _hunterClanFilter.SelectId(args.Id);
-            _hunterFilter = args.Id >= 0 && args.Id < _hunterFilterIds.Count ? _hunterFilterIds[args.Id] : NoClanFilter;
+            _hunterFilter.SelectId(args.Id);
+            _filter = _filterIds[args.Id];
             RebuildHunterBoard();
         };
-        filters.AddChild(_hunterClanFilter);
-        hunters.AddChild(filters);
-        hunters.AddChild(BoardHeader(
-            ("#", 40, false),
-            (Loc.GetString("cmu-yautja-hall-col-hunter"), 0, false),
-            (Loc.GetString("cmu-yautja-hall-col-clan"), 150, false),
-            (Loc.GetString("cmu-yautja-hall-col-honor"), 88, true)));
-        _hunterRows = YautjaClanHallStyle.VBox(2);
-        hunters.AddChild(Scroll(_hunterRows));
-        _hunterBoard = hunters;
-        page.AddChild(hunters);
+        filters.AddChild(_hunterFilter);
+        _hunterBoard.Body.AddChild(filters);
+        _hunterRows = VBox(1);
+        _hunterBoard.Body.AddChild(_hunterRows);
+        page.AddChild(_hunterBoard);
 
-        SetBoardMode(false);
+        ShowBoard(false);
         return page;
     }
 
-    private void SetBoardMode(bool hunters)
+    private void ShowBoard(bool hunters)
     {
-        if (hunters != _showHunters)
-            _holo.Flicker();
-
         _showHunters = hunters;
-        _clansMode.Selected = !hunters;
-        _huntersMode.Selected = hunters;
+        _clansButton.Selected = !hunters;
+        _huntersButton.Selected = hunters;
         _clanBoard.Visible = !hunters;
         _hunterBoard.Visible = hunters;
     }
 
-    private Control BoardHeader(params (string Text, float Width, bool Right)[] columns)
-    {
-        var row = YautjaClanHallStyle.HBox(8);
-        row.Margin = new Thickness(6, 0);
-        foreach (var (text, width, alignRight) in columns)
-        {
-            var label = YautjaClanHallStyle.Label(text.ToUpperInvariant(), _small, YautjaClanHallStyle.Dim);
-            if (width > 0)
-                label.MinWidth = width;
-            else
-                label.HorizontalExpand = true;
-            if (alignRight)
-                label.Align = Label.AlignMode.Right;
-            row.AddChild(label);
-        }
-
-        return row;
-    }
-
     private void UpdateBoardsPage(YautjaClanHallEuiState state)
     {
-        _foundRow.Visible = state.Viewer.Council;
+        _foundButton.Visible = state.Viewer.Council;
+        if (!state.Viewer.Council)
+            _foundForm.Visible = false;
 
-        _clanRows.RemoveAllChildren();
-        var top = Math.Max(1, state.Clans.Count == 0 ? 1 : state.Clans.Max(c => c.Honor));
+        _clanBoard.Body.RemoveAllChildren();
+        var top = state.Clans.Count == 0 ? 1 : Math.Max(1, state.Clans.Max(c => c.Honor));
+        var header = HBox(8);
+        header.Margin = new Thickness(8, 0, 4, 2);
+        header.AddChild(new Label { Text = "#", MinWidth = 28, FontOverride = _small, FontColorOverride = Hud.Muted });
+        header.AddChild(new Label { Text = Loc.GetString("cmu-yautja-hall-col-clan").ToUpperInvariant(), HorizontalExpand = true, FontOverride = _small, FontColorOverride = Hud.Muted, Margin = new Thickness(30, 0, 0, 0) });
+        header.AddChild(new Label { Text = Loc.GetString("cmu-yautja-hall-col-leader").ToUpperInvariant(), MinWidth = 150, FontOverride = _small, FontColorOverride = Hud.Muted });
+        header.AddChild(new Label { Text = Loc.GetString("cmu-yautja-hall-col-members").ToUpperInvariant(), MinWidth = 70, FontOverride = _small, FontColorOverride = Hud.Muted, Align = Label.AlignMode.Right });
+        header.AddChild(new Label { Text = Loc.GetString("cmu-yautja-hall-col-honor").ToUpperInvariant(), MinWidth = 190, FontOverride = _small, FontColorOverride = Hud.Muted, Align = Label.AlignMode.Right });
+        _clanBoard.Body.AddChild(header);
+
         for (var i = 0; i < state.Clans.Count; i++)
-            _clanRows.AddChild(ClanBoardRow(state.Clans[i], i + 1, top, state.Viewer.ClanId == state.Clans[i].Id));
-
-        if (state.Clans.Count == 0)
-            _clanRows.AddChild(Empty(Loc.GetString("cmu-yautja-hall-no-clans")));
-
-        var selected = _hunterFilter;
-        _hunterClanFilter.Clear();
-        _hunterFilterIds.Clear();
-        _hunterClanFilter.AddItem(Loc.GetString("cmu-yautja-hall-filter-all"), _hunterFilterIds.Count);
-        _hunterFilterIds.Add(NoClanFilter);
-        _hunterClanFilter.AddItem(Loc.GetString("cmu-yautja-hall-clanless"), _hunterFilterIds.Count);
-        _hunterFilterIds.Add(ClanlessFilter);
-        foreach (var clan in state.Clans)
         {
-            _hunterClanFilter.AddItem(clan.Name, _hunterFilterIds.Count);
-            _hunterFilterIds.Add(clan.Id);
+            var clan = state.Clans[i];
+            var row = new HudRow { Selected = clan.Id == state.Viewer.ClanId, Disabled = !clan.CanView };
+            if (!clan.CanView)
+                row.ToolTip = Loc.GetString("cmu-yautja-hall-clan-locked");
+            var line = HBox(8);
+            line.Margin = new Thickness(8, 4, 4, 4);
+            var number = Hud.Write((i + 1).ToString(), _label, i < 3 ? Hud.Hot : Hud.Muted);
+            number.MinWidth = 28;
+            number.VerticalAlignment = VAlignment.Center;
+            line.AddChild(number);
+            line.AddChild(new SigilRing(SigilTexture(clan.Sigil), Color.TryFromHex(clan.Color, out var c) ? c : Hud.Bright, 28));
+            var name = Hud.Write(clan.Name, _bodyBold, Hud.Text, clip: true);
+            name.HorizontalExpand = true;
+            name.VerticalAlignment = VAlignment.Center;
+            line.AddChild(name);
+            var leader = Hud.Write(clan.LeaderName ?? "-", _body, Hud.Muted, clip: true);
+            leader.MinWidth = 150;
+            leader.VerticalAlignment = VAlignment.Center;
+            line.AddChild(leader);
+            var members = Hud.Write(clan.Members.ToString(), _label, Hud.Label);
+            members.MinWidth = 70;
+            members.Align = Label.AlignMode.Right;
+            members.VerticalAlignment = VAlignment.Center;
+            line.AddChild(members);
+            line.AddChild(new HudBar(clan.Honor / (float) top));
+            var honor = Hud.Write(clan.Honor.ToString(), _label, Hud.Text);
+            honor.MinWidth = 60;
+            honor.Align = Label.AlignMode.Right;
+            honor.VerticalAlignment = VAlignment.Center;
+            line.AddChild(honor);
+            row.AddChild(line);
+            var id = clan.Id;
+            row.OnPressed += _ => OpenClan(id);
+            _clanBoard.Body.AddChild(row);
         }
 
-        var index = _hunterFilterIds.IndexOf(selected);
-        _hunterFilter = index < 0 ? NoClanFilter : selected;
-        _hunterClanFilter.SelectId(index < 0 ? 0 : index);
-        RebuildHunterBoard();
-    }
+        if (state.Clans.Count == 0)
+            _clanBoard.Body.AddChild(Empty("cmu-yautja-hall-no-clans"));
 
-    private Control ClanBoardRow(YautjaClanHallClanRow clan, int standing, int top, bool own)
-    {
-        var button = new HallButton(string.Empty, _body, YautjaClanHallStyle.HotRed, 0, 0)
+        var selected = _filter;
+        _hunterFilter.Clear();
+        _filterIds.Clear();
+        _hunterFilter.AddItem(Loc.GetString("cmu-yautja-hall-filter-all"), _filterIds.Count);
+        _filterIds.Add(AllClans);
+        _hunterFilter.AddItem(Loc.GetString("cmu-yautja-hall-clanless"), _filterIds.Count);
+        _filterIds.Add(NoClan);
+        foreach (var clan in state.Clans)
         {
-            HorizontalExpand = true,
-            Disabled = !clan.CanView,
-            Selected = own,
-            ToolTip = clan.CanView ? null : Loc.GetString("cmu-yautja-hall-clan-locked"),
-        };
-        button.Label.Visible = false;
+            _hunterFilter.AddItem(clan.Name, _filterIds.Count);
+            _filterIds.Add(clan.Id);
+        }
 
-        var color = YautjaClanHallStyle.ClanColor(clan.Color);
-        var row = YautjaClanHallStyle.HBox(8);
-        row.Margin = new Thickness(6, 4);
-        var number = YautjaClanHallStyle.Label(standing.ToString(), _heading, standing <= 3 ? YautjaClanHallStyle.Honor : YautjaClanHallStyle.Dim);
-        number.MinWidth = 40;
-        number.VerticalAlignment = VAlignment.Center;
-        row.AddChild(number);
-        var badge = new SigilBadge(30);
-        badge.Set(clan.Sigil, color);
-        row.AddChild(badge);
-        var name = YautjaClanHallStyle.Label(clan.Name, _bodyBold, YautjaClanHallStyle.Readable(color), clip: true);
-        name.HorizontalExpand = true;
-        name.VerticalAlignment = VAlignment.Center;
-        row.AddChild(name);
-        var leader = YautjaClanHallStyle.Label(clan.LeaderName ?? "—", _body, YautjaClanHallStyle.Muted, clip: true);
-        leader.MinWidth = 150;
-        leader.VerticalAlignment = VAlignment.Center;
-        row.AddChild(leader);
-        var members = YautjaClanHallStyle.Label(clan.Members.ToString(), _readout, YautjaClanHallStyle.Text);
-        members.MinWidth = 90;
-        members.Align = Label.AlignMode.Right;
-        members.VerticalAlignment = VAlignment.Center;
-        row.AddChild(members);
-        row.AddChild(new HonorBar(clan.Honor, top, _readout) { MinWidth = 240, VerticalAlignment = VAlignment.Center });
-        button.AddChild(row);
-
-        var id = clan.Id;
-        button.OnPressed += _ => OpenClan(id);
-        return button;
+        var index = _filterIds.IndexOf(selected);
+        _filter = index < 0 ? AllClans : selected;
+        _hunterFilter.SelectId(index < 0 ? 0 : index);
+        RebuildHunterBoard();
     }
 
     private void RebuildHunterBoard()
@@ -223,58 +194,23 @@ public sealed partial class YautjaClanHallWindow
         if (_state is not { } state)
             return;
 
-        var filter = _hunterSearch.Text.Trim();
+        var search = _hunterSearch.Text.Trim();
         var shown = 0;
         for (var i = 0; i < state.Hunters.Count; i++)
         {
             var hunter = state.Hunters[i];
-            if (_hunterFilter == ClanlessFilter && hunter.ClanId != null ||
-                _hunterFilter >= 0 && hunter.ClanId != _hunterFilter ||
-                filter.Length > 0 && !hunter.Name.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            if (_filter == NoClan && hunter.ClanId != null ||
+                _filter >= 0 && hunter.ClanId != _filter ||
+                search.Length > 0 && !hunter.Name.Contains(search, StringComparison.OrdinalIgnoreCase))
             {
                 continue;
             }
 
-            _hunterRows.AddChild(HunterLine(hunter, (i + 1).ToString(), showClan: true, highlight: hunter.PlayerId == state.Viewer.PlayerId));
+            _hunterRows.AddChild(HunterRow(hunter, (i + 1).ToString(), showClan: true));
             shown++;
         }
 
         if (shown == 0)
-            _hunterRows.AddChild(Empty(Loc.GetString("cmu-yautja-hall-no-hunters")));
-    }
-
-    // honor as a bar against the top clan, number on the end
-    private sealed class HonorBar : Control
-    {
-        private readonly float _fill;
-        private readonly Label _label;
-
-        public HonorBar(int honor, int top, Font font)
-        {
-            _fill = Math.Clamp(honor / (float) top, 0, 1);
-            MinHeight = 16;
-            MouseFilter = MouseFilterMode.Ignore;
-            _label = YautjaClanHallStyle.Label(YautjaClanHallStyle.Number(honor), font, YautjaClanHallStyle.Honor);
-            _label.HorizontalAlignment = HAlignment.Right;
-            _label.VerticalAlignment = VAlignment.Center;
-            AddChild(_label);
-        }
-
-        protected override void Draw(DrawingHandleScreen handle)
-        {
-            base.Draw(handle);
-            var s = UIScale;
-            var barWidth = PixelSize.X - 74 * s;
-            var y = PixelSize.Y / 2;
-            var bar = UIBox2.FromDimensions(0, y - 3 * s, barWidth, 6 * s);
-            handle.DrawRect(bar, YautjaClanHallStyle.HonorDim.WithAlpha(0.25f));
-            handle.DrawRect(UIBox2.FromDimensions(bar.Left, bar.Top, barWidth * _fill, bar.Height), YautjaClanHallStyle.Honor.WithAlpha(0.85f));
-            // tick marks every tenth, so close standings still read
-            for (var i = 1; i < 10; i++)
-            {
-                var x = barWidth * i / 10f;
-                handle.DrawLine(new Vector2(x, bar.Top), new Vector2(x, bar.Bottom), YautjaClanHallStyle.Screen.WithAlpha(0.6f));
-            }
-        }
+            _hunterRows.AddChild(Empty("cmu-yautja-hall-no-hunters"));
     }
 }
