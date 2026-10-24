@@ -145,6 +145,7 @@ cmu-ui-options-tile-movement-walk-only-tooltip = Move from tile to tile while wa
 
 cmu-trait-category-drinking = Alcohol Tolerance
 cmu-trait-category-addictions = Addictions
+cmu-trait-category-phobias = Fears and Phobias
 cmu-trait-heavyweight-name = Heavyweight drunk
 cmu-trait-heavyweight-desc = This is someone that can hold their liquor.
 

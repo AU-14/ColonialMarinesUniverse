@@ -2,7 +2,7 @@
   id: CMUFearOfBlood
   name: cmu-trait-fear-of-blood-name
   description: cmu-trait-fear-of-blood-desc
-  category: Disabilities
+  category: CMUPhobias
   cost: 1
   components:
   - type: CMUFearOfBlood
@@ -11,7 +11,7 @@
   id: CMUClaustrophobic
   name: cmu-trait-claustrophobic-name
   description: cmu-trait-claustrophobic-desc
-  category: Disabilities
+  category: CMUPhobias
   cost: 1
   components:
   - type: CMUClaustrophobia
@@ -22,6 +22,8 @@
   description: cmu-trait-hemophilia-desc
   category: Disabilities
   cost: 1
+  cmuExcludes:
+  - Anemic
   components:
   - type: CMUHemophilia
 
@@ -74,7 +76,7 @@
   id: CMUHeartyAppetite
   name: cmu-trait-hearty-appetite-name
   description: cmu-trait-hearty-appetite-desc
-  category: RMCInconveniences
+  category: CMUQuirks
   cost: 1
   components:
   - type: CMUHeartyAppetite
@@ -83,7 +85,7 @@
   id: CMUHighThirst
   name: cmu-trait-high-thirst-name
   description: cmu-trait-high-thirst-desc
-  category: RMCInconveniences
+  category: CMUQuirks
   cost: 1
   components:
   - type: CMUHighThirst

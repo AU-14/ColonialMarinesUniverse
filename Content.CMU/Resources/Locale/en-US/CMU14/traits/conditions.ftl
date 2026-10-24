@@ -37,3 +37,8 @@ cmu-trait-hearty-appetite-desc = You get hungry much faster than most people.
 
 cmu-trait-high-thirst-name = High Thirst
 cmu-trait-high-thirst-desc = You get thirsty much faster than most people.
+
+cmu-trait-light-stutter-name = Light Stutter
+cmu-trait-light-stutter-desc = Now and then you t-trip over a word.
+cmu-trait-light-lisp-name = Light Lisp
+cmu-trait-light-lisp-desc = Some of your s-sounds come out as "th".

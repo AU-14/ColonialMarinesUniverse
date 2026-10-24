@@ -3,6 +3,12 @@
   name: trait-category-language
   maxTraitPoints: 2
 
+# Fears and phobias, two at most.
+- type: traitCategory
+  id: CMUPhobias
+  name: cmu-trait-category-phobias
+  maxTraitPoints: 2
+
 # Addictions, one at most.
 - type: traitCategory
   id: CMUAddictions
