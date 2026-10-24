@@ -37,7 +37,9 @@ public sealed partial class AnchoredTileCacheSystem : EntitySystem
         // Other invalidations have a known grid/tile and can preserve unrelated entries.
         _transform.OnGlobalMoveEvent += OnMove;
         SubscribeLocalEvent<TransformComponent, AnchorStateChangedEvent>(OnAnchor);
-        SubscribeLocalEvent<TransformComponent, ReAnchorEvent>(OnReanchor);
+        // CMU14: engine v293.0.1 removed ReAnchorEvent. The unanchor and anchor pair fires while the
+        // transform still reads the old grid, then the new grid, so both tiles stay invalidated.
+        // SubscribeLocalEvent<TransformComponent, ReAnchorEvent>(OnReanchor);
         SubscribeLocalEvent<TransformComponent, ComponentShutdown>(OnShutdown);
         // Transform startup raises AnchorStateChangedEvent for initially anchored entities too.
         // MapInit does not need a second invalidation or an additional lifecycle subscription.
@@ -106,11 +108,12 @@ public sealed partial class AnchoredTileCacheSystem : EntitySystem
         InvalidatePosition(ent.Comp);
     }
 
-    private void OnReanchor(Entity<TransformComponent> ent, ref ReAnchorEvent args)
-    {
-        InvalidateGrid(args.OldGrid);
-        InvalidateGrid(args.Grid);
-    }
+    // CMU14: engine v293.0.1 removed ReAnchorEvent, see Initialize.
+    // private void OnReanchor(Entity<TransformComponent> ent, ref ReAnchorEvent args)
+    // {
+    //     InvalidateGrid(args.OldGrid);
+    //     InvalidateGrid(args.Grid);
+    // }
 
     private void OnShutdown(Entity<TransformComponent> ent, ref ComponentShutdown args)
     {
