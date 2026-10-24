@@ -70,3 +70,19 @@
     itemIconStyle: BigItem
   - type: InstantAction
     event: !type:ToggleActionEvent
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14NRAT79
+  name: Type 79 Steel Helmet
+  description: A steel helmet manufactured for the Revolutionary Army's Soldiers. Features a leather liner for comfort and a reinforced brow plate for additional shrapnel protection.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/UPP/helmets/type79.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/UPP/helmets/type79.rsi
+     - type: CMArmor
+    melee: 25
+    bullet: 25
+    bio: 5
+    explosionArmor: 20
