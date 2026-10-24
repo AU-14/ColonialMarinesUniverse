@@ -1,0 +1,49 @@
+<Document>
+  # Midway M90 Chin Turret
+
+  The Midway's fixed twin 90mm turret is operated from its dedicated gunnery seat and console.
+  It supports landed physical fire and delayed flare-assisted impacts during transit or CAS flybys.
+  Tactical hover and takeoff do not support M90 gunnery.
+
+  ## Setup and Controls
+  - While landed, calibrate the hardpoint with a screwdriver, then use a multitool to program your faction IFF.
+  - Buckle into the gunnery seat and take turret control. Mouse movement aims; hold left click to fire.
+  - The turret slews at sixty degrees per second. WASD or the panel arrows pan its camera; the center button recenters.
+  - Landed manual fire has a 225-degree forward arc and a twenty-tile targeting circle. Rounds aimed inside the circle stop at the cursor; outside it they keep traveling until collision.
+  - Normal and Night optics respect opaque walls. Thermal can observe through walls, but physical shells cannot pass through them.
+  - Mark a target or acquire the current priority hostile, then authorize tracked fire for thirty seconds. Marking alone never permits fire.
+  - AR mode shows the turret's targeting boundary in the main view. Return to the gun panel to leave AR.
+
+  ## Ammunition and Heat
+  - Load crates with a power loader. Feeds one and two accept any M90 crate; feed three is reserved for Squall.
+  - Select a feed or alternate after each shell. Empty feeds automatically fall back to another loaded feed.
+  - Squall contains 2400 kinetic rounds and fires fifteen rounds per second without ejecting casings. It can mark only living targets.
+  - HEAP contains 400 explosive rounds and supports both groundside and airborne fire.
+  - Gale scatter, Ember incendiary, and Tempest devastator are airborne-only explosive feeds. Explosive ammunition fires three shells per second.
+  - Explosive shells heat the barrels faster than Squall. At maximum heat the turret locks until it cools to forty percent.
+  - A feed warns its gunner when it falls below one quarter of its full crate capacity.
+
+  ## Airborne Flare Fire
+  - Select an active faction signal flare on the right TARGET monitor. Aim within ten tiles of it.
+  - Each shell consumes one round immediately and impacts after a one-to-two-second delay.
+  - Protected overhead cover, incompatible ammunition, and friendly clearance can prevent a shot.
+  - Friendly clearance is checked again at impact. A cancelled delayed impact does not refund its shell.
+  - Clearing or losing the flare stops airborne fire. Nearby players receive a warning when a gunner locks their flare.
+
+  ## AI Free Fire and IFF
+  - Enable AI free fire explicitly. Groundside AI engages only after landing on the planet, never in a shipside hangar.
+  - Airborne AI scans active flares and compatible feeds, but each new target requires individual gunner approval.
+  - AI cannot acquire or shoot through walls, even with Thermal selected.
+  - Taking manual control pauses AI scanning without disabling it. Disabling AI starts a five-minute reactivation cooldown.
+  - Groundside AI forces IFF on until close self-defense or an overwhelming group returns control to the gunner's toggle.
+  - Disabling IFF removes friendly shot and impact protection.
+
+  ## Damage and Rebuilding
+  The mount disables at zero integrity. Land before beginning a staged engineer rebuild:
+  - Strip the damaged mechanism with a wrench.
+  - Install one box of 90mm repair parts from the dropship fabricator.
+  - Add ten lengths of cable.
+  - Weld the housing with a lit blowtorch, consuming five fuel.
+  - Calibrate and close it with a screwdriver.
+  Interrupted steps do not advance the repair. A completed rebuild restores full integrity.
+</Document>

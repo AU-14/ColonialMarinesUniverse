@@ -3,13 +3,14 @@ using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CCVar;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
-using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Weapons.Ranged;
 
 /// <summary>
-/// Periodic sweeper for ejected spent casings: strips their physics a few seconds
+/// Periodic sweeper for ejected spent casings: disables collision physics a few seconds
 /// after landing (they become free-floating decals) and despawns them after
 /// <see cref="CCVars.SpentCasingDespawnTime"/>. One shared sweep instead of
 /// per-entity timers; contained casings (held, stored) are left alone.
@@ -17,12 +18,13 @@ namespace Content.Server.CMU14.Weapons.Ranged;
 public sealed partial class CMUSpentCasingSystem : EntitySystem
 {
     [Dependency] private  SharedContainerSystem _containers = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
     [Dependency] private  IConfigurationManager _cfg = default!;
     [Dependency] private  IGameTiming _timing = default!;
 
     private static readonly TimeSpan SweepInterval = TimeSpan.FromSeconds(5);
 
-    /// <summary>Delay before the physics strip, so the ejection throw always finishes first.</summary>
+    /// <summary>Delay before disabling physics, so the ejection throw always finishes first.</summary>
     private static readonly TimeSpan StripDelay = TimeSpan.FromSeconds(3);
 
     private TimeSpan _nextSweep;
@@ -51,7 +53,11 @@ public sealed partial class CMUSpentCasingSystem : EntitySystem
             if (age >= despawn)
                 QueueDel(uid);
             else if (age >= StripDelay && !HasComp<CMUZFallingComponent>(uid))
-                RemComp<PhysicsComponent>(uid);
+            {
+                // Clients need fixtures when applying the replicated body-type change.
+                _physics.SetBodyType(uid, BodyType.Static);
+                _physics.SetCanCollide(uid, false);
+            }
         }
     }
 }

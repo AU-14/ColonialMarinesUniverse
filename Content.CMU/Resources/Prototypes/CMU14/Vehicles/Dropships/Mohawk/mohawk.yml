@@ -468,9 +468,43 @@
   id: CMUMohawkM90Point
   name: Midway chin gun mount
   components:
+  - type: MohawkChinGun
+    maxHealth: 2000
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Physics
+    bodyType: Kinematic
+  - type: Fixtures
+    fixtures:
+      turret:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+          position: 1.5,1
+        density: 100
+        hard: true
+        layer: [BulletImpassable]
+        mask: [BulletImpassable]
+  - type: GenericVisualizer
+    visuals:
+      enum.MohawkChinGunVisuals.Disabled:
+        enum.DropshipWeaponPointLayers.Layer:
+          True: { color: "#805050" }
+          False: { color: "#FFFFFF" }
+  - type: GunshipDirectFirePoint
+    lateralOffset: 1.5
+    forwardOffset: 1
+  - type: SentryTargeting
+  - type: EntityIFF
+  - type: UserIFF
   - type: DropshipWeaponPoint
     dirOffset: None
     fixedWeapon: true
+    secondAmmoContainerSlotId: cmu_m90_second_ammo
+    thirdAmmoContainerSlotId: cmu_m90_squall_ammo
+    thirdAmmoTypes:
+    - m90_kinetic
     # own location, inheriting PortFore made the chin gun share the port fore weapon's number
     location: Chin
   - type: Sprite
@@ -484,6 +518,8 @@
     containers:
       rmc_dropship_weapon_point_weapon_container_slot: !type:ContainerSlot
       rmc_dropship_weapon_point_ammo_container_slot: !type:ContainerSlot
+      cmu_m90_second_ammo: !type:ContainerSlot
+      cmu_m90_squall_ammo: !type:ContainerSlot
   - type: ContainerFill
     containers:
       rmc_dropship_weapon_point_weapon_container_slot: [CMUMohawkM90]
@@ -491,8 +527,8 @@
 - type: entity
   parent: RMCDropshipAttachmentGau21Cannon
   id: CMUMohawkM90
-  name: twin-linked M90 miniguns
-  description: The Midway's fixed chin-mounted twin gun system. Uses PGU-420 ammunition.
+  name: twin-linked M90 90mm chin guns
+  description: The Midway's triple-feed twin 90mm turret fires three explosive shells or fifteen Squall kinetic rounds per second. Supports five M90 ammunition types, selected or alternating feeds, a landed 225-degree forward arc and 20-tile range, and delayed flare-assisted bombardment during CAS flybys and transit. The 2000-HP mount disables when wrecked and requires an engineer-led rebuild with dedicated repair parts.
   components:
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/midway/misc_96x96.rsi
@@ -502,8 +538,8 @@
     abbreviation: M90
     ammoSpriteThresholds: []
     gunneryOnly: true
-    fireDelay: 1
-    fireInTransport: false
+    fireDelay: 0.3333333
+    fireInTransport: true
     weaponAttachedSprite:
       sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/midway/misc_96x96.rsi
       state: m90_minigun
@@ -513,37 +549,385 @@
     ammoAttachedSprite:
       sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/midway/misc_96x96.rsi
       state: m90_minigun
+  - type: GunshipDirectFireWeapon
+    projectile: CMUMohawkM90HEAP
+    ammoPrototype: CMUMohawkM90Ammo
+    gimbalDegrees: 225
+    roundsPerProjectile: 1
+  - type: Gun
+    projectileSpeed: 40
+    fireRate: 3
+    minAngle: 0
+    maxAngle: 0
+    angleIncrease: 0
+    selectedMode: FullAuto
+    availableModes: [FullAuto]
+    soundGunshot: /Audio/_RMC14/Dropship/gau_incockpit.ogg
+    cameraRecoilScalar: 0
+  - type: GunIgnorePrediction
   - type: RemoveComponents
     components:
     - type: PowerLoaderDetachable
     - type: DropshipFabricatorPrintable
 
 - type: entity
+  parent: BaseItem
+  id: CMUMohawkM90RepairParts
+  name: 90mm repair parts
+  description: A costly replacement mechanism for a disabled twin M90 chin gun. After stripping the damaged mechanism with a wrench, an engineer must install these parts, add ten lengths of cable, weld the housing and calibrate it with a screwdriver.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/engineering_kit.rsi
+    state: icon
+  - type: Item
+    size: Large
+  - type: MohawkChinGunRepairParts
+  - type: DropshipFabricatorPrintable
+    category: Equipment
+    cost: 1150
+
+- type: entity
   parent: RMCDropshipAttachmentAmmoGAU
   id: CMUMohawkM90Ammo
-  name: PGU-420 multi-purpose 90mm ammunition crate
-  description: Four hundred rounds for the Midway's twin M90 guns, fired in forty-round bursts.
+  name: PGU-420 HEAP 90mm ammunition crate
+  description: Four hundred high-explosive armor-piercing rounds for the Midway's dual-feed M90 guns. Fires as a landed turret or as delayed explosive impacts near a signal flare in flight. HEAP heats the barrels quickly; sustained fire overheats the guns.
   components:
   - type: RMCGenericExamine
-    message: It can penetrate 3 z-levels.
+    message: It can penetrate 2 z-levels.
   - type: DropshipAmmo
     rounds: 400
     maxRounds: 400
-    roundsPerShot: 40
+    roundsPerShot: 1
+    roundsPerSprite: 40
     fireMissionDelay: 2
     travelTime: 2
     targetSpread: 1
     bulletSpread: 2
-    armorPiercing: 30
-    zLevelPenetration: 3
+    armorPiercing: 60
+    zLevelPenetration: 2
     applyEffectsOnPenetrationLevels: true
     damage:
       types:
         Piercing: 145
+        Heat: 20
+    explosion:
+      total: 20
+      slope: 6
+      max: 10
     weapon: CMUMohawkM90
+    directFireProjectile: CMUMohawkM90HEAP
+    groundCompatible: true
+    directFireHeat: 8
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 275
+    cost: 1250
+
+- type: entity
+  parent: CMUMohawkM90Ammo
+  id: CMUMohawkM90AmmoScatter
+  name: PGU-425 'Gale' 90mm scatter ammunition crate
+  description: Four hundred low-yield 90mm shells. Wide dispersion provides suppressive coverage at the cost of direct damage and armor penetration.
+  components:
+  - type: RMCGenericExamine
+    message: Scatter rounds penetrate 1 z-level of cover
+  - type: DropshipAmmo
+    ammoType: m90_scatter
+    groundCompatible: false
+    ammoSpriteType: 30mm_crate
+    targetSpread: 4
+    bulletSpread: 5
+    armorPiercing: 10
+    zLevelPenetration: 1
+    directFireProjectile: CMUMohawkM90Scatter
+    directFireSpreadDegrees: 10
+    damage:
+      types:
+        Piercing: 50
+        Heat: 10
+    explosion:
+      total: 10
+      slope: 6
+      max: 4
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 1500
+
+- type: entity
+  parent: CMUMohawkM90Ammo
+  id: CMUMohawkM90AmmoIncendiary
+  name: PGU-430 'Ember' 90mm incendiary ammunition crate
+  description: Four hundred incendiary 90mm shells. Direct hits ignite flammable targets; flyby bombardment scatters burning impact sites. Reduced penetration compared with HEAP.
+  components:
+  - type: RMCGenericExamine
+    message: Incendiary rounds penetrate 1 z-level of cover.
+  - type: DropshipAmmo
+    ammoType: m90_incendiary
+    groundCompatible: false
+    ammoSpriteType: 30mm_crate
+    targetSpread: 2
+    bulletSpread: 3
+    armorPiercing: 15
+    zLevelPenetration: 1
+    directFireProjectile: CMUMohawkM90Incendiary
+    directFireSpreadDegrees: 2
+    friendlyImpactRadius: 3
+    damage:
+      types:
+        Piercing: 70
+        Heat: 60
+    explosion:
+      total: 12
+      slope: 6
+      max: 6
+    fire:
+      type: RMCTileFireMiniMike
+      range: 0
+      cardinalRange: 0
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 1250
+
+- type: entity
+  parent: CMUMohawkM90Ammo
+  id: CMUMohawkM90AmmoDevastator
+  name: PGU-440 'Tempest' 90mm devastator ammunition crate
+  description: Four hundred premium high-yield 90mm shells. Wide dispersion and heavy explosive damage saturate exposed targets. Extremely expensive and unsuitable near friendly troops.
+  components:
+  - type: RMCGenericExamine
+    message: It can penetrate 3 z-levels.
+  - type: DropshipAmmo
+    ammoType: m90_devastator
+    groundCompatible: false
+    ammoSpriteType: 30mm_crate_hv
+    targetSpread: 5
+    bulletSpread: 6
+    armorPiercing: 40
+    zLevelPenetration: 3
+    directFireProjectile: CMUMohawkM90Devastator
+    directFireSpreadDegrees: 12
+    friendlyImpactRadius: 6
+    damage:
+      types:
+        Piercing: 220
+        Heat: 80
+    explosion:
+      total: 100
+      slope: 3
+      max: 12
+    fire:
+      type: RMCTileFireMiniMike
+      range: 1
+      cardinalRange: 1
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 3500
+
+- type: entity
+  parent: CMUMohawkM90Ammo
+  id: CMUMohawkM90AmmoKinetic
+  name: PGU-410 'Squall' 90mm rapid-fire kinetic ammunition crate
+  description: Twenty-four hundred budget kinetic rounds for the three-feed M90. Fires fifteen rounds per second with GAU-style non-explosive impacts. Supports groundside, transit, and flyby fire without ejecting casings.
+  components:
+  - type: RMCGenericExamine
+    message: Squall kinetic rounds support groundside and flyby fire but cannot penetrate overhead cover.
+  - type: DropshipAmmo
+    ammoType: m90_kinetic
+    ammoSpriteType: 30mm_crate
+    bulletSpread: 2
+    armorPiercing: 30
+    zLevelPenetration: 0
+    directFireProjectile: CMUMohawkM90Kinetic
+    directFireRate: 15
+    groundCompatible: true
+    directFireHeat: 0.6
+    livingTargetsOnly: true
+    ejectCasing: false
+    rounds: 2400
+    maxRounds: 2400
+    roundsPerSprite: 240
+    friendlyImpactRadius: 2
+    damage:
+      types:
+        Piercing: 20
+        Heat: 5
+    explosion: null
+    impactEffects:
+    - RMCEffectExplosionParticle
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 750
+
+- type: entity
+  parent: CMBulletBase
+  id: CMUMohawkM90Kinetic
+  name: 90mm kinetic round
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 20
+  - type: CMArmorPiercing
+    amount: 30
+  - type: SpawnOnTerminate
+    spawn: CMUMohawkM90KineticImpact
+    projectileAdjust: false
+  - type: RemoveComponents
+    components:
+    - type: RMCProjectileDamageFalloff
+    - type: RMCProjectileAccuracy
+
+- type: entity
+  parent: RMCEffectExplosionParticle
+  id: CMUMohawkM90KineticImpact
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: false
+
+- type: entity
+  parent: CMUProjectileLTBCannonHEAT
+  id: CMUMohawkM90HEAP
+  name: 90mm HEAP shell
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 145
+        Heat: 20
+  - type: CMArmorPiercing
+    amount: 60
+  - type: VehicleDamageMultiplier
+    multiplier: 1
+  - type: ProjectileGrenade
+    capacity: 0
+  - type: SpawnOnTerminate
+    spawn: CMUMohawkM90HEAPImpact
+
+- type: entity
+  parent: BaseItem
+  id: CMUMohawkM90Casing
+  name: spent 90mm shell casing
+  description: An empty brass casing ejected by a twin M90 chin turret.
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
+    state: lbtshell_casing
+  - type: Item
+    size: Normal
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.10,-0.05,0.10,0.05"
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+  - type: CMUSpentCasing
+  - type: TimedDespawn
+    lifetime: 10
+
+- type: entity
+  parent: CMUMohawkM90HEAP
+  id: CMUMohawkM90Scatter
+  name: 90mm scatter shell
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 50
+        Heat: 10
+  - type: CMArmorPiercing
+    amount: 10
+  - type: SpawnOnTerminate
+    spawn: CMUMohawkM90ScatterImpact
+
+- type: entity
+  parent: CMUMohawkM90HEAP
+  id: CMUMohawkM90Incendiary
+  name: 90mm incendiary shell
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 70
+        Heat: 60
+  - type: CMArmorPiercing
+    amount: 15
+  - type: IgniteOnProjectileHit
+    intensity: 30
+    duration: 20
+  - type: SpawnOnTerminate
+    spawn: CMUMohawkM90IncendiaryImpact
+
+- type: entity
+  parent: CMUMohawkM90HEAP
+  id: CMUMohawkM90Devastator
+  name: 90mm devastator shell
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 220
+        Heat: 80
+  - type: CMArmorPiercing
+    amount: 40
+  - type: SpawnOnTerminate
+    spawn: CMUMohawkM90DevastatorImpact
+
+- type: entity
+  parent: CMULTBCannonImpactHEAT
+  id: CMUMohawkM90HEAPImpact
+  name: 90mm HEAP impact
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMExplosionEffect
+    minShrapnel: 0
+    maxShrapnel: 0
+  - type: Explosive
+    maxIntensity: 6
+    intensitySlope: 6
+    totalIntensity: 20
+
+- type: entity
+  parent: CMUMohawkM90HEAPImpact
+  id: CMUMohawkM90ScatterImpact
+  name: 90mm scatter impact
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Explosive
+    maxIntensity: 4
+    intensitySlope: 6
+    totalIntensity: 10
+
+- type: entity
+  parent: CMUMohawkM90HEAPImpact
+  id: CMUMohawkM90IncendiaryImpact
+  name: 90mm incendiary impact
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Explosive
+    maxIntensity: 6
+    intensitySlope: 6
+    totalIntensity: 12
+
+- type: entity
+  parent: CMUMohawkM90HEAPImpact
+  id: CMUMohawkM90DevastatorImpact
+  name: 90mm devastator impact
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Explosive
+    maxIntensity: 12
+    intensitySlope: 3
+    totalIntensity: 100
 
 - type: cameraNetwork
   id: CMUMohawkOmaha
