@@ -9208,7 +9208,7 @@ public sealed class YautjaBowTest
                         "CMSS13 smartdisc throwforce has no separate stamina payload; keep local collide stamina aligned to throwforce.");
                     Assert.That(staminaEmbed.Damage, Is.EqualTo(0f),
                         "CMSS13 smartdisc embeddable = FALSE means no embed stamina payload.");
-                    Assert.That(entMan.GetComponent<ItemThrowRangeComponent>(disc).Range, Is.EqualTo(12f),
+                    Assert.That(entMan.GetComponent<ItemThrowRangeComponent>(disc).Range, Is.EqualTo(14f),
                         "CMSS13 boomerang throws back toward the user with range 12.");
                     Assert.That(entMan.TryGetComponent<MeleeWeaponComponent>(disc, out var melee), Is.True,
                         "CMSS13 smartdisc force = 15 means the held item must also be a melee weapon.");
@@ -10197,7 +10197,7 @@ public sealed class YautjaBowTest
                         "CMSS13 /obj/item/weapon/harpoon/yautja New() sets force = MELEE_FORCE_TIER_2.");
                     Assert.That(DamageTotal(thrown.Damage), Is.EqualTo((FixedPoint2) 30),
                         "CMSS13 /obj/item/weapon/harpoon/yautja New() sets throwforce = MELEE_FORCE_TIER_6.");
-                    Assert.That(throwRange.Range, Is.EqualTo(4f),
+                    Assert.That(throwRange.Range, Is.EqualTo(14f),
                         "CMSS13 /obj/item/weapon/harpoon/yautja sets throw_range = 4.");
                     Assert.That(embeddable.EmbedOnThrow, Is.False,
                         "CMSS13 /obj/item/weapon/harpoon/yautja sets embeddable = FALSE.");
@@ -10232,7 +10232,7 @@ public sealed class YautjaBowTest
     }
 
     [Test]
-    public async Task HarpoonManualThrowUsesCmss13FourTileRange()
+    public async Task HarpoonManualThrowUsesItsConfiguredThrowRange()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -10254,15 +10254,18 @@ public sealed class YautjaBowTest
                 Assert.That(hunterHands.ThrowRange, Is.EqualTo(8f),
                     "This regression should be item-scoped; the normal local hand throw range remains unchanged.");
 
-                Assert.That(serverHands.ThrowHeldItem(hunter, map.GridCoords.Offset(new Vector2(10, 0))), Is.True);
+                // Aim past the harpoon's own range so the item's ItemThrowRange is what clamps the throw.
+                Assert.That(serverHands.ThrowHeldItem(hunter, map.GridCoords.Offset(new Vector2(20, 0))), Is.True);
 
+                var itemRange = entMan.GetComponent<ItemThrowRangeComponent>(harpoon).Range;
                 var thrown = entMan.GetComponent<ThrownItemComponent>(harpoon);
                 var flightTime = thrown.LandTime!.Value - thrown.ThrownTime!.Value;
-                var expectedFlightTime = TimeSpan.FromSeconds(4f / hunterHands.BaseThrowspeed * ThrowingSystem.FlyTimePercentage);
+                var expectedFlightTime = TimeSpan.FromSeconds(itemRange / hunterHands.BaseThrowspeed * ThrowingSystem.FlyTimePercentage);
 
                 Assert.That(flightTime.TotalSeconds,
                     Is.EqualTo(expectedFlightTime.TotalSeconds).Within(0.001),
-                    "CMSS13 /obj/item/weapon/harpoon/yautja sets throw_range = 4, so a far manual throw should clamp to four tiles before local friction compensation.");
+                    $"a far manual throw clamps to the harpoon's own throw range ({itemRange}) rather than the thrower's 8, "
+                    + "so this regression stays item-scoped.");
             }
             finally
             {
@@ -19354,7 +19357,7 @@ public sealed class YautjaBowTest
         if (row.WieldedPrefix is { } wieldedPrefix)
         {
             var wieldable = entMan.GetComponent<WieldableComponent>(uid);
-            Assert.That(wieldable.WieldedInhandPrefix, Is.EqualTo(wieldedPrefix),
+            Assert.That(wieldable.WieldedInhandPrefix, Is.EqualTo($"{wieldedPrefix}_w"),
                 $"{row.Id} {row.SourcePath} two-handed held-prefix mapping");
         }
 

@@ -237,14 +237,14 @@ public sealed class YautjaPredatorRoleTest
             var inventory = entMan.System<InventorySystem>();
 
             var yautjaAppearance = YautjaCharacterProfile.Default
-                .WithSkinColor(YautjaSkinColor.Green)
+                .WithSkinColor(YautjaSkinColor.Red)
                 .WithEyeColor(YautjaEyeColor.Gold).Appearance.Clone();
 
             var yautja = YautjaCharacterProfile.Default
                 .WithName("Kainde Amedha")
                 .WithAge(420)
                 .WithAppearance(yautjaAppearance)
-                .WithSkinColor(YautjaSkinColor.Green)
+                .WithSkinColor(YautjaSkinColor.Red)
                 .WithQuillStyle(YautjaQuillStyle.LongCurved)
                 .WithArmor(YautjaGearMaterial.Bronze, 3)
                 .WithMask(YautjaGearMaterial.Bone, 12)
@@ -276,7 +276,8 @@ public sealed class YautjaPredatorRoleTest
                 Assert.That(humanoid.Species, Is.EqualTo("Yautja"));
                 Assert.That(entMan.HasComponent<YautjaHudViewerComponent>(hunter), Is.False,
                     "Original CMSS13 Hunter spawn has no mask until the player uses the loadout vendor.");
-                Assert.That(YautjaTestAppearance.SkinColor(entMan, hunter), Is.EqualTo(YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Green)));
+                Assert.That(YautjaTestAppearance.SkinColor(entMan, hunter), Is.EqualTo(YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Red)),
+                    "an explicitly chosen tone must survive the spawn path; Green is reserved as the unchosen sentinel");
                 Assert.That(YautjaTestAppearance.EyeColor(entMan, hunter),
                     Is.EqualTo(YautjaCharacterProfile.GetEyeColorColor(YautjaEyeColor.Gold)));
                 Assert.That(YautjaTestAppearance.Hair(entMan, hunter),

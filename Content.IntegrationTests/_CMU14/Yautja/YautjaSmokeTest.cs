@@ -1006,7 +1006,7 @@ public sealed class YautjaSmokeTest
                     {
                         Assert.That(bracerComp.Charge, Is.EqualTo((FixedPoint2) 3000), $"{id} CMSS13 /obj/item/clothing/gloves/yautja/hunter charge");
                         Assert.That(bracerComp.MaxCharge, Is.EqualTo((FixedPoint2) 3000), $"{id} CMSS13 /obj/item/clothing/gloves/yautja/hunter charge_max");
-                        Assert.That(bracerComp.Regen, Is.EqualTo((FixedPoint2) 60), $"{id} CMSS13 /obj/item/clothing/gloves/yautja charge_rate");
+                        Assert.That(bracerComp.Regen, Is.EqualTo((FixedPoint2) 100), $"{id} hunter bracer charge_rate (CMU tuning: 100/s, CM-SS13 is 60)");
                     });
                 }
             }

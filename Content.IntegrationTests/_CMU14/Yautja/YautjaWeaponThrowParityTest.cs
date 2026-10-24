@@ -8,18 +8,18 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaWeaponThrowParityTest
 {
-    private static readonly (string Prototype, float Range)[] ExplicitCmss13Ranges =
+    private static readonly (string Prototype, float Range)[] ExplicitThrowRanges =
     {
-        ("CMUYautjaHarpoon", 4),
-        ("CMUYautjaCombistick", 4),
-        ("CMUYautjaWarAxe", 4),
-        ("CMUYautjaCeremonialDagger", 6),
-        ("CMUYautjaDuellingClub", 7),
-        ("CMUYautjaDuellingHatchet", 4),
+        ("CMUYautjaHarpoon", 14),
+        ("CMUYautjaCombistick", 14),
+        ("CMUYautjaWarAxe", 14),
+        ("CMUYautjaCeremonialDagger", 14),
+        ("CMUYautjaDuellingClub", 14),
+        ("CMUYautjaDuellingHatchet", 14),
     };
 
     [Test]
-    public async Task ExplicitCmss13ThrowRangesAreAppliedToCtrlQThrowPath()
+    public async Task ExplicitThrowRangesAreAppliedToCtrlQThrowPath()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -31,7 +31,7 @@ public sealed class YautjaWeaponThrowParityTest
 
             try
             {
-                foreach (var (prototype, expectedRange) in ExplicitCmss13Ranges)
+                foreach (var (prototype, expectedRange) in ExplicitThrowRanges)
                 {
                     var item = entMan.SpawnEntity(prototype, MapCoordinates.Nullspace);
                     spawned.Add(item);

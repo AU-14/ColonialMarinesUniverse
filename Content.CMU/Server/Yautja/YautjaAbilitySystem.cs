@@ -285,7 +285,6 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
 
             leap.Direction = direction.Normalized();
             leap.SnapToDestination = true;
-            Dirty(ent.Owner, leap);
         }
 
         _throwing.TryThrow(

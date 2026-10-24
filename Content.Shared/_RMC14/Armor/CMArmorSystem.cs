@@ -372,9 +372,12 @@ public sealed partial class CMArmorSystem : EntitySystem
             var bodyAttackFromXeno = HasComp<XenoComponent>(args.Origin) &&
                                      args.Tool == args.Origin &&
                                      args.Damage.AnyPositive();
-            var meleeToolAttack = args.Impact.Delivery == DamageImpactDelivery.Melee && args.Tool != args.Origin;
+            // Any melee hit on a xeno gets the x1.5, including a bare-handed punch from a non-xeno. The flat 20
+            // penetration below stays item-attack only, and the xeno armour bypass stays xeno-body-attack only, so a
+            // punch is boosted but does not strip armour.
+            var meleeAttack = args.Impact.Delivery == DamageImpactDelivery.Melee;
 
-            if (!hasOwnMultiplier && (meleeToolAttack || bodyAttackFromXeno))
+            if (!hasOwnMultiplier && (meleeAttack || bodyAttackFromXeno))
             {
                 args.Damage = args.Damage * 1.5f;
 

@@ -40,6 +40,22 @@ public sealed partial class VisualBodySystem
                YautjaBodyVariants.IsBodyRsi(sprite.BaseRSI?.Path.ToString());
     }
 
+    private static bool YautjaHasExactVariant(Color skin)
+    {
+        foreach (var (colour, _) in YautjaSkinVariants)
+        {
+            var candidate = YautjaCharacterProfile.GetSkinColorColor(colour);
+            if (MathF.Abs(candidate.R - skin.R) < 0.004f &&
+                MathF.Abs(candidate.G - skin.G) < 0.004f &&
+                MathF.Abs(candidate.B - skin.B) < 0.004f)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private static string YautjaSkinSuffix(Color skin)
     {
         var best = "tan";
@@ -171,6 +187,17 @@ public sealed partial class VisualBodySystem
         var rsiPath = sprite.BaseRSI?.Path.ToString() ?? string.Empty;
         if (!rsiPath.Contains("CMU14/Yautja/body.rsi", StringComparison.OrdinalIgnoreCase))
         {
+            return;
+        }
+
+        // Only the six CM tones have baked art. Gray/White (and any colour outside the palette) have no variant state,
+        // so they keep the greyscale shader plus a tint - that is what the achromatic presets expect.
+        if (!YautjaHasExactVariant(selection))
+        {
+            if ((layer.RsiState.Name ?? string.Empty) != baseState)
+                sprite.LayerSetState(index, baseState);
+            sprite.LayerSetShader(index, "Greyscale");
+            sprite.LayerSetColor(index, selection);
             return;
         }
 
