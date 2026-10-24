@@ -85,9 +85,9 @@
     attackRate: 2.2
     damage:
       types:
-        Blunt: 14
-        Slash: 14
-        Piercing: 14
+        Blunt: 15
+        Slash: 15
+        Piercing: 15
   - type: CMArmor
     explosionArmor: 20
     xenoArmor: 30
@@ -168,9 +168,9 @@
     attackRate: 2.0
     damage:
       types:
-        Slash: 15
+        Slash: 40
   - type: XenoClawBloodloss
-    bloodloss: 100
+    bloodloss: 8
   - type: XenoScissorCut
     damage:
       types:
