@@ -1,1 +1,24 @@
 
+- type: entity  
+  parent: ActionXenoBase  
+  id: ActionXenoGuardianLink
+  name: Guardian Link (100)  
+  description: Link to a nearby ally, absorbing 50% of the damage they take for a short duration.  
+  components:  
+  - type: Action  
+    itemIconStyle: NoItem  
+    icon:  
+      sprite: _RMC14/Actions/xeno_actions.rsi  
+      state: guardian_link  
+    useDelay: 20  
+  - type: TargetAction  
+    checkCanAccess: false  
+    range: -1  
+  - type: EntityTargetAction  
+    event: !type:XenoGuardianLinkActionEvent  
+    canTargetSelf: false  
+    whitelist:  
+      components:  
+      - XenoComponent  
+  - type: XenoActionPlasma  
+    cost: 100
