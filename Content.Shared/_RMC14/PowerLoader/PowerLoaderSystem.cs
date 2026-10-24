@@ -66,6 +66,10 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
     private static readonly EntProtoId DefaultHandVisual = "RMCVirtualDropshipGearRight";
 
+    // AU-14: tag-based matching for the JDAM bomb clamp and its bombs.
+    private static readonly ProtoId<TagPrototype> JDAMBombTag = "CMUJDAMBomb";
+    private static readonly ProtoId<TagPrototype> JDAMBombClampTag = "CMUJDAMBombClamp";
+
     private EntityQuery<PowerLoaderGrabbableComponent> _powerLoaderGrabbableQuery;
 
     public override void Initialize()
@@ -128,6 +132,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
         SubscribeLocalEvent<DropshipWeaponPointComponent, EntInsertedIntoContainerMessage>(OnWeaponPointContainerInserted); // CMU14
         SubscribeLocalEvent<DropshipWeaponPointComponent, EntRemovedFromContainerMessage>(OnWeaponPointContainerChanged);
+        SubscribeLocalEvent<DropshipUtilityPointComponent, EntInsertedIntoContainerMessage>(OnUtilityPointContainerInserted);
         SubscribeLocalEvent<DropshipUtilityPointComponent, EntRemovedFromContainerMessage>(OnUtilityPointContainerChanged);
         SubscribeLocalEvent<DropshipEnginePointComponent, EntRemovedFromContainerMessage>(OnEnginePointContainerChanged);
         SubscribeLocalEvent<DropshipElectronicSystemPointComponent, EntRemovedFromContainerMessage>(OnElectronicPointContainerChanged);
@@ -490,6 +495,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         else
         {
             args.CanUse = CanDetachPopup(ref user, ent, ent.Comp.DeployableContainerSlotId, false, out slot) ||
+                          CanDetachPopup(ref user, ent, ent.Comp.AmmoContainerSlotId, false, out slot) ||
                           CanDetachPopup(ref user, ent, ent.Comp.UtilitySlotId, false, out slot);
         }
 
@@ -824,7 +830,8 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         string msg;
         if (HasComp<DropshipUtilityComponent>(used) ||
             HasComp<DropshipEngineComponent>(used) ||
-            HasComp<DropshipElectronicSystemComponent>(used))
+            HasComp<DropshipElectronicSystemComponent>(used) ||
+            HasComp<DropshipWeaponComponent>(used))
         {
             slotId = container;
             msg = Loc.GetString("rmc-power-loader-occupied");
@@ -858,6 +865,43 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         [NotNullWhen(true)] out ContainerSlot? slot)
     {
         slot = null;
+
+        // AU-14: weapons installed on crew compartment points (JDAM bomb clamp, etc.)
+        // take their matching ammo in the point's ammo slot.
+        if (TryComp(used, out DropshipAmmoComponent? ammo))
+        {
+            if (!_container.TryGetContainer(target, target.Comp.UtilitySlotId, out var weaponContainer))
+                return false;
+
+            foreach (var containedEntity in weaponContainer.ContainedEntities)
+            {
+                if (!HasComp<DropshipWeaponComponent>(containedEntity))
+                    continue;
+
+                if (ammo.Weapon.Id != Prototype(containedEntity)?.ID)
+                {
+                    // AU-14: the JDAM bomb clamp accepts any JDAM-family bomb.
+                    if (!(_tag.HasTag(containedEntity, JDAMBombClampTag) &&
+                          _tag.HasTag(used, JDAMBombTag)))
+                        return false;
+                }
+
+                slot = _container.EnsureContainer<ContainerSlot>(target, target.Comp.AmmoContainerSlotId);
+                if (slot.ContainedEntity == null)
+                    return true;
+
+                foreach (var buckled in GetBuckled(user))
+                {
+                    _popup.PopupClient(Loc.GetString("rmc-power-loader-occupied-ammo"), target, buckled, PopupType.SmallCaution);
+                }
+
+                slot = null;
+                return false;
+            }
+
+            return false;
+        }
+
         var slotId = target.Comp.UtilitySlotId;
         if (HasComp<RMCOrbitalDeployableComponent>(used))
         {
@@ -1203,6 +1247,12 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
     public void SyncAppearance(Entity<DropshipWeaponPointComponent?> point)
     {
+        if (TryComp(point, out DropshipUtilityPointComponent? utilityPoint))
+        {
+            SyncAppearance(point, utilityPoint.UtilitySlotId);
+            return;
+        }
+
         if (!Resolve(point, ref point.Comp, logMissing: false))
             return;
 
@@ -1291,6 +1341,22 @@ public sealed partial class PowerLoaderSystem : EntitySystem
             if (utility.Sprite is not { } rsi)
                 continue;
 
+            if (TryComp(contained, out DropshipWeaponComponent? weapon) &&
+                weapon.UtilityAmmoAttachedSprite is { } loadedSprite &&
+                TryComp(point, out DropshipUtilityPointComponent? utilityPoint) &&
+                _container.TryGetContainer(point, utilityPoint.AmmoContainerSlotId, out var ammoContainer))
+            {
+                foreach (var ammoEntity in ammoContainer.ContainedEntities)
+                {
+                    if (TryComp(ammoEntity, out DropshipAmmoComponent? ammo) &&
+                        ammo.Rounds > 0 && ammo.Rounds >= ammo.RoundsPerShot)
+                    {
+                        rsi = loadedSprite;
+                        break;
+                    }
+                }
+            }
+
             _appearance.SetData(point, DropshipUtilityVisuals.Sprite, rsi.RsiPath.ToString());
             _appearance.SetData(point, DropshipUtilityVisuals.State, rsi.RsiState);
             return;
@@ -1332,10 +1398,15 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         if (slot.ContainedEntities.Count > 0)
             return;
 
+        if (!_container.Insert(contained, slot))
+        {
+            Log.Warning($"Failed to install {ToPrettyString(contained)} into {slot.ID} on {ToPrettyString(slot.Owner)}.");
+            foreach (var pilot in GetBuckled(user))
+                _popup.PopupEntity(Loc.GetString("rmc-power-loader-occupied-ammo"), slot.Owner, pilot, PopupType.SmallCaution);
+            return;
+        }
         var ev = new DropShipAttachmentInsertedEvent(contained);
         RaiseLocalEvent(slot.Owner, ref ev);
-
-        _container.Insert(contained, slot);
         SyncHands((user, user.Comp));
     }
 
@@ -1423,9 +1494,15 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         SyncAppearance(ent.Owner);
     }
 
+    private void OnUtilityPointContainerInserted(Entity<DropshipUtilityPointComponent> ent, ref EntInsertedIntoContainerMessage args)
+    {
+        if (args.Container.ID == ent.Comp.UtilitySlotId || args.Container.ID == ent.Comp.AmmoContainerSlotId)
+            SyncAppearance(ent, ent.Comp.UtilitySlotId);
+    }
+
     private void OnUtilityPointContainerChanged(Entity<DropshipUtilityPointComponent> ent, ref EntRemovedFromContainerMessage args)
     {
-        if (args.Container.ID == ent.Comp.UtilitySlotId)
+        if (args.Container.ID == ent.Comp.UtilitySlotId || args.Container.ID == ent.Comp.AmmoContainerSlotId)
             SyncAppearance(ent, ent.Comp.UtilitySlotId);
     }
 

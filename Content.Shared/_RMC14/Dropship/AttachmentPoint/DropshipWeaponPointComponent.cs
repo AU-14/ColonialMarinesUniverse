@@ -44,4 +44,6 @@ public enum DropshipWeaponPointLocation
     PortFore = 3,
     StarboardFore = 4,
     Chin = 5, // CMU14: midway's fixed chin gun, its own slot so it doesn't share a number with the port fore mount
+    /// <summary>CMU14: weapons in internal utility attachment points, used for fire-mission offsets.</summary>
+    Internal = 6,
 }

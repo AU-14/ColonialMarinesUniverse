@@ -2,14 +2,14 @@
   parent: RMCDropshipAttachmentWeapon
   id: RMCDropshipAttachmentLaserCannon
   name: LWU-6B Laser Cannon
-  description: State of the art technology recently acquired by the UNMC, it fires a battery-fed pulsed laser beam at near lightspeed setting on fire everything it touches. Moving this will require some sort of lifter. Accepts the BTU-17/LW Hi-Cap Laser Batteries.
+  description: State of the art technology recently acquired, it fires a battery-fed pulsed laser beam at near lightspeed setting on fire everything it touches. Moving this will require some sort of lifter. Accepts the BTU-17/LW Hi-Cap Laser Batteries. # CMU14
   components:
   - type: Sprite
     layers:
     - state: laser_beam
       offset: 0.5, 0.5
   - type: DropshipFabricatorPrintable
-    cost: 500
+    cost: 400 # CMU14
   - type: DropshipWeapon
     abbreviation: LZR
     fireDelay: 5
@@ -31,7 +31,7 @@
   parent: RMCDropshipAttachmentAmmo
   id: RMCDropshipAttachmentAmmoLaserCannon
   name: BTU-17/LW Hi-Cap Laser Battery
-  description: A high-capacity laser battery used to power laser beam weapons.  Can be loaded into the LWU-6B Laser Cannon.
+  description: A high-capacity standard laser battery used to power laser beam weapons. Can be loaded into the LWU-6B Laser Cannon. # CMU14
   components:
   - type: Sprite
     layers:
@@ -62,4 +62,80 @@
     deleteOnEmpty: true
   - type: DropshipFabricatorPrintable
     category: Ammo
+    cost: 475 # CMU14
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoLaserCannon
+  id: RMCDropshipAttachmentAmmoLaserCannonGreen # CMU14
+  name: BTU-18/LW-G 'Verdant' Hi-Cap Laser Battery
+  description: A high-capacity laser battery used to power laser beam weapons, tuned to a green wavelength that spreads intense green fire over a wide area. Can be loaded into the LWU-6B Laser Cannon.
+  components:
+  - type: DropshipAmmo
+    ammoType: laser_battery_green
+    roundsPerShot: 5
+    fire:
+      type: RMCTileFireGreen
+      range: 8
+      total: 48
+  - type: DropshipFabricatorPrintable
+    category: Ammo
     cost: 500
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoLaserCannon
+  id: RMCDropshipAttachmentAmmoLaserCannonBlue # CMU14
+  name: BTU-18/LW-B 'Glacier' Hi-Cap Laser Battery
+  description: A high-capacity laser battery used to power laser beam weapons, tuned to a blue wavelength that concentrates blue fire on a small area. Can be loaded into the LWU-6B Laser Cannon.
+  components:
+  - type: DropshipAmmo
+    ammoType: laser_battery_blue
+    roundsPerShot: 20
+    fire:
+      type: RMCTileFireBlue
+      range: 3
+      total: 16
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 1100
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoLaserCannon
+  id: RMCDropshipAttachmentAmmoLaserCannonWhite # CMU14
+  name: BTU-18/LW-W 'Daybreak' Hi-Cap Laser Battery
+  description: An experimental low-capacity laser battery used to power laser beam weapons, packing as much charge as possible into the tiny battery to release a searing white-hot blast. Can be loaded into the LWU-6B Laser Cannon.
+  components:
+  - type: DropshipAmmo
+    ammoType: laser_battery_white
+    roundsPerShot: 50
+    fire:
+      type: RMCTileFireOB
+      range: 2
+      total: 8
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 3500
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoLaserCannon
+  id: RMCDropshipAttachmentAmmoLaserCannonRapid # CMU14
+  name: BTU-18/LW-R 'Rapidfire' Hi-Cap Laser Battery
+  description: An overclocked laser battery that fires five simultaneous laser pulses, igniting five separate impact areas. Select a wide ring or sweeping line in the weapons console. Both patterns hold enough charge for ten shots. Can be loaded into the LWU-6B Laser Cannon.
+  components:
+  - type: DropshipAmmo
+    ammoType: laser_battery_rapid
+    ammoSpriteType: laser_battery
+    roundsPerShot: 10
+    shotsPerVolley: 10
+    impactsPerVolley: 5
+    selectableLaserPattern: true
+    targetSpread: 0
+    bulletSpread: 6
+    impactEffects:
+    - CMUDropshipLaserPulse
+    fire:
+      type: RMCTileFireNapalm
+      range: 3
+      total: 16
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 950

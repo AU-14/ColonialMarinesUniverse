@@ -21,6 +21,16 @@ public abstract class SharedExplosionSystem : EntitySystem
     /// </remarks>
     public static readonly ProtoId<ExplosionPrototype> DefaultExplosionPrototypeId = "Default";
 
+    // CMU14 method: retain the capped-intensity blast-radius calculation for CAS explosions.
+    public static float CalculateBlastRadius(float totalIntensity, float slope, float maxIntensity)
+    {
+        var r0 = maxIntensity / slope;
+        var v0 = slope * MathF.PI / 3 * MathF.Pow(r0, 3);
+        if (totalIntensity <= v0)
+            return MathF.Cbrt(3 * totalIntensity / (slope * MathF.PI));
+        return r0 * (MathF.Sqrt(12 * totalIntensity / v0 - 3) / 6 + 0.5f);
+    }
+
     public override void Initialize()
     {
         base.Initialize();

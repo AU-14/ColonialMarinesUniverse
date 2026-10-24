@@ -185,6 +185,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
 
             ammo.Rounds -= roundsPerShot;
             var projectile = Spawn(ent.Comp.Projectile, args.Coordinates);
+            EnsureComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(projectile);
             args.Ammo.Add((projectile, _guns.EnsureShootable(projectile)));
         }
 
