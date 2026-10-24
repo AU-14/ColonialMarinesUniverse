@@ -10,7 +10,9 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.CMU14.ColonyEconomy;
 
 // Prices canister contents by mole count so gas canisters sold on the ASRS pay by fill.
-// Three price sources, checked in order: waste, valuable, then derived from the catalog.
+// Waste and valuable set fixed floor rates; the live ASRS catalog additionally caps every
+// gas at ResaleMargin x (cost - shell) per fresh fill, cheapest source winning per gas.
+// A catalog canister therefore can never resell above its own cost, whichever rate wins.
 //
 // Waste: gases with a free source (station atmos loops, fire byproducts, the portable
 // miners) must stay near-zero per mol. Any real value here turns the free source into
@@ -28,20 +30,17 @@ namespace Content.Server.CMU14.ColonyEconomy;
 // cryo chain, the colony's industrial jackpot. The 51x mole gain is the number to
 // respect when retuning.
 //
-// Derived: everything else a canister can hold is priced from the live ASRS catalog as
-// ResaleMargin x (cost - shell) / fresh moles, cheapest source winning per gas. Catalog
-// balance tweaks move the resale price automatically; resale can never beat purchase.
-// Nitrous oxide has no production reaction and rides this rate (~0.067 from its
-// 500-cr canister). A catalog canister holding a valuable gas must cost more than
-// valuable-rate x fresh moles: at 0.4 a tritium canister resells for ~1108, so the
-// commented-out 800-cr TritiumCanister entry would print if re-enabled.
+// Derived caps: everything a canister can hold is also priced from the live ASRS catalog
+// as ResaleMargin x (cost - shell) / fresh moles. The cap is what lets a catalog entry for
+// any gas exist without printing, including tritium. Nitrous oxide has no production
+// reaction and rides this rate (~0.067 from its 500-cr canister).
 public sealed partial class GasCanisterPricingSystem : EntitySystem
 {
     private const float ResaleMargin = 0.5f;
 
-    // Scales the fixed per-mol price sources (waste and valuable). Derived rates already
-    // carry the resale margin against live catalog costs, so scaling them would let a
-    // catalog canister resell above cost.
+    // Scales the fixed per-mol price sources (waste and valuable). Catalog budgets can
+    // still cap any gas below its fixed rate, so a catalog canister never resells above
+    // its own cost.
     private const float MolPriceMultiplier = 1.75f;
 
     private static readonly Dictionary<Gas, float> WasteGasPrices = new()
@@ -70,7 +69,7 @@ public sealed partial class GasCanisterPricingSystem : EntitySystem
 
     private void OnCanisterPrice(Entity<GasCanisterComponent> canister, ref PriceCalculationEvent args)
     {
-        var derived = GetDerivedRates();
+        var rates = GetRates();
         for (var i = 0; i < Atmospherics.TotalNumberOfGases; i++)
         {
             var gas = (Gas) i;
@@ -78,14 +77,7 @@ public sealed partial class GasCanisterPricingSystem : EntitySystem
             if (moles <= 0)
                 continue;
 
-            if (WasteGasPrices.TryGetValue(gas, out var rate)
-                || ValuableGasPrices.TryGetValue(gas, out rate))
-            {
-                args.Price += moles * rate * MolPriceMultiplier;
-                continue;
-            }
-
-            if (!derived.TryGetValue(gas, out rate))
+            if (!rates.TryGetValue(gas, out var rate))
                 continue;
 
             args.Price += moles * rate;
@@ -94,9 +86,13 @@ public sealed partial class GasCanisterPricingSystem : EntitySystem
 
     // Rebuilt per pricing call: canister pricing is rare (elevator sells, appraisals)
     // and this skips all cache invalidation against catalog rebuilds.
-    private Dictionary<Gas, float> GetDerivedRates()
+    private Dictionary<Gas, float> GetRates()
     {
         var rates = new Dictionary<Gas, float>();
+        foreach (var (gas, price) in WasteGasPrices)
+            rates[gas] = price * MolPriceMultiplier;
+        foreach (var (gas, price) in ValuableGasPrices)
+            rates[gas] = price * MolPriceMultiplier;
         foreach (var computer in EntityQuery<RequisitionsComputerComponent>())
         {
             foreach (var item in computer.ItemCatalog)
@@ -115,7 +111,7 @@ public sealed partial class GasCanisterPricingSystem : EntitySystem
                 {
                     var gas = (Gas) i;
                     var moles = canister.Air.GetMoles(gas);
-                    if (moles <= 0 || WasteGasPrices.ContainsKey(gas) || ValuableGasPrices.ContainsKey(gas))
+                    if (moles <= 0)
                         continue;
 
                     var rate = (float) ((item.Cost - shellPrice) * ResaleMargin / moles);
