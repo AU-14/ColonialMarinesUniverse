@@ -177,10 +177,10 @@
     bloodloss: 12
   - type: XenoTailStab
     tailDamage:
-    types:
-      Slash: 10
-      Blunt: 10
-      Piercing: 10
+      types:
+        Slash: 10
+        Blunt: 10
+        Piercing: 10
     bloodloss: 25
   - type: XenoImpale  
     damage:  
