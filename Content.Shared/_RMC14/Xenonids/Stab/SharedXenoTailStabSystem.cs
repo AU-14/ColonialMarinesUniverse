@@ -288,7 +288,7 @@ public abstract partial class SharedXenoTailStabSystem : EntitySystem
                     damaged = true;
                     _colorFlash.RaiseEffect(Color.Red, new List<EntityUid> { hit }, filter);
 
-                    if (stab.Comp.Bloodloss > FixedPoint2.Zero && TryComp<BloodsteamComponent>(hit, out var bloodstream))
+                    if (stab.Comp.Bloodloss > FixedPoint2.Zero && TryComp<BloodstreamComponent>(hit, out var bloodstream))
                         _bloodstream.TryModifyBloodLevel((hit, bloodstream), -stab.Comp.Bloodloss); // CMU14
                 }
             }
