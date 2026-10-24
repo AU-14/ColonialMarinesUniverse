@@ -1,3 +1,4 @@
+using Content.Client.CMU14.ZLevels.Core; // cmu edit
 using Content.Client.Nutrition.EntitySystems;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
@@ -47,7 +48,7 @@ public sealed partial class NutritionOverlay : Overlay
         if (player == null)
             return false;
 
-        if (!_entityManager.TryGetComponent(player, out EyeComponent? eyeComp) || args.Viewport.Eye != eyeComp.Eye)
+        if (!_entityManager.TryGetComponent(player, out EyeComponent? eyeComp) || !args.Viewport.Eye.IsPlayerView(eyeComp.Eye)) // cmu edit
             return false;
 
         if (!_entityManager.TryGetComponent(player, out SatiationComponent? satiation))

@@ -611,6 +611,8 @@ jobs:
             # CMU14: four linter pairs at once went past the runner's RAM into swap and the GC crawled
             # until the hang watchdog killed it. two keep it in memory
             proto_lint_serial) workers=2 ;;
+            # CMU14: every procgen research test builds its own pair, four at once ran out of memory and hung
+            cmu_chemistry) workers=2 ;;
           esac
 
           if [[ "$shard" == root ]]; then

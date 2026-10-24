@@ -73,11 +73,13 @@ public sealed class StartingGearPrototypeStorageTest : GameTest
                             server.EntMan.EventBus.RaiseLocalEvent(bag, ref ev);
                         }
 
-                        if (!storageSystem.CanInsert(bag, ent, out _))
+                        // cmu edit start: say why it was refused
+                        if (!storageSystem.CanInsert(bag, ent, out var reason))
                         {
                             var entity = server.EntMan.GetComponent<MetaDataComponent>(ent).EntityPrototype?.ID ?? ent.ToString();
-                            Assert.Fail($"StartingGearPrototype {gearProto.ID} could not insert {entity} into slot {slot} storage entity {storageProto} ({bag.Id})");
+                            Assert.Fail($"StartingGearPrototype {gearProto.ID} could not insert {entity} into slot {slot} storage entity {storageProto} ({bag.Id}): {reason}");
                         }
+                        // cmu edit end
 
                         server.EntMan.DeleteEntity(ent);
                     }

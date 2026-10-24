@@ -58,7 +58,7 @@
   storage:
     back:
     - CMSheetMetal20
-    - CMDefibrillator
+    - AU14CMDefibrillator # cmu edit: was CMDefibrillator
     outerClothing:
     - RMCMREWeYa
   inhand:

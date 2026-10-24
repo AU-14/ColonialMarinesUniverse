@@ -23,6 +23,20 @@ public sealed partial class CMUPhotoCameraSystem : EntitySystem
             return;
 
         var user = args.User;
+        if (ent.Comp.RequiresPhotoMode)
+        {
+            var photoMode = !ent.Comp.PhotoMode;
+            args.Verbs.Add(new AlternativeVerb
+            {
+                Text = Loc.GetString(photoMode ? "cmu-photo-camera-verb-photo-mode" : "cmu-photo-camera-verb-video-mode"),
+                Priority = 1,
+                Act = () => SetPhotoMode(ent, photoMode, user),
+            });
+
+            if (!ent.Comp.PhotoMode)
+                return;
+        }
+
         var next = NextSize(ent.Comp);
         args.Verbs.Add(new AlternativeVerb
         {
@@ -45,8 +59,27 @@ public sealed partial class CMUPhotoCameraSystem : EntitySystem
             _popup.PopupClient(Loc.GetString("cmu-photo-camera-frame-set", ("size", size)), ent, user.Value);
     }
 
+    /// <summary>Switches a camera that needs it between taking photos and its other use. Broadcasting carries on.</summary>
+    public void SetPhotoMode(Entity<CMUPhotoCameraComponent> ent, bool photoMode, EntityUid? user)
+    {
+        ent.Comp.PhotoMode = photoMode;
+        Dirty(ent);
+        if (user != null)
+        {
+            _popup.PopupEntity(Loc.GetString(photoMode ? "cmu-photo-camera-photo-mode-on" : "cmu-photo-camera-photo-mode-off"),
+                ent, user.Value);
+        }
+    }
+
     private void OnCameraExamined(Entity<CMUPhotoCameraComponent> ent, ref ExaminedEvent args)
     {
+        if (ent.Comp.RequiresPhotoMode)
+        {
+            args.PushMarkup(Loc.GetString(ent.Comp.PhotoMode
+                ? "cmu-photo-camera-examine-photo-mode"
+                : "cmu-photo-camera-examine-video-mode"));
+        }
+
         args.PushMarkup(Loc.GetString("cmu-photo-camera-examine", ("size", ent.Comp.Size)));
         args.PushMarkup(Loc.GetString("cmu-photo-camera-shots", ("shots", ent.Comp.Shots), ("max", ent.Comp.MaxShots)));
     }

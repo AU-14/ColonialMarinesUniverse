@@ -14632,5 +14632,280 @@
   id: 857
   time: '2026-10-22T14:13:05.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2234
+- author: rokudara-sen
+  changes:
+  - message: Nightly test workflow only runs the tests PR CI skips and no longer runs
+      out of memory.
+    type: Code
+  id: 858
+  time: '2026-10-22T21:10:05.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2260
+- author: KeiKiyomi
+  changes:
+  - message: Gas OB now does 1 brain and lung damage every 3 seconds (max of 10 lung
+      and brain damage per OB)
+    type: Add
+  - message: EMS OB now does 5 burn damage a second, max of 50 burn for humanoids,
+      max of 150 for xenos
+    type: Add
+  - message: Gas OB now is blocked for half its duration by WY and CBRN filters (15
+      seconds) but only for 5 seconds by standard filters
+    type: Tweak
+  - message: EMS cloud now lasts 30 seconds (from 20)
+    type: Tweak
+  - message: EMS stun now lasts 35 seconds (from 25)
+    type: Tweak
+  - message: Added screen blur and slowness support for Gas OBs, currently disabled
+    type: Code
+  id: 859
+  time: '2026-10-22T21:11:17.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2251
+- author: rokudara-sen
+  changes:
+  - message: GOVFOR ghost warp no longer has two LINE sections
+    type: Fix
+  - message: Overminds can have up to 3 blight cores
+    type: Tweak
+  - message: Ghosts can't open the Bison cargo bay
+    type: Fix
+  - message: Chemical payloads only take beaker-sized containers
+    type: Fix
+  - message: The IO earpiece shows rank and role icons
+    type: Fix
+  - message: The comms net directory no longer wipes what you're typing
+    type: Fix
+  - message: Medicomp tools work without the surgery window
+    type: Fix
+  - message: The ammo counter no longer draws over the TV
+    type: Fix
+  - message: Ship camera terminals no longer block their tile
+    type: Fix
+  - message: Synths no longer bleed forever from a lost limb
+    type: Fix
+  - message: Synth reset keys no longer call the target an inanimate object
+    type: Fix
+  - message: Gear that can't exist in the current mode isn't sold in vendors or req
+    type: Fix
+  - message: Things tucked into a PMC beret no longer cover the beret
+    type: Fix
+  id: 860
+  time: '2026-10-22T21:14:07.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2262
+- author: troytroy400
+  changes:
+  - message: Auxiliary Staff now replaces the Combat Correspondent role. Pick Combat
+      Correspondent, Chaplain or Mess Technician in your loadout. Distress Signal
+      has 3 Auxiliary Staff slots, Insurgency and Force on Force have 1 per side.
+    type: Add
+  - message: The DEFAC kitchen on the bush now has an open for business button. While
+      the kitchen shutters are up, the NutriCo AutoChef and AutoDrink stop dispensing
+      and say the foodline is open to make people interact.
+    type: Add
+  - message: USS Bush kitchen doors are now locked to mess technicians.
+    type: Add
+  - message: The coffee machines work now.
+    type: Add
+  - message: Mug rack ported from CM-SS13.
+    type: Add
+  - message: Gym equipment works now. Added weight machines, punching bag, treadmill,
+      light and heavy dumbbells, ring ropes, posts, posters, arena floors and USCM
+      logo decals. How many reps or minutes of running you can manage depends on your
+      build, height, weight and age.
+    type: Add
+  - message: Knee pushups. If your arms give out on normal pushups, you can drop to
+      your knees and keep going or be a pussy and do only knee pushups.
+    type: Add
+  - message: Caffeine Addict trait.
+    type: Add
+  - message: M2C and M56D resprite from CM-SS13.
+    type: Add
+  - message: HPR and M7-SMAW resprite from CM-SS13.
+    type: Add
+  - message: The USS Bush now has proper evacuation airlocks on the pods.
+    type: Add
+  - message: Added admin command lockgamemode which makes the gamemode vote offer
+      only one gamemode, for a set number of rounds or until cleared.
+    type: Add
+  - message: Force on Force now requires 100 players.
+    type: Tweak
+  - message: Hope's Retreat is in the Distress Signal rotation.
+    type: Tweak
+  - message: The generic guidebook item now opens the CMU guidebook.
+    type: Tweak
+  - message: Upstream defibrillators are properly fully replaced with the CMU defibrillator.
+    type: Tweak
+  - message: Diplomatic consoles only work for their own faction's ambassador now.
+    type: Tweak
+  - message: Hijack floor tiles can be blown out 4 minutes after the crash, down from
+      8.
+    type: Tweak
+  - message: All ship consoles make keyboard sounds when you use them.
+    type: Tweak
+  - message: GOVFOR and OPFOR spawn on their ship even when the platoon or ship vote
+      was skipped.
+    type: Fix
+  - message: Electronic hearing protection no longer sells for more than it costs.
+    type: Fix
+  - message: The AI Core Outter button opens the outer AI core podlocks on the USS
+      Bush.
+    type: Fix
+  - message: Boom mic. Takes both hands, click a broadcasting camera with it to sync
+      it, and while you hold it within 20 tiles of that camera, everything said and
+      emoted within 10 tiles is repeated by the TVs watching it.
+    type: Add
+  - message: The broadcasting camera has its own microphone that picks up speech and
+      emotes within 5 tiles.
+    type: Add
+  - message: The broadcasting camera has a photo mode. Right click to switch, wield
+      it and click to take photos.
+    type: Add
+  - message: TV News Crew third party. Has a reporter, a camera operator and a sound
+      technician with press armor and helmets and their own gear. They show up on
+      Shepherd's Pride and Stable Garrison.
+    type: Add
+  - message: The Wendigo has a resting sprite, made by mushroomracc.
+    type: Add
+  - message: Flashes and camera flashes have a 25% chance to set off a seizure in
+      someone with epilepsy.
+    type: Add
+  - message: TVs keep their channel for everyone until someone changes it and keep
+      playing with nobody watching. You can watch one from anywhere you can see it,
+      but you have to be next to it to change the channel.
+    type: Tweak
+  - message: The Combat Correspondent kit has a boom mic, a photo camera and 2 film.
+      Journalists get a boom mic, a second film and press armor and helmet.
+    type: Tweak
+  - message: Insurgency has 2 journalist slots.
+    type: Tweak
+  - message: Synths don't take pressure damage.
+    type: Tweak
+  - message: Distress Signal no longer gets random third party arrivals. Other than
+      the survivors, third parties only come when called in.
+    type: Tweak
+  - message: HESCOs can no-longer be built from sandbags.
+    type: Tweak
+  - message: The LACN utility tools rig, construction rig and medical storage rig
+      use LACN sprites.
+    type: Tweak
+  - message: The emergency toolbox has a colony radio instead of a USCM one.
+    type: Tweak
+  - message: WeYu Security Officers are now uniformed.
+    type: Tweak
+  - message: BEAR third parties no longer randomly show up on Stable Garrison.
+    type: Remove
+  id: 861
+  time: '2026-10-22T22:25:33.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2258
+- author: rokudara-sen
+  changes:
+  - message: The radio jammer can be switched on and off and actually jams
+    type: Fix
+  - message: Expedition faction squads wear their own boots and packs, UACG no longer
+      carry USCM rifles and vests
+    type: Fix
+  - message: Auxiliary Staff can take disability traits
+    type: Fix
+  - message: Clusters already on a comms tower turn into a pylon once the takeover
+      time passes
+    type: Fix
+  - message: Larvae no longer get stuck catatonic when the infecting hugger skips
+      the claim prompt
+    type: Fix
+  - message: UPP commandos and snipers can use their thermal cloaks
+    type: Fix
+  - message: Welders repair barricades again
+    type: Fix
+  - message: Distress Signal threats spawn again when the queen volunteer doesn't
+      have the playtime for her
+    type: Fix
+  - message: IASF enlisted speak the same languages as their leaders
+    type: Fix
+  - message: The Reaper can no longer revive a dead Queen
+    type: Fix
+  - message: Shots fired through a floor lose damage over the height they cover, buckshot
+      no longer point blanks through holes
+    type: Fix
+  - message: Distress Signal ends when the last xeno is gibbed or deleted instead
+      of hanging
+    type: Fix
+  - message: Youngbloods always arrive on the hunter ship
+    type: Fix
+  - message: Blooding console party sizes match what spawns, and dialog windows can
+      be resized
+    type: Fix
+  - message: The fighter VTOL pad can be packed back up
+    type: Fix
+  id: 862
+  time: '2026-10-23T20:15:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2266
+- author: johnnny34y
+  changes:
+  - message: HAZOPS armor has been buffed with a speed increase and a bullet resistance
+      of 15.
+    type: Tweak
+  id: 863
+  time: '2026-10-23T20:16:10.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2263
+- author: rokudara-sen
+  changes:
+  - message: Radio direction finding no longer marks anyone on the tactical map. Talking
+      on the radio doesn't reveal you on its own anymore
+    type: Tweak
+  - message: A fixed enemy net only gives a rough compass bearing in chat, from manpacks
+      only, at most every 30 seconds. BURST traffic gives no bearing
+    type: Tweak
+  id: 864
+  time: '2026-10-23T20:16:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2267
+- author: Vixting
+  changes:
+  - message: APC & rotary using incorrect ammo type & 1 shotting reisn
+    type: Fix
+  id: 865
+  time: '2026-10-23T20:18:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2264
+- author: RomiGur
+  changes:
+  - message: Vision effects (welding blindness, flash, drunkenness, drowsiness, drugs,
+      hunger, blur) now show on Z-level maps.|
+    type: Fix
+  - message: Blind players no longer see the level above via faint glance or stair
+      preview.
+    type: Fix
+  - message: Added IsPlayerView helper for player-only overlays on Z-level maps.
+    type: Code
+  id: 866
+  time: '2026-10-23T20:18:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2268
+- author: TheHellFireo
+  changes:
+  - message: Reanimation now has one ten-minute cooldown shared by all Reapers, including
+      newly spawned Reapers.
+    type: Tweak
+  id: 867
+  time: '2026-10-23T20:18:40.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2270
+- author: Vixting
+  changes:
+  - message: Added generatereagent command for spawning in custom reagents
+    type: Add
+  id: 868
+  time: '2026-10-23T20:18:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2269
+- author: ILoveDespoiler
+  changes:
+  - message: Saved Despoiler Society
+    type: Fix
+  id: 869
+  time: '2026-10-23T21:34:51.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2272
+- author: TheHellFireo
+  changes:
+  - message: Fixed threats failing to spawn when a waiting player has no preferred
+      job, and the same error when joining as an observer.
+    type: Fix
+  id: 870
+  time: '2026-10-23T21:55:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2273
 Name: CMU
 Order: -1

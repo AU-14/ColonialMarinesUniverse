@@ -1,3 +1,4 @@
+using Content.Client.CMU14.ZLevels.Core; // cmu edit
 using Content.Shared.CCVar;
 using Content.Shared.Drunk;
 using Robust.Client.Graphics;
@@ -82,7 +83,7 @@ public sealed partial class DrunkOverlay : Overlay
         if (!_entityManager.TryGetComponent(_playerManager.LocalEntity, out EyeComponent? eyeComp))
             return false;
 
-        if (args.Viewport.Eye != eyeComp.Eye)
+        if (!args.Viewport.Eye.IsPlayerView(eyeComp.Eye)) // cmu edit
             return false;
 
         _visualScale = BoozePowerToVisual(CurrentBoozePower);
