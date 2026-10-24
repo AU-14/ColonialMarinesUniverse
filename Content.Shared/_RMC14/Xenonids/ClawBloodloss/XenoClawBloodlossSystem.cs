@@ -7,7 +7,7 @@ namespace Content.Shared._RMC14.Xenonids.ClawBloodloss;
 
 public sealed partial class XenoClawBloodlossSystem : EntitySystem
 {
-    [Dependancy] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
 
     public override void Initialize()
     {
