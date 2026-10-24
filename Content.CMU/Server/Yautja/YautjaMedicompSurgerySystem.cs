@@ -1,4 +1,9 @@
+using Robust.Shared.Random;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Audio;
 using System.Linq;
+using Content.Server.Chat.Systems;
+using Content.Shared.Chat.Prototypes;
 using Content.Server.CMU14.Medical.Treatment.Surgery;
 using Content.Shared.CMU14.Medical.Treatment.Surgery.Traits;
 using Content.Shared.Damage;
@@ -27,6 +32,21 @@ namespace Content.Server.CMU14.Yautja;
 /// </summary>
 public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
 {
+    // CM-SS13 mcomp_tendwounds.dm:192-195 - the patient roars with "loudroar" if Yautja, otherwise emotes "pain".
+    private static readonly ProtoId<EmotePrototype> YautjaLoudRoarEmote = "CMUYautjaLoudRoar";
+    // CM emotes "pain" here; this codebase has no generic pain emote (CMUYautjaPain is Yautja-only), so the nearest
+    // audible equivalent is Scream - a non-Yautja patient still vocalises, which is what the reference does.
+    private static readonly ProtoId<EmotePrototype> PainEmote = "Scream";
+
+    // loudroar's get_sound() picks from pred_roar4/5/6 at volume 60 (species/yautja/yautja_sound.dm:86-87).
+    private static readonly SoundSpecifier[] LoudRoarSounds =
+    [
+        new SoundPathSpecifier("/Audio/CMU14/Yautja/Voice/Roars/pred_roar4.wav"),
+        new SoundPathSpecifier("/Audio/CMU14/Yautja/Voice/Roars/pred_roar5.wav"),
+        new SoundPathSpecifier("/Audio/CMU14/Yautja/Voice/Roars/pred_roar6.wav"),
+    ];
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedOrganHealthSystem _organHealth = default!;
@@ -34,6 +54,7 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
     [Dependency] private SharedCMUSurgicalTraitSystem _surgicalTraits = default!;
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
     [Dependency] private SharedCMUWoundsSystem _wounds = default!;
+    [Dependency] private ChatSystem _chat = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -201,6 +222,10 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
             // depth. In CMU that is represented by removing the open-incision
             // markers and suppressing only the surgical bleed source.
             _wounds.ClearInternalBleed(part);
+            // CMU14: the clamp closes the treatment, so it clears the wound ledger itself - the deep cuts, massive
+            // wounds and ripped cuts the healing gun only slows. Clearing bleeding alone left those wounds (and their
+            // descriptions) in place after a completed surgery.
+            _wounds.ClearAllWounds((part, null));
             RemComp<CMIncisionOpenComponent>(part);
             RemComp<CMBleedersClampedComponent>(part);
             RemComp<CMSkinRetractedComponent>(part);
@@ -208,6 +233,22 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
         }
 
         RemComp<CMUYautjaMedicompTreatedComponent>(args.Part);
+
+        // CM-SS13 roars loudly when a Yautja's treatment is clamped shut, and a non-Yautja patient emotes pain
+        // (mcomp_tendwounds.dm:192-195). This runs from the successful step callback only, so an interrupted or failed
+        // surgery stays silent.
+        if (TerminatingOrDeleted(args.Body))
+            return;
+
+        if (HasComp<YautjaComponent>(args.Body))
+        {
+            _audio.PlayPvs(_random.Pick(LoudRoarSounds), args.Body);
+            _chat.TryEmoteWithChat(args.Body, YautjaLoudRoarEmote);
+        }
+        else
+        {
+            _chat.TryEmoteWithChat(args.Body, PainEmote);
+        }
     }
 
     private void ApplyGroupHeal(EntityUid body, int amount)

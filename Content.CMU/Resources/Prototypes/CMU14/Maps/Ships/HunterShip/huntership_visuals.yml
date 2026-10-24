@@ -20755,8 +20755,8 @@
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: Items
-    noRot: true
-    enableOverrideDir: true
+    noRot: false
+    enableOverrideDir: false
     layers:
     - state: "spike"
   - type: Icon

@@ -8,6 +8,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Physics;
 using Content.Shared.Throwing;
 using Robust.Shared.Map;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Audio.Systems;
@@ -31,12 +32,16 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
     [Dependency] private RMCObstacleSlammingSystem _obstacleSlamming = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private ThrownItemSystem _thrown = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
     [Dependency] private CMUZLevelShootingSystem _zLevelShooting = default!;
 
+    private EntityQuery<YautjaLeapingComponent> _leapingQuery;
+
     public override void Initialize()
     {
+        _leapingQuery = GetEntityQuery<YautjaLeapingComponent>();
         SubscribeLocalEvent<YautjaComponent, YautjaLeapActionEvent>(OnLeap);
         SubscribeLocalEvent<YautjaComponent, YautjaLeapDoAfterEvent>(OnLeapDoAfter);
         SubscribeLocalEvent<YautjaLeapingComponent, StopThrowEvent>(OnLeapStopped);
@@ -100,6 +105,7 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
 
         MapCoordinates landing;
         var windup = ent.Comp.LeapWindup;
+        var cursorBeyondRange = false;
         if (zOffset != 0)
         {
             if (Transform(ent.Owner).MapUid is not { } originMap ||
@@ -107,8 +113,18 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
                 targetMap is not { } destinationMap)
                 return;
 
-            landing = new MapCoordinates(target.Position, _transform.GetMapId(destinationMap.Owner));
+            // CMU14: each z level is its own map, but the levels are coordinate-aligned, so the same world-space
+            // delta and the same range clamp apply as on the hunter's own level - otherwise a cross-level leap went
+            // as far as the cursor.
+            var crossDelta = target.Position - origin.Position;
+            var clamped = ClampLeapDirection(ent, crossDelta);
+            if (clamped == Vector2.Zero)
+                return;
+
+            landing = new MapCoordinates(origin.Position + clamped, _transform.GetMapId(destinationMap.Owner));
             windup = zOffset > 0 ? ent.Comp.LeapUpWindup : ent.Comp.LeapDownWindup;
+            // The exact cursor tile is only safe to re-apply when the leap was not pulled in.
+            cursorBeyondRange = clamped != crossDelta;
         }
         else
         {
@@ -123,13 +139,24 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
         }
 
         // CMU14: a click on a deck is an EntityCoordinates on that grid, so keep the grid identity and the tile.
-        // The world position is only a fallback; landing re-resolves against the grid's transform at that moment.
+        // The world position is only a fallback; landing re-resolves against the grid's transform at that moment, which
+        // is what keeps a leap onto a moving ship correct.
         NetEntity? destinationGrid = null;
         Vector2? gridLocalPosition = null;
         if (HasComp<MapGridComponent>(args.Target.EntityId))
         {
             destinationGrid = GetNetEntity(args.Target.EntityId);
             gridLocalPosition = args.Target.Position;
+
+            // A clamped leap must not keep the out-of-range cursor tile. Clamp the offset in grid-local space and keep
+            // the grid, so the landing is still re-resolved against the deck's transform when the wind-up ends.
+            if (cursorBeyondRange)
+            {
+                var hunterLocal = Transform(ent.Owner).Coordinates.Position;
+                var localDelta = gridLocalPosition.Value - hunterLocal;
+                if (localDelta.Length() > ent.Comp.LeapMaxRange)
+                    gridLocalPosition = hunterLocal + Vector2.Normalize(localDelta) * ent.Comp.LeapMaxRange;
+            }
         }
 
         var landingCoords = _transform.ToCoordinates(landing);
@@ -177,7 +204,8 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
 
         var origin = _transform.GetMapCoordinates(ent.Owner);
         var target = _transform.ToMapCoordinates(args.Coordinates);
-        if (origin.MapId != target.MapId)
+
+        if (args.ZOffset == 0 && origin.MapId != target.MapId)
             return;
 
         var direction = ClampLeapDirection(ent, target.Position - origin.Position);
@@ -241,6 +269,25 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
             return;
         }
 
+        // CMU14: the throw compensates friction using the LAUNCH tile's friction, so the hunter stops wherever that
+        // estimate lands - typically short of the cursor on a different surface. Record the intended destination and
+        // snap to it once the body reaches it, mirroring XenoLeapSystem's leap end.
+        if (TryComp<YautjaLeapingComponent>(ent.Owner, out var leap))
+        {
+            leap.Destination = new MapCoordinates(origin.Position + direction, origin.MapId);
+            if (args.DestinationGrid is { } deck &&
+                args.GridLocalPosition is { } tile &&
+                TryGetEntity(deck, out var deckUid) &&
+                !Deleted(deckUid.Value))
+            {
+                leap.Destination = _transform.ToMapCoordinates(new EntityCoordinates(deckUid.Value, tile));
+            }
+
+            leap.Direction = direction.Normalized();
+            leap.SnapToDestination = true;
+            Dirty(ent.Owner, leap);
+        }
+
         _throwing.TryThrow(
             ent.Owner,
             direction,
@@ -264,6 +311,44 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
 
         RestoreLeapCollision((uid, leap));
         RemCompDeferred<YautjaLeapingComponent>(uid);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        // CMU14: end the leap exactly on its destination once the body reaches it, the way XenoLeapSystem does. Without
+        // this the hunter stops wherever the throw's friction estimate puts it, which lands short of the cursor whenever
+        // the landing surface differs from the launch surface. A blocked leap never reaches the destination, so this can
+        // never carry the hunter through a wall - collision still decides whether the destination is reachable.
+        var leaping = EntityQueryEnumerator<YautjaLeapingComponent, TransformComponent>();
+        while (leaping.MoveNext(out var uid, out var leap, out var xform))
+        {
+            if (!leap.SnapToDestination)
+                continue;
+
+            if (TerminatingOrDeleted(uid) || !Exists(uid))
+            {
+                leap.SnapToDestination = false;
+                continue;
+            }
+
+            var coordinates = _transform.GetMapCoordinates(uid, xform);
+            if (coordinates.MapId != leap.Destination.MapId)
+                continue;
+
+            if (Vector2.Dot(coordinates.Position - leap.Destination.Position, leap.Direction) < 0f)
+                continue;
+
+            _transform.SetMapCoordinates(uid, leap.Destination);
+            if (TryComp<PhysicsComponent>(uid, out var physics))
+                _physics.SetLinearVelocity(uid, Vector2.Zero, body: physics);
+
+            if (TryComp<ThrownItemComponent>(uid, out var thrown))
+                _thrown.StopThrow(uid, thrown);
+
+            FinishLeapWithoutThrow(uid);
+        }
     }
 
     private void OnLeapStopped(Entity<YautjaLeapingComponent> ent, ref StopThrowEvent args)

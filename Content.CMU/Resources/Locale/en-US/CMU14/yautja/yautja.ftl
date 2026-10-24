@@ -1293,3 +1293,8 @@ cmu-yautja-entry-4 = Most importantly, remember that dying in battle is the high
 
 cmu-yautja-mask-knockoff-others = { $xeno } smashes off { $target }'s { $mask }!
 cmu-yautja-mask-knockoff-self = We smash off { $target }'s { $mask }!
+
+cmu-yautja-combistick-wield-folded = {CAPITALIZE(THE($item))} must be extended before you can wield it.
+
+cmu-yautja-emote-name-loudroar = Loud Roar
+cmu-yautja-emote-msg-loudroar = {THE($entity)} roars loudly!

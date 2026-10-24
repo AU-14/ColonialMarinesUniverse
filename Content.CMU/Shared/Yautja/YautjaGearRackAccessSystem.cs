@@ -94,7 +94,16 @@ public sealed partial class YautjaGearRackAccessSystem : EntitySystem
 
     private bool HasJob(EntityUid user, ProtoId<JobPrototype> job)
     {
-        return _mind.TryGetMind(user, out var mindId, out _) &&
-               _job.MindHasJobWithId(mindId, job.Id);
+        if (!_mind.TryGetMind(user, out var mindId, out _))
+            return false;
+
+        if (_job.MindHasJobWithId(mindId, job.Id))
+            return true;
+
+        // CMU14: a Yautja spawned from the spawn panel has no job at all, so the role half of the rack check rejected
+        // them even though the rank check above had already granted access. Jobless Yautja count as the right role.
+        return HasComp<YautjaComponent>(user) &&
+               !HasComp<YautjaYoungbloodComponent>(user) &&
+               !_job.MindTryGetJobId(mindId, out _);
     }
 }

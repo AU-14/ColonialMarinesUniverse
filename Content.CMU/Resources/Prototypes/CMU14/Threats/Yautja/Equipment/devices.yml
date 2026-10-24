@@ -18,7 +18,7 @@
     cloakMovingOpacity: 0.035
     charge: 3000
     maxCharge: 3000
-    regen: 60
+    regen: 100
     # CMU14: CM-SS13 hunter bracers shock a non-Yautja wearer with prob(4) per process tick whether or
     # not they are cloaked (yaut_bracers.dm:392-400); the thrall bracer keeps only the cloak-gated 2%.
     nonYautjaShockChance: 0.04
@@ -489,7 +489,7 @@
     sprite: CMU14/Yautja/smart_disc.rsi
     size: Tiny
   - type: ItemThrowRange
-    range: 12
+    range: 14
   - type: YautjaTechItem
     damageMultiplier: 1
     blockPickup: false
@@ -546,6 +546,7 @@
     damage: 0
 
   - type: MeleeWeapon
+    wideAttackAllowed: false
     damage:
       types:
         Slash: 15
@@ -645,6 +646,7 @@
     speedModifier: 1.5
     pryPowered: true
   - type: MeleeWeapon
+    wideAttackAllowed: false
     wideAnimationRotation: -135
     attackRate: 2
     damage:
@@ -692,6 +694,7 @@
     speedModifier: 1.5
     pryPowered: true
   - type: MeleeWeapon
+    wideAttackAllowed: false
     wideAnimationRotation: -135
     attackRate: 1
     damage:
@@ -738,6 +741,7 @@
   - type: YautjaTechItem
   - type: YautjaChainGauntlet
   - type: MeleeWeapon
+    wideAttackAllowed: false
     attackRate: 1
     damage:
       types:

@@ -82,10 +82,19 @@ public sealed partial class VisualBodySystem
                     ? appearance.EyeColor
                     : appearance.SkinColor);
 
-            ApplyYautjaSkinShader(body.Owner, index, appearance.SkinColor, layer.Color, organ.Comp2.Layer.Equals(HumanoidVisualLayers.Eyes));
-
             if (organ.Comp2.SexStateOverrides?.TryGetValue(sex, out var state) == true)
                 _sprite.LayerSetRsiState(body.Owner, index, state);
+
+            // CMU14: must run after the sex-state override above, which resets the layer state and would otherwise undo
+            // the yautja colour variant this selects.
+            // CMU14: pass the organ's own skin colour - see ApplyYautjaSkinShader. The profile appearance is not updated
+            // at runtime, so the organ is the value that reflects what the appearance pipeline applied.
+            Color? organSkin = TryComp<VisualOrganComponent>(organ.Owner, out var organVisual)
+                ? organVisual.Profile.SkinColor
+                : null;
+            ApplyYautjaSkinShader(body.Owner, index, appearance.SkinColor, layer.Color,
+                organ.Comp2.Layer.Equals(HumanoidVisualLayers.Eyes),
+                organSkin);
 
             _sprite.LayerSetVisible(body.Owner, index, visible);
         }
@@ -214,7 +223,8 @@ public sealed partial class VisualBodySystem
                         : Color.White);
 
                 if (proto.BodyPart == HumanoidVisualLayers.Hair)
-                    ApplyYautjaSkinShader(body.Owner, spriteLayer, skinColor, body.Comp[spriteLayer].Color);
+                    ApplyYautjaSkinShader(body.Owner, spriteLayer, skinColor, body.Comp[spriteLayer].Color, // CMU14
+                        organSkin: skinColor); // CMU14
 
                 localMarkingLayers[layerId] = (organ.Owner, proto.BodyPart);
 

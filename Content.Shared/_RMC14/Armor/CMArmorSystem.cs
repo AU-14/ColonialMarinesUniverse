@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Weapons.Melee; // CMU14
 using System.Linq;
 using System.Text;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
@@ -367,8 +368,13 @@ public sealed partial class CMArmorSystem : EntitySystem
             // flat 20 penetration is the item-attack path only, and a xeno's own body attack ignores three
             // quarters of the victim's armour (XVX_ARMOR_EFFECTIVEMULT).
             var armorEffectiveness = 1f;
-            if (args.Impact.Delivery == DamageImpactDelivery.Melee ||
-                (HasComp<XenoComponent>(args.Origin) && args.Tool == args.Origin && args.Damage.AnyPositive()))
+            var hasOwnMultiplier = HasComp<MeleeDamageMultiplierComponent>(args.Origin);
+            var bodyAttackFromXeno = HasComp<XenoComponent>(args.Origin) &&
+                                     args.Tool == args.Origin &&
+                                     args.Damage.AnyPositive();
+            var meleeToolAttack = args.Impact.Delivery == DamageImpactDelivery.Melee && args.Tool != args.Origin;
+
+            if (!hasOwnMultiplier && (meleeToolAttack || bodyAttackFromXeno))
             {
                 args.Damage = args.Damage * 1.5f;
 

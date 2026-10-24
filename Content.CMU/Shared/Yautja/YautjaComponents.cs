@@ -169,6 +169,14 @@ public sealed partial class YautjaComponent : Component
 
     public EntityUid? LeapAction;
 
+    /// <summary>
+    /// CMU14: multiplier on the BASE throw speed of objects this Yautja throws. HandsSystem hands this value to
+    /// ThrowingSystem as baseThrowSpeed, which feeds its compensateFriction formula, so the object covers the same
+    /// distance faster rather than overshooting - the compensation still solves for the cursor distance.
+    /// </summary>
+    [DataField]
+    public float ThrowSpeedMultiplier = 1.8f;
+
     [DataField]
     public float LeapThrowSpeed = 5f;
 
@@ -431,7 +439,7 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public FixedPoint2 Charge = 3000;
 
     [DataField]
-    public FixedPoint2 Regen = 60;
+    public FixedPoint2 Regen = 100;
 
     [DataField]
     public FixedPoint2 EmpPowerDrain = 1000;
@@ -3054,6 +3062,9 @@ public sealed partial class YautjaShieldHeldPrefixComponent : Component
 [RegisterComponent]
 public sealed partial class YautjaCombistickComponent : Component
 {
+    [NonSerialized]
+    public bool AllowToggle;
+
     [DataField]
     public EntProtoId FoldActionId = "CMUActionYautjaFoldCombistick";
 

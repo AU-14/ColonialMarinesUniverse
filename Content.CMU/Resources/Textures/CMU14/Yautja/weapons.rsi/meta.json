@@ -310,6 +310,46 @@
     {
       "name": "duelling_knife-inhand-right",
       "directions": 4
+    },
+    {
+      "name": "war_glaive_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "war_glaive_w-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "cleaving_glaive_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "cleaving_glaive_w-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "combistick_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "combistick_w-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "hunter_spear_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "hunter_spear_w-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "longaxe_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "longaxe_w-inhand-right",
+      "directions": 4
     }
   ]
 }

@@ -274,10 +274,6 @@ public sealed partial class FiremanCarrySystem : EntitySystem
         if (_transform.IsParentOf(Transform(ent.Owner), user))
             return;
 
-        // CMU14: end the pull before parenting. The victim is about to become a child of the carrier; while the pull was
-        // still live RMCPullingSystem kept driving the pair, and with the pullable now sitting on the puller that is
-        // what displaced the carrier. The carry owns the relationship from here on.
-        _rmcPulling.TryStopUserPullIfPulling(user, ent.Owner);
 
         ent.Comp.BeingCarried = true;
         Dirty(ent);
@@ -588,8 +584,9 @@ public sealed partial class FiremanCarrySystem : EntitySystem
             }
         }
 
-        // CMU14: drop the knockdown the carry applied, so a dropped or thrown xeno stands up again normally.
-        RemCompDeferred<KnockedDownComponent>(target);
+        // Why: only xenos get the carry's knockdown, so a carried-and-released marine must keep theirs.
+        if (HasComp<XenoComponent>(target))
+            RemCompDeferred<KnockedDownComponent>(target);
 
         _standing.Stand(target);
         _actionBlocker.UpdateCanMove(target);

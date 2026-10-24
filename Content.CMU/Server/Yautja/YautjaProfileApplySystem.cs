@@ -61,6 +61,49 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<YautjaAppliedProfileComponent, RMCAutomatedVendedUserEvent>(OnAutomatedVendorVended);
+        // CMU14: SharedVisualBodySystem stamps a species-default appearance on the body at VisualBodyComponent MapInit
+        // (SharedVisualBodySystem.Initial.cs:13, ordered after InitialBodySystem so the organs already exist). A
+        // console-spawned youngblood has its profile applied before that point, so the default overwrote the rolled tone
+        // and the body sat tan until a player took the role. Re-apply the already-selected profile right after body
+        // initialisation. The hook rides HumanoidProfileComponent because Robust permits only one subscription per
+        // component+event pair and SharedVisualBodySystem already owns VisualBodyComponent+MapInitEvent.
+        SubscribeLocalEvent<HumanoidProfileComponent, MapInitEvent>(OnHumanoidProfileMapInit, after: [typeof(Content.Server.Body.VisualBodySystem)]);
+    }
+
+    /// <summary>
+    /// Builds the humanoid profile an applied Yautja profile maps onto, including the species voice (DefaultWithSpecies
+    /// leaves the human default, which strips every Yautja emote sound).
+    /// </summary>
+    private HumanoidCharacterProfile BuildHumanoidProfile(YautjaCharacterProfile profile, YautjaComponent? yautja)
+    {
+        var humanoidProfile = HumanoidCharacterProfile.DefaultWithSpecies("Yautja")
+            .WithName(profile.Name)
+            .WithAge(profile.Age)
+            .WithSex(profile.Sex)
+            .WithGender(profile.Gender)
+            .WithCharacterAppearance(profile.Appearance);
+
+        if (yautja != null && yautja.VocalSounds.TryGetValue(profile.Sex, out var voice))
+            humanoidProfile = humanoidProfile.WithVoice(voice);
+
+        return humanoidProfile;
+    }
+
+    public static int DebugApplied;
+    private void OnHumanoidProfileMapInit(Entity<HumanoidProfileComponent> ent, ref MapInitEvent args)
+    {
+        if (!TryComp<YautjaAppliedProfileComponent>(ent.Owner, out var applied) ||
+            !TryComp<HumanoidProfileComponent>(ent.Owner, out var humanoid))
+        {
+            return;
+        }
+
+        // The stored profile is the authority: no reroll here, so an explicitly selected tone survives.
+        // Appearance only - never EnsureComp here, or this path would initialise species stats as a side effect.
+        TryComp<YautjaComponent>(ent.Owner, out var yautja);
+        var humanoidProfile = BuildHumanoidProfile(applied.Profile, yautja);
+        _humanoid.ApplyProfileTo((ent.Owner, humanoid), humanoidProfile);
+        _visualBody.ApplyProfileTo(ent.Owner, humanoidProfile);
     }
 
     public void ApplyProfile(
@@ -88,6 +131,13 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
         if (profile.Name is "Unknown" or "Неизвестно")
             profile = profile.WithName(
                 $"{_random.Pick(_prototypes.Index(YautjaFirstName))} {_random.Pick(_prototypes.Index(YautjaLastName))}");
+        // CMU14: CM-SS13's load_race only rolls a tone when the player has not chosen one (prefs override it). The
+        // default appearance is built with Green, so treat that as "unchosen" and roll from PRED_SKIN_COLOR; an explicit
+        // pick (Red, Blue, ...) must survive. Overwriting unconditionally here threw away the chosen colour and made
+        // every hunter render the same random tan variant.
+        if (profile.Appearance.SkinColor == YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Green))
+            profile = profile.WithSkinColor(_random.Pick(YautjaCharacterProfile.SkinColorOrder[..6]));
+
         var rank = capabilities.ForStatus(profile.Status).Rank;
         EnsureComp<YautjaAppliedProfileComponent>(uid).Profile = profile.Clone();
 
@@ -96,20 +146,10 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
         yautja.SkinColorRandomized = true;
         Dirty(uid, yautja);
 
-        var humanoidProfile = HumanoidCharacterProfile.DefaultWithSpecies("Yautja")
-            .WithName(profile.Name)
-            .WithAge(profile.Age)
-            .WithSex(profile.Sex)
-            .WithGender(profile.Gender)
-            .WithCharacterAppearance(profile.Appearance);
-
-        // DefaultWithSpecies leaves Voice at the human default, which strips every
-        // Yautja emote sound once applied. Take the voice from the species map.
-        if (yautja.VocalSounds.TryGetValue(profile.Sex, out var voice))
-            humanoidProfile = humanoidProfile.WithVoice(voice);
-
+        var humanoidProfile = BuildHumanoidProfile(profile, yautja);
         _humanoid.ApplyProfileTo((uid, humanoid), humanoidProfile);
         _visualBody.ApplyProfileTo(uid, humanoidProfile);
+
         // The profile is authoritative for player-controlled Yautja appearance.
         // Mark the deferred randomizer complete so the next stats tick cannot
         // replace the selected skin color.
@@ -123,7 +163,11 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
         if (equipProfileGear)
         {
             ReplaceEquipped(uid, "outerClothing", profile.ArmorPrototype);
-            mask = ReplaceEquipped(uid, "mask", profile.MaskPrototype);
+            // CMU14: an unblooded youngblood does not wear a clan bio-mask, so only a blooded hunter gets one. Every
+            // other piece of profile gear is still applied.
+            mask = HasComp<YautjaYoungbloodComponent>(uid)
+                ? null
+                : ReplaceEquipped(uid, "mask", profile.MaskPrototype);
             ReplaceEquipped(uid, "shoes", profile.GreavesPrototype);
             bracer = ReplaceEquipped(uid, "gloves", profile.BracerPrototype);
             cape = ReplaceEquipped(uid, "back", profile.CapePrototype);

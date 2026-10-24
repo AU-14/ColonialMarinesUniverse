@@ -12218,6 +12218,10 @@ public sealed class YautjaSmokeTest
     [TestCase("Pen")]
     [TestCase("CMUYautjaHarpoon")]
     [TestCase("CMUYautjaSmartDisc")]
+    [TestCase("CMUYautjaCeremonialDagger")]
+    [TestCase("CMUYautjaWarGlaive")]
+    [TestCase("CMUYautjaSpikeLauncher")]
+    [TestCase("CMUYautjaPlasmaRifle")]
     public async Task ThrowHeldItemDoesNotPassThroughHunterShipWall(string itemPrototype)
     {
         await using var pair = await PoolManager.GetServerClient();

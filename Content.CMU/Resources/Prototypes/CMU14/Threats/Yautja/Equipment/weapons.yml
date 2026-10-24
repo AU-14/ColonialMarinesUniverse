@@ -68,7 +68,7 @@
       types:
         Piercing: 30
   - type: ItemThrowRange
-    range: 4
+    range: 14
   - type: RemoveComponents
     components:
     - type: YautjaTechItem
@@ -328,7 +328,7 @@
     projectileBlockFraction: 0.4
     blocksOnBack: false
   - type: ItemThrowRange
-    range: 4
+    range: 14
   - type: Clothing
     clothingVisuals:
       back:
@@ -338,6 +338,8 @@
     - back
     - suitStorage
   - type: ItemToggle
+    onUse: false
+    onActivate: false
     activated: true
     soundActivate:
       path: /Audio/CMU14/Yautja/Weapons/WristBlades/wristblades_on.wav
@@ -365,7 +367,9 @@
     - type: Tool
       qualities: [Slicing]
   - type: Wieldable
-    wieldedInhandPrefix: combistick
+    wieldedInhandPrefix: combistick_w
+  - type: WieldingBlocker
+    blockEquipped: false
   - type: IncreaseDamageOnWield
     damage:
       types:
@@ -427,7 +431,7 @@
 
   - type: YautjaChainedWeapon
   - type: ItemThrowRange
-    range: 4
+    range: 14
   - type: Clothing
     clothingVisuals:
       back:
@@ -467,7 +471,7 @@
         Piercing: 16
         Slash: 4
   - type: ItemThrowRange
-    range: 6
+    range: 14
   - type: Clothing
     slots:
     - pocket
@@ -625,7 +629,7 @@
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
   - type: Wieldable
-    wieldedInhandPrefix: hunter_spear
+    wieldedInhandPrefix: hunter_spear_w
   - type: IncreaseDamageOnWield
     damage:
       types:
@@ -685,7 +689,7 @@
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
   - type: Wieldable
-    wieldedInhandPrefix: war_glaive
+    wieldedInhandPrefix: war_glaive_w
   - type: IncreaseDamageOnWield
     damage:
       types:
@@ -720,7 +724,7 @@
     sprite: CMU14/Yautja/weapons.rsi
     heldPrefix: cleaving_glaive
   - type: Wieldable
-    wieldedInhandPrefix: cleaving_glaive
+    wieldedInhandPrefix: cleaving_glaive_w
   - type: Clothing
     clothingVisuals:
       back:
@@ -760,7 +764,7 @@
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
   - type: Wieldable
-    wieldedInhandPrefix: war_glaive
+    wieldedInhandPrefix: war_glaive_w
   - type: IncreaseDamageOnWield
     damage:
       types:
@@ -784,7 +788,7 @@
   - type: Item
     heldPrefix: longaxe
   - type: Wieldable
-    wieldedInhandPrefix: longaxe
+    wieldedInhandPrefix: longaxe_w
   - type: Clothing
     clothingVisuals:
       back:
@@ -837,7 +841,7 @@
     heldPrefix: duelling_club
     size: Normal
   - type: ItemThrowRange
-    range: 7
+    range: 14
   - type: MeleeWeapon
     damage:
       types:
@@ -886,7 +890,7 @@
   - type: LandAtCursor
 
   - type: ItemThrowRange
-    range: 4
+    range: 14
   - type: RemoveComponents
     components:
     - type: YautjaTechItem

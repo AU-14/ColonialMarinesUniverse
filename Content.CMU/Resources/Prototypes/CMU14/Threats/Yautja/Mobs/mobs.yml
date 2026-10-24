@@ -21,6 +21,14 @@
     currentLanguage: Yautja
     defaultLanguage: Yautja
   - type: Yautja
+  # CMU14: Yautja throw further than a human. ThrowHeldItem clamps the throw distance to HandsComponent.ThrowRange
+  # (human default 8) or the item's ItemThrowRange, and then throws with compensateFriction, so the object stops on the
+  # target
+  # Why: ThrowHeldItem clamps the throw distance to HandsComponent.ThrowRange (human default 8) or the item's
+  # ItemThrowRange, then throws with compensateFriction so the object stops on the target - the range is what lets a
+  # distant cursor actually be reached.
+  - type: Hands
+    throwRange: 14
   - type: YautjaLimbRegeneration
     requiredSeverAttempts: 2
     severAttemptWindow: 30
@@ -260,6 +268,10 @@
   name: Yautja Youngblood
   suffix: Yautja, Youngblood, Event
   components:
+  # Why: without a VisualBodyComponent, SharedVisualBodySystem.ApplyProfileTo resolves nothing and returns silently, so
+  # the applied profile never reaches the body organs. Hunters inherit it from CMUMobYautja; youngbloods parent the human
+  # base and must declare it.
+  - type: VisualBody
   - type: Language
     spokenLanguages:
     - Yautja
@@ -270,6 +282,9 @@
     currentLanguage: Yautja
     defaultLanguage: Yautja
   - type: Yautja
+    clanRank: YoungBlood
+  - type: Hands
+    throwRange: 14
   - type: YautjaYoungblood
   - type: Satiation
     satiations:

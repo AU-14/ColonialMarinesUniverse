@@ -697,12 +697,33 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
         out EntityUid? destination,
         bool allowDestinationFallback = true)
     {
+        // CMU14: spawn points that do not name a destination used to match *any* request, and the loop returned the
+        // first hit - so on a map that also places an untagged youngblood point at its hunting ground (jungle_moon,
+        // desert_moon_caves), blooding youngbloods spawned at the preserve instead of aboard the ship, depending on
+        // entity order. Look for an exact destination match first and only accept untagged points afterwards, which
+        // keeps this working for every map without naming coordinates.
         var query = EntityQueryEnumerator<YautjaHuntSpawnPointComponent>();
         while (query.MoveNext(out var uid, out var component))
         {
             if (Deleted(uid) ||
                 component.Kind != spawnKind ||
+                component.DestinationId == null ||
                 !SpawnDestinationMatches(component.DestinationId, destinationId))
+            {
+                continue;
+            }
+
+            coordinates = _transform.GetMapCoordinates(uid);
+            destination = null;
+            return true;
+        }
+
+        var fallbackQuery = EntityQueryEnumerator<YautjaHuntSpawnPointComponent>();
+        while (fallbackQuery.MoveNext(out var uid, out var component))
+        {
+            if (Deleted(uid) ||
+                component.Kind != spawnKind ||
+                component.DestinationId != null)
             {
                 continue;
             }

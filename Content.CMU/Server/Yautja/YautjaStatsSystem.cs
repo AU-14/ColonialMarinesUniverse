@@ -42,8 +42,12 @@ namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaStatsSystem : EntitySystem
 {
+    private const float YautjaFemaleChance = 0.2f;
+
     [Dependency] private NpcFactionSystem _faction = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
+
+    [Dependency] private YautjaProfileApplySystem _profileApply = default!;
     [Dependency] private HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
     [Dependency] private HumanoidProfileSystem _humanoidProfile = default!;
     [Dependency] private GunIFFSystem _iff = default!;
@@ -81,6 +85,11 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     {
         SubscribeLocalEvent<YautjaComponent, ComponentInit>(OnYautjaInit);
         SubscribeLocalEvent<YautjaComponent, ComponentStartup>(OnYautjaStartup);
+        SubscribeLocalEvent<YautjaYoungbloodComponent, MapInitEvent>(OnYoungbloodMapInit);
+        // CMU14: a role spawn adds this component after map init, so MapInit alone never fires for youngbloods - their
+        // profile was never applied and every one of them rendered with the species default. ComponentStartup fires
+        // whenever the component is added, which covers both spawn paths.
+        SubscribeLocalEvent<YautjaYoungbloodComponent, ComponentStartup>(OnYoungbloodStartup);
         SubscribeLocalEvent<YautjaComponent, ComponentShutdown>(OnYautjaShutdown);
         SubscribeLocalEvent<YautjaComponent, MapInitEvent>(OnYautjaMapInit);
         SubscribeLocalEvent<YautjaComponent, IdentityChangedEvent>(OnIdentityChanged);
@@ -97,6 +106,12 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     private void OnYautjaStartup(Entity<YautjaComponent> ent, ref ComponentStartup args)
     {
         ApplyIntrinsicStats(ent);
+
+        // CMU14: a youngblood's own component can arrive before the Yautja/humanoid components exist, in which case its
+        // handler bails and nothing retries - leaving the species default tone for every youngblood. Re-run the shared
+        // profile application here, where all three components are guaranteed present.
+        if (HasComp<YautjaYoungbloodComponent>(ent.Owner))
+            ApplyYoungbloodProfile(ent.Owner);
         ent.Comp.SkinColorRandomized = false;
         _pendingSkinRandomization.Add(ent);
         _abilities.GrantActions(ent);
@@ -300,6 +315,69 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         _humanoidAppearance.SetMarkings(ent, organ, HumanoidVisualLayers.Hair, [dreadlocks]);
     }
 
+
+    /// <summary>
+    /// CMU14: a spawned youngblood is randomised like any hunter - CM-SS13's load_name picks gender with an 80/20
+    /// male/female weight ("female hunters are rare"). Colour, name and gear all go through the same ApplyProfile path
+    /// hunters use; there is deliberately no youngblood-specific colour code.
+    /// </summary>
+    private void OnYoungbloodStartup(Entity<YautjaYoungbloodComponent> ent, ref ComponentStartup args)
+    {
+        ApplyYoungbloodProfile(ent.Owner);
+    }
+
+    private void OnYoungbloodMapInit(Entity<YautjaYoungbloodComponent> ent, ref MapInitEvent args)
+    {
+        ApplyYoungbloodProfile(ent.Owner);
+    }
+
+    /// <summary>
+    /// Replaces an existing youngblood profile's tone with a rolled CM-SS13 palette colour and re-applies it, so the
+    /// renderer picks the matching pre-coloured variant. Uses the same palette as the Hunter randomiser.
+    /// </summary>
+    private void RollYoungbloodTone(EntityUid uid)
+    {
+        if (!TryComp<YautjaAppliedProfileComponent>(uid, out var applied))
+            return;
+
+        var tone = _random.Pick(YautjaCharacterProfile.SkinColorOrder[..6]);
+        applied.Profile = applied.Profile.WithSkinColor(tone);
+        _profileApply.ApplyProfile(uid, applied.Profile, equipProfileGear: false);
+    }
+
+    /// <summary>
+    /// CMU14: rolls a CM-SS13 palette tone onto a youngblood that already has a profile (console spawns build one from the
+    /// species default). Same palette call the hunter randomiser uses.
+    /// </summary>
+    public void EnsureYoungbloodTone(EntityUid uid)
+    {
+        ApplyYoungbloodProfile(uid);
+    }
+
+    private void ApplyYoungbloodProfile(EntityUid uid)
+    {
+        // No YautjaComponent requirement: CMUMobYautjaYoungblood's prototype does not carry one (it parents
+        // AppearanceYautja + CMMobHuman), which is why this never ran and every youngblood kept the tan species default.
+        if (!HasComp<HumanoidProfileComponent>(uid))
+            return;
+
+        // A console-spawned youngblood already carries a profile built from the species default tone (tan), so reusing it
+        // unchanged gave every youngblood the same colour. Roll the shared palette onto whatever profile is there.
+        if (HasComp<YautjaAppliedProfileComponent>(uid))
+        {
+            RollYoungbloodTone(uid);
+            return;
+        }
+
+        // Reuse the same palette roll normal Hunters use: CM-SS13's load_name picks gender 80/20 and load_race picks the
+        // tone from PRED_SKIN_COLOR. Choosing it here rather than relying on ApplyProfile's "unchosen" fallback means a
+        // spawn-menu youngblood always gets a rolled tone instead of the profile default.
+        var profile = new YautjaCharacterProfile()
+            .WithSex(_random.Prob(YautjaFemaleChance) ? Sex.Female : Sex.Male)
+            .WithSkinColor(_random.Pick(YautjaCharacterProfile.SkinColorOrder[..6]));
+        _profileApply.ApplyProfile(uid, profile, equipProfileGear: false);
+    }
+
     private void RandomizeSkinColor(Entity<YautjaComponent> ent, HumanoidProfileComponent humanoid)
     {
         if (ent.Comp.SkinColorRandomized ||
@@ -312,11 +390,11 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         if (!ent.Comp.RandomizeSkinColor)
             return;
 
-        var hue = _random.NextFloat(ent.Comp.SkinHueMin, ent.Comp.SkinHueMax);
-        var sat = _random.NextFloat(ent.Comp.SkinSaturationMin, ent.Comp.SkinSaturationMax);
-        var val = _random.NextFloat(ent.Comp.SkinValueMin, ent.Comp.SkinValueMax);
-        var skinColor = Color.FromHsv(new Vector4(hue, sat, val, 1f));
-        _humanoidAppearance.TrySetSkinColor(ent, skinColor);
+        // CMU14: same rule for hunters and youngbloods - CM-SS13 picks the tone from PRED_SKIN_COLOR (load_race),
+        // so the HSV band that produced colours the reference does not offer is gone.
+        _humanoidAppearance.TrySetSkinColor(
+            ent,
+            YautjaCharacterProfile.GetSkinColorColor(_random.Pick(YautjaCharacterProfile.SkinColorOrder[..6])));
     }
 
     private void GrantAllSkills(Entity<YautjaComponent> ent)

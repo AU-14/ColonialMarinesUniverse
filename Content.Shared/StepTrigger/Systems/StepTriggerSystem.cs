@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Yautja; // CMU14
 using Content.Shared.Gravity;
 using Content.Shared.StepTrigger.Components;
 using Content.Shared.Whitelist;
@@ -135,6 +136,11 @@ public sealed partial class StepTriggerSystem : EntitySystem
     private bool CanTrigger(EntityUid uid, EntityUid otherUid, StepTriggerComponent component)
     {
         if (!component.Active || component.CurrentlySteppedOn.Contains(otherUid))
+            return false;
+
+        // CMU14: a Yautja does not set off traps - resin traps, M20 claymores, tripwire mines. The check lives here
+        // because every step-triggered trap routes through this one gate, so it covers new trap prototypes too.
+        if (HasComp<YautjaComponent>(otherUid))
             return false;
 
         // Can't trigger if we don't ignore weightless entities

@@ -27,6 +27,20 @@
   - predroar
 
 - type: emote
+  id: CMUYautjaLoudRoar
+  name: cmu-yautja-emote-name-loudroar
+  category: Vocal
+  icon: Interface/Actions/scream.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-loudroar"]
+  chatTriggers:
+  - yautjaloudroar
+  - predloudroar
+
+- type: emote
   id: CMUYautjaLaugh
   name: cmu-yautja-emote-name-laugh
   category: Vocal
