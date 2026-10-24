@@ -150,11 +150,6 @@
     - CMU14ActionXenoPathogenScissorCut
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenRegurgitate
-  - type: XenoScissorCut
-    damage:
-      types:
-        Slash: 0
-    bloodloss: 100
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -167,20 +162,36 @@
     displayDamageInAlert: true
   - type: MovementSpeedModifier
     baseWalkSpeed: 4.5
-    baseSprintSpeed: 7.0
+    baseSprintSpeed: 6.0
   - type: MeleeWeapon
     attackRate: 2.0
     damage:
       types:
-        Slash: 0
+        Slash: 15
+  - type: XenoClawBloodloss
+    bloodloss: 6
+  - type: XenoScissorCut
+    damage:
+      types:
+        Slash: 20
+    bloodloss: 12
+  - type: XenoTailStab
+    tailDamage:
+    types:
+      Slash: 10
+      Blunt: 10
+      Piercing: 10
+    bloodloss: 25
   - type: XenoImpale  
     damage:  
-      types:  
-        Piercing: 0
-    bloodloss: 100
+      types:
+        Slash: 11.66
+        Blunt: 11.66
+        Piercing: 11.67
+    bloodloss: 25
   - type: CMArmor
     explosionArmor: 20
-    xenoArmor: 30
+    xenoArmor: 25
   - type: XenoStrain
     name: rmc-xeno-bloodletter-name
     description: rmc-xeno-bloodletter-description
