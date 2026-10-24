@@ -928,7 +928,7 @@
   parent: ActionXenoBase
   id: CMU14ActionXenoPathogenImpale
   name: Impale (80)
-  description: Impales an adjacent enemy with your tail. Hits twice on a marked target and removes the mark. Pierces armor.
+  description: Impales an adjacent enemy with your tail.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -1064,7 +1064,7 @@
   parent: ActionXenoBase
   id: CMU14ActionXenoPathogenScissorCut
   name: Savage (25)
-  description: Cuts enemies and fences in a straight line. If Super-Empowered, slows enemies hit too.
+  description: Cuts enemies in an area in front of you.
   components:
   - type: Action
     itemIconStyle: NoItem
