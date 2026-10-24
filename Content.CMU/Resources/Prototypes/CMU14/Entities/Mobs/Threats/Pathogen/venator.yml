@@ -171,7 +171,13 @@
     attackRate: 2.0
     damage:
       types:
-        Slash: 20
+        Slash: 0
+    bloodloss: 100 
+  - type: XenoImpale  
+    damage:  
+      types:  
+        Piercing: 0
+    bloodloss: 100
   - type: CMArmor
     explosionArmor: 20
     xenoArmor: 30
