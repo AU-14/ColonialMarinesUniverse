@@ -16,6 +16,9 @@ public sealed partial class XenoImpaleComponent : Component
     [DataField, AutoNetworkedField]
     public DamageSpecifier Damage = new();
 
+    [DataField, AutoNetworkedField]  
+    public FixedPoint2 Bloodloss = FixedPoint2.Zero; // CMU14 Bloodletter Venator bloodless system
+
     [DataField, AutoNetworkedField]
     public EntProtoId Animation = "RMCEffectTailHit";
 
