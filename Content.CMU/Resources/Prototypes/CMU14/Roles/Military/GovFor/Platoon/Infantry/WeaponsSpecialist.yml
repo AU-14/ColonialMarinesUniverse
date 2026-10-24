@@ -44,6 +44,12 @@
     inverted: true
     traits:
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
+    - CMUWeakThrow
     - NoEnglish
     - CMUProstheticLeftArm
     - CMUProstheticRightArm

@@ -11,3 +11,7 @@ cmu-health-analyzer-advice-splint = [color=#5B88B0][font="Emoji"]🦴[/font][/co
 cmu-health-analyzer-advice-shrapnel = [color=#9A9A9A][font="Emoji"]🔩[/font][/color] Remove the embedded shrapnel.
 cmu-health-analyzer-advice-allergy = [color=#FF5050][font="Emoji"]⚠[/font][/color] Allergic reaction to { $reagent }! Give epinephrine.
 cmu-health-analyzer-advice-allergy-unknown = [color=#FF5050][font="Emoji"]⚠[/font][/color] Allergic reaction! Give epinephrine.
+cmu-health-analyzer-advice-seizure = [color=#B05BD5][font="Emoji"]🧠[/font][/color] Patient is having a seizure. Administer a single dose of phenytoin.
+cmu-health-analyzer-advice-asthma-attack = [color=#5887D5][font="Emoji"]🫁[/font][/color] Patient is having an asthma attack. Administer a single dose of albuterol.
+cmu-health-analyzer-advice-panic-attack = [color=#FFAA00][font="Emoji"]😰[/font][/color] Patient is having a panic attack. Move them somewhere safe to calm down.
+cmu-health-analyzer-advice-heart-episode = [color=#FF5050][font="Emoji"]🫀[/font][/color] Patient is having a cardiac episode. Administer a single dose of cardiocaine or epinephrine.

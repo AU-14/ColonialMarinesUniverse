@@ -1,0 +1,15 @@
+author: ILoveDespoiler
+category: CMU
+changes:
+- message: Removed Brute Neomorph Tailstab. It doesn't have a tail.
+  type: Remove
+- message: Brute Neomorph no longer has fast attacks. It's attacks are slower, do
+    more damage, and do only brute damage. Hit VFX and SFX also changed.
+  type: Tweak
+- message: Brute Neomorph ground slam launches you farther and makes your screen shake
+    more.
+  type: Tweak
+- message: Reduced Brute Neomorph armor.
+  type: Tweak
+time: '2026-10-22T13:39:24.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2236

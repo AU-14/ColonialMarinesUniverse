@@ -8,6 +8,33 @@
   - On planets, the outside air flows in through anything open to the sky, so a roofless or breached room takes on the outdoor atmosphere.
   - The outdoor temperature follows a [bold]day and night cycle[/bold]: warmest a quarter of the way through, coldest three quarters through. Expect cold nights to drag down the temperature of anywhere open to the outside.
 
+  ## Ship Gravity Generator
+  <Box>
+    <GuideEntityEmbed Entity="CMUShipGravityGenerator" Caption="gravity generator"/>
+  </Box>
+  - The [bold]gravity generator[/bold] keeps gravity on across [bold]every deck[/bold] of the ship at once.
+  - It runs off the ship's power. If its APC loses power, gravity goes on every deck and everyone aboard starts floating. It comes back by itself as soon as the power does.
+  - The decks start the round with gravity on, so nobody floats while the power grid is still coming up. Keep its APC charged and repaired, especially once a hijacked dropship has knocked the ship's APCs out.
+
+  ## Firelocks
+  - [bold]Firelocks[/bold] slam shut by themselves, with an alarm, when air starts escaping past them or the area next to them is losing air. This holds a breach to the area it started in.
+  - They need no power, so they still work during a blackout.
+  - Once one has sealed, only engineers with access can open it by hand; anyone else needs a crowbar. A sealed firelock that's been opened shuts again a few seconds later.
+  - They open back up on their own once the air on both sides is safe again. Fix the breach first and they'll take care of themselves.
+
+  ## Airlock Bolting
+  - Airlocks and double doors on the ship [bold]bolt themselves[/bold] while they're shut against unsafe air: very low pressure on either side, or a big pressure difference across the door that would let air rush out.
+  - Examining a door bolted like this shows a pressure warning, so you know what's on the other side before you open it.
+  - They unbolt themselves once the air on every side is safe again. Bolts someone set or lifted by hand are left alone, and a door someone unbolts by hand stays unbolted until the air is safe.
+
+  ## Atmospherics Alert Computer
+  <Box>
+    <GuideEntityEmbed Entity="CMUStationAlertComputer" Caption="atmospherics alert computer"/>
+  </Box>
+  - The [bold]atmospherics alert computer[/bold] watches the ship's air on every deck.
+  - Whenever a firelock seals itself, the computer [bold]calls it out loud[/bold] with the area it's in, so anyone nearby hears where the breach is.
+  - Its screen lists every area aboard with a [bold]breach, a fire, bad air or a sealed firelock[/bold]. Areas that are airless by design, like the outer hull, are left off.
+
   ## Exhaust Vents
   <Box>
     <GuideEntityEmbed Entity="CMUExhaustVent" Caption="EX-1 exhaust vent"/>

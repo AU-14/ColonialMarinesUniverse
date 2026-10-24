@@ -113,6 +113,12 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
+    - CMUWeakThrow
     - NoEnglish
     - CMUProstheticLeftArm
     - CMUProstheticRightArm
@@ -249,6 +255,12 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
+    - CMUWeakThrow
     - CMUBadLeg
   ranks:
     RMC_WarrantOfficer1:
@@ -280,6 +292,12 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
+    - CMUWeakThrow
     - CMUBadLeg
   ranks:
     UPP_SeniorWarrantOfficer:

@@ -5,6 +5,7 @@
   description: An automated weapons rack, hooked up to a small armory of Colonial Liberation Front weaponry. The armory contains enough firepower to arm a small but capable insurgent army withstanding mightier foes and asymmetrical warfare.
   suffix: CLF
   components:
+  - type: CMUVendGunsOnSafety
   - type: Sprite
     sprite: CMU14/Structures/Vendors/genericweaponrack.rsi
     layers:

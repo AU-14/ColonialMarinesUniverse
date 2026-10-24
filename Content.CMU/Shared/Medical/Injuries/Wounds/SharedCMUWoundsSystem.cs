@@ -48,6 +48,9 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     [Dependency] protected CMUWoundLedgerSystem WoundLedger = default!;
     [Dependency] protected DamageableSystem Damageable = default!;
     [Dependency] protected INetManager Net = default!;
+
+    private readonly List<EntityUid> _expiredSuppressions = new();
+    private TimeSpan _nextSuppressionCheck;
     [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
@@ -307,7 +310,8 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         // a different source means the patient has developed a new active IB.
         if (TryComp<CMUInternalBleedingSuppressedComponent>(part, out var suppressed))
         {
-            if (IsSuppressedBleedSourceMatch(suppressed.Source, source)
+            if ((suppressed.ExpiresAt is not { } expires || Timing.CurTime < expires)
+                && IsSuppressedBleedSourceMatch(suppressed.Source, source)
                 && maxRate <= suppressed.BloodlossPerSecond + 0.001f)
             {
                 if (HasComp<InternalBleedingComponent>(part))
@@ -508,6 +512,68 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     public void SuppressInternalBleed(EntityUid part)
     {
         ClearInternalBleed(part, true);
+    }
+
+    /// <summary>
+    ///     Holds a limb's internal bleed back for a while without treating it, the way a clotting drug does. Calling it
+    ///     again pushes the end back. Once it runs out the bleed comes back as it was, unless it was clamped for good.
+    /// </summary>
+    public void SuppressInternalBleedFor(EntityUid part, TimeSpan duration)
+    {
+        if (Net.IsClient || IsSynthOwned(part))
+            return;
+
+        part = GetBleedSite(part);
+        var expires = Timing.CurTime + duration;
+        if (TryComp<CMUInternalBleedingSuppressedComponent>(part, out var suppressed))
+        {
+            // A surgical clamp already holds it for good.
+            if (suppressed.ExpiresAt is not { } current)
+                return;
+
+            if (!HasComp<InternalBleedingComponent>(part))
+            {
+                if (expires > current)
+                    suppressed.ExpiresAt = expires;
+                return;
+            }
+        }
+
+        if (!TryComp<InternalBleedingComponent>(part, out var existing))
+            return;
+
+        suppressed = EnsureComp<CMUInternalBleedingSuppressedComponent>(part);
+        suppressed.Source = existing.Source;
+        suppressed.BloodlossPerSecond = existing.BloodlossPerSecond;
+        suppressed.ExpiresAt = expires;
+
+        RemComp<InternalBleedingComponent>(part);
+        RaiseInternalBleedingChanged(part, true);
+    }
+
+    /// <summary>
+    ///     Lets internal bleeds held back by a drug start again once it has worn off.
+    /// </summary>
+    protected void ExpireInternalBleedSuppression()
+    {
+        var now = Timing.CurTime;
+        if (now < _nextSuppressionCheck)
+            return;
+
+        _nextSuppressionCheck = now + TimeSpan.FromSeconds(1);
+        _expiredSuppressions.Clear();
+        var query = EntityQueryEnumerator<CMUInternalBleedingSuppressedComponent>();
+        while (query.MoveNext(out var uid, out var suppressed))
+        {
+            if (suppressed.ExpiresAt is { } expires && now >= expires)
+                _expiredSuppressions.Add(uid);
+        }
+
+        foreach (var part in _expiredSuppressions)
+        {
+            RemComp<CMUInternalBleedingSuppressedComponent>(part);
+            RecomputeInternalBleed(part);
+        }
     }
 
     private void ClearInternalBleed(EntityUid part, bool suppressCurrentSource)
