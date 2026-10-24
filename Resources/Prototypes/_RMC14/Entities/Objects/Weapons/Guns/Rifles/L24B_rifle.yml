@@ -4,6 +4,9 @@
   name: L23B 'Breacher' assault rifle
   description: Pulse action 8.8x51mm caseless assault rifle of the Royal Marine Commandos, personal friend of any Marine Commando. Comes with semi-auto and burst-fire firemodes and features an integrated 30mm grenade launcher that can hold two grenades on backup with one in the chamber
   components:
+  # cmu edit start: built-in ammo counter
+  - type: CMUAmmoCounter
+  # cmu edit end
   - type: Sprite
     sprite: CMU14/Weapons/Guns/RMC/L23.rsi
     layers:

@@ -18226,11 +18226,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 23.5,20.5
-  - uid: 16
-    components:
-    - type: Transform
-      parent: 1
-      pos: 22.5,24.5
   - uid: 19
     components:
     - type: Transform
@@ -18671,11 +18666,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -8.5,-57.5
-  - uid: 1152
-    components:
-    - type: Transform
-      parent: 1
-      pos: 22.5,22.5
   - uid: 1153
     components:
     - type: Transform
@@ -18841,6 +18831,20 @@ entities:
     - type: Transform
       parent: 1
       pos: -19.5,0.5
+- proto: CMUTableReinforcedRequisitionDispenseNorth
+  entities:
+  - uid: 16
+    components:
+    - type: Transform
+      parent: 1
+      pos: 22.5,24.5
+- proto: CMUTableReinforcedRequisitionDispenseSouth
+  entities:
+  - uid: 1152
+    components:
+    - type: Transform
+      parent: 1
+      pos: 22.5,22.5
 - proto: CMTableWoodenFancy
   entities:
   - uid: 1182

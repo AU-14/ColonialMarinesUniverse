@@ -34,11 +34,24 @@ public sealed class CMUAsrsVehicleAmmoCatalogTest
         "RMCCrateVehicleAmmoRotaryCannon",
     ];
 
+    // cmu edit start: the colony ASRS (and the plain console the planets place for it) sells no vehicle gear
     private static readonly EntProtoId[] BaseAsrsConsoles =
+    [
+        "CMASRSConsoleGovfor",
+        "CMASRSConsoleOpfor",
+        "CMASRSConsolePowered",
+        "AU14CorporateASRSConsole",
+    ];
+
+    private static readonly EntProtoId[] ColonyAsrsConsoles =
     [
         "CMASRSConsole",
         "CMASRSConsoleColony",
     ];
+
+    /// <summary>The only vehicle tab the colony ASRS keeps: the jeep kits.</summary>
+    private const string ColonyVehicleTab = "Vehicles";
+    // cmu edit end
 
     private static readonly EntProtoId[] PlatoonAsrsCatalogs =
     [
@@ -77,6 +90,20 @@ public sealed class CMUAsrsVehicleAmmoCatalogTest
 
                 foreach (var catalogId in PlatoonAsrsCatalogs)
                     AssertCatalogHasVehicleAmmo(prototypes, factory, catalogId);
+
+                // cmu edit start
+                foreach (var consoleId in ColonyAsrsConsoles)
+                {
+                    Assert.That(prototypes.Index<EntityPrototype>(consoleId)
+                            .TryComp<RequisitionsComputerComponent>(out var colony, factory), Is.True,
+                        $"{consoleId} has no RequisitionsComputer component");
+                    var vehicleTabs = colony!.Categories
+                        .Where(c => c.Name.StartsWith("Vehicle") && c.Name != ColonyVehicleTab)
+                        .Select(c => c.Name)
+                        .ToList();
+                    Assert.That(vehicleTabs, Is.Empty, $"{consoleId} still sells vehicle gear: {string.Join(", ", vehicleTabs)}");
+                }
+                // cmu edit end
             });
         });
 

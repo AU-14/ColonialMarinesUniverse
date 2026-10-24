@@ -46,6 +46,7 @@
     inverted: true
     traits:
     - NoEnglish
+    - CMUWeakThrow
   ranks:
     RMCRankCivilian: []
   chevrons:
