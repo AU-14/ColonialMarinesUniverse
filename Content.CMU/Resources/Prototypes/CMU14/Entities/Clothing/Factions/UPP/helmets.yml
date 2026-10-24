@@ -71,7 +71,7 @@
   - type: InstantAction
     event: !type:ToggleActionEvent
 
-type: entity
+- type: entity
   parent: RMCMarineHelmetBase
   id: AU14NRAT79
   name: Type 79 Steel Helmet
