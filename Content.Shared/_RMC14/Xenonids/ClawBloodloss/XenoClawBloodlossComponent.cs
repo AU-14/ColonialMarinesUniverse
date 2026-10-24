@@ -8,5 +8,5 @@ namespace Content.Shared._RMC14.Xenonids.ClawBloodloss;
 public sealed partial class XenoClawBloodlossComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public FixedPoint2 Bloodloss = FixedPoint2.0;
+    public FixedPoint2 Bloodloss = FixedPoint2.Zero;
 }
