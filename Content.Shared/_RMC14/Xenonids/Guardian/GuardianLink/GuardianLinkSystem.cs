@@ -8,7 +8,7 @@ using Content.Shared.Popups;
 using Robust.Shared.Network;  
 using Robust.Shared.Timing;  
   
-namespace Content.Shared._RMC14.Xenonids.Guardian;  
+namespace Content.Shared._RMC14.Xenonids.Guardian.GuardianLink;
   
 public sealed partial class XenoGuardianSystem : EntitySystem  
 {  
