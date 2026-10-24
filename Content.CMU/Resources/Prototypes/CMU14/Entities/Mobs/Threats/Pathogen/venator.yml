@@ -142,7 +142,7 @@
   suffix: Bloodletter
   components:
   - type: Sprite
-    sprite: CMU14/Mobs/Xenonids/Pathogen/bloodlettervenator.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/venatorbloodletter.rsi
   - type: Xeno
     actionIds:
     - CMU14ActionXenoPathogenRest
