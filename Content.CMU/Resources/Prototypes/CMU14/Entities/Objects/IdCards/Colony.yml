@@ -564,6 +564,14 @@
 
 - type: entity
   parent: AU14IDCardColonyLEO
+  id: AU14IDCardColonyCMBDetective
+  name: CMB detective ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianCMBDetective
+
+- type: entity
+  parent: AU14IDCardColonyLEO
   id: AU14IDCardcivilianCWPSranger
   name: CWPS ranger ID card
   components:

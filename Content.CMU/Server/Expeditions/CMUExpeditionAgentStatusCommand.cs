@@ -81,6 +81,10 @@ public sealed partial class CMUExpeditionAgentStatusCommand : LocalizedEntityCom
                 ("item", agent.ScavengeTarget is { } item ? EntityManager.GetNetEntity(item).ToString() : "-")));
             shell.WriteLine(Loc.GetString("cmu-expedition-ai-vision-status",
                 ("sight", agent.VisionDecision), ("flares", agent.FlaresUsed), ("flashShots", agent.FlashShots), ("bipods", agent.BipodsDeployed)));
+            shell.WriteLine(Loc.GetString("cmu-expedition-ai-perception-status",
+                ("checks", agent.SightChecksLastThink), ("limit", Math.Clamp(agent.SightChecksPerThink, 3, 16)),
+                ("contacts", agent.ContactRecognition.Count), ("searching", agent.ContactSearchPoint != null),
+                ("remaining", Math.Max(0, (agent.ContactSearchUntil - _timing.CurTime).TotalSeconds).ToString("F1"))));
             shell.WriteLine(Loc.GetString("cmu-expedition-ai-logistics-status",
                 ("outfit", agent.Outfit), ("decision", agent.SupplyDecision), ("shared", agent.SuppliesShared),
                 ("received", agent.SuppliesReceived), ("crates", agent.CratesOpened)));
