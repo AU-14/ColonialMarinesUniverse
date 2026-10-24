@@ -99,22 +99,24 @@ public sealed partial class DockingSystem : SharedDockingSystem
         }
     }
 
-    [SubscribeLocalEvent]
-    private void OnDockingReAnchor(Entity<DockingComponent> entity, ref ReAnchorEvent args)
-    {
-        var uid = entity.Owner;
-        var component = entity.Comp;
-
-        if (!component.Docked)
-            return;
-
-        var otherDock = component.DockedWith;
-        var other = Comp<DockingComponent>(otherDock!.Value);
-
-        Undock(entity);
-        Dock((uid, component), (otherDock.Value, other));
-        _console.RefreshShuttleConsoles();
-    }
+    // CMU14: engine v293.0.1 removed ReAnchorEvent. Upstream dropped reanchor redocking; the
+    // unanchor side still undocks through OnAnchorChange.
+    // [SubscribeLocalEvent]
+    // private void OnDockingReAnchor(Entity<DockingComponent> entity, ref ReAnchorEvent args)
+    // {
+    //     var uid = entity.Owner;
+    //     var component = entity.Comp;
+    //
+    //     if (!component.Docked)
+    //         return;
+    //
+    //     var otherDock = component.DockedWith;
+    //     var other = Comp<DockingComponent>(otherDock!.Value);
+    //
+    //     Undock(entity);
+    //     Dock((uid, component), (otherDock.Value, other));
+    //     _console.RefreshShuttleConsoles();
+    // }
 
     [SubscribeLocalEvent]
     private void OnRequestUndock(EntityUid uid, ShuttleConsoleComponent component, UndockRequestMessage args)
