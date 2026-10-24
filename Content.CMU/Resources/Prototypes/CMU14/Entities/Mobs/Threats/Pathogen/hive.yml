@@ -14,6 +14,7 @@
       3: 0.4
     freeSlots:
       CMU14XenoConditor: 2
+      CMU14XenoHarbingerBase: 1
     announceSound:
       path: /Audio/CMU14/Xeno/Pathogen/pathogen_distant_roar.ogg
       params:
