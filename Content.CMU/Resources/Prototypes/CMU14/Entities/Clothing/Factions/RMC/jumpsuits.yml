@@ -104,6 +104,7 @@
   components:
   - type: Sprite
     sprite: CMU14/Clothing/RMC/jumpsuits/black.rsi
+  - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: CMU14/Clothing/RMC/jumpsuits/black.rsi
@@ -119,6 +120,7 @@
   components:
   - type: Sprite
     sprite: CMU14/Clothing/RMC/jumpsuits/black_team_lead.rsi
+  - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: CMU14/Clothing/RMC/jumpsuits/black_team_lead.rsi

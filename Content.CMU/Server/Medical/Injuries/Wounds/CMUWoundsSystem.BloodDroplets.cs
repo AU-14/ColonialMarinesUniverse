@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Server.CMU14.Forensics;
 using Content.Server.Decals;
 using Content.Shared.Body.Components;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
@@ -11,6 +12,7 @@ namespace Content.Server.CMU14.Medical.Injuries.Wounds;
 
 public sealed partial class CMUWoundsSystem
 {
+    [Dependency] private CMUBloodEvidenceSystem _bloodEvidence = default!;
     [Dependency] private DecalSystem _decals = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedCMUOpenStumpSystem _stumps = default!;
@@ -46,13 +48,17 @@ public sealed partial class CMUWoundsSystem
             return;
 
         // Decals have no contact fixture or reagent transfer, so small drips cannot stain feet.
-        _decals.TryAddDecal(
-            _random.Pick(BloodDroplets),
-            Transform(ent).Coordinates.Offset(new Vector2(-0.5f, -0.5f)),
-            out _,
-            color: args.Solution.GetColor(Proto),
-            rotation: _random.NextAngle(),
-            cleanable: true);
+        var dropAt = Transform(ent).Coordinates.Offset(new Vector2(-0.5f, -0.5f));
+        if (_decals.TryAddDecal(
+                _random.Pick(BloodDroplets),
+                dropAt,
+                out var droplet,
+                color: args.Solution.GetColor(Proto),
+                rotation: _random.NextAngle(),
+                cleanable: true))
+        {
+            _bloodEvidence.RecordBloodDecal(dropAt, droplet, ent);
+        }
         args.Handled = true;
     }
 

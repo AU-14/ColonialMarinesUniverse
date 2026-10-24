@@ -16,7 +16,7 @@
   parent: MobAghostGear
   id: RMCMobAghostGear # CMU14
   equipment:
-    back: ClothingBackpackSatchelHolding
+    back: CMUClothingBackpackSatchelHoldingAdminGhost # cmu edit: no worn sprite
     id: RMCAdminPDA
   storage:
     back:

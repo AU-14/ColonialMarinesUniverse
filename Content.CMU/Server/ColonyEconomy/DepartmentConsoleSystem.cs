@@ -274,9 +274,10 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
     /// <summary>
     ///     Builds a catalog snapshot from the nearest ASRS computer matching the department's configured faction.
     /// </summary>
-    private List<DepartmentOrderCatalogCategory> BuildCatalog(EntityUid consoleUid, string asrsFaction)
+    private List<DepartmentOrderCatalogCategory> BuildCatalog(EntityUid consoleUid, DepartmentConsoleComponent department)
     {
         var result = new List<DepartmentOrderCatalogCategory>();
+        AddSupplyCatalog(department, result);
 
         var consoleCoords = _transform.GetMapCoordinates(consoleUid);
         Entity<RequisitionsComputerComponent>? nearest = null;
@@ -285,7 +286,7 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
         var computers = EntityQueryEnumerator<RequisitionsComputerComponent>();
         while (computers.MoveNext(out var compUid, out var comp))
         {
-            if (comp.Faction != asrsFaction)
+            if (comp.Faction != department.AsrsFaction)
                 continue;
 
             var compCoords = _transform.GetMapCoordinates(compUid);
@@ -382,7 +383,7 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
             comp.SalaryOverrides.Remove(rem);
         }
 
-        var catalog = BuildCatalog(uid, comp.AsrsFaction);
+        var catalog = BuildCatalog(uid, comp);
 
         var state = new DepartmentConsoleBuiState(
             comp.DepartmentName,
@@ -591,6 +592,12 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
     /// </summary>
     private void OnOrder(EntityUid uid, DepartmentConsoleComponent comp, DepartmentConsoleOrderBuiMsg msg)
     {
+        if (msg.CategoryIndex == SupplyCategory)
+        {
+            TryBuySupply((uid, comp), msg.Actor, msg.EntryIndex);
+            return;
+        }
+
         // Find the ASRS computer for this department's configured faction
         var consoleCoords = _transform.GetMapCoordinates(uid);
         Entity<RequisitionsComputerComponent>? nearestComputer = null;
@@ -671,6 +678,11 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
 
         elevator.Value.Comp.Orders.Add(deptOrder);
         Dirty(elevator.Value);
+
+        // Department orders are the colony's too, so their guns go on the firearm registry under whoever ordered them.
+        var bought = new Content.Server.CMU14.Requisitions.CMURequisitionsOrderBoughtEvent(elevator.Value,
+            elevator.Value.Comp.Orders.Count - 1, msg.Actor, elevator.Value.Comp.Faction);
+        RaiseLocalEvent(ref bought);
         UpdateAllUiForDepartment(uid, comp);
     }
 

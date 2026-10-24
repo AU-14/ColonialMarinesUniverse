@@ -13,6 +13,7 @@ using Content.Shared._RMC14.Weapons.Common;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Weapons.Ranged.Whitelist;
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems; // CMU14
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DoAfter;
 using Content.Shared.Damage;
@@ -69,6 +70,7 @@ public sealed partial class CMGunSystem : EntitySystem
     [Dependency] private INetConfigurationManager _netConfig = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!; // CMU14
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedProjectileSystem _projectile = default!;
@@ -107,7 +109,9 @@ public sealed partial class CMGunSystem : EntitySystem
 
         SubscribeLocalEvent<RMCExtraProjectilesDamageModsComponent, AmmoShotEvent>(OnExtraProjectilesShot);
 
-        SubscribeLocalEvent<RMCWeaponAccuracyComponent, ExaminedEvent>(OnWeaponAccuracyExamined);
+        // cmu edit start: listed under the weapon stats examine verb instead (CMUWeaponStatsSystem)
+        // SubscribeLocalEvent<RMCWeaponAccuracyComponent, ExaminedEvent>(OnWeaponAccuracyExamined);
+        // cmu edit end
         SubscribeLocalEvent<RMCWeaponAccuracyComponent, GunRefreshModifiersEvent>(OnWeaponAccuracyRefreshModifiers);
         SubscribeLocalEvent<RMCWeaponAccuracyComponent, AmmoShotEvent>(OnWeaponAccuracyShot);
 
@@ -186,6 +190,9 @@ public sealed partial class CMGunSystem : EntitySystem
         if (args.FiredProjectiles.Count > 0)
             from = _transform.GetMapCoordinates(args.FiredProjectiles[0]);
         var to = _transform.ToMapCoordinates(target);
+        // CMU14: cross-z shots start on the other level but the click stays on yours, aim at the same spot over there
+        if (from.MapId != to.MapId && args.FiredProjectiles.Count > 0 && _zLevels.IsSameZNetwork(from.MapId, to.MapId))
+            to = new MapCoordinates(to.Position, from.MapId);
         // Must be same map.
         if (from.MapId != to.MapId)
             return;
@@ -671,7 +678,7 @@ public sealed partial class CMGunSystem : EntitySystem
             if (time < comp.FlyEndTime)
                 continue;
 
-            if (comp.TargetCoordinates is { } targetCoords)
+            if (comp.TargetCoordinates is { } targetCoords && !IsSnapBlocked(uid, targetCoords)) // CMU14
                 _transform.SetMapCoordinates(uid, targetCoords);
 
             StopProjectile((uid, comp));
@@ -685,6 +692,25 @@ public sealed partial class CMGunSystem : EntitySystem
                 QueueDel(uid);
         }
     }
+
+    // CMU14 Begin
+    // a launched grenade that bounced off a wall used to get teleported to the clicked spot behind it,
+    // so it looked like it vanished and then blew up out of sight
+    private bool IsSnapBlocked(EntityUid uid, MapCoordinates target)
+    {
+        var current = _transform.GetMapCoordinates(uid);
+        if (current.MapId != target.MapId)
+            return false;
+
+        var direction = target.Position - current.Position;
+        var length = direction.Length();
+        if (length < 0.01f)
+            return false;
+
+        var ray = new CollisionRay(current.Position, direction / length, _blockArcCollisionGroup);
+        return _physics.IntersectRay(current.MapId, ray, length, uid).Any();
+    }
+    // CMU14 End
 
     // RMC revolver cylinder spin default unique action
     private void OnRevolverUniqueAction(Entity<RevolverAmmoProviderComponent> gun, ref UniqueActionEvent args)

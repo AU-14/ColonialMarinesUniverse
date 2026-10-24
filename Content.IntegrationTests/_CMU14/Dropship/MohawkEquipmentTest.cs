@@ -38,7 +38,7 @@ public sealed class MohawkEquipmentTest
             var entities = pair.Server.EntMan;
             entities.System<SharedMapSystem>().CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
             foreach (var xform in entities.QueryEntities<TransformComponent>().Where(t => t.Comp.ParentUid == ship))
             {

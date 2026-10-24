@@ -207,7 +207,12 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
                 return true;
             }
 
-            var parts = BuildPartEntries(patient, surgeon, allowOptionalHemostasis: true);
+            // medicomp work is done on a standing hunter, same as the menu path allows
+            var parts = BuildPartEntries(
+                patient,
+                surgeon,
+                allowOptionalHemostasis: true,
+                allowStanding: IsYautjaMedicompTool(tool));
             if (TryArmByToolIntent(surgeon, patient, tool, parts, uiLess: true))
                 return true;
 

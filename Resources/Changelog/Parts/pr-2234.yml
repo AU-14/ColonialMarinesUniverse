@@ -1,0 +1,30 @@
+author: Ignies
+category: CMU
+changes:
+- message: Added military and colony jeeps, ordered as kit crates or dropped by flare,
+    each with a field manual.
+  type: Add
+- message: Jeeps have doors, lamps, a key, fuel, paint and dirt; military jeeps have
+    a hand aimed searchlight.
+  type: Add
+- message: Jeep panels show bullet holes, burns and dents, and can be welded or replaced
+    from the autolathe.
+  type: Add
+- message: A dead jeep engine catches fire that creeps out slowly; a heavy hit blows
+    the jeep up at once.
+  type: Add
+- message: Jeep wrecks slide on from where they blew up and can only be welded down
+    to scrap.
+  type: Add
+- message: The gun jeep has a .50 cal, the medical jeep a surgical bed.
+  type: Add
+- message: Added a CLF HMG jeep and civilian crew call-in, available twice with a
+    ten-minute cooldown.
+  type: Add
+- message: Medical departments can buy throwable medical jeep beacons with a blue
+    delivery laser and crate impact effects.
+  type: Add
+- message: Added the jeepkit command.
+  type: Admin
+time: '2026-10-22T14:13:05.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2234

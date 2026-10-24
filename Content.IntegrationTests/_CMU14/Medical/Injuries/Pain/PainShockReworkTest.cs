@@ -722,8 +722,8 @@ public sealed class PainShockReworkTest
                 Assert.That(IsEnoughForSurgeryPainControl(soporificSuppression), Is.True);
             });
 
-            AssertReagentAppliesStatusEffect(soporific, "StatusEffectDrowsiness");
-            AssertReagentAppliesStatusEffect(soporific, "StatusEffectForcedSleeping");
+            // CMU14: soporific clouds the patient's vision instead of putting them to sleep.
+            AssertReagentAppliesStatusEffect(soporific, "StatusEffectCMUSoporificHaze");
         });
 
         await pair.CleanReturnAsync();

@@ -77,10 +77,10 @@
     - [ CMJumpsuitColonistCLFArmband ] 
     randomWeapon: # Weapon with ammo pouches and stuff
     - [ AU14WeaponRifleM16A1, AU14PouchMagazineLargeFilledM16, AU14PouchIFAKFill ]
-    - [ AU14WeaponRifleAR10, AU14PouchMagazineLargeFilledM16, AU14PouchIFAKFill ]
+    - [ AU14WeaponRifleAR10, AU14PouchMagazineLargeFilledAR10, AU14PouchIFAKFill ]
     - [ RMCWeaponBoltActionRifle, AU14PouchMagazineLargeFilledHuntingRifle, AU14PouchIFAKFill ]
     - [ AU14WeaponRifleM16A1, AU14PouchMagazineLargeFilledM16, AU14PouchIFAKFill ]
-    - [ AU14WeaponRifleAR10, AU14PouchMagazineLargeFilledM16, AU14PouchIFAKFill ]
+    - [ AU14WeaponRifleAR10, AU14PouchMagazineLargeFilledAR10, AU14PouchIFAKFill ]
     - [ RMCWeaponBoltActionRifle, AU14PouchMagazineLargeFilledHuntingRifle, AU14PouchIFAKFill ]
     - [ WeaponRifleMAR40, AU14PouchMagazineLargeFilledMAR40normal, AU14PouchIFAKFill ]
     - [ RMCWeaponShotgunHG3712, AU14PouchShotgunLargeBuckshot, AU14PouchIFAKFill ]

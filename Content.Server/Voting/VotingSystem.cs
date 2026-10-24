@@ -52,7 +52,7 @@ public sealed partial class VotingSystem : EntitySystem
         {
             if (args.SenderSession == player) continue;
 
-            if (_adminManager.IsAdmin(player, false)) continue;
+            if (_adminManager.HasAdminFlag(player, Content.Shared.Administration.AdminFlags.Staff)) continue; // cmu edit
 
             if (player.AttachedEntity is not { Valid: true } attached)
             {
@@ -93,7 +93,7 @@ public sealed partial class VotingSystem : EntitySystem
             return false;
 
         // Being an admin overrides the votekick eligibility
-        if (initiator.AttachedEntity != null && _adminManager.IsAdmin(initiator.AttachedEntity.Value, false))
+        if (initiator.AttachedEntity != null && _adminManager.HasAdminFlag(initiator.AttachedEntity.Value, Content.Shared.Administration.AdminFlags.Staff)) // cmu edit
             return true;
 
         // If cvar enabled, skip the ghost requirement in the preround lobby
@@ -131,7 +131,7 @@ public sealed partial class VotingSystem : EntitySystem
             return false;
 
         // Admins can't be votekicked
-        if (target.AttachedEntity != null && _adminManager.IsAdmin(target.AttachedEntity.Value))
+        if (target.AttachedEntity != null && _adminManager.HasAdminFlag(target.AttachedEntity.Value, Content.Shared.Administration.AdminFlags.Staff)) // cmu edit
             return false;
 
         return true;

@@ -96,9 +96,13 @@ anprc-sweep-aborted = The search stops as the set shuts down.
 anprc-sweep-aborted-power = The battery dies and the search stops.
 anprc-sweep-tx-blocked = The set is searching the band. Stop the search before transmitting.
 anprc-sweep-contact = The search narrows. Something is transmitting on { $freq } MHz.
-anprc-sweep-resolved = FIX: { $freq } MHz - { $net }. New traffic on it now gives a bearing and banks a key trial on the faceplate.
+anprc-sweep-resolved = FIX: { $freq } MHz - { $net }. Manpack traffic on it now gives a rough bearing, and every line banks a key trial on the faceplate.
 anprc-sweep-unknown-net = UNIDENTIFIED NET
-anprc-fixed-net-bearing = DF { $net }: speaker bearing { $bearing }, about { $distance } tiles away.
+anprc-fixed-net-bearing = DF { $net }: speaker bearing { $bearing }, { $band ->
+    [near] close by.
+    [mid] some way off.
+   *[far] a long way off.
+}
 
 # chat rows (ANPRCChatSystem): the set's own notices, and intercepts
 anprc-chat-label = 117G

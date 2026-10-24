@@ -1,0 +1,13 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Fixed server lag from gunfire and doors being checked for expedition NPCs
+    in every round
+  type: Fix
+- message: Fixed server lag from open predator bracer trackers
+  type: Fix
+- message: Fixed the Ambassador console resending its screen to everyone nearby every
+    tick
+  type: Fix
+time: '2026-10-09T20:04:40.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2131

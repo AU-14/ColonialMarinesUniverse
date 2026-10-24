@@ -462,6 +462,11 @@
         density: 1000
         hard: false
   - type: Chasm
+    # cmu edit start: thrown stuff falls in like the ASRS lift, vehicles don't
+    blacklist:
+      components:
+      - Vehicle
+    # cmu edit end
   - type: StepTrigger
     requiredTriggeredSpeed: 0
     intersectRatio: 1

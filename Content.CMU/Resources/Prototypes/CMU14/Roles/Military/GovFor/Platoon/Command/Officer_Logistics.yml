@@ -29,7 +29,7 @@
   - type: AU14CallToAttentionAbility
   - type: AU14CallsignRole
     suffix: OPS
-    commandElement: true
+    auxiliaryElement: true # LONGBOW OPS, the logistics net is the auxiliary net
   - type: Skills
     preset: AU14SkillPresetOfficerLogistics
   - type: JobPrefix
@@ -71,6 +71,12 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
+    - CMUWeakThrow
     - NoEnglish
     - SlowRunner
     - Anemic

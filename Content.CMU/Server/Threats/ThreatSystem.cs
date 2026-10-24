@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.CMU14.Diagnostics.Performance;
 using Content.Server.CMU14.Round;
+using Content.Server.CMU14.Ship;
 using Content.Server.CMU14.Round.Objectives;
 using Content.Server.GameTicking;
 using Content.Server.Chat.Managers;
@@ -13,6 +14,7 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.CMU14.Threats.Mobs.Biomorph;
+using Content.Shared.CMU14.Threats.Mobs.Wendigo.Pack;
 using Content.Shared.CMU14.util;
 using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
@@ -41,6 +43,7 @@ namespace Content.Server.CMU14.Threats;
 
 public sealed partial class ThreatSystem : EntitySystem
 {
+    [Dependency] private CMUAdriftSystem _adrift = default!;
     [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private IEntityManager _entityManager = default!;
@@ -1025,7 +1028,8 @@ public sealed partial class ThreatSystem : EntitySystem
             || HasComp<ApeComponent>(uid)
             || HasComp<TribalComponent>(uid)
             || HasComp<BiomorphComponent>(uid)
-            || HasComp<BiomorphMimicComponent>(uid))
+            || HasComp<BiomorphMimicComponent>(uid)
+            || HasComp<CMUWendigoPackComponent>(uid))
             return true;
 
         if (HasComp<SynthComponent>(uid))
@@ -1035,9 +1039,10 @@ public sealed partial class ThreatSystem : EntitySystem
         if (mobState.CurrentState == MobState.Dead)
             return false;
 
-        // Alive and nested or SSD
+        // Alive and nested or SSD, or adrift in space outside the ship
         return HasComp<XenoNestedComponent>(uid)
-            || (TryComp(uid, out SSDIndicatorComponent? ssd) && ssd.IsSSD);
+            || (TryComp(uid, out SSDIndicatorComponent? ssd) && ssd.IsSSD)
+            || _adrift.IsAdrift(uid);
     }
 
     internal sealed record PendingThreatSpawnDebugView(

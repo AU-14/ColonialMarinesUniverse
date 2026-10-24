@@ -1,0 +1,143 @@
+# Food allergies, in the Allergies section with the drug allergies (two per character); each adds its allergen through a special so they stack.
+
+- type: cmuFoodAllergen
+  id: CMUFoodAllergenNuts
+  name: cmu-food-allergen-nuts
+  reagents:
+  - CMUNuts
+  - CMUHazelnutBeverage
+  - CMUHazelnutChocolateDrink
+  - RMCPeanutButter
+  foods:
+  - CMMREFoodPeanuts
+  - FoodSnackPistachios
+  - RMCFoodCookiePeanutButter
+
+- type: cmuFoodAllergen
+  id: CMUFoodAllergenFish
+  name: cmu-food-allergen-fish
+  reagents:
+  - CMUFishMeat
+  - CarpoToxin
+  foods:
+  - RMCFoodMeatFish
+  - RMCFoodMeatFishAndChips
+  - RMCFoodMeatFishGrilled
+  - RMCFoodMeatFishSushi
+  - CMMREFoodSushi
+  - FoodTacoFish
+  - FoodBurgerCarp
+  - FoodCarpsilog
+  - FoodDonkpocketCarp
+  - FoodDonkpocketCarpWarm
+  - RuMCFoodFish
+  - RMCMarinePreparedMealPMCFishAndChips
+  - RMCMarinePreparedMealRCMFish
+
+- type: cmuFoodAllergen
+  id: CMUFoodAllergenDairy
+  name: cmu-food-allergen-dairy
+  reagents:
+  - Milk
+  - MilkGoat
+  - MilkSheep
+  - Cream
+  - Butter
+  - IceCream
+  - Eggnog
+  - RMCMilkshake
+  - CafeLatte
+  - CMUCheese
+  foods:
+  - FoodCheese
+  - FoodCheeseSlice
+  - FoodCakeCheese
+  - FoodCakeCheeseSlice
+  - FoodBurgerCheese
+  - FoodBakedGrilledCheeseSandwich
+  - FoodCheesesteak
+  - FoodCheesesteakHalf
+  - RMCMREFoodMeatSlabCheese
+  - RMCFoodSnackCheeseburger
+  - CMMREFoodFlan
+  - CMMREFoodHoneyFlan
+  - CMUMREFoodCLFWrappedCheesePizza
+  - CMUMREFoodTWETinyCheesecake
+  - CMUMREFoodWYEclair
+
+- type: cmuFoodAllergen
+  id: CMUFoodAllergenEggs
+  name: cmu-food-allergen-eggs
+  reagents:
+  - Egg
+  - EggCooked
+  - Eggnog
+  - Mayo
+  foods:
+  - FoodMealOmelette
+  - FoodRiceEgg
+  - FoodMealEggsbenedict
+  - FoodEggBoiled
+  - FoodCarpsilog
+  - CMMREFoodFlan
+  - CMMREFoodHoneyFlan
+  - CMUMREFoodUSCMFlan
+  - CMUMREFoodUSCMHoneyFlan
+  - CMUMREFoodTWETinyPancakes
+  - FoodBakedPancake
+  - FoodBakedPancakeBb
+  - FoodBakedPancakeCc
+
+- type: trait
+  id: CMUFoodAllergyNuts
+  name: cmu-trait-food-allergy-nuts-name
+  description: cmu-trait-food-allergy-desc
+  category: CMUDrugAllergies
+  cost: 1
+  specials:
+  - !type:CMUAddFoodAllergySpecial
+    allergen: CMUFoodAllergenNuts
+  traitGear: CMUEpinephrineAutoInjector
+
+- type: trait
+  id: CMUFoodAllergyFish
+  name: cmu-trait-food-allergy-fish-name
+  description: cmu-trait-food-allergy-desc
+  category: CMUDrugAllergies
+  cost: 1
+  specials:
+  - !type:CMUAddFoodAllergySpecial
+    allergen: CMUFoodAllergenFish
+  traitGear: CMUEpinephrineAutoInjector
+
+- type: trait
+  id: CMUFoodAllergyDairy
+  name: cmu-trait-food-allergy-dairy-name
+  description: cmu-trait-food-allergy-desc
+  category: CMUDrugAllergies
+  cost: 1
+  specials:
+  - !type:CMUAddFoodAllergySpecial
+    allergen: CMUFoodAllergenDairy
+  traitGear: CMUEpinephrineAutoInjector
+
+- type: trait
+  id: CMUFoodAllergyEggs
+  name: cmu-trait-food-allergy-eggs-name
+  description: cmu-trait-food-allergy-desc
+  category: CMUDrugAllergies
+  cost: 1
+  specials:
+  - !type:CMUAddFoodAllergySpecial
+    allergen: CMUFoodAllergenEggs
+  traitGear: CMUEpinephrineAutoInjector
+
+- type: trait
+  id: CMUFoodAllergyRandom
+  name: cmu-trait-food-allergy-random-name
+  description: cmu-trait-food-allergy-random-desc
+  category: CMUDrugAllergies
+  cost: 1
+  specials:
+  - !type:CMUAddFoodAllergySpecial
+  traitGear: CMUEpinephrineAutoInjector

@@ -46,7 +46,7 @@ reagent-desc-cmu-fentanyl-precursor          = An unstable halogenated intermedi
 reagent-name-cmu-sleen                       = Sleen
 reagent-desc-cmu-sleen                       = A strong experimental painkiller. Masks severe pain, but overdoses become toxic and disorienting.
 reagent-name-cmu-soporific                   = Soporific
-reagent-desc-cmu-soporific                   = A powerful sedative painkiller. Causes drowsiness and can force sleep at surgical doses.
+reagent-desc-cmu-soporific                   = A powerful sedative painkiller. Leaves the patient heavily dazed, with blurred and darkened vision.
 
 reagent-name-cmu-meth-precursor              = Crude Amphetamine Oil
 reagent-desc-cmu-meth-precursor              = A foul-smelling reduction product. Needs further refinement before it's anything but toxic.
@@ -57,3 +57,16 @@ reagent-desc-cmu-methamphetamine             = A potent synthetic stimulant. Pro
 
 reagent-name-cmu-blood-plasma = blood plasma
 reagent-desc-cmu-blood-plasma = The liquid part of blood. Given from a plasma pack of a matching type it restores blood volume quickly and slows bleeding for a while.
+reagent-name-cmu-phenytoin                   = Phenytoin
+reagent-desc-cmu-phenytoin                   = An anticonvulsant. It stops a seizure in its tracks, and a single dose keeps epileptic seizures away for about 25 minutes.
+cmu-medical-suppress-seizures-guidebook      = Stops an ongoing seizure and prevents epileptic seizures for { $minutes } minutes.
+reagent-name-cmu-propranolol                 = Propranolol
+reagent-desc-cmu-propranolol                 = A beta blocker. It settles a struggling heart, ends a cardiac episode and takes the edge off panic. A single dose keeps a heart condition from flaring up for about 15 minutes.
+cmu-medical-beta-blocker-guidebook           = Ends a cardiac episode, keeps a heart condition from building strain for { $minutes } minutes and reduces panic.
+reagent-name-cmu-disulfiram                  = Disulfiram
+reagent-desc-cmu-disulfiram                  = An alcohol deterrent. Anyone who drinks while it's in them gets violently sick, and it eases an alcoholic's cravings. A single dose lasts about 30 minutes.
+cmu-medical-alcohol-deterrent-guidebook      = For { $minutes } minutes, any alcohol causes nausea and vomiting. Eases alcohol cravings.
+cmu-alcohol-deterrent-reaction               = Your face flushes and your stomach heaves as the alcohol hits you!
+reagent-name-cmu-meclizine                   = Meclizine
+reagent-desc-cmu-meclizine                   = An anti-vertigo drug. It clears dizziness from motion sickness, phobias and the like, and a single dose keeps it away for about 20 minutes.
+cmu-medical-anti-vertigo-guidebook           = Clears dizziness and prevents it for { $minutes } minutes.

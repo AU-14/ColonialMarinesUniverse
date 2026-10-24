@@ -1,0 +1,126 @@
+# The CMB detective's plain-clothes loadout, from the civilian clothing wardrobe.
+
+- type: loadoutGroup
+  id: CMUDetectiveUniformAU14
+  name: cmu-loadout-group-detective-uniform
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - WYJumpsuitLiaisonBlackAU14
+  - LiaisonBlueJumpsuitRMC
+  - LiaisonBrownJumpsuitRMC
+  - WYJumpsuitLiaisonFieldAU14
+  - WYJumpsuitLiaisonIvyAU14
+  - LiaisonCorporateFormalJumpsuitRMC
+  - WYJumpsuitLiaisonFormalAU14
+  - WYJumpsuitLiaisonAU14
+  - WYJumpsuitLiaisonBlazerAU14
+  - WYJumpsuitLiaisonCharcoalAU14
+  - CMULiaisonBlackSuitskirt
+  - CMULiaisonCharcoalSuitskirt
+  - CMULiaisonFieldSuitskirt
+  - CMULiaisonSkirt
+  - CivilianFlannelWhiteAU14
+  - CivilianFlannelRedAU14
+  - CivilianFlannelPurpleAU14
+  - CivilianFloralRedAU14
+  - CivilianFloralBlueAU14
+  - CivilianFloralYellowAU14
+
+- type: loadoutGroup
+  id: CMUDetectiveTieAU14
+  name: cmu-loadout-group-detective-tie
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - CMUDetectiveClothingNeckTieRed
+  - DetectiveTie
+  - ScientistTie
+  - CMUDetectiveClothingNeckTieSerious
+
+- type: loadoutGroup
+  id: CMUDetectiveCoatAU14
+  name: cmu-loadout-group-detective-coat
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - CMUDetectiveRMCJacketCorporateKhaki
+  - CMUDetectiveRMCJacketCorporateBlack
+  - CMUDetectiveRMCJacketCorporateBlue
+  - CMUDetectiveRMCJacketCorporateBrown
+  - CMUDetectiveAU14WindbreakerBlue
+  - CMUDetectiveRMCJacketWindbreakerGrey
+  - CMUDetectiveRMCJacketWindbreaker
+  - CMUDetectiveRMCJacketWindbreakerFirstResponder
+  - CMUDetectiveRMCJacketWindbreakerBrown
+  - CMUDetectiveAU14CivilianTanTrenchCoat
+  - CMUDetectiveAU14CivilianBrownTrenchCoat
+  - CMUDetectiveAU14CivilianGrayTrenchCoat
+  - CMUDetectiveAU14CivilianJacketGrayPufferVest
+  - CMUDetectiveAU14CivilianJacketKhakiPufferVest
+  - CMUDetectiveAU14CivilianJacketTanPufferVest
+  - CMUDetectiveAU14CivilianJacketGrayPufferJacket
+  - CMUDetectiveAU14CivilianJacketOrangePufferJacket
+  - CMUDetectiveAU14CivilianJacketKhakiPufferJacket
+
+- type: loadoutGroup
+  id: CMUDetectiveHatAU14
+  name: cmu-loadout-group-detective-hat
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - CivBallCapBlackAU14
+  - CivBallCapBlueTruckerAU14
+  - CivBallCapRedTruckerAU14
+  - USCMVeteranCapAU14
+  - CivFedoraTanAU14
+  - CivFedoraBrownAU14
+  - CivFedoraGrayAU14
+  - HeadCommandoBeanieAU14
+  - CMUDetectiveCMUCivBoonieHatTan
+  - CMUDetectiveCMUCivBoonieHatGreen
+  - CMUDetectiveCMUCivWorkCapTan
+  - CMUDetectiveCMUCivWorkCapGreen
+  - CMUDetectiveCMUCivSunCapTan
+  - CMUDetectiveCMUCivSunCapGreen
+
+- type: loadoutGroup
+  id: CMUDetectiveGlassesAU14
+  name: cmu-loadout-group-detective-glasses
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - SunglassesRMC
+  - GlassesPrescriptionRMC
+  - CMUDetectiveRMCSunglassesBig
+  - CMUDetectiveAU14GlassesPersonalOrange
+  - AviatorsRMC
+  - CMUDetectiveRMCGlassesTriMaxYellow
+  - CMUDetectiveRMCGlassesTriMaxBlack
+  - CMUDetectiveRMCGlassesTriMaxBronze
+  - CMUDetectiveAU14GlassesBiMexOrange
+
+- type: loadoutGroup
+  id: CMUDetectiveSatchelAU14
+  name: cmu-loadout-group-detective-satchel
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - MarineLeatherSatchel
+  - SlingSatchelBlackAU14
+  - SlingSatchelBlueAU14
+
+- type: roleLoadout
+  id: JobAU14JobCivilianCMBDetective
+  points: 7
+  groups:
+  - CMUDetectiveUniformAU14
+  - CMUDetectiveTieAU14
+  - CMUDetectiveCoatAU14
+  - CMUDetectiveHatAU14
+  - CMUDetectiveGlassesAU14
+  - CMUDetectiveSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC

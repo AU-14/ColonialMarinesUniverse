@@ -86,6 +86,8 @@
         amount: 5
       - id: CMULACNSatchelEngineer
         amount: 5
+      - id: RMCBackpackAmmo
+        amount: 4
     - name: Belts
       entries:
       - id: CMULACNBeltStandard
@@ -195,6 +197,8 @@
         amount: 60
       - id: CMUBoxMRELACN
         amount: 10
+      - id: CMCanteen
+        amount: 60
     - name: Medical Supplies
       entries:
       - id: AU14PouchIFAKFill
@@ -497,29 +501,11 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
     sections:
-    - name: Fatigues
-      choices: { CMUPlatoonAirCrewFatigues: 1 }
-      entries:
-      - id: AU14LACNPilotJumpsuit
     - name: Body Armor
       choices: { CMUPlatoonAirCrewVest: 1 }
       entries:
       - id: AU14LACNICPS2
       - id: CMULACNFlightVest
-    - name: Footwear
-      choices: { CMUPlatoonAirCrewFootwear: 1 }
-      entries:
-      - id: AU14LACNBootsFilled
-    - name: Gloves
-      choices: { CMUPlatoonAirCrewGloves: 1 }
-      entries:
-      - id: AU14LACNGloves
-    - name: Headgear
-      choices: { CMUPlatoonAirCrewHeadgear: 1 }
-      entries:
-      - id: CMULACNHelmetDropshipCrew
-      - id: AU14LACNAirCrewHelmet
-      - id: CMULACNHelmetGunshipCrew
     - name: Helmet Garb
       choices: { CMUPlatoonAirCrewHelmetGarb: 1 }
       entries:
@@ -707,7 +693,7 @@
         amount: 5
     - name: Footwear
       entries:
-      - id: AU14LACNBootsFilled
+      - id: CMULACNBootsWhiteFilled
         amount: 5
     - name: Headgear
       entries:
@@ -863,6 +849,11 @@
     - AU14JobGOVFORSquadSergeantUPP
     - AU14JobGOVFORSquadSergeantWYPMC
     sections:
+    - name: cmu-vendor-section-sl-scopes
+      choices: { CMUSquadLeaderScope: 1 }
+      entries:
+      - id: RMCAttachmentS42xTelescopicMiniscope
+      - id: CMUAttachmentNightVisionScope
     - name: Headgear
       choices: { CMHat: 2 }
       entries:
@@ -968,8 +959,9 @@
     Standard issue across the frontier where threats can appear without warning.
     Engineered to arm personnel in seconds following cryogenic hypersleep or emergency mobilization.
 
-    For immediate combat readiness: select a primary weapon kit and a sidearm.
+    For immediate combat readiness: select a primary weapon and a sidearm.
   components:
+  - type: CMUVendGunsOnSafety
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
@@ -979,26 +971,41 @@
     - name: Weapons
       choices: { CMUPrimaryWeapon: 1 }
       entries:
-      - id: AU14KitWeaponKramer
-      - id: CMUKitWeaponKramerKarbine
+      - id: AU14WeaponRifleKramerAR
+      - id: CMUWeaponRifleKramerKarbine
     - name: Rifle Ammunition
       entries:
       - id: AU14WeaponRifleKramerMagazineStandard
-        amount: 60
+        amount: 120
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
       entries:
-      - id: AU14KitWeaponTPR23B
+      - id: AU14WeaponPistolTPR23BEmpty
     - name: Handgun Ammunition
       entries:
       - id: CMMagazinePistolM1984
-        amount: 60
-    - name: Attachments
+        amount: 120
+    - name: Unrestricted Attachments
+      entries:
+      - id: RMCAttachmentRailFlashlight
+        maxPerUser: 1
+      - id: AU14AttachmentTwoPointSling
+        maxPerUser: 1
+    - name: Restricted Attachments
       choices: { CMUAttachmentsVendor: 1 }
       entries:
-      - id: AU14AttachmentTwoPointSling
       - id: CMULACNAttachmentKramerSmartScope
-      - id: CMULACNAttachmentUnderbarrelGrenadeLauncher
+    - name: Kramer Stocks
+      choices: { CMUKramerStocks: 1 }
+      entries:
+      - id: CMULACNAttachmentKramerStock
+      - id: CMULACNAttachmentKarbineStock
+    - name: Special Ammunition
+      choices: { CMUSpecialAmmo: 2 }
+      entries:
+      - id: AU14WeaponRifleKramerMagazineAP
+      - id: RMCMagazinePistolM1984AP
+      - id: RMCMagazinePistolM1984HP
 
 - type: entity
   parent: AU14SpecVend
@@ -1011,6 +1018,7 @@
 
     Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
   components:
+  - type: CMUVendGunsOnSafety
   - type: CMAutomatedVendor
     sections:
     - name: Weapons Specialist Sets
@@ -1088,7 +1096,7 @@
     - name: Footwear
       choices: { AU14FootWear: 1 }
       entries:
-      - id: AU14LACNBootsFilled
+      - id: CMULACNBootsWhiteFilled
     - name: Hat
       choices: { CMHat: 1 }
       entries:
@@ -1126,6 +1134,7 @@
   name: LACN automated requisitions vendor
   description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
   components:
+  - type: CMUVendGunsOnSafety
   - type: CMURequisitionsVendor
   - type: AccessReader
     access: [ ["AU14AccessGovforReq"], ["AU14AccessOpforReq"] ]
@@ -1169,6 +1178,8 @@
         amount: 200
       - id: AU14WeaponRifleKramerMagazineAP
         amount: 15
+      - id: CMUWeaponRifleKramerMagazineHP
+        amount: 5
       - id: RMCBoxShotgunBuckshot
         amount: 20
       - id: RMCBoxShotgunFlechette
@@ -1235,10 +1246,6 @@
         amount: 2
       - id: CMUPacketGrenadeElectroshockFilled
         amount: 2
-      - id: RMCBoxClaymoreMineFilled
-        amount: 3
-      - id: AU14BoxClaymoreMineIncendiaryFilled
-        amount: 1
       - id: AU14PacketGrenadeTearGasFilled
         amount: 2
       - id: AU14PacketGrenadeTearGasFilledAirburst
@@ -1263,8 +1270,18 @@
         amount: 12
       - id: AU14Bangalore
         amount: 2
+    - name: Mines
+      entries:
+      - id: RMCBoxClaymoreMineFilled
+        amount: 3
+      - id: AU14BoxClaymoreMineIncendiaryFilled
+        amount: 1
+      - id: CMUExplosiveAntitankMineM19
+        amount: 2
     - name: Rail Attachments
       entries:
+      - id: CMUAttachmentNightVisionScope
+        amount: 3
       - id: RMCAttachmentTwoPointSling
         amount: 50
       - id: RMCAttachmentRailFlashlight
@@ -1488,6 +1505,7 @@
   name: LACN requisitions staff equipment rack
   description: An automated rack hooked up to a small storage of Latin American Colonial Navy requisitions and logistics gear.
   components:
+  - type: CMUVendGunsOnSafety
   - type: Sprite
     sprite: CMU14/Structures/Vendors/assortedequipment.rsi
   - type: CMAutomatedVendor
@@ -1517,12 +1535,10 @@
       choices: { CMULACNReqFootwear: 1 }
       entries:
       - id: CMULACNBootsWhiteFilled
-      - id: AU14LACNBootsFilled
     - name: Gloves
       choices: { CMULACNReqGloves: 1 }
       entries:
       - id: CMULACNGlovesWhite
-      - id: AU14LACNGloves
     - name: Backpack
       choices: { CMULACNReqBackpack: 1 }
       entries:
@@ -1577,7 +1593,7 @@
     - name: Gloves
       choices: { CMHands: 1 }
       entries:
-      - id: AU14LACNGloves
+      - id: CMULACNGlovesWhite
     - name: Uniform
       choices: { CMUEngiStaffUniform: 2 }
       entries:
@@ -1653,10 +1669,10 @@
     - name: Tool Storage
       choices: { CMUCTToolStorage: 1 }
       entries:
-      - id: AU14BeltUtilityCombatFilled
+      - id: CMULACNBeltUtilityCombatFilled
         name: LACN utility tools rig (filled)
         recommended: true
-      - id: RMCBeltConstruction
+      - id: CMULACNBeltConstruction
         name: LACN construction rig
       - id: AU14PouchToolsFilledComtech
         name: tactical tools pouch (filled)
@@ -1742,6 +1758,8 @@
         points: 5
       - id: AU14ExplosiveClaymoreMineIncendiary
         points: 6
+      - id: CMUExplosiveAntitankMineM19
+        points: 10
       - id: RMCExplosivePlastic
         points: 4
       - id: AU14Bangalore
@@ -1789,3 +1807,92 @@
       entries:
       - id: CMULACNHelmetGarbMic
       - id: CMULACNHelmetGarbComms
+
+- type: entity
+  parent: AU14VehicleCrewmanVendorUSCM
+  id: AU14VehicleCrewmanVendorLACN
+  name: vehicle crewman vendor
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of support gear for vehicle crew.
+    Engineered to get vehicle crewmen fight-ready in seconds after cryogenic hypersleep or scramble orders.
+    The console shows many different options available, though they are all marked as temporarily out of stock.
+
+    Vehicle crew protocol: grab the essential maintenance jack.
+  components:
+  - type: AccessReader
+    access: [[ "AU14AccessGovforVehicleCrew" ], [ "AU14AccessOpforVehicleCrew" ]]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORVehicleCommander
+    - AU14JobOPFORVehicleCommander
+    - AU14JobGOVFORVehicleCrewman
+    - AU14JobOPFORVehicleCrewman
+    sections:
+    - name: Essential Equipment
+      takeAll: CMUAREssentialEquipment
+      entries:
+      - id: RMCLaserDesignator
+      - id: AU14MaintenanceJack
+      - id: RMCWelderPVE
+      - id: RMCPouchTools
+    - name: Gloves
+      choices: { CMHands: 1 }
+      entries:
+      - id: AU14LACNGloves
+    - name: Uniform
+      choices: { CMUEngiStaffUniform: 2 }
+      entries:
+      - id: CMULACNEngineerJumpsuit
+    - name: Tool Storage
+      choices: { CMUCTToolStorage: 2 }
+      entries:
+      - id: CMULACNBeltToolbeltFilled
+        name: LACN toolbelt rig (filled)
+      - id: AU14PouchToolsFilledComtech
+        name: tactical tools pouch (filled)
+    - name: Engineering Storage Bag
+      choices: { CMUPouchesCTBag: 1 }
+      entries:
+      - id: CMULACNSatchelEngineer
+        recommended: true
+      - id: CMULACNBackpackEngineer
+    - name: Engineering Storage Pouch
+      choices: { CMUPouchesCT: 2 }
+      entries:
+      - id: RMCPouchConstruction
+        recommended: true
+      - id: RMCPouchEngineerKit
+      - id: RMCPouchElectronics
+      - id: RMCPouchGeneralLarge
+    - name: Field Gear
+      choices: { CMUFieldEquipmentEngi: 2 }
+      entries:
+      - id: CMULACNEngineerFieldUniform
+      - id: CMULACNLogisticsVest
+    - name: Engineering Supplies
+      entries:
+      - id: RMCCableCoil
+        points: 1
+      - id: AU14MaintenanceJack
+        points: 2
+      - id: RMCES11MobileFuelCanister
+        points: 4
+      - id: RMCEngineerKit
+        points: 2
+    - name: Explosives
+      entries:
+      - id: RMCExplosivePlastic
+        points: 4
+      - id: AU14Bangalore
+        points: 6
+        recommended: true
+      - id: RMCExplosiveBreachingCharge
+        points: 5
+    - name: Utilities
+      entries:
+      - id: RMCOuterClothingExternalWebbingBlack
+        points: 5
+      - id: RMCOuterClothingExternalWebbing
+        points: 5

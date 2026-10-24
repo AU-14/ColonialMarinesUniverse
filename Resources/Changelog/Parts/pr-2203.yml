@@ -1,0 +1,8 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Xenos can devolve for a full point refund within 15 seconds of evolving
+    if they are on weeds and at full health.
+  type: Tweak
+time: '2026-10-18T03:36:05.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2203
