@@ -195,7 +195,7 @@
       types:
         Slash: 20
         Blunt: 20
-        Pierce: 20
+        Piercing: 20
     bloodloss: 100
   - type: CMArmor
     explosionArmor: 20
