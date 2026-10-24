@@ -71,7 +71,6 @@
       icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: soak }
       components:
       - type: XenoBulwarkOfTheHive
-
     - action: CMUActionXenoGambleFruitRain
       icon: { sprite: _RMC14/Structures/Xenos/xeno_fruit.rsi, state: fruit_greater_item }
 
@@ -106,27 +105,6 @@
         auraColor: "#522020"
         damageMult: 1
         speed: 1.2
-    - action: CMUActionYautjaAbominationRush
-      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: charge }
-      components:
-      - type: YautjaAbomination
-        kills: 2
-        announced: true
-        awaken: false
-    - action: CMUActionYautjaAbominationFrenzy
-      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: rav_eviscerate }
-      components:
-      - type: YautjaAbomination
-        kills: 2
-        announced: true
-        awaken: false
-    - action: CMUActionYautjaAbominationRoar
-      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: screech }
-      components:
-      - type: YautjaAbomination
-        kills: 2
-        announced: true
-        awaken: false
     - action: CMUActionXenoGambleExplode
       icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: gardener_plant }
     - action: ActionXenoRend
@@ -138,33 +116,6 @@
             Blunt: 8.33
             Slash: 8.33
             Piercing: 8.34
-    - action: ActionXenoEviscerate
-      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: rav_eviscerate }
-      components:
-      - type: XenoEviscerate
-        damageAtRageLevels:
-        - types:
-            Blunt: 1.66
-            Slash: 1.67
-            Piercing: 1.67
-        - types:
-            Blunt: 3.33
-            Slash: 3.33
-            Piercing: 3.34
-        - types:
-            Blunt: 8.33
-            Slash: 8.33
-            Piercing: 8.34
-        - types:
-            Blunt: 15
-            Slash: 15
-            Piercing: 15
-        - types:
-            Blunt: 28.33
-            Slash: 28.33
-            Piercing: 28.34
-        rangeAtRageLevels: [1.5, 1.5, 1.5, 2.5, 2.5]
-        windupReductionAtRageLevels: [0, 0.2, 0.4, 0.6, 1]
     - action: ActionXenoDirectionalStomp
       icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: stomp }
       components:
@@ -188,13 +139,6 @@
       icon: { sprite: _CM13/Actions/xeno_strain_actions.rsi, state: bulwark_reflective_shield }
       components:
       - type: XenoBulwark
-    - action: CMUActionYautjaAbominationSmash
-      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: stomp }
-      components:
-      - type: YautjaAbomination
-        kills: 2
-        announced: true
-        awaken: false
     - action: CMUActionXenoPsychicBlast
       icon: { sprite: CMU14/Actions/Xeno/warlock.rsi, state: psy_blast }
       components:
@@ -218,9 +162,12 @@
       icon: { sprite: CMU14/Actions/actions_pathogen.rsi, state: screech }
       components:
       - type: CMUXenoBlightWave
-
     - action: ActionXenoDigTunnel
       icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: build_tunnel }
+    - action: ActionXenoBombard
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: bombard }
+      components:
+      - type: XenoBombard
 
   - name: rare
     weight: 25
@@ -445,7 +392,6 @@
       icon: { sprite: CMU14/Actions/actions_pathogen.rsi, state: inject_walker }
       components:
       - type: CMUXenoMycotoxinInject
-
     - action: ActionXenoLunge
       icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: lunge }
       components:
