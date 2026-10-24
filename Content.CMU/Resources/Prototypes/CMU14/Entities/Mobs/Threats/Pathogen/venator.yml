@@ -170,7 +170,7 @@
       types:
         Slash: 15
   - type: XenoClawBloodloss
-    bloodloss: 6
+    bloodloss: 100
   - type: XenoScissorCut
     damage:
       types:
