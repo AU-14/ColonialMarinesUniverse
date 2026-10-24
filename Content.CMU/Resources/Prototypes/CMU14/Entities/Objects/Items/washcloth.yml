@@ -1,0 +1,54 @@
+- type: entity
+  parent: BaseItem
+  id: CMUFieldWashcloth
+  name: field washcloth
+  description: A damp disposable cloth that cleans blood and alien residue from skin and worn clothing in one wipe. Two uses.
+  components:
+  - type: Sprite
+    scale: "0.54,0.54"
+    sprite: CMU14/Items/field_washcloth.rsi
+    layers:
+    - state: clean
+      map: [ "enum.CMUWashclothVisuals.Layer" ]
+  - type: Item
+    size: Tiny
+  - type: CMUWashcloth
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUWashclothVisuals.Used:
+        enum.CMUWashclothVisuals.Layer:
+          True: { state: used }
+          False: { state: clean }
+
+- type: entity
+  parent: BaseItem
+  id: CMUFieldWashclothPacket
+  name: field washcloth packet
+  description: A sealed cleansing cloth. Open before use.
+  components:
+  - type: Sprite
+    scale: "0.54,0.54"
+    sprite: CMU14/Items/field_washcloth.rsi
+    state: wrapped
+  - type: Item
+    size: Tiny
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUFieldWashclothWrapper
+    - id: CMUFieldWashcloth
+    sound:
+      path: /Audio/Effects/unwrap.ogg
+
+- type: entity
+  parent: BaseItem
+  id: CMUFieldWashclothWrapper
+  name: empty washcloth wrapper
+  description: A torn, empty cleansing-cloth wrapper.
+  components:
+  - type: Sprite
+    scale: "0.54,0.54"
+    sprite: CMU14/Items/field_washcloth.rsi
+    state: wrapper
+  - type: Item
+    size: Tiny

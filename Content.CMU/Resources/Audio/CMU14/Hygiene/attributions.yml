@@ -1,0 +1,9 @@
+- files: ["wash_loop.ogg"]
+  license: "CC0-1.0"
+  copyright: "Washing_Machine_loop.wav by BeroundSound. Converted from Freesound preview to mono Ogg; filtered for in-game ambience."
+  source: "https://freesound.org/people/BeroundSound/sounds/693644/"
+
+- files: ["soap_scrub.ogg"]
+  license: "CC0-1.0"
+  copyright: "Procedurally synthesized wet rubbing and small bubble sounds for CMU14."
+  source: "https://github.com/AU-14/ColonialMarinesUniverse"

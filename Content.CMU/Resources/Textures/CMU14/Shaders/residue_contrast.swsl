@@ -1,0 +1,5 @@
+// Keep the original directional masks; strengthen their translucent blood pixels.
+void fragment() {
+    highp vec4 stain = zTexture(UV);
+    COLOR = vec4(stain.rgb, min(stain.a * 2.2, 1.0));
+}

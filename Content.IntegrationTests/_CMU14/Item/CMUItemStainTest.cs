@@ -444,7 +444,11 @@ public sealed class CMUItemStainTest
             {
                 Assert.That(wornLayer.RsiPath, Is.EqualTo("CMU14/Effects/item_stains.rsi"));
                 Assert.That(wornLayer.State, Is.EqualTo("m10helmet_blood"));
-                Assert.That(wornLayer.Color, Is.EqualTo(Color.FromHex("#800000")));
+                // CMU14: stronger rendering is intentional; the stored blood color stays unchanged.
+                Assert.That(wornLayer.Color.Value.R, Is.GreaterThan(Color.FromHex("#800000").R));
+                Assert.That(wornLayer.Color.Value.G, Is.Zero);
+                Assert.That(wornLayer.Color.Value.B, Is.Zero);
+                Assert.That(wornLayer.Shader, Is.EqualTo("CMUResidueContrast"));
             });
         });
 

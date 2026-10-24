@@ -1,5 +1,6 @@
 using System;
 using Content.Shared.CMU14.Item.Stain;
+using Content.Shared.CMU14.Hygiene;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared._RMC14.Chemistry.Reagent;
@@ -22,6 +23,7 @@ public sealed partial class CMUItemStainDamageSystem : EntitySystem
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly Color OilColor = Color.FromHex("#030303");
 
+    [Dependency] private CMUResidueSystem _residue = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private BloodstreamSystem _bloodstream = default!;
@@ -62,6 +64,9 @@ public sealed partial class CMUItemStainDamageSystem : EntitySystem
             kind = CMUItemStainKind.Blood;
             color = blood.SubstanceColor;
         }
+
+        if (kind == CMUItemStainKind.Blood)
+            _residue.Stain(args.Body, color);
 
         var stainChance = Math.Clamp((25f + 2f * brute.Float()) / 100f, 0f, 1f);
         if (!_random.Prob(stainChance))

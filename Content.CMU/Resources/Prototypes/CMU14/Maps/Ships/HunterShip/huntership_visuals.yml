@@ -11278,19 +11278,18 @@
     anchored: true
   - type: Sprite
     sprite: CMU14/HunterShip/obj/structures/props/watercloset.rsi
-    drawdepth: SmallObjects
+    drawdepth: OverMobs
     noRot: true
     enableOverrideDir: true
     layers:
     - state: "shower"
       color: "#c1a384"
+    - state: water
+      visible: false
+      map: [ "enum.CMUHygieneVisuals.Water" ]
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/props/watercloset.rsi
     state: "shower"
-  - type: RemoveComponents
-    components:
-    - type: GenericVisualizer
-      visuals: {}
   - type: Clickable
   - type: InteractionOutline
   - type: Fixtures

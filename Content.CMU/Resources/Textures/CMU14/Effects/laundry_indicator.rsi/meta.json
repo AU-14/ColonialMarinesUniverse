@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "license": "CC0-1.0",
+  "copyright": "Original geometric indicator overlays created for CMU14 hygiene. Vector sources in ../HygieneSources/.",
+  "size": {
+    "x": 48,
+    "y": 48
+  },
+  "states": [
+    {
+      "name": "single",
+      "directions": 4
+    },
+    {
+      "name": "double",
+      "directions": 4
+    }
+  ]
+}

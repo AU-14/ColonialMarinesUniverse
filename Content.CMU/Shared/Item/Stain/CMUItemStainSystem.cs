@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Hygiene;
 using Content.Shared.Examine;
 using Content.Shared.Inventory;
 using Content.Shared.Item;
@@ -19,6 +20,7 @@ public sealed partial class CMUItemStainSystem : EntitySystem
 
     private const float DefaultCleaningDistance = 1.5f;
 
+    [Dependency] private CMUResidueSystem _residue = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private INetManager _net = default!;
 
@@ -126,6 +128,8 @@ public sealed partial class CMUItemStainSystem : EntitySystem
     /// </summary>
     public bool StainExposedEquipment(EntityUid wearer, CMUItemStainKind kind, Color color, EntityUid? source = null)
     {
+        if (kind == CMUItemStainKind.Blood)
+            _residue.Stain(wearer, color);
         var changed = TryStainOuterBody(wearer, kind, color, source);
         changed |= TryStainSlot(wearer, HeadSlot, kind, color, source);
         changed |= TryStainSlot(wearer, MaskSlot, kind, color, source);

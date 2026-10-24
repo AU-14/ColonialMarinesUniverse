@@ -1,7 +1,7 @@
-- type: entity
+- type: entity # CMU14: functional hygiene appliance
   id: CMShower
   name: shower
-  suffix: Empty
+  # suffix: Empty # CMU14: now operational
   description: The HS-451. Installed in the 2050s by the WeYa Hygiene Division.
   placement:
     mode: SnapgridCenter
@@ -12,12 +12,23 @@
     bodyType: Static
     canCollide: false
   - type: Sprite
+    drawdepth: OverMobs # CMU14: keep running water visible over the bather
     sprite: _RMC14/Structures/Furniture/shower.rsi
     layers:
     - state: shower
+    - sprite: CMU14/Effects/hygiene_water.rsi
+      state: water
+      visible: false
+      map: [ "enum.CMUHygieneVisuals.Water" ]
   - type: Clickable
   - type: InteractionOutline
   - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUHygieneVisuals.Running:
+        enum.CMUHygieneVisuals.Water:
+          True: { visible: true }
+          False: { visible: false }
   - type: Damageable
   - type: Injurable
     damageContainer: Inorganic
@@ -38,12 +49,6 @@
       - !type:PlaySoundBehavior
         sound:
           collection: MetalBreak
-  - type: InteractionPopup
-    interactDelay: 3
-    successChance: 1
-    interactSuccessSound:
-      path: /Audio/Ambience/Objects/drain.ogg
-      params:
-        variation: 0.250
-        volume: -5
+  - type: CMUShower
+  - type: CMUShowerControls # CMU14: networked right-click on/off controls
   - type: RMCMesonsNonviewable

@@ -1,0 +1,23 @@
+{
+    "version": 1,
+    "license": "CC0-1.0",
+    "copyright": "New washcloth sprites generated with OpenAI image generation, adapted to 32x32 indexed-color icons. Reference: CMU spriting compendium; no original gauze pixels copied.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "wrapped"
+        },
+        {
+            "name": "clean"
+        },
+        {
+            "name": "used"
+        },
+        {
+            "name": "wrapper"
+        }
+    ]
+}

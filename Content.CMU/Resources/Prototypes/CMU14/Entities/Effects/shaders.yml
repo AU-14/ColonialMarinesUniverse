@@ -9,3 +9,9 @@
   path: "/Textures/CMU14/Shaders/item_stain.swsl"
   params:
     stainColor: 0.5, 0.0, 0.0, 1.0
+    opacityBoost: 1.0
+
+- type: shader
+  id: CMUResidueContrast
+  kind: source
+  path: "/Textures/CMU14/Shaders/residue_contrast.swsl"
