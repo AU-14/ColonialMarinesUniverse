@@ -21,10 +21,7 @@
         - FullTileMask
         layer:
         - AirlockLayer
-  # CMU14: engine airtight covers only the tile the door is anchored on; seal the second tile of the 2-tile fixture
-  - type: CMUWideAirtight
-    offsets:
-    - 0,1
+  # CMU14: Removed the obsolete wide-airtight seal companion.
 
 - type: entity
   abstract: true

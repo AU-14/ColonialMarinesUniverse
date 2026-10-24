@@ -18,6 +18,8 @@ public sealed partial class CMURoundStatisticsEui : BaseEui
 
     private readonly ISawmill _sawmill = Logger.GetSawmill("cmu.round_statistics");
     private CMURoundStatisticsDashboard _dashboard = EmptyDashboard();
+    private CMURoundStatisticsPeriod _period = CMURoundStatisticsPeriod.OneMonth;
+    private int _loadVersion;
 
     public CMURoundStatisticsEui()
     {
@@ -33,7 +35,7 @@ public sealed partial class CMURoundStatisticsEui : BaseEui
 
     public override EuiStateBase GetNewState()
     {
-        return new CMURoundStatisticsEuiState(_dashboard);
+        return new CMURoundStatisticsEuiState(_dashboard, _period);
     }
 
     public override void HandleMessage(EuiMessageBase msg)
@@ -42,15 +44,35 @@ public sealed partial class CMURoundStatisticsEui : BaseEui
 
         if (msg is CMURoundStatisticsRefreshMsg)
             LoadFromDb();
+        else if (msg is CMURoundStatisticsPeriodMsg period &&
+                 Enum.IsDefined(period.Period) && period.Period != _period)
+        {
+            _period = period.Period;
+            LoadFromDb();
+        }
     }
 
     private async void LoadFromDb()
     {
+        var version = ++_loadVersion;
+        var period = _period;
+        var now = DateTime.UtcNow;
+        var from = period switch
+        {
+            CMURoundStatisticsPeriod.OneWeek => now.AddDays(-7),
+            CMURoundStatisticsPeriod.TwoWeeks => now.AddDays(-14),
+            CMURoundStatisticsPeriod.OneMonth => now.AddMonths(-1),
+            CMURoundStatisticsPeriod.ThreeMonths => now.AddMonths(-3),
+            CMURoundStatisticsPeriod.SixMonths => now.AddMonths(-6),
+            _ => now.AddYears(-1),
+        };
         try
         {
-            var dashboard = await _db.GetCMURoundStatisticsDashboard(RecentRounds);
+            var dashboard = await _db.GetCMURoundStatisticsDashboard(RecentRounds, from);
             _task.RunOnMainThread(() =>
             {
+                if (version != _loadVersion)
+                    return;
                 _dashboard = dashboard;
                 StateDirty();
             });

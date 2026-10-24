@@ -141549,33 +141549,35 @@ entities:
     - type: Transform
       parent: 1
       pos: 102.5,0.5
-- proto: CMUBosenmoriExact0a3113f0f8b1878a
+- proto: RMCDrill
   entities:
   - uid: 2794
     components:
     - type: Transform
       parent: 1
       pos: -8.5,-14.5
-    - type: Fixtures
-      fixtures: {}
+    - type: Sprite
+      offset: 0,1
   - uid: 14142
     components:
     - type: Transform
       parent: 1
       pos: 4.5,-23.5
-    - type: Fixtures
-      fixtures: {}
+    - type: Sprite
+      offset: 0,1
   - uid: 14241
     components:
     - type: Transform
       parent: 1
       pos: -17.5,-21.5
-    - type: Fixtures
-      fixtures: {}
-- proto: CMUBosenmoriExactb3bdea832f1385d1
+    - type: Sprite
+      offset: 0,1
+- proto: FoodPacketMRETrash
   entities:
   - uid: 14454
     components:
+    - type: Sprite
+      offset: 0.40625,-0.03125
     - type: Transform
       parent: 1
       pos: 18.322683,-34.59748

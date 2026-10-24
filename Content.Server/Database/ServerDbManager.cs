@@ -255,8 +255,10 @@ namespace Content.Server.Database
         Task<Round> GetRound(int id);
         Task AddRoundPlayers(int id, params Guid[] playerIds);
         Task UpsertCMURoundOutcome(CMURoundOutcomeRecord record);
+        // CMU14: time-filtered round outcomes.
         Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboard(
             int recentRounds,
+            DateTime from,
             CancellationToken cancel = default);
 
         // CMU14 method
@@ -1023,12 +1025,14 @@ namespace Content.Server.Database
             return RunDbCommand(() => _db.UpsertCMURoundOutcome(record));
         }
 
+        // CMU14: time-filtered round outcomes.
         public Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboard(
             int recentRounds,
+            DateTime from,
             CancellationToken cancel = default)
         {
             DbReadOpsMetric.Inc();
-            return RunDbCommand(() => _db.GetCMURoundStatisticsDashboard(recentRounds, cancel));
+            return RunDbCommand(() => _db.GetCMURoundStatisticsDashboard(recentRounds, from, cancel));
         }
 
         // CMU14 method

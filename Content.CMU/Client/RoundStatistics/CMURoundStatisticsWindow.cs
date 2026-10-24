@@ -36,8 +36,10 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
     private readonly BoxContainer _recent;
     private readonly Label _summary;
     private readonly Button _refresh;
+    private readonly OptionButton _period;
 
     public event Action? OnRefresh;
+    public event Action<CMURoundStatisticsPeriod>? OnPeriodChanged;
 
     public CMURoundStatisticsWindow()
     {
@@ -86,6 +88,27 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         };
         headerText.AddChild(_summary);
         header.AddChild(headerText);
+
+        _period = new OptionButton { MinSize = new Vector2(130, 34) };
+        _period.AddItem(Loc.GetString("cmu-roundstats-one-week"), (int) CMURoundStatisticsPeriod.OneWeek);
+        _period.AddItem(Loc.GetString("cmu-roundstats-two-weeks"), (int) CMURoundStatisticsPeriod.TwoWeeks);
+        _period.AddItem(Loc.GetString("cmu-roundstats-one-month"), (int) CMURoundStatisticsPeriod.OneMonth);
+        _period.AddItem(Loc.GetString("cmu-roundstats-three-months"), (int) CMURoundStatisticsPeriod.ThreeMonths);
+        _period.AddItem(Loc.GetString("cmu-roundstats-six-months"), (int) CMURoundStatisticsPeriod.SixMonths);
+        _period.AddItem(Loc.GetString("cmu-roundstats-one-year"), (int) CMURoundStatisticsPeriod.OneYear);
+        _period.SelectId((int) CMURoundStatisticsPeriod.OneMonth);
+        _period.OnItemSelected += args =>
+        {
+            _period.SelectId(args.Id);
+            OnPeriodChanged?.Invoke((CMURoundStatisticsPeriod) args.Id);
+        };
+        header.AddChild(new Label
+        {
+            Text = Loc.GetString("cmu-roundstats-period"),
+            FontColorOverride = Muted,
+            VerticalAlignment = VAlignment.Center,
+        });
+        header.AddChild(_period);
 
         _refresh = new Button
         {
@@ -154,8 +177,9 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         CrtLobbyTheme.ApplyWindow(this, useCrtTypography: true);
     }
 
-    public void UpdateDashboard(CMURoundStatisticsDashboard dashboard)
+    public void UpdateDashboard(CMURoundStatisticsDashboard dashboard, CMURoundStatisticsPeriod period)
     {
+        _period.SelectId((int) period);
         var totalRounds = dashboard.Modes.Sum(mode => mode.Total);
         var decidedRounds = dashboard.Modes.Sum(mode => mode.DecidedTotal);
         _summary.Text = $"{totalRounds} tracked endings, {decidedRounds} decided wins";

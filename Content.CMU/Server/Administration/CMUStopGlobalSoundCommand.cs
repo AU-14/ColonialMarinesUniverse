@@ -8,7 +8,7 @@ using Robust.Shared.Player;
 
 namespace Content.Server.CMU14.Administration;
 
-[AdminCommand(AdminFlags.Fun)]
+[AdminCommand(AdminFlags.Moderator)]
 public sealed class CMUStopGlobalSoundCommand : IConsoleCommand
 {
     [Dependency] private readonly IEntityManager _entities = default!;

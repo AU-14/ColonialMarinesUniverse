@@ -16,6 +16,7 @@ public sealed class CMURoundStatisticsEui : BaseEui
 
         _window = new CMURoundStatisticsWindow();
         _window.OnRefresh += OnRefresh;
+        _window.OnPeriodChanged += OnPeriodChanged;
         _window.OpenCentered();
     }
 
@@ -24,7 +25,10 @@ public sealed class CMURoundStatisticsEui : BaseEui
         base.Closed();
 
         if (_window != null)
+        {
             _window.OnRefresh -= OnRefresh;
+            _window.OnPeriodChanged -= OnPeriodChanged;
+        }
 
         _window?.Close();
         _window = null;
@@ -35,11 +39,16 @@ public sealed class CMURoundStatisticsEui : BaseEui
         base.HandleState(state);
 
         if (state is CMURoundStatisticsEuiState s)
-            _window?.UpdateDashboard(s.Dashboard);
+            _window?.UpdateDashboard(s.Dashboard, s.Period);
     }
 
     private void OnRefresh()
     {
         SendMessage(new CMURoundStatisticsRefreshMsg());
+    }
+
+    private void OnPeriodChanged(CMURoundStatisticsPeriod period)
+    {
+        SendMessage(new CMURoundStatisticsPeriodMsg(period));
     }
 }

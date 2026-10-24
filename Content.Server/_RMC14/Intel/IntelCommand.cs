@@ -7,6 +7,7 @@ using Robust.Shared.Toolshed;
 namespace Content.Server._RMC14.Intel;
 
 [ToolshedCommand, AdminCommand(AdminFlags.VarEdit)]
+[AdminCommand(AdminFlags.Moderator)] // CMU14: allow moderators to use intel commands.
 public sealed class IntelCommand : ToolshedCommand
 {
     [CommandImplementation("addpoints")]

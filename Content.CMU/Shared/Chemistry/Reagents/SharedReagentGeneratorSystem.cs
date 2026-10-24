@@ -364,7 +364,12 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         ChemicalGenClassesList.Add("TAU", []);
         foreach (var chem in chems)
         {
-            if (chem.Value.Flags.HasFlag(ReagentFlags.NoGeneration))
+            // Contract recipes and their hints use these pools. Keep water and sugar
+            // available while excluding other food and drink reagents.
+            if (chem.Value.Flags.HasFlag(ReagentFlags.NoGeneration) ||
+                ((chem.Value.Group is "Foods" or "Drinks") &&
+                 chem.Value.ID != "Water" &&
+                 chem.Value.ID != "RMCSugar"))
                 continue;
             switch (chem.Value.Class)
             {

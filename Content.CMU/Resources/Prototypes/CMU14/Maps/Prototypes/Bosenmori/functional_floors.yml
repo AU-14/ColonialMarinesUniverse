@@ -1,0 +1,80 @@
+# CMU14: Bosenmori's unique floor art has no equivalent tile in the RMC catalog.
+# These named CMU tiles inherit working floor behavior and preserve map artwork.
+- type: tile
+  parent: BaseStationTile
+  id: CMUBosenmoriFloorWarningCorner
+  name: warning corner floor
+  sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/53aebc6a93e995ff7fa2.png
+
+- type: tile
+  parent: BaseStationTile
+  id: CMUBosenmoriFloorFiltrationSideWest
+  name: filtration side floor, west
+  sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/dd81f7103f95dc8b8ff0.png
+
+- type: tile
+  parent: BaseStationTile
+  id: CMUBosenmoriFloorCatwalkPlating
+  name: catwalk plating
+  sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/03e5c9b49774d729434c.png
+
+- type: tile
+  parent: BaseStationTile
+  id: CMUBosenmoriFloorWarningYellow2
+  name: yellow warning floor, second segment
+  sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/eaf632582eb2c3993e75.png
+
+- type: tile
+  parent: BaseStationTile
+  id: CMUBosenmoriFloorAICatwalkPlating
+  name: AI core catwalk plating
+  sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/9728ccc954f6e85b2651.png
+
+- type: tile
+  parent: BaseStationTile
+  id: CMUBosenmoriFloorWarningYellow1
+  name: yellow warning floor, first segment
+  sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/6f6acb48ada8ab7b0c2e.png
+
+- type: tile
+  parent: BaseStationTile
+  id: CMUBosenmoriFloorContainmentCorner4
+  name: containment corner four
+  sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/bb98369c98c2a91a6fd9.png
+
+- type: tile
+  parent: BaseStationTile
+  id: CMUBosenmoriFloorRedYellowFull
+  name: red and yellow floor
+  sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/fea75ba6b8f840ac77f9.png
+
+- type: tile
+  parent: BaseStationTile
+  id: CMUBosenmoriFloorWarningYellow0
+  name: yellow warning floor, start
+  sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/6890e20f926fb247a89c.png
+
+- type: tile
+  parent: BaseStationTile
+  id: CMUBosenmoriFloorAICatwalkPlatingWhite
+  name: white AI core catwalk plating
+  sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/be0e97f51376a9f51d14.png
+
+- type: tile
+  parent: BaseStationTile
+  id: CMUBosenmoriFloorContainmentCorner2
+  name: containment corner two
+  sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/1e1b4410fb56cb6d0b64.png
+
+- type: tile
+  parent: BaseStationTile
+  id: CMUBosenmoriFloorContainmentCorner3
+  name: containment corner three
+  sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/76b68bb87e30c6baf8ad.png
+
+- type: tile
+  parent: FloorAsteroidTile
+  id: CMUBosenmoriFloorAsteroid
+  name: asteroid floor
+  sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/de7efa692df459a839c7.png
+  variants: 1 # CMU14: this imported tile has one 32x32 frame; its parent has four variants.

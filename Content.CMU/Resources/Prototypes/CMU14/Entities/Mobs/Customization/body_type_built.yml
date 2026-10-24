@@ -1,0 +1,31 @@
+# The Normal body is the unmodified Human torso. These markings contain only
+# the pixels changed in the user-supplied Built sprite sheets.
+- type: marking
+  id: CMUHumanBuiltFemale
+  bodyPart: Special
+  groupWhitelist: [Human]
+  sexRestriction: Female
+  forcedColoring: true
+  randomWeight: 0
+  coloring:
+    default:
+      type:
+        !type:SkinColoring
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/body_type_built.rsi
+    state: built_female
+
+- type: marking
+  id: CMUHumanBuiltMale
+  bodyPart: Special
+  groupWhitelist: [Human]
+  sexRestriction: Male
+  forcedColoring: true
+  randomWeight: 0
+  coloring:
+    default:
+      type:
+        !type:SkinColoring
+  sprites:
+  - sprite: CMU14/Mobs/Human_Customization/body_type_built.rsi
+    state: built_male

@@ -80,8 +80,8 @@
     AU14JobGOVFOROfficerIntel:
       scale: 0.04
       whenToBeginScaling: 36
-      benchmark: 1
-      maximum: 4
+      benchmark: 3
+      maximum: 6
 
 - type: jobScale
   id: DefaultInsurgencyScale

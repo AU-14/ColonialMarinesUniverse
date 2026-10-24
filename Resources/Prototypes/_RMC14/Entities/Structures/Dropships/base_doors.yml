@@ -119,11 +119,7 @@
     - 0.5,-1.5
     - 0.5,1.5
     - -0.5,1.5
-  # CMU14: engine airtight covers only the tile the door is anchored on; seal the two extra tiles of the 3-tile fixture
-  - type: CMUWideAirtight
-    offsets:
-    - 0,-1
-    - 0,1
+  # CMU14: Removed the obsolete wide-airtight seal companion.
 
 - type: entity
   parent: RMCDropshipDoorBase
@@ -152,10 +148,7 @@
     - 0.5,-0.5
     - 0.5,1.5
     - -0.5,1.5
-  # CMU14: engine airtight covers only the tile the door is anchored on; seal the second tile of the 2-tile fixture
-  - type: CMUWideAirtight
-    offsets:
-    - 0,1
+  # CMU14: Removed the obsolete wide-airtight seal companion.
 
 - type: entity
   parent: RMCDropshipDoorBase
@@ -184,7 +177,4 @@
     - 0.5,-0.5
     - 0.5,1.5
     - -0.5,1.5
-  # CMU14: engine airtight covers only the tile the door is anchored on; seal the second tile of the 2-tile fixture
-  - type: CMUWideAirtight
-    offsets:
-    - 0,1
+  # CMU14: Removed the obsolete wide-airtight seal companion.

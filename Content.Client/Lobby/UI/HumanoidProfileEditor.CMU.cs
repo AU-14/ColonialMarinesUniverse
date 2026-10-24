@@ -681,8 +681,12 @@ public sealed partial class HumanoidProfileEditor
 
     private void SetBuild(BuildType value)
     {
-        Profile = Profile?.WithBuild(value);
-        SetDirty();
+        if (Profile is null)
+            return;
+
+        Profile = Profile.WithBuild(value); // CMU14: Character Records Build controls the visible human body.
+        _markingsModel.Markings = Profile.Appearance.Markings; // CMU14
+        ReloadPreview(); // CMU14
     }
 
     private void SetHideMetaInformation(bool value)

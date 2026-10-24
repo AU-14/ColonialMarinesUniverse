@@ -86,10 +86,6 @@
         layer:
         - WallLayer
         density: 1000
-  - type: CMUWideAirtight
-    offsets:
-    - -1,0
-    - 1,0
 
 - type: entity
   parent: CMUBaseOspreyWall
@@ -720,10 +716,6 @@
         layer:
         - WallLayer
         density: 1000
-  - type: CMUWideAirtight
-    offsets:
-    - -1,0
-    - 1,0
 
 - type: entity
   id: CMUOspreyWingPort

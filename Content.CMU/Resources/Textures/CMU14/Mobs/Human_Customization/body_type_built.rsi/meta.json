@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "User-provided femalenew.png and malenew.png edits to the human torso sprites; original artwork credited in Resources/Textures/Mobs/Species/Human/parts.rsi/meta.json",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "built_female",
+      "directions": 4
+    },
+    {
+      "name": "built_male",
+      "directions": 4
+    }
+  ]
+}

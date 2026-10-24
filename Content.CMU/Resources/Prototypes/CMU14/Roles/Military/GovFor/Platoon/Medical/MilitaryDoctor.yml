@@ -55,7 +55,7 @@
   id: AU14GearGOVFORMilitaryDoctor
   equipment:
     shoes: CMBootsBlackFilled
-    ears: AU14HeadsetGovforAuxiliary
+    ears: CMUHeadsetGovforDoctor
     ears2: RMCM5CameraGear
   inhand:
     - AU14StampMO
@@ -125,7 +125,7 @@
     pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
     back: AU14SatchelMilitaryDoctor
     outerClothing: RMCLabcoat
-    ears: AU14HeadsetOpforAuxiliary
+    ears: CMUHeadsetOpforDoctor
     ears2: RMCM5CameraGear
     id: AU14IDCardOPFORDoctor
     neck: ClothingNeckStethoscope

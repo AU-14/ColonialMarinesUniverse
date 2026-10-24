@@ -119,7 +119,7 @@
   id: AU14GearGOVFOROfficerMedical
   equipment:
     id: AU14IDCardGOVFOROfficerMedical
-    ears: AU14HeadsetGovforCommand
+    ears: CMUHeadsetGovforMedicalCommand
   inhand:
     - AU14KitJOMedicalOfficerKit
 
@@ -127,7 +127,7 @@
   id: AU14GearOPFOROfficerMedical
   equipment:
     id: AU14IDCardOPFOROfficerMedical
-    ears: AU14HeadsetOpforCommand
+    ears: CMUHeadsetOpforMedicalCommand
   inhand:
     - AU14KitJOMedicalOfficerKit
 
@@ -151,7 +151,7 @@
     shoes: CMBootsBlack
     head: CMHeadCapPeakedFormal
     jumpsuit: CMJumpsuitCMO
-    ears: AU14HeadsetGovforCommand
+    ears: CMUHeadsetGovforMedicalCommand
 
 - type: startingGear
   id: AU14GearOPFOROfficerMedicalDummy
@@ -159,7 +159,7 @@
     shoes: CMBootsBlack
     head: CMHeadCapPeakedFormal
     jumpsuit: CMJumpsuitCMO
-    ears: AU14HeadsetOpforCommand
+    ears: CMUHeadsetOpforMedicalCommand
 
 # ├──[ Spawnpoints ]─────────────────────────────────────────────────┤
 - type: entity

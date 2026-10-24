@@ -1187,14 +1187,17 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             await db.DbContext.SaveChangesAsync();
         }
 
+        // CMU14: aggregate only outcomes in the selected dashboard period.
         public async Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboard(
             int recentRounds,
+            DateTime from,
             CancellationToken cancel = default)
         {
             await using var db = await GetDb();
 
             var records = (await db.DbContext.CMURoundOutcomes
                     .AsNoTracking()
+                    .Where(outcome => outcome.RecordedAt >= from)
                     .OrderByDescending(outcome => outcome.RecordedAt)
                     .ToListAsync(cancel))
                 .Select(MakeCMURoundOutcomeRecord)

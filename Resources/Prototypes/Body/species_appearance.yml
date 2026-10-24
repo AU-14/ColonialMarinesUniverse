@@ -6,6 +6,7 @@
     layers:
     # Torso
     - map: [ "enum.HumanoidVisualLayers.Chest" ]
+    - map: [ "enum.HumanoidVisualLayers.Special" ]
 
     # Head
     - map: [ "enum.HumanoidVisualLayers.Head" ]

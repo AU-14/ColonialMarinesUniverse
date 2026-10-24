@@ -201,7 +201,12 @@ public abstract partial class SatiationSystem : EntitySystem
             currentChangeMod = 1f;
         }
 
-        satiation.ActualChangeRate = proto.BaseChangeRate * currentChangeMod;
+        var changeRate = proto.BaseChangeRate * currentChangeMod;
+        // CMU14: hunger drains two-thirds as fast; thirst and positive satiation gains are unchanged.
+        if (satiation.SatiationType == Hunger && changeRate < 0f)
+            changeRate /= 1.5f;
+
+        satiation.ActualChangeRate = changeRate;
         satiation.NextChangeRateModUpdateTime = EvolvesToBoundAt(
             satiation,
             proto,

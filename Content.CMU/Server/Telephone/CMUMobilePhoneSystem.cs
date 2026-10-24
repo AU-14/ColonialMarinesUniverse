@@ -8,8 +8,11 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
 using Content.Shared.Tools;
 using Content.Shared.Tools.Systems;
+using Content.Shared.Audio;
+using Robust.Shared.Audio;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 
 namespace Content.Server.CMU14.Telephone;
 
@@ -20,14 +23,24 @@ public sealed partial class CMUMobilePhoneSystem : EntitySystem
     [Dependency] private QuickDialogSystem _quickDialog = default!;
     [Dependency] private RMCTelephoneSystem _telephone = default!;
     [Dependency] private SharedToolSystem _tool = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambientSound = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     private static readonly ProtoId<ToolQualityPrototype> ScrewingQuality = "Screwing";
+    private static readonly SoundSpecifier IedRingtone = new SoundPathSpecifier("/Audio/CMU14/IED/detonate.ogg");
 
     public override void Initialize()
     {
         SubscribeLocalEvent<CMUMobilePhoneComponent, GotEquippedHandEvent>(OnEquippedHand);
         SubscribeLocalEvent<CMUMobilePhoneComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<CMUMobilePhoneComponent, UseInHandEvent>(OnUseInHand);
+        SubscribeLocalEvent<RMCTelephoneRingEvent>(OnTelephoneRing);
+    }
+
+    private void OnTelephoneRing(ref RMCTelephoneRingEvent args)
+    {
+        if (HasComp<CMUMobilePhoneComponent>(args.Receiving) && _random.Prob(0.05f))
+            _ambientSound.SetSound(args.Receiving, IedRingtone);
     }
 
     private void OnEquippedHand(Entity<CMUMobilePhoneComponent> ent, ref GotEquippedHandEvent args)

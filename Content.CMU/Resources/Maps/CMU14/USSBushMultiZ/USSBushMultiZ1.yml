@@ -12079,73 +12079,6 @@ entities:
       parent: 1
       rot: 3.141592653589793 rad
       pos: -9.5,-35.5
-- proto: CMUAirtightSeal
-  entities:
-  - uid: 1975
-    components:
-    - type: Transform
-      parent: 1
-      pos: -4.5,-69.5
-      anchored: True
-  - uid: 1982
-    components:
-    - type: Transform
-      parent: 1
-      pos: -2.5,-69.5
-      anchored: True
-  - uid: 1983
-    components:
-    - type: Transform
-      parent: 1
-      pos: 0.5,-69.5
-      anchored: True
-  - uid: 1984
-    components:
-    - type: Transform
-      parent: 1
-      pos: 2.5,-69.5
-      anchored: True
-  - uid: 6429
-    components:
-    - type: Transform
-      parent: 1
-      pos: -23.5,17.5
-      anchored: True
-  - uid: 6430
-    components:
-    - type: Transform
-      parent: 1
-      rot: 1.5707963267948966 rad
-      pos: -16.5,-52.5
-      anchored: True
-  - uid: 6431
-    components:
-    - type: Transform
-      parent: 1
-      rot: 1.5707963267948966 rad
-      pos: 14.5,-52.5
-      anchored: True
-  - uid: 6432
-    components:
-    - type: Transform
-      parent: 1
-      rot: -1.5707963267948966 rad
-      pos: 15.5,-19.5
-      anchored: True
-  - uid: 6433
-    components:
-    - type: Transform
-      parent: 1
-      rot: 1.5707963267948966 rad
-      pos: -16.5,-19.5
-      anchored: True
-  - uid: 6434
-    components:
-    - type: Transform
-      parent: 1
-      rot: -1.5707963267948966 rad
-      pos: -0.5,-62.5
-      anchored: True
 - proto: CMUAutodocConsole
   entities:
   - uid: 456
@@ -12242,28 +12175,36 @@ entities:
     - type: Transform
       parent: 1
       pos: -21.5,53.5
-- proto: CMUBosenmoriExact2056adc5992958f8
+- proto: RMCVialBox
   entities:
   - uid: 1501
     components:
     - type: Transform
       parent: 1
       pos: 21.512259,38.459873
+    - type: Sprite
+      offset: 0,0.0625
   - uid: 1503
     components:
     - type: Transform
       parent: 1
       pos: 21.512259,38.459873
+    - type: Sprite
+      offset: 0,0.0625
   - uid: 1507
     components:
     - type: Transform
       parent: 1
       pos: 21.512259,38.459873
+    - type: Sprite
+      offset: 0,0.0625
   - uid: 1607
     components:
     - type: Transform
       parent: 1
       pos: 21.512259,38.459873
+    - type: Sprite
+      offset: 0,0.0625
 - proto: CMUCanisterOxygen
   entities:
   - uid: 271

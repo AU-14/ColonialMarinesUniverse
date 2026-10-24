@@ -3,7 +3,11 @@
   parent: AU14EncryptionKey
   id: AU14EncryptionKeyGovfor # blank key, channel set by SquadSystem.cs
   name: GOVFOR encryption key
-  description: An encryption key used to communicate on the GOVFOR channel, it is automatically assigned the right channel.
+  description: An encryption key automatically assigned a GOVFOR squad channel, with access to GOVFOR medical.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioGovforMedical
 
 - type: entity
   parent: AU14EncryptionKeyGovfor
@@ -66,6 +70,16 @@
     channels:
     - radioGovforIntel
     defaultChannel: radioGovforIntel
+
+- type: entity
+  parent: AU14EncryptionKeyGovfor
+  id: CMUEncryptionKeyGovforMedical
+  name: GOVFOR medical encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioGovforMedical
+    defaultChannel: radioGovforMedical
 
 - type: entity
   parent: AU14EncryptionKeyGovfor
@@ -221,6 +235,36 @@
     defaultChannel: radioGovforCommand
 
 - type: entity
+  parent: AU14HeadsetGovforAuxiliary
+  id: CMUHeadsetGovforDoctor
+  name: GOVFOR medical headset
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGovfor
+      - AU14EncryptionKeyGovforCommandOnly
+      - AU14EncryptionKeyGovforIntel
+      - CMUEncryptionKeyGovforMedical
+
+- type: entity
+  parent: AU14HeadsetGovforCommand
+  id: CMUHeadsetGovforMedicalCommand
+  name: GOVFOR medical command headset
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGovfor
+      - AU14EncryptionKeyGovforCommand
+      - AU14EncryptionKeyGovforBravo
+      - AU14EncryptionKeyGovforCharlie
+      - AU14EncryptionKeyGovforIntel
+      - AU14EncryptionKeyGovforJTAC
+      - AU14EncryptionKeyGovforMILP
+      - CMUEncryptionKeyGovforMedical
+
+- type: entity
   parent: AU14HeadsetGovforMarine
   id: AU14HeadsetGovforMarineMP
   name: GOVFOR MP radio headset
@@ -236,6 +280,19 @@
   - type: RMCStaticDefaultChannel
   - type: EncryptionKeyHolder
     defaultChannel: radioGovforCommand
+
+- type: entity
+  parent: CMHeadsetHighCommand
+  id: CMUHeadsetGovforHighCommand
+  name: GOVFOR high command headset
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMEncryptionKeyCommon
+      - RMCEncryptionKeySeniorCommand
+      - RMCEncryptionKeyHighCommand
+      - CMUEncryptionKeyGovforMedical
 
 - type: entity
   parent: RMCBaseUniformAccessory
@@ -266,6 +323,7 @@
     - radioGovforCharlie
     - radioGovforCommand
     - radioGovforIntel
+    - radioGovforMedical
     - radioGovforFoxtrot
     - radioGovforJTAC
     - radioGovforMILP

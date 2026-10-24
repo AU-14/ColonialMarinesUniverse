@@ -64,7 +64,7 @@
       limit: 0
       required: false
     enum.HumanoidVisualLayers.Special:
-      limit: 0
+      limit: 1
       required: false
 
 - type: entity

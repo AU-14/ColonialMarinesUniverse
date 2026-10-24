@@ -14,6 +14,17 @@ public enum CMURoundStatisticsPreset : byte
 }
 
 [Serializable, NetSerializable]
+public enum CMURoundStatisticsPeriod : byte
+{
+    OneWeek,
+    TwoWeeks,
+    OneMonth,
+    ThreeMonths,
+    SixMonths,
+    OneYear,
+}
+
+[Serializable, NetSerializable]
 public enum CMURoundStatisticsWinner : byte
 {
     Xeno,
@@ -184,10 +195,17 @@ public sealed class CMURoundStatisticsDashboard(
 }
 
 [Serializable, NetSerializable]
-public sealed class CMURoundStatisticsEuiState(CMURoundStatisticsDashboard dashboard) : EuiStateBase
+public sealed class CMURoundStatisticsEuiState(CMURoundStatisticsDashboard dashboard, CMURoundStatisticsPeriod period) : EuiStateBase
 {
     public readonly CMURoundStatisticsDashboard Dashboard = dashboard;
+    public readonly CMURoundStatisticsPeriod Period = period;
 }
 
 [Serializable, NetSerializable]
 public sealed class CMURoundStatisticsRefreshMsg : EuiMessageBase;
+
+[Serializable, NetSerializable]
+public sealed class CMURoundStatisticsPeriodMsg(CMURoundStatisticsPeriod period) : EuiMessageBase
+{
+    public readonly CMURoundStatisticsPeriod Period = period;
+}

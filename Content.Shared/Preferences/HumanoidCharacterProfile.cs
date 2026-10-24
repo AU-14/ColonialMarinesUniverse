@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Xenonids.Name;
 using Content.Shared.CMU14.Medical.Blood; // CMU14
 using Content.Shared.CMU14.Allegiance;
 using Content.Shared.CMU14.Origin;
+using Content.Shared.CMU14.Preferences; // CMU14
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CCVar;
@@ -732,7 +733,9 @@ namespace Content.Shared.Preferences
 
         public HumanoidCharacterProfile WithSex(Sex sex)
         {
-            return new(this) { Sex = sex };
+            var profile = new HumanoidCharacterProfile(this) { Sex = sex }; // CMU14: keep the record build's overlay matched to sex.
+            profile.Appearance = CMUHumanBodyType.Apply(profile.Appearance, profile.Species, sex, profile.Build); // CMU14
+            return profile;
         }
 
         public HumanoidCharacterProfile WithVoice(ProtoId<EmoteSoundsPrototype> voice)
@@ -747,13 +750,17 @@ namespace Content.Shared.Preferences
 
         public HumanoidCharacterProfile WithSpecies(string species)
         {
-            return new(this) { Species = species };
+            var profile = new HumanoidCharacterProfile(this) { Species = species }; // CMU14: remove or restore the human build overlay when species changes.
+            profile.Appearance = CMUHumanBodyType.Apply(profile.Appearance, profile.Species, profile.Sex, profile.Build); // CMU14
+            return profile;
         }
 
 
         public HumanoidCharacterProfile WithCharacterAppearance(HumanoidCharacterAppearance appearance)
         {
-            return new(this) { Appearance = appearance };
+            var profile = new HumanoidCharacterProfile(this); // CMU14: Build controls the human body overlay even when other markings change.
+            profile.Appearance = CMUHumanBodyType.Apply(appearance, profile.Species, profile.Sex, profile.Build); // CMU14
+            return profile;
         }
 
         public HumanoidCharacterProfile WithSpawnPriorityPreference(SpawnPriorityPreference spawnPriority)
@@ -899,7 +906,9 @@ namespace Content.Shared.Preferences
 
         public HumanoidCharacterProfile WithBuild(BuildType build)
         {
-            return new(this) { Build = build };
+            var profile = new HumanoidCharacterProfile(this) { Build = build }; // CMU14: records Build is the source of the human body overlay.
+            profile.Appearance = CMUHumanBodyType.Apply(profile.Appearance, profile.Species, profile.Sex, build); // CMU14
+            return profile;
         }
 
         public HumanoidCharacterProfile WithHideMetaInformation(bool hideMetaInformation)
@@ -1458,7 +1467,8 @@ namespace Content.Shared.Preferences
                 _ => BuildType.Average // Invalid enum values.
             };
 
-            var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, Sex);
+            var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, sex);
+            appearance = CMUHumanBodyType.Apply(appearance, Species, sex, build); // CMU14: migrate and validate saved character builds.
 
             var prefsUnavailableMode = PreferenceUnavailable switch
             {

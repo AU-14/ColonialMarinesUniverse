@@ -84,6 +84,7 @@ cmu-wound-stump-limb = { $symmetry ->
 
 # Internal bleeding and shrapnel reminders (CMUInternalBleedPainSystem, CMUShrapnelMovePainSystem)
 cmu-internal-bleed-pain = You feel a stabbing pain in your {$part}!
+cmu-internal-bleed-cough = *You cough up some blood*
 cmu-shrapnel-move-pain = You feel shrapnel digging into your {$part} as you move.
 cmu-body-part-name = { $side ->
         [left] left { $type }

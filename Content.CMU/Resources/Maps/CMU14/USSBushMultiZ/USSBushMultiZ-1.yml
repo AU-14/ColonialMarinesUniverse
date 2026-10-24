@@ -5379,15 +5379,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -5.5,42.5
-- proto: CMUAirtightSeal
-  entities:
-  - uid: 1461
-    components:
-    - type: Transform
-      parent: 1
-      rot: 1.5707963267948966 rad
-      pos: -11.5,41.5
-      anchored: True
 - proto: CMUAtmosScanner
   entities:
   - uid: 81
@@ -5404,7 +5395,7 @@ entities:
     - type: Transform
       parent: 1
       pos: -2.5134282,-3.4650345
-- proto: CMUBosenmoriExact52a504fb335e4b61
+- proto: AU14PropItemLaptop
   entities:
   - uid: 443
     components:
@@ -5412,8 +5403,6 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: -9.5,39.5
-    - type: Fixtures
-      fixtures: {}
 - proto: CMUCanisterAir
   entities:
   - uid: 962
