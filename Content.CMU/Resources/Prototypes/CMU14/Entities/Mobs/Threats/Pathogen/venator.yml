@@ -8,7 +8,7 @@
   - type: GhostRole
     name: cmu-job-name-pathogen-venator
   - type: Sprite
-    sprite: CMU14/Mobs/Xenonids/Pathogen/venator.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/bloodlettervenator.rsi
   - type: MobThresholds
     thresholds:
       0: Alive
