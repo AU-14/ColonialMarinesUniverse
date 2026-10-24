@@ -14112,12 +14112,7 @@ public sealed class YautjaSmokeTest
     private static void ForceAnchor(IEntityManager entMan, SharedTransformSystem transform, EntityUid entity)
     {
         var xform = entMan.GetComponent<TransformComponent>(entity);
-        if (!transform.AnchorEntity(entity, xform))
-        {
-#pragma warning disable CS0618
-            xform.Anchored = true;
-#pragma warning restore CS0618
-        }
+        transform.AnchorEntity(entity, xform);
 
         if (!xform.Anchored)
         {

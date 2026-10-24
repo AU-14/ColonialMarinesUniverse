@@ -43,12 +43,11 @@ public sealed class CMUCombatDroneReplicationTest
             transform.SetLocalRotationNoLerp(drone, Angle.Zero);
             transform.SetLocalRotationNoLerp(turret, Angle.FromDegrees(45));
 
-            // Reproduce the reported ordering: transforms begin interpolation, then
-            // InputMover receives a different button state in the same snapshot.
+            // Reproduce the reported ordering: transform state application, then
+            // InputMover receiving a different button state in the same snapshot.
+            // Engine v293.0.1 removed ActivateLerp, so interpolation cannot be forced here.
             using (pair.Client.ResolveDependency<IClientGameTiming>().StartStateApplicationArea())
             {
-                transform.ActivateLerp(drone, hullTransform);
-                transform.ActivateLerp(turret, turretTransform);
                 var state = new ComponentHandleState(new InputMoverComponentState
                 {
                     HeldMoveButtons = MoveButtons.Right,
