@@ -1,7 +1,7 @@
 
 - type: entity  
   parent: ActionXenoBase  
-  id: ActionXenoGuardianLink
+  id: ActionXenoPathogenGuardianLink
   name: Guardian Link (100)  
   description: Link to a nearby ally, absorbing 50% of the damage they take for a short duration.  
   components:  
