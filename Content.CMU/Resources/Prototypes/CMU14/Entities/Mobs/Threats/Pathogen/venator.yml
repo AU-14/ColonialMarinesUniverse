@@ -181,9 +181,11 @@
   - type: CMArmor
     explosionArmor: 20
     xenoArmor: 30
-  - type: MeleeAttack
   - type: XenoStrain
     name: rmc-xeno-bloodletter-name
     description: rmc-xeno-bloodletter-description
     popup: rmc-xeno-bloodletter-popup
+  - type: XenoHidden  
+  - type: RMCActionOrder  
+    id: CMU14XenoVenatorBloodletter
     
