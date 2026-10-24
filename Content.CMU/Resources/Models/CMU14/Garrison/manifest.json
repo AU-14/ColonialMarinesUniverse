@@ -20296,9 +20296,9 @@
       ]
     },
     {
-      "id": "CMU3DReduxVehicleSPPTankCupolaMounted",
-      "label": "VehicleSPPTankCupolaMounted",
-      "file": "CMU3DReduxVehicleSPPTankCupolaMounted.glb",
+      "id": "CMU3DReduxVehicleUPPTankCupolaMounted",
+      "label": "VehicleUPPTankCupolaMounted",
+      "file": "CMU3DReduxVehicleUPPTankCupolaMounted.glb",
       "status": "draft",
       "parts": 5,
       "triangles": 216,
@@ -20306,9 +20306,9 @@
       "sourcePrototypes": []
     },
     {
-      "id": "CMU3DReduxVehicleSPPTankHJ35TLauncherMounted",
-      "label": "VehicleSPPTankHJ35TLauncherMounted",
-      "file": "CMU3DReduxVehicleSPPTankHJ35TLauncherMounted.glb",
+      "id": "CMU3DReduxVehicleUPPTankHJ35TLauncherMounted",
+      "label": "VehicleUPPTankHJ35TLauncherMounted",
+      "file": "CMU3DReduxVehicleUPPTankHJ35TLauncherMounted.glb",
       "status": "draft",
       "parts": 6,
       "triangles": 280,
@@ -20316,9 +20316,9 @@
       "sourcePrototypes": []
     },
     {
-      "id": "CMU3DReduxVehicleSPPTankP17702Mounted",
-      "label": "VehicleSPPTankP17702Mounted",
-      "file": "CMU3DReduxVehicleSPPTankP17702Mounted.glb",
+      "id": "CMU3DReduxVehicleUPPTankP17702Mounted",
+      "label": "VehicleUPPTankP17702Mounted",
+      "file": "CMU3DReduxVehicleUPPTankP17702Mounted.glb",
       "status": "draft",
       "parts": 5,
       "triangles": 216,
@@ -20326,9 +20326,9 @@
       "sourcePrototypes": []
     },
     {
-      "id": "CMU3DReduxVehicleSPPTankRailgunMounted",
-      "label": "VehicleSPPTankRailgunMounted",
-      "file": "CMU3DReduxVehicleSPPTankRailgunMounted.glb",
+      "id": "CMU3DReduxVehicleUPPTankRailgunMounted",
+      "label": "VehicleUPPTankRailgunMounted",
+      "file": "CMU3DReduxVehicleUPPTankRailgunMounted.glb",
       "status": "draft",
       "parts": 5,
       "triangles": 216,

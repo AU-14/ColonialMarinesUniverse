@@ -1335,43 +1335,43 @@
       "mountedTurrets": []
     },
     {
-      "id": "CMU3DReduxVehicleSPPTankCupolaMounted",
+      "id": "CMU3DReduxVehicleUPPTankCupolaMounted",
       "sourcePrototypes": [],
       "parts": 5,
       "triangles": 216,
       "vehicleLayerStates": 1,
       "mountedTurrets": [
-        "VehicleSPPTankCupola"
+        "VehicleUPPTankCupola"
       ]
     },
     {
-      "id": "CMU3DReduxVehicleSPPTankHJ35TLauncherMounted",
+      "id": "CMU3DReduxVehicleUPPTankHJ35TLauncherMounted",
       "sourcePrototypes": [],
       "parts": 6,
       "triangles": 280,
       "vehicleLayerStates": 1,
       "mountedTurrets": [
-        "VehicleSPPTankHJ35TLauncher"
+        "VehicleUPPTankHJ35TLauncher"
       ]
     },
     {
-      "id": "CMU3DReduxVehicleSPPTankP17702Mounted",
+      "id": "CMU3DReduxVehicleUPPTankP17702Mounted",
       "sourcePrototypes": [],
       "parts": 5,
       "triangles": 216,
       "vehicleLayerStates": 1,
       "mountedTurrets": [
-        "VehicleSPPTankP17702"
+        "VehicleUPPTankP17702"
       ]
     },
     {
-      "id": "CMU3DReduxVehicleSPPTankRailgunMounted",
+      "id": "CMU3DReduxVehicleUPPTankRailgunMounted",
       "sourcePrototypes": [],
       "parts": 5,
       "triangles": 216,
       "vehicleLayerStates": 1,
       "mountedTurrets": [
-        "VehicleSPPTankRailgun"
+        "VehicleUPPTankRailgun"
       ]
     },
     {

@@ -253,6 +253,12 @@
         whitelist:
           components:
           - HardpointItem
+      wheel-1:
+        startingItem: VehicleHumveeWheel
+        disableEject: true
+        whitelist:
+          components:
+          - VehicleWheelItem
   - type: Damageable
     damageModifierSet: VehicleFrameHumvee
   - type: Injurable
@@ -261,6 +267,7 @@
     maxIntegrity: 1000
     bypassEntryOnZero: true
     integrity: 1000
+
 - type: entity
   parent: VehicleHumveeBase
   id: VehicleHumveeMedical # CMU14
@@ -491,6 +498,12 @@
         whitelist:
           components:
           - HardpointItem
+      wheel-1:
+        startingItem: RMCAPCWheel
+        disableEject: true
+        whitelist:
+          components:
+          - VehicleWheelItem
   - type: Damageable
     damageModifierSet: VehicleFrameARC
   - type: Injurable

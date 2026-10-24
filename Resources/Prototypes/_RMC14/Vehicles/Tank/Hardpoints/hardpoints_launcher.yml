@@ -1,8 +1,8 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankFlamer # CMU14
-  name: tank flamer
-  description: A tank-mounted flamethrower hardpoint.
+  name: M4A3R3 flamethrower
+  description: A tank-mounted M4A3R3 flamethrower hardpoint.
   components:
   - type: Sprite
     state: flamer
@@ -37,29 +37,21 @@
     selectedMode: FullAuto
     availableModes:
     - FullAuto
-    soundGunshot: /Audio/_RMC14/Weapons/Guns/Flamer/gun_flamethrower2.ogg
+    soundGunshot:
+      collection: RMCFlamerShoot
     cameraRecoilScalar: 0
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 4
     accuracyMultiplierUnwielded: 4
-  - type: SolutionContainerManager
-    solutions:
-      rmc_flamer_tank:
-        maxVol: 100
-        reagents:
-        - ReagentId: RMCNapalmUTTank
-          Quantity: 100
-  - type: RMCFlamerAmmoProvider
-  - type: RMCFlamerTank
-    maxIntensity: 30
-    maxDuration: 20
-    maxRange: 9
-    reagentWhitelist:
-    - RMCNapalmUTTank
-  - type: RMCFlushableSolution
-    solution: rmc_flamer_tank
-    flushTime: 1.5
-  - type: NoMixingReagents
+  - type: BallisticAmmoProvider
+    cycleable: false
+    proto: RMCTankFlamer
+    capacity: 1
+  - type: RefillableByBulletBox
+    bulletType: RMCTankFlamer
+  - type: VehicleHardpointAmmo
+    magazineSize: 100
+    maxStoredMagazines: 4
   - type: GunFireArc
     arc: 120
   - type: GunMuzzleOffset
@@ -161,7 +153,7 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankTowLauncher # CMU14
-  name: tank TOW launcher
+  name: 84mm tank TOW launcher
   description: A tank-mounted TOW launcher hardpoint.
   components:
   - type: ContainerContainer
@@ -469,4 +461,4 @@
   - type: HardpointVisual
     vehicleState: mounted_cupola_0
     damagedVehicleState: mounted_cupola_1
-    
+
