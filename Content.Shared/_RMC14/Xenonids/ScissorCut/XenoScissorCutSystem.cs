@@ -141,6 +141,9 @@ public sealed partial class XenoScissorCutSystem : EntitySystem
 
             var change = _damage.TryChangeDamage(victim, xeno.Comp.Damage, origin: xeno, tool: xeno);
 
+            if (xeno.Comp.Bloodloss > FixedPoint2.Zero && TryComp<BloodstreamComponent>(victim, out var bloodstream))  
+    _bloodstream.TryModifyBloodLevel((victim, bloodstream), -xeno.Comp.Bloodloss); // CMU14 Bloodletter Venetor Bloodloss
+
             if (change?.GetTotal() > FixedPoint2.Zero)
             {
                 var filter = Filter.Pvs(victim, entityManager: EntityManager).RemoveWhereAttachedEntity(o => o == xeno.Owner);
