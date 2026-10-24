@@ -209,7 +209,9 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         SubscribeLocalEvent<GridVehicleMoverComponent, ComponentStartup>(OnMoverStartup);
         SubscribeLocalEvent<GridVehicleMoverComponent, ComponentShutdown>(OnMoverShutdown);
         SubscribeLocalEvent<GridVehicleMoverComponent, MoveEvent>(OnMoverMove);
-        SubscribeLocalEvent<GridVehicleMoverComponent, ReAnchorEvent>(OnMoverReAnchor);
+        // CMU14: engine v293.0.1 removed ReAnchorEvent. A reanchor now raises MoveEvent with
+        // ParentChanged, and OnMoverMove already resyncs on that.
+        // SubscribeLocalEvent<GridVehicleMoverComponent, ReAnchorEvent>(OnMoverReAnchor);
         SubscribeLocalEvent<GridVehicleMoverComponent, VehicleCanRunEvent>(OnMoverCanRun);
         SubscribeLocalEvent<GridVehicleMoverComponent, PreventCollideEvent>(OnMoverPreventCollide);
         SubscribeLocalEvent<XenoComponent, XenoFortifyAttemptEvent>(OnXenoFortifyAttemptVehicleBounds);
@@ -251,10 +253,11 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         TrySyncMoverToCurrentGrid(ent, centerOnTile: false);
     }
 
-    private void OnMoverReAnchor(Entity<GridVehicleMoverComponent> ent, ref ReAnchorEvent args)
-    {
-        TrySyncMoverToCurrentGrid(ent, centerOnTile: false);
-    }
+    // CMU14: engine v293.0.1 removed ReAnchorEvent, see Initialize.
+    // private void OnMoverReAnchor(Entity<GridVehicleMoverComponent> ent, ref ReAnchorEvent args)
+    // {
+    //     TrySyncMoverToCurrentGrid(ent, centerOnTile: false);
+    // }
 
     // Vehicle traversal can change grids through several engine paths. Keep all resync logic in one place.
     private bool TrySyncMoverToCurrentGrid(

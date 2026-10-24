@@ -13,7 +13,8 @@ public partial class RadiationSystem
         SubscribeLocalEvent<RadiationBlockerComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<RadiationBlockerComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<RadiationBlockerComponent, AnchorStateChangedEvent>(OnAnchorChanged);
-        SubscribeLocalEvent<RadiationBlockerComponent, ReAnchorEvent>(OnReAnchor);
+        // CMU14: engine v293.0.1 removed ReAnchorEvent. The unanchor and anchor pair covers it.
+        // SubscribeLocalEvent<RadiationBlockerComponent, ReAnchorEvent>(OnReAnchor);
 
         SubscribeLocalEvent<RadiationBlockerComponent, DoorStateChangedEvent>(OnDoorChanged);
 
@@ -46,14 +47,12 @@ public partial class RadiationSystem
         }
     }
 
-    private void OnReAnchor(EntityUid uid, RadiationBlockerComponent component, ref ReAnchorEvent args)
-    {
-        // probably grid was split
-        // we need to remove entity from old resistance map
-        RemoveTile(uid, component);
-        // and move it to the new one
-        AddTile(uid, component);
-    }
+    // CMU14: engine v293.0.1 removed ReAnchorEvent, see InitRadBlocking.
+    // private void OnReAnchor(EntityUid uid, RadiationBlockerComponent component, ref ReAnchorEvent args)
+    // {
+    //     RemoveTile(uid, component);
+    //     AddTile(uid, component);
+    // }
 
     private void OnDoorChanged(EntityUid uid, RadiationBlockerComponent component, DoorStateChangedEvent args)
     {
