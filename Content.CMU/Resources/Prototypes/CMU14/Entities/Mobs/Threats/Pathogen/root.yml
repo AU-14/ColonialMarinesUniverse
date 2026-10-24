@@ -28,14 +28,7 @@
     - CMU14ActionXenoPathogenRest
     - CMU14ActionXenoPathogenWatch
     - CMU14ActionXenoPathogenTailStab
-    - CMU14ActionXenoPathogenPheromones
-    - CMU14ActionXenoPathogenTantrum
-    - CMU14ActionXenoPathogenTailFountain
-    - CMU14ActionXenoPathogenAidRejuvenate
-    - ActionXenoPierce
-    - ActionXenoBlitz
-    - ActionXenoCleaveRoot
-    - ActionXenoCleaveFling
+    - CMU14ActionXenoPathogenGuardianLink
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenRegurgitate
   - type: XenoHeavy
