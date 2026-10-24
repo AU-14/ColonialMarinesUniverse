@@ -248,6 +248,7 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
     {
         var multiplier = _skills.GetSkillDelayMultiplier(surgeon, SurgerySkill, SurgeryStepDelayMultipliers);
         multiplier *= _bodyScanner.GetSurgeryDelayMultiplier(surgeon, patient);
+        multiplier *= Content.Shared.CMU14.Traits.Conditions.CMUFearOfBloodComponent.GetTreatmentMultiplier(EntityManager, surgeon);
         return TimeSpan.FromSeconds(baseSeconds * multiplier);
     }
 

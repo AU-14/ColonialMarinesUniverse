@@ -36,3 +36,42 @@
       amount: 1
   products:
     CMUPhenytoin: 3
+
+# Propranolol, the beta blocker.
+- type: reaction
+  id: CMUPropranolol
+  reactants:
+    CMInaprovaline:
+      amount: 1
+    RMCPotassium:
+      amount: 1
+    RMCChlorine:
+      amount: 1
+  products:
+    CMUPropranolol: 3
+
+# Disulfiram, the alcohol deterrent.
+- type: reaction
+  id: CMUDisulfiram
+  reactants:
+    CMEthylredoxrazine:
+      amount: 1
+    RMCSulfur:
+      amount: 1
+    RMCCarbon:
+      amount: 1
+  products:
+    CMUDisulfiram: 3
+
+# Meclizine, the anti-vertigo drug.
+- type: reaction
+  id: CMUMeclizine
+  reactants:
+    CMDylovene:
+      amount: 1
+    RMCChlorine:
+      amount: 1
+    RMCCarbon:
+      amount: 1
+  products:
+    CMUMeclizine: 3

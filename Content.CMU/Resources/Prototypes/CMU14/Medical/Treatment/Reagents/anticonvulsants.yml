@@ -15,3 +15,57 @@
       effects:
       - !type:CMUSuppressSeizuresEffect
         duration: 1500
+
+# A beta blocker. Ends a cardiac episode, keeps a weak heart from straining for 15 minutes and calms panic.
+- type: reagent
+  parent: CMReagentMedicine
+  id: CMUPropranolol
+  name: reagent-name-cmu-propranolol
+  desc: reagent-desc-cmu-propranolol
+  flavor: bitter
+  physicalDesc: reagent-physical-desc-powdery
+  color: "#e8d8f0"
+  overdose: 30
+  criticalOverdose: 60
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.5
+      effects:
+      - !type:CMUBetaBlockerEffect
+        duration: 900
+
+# The alcohol deterrent. For 30 minutes any alcohol makes them throw up, and an alcoholic's cravings ease.
+- type: reagent
+  parent: CMReagentMedicine
+  id: CMUDisulfiram
+  name: reagent-name-cmu-disulfiram
+  desc: reagent-desc-cmu-disulfiram
+  flavor: bitter
+  physicalDesc: reagent-physical-desc-powdery
+  color: "#f5f5dc"
+  overdose: 30
+  criticalOverdose: 60
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.5
+      effects:
+      - !type:CMUAlcoholDeterrentEffect
+        duration: 1800
+
+# An anti-vertigo drug. Clears dizziness and keeps it away for 20 minutes.
+- type: reagent
+  parent: CMReagentMedicine
+  id: CMUMeclizine
+  name: reagent-name-cmu-meclizine
+  desc: reagent-desc-cmu-meclizine
+  flavor: bitter
+  physicalDesc: reagent-physical-desc-powdery
+  color: "#f7e7a8"
+  overdose: 30
+  criticalOverdose: 60
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.5
+      effects:
+      - !type:CMUAntiVertigoEffect
+        duration: 1200

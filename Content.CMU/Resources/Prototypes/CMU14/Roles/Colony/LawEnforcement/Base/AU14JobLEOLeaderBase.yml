@@ -27,6 +27,11 @@
     inverted: true
     traits:
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
     - NoEnglish
     - CMUAlcoholic
     - CMUDrugAddict

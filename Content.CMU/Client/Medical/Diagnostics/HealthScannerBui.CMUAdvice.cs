@@ -37,6 +37,9 @@ public sealed partial class HealthScannerBui
         if (uiState.CMUPanicAttack)
             AddAdviceCandidate(recommendations, 86, Loc.GetString("cmu-health-analyzer-advice-panic-attack"));
 
+        if (uiState.CMUHeartEpisode)
+            AddAdviceCandidate(recommendations, 93, Loc.GetString("cmu-health-analyzer-advice-heart-episode"));
+
         if (uiState.Advice.CMUShowInternals)
             AddAdviceCandidate(recommendations, 91, Loc.GetString("cmu-health-analyzer-advice-internals"));
 

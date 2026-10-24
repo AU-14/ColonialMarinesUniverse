@@ -44,7 +44,7 @@ public sealed partial class CMUGunSerialNumberSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => _used.Clear());
-        SubscribeLocalEvent<GunComponent, ComponentStartup>(OnGunStartup);
+        SubscribeLocalEvent<GunComponent, CMUGunMapInitEvent>(OnGunMapInit);
         SubscribeLocalEvent<CMUGunSerialNumberComponent, GetVerbsEvent<ExamineVerb>>(OnGetExamineVerbs);
         SubscribeLocalEvent<CMUGunSerialNumberComponent, GetVerbsEvent<UtilityVerb>>(OnGetUtilityVerbs);
         SubscribeLocalEvent<CMUGunSerialNumberComponent, CMUScratchSerialDoAfterEvent>(OnScratchDoAfter);
@@ -52,7 +52,7 @@ public sealed partial class CMUGunSerialNumberSystem : EntitySystem
     }
 
     // Guns mounted on vehicles and emplacements, or used by mobs, aren't items and get no serial.
-    private void OnGunStartup(Entity<GunComponent> ent, ref ComponentStartup args)
+    private void OnGunMapInit(Entity<GunComponent> ent, ref CMUGunMapInitEvent args)
     {
         if (_net.IsClient || !HasComp<ItemComponent>(ent) || HasComp<CMUGunSerialNumberComponent>(ent))
             return;

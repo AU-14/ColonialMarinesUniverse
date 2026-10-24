@@ -57,6 +57,11 @@
     inverted: true
     traits:
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
   spawnMenuRoleName: cmu-spawn-role-prodigy-team-leader-cmu-surv 

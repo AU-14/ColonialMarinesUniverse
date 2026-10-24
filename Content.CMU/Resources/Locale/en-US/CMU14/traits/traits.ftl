@@ -144,6 +144,7 @@ cmu-ui-options-tile-movement-walk-only = Tile movement while walking
 cmu-ui-options-tile-movement-walk-only-tooltip = Move from tile to tile while walking, and freely while running. Tile movement above overrides this.
 
 cmu-trait-category-drinking = Alcohol Tolerance
+cmu-trait-category-addictions = Addictions
 cmu-trait-heavyweight-name = Heavyweight drunk
 cmu-trait-heavyweight-desc = This is someone that can hold their liquor.
 

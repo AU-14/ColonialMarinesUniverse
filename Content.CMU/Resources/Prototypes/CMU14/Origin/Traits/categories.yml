@@ -3,6 +3,12 @@
   name: trait-category-language
   maxTraitPoints: 2
 
+# Addictions, one at most.
+- type: traitCategory
+  id: CMUAddictions
+  name: cmu-trait-category-addictions
+  maxTraitPoints: 1
+
 - type: traitCategory
   id: CMUDrinkingTraits
   name: cmu-trait-category-drinking

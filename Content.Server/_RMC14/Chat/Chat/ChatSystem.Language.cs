@@ -556,6 +556,10 @@ public sealed partial class ChatSystem
             var listenerMessage = listener == source
                 ? speakerMessage
                 : _language.ObfuscateMessageForListener(listener, speakerMessage, language, source);
+            // cmu edit start: hard of hearing
+            if (listener != source)
+                listenerMessage = CMUApplyHearingLoss(listener, data.Range, listenerMessage);
+            // cmu edit end
             var useEmoteSpeechBubble = visibleLanguage && !canUnderstand;
             var listenerName = FormattedMessage.EscapeText(GetSpeakerNameForListener(
                 source,

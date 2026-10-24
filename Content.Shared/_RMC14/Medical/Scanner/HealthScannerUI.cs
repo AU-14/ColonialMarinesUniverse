@@ -67,6 +67,7 @@ public sealed class HealthScannerBuiState(
     public bool CMUSeizure;
     public bool CMUAsthmaAttack;
     public bool CMUPanicAttack;
+    public bool CMUHeartEpisode;
     // cmu edit end
 }
 

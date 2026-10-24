@@ -18,11 +18,11 @@ public sealed partial class CMUToolmarkSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<ToolComponent, ComponentStartup>(OnToolStartup);
+        SubscribeLocalEvent<ToolComponent, MapInitEvent>(OnToolMapInit);
         SubscribeLocalEvent<CMUToolmarkEvent>(OnToolmark);
     }
 
-    private void OnToolStartup(Entity<ToolComponent> ent, ref ComponentStartup args)
+    private void OnToolMapInit(Entity<ToolComponent> ent, ref MapInitEvent args)
     {
         if (_net.IsClient || HasComp<CMUToolSignatureComponent>(ent))
             return;

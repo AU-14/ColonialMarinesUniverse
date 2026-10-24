@@ -61,6 +61,12 @@ public sealed partial class CMUSubstanceAddictionSystem : EntitySystem
         RemCompDeferred<CMUSubstanceAddictionComponent>(ent);
     }
 
+    /// <summary>Eases a craving as if they'd just had their fix, without the substance itself.</summary>
+    public void EaseCraving(Entity<CMUSubstanceAddictionComponent> ent)
+    {
+        ResetCraving(ent);
+    }
+
     private void ResetCraving(Entity<CMUSubstanceAddictionComponent> ent)
     {
         var time = _timing.CurTime;
