@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._RMC14.Guardian;  
+namespace Content.Shared._RMC14.Xenonids.Guardian.GuardianAbsorb;
   
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]  
 public sealed partial class GuardianAbsorbComponent : Component  
