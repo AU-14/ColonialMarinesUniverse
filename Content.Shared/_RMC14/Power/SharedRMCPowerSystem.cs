@@ -1116,6 +1116,10 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         if (!_powerReceiver.ResolveApc(receiver, ref receiverComp))
             return;
 
+        // CMU14: a cut power wire keeps the receiver unpowered even when the area has power
+        if (receiverComp.PowerDisabled)
+            ev = new PowerChangedEvent(false, ev.ReceivingPower);
+
         if (receiverComp.Powered == ev.Powered)
             return;
 
