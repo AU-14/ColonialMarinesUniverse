@@ -1,5 +1,5 @@
 using Content.Shared.Damage;
-using Content.Shared.Damage.Systemns.DamageableSystem;
+using Content.Shared.Damage.Systems.DamageableSystem;
 using Content.Shared.Damage.Systems.BeforeDamageChangedEvent;
 using Content.Shared.Popups; 
 
