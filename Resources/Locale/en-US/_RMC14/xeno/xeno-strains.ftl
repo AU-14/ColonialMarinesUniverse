@@ -238,7 +238,7 @@ rmc-xeno-bloodletter-description = You trade your Abduct and most of your damage
     - Some armor.
     - Some attack speed.
     - Your Blight Strike ability and Abduct ability.
-    - Most of the raw damage of your attacks and abilites.
+    - Most of the raw damage of your attacks and abilities.
 rmc-xeno-bloodletter-popup = Open their veins. Bleed them dry. The Mycelium will run red.
 
 cm-xeno-heatshield-vomit-bile-extinguish = You smother the flames with bile.
