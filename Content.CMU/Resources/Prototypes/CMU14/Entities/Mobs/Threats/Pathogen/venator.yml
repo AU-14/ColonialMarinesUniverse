@@ -127,8 +127,6 @@
   id: CMU14XenoVenator
   name: Venator
   components:
-  - type: Sprite
-    sprite: CMU14/Mobs/Xenonids/Pathogen/Venator/venator.rsi
   - type: RMCGibOnDeath
     gibChance: 0.1
   - type: RMCSpawnEntitiesOnGib
@@ -142,7 +140,7 @@
   suffix: Bloodletter
   components:
   - type: Sprite
-    sprite: CMU14/Mobs/Xenonids/Pathogen/Venator/venatorbloodletter.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/Venator/bloodletter_venator.rsi
   - type: Xeno
     actionIds:
     - CMU14ActionXenoPathogenRest
