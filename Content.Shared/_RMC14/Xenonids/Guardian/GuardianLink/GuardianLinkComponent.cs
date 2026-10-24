@@ -1,7 +1,7 @@
 using Content.Shared.Actions;  
 using Content.Shared.FixedPoint;  
   
-namespace Content.Shared._RMC14.Guardian;  
+namespace Content.Shared._RMC14.Xenonids.Guardian.GuardianLink
   
 public sealed partial class XenoGuardianLinkActionEvent : EntityTargetActionEvent  
 {  
