@@ -32,6 +32,10 @@
       state: template_won
       map: ["cmu-gamble-won"]
       visible: false
+    - sprite: CMU14/Actions/Xeno/gambler.rsi
+      state: flash
+      map: ["cmu-gamble-flash"]
+      visible: false
   - type: InstantAction
     event: !type:CMUXenoGambleReelActionEvent
 
@@ -73,24 +77,6 @@
     - sprite: _RMC14/Actions/xeno_actions.rsi
       state: gardener_plant
       map: ["enum.ActionVisuals.Icon"]
-
-- type: entity
-  parent: CMUActionXenoGambleMysteryBase
-  id: CMUActionXenoGambleCarp
-  components:
-  - type: InstantAction
-    event: !type:CMUXenoGambleSpawnActionEvent
-      spawn: MobCarp
-      spawnSound: /Audio/Machines/phasein.ogg
-
-- type: entity
-  parent: CMUActionXenoGambleMysteryBase
-  id: CMUActionXenoGambleLizards
-  components:
-  - type: InstantAction
-    event: !type:CMUXenoGambleSpawnActionEvent
-      spawn: MobLizard
-      spawnSound: /Audio/Machines/phasein.ogg
 
 - type: entity
   parent: CMUActionXenoGambleMysteryBase
