@@ -21,7 +21,7 @@ public sealed partial class XenoClawBloodlossSystem : EntitySystem
 
         foreach (var hit in args.HitEntities)
         {
-            if TryComp<BloodstreamComponent>(hit, out var bloodstream))
+            if (TryComp<BloodstreamComponent>(hit, out var bloodstream))
               _bloodstream.TryModifyBloodLevel((hit, bloodstream), -ent.Comp.Bloodloss);
         }
     }
