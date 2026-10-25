@@ -236,7 +236,8 @@
                                 </BoxContainer>
                                 <Slider Name="CharacterSkinSlider" HorizontalExpand="True" MinValue="0" MaxValue="100" />
                                 <ColorSelectorSliders Name="CharacterSkinColorPicker" HorizontalExpand="True" />
-                                <BoxContainer Name="CharacterHairPickers" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="6" />
+                                <!-- cmu edit start: hair pickers moved below the eye color controls - two MinHeight 350
+                                     grids here buried the skin and eye rows under ~740px of scroll -->
                                 <cc:HSeparator Color="#16823E" Margin="0 5" />
                                 <BoxContainer HorizontalExpand="True">
                                     <Label Text="{Loc 'humanoid-profile-editor-eye-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-eye-color-tooltip'}" />
@@ -244,6 +245,8 @@
                                     <Label Name="EyeColorNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
                                 </BoxContainer>
                                 <ColorSelectorSliders Name="CharacterEyeColorPicker" HorizontalExpand="True" />
+                                <BoxContainer Name="CharacterHairPickers" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="6" />
+                                <!-- cmu edit end -->
                             </BoxContainer>
                             <!-- cmu edit end -->
                     </ScrollContainer>
@@ -362,7 +365,9 @@
                         <BoxContainer Orientation="Vertical">
                             <RichTextLabel Name="RegulationAppearanceInfo" HorizontalExpand="True" Margin="10 10 10 0" />
                             <!-- Hair -->
-                            <BoxContainer Margin="10" Orientation="Horizontal">
+                            <!-- cmu edit start: pickers stacked full-width instead of side-by-side columns -->
+                            <BoxContainer Margin="10" Orientation="Vertical">
+                            <!-- cmu edit end -->
                                 <humanoid:RegulationMarkingPicker Name="RegulationHairStylePicker" Layer="Hair" />
                                 <humanoid:RegulationMarkingPicker Name="RegulationFacialHairPicker" Layer="FacialHair" />
                             </BoxContainer>
