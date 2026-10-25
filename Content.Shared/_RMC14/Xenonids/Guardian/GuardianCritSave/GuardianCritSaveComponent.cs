@@ -23,5 +23,8 @@ public sealed partial class GuardianCritSaveComponent : Component
     public TimeSpan NextCheck;  
   
     [DataField, AutoNetworkedField]  
-    public HashSet<EntityUid> ActiveTargets = new();  
+    public HashSet<EntityUid> ActiveTargets = new();
+
+    [DataField, AutoNetworkedField]  
+    public FixedPoint2 CachedDamage;  
 }
