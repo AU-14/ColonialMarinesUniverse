@@ -87,11 +87,11 @@
       whitelist:
         components:
         - Marine
-    - multiplier: 0.7025
+    - multiplier: 1.0
       whitelist:
         components:
         - XenoLight
-    - multiplier: 0.475
+    - multiplier: 1.0
       whitelist:
         components:
         - XenoHeavy
