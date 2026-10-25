@@ -107936,7 +107936,7 @@ entities:
       pos: 92.5,17.5
     - type: Sprite
       offset: 0.09375,0.09375
-- proto: RMCPickaxe
+- proto: AU14ToolPickaxe
   entities:
   - uid: 44127
     components:
@@ -109996,7 +109996,7 @@ entities:
       pos: 56.5,36.5
     - type: Sprite
       offset: -0.21875,0.0625
-- proto: RMCTacticalMapTable
+- proto: CMUTacticalMapTableGovfor
   entities:
   - uid: 48889
     components:
@@ -112639,7 +112639,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 127.5,25.5
-- proto: RMCPickaxe
+- proto: AU14ToolPickaxe
   entities:
   - uid: 33164
     components:
@@ -113702,7 +113702,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 74.5,70.5
-- proto: RMCTacticalMapTable
+- proto: CMUTacticalMapTableGovfor
   entities:
   - uid: 48904
     components:
@@ -113822,7 +113822,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 20.5,210.5
-- proto: RMCPickaxe
+- proto: AU14ToolPickaxe
   entities:
   - uid: 49967
     components:
@@ -117243,7 +117243,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 33.5,11.5
-- proto: RMCPickaxe
+- proto: AU14ToolPickaxe
   entities:
   - uid: 44126
     components:
@@ -118147,7 +118147,7 @@ entities:
       pos: 65.5,67.5
     - type: Sprite
       offset: -0.21875,0.6875
-- proto: RMCPickaxe
+- proto: AU14ToolPickaxe
   entities:
   - uid: 33161
     components:
@@ -125072,7 +125072,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 81.5,83.5
-- proto: RMCTacticalMapTable
+- proto: CMUTacticalMapTableGovfor
   entities:
   - uid: 48891
     components:
@@ -130846,7 +130846,7 @@ entities:
       pos: 57.5,36.5
     - type: Sprite
       offset: 0,0.125
-- proto: RMCTacticalMapTable
+- proto: CMUTacticalMapTableGovfor
   entities:
   - uid: 48900
     components:
@@ -135615,7 +135615,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 63.5,16.5
-- proto: RMCPickaxe
+- proto: AU14ToolPickaxe
   entities:
   - uid: 33162
     components:
