@@ -388,34 +388,14 @@
                     <!-- cmu edit end -->
                 </BoxContainer>
                 <!-- cmu edit end -->
-                <!-- CMU14: strip-level FoF annotation, overlaid on the tab header row -->
-                <Control VerticalExpand="True">
-                    <TabContainer Name="InsurgencyTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
-                        <BoxContainer Orientation="Vertical">
-                            <ScrollContainer VerticalExpand="True">
-                                <BoxContainer Name="InsurgencyGovernmentJobList" Orientation="Vertical" />
-                            </ScrollContainer>
-                        </BoxContainer>
-                        <BoxContainer Orientation="Vertical">
-                            <ScrollContainer VerticalExpand="True">
-                                <BoxContainer Name="InsurgencyInsurgentJobList" Orientation="Vertical" />
-                            </ScrollContainer>
-                        </BoxContainer>
-                        <BoxContainer Orientation="Vertical">
-                            <ScrollContainer VerticalExpand="True">
-                                <BoxContainer Name="InsurgencyCivilianJobList" Orientation="Vertical" />
-                            </ScrollContainer>
-                        </BoxContainer>
-                        <BoxContainer Orientation="Vertical" Margin="10">
-                            <ScrollContainer VerticalExpand="True">
-                                <BoxContainer Name="InsurgencyAntagList" Orientation="Vertical" />
-                            </ScrollContainer>
-                        </BoxContainer>
-                    </TabContainer>
-                    <Label Text="{Loc 'humanoid-profile-editor-fof-included-label'}"
-                           HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 3 6 0"
-                           MouseFilter="Ignore" StyleClasses="CrtText" />
-                </Control>
+                <!-- CMU14: colony roles for colony-side gamemodes, replacing the retired insurgency tab -->
+                <BoxContainer Orientation="Vertical" Margin="10">
+                    <ScrollContainer VerticalExpand="True">
+                        <BoxContainer Name="ColonyRolesJobList" Orientation="Vertical" />
+                        <!-- CMU14: antag opt-ins for colony rounds; restores the surface lost with the insurgency tab -->
+                        <BoxContainer Name="ColonyRolesAntagList" Orientation="Vertical" />
+                    </ScrollContainer>
+                </BoxContainer>
                 <BoxContainer Orientation="Vertical">
                     <TabContainer Name="ColonyFallTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
                         <BoxContainer Orientation="Vertical">
