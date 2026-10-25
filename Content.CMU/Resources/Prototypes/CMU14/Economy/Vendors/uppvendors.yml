@@ -562,7 +562,7 @@
     - name: Headgear
       choices: { CMUPlatoonAirCrewHeadgear: 1 }
       entries:
-      - id: AU14UPPPilotHelmet
+      - id: AU14UPPPilot
       - id: AU14JungleM50Helmet
       - id: AU14CamoM50Helmet
       - id: AU14UPPPatrolCap
