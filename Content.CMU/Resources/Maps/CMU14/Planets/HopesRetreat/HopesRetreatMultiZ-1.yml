@@ -1,10 +1,10 @@
 meta:
   format: 7
   category: Map
-  engineVersion: v278.0.0
+  engineVersion: 290.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/14/2026 09:32:29
+  time: 10/25/2026 02:24:26
   entityCount: 1
 maps:
 - 1
@@ -16,7 +16,7 @@ tilemap:
   1: Space
   2: CMFloorPlating
 entities:
-- proto: ''
+- proto: ""
   entities:
   - uid: 1
     components:
@@ -1121,14 +1121,10 @@ entities:
     - type: SpreaderGrid
     - type: GridPathfinding
     - type: Gravity
+      inherent: True
       gravityShakeSound: !type:SoundPathSpecifier
         path: /Audio/Effects/alert.ogg
-      inherent: True
       enabled: True
-    - type: DecalGrid
-      chunkCollection:
-        version: 2
-        nodes: []
     - type: MapLight
     - type: DayNightCycle
       timeEntries:
@@ -2115,12 +2111,12 @@ entities:
     - type: MapAtmosphere
       space: False
       mixture:
-        volume: 2500
-        immutable: True
         temperature: 293.15
+        volume: 2500
         moles:
           Oxygen: 21.8124
           Nitrogen: 81.1594
+        immutable: True
     - type: GasTileOverlay
     - type: GridAtmosphere
       version: 2
