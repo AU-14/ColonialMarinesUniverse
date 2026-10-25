@@ -36,7 +36,12 @@ public sealed class GuardianAbsorbSystem : EntitySystem
             origin: args.Origin);  
   
         _popup.PopupEntity(Loc.GetString("guardian-absorbing-damage"), guardian, guardian);  
-    }  
+    } 
+
+    private void OnGuardianAbsorbRemoved(Entity<GuardianAbsorbComponent> ent, ref EntityTerminatingEvent args)  
+    {  
+        RemCompDeferred<GuardianAbsorbComponent>(ent);  
+    }
   
     public void SetAbsorb(EntityUid target, EntityUid guardian, GuardianAbsorbType type,  
         float percent = 0.5f, bool ignoreResistances = true)  
