@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared.CMU14.Input;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Projectiles;
 using Content.Shared._RMC14.Stun;
@@ -169,7 +170,7 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
     private bool CanAimAcrossZWithoutGun(EntityUid user)
     {
-        return HasComp<XenoComponent>(user);
+        return HasComp<XenoComponent>(user) || HasComp<YautjaComponent>(user);
     }
 
     private bool TryDisableShootDown(EntityUid user)
@@ -584,7 +585,7 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
         if (TryComp<CMUZLevelViewerComponent>(shooter, out var viewer) &&
             viewer.LookUp &&
-            (!requireReadyGunForLookUp || HasReadyGun(shooter)))
+            (!requireReadyGunForLookUp || HasReadyGun(shooter) || CanAimAcrossZWithoutGun(shooter)))
         {
             return 1;
         }

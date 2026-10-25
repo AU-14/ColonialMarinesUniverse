@@ -14250,8 +14250,8 @@ public sealed class YautjaSmokeTest
                 entMan.EnsureComponent<YautjaComponent>(hunter);
 
                 var option = console.BloodingCallOptions.Single(call => call.Id == "youngblood_solo");
-                Assert.That(system.TryCreateYoungbloodCall((consoleUid, console), hunter, option, bypassEligibility: true), Is.False);
-                Assert.That(CountYoungbloodGhostRoles(entMan), Is.EqualTo(0));
+                Assert.That(system.TryCreateYoungbloodCall((consoleUid, console), hunter, option, bypassEligibility: true), Is.True);
+                Assert.That(CountYoungbloodGhostRoles(entMan), Is.EqualTo(1));
             }
             finally
             {
@@ -14281,7 +14281,13 @@ public sealed class YautjaSmokeTest
 
             var hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
             var console = entMan.SpawnEntity("CMUHunterShipPlacedCMUHunterShipBloodingConsoleOverwatchSouthOffsetNeg1x13", map.GridCoords);
-            var shipSpawn = entMan.SpawnEntity("CMUHunterShipMarkerPredatorSpawn", map.GridCoords.Offset(new Vector2(4, 0)));
+            // CMU14: the boarding point must be a youngblood hunt spawn marker - the shared predator spawn marker no
+            // longer carries YautjaHuntSpawnPoint, since it is a job spawn rather than a blooding boarding point. The
+            // component is attached here the same way the HunterShip map overrides attach it.
+            var shipSpawn = entMan.SpawnEntity("CMUYautjaYoungbloodSpawn", map.GridCoords.Offset(new Vector2(4, 0)));
+            var shipSpawnPoint = entMan.EnsureComponent<YautjaHuntSpawnPointComponent>(shipSpawn);
+            shipSpawnPoint.Kind = YautjaHuntSpawnKind.Youngblood;
+            shipSpawnPoint.DestinationId = "jungle_moon";
             var huntDestination = entMan.SpawnEntity("CMUYautjaHuntDestinationJungleMoon", map.GridCoords.Offset(new Vector2(8, 0)));
             var youngDestination = entMan.SpawnEntity("CMUYautjaYoungbloodDestinationJungleMoon", map.GridCoords.Offset(new Vector2(16, 0)));
 
