@@ -18,6 +18,6 @@
     canTargetSelf: false  
     whitelist:  
       components:  
-      - XenoComponent  
+      - Xeno
   - type: XenoActionPlasma  
     cost: 100
